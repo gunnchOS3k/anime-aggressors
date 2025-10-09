@@ -4,20 +4,156 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Anime Aggressors</title>
+    <title>Anime Aggressors - Live Demo</title>
+    <meta name="description" content="Shōnen-style PvP arena brawler with optional Edge-IO wearables. Features rollback netcode, gesture-driven combat, and cross-platform builds." />
+    <meta name="keywords" content="fighting game, anime, pvp, rollback netcode, edge-io, gesture control, cross-platform" />
+    <meta property="og:title" content="Anime Aggressors - Live Demo" />
+    <meta property="og:description" content="Shōnen-style PvP arena brawler with optional Edge-IO wearables" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://gunnchOS3k.github.io/anime-aggressors" />
+    <meta property="og:image" content="https://gunnchOS3k.github.io/anime-aggressors/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Anime Aggressors - Live Demo" />
+    <meta name="twitter:description" content="Shōnen-style PvP arena brawler with optional Edge-IO wearables" />
+    <meta name="twitter:image" content="https://gunnchOS3k.github.io/anime-aggressors/og-image.png" />
+    
     <style>
-      body {
+      * {
         margin: 0;
         padding: 0;
-        background: #000;
+        box-sizing: border-box;
+      }
+      
+      body {
         font-family: 'Courier New', monospace;
-        overflow: hidden;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        overflow-x: hidden;
+      }
+      
+      .hero-section {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 20px;
+        position: relative;
+      }
+      
+      .hero-content {
+        max-width: 800px;
+        z-index: 2;
+      }
+      
+      .hero-title {
+        font-size: clamp(3rem, 8vw, 6rem);
+        font-weight: bold;
+        margin-bottom: 1rem;
+        text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: gradientShift 3s ease-in-out infinite;
+      }
+      
+      @keyframes gradientShift {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+      }
+      
+      .hero-subtitle {
+        font-size: clamp(1.2rem, 3vw, 2rem);
+        margin-bottom: 2rem;
+        opacity: 0.9;
+      }
+      
+      .hero-description {
+        font-size: clamp(1rem, 2vw, 1.3rem);
+        margin-bottom: 3rem;
+        opacity: 0.8;
+        line-height: 1.6;
+      }
+      
+      .play-button {
+        display: inline-block;
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        color: white;
+        padding: 20px 40px;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin: 10px;
+      }
+      
+      .play-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+        background: linear-gradient(45deg, #4ecdc4, #ff6b6b);
+      }
+      
+      .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin: 3rem 0;
+        max-width: 1000px;
+      }
+      
+      .feature-card {
+        background: rgba(255,255,255,0.1);
+        padding: 2rem;
+        border-radius: 15px;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+        transition: transform 0.3s ease;
+      }
+      
+      .feature-card:hover {
+        transform: translateY(-5px);
+      }
+      
+      .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+      
+      .feature-title {
+        font-size: 1.3rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+      }
+      
+      .feature-description {
+        opacity: 0.8;
+        line-height: 1.5;
+      }
+      
+      .game-container {
+        display: none;
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        background: #000;
       }
       
       #game-canvas {
         display: block;
-        width: 100vw;
-        height: 100vh;
+        width: 100%;
+        height: 100%;
       }
       
       #loading-screen {
@@ -31,14 +167,10 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        z-index: 1000;
+        z-index: 1001;
         color: white;
         font-size: 24px;
         font-weight: bold;
-      }
-      
-      #loading-screen.hidden {
-        display: none;
       }
       
       .loading-logo {
@@ -80,11 +212,134 @@
         padding: 10px 20px;
         border-radius: 8px;
         font-size: 14px;
-        z-index: 1001;
+        z-index: 1002;
+        border: 1px solid #4ecdc4;
+      }
+      
+      .close-game {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: rgba(255,0,0,0.8);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        z-index: 1003;
+        font-family: inherit;
+        font-weight: bold;
+      }
+      
+      .close-game:hover {
+        background: rgba(255,0,0,1);
+      }
+      
+      .footer {
+        background: rgba(0,0,0,0.3);
+        padding: 2rem;
+        text-align: center;
+        margin-top: 3rem;
+        backdrop-filter: blur(10px);
+      }
+      
+      .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+      }
+      
+      .footer-links a {
+        color: white;
+        text-decoration: none;
+        opacity: 0.8;
+        transition: opacity 0.3s ease;
+      }
+      
+      .footer-links a:hover {
+        opacity: 1;
+      }
+      
+      @media (max-width: 768px) {
+        .hero-title {
+          font-size: 3rem;
+        }
+        
+        .play-button {
+          padding: 15px 30px;
+          font-size: 1.2rem;
+        }
+        
+        .features {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
   </head>
   <body>
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <div class="hero-content">
+        <h1 class="hero-title">🥊 ANIME AGGRESSORS</h1>
+        <p class="hero-subtitle">Shōnen-style PvP Arena Brawler</p>
+        <p class="hero-description">
+          Next-generation fighting game combining platform fighters with anime intensity. 
+          Features rollback netcode, gesture-driven combat, and cross-platform builds.
+        </p>
+        
+        <button class="play-button" onclick="startGame()">
+          🎮 Play Live Demo
+        </button>
+        
+        <div class="features">
+          <div class="feature-card">
+            <div class="feature-icon">🥊</div>
+            <h3 class="feature-title">Shōnen Combat</h3>
+            <p class="feature-description">Fast-paced aerial fighting with cancel routes and combo systems</p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">🌐</div>
+            <h3 class="feature-title">Cross-Platform</h3>
+            <p class="feature-description">Web, Mobile, Desktop with unified rollback netcode</p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <h3 class="feature-title">Gesture Control</h3>
+            <p class="feature-description">Optional Edge-IO rings for motion-based inputs</p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3 class="feature-title">Sub-50ms Latency</h3>
+            <p class="feature-description">Rollback netcode designed for competitive play</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer">
+        <div class="footer-links">
+          <a href="https://github.com/gunnchOS3k/anime-aggressors" target="_blank">GitHub</a>
+          <a href="https://gunnchOS3k.github.io/edmundgunnjr.github.io/" target="_blank">Portfolio</a>
+          <a href="mailto:edmundgunnjr@gmail.com">Contact</a>
+        </div>
+        <p>&copy; 2025 Edmund Gunn, Jr. - Built with ❤️ for the gaming community</p>
+      </div>
+    </div>
+    
+    <!-- Game Container -->
+    <div class="game-container" id="game-container">
+      <button class="close-game" onclick="closeGame()">✕ Close Game</button>
+      <canvas id="game-canvas"></canvas>
+      <div class="controller-hint">
+        🎮 Connect a controller (PS5 DualSense or Switch Pro) for the best experience
+      </div>
+    </div>
+    
+    <!-- Loading Screen -->
     <div id="loading-screen">
       <div class="loading-logo">🎮 ANIME AGGRESSORS</div>
       <div>Loading...</div>
@@ -92,33 +347,54 @@
         <div class="loading-progress" id="loading-progress"></div>
       </div>
     </div>
-    
-    <canvas id="game-canvas"></canvas>
-    
-    <div class="controller-hint">
-      🎮 Connect a controller (PS5 DualSense or Switch Pro) for the best experience
-    </div>
 
     <script type="module" src="/src/main.ts"></script>
     
     <script>
-      // Simple loading simulation
-      let progress = 0;
-      const progressBar = document.getElementById('loading-progress');
-      const loadingScreen = document.getElementById('loading-screen');
+      let gameLoaded = false;
       
-      const interval = setInterval(() => {
-        progress += Math.random() * 15;
-        if (progress > 100) progress = 100;
-        progressBar.style.width = progress + '%';
+      function startGame() {
+        const gameContainer = document.getElementById('game-container');
+        const loadingScreen = document.getElementById('loading-screen');
         
-        if (progress >= 100) {
-          clearInterval(interval);
-          setTimeout(() => {
-            loadingScreen.classList.add('hidden');
-          }, 500);
+        gameContainer.style.display = 'block';
+        loadingScreen.style.display = 'flex';
+        
+        // Simulate loading
+        let progress = 0;
+        const progressBar = document.getElementById('loading-progress');
+        
+        const interval = setInterval(() => {
+          progress += Math.random() * 15;
+          if (progress > 100) progress = 100;
+          progressBar.style.width = progress + '%';
+          
+          if (progress >= 100) {
+            clearInterval(interval);
+            setTimeout(() => {
+              loadingScreen.style.display = 'none';
+              gameLoaded = true;
+            }, 500);
+          }
+        }, 100);
+      }
+      
+      function closeGame() {
+        const gameContainer = document.getElementById('game-container');
+        gameContainer.style.display = 'none';
+        
+        // Reset game state if needed
+        if (window.game && typeof window.game.destroy === 'function') {
+          window.game.destroy();
         }
-      }, 100);
+      }
+      
+      // Handle escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && gameLoaded) {
+          closeGame();
+        }
+      });
     </script>
   </body>
 </html>
