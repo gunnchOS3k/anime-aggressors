@@ -2,9 +2,9 @@
 
 > **Shōnen-style PvP arena brawler with optional Edge-IO wearables**
 
-[![CI](https://github.com/gunnchOS3k/anime-aggressors/actions/workflows/ci.yml/badge.svg)](https://github.com/gunnchOS3k/anime-aggressors/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Web Demo](https://img.shields.io/badge/Web-Demo-blue)](https://anime-aggressors.vercel.app)
+[![CI](https://img.shields.io/github/workflow/status/gunnchOS3k/anime-aggressors/Deploy%20to%20GitHub%20Pages?style=flat-square)](https://github.com/gunnchOS3k/anime-aggressors/actions)
+[![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
+[![Web Demo](https://img.shields.io/badge/Web%20Demo-Live-brightgreen?style=flat-square)](https://gunnchOS3k.github.io/anime-aggressors)
 
 ---
 
@@ -14,18 +14,19 @@ Anime Aggressors is a **next-generation fighting game** that combines the best o
 
 ### ✨ **Key Features**
 
-- 🥊 **Shōnen Combat**: Fast-paced, aerial-heavy fighting with cancel routes and combo systems
-- 🌐 **Cross-Platform**: Web, Mobile, Desktop with unified rollback netcode
-- 🎯 **Gesture Control**: Optional Edge-IO rings/wristbands for motion-based inputs
-- ⚡ **Sub-50ms Latency**: Rollback netcode designed for competitive play
-- 🎨 **Anime Aesthetics**: Stylized toon-shaded graphics with readable VFX
-- 🔧 **Mod Support**: Data-driven character system with JSON move definitions
+* 🥊 **Shōnen Combat**: Fast-paced, aerial-heavy fighting with cancel routes and combo systems
+* 🌐 **Cross-Platform**: Web, Mobile, Desktop with unified rollback netcode
+* 🎯 **Gesture Control**: Optional Edge-IO rings/wristbands for motion-based inputs
+* ⚡ **Sub-50ms Latency**: Rollback netcode designed for competitive play
+* 🎨 **Anime Aesthetics**: Stylized toon-shaded graphics with readable VFX
+* 🔧 **Mod Support**: Data-driven character system with JSON move definitions
 
 ---
 
 ## 🚀 **Quick Start**
 
 ### **Web Demo** (Try it now!)
+
 ```bash
 # Clone and run locally
 git clone https://github.com/gunnchOS3k/anime-aggressors.git
@@ -35,6 +36,7 @@ npm install && npm run dev
 ```
 
 ### **Hardware Setup** (Optional)
+
 ```bash
 # Flash Edge-IO firmware
 cd firmware/ring
@@ -110,28 +112,32 @@ anime-aggressors/
 ## 🎯 **Game Design**
 
 ### **Core Mechanics**
-- **Resources**: HP, Ki (specials), Stamina (guards/dashes)
-- **Movement**: Air dashes, vanishes, wall jumps
-- **Combat**: Light/Heavy/Special with cancel routes
-- **Supers**: Cinematic ultimates with quick cutbacks
+
+* **Resources**: HP, Ki (specials), Stamina (guards/dashes)
+* **Movement**: Air dashes, vanishes, wall jumps
+* **Combat**: Light/Heavy/Special with cancel routes
+* **Supers**: Cinematic ultimates with quick cutbacks
 
 ### **Input Systems**
-- **Standard**: Keyboard, Gamepad, Touch
-- **Edge-IO**: Swipe gestures → Dodge, Thrust → Heavy, Tap → Special
-- **Accessibility**: Full remapping and alternative controls
+
+* **Standard**: Keyboard, Gamepad, Touch
+* **Edge-IO**: Swipe gestures → Dodge, Thrust → Heavy, Tap → Special
+* **Accessibility**: Full remapping and alternative controls
 
 ---
 
 ## 🔬 **Edge-IO Technology**
 
 ### **Hardware Specs**
-- **MCU**: nRF52840 (BLE 5.0)
-- **Sensors**: 6-axis IMU (BMI270)
-- **Haptics**: DRV2605L + ERM/LRA
-- **Power**: Li-Po 50-300mAh
-- **Connectivity**: BLE with <50ms latency
+
+* **MCU**: nRF52840 (BLE 5.0)
+* **Sensors**: 6-axis IMU (BMI270)
+* **Haptics**: DRV2605L + ERM/LRA
+* **Power**: Li-Po 50-300mAh
+* **Connectivity**: BLE with <50ms latency
 
 ### **Gesture Library**
+
 ```typescript
 import { EdgeIO } from '@anime-aggressors/edgeio';
 
@@ -150,6 +156,7 @@ edgeio.onGesture((gesture) => {
 ## 🌐 **Deployment**
 
 ### **Web Build**
+
 ```bash
 cd apps/web
 npm run build
@@ -157,6 +164,7 @@ npm run build
 ```
 
 ### **Mobile Build**
+
 ```bash
 cd apps/mobile
 npx expo build:android
@@ -164,6 +172,7 @@ npx expo build:ios
 ```
 
 ### **Desktop Build**
+
 ```bash
 cd apps/desktop
 npm run build:win
@@ -178,6 +187,7 @@ npm run build:linux
 We welcome contributions! See our [Contributing Guide](CONTRIBUTING.md) for details.
 
 ### **Development Setup**
+
 ```bash
 # Install dependencies
 npm install
@@ -198,10 +208,10 @@ npm run build
 
 ## 📊 **Roadmap**
 
-- [ ] **Q1 2025**: Core game mechanics + 2 characters
-- [ ] **Q2 2025**: Edge-IO hardware integration
-- [ ] **Q3 2025**: Mobile app + cloud services
-- [ ] **Q4 2025**: Full release + tournament mode
+* **Q1 2025**: Core game mechanics + 2 characters
+* **Q2 2025**: Edge-IO hardware integration
+* **Q3 2025**: Mobile app + cloud services
+* **Q4 2025**: Full release + tournament mode
 
 ---
 
@@ -213,16 +223,11 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## 🔗 **Related Projects**
 
-- **[Edge-IO](https://github.com/gunnchOS3k/edge-io)** - Gesture detection hardware
-- **[ReadyGary](https://github.com/gunnchOS3k/readygary-6g-beam-selection)** - 6G beam selection research
+* **Edge-IO** \- Gesture detection hardware
+* **ReadyGary** \- 6G beam selection research
 
 ---
 
-<div align="center">
-
 **Built with ❤️ by the Anime Aggressors team**
 
-[🌐 Web Demo](https://anime-aggressors.vercel.app) • [📱 Mobile](https://expo.dev/@gunnchOS3k/anime-aggressors) • [💬 Discord](https://discord.gg/anime-aggressors)
-
-</div>
-EOF'
+🌐 [Web Demo](https://gunnchOS3k.github.io/anime-aggressors) • 📱 [Mobile](https://github.com/gunnchOS3k/anime-aggressors) • 💬 [Discord](https://discord.gg/anime-aggressors)

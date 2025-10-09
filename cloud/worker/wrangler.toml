@@ -1,14 +1,30 @@
-name = "anime-aggressors-worker"
+name = "anime-aggressors-cloud"
 main = "src/index.ts"
-compatibility_date = "2024-10-01"
+compatibility_date = "2024-01-09"
 
+[env.production]
+name = "anime-aggressors-cloud"
+
+[env.staging]
+name = "anime-aggressors-cloud-staging"
+
+# R2 Bucket for persistent storage
+[[r2_buckets]]
+binding = "GAME_DATA"
+bucket_name = "anime-aggressors-data"
+
+# KV Namespace for caching
+[[kv_namespaces]]
+binding = "CACHE"
+id = "anime-aggressors-cache"
+
+# Durable Objects for real-time features
+[[durable_objects.bindings]]
+name = "MATCH_ROOM"
+class_name = "MatchRoom"
+
+# Environment variables
 [vars]
-CORS_ORIGIN = "*"
-
-[[r2_buckets]]
-binding = "PROFILES"
-bucket_name = "anime-aggressors-profiles"
-
-[[r2_buckets]]
-binding = "LEADERBOARDS"
-bucket_name = "anime-aggressors-leaderboards"
+ENVIRONMENT = "production"
+API_VERSION = "v1"
+MAX_PLAYERS_PER_MATCH = "2"
