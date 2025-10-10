@@ -289,9 +289,17 @@
           Features rollback netcode, gesture-driven combat, and cross-platform builds.
         </p>
         
-        <button class="play-button" onclick="startGame()">
-          🎮 Play Live Demo
-        </button>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <button class="play-button" onclick="startGame('training')">
+            🥊 Training Mode
+          </button>
+          <button class="play-button" onclick="startGame('versus')">
+            ⚔️ Versus AI
+          </button>
+          <button class="play-button" onclick="startGame('demo')">
+            🎮 Quick Demo
+          </button>
+        </div>
         
         <div class="features">
           <div class="feature-card">
@@ -352,13 +360,33 @@
     
     <script>
       let gameLoaded = false;
+      let currentGameMode = '';
       
-      function startGame() {
+      function startGame(mode) {
+        currentGameMode = mode;
         const gameContainer = document.getElementById('game-container');
         const loadingScreen = document.getElementById('loading-screen');
         
         gameContainer.style.display = 'block';
         loadingScreen.style.display = 'flex';
+        
+        // Update loading message based on mode
+        const loadingText = document.querySelector('#loading-screen div:nth-child(2)');
+        if (loadingText) {
+          switch(mode) {
+            case 'training':
+              loadingText.textContent = 'Loading Training Mode...';
+              break;
+            case 'versus':
+              loadingText.textContent = 'Loading Versus AI...';
+              break;
+            case 'demo':
+              loadingText.textContent = 'Loading Quick Demo...';
+              break;
+            default:
+              loadingText.textContent = 'Loading Game...';
+          }
+        }
         
         // Simulate loading
         let progress = 0;
@@ -374,9 +402,78 @@
             setTimeout(() => {
               loadingScreen.style.display = 'none';
               gameLoaded = true;
+              initializeGameMode(mode);
             }, 500);
           }
         }, 100);
+      }
+      
+      function initializeGameMode(mode) {
+        // This will be called by the game engine
+        console.log(`Starting game in ${mode} mode`);
+        
+        // Show mode-specific instructions
+        const instructions = document.createElement('div');
+        instructions.id = 'game-instructions';
+        instructions.style.cssText = `
+          position: fixed;
+          top: 20px;
+          left: 20px;
+          background: rgba(0,0,0,0.8);
+          color: white;
+          padding: 15px;
+          border-radius: 8px;
+          font-family: monospace;
+          font-size: 14px;
+          z-index: 1001;
+          border: 1px solid #4ecdc4;
+          max-width: 300px;
+        `;
+        
+        let instructionText = '';
+        switch(mode) {
+          case 'training':
+            instructionText = `
+              <strong>🥊 Training Mode</strong><br>
+              • Arrow keys: Move<br>
+              • Space: Jump<br>
+              • Z: Light Attack<br>
+              • X: Heavy Attack<br>
+              • C: Special Attack<br>
+              • Practice your combos!
+            `;
+            break;
+          case 'versus':
+            instructionText = `
+              <strong>⚔️ Versus AI</strong><br>
+              • Arrow keys: Move<br>
+              • Space: Jump<br>
+              • Z: Light Attack<br>
+              • X: Heavy Attack<br>
+              • C: Special Attack<br>
+              • Fight the AI opponent!
+            `;
+            break;
+          case 'demo':
+            instructionText = `
+              <strong>🎮 Quick Demo</strong><br>
+              • Arrow keys: Move<br>
+              • Space: Jump<br>
+              • Mouse: Look around<br>
+              • Experience the game!
+            `;
+            break;
+        }
+        
+        instructions.innerHTML = instructionText;
+        document.body.appendChild(instructions);
+        
+        // Auto-hide instructions after 10 seconds
+        setTimeout(() => {
+          if (document.body.contains(instructions)) {
+            document.body.removeChild(instructions);
+          }
+        }, 10000);
       }
       
       function closeGame() {
