@@ -47,6 +47,10 @@ jobs:
       env:
         NODE_ENV: production
         
+    - name: Remove redirect HTML
+      run: |
+        rm -f index.html
+        
     - name: Copy built files to root
       run: |
         cp -r apps/web/dist/* .

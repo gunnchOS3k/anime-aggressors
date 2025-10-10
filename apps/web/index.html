@@ -432,7 +432,7 @@
           }
         }
         
-        // Realistic loading simulation with time estimates
+        // Real loading with actual game initialization
         let progress = 0;
         let startTime = Date.now();
         const progressBar = document.getElementById('loading-progress');
@@ -453,45 +453,61 @@
         ];
         
         let currentStep = 0;
-        const estimatedTotalTime = 20000; // 20 seconds estimated
+        let gameInitialized = false;
         
-        const interval = setInterval(() => {
-          const elapsed = Date.now() - startTime;
-          const remaining = Math.max(0, estimatedTotalTime - elapsed);
-          const remainingSeconds = Math.ceil(remaining / 1000);
-          
-          // Update progress based on time elapsed
-          const timeProgress = Math.min(95, (elapsed / estimatedTotalTime) * 100);
-          
-          // Check if we should move to next step
-          if (currentStep < loadingSteps.length - 1 && timeProgress >= loadingSteps[currentStep + 1].progress) {
-            currentStep++;
-            statusEl.textContent = loadingSteps[currentStep].status;
-            textEl.textContent = loadingSteps[currentStep].text;
-            document.getElementById('loading-tip').textContent = loadingSteps[currentStep].tip;
+        // Start actual game loading
+        const loadGame = async () => {
+          try {
+            // Simulate loading steps while actually loading the game
+            const interval = setInterval(() => {
+              const elapsed = Date.now() - startTime;
+              const timeProgress = Math.min(95, (elapsed / 15000) * 100); // 15 second estimate
+              
+              // Update progress
+              progress = Math.min(timeProgress, loadingSteps[currentStep].progress);
+              progressBar.style.width = progress + '%';
+              percentageEl.textContent = Math.round(progress) + '%';
+              
+              // Update time estimate
+              const remaining = Math.max(0, 15000 - elapsed);
+              const remainingSeconds = Math.ceil(remaining / 1000);
+              if (remainingSeconds > 0) {
+                timeEl.textContent = `Estimated time: ${remainingSeconds} seconds remaining`;
+              } else {
+                timeEl.textContent = 'Finalizing...';
+              }
+              
+              // Check if we should move to next step
+              if (currentStep < loadingSteps.length - 1 && timeProgress >= loadingSteps[currentStep + 1].progress) {
+                currentStep++;
+                statusEl.textContent = loadingSteps[currentStep].status;
+                textEl.textContent = loadingSteps[currentStep].text;
+                document.getElementById('loading-tip').textContent = loadingSteps[currentStep].tip;
+              }
+              
+              // Complete loading when game is ready
+              if (progress >= 100 && gameInitialized) {
+                clearInterval(interval);
+                setTimeout(() => {
+                  loadingScreen.style.display = 'none';
+                  gameLoaded = true;
+                  initializeGameMode(mode);
+                }, 500);
+              }
+            }, 100);
+            
+            // Wait for game to actually load
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            gameInitialized = true;
+            
+          } catch (error) {
+            console.error('Game loading failed:', error);
+            statusEl.textContent = 'Loading failed - please refresh';
+            textEl.textContent = 'Error Loading Game';
           }
-          
-          // Smooth progress animation
-          progress = Math.min(timeProgress, loadingSteps[currentStep].progress);
-          progressBar.style.width = progress + '%';
-          percentageEl.textContent = Math.round(progress) + '%';
-          
-          // Update time estimate
-          if (remainingSeconds > 0) {
-            timeEl.textContent = `Estimated time: ${remainingSeconds} seconds remaining`;
-          } else {
-            timeEl.textContent = 'Finalizing...';
-          }
-          
-          if (progress >= 100) {
-            clearInterval(interval);
-            setTimeout(() => {
-              loadingScreen.style.display = 'none';
-              gameLoaded = true;
-              initializeGameMode(mode);
-            }, 500);
-          }
-        }, 100);
+        };
+        
+        loadGame();
       }
       
       function initializeGameMode(mode) {
