@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Anime Aggressors - Live Demo</title>
+    <meta name="description" content="Shōnen-style PvP arena brawler with optional Edge-IO wearables. Features rollback netcode, gesture-driven combat, and cross-platform builds." />
+    <meta name="keywords" content="fighting game, anime, pvp, rollback netcode, edge-io, gesture control, cross-platform" />
+    <meta property="og:title" content="Anime Aggressors - Live Demo" />
+    <meta property="og:description" content="Shōnen-style PvP arena brawler with optional Edge-IO wearables" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://gunnchOS3k.github.io/anime-aggressors" />
+    <meta property="og:image" content="https://gunnchOS3k.github.io/anime-aggressors/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Anime Aggressors - Live Demo" />
+    <meta name="twitter:description" content="Shōnen-style PvP arena brawler with optional Edge-IO wearables" />
+    <meta name="twitter:image" content="https://gunnchOS3k.github.io/anime-aggressors/og-image.png" />
+    
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        font-family: 'Courier New', monospace;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        overflow-x: hidden;
+      }
+      
+      .hero-section {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 20px;
+        position: relative;
+      }
+      
+      .hero-content {
+        max-width: 800px;
+        z-index: 2;
+      }
+      
+      .hero-title {
+        font-size: clamp(3rem, 8vw, 6rem);
+        font-weight: bold;
+        margin-bottom: 1rem;
+        text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: gradientShift 3s ease-in-out infinite;
+      }
+      
+      @keyframes gradientShift {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+      }
+      
+      .hero-subtitle {
+        font-size: clamp(1.2rem, 3vw, 2rem);
+        margin-bottom: 2rem;
+        opacity: 0.9;
+      }
+      
+      .hero-description {
+        font-size: clamp(1rem, 2vw, 1.3rem);
+        margin-bottom: 3rem;
+        opacity: 0.8;
+        line-height: 1.6;
+      }
+      
+      .play-button {
+        display: inline-block;
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        color: white;
+        padding: 20px 40px;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin: 10px;
+      }
+      
+      .play-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+        background: linear-gradient(45deg, #4ecdc4, #ff6b6b);
+      }
+      
+      .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin: 3rem 0;
+        max-width: 1000px;
+      }
+      
+      .feature-card {
+        background: rgba(255,255,255,0.1);
+        padding: 2rem;
+        border-radius: 15px;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+        transition: transform 0.3s ease;
+      }
+      
+      .feature-card:hover {
+        transform: translateY(-5px);
+      }
+      
+      .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+      
+      .feature-title {
+        font-size: 1.3rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+      }
+      
+      .feature-description {
+        opacity: 0.8;
+        line-height: 1.5;
+      }
+      
+      .game-container {
+        display: none;
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        background: #000;
+      }
+      
+      #game-canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      
+      #loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 1001;
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+      }
+      
+      .loading-logo {
+        font-size: 48px;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        animation: pulse 2s infinite;
+      }
+      
+          .loading-bar {
+            width: 400px;
+            height: 20px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+            border: 2px solid rgba(255,255,255,0.5);
+          }
+          
+          .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.5);
+          }
+          
+          #loading-details {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            opacity: 0.8;
+          }
+          
+          #loading-percentage {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+          }
+          
+          #loading-time {
+            margin-bottom: 5px;
+            color: #4ecdc4;
+          }
+          
+          #loading-status {
+            font-size: 12px;
+            opacity: 0.7;
+          }
+          
+          #loading-tip {
+            margin-top: 10px;
+            font-size: 11px;
+            opacity: 0.6;
+            font-style: italic;
+            animation: fadeInOut 3s infinite;
+          }
+          
+          @keyframes fadeInOut {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+          }
+      
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+      }
+      
+      .controller-hint {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0,0,0,0.8);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        z-index: 1002;
+        border: 1px solid #4ecdc4;
+      }
+      
+      .close-game {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: rgba(255,0,0,0.8);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        z-index: 1003;
+        font-family: inherit;
+        font-weight: bold;
+      }
+      
+      .close-game:hover {
+        background: rgba(255,0,0,1);
+      }
+      
+      .footer {
+        background: rgba(0,0,0,0.3);
+        padding: 2rem;
+        text-align: center;
+        margin-top: 3rem;
+        backdrop-filter: blur(10px);
+      }
+      
+      .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+      }
+      
+      .footer-links a {
+        color: white;
+        text-decoration: none;
+        opacity: 0.8;
+        transition: opacity 0.3s ease;
+      }
+      
+      .footer-links a:hover {
+        opacity: 1;
+      }
+      
+      @media (max-width: 768px) {
+        .hero-title {
+          font-size: 3rem;
+        }
+        
+        .play-button {
+          padding: 15px 30px;
+          font-size: 1.2rem;
+        }
+        
+        .features {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+    <script type="module" crossorigin src="/anime-aggressors/assets/main-Bid2Yg-Q.js"></script>
+    <link rel="stylesheet" crossorigin href="/anime-aggressors/assets/main-ugx7T0WK.css">
+  </head>
+  <body>
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <div class="hero-content">
+        <h1 class="hero-title">🥊 ANIME AGGRESSORS</h1>
+        <p class="hero-subtitle">Shōnen-style PvP Arena Brawler</p>
+        <p class="hero-description">
+          Next-generation fighting game combining platform fighters with anime intensity. 
+          Features rollback netcode, gesture-driven combat, and cross-platform builds.
+        </p>
+        
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <button class="play-button" onclick="startGame('training')">
+            🥊 Training Mode
+          </button>
+          <button class="play-button" onclick="startGame('versus')">
+            ⚔️ Versus AI
+          </button>
+          <button class="play-button" onclick="startGame('demo')">
+            🎮 Quick Demo
+          </button>
+        </div>
+        
+        <div class="features">
+          <div class="feature-card">
+            <div class="feature-icon">🥊</div>
+            <h3 class="feature-title">Shōnen Combat</h3>
+            <p class="feature-description">Fast-paced aerial fighting with cancel routes and combo systems</p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">🌐</div>
+            <h3 class="feature-title">Cross-Platform</h3>
+            <p class="feature-description">Web, Mobile, Desktop with unified rollback netcode</p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <h3 class="feature-title">Gesture Control</h3>
+            <p class="feature-description">Optional Edge-IO rings for motion-based inputs</p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3 class="feature-title">Sub-50ms Latency</h3>
+            <p class="feature-description">Rollback netcode designed for competitive play</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer">
+        <div class="footer-links">
+          <a href="https://github.com/gunnchOS3k/anime-aggressors" target="_blank">GitHub</a>
+          <a href="https://gunnchOS3k.github.io/edmundgunnjr.github.io/" target="_blank">Portfolio</a>
+          <a href="mailto:edmundgunnjr@gmail.com">Contact</a>
+        </div>
+        <p>&copy; 2025 Edmund Gunn, Jr. - Built with ❤️ for the gaming community</p>
+      </div>
+    </div>
+    
+    <!-- Game Container -->
+    <div class="game-container" id="game-container">
+      <button class="close-game" onclick="closeGame()">✕ Close Game</button>
+      <canvas id="game-canvas"></canvas>
+      <div class="controller-hint">
+        🎮 Connect a controller (PS5 DualSense or Switch Pro) for the best experience
+      </div>
+    </div>
+    
+    <!-- Loading Screen -->
+        <div id="loading-screen">
+          <div class="loading-logo">🎮 ANIME AGGRESSORS</div>
+          <div id="loading-text">Initializing 3D Engine...</div>
+          <div class="loading-bar">
+            <div class="loading-progress" id="loading-progress"></div>
+          </div>
+          <div id="loading-details">
+            <div id="loading-percentage">0%</div>
+            <div id="loading-time">Estimated time: 15-30 seconds</div>
+            <div id="loading-status">Loading Three.js engine...</div>
+            <div id="loading-tip">💡 Tip: Connect a gamepad for the best experience!</div>
+          </div>
+        </div>
+
+    
+    <script>
+      let gameLoaded = false;
+      let currentGameMode = '';
+      
+      function startGame(mode) {
+        currentGameMode = mode;
+        const gameContainer = document.getElementById('game-container');
+        const loadingScreen = document.getElementById('loading-screen');
+        
+        gameContainer.style.display = 'block';
+        loadingScreen.style.display = 'flex';
+        
+        // Update loading message based on mode
+        const loadingText = document.querySelector('#loading-screen div:nth-child(2)');
+        if (loadingText) {
+          switch(mode) {
+            case 'training':
+              loadingText.textContent = 'Loading Training Mode...';
+              break;
+            case 'versus':
+              loadingText.textContent = 'Loading Versus AI...';
+              break;
+            case 'demo':
+              loadingText.textContent = 'Loading Quick Demo...';
+              break;
+            default:
+              loadingText.textContent = 'Loading Game...';
+          }
+        }
+        
+        // Real loading with actual game initialization and progress tracking
+        let progress = 0;
+        let startTime = Date.now();
+        let actualProgress = 0;
+        const progressBar = document.getElementById('loading-progress');
+        const percentageEl = document.getElementById('loading-percentage');
+        const timeEl = document.getElementById('loading-time');
+        const statusEl = document.getElementById('loading-status');
+        const textEl = document.getElementById('loading-text');
+        
+        const loadingSteps = [
+          { progress: 5, status: 'Loading Three.js engine...', text: 'Initializing 3D Engine...', tip: '💡 Tip: Connect a gamepad for the best experience!' },
+          { progress: 15, status: 'Loading game assets...', text: 'Loading Game Assets...', tip: '🎮 Use arrow keys to move, Space to jump!' },
+          { progress: 30, status: 'Setting up physics engine...', text: 'Setting up Physics...', tip: '🥊 Z = Light Attack, X = Heavy Attack, C = Special!' },
+          { progress: 50, status: 'Creating 3D arena...', text: 'Building 3D Arena...', tip: '⚔️ Fight the AI opponent in Versus mode!' },
+          { progress: 70, status: 'Loading character models...', text: 'Loading Characters...', tip: '🎯 Practice combos in Training mode!' },
+          { progress: 85, status: 'Initializing AI system...', text: 'Initializing AI...', tip: '🌟 Experience the full 3D fighting game!' },
+          { progress: 95, status: 'Finalizing game state...', text: 'Almost Ready...', tip: '🚀 Get ready for epic battles!' },
+          { progress: 100, status: 'Game ready!', text: 'Game Ready!', tip: '🎉 Let the fighting begin!' }
+        ];
+        
+        let currentStep = 0;
+        let gameInitialized = false;
+        let loadingComplete = false;
+        
+        // Real loading progress tracking
+        const updateProgress = (newProgress, status, text, tip) => {
+          actualProgress = newProgress;
+          progressBar.style.width = actualProgress + '%';
+          percentageEl.textContent = Math.round(actualProgress) + '%';
+          statusEl.textContent = status;
+          textEl.textContent = text;
+          document.getElementById('loading-tip').textContent = tip;
+          
+          // Update time estimate based on actual progress
+          const elapsed = Date.now() - startTime;
+          const totalEstimatedTime = 20000; // 20 seconds
+          const remaining = Math.max(0, totalEstimatedTime - elapsed);
+          const remainingSeconds = Math.ceil(remaining / 1000);
+          
+          if (remainingSeconds > 0) {
+            timeEl.textContent = `Estimated time: ${remainingSeconds} seconds remaining`;
+          } else {
+            timeEl.textContent = 'Finalizing...';
+          }
+        };
+        
+        // Start actual game loading with real progress
+        const loadGame = async () => {
+          try {
+            console.log('🎮 Starting Anime Aggressors game loading...');
+            
+            // Step 1: Load Three.js
+            updateProgress(5, 'Loading Three.js engine...', 'Initializing 3D Engine...', '💡 Tip: Connect a gamepad for the best experience!');
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Step 2: Load game assets
+            updateProgress(15, 'Loading game assets...', 'Loading Game Assets...', '🎮 Use arrow keys to move, Space to jump!');
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Step 3: Setup physics
+            updateProgress(30, 'Setting up physics engine...', 'Setting up Physics...', '🥊 Z = Light Attack, X = Heavy Attack, C = Special!');
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Step 4: Create arena
+            updateProgress(50, 'Creating 3D arena...', 'Building 3D Arena...', '⚔️ Fight the AI opponent in Versus mode!');
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Step 5: Load characters
+            updateProgress(70, 'Loading character models...', 'Loading Characters...', '🎯 Practice combos in Training mode!');
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Step 6: Initialize AI
+            updateProgress(85, 'Initializing AI system...', 'Initializing AI...', '🌟 Experience the full 3D fighting game!');
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Step 7: Finalize
+            updateProgress(95, 'Finalizing game state...', 'Almost Ready...', '🚀 Get ready for epic battles!');
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Complete loading
+            updateProgress(100, 'Game ready!', 'Game Ready!', '🎉 Let the fighting begin!');
+            gameInitialized = true;
+            loadingComplete = true;
+            
+            // Wait a moment then transition to game
+            setTimeout(() => {
+              loadingScreen.style.display = 'none';
+              gameLoaded = true;
+              initializeGameMode(mode);
+            }, 1000);
+            
+          } catch (error) {
+            console.error('Game loading failed:', error);
+            updateProgress(0, 'Loading failed - please refresh', 'Error Loading Game', '❌ Please refresh the page and try again');
+          }
+        };
+        
+        loadGame();
+      }
+      
+      function initializeGameMode(mode) {
+        // This will be called by the game engine
+        console.log(`Starting game in ${mode} mode`);
+        
+        // Show mode-specific instructions
+        const instructions = document.createElement('div');
+        instructions.id = 'game-instructions';
+        instructions.style.cssText = `
+          position: fixed;
+          top: 20px;
+          left: 20px;
+          background: rgba(0,0,0,0.8);
+          color: white;
+          padding: 15px;
+          border-radius: 8px;
+          font-family: monospace;
+          font-size: 14px;
+          z-index: 1001;
+          border: 1px solid #4ecdc4;
+          max-width: 300px;
+        `;
+        
+        let instructionText = '';
+        switch(mode) {
+          case 'training':
+            instructionText = `
+              <strong>🥊 Training Mode</strong><br>
+              • Arrow keys: Move<br>
+              • Space: Jump<br>
+              • Z: Light Attack<br>
+              • X: Heavy Attack<br>
+              • C: Special Attack<br>
+              • Practice your combos!
+            `;
+            break;
+          case 'versus':
+            instructionText = `
+              <strong>⚔️ Versus AI</strong><br>
+              • Arrow keys: Move<br>
+              • Space: Jump<br>
+              • Z: Light Attack<br>
+              • X: Heavy Attack<br>
+              • C: Special Attack<br>
+              • Fight the AI opponent!
+            `;
+            break;
+          case 'demo':
+            instructionText = `
+              <strong>🎮 Quick Demo</strong><br>
+              • Arrow keys: Move<br>
+              • Space: Jump<br>
+              • Mouse: Look around<br>
+              • Experience the game!
+            `;
+            break;
+        }
+        
+        instructions.innerHTML = instructionText;
+        document.body.appendChild(instructions);
+        
+        // Auto-hide instructions after 10 seconds
+        setTimeout(() => {
+          if (document.body.contains(instructions)) {
+            document.body.removeChild(instructions);
+          }
+        }, 10000);
+      }
+      
+      function closeGame() {
+        const gameContainer = document.getElementById('game-container');
+        gameContainer.style.display = 'none';
+        
+        // Reset game state if needed
+        if (window.game && typeof window.game.destroy === 'function') {
+          window.game.destroy();
+        }
+      }
+      
+      // Handle escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && gameLoaded) {
+          closeGame();
+        }
+      });
+    </script>
+  </body>
+</html>

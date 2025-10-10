@@ -56,16 +56,16 @@ export interface Stage {
 }
 
 export class GameEngine {
-  private scene: THREE.Scene;
-  private camera: THREE.PerspectiveCamera;
-  private renderer: THREE.WebGLRenderer;
+  private scene!: THREE.Scene;
+  private camera!: THREE.PerspectiveCamera;
+  private renderer!: THREE.WebGLRenderer;
   private canvas: HTMLCanvasElement;
   private players: Player[] = [];
-  private stage: Stage;
+  private stage!: Stage;
   private isRunning = false;
   private lastTime = 0;
   private deltaTime = 0;
-  private gameState: GameState;
+  private gameState!: GameState;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
