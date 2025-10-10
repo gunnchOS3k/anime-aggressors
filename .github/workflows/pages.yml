@@ -1,8 +1,8 @@
-name: Deploy Vite to Pages
+name: Deploy Pages (web)
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -16,27 +16,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-      - name: Install dependencies
+        with: { node-version: 20 }
+      - name: Install & build
         run: |
-          cd apps/web
-          npm install
-      - name: Build Anime Aggressors
-        run: |
-          cd apps/web
+          npm ci
           npm run build
-        env:
-          NODE_ENV: production
-      - name: Upload build artifacts
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: apps/web/dist
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: dist }
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    environment: 
+    environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
