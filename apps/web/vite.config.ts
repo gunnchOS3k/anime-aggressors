@@ -1,15 +1,19 @@
 import { defineConfig } from 'vite';
-import { resolve } from 'path';
 
+// IMPORTANT: Set to your repo name for GitHub Pages
 export default defineConfig({
   base: '/anime-aggressors/',
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
-    sourcemap: true,
+    sourcemap: false, // Disable sourcemaps for faster builds
     rollupOptions: {
-      input: {
-        main: resolve(__dirname, 'index.html')
+      output: {
+        manualChunks: {
+          // Split game code into separate chunks for lazy loading
+          'minigames': ['./src/minigames/bootstrap.ts'],
+          'gamepad': ['./src/input/gamepad.ts']
+        }
       }
     }
   },
