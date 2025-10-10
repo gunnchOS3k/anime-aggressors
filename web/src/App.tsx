@@ -7,7 +7,7 @@ const Play = lazy(() => import('./pages/Play'));
 
 function App() {
   return (
-    <Router>
+    <Router basename="/anime-aggressors">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route 
