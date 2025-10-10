@@ -222,6 +222,18 @@
             opacity: 0.7;
           }
           
+          #loading-speed {
+            margin-top: 5px;
+            font-size: 12px;
+            color: #4ecdc4;
+          }
+          
+          #loading-filesize {
+            margin-top: 2px;
+            font-size: 12px;
+            color: #ff6b6b;
+          }
+          
           #loading-tip {
             margin-top: 10px;
             font-size: 11px;
@@ -396,6 +408,8 @@
             <div id="loading-percentage">0%</div>
             <div id="loading-time">Estimated time: 15-30 seconds</div>
             <div id="loading-status">Loading Three.js engine...</div>
+            <div id="loading-speed">Download speed: -- MB/s</div>
+            <div id="loading-filesize">File size: -- MB</div>
             <div id="loading-tip">💡 Tip: Connect a gamepad for the best experience!</div>
           </div>
         </div>
@@ -471,22 +485,30 @@
           }
         };
         
-        // Fast loading sequence
+        // Real byte-by-byte loading like PlayStation/Xbox
         const loadGame = async () => {
           try {
             console.log('🎮 Starting Anime Aggressors Simple Demo...');
             
-            // Step 1: Load Three.js (1 second)
-            updateProgress(20, 'Loading Three.js...', 'Initializing 3D Engine...', '💡 Tip: Connect a gamepad for the best experience!');
+            // Step 1: Download Three.js library
+            updateProgress(5, 'Downloading Three.js library...', 'Downloading 3D Engine...', '💡 Tip: Connect a gamepad for the best experience!');
+            await downloadWithProgress('https://cdnjs.cloudflare.com/ajax/libs/three.js/0.159.0/three.min.js', 20);
+            
+            // Step 2: Download game assets
+            updateProgress(25, 'Downloading game assets...', 'Loading Game Assets...', '🎮 Use arrow keys to move, Space to jump!');
+            await downloadWithProgress('/src/main.js', 40);
+            
+            // Step 3: Initialize 3D engine
+            updateProgress(65, 'Initializing 3D engine...', 'Setting up 3D Engine...', '🥊 Z = Light Attack, X = Heavy Attack, C = Special!');
             await new Promise(resolve => setTimeout(resolve, 1000));
             
-            // Step 2: Create scene (1 second)
-            updateProgress(60, 'Creating 3D scene...', 'Building 3D Arena...', '🎮 Use arrow keys to move, Space to jump!');
+            // Step 4: Create 3D scene
+            updateProgress(85, 'Creating 3D scene...', 'Building 3D Arena...', '⚔️ Fight the AI opponent in Versus mode!');
             await new Promise(resolve => setTimeout(resolve, 1000));
             
-            // Step 3: Complete (1 second)
+            // Step 5: Finalize
             updateProgress(100, 'Game ready!', 'Game Ready!', '🎉 Let the fighting begin!');
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise(resolve => setTimeout(resolve, 500));
             
             // Transition to game
             loadingScreen.style.display = 'none';
@@ -497,6 +519,54 @@
             console.error('Game loading failed:', error);
             updateProgress(0, 'Loading failed - please refresh', 'Error Loading Game', '❌ Please refresh the page and try again');
           }
+        };
+        
+        // Real download progress tracking with speed and file size
+        const downloadWithProgress = async (url, targetProgress) => {
+          return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            let lastProgress = 0;
+            let downloadStartTime = Date.now();
+            
+            xhr.onprogress = (event) => {
+              if (event.lengthComputable) {
+                const percentComplete = (event.loaded / event.total) * 100;
+                const currentProgress = Math.floor((percentComplete / 100) * (targetProgress - lastProgress)) + lastProgress;
+                
+                // Calculate download speed
+                const elapsed = (Date.now() - downloadStartTime) / 1000;
+                const bytesPerSecond = event.loaded / elapsed;
+                const mbPerSecond = (bytesPerSecond / (1024 * 1024)).toFixed(2);
+                const fileSizeMB = (event.total / (1024 * 1024)).toFixed(2);
+                
+                // Update UI elements
+                document.getElementById('loading-speed').textContent = `Download speed: ${mbPerSecond} MB/s`;
+                document.getElementById('loading-filesize').textContent = `File size: ${fileSizeMB} MB`;
+                
+                updateProgress(currentProgress, `Downloading ${url.split('/').pop()}...`, 'Downloading Assets...', '📡 Downloading game files...');
+                
+                // Update time estimate based on download speed
+                const remainingBytes = event.total - event.loaded;
+                const remainingSeconds = Math.ceil(remainingBytes / bytesPerSecond);
+                
+                if (remainingSeconds > 0) {
+                  timeEl.textContent = `Estimated time: ${remainingSeconds} seconds remaining`;
+                }
+              }
+            };
+            
+            xhr.onload = () => {
+              lastProgress = targetProgress;
+              resolve();
+            };
+            
+            xhr.onerror = () => {
+              reject(new Error(`Failed to download ${url}`));
+            };
+            
+            xhr.open('GET', url);
+            xhr.send();
+          });
         };
         
         loadGame();
