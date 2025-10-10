@@ -180,22 +180,60 @@
         animation: pulse 2s infinite;
       }
       
-      .loading-bar {
-        width: 300px;
-        height: 20px;
-        background: rgba(255,255,255,0.3);
-        border-radius: 10px;
-        overflow: hidden;
-        margin-top: 20px;
-      }
-      
-      .loading-progress {
-        height: 100%;
-        background: linear-gradient(90deg, #00ff00, #ffff00);
-        width: 0%;
-        transition: width 0.3s ease;
-        border-radius: 10px;
-      }
+          .loading-bar {
+            width: 400px;
+            height: 20px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+            border: 2px solid rgba(255,255,255,0.5);
+          }
+          
+          .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.5);
+          }
+          
+          #loading-details {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            opacity: 0.8;
+          }
+          
+          #loading-percentage {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+          }
+          
+          #loading-time {
+            margin-bottom: 5px;
+            color: #4ecdc4;
+          }
+          
+          #loading-status {
+            font-size: 12px;
+            opacity: 0.7;
+          }
+          
+          #loading-tip {
+            margin-top: 10px;
+            font-size: 11px;
+            opacity: 0.6;
+            font-style: italic;
+            animation: fadeInOut 3s infinite;
+          }
+          
+          @keyframes fadeInOut {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+          }
       
       @keyframes pulse {
         0%, 100% { transform: scale(1); }
@@ -348,13 +386,19 @@
     </div>
     
     <!-- Loading Screen -->
-    <div id="loading-screen">
-      <div class="loading-logo">🎮 ANIME AGGRESSORS</div>
-      <div>Loading...</div>
-      <div class="loading-bar">
-        <div class="loading-progress" id="loading-progress"></div>
-      </div>
-    </div>
+        <div id="loading-screen">
+          <div class="loading-logo">🎮 ANIME AGGRESSORS</div>
+          <div id="loading-text">Initializing 3D Engine...</div>
+          <div class="loading-bar">
+            <div class="loading-progress" id="loading-progress"></div>
+          </div>
+          <div id="loading-details">
+            <div id="loading-percentage">0%</div>
+            <div id="loading-time">Estimated time: 15-30 seconds</div>
+            <div id="loading-status">Loading Three.js engine...</div>
+            <div id="loading-tip">💡 Tip: Connect a gamepad for the best experience!</div>
+          </div>
+        </div>
 
     <script type="module" src="/src/main.ts"></script>
     
@@ -388,14 +432,56 @@
           }
         }
         
-        // Simulate loading
+        // Realistic loading simulation with time estimates
         let progress = 0;
+        let startTime = Date.now();
         const progressBar = document.getElementById('loading-progress');
+        const percentageEl = document.getElementById('loading-percentage');
+        const timeEl = document.getElementById('loading-time');
+        const statusEl = document.getElementById('loading-status');
+        const textEl = document.getElementById('loading-text');
+        
+        const loadingSteps = [
+          { progress: 10, status: 'Loading Three.js engine...', text: 'Initializing 3D Engine...', tip: '💡 Tip: Connect a gamepad for the best experience!' },
+          { progress: 25, status: 'Loading game assets...', text: 'Loading Game Assets...', tip: '🎮 Use arrow keys to move, Space to jump!' },
+          { progress: 40, status: 'Setting up physics engine...', text: 'Setting up Physics...', tip: '🥊 Z = Light Attack, X = Heavy Attack, C = Special!' },
+          { progress: 55, status: 'Creating 3D arena...', text: 'Building 3D Arena...', tip: '⚔️ Fight the AI opponent in Versus mode!' },
+          { progress: 70, status: 'Loading character models...', text: 'Loading Characters...', tip: '🎯 Practice combos in Training mode!' },
+          { progress: 85, status: 'Initializing AI system...', text: 'Initializing AI...', tip: '🌟 Experience the full 3D fighting game!' },
+          { progress: 95, status: 'Finalizing game state...', text: 'Almost Ready...', tip: '🚀 Get ready for epic battles!' },
+          { progress: 100, status: 'Game ready!', text: 'Game Ready!', tip: '🎉 Let the fighting begin!' }
+        ];
+        
+        let currentStep = 0;
+        const estimatedTotalTime = 20000; // 20 seconds estimated
         
         const interval = setInterval(() => {
-          progress += Math.random() * 15;
-          if (progress > 100) progress = 100;
+          const elapsed = Date.now() - startTime;
+          const remaining = Math.max(0, estimatedTotalTime - elapsed);
+          const remainingSeconds = Math.ceil(remaining / 1000);
+          
+          // Update progress based on time elapsed
+          const timeProgress = Math.min(95, (elapsed / estimatedTotalTime) * 100);
+          
+          // Check if we should move to next step
+          if (currentStep < loadingSteps.length - 1 && timeProgress >= loadingSteps[currentStep + 1].progress) {
+            currentStep++;
+            statusEl.textContent = loadingSteps[currentStep].status;
+            textEl.textContent = loadingSteps[currentStep].text;
+            document.getElementById('loading-tip').textContent = loadingSteps[currentStep].tip;
+          }
+          
+          // Smooth progress animation
+          progress = Math.min(timeProgress, loadingSteps[currentStep].progress);
           progressBar.style.width = progress + '%';
+          percentageEl.textContent = Math.round(progress) + '%';
+          
+          // Update time estimate
+          if (remainingSeconds > 0) {
+            timeEl.textContent = `Estimated time: ${remainingSeconds} seconds remaining`;
+          } else {
+            timeEl.textContent = 'Finalizing...';
+          }
           
           if (progress >= 100) {
             clearInterval(interval);
