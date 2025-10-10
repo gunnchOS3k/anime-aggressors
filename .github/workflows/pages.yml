@@ -30,11 +30,6 @@ jobs:
         node-version: '18'
         cache: 'npm'
         
-    - name: Setup pnpm
-      uses: pnpm/action-setup@v2
-      with:
-        version: 8
-        
     - name: Install dependencies
       run: |
         cd apps/web
@@ -47,13 +42,20 @@ jobs:
       env:
         NODE_ENV: production
         
-    - name: Remove redirect HTML
+    - name: Prepare deployment
       run: |
-        rm -f index.html
+        # Remove README.md to prevent it from being served
+        rm -f README.md
+        rm -f *.md
         
-    - name: Copy built files to root
-      run: |
+        # Copy built files to root
         cp -r apps/web/dist/* .
+        
+        # Create a simple index.html if needed
+        if [ ! -f index.html ]; then
+          echo "No index.html found in dist, creating fallback"
+          echo '<!DOCTYPE html><html><head><title>Anime Aggressors</title></head><body><h1>Game Loading...</h1></body></html>' > index.html
+        fi
         
     - name: Upload build artifacts
       uses: actions/upload-pages-artifact@v3

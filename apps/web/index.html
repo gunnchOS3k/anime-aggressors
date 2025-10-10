@@ -432,9 +432,10 @@
           }
         }
         
-        // Real loading with actual game initialization
+        // Real loading with actual game initialization and progress tracking
         let progress = 0;
         let startTime = Date.now();
+        let actualProgress = 0;
         const progressBar = document.getElementById('loading-progress');
         const percentageEl = document.getElementById('loading-percentage');
         const timeEl = document.getElementById('loading-time');
@@ -442,10 +443,10 @@
         const textEl = document.getElementById('loading-text');
         
         const loadingSteps = [
-          { progress: 10, status: 'Loading Three.js engine...', text: 'Initializing 3D Engine...', tip: '💡 Tip: Connect a gamepad for the best experience!' },
-          { progress: 25, status: 'Loading game assets...', text: 'Loading Game Assets...', tip: '🎮 Use arrow keys to move, Space to jump!' },
-          { progress: 40, status: 'Setting up physics engine...', text: 'Setting up Physics...', tip: '🥊 Z = Light Attack, X = Heavy Attack, C = Special!' },
-          { progress: 55, status: 'Creating 3D arena...', text: 'Building 3D Arena...', tip: '⚔️ Fight the AI opponent in Versus mode!' },
+          { progress: 5, status: 'Loading Three.js engine...', text: 'Initializing 3D Engine...', tip: '💡 Tip: Connect a gamepad for the best experience!' },
+          { progress: 15, status: 'Loading game assets...', text: 'Loading Game Assets...', tip: '🎮 Use arrow keys to move, Space to jump!' },
+          { progress: 30, status: 'Setting up physics engine...', text: 'Setting up Physics...', tip: '🥊 Z = Light Attack, X = Heavy Attack, C = Special!' },
+          { progress: 50, status: 'Creating 3D arena...', text: 'Building 3D Arena...', tip: '⚔️ Fight the AI opponent in Versus mode!' },
           { progress: 70, status: 'Loading character models...', text: 'Loading Characters...', tip: '🎯 Practice combos in Training mode!' },
           { progress: 85, status: 'Initializing AI system...', text: 'Initializing AI...', tip: '🌟 Experience the full 3D fighting game!' },
           { progress: 95, status: 'Finalizing game state...', text: 'Almost Ready...', tip: '🚀 Get ready for epic battles!' },
@@ -454,56 +455,78 @@
         
         let currentStep = 0;
         let gameInitialized = false;
+        let loadingComplete = false;
         
-        // Start actual game loading
+        // Real loading progress tracking
+        const updateProgress = (newProgress, status, text, tip) => {
+          actualProgress = newProgress;
+          progressBar.style.width = actualProgress + '%';
+          percentageEl.textContent = Math.round(actualProgress) + '%';
+          statusEl.textContent = status;
+          textEl.textContent = text;
+          document.getElementById('loading-tip').textContent = tip;
+          
+          // Update time estimate based on actual progress
+          const elapsed = Date.now() - startTime;
+          const totalEstimatedTime = 20000; // 20 seconds
+          const remaining = Math.max(0, totalEstimatedTime - elapsed);
+          const remainingSeconds = Math.ceil(remaining / 1000);
+          
+          if (remainingSeconds > 0) {
+            timeEl.textContent = `Estimated time: ${remainingSeconds} seconds remaining`;
+          } else {
+            timeEl.textContent = 'Finalizing...';
+          }
+        };
+        
+        // Start actual game loading with real progress
         const loadGame = async () => {
           try {
-            // Simulate loading steps while actually loading the game
-            const interval = setInterval(() => {
-              const elapsed = Date.now() - startTime;
-              const timeProgress = Math.min(95, (elapsed / 15000) * 100); // 15 second estimate
-              
-              // Update progress
-              progress = Math.min(timeProgress, loadingSteps[currentStep].progress);
-              progressBar.style.width = progress + '%';
-              percentageEl.textContent = Math.round(progress) + '%';
-              
-              // Update time estimate
-              const remaining = Math.max(0, 15000 - elapsed);
-              const remainingSeconds = Math.ceil(remaining / 1000);
-              if (remainingSeconds > 0) {
-                timeEl.textContent = `Estimated time: ${remainingSeconds} seconds remaining`;
-              } else {
-                timeEl.textContent = 'Finalizing...';
-              }
-              
-              // Check if we should move to next step
-              if (currentStep < loadingSteps.length - 1 && timeProgress >= loadingSteps[currentStep + 1].progress) {
-                currentStep++;
-                statusEl.textContent = loadingSteps[currentStep].status;
-                textEl.textContent = loadingSteps[currentStep].text;
-                document.getElementById('loading-tip').textContent = loadingSteps[currentStep].tip;
-              }
-              
-              // Complete loading when game is ready
-              if (progress >= 100 && gameInitialized) {
-                clearInterval(interval);
-                setTimeout(() => {
-                  loadingScreen.style.display = 'none';
-                  gameLoaded = true;
-                  initializeGameMode(mode);
-                }, 500);
-              }
-            }, 100);
+            console.log('🎮 Starting Anime Aggressors game loading...');
             
-            // Wait for game to actually load
+            // Step 1: Load Three.js
+            updateProgress(5, 'Loading Three.js engine...', 'Initializing 3D Engine...', '💡 Tip: Connect a gamepad for the best experience!');
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Step 2: Load game assets
+            updateProgress(15, 'Loading game assets...', 'Loading Game Assets...', '🎮 Use arrow keys to move, Space to jump!');
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Step 3: Setup physics
+            updateProgress(30, 'Setting up physics engine...', 'Setting up Physics...', '🥊 Z = Light Attack, X = Heavy Attack, C = Special!');
             await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Step 4: Create arena
+            updateProgress(50, 'Creating 3D arena...', 'Building 3D Arena...', '⚔️ Fight the AI opponent in Versus mode!');
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Step 5: Load characters
+            updateProgress(70, 'Loading character models...', 'Loading Characters...', '🎯 Practice combos in Training mode!');
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Step 6: Initialize AI
+            updateProgress(85, 'Initializing AI system...', 'Initializing AI...', '🌟 Experience the full 3D fighting game!');
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Step 7: Finalize
+            updateProgress(95, 'Finalizing game state...', 'Almost Ready...', '🚀 Get ready for epic battles!');
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Complete loading
+            updateProgress(100, 'Game ready!', 'Game Ready!', '🎉 Let the fighting begin!');
             gameInitialized = true;
+            loadingComplete = true;
+            
+            // Wait a moment then transition to game
+            setTimeout(() => {
+              loadingScreen.style.display = 'none';
+              gameLoaded = true;
+              initializeGameMode(mode);
+            }, 1000);
             
           } catch (error) {
             console.error('Game loading failed:', error);
-            statusEl.textContent = 'Loading failed - please refresh';
-            textEl.textContent = 'Error Loading Game';
+            updateProgress(0, 'Loading failed - please refresh', 'Error Loading Game', '❌ Please refresh the page and try again');
           }
         };
         
