@@ -1,9 +1,8 @@
-import React, { useEffect, useRef } from 'react';
-import { startPolling, stopPolling, PadState } from '../../gamepad';
+import React, { useEffect, useRef, useState } from 'react';
 
 const Lanes: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const gameStateRef = useRef({
+  const [gameState, setGameState] = useState({
     lanes: 4,
     laneWidth: 0,
     players: [
@@ -24,70 +23,89 @@ const Lanes: React.FC = () => {
     const width = canvas.width;
     const height = canvas.height;
     
-    const state = gameStateRef.current;
-    state.laneWidth = width / state.lanes;
-    state.players[0].y = height - 100;
-    state.players[1].y = height - 100;
+    const lanes = 4;
+    const laneWidth = width / lanes;
+    
+    setGameState(prev => ({
+      ...prev,
+      lanes,
+      laneWidth,
+      players: [
+        { lane: 0, lives: 3, y: height - 100 },
+        { lane: 2, lives: 3, y: height - 100 }
+      ]
+    }));
 
     const update = (dt: number) => {
-      state.gameTime += dt;
-      
-      // Spawn enemies
-      if (state.gameTime - state.lastEnemySpawn > 2) {
-        const lane = Math.floor(Math.random() * state.lanes);
-        state.enemies.push({
-          x: lane * state.laneWidth + state.laneWidth / 2,
-          y: -50,
-          lane: lane,
-          vx: 0
-        });
-        state.lastEnemySpawn = state.gameTime;
-      }
-      
-      // Update bullets
-      state.bullets = state.bullets.filter(bullet => {
-        bullet.x += bullet.vx * dt;
-        bullet.y += bullet.vy * dt;
+      setGameState(prev => {
+        const newGameTime = prev.gameTime + dt;
         
-        if (bullet.x < 0 || bullet.x > width || bullet.y < 0 || bullet.y > height) {
-          return false;
+        // Spawn enemies
+        let newEnemies = [...prev.enemies];
+        if (newGameTime - prev.lastEnemySpawn > 2) {
+          const lane = Math.floor(Math.random() * prev.lanes);
+          newEnemies.push({
+            x: lane * prev.laneWidth + prev.laneWidth / 2,
+            y: -50,
+            lane: lane,
+            vx: 0
+          });
         }
-        return true;
-      });
-      
-      // Update enemies
-      state.enemies = state.enemies.filter(enemy => {
-        enemy.y += 100 * dt;
         
-        if (enemy.y > height) {
-          return false;
-        }
-        return true;
-      });
-      
-      // Check collisions
-      state.bullets.forEach((bullet, bulletIndex) => {
-        state.enemies.forEach((enemy, enemyIndex) => {
-          if (Math.abs(bullet.x - enemy.x) < 30 && Math.abs(bullet.y - enemy.y) < 30) {
-            state.bullets.splice(bulletIndex, 1);
-            state.enemies.splice(enemyIndex, 1);
-          }
+        // Update bullets
+        const newBullets = prev.bullets
+          .map(bullet => ({
+            ...bullet,
+            x: bullet.x + bullet.vx * dt,
+            y: bullet.y + bullet.vy * dt
+          }))
+          .filter(bullet => bullet.x >= 0 && bullet.x <= width && bullet.y >= 0 && bullet.y <= height);
+        
+        // Update enemies
+        const updatedEnemies = newEnemies
+          .map(enemy => ({
+            ...enemy,
+            y: enemy.y + 100 * dt
+          }))
+          .filter(enemy => enemy.y <= height);
+        
+        // Check collisions
+        const finalBullets = [...newBullets];
+        const finalEnemies = [...updatedEnemies];
+        
+        finalBullets.forEach((bullet, bulletIndex) => {
+          finalEnemies.forEach((enemy, enemyIndex) => {
+            if (Math.abs(bullet.x - enemy.x) < 30 && Math.abs(bullet.y - enemy.y) < 30) {
+              finalBullets.splice(bulletIndex, 1);
+              finalEnemies.splice(enemyIndex, 1);
+            }
+          });
         });
-      });
-      
-      // Check player collisions with enemies
-      state.players.forEach(player => {
-        state.enemies.forEach((enemy, enemyIndex) => {
-          if (enemy.lane === player.lane && Math.abs(enemy.y - player.y) < 50) {
-            player.lives--;
-            state.enemies.splice(enemyIndex, 1);
-          }
+        
+        // Check player collisions with enemies
+        const newPlayers = [...prev.players];
+        finalEnemies.forEach((enemy, enemyIndex) => {
+          newPlayers.forEach(player => {
+            if (enemy.lane === player.lane && Math.abs(enemy.y - player.y) < 50) {
+              player.lives--;
+              finalEnemies.splice(enemyIndex, 1);
+            }
+          });
         });
+        
+        return {
+          ...prev,
+          gameTime: newGameTime,
+          lastEnemySpawn: newGameTime - prev.lastEnemySpawn > 2 ? newGameTime : prev.lastEnemySpawn,
+          bullets: finalBullets,
+          enemies: finalEnemies,
+          players: newPlayers
+        };
       });
     };
 
     const render = () => {
-      const state = gameStateRef.current;
+      const state = gameState;
       
       // Clear canvas
       ctx.fillStyle = '#000';
@@ -116,7 +134,7 @@ const Lanes: React.FC = () => {
         // Draw lives
         ctx.fillStyle = '#FFF';
         ctx.font = '16px Arial';
-        ctx.fillText(`Lives: ${player.lives}`, 20, 30 + i * 20);
+        ctx.fillText(`P${i + 1}: ${player.lives}`, 20, 30 + i * 20);
       });
       
       // Draw bullets
@@ -146,53 +164,55 @@ const Lanes: React.FC = () => {
       requestAnimationFrame(gameLoop);
     };
 
-    // Start gamepad tracking
-    startPolling((pads: PadState[]) => {
-      const p1 = pads[0];
-      const p2 = pads[1] || pads[0]; // Fallback to same pad for single player
-      
-      if (!p1) return;
-      
-      const state = gameStateRef.current;
-      
-      // Player 1 movement
-      if (p1.axes[0] < -0.5 && state.players[0].lane > 0) state.players[0].lane--;
-      if (p1.axes[0] > 0.5 && state.players[0].lane < state.lanes - 1) state.players[0].lane++;
-      
-      // Player 2 movement
-      if (p2 && p2 !== p1) {
-        if (p2.axes[0] < -0.5 && state.players[1].lane > 0) state.players[1].lane--;
-        if (p2.axes[0] > 0.5 && state.players[1].lane < state.lanes - 1) state.players[1].lane++;
-      }
-      
-      // Shooting
-      if (p1.buttons.A || p1.buttons.Cross) {
-        state.bullets.push({
-          x: state.players[0].lane * state.laneWidth + state.laneWidth / 2,
-          y: state.players[0].y - 20,
-          vx: 0,
-          vy: -200,
-          owner: 0
-        });
-      }
-      
-      if (p2 && (p2.buttons.A || p2.buttons.Cross)) {
-        state.bullets.push({
-          x: state.players[1].lane * state.laneWidth + state.laneWidth / 2,
-          y: state.players[1].y - 20,
-          vx: 0,
-          vy: -200,
-          owner: 1
-        });
-      }
-    });
+    // Keyboard controls
+    const handleKeyDown = (e: KeyboardEvent) => {
+      setGameState(prev => {
+        const newPlayers = [...prev.players];
+        
+        // Player 1 movement (WASD)
+        if (e.key === 'a' && newPlayers[0].lane > 0) newPlayers[0].lane--;
+        if (e.key === 'd' && newPlayers[0].lane < prev.lanes - 1) newPlayers[0].lane++;
+        
+        // Player 2 movement (Arrow keys)
+        if (e.key === 'ArrowLeft' && newPlayers[1].lane > 0) newPlayers[1].lane--;
+        if (e.key === 'ArrowRight' && newPlayers[1].lane < prev.lanes - 1) newPlayers[1].lane++;
+        
+        // Shooting
+        if (e.key === ' ') { // Space for P1
+          const newBullets = [...prev.bullets];
+          newBullets.push({
+            x: newPlayers[0].lane * prev.laneWidth + prev.laneWidth / 2,
+            y: newPlayers[0].y - 20,
+            vx: 0,
+            vy: -200,
+            owner: 0
+          });
+          return { ...prev, players: newPlayers, bullets: newBullets };
+        }
+        if (e.key === 'Enter') { // Enter for P2
+          const newBullets = [...prev.bullets];
+          newBullets.push({
+            x: newPlayers[1].lane * prev.laneWidth + prev.laneWidth / 2,
+            y: newPlayers[1].y - 20,
+            vx: 0,
+            vy: -200,
+            owner: 1
+          });
+          return { ...prev, players: newPlayers, bullets: newBullets };
+        }
+        
+        return { ...prev, players: newPlayers };
+      });
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
 
     gameLoop();
 
     return () => {
-      stopPolling();
+      document.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [gameState]);
 
   return (
     <div style={{ textAlign: 'center' }}>
@@ -204,7 +224,7 @@ const Lanes: React.FC = () => {
         style={{ border: '2px solid rgba(255,255,255,0.3)', borderRadius: '10px', background: '#000' }}
       />
       <p style={{ color: '#ccc', marginTop: '1rem', fontSize: '0.9rem' }}>
-        Move between lanes with stick, shoot with A/Cross. 3 lives each!
+        P1: A/D to move, SPACE to shoot. P2: Arrow keys to move, ENTER to shoot. 3 lives each!
       </p>
     </div>
   );

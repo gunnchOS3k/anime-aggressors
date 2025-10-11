@@ -1,9 +1,8 @@
-import React, { useEffect, useRef } from 'react';
-import { startPolling, stopPolling, PadState } from '../../gamepad';
+import React, { useEffect, useRef, useState } from 'react';
 
 const HomeRun: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const gameStateRef = useRef({
+  const [gameState, setGameState] = useState({
     state: 'waiting', // waiting, charging, releasing, flying, landed
     charge: 0,
     maxCharge: 100,
@@ -22,45 +21,61 @@ const HomeRun: React.FC = () => {
     const height = canvas.height;
     
     // Initialize ball position
-    gameStateRef.current.ball.y = height - 100;
+    setGameState(prev => ({ ...prev, ball: { ...prev.ball, y: height - 100 } }));
 
     const update = (dt: number) => {
-      const state = gameStateRef.current;
-      
-      if (state.state === 'charging') {
-        state.charge += 60 * dt;
-        if (state.charge >= state.maxCharge) {
-          state.charge = state.maxCharge;
-          state.state = 'releasing';
+      setGameState(prev => {
+        if (prev.state === 'charging') {
+          const newCharge = Math.min(prev.charge + 60 * dt, prev.maxCharge);
+          if (newCharge >= prev.maxCharge) {
+            return { ...prev, charge: prev.maxCharge, state: 'releasing' };
+          }
+          return { ...prev, charge: newCharge };
+        } else if (prev.state === 'releasing') {
+          const accuracy = prev.charge / prev.maxCharge;
+          if (accuracy >= prev.targetZone.start && accuracy <= prev.targetZone.end) {
+            const power = accuracy * 100;
+            return {
+              ...prev,
+              power,
+              state: 'flying',
+              ball: { ...prev.ball, vx: power * 0.5, vy: -power * 0.3 }
+            };
+          } else {
+            const power = accuracy * 50;
+            return {
+              ...prev,
+              power,
+              state: 'flying',
+              ball: { ...prev.ball, vx: power * 0.3, vy: -power * 0.2 }
+            };
+          }
+        } else if (prev.state === 'flying') {
+          const newBall = {
+            x: prev.ball.x + prev.ball.vx * dt,
+            y: prev.ball.y + prev.ball.vy * dt,
+            vx: prev.ball.vx,
+            vy: prev.ball.vy + 200 * dt, // Gravity
+            size: prev.ball.size
+          };
+          
+          if (newBall.y > height - 50) {
+            newBall.y = height - 50;
+            return {
+              ...prev,
+              ball: newBall,
+              state: 'landed',
+              score: Math.floor(newBall.x / 10)
+            };
+          }
+          return { ...prev, ball: newBall };
         }
-      } else if (state.state === 'releasing') {
-        const accuracy = state.charge / state.maxCharge;
-        if (accuracy >= state.targetZone.start && accuracy <= state.targetZone.end) {
-          state.power = accuracy * 100;
-          state.state = 'flying';
-          state.ball.vx = state.power * 0.5;
-          state.ball.vy = -state.power * 0.3;
-        } else {
-          state.power = accuracy * 50;
-          state.state = 'flying';
-          state.ball.vx = state.power * 0.3;
-          state.ball.vy = -state.power * 0.2;
-        }
-      } else if (state.state === 'flying') {
-        state.ball.x += state.ball.vx * dt;
-        state.ball.y += state.ball.vy * dt;
-        state.ball.vy += 200 * dt; // Gravity
-        
-        if (state.ball.y > height - 50) {
-          state.ball.y = height - 50;
-          state.state = 'landed';
-          state.score = Math.floor(state.ball.x / 10);
-        }
-      }
+        return prev;
+      });
     };
 
     const render = () => {
-      const state = gameStateRef.current;
+      const state = gameState;
       
       // Clear canvas
       ctx.fillStyle = '#87CEEB';
@@ -82,7 +97,7 @@ const HomeRun: React.FC = () => {
       ctx.fillText(`Score: ${state.score}`, 20, 30);
       
       if (state.state === 'waiting') {
-        ctx.fillText('Press any button to start charging!', 20, 60);
+        ctx.fillText('Press SPACE to start charging!', 20, 60);
       } else if (state.state === 'charging') {
         // Draw charge bar
         ctx.fillStyle = '#FF0000';
@@ -97,7 +112,7 @@ const HomeRun: React.FC = () => {
         ctx.fillText(`Power: ${Math.floor(state.power)}%`, 20, 60);
       } else if (state.state === 'landed') {
         ctx.fillText(`Final Score: ${state.score}`, 20, 60);
-        ctx.fillText('Press any button to restart', 20, 90);
+        ctx.fillText('Press SPACE to restart', 20, 90);
       }
     };
 
@@ -107,41 +122,54 @@ const HomeRun: React.FC = () => {
       requestAnimationFrame(gameLoop);
     };
 
-    // Start gamepad tracking
-    startPolling((pads: PadState[]) => {
-      const p1 = pads[0];
-      if (!p1) return;
-      
-      const state = gameStateRef.current;
-      
-      // Check for button press to start/restart
-      if (p1.buttons.A || p1.buttons.Cross) {
-        if (state.state === 'waiting' || state.state === 'landed') {
-          if (state.state === 'landed') {
-            // Reset game
-            state.state = 'waiting';
-            state.charge = 0;
-            state.ball = { x: 50, y: height - 100, vx: 0, vy: 0, size: 20 };
-            state.score = 0;
-            state.power = 0;
-          } else {
-            state.state = 'charging';
+    // Keyboard controls
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        setGameState(prev => {
+          if (prev.state === 'waiting' || prev.state === 'landed') {
+            if (prev.state === 'landed') {
+              // Reset game
+              return {
+                state: 'waiting',
+                charge: 0,
+                ball: { x: 50, y: height - 100, vx: 0, vy: 0, size: 20 },
+                score: 0,
+                power: 0,
+                maxCharge: 100,
+                targetZone: { start: 0.7, end: 0.9 }
+              };
+            } else {
+              return { ...prev, state: 'charging' };
+            }
           }
-        }
+          return prev;
+        });
       }
-      
-      // Check for button release during charging
-      if (state.state === 'charging' && !p1.buttons.A && !p1.buttons.Cross) {
-        state.state = 'releasing';
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        setGameState(prev => {
+          if (prev.state === 'charging') {
+            return { ...prev, state: 'releasing' };
+          }
+          return prev;
+        });
       }
-    });
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keyup', handleKeyUp);
 
     gameLoop();
 
     return () => {
-      stopPolling();
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keyup', handleKeyUp);
     };
-  }, []);
+  }, [gameState]);
 
   return (
     <div style={{ textAlign: 'center' }}>
@@ -153,7 +181,7 @@ const HomeRun: React.FC = () => {
         style={{ border: '2px solid rgba(255,255,255,0.3)', borderRadius: '10px', background: '#000' }}
       />
       <p style={{ color: '#ccc', marginTop: '1rem', fontSize: '0.9rem' }}>
-        Charge with A/Cross, release in the green zone for max power!
+        Hold SPACE to charge, release in the green zone for max power!
       </p>
     </div>
   );

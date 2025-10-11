@@ -1,9 +1,8 @@
-import React, { useEffect, useRef } from 'react';
-import { startPolling, stopPolling, PadState } from '../../gamepad';
+import React, { useEffect, useRef, useState } from 'react';
 
 const Paint: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const gameStateRef = useRef({
+  const [gameState, setGameState] = useState({
     grid: [] as number[][],
     players: [
       { x: 1, y: 1, color: 1, score: 0 },
@@ -24,35 +23,46 @@ const Paint: React.FC = () => {
     const width = canvas.width;
     const height = canvas.height;
     
-    const state = gameStateRef.current;
-    state.gridSize = 20;
-    state.cols = Math.floor(width / state.gridSize);
-    state.rows = Math.floor(height / state.gridSize);
-    state.grid = Array(state.rows).fill(null).map(() => Array(state.cols).fill(0));
-    state.players[1].x = state.cols - 2;
-    state.players[1].y = state.rows - 2;
+    const gridSize = 20;
+    const cols = Math.floor(width / gridSize);
+    const rows = Math.floor(height / gridSize);
+    const grid = Array(rows).fill(null).map(() => Array(cols).fill(0));
+    
+    setGameState(prev => ({
+      ...prev,
+      grid,
+      cols,
+      rows,
+      players: [
+        { x: 1, y: 1, color: 1, score: 0 },
+        { x: cols - 2, y: rows - 2, color: 2, score: 0 }
+      ]
+    }));
 
     const update = (dt: number) => {
-      const elapsed = (Date.now() - state.gameStart) / 1000;
-      state.gameTime = Math.max(0, 60 - elapsed);
-      
-      if (state.gameTime <= 0) return;
-      
-      // Update player scores
-      state.players.forEach(player => {
-        player.score = 0;
-        for (let y = 0; y < state.rows; y++) {
-          for (let x = 0; x < state.cols; x++) {
-            if (state.grid[y][x] === player.color) {
-              player.score++;
+      setGameState(prev => {
+        const elapsed = (Date.now() - prev.gameStart) / 1000;
+        const newGameTime = Math.max(0, 60 - elapsed);
+        
+        // Update player scores
+        const newPlayers = prev.players.map(player => {
+          let score = 0;
+          for (let y = 0; y < prev.rows; y++) {
+            for (let x = 0; x < prev.cols; x++) {
+              if (prev.grid[y][x] === player.color) {
+                score++;
+              }
             }
           }
-        }
+          return { ...player, score };
+        });
+        
+        return { ...prev, gameTime: newGameTime, players: newPlayers };
       });
     };
 
     const render = () => {
-      const state = gameStateRef.current;
+      const state = gameState;
       
       // Clear canvas
       ctx.fillStyle = '#F0F0F0';
@@ -82,14 +92,17 @@ const Paint: React.FC = () => {
           state.gridSize - 4,
           state.gridSize - 4
         );
+        
+        // Draw lives
+        ctx.fillStyle = '#FFF';
+        ctx.font = '16px Arial';
+        ctx.fillText(`P${i + 1}: ${player.score}`, 20, 30 + i * 20);
       });
       
       // Draw UI
       ctx.fillStyle = '#000';
       ctx.font = '20px Arial';
       ctx.fillText(`Time: ${Math.floor(state.gameTime)}s`, 20, 30);
-      ctx.fillText(`P1: ${state.players[0].score}`, 20, 60);
-      ctx.fillText(`P2: ${state.players[1].score}`, 20, 90);
       
       if (state.gameTime <= 0) {
         const winner = state.players[0].score > state.players[1].score ? 'Player 1' : 
@@ -104,44 +117,47 @@ const Paint: React.FC = () => {
       requestAnimationFrame(gameLoop);
     };
 
-    // Start gamepad tracking
-    startPolling((pads: PadState[]) => {
-      const p1 = pads[0];
-      const p2 = pads[1] || pads[0]; // Fallback to same pad for single player
-      
-      if (!p1) return;
-      
-      const state = gameStateRef.current;
-      
-      // Player 1 movement
-      if (p1.axes[0] < -0.5 && state.players[0].x > 0) state.players[0].x--;
-      if (p1.axes[0] > 0.5 && state.players[0].x < state.cols - 1) state.players[0].x++;
-      if (p1.axes[1] < -0.5 && state.players[0].y > 0) state.players[0].y--;
-      if (p1.axes[1] > 0.5 && state.players[0].y < state.rows - 1) state.players[0].y++;
-      
-      // Player 2 movement
-      if (p2 && p2 !== p1) {
-        if (p2.axes[0] < -0.5 && state.players[1].x > 0) state.players[1].x--;
-        if (p2.axes[0] > 0.5 && state.players[1].x < state.cols - 1) state.players[1].x++;
-        if (p2.axes[1] < -0.5 && state.players[1].y > 0) state.players[1].y--;
-        if (p2.axes[1] > 0.5 && state.players[1].y < state.rows - 1) state.players[1].y++;
-      }
-      
-      // Paint tiles
-      if (p1.buttons.A || p1.buttons.Cross) {
-        state.grid[state.players[0].y][state.players[0].x] = 1;
-      }
-      if (p2 && (p2.buttons.A || p2.buttons.Cross)) {
-        state.grid[state.players[1].y][state.players[1].x] = 2;
-      }
-    });
+    // Keyboard controls
+    const handleKeyDown = (e: KeyboardEvent) => {
+      setGameState(prev => {
+        const newPlayers = [...prev.players];
+        
+        // Player 1 (WASD)
+        if (e.key === 'w' && newPlayers[0].y > 0) newPlayers[0].y--;
+        if (e.key === 's' && newPlayers[0].y < prev.rows - 1) newPlayers[0].y++;
+        if (e.key === 'a' && newPlayers[0].x > 0) newPlayers[0].x--;
+        if (e.key === 'd' && newPlayers[0].x < prev.cols - 1) newPlayers[0].x++;
+        
+        // Player 2 (Arrow keys)
+        if (e.key === 'ArrowUp' && newPlayers[1].y > 0) newPlayers[1].y--;
+        if (e.key === 'ArrowDown' && newPlayers[1].y < prev.rows - 1) newPlayers[1].y++;
+        if (e.key === 'ArrowLeft' && newPlayers[1].x > 0) newPlayers[1].x--;
+        if (e.key === 'ArrowRight' && newPlayers[1].x < prev.cols - 1) newPlayers[1].x++;
+        
+        // Paint tiles
+        if (e.key === ' ') { // Space for P1
+          const newGrid = [...prev.grid];
+          newGrid[newPlayers[0].y][newPlayers[0].x] = 1;
+          return { ...prev, players: newPlayers, grid: newGrid };
+        }
+        if (e.key === 'Enter') { // Enter for P2
+          const newGrid = [...prev.grid];
+          newGrid[newPlayers[1].y][newPlayers[1].x] = 2;
+          return { ...prev, players: newPlayers, grid: newGrid };
+        }
+        
+        return { ...prev, players: newPlayers };
+      });
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
 
     gameLoop();
 
     return () => {
-      stopPolling();
+      document.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [gameState]);
 
   return (
     <div style={{ textAlign: 'center' }}>
@@ -153,7 +169,7 @@ const Paint: React.FC = () => {
         style={{ border: '2px solid rgba(255,255,255,0.3)', borderRadius: '10px', background: '#000' }}
       />
       <p style={{ color: '#ccc', marginTop: '1rem', fontSize: '0.9rem' }}>
-        Move with stick, paint with A/Cross. Most tiles in 60 seconds wins!
+        P1: WASD to move, SPACE to paint. P2: Arrow keys to move, ENTER to paint. Most tiles in 60 seconds wins!
       </p>
     </div>
   );
