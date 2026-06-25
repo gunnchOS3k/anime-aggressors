@@ -5,10 +5,15 @@ jobs:
     runs-on: ubuntu-latest
     defaults: { run: { working-directory: apps/web } }
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: '20' }
-      - run: npm ci || npm i
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
+        working-directory: ${{ github.workspace }}
       - run: npm run build
       - uses: actions/upload-artifact@v4
-        with: { name: web-dist, path: apps/web/dist }
+        with:
+          name: web-dist
+          path: apps/web/dist

@@ -2,18 +2,18 @@ name: Quality
 
 on:
   push:
-    branches: [main, revive-product-rollback-vertical-slice, fix-ci-expand-full-completion-roadmap]
+    branches: [main, revive-product-rollback-vertical-slice, fix-ci-expand-full-completion-roadmap, fix-pages-artifact-node24]
   pull_request:
 
 jobs:
   quality:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: "20"
+          node-version: "24"
           cache: npm
 
       - name: Install dependencies
@@ -35,7 +35,7 @@ jobs:
   native-engine:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Configure native engine
         run: cmake -S native/engine -B build/native-engine -DCMAKE_BUILD_TYPE=Release
@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Firmware compile status (non-blocking)
         run: |
           echo "Firmware compile not gated yet — see firmware/ring/README.md"

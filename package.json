@@ -13,6 +13,7 @@
     "build": "npm run build:packages && npm run build:web",
     "build:packages": "npm run build -w @anime-aggressors/game-core -w @anime-aggressors/rollback -w @anime-aggressors/edgeio -w @anime-aggressors/messages -w @gunnch/input",
     "build:web": "npm run build -w anime-aggressors-web",
+    "build:pages": "npm run build:web && test -f apps/web/dist/index.html",
     "typecheck": "npm run build -w @anime-aggressors/game-core && npm run typecheck -w @anime-aggressors/game-core -w @anime-aggressors/rollback -w @anime-aggressors/edgeio -w @anime-aggressors/messages -w @gunnch/input -w anime-aggressors-web",
     "test": "npm run build -w @anime-aggressors/game-core && npm run test -w @anime-aggressors/game-core -w @anime-aggressors/rollback -w @anime-aggressors/edgeio",
     "quality": "npm run typecheck && npm run test && npm run build",

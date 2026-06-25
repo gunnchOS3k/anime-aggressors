@@ -1,8 +1,8 @@
 # Validation Report
 
 **Date:** 2026-06-25  
-**Branch:** `fix-ci-expand-full-completion-roadmap`  
-**PR context:** Fixes GitHub Actions failures from PR #19
+**Branch:** `fix-pages-artifact-node24`  
+**PR context:** Fixes GitHub Pages deploy failure from PR #20
 
 ## Commands run (local)
 
@@ -14,6 +14,7 @@
 | `npm run test` | **PASS** — 15 tests (8 game-core, 3 rollback, 4 edgeio) |
 | `npm run build` | **PASS** — all packages + `apps/web` |
 | `npm run quality` | **PASS** |
+| `npm run build:pages` | **PASS** — `apps/web/dist/index.html` present |
 | `cmake` native engine | **NOT RUN locally** — `cmake` not installed on dev machine; **expected PASS** on `ubuntu-latest` CI job `native-engine` |
 
 ## PR #19 CI failures — root cause and fix
@@ -54,5 +55,23 @@ Run `npm audit` for details. See `docs/SECURITY_AUDIT.md` for triage template. V
 
 ## Next PR
 
-**Title:** `fix(ci): workspace boundaries, legacy isolation, full-completion roadmap`  
-See final response for PR body.
+**Title:** `fix(pages): upload apps/web/dist artifact and Node 24 actions`  
+See `docs/VALIDATION_REPORT.md` § PR #20.
+
+---
+
+## PR #20 Pages failure
+
+**Root cause:**
+- GitHub Pages upload step was looking for root `dist`.
+- Vite web build outputs `apps/web/dist`.
+
+**Fix:**
+- Pages artifact path changed to `apps/web/dist`.
+- Added assertion that `apps/web/dist/index.html` exists before upload.
+- Updated Actions to Node 24-compatible action versions (`checkout@v6`, `setup-node@v6`, `upload-pages-artifact@v5`).
+
+**Validation:**
+- `npm ci` — see commands table below
+- `npm run quality`
+- `npm run build:pages`

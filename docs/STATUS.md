@@ -178,16 +178,21 @@ These work for demos and engineering validation but are not product-complete.
 
 | Job | Workflow | Required | What it runs | Status |
 |-----|----------|----------|--------------|--------|
-| `quality` | `.github/workflows/quality.yml` | **Yes** | `npm ci`, `typecheck`, `test`, `build`, `audit:ci` (non-blocking) | Target: green on `fix-ci-expand-full-completion-roadmap` |
+| `quality` | `.github/workflows/quality.yml` | **Yes** | `npm ci`, `typecheck`, `test`, `build`, `audit:ci` (non-blocking) | Green on main after PR #2 |
+| `pages` | `.github/workflows/pages.yml` | **Yes** (main push) | `npm run quality`, upload `apps/web/dist` | Fixed PR #20 — was uploading root `dist` |
 | `native-engine` | same | **Yes** | CMake configure/build, `ctest` determinism | Skeleton passes when enabled |
 | `firmware-audit` | same | No (`continue-on-error`) | Checks `platformio.ini` exists | Compile not gated |
 
-**PR #19 failures (resolved on integration branch):** workspace import for `@anime-aggressors/rollback`, accidental `legacy/web` compilation, missing `zod`/`StageState` in `packages/messages`, `@gunnch/input` tsconfig boundary leaks.
+**PR #19 failures (resolved):** workspace import for `@anime-aggressors/rollback`, accidental `legacy/web` compilation, missing `zod`/`StageState` in `packages/messages`, `@gunnch/input` tsconfig boundary leaks.
+
+**PR #20 Pages failure (resolved on `fix-pages-artifact-node24`):** upload step targeted root `dist`; Vite outputs `apps/web/dist`. Artifact path updated; pre-upload assertion added.
+
+**Node.js:** GitHub Actions workflows use `actions/checkout@v6`, `actions/setup-node@v6`, `node-version: 24` to avoid Node 20 deprecation warnings on hosted runners.
 
 **Local verify:**
 
 ```bash
-npm ci && npm run quality
+npm ci && npm run quality && npm run build:pages
 ```
 
 See `docs/VALIDATION_REPORT.md` and `docs/PULL_REQUEST_CHECKLIST.md`.
