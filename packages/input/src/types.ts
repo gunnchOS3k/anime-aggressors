@@ -60,3 +60,4 @@ export interface GamepadManagerConfig {
   enableVibration: boolean;
   autoReconnect: boolean;
 }
+

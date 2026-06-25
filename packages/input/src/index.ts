@@ -8,3 +8,4 @@ export type {
   RemapConfig,
   GamepadMapping 
 } from './types.js';
+

@@ -1,39 +1,52 @@
-import assert from 'node:assert/strict';
-import { parseSensorPacket, makeDataView, createHapticPacket } from '../src/parser.js';
-import { detectGestures } from '../src/gestures.js';
-import { generateFakePacket, generateSwipeRightSequence } from '../src/fake.js';
+import { describe, it } from "node:test";
+import assert from "node:assert/strict";
+import {
+  parseSensorPacket,
+  parseGesturePacket,
+  createHapticPacket,
+  createGesturePacket,
+  makeDataView,
+  mapGestureToInput,
+  SENSOR_PACKET_SIZE,
+  GESTURE_PACKET_SIZE,
+  HAPTIC_PACKET_SIZE,
+} from "../dist/index.js";
 
-// Test sensor packet parsing
-const bytes = new Uint8Array(14);
-const dv = new DataView(bytes.buffer);
-dv.setUint16(0, 42, true);
-dv.setInt16(2, 1000, true);
-dv.setInt16(4, 0, true);
-dv.setInt16(6, 0, true);
-dv.setInt16(8, 0, true);
-dv.setInt16(10, 0, true);
-dv.setInt16(12, 0, true);
+describe("edgeio protocol", () => {
+  it("parses sensor packet", () => {
+    const bytes = new Uint8Array(SENSOR_PACKET_SIZE);
+    const dv = new DataView(bytes.buffer);
+    dv.setUint32(0, 42, true);
+    dv.setUint32(4, 1000, true);
+    dv.setInt16(8, 100, true);
+    dv.setUint8(20, 90);
 
-const frame = parseSensorPacket(makeDataView(bytes));
-assert.equal(frame.t, 42);
-assert.equal(frame.ax, 1000);
+    const parsed = parseSensorPacket(makeDataView(bytes));
+    assert.equal(parsed.seq, 42);
+    assert.equal(parsed.timestampMs, 1000);
+    assert.equal(parsed.ax, 100);
+    assert.equal(parsed.batteryPct, 90);
+  });
 
-// Test gesture detection
-const gestures = detectGestures([
-  {t:41,ax:0,ay:0,az:0,gx:0,gy:0,gz:0},
-  {t:42,ax:1400,ay:0,az:0,gx:0,gy:0,gz:0}
-]);
-assert.ok(gestures.find(g => g.type === 'swipeR'));
+  it("parses gesture packet", () => {
+    const packet = createGesturePacket(7, 500, "swipeR", 95, 1);
+    assert.equal(packet.byteLength, GESTURE_PACKET_SIZE);
+    const parsed = parseGesturePacket(makeDataView(packet));
+    assert.equal(parsed.gesture, "swipeR");
+    assert.equal(parsed.confidence, 95);
+    assert.equal(parsed.deviceId, 1);
+  });
 
-// Test haptic packet creation
-const hapticCmd = createHapticPacket({ effectId: 1, intensity: 128, durationMs: 500 });
-assert.equal(hapticCmd.length, 4);
-assert.equal(hapticCmd[0], 1);
-assert.equal(hapticCmd[1], 128);
+  it("encodes haptic packet", () => {
+    const bytes = createHapticPacket({ effectId: 2, intensity: 200, durationMs: 150 });
+    assert.equal(bytes.byteLength, HAPTIC_PACKET_SIZE);
+    assert.equal(bytes[0], 2);
+    assert.equal(bytes[1], 200);
+  });
 
-// Test fake data generation
-const fakeFrames = generateSwipeRightSequence();
-assert.equal(fakeFrames.length, 5);
-assert.equal(fakeFrames[4].ax, 1400);
-
-console.log('All tests passed!');
+  it("maps wearable gesture to expected input action", () => {
+    const mapped = mapGestureToInput("doubleTap");
+    assert.equal(mapped.special, true);
+    assert.equal(mapped.wearableGesture, "doubleTap");
+  });
+});

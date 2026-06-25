@@ -23,8 +23,8 @@ export class EdgeIO extends EventEmitter {
     this.config = {
       autoConnect: true,
       scanTimeout: 10000,
-      scanTimeout: 0.7,
-      ...config
+      gestureThreshold: 0.7,
+      ...config,
     };
   }
 
@@ -122,3 +122,4 @@ export class EdgeIO extends EventEmitter {
     return Math.abs(accel.z) > 1.5 && Math.abs(accel.z) < 2.5;
   }
 }
+

@@ -1,0 +1,7 @@
+category,reference,part_name,manufacturer,manufacturer_part_number,quantity,purpose,status,notes
+MCU,U1,Adafruit Feather nRF52840 Express,Adafruit,TBD,1,Main MCU + BLE,TBD,Primary dev-board mule target
+IMU,U2,6-axis IMU breakout BMI270 or ICM-42688,Bosch/TDK,TBD,1,Motion sensing,TBD,Verify I2C address and mount orientation
+Haptic,U3,DRV2605L haptic driver breakout,Texas Instruments,TBD,1,Haptic output,TBD,Output-only; map effect IDs in firmware
+Battery,B1,LiPo 3.7V 200mAh pouch,TBD,TBD,1,Power,TBD,Include protection and strain relief in mechanical design
+Passives,—,0402 decoupling / I2C pull-ups,—,—,1 set,Signal integrity,TBD,Per schematic review
+Connector,J1,Micro-USB or USB-C for charge/debug,TBD,TBD,1,Programming/charge,TBD,Match Feather variant

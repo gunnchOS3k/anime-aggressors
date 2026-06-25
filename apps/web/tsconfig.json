@@ -1,1 +1,16 @@
-{ "compilerOptions": { "jsx": "react-jsx", "module": "esnext", "target": "es2018", "moduleResolution": "bundler", "strict": true }, "include": ["src"] }
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "paths": {
+      "@anime-aggressors/game-core": ["../../packages/game-core/src/index.ts"],
+      "@anime-aggressors/rollback": ["../../packages/rollback/src/index.ts"],
+      "@anime-aggressors/edgeio": ["../../packages/edgeio/src/index.ts"]
+    }
+  },
+  "include": ["src"]
+}

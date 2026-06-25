@@ -81,3 +81,4 @@ export function getGamepadInfo(): { connected: number; names: string[] } {
   
   return { connected, names };
 }
+
