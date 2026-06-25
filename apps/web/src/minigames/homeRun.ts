@@ -1,4 +1,4 @@
-import { trackGamepads, createKeyboardFallback } from '../input/gamepad';
+import { trackGamepads } from '../input/gamepad';
 
 export function startHomeRun(canvas: HTMLCanvasElement) {
   const ctx = canvas.getContext('2d')!;
@@ -100,7 +100,7 @@ export function startHomeRun(canvas: HTMLCanvasElement) {
   
   // Start gamepad tracking
   trackGamepads((pads, dt) => {
-    const p1 = pads.p1 || createKeyboardFallback();
+    const p1 = pads.p1!;
     
     // Check for button press to start/restart
     if (p1.buttons.some(b => b) && (gameState === 'waiting' || gameState === 'landed')) {
@@ -126,3 +126,4 @@ export function startHomeRun(canvas: HTMLCanvasElement) {
   
   gameLoop();
 }
+

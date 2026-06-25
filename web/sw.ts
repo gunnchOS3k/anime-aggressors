@@ -24,3 +24,4 @@ registerRoute(
   ({ url }) => url.pathname.startsWith('/api/'),
   new StaleWhileRevalidate()
 );
+

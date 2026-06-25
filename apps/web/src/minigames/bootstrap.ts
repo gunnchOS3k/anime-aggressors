@@ -29,3 +29,4 @@ export function bootstrapMiniGames(root: HTMLElement | null) {
     if (game === 'lane') startLaneBlaster(stage);
   });
 }
+

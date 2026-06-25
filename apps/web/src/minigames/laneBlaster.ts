@@ -1,4 +1,4 @@
-import { trackGamepads, createKeyboardFallback } from '../input/gamepad';
+import { trackGamepads } from '../input/gamepad';
 
 export function startLaneBlaster(canvas: HTMLCanvasElement) {
   const ctx = canvas.getContext('2d')!;
@@ -140,8 +140,8 @@ export function startLaneBlaster(canvas: HTMLCanvasElement) {
   
   // Start gamepad tracking
   trackGamepads((pads, dt) => {
-    const p1 = pads.p1 || createKeyboardFallback();
-    const p2 = pads.p2 || createKeyboardFallback();
+    const p1 = pads.p1!;
+    const p2 = pads.p2!;
     
     // Player 1 movement
     if (p1.axes[0] < -0.5 && players[0].lane > 0) players[0].lane--;
@@ -177,3 +177,4 @@ export function startLaneBlaster(canvas: HTMLCanvasElement) {
   
   gameLoop();
 }
+

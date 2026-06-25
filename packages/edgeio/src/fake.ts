@@ -1,35 +1,43 @@
-import { makeDataView, parseSensorPacket } from "./parser.js";
+import type { GestureName } from "./gestures.js";
+import { createGesturePacket, createSensorPacket, type SensorNotify } from "./parser.js";
 
-export function generateFakePacket({ t = 0, ax = 0, ay = 0, az = 0, gx = 0, gy = 0, gz = 0 } = {}) {
-  const bytes = new Uint8Array(14);
-  const dv = new DataView(bytes.buffer);
-  dv.setUint16(0, t, true);
-  dv.setInt16(2, ax, true);
-  dv.setInt16(4, ay, true);
-  dv.setInt16(6, az, true);
-  dv.setInt16(8, gx, true);
-  dv.setInt16(10, gy, true);
-  dv.setInt16(12, gz, true);
-  return bytes;
+export function generateFakeSensorFrame(seq: number, timestampMs: number): SensorNotify {
+  return {
+    seq,
+    timestampMs,
+    ax: Math.sin(seq * 0.1) * 1000,
+    ay: 0,
+    az: 1000,
+    gx: 0,
+    gy: 0,
+    gz: 0,
+    batteryPct: 85,
+    flags: 0,
+  };
 }
 
-export function generateFrames(n: number) {
-  const frames = [];
-  for (let i = 0; i < n; i++) {
-    const bytes = generateFakePacket({ 
-      t: i, 
-      ax: i * 50, 
-      ay: 0, 
-      az: i === n - 1 ? 2100 : 0 
-    });
-    frames.push(parseSensorPacket(makeDataView(bytes)));
+export function generateFakeGesturePacket(
+  gesture: GestureName,
+  seq = 1,
+  timestampMs = 1000,
+): Uint8Array {
+  return createGesturePacket(seq, timestampMs, gesture);
+}
+
+export function generateSwipeRightSequence(count = 10): Uint8Array[] {
+  const frames: Uint8Array[] = [];
+  for (let i = 0; i < count; i++) {
+    frames.push(
+      createSensorPacket(generateFakeSensorFrame(i, i * 16)),
+    );
   }
+  frames.push(generateFakeGesturePacket("swipeR", count, count * 16));
   return frames;
 }
 
-export function generateSwipeRightSequence() {
-  return generateFrames(5).map((frame, i) => ({
-    ...frame,
-    ax: i === 4 ? 1400 : frame.ax
-  }));
+export function generateFakePacket(type: "sensor" | "gesture", seq = 1): Uint8Array {
+  if (type === "sensor") {
+    return createSensorPacket(generateFakeSensorFrame(seq, seq * 16));
+  }
+  return generateFakeGesturePacket("tap", seq, seq * 16);
 }

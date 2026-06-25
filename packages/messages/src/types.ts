@@ -183,3 +183,4 @@ export interface MatchmakingPreferences {
   skillRange: number;
   stagePreferences: string[];
 }
+

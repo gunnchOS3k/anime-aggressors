@@ -1,0 +1,42 @@
+name: quality
+
+on:
+  push:
+    branches: [main, revive-product-rollback-vertical-slice]
+  pull_request:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm run test
+
+      - name: Build web vertical slice
+        run: npm run build:web
+
+      - name: Build packages
+        run: npm run build -w @anime-aggressors/game-core -w @anime-aggressors/rollback -w @anime-aggressors/edgeio --if-present
+
+  firmware-audit:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Firmware compile status (non-blocking)
+        run: |
+          echo "Firmware compile not gated yet — see firmware/ring/README.md"
+          test -f firmware/ring/platformio.ini

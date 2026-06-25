@@ -101,3 +101,4 @@ const MiniGames: React.FC<MiniGamesProps> = ({ onClose }) => {
 };
 
 export default MiniGames;
+

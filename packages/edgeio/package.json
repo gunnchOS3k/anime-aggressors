@@ -1,28 +1,16 @@
 {
   "name": "@anime-aggressors/edgeio",
   "version": "1.0.0",
-  "description": "Edge-IO gesture detection library for Anime Aggressors",
+  "description": "Edge-IO BLE gesture protocol for Anime Aggressors",
   "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch",
-    "test": "vitest",
-    "clean": "rm -rf dist"
-  },
-  "keywords": ["edge-io", "gesture", "ble", "wearable", "gamepad"],
-  "author": "gunnchOS3k",
-  "license": "MIT",
-  "dependencies": {
-    "noble": "^1.9.1"
+    "test": "npm run build && node --test test/*.test.mjs",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "typescript": "^5.3.0",
-    "vitest": "^1.0.0",
-    "@types/node": "^20.10.0"
+    "typescript": "^5.3.0"
   }
 }
