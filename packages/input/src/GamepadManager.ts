@@ -1,4 +1,4 @@
-import type { Actions, GamepadInfo, GamepadEvent, GamepadManagerConfig, RemapConfig } from './types.js';
+import type { Actions, GamepadInfo, PadConnectionEvent, GamepadManagerConfig, RemapConfig } from './types.js';
 import { getMappingFor, getControllerName } from './mappings.js';
 
 export class GamepadManager {
@@ -27,7 +27,7 @@ export class GamepadManager {
   start(): void {
     // Add event listeners
     window.addEventListener('gamepadconnected', this.handleGamepadConnected);
-    window.addEventListener('gampaddisconnected', this.handleGamepadDisconnected);
+    window.addEventListener('gamepaddisconnected', this.handleGamepadDisconnected);
     
     // Start polling loop
     this.loop();
@@ -36,7 +36,7 @@ export class GamepadManager {
   stop(): void {
     // Remove event listeners
     window.removeEventListener('gamepadconnected', this.handleGamepadConnected);
-    window.removeEventListener('gampaddisconnected', this.handleGamepadDisconnected);
+    window.removeEventListener('gamepaddisconnected', this.handleGamepadDisconnected);
     
     // Stop polling
     if (this.animationFrameId) {
@@ -45,7 +45,7 @@ export class GamepadManager {
     }
   }
 
-  private handleGamepadConnected = (event: GamepadEvent): void => {
+  private handleGamepadConnected = (event: globalThis.GamepadEvent): void => {
     const gamepad = event.gamepad;
     const info: GamepadInfo = {
       id: gamepad.id,
@@ -62,7 +62,7 @@ export class GamepadManager {
     this.onConnect?.(info);
   };
 
-  private handleGamepadDisconnected = (event: GamepadEvent): void => {
+  private handleGamepadDisconnected = (event: globalThis.GamepadEvent): void => {
     const gamepad = event.gamepad;
     const info = this.gamepadInfo[gamepad.index];
     

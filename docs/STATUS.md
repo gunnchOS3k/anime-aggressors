@@ -1,10 +1,40 @@
 # Anime Aggressors — Status
 
 **Last updated:** 2026-06-24  
-**Branch:** `revive-product-rollback-vertical-slice`  
-**Milestone:** v0.1 deterministic web vertical slice
+**Branch:** `fix-ci-expand-full-completion-roadmap` (integration)  
+**Program:** Full-completion tracks A–H — see `docs/ROADMAP_FULL_COMPLETION.md`  
+**Milestone:** Track A1 (2P deterministic match); Track A0 (CI green) in progress
 
 This document is the honest capability matrix. If something is not listed under **Playable today**, assume it is not shipped.
+
+The v0.1 web vertical slice is **Track A** of the full-completion program, not the entire product scope.
+
+---
+
+## Full-completion program (parallel tracks)
+
+| Track | Focus | Honest status |
+|-------|-------|---------------|
+| **A** | Full deterministic web game | A1 done; A0 CI in progress |
+| **B** | Rollback / online | B0 done (local harness) |
+| **C** | C++ engine | C1–C2 skeleton compiles in CI |
+| **D** | Mobile (Expo) | D0–D1 planning / scaffold |
+| **E** | Desktop (Tauri) | E0 ADR done; no shell yet |
+| **F** | Edge-IO dev-board mule | F0–F1 done; F3 blocked on firmware |
+| **G** | Production wristband/ring | G0–G1 requirements only |
+| **H** | AAA-inspired quality bar | H0 done; polish not started |
+
+---
+
+## Legacy / archived paths
+
+| Path | Status | Notes |
+|------|--------|-------|
+| `legacy/web/` | Archived React PWA | **Not in CI** — moved from root `web/` to fix workspace compile leaks |
+| `legacy/game-prototype/` | Archived TS/C++ prototype | Superseded by `packages/game-core` + `native/engine/` |
+| Root `web/` (if present) | **Removed or legacy** | Canonical web app is `apps/web` only |
+
+Do not import from `legacy/*` in active packages. See `legacy/web/README.md`.
 
 ---
 
@@ -40,7 +70,7 @@ These work for demos and engineering validation but are not product-complete.
 | Edge-IO in browser | Mapper + fake packet generators; no Web Bluetooth UI | BLE connect flow, latency measurement |
 | Characters | 2 stats-differentiated originals | 4+ roster, unique specials |
 | Stages | 1 stage (`skyline-arena`) | 2+ with hazards |
-| CI | `ci.yml` builds `apps/web` only | Full workspace `quality` gate on every PR |
+| CI | `quality.yml` runs typecheck + test + build | A0 gate — verify green on PR branch |
 | Legacy web tree | Root `web/` React app still present | Consolidate or archive |
 
 ---
@@ -69,9 +99,9 @@ These work for demos and engineering validation but are not product-complete.
 |------|---------|--------------|--------|
 | Firmware compile on target | Not verified in CI | `main.cpp` uses ESP32-style `BLEDevice.h` on nRF52840 Arduino; JSON notify vs binary protocol | **Blocked** — see ADR-0001 |
 | Real BLE end-to-end | No hardware-in-loop test | Firmware/protocol mismatch; no validated PCB | **Not tested** |
-| Root legacy `web/` app | May diverge from `apps/web` | Two web stacks in repo | **Unknown** — needs audit |
-| Godot / C++ engine paths | Referenced in old README | Placeholder or removed | **Not present** in active vertical slice |
-| Mobile (Expo) / Desktop (Electron) | Old README claims | No workspace packages | **Not implemented** |
+| Root legacy `web/` app | Moved to `legacy/web/` | Was compiled by stray tsconfig includes | **Mitigated** — excluded from workspace build |
+| C++ engine (`native/engine/`) | Skeleton only | Not wired to `apps/web` | **Experimental** — compiles in CI `native-engine` job |
+| Mobile (Expo) / Desktop (Tauri) | Scaffolds + docs only | Not in required `quality` gate | **Planning** — see ADR-0002, `apps/*/PRODUCT_SCOPE.md` |
 | Cloud worker leaderboards | `cloud/worker/` exists | Not wired to vertical slice | **Scaffold only** |
 | Floating-point determinism across browsers | Uses JSON serialize + JS numbers | Acceptable for v0.1; cross-platform lockstep needs audit | **Risk** — monitor in QA |
 
@@ -141,6 +171,26 @@ These work for demos and engineering validation but are not product-complete.
 - [x] `docs/PRODUCT_REQUIREMENTS.md` and honest `README.md`
 - [ ] `docs/VALIDATION_REPORT.md` with command results
 - [ ] Firmware stack decision recorded (ADR-0001)
+
+---
+
+## CI status
+
+| Job | Workflow | Required | What it runs | Status |
+|-----|----------|----------|--------------|--------|
+| `quality` | `.github/workflows/quality.yml` | **Yes** | `npm ci`, `typecheck`, `test`, `build`, `audit:ci` (non-blocking) | Target: green on `fix-ci-expand-full-completion-roadmap` |
+| `native-engine` | same | **Yes** | CMake configure/build, `ctest` determinism | Skeleton passes when enabled |
+| `firmware-audit` | same | No (`continue-on-error`) | Checks `platformio.ini` exists | Compile not gated |
+
+**PR #19 failures (resolved on integration branch):** workspace import for `@anime-aggressors/rollback`, accidental `legacy/web` compilation, missing `zod`/`StageState` in `packages/messages`, `@gunnch/input` tsconfig boundary leaks.
+
+**Local verify:**
+
+```bash
+npm ci && npm run quality
+```
+
+See `docs/VALIDATION_REPORT.md` and `docs/PULL_REQUEST_CHECKLIST.md`.
 
 ---
 

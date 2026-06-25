@@ -9,13 +9,15 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "npm run dev -w apps/web",
-    "build": "npm run build -ws --if-present",
-    "build:web": "npm run build -w apps/web",
-    "typecheck": "npm run build -w @anime-aggressors/game-core && npm run typecheck -ws --if-present",
-    "test": "npm run build -w @anime-aggressors/game-core && npm run test -ws --if-present",
-    "quality": "npm run typecheck && npm run test && npm run build:web",
-    "clean": "rm -rf apps/web/dist packages/*/dist"
+    "dev": "npm run dev -w anime-aggressors-web",
+    "build": "npm run build:packages && npm run build:web",
+    "build:packages": "npm run build -w @anime-aggressors/game-core -w @anime-aggressors/rollback -w @anime-aggressors/edgeio -w @anime-aggressors/messages -w @gunnch/input",
+    "build:web": "npm run build -w anime-aggressors-web",
+    "typecheck": "npm run build -w @anime-aggressors/game-core && npm run typecheck -w @anime-aggressors/game-core -w @anime-aggressors/rollback -w @anime-aggressors/edgeio -w @anime-aggressors/messages -w @gunnch/input -w anime-aggressors-web",
+    "test": "npm run build -w @anime-aggressors/game-core && npm run test -w @anime-aggressors/game-core -w @anime-aggressors/rollback -w @anime-aggressors/edgeio",
+    "quality": "npm run typecheck && npm run test && npm run build",
+    "audit:ci": "npm audit --audit-level=high || true",
+    "clean": "rm -rf apps/web/dist packages/*/dist legacy/web/dist"
   },
   "devDependencies": {
     "typescript": "^5.3.0"

@@ -1,7 +1,25 @@
 # Architecture — 90-Day Canonical Structure
 
 **Last updated:** 2026-06-24  
-**Horizon:** v0.1 → v0.5 (deterministic web slice → public demo + Edge-IO mule)
+**Horizon:** Full-completion program — tracks A–H in parallel (`ROADMAP_FULL_COMPLETION.md`)  
+**Authoritative sim (shipping):** `packages/game-core` (TypeScript)
+
+---
+
+## Full-completion parallel tracks
+
+Anime Aggressors runs **eight parallel tracks**. Architecture enforces boundaries so experimental paths do not block the web game.
+
+| Track | Repo areas | Authoritative for gameplay? |
+|-------|------------|---------------------------|
+| A — Web game | `apps/web`, `game-core` | **Yes** (today) |
+| B — Rollback / online | `packages/rollback`, `cloud/worker/` | Rollback harness yes; transport no |
+| C — C++ engine | `native/engine/` | **No** — experimental skeleton |
+| D — Mobile | `apps/mobile/` | No |
+| E — Desktop | `apps/desktop/` | No (wraps web build) |
+| F — Edge-IO mule | `firmware/ring`, `packages/edgeio` | Input mapping only |
+| G — Production HW | `hardware/*` | N/A |
+| H — Quality | `docs/QUALITY_BAR.md` | N/A |
 
 ---
 
@@ -20,19 +38,25 @@
 ```text
 anime-aggressors/
 ├── apps/
-│   └── web/                 # Playable web/couch demo (Vite + Canvas)
+│   ├── web/                 # Playable web/couch demo (Vite + Canvas) — Track A
+│   ├── mobile/              # Expo scaffold — Track D (not in required CI)
+│   └── desktop/             # Tauri planning — Track E (not in required CI)
 ├── packages/
-│   ├── game-core/           # Deterministic platform-fighter simulation
-│   ├── rollback/            # Snapshot / input / replay / rollback harness
-│   └── edgeio/              # BLE gesture + haptic binary protocol (TS)
+│   ├── game-core/           # Deterministic platform-fighter simulation (authoritative)
+│   ├── rollback/            # Snapshot / input / replay / rollback harness — Track B
+│   └── edgeio/              # BLE gesture + haptic binary protocol (TS) — Track F
+├── native/
+│   └── engine/              # C++ deterministic sim skeleton — Track C
 ├── firmware/
-│   └── ring/                # Wearable firmware / dev-board mule target
+│   └── ring/                # Wearable firmware / dev-board mule target — Track F
 ├── hardware/
-│   ├── ring/                # KiCad + EVT documentation path (ring)
-│   └── wristband/           # Dev-board mule BOM + validation (first prototype)
-├── docs/                    # PRD, design, QA, hardware, release docs
-├── cloud/worker/            # Future: matchmaking/leaderboards (scaffold)
-└── web/                     # LEGACY — React mini-games; consolidate or archive
+│   ├── ring/                # Ring EVT path — Track G
+│   └── wristband/           # Dev-board mule + wristband EVT — Tracks F/G
+├── legacy/
+│   ├── web/                 # Archived React PWA — NOT in workspace build
+│   └── game-prototype/      # Archived TS/C++ prototype
+├── docs/                    # PRD, roadmap, QA, hardware, release docs
+└── cloud/worker/            # Future: matchmaking/leaderboards (scaffold)
 ```
 
 ---
@@ -153,6 +177,27 @@ Local rollback harness — online transport plugs in later.
 
 Firmware must converge on same binary layout (`docs/EDGE_IO_PROTOCOL.md`).
 
+### `native/engine` (Track C — experimental)
+
+C++ deterministic simulation **skeleton** — not used by `apps/web` today.
+
+| Module | Purpose |
+|--------|---------|
+| `include/aa/simulation.hpp` | `InputFrame`, `GameState`, API |
+| `src/simulation.cpp` | `simulate_frame`, `hash_state` |
+| `tests/determinism_test.cpp` | Same-input → same-hash |
+
+**Relationship to `game-core`:** TS remains authoritative until shared test vectors and hash parity pass. See `docs/CPP_ENGINE_PLAN.md` for WASM boundary and CI policy.
+
+**Build:**
+
+```bash
+cmake -S native/engine -B build/native-engine && cmake --build build/native-engine
+ctest --test-dir build/native-engine
+```
+
+CI job `native-engine` runs on every PR.
+
 ---
 
 ## Data flow — one simulation frame (couch)
@@ -199,25 +244,33 @@ Online (future): step 3 receives `confirmed` from network; unconfirmed slots use
 npm install
 npm run typecheck   # all workspaces
 npm run test        # game-core, rollback, edgeio
-npm run build:web
+npm run build       # packages + apps/web
 npm run quality     # all of the above
 ```
 
-Target: `.github/workflows/quality.yml` runs full `quality` on PR.
+| Job | Scope | Blocking |
+|-----|-------|----------|
+| `quality` | npm typecheck, test, build | Yes |
+| `native-engine` | CMake + ctest | Yes |
+| `firmware-audit` | platformio.ini presence | No |
 
-Firmware: non-blocking `pio run` audit until compile fixed.
+Target: `.github/workflows/quality.yml` on every PR. See `docs/STATUS.md` CI section.
+
+Firmware compile: non-blocking until ADR-0001 migration completes.
 
 ---
 
-## Legacy & deferred components
+## Legacy & archived paths
 
 | Path | Status | Action |
 |------|--------|--------|
-| `web/` (React) | Legacy mini-games | Archive or merge into apps/web |
-| `cloud/worker/` | Scaffold | Wire post-v0.5 |
-| `packages/messages/` | Shared types | Align with edgeio or deprecate |
-| `packages/input/` | Older gamepad helper | Superseded by apps/web/input |
-| Godot / C++ game/ | Not in active slice | Do not document as shipped |
+| `legacy/web/` | Archived React PWA + Workbox | Excluded from workspace `tsconfig`; see `legacy/web/README.md` |
+| `legacy/game-prototype/` | Archived TS + `performance_engine.cpp` | Do not extend; see `legacy/game-prototype/README.md` |
+| `cloud/worker/` | Scaffold | Wire post-v0.5 (Track B) |
+| `packages/messages/` | Shared wire types | Align with edgeio; no circular deps with game-core |
+| `packages/input/` (`@gunnch/input`) | Older gamepad helper | Strict tsconfig include; superseded by `apps/web/src/input` |
+
+**Policy:** Legacy trees must not be pulled into active package compilation. Root cause of PR #19 CI failures.
 
 ---
 
@@ -232,6 +285,8 @@ Firmware: non-blocking `pio run` audit until compile fixed.
 
 ## Related documents
 
+- [ROADMAP_FULL_COMPLETION.md](./ROADMAP_FULL_COMPLETION.md)
+- [CPP_ENGINE_PLAN.md](./CPP_ENGINE_PLAN.md)
 - [ROLLBACK_DESIGN.md](./ROLLBACK_DESIGN.md)
 - [INPUT_SYSTEM.md](./INPUT_SYSTEM.md)
 - [EDGE_IO_PROTOCOL.md](./EDGE_IO_PROTOCOL.md)

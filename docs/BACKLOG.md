@@ -2,18 +2,37 @@
 
 **Last updated:** 2026-06-24  
 **Priority:** P0 = blocking milestone · P1 = important · P2 = nice-to-have  
-**Milestones:** v0.1 · v0.5 · v1.0 · future
+**Milestones:** v0.1 · v0.5 · v1.0 · future  
+**Program tracks:** A–H — see `docs/ROADMAP_FULL_COMPLETION.md`
 
-Each item includes title, rationale, acceptance criteria, priority, and milestone.
+Each item includes title, rationale, acceptance criteria, priority, milestone, and **track label** where applicable.
+
+### Track legend
+
+| Track | Focus |
+|-------|-------|
+| **A** | Full deterministic web game |
+| **B** | Rollback / online |
+| **C** | C++ engine |
+| **D** | Mobile |
+| **E** | Desktop |
+| **F** | Edge-IO dev-board mule |
+| **G** | Production hardware |
+| **H** | Production quality / polish |
 
 ---
 
 ## Product
 
+### Full-completion roadmap docs
+- **Why:** Product is parallel tracks A–H, not vertical-slice-only.
+- **Acceptance:** `ROADMAP_FULL_COMPLETION.md`, updated STATUS/ARCHITECTURE/PRD.
+- **Priority:** P0 · **Milestone:** v0.1 · **Track:** A0 · **Status:** Done
+
 ### README honesty pass
 - **Why:** Prior README oversold Godot, mobile, desktop, hardware.
 - **Acceptance:** README lists only verified capabilities; links to STATUS.md.
-- **Priority:** P0 · **Milestone:** v0.1 · **Status:** Done
+- **Priority:** P0 · **Milestone:** v0.1 · **Track:** A · **Status:** Done
 
 ### Product requirements document
 - **Why:** Contributors and investors need measurable compass.
@@ -23,7 +42,7 @@ Each item includes title, rationale, acceptance criteria, priority, and mileston
 ### Consolidate legacy `web/` React app
 - **Why:** Two web stacks cause confusion (`web/` vs `apps/web`).
 - **Acceptance:** Single canonical path documented; legacy archived or merged.
-- **Priority:** P1 · **Milestone:** v0.5
+- **Priority:** P0 · **Milestone:** v0.1 · **Track:** A0 · **Status:** Done (`legacy/web/`)
 
 ### Public demo landing polish
 - **Why:** v0.5 needs shareable first impression.
@@ -37,12 +56,12 @@ Each item includes title, rationale, acceptance criteria, priority, and mileston
 ### Deterministic game-core
 - **Why:** Foundation for rollback, replay, online.
 - **Acceptance:** 60 Hz sim; determinism + combat tests pass; no DOM in package.
-- **Priority:** P0 · **Milestone:** v0.1 · **Status:** Done
+- **Priority:** P0 · **Milestone:** v0.1 · **Track:** A · **Status:** Done
 
 ### Local 2-player vertical slice
 - **Why:** Core product proof — couch platform fighter.
 - **Acceptance:** Select → fight → results → rematch in browser; 2P keyboard/gamepad.
-- **Priority:** P0 · **Milestone:** v0.1 · **Status:** Done
+- **Priority:** P0 · **Milestone:** v0.1 · **Track:** A1 · **Status:** Done
 
 ### Third character + second stage
 - **Why:** Roster depth for public demo.
@@ -66,7 +85,7 @@ Each item includes title, rationale, acceptance criteria, priority, and mileston
 ### Rollback harness package
 - **Why:** Same sim path for couch, online, replay.
 - **Acceptance:** Wrong prediction test; desync detection; rollback count exposed.
-- **Priority:** P0 · **Milestone:** v0.1 · **Status:** Done
+- **Priority:** P0 · **Milestone:** v0.1 · **Track:** B0 · **Status:** Done
 
 ### Couch artificial delay mode
 - **Why:** Exercise prediction/rollback without network.
@@ -227,9 +246,24 @@ Each item includes title, rationale, acceptance criteria, priority, and mileston
 ## QA
 
 ### CI quality workflow
-- **Why:** Merge bar for determinism regressions.
-- **Acceptance:** `.github/workflows/quality.yml` runs typecheck + test + build:web on PR.
-- **Priority:** P0 · **Milestone:** v0.1 · **Status:** Partial (ci.yml web-only)
+- **Why:** Merge bar for determinism regressions (Track A0).
+- **Acceptance:** `.github/workflows/quality.yml` runs typecheck + test + build on PR.
+- **Priority:** P0 · **Milestone:** v0.1 · **Track:** A0 · **Status:** In progress
+
+### Native C++ engine skeleton
+- **Why:** Track C performance path without blocking web ship.
+- **Acceptance:** `native/engine` CMake + determinism test in CI.
+- **Priority:** P1 · **Milestone:** v0.5 · **Track:** C1–C2 · **Status:** Done (skeleton)
+
+### Desktop shell (Tauri)
+- **Why:** Track E distribution path.
+- **Acceptance:** ADR-0002; minimal scaffold loads web build.
+- **Priority:** P2 · **Milestone:** v1.0 · **Track:** E0–E1 · **Status:** E0 done
+
+### Mobile Expo scaffold
+- **Why:** Track D companion/playable research.
+- **Acceptance:** `apps/mobile/PRODUCT_SCOPE.md`; optional typecheck when valid.
+- **Priority:** P2 · **Milestone:** v0.5 · **Track:** D0–D1 · **Status:** D0 done
 
 ### VALIDATION_REPORT.md per milestone
 - **Why:** Honest record of what was run.
@@ -302,6 +336,8 @@ Each item includes title, rationale, acceptance criteria, priority, and mileston
 
 ## Related documents
 
+- [ROADMAP_FULL_COMPLETION.md](./ROADMAP_FULL_COMPLETION.md)
 - [PRODUCT_REQUIREMENTS.md](./PRODUCT_REQUIREMENTS.md)
 - [AUDIT_ACTION_PLAN.md](./AUDIT_ACTION_PLAN.md)
 - [STATUS.md](./STATUS.md)
+- [PULL_REQUEST_CHECKLIST.md](./PULL_REQUEST_CHECKLIST.md)

@@ -1,8 +1,8 @@
-name: quality
+name: Quality
 
 on:
   push:
-    branches: [main, revive-product-rollback-vertical-slice]
+    branches: [main, revive-product-rollback-vertical-slice, fix-ci-expand-full-completion-roadmap]
   pull_request:
 
 jobs:
@@ -17,7 +17,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Typecheck
         run: npm run typecheck
@@ -25,11 +25,26 @@ jobs:
       - name: Test
         run: npm run test
 
-      - name: Build web vertical slice
-        run: npm run build:web
+      - name: Build
+        run: npm run build
 
-      - name: Build packages
-        run: npm run build -w @anime-aggressors/game-core -w @anime-aggressors/rollback -w @anime-aggressors/edgeio --if-present
+      - name: Security audit (non-blocking)
+        run: npm run audit:ci
+        continue-on-error: true
+
+  native-engine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure native engine
+        run: cmake -S native/engine -B build/native-engine -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build native engine
+        run: cmake --build build/native-engine --config Release
+
+      - name: Run native tests
+        run: ctest --test-dir build/native-engine --output-on-failure
 
   firmware-audit:
     runs-on: ubuntu-latest
