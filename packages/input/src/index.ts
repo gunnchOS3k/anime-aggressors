@@ -3,7 +3,7 @@ export { getMappingFor, getControllerName } from './mappings.js';
 export type { 
   Actions, 
   GamepadInfo, 
-  GamepadEvent, 
+  PadConnectionEvent, 
   GamepadManagerConfig, 
   RemapConfig,
   GamepadMapping 

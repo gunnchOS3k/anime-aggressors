@@ -3,7 +3,28 @@
 **Version:** 0.1  
 **Status:** Canonical product compass  
 **Last updated:** 2026-06-24  
-**Milestone focus:** v0.1 deterministic web vertical slice
+**Program:** Full-completion tracks A–H (`docs/ROADMAP_FULL_COMPLETION.md`)
+
+---
+
+## Full-completion program intro
+
+Anime Aggressors is **no longer scoped only as a v0.1 vertical slice.** The deterministic web vertical slice remains the **first shippable proof**, but it is explicitly **Track A** of a larger parallel program:
+
+| Track | Scope |
+|-------|-------|
+| A | Full deterministic web game |
+| B | Rollback and online multiplayer |
+| C | C++ engine expansion |
+| D | Mobile app |
+| E | Desktop app |
+| F | Edge-IO wearable dev-board mule |
+| G | Production ring/wristband hardware |
+| H | AAA-inspired production quality |
+
+**Section 8 (MVP / v0.1 vertical slice)** defines Track **A0–A1** scope. Milestones A2–A7, and tracks B–H, are documented in `ROADMAP_FULL_COMPLETION.md` and `BACKLOG.md` with track labels.
+
+**Policy:** Do not merge on broken CI (Track A0). Do not claim hardware fabrication or AAA completion without passing gates in `STATUS.md`.
 
 ---
 
@@ -91,7 +112,9 @@ See `docs/QUALITY_BAR.md` for full metrics. Summary:
 
 ---
 
-## 8. MVP / v0.1 vertical slice scope
+## 8. MVP / v0.1 vertical slice scope (Track A0–A1)
+
+This section is **Track A** of the full-completion program. Completing it does not complete the product.
 
 **In scope:**
 

@@ -1,3 +1,15 @@
+export interface StageState {
+  id: string;
+  name: string;
+  bounds: {
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
+    floorY: number;
+  };
+}
+
 // Game state types
 export interface GameState {
   players: PlayerState[];

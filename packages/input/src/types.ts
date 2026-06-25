@@ -45,7 +45,7 @@ export interface GamepadInfo {
   lastSeen: number;
 }
 
-export interface GamepadEvent {
+export interface PadConnectionEvent {
   gamepad: Gamepad;
   type: 'connected' | 'disconnected';
 }

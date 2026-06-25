@@ -154,10 +154,11 @@ Legacy `web/` React tree may still exist — canonical app is **`apps/web`**.
 
 ## Contributing
 
-1. Read PRD and STATUS before large changes.
-2. Keep simulation deterministic — no DOM/BLE in `game-core`.
-3. Run `npm run quality` before opening a PR.
-4. Do not add copyrighted characters or oversell hardware readiness.
+1. Read [docs/PRODUCT_REQUIREMENTS.md](docs/PRODUCT_REQUIREMENTS.md) and [docs/STATUS.md](docs/STATUS.md) before large changes.
+2. Follow [docs/PULL_REQUEST_CHECKLIST.md](docs/PULL_REQUEST_CHECKLIST.md) — **CI must be green**.
+3. Run `npm ci && npm run quality` before opening a PR.
+4. Keep simulation deterministic — no DOM/BLE in `game-core`.
+5. Do not add copyrighted characters or oversell hardware readiness.
 
 ---
 
