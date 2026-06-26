@@ -15,6 +15,7 @@ import {
 } from "./constants.js";
 import { getCharacter } from "./characters.js";
 import { getStage } from "./stages.js";
+import { getFighterProfile, applyCreatedFighterToPlayer } from "./fighterCreation.js";
 
 export function createInitialGameState(config: GameConfig): GameState {
   const stage = getStage(config.stageId);
@@ -25,9 +26,19 @@ export function createInitialGameState(config: GameConfig): GameState {
     const spawn = stage.spawnPoints[i] ?? { x: STAGE_WIDTH / 2, y: FLOOR_Y - 64 * FP_SCALE };
     const character = getCharacter(charId);
 
-    players.push({
+    const fighter = getFighterProfile(config, i);
+
+    const player: PlayerState = {
       id: i,
       characterId: charId,
+      fighterName: fighter.name,
+      fighterSize: fighter.size,
+      fighterColor: fighter.color,
+      elementEffect: fighter.element,
+      burnFramesRemaining: 0,
+      slowFramesRemaining: 0,
+      slowMultiplierFp: 100,
+      airDriftBonusFrames: 0,
       x: spawn.x,
       y: spawn.y,
       vx: 0,
@@ -46,7 +57,9 @@ export function createInitialGameState(config: GameConfig): GameState {
       jumpBufferFrames: 0,
       fastFalling: false,
       currentMoveId: "none",
-    });
+    };
+    applyCreatedFighterToPlayer(player, fighter);
+    players.push(player);
   }
 
   return {
@@ -65,7 +78,13 @@ export function createInitialGameState(config: GameConfig): GameState {
 export function cloneGameState(state: GameState): GameState {
   return {
     ...state,
-    config: { ...state.config, characterIds: [...state.config.characterIds] },
+    config: {
+      ...state.config,
+      characterIds: [...state.config.characterIds],
+      fighterProfiles: state.config.fighterProfiles
+        ? state.config.fighterProfiles.map((f) => ({ ...f }))
+        : undefined,
+    },
     players: state.players.map((p) => ({ ...p })),
     stage: { ...state.stage },
   };

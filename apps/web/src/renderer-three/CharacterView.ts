@@ -1,7 +1,8 @@
 import * as THREE from "three";
 import type { PlayerState } from "@anime-aggressors/game-core";
+import { getDisplayColor, getVisualScale } from "@anime-aggressors/game-core";
 import { fpToWorld } from "./RenderTypes.js";
-import { addOutline, createPlayerMaterial, PLAYER_COLORS } from "./Materials.js";
+import { addOutline, createPlayerMaterial } from "./Materials.js";
 
 export class CharacterView {
   readonly group = new THREE.Group();
@@ -11,7 +12,7 @@ export class CharacterView {
   private label: THREE.Sprite | null = null;
 
   constructor(playerId: number) {
-    const color = PLAYER_COLORS[playerId] ?? "#aaaaaa";
+    const color = "#aaaaaa";
     const mat = createPlayerMaterial(color);
 
     const bodyGeo = new THREE.CapsuleGeometry(0.45, 1.0, 6, 12);
@@ -35,14 +36,19 @@ export class CharacterView {
   }
 
   update(player: PlayerState): void {
+    const scale = getVisualScale(player);
+    this.group.scale.set(scale * player.facing, scale, scale);
     this.group.position.set(fpToWorld(player.x), fpToWorld(player.y), player.id * 0.3);
-    this.group.scale.x = player.facing;
 
+    const displayColor = getDisplayColor(player);
+    const matColor = new THREE.Color(displayColor);
     const squash = player.actionState === "jumping" ? 0.92 : player.actionState === "falling" ? 1.05 : 1;
     this.body.scale.y = squash;
     this.head.scale.y = 1 / squash;
 
     this.shieldMesh.visible = player.actionState === "shielding";
+    const shieldColor = new THREE.Color(displayColor);
+    (this.shieldMesh.material as THREE.MeshBasicMaterial).color.copy(shieldColor);
 
     if (player.actionState === "attacking") {
       this.body.rotation.z = -0.25 * player.facing;
@@ -58,9 +64,8 @@ export class CharacterView {
       this.group.visible = false;
     } else {
       this.group.visible = true;
-      const idx = player.id % PLAYER_COLORS.length;
-      (this.body.material as THREE.MeshToonMaterial).color.set(PLAYER_COLORS[idx]);
-      (this.head.material as THREE.MeshToonMaterial).color.set(PLAYER_COLORS[idx]);
+      (this.body.material as THREE.MeshToonMaterial).color.copy(matColor);
+      (this.head.material as THREE.MeshToonMaterial).color.copy(matColor);
     }
   }
 

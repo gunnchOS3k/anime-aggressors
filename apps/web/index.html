@@ -3,40 +3,37 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Anime Aggressors — 2.5D Platform Fighter</title>
-    <meta name="description" content="Anime Aggressors is a 2.5D platform fighter with rollback-first deterministic gameplay and optional Edge-IO wearable input/haptics." />
+    <title>Anime Aggressors — Create Your Fighter</title>
+    <meta name="description" content="Create your fighter. Pick your element. Launch your rivals. A 2.5D anime platform fighter with size classes and ROYGBIV elemental combat." />
   </head>
   <body>
-    <main class="landing" id="home-view">
+    <main class="landing game-menu" id="home-view">
       <section class="hero">
-        <p class="hero-kicker">2.5D Platform Fighter</p>
+        <p class="hero-kicker">2.5D Anime Platform Fighter</p>
         <h1>Anime Aggressors</h1>
-        <p>
-          Rollback-first deterministic combat rendered in Three.js. Keyboard and gamepads are first-class;
-          Edge-IO wearables are an optional input layer.
+        <p class="hero-tagline">
+          Create your fighter from <strong>body size</strong> and <strong>element color</strong>.
+          Fight on Skyline Arena, train your combo, and launch rivals in Impact Dummy Derby.
         </p>
-        <div class="cta-row">
+        <div class="cta-row primary-cta">
           <a id="btn-play-match" class="btn-primary" href="#/play">Play Match</a>
+          <a id="btn-create-fighter" class="btn-primary btn-accent" href="#/create-fighter">Create Fighter</a>
+        </div>
+        <div class="cta-row">
           <a id="btn-training" class="btn-secondary" href="#/training">Training Mode</a>
-          <a id="btn-controller" class="btn-secondary" href="#/controller-test">Controller Test</a>
-          <a id="btn-rollback" class="btn-secondary" href="#/rollback-debug">Rollback Debug</a>
-          <a id="btn-edgeio" class="btn-secondary" href="#/edgeio-lab">Edge-IO Lab</a>
           <a id="btn-impact-dummy-derby" class="btn-secondary" href="#/impact-dummy-derby">Impact Dummy Derby</a>
+          <a id="btn-controller" class="btn-secondary" href="#/controller-test">Controller Test</a>
+          <a id="btn-feedback" class="btn-secondary" href="#/feedback">Feedback / Playtest</a>
+        </div>
+        <div class="cta-row tertiary-cta">
+          <a id="btn-rollback" class="btn-tertiary" href="#/rollback-debug">Rollback Debug</a>
+          <a id="btn-edgeio" class="btn-tertiary" href="#/edgeio-lab">Edge-IO Lab</a>
           <a id="btn-prototype" class="btn-tertiary" href="#/prototype-lab">Prototype Lab</a>
         </div>
       </section>
 
-      <section class="ship-gates">
-        <h2>Ship gates</h2>
-        <ul>
-          <li><strong>PLAYABLE</strong> — 2-player local match + Impact Dummy Derby</li>
-          <li><strong>PROVEN BY TEST</strong> — game-core, rollback, netplay loopback</li>
-          <li><strong>SHIP BLOCKED</strong> — public online relay, final art, hardware BLE verify</li>
-        </ul>
-        <p>
-          See <a href="https://github.com/gunnchOS3k/anime-aggressors/blob/main/docs/STATUS.md">docs/STATUS.md</a>
-          for the full capability matrix.
-        </p>
+      <section class="menu-hint">
+        <p>P1: Arrows + ZXC · P2: WASD + 123 · Gamepads supported · <a href="#/feedback">How to playtest with friends</a></p>
       </section>
     </main>
 

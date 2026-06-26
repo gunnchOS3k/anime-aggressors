@@ -1,5 +1,8 @@
 import type { InputFrame } from "../types.js";
 import { FP_SCALE, SIM_HZ } from "../constants.js";
+import type { CreatedFighter } from "../createdFighter.js";
+import { getDefaultCreatedFighter } from "../createdFighter.js";
+import { getSizeStats } from "../sizeClasses.js";
 
 export type DerbyPhase =
   | "ready"
@@ -37,6 +40,7 @@ export type ImpactDummyDerbyState = {
   phaseFrame: number;
   player: DerbyPlayer;
   dummy: DerbyDummy;
+  fighter: CreatedFighter;
   kineticBatAvailable: boolean;
   kineticBatEquipped: boolean;
   totalDamageDealt: number;
@@ -63,11 +67,17 @@ export const GRAVITY = (12 * FP_SCALE) / SIM_HZ;
 export const RUN_SPEED = (7 * FP_SCALE) / SIM_HZ;
 export const JUMP_V = -(14 * FP_SCALE) / SIM_HZ;
 
-export function createInitialDerbyState(seed = 1, bestScore = 0): ImpactDummyDerbyState {
+export function createInitialDerbyState(
+  seed = 1,
+  bestScore = 0,
+  fighter?: CreatedFighter,
+): ImpactDummyDerbyState {
+  const f = fighter ?? getDefaultCreatedFighter(0);
   return {
     frame: 0,
     phase: "ready",
     phaseFrame: 0,
+    fighter: f,
     player: {
       x: 600 * FP_SCALE,
       y: PLATFORM_Y - 64 * FP_SCALE,
@@ -123,7 +133,10 @@ function computeScore(state: ImpactDummyDerbyState): number {
   return distScore + dmgBonus + speedBonus;
 }
 
-function applyPlayerInput(player: DerbyPlayer, input: DerbyInput): void {
+function applyPlayerInput(player: DerbyPlayer, input: DerbyInput, fighter: CreatedFighter): void {
+  const sizeStats = getSizeStats(fighter.size);
+  const runSpeed = Math.floor(RUN_SPEED * sizeStats.speedMultiplier);
+  const jumpV = Math.floor(JUMP_V * sizeStats.jumpMultiplier);
   const i = {
     left: input.left ?? false,
     right: input.right ?? false,
@@ -140,11 +153,11 @@ function applyPlayerInput(player: DerbyPlayer, input: DerbyInput): void {
   }
 
   if (i.left) {
-    player.vx = -RUN_SPEED;
+    player.vx = -runSpeed;
     player.facing = -1;
     if (player.onGround) player.actionState = "running";
   } else if (i.right) {
-    player.vx = RUN_SPEED;
+    player.vx = runSpeed;
     player.facing = 1;
     if (player.onGround) player.actionState = "running";
   } else if (player.onGround && player.actionState === "running") {
@@ -153,13 +166,13 @@ function applyPlayerInput(player: DerbyPlayer, input: DerbyInput): void {
   }
 
   if (i.jump && player.onGround) {
-    player.vy = JUMP_V;
+    player.vy = jumpV;
     player.onGround = false;
     player.actionState = "jumping";
   }
 
   if (i.dodge && player.onGround) {
-    player.vx = player.facing * RUN_SPEED * 2;
+    player.vx = player.facing * runSpeed * 2;
   }
 
   if (i.attack && player.actionState !== "attacking") {
@@ -170,7 +183,7 @@ function applyPlayerInput(player: DerbyPlayer, input: DerbyInput): void {
   if (i.special && player.onGround) {
     player.actionState = "special";
     player.actionFrame = 0;
-    player.vx = player.facing * RUN_SPEED * 1.5;
+    player.vx = player.facing * runSpeed * 1.5;
   }
 }
 
@@ -215,6 +228,7 @@ function hitDummy(
 function tryPlayerHits(state: ImpactDummyDerbyState, kineticLaunch: boolean): void {
   const p = state.player;
   const d = state.dummy;
+  const sizeStats = getSizeStats(state.fighter.size);
   if (p.actionFrame < 4 || p.actionFrame > 6) return;
 
   const reach = 80 * FP_SCALE;
@@ -236,7 +250,8 @@ function tryPlayerHits(state: ImpactDummyDerbyState, kineticLaunch: boolean): vo
     return;
   }
 
-  const dmg = p.actionState === "special" ? 8 : 4;
+  const baseDmg = p.actionState === "special" ? 8 : 4;
+  const dmg = Math.max(1, Math.floor(baseDmg * sizeStats.damageMultiplier));
   const kb = Math.floor((4 + d.damage / 20) * FP_SCALE) / SIM_HZ;
   hitDummy(state, dmg, p.facing * kb, -kb / 2);
 }
@@ -315,7 +330,7 @@ export function simulateDerbyFrame(
     return next;
   }
 
-  applyPlayerInput(next.player, input);
+  applyPlayerInput(next.player, input, next.fighter);
   integratePlayer(next.player);
 
   if (next.phase === "damage_phase" || next.phase === "launch_window") {
@@ -333,7 +348,7 @@ export function simulateDerbyFrame(
 }
 
 export function resetDerbyForRetry(state: ImpactDummyDerbyState): ImpactDummyDerbyState {
-  const fresh = createInitialDerbyState(state.seed, state.bestScore);
+  const fresh = createInitialDerbyState(state.seed, state.bestScore, state.fighter);
   fresh.phase = "countdown";
   fresh.phaseFrame = 0;
   return fresh;

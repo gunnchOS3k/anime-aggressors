@@ -25,7 +25,10 @@ async function navigate(mode: AppRouteMode): Promise<void> {
   if (appRoot) appRoot.innerHTML = "";
 
   try {
-    if (mode === "match") {
+    if (mode === "create-fighter") {
+      const { mountCreateFighterScreen } = await import("./screens/CreateFighterScreen.js");
+      mountCreateFighterScreen(appRoot!);
+    } else if (mode === "match") {
       const { launchMatch } = await import("./game/App.js");
       launchMatch(appRoot!);
     } else if (mode === "training") {
@@ -46,6 +49,9 @@ async function navigate(mode: AppRouteMode): Promise<void> {
     } else if (mode === "impact-dummy-derby") {
       const { mountImpactDummyDerby } = await import("./modes/impactDummyDerbyView.js");
       mountImpactDummyDerby(appRoot!);
+    } else if (mode === "feedback") {
+      const { mountFeedbackScreen } = await import("./screens/FeedbackScreen.js");
+      mountFeedbackScreen(appRoot!);
     }
   } catch (error) {
     console.error(error);

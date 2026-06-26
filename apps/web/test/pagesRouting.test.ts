@@ -16,6 +16,7 @@ describe("GitHub Pages routing", () => {
 
   it("hashToMode maps play route to match", () => {
     assert.equal(hashToMode(APP_ROUTES.play), "match");
+    assert.equal(hashToMode(APP_ROUTES.createFighter), "create-fighter");
     assert.equal(hashToMode(APP_ROUTES.impactDummyDerby), "impact-dummy-derby");
   });
 

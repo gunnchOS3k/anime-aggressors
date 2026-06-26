@@ -69,6 +69,27 @@ export {
 export type { MoveFrameData } from "./frameData.js";
 export { getMoveData, actionToMoveId, isMoveComplete } from "./moves.js";
 export type { MoveId } from "./moves.js";
+export type { FighterSize } from "./sizeClasses.js";
+export { SIZE_STATS, getSizeStats } from "./sizeClasses.js";
+export type { FighterColor, ElementEffect, ElementDef } from "./elements.js";
+export { ELEMENTS, getElementForColor, getElementColorHex } from "./elements.js";
+export type { CreatedFighter } from "./createdFighter.js";
+export {
+  buildCreatedFighter,
+  serializeCreatedFighter,
+  deserializeCreatedFighter,
+  getDefaultCreatedFighter,
+  createCreatedFighterId,
+  DEFAULT_FIGHTER_NAME,
+} from "./createdFighter.js";
+export {
+  getFighterProfile,
+  applyCreatedFighterToPlayer,
+  previewFighterStats,
+  getDisplayColor,
+  getVisualScale,
+} from "./fighterCreation.js";
+export type { FighterPreviewStats } from "./fighterCreation.js";
 export {
   COYOTE_FRAMES,
   JUMP_BUFFER_FRAMES,

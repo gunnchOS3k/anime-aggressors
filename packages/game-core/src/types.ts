@@ -48,6 +48,14 @@ export type PlayerActionState =
 export type PlayerState = {
   id: number;
   characterId: string;
+  fighterName: string;
+  fighterSize: import("./sizeClasses.js").FighterSize;
+  fighterColor: import("./elements.js").FighterColor;
+  elementEffect: import("./elements.js").ElementEffect;
+  burnFramesRemaining: number;
+  slowFramesRemaining: number;
+  slowMultiplierFp: number;
+  airDriftBonusFrames: number;
   x: number;
   y: number;
   vx: number;
@@ -82,6 +90,7 @@ export type GameConfig = {
   matchDurationFrames: number;
   stageId: string;
   characterIds: string[];
+  fighterProfiles?: import("./createdFighter.js").CreatedFighter[];
   seed: number;
 };
 

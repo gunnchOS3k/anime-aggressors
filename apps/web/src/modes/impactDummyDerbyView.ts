@@ -4,18 +4,26 @@ import {
   simulateDerbyFrame,
   resetDerbyForRetry,
   fpToDisplay,
+  ELEMENTS,
+  getElementColorHex,
+  getDefaultCreatedFighter,
   type ImpactDummyDerbyState,
 } from "@anime-aggressors/game-core";
 import { pollAllInputs } from "../input/deviceAssignment.js";
 import { globalAudio } from "../audio/AudioManager.js";
-import { navigateHome } from "../router.js";
+import { navigateHome, navigateTo } from "../router.js";
+import { listCreatedFighters } from "../storage/createdFightersStorage.js";
 
 export function mountImpactDummyDerby(root: HTMLElement): void {
+  const saved = listCreatedFighters();
+  const fighter = saved[0] ?? getDefaultCreatedFighter(0);
+
   root.innerHTML = `
     <div class="derby-root">
       <div class="vs-toolbar">
         <button id="derby-back" type="button">← Home</button>
-        <span class="vs-hint">Impact Dummy Derby — build damage, then Kinetic Bat launch (Z/attack)</span>
+        <span class="vs-hint">Fighter: <strong>${fighter.name}</strong> (${fighter.size} / ${ELEMENTS[fighter.color].name})</span>
+        <button id="derby-pick" type="button" class="btn-tertiary">Change Fighter</button>
       </div>
       <div id="derby-viewport" class="pf-viewport"></div>
       <div id="derby-hud" class="derby-hud"></div>
@@ -31,8 +39,12 @@ export function mountImpactDummyDerby(root: HTMLElement): void {
     cancelAnimationFrame(raf);
     navigateHome();
   });
+  root.querySelector("#derby-pick")?.addEventListener("click", () => {
+    cancelAnimationFrame(raf);
+    navigateTo("create-fighter");
+  });
 
-  let state = createInitialDerbyState(Date.now() & 0xffff, loadBest());
+  let state = createInitialDerbyState(Date.now() & 0xffff, loadBest(), fighter);
   let prevDamage = 0;
   let simFrame = 0;
 
@@ -55,7 +67,7 @@ export function mountImpactDummyDerby(root: HTMLElement): void {
 
   const playerMesh = new THREE.Mesh(
     new THREE.CapsuleGeometry(0.4, 1, 6, 12),
-    new THREE.MeshToonMaterial({ color: 0xff6b35 }),
+    new THREE.MeshToonMaterial({ color: new THREE.Color(getElementColorHex(fighter.color)) }),
   );
   playerMesh.position.y = 1;
   scene.add(playerMesh);

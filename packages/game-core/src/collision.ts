@@ -12,6 +12,8 @@ import { DODGE_MOVE, NEUTRAL_ATTACK, SPECIAL_ATTACK } from "./frameData.js";
 import { isInActive } from "./frameData.js";
 import { getMoveData, type MoveId } from "./moves.js";
 import { scaleKnockback } from "./feel.js";
+import { scaledHitDamage } from "./fighterCreation.js";
+import { scaledHurtboxDimension } from "./fighterCreation.js";
 
 export function getHurtboxes(players: PlayerState[]): Hurtbox[] {
   return players
@@ -28,12 +30,14 @@ export function getActiveHitboxesForState(players: PlayerState[]): Hitbox[] {
 }
 
 export function getHurtbox(player: PlayerState): Hurtbox {
+  const w = scaledHurtboxDimension(HURTBOX_W, player);
+  const h = scaledHurtboxDimension(HURTBOX_H, player);
   return {
     ownerId: player.id,
-    x: player.x - HURTBOX_W / 2,
-    y: player.y - HURTBOX_H,
-    w: HURTBOX_W,
-    h: HURTBOX_H,
+    x: player.x - w / 2,
+    y: player.y - h,
+    w,
+    h,
   };
 }
 
@@ -53,7 +57,7 @@ export function getActiveHitboxes(player: PlayerState): Hitbox[] {
         y: player.y - (48 * FP_SCALE),
         w,
         h,
-        damage: data.damage,
+        damage: scaledHitDamage(data.damage, player),
         knockbackX: (kb.kbX * player.facing) / FP_SCALE,
         knockbackY: kb.kbY / FP_SCALE,
         active: true,
