@@ -1,5 +1,6 @@
 import { installHashRouter, navigateHome, bindRouteButtons } from "./router.js";
 import type { AppRouteMode } from "./routes.js";
+import { APP_VERSION_LABEL, APP_EXPECTED_MODES } from "./version.js";
 import "./styles.css";
 
 const home = document.getElementById("home-view");
@@ -58,6 +59,12 @@ window.addEventListener("aa:navigate-home", () => navigateHome());
 
 bindRouteButtons();
 installHashRouter(navigate);
+
+const buildFooter = document.getElementById("build-footer");
+if (buildFooter) {
+  buildFooter.textContent = `Build: ${APP_VERSION_LABEL}`;
+  buildFooter.title = APP_EXPECTED_MODES.join(" · ");
+}
 
 export { launchMatch, launchTrainingMode } from "./game/App.js";
 export { bootstrapMiniGames } from "./minigames/bootstrap.js";

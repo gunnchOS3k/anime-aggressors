@@ -212,6 +212,7 @@ Anime Aggressors is **not** scoped only as a v0.1 vertical slice. The determinis
 - [PRODUCT_REQUIREMENTS.md](./PRODUCT_REQUIREMENTS.md) — Track A is the vertical slice within full program
 - [STATUS.md](./STATUS.md) — Honest capability matrix
 - [PC_DISTRIBUTION_PLAN.md](./PC_DISTRIBUTION_PLAN.md) — Staged PC friend playtests (web → ZIP → itch.io)
+- [GITHUB_PAGES_DEPLOYMENT.md](./GITHUB_PAGES_DEPLOYMENT.md) — Production Pages source (`apps/web/dist` via Actions)
 - [playtest/PC_PLAYTEST_GUIDE.md](./playtest/PC_PLAYTEST_GUIDE.md) — Tester instructions
 - [BACKLOG.md](./BACKLOG.md) — Work items labeled A–H
 - [ARCHITECTURE.md](./ARCHITECTURE.md) — Parallel tracks and legacy paths
