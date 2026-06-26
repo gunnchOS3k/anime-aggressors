@@ -62,6 +62,10 @@ export type PlayerState = {
   jumpsRemaining: number;
   onGround: boolean;
   invulnFrames: number;
+  coyoteFrames: number;
+  jumpBufferFrames: number;
+  fastFalling: boolean;
+  currentMoveId: string;
 };
 
 export type StageBounds = {
@@ -90,6 +94,7 @@ export type GameState = {
   countdownFrames: number;
   matchTimerFrames: number;
   winnerId: number | null;
+  hitstopFrames: number;
 };
 
 export type ReplayResult = {

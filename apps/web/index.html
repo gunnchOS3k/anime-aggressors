@@ -3,74 +3,94 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Anime Aggressors — Vertical Slice</title>
-    <meta name="description" content="Original shōnen-inspired platform fighter. Deterministic web vertical slice with rollback-first simulation." />
+    <title>Anime Aggressors — 2.5D Platform Fighter</title>
+    <meta name="description" content="Anime Aggressors is a 2.5D platform fighter with rollback-first deterministic gameplay and optional Edge-IO wearable input/haptics." />
     <link rel="stylesheet" href="./src/styles.css" />
   </head>
   <body>
-    <main class="landing">
+    <main class="landing" id="home-view">
       <section class="hero">
+        <p class="hero-kicker">2.5D Platform Fighter</p>
         <h1>Anime Aggressors</h1>
         <p>
-          Original 2-player couch platform fighter built around deterministic simulation,
-          rollback architecture, and optional Edge-IO wearables. Keyboard and gamepads are
-          first-class; hardware enhances input but is never required.
+          Rollback-first deterministic combat rendered in Three.js. Keyboard and gamepads are first-class;
+          Edge-IO wearables are an optional input layer.
         </p>
         <div class="cta-row">
-          <button id="load-vertical-slice" class="btn-primary" type="button">
-            Play Anime Aggressors Vertical Slice
-          </button>
-          <button id="load-minigames" class="btn-secondary" type="button">
-            Open Training Lab (Prototype Mini-Games)
-          </button>
+          <button id="btn-play-match" class="btn-primary" type="button">Play Match</button>
+          <button id="btn-training" class="btn-secondary" type="button">Training Mode</button>
+          <button id="btn-controller" class="btn-secondary" type="button">Controller Test</button>
+          <button id="btn-rollback" class="btn-secondary" type="button">Rollback Debug</button>
+          <button id="btn-edgeio" class="btn-secondary" type="button">Edge-IO Lab</button>
+          <button id="btn-prototype" class="btn-tertiary" type="button">Prototype Lab</button>
         </div>
       </section>
 
-      <section>
-        <h2>Current milestone: v0.1 deterministic web vertical slice</h2>
+      <section class="ship-gates">
+        <h2>Ship gates</h2>
         <ul>
-          <li>Fixed 60 Hz simulation in <code>packages/game-core</code></li>
-          <li>Local rollback harness in <code>packages/rollback</code></li>
-          <li>2 original characters, 1 stage, stocks, blast zones</li>
-          <li>Character select → match → results → rematch</li>
+          <li><strong>PLAYABLE</strong> — 2-player local match (Three.js renderer)</li>
+          <li><strong>PROVEN BY TEST</strong> — deterministic game-core + rollback harness</li>
+          <li><strong>UNSHIPPED</strong> — online multiplayer, mobile, desktop, hardware</li>
         </ul>
         <p>
           See <a href="https://github.com/gunnchOS3k/anime-aggressors/blob/main/docs/STATUS.md">docs/STATUS.md</a>
-          for an honest capability matrix.
+          for the full capability matrix.
         </p>
       </section>
-
-      <div id="vertical-slice-root" class="hidden"></div>
-      <div id="minigame-root" class="hidden"></div>
     </main>
 
+    <div id="app-root" class="hidden"></div>
+
     <script type="module">
-      const vsRoot = document.getElementById('vertical-slice-root');
-      const mgRoot = document.getElementById('minigame-root');
+      const home = document.getElementById('home-view');
+      const appRoot = document.getElementById('app-root');
 
-      document.getElementById('load-vertical-slice')?.addEventListener('click', async () => {
-        mgRoot?.classList.add('hidden');
-        vsRoot?.classList.remove('hidden');
+      function showHome() {
+        appRoot.innerHTML = '';
+        appRoot.classList.add('hidden');
+        home?.classList.remove('hidden');
+      }
+
+      async function navigate(mode) {
+        home?.classList.add('hidden');
+        appRoot?.classList.remove('hidden');
+        appRoot.innerHTML = '';
+
         try {
-          const { launchVerticalSlice } = await import('./src/game/App.ts');
-          launchVerticalSlice(vsRoot);
+          if (mode === 'match') {
+            const { launchMatch } = await import('./src/game/App.ts');
+            launchMatch(appRoot);
+          } else if (mode === 'training') {
+            const { launchTrainingMode } = await import('./src/game/App.ts');
+            launchTrainingMode(appRoot);
+          } else if (mode === 'controller') {
+            const { mountControllerTest } = await import('./src/shell/controllerTest.ts');
+            mountControllerTest(appRoot);
+          } else if (mode === 'rollback') {
+            const { mountRollbackDebug } = await import('./src/shell/rollbackDebug.ts');
+            mountRollbackDebug(appRoot);
+          } else if (mode === 'edgeio') {
+            const { mountEdgeIOLab } = await import('./src/shell/edgeioLab.ts');
+            mountEdgeIOLab(appRoot);
+          } else if (mode === 'prototype') {
+            const { mountPrototypeLab } = await import('./src/shell/prototypeLab.ts');
+            mountPrototypeLab(appRoot);
+          }
         } catch (error) {
           console.error(error);
-          vsRoot.innerHTML = '<p style="color:#ff6b6b">Failed to load vertical slice.</p>';
+          appRoot.innerHTML = '<p style="color:#ff6b6b">Failed to load module.</p>';
         }
-      });
+      }
 
-      document.getElementById('load-minigames')?.addEventListener('click', async () => {
-        vsRoot?.classList.add('hidden');
-        mgRoot?.classList.remove('hidden');
-        try {
-          const { bootstrapMiniGames } = await import('./src/minigames/bootstrap.ts');
-          bootstrapMiniGames(mgRoot);
-        } catch (error) {
-          console.error(error);
-          mgRoot.innerHTML = '<p style="color:#ff6b6b">Failed to load mini-games.</p>';
-        }
-      });
+      window.addEventListener('aa:navigate-home', showHome);
+
+      document.getElementById('btn-play-match')?.addEventListener('click', () => navigate('match'));
+      document.getElementById('btn-training')?.addEventListener('click', () => navigate('training'));
+      document.getElementById('btn-controller')?.addEventListener('click', () => navigate('controller'));
+      document.getElementById('btn-rollback')?.addEventListener('click', () => navigate('rollback'));
+      document.getElementById('btn-edgeio')?.addEventListener('click', () => navigate('edgeio'));
+      document.getElementById('btn-prototype')?.addEventListener('click', () => navigate('prototype'));
     </script>
   </body>
 </html>

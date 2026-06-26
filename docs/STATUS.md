@@ -1,212 +1,83 @@
 # Anime Aggressors — Status
 
 **Last updated:** 2026-06-24  
-**Branch:** `fix-ci-expand-full-completion-roadmap` (integration)  
-**Program:** Full-completion tracks A–H — see `docs/ROADMAP_FULL_COMPLETION.md`  
-**Milestone:** Track A1 (2P deterministic match); Track A0 (CI green) in progress
+**Branch:** `threejs-platform-fighter-pivot`  
+**Product:** 2.5D platform fighter (Three.js renderer + deterministic game-core)
 
-This document is the honest capability matrix. If something is not listed under **Playable today**, assume it is not shipped.
+Ship gate vocabulary:
 
-The v0.1 web vertical slice is **Track A** of the full-completion program, not the entire product scope.
-
----
-
-## Full-completion program (parallel tracks)
-
-| Track | Focus | Honest status |
-|-------|-------|---------------|
-| **A** | Full deterministic web game | A1 done; A0 CI in progress |
-| **B** | Rollback / online | B0 done (local harness) |
-| **C** | C++ engine | C1–C2 skeleton compiles in CI |
-| **D** | Mobile (Expo) | D0–D1 planning / scaffold |
-| **E** | Desktop (Tauri) | E0 ADR done; no shell yet |
-| **F** | Edge-IO dev-board mule | F0–F1 done; F3 blocked on firmware |
-| **G** | Production wristband/ring | G0–G1 requirements only |
-| **H** | AAA-inspired quality bar | H0 done; polish not started |
-
----
-
-## Legacy / archived paths
-
-| Path | Status | Notes |
-|------|--------|-------|
-| `legacy/web/` | Archived React PWA | **Not in CI** — moved from root `web/` to fix workspace compile leaks |
-| `legacy/game-prototype/` | Archived TS/C++ prototype | Superseded by `packages/game-core` + `native/engine/` |
-| Root `web/` (if present) | **Removed or legacy** | Canonical web app is `apps/web` only |
-
-Do not import from `legacy/*` in active packages. See `legacy/web/README.md`.
+| Gate | Meaning |
+|------|---------|
+| **UNSHIPPED** | Not available to users |
+| **SHIP BLOCKED** | Implementation exists but fails a quality gate |
+| **PLAYABLE** | User can launch and play it |
+| **PROVEN BY TEST** | CI/automated tests cover it |
+| **PROVEN BY DEMO** | Public demo (GitHub Pages) demonstrates it |
+| **RELEASED** | Tagged release / artifact exists |
 
 ---
 
 ## Playable today
 
-| Capability | Evidence | How to verify |
-|------------|----------|---------------|
-| 2-player local couch match (keyboard + gamepad) | `apps/web/src/game/App.ts`, `deviceAssignment.ts` | `npm run dev -w apps/web` → **Play Anime Aggressors Vertical Slice** |
-| Character select (2 original characters) | `packages/game-core/src/characters.ts` — Ember Vale, Tide Kuro | Select P1/P2 on character screen |
-| Match flow: countdown → fighting → results → rematch | `simulate.ts`, `App.ts`, `results.ts` | Play until stocks depleted or timer expires |
-| Fixed 60 Hz deterministic simulation | `packages/game-core/src/constants.ts` (`SIM_HZ = 60`) | Run `npm run test -w packages/game-core` |
-| Deterministic state hash + replay | `hash.ts`, `replay.ts`, determinism tests | Tests: same inputs → same hash; replay matches step sim |
-| Local rollback harness (unit-tested) | `packages/rollback/src/rollbackSession.ts` | `npm run test -w packages/rollback` |
-| Canvas renderer with debug overlay | `renderCanvas.ts`, `debugOverlay.ts` | Toggle Debug / Hitboxes in vertical slice toolbar |
-| Keyboard singleton (no per-frame listener leak) | `apps/web/src/input/keyboard.ts` | Inspect `initialized` guard; play 5+ minutes without duplicate handlers |
-| Gamepad auto-assignment (pad 0 → P1, pad 1 → P2) | `deviceAssignment.ts` | Connect two controllers; verify slot mapping |
-| Edge-IO binary protocol parse/encode (software) | `packages/edgeio/src/parser.ts`, tests | `npm run test -w packages/edgeio` |
-| Training Lab mini-games (prototype) | `apps/web/src/minigames/*` | **Open Training Lab** on landing page |
-| Monorepo quality scripts | Root `package.json`: `typecheck`, `test`, `build`, `quality` | `npm run quality` from repo root |
+| Capability | Gate | Evidence |
+|------------|------|----------|
+| **Play Match** — 2P stock battle, Skyline Arena | PLAYABLE | `apps/web` → **Play Match** |
+| Three.js 2.5D renderer (orthographic camera, placeholders, VFX) | PLAYABLE | `apps/web/src/renderer-three/` |
+| Character select → countdown → fight → results → rematch | PLAYABLE | `apps/web/src/game/App.ts` |
+| Training Mode + debug overlay (F1–F4, hitboxes) | PLAYABLE | **Training Mode** on homepage |
+| Controller Test | PLAYABLE | `apps/web/src/shell/controllerTest.ts` |
+| Rollback Debug shell | PLAYABLE | `apps/web/src/shell/rollbackDebug.ts` |
+| Edge-IO Lab (gesture mapping) | PLAYABLE | `apps/web/src/shell/edgeioLab.ts` |
+| Prototype Lab mini-games | PLAYABLE | `apps/web/src/minigames/` (demoted from main CTA) |
+| Deterministic game-core (60 Hz, frame data, blast zones) | PROVEN BY TEST | `npm run test -w @anime-aggressors/game-core` |
+| Rollback harness | PROVEN BY TEST | `npm run test -w @anime-aggressors/rollback` |
+| Edge-IO binary protocol | PROVEN BY TEST | `npm run test -w @anime-aggressors/edgeio` |
+| Renderer mapping (no GameState mutation) | PROVEN BY TEST | `npm run test -w anime-aggressors-web` |
+| GitHub Pages demo | PROVEN BY DEMO | After merge + Pages deploy |
 
 ---
 
-## Prototype quality
+## Ship blocked / in progress
 
-These work for demos and engineering validation but are not product-complete.
-
-| Item | Current state | Gap to v0.5 |
-|------|---------------|-------------|
-| Combat feel | Basic attack/special/shield/dodge/grab with percent + knockback | Cancel routes, combo scaling, frame data tuning |
-| Art | Colored rectangles + character names | Sprite rigs, VFX, readable hit flash |
-| Audio | None in vertical slice | Hit SFX, UI sounds, music stubs |
-| Rollback in live match | `RollbackSession` wired; couch uses `[true, true]` confirmed inputs | Inject artificial delay + prediction for couch parity with online |
-| Edge-IO in browser | Mapper + fake packet generators; no Web Bluetooth UI | BLE connect flow, latency measurement |
-| Characters | 2 stats-differentiated originals | 4+ roster, unique specials |
-| Stages | 1 stage (`skyline-arena`) | 2+ with hazards |
-| CI | `quality.yml` runs typecheck + test + build | A0 gate — verify green on PR branch |
-| Legacy web tree | Root `web/` React app still present | Consolidate or archive |
+| Item | Gate | Blocker |
+|------|------|---------|
+| GLB character/stage assets | SHIP BLOCKED | Placeholders only; pipeline stubbed |
+| Production combat polish | SHIP BLOCKED | Basic frame data; needs tuning |
+| Online multiplayer | UNSHIPPED | No transport |
+| Edge-IO hardware loop | UNSHIPPED | No BLE UI / firmware in CI |
+| Mobile / desktop apps | UNSHIPPED | Scaffold only |
+| Tagged release | UNSHIPPED | No v0.2 tag yet |
 
 ---
 
-## Planned
+## Architecture (authoritative vs presentation)
 
-| Item | Target milestone | Owner area |
-|------|------------------|------------|
-| Online rollback transport (UDP/WebRTC) | v0.5 | `packages/rollback` + cloud worker |
-| 3–4 player local | v0.5 | `game-core`, input assignment |
-| Input buffering (1–3 frames) | v0.5 | `apps/web/src/input` |
-| Remapping UI | v0.5 | Web settings |
-| Touch controls (mobile web) | v0.5 | New input module |
-| Web Bluetooth Edge-IO pairing | v0.5 | `packages/edgeio` + web app |
-| Firmware binary protocol on dev board | v0.5 | `firmware/ring` |
-| Wristband dev-board mule EVT | v0.5 | `hardware/wristband` |
-| Replay file export/import | v1.0 | `game-core` + web |
-| Tournament mode | v1.0 | Product |
-| Production art pipeline | v1.0 | Art |
+```
+packages/game-core     → GameState truth
+packages/rollback      → rollback / replay truth
+apps/web/renderer-three → read GameState, render only
+```
+
+See `docs/RENDERER_THREE_CONTRACT.md`.
 
 ---
 
-## Broken / unknown
+## Legacy / archived
 
-| Item | Symptom | Likely cause | Status |
-|------|---------|--------------|--------|
-| Firmware compile on target | Not verified in CI | `main.cpp` uses ESP32-style `BLEDevice.h` on nRF52840 Arduino; JSON notify vs binary protocol | **Blocked** — see ADR-0001 |
-| Real BLE end-to-end | No hardware-in-loop test | Firmware/protocol mismatch; no validated PCB | **Not tested** |
-| Root legacy `web/` app | Moved to `legacy/web/` | Was compiled by stray tsconfig includes | **Mitigated** — excluded from workspace build |
-| C++ engine (`native/engine/`) | Skeleton only | Not wired to `apps/web` | **Experimental** — compiles in CI `native-engine` job |
-| Mobile (Expo) / Desktop (Tauri) | Scaffolds + docs only | Not in required `quality` gate | **Planning** — see ADR-0002, `apps/*/PRODUCT_SCOPE.md` |
-| Cloud worker leaderboards | `cloud/worker/` exists | Not wired to vertical slice | **Scaffold only** |
-| Floating-point determinism across browsers | Uses JSON serialize + JS numbers | Acceptable for v0.1; cross-platform lockstep needs audit | **Risk** — monitor in QA |
-
----
-
-## Deferred
-
-| Item | Reason |
+| Path | Status |
 |------|--------|
-| Custom ring PCB fabrication | Wristband/dev-board mule first; no KiCad project in repo |
-| Zephyr/NCS firmware migration | Deferred until Adafruit mule proves protocol |
-| 6G / ReadyGary integration | Out of product scope |
-| Mod marketplace | Post v1.0 |
-| AI opponents | Post v1.0 |
-| Full haptic choreography | Requires validated DRV2605L hardware path |
-| Anti-cheat / server authority | Online milestone |
+| `legacy/web/` | Archived React PWA — not in CI |
+| `legacy/game-prototype/` | Superseded by game-core + native/engine |
+| `apps/web/src/game/renderCanvas.ts` | Legacy 2D canvas — superseded by Three.js |
 
 ---
 
-## Hardware readiness
-
-| Gate | Status | Notes |
-|------|--------|-------|
-| Target BOM documented | Partial | `hardware/wristband/bom.csv`, `hardware/ring/bom.csv` — minimal, not EVT-complete |
-| KiCad project (`edgeio-ring.kicad_*`) | **Missing** | Do not claim fabrication-ready |
-| Gerbers / pick-place / STEP | **Missing** | See `docs/HARDWARE_PROTOTYPE_PLAN.md` for file expectations |
-| Dev-board mule plan | Documented | nRF52840 DK + IMU breakout + DRV2605L recommended first |
-| EVT validation matrix | Documented | `hardware/ring/test/` checklists planned |
-| Safety review (battery/charging) | **Not started** | Required before wearable EVT |
-| Measured latency on silicon | **Not measured** | Target: gesture-to-host notify p50 < 50 ms (PRD) |
-
-**Hardware readiness score:** **Prototype planning** — not EVT, not DVT, not PVT.
-
----
-
-## Firmware readiness
-
-| Gate | Status | Notes |
-|------|--------|-------|
-| PlatformIO config | Present | `firmware/ring/platformio.ini` — nRF52840 DK targets |
-| Canonical binary protocol in firmware | **No** | TS parser expects binary; firmware sends JSON strings |
-| BLE service/characteristic layout | **Placeholder UUIDs** | Must align with `docs/EDGE_IO_PROTOCOL.md` |
-| IMU driver validated on board | **Unknown** | BMI270/ICM-42688 references; not CI-built |
-| Haptic write path | **Scaffold** | DRV2605L calls present; not hardware-tested |
-| DFU / OTA | **Planned** | Nordic DFU suggested in firmware notes |
-| CI firmware build | **Not in CI** | Documented future gate |
-
-**Firmware readiness score:** **Bring-up planning** — compile status unverified; protocol migration required.
-
----
-
-## Release readiness
-
-| Stage | Status | Blockers |
-|-------|--------|------------|
-| **v0.1 vertical slice (internal)** | **In progress / near** | CI quality workflow; validation report |
-| **v0.5 public demo** | Not ready | Online play, polish, Edge-IO dev board, remapping |
-| **v1.0 commercial** | Not started | Content, art, platforms, hardware optional SKU |
-
-### v0.1 exit criteria (measurable)
-
-- [x] `packages/game-core` tests pass (determinism, combat)
-- [x] `packages/rollback` tests pass (rollback + desync detection)
-- [x] `packages/edgeio` protocol tests pass
-- [x] Web vertical slice: select → fight → results → rematch
-- [ ] `npm run quality` green on CI for full workspace
-- [x] `docs/PRODUCT_REQUIREMENTS.md` and honest `README.md`
-- [ ] `docs/VALIDATION_REPORT.md` with command results
-- [ ] Firmware stack decision recorded (ADR-0001)
-
----
-
-## CI status
-
-| Job | Workflow | Required | What it runs | Status |
-|-----|----------|----------|--------------|--------|
-| `quality` | `.github/workflows/quality.yml` | **Yes** | `npm ci`, `typecheck`, `test`, `build`, `audit:ci` (non-blocking) | Green on main after PR #2 |
-| `pages` | `.github/workflows/pages.yml` | **Yes** (main push) | `npm run quality`, upload `apps/web/dist` | Fixed PR #20 — was uploading root `dist` |
-| `native-engine` | same | **Yes** | CMake configure/build, `ctest` determinism | Skeleton passes when enabled |
-| `firmware-audit` | same | No (`continue-on-error`) | Checks `platformio.ini` exists | Compile not gated |
-
-**PR #19 failures (resolved):** workspace import for `@anime-aggressors/rollback`, accidental `legacy/web` compilation, missing `zod`/`StageState` in `packages/messages`, `@gunnch/input` tsconfig boundary leaks.
-
-**PR #20 Pages failure (resolved on `fix-pages-artifact-node24`):** upload step targeted root `dist`; Vite outputs `apps/web/dist`. Artifact path updated; pre-upload assertion added.
-
-**Node.js:** GitHub Actions workflows use `actions/checkout@v6`, `actions/setup-node@v6`, `node-version: 24` to avoid Node 20 deprecation warnings on hosted runners.
-
-**Local verify:**
+## Verify locally
 
 ```bash
-npm ci && npm run quality && npm run build:pages
+npm ci
+npm run quality
+npm run dev
 ```
 
-See `docs/VALIDATION_REPORT.md` and `docs/PULL_REQUEST_CHECKLIST.md`.
-
----
-
-## Quick commands
-
-```bash
-cd /path/to/anime-aggressors
-npm install
-npm run quality          # typecheck + test + web build
-npm run dev              # launches apps/web on Vite dev server
-npm run test -w packages/game-core
-npm run test -w packages/rollback
-npm run test -w packages/edgeio
-```
+Use `docs/VISUAL_ACCEPTANCE_CHECKLIST.md` before claiming PROVEN BY DEMO.
