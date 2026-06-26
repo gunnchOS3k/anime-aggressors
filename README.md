@@ -33,6 +33,16 @@ Build a fighter in seconds:
 | Indigo | Gravity | Inward pull for combos |
 | Violet | Void | Tricky special displacement |
 
+## Flagline Clash
+
+Flagline Clash is Anime Aggressors' team-vs-team territory mode. Teams fight over a Flag Core across a five-room battlefield. Win the center, push the frontline toward the enemy base, and capture the final room to win the whole game.
+
+Map flow:
+
+`Lunar Base ← Lunar Outpost ← Center Clash → Solar Outpost → Solar Base`
+
+Solar pushes left. Lunar pushes right. Every room is still a platform-fighter battle — movement, knockback, stocks, elements, and created fighters all matter.
+
 ## Playable Modes
 
 - **Play Match** — quick 2-player match (default stock rules)
@@ -40,6 +50,7 @@ Build a fighter in seconds:
 - **Create Fighter** — size + color builder with stat preview
 - **Controls** — per-player input profiles with keyboard/gamepad remapping
 - **Training Mode** — practice with hitbox overlay and frame step
+- **Flagline Clash** — 2v2 team territory war with Flag Core capture
 - **Impact Dummy Derby** — damage dummy, then Kinetic Bat launch for distance
 - **Controller Test** — keyboard + gamepad + mapped action check
 - **Rollback Debug** — deterministic state inspector
