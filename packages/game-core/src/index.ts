@@ -49,6 +49,36 @@ export {
   LAUNCH_WINDOW_FRAMES,
 } from "./modes/impactDummyDerby.js";
 export type { ImpactDummyDerbyState, DerbyPhase, DerbyInput } from "./modes/impactDummyDerby.js";
+export type {
+  TeamId,
+  FlaglineRoomIndex,
+  FlaglineRoom,
+  FlaglineMetaState,
+  FlaglineRoomResult,
+  FlaglineConfig,
+  FlaglineClashState,
+  TeamSlot,
+  FlaglineProgressionResult,
+} from "./modes/flaglineTypes.js";
+export { FLAGLINE_DEFAULTS, TEAM_PUSH_DIRECTION } from "./modes/flaglineTypes.js";
+export { FLAGLINE_ROOMS, FLAGLINE_ROOM_ORDER, getFlaglineRoom, getRoomLabel } from "./modes/flaglineMaps.js";
+export { getNextRoomIndex, roomIndexToStripPosition } from "./modes/flaglineProgression.js";
+export {
+  updateFlagCoreCapture,
+  checkCaptureWin,
+  resetCaptureMeters,
+  countTeamsInCore,
+} from "./modes/flaglineObjective.js";
+export {
+  createInitialFlaglineState,
+  createDefaultTeamSlots,
+  simulateFlaglineFrame,
+  mergeFlaglineInputs,
+  flaglineStateHash,
+  serializeFlaglineState,
+  deserializeFlaglineState,
+} from "./modes/flaglineClash.js";
+export { generateFlaglineBotInput, generateAllBotInputs } from "./bots/simpleFlaglineBot.js";
 export { createCombatEvent } from "./combatEvents.js";
 export type { CombatEvent, CombatEventType } from "./combatEvents.js";
 export { combatEventToSfx, createSfxEvent } from "./sfxEvents.js";

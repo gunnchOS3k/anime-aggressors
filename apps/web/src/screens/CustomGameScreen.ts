@@ -31,6 +31,7 @@ export function mountCustomGameScreen(root: HTMLElement): void {
 
   const render = () => {
     const staminaVisible = ruleset.matchType === "stamina";
+    const flaglineVisible = ruleset.matchType === "flaglineClash";
     root.innerHTML = `
       <div class="screen custom-game">
         <div class="screen-toolbar">
@@ -45,7 +46,7 @@ export function mountCustomGameScreen(root: HTMLElement): void {
 
           <fieldset>
             <legend>Match Type</legend>
-            ${(["stock", "time", "stamina"] as MatchType[])
+            ${(["stock", "time", "stamina", "flaglineClash"] as MatchType[])
               .map(
                 (t) =>
                   `<label><input type="radio" name="matchType" value="${t}" ${ruleset.matchType === t ? "checked" : ""}/> ${t}</label>`,
@@ -62,6 +63,25 @@ export function mountCustomGameScreen(root: HTMLElement): void {
               })
               .join("")}
           </fieldset>
+
+          <label class="${flaglineVisible ? "" : "hidden"}">Team size
+            <select id="cg-flagline-teams"><option value="2v2" selected>2v2</option></select>
+          </label>
+          <label class="${flaglineVisible ? "" : "hidden"}">Bots
+            <select id="cg-flagline-bots"><option value="on" ${ruleset.flagline?.botsEnabled !== false ? "selected" : ""}>On</option><option value="off" ${ruleset.flagline?.botsEnabled === false ? "selected" : ""}>Off</option></select>
+          </label>
+          <label class="${flaglineVisible ? "" : "hidden"}">Capture speed
+            <select id="cg-flagline-capture">${[8, 12, 16].map((v) => `<option value="${v}" ${(ruleset.flagline?.captureRatePerSecond ?? 12) === v ? "selected" : ""}>${v}/s</option>`).join("")}</select>
+          </label>
+          <label class="${flaglineVisible ? "" : "hidden"}">Team wipe wins room
+            <select id="cg-flagline-wipe"><option value="off" ${!ruleset.flagline?.teamWipeWinsRoom ? "selected" : ""}>Off</option><option value="on" ${ruleset.flagline?.teamWipeWinsRoom ? "selected" : ""}>On</option></select>
+          </label>
+          <label class="${flaglineVisible ? "" : "hidden"}">Overtime
+            <select id="cg-flagline-ot"><option value="on" ${ruleset.flagline?.overtimeEnabled !== false ? "selected" : ""}>On</option><option value="off" ${ruleset.flagline?.overtimeEnabled === false ? "selected" : ""}>Off</option></select>
+          </label>
+          <label class="${flaglineVisible ? "" : "hidden"}">Starting room
+            <select id="cg-flagline-start"><option value="0" selected>Center Clash</option></select>
+          </label>
 
           <label>Stocks
             <select id="cg-stocks">${STOCK_OPTIONS.map((s) => `<option value="${s}" ${ruleset.stocks === s ? "selected" : ""}>${s}</option>`).join("")}</select>
@@ -143,6 +163,20 @@ export function mountCustomGameScreen(root: HTMLElement): void {
       teamMode: (root.querySelector("#cg-teams") as HTMLSelectElement).value as TeamMode,
       createdFighters: (root.querySelector("#cg-created") as HTMLSelectElement).value as GameRuleset["createdFighters"],
     };
+    if (ruleset.matchType === "flaglineClash") {
+      ruleset.flagline = {
+        enabled: true,
+        captureToWin: 100,
+        captureRatePerSecond: Number((root.querySelector("#cg-flagline-capture") as HTMLSelectElement)?.value ?? 12),
+        decayRatePerSecond: 4,
+        overtimeEnabled: (root.querySelector("#cg-flagline-ot") as HTMLSelectElement)?.value !== "off",
+        teamWipeWinsRoom: (root.querySelector("#cg-flagline-wipe") as HTMLSelectElement)?.value === "on",
+        botsEnabled: (root.querySelector("#cg-flagline-bots") as HTMLSelectElement)?.value !== "off",
+      };
+      ruleset.teamMode = "2v2";
+      ruleset.playerCount = 4;
+      ruleset.stageId = "flagline-center-clash";
+    }
   };
 
   const bind = () => {
@@ -167,7 +201,11 @@ export function mountCustomGameScreen(root: HTMLElement): void {
       setActiveRulesetId(saved.id);
       setMatchRuleset(saved);
       setCustomFlow(true);
-      navigateTo("fighter-select");
+      if (saved.matchType === "flaglineClash") {
+        navigateTo("flagline-teams");
+      } else {
+        navigateTo("fighter-select");
+      }
     });
   };
 

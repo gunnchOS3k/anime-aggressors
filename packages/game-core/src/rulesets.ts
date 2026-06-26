@@ -2,7 +2,7 @@ import type { GameConfig } from "./types.js";
 import type { CreatedFighter } from "./createdFighter.js";
 import { SIM_HZ } from "./constants.js";
 
-export type MatchType = "stock" | "time" | "stamina";
+export type MatchType = "stock" | "time" | "stamina" | "flaglineClash";
 export type ItemFrequency = "off" | "low" | "medium" | "high";
 export type ElementMode = "on" | "visualOnly" | "off";
 export type TeamMode = "off" | "2v2";
@@ -23,6 +23,15 @@ export type GameRuleset = {
   elementMode: ElementMode;
   teamMode: TeamMode;
   createdFighters: "allowed" | "defaultsOnly";
+  flagline?: {
+    enabled: boolean;
+    captureToWin: number;
+    captureRatePerSecond: number;
+    decayRatePerSecond: number;
+    overtimeEnabled: boolean;
+    teamWipeWinsRoom: boolean;
+    botsEnabled: boolean;
+  };
   createdAt: string;
   updatedAt: string;
 };
@@ -110,6 +119,26 @@ export const RULESET_PRESETS: GameRuleset[] = [
     damageRatio: 1,
     launchRatio: 1,
   },
+  {
+    ...DEFAULT_RULESET,
+    id: "flagline-clash-2v2",
+    name: "Flagline Clash 2v2",
+    matchType: "flaglineClash",
+    playerCount: 4,
+    teamMode: "2v2",
+    stocks: 3,
+    timerSeconds: 180,
+    stageId: "flagline-center-clash",
+    flagline: {
+      enabled: true,
+      captureToWin: 100,
+      captureRatePerSecond: 12,
+      decayRatePerSecond: 4,
+      overtimeEnabled: true,
+      teamWipeWinsRoom: false,
+      botsEnabled: true,
+    },
+  },
 ];
 
 export function cloneRuleset(r: GameRuleset): GameRuleset {
@@ -120,7 +149,7 @@ export function validateRuleset(r: GameRuleset): boolean {
   if (r.stocks < 1 || r.stocks > 99) return false;
   if (r.damageRatio < 0.25 || r.damageRatio > 4) return false;
   if (r.launchRatio < 0.25 || r.launchRatio > 4) return false;
-  if (!["stock", "time", "stamina"].includes(r.matchType)) return false;
+  if (!["stock", "time", "stamina", "flaglineClash"].includes(r.matchType)) return false;
   return true;
 }
 
@@ -130,6 +159,7 @@ export function rulesetToMatchDurationFrames(r: GameRuleset): number {
 }
 
 export function effectivePlayerCount(r: GameRuleset): number {
+  if (r.matchType === "flaglineClash") return 4;
   return Math.min(r.playerCount, 2) as 2;
 }
 

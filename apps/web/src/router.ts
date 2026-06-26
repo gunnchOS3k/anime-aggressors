@@ -60,6 +60,7 @@ export function bindRouteButtons(): void {
     ["btn-edgeio", "edgeio"],
     ["btn-prototype", "prototype"],
     ["btn-impact-dummy-derby", "impact-dummy-derby"],
+    ["btn-flagline-clash", "flagline-setup"],
     ["btn-feedback", "feedback"],
   ];
 

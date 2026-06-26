@@ -63,10 +63,32 @@ const IMPACT_PLATFORM: StageDef = {
   ],
 };
 
+const FLAGLINE_BASE: StageDef = {
+  id: "flagline-lunar-base",
+  name: "Lunar Base",
+  placeholder: true,
+  bounds: { left: BLAST_LEFT, right: BLAST_RIGHT, top: BLAST_TOP, bottom: BLAST_BOTTOM, floorY: FLOOR_Y },
+  spawnPoints: [
+    { x: STAGE_WIDTH / 4, y: FLOOR_Y - 64 * FP_SCALE },
+    { x: STAGE_WIDTH / 3, y: FLOOR_Y - 64 * FP_SCALE },
+    { x: (STAGE_WIDTH * 3) / 4, y: FLOOR_Y - 64 * FP_SCALE },
+    { x: (STAGE_WIDTH * 2) / 3, y: FLOOR_Y - 64 * FP_SCALE },
+  ],
+};
+
+const FLAGLINE_STAGES: StageDef[] = [
+  FLAGLINE_BASE,
+  { ...FLAGLINE_BASE, id: "flagline-lunar-outpost", name: "Lunar Outpost" },
+  { ...FLAGLINE_BASE, id: "flagline-center-clash", name: "Center Clash" },
+  { ...FLAGLINE_BASE, id: "flagline-solar-outpost", name: "Solar Outpost" },
+  { ...FLAGLINE_BASE, id: "flagline-solar-base", name: "Solar Base" },
+];
+
 const STAGES: Record<string, StageDef> = {
   "skyline-arena": SKYLINE_ARENA,
   "training-grid": TRAINING_GRID,
   "impact-platform": IMPACT_PLATFORM,
+  ...Object.fromEntries(FLAGLINE_STAGES.map((s) => [s.id, s])),
 };
 
 export function getStage(id: string): StageDef {

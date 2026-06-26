@@ -96,6 +96,16 @@ async function navigate(mode: AppRouteMode): Promise<void> {
     } else if (mode === "impact-dummy-derby") {
       const { mountImpactDummyDerby } = await import("./modes/impactDummyDerbyView.js");
       mountImpactDummyDerby(appRoot!);
+    } else if (mode === "flagline-setup") {
+      const { mountFlaglineClashSetupScreen } = await import("./screens/FlaglineClashSetupScreen.js");
+      mountFlaglineClashSetupScreen(appRoot!);
+    } else if (mode === "flagline-teams") {
+      const { mountTeamSelectScreen } = await import("./screens/TeamSelectScreen.js");
+      const { navigateTo } = await import("./router.js");
+      mountTeamSelectScreen(appRoot!, () => navigateTo("flagline-clash"));
+    } else if (mode === "flagline-clash") {
+      const { mountFlaglineClash } = await import("./modes/flaglineClashView.js");
+      mountFlaglineClash(appRoot!);
     } else if (mode === "feedback") {
       const { mountFeedbackScreen } = await import("./screens/FeedbackScreen.js");
       mountFeedbackScreen(appRoot!);

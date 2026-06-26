@@ -542,3 +542,54 @@ body {
   background: #1a1a2e;
   border-radius: 8px;
 }
+
+.flagline-map-strip {
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  margin: 0.5rem 0;
+}
+
+.map-node.current {
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.flagline-hud .capture-meters {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0.5rem 0;
+}
+
+.capture .bar {
+  height: 8px;
+  background: #222;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.capture.solar .fill {
+  background: #ffb347;
+  height: 100%;
+}
+
+.capture.lunar .fill {
+  background: #6b9dff;
+  height: 100%;
+}
+
+.team-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.flagline-flow code {
+  display: block;
+  padding: 0.5rem;
+  background: #1a1a2e;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}

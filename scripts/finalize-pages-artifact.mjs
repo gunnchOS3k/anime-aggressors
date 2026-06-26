@@ -28,7 +28,7 @@ const assetFiles = fs
   .join("\n");
 
 const markers = `${html}\n${assetFiles}`;
-for (const label of ["Create Fighter", "Play Match", "Custom Game", "Controls", "Impact Dummy Derby"]) {
+for (const label of ["Create Fighter", "Play Match", "Custom Game", "Controls", "Flagline Clash", "Impact Dummy Derby"]) {
   if (!markers.includes(label)) {
     console.error(`Missing expected marker in artifact: ${label}`);
     process.exit(1);
@@ -52,7 +52,7 @@ if (commitSha === "local") {
 let branch = process.env.GITHUB_REF_NAME ?? "main";
 const builtAt = new Date().toISOString();
 const modes =
-  "Play Match,Create Fighter,Custom Game,Controls,Training Mode,Impact Dummy Derby,Controller Test,Rollback Debug,Edge-IO Lab,Prototype Lab,Feedback";
+  "Play Match,Create Fighter,Custom Game,Controls,Flagline Clash,Training Mode,Impact Dummy Derby,Controller Test,Rollback Debug,Edge-IO Lab,Prototype Lab,Feedback";
 const deployInfo = [
   `commit_sha=${commitSha}`,
   `branch=${branch}`,

@@ -93,6 +93,10 @@ export class ThreeGameRenderer {
     this.renderer.render(this.scene, this.cameraDirector.getCamera());
   }
 
+  getScene(): THREE.Scene {
+    return this.scene;
+  }
+
   resize(width: number, height: number): void {
     this.width = width;
     this.height = height;

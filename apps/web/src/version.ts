@@ -6,6 +6,7 @@ export const APP_EXPECTED_MODES = [
   "Controls",
   "Training Mode",
   "Impact Dummy Derby",
+  "Flagline Clash",
   "Controller Test",
   "Rollback Debug",
   "Edge-IO Lab",
