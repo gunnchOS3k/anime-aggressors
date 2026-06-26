@@ -1,8 +1,12 @@
 # Anime Aggressors — Status
 
 **Last updated:** 2026-06-24  
-**Branch:** `threejs-platform-fighter-pivot`  
+**Branch:** `main` (post PR #5)  
 **Product:** 2.5D platform fighter (Three.js renderer + deterministic game-core)
+
+## CI note (post PR #5)
+
+PR #5 added `@anime-aggressors/netplay` but omitted an updated `package-lock.json`, causing `npm ci` to fail on GitHub Actions. Fixed in `fix-netplay-lockfile-ci` by regenerating the lockfile and verifying all quality gates.
 
 Ship gate vocabulary:
 
@@ -32,8 +36,8 @@ Ship gate vocabulary:
 | Deterministic game-core (60 Hz, frame data, blast zones) | PROVEN BY TEST | `npm run test -w @anime-aggressors/game-core` |
 | Rollback harness | PROVEN BY TEST | `npm run test -w @anime-aggressors/rollback` |
 | Edge-IO binary protocol | PROVEN BY TEST | `npm run test -w @anime-aggressors/edgeio` |
-| Renderer mapping (no GameState mutation) | PROVEN BY TEST | `npm run test -w anime-aggressors-web` |
-| GitHub Pages demo | PROVEN BY DEMO | After merge + Pages deploy |
+| Local loopback netplay | PROVEN BY TEST | `npm run test -w @anime-aggressors/netplay` |
+| Impact Dummy Derby | PLAYABLE + PROVEN BY TEST | `#/impact-dummy-derby` |
 
 ---
 
@@ -43,7 +47,7 @@ Ship gate vocabulary:
 |------|------|---------|
 | GLB character/stage assets | SHIP BLOCKED | Placeholders only; pipeline stubbed |
 | Production combat polish | SHIP BLOCKED | Basic frame data; needs tuning |
-| Online multiplayer | UNSHIPPED | No transport |
+| Online multiplayer (public relay) | SHIP BLOCKED | Loopback PROVEN BY TEST; relay not deployed |
 | Edge-IO hardware loop | UNSHIPPED | No BLE UI / firmware in CI |
 | Mobile / desktop apps | UNSHIPPED | Scaffold only |
 | Tagged release | UNSHIPPED | No v0.2 tag yet |
