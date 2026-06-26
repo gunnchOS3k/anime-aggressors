@@ -1,9 +1,44 @@
-# Validation report — Pages fix + Impact Dummy Derby + unshipped advance
+# Validation report — netplay rollback typecheck + README playtest refresh
 
-**Branch:** `fix-netplay-lockfile-ci`  
+**Branch:** `fix-netplay-rollback-readme-pc-playtest`  
 **Date:** 2026-06-24
 
-## Post-PR #5 CI failure: netplay workspace lockfile
+## CI failure: netplay cannot resolve `@anime-aggressors/rollback`
+
+**Root cause:**
+- `@anime-aggressors/netplay` depends on `@anime-aggressors/rollback` (workspace `0.1.0`, symlink OK).
+- Rollback `package.json` `exports` point to `./dist/src/index.d.ts` (built output).
+- Root `typecheck` built `game-core` then ran `tsc --noEmit` on all workspaces without building rollback first.
+- On clean CI (`npm ci`, no prior `dist/`), netplay typecheck failed: `TS2307: Cannot find module '@anime-aggressors/rollback'`.
+
+**Fix:**
+- Updated root `package.json` `typecheck` script to run `npm run build -w @anime-aggressors/rollback` after game-core and before workspace typechecks.
+- No lockfile change required (dependency was already declared correctly).
+
+**Validation:**
+
+| Command | Result |
+|---------|--------|
+| `npm ci` | pass |
+| `npm run typecheck` | pass |
+| `npm run test` | pass |
+| `npm run build` | pass |
+| `npm run quality` | pass |
+| `npm run build:pages` | pass |
+
+---
+
+## README + PC playtest docs
+
+- README top half rewritten as game landing page (modes, controls, playtest CTA).
+- Ship gates / dev docs moved below the fold.
+- Added `docs/playtest/` (PC guide, feedback form, checklist, known issues).
+- Added `docs/PC_DISTRIBUTION_PLAN.md` (Pages → Windows ZIP → itch.io → Steam).
+- Added `docs/media/README.md` (banner/GIF placeholder instructions; no broken image links in README).
+
+---
+
+## Post-PR #5 CI failure: netplay workspace lockfile (resolved in PR #6)
 
 **Root cause:**
 - PR #5 added `packages/netplay` as workspace package `@anime-aggressors/netplay@0.1.0`.
