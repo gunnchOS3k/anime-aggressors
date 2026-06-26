@@ -1,12 +1,18 @@
 # Anime Aggressors — Status
 
 **Last updated:** 2026-06-24  
-**Branch:** `main` (post PR #5)  
+**Branch:** `fix-netplay-rollback-readme-pc-playtest`  
 **Product:** 2.5D platform fighter (Three.js renderer + deterministic game-core)
 
-## CI note (post PR #5)
+## CI note (post PR #6)
 
-PR #5 added `@anime-aggressors/netplay` but omitted an updated `package-lock.json`, causing `npm ci` to fail on GitHub Actions. Fixed in `fix-netplay-lockfile-ci` by regenerating the lockfile and verifying all quality gates.
+After the netplay lockfile fix, `npm run typecheck` failed in CI because `@anime-aggressors/netplay` resolves `@anime-aggressors/rollback` via package `exports` pointing at `dist/`. The root `typecheck` script built `game-core` but not `rollback` before netplay typecheck. Fixed by building rollback before workspace typechecks.
+
+## Friend playtest (PC)
+
+- **Web (live):** https://gunnchOS3k.github.io/anime-aggressors/ — see `docs/playtest/PC_PLAYTEST_GUIDE.md`
+- **Windows ZIP:** SHIP BLOCKED — `npm run build:desktop:win` not implemented; target `releases/windows/AnimeAggressors-Playtest-v0.2.0.zip`
+- **Distribution stages:** `docs/PC_DISTRIBUTION_PLAN.md`
 
 Ship gate vocabulary:
 

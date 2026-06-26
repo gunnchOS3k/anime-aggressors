@@ -40,7 +40,7 @@ Anime Aggressors is **not** scoped only as a v0.1 vertical slice. The determinis
 
 | Milestone | Description | Exit criteria | Status |
 |-----------|-------------|---------------|--------|
-| **A0** | CI green | `npm ci`, `typecheck`, `test`, `build`, `quality` pass locally and on GitHub Actions | **In progress** — PR #19 failures addressed on `fix-ci-expand-full-completion-roadmap` |
+| **A0** | CI green | `npm ci`, `typecheck`, `test`, `build`, `quality` pass locally and on GitHub Actions | **In progress** — netplay rollback build-order fix on `fix-netplay-rollback-readme-pc-playtest` |
 | **A1** | 2P deterministic match | Select → fight → results → rematch; determinism tests pass | **Done** |
 | **A2** | 4P local couch | 4 `InputFrame` slots; device assignment UI | Not started |
 | **A3** | Training mode | Dummy opponent, frame step, input display | Not started |
@@ -211,6 +211,8 @@ Anime Aggressors is **not** scoped only as a v0.1 vertical slice. The determinis
 
 - [PRODUCT_REQUIREMENTS.md](./PRODUCT_REQUIREMENTS.md) — Track A is the vertical slice within full program
 - [STATUS.md](./STATUS.md) — Honest capability matrix
+- [PC_DISTRIBUTION_PLAN.md](./PC_DISTRIBUTION_PLAN.md) — Staged PC friend playtests (web → ZIP → itch.io)
+- [playtest/PC_PLAYTEST_GUIDE.md](./playtest/PC_PLAYTEST_GUIDE.md) — Tester instructions
 - [BACKLOG.md](./BACKLOG.md) — Work items labeled A–H
 - [ARCHITECTURE.md](./ARCHITECTURE.md) — Parallel tracks and legacy paths
 - [CPP_ENGINE_PLAN.md](./CPP_ENGINE_PLAN.md) — Track C detail
