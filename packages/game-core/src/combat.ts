@@ -35,6 +35,15 @@ import {
   scaledKnockbackTaken,
 } from "./fighterCreation.js";
 import { applyElementOnHit, tickElementalEffects } from "./elements.js";
+import { elementGameplayEnabled } from "./rulesets.js";
+
+function getDamageRatio(state: GameState): number {
+  return state.config.ruleset?.damageRatio ?? 1;
+}
+
+function getLaunchRatio(state: GameState): number {
+  return state.config.ruleset?.launchRatio ?? 1;
+}
 
 function applyInputMovement(player: PlayerState, input: InputFrame): void {
   const char = getCharacter(player.characterId);
@@ -241,19 +250,32 @@ function applyHit(
       ? getMoveData(attacker.currentMoveId as MoveId) ?? SPECIAL_ATTACK
       : getMoveData(attacker.currentMoveId as MoveId) ?? NEUTRAL_ATTACK;
 
-  const finalDamage = scaledHitDamage(damage, attacker);
-  const kbXScaled = scaledKnockbackTaken(kbX !== 0 ? kbX * FP_SCALE : kb.kbX, defender);
-  const kbYScaled = scaledKnockbackTaken(kbY !== 0 ? kbY * FP_SCALE : kb.kbY, defender);
+  const dmgRatio = getDamageRatio(state);
+  const launchRatio = getLaunchRatio(state);
+  const finalDamage = Math.max(1, Math.floor(scaledHitDamage(damage, attacker) * dmgRatio));
+  const kbXScaled = Math.floor(
+    scaledKnockbackTaken(kbX !== 0 ? kbX * FP_SCALE : kb.kbX, defender) * launchRatio,
+  );
+  const kbYScaled = Math.floor(
+    scaledKnockbackTaken(kbY !== 0 ? kbY * FP_SCALE : kb.kbY, defender) * launchRatio,
+  );
 
-  defender.damage += finalDamage;
-  defender.vx += kbX !== 0 ? kbX : (kbXScaled * attacker.facing) / 10;
-  defender.vy += kbY !== 0 ? kbY : kbYScaled / 10;
+  if (state.config.ruleset?.matchType === "stamina") {
+    defender.staminaHp = Math.max(0, defender.staminaHp - finalDamage);
+  } else {
+    defender.damage += finalDamage;
+  }
+  defender.vx += kbX !== 0 ? kbX * launchRatio : (kbXScaled * attacker.facing) / 10;
+  defender.vy += kbY !== 0 ? kbY * launchRatio : kbYScaled / 10;
   defender.actionState = "hitstun";
-  defender.hitstunFrames = HITSTUN_BASE + Math.floor(defender.damage / 10);
+  defender.hitstunFrames = HITSTUN_BASE + Math.floor((defender.damage || 0) / 10);
   defender.onGround = false;
   defender.currentMoveId = "none";
 
-  applyElementOnHit(attacker, defender, moveData, attacker.actionFrame);
+  const elementMode = state.config.ruleset?.elementMode ?? "on";
+  if (elementGameplayEnabled(elementMode)) {
+    applyElementOnHit(attacker, defender, moveData, attacker.actionFrame);
+  }
 
   if (hitstop > state.hitstopFrames) {
     state.hitstopFrames = hitstop;
@@ -269,12 +291,19 @@ function checkBlastZones(player: PlayerState): boolean {
   );
 }
 
-function respawnPlayer(player: PlayerState, spawn: { x: number; y: number }): void {
+function respawnPlayer(
+  player: PlayerState,
+  spawn: { x: number; y: number },
+  ruleset?: import("./rulesets.js").GameRuleset,
+): void {
   player.x = spawn.x;
   player.y = spawn.y;
   player.vx = 0;
   player.vy = 0;
   player.damage = 0;
+  if (ruleset?.matchType === "stamina") {
+    player.staminaHp = ruleset.staminaHp;
+  }
   player.actionState = "idle";
   player.actionFrame = 0;
   player.hitstunFrames = 0;
@@ -323,13 +352,23 @@ export function resolveCombat(state: GameState): void {
   for (const player of state.players) {
     if (player.actionState === "defeated") continue;
     if (checkBlastZones(player)) {
+      const matchType = state.config.ruleset?.matchType ?? "stock";
+      if (matchType === "stamina" && player.staminaHp <= 0) {
+        player.actionState = "defeated";
+        continue;
+      }
+      for (const other of state.players) {
+        if (other.id !== player.id && other.actionState !== "defeated") {
+          if (matchType === "time") other.score += 1;
+        }
+      }
       player.stocks -= 1;
       if (player.stocks <= 0) {
         player.actionState = "defeated";
       } else {
         const stageDef = getStage(state.config.stageId);
         const spawn = stageDef.spawnPoints[player.id] ?? stageDef.spawnPoints[0];
-        respawnPlayer(player, spawn);
+        respawnPlayer(player, spawn, state.config.ruleset);
       }
     }
   }

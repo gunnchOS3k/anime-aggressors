@@ -1,6 +1,26 @@
 import { APP_ROUTES, hashToMode, modeToHash, type AppRouteMode } from "./routes.js";
+import { setCustomFlow } from "./match/matchSession.js";
 
 export type RouteHandler = (mode: AppRouteMode) => void | Promise<void>;
+
+const ROUTE_PARAMS_KEY = "aa-route-params";
+
+export function setRouteParams(params: Record<string, unknown>): void {
+  sessionStorage.setItem(ROUTE_PARAMS_KEY, JSON.stringify(params));
+}
+
+export function getRouteParams<T extends Record<string, unknown>>(): T {
+  try {
+    const raw = sessionStorage.getItem(ROUTE_PARAMS_KEY);
+    return raw ? (JSON.parse(raw) as T) : ({} as T);
+  } catch {
+    return {} as T;
+  }
+}
+
+export function clearRouteParams(): void {
+  sessionStorage.removeItem(ROUTE_PARAMS_KEY);
+}
 
 export function installHashRouter(onRoute: RouteHandler): () => void {
   const handle = () => {
@@ -13,9 +33,10 @@ export function installHashRouter(onRoute: RouteHandler): () => void {
   return () => window.removeEventListener("hashchange", handle);
 }
 
-export function navigateTo(mode: AppRouteMode): void {
+export function navigateTo(mode: AppRouteMode, params?: Record<string, unknown>): void {
+  if (params) setRouteParams(params);
   const target = modeToHash(mode);
-  if (window.location.hash !== target) {
+  if (window.location.hash.split("?")[0] !== target) {
     window.location.hash = target;
   } else {
     window.dispatchEvent(new HashChangeEvent("hashchange"));
@@ -23,6 +44,7 @@ export function navigateTo(mode: AppRouteMode): void {
 }
 
 export function navigateHome(): void {
+  clearRouteParams();
   navigateTo("home");
 }
 
@@ -30,6 +52,8 @@ export function bindRouteButtons(): void {
   const map: [string, AppRouteMode][] = [
     ["btn-play-match", "match"],
     ["btn-create-fighter", "create-fighter"],
+    ["btn-custom-game", "custom-game"],
+    ["btn-controls", "controls"],
     ["btn-training", "training"],
     ["btn-controller", "controller"],
     ["btn-rollback", "rollback"],
@@ -42,6 +66,7 @@ export function bindRouteButtons(): void {
   for (const [id, mode] of map) {
     document.getElementById(id)?.addEventListener("click", (e) => {
       e.preventDefault();
+      if (id === "btn-play-match") setCustomFlow(false);
       navigateTo(mode);
     });
   }

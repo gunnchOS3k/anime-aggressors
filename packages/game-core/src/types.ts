@@ -63,6 +63,10 @@ export type PlayerState = {
   facing: 1 | -1;
   damage: number;
   stocks: number;
+  staminaHp: number;
+  maxStaminaHp: number;
+  score: number;
+  teamId: number;
   actionState: PlayerActionState;
   actionFrame: number;
   hitstunFrames: number;
@@ -91,6 +95,7 @@ export type GameConfig = {
   stageId: string;
   characterIds: string[];
   fighterProfiles?: import("./createdFighter.js").CreatedFighter[];
+  ruleset?: import("./rulesets.js").GameRuleset;
   seed: number;
 };
 

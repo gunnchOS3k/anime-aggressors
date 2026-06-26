@@ -5,8 +5,11 @@ import {
   hashState,
   ELEMENTS,
   SIZE_STATS,
+  gameConfigFromRuleset,
+  DEFAULT_RULESET,
   type GameConfig,
   type GameState,
+  type GameRuleset,
 } from "@anime-aggressors/game-core";
 import { RollbackSession } from "@anime-aggressors/rollback";
 import { pollAllInputs } from "../input/deviceAssignment.js";
@@ -17,11 +20,14 @@ import { showCharacterSelect, type CharacterSelectResult } from "../screens/Figh
 import { showResults, type ResultsAction } from "./results.js";
 import { globalAudio } from "../audio/AudioManager.js";
 import { navigateHome } from "../router.js";
+import { getMatchSetup } from "../match/matchSession.js";
+import { getProfileForSlot } from "../storage/inputProfileStorage.js";
 
 export type MatchPhase = "select" | "fighting" | "results";
 
 export type PlatformFighterOptions = {
   trainingMode?: boolean;
+  skipSelect?: boolean;
 };
 
 export class PlatformFighterApp {
@@ -47,14 +53,17 @@ export class PlatformFighterApp {
   private trainingMode: boolean;
   private prevDamage: number[] = [0, 0];
 
+  private options: PlatformFighterOptions;
+
   constructor(root: HTMLElement, options: PlatformFighterOptions = {}) {
     this.root = root;
+    this.options = options;
     this.trainingMode = options.trainingMode ?? false;
     this.root.innerHTML = `
       <div class="pf-root">
         <div class="vs-toolbar">
           <button id="pf-back" type="button">← Home</button>
-          <span class="vs-hint">P1: Arrows+ZXCVB | P2: WASD+12345 | F1 debug | F2 hitboxes | F3 pause | F4 step | R reset</span>
+          <span class="vs-hint">P1: ${getProfileForSlot(1).name} | P2: ${getProfileForSlot(2).name} | F1 debug | F2 hitboxes | F3 pause | F4 step | R reset</span>
         </div>
         <div class="pf-viewport-wrap">
           <div id="pf-viewport" class="pf-viewport"></div>
@@ -73,6 +82,14 @@ export class PlatformFighterApp {
   }
 
   start(): void {
+    const setup = getMatchSetup();
+    if (this.options.skipSelect && setup.p1Fighter && setup.p2Fighter) {
+      this.beginMatch(
+        { p1Fighter: setup.p1Fighter, p2Fighter: setup.p2Fighter },
+        setup.ruleset,
+      );
+      return;
+    }
     this.state = "select";
     showCharacterSelect(this.root, (result) => {
       this.selectResult = result;
@@ -128,16 +145,13 @@ export class PlatformFighterApp {
     this.state = "fighting";
   }
 
-  private beginMatch(select: CharacterSelectResult): void {
-    const config: GameConfig = {
-      playerCount: 2,
-      stocks: 3,
-      matchDurationFrames: 180 * 60,
-      stageId: "skyline-arena",
-      characterIds: [`created:${select.p1Fighter.id}`, `created:${select.p2Fighter.id}`],
-      fighterProfiles: [select.p1Fighter, select.p2Fighter],
-      seed: Date.now() & 0xffff,
-    };
+  beginMatch(select: CharacterSelectResult, ruleset?: GameRuleset): void {
+    const activeRuleset = ruleset ?? getMatchSetup().ruleset ?? DEFAULT_RULESET;
+    const config: GameConfig = gameConfigFromRuleset(
+      activeRuleset,
+      [select.p1Fighter, select.p2Fighter],
+      Date.now() & 0xffff,
+    );
 
     this.gameState = createInitialGameState(config);
     this.rollback = new RollbackSession(this.gameState, {
@@ -254,23 +268,39 @@ export class PlatformFighterApp {
     if (!this.gameState) return;
     const p1 = this.gameState.players[0];
     const p2 = this.gameState.players[1];
-    const timerSec = Math.ceil(this.gameState.matchTimerFrames / 60);
     const el1 = ELEMENTS[p1.fighterColor]?.name ?? "—";
     const el2 = ELEMENTS[p2.fighterColor]?.name ?? "—";
     const sz1 = SIZE_STATS[p1.fighterSize]?.label ?? "—";
     const sz2 = SIZE_STATS[p2.fighterSize]?.label ?? "—";
+    const matchType = this.gameState.config.ruleset?.matchType ?? "stock";
+    const p1Stat =
+      matchType === "stamina"
+        ? `${p1.staminaHp}/${p1.maxStaminaHp} HP`
+        : matchType === "time"
+          ? `score ${p1.score}`
+          : `${p1.damage}%`;
+    const p2Stat =
+      matchType === "stamina"
+        ? `${p2.staminaHp}/${p2.maxStaminaHp} HP`
+        : matchType === "time"
+          ? `score ${p2.score}`
+          : `${p2.damage}%`;
+    const timerSec =
+      this.gameState.config.ruleset?.timerSeconds === null
+        ? "∞"
+        : String(Math.ceil(this.gameState.matchTimerFrames / 60));
     this.hud.innerHTML = `
       <div class="pf-hud-row">
-        <span><strong>${p1.fighterName}</strong> (${sz1}/${el1}) · ${p1.damage}% · ${p1.stocks}♥</span>
+        <span><strong>${p1.fighterName}</strong> (${sz1}/${el1}) · ${p1Stat} · ${p1.stocks}♥</span>
         <span class="pf-timer">${timerSec}s</span>
-        <span><strong>${p2.fighterName}</strong> (${sz2}/${el2}) · ${p2.damage}% · ${p2.stocks}♥</span>
+        <span><strong>${p2.fighterName}</strong> (${sz2}/${el2}) · ${p2Stat} · ${p2.stocks}♥</span>
       </div>
     `;
   }
 }
 
-export function launchMatch(root: HTMLElement): PlatformFighterApp {
-  const app = new PlatformFighterApp(root, { trainingMode: false });
+export function launchMatch(root: HTMLElement, options: PlatformFighterOptions = {}): PlatformFighterApp {
+  const app = new PlatformFighterApp(root, options);
   app.start();
   return app;
 }

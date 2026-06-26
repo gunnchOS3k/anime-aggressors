@@ -38,6 +38,16 @@ export function simulateFrame(state: GameState, inputs: InputFrame[]): GameState
 
     resolveCombat(next);
 
+    const matchType = next.config.ruleset?.matchType ?? "stock";
+
+    if (matchType === "stamina") {
+      for (const p of next.players) {
+        if (p.staminaHp <= 0 && p.actionState !== "defeated") {
+          p.actionState = "defeated";
+        }
+      }
+    }
+
     const alive = next.players.filter((p) => p.actionState !== "defeated");
     if (alive.length === 1) {
       next.phase = "results";
@@ -45,15 +55,25 @@ export function simulateFrame(state: GameState, inputs: InputFrame[]): GameState
     } else if (alive.length === 0) {
       next.phase = "results";
       next.winnerId = null;
-    } else if (next.matchTimerFrames <= 0) {
+    } else if (next.matchTimerFrames <= 0 && next.config.ruleset?.timerSeconds !== null) {
       next.phase = "results";
-      let best = alive[0];
-      for (const p of alive) {
-        if (p.stocks > best.stocks || (p.stocks === best.stocks && p.damage < best.damage)) {
-          best = p;
+      if (matchType === "time") {
+        let best = alive[0];
+        for (const p of alive) {
+          if (p.score > best.score || (p.score === best.score && p.damage < best.damage)) {
+            best = p;
+          }
         }
+        next.winnerId = best.id;
+      } else {
+        let best = alive[0];
+        for (const p of alive) {
+          if (p.stocks > best.stocks || (p.stocks === best.stocks && p.damage < best.damage)) {
+            best = p;
+          }
+        }
+        next.winnerId = best.id;
       }
-      next.winnerId = best.id;
     }
   }
 
@@ -78,6 +98,8 @@ export function resetForRematch(state: GameState): GameState {
     p.vx = 0;
     p.vy = 0;
     p.damage = 0;
+    p.staminaHp = state.config.ruleset?.matchType === "stamina" ? state.config.ruleset.staminaHp : 0;
+    p.score = 0;
     p.stocks = state.config.stocks;
     p.actionState = "idle";
     p.actionFrame = 0;

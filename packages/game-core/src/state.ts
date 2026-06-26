@@ -16,10 +16,13 @@ import {
 import { getCharacter } from "./characters.js";
 import { getStage } from "./stages.js";
 import { getFighterProfile, applyCreatedFighterToPlayer } from "./fighterCreation.js";
+import { DEFAULT_RULESET } from "./rulesets.js";
 
 export function createInitialGameState(config: GameConfig): GameState {
+  const ruleset = config.ruleset ?? DEFAULT_RULESET;
   const stage = getStage(config.stageId);
   const players: PlayerState[] = [];
+  const maxStamina = ruleset.staminaHp;
 
   for (let i = 0; i < config.playerCount; i++) {
     const charId = config.characterIds[i] ?? "ember";
@@ -46,6 +49,10 @@ export function createInitialGameState(config: GameConfig): GameState {
       facing: i === 0 ? 1 : -1,
       damage: 0,
       stocks: config.stocks ?? DEFAULT_STOCKS,
+      staminaHp: ruleset.matchType === "stamina" ? maxStamina : 0,
+      maxStaminaHp: maxStamina,
+      score: 0,
+      teamId: ruleset.teamMode === "2v2" ? (i < 2 ? 0 : 1) : i,
       actionState: "idle",
       actionFrame: 0,
       hitstunFrames: 0,
@@ -65,7 +72,7 @@ export function createInitialGameState(config: GameConfig): GameState {
   return {
     frame: 0,
     phase: "countdown",
-    config,
+    config: { ...config, ruleset },
     players,
     stage: stage.bounds,
     countdownFrames: COUNTDOWN_FRAMES,
@@ -84,6 +91,7 @@ export function cloneGameState(state: GameState): GameState {
       fighterProfiles: state.config.fighterProfiles
         ? state.config.fighterProfiles.map((f) => ({ ...f }))
         : undefined,
+      ruleset: state.config.ruleset ? { ...state.config.ruleset } : undefined,
     },
     players: state.players.map((p) => ({ ...p })),
     stage: { ...state.stage },

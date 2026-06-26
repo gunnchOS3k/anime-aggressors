@@ -80,3 +80,8 @@ export function isKeyDown(code: string): boolean {
   ensureKeyboard();
   return keys.has(code);
 }
+
+export function getPressedKeyCodes(): ReadonlySet<string> {
+  ensureKeyboard();
+  return keys;
+}
