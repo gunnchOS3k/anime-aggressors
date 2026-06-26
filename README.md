@@ -2,104 +2,65 @@
 
 Anime Aggressors is a **2.5D platform fighter** with rollback-first deterministic gameplay and optional Edge-IO wearable input/haptics.
 
-**Branch:** `threejs-platform-fighter-pivot`
+**Branch:** `complete-unshipped-fix-pages-launch-lab`
 
 ## Play now
 
-| Mode | Description |
-|------|-------------|
-| **Play Match** | 2-player local stock battle on Skyline Arena (Three.js renderer) |
-| **Training Mode** | Match + debug overlay (F1–F4, hitbox toggles) |
-| **Controller Test** | Live keyboard / gamepad input display |
-| **Rollback Debug** | Deterministic rollback + replay scenario |
-| **Edge-IO Lab** | Gesture → input mapping sandbox |
-| **Prototype Lab** | Legacy mini-game experiments (not the main product) |
+| Mode | Gate |
+|------|------|
+| **Play Match** | PLAYABLE |
+| **Training Mode** | PLAYABLE |
+| **Impact Dummy Derby** | PLAYABLE |
+| **Controller Test** | PLAYABLE |
+| **Rollback Debug** | PLAYABLE |
+| **Edge-IO Lab** (simulator + BLE UI) | PLAYABLE |
+| **Prototype Lab** | PLAYABLE (secondary) |
+
+Live demo: https://gunnchOS3k.github.io/anime-aggressors/
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open the URL Vite prints (e.g. `http://localhost:5173/anime-aggressors/`) and click **Play Match**.
+Hash routes (GitHub Pages safe): `#/play`, `#/training`, `#/impact-dummy-derby`, etc.
 
 ## What ships first
 
-The first shippable target is a complete 2-player local platform-fighter match rendered in Three.js with deterministic game-core simulation and rollback-ready architecture.
+A complete 2-player local platform-fighter match (Three.js) plus **Impact Dummy Derby** — an original damage-build-then-launch side mode with **Kinetic Bat** final hit.
 
 ## Ship gates
 
 | System | Gate | Proof |
 |--------|------|-------|
-| Three.js 2.5D match renderer | PLAYABLE | GitHub Pages / local `npm run dev` |
+| Three.js 2.5D match | PLAYABLE | `#/play` on Pages / `npm run dev` |
+| Impact Dummy Derby | PLAYABLE + PROVEN BY TEST | `#/impact-dummy-derby` / game-core tests |
 | Deterministic game-core | PROVEN BY TEST | `npm run test -w @anime-aggressors/game-core` |
 | Rollback harness | PROVEN BY TEST | `npm run test -w @anime-aggressors/rollback` |
-| Prototype Lab mini-games | PLAYABLE | Prototype Lab |
-| Online multiplayer | UNSHIPPED | — |
-| Edge-IO hardware | UNSHIPPED | — |
-| Mobile app | UNSHIPPED | — |
-| Desktop app | UNSHIPPED | — |
-
-See **[docs/STATUS.md](docs/STATUS.md)** for the full capability matrix.
-
----
+| Local loopback netplay | PROVEN BY TEST | `npm run test -w @anime-aggressors/netplay` |
+| WebAudio placeholder SFX | PLAYABLE | in-match hit/KO sounds |
+| Edge-IO Lab simulator | PLAYABLE | `#/edgeio-lab` |
+| Edge-IO hardware BLE | SHIP BLOCKED | needs verified device |
+| GLB assets | SHIP BLOCKED | manifest only; placeholders render |
+| Public online | SHIP BLOCKED | relay/lobby not deployed |
+| Mobile app | SHIP BLOCKED | scaffold only |
+| Desktop app | SHIP BLOCKED | scaffold only |
+| Tagged release | UNSHIPPED | run `docs/RELEASE_PROCESS.md` |
 
 ## Architecture
 
 ```
-packages/game-core     — deterministic combat, movement, hitboxes, stocks
-packages/rollback      — input history, snapshots, rollback, replay
-apps/web/src/renderer-three — Three.js read-only presentation
-apps/web               — menus, match shell, training / debug modes
-native/engine          — C++ determinism track (later WASM/native)
+packages/game-core     — deterministic simulation (authoritative)
+packages/rollback      — rollback / replay
+packages/netplay       — loopback netplay (PROVEN BY TEST)
+apps/web/renderer-three — read-only Three.js presentation
 ```
 
-**Critical rule:** Three.js reads `GameState`; it never mutates authoritative gameplay state.
+Three.js reads `GameState`; it never mutates gameplay truth.
 
----
-
-## Controls
-
-| Player | Movement | Jump | Attack | Special | Shield | Dodge | Grab |
-|--------|----------|------|--------|---------|--------|-------|------|
-| P1 | Arrows | ↑ / Space | Z | X | C | V | B |
-| P2 | WASD | W | 1 | 2 | 3 | 4 | 5 |
-
-**Training / debug:** F1 overlay · F2 hitboxes/hurtboxes · F3 pause · F4 step · R reset
-
-Gamepads auto-assign: pad 0 → P1, pad 1 → P2.
-
----
-
-## Tests and quality
+## Quality
 
 ```bash
 npm ci
-npm run typecheck
-npm run test
-npm run build
-npm run quality
-npm run build:pages
+npm run release:check   # quality + pages artifact checks
 ```
-
----
-
-## Repo layout
-
-```
-apps/web/              Web app — Play Match, Training, debug shells
-apps/web/src/renderer-three/  Three.js renderer (non-authoritative)
-packages/game-core/    Deterministic simulation
-packages/rollback/     Rollback session harness
-packages/edgeio/       Wearable binary protocol
-native/engine/         C++ engine skeleton
-legacy/web/            Archived React PWA (not in CI)
-```
-
----
-
-## Docs
-
-- [STATUS](docs/STATUS.md) — ship gates and capability matrix
-- [RENDERER_THREE_CONTRACT](docs/RENDERER_THREE_CONTRACT.md) — renderer ↔ game-core boundary
-- [VISUAL_ACCEPTANCE_CHECKLIST](docs/VISUAL_ACCEPTANCE_CHECKLIST.md) — demo review checklist
-- [ROADMAP_FULL_COMPLETION](docs/ROADMAP_FULL_COMPLETION.md)

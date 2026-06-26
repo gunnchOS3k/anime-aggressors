@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import path from "node:path";
+import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
@@ -11,6 +12,7 @@ export default defineConfig({
       "@anime-aggressors/game-core": path.resolve(root, "../../packages/game-core/src/index.ts"),
       "@anime-aggressors/rollback": path.resolve(root, "../../packages/rollback/src/index.ts"),
       "@anime-aggressors/edgeio": path.resolve(root, "../../packages/edgeio/src/index.ts"),
+      "@anime-aggressors/netplay": path.resolve(root, "../../packages/netplay/src/index.ts"),
     },
   },
   build: {
@@ -26,6 +28,19 @@ export default defineConfig({
       },
     },
   },
+  plugins: [
+    {
+      name: "copy-404-for-github-pages",
+      closeBundle() {
+        const distDir = path.resolve(root, "dist");
+        const indexHtml = path.join(distDir, "index.html");
+        const fallback = path.join(distDir, "404.html");
+        if (fs.existsSync(indexHtml)) {
+          fs.copyFileSync(indexHtml, fallback);
+        }
+      },
+    },
+  ],
   server: {
     port: 3000,
     host: true,

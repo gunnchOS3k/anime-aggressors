@@ -11,12 +11,13 @@
   "scripts": {
     "dev": "npm run dev -w anime-aggressors-web",
     "build": "npm run build:packages && npm run build:web",
-    "build:packages": "npm run build -w @anime-aggressors/game-core -w @anime-aggressors/rollback -w @anime-aggressors/edgeio -w @anime-aggressors/messages -w @gunnch/input",
+    "build:packages": "npm run build -w @anime-aggressors/game-core -w @anime-aggressors/rollback -w @anime-aggressors/netplay -w @anime-aggressors/edgeio -w @anime-aggressors/messages -w @gunnch/input",
     "build:web": "npm run build -w anime-aggressors-web",
-    "build:pages": "npm run build:web && test -f apps/web/dist/index.html",
-    "typecheck": "npm run build -w @anime-aggressors/game-core && npm run typecheck -w @anime-aggressors/game-core -w @anime-aggressors/rollback -w @anime-aggressors/edgeio -w @anime-aggressors/messages -w @gunnch/input -w anime-aggressors-web",
-    "test": "npm run build -w @anime-aggressors/game-core && npm run test -w @anime-aggressors/game-core -w @anime-aggressors/rollback -w @anime-aggressors/edgeio -w anime-aggressors-web",
+    "build:pages": "npm run build:web && test -f apps/web/dist/index.html && test -f apps/web/dist/404.html && node -e \"const fs=require('fs');const h=fs.readFileSync('apps/web/dist/index.html','utf8');if(!h.includes('/anime-aggressors/')){process.exit(1)}\"",
+    "typecheck": "npm run build -w @anime-aggressors/game-core && npm run typecheck -w @anime-aggressors/game-core -w @anime-aggressors/rollback -w @anime-aggressors/netplay -w @anime-aggressors/edgeio -w @anime-aggressors/messages -w @gunnch/input -w anime-aggressors-web",
+    "test": "npm run build -w @anime-aggressors/game-core && npm run test -w @anime-aggressors/game-core -w @anime-aggressors/rollback -w @anime-aggressors/netplay -w @anime-aggressors/edgeio -w anime-aggressors-web",
     "quality": "npm run typecheck && npm run test && npm run build",
+    "release:check": "npm run quality && npm run build:pages",
     "audit:ci": "npm audit --audit-level=high || true",
     "clean": "rm -rf apps/web/dist packages/*/dist legacy/web/dist"
   },

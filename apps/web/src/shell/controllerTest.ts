@@ -13,7 +13,7 @@ export function mountControllerTest(root: HTMLElement): void {
   const out = root.querySelector("#controller-output") as HTMLPreElement;
   root.querySelector("#shell-back")?.addEventListener("click", () => {
     cancelAnimationFrame(raf);
-    window.dispatchEvent(new CustomEvent("aa:navigate-home"));
+    import("../router.js").then(({ navigateHome }) => navigateHome());
   });
 
   let frame = 0;

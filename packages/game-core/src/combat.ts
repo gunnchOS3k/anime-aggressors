@@ -18,7 +18,7 @@ import { getCharacter } from "./characters.js";
 import { getStage } from "./stages.js";
 import { boxesOverlap, getActiveHitboxes, getHurtbox } from "./collision.js";
 import { DODGE_MOVE, NEUTRAL_ATTACK, SPECIAL_ATTACK } from "./frameData.js";
-import { isMoveComplete } from "./moves.js";
+import { getMoveData, isMoveComplete, type MoveId } from "./moves.js";
 import {
   bufferJump,
   canCoyoteJump,
@@ -110,14 +110,24 @@ function startAction(player: PlayerState, input: InputFrame): void {
   if (input.special) {
     player.actionState = "special";
     player.actionFrame = 0;
-    player.currentMoveId = "special_attack";
+    player.currentMoveId = input.left || input.right ? "side_special" : "special_attack";
     return;
   }
 
   if (input.attack) {
     player.actionState = "attacking";
     player.actionFrame = 0;
-    player.currentMoveId = "neutral_attack";
+    if (!player.onGround) {
+      player.currentMoveId = "aerial_attack";
+    } else if (input.up) {
+      player.currentMoveId = "up_attack";
+    } else if (input.down) {
+      player.currentMoveId = "down_attack";
+    } else if (input.left || input.right) {
+      player.currentMoveId = "forward_attack";
+    } else {
+      player.currentMoveId = "neutral_attack";
+    }
     return;
   }
 }
@@ -173,13 +183,12 @@ function tickActionState(player: PlayerState): void {
     return;
   }
 
-  if (player.actionState === "attacking" && isMoveComplete(NEUTRAL_ATTACK, player.actionFrame)) {
-    player.actionState = "idle";
-    player.currentMoveId = "none";
-  }
-  if (player.actionState === "special" && isMoveComplete(SPECIAL_ATTACK, player.actionFrame)) {
-    player.actionState = "idle";
-    player.currentMoveId = "none";
+  if (player.actionState === "attacking" || player.actionState === "special") {
+    const data = getMoveData(player.currentMoveId as MoveId);
+    if (data && isMoveComplete(data, player.actionFrame)) {
+      player.actionState = "idle";
+      player.currentMoveId = "none";
+    }
   }
   if (player.actionState === "dodging" && isMoveComplete(DODGE_MOVE, player.actionFrame)) {
     player.actionState = "idle";

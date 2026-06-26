@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Anime Aggressors — 2.5D Platform Fighter</title>
     <meta name="description" content="Anime Aggressors is a 2.5D platform fighter with rollback-first deterministic gameplay and optional Edge-IO wearable input/haptics." />
-    <link rel="stylesheet" href="./src/styles.css" />
   </head>
   <body>
     <main class="landing" id="home-view">
@@ -17,21 +16,22 @@
           Edge-IO wearables are an optional input layer.
         </p>
         <div class="cta-row">
-          <button id="btn-play-match" class="btn-primary" type="button">Play Match</button>
-          <button id="btn-training" class="btn-secondary" type="button">Training Mode</button>
-          <button id="btn-controller" class="btn-secondary" type="button">Controller Test</button>
-          <button id="btn-rollback" class="btn-secondary" type="button">Rollback Debug</button>
-          <button id="btn-edgeio" class="btn-secondary" type="button">Edge-IO Lab</button>
-          <button id="btn-prototype" class="btn-tertiary" type="button">Prototype Lab</button>
+          <a id="btn-play-match" class="btn-primary" href="#/play">Play Match</a>
+          <a id="btn-training" class="btn-secondary" href="#/training">Training Mode</a>
+          <a id="btn-controller" class="btn-secondary" href="#/controller-test">Controller Test</a>
+          <a id="btn-rollback" class="btn-secondary" href="#/rollback-debug">Rollback Debug</a>
+          <a id="btn-edgeio" class="btn-secondary" href="#/edgeio-lab">Edge-IO Lab</a>
+          <a id="btn-impact-dummy-derby" class="btn-secondary" href="#/impact-dummy-derby">Impact Dummy Derby</a>
+          <a id="btn-prototype" class="btn-tertiary" href="#/prototype-lab">Prototype Lab</a>
         </div>
       </section>
 
       <section class="ship-gates">
         <h2>Ship gates</h2>
         <ul>
-          <li><strong>PLAYABLE</strong> — 2-player local match (Three.js renderer)</li>
-          <li><strong>PROVEN BY TEST</strong> — deterministic game-core + rollback harness</li>
-          <li><strong>UNSHIPPED</strong> — online multiplayer, mobile, desktop, hardware</li>
+          <li><strong>PLAYABLE</strong> — 2-player local match + Impact Dummy Derby</li>
+          <li><strong>PROVEN BY TEST</strong> — game-core, rollback, netplay loopback</li>
+          <li><strong>SHIP BLOCKED</strong> — public online relay, final art, hardware BLE verify</li>
         </ul>
         <p>
           See <a href="https://github.com/gunnchOS3k/anime-aggressors/blob/main/docs/STATUS.md">docs/STATUS.md</a>
@@ -42,55 +42,6 @@
 
     <div id="app-root" class="hidden"></div>
 
-    <script type="module">
-      const home = document.getElementById('home-view');
-      const appRoot = document.getElementById('app-root');
-
-      function showHome() {
-        appRoot.innerHTML = '';
-        appRoot.classList.add('hidden');
-        home?.classList.remove('hidden');
-      }
-
-      async function navigate(mode) {
-        home?.classList.add('hidden');
-        appRoot?.classList.remove('hidden');
-        appRoot.innerHTML = '';
-
-        try {
-          if (mode === 'match') {
-            const { launchMatch } = await import('./src/game/App.ts');
-            launchMatch(appRoot);
-          } else if (mode === 'training') {
-            const { launchTrainingMode } = await import('./src/game/App.ts');
-            launchTrainingMode(appRoot);
-          } else if (mode === 'controller') {
-            const { mountControllerTest } = await import('./src/shell/controllerTest.ts');
-            mountControllerTest(appRoot);
-          } else if (mode === 'rollback') {
-            const { mountRollbackDebug } = await import('./src/shell/rollbackDebug.ts');
-            mountRollbackDebug(appRoot);
-          } else if (mode === 'edgeio') {
-            const { mountEdgeIOLab } = await import('./src/shell/edgeioLab.ts');
-            mountEdgeIOLab(appRoot);
-          } else if (mode === 'prototype') {
-            const { mountPrototypeLab } = await import('./src/shell/prototypeLab.ts');
-            mountPrototypeLab(appRoot);
-          }
-        } catch (error) {
-          console.error(error);
-          appRoot.innerHTML = '<p style="color:#ff6b6b">Failed to load module.</p>';
-        }
-      }
-
-      window.addEventListener('aa:navigate-home', showHome);
-
-      document.getElementById('btn-play-match')?.addEventListener('click', () => navigate('match'));
-      document.getElementById('btn-training')?.addEventListener('click', () => navigate('training'));
-      document.getElementById('btn-controller')?.addEventListener('click', () => navigate('controller'));
-      document.getElementById('btn-rollback')?.addEventListener('click', () => navigate('rollback'));
-      document.getElementById('btn-edgeio')?.addEventListener('click', () => navigate('edgeio'));
-      document.getElementById('btn-prototype')?.addEventListener('click', () => navigate('prototype'));
-    </script>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

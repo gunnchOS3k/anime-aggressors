@@ -13,6 +13,8 @@ import type { RenderOptions } from "../renderer-three/RenderTypes.js";
 import { mountDebugPanel } from "./debugPanel.js";
 import { showCharacterSelect, type CharacterSelectResult } from "./characterSelect.js";
 import { showResults, type ResultsAction } from "./results.js";
+import { globalAudio } from "../audio/AudioManager.js";
+import { navigateHome } from "../router.js";
 
 export type MatchPhase = "select" | "fighting" | "results";
 
@@ -41,6 +43,7 @@ export class PlatformFighterApp {
   private selectResult: CharacterSelectResult | null = null;
   private simFrame = 0;
   private trainingMode: boolean;
+  private prevDamage: number[] = [0, 0];
 
   constructor(root: HTMLElement, options: PlatformFighterOptions = {}) {
     this.root = root;
@@ -62,7 +65,7 @@ export class PlatformFighterApp {
     this.debugPanel = mountDebugPanel(this.root);
     this.root.querySelector("#pf-back")?.addEventListener("click", () => {
       this.stop();
-      window.dispatchEvent(new CustomEvent("aa:navigate-home"));
+      navigateHome();
     });
     window.addEventListener("keydown", this.onKeyDown);
   }
@@ -221,6 +224,16 @@ export class PlatformFighterApp {
     this.renderer.update(this.gameState, opts);
     this.renderer.render();
     this.updateHud();
+
+    for (const p of this.gameState.players) {
+      if (p.damage > this.prevDamage[p.id]) {
+        globalAudio.play("hit_confirm");
+      }
+      if (p.stocks < 3 && p.actionState === "defeated") {
+        globalAudio.play("ko");
+      }
+      this.prevDamage[p.id] = p.damage;
+    }
 
     if (this.debug || this.trainingMode) {
       this.debugPanel?.update({
