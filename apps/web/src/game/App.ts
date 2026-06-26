@@ -3,6 +3,8 @@ import {
   simulateFrame,
   resetForRematch,
   hashState,
+  ELEMENTS,
+  SIZE_STATS,
   type GameConfig,
   type GameState,
 } from "@anime-aggressors/game-core";
@@ -11,7 +13,7 @@ import { pollAllInputs } from "../input/deviceAssignment.js";
 import { ThreeGameRenderer } from "../renderer-three/ThreeGameRenderer.js";
 import type { RenderOptions } from "../renderer-three/RenderTypes.js";
 import { mountDebugPanel } from "./debugPanel.js";
-import { showCharacterSelect, type CharacterSelectResult } from "./characterSelect.js";
+import { showCharacterSelect, type CharacterSelectResult } from "../screens/FighterSelectScreen.js";
 import { showResults, type ResultsAction } from "./results.js";
 import { globalAudio } from "../audio/AudioManager.js";
 import { navigateHome } from "../router.js";
@@ -132,7 +134,8 @@ export class PlatformFighterApp {
       stocks: 3,
       matchDurationFrames: 180 * 60,
       stageId: "skyline-arena",
-      characterIds: [select.p1CharacterId, select.p2CharacterId],
+      characterIds: [`created:${select.p1Fighter.id}`, `created:${select.p2Fighter.id}`],
+      fighterProfiles: [select.p1Fighter, select.p2Fighter],
       seed: Date.now() & 0xffff,
     };
 
@@ -252,11 +255,15 @@ export class PlatformFighterApp {
     const p1 = this.gameState.players[0];
     const p2 = this.gameState.players[1];
     const timerSec = Math.ceil(this.gameState.matchTimerFrames / 60);
+    const el1 = ELEMENTS[p1.fighterColor]?.name ?? "—";
+    const el2 = ELEMENTS[p2.fighterColor]?.name ?? "—";
+    const sz1 = SIZE_STATS[p1.fighterSize]?.label ?? "—";
+    const sz2 = SIZE_STATS[p2.fighterSize]?.label ?? "—";
     this.hud.innerHTML = `
       <div class="pf-hud-row">
-        <span>P1 ${p1.damage}% · ${p1.stocks} stock${p1.stocks === 1 ? "" : "s"}</span>
+        <span><strong>${p1.fighterName}</strong> (${sz1}/${el1}) · ${p1.damage}% · ${p1.stocks}♥</span>
         <span class="pf-timer">${timerSec}s</span>
-        <span>P2 ${p2.damage}% · ${p2.stocks} stock${p2.stocks === 1 ? "" : "s"}</span>
+        <span><strong>${p2.fighterName}</strong> (${sz2}/${el2}) · ${p2.damage}% · ${p2.stocks}♥</span>
       </div>
     `;
   }

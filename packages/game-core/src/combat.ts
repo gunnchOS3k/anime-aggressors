@@ -13,6 +13,7 @@ import {
   MAX_FALL_SPEED,
   RUN_SPEED,
   SHIELD_MAX,
+  FP_SCALE,
 } from "./constants.js";
 import { getCharacter } from "./characters.js";
 import { getStage } from "./stages.js";
@@ -27,10 +28,17 @@ import {
   scaleKnockback,
   tickCoyoteTime,
 } from "./feel.js";
+import {
+  scaledRunSpeed,
+  scaledJumpVelocity,
+  scaledHitDamage,
+  scaledKnockbackTaken,
+} from "./fighterCreation.js";
+import { applyElementOnHit, tickElementalEffects } from "./elements.js";
 
 function applyInputMovement(player: PlayerState, input: InputFrame): void {
   const char = getCharacter(player.characterId);
-  const run = (RUN_SPEED * char.runSpeedMult) / 100;
+  const run = scaledRunSpeed((RUN_SPEED * char.runSpeedMult) / 100, player);
 
   if (player.actionState === "hitstun" || player.actionState === "defeated") return;
   if (player.actionState === "dodging") return;
@@ -99,7 +107,7 @@ function startAction(player: PlayerState, input: InputFrame): void {
     } else {
       player.coyoteFrames = 0;
     }
-    player.vy = JUMP_VELOCITY;
+    player.vy = scaledJumpVelocity(JUMP_VELOCITY, player);
     player.onGround = false;
     player.actionState = "jumping";
     player.actionFrame = 0;
@@ -228,13 +236,24 @@ function applyHit(
     defender.damage,
   );
 
-  defender.damage += damage;
-  defender.vx += kbX + (kb.kbX * attacker.facing) / 10;
-  defender.vy += kbY + kb.kbY / 10;
+  const moveData =
+    attacker.actionState === "special"
+      ? getMoveData(attacker.currentMoveId as MoveId) ?? SPECIAL_ATTACK
+      : getMoveData(attacker.currentMoveId as MoveId) ?? NEUTRAL_ATTACK;
+
+  const finalDamage = scaledHitDamage(damage, attacker);
+  const kbXScaled = scaledKnockbackTaken(kbX !== 0 ? kbX * FP_SCALE : kb.kbX, defender);
+  const kbYScaled = scaledKnockbackTaken(kbY !== 0 ? kbY * FP_SCALE : kb.kbY, defender);
+
+  defender.damage += finalDamage;
+  defender.vx += kbX !== 0 ? kbX : (kbXScaled * attacker.facing) / 10;
+  defender.vy += kbY !== 0 ? kbY : kbYScaled / 10;
   defender.actionState = "hitstun";
   defender.hitstunFrames = HITSTUN_BASE + Math.floor(defender.damage / 10);
   defender.onGround = false;
   defender.currentMoveId = "none";
+
+  applyElementOnHit(attacker, defender, moveData, attacker.actionFrame);
 
   if (hitstop > state.hitstopFrames) {
     state.hitstopFrames = hitstop;
@@ -264,6 +283,10 @@ function respawnPlayer(player: PlayerState, spawn: { x: number; y: number }): vo
   player.jumpBufferFrames = 0;
   player.fastFalling = false;
   player.currentMoveId = "none";
+  player.burnFramesRemaining = 0;
+  player.slowFramesRemaining = 0;
+  player.slowMultiplierFp = 100;
+  player.airDriftBonusFrames = 0;
   const char = getCharacter(player.characterId);
   player.jumpsRemaining = char.maxJumps;
   player.onGround = true;
@@ -328,6 +351,7 @@ export function processPlayer(state: GameState, player: PlayerState, input: Inpu
   }
 
   tickActionState(player);
+  tickElementalEffects(player);
   integratePhysics(player, state.stage);
 }
 

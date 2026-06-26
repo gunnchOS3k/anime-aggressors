@@ -29,12 +29,14 @@ export function navigateHome(): void {
 export function bindRouteButtons(): void {
   const map: [string, AppRouteMode][] = [
     ["btn-play-match", "match"],
+    ["btn-create-fighter", "create-fighter"],
     ["btn-training", "training"],
     ["btn-controller", "controller"],
     ["btn-rollback", "rollback"],
     ["btn-edgeio", "edgeio"],
     ["btn-prototype", "prototype"],
     ["btn-impact-dummy-derby", "impact-dummy-derby"],
+    ["btn-feedback", "feedback"],
   ];
 
   for (const [id, mode] of map) {
