@@ -3,47 +3,45 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Anime Aggressors — Vertical Slice</title>
-    <meta name="description" content="Original shōnen-inspired platform fighter. Deterministic web vertical slice with rollback-first simulation." />
-    <script type="module" crossorigin src="/anime-aggressors/assets/index-jtQcV6iB.js"></script>
-    <link rel="stylesheet" crossorigin href="/anime-aggressors/assets/index-Cy-ebt9K.css">
+    <title>Anime Aggressors — 2.5D Platform Fighter</title>
+    <meta name="description" content="Anime Aggressors is a 2.5D platform fighter with rollback-first deterministic gameplay and optional Edge-IO wearable input/haptics." />
+    <script type="module" crossorigin src="/anime-aggressors/assets/index-BOQHOhZn.js"></script>
+    <link rel="stylesheet" crossorigin href="/anime-aggressors/assets/index-CQpdkZAh.css">
   </head>
   <body>
-    <main class="landing">
+    <main class="landing" id="home-view">
       <section class="hero">
+        <p class="hero-kicker">2.5D Platform Fighter</p>
         <h1>Anime Aggressors</h1>
         <p>
-          Original 2-player couch platform fighter built around deterministic simulation,
-          rollback architecture, and optional Edge-IO wearables. Keyboard and gamepads are
-          first-class; hardware enhances input but is never required.
+          Rollback-first deterministic combat rendered in Three.js. Keyboard and gamepads are first-class;
+          Edge-IO wearables are an optional input layer.
         </p>
         <div class="cta-row">
-          <button id="load-vertical-slice" class="btn-primary" type="button">
-            Play Anime Aggressors Vertical Slice
-          </button>
-          <button id="load-minigames" class="btn-secondary" type="button">
-            Open Training Lab (Prototype Mini-Games)
-          </button>
+          <button id="btn-play-match" class="btn-primary" type="button">Play Match</button>
+          <button id="btn-training" class="btn-secondary" type="button">Training Mode</button>
+          <button id="btn-controller" class="btn-secondary" type="button">Controller Test</button>
+          <button id="btn-rollback" class="btn-secondary" type="button">Rollback Debug</button>
+          <button id="btn-edgeio" class="btn-secondary" type="button">Edge-IO Lab</button>
+          <button id="btn-prototype" class="btn-tertiary" type="button">Prototype Lab</button>
         </div>
       </section>
 
-      <section>
-        <h2>Current milestone: v0.1 deterministic web vertical slice</h2>
+      <section class="ship-gates">
+        <h2>Ship gates</h2>
         <ul>
-          <li>Fixed 60 Hz simulation in <code>packages/game-core</code></li>
-          <li>Local rollback harness in <code>packages/rollback</code></li>
-          <li>2 original characters, 1 stage, stocks, blast zones</li>
-          <li>Character select → match → results → rematch</li>
+          <li><strong>PLAYABLE</strong> — 2-player local match (Three.js renderer)</li>
+          <li><strong>PROVEN BY TEST</strong> — deterministic game-core + rollback harness</li>
+          <li><strong>UNSHIPPED</strong> — online multiplayer, mobile, desktop, hardware</li>
         </ul>
         <p>
           See <a href="https://github.com/gunnchOS3k/anime-aggressors/blob/main/docs/STATUS.md">docs/STATUS.md</a>
-          for an honest capability matrix.
+          for the full capability matrix.
         </p>
       </section>
-
-      <div id="vertical-slice-root" class="hidden"></div>
-      <div id="minigame-root" class="hidden"></div>
     </main>
+
+    <div id="app-root" class="hidden"></div>
 
   </body>
 </html>

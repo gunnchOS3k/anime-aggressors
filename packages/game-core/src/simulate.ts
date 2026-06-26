@@ -20,6 +20,11 @@ export function simulateFrame(state: GameState, inputs: InputFrame[]): GameState
   }
 
   if (next.phase === "fighting") {
+    if (next.hitstopFrames > 0) {
+      next.hitstopFrames -= 1;
+      return next;
+    }
+
     next.matchTimerFrames -= 1;
 
     const inputByPlayer = new Map<number, InputFrame>();
@@ -63,6 +68,7 @@ export function resetForRematch(state: GameState): GameState {
   fresh.countdownFrames = 3 * 60;
   fresh.matchTimerFrames = state.config.matchDurationFrames;
   fresh.winnerId = null;
+  fresh.hitstopFrames = 0;
 
   for (let i = 0; i < fresh.players.length; i++) {
     const spawn = stage.spawnPoints[i];
@@ -79,7 +85,10 @@ export function resetForRematch(state: GameState): GameState {
     p.shieldHealth = 100;
     p.invulnFrames = 0;
     p.onGround = true;
-    p.actionState = "idle";
+    p.coyoteFrames = 0;
+    p.jumpBufferFrames = 0;
+    p.fastFalling = false;
+    p.currentMoveId = "none";
     const char = fresh.config.characterIds[i];
     p.characterId = char ?? p.characterId;
   }

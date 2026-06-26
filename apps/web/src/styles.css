@@ -63,8 +63,139 @@ body {
   border: 2px solid var(--accent2);
 }
 
+.btn-tertiary {
+  padding: 0.85rem 1.5rem;
+  border: 1px dashed #555;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  background: transparent;
+  color: #999;
+}
+
+.hero-kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.85rem;
+  color: var(--accent2);
+  margin: 0 0 0.25rem;
+}
+
+.ship-gates {
+  margin-top: 2rem;
+  opacity: 0.9;
+}
+
+#app-root {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.pf-root {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.pf-viewport-wrap {
+  position: relative;
+}
+
+.pf-viewport {
+  width: 100%;
+  height: min(70vh, 540px);
+  min-height: 360px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #0a0a12;
+}
+
+.pf-hud {
+  position: absolute;
+  top: 0.5rem;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+.pf-hud-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1rem;
+  font-weight: 700;
+  text-shadow: 0 1px 4px #000;
+}
+
+.pf-timer {
+  opacity: 0.85;
+}
+
+.debug-panel {
+  position: absolute;
+  top: 2.5rem;
+  left: 0.5rem;
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 0.5rem;
+  max-width: 420px;
+  font-size: 11px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.debug-panel pre {
+  margin: 0;
+  white-space: pre-wrap;
+  font-family: ui-monospace, monospace;
+}
+
+.debug-title {
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  color: #00ff88;
+}
+
+.shell-panel {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.shell-pre {
+  background: #111;
+  padding: 1rem;
+  border-radius: 8px;
+  overflow: auto;
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+}
+
+.shell-muted {
+  opacity: 0.7;
+}
+
+.edgeio-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.edgeio-buttons button {
+  padding: 0.4rem 0.7rem;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background: #222;
+  color: #fff;
+  cursor: pointer;
+}
+
 #vertical-slice-root,
-#minigame-root {
+#minigame-root,
+#prototype-lab-games {
   margin-top: 2rem;
   background: var(--card);
   border-radius: 12px;

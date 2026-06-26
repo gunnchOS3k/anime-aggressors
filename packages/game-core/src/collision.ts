@@ -1,17 +1,31 @@
 import type { Hitbox, Hurtbox, PlayerState } from "./types.js";
 import {
-  ATTACK_FRAMES,
   ATTACK_HITBOX_H,
   ATTACK_HITBOX_W,
-  DODGE_FRAMES,
   FP_SCALE,
   HURTBOX_H,
   HURTBOX_W,
-  SPECIAL_FRAMES,
   SPECIAL_HITBOX_H,
   SPECIAL_HITBOX_W,
 } from "./constants.js";
-import { getCharacter } from "./characters.js";
+import { isInActive } from "./frameData.js";
+import { NEUTRAL_ATTACK, SPECIAL_ATTACK } from "./frameData.js";
+import { getMoveDataForAction } from "./moves.js";
+import { scaleKnockback } from "./feel.js";
+
+export function getHurtboxes(players: PlayerState[]): Hurtbox[] {
+  return players
+    .filter((p) => p.actionState !== "defeated" && p.invulnFrames <= 0)
+    .map(getHurtbox);
+}
+
+export function getActiveHitboxesForState(players: PlayerState[]): Hitbox[] {
+  const boxes: Hitbox[] = [];
+  for (const p of players) {
+    boxes.push(...getActiveHitboxes(p));
+  }
+  return boxes;
+}
 
 export function getHurtbox(player: PlayerState): Hurtbox {
   return {
@@ -24,9 +38,9 @@ export function getHurtbox(player: PlayerState): Hurtbox {
 }
 
 export function getActiveHitboxes(player: PlayerState): Hitbox[] {
-  const char = getCharacter(player.characterId);
-
-  if (player.actionState === "attacking" && player.actionFrame <= ATTACK_FRAMES) {
+  if (player.actionState === "attacking") {
+    if (!isInActive(NEUTRAL_ATTACK, player.actionFrame)) return [];
+    const kb = scaleKnockback(NEUTRAL_ATTACK, 0);
     const offsetX = player.facing * (32 * FP_SCALE);
     return [
       {
@@ -35,15 +49,17 @@ export function getActiveHitboxes(player: PlayerState): Hitbox[] {
         y: player.y - (48 * FP_SCALE),
         w: ATTACK_HITBOX_W,
         h: ATTACK_HITBOX_H,
-        damage: char.attackDamage,
-        knockbackX: (4 * FP_SCALE * player.facing) / 10,
-        knockbackY: -(3 * FP_SCALE) / 10,
+        damage: NEUTRAL_ATTACK.damage,
+        knockbackX: (kb.kbX * player.facing) / FP_SCALE,
+        knockbackY: kb.kbY / FP_SCALE,
         active: true,
       },
     ];
   }
 
-  if (player.actionState === "special" && player.actionFrame <= SPECIAL_FRAMES) {
+  if (player.actionState === "special") {
+    if (!isInActive(SPECIAL_ATTACK, player.actionFrame)) return [];
+    const kb = scaleKnockback(SPECIAL_ATTACK, 0);
     const offsetX = player.facing * (48 * FP_SCALE);
     return [
       {
@@ -52,16 +68,12 @@ export function getActiveHitboxes(player: PlayerState): Hitbox[] {
         y: player.y - (56 * FP_SCALE),
         w: SPECIAL_HITBOX_W,
         h: SPECIAL_HITBOX_H,
-        damage: char.specialDamage,
-        knockbackX: (8 * FP_SCALE * player.facing) / 10,
-        knockbackY: -(5 * FP_SCALE) / 10,
+        damage: SPECIAL_ATTACK.damage,
+        knockbackX: (kb.kbX * player.facing) / FP_SCALE,
+        knockbackY: kb.kbY / FP_SCALE,
         active: true,
       },
     ];
-  }
-
-  if (player.actionState === "dodging" && player.actionFrame <= DODGE_FRAMES) {
-    return [];
   }
 
   return [];
@@ -78,3 +90,5 @@ export function boxesOverlap(
     a.y + a.h > b.y
   );
 }
+
+export { getMoveDataForAction };

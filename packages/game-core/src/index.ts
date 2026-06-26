@@ -29,6 +29,29 @@ export { getCharacter, listCharacters } from "./characters.js";
 export type { CharacterDef } from "./characters.js";
 export { getStage, listStages } from "./stages.js";
 export type { StageDef } from "./stages.js";
-export { getHurtbox, getActiveHitboxes, boxesOverlap } from "./collision.js";
+export {
+  getHurtbox,
+  getHurtboxes,
+  getActiveHitboxes,
+  getActiveHitboxesForState,
+  boxesOverlap,
+} from "./collision.js";
 export { hashState, serializeState, deserializeState, fpToDisplay } from "./hash.js";
 export { replay } from "./replay.js";
+export {
+  NEUTRAL_ATTACK,
+  SPECIAL_ATTACK,
+  DODGE_MOVE,
+  isInStartup,
+  isInActive,
+  isInRecovery,
+} from "./frameData.js";
+export type { MoveFrameData } from "./frameData.js";
+export { getMoveData, actionToMoveId, isMoveComplete } from "./moves.js";
+export type { MoveId } from "./moves.js";
+export {
+  COYOTE_FRAMES,
+  JUMP_BUFFER_FRAMES,
+  scaleKnockback,
+  isDodgeInvulnerable,
+} from "./feel.js";

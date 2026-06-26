@@ -4,6 +4,8 @@ import {
   createInitialGameState,
   simulateFrame,
   getActiveHitboxes,
+  NEUTRAL_ATTACK,
+  SPECIAL_ATTACK,
   type GameConfig,
   type InputFrame,
 } from "../src/index.js";
@@ -43,7 +45,7 @@ describe("combat mechanics", () => {
     }
 
     state.players[0].actionState = "attacking";
-    state.players[0].actionFrame = 1;
+    state.players[0].actionFrame = NEUTRAL_ATTACK.startup;
 
     const hitboxes = getActiveHitboxes(state.players[0]);
     assert.ok(hitboxes.length > 0);
@@ -54,11 +56,11 @@ describe("combat mechanics", () => {
   it("special attack has larger hitbox than basic attack", () => {
     const state = createInitialGameState(config);
     state.players[0].actionState = "attacking";
-    state.players[0].actionFrame = 1;
+    state.players[0].actionFrame = NEUTRAL_ATTACK.startup;
     const attackBoxes = getActiveHitboxes(state.players[0]);
 
     state.players[0].actionState = "special";
-    state.players[0].actionFrame = 1;
+    state.players[0].actionFrame = SPECIAL_ATTACK.startup;
     const specialBoxes = getActiveHitboxes(state.players[0]);
 
     assert.ok(specialBoxes[0].w >= attackBoxes[0].w);

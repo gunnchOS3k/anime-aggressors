@@ -7,10 +7,10 @@ export function bootstrapMiniGames(root: HTMLElement | null) {
   
   root.innerHTML = `
     <div class="mini-menu">
+      <p class="hint">Early experiments only — not the main Anime Aggressors product.</p>
       <button data-game="home">🏏 Home-Run Sandbag</button>
       <button data-game="paint">🎨 Paint the Floor</button>
       <button data-game="lane">🚀 4-Lane Blaster</button>
-      <span class="hint">Plug 2 controllers or share 1. Keyboard works too.</span>
     </div>
     <canvas id="stage" width="960" height="540"></canvas>
   `;

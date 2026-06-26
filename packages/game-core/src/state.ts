@@ -42,6 +42,10 @@ export function createInitialGameState(config: GameConfig): GameState {
       jumpsRemaining: character.maxJumps,
       onGround: true,
       invulnFrames: 0,
+      coyoteFrames: 0,
+      jumpBufferFrames: 0,
+      fastFalling: false,
+      currentMoveId: "none",
     });
   }
 
@@ -54,6 +58,7 @@ export function createInitialGameState(config: GameConfig): GameState {
     countdownFrames: COUNTDOWN_FRAMES,
     matchTimerFrames: config.matchDurationFrames ?? DEFAULT_MATCH_FRAMES,
     winnerId: null,
+    hitstopFrames: 0,
   };
 }
 

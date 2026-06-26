@@ -1,77 +1,117 @@
-# Validation Report
+# Validation report — Three.js platform fighter pivot
 
-**Date:** 2026-06-25  
-**Branch:** `fix-pages-artifact-node24`  
-**PR context:** Fixes GitHub Pages deploy failure from PR #20
+**Branch:** `threejs-platform-fighter-pivot`  
+**Date:** 2026-06-24
 
-## Commands run (local)
+## Baseline (before changes)
+
+On `main` before pivot work began:
+
+- `npm ci` — pass
+- `npm run quality` — pass
+
+No pre-existing failures were hidden.
+
+## Commands run (after changes)
 
 | Command | Result |
 |---------|--------|
-| `npm install` | **PASS** — lockfile updated (`zod` added) |
-| `npm ci` | **PASS** |
-| `npm run typecheck` | **PASS** |
-| `npm run test` | **PASS** — 15 tests (8 game-core, 3 rollback, 4 edgeio) |
-| `npm run build` | **PASS** — all packages + `apps/web` |
-| `npm run quality` | **PASS** |
-| `npm run build:pages` | **PASS** — `apps/web/dist/index.html` present |
-| `cmake` native engine | **NOT RUN locally** — `cmake` not installed on dev machine; **expected PASS** on `ubuntu-latest` CI job `native-engine` |
+| `npm ci` | pass (during development) |
+| `npm run typecheck` | pass |
+| `npm run test` | pass (18 game-core + 3 rollback + 4 edgeio + 3 web = 28 tests) |
+| `npm run build` | pass |
+| `npm run quality` | pass |
+| `npm run build:pages` | pass |
 
-## PR #19 CI failures — root cause and fix
+## Three.js dependency
 
-| Failure | Root cause | Fix |
-|---------|------------|-----|
-| Cannot find `@anime-aggressors/rollback` | Workspace build order / implicit paths | Explicit `build:packages` order; `apps/web` tsconfig `paths` to package sources |
-| JSX / `Play.tsx` without `--jsx` | Root `tsconfig.json` had no `files`/`include`; `packages/input` `tsc` inherited it and compiled entire repo including `web/` | Moved `web/` → `legacy/web/`; root tsconfig `files: []`; scoped `packages/input/tsconfig.json` |
-| Workbox modules missing | `legacy/web/sw.ts` compiled by wrong package | Archived under `legacy/web/` — excluded from CI |
-| `zod` missing in messages | Dependency not declared | Added `zod` to `packages/messages/package.json` |
-| Missing `StageState` | Orphan type reference | Defined `StageState` in `packages/messages/src/types.ts` |
-| `@gunnch/input` compiling unrelated files | No package tsconfig → inherited root config | Added `packages/input/tsconfig.json` with `include: ["src/**/*.ts"]`; fixed `gamepaddisconnected` typo; renamed `GamepadEvent` → `PadConnectionEvent` |
+- `three@^0.185.0` in `apps/web/package.json`
+- `@types/three` devDependency in `apps/web`
 
-## Package-lock
+## Files created
 
-**Changed:** yes — `zod` dependency + workspace boundary fixes.
+### Renderer (`apps/web/src/renderer-three/`)
 
-## npm audit (2026-06-25)
+- `ThreeGameRenderer.ts`, `CameraDirector.ts`, `CharacterView.ts`, `StageView.ts`
+- `HitboxDebugView.ts`, `HurtboxDebugView.ts`, `VfxSystem.ts`, `AnimationController.ts`
+- `AssetLoader.ts`, `Materials.ts`, `SceneLighting.ts`, `RenderTypes.ts`, `index.ts`, `README.md`
 
+### Shell modes (`apps/web/src/shell/`)
+
+- `controllerTest.ts`, `rollbackDebug.ts`, `edgeioLab.ts`, `prototypeLab.ts`
+
+### Game-core feel
+
+- `packages/game-core/src/frameData.ts`, `moves.ts`, `feel.ts`
+- `packages/game-core/test/platformFighterFeel.test.ts`
+- `packages/game-core/test/collisionHelpers.test.ts`
+
+### Tests & docs
+
+- `apps/web/test/renderMapping.test.ts`
+- `docs/RENDERER_THREE_CONTRACT.md`
+- `docs/VISUAL_ACCEPTANCE_CHECKLIST.md`
+
+## Files modified (high level)
+
+- `apps/web/index.html` — platform-fighter-first homepage
+- `apps/web/src/game/App.ts` — Three.js match + training mode
+- `apps/web/src/game/debugPanel.ts` — HTML debug overlay
+- `apps/web/src/styles.css` — match viewport + shell styles
+- `packages/game-core/src/combat.ts` — feel systems, blast-zone fix (no horizontal hard clamp)
+- `packages/game-core/src/collision.ts` — active-frame hitboxes, helper exports
+- `packages/game-core/src/types.ts`, `state.ts`, `simulate.ts`, `index.ts`
+- `README.md`, `docs/STATUS.md`
+- Root `package.json` — web tests in `npm run test`
+- `apps/web/package.json` — three, @types/three, test script
+
+## What is playable now
+
+- **Play Match** — 2P local stock battle with Three.js Skyline Arena, capsule fighters, HUD, results/rematch
+- **Training Mode** — same match, starts paused, F1–F4 debug controls
+- **Controller Test**, **Rollback Debug**, **Edge-IO Lab**
+- **Prototype Lab** — Home-Run Sandbag, Paint the Floor, 4-Lane Blaster (demoted)
+
+## What is proven by test
+
+- Deterministic simulation + replay
+- Platform-fighter frame data (startup/active/recovery, hitstun, shield, dodge invuln, blast-zone KO)
+- Rollback session + desync detection
+- Edge-IO protocol parse/encode
+- Renderer `mapGameStateReadOnly` does not mutate `GameState`
+
+## What is proven by demo
+
+- Pending GitHub Pages deploy after merge — local `npm run dev` demonstrates PLAYABLE match flow
+
+## Screenshots / GIF instructions for PR
+
+1. Homepage with **Play Match** as primary CTA
+2. Character select screen
+3. Mid-match Three.js view (2 fighters, orthographic camera, HUD)
+4. Hit spark / knockback moment
+5. F2 hitbox/hurtbox debug overlay
+6. Results screen with rematch
+7. Prototype Lab showing mini-games are secondary
+
+```bash
+npm run dev
+# http://localhost:5173/anime-aggressors/
 ```
-4 vulnerabilities (2 moderate, 2 high)
-```
 
-Run `npm audit` for details. See `docs/SECURITY_AUDIT.md` for triage template. Vulnerabilities are primarily in dev/build toolchain (Vite/esbuild chain) — not shipped to browser runtime directly, but should be addressed on a scheduled pass.
+## Remaining blockers (UNSHIPPED)
 
-## Remaining blockers
+- Online multiplayer transport
+- Real GLB assets + animation rigs
+- Edge-IO BLE hardware loop
+- Mobile (`apps/mobile`) and desktop (`apps/desktop`) shells
+- Combat polish (cancel routes, expanded roster, SFX)
+- Tagged **RELEASED** artifact
 
-1. **Firmware** — still does not compile (`pio run` not gated)
-2. **Mobile Expo** — scaffold only; excluded from workspace until Track D1
-3. **Desktop shell** — docs only (ADR-0002)
-4. **Hardware** — BOM templates/checklists only (no Gerbers)
-5. **Legacy `legacy/game-prototype/`** — archived TS/C++ prototype, not in CI
+## Next step toward full completion
 
-## GitHub Actions expected result
-
-`quality` job: `npm ci` → typecheck → test → build → audit (non-blocking)  
-`native-engine` job: cmake configure/build/test on Ubuntu
-
-## Next PR
-
-**Title:** `fix(pages): upload apps/web/dist artifact and Node 24 actions`  
-See `docs/VALIDATION_REPORT.md` § PR #20.
-
----
-
-## PR #20 Pages failure
-
-**Root cause:**
-- GitHub Pages upload step was looking for root `dist`.
-- Vite web build outputs `apps/web/dist`.
-
-**Fix:**
-- Pages artifact path changed to `apps/web/dist`.
-- Added assertion that `apps/web/dist/index.html` exists before upload.
-- Updated Actions to Node 24-compatible action versions (`checkout@v6`, `setup-node@v6`, `upload-pages-artifact@v5`).
-
-**Validation:**
-- `npm ci` — see commands table below
-- `npm run quality`
-- `npm run build:pages`
+1. **Art pass** — import first GLB fighters + stage props via `AssetLoader`; keep placeholder fallback
+2. **Combat depth** — expand `frameData.ts` per character, add tilt / DI / more moves
+3. **Rollback couch stress** — inject artificial input delay in local play to match online path
+4. **Pages deploy** — merge PR, verify PROVEN BY DEMO on live URL
+5. **Online track** — WebSocket transport + synchronized `RollbackSession` across peers
