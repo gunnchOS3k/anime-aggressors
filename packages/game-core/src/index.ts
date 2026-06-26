@@ -39,7 +39,27 @@ export {
 export { hashState, serializeState, deserializeState, fpToDisplay } from "./hash.js";
 export { replay } from "./replay.js";
 export {
+  createInitialDerbyState,
+  simulateDerbyFrame,
+  resetDerbyForRetry,
+  replayDerby,
+  derbyStateHash,
+  DAMAGE_PHASE_FRAMES,
+  DERBY_COUNTDOWN_FRAMES,
+  LAUNCH_WINDOW_FRAMES,
+} from "./modes/impactDummyDerby.js";
+export type { ImpactDummyDerbyState, DerbyPhase, DerbyInput } from "./modes/impactDummyDerby.js";
+export { createCombatEvent } from "./combatEvents.js";
+export type { CombatEvent, CombatEventType } from "./combatEvents.js";
+export { combatEventToSfx, createSfxEvent } from "./sfxEvents.js";
+export type { SfxEvent, SfxEventType } from "./sfxEvents.js";
+export {
   NEUTRAL_ATTACK,
+  FORWARD_ATTACK,
+  UP_ATTACK,
+  DOWN_ATTACK,
+  AERIAL_ATTACK,
+  SIDE_SPECIAL,
   SPECIAL_ATTACK,
   DODGE_MOVE,
   isInStartup,

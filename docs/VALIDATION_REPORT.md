@@ -1,117 +1,70 @@
-# Validation report — Three.js platform fighter pivot
+# Validation report — Pages fix + Impact Dummy Derby + unshipped advance
 
-**Branch:** `threejs-platform-fighter-pivot`  
+**Branch:** `complete-unshipped-fix-pages-launch-lab`  
 **Date:** 2026-06-24
 
 ## Baseline (before changes)
 
-On `main` before pivot work began:
+`npm run quality` — **pass** on `main` at branch creation.
 
-- `npm ci` — pass
-- `npm run quality` — pass
+## GitHub Pages 404 — root cause and fix
 
-No pre-existing failures were hidden.
+**Root cause:** `index.html` used an inline `<script type="module">` with dev-only dynamic imports (`./src/game/App.ts`). Vite production builds bundle via entry `main.ts`, but any path-based navigation or missing `404.html` on Pages caused 404s on refresh/direct links.
 
-## Commands run (after changes)
+**Fix:**
+1. Moved all navigation to `apps/web/src/main.ts` (Vite entry `<script type="module" src="/src/main.ts">`).
+2. Hash routing via `APP_ROUTES` (`#/play`, `#/training`, `#/impact-dummy-derby`, etc.).
+3. Vite plugin copies `dist/index.html` → `dist/404.html`.
+4. `build:pages` verifies `index.html`, `404.html`, and `/anime-aggressors/` base paths.
+
+## Commands run
 
 | Command | Result |
 |---------|--------|
-| `npm ci` | pass (during development) |
 | `npm run typecheck` | pass |
-| `npm run test` | pass (18 game-core + 3 rollback + 4 edgeio + 3 web = 28 tests) |
+| `npm run test` | pass (45 tests) |
 | `npm run build` | pass |
 | `npm run quality` | pass |
 | `npm run build:pages` | pass |
 
-## Three.js dependency
+## Impact Dummy Derby
 
-- `three@^0.185.0` in `apps/web/package.json`
-- `@types/three` devDependency in `apps/web`
+Deterministic mode in `packages/game-core/src/modes/impactDummyDerby.ts`:
 
-## Files created
+- READY → countdown → **10s damage phase** → **Kinetic Bat launch window** → flight → distance → results
+- Walk, jump, dash, attack, special, timed final launch
+- Dummy damage scales launch distance; bat hit > normal hit (tested)
+- Three.js view: `apps/web/src/modes/impactDummyDerbyView.ts`
 
-### Renderer (`apps/web/src/renderer-three/`)
+Removed weak Home-Run Sandbag from Prototype Lab (Paint the Floor + 4-Lane Blaster remain).
 
-- `ThreeGameRenderer.ts`, `CameraDirector.ts`, `CharacterView.ts`, `StageView.ts`
-- `HitboxDebugView.ts`, `HurtboxDebugView.ts`, `VfxSystem.ts`, `AnimationController.ts`
-- `AssetLoader.ts`, `Materials.ts`, `SceneLighting.ts`, `RenderTypes.ts`, `index.ts`, `README.md`
+## Systems advanced
 
-### Shell modes (`apps/web/src/shell/`)
+| System | New gate |
+|--------|----------|
+| GitHub Pages routing | PLAYABLE (hash + 404 fallback) |
+| Impact Dummy Derby | PLAYABLE + PROVEN BY TEST |
+| Combat polish (directional moves, SFX events) | PROVEN BY TEST |
+| WebAudio SFX | PLAYABLE |
+| Netplay loopback | PROVEN BY TEST |
+| Edge-IO Lab BLE UI + simulator | PLAYABLE (sim); BLE SHIP BLOCKED |
+| Asset pipeline manifest | SHIP BLOCKED |
+| Release workflow | SHIP BLOCKED until tag |
+| Mobile / desktop | SHIP BLOCKED scaffolds |
 
-- `controllerTest.ts`, `rollbackDebug.ts`, `edgeioLab.ts`, `prototypeLab.ts`
+## Screenshots for PR
 
-### Game-core feel
+1. Homepage with Play Match + Impact Dummy Derby
+2. `#/play` match on Pages (no 404)
+3. Derby damage phase with dummy %
+4. Kinetic Bat launch + flight camera
+5. Derby results (distance, grade, retry)
+6. Edge-IO Lab simulator mode
 
-- `packages/game-core/src/frameData.ts`, `moves.ts`, `feel.ts`
-- `packages/game-core/test/platformFighterFeel.test.ts`
-- `packages/game-core/test/collisionHelpers.test.ts`
+## Remaining blockers
 
-### Tests & docs
-
-- `apps/web/test/renderMapping.test.ts`
-- `docs/RENDERER_THREE_CONTRACT.md`
-- `docs/VISUAL_ACCEPTANCE_CHECKLIST.md`
-
-## Files modified (high level)
-
-- `apps/web/index.html` — platform-fighter-first homepage
-- `apps/web/src/game/App.ts` — Three.js match + training mode
-- `apps/web/src/game/debugPanel.ts` — HTML debug overlay
-- `apps/web/src/styles.css` — match viewport + shell styles
-- `packages/game-core/src/combat.ts` — feel systems, blast-zone fix (no horizontal hard clamp)
-- `packages/game-core/src/collision.ts` — active-frame hitboxes, helper exports
-- `packages/game-core/src/types.ts`, `state.ts`, `simulate.ts`, `index.ts`
-- `README.md`, `docs/STATUS.md`
-- Root `package.json` — web tests in `npm run test`
-- `apps/web/package.json` — three, @types/three, test script
-
-## What is playable now
-
-- **Play Match** — 2P local stock battle with Three.js Skyline Arena, capsule fighters, HUD, results/rematch
-- **Training Mode** — same match, starts paused, F1–F4 debug controls
-- **Controller Test**, **Rollback Debug**, **Edge-IO Lab**
-- **Prototype Lab** — Home-Run Sandbag, Paint the Floor, 4-Lane Blaster (demoted)
-
-## What is proven by test
-
-- Deterministic simulation + replay
-- Platform-fighter frame data (startup/active/recovery, hitstun, shield, dodge invuln, blast-zone KO)
-- Rollback session + desync detection
-- Edge-IO protocol parse/encode
-- Renderer `mapGameStateReadOnly` does not mutate `GameState`
-
-## What is proven by demo
-
-- Pending GitHub Pages deploy after merge — local `npm run dev` demonstrates PLAYABLE match flow
-
-## Screenshots / GIF instructions for PR
-
-1. Homepage with **Play Match** as primary CTA
-2. Character select screen
-3. Mid-match Three.js view (2 fighters, orthographic camera, HUD)
-4. Hit spark / knockback moment
-5. F2 hitbox/hurtbox debug overlay
-6. Results screen with rematch
-7. Prototype Lab showing mini-games are secondary
-
-```bash
-npm run dev
-# http://localhost:5173/anime-aggressors/
-```
-
-## Remaining blockers (UNSHIPPED)
-
-- Online multiplayer transport
-- Real GLB assets + animation rigs
-- Edge-IO BLE hardware loop
-- Mobile (`apps/mobile`) and desktop (`apps/desktop`) shells
-- Combat polish (cancel routes, expanded roster, SFX)
-- Tagged **RELEASED** artifact
-
-## Next step toward full completion
-
-1. **Art pass** — import first GLB fighters + stage props via `AssetLoader`; keep placeholder fallback
-2. **Combat depth** — expand `frameData.ts` per character, add tilt / DI / more moves
-3. **Rollback couch stress** — inject artificial input delay in local play to match online path
-4. **Pages deploy** — merge PR, verify PROVEN BY DEMO on live URL
-5. **Online track** — WebSocket transport + synchronized `RollbackSession` across peers
+- Public WebSocket relay + lobby
+- Real GLB assets committed
+- Verified Edge-IO hardware packets
+- Mobile installable build / desktop package
+- `v*` tag for RELEASED gate

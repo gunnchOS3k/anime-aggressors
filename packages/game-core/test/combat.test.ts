@@ -61,6 +61,7 @@ describe("combat mechanics", () => {
 
     state.players[0].actionState = "special";
     state.players[0].actionFrame = SPECIAL_ATTACK.startup;
+    state.players[0].currentMoveId = "special_attack";
     const specialBoxes = getActiveHitboxes(state.players[0]);
 
     assert.ok(specialBoxes[0].w >= attackBoxes[0].w);
