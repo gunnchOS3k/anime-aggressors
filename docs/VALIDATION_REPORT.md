@@ -1,7 +1,32 @@
 # Validation report — Pages fix + Impact Dummy Derby + unshipped advance
 
-**Branch:** `complete-unshipped-fix-pages-launch-lab`  
+**Branch:** `fix-netplay-lockfile-ci`  
 **Date:** 2026-06-24
+
+## Post-PR #5 CI failure: netplay workspace lockfile
+
+**Root cause:**
+- PR #5 added `packages/netplay` as workspace package `@anime-aggressors/netplay@0.1.0`.
+- `package-lock.json` was not updated/committed.
+- `npm ci` failed correctly because `package.json` and `package-lock.json` were out of sync.
+
+**Fix:**
+- Ran `npm install` from repo root to regenerate `package-lock.json`.
+- Verified `npm ci` after deleting `node_modules`.
+- Confirmed `package-lock.json` includes `packages/netplay` and `node_modules/@anime-aggressors/netplay`.
+
+**Validation:**
+
+| Command | Result |
+|---------|--------|
+| `npm ci` | pass |
+| `npm run typecheck` | pass |
+| `npm run test` | pass (45 tests) |
+| `npm run build` | pass |
+| `npm run quality` | pass |
+| `npm run build:pages` | pass |
+
+---
 
 ## Baseline (before changes)
 
