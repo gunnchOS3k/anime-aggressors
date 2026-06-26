@@ -35,16 +35,34 @@ Build a fighter in seconds:
 
 ## Playable Modes
 
-- **Play Match** — 2-player platform fighter with created fighters
+- **Play Match** — quick 2-player match (default stock rules)
+- **Custom Game** — stock / time / stamina rules, stages, ratios, items config
 - **Create Fighter** — size + color builder with stat preview
+- **Controls** — per-player input profiles with keyboard/gamepad remapping
 - **Training Mode** — practice with hitbox overlay and frame step
 - **Impact Dummy Derby** — damage dummy, then Kinetic Bat launch for distance
-- **Controller Test** — keyboard + gamepad check
+- **Controller Test** — keyboard + gamepad + mapped action check
 - **Rollback Debug** — deterministic state inspector
 - **Edge-IO Lab** — wearable simulator
 - **Prototype Lab** — older experiments (secondary)
 
-## Controls
+## Custom Game & Rulesets
+
+Save and select rulesets locally (no account required):
+
+- Match type: stock, time, or stamina
+- Stocks, timer, stamina HP, stage, hazards, items frequency
+- Damage ratio and launch ratio
+- Element effects: on, visual only, or off
+- Created fighters allowed or defaults only
+
+Friend-test flow: **Create Fighter → Custom Game → Fighters → Controls Check → Start Battle**
+
+## Custom Controls
+
+Anime Aggressors supports per-player input profiles. Keyboard, gamepad, and Edge-IO gestures can be mapped to game actions. Save a profile, assign it to a player, and use it in Play Match, Training Mode, and Impact Dummy Derby.
+
+## Controls (defaults)
 
 | Action | Keyboard P1 | Keyboard P2 | Gamepad |
 |---|---|---|---|
@@ -60,9 +78,10 @@ Build a fighter in seconds:
 
 1. Open the [web build](https://gunnchOS3k.github.io/anime-aggressors/)
 2. Click **Create Fighter** — pick size + ROYGBIV color
-3. Click **Play Match** — fight on Skyline Arena
-4. Try **Impact Dummy Derby**
-5. Send [feedback](docs/playtest/feedback-form.md)
+3. Click **Custom Game** — set stocks, timer, stage, and ratios
+4. Choose fighters and confirm **Controls**
+5. **Start Battle** or try **Impact Dummy Derby**
+6. Send [feedback](docs/playtest/feedback-form.md)
 
 See [PC Playtest Guide](docs/playtest/PC_PLAYTEST_GUIDE.md) for the full friend-testing path.
 

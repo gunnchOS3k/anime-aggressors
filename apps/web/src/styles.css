@@ -471,3 +471,74 @@ body {
 .playtest-steps {
   line-height: 1.8;
 }
+
+.cg-grid {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 640px;
+}
+
+.cg-grid fieldset {
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+
+.binding-list {
+  display: grid;
+  gap: 0.35rem;
+  margin: 1rem 0;
+}
+
+.binding-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #444;
+  border-radius: 8px;
+  background: #1a1a2e;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.slot-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin: 0.75rem 0;
+}
+
+.slot-btn.selected {
+  border-color: var(--accent);
+}
+
+.ship-blocked {
+  color: #ffb347;
+  font-size: 0.9rem;
+}
+
+.ruleset-card {
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+}
+
+.ruleset-card.selected {
+  border-color: var(--accent);
+}
+
+.check-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.rules-summary {
+  margin: 1rem 0;
+  padding: 0.75rem;
+  background: #1a1a2e;
+  border-radius: 8px;
+}

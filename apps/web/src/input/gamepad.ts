@@ -1,7 +1,5 @@
 /**
  * Gamepad polling → InputFrame mapping.
- * Standard layout: left stick/dpad = movement, A = jump, X = attack, B = special,
- * shoulder = shield, trigger = dodge.
  */
 
 import type { InputFrame } from "./inputFrame.js";
@@ -16,6 +14,13 @@ function axis(value: number): number {
 
 function pressed(buttons: readonly GamepadButton[], index: number): boolean {
   return buttons[index]?.pressed ?? false;
+}
+
+export function gamepadToState(gamepad: Gamepad): { buttons: boolean[]; axes: number[] } {
+  return {
+    buttons: gamepad.buttons.map((b) => b.pressed),
+    axes: [...gamepad.axes],
+  };
 }
 
 export function pollGamepad(gamepad: Gamepad, frame: number, playerId: number): InputFrame {
@@ -45,7 +50,7 @@ export function pollGamepad(gamepad: Gamepad, frame: number, playerId: number): 
 
 export function getConnectedGamepads(): (Gamepad | null)[] {
   const pads = navigator.getGamepads?.() ?? [];
-  return [pads[0] ?? null, pads[1] ?? null];
+  return [pads[0] ?? null, pads[1] ?? null, pads[2] ?? null, pads[3] ?? null];
 }
 
 export function getGamepadInfo(): { connected: number; names: string[] } {

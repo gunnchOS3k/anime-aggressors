@@ -96,3 +96,21 @@ export {
   scaleKnockback,
   isDodgeInvulnerable,
 } from "./feel.js";
+export type {
+  MatchType,
+  ItemFrequency,
+  ElementMode,
+  TeamMode,
+  GameRuleset,
+} from "./rulesets.js";
+export {
+  DEFAULT_RULESET,
+  RULESET_PRESETS,
+  cloneRuleset,
+  validateRuleset,
+  rulesetToMatchDurationFrames,
+  effectivePlayerCount,
+  gameConfigFromRuleset,
+  elementGameplayEnabled,
+  elementVisualsEnabled,
+} from "./rulesets.js";

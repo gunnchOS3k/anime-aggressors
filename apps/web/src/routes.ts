@@ -2,6 +2,12 @@
 export const APP_ROUTES = {
   home: "#/",
   createFighter: "#/create-fighter",
+  customGame: "#/custom-game",
+  rulesets: "#/rulesets",
+  fighterSelect: "#/fighter-select",
+  controlsCheck: "#/controls-check",
+  controls: "#/controls",
+  controlsRemap: "#/controls/remap",
   play: "#/play",
   training: "#/training",
   controllerTest: "#/controller-test",
@@ -15,6 +21,12 @@ export const APP_ROUTES = {
 export type AppRouteMode =
   | "home"
   | "create-fighter"
+  | "custom-game"
+  | "rulesets"
+  | "fighter-select"
+  | "controls-check"
+  | "controls"
+  | "controls-remap"
   | "match"
   | "training"
   | "controller"
@@ -27,6 +39,12 @@ export type AppRouteMode =
 export const ROUTE_TO_MODE: Record<string, AppRouteMode> = {
   [APP_ROUTES.home]: "home",
   [APP_ROUTES.createFighter]: "create-fighter",
+  [APP_ROUTES.customGame]: "custom-game",
+  [APP_ROUTES.rulesets]: "rulesets",
+  [APP_ROUTES.fighterSelect]: "fighter-select",
+  [APP_ROUTES.controlsCheck]: "controls-check",
+  [APP_ROUTES.controls]: "controls",
+  [APP_ROUTES.controlsRemap]: "controls-remap",
   [APP_ROUTES.play]: "match",
   [APP_ROUTES.training]: "training",
   [APP_ROUTES.controllerTest]: "controller",
@@ -40,6 +58,12 @@ export const ROUTE_TO_MODE: Record<string, AppRouteMode> = {
 export const MODE_TO_ROUTE: Record<AppRouteMode, string> = {
   home: APP_ROUTES.home,
   "create-fighter": APP_ROUTES.createFighter,
+  "custom-game": APP_ROUTES.customGame,
+  rulesets: APP_ROUTES.rulesets,
+  "fighter-select": APP_ROUTES.fighterSelect,
+  "controls-check": APP_ROUTES.controlsCheck,
+  controls: APP_ROUTES.controls,
+  "controls-remap": APP_ROUTES.controlsRemap,
   match: APP_ROUTES.play,
   training: APP_ROUTES.training,
   controller: APP_ROUTES.controllerTest,
@@ -51,7 +75,7 @@ export const MODE_TO_ROUTE: Record<AppRouteMode, string> = {
 };
 
 export function hashToMode(hash: string): AppRouteMode {
-  const normalized = hash || APP_ROUTES.home;
+  const normalized = hash.split("?")[0] || APP_ROUTES.home;
   return ROUTE_TO_MODE[normalized] ?? "home";
 }
 
