@@ -118,7 +118,13 @@ npm run dev
 npm run quality
 ```
 
-Hash routes: `#/`, `#/create-fighter`, `#/play`, `#/training`, `#/impact-dummy-derby`
+Hash routes: `#/`, `#/create-fighter`, `#/play`, `#/training`, `#/impact-dummy-derby`, `#/career`, `#/career/history`, `#/career/replays`, `#/career/saves`
+
+## Career, Replays, and Saves
+
+Anime Aggressors tracks local career stats for your fighters: playtime, KOs, falls, wins, damage, Flagline captures, and Impact Dummy Derby records. Match History stores recent scoreboards, Replay Vault lets you rewatch deterministic matches, and Saved Games lets you resume or inspect local game snapshots.
+
+All career data is stored locally in your browser for now.
 
 ## Architecture
 

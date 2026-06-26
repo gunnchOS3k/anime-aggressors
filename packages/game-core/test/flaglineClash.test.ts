@@ -43,8 +43,9 @@ describe("flagline clash", () => {
   });
 
   it("same inputs produce same hash", () => {
-    let a = createInitialFlaglineState(99);
-    let b = createInitialFlaglineState(99);
+    const initial = createInitialFlaglineState(99);
+    let a = initial;
+    let b = deserializeFlaglineState(serializeFlaglineState(initial))!;
     const inputs = [emptyInput(0, 0), emptyInput(0, 1)];
     for (let i = 0; i < 30; i++) {
       a = simulateFlaglineFrame(a, inputs);

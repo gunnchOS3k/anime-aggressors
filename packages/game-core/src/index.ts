@@ -144,3 +144,36 @@ export {
   elementGameplayEnabled,
   elementVisualsEnabled,
 } from "./rulesets.js";
+export type {
+  CareerProfile,
+  FighterCareerStats,
+  MatchRecord,
+  MatchPlayerRecord,
+  MatchMode,
+  ReplayRecord,
+  ReplayInputFrame,
+  SaveGameRecord,
+  ScoreboardRow,
+} from "./career/types.js";
+export {
+  createDefaultCareerProfile,
+  createDefaultFighterStats,
+  computeWinRate,
+  computeHitAccuracy,
+} from "./career/stats.js";
+export type { StatEvent } from "./career/statEvents.js";
+export { collectStatEventsForFrame } from "./career/statEvents.js";
+export { buildScoreboard } from "./career/scoreboard.js";
+export type { MilestoneId, MilestoneDef } from "./career/milestones.js";
+export { MILESTONE_DEFS, evaluateMilestones } from "./career/milestones.js";
+export {
+  buildMatchRecordFromEvents,
+  applyMatchRecordToCareer,
+} from "./career/aggregateCareer.js";
+export type { PlayerMeta } from "./career/aggregateCareer.js";
+export {
+  createReplayRecord,
+  verifyReplayRecord,
+  inputsToReplayFrames,
+} from "./career/replay.js";
+export { createSaveGameRecord, loadSaveGameState } from "./career/saveGame.js";

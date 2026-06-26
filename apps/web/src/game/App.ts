@@ -22,6 +22,10 @@ import { globalAudio } from "../audio/AudioManager.js";
 import { navigateHome } from "../router.js";
 import { getMatchSetup } from "../match/matchSession.js";
 import { getProfileForSlot } from "../storage/inputProfileStorage.js";
+import { ReplayRecorder } from "../replay/ReplayRecorder.js";
+import { StatEventTracker, processMatchEnd } from "../career/careerService.js";
+import { saveCurrentGame } from "../saves/SaveGameManager.js";
+import type { MatchRecord, ReplayRecord } from "@anime-aggressors/game-core";
 
 export type MatchPhase = "select" | "fighting" | "results";
 
@@ -52,6 +56,11 @@ export class PlatformFighterApp {
   private simFrame = 0;
   private trainingMode: boolean;
   private prevDamage: number[] = [0, 0];
+  private replayRecorder: ReplayRecorder | null = null;
+  private statTracker: StatEventTracker | null = null;
+  private initialState: GameState | null = null;
+  private matchEndResult: { match: MatchRecord; replay: ReplayRecord | null } | null = null;
+  private matchMode = "playMatch";
 
   private options: PlatformFighterOptions;
 
@@ -130,7 +139,22 @@ export class PlatformFighterApp {
       e.preventDefault();
       this.resetMatch();
     }
+    if (e.key === "s" || e.key === "S") {
+      e.preventDefault();
+      void this.saveSnapshot();
+    }
   };
+
+  private async saveSnapshot(): Promise<void> {
+    if (!this.gameState) return;
+    const setup = getMatchSetup();
+    await saveCurrentGame(this.gameState, {
+      mode: this.matchMode,
+      title: `${setup.ruleset?.name ?? "Match"} — frame ${this.gameState.frame}`,
+      ruleset: setup.ruleset,
+      auto: true,
+    });
+  }
 
   private resetMatch(): void {
     if (!this.gameState) return;
@@ -147,6 +171,7 @@ export class PlatformFighterApp {
 
   beginMatch(select: CharacterSelectResult, ruleset?: GameRuleset): void {
     const activeRuleset = ruleset ?? getMatchSetup().ruleset ?? DEFAULT_RULESET;
+    const setup = getMatchSetup();
     const config: GameConfig = gameConfigFromRuleset(
       activeRuleset,
       [select.p1Fighter, select.p2Fighter],
@@ -154,6 +179,23 @@ export class PlatformFighterApp {
     );
 
     this.gameState = createInitialGameState(config);
+    this.initialState = structuredClone(this.gameState);
+    this.matchMode = this.trainingMode
+      ? "training"
+      : setup.customFlow
+        ? "customGame"
+        : "playMatch";
+    this.replayRecorder = new ReplayRecorder({
+      gameVersion: "0.1.0",
+      mode: this.matchMode,
+      ruleset: activeRuleset,
+      title: `${activeRuleset.name} Replay`,
+    });
+    this.replayRecorder.start(this.gameState);
+    this.statTracker = new StatEventTracker(this.matchMode);
+    this.statTracker.initFromState(this.gameState);
+    this.statTracker.start(0);
+    this.matchEndResult = null;
     this.rollback = new RollbackSession(this.gameState, {
       snapshotInterval: 1,
       maxRollbackFrames: 120,
@@ -203,7 +245,9 @@ export class PlatformFighterApp {
     if (!this.gameState || !this.rollback || this.state !== "fighting") return;
 
     const inputs = pollAllInputs(this.simFrame);
+    this.replayRecorder?.recordFrame(this.simFrame, inputs);
     this.gameState = this.rollback.advanceFrame(inputs, [true, true]);
+    this.statTracker?.trackFrame(this.gameState, inputs);
     this.simFrame += 1;
 
     if (this.gameState.phase === "results") {
@@ -212,19 +256,44 @@ export class PlatformFighterApp {
     }
   }
 
-  private showResultsScreen(): void {
-    if (!this.gameState) return;
+  private async showResultsScreen(): Promise<void> {
+    if (!this.gameState || !this.initialState) return;
     cancelAnimationFrame(this.rafId);
 
-    showResults(this.root, this.gameState, (action: ResultsAction) => {
-      if (action === "rematch" && this.gameState) {
-        this.resetMatch();
-        this.lastTime = performance.now();
-        this.loop(this.lastTime);
-      } else {
-        this.start();
-      }
-    });
+    this.statTracker?.end(this.gameState.frame, this.gameState.winnerId ?? undefined);
+    try {
+      this.matchEndResult = await processMatchEnd({
+        mode: this.matchMode,
+        initialState: this.initialState,
+        finalState: this.gameState,
+        events: this.statTracker?.getEvents() ?? [],
+        recorder: this.replayRecorder,
+        localPlayerId: 0,
+      });
+    } catch (err) {
+      console.error("Career recording failed", err);
+    }
+
+    showResults(
+      this.root,
+      this.gameState,
+      (action: ResultsAction) => {
+        if (action === "rematch" && this.gameState) {
+          this.resetMatch();
+          this.lastTime = performance.now();
+          this.loop(this.lastTime);
+        } else if (action === "menu") {
+          this.stop();
+          navigateHome();
+        } else {
+          this.stop();
+        }
+      },
+      {
+        match: this.matchEndResult?.match,
+        replay: this.matchEndResult?.replay,
+      },
+    );
   }
 
   private render(): void {

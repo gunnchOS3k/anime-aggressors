@@ -62,6 +62,11 @@ export function bindRouteButtons(): void {
     ["btn-impact-dummy-derby", "impact-dummy-derby"],
     ["btn-flagline-clash", "flagline-setup"],
     ["btn-feedback", "feedback"],
+    ["btn-career", "career"],
+    ["btn-match-history", "career-history"],
+    ["btn-replay-vault", "career-replays"],
+    ["btn-saved-games", "career-saves"],
+    ["btn-fighter-stats", "career-fighters"],
   ];
 
   for (const [id, mode] of map) {

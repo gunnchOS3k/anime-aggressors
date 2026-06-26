@@ -11,7 +11,10 @@ import { FlaglineStageView } from "../renderer-three/FlaglineStageView.js";
 import { renderFlaglineHUD } from "../screens/FlaglineClashHUD.js";
 import { mountFlaglineClashResultsScreen } from "../screens/FlaglineClashResultsScreen.js";
 import { getPendingTeamSelect } from "../screens/TeamSelectScreen.js";
-import { navigateHome } from "../router.js";
+import { navigateHome, navigateTo } from "../router.js";
+import { ReplayRecorder } from "../replay/ReplayRecorder.js";
+import { StatEventTracker, processFlaglineEnd } from "../career/careerService.js";
+import { DEFAULT_RULESET } from "@anime-aggressors/game-core";
 
 export function mountFlaglineClash(root: HTMLElement): void {
   const pending = getPendingTeamSelect();
@@ -35,6 +38,18 @@ export function mountFlaglineClash(root: HTMLElement): void {
   const hud = root.querySelector("#fl-hud") as HTMLElement;
 
   let state: FlaglineClashState = createInitialFlaglineState(42, config, teamSlots, 0);
+  const initialGame = structuredClone(state.game);
+  const recorder = new ReplayRecorder({
+    gameVersion: "0.1.0",
+    mode: "flaglineClash",
+    ruleset: config ?? DEFAULT_RULESET,
+    title: "Flagline Clash Replay",
+  });
+  recorder.start(state.game);
+  const statTracker = new StatEventTracker("flaglineClash");
+  statTracker.initFromState(state.game);
+  statTracker.start(0);
+  let careerProcessed = false;
 
   const renderer = new ThreeGameRenderer(viewport, { smoothCamera: true });
   renderer.mount();
@@ -62,6 +77,8 @@ export function mountFlaglineClash(root: HTMLElement): void {
       if (state.flagline.phase !== "gameWon") {
         const humanInputs = [pollPlayerInput(simFrame, 0), pollPlayerInput(simFrame, 1)];
         state = simulateFlaglineFrame(state, humanInputs);
+        recorder.recordFrame(simFrame, humanInputs);
+        statTracker.trackFrame(state.game, humanInputs);
         simFrame += 1;
       }
       acc -= fixedDt;
@@ -70,15 +87,33 @@ export function mountFlaglineClash(root: HTMLElement): void {
     if (state.flagline.phase === "gameWon") {
       cancelAnimationFrame(raf);
       renderer.dispose();
-      mountFlaglineClashResultsScreen(
-        root,
-        state,
-        () => {
-          state = createInitialFlaglineState(42, config, teamSlots, 0);
-          mountFlaglineClash(root);
-        },
-        () => navigateHome(),
-      );
+      if (!careerProcessed) {
+        careerProcessed = true;
+        for (const room of state.flagline.roomHistory) {
+          if (room.winner) {
+            statTracker.addEvent({
+              type: "flaglineRoomWon",
+              frame: room.frame,
+              teamId: room.winner,
+              roomIndex: room.roomIndex,
+            });
+          }
+        }
+        void processFlaglineEnd(initialGame, state, statTracker.getEvents(), recorder).then(
+          (result) => {
+            mountFlaglineClashResultsScreen(
+              root,
+              state,
+              () => {
+                state = createInitialFlaglineState(42, config, teamSlots, 0);
+                mountFlaglineClash(root);
+              },
+              () => navigateHome(),
+              result,
+            );
+          },
+        );
+      }
       return;
     }
 
