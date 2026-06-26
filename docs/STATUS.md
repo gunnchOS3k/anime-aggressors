@@ -1,10 +1,26 @@
 # Anime Aggressors — Status
 
 **Last updated:** 2026-06-24  
-**Branch:** `fix-netplay-rollback-readme-pc-playtest`  
+**Branch:** `fix-pages-source-of-truth`  
 **Product:** 2.5D platform fighter (Three.js renderer + deterministic game-core)
 
-## CI note (post PR #6)
+## GitHub Pages source of truth
+
+Public site was serving mixed/stale content because:
+
+- Repo root `index.html` + `vite.config.ts` were a **legacy mini-game shell** (competing with `apps/web`).
+- GitHub Pages **Source** was set to **Deploy from branch / main / /** (`build_type: legacy`), while a separate Actions workflow also uploaded `apps/web/dist`.
+- Committed `apps/web/dist/` could drift from CI-built artifacts.
+
+**Fix (this branch):**
+
+- Archive root web entry to `legacy/root-web/`.
+- Gitignore `apps/web/dist/` — production artifact is CI-only.
+- Harden `pages.yml`: `npm run build:pages`, marker asserts, `deploy-info.txt`, `apps/web/dist` upload.
+- Document required setting: **Pages → Source → GitHub Actions** (`docs/GITHUB_PAGES_DEPLOYMENT.md`).
+- Add visible build footer + `/deploy-info.txt` for verification.
+
+## CI note (post PR #7)
 
 After the netplay lockfile fix, `npm run typecheck` failed in CI because `@anime-aggressors/netplay` resolves `@anime-aggressors/rollback` via package `exports` pointing at `dist/`. The root `typecheck` script built `game-core` but not `rollback` before netplay typecheck. Fixed by building rollback before workspace typechecks.
 

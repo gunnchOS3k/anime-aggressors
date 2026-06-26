@@ -1,9 +1,47 @@
-# Validation report — netplay rollback typecheck + README playtest refresh
+# Validation report — GitHub Pages source of truth
 
-**Branch:** `fix-netplay-rollback-readme-pc-playtest`  
+**Branch:** `fix-pages-source-of-truth`  
 **Date:** 2026-06-24
 
-## CI failure: netplay cannot resolve `@anime-aggressors/rollback`
+## Public site stale vs `main`
+
+**Root cause:**
+
+| Issue | Detail |
+|-------|--------|
+| Latest game on `main` | Yes — `apps/web`, Impact Dummy Derby, Three.js renderer, game-first README (PR #7) |
+| README on `main` | Updated (game-first) after PR #7 merge |
+| Stale root app | Yes — root `index.html` loaded `/web/src/main.tsx` (mini-game shell); root `vite.config.ts` was legacy PWA config |
+| Pages source | Was `legacy` branch deploy from `/`; Actions workflow also ran but could be ignored |
+| Committed `apps/web/dist` | Stale build artifacts tracked in git |
+
+**Fix:**
+
+1. Moved root `index.html` + `vite.config.ts` → `legacy/root-web/`.
+2. Added `apps/web/dist/` to `.gitignore`; removed tracked dist from git.
+3. Rewrote `.github/workflows/pages.yml` to run `npm run build:pages`, assert Play Match / Impact Dummy Derby markers, write `deploy-info.txt`, upload `apps/web/dist`.
+4. Added `apps/web/src/version.ts` + footer `Build: Anime Aggressors Pages Build`.
+5. Documented Pages setting in `docs/GITHUB_PAGES_DEPLOYMENT.md`.
+6. Set repo Pages `build_type` to `workflow` (GitHub Actions).
+
+**Verify after deploy:**
+
+```text
+https://gunnchOS3k.github.io/anime-aggressors/
+https://gunnchOS3k.github.io/anime-aggressors/deploy-info.txt
+```
+
+**Validation:**
+
+| Command | Result |
+|---------|--------|
+| `npm ci` | pass |
+| `npm run quality` | pass |
+| `npm run build:pages` | pass |
+
+---
+
+## Netplay rollback typecheck (PR #7)
 
 **Root cause:**
 - `@anime-aggressors/netplay` depends on `@anime-aggressors/rollback` (workspace `0.1.0`, symlink OK).

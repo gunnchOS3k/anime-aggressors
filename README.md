@@ -2,7 +2,7 @@
 
 > A 2.5D anime platform fighter with rollback-first combat, couch multiplayer energy, and optional Edge-IO wearable input/haptics.
 
-[Play the Web Build](https://gunnchOS3k.github.io/anime-aggressors/) · [Gameplay Media](docs/media/README.md) · [Give Feedback](docs/playtest/feedback-form.md)
+[Play the Web Build](https://gunnchOS3k.github.io/anime-aggressors/) · [PC Playtest Guide](docs/playtest/PC_PLAYTEST_GUIDE.md) · [Give Feedback](docs/playtest/feedback-form.md)
 
 ## Choose Your Fight
 

@@ -17,6 +17,17 @@ body {
   font-family: system-ui, -apple-system, sans-serif;
   background: var(--bg);
   color: var(--text);
+  min-height: 100vh;
+}
+
+.build-footer {
+  position: fixed;
+  right: 0.75rem;
+  bottom: 0.5rem;
+  font-size: 0.7rem;
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: 5;
 }
 
 .landing {
