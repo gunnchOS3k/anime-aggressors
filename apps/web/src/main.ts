@@ -109,6 +109,33 @@ async function navigate(mode: AppRouteMode): Promise<void> {
     } else if (mode === "feedback") {
       const { mountFeedbackScreen } = await import("./screens/FeedbackScreen.js");
       mountFeedbackScreen(appRoot!);
+    } else if (mode === "career") {
+      const { mountCareerScreen } = await import("./screens/CareerScreen.js");
+      await mountCareerScreen(appRoot!);
+    } else if (mode === "career-fighters") {
+      const { mountFighterStatsScreen } = await import("./screens/FighterStatsScreen.js");
+      await mountFighterStatsScreen(appRoot!);
+    } else if (mode === "career-history") {
+      const { mountMatchHistoryScreen } = await import("./screens/MatchHistoryScreen.js");
+      await mountMatchHistoryScreen(appRoot!);
+    } else if (mode === "career-replays") {
+      const { mountReplayVaultScreen } = await import("./screens/ReplayVaultScreen.js");
+      await mountReplayVaultScreen(appRoot!);
+    } else if (mode === "career-saves") {
+      const { mountSavedGamesScreen } = await import("./screens/SavedGamesScreen.js");
+      await mountSavedGamesScreen(appRoot!);
+    } else if (mode === "career-milestones") {
+      const { mountMilestonesScreen } = await import("./screens/MilestonesScreen.js");
+      await mountMilestonesScreen(appRoot!);
+    } else if (mode === "replay") {
+      const { mountReplayViewerScreen } = await import("./screens/ReplayViewerScreen.js");
+      const params = getRouteParams<{ id?: string }>();
+      const replayId = params.id ?? new URLSearchParams(window.location.hash.split("?")[1] ?? "").get("id");
+      if (replayId) {
+        await mountReplayViewerScreen(appRoot!, replayId);
+      } else {
+        appRoot!.innerHTML = "<p>Missing replay id.</p>";
+      }
     }
   } catch (error) {
     console.error(error);

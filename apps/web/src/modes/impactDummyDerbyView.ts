@@ -13,6 +13,7 @@ import { pollAllInputs } from "../input/deviceAssignment.js";
 import { globalAudio } from "../audio/AudioManager.js";
 import { navigateHome, navigateTo } from "../router.js";
 import { listCreatedFighters } from "../storage/createdFightersStorage.js";
+import { processDerbyEnd } from "../career/careerService.js";
 
 export function mountImpactDummyDerby(root: HTMLElement): void {
   const saved = listCreatedFighters();
@@ -150,18 +151,22 @@ export function mountImpactDummyDerby(root: HTMLElement): void {
         <p>Distance: ${fpToDisplay(state.distance)}</p>
         <p>Score: ${state.score} · Grade: ${state.grade}</p>
         <p>Best: ${state.bestScore}</p>
+        <button id="derby-career" type="button">View Career</button>
         <button id="derby-retry" type="button">Retry</button>
-        <button id="derby-proto" type="button">Prototype Lab</button>
+        <button id="derby-home" type="button">Home</button>
       `;
       saveBest(state.bestScore);
       globalAudio.play("result");
+      void processDerbyEnd(state, fighter.id, fighter.name);
+      results.querySelector("#derby-career")?.addEventListener("click", () => navigateTo("career"));
       results.querySelector("#derby-retry")?.addEventListener("click", () => {
         state = resetDerbyForRetry(state);
         results.classList.add("hidden");
         prevDamage = 0;
       });
-      results.querySelector("#derby-proto")?.addEventListener("click", () => {
-        window.location.hash = "#/prototype-lab";
+      results.querySelector("#derby-home")?.addEventListener("click", () => {
+        cancelAnimationFrame(raf);
+        navigateHome();
       });
     }
   }
