@@ -136,6 +136,34 @@ base: "/anime-aggressors/"
 
 ## Troubleshooting stale site
 
+The live site can remain **stale** if the **Deploy GitHub Pages** workflow fails **before** the upload/deploy steps. GitHub Pages keeps serving the last successful deployment until a new one completes.
+
+Common causes of a stale site:
+
+1. Workflow failed during quality gate, build, or brittle assert step (fixed — workflow no longer greps UI labels like "Play Match").
+2. Pages **Source** is not set to **GitHub Actions**.
+3. Browser cache or an old service worker from a prior root PWA build.
+
+Verify the live deployment:
+
+```text
+https://gunnchos3k.github.io/anime-aggressors/deploy-info.txt
+```
+
+`commit_sha` must match the latest merge on `main`.
+
+Correct public URLs:
+
+| Purpose | URL |
+|---------|-----|
+| App home | `https://gunnchos3k.github.io/anime-aggressors/` |
+| Start Match | `https://gunnchos3k.github.io/anime-aggressors/#/match-setup/rules` |
+| Quick play | `https://gunnchos3k.github.io/anime-aggressors/#/play` |
+
+**Wrong for this repo:** `https://gunnchos3k.github.io/play` — that is outside the project-site base `/anime-aggressors/`. To make `/play` redirect, set up a separate root user-site repo (`gunnchos3k.github.io`) — see [ROOT_PLAY_REDIRECT.md](../ROOT_PLAY_REDIRECT.md).
+
+Steps:
+
 1. Confirm Pages **Source = GitHub Actions** (not branch deploy).
 2. Open `deploy-info.txt` and check `commit_sha`.
 3. Hard-refresh or clear site data (old root PWA may have cached a service worker).

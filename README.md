@@ -10,6 +10,8 @@ Anime Aggressors is a 2.5D anime platform fighter where every fighter is built f
 **Quick play hash route:** `https://gunnchos3k.github.io/anime-aggressors/#/play`  
 Do not use `https://gunnchos3k.github.io/play` — Anime Aggressors is hosted as a project site under `/anime-aggressors/`. See [docs/ROOT_PLAY_REDIRECT.md](docs/ROOT_PLAY_REDIRECT.md).
 
+If the live site looks stale after a merge, check [deploy-info.txt](https://gunnchos3k.github.io/anime-aggressors/deploy-info.txt) — a failed Pages workflow leaves the previous deployment active until a new one succeeds.
+
 ## Create-a-Fighter
 
 Build a fighter in seconds:
