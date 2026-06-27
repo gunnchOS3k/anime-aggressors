@@ -2,7 +2,7 @@ import type { CreatedFighter, TeamSlot, FlaglineConfig } from "@anime-aggressors
 import {
   createDefaultTeamSlots,
   FLAGLINE_DEFAULTS,
-  getDefaultCreatedFighter,
+  getAllDefaultCreatedFighters,
 } from "@anime-aggressors/game-core";
 import { listCreatedFighters } from "../storage/createdFightersStorage.js";
 import { navigateTo } from "../router.js";
@@ -27,7 +27,7 @@ export function mountTeamSelectScreen(
   onStart: (result: TeamSelectResult) => void,
 ): void {
   const roster = listCreatedFighters();
-  const defaults = [0, 1, 2, 3].map((i) => getDefaultCreatedFighter(i));
+  const defaults = getAllDefaultCreatedFighters();
   const fighters = roster.length >= 2 ? roster : defaults;
 
   let slots = createDefaultTeamSlots(fighters);

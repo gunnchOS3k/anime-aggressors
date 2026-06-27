@@ -123,8 +123,19 @@ export {
   getDefaultCreatedFighter,
   createCreatedFighterId,
   DEFAULT_FIGHTER_NAME,
+  DEFAULT_FIGHTERS,
   DEFAULT_FIGHTER_ROSTER,
   getDefaultFighterPreset,
+  getAllDefaultCreatedFighters,
+  getDefaultFighterProfile,
+  getRoygbivColors,
+  isDefaultFighterId,
+  normalizeDefaultFighterId,
+} from "./createdFighter.js";
+export type {
+  DefaultFighterId,
+  DefaultFighterProfile,
+  PreviewAnimationId,
 } from "./createdFighter.js";
 export {
   getFighterProfile,

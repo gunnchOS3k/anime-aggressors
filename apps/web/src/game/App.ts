@@ -94,7 +94,7 @@ export class PlatformFighterApp {
     const setup = getMatchSetup();
     if (this.options.skipSelect && setup.p1Fighter && setup.p2Fighter) {
       this.beginMatch(
-        { p1Fighter: setup.p1Fighter, p2Fighter: setup.p2Fighter },
+        { p1: setup.p1Fighter, p2: setup.p2Fighter },
         setup.ruleset,
       );
       return;
@@ -174,7 +174,7 @@ export class PlatformFighterApp {
     const setup = getMatchSetup();
     const config: GameConfig = gameConfigFromRuleset(
       activeRuleset,
-      [select.p1Fighter, select.p2Fighter],
+      [select.p1, select.p2],
       Date.now() & 0xffff,
     );
 

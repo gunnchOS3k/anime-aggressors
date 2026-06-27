@@ -55,4 +55,18 @@ export function getDefaultCreatedFighter(playerIndex: number): CreatedFighter {
   return buildCreatedFighter({ ...preset });
 }
 
-export { DEFAULT_FIGHTER_ROSTER, getDefaultFighterPreset } from "./defaultFighters.js";
+export {
+  DEFAULT_FIGHTERS,
+  DEFAULT_FIGHTER_ROSTER,
+  getDefaultFighterPreset,
+  getAllDefaultCreatedFighters,
+  getDefaultFighterProfile,
+  getRoygbivColors,
+  isDefaultFighterId,
+  normalizeDefaultFighterId,
+} from "./defaultFighters.js";
+export type {
+  DefaultFighterId,
+  DefaultFighterProfile,
+  PreviewAnimationId,
+} from "./defaultFighters.js";

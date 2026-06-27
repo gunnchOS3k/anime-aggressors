@@ -78,7 +78,7 @@ async function navigate(mode: AppRouteMode): Promise<void> {
       const { getMatchSetup, setMatchFighters } = await import("./match/matchSession.js");
       const { navigateTo } = await import("./router.js");
       mountFighterSelectScreen(appRoot!, (result) => {
-        setMatchFighters(result.p1Fighter, result.p2Fighter);
+        setMatchFighters(result.p1, result.p2);
         const setup = getMatchSetup();
         if (setup.customFlow) {
           navigateTo("controls-check");
