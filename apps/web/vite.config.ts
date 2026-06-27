@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 const root = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
+  root,
   base: "/anime-aggressors/",
   resolve: {
     alias: {
@@ -16,7 +17,8 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: "dist",
+    outDir: path.resolve(root, "dist"),
+    emptyOutDir: true,
     assetsDir: "assets",
     sourcemap: false,
     rollupOptions: {

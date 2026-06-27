@@ -40,21 +40,44 @@ jobs:
       - name: Build Pages app
         run: npm run build:pages
 
-      - name: Assert artifact is current app
+      - name: Debug Pages artifact
+        run: |
+          echo "PWD=$(pwd)"
+          echo "Root files:"
+          ls -la
+          echo "apps/web files:"
+          ls -la apps/web || true
+          echo "apps/web/dist files:"
+          ls -la apps/web/dist || true
+          echo "Find index.html:"
+          find . -maxdepth 5 -name index.html -print
+
+      - name: Assert Pages artifact is current game
         run: |
           test -f apps/web/dist/index.html
           test -f apps/web/dist/404.html
           test -f apps/web/dist/deploy-info.txt
-          grep -q "Play Match" apps/web/dist/index.html
-          grep -q "Impact Dummy Derby" apps/web/dist/index.html
-          ! grep -q "Load Mini-Games" apps/web/dist/index.html
+          grep -R "Start Match" apps/web/dist/index.html apps/web/dist/assets
+          grep -R "Impact Dummy Derby" apps/web/dist/index.html apps/web/dist/assets
+          if grep -R "Load Mini-Games" apps/web/dist/index.html apps/web/dist/assets; then
+            echo "Found stale Load Mini-Games marker"
+            exit 1
+          fi
+          if grep -R "https://gunnchos3k.github.io/play" apps/web/dist; then
+            echo "Found forbidden root play URL"
+            exit 1
+          fi
+          if grep -R 'href="/play' apps/web/dist; then
+            echo "Found forbidden href=/play link"
+            exit 1
+          fi
           cat apps/web/dist/deploy-info.txt
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: apps/web/dist
 

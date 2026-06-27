@@ -48,6 +48,51 @@ npm run preview:pages
 
 Open http://localhost:4173/anime-aggressors/ (Vite preview uses `base: /anime-aggressors/`).
 
+## Build commands
+
+| Step | Command |
+|------|---------|
+| Web build | `npm run build:web` → `npm run build -w anime-aggressors-web` |
+| Finalize artifact | `npm run finalize:pages` |
+| Pages build | `npm run build:pages` (= `build:web` + `finalize:pages`) |
+| Output directory | `apps/web/dist` |
+
+After `npm run build:pages`, these files must exist:
+
+```text
+apps/web/dist/index.html
+apps/web/dist/404.html
+apps/web/dist/deploy-info.txt
+```
+
+Vite config (`apps/web/vite.config.ts`) sets `root` to `apps/web` and `build.outDir` to `apps/web/dist`.
+
+## Pages deploy failure: missing apps/web/dist/index.html
+
+If the workflow fails at the artifact assert step, check the **Debug Pages artifact** log first. The build may have succeeded while a stale content grep (for example **Play Match** after rename to **Start Match**) failed the assert step.
+
+Root cause pattern:
+- The Pages workflow asserted `apps/web/dist/index.html`, but the build command did not create that file in CI, **or** a stale assert grep failed after the file was created.
+
+Fix in repo:
+- `npm run build:pages` explicitly runs the `anime-aggressors-web` workspace build.
+- `apps/web/vite.config.ts` outputs to `apps/web/dist`.
+- `finalize-pages-artifact.mjs` fails loudly if `index.html` is missing.
+- Workflow debug output lists root, `apps/web`, and discovered `index.html` files.
+- Upload path remains `apps/web/dist`.
+
+Validation:
+
+```bash
+npm ci
+npm run build:web
+test -f apps/web/dist/index.html
+npm run build:pages
+test -f apps/web/dist/404.html
+test -f apps/web/dist/deploy-info.txt
+npm run quality
+```
+
 ## Hash routes (no path 404s)
 
 Public navigation uses hash routes only:
