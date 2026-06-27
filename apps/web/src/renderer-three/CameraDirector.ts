@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import type { GameState } from "@anime-aggressors/game-core";
 import { computeCameraBounds, type CameraBounds } from "./cameraBounds.js";
+import { computeCinematicPulse, launchCameraBias } from "./camera/CinematicEffects.ts";
 
 export type { CameraBounds };
 
@@ -35,10 +36,12 @@ export class CameraDirector {
     const cy = (b.minY + b.maxY) / 2;
     const spanX = Math.max(18, b.maxX - b.minX);
     const spanY = Math.max(10, b.maxY - b.minY);
-    const desiredZoom = Math.max(spanX / 2, spanY / 1.1) * 1.15;
+    const pulse = computeCinematicPulse(hitEvent, koEvent, state.hitstopFrames);
+    const launchBias = launchCameraBias(state);
+    const desiredZoom = Math.max(spanX / 2, spanY / 1.1) * (1.15 + pulse.zoomBias + launchBias);
 
-    if (hitEvent) this.shake = 0.35;
-    if (koEvent) this.shake = 0.8;
+    if (pulse.shake > this.shake) this.shake = pulse.shake;
+    if (koEvent) this.shake = Math.max(this.shake, 1.0);
 
     if (this.smooth) {
       this.target.x += (cx - this.target.x) * 0.12;

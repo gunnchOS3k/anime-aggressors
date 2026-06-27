@@ -1,82 +1,75 @@
 import * as THREE from "three";
 import type { PlayerState } from "@anime-aggressors/game-core";
-import { getDisplayColor, getVisualScale } from "@anime-aggressors/game-core";
+import { getDefaultCreatedFighter } from "@anime-aggressors/game-core";
 import { fpToWorld } from "./RenderTypes.js";
-import { addOutline, createPlayerMaterial } from "./Materials.js";
+import { resolveFighterAppearance, resolveFighterAppearanceFromPlayer } from "./fighters/FighterAppearance.ts";
+import { createFighterModel, destroyFighterModel, type LowPolyHumanoidParts } from "./fighters/FighterModelFactory.ts";
+import { applyFighterPose, computeFighterPose } from "./fighters/FighterAnimator.ts";
 
 export class CharacterView {
   readonly group = new THREE.Group();
-  private body: THREE.Mesh;
-  private head: THREE.Mesh;
+  private parts: LowPolyHumanoidParts;
   private shieldMesh: THREE.Mesh;
-  private label: THREE.Sprite | null = null;
+  private appearanceKey = "";
+  private baseTorsoColor = new THREE.Color();
 
   constructor(playerId: number) {
-    const color = "#aaaaaa";
-    const mat = createPlayerMaterial(color);
+    const appearance = resolveFighterAppearance(getDefaultCreatedFighter(playerId));
+    this.parts = createFighterModel(appearance);
+    this.group.add(this.parts.root);
+    this.baseTorsoColor.setHex(appearance.primaryHex);
 
-    const bodyGeo = new THREE.CapsuleGeometry(0.45, 1.0, 6, 12);
-    this.body = new THREE.Mesh(bodyGeo, mat);
-    this.body.position.y = 1.0;
-    addOutline(this.body);
-
-    const headGeo = new THREE.SphereGeometry(0.38, 16, 16);
-    this.head = new THREE.Mesh(headGeo, mat.clone());
-    this.head.position.y = 1.85;
-    addOutline(this.head);
-
-    const shieldGeo = new THREE.SphereGeometry(1.1, 16, 16);
     this.shieldMesh = new THREE.Mesh(
-      shieldGeo,
-      new THREE.MeshBasicMaterial({ color: 0x66ccff, transparent: true, opacity: 0.25 }),
+      new THREE.SphereGeometry(1.15, 16, 16),
+      new THREE.MeshBasicMaterial({ color: appearance.vfx.shield, transparent: true, opacity: 0.22 }),
     );
     this.shieldMesh.visible = false;
-
-    this.group.add(this.body, this.head, this.shieldMesh);
+    this.group.add(this.shieldMesh);
+    this.appearanceKey = `${appearance.name}-${appearance.color}-${appearance.size}`;
   }
 
-  update(player: PlayerState): void {
-    const scale = getVisualScale(player);
-    this.group.scale.set(scale * player.facing, scale, scale);
-    this.group.position.set(fpToWorld(player.x), fpToWorld(player.y), player.id * 0.3);
-
-    const displayColor = getDisplayColor(player);
-    const matColor = new THREE.Color(displayColor);
-    const squash = player.actionState === "jumping" ? 0.92 : player.actionState === "falling" ? 1.05 : 1;
-    this.body.scale.y = squash;
-    this.head.scale.y = 1 / squash;
-
-    this.shieldMesh.visible = player.actionState === "shielding";
-    const shieldColor = new THREE.Color(displayColor);
-    (this.shieldMesh.material as THREE.MeshBasicMaterial).color.copy(shieldColor);
-
-    if (player.actionState === "attacking") {
-      this.body.rotation.z = -0.25 * player.facing;
-    } else if (player.actionState === "special") {
-      this.body.rotation.z = -0.45 * player.facing;
-    } else {
-      this.body.rotation.z = 0;
+  update(player: PlayerState, frame = 0): void {
+    const appearance = resolveFighterAppearanceFromPlayer(player);
+    const key = `${appearance.name}-${appearance.color}-${appearance.size}`;
+    if (key !== this.appearanceKey) {
+      this.group.remove(this.parts.root);
+      destroyFighterModel(this.parts);
+      this.parts = createFighterModel(appearance);
+      this.group.add(this.parts.root);
+      this.appearanceKey = key;
+      this.baseTorsoColor.setHex(appearance.primaryHex);
+      (this.shieldMesh.material as THREE.MeshBasicMaterial).color.setHex(appearance.vfx.shield);
     }
 
+    const pose = computeFighterPose(player, frame);
+    applyFighterPose(this.parts, pose, player.facing);
+
+    this.group.position.set(fpToWorld(player.x), fpToWorld(player.y), player.id * 0.35);
+    this.shieldMesh.visible = player.actionState === "shielding";
+    this.shieldMesh.position.set(0, 1.1, 0.1);
+
+    const torsoMat = this.parts.torso.material as THREE.MeshToonMaterial;
     if (player.actionState === "hitstun") {
-      (this.body.material as THREE.MeshToonMaterial).color.setHex(0xff8888);
+      torsoMat.color.set(0xff8888);
+      torsoMat.emissive.setHex(0xff3333);
+      torsoMat.emissiveIntensity = 0.35;
     } else if (player.actionState === "defeated") {
       this.group.visible = false;
     } else {
       this.group.visible = true;
-      (this.body.material as THREE.MeshToonMaterial).color.copy(matColor);
-      (this.head.material as THREE.MeshToonMaterial).color.copy(matColor);
+      torsoMat.color.copy(this.baseTorsoColor);
+      torsoMat.emissive.setHex(appearance.accentHex);
+      torsoMat.emissiveIntensity = 0.08;
     }
   }
 
   dispose(): void {
-    this.body.geometry.dispose();
-    this.head.geometry.dispose();
+    destroyFighterModel(this.parts);
     this.shieldMesh.geometry.dispose();
+    (this.shieldMesh.material as THREE.Material).dispose();
   }
 }
 
 export async function loadCharacterModel(_characterId: string): Promise<THREE.Group> {
-  // GLB pipeline stub — returns empty group until assets land
   return new THREE.Group();
 }

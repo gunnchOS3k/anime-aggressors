@@ -15,6 +15,8 @@ function fighterCard(f: CreatedFighter, selected: boolean, player: number): stri
       style="border-color:${ELEMENTS[f.color].hexColor}">
       <strong>${f.name}</strong><br/>
       <small>${stats.label} · ${ELEMENTS[f.color].name}</small><br/>
+      <span class="element-badge" style="background:${ELEMENTS[f.color].hexColor}33;border:1px solid ${ELEMENTS[f.color].hexColor}">${ELEMENTS[f.color].name}</span>
+      <span class="size-badge">${stats.label}</span><br/>
       <small class="mini-stats">SPD ${stats.speedMultiplier.toFixed(2)} · PWR ${stats.damageMultiplier.toFixed(2)} · WT ${stats.weight.toFixed(2)}</small>
     </button>`;
 }
@@ -22,8 +24,8 @@ function fighterCard(f: CreatedFighter, selected: boolean, player: number): stri
 export function mountMatchSetupFightersScreen(root: HTMLElement): void {
   const setup = loadMatchSetup();
   const saved = listCreatedFighters();
-  const defaults = [getDefaultCreatedFighter(0), getDefaultCreatedFighter(1)];
-  const roster = saved.length >= 2 ? saved : [...saved, ...defaults].slice(0, Math.max(2, saved.length + 2));
+  const defaults = [0, 1, 2, 3].map((i) => getDefaultCreatedFighter(i));
+  const roster = saved.length >= 2 ? [...saved, ...defaults.filter((d) => !saved.some((s) => s.id === d.id))] : defaults;
 
   let p1 = setup.fighters.find((f) => f.playerId === 0)?.fighter ?? roster[0] ?? defaults[0];
   let p2 = setup.fighters.find((f) => f.playerId === 1)?.fighter ?? roster[1] ?? defaults[1];

@@ -76,3 +76,17 @@ Validation:
 - npm run test:web (includes `pagesDeployContract`)
 - npm run build:pages
 - Confirm `deploy-info.txt` commit_sha after merge
+
+## Visual identity pass (low-poly fighters, stages, VFX)
+
+Added:
+- Four default fighters: Ember Vale, Tide Kuro, Zeph Ray, Nova Grimm
+- Procedural low-poly humanoid renderer with silhouette/accessory variants
+- Stage model factory for all eight required stages
+- Combat VFX orchestrator (hit sparks, attack trails, dash/land, KO bursts)
+- Cinematic camera pulse on hitstop/KO
+- Fight announcement UI (Ready? / Fight!)
+
+Validation:
+- npm run test:web (fighterAppearance, stageFactory, effectsStyle, lowPolyModelFactory, derby/flagline visuals)
+- npm run build:pages
