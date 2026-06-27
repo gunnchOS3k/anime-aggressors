@@ -55,3 +55,24 @@ Validation:
 - npm run build:web
 - npm run build:pages
 - npm run quality
+
+## Stale live site after merge (Pages deploy blocked)
+
+Root cause:
+- The **Deploy GitHub Pages** workflow can fail before upload/deploy (for example brittle UI text greps like **Play Match** / **Start Match**). GitHub Pages then keeps serving the **last successful** deployment, so the live site looks stale even after merges to `main`.
+
+Fix:
+- Removed deploy-blocking UI text greps from `.github/workflows/pages.yml`.
+- Workflow now asserts only required files exist (`index.html`, `404.html`, `deploy-info.txt`) and rejects forbidden root `/play` links.
+- `finalize-pages-artifact.mjs` no longer fails on UI label markers — only missing artifact, wrong base path, or forbidden root play links.
+- Upload path remains `apps/web/dist`.
+
+Correct live URLs:
+- App: `https://gunnchos3k.github.io/anime-aggressors/`
+- Start Match: `https://gunnchos3k.github.io/anime-aggressors/#/match-setup/rules`
+- Wrong: `https://gunnchos3k.github.io/play` (requires separate root user-site redirect)
+
+Validation:
+- npm run test:web (includes `pagesDeployContract`)
+- npm run build:pages
+- Confirm `deploy-info.txt` commit_sha after merge

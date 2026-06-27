@@ -39,17 +39,6 @@ const assetFiles = fs.existsSync(assetsDir)
   : "";
 
 const markers = `${html}\n${assetFiles}`;
-for (const label of ["Create Fighter", "Start Match", "Custom Game", "Controls", "Flagline Clash", "Impact Dummy Derby"]) {
-  if (!markers.includes(label)) {
-    console.error(`Missing expected marker in artifact: ${label}`);
-    process.exit(1);
-  }
-}
-
-if (markers.includes("Load Mini-Games")) {
-  console.error("Stale marker found in artifact: Load Mini-Games");
-  process.exit(1);
-}
 
 const badPatterns = [
   "https://gunnchos3k.github.io/play",

@@ -14,6 +14,8 @@ Two ways for friends on PC to try Anime Aggressors and send feedback. Web is fas
 
 > **Note:** Do not use `https://gunnchos3k.github.io/play` for this project. Anime Aggressors is hosted as a project site under `/anime-aggressors/`. See [ROOT_PLAY_REDIRECT.md](../ROOT_PLAY_REDIRECT.md).
 
+> **Stale site?** If the live build looks old after a merge, open [deploy-info.txt](https://gunnchos3k.github.io/anime-aggressors/deploy-info.txt) and confirm `commit_sha` matches `main`. A failed Pages deploy leaves the previous version live.
+
 **Tips**
 
 - Chrome or Edge recommended; Firefox usually works.
