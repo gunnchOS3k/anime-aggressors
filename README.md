@@ -4,7 +4,10 @@
 
 Anime Aggressors is a 2.5D anime platform fighter where every fighter is built from two choices: **body size** and **element color**. Small fighters are quick but light. Large fighters hit hard but move slower. Medium fighters stay balanced. Your ROYGBIV color gives your combo a unique elemental feel.
 
-[Play the Web Build](https://gunnchOS3k.github.io/anime-aggressors/) · [PC Playtest Guide](docs/playtest/PC_PLAYTEST_GUIDE.md) · [Give Feedback](docs/playtest/feedback-form.md)
+[Play Match](https://gunnchOS3k.github.io/anime-aggressors/#/play) · [Web Build Home](https://gunnchOS3k.github.io/anime-aggressors/) · [PC Playtest Guide](docs/playtest/PC_PLAYTEST_GUIDE.md) · [Give Feedback](docs/playtest/feedback-form.md)
+
+**Direct play link:** `https://gunnchOS3k.github.io/anime-aggressors/#/play`  
+Root `/play` URLs require a separate user-site redirect — see [docs/ROOT_PLAY_REDIRECT.md](docs/ROOT_PLAY_REDIRECT.md).
 
 ## Create-a-Fighter
 

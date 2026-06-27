@@ -4,16 +4,22 @@ import {
   simulateDerbyFrame,
   resetDerbyForRetry,
   fpToDisplay,
-  ELEMENTS,
   getElementColorHex,
   getDefaultCreatedFighter,
-  type ImpactDummyDerbyState,
 } from "@anime-aggressors/game-core";
 import { pollAllInputs } from "../input/deviceAssignment.js";
 import { globalAudio } from "../audio/AudioManager.js";
 import { navigateHome, navigateTo } from "../router.js";
 import { listCreatedFighters } from "../storage/createdFightersStorage.js";
 import { processDerbyEnd } from "../career/careerService.js";
+import { ImpactDummyView } from "../renderer-three/ImpactDummyView.ts";
+import { KineticBatView } from "../renderer-three/KineticBatView.ts";
+import { DistanceMarkerView } from "../renderer-three/DistanceMarkerView.ts";
+import { LaunchTrailView } from "../renderer-three/LaunchTrailView.ts";
+import { derbyHudHtml } from "../modes/impactDummyDerbyHud.ts";
+import { renderDerbyResultsPanel } from "../screens/ImpactDummyDerbyResultsScreen.ts";
+
+const DERBY_SEED = 4242;
 
 export function mountImpactDummyDerby(root: HTMLElement): void {
   const saved = listCreatedFighters();
@@ -23,7 +29,7 @@ export function mountImpactDummyDerby(root: HTMLElement): void {
     <div class="derby-root">
       <div class="vs-toolbar">
         <button id="derby-back" type="button">← Home</button>
-        <span class="vs-hint">Fighter: <strong>${fighter.name}</strong> (${fighter.size} / ${ELEMENTS[fighter.color].name})</span>
+        <span class="vs-hint">Impact Dummy Derby · <strong>${fighter.name}</strong></span>
         <button id="derby-pick" type="button" class="btn-tertiary">Change Fighter</button>
       </div>
       <div id="derby-viewport" class="pf-viewport"></div>
@@ -36,23 +42,17 @@ export function mountImpactDummyDerby(root: HTMLElement): void {
   const hud = root.querySelector("#derby-hud") as HTMLElement;
   const results = root.querySelector("#derby-results") as HTMLElement;
 
-  root.querySelector("#derby-back")?.addEventListener("click", () => {
-    cancelAnimationFrame(raf);
-    navigateHome();
-  });
-  root.querySelector("#derby-pick")?.addEventListener("click", () => {
-    cancelAnimationFrame(raf);
-    navigateTo("create-fighter");
-  });
-
-  let state = createInitialDerbyState(Date.now() & 0xffff, loadBest(), fighter);
-  let prevDamage = 0;
+  let raf = 0;
   let simFrame = 0;
+  let prevDamage = 0;
+  let careerSaved = false;
+
+  let state = createInitialDerbyState(DERBY_SEED, loadBest(), fighter);
 
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x1a2035);
-  const camera = new THREE.OrthographicCamera(-20, 20, 12, -4, 0.1, 200);
-  camera.position.set(12, 6, 40);
+  scene.background = new THREE.Color(0x141a2e);
+  const camera = new THREE.OrthographicCamera(-22, 22, 14, -6, 0.1, 300);
+  camera.position.set(12, 6, 50);
   camera.lookAt(12, 4, 0);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -60,54 +60,37 @@ export function mountImpactDummyDerby(root: HTMLElement): void {
   viewport.appendChild(renderer.domElement);
 
   const platform = new THREE.Mesh(
-    new THREE.BoxGeometry(22, 0.5, 4),
-    new THREE.MeshStandardMaterial({ color: 0x444455 }),
+    new THREE.BoxGeometry(28, 0.55, 5),
+    new THREE.MeshStandardMaterial({ color: 0x3a4460 }),
   );
-  platform.position.set(12, 3.2, 0);
+  platform.position.set(12, 3.15, 0);
   scene.add(platform);
 
   const playerMesh = new THREE.Mesh(
-    new THREE.CapsuleGeometry(0.4, 1, 6, 12),
+    new THREE.CapsuleGeometry(0.42, 1.05, 6, 12),
     new THREE.MeshToonMaterial({ color: new THREE.Color(getElementColorHex(fighter.color)) }),
   );
-  playerMesh.position.y = 1;
   scene.add(playerMesh);
 
-  const dummyMesh = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.5, 0.6, 1.6, 12),
-    new THREE.MeshToonMaterial({ color: 0xcccccc }),
-  );
-  dummyMesh.position.y = 0.8;
-  scene.add(dummyMesh);
+  const dummyView = new ImpactDummyView();
+  scene.add(dummyView.group);
 
-  const batMesh = new THREE.Mesh(
-    new THREE.BoxGeometry(0.15, 1.2, 0.15),
-    new THREE.MeshToonMaterial({ color: 0x66ccff }),
-  );
-  batMesh.visible = false;
-  scene.add(batMesh);
+  const batView = new KineticBatView();
+  scene.add(batView.group);
 
-  const markers: THREE.Mesh[] = [];
-  for (let i = 0; i < 8; i++) {
-    const m = new THREE.Mesh(
-      new THREE.BoxGeometry(0.1, 1.5, 0.1),
-      new THREE.MeshBasicMaterial({ color: 0x888899 }),
-    );
-    m.position.set(4 + i * 2.5, 2, -1);
-    scene.add(m);
-    markers.push(m);
-  }
+  const markers = new DistanceMarkerView();
+  scene.add(markers.group);
 
-  const amb = new THREE.AmbientLight(0xffffff, 0.6);
+  const trail = new LaunchTrailView();
+  scene.add(trail.group);
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.55));
   const key = new THREE.DirectionalLight(0xfff0dd, 1);
-  key.position.set(8, 12, 10);
-  scene.add(amb, key);
-
-  const sparkGeo = new THREE.SphereGeometry(0.2, 8, 8);
-  const sparks: THREE.Mesh[] = [];
+  key.position.set(10, 14, 12);
+  scene.add(key);
 
   function toWorld(fp: number): number {
-    return fp / 256;
+    return fpToDisplay(fp);
   }
 
   function derbyInput() {
@@ -121,55 +104,20 @@ export function mountImpactDummyDerby(root: HTMLElement): void {
       jump: p.jump,
       attack: p.attack,
       special: p.special,
+      shield: p.shield,
       dodge: p.dodge,
+      grab: p.grab,
     };
   }
 
-  function updateHud(): void {
-    const timer =
-      state.phase === "damage_phase"
-        ? Math.ceil((600 - state.phaseFrame) / 60)
-        : state.phase === "launch_window"
-          ? Math.ceil((180 - state.phaseFrame) / 60)
-          : 0;
-
-    hud.innerHTML = `
-      <div class="derby-hud-row">
-        <span>Phase: ${state.phase.replace(/_/g, " ")}</span>
-        <span>Dummy: ${state.dummy.damage}%</span>
-        <span>${state.kineticBatEquipped ? "Kinetic Bat ready" : state.kineticBatAvailable ? "Bat available" : "Build damage"}</span>
-        <span>Timer: ${timer}s</span>
-      </div>
-    `;
-
-    if (state.phase === "results") {
-      results.classList.remove("hidden");
-      results.innerHTML = `
-        <h3>Impact Dummy Derby — Results</h3>
-        <p>Damage dealt: ${state.totalDamageDealt}%</p>
-        <p>Launch speed: ${fpToDisplay(state.launchSpeed)}</p>
-        <p>Distance: ${fpToDisplay(state.distance)}</p>
-        <p>Score: ${state.score} · Grade: ${state.grade}</p>
-        <p>Best: ${state.bestScore}</p>
-        <button id="derby-career" type="button">View Career</button>
-        <button id="derby-retry" type="button">Retry</button>
-        <button id="derby-home" type="button">Home</button>
-      `;
-      saveBest(state.bestScore);
-      globalAudio.play("result");
-      void processDerbyEnd(state, fighter.id, fighter.name);
-      results.querySelector("#derby-career")?.addEventListener("click", () => navigateTo("career"));
-      results.querySelector("#derby-retry")?.addEventListener("click", () => {
-        state = resetDerbyForRetry(state);
-        results.classList.add("hidden");
-        prevDamage = 0;
-      });
-      results.querySelector("#derby-home")?.addEventListener("click", () => {
-        cancelAnimationFrame(raf);
-        navigateHome();
-      });
-    }
-  }
+  root.querySelector("#derby-back")?.addEventListener("click", () => {
+    cancelAnimationFrame(raf);
+    navigateHome();
+  });
+  root.querySelector("#derby-pick")?.addEventListener("click", () => {
+    cancelAnimationFrame(raf);
+    navigateTo("create-fighter");
+  });
 
   function tick(): void {
     if (state.phase !== "results") {
@@ -179,44 +127,55 @@ export function mountImpactDummyDerby(root: HTMLElement): void {
 
     if (state.dummy.damage > prevDamage) {
       globalAudio.play("hit_confirm");
-      const spark = new THREE.Mesh(sparkGeo, new THREE.MeshBasicMaterial({ color: 0xffee55 }));
-      spark.position.set(toWorld(state.dummy.x), toWorld(state.dummy.y) + 1.5, 0.5);
-      scene.add(spark);
-      sparks.push(spark);
       prevDamage = state.dummy.damage;
     }
-
     if (state.phase === "flight" && state.phaseFrame === 1) {
-      globalAudio.play("ko", 0.8);
+      globalAudio.play("ko", 0.85);
     }
 
-    playerMesh.position.set(toWorld(state.player.x), toWorld(state.player.y) + 1, 0.3);
+    if (state.phase === "results" && !careerSaved) {
+      careerSaved = true;
+      saveBest(state.personalBest);
+      globalAudio.play("result");
+      void processDerbyEnd(state, fighter.id, fighter.name);
+      renderDerbyResultsPanel(results, state, fighter, {
+        onRetry: () => {
+          state = resetDerbyForRetry(state);
+          results.classList.add("hidden");
+          prevDamage = 0;
+          simFrame = 0;
+          careerSaved = false;
+          trail.clear();
+        },
+        onChangeFighter: () => navigateTo("create-fighter"),
+      });
+    }
+
+    const px = toWorld(state.player.x);
+    const py = toWorld(state.player.y);
+    playerMesh.position.set(px, py + 1, 0.3);
     playerMesh.scale.x = state.player.facing;
-    dummyMesh.position.set(toWorld(state.dummy.x), toWorld(state.dummy.y) + 0.8, 0);
-    batMesh.visible = state.kineticBatEquipped;
-    batMesh.position.set(toWorld(state.player.x) + state.player.facing * 0.8, toWorld(state.player.y) + 1.2, 0.5);
+
+    dummyView.update(state.dummy);
+    batView.update(state.kineticBat, state.player.facing, px, py + 1);
 
     if (state.phase === "flight") {
+      trail.setVisible(true);
+      trail.addPoint(toWorld(state.dummy.x), toWorld(state.dummy.y));
+      markers.update(toWorld(state.launchOriginX), toWorld(state.dummy.x), true);
       camera.position.x += (toWorld(state.dummy.x) - camera.position.x) * 0.08;
       camera.lookAt(toWorld(state.dummy.x), toWorld(state.dummy.y) + 2, 0);
     } else {
+      trail.setVisible(false);
+      markers.update(toWorld(state.launchOriginX), toWorld(state.dummy.x), false);
       camera.position.x += (12 - camera.position.x) * 0.05;
       camera.lookAt(12, 4, 0);
     }
 
-    sparks.forEach((s, i) => {
-      s.scale.multiplyScalar(0.9);
-      if (s.scale.x < 0.1) {
-        scene.remove(s);
-        sparks.splice(i, 1);
-      }
-    });
-
-    updateHud();
+    hud.innerHTML = derbyHudHtml(state);
     renderer.render(scene, camera);
   }
 
-  let raf = 0;
   const loop = () => {
     tick();
     raf = requestAnimationFrame(loop);

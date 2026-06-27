@@ -1,286 +1,145 @@
-import type { InputFrame } from "../types.js";
-import { FP_SCALE, SIM_HZ } from "../constants.js";
 import type { CreatedFighter } from "../createdFighter.js";
 import { getDefaultCreatedFighter } from "../createdFighter.js";
-import { getSizeStats } from "../sizeClasses.js";
+import { SIM_HZ } from "../constants.js";
+import { FP_SCALE } from "../constants.js";
+import type { DerbyInput, ImpactDummyDerbyState } from "./impactDummyDerbyTypes.js";
+import { pushDerbyEvent } from "./impactDummyDerbyEvents.js";
+import {
+  computeDerbyScore,
+  gradeFromScore,
+  syncLegacyScoreFields,
+} from "./impactDummyDerbyScoring.js";
+import {
+  PLATFORM_Y,
+  advanceBatSwing,
+  fallbackLaunch,
+  integrateDummy,
+  integratePlayer,
+  tryBatLaunch,
+  tryNormalAttackHit,
+} from "./impactDummyDerbyPhysics.js";
+import { comboWindowForFighter, tickDerbyElements } from "./impactDummyDerbyElements.js";
 
-export type DerbyPhase =
-  | "ready"
-  | "countdown"
-  | "damage_phase"
-  | "launch_window"
-  | "flight"
-  | "landed"
-  | "results";
-
-export type DerbyPlayer = {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  facing: 1 | -1;
-  onGround: boolean;
-  actionState: "idle" | "running" | "jumping" | "falling" | "attacking" | "special";
-  actionFrame: number;
-};
-
-export type DerbyDummy = {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  damage: number;
-  hitstunFrames: number;
-  launched: boolean;
-};
-
-export type ImpactDummyDerbyState = {
-  frame: number;
-  phase: DerbyPhase;
-  phaseFrame: number;
-  player: DerbyPlayer;
-  dummy: DerbyDummy;
-  fighter: CreatedFighter;
-  kineticBatAvailable: boolean;
-  kineticBatEquipped: boolean;
-  totalDamageDealt: number;
-  launchSpeed: number;
-  launchOriginX: number;
-  distance: number;
-  score: number;
-  grade: string;
-  bestScore: number;
-  seed: number;
-};
-
-export type DerbyInput = Partial<
-  Pick<InputFrame, "left" | "right" | "up" | "down" | "jump" | "attack" | "special" | "dodge">
->;
+export {
+  PLATFORM_Y,
+  PLATFORM_LEFT,
+  PLATFORM_RIGHT,
+  RUN_SPEED,
+  JUMP_V,
+  BAT_STARTUP,
+  BAT_ACTIVE,
+  BAT_RECOVERY,
+} from "./impactDummyDerbyPhysics.js";
+export { GRAVITY } from "./impactDummyDerbyElements.js";
 
 export const DERBY_COUNTDOWN_FRAMES = 3 * SIM_HZ;
 export const DAMAGE_PHASE_FRAMES = 10 * SIM_HZ;
 export const LAUNCH_WINDOW_FRAMES = 3 * SIM_HZ;
-export const PLATFORM_Y = 900 * FP_SCALE;
-export const PLATFORM_LEFT = 200 * FP_SCALE;
-export const PLATFORM_RIGHT = 2200 * FP_SCALE;
-export const GRAVITY = (12 * FP_SCALE) / SIM_HZ;
-export const RUN_SPEED = (7 * FP_SCALE) / SIM_HZ;
-export const JUMP_V = -(14 * FP_SCALE) / SIM_HZ;
 
-export function createInitialDerbyState(
-  seed = 1,
-  bestScore = 0,
-  fighter?: CreatedFighter,
-): ImpactDummyDerbyState {
-  const f = fighter ?? getDefaultCreatedFighter(0);
-  return {
-    frame: 0,
-    phase: "ready",
-    phaseFrame: 0,
-    fighter: f,
-    player: {
-      x: 600 * FP_SCALE,
-      y: PLATFORM_Y - 64 * FP_SCALE,
-      vx: 0,
-      vy: 0,
-      facing: 1,
-      onGround: true,
-      actionState: "idle",
-      actionFrame: 0,
-    },
-    dummy: {
-      x: 1200 * FP_SCALE,
-      y: PLATFORM_Y - 64 * FP_SCALE,
-      vx: 0,
-      vy: 0,
-      damage: 0,
-      hitstunFrames: 0,
-      launched: false,
-    },
-    kineticBatAvailable: false,
-    kineticBatEquipped: false,
-    totalDamageDealt: 0,
-    launchSpeed: 0,
-    launchOriginX: 1200 * FP_SCALE,
-    distance: 0,
-    score: 0,
-    grade: "—",
-    bestScore,
-    seed,
-  };
-}
+export type {
+  ImpactDummyDerbyPhase,
+  DerbyPhase,
+  DerbyPlayerState,
+  ImpactDummyState,
+  KineticBatState,
+  DerbyGrade,
+  ImpactDummyDerbyState,
+  DerbyInput,
+} from "./impactDummyDerbyTypes.js";
+
+export type { ImpactDummyDerbyEvent } from "./impactDummyDerbyEvents.js";
+export { computeDerbyScore, gradeFromScore, distanceDisplayUnits } from "./impactDummyDerbyScoring.js";
 
 function cloneState(s: ImpactDummyDerbyState): ImpactDummyDerbyState {
   return {
     ...s,
     player: { ...s.player },
     dummy: { ...s.dummy },
+    kineticBat: { ...s.kineticBat },
+    events: [...s.events],
   };
 }
 
-function gradeFromScore(score: number): string {
-  if (score >= 900) return "S";
-  if (score >= 700) return "A";
-  if (score >= 500) return "B";
-  if (score >= 300) return "C";
-  return "D";
-}
-
-function computeScore(state: ImpactDummyDerbyState): number {
-  const distScore = Math.floor(state.distance / FP_SCALE);
-  const dmgBonus = state.totalDamageDealt * 2;
-  const speedBonus = Math.floor(state.launchSpeed / 4);
-  return distScore + dmgBonus + speedBonus;
-}
-
-function applyPlayerInput(player: DerbyPlayer, input: DerbyInput, fighter: CreatedFighter): void {
-  const sizeStats = getSizeStats(fighter.size);
-  const runSpeed = Math.floor(RUN_SPEED * sizeStats.speedMultiplier);
-  const jumpV = Math.floor(JUMP_V * sizeStats.jumpMultiplier);
-  const i = {
-    left: input.left ?? false,
-    right: input.right ?? false,
-    up: input.up ?? false,
-    down: input.down ?? false,
-    jump: input.jump ?? false,
-    attack: input.attack ?? false,
-    special: input.special ?? false,
-    dodge: input.dodge ?? false,
+function createPlayerSpawn() {
+  return {
+    x: 600 * FP_SCALE,
+    y: PLATFORM_Y - 64 * FP_SCALE,
+    vx: 0,
+    vy: 0,
+    facing: 1 as const,
+    onGround: true,
+    jumpsRemaining: 1,
+    fastFalling: false,
+    actionState: "idle" as const,
+    actionFrame: 0,
+    shieldHealth: 100,
   };
-  if (player.actionState === "attacking" && player.actionFrame > 12) {
-    player.actionState = "idle";
-    player.actionFrame = 0;
-  }
-
-  if (i.left) {
-    player.vx = -runSpeed;
-    player.facing = -1;
-    if (player.onGround) player.actionState = "running";
-  } else if (i.right) {
-    player.vx = runSpeed;
-    player.facing = 1;
-    if (player.onGround) player.actionState = "running";
-  } else if (player.onGround && player.actionState === "running") {
-    player.vx = 0;
-    player.actionState = "idle";
-  }
-
-  if (i.jump && player.onGround) {
-    player.vy = jumpV;
-    player.onGround = false;
-    player.actionState = "jumping";
-  }
-
-  if (i.dodge && player.onGround) {
-    player.vx = player.facing * runSpeed * 2;
-  }
-
-  if (i.attack && player.actionState !== "attacking") {
-    player.actionState = "attacking";
-    player.actionFrame = 0;
-  }
-
-  if (i.special && player.onGround) {
-    player.actionState = "special";
-    player.actionFrame = 0;
-    player.vx = player.facing * runSpeed * 1.5;
-  }
 }
 
-function integratePlayer(player: DerbyPlayer): void {
-  player.actionFrame += 1;
-  player.vy += GRAVITY;
-  player.x += player.vx;
-  player.y += player.vy;
-
-  if (player.y >= PLATFORM_Y - 64 * FP_SCALE) {
-    player.y = PLATFORM_Y - 64 * FP_SCALE;
-    player.vy = 0;
-    player.onGround = true;
-    if (player.actionState === "jumping" || player.actionState === "falling") {
-      player.actionState = "idle";
-    }
-  } else {
-    player.onGround = false;
-    if (player.actionState === "idle" || player.actionState === "running") {
-      player.actionState = "falling";
-    }
-  }
-
-  if (player.x < PLATFORM_LEFT) player.x = PLATFORM_LEFT;
-  if (player.x > PLATFORM_RIGHT) player.x = PLATFORM_RIGHT;
+function createDummySpawn() {
+  return {
+    x: 1200 * FP_SCALE,
+    y: PLATFORM_Y - 64 * FP_SCALE,
+    vx: 0,
+    vy: 0,
+    damage: 0,
+    hitstunFrames: 0,
+    grounded: true,
+    launched: false,
+    landed: false,
+    burnTicksRemaining: 0,
+    slowFramesRemaining: 0,
+    slowMultiplierFp: 100,
+  };
 }
 
-function hitDummy(
-  state: ImpactDummyDerbyState,
-  damage: number,
-  kbX: number,
-  kbY: number,
-): void {
-  const d = state.dummy;
-  d.damage += damage;
-  state.totalDamageDealt += damage;
-  d.hitstunFrames = 8;
-  d.vx += kbX;
-  d.vy += kbY;
-}
-
-function tryPlayerHits(state: ImpactDummyDerbyState, kineticLaunch: boolean): void {
-  const p = state.player;
-  const d = state.dummy;
-  const sizeStats = getSizeStats(state.fighter.size);
-  if (p.actionFrame < 4 || p.actionFrame > 6) return;
-
-  const reach = 80 * FP_SCALE;
-  const inRange = Math.abs(p.x - d.x) < reach && Math.abs(p.y - d.y) < 96 * FP_SCALE;
-  if (!inRange) return;
-
-  if (kineticLaunch && state.kineticBatEquipped) {
-    const power = 1 + d.damage / 50;
-    const launchVx = p.facing * Math.floor(18 * FP_SCALE * power) / SIM_HZ;
-    const launchVy = -Math.floor(12 * FP_SCALE * power) / SIM_HZ;
-    d.vx = launchVx;
-    d.vy = launchVy;
-    d.launched = true;
-    state.launchSpeed = Math.abs(launchVx) + Math.abs(launchVy);
-    state.launchOriginX = d.x;
-    state.phase = "flight";
-    state.phaseFrame = 0;
-    state.kineticBatEquipped = false;
-    return;
-  }
-
-  const baseDmg = p.actionState === "special" ? 8 : 4;
-  const dmg = Math.max(1, Math.floor(baseDmg * sizeStats.damageMultiplier));
-  const kb = Math.floor((4 + d.damage / 20) * FP_SCALE) / SIM_HZ;
-  hitDummy(state, dmg, p.facing * kb, -kb / 2);
-}
-
-function integrateDummy(state: ImpactDummyDerbyState): void {
-  const d = state.dummy;
-  if (d.hitstunFrames > 0) d.hitstunFrames -= 1;
-
-  if (state.phase === "flight" || d.launched) {
-    d.vy += GRAVITY;
-    d.x += d.vx;
-    d.y += d.vy;
-    d.vx *= 0.998;
-
-    if (d.y >= PLATFORM_Y - 32 * FP_SCALE && d.vy >= 0) {
-      d.y = PLATFORM_Y - 32 * FP_SCALE;
-      d.vy = 0;
-      d.vx = 0;
-      if (state.phase === "flight") {
-        state.distance = Math.max(0, d.x - state.launchOriginX);
-        state.phase = "landed";
-        state.phaseFrame = 0;
-      }
-    }
-  } else {
-    d.y = PLATFORM_Y - 64 * FP_SCALE;
-    d.vx *= 0.85;
-    d.x += d.vx;
-  }
+export function createInitialDerbyState(
+  seed = 1,
+  personalBest = 0,
+  fighter?: CreatedFighter,
+): ImpactDummyDerbyState {
+  const f = fighter ?? getDefaultCreatedFighter(0);
+  const state: ImpactDummyDerbyState = {
+    mode: "impactDummyDerby",
+    frame: 0,
+    phase: "ready",
+    phaseFrame: 0,
+    fighter: f,
+    player: createPlayerSpawn(),
+    dummy: createDummySpawn(),
+    kineticBat: {
+      available: false,
+      equipped: false,
+      swingState: "idle",
+      swingFrame: 0,
+      sweetSpotActive: false,
+    },
+    timerFramesRemaining: DAMAGE_PHASE_FRAMES,
+    finalLaunchFramesRemaining: LAUNCH_WINDOW_FRAMES,
+    comboCount: 0,
+    bestCombo: 0,
+    totalHits: 0,
+    comboWindowFrames: comboWindowForFighter(f),
+    lastHitFrame: -9999,
+    totalDamageDealt: 0,
+    launchOriginX: 1200 * FP_SCALE,
+    flightDistance: 0,
+    finalDistance: 0,
+    finalLaunchSpeed: 0,
+    finalLaunchAngleDeg: 0,
+    score: 0,
+    grade: "—",
+    personalBest,
+    bestScore: personalBest,
+    launchSpeed: 0,
+    distance: 0,
+    kineticBatAvailable: false,
+    kineticBatEquipped: false,
+    seed,
+    events: [],
+  };
+  syncLegacyScoreFields(state);
+  return state;
 }
 
 function advancePhase(state: ImpactDummyDerbyState): void {
@@ -289,33 +148,43 @@ function advancePhase(state: ImpactDummyDerbyState): void {
   if (state.phase === "ready" && state.phaseFrame >= 1) {
     state.phase = "countdown";
     state.phaseFrame = 0;
+    state.events = pushDerbyEvent(state.events, { type: "phaseChanged", frame: state.frame, phase: "countdown" });
   } else if (state.phase === "countdown" && state.phaseFrame >= DERBY_COUNTDOWN_FRAMES) {
-    state.phase = "damage_phase";
+    state.phase = "damage";
     state.phaseFrame = 0;
-  } else if (state.phase === "damage_phase" && state.phaseFrame >= DAMAGE_PHASE_FRAMES) {
-    state.phase = "launch_window";
-    state.phaseFrame = 0;
-    state.kineticBatAvailable = true;
-    state.kineticBatEquipped = true;
-  } else if (state.phase === "launch_window" && state.phaseFrame >= LAUNCH_WINDOW_FRAMES) {
-    if (!state.dummy.launched) {
-      tryPlayerHits(state, true);
-      if (!state.dummy.launched) {
-        hitDummy(state, 0, state.player.facing * 8, -4);
-        state.dummy.launched = true;
-        state.dummy.vx = state.player.facing * 6;
-        state.dummy.vy = -8;
-        state.launchOriginX = state.dummy.x;
-        state.phase = "flight";
-        state.phaseFrame = 0;
-      }
+    state.timerFramesRemaining = DAMAGE_PHASE_FRAMES;
+    state.events = pushDerbyEvent(state.events, { type: "phaseChanged", frame: state.frame, phase: "damage" });
+  } else if (state.phase === "damage") {
+    state.timerFramesRemaining = Math.max(0, DAMAGE_PHASE_FRAMES - state.phaseFrame);
+    if (state.phaseFrame >= DAMAGE_PHASE_FRAMES) {
+      state.phase = "finalLaunch";
+      state.phaseFrame = 0;
+      state.finalLaunchFramesRemaining = LAUNCH_WINDOW_FRAMES;
+      state.kineticBat.available = true;
+      state.kineticBat.equipped = true;
+      state.events = pushDerbyEvent(state.events, { type: "phaseChanged", frame: state.frame, phase: "finalLaunch" });
+      state.events = pushDerbyEvent(state.events, { type: "batEquipped", frame: state.frame });
+    }
+  } else if (state.phase === "finalLaunch") {
+    state.finalLaunchFramesRemaining = Math.max(0, LAUNCH_WINDOW_FRAMES - state.phaseFrame);
+    if (state.phaseFrame >= LAUNCH_WINDOW_FRAMES && !state.dummy.launched) {
+      fallbackLaunch(state);
     }
   } else if (state.phase === "landed" && state.phaseFrame >= SIM_HZ) {
-    state.score = computeScore(state);
+    state.score = computeDerbyScore(state);
     state.grade = gradeFromScore(state.score);
-    state.bestScore = Math.max(state.bestScore, state.score);
+    if (state.score > state.personalBest) {
+      state.personalBest = state.score;
+    }
     state.phase = "results";
     state.phaseFrame = 0;
+    syncLegacyScoreFields(state);
+    state.events = pushDerbyEvent(state.events, {
+      type: "scored",
+      frame: state.frame,
+      score: state.score,
+      grade: state.grade,
+    });
   }
 }
 
@@ -327,30 +196,48 @@ export function simulateDerbyFrame(
   next.frame += 1;
 
   if (next.phase === "results") {
+    syncLegacyScoreFields(next);
     return next;
   }
 
-  applyPlayerInput(next.player, input, next.fighter);
-  integratePlayer(next.player);
+  const i = {
+    left: input.left ?? false,
+    right: input.right ?? false,
+    up: input.up ?? false,
+    down: input.down ?? false,
+    jump: input.jump ?? false,
+    attack: input.attack ?? false,
+    special: input.special ?? false,
+    shield: input.shield ?? false,
+    dodge: input.dodge ?? false,
+    grab: input.grab ?? false,
+  };
 
-  if (next.phase === "damage_phase" || next.phase === "launch_window") {
-    const kinetic = next.phase === "launch_window" && next.kineticBatEquipped && !!input.attack;
-    tryPlayerHits(next, kinetic);
-    if (!kinetic) {
-      tryPlayerHits(next, false);
+  integratePlayer(next.player, next.fighter, i);
+  tickDerbyElements(next);
+
+  if (next.phase === "damage") {
+    tryNormalAttackHit(next);
+  }
+
+  if (next.phase === "finalLaunch") {
+    advanceBatSwing(next.kineticBat, i.attack);
+    if (!tryBatLaunch(next, i)) {
+      tryNormalAttackHit(next);
     }
   }
 
   integrateDummy(next);
   advancePhase(next);
-
+  syncLegacyScoreFields(next);
   return next;
 }
 
 export function resetDerbyForRetry(state: ImpactDummyDerbyState): ImpactDummyDerbyState {
-  const fresh = createInitialDerbyState(state.seed, state.bestScore, state.fighter);
+  const fresh = createInitialDerbyState(state.seed, state.personalBest, state.fighter);
   fresh.phase = "countdown";
   fresh.phaseFrame = 0;
+  fresh.events = pushDerbyEvent(fresh.events, { type: "phaseChanged", frame: 0, phase: "countdown" });
   return fresh;
 }
 
@@ -362,8 +249,10 @@ export function derbyStateHash(state: ImpactDummyDerbyState): string {
     state.player.y,
     state.dummy.damage,
     state.dummy.x,
-    state.distance,
+    state.finalDistance,
     state.score,
+    state.comboCount,
+    state.bestCombo,
   ];
   let h = state.seed;
   for (const p of parts) {

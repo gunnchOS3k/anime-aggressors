@@ -4,12 +4,15 @@ Two ways for friends on PC to try Anime Aggressors and send feedback. Web is fas
 
 ## Route A — easiest web test (recommended)
 
-1. Open https://gunnchOS3k.github.io/anime-aggressors/
+1. Open **Play Match**: https://gunnchOS3k.github.io/anime-aggressors/#/play  
+   (Home menu: https://gunnchOS3k.github.io/anime-aggressors/)
 2. Click **Create Fighter** — pick size (Small/Medium/Large) and ROYGBIV color
 3. Click **Play Match** and choose your created fighters
 4. Use keyboard or plug in Xbox / PlayStation / PC controller
-5. Try **Impact Dummy Derby** with your fighter
+5. Try **Impact Dummy Derby** at https://gunnchOS3k.github.io/anime-aggressors/#/impact-dummy-derby
 6. Fill out the [feedback form](feedback-form.md)
+
+> **Note:** `https://gunnchOS3k.github.io/play` is **not** this project site and will 404 unless you set up a root redirect. See [ROOT_PLAY_REDIRECT.md](../ROOT_PLAY_REDIRECT.md).
 
 **Tips**
 

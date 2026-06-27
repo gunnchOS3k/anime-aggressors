@@ -47,8 +47,20 @@ export {
   DAMAGE_PHASE_FRAMES,
   DERBY_COUNTDOWN_FRAMES,
   LAUNCH_WINDOW_FRAMES,
+  BAT_STARTUP,
 } from "./modes/impactDummyDerby.js";
-export type { ImpactDummyDerbyState, DerbyPhase, DerbyInput } from "./modes/impactDummyDerby.js";
+export type {
+  ImpactDummyDerbyState,
+  DerbyPhase,
+  DerbyInput,
+  ImpactDummyDerbyPhase,
+  DerbyPlayerState,
+  ImpactDummyState,
+  KineticBatState,
+  DerbyGrade,
+} from "./modes/impactDummyDerby.js";
+export type { ImpactDummyDerbyEvent } from "./modes/impactDummyDerbyEvents.js";
+export { computeDerbyScore, gradeFromScore, distanceDisplayUnits } from "./modes/impactDummyDerbyScoring.js";
 export type {
   TeamId,
   FlaglineRoomIndex,
