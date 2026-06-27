@@ -36,3 +36,22 @@ Fix:
 Validation:
 - npm run test:web (includes `startMatchRoute`, `matchSetupFlow`, `noRootPlayLinks`, `routingNoRootPaths`, `publicUrls`, `matchSetupSession`)
 - npm run build:pages (artifact scan rejects root play links)
+
+## Pages deploy failure: missing apps/web/dist/index.html
+
+Root cause:
+- The Pages workflow asserted `apps/web/dist/index.html`, but the **Assert artifact** step also grepped for the stale label **Play Match** after the main menu CTA was renamed to **Start Match**. GitHub Actions surfaced the step as failing at `test -f apps/web/dist/index.html`, even though `npm run build:pages` had already produced the file and `finalize-pages-artifact.mjs` succeeded.
+
+Fix:
+- Made `npm run build:pages` explicitly run the `anime-aggressors-web` workspace build via `build:web` + `finalize:pages`.
+- Made `apps/web/vite.config.ts` output to `apps/web/dist` with explicit `root` and `outDir`.
+- Made `finalize-pages-artifact.mjs` fail loudly if `index.html` is missing.
+- Updated workflow assertions to grep **Start Match** (not Play Match) and use explicit `if grep` blocks for forbidden strings.
+- Added workflow debug output listing root, `apps/web`, and discovered `index.html` files.
+- Upload path remains `apps/web/dist`.
+
+Validation:
+- npm ci
+- npm run build:web
+- npm run build:pages
+- npm run quality
