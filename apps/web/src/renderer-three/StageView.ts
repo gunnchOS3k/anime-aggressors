@@ -1,61 +1,29 @@
 import * as THREE from "three";
 import { fpToWorld } from "./RenderTypes.js";
-import { createStageMaterial } from "./Materials.js";
+import { buildStageModel } from "./stages/StageModelFactory.ts";
 
 export class StageView {
   readonly group = new THREE.Group();
   private blastZone: THREE.LineSegments | null = null;
-  private label: THREE.Mesh | null = null;
+  private stageId = "";
 
-  constructor() {
-    const floorMat = createStageMaterial(0x2d3436);
-    const platMat = createStageMaterial(0x636e72);
-
-    // Main platform (authoritative floor at y≈900 fp → ~3.5 world)
-    const main = new THREE.Mesh(new THREE.BoxGeometry(24, 0.6, 4), floorMat);
-    main.position.set(12, 3.2, 0);
-    this.group.add(main);
-
-    // Side platforms
-    const leftPlat = new THREE.Mesh(new THREE.BoxGeometry(6, 0.5, 3), platMat);
-    leftPlat.position.set(5, 5.5, -0.5);
-    this.group.add(leftPlat);
-
-    const rightPlat = new THREE.Mesh(new THREE.BoxGeometry(6, 0.5, 3), platMat);
-    rightPlat.position.set(19, 5.5, 0.5);
-    this.group.add(rightPlat);
-
-    // Parallax layers
-    for (let i = 0; i < 3; i++) {
-      const bg = new THREE.Mesh(
-        new THREE.PlaneGeometry(40, 16),
-        new THREE.MeshBasicMaterial({
-          color: new THREE.Color().setHSL(0.62 - i * 0.05, 0.35, 0.12 + i * 0.06),
-          transparent: true,
-          opacity: 0.35 - i * 0.08,
-        }),
-      );
-      bg.position.set(12, 8, -8 - i * 4);
-      this.group.add(bg);
+  setStage(stageId: string): void {
+    if (stageId === this.stageId) return;
+    this.stageId = stageId;
+    while (this.group.children.length > 0) {
+      const child = this.group.children[0];
+      this.group.remove(child);
+      child.traverse((obj) => {
+        if (obj instanceof THREE.Mesh) {
+          obj.geometry.dispose();
+          if (Array.isArray(obj.material)) obj.material.forEach((m) => m.dispose());
+          else obj.material.dispose();
+        }
+      });
     }
-
-    // Depth props (non-authoritative)
-    const tower = new THREE.Mesh(new THREE.BoxGeometry(1.2, 8, 1.2), platMat);
-    tower.position.set(3, 6, -2);
-    this.group.add(tower);
-
-    const tower2 = tower.clone();
-    tower2.position.set(21, 6, 2);
-    this.group.add(tower2);
-
-    // Stage name card
-    const card = new THREE.Mesh(
-      new THREE.PlaneGeometry(6, 1.2),
-      new THREE.MeshBasicMaterial({ color: 0x111122, transparent: true, opacity: 0.7 }),
-    );
-    card.position.set(12, 9.5, 2);
-    this.label = card;
-    this.group.add(card);
+    const built = buildStageModel(stageId);
+    this.group.add(built.group);
+    this.blastZone = null;
   }
 
   setBlastZonesVisible(visible: boolean, bounds?: { left: number; right: number; top: number; bottom: number }): void {

@@ -1,6 +1,7 @@
 import type { FighterColor, ElementEffect } from "./elements.js";
 import { getElementForColor } from "./elements.js";
 import type { FighterSize } from "./sizeClasses.js";
+import { DEFAULT_FIGHTER_ROSTER, getDefaultFighterPreset } from "./defaultFighters.js";
 
 export type CreatedFighter = {
   id: string;
@@ -50,10 +51,8 @@ export function deserializeCreatedFighter(json: string): CreatedFighter | null {
 }
 
 export function getDefaultCreatedFighter(playerIndex: number): CreatedFighter {
-  const presets: Array<Pick<CreatedFighter, "name" | "size" | "color">> = [
-    { name: "Ember Spark", size: "medium", color: "red" },
-    { name: "Tide Breaker", size: "medium", color: "blue" },
-  ];
-  const preset = presets[playerIndex] ?? presets[0];
-  return buildCreatedFighter({ ...preset, id: `default-${playerIndex}` });
+  const preset = getDefaultFighterPreset(playerIndex);
+  return buildCreatedFighter({ ...preset });
 }
+
+export { DEFAULT_FIGHTER_ROSTER, getDefaultFighterPreset } from "./defaultFighters.js";

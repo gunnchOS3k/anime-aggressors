@@ -205,6 +205,8 @@ export class PlatformFighterApp {
     this.state = "fighting";
     this.paused = this.trainingMode;
 
+    this.showFightAnnouncement();
+
     if (!this.renderer) {
       this.renderer = new ThreeGameRenderer(this.viewport, { smoothCamera: true });
       this.renderer.mount();
@@ -331,6 +333,15 @@ export class PlatformFighterApp {
         paused: this.paused,
       });
     }
+  }
+
+  private showFightAnnouncement(): void {
+    const banner = document.createElement("div");
+    banner.className = "pf-fight-banner";
+    banner.innerHTML = `<span class="pf-fight-ready">Ready?</span><span class="pf-fight-go">Fight!</span>`;
+    this.root.querySelector(".pf-viewport-wrap")?.appendChild(banner);
+    window.setTimeout(() => banner.classList.add("show-go"), 900);
+    window.setTimeout(() => banner.remove(), 2200);
   }
 
   private updateHud(): void {

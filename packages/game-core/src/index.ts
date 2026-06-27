@@ -123,6 +123,8 @@ export {
   getDefaultCreatedFighter,
   createCreatedFighterId,
   DEFAULT_FIGHTER_NAME,
+  DEFAULT_FIGHTER_ROSTER,
+  getDefaultFighterPreset,
 } from "./createdFighter.js";
 export {
   getFighterProfile,

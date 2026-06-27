@@ -13,8 +13,8 @@ export function mountFighterSelectScreen(
   onStart: (result: FighterSelectResult) => void,
 ): void {
   const saved = listCreatedFighters();
-  const defaults = [getDefaultCreatedFighter(0), getDefaultCreatedFighter(1)];
-  const roster = saved.length >= 2 ? saved : [...saved, ...defaults].slice(0, Math.max(2, saved.length + 2));
+  const defaults = [0, 1, 2, 3].map((i) => getDefaultCreatedFighter(i));
+  const roster = saved.length >= 2 ? [...saved, ...defaults.filter((d) => !saved.some((s) => s.id === d.id))] : defaults;
 
   let p1 = roster[0] ?? defaults[0];
   let p2 = roster[1] ?? defaults[1];

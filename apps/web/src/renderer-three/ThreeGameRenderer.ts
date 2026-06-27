@@ -6,7 +6,7 @@ import { CharacterView } from "./CharacterView.js";
 import { StageView } from "./StageView.js";
 import { HitboxDebugView } from "./HitboxDebugView.js";
 import { HurtboxDebugView } from "./HurtboxDebugView.js";
-import { VfxSystem } from "./VfxSystem.js";
+import { CombatVfxOrchestrator } from "./vfx/CombatVfxOrchestrator.ts";
 import { setupSceneLighting } from "./SceneLighting.js";
 import type { RenderOptions, ThreeRendererOptions } from "./RenderTypes.js";
 
@@ -19,9 +19,10 @@ export class ThreeGameRenderer {
   private characterViews: CharacterView[] = [];
   private hitboxView = new HitboxDebugView();
   private hurtboxView = new HurtboxDebugView();
-  private vfx = new VfxSystem();
+  private vfx = new CombatVfxOrchestrator();
   private mounted = false;
   private lastKoFrame = -1;
+  private currentStageId = "";
   private width: number;
   private height: number;
 
@@ -36,7 +37,9 @@ export class ThreeGameRenderer {
 
     this.cameraDirector = new CameraDirector(this.width / this.height, options.smoothCamera ?? true);
     this.stageView = new StageView();
+    this.stageView.setStage("skyline-arena");
     this.scene.add(this.stageView.group);
+    this.scene.fog = new THREE.Fog(0x0a0a12, 18, 55);
     setupSceneLighting(this.scene);
   }
 
@@ -51,6 +54,12 @@ export class ThreeGameRenderer {
   }
 
   update(gameState: GameState, renderOptions: RenderOptions = {}): void {
+    const stageId = gameState.config.stageId ?? "skyline-arena";
+    if (stageId !== this.currentStageId) {
+      this.stageView.setStage(stageId);
+      this.currentStageId = stageId;
+    }
+
     while (this.characterViews.length < gameState.players.length) {
       const cv = new CharacterView(this.characterViews.length);
       this.characterViews.push(cv);
@@ -63,7 +72,7 @@ export class ThreeGameRenderer {
         koEvent = true;
         this.lastKoFrame = gameState.frame;
       }
-      this.characterViews[p.id]?.update(p);
+      this.characterViews[p.id]?.update(p, gameState.frame);
     }
 
     const hitEvent = gameState.hitstopFrames > 0;
