@@ -4,15 +4,15 @@ Two ways for friends on PC to try Anime Aggressors and send feedback. Web is fas
 
 ## Route A — easiest web test (recommended)
 
-1. Open **Play Match**: https://gunnchOS3k.github.io/anime-aggressors/#/play  
-   (Home menu: https://gunnchOS3k.github.io/anime-aggressors/)
-2. Click **Create Fighter** — pick size (Small/Medium/Large) and ROYGBIV color
-3. Click **Play Match** and choose your created fighters
-4. Use keyboard or plug in Xbox / PlayStation / PC controller
-5. Try **Impact Dummy Derby** at https://gunnchOS3k.github.io/anime-aggressors/#/impact-dummy-derby
-6. Fill out the [feedback form](feedback-form.md)
+1. Open the home menu: https://gunnchos3k.github.io/anime-aggressors/
+2. Click **Start Match** — https://gunnchos3k.github.io/anime-aggressors/#/match-setup/rules
+3. Continue through **Rules → Map → Character Select → Controls Check → Start Battle**
+4. Or click **Create Fighter** — pick size (Small/Medium/Large) and ROYGBIV color, then **Custom Game**
+5. Use keyboard or plug in Xbox / PlayStation / PC controller
+6. Try **Impact Dummy Derby** at https://gunnchos3k.github.io/anime-aggressors/#/impact-dummy-derby
+7. Fill out the [feedback form](feedback-form.md)
 
-> **Note:** `https://gunnchOS3k.github.io/play` is **not** this project site and will 404 unless you set up a root redirect. See [ROOT_PLAY_REDIRECT.md](../ROOT_PLAY_REDIRECT.md).
+> **Note:** Do not use `https://gunnchos3k.github.io/play` for this project. Anime Aggressors is hosted as a project site under `/anime-aggressors/`. See [ROOT_PLAY_REDIRECT.md](../ROOT_PLAY_REDIRECT.md).
 
 **Tips**
 

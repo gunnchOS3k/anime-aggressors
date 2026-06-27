@@ -4,10 +4,11 @@
 
 Anime Aggressors is a 2.5D anime platform fighter where every fighter is built from two choices: **body size** and **element color**. Small fighters are quick but light. Large fighters hit hard but move slower. Medium fighters stay balanced. Your ROYGBIV color gives your combo a unique elemental feel.
 
-[Play Match](https://gunnchOS3k.github.io/anime-aggressors/#/play) · [Web Build Home](https://gunnchOS3k.github.io/anime-aggressors/) · [PC Playtest Guide](docs/playtest/PC_PLAYTEST_GUIDE.md) · [Give Feedback](docs/playtest/feedback-form.md)
+[Start Match](https://gunnchos3k.github.io/anime-aggressors/#/match-setup/rules) · [Web Build Home](https://gunnchos3k.github.io/anime-aggressors/) · [PC Playtest Guide](docs/playtest/PC_PLAYTEST_GUIDE.md) · [Give Feedback](docs/playtest/feedback-form.md)
 
-**Direct play link:** `https://gunnchOS3k.github.io/anime-aggressors/#/play`  
-Root `/play` URLs require a separate user-site redirect — see [docs/ROOT_PLAY_REDIRECT.md](docs/ROOT_PLAY_REDIRECT.md).
+**Match setup link:** `https://gunnchos3k.github.io/anime-aggressors/#/match-setup/rules`  
+**Quick play hash route:** `https://gunnchos3k.github.io/anime-aggressors/#/play`  
+Do not use `https://gunnchos3k.github.io/play` — Anime Aggressors is hosted as a project site under `/anime-aggressors/`. See [docs/ROOT_PLAY_REDIRECT.md](docs/ROOT_PLAY_REDIRECT.md).
 
 ## Create-a-Fighter
 
@@ -48,7 +49,8 @@ Solar pushes left. Lunar pushes right. Every room is still a platform-fighter ba
 
 ## Playable Modes
 
-- **Play Match** — quick 2-player match (default stock rules)
+- **Start Match** — rules → map → fighters → controls → battle setup flow
+- **Quick Play** — `#/play` legacy quick launch (defaults)
 - **Custom Game** — stock / time / stamina rules, stages, ratios, items config
 - **Create Fighter** — size + color builder with stat preview
 - **Controls** — per-player input profiles with keyboard/gamepad remapping
@@ -70,7 +72,7 @@ Save and select rulesets locally (no account required):
 - Element effects: on, visual only, or off
 - Created fighters allowed or defaults only
 
-Friend-test flow: **Create Fighter → Custom Game → Fighters → Controls Check → Start Battle**
+Friend-test flow: **Start Match → Rules → Map → Fighters → Controls → Battle** (or **Create Fighter → Custom Game → …**)
 
 ## Custom Controls
 
@@ -90,11 +92,11 @@ Anime Aggressors supports per-player input profiles. Keyboard, gamepad, and Edge
 
 ## Playtest With Friends (PC / Web)
 
-1. Open the [web build](https://gunnchOS3k.github.io/anime-aggressors/)
-2. Click **Create Fighter** — pick size + ROYGBIV color
-3. Click **Custom Game** — set stocks, timer, stage, and ratios
-4. Choose fighters and confirm **Controls**
-5. **Start Battle** or try **Impact Dummy Derby**
+1. Open the [web build](https://gunnchos3k.github.io/anime-aggressors/)
+2. Click **Start Match** — pick rules, map, and fighters
+3. Or click **Create Fighter** — pick size + ROYGBIV color, then **Custom Game**
+4. Confirm **Controls** and **Start Battle**
+5. Try **Impact Dummy Derby** or **Flagline Clash**
 6. Send [feedback](docs/playtest/feedback-form.md)
 
 See [PC Playtest Guide](docs/playtest/PC_PLAYTEST_GUIDE.md) for the full friend-testing path.
@@ -106,7 +108,7 @@ See [PC Playtest Guide](docs/playtest/PC_PLAYTEST_GUIDE.md) for the full friend-
 | System | Gate |
 |--------|------|
 | Create Fighter + size/element modifiers | PLAYABLE |
-| Play Match with created fighters | PLAYABLE |
+| Start Match with created fighters | PLAYABLE |
 | Impact Dummy Derby with created fighter | PLAYABLE |
 | Three.js 2.5D match | PLAYABLE |
 | Deterministic game-core | PROVEN BY TEST |
@@ -121,7 +123,7 @@ npm run dev
 npm run quality
 ```
 
-Hash routes: `#/`, `#/create-fighter`, `#/play`, `#/training`, `#/impact-dummy-derby`, `#/career`, `#/career/history`, `#/career/replays`, `#/career/saves`
+Hash routes: `#/`, `#/match-setup/rules`, `#/match-setup/stage`, `#/match-setup/fighters`, `#/match-setup/controls`, `#/battle`, `#/play`, `#/create-fighter`, `#/training`, `#/impact-dummy-derby`, `#/career`, `#/career/history`, `#/career/replays`, `#/career/saves`
 
 ## Career, Replays, and Saves
 

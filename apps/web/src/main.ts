@@ -25,7 +25,46 @@ async function navigate(mode: AppRouteMode): Promise<void> {
   if (appRoot) appRoot.innerHTML = "";
 
   try {
-    if (mode === "create-fighter") {
+    if (mode === "match-setup-rules") {
+      const { mountMatchSetupRulesScreen } = await import("./screens/MatchSetupRulesScreen.js");
+      mountMatchSetupRulesScreen(appRoot!);
+    } else if (mode === "match-setup-stage") {
+      const { mountMatchSetupStageScreen } = await import("./screens/MatchSetupStageScreen.js");
+      mountMatchSetupStageScreen(appRoot!);
+    } else if (mode === "match-setup-fighters") {
+      const { mountMatchSetupFightersScreen } = await import("./screens/MatchSetupFightersScreen.js");
+      mountMatchSetupFightersScreen(appRoot!);
+    } else if (mode === "match-setup-controls") {
+      const { mountMatchSetupControlsScreen } = await import("./screens/MatchSetupControlsScreen.js");
+      const { isMatchSetupReady, loadMatchSetup } = await import("./match/matchSetupSession.js");
+      const { navigateTo } = await import("./router.js");
+      const setup = loadMatchSetup();
+      if (!isMatchSetupReady(setup)) {
+        navigateTo("match-setup-fighters");
+        return;
+      }
+      mountMatchSetupControlsScreen(appRoot!);
+    } else if (mode === "battle") {
+      const { launchMatch } = await import("./game/App.js");
+      const { mountFlaglineClash } = await import("./modes/flaglineClashView.js");
+      const {
+        applySetupToMatchSession,
+        isMatchSetupReady,
+        loadMatchSetup,
+      } = await import("./match/matchSetupSession.js");
+      const { navigateTo } = await import("./router.js");
+      const setup = loadMatchSetup();
+      if (!isMatchSetupReady(setup)) {
+        navigateTo("match-setup-rules");
+        return;
+      }
+      applySetupToMatchSession(setup);
+      if (setup.mode === "flaglineClash" || setup.ruleset?.matchType === "flaglineClash") {
+        mountFlaglineClash(appRoot!);
+      } else {
+        launchMatch(appRoot!, { skipSelect: true });
+      }
+    } else if (mode === "create-fighter") {
       const { mountCreateFighterScreen } = await import("./screens/CreateFighterScreen.js");
       mountCreateFighterScreen(appRoot!);
     } else if (mode === "custom-game") {

@@ -1,4 +1,4 @@
-import { APP_ROUTES, hashToMode, modeToHash, type AppRouteMode } from "./routes.js";
+import { APP_ROUTES, hashToMode, modeToHash, navigateToHash, type AppRouteMode } from "./routes.js";
 import { setCustomFlow } from "./match/matchSession.js";
 
 export type RouteHandler = (mode: AppRouteMode) => void | Promise<void>;
@@ -35,12 +35,7 @@ export function installHashRouter(onRoute: RouteHandler): () => void {
 
 export function navigateTo(mode: AppRouteMode, params?: Record<string, unknown>): void {
   if (params) setRouteParams(params);
-  const target = modeToHash(mode);
-  if (window.location.hash.split("?")[0] !== target) {
-    window.location.hash = target;
-  } else {
-    window.dispatchEvent(new HashChangeEvent("hashchange"));
-  }
+  navigateToHash(modeToHash(mode));
 }
 
 export function navigateHome(): void {
@@ -50,7 +45,7 @@ export function navigateHome(): void {
 
 export function bindRouteButtons(): void {
   const map: [string, AppRouteMode][] = [
-    ["btn-play-match", "match"],
+    ["btn-play-match", "match-setup-rules"],
     ["btn-create-fighter", "create-fighter"],
     ["btn-custom-game", "custom-game"],
     ["btn-controls", "controls"],
