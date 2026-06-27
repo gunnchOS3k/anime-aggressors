@@ -1,14 +1,21 @@
 /** Hash routes for GitHub Pages — no path-based SPA routing required. */
 export const APP_ROUTES = {
   home: "#/",
+  play: "#/play",
+  matchSetupRules: "#/match-setup/rules",
+  matchSetupStage: "#/match-setup/stage",
+  matchSetupFighters: "#/match-setup/fighters",
+  matchSetupControls: "#/match-setup/controls",
+  battle: "#/battle",
+
   createFighter: "#/create-fighter",
   customGame: "#/custom-game",
   rulesets: "#/rulesets",
+  stageSelect: "#/stage-select",
   fighterSelect: "#/fighter-select",
   controlsCheck: "#/controls-check",
   controls: "#/controls",
   controlsRemap: "#/controls/remap",
-  play: "#/play",
   training: "#/training",
   controllerTest: "#/controller-test",
   rollbackDebug: "#/rollback-debug",
@@ -21,8 +28,11 @@ export const APP_ROUTES = {
   feedback: "#/feedback",
   career: "#/career",
   careerFighters: "#/career/fighters",
+  matchHistory: "#/career/history",
   careerHistory: "#/career/history",
+  replayVault: "#/career/replays",
   careerReplays: "#/career/replays",
+  savedGames: "#/career/saves",
   careerSaves: "#/career/saves",
   careerMilestones: "#/career/milestones",
   saves: "#/saves",
@@ -31,9 +41,15 @@ export const APP_ROUTES = {
 
 export type AppRouteMode =
   | "home"
+  | "match-setup-rules"
+  | "match-setup-stage"
+  | "match-setup-fighters"
+  | "match-setup-controls"
+  | "battle"
   | "create-fighter"
   | "custom-game"
   | "rulesets"
+  | "stage-select"
   | "fighter-select"
   | "controls-check"
   | "controls"
@@ -60,9 +76,15 @@ export type AppRouteMode =
 
 const HASH_TO_MODE: Record<string, AppRouteMode> = {
   [APP_ROUTES.home]: "home",
+  [APP_ROUTES.matchSetupRules]: "match-setup-rules",
+  [APP_ROUTES.matchSetupStage]: "match-setup-stage",
+  [APP_ROUTES.matchSetupFighters]: "match-setup-fighters",
+  [APP_ROUTES.matchSetupControls]: "match-setup-controls",
+  [APP_ROUTES.battle]: "battle",
   [APP_ROUTES.createFighter]: "create-fighter",
   [APP_ROUTES.customGame]: "custom-game",
   [APP_ROUTES.rulesets]: "rulesets",
+  [APP_ROUTES.stageSelect]: "stage-select",
   [APP_ROUTES.fighterSelect]: "fighter-select",
   [APP_ROUTES.controlsCheck]: "controls-check",
   [APP_ROUTES.controls]: "controls",
@@ -92,9 +114,15 @@ export const ROUTE_TO_MODE = HASH_TO_MODE;
 
 export const MODE_TO_ROUTE: Record<AppRouteMode, string> = {
   home: APP_ROUTES.home,
+  "match-setup-rules": APP_ROUTES.matchSetupRules,
+  "match-setup-stage": APP_ROUTES.matchSetupStage,
+  "match-setup-fighters": APP_ROUTES.matchSetupFighters,
+  "match-setup-controls": APP_ROUTES.matchSetupControls,
+  battle: APP_ROUTES.battle,
   "create-fighter": APP_ROUTES.createFighter,
   "custom-game": APP_ROUTES.customGame,
   rulesets: APP_ROUTES.rulesets,
+  "stage-select": APP_ROUTES.stageSelect,
   "fighter-select": APP_ROUTES.fighterSelect,
   "controls-check": APP_ROUTES.controlsCheck,
   controls: APP_ROUTES.controls,
@@ -120,6 +148,28 @@ export const MODE_TO_ROUTE: Record<AppRouteMode, string> = {
   replay: APP_ROUTES.replay,
 };
 
+export function assertHashRoute(route: string): void {
+  if (!route.startsWith("#/")) {
+    throw new Error(`Invalid app route: ${route}. Anime Aggressors uses hash routes on GitHub Pages.`);
+  }
+}
+
+/** Set hash from a `#/...` route constant. */
+export function navigateToHash(route: string): void {
+  assertHashRoute(route);
+  const hash = route.startsWith("#") ? route.slice(1) : route;
+  if (window.location.hash.split("?")[0] !== `#${hash}`) {
+    window.location.hash = hash;
+  } else {
+    window.dispatchEvent(new HashChangeEvent("hashchange"));
+  }
+}
+
+/** Hash-route navigation — required for GitHub Pages project-site hosting. */
+export function navigateTo(route: string): void {
+  navigateToHash(route);
+}
+
 export function hashToMode(hash: string): AppRouteMode {
   const normalized = hash.split("?")[0] || APP_ROUTES.home;
   return HASH_TO_MODE[normalized] ?? "home";
@@ -131,6 +181,10 @@ export function modeToHash(mode: AppRouteMode): string {
 
 export function assertPagesBaseInHtml(html: string, base = "/anime-aggressors/"): boolean {
   return html.includes(base);
+}
+
+export function allAppRoutesStartWithHash(): boolean {
+  return Object.values(APP_ROUTES).every((r) => r.startsWith("#/"));
 }
 
 export const CAREER_ROUTE_HASHES = [

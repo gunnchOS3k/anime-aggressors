@@ -28,7 +28,7 @@ const assetFiles = fs
   .join("\n");
 
 const markers = `${html}\n${assetFiles}`;
-for (const label of ["Create Fighter", "Play Match", "Custom Game", "Controls", "Flagline Clash", "Impact Dummy Derby"]) {
+for (const label of ["Create Fighter", "Start Match", "Custom Game", "Controls", "Flagline Clash", "Impact Dummy Derby"]) {
   if (!markers.includes(label)) {
     console.error(`Missing expected marker in artifact: ${label}`);
     process.exit(1);
@@ -38,6 +38,22 @@ for (const label of ["Create Fighter", "Play Match", "Custom Game", "Controls", 
 if (markers.includes("Load Mini-Games")) {
   console.error("Stale marker found in artifact: Load Mini-Games");
   process.exit(1);
+}
+
+const badPatterns = [
+  "https://gunnchos3k.github.io/play",
+  'href="/play',
+  "location.href='/play",
+  "location.href = '/play",
+  'location.href = "/play',
+  "window.location.href = '/play",
+  'window.location.href = "/play',
+];
+for (const pattern of badPatterns) {
+  if (markers.includes(pattern)) {
+    console.error(`Forbidden root play link in artifact: ${pattern}`);
+    process.exit(1);
+  }
 }
 
 let commitSha = process.env.GITHUB_SHA ?? "local";
@@ -52,7 +68,7 @@ if (commitSha === "local") {
 let branch = process.env.GITHUB_REF_NAME ?? "main";
 const builtAt = new Date().toISOString();
 const modes =
-  "Play Match,Create Fighter,Custom Game,Controls,Flagline Clash,Training Mode,Impact Dummy Derby,Controller Test,Rollback Debug,Edge-IO Lab,Prototype Lab,Feedback";
+  "Start Match,Create Fighter,Custom Game,Controls,Flagline Clash,Training Mode,Impact Dummy Derby,Controller Test,Rollback Debug,Edge-IO Lab,Prototype Lab,Feedback,Match Setup";
 const deployInfo = [
   `commit_sha=${commitSha}`,
   `branch=${branch}`,

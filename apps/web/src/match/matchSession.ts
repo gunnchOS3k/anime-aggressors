@@ -1,5 +1,5 @@
 import type { CreatedFighter, GameRuleset } from "@anime-aggressors/game-core";
-import { getActiveRuleset } from "../storage/rulesetStorage.js";
+import { getActiveRuleset } from "../storage/rulesetStorage.ts";
 
 export type MatchSetup = {
   ruleset: GameRuleset;

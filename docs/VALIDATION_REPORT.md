@@ -21,3 +21,18 @@ Validation:
 - npm run test
 - npm run quality
 - npm run build:pages
+
+## Start Match routing (GitHub Pages project site)
+
+Root cause:
+- Primary CTA **Play Match** used `#/play` (legacy quick launch). External docs sometimes linked `https://gunnchos3k.github.io/play`, which is outside the `/anime-aggressors/` project-site base and returns GitHub Pages 404.
+- Any path-based link to `/play` (without the project prefix) navigates away from the hosted app root.
+
+Fix:
+- **Start Match** now routes to `#/match-setup/rules` with a full setup flow: Rules → Map → Fighters → Controls → `#/battle`.
+- Centralized hash routes in `apps/web/src/routes.ts` and public URLs in `apps/web/src/siteUrls.ts`.
+- Static tests scan sources and build artifacts for forbidden root `/play` links.
+
+Validation:
+- npm run test:web (includes `startMatchRoute`, `matchSetupFlow`, `noRootPlayLinks`, `routingNoRootPaths`, `publicUrls`, `matchSetupSession`)
+- npm run build:pages (artifact scan rejects root play links)
