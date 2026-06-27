@@ -15,7 +15,7 @@ describe("element VFX style mapping", () => {
 
   it("uses distinct trails for flame vs frost vs void", () => {
     assert.equal(getElementTrailStyle("red"), "flameArc");
-    assert.equal(getElementTrailStyle("blue"), "waterRibbon");
+    assert.equal(getElementTrailStyle("blue"), "frostShard");
     assert.equal(getElementTrailStyle("violet"), "voidSmear");
   });
 });

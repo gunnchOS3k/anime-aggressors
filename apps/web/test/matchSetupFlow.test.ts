@@ -36,7 +36,7 @@ describe("match setup flow routes", () => {
 
   it("fighter screen continues to controls check", () => {
     const src = fs.readFileSync(
-      path.join(webRoot, "src/screens/MatchSetupFightersScreen.ts"),
+      path.join(webRoot, "src/screens/CharacterSelectScreen.ts"),
       "utf8",
     );
     assert.match(src, /navigateToHash\(APP_ROUTES\.matchSetupControls\)/);

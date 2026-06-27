@@ -1,9 +1,22 @@
 import type { CreatedFighter, FighterColor, FighterSize } from "@anime-aggressors/game-core";
-import { DEFAULT_FIGHTER_ROSTER, ELEMENTS, getSizeStats } from "@anime-aggressors/game-core";
+import {
+  DEFAULT_FIGHTERS,
+  ELEMENTS,
+  getDefaultFighterProfile,
+  getSizeStats,
+  normalizeDefaultFighterId,
+} from "@anime-aggressors/game-core";
 import type { PlayerState } from "@anime-aggressors/game-core";
 import { getElementVfxStyle, hexForElement, type ElementVfxStyle } from "./FighterEffectsStyle.ts";
+import {
+  getDefaultFighterAppearance,
+  type DefaultFighterAppearance,
+  type BodyShape,
+} from "./defaultFighterAppearances.ts";
 
 export type SilhouetteKind = "angular" | "sleek" | "lean" | "heavy";
+
+export type FighterVisualParts = DefaultFighterAppearance["silhouetteParts"];
 
 export type FighterAppearance = {
   name: string;
@@ -13,23 +26,28 @@ export type FighterAppearance = {
   accentHex: number;
   darkHex: number;
   silhouette: SilhouetteKind;
+  bodyShape: BodyShape;
   vfx: ElementVfxStyle;
   scale: number;
   accessory: "blade" | "scarf" | "wings" | "cape" | "none";
+  parts: FighterVisualParts;
+  visualStyleId?: string;
 };
 
-const ARCHETYPE_SILHOUETTE: Record<string, SilhouetteKind> = {
-  "default-0": "angular",
-  "default-1": "sleek",
-  "default-2": "lean",
-  "default-3": "heavy",
+const BODY_SHAPE_SILHOUETTE: Record<BodyShape, SilhouetteKind> = {
+  compact: "lean",
+  athletic: "angular",
+  broad: "heavy",
 };
 
-const ARCHETYPE_ACCESSORY: Record<string, FighterAppearance["accessory"]> = {
-  "default-0": "blade",
-  "default-1": "scarf",
-  "default-2": "wings",
-  "default-3": "cape",
+const LEGACY_SILHOUETTE: Record<string, SilhouetteKind> = {
+  "ember-vale": "angular",
+  "rook-ironside": "heavy",
+  "juno-spark": "lean",
+  "kaia-windrow": "sleek",
+  "nix-calder": "heavy",
+  "orion-vell": "sleek",
+  "vesper-nyx": "lean",
 };
 
 const SIZE_SCALE: Record<FighterSize, number> = {
@@ -52,8 +70,13 @@ function accentize(hex: number): number {
   return (r << 16) | (g << 8) | b;
 }
 
+function parseHex(hex: string): number {
+  return Number.parseInt(hex.replace("#", ""), 16);
+}
+
 export function silhouetteForFighterId(id: string): SilhouetteKind {
-  return ARCHETYPE_SILHOUETTE[id] ?? "angular";
+  const normalized = normalizeDefaultFighterId(id);
+  return LEGACY_SILHOUETTE[normalized] ?? "angular";
 }
 
 export function resolveFighterAppearanceFromPlayer(player: PlayerState): FighterAppearance {
@@ -66,22 +89,43 @@ export function resolveFighterAppearanceFromPlayer(player: PlayerState): Fighter
 }
 
 export function resolveFighterAppearance(fighter: Pick<CreatedFighter, "id" | "name" | "size" | "color">): FighterAppearance {
-  const roster = DEFAULT_FIGHTER_ROSTER.find((f) => f.id === fighter.id);
+  const normalizedId = normalizeDefaultFighterId(fighter.id);
+  const profile = getDefaultFighterProfile(normalizedId);
+  const visual = getDefaultFighterAppearance(normalizedId);
   const color = fighter.color;
-  const primary = hexForElement(color);
+  const primary = visual ? parseHex(visual.secondaryColor) : hexForElement(color);
   const sizeStats = getSizeStats(fighter.size);
+  const bodyShape = visual?.bodyShape ?? sizeBodyShape(fighter.size);
+
   return {
     name: fighter.name,
     size: fighter.size,
     color,
     primaryHex: primary,
-    accentHex: accentize(primary),
-    darkHex: darken(primary, 0.45),
-    silhouette: roster ? silhouetteForFighterId(fighter.id) : sizeSilhouette(fighter.size),
+    accentHex: visual ? parseHex(visual.accentColor) : accentize(primary),
+    darkHex: visual ? parseHex(visual.primaryColor) : darken(primary, 0.45),
+    silhouette: visual ? BODY_SHAPE_SILHOUETTE[visual.bodyShape] : sizeSilhouette(fighter.size),
+    bodyShape,
     vfx: getElementVfxStyle(color),
     scale: SIZE_SCALE[fighter.size] * sizeStats.hurtboxScale,
-    accessory: roster ? (ARCHETYPE_ACCESSORY[fighter.id] ?? "none") : accessoryForColor(color),
+    accessory: visual ? accessoryFromParts(visual.silhouetteParts) : accessoryForColor(color),
+    parts: visual?.silhouetteParts ?? partsForColor(color),
+    visualStyleId: profile?.visualStyleId,
   };
+}
+
+function sizeBodyShape(size: FighterSize): BodyShape {
+  if (size === "small") return "compact";
+  if (size === "large") return "broad";
+  return "athletic";
+}
+
+function accessoryFromParts(parts: FighterVisualParts): FighterAppearance["accessory"] {
+  if (parts.cape) return "cape";
+  if (parts.wingSleeves) return "wings";
+  if (parts.scarf) return "scarf";
+  if (parts.gauntlets || parts.jacket) return "blade";
+  return "none";
 }
 
 function sizeSilhouette(size: FighterSize): SilhouetteKind {
@@ -103,6 +147,23 @@ function accessoryForColor(color: FighterColor): FighterAppearance["accessory"] 
   return map[color] ?? "none";
 }
 
+function partsForColor(color: FighterColor): FighterVisualParts {
+  const map: Partial<Record<FighterColor, FighterVisualParts>> = {
+    red: { gauntlets: "flame", jacket: "short" },
+    orange: { shoulderArmor: "block", heavyBoots: "heavy" },
+    yellow: { scarf: "lightning", hair: "tufts" },
+    green: { wingSleeves: "flow", scarf: "sash" },
+    blue: { mantle: "ice", gauntlets: "heavy" },
+    indigo: { jacket: "long-coat", floatingBits: "stones" },
+    violet: { hood: "collar", cape: "asymmetric" },
+  };
+  return map[color] ?? {};
+}
+
 export function elementLabel(color: FighterColor): string {
   return ELEMENTS[color].name;
+}
+
+export function listDefaultFighterProfiles() {
+  return DEFAULT_FIGHTERS;
 }

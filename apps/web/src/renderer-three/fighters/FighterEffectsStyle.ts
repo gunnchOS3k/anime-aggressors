@@ -59,7 +59,7 @@ const ELEMENT_VFX: Record<FighterColor, ElementVfxStyle> = {
     ko: 0x22aa44,
   },
   blue: {
-    trail: "waterRibbon",
+    trail: "frostShard",
     hitSpark: 0x66ccff,
     hitSparkHeavy: 0xaaeeff,
     aura: 0x4499ff,
