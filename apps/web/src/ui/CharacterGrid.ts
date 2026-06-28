@@ -2,6 +2,7 @@ import type { CreatedFighter } from "@anime-aggressors/game-core";
 import type { CharacterSelectState } from "../characterSelect/characterSelectState.js";
 import { tileStateForFighter } from "../characterSelect/characterSelectState.js";
 import { renderCharacterTile } from "./CharacterTile.js";
+import { ARENA_CLASSES } from "./theme/arenaClasses.ts";
 
 export type CharacterGridOptions = {
   roster: CreatedFighter[];
@@ -10,14 +11,16 @@ export type CharacterGridOptions = {
 
 export function renderCharacterGrid({ roster, state }: CharacterGridOptions): string {
   return `
-    <div class="cs-grid" role="listbox" aria-label="Fighter roster">
-      ${roster.map((fighter, i) =>
-        renderCharacterTile({
-          fighter,
-          state: tileStateForFighter(state, fighter.id),
-          tabIndex: state.focusedId === fighter.id ? 0 : -1,
-        }),
-      ).join("")}
+    <div class="${ARENA_CLASSES.portraitGrid} cs-grid character-portrait-grid" role="listbox" aria-label="Fighter roster">
+      ${roster
+        .map((fighter) =>
+          renderCharacterTile({
+            fighter,
+            state: tileStateForFighter(state, fighter.id),
+            tabIndex: state.focusedId === fighter.id ? 0 : -1,
+          }),
+        )
+        .join("")}
     </div>`;
 }
 

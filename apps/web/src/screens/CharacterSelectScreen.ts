@@ -14,6 +14,8 @@ import {
 import { renderCharacterGrid, navigateGrid } from "../ui/CharacterGrid.js";
 import { renderPlayerSelectionPanel } from "../ui/PlayerSelectionPanel.js";
 import { renderFighterPreviewPanel } from "../ui/FighterPreviewPanel.js";
+import { renderSetupFlowShell } from "../ui/setup/SetupFlowShell.ts";
+import { ARENA_CLASSES } from "../ui/theme/arenaClasses.ts";
 import { CharacterPreviewRenderer } from "../renderer-three/preview/CharacterPreviewRenderer.ts";
 
 export type CharacterSelectResult = {
@@ -73,13 +75,12 @@ export function mountCharacterSelectScreen(root: HTMLElement, options: Character
 
   const render = () => {
     const focused = getFocusedFighter(state, roster);
-    root.innerHTML = `
-      <div class="screen character-select-screen">
-        <header class="cs-header">
-          <h2>Select Fighters</h2>
-          <p class="cs-setup-summary">${summary}</p>
-        </header>
-        <div class="cs-layout">
+    root.innerHTML = renderSetupFlowShell({
+      step: "fighters",
+      title: "Select Fighters",
+      summary,
+      body: `
+        <div class="${ARENA_CLASSES.characterSelectLayout} cs-layout character-select-layout">
           <aside class="cs-side cs-side--left">
             ${renderPlayerSelectionPanel(0, state.p1, state.activePlayer === 0)}
           </aside>
@@ -91,15 +92,16 @@ export function mountCharacterSelectScreen(root: HTMLElement, options: Character
             ${renderPlayerSelectionPanel(1, state.p2, state.activePlayer === 1)}
           </aside>
         </div>
-        <div class="create-actions cs-actions">
-          <button type="button" id="cs-create" class="btn-secondary">Create Fighter</button>
-          <button type="button" id="cs-back" class="btn-secondary">Back to Map Select</button>
-          <button type="button" id="cs-continue" class="btn-primary" ${isCharacterSelectReady(state) ? "" : "disabled"}>
-            Continue to Controls Check
-          </button>
-        </div>
-      </div>
-    `;
+      `,
+      footer: {
+        backId: "cs-back",
+        backLabel: "Back to Map Select",
+        continueId: "cs-continue",
+        continueLabel: "Continue to Controls Check",
+        continueDisabled: !isCharacterSelectReady(state),
+        extraHtml: `<button type="button" id="cs-create" class="${ARENA_CLASSES.secondaryBtn}">Create Fighter</button>`,
+      },
+    });
 
     const canvas = root.querySelector("#cs-preview-canvas") as HTMLCanvasElement | null;
     syncPreview(canvas, focused, "hover");
