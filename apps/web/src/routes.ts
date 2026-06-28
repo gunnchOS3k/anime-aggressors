@@ -17,6 +17,8 @@ export const APP_ROUTES = {
   controls: "#/controls",
   controlsRemap: "#/controls/remap",
   training: "#/training",
+  moves: "#/moves",
+  combos: "#/combos",
   controllerTest: "#/controller-test",
   rollbackDebug: "#/rollback-debug",
   edgeioLab: "#/edgeio-lab",
@@ -56,6 +58,8 @@ export type AppRouteMode =
   | "controls-remap"
   | "match"
   | "training"
+  | "moves"
+  | "combos"
   | "controller"
   | "rollback"
   | "edgeio"
@@ -91,6 +95,8 @@ const HASH_TO_MODE: Record<string, AppRouteMode> = {
   [APP_ROUTES.controlsRemap]: "controls-remap",
   [APP_ROUTES.play]: "match",
   [APP_ROUTES.training]: "training",
+  [APP_ROUTES.moves]: "moves",
+  [APP_ROUTES.combos]: "combos",
   [APP_ROUTES.controllerTest]: "controller",
   [APP_ROUTES.rollbackDebug]: "rollback",
   [APP_ROUTES.edgeioLab]: "edgeio",
@@ -129,6 +135,8 @@ export const MODE_TO_ROUTE: Record<AppRouteMode, string> = {
   "controls-remap": APP_ROUTES.controlsRemap,
   match: APP_ROUTES.play,
   training: APP_ROUTES.training,
+  moves: APP_ROUTES.moves,
+  combos: APP_ROUTES.combos,
   controller: APP_ROUTES.controllerTest,
   rollback: APP_ROUTES.rollbackDebug,
   edgeio: APP_ROUTES.edgeioLab,

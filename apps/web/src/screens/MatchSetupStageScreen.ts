@@ -1,6 +1,8 @@
 import { listStages } from "@anime-aggressors/game-core";
 import { APP_ROUTES, navigateToHash } from "../routes.js";
 import { loadMatchSetup, saveMatchSetup } from "../match/matchSetupSession.js";
+import { renderStageGrid, bindStageGrid } from "../ui/StageGrid.js";
+import { renderStagePreviewPanel } from "../ui/StagePreviewPanel.js";
 
 const FLAGLINE_ROOM_IDS = [
   "flagline-lunar-base",
@@ -45,18 +47,11 @@ export function mountMatchSetupStageScreen(root: HTMLElement): void {
           ).join("")}
         </div>
         <p class="hint"><small>Flagline map set — select the starting arena below.</small></p>`
-            : `<div class="stage-preview placeholder">Stage preview</div>`
+            : ""
         }
-        <div class="stage-grid">
-          ${stages
-            .map(
-              (s) => `
-            <button type="button" class="stage-card ${s.id === selectedId ? "selected" : ""}" data-id="${s.id}">
-              <strong>${s.name}</strong>
-              ${s.placeholder ? "<small>placeholder</small>" : ""}
-            </button>`,
-            )
-            .join("")}
+        <div class="stage-select-layout">
+          ${renderStagePreviewPanel({ stageId: selectedId })}
+          ${renderStageGrid({ stages, selectedId })}
         </div>
         <div class="rules-summary">
           <strong>Selected stage:</strong> ${selected?.name ?? "—"}
@@ -68,11 +63,9 @@ export function mountMatchSetupStageScreen(root: HTMLElement): void {
       </div>
     `;
 
-    root.querySelectorAll(".stage-card").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        selectedId = (btn as HTMLButtonElement).dataset.id!;
-        render();
-      });
+    bindStageGrid(root, (id) => {
+      selectedId = id;
+      render();
     });
 
     root.querySelector("#mss-back")?.addEventListener("click", () => navigateToHash(APP_ROUTES.matchSetupRules));

@@ -27,8 +27,10 @@ export { createInitialGameState, cloneGameState } from "./state.js";
 export { simulateFrame, resetForRematch } from "./simulate.js";
 export { getCharacter, listCharacters } from "./characters.js";
 export type { CharacterDef } from "./characters.js";
-export { getStage, listStages } from "./stages.js";
+export { getStage, listStages, stageHasLayout } from "./stages.js";
 export type { StageDef } from "./stages.js";
+export { getStageLayout, listStageLayoutIds, STAGE_LAYOUTS } from "./stageLayouts.js";
+export type { StageLayoutDef, StagePlatform } from "./stageLayouts.js";
 export {
   getHurtbox,
   getHurtboxes,
@@ -111,6 +113,58 @@ export {
 export type { MoveFrameData } from "./frameData.js";
 export { getMoveData, actionToMoveId, isMoveComplete } from "./moves.js";
 export type { MoveId } from "./moves.js";
+export type {
+  MoveDefinition,
+  MoveSlot,
+  ComboRoute,
+  MoveCategory,
+} from "./moves/universalMoveSchema.js";
+export {
+  ALL_MOVE_SLOTS,
+  MOVE_SLOT_INPUT_HINT,
+} from "./moves/universalMoveSchema.js";
+export {
+  getFighterMove,
+  getFighterMoveset,
+  getAllFighterMovesets,
+  getMoveById,
+  moveDefinitionToFrameData,
+  fighterSkillFloor,
+  fighterSkillCeiling,
+} from "./moves/moveDefinitions.js";
+export {
+  COMBO_ROUTES,
+  getComboRoutesForFighter,
+  getComboRoutesByDifficulty,
+  getAllComboRoutes,
+  validateComboRouteCoverage,
+} from "./moves/comboRoutes.js";
+export type {
+  EnergyAttackKind,
+  EnergyAttackState,
+  EnergyClashState,
+  EnergyElement,
+  EnergyClashPhase,
+} from "./combat/beamTypes.js";
+export {
+  CLASH_WIN_THRESHOLD,
+  elementAdvantageBonus,
+} from "./combat/beamTypes.js";
+export {
+  createEnergyAttack,
+  energyAttacksOverlap,
+  serializeEnergyAttack,
+  deserializeEnergyAttack,
+} from "./combat/projectiles.js";
+export {
+  detectEnergyClashes,
+  tickEnergyClashes,
+  tickEnergyAttacks,
+  getActiveClash,
+  serializeEnergyClash,
+  deserializeEnergyClash,
+  maybeSpawnSuperEnergyAttack,
+} from "./combat/energyClash.js";
 export type { FighterSize } from "./sizeClasses.js";
 export { SIZE_STATS, getSizeStats } from "./sizeClasses.js";
 export type { FighterColor, ElementEffect, ElementDef } from "./elements.js";

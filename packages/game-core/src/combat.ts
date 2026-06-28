@@ -21,6 +21,14 @@ import { boxesOverlap, getActiveHitboxes, getHurtbox } from "./collision.js";
 import { DODGE_MOVE, NEUTRAL_ATTACK, SPECIAL_ATTACK } from "./frameData.js";
 import { getMoveData, isMoveComplete, type MoveId } from "./moves.js";
 import {
+  fighterIdFromCharacterId,
+  getFighterMove,
+  getFrameDataForMoveId,
+  getMoveById,
+  resolveMoveSlotFromInput,
+} from "./moves/moveDefinitions.js";
+import { maybeSpawnSuperEnergyAttack } from "./combat/energyClash.js";
+import {
   bufferJump,
   canCoyoteJump,
   consumeJumpBuffer,
@@ -127,13 +135,27 @@ function startAction(player: PlayerState, input: InputFrame): void {
   if (input.special) {
     player.actionState = "special";
     player.actionFrame = 0;
-    player.currentMoveId = input.left || input.right ? "side_special" : "special_attack";
+    const fighterId = fighterIdFromCharacterId(player.characterId);
+    const slot = resolveMoveSlotFromInput(player, input);
+    const fighterMove = slot ? getFighterMove(fighterId, slot) : undefined;
+    if (fighterMove) {
+      player.currentMoveId = fighterMove.id;
+    } else {
+      player.currentMoveId = input.left || input.right ? "side_special" : "special_attack";
+    }
     return;
   }
 
   if (input.attack) {
     player.actionState = "attacking";
     player.actionFrame = 0;
+    const fighterId = fighterIdFromCharacterId(player.characterId);
+    const slot = resolveMoveSlotFromInput(player, input);
+    const fighterMove = slot ? getFighterMove(fighterId, slot) : undefined;
+    if (fighterMove) {
+      player.currentMoveId = fighterMove.id;
+      return;
+    }
     if (!player.onGround) {
       player.currentMoveId = "aerial_attack";
     } else if (input.up) {
@@ -186,7 +208,13 @@ function integratePhysics(player: PlayerState, stage: GameState["stage"]): void 
   // Horizontal blast zones are not hard-clamped — crossing triggers stock loss in resolveCombat.
 }
 
-function tickActionState(player: PlayerState): void {
+function getPlayerMoveFrameData(player: PlayerState): import("./frameData.js").MoveFrameData | null {
+  const fighterData = getFrameDataForMoveId(player.currentMoveId);
+  if (fighterData) return fighterData;
+  return getMoveData(player.currentMoveId as MoveId);
+}
+
+function tickActionState(state: GameState, player: PlayerState): void {
   player.actionFrame += 1;
 
   if (player.invulnFrames > 0) player.invulnFrames -= 1;
@@ -201,7 +229,11 @@ function tickActionState(player: PlayerState): void {
   }
 
   if (player.actionState === "attacking" || player.actionState === "special") {
-    const data = getMoveData(player.currentMoveId as MoveId);
+    const data = getPlayerMoveFrameData(player);
+    const fighterMove = getMoveById(player.currentMoveId);
+    if (fighterMove) {
+      maybeSpawnSuperEnergyAttack(state, player.id, fighterMove.fighterId, fighterMove, player.actionFrame);
+    }
     if (data && isMoveComplete(data, player.actionFrame)) {
       player.actionState = "idle";
       player.currentMoveId = "none";
@@ -389,7 +421,7 @@ export function processPlayer(state: GameState, player: PlayerState, input: Inpu
     if (player.jumpBufferFrames > 0) player.jumpBufferFrames -= 1;
   }
 
-  tickActionState(player);
+  tickActionState(state, player);
   tickElementalEffects(player);
   integratePhysics(player, state.stage);
 }

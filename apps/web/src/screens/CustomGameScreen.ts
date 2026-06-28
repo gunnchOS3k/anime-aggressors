@@ -96,7 +96,7 @@ export function mountCustomGameScreen(root: HTMLElement): void {
           </label>
 
           <label>Stage
-            <select id="cg-stage">${stages.map((s) => `<option value="${s.id}" ${ruleset.stageId === s.id ? "selected" : ""}>${s.name}${s.placeholder ? " (placeholder)" : ""}</option>`).join("")}</select>
+            <select id="cg-stage">${stages.map((s) => `<option value="${s.id}" ${ruleset.stageId === s.id ? "selected" : ""}>${s.name}</option>`).join("")}</select>
           </label>
 
           <label>Hazards

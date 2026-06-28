@@ -1128,3 +1128,296 @@ body {
   gap: 0.5rem;
 }
 
+/* Move list & combo guide */
+.move-list-screen,
+.combo-guide-screen {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.fighter-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 1rem 0;
+}
+
+.fighter-tab {
+  padding: 0.4rem 0.75rem;
+  border: 1px solid #444;
+  border-radius: 6px;
+  background: #1a1a2e;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.fighter-tab.active {
+  border-color: var(--accent2);
+  background: #252540;
+}
+
+.move-list-grid,
+.combo-route-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.move-card,
+.combo-route-card {
+  padding: 0.85rem;
+  border: 1px solid #333;
+  border-radius: 8px;
+  background: #1a1a2e;
+}
+
+.move-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.move-input {
+  font-size: 0.75rem;
+  color: var(--accent2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.move-card-details {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.move-card-details div {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.move-card-details dt {
+  min-width: 5.5rem;
+  opacity: 0.7;
+}
+
+.move-visual-hint {
+  font-size: 0.75rem;
+  opacity: 0.6;
+  margin: 0.5rem 0 0;
+}
+
+.combo-route-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.combo-difficulty-badge {
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  background: #333;
+  text-transform: uppercase;
+}
+
+.combo-difficulty-section {
+  margin: 1.25rem 0;
+}
+
+.combo-steps {
+  margin: 0.5rem 0;
+  padding-left: 1.25rem;
+  font-size: 0.85rem;
+}
+
+.combo-step-input {
+  color: var(--accent2);
+  font-size: 0.8rem;
+}
+
+.combo-hint {
+  font-size: 0.8rem;
+  opacity: 0.85;
+  margin: 0.5rem 0 0;
+}
+
+/* Stage select grid & preview */
+.stage-select-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+@media (max-width: 700px) {
+  .stage-select-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stage-select-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.5rem;
+}
+
+.stage-select-card {
+  padding: 0.65rem;
+  text-align: left;
+  border: 2px solid #444;
+  border-radius: 8px;
+  background: #1a1a2e;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.stage-select-card.selected {
+  border-color: var(--accent2);
+  box-shadow: 0 0 0 2px var(--accent2);
+}
+
+.stage-preview-panel {
+  padding: 1rem;
+  border-radius: 8px;
+  background: #252540;
+  border: 1px solid #333;
+}
+
+.stage-preview-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stage-vibe {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  margin: 0.35rem 0 0.75rem;
+}
+
+.stage-minimap {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+}
+
+.stage-minimap-bg {
+  fill: #1a1a30;
+}
+
+.stage-minimap-plat {
+  fill: #556;
+}
+
+.stage-minimap-plat.main {
+  fill: var(--accent2);
+}
+
+.stage-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  opacity: 0.75;
+}
+
+.stage-hazard-icon {
+  color: #ffaa44;
+}
+
+/* Training overlays */
+.pf-training-overlays {
+  position: absolute;
+  left: 0.75rem;
+  bottom: 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  pointer-events: none;
+  z-index: 4;
+  max-width: 280px;
+}
+
+.training-overlay {
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(15, 15, 26, 0.88);
+  border: 1px solid #444;
+  font-size: 0.8rem;
+}
+
+.training-overlay-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent2);
+  margin-bottom: 0.2rem;
+}
+
+.training-move-name {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.training-move-input,
+.training-follow-up,
+.combo-hint-input {
+  margin-top: 0.25rem;
+  opacity: 0.85;
+}
+
+.training-combo-count {
+  margin-top: 0.35rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.energy-clash-prompt {
+  border-color: #ff6b35;
+  animation: clash-pulse 0.8s ease-in-out infinite alternate;
+}
+
+.energy-clash-title {
+  font-weight: 800;
+  font-size: 1rem;
+  color: #ff8844;
+  letter-spacing: 0.05em;
+}
+
+.energy-clash-instructions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin: 0.35rem 0;
+  font-size: 0.75rem;
+}
+
+.energy-clash-meter {
+  height: 6px;
+  background: #333;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.energy-clash-meter-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4ecdc4, #ff6b35);
+  transition: width 0.1s linear;
+}
+
+.energy-clash-intensity {
+  font-size: 0.7rem;
+  margin-top: 0.25rem;
+  opacity: 0.7;
+}
+
+@keyframes clash-pulse {
+  from { box-shadow: 0 0 4px rgba(255, 107, 53, 0.4); }
+  to { box-shadow: 0 0 12px rgba(255, 107, 53, 0.8); }
+}
+

@@ -12,7 +12,7 @@ export function mountStageSelectScreen(
       ${stages
         .map(
           (s) =>
-            `<button type="button" class="stage-pick ${s.id === currentStageId ? "selected" : ""}" data-id="${s.id}">${s.name}${s.placeholder ? " (placeholder)" : ""}</button>`,
+            `<button type="button" class="stage-pick ${s.id === currentStageId ? "selected" : ""}" data-id="${s.id}">${s.name}</button>`,
         )
         .join("")}
     </div>
