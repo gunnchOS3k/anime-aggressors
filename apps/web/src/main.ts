@@ -1,10 +1,12 @@
-import { installHashRouter, navigateHome, bindRouteButtons, getRouteParams } from "./router.js";
+import { installHashRouter, navigateHome, getRouteParams } from "./router.js";
 import type { AppRouteMode } from "./routes.js";
-import { APP_VERSION_LABEL, APP_EXPECTED_MODES } from "./version.js";
+import { mountHomeScreen, type HomeScreenHandle } from "./screens/HomeScreen.ts";
 import "./styles.css";
 
 const home = document.getElementById("home-view");
 const appRoot = document.getElementById("app-root");
+
+let homeScreen: HomeScreenHandle | null = null;
 
 function showHome(): void {
   if (appRoot) {
@@ -12,6 +14,10 @@ function showHome(): void {
     appRoot.classList.add("hidden");
   }
   home?.classList.remove("hidden");
+  if (home) {
+    homeScreen?.dispose();
+    homeScreen = mountHomeScreen(home);
+  }
 }
 
 async function navigate(mode: AppRouteMode): Promise<void> {
@@ -21,6 +27,8 @@ async function navigate(mode: AppRouteMode): Promise<void> {
   }
 
   home?.classList.add("hidden");
+  homeScreen?.dispose();
+  homeScreen = null;
   appRoot?.classList.remove("hidden");
   if (appRoot) appRoot.innerHTML = "";
 
@@ -192,14 +200,7 @@ async function navigate(mode: AppRouteMode): Promise<void> {
 
 window.addEventListener("aa:navigate-home", () => navigateHome());
 
-bindRouteButtons();
 installHashRouter(navigate);
-
-const buildFooter = document.getElementById("build-footer");
-if (buildFooter) {
-  buildFooter.textContent = `Build: ${APP_VERSION_LABEL}`;
-  buildFooter.title = APP_EXPECTED_MODES.join(" · ");
-}
 
 export { launchMatch, launchTrainingMode } from "./game/App.js";
 export { bootstrapMiniGames } from "./minigames/bootstrap.js";

@@ -4,69 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Anime Aggressors — Create Your Fighter</title>
-    <meta name="description" content="Create your fighter. Pick your element. Launch your rivals. A 2.5D anime platform fighter with size classes and ROYGBIV elemental combat." />
+    <meta name="description" content="Create your fighter. Charge your aura. Launch your rivals. A 2.5D anime platform fighter with size classes and ROYGBIV elemental combat." />
   </head>
   <body>
-    <main class="landing game-menu" id="home-view">
-      <section class="hero">
-        <p class="hero-kicker">2.5D Anime Platform Fighter</p>
-        <h1>Anime Aggressors</h1>
-        <p class="hero-tagline">
-          Create your fighter from <strong>body size</strong> and <strong>element color</strong>.
-          Fight on Skyline Arena, train your combo, and launch rivals in Impact Dummy Derby.
-        </p>
-
-        <section class="menu-section">
-          <h2 class="menu-section-title">Play</h2>
-          <div class="cta-row primary-cta">
-            <a id="btn-play-match" class="btn-primary" href="#/match-setup/rules">Start Match</a>
-            <a id="btn-custom-game" class="btn-primary" href="#/custom-game">Custom Game</a>
-            <a id="btn-flagline-clash" class="btn-primary" href="#/flagline-setup">Flagline Clash</a>
-            <a id="btn-impact-dummy-derby" class="btn-primary" href="#/impact-dummy-derby">Impact Dummy Derby</a>
-            <a id="btn-training" class="btn-secondary" href="#/training">Training Mode</a>
-          </div>
-        </section>
-
-        <section class="menu-section">
-          <h2 class="menu-section-title">Fighters</h2>
-          <div class="cta-row">
-            <a id="btn-create-fighter" class="btn-primary btn-accent" href="#/create-fighter">Create Fighter</a>
-            <a id="btn-fighter-stats" class="btn-secondary" href="#/career/fighters">Fighter Stats</a>
-          </div>
-        </section>
-
-        <section class="menu-section">
-          <h2 class="menu-section-title">Player</h2>
-          <div class="cta-row">
-            <a id="btn-career" class="btn-secondary" href="#/career">Career</a>
-            <a id="btn-match-history" class="btn-secondary" href="#/career/history">Match History</a>
-            <a id="btn-replay-vault" class="btn-secondary" href="#/career/replays">Replay Vault</a>
-            <a id="btn-saved-games" class="btn-secondary" href="#/career/saves">Saved Games</a>
-            <a id="btn-controls" class="btn-secondary" href="#/controls">Controls</a>
-          </div>
-        </section>
-
-        <section class="menu-section">
-          <h2 class="menu-section-title">Labs</h2>
-          <div class="cta-row tertiary-cta">
-            <a id="btn-controller" class="btn-tertiary" href="#/controller-test">Controller Test</a>
-            <a id="btn-rollback" class="btn-tertiary" href="#/rollback-debug">Rollback Debug</a>
-            <a id="btn-edgeio" class="btn-tertiary" href="#/edgeio-lab">Edge-IO Lab</a>
-            <a id="btn-prototype" class="btn-tertiary" href="#/prototype-lab">Prototype Lab</a>
-            <a id="btn-feedback" class="btn-tertiary" href="#/feedback">Feedback / Playtest</a>
-          </div>
-        </section>
-      </section>
-
-      <section class="menu-hint">
-        <p>Flow: Start Match → Rules → Map → Fighters → Controls → Battle · Career stats are saved locally in your browser.</p>
-      </section>
-    </main>
-
+    <main class="arena-hub-root" id="home-view"></main>
     <div id="app-root" class="hidden"></div>
-
-    <footer id="build-footer" class="build-footer" aria-label="Build info"></footer>
-
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

@@ -4,6 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { APP_ROUTES } from "../src/routes.ts";
+import { renderHomeMarkup } from "../src/screens/homeScreenMarkup.ts";
 
 const webRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -12,14 +13,16 @@ describe("start match route", () => {
     assert.equal(APP_ROUTES.matchSetupRules, "#/match-setup/rules");
   });
 
-  it("index.html Start Match links to match setup rules", () => {
-    const html = fs.readFileSync(path.join(webRoot, "index.html"), "utf8");
-    assert.match(html, /id="btn-play-match"[^>]*href="#\/match-setup\/rules"/);
+  it("HomeScreen Start Match links to match setup rules", () => {
+    const html = renderHomeMarkup();
+    assert.match(html, /id="btn-play-match"/);
     assert.match(html, />Start Match</);
+    assert.match(html, /#\/match-setup\/rules/);
   });
 
-  it("router maps btn-play-match to match-setup-rules", () => {
-    const routerSrc = fs.readFileSync(path.join(webRoot, "src/router.ts"), "utf8");
-    assert.match(routerSrc, /\["btn-play-match",\s*"match-setup-rules"\]/);
+  it("main menu config maps btn-play-match to match-setup-rules", () => {
+    const config = fs.readFileSync(path.join(webRoot, "src/ui/mainMenuConfig.ts"), "utf8");
+    assert.match(config, /btn-play-match/);
+    assert.match(config, /match-setup-rules/);
   });
 });
