@@ -8,6 +8,13 @@ import {
   type MatchSetupMode,
   type MatchSetupSession,
 } from "../match/matchSetupSession.js";
+import { renderSetupFlowShell } from "../ui/setup/SetupFlowShell.ts";
+import {
+  renderRulesPresetCard,
+  renderRulesSummaryCard,
+  rulesPresetCardFromRuleset,
+} from "../ui/rules/RulesPresetCard.ts";
+import { ARENA_CLASSES } from "../ui/theme/arenaClasses.ts";
 
 const PRESET_IDS = [
   "friendly-3-stock",
@@ -31,48 +38,49 @@ export function mountMatchSetupRulesScreen(root: HTMLElement): void {
 
   const render = () => {
     const selected = allRulesets.find((r) => r.id === selectedId) ?? presets[0];
-    root.innerHTML = `
-      <div class="screen match-setup-rules">
-        <h2>Rules Select</h2>
-        <p class="hint">Choose how this match is played.</p>
-        <div class="preset-grid">
-          ${presets
-            .map(
-              (p) => `
-            <button type="button" class="preset-card ${p.id === selectedId ? "selected" : ""}" data-id="${p.id}">
-              <strong>${p.name}</strong>
-              <small>${rulesSummary(p)}</small>
-            </button>`,
-            )
-            .join("")}
-          <button type="button" class="preset-card" data-nav="${APP_ROUTES.customGame}">
-            <strong>Custom Rules</strong>
-            <small>Build your own ruleset</small>
-          </button>
-          <button type="button" class="preset-card" data-nav="${APP_ROUTES.rulesets}">
-            <strong>Saved Rulesets</strong>
-            <small>Load or edit saved presets</small>
-          </button>
-        </div>
-        <div class="rules-summary">
-          <strong>Selected:</strong> ${selected?.name ?? "—"} — ${selected ? rulesSummary(selected) : ""}
-        </div>
-        <div class="create-actions">
-          <button type="button" id="msr-back" class="btn-secondary">Back to Main Menu</button>
-          <button type="button" id="msr-edit" class="btn-secondary">Edit Custom Rules</button>
-          <button type="button" id="msr-continue" class="btn-primary">Continue to Map Select</button>
-        </div>
+    const body = `
+      <div class="${ARENA_CLASSES.cardGrid} rules-preset-grid">
+        ${presets.map((p) => renderRulesPresetCard(rulesPresetCardFromRuleset(p, p.id === selectedId))).join("")}
+        ${renderRulesPresetCard({
+          id: "custom",
+          title: "CUSTOM RULES",
+          description: "Build your own ruleset with damage, launch, and element toggles.",
+          icon: "⚙",
+          navRoute: APP_ROUTES.customGame,
+        })}
+        ${renderRulesPresetCard({
+          id: "saved",
+          title: "SAVED RULESETS",
+          description: "Load or edit rulesets saved in your browser.",
+          icon: "★",
+          navRoute: APP_ROUTES.rulesets,
+        })}
       </div>
+      ${selected ? renderRulesSummaryCard(selected.name, rulesSummary(selected)) : ""}
     `;
 
-    root.querySelectorAll(".preset-card[data-id]").forEach((btn) => {
+    root.innerHTML = renderSetupFlowShell({
+      step: "rules",
+      title: "Rules Select",
+      subtitle: "Choose how this match is played.",
+      body,
+      footer: {
+        backId: "msr-back",
+        backLabel: "Back to Main Menu",
+        continueId: "msr-continue",
+        continueLabel: "Continue to Map Select",
+        extraHtml: `<button type="button" id="msr-edit" class="${ARENA_CLASSES.secondaryBtn}">Edit Custom Rules</button>`,
+      },
+    });
+
+    root.querySelectorAll(".rules-preset-card[data-id]").forEach((btn) => {
       btn.addEventListener("click", () => {
         selectedId = (btn as HTMLButtonElement).dataset.id!;
         render();
       });
     });
 
-    root.querySelectorAll(".preset-card[data-nav]").forEach((btn) => {
+    root.querySelectorAll(".rules-preset-card[data-nav]").forEach((btn) => {
       btn.addEventListener("click", () => {
         navigateToHash((btn as HTMLButtonElement).dataset.nav!);
       });

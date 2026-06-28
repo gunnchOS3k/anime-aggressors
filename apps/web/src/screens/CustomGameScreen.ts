@@ -7,6 +7,8 @@ import {
 } from "../storage/rulesetStorage.js";
 import { navigateTo } from "../router.js";
 import { setMatchRuleset, setCustomFlow } from "../match/matchSession.js";
+import { renderSetupFlowShell } from "../ui/setup/SetupFlowShell.ts";
+import { ARENA_CLASSES } from "../ui/theme/arenaClasses.ts";
 
 const STOCK_OPTIONS = [1, 2, 3, 4, 5];
 const TIMER_OPTIONS: { label: string; seconds: number | null }[] = [
@@ -32,17 +34,17 @@ export function mountCustomGameScreen(root: HTMLElement): void {
   const render = () => {
     const staminaVisible = ruleset.matchType === "stamina";
     const flaglineVisible = ruleset.matchType === "flaglineClash";
-    root.innerHTML = `
-      <div class="screen custom-game">
-        <div class="screen-toolbar">
-          <button type="button" id="cg-back" class="btn-secondary">← Home</button>
-          <h2>Custom Game</h2>
-          <button type="button" id="cg-rulesets" class="btn-secondary">Saved Rules</button>
-        </div>
-        <p class="hint">Set match rules, then pick fighters and controls.</p>
-
-        <div class="cg-grid">
-          <label>Ruleset Name<input id="cg-name" value="${ruleset.name}" /></label>
+    root.innerHTML = renderSetupFlowShell({
+      step: "rules",
+      title: "Custom Rules",
+      subtitle: "Build your match rules, then choose fighters.",
+      body: `
+        <div class="rules-editor-panel setup-hero-panel">
+          <div class="custom-game-toolbar">
+            <button type="button" id="cg-rulesets" class="${ARENA_CLASSES.secondaryBtn}">Saved Rules</button>
+          </div>
+          <div class="cg-grid rules-editor-grid">
+          <label class="rules-field">Ruleset Name<input id="cg-name" value="${ruleset.name}" /></label>
 
           <fieldset>
             <legend>Match Type</legend>
@@ -130,13 +132,16 @@ export function mountCustomGameScreen(root: HTMLElement): void {
             <select id="cg-created">${(["allowed", "defaultsOnly"] as const).map((v) => `<option value="${v}" ${ruleset.createdFighters === v ? "selected" : ""}>${v === "allowed" ? "Allowed" : "Defaults Only"}</option>`).join("")}</select>
           </label>
         </div>
-
-        <div class="create-actions">
-          <button type="button" id="cg-save" class="btn-secondary">Save Rules</button>
-          <button type="button" id="cg-continue" class="btn-primary">Choose Fighters →</button>
         </div>
-      </div>
-    `;
+      `,
+      footer: {
+        backId: "cg-back",
+        backLabel: "Back to Main Menu",
+        continueId: "cg-continue",
+        continueLabel: "Choose Fighters →",
+        extraHtml: `<button type="button" id="cg-save" class="${ARENA_CLASSES.secondaryBtn}">Save Rules</button>`,
+      },
+    });
 
     bind();
   };

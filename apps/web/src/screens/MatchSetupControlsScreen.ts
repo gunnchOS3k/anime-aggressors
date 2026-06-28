@@ -5,6 +5,13 @@ import {
   isMatchSetupReady,
   loadMatchSetup,
 } from "../match/matchSetupSession.js";
+import { renderSetupFlowShell } from "../ui/setup/SetupFlowShell.ts";
+import {
+  renderPlayerLoadoutCard,
+  renderRulesStageSummary,
+  renderVersusConfirmPanel,
+} from "../ui/setup/VersusConfirmPanel.ts";
+import { ARENA_CLASSES } from "../ui/theme/arenaClasses.ts";
 
 export function mountMatchSetupControlsScreen(root: HTMLElement): void {
   const setup = loadMatchSetup();
@@ -14,27 +21,33 @@ export function mountMatchSetupControlsScreen(root: HTMLElement): void {
   const p2Profile = getProfileForSlot(2);
   const ruleset = setup.ruleset;
 
-  root.innerHTML = `
-    <div class="screen match-setup-controls">
-      <h2>Controls Check</h2>
-      <p class="hint">Confirm setup and test inputs before battle.</p>
-      <div class="check-grid">
-        <div><strong>Rules</strong><br/>${ruleset?.name ?? "—"}</div>
-        <div><strong>Stage</strong><br/>${setup.stageName ?? setup.stageId ?? "—"}</div>
-        <div><strong>P1</strong><br/>${p1?.name ?? "—"}<br/><small>${p1Profile.name}</small></div>
-        <div><strong>P2</strong><br/>${p2?.name ?? "—"}<br/><small>${p2Profile.name}</small></div>
-      </div>
-      <div class="input-preview" id="ms-input-preview">
-        <strong>Press any button</strong>
+  const versusBody = renderVersusConfirmPanel(
+    renderPlayerLoadoutCard("Player 1", p1 ?? null, p1Profile.name, true),
+    renderPlayerLoadoutCard("Player 2", p2 ?? null, p2Profile.name, true),
+    renderRulesStageSummary(ruleset?.name ?? "—", setup.stageName ?? setup.stageId ?? "—"),
+  );
+
+  root.innerHTML = renderSetupFlowShell({
+    step: "controls",
+    title: "Ready to Fight",
+    subtitle: "Confirm loadouts and test inputs before battle.",
+    summary: `${ruleset?.name ?? "Rules"} · ${setup.stageName ?? setup.stageId ?? "Stage"}`,
+    body: `
+      ${versusBody}
+      <div class="input-preview setup-hero-panel" id="ms-input-preview">
+        <strong>Press any button to test inputs</strong>
         <div id="ms-input-log">Waiting for input…</div>
+        <p class="setup-input-hint">P1: ${p1Profile.name} · P2: ${p2Profile.name}</p>
       </div>
-      <div class="create-actions">
-        <button type="button" id="msc-remap" class="btn-secondary">Remap Controls</button>
-        <button type="button" id="msc-back" class="btn-secondary">Back to Character Select</button>
-        <button type="button" id="msc-start" class="btn-primary">Start Battle</button>
-      </div>
-    </div>
-  `;
+    `,
+    footer: {
+      backId: "msc-back",
+      backLabel: "Back to Character Select",
+      continueId: "msc-start",
+      continueLabel: "Start Battle",
+      extraHtml: `<button type="button" id="msc-remap" class="${ARENA_CLASSES.secondaryBtn}">Remap Controls</button>`,
+    },
+  });
 
   const logEl = root.querySelector("#ms-input-log");
   const onKey = (e: KeyboardEvent) => {

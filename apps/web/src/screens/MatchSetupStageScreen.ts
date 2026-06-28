@@ -1,8 +1,8 @@
 import { listStages } from "@anime-aggressors/game-core";
 import { APP_ROUTES, navigateToHash } from "../routes.js";
 import { loadMatchSetup, saveMatchSetup } from "../match/matchSetupSession.js";
-import { renderStageGrid, bindStageGrid } from "../ui/StageGrid.js";
-import { renderStagePreviewPanel } from "../ui/StagePreviewPanel.js";
+import { renderSetupFlowShell } from "../ui/setup/SetupFlowShell.ts";
+import { renderStagePreviewHero, renderStageSelectGrid } from "../ui/stage/StageSelectGrid.ts";
 
 const FLAGLINE_ROOM_IDS = [
   "flagline-lunar-base",
@@ -30,42 +30,43 @@ export function mountMatchSetupStageScreen(root: HTMLElement): void {
   let selectedId = setup.stageId ?? stages[0]?.id ?? "skyline-arena";
 
   const render = () => {
-    const selected = stages.find((s) => s.id === selectedId) ?? stages[0];
-    root.innerHTML = `
-      <div class="screen match-setup-stage">
-        <h2>Map Select</h2>
-        <p class="hint">${isFlagline ? "Flagline Clash uses a five-room map strip. Center Clash is the starting room." : "Pick the battlefield."}</p>
-        ${
-          isFlagline
-            ? `
-        <div class="flagline-strip">
-          ${FLAGLINE_ROOM_IDS.map(
-            (id) => {
-              const s = stages.find((st) => st.id === id);
-              return `<div class="flagline-room ${id === "flagline-center-clash" ? "start-room" : ""}">${s?.name ?? id}</div>`;
-            },
-          ).join("")}
-        </div>
-        <p class="hint"><small>Flagline map set — select the starting arena below.</small></p>`
-            : ""
-        }
-        <div class="stage-select-layout">
-          ${renderStagePreviewPanel({ stageId: selectedId })}
-          ${renderStageGrid({ stages, selectedId })}
-        </div>
-        <div class="rules-summary">
-          <strong>Selected stage:</strong> ${selected?.name ?? "—"}
-        </div>
-        <div class="create-actions">
-          <button type="button" id="mss-back" class="btn-secondary">Back to Rules</button>
-          <button type="button" id="mss-continue" class="btn-primary">Continue to Character Select</button>
-        </div>
+    const summary = `${setup.ruleset?.name ?? "Rules"} · ${stages.find((s) => s.id === selectedId)?.name ?? "Stage"}`;
+    const flaglineStrip = isFlagline
+      ? `<div class="flagline-strip setup-hero-panel">
+          ${FLAGLINE_ROOM_IDS.map((id) => {
+            const s = stages.find((st) => st.id === id);
+            return `<div class="flagline-room ${id === "flagline-center-clash" ? "start-room" : ""}">${s?.name ?? id}</div>`;
+          }).join("")}
+        </div>`
+      : "";
+
+    const body = `
+      ${flaglineStrip}
+      <div class="stage-select-layout setup-hero-panel-row">
+        ${renderStagePreviewHero(selectedId)}
+        ${renderStageSelectGrid(stages, selectedId)}
       </div>
     `;
 
-    bindStageGrid(root, (id) => {
-      selectedId = id;
-      render();
+    root.innerHTML = renderSetupFlowShell({
+      step: "stage",
+      title: "Map Select",
+      subtitle: isFlagline ? "Flagline Clash uses a five-room map strip." : "Pick the battlefield.",
+      summary,
+      body,
+      footer: {
+        backId: "mss-back",
+        backLabel: "Back to Rules",
+        continueId: "mss-continue",
+        continueLabel: "Continue to Character Select",
+      },
+    });
+
+    root.querySelectorAll(".stage-select-thumb").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        selectedId = (btn as HTMLButtonElement).dataset.id!;
+        render();
+      });
     });
 
     root.querySelector("#mss-back")?.addEventListener("click", () => navigateToHash(APP_ROUTES.matchSetupRules));
