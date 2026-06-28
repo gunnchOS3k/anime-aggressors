@@ -1,13 +1,21 @@
 import * as THREE from "three";
+import type { FighterSize } from "@anime-aggressors/game-core";
 import type { FighterAppearance } from "./FighterAppearance.ts";
 import { buildLowPolyHumanoid, disposeHumanoid, type LowPolyHumanoidParts } from "./LowPolyHumanoid.ts";
 import { characterWorldScale } from "../RenderTypes.ts";
 import { getDefaultCreatedFighter } from "@anime-aggressors/game-core";
 import { resolveFighterAppearance } from "./FighterAppearance.ts";
 
+/** Preview scene uses unscaled humanoid (~2 units tall). */
+export function createPreviewFighterModel(appearance: FighterAppearance): LowPolyHumanoidParts {
+  const parts = buildLowPolyHumanoid(appearance);
+  parts.root.scale.setScalar(appearance.scale);
+  return parts;
+}
+
 export function createFighterModel(appearance: FighterAppearance): LowPolyHumanoidParts {
   const parts = buildLowPolyHumanoid(appearance);
-  const scale = characterWorldScale(appearance.scale);
+  const scale = characterWorldScale(appearance.size);
   parts.root.scale.setScalar(scale);
   return parts;
 }

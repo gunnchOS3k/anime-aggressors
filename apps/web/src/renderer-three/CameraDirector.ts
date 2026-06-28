@@ -1,8 +1,9 @@
 import * as THREE from "three";
 import type { GameState } from "@anime-aggressors/game-core";
-import { FP_SCALE, STAGE_HEIGHT, STAGE_WIDTH } from "@anime-aggressors/game-core";
+import { STAGE_HEIGHT, STAGE_WIDTH } from "@anime-aggressors/game-core";
 import { computeCameraBounds, type CameraBounds } from "./cameraBounds.ts";
 import { computeCinematicPulse, launchCameraBias } from "./camera/CinematicEffects.ts";
+import { applyBattleCameraAngle } from "./camera/BattleCamera.ts";
 import { fpToWorld } from "./RenderTypes.ts";
 
 export type { CameraBounds };
@@ -12,9 +13,9 @@ const DEFAULT_TARGET = new THREE.Vector3(
   fpToWorld(STAGE_HEIGHT * 0.62),
   0,
 );
-const DEFAULT_ZOOM = 420;
-const MIN_ZOOM = 180;
-const MAX_ZOOM = 720;
+const DEFAULT_ZOOM = 340;
+const MIN_ZOOM = 160;
+const MAX_ZOOM = 620;
 
 export class CameraDirector {
   private camera: THREE.OrthographicCamera;
@@ -27,9 +28,8 @@ export class CameraDirector {
   constructor(aspect: number, smooth = true) {
     this.smooth = smooth;
     this.aspect = aspect;
-    this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 5000);
-    this.camera.position.set(DEFAULT_TARGET.x, DEFAULT_TARGET.y, 800);
-    this.camera.lookAt(DEFAULT_TARGET);
+    this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 8000);
+    applyBattleCameraAngle(this.camera, DEFAULT_TARGET, this.zoom);
     this.resize(aspect);
   }
 
@@ -39,6 +39,10 @@ export class CameraDirector {
 
   getTarget(): THREE.Vector3 {
     return this.target;
+  }
+
+  getZoom(): number {
+    return this.zoom;
   }
 
   computeBounds(state: GameState): CameraBounds {
@@ -57,7 +61,7 @@ export class CameraDirector {
     const spanY = Math.max(80, b.maxY - b.minY);
     const pulse = computeCinematicPulse(hitEvent, koEvent, state.hitstopFrames);
     const launchBias = launchCameraBias(state);
-    let desiredZoom = Math.max(spanX / 1.6, spanY / 1.2) * (1.1 + pulse.zoomBias + launchBias);
+    let desiredZoom = Math.max(spanX / 1.45, spanY / 1.05) * (1.05 + pulse.zoomBias + launchBias);
     desiredZoom = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, desiredZoom));
 
     if (this.smooth) {
@@ -75,8 +79,7 @@ export class CameraDirector {
     if (koEvent) this.shake = Math.max(this.shake, 12);
     this.shake *= 0.85;
 
-    this.camera.position.set(this.target.x + shakeX, this.target.y + shakeY, 800);
-    this.camera.lookAt(this.target.x, this.target.y, 0);
+    applyBattleCameraAngle(this.camera, this.target, this.zoom, shakeX, shakeY);
     this.camera.left = -this.zoom;
     this.camera.right = this.zoom;
     this.camera.top = this.zoom / this.aspect;

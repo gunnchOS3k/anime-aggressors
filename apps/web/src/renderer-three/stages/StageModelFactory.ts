@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { FP_SCALE, STAGE_HEIGHT, STAGE_WIDTH, getStageLayout, type StagePlatform } from "@anime-aggressors/game-core";
-import { createStageMaterial, createNeonMaterial } from "../materials/AnimeMaterialLibrary.ts";
-import { fpToWorld } from "../RenderTypes.ts";
+import { createStageMaterial, createNeonMaterial, createAccentMaterial } from "../materials/AnimeMaterialLibrary.ts";
+import { fpToWorld, STAGE_PLATFORM_DEPTH } from "../RenderTypes.ts";
 
 export type StageBuildResult = {
   group: THREE.Group;
@@ -35,14 +35,34 @@ function countObjects(group: THREE.Object3D): number {
   return n;
 }
 
-function platformMesh(p: StagePlatform, color: number, depth = 4): THREE.Mesh {
+function platformMesh(p: StagePlatform, color: number, accent: number): THREE.Group {
+  const g = new THREE.Group();
   const w = fpToWorld(p.width);
-  const h = Math.max(fpToWorld(p.height), 2);
+  const h = Math.max(fpToWorld(p.height), 3);
+  const depth = STAGE_PLATFORM_DEPTH;
   const cx = fpToWorld(p.x + p.width / 2);
   const cy = fpToWorld(p.y) - h / 2;
-  const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, depth), createStageMaterial(color));
-  mesh.position.set(cx, cy, 0);
-  return mesh;
+  const cz = depth * 0.35;
+
+  const body = new THREE.Mesh(new THREE.BoxGeometry(w, h, depth), createStageMaterial(color));
+  body.position.set(cx, cy, cz);
+  g.add(body);
+
+  const lip = new THREE.Mesh(
+    new THREE.BoxGeometry(w, Math.max(h * 0.22, 2), depth * 0.92),
+    createAccentMaterial(accent),
+  );
+  lip.position.set(cx, cy - h * 0.38, cz + depth * 0.08);
+  g.add(lip);
+
+  const top = new THREE.Mesh(
+    new THREE.BoxGeometry(w * 0.98, 1.2, depth * 0.98),
+    createAccentMaterial(accent),
+  );
+  top.position.set(cx, cy + h * 0.48, cz);
+  g.add(top);
+
+  return g;
 }
 
 function addBackdrop(group: THREE.Group, hues: number[], z = -12): void {
@@ -69,7 +89,7 @@ function buildFromLayout(stageId: string, floorColor: number, accent: number, bg
   const g = new THREE.Group();
   const layout = getStageLayout(stageId);
   for (const p of layout.platforms) {
-    g.add(platformMesh(p, floorColor));
+    g.add(platformMesh(p, floorColor, accent));
   }
   addBackdrop(g, bg);
   return g;
@@ -114,7 +134,7 @@ function buildTrainingGrid(): THREE.Group {
 
 function buildImpactPlatform(): THREE.Group {
   const g = buildFromLayout("impact-platform", 0x3a4460, 0xffaa44, [0x182030, 0x203040]);
-  const runway = g.children[0] as THREE.Mesh | undefined;
+  const runway = g.children[0] as THREE.Group | undefined;
   if (runway) {
     runway.scale.z = 1.4;
   }
@@ -191,6 +211,17 @@ function buildStageModelInternal(requestedId: string, isFallback = false): Stage
 
 export function buildStageModel(stageId: string): StageBuildResult {
   return buildStageModelInternal(stageId);
+}
+
+export function measureStagePlatformDepth(group: THREE.Object3D): number {
+  let maxDepth = 0;
+  group.traverse((o) => {
+    if (o instanceof THREE.Mesh && o.geometry instanceof THREE.BoxGeometry) {
+      const p = o.geometry.parameters as { depth?: number };
+      if (p.depth) maxDepth = Math.max(maxDepth, p.depth * o.scale.z);
+    }
+  });
+  return maxDepth;
 }
 
 export { STAGE_NAMES, FALLBACK_STAGE_ID };

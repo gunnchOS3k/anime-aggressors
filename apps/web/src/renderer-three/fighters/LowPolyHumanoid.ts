@@ -23,95 +23,116 @@ export function buildLowPolyHumanoid(appearance: FighterAppearance): LowPolyHuma
   const extras: THREE.Object3D[] = [];
 
   const torsoScale = silhouetteTorso(appearance.silhouette);
-  const torso = createToonMesh(new THREE.BoxGeometry(0.9 * torsoScale.w, 1.05, 0.45 * torsoScale.d), bodyMat, accent);
+  const torsoDepth = 0.58 * torsoScale.d;
+  const torso = createToonMesh(
+    new THREE.BoxGeometry(0.92 * torsoScale.w, 1.08, torsoDepth),
+    bodyMat,
+    accent,
+  );
   torso.position.y = 1.05;
   addOutline(torso);
 
-  const headSize = appearance.silhouette === "heavy" ? 0.42 : appearance.silhouette === "lean" ? 0.34 : 0.38;
-  const head = createToonMesh(new THREE.BoxGeometry(headSize, headSize, headSize * 0.9), accent);
-  head.position.y = 1.75;
+  const headSize = appearance.silhouette === "heavy" ? 0.44 : appearance.silhouette === "lean" ? 0.36 : 0.4;
+  const head = createToonMesh(new THREE.SphereGeometry(headSize, 10, 10), accent);
+  head.position.y = 1.78;
   addOutline(head);
 
   if (appearance.parts.hair === "angular" || appearance.parts.hair === "tufts") {
-    const spike = createToonMesh(new THREE.BoxGeometry(0.12, 0.35, 0.08), accent);
-    spike.position.set(0, 2.05, 0.05);
+    const spike = createToonMesh(new THREE.BoxGeometry(0.14, 0.38, 0.12), accent);
+    spike.position.set(0, 2.08, 0.06);
     spike.rotation.z = appearance.parts.hair === "tufts" ? 0.2 : -0.15;
     extras.push(spike);
     root.add(spike);
   }
 
   if (appearance.parts.hood) {
-    const hood = createToonMesh(new THREE.BoxGeometry(headSize * 1.3, 0.25, headSize), dark);
-    hood.position.set(0, 1.88, -0.05);
+    const hood = createToonMesh(new THREE.BoxGeometry(headSize * 1.35, 0.28, headSize * 1.1), dark);
+    hood.position.set(0, 1.9, -0.06);
     extras.push(hood);
     root.add(hood);
   }
 
-  const armLen = appearance.silhouette === "lean" ? 0.55 : appearance.silhouette === "heavy" ? 0.72 : 0.65;
-  const armW = appearance.parts.gauntlets === "block" ? 0.32 : 0.22;
-  const leftArm = createToonMesh(new THREE.BoxGeometry(armW, armLen, armW), dark);
-  leftArm.position.set(-0.62 * torsoScale.w, 1.15, 0);
-  const rightArm = createToonMesh(new THREE.BoxGeometry(armW, armLen, armW), dark);
-  rightArm.position.set(0.62 * torsoScale.w, 1.15, 0);
+  const armLen = appearance.silhouette === "lean" ? 0.58 : appearance.silhouette === "heavy" ? 0.76 : 0.68;
+  const armW = appearance.parts.gauntlets === "block" ? 0.34 : 0.24;
+  const armDepth = 0.26;
+  const leftArm = createToonMesh(new THREE.BoxGeometry(armW, armLen, armDepth), dark);
+  leftArm.position.set(-0.64 * torsoScale.w, 1.15, 0.04);
+  const rightArm = createToonMesh(new THREE.BoxGeometry(armW, armLen, armDepth), dark);
+  rightArm.position.set(0.64 * torsoScale.w, 1.15, 0.04);
+
+  const handL = createToonMesh(new THREE.BoxGeometry(0.2, 0.2, 0.2), accent);
+  handL.position.set(-0.64 * torsoScale.w, 0.78, 0.06);
+  const handR = handL.clone();
+  handR.position.x = 0.64 * torsoScale.w;
+  extras.push(handL, handR);
+  root.add(handL, handR);
 
   if (appearance.parts.gauntlets) {
     const glow = appearance.parts.gauntlets === "flame" ? appearance.vfx.hitSpark : accent;
-    const gauntL = createToonMesh(new THREE.BoxGeometry(0.28, 0.22, 0.28), glow);
-    gauntL.position.set(-0.62 * torsoScale.w, 0.82, 0.05);
+    const gauntL = createToonMesh(new THREE.BoxGeometry(0.32, 0.26, 0.32), glow);
+    gauntL.position.set(-0.64 * torsoScale.w, 0.82, 0.1);
     const gauntR = gauntL.clone();
-    gauntR.position.x = 0.62 * torsoScale.w;
+    gauntR.position.x = 0.64 * torsoScale.w;
     extras.push(gauntL, gauntR);
     root.add(gauntL, gauntR);
   }
 
-  const legH = appearance.silhouette === "heavy" ? 0.75 : 0.85;
-  const bootH = appearance.parts.heavyBoots ? 0.18 : 0;
-  const leftLeg = createToonMesh(new THREE.BoxGeometry(0.28, legH, 0.28), dark);
-  leftLeg.position.set(-0.28, 0.38 + bootH * 0.5, 0);
-  const rightLeg = createToonMesh(new THREE.BoxGeometry(0.28, legH, 0.28), dark);
-  rightLeg.position.set(0.28, 0.38 + bootH * 0.5, 0);
+  const legH = appearance.silhouette === "heavy" ? 0.78 : 0.88;
+  const bootH = appearance.parts.heavyBoots ? 0.2 : 0;
+  const legDepth = 0.3;
+  const leftLeg = createToonMesh(new THREE.BoxGeometry(0.3, legH, legDepth), dark);
+  leftLeg.position.set(-0.3, 0.4 + bootH * 0.5, 0.02);
+  const rightLeg = createToonMesh(new THREE.BoxGeometry(0.3, legH, legDepth), dark);
+  rightLeg.position.set(0.3, 0.4 + bootH * 0.5, 0.02);
+
+  const footL = createToonMesh(new THREE.BoxGeometry(0.34, 0.14, 0.38), dark);
+  footL.position.set(-0.3, 0.08 + bootH, 0.04);
+  const footR = footL.clone();
+  footR.position.x = 0.3;
+  extras.push(footL, footR);
+  root.add(footL, footR);
 
   if (appearance.parts.heavyBoots) {
-    const bootL = createToonMesh(new THREE.BoxGeometry(0.34, bootH, 0.38), accent);
-    bootL.position.set(-0.28, bootH * 0.5, 0.02);
+    const bootL = createToonMesh(new THREE.BoxGeometry(0.38, bootH, 0.42), accent);
+    bootL.position.set(-0.3, bootH * 0.5, 0.04);
     const bootR = bootL.clone();
-    bootR.position.x = 0.28;
+    bootR.position.x = 0.3;
     extras.push(bootL, bootR);
     root.add(bootL, bootR);
   }
 
   if (appearance.parts.shoulderArmor) {
-    const padL = createToonMesh(new THREE.BoxGeometry(0.35, 0.22, 0.35), accent);
-    padL.position.set(-0.55 * torsoScale.w, 1.55, 0);
+    const padL = createToonMesh(new THREE.BoxGeometry(0.38, 0.24, 0.38), accent);
+    padL.position.set(-0.58 * torsoScale.w, 1.58, 0.02);
     const padR = padL.clone();
-    padR.position.x = 0.55 * torsoScale.w;
+    padR.position.x = 0.58 * torsoScale.w;
     extras.push(padL, padR);
     root.add(padL, padR);
   }
 
   if (appearance.parts.jacket) {
     const jacket = createToonMesh(
-      new THREE.BoxGeometry(1.0 * torsoScale.w, appearance.parts.jacket === "long-coat" ? 1.35 : 0.55, 0.5),
+      new THREE.BoxGeometry(1.02 * torsoScale.w, appearance.parts.jacket === "long-coat" ? 1.38 : 0.58, 0.58),
       dark,
     );
-    jacket.position.set(0, appearance.parts.jacket === "long-coat" ? 0.95 : 1.35, -0.08);
+    jacket.position.set(0, appearance.parts.jacket === "long-coat" ? 0.95 : 1.38, -0.1);
     extras.push(jacket);
     root.add(jacket);
   }
 
   if (appearance.parts.mantle) {
-    const mantle = createToonMesh(new THREE.BoxGeometry(1.15, 0.35, 0.55), accent);
-    mantle.position.set(0, 1.65, -0.12);
+    const mantle = createToonMesh(new THREE.BoxGeometry(1.2, 0.38, 0.62), accent);
+    mantle.position.set(0, 1.68, -0.14);
     extras.push(mantle);
     root.add(mantle);
   }
 
   if (appearance.parts.wingSleeves) {
-    const sleeveL = createToonMesh(new THREE.BoxGeometry(0.1, 0.5, 0.55), accent);
-    sleeveL.position.set(-0.72 * torsoScale.w, 1.25, 0);
+    const sleeveL = createToonMesh(new THREE.BoxGeometry(0.12, 0.55, 0.6), accent);
+    sleeveL.position.set(-0.74 * torsoScale.w, 1.28, 0.02);
     sleeveL.rotation.z = 0.25;
     const sleeveR = sleeveL.clone();
-    sleeveR.position.x = 0.72 * torsoScale.w;
+    sleeveR.position.x = 0.74 * torsoScale.w;
     sleeveR.rotation.z = -0.25;
     extras.push(sleeveL, sleeveR);
     root.add(sleeveL, sleeveR);
@@ -122,20 +143,20 @@ export function buildLowPolyHumanoid(appearance: FighterAppearance): LowPolyHuma
 
   if (appearance.parts.floatingBits) {
     for (let i = 0; i < 3; i++) {
-      const stone = createToonMesh(new THREE.BoxGeometry(0.12, 0.12, 0.12), accent);
+      const stone = createToonMesh(new THREE.BoxGeometry(0.14, 0.14, 0.14), accent);
       stone.name = `orbit-stone-${i}`;
-      stone.position.set(Math.cos(i * 2.1) * 0.75, 1.2 + i * 0.15, Math.sin(i * 2.1) * 0.75);
+      stone.position.set(Math.cos(i * 2.1) * 0.8, 1.25 + i * 0.15, Math.sin(i * 2.1) * 0.8);
       extras.push(stone);
       root.add(stone);
     }
   }
 
   const aura = new THREE.Mesh(
-    new THREE.RingGeometry(0.55, 0.75, 24),
+    new THREE.RingGeometry(0.58, 0.82, 28),
     new THREE.MeshBasicMaterial({
       color: appearance.vfx.aura,
       transparent: true,
-      opacity: 0.22,
+      opacity: 0.28,
       side: THREE.DoubleSide,
     }),
   );
@@ -143,7 +164,6 @@ export function buildLowPolyHumanoid(appearance: FighterAppearance): LowPolyHuma
   aura.position.y = 0.05;
 
   root.add(torso, head, leftArm, rightArm, leftLeg, rightLeg, aura);
-  root.scale.setScalar(appearance.scale);
 
   return { root, torso, head, leftArm, rightArm, leftLeg, rightLeg, accessory, extras, aura };
 }
@@ -151,13 +171,13 @@ export function buildLowPolyHumanoid(appearance: FighterAppearance): LowPolyHuma
 function silhouetteTorso(kind: FighterAppearance["silhouette"]): { w: number; d: number } {
   switch (kind) {
     case "angular":
-      return { w: 1.08, d: 0.95 };
+      return { w: 1.08, d: 1.05 };
     case "sleek":
-      return { w: 0.92, d: 1.05 };
+      return { w: 0.92, d: 1.12 };
     case "lean":
-      return { w: 0.82, d: 0.88 };
+      return { w: 0.82, d: 0.95 };
     case "heavy":
-      return { w: 1.22, d: 1.1 };
+      return { w: 1.26, d: 1.18 };
   }
 }
 
@@ -166,43 +186,43 @@ function buildAccessory(appearance: FighterAppearance): THREE.Object3D | null {
   const parts = appearance.parts;
 
   if (parts.scarf === "lightning" || parts.scarf === "sash") {
-    const scarf = createToonMesh(new THREE.BoxGeometry(0.15, 0.9, 0.5), appearance.accentHex);
+    const scarf = createToonMesh(new THREE.BoxGeometry(0.16, 0.95, 0.55), appearance.accentHex);
     scarf.name = "scarf";
-    scarf.position.set(0, 1.5, -0.35);
+    scarf.position.set(0, 1.52, -0.38);
     g.add(scarf);
     return g;
   }
 
   switch (appearance.accessory) {
     case "blade": {
-      const blade = createToonMesh(new THREE.BoxGeometry(0.08, 0.9, 0.18), appearance.accentHex, appearance.vfx.hitSpark);
-      blade.position.set(0.75, 1.2, 0.2);
+      const blade = createToonMesh(new THREE.BoxGeometry(0.1, 0.95, 0.2), appearance.accentHex, appearance.vfx.hitSpark);
+      blade.position.set(0.78, 1.22, 0.22);
       blade.rotation.z = -0.4;
       g.add(blade);
       break;
     }
     case "scarf": {
-      const scarf = createToonMesh(new THREE.BoxGeometry(0.15, 0.9, 0.5), appearance.accentHex);
-      scarf.position.set(0, 1.5, -0.35);
+      const scarf = createToonMesh(new THREE.BoxGeometry(0.16, 0.95, 0.55), appearance.accentHex);
+      scarf.position.set(0, 1.52, -0.38);
       g.add(scarf);
       break;
     }
     case "wings": {
-      const wingL = createToonMesh(new THREE.BoxGeometry(0.08, 0.55, 0.45), appearance.accentHex);
-      wingL.position.set(-0.55, 1.35, -0.15);
+      const wingL = createToonMesh(new THREE.BoxGeometry(0.1, 0.58, 0.48), appearance.accentHex);
+      wingL.position.set(-0.58, 1.38, -0.12);
       wingL.rotation.z = 0.35;
       const wingR = wingL.clone();
-      wingR.position.x = 0.55;
+      wingR.position.x = 0.58;
       wingR.rotation.z = -0.35;
       g.add(wingL, wingR);
       break;
     }
     case "cape": {
       const cape = createToonMesh(
-        new THREE.BoxGeometry(parts.cape === "asymmetric" ? 0.85 : 1.1, 1.2, 0.08),
+        new THREE.BoxGeometry(parts.cape === "asymmetric" ? 0.88 : 1.15, 1.25, 0.12),
         appearance.darkHex,
       );
-      cape.position.set(parts.cape === "asymmetric" ? 0.12 : 0, 1.05, -0.32);
+      cape.position.set(parts.cape === "asymmetric" ? 0.12 : 0, 1.08, -0.36);
       g.add(cape);
       break;
     }

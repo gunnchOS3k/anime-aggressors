@@ -99,6 +99,10 @@ export class ThreeGameRenderer {
     return `pos(${c.position.x.toFixed(1)},${c.position.y.toFixed(1)},${c.position.z.toFixed(1)}) target(${t.x.toFixed(1)},${t.y.toFixed(1)})`;
   }
 
+  getCamera(): THREE.OrthographicCamera {
+    return this.cameraDirector.getCamera();
+  }
+
   update(gameState: GameState, renderOptions: RenderOptions = {}): void {
     try {
       const stageId = gameState.config.stageId ?? "skyline-arena";

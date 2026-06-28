@@ -10,14 +10,17 @@ import {
   type LowPolyHumanoidParts,
 } from "./fighters/FighterModelFactory.ts";
 import { applyFighterPose, computeFighterPose } from "./fighters/FighterAnimator.ts";
+import { ContactShadow } from "./vfx/ContactShadow.ts";
 
 export class CharacterView {
   readonly group = new THREE.Group();
   private parts: LowPolyHumanoidParts;
   private shieldMesh: THREE.Mesh;
+  private contactShadow: ContactShadow;
   private appearanceKey = "";
   private baseTorsoColor = new THREE.Color();
   private shieldColor = 0x5599ff;
+  private fighterSize: import("@anime-aggressors/game-core").FighterSize = "medium";
 
   constructor(playerId: number) {
     let appearance;
@@ -28,12 +31,17 @@ export class CharacterView {
       appearance = resolveFighterAppearance(getDefaultCreatedFighter(playerId));
       this.parts = createFallbackFighterModel(playerId);
     }
+    this.fighterSize = appearance.size;
     this.group.add(this.parts.root);
     this.appearanceKey = `${appearance.name}-${appearance.color}-${appearance.size}`;
     this.baseTorsoColor.setHex(appearance.primaryHex);
     this.shieldColor = appearance.vfx.shield;
 
-    const shieldR = characterWorldScale(appearance.scale) * 0.45;
+    const scale = characterWorldScale(appearance.size);
+    this.contactShadow = new ContactShadow(scale * 0.42, 0x000000, 0.32);
+    this.group.add(this.contactShadow.mesh);
+
+    const shieldR = scale * 0.45;
     this.shieldMesh = new THREE.Mesh(
       new THREE.SphereGeometry(shieldR, 16, 16),
       new THREE.MeshBasicMaterial({ color: this.shieldColor, transparent: true, opacity: 0.22 }),
@@ -57,6 +65,7 @@ export class CharacterView {
         }
         this.group.add(this.parts.root);
         this.appearanceKey = key;
+        this.fighterSize = appearance.size;
         this.baseTorsoColor.setHex(appearance.primaryHex);
         this.shieldColor = appearance.vfx.shield;
         (this.shieldMesh.material as THREE.MeshBasicMaterial).color.setHex(this.shieldColor);
@@ -68,10 +77,11 @@ export class CharacterView {
     const pose = computeFighterPose(player, frame);
     applyFighterPose(this.parts, pose, player.facing);
 
-    const scale = characterWorldScale(appearance.scale);
-    this.group.position.set(fpToWorld(player.x), fpToWorld(player.y), player.id * 0.35);
+    const scale = characterWorldScale(this.fighterSize);
+    this.group.position.set(fpToWorld(player.x), fpToWorld(player.y), player.id * 1.4);
+    this.contactShadow.setRadius(scale * 0.42);
     this.shieldMesh.visible = player.actionState === "shielding";
-    this.shieldMesh.position.set(0, scale * 1.1, scale * 0.1);
+    this.shieldMesh.position.set(0, scale * 1.1, scale * 0.12);
 
     const torsoMat = this.parts.torso.material as THREE.MeshToonMaterial;
     if (player.actionState === "hitstun") {
@@ -84,12 +94,17 @@ export class CharacterView {
       this.group.visible = true;
       torsoMat.color.copy(this.baseTorsoColor);
       torsoMat.emissive.setHex(appearance.accentHex);
-      torsoMat.emissiveIntensity = 0.08;
+      torsoMat.emissiveIntensity = 0.12;
     }
+  }
+
+  getParts(): LowPolyHumanoidParts {
+    return this.parts;
   }
 
   dispose(): void {
     destroyFighterModel(this.parts);
+    this.contactShadow.dispose();
     this.shieldMesh.geometry.dispose();
     (this.shieldMesh.material as THREE.Material).dispose();
   }
