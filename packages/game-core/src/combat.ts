@@ -29,6 +29,16 @@ import {
 } from "./moves/moveDefinitions.js";
 import { maybeSpawnSuperEnergyAttack } from "./combat/energyClash.js";
 import {
+  applyAuraHitPenalty,
+  canStartAuraCharge,
+  consumeAuraOnSuper,
+  releaseAuraCharge,
+  startAuraCharge,
+  tickAuraDecay,
+  tickAuraWhileCharging,
+} from "./aura/auraCharge.js";
+import { createDefaultAuraState } from "./aura/auraTypes.js";
+import {
   bufferJump,
   canCoyoteJump,
   consumeJumpBuffer,
@@ -59,6 +69,10 @@ function applyInputMovement(player: PlayerState, input: InputFrame): void {
 
   if (player.actionState === "hitstun" || player.actionState === "defeated") return;
   if (player.actionState === "dodging") return;
+  if (player.actionState === "auraCharging") {
+    player.vx = Math.floor(player.vx * 0.5);
+    return;
+  }
 
   const canMove =
     player.onGround ||
@@ -91,6 +105,7 @@ function applyInputMovement(player: PlayerState, input: InputFrame): void {
 
 function startAction(player: PlayerState, input: InputFrame): void {
   if (player.actionState === "hitstun" || player.actionState === "defeated") return;
+  if (player.actionState === "auraCharging") return;
   if (
     player.actionState === "attacking" ||
     player.actionState === "special" ||
@@ -107,6 +122,11 @@ function startAction(player: PlayerState, input: InputFrame): void {
     player.currentMoveId = "dodge";
     player.vx = player.facing * DODGE_SPEED;
     player.invulnFrames = DODGE_MOVE.startup + DODGE_MOVE.active;
+    return;
+  }
+
+  if (input.shield && input.special && canStartAuraCharge(player)) {
+    startAuraCharge(player);
     return;
   }
 
@@ -250,6 +270,9 @@ function tickActionState(state: GameState, player: PlayerState): void {
       player.hitstunFrames = HITSTUN_BASE * 2;
     }
   }
+  if (player.actionState === "auraCharging") {
+    player.shieldHealth = Math.max(SHIELD_MAX * 0.4, player.shieldHealth - 0.5);
+  }
 }
 
 function applyHit(
@@ -303,6 +326,7 @@ function applyHit(
   defender.hitstunFrames = HITSTUN_BASE + Math.floor((defender.damage || 0) / 10);
   defender.onGround = false;
   defender.currentMoveId = "none";
+  applyAuraHitPenalty(defender, finalDamage >= 15);
 
   const elementMode = state.config.ruleset?.elementMode ?? "on";
   if (elementGameplayEnabled(elementMode)) {
@@ -348,6 +372,7 @@ function respawnPlayer(
   player.slowFramesRemaining = 0;
   player.slowMultiplierFp = 100;
   player.airDriftBonusFrames = 0;
+  player.aura = createDefaultAuraState();
   const char = getCharacter(player.characterId);
   player.jumpsRemaining = char.maxJumps;
   player.onGround = true;
@@ -409,13 +434,25 @@ export function resolveCombat(state: GameState): void {
 export function processPlayer(state: GameState, player: PlayerState, input: InputFrame | undefined): void {
   if (player.actionState === "defeated") return;
 
+  tickAuraDecay(player);
+
   if (input) {
     if (player.actionState === "shielding" && !input.shield) {
       player.actionState = "idle";
       player.shieldHealth = SHIELD_MAX;
     }
 
-    startAction(player, input);
+    if (player.actionState === "auraCharging") {
+      if (!tickAuraWhileCharging(player, input)) {
+        const fighterId = fighterIdFromCharacterId(player.characterId);
+        if (releaseAuraCharge(player) === "super") {
+          const fighterMove = getFighterMove(fighterId, "super");
+          player.currentMoveId = fighterMove?.id ?? "super";
+        }
+      }
+    } else {
+      startAction(player, input);
+    }
     applyInputMovement(player, input);
   } else {
     if (player.jumpBufferFrames > 0) player.jumpBufferFrames -= 1;

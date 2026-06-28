@@ -178,6 +178,93 @@ body {
   text-shadow: 0 1px 4px #000;
 }
 
+.pf-hud-aura-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.35rem 1rem 0;
+}
+
+.pf-aura-meter {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 140px;
+}
+
+.pf-aura-meter--right {
+  flex-direction: row-reverse;
+}
+
+.pf-aura-track {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.pf-aura-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #556, #aaf);
+  transition: width 0.08s linear;
+}
+
+.pf-aura-fill--level-1 { background: linear-gradient(90deg, #668, #9cf); }
+.pf-aura-fill--level-2 { background: linear-gradient(90deg, #77a, #bdf); }
+.pf-aura-fill--level-3 { background: linear-gradient(90deg, #88f, #ffd); }
+
+.pf-aura-meter.super-ready .pf-aura-fill--level-3 {
+  animation: pf-aura-pulse 0.6s ease-in-out infinite alternate;
+}
+
+.pf-super-ready-badge {
+  display: inline-block;
+  margin-left: 0.35rem;
+  padding: 0.1rem 0.35rem;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #ffe;
+  background: linear-gradient(90deg, #f60, #fd0);
+  border-radius: 4px;
+  animation: pf-aura-pulse 0.5s ease-in-out infinite alternate;
+}
+
+.pf-element-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 50%;
+  font-size: 0.65rem;
+  font-weight: 800;
+  background: #334;
+}
+
+.pf-el-flame { background: #622; color: #faa; }
+.pf-el-impact { background: #632; color: #fc8; }
+.pf-el-volt { background: #663; color: #ff8; }
+.pf-el-gale { background: #363; color: #afa; }
+.pf-el-frost { background: #346; color: #bdf; }
+.pf-el-gravity { background: #334; color: #aaf; }
+.pf-el-void { background: #424; color: #daf; }
+
+.pf-training-aura-hint {
+  padding: 0.35rem 0.75rem;
+  margin-bottom: 0.35rem;
+  font-size: 0.8rem;
+  color: #bdf;
+  background: rgba(20, 30, 60, 0.85);
+  border-radius: 6px;
+}
+
+@keyframes pf-aura-pulse {
+  from { filter: brightness(1); }
+  to { filter: brightness(1.35); }
+}
+
 .pf-timer {
   opacity: 0.85;
 }

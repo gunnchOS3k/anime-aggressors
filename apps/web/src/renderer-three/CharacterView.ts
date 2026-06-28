@@ -94,7 +94,9 @@ export class CharacterView {
       this.group.visible = true;
       torsoMat.color.copy(this.baseTorsoColor);
       torsoMat.emissive.setHex(appearance.accentHex);
-      torsoMat.emissiveIntensity = 0.12;
+      torsoMat.emissiveIntensity = player.actionState === "auraCharging" ? 0.18 + player.aura.level * 0.08 : 0.12;
+      const auraMat = this.parts.aura.material as THREE.MeshBasicMaterial;
+      auraMat.opacity = player.actionState === "auraCharging" ? 0.25 + player.aura.level * 0.2 : 0.15 + player.aura.level * 0.05;
     }
   }
 

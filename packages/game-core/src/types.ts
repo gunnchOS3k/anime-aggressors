@@ -41,6 +41,7 @@ export type PlayerActionState =
   | "attacking"
   | "special"
   | "shielding"
+  | "auraCharging"
   | "dodging"
   | "hitstun"
   | "defeated";
@@ -78,6 +79,7 @@ export type PlayerState = {
   jumpBufferFrames: number;
   fastFalling: boolean;
   currentMoveId: string;
+  aura: import("./aura/auraTypes.js").AuraChargeState;
 };
 
 export type StageBounds = {

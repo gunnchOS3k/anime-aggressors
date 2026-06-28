@@ -2,6 +2,7 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { ELEMENTS, getElementForColor, applyElementOnHit } from "../src/elements.js";
 import type { PlayerState } from "../src/types.js";
+import { createDefaultAuraState } from "../src/aura/auraTypes.js";
 import { NEUTRAL_ATTACK } from "../src/frameData.js";
 
 const COLORS = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"] as const;
@@ -40,6 +41,7 @@ function player(): PlayerState {
     jumpBufferFrames: 0,
     fastFalling: false,
     currentMoveId: "neutral_attack",
+    aura: createDefaultAuraState(),
   };
 }
 

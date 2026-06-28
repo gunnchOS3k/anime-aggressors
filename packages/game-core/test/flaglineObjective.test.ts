@@ -1,6 +1,7 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import type { PlayerState } from "../src/types.js";
+import { createDefaultAuraState } from "../src/aura/auraTypes.js";
 import { FP_SCALE, FLOOR_Y } from "../src/constants.js";
 import { getFlaglineRoom } from "../src/modes/flaglineMaps.js";
 import {
@@ -61,6 +62,7 @@ function player(id: number, x: number, y: number, defeated = false): PlayerState
     jumpBufferFrames: 0,
     fastFalling: false,
     currentMoveId: "none",
+    aura: createDefaultAuraState(),
   };
 }
 

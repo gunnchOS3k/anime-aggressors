@@ -22,6 +22,7 @@ export const ANIMATION_STATES = [
   "superActive",
   "superRecovery",
   "shield",
+  "auraCharge",
   "dodge",
   "grab",
   "throw",

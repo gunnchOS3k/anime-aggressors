@@ -25,6 +25,7 @@ export {
 
 export { createInitialGameState, cloneGameState } from "./state.js";
 export { simulateFrame, resetForRematch } from "./simulate.js";
+export { processPlayer } from "./combat.js";
 export { getCharacter, listCharacters } from "./characters.js";
 export type { CharacterDef } from "./characters.js";
 export { getStage, listStages, stageHasLayout } from "./stages.js";
@@ -32,6 +33,21 @@ export type { StageDef } from "./stages.js";
 export { getStageLayout, listStageLayoutIds, STAGE_LAYOUTS } from "./stageLayouts.js";
 export type { StageLayoutDef, StagePlatform } from "./stageLayouts.js";
 export { defaultBattleSpawns, validateSpawnPoints, spawnDisplayX } from "./spawn.js";
+export {
+  AURA_MAX,
+  auraLevelFromCurrent,
+  createDefaultAuraState,
+  isSuperReady,
+  startAuraCharge,
+  tickAuraWhileCharging,
+  releaseAuraCharge,
+  consumeAuraOnSuper,
+  applyAuraHitPenalty,
+  auraClashPowerBonus,
+  auraClashStabilityBonus,
+  auraSpecialPowerMultiplier,
+} from "./aura/auraCharge.js";
+export type { AuraChargeState, AuraChargeLevel } from "./aura/auraTypes.js";
 export {
   getHurtbox,
   getHurtboxes,

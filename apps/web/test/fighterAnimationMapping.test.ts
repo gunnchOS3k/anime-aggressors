@@ -10,7 +10,7 @@ describe("fighter animation mapping", () => {
     assert.ok(ANIMATION_STATES.includes("superActive"));
     assert.ok(ANIMATION_STATES.includes("dash"));
     assert.ok(ANIMATION_STATES.includes("launch"));
-    assert.equal(ANIMATION_STATES.length, 29);
+    assert.equal(ANIMATION_STATES.length, 30);
   });
 
   it("maps every move to an animation key", () => {

@@ -7,7 +7,13 @@ import {
   elementAdvantageBonus,
 } from "./beamTypes.js";
 import { createEnergyAttack, energyAttacksOverlap, tickEnergyAttack } from "./projectiles.js";
-import { getFighterMove } from "../moves/moveDefinitions.js";
+import {
+  auraClashPowerBonus,
+  auraClashStabilityBonus,
+  auraSpecialPowerMultiplier,
+  consumeAuraOnSuper,
+} from "../aura/auraCharge.js";
+import type { AuraChargeState } from "../aura/auraTypes.js";
 import type { MoveDefinition } from "../moves/universalMoveSchema.js";
 
 let nextClashId = 1;
@@ -63,10 +69,12 @@ export function computeClashPush(
   attack: EnergyAttackState,
   input: InputFrame | undefined,
   playerDamage: number,
+  aura?: AuraChargeState,
 ): ClashInputBonus {
   const holdBonus = input?.special || input?.attack ? 12 : 0;
   const pressBonus = input?.attack ? 6 : 0;
-  const chargeBonus = Math.min(20, Math.floor(playerDamage / 10));
+  const chargeBonus =
+    Math.min(20, Math.floor(playerDamage / 10)) + (aura ? auraClashPowerBonus(aura) : 0);
   return { holdBonus, pressBonus, chargeBonus };
 }
 
@@ -95,8 +103,8 @@ export function tickEnergyClashes(state: GameState, inputs: InputFrame[]): void 
     const playerA = state.players[clash.playerAId];
     const playerB = state.players[clash.playerBId];
 
-    const pushA = computeClashPush(attackA, inputA, playerA?.damage ?? 0);
-    const pushB = computeClashPush(attackB, inputB, playerB?.damage ?? 0);
+    const pushA = computeClashPush(attackA, inputA, playerA?.damage ?? 0, playerA?.aura);
+    const pushB = computeClashPush(attackB, inputB, playerB?.damage ?? 0, playerB?.aura);
 
     let delta =
       attackA.power +
@@ -107,6 +115,8 @@ export function tickEnergyClashes(state: GameState, inputs: InputFrame[]): void 
       (attackB.power + pushB.holdBonus + pushB.pressBonus + pushB.chargeBonus);
 
     delta -= (attackA.stability - attackB.stability) * 0.05;
+    if (playerA?.aura) delta += auraClashStabilityBonus(playerA.aura) * 0.1;
+    if (playerB?.aura) delta -= auraClashStabilityBonus(playerB.aura) * 0.1;
     clash.balance += delta * 0.15;
     clash.durationFrames += 1;
     clash.intensity = Math.min(100, clash.intensity + 0.5);
@@ -167,6 +177,10 @@ export function maybeSpawnSuperEnergyAttack(
   const player = state.players[playerId];
   if (!player) return;
   const attack = createEnergyAttack(player, move, player.facing);
+  const mult = auraSpecialPowerMultiplier(player.aura);
+  attack.power = Math.floor(attack.power * mult);
+  attack.stability = Math.floor(attack.stability * mult);
+  if (player.aura.level >= 3) consumeAuraOnSuper(player);
   state.energyAttacks = state.energyAttacks ?? [];
   state.energyAttacks.push(attack);
 }

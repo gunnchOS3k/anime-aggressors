@@ -31,8 +31,10 @@ import { getProfileForSlot } from "../storage/inputProfileStorage.js";
 import { ReplayRecorder } from "../replay/ReplayRecorder.js";
 import { StatEventTracker, processMatchEnd } from "../career/careerService.js";
 import { saveCurrentGame } from "../saves/SaveGameManager.js";
-import { renderTrainingMoveOverlay } from "../ui/TrainingMoveOverlay.js";
+import { renderAuraMeter } from "../ui/AuraMeter.ts";
+import { renderSuperReadyBadge } from "../ui/SuperReadyBadge.ts";
 import { renderComboHintOverlay } from "../ui/ComboHintOverlay.js";
+import { renderTrainingMoveOverlay } from "../ui/TrainingMoveOverlay.ts";
 import { renderEnergyClashPrompt, isClashActive } from "../ui/EnergyClashPrompt.js";
 
 function fighterIdFromCharacterId(characterId: string): string {
@@ -445,9 +447,13 @@ export class PlatformFighterApp {
         : String(Math.ceil(this.gameState.matchTimerFrames / 60));
     this.hud.innerHTML = `
       <div class="pf-hud-row">
-        <span><strong>${p1.fighterName}</strong> (${sz1}/${el1}) · ${p1Stat} · ${p1.stocks}♥</span>
+        <span><strong>${p1.fighterName}</strong> (${sz1}/${el1}) · ${p1Stat} · ${p1.stocks}♥ ${renderSuperReadyBadge(p1.aura)}</span>
         <span class="pf-timer">${timerSec}s</span>
-        <span><strong>${p2.fighterName}</strong> (${sz2}/${el2}) · ${p2Stat} · ${p2.stocks}♥</span>
+        <span><strong>${p2.fighterName}</strong> (${sz2}/${el2}) · ${p2Stat} · ${p2.stocks}♥ ${renderSuperReadyBadge(p2.aura)}</span>
+      </div>
+      <div class="pf-hud-aura-row">
+        ${renderAuraMeter(p1.aura, p1.fighterColor, "left")}
+        ${renderAuraMeter(p2.aura, p2.fighterColor, "right")}
       </div>
     `;
   }
@@ -460,6 +466,7 @@ export class PlatformFighterApp {
     const clash = getActiveClash(this.gameState);
 
     const parts = [
+      `<div class="pf-training-aura-hint">Hold Shield + Special to charge aura · Level 3 = Super Ready</div>`,
       renderTrainingMoveOverlay({ player: p1, comboCount: this.comboHits }),
       beginnerRoute
         ? renderComboHintOverlay({

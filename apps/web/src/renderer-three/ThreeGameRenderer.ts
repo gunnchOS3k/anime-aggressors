@@ -128,7 +128,7 @@ export class ThreeGameRenderer {
 
       const hitEvent = gameState.hitstopFrames > 0;
       this.cameraDirector.update(gameState, hitEvent, koEvent);
-      this.vfx.update(this.scene, gameState.players);
+      this.vfx.update(this.scene, gameState.players, gameState.frame);
 
       if (renderOptions.showBlastZones) {
         this.stageView.setBlastZonesVisible(true, gameState.stage);
