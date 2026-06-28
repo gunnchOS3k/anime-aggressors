@@ -41,6 +41,14 @@ export function mountMoveListScreen(root: HTMLElement): void {
           <h3>${fighter.name}</h3>
           <p class="fighter-tagline">${fighter.shortTagline}</p>
         </div>
+        <div class="move-list-universal">
+          <article class="move-card move-card--aura">
+            <h4>Aura Charge</h4>
+            <p class="move-input">Hold Shield + Special</p>
+            <p class="move-purpose">Build super power and enhance element effects</p>
+            <p class="move-meta">Difficulty: beginner · Risk: vulnerable while charging</p>
+          </article>
+        </div>
         <div class="move-list-grid">
           ${moves
             .map((move) => {

@@ -8,6 +8,7 @@ import {
   HitSparkSystem,
   KOEffectSystem,
 } from "./CombatVfxSystems.ts";
+import { ElementalAuraChargeSystem } from "./ElementalAuraChargeSystem.ts";
 
 type Prev = { damage: number; stocks: number; onGround: boolean; action: string };
 
@@ -15,10 +16,11 @@ export class CombatVfxOrchestrator {
   private hitSparks = new HitSparkSystem();
   private trails = new AttackTrailSystem();
   private auras = new ElementAuraSystem();
+  private auraCharge = new ElementalAuraChargeSystem();
   private ko = new KOEffectSystem();
   private prev = new Map<number, Prev>();
 
-  update(scene: THREE.Scene, players: PlayerState[]): void {
+  update(scene: THREE.Scene, players: PlayerState[], frame = 0): void {
     for (const p of players) {
       const appearance = resolveFighterAppearanceFromPlayer(p);
       const style = appearance.vfx;
@@ -63,6 +65,7 @@ export class CombatVfxOrchestrator {
     this.hitSparks.tick(scene);
     this.trails.tick(scene);
     this.ko.tick(scene);
+    this.auraCharge.update(scene, players, frame);
   }
 
   private spawnShieldRing(scene: THREE.Scene, p: PlayerState, color: number): void {
@@ -83,6 +86,7 @@ export class CombatVfxOrchestrator {
     this.hitSparks.dispose(scene);
     this.trails.dispose(scene);
     this.ko.dispose(scene);
+    this.auraCharge.dispose(scene);
     this.prev.clear();
   }
 }

@@ -16,6 +16,7 @@ import {
 import { getCharacter } from "./characters.js";
 import { getStage } from "./stages.js";
 import { getFighterProfile, applyCreatedFighterToPlayer } from "./fighterCreation.js";
+import { createDefaultAuraState } from "./aura/auraTypes.js";
 import { DEFAULT_RULESET } from "./rulesets.js";
 
 export function createInitialGameState(config: GameConfig): GameState {
@@ -64,6 +65,7 @@ export function createInitialGameState(config: GameConfig): GameState {
       jumpBufferFrames: 0,
       fastFalling: false,
       currentMoveId: "none",
+      aura: createDefaultAuraState(),
     };
     applyCreatedFighterToPlayer(player, fighter);
     players.push(player);

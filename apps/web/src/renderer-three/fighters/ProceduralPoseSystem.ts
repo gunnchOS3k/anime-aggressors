@@ -91,6 +91,16 @@ export function computeProceduralPose(player: PlayerState, frame: number): AnimP
       base.armSwingR = 0.6;
       base.auraOpacity = 0.5;
       break;
+    case "auraCharging": {
+      const lvl = player.aura.level;
+      base.armSwingL = 0.45 + lvl * 0.08;
+      base.armSwingR = 0.45 + lvl * 0.08;
+      base.torsoScaleY = 0.96;
+      base.bob = Math.sin(t * 4) * 0.04;
+      base.auraOpacity = 0.35 + lvl * 0.18;
+      base.torsoRotZ = -0.08 * player.facing;
+      break;
+    }
     case "dodging":
       base.torsoRotZ = 0.5 * player.facing;
       base.torsoScaleY = 0.88;

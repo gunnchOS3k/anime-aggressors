@@ -7,6 +7,7 @@ import {
   tickEnergyClashes,
 } from "./combat/energyClash.js";
 import { getStage } from "./stages.js";
+import { createDefaultAuraState } from "./aura/auraTypes.js";
 
 export function simulateFrame(state: GameState, inputs: InputFrame[]): GameState {
   const next = cloneGameState(state);
@@ -120,6 +121,7 @@ export function resetForRematch(state: GameState): GameState {
     p.jumpBufferFrames = 0;
     p.fastFalling = false;
     p.currentMoveId = "none";
+    p.aura = createDefaultAuraState();
     const char = fresh.config.characterIds[i];
     p.characterId = char ?? p.characterId;
   }

@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { SIZE_STATS, getSizeStats } from "../src/sizeClasses.js";
 import { scaledRunSpeed, scaledHitDamage } from "../src/fighterCreation.js";
 import type { PlayerState } from "../src/types.js";
+import { createDefaultAuraState } from "../src/aura/auraTypes.js";
 
 function basePlayer(size: PlayerState["fighterSize"]): PlayerState {
   return {
@@ -38,6 +39,7 @@ function basePlayer(size: PlayerState["fighterSize"]): PlayerState {
     jumpBufferFrames: 0,
     fastFalling: false,
     currentMoveId: "none",
+    aura: createDefaultAuraState(),
   };
 }
 
