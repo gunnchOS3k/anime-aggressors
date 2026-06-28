@@ -124,10 +124,42 @@ body {
 .pf-viewport {
   width: 100%;
   height: min(70vh, 540px);
-  min-height: 360px;
+  min-height: 520px;
   border-radius: 8px;
   overflow: hidden;
-  background: #0a0a12;
+  background: #12122e;
+}
+
+.battle-screen,
+.battle-canvas-shell,
+.three-battle-canvas {
+  width: 100%;
+  min-height: 520px;
+}
+
+.renderer-diagnostics {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0.5rem;
+  right: 0.5rem;
+  max-height: 40%;
+  overflow: auto;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  font-family: ui-monospace, monospace;
+  background: rgba(8, 8, 20, 0.92);
+  border: 1px solid #445;
+  border-radius: 6px;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.renderer-diagnostics .warn {
+  color: #fa0;
+}
+
+.renderer-diagnostics .err {
+  color: #f66;
 }
 
 .pf-hud {

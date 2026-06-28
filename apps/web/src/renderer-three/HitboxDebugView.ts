@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import type { Hitbox } from "@anime-aggressors/game-core";
-import { fpToWorld } from "./RenderTypes.js";
-import { createHitboxMaterial } from "./Materials.js";
+import { fpToWorld } from "./RenderTypes.ts";
+import { createHitboxMaterial } from "./Materials.ts";
 
 export class HitboxDebugView {
   private boxes: THREE.Mesh[] = [];

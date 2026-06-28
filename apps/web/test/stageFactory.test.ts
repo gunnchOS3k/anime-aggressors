@@ -31,8 +31,9 @@ describe("stage factory", () => {
     }
   });
 
-  it("falls back to skyline for unknown stage id", () => {
+  it("falls back to training grid for unknown stage id", () => {
     const built = buildStageModel("unknown-stage");
-    assert.equal(built.stageId, "skyline-arena");
+    assert.equal(built.stageId, "training-grid");
+    assert.ok(built.objectCount > 0);
   });
 });
