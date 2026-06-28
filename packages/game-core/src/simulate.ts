@@ -1,6 +1,11 @@
 import type { GameState, InputFrame } from "./types.js";
 import { cloneGameState } from "./state.js";
 import { processPlayer, resolveCombat } from "./combat.js";
+import {
+  detectEnergyClashes,
+  tickEnergyAttacks,
+  tickEnergyClashes,
+} from "./combat/energyClash.js";
 import { getStage } from "./stages.js";
 
 export function simulateFrame(state: GameState, inputs: InputFrame[]): GameState {
@@ -37,6 +42,10 @@ export function simulateFrame(state: GameState, inputs: InputFrame[]): GameState
     }
 
     resolveCombat(next);
+
+    tickEnergyAttacks(next);
+    detectEnergyClashes(next);
+    tickEnergyClashes(next, inputs);
 
     const matchType = next.config.ruleset?.matchType ?? "stock";
 

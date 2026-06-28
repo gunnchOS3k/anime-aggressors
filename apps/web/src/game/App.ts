@@ -7,9 +7,13 @@ import {
   SIZE_STATS,
   gameConfigFromRuleset,
   DEFAULT_RULESET,
+  getActiveClash,
+  getComboRoutesForFighter,
   type GameConfig,
   type GameState,
   type GameRuleset,
+  type MatchRecord,
+  type ReplayRecord,
 } from "@anime-aggressors/game-core";
 import { RollbackSession } from "@anime-aggressors/rollback";
 import { pollAllInputs } from "../input/deviceAssignment.js";
@@ -25,7 +29,13 @@ import { getProfileForSlot } from "../storage/inputProfileStorage.js";
 import { ReplayRecorder } from "../replay/ReplayRecorder.js";
 import { StatEventTracker, processMatchEnd } from "../career/careerService.js";
 import { saveCurrentGame } from "../saves/SaveGameManager.js";
-import type { MatchRecord, ReplayRecord } from "@anime-aggressors/game-core";
+import { renderTrainingMoveOverlay } from "../ui/TrainingMoveOverlay.js";
+import { renderComboHintOverlay } from "../ui/ComboHintOverlay.js";
+import { renderEnergyClashPrompt, isClashActive } from "../ui/EnergyClashPrompt.js";
+
+function fighterIdFromCharacterId(characterId: string): string {
+  return characterId.replace(/^created:/, "");
+}
 
 export type MatchPhase = "select" | "fighting" | "results";
 
@@ -61,6 +71,8 @@ export class PlatformFighterApp {
   private initialState: GameState | null = null;
   private matchEndResult: { match: MatchRecord; replay: ReplayRecord | null } | null = null;
   private matchMode = "playMatch";
+  private comboHits = 0;
+  private trainingOverlayEl: HTMLElement | null = null;
 
   private options: PlatformFighterOptions;
 
@@ -77,11 +89,13 @@ export class PlatformFighterApp {
         <div class="pf-viewport-wrap">
           <div id="pf-viewport" class="pf-viewport"></div>
           <div id="pf-hud" class="pf-hud"></div>
+          <div id="pf-training-overlays" class="pf-training-overlays"></div>
         </div>
       </div>
     `;
     this.viewport = this.root.querySelector("#pf-viewport") as HTMLElement;
     this.hud = this.root.querySelector("#pf-hud") as HTMLElement;
+    this.trainingOverlayEl = this.root.querySelector("#pf-training-overlays") as HTMLElement;
     this.debugPanel = mountDebugPanel(this.root);
     this.root.querySelector("#pf-back")?.addEventListener("click", () => {
       this.stop();
@@ -166,6 +180,7 @@ export class PlatformFighterApp {
     });
     this.simFrame = 0;
     this.paused = false;
+    this.comboHits = 0;
     this.state = "fighting";
   }
 
@@ -202,6 +217,7 @@ export class PlatformFighterApp {
       playerCount: 2,
     });
     this.simFrame = 0;
+    this.comboHits = 0;
     this.state = "fighting";
     this.paused = this.trainingMode;
 
@@ -312,10 +328,16 @@ export class PlatformFighterApp {
     this.renderer.update(this.gameState, opts);
     this.renderer.render();
     this.updateHud();
+    if (this.trainingMode) {
+      this.updateTrainingOverlays();
+    }
 
     for (const p of this.gameState.players) {
       if (p.damage > this.prevDamage[p.id]) {
         globalAudio.play("hit_confirm");
+        if (this.trainingMode && p.id === 1) {
+          this.comboHits += 1;
+        }
       }
       if (p.stocks < 3 && p.actionState === "defeated") {
         globalAudio.play("ko");
@@ -376,6 +398,29 @@ export class PlatformFighterApp {
         <span><strong>${p2.fighterName}</strong> (${sz2}/${el2}) · ${p2Stat} · ${p2.stocks}♥</span>
       </div>
     `;
+  }
+
+  private updateTrainingOverlays(): void {
+    if (!this.gameState || !this.trainingOverlayEl) return;
+    const p1 = this.gameState.players[0];
+    const fighterId = fighterIdFromCharacterId(p1.characterId);
+    const beginnerRoute = getComboRoutesForFighter(fighterId).find((r) => r.difficulty === "beginner");
+    const clash = getActiveClash(this.gameState);
+
+    const parts = [
+      renderTrainingMoveOverlay({ player: p1, comboCount: this.comboHits }),
+      beginnerRoute
+        ? renderComboHintOverlay({
+            hint: beginnerRoute.description,
+            suggestedInput: beginnerRoute.teachingHint,
+          })
+        : "",
+      isClashActive(clash) && clash
+        ? renderEnergyClashPrompt({ clash, localPlayerId: 0 })
+        : "",
+    ];
+
+    this.trainingOverlayEl.innerHTML = parts.filter(Boolean).join("");
   }
 }
 

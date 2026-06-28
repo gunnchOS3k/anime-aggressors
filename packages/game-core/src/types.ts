@@ -109,6 +109,8 @@ export type GameState = {
   matchTimerFrames: number;
   winnerId: number | null;
   hitstopFrames: number;
+  energyAttacks?: import("./combat/beamTypes.js").EnergyAttackState[];
+  energyClashes?: import("./combat/beamTypes.js").EnergyClashState[];
 };
 
 export type ReplayResult = {

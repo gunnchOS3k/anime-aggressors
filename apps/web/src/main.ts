@@ -120,6 +120,12 @@ async function navigate(mode: AppRouteMode): Promise<void> {
     } else if (mode === "training") {
       const { launchTrainingMode } = await import("./game/App.js");
       launchTrainingMode(appRoot!);
+    } else if (mode === "moves") {
+      const { mountMoveListScreen } = await import("./screens/MoveListScreen.js");
+      mountMoveListScreen(appRoot!);
+    } else if (mode === "combos") {
+      const { mountComboGuideScreen } = await import("./screens/ComboGuideScreen.js");
+      mountComboGuideScreen(appRoot!);
     } else if (mode === "controller") {
       const { mountControllerTest } = await import("./shell/controllerTest.js");
       mountControllerTest(appRoot!);
