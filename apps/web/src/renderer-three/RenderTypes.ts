@@ -1,5 +1,5 @@
 import type { GameState, PlayerState } from "@anime-aggressors/game-core";
-import { FP_SCALE, STAGE_HEIGHT, STAGE_WIDTH } from "@anime-aggressors/game-core";
+import { FP_SCALE, STAGE_HEIGHT, STAGE_WIDTH, type FighterSize } from "@anime-aggressors/game-core";
 
 export type ThreeRendererOptions = {
   width?: number;
@@ -65,20 +65,31 @@ export type RenderableGameState = {
 export const STAGE_DISPLAY_WIDTH = STAGE_WIDTH / FP_SCALE;
 export const STAGE_DISPLAY_HEIGHT = STAGE_HEIGHT / FP_SCALE;
 
-/** Low-poly humanoid base height before display scale (~2 units). */
+/** Low-poly humanoid base height before battle scale (~2.2 units). */
 export const CHARACTER_BASE_HEIGHT = 2.2;
 
-/** Scale humanoid meshes to ~64 display units tall (matches 2D fighter rects). */
-export const CHARACTER_DISPLAY_SCALE = 30;
+/** Size-class multipliers for readable 2.5D battle fighters. */
+export const BATTLE_SIZE_CLASS_SCALE: Record<FighterSize, number> = {
+  small: 1.0,
+  medium: 1.2,
+  large: 1.45,
+};
+
+/** Base battle scale — multiplied by size class for world-space humanoid height. */
+export const BATTLE_BASE_SCALE = 42;
+
+/** Scale humanoid meshes for battle display coordinates. */
+export function characterWorldScale(size: FighterSize): number {
+  return BATTLE_BASE_SCALE * BATTLE_SIZE_CLASS_SCALE[size];
+}
 
 /** Convert fixed-point game units to Three.js display coordinates. */
 export function fpToWorld(value: number): number {
   return value / FP_SCALE;
 }
 
-export function characterWorldScale(sizeScale = 1): number {
-  return CHARACTER_DISPLAY_SCALE * sizeScale;
-}
+/** Minimum platform thickness in world units for 2.5D readability. */
+export const STAGE_PLATFORM_DEPTH = 56;
 
 export function stageCenterDisplay(): { x: number; y: number } {
   return { x: STAGE_DISPLAY_WIDTH / 2, y: fpToWorld(STAGE_HEIGHT) / 2 };

@@ -44,13 +44,15 @@ function playMenuBlip(kind: "hover" | "select" | "confirm" | "cancel"): void {
 
 function syncPreview(canvas: HTMLCanvasElement | null, fighter: CreatedFighter | null, phase: "hover" | "select" = "hover"): void {
   if (!canvas || !fighter) return;
-  if (!previewRenderer) {
+  if (!previewRenderer || previewRenderer.getCanvas() !== canvas) {
+    previewRenderer?.dispose();
     previewRenderer = new CharacterPreviewRenderer(canvas);
     previewRenderer.start();
   }
   const rect = canvas.getBoundingClientRect();
-  previewRenderer.resize(rect.width || 480, rect.height || 360);
+  previewRenderer.resize(rect.width || 480, rect.height || 320);
   previewRenderer.setFighter(fighter, phase);
+  previewRenderer.renderFrame(performance.now());
 }
 
 function disposePreview(): void {
@@ -109,7 +111,8 @@ export function mountCharacterSelectScreen(root: HTMLElement, options: Character
       tile.addEventListener("mouseenter", () => {
         state = setFocusedFighter(state, id);
         playMenuBlip("hover");
-        syncPreview(canvas, fighter, "hover");
+        const liveCanvas = root.querySelector("#cs-preview-canvas") as HTMLCanvasElement | null;
+        syncPreview(liveCanvas, fighter, "hover");
         root.querySelectorAll(".cs-tile").forEach((t) => t.classList.remove("cs-tile--focus"));
         tile.classList.add("cs-tile--focus");
         updatePreviewInfo(root, fighter);
@@ -117,14 +120,16 @@ export function mountCharacterSelectScreen(root: HTMLElement, options: Character
 
       tile.addEventListener("focus", () => {
         state = setFocusedFighter(state, id);
-        syncPreview(canvas, fighter, "hover");
+        const liveCanvas = root.querySelector("#cs-preview-canvas") as HTMLCanvasElement | null;
+        syncPreview(liveCanvas, fighter, "hover");
         updatePreviewInfo(root, fighter);
       });
 
       tile.addEventListener("click", () => {
         state = selectFighterForActivePlayer(state, fighter);
         playMenuBlip("select");
-        syncPreview(canvas, fighter, "select");
+        const liveCanvas = root.querySelector("#cs-preview-canvas") as HTMLCanvasElement | null;
+        syncPreview(liveCanvas, fighter, "select");
         render();
       });
     });
