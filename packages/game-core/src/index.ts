@@ -31,6 +31,7 @@ export { getStage, listStages, stageHasLayout } from "./stages.js";
 export type { StageDef } from "./stages.js";
 export { getStageLayout, listStageLayoutIds, STAGE_LAYOUTS } from "./stageLayouts.js";
 export type { StageLayoutDef, StagePlatform } from "./stageLayouts.js";
+export { defaultBattleSpawns, validateSpawnPoints, spawnDisplayX } from "./spawn.js";
 export {
   getHurtbox,
   getHurtboxes,

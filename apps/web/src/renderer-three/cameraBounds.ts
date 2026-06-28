@@ -29,8 +29,8 @@ export function computeCameraBounds(state: GameState): CameraBounds {
     maxY = Math.max(maxY, y);
   }
 
-  const padX = 6;
-  const padY = 4;
+  const padX = 80;
+  const padY = 60;
   return {
     minX: minX - padX,
     maxX: maxX + padX,

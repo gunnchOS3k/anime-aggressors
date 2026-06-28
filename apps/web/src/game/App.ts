@@ -17,7 +17,9 @@ import {
 } from "@anime-aggressors/game-core";
 import { RollbackSession } from "@anime-aggressors/rollback";
 import { pollAllInputs } from "../input/deviceAssignment.js";
-import { ThreeGameRenderer } from "../renderer-three/ThreeGameRenderer.js";
+import { createBattleScene } from "../renderer-three/createBattleScene.ts";
+import { RendererDiagnostics } from "../renderer-three/RendererDiagnostics.ts";
+import type { BattleSceneBootResult } from "../renderer-three/createBattleScene.ts";
 import type { RenderOptions } from "../renderer-three/RenderTypes.js";
 import { mountDebugPanel } from "./debugPanel.js";
 import { showCharacterSelect, type CharacterSelectResult } from "../screens/FighterSelectScreen.js";
@@ -48,7 +50,9 @@ export class PlatformFighterApp {
   private root: HTMLElement;
   private viewport: HTMLElement;
   private hud: HTMLElement;
-  private renderer: ThreeGameRenderer | null = null;
+  private renderer: import("../renderer-three/ThreeGameRenderer.js").ThreeGameRenderer | null = null;
+  private rendererDiagnostics: RendererDiagnostics | null = null;
+  private bootResult: BattleSceneBootResult | null = null;
   private debugPanel: ReturnType<typeof mountDebugPanel> | null = null;
   private state: MatchPhase = "select";
   private gameState: GameState | null = null;
@@ -81,15 +85,16 @@ export class PlatformFighterApp {
     this.options = options;
     this.trainingMode = options.trainingMode ?? false;
     this.root.innerHTML = `
-      <div class="pf-root">
+      <div class="pf-root battle-screen">
         <div class="vs-toolbar">
           <button id="pf-back" type="button">← Home</button>
-          <span class="vs-hint">P1: ${getProfileForSlot(1).name} | P2: ${getProfileForSlot(2).name} | F1 debug | F2 hitboxes | F3 pause | F4 step | R reset</span>
+          <span class="vs-hint">P1: ${getProfileForSlot(1).name} | P2: ${getProfileForSlot(2).name} | F1 debug | F2 hitboxes | F3 pause | F4 step | F6 renderer | R reset</span>
         </div>
-        <div class="pf-viewport-wrap">
-          <div id="pf-viewport" class="pf-viewport"></div>
+        <div class="pf-viewport-wrap battle-canvas-shell">
+          <div id="pf-viewport" class="pf-viewport battle-canvas-shell"></div>
           <div id="pf-hud" class="pf-hud"></div>
           <div id="pf-training-overlays" class="pf-training-overlays"></div>
+          <div id="pf-renderer-diagnostics-host"></div>
         </div>
       </div>
     `;
@@ -122,8 +127,11 @@ export class PlatformFighterApp {
 
   stop(): void {
     cancelAnimationFrame(this.rafId);
+    this.rendererDiagnostics?.dispose();
+    this.rendererDiagnostics = null;
     this.renderer?.dispose();
     this.renderer = null;
+    this.bootResult = null;
     window.removeEventListener("keydown", this.onKeyDown);
     this.debugPanel?.destroy();
     this.debugPanel = null;
@@ -224,11 +232,41 @@ export class PlatformFighterApp {
     this.showFightAnnouncement();
 
     if (!this.renderer) {
-      this.renderer = new ThreeGameRenderer(this.viewport, { smoothCamera: true });
-      this.renderer.mount();
+      const diagHost = this.root.querySelector("#pf-renderer-diagnostics-host") as HTMLElement;
+      const { renderer, result } = createBattleScene({
+        mount: this.viewport,
+        gameConfig: config,
+        initialState: this.gameState,
+        smoothCamera: true,
+      });
+      this.renderer = renderer;
+      this.bootResult = result;
+
+      this.rendererDiagnostics = new RendererDiagnostics({
+        enabled: true,
+        mount: diagHost ?? this.viewport,
+        getRenderer: () => this.renderer,
+        getGameState: () => this.gameState,
+        getBootWarnings: () => this.bootResult?.warnings ?? [],
+        getLastError: () => this.renderer?.getLastError() ?? this.bootResult?.error,
+      });
+      this.rendererDiagnostics.mount();
+
+      if (!result.ok) {
+        const names = this.gameState.players.map((p) => p.fighterName);
+        this.rendererDiagnostics.showFailurePanel(
+          config.stageId ?? "unknown",
+          names,
+          result.error ?? (result.warnings.join("; ") || "Scene boot incomplete"),
+        );
+        if (import.meta.env.DEV) {
+          console.error("Battle scene boot failed", result);
+        }
+      }
+
       const ro = new ResizeObserver(() => {
-        const w = this.viewport.clientWidth || 960;
-        const h = this.viewport.clientHeight || 540;
+        const w = Math.max(this.viewport.clientWidth || 0, 960);
+        const h = Math.max(this.viewport.clientHeight || 0, 520);
         this.renderer?.resize(w, h);
       });
       ro.observe(this.viewport);
@@ -328,6 +366,20 @@ export class PlatformFighterApp {
     this.renderer.update(this.gameState, opts);
     this.renderer.render();
     this.updateHud();
+    this.rendererDiagnostics?.update({
+      rendererMounted: this.renderer.isMounted(),
+      canvasWidth: this.renderer.getCanvas().width,
+      canvasHeight: this.renderer.getCanvas().height,
+      sceneObjectCount: this.bootResult?.sceneObjectCount ?? 0,
+      stageId: this.gameState.config.stageId ?? "—",
+      stageObjectCount: this.renderer.getStageObjectCount(),
+      fighterCount: this.renderer.getFighterViewCount(),
+      cameraPosition: this.renderer.getCameraPositionString(),
+      activeRoute: window.location.hash || "#/battle",
+      lastError: this.renderer.getLastError() ?? this.bootResult?.error ?? "",
+      bootOk: this.bootResult?.ok ?? false,
+      warnings: this.bootResult?.warnings ?? [],
+    });
     if (this.trainingMode) {
       this.updateTrainingOverlays();
     }

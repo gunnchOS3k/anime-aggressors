@@ -1,15 +1,39 @@
 import * as THREE from "three";
-import { fpToWorld } from "./RenderTypes.js";
-import { buildStageModel } from "./stages/StageModelFactory.ts";
+import { fpToWorld } from "./RenderTypes.ts";
+import { buildStageModel, buildFallbackStageModel } from "./stages/StageModelFactory.ts";
 
 export class StageView {
   readonly group = new THREE.Group();
   private blastZone: THREE.LineSegments | null = null;
   private stageId = "";
+  private objectCount = 0;
 
-  setStage(stageId: string): void {
-    if (stageId === this.stageId) return;
+  setStage(stageId: string): number {
+    if (stageId === this.stageId && this.objectCount > 0) return this.objectCount;
     this.stageId = stageId;
+    this.clearChildren();
+
+    let built;
+    try {
+      built = buildStageModel(stageId);
+      if (built.objectCount === 0) {
+        built = buildFallbackStageModel();
+      }
+    } catch {
+      built = buildFallbackStageModel();
+    }
+
+    this.group.add(built.group);
+    this.objectCount = built.objectCount;
+    this.blastZone = null;
+    return this.objectCount;
+  }
+
+  getObjectCount(): number {
+    return this.objectCount;
+  }
+
+  private clearChildren(): void {
     while (this.group.children.length > 0) {
       const child = this.group.children[0];
       this.group.remove(child);
@@ -21,9 +45,7 @@ export class StageView {
         }
       });
     }
-    const built = buildStageModel(stageId);
-    this.group.add(built.group);
-    this.blastZone = null;
+    this.objectCount = 0;
   }
 
   setBlastZonesVisible(visible: boolean, bounds?: { left: number; right: number; top: number; bottom: number }): void {

@@ -1,9 +1,14 @@
 import * as THREE from "three";
 import type { PlayerState } from "@anime-aggressors/game-core";
 import { getDefaultCreatedFighter } from "@anime-aggressors/game-core";
-import { fpToWorld } from "./RenderTypes.js";
+import { characterWorldScale, fpToWorld } from "./RenderTypes.ts";
 import { resolveFighterAppearance, resolveFighterAppearanceFromPlayer } from "./fighters/FighterAppearance.ts";
-import { createFighterModel, destroyFighterModel, type LowPolyHumanoidParts } from "./fighters/FighterModelFactory.ts";
+import {
+  createFighterModel,
+  destroyFighterModel,
+  createFallbackFighterModel,
+  type LowPolyHumanoidParts,
+} from "./fighters/FighterModelFactory.ts";
 import { applyFighterPose, computeFighterPose } from "./fighters/FighterAnimator.ts";
 
 export class CharacterView {
@@ -12,41 +17,61 @@ export class CharacterView {
   private shieldMesh: THREE.Mesh;
   private appearanceKey = "";
   private baseTorsoColor = new THREE.Color();
+  private shieldColor = 0x5599ff;
 
   constructor(playerId: number) {
-    const appearance = resolveFighterAppearance(getDefaultCreatedFighter(playerId));
-    this.parts = createFighterModel(appearance);
+    let appearance;
+    try {
+      appearance = resolveFighterAppearance(getDefaultCreatedFighter(playerId));
+      this.parts = createFighterModel(appearance);
+    } catch {
+      appearance = resolveFighterAppearance(getDefaultCreatedFighter(playerId));
+      this.parts = createFallbackFighterModel(playerId);
+    }
     this.group.add(this.parts.root);
+    this.appearanceKey = `${appearance.name}-${appearance.color}-${appearance.size}`;
     this.baseTorsoColor.setHex(appearance.primaryHex);
+    this.shieldColor = appearance.vfx.shield;
 
+    const shieldR = characterWorldScale(appearance.scale) * 0.45;
     this.shieldMesh = new THREE.Mesh(
-      new THREE.SphereGeometry(1.15, 16, 16),
-      new THREE.MeshBasicMaterial({ color: appearance.vfx.shield, transparent: true, opacity: 0.22 }),
+      new THREE.SphereGeometry(shieldR, 16, 16),
+      new THREE.MeshBasicMaterial({ color: this.shieldColor, transparent: true, opacity: 0.22 }),
     );
     this.shieldMesh.visible = false;
     this.group.add(this.shieldMesh);
-    this.appearanceKey = `${appearance.name}-${appearance.color}-${appearance.size}`;
   }
 
   update(player: PlayerState, frame = 0): void {
-    const appearance = resolveFighterAppearanceFromPlayer(player);
-    const key = `${appearance.name}-${appearance.color}-${appearance.size}`;
-    if (key !== this.appearanceKey) {
-      this.group.remove(this.parts.root);
-      destroyFighterModel(this.parts);
-      this.parts = createFighterModel(appearance);
-      this.group.add(this.parts.root);
-      this.appearanceKey = key;
-      this.baseTorsoColor.setHex(appearance.primaryHex);
-      (this.shieldMesh.material as THREE.MeshBasicMaterial).color.setHex(appearance.vfx.shield);
+    let appearance;
+    try {
+      appearance = resolveFighterAppearanceFromPlayer(player);
+      const key = `${appearance.name}-${appearance.color}-${appearance.size}`;
+      if (key !== this.appearanceKey) {
+        this.group.remove(this.parts.root);
+        destroyFighterModel(this.parts);
+        try {
+          this.parts = createFighterModel(appearance);
+        } catch {
+          this.parts = createFallbackFighterModel(player.id);
+        }
+        this.group.add(this.parts.root);
+        this.appearanceKey = key;
+        this.baseTorsoColor.setHex(appearance.primaryHex);
+        this.shieldColor = appearance.vfx.shield;
+        (this.shieldMesh.material as THREE.MeshBasicMaterial).color.setHex(this.shieldColor);
+      }
+    } catch {
+      appearance = resolveFighterAppearance(getDefaultCreatedFighter(player.id));
     }
 
     const pose = computeFighterPose(player, frame);
     applyFighterPose(this.parts, pose, player.facing);
 
+    const scale = characterWorldScale(appearance.scale);
     this.group.position.set(fpToWorld(player.x), fpToWorld(player.y), player.id * 0.35);
     this.shieldMesh.visible = player.actionState === "shielding";
-    this.shieldMesh.position.set(0, 1.1, 0.1);
+    this.shieldMesh.position.set(0, scale * 1.1, scale * 0.1);
 
     const torsoMat = this.parts.torso.material as THREE.MeshToonMaterial;
     if (player.actionState === "hitstun") {

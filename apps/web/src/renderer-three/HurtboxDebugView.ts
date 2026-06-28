@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import type { Hurtbox } from "@anime-aggressors/game-core";
-import { fpToWorld } from "./RenderTypes.js";
-import { createHurtboxMaterial } from "./Materials.js";
+import { fpToWorld } from "./RenderTypes.ts";
+import { createHurtboxMaterial } from "./Materials.ts";
 
 export class HurtboxDebugView {
   private boxes: THREE.Mesh[] = [];
