@@ -21,9 +21,9 @@ import {
 import { fpToWorld } from "../renderer-three/RenderTypes.ts";
 import { STAGE_HEIGHT, STAGE_WIDTH } from "@anime-aggressors/game-core";
 import { applyVictoryPose } from "../renderer-three/fighters/victoryAnimations.ts";
-import { applyIdleFlavor } from "../renderer-three/fighters/idleAnimations.ts";
+import { computeFighterLimbPose, derbyPlayerToAnimationState } from "../renderer-three/fighters/FighterAnimationController.ts";
 import { applyFighterPose } from "../renderer-three/fighters/FighterAnimator.ts";
-import type { AnimPose } from "../renderer-three/fighters/FighterAnimator.ts";
+import { emptyPose } from "../renderer-three/fighters/FighterPose.ts";
 import { resolveFighterAppearance } from "../renderer-three/fighters/FighterAppearance.ts";
 import { mountReadyFightSequence } from "../ui/ReadyFightSequence.ts";
 import { APP_ROUTES } from "../routes.ts";
@@ -165,22 +165,11 @@ export function mountImpactDummyDerby(root: HTMLElement): void {
   }
 
   function updateFighterVisual(frame: number): void {
-    const pose: AnimPose = {
-      torsoRotZ: 0,
-      torsoScaleY: 1,
-      headTilt: 0,
-      armSwingL: 0,
-      armSwingR: 0,
-      legSpread: 0,
-      bob: 0,
-      auraOpacity: 0.2,
-    };
     const animId = fighterAnimId();
-    if (state.phase === "results") {
-      applyVictoryPose(pose, animId, frame);
-    } else {
-      applyIdleFlavor(pose, animId, frame);
-    }
+    const pose =
+      state.phase === "results"
+        ? applyVictoryPose(emptyPose(), animId, frame)
+        : computeFighterLimbPose(derbyPlayerToAnimationState(state.player, derbyFighter), frame);
     applyFighterPose(fighterParts, pose, state.player.facing);
   }
 

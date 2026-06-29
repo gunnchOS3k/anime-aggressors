@@ -13,7 +13,7 @@ import {
   STAGE_HEIGHT,
   STAGE_WIDTH,
 } from "./constants.js";
-import { getCharacter } from "./characters.js";
+import { getCharacter, getCharacterForPlayer } from "./characters.js";
 import { getStage } from "./stages.js";
 import { getFighterProfile, applyCreatedFighterToPlayer } from "./fighterCreation.js";
 import { createDefaultAuraState } from "./aura/auraTypes.js";
@@ -27,10 +27,9 @@ export function createInitialGameState(config: GameConfig): GameState {
 
   for (let i = 0; i < config.playerCount; i++) {
     const charId = config.characterIds[i] ?? "ember";
-    const spawn = stage.spawnPoints[i] ?? { x: STAGE_WIDTH / 2, y: FLOOR_Y - 64 * FP_SCALE };
-    const character = getCharacter(charId);
-
+    const spawn = stage.spawnPoints[i] ?? { x: STAGE_WIDTH / 2, y: FLOOR_Y };
     const fighter = getFighterProfile(config, i);
+    const character = getCharacterForPlayer({ characterId: charId, fighterSize: fighter.size });
 
     const player: PlayerState = {
       id: i,
@@ -59,6 +58,9 @@ export function createInitialGameState(config: GameConfig): GameState {
       hitstunFrames: 0,
       shieldHealth: SHIELD_MAX,
       jumpsRemaining: character.maxJumps,
+      jumpsUsed: 0,
+      jumpHoldFrames: 0,
+      wasJumpHeld: false,
       onGround: true,
       invulnFrames: 0,
       coyoteFrames: 0,

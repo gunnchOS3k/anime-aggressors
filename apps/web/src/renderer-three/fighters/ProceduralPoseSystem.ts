@@ -183,7 +183,7 @@ export function computeProceduralPose(player: PlayerState, frame: number): AnimP
   }
 
   if (!player.onGround && player.actionState !== "jumping" && player.actionState !== "falling") {
-    base.bob += 0.02;
+    base.bob = (base.bob ?? 0) + 0.02;
   }
 
   if (player.fastFalling && player.actionState === "falling") {

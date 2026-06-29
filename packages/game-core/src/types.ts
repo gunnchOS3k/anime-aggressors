@@ -75,6 +75,9 @@ export type PlayerState = {
   hitstunFrames: number;
   shieldHealth: number;
   jumpsRemaining: number;
+  jumpsUsed: number;
+  jumpHoldFrames: number;
+  wasJumpHeld: boolean;
   onGround: boolean;
   invulnFrames: number;
   coyoteFrames: number;

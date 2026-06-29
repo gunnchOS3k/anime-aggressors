@@ -29,17 +29,27 @@ export function idleFlavorForFighter(fighterId: string): IdleAnimFlavor {
   return IDLE_FLAVORS[id] ?? IDLE_FLAVORS["ember-vale"]!;
 }
 
-export function applyIdleFlavor(pose: AnimPose, fighterId: string, frame: number): AnimPose {
+import type { FighterPose } from "./FighterPose.ts";
+import { mergePose } from "./FighterPose.ts";
+
+export function applyIdleFlavorToPose(pose: FighterPose, fighterId: string, frame: number): FighterPose {
   const t = frame * 0.08;
   const f = idleFlavorForFighter(fighterId);
-  pose.bob = Math.sin(t * f.bobSpeed) * f.bobAmp + (f.extraBob ? Math.sin(t * 6) * f.extraBob : 0);
-  pose.armSwingL = f.armL + Math.sin(t * f.bobSpeed) * 0.08;
-  pose.armSwingR = f.armR - Math.sin(t * f.bobSpeed) * 0.08;
-  pose.torsoRotZ = f.torsoRot;
-  pose.headTilt = f.headTilt;
-  pose.legSpread = f.legSpread;
-  pose.auraOpacity = f.auraPulse + Math.sin(t * 2) * 0.08;
-  return pose;
+  const bob = Math.sin(t * f.bobSpeed) * f.bobAmp + (f.extraBob ? Math.sin(t * 6) * f.extraBob : 0);
+  return mergePose(pose, {
+    root: { y: bob },
+    leftUpperArm: { rotationX: f.armL + Math.sin(t * f.bobSpeed) * 0.08 },
+    rightUpperArm: { rotationX: f.armR - Math.sin(t * f.bobSpeed) * 0.08 },
+    torso: { rotationZ: f.torsoRot },
+    head: { rotationZ: f.headTilt },
+    leftUpperLeg: { x: -f.legSpread },
+    rightUpperLeg: { x: f.legSpread },
+    auraOpacity: f.auraPulse + Math.sin(t * 2) * 0.08,
+  });
+}
+
+export function applyIdleFlavor(pose: AnimPose, fighterId: string, frame: number): AnimPose {
+  return applyIdleFlavorToPose(pose, fighterId, frame);
 }
 
 export function listFightersWithIdleAnimation(): DefaultFighterId[] {

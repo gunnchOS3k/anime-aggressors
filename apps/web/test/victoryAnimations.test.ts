@@ -6,7 +6,7 @@ import {
   victoryFlavorForFighter,
   applyVictoryPose,
 } from "../src/renderer-three/fighters/victoryAnimations.ts";
-import type { AnimPose } from "../src/renderer-three/fighters/FighterAnimator.ts";
+import { emptyPose } from "../src/renderer-three/fighters/FighterPose.ts";
 
 describe("victory animations", () => {
   it("each default fighter has a unique win animation", () => {
@@ -24,17 +24,7 @@ describe("victory animations", () => {
   });
 
   it("applyVictoryPose mutates pose", () => {
-    const pose: AnimPose = {
-      torsoRotZ: 0,
-      torsoScaleY: 1,
-      headTilt: 0,
-      armSwingL: 0,
-      armSwingR: 0,
-      legSpread: 0,
-      bob: 0,
-      auraOpacity: 0,
-    };
-    applyVictoryPose(pose, "juno-spark", 10);
-    assert.ok(Math.abs(pose.armSwingR) > 0.1);
+    const posed = applyVictoryPose(emptyPose(), "juno-spark", 10);
+    assert.ok(Math.abs(posed.rightUpperArm?.rotationX ?? 0) > 0.1);
   });
 });

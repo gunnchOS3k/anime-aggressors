@@ -1,3 +1,5 @@
+import type { PlayerState } from "./types.js";
+
 export type CharacterDef = {
   id: string;
   name: string;
@@ -38,6 +40,23 @@ const CHARACTERS: Record<string, CharacterDef> = {
 
 export function getCharacter(id: string): CharacterDef {
   return CHARACTERS[id] ?? CHARACTERS.ember;
+}
+
+/** Resolve character stats for legacy ids and created fighters. */
+export function getCharacterForPlayer(player: Pick<PlayerState, "characterId" | "fighterSize">): CharacterDef {
+  const id = player.characterId;
+  if (CHARACTERS[id]) return CHARACTERS[id]!;
+  const base = CHARACTERS.ember!;
+  const size = player.fighterSize ?? "medium";
+  const speedMult = size === "small" ? 112 : size === "large" ? 88 : 100;
+  const weight = size === "small" ? 85 : size === "large" ? 120 : 100;
+  return {
+    ...base,
+    id,
+    maxJumps: 2,
+    runSpeedMult: speedMult,
+    weight,
+  };
 }
 
 export function listCharacters(): CharacterDef[] {

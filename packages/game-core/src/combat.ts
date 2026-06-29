@@ -11,8 +11,9 @@ import {
   SHIELD_MAX,
   FP_SCALE,
 } from "./constants.js";
-import { getCharacter } from "./characters.js";
+import { getCharacter, getCharacterForPlayer } from "./characters.js";
 import { getStage } from "./stages.js";
+import { elementGameplayEnabled } from "./rulesets.js";
 import { resolveCombatHits, processBlastZoneKOs } from "./combat/hitResolution.js";
 import { DODGE_MOVE, NEUTRAL_ATTACK, SPECIAL_ATTACK } from "./frameData.js";
 import { getMoveData, isMoveComplete, type MoveId } from "./moves.js";
@@ -36,20 +37,20 @@ import {
 } from "./aura/auraCharge.js";
 import { createDefaultAuraState } from "./aura/auraTypes.js";
 import {
-  bufferJump,
-  canCoyoteJump,
-  consumeJumpBuffer,
-  scaleKnockback,
+  bufferJumpInput,
+  fastFallSpeed,
+  resetJumpStateOnLand,
   tickCoyoteTime,
-} from "./feel.js";
-import { fastFallSpeed } from "./movement/jumpPhysics.js";
-import { applyDash, applyHorizontalMovement, computeJumpVelocity } from "./movement/applyMovement.js";
+  tickJumpHold,
+  tryJump,
+} from "./movement/jumpSystem.js";
+import { applyDash, applyHorizontalMovement } from "./movement/applyMovement.js";
 import {
   scaledHitDamage,
   scaledKnockbackTaken,
 } from "./fighterCreation.js";
 import { applyElementOnHit, tickElementalEffects } from "./elements.js";
-import { elementGameplayEnabled } from "./rulesets.js";
+import { scaleKnockback } from "./feel.js";
 
 function getDamageRatio(state: GameState): number {
   return state.config.ruleset?.damageRatio ?? 1;
@@ -66,15 +67,14 @@ function applyInputMovement(player: PlayerState, input: InputFrame): void {
 function startAction(player: PlayerState, input: InputFrame): void {
   if (player.actionState === "hitstun" || player.actionState === "defeated") return;
   if (player.actionState === "auraCharging") return;
+  if (player.actionState === "dodging") return;
   if (
-    player.actionState === "attacking" ||
-    player.actionState === "special" ||
-    player.actionState === "dodging"
+    (player.actionState === "attacking" || player.actionState === "special") &&
+    player.actionFrame > 0
   ) {
-    return;
+    const data = getPlayerMoveFrameData(player);
+    if (data && !isMoveComplete(data, player.actionFrame)) return;
   }
-
-  bufferJump(player, input.jump);
 
   if (input.dodge && player.onGround) {
     player.actionState = "dodging";
@@ -85,30 +85,15 @@ function startAction(player: PlayerState, input: InputFrame): void {
     return;
   }
 
-  if (isAuraChargeHeld(input) && canStartAuraCharge(player)) {
+  if (isAuraChargeHeld(input) && canStartAuraCharge(player) && !input.jump) {
     startAuraCharge(player);
     return;
   }
 
-  if (input.shield) {
+  if (input.shield && !input.jump) {
     player.actionState = "shielding";
     player.actionFrame = 0;
     player.vx = 0;
-    return;
-  }
-
-  const wantsJump = input.jump || consumeJumpBuffer(player);
-  if (wantsJump && (player.jumpsRemaining > 0 || canCoyoteJump(player))) {
-    if (player.jumpsRemaining > 0) {
-      player.jumpsRemaining -= 1;
-    } else {
-      player.coyoteFrames = 0;
-    }
-    player.vy = computeJumpVelocity(player);
-    player.onGround = false;
-    player.actionState = "jumping";
-    player.actionFrame = 0;
-    player.fastFalling = false;
     return;
   }
 
@@ -169,10 +154,12 @@ function integratePhysics(player: PlayerState, stage: GameState["stage"]): void 
   if (player.y >= stage.floorY) {
     player.y = stage.floorY;
     player.vy = 0;
+    const wasAirborne = !player.onGround;
     player.onGround = true;
     player.fastFalling = false;
-    const char = getCharacter(player.characterId);
-    player.jumpsRemaining = char.maxJumps;
+    if (wasAirborne) {
+      resetJumpStateOnLand(player);
+    }
     if (player.actionState === "jumping" || player.actionState === "falling") {
       player.actionState = "idle";
     }
@@ -333,8 +320,10 @@ function respawnPlayer(
   player.slowMultiplierFp = 100;
   player.airDriftBonusFrames = 0;
   player.aura = createDefaultAuraState();
-  const char = getCharacter(player.characterId);
-  player.jumpsRemaining = char.maxJumps;
+  player.jumpsUsed = 0;
+  player.jumpHoldFrames = 0;
+  player.wasJumpHeld = false;
+  player.jumpsRemaining = getCharacterForPlayer(player).maxJumps;
   player.onGround = true;
 }
 
@@ -354,7 +343,14 @@ export function processPlayer(state: GameState, player: PlayerState, input: Inpu
       player.shieldHealth = SHIELD_MAX;
     }
 
-    if (player.actionState === "auraCharging") {
+    const jumpJustPressed = input.jump && !player.wasJumpHeld;
+    bufferJumpInput(player, input.jump);
+    if (tryJump(player, input, jumpJustPressed)) {
+      if (player.actionState === "auraCharging" || player.aura.charging) {
+        player.aura.charging = false;
+        player.currentMoveId = "none";
+      }
+    } else if (player.actionState === "auraCharging") {
       if (!tickAuraWhileCharging(player, input)) {
         const fighterId = fighterIdFromCharacterId(player.characterId);
         if (releaseAuraCharge(player) === "super") {
@@ -365,6 +361,7 @@ export function processPlayer(state: GameState, player: PlayerState, input: Inpu
     } else {
       startAction(player, input);
     }
+    tickJumpHold(player, !!input.jump);
     applyInputMovement(player, input);
     if (!player.onGround && input.down) {
       player.fastFalling = true;

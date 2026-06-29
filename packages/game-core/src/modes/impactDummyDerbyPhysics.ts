@@ -79,15 +79,18 @@ export function integratePlayer(player: DerbyPlayerState, fighter: CreatedFighte
     }
 
     if (input.jump) {
-      if (player.onGround) {
-        player.vy = jumpV;
+      if (player.onGround || player.jumpsRemaining > 0) {
+        if (player.onGround) {
+          player.vy = jumpV;
+          player.jumpsRemaining = 1;
+          player.actionState = "jumping";
+        } else if (player.jumpsRemaining > 0) {
+          player.vy = Math.floor(jumpV * 0.94);
+          player.jumpsRemaining = 0;
+          player.actionState = "jumping";
+        }
         player.onGround = false;
-        player.jumpsRemaining = 1;
-        player.actionState = "jumping";
-      } else if (player.jumpsRemaining > 0) {
-        player.vy = Math.floor(jumpV * 0.92);
-        player.jumpsRemaining = 0;
-        player.actionState = "jumping";
+        player.actionFrame = 0;
       }
     }
 
@@ -126,7 +129,7 @@ export function integratePlayer(player: DerbyPlayerState, fighter: CreatedFighte
     player.vy = 0;
     player.onGround = true;
     player.fastFalling = false;
-    player.jumpsRemaining = 1;
+    player.jumpsRemaining = 2;
     if (player.actionState === "jumping" || player.actionState === "falling") {
       player.actionState = "idle";
     }

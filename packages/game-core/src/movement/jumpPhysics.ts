@@ -1,7 +1,8 @@
-import type { PlayerState } from "../types.js";
+import type { InputFrame, PlayerState } from "../types.js";
 import { MOVEMENT_BASE, movementTuningForSize, scaledMovementValue } from "./movementTuning.js";
 import { getPlayerSizeStats } from "../fighterCreation.js";
 
+/** @deprecated Use jumpSystem.ts */
 export function computeJumpVelocity(player: PlayerState): number {
   const tuning = movementTuningForSize(player.fighterSize ?? "medium");
   const stats = getPlayerSizeStats(player);
@@ -9,8 +10,4 @@ export function computeJumpVelocity(player: PlayerState): number {
   return Math.floor(base * stats.jumpMultiplier);
 }
 
-export function fastFallSpeed(maxFall: number, player: PlayerState): number {
-  const tuning = movementTuningForSize(player.fighterSize ?? "medium");
-  const mult = (MOVEMENT_BASE.fastFallMult * tuning.fastFall) / 100;
-  return Math.floor(maxFall * mult);
-}
+export { fastFallSpeed } from "./jumpSystem.js";

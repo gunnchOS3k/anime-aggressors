@@ -6,7 +6,7 @@ import {
   idleFlavorForFighter,
   applyIdleFlavor,
 } from "../src/renderer-three/fighters/idleAnimations.ts";
-import type { AnimPose } from "../src/renderer-three/fighters/FighterAnimator.ts";
+import { emptyPose } from "../src/renderer-three/fighters/FighterPose.ts";
 
 describe("idle animations", () => {
   it("each default fighter has idle animation config", () => {
@@ -24,19 +24,9 @@ describe("idle animations", () => {
   });
 
   it("applyIdleFlavor animates bob over frames", () => {
-    const pose: AnimPose = {
-      torsoRotZ: 0,
-      torsoScaleY: 1,
-      headTilt: 0,
-      armSwingL: 0,
-      armSwingR: 0,
-      legSpread: 0,
-      bob: 0,
-      auraOpacity: 0,
-    };
-    applyIdleFlavor(pose, "kaia-windrow", 5);
-    const bob1 = pose.bob;
-    applyIdleFlavor(pose, "kaia-windrow", 20);
-    assert.notEqual(bob1, pose.bob);
+    const pose1 = applyIdleFlavor(emptyPose(), "kaia-windrow", 5);
+    const bob1 = pose1.root?.y ?? 0;
+    const pose2 = applyIdleFlavor(emptyPose(), "kaia-windrow", 20);
+    assert.notEqual(bob1, pose2.root?.y ?? 0);
   });
 });

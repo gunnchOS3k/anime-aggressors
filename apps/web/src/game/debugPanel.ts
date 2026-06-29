@@ -8,6 +8,7 @@ export type DebugInfo = {
   inputs: InputFrame[];
   gameState: GameState;
   paused?: boolean;
+  fighterStateDebug?: boolean;
 };
 
 export type DebugPanel = {
@@ -43,6 +44,12 @@ export function mountDebugPanel(container: HTMLElement): DebugPanel {
         `  damage=${p.damage}% stocks=${p.stocks} hitstun=${p.hitstunFrames} shield=${p.shieldHealth}`,
         `  onGround=${p.onGround} invuln=${p.invulnFrames}`,
       );
+      if (info.fighterStateDebug) {
+        lines.push(
+          `  jumpsUsed=${p.jumpsUsed} jumpsRemaining=${p.jumpsRemaining} coyote=${p.coyoteFrames} jumpBuf=${p.jumpBufferFrames}`,
+          `  auraCharging=${p.aura.charging} hitstop=${info.gameState.hitstopFrames}`,
+        );
+      }
     }
 
     lines.push("", "inputs:");
@@ -63,8 +70,9 @@ export function mountDebugPanel(container: HTMLElement): DebugPanel {
       lines.push(`  P${input.playerId + 1}: ${flags || "(none)"}`);
     }
 
-    lines.push("", "F2 hitboxes | F3 pause | F4 step | R reset");
+    lines.push("", "F2 hitboxes | F3 pause | F4 step | F6 fighter state | R reset");
     body.textContent = lines.join("\n");
+    if (info.fighterStateDebug) panel.classList.remove("hidden");
   };
 
   return {

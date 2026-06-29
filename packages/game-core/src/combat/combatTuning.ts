@@ -9,6 +9,15 @@ export const HITLAG_DEFAULTS = {
 
 export type HitStrength = keyof typeof HITLAG_DEFAULTS;
 
+export const MOVE_FEEL_TARGETS = {
+  jab: { startup: 4, active: 3, recovery: 10, hitlag: 3 },
+  tilt: { startup: 6, active: 4, recovery: 14, hitlag: 5 },
+  aerial: { startup: 5, active: 6, recovery: 12, hitlag: 4 },
+  special: { startup: 10, active: 8, recovery: 22, hitlag: 7 },
+  smashOrHeavy: { startup: 14, active: 5, recovery: 28, hitlag: 10 },
+  super: { startup: 24, active: 18, recovery: 36, hitlag: 14 },
+} as const;
+
 export const HITLAG_FRAMES = HITLAG_DEFAULTS;
 
 export const KNOCKBACK_TUNING = {
