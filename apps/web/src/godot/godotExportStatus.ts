@@ -23,12 +23,17 @@ export function classifyGodotExportHtml(html: string): GodotExportStatus {
       return "placeholder";
     }
   }
+  const looksLikeBootShell = html.includes("runtime/index.html") && html.includes("rescue-runtime.js");
+  if (looksLikeBootShell) {
+    return "ready";
+  }
   const looksLikeGodot =
     html.includes(".wasm") ||
     html.includes(".pck") ||
     html.includes("createEngine") ||
     html.includes("EngineConfig") ||
-    html.includes("godot_js");
+    html.includes("godot_js") ||
+    html.includes("new Engine(");
   if (!looksLikeGodot) {
     return "placeholder";
   }
