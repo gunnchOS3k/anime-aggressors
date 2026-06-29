@@ -120,6 +120,9 @@ export function resetForRematch(state: GameState): GameState {
     p.onGround = true;
     p.coyoteFrames = 0;
     p.jumpBufferFrames = 0;
+    p.jumpsUsed = 0;
+    p.jumpHoldFrames = 0;
+    p.wasJumpHeld = false;
     p.fastFalling = false;
     p.currentMoveId = "none";
     p.aura = createDefaultAuraState();

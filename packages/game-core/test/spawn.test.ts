@@ -4,12 +4,12 @@ import { getStage, defaultBattleSpawns, validateSpawnPoints, spawnDisplayX } fro
 import { FLOOR_Y, STAGE_WIDTH } from "../src/constants.js";
 
 describe("spawn helpers", () => {
-  it("defaultBattleSpawns places P1 left and P2 right above floor", () => {
+  it("defaultBattleSpawns places P1 left and P2 right on floor", () => {
     const spawns = defaultBattleSpawns();
     assert.equal(spawns.length, 2);
     assert.ok(spawns[0]!.x < spawns[1]!.x);
-    assert.ok(spawns[0]!.y < FLOOR_Y);
-    assert.ok(spawns[1]!.y < FLOOR_Y);
+    assert.equal(spawns[0]!.y, FLOOR_Y);
+    assert.equal(spawns[1]!.y, FLOOR_Y);
   });
 
   it("spawnDisplayX returns stage thirds", () => {

@@ -67,7 +67,7 @@ export function pollKeyboardP2(frame: number, playerId = 1): InputFrame {
     right: keys.has("KeyD"),
     up: keys.has("KeyW"),
     down: keys.has("KeyS"),
-    jump: keys.has("KeyW"),
+    jump: keys.has("KeyW") || keys.has("Numpad0"),
     attack: keys.has("Digit1"),
     special: keys.has("Digit2"),
     shield: keys.has("Digit3"),

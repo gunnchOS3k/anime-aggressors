@@ -1,6 +1,6 @@
 import type { GameState, PlayerState } from "../types.js";
 import { FP_SCALE, HITSTUN_BASE } from "../constants.js";
-import { getCharacter } from "../characters.js";
+import { getCharacterForPlayer } from "../characters.js";
 import { boxesOverlap, getActiveHitboxes, getHurtbox } from "../collision.js";
 import { NEUTRAL_ATTACK, SPECIAL_ATTACK } from "../frameData.js";
 import { getMoveData, type MoveId } from "../moves.js";
@@ -47,7 +47,7 @@ export function resolveHitFromContact(
 
   const preDamage = defender.damage;
   const strength = classifyHitStrength(damage, moveId);
-  const char = getCharacter(defender.characterId);
+  const char = getCharacterForPlayer(defender);
   const launchRatio = getLaunchRatio(state);
   const dmgRatio = getDamageRatio(state);
   const finalDamage = Math.max(1, Math.floor(scaledHitDamage(damage, attacker) * dmgRatio));
@@ -199,7 +199,10 @@ function respawnPlayer(
   player.slowMultiplierFp = 100;
   player.airDriftBonusFrames = 0;
   player.aura = createDefaultAuraState();
-  const char = getCharacter(player.characterId);
+  const char = getCharacterForPlayer(player);
   player.jumpsRemaining = char.maxJumps;
+  player.jumpsUsed = 0;
+  player.jumpHoldFrames = 0;
+  player.wasJumpHeld = false;
   player.onGround = true;
 }

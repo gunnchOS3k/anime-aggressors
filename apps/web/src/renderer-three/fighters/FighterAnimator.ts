@@ -1,31 +1,28 @@
 import type { PlayerState } from "@anime-aggressors/game-core";
 import type { LowPolyHumanoidParts } from "./LowPolyHumanoid.ts";
-import { computeProceduralPose } from "./ProceduralPoseSystem.ts";
+import type { FighterPose } from "./FighterPose.ts";
+import { computeFighterLimbPose, strikeSideForClip, clipForPlayer } from "./FighterAnimationController.ts";
+import { humanoidToRig } from "./FighterRigParts.ts";
+import { applyPoseToRig, getStrikeAnchor } from "./LowPolyFighterRig.ts";
+import { clipUsesLimbs } from "./fightingAnimationClips.ts";
 
-export type AnimPose = {
-  torsoRotZ: number;
-  torsoScaleY: number;
-  headTilt: number;
-  armSwingL: number;
-  armSwingR: number;
-  legSpread: number;
-  bob: number;
-  auraOpacity: number;
-};
+export type AnimPose = FighterPose;
 
-export function computeFighterPose(player: PlayerState, frame: number): AnimPose {
-  return computeProceduralPose(player, frame);
+export function computeFighterPose(player: PlayerState, frame: number): FighterPose {
+  return computeFighterLimbPose(player, frame);
 }
 
-export function applyFighterPose(parts: LowPolyHumanoidParts, pose: AnimPose, facing: number): void {
-  parts.torso.rotation.z = pose.torsoRotZ;
-  parts.torso.scale.y = pose.torsoScaleY;
-  parts.head.rotation.z = pose.headTilt;
-  parts.leftArm.rotation.x = pose.armSwingL;
-  parts.rightArm.rotation.x = pose.armSwingR;
-  parts.leftLeg.position.x = -0.28 - pose.legSpread;
-  parts.rightLeg.position.x = 0.28 + pose.legSpread;
-  parts.root.position.y = pose.bob;
-  (parts.aura.material as import("three").MeshBasicMaterial).opacity = pose.auraOpacity;
-  parts.root.rotation.y = facing > 0 ? 0 : Math.PI;
+export function applyFighterPose(parts: LowPolyHumanoidParts, pose: FighterPose, facing: 1 | -1): void {
+  const rig = humanoidToRig(parts);
+  applyPoseToRig(rig, pose, facing);
+}
+
+export function getFighterStrikeAnchor(parts: LowPolyHumanoidParts, player: PlayerState, frame: number) {
+  const clipId = clipForPlayer(player);
+  const side = strikeSideForClip(clipId);
+  return getStrikeAnchor(humanoidToRig(parts), side);
+}
+
+export function attackAnimationUsesLimbs(player: PlayerState): boolean {
+  return clipUsesLimbs(clipForPlayer(player));
 }

@@ -21,12 +21,12 @@ function room(
     stageId,
     flagCore: { x: CENTER_X, y: CORE_Y, width: CORE_W, height: CORE_H },
     solarSpawn: [
-      { x: solarX, y: FLOOR_Y - 64 * FP_SCALE },
-      { x: solarX + 80 * FP_SCALE, y: FLOOR_Y - 64 * FP_SCALE },
+      { x: solarX, y: FLOOR_Y },
+      { x: solarX + 80 * FP_SCALE, y: FLOOR_Y },
     ],
     lunarSpawn: [
-      { x: lunarX, y: FLOOR_Y - 64 * FP_SCALE },
-      { x: lunarX - 80 * FP_SCALE, y: FLOOR_Y - 64 * FP_SCALE },
+      { x: lunarX, y: FLOOR_Y },
+      { x: lunarX - 80 * FP_SCALE, y: FLOOR_Y },
     ],
   };
 }

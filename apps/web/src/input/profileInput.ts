@@ -20,6 +20,9 @@ export function resolveProfileActions(
   if (profile.tapJumpEnabled) {
     if (actions.moveUp) actions.jump = true;
   }
+  if (profile.playerSlot === 2 && keyboard.has("Numpad0")) {
+    actions.jump = true;
+  }
   return actions;
 }
 

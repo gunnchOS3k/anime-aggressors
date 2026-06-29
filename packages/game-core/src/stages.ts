@@ -34,10 +34,10 @@ const SKYLINE_ARENA: StageDef = {
     floorY: FLOOR_Y,
   },
   spawnPoints: [
-    { x: STAGE_WIDTH / 3, y: FLOOR_Y - 64 * FP_SCALE },
-    { x: (STAGE_WIDTH * 2) / 3, y: FLOOR_Y - 64 * FP_SCALE },
-    { x: STAGE_WIDTH / 4, y: FLOOR_Y - 64 * FP_SCALE },
-    { x: (STAGE_WIDTH * 3) / 4, y: FLOOR_Y - 64 * FP_SCALE },
+    { x: STAGE_WIDTH / 3, y: FLOOR_Y },
+    { x: (STAGE_WIDTH * 2) / 3, y: FLOOR_Y },
+    { x: STAGE_WIDTH / 4, y: FLOOR_Y },
+    { x: (STAGE_WIDTH * 3) / 4, y: FLOOR_Y },
   ],
 };
 
@@ -63,10 +63,10 @@ const IMPACT_PLATFORM: StageDef = {
     floorY: FLOOR_Y,
   },
   spawnPoints: [
-    { x: STAGE_WIDTH / 3, y: FLOOR_Y - 64 * FP_SCALE },
-    { x: (STAGE_WIDTH * 2) / 3, y: FLOOR_Y - 64 * FP_SCALE },
-    { x: STAGE_WIDTH / 4, y: FLOOR_Y - 64 * FP_SCALE },
-    { x: (STAGE_WIDTH * 3) / 4, y: FLOOR_Y - 64 * FP_SCALE },
+    { x: STAGE_WIDTH / 3, y: FLOOR_Y },
+    { x: (STAGE_WIDTH * 2) / 3, y: FLOOR_Y },
+    { x: STAGE_WIDTH / 4, y: FLOOR_Y },
+    { x: (STAGE_WIDTH * 3) / 4, y: FLOOR_Y },
   ],
 };
 
@@ -78,10 +78,10 @@ const FLAGLINE_BASE: StageDef = {
   hazardsEnabled: true,
   bounds: { left: BLAST_LEFT, right: BLAST_RIGHT, top: BLAST_TOP, bottom: BLAST_BOTTOM, floorY: FLOOR_Y },
   spawnPoints: [
-    { x: STAGE_WIDTH / 4, y: FLOOR_Y - 64 * FP_SCALE },
-    { x: STAGE_WIDTH / 3, y: FLOOR_Y - 64 * FP_SCALE },
-    { x: (STAGE_WIDTH * 3) / 4, y: FLOOR_Y - 64 * FP_SCALE },
-    { x: (STAGE_WIDTH * 2) / 3, y: FLOOR_Y - 64 * FP_SCALE },
+    { x: STAGE_WIDTH / 4, y: FLOOR_Y },
+    { x: STAGE_WIDTH / 3, y: FLOOR_Y },
+    { x: (STAGE_WIDTH * 3) / 4, y: FLOOR_Y },
+    { x: (STAGE_WIDTH * 2) / 3, y: FLOOR_Y },
   ],
 };
 

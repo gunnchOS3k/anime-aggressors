@@ -1,5 +1,6 @@
 import { normalizeDefaultFighterId } from "@anime-aggressors/game-core";
 import type { AnimPose } from "./FighterAnimator.ts";
+import { mergePose } from "./FighterPose.ts";
 
 export type VictoryAnimFlavor = {
   torsoRot: number;
@@ -86,14 +87,16 @@ export function victoryFlavorForFighter(fighterId: string, frame: number): Victo
 
 export function applyVictoryPose(pose: AnimPose, fighterId: string, frame: number): AnimPose {
   const v = victoryFlavorForFighter(fighterId, frame);
-  pose.torsoRotZ = v.torsoRot;
-  pose.armSwingR = v.armR;
-  pose.armSwingL = v.armL;
-  pose.bob = v.bob;
-  pose.headTilt = v.headTilt;
-  pose.auraOpacity = v.auraOpacity;
-  pose.legSpread = v.legSpread;
-  return pose;
+  return mergePose(pose, {
+    root: { y: v.bob },
+    torso: { rotationZ: v.torsoRot },
+    head: { rotationZ: v.headTilt },
+    leftUpperArm: { rotationX: v.armL },
+    rightUpperArm: { rotationX: v.armR },
+    leftUpperLeg: { x: -v.legSpread },
+    rightUpperLeg: { x: v.legSpread },
+    auraOpacity: v.auraOpacity,
+  });
 }
 
 export function listFightersWithVictoryAnimation(): string[] {

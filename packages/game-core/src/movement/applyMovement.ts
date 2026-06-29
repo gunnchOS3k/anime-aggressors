@@ -2,7 +2,6 @@ import type { InputFrame, PlayerState } from "../types.js";
 import { getCharacter } from "../characters.js";
 import { MOVEMENT_BASE, movementTuningForSize, scaledMovementValue } from "./movementTuning.js";
 import { computeAirDriftSpeed } from "./airControl.js";
-import { computeJumpVelocity } from "./jumpPhysics.js";
 
 export function computeRunSpeed(player: PlayerState): number {
   const char = getCharacter(player.characterId);
@@ -70,4 +69,4 @@ export function applyDash(player: PlayerState): void {
   player.invulnFrames = Math.max(player.invulnFrames, 6);
 }
 
-export { computeJumpVelocity } from "./jumpPhysics.js";
+export { computeJumpVelocity } from "./jumpSystem.js";

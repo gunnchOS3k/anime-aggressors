@@ -1,14 +1,14 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { BLAST_LEFT, BLAST_RIGHT, isOutsideBlastZone } from "../src/combat/blastZones.js";
+import { resolveMoveSlotFromInput } from "../src/moves/moveDefinitions.js";
+import type { InputFrame, PlayerState } from "../src/types.js";
 import { createDefaultAuraState } from "../src/aura/auraTypes.js";
-import type { PlayerState } from "../src/types.js";
 
-function playerAt(x: number, y: number): PlayerState {
+function stubPlayer(): PlayerState {
   return {
     id: 0,
-    characterId: "ember",
-    fighterName: "Test",
+    characterId: "created:ember-vale",
+    fighterName: "Ember",
     fighterSize: "medium",
     fighterColor: "red",
     elementEffect: "burn",
@@ -16,15 +16,15 @@ function playerAt(x: number, y: number): PlayerState {
     slowFramesRemaining: 0,
     slowMultiplierFp: 100,
     airDriftBonusFrames: 0,
-    x,
-    y,
+    x: 0,
+    y: 0,
     vx: 0,
     vy: 0,
     facing: 1,
     damage: 0,
     stocks: 3,
-    staminaHp: 100,
-    maxStaminaHp: 100,
+    staminaHp: 0,
+    maxStaminaHp: 0,
     score: 0,
     teamId: 0,
     actionState: "idle",
@@ -45,10 +45,17 @@ function playerAt(x: number, y: number): PlayerState {
   };
 }
 
-describe("blast zones", () => {
-  it("detects outside left and right blast zones", () => {
-    assert.equal(isOutsideBlastZone(playerAt(BLAST_LEFT - 1, 50000)), true);
-    assert.equal(isOutsideBlastZone(playerAt(BLAST_RIGHT + 1, 50000)), true);
-    assert.equal(isOutsideBlastZone(playerAt((BLAST_LEFT + BLAST_RIGHT) / 2, 50000)), false);
+describe("combat input grammar", () => {
+  it("side attack slot from directional input", () => {
+    const p = stubPlayer();
+    const slot = resolveMoveSlotFromInput(p, {
+      left: false,
+      right: true,
+      up: false,
+      down: false,
+      attack: true,
+      special: false,
+    });
+    assert.equal(slot, "sideAttack");
   });
 });

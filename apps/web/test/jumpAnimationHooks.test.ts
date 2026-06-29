@@ -1,0 +1,94 @@
+import { describe, it } from "node:test";
+import assert from "node:assert/strict";
+import { computeFighterLimbPose } from "../src/renderer-three/fighters/FighterAnimationController.ts";
+import { createDefaultAuraState } from "@anime-aggressors/game-core";
+import type { PlayerState } from "@anime-aggressors/game-core";
+
+describe("jump animation hooks", () => {
+  it("ground jump pose animates arms", () => {
+    const player: PlayerState = {
+      id: 0,
+      characterId: "created:ember-vale",
+      fighterName: "Ember",
+      fighterSize: "medium",
+      fighterColor: "red",
+      elementEffect: "burn",
+      burnFramesRemaining: 0,
+      slowFramesRemaining: 0,
+      slowMultiplierFp: 100,
+      airDriftBonusFrames: 0,
+      x: 0,
+      y: 0,
+      vx: 0,
+      vy: -50,
+      facing: 1,
+      damage: 0,
+      stocks: 3,
+      staminaHp: 0,
+      maxStaminaHp: 0,
+      score: 0,
+      teamId: 0,
+      actionState: "jumping",
+      actionFrame: 3,
+      hitstunFrames: 0,
+      shieldHealth: 100,
+      jumpsRemaining: 1,
+      jumpsUsed: 1,
+      jumpHoldFrames: 0,
+      wasJumpHeld: false,
+      onGround: false,
+      invulnFrames: 0,
+      coyoteFrames: 0,
+      jumpBufferFrames: 0,
+      fastFalling: false,
+      currentMoveId: "none",
+      aura: createDefaultAuraState(),
+    };
+    const pose = computeFighterLimbPose(player, 5);
+    assert.ok(Math.abs(pose.leftUpperArm?.rotationX ?? 0) > 0.2);
+  });
+
+  it("double jump pose differs from ground jump", () => {
+    const base = {
+      id: 0,
+      characterId: "created:juno-spark",
+      fighterName: "Juno",
+      fighterSize: "small" as const,
+      fighterColor: "yellow" as const,
+      elementEffect: "shock" as const,
+      burnFramesRemaining: 0,
+      slowFramesRemaining: 0,
+      slowMultiplierFp: 100,
+      airDriftBonusFrames: 0,
+      x: 0,
+      y: 0,
+      vx: 0,
+      vy: -50,
+      facing: 1 as const,
+      damage: 0,
+      stocks: 3,
+      staminaHp: 0,
+      maxStaminaHp: 0,
+      score: 0,
+      teamId: 0,
+      actionState: "jumping" as const,
+      actionFrame: 3,
+      hitstunFrames: 0,
+      shieldHealth: 100,
+      jumpsRemaining: 0,
+      jumpsUsed: 2,
+      jumpHoldFrames: 0,
+      wasJumpHeld: false,
+      onGround: false,
+      invulnFrames: 0,
+      coyoteFrames: 0,
+      jumpBufferFrames: 0,
+      fastFalling: false,
+      currentMoveId: "none",
+      aura: createDefaultAuraState(),
+    };
+    const ground = computeFighterLimbPose({ ...base, jumpsUsed: 1 }, 5);
+    const dbl = computeFighterLimbPose(base, 5);
+    assert.notEqual(ground.torso?.rotationZ, dbl.torso?.rotationZ);
+  });
+});

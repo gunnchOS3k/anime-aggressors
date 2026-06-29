@@ -63,6 +63,7 @@ export class PlatformFighterApp {
   private lastTime = 0;
   private accumulator = 0;
   private readonly fixedDt = 1 / 60;
+  private fighterStateDebug = false;
   private debug = false;
   private showHitboxes = false;
   private showHurtboxes = false;
@@ -161,6 +162,10 @@ export class PlatformFighterApp {
     if (e.key === "F4" && this.paused) {
       e.preventDefault();
       this.stepOnce = true;
+    }
+    if (e.key === "F6") {
+      e.preventDefault();
+      this.fighterStateDebug = !this.fighterStateDebug;
     }
     if (e.key === "r" || e.key === "R") {
       e.preventDefault();
@@ -414,7 +419,7 @@ export class PlatformFighterApp {
       this.prevDamage[p.id] = p.damage;
     }
 
-    if (this.debug || this.trainingMode) {
+    if (this.debug || this.trainingMode || this.fighterStateDebug) {
       this.debugPanel?.update({
         frame: this.gameState.frame,
         hash: hashState(this.gameState),
@@ -422,6 +427,7 @@ export class PlatformFighterApp {
         inputs: pollAllInputs(this.simFrame),
         gameState: this.gameState,
         paused: this.paused,
+        fighterStateDebug: this.fighterStateDebug,
       });
     }
   }

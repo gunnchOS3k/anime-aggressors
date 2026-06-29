@@ -26,7 +26,15 @@ export {
 export { createInitialGameState, cloneGameState } from "./state.js";
 export { simulateFrame, resetForRematch } from "./simulate.js";
 export { processPlayer } from "./combat.js";
-export { computeDashSpeed, computeJumpVelocity, computeRunSpeed } from "./movement/applyMovement.js";
+export { computeDashSpeed, computeRunSpeed } from "./movement/applyMovement.js";
+export {
+  JUMP_TUNING,
+  tryJump,
+  bufferJumpInput,
+  resetJumpStateOnLand,
+  getMaxJumpsForPlayer,
+  computeJumpVelocity,
+} from "./movement/jumpSystem.js";
 export { MOVEMENT_BASE, MOVEMENT_TUNING } from "./movement/movementTuning.js";
 export { getMovePhase, type MovePhase, type FightingMoveTiming } from "./combat/movePhases.js";
 export { currentMovePhase, isMoveInActiveFrames } from "./combat/moveStateMachine.js";
