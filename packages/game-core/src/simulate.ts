@@ -99,6 +99,7 @@ export function resetForRematch(state: GameState): GameState {
   fresh.matchTimerFrames = state.config.matchDurationFrames;
   fresh.winnerId = null;
   fresh.hitstopFrames = 0;
+  fresh.lastHitEvents = [];
 
   for (let i = 0; i < fresh.players.length; i++) {
     const spawn = stage.spawnPoints[i];

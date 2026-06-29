@@ -1,3 +1,4 @@
+import { isDerbySetupReady, loadDerbySetup, type ImpactDummyDerbySetup } from "../modes/impactDummyDerbySetup.ts";
 import type { MatchSetupSession } from "../match/matchSetupSession.ts";
 import { APP_ROUTES } from "../routes.ts";
 import type { AppRouteMode } from "../routes.ts";
@@ -22,9 +23,15 @@ export function guardBattleEntry(setup: MatchSetupSession | null): ModeEntryGuar
   return { ok: true };
 }
 
-export function guardDerbyEntry(hasFighter: boolean): ModeEntryGuardResult {
-  if (!hasFighter) {
-    return { ok: false, redirectRoute: APP_ROUTES.createFighter, redirectMode: "create-fighter", reason: "pick fighter" };
+export function guardDerbyEntry(setup?: ImpactDummyDerbySetup | null): ModeEntryGuardResult {
+  const derby = setup ?? loadDerbySetup();
+  if (!derby || !isDerbySetupReady(derby)) {
+    return {
+      ok: false,
+      redirectRoute: APP_ROUTES.impactDummyDerbyFighterSelect,
+      redirectMode: "impact-dummy-derby-fighter-select",
+      reason: "pick fighter",
+    };
   }
   return { ok: true };
 }

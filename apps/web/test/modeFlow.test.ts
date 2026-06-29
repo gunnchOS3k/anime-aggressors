@@ -16,10 +16,12 @@ const { APP_ROUTES } = await import("../src/routes.ts");
 const { clearMatchSetup, createDefaultMatchSetup, saveMatchSetup } = await import(
   "../src/match/matchSetupSession.ts"
 );
+const { clearDerbySetup } = await import("../src/modes/impactDummyDerbySetup.ts");
 
 beforeEach(() => {
   storage.clear();
   clearMatchSetup();
+  clearDerbySetup();
 });
 
 describe("mode flow", () => {
@@ -45,8 +47,9 @@ describe("mode flow", () => {
     assert.equal(guard.redirectMode, "match-setup-fighters");
   });
 
-  it("derby without fighter routes to create fighter", () => {
-    const r = resolveModeEntry("impactDummyDerby", false);
-    assert.equal(r.mode, "create-fighter");
+  it("derby without fighter routes to fighter select", () => {
+    const r = resolveModeEntry("impactDummyDerby");
+    assert.equal(r.mode, "impact-dummy-derby-fighter-select");
+    assert.equal(r.route, APP_ROUTES.impactDummyDerbyFighterSelect);
   });
 });

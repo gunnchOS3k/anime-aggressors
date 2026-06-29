@@ -144,13 +144,16 @@ async function navigate(mode: AppRouteMode): Promise<void> {
     } else if (mode === "prototype") {
       const { mountPrototypeLab } = await import("./shell/prototypeLab.js");
       mountPrototypeLab(appRoot!);
+    } else if (mode === "impact-dummy-derby-fighter-select") {
+      const { mountImpactDummyDerbyFighterSelectScreen } = await import(
+        "./screens/ImpactDummyDerbyFighterSelectScreen.js"
+      );
+      mountImpactDummyDerbyFighterSelectScreen(appRoot!);
     } else if (mode === "impact-dummy-derby") {
       const { mountImpactDummyDerby } = await import("./modes/impactDummyDerbyView.js");
-      const { resolveModeEntry } = await import("./navigation/modeFlow.ts");
-      const { listCreatedFighters } = await import("./storage/createdFightersStorage.js");
+      const { resolveDerbyRoute } = await import("./navigation/modeFlow.ts");
       const { navigateTo } = await import("./router.js");
-      const hasFighter = listCreatedFighters().length > 0;
-      const resolved = resolveModeEntry("impactDummyDerby", hasFighter);
+      const resolved = resolveDerbyRoute();
       if (resolved.mode !== "impact-dummy-derby") {
         navigateTo(resolved.mode);
         return;

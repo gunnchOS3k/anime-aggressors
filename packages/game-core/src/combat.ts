@@ -17,7 +17,7 @@ import {
 } from "./constants.js";
 import { getCharacter } from "./characters.js";
 import { getStage } from "./stages.js";
-import { boxesOverlap, getActiveHitboxes, getHurtbox } from "./collision.js";
+import { resolveCombatHits, processBlastZoneKOs } from "./combat/hitResolution.js";
 import { DODGE_MOVE, NEUTRAL_ATTACK, SPECIAL_ATTACK } from "./frameData.js";
 import { getMoveData, isMoveComplete, type MoveId } from "./moves.js";
 import {
@@ -379,56 +379,8 @@ function respawnPlayer(
 }
 
 export function resolveCombat(state: GameState): void {
-  const hitboxes = state.players.flatMap((p) => getActiveHitboxes(p));
-
-  for (const hit of hitboxes) {
-    if (!hit.active) continue;
-    for (const defender of state.players) {
-      if (defender.id === hit.ownerId) continue;
-      if (defender.actionState === "defeated") continue;
-
-      const hurt = getHurtbox(defender);
-      if (boxesOverlap(hit, hurt)) {
-        const moveData =
-          state.players[hit.ownerId].actionState === "special"
-            ? SPECIAL_ATTACK
-            : NEUTRAL_ATTACK;
-        applyHit(
-          state,
-          state.players[hit.ownerId],
-          defender,
-          hit.damage,
-          hit.knockbackX,
-          hit.knockbackY,
-          moveData.hitstop,
-        );
-      }
-    }
-  }
-
-  for (const player of state.players) {
-    if (player.actionState === "defeated") continue;
-    if (checkBlastZones(player)) {
-      const matchType = state.config.ruleset?.matchType ?? "stock";
-      if (matchType === "stamina" && player.staminaHp <= 0) {
-        player.actionState = "defeated";
-        continue;
-      }
-      for (const other of state.players) {
-        if (other.id !== player.id && other.actionState !== "defeated") {
-          if (matchType === "time") other.score += 1;
-        }
-      }
-      player.stocks -= 1;
-      if (player.stocks <= 0) {
-        player.actionState = "defeated";
-      } else {
-        const stageDef = getStage(state.config.stageId);
-        const spawn = stageDef.spawnPoints[player.id] ?? stageDef.spawnPoints[0];
-        respawnPlayer(player, spawn, state.config.ruleset);
-      }
-    }
-  }
+  state.lastHitEvents = resolveCombatHits(state);
+  processBlastZoneKOs(state);
 }
 
 export function processPlayer(state: GameState, player: PlayerState, input: InputFrame | undefined): void {

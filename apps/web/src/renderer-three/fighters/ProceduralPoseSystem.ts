@@ -67,26 +67,36 @@ export function computeProceduralPose(player: PlayerState, frame: number): AnimP
       base.armSwingR = 0.25;
       break;
     case "attacking":
-      base.torsoRotZ = -0.35 * player.facing;
-      base.armSwingR = -1.1 * player.facing;
-      base.headTilt = -0.15 * player.facing;
-      base.auraOpacity = 0.45;
-      if (animSlot === "upAttack") {
-        base.torsoRotZ = -0.6 * player.facing;
-        base.armSwingR = -1.5 * player.facing;
-        base.bob = 0.12;
-      } else if (animSlot === "downAttack") {
-        base.torsoRotZ = 0.25 * player.facing;
-        base.armSwingR = -0.8 * player.facing;
-        base.bob = -0.06;
+    case "special": {
+      const f = player.actionFrame;
+      const startup = 5;
+      const active = 7;
+      if (f < startup) {
+        base.torsoRotZ = -0.12 * player.facing;
+        base.armSwingR = -0.35 * player.facing;
+        base.bob = -0.02;
+        base.auraOpacity = 0.3;
+      } else if (f < startup + active) {
+        base.torsoRotZ = -0.45 * player.facing;
+        base.armSwingR = -1.25 * player.facing;
+        base.headTilt = -0.18 * player.facing;
+        base.auraOpacity = 0.55;
+        if (animSlot === "upAttack") {
+          base.torsoRotZ = -0.7 * player.facing;
+          base.armSwingR = -1.55 * player.facing;
+          base.bob = 0.14;
+        } else if (animSlot === "downAttack") {
+          base.torsoRotZ = 0.3 * player.facing;
+          base.armSwingR = -0.95 * player.facing;
+          base.bob = -0.08;
+        }
+      } else {
+        base.torsoRotZ = -0.2 * player.facing;
+        base.armSwingR = -0.5 * player.facing;
+        base.auraOpacity = 0.35;
       }
       break;
-    case "special":
-      base.torsoRotZ = -0.55 * player.facing;
-      base.armSwingR = -1.4 * player.facing;
-      base.armSwingL = 0.4 * player.facing;
-      base.auraOpacity = 0.65;
-      break;
+    }
     case "shielding":
       base.armSwingL = 0.6;
       base.armSwingR = 0.6;
@@ -108,9 +118,11 @@ export function computeProceduralPose(player: PlayerState, frame: number): AnimP
       base.auraOpacity = 0.35;
       break;
     case "hitstun":
-      base.torsoRotZ = 0.25 * player.facing;
+      base.torsoRotZ = (0.25 + Math.min(player.hitstunFrames, 20) * 0.01) * player.facing;
       base.headTilt = 0.2;
-      base.bob = -0.05;
+      base.bob = player.onGround ? -0.05 : 0.08;
+      base.armSwingL = 0.35;
+      base.armSwingR = 0.2;
       break;
     case "defeated":
       base.torsoRotZ = 1.2 * player.facing;
