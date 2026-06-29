@@ -51,7 +51,8 @@ export function setActivePlayer(state: CharacterSelectState, player: 0 | 1): Cha
   return { ...state, activePlayer: player };
 }
 
-export function isCharacterSelectReady(state: CharacterSelectState): boolean {
+export function isCharacterSelectReady(state: CharacterSelectState, mode: "match" | "derby" = "match"): boolean {
+  if (mode === "derby") return !!state.p1;
   return !!(state.p1 && state.p2);
 }
 

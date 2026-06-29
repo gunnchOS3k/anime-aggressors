@@ -41,6 +41,7 @@ export function actionsToInputFrame(
     shield: !!actions.shield,
     dodge: !!actions.dodge,
     grab: !!actions.grab,
+    auraCharge: !!actions.auraCharge || (!!actions.shield && !!actions.special),
   };
 }
 

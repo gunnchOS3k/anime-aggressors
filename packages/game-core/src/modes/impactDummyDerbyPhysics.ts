@@ -24,8 +24,8 @@ import { pushDerbyEvent } from "./impactDummyDerbyEvents.js";
 export const PLATFORM_Y = 900 * FP_SCALE;
 export const PLATFORM_LEFT = 200 * FP_SCALE;
 export const PLATFORM_RIGHT = 2200 * FP_SCALE;
-export const RUN_SPEED = (7 * FP_SCALE) / SIM_HZ;
-export const JUMP_V = -(14 * FP_SCALE) / SIM_HZ;
+export const RUN_SPEED = (10.2 * FP_SCALE) / SIM_HZ;
+export const JUMP_V = (-17.5 * FP_SCALE) / SIM_HZ;
 export const BARRIER_TOP = PLATFORM_Y - 180 * FP_SCALE;
 
 export const BAT_STARTUP = 8;

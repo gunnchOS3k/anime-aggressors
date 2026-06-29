@@ -9,6 +9,7 @@ export type GameAction =
   | "shield"
   | "dodge"
   | "grab"
+  | "auraCharge"
   | "pause"
   | "taunt"
   | "debugToggle";
@@ -24,6 +25,7 @@ export const GAME_ACTIONS: GameAction[] = [
   "shield",
   "dodge",
   "grab",
+  "auraCharge",
   "pause",
   "taunt",
   "debugToggle",
@@ -40,6 +42,7 @@ export const ACTION_LABELS: Record<GameAction, string> = {
   shield: "Shield",
   dodge: "Dodge",
   grab: "Grab",
+  auraCharge: "Aura Charge",
   pause: "Pause",
   taunt: "Taunt",
   debugToggle: "Debug Toggle",

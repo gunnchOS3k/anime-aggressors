@@ -92,6 +92,17 @@ Anime Aggressors supports per-player input profiles. Keyboard, gamepad, and Edge
 | Dodge | V | 4 | Trigger |
 | Grab / Extra | B | 5 | Top face button |
 
+### Aura Charge
+
+Aura Charge builds your elemental power meter. At Level 3, your fighter becomes **Super Ready**.
+
+| Player | Keyboard | Gamepad |
+|---|---|---|
+| P1 | Hold **F** (or Shield + Special: C + X) | Hold **Select** (or Shield + Special) |
+| P2 | Hold **/** (or Shield + Special: 3 + 2) | Hold **Select** (or Shield + Special) |
+
+Aura Charge slows movement while charging and can be interrupted by heavy hits.
+
 ## Playtest With Friends (PC / Web)
 
 1. Open the [web build](https://gunnchos3k.github.io/anime-aggressors/)

@@ -51,6 +51,20 @@ describe("aura charge", () => {
     assert.ok(p.aura.current > 0);
   });
 
+  it("holding auraCharge input increases meter", () => {
+    const state = createInitialGameState(
+      gameConfigFromRuleset(DEFAULT_RULESET, [getDefaultCreatedFighter(0), getDefaultCreatedFighter(1)], 2),
+    );
+    const p = state.players[0]!;
+    processPlayer(state, p, input(0, 0, { auraCharge: true }));
+    assert.equal(p.actionState, "auraCharging");
+    for (let f = 1; f <= 20; f++) {
+      processPlayer(state, p, input(f, 0, { auraCharge: true }));
+    }
+    assert.ok(p.aura.current >= 25);
+    assert.ok(p.aura.level >= 1);
+  });
+
   it("level changes at thresholds", () => {
     assert.equal(auraLevelFromCurrent(0), 0);
     assert.equal(auraLevelFromCurrent(25), 1);

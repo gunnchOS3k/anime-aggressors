@@ -9,14 +9,16 @@ export const HITLAG_DEFAULTS = {
 
 export type HitStrength = keyof typeof HITLAG_DEFAULTS;
 
+export const HITLAG_FRAMES = HITLAG_DEFAULTS;
+
 export const KNOCKBACK_TUNING = {
   baseWeight: 100,
-  damageGrowthFactor: 0.12,
+  damageGrowthFactor: 0.14,
   launchAngleRadDefault: -0.65,
-  superMultiplier: 1.35,
-  heavyMultiplier: 1.15,
-  mediumMultiplier: 1.0,
-  lightMultiplier: 0.75,
+  superMultiplier: 1.42,
+  heavyMultiplier: 1.22,
+  mediumMultiplier: 1.05,
+  lightMultiplier: 0.8,
 } as const;
 
 export function classifyHitStrength(

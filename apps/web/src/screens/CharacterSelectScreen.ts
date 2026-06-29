@@ -17,6 +17,7 @@ import { renderFighterPreviewPanel } from "../ui/FighterPreviewPanel.js";
 import { renderSetupFlowShell } from "../ui/setup/SetupFlowShell.ts";
 import { ARENA_CLASSES } from "../ui/theme/arenaClasses.ts";
 import { CharacterPreviewRenderer } from "../renderer-three/preview/CharacterPreviewRenderer.ts";
+import { saveDerbySetup } from "../modes/impactDummyDerbySetup.ts";
 
 export type CharacterSelectResult = {
   p1: CreatedFighter;
@@ -25,6 +26,10 @@ export type CharacterSelectResult = {
 
 export type CharacterSelectOptions = {
   setupSummary?: string;
+  variant?: "match" | "derby";
+  title?: string;
+  continueLabel?: string;
+  backLabel?: string;
   onContinue: (result: CharacterSelectResult) => void;
   onBack?: () => void;
 };
@@ -69,18 +74,23 @@ export function mountCharacterSelectScreen(root: HTMLElement, options: Character
   const initialP2 = setup.fighters.find((f) => f.playerId === 1)?.fighter ?? null;
   let state = createCharacterSelectState(roster, initialP1, initialP2);
 
+  const variant = options.variant ?? "match";
+  const isDerby = variant === "derby";
+
   const summary =
     options.setupSummary ??
-    `${setup.ruleset?.name ?? "Rules"} · ${setup.stageName ?? setup.stageId ?? "Stage"}`;
+    (isDerby
+      ? "Pick the fighter who will launch the Impact Dummy."
+      : `${setup.ruleset?.name ?? "Rules"} · ${setup.stageName ?? setup.stageId ?? "Stage"}`);
 
   const render = () => {
     const focused = getFocusedFighter(state, roster);
     root.innerHTML = renderSetupFlowShell({
       step: "fighters",
-      title: "Select Fighters",
+      title: options.title ?? (isDerby ? "Choose Your Derby Fighter" : "Select Fighters"),
       summary,
       body: `
-        <div class="${ARENA_CLASSES.characterSelectLayout} cs-layout character-select-layout">
+        <div class="${ARENA_CLASSES.characterSelectLayout} cs-layout character-select-layout ${isDerby ? "cs-layout--derby" : ""}">
           <aside class="cs-side cs-side--left">
             ${renderPlayerSelectionPanel(0, state.p1, state.activePlayer === 0)}
           </aside>
@@ -88,17 +98,15 @@ export function mountCharacterSelectScreen(root: HTMLElement, options: Character
             ${renderFighterPreviewPanel(focused)}
             ${renderCharacterGrid({ roster, state })}
           </main>
-          <aside class="cs-side cs-side--right">
-            ${renderPlayerSelectionPanel(1, state.p2, state.activePlayer === 1)}
-          </aside>
+          ${isDerby ? `<aside class="cs-side cs-side--right cs-side--derby-hint"><p class="cs-derby-hint">Single fighter · No P2 required</p></aside>` : `<aside class="cs-side cs-side--right">${renderPlayerSelectionPanel(1, state.p2, state.activePlayer === 1)}</aside>`}
         </div>
       `,
       footer: {
         backId: "cs-back",
-        backLabel: "Back to Map Select",
+        backLabel: options.backLabel ?? (isDerby ? "← Home" : "Back to Map Select"),
         continueId: "cs-continue",
-        continueLabel: "Continue to Controls Check",
-        continueDisabled: !isCharacterSelectReady(state),
+        continueLabel: options.continueLabel ?? (isDerby ? "Continue to Derby" : "Continue to Controls Check"),
+        continueDisabled: !isCharacterSelectReady(state, variant),
         extraHtml: `<button type="button" id="cs-create" class="${ARENA_CLASSES.secondaryBtn}">Create Fighter</button>`,
       },
     });
@@ -160,17 +168,24 @@ export function mountCharacterSelectScreen(root: HTMLElement, options: Character
     });
 
     root.querySelector("#cs-continue")?.addEventListener("click", () => {
-      if (!isCharacterSelectReady(state) || !state.p1 || !state.p2) return;
+      if (!isCharacterSelectReady(state, variant) || !state.p1) return;
+      if (!isDerby && !state.p2) return;
       playMenuBlip("confirm");
+      if (isDerby) {
+        disposePreview();
+        options.onContinue({ p1: state.p1, p2: state.p2 ?? state.p1 });
+        return;
+      }
+      const p2 = state.p2!;
       saveMatchSetup({
         ...setup,
         fighters: [
           { playerId: 0, fighterId: state.p1.id, fighter: state.p1 },
-          { playerId: 1, fighterId: state.p2.id, fighter: state.p2 },
+          { playerId: 1, fighterId: p2.id, fighter: p2 },
         ],
       });
       disposePreview();
-      options.onContinue({ p1: state.p1, p2: state.p2 });
+      options.onContinue({ p1: state.p1, p2 });
     });
   };
 
@@ -232,6 +247,28 @@ function updatePreviewInfo(root: HTMLElement, fighter: CreatedFighter): void {
 export function mountMatchSetupCharacterSelect(root: HTMLElement): void {
   mountCharacterSelectScreen(root, {
     onContinue: () => navigateToHash(APP_ROUTES.matchSetupControls),
+  });
+}
+
+export function mountDerbyCharacterSelectScreen(root: HTMLElement): void {
+  mountCharacterSelectScreen(root, {
+    variant: "derby",
+    title: "Choose Your Derby Fighter",
+    setupSummary: "Pick the fighter who will launch the Impact Dummy.",
+    continueLabel: "Continue to Derby",
+    backLabel: "← Home",
+    onBack: () => navigateToHash(APP_ROUTES.home),
+    onContinue: (result) => {
+      saveDerbySetup({
+        fighterId: result.p1.id,
+        fighterName: result.p1.name,
+        fighterSize: result.p1.size,
+        fighterColor: result.p1.color,
+        stageId: "impact-platform",
+        ready: false,
+      });
+      navigateToHash(APP_ROUTES.impactDummyDerby);
+    },
   });
 }
 

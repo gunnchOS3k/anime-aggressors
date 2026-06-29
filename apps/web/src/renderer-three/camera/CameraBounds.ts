@@ -6,11 +6,11 @@ function fpToWorld(value: number): number {
 }
 
 export const CAMERA_DEFAULTS = {
-  minZoom: 0.75,
-  maxZoom: 1.45,
-  defaultZoom: 1.0,
-  horizontalPadding: 5.0,
-  verticalPadding: 3.0,
+  minZoom: 0.7,
+  maxZoom: 1.18,
+  defaultZoom: 0.92,
+  horizontalPadding: 6.5,
+  verticalPadding: 3.8,
   zoomSmooth: 0.08,
   positionSmooth: 0.12,
 } as const;

@@ -28,6 +28,7 @@ export const KEYBOARD_P1_BINDINGS: InputProfile["bindings"] = {
   shield: { device: "keyboard", code: "KeyC" },
   dodge: { device: "keyboard", code: "KeyV" },
   grab: { device: "keyboard", code: "KeyB" },
+  auraCharge: { device: "keyboard", code: "KeyF" },
 };
 
 export const KEYBOARD_P2_BINDINGS: InputProfile["bindings"] = {
@@ -41,6 +42,7 @@ export const KEYBOARD_P2_BINDINGS: InputProfile["bindings"] = {
   shield: { device: "keyboard", code: "Digit3" },
   dodge: { device: "keyboard", code: "Digit4" },
   grab: { device: "keyboard", code: "Digit5" },
+  auraCharge: { device: "keyboard", code: "Slash" },
 };
 
 export const GAMEPAD_STANDARD_BINDINGS: InputProfile["bindings"] = {
@@ -54,6 +56,7 @@ export const GAMEPAD_STANDARD_BINDINGS: InputProfile["bindings"] = {
   shield: { device: "gamepad", kind: "button", index: 4 },
   dodge: { device: "gamepad", kind: "button", index: 5 },
   grab: { device: "gamepad", kind: "button", index: 3 },
+  auraCharge: { device: "gamepad", kind: "button", index: 6 },
 };
 
 export const GAMEPAD_PLATFORM_BINDINGS: InputProfile["bindings"] = {
