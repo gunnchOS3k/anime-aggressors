@@ -1,17 +1,13 @@
 import type { GameState, InputFrame, PlayerState } from "./types.js";
 import {
-  AIR_CONTROL,
+  GRAVITY,
   BLAST_BOTTOM,
   BLAST_LEFT,
   BLAST_RIGHT,
   BLAST_TOP,
   DODGE_FRAMES,
-  DODGE_SPEED,
-  GRAVITY,
   HITSTUN_BASE,
-  JUMP_VELOCITY,
   MAX_FALL_SPEED,
-  RUN_SPEED,
   SHIELD_MAX,
   FP_SCALE,
 } from "./constants.js";
@@ -32,6 +28,7 @@ import {
   applyAuraHitPenalty,
   canStartAuraCharge,
   consumeAuraOnSuper,
+  isAuraChargeHeld,
   releaseAuraCharge,
   startAuraCharge,
   tickAuraDecay,
@@ -42,13 +39,12 @@ import {
   bufferJump,
   canCoyoteJump,
   consumeJumpBuffer,
-  FAST_FALL_MULT,
   scaleKnockback,
   tickCoyoteTime,
 } from "./feel.js";
+import { fastFallSpeed } from "./movement/jumpPhysics.js";
+import { applyDash, applyHorizontalMovement, computeJumpVelocity } from "./movement/applyMovement.js";
 import {
-  scaledRunSpeed,
-  scaledJumpVelocity,
   scaledHitDamage,
   scaledKnockbackTaken,
 } from "./fighterCreation.js";
@@ -64,43 +60,7 @@ function getLaunchRatio(state: GameState): number {
 }
 
 function applyInputMovement(player: PlayerState, input: InputFrame): void {
-  const char = getCharacter(player.characterId);
-  const run = scaledRunSpeed((RUN_SPEED * char.runSpeedMult) / 100, player);
-
-  if (player.actionState === "hitstun" || player.actionState === "defeated") return;
-  if (player.actionState === "dodging") return;
-  if (player.actionState === "auraCharging") {
-    player.vx = Math.floor(player.vx * 0.5);
-    return;
-  }
-
-  const canMove =
-    player.onGround ||
-    player.actionState === "jumping" ||
-    player.actionState === "falling" ||
-    player.actionState === "idle" ||
-    player.actionState === "running";
-
-  if (!canMove) return;
-
-  const speed = player.onGround ? run : AIR_CONTROL;
-
-  if (input.left) {
-    player.vx = -speed;
-    player.facing = -1;
-    if (player.onGround) player.actionState = "running";
-  } else if (input.right) {
-    player.vx = speed;
-    player.facing = 1;
-    if (player.onGround) player.actionState = "running";
-  } else if (player.onGround && player.actionState === "running") {
-    player.vx = 0;
-    player.actionState = "idle";
-  }
-
-  if (!player.onGround && input.down) {
-    player.fastFalling = true;
-  }
+  applyHorizontalMovement(player, input);
 }
 
 function startAction(player: PlayerState, input: InputFrame): void {
@@ -120,12 +80,12 @@ function startAction(player: PlayerState, input: InputFrame): void {
     player.actionState = "dodging";
     player.actionFrame = 0;
     player.currentMoveId = "dodge";
-    player.vx = player.facing * DODGE_SPEED;
+    applyDash(player);
     player.invulnFrames = DODGE_MOVE.startup + DODGE_MOVE.active;
     return;
   }
 
-  if (input.shield && input.special && canStartAuraCharge(player)) {
+  if (isAuraChargeHeld(input) && canStartAuraCharge(player)) {
     startAuraCharge(player);
     return;
   }
@@ -144,7 +104,7 @@ function startAction(player: PlayerState, input: InputFrame): void {
     } else {
       player.coyoteFrames = 0;
     }
-    player.vy = scaledJumpVelocity(JUMP_VELOCITY, player);
+    player.vy = computeJumpVelocity(player);
     player.onGround = false;
     player.actionState = "jumping";
     player.actionFrame = 0;
@@ -198,7 +158,7 @@ function integratePhysics(player: PlayerState, stage: GameState["stage"]): void 
     player.vy += GRAVITY;
     let maxFall = MAX_FALL_SPEED;
     if (player.fastFalling && !player.onGround) {
-      maxFall = (MAX_FALL_SPEED * FAST_FALL_MULT) / 100;
+      maxFall = fastFallSpeed(MAX_FALL_SPEED, player);
     }
     if (player.vy > maxFall) player.vy = maxFall;
   }
@@ -406,6 +366,9 @@ export function processPlayer(state: GameState, player: PlayerState, input: Inpu
       startAction(player, input);
     }
     applyInputMovement(player, input);
+    if (!player.onGround && input.down) {
+      player.fastFalling = true;
+    }
   } else {
     if (player.jumpBufferFrames > 0) player.jumpBufferFrames -= 1;
   }

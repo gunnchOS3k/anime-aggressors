@@ -24,6 +24,8 @@ export type InputFrame = {
   shield: boolean;
   dodge: boolean;
   grab: boolean;
+  /** Hold to charge elemental aura meter (also available via Shield + Special). */
+  auraCharge?: boolean;
   wearableGesture?: GestureName;
 };
 

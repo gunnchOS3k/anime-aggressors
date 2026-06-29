@@ -52,11 +52,16 @@ export function startAuraCharge(player: PlayerState): void {
   player.currentMoveId = "aura_charge";
 }
 
+export function isAuraChargeHeld(input: InputFrame | undefined): boolean {
+  if (!input) return false;
+  return !!(input.auraCharge || (input.shield && input.special));
+}
+
 export function tickAuraWhileCharging(player: PlayerState, input: InputFrame | undefined): boolean {
   const aura = player.aura;
   tickAuraCooldown(aura);
 
-  if (!input?.shield || !input.special) {
+  if (!isAuraChargeHeld(input)) {
     return false;
   }
 
