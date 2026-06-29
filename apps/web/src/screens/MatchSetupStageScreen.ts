@@ -2,7 +2,9 @@ import { listStages } from "@anime-aggressors/game-core";
 import { APP_ROUTES, navigateToHash } from "../routes.js";
 import { loadMatchSetup, saveMatchSetup } from "../match/matchSetupSession.js";
 import { renderSetupFlowShell } from "../ui/setup/SetupFlowShell.ts";
-import { renderStagePreviewHero, renderStageSelectGrid } from "../ui/stage/StageSelectGrid.ts";
+import { renderStageSelectGrid } from "../ui/stage/StageSelectGrid.ts";
+import { renderStagePreviewHeroPanel } from "../ui/stage/StagePreviewCanvas.ts";
+import { createStagePreviewRenderer, type StagePreviewRenderer } from "../renderer-three/stage-preview/StagePreviewRenderer.ts";
 
 const FLAGLINE_ROOM_IDS = [
   "flagline-lunar-base",
@@ -28,6 +30,7 @@ export function mountMatchSetupStageScreen(root: HTMLElement): void {
   const isFlagline = setup.mode === "flaglineClash" || setup.ruleset?.matchType === "flaglineClash";
   const stages = listStages().filter((s) => MATCH_SETUP_STAGE_IDS.includes(s.id as (typeof MATCH_SETUP_STAGE_IDS)[number]));
   let selectedId = setup.stageId ?? stages[0]?.id ?? "skyline-arena";
+  let preview: StagePreviewRenderer | null = null;
 
   const render = () => {
     const summary = `${setup.ruleset?.name ?? "Rules"} · ${stages.find((s) => s.id === selectedId)?.name ?? "Stage"}`;
@@ -42,8 +45,8 @@ export function mountMatchSetupStageScreen(root: HTMLElement): void {
 
     const body = `
       ${flaglineStrip}
-      <div class="stage-select-layout setup-hero-panel-row">
-        ${renderStagePreviewHero(selectedId)}
+      <div class="stage-select-layout setup-hero-panel-row stage-select-layout--preview">
+        ${renderStagePreviewHeroPanel(selectedId)}
         ${renderStageSelectGrid(stages, selectedId)}
       </div>
     `;
@@ -62,6 +65,15 @@ export function mountMatchSetupStageScreen(root: HTMLElement): void {
       },
     });
 
+    preview?.dispose();
+    const canvas = root.querySelector<HTMLCanvasElement>("#stage-preview-canvas");
+    if (canvas) {
+      preview = createStagePreviewRenderer(canvas);
+      preview.setStage(selectedId);
+      preview.resize(canvas.clientWidth || 640, canvas.clientHeight || 360);
+      preview.start();
+    }
+
     root.querySelectorAll(".stage-select-thumb").forEach((btn) => {
       btn.addEventListener("click", () => {
         selectedId = (btn as HTMLButtonElement).dataset.id!;
@@ -69,10 +81,14 @@ export function mountMatchSetupStageScreen(root: HTMLElement): void {
       });
     });
 
-    root.querySelector("#mss-back")?.addEventListener("click", () => navigateToHash(APP_ROUTES.matchSetupRules));
+    root.querySelector("#mss-back")?.addEventListener("click", () => {
+      preview?.dispose();
+      navigateToHash(APP_ROUTES.matchSetupRules);
+    });
     root.querySelector("#mss-continue")?.addEventListener("click", () => {
       const stage = stages.find((s) => s.id === selectedId);
       if (!stage) return;
+      preview?.dispose();
       saveMatchSetup({
         ...setup,
         stageId: stage.id,

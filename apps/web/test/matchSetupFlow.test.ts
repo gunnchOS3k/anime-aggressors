@@ -52,9 +52,9 @@ describe("match setup flow routes", () => {
     assert.doesNotMatch(src, /location\.href\s*=\s*["']\/play/);
   });
 
-  it("battle route redirects incomplete setup to rules", () => {
+  it("battle route redirects incomplete setup via mode flow", () => {
     const src = fs.readFileSync(path.join(webRoot, "src/main.ts"), "utf8");
-    assert.match(src, /navigateTo\("match-setup-rules"\)/);
-    assert.match(src, /isMatchSetupReady/);
+    assert.match(src, /resolveBattleRoute/);
+    assert.match(src, /navigateTo\(resolved\.mode\)/);
   });
 });

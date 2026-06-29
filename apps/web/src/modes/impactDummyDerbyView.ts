@@ -3,36 +3,50 @@ import {
   createInitialDerbyState,
   simulateDerbyFrame,
   resetDerbyForRetry,
-  fpToDisplay,
-  getElementColorHex,
   getDefaultCreatedFighter,
+  DEFAULT_FIGHTERS,
 } from "@anime-aggressors/game-core";
 import { pollAllInputs } from "../input/deviceAssignment.js";
 import { globalAudio } from "../audio/AudioManager.js";
 import { navigateHome, navigateTo } from "../router.js";
 import { listCreatedFighters } from "../storage/createdFightersStorage.js";
 import { processDerbyEnd } from "../career/careerService.js";
-import { ImpactDummyView } from "../renderer-three/ImpactDummyView.ts";
-import { KineticBatView } from "../renderer-three/KineticBatView.ts";
-import { DistanceMarkerView } from "../renderer-three/DistanceMarkerView.ts";
-import { LaunchTrailView } from "../renderer-three/LaunchTrailView.ts";
 import { derbyHudHtml } from "../modes/impactDummyDerbyHud.ts";
 import { renderDerbyResultsPanel } from "../screens/ImpactDummyDerbyResultsScreen.ts";
+import {
+  bootImpactDummyDerby,
+  canDerbySimulate,
+  shouldShowDerbyResults,
+} from "../modes/impactDummyDerbyBoot.ts";
+import { fpToWorld } from "../renderer-three/RenderTypes.ts";
+import { STAGE_HEIGHT, STAGE_WIDTH } from "@anime-aggressors/game-core";
+import { applyVictoryPose } from "../renderer-three/fighters/victoryAnimations.ts";
+import { applyIdleFlavor } from "../renderer-three/fighters/idleAnimations.ts";
+import { applyFighterPose } from "../renderer-three/fighters/FighterAnimator.ts";
+import type { AnimPose } from "../renderer-three/fighters/FighterAnimator.ts";
+import { resolveFighterAppearance } from "../renderer-three/fighters/FighterAppearance.ts";
 
 const DERBY_SEED = 4242;
+
+function derbyCameraBounds() {
+  const cx = fpToWorld(STAGE_WIDTH / 2);
+  const floorY = fpToWorld(STAGE_HEIGHT * 0.67);
+  return { cx, floorY, left: cx - 500, right: cx + 500, top: floorY + 180, bottom: floorY - 80 };
+}
 
 export function mountImpactDummyDerby(root: HTMLElement): void {
   const saved = listCreatedFighters();
   const fighter = saved[0] ?? getDefaultCreatedFighter(0);
 
   root.innerHTML = `
-    <div class="derby-root">
+    <div class="derby-root setup-shell">
       <div class="vs-toolbar">
-        <button id="derby-back" type="button">← Home</button>
+        <button id="derby-back" type="button" class="secondary-game-button">← Home</button>
         <span class="vs-hint">Impact Dummy Derby · <strong>${fighter.name}</strong></span>
-        <button id="derby-pick" type="button" class="btn-tertiary">Change Fighter</button>
+        <button id="derby-pick" type="button" class="secondary-game-button">Change Fighter</button>
       </div>
-      <div id="derby-viewport" class="pf-viewport"></div>
+      <div id="derby-boot-status" class="derby-boot-status setup-hero-panel"></div>
+      <div id="derby-viewport" class="pf-viewport stage-preview-canvas-wrap"></div>
       <div id="derby-hud" class="derby-hud"></div>
       <div id="derby-results" class="derby-results hidden"></div>
     </div>
@@ -41,56 +55,61 @@ export function mountImpactDummyDerby(root: HTMLElement): void {
   const viewport = root.querySelector("#derby-viewport") as HTMLElement;
   const hud = root.querySelector("#derby-hud") as HTMLElement;
   const results = root.querySelector("#derby-results") as HTMLElement;
+  const bootStatus = root.querySelector("#derby-boot-status") as HTMLElement;
+
+  const boot = bootImpactDummyDerby(fighter);
+  if (!boot.assets) {
+    bootStatus.innerHTML = `<p class="derby-boot-error">Failed to load Derby: ${boot.result.errors.join(", ")}</p>`;
+    return;
+  }
+
+  const { fighterParts, dummyView, batView, markers, stageGroup } = boot.assets;
+  bootStatus.innerHTML = boot.result.ok
+    ? `<p>Runway ready · ${boot.result.stageObjectCount} stage meshes · Fighter loaded</p>`
+    : `<p class="derby-boot-error">Boot incomplete: ${boot.result.errors.join(", ")}</p>`;
 
   let raf = 0;
   let simFrame = 0;
   let prevDamage = 0;
   let careerSaved = false;
+  let noLaunchHandled = false;
+  let simEnabled = canDerbySimulate(boot.result);
 
   let state = createInitialDerbyState(DERBY_SEED, loadBest(), fighter);
 
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x141a2e);
-  const camera = new THREE.OrthographicCamera(-22, 22, 14, -6, 0.1, 300);
-  camera.position.set(12, 6, 50);
-  camera.lookAt(12, 4, 0);
+  scene.fog = new THREE.Fog(0x141a2e, 400, 2400);
+
+  const bounds = derbyCameraBounds();
+  const camera = new THREE.OrthographicCamera(
+    bounds.left,
+    bounds.right,
+    bounds.top,
+    bounds.bottom,
+    0.1,
+    3000,
+  );
+  camera.position.set(bounds.cx, bounds.floorY, 500);
+  camera.lookAt(bounds.cx, bounds.floorY, 0);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(viewport.clientWidth || 960, viewport.clientHeight || 540);
   viewport.appendChild(renderer.domElement);
 
-  const platform = new THREE.Mesh(
-    new THREE.BoxGeometry(28, 0.55, 5),
-    new THREE.MeshStandardMaterial({ color: 0x3a4460 }),
-  );
-  platform.position.set(12, 3.15, 0);
-  scene.add(platform);
-
-  const playerMesh = new THREE.Mesh(
-    new THREE.CapsuleGeometry(0.42, 1.05, 6, 12),
-    new THREE.MeshToonMaterial({ color: new THREE.Color(getElementColorHex(fighter.color)) }),
-  );
-  scene.add(playerMesh);
-
-  const dummyView = new ImpactDummyView();
+  scene.add(stageGroup);
+  scene.add(fighterParts.root);
   scene.add(dummyView.group);
-
-  const batView = new KineticBatView();
   scene.add(batView.group);
-
-  const markers = new DistanceMarkerView();
   scene.add(markers.group);
-
-  const trail = new LaunchTrailView();
-  scene.add(trail.group);
 
   scene.add(new THREE.AmbientLight(0xffffff, 0.55));
   const key = new THREE.DirectionalLight(0xfff0dd, 1);
-  key.position.set(10, 14, 12);
+  key.position.set(bounds.cx, bounds.top, 400);
   scene.add(key);
 
   function toWorld(fp: number): number {
-    return fpToDisplay(fp);
+    return fpToWorld(fp);
   }
 
   function derbyInput() {
@@ -116,11 +135,37 @@ export function mountImpactDummyDerby(root: HTMLElement): void {
   });
   root.querySelector("#derby-pick")?.addEventListener("click", () => {
     cancelAnimationFrame(raf);
-    navigateTo("create-fighter");
+    navigateTo("fighter-select");
   });
 
+  function fighterAnimId(): string {
+    const style = resolveFighterAppearance(fighter).visualStyleId;
+    if (style) return style;
+    return DEFAULT_FIGHTERS.find((f) => f.color === fighter.color)?.id ?? "ember-vale";
+  }
+
+  function updateFighterVisual(frame: number): void {
+    const pose: AnimPose = {
+      torsoRotZ: 0,
+      torsoScaleY: 1,
+      headTilt: 0,
+      armSwingL: 0,
+      armSwingR: 0,
+      legSpread: 0,
+      bob: 0,
+      auraOpacity: 0.2,
+    };
+    const animId = fighterAnimId();
+    if (state.phase === "results") {
+      applyVictoryPose(pose, animId, frame);
+    } else {
+      applyIdleFlavor(pose, animId, frame);
+    }
+    applyFighterPose(fighterParts, pose, state.player.facing);
+  }
+
   function tick(): void {
-    if (state.phase !== "results") {
+    if (simEnabled && state.phase !== "results") {
       state = simulateDerbyFrame(state, derbyInput());
       simFrame += 1;
     }
@@ -133,46 +178,56 @@ export function mountImpactDummyDerby(root: HTMLElement): void {
       globalAudio.play("ko", 0.85);
     }
 
-    if (state.phase === "results" && !careerSaved) {
-      careerSaved = true;
-      saveBest(state.personalBest);
-      globalAudio.play("result");
-      void processDerbyEnd(state, fighter.id, fighter.name);
-      renderDerbyResultsPanel(results, state, fighter, {
-        onRetry: () => {
+    if (state.phase === "results" && !careerSaved && !noLaunchHandled) {
+      if (shouldShowDerbyResults(state)) {
+        careerSaved = true;
+        saveBest(state.personalBest);
+        globalAudio.play("result");
+        void processDerbyEnd(state, fighter.id, fighter.name);
+        renderDerbyResultsPanel(results, state, fighter, {
+          onRetry: () => {
+            state = resetDerbyForRetry(state);
+            results.classList.add("hidden");
+            prevDamage = 0;
+            simFrame = 0;
+            careerSaved = false;
+            noLaunchHandled = false;
+            simEnabled = canDerbySimulate(boot.result);
+          },
+          onChangeFighter: () => navigateTo("fighter-select"),
+        });
+      } else {
+        noLaunchHandled = true;
+        results.classList.remove("hidden");
+        results.innerHTML = `<div class="derby-results-panel setup-hero-panel"><h3>No launch recorded</h3><p>Damage the dummy and use the Kinetic Bat before time expires.</p><button type="button" id="derby-retry-empty" class="primary-game-cta">Retry</button></div>`;
+        results.querySelector("#derby-retry-empty")?.addEventListener("click", () => {
           state = resetDerbyForRetry(state);
           results.classList.add("hidden");
-          prevDamage = 0;
-          simFrame = 0;
           careerSaved = false;
-          trail.clear();
-        },
-        onChangeFighter: () => navigateTo("create-fighter"),
-      });
+          noLaunchHandled = false;
+          simEnabled = canDerbySimulate(boot.result);
+        });
+      }
     }
 
     const px = toWorld(state.player.x);
     const py = toWorld(state.player.y);
-    playerMesh.position.set(px, py + 1, 0.3);
-    playerMesh.scale.x = state.player.facing;
+    fighterParts.root.position.set(px, py, 0.3);
+    updateFighterVisual(simFrame);
 
     dummyView.update(state.dummy);
-    batView.update(state.kineticBat, state.player.facing, px, py + 1);
+    batView.update(state.kineticBat, state.player.facing, px, py + 50);
 
     if (state.phase === "flight") {
-      trail.setVisible(true);
-      trail.addPoint(toWorld(state.dummy.x), toWorld(state.dummy.y));
       markers.update(toWorld(state.launchOriginX), toWorld(state.dummy.x), true);
-      camera.position.x += (toWorld(state.dummy.x) - camera.position.x) * 0.08;
-      camera.lookAt(toWorld(state.dummy.x), toWorld(state.dummy.y) + 2, 0);
+      const dx = toWorld(state.dummy.x) - camera.position.x;
+      camera.position.x += dx * 0.08;
     } else {
-      trail.setVisible(false);
       markers.update(toWorld(state.launchOriginX), toWorld(state.dummy.x), false);
-      camera.position.x += (12 - camera.position.x) * 0.05;
-      camera.lookAt(12, 4, 0);
+      camera.position.x += (bounds.cx - camera.position.x) * 0.05;
     }
 
-    hud.innerHTML = derbyHudHtml(state);
+    hud.innerHTML = simEnabled ? derbyHudHtml(state) : `<p>Loading arena…</p>`;
     renderer.render(scene, camera);
   }
 
@@ -180,12 +235,22 @@ export function mountImpactDummyDerby(root: HTMLElement): void {
     tick();
     raf = requestAnimationFrame(loop);
   };
-  loop();
+
+  if (simEnabled) {
+    loop();
+  } else {
+    bootStatus.innerHTML += `<p>Cannot start — fix boot errors above.</p>`;
+    tick();
+  }
 
   new ResizeObserver(() => {
     const w = viewport.clientWidth || 960;
     const h = viewport.clientHeight || 540;
     renderer.setSize(w, h);
+    const aspect = w / h;
+    const span = (bounds.right - bounds.left) / 2;
+    camera.left = bounds.cx - span / aspect;
+    camera.right = bounds.cx + span / aspect;
     camera.updateProjectionMatrix();
   }).observe(viewport);
 }

@@ -2,6 +2,7 @@ import type { PlayerState } from "@anime-aggressors/game-core";
 import { getMoveById } from "@anime-aggressors/game-core";
 import type { AnimPose } from "./FighterAnimator.ts";
 import { slotToAnimationState } from "./FighterAnimationClips.ts";
+import { applyIdleFlavor } from "./idleAnimations.ts";
 
 function basePose(player: PlayerState, frame: number): AnimPose {
   const t = frame * 0.08;
@@ -114,6 +115,9 @@ export function computeProceduralPose(player: PlayerState, frame: number): AnimP
     case "defeated":
       base.torsoRotZ = 1.2 * player.facing;
       base.bob = -0.4;
+      break;
+    case "idle":
+      applyIdleFlavor(base, player.characterId, frame);
       break;
     default:
       break;
