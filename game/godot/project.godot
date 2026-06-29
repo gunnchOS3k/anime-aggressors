@@ -1,0 +1,23 @@
+; Anime Aggressors — Godot 4 gameplay runtime
+; Engine configuration file.
+config_version=5
+
+[application]
+config/name="Anime Aggressors"
+config/description="Platform-fighter combat prototype runtime"
+run/main_scene="res://scenes/Main.tscn"
+config/features=PackedStringArray("4.2", "GL Compatibility")
+config/icon="res://icon.svg"
+
+[display]
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+
+[input]
+
+[physics]
+2d/default_gravity=2100.0
+
+[rendering]
+renderer/rendering_method="gl_compatibility"

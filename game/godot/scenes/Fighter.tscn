@@ -1,0 +1,64 @@
+[gd_scene load_steps=10 format=3 uid="uid://fighter_scene"]
+
+[ext_resource type="Script" path="res://scripts/fighter/FighterController.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/fighter/FighterInput.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/fighter/FighterStateMachine.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/combat/AuraCharge.gd" id="4"]
+[ext_resource type="Script" path="res://scripts/fighter/FighterAnimationDriver.gd" id="5"]
+[ext_resource type="PackedScene" uid="uid://fighter_visual_rig" path="res://scenes/FighterVisualRig.tscn" id="6"]
+[ext_resource type="Script" path="res://scripts/combat/Hitbox.gd" id="7"]
+[ext_resource type="Script" path="res://scripts/combat/Hurtbox.gd" id="8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(28, 56)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hit"]
+size = Vector2(36, 28)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hurt"]
+size = Vector2(30, 58)
+
+[node name="Fighter" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -4)
+shape = SubResource("RectangleShape2D_body")
+
+[node name="FighterInput" type="Node" parent="."]
+script = ExtResource("2")
+
+[node name="FighterStateMachine" type="Node" parent="."]
+script = ExtResource("3")
+
+[node name="AuraCharge" type="Node" parent="."]
+script = ExtResource("4")
+
+[node name="VisualRig" parent="." instance=ExtResource("6")]
+
+[node name="FighterAnimationDriver" type="Node" parent="."]
+script = ExtResource("5")
+visual_rig_path = NodePath("../VisualRig")
+state_machine_path = NodePath("../FighterStateMachine")
+use_animation_player = false
+
+[node name="Hitbox" type="Area2D" parent="."]
+position = Vector2(24, -8)
+collision_layer = 4
+collision_mask = 8
+monitoring = false
+script = ExtResource("7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("RectangleShape2D_hit")
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 4
+script = ExtResource("8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, -4)
+shape = SubResource("RectangleShape2D_hurt")

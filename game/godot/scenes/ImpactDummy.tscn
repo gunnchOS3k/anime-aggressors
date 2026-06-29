@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://impact_dummy"]
+
+[ext_resource type="Script" path="res://scripts/modes/ImpactDummy.gd" id="1"]
+
+[sub_resource type="RectangleShape2D" id="DummyShape"]
+size = Vector2(40, 72)
+
+[node name="ImpactDummy" type="CharacterBody2D"]
+script = ExtResource("1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("DummyShape")
+
+[node name="Body" type="Polygon2D" parent="."]
+color = Color(0.55, 0.58, 0.62, 1)
+polygon = PackedVector2Array(-20, -36, 20, -36, 24, 36, -24, 36)
+
+[node name="Head" type="Polygon2D" parent="."]
+position = Vector2(0, -44)
+color = Color(0.7, 0.72, 0.75, 1)
+polygon = PackedVector2Array(-14, -14, 14, -14, 14, 14, -14, 14)
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("DummyShape")

@@ -1,0 +1,74 @@
+[gd_scene load_steps=10 format=3 uid="uid://battle_scene"]
+
+[ext_resource type="Script" path="res://scripts/BattleScene.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://skyline_arena" path="res://scenes/stages/SkylineArena.tscn" id="2"]
+[ext_resource type="Script" path="res://scripts/combat/BlastZones.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/combat/HitResolver.gd" id="4"]
+[ext_resource type="Script" path="res://scripts/camera/PlatformFighterCamera.gd" id="5"]
+[ext_resource type="Script" path="res://scripts/camera/CameraBounds.gd" id="6"]
+[ext_resource type="PackedScene" uid="uid://aura_meter" path="res://scenes/ui/AuraMeter.tscn" id="7"]
+[ext_resource type="Script" path="res://scripts/camera/CameraImpulse.gd" id="8"]
+
+[node name="BattleScene" type="Node2D"]
+script = ExtResource("1")
+fighter_scene_path = "res://scenes/Fighter.tscn"
+spawn_a = Vector2(-280, 100)
+spawn_b = Vector2(280, 100)
+blast_zones_path = NodePath("BlastZones")
+hit_resolver_path = NodePath("HitResolver")
+aura_meter_p1_path = NodePath("HUD/AuraMeterP1")
+aura_meter_p2_path = NodePath("HUD/AuraMeterP2")
+
+[node name="Stage" parent="." instance=ExtResource("2")]
+
+[node name="BlastZones" type="Node2D" parent="."]
+script = ExtResource("3")
+left_x = -900.0
+right_x = 900.0
+top_y = -500.0
+bottom_y = 500.0
+
+[node name="HitResolver" type="Node" parent="."]
+script = ExtResource("4")
+
+[node name="CombatCamera" type="Camera2D" parent="."]
+position = Vector2(0, 40)
+current = true
+script = ExtResource("5")
+fighter_a_path = NodePath("../FighterAAnchor")
+fighter_b_path = NodePath("../FighterBAnchor")
+impulse_path = NodePath("CameraImpulse")
+
+[node name="CameraImpulse" type="Node" parent="CombatCamera"]
+script = ExtResource("8")
+
+[node name="CameraBounds" type="Node" parent="."]
+script = ExtResource("6")
+
+[node name="FighterAAnchor" type="Node2D" parent="."]
+position = Vector2(-280, 100)
+
+[node name="FighterBAnchor" type="Node2D" parent="."]
+position = Vector2(280, 100)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="AuraMeterP1" parent="HUD" instance=ExtResource("7")]
+offset_left = 24.0
+offset_top = 16.0
+offset_right = 224.0
+offset_bottom = 48.0
+
+[node name="AuraMeterP2" parent="HUD" instance=ExtResource("7")]
+offset_left = 1056.0
+offset_top = 16.0
+offset_right = 1256.0
+offset_bottom = 48.0
+
+[node name="Hint" type="Label" parent="HUD"]
+offset_left = 400.0
+offset_top = 680.0
+offset_right = 880.0
+offset_bottom = 710.0
+text = "P1: WASD/Space J/K/L/F  |  P2: Arrows Numpad0/1/2/3 Slash"
+horizontal_alignment = 1

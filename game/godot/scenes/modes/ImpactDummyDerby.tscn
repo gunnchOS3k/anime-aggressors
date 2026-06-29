@@ -1,0 +1,55 @@
+[gd_scene load_steps=6 format=3 uid="uid://impact_dummy_derby"]
+
+[ext_resource type="Script" path="res://scripts/modes/ImpactDummyDerby.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://impact_dummy" path="res://scenes/ImpactDummy.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://fighter_scene" path="res://scenes/Fighter.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://kinetic_bat" path="res://scenes/KineticBat.tscn" id="4"]
+
+[node name="ImpactDummyDerby" type="Node2D"]
+script = ExtResource("1")
+dummy_path = NodePath("ImpactDummy")
+
+[node name="Runway" type="Polygon2D" parent="."]
+color = Color(0.18, 0.22, 0.32, 1)
+polygon = PackedVector2Array(-700, 80, 700, 80, 700, 120, -700, 120)
+
+[node name="RunwayFloor" type="StaticBody2D" parent="."]
+position = Vector2(0, 100)
+collision_layer = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RunwayFloor"]
+
+[node name="ImpactDummy" parent="." instance=ExtResource("2")]
+position = Vector2(320, 60)
+
+[node name="KineticBat" parent="." instance=ExtResource("4")]
+position = Vector2(-200, 40)
+
+[node name="FighterSpawn" type="Marker2D" parent="."]
+position = Vector2(-280, 60)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="TimerLabel" type="Label" parent="HUD"]
+offset_left = 540.0
+offset_top = 16.0
+offset_right = 740.0
+offset_bottom = 48.0
+text = "Derby Timer"
+horizontal_alignment = 1
+
+[node name="ScoreLabel" type="Label" parent="HUD"]
+offset_left = 540.0
+offset_top = 52.0
+offset_right = 740.0
+offset_bottom = 84.0
+text = "Score: 0"
+horizontal_alignment = 1
+
+[node name="Hint" type="Label" parent="HUD"]
+offset_left = 200.0
+offset_top = 680.0
+offset_right = 1080.0
+offset_bottom = 710.0
+text = "Damage the dummy, then use Kinetic Bat for final launch"
+horizontal_alignment = 1

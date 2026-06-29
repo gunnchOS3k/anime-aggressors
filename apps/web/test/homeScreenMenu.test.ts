@@ -4,13 +4,19 @@ import { renderHomeMarkup } from "../src/screens/homeScreenMarkup.ts";
 import { APP_ROUTES } from "../src/routes.ts";
 
 describe("home screen menu", () => {
-  it("renders Start Match as primary CTA", () => {
+  it("renders Godot combat as primary CTA", () => {
     const html = renderHomeMarkup();
-    assert.match(html, /id="btn-play-match"/);
-    assert.match(html, />Start Match</);
+    assert.match(html, /id="btn-godot-combat"/);
+    assert.match(html, />Play Godot Combat Prototype</);
     assert.match(html, /menu-btn--hero/);
     assert.match(html, /ANIME AGGRESSORS/);
     assert.match(html, /Charge your aura/);
+  });
+
+  it("renders legacy Start Match CTA", () => {
+    const html = renderHomeMarkup();
+    assert.match(html, /id="btn-play-match"/);
+    assert.match(html, /Legacy Web Prototype/);
   });
 
   it("includes animated scene canvas", () => {

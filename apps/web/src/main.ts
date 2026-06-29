@@ -144,6 +144,9 @@ async function navigate(mode: AppRouteMode): Promise<void> {
     } else if (mode === "prototype") {
       const { mountPrototypeLab } = await import("./shell/prototypeLab.js");
       mountPrototypeLab(appRoot!);
+    } else if (mode === "godot") {
+      const { mountGodotRuntimeScreen } = await import("./screens/GodotRuntimeScreen.ts");
+      mountGodotRuntimeScreen(appRoot!);
     } else if (mode === "impact-dummy-derby-fighter-select") {
       const { mountImpactDummyDerbyFighterSelectScreen } = await import(
         "./screens/ImpactDummyDerbyFighterSelectScreen.js"

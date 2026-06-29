@@ -9,9 +9,10 @@ import {
 } from "../src/ui/mainMenuConfig.ts";
 
 describe("main menu hierarchy", () => {
-  it("primary tier has only Start Match", () => {
-    assert.equal(MAIN_MENU_PRIMARY.length, 1);
-    assert.equal(MAIN_MENU_PRIMARY[0]!.tier, "primary");
+  it("primary tier includes Godot combat and legacy Start Match", () => {
+    assert.equal(MAIN_MENU_PRIMARY.length, 2);
+    assert.equal(MAIN_MENU_PRIMARY[0]!.id, "btn-godot-combat");
+    assert.equal(MAIN_MENU_PRIMARY[1]!.tier, "primary");
   });
 
   it("secondary modes are separate from labs", () => {
