@@ -4,7 +4,22 @@
 
 Anime Aggressors is a 2.5D anime platform fighter where every fighter is built from two choices: **body size** and **element color**. Small fighters are quick but light. Large fighters hit hard but move slower. Medium fighters stay balanced. Your ROYGBIV color gives your combo a unique elemental feel.
 
-[Start Match](https://gunnchos3k.github.io/anime-aggressors/#/match-setup/rules) · [Web Build Home](https://gunnchos3k.github.io/anime-aggressors/) · [PC Playtest Guide](docs/playtest/PC_PLAYTEST_GUIDE.md) · [Give Feedback](docs/playtest/feedback-form.md)
+## Architecture (split runtime)
+
+Anime Aggressors now uses a **split architecture**:
+
+| Layer | Stack | Role |
+|-------|-------|------|
+| Web shell | TypeScript + Vite | Menus, routing, GitHub Pages, career metadata |
+| **Gameplay runtime** | **Godot 4 + GDScript** | Movement, combat, limb animation, camera, Derby |
+| Legacy prototype | TypeScript `game-core` + Three.js | Fallback while Godot runtime matures |
+
+- **[Play Godot Combat Prototype](https://gunnchos3k.github.io/anime-aggressors/#/godot)** — primary combat entry (`#/godot`)
+- **Start Match (Legacy Web Prototype)** — original browser sim (`#/match-setup/rules`)
+
+See [docs/ENGINE_DECISION_RECORD.md](docs/ENGINE_DECISION_RECORD.md) and [docs/GODOT_RUNTIME_INTEGRATION.md](docs/GODOT_RUNTIME_INTEGRATION.md).
+
+[Godot Prototype](https://gunnchos3k.github.io/anime-aggressors/#/godot) · [Legacy Start Match](https://gunnchos3k.github.io/anime-aggressors/#/match-setup/rules) · [Web Build Home](https://gunnchos3k.github.io/anime-aggressors/) · [PC Playtest Guide](docs/playtest/PC_PLAYTEST_GUIDE.md) · [Give Feedback](docs/playtest/feedback-form.md)
 
 **Match setup link:** `https://gunnchos3k.github.io/anime-aggressors/#/match-setup/rules`  
 **Quick play hash route:** `https://gunnchos3k.github.io/anime-aggressors/#/play`  
@@ -51,7 +66,8 @@ Solar pushes left. Lunar pushes right. Every room is still a platform-fighter ba
 
 ## Playable Modes
 
-- **Start Match** — rules → map → fighters → controls → battle setup flow
+- **Play Godot Combat Prototype** — `#/godot` Godot 4 runtime (primary combat)
+- **Start Match (Legacy Web Prototype)** — rules → map → fighters → controls → battle (TypeScript/Three.js)
 - **Quick Play** — `#/play` legacy quick launch (defaults)
 - **Custom Game** — stock / time / stamina rules, stages, ratios, items config
 - **Create Fighter** — size + color builder with stat preview

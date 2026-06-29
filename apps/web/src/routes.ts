@@ -23,6 +23,7 @@ export const APP_ROUTES = {
   rollbackDebug: "#/rollback-debug",
   edgeioLab: "#/edgeio-lab",
   prototypeLab: "#/prototype-lab",
+  godot: "#/godot",
   impactDummyDerby: "#/impact-dummy-derby",
   impactDummyDerbySelectFighter: "#/impact-dummy-derby/select-fighter",
   impactDummyDerbyFighterSelect: "#/impact-dummy-derby/select-fighter",
@@ -66,6 +67,7 @@ export type AppRouteMode =
   | "rollback"
   | "edgeio"
   | "prototype"
+  | "godot"
   | "impact-dummy-derby"
   | "impact-dummy-derby-fighter-select"
   | "flagline-clash"
@@ -104,6 +106,7 @@ const HASH_TO_MODE: Record<string, AppRouteMode> = {
   [APP_ROUTES.rollbackDebug]: "rollback",
   [APP_ROUTES.edgeioLab]: "edgeio",
   [APP_ROUTES.prototypeLab]: "prototype",
+  [APP_ROUTES.godot]: "godot",
   [APP_ROUTES.impactDummyDerby]: "impact-dummy-derby",
   [APP_ROUTES.impactDummyDerbyFighterSelect]: "impact-dummy-derby-fighter-select",
   [APP_ROUTES.flaglineClash]: "flagline-clash",
@@ -145,6 +148,7 @@ export const MODE_TO_ROUTE: Record<AppRouteMode, string> = {
   rollback: APP_ROUTES.rollbackDebug,
   edgeio: APP_ROUTES.edgeioLab,
   prototype: APP_ROUTES.prototypeLab,
+  godot: APP_ROUTES.godot,
   "impact-dummy-derby": APP_ROUTES.impactDummyDerby,
   "impact-dummy-derby-fighter-select": APP_ROUTES.impactDummyDerbyFighterSelect,
   "flagline-clash": APP_ROUTES.flaglineClash,

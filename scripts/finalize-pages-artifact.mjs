@@ -80,7 +80,7 @@ const deployInfo = [
   `branch=${branch}`,
   "artifact=apps/web/dist",
   `built_at=${new Date().toISOString()}`,
-  "routes=#/,#/match-setup/rules,#/match-setup/stage,#/match-setup/fighters,#/match-setup/controls,#/battle,#/play,#/impact-dummy-derby",
+  "routes=#/,#/godot,#/match-setup/rules,#/match-setup/stage,#/match-setup/fighters,#/match-setup/controls,#/battle,#/play,#/impact-dummy-derby",
 ].join("\n");
 
 fs.writeFileSync(deployInfoPath, `${deployInfo}\n`);

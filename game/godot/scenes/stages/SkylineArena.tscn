@@ -1,0 +1,55 @@
+[gd_scene load_steps=3 format=3 uid="uid://skyline_arena"]
+
+[sub_resource type="RectangleShape2D" id="FloorShape"]
+size = Vector2(1600, 40)
+
+[sub_resource type="RectangleShape2D" id="PlatformShape"]
+size = Vector2(220, 24)
+
+[node name="SkylineArena" type="Node2D"]
+
+[node name="Background" type="ColorRect" parent="."]
+offset_left = -900.0
+offset_top = -600.0
+offset_right = 900.0
+offset_bottom = 400.0
+color = Color(0.08, 0.1, 0.18, 1)
+
+[node name="MainPlatform" type="StaticBody2D" parent="."]
+position = Vector2(0, 120)
+collision_layer = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MainPlatform"]
+shape = SubResource("FloorShape")
+
+[node name="FloorVisual" type="Polygon2D" parent="MainPlatform"]
+color = Color(0.2, 0.25, 0.38, 1)
+polygon = PackedVector2Array(-800, -20, 800, -20, 800, 20, -800, 20)
+
+[node name="LeftPlatform" type="StaticBody2D" parent="."]
+position = Vector2(-420, 20)
+collision_layer = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftPlatform"]
+shape = SubResource("PlatformShape")
+
+[node name="Visual" type="Polygon2D" parent="LeftPlatform"]
+color = Color(0.28, 0.32, 0.48, 1)
+polygon = PackedVector2Array(-110, -12, 110, -12, 110, 12, -110, 12)
+
+[node name="RightPlatform" type="StaticBody2D" parent="."]
+position = Vector2(420, 20)
+collision_layer = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightPlatform"]
+shape = SubResource("PlatformShape")
+
+[node name="Visual" type="Polygon2D" parent="RightPlatform"]
+color = Color(0.28, 0.32, 0.48, 1)
+polygon = PackedVector2Array(-110, -12, 110, -12, 110, 12, -110, 12)
+
+[node name="SpawnA" type="Marker2D" parent="."]
+position = Vector2(-280, 80)
+
+[node name="SpawnB" type="Marker2D" parent="."]
+position = Vector2(280, 80)

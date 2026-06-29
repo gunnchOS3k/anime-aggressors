@@ -13,7 +13,10 @@ describe("Pages deploy contract", () => {
   it("build:pages runs web workspace build then finalize", () => {
     assert.equal(rootPkg.scripts["build:web"], "npm run build -w anime-aggressors-web");
     assert.equal(rootPkg.scripts["finalize:pages"], "node scripts/finalize-pages-artifact.mjs");
-    assert.equal(rootPkg.scripts["build:pages"], "npm run build:web && npm run finalize:pages");
+    assert.equal(rootPkg.scripts["godot:check"], "node scripts/check-godot-runtime.mjs");
+    assert.match(rootPkg.scripts["build:pages"], /build:web/);
+    assert.match(rootPkg.scripts["build:pages"], /godot:check/);
+    assert.match(rootPkg.scripts["build:pages"], /finalize:pages/);
   });
 
   it("pages workflow does not block on fragile UI text greps", () => {
@@ -28,7 +31,7 @@ describe("Pages deploy contract", () => {
   it("finalize script writes required deploy-info routes", () => {
     const script = fs.readFileSync(path.join(repoRoot, "scripts/finalize-pages-artifact.mjs"), "utf8");
     assert.match(script, /artifact=apps\/web\/dist/);
-    assert.match(script, /routes=#\/,#\/match-setup\/rules/);
+    assert.match(script, /routes=#\/,#\/godot,#\/match-setup\/rules/);
     assert.match(script, /Forbidden root play link/);
     assert.doesNotMatch(script, /Missing expected marker in artifact/);
   });

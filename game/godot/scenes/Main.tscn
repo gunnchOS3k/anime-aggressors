@@ -1,0 +1,36 @@
+[gd_scene load_steps=6 format=3 uid="uid://main_scene"]
+
+[ext_resource type="Script" path="res://scripts/Main.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://character_select" path="res://scenes/ui/CharacterSelect.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://battle_scene" path="res://scenes/BattleScene.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://impact_dummy_derby" path="res://scenes/modes/ImpactDummyDerby.tscn" id="4"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1")
+character_select_path = NodePath("CharacterSelect")
+battle_scene_path = NodePath("BattleScene")
+derby_mode_path = NodePath("ImpactDummyDerby")
+
+[node name="CharacterSelect" parent="." instance=ExtResource("2")]
+
+[node name="BattleScene" parent="." instance=ExtResource("3")]
+visible = false
+
+[node name="ImpactDummyDerby" parent="." instance=ExtResource("4")]
+visible = false
+
+[node name="ModeBar" type="CanvasLayer" parent="."]
+
+[node name="DerbyButton" type="Button" parent="ModeBar"]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 200.0
+offset_bottom = 48.0
+text = "Impact Dummy Derby"
+
+[node name="BattleButton" type="Button" parent="ModeBar"]
+offset_left = 210.0
+offset_top = 16.0
+offset_right = 360.0
+offset_bottom = 48.0
+text = "Normal Battle"

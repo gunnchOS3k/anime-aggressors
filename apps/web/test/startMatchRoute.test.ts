@@ -13,10 +13,10 @@ describe("start match route", () => {
     assert.equal(APP_ROUTES.matchSetupRules, "#/match-setup/rules");
   });
 
-  it("HomeScreen Start Match links to match setup rules", () => {
+  it("HomeScreen legacy Start Match links to match setup rules", () => {
     const html = renderHomeMarkup();
     assert.match(html, /id="btn-play-match"/);
-    assert.match(html, />Start Match</);
+    assert.match(html, /Legacy Web Prototype/);
     assert.match(html, /#\/match-setup\/rules/);
   });
 

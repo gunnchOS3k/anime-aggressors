@@ -10,9 +10,15 @@ import { renderHomeMarkup } from "../src/screens/homeScreenMarkup.ts";
 const webRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 describe("main menu routes", () => {
-  it("Start Match uses match setup rules hash", () => {
-    assert.equal(MAIN_MENU_PRIMARY[0]!.route, APP_ROUTES.matchSetupRules);
-    assert.equal(MAIN_MENU_PRIMARY[0]!.mode, "match-setup-rules");
+  it("Godot combat is primary menu entry", () => {
+    assert.equal(MAIN_MENU_PRIMARY[0]!.route, APP_ROUTES.godot);
+    assert.equal(MAIN_MENU_PRIMARY[0]!.mode, "godot");
+  });
+
+  it("legacy Start Match uses match setup rules hash", () => {
+    const legacy = MAIN_MENU_PRIMARY.find((m) => m.id === "btn-play-match");
+    assert.equal(legacy?.route, APP_ROUTES.matchSetupRules);
+    assert.equal(legacy?.mode, "match-setup-rules");
   });
 
   it("no home menu item points to root /play", () => {

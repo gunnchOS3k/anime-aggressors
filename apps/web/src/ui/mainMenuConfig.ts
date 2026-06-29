@@ -12,8 +12,15 @@ export type MainMenuItem = {
 
 export const MAIN_MENU_PRIMARY: MainMenuItem[] = [
   {
+    id: "btn-godot-combat",
+    label: "Play Godot Combat Prototype",
+    route: APP_ROUTES.godot,
+    mode: "godot",
+    tier: "primary",
+  },
+  {
     id: "btn-play-match",
-    label: "Start Match",
+    label: "Start Match (Legacy Web Prototype)",
     route: APP_ROUTES.matchSetupRules,
     mode: "match-setup-rules",
     tier: "primary",

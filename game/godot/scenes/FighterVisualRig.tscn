@@ -1,0 +1,88 @@
+[gd_scene load_steps=8 format=3 uid="uid://fighter_visual_rig"]
+
+[ext_resource type="Script" path="res://scripts/fighter/FighterVisualRig.gd" id="1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_limb"]
+size = Vector2(24, 40)
+
+[node name="FighterVisualRig" type="Node2D"]
+script = ExtResource("1")
+root_path = NodePath("Root")
+hips_path = NodePath("Root/Hips")
+torso_path = NodePath("Root/Hips/Torso")
+head_path = NodePath("Root/Hips/Torso/Head")
+left_arm_path = NodePath("Root/Hips/Torso/LeftArm")
+right_arm_path = NodePath("Root/Hips/Torso/RightArm")
+left_leg_path = NodePath("Root/Hips/LeftLeg")
+right_leg_path = NodePath("Root/Hips/RightLeg")
+left_foot_path = NodePath("Root/Hips/LeftLeg/LeftFoot")
+right_foot_path = NodePath("Root/Hips/RightLeg/RightFoot")
+element_aura_path = NodePath("ElementAura")
+
+[node name="Root" type="Node2D" parent="."]
+
+[node name="Hips" type="Node2D" parent="Root"]
+position = Vector2(0, 8)
+
+[node name="Torso" type="Polygon2D" parent="Root/Hips"]
+color = Color(0.35, 0.4, 0.55, 1)
+polygon = PackedVector2Array(-14, -28, 14, -28, 16, 12, -16, 12)
+
+[node name="Head" type="Polygon2D" parent="Root/Hips/Torso"]
+position = Vector2(0, -36)
+color = Color(0.9, 0.75, 0.65, 1)
+polygon = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
+
+[node name="LeftArm" type="Polygon2D" parent="Root/Hips/Torso"]
+position = Vector2(-18, -16)
+color = Color(0.9, 0.75, 0.65, 1)
+polygon = PackedVector2Array(-6, -4, 6, -4, 6, 28, -6, 28)
+
+[node name="LeftForearm" type="Polygon2D" parent="Root/Hips/Torso/LeftArm"]
+position = Vector2(0, 24)
+color = Color(0.85, 0.7, 0.6, 1)
+polygon = PackedVector2Array(-5, 0, 5, 0, 5, 22, -5, 22)
+
+[node name="LeftHand" type="Polygon2D" parent="Root/Hips/Torso/LeftArm/LeftForearm"]
+position = Vector2(0, 20)
+color = Color(0.95, 0.8, 0.7, 1)
+polygon = PackedVector2Array(-4, 0, 4, 0, 4, 8, -4, 8)
+
+[node name="RightArm" type="Polygon2D" parent="Root/Hips/Torso"]
+position = Vector2(18, -16)
+color = Color(0.9, 0.75, 0.65, 1)
+polygon = PackedVector2Array(-6, -4, 6, -4, 6, 28, -6, 28)
+
+[node name="RightForearm" type="Polygon2D" parent="Root/Hips/Torso/RightArm"]
+position = Vector2(0, 24)
+color = Color(0.85, 0.7, 0.6, 1)
+polygon = PackedVector2Array(-5, 0, 5, 0, 5, 22, -5, 22)
+
+[node name="RightHand" type="Polygon2D" parent="Root/Hips/Torso/RightArm/RightForearm"]
+position = Vector2(0, 20)
+color = Color(0.95, 0.8, 0.7, 1)
+polygon = PackedVector2Array(-4, 0, 4, 0, 4, 8, -4, 8)
+
+[node name="LeftLeg" type="Polygon2D" parent="Root/Hips"]
+position = Vector2(-8, 12)
+color = Color(0.3, 0.35, 0.5, 1)
+polygon = PackedVector2Array(-7, 0, 7, 0, 7, 30, -7, 30)
+
+[node name="LeftFoot" type="Polygon2D" parent="Root/Hips/LeftLeg"]
+position = Vector2(0, 28)
+color = Color(0.25, 0.28, 0.4, 1)
+polygon = PackedVector2Array(-10, 0, 10, 0, 10, 8, -10, 8)
+
+[node name="RightLeg" type="Polygon2D" parent="Root/Hips"]
+position = Vector2(8, 12)
+color = Color(0.3, 0.35, 0.5, 1)
+polygon = PackedVector2Array(-7, 0, 7, 0, 7, 30, -7, 30)
+
+[node name="RightFoot" type="Polygon2D" parent="Root/Hips/RightLeg"]
+position = Vector2(0, 28)
+color = Color(0.25, 0.28, 0.4, 1)
+polygon = PackedVector2Array(-10, 0, 10, 0, 10, 8, -10, 8)
+
+[node name="ElementAura" type="Polygon2D" parent="."]
+color = Color(1, 0.4, 0.2, 0.35)
+polygon = PackedVector2Array(-28, -48, 28, -48, 32, 40, -32, 40)

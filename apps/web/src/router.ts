@@ -54,6 +54,7 @@ export function bindRouteButtons(): void {
     ["btn-rollback", "rollback"],
     ["btn-edgeio", "edgeio"],
     ["btn-prototype", "prototype"],
+    ["btn-godot-combat", "godot"],
     ["btn-impact-dummy-derby", "impact-dummy-derby"],
     ["btn-flagline-clash", "flagline-setup"],
     ["btn-feedback", "feedback"],
