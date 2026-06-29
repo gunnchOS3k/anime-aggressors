@@ -55,17 +55,15 @@ async function navigate(mode: AppRouteMode): Promise<void> {
     } else if (mode === "battle") {
       const { launchMatch } = await import("./game/App.js");
       const { mountFlaglineClash } = await import("./modes/flaglineClashView.js");
-      const {
-        applySetupToMatchSession,
-        isMatchSetupReady,
-        loadMatchSetup,
-      } = await import("./match/matchSetupSession.js");
+      const { applySetupToMatchSession, loadMatchSetup } = await import("./match/matchSetupSession.js");
+      const { resolveBattleRoute } = await import("./navigation/modeFlow.ts");
       const { navigateTo } = await import("./router.js");
-      const setup = loadMatchSetup();
-      if (!isMatchSetupReady(setup)) {
-        navigateTo("match-setup-rules");
+      const resolved = resolveBattleRoute();
+      if (resolved.mode !== "battle") {
+        navigateTo(resolved.mode);
         return;
       }
+      const setup = loadMatchSetup();
       applySetupToMatchSession(setup);
       if (setup.mode === "flaglineClash" || setup.ruleset?.matchType === "flaglineClash") {
         mountFlaglineClash(appRoot!);
@@ -148,6 +146,15 @@ async function navigate(mode: AppRouteMode): Promise<void> {
       mountPrototypeLab(appRoot!);
     } else if (mode === "impact-dummy-derby") {
       const { mountImpactDummyDerby } = await import("./modes/impactDummyDerbyView.js");
+      const { resolveModeEntry } = await import("./navigation/modeFlow.ts");
+      const { listCreatedFighters } = await import("./storage/createdFightersStorage.js");
+      const { navigateTo } = await import("./router.js");
+      const hasFighter = listCreatedFighters().length > 0;
+      const resolved = resolveModeEntry("impactDummyDerby", hasFighter);
+      if (resolved.mode !== "impact-dummy-derby") {
+        navigateTo(resolved.mode);
+        return;
+      }
       mountImpactDummyDerby(appRoot!);
     } else if (mode === "flagline-setup") {
       const { mountFlaglineClashSetupScreen } = await import("./screens/FlaglineClashSetupScreen.js");

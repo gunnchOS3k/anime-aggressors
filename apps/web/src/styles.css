@@ -2122,3 +2122,106 @@ body {
   }
 }
 
+.stage-preview-canvas {
+  width: 100%;
+  min-height: 220px;
+  border-radius: 10px;
+  background: #060610;
+  display: block;
+}
+
+.stage-preview-hero__minimap-wrap {
+  margin-top: 0.5rem;
+  opacity: 0.85;
+}
+
+.stage-preview-canvas-wrap,
+#derby-viewport.pf-viewport {
+  min-height: 360px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid #2a2a4a;
+}
+
+.derby-boot-status {
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.derby-boot-error {
+  color: #ff6b6b;
+}
+
+.match-results-screen {
+  display: grid;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.results-winner-hero {
+  text-align: center;
+  padding: 1.5rem;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255, 106, 42, 0.15), rgba(20, 20, 40, 0.9));
+  border: 2px solid rgba(255, 159, 67, 0.45);
+}
+
+.results-winner-label {
+  font-size: 1rem;
+  letter-spacing: 0.35em;
+  color: #ff9f43;
+  margin: 0 0 0.5rem;
+}
+
+.results-winner-name {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  margin: 0;
+  letter-spacing: 0.08em;
+  color: #fff;
+}
+
+.results-winner-subtitle {
+  font-size: 1.1rem;
+  color: #c8d0ff;
+  margin: 0.35rem 0 1rem;
+}
+
+.results-winner-canvas {
+  width: min(480px, 100%);
+  margin: 0.75rem auto 0;
+  border-radius: 10px;
+  background: #0a0a18;
+}
+
+.results-scoreboard {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.results-scoreboard th,
+.results-scoreboard td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid #333;
+  text-align: left;
+}
+
+.results-row--winner td {
+  color: #39d8ff;
+  font-weight: 600;
+}
+
+.results-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.results-meta {
+  text-align: center;
+  opacity: 0.75;
+  font-size: 0.9rem;
+}
