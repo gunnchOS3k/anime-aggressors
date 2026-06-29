@@ -34,6 +34,7 @@ export const MODE_ROUTE_MAP: Record<GameModeId, ModeFlowStep[]> = {
     { route: APP_ROUTES.flaglineClash, mode: "flagline-clash", label: "Battle" },
   ],
   impactDummyDerby: [
+    { route: APP_ROUTES.impactDummyDerbyFighterSelect, mode: "impact-dummy-derby-fighter-select", label: "Fighter" },
     { route: APP_ROUTES.impactDummyDerby, mode: "impact-dummy-derby", label: "Derby" },
   ],
   training: [

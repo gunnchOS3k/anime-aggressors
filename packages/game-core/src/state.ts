@@ -81,6 +81,7 @@ export function createInitialGameState(config: GameConfig): GameState {
     matchTimerFrames: config.matchDurationFrames ?? DEFAULT_MATCH_FRAMES,
     winnerId: null,
     hitstopFrames: 0,
+    lastHitEvents: [],
     energyAttacks: [],
     energyClashes: [],
   };
@@ -101,6 +102,7 @@ export function cloneGameState(state: GameState): GameState {
     stage: { ...state.stage },
     energyAttacks: state.energyAttacks?.map((a) => ({ ...a })),
     energyClashes: state.energyClashes?.map((c) => ({ ...c })),
+    lastHitEvents: state.lastHitEvents?.map((e) => ({ ...e })) ?? [],
   };
 }
 

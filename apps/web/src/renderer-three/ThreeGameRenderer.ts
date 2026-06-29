@@ -8,6 +8,7 @@ import { StageView } from "./StageView.ts";
 import { HitboxDebugView } from "./HitboxDebugView.ts";
 import { HurtboxDebugView } from "./HurtboxDebugView.ts";
 import { CombatVfxOrchestrator } from "./vfx/CombatVfxOrchestrator.ts";
+import { CombatEventAdapter } from "../combat/CombatEventAdapter.ts";
 import { setupSceneLighting } from "./SceneLighting.ts";
 import { fpToWorld } from "./RenderTypes.ts";
 import type { RenderOptions, ThreeRendererOptions } from "./RenderTypes.ts";
@@ -22,6 +23,7 @@ export class ThreeGameRenderer {
   private hitboxView = new HitboxDebugView();
   private hurtboxView = new HurtboxDebugView();
   private vfx = new CombatVfxOrchestrator();
+  private combatAdapter: CombatEventAdapter;
   private mounted = false;
   private lastKoFrame = -1;
   private currentStageId = "";
@@ -42,6 +44,7 @@ export class ThreeGameRenderer {
     this.renderer.setClearColor(0x12122e);
 
     this.cameraDirector = new CameraDirector(this.width / this.height, options.smoothCamera ?? true);
+    this.combatAdapter = new CombatEventAdapter(this.cameraDirector.getPlatformCamera().getImpulseSystem());
     this.stageView = new StageView();
     this.scene.add(this.stageView.group);
     this.scene.fog = new THREE.Fog(0x12122e, fpToWorld(STAGE_WIDTH), fpToWorld(STAGE_WIDTH * 1.8));
@@ -127,6 +130,9 @@ export class ThreeGameRenderer {
       }
 
       const hitEvent = gameState.hitstopFrames > 0;
+      if (gameState.lastHitEvents?.length) {
+        this.combatAdapter.processHitEvents(gameState.lastHitEvents, gameState.frame);
+      }
       this.cameraDirector.update(gameState, hitEvent, koEvent);
       this.vfx.update(this.scene, gameState.players, gameState.frame);
 

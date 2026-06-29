@@ -2220,8 +2220,70 @@ body {
   justify-content: center;
 }
 
-.results-meta {
+.ready-fight-sequence {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 20;
+  pointer-events: none;
+}
+
+.ready-fight-sequence__label {
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  letter-spacing: 0.2em;
+  color: #ff9f43;
+  margin: 0;
+}
+
+.camera-debug-overlay {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(0, 0, 0, 0.75);
+  font-size: 0.75rem;
+  font-family: monospace;
+  z-index: 30;
+  border-radius: 6px;
+}
+
+.camera-debug-overlay.hidden {
+  display: none;
+}
+
+.derby-fighter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.derby-fighter-card.selected {
+  border-color: #39d8ff;
+}
+
+.pf-combo-callout {
   text-align: center;
-  opacity: 0.75;
-  font-size: 0.9rem;
+  font-size: 1.1rem;
+  letter-spacing: 0.12em;
+  color: #ff9f43;
+  margin-bottom: 0.35rem;
+  animation: combo-pop 0.2s ease-out;
+}
+
+.pf-move-callout {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #c8d0ff;
+  margin-bottom: 0.25rem;
+  opacity: 0.9;
+}
+
+@keyframes combo-pop {
+  from { transform: scale(0.9); opacity: 0.5; }
+  to { transform: scale(1); opacity: 1; }
 }

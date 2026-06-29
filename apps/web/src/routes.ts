@@ -24,6 +24,7 @@ export const APP_ROUTES = {
   edgeioLab: "#/edgeio-lab",
   prototypeLab: "#/prototype-lab",
   impactDummyDerby: "#/impact-dummy-derby",
+  impactDummyDerbyFighterSelect: "#/impact-dummy-derby/fighter-select",
   flaglineClash: "#/flagline-clash",
   flaglineSetup: "#/flagline-setup",
   flaglineTeams: "#/flagline-teams",
@@ -65,6 +66,7 @@ export type AppRouteMode =
   | "edgeio"
   | "prototype"
   | "impact-dummy-derby"
+  | "impact-dummy-derby-fighter-select"
   | "flagline-clash"
   | "flagline-setup"
   | "flagline-teams"
@@ -102,6 +104,7 @@ const HASH_TO_MODE: Record<string, AppRouteMode> = {
   [APP_ROUTES.edgeioLab]: "edgeio",
   [APP_ROUTES.prototypeLab]: "prototype",
   [APP_ROUTES.impactDummyDerby]: "impact-dummy-derby",
+  [APP_ROUTES.impactDummyDerbyFighterSelect]: "impact-dummy-derby-fighter-select",
   [APP_ROUTES.flaglineClash]: "flagline-clash",
   [APP_ROUTES.flaglineSetup]: "flagline-setup",
   [APP_ROUTES.flaglineTeams]: "flagline-teams",
@@ -142,6 +145,7 @@ export const MODE_TO_ROUTE: Record<AppRouteMode, string> = {
   edgeio: APP_ROUTES.edgeioLab,
   prototype: APP_ROUTES.prototypeLab,
   "impact-dummy-derby": APP_ROUTES.impactDummyDerby,
+  "impact-dummy-derby-fighter-select": APP_ROUTES.impactDummyDerbyFighterSelect,
   "flagline-clash": APP_ROUTES.flaglineClash,
   "flagline-setup": APP_ROUTES.flaglineSetup,
   "flagline-teams": APP_ROUTES.flaglineTeams,

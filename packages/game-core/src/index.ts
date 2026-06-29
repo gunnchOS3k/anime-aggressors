@@ -182,6 +182,14 @@ export {
   deserializeEnergyClash,
   maybeSpawnSuperEnergyAttack,
 } from "./combat/energyClash.js";
+export type { HitEvent, CameraImpulseKind } from "./combat/hitEvents.js";
+export { createHitEvent } from "./combat/hitEvents.js";
+export { computeKnockback } from "./combat/knockback.js";
+export { computeHitlag, tickHitlag } from "./combat/hitlag.js";
+export { HITLAG_DEFAULTS, classifyHitStrength, KNOCKBACK_TUNING } from "./combat/combatTuning.js";
+export { computeHitstun, isLaunched } from "./combat/hitstun.js";
+export { isOutsideBlastZone, BLAST_LEFT, BLAST_RIGHT, BLAST_TOP, BLAST_BOTTOM } from "./combat/blastZones.js";
+export { resolveCombatHits, processBlastZoneKOs } from "./combat/hitResolution.js";
 export type { FighterSize } from "./sizeClasses.js";
 export { SIZE_STATS, getSizeStats } from "./sizeClasses.js";
 export type { FighterColor, ElementEffect, ElementDef } from "./elements.js";

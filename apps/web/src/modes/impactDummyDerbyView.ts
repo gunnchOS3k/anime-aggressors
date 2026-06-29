@@ -3,13 +3,13 @@ import {
   createInitialDerbyState,
   simulateDerbyFrame,
   resetDerbyForRetry,
-  getDefaultCreatedFighter,
   DEFAULT_FIGHTERS,
+  buildCreatedFighter,
 } from "@anime-aggressors/game-core";
 import { pollAllInputs } from "../input/deviceAssignment.js";
 import { globalAudio } from "../audio/AudioManager.js";
 import { navigateHome, navigateTo } from "../router.js";
-import { listCreatedFighters } from "../storage/createdFightersStorage.js";
+import { loadDerbySetup, saveDerbySetup } from "../modes/impactDummyDerbySetup.ts";
 import { processDerbyEnd } from "../career/careerService.js";
 import { derbyHudHtml } from "../modes/impactDummyDerbyHud.ts";
 import { renderDerbyResultsPanel } from "../screens/ImpactDummyDerbyResultsScreen.ts";
@@ -25,8 +25,23 @@ import { applyIdleFlavor } from "../renderer-three/fighters/idleAnimations.ts";
 import { applyFighterPose } from "../renderer-three/fighters/FighterAnimator.ts";
 import type { AnimPose } from "../renderer-three/fighters/FighterAnimator.ts";
 import { resolveFighterAppearance } from "../renderer-three/fighters/FighterAppearance.ts";
+import { mountReadyFightSequence } from "../ui/ReadyFightSequence.ts";
+import { APP_ROUTES } from "../routes.ts";
 
 const DERBY_SEED = 4242;
+
+function derbyFighterFromSetup() {
+  const setup = loadDerbySetup();
+  if (!setup.fighterId || !setup.fighterName || !setup.fighterSize || !setup.fighterColor) {
+    return null;
+  }
+  return buildCreatedFighter({
+    id: setup.fighterId,
+    name: setup.fighterName,
+    size: setup.fighterSize,
+    color: setup.fighterColor,
+  });
+}
 
 function derbyCameraBounds() {
   const cx = fpToWorld(STAGE_WIDTH / 2);
@@ -35,14 +50,19 @@ function derbyCameraBounds() {
 }
 
 export function mountImpactDummyDerby(root: HTMLElement): void {
-  const saved = listCreatedFighters();
-  const fighter = saved[0] ?? getDefaultCreatedFighter(0);
+  const fighter = derbyFighterFromSetup();
+  if (!fighter) {
+    root.innerHTML = `<div class="derby-root setup-shell"><p class="derby-boot-error">No fighter selected.</p><button id="derby-pick" type="button" class="primary-game-cta">Select Fighter</button></div>`;
+    root.querySelector("#derby-pick")?.addEventListener("click", () => navigateTo("impact-dummy-derby-fighter-select"));
+    return;
+  }
+  const derbyFighter = fighter;
 
   root.innerHTML = `
     <div class="derby-root setup-shell">
       <div class="vs-toolbar">
         <button id="derby-back" type="button" class="secondary-game-button">← Home</button>
-        <span class="vs-hint">Impact Dummy Derby · <strong>${fighter.name}</strong></span>
+        <span class="vs-hint">Impact Dummy Derby · <strong>${derbyFighter.name}</strong></span>
         <button id="derby-pick" type="button" class="secondary-game-button">Change Fighter</button>
       </div>
       <div id="derby-boot-status" class="derby-boot-status setup-hero-panel"></div>
@@ -57,7 +77,7 @@ export function mountImpactDummyDerby(root: HTMLElement): void {
   const results = root.querySelector("#derby-results") as HTMLElement;
   const bootStatus = root.querySelector("#derby-boot-status") as HTMLElement;
 
-  const boot = bootImpactDummyDerby(fighter);
+  const boot = bootImpactDummyDerby(derbyFighter);
   if (!boot.assets) {
     bootStatus.innerHTML = `<p class="derby-boot-error">Failed to load Derby: ${boot.result.errors.join(", ")}</p>`;
     return;
@@ -75,7 +95,7 @@ export function mountImpactDummyDerby(root: HTMLElement): void {
   let noLaunchHandled = false;
   let simEnabled = canDerbySimulate(boot.result);
 
-  let state = createInitialDerbyState(DERBY_SEED, loadBest(), fighter);
+  let state = createInitialDerbyState(DERBY_SEED, loadBest(), derbyFighter);
 
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x141a2e);
@@ -135,13 +155,13 @@ export function mountImpactDummyDerby(root: HTMLElement): void {
   });
   root.querySelector("#derby-pick")?.addEventListener("click", () => {
     cancelAnimationFrame(raf);
-    navigateTo("fighter-select");
+    navigateTo("impact-dummy-derby-fighter-select");
   });
 
   function fighterAnimId(): string {
-    const style = resolveFighterAppearance(fighter).visualStyleId;
+    const style = resolveFighterAppearance(derbyFighter).visualStyleId;
     if (style) return style;
-    return DEFAULT_FIGHTERS.find((f) => f.color === fighter.color)?.id ?? "ember-vale";
+    return DEFAULT_FIGHTERS.find((f) => f.color === derbyFighter.color)?.id ?? "ember-vale";
   }
 
   function updateFighterVisual(frame: number): void {
@@ -183,8 +203,8 @@ export function mountImpactDummyDerby(root: HTMLElement): void {
         careerSaved = true;
         saveBest(state.personalBest);
         globalAudio.play("result");
-        void processDerbyEnd(state, fighter.id, fighter.name);
-        renderDerbyResultsPanel(results, state, fighter, {
+        void processDerbyEnd(state, derbyFighter.id, derbyFighter.name);
+        renderDerbyResultsPanel(results, state, derbyFighter, {
           onRetry: () => {
             state = resetDerbyForRetry(state);
             results.classList.add("hidden");
@@ -194,7 +214,7 @@ export function mountImpactDummyDerby(root: HTMLElement): void {
             noLaunchHandled = false;
             simEnabled = canDerbySimulate(boot.result);
           },
-          onChangeFighter: () => navigateTo("fighter-select"),
+          onChangeFighter: () => navigateTo("impact-dummy-derby-fighter-select"),
         });
       } else {
         noLaunchHandled = true;
@@ -237,7 +257,16 @@ export function mountImpactDummyDerby(root: HTMLElement): void {
   };
 
   if (simEnabled) {
-    loop();
+    saveDerbySetup({ ...loadDerbySetup(), ready: true });
+    const readyRoot = document.createElement("div");
+    root.appendChild(readyRoot);
+    mountReadyFightSequence(readyRoot, {
+      label: "READY… LAUNCH!",
+      onComplete: () => {
+        readyRoot.remove();
+        loop();
+      },
+    });
   } else {
     bootStatus.innerHTML += `<p>Cannot start — fix boot errors above.</p>`;
     tick();

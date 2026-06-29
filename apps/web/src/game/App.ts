@@ -78,6 +78,9 @@ export class PlatformFighterApp {
   private matchEndResult: { match: MatchRecord; replay: ReplayRecord | null } | null = null;
   private matchMode = "playMatch";
   private comboHits = 0;
+  private battleComboCount = 0;
+  private battleComboDecay = 0;
+  private lastMoveCallout = "";
   private trainingOverlayEl: HTMLElement | null = null;
 
   private options: PlatformFighterOptions;
@@ -308,6 +311,18 @@ export class PlatformFighterApp {
     this.statTracker?.trackFrame(this.gameState, inputs);
     this.simFrame += 1;
 
+    for (const hit of this.gameState.lastHitEvents ?? []) {
+      if (hit.attackerPlayerId === 0) {
+        this.battleComboCount += 1;
+        this.battleComboDecay = 90;
+        this.lastMoveCallout = hit.moveId.replace(/-/g, " ");
+      }
+    }
+    if (this.battleComboDecay > 0) {
+      this.battleComboDecay -= 1;
+      if (this.battleComboDecay === 0) this.battleComboCount = 0;
+    }
+
     if (this.gameState.phase === "results") {
       this.state = "results";
       this.showResultsScreen();
@@ -446,6 +461,8 @@ export class PlatformFighterApp {
         ? "∞"
         : String(Math.ceil(this.gameState.matchTimerFrames / 60));
     this.hud.innerHTML = `
+      ${this.battleComboCount >= 2 ? `<div class="pf-combo-callout">${this.battleComboCount} HIT COMBO</div>` : ""}
+      ${this.lastMoveCallout && this.battleComboDecay > 60 ? `<div class="pf-move-callout">${p1.fighterName.toUpperCase()} — ${this.lastMoveCallout}</div>` : ""}
       <div class="pf-hud-row">
         <span><strong>${p1.fighterName}</strong> (${sz1}/${el1}) · ${p1Stat} · ${p1.stocks}♥ ${renderSuperReadyBadge(p1.aura)}</span>
         <span class="pf-timer">${timerSec}s</span>
