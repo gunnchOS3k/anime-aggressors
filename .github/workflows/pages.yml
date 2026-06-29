@@ -35,8 +35,13 @@ jobs:
       - name: Install Godot CLI and export templates
         run: |
           chmod +x scripts/install-godot-ci.sh scripts/install-godot-templates.sh
-          export GODOT_BIN="$(bash scripts/install-godot-ci.sh)"
-          echo "GODOT_BIN=${GODOT_BIN}" >> "$GITHUB_ENV"
+          GODOT_BIN="$(bash scripts/install-godot-ci.sh)"
+          if [ ! -x "$GODOT_BIN" ]; then
+            echo "Godot binary not executable: $GODOT_BIN"
+            exit 1
+          fi
+          printf 'GODOT_BIN=%s\n' "$GODOT_BIN" >> "$GITHUB_ENV"
+          "$GODOT_BIN" --version
           bash scripts/install-godot-templates.sh
 
       - name: Export Godot Web build
