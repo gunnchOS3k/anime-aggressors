@@ -1,8 +1,7 @@
+import { godotIndexPath, probeGodotExport } from "../godot/godotExportStatus.ts";
+
 export function mountGodotRuntimeScreen(root: HTMLElement): void {
-  const base = import.meta.env.BASE_URL ?? "/";
-  const godotUrl = `${base}godot/index.html`;
-  const legacyNote =
-    "The TypeScript/Three.js build remains available as Legacy Web Prototype from the main menu.";
+  const godotUrl = godotIndexPath();
 
   root.innerHTML = `
     <div class="godot-runtime-shell setup-shell">
@@ -16,24 +15,23 @@ export function mountGodotRuntimeScreen(root: HTMLElement): void {
           Anime Aggressors gameplay runs in <strong>Godot 4</strong> for responsive platform-fighter movement,
           limb animation, hitstop, knockback, and camera framing.
         </p>
-        <p class="godot-runtime-note">${legacyNote}</p>
+        <p class="godot-runtime-note">
+          Legacy Web Prototype remains on the main menu for the TypeScript/Three.js build.
+        </p>
         <div class="godot-runtime-actions">
           <a id="godot-open-tab" class="primary-game-cta" href="${godotUrl}" target="_blank" rel="noopener">Open Godot Build</a>
           <button type="button" id="godot-reload-frame" class="secondary-game-button">Reload Embed</button>
         </div>
       </div>
+      <div id="godot-export-error" class="godot-export-error setup-hero-panel hidden" role="alert"></div>
       <div class="godot-runtime-frame-wrap stage-preview-canvas-wrap">
         <iframe
           id="godot-runtime-frame"
-          class="godot-runtime-frame"
+          class="godot-runtime-frame hidden"
           title="Anime Aggressors Godot Runtime"
           src="${godotUrl}"
           allow="fullscreen"
         ></iframe>
-        <p id="godot-frame-fallback" class="godot-frame-fallback hidden">
-          Godot web export not found. Run <code>npm run godot:export:web</code> with Godot 4 CLI installed,
-          or see <code>docs/GODOT_EXPORT_GUIDE.md</code>.
-        </p>
       </div>
       <details class="godot-runtime-controls setup-hero-panel">
         <summary>Default Controls</summary>
@@ -50,24 +48,52 @@ export function mountGodotRuntimeScreen(root: HTMLElement): void {
   });
 
   const frame = root.querySelector<HTMLIFrameElement>("#godot-runtime-frame");
-  const fallback = root.querySelector("#godot-frame-fallback");
+  const errorPanel = root.querySelector("#godot-export-error");
+  const openTab = root.querySelector<HTMLAnchorElement>("#godot-open-tab");
   const reloadBtn = root.querySelector("#godot-reload-frame");
 
-  reloadBtn?.addEventListener("click", () => {
-    if (frame) frame.src = godotUrl;
-  });
+  function showError(message: string) {
+    if (errorPanel) {
+      errorPanel.classList.remove("hidden");
+      errorPanel.innerHTML = `<h3>Godot export unavailable</h3><p>${message}</p>`;
+    }
+    frame?.classList.add("hidden");
+    openTab?.classList.add("disabled");
+  }
 
-  void fetch(godotUrl, { method: "HEAD" })
-    .then((res) => {
-      if (!res.ok && fallback && frame) {
-        fallback.classList.remove("hidden");
-        frame.classList.add("hidden");
-      }
-    })
-    .catch(() => {
-      if (fallback && frame) {
-        fallback.classList.remove("hidden");
-        frame.classList.add("hidden");
+  function showReady() {
+    errorPanel?.classList.add("hidden");
+    frame?.classList.remove("hidden");
+  }
+
+  reloadBtn?.addEventListener("click", () => {
+    void probeGodotExport().then((status) => {
+      if (status === "ready" && frame) {
+        frame.src = godotUrl;
+        showReady();
+      } else {
+        showError(
+          status === "placeholder"
+            ? "Placeholder export is deployed. Real Godot export was not built. Run <code>npm run godot:export:web</code>."
+            : "Godot Web export is missing. Run <code>npm run godot:export:web</code>.",
+        );
       }
     });
+  });
+
+  void probeGodotExport().then((status) => {
+    if (status === "ready") {
+      showReady();
+      return;
+    }
+    if (status === "placeholder") {
+      showError(
+        "Placeholder export is deployed. Real Godot export was not built. Run <code>npm run godot:export:web</code> with Godot 4.3+.",
+      );
+      return;
+    }
+    showError(
+      "Godot Web export is missing. Run <code>npm run godot:export:web</code> with Godot 4.3+ installed.",
+    );
+  });
 }

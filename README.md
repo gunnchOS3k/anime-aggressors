@@ -152,7 +152,21 @@ npm run dev
 npm run quality
 ```
 
-Hash routes: `#/`, `#/match-setup/rules`, `#/match-setup/stage`, `#/match-setup/fighters`, `#/match-setup/controls`, `#/battle`, `#/play`, `#/create-fighter`, `#/training`, `#/impact-dummy-derby`, `#/career`, `#/career/history`, `#/career/replays`, `#/career/saves`
+### Godot Web export (required for Pages deploy)
+
+The Godot combat prototype needs a real Web export — the checked-in placeholder is not playable.
+
+```bash
+# Install Godot 4.3+ or set GODOT_BIN=/path/to/godot
+npm run godot:export:web
+npm run build:pages
+```
+
+Export uses **single-threaded** Web mode for GitHub Pages (`variant/thread_support=false`). Threaded exports require COOP/COEP headers that Pages does not provide.
+
+Live Godot URL: `https://gunnchos3k.github.io/anime-aggressors/godot/index.html`
+
+Hash routes: `#/`, `#/godot`, `#/match-setup/rules`, `#/match-setup/stage`, `#/match-setup/fighters`, `#/match-setup/controls`, `#/battle`, `#/play`, `#/create-fighter`, `#/training`, `#/impact-dummy-derby`, `#/career`, `#/career/history`, `#/career/replays`, `#/career/saves`
 
 ## Career, Replays, and Saves
 

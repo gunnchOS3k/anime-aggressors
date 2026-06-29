@@ -32,19 +32,26 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install Godot CLI and export templates
+        run: |
+          chmod +x scripts/install-godot-ci.sh scripts/install-godot-templates.sh
+          export GODOT_BIN="$(bash scripts/install-godot-ci.sh)"
+          echo "GODOT_BIN=${GODOT_BIN}" >> "$GITHUB_ENV"
+          bash scripts/install-godot-templates.sh
+
+      - name: Export Godot Web build
+        run: npm run godot:export:web
+
       - name: Quality gate
         run: npm run quality
 
       - name: Build Pages app
-        run: npm run build:pages
+        run: npm run build:web && npm run assert:godot-export && npm run finalize:pages
 
       - name: Debug Pages artifact
         run: |
-          pwd
-          ls -la
-          ls -la apps/web || true
-          ls -la apps/web/dist || true
-          find . -maxdepth 5 -name index.html -print
+          ls -la apps/web/dist/godot || true
+          ls -la apps/web/public/godot || true
           cat apps/web/dist/deploy-info.txt || true
 
       - name: Assert Pages artifact exists
@@ -52,6 +59,14 @@ jobs:
           test -f apps/web/dist/index.html
           test -f apps/web/dist/404.html
           test -f apps/web/dist/deploy-info.txt
+          test -f apps/web/dist/godot/index.html
+          test -n "$(find apps/web/dist/godot -maxdepth 1 -name '*.wasm' -print -quit)"
+          test -n "$(find apps/web/dist/godot -maxdepth 1 -name '*.pck' -print -quit)"
+          test -n "$(find apps/web/dist/godot -maxdepth 1 -name '*.js' -print -quit)"
+          if grep -q "No export artifact is checked in yet" apps/web/dist/godot/index.html; then
+            echo "Godot placeholder still deployed"
+            exit 1
+          fi
           if grep -R "https://gunnchos3k.github.io/play" apps/web/dist; then
             echo "Found forbidden root play URL"
             exit 1

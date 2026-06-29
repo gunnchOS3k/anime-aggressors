@@ -86,7 +86,7 @@ func _physics_process(delta: float) -> void:
 	_handle_combat_states(delta)
 	_handle_input(delta)
 	_apply_gravity(delta)
-	_move_and_slide()
+	move_and_slide()
 	_update_landing_state()
 	_update_motion_state()
 

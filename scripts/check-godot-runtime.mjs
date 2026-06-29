@@ -1,21 +1,11 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { execSync } from "node:child_process";
+import { validateGodotExportDir, resolveGodotBin } from "./godot-export-shared.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const godotProject = path.join(repoRoot, "game/godot/project.godot");
-const publicExport = path.join(repoRoot, "apps/web/public/godot/index.html");
-const distExport = path.join(repoRoot, "apps/web/dist/godot/index.html");
-
-function hasGodotCli() {
-  try {
-    execSync("godot --version", { stdio: "pipe" });
-    return true;
-  } catch {
-    return false;
-  }
-}
+const publicExport = path.join(repoRoot, "apps/web/public/godot");
 
 if (!fs.existsSync(godotProject)) {
   console.error("Missing Godot project at game/godot/project.godot");
@@ -24,24 +14,19 @@ if (!fs.existsSync(godotProject)) {
 
 console.log("Godot project found:", godotProject);
 
-if (hasGodotCli()) {
-  console.log("Godot CLI detected — run npm run godot:export:web to refresh the web build.");
+const godotBin = resolveGodotBin();
+if (godotBin) {
+  console.log("Godot CLI:", godotBin);
 } else {
-  console.warn("Godot CLI not installed — skipping export. See docs/GODOT_EXPORT_GUIDE.md");
+  console.warn("Godot CLI not installed — run npm run godot:export:web after installing Godot 4.3+");
 }
 
-const exportHtml = fs.existsSync(publicExport)
-  ? publicExport
-  : fs.existsSync(distExport)
-    ? distExport
-    : null;
-
-if (exportHtml) {
-  console.log("Godot web artifact present:", exportHtml);
+const result = validateGodotExportDir(publicExport, { label: publicExport });
+if (result.ok) {
+  console.log("Godot web artifact present:", publicExport);
+  console.log("  wasm:", result.files.wasm.join(", "));
 } else {
-  console.warn(
-    "No Godot web export at apps/web/public/godot/index.html — launcher will show export instructions.",
-  );
+  console.warn("Godot export missing or placeholder:", result.errors.join("; "));
 }
 
 console.log("godot:check complete");
