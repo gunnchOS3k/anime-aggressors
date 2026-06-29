@@ -10,22 +10,29 @@ const rootPkg = JSON.parse(fs.readFileSync(path.join(repoRoot, "package.json"), 
 };
 
 describe("Pages deploy contract", () => {
-  it("build:pages runs web workspace build then finalize", () => {
+  it("build:pages exports Godot, builds web, asserts export, then finalizes", () => {
     assert.equal(rootPkg.scripts["build:web"], "npm run build -w anime-aggressors-web");
     assert.equal(rootPkg.scripts["finalize:pages"], "node scripts/finalize-pages-artifact.mjs");
-    assert.equal(rootPkg.scripts["godot:check"], "node scripts/check-godot-runtime.mjs");
+    assert.equal(rootPkg.scripts["assert:godot-export"], "node scripts/assert-godot-export.mjs");
+    assert.equal(rootPkg.scripts["godot:export:web"], "node scripts/export-godot-web.mjs");
+    assert.match(rootPkg.scripts["build:pages"], /godot:export:web/);
     assert.match(rootPkg.scripts["build:pages"], /build:web/);
-    assert.match(rootPkg.scripts["build:pages"], /godot:check/);
+    assert.match(rootPkg.scripts["build:pages"], /assert:godot-export/);
     assert.match(rootPkg.scripts["build:pages"], /finalize:pages/);
   });
 
-  it("pages workflow does not block on fragile UI text greps", () => {
+  it("pages workflow exports Godot and validates wasm/pck/js in dist", () => {
     const workflow = fs.readFileSync(path.join(repoRoot, ".github/workflows/pages.yml"), "utf8");
     assert.doesNotMatch(workflow, /grep.*Start Match/);
     assert.doesNotMatch(workflow, /grep.*Play Match/);
     assert.doesNotMatch(workflow, /grep.*Impact Dummy Derby/);
+    assert.match(workflow, /godot:export:web/);
+    assert.match(workflow, /assert:godot-export/);
     assert.match(workflow, /path: apps\/web\/dist/);
     assert.match(workflow, /test -f apps\/web\/dist\/index\.html/);
+    assert.match(workflow, /test -f apps\/web\/dist\/godot\/index\.html/);
+    assert.match(workflow, /\.wasm/);
+    assert.match(workflow, /\.pck/);
   });
 
   it("finalize script writes required deploy-info routes", () => {

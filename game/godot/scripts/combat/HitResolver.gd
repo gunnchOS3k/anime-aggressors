@@ -28,9 +28,9 @@ func _on_hit_connected(hitbox: Hitbox, hurtbox: Hurtbox) -> void:
 
 	var damage_percent := _read_float_property(defender, "damage_percent", 0.0)
 	var victim_weight := 1.0
-	var fighter_stats := _read_property(defender, "fighter_stats")
-	if fighter_stats != null:
-		victim_weight = float(fighter_stats.weight)
+	var fighter_stats_obj: Variant = _read_property(defender, "fighter_stats")
+	if fighter_stats_obj is FighterStats:
+		victim_weight = float((fighter_stats_obj as FighterStats).weight)
 
 	var launch_velocity := Knockback.calculate_velocity(
 		damage_percent,
@@ -66,7 +66,7 @@ func _read_property(target: Object, property_name: String) -> Variant:
 	return null
 
 func _read_float_property(target: Object, property_name: String, default_value: float) -> float:
-	var value := _read_property(target, property_name)
+	var value: Variant = _read_property(target, property_name)
 	if value == null:
 		return default_value
 	return float(value)

@@ -21,10 +21,19 @@ describe("godot route", () => {
     assert.match(item!.label, /Godot Combat Prototype/i);
   });
 
-  it("GodotRuntimeScreen exists", () => {
+  it("GodotRuntimeScreen exists with project-safe embed path", () => {
     const src = fs.readFileSync(path.join(webRoot, "src/screens/GodotRuntimeScreen.ts"), "utf8");
     assert.match(src, /godot-runtime-frame/);
-    assert.match(src, /godot\/index\.html/);
+    assert.match(src, /godotIndexPath/);
+    assert.match(src, /probeGodotExport/);
+  });
+
+  it("public godot export has wasm pck and js artifacts", () => {
+    const godotDir = path.join(webRoot, "public/godot");
+    const files = fs.readdirSync(godotDir);
+    assert.ok(files.some((f) => f.endsWith(".wasm")));
+    assert.ok(files.some((f) => f.endsWith(".pck")));
+    assert.ok(files.some((f) => f.endsWith(".js")));
   });
 
   it("godot project file exists", () => {
