@@ -14,7 +14,7 @@
     "build:packages": "npm run build -w @anime-aggressors/game-core -w @anime-aggressors/rollback -w @anime-aggressors/netplay -w @anime-aggressors/edgeio -w @anime-aggressors/messages -w @gunnch/input",
     "build:web": "npm run build -w anime-aggressors-web",
     "godot:check": "node scripts/check-godot-runtime.mjs",
-    "godot:export:web": "node scripts/export-godot-web.mjs",
+    "godot:export:web": "node scripts/export-godot-web-pages.mjs",
     "assert:godot-export": "node scripts/assert-godot-export.mjs",
     "finalize:pages": "node scripts/finalize-pages-artifact.mjs",
     "build:pages": "npm run godot:export:web && npm run build:web && npm run assert:godot-export && npm run finalize:pages",
