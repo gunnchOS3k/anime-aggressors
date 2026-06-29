@@ -55,8 +55,10 @@ jobs:
 
       - name: Debug Pages artifact
         run: |
-          ls -la apps/web/dist/godot || true
-          ls -la apps/web/public/godot || true
+          echo "--- dist/godot ---"
+          find apps/web/dist/godot -maxdepth 2 -type f -print | sort || true
+          echo "--- public/godot ---"
+          find apps/web/public/godot -maxdepth 2 -type f -print | sort || true
           cat apps/web/dist/deploy-info.txt || true
 
       - name: Assert Pages artifact exists
@@ -65,11 +67,21 @@ jobs:
           test -f apps/web/dist/404.html
           test -f apps/web/dist/deploy-info.txt
           test -f apps/web/dist/godot/index.html
-          test -n "$(find apps/web/dist/godot -maxdepth 1 -name '*.wasm' -print -quit)"
-          test -n "$(find apps/web/dist/godot -maxdepth 1 -name '*.pck' -print -quit)"
-          test -n "$(find apps/web/dist/godot -maxdepth 1 -name '*.js' -print -quit)"
+          test -f apps/web/dist/godot/rescue-runtime.js
+          test -f apps/web/dist/godot/runtime/index.html
+          test -n "$(find apps/web/dist/godot/runtime -maxdepth 1 -name '*.wasm' -print -quit)"
+          test -n "$(find apps/web/dist/godot/runtime -maxdepth 1 -name '*.pck' -print -quit)"
+          test -n "$(find apps/web/dist/godot/runtime -maxdepth 1 -name '*.js' -print -quit)"
           if grep -q "No export artifact is checked in yet" apps/web/dist/godot/index.html; then
             echo "Godot placeholder still deployed"
+            exit 1
+          fi
+          if ! grep -q "AARescueRuntime" apps/web/dist/godot/index.html; then
+            echo "Godot boot shell missing rescue runtime contract"
+            exit 1
+          fi
+          if ! grep -q "runtime/index.html" apps/web/dist/godot/index.html; then
+            echo "Godot boot shell missing runtime iframe"
             exit 1
           fi
           if grep -R "https://gunnchos3k.github.io/play" apps/web/dist; then
