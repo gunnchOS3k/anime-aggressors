@@ -9,7 +9,7 @@ class_name FighterAnimationDriver
 @export var animation_library: FighterAnimationLibrary
 
 var animation_player: AnimationPlayer
-var visual_rig: FighterVisualRig
+var visual_rig: Node2D
 var state_machine: FighterStateMachine
 var local_time: float = 0.0
 var current_animation: StringName = &"idle"

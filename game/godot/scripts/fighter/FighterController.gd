@@ -38,6 +38,7 @@ var damage_percent: float = 0.0
 var hitbox: Hitbox
 var hurtbox: Hurtbox
 var animation_driver: FighterAnimationDriver
+var visual_rig: FighterRig3D
 
 func _ready() -> void:
 	if fighter_stats == null:
@@ -70,6 +71,10 @@ func _ready() -> void:
 		hitbox.deactivate()
 
 	animation_driver = get_node_or_null("FighterAnimationDriver") as FighterAnimationDriver
+	visual_rig = get_node_or_null("VisualRig") as FighterRig3D
+	if visual_rig != null and fighter_stats != null:
+		visual_rig.configure(fighter_stats.fighter_id)
+		visual_rig.set_facing(facing)
 
 func receive_hit(hit_info: Dictionary) -> void:
 	damage_percent += float(hit_info.get("damage", 0.0))
@@ -89,6 +94,16 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	_update_landing_state()
 	_update_motion_state()
+	_sync_hitbox_socket()
+
+func _sync_hitbox_socket() -> void:
+	if visual_rig != null:
+		visual_rig.set_facing(facing)
+	if hitbox == null or visual_rig == null:
+		return
+	if state_machine.is_attacking() or state_machine.is_specialing() or hitbox.active:
+		var socket_name := FighterMoveChoreography.hit_socket_for_state(state_machine.current_state)
+		hitbox.global_position = visual_rig.get_socket_global_position(socket_name)
 
 func _update_timers(delta: float) -> void:
 	coyote_timer = maxf(0.0, coyote_timer - delta)
