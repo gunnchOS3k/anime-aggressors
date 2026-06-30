@@ -1,15 +1,9 @@
-# Godot smoke tests
+# Godot static validation
 
-Run from Godot editor **Scene → Run Tests** after installing GUT, or validate manually:
+Run from repo root:
 
-1. `godot --headless --path game/godot --check-only`
-2. Open `scenes/Main.tscn` and confirm no script errors in Output
+- `npm run validate:godot-rig`
+- `npm run validate:godot-animation`
+- `npm run validate:godot-vfx`
 
-## Expected project files
-
-- `project.godot`
-- `scenes/Main.tscn`
-- `scripts/fighter/FighterController.gd`
-- `scripts/BattleScene.gd`
-
-See `docs/GODOT_MANUAL_QA.md` for gameplay validation.
+These parse scene/script files and assert production rig, animation states, socket VFX, and Skyline Arena structure.

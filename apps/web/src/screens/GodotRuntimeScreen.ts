@@ -1,8 +1,12 @@
 import {
   fetchGodotBuildManifest,
   probeGodotExport,
+  shortCommitSha,
   versionedGodotIndexPath,
 } from "../godot/godotExportStatus.ts";
+import { unregisterStaleServiceWorkers } from "../godot/godotServiceWorker.ts";
+
+const EMBEDDED_BUILD_KEY = "aa:godot-embedded-build-id";
 
 export function mountGodotRuntimeScreen(root: HTMLElement): void {
   root.innerHTML = `
@@ -24,7 +28,8 @@ export function mountGodotRuntimeScreen(root: HTMLElement): void {
           <a id="godot-open-tab" class="primary-game-cta" href="#" target="_blank" rel="noopener">Open Godot Build</a>
           <button type="button" id="godot-reload-frame" class="secondary-game-button">Reload Embed</button>
         </div>
-        <p id="godot-build-id" class="godot-runtime-note hidden"></p>
+        <p id="godot-build-badge" class="godot-runtime-note hidden"></p>
+        <p id="godot-stale-notice" class="godot-runtime-note hidden" role="status"></p>
       </div>
       <div id="godot-export-error" class="godot-export-error setup-hero-panel hidden" role="alert"></div>
       <div class="godot-runtime-frame-wrap stage-preview-canvas-wrap">
@@ -53,7 +58,11 @@ export function mountGodotRuntimeScreen(root: HTMLElement): void {
   const errorPanel = root.querySelector("#godot-export-error");
   const openTab = root.querySelector<HTMLAnchorElement>("#godot-open-tab");
   const reloadBtn = root.querySelector("#godot-reload-frame");
-  const buildIdLabel = root.querySelector("#godot-build-id");
+  const buildBadge = root.querySelector("#godot-build-badge");
+  const staleNotice = root.querySelector("#godot-stale-notice");
+
+  let embeddedBuildId = "";
+  let manifestPollTimer: number | undefined;
 
   function showError(message: string) {
     if (errorPanel) {
@@ -64,7 +73,13 @@ export function mountGodotRuntimeScreen(root: HTMLElement): void {
     openTab?.classList.add("disabled");
   }
 
-  function showReady(embedUrl: string, buildId: string) {
+  function updateBuildBadge(buildId: string, commit: string) {
+    if (!buildBadge) return;
+    buildBadge.textContent = `Godot Build: ${buildId} · Commit: ${shortCommitSha(commit)}`;
+    buildBadge.classList.remove("hidden");
+  }
+
+  function embedRuntime(embedUrl: string, buildId: string) {
     errorPanel?.classList.add("hidden");
     if (frame) {
       frame.src = embedUrl;
@@ -74,13 +89,32 @@ export function mountGodotRuntimeScreen(root: HTMLElement): void {
       openTab.href = embedUrl;
       openTab.classList.remove("disabled");
     }
-    if (buildIdLabel) {
-      buildIdLabel.textContent = `Godot build ${buildId}`;
-      buildIdLabel.classList.remove("hidden");
+    embeddedBuildId = buildId;
+    sessionStorage.setItem(EMBEDDED_BUILD_KEY, buildId);
+  }
+
+  async function reloadIframeOnly(manifest: Awaited<ReturnType<typeof fetchGodotBuildManifest>>) {
+    if (!manifest || !frame) return;
+    if (staleNotice) {
+      staleNotice.textContent = "New build available. Reloading runtime...";
+      staleNotice.classList.remove("hidden");
+    }
+    embedRuntime(versionedGodotIndexPath(manifest), manifest.buildId);
+    updateBuildBadge(manifest.buildId, manifest.commit);
+    window.setTimeout(() => staleNotice?.classList.add("hidden"), 2500);
+  }
+
+  async function pollManifestForStaleBuild() {
+    const manifest = await fetchGodotBuildManifest();
+    if (!manifest || !embeddedBuildId) return;
+    if (manifest.buildId !== embeddedBuildId) {
+      await reloadIframeOnly(manifest);
     }
   }
 
   async function loadEmbed() {
+    await unregisterStaleServiceWorkers();
+
     const manifest = await fetchGodotBuildManifest();
     if (!manifest) {
       showError(
@@ -88,6 +122,7 @@ export function mountGodotRuntimeScreen(root: HTMLElement): void {
       );
       return;
     }
+
     const status = await probeGodotExport();
     if (status === "placeholder") {
       showError(
@@ -101,12 +136,27 @@ export function mountGodotRuntimeScreen(root: HTMLElement): void {
       );
       return;
     }
-    showReady(versionedGodotIndexPath(manifest), manifest.buildId);
+
+    updateBuildBadge(manifest.buildId, manifest.commit);
+    embedRuntime(versionedGodotIndexPath(manifest), manifest.buildId);
+
+    const stored = sessionStorage.getItem(EMBEDDED_BUILD_KEY);
+    if (stored && stored !== manifest.buildId) {
+      await reloadIframeOnly(manifest);
+    }
   }
 
   reloadBtn?.addEventListener("click", () => {
     void loadEmbed();
   });
+
+  window.addEventListener("focus", () => {
+    void pollManifestForStaleBuild();
+  });
+
+  manifestPollTimer = window.setInterval(() => {
+    void pollManifestForStaleBuild();
+  }, 60_000);
 
   void loadEmbed();
 }

@@ -13,9 +13,19 @@ export type GodotBuildManifest = {
   buildId: string;
   commit: string;
   generatedAt: string;
+  bootPath: string;
   runtimePath: string;
   rescueRuntimePath: string;
 };
+
+export function shortCommitSha(commit: string): string {
+  return commit.slice(0, 7);
+}
+
+export function godotBootPath(manifest: GodotBuildManifest, baseUrl?: string): string {
+  const boot = manifest.bootPath || "index.html";
+  return `${godotPublicBase(baseUrl)}${boot}?v=${manifest.buildId}`;
+}
 
 export function godotPublicBase(baseUrl = import.meta.env.BASE_URL ?? "/"): string {
   const base = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
@@ -31,7 +41,7 @@ export function godotManifestPath(baseUrl = import.meta.env.BASE_URL ?? "/"): st
 }
 
 export function versionedGodotIndexPath(manifest: GodotBuildManifest, baseUrl?: string): string {
-  return `${godotIndexPath(baseUrl)}?v=${manifest.buildId}`;
+  return godotBootPath(manifest, baseUrl);
 }
 
 export function classifyGodotExportHtml(html: string): GodotExportStatus {
@@ -75,6 +85,9 @@ export async function fetchGodotBuildManifest(
     const data = (await res.json()) as GodotBuildManifest;
     if (!data?.buildId || !data?.runtimePath) {
       return null;
+    }
+    if (!data.bootPath) {
+      data.bootPath = "index.html";
     }
     return data;
   } catch {
