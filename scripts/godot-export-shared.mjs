@@ -63,6 +63,19 @@ export function listGodotExportFiles(dir) {
   };
 }
 
+export function isBootShellHtml(html) {
+  return (
+    html.includes("runtime/index.html") &&
+    html.includes("rescue-runtime.js") &&
+    (html.includes("AARescueRuntime") || /rescue runtime/i.test(html))
+  );
+}
+
+/** Validates a raw Godot Web export directory (runtime/index.html + wasm/pck/js). */
+export function validateGodotRuntimeDir(dir, { label = dir } = {}) {
+  return validateGodotExportDir(dir, { label });
+}
+
 export function validateGodotExportDir(dir, { label = dir } = {}) {
   const errors = [];
   const indexHtml = path.join(dir, "index.html");
@@ -89,6 +102,47 @@ export function validateGodotExportDir(dir, { label = dir } = {}) {
   }
 
   return { ok: errors.length === 0, errors, files };
+}
+
+/** Validates boot shell + rescue runtime + nested raw Godot export. */
+export function validateGodotPagesExportRoot(rootDir, { label = rootDir } = {}) {
+  const errors = [];
+  const runtimeDir = path.join(rootDir, "runtime");
+  const runtimeResult = validateGodotRuntimeDir(runtimeDir, { label: runtimeDir });
+  errors.push(...runtimeResult.errors);
+
+  const bootShell = path.join(rootDir, "index.html");
+  const rescueRuntime = path.join(rootDir, "rescue-runtime.js");
+
+  if (!fs.existsSync(bootShell)) {
+    errors.push(`${label}: missing boot shell index.html`);
+  } else {
+    const bootHtml = fs.readFileSync(bootShell, "utf8");
+    for (const marker of PLACEHOLDER_MARKERS) {
+      if (bootHtml.includes(marker)) {
+        errors.push(`${label}: boot shell contains placeholder marker (${marker})`);
+      }
+    }
+    if (!isBootShellHtml(bootHtml)) {
+      errors.push(`${label}: boot shell must reference runtime/index.html and rescue-runtime.js`);
+    }
+  }
+
+  if (!fs.existsSync(rescueRuntime)) {
+    errors.push(`${label}: missing rescue-runtime.js`);
+  } else {
+    const rescueJs = fs.readFileSync(rescueRuntime, "utf8");
+    if (!rescueJs.includes("AARescueRuntime")) {
+      errors.push(`${label}: rescue-runtime.js missing AARescueRuntime mount`);
+    }
+  }
+
+  return {
+    ok: errors.length === 0,
+    errors,
+    runtime: runtimeResult,
+    files: runtimeResult.files,
+  };
 }
 
 export function godotExportTemplatesDir(version = DEFAULT_GODOT_VERSION) {

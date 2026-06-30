@@ -7,7 +7,7 @@ import {
   godotExportTemplatesDir,
   resolveGodotBin,
   templatesInstalled,
-  validateGodotExportDir,
+  validateGodotPagesExportRoot,
 } from "./godot-export-shared.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -176,128 +176,14 @@ function writeBootShell() {
 }
 
 function writeRescueRuntime() {
-  const js = String.raw`(() => {
-  const fighters = [
-    { id: 'ember', name: 'Ember Vale', color: '#ff5b2d', aura: '#ff9a42' },
-    { id: 'juno', name: 'Juno Spark', color: '#ffd93a', aura: '#fff17c' },
-  ];
-
-  function mount(root) {
-    root.innerHTML = '';
-    const canvas = document.createElement('canvas');
-    canvas.width = 1280;
-    canvas.height = 720;
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
-    canvas.style.display = 'block';
-    canvas.style.background = '#080816';
-    root.appendChild(canvas);
-    const ctx = canvas.getContext('2d');
-    const keys = new Set();
-    const players = [
-      makePlayer(260, fighters[0], { left: 'KeyA', right: 'KeyD', jump: 'KeyW', jump2: 'Space', attack: 'KeyJ', charge: 'KeyF' }),
-      makePlayer(930, fighters[1], { left: 'ArrowLeft', right: 'ArrowRight', jump: 'ArrowUp', jump2: 'Numpad0', attack: 'Numpad1', charge: 'Slash' }),
-    ];
-    let hitFlash = 0;
-
-    function makePlayer(x, fighter, controls) {
-      return { x, y: 470, vx: 0, vy: 0, w: 42, h: 92, face: 1, jumps: 0, grounded: true, attack: 0, hitstun: 0, damage: 0, aura: 0, charging: false, fighter, controls };
-    }
-
-    window.addEventListener('keydown', (e) => { keys.add(e.code); if (['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code)) e.preventDefault(); });
-    window.addEventListener('keyup', (e) => keys.delete(e.code));
-
-    function stepPlayer(p, other) {
-      const c = p.controls;
-      const left = keys.has(c.left);
-      const right = keys.has(c.right);
-      const jump = keys.has(c.jump) || keys.has(c.jump2);
-      const attack = keys.has(c.attack);
-      p.charging = keys.has(c.charge);
-
-      if (p.hitstun > 0) p.hitstun--;
-      if (p.attack > 0) p.attack--;
-      if (p.charging) p.aura = Math.min(100, p.aura + 0.7);
-
-      if (p.hitstun <= 0) {
-        const accel = p.grounded ? 1.5 : 0.82;
-        if (left) { p.vx -= accel; p.face = -1; }
-        if (right) { p.vx += accel; p.face = 1; }
-        if (!left && !right && p.grounded) p.vx *= 0.78;
-        p.vx = Math.max(-9, Math.min(9, p.vx));
-        if (jump && !p._jumpHeld && (p.grounded || p.jumps < 2)) {
-          p.vy = p.grounded ? -24 : -21;
-          p.grounded = false;
-          p.jumps++;
-        }
-        if (attack && p.attack <= 0) p.attack = 16;
-      }
-      p._jumpHeld = jump;
-
-      p.vy += 1.05;
-      p.x += p.vx;
-      p.y += p.vy;
-      if (p.y >= 470) { p.y = 470; p.vy = 0; p.grounded = true; p.jumps = 0; }
-      if (p.x < 80) { p.x = 80; p.vx = 0; }
-      if (p.x > 1200) { p.x = 1200; p.vx = 0; }
-
-      if (p.attack === 8) {
-        const hx = p.x + p.face * 64;
-        if (Math.abs(hx - other.x) < 70 && Math.abs(p.y - other.y) < 95) {
-          other.damage += 8;
-          other.hitstun = 12;
-          other.vx = p.face * (8 + other.damage * 0.06);
-          other.vy = -9 - other.damage * 0.025;
-          hitFlash = 8;
-        }
-      }
-    }
-
-    function drawFighter(p) {
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.scale(p.face, 1);
-      if (p.aura > 5) {
-        ctx.globalAlpha = 0.28 + 0.25 * Math.sin(performance.now() / 80);
-        ctx.strokeStyle = p.fighter.aura;
-        ctx.lineWidth = 5;
-        ctx.beginPath(); ctx.ellipse(0, -46, 54 + p.aura * 0.25, 76 + p.aura * 0.25, 0, 0, Math.PI * 2); ctx.stroke();
-        ctx.globalAlpha = 1;
-      }
-      ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.beginPath(); ctx.ellipse(0, 14, 46, 10, 0, 0, Math.PI * 2); ctx.fill();
-      const recoil = p.hitstun > 0 ? -0.35 : 0;
-      ctx.rotate(recoil);
-      ctx.fillStyle = p.fighter.color;
-      ctx.fillRect(-22, -78, 44, 58);
-      ctx.beginPath(); ctx.arc(0, -96, 20, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = '#111225';
-      ctx.fillRect(-19, -20, 15, 42); ctx.fillRect(4, -20, 15, 42);
-      const swing = p.attack > 0 ? Math.sin((16 - p.attack) / 16 * Math.PI) : 0;
-      ctx.strokeStyle = p.fighter.color; ctx.lineWidth = 12; ctx.lineCap = 'round';
-      ctx.beginPath(); ctx.moveTo(20, -66); ctx.lineTo(54 + swing * 48, -62 + swing * 10); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(-20, -66); ctx.lineTo(-42, -48); ctx.stroke();
-      if (p.attack > 0) { ctx.strokeStyle = p.fighter.aura; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(70, -60, 34, -0.9, 0.9); ctx.stroke(); }
-      ctx.restore();
-    }
-
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const g = ctx.createLinearGradient(0, 0, 0, canvas.height); g.addColorStop(0, '#16163b'); g.addColorStop(1, '#070814'); ctx.fillStyle = g; ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#2fe0d3'; ctx.fillRect(70, 500, 1140, 28); ctx.fillStyle = '#ff456d'; ctx.fillRect(70, 492, 1140, 10);
-      if (hitFlash > 0) { ctx.globalAlpha = hitFlash / 12; ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, canvas.width, canvas.height); ctx.globalAlpha = 1; hitFlash--; }
-      players.forEach((p, i) => { ctx.fillStyle = '#fff'; ctx.font = '18px Inter, sans-serif'; ctx.fillText(`${p.fighter.name} ${Math.round(p.damage)}% Aura ${Math.round(p.aura)}%`, i === 0 ? 32 : 850, 42); });
-      drawFighter(players[0]); drawFighter(players[1]);
-      ctx.fillStyle = '#9aa0c3'; ctx.font = '14px Inter, sans-serif'; ctx.fillText('RESCUE RUNTIME: P1 A/D W/Space J F · P2 arrows/Numpad0 Numpad1 /', 32, 690);
-    }
-
-    function loop() {
-      stepPlayer(players[0], players[1]); stepPlayer(players[1], players[0]); draw(); requestAnimationFrame(loop);
-    }
-    loop();
-  }
-
-  window.AARescueRuntime = { mount };
-})();`;
+  const js = [
+    "(()=>{",
+    "function mount(root){root.innerHTML='';const c=document.createElement('canvas');c.width=1280;c.height=720;c.style.width='100%';c.style.height='100%';c.style.display='block';root.appendChild(c);const x=c.getContext('2d');const keys=new Set();const fs=[{name:'Ember Vale',color:'#ff5b2d',aura:'#ff9a42'},{name:'Juno Spark',color:'#ffd93a',aura:'#fff17c'}];function p(px,f,ctl){return{x:px,y:470,vx:0,vy:0,face:1,jumps:0,grounded:true,attack:0,hitstun:0,damage:0,aura:0,fighter:f,ctl:ctl}}const ps=[p(260,fs[0],{l:'KeyA',r:'KeyD',j:'KeyW',j2:'Space',a:'KeyJ',ch:'KeyF'}),p(930,fs[1],{l:'ArrowLeft',r:'ArrowRight',j:'ArrowUp',j2:'Numpad0',a:'Numpad1',ch:'Slash'})];let flash=0;addEventListener('keydown',e=>{keys.add(e.code);if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault()});addEventListener('keyup',e=>keys.delete(e.code));function step(a,b){const ct=a.ctl,j=keys.has(ct.j)||keys.has(ct.j2);if(a.hitstun>0)a.hitstun--;if(a.attack>0)a.attack--;if(keys.has(ct.ch))a.aura=Math.min(100,a.aura+.7);if(a.hitstun<=0){const ac=a.grounded?1.5:.82;if(keys.has(ct.l)){a.vx-=ac;a.face=-1}if(keys.has(ct.r)){a.vx+=ac;a.face=1}if(!keys.has(ct.l)&&!keys.has(ct.r)&&a.grounded)a.vx*=.78;a.vx=Math.max(-9,Math.min(9,a.vx));if(j&&!a.jumpHeld&&(a.grounded||a.jumps<2)){a.vy=a.grounded?-24:-21;a.grounded=false;a.jumps++}if(keys.has(ct.a)&&a.attack<=0)a.attack=16}a.jumpHeld=j;a.vy+=1.05;a.x+=a.vx;a.y+=a.vy;if(a.y>=470){a.y=470;a.vy=0;a.grounded=true;a.jumps=0}a.x=Math.max(80,Math.min(1200,a.x));if(a.attack===8){const hx=a.x+a.face*64;if(Math.abs(hx-b.x)<70&&Math.abs(a.y-b.y)<95){b.damage+=8;b.hitstun=12;b.vx=a.face*(8+b.damage*.06);b.vy=-9-b.damage*.025;flash=8}}}",
+    "function drawP(a){x.save();x.translate(a.x,a.y);x.scale(a.face,1);if(a.aura>5){x.globalAlpha=.28+.25*Math.sin(performance.now()/80);x.strokeStyle=a.fighter.aura;x.lineWidth=5;x.beginPath();x.ellipse(0,-46,54+a.aura*.25,76+a.aura*.25,0,0,Math.PI*2);x.stroke();x.globalAlpha=1}x.fillStyle='rgba(0,0,0,.35)';x.beginPath();x.ellipse(0,14,46,10,0,0,Math.PI*2);x.fill();x.rotate(a.hitstun>0?-.35:0);x.fillStyle=a.fighter.color;x.fillRect(-22,-78,44,58);x.beginPath();x.arc(0,-96,20,0,Math.PI*2);x.fill();x.fillStyle='#111225';x.fillRect(-19,-20,15,42);x.fillRect(4,-20,15,42);const s=a.attack>0?Math.sin((16-a.attack)/16*Math.PI):0;x.strokeStyle=a.fighter.color;x.lineWidth=12;x.lineCap='round';x.beginPath();x.moveTo(20,-66);x.lineTo(54+s*48,-62+s*10);x.stroke();x.beginPath();x.moveTo(-20,-66);x.lineTo(-42,-48);x.stroke();if(a.attack>0){x.strokeStyle=a.fighter.aura;x.lineWidth=4;x.beginPath();x.arc(70,-60,34,-.9,.9);x.stroke()}x.restore()}",
+    "function draw(){x.clearRect(0,0,c.width,c.height);const g=x.createLinearGradient(0,0,0,c.height);g.addColorStop(0,'#16163b');g.addColorStop(1,'#070814');x.fillStyle=g;x.fillRect(0,0,c.width,c.height);x.fillStyle='#2fe0d3';x.fillRect(70,500,1140,28);x.fillStyle='#ff456d';x.fillRect(70,492,1140,10);if(flash>0){x.globalAlpha=flash/12;x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.globalAlpha=1;flash--}ps.forEach((a,i)=>{x.fillStyle='#fff';x.font='18px Inter, sans-serif';x.fillText(a.fighter.name+' '+Math.round(a.damage)+'% Aura '+Math.round(a.aura)+'%',i===0?32:850,42)});drawP(ps[0]);drawP(ps[1]);x.fillStyle='#9aa0c3';x.font='14px Inter, sans-serif';x.fillText('RESCUE RUNTIME: P1 A/D W/Space J F · P2 arrows/Numpad0 Numpad1 /',32,690)}function loop(){step(ps[0],ps[1]);step(ps[1],ps[0]);draw();requestAnimationFrame(loop)}loop()}",
+    "window.AARescueRuntime={mount};",
+    "})();",
+  ].join("\n");
   fs.writeFileSync(rescueRuntimePath, js);
 }
 
@@ -338,9 +224,9 @@ patchRuntimeIndexForPages(runtimeExportIndex);
 writeRescueRuntime();
 writeBootShell();
 
-const result = validateGodotExportDir(runtimeExportDir, { label: runtimeExportDir });
+const result = validateGodotPagesExportRoot(godotPublicRoot, { label: godotPublicRoot });
 if (!result.ok) {
-  console.error("Export completed but runtime output is invalid:");
+  console.error("Export completed but Pages output is invalid:");
   for (const err of result.errors) {
     console.error(`  - ${err}`);
   }

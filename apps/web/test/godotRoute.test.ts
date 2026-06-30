@@ -28,12 +28,15 @@ describe("godot route", () => {
     assert.match(src, /probeGodotExport/);
   });
 
-  it("public godot export has wasm pck and js artifacts", () => {
-    const godotDir = path.join(webRoot, "public/godot");
-    const files = fs.readdirSync(godotDir);
+  it("public godot boot shell and runtime artifacts exist after export", () => {
+    assert.ok(fs.existsSync(path.join(webRoot, "public/godot/index.html")));
+    assert.ok(fs.existsSync(path.join(webRoot, "public/godot/rescue-runtime.js")));
+    const runtimeDir = path.join(webRoot, "public/godot/runtime");
+    const files = fs.readdirSync(runtimeDir);
     assert.ok(files.some((f) => f.endsWith(".wasm")));
     assert.ok(files.some((f) => f.endsWith(".pck")));
     assert.ok(files.some((f) => f.endsWith(".js")));
+    assert.ok(files.some((f) => f === "index.html"));
   });
 
   it("godot project file exists", () => {

@@ -47,6 +47,9 @@ jobs:
       - name: Export Godot Web build
         run: npm run godot:export:web
 
+      - name: Assert exported public Godot artifact
+        run: GODOT_EXPORT_ROOT=apps/web/public/godot npm run assert:godot-export
+
       - name: Quality gate
         run: npm run quality
 
