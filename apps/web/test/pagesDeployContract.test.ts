@@ -21,16 +21,20 @@ describe("Pages deploy contract", () => {
     assert.match(rootPkg.scripts["build:pages"], /finalize:pages/);
   });
 
-  it("pages workflow exports Godot and validates wasm/pck/js in dist", () => {
+  it("pages workflow exports Godot and validates nested runtime in dist", () => {
     const workflow = fs.readFileSync(path.join(repoRoot, ".github/workflows/pages.yml"), "utf8");
     assert.doesNotMatch(workflow, /grep.*Start Match/);
     assert.doesNotMatch(workflow, /grep.*Play Match/);
     assert.doesNotMatch(workflow, /grep.*Impact Dummy Derby/);
     assert.match(workflow, /godot:export:web/);
     assert.match(workflow, /assert:godot-export/);
+    assert.match(workflow, /GODOT_EXPORT_ROOT=apps\/web\/public\/godot/);
     assert.match(workflow, /path: apps\/web\/dist/);
     assert.match(workflow, /test -f apps\/web\/dist\/index\.html/);
     assert.match(workflow, /test -f apps\/web\/dist\/godot\/index\.html/);
+    assert.match(workflow, /test -f apps\/web\/dist\/godot\/rescue-runtime\.js/);
+    assert.match(workflow, /test -f apps\/web\/dist\/godot\/runtime\/index\.html/);
+    assert.match(workflow, /apps\/web\/dist\/godot\/runtime/);
     assert.match(workflow, /\.wasm/);
     assert.match(workflow, /\.pck/);
   });
