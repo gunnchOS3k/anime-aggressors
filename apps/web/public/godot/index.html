@@ -27,7 +27,8 @@
     #fallback { display: none; margin-top: 18px; gap: 10px; flex-wrap: wrap; }
     #fallback.visible { display: flex; }
     #details { margin-top: 12px; color: #9aa0c3; font-size: 12px; white-space: pre-wrap; }
-    @keyframes pulse { from { transform: translateX(-28%); } to { transform: translateX(190%); } }
+    #rescue-badge { display: none; position: fixed; top: 62px; left: 12px; z-index: 9999; padding: 8px 12px; border-radius: 8px; background: rgba(120, 20, 40, 0.92); border: 1px solid #ff5577; color: #ffd7df; font-size: 11px; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase; }
+    #rescue-badge.visible { display: block; }
   </style>
 </head>
 <body>
@@ -36,19 +37,19 @@
       <div id="brand"><strong>ANIME AGGRESSORS</strong><span>Godot combat runtime boot shell</span></div>
       <div id="actions">
         <button id="reload">Reload Runtime</button>
-        <button id="rescue" class="primary">Launch Rescue Runtime</button>
+        <button id="rescue">Launch Rescue Runtime (Fallback)</button>
       </div>
     </header>
     <main id="runtime-wrap">
-      <iframe id="runtime" title="Anime Aggressors Godot Runtime" src="runtime/index.html"></iframe>
+      <iframe id="runtime" title="Anime Aggressors Godot Runtime" src="runtime/3430261/index.html?v=3430261"></iframe>
       <div id="overlay">
         <section id="panel">
           <div id="status">Booting Godot runtime</div>
           <h1>Entering the Arena</h1>
-          <p>The game is loading the Godot Web runtime, project package, and combat scene. If the engine fails to report ready, the page will expose a playable rescue runtime instead of leaving you on a blank gradient.</p>
+          <p>The game is loading the Godot Web runtime, project package, and combat scene. If the engine fails to report ready within 12 seconds, you may launch the labeled rescue fallback — it is diagnostic only, not the production fighter scene.</p>
           <div id="progress"><div></div></div>
           <div id="fallback">
-            <button id="fallback-rescue" class="primary">Launch Rescue Combat Runtime</button>
+            <button id="fallback-rescue" class="primary">Launch Rescue Runtime (Fallback)</button>
             <button id="fallback-open">Open Raw Godot Export</button>
           </div>
           <div id="details"></div>
@@ -56,8 +57,10 @@
       </div>
     </main>
   </div>
-  <script src="rescue-runtime.js"></script>
+  <div id="rescue-badge">RESCUE RUNTIME — NOT FINAL GODOT BUILD</div>
+  <script src="rescue-runtime.js?v=3430261"></script>
   <script>
+    const BUILD_ID = "3430261";
     const frame = document.getElementById('runtime');
     const overlay = document.getElementById('overlay');
     const status = document.getElementById('status');
@@ -78,6 +81,11 @@
       ready = true;
       overlay.remove();
       frame.remove();
+      document.getElementById('rescue-badge').classList.add('visible');
+      const notice = document.createElement('div');
+      notice.style.cssText = 'position:fixed;bottom:12px;left:12px;right:12px;padding:12px;background:rgba(12,12,28,.92);border:1px solid rgba(255,85,119,.5);border-radius:10px;color:#ffd7df;font-size:13px;z-index:9999;';
+      notice.textContent = 'The raw Godot runtime failed to report ready. This fallback proves the page is alive, but it is not the production fighter scene.';
+      document.body.appendChild(notice);
       window.AARescueRuntime?.mount(document.getElementById('runtime-wrap'));
     }
 
@@ -98,7 +106,7 @@
     document.getElementById('rescue').addEventListener('click', launchRescue);
     document.getElementById('fallback-rescue').addEventListener('click', launchRescue);
     document.getElementById('fallback-open').addEventListener('click', () => {
-      window.open('runtime/index.html', '_blank', 'noopener');
+      window.open('runtime/3430261/index.html?v=3430261', '_blank', 'noopener');
     });
 
     setTimeout(() => {

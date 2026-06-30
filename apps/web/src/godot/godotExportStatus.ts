@@ -7,11 +7,31 @@ export const GODOT_PLACEHOLDER_MARKERS = [
   "This folder hosts the",
 ] as const;
 
-export type GodotExportStatus = "ready" | "missing" | "placeholder";
+export type GodotExportStatus = "ready" | "missing" | "placeholder" | "manifest-missing";
+
+export type GodotBuildManifest = {
+  buildId: string;
+  commit: string;
+  generatedAt: string;
+  runtimePath: string;
+  rescueRuntimePath: string;
+};
+
+export function godotPublicBase(baseUrl = import.meta.env.BASE_URL ?? "/"): string {
+  const base = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
+  return `${base}godot/`;
+}
 
 export function godotIndexPath(baseUrl = import.meta.env.BASE_URL ?? "/"): string {
-  const base = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
-  return `${base}godot/index.html`;
+  return `${godotPublicBase(baseUrl)}index.html`;
+}
+
+export function godotManifestPath(baseUrl = import.meta.env.BASE_URL ?? "/"): string {
+  return `${godotPublicBase(baseUrl)}build-manifest.json`;
+}
+
+export function versionedGodotIndexPath(manifest: GodotBuildManifest, baseUrl?: string): string {
+  return `${godotIndexPath(baseUrl)}?v=${manifest.buildId}`;
 }
 
 export function classifyGodotExportHtml(html: string): GodotExportStatus {
@@ -23,7 +43,10 @@ export function classifyGodotExportHtml(html: string): GodotExportStatus {
       return "placeholder";
     }
   }
-  const looksLikeBootShell = html.includes("runtime/index.html") && html.includes("rescue-runtime.js");
+  const looksLikeBootShell =
+    html.includes("runtime/") &&
+    html.includes("rescue-runtime.js") &&
+    (html.includes("AARescueRuntime") || /rescue runtime/i.test(html));
   if (looksLikeBootShell) {
     return "ready";
   }
@@ -40,8 +63,31 @@ export function classifyGodotExportHtml(html: string): GodotExportStatus {
   return "ready";
 }
 
+export async function fetchGodotBuildManifest(
+  baseUrl?: string,
+): Promise<GodotBuildManifest | null> {
+  const url = `${godotManifestPath(baseUrl)}?ts=${Date.now()}`;
+  try {
+    const res = await fetch(url, { method: "GET", cache: "no-store" });
+    if (!res.ok) {
+      return null;
+    }
+    const data = (await res.json()) as GodotBuildManifest;
+    if (!data?.buildId || !data?.runtimePath) {
+      return null;
+    }
+    return data;
+  } catch {
+    return null;
+  }
+}
+
 export async function probeGodotExport(baseUrl?: string): Promise<GodotExportStatus> {
-  const url = godotIndexPath(baseUrl);
+  const manifest = await fetchGodotBuildManifest(baseUrl);
+  if (!manifest) {
+    return "manifest-missing";
+  }
+  const url = versionedGodotIndexPath(manifest, baseUrl);
   try {
     const res = await fetch(url, { method: "GET", cache: "no-store" });
     if (!res.ok) {

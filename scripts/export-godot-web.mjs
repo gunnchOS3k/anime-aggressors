@@ -6,23 +6,34 @@ import {
   DEFAULT_GODOT_VERSION,
   godotExportTemplatesDir,
   resolveGodotBin,
+  resolveGodotBuildId,
   templatesInstalled,
   validateGodotPagesExportRoot,
 } from "./godot-export-shared.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const godotDir = path.join(repoRoot, "game/godot");
+const buildId = resolveGodotBuildId(repoRoot);
+const fullCommit = process.env.GITHUB_SHA ?? (() => {
+  try {
+    return execSync("git rev-parse HEAD", { encoding: "utf8", cwd: repoRoot }).trim();
+  } catch {
+    return buildId;
+  }
+})();
 
 // Public Pages path layout:
-//   /godot/index.html              = stable boot shell with timeout/error UX
-//   /godot/rescue-runtime.js       = playable emergency fallback, never a blank screen
-//   /godot/runtime/index.html      = raw Godot web export
-//   /godot/runtime/index.wasm/.pck = raw Godot engine/project payloads
+//   /godot/index.html                    = boot shell with cache-busted URLs
+//   /godot/build-manifest.json           = deploy identity for #/godot embed
+//   /godot/rescue-runtime.js               = diagnostic fallback (not final gameplay)
+//   /godot/runtime/<buildId>/index.html    = raw Godot web export (versioned folder)
 const godotPublicRoot = path.join(repoRoot, "apps/web/public/godot");
-const runtimeExportDir = path.join(godotPublicRoot, "runtime");
+const runtimeExportDir = path.join(godotPublicRoot, "runtime", buildId);
 const runtimeExportIndex = path.join(runtimeExportDir, "index.html");
+const runtimePublicPath = `runtime/${buildId}/index.html`;
 const bootShellIndex = path.join(godotPublicRoot, "index.html");
 const rescueRuntimePath = path.join(godotPublicRoot, "rescue-runtime.js");
+const manifestPath = path.join(godotPublicRoot, "build-manifest.json");
 
 function clearGodotPublicRoot() {
   fs.rmSync(godotPublicRoot, { recursive: true, force: true });
@@ -40,27 +51,64 @@ function installTemplates(godotBin, version) {
   console.warn("Install via Godot Editor → Manage Export Templates, or run scripts/install-godot-templates.sh");
 }
 
+function writeBuildManifest() {
+  const manifest = {
+    buildId,
+    commit: fullCommit,
+    generatedAt: new Date().toISOString(),
+    runtimePath: runtimePublicPath,
+    rescueRuntimePath: "rescue-runtime.js",
+  };
+  fs.writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+}
+
 function patchRuntimeIndexForPages(indexPath) {
   let html = fs.readFileSync(indexPath, "utf8");
+  const v = `?v=${buildId}`;
 
-  // GitHub Pages cannot provide COOP/COEP headers. Threads are disabled in the export preset,
-  // so the runtime should not insist on cross-origin isolation.
   html = html.replace('"ensureCrossOriginIsolationHeaders":true', '"ensureCrossOriginIsolationHeaders":false');
+  html = html.replace(/src="index\.js"/, `src="index.js${v}"`);
+  html = html.replace(/href="index\.icon\.png"/, `href="index.icon.png${v}"`);
+  html = html.replace(/href="index\.apple-touch-icon\.png"/, `href="index.apple-touch-icon.png${v}"`);
+  html = html.replace(/src="index\.png"/, `src="index.png${v}"`);
 
-  // Let the outer boot shell know whether Godot actually started or failed.
+  if (html.includes('"executable":"index"')) {
+    html = html.replace('"executable":"index"', `"executable":"index","fileVersion":"${buildId}"`);
+  }
+
   html = html.replace(
     "setStatusMode('hidden');",
-    "setStatusMode('hidden');\n\t\t\twindow.parent?.postMessage({ type: 'aa:godot-ready' }, '*');"
+    "setStatusMode('hidden');\n\t\t\tconsole.log('Godot engine started');\n\t\t\twindow.parent?.postMessage({ type: 'aa:godot-ready', scene: 'Main', buildId: '" +
+      buildId +
+      "' }, '*');",
   );
   html = html.replace(
     "function displayFailureNotice(err) {",
-    "function displayFailureNotice(err) {\n\t\ttry { window.parent?.postMessage({ type: 'aa:godot-error', message: String(err && err.message ? err.message : err) }, '*'); } catch (_) {}"
+    "function displayFailureNotice(err) {\n\t\ttry { window.parent?.postMessage({ type: 'aa:godot-error', message: String(err && err.message ? err.message : err), buildId: '" +
+      buildId +
+      "' }, '*'); } catch (_) {}",
+  );
+  html = html.replace(
+    "engine.startGame({",
+    "console.log('Godot project package loading'); engine.startGame({",
   );
 
   fs.writeFileSync(indexPath, html);
+
+  const jsPath = path.join(path.dirname(indexPath), "index.js");
+  if (fs.existsSync(jsPath)) {
+    let js = fs.readFileSync(jsPath, "utf8");
+    js = js.replaceAll(`${buildId}.wasm`, "index.wasm");
+    js = js.replaceAll(`${buildId}.pck`, "index.pck");
+    js = js.replaceAll("index.wasm", `index.wasm${v}`);
+    js = js.replaceAll("index.pck", `index.pck${v}`);
+    fs.writeFileSync(jsPath, js);
+  }
 }
 
 function writeBootShell() {
+  const runtimeSrc = `${runtimePublicPath}?v=${buildId}`;
+  const rescueSrc = `rescue-runtime.js?v=${buildId}`;
   const html = String.raw`<!doctype html>
 <html lang="en">
 <head>
@@ -90,7 +138,8 @@ function writeBootShell() {
     #fallback { display: none; margin-top: 18px; gap: 10px; flex-wrap: wrap; }
     #fallback.visible { display: flex; }
     #details { margin-top: 12px; color: #9aa0c3; font-size: 12px; white-space: pre-wrap; }
-    @keyframes pulse { from { transform: translateX(-28%); } to { transform: translateX(190%); } }
+    #rescue-badge { display: none; position: fixed; top: 62px; left: 12px; z-index: 9999; padding: 8px 12px; border-radius: 8px; background: rgba(120, 20, 40, 0.92); border: 1px solid #ff5577; color: #ffd7df; font-size: 11px; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase; }
+    #rescue-badge.visible { display: block; }
   </style>
 </head>
 <body>
@@ -99,19 +148,19 @@ function writeBootShell() {
       <div id="brand"><strong>ANIME AGGRESSORS</strong><span>Godot combat runtime boot shell</span></div>
       <div id="actions">
         <button id="reload">Reload Runtime</button>
-        <button id="rescue" class="primary">Launch Rescue Runtime</button>
+        <button id="rescue">Launch Rescue Runtime (Fallback)</button>
       </div>
     </header>
     <main id="runtime-wrap">
-      <iframe id="runtime" title="Anime Aggressors Godot Runtime" src="runtime/index.html"></iframe>
+      <iframe id="runtime" title="Anime Aggressors Godot Runtime" src="__RUNTIME_SRC__"></iframe>
       <div id="overlay">
         <section id="panel">
           <div id="status">Booting Godot runtime</div>
           <h1>Entering the Arena</h1>
-          <p>The game is loading the Godot Web runtime, project package, and combat scene. If the engine fails to report ready, the page will expose a playable rescue runtime instead of leaving you on a blank gradient.</p>
+          <p>The game is loading the Godot Web runtime, project package, and combat scene. If the engine fails to report ready within 12 seconds, you may launch the labeled rescue fallback — it is diagnostic only, not the production fighter scene.</p>
           <div id="progress"><div></div></div>
           <div id="fallback">
-            <button id="fallback-rescue" class="primary">Launch Rescue Combat Runtime</button>
+            <button id="fallback-rescue" class="primary">Launch Rescue Runtime (Fallback)</button>
             <button id="fallback-open">Open Raw Godot Export</button>
           </div>
           <div id="details"></div>
@@ -119,8 +168,10 @@ function writeBootShell() {
       </div>
     </main>
   </div>
-  <script src="rescue-runtime.js"></script>
+  <div id="rescue-badge">RESCUE RUNTIME — NOT FINAL GODOT BUILD</div>
+  <script src="__RESCUE_SRC__"></script>
   <script>
+    const BUILD_ID = "__BUILD_ID__";
     const frame = document.getElementById('runtime');
     const overlay = document.getElementById('overlay');
     const status = document.getElementById('status');
@@ -141,6 +192,11 @@ function writeBootShell() {
       ready = true;
       overlay.remove();
       frame.remove();
+      document.getElementById('rescue-badge').classList.add('visible');
+      const notice = document.createElement('div');
+      notice.style.cssText = 'position:fixed;bottom:12px;left:12px;right:12px;padding:12px;background:rgba(12,12,28,.92);border:1px solid rgba(255,85,119,.5);border-radius:10px;color:#ffd7df;font-size:13px;z-index:9999;';
+      notice.textContent = 'The raw Godot runtime failed to report ready. This fallback proves the page is alive, but it is not the production fighter scene.';
+      document.body.appendChild(notice);
       window.AARescueRuntime?.mount(document.getElementById('runtime-wrap'));
     }
 
@@ -161,7 +217,7 @@ function writeBootShell() {
     document.getElementById('rescue').addEventListener('click', launchRescue);
     document.getElementById('fallback-rescue').addEventListener('click', launchRescue);
     document.getElementById('fallback-open').addEventListener('click', () => {
-      window.open('runtime/index.html', '_blank', 'noopener');
+      window.open('__RUNTIME_SRC__', '_blank', 'noopener');
     });
 
     setTimeout(() => {
@@ -171,16 +227,19 @@ function writeBootShell() {
     }, 12000);
   </script>
 </body>
-</html>`;
+</html>`
+    .replaceAll("__RUNTIME_SRC__", runtimeSrc)
+    .replaceAll("__RESCUE_SRC__", rescueSrc)
+    .replaceAll("__BUILD_ID__", buildId);
   fs.writeFileSync(bootShellIndex, html);
 }
 
 function writeRescueRuntime() {
   const js = [
     "(()=>{",
-    "function mount(root){root.innerHTML='';const c=document.createElement('canvas');c.width=1280;c.height=720;c.style.width='100%';c.style.height='100%';c.style.display='block';root.appendChild(c);const x=c.getContext('2d');const keys=new Set();const fs=[{name:'Ember Vale',color:'#ff5b2d',aura:'#ff9a42'},{name:'Juno Spark',color:'#ffd93a',aura:'#fff17c'}];function p(px,f,ctl){return{x:px,y:470,vx:0,vy:0,face:1,jumps:0,grounded:true,attack:0,hitstun:0,damage:0,aura:0,fighter:f,ctl:ctl}}const ps=[p(260,fs[0],{l:'KeyA',r:'KeyD',j:'KeyW',j2:'Space',a:'KeyJ',ch:'KeyF'}),p(930,fs[1],{l:'ArrowLeft',r:'ArrowRight',j:'ArrowUp',j2:'Numpad0',a:'Numpad1',ch:'Slash'})];let flash=0;addEventListener('keydown',e=>{keys.add(e.code);if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault()});addEventListener('keyup',e=>keys.delete(e.code));function step(a,b){const ct=a.ctl,j=keys.has(ct.j)||keys.has(ct.j2);if(a.hitstun>0)a.hitstun--;if(a.attack>0)a.attack--;if(keys.has(ct.ch))a.aura=Math.min(100,a.aura+.7);if(a.hitstun<=0){const ac=a.grounded?1.5:.82;if(keys.has(ct.l)){a.vx-=ac;a.face=-1}if(keys.has(ct.r)){a.vx+=ac;a.face=1}if(!keys.has(ct.l)&&!keys.has(ct.r)&&a.grounded)a.vx*=.78;a.vx=Math.max(-9,Math.min(9,a.vx));if(j&&!a.jumpHeld&&(a.grounded||a.jumps<2)){a.vy=a.grounded?-24:-21;a.grounded=false;a.jumps++}if(keys.has(ct.a)&&a.attack<=0)a.attack=16}a.jumpHeld=j;a.vy+=1.05;a.x+=a.vx;a.y+=a.vy;if(a.y>=470){a.y=470;a.vy=0;a.grounded=true;a.jumps=0}a.x=Math.max(80,Math.min(1200,a.x));if(a.attack===8){const hx=a.x+a.face*64;if(Math.abs(hx-b.x)<70&&Math.abs(a.y-b.y)<95){b.damage+=8;b.hitstun=12;b.vx=a.face*(8+b.damage*.06);b.vy=-9-b.damage*.025;flash=8}}}",
+    "function mount(root){const badge=document.createElement('div');badge.textContent='RESCUE RUNTIME — NOT FINAL GODOT BUILD';badge.style.cssText='position:absolute;top:8px;left:8px;z-index:5;padding:8px 10px;background:rgba(120,20,40,.92);border:1px solid #ff5577;color:#ffd7df;font:bold 11px Inter,sans-serif;letter-spacing:.06em';root.style.position='relative';root.appendChild(badge);const c=document.createElement('canvas');c.width=1280;c.height=720;c.style.width='100%';c.style.height='100%';c.style.display='block';root.appendChild(c);const x=c.getContext('2d');const keys=new Set();const fs=[{name:'Ember Vale',color:'#ff5b2d',aura:'#ff9a42'},{name:'Juno Spark',color:'#ffd93a',aura:'#fff17c'}];function p(px,f,ctl){return{x:px,y:470,vx:0,vy:0,face:1,jumps:0,grounded:true,attack:0,hitstun:0,damage:0,aura:0,fighter:f,ctl:ctl}}const ps=[p(260,fs[0],{l:'KeyA',r:'KeyD',j:'KeyW',j2:'Space',a:'KeyJ',ch:'KeyF'}),p(930,fs[1],{l:'ArrowLeft',r:'ArrowRight',j:'ArrowUp',j2:'Numpad0',a:'Numpad1',ch:'Slash'})];let flash=0;addEventListener('keydown',e=>{keys.add(e.code);if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault()});addEventListener('keyup',e=>keys.delete(e.code));function step(a,b){const ct=a.ctl,j=keys.has(ct.j)||keys.has(ct.j2);if(a.hitstun>0)a.hitstun--;if(a.attack>0)a.attack--;if(keys.has(ct.ch))a.aura=Math.min(100,a.aura+.7);if(a.hitstun<=0){const ac=a.grounded?1.5:.82;if(keys.has(ct.l)){a.vx-=ac;a.face=-1}if(keys.has(ct.r)){a.vx+=ac;a.face=1}if(!keys.has(ct.l)&&!keys.has(ct.r)&&a.grounded)a.vx*=.78;a.vx=Math.max(-9,Math.min(9,a.vx));if(j&&!a.jumpHeld&&(a.grounded||a.jumps<2)){a.vy=a.grounded?-24:-21;a.grounded=false;a.jumps++}if(keys.has(ct.a)&&a.attack<=0)a.attack=16}a.jumpHeld=j;a.vy+=1.05;a.x+=a.vx;a.y+=a.vy;if(a.y>=470){a.y=470;a.vy=0;a.grounded=true;a.jumps=0}a.x=Math.max(80,Math.min(1200,a.x));if(a.attack===8){const hx=a.x+a.face*64;if(Math.abs(hx-b.x)<70&&Math.abs(a.y-b.y)<95){b.damage+=8;b.hitstun=12;b.vx=a.face*(8+b.damage*.06);b.vy=-9-b.damage*.025;flash=8}}}",
     "function drawP(a){x.save();x.translate(a.x,a.y);x.scale(a.face,1);if(a.aura>5){x.globalAlpha=.28+.25*Math.sin(performance.now()/80);x.strokeStyle=a.fighter.aura;x.lineWidth=5;x.beginPath();x.ellipse(0,-46,54+a.aura*.25,76+a.aura*.25,0,0,Math.PI*2);x.stroke();x.globalAlpha=1}x.fillStyle='rgba(0,0,0,.35)';x.beginPath();x.ellipse(0,14,46,10,0,0,Math.PI*2);x.fill();x.rotate(a.hitstun>0?-.35:0);x.fillStyle=a.fighter.color;x.fillRect(-22,-78,44,58);x.beginPath();x.arc(0,-96,20,0,Math.PI*2);x.fill();x.fillStyle='#111225';x.fillRect(-19,-20,15,42);x.fillRect(4,-20,15,42);const s=a.attack>0?Math.sin((16-a.attack)/16*Math.PI):0;x.strokeStyle=a.fighter.color;x.lineWidth=12;x.lineCap='round';x.beginPath();x.moveTo(20,-66);x.lineTo(54+s*48,-62+s*10);x.stroke();x.beginPath();x.moveTo(-20,-66);x.lineTo(-42,-48);x.stroke();if(a.attack>0){x.strokeStyle=a.fighter.aura;x.lineWidth=4;x.beginPath();x.arc(70,-60,34,-.9,.9);x.stroke()}x.restore()}",
-    "function draw(){x.clearRect(0,0,c.width,c.height);const g=x.createLinearGradient(0,0,0,c.height);g.addColorStop(0,'#16163b');g.addColorStop(1,'#070814');x.fillStyle=g;x.fillRect(0,0,c.width,c.height);x.fillStyle='#2fe0d3';x.fillRect(70,500,1140,28);x.fillStyle='#ff456d';x.fillRect(70,492,1140,10);if(flash>0){x.globalAlpha=flash/12;x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.globalAlpha=1;flash--}ps.forEach((a,i)=>{x.fillStyle='#fff';x.font='18px Inter, sans-serif';x.fillText(a.fighter.name+' '+Math.round(a.damage)+'% Aura '+Math.round(a.aura)+'%',i===0?32:850,42)});drawP(ps[0]);drawP(ps[1]);x.fillStyle='#9aa0c3';x.font='14px Inter, sans-serif';x.fillText('RESCUE RUNTIME: P1 A/D W/Space J F · P2 arrows/Numpad0 Numpad1 /',32,690)}function loop(){step(ps[0],ps[1]);step(ps[1],ps[0]);draw();requestAnimationFrame(loop)}loop()}",
+    "function draw(){x.clearRect(0,0,c.width,c.height);const g=x.createLinearGradient(0,0,0,c.height);g.addColorStop(0,'#16163b');g.addColorStop(1,'#070814');x.fillStyle=g;x.fillRect(0,0,c.width,c.height);x.fillStyle='#2fe0d3';x.fillRect(70,500,1140,28);x.fillStyle='#ff456d';x.fillRect(70,492,1140,10);if(flash>0){x.globalAlpha=flash/12;x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.globalAlpha=1;flash--}ps.forEach((a,i)=>{x.fillStyle='#fff';x.font='18px Inter, sans-serif';x.fillText(a.fighter.name+' '+Math.round(a.damage)+'% Aura '+Math.round(a.aura)+'%',i===0?32:850,42)});drawP(ps[0]);drawP(ps[1]);x.fillStyle='#9aa0c3';x.font='14px Inter, sans-serif';x.fillText('DIAGNOSTIC FALLBACK ONLY — not production Godot fighters',32,690)}function loop(){step(ps[0],ps[1]);step(ps[1],ps[0]);draw();requestAnimationFrame(loop)}loop()}",
     "window.AARescueRuntime={mount};",
     "})();",
   ].join("\n");
@@ -223,6 +282,7 @@ try {
 patchRuntimeIndexForPages(runtimeExportIndex);
 writeRescueRuntime();
 writeBootShell();
+writeBuildManifest();
 
 const result = validateGodotPagesExportRoot(godotPublicRoot, { label: godotPublicRoot });
 if (!result.ok) {

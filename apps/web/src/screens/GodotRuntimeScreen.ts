@@ -1,8 +1,10 @@
-import { godotIndexPath, probeGodotExport } from "../godot/godotExportStatus.ts";
+import {
+  fetchGodotBuildManifest,
+  probeGodotExport,
+  versionedGodotIndexPath,
+} from "../godot/godotExportStatus.ts";
 
 export function mountGodotRuntimeScreen(root: HTMLElement): void {
-  const godotUrl = godotIndexPath();
-
   root.innerHTML = `
     <div class="godot-runtime-shell setup-shell">
       <div class="vs-toolbar">
@@ -19,9 +21,10 @@ export function mountGodotRuntimeScreen(root: HTMLElement): void {
           Legacy Web Prototype remains on the main menu for the TypeScript/Three.js build.
         </p>
         <div class="godot-runtime-actions">
-          <a id="godot-open-tab" class="primary-game-cta" href="${godotUrl}" target="_blank" rel="noopener">Open Godot Build</a>
+          <a id="godot-open-tab" class="primary-game-cta" href="#" target="_blank" rel="noopener">Open Godot Build</a>
           <button type="button" id="godot-reload-frame" class="secondary-game-button">Reload Embed</button>
         </div>
+        <p id="godot-build-id" class="godot-runtime-note hidden"></p>
       </div>
       <div id="godot-export-error" class="godot-export-error setup-hero-panel hidden" role="alert"></div>
       <div class="godot-runtime-frame-wrap stage-preview-canvas-wrap">
@@ -29,7 +32,6 @@ export function mountGodotRuntimeScreen(root: HTMLElement): void {
           id="godot-runtime-frame"
           class="godot-runtime-frame hidden"
           title="Anime Aggressors Godot Runtime"
-          src="${godotUrl}"
           allow="fullscreen"
         ></iframe>
       </div>
@@ -51,6 +53,7 @@ export function mountGodotRuntimeScreen(root: HTMLElement): void {
   const errorPanel = root.querySelector("#godot-export-error");
   const openTab = root.querySelector<HTMLAnchorElement>("#godot-open-tab");
   const reloadBtn = root.querySelector("#godot-reload-frame");
+  const buildIdLabel = root.querySelector("#godot-build-id");
 
   function showError(message: string) {
     if (errorPanel) {
@@ -61,39 +64,49 @@ export function mountGodotRuntimeScreen(root: HTMLElement): void {
     openTab?.classList.add("disabled");
   }
 
-  function showReady() {
+  function showReady(embedUrl: string, buildId: string) {
     errorPanel?.classList.add("hidden");
-    frame?.classList.remove("hidden");
+    if (frame) {
+      frame.src = embedUrl;
+      frame.classList.remove("hidden");
+    }
+    if (openTab) {
+      openTab.href = embedUrl;
+      openTab.classList.remove("disabled");
+    }
+    if (buildIdLabel) {
+      buildIdLabel.textContent = `Godot build ${buildId}`;
+      buildIdLabel.classList.remove("hidden");
+    }
   }
 
-  reloadBtn?.addEventListener("click", () => {
-    void probeGodotExport().then((status) => {
-      if (status === "ready" && frame) {
-        frame.src = godotUrl;
-        showReady();
-      } else {
-        showError(
-          status === "placeholder"
-            ? "Placeholder export is deployed. Real Godot export was not built. Run <code>npm run godot:export:web</code>."
-            : "Godot Web export is missing. Run <code>npm run godot:export:web</code>.",
-        );
-      }
-    });
-  });
-
-  void probeGodotExport().then((status) => {
-    if (status === "ready") {
-      showReady();
+  async function loadEmbed() {
+    const manifest = await fetchGodotBuildManifest();
+    if (!manifest) {
+      showError(
+        "Godot build manifest missing. The Pages artifact is incomplete. Run <code>npm run godot:export:web</code> and redeploy.",
+      );
       return;
     }
+    const status = await probeGodotExport();
     if (status === "placeholder") {
       showError(
         "Placeholder export is deployed. Real Godot export was not built. Run <code>npm run godot:export:web</code> with Godot 4.3+.",
       );
       return;
     }
-    showError(
-      "Godot Web export is missing. Run <code>npm run godot:export:web</code> with Godot 4.3+ installed.",
-    );
+    if (status === "missing" || status === "manifest-missing") {
+      showError(
+        "Godot Web export is missing. Run <code>npm run godot:export:web</code> with Godot 4.3+ installed.",
+      );
+      return;
+    }
+    showReady(versionedGodotIndexPath(manifest), manifest.buildId);
+  }
+
+  reloadBtn?.addEventListener("click", () => {
+    void loadEmbed();
   });
+
+  void loadEmbed();
 }

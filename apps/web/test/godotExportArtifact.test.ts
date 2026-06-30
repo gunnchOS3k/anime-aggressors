@@ -6,6 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   isPlaceholderHtml,
+  resolveRuntimeDirFromRoot,
   validateGodotPagesExportRoot,
   validateGodotRuntimeDir,
 } from "../../../scripts/godot-export-shared.mjs";
@@ -13,15 +14,19 @@ import {
 const webRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const repoRoot = path.resolve(webRoot, "../..");
 const publicGodot = path.join(webRoot, "public/godot");
-const publicRuntime = path.join(publicGodot, "runtime");
+const publicRuntime = resolveRuntimeDirFromRoot(publicGodot);
 
 describe("godot export artifact", () => {
-  it("boot shell exists and references runtime + rescue", () => {
+  it("boot shell exists and references versioned runtime + rescue", () => {
     const bootHtml = fs.readFileSync(path.join(publicGodot, "index.html"), "utf8");
-    assert.match(bootHtml, /runtime\/index\.html/);
-    assert.match(bootHtml, /rescue-runtime\.js/);
+    assert.match(bootHtml, /runtime\/[^"']+\/index\.html/);
+    assert.match(bootHtml, /rescue-runtime\.js\?v=/);
     assert.match(bootHtml, /AARescueRuntime|rescue runtime/i);
     assert.doesNotMatch(bootHtml, /Placeholder export page/);
+  });
+
+  it("build-manifest.json exists", () => {
+    assert.ok(fs.existsSync(path.join(publicGodot, "build-manifest.json")));
   });
 
   it("validateGodotRuntimeDir passes on checked-in runtime export", () => {

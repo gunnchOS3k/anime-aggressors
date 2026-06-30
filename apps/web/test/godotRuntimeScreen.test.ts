@@ -16,16 +16,16 @@ describe("GodotRuntimeScreen", () => {
     "utf8",
   );
 
-  it("shows explicit error when export is missing or placeholder", () => {
+  it("shows explicit error when export or manifest is missing", () => {
+    assert.match(screenSrc, /Godot build manifest missing/);
     assert.match(screenSrc, /Godot Web export is missing/);
-    assert.match(screenSrc, /Placeholder export is deployed/);
     assert.match(screenSrc, /godot-export-error/);
   });
 
-  it("hides iframe until real export is detected", () => {
-    assert.match(screenSrc, /probeGodotExport/);
+  it("embeds iframe only after manifest resolves", () => {
+    assert.match(screenSrc, /fetchGodotBuildManifest/);
+    assert.match(screenSrc, /frame\.src = embedUrl/);
     assert.match(screenSrc, /classList\.add\("hidden"\)/);
-    assert.match(screenSrc, /status === "ready"/);
   });
 
   it("does not treat placeholder markers as ready", () => {

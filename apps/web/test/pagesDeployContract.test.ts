@@ -33,8 +33,10 @@ describe("Pages deploy contract", () => {
     assert.match(workflow, /test -f apps\/web\/dist\/index\.html/);
     assert.match(workflow, /test -f apps\/web\/dist\/godot\/index\.html/);
     assert.match(workflow, /test -f apps\/web\/dist\/godot\/rescue-runtime\.js/);
-    assert.match(workflow, /test -f apps\/web\/dist\/godot\/runtime\/index\.html/);
-    assert.match(workflow, /apps\/web\/dist\/godot\/runtime/);
+    assert.match(workflow, /test -f apps\/web\/dist\/godot\/build-manifest\.json/);
+    assert.match(workflow, /find apps\/web\/dist\/godot\/runtime -mindepth 2 -name 'index\.html'/);
+    assert.match(workflow, /validate:godot-cache/);
+    assert.match(workflow, /validate:godot-fighters/);
     assert.match(workflow, /\.wasm/);
     assert.match(workflow, /\.pck/);
   });

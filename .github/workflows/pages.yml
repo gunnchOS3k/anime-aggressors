@@ -50,6 +50,11 @@ jobs:
       - name: Assert exported public Godot artifact
         run: GODOT_EXPORT_ROOT=apps/web/public/godot npm run assert:godot-export
 
+      - name: Validate Godot cache busting and fighter quality
+        run: |
+          GODOT_EXPORT_ROOT=apps/web/public/godot npm run validate:godot-cache
+          npm run validate:godot-fighters
+
       - name: Quality gate
         run: npm run quality
 
@@ -70,11 +75,12 @@ jobs:
           test -f apps/web/dist/404.html
           test -f apps/web/dist/deploy-info.txt
           test -f apps/web/dist/godot/index.html
+          test -f apps/web/dist/godot/build-manifest.json
           test -f apps/web/dist/godot/rescue-runtime.js
-          test -f apps/web/dist/godot/runtime/index.html
-          test -n "$(find apps/web/dist/godot/runtime -maxdepth 1 -name '*.wasm' -print -quit)"
-          test -n "$(find apps/web/dist/godot/runtime -maxdepth 1 -name '*.pck' -print -quit)"
-          test -n "$(find apps/web/dist/godot/runtime -maxdepth 1 -name '*.js' -print -quit)"
+          test -n "$(find apps/web/dist/godot/runtime -mindepth 2 -name 'index.html' -print -quit)"
+          test -n "$(find apps/web/dist/godot/runtime -mindepth 2 -name '*.wasm' -print -quit)"
+          test -n "$(find apps/web/dist/godot/runtime -mindepth 2 -name '*.pck' -print -quit)"
+          test -n "$(find apps/web/dist/godot/runtime -mindepth 2 -name '*.js' -print -quit)"
           if grep -q "No export artifact is checked in yet" apps/web/dist/godot/index.html; then
             echo "Godot placeholder still deployed"
             exit 1
@@ -83,8 +89,8 @@ jobs:
             echo "Godot boot shell missing rescue runtime contract"
             exit 1
           fi
-          if ! grep -q "runtime/index.html" apps/web/dist/godot/index.html; then
-            echo "Godot boot shell missing runtime iframe"
+          if ! grep -q "runtime/" apps/web/dist/godot/index.html; then
+            echo "Godot boot shell missing versioned runtime iframe"
             exit 1
           fi
           if grep -R "https://gunnchos3k.github.io/play" apps/web/dist; then

@@ -12,6 +12,46 @@ export const PLACEHOLDER_MARKERS = [
 
 export const DEFAULT_GODOT_VERSION = process.env.GODOT_VERSION ?? "4.3";
 
+export function resolveGodotBuildId(repoRoot = process.cwd()) {
+  const fullSha = process.env.GITHUB_SHA ?? "";
+  if (fullSha) {
+    return fullSha.slice(0, 12);
+  }
+  try {
+    return execSync("git rev-parse --short HEAD", { encoding: "utf8", cwd: repoRoot }).trim();
+  } catch {
+    return String(Date.now());
+  }
+}
+
+export function readGodotBuildManifest(rootDir) {
+  const manifestPath = path.join(rootDir, "build-manifest.json");
+  if (!fs.existsSync(manifestPath)) {
+    return null;
+  }
+  return JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+}
+
+export function resolveRuntimeDirFromRoot(rootDir) {
+  const manifest = readGodotBuildManifest(rootDir);
+  if (manifest?.runtimePath) {
+    return path.join(rootDir, manifest.runtimePath.replace(/\/index\.html$/, ""));
+  }
+  const runtimeRoot = path.join(rootDir, "runtime");
+  if (!fs.existsSync(runtimeRoot)) {
+    return runtimeRoot;
+  }
+  const entries = fs.readdirSync(runtimeRoot, { withFileTypes: true });
+  const versionDirs = entries
+    .filter((e) => e.isDirectory())
+    .map((e) => e.name)
+    .sort();
+  if (versionDirs.length > 0) {
+    return path.join(runtimeRoot, versionDirs[versionDirs.length - 1]);
+  }
+  return runtimeRoot;
+}
+
 export function resolveGodotBin() {
   if (process.env.GODOT_BIN) {
     return process.env.GODOT_BIN;
@@ -65,7 +105,7 @@ export function listGodotExportFiles(dir) {
 
 export function isBootShellHtml(html) {
   return (
-    html.includes("runtime/index.html") &&
+    (html.includes("runtime/") && html.includes("index.html")) &&
     html.includes("rescue-runtime.js") &&
     (html.includes("AARescueRuntime") || /rescue runtime/i.test(html))
   );
@@ -107,7 +147,20 @@ export function validateGodotExportDir(dir, { label = dir } = {}) {
 /** Validates boot shell + rescue runtime + nested raw Godot export. */
 export function validateGodotPagesExportRoot(rootDir, { label = rootDir } = {}) {
   const errors = [];
-  const runtimeDir = path.join(rootDir, "runtime");
+  const manifestPath = path.join(rootDir, "build-manifest.json");
+  if (!fs.existsSync(manifestPath)) {
+    errors.push(`${label}: missing build-manifest.json`);
+  } else {
+    const manifest = readGodotBuildManifest(rootDir);
+    if (!manifest?.buildId) {
+      errors.push(`${label}: build-manifest.json missing buildId`);
+    }
+    if (!manifest?.runtimePath) {
+      errors.push(`${label}: build-manifest.json missing runtimePath`);
+    }
+  }
+
+  const runtimeDir = resolveRuntimeDirFromRoot(rootDir);
   const runtimeResult = validateGodotRuntimeDir(runtimeDir, { label: runtimeDir });
   errors.push(...runtimeResult.errors);
 
@@ -124,7 +177,10 @@ export function validateGodotPagesExportRoot(rootDir, { label = rootDir } = {}) 
       }
     }
     if (!isBootShellHtml(bootHtml)) {
-      errors.push(`${label}: boot shell must reference runtime/index.html and rescue-runtime.js`);
+      errors.push(`${label}: boot shell must reference versioned runtime and rescue-runtime.js`);
+    }
+    if (!bootHtml.includes("?v=") && !bootHtml.includes("runtime/")) {
+      errors.push(`${label}: boot shell missing cache-busted asset URLs`);
     }
   }
 

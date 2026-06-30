@@ -5,6 +5,7 @@ import { MAIN_MENU_PRIMARY } from "../src/ui/mainMenuConfig.ts";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { resolveRuntimeDirFromRoot } from "../../../scripts/godot-export-shared.mjs";
 
 const webRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -24,14 +25,15 @@ describe("godot route", () => {
   it("GodotRuntimeScreen exists with project-safe embed path", () => {
     const src = fs.readFileSync(path.join(webRoot, "src/screens/GodotRuntimeScreen.ts"), "utf8");
     assert.match(src, /godot-runtime-frame/);
-    assert.match(src, /godotIndexPath/);
-    assert.match(src, /probeGodotExport/);
+    assert.match(src, /versionedGodotIndexPath/);
+    assert.match(src, /fetchGodotBuildManifest/);
   });
 
-  it("public godot boot shell and runtime artifacts exist after export", () => {
+  it("public godot boot shell and versioned runtime artifacts exist after export", () => {
     assert.ok(fs.existsSync(path.join(webRoot, "public/godot/index.html")));
     assert.ok(fs.existsSync(path.join(webRoot, "public/godot/rescue-runtime.js")));
-    const runtimeDir = path.join(webRoot, "public/godot/runtime");
+    assert.ok(fs.existsSync(path.join(webRoot, "public/godot/build-manifest.json")));
+    const runtimeDir = resolveRuntimeDirFromRoot(path.join(webRoot, "public/godot"));
     const files = fs.readdirSync(runtimeDir);
     assert.ok(files.some((f) => f.endsWith(".wasm")));
     assert.ok(files.some((f) => f.endsWith(".pck")));
