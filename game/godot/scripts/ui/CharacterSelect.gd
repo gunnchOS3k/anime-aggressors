@@ -18,6 +18,10 @@ func _ready() -> void:
 	fighter_ids = FighterRoster.get_ids()
 	if fighter_ids.is_empty():
 		fighter_ids = PackedStringArray(["ember-vale"])
+	var ember_idx := fighter_ids.find("ember-vale")
+	var juno_idx := fighter_ids.find("juno-spark")
+	p1_index = ember_idx if ember_idx >= 0 else 0
+	p2_index = juno_idx if juno_idx >= 0 else clampi(p2_index, 0, fighter_ids.size() - 1)
 	p1_index = clampi(p1_index, 0, fighter_ids.size() - 1)
 	p2_index = clampi(p2_index, 0, fighter_ids.size() - 1)
 	_build_ui()

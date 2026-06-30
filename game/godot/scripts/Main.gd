@@ -14,6 +14,7 @@ var derby_mode: ImpactDummyDerby
 var current_route: Route
 
 func _ready() -> void:
+	add_to_group("main_router")
 	character_select = get_node_or_null(character_select_path)
 	battle_scene = get_node_or_null(battle_scene_path)
 	derby_mode = get_node_or_null(derby_mode_path)
@@ -35,6 +36,9 @@ func go_to_character_select(mode: CharacterSelect.Mode = CharacterSelect.Mode.BA
 	if character_select != null:
 		character_select.set_mode(mode)
 	_set_route(Route.CHARACTER_SELECT)
+
+func go_character_select() -> void:
+	go_to_character_select(CharacterSelect.Mode.BATTLE)
 
 func _on_battle_selected(p1_fighter_id: String, p2_fighter_id: String) -> void:
 	if battle_scene != null:

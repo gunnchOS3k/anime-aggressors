@@ -56,6 +56,7 @@ function writeBuildManifest() {
     buildId,
     commit: fullCommit,
     generatedAt: new Date().toISOString(),
+    bootPath: "index.html",
     runtimePath: runtimePublicPath,
     rescueRuntimePath: "rescue-runtime.js",
   };

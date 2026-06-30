@@ -91,8 +91,8 @@ if (!choreographySrc.includes("hit_socket")) {
 }
 
 const fighterScene = fs.readFileSync(path.join(godotRoot, "scenes/Fighter.tscn"), "utf8");
-if (!fighterScene.includes("FighterRig3D.tscn")) {
-  errors.push("Fighter.tscn does not instance FighterRig3D");
+if (!fighterScene.includes("ProductionFighterRig.tscn") && !fighterScene.includes("FighterRig3D.tscn")) {
+  errors.push("Fighter.tscn does not instance a production fighter rig");
 }
 
 if (errors.length > 0) {

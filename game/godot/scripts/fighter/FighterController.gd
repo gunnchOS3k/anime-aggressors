@@ -38,7 +38,7 @@ var damage_percent: float = 0.0
 var hitbox: Hitbox
 var hurtbox: Hurtbox
 var animation_driver: FighterAnimationDriver
-var visual_rig: FighterRig3D
+var visual_rig: ProductionFighterRig
 
 func _ready() -> void:
 	if fighter_stats == null:
@@ -71,7 +71,7 @@ func _ready() -> void:
 		hitbox.deactivate()
 
 	animation_driver = get_node_or_null("FighterAnimationDriver") as FighterAnimationDriver
-	visual_rig = get_node_or_null("VisualRig") as FighterRig3D
+	visual_rig = get_node_or_null("VisualRig") as ProductionFighterRig
 	if visual_rig != null and fighter_stats != null:
 		visual_rig.configure(fighter_stats.fighter_id)
 		visual_rig.set_facing(facing)
