@@ -22,6 +22,8 @@
 
 **Resolved in PR #46:** grab/throw gameplay, 60 Hz move runner, CPU tiers, training tools, aura burst, edge teeter, validation hard gates.
 
+**Resolved in PR #47:** hit resolution double-gate, aura charge ordering, hurt recovery, P2 inputs, debug overlay toggles.
+
 **Completion claim:** Not allowed until BLK-FS001–FS002 resolved and full-scope manual playtest signed.
 
 ---
@@ -34,7 +36,8 @@
 | BLK-G004 | ~~CPU AI is minimal~~ | — | **Closed (PR #46 tiers)** |
 | BLK-G005 | Authored fighter/stage art not integrated | P2 | Open |
 | BLK-G006 | Web Godot export may lag `game-godot/` editor build | P2 | Open |
-| BLK-G007 | Pause menu reloads battle scene (no in-scene pause) | P2 | Open |
+| BLK-G007 | Pause menu reloads battle scene (legacy route; in-battle pause in PR #46) | P2 | Open |
+| BLK-G008 | PR #46 runtime bugs (hits/aura/hurt/P2/debug) | P0 | **Closed (PR #47)** |
 
 ### BLK-G001 — Godot manual playtest checklist unsigned
 

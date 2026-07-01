@@ -4,6 +4,16 @@
 **Runtime:** Godot 4 — `game-godot/`  
 **Last updated:** 2026-07-01
 
+## PR #47 runtime hardening
+
+Fixed gameplay-breaking paths discovered after PR #46 merge:
+
+- Hit damage applies (single `can_hit_target` in resolver)
+- Aura charge works with special+shield held
+- Hurt states recover to idle/fall/hitstun
+- P2 human controls mapped in `project.godot`
+- F2/F6 debug overlays toggle without method errors
+
 ## Implemented (core gate)
 
 - Boot → main menu → mode/ruleset/fighter/stage/versus → countdown → battle → pause → results

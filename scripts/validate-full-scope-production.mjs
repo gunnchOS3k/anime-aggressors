@@ -221,6 +221,63 @@ if (!fighterSrc.includes("aura_burst") || !fighterSrc.includes("AURA_CHARGE")) {
 }
 ok("hit resolver + grab + aura");
 
+// PR #47 runtime hardening gates
+const battleSrc = readGodot("scripts/battle/battle_scene.gd");
+const trainHitSrc = readGodot("scripts/training/training_battle_scene.gd");
+for (const [name, src] of [["battle_scene.gd", battleSrc], ["training_battle_scene.gd", trainHitSrc]]) {
+  if (/can_hit_target\s*\(/.test(src)) {
+    fail(`${name} must not call can_hit_target(); gating belongs in HitResolver.resolve()`);
+  }
+}
+if (!hrSrc.includes("can_hit_target")) {
+  fail("hit_resolver.resolve must gate with can_hit_target()");
+}
+ok("single can_hit_target gating in hit resolver");
+
+const projectGodot = readGodot("project.godot");
+const P2_ACTIONS = ["p2_left", "p2_right", "p2_up", "p2_down", "p2_jump", "p2_attack", "p2_special", "p2_shield", "p2_dodge", "p2_grab"];
+const P1_ACTIONS = ["p1_left", "p1_right", "p1_up", "p1_down", "p1_jump", "p1_attack", "p1_special", "p1_shield", "p1_dodge", "p1_grab"];
+for (const a of P1_ACTIONS) {
+  if (!projectGodot.includes(`${a}=`)) fail(`project.godot missing ${a}`);
+}
+for (const a of P2_ACTIONS) {
+  if (!projectGodot.includes(`${a}=`)) fail(`project.godot missing ${a}`);
+}
+ok("P1/P2 input actions");
+
+if (/not in FighterStates\.is_attack_state/.test(fighterSrc)) {
+  fail("fighter.gd misuses `not in FighterStates.is_attack_state(...)`");
+}
+if (!fighterSrc.includes("not FighterStates.is_attack_state(")) {
+  fail("fighter.gd missing correct is_attack_state boolean check");
+}
+ok("movement attack-state boolean check");
+
+const auraIdx = fighterSrc.indexOf("is_aura_input_held");
+const shieldIdx = fighterSrc.indexOf("_read_shield()");
+const handleActions = fighterSrc.slice(fighterSrc.indexOf("func _handle_actions"), fighterSrc.indexOf("func is_aura_input_held"));
+if (auraIdx < 0 || shieldIdx < 0 || auraIdx > shieldIdx) {
+  fail("aura charge must be checked before shield handling in _handle_actions");
+}
+if (/if _read_shield\(\)[\s\S]{0,120}return[\s\S]{0,400}is_aura_input_held/.test(handleActions)) {
+  fail("shield early return blocks aura charge branch");
+}
+ok("aura input ordering");
+
+if (!smSrc.includes("FighterStates.HURT_LIGHT") || !smSrc.includes("FighterStates.HURT_HEAVY")) {
+  fail("fighter_state_machine missing HURT_LIGHT/HURT_HEAVY recovery");
+}
+ok("hurt state recovery");
+
+const debugHudSrc = readGodot("scripts/debug/debug_hud.gd");
+if (/call_group\([^)]*set_debug_visible/.test(debugHudSrc)) {
+  fail("debug_hud must not call_group set_debug_visible on ColorRect groups");
+}
+if (!debugHudSrc.includes("set_debug_hitboxes") || !debugHudSrc.includes("set_debug_hurtboxes")) {
+  fail("debug_hud must toggle overlays via fighter methods");
+}
+ok("debug overlay toggles");
+
 // CPU tiers
 if (!fs.existsSync(path.join(godotRoot, "scripts/fighters/cpu_controller.gd"))) {
   fail("missing cpu_controller.gd");
