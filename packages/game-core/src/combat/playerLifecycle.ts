@@ -3,6 +3,7 @@ import type { GameRuleset } from "../rulesets.js";
 import { SHIELD_MAX } from "../constants.js";
 import { getCharacterForPlayer } from "../characters.js";
 import { createDefaultAuraState } from "../aura/auraTypes.js";
+import { resetMovementFields } from "../movement/movementTypes.js";
 
 export const RESPAWN_INVULN_FRAMES = 60;
 
@@ -44,4 +45,5 @@ export function resetPlayerAfterRespawn(
   player.wasJumpHeld = false;
   player.shieldHealth = SHIELD_MAX;
   player.onGround = true;
+  resetMovementFields(player);
 }

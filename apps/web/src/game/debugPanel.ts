@@ -43,10 +43,12 @@ export function mountDebugPanel(container: HTMLElement): DebugPanel {
         `  action=${p.actionState} moveFrame=${p.actionFrame} move=${p.currentMoveId}`,
         `  damage=${p.damage}% stocks=${p.stocks} hitstun=${p.hitstunFrames} shield=${p.shieldHealth}`,
         `  onGround=${p.onGround} invuln=${p.invulnFrames}`,
+        `  movement=${p.movementState} plat=${p.currentPlatformId || "—"} ledge=${p.grabbedLedgeId || "—"}`,
+        `  jumpsUsed=${p.jumpsUsed} landingLag=${p.landingLagFrames}`,
       );
       if (info.fighterStateDebug) {
         lines.push(
-          `  jumpsUsed=${p.jumpsUsed} jumpsRemaining=${p.jumpsRemaining} coyote=${p.coyoteFrames} jumpBuf=${p.jumpBufferFrames}`,
+          `  jumpsRemaining=${p.jumpsRemaining} coyote=${p.coyoteFrames} jumpBuf=${p.jumpBufferFrames}`,
           `  auraCharging=${p.aura.charging} hitstop=${info.gameState.hitstopFrames}`,
         );
       }

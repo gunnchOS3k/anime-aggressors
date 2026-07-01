@@ -9,6 +9,7 @@ export const JUMP_TUNING = {
   maxAirJumps: 1,
   shortHopReleaseFrames: 6,
   shortHopVelocityMultiplier: 0.72,
+  jumpSquatFrames: 3,
 } as const;
 
 export function getMaxJumpsForPlayer(player: PlayerState): number {
@@ -34,8 +35,8 @@ export function computeDoubleJumpVelocity(player: PlayerState): number {
   return Math.floor(computeJumpVelocity(player) * 0.94);
 }
 
-export function bufferJumpInput(player: PlayerState, pressed: boolean): void {
-  if (pressed) {
+export function bufferJumpInput(player: PlayerState, justPressed: boolean): void {
+  if (justPressed) {
     player.jumpBufferFrames = JUMP_TUNING.jumpBufferFrames;
   } else if (player.jumpBufferFrames > 0) {
     player.jumpBufferFrames -= 1;
@@ -64,24 +65,49 @@ export function canCoyoteJump(player: PlayerState): boolean {
   return player.coyoteFrames > 0 && player.jumpsUsed === 0;
 }
 
-export type JumpResult = "ground" | "air" | "coyote" | null;
+export type JumpResult = "ground" | "air" | "coyote" | "squat" | null;
+
+/** Queue jump squat before leaving the ground (or coyote window). */
+export function queueJumpSquat(player: PlayerState): boolean {
+  if (!(player.onGround || canCoyoteJump(player))) return false;
+  player.movementState = "jumpSquat";
+  player.jumpSquatFrames = JUMP_TUNING.jumpSquatFrames;
+  player.jumpShortHop = false;
+  player.actionState = "jumping";
+  return true;
+}
+
+/** Advance jump squat; launches when frames reach zero. Returns true while squatting. */
+export function tickJumpSquat(player: PlayerState, jumpHeld: boolean): boolean {
+  if (player.movementState !== "jumpSquat") return false;
+  if (!jumpHeld && player.jumpSquatFrames > 0) {
+    player.jumpShortHop = true;
+  }
+  player.jumpSquatFrames -= 1;
+  if (player.jumpSquatFrames > 0) return true;
+
+  const coyote = !player.onGround;
+  if (coyote) player.coyoteFrames = 0;
+  player.jumpsUsed = 1;
+  player.jumpsRemaining = Math.max(0, getMaxJumpsForPlayer(player) - player.jumpsUsed);
+  const shortHop = player.jumpShortHop || !jumpHeld;
+  player.vy = computeJumpVelocity(player, shortHop);
+  player.onGround = false;
+  player.movementState = "airborne";
+  player.actionState = "jumping";
+  player.actionFrame = 0;
+  player.fastFalling = false;
+  player.jumpHoldFrames = JUMP_TUNING.shortHopReleaseFrames;
+  player.jumpShortHop = false;
+  return false;
+}
 
 export function tryJump(player: PlayerState, input: InputFrame, jumpJustPressed: boolean): JumpResult {
   const wantsJump = jumpJustPressed || consumeJumpBuffer(player);
   if (!wantsJump) return null;
 
   if (player.onGround || canCoyoteJump(player)) {
-    const coyote = !player.onGround;
-    if (coyote) player.coyoteFrames = 0;
-    player.jumpsUsed = 1;
-    player.jumpsRemaining = Math.max(0, getMaxJumpsForPlayer(player) - player.jumpsUsed);
-    player.vy = computeJumpVelocity(player, false);
-    player.onGround = false;
-    player.actionState = "jumping";
-    player.actionFrame = 0;
-    player.fastFalling = false;
-    player.jumpHoldFrames = JUMP_TUNING.shortHopReleaseFrames;
-    return coyote ? "coyote" : "ground";
+    if (queueJumpSquat(player)) return "squat";
   }
 
   const maxAir = getMaxAirJumpsForPlayer(player);
@@ -89,6 +115,7 @@ export function tryJump(player: PlayerState, input: InputFrame, jumpJustPressed:
     player.jumpsUsed = 2;
     player.jumpsRemaining = Math.max(0, getMaxJumpsForPlayer(player) - player.jumpsUsed);
     player.vy = computeDoubleJumpVelocity(player);
+    player.movementState = "airborne";
     player.actionState = "jumping";
     player.actionFrame = 0;
     player.fastFalling = false;

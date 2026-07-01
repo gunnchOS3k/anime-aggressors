@@ -9,6 +9,7 @@ import {
 import { getStage } from "./stages.js";
 import { getStageLayout } from "./stageLayouts.js";
 import { createDefaultAuraState } from "./aura/auraTypes.js";
+import { resetMovementFields } from "./movement/movementTypes.js";
 
 export function simulateFrame(state: GameState, inputs: InputFrame[]): GameState {
   const next = cloneGameState(state);
@@ -131,6 +132,7 @@ export function resetForRematch(state: GameState): GameState {
     p.currentPlatformId = layout.mainPlatformId;
     p.dropThroughFrames = 0;
     p.ignoredPlatformId = "";
+    resetMovementFields(p);
     p.aura = createDefaultAuraState();
     const char = fresh.config.characterIds[i];
     p.characterId = char ?? p.characterId;

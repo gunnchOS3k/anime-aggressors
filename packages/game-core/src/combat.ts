@@ -10,11 +10,12 @@ import {
   MAX_FALL_SPEED,
   SHIELD_MAX,
   FP_SCALE,
+  STAGE_WIDTH,
 } from "./constants.js";
 import { getCharacter, getCharacterForPlayer } from "./characters.js";
 import { getStage } from "./stages.js";
 import { getStageLayout } from "./stageLayouts.js";
-import { resolveStageCollision, beginDropThrough, isPassThroughPlatform, tickDropThrough } from "./stageCollision.js";
+import { resolveStageCollision, tickDropThrough } from "./stageCollision.js";
 import { resetPlayerAfterRespawn } from "./combat/playerLifecycle.js";
 import { elementGameplayEnabled } from "./rulesets.js";
 import { resolveCombatHits, processBlastZoneKOs } from "./combat/hitResolution.js";
@@ -40,14 +41,19 @@ import {
 } from "./aura/auraCharge.js";
 import { createDefaultAuraState } from "./aura/auraTypes.js";
 import {
-  bufferJumpInput,
-  fastFallSpeed,
   resetJumpStateOnLand,
   tickCoyoteTime,
-  tickJumpHold,
-  tryJump,
 } from "./movement/jumpSystem.js";
-import { applyDash, applyHorizontalMovement } from "./movement/applyMovement.js";
+import {
+  afterMovementPhysics,
+  applyFastFallCap,
+  processMovementInput,
+  tickMovementTimers,
+  tickJumpSquatPhase,
+} from "./movement/movementController.js";
+import { applyLandingLag, isMovementLocked } from "./movement/landingLag.js";
+import { tickLedgeHang } from "./movement/ledgeSystem.js";
+import { applyDash } from "./movement/applyMovement.js";
 import {
   scaledHitDamage,
   scaledKnockbackTaken,
@@ -63,8 +69,8 @@ function getLaunchRatio(state: GameState): number {
   return state.config.ruleset?.launchRatio ?? 1;
 }
 
-function applyInputMovement(player: PlayerState, input: InputFrame): void {
-  applyHorizontalMovement(player, input);
+function applyInputMovement(_player: PlayerState, _input: InputFrame): void {
+  // Ground/air movement handled by movementController (Milestone 2).
 }
 
 function clearMoveHitRegistry(player: PlayerState): void {
@@ -72,9 +78,11 @@ function clearMoveHitRegistry(player: PlayerState): void {
 }
 
 function startAction(player: PlayerState, input: InputFrame): void {
+  if (isMovementLocked(player)) return;
   if (player.actionState === "hitstun" || player.actionState === "defeated") return;
   if (player.actionState === "auraCharging") return;
   if (player.actionState === "dodging") return;
+  if (!player.onGround && input.special && player.recoveryUsed) return;
   if (
     (player.actionState === "attacking" || player.actionState === "special") &&
     player.actionFrame > 0
@@ -147,22 +155,30 @@ function startAction(player: PlayerState, input: InputFrame): void {
 
 function integratePhysics(player: PlayerState, stage: GameState["stage"], stageId: string): void {
   const wasOnGround = player.onGround;
+  const wasFastFalling = player.fastFalling;
   const previousY = player.y;
 
-  if (player.actionState !== "shielding") {
-    player.vy += GRAVITY;
-    let maxFall = MAX_FALL_SPEED;
-    if (player.fastFalling && !player.onGround) {
-      maxFall = fastFallSpeed(MAX_FALL_SPEED, player);
-    }
-    if (player.vy > maxFall) player.vy = maxFall;
+  if (player.movementState === "ledgeHang" || player.movementState === "ledgeGetup") {
+    tickCoyoteTime(player, wasOnGround);
+    return;
+  }
+
+  if (player.movementState === "jumpSquat") {
+    return;
   }
 
   player.x += player.vx;
+  const previousVy = player.vy;
   player.y += player.vy;
 
   const layout = getStageLayout(getStage(stageId).layoutId ?? stageId);
   const collision = resolveStageCollision(player, layout, stage.floorY, previousY);
+
+  if (player.actionState !== "shielding") {
+    player.vy += GRAVITY;
+    const maxFall = applyFastFallCap(player);
+    if (player.vy > maxFall) player.vy = maxFall;
+  }
 
   if (collision.landed) {
     const wasAirborne = !wasOnGround;
@@ -171,9 +187,12 @@ function integratePhysics(player: PlayerState, stage: GameState["stage"], stageI
     player.fastFalling = false;
     if (wasAirborne) {
       resetJumpStateOnLand(player);
+      applyLandingLag(player, wasFastFalling);
     }
     if (player.actionState === "jumping" || player.actionState === "falling") {
-      player.actionState = "idle";
+      if (player.landingLagFrames === 0) {
+        player.actionState = "idle";
+      }
     }
   } else {
     player.onGround = false;
@@ -184,8 +203,7 @@ function integratePhysics(player: PlayerState, stage: GameState["stage"], stageI
   }
 
   tickCoyoteTime(player, wasOnGround);
-
-  // Horizontal blast zones are not hard-clamped — crossing triggers stock loss in resolveCombat.
+  afterMovementPhysics(player, layout, wasOnGround, wasFastFalling);
 }
 
 function getPlayerMoveFrameData(player: PlayerState): import("./frameData.js").MoveFrameData | null {
@@ -331,7 +349,11 @@ export function processPlayer(state: GameState, player: PlayerState, input: Inpu
   if (player.actionState === "defeated") return;
 
   tickDropThrough(player);
+  tickMovementTimers(player);
   tickAuraDecay(player);
+
+  const stageDef = getStage(state.config.stageId);
+  const layout = getStageLayout(stageDef.layoutId ?? stageDef.id);
 
   if (input) {
     if (player.actionState === "shielding" && !input.shield) {
@@ -339,43 +361,36 @@ export function processPlayer(state: GameState, player: PlayerState, input: Inpu
       player.shieldHealth = SHIELD_MAX;
     }
 
-    const jumpJustPressed = input.jump && !player.wasJumpHeld;
-    bufferJumpInput(player, input.jump);
-
-    const stageDef = getStage(state.config.stageId);
-    const layout = getStageLayout(stageDef.layoutId ?? stageDef.id);
-    const wantsDropThrough =
-      jumpJustPressed &&
-      input.down &&
-      player.onGround &&
-      player.currentPlatformId !== "" &&
-      isPassThroughPlatform(layout, player.currentPlatformId);
-
-    if (wantsDropThrough) {
-      beginDropThrough(player, player.currentPlatformId);
-    } else if (tryJump(player, input, jumpJustPressed)) {
-      if (player.actionState === "auraCharging" || player.aura.charging) {
-        player.aura.charging = false;
-        player.currentMoveId = "none";
-      }
-    } else if (player.actionState === "auraCharging") {
-      if (!tickAuraWhileCharging(player, input)) {
-        const fighterId = fighterIdFromCharacterId(player.characterId);
-        if (releaseAuraCharge(player) === "super") {
-          const fighterMove = getFighterMove(fighterId, "super");
-          player.currentMoveId = fighterMove?.id ?? "super";
-        }
-      }
+    if (player.movementState === "ledgeHang") {
+      tickLedgeHang(player, layout, input);
     } else {
-      startAction(player, input);
+      tickJumpSquatPhase(player, !!input.jump);
+      if (!isMovementLocked(player) || player.movementState === "jumpSquat") {
+        processMovementInput(player, input, layout, STAGE_WIDTH / 2);
+      } else {
+        player.wasJumpHeld = !!input.jump;
+      }
     }
-    tickJumpHold(player, !!input.jump);
+
+    if (!isMovementLocked(player) && player.movementState !== "recoveryFall") {
+      if (player.actionState === "auraCharging") {
+        if (!tickAuraWhileCharging(player, input)) {
+          const fighterId = fighterIdFromCharacterId(player.characterId);
+          if (releaseAuraCharge(player) === "super") {
+            const fighterMove = getFighterMove(fighterId, "super");
+            player.currentMoveId = fighterMove?.id ?? "super";
+          }
+        }
+      } else {
+        startAction(player, input);
+      }
+    }
     applyInputMovement(player, input);
-    if (!player.onGround && input.down) {
-      player.fastFalling = true;
-    }
   } else {
     if (player.jumpBufferFrames > 0) player.jumpBufferFrames -= 1;
+    if (player.movementState === "ledgeHang") {
+      tickLedgeHang(player, layout, undefined);
+    }
   }
 
   tickActionState(state, player);

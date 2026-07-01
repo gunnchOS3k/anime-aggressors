@@ -6,6 +6,7 @@ import {
   DEFAULT_RULESET,
   getDefaultCreatedFighter,
   processPlayer,
+  JUMP_TUNING,
 } from "../src/index.js";
 import type { InputFrame } from "../src/types.js";
 
@@ -38,6 +39,9 @@ describe("aura charge does not block jump", () => {
     assert.equal(p.actionState, "auraCharging");
     processPlayer(state, p, input(1, 0, { jump: true, auraCharge: true }));
     assert.equal(p.actionState, "jumping");
+    for (let f = 2; f <= JUMP_TUNING.jumpSquatFrames + 1; f++) {
+      processPlayer(state, p, input(f, 0, { jump: true }));
+    }
     assert.ok(p.vy < 0);
   });
 });
