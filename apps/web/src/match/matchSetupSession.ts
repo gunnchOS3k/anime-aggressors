@@ -27,6 +27,7 @@ export type MatchSetupSession = {
     fighter?: CreatedFighter;
     teamId?: "solar" | "lunar";
     isBot?: boolean;
+    cpuLevel?: 1 | 2 | 3;
   }[];
 
   inputProfiles: {
@@ -98,7 +99,18 @@ export function buildGameConfigFromSetup(setup: MatchSetupSession): GameConfig {
     ...setup.ruleset,
     stageId: setup.stageId ?? setup.ruleset.stageId,
   };
-  return gameConfigFromRuleset(ruleset, fighters, 42);
+  const config = gameConfigFromRuleset(ruleset, fighters, 42);
+  const bot = setup.fighters.find((f) => f.isBot);
+  if (bot) {
+    config.cpuOpponents = [
+      {
+        playerId: bot.playerId,
+        difficulty: bot.cpuLevel ?? 1,
+        seed: config.seed,
+      },
+    ];
+  }
+  return config;
 }
 
 export function applySetupToMatchSession(setup: MatchSetupSession): void {

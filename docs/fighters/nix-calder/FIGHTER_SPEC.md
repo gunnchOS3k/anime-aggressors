@@ -1,5 +1,7 @@
 # Nix Calder
 
+**Roster status:** Preview / balance-pending (Milestone 4)
+
 Element: Frost
 Size: Large
 Asset tier: production_proxy

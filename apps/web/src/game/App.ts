@@ -9,6 +9,9 @@ import {
   DEFAULT_RULESET,
   getActiveClash,
   getComboRoutesForFighter,
+  getFighterMoveList,
+  resetTrainingDamage,
+  resetTrainingPositions,
   type GameConfig,
   type GameState,
   type GameRuleset,
@@ -27,6 +30,7 @@ import { showResults, type ResultsAction } from "./results.js";
 import { globalAudio } from "../audio/AudioManager.js";
 import { navigateHome } from "../router.js";
 import { getMatchSetup } from "../match/matchSession.js";
+import { loadMatchSetup } from "../match/matchSetupSession.ts";
 import { ReplayRecorder } from "../replay/ReplayRecorder.js";
 import { StatEventTracker, processMatchEnd } from "../career/careerService.js";
 import { saveCurrentGame } from "../saves/SaveGameManager.js";
@@ -34,7 +38,8 @@ import { renderAuraMeter } from "../ui/AuraMeter.ts";
 import { renderSuperReadyBadge } from "../ui/SuperReadyBadge.ts";
 import { renderComboHintOverlay } from "../ui/ComboHintOverlay.js";
 import { renderTrainingMoveOverlay } from "../ui/TrainingMoveOverlay.ts";
-import { renderControlsOverlayHtml, BATTLE_SHORTCUT_LINES } from "../input/controlReference.ts";
+import { renderControlsOverlayHtml, BATTLE_SHORTCUT_LINES, TRAINING_SHORTCUT_LINES } from "../input/controlReference.ts";
+import { applyTrainingLaunchSetup } from "../match/trainingSetup.ts";
 import { renderEnergyClashPrompt, isClashActive } from "../ui/EnergyClashPrompt.js";
 
 function fighterIdFromCharacterId(characterId: string): string {
@@ -86,6 +91,8 @@ export class PlatformFighterApp {
   private controlsOverlayEl: HTMLElement | null = null;
   private showControlsOverlay = false;
 
+  private trainingDummyBehavior: import("@anime-aggressors/game-core").TrainingDummyBehavior = "idle";
+
   private options: PlatformFighterOptions;
 
   constructor(root: HTMLElement, options: PlatformFighterOptions = {}) {
@@ -96,7 +103,7 @@ export class PlatformFighterApp {
       <div class="pf-root pf-root--fullscreen battle-screen">
         <div class="vs-toolbar vs-toolbar--battle">
           <button id="pf-back" type="button">← Home</button>
-          <span class="vs-hint">H controls · ${BATTLE_SHORTCUT_LINES.slice(1).join(" · ")}</span>
+          <span class="vs-hint">H controls · ${this.trainingMode ? TRAINING_SHORTCUT_LINES.join(" · ") : BATTLE_SHORTCUT_LINES.slice(1).join(" · ")}</span>
         </div>
         <div class="pf-viewport-wrap battle-canvas-shell">
           <div id="pf-viewport" class="pf-viewport battle-canvas-shell"></div>
@@ -121,6 +128,11 @@ export class PlatformFighterApp {
 
   start(): void {
     const setup = getMatchSetup();
+    if (this.trainingMode) {
+      const training = applyTrainingLaunchSetup();
+      this.beginMatch({ p1: training.p1, p2: training.p2 }, training.ruleset);
+      return;
+    }
     if (this.options.skipSelect && setup.p1Fighter && setup.p2Fighter) {
       this.beginMatch(
         { p1: setup.p1Fighter, p2: setup.p2Fighter },
@@ -185,6 +197,42 @@ export class PlatformFighterApp {
       e.preventDefault();
       this.resetMatch();
     }
+    if (this.trainingMode && this.gameState) {
+      if (e.key === "d" || e.key === "D") {
+        e.preventDefault();
+        resetTrainingDamage(this.gameState);
+      }
+      if (e.key === "p" || e.key === "P") {
+        e.preventDefault();
+        resetTrainingPositions(this.gameState);
+      }
+      if (e.key === "1") {
+        e.preventDefault();
+        this.trainingDummyBehavior = "idle";
+      }
+      if (e.key === "2") {
+        e.preventDefault();
+        this.trainingDummyBehavior = "shield";
+      }
+      if (e.key === "3") {
+        e.preventDefault();
+        this.trainingDummyBehavior = "jump";
+      }
+      if (e.key === "4") {
+        e.preventDefault();
+        this.trainingDummyBehavior = "cpu1";
+      }
+      if (this.gameState.config.training) {
+        this.gameState.config.training.dummyBehavior = this.trainingDummyBehavior;
+        if (this.trainingDummyBehavior === "cpu1") {
+          this.gameState.config.cpuOpponents = [
+            { playerId: 1, difficulty: 1, seed: this.gameState.config.seed },
+          ];
+        } else {
+          this.gameState.config.cpuOpponents = undefined;
+        }
+      }
+    }
     if (e.key === "s" || e.key === "S") {
       e.preventDefault();
       void this.saveSnapshot();
@@ -224,6 +272,25 @@ export class PlatformFighterApp {
       [select.p1, select.p2],
       Date.now() & 0xffff,
     );
+
+    if (this.trainingMode) {
+      config.training = {
+        dummyPlayerId: 1,
+        dummyBehavior: this.trainingDummyBehavior,
+        cpu: { playerId: 1, difficulty: 1, seed: config.seed },
+      };
+      if (this.trainingDummyBehavior === "cpu1") {
+        config.cpuOpponents = [{ playerId: 1, difficulty: 1, seed: config.seed }];
+      }
+    } else {
+      const setupSession = loadMatchSetup();
+      const bot = setupSession.fighters.find((f) => f.isBot);
+      if (bot) {
+        config.cpuOpponents = [
+          { playerId: bot.playerId, difficulty: bot.cpuLevel ?? 1, seed: config.seed },
+        ];
+      }
+    }
 
     this.gameState = createInitialGameState(config);
     this.initialState = structuredClone(this.gameState);
@@ -499,11 +566,20 @@ export class PlatformFighterApp {
     if (!this.gameState || !this.trainingOverlayEl) return;
     const p1 = this.gameState.players[0];
     const fighterId = fighterIdFromCharacterId(p1.characterId);
+    const moves = getFighterMoveList(fighterId).slice(0, 6);
+    const moveListHtml = moves.length
+      ? `<div class="pf-training-moves"><strong>Moves:</strong> ${moves.map((m) => m.label).join(" · ")}</div>`
+      : "";
+    const dummyLabel =
+      this.trainingDummyBehavior === "cpu1"
+        ? "CPU Lv1"
+        : `Dummy: ${this.trainingDummyBehavior}`;
     const beginnerRoute = getComboRoutesForFighter(fighterId).find((r) => r.difficulty === "beginner");
     const clash = getActiveClash(this.gameState);
 
     const parts = [
-      `<div class="pf-training-aura-hint">Hold Shield + Special to charge aura · Level 3 = Super Ready</div>`,
+      `<div class="pf-training-aura-hint">${dummyLabel} · D reset damage · P reset positions · 1-4 dummy modes</div>`,
+      moveListHtml,
       renderTrainingMoveOverlay({ player: p1, comboCount: this.comboHits }),
       beginnerRoute
         ? renderComboHintOverlay({
@@ -527,7 +603,7 @@ export function launchMatch(root: HTMLElement, options: PlatformFighterOptions =
 }
 
 export function launchTrainingMode(root: HTMLElement): PlatformFighterApp {
-  const app = new PlatformFighterApp(root, { trainingMode: true });
+  const app = new PlatformFighterApp(root, { trainingMode: true, skipSelect: true });
   app.start();
   return app;
 }

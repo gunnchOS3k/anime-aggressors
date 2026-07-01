@@ -1,5 +1,7 @@
 # Juno Spark
 
+**Roster status:** Production (Milestone 4)
+
 Element: Volt
 Size: Small
 Asset tier: production_proxy

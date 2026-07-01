@@ -1,5 +1,5 @@
 import type { CreatedFighter } from "@anime-aggressors/game-core";
-import { ELEMENTS, SIZE_STATS, getDefaultFighterProfile, normalizeDefaultFighterId } from "@anime-aggressors/game-core";
+import { ELEMENTS, SIZE_STATS, getDefaultFighterProfile, getFighterGameplayProfile, normalizeDefaultFighterId } from "@anime-aggressors/game-core";
 import type { TileState } from "../characterSelect/characterSelectState.js";
 import { renderFighterPortraitHtml } from "../renderer-three/portraits/FighterPortraitFactory.ts";
 
@@ -11,6 +11,13 @@ export type CharacterTileOptions = {
 
 export function renderCharacterTile({ fighter, state, tabIndex = 0 }: CharacterTileOptions): string {
   const profile = getDefaultFighterProfile(normalizeDefaultFighterId(fighter.id));
+  const gameplay = getFighterGameplayProfile(fighter.id);
+  const rosterBadge =
+    gameplay?.status === "production"
+      ? '<span class="cs-tile-badge cs-tile-badge--production">Production</span>'
+      : gameplay?.status === "preview"
+        ? '<span class="cs-tile-badge cs-tile-badge--preview">Preview</span>'
+        : "";
   const el = ELEMENTS[fighter.color];
   const sizeLabel = SIZE_STATS[fighter.size].label;
   const marker =
@@ -25,6 +32,7 @@ export function renderCharacterTile({ fighter, state, tabIndex = 0 }: CharacterT
         ${renderFighterPortraitHtml(fighter.id, 64)}
       </span>
       <span class="cs-tile-name">${fighter.name}</span>
+      ${rosterBadge}
       <span class="cs-tile-meta">
         <span class="cs-tile-element" style="color:${el.hexColor}">${profile?.elementName ?? el.name}</span>
         <span class="cs-tile-size" title="${sizeLabel}">${sizeLabel.charAt(0)}</span>

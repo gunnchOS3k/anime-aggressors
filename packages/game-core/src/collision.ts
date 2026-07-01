@@ -6,6 +6,7 @@ import { combatMoveToFrameData } from "./moves/combatMoveData.js";
 import { scaledHitDamage } from "./fighterCreation.js";
 import { scaledHurtboxDimension } from "./fighterCreation.js";
 import { applyStaleMultiplier } from "./combat/staleMoves.js";
+import { applyFighterMoveOverrides } from "./moves/fighterMoveTuning.js";
 import { computeKnockback } from "./combat/knockback.js";
 import { getCharacterForPlayer } from "./characters.js";
 
@@ -67,8 +68,9 @@ export function getActiveHitboxes(player: PlayerState): Hitbox[] {
       : player.actionState === "special"
         ? "special_attack"
         : "neutral_attack";
-  const move = getCombatMoveData(moveId);
+  let move = getCombatMoveData(moveId);
   if (!move) return [];
+  move = applyFighterMoveOverrides(player.characterId, moveId, move);
 
   const frameData = combatMoveToFrameData(move);
   if (!isInActive(frameData, player.actionFrame)) return [];

@@ -76,10 +76,24 @@ export const STAGE_LAYOUTS: Record<string, StageLayoutDef> = {
   "training-grid": layoutWithLedges({
     id: "training-grid",
     name: "Training Grid",
-    vibe: "Clean sim arena with measurement markers.",
+    vibe: "Flat practice floor with measurement markers.",
     hazardsEnabled: false,
     supportedModes: ["stock", "time", "stamina", "training"],
-    platforms: [mainFloor(), sidePlat(true, 140 * FP_SCALE), sidePlat(false, 140 * FP_SCALE)],
+    platforms: [mainFloor()],
+    mainPlatformId: "main",
+  }),
+  "neon-rooftops": layoutWithLedges({
+    id: "neon-rooftops",
+    name: "Neon Rooftops",
+    vibe: "Casual rooftop duel with asymmetric catwalks.",
+    hazardsEnabled: false,
+    supportedModes: ["stock", "time", "stamina", "training"],
+    platforms: [
+      { id: "main", x: W * 0.1, y: FLOOR, width: W * 0.8, height: 24 * FP_SCALE },
+      { id: "catwalk-left", x: W * 0.08, y: FLOOR - 170 * FP_SCALE, width: W * 0.22, height: 16 * FP_SCALE },
+      { id: "catwalk-right", x: W * 0.68, y: FLOOR - 210 * FP_SCALE, width: W * 0.2, height: 16 * FP_SCALE },
+      { id: "neon-perch", x: W * 0.44, y: FLOOR - 300 * FP_SCALE, width: W * 0.12, height: 16 * FP_SCALE },
+    ],
     mainPlatformId: "main",
   }),
   "impact-platform": layoutWithLedges({

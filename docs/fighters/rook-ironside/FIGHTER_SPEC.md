@@ -1,5 +1,7 @@
 # Rook Ironside
 
+**Roster status:** Production (Milestone 4)
+
 Element: Impact
 Size: Large
 Asset tier: production_proxy

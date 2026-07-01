@@ -93,9 +93,19 @@ const FLAGLINE_STAGES: StageDef[] = [
   { ...FLAGLINE_BASE, id: "flagline-solar-base", name: "Solar Base", layoutId: "flagline-solar-base", vibe: "Solar fortress", hazardsEnabled: false },
 ];
 
+const NEON_ROOFTOPS: StageDef = {
+  id: "neon-rooftops",
+  name: "Neon Rooftops",
+  layoutId: "neon-rooftops",
+  vibe: "Casual city rooftop duel",
+  bounds: { ...SKYLINE_ARENA.bounds },
+  spawnPoints: [...SKYLINE_ARENA.spawnPoints],
+};
+
 const STAGES: Record<string, StageDef> = {
   "skyline-arena": SKYLINE_ARENA,
   "training-grid": TRAINING_GRID,
+  "neon-rooftops": NEON_ROOFTOPS,
   "impact-platform": IMPACT_PLATFORM,
   ...Object.fromEntries(FLAGLINE_STAGES.map((s) => [s.id, s])),
 };

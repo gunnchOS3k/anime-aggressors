@@ -154,7 +154,7 @@ export function getDefaultFighterProfile(id: string): DefaultFighterProfile | un
 }
 
 export function getDefaultFighterPreset(playerIndex: number): DefaultFighterPreset {
-  const fighter = DEFAULT_FIGHTERS[playerIndex] ?? DEFAULT_FIGHTERS[0];
+  const fighter = DEFAULT_FIGHTERS[playerIndex] ?? DEFAULT_FIGHTERS[0]!;
   return { id: fighter.id, name: fighter.name, size: fighter.size, color: fighter.color };
 }
 

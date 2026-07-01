@@ -58,3 +58,17 @@ Use a **fresh browser profile** or clear site data for `anime-aggressors` before
 ## Pass criteria
 
 All steps complete with **no uncaught console errors** and controls matching the reference in `apps/web/src/input/controlReference.ts`.
+
+---
+
+## Milestone 4 — Four-fighter vertical slice
+
+See full checklist: `docs/playtest/2026-06-30-m4-four-fighter-vertical-slice.md`
+
+31. Character select shows all 7 fighters with Production/Preview badges  
+32. Quick Match = Ember Vale vs Rook Ironside on Skyline Arena  
+33. Production stages: Training Grid (flat), Skyline Arena, Neon Rooftops  
+34. Training mode (`#/training`) — dummy modes 1–4, D/P reset  
+35. CPU opponent levels 1–3 in custom match setup  
+36. Dual gamepad auto-maps to P1/P2 when both connected
+
