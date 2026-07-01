@@ -89,9 +89,12 @@ describe("stage platform collision", () => {
     const p = state.players[0];
     p.x = STAGE_WIDTH / 2;
     processPlayer(state, p, input(0, 0, { jump: true }));
+    for (let f = 1; f <= 3; f++) {
+      processPlayer(state, p, input(f, 0, {}));
+    }
     p.jumpsRemaining = 0;
     p.jumpsUsed = 2;
-    for (let f = 1; f < 80; f++) {
+    for (let f = 4; f < 120; f++) {
       processPlayer(state, p, input(f, 0, {}));
       if (p.onGround) break;
     }

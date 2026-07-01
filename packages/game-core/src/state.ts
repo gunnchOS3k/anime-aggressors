@@ -18,6 +18,7 @@ import { getStage } from "./stages.js";
 import { getStageLayout } from "./stageLayouts.js";
 import { getFighterProfile, applyCreatedFighterToPlayer } from "./fighterCreation.js";
 import { createDefaultAuraState } from "./aura/auraTypes.js";
+import { defaultMovementState } from "./movement/movementTypes.js";
 import { DEFAULT_RULESET } from "./rulesets.js";
 
 export function createInitialGameState(config: GameConfig): GameState {
@@ -73,6 +74,15 @@ export function createInitialGameState(config: GameConfig): GameState {
       currentPlatformId: layout.mainPlatformId,
       dropThroughFrames: 0,
       ignoredPlatformId: "",
+      movementState: defaultMovementState(),
+      dashFrames: 0,
+      jumpSquatFrames: 0,
+      jumpShortHop: false,
+      landingLagFrames: 0,
+      ledgeStateFrames: 0,
+      grabbedLedgeId: "",
+      ledgeCooldownFrames: 0,
+      recoveryUsed: false,
       aura: createDefaultAuraState(),
     };
     applyCreatedFighterToPlayer(player, fighter);

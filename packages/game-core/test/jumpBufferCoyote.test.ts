@@ -45,6 +45,15 @@ function stubPlayer(): PlayerState {
     currentPlatformId: "",
     dropThroughFrames: 0,
     ignoredPlatformId: "",
+    movementState: "idle",
+    dashFrames: 0,
+    jumpSquatFrames: 0,
+    jumpShortHop: false,
+    landingLagFrames: 0,
+    ledgeStateFrames: 0,
+    grabbedLedgeId: "",
+    ledgeCooldownFrames: 0,
+    recoveryUsed: false,
     aura: createDefaultAuraState(),
   };
 }

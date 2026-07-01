@@ -37,6 +37,10 @@ describe("jump and double jump", () => {
     state.phase = "fighting";
     const p = state.players[0]!;
     processPlayer(state, p, input(0, 0, { jump: true }));
+    assert.equal(p.movementState, "jumpSquat");
+    for (let f = 1; f <= JUMP_TUNING.jumpSquatFrames; f++) {
+      processPlayer(state, p, input(f, 0, { jump: true }));
+    }
     assert.ok(p.vy < 0);
     assert.equal(p.jumpsUsed, 1);
     assert.equal(p.onGround, false);
@@ -92,9 +96,13 @@ describe("jump and double jump", () => {
     state.phase = "fighting";
     const p = state.players[0]!;
     p.onGround = false;
+    p.y = state.stage.floorY - 12 * FP_SCALE;
     p.coyoteFrames = JUMP_TUNING.coyoteFrames;
     p.jumpsUsed = 0;
     processPlayer(state, p, input(0, 0, { jump: true }));
+    for (let f = 1; f <= JUMP_TUNING.jumpSquatFrames; f++) {
+      processPlayer(state, p, input(f, 0, { jump: true }));
+    }
     assert.equal(p.jumpsUsed, 1);
     assert.ok(p.vy < 0);
   });

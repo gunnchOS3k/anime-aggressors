@@ -1,10 +1,9 @@
-import { describe, it } from "node:test";
-import assert from "node:assert/strict";
-import { BLAST_LEFT, BLAST_RIGHT, isOutsideBlastZone } from "../src/combat/blastZones.js";
-import { createDefaultAuraState } from "../src/aura/auraTypes.js";
-import type { PlayerState } from "../src/types.js";
+import type { PlayerState } from "../../src/types.js";
+import { createDefaultAuraState } from "../../src/aura/auraTypes.js";
+import { defaultMovementState } from "../../src/movement/movementTypes.js";
 
-function playerAt(x: number, y: number): PlayerState {
+/** Minimal PlayerState for game-core unit tests. */
+export function stubPlayer(overrides: Partial<PlayerState> = {}): PlayerState {
   return {
     id: 0,
     characterId: "ember",
@@ -16,15 +15,15 @@ function playerAt(x: number, y: number): PlayerState {
     slowFramesRemaining: 0,
     slowMultiplierFp: 100,
     airDriftBonusFrames: 0,
-    x,
-    y,
+    x: 0,
+    y: 0,
     vx: 0,
     vy: 0,
     facing: 1,
     damage: 0,
     stocks: 3,
-    staminaHp: 100,
-    maxStaminaHp: 100,
+    staminaHp: 0,
+    maxStaminaHp: 0,
     score: 0,
     teamId: 0,
     actionState: "idle",
@@ -42,10 +41,10 @@ function playerAt(x: number, y: number): PlayerState {
     fastFalling: false,
     currentMoveId: "none",
     hitVictimsThisMove: [],
-    currentPlatformId: "",
+    currentPlatformId: "main",
     dropThroughFrames: 0,
     ignoredPlatformId: "",
-    movementState: "idle",
+    movementState: defaultMovementState(),
     dashFrames: 0,
     jumpSquatFrames: 0,
     jumpShortHop: false,
@@ -55,13 +54,6 @@ function playerAt(x: number, y: number): PlayerState {
     ledgeCooldownFrames: 0,
     recoveryUsed: false,
     aura: createDefaultAuraState(),
+    ...overrides,
   };
 }
-
-describe("blast zones", () => {
-  it("detects outside left and right blast zones", () => {
-    assert.equal(isOutsideBlastZone(playerAt(BLAST_LEFT - 1, 50000)), true);
-    assert.equal(isOutsideBlastZone(playerAt(BLAST_RIGHT + 1, 50000)), true);
-    assert.equal(isOutsideBlastZone(playerAt((BLAST_LEFT + BLAST_RIGHT) / 2, 50000)), false);
-  });
-});

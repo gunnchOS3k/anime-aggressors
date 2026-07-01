@@ -80,6 +80,9 @@ describe("platform fighter movement feel", () => {
     assert.equal(p.onGround, true);
     processPlayer(state, p, input(0, 0, { jump: true }));
     assert.equal(p.actionState, "jumping");
+    for (let f = 1; f <= 3; f++) {
+      processPlayer(state, p, input(f, 0, { jump: true }));
+    }
     assert.ok(p.vy < 0);
     assert.equal(p.onGround, false);
   });

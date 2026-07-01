@@ -92,6 +92,16 @@ export type PlayerState = {
   dropThroughFrames: number;
   /** Platform id skipped during drop-through window. */
   ignoredPlatformId: string;
+  /** Deterministic movement vocabulary (Milestone 2). */
+  movementState: import("./movement/movementTypes.js").MovementState;
+  dashFrames: number;
+  jumpSquatFrames: number;
+  jumpShortHop: boolean;
+  landingLagFrames: number;
+  ledgeStateFrames: number;
+  grabbedLedgeId: string;
+  ledgeCooldownFrames: number;
+  recoveryUsed: boolean;
   aura: import("./aura/auraTypes.js").AuraChargeState;
 };
 

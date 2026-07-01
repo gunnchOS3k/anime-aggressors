@@ -63,6 +63,7 @@ export function resolveStageCollision(
   previousY: number,
 ): StageCollisionResult {
   const ignoreId = ignoredPlatformId(player);
+  const vyBeforeResolve = player.vy;
 
   if (player.vy < 0) {
     return { landed: false, platformId: "" };
@@ -78,7 +79,9 @@ export function resolveStageCollision(
     const top = plat.y;
     const crossedFromAbove = previousY <= top + LAND_TOLERANCE && player.y >= top;
     const restingOnTop =
-      Math.abs(player.y - top) <= LAND_TOLERANCE && player.vy >= 0;
+      vyBeforeResolve >= 0 &&
+      previousY >= top - LAND_TOLERANCE &&
+      Math.abs(player.y - top) <= LAND_TOLERANCE;
 
     if (crossedFromAbove || restingOnTop) {
       if (!best || top < best.y) {
