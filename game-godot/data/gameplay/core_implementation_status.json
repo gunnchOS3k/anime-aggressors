@@ -1,6 +1,13 @@
 {
-  "schema_version": 3,
-  "pass_label": "runtime_hardening_pr47",
+  "schema_version": 4,
+  "pass_label": "verification_playtest_loop_pr48",
+  "verification_tiers": {
+    "automated_npm": "verified_by_aa_verify_project",
+    "godot_cli": "requires_cli_or_manual_blocker",
+    "godot_editor_playtest": "manual_signoff_required",
+    "proxy_functional": "functional_proxy",
+    "final_art": "final_art_blocked_only"
+  },
   "core_systems": {
     "boot_menu_flow": "implemented",
     "mode_select": "implemented",
@@ -31,14 +38,18 @@
     "full_roster_data": "implemented",
     "move_manifests": "implemented",
     "validation_scripts": "implemented",
+    "verification_loop": "implemented",
     "final_authored_glb": "final_art_blocked_only"
   },
-  "pr47_fixes": [
-    "single can_hit_target gate in HitResolver",
-    "aura charge before shield branch",
-    "HURT_LIGHT/HURT_HEAVY recovery transitions",
-    "is_attack_state boolean fix",
-    "P2 InputMap actions",
-    "debug overlay toggles via fighter methods"
-  ]
+  "blockers": [
+    "P1: signed Godot editor playtest required",
+    "P1: final authored .glb fighter art",
+    "P1: final authored animation clips",
+    "P2: final SFX/VFX polish",
+    "P2: CPU balance/tuning",
+    "P2: export hardening",
+    "P3: full ledge grab",
+    "P3: rollback/netplay"
+  ],
+  "notes": "Core systems are code-implemented; editor playtest and final art remain blockers. See docs/GODOT_VERIFICATION_PLAN.md."
 }

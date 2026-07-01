@@ -24,6 +24,8 @@
 
 **Resolved in PR #47:** hit resolution double-gate, aura charge ordering, hurt recovery, P2 inputs, debug overlay toggles.
 
+**PR #48:** verification loop, smoke tests, playtest evidence workflow — does not remove editor signoff blocker.
+
 **Completion claim:** Not allowed until BLK-FS001–FS002 resolved and full-scope manual playtest signed.
 
 ---
@@ -38,6 +40,8 @@
 | BLK-G006 | Web Godot export may lag `game-godot/` editor build | P2 | Open |
 | BLK-G007 | Pause menu reloads battle scene (legacy route; in-battle pause in PR #46) | P2 | Open |
 | BLK-G008 | PR #46 runtime bugs (hits/aura/hurt/P2/debug) | P0 | **Closed (PR #47)** |
+| BLK-G009 | Godot editor playtest unsigned | P1 | Open |
+| BLK-G010 | Godot CLI absent on CI/agent hosts | P1 | Open (manual blocker; see `aa-verify-project.mjs`) |
 
 ### BLK-G001 — Godot manual playtest checklist unsigned
 

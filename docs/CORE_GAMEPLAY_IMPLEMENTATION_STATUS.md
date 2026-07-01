@@ -14,7 +14,24 @@ Fixed gameplay-breaking paths discovered after PR #46 merge:
 - P2 human controls mapped in `project.godot`
 - F2/F6 debug overlays toggle without method errors
 
-## Implemented (core gate)
+## PR #48 verification loop
+
+- `scripts/aa-verify-project.mjs` — recursive npm + Godot CLI verification
+- `game-godot/tests/smoke_*.gd` — headless load/instantiate checks
+- `docs/GODOT_VERIFICATION_PLAN.md` — tier definitions
+- `docs/GODOT_EDITOR_PLAYTEST_SIGNOFF.md` — human checklist (P1 until signed)
+
+### Verification tiers (honest labels)
+
+| Tier | Status |
+|------|--------|
+| Automated npm | Run `node scripts/aa-verify-project.mjs` |
+| Godot CLI | Verified only if Godot installed on runner |
+| Godot editor playtest | **manual_signoff_required** |
+| Proxy functional | ColorRect + proxy AnimationPlayer |
+| Final art | Blocked |
+
+## Implemented (core gate — code paths)
 
 - Boot → main menu → mode/ruleset/fighter/stage/versus → countdown → battle → pause → results
 - Fighter state machine (all required states with behavior + debug label)
