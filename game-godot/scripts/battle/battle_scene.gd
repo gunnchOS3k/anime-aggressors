@@ -12,8 +12,11 @@ var fighter1: AAFighter
 var fighter2: AAFighter
 var blast: Dictionary = {}
 var _active := false
+var _paused := false
 var _ko_lock := false
 var _debug_hud: DebugHud
+var _battle_sim: BattleSim
+var _pause_panel: PanelContainer
 
 const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
 const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
@@ -21,10 +24,17 @@ const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
 func _ready() -> void:
 	_build_stage()
 	_spawn_fighters()
+	_battle_sim = BattleSim.new()
+	add_child(_battle_sim)
+	_battle_sim.bind_fighters([fighter1, fighter2])
 	_debug_hud = DEBUG_HUD_SCENE.instantiate()
 	add_child(_debug_hud)
 	_debug_hud.bind_fighters([fighter1, fighter2])
+	fighter1.controls_enabled = false
+	fighter2.controls_enabled = false
 	await _run_countdown()
+	fighter1.controls_enabled = true
+	fighter2.controls_enabled = true
 	_active = true
 
 func _build_stage() -> void:
@@ -59,6 +69,7 @@ func _spawn_fighters() -> void:
 	var spawns: Array = stage_data.get("spawnPoints", [])
 	var s1 := Vector2(-200, 200)
 	var s2 := Vector2(200, 200)
+	var main: Dictionary = stage_data.get("mainPlatform", {})
 	for sp in spawns:
 		if sp.slot == 1:
 			s1 = Vector2(sp.x, sp.y)
@@ -74,6 +85,9 @@ func _spawn_fighters() -> void:
 	fighter2.configure(GameState.p2_fighter_id, 2, GameState.p2_is_cpu, GameState.stocks, s2)
 	fighter1.global_position = s1
 	fighter2.global_position = s2
+	for f in [fighter1, fighter2]:
+		f.platform_half_width = float(main.get("width", 800)) / 2.0
+		f.platform_center_x = float(main.get("x", 0))
 	_connect_hitboxes(fighter1, fighter2)
 	_connect_hitboxes(fighter2, fighter1)
 	fighter1.koed.connect(_on_ko.bind(fighter1))
@@ -84,12 +98,14 @@ func _connect_hitboxes(attacker: AAFighter, defender: AAFighter) -> void:
 	var hb: Area2D = attacker.get_node("Hitbox")
 	var hurt: Area2D = defender.get_node("Hurtbox")
 	hb.area_entered.connect(func(area: Area2D):
-		if area != hurt or not hb.monitoring:
+		if area != hurt or not hb.monitoring or not attacker.move_runner.is_active_phase():
+			return
+		if not attacker.move_runner.can_hit_target(defender):
 			return
 		var move := attacker._current_move
 		if move.is_empty():
 			move = DataLoader.find_move(attacker.move_manifest, attacker.move_runner.current_move_id())
-		if move.is_empty():
+		if move.is_empty() or move.get("move_id") == "grab":
 			return
 		attacker.hit_resolver.resolve(attacker, defender, move, attacker.damage_percent)
 	)
@@ -106,7 +122,7 @@ func _run_countdown() -> void:
 		countdown_label.visible = false
 
 func _physics_process(_delta: float) -> void:
-	if not _active:
+	if not _active or _paused:
 		return
 	_update_hud()
 	_check_blast(fighter1)
@@ -143,8 +159,37 @@ func _update_hud() -> void:
 	if p1_hud and fighter1:
 		p1_hud.text = "%s  %d%%  x%d  aura:%d" % [fighter1.data.get("displayName","P1"), int(fighter1.damage_percent), fighter1.stocks, int(fighter1.aura)]
 	if p2_hud and fighter2:
-		p2_hud.text = "%s  %d%%  x%d  aura:%d%s" % [fighter2.data.get("displayName","P2"), int(fighter2.damage_percent), fighter2.stocks, int(fighter2.aura), " (CPU)" if GameState.p2_is_cpu else ""]
+		p2_hud.text = "%s  %d%%  x%d  aura:%d%s" % [fighter2.data.get("displayName","P2"), int(fighter2.damage_percent), fighter2.stocks, int(fighter2.aura), " (CPU L%d)" % GameState.cpu_level if GameState.p2_is_cpu else ""]
+
+func _toggle_pause() -> void:
+	_paused = not _paused
+	if _battle_sim:
+		_battle_sim.set_paused(_paused)
+	if fighter1:
+		fighter1.controls_enabled = not _paused
+	if fighter2:
+		fighter2.controls_enabled = not _paused
+	if _pause_panel:
+		_pause_panel.visible = _paused
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
-		SceneRouter.go("pause")
+		if not _pause_panel:
+			_pause_panel = PanelContainer.new()
+			_pause_panel.position = Vector2(200, 200)
+			var v := VBoxContainer.new()
+			var title := Label.new()
+			title.text = "Paused — Esc/B resume | R rematch | M menu"
+			v.add_child(title)
+			_pause_panel.add_child(v)
+			hud.add_child(_pause_panel)
+			_pause_panel.visible = false
+		_toggle_pause()
+	if _paused and event.is_action_pressed("ui_accept"):
+		_toggle_pause()
+	if _paused and event is InputEventKey and event.pressed:
+		match event.keycode:
+			KEY_M:
+				SceneRouter.go("main_menu")
+			KEY_R:
+				SceneRouter.go("battle")

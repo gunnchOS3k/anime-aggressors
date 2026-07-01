@@ -8,17 +8,19 @@
 
 ---
 
-## Full-scope consolidation — open blockers (2026-07-01)
+## Full-scope implementation pass — open blockers (2026-07-01)
 
 | ID | Title | Severity | Status |
 |----|-------|----------|--------|
 | BLK-FS001 | Godot editor playtest unsigned | P1 | Open |
-| BLK-FS002 | Authored `.glb` / animation clips not integrated | P1 | Open |
-| BLK-FS003 | Grab/throw loop architecture only (placeholder moves) | P2 | Open |
-| BLK-FS004 | Move timelines not frame-synced to 60 Hz sim tick | P2 | Open |
-| BLK-FS005 | CPU not balance-tiered | P2 | Open |
-| BLK-FS006 | Web Godot export may lag editor build | P2 | Open |
-| BLK-FS007 | Ledge/edge state placeholder | P3 | Open |
+| BLK-FS002 | Authored `.glb` / final animation clips not integrated | P1 | Open |
+| BLK-FS003 | Final SFX/VFX polish | P2 | Open |
+| BLK-FS004 | Tournament CPU/balance tuning | P2 | Open |
+| BLK-FS005 | Web Godot export may lag editor build | P2 | Open |
+| BLK-FS006 | Online/rollback/netplay | P3 | Open |
+| BLK-FS007 | Full ledge grab (teeter baseline implemented) | P3 | Open |
+
+**Resolved in PR #46:** grab/throw gameplay, 60 Hz move runner, CPU tiers, training tools, aura burst, edge teeter, validation hard gates.
 
 **Completion claim:** Not allowed until BLK-FS001–FS002 resolved and full-scope manual playtest signed.
 
@@ -27,9 +29,9 @@
 | ID | Title | Severity | Status |
 |----|-------|----------|--------|
 | BLK-G001 | Godot editor playtest not signed | P1 | Open |
-| BLK-G002 | Grab/throw loop placeholder only | P2 | Open |
+| BLK-G002 | ~~Grab/throw loop placeholder only~~ | — | **Closed (PR #46)** |
 | BLK-G003 | Hitbox uses Area2D overlap — needs hurtbox polish | P1 | Open |
-| BLK-G004 | CPU AI is minimal (not tournament-grade) | P2 | Open |
+| BLK-G004 | ~~CPU AI is minimal~~ | — | **Closed (PR #46 tiers)** |
 | BLK-G005 | Authored fighter/stage art not integrated | P2 | Open |
 | BLK-G006 | Web Godot export may lag `game-godot/` editor build | P2 | Open |
 | BLK-G007 | Pause menu reloads battle scene (no in-scene pause) | P2 | Open |
