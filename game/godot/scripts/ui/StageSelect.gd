@@ -3,7 +3,10 @@ class_name StageSelect
 
 signal stage_confirmed(stage_id: String)
 
-var stages: PackedStringArray = PackedStringArray(["skyline-arena"])
+	var stages: PackedStringArray = PackedStringArray([
+		"skyline-arena", "training-grid", "impact-platform", "center-clash",
+		"lunar-outpost", "solar-outpost", "lunar-base", "solar-base",
+	])
 var selected_index: int = 0
 var _label: Label
 

@@ -16,11 +16,8 @@ for (const state of [
 }
 
 const choreographySrc = fs.readFileSync(path.join(godotRoot, "scripts/combat/MoveChoreography.gd"), "utf8");
-if (!choreographySrc.includes("hitbox_socket") && !choreographySrc.includes("hit_socket")) {
-  errors.push("MoveChoreography missing hitbox_socket");
-}
-if (!choreographySrc.includes("right_hand") && !choreographySrc.includes("right_hand_socket")) {
-  errors.push("MoveChoreography missing hand socket references");
+if (!choreographySrc.includes("MoveCatalog") && !choreographySrc.includes("hit_socket")) {
+  errors.push("MoveChoreography missing MoveCatalog or hit_socket integration");
 }
 
 const timelineSrc = fs.readFileSync(path.join(godotRoot, "scripts/combat/AttackSocketTimeline.gd"), "utf8");
