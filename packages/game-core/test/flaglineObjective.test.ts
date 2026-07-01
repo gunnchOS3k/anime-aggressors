@@ -65,6 +65,7 @@ function player(id: number, x: number, y: number, defeated = false): PlayerState
     jumpBufferFrames: 0,
     fastFalling: false,
     currentMoveId: "none",
+    hitVictimsThisMove: [],
     aura: createDefaultAuraState(),
   };
 }

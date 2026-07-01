@@ -131,6 +131,14 @@ export function resolveCombatHits(state: GameState): HitEvent[] {
       if (!boxesOverlap(hit, hurt)) continue;
 
       const moveId = attacker.currentMoveId || "neutral-attack";
+      const moveData = getMoveData(moveId as MoveId) ?? NEUTRAL_ATTACK;
+      if (
+        !moveData.multiHit &&
+        attacker.hitVictimsThisMove.includes(defender.id)
+      ) {
+        continue;
+      }
+
       const evt = resolveHitFromContact(
         state,
         attacker,
@@ -140,7 +148,12 @@ export function resolveCombatHits(state: GameState): HitEvent[] {
         hit.knockbackY,
         moveId,
       );
-      if (evt) events.push(evt);
+      if (evt) {
+        if (!moveData.multiHit && !attacker.hitVictimsThisMove.includes(defender.id)) {
+          attacker.hitVictimsThisMove.push(defender.id);
+        }
+        events.push(evt);
+      }
     }
   }
   return events;
@@ -194,6 +207,7 @@ function respawnPlayer(
   player.jumpBufferFrames = 0;
   player.fastFalling = false;
   player.currentMoveId = "none";
+  player.hitVictimsThisMove = [];
   player.burnFramesRemaining = 0;
   player.slowFramesRemaining = 0;
   player.slowMultiplierFp = 100;

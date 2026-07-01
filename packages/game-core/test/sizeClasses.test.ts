@@ -42,6 +42,7 @@ function basePlayer(size: PlayerState["fighterSize"]): PlayerState {
     jumpBufferFrames: 0,
     fastFalling: false,
     currentMoveId: "none",
+    hitVictimsThisMove: [],
     aura: createDefaultAuraState(),
   };
 }
