@@ -41,6 +41,7 @@ function playerAt(x: number, y: number): PlayerState {
     jumpBufferFrames: 0,
     fastFalling: false,
     currentMoveId: "none",
+    hitVictimsThisMove: [],
     aura: createDefaultAuraState(),
   };
 }

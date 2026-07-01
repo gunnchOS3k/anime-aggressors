@@ -44,6 +44,7 @@ function player(): PlayerState {
     jumpBufferFrames: 0,
     fastFalling: false,
     currentMoveId: "neutral_attack",
+    hitVictimsThisMove: [],
     aura: createDefaultAuraState(),
   };
 }

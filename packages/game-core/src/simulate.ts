@@ -125,6 +125,7 @@ export function resetForRematch(state: GameState): GameState {
     p.wasJumpHeld = false;
     p.fastFalling = false;
     p.currentMoveId = "none";
+    p.hitVictimsThisMove = [];
     p.aura = createDefaultAuraState();
     const char = fresh.config.characterIds[i];
     p.characterId = char ?? p.characterId;

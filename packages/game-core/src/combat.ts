@@ -13,6 +13,8 @@ import {
 } from "./constants.js";
 import { getCharacter, getCharacterForPlayer } from "./characters.js";
 import { getStage } from "./stages.js";
+import { getStageLayout } from "./stageLayouts.js";
+import { resolvePlatformLanding } from "./stageCollision.js";
 import { elementGameplayEnabled } from "./rulesets.js";
 import { resolveCombatHits, processBlastZoneKOs } from "./combat/hitResolution.js";
 import { DODGE_MOVE, NEUTRAL_ATTACK, SPECIAL_ATTACK } from "./frameData.js";
@@ -64,6 +66,10 @@ function applyInputMovement(player: PlayerState, input: InputFrame): void {
   applyHorizontalMovement(player, input);
 }
 
+function clearMoveHitRegistry(player: PlayerState): void {
+  player.hitVictimsThisMove = [];
+}
+
 function startAction(player: PlayerState, input: InputFrame): void {
   if (player.actionState === "hitstun" || player.actionState === "defeated") return;
   if (player.actionState === "auraCharging") return;
@@ -98,6 +104,7 @@ function startAction(player: PlayerState, input: InputFrame): void {
   }
 
   if (input.special) {
+    clearMoveHitRegistry(player);
     player.actionState = "special";
     player.actionFrame = 0;
     const fighterId = fighterIdFromCharacterId(player.characterId);
@@ -112,6 +119,7 @@ function startAction(player: PlayerState, input: InputFrame): void {
   }
 
   if (input.attack) {
+    clearMoveHitRegistry(player);
     player.actionState = "attacking";
     player.actionFrame = 0;
     const fighterId = fighterIdFromCharacterId(player.characterId);
@@ -136,8 +144,9 @@ function startAction(player: PlayerState, input: InputFrame): void {
   }
 }
 
-function integratePhysics(player: PlayerState, stage: GameState["stage"]): void {
+function integratePhysics(player: PlayerState, stage: GameState["stage"], stageId: string): void {
   const wasOnGround = player.onGround;
+  const previousY = player.y;
 
   if (player.actionState !== "shielding") {
     player.vy += GRAVITY;
@@ -151,10 +160,23 @@ function integratePhysics(player: PlayerState, stage: GameState["stage"]): void 
   player.x += player.vx;
   player.y += player.vy;
 
-  if (player.y >= stage.floorY) {
+  const layout = getStageLayout(stageId);
+  const landedOnPlatform = resolvePlatformLanding(player, layout, previousY);
+
+  if (landedOnPlatform) {
+    const wasAirborne = !wasOnGround;
+    player.onGround = true;
+    player.fastFalling = false;
+    if (wasAirborne) {
+      resetJumpStateOnLand(player);
+    }
+    if (player.actionState === "jumping" || player.actionState === "falling") {
+      player.actionState = "idle";
+    }
+  } else if (player.y >= stage.floorY) {
     player.y = stage.floorY;
     player.vy = 0;
-    const wasAirborne = !player.onGround;
+    const wasAirborne = !wasOnGround;
     player.onGround = true;
     player.fastFalling = false;
     if (wasAirborne) {
@@ -204,11 +226,13 @@ function tickActionState(state: GameState, player: PlayerState): void {
     if (data && isMoveComplete(data, player.actionFrame)) {
       player.actionState = "idle";
       player.currentMoveId = "none";
+      player.hitVictimsThisMove = [];
     }
   }
   if (player.actionState === "dodging" && isMoveComplete(DODGE_MOVE, player.actionFrame)) {
     player.actionState = "idle";
     player.currentMoveId = "none";
+    player.hitVictimsThisMove = [];
   }
   if (player.actionState === "shielding") {
     player.shieldHealth = Math.max(0, player.shieldHealth - 1);
@@ -315,6 +339,7 @@ function respawnPlayer(
   player.jumpBufferFrames = 0;
   player.fastFalling = false;
   player.currentMoveId = "none";
+  player.hitVictimsThisMove = [];
   player.burnFramesRemaining = 0;
   player.slowFramesRemaining = 0;
   player.slowMultiplierFp = 100;
@@ -372,7 +397,7 @@ export function processPlayer(state: GameState, player: PlayerState, input: Inpu
 
   tickActionState(state, player);
   tickElementalEffects(player);
-  integratePhysics(player, state.stage);
+  integratePhysics(player, state.stage, state.config.stageId);
 }
 
 export { applyHit, checkBlastZones, respawnPlayer };

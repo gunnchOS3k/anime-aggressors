@@ -43,7 +43,7 @@ describe("inputProfiles", () => {
 
   it("selected input profile generates expected InputFrame", () => {
     const profile = getDefaultProfileForSlot(1);
-    const keyboard = new Set(["KeyZ"]);
+    const keyboard = new Set(["KeyJ"]);
     const actions = resolveProfileActions(profile, keyboard, null);
     const frame = actionsToInputFrame(0, 0, actions);
     assert.equal(frame.attack, true);

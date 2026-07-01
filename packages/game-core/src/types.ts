@@ -84,6 +84,8 @@ export type PlayerState = {
   jumpBufferFrames: number;
   fastFalling: boolean;
   currentMoveId: string;
+  /** Defender ids already hit during the current move instance (cleared on new move). */
+  hitVictimsThisMove: number[];
   aura: import("./aura/auraTypes.js").AuraChargeState;
 };
 

@@ -4,21 +4,29 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { APP_ROUTES } from "../src/routes.ts";
-import { ALL_MAIN_MENU_ITEMS, MAIN_MENU_PRIMARY } from "../src/ui/mainMenuConfig.ts";
+import { ALL_MAIN_MENU_ITEMS, MAIN_MENU_LABS, MAIN_MENU_PRIMARY } from "../src/ui/mainMenuConfig.ts";
 import { renderHomeMarkup } from "../src/screens/homeScreenMarkup.ts";
 
 const webRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 describe("main menu routes", () => {
-  it("Godot combat is primary menu entry", () => {
-    assert.equal(MAIN_MENU_PRIMARY[0]!.route, APP_ROUTES.godot);
-    assert.equal(MAIN_MENU_PRIMARY[0]!.mode, "godot");
+  it("Quick Match is primary menu entry", () => {
+    assert.equal(MAIN_MENU_PRIMARY[0]!.id, "btn-quick-match");
+    assert.equal(MAIN_MENU_PRIMARY[0]!.route, APP_ROUTES.battle);
+    assert.equal(MAIN_MENU_PRIMARY[0]!.mode, "battle");
   });
 
-  it("legacy Start Match uses match setup rules hash", () => {
-    const legacy = MAIN_MENU_PRIMARY.find((m) => m.id === "btn-play-match");
-    assert.equal(legacy?.route, APP_ROUTES.matchSetupRules);
-    assert.equal(legacy?.mode, "match-setup-rules");
+  it("custom match setup remains available as secondary primary", () => {
+    const custom = MAIN_MENU_PRIMARY.find((m) => m.id === "btn-play-match");
+    assert.equal(custom?.route, APP_ROUTES.matchSetupRules);
+    assert.equal(custom?.mode, "match-setup-rules");
+  });
+
+  it("experimental modes live under labs", () => {
+    const labIds = new Set(MAIN_MENU_LABS.map((m) => m.id));
+    assert.ok(labIds.has("btn-godot-combat"));
+    assert.ok(labIds.has("btn-flagline-clash"));
+    assert.ok(labIds.has("btn-impact-dummy-derby"));
   });
 
   it("no home menu item points to root /play", () => {
@@ -36,7 +44,6 @@ describe("main menu routes", () => {
     const routes = new Map(ALL_MAIN_MENU_ITEMS.map((i) => [i.id, i.route]));
     assert.equal(routes.get("btn-custom-game"), APP_ROUTES.customGame);
     assert.equal(routes.get("btn-training"), APP_ROUTES.training);
-    assert.equal(routes.get("btn-impact-dummy-derby"), APP_ROUTES.impactDummyDerby);
     assert.equal(routes.get("btn-create-fighter"), APP_ROUTES.createFighter);
     assert.equal(routes.get("btn-career"), APP_ROUTES.career);
     assert.equal(routes.get("btn-controls"), APP_ROUTES.controls);

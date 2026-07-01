@@ -1,4 +1,4 @@
-import { describe, it } from "node:test";
+import { describe, it, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
@@ -8,21 +8,46 @@ import { renderHomeMarkup } from "../src/screens/homeScreenMarkup.ts";
 
 const webRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
+const storage = new Map<string, string>();
+(globalThis as { localStorage?: Storage }).localStorage = {
+  getItem: (k) => storage.get(k) ?? null,
+  setItem: (k, v) => storage.set(k, v),
+  removeItem: (k) => storage.delete(k),
+  clear: () => storage.clear(),
+  key: () => null,
+  length: 0,
+};
+
+const { createQuickMatchSetup } = await import("../src/match/quickMatch.ts");
+
+beforeEach(() => storage.clear());
+
 describe("start match route", () => {
-  it("APP_ROUTES.matchSetupRules is the setup entry", () => {
-    assert.equal(APP_ROUTES.matchSetupRules, "#/match-setup/rules");
+  it("Quick Match uses battle route", () => {
+    assert.equal(APP_ROUTES.battle, "#/battle");
+    const html = renderHomeMarkup();
+    assert.match(html, /id="btn-quick-match"/);
+    assert.match(html, /#\/battle/);
   });
 
-  it("HomeScreen legacy Start Match links to match setup rules", () => {
+  it("custom setup links to match setup rules", () => {
     const html = renderHomeMarkup();
     assert.match(html, /id="btn-play-match"/);
-    assert.match(html, /Legacy Web Prototype/);
+    assert.match(html, /Custom Match Setup/);
     assert.match(html, /#\/match-setup\/rules/);
   });
 
-  it("main menu config maps btn-play-match to match-setup-rules", () => {
+  it("quick match defaults use skyline arena and 3 stocks", () => {
+    const setup = createQuickMatchSetup();
+    assert.equal(setup.stageId, "skyline-arena");
+    assert.equal(setup.ruleset?.stocks, 3);
+    assert.equal(setup.playerCount, 2);
+    assert.equal(setup.ruleset?.itemFrequency, "off");
+  });
+
+  it("main menu config maps btn-quick-match to battle", () => {
     const config = fs.readFileSync(path.join(webRoot, "src/ui/mainMenuConfig.ts"), "utf8");
-    assert.match(config, /btn-play-match/);
-    assert.match(config, /match-setup-rules/);
+    assert.match(config, /btn-quick-match/);
+    assert.match(config, /battle/);
   });
 });

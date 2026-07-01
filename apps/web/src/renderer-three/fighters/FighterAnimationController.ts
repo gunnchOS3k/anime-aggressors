@@ -83,6 +83,7 @@ export function derbyPlayerToAnimationState(player: DerbyPlayerState, fighter: C
         : player.actionState === "special"
           ? "neutral_special"
           : "none",
+    hitVictimsThisMove: [],
     aura: createDefaultAuraState(),
   };
 }

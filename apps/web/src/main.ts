@@ -11,7 +11,7 @@ let homeScreen: HomeScreenHandle | null = null;
 function showHome(): void {
   if (appRoot) {
     appRoot.innerHTML = "";
-    appRoot.classList.add("hidden");
+    appRoot.classList.remove("hidden", "app-root--battle");
   }
   home?.classList.remove("hidden");
   if (home) {
@@ -21,7 +21,9 @@ function showHome(): void {
 }
 
 async function navigate(mode: AppRouteMode): Promise<void> {
+  const isBattleRoute = mode === "battle" || mode === "match";
   if (mode === "home") {
+    appRoot?.classList.remove("app-root--battle");
     showHome();
     return;
   }
@@ -30,7 +32,14 @@ async function navigate(mode: AppRouteMode): Promise<void> {
   homeScreen?.dispose();
   homeScreen = null;
   appRoot?.classList.remove("hidden");
-  if (appRoot) appRoot.innerHTML = "";
+  if (appRoot) {
+    appRoot.innerHTML = "";
+    if (isBattleRoute) {
+      appRoot.classList.add("app-root--battle");
+    } else {
+      appRoot.classList.remove("app-root--battle");
+    }
+  }
 
   try {
     if (mode === "match-setup-rules") {
@@ -54,22 +63,9 @@ async function navigate(mode: AppRouteMode): Promise<void> {
       mountMatchSetupControlsScreen(appRoot!);
     } else if (mode === "battle") {
       const { launchMatch } = await import("./game/App.js");
-      const { mountFlaglineClash } = await import("./modes/flaglineClashView.js");
-      const { applySetupToMatchSession, loadMatchSetup } = await import("./match/matchSetupSession.js");
-      const { resolveBattleRoute } = await import("./navigation/modeFlow.ts");
-      const { navigateTo } = await import("./router.js");
-      const resolved = resolveBattleRoute();
-      if (resolved.mode !== "battle") {
-        navigateTo(resolved.mode);
-        return;
-      }
-      const setup = loadMatchSetup();
-      applySetupToMatchSession(setup);
-      if (setup.mode === "flaglineClash" || setup.ruleset?.matchType === "flaglineClash") {
-        mountFlaglineClash(appRoot!);
-      } else {
-        launchMatch(appRoot!, { skipSelect: true });
-      }
+      const { ensureBattleReadySetup } = await import("./match/quickMatch.ts");
+      ensureBattleReadySetup();
+      launchMatch(appRoot!, { skipSelect: true });
     } else if (mode === "create-fighter") {
       const { mountCreateFighterScreen } = await import("./screens/CreateFighterScreen.js");
       mountCreateFighterScreen(appRoot!);
@@ -118,7 +114,9 @@ async function navigate(mode: AppRouteMode): Promise<void> {
       });
     } else if (mode === "match") {
       const { launchMatch } = await import("./game/App.js");
+      const { ensureBattleReadySetup } = await import("./match/quickMatch.ts");
       const { getMatchSetup } = await import("./match/matchSession.js");
+      ensureBattleReadySetup();
       const setup = getMatchSetup();
       launchMatch(appRoot!, {
         skipSelect: setup.customFlow && !!(setup.p1Fighter && setup.p2Fighter),

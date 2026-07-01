@@ -5,12 +5,16 @@ import { actionsToInputFrame, resolveProfileActions } from "../src/input/profile
 import { getDefaultProfileForSlot } from "../src/input/inputProfiles.ts";
 
 describe("jump input mapping", () => {
-  it("P1 jump key is Space", () => {
+  it("P1 jump key is Space with W as alternate", () => {
     assert.equal(KEYBOARD_P1_BINDINGS.jump?.code, "Space");
+    assert.equal(KEYBOARD_P1_BINDINGS.moveUp?.code, "KeyW");
   });
 
-  it("P2 jump key is KeyW", () => {
-    assert.equal(KEYBOARD_P2_BINDINGS.jump?.code, "KeyW");
+  it("P2 jump keys are Numpad0 and ArrowUp", () => {
+    assert.equal(KEYBOARD_P2_BINDINGS.jump?.code, "Numpad0");
+    const profile = getDefaultProfileForSlot(2);
+    const actions = resolveProfileActions(profile, new Set(["ArrowUp"]), null);
+    assert.equal(actions.jump, true);
   });
 
   it("actionsToInputFrame sets jump", () => {

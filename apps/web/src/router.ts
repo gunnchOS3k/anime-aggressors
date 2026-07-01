@@ -1,5 +1,6 @@
 import { APP_ROUTES, hashToMode, modeToHash, navigateToHash, type AppRouteMode } from "./routes.js";
 import { setCustomFlow } from "./match/matchSession.js";
+import { startQuickMatch } from "./match/quickMatch.ts";
 
 export type RouteHandler = (mode: AppRouteMode) => void | Promise<void>;
 
@@ -45,6 +46,7 @@ export function navigateHome(): void {
 
 export function bindRouteButtons(): void {
   const map: [string, AppRouteMode][] = [
+    ["btn-quick-match", "battle"],
     ["btn-play-match", "match-setup-rules"],
     ["btn-create-fighter", "create-fighter"],
     ["btn-custom-game", "custom-game"],
@@ -68,6 +70,10 @@ export function bindRouteButtons(): void {
   for (const [id, mode] of map) {
     document.getElementById(id)?.addEventListener("click", (e) => {
       e.preventDefault();
+      if (id === "btn-quick-match") {
+        startQuickMatch();
+        return;
+      }
       if (id === "btn-play-match") setCustomFlow(false);
       navigateTo(mode);
     });

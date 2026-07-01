@@ -67,6 +67,7 @@ export function createInitialGameState(config: GameConfig): GameState {
       jumpBufferFrames: 0,
       fastFalling: false,
       currentMoveId: "none",
+      hitVictimsThisMove: [],
       aura: createDefaultAuraState(),
     };
     applyCreatedFighterToPlayer(player, fighter);

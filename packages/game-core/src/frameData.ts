@@ -9,6 +9,8 @@ export type MoveFrameData = {
   knockbackGrowth: number;
   hitstop: number;
   cancelWindows: number[];
+  /** When true, the same defender may be hit multiple times during one move instance. */
+  multiHit?: boolean;
 };
 
 export const FORWARD_ATTACK: MoveFrameData = {

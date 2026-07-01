@@ -9,9 +9,10 @@ import {
 } from "../src/ui/mainMenuConfig.ts";
 
 describe("main menu hierarchy", () => {
-  it("primary tier includes Godot combat and legacy Start Match", () => {
+  it("primary tier includes Quick Match and custom setup", () => {
     assert.equal(MAIN_MENU_PRIMARY.length, 2);
-    assert.equal(MAIN_MENU_PRIMARY[0]!.id, "btn-godot-combat");
+    assert.equal(MAIN_MENU_PRIMARY[0]!.id, "btn-quick-match");
+    assert.equal(MAIN_MENU_PRIMARY[1]!.id, "btn-play-match");
     assert.equal(MAIN_MENU_PRIMARY[1]!.tier, "primary");
   });
 

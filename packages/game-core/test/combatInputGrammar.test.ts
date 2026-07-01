@@ -41,6 +41,7 @@ function stubPlayer(): PlayerState {
     jumpBufferFrames: 0,
     fastFalling: false,
     currentMoveId: "none",
+    hitVictimsThisMove: [],
     aura: createDefaultAuraState(),
   };
 }
