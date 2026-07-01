@@ -1,0 +1,39 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fighters/fighter.gd" id="1"]
+
+[node name="Fighter" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1")
+
+[node name="Body" type="ColorRect" parent="."]
+offset_left = -20.0
+offset_top = -48.0
+offset_right = 20.0
+color = Color(0.8, 0.3, 0.3, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -24)
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 8
+
+[node name="HurtShape" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, -24)
+
+[node name="Hitbox" type="Area2D" parent="."]
+monitoring = false
+collision_layer = 8
+collision_mask = 4
+
+[node name="HitShape" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(32, -24)
+
+[node name="NameLabel" type="Label" parent="."]
+offset_left = -60.0
+offset_top = -72.0
+offset_right = 60.0
+offset_bottom = -52.0
+horizontal_alignment = 1

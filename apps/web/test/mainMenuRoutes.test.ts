@@ -10,21 +10,21 @@ import { renderHomeMarkup } from "../src/screens/homeScreenMarkup.ts";
 const webRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 describe("main menu routes", () => {
-  it("Start Game is primary menu entry", () => {
-    assert.equal(MAIN_MENU_PRIMARY[0]!.id, "btn-start-game");
-    assert.equal(MAIN_MENU_PRIMARY[0]!.label, "Start Game");
-    assert.equal(MAIN_MENU_PRIMARY[0]!.route, APP_ROUTES.fighterSelect);
-    assert.equal(MAIN_MENU_PRIMARY[0]!.mode, "fighter-select");
+  it("Godot Primary Runtime is the primary menu entry", () => {
+    assert.equal(MAIN_MENU_PRIMARY[0]!.id, "btn-godot-primary");
+    assert.equal(MAIN_MENU_PRIMARY[0]!.label, "Godot Primary Runtime");
+    assert.equal(MAIN_MENU_PRIMARY[0]!.route, APP_ROUTES.godot);
+    assert.equal(MAIN_MENU_PRIMARY[0]!.mode, "godot");
   });
 
-  it("Quick Play routes to battle", () => {
-    const quick = MAIN_MENU_PRIMARY.find((m) => m.id === "btn-quick-match");
-    assert.equal(quick?.label, "Quick Play");
+  it("legacy Quick Play routes to battle from labs", () => {
+    const quick = MAIN_MENU_LABS.find((m) => m.id === "btn-quick-match");
+    assert.equal(quick?.label, "Legacy Web — Quick Play");
     assert.equal(quick?.route, APP_ROUTES.battle);
   });
 
-  it("custom match setup remains available as secondary primary", () => {
-    const custom = MAIN_MENU_PRIMARY.find((m) => m.id === "btn-play-match");
+  it("legacy advanced setup lives in labs", () => {
+    const custom = MAIN_MENU_LABS.find((m) => m.id === "btn-play-match");
     assert.equal(custom?.route, APP_ROUTES.matchSetupRules);
     assert.equal(custom?.mode, "match-setup-rules");
   });
@@ -34,6 +34,7 @@ describe("main menu routes", () => {
     assert.ok(labIds.has("btn-godot-combat"));
     assert.ok(labIds.has("btn-flagline-clash"));
     assert.ok(labIds.has("btn-impact-dummy-derby"));
+    assert.ok(labIds.has("btn-start-game"));
   });
 
   it("no home menu item points to root /play", () => {

@@ -9,12 +9,17 @@ import {
 } from "../src/ui/mainMenuConfig.ts";
 
 describe("main menu hierarchy", () => {
-  it("primary tier includes Start Game, Quick Play, and advanced setup", () => {
-    assert.equal(MAIN_MENU_PRIMARY.length, 3);
-    assert.equal(MAIN_MENU_PRIMARY[0]!.id, "btn-start-game");
-    assert.equal(MAIN_MENU_PRIMARY[1]!.id, "btn-quick-match");
-    assert.equal(MAIN_MENU_PRIMARY[2]!.id, "btn-play-match");
-    assert.equal(MAIN_MENU_PRIMARY[2]!.tier, "primary");
+  it("primary tier is Godot Primary Runtime", () => {
+    assert.equal(MAIN_MENU_PRIMARY.length, 1);
+    assert.equal(MAIN_MENU_PRIMARY[0]!.id, "btn-godot-primary");
+    assert.equal(MAIN_MENU_PRIMARY[0]!.tier, "primary");
+  });
+
+  it("legacy web start paths moved to labs", () => {
+    const labIds = MAIN_MENU_LABS.map((m) => m.id);
+    assert.ok(labIds.includes("btn-start-game"));
+    assert.ok(labIds.includes("btn-quick-match"));
+    assert.ok(labIds.includes("btn-play-match"));
   });
 
   it("secondary modes are separate from labs", () => {

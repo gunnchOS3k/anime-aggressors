@@ -1,6 +1,7 @@
 import { installHashRouter, navigateHome, getRouteParams } from "./router.js";
 import type { AppRouteMode } from "./routes.js";
 import { mountHomeScreen, type HomeScreenHandle } from "./screens/HomeScreen.ts";
+import { attachRuntimeBanner } from "./ui/runtimeLabel.ts";
 import "./styles.css";
 
 const home = document.getElementById("home-view");
@@ -209,6 +210,10 @@ async function navigate(mode: AppRouteMode): Promise<void> {
     if (appRoot) {
       appRoot.innerHTML = '<p style="color:#ff6b6b">Failed to load module.</p>';
     }
+  }
+
+  if (appRoot) {
+    attachRuntimeBanner(appRoot, mode);
   }
 }
 

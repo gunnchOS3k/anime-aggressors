@@ -10,27 +10,13 @@ export type MainMenuItem = {
   tier: MenuItemTier;
 };
 
-/** Main public path — Start Game walks fighter → stage → ready → battle. */
+/** Primary path — Godot 4 runtime (local editor + web embed). */
 export const MAIN_MENU_PRIMARY: MainMenuItem[] = [
   {
-    id: "btn-start-game",
-    label: "Start Game",
-    route: APP_ROUTES.fighterSelect,
-    mode: "fighter-select",
-    tier: "primary",
-  },
-  {
-    id: "btn-quick-match",
-    label: "Quick Play",
-    route: APP_ROUTES.battle,
-    mode: "battle",
-    tier: "primary",
-  },
-  {
-    id: "btn-play-match",
-    label: "Advanced Match Setup",
-    route: APP_ROUTES.matchSetupRules,
-    mode: "match-setup-rules",
+    id: "btn-godot-primary",
+    label: "Godot Primary Runtime",
+    route: APP_ROUTES.godot,
+    mode: "godot",
     tier: "primary",
   },
 ];
@@ -108,6 +94,27 @@ export const MAIN_MENU_PLAYER: MainMenuItem[] = [
 /** Experimental — separated from main demo path. */
 export const MAIN_MENU_LABS: MainMenuItem[] = [
   {
+    id: "btn-start-game",
+    label: "Legacy Web — Start Game",
+    route: APP_ROUTES.fighterSelect,
+    mode: "fighter-select",
+    tier: "labs",
+  },
+  {
+    id: "btn-quick-match",
+    label: "Legacy Web — Quick Play",
+    route: APP_ROUTES.battle,
+    mode: "battle",
+    tier: "labs",
+  },
+  {
+    id: "btn-play-match",
+    label: "Legacy Web — Advanced Setup",
+    route: APP_ROUTES.matchSetupRules,
+    mode: "match-setup-rules",
+    tier: "labs",
+  },
+  {
     id: "btn-create-fighter",
     label: "Create Fighter",
     route: APP_ROUTES.createFighter,
@@ -116,7 +123,7 @@ export const MAIN_MENU_LABS: MainMenuItem[] = [
   },
   {
     id: "btn-godot-combat",
-    label: "Godot Combat Prototype",
+    label: "Godot Web Export",
     route: APP_ROUTES.godot,
     mode: "godot",
     tier: "labs",

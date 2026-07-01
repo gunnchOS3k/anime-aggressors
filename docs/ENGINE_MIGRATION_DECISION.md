@@ -1,233 +1,258 @@
 # Engine Migration Decision — Anime Aggressors
 
-**Status:** Decision proposal (documentation only)  
+**Status:** Approved  
 **Last updated:** 2026-07-01  
-**Revisit date:** 2026-09-01 (after public demo + engine spike)
+**Effective:** 2026-07-01  
+**Related:** [Product runtime pivot](./PRODUCT_RUNTIME_PIVOT.md) · [Console UX spec](./CONSOLE_PLATFORM_FIGHTER_UX_SPEC.md) · [Legacy web status](./LEGACY_WEB_RUNTIME_STATUS.md)
 
-> **This document does not authorize or perform engine migration.** Milestone 5 ships the TypeScript + Three.js web demo. Migration becomes its own milestone only if this proposal is approved and a spike proves value.
+---
+
+## Decision summary
+
+| Role | Technology | Location |
+|------|------------|----------|
+| **Primary gameplay runtime** | Godot 4 + GDScript | `game-godot/` |
+| **Spec, tests, validation, tooling** | TypeScript monorepo | `packages/game-core`, `packages/rollback`, `apps/web` |
+| **Temporary web preview / launcher** | Vite + Godot web export embed | `apps/web`, GitHub Pages |
+| **Later rollback spike** | C++ GDExtension | TBD under `game-godot/` |
+| **Not chosen this phase** | Unity/C#; custom C++ engine | Deferred |
+
+TypeScript + Three.js is **no longer the final gameplay runtime**. It remains the **reference implementation and test oracle** until Godot battle logic reaches documented parity.
 
 ---
 
 ## Current state of Anime Aggressors
 
-| Layer | Technology | Maturity |
-|-------|------------|----------|
-| Simulation | TypeScript `packages/game-core` | M1–M4 proven (platform, movement, combat, roster) |
-| Rollback harness | TypeScript `packages/rollback` | Local/replay tested |
-| Web client | Vite + hash routes | GitHub Pages deployable |
-| Rendering | Three.js procedural | Playable, not final art |
-| Labs | Godot export, Edge-IO, derby, flagline | Experimental, separated from demo |
+| Layer | Technology | Role after pivot |
+|-------|------------|------------------|
+| Simulation spec | TypeScript `packages/game-core` | Oracle + unit tests (M1–M4 proven) |
+| Rollback harness | TypeScript `packages/rollback` | Design reference; not shipping path |
+| Web client | Vite + hash routes | Launcher, legacy preview, docs host |
+| Legacy rendering | Three.js procedural | Deprecated gameplay path; labeled in UI |
+| **Primary runtime** | Godot 4 GDScript | Menus, battle, assets, controller UX |
+| Labs | Edge-IO, derby experiments | Separated from primary flow |
+
+Prior Godot work under `game/godot/` is consolidated into `game-godot/` as the canonical project for this decision.
 
 ---
 
-## What TypeScript has proven so far
+## What TypeScript has proven
 
 - Deterministic 60 Hz fixed-point simulation with extensive unit tests
-- Platform-fighter movement feel (M2), combat grammar (M3), 7-fighter roster slice (M4)
-- Rollback-friendly state hashing and input frames
-- Rapid iteration for designers/engineers in a monorepo
-- Browser-playable vertical slice without native install
+- Platform-fighter movement feel (M2), combat grammar (M3), seven-fighter roster rules (M4)
+- Rollback-friendly state hashing and `InputFrame` contract
+- Rapid iteration for rules and data in a monorepo
+- Browser-accessible preview without native install
+
+These proofs **inform** Godot implementation. They do not require the web canvas to remain the shipping battle renderer.
 
 ---
 
-## What TypeScript should not be trusted to solve forever
+## What TypeScript should not solve going forward
 
-- Console-grade frame pacing and GPU skinning at scale
-- Native controller latency on all platforms
-- Mobile thermal/battery performance with rich VFX
-- AAA animation blending, IK, and cinematic pipelines
-- Shipping on Switch/console without a native runtime wrapper
-- Long-term art team workflow (DCC → engine) at production scale
+- Console-grade frame pacing and GPU skinning at production scale
+- Native controller latency as the primary feel target
+- Authored animation blending, IK, choreography, and cinematic VFX
+- Controller-first menu systems with production polish
+- Long-term DCC → engine art workflow at AAA indie scale
 
 ---
 
-## What must be preserved in any migration
+## What must be preserved in migration
 
-1. **game-core rules as spec/oracle** — hitboxes, movement constants, combat grammar, roster data
+1. **`game-core` rules as spec/oracle** — hitboxes, movement constants, combat grammar, roster data
 2. **Deterministic simulation contract** — 60 Hz, `InputFrame`, reproducible tests
-3. **Rollback design assumptions** — serializable state, frame inputs
-4. **Existing 7 fighters + 3 production stages** as content baseline
-5. **Playable web path** until native demo replaces it
+3. **Rollback design assumptions** — serializable state, frame inputs (for future GDExtension spike)
+4. **Existing seven fighters + production stages** as content baseline
+5. **Playable web path** until Godot fully replaces legacy battle (Phase 4)
 
 ---
 
 ## Option comparisons
 
-### 1. Keep TypeScript + Three.js (web)
+Evaluation criteria: **performance**, **controller support**, **animation pipeline**, **UI/menu pipeline**, **asset pipeline**, **deterministic simulation**, **rollback/netplay (later)**, **web/mobile constraints**, **team velocity**.
 
-| | |
-|--|--|
-| **Summary** | Continue shipping browser MVP on current stack |
-| **Strengths** | Fastest path to public demo; tests already green; no rewrite |
-| **Weaknesses** | Performance ceiling; procedural art limits; mobile weak |
-| **Performance risks** | Medium on desktop; high on mobile |
-| **Browser/mobile** | Desktop OK; mobile touch not production-ready |
-| **Controller** | Gamepad API works; not as tight as native |
-| **Animation** | Procedural poses; limited choreography |
-| **Rollback/netplay** | Best fit — same language as sim |
-| **Deterministic portability** | Already authoritative |
-| **Asset pipeline** | Code-first; weak for DCC |
-| **Dev speed** | Highest |
-| **Testing** | Excellent (unit + web smoke) |
-| **Hiring** | Web/TS talent plentiful |
-| **Risk** | Low short-term, medium long-term |
-| **Use case** | Public demo, playtests, design iteration |
+### 1. TypeScript + Three.js (web)
+
+| Criterion | Assessment |
+|-----------|------------|
+| **Summary** | Browser SPA + Canvas/Three.js; `game-core` sim in TS |
+| **Performance** | Medium on desktop; high risk on mobile and with rich VFX |
+| **Controller** | Gamepad API works; higher latency than native; not primary target |
+| **Animation** | Procedural poses; weak for authored choreography at scale |
+| **UI/menu** | DOM + custom screens; hard to match console tile UX natively |
+| **Assets** | Code-first; poor fit for Blender rig pipeline |
+| **Determinism** | **Strong** — already authoritative oracle |
+| **Rollback/netplay** | **Best fit today** — same language as sim |
+| **Web/mobile** | Desktop web OK; mobile thermal/battery weak |
+| **Team velocity** | Highest for rules/tests; **low** for production fighter polish |
+| **Risk** | Low for spec work; **high** if kept as final runtime |
+| **Verdict** | **Retain as spec, tests, tooling, legacy preview — not primary runtime** |
 
 ### 2. Godot 4 + GDScript
 
-| | |
-|--|--|
-| **Summary** | Migrate presentation + eventually sim to Godot |
-| **Strengths** | Fast prototyping; good 2.5D; export targets |
-| **Weaknesses** | GDScript perf; team may prefer TS/C# |
-| **Performance** | Good for indie 2.5D |
-| **Browser** | Web export usable but heavier than Vite SPA |
-| **Controller** | Strong native; web export variable |
-| **Animation** | Strong with proper rigs |
-| **Rollback** | Must re-port sim or FFI to TS core |
-| **Determinism** | Needs careful fixed-point port |
-| **Assets** | Blender → Godot pipeline exists in repo docs |
-| **Dev speed** | Medium |
-| **Testing** | Weaker than TS unit suite unless hybrid |
-| **Hiring** | Godot community growing |
-| **Risk** | Medium |
-| **Use case** | Native desktop/mobile demo after spike |
+| Criterion | Assessment |
+|-----------|------------|
+| **Summary** | Primary gameplay in Godot; GDScript for menus, battle, content |
+| **Performance** | Good for indie 2.5D; native exports beat browser |
+| **Controller** | **Strong** — native input, focus navigation, prompts |
+| **Animation** | **Strong** with authored rigs and AnimationTree |
+| **UI/menu** | **Strong** — Control nodes, themes, transitions, controller focus |
+| **Assets** | Blender → `.glb` pipeline documented and in use |
+| **Determinism** | Achievable; requires fixed-point discipline when porting sim |
+| **Rollback/netplay** | Re-port sim or bind TS/GDExtension later |
+| **Web/mobile** | Web export usable for embed; mobile/desktop exports viable |
+| **Team velocity** | **High** for gameplay + content iteration |
+| **Risk** | Medium — manageable with TS oracle |
+| **Verdict** | **Chosen primary runtime** |
 
 ### 3. Godot 4 + C#
 
-| | |
-|--|--|
-| **Summary** | Godot with C# for sim-heavy code |
-| **Strengths** | Stronger typing; closer to enterprise patterns |
-| **Weaknesses** | C# support varies by export target; heavier builds |
-| **Performance** | Better than GDScript for sim |
-| **Browser** | Web export with C# is limited |
+| Criterion | Assessment |
+|-----------|------------|
+| **Summary** | Godot presentation with C# for sim-heavy code |
+| **Performance** | Better than GDScript for hot sim loops |
 | **Controller** | Good on desktop/console exports |
-| **Animation** | Same as Godot |
-| **Rollback** | Port sim to C# or bind TS |
-| **Determinism** | Achievable with fixed-point discipline |
+| **Animation** | Same as Godot GDScript path |
+| **UI/menu** | Same as Godot; C# does not improve menu UX |
 | **Assets** | Same Godot pipeline |
-| **Dev speed** | Medium-slow |
-| **Testing** | xUnit-style possible |
-| **Hiring** | Unity refugees |
+| **Determinism** | Achievable with fixed-point discipline |
+| **Rollback/netplay** | Port sim to C# or hybrid bind |
+| **Web/mobile** | C# web export limited; complicates Pages embed |
+| **Team velocity** | Medium-slow — heavier builds, smaller Godot+C# roster |
 | **Risk** | Medium-high |
-| **Use case** | Desktop-first if team is C#-heavy |
+| **Verdict** | **Not chosen** — GDScript sufficient until profiling says otherwise |
 
 ### 4. Godot 4 + C++ GDExtension
 
-| | |
-|--|--|
-| **Summary** | Hot sim in C++; Godot for presentation |
-| **Strengths** | Best Godot perf; rollback-friendly sim |
-| **Weaknesses** | Build complexity; FFI boundary |
-| **Performance** | High |
-| **Browser** | Web export still constrained |
-| **Controller** | Native excellent |
-| **Animation** | Godot side |
-| **Rollback** | Ideal if sim is C++ |
-| **Determinism** | Excellent in C++ |
+| Criterion | Assessment |
+|-----------|------------|
+| **Summary** | Hot sim in C++; Godot for presentation and menus |
+| **Performance** | **High** |
+| **Controller** | Native excellent (Godot shell) |
+| **Animation** | Godot side unchanged |
+| **UI/menu** | Godot side unchanged |
 | **Assets** | Godot presentation |
-| **Dev speed** | Slow |
-| **Testing** | C++ test harness needed |
-| **Hiring** | Specialized |
-| **Risk** | High |
-| **Use case** | Competitive netplay-native path |
+| **Determinism** | **Excellent** in C++ |
+| **Rollback/netplay** | **Ideal** if sim lives in C++ |
+| **Web/mobile** | Web export still constrained; native-first |
+| **Team velocity** | **Slow** — build complexity, FFI boundary |
+| **Risk** | High upfront |
+| **Verdict** | **Later spike** if GDScript sim blocks rollback/netplay |
 
 ### 5. Unity + C#
 
-| | |
-|--|--|
+| Criterion | Assessment |
+|-----------|------------|
 | **Summary** | Industry-standard 3D/2.5D toolchain |
-| **Strengths** | Mature animation, VFX, hiring pool |
-| **Weaknesses** | License/runtime cost; web export weak |
 | **Performance** | Good on target platforms |
-| **Browser** | Poor for fighter web demo |
 | **Controller** | Excellent |
 | **Animation** | Best-in-class for indie AAA |
-| **Rollback** | Custom sim layer required |
-| **Determinism** | Harder — floating point defaults |
+| **UI/menu** | Strong with UI Toolkit / uGUI |
 | **Assets** | Strong DCC pipeline |
-| **Dev speed** | Medium (rewrite cost high) |
-| **Testing** | PlayMode tests |
-| **Hiring** | Large pool |
-| **Risk** | High for this repo's web-first proof |
-| **Use case** | Console SKU later |
+| **Determinism** | Harder — floating-point defaults |
+| **Rollback/netplay** | Custom sim layer required |
+| **Web/mobile** | Poor for fighter web preview; license considerations |
+| **Team velocity** | Medium — full rewrite cost |
+| **Risk** | High for this repo's existing TS/Godot investment |
+| **Verdict** | **Not chosen this phase** |
 
 ### 6. Custom C++ engine (later)
 
-| | |
-|--|--|
-| **Summary** | Own runtime after product proof |
-| **Strengths** | Maximum control; rollback/netplay |
-| **Weaknesses** | Years of tooling work |
+| Criterion | Assessment |
+|-----------|------------|
+| **Summary** | Own runtime after product and design proof |
 | **Performance** | Highest |
-| **Browser** | Requires WASM port for web |
 | **Controller** | Full control |
 | **Animation** | Build or license |
-| **Rollback** | Native design |
+| **UI/menu** | Build from scratch |
+| **Assets** | Custom tooling |
 | **Determinism** | Native design |
-| **Assets** | Custom |
-| **Dev speed** | Very slow |
-| **Testing** | Custom |
-| **Hiring** | Expensive |
+| **Rollback/netplay** | Native design |
+| **Web/mobile** | Requires WASM or separate clients |
+| **Team velocity** | **Very slow** |
 | **Risk** | Very high early |
-| **Use case** | Post-PMF commercial product |
+| **Verdict** | **Not until design proven in Godot** |
 
 ---
 
-## Candidate architecture after migration (if approved)
+## Comparison matrix (at a glance)
 
-```
-┌─────────────────────────────────────┐
-│  Presentation (Godot / native UI)   │
-├─────────────────────────────────────┤
-│  Ported sim OR GDExtension/C++ core  │  ← ported from game-core spec
-├─────────────────────────────────────┤
-│  game-core TS tests as oracle       │  ← kept until parity proven
-└─────────────────────────────────────┘
-```
+| Option | Perf | Controller | Animation | UI/menus | Assets | Determinism | Rollback later | Web/mobile | Velocity |
+|--------|------|------------|-----------|----------|--------|-------------|----------------|------------|----------|
+| TS + Three.js | ◐ | ◐ | ○ | ◐ | ○ | ● | ● | ● web / ○ mobile | ● rules / ○ polish |
+| **Godot GDScript** | ● | ● | ● | ● | ● | ◐ | ◐ | ◐ | ● |
+| Godot C# | ● | ● | ● | ● | ● | ◐ | ◐ | ○ web | ◐ |
+| Godot C++ ext | ●● | ● | ● | ● | ● | ● | ● | ○ web | ○ |
+| Unity C# | ● | ● | ●● | ● | ●● | ○ | ◐ | ○ | ◐ |
+| Custom C++ | ●● | ●● | ◐ | ○ | ○ | ● | ● | ○ | ○ |
 
-Hybrid interim: **TS game-core in WASM** + Godot/native shell (spike option).
+Legend: ● strong · ◐ adequate · ○ weak for this product stage
 
 ---
 
-## Minimum migration proof-of-concept
+## Target architecture
 
-1. One production fighter (Ember Vale) + Skyline Arena
-2. Movement + one attack + shield + KO
-3. Gamepad feel comparison vs web build
+```
+┌──────────────────────────────────────────────┐
+│  Godot 4 — menus, battle, HUD, results       │  ← primary runtime (GDScript)
+├──────────────────────────────────────────────┤
+│  Godot data — fighters, stages, moves        │  ← shared catalogs w/ validation
+├──────────────────────────────────────────────┤
+│  Optional: C++ GDExtension sim (later spike) │
+├──────────────────────────────────────────────┤
+│  TypeScript game-core — spec + unit oracle   │  ← retained until parity proven
+├──────────────────────────────────────────────┤
+│  Web shell — embed, docs, legacy preview     │
+└──────────────────────────────────────────────┘
+```
+
+Hybrid interim acceptable: **TS `game-core` tests gate Godot constants**; Godot owns all player-facing behavior.
+
+---
+
+## Minimum proof for battle parity (Phase 2)
+
+1. One production fighter (Ember Vale) + Skyline Arena fully playable in Godot
+2. Movement + attack + shield + KO + rematch
+3. Gamepad feel comparison vs legacy web build (documented, not blocking)
 4. Frame time budget on target hardware
-5. Determinism check: same inputs → same KO frame (±0)
+5. Determinism spot-check: same inputs → same KO outcome where sim is ported
 
 ---
 
 ## Recommendation
 
-**Ship the public MVP/demo on the current TypeScript + Three.js path.**
+**Adopt Godot 4 + GDScript in `game-godot/` as the primary gameplay runtime immediately.**
 
-- Keep `game-core` as the authoritative design/spec/test oracle.
-- After M5 public demo traction, run a **dedicated engine spike** (4–6 weeks):
-  - Godot 4 GDScript or C# prototype with one fighter
-  - Optional C++ GDExtension deterministic sim prototype
-  - Compare feel, performance, controller latency, export targets
-- **Do not rewrite** until the spike proves measurable value over web demo limits.
+- Implement console-style local platform fighter flow per [CONSOLE_PLATFORM_FIGHTER_UX_SPEC.md](./CONSOLE_PLATFORM_FIGHTER_UX_SPEC.md).
+- Keep TypeScript `game-core` as the **rules oracle and test suite**; do not delete web app or CI.
+- Run a **C++ GDExtension spike** only after Godot battle loop is stable and profiling shows GDScript sim is a netplay blocker.
+- Do **not** start Unity or custom C++ engine work this phase.
+- Deprecate Three.js **gameplay** path in Phase 4; until then, label it **Legacy Web Runtime**.
 
 ---
 
-## Decision
+## Decision record
 
 | Field | Value |
 |-------|-------|
-| **Proposal** | Stay on TypeScript + Three.js for public demo; defer migration |
-| **Approved by** | _Pending product/engineering review_ |
-| **Effective** | After M5 merge |
-| **Next action** | Schedule engine spike milestone if demo KPIs met |
+| **Primary runtime** | Godot 4 GDScript, `game-godot/` |
+| **TypeScript/web** | Reference, spec, tooling, temporary preview |
+| **C++ GDExtension** | Later spike for rollback |
+| **Unity/C#** | Not chosen |
+| **Custom C++** | Not until design proven |
+| **Approved by** | Product/engineering pivot (branch `product/runtime-pivot-godot-primary`) |
+| **Effective** | 2026-07-01 |
+| **Next action** | Phase 1 skeleton + Phase 2 battle parity playtest |
 
 ---
 
 ## Revisit date
 
 **2026-09-01** — Re-evaluate after:
-- Public demo deploy + playtest feedback
-- Engine spike results (if started)
-- Performance issues on target browsers/devices
+
+- Godot Phase 2 battle parity playtest
+- GDExtension spike results (if started)
+- Data validation CI between TS and Godot catalogs
+- Legacy web route traffic and confusion reports

@@ -2402,6 +2402,58 @@ body {
   to { transform: scale(1); opacity: 1; }
 }
 
+.runtime-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  border-bottom: 2px solid rgba(245, 197, 66, 0.35);
+  background: rgba(8, 12, 22, 0.92);
+  color: #e8ecf4;
+  z-index: 20;
+}
+
+.runtime-banner__label {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.runtime-banner__hint {
+  opacity: 0.85;
+}
+
+.runtime-banner--godot-primary {
+  border-bottom-color: rgba(92, 184, 92, 0.5);
+}
+
+.runtime-banner--godot-primary .runtime-banner__label {
+  color: #8fd48f;
+}
+
+.runtime-banner--legacy-web {
+  border-bottom-color: rgba(255, 140, 90, 0.55);
+}
+
+.runtime-banner--legacy-web .runtime-banner__label {
+  color: #ffb07a;
+}
+
+.runtime-banner--labs {
+  border-bottom-color: rgba(180, 120, 255, 0.45);
+}
+
+.runtime-banner--labs .runtime-banner__label {
+  color: #c9a0ff;
+}
+
+.runtime-banner--home {
+  position: relative;
+  z-index: 5;
+}
+
 .godot-runtime-shell {
   display: flex;
   flex-direction: column;

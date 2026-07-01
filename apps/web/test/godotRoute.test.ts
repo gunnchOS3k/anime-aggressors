@@ -16,10 +16,10 @@ describe("godot route", () => {
     assert.equal(MODE_TO_ROUTE.godot, "#/godot");
   });
 
-  it("labs menu includes Godot Combat Prototype", () => {
+  it("labs menu includes Godot web export entry", () => {
     const item = MAIN_MENU_LABS.find((m) => m.id === "btn-godot-combat");
     assert.ok(item);
-    assert.match(item!.label, /Godot Combat Prototype/i);
+    assert.match(item!.label, /Godot Web Export/i);
   });
 
   it("GodotRuntimeScreen exists with project-safe embed path", () => {
@@ -41,7 +41,8 @@ describe("godot route", () => {
     assert.ok(files.some((f) => f === "index.html"));
   });
 
-  it("godot project file exists", () => {
+  it("godot project files exist (legacy and primary)", () => {
     assert.ok(fs.existsSync(path.join(webRoot, "../../game/godot/project.godot")));
+    assert.ok(fs.existsSync(path.join(webRoot, "../../game-godot/project.godot")));
   });
 });
