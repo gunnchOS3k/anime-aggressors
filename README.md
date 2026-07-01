@@ -19,6 +19,30 @@ Anime Aggressors now uses a **split architecture**:
 
 See [docs/ENGINE_DECISION_RECORD.md](docs/ENGINE_DECISION_RECORD.md) and [docs/GODOT_RUNTIME_INTEGRATION.md](docs/GODOT_RUNTIME_INTEGRATION.md).
 
+## Production Rescue Strategy
+
+Anime Aggressors is moving from prototype code generation to a **real production workflow**.
+
+**Current architecture:**
+
+| Layer | Role |
+|-------|------|
+| **TypeScript** | Web launcher / GitHub Pages shell |
+| **Godot** | Public web gameplay runtime |
+| **Blender** | Source assets, rigs, animations |
+| **Unreal** | High-fidelity R&D track for anime combat, VFX, cinematics |
+
+The project **no longer accepts debug placeholder fighters as final product**. Missing production GLB assets show **DEBUG FALLBACK — NOT PRODUCTION MODEL** and fail content gates.
+
+See [docs/PRODUCT_RESCUE_PLAN.md](docs/PRODUCT_RESCUE_PLAN.md), [docs/ROADBLOCK_AUDIT.md](docs/ROADBLOCK_AUDIT.md), [docs/ENGINE_STRATEGY.md](docs/ENGINE_STRATEGY.md).
+
+## Current Roadblock
+
+The blocker is **not** just engine choice. The blocker is the **missing art / animation / VFX / choreography production pipeline** and the lack of acceptance gates that enforce shippable content.
+
+Milestones **M0–M9** are defined in [docs/production/PRODUCT_MILESTONES.md](docs/production/PRODUCT_MILESTONES.md).
+
+
 [Godot Prototype](https://gunnchos3k.github.io/anime-aggressors/#/godot) · [Legacy Start Match](https://gunnchos3k.github.io/anime-aggressors/#/match-setup/rules) · [Web Build Home](https://gunnchos3k.github.io/anime-aggressors/) · [PC Playtest Guide](docs/playtest/PC_PLAYTEST_GUIDE.md) · [Give Feedback](docs/playtest/feedback-form.md)
 
 **Match setup link:** `https://gunnchos3k.github.io/anime-aggressors/#/match-setup/rules`  

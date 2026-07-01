@@ -76,8 +76,8 @@ body {
 	z-index: 1;
 }
 		</style>
-		<link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.png?v=8c63172" />
-<link rel="apple-touch-icon" href="index.apple-touch-icon.png?v=8c63172"/>
+		<link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.png?v=8a70a26" />
+<link rel="apple-touch-icon" href="index.apple-touch-icon.png?v=8a70a26"/>
 
 	</head>
 	<body>
@@ -90,14 +90,14 @@ body {
 		</noscript>
 
 		<div id="status">
-			<img id="status-splash" src="index.png?v=8c63172" alt="">
+			<img id="status-splash" src="index.png?v=8a70a26" alt="">
 			<progress id="status-progress"></progress>
 			<div id="status-notice"></div>
 		</div>
 
-		<script src="index.js?v=8c63172"></script>
+		<script src="index.js?v=8a70a26"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"ensureCrossOriginIsolationHeaders":false,"executable":"index","fileVersion":"8c63172","experimentalVK":false,"fileSizes":{"index.pck":150528,"index.wasm":35376909},"focusCanvas":true,"gdextensionLibs":[]};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"ensureCrossOriginIsolationHeaders":false,"executable":"index","fileVersion":"8a70a26","experimentalVK":false,"fileSizes":{"index.pck":174352,"index.wasm":35376909},"focusCanvas":true,"gdextensionLibs":[]};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
@@ -136,7 +136,7 @@ const engine = new Engine(GODOT_CONFIG);
 	}
 
 	function displayFailureNotice(err) {
-		try { window.parent?.postMessage({ type: 'aa:godot-error', message: String(err && err.message ? err.message : err), buildId: '8c63172' }, '*'); } catch (_) {}
+		try { window.parent?.postMessage({ type: 'aa:godot-error', message: String(err && err.message ? err.message : err), buildId: '8a70a26' }, '*'); } catch (_) {}
 		console.error(err);
 		if (err instanceof Error) {
 			setStatusNotice(err.message);
@@ -192,7 +192,7 @@ const engine = new Engine(GODOT_CONFIG);
 		}).then(() => {
 			setStatusMode('hidden');
 			console.log('Godot engine started');
-			window.parent?.postMessage({ type: 'aa:godot-ready', scene: 'Main', buildId: '8c63172' }, '*');
+			window.parent?.postMessage({ type: 'aa:godot-ready', scene: 'Main', buildId: '8a70a26' }, '*');
 		}, displayFailureNotice);
 	}
 }());

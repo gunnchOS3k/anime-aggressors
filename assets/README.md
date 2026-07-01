@@ -1,7 +1,20 @@
-# Assets
+# Anime Aggressors — Source Assets
 
-Original GLB/glTF files for Anime Aggressors. **No third-party IP.**
+## Layout
 
-Until binaries are committed, the web demo uses procedural Three.js placeholders.
+```
+assets/
+  blender/     # editable .blend sources
+  exports/     # engine-ready exports
+  refs/        # moodboards, animation notes
+```
 
-See `docs/ASSET_PIPELINE.md` and `assets/manifest.json`.
+## Rules
+
+- **Blender `.blend` files are the editable source of truth.**
+- **Godot** imports `.glb` / `.gltf` from `exports/godot/`.
+- **Unreal** imports `.fbx` or `.glb` from `exports/unreal/`.
+- Every fighter needs: model, rig, animations, material palette, sockets, VFX anchors.
+- **No copyrighted characters, moves, sounds, or ripped assets.** Original or properly licensed only.
+
+See `blender/README.md` and `exports/README.md`.
