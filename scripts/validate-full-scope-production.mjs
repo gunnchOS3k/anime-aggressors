@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const godotRoot = path.join(root, "game-godot");
+const tmpDir = path.join(root, "tmp");
 
 const FIGHTERS = [
   "ember-vale", "rook-ironside", "juno-spark", "kaia-windrow",
@@ -48,7 +49,7 @@ const CORE_SYSTEMS = [
   "fighter_movement", "fighter_states", "move_runner_60hz", "hit_resolver", "shield", "dodge",
   "grab_throw", "aura_charge_burst", "ko_stocks_respawn", "training_mode", "debug_hud",
   "hitbox_overlay", "cpu_tiers", "proxy_animations", "data_loading", "full_roster_data",
-  "move_manifests", "validation_scripts",
+  "move_manifests", "validation_scripts", "verification_loop",
 ];
 
 const IMPLEMENTED_OK = new Set(["implemented", "functional_proxy", "final_art_blocked_only"]);
@@ -84,6 +85,12 @@ const REQUIRED_DOCS = [
   "docs/FULL_SCOPE_IMPLEMENTATION_AUDIT.md",
   "docs/FULL_SCOPE_IMPLEMENTATION_REPORT.md",
   "docs/CORE_GAMEPLAY_IMPLEMENTATION_STATUS.md",
+  "docs/GODOT_VERIFICATION_PLAN.md",
+  "docs/GODOT_EDITOR_PLAYTEST_SIGNOFF.md",
+  "docs/PLAYTEST_EVIDENCE_GUIDE.md",
+  "docs/PR48_VERIFICATION_REPORT.md",
+  "docs/KNOWN_RUNTIME_RISKS.md",
+  "docs/MANUAL_PLAYTEST_SIGNOFF_TEMPLATE.md",
 ];
 
 const BANNED_IP = [/super\s*smash/i, /smash\s*bros/i, /nintendo/i];
@@ -144,7 +151,62 @@ for (const key of CORE_SYSTEMS) {
   else if (!IMPLEMENTED_OK.has(st)) fail(`core system ${key} status not implemented: ${st}`);
   else if (BANNED_CORE_STATUS.test(st)) fail(`core system ${key} uses banned status word`);
 }
+if (!Array.isArray(implStatus.blockers) || implStatus.blockers.length === 0) {
+  fail("core_implementation_status must list blockers (final-art + manual playtest)");
+}
+if (!implStatus.verification_tiers?.godot_editor_playtest?.includes("manual")) {
+  fail("core_implementation_status must mark godot_editor_playtest as manual_signoff_required");
+}
 ok("core implementation status");
+
+// PR #48 verification artifacts
+const smokeTests = [
+  "tests/smoke_boot.gd",
+  "tests/smoke_data_load.gd",
+  "tests/smoke_fighter_scene.gd",
+  "tests/smoke_training_scene.gd",
+  "tests/smoke_battle_scene.gd",
+  "tests/smoke_runner.gd",
+];
+for (const s of smokeTests) {
+  if (!fs.existsSync(path.join(godotRoot, s))) fail(`missing Godot smoke test ${s}`);
+}
+if (!fs.existsSync(path.join(root, "scripts/aa-verify-project.mjs"))) {
+  fail("missing scripts/aa-verify-project.mjs");
+}
+if (!fs.existsSync(path.join(root, "playtest-evidence/.gitkeep"))) {
+  fail("missing playtest-evidence folder");
+}
+if (!fs.existsSync(path.join(root, "docs/manual-playtests/.gitkeep"))) {
+  fail("missing docs/manual-playtests folder");
+}
+ok("PR48 verification artifacts");
+
+// Overclaiming guards
+const OVERCLAIM = /manual editor test passed|manual test status:\s*\*\*pass\b|(?<![\w-])fully verified runtime(?!\s+requires)|claim full product completion/i;
+const signedPlaytests = fs.existsSync(path.join(root, "docs/manual-playtests"))
+  ? fs.readdirSync(path.join(root, "docs/manual-playtests")).filter((f) => f.endsWith(".md") && !f.startsWith("."))
+  : [];
+for (const docPath of [
+  "docs/FULL_SCOPE_IMPLEMENTATION_REPORT.md",
+  "docs/PR48_VERIFICATION_REPORT.md",
+  "docs/CORE_GAMEPLAY_IMPLEMENTATION_STATUS.md",
+  "README.md",
+]) {
+  const text = read(docPath);
+  if (OVERCLAIM.test(text) && signedPlaytests.length === 0) {
+    fail(`${docPath} claims manual/editor verification passed without docs/manual-playtests/*.md signoff`);
+  }
+  if (/godot cli verified/i.test(text) && /GODOT_CLI_MISSING|cli_missing|manual_blocker_cli_missing/i.test(text) === false) {
+    if (!fs.existsSync(path.join(tmpDir, "aa-verify-project-report.json"))) {
+      // allow if report not generated yet during first validate-only run
+    }
+  }
+}
+if (/claim fully verified runtime/i.test(read("docs/PR48_VERIFICATION_REPORT.md")) && signedPlaytests.length === 0) {
+  fail("PR48 report must not claim fully verified runtime without signoff");
+}
+ok("overclaiming guards");
 
 // Fighters
 for (const id of FIGHTERS) {
@@ -324,6 +386,21 @@ for (const s of REQUIRED_SCENES) {
   if (!fs.existsSync(path.join(godotRoot, s))) fail(`missing scene ${s}`);
 }
 ok("required scenes");
+
+function validateSceneScripts(sceneRel) {
+  const full = path.join(godotRoot, sceneRel);
+  if (!fs.existsSync(full)) return;
+  const src = fs.readFileSync(full, "utf8");
+  const scriptRe = /path="(res:\/\/[^"]+\.gd)"/g;
+  let m;
+  while ((m = scriptRe.exec(src)) !== null) {
+    const rel = m[1].replace("res://", "");
+    const sp = path.join(godotRoot, rel);
+    if (!fs.existsSync(sp)) fail(`scene ${sceneRel} references missing script ${m[1]}`);
+  }
+}
+for (const s of REQUIRED_SCENES) validateSceneScripts(s);
+ok("scene script path sanity");
 
 const coreScripts = [
   "scripts/fighters/fighter_state_machine.gd",

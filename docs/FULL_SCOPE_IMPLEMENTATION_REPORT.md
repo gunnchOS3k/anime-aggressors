@@ -78,7 +78,7 @@ Main Menu → Training → P1/dummy/stage/behavior/CPU → Start
 → Esc training menu → Main Menu
 ```
 
-**Manual test status:** Pending local Godot editor session (CLI unavailable in CI agent). Automated validation passes.
+**Manual test status:** **Not signed** — editor playtest required (`docs/GODOT_EDITOR_PLAYTEST_SIGNOFF.md`). Automated npm gates pass via `aa-verify-project.mjs`; Godot CLI verification depends on local install.
 
 ---
 
