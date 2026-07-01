@@ -5,13 +5,36 @@
   "element": "Frost",
   "size": "large",
   "color": "#4a90d9",
+  "auraColor": "#4a90d9",
   "weight": 118,
-  "speed": 90,
-  "jump": 95,
-  "recovery": 98,
+  "runSpeed": 252,
+  "dashSpeed": 378,
+  "airSpeed": 198,
+  "jumpStrength": 589,
+  "fallSpeed": 1890,
+  "maxJumps": 2,
+  "damageTakenMult": 0.9,
+  "damageDealtMult": 1.05,
+  "shieldHealthMult": 1.1,
   "signatureMove": "Glacier Lock",
-  "portraitPlaceholder": "res://assets/placeholder/fighter_nix-calder.svg",
-  "moves": ["jab", "tilt", "smash", "special", "recovery"],
-  "moveListPlaceholder": true,
-  "gameplayStatus": "preview"
+  "defaultSkin": "proxy_nix-calder",
+  "animationManifestPath": "res://data/fighters/nix-calder_animations.json",
+  "moveListPath": "res://data/moves/nix-calder.json",
+  "hitHurtProfile": {
+    "hurtboxWidth": 40,
+    "hurtboxHeight": 48,
+    "hitboxScale": 1
+  },
+  "shieldProfile": {
+    "maxHealth": 110.00000000000001,
+    "decayPerSecond": 18,
+    "stunMult": 1
+  },
+  "cpuBehaviorTags": [
+    "control",
+    "defensive"
+  ],
+  "productionStatus": "placeholder",
+  "portraitPlaceholder": "res://assets/ui/placeholders/fighter_nix-calder.svg",
+  "modelPath": "res://assets/characters/proxy/nix-calder.glb"
 }

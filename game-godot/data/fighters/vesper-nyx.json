@@ -5,13 +5,36 @@
   "element": "Void",
   "size": "small",
   "color": "#9b59b6",
+  "auraColor": "#9b59b6",
   "weight": 88,
-  "speed": 95,
-  "jump": 98,
-  "recovery": 102,
+  "runSpeed": 266,
+  "dashSpeed": 399,
+  "airSpeed": 215.6,
+  "jumpStrength": 607.6,
+  "fallSpeed": 1728,
+  "maxJumps": 2,
+  "damageTakenMult": 1.06,
+  "damageDealtMult": 0.94,
+  "shieldHealthMult": 0.95,
   "signatureMove": "Null Step",
-  "portraitPlaceholder": "res://assets/placeholder/fighter_vesper-nyx.svg",
-  "moves": ["jab", "tilt", "smash", "special", "recovery"],
-  "moveListPlaceholder": true,
-  "gameplayStatus": "preview"
+  "defaultSkin": "proxy_vesper-nyx",
+  "animationManifestPath": "res://data/fighters/vesper-nyx_animations.json",
+  "moveListPath": "res://data/moves/vesper-nyx.json",
+  "hitHurtProfile": {
+    "hurtboxWidth": 40,
+    "hurtboxHeight": 48,
+    "hitboxScale": 1
+  },
+  "shieldProfile": {
+    "maxHealth": 95,
+    "decayPerSecond": 18,
+    "stunMult": 1
+  },
+  "cpuBehaviorTags": [
+    "trickster",
+    "mixup"
+  ],
+  "productionStatus": "placeholder",
+  "portraitPlaceholder": "res://assets/ui/placeholders/fighter_vesper-nyx.svg",
+  "modelPath": "res://assets/characters/proxy/vesper-nyx.glb"
 }

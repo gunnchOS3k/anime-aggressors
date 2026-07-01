@@ -5,13 +5,36 @@
   "element": "Impact",
   "size": "large",
   "color": "#f28c28",
+  "auraColor": "#f28c28",
   "weight": 125,
-  "speed": 85,
-  "jump": 92,
-  "recovery": 95,
+  "runSpeed": 238,
+  "dashSpeed": 357,
+  "airSpeed": 193.6,
+  "jumpStrength": 570.4,
+  "fallSpeed": 1944.0000000000002,
+  "maxJumps": 2,
+  "damageTakenMult": 0.88,
+  "damageDealtMult": 1.18,
+  "shieldHealthMult": 1.15,
   "signatureMove": "Faultline Breaker",
-  "portraitPlaceholder": "res://assets/placeholder/fighter_rook-ironside.svg",
-  "moves": ["jab", "tilt", "smash", "special", "recovery"],
-  "moveListPlaceholder": true,
-  "gameplayStatus": "production"
+  "defaultSkin": "proxy_rook-ironside",
+  "animationManifestPath": "res://data/fighters/rook-ironside_animations.json",
+  "moveListPath": "res://data/moves/rook-ironside.json",
+  "hitHurtProfile": {
+    "hurtboxWidth": 40,
+    "hurtboxHeight": 48,
+    "hitboxScale": 1
+  },
+  "shieldProfile": {
+    "maxHealth": 114.99999999999999,
+    "decayPerSecond": 18,
+    "stunMult": 1
+  },
+  "cpuBehaviorTags": [
+    "tank",
+    "punish"
+  ],
+  "productionStatus": "proxy",
+  "portraitPlaceholder": "res://assets/ui/placeholders/fighter_rook-ironside.svg",
+  "modelPath": "res://assets/characters/proxy/rook-ironside.glb"
 }

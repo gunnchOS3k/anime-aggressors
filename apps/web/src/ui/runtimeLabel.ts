@@ -56,7 +56,7 @@ export function runtimeLabelForKind(kind: RuntimeKind): string {
     case "godot-primary":
       return "Godot Runtime";
     case "legacy-web":
-      return "Web Legacy Runtime";
+      return "Legacy Web Runtime — reference only";
     case "labs":
       return "Experimental / Labs";
     default:
@@ -69,7 +69,7 @@ export function runtimeHintForKind(kind: RuntimeKind): string {
     case "godot-primary":
       return "Primary gameplay path. Local editor: game-godot/. Web embed may lag behind editor build.";
     case "legacy-web":
-      return "Deprecated Three.js battle. Tuning here may not match Godot.";
+      return "Legacy Web Runtime — reference only, not final gameplay.";
     case "labs":
       return "Experimental tools — not production balance or UX.";
     default:

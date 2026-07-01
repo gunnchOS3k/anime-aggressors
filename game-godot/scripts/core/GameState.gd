@@ -15,6 +15,7 @@ var match_type: String = "stock"
 var p1_ready: bool = false
 var p2_ready: bool = false
 
+var training_dummy_mode: String = "cpu"
 var last_winner_slot: int = -1
 
 func reset_match() -> void:

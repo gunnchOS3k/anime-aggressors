@@ -5,13 +5,36 @@
   "element": "Volt",
   "size": "small",
   "color": "#f5d042",
+  "auraColor": "#f5d042",
   "weight": 82,
-  "speed": 118,
-  "jump": 108,
-  "recovery": 105,
+  "runSpeed": 330.4,
+  "dashSpeed": 495.59999999999997,
+  "airSpeed": 268.4,
+  "jumpStrength": 669.6,
+  "fallSpeed": 1836,
+  "maxJumps": 2,
+  "damageTakenMult": 1.12,
+  "damageDealtMult": 0.92,
+  "shieldHealthMult": 0.92,
   "signatureMove": "Flash Circuit",
-  "portraitPlaceholder": "res://assets/placeholder/fighter_juno-spark.svg",
-  "moves": ["jab", "tilt", "smash", "special", "recovery"],
-  "moveListPlaceholder": true,
-  "gameplayStatus": "production"
+  "defaultSkin": "proxy_juno-spark",
+  "animationManifestPath": "res://data/fighters/juno-spark_animations.json",
+  "moveListPath": "res://data/moves/juno-spark.json",
+  "hitHurtProfile": {
+    "hurtboxWidth": 40,
+    "hurtboxHeight": 48,
+    "hitboxScale": 1
+  },
+  "shieldProfile": {
+    "maxHealth": 92,
+    "decayPerSecond": 18,
+    "stunMult": 1
+  },
+  "cpuBehaviorTags": [
+    "speed",
+    "combo"
+  ],
+  "productionStatus": "proxy",
+  "portraitPlaceholder": "res://assets/ui/placeholders/fighter_juno-spark.svg",
+  "modelPath": "res://assets/characters/proxy/juno-spark.glb"
 }

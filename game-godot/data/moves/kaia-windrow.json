@@ -1,0 +1,435 @@
+{
+  "fighter_id": "kaia-windrow",
+  "schema_version": 1,
+  "moves": [
+    {
+      "move_id": "jab",
+      "fighter_id": "kaia-windrow",
+      "input_command": "attack_neutral",
+      "grounded_air": "grounded",
+      "startup_frames": 4,
+      "active_frames": 3,
+      "recovery_frames": 10,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "hurtbox_changes": [],
+      "damage": 2.88,
+      "angle_deg": 45,
+      "base_knockback": 4,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "self_movement": {
+        "x": 0,
+        "y": 0
+      },
+      "cancel_windows": [],
+      "aura_gain": 2,
+      "meter_cost": 0,
+      "armor_frames": 0,
+      "invulnerability_frames": 0,
+      "animation_clip": "jab",
+      "vfx_event": null,
+      "sfx_event": null,
+      "camera_event": null,
+      "training_display_name": "Jab"
+    },
+    {
+      "move_id": "forward_tilt",
+      "fighter_id": "kaia-windrow",
+      "input_command": "attack_forward",
+      "grounded_air": "grounded",
+      "startup_frames": 5,
+      "active_frames": 3,
+      "recovery_frames": 12,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "hurtbox_changes": [],
+      "damage": 6.72,
+      "angle_deg": 45,
+      "base_knockback": 8,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "self_movement": {
+        "x": 0,
+        "y": 0
+      },
+      "cancel_windows": [],
+      "aura_gain": 2,
+      "meter_cost": 0,
+      "armor_frames": 0,
+      "invulnerability_frames": 0,
+      "animation_clip": "forward_tilt",
+      "vfx_event": null,
+      "sfx_event": null,
+      "camera_event": null,
+      "training_display_name": "Forward Tilt"
+    },
+    {
+      "move_id": "heavy_attack",
+      "fighter_id": "kaia-windrow",
+      "input_command": "attack_heavy",
+      "grounded_air": "grounded",
+      "startup_frames": 8,
+      "active_frames": 4,
+      "recovery_frames": 18,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "hurtbox_changes": [],
+      "damage": 11.52,
+      "angle_deg": 30,
+      "base_knockback": 14,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "self_movement": {
+        "x": 0,
+        "y": 0
+      },
+      "cancel_windows": [],
+      "aura_gain": 2,
+      "meter_cost": 0,
+      "armor_frames": 0,
+      "invulnerability_frames": 0,
+      "animation_clip": "heavy_attack",
+      "vfx_event": null,
+      "sfx_event": null,
+      "camera_event": null,
+      "training_display_name": "Heavy Attack"
+    },
+    {
+      "move_id": "neutral_special",
+      "fighter_id": "kaia-windrow",
+      "input_command": "special_neutral",
+      "grounded_air": "grounded",
+      "startup_frames": 6,
+      "active_frames": 3,
+      "recovery_frames": 16,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "hurtbox_changes": [],
+      "damage": 9.6,
+      "angle_deg": 45,
+      "base_knockback": 10,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "self_movement": {
+        "x": 0,
+        "y": 0
+      },
+      "cancel_windows": [],
+      "aura_gain": 2,
+      "meter_cost": 0,
+      "armor_frames": 0,
+      "invulnerability_frames": 0,
+      "animation_clip": "neutral_special",
+      "vfx_event": null,
+      "sfx_event": null,
+      "camera_event": null,
+      "training_display_name": "Neutral Special"
+    },
+    {
+      "move_id": "up_special",
+      "fighter_id": "kaia-windrow",
+      "input_command": "special_up",
+      "grounded_air": "both",
+      "startup_frames": 4,
+      "active_frames": 3,
+      "recovery_frames": 10,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "hurtbox_changes": [],
+      "damage": 7.68,
+      "angle_deg": 80,
+      "base_knockback": 12,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "self_movement": {
+        "x": 0,
+        "y": -320
+      },
+      "cancel_windows": [],
+      "aura_gain": 2,
+      "meter_cost": 0,
+      "armor_frames": 0,
+      "invulnerability_frames": 0,
+      "animation_clip": "up_special",
+      "vfx_event": null,
+      "sfx_event": null,
+      "camera_event": null,
+      "training_display_name": "Up Special / Recovery"
+    },
+    {
+      "move_id": "down_special",
+      "fighter_id": "kaia-windrow",
+      "input_command": "special_down",
+      "grounded_air": "grounded",
+      "startup_frames": 4,
+      "active_frames": 3,
+      "recovery_frames": 10,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "hurtbox_changes": [],
+      "damage": 8.64,
+      "angle_deg": 270,
+      "base_knockback": 9,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "self_movement": {
+        "x": 0,
+        "y": 0
+      },
+      "cancel_windows": [],
+      "aura_gain": 2,
+      "meter_cost": 0,
+      "armor_frames": 0,
+      "invulnerability_frames": 0,
+      "animation_clip": "down_special",
+      "vfx_event": null,
+      "sfx_event": null,
+      "camera_event": null,
+      "training_display_name": "Down Special"
+    },
+    {
+      "move_id": "aerial_neutral",
+      "fighter_id": "kaia-windrow",
+      "input_command": "attack_air_neutral",
+      "grounded_air": "air",
+      "startup_frames": 4,
+      "active_frames": 3,
+      "recovery_frames": 10,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "hurtbox_changes": [],
+      "damage": 5.76,
+      "angle_deg": 45,
+      "base_knockback": 7,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "self_movement": {
+        "x": 0,
+        "y": 0
+      },
+      "cancel_windows": [],
+      "aura_gain": 2,
+      "meter_cost": 0,
+      "armor_frames": 0,
+      "invulnerability_frames": 0,
+      "animation_clip": "aerial_neutral",
+      "vfx_event": null,
+      "sfx_event": null,
+      "camera_event": null,
+      "training_display_name": "Aerial Neutral"
+    },
+    {
+      "move_id": "grab",
+      "fighter_id": "kaia-windrow",
+      "input_command": "grab",
+      "grounded_air": "grounded",
+      "startup_frames": 7,
+      "active_frames": 2,
+      "recovery_frames": 20,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "hurtbox_changes": [],
+      "damage": 0,
+      "angle_deg": 45,
+      "base_knockback": 0,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "self_movement": {
+        "x": 0,
+        "y": 0
+      },
+      "cancel_windows": [],
+      "aura_gain": 2,
+      "meter_cost": 0,
+      "armor_frames": 0,
+      "invulnerability_frames": 0,
+      "animation_clip": "grab",
+      "vfx_event": null,
+      "sfx_event": null,
+      "camera_event": null,
+      "training_display_name": "Grab (placeholder)"
+    },
+    {
+      "move_id": "throw",
+      "fighter_id": "kaia-windrow",
+      "input_command": "throw_forward",
+      "grounded_air": "grounded",
+      "startup_frames": 4,
+      "active_frames": 3,
+      "recovery_frames": 10,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "hurtbox_changes": [],
+      "damage": 5.76,
+      "angle_deg": 45,
+      "base_knockback": 16,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "self_movement": {
+        "x": 0,
+        "y": 0
+      },
+      "cancel_windows": [],
+      "aura_gain": 2,
+      "meter_cost": 0,
+      "armor_frames": 0,
+      "invulnerability_frames": 0,
+      "animation_clip": "throw",
+      "vfx_event": null,
+      "sfx_event": null,
+      "camera_event": null,
+      "training_display_name": "Throw (placeholder)"
+    },
+    {
+      "move_id": "aura_charge",
+      "fighter_id": "kaia-windrow",
+      "input_command": "aura_charge",
+      "grounded_air": "both",
+      "startup_frames": 0,
+      "active_frames": 0,
+      "recovery_frames": 0,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "hurtbox_changes": [],
+      "damage": 0,
+      "angle_deg": 45,
+      "base_knockback": 0,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "self_movement": {
+        "x": 0,
+        "y": 0
+      },
+      "cancel_windows": [],
+      "aura_gain": 0,
+      "meter_cost": 0,
+      "armor_frames": 0,
+      "invulnerability_frames": 0,
+      "animation_clip": "aura_charge",
+      "vfx_event": null,
+      "sfx_event": null,
+      "camera_event": null,
+      "training_display_name": "Aura Charge"
+    },
+    {
+      "move_id": "aura_burst",
+      "fighter_id": "kaia-windrow",
+      "input_command": "aura_burst",
+      "grounded_air": "grounded",
+      "startup_frames": 10,
+      "active_frames": 6,
+      "recovery_frames": 24,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "hurtbox_changes": [],
+      "damage": 17.28,
+      "angle_deg": 45,
+      "base_knockback": 22,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "self_movement": {
+        "x": 0,
+        "y": 0
+      },
+      "cancel_windows": [],
+      "aura_gain": 2,
+      "meter_cost": 100,
+      "armor_frames": 0,
+      "invulnerability_frames": 0,
+      "animation_clip": "aura_burst",
+      "vfx_event": null,
+      "sfx_event": null,
+      "camera_event": null,
+      "training_display_name": "Aura Burst (placeholder)"
+    }
+  ]
+}

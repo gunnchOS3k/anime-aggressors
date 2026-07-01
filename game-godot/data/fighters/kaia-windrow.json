@@ -5,13 +5,36 @@
   "element": "Gale",
   "size": "medium",
   "color": "#3cb371",
+  "auraColor": "#3cb371",
   "weight": 96,
-  "speed": 98,
-  "jump": 104,
-  "recovery": 110,
+  "runSpeed": 274.4,
+  "dashSpeed": 411.59999999999997,
+  "airSpeed": 246.40000000000003,
+  "jumpStrength": 644.8000000000001,
+  "fallSpeed": 1728,
+  "maxJumps": 2,
+  "damageTakenMult": 1.04,
+  "damageDealtMult": 0.96,
+  "shieldHealthMult": 0.98,
   "signatureMove": "Spiral Current",
-  "portraitPlaceholder": "res://assets/placeholder/fighter_kaia-windrow.svg",
-  "moves": ["jab", "tilt", "smash", "special", "recovery"],
-  "moveListPlaceholder": true,
-  "gameplayStatus": "production"
+  "defaultSkin": "proxy_kaia-windrow",
+  "animationManifestPath": "res://data/fighters/kaia-windrow_animations.json",
+  "moveListPath": "res://data/moves/kaia-windrow.json",
+  "hitHurtProfile": {
+    "hurtboxWidth": 40,
+    "hurtboxHeight": 48,
+    "hitboxScale": 1
+  },
+  "shieldProfile": {
+    "maxHealth": 98,
+    "decayPerSecond": 18,
+    "stunMult": 1
+  },
+  "cpuBehaviorTags": [
+    "spacing",
+    "aerial"
+  ],
+  "productionStatus": "proxy",
+  "portraitPlaceholder": "res://assets/ui/placeholders/fighter_kaia-windrow.svg",
+  "modelPath": "res://assets/characters/proxy/kaia-windrow.glb"
 }
