@@ -5,7 +5,7 @@ Use a **fresh browser profile** or clear site data for `anime-aggressors` before
 ## Setup
 
 1. Open the home page (`#/`)
-2. Confirm **Quick Match** is the primary button (not buried under setup or Godot)
+2. Confirm **Play Demo** is the primary button (not buried under setup or Godot)
 
 ## Quick Match flow
 
@@ -71,4 +71,18 @@ See full checklist: `docs/playtest/2026-06-30-m4-four-fighter-vertical-slice.md`
 34. Training mode (`#/training`) — dummy modes 1–4, D/P reset  
 35. CPU opponent levels 1–3 in custom match setup  
 36. Dual gamepad auto-maps to P1/P2 when both connected
+
+---
+
+## Milestone 5 — Public demo readiness
+
+See full checklist: `docs/playtest/2026-07-01-m5-public-demo-readiness.md`
+
+37. Home exposes Play Demo, Fighter Select, Stage Select, Training, Controls, About  
+38. Labs & Debug separated from main carousel  
+39. First-match onboarding appears once; dismiss persists  
+40. HUD shows CPU label when bot active; damage/stocks readable  
+41. Results: rematch, change fighters, change stage, home  
+42. Audio mute/volume in Controls  
+43. `npm run build` artifact playable; hash routes work
 

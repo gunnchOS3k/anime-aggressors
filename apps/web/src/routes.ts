@@ -31,6 +31,7 @@ export const APP_ROUTES = {
   flaglineSetup: "#/flagline-setup",
   flaglineTeams: "#/flagline-teams",
   feedback: "#/feedback",
+  about: "#/about",
   career: "#/career",
   careerFighters: "#/career/fighters",
   matchHistory: "#/career/history",
@@ -74,6 +75,7 @@ export type AppRouteMode =
   | "flagline-setup"
   | "flagline-teams"
   | "feedback"
+  | "about"
   | "career"
   | "career-fighters"
   | "career-history"
@@ -113,6 +115,7 @@ const HASH_TO_MODE: Record<string, AppRouteMode> = {
   [APP_ROUTES.flaglineSetup]: "flagline-setup",
   [APP_ROUTES.flaglineTeams]: "flagline-teams",
   [APP_ROUTES.feedback]: "feedback",
+  [APP_ROUTES.about]: "about",
   [APP_ROUTES.career]: "career",
   [APP_ROUTES.careerFighters]: "career-fighters",
   [APP_ROUTES.careerHistory]: "career-history",
@@ -155,6 +158,7 @@ export const MODE_TO_ROUTE: Record<AppRouteMode, string> = {
   "flagline-setup": APP_ROUTES.flaglineSetup,
   "flagline-teams": APP_ROUTES.flaglineTeams,
   feedback: APP_ROUTES.feedback,
+  about: APP_ROUTES.about,
   career: APP_ROUTES.career,
   "career-fighters": APP_ROUTES.careerFighters,
   "career-history": APP_ROUTES.careerHistory,

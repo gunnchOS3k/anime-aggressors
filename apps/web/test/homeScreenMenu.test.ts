@@ -4,13 +4,13 @@ import { renderHomeMarkup } from "../src/screens/homeScreenMarkup.ts";
 import { APP_ROUTES } from "../src/routes.ts";
 
 describe("home screen menu", () => {
-  it("renders Quick Match as primary CTA", () => {
+  it("renders Play Demo as primary CTA", () => {
     const html = renderHomeMarkup();
     assert.match(html, /id="btn-quick-match"/);
-    assert.match(html, />Quick Match</);
+    assert.match(html, />Play Demo</);
     assert.match(html, /menu-btn--hero/);
     assert.match(html, /ANIME AGGRESSORS/);
-    assert.match(html, /Charge your aura/);
+    assert.match(html, /Play Demo/);
   });
 
   it("renders custom match setup as secondary CTA", () => {
@@ -30,6 +30,8 @@ describe("home screen menu", () => {
     const carousel = html.match(/<div class="menu-carousel"[\s\S]*?<\/div>\s*<\/div>/)?.[0] ?? "";
     assert.match(carousel, /Custom Game/);
     assert.match(carousel, /Training Mode/);
+    assert.match(carousel, /Fighter Select/);
+    assert.match(carousel, /Stage Select/);
     assert.doesNotMatch(carousel, /Impact Dummy Derby/);
     assert.doesNotMatch(carousel, /Flagline Clash/);
   });

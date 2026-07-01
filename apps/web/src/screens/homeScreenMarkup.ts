@@ -20,9 +20,9 @@ export function renderHomeMarkup(): string {
     <div class="arena-hub__veil"></div>
     <div class="arena-hub__content">
       <header class="arena-hub__header">
-        <p class="arena-hub__kicker">2.5D Anime Platform Fighter</p>
+        <p class="arena-hub__kicker">Public Web Demo · 2.5D Platform Fighter</p>
         <h1 class="arena-hub__title">ANIME AGGRESSORS</h1>
-        <p class="arena-hub__tagline">Create your fighter. Charge your aura. Launch your rivals.</p>
+        <p class="arena-hub__tagline">Play Demo → battle → rematch. Seven fighters, three stages, training &amp; local 2P.</p>
       </header>
 
       <div class="arena-hub__body">

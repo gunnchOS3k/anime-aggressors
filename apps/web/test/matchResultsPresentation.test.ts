@@ -34,9 +34,10 @@ describe("match results presentation", () => {
     assert.match(html, /Rook Ironside/);
   });
 
-  it("actions include rematch and main menu", () => {
+  it("actions include rematch, change stage, and home", () => {
     const html = renderResultsActions(false);
     assert.match(html, /vs-rematch/);
+    assert.match(html, /vs-change-stage/);
     assert.match(html, /vs-menu/);
   });
 });
