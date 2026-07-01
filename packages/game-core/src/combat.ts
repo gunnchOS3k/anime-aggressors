@@ -5,41 +5,32 @@ import {
   BLAST_LEFT,
   BLAST_RIGHT,
   BLAST_TOP,
-  DODGE_FRAMES,
-  HITSTUN_BASE,
-  MAX_FALL_SPEED,
-  SHIELD_MAX,
   FP_SCALE,
+  HITSTUN_BASE,
+  SHIELD_MAX,
   STAGE_WIDTH,
 } from "./constants.js";
-import { getCharacter, getCharacterForPlayer } from "./characters.js";
 import { getStage } from "./stages.js";
 import { getStageLayout } from "./stageLayouts.js";
 import { resolveStageCollision, tickDropThrough } from "./stageCollision.js";
 import { resetPlayerAfterRespawn } from "./combat/playerLifecycle.js";
 import { elementGameplayEnabled } from "./rulesets.js";
 import { resolveCombatHits, processBlastZoneKOs } from "./combat/hitResolution.js";
-import { DODGE_MOVE, NEUTRAL_ATTACK, SPECIAL_ATTACK } from "./frameData.js";
+import { NEUTRAL_ATTACK, SPECIAL_ATTACK } from "./frameData.js";
 import { getMoveData, isMoveComplete, type MoveId } from "./moves.js";
-import {
-  fighterIdFromCharacterId,
-  getFighterMove,
-  getFrameDataForMoveId,
-  getMoveById,
-  resolveMoveSlotFromInput,
-} from "./moves/moveDefinitions.js";
+import { getCombatMoveData } from "./moves/combatMoveData.js";
+import { combatMoveToFrameData } from "./moves/combatMoveData.js";
 import { maybeSpawnSuperEnergyAttack } from "./combat/energyClash.js";
+import { getMoveById, getFighterMove, fighterIdFromCharacterId } from "./moves/moveDefinitions.js";
 import {
   applyAuraHitPenalty,
   canStartAuraCharge,
-  consumeAuraOnSuper,
   isAuraChargeHeld,
   releaseAuraCharge,
   startAuraCharge,
   tickAuraDecay,
   tickAuraWhileCharging,
 } from "./aura/auraCharge.js";
-import { createDefaultAuraState } from "./aura/auraTypes.js";
 import {
   resetJumpStateOnLand,
   tickCoyoteTime,
@@ -53,11 +44,24 @@ import {
 } from "./movement/movementController.js";
 import { applyLandingLag, isMovementLocked } from "./movement/landingLag.js";
 import { tickLedgeHang } from "./movement/ledgeSystem.js";
-import { applyDash } from "./movement/applyMovement.js";
+import { selectCombatAction } from "./combat/moveSelection.js";
+import { canStartCombatAction } from "./combat/combatState.js";
 import {
-  scaledHitDamage,
-  scaledKnockbackTaken,
-} from "./fighterCreation.js";
+  releaseShield,
+  tickShieldRegen,
+  tickShieldRelease,
+  tickShieldStun,
+} from "./combat/shieldSystem.js";
+import { tryGrabConnect, tickGrabState, executeThrow } from "./combat/grabSystem.js";
+import {
+  startDodgeAction,
+  tickDodgeCooldown,
+  tickDodgeAction,
+  canDodge,
+} from "./combat/dodgeSystem.js";
+import { applyDirectionalInfluence } from "./combat/di.js";
+import { classifyHitStrength } from "./combat/combatTuning.js";
+import { scaledHitDamage, scaledKnockbackTaken } from "./fighterCreation.js";
 import { applyElementOnHit, tickElementalEffects } from "./elements.js";
 import { scaleKnockback } from "./feel.js";
 
@@ -69,88 +73,56 @@ function getLaunchRatio(state: GameState): number {
   return state.config.ruleset?.launchRatio ?? 1;
 }
 
-function applyInputMovement(_player: PlayerState, _input: InputFrame): void {
-  // Ground/air movement handled by movementController (Milestone 2).
-}
-
 function clearMoveHitRegistry(player: PlayerState): void {
   player.hitVictimsThisMove = [];
+  player.multiHitContacts = [];
 }
 
-function startAction(player: PlayerState, input: InputFrame): void {
-  if (isMovementLocked(player)) return;
-  if (player.actionState === "hitstun" || player.actionState === "defeated") return;
+function startCombatAction(player: PlayerState, input: InputFrame): void {
+  if (!canStartCombatAction(player)) return;
   if (player.actionState === "auraCharging") return;
-  if (player.actionState === "dodging") return;
   if (!player.onGround && input.special && player.recoveryUsed) return;
-  if (
-    (player.actionState === "attacking" || player.actionState === "special") &&
-    player.actionFrame > 0
-  ) {
-    const data = getPlayerMoveFrameData(player);
-    if (data && !isMoveComplete(data, player.actionFrame)) return;
-  }
-
-  if (input.dodge && player.onGround) {
-    player.actionState = "dodging";
-    player.actionFrame = 0;
-    player.currentMoveId = "dodge";
-    applyDash(player);
-    player.invulnFrames = DODGE_MOVE.startup + DODGE_MOVE.active;
-    return;
-  }
 
   if (isAuraChargeHeld(input) && canStartAuraCharge(player) && !input.jump) {
     startAuraCharge(player);
     return;
   }
 
-  if (input.shield && !input.jump) {
+  const selected = selectCombatAction(player, input);
+  if (!selected) return;
+
+  if (selected.actionState === "shielding") {
     player.actionState = "shielding";
     player.actionFrame = 0;
+    player.currentMoveId = "shield";
     player.vx = 0;
     return;
   }
 
-  if (input.special) {
+  if (selected.actionState === "dodging" || selected.actionState === "rolling" || selected.actionState === "airDodging") {
+    if (!canDodge(player)) return;
     clearMoveHitRegistry(player);
-    player.actionState = "special";
-    player.actionFrame = 0;
-    const fighterId = fighterIdFromCharacterId(player.characterId);
-    const slot = resolveMoveSlotFromInput(player, input);
-    const fighterMove = slot ? getFighterMove(fighterId, slot) : undefined;
-    if (fighterMove) {
-      player.currentMoveId = fighterMove.id;
-    } else {
-      player.currentMoveId = input.left || input.right ? "side_special" : "special_attack";
-    }
+    startDodgeAction(player, selected.moveId, input);
     return;
   }
 
-  if (input.attack) {
+  if (selected.actionState === "grabbing") {
     clearMoveHitRegistry(player);
-    player.actionState = "attacking";
+    player.actionState = "grabbing";
     player.actionFrame = 0;
-    const fighterId = fighterIdFromCharacterId(player.characterId);
-    const slot = resolveMoveSlotFromInput(player, input);
-    const fighterMove = slot ? getFighterMove(fighterId, slot) : undefined;
-    if (fighterMove) {
-      player.currentMoveId = fighterMove.id;
-      return;
-    }
-    if (!player.onGround) {
-      player.currentMoveId = "aerial_attack";
-    } else if (input.up) {
-      player.currentMoveId = "up_attack";
-    } else if (input.down) {
-      player.currentMoveId = "down_attack";
-    } else if (input.left || input.right) {
-      player.currentMoveId = "forward_attack";
-    } else {
-      player.currentMoveId = "neutral_attack";
-    }
+    player.currentMoveId = selected.moveId;
+    player.grabFrames = 0;
     return;
   }
+
+  if (selected.actionState === "throwing") {
+    return;
+  }
+
+  clearMoveHitRegistry(player);
+  player.actionState = selected.actionState;
+  player.actionFrame = 0;
+  player.currentMoveId = selected.moveId;
 }
 
 function integratePhysics(player: PlayerState, stage: GameState["stage"], stageId: string): void {
@@ -168,7 +140,6 @@ function integratePhysics(player: PlayerState, stage: GameState["stage"], stageI
   }
 
   player.x += player.vx;
-  const previousVy = player.vy;
   player.y += player.vy;
 
   const layout = getStageLayout(getStage(stageId).layoutId ?? stageId);
@@ -188,10 +159,12 @@ function integratePhysics(player: PlayerState, stage: GameState["stage"], stageI
     if (wasAirborne) {
       resetJumpStateOnLand(player);
       applyLandingLag(player, wasFastFalling);
+      player.recoveryUsed = false;
     }
-    if (player.actionState === "jumping" || player.actionState === "falling") {
+    if (player.actionState === "jumping" || player.actionState === "falling" || player.actionState === "airDodging") {
       if (player.landingLagFrames === 0) {
         player.actionState = "idle";
+        player.currentMoveId = "none";
       }
     }
   } else {
@@ -206,14 +179,13 @@ function integratePhysics(player: PlayerState, stage: GameState["stage"], stageI
   afterMovementPhysics(player, layout, wasOnGround, wasFastFalling);
 }
 
-function getPlayerMoveFrameData(player: PlayerState): import("./frameData.js").MoveFrameData | null {
-  const fighterData = getFrameDataForMoveId(player.currentMoveId);
-  if (fighterData) return fighterData;
-  return getMoveData(player.currentMoveId as MoveId);
-}
-
 function tickActionState(state: GameState, player: PlayerState): void {
   player.actionFrame += 1;
+
+  tickDodgeCooldown(player);
+  tickShieldRegen(player);
+  tickShieldRelease(player);
+  tickShieldStun(player);
 
   if (player.invulnFrames > 0) player.invulnFrames -= 1;
 
@@ -226,33 +198,138 @@ function tickActionState(state: GameState, player: PlayerState): void {
     return;
   }
 
+  if (player.actionState === "throwing") {
+    const move = getCombatMoveData(player.currentMoveId);
+    if (move && player.actionFrame === move.startup) {
+      const target = state.players.find((p) => p.id === player.grabTargetId);
+      if (target) executeThrow(state, player, target, player.currentMoveId);
+    }
+    if (move && player.actionFrame > move.startup + move.active + move.recovery) {
+      player.actionState = "idle";
+      player.currentMoveId = "none";
+    }
+    return;
+  }
+
+  if (player.actionState === "grabbing") {
+    const target = state.players.find((p) => p.id === player.grabTargetId);
+    tickGrabState(player, target);
+    const grab = getCombatMoveData("grab");
+    if (grab && isMoveComplete(combatMoveToFrameData(grab), player.actionFrame) && player.grabTargetId < 0) {
+      player.actionState = "idle";
+      player.currentMoveId = "none";
+    }
+    return;
+  }
+
   if (player.actionState === "attacking" || player.actionState === "special") {
-    const data = getPlayerMoveFrameData(player);
+    const move = getCombatMoveData(player.currentMoveId);
     const fighterMove = getMoveById(player.currentMoveId);
     if (fighterMove) {
       maybeSpawnSuperEnergyAttack(state, player.id, fighterMove.fighterId, fighterMove, player.actionFrame);
     }
-    if (data && isMoveComplete(data, player.actionFrame)) {
+    if (move && isMoveComplete(combatMoveToFrameData(move), player.actionFrame)) {
       player.actionState = "idle";
       player.currentMoveId = "none";
-      player.hitVictimsThisMove = [];
+      clearMoveHitRegistry(player);
     }
   }
-  if (player.actionState === "dodging" && isMoveComplete(DODGE_MOVE, player.actionFrame)) {
-    player.actionState = "idle";
-    player.currentMoveId = "none";
-    player.hitVictimsThisMove = [];
-  }
+
+  tickDodgeAction(player);
+
   if (player.actionState === "shielding") {
-    player.shieldHealth = Math.max(0, player.shieldHealth - 1);
-    if (player.shieldHealth <= 0) {
-      player.actionState = "hitstun";
-      player.hitstunFrames = HITSTUN_BASE * 2;
-    }
+    player.shieldHealth = Math.max(0, player.shieldHealth - 0.02);
   }
+
   if (player.actionState === "auraCharging") {
     player.shieldHealth = Math.max(SHIELD_MAX * 0.4, player.shieldHealth - 0.5);
   }
+}
+
+function applyHitstunDI(player: PlayerState, input: InputFrame | undefined): void {
+  if (player.actionState !== "hitstun" || !input) return;
+  const strength = classifyHitStrength(player.damage, player.currentMoveId);
+  const adjusted = applyDirectionalInfluence(player.vx, player.vy, input, strength);
+  player.vx = adjusted.vx;
+  player.vy = adjusted.vy;
+}
+
+export function resolveCombat(state: GameState, inputs?: InputFrame[]): void {
+  for (const player of state.players) {
+    if (player.actionState === "grabbing") {
+      tryGrabConnect(state, player);
+    }
+  }
+  state.lastHitEvents = resolveCombatHits(state, inputs);
+  processBlastZoneKOs(state);
+}
+
+export function processPlayer(state: GameState, player: PlayerState, input: InputFrame | undefined): void {
+  if (player.actionState === "defeated") return;
+
+  tickDropThrough(player);
+  tickMovementTimers(player);
+  tickAuraDecay(player);
+
+  const stageDef = getStage(state.config.stageId);
+  const layout = getStageLayout(stageDef.layoutId ?? stageDef.id);
+
+  if (input) {
+    applyHitstunDI(player, input);
+
+    if (player.actionState === "shielding" && !input.shield) {
+      releaseShield(player);
+    }
+
+    if (player.actionState === "grabbing" && player.grabTargetId >= 0) {
+      const throwAction = selectCombatAction(player, input);
+      if (throwAction?.actionState === "throwing") {
+        player.actionState = "throwing";
+        player.actionFrame = 0;
+        player.currentMoveId = throwAction.moveId;
+      }
+    }
+
+    if (player.movementState === "ledgeHang") {
+      tickLedgeHang(player, layout, input);
+    } else {
+      tickJumpSquatPhase(player, !!input.jump);
+      const canMove =
+        !isMovementLocked(player) ||
+        player.movementState === "jumpSquat" ||
+        player.actionState === "hitstun";
+      if (canMove && player.actionState !== "grabbed") {
+        processMovementInput(player, input, layout, STAGE_WIDTH / 2);
+      } else {
+        player.wasJumpHeld = !!input.jump;
+      }
+    }
+
+    if (player.actionState === "auraCharging") {
+      if (!tickAuraWhileCharging(player, input)) {
+        const fighterId = fighterIdFromCharacterId(player.characterId);
+        if (releaseAuraCharge(player) === "super") {
+          const fighterMove = getFighterMove(fighterId, "super");
+          player.currentMoveId = fighterMove?.id ?? "super";
+        }
+      }
+    } else if (
+      player.actionState !== "grabbed" &&
+      !isMovementLocked(player) &&
+      player.movementState !== "recoveryFall"
+    ) {
+      startCombatAction(player, input);
+    }
+  } else {
+    if (player.jumpBufferFrames > 0) player.jumpBufferFrames -= 1;
+    if (player.movementState === "ledgeHang") {
+      tickLedgeHang(player, layout, undefined);
+    }
+  }
+
+  tickActionState(state, player);
+  tickElementalEffects(player);
+  integratePhysics(player, state.stage, state.config.stageId);
 }
 
 function applyHit(
@@ -269,8 +346,8 @@ function applyHit(
   if (defender.actionState === "shielding") {
     defender.shieldHealth -= damage;
     if (defender.shieldHealth <= 0) {
-      defender.actionState = "hitstun";
-      defender.hitstunFrames = HITSTUN_BASE * 2;
+      defender.actionState = "shieldBreak";
+      defender.shieldStunFrames = HITSTUN_BASE * 2;
     }
     return;
   }
@@ -338,64 +415,6 @@ function respawnPlayer(
     const layout = getStageLayout(getStage(stageId).layoutId ?? stageId);
     player.currentPlatformId = layout.mainPlatformId;
   }
-}
-
-export function resolveCombat(state: GameState): void {
-  state.lastHitEvents = resolveCombatHits(state);
-  processBlastZoneKOs(state);
-}
-
-export function processPlayer(state: GameState, player: PlayerState, input: InputFrame | undefined): void {
-  if (player.actionState === "defeated") return;
-
-  tickDropThrough(player);
-  tickMovementTimers(player);
-  tickAuraDecay(player);
-
-  const stageDef = getStage(state.config.stageId);
-  const layout = getStageLayout(stageDef.layoutId ?? stageDef.id);
-
-  if (input) {
-    if (player.actionState === "shielding" && !input.shield) {
-      player.actionState = "idle";
-      player.shieldHealth = SHIELD_MAX;
-    }
-
-    if (player.movementState === "ledgeHang") {
-      tickLedgeHang(player, layout, input);
-    } else {
-      tickJumpSquatPhase(player, !!input.jump);
-      if (!isMovementLocked(player) || player.movementState === "jumpSquat") {
-        processMovementInput(player, input, layout, STAGE_WIDTH / 2);
-      } else {
-        player.wasJumpHeld = !!input.jump;
-      }
-    }
-
-    if (!isMovementLocked(player) && player.movementState !== "recoveryFall") {
-      if (player.actionState === "auraCharging") {
-        if (!tickAuraWhileCharging(player, input)) {
-          const fighterId = fighterIdFromCharacterId(player.characterId);
-          if (releaseAuraCharge(player) === "super") {
-            const fighterMove = getFighterMove(fighterId, "super");
-            player.currentMoveId = fighterMove?.id ?? "super";
-          }
-        }
-      } else {
-        startAction(player, input);
-      }
-    }
-    applyInputMovement(player, input);
-  } else {
-    if (player.jumpBufferFrames > 0) player.jumpBufferFrames -= 1;
-    if (player.movementState === "ledgeHang") {
-      tickLedgeHang(player, layout, undefined);
-    }
-  }
-
-  tickActionState(state, player);
-  tickElementalEffects(player);
-  integratePhysics(player, state.stage, state.config.stageId);
 }
 
 export { applyHit, checkBlastZones, respawnPlayer };

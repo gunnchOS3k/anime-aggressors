@@ -5,7 +5,7 @@ export function applyDirectionalInfluence(
   vx: number,
   vy: number,
   input: InputFrame | undefined,
-  strength: "light" | "medium" | "heavy" | "launch" | "super",
+  strength: "light" | "medium" | "heavy" | "launch" | "super" | "beamClash",
 ): { vx: number; vy: number } {
   if (!input || strength === "light") return { vx, vy };
   const influence = strength === "super" ? 0.18 : strength === "heavy" ? 0.12 : 0.08;

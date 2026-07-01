@@ -1,5 +1,5 @@
 import type { GameState, InputFrame } from "@anime-aggressors/game-core";
-import { fpToDisplay } from "@anime-aggressors/game-core";
+import { fpToDisplay, currentMovePhase } from "@anime-aggressors/game-core";
 
 export type DebugInfo = {
   frame: number;
@@ -41,7 +41,10 @@ export function mountDebugPanel(container: HTMLElement): DebugPanel {
       lines.push(
         `P${p.id + 1} pos=(${fpToDisplay(p.x)},${fpToDisplay(p.y)}) vel=(${fpToDisplay(p.vx)},${fpToDisplay(p.vy)})`,
         `  action=${p.actionState} moveFrame=${p.actionFrame} move=${p.currentMoveId}`,
-        `  damage=${p.damage}% stocks=${p.stocks} hitstun=${p.hitstunFrames} shield=${p.shieldHealth}`,
+        `  phase=${currentMovePhase(p)} damage=${p.damage}% stocks=${p.stocks}`,
+        `  hitstun=${p.hitstunFrames} hitstop=${info.gameState.hitstopFrames} shield=${Math.floor(p.shieldHealth)}`,
+        `  shieldStun=${p.shieldStunFrames} grab=${p.grabTargetId >= 0 ? `target P${p.grabTargetId + 1}` : p.grabbedByPlayerId >= 0 ? `held by P${p.grabbedByPlayerId + 1}` : "—"}`,
+        `  stale=[${p.staleMoveQueue.slice(0, 3).join(",")}]`,
         `  onGround=${p.onGround} invuln=${p.invulnFrames}`,
         `  movement=${p.movementState} plat=${p.currentPlatformId || "—"} ledge=${p.grabbedLedgeId || "—"}`,
         `  jumpsUsed=${p.jumpsUsed} landingLag=${p.landingLagFrames}`,

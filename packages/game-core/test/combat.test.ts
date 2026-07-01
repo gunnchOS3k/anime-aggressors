@@ -46,6 +46,7 @@ describe("combat mechanics", () => {
 
     state.players[0].actionState = "attacking";
     state.players[0].actionFrame = NEUTRAL_ATTACK.startup;
+    state.players[0].currentMoveId = "neutral_attack";
 
     const hitboxes = getActiveHitboxes(state.players[0]);
     assert.ok(hitboxes.length > 0);
@@ -57,6 +58,7 @@ describe("combat mechanics", () => {
     const state = createInitialGameState(config);
     state.players[0].actionState = "attacking";
     state.players[0].actionFrame = NEUTRAL_ATTACK.startup;
+    state.players[0].currentMoveId = "neutral_attack";
     const attackBoxes = getActiveHitboxes(state.players[0]);
 
     state.players[0].actionState = "special";

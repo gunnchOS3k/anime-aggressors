@@ -4,6 +4,8 @@ import { SHIELD_MAX } from "../constants.js";
 import { getCharacterForPlayer } from "../characters.js";
 import { createDefaultAuraState } from "../aura/auraTypes.js";
 import { resetMovementFields } from "../movement/movementTypes.js";
+import { resetCombatFields } from "./combatState.js";
+import { clearStaleQueue } from "./staleMoves.js";
 
 export const RESPAWN_INVULN_FRAMES = 60;
 
@@ -23,13 +25,12 @@ export function resetPlayerAfterRespawn(
   }
   player.actionState = "idle";
   player.actionFrame = 0;
-  player.hitstunFrames = 0;
+  resetCombatFields(player);
+  clearStaleQueue(player);
   player.invulnFrames = RESPAWN_INVULN_FRAMES;
   player.coyoteFrames = 0;
   player.jumpBufferFrames = 0;
   player.fastFalling = false;
-  player.currentMoveId = "none";
-  player.hitVictimsThisMove = [];
   player.dropThroughFrames = 0;
   player.ignoredPlatformId = "";
   player.currentPlatformId = "";
