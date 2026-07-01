@@ -111,6 +111,7 @@ console.log("aa-verify-project: starting");
 console.log("commit:", report.commit_sha);
 
 const npmOk =
+  runStep("validate_unity_spike", "npm run validate:unity-spike") &&
   runStep("validate_full_scope", "npm run validate:full-scope-production") &&
   runStep("typecheck", "npm run typecheck") &&
   runStep("test_workspaces", "npm run test:workspaces") &&

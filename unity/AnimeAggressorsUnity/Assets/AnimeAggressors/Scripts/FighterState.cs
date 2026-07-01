@@ -1,0 +1,31 @@
+namespace AnimeAggressors
+{
+    public enum FighterState
+    {
+        Idle,
+        Walk,
+        Run,
+        Jump,
+        Fall,
+        Land,
+        AttackStartup,
+        AttackActive,
+        AttackRecovery,
+        ShieldHold,
+        ShieldStun,
+        ShieldBreak,
+        GrabStartup,
+        GrabActive,
+        GrabWhiff,
+        GrabHold,
+        ThrowRelease,
+        AuraCharge,
+        AuraReady,
+        AuraBurstStartup,
+        AuraBurstActive,
+        AuraBurstRecovery,
+        Hitstun,
+        Launched,
+        Dodge,
+    }
+}
