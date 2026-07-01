@@ -2,12 +2,27 @@
 
 **Status:** Living blocker registry  
 **Last updated:** 2026-07-01  
-**Audit branch:** `product/runtime-pivot-godot-primary`  
-**Primary runtime:** Godot 4 — `game-godot/`
+**Audit branch:** `product/full-scope-godot-consolidation`  
+**Primary runtime:** Godot 4 — `game-godot/`  
+**Policy:** [RUNTIME_SOURCE_OF_TRUTH.md](./RUNTIME_SOURCE_OF_TRUTH.md)
 
 ---
 
-## Godot pivot — open blockers (2026-07-01)
+## Full-scope consolidation — open blockers (2026-07-01)
+
+| ID | Title | Severity | Status |
+|----|-------|----------|--------|
+| BLK-FS001 | Godot editor playtest unsigned | P1 | Open |
+| BLK-FS002 | Authored `.glb` / animation clips not integrated | P1 | Open |
+| BLK-FS003 | Grab/throw loop architecture only (placeholder moves) | P2 | Open |
+| BLK-FS004 | Move timelines not frame-synced to 60 Hz sim tick | P2 | Open |
+| BLK-FS005 | CPU not balance-tiered | P2 | Open |
+| BLK-FS006 | Web Godot export may lag editor build | P2 | Open |
+| BLK-FS007 | Ledge/edge state placeholder | P3 | Open |
+
+**Completion claim:** Not allowed until BLK-FS001–FS002 resolved and full-scope manual playtest signed.
+
+---
 
 | ID | Title | Severity | Status |
 |----|-------|----------|--------|

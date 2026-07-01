@@ -6,7 +6,7 @@ func _ready() -> void:
 		title_label.text = "Anime Aggressors"
 
 func _on_start_battle_pressed() -> void:
-	SceneRouter.go_battle_setup()
+	SceneRouter.go("mode_select")
 
 func _on_training_pressed() -> void:
 	SceneRouter.go_training()

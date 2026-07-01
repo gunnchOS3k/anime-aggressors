@@ -5,13 +5,36 @@
   "element": "Flame",
   "size": "medium",
   "color": "#e8453c",
+  "auraColor": "#e8453c",
   "weight": 100,
-  "speed": 105,
-  "jump": 100,
-  "recovery": 108,
+  "runSpeed": 294,
+  "dashSpeed": 441,
+  "airSpeed": 224.4,
+  "jumpStrength": 620,
+  "fallSpeed": 1800,
+  "maxJumps": 2,
+  "damageTakenMult": 1,
+  "damageDealtMult": 1,
+  "shieldHealthMult": 1,
   "signatureMove": "Cinder Rush",
-  "portraitPlaceholder": "res://assets/placeholder/fighter_ember-vale.svg",
-  "moves": ["jab", "tilt", "smash", "special", "recovery"],
-  "moveListPlaceholder": true,
-  "gameplayStatus": "production"
+  "defaultSkin": "proxy_ember-vale",
+  "animationManifestPath": "res://data/fighters/ember-vale_animations.json",
+  "moveListPath": "res://data/moves/ember-vale.json",
+  "hitHurtProfile": {
+    "hurtboxWidth": 40,
+    "hurtboxHeight": 48,
+    "hitboxScale": 1
+  },
+  "shieldProfile": {
+    "maxHealth": 100,
+    "decayPerSecond": 18,
+    "stunMult": 1
+  },
+  "cpuBehaviorTags": [
+    "rushdown",
+    "approach"
+  ],
+  "productionStatus": "proxy",
+  "portraitPlaceholder": "res://assets/ui/placeholders/fighter_ember-vale.svg",
+  "modelPath": "res://assets/characters/proxy/ember-vale.glb"
 }

@@ -13,12 +13,17 @@ var fighter2: AAFighter
 var blast: Dictionary = {}
 var _active := false
 var _ko_lock := false
+var _debug_hud: DebugHud
 
 const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
+const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
 
 func _ready() -> void:
 	_build_stage()
 	_spawn_fighters()
+	_debug_hud = DEBUG_HUD_SCENE.instantiate()
+	add_child(_debug_hud)
+	_debug_hud.bind_fighters([fighter1, fighter2])
 	await _run_countdown()
 	_active = true
 
@@ -79,8 +84,14 @@ func _connect_hitboxes(attacker: AAFighter, defender: AAFighter) -> void:
 	var hb: Area2D = attacker.get_node("Hitbox")
 	var hurt: Area2D = defender.get_node("Hurtbox")
 	hb.area_entered.connect(func(area: Area2D):
-		if area == hurt and hb.monitoring:
-			defender.receive_hit(attacker, attacker.last_attack_damage, attacker.last_attack_kb)
+		if area != hurt or not hb.monitoring:
+			return
+		var move := attacker._current_move
+		if move.is_empty():
+			move = DataLoader.find_move(attacker.move_manifest, attacker.move_runner.current_move_id())
+		if move.is_empty():
+			return
+		attacker.hit_resolver.resolve(attacker, defender, move, attacker.damage_percent)
 	)
 
 func _run_countdown() -> void:
@@ -130,9 +141,9 @@ func _check_match_end() -> void:
 
 func _update_hud() -> void:
 	if p1_hud and fighter1:
-		p1_hud.text = "%s  %d%%  x%d%s" % [fighter1.data.get("displayName","P1"), int(fighter1.damage_percent), fighter1.stocks, " (CPU)" if false else ""]
+		p1_hud.text = "%s  %d%%  x%d  aura:%d" % [fighter1.data.get("displayName","P1"), int(fighter1.damage_percent), fighter1.stocks, int(fighter1.aura)]
 	if p2_hud and fighter2:
-		p2_hud.text = "%s  %d%%  x%d%s" % [fighter2.data.get("displayName","P2"), int(fighter2.damage_percent), fighter2.stocks, " (CPU)" if GameState.p2_is_cpu else ""]
+		p2_hud.text = "%s  %d%%  x%d  aura:%d%s" % [fighter2.data.get("displayName","P2"), int(fighter2.damage_percent), fighter2.stocks, int(fighter2.aura), " (CPU)" if GameState.p2_is_cpu else ""]
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):

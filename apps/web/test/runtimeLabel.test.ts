@@ -10,7 +10,7 @@ describe("runtime labels", () => {
 
   it("maps battle to legacy web", () => {
     assert.equal(runtimeKindForMode("battle"), "legacy-web");
-    assert.match(renderRuntimeBanner("legacy-web"), /Web Legacy Runtime/);
+    assert.match(renderRuntimeBanner("legacy-web"), /Legacy Web Runtime — reference only/);
   });
 
   it("maps prototype to labs", () => {

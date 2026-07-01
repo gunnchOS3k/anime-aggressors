@@ -50,12 +50,12 @@ func _refresh() -> void:
 		p2_name.text = "P2: %s%s" % [p2.get("displayName", "?"), " (CPU)" if GameState.p2_is_cpu else ""]
 	if detail:
 		var d: Dictionary = GameState.load_fighter(_roster[_cursor])
-		detail.text = "%s | %s | W:%d Sp:%d J:%d\nSig: %s" % [
+		detail.text = "%s | %s | W:%d Run:%d J:%d\nSig: %s" % [
 			d.get("archetype", ""),
 			d.get("element", ""),
 			d.get("weight", 0),
-			d.get("speed", 0),
-			d.get("jump", 0),
+			int(d.get("runSpeed", 0)),
+			int(d.get("jumpStrength", 0)),
 			d.get("signatureMove", "")
 		]
 	if ready_label:

@@ -5,13 +5,36 @@
   "element": "Gravity",
   "size": "medium",
   "color": "#5b4b8a",
+  "auraColor": "#5b4b8a",
   "weight": 100,
-  "speed": 100,
-  "jump": 100,
-  "recovery": 100,
+  "runSpeed": 280,
+  "dashSpeed": 420,
+  "airSpeed": 220,
+  "jumpStrength": 620,
+  "fallSpeed": 1800,
+  "maxJumps": 2,
+  "damageTakenMult": 1,
+  "damageDealtMult": 1,
+  "shieldHealthMult": 1,
   "signatureMove": "Orbit Collapse",
-  "portraitPlaceholder": "res://assets/placeholder/fighter_orion-vell.svg",
-  "moves": ["jab", "tilt", "smash", "special", "recovery"],
-  "moveListPlaceholder": true,
-  "gameplayStatus": "preview"
+  "defaultSkin": "proxy_orion-vell",
+  "animationManifestPath": "res://data/fighters/orion-vell_animations.json",
+  "moveListPath": "res://data/moves/orion-vell.json",
+  "hitHurtProfile": {
+    "hurtboxWidth": 40,
+    "hurtboxHeight": 48,
+    "hitboxScale": 1
+  },
+  "shieldProfile": {
+    "maxHealth": 100,
+    "decayPerSecond": 18,
+    "stunMult": 1
+  },
+  "cpuBehaviorTags": [
+    "combo",
+    "neutral"
+  ],
+  "productionStatus": "placeholder",
+  "portraitPlaceholder": "res://assets/ui/placeholders/fighter_orion-vell.svg",
+  "modelPath": "res://assets/characters/proxy/orion-vell.glb"
 }
