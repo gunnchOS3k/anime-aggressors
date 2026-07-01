@@ -43,6 +43,9 @@ function basePlayer(size: PlayerState["fighterSize"]): PlayerState {
     fastFalling: false,
     currentMoveId: "none",
     hitVictimsThisMove: [],
+    currentPlatformId: "",
+    dropThroughFrames: 0,
+    ignoredPlatformId: "",
     aura: createDefaultAuraState(),
   };
 }

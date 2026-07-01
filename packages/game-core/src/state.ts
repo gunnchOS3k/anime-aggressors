@@ -15,6 +15,7 @@ import {
 } from "./constants.js";
 import { getCharacter, getCharacterForPlayer } from "./characters.js";
 import { getStage } from "./stages.js";
+import { getStageLayout } from "./stageLayouts.js";
 import { getFighterProfile, applyCreatedFighterToPlayer } from "./fighterCreation.js";
 import { createDefaultAuraState } from "./aura/auraTypes.js";
 import { DEFAULT_RULESET } from "./rulesets.js";
@@ -22,6 +23,7 @@ import { DEFAULT_RULESET } from "./rulesets.js";
 export function createInitialGameState(config: GameConfig): GameState {
   const ruleset = config.ruleset ?? DEFAULT_RULESET;
   const stage = getStage(config.stageId);
+  const layout = getStageLayout(stage.layoutId ?? stage.id);
   const players: PlayerState[] = [];
   const maxStamina = ruleset.staminaHp;
 
@@ -68,6 +70,9 @@ export function createInitialGameState(config: GameConfig): GameState {
       fastFalling: false,
       currentMoveId: "none",
       hitVictimsThisMove: [],
+      currentPlatformId: layout.mainPlatformId,
+      dropThroughFrames: 0,
+      ignoredPlatformId: "",
       aura: createDefaultAuraState(),
     };
     applyCreatedFighterToPlayer(player, fighter);

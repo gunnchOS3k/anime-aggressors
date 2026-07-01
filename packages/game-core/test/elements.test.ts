@@ -45,6 +45,9 @@ function player(): PlayerState {
     fastFalling: false,
     currentMoveId: "neutral_attack",
     hitVictimsThisMove: [],
+    currentPlatformId: "",
+    dropThroughFrames: 0,
+    ignoredPlatformId: "",
     aura: createDefaultAuraState(),
   };
 }

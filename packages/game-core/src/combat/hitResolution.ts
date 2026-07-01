@@ -15,7 +15,8 @@ import { computeHitstun, isLaunched } from "./hitstun.js";
 import { createHitEvent, type HitEvent } from "./hitEvents.js";
 import { isOutsideBlastZone } from "./blastZones.js";
 import { getStage } from "../stages.js";
-import { createDefaultAuraState } from "../aura/auraTypes.js";
+import { getStageLayout } from "../stageLayouts.js";
+import { resetPlayerAfterRespawn } from "./playerLifecycle.js";
 
 function getDamageRatio(state: GameState): number {
   return state.config.ruleset?.damageRatio ?? 1;
@@ -182,41 +183,10 @@ export function processBlastZoneKOs(state: GameState): boolean {
     } else {
       const stageDef = getStage(state.config.stageId);
       const spawn = stageDef.spawnPoints[player.id] ?? stageDef.spawnPoints[0];
-      respawnPlayer(player, spawn, state.config.ruleset);
+      resetPlayerAfterRespawn(player, spawn, state.config.ruleset);
+      const layout = getStageLayout(stageDef.layoutId ?? stageDef.id);
+      player.currentPlatformId = layout.mainPlatformId;
     }
   }
   return anyKo;
-}
-
-function respawnPlayer(
-  player: PlayerState,
-  spawn: { x: number; y: number },
-  ruleset?: import("../rulesets.js").GameRuleset,
-): void {
-  player.x = spawn.x;
-  player.y = spawn.y;
-  player.vx = 0;
-  player.vy = 0;
-  player.damage = 0;
-  if (ruleset?.matchType === "stamina") player.staminaHp = ruleset.staminaHp;
-  player.actionState = "idle";
-  player.actionFrame = 0;
-  player.hitstunFrames = 0;
-  player.invulnFrames = 60;
-  player.coyoteFrames = 0;
-  player.jumpBufferFrames = 0;
-  player.fastFalling = false;
-  player.currentMoveId = "none";
-  player.hitVictimsThisMove = [];
-  player.burnFramesRemaining = 0;
-  player.slowFramesRemaining = 0;
-  player.slowMultiplierFp = 100;
-  player.airDriftBonusFrames = 0;
-  player.aura = createDefaultAuraState();
-  const char = getCharacterForPlayer(player);
-  player.jumpsRemaining = char.maxJumps;
-  player.jumpsUsed = 0;
-  player.jumpHoldFrames = 0;
-  player.wasJumpHeld = false;
-  player.onGround = true;
 }
