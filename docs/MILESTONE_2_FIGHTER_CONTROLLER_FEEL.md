@@ -1,6 +1,6 @@
 # Milestone 2 — Fighter Controller Feel
 
-**Status:** In progress  
+**Status:** Complete (pending manual playtest)  
 **Branch:** `feat/milestone-2-fighter-controller-feel`  
 **Last updated:** 2026-06-24
 
