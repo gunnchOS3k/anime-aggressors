@@ -72,7 +72,23 @@ func _on_update(state: String, delta: float) -> void:
 				owner.state_machine.enter(FighterStates.IDLE)
 		FighterStates.HITSTUN:
 			if state_time > owner.hitstun_remaining:
-				owner.state_machine.enter(FighterStates.IDLE)
+				owner.state_machine.enter(FighterStates.IDLE if owner.is_on_floor() else FighterStates.FALL)
+		FighterStates.HURT_LIGHT:
+			if state_time > 0.06:
+				if owner.hitstun_remaining > 0.04:
+					owner.state_machine.enter(FighterStates.HITSTUN)
+				elif owner.is_on_floor():
+					owner.state_machine.enter(FighterStates.IDLE)
+				else:
+					owner.state_machine.enter(FighterStates.FALL)
+		FighterStates.HURT_HEAVY:
+			if state_time > 0.12:
+				if owner.hitstun_remaining > 0.08:
+					owner.state_machine.enter(FighterStates.HITSTUN)
+				elif owner.is_on_floor():
+					owner.state_machine.enter(FighterStates.IDLE)
+				else:
+					owner.state_machine.enter(FighterStates.FALL)
 		FighterStates.LAUNCHED:
 			if owner.is_on_floor() and owner.velocity.y >= 0:
 				owner.state_machine.enter(FighterStates.TUMBLE if owner.velocity.length() > 120 else FighterStates.LAND)

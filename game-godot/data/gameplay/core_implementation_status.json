@@ -1,6 +1,6 @@
 {
-  "schema_version": 2,
-  "pass_label": "implementation_pass_pr46",
+  "schema_version": 3,
+  "pass_label": "runtime_hardening_pr47",
   "core_systems": {
     "boot_menu_flow": "implemented",
     "mode_select": "implemented",
@@ -26,10 +26,19 @@
     "hitbox_overlay": "implemented",
     "cpu_tiers": "implemented",
     "proxy_animations": "functional_proxy",
+    "p2_input_map": "implemented",
     "data_loading": "implemented",
     "full_roster_data": "implemented",
     "move_manifests": "implemented",
     "validation_scripts": "implemented",
     "final_authored_glb": "final_art_blocked_only"
-  }
+  },
+  "pr47_fixes": [
+    "single can_hit_target gate in HitResolver",
+    "aura charge before shield branch",
+    "HURT_LIGHT/HURT_HEAVY recovery transitions",
+    "is_attack_state boolean fix",
+    "P2 InputMap actions",
+    "debug overlay toggles via fighter methods"
+  ]
 }

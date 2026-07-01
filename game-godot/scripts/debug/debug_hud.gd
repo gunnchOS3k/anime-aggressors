@@ -48,7 +48,9 @@ func _update_text() -> void:
 	if label == null:
 		return
 	var lines: PackedStringArray = []
-	lines.append("[b]DEBUG HUD[/b]  F1 HUD  F2 hitboxes  F6 hurtboxes")
+	lines.append("[b]DEBUG HUD[/b]  F1 HUD  F2 hitboxes:%s  F6 hurtboxes:%s" % [
+		str(show_hitboxes).to_lower(), str(show_hurtboxes).to_lower(),
+	])
 	for f in fighters:
 		if f == null:
 			continue
@@ -71,14 +73,24 @@ func _update_text() -> void:
 			lines.append("  %s" % hit_logs[hit_logs.size() - 1 - i])
 	label.text = "\n".join(lines)
 
+func _apply_hitbox_overlay(v: bool) -> void:
+	show_hitboxes = v
+	for f in fighters:
+		if f and f.has_method("set_debug_hitboxes"):
+			f.set_debug_hitboxes(v)
+
+func _apply_hurtbox_overlay(v: bool) -> void:
+	show_hurtboxes = v
+	for f in fighters:
+		if f and f.has_method("set_debug_hurtboxes"):
+			f.set_debug_hurtboxes(v)
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
 		match event.keycode:
 			KEY_F1:
 				visible_debug = not visible_debug
 			KEY_F2:
-				show_hitboxes = not show_hitboxes
-				get_tree().call_group("hitbox_debug", "set_debug_visible", show_hitboxes)
+				_apply_hitbox_overlay(not show_hitboxes)
 			KEY_F6:
-				show_hurtboxes = not show_hurtboxes
-				get_tree().call_group("hurtbox_debug", "set_debug_visible", show_hurtboxes)
+				_apply_hurtbox_overlay(not show_hurtboxes)

@@ -13,6 +13,8 @@ PR #46 implements core P0/P1 Godot gameplay: fighter state machine behavior, 60 
 
 **Not claimed:** Full product completion — final authored `.glb` art, final SFX/VFX, netplay, tournament balance.
 
+**PR #47 hardening (post-merge fixes):** Hit resolution double-gate bug, aura charge input ordering, hurt-state recovery, movement boolean fix, P2 InputMap, debug overlay toggles — validated in code, not just docs.
+
 ---
 
 ## Systems converted to implemented

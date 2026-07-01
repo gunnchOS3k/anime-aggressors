@@ -186,7 +186,7 @@ func _apply_movement(delta: float) -> void:
 			body.scale.x = absf(body.scale.x) * facing
 	else:
 		velocity.x = move_toward(velocity.x, 0.0, get_run_speed() * delta * 8.0)
-		if is_on_floor() and state_machine.current_state not in FighterStates.is_attack_state(state_machine.current_state):
+		if is_on_floor() and not FighterStates.is_attack_state(state_machine.current_state):
 			if absf(velocity.x) < 10.0:
 				state_machine.enter(FighterStates.IDLE)
 	if _read_jump_pressed():
@@ -204,7 +204,25 @@ func _handle_actions() -> void:
 		_pending_attack_cmd = ""
 	if not state_machine.can_attack():
 		return
-	if _read_shield() and is_on_floor():
+	if state_machine.current_state == FighterStates.GRAB_HOLD:
+		if _read_attack_pressed() or _read_grab_pressed():
+			execute_throw()
+		return
+	if is_aura_input_held():
+		if aura < 100.0:
+			state_machine.enter(FighterStates.AURA_CHARGE)
+			aura = minf(100.0, aura + 35.0 * get_physics_process_delta_time())
+			_set_aura_vfx(true)
+		else:
+			state_machine.enter(FighterStates.AURA_READY)
+			_set_aura_vfx(true)
+	elif state_machine.current_state in [FighterStates.AURA_CHARGE, FighterStates.AURA_READY]:
+		state_machine.enter(FighterStates.IDLE)
+		_set_aura_vfx(false)
+	if _read_aura_burst() and aura >= 100.0:
+		_start_move_by_command("aura_burst")
+		return
+	if _read_shield() and is_on_floor() and not is_aura_input_held():
 		if state_machine.current_state != FighterStates.SHIELD_HOLD:
 			state_machine.enter(FighterStates.SHIELD_START)
 		state_machine.enter(FighterStates.SHIELD_HOLD)
@@ -214,10 +232,6 @@ func _handle_actions() -> void:
 	if state_machine.current_state in [FighterStates.SHIELD_HOLD, FighterStates.SHIELD_START]:
 		shielding = false
 		state_machine.enter(FighterStates.IDLE)
-	if state_machine.current_state == FighterStates.GRAB_HOLD:
-		if _read_attack_pressed() or _read_grab_pressed():
-			execute_throw()
-		return
 	if _read_dodge_pressed():
 		_start_dodge()
 	if _read_grab_pressed():
@@ -225,19 +239,8 @@ func _handle_actions() -> void:
 	if _read_attack_pressed():
 		var cmd := "attack_air_neutral" if not is_on_floor() else ("attack_heavy" if _read_axis() > 0.5 else "attack_neutral")
 		_start_move_by_command(cmd)
-	if _read_special_pressed():
+	if _read_special_pressed() and not is_aura_input_held():
 		_start_move_by_command("special_neutral")
-	if is_aura_input_held():
-		if aura < 100.0:
-			state_machine.enter(FighterStates.AURA_CHARGE)
-			aura = minf(100.0, aura + 35.0 * get_physics_process_delta_time())
-			_set_aura_vfx(true)
-		else:
-			state_machine.enter(FighterStates.AURA_READY)
-	else:
-		_set_aura_vfx(state_machine.current_state in [FighterStates.AURA_CHARGE, FighterStates.AURA_READY])
-	if _read_aura_burst() and aura >= 100.0:
-		_start_move_by_command("aura_burst")
 
 func is_aura_input_held() -> bool:
 	return Input.is_action_pressed("p%d_special" % slot) and Input.is_action_pressed("p%d_shield" % slot)
@@ -426,13 +429,16 @@ func clear_aura() -> void:
 		state_machine.enter(FighterStates.IDLE)
 
 func set_debug_hitboxes(v: bool) -> void:
-	set_debug_visible(v)
-
-func set_debug_visible(v: bool) -> void:
 	if hitbox_debug:
 		hitbox_debug.visible = v
+
+func set_debug_hurtboxes(v: bool) -> void:
 	if hurtbox_debug:
 		hurtbox_debug.visible = v
+
+func set_debug_visible(v: bool) -> void:
+	set_debug_hitboxes(v)
+	set_debug_hurtboxes(v)
 
 func _on_move_ended(_move_id: String) -> void:
 	hitbox.monitoring = false

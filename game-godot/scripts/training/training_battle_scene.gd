@@ -76,8 +76,6 @@ func _connect_hits(attacker: AAFighter, defender: AAFighter) -> void:
 	hb.area_entered.connect(func(area: Area2D):
 		if area != hurt or not hb.monitoring or not attacker.move_runner.is_active_phase():
 			return
-		if not attacker.move_runner.can_hit_target(defender):
-			return
 		var move := attacker._current_move
 		if move.is_empty():
 			move = DataLoader.find_move(attacker.move_manifest, attacker.move_runner.current_move_id())
