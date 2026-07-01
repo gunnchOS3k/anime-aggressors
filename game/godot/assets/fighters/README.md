@@ -1,8 +1,10 @@
-# Fighter assets
+# Fighter runtime assets
 
-- `source/` — Blender `.blend` or reference meshes
-- `glb/` — exported GLB proxies for Godot import
+Production fighters import from:
 
-The shipped web build uses `ProductionFighterFactory` procedural proxies when GLB files are not present.
+- `assets/exports/godot/fighters/<id>.glb` (source of truth export)
+- `glb/<id>.glb` (runtime copy for Godot)
 
-Vertical-slice fighters: **ember-vale**, **juno-spark**.
+If GLB is missing, `FighterAssetLoader` shows **DEBUG FALLBACK — NOT PRODUCTION MODEL** and uses `ProductionFighterRig` proxy geometry.
+
+See `docs/fighters/` for per-fighter production specs.

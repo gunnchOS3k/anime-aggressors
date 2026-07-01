@@ -1,36 +1,34 @@
-[gd_scene load_steps=6 format=3 uid="uid://main_scene"]
+[gd_scene load_steps=9 format=3 uid="uid://main_scene"]
 
 [ext_resource type="Script" path="res://scripts/Main.gd" id="1"]
-[ext_resource type="PackedScene" uid="uid://character_select" path="res://scenes/ui/CharacterSelect.tscn" id="2"]
-[ext_resource type="PackedScene" uid="uid://battle_scene" path="res://scenes/BattleScene.tscn" id="3"]
-[ext_resource type="PackedScene" uid="uid://impact_dummy_derby" path="res://scenes/modes/ImpactDummyDerby.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://title_screen" path="res://scenes/ui/TitleScreen.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://character_select" path="res://scenes/ui/CharacterSelect.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://stage_select" path="res://scenes/ui/StageSelect.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://versus_screen" path="res://scenes/ui/VersusScreen.tscn" id="5"]
+[ext_resource type="PackedScene" uid="uid://battle_scene" path="res://scenes/BattleScene.tscn" id="6"]
+[ext_resource type="PackedScene" uid="uid://impact_dummy_derby" path="res://scenes/modes/ImpactDummyDerby.tscn" id="7"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1")
+title_screen_path = NodePath("TitleScreen")
 character_select_path = NodePath("CharacterSelect")
+stage_select_path = NodePath("StageSelect")
+versus_screen_path = NodePath("VersusScreen")
 battle_scene_path = NodePath("BattleScene")
 derby_mode_path = NodePath("ImpactDummyDerby")
+default_route = 0
 
-[node name="CharacterSelect" parent="." instance=ExtResource("2")]
+[node name="TitleScreen" parent="." instance=ExtResource("2")]
 
-[node name="BattleScene" parent="." instance=ExtResource("3")]
+[node name="CharacterSelect" parent="." instance=ExtResource("3")]
 visible = false
 
-[node name="ImpactDummyDerby" parent="." instance=ExtResource("4")]
+[node name="StageSelect" parent="." instance=ExtResource("4")]
+
+[node name="VersusScreen" parent="." instance=ExtResource("5")]
+
+[node name="BattleScene" parent="." instance=ExtResource("6")]
 visible = false
 
-[node name="ModeBar" type="CanvasLayer" parent="."]
-
-[node name="DerbyButton" type="Button" parent="ModeBar"]
-offset_left = 16.0
-offset_top = 16.0
-offset_right = 200.0
-offset_bottom = 48.0
-text = "Impact Dummy Derby"
-
-[node name="BattleButton" type="Button" parent="ModeBar"]
-offset_left = 210.0
-offset_top = 16.0
-offset_right = 360.0
-offset_bottom = 48.0
-text = "Normal Battle"
+[node name="ImpactDummyDerby" parent="." instance=ExtResource("7")]
+visible = false

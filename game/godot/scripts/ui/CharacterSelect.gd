@@ -54,12 +54,18 @@ func _build_ui() -> void:
 	next.text = "Next ▶"
 	next.pressed.connect(func(): cycle_player(FighterInput.PlayerSlot.P1, 1); _refresh_labels())
 	var confirm := Button.new()
-	confirm.text = "Continue to Derby" if mode == Mode.DERBY else "Start Battle"
+	confirm.text = "Continue to Derby" if mode == Mode.DERBY else "Continue"
 	confirm.pressed.connect(confirm_selection)
 	row.add_child(prev)
 	row.add_child(next)
 	row.add_child(confirm)
 	panel.add_child(row)
+
+	var gate := Label.new()
+	gate.name = "ContentGateLabel"
+	gate.add_theme_font_size_override("font_size", 11)
+	gate.modulate = Color(1, 0.5, 0.4)
+	panel.add_child(gate)
 
 	if mode != Mode.DERBY:
 		var p2row := HBoxContainer.new()
@@ -86,6 +92,28 @@ func _refresh_labels() -> void:
 			p2_label.visible = true
 			var data2 := FighterRoster.get_fighter(fighter_ids[p2_index])
 			p2_label.text = "P2: %s (%s)" % [data2.get("name", fighter_ids[p2_index]), data2.get("element", "")]
+	_update_content_gate()
+
+func _update_content_gate() -> void:
+	var gate := get_node_or_null("VBoxContainer/ContentGateLabel") as Label
+	if gate == null:
+		for child in get_children():
+			gate = child.find_child("ContentGateLabel", true, false) as Label
+			if gate != null:
+				break
+	if gate == null:
+		return
+	var missing: Array[String] = []
+	for id in [fighter_ids[p1_index], fighter_ids[p2_index] if mode != Mode.DERBY else fighter_ids[p1_index]]:
+		if not FighterAssetContract.has_production_glb(id):
+			missing.append(id)
+	if missing.is_empty():
+		gate.text = ""
+	else:
+		gate.text = "%s — missing GLB: %s" % [
+			FighterAssetContract.DEBUG_FALLBACK_LABEL,
+			", ".join(missing),
+		]
 
 func set_mode(new_mode: Mode) -> void:
 	mode = new_mode
