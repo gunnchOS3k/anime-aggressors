@@ -41,6 +41,9 @@ function stubPlayer(partial: Partial<PlayerState>): PlayerState {
     fastFalling: false,
     currentMoveId: "neutral_attack",
     hitVictimsThisMove: [],
+    currentPlatformId: "",
+    dropThroughFrames: 0,
+    ignoredPlatformId: "",
     aura: { current: 0, max: 100, level: 0, charging: false, superReady: false, cooldownFrames: 0, overcharged: false },
     ...partial,
   };

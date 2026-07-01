@@ -14,7 +14,8 @@ import {
 import { getCharacter, getCharacterForPlayer } from "./characters.js";
 import { getStage } from "./stages.js";
 import { getStageLayout } from "./stageLayouts.js";
-import { resolvePlatformLanding } from "./stageCollision.js";
+import { resolveStageCollision, beginDropThrough, isPassThroughPlatform, tickDropThrough } from "./stageCollision.js";
+import { resetPlayerAfterRespawn } from "./combat/playerLifecycle.js";
 import { elementGameplayEnabled } from "./rulesets.js";
 import { resolveCombatHits, processBlastZoneKOs } from "./combat/hitResolution.js";
 import { DODGE_MOVE, NEUTRAL_ATTACK, SPECIAL_ATTACK } from "./frameData.js";
@@ -160,24 +161,13 @@ function integratePhysics(player: PlayerState, stage: GameState["stage"], stageI
   player.x += player.vx;
   player.y += player.vy;
 
-  const layout = getStageLayout(stageId);
-  const landedOnPlatform = resolvePlatformLanding(player, layout, previousY);
+  const layout = getStageLayout(getStage(stageId).layoutId ?? stageId);
+  const collision = resolveStageCollision(player, layout, stage.floorY, previousY);
 
-  if (landedOnPlatform) {
+  if (collision.landed) {
     const wasAirborne = !wasOnGround;
     player.onGround = true;
-    player.fastFalling = false;
-    if (wasAirborne) {
-      resetJumpStateOnLand(player);
-    }
-    if (player.actionState === "jumping" || player.actionState === "falling") {
-      player.actionState = "idle";
-    }
-  } else if (player.y >= stage.floorY) {
-    player.y = stage.floorY;
-    player.vy = 0;
-    const wasAirborne = !wasOnGround;
-    player.onGround = true;
+    player.currentPlatformId = collision.platformId;
     player.fastFalling = false;
     if (wasAirborne) {
       resetJumpStateOnLand(player);
@@ -187,6 +177,7 @@ function integratePhysics(player: PlayerState, stage: GameState["stage"], stageI
     }
   } else {
     player.onGround = false;
+    player.currentPlatformId = "";
     if (player.actionState === "idle" || player.actionState === "running") {
       player.actionState = "falling";
     }
@@ -322,34 +313,13 @@ function respawnPlayer(
   player: PlayerState,
   spawn: { x: number; y: number },
   ruleset?: import("./rulesets.js").GameRuleset,
+  stageId?: string,
 ): void {
-  player.x = spawn.x;
-  player.y = spawn.y;
-  player.vx = 0;
-  player.vy = 0;
-  player.damage = 0;
-  if (ruleset?.matchType === "stamina") {
-    player.staminaHp = ruleset.staminaHp;
+  resetPlayerAfterRespawn(player, spawn, ruleset);
+  if (stageId) {
+    const layout = getStageLayout(getStage(stageId).layoutId ?? stageId);
+    player.currentPlatformId = layout.mainPlatformId;
   }
-  player.actionState = "idle";
-  player.actionFrame = 0;
-  player.hitstunFrames = 0;
-  player.invulnFrames = 60;
-  player.coyoteFrames = 0;
-  player.jumpBufferFrames = 0;
-  player.fastFalling = false;
-  player.currentMoveId = "none";
-  player.hitVictimsThisMove = [];
-  player.burnFramesRemaining = 0;
-  player.slowFramesRemaining = 0;
-  player.slowMultiplierFp = 100;
-  player.airDriftBonusFrames = 0;
-  player.aura = createDefaultAuraState();
-  player.jumpsUsed = 0;
-  player.jumpHoldFrames = 0;
-  player.wasJumpHeld = false;
-  player.jumpsRemaining = getCharacterForPlayer(player).maxJumps;
-  player.onGround = true;
 }
 
 export function resolveCombat(state: GameState): void {
@@ -360,6 +330,7 @@ export function resolveCombat(state: GameState): void {
 export function processPlayer(state: GameState, player: PlayerState, input: InputFrame | undefined): void {
   if (player.actionState === "defeated") return;
 
+  tickDropThrough(player);
   tickAuraDecay(player);
 
   if (input) {
@@ -370,7 +341,19 @@ export function processPlayer(state: GameState, player: PlayerState, input: Inpu
 
     const jumpJustPressed = input.jump && !player.wasJumpHeld;
     bufferJumpInput(player, input.jump);
-    if (tryJump(player, input, jumpJustPressed)) {
+
+    const stageDef = getStage(state.config.stageId);
+    const layout = getStageLayout(stageDef.layoutId ?? stageDef.id);
+    const wantsDropThrough =
+      jumpJustPressed &&
+      input.down &&
+      player.onGround &&
+      player.currentPlatformId !== "" &&
+      isPassThroughPlatform(layout, player.currentPlatformId);
+
+    if (wantsDropThrough) {
+      beginDropThrough(player, player.currentPlatformId);
+    } else if (tryJump(player, input, jumpJustPressed)) {
       if (player.actionState === "auraCharging" || player.aura.charging) {
         player.aura.charging = false;
         player.currentMoveId = "none";

@@ -43,6 +43,9 @@ describe("jump animation hooks", () => {
       fastFalling: false,
       currentMoveId: "none",
       hitVictimsThisMove: [],
+      currentPlatformId: "",
+      dropThroughFrames: 0,
+      ignoredPlatformId: "",
       aura: createDefaultAuraState(),
     };
     const pose = computeFighterLimbPose(player, 5);
@@ -87,6 +90,9 @@ describe("jump animation hooks", () => {
       fastFalling: false,
       currentMoveId: "none",
       hitVictimsThisMove: [],
+      currentPlatformId: "",
+      dropThroughFrames: 0,
+      ignoredPlatformId: "",
       aura: createDefaultAuraState(),
     };
     const ground = computeFighterLimbPose({ ...base, jumpsUsed: 1 }, 5);

@@ -86,6 +86,12 @@ export type PlayerState = {
   currentMoveId: string;
   /** Defender ids already hit during the current move instance (cleared on new move). */
   hitVictimsThisMove: number[];
+  /** Platform id under the player's feet when grounded (empty when airborne). */
+  currentPlatformId: string;
+  /** Frames remaining to ignore `ignoredPlatformId` for landing. */
+  dropThroughFrames: number;
+  /** Platform id skipped during drop-through window. */
+  ignoredPlatformId: string;
   aura: import("./aura/auraTypes.js").AuraChargeState;
 };
 

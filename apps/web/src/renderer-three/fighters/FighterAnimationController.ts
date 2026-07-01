@@ -84,6 +84,9 @@ export function derbyPlayerToAnimationState(player: DerbyPlayerState, fighter: C
           ? "neutral_special"
           : "none",
     hitVictimsThisMove: [],
+    currentPlatformId: "",
+    dropThroughFrames: 0,
+    ignoredPlatformId: "",
     aura: createDefaultAuraState(),
   };
 }

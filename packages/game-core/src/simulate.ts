@@ -7,6 +7,7 @@ import {
   tickEnergyClashes,
 } from "./combat/energyClash.js";
 import { getStage } from "./stages.js";
+import { getStageLayout } from "./stageLayouts.js";
 import { createDefaultAuraState } from "./aura/auraTypes.js";
 
 export function simulateFrame(state: GameState, inputs: InputFrame[]): GameState {
@@ -92,6 +93,7 @@ export function simulateFrame(state: GameState, inputs: InputFrame[]): GameState
 
 export function resetForRematch(state: GameState): GameState {
   const stage = getStage(state.config.stageId);
+  const layout = getStageLayout(stage.layoutId ?? stage.id);
   const fresh = cloneGameState(state);
   fresh.frame = 0;
   fresh.phase = "countdown";
@@ -126,6 +128,9 @@ export function resetForRematch(state: GameState): GameState {
     p.fastFalling = false;
     p.currentMoveId = "none";
     p.hitVictimsThisMove = [];
+    p.currentPlatformId = layout.mainPlatformId;
+    p.dropThroughFrames = 0;
+    p.ignoredPlatformId = "";
     p.aura = createDefaultAuraState();
     const char = fresh.config.characterIds[i];
     p.characterId = char ?? p.characterId;

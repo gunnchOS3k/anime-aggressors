@@ -42,6 +42,9 @@ function playerAt(x: number, y: number): PlayerState {
     fastFalling: false,
     currentMoveId: "none",
     hitVictimsThisMove: [],
+    currentPlatformId: "",
+    dropThroughFrames: 0,
+    ignoredPlatformId: "",
     aura: createDefaultAuraState(),
   };
 }

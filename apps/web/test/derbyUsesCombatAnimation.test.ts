@@ -43,6 +43,9 @@ describe("derby uses combat animation", () => {
       fastFalling: false,
       currentMoveId: "none",
       hitVictimsThisMove: [],
+      currentPlatformId: "",
+      dropThroughFrames: 0,
+      ignoredPlatformId: "",
       aura: createDefaultAuraState(),
     };
     const pose = computeFighterLimbPose(player, 10);
