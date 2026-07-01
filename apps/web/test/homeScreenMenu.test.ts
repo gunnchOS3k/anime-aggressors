@@ -4,20 +4,21 @@ import { renderHomeMarkup } from "../src/screens/homeScreenMarkup.ts";
 import { APP_ROUTES } from "../src/routes.ts";
 
 describe("home screen menu", () => {
-  it("renders Start Game as primary CTA", () => {
+  it("renders Godot Primary Runtime as primary CTA", () => {
     const html = renderHomeMarkup();
-    assert.match(html, /id="btn-start-game"/);
-    assert.match(html, />Start Game</);
+    assert.match(html, /id="btn-godot-primary"/);
+    assert.match(html, />Godot Primary Runtime</);
     assert.match(html, /menu-btn--hero/);
     assert.match(html, /ANIME AGGRESSORS/);
+    assert.match(html, /data-testid="runtime-banner"/);
   });
 
-  it("renders Quick Play and advanced setup CTAs", () => {
+  it("renders legacy web paths in labs", () => {
     const html = renderHomeMarkup();
+    assert.match(html, /id="btn-start-game"/);
+    assert.match(html, /Legacy Web — Start Game/);
     assert.match(html, /id="btn-quick-match"/);
-    assert.match(html, /Quick Play/);
-    assert.match(html, /id="btn-play-match"/);
-    assert.match(html, /Advanced Match Setup/);
+    assert.match(html, /Legacy Web — Quick Play/);
   });
 
   it("includes animated scene canvas", () => {
@@ -39,12 +40,12 @@ describe("home screen menu", () => {
 
   it("labs panel lists experimental modes", () => {
     const html = renderHomeMarkup();
-    assert.match(html, /Godot Combat Prototype/);
+    assert.match(html, /Godot Web Export/);
     assert.match(html, /Impact Dummy Derby/);
     assert.match(html, /Flagline Clash/);
   });
 
-  it("Quick Match routes to battle hash", () => {
+  it("legacy Quick Match routes to battle hash in labs", () => {
     const html = renderHomeMarkup();
     assert.match(html, new RegExp(`data-menu-route="${APP_ROUTES.battle.replace("#", "\\#")}"`));
   });

@@ -10,32 +10,26 @@ import { renderLabsPanel, renderMainMenuPanel } from "../ui/MainMenuPanel.ts";
 import { renderMainMenuFooter } from "../ui/MainMenuFooter.ts";
 
 export function renderHomeMarkup(): string {
-  const startGame = MAIN_MENU_PRIMARY.find((m) => m.id === "btn-start-game") ?? MAIN_MENU_PRIMARY[0]!;
-  const quickPlay = MAIN_MENU_PRIMARY.find((m) => m.id === "btn-quick-match");
-  const customSetup = MAIN_MENU_PRIMARY.find((m) => m.id === "btn-play-match");
-  const secondaryCta = quickPlay
-    ? `<div class="arena-hub__cta arena-hub__cta--secondary">${renderMainMenuButton({ item: quickPlay, state: "default", variant: "secondary", tabIndex: 0 })}</div>`
-    : "";
-  const tertiaryCta = customSetup
-    ? `<div class="arena-hub__cta arena-hub__cta--tertiary">${renderMainMenuButton({ item: customSetup, state: "default", variant: "secondary", tabIndex: 0 })}</div>`
-    : "";
+  const godotPrimary = MAIN_MENU_PRIMARY[0]!;
   return `<div class="arena-hub" data-testid="arena-hub">
+    <div class="runtime-banner runtime-banner--home" data-testid="runtime-banner" role="status">
+      <span class="runtime-banner__label">Primary Runtime: Godot 4 (local)</span>
+      <span class="runtime-banner__hint">Open <code>game-godot/</code> in Godot 4 for authoritative offline play. Web paths below are legacy or preview.</span>
+    </div>
     <canvas id="menu-scene-canvas" class="arena-hub__canvas" aria-hidden="true"></canvas>
     <div class="arena-hub__veil"></div>
     <div class="arena-hub__content">
       <header class="arena-hub__header">
         <p class="arena-hub__kicker">Local Platform Fighter</p>
         <h1 class="arena-hub__title">ANIME AGGRESSORS</h1>
-        <p class="arena-hub__tagline">Start Game for full setup · Quick Play jumps straight to battle · Labs are experimental.</p>
+        <p class="arena-hub__tagline">Godot 4 is the primary runtime · Legacy web battle lives under Labs.</p>
       </header>
 
       <div class="arena-hub__body">
         <div class="arena-hub__center">
           <div class="arena-hub__cta">
-            ${renderMainMenuButton({ item: startGame, state: "default", variant: "primary", tabIndex: 0 })}
+            ${renderMainMenuButton({ item: godotPrimary, state: "default", variant: "primary", tabIndex: 0 })}
           </div>
-          ${secondaryCta}
-          ${tertiaryCta}
           ${renderMainMenuCarousel(MAIN_MENU_SECONDARY)}
         </div>
         ${renderMainMenuPanel("Player", MAIN_MENU_PLAYER)}

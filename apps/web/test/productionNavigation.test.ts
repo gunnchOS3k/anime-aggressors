@@ -25,17 +25,18 @@ describe("production navigation flow", () => {
     assert.deepEqual(steps, ["fighter-select", "stage-select", "match-setup-controls", "battle"]);
   });
 
-  it("home loads with Start Game and Quick Play", () => {
+  it("home loads with Godot primary CTA and legacy labs labels", () => {
     const html = renderHomeMarkup();
     assert.match(html, /data-testid="arena-hub"/);
-    assert.match(html, /Start Game/);
-    assert.match(html, /Quick Play/);
+    assert.match(html, /Godot Primary Runtime/);
+    assert.match(html, /Legacy Web — Start Game/);
+    assert.match(html, /Legacy Web — Quick Play/);
   });
 
   it("labs are separated from carousel", () => {
     const html = renderHomeMarkup();
     assert.match(html, /menu-labs/);
-    assert.doesNotMatch(html, /Godot Combat Prototype[\s\S]*menu-carousel/);
+    assert.doesNotMatch(html, /Godot Web Export[\s\S]*menu-carousel/);
   });
 
   it("reset game state restores valid setup", () => {

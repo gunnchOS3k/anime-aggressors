@@ -1,0 +1,75 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/battle/battle_scene.gd" id="1"]
+
+[node name="BattleScene" type="Node2D"]
+script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="."]
+offset_left = -640.0
+offset_top = -360.0
+offset_right = 640.0
+offset_bottom = 360.0
+color = Color(0.08, 0.1, 0.16, 1)
+
+[node name="Stage" type="Node2D" parent="."]
+
+[node name="Fighters" type="Node2D" parent="."]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, 120)
+zoom = Vector2(1.2, 1.2)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="TopBar" type="HBoxContainer" parent="HUD"]
+offset_left = 24.0
+offset_top = 16.0
+offset_right = 1256.0
+offset_bottom = 56.0
+theme_override_constants/separation = 24
+
+[node name="P1Hud" type="Label" parent="HUD/TopBar"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+text = "P1"
+
+[node name="P2Hud" type="Label" parent="HUD/TopBar"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+text = "P2"
+horizontal_alignment = 2
+
+[node name="CountdownLabel" type="Label" parent="HUD"]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -40.0
+offset_right = 80.0
+offset_bottom = 40.0
+theme_override_font_sizes/font_size = 64
+text = "3"
+horizontal_alignment = 1
+
+[node name="KoLabel" type="Label" parent="HUD"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = 60.0
+offset_right = 160.0
+offset_bottom = 100.0
+theme_override_font_sizes/font_size = 36
+horizontal_alignment = 1

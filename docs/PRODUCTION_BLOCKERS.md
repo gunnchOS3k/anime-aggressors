@@ -2,19 +2,72 @@
 
 **Status:** Living blocker registry  
 **Last updated:** 2026-07-01  
-**Audit branch:** `production/complete-functional-game`  
-**Severity reference:** [BUG_SEVERITY_RUBRIC.md](./BUG_SEVERITY_RUBRIC.md)
+**Audit branch:** `product/runtime-pivot-godot-primary`  
+**Primary runtime:** Godot 4 — `game-godot/`
 
 ---
 
-## Summary
+## Godot pivot — open blockers (2026-07-01)
+
+| ID | Title | Severity | Status |
+|----|-------|----------|--------|
+| BLK-G001 | Godot editor playtest not signed | P1 | Open |
+| BLK-G002 | Grab/throw loop placeholder only | P2 | Open |
+| BLK-G003 | Hitbox uses Area2D overlap — needs hurtbox polish | P1 | Open |
+| BLK-G004 | CPU AI is minimal (not tournament-grade) | P2 | Open |
+| BLK-G005 | Authored fighter/stage art not integrated | P2 | Open |
+| BLK-G006 | Web Godot export may lag `game-godot/` editor build | P2 | Open |
+| BLK-G007 | Pause menu reloads battle scene (no in-scene pause) | P2 | Open |
+
+### BLK-G001 — Godot manual playtest checklist unsigned
+
+| Field | Value |
+|-------|-------|
+| **Severity** | P1 |
+| **Discipline** | QA |
+| **Status** | Open |
+
+**Reproduction:** Open `docs/playtest/2026-07-01-godot-runtime-pivot-check.md` — all boxes unchecked.
+
+**Expected:** Editor verification of boot → battle → results on target platform.
+
+**Actual:** Automated validation only; no signed manual pass in this PR.
+
+**Fix plan:** Run Godot 4 editor playtest; check boxes with evidence.
+
+**Acceptance test:** Playtest doc signed; P0/P1 Godot blockers closed.
+
+---
+
+### BLK-G003 — Combat hit detection foundation incomplete
+
+| Field | Value |
+|-------|-------|
+| **Severity** | P1 |
+| **Discipline** | Engineering (Godot combat) |
+| **Status** | Open |
+
+**Reproduction:** Enter battle; attack overlapping opponent inconsistently.
+
+**Expected:** Reliable hit confirmation, hitstun, knockback scaling with damage%.
+
+**Actual:** Simplified Area2D overlap; no move frame data; shield blocks all damage.
+
+**Fix plan:** Port move catalog hitboxes; hurtbox i-frames; hit freeze.
+
+**Acceptance test:** 10 consecutive intentional hits land in training mode.
+
+---
+
+## Summary (legacy web — prior pass)
 
 | Status | P0 | P1 | P2 | P3 | P4 |
 |--------|----|----|----|----|-----|
-| **Open** | 0 | 0 | 6 | 8 | 5 |
-| **Fixed (this pass)** | 3 | 0 | 0 | 0 | 0 |
+| **Open (web)** | 0 | 0 | 6 | 8 | 5 |
+| **Open (Godot)** | 0 | 2 | 5 | 0 | 0 |
+| **Fixed (web pass)** | 3 | 0 | 0 | 0 | 0 |
 
-**Completion claim:** Allowed only when open P0 = 0 and open P1 = 0. Remaining open items are P2+.
+**Completion claim:** Godot foundation PR — not full game complete. Allowed when Godot menu + battle loop verified and open Godot P0/P1 = 0.
 
 ---
 

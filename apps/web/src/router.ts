@@ -46,6 +46,8 @@ export function navigateHome(): void {
 
 export function bindRouteButtons(): void {
   const map: [string, AppRouteMode][] = [
+    ["btn-godot-primary", "godot"],
+    ["btn-start-game", "fighter-select"],
     ["btn-quick-match", "battle"],
     ["btn-play-match", "match-setup-rules"],
     ["btn-fighter-select", "fighter-select"],

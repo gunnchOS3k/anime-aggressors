@@ -41,12 +41,14 @@ function withMockStorage(run: () => void): void {
 }
 
 describe("Milestone 5 — public demo readiness", () => {
-  it("home CTA includes Quick Play and Start Game", () => {
+  it("home CTA includes Godot primary and legacy labs paths", () => {
     const html = renderHomeMarkup();
+    assert.match(html, /id="btn-godot-primary"/);
+    assert.match(html, /Godot Primary Runtime/);
     assert.match(html, /id="btn-quick-match"/);
-    assert.match(html, /Quick Play/);
+    assert.match(html, /Legacy Web — Quick Play/);
     assert.match(html, /id="btn-start-game"/);
-    assert.match(html, /Start Game/);
+    assert.match(html, /Legacy Web — Start Game/);
     assert.match(html, new RegExp(`data-menu-route="${APP_ROUTES.battle.replace("#", "\\#")}"`));
   });
 
@@ -130,9 +132,10 @@ describe("Milestone 5 — public demo readiness", () => {
     }
   });
 
-  it("engine migration doc states no migration in M5", () => {
+  it("engine migration doc approves Godot primary runtime", () => {
     const md = fs.readFileSync(path.join(repoRoot, "docs/ENGINE_MIGRATION_DECISION.md"), "utf8");
-    assert.match(md, /does not authorize or perform engine migration/i);
+    assert.match(md, /Primary gameplay runtime.*Godot 4/i);
+    assert.match(md, /game-godot/i);
     assert.match(md, /Recommendation/i);
     assert.match(md, /TypeScript/i);
   });
