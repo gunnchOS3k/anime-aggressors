@@ -7,6 +7,7 @@ import {
 import { renderHomeMarkup } from "./homeScreenMarkup.ts";
 import { createMenuNavigation, type MenuNavigationController } from "../input/menuNavigation.ts";
 import { createMainMenuSceneRenderer, type MainMenuSceneRenderer } from "../renderer-three/menu/MainMenuSceneRenderer.ts";
+import { resetGameState } from "../match/quickMatch.ts";
 
 export type HomeScreenHandle = {
   dispose: () => void;
@@ -41,6 +42,10 @@ export function mountHomeScreen(container: HTMLElement): HomeScreenHandle {
       labs: MAIN_MENU_LABS,
     });
 
+    hub?.querySelector("#btn-reset-game-state")?.addEventListener("click", () => {
+      resetGameState();
+    });
+
     return {
       dispose: () => {
         window.removeEventListener("resize", onResize);
@@ -62,6 +67,10 @@ export function mountHomeScreen(container: HTMLElement): HomeScreenHandle {
     carousel: MAIN_MENU_SECONDARY,
     player: MAIN_MENU_PLAYER,
     labs: MAIN_MENU_LABS,
+  });
+
+  container.querySelector("#btn-reset-game-state")?.addEventListener("click", () => {
+    resetGameState();
   });
 
   return {

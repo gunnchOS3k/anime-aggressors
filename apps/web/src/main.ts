@@ -64,6 +64,13 @@ async function navigate(mode: AppRouteMode): Promise<void> {
     } else if (mode === "battle") {
       const { launchMatch } = await import("./game/App.js");
       const { ensureBattleReadySetup } = await import("./match/quickMatch.ts");
+      const { resolveBattleRoute } = await import("./navigation/modeFlow.ts");
+      const { navigateToHash } = await import("./routes.ts");
+      const resolved = resolveBattleRoute();
+      if (resolved.mode !== "battle") {
+        navigateToHash(resolved.route);
+        return;
+      }
       ensureBattleReadySetup();
       launchMatch(appRoot!, { skipSelect: true });
     } else if (mode === "create-fighter") {

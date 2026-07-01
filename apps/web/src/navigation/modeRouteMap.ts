@@ -16,10 +16,9 @@ export type ModeFlowStep = {
 
 export const MODE_ROUTE_MAP: Record<GameModeId, ModeFlowStep[]> = {
   startMatch: [
-    { route: APP_ROUTES.matchSetupRules, mode: "match-setup-rules", label: "Rules" },
-    { route: APP_ROUTES.matchSetupStage, mode: "match-setup-stage", label: "Map" },
-    { route: APP_ROUTES.matchSetupFighters, mode: "match-setup-fighters", label: "Fighters" },
-    { route: APP_ROUTES.matchSetupControls, mode: "match-setup-controls", label: "Controls" },
+    { route: APP_ROUTES.fighterSelect, mode: "fighter-select", label: "Fighters" },
+    { route: APP_ROUTES.stageSelect, mode: "stage-select", label: "Stage" },
+    { route: APP_ROUTES.matchSetupControls, mode: "match-setup-controls", label: "Ready" },
     { route: APP_ROUTES.battle, mode: "battle", label: "Battle" },
   ],
   customGame: [

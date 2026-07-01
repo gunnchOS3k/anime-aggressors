@@ -13,14 +13,11 @@ export type ModeFlowResolution = {
 export function resolveModeEntry(modeId: GameModeId): ModeFlowResolution {
   if (modeId === "startMatch") {
     const setup = loadMatchSetup();
-    if (!setup.rulesetId) {
-      return { route: APP_ROUTES.matchSetupRules, mode: "match-setup-rules" };
+    if (!setup.fighters?.length || setup.fighters.length < 2 || !setup.fighters[0]?.fighter) {
+      return { route: APP_ROUTES.fighterSelect, mode: "fighter-select" };
     }
     if (!setup.stageId) {
-      return { route: APP_ROUTES.matchSetupStage, mode: "match-setup-stage" };
-    }
-    if (!setup.fighters?.length || setup.fighters.length < 2) {
-      return { route: APP_ROUTES.matchSetupFighters, mode: "match-setup-fighters" };
+      return { route: APP_ROUTES.stageSelect, mode: "stage-select" };
     }
     if (!isMatchSetupReady(setup)) {
       return { route: APP_ROUTES.matchSetupControls, mode: "match-setup-controls" };

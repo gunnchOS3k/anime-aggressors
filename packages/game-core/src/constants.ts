@@ -18,7 +18,8 @@ export const BLAST_BOTTOM = STAGE_HEIGHT + 300 * FP_SCALE;
 /** Physics (fixed-point per frame at 60 Hz). */
 export const GRAVITY = (12 * FP_SCALE) / SIM_HZ;
 export const MAX_FALL_SPEED = (18 * FP_SCALE) / SIM_HZ;
-export const RUN_SPEED = (6 * FP_SCALE) / SIM_HZ;
+/** Legacy alias — active movement uses MOVEMENT_BASE in movementTuning.ts */
+export const RUN_SPEED = (220 * FP_SCALE) / SIM_HZ;
 export const JUMP_VELOCITY = -(14 * FP_SCALE) / SIM_HZ;
 export const AIR_CONTROL = (3 * FP_SCALE) / SIM_HZ;
 export const DODGE_SPEED = (10 * FP_SCALE) / SIM_HZ;

@@ -23,17 +23,30 @@ const { createQuickMatchSetup } = await import("../src/match/quickMatch.ts");
 beforeEach(() => storage.clear());
 
 describe("start match route", () => {
-  it("Quick Match uses battle route", () => {
+  it("Quick Play uses battle route", () => {
     assert.equal(APP_ROUTES.battle, "#/battle");
     const html = renderHomeMarkup();
     assert.match(html, /id="btn-quick-match"/);
+    assert.match(html, /Quick Play/);
     assert.match(html, /#\/battle/);
   });
 
-  it("custom setup links to match setup rules", () => {
+  it("Start Game links to fighter select", () => {
+    const html = renderHomeMarkup();
+    assert.match(html, /id="btn-start-game"/);
+    assert.match(html, /Start Game/);
+    assert.match(html, /#\/fighter-select/);
+  });
+
+  it("reset game state button exists on home", () => {
+    const html = renderHomeMarkup();
+    assert.match(html, /id="btn-reset-game-state"/);
+  });
+
+  it("advanced setup links to match setup rules", () => {
     const html = renderHomeMarkup();
     assert.match(html, /id="btn-play-match"/);
-    assert.match(html, /Custom Match Setup/);
+    assert.match(html, /Advanced Match Setup/);
     assert.match(html, /#\/match-setup\/rules/);
   });
 

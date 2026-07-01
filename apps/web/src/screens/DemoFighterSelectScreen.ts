@@ -13,7 +13,7 @@ export function mountDemoFighterSelectScreen(root: HTMLElement): void {
   mountCharacterSelectScreen(root, {
     title: "Fighter Select",
     setupSummary: "All 7 fighters selectable — production vs preview badges shown.",
-    continueLabel: "Start Match",
+    continueLabel: "Choose Stage",
     backLabel: "← Home",
     onBack: () => navigateHome(),
     onContinue: (result) => {
@@ -26,7 +26,7 @@ export function mountDemoFighterSelectScreen(root: HTMLElement): void {
       };
       saveMatchSetup(next);
       applySetupToMatchSession(next);
-      navigateToHash(APP_ROUTES.battle);
+      navigateToHash(APP_ROUTES.stageSelect);
     },
   });
 }

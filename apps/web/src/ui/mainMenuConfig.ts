@@ -10,18 +10,25 @@ export type MainMenuItem = {
   tier: MenuItemTier;
 };
 
-/** Main public demo path — Quick Match / Play Demo. */
+/** Main public path — Start Game walks fighter → stage → ready → battle. */
 export const MAIN_MENU_PRIMARY: MainMenuItem[] = [
   {
+    id: "btn-start-game",
+    label: "Start Game",
+    route: APP_ROUTES.fighterSelect,
+    mode: "fighter-select",
+    tier: "primary",
+  },
+  {
     id: "btn-quick-match",
-    label: "Play Demo",
+    label: "Quick Play",
     route: APP_ROUTES.battle,
     mode: "battle",
     tier: "primary",
   },
   {
     id: "btn-play-match",
-    label: "Custom Match Setup",
+    label: "Advanced Match Setup",
     route: APP_ROUTES.matchSetupRules,
     mode: "match-setup-rules",
     tier: "primary",
@@ -63,7 +70,7 @@ export const MAIN_MENU_SECONDARY: MainMenuItem[] = [
 export const MAIN_MENU_PLAYER: MainMenuItem[] = [
   {
     id: "btn-controls",
-    label: "Controls",
+    label: "Controls / Settings",
     route: APP_ROUTES.controls,
     mode: "controls",
     tier: "player",

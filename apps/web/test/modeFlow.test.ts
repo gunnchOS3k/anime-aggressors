@@ -25,18 +25,26 @@ beforeEach(() => {
 });
 
 describe("mode flow", () => {
-  it("start match without rules routes to rules select", () => {
-    saveMatchSetup({ ...createDefaultMatchSetup(), rulesetId: undefined, ruleset: undefined });
+  it("start match without fighters routes to fighter select", () => {
+    const base = createDefaultMatchSetup();
+    saveMatchSetup({
+      ...base,
+      fighters: [
+        { playerId: 0 },
+        { playerId: 1 },
+      ],
+    });
     const r = resolveModeEntry("startMatch");
-    assert.equal(r.route, APP_ROUTES.matchSetupRules);
-    assert.equal(r.mode, "match-setup-rules");
+    assert.equal(r.route, APP_ROUTES.fighterSelect);
+    assert.equal(r.mode, "fighter-select");
   });
 
-  it("start match without stage routes to map select", () => {
+  it("start match without stage routes to stage select", () => {
     const base = createDefaultMatchSetup();
     saveMatchSetup({ ...base, stageId: undefined, stageName: undefined });
     const r = resolveModeEntry("startMatch");
-    assert.equal(r.route, APP_ROUTES.matchSetupStage);
+    assert.equal(r.route, APP_ROUTES.stageSelect);
+    assert.equal(r.mode, "stage-select");
   });
 
   it("battle route redirects when fighters missing", async () => {
@@ -44,7 +52,7 @@ describe("mode flow", () => {
     const base = createDefaultMatchSetup();
     const guard = guardBattleEntry({ ...base, fighters: [] });
     assert.equal(guard.ok, false);
-    assert.equal(guard.redirectMode, "match-setup-fighters");
+    assert.equal(guard.redirectMode, "fighter-select");
   });
 
   it("derby without fighter routes to fighter select", () => {

@@ -41,10 +41,12 @@ function withMockStorage(run: () => void): void {
 }
 
 describe("Milestone 5 — public demo readiness", () => {
-  it("home CTA routes to battle hash", () => {
+  it("home CTA includes Quick Play and Start Game", () => {
     const html = renderHomeMarkup();
     assert.match(html, /id="btn-quick-match"/);
-    assert.match(html, />Play Demo</);
+    assert.match(html, /Quick Play/);
+    assert.match(html, /id="btn-start-game"/);
+    assert.match(html, /Start Game/);
     assert.match(html, new RegExp(`data-menu-route="${APP_ROUTES.battle.replace("#", "\\#")}"`));
   });
 
