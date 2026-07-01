@@ -102,7 +102,10 @@ func _sync_hitbox_socket() -> void:
 	if hitbox == null or visual_rig == null:
 		return
 	if state_machine.is_attacking() or state_machine.is_specialing() or hitbox.active:
-		var socket_name := FighterMoveChoreography.hit_socket_for_state(state_machine.current_state)
+		var socket_name := FighterMoveChoreography.hit_socket_for_state(
+			state_machine.current_state,
+			fighter_stats.fighter_id if fighter_stats != null else ""
+		)
 		hitbox.global_position = visual_rig.get_socket_global_position(socket_name)
 
 func _update_timers(delta: float) -> void:

@@ -1,56 +1,28 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  FIGHTERS,
+  REQUIRED_MOVE_FIELDS,
+  REQUIRED_MOVE_INPUTS,
+  formatMissing,
+  getFighterMoves,
+  loadMoveCatalog,
+} from "./godot-product-validation-shared.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const godotRoot = path.join(repoRoot, "game/godot");
-
-const REQUIRED_PARTS = [
-  "head",
-  "torso",
-  "hips",
-  "left_upper_arm",
-  "left_forearm",
-  "left_hand",
-  "right_upper_arm",
-  "right_forearm",
-  "right_hand",
-  "left_thigh",
-  "left_shin",
-  "left_foot",
-  "right_thigh",
-  "right_shin",
-  "right_foot",
-  "element_accent",
-  "aura_socket",
-];
+const errors = [];
 
 const REQUIRED_FILES = [
-  "scripts/fighter/FighterRig3D.gd",
-  "scripts/fighter/FighterRigFactory.gd",
-  "scripts/fighter/FighterAnimationTreeDriver.gd",
-  "scripts/fighter/FighterAnimationStates.gd",
+  "scripts/fighter/ProductionFighterRig.gd",
+  "scripts/fighter/ProductionFighterFactory.gd",
   "scripts/fighter/FighterMoveChoreography.gd",
   "scripts/combat/MoveChoreography.gd",
+  "scripts/combat/MoveCatalog.gd",
   "scripts/combat/MoveFrameData.gd",
-  "scripts/combat/HitboxSocket.gd",
-  "scripts/vfx/VfxSocket.gd",
-  "scripts/vfx/ElementalVfxFactory.gd",
-  "scenes/fighters/FighterRig3D.tscn",
-  "scenes/fighters/FighterAnimationTree.tscn",
+  "scenes/fighter/ProductionFighterRig.tscn",
 ];
-
-const FIGHTERS = [
-  "ember-vale",
-  "rook-ironside",
-  "juno-spark",
-  "kaia-windrow",
-  "nix-calder",
-  "orion-vell",
-  "vesper-nyx",
-];
-
-const errors = [];
 
 for (const rel of REQUIRED_FILES) {
   if (!fs.existsSync(path.join(godotRoot, rel))) {
@@ -58,41 +30,47 @@ for (const rel of REQUIRED_FILES) {
   }
 }
 
-const factorySrc = fs.readFileSync(path.join(godotRoot, "scripts/fighter/FighterRigFactory.gd"), "utf8");
-for (const part of REQUIRED_PARTS) {
-  if (!factorySrc.includes(`"${part}"`)) {
-    errors.push(`FighterRigFactory missing part ${part}`);
+const catalog = loadMoveCatalog();
+if (!catalog) {
+  errors.push("missing game/godot/data/moves/move_catalog.json");
+} else {
+  for (const fighterId of FIGHTERS) {
+    const moves = getFighterMoves(catalog, fighterId);
+    for (const input of REQUIRED_MOVE_INPUTS) {
+      const move = moves[input];
+      if (!move) {
+        errors.push(formatMissing(fighterId, input, "move_definition", "game/godot/data/moves/move_catalog.json"));
+        continue;
+      }
+      if (!move.hit_socket) {
+        errors.push(formatMissing(fighterId, move.move_id ?? input, "hit_socket", "game/godot/data/moves/move_catalog.json"));
+      }
+      if (!move.vfx_socket) {
+        errors.push(formatMissing(fighterId, move.move_id ?? input, "vfx_socket", "game/godot/data/moves/move_catalog.json"));
+      }
+      for (const field of ["hurtbox_profile", "startup_frames", "active_frames", "recovery_frames"]) {
+        if (move[field] === undefined || move[field] === null) {
+          errors.push(formatMissing(fighterId, move.move_id ?? input, field, "game/godot/data/moves/move_catalog.json"));
+        }
+      }
+    }
   }
 }
+
+const factorySrc = fs.readFileSync(path.join(godotRoot, "scripts/fighter/ProductionFighterFactory.gd"), "utf8");
 for (const fighter of FIGHTERS) {
-  if (!factorySrc.includes(`"${fighter}"`)) {
-    errors.push(`FighterRigFactory missing fighter profile ${fighter}`);
+  if (!fs.existsSync(path.join(repoRoot, "docs/fighters", fighter, "FIGHTER_SPEC.md"))) {
+    errors.push(`docs/fighters/${fighter}/FIGHTER_SPEC.md missing`);
   }
 }
 
-const rigSrc = fs.readFileSync(path.join(godotRoot, "scripts/fighter/FighterRig3D.gd"), "utf8");
-if (rigSrc.includes("stick") || rigSrc.includes("line2d")) {
-  errors.push("FighterRig3D appears to use stick/line primitives");
-}
-if (!rigSrc.includes("MeshInstance3D") && !factorySrc.includes("MeshInstance3D")) {
-  errors.push("fighter rig pipeline missing MeshInstance3D parts");
-}
-
-const statesSrc = fs.readFileSync(path.join(godotRoot, "scripts/fighter/FighterAnimationStates.gd"), "utf8");
-for (const state of ["neutral_attack_active", "aura_charge", "launch_tumble", "victory"]) {
-  if (!statesSrc.includes(`"${state}"`)) {
-    errors.push(`animation states missing ${state}`);
-  }
-}
-
-const choreographySrc = fs.readFileSync(path.join(godotRoot, "scripts/combat/MoveChoreography.gd"), "utf8");
-if (!choreographySrc.includes("hit_socket")) {
-  errors.push("MoveChoreography missing hit_socket definitions");
+if (!factorySrc.includes("MeshInstance3D")) {
+  errors.push("ProductionFighterFactory missing MeshInstance3D volumetric parts");
 }
 
 const fighterScene = fs.readFileSync(path.join(godotRoot, "scenes/Fighter.tscn"), "utf8");
-if (!fighterScene.includes("ProductionFighterRig.tscn") && !fighterScene.includes("FighterRig3D.tscn")) {
-  errors.push("Fighter.tscn does not instance a production fighter rig");
+if (!fighterScene.includes("ProductionFighterRig.tscn")) {
+  errors.push("Fighter.tscn does not instance ProductionFighterRig");
 }
 
 if (errors.length > 0) {
@@ -103,4 +81,3 @@ if (errors.length > 0) {
 
 console.log("Godot fighter quality OK");
 console.log(`  fighters: ${FIGHTERS.length}`);
-console.log(`  rig parts: ${REQUIRED_PARTS.length}`);

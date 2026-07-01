@@ -7,7 +7,9 @@ var startup_frames: int
 var active_frames: int
 var recovery_frames: int
 var hitbox_socket: String
+var hit_socket: String
 var vfx_socket: String
+var hurtbox_profile: String
 var camera_event: String
 var audio_event: String
 var hitstop_frames: int
@@ -24,8 +26,10 @@ func _init(data: Dictionary = {}) -> void:
 	startup_frames = int(data.get("startup_frames", data.get("startup", 4)))
 	active_frames = int(data.get("active_frames", data.get("active", 3)))
 	recovery_frames = int(data.get("recovery_frames", data.get("recovery", 10)))
-	hitbox_socket = String(data.get("hitbox_socket", data.get("hit_socket", "right_hand")))
-	vfx_socket = String(data.get("vfx_socket", hitbox_socket))
+	hit_socket = String(data.get("hit_socket", data.get("hitbox_socket", "right_fist")))
+	hitbox_socket = hit_socket
+	vfx_socket = String(data.get("vfx_socket", hit_socket))
+	hurtbox_profile = String(data.get("hurtbox_profile", "standard"))
 	camera_event = String(data.get("camera_event", "light_impact"))
 	audio_event = String(data.get("audio_event", ""))
 	hitstop_frames = int(data.get("hitstop_frames", data.get("hitstop", 4)))
@@ -44,7 +48,9 @@ func to_dictionary() -> Dictionary:
 		"active_frames": active_frames,
 		"recovery_frames": recovery_frames,
 		"hitbox_socket": hitbox_socket,
+		"hit_socket": hit_socket,
 		"vfx_socket": vfx_socket,
+		"hurtbox_profile": hurtbox_profile,
 		"camera_event": camera_event,
 		"audio_event": audio_event,
 		"hitstop_frames": hitstop_frames,

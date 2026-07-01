@@ -63,7 +63,9 @@ static func build_rig(
 	sockets["right_foot"] = sockets["right_foot_socket"]
 	sockets["left_foot"] = sockets["left_foot_socket"]
 	sockets["weapon_tip"] = sockets["weapon_socket"]
-	sockets["chest_aura"] = sockets["aura_socket"]
+	sockets["center_mass"] = sockets["hit_center_socket"]
+	sockets["ground_contact"] = _socket("ground_contact", Vector3(0.10, -0.24, 0.12), limbs["right_foot"])
+	sockets["aura_core"] = sockets["aura_socket"]
 
 	ElementalAuraSystem.attach(owner, fighter_id, sockets["aura_socket"])
 

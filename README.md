@@ -42,6 +42,17 @@ The blocker is **not** just engine choice. The blocker is the **missing art / an
 
 Milestones **M0–M9** are defined in [docs/production/PRODUCT_MILESTONES.md](docs/production/PRODUCT_MILESTONES.md).
 
+## Product completion mode
+
+Anime Aggressors is moving into **product-completion mode**. The product is **not complete** unless all 7 fighters, stages, moves, combos, choreography, aura, Derby, results, and production gates pass (`npm run validate:godot-product`).
+
+- **Godot** — public gameplay runtime
+- **TypeScript** — launcher / site shell
+- **Blender** — source asset pipeline (`tools/blender/export_all_fighters.py`)
+- **Unreal** — R&D reference track only (not GitHub Pages runtime)
+
+Production proxy models are acceptable for the current phase; unlabeled stick figures and debug-only geometry are not.
+
 
 [Godot Prototype](https://gunnchos3k.github.io/anime-aggressors/#/godot) · [Legacy Start Match](https://gunnchos3k.github.io/anime-aggressors/#/match-setup/rules) · [Web Build Home](https://gunnchos3k.github.io/anime-aggressors/) · [PC Playtest Guide](docs/playtest/PC_PLAYTEST_GUIDE.md) · [Give Feedback](docs/playtest/feedback-form.md)
 

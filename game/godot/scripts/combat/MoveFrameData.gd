@@ -7,8 +7,11 @@ var active: int
 var recovery: int
 var hit_socket: String
 var vfx_socket: String
+var hurtbox_profile: String
 var trail: String
 var hitstop: int
+var hitlag: int
+var hitstun: int
 var knockback_angle: float
 var knockback_growth: float
 
@@ -17,11 +20,14 @@ func _init(data: Dictionary = {}) -> void:
 	startup = int(data.get("startup_frames", data.get("startup", 4)))
 	active = int(data.get("active_frames", data.get("active", 3)))
 	recovery = int(data.get("recovery_frames", data.get("recovery", 10)))
-	hit_socket = String(data.get("hitbox_socket", data.get("hit_socket", "right_hand")))
+	hit_socket = String(data.get("hit_socket", data.get("hitbox_socket", "right_fist")))
 	vfx_socket = String(data.get("vfx_socket", hit_socket))
+	hurtbox_profile = String(data.get("hurtbox_profile", "standard"))
 	trail = String(data.get("trail", "default_arc"))
-	hitstop = int(data.get("hitstop_frames", data.get("hitstop", 4)))
-	knockback_angle = float(data.get("launch_angle_degrees", data.get("knockback_angle", 35.0)))
+	hitstop = int(data.get("hitstop_frames", data.get("hitstop", data.get("hitlag", 4))))
+	hitlag = int(data.get("hitlag", hitstop))
+	hitstun = int(data.get("hitstun", 10))
+	knockback_angle = float(data.get("launch_angle_degrees", data.get("launch_angle", data.get("knockback_angle", 35.0))))
 	knockback_growth = float(data.get("knockback_growth", 1.05))
 
 func to_dictionary() -> Dictionary:
