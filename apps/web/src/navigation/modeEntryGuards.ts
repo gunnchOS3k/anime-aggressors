@@ -11,14 +11,14 @@ export type ModeEntryGuardResult = {
 };
 
 export function guardBattleEntry(setup: MatchSetupSession | null): ModeEntryGuardResult {
-  if (!setup?.rulesetId || !setup.ruleset) {
-    return { ok: false, redirectRoute: APP_ROUTES.matchSetupRules, redirectMode: "match-setup-rules", reason: "missing rules" };
+  if (!setup?.fighters || setup.fighters.length < 2 || !setup.fighters[0]?.fighter) {
+    return { ok: false, redirectRoute: APP_ROUTES.fighterSelect, redirectMode: "fighter-select", reason: "missing fighters" };
   }
   if (!setup.stageId) {
-    return { ok: false, redirectRoute: APP_ROUTES.matchSetupStage, redirectMode: "match-setup-stage", reason: "missing stage" };
+    return { ok: false, redirectRoute: APP_ROUTES.stageSelect, redirectMode: "stage-select", reason: "missing stage" };
   }
-  if (!setup.fighters || setup.fighters.length < 2) {
-    return { ok: false, redirectRoute: APP_ROUTES.matchSetupFighters, redirectMode: "match-setup-fighters", reason: "missing fighters" };
+  if (!setup.rulesetId || !setup.ruleset) {
+    return { ok: false, redirectRoute: APP_ROUTES.matchSetupRules, redirectMode: "match-setup-rules", reason: "missing rules" };
   }
   return { ok: true };
 }

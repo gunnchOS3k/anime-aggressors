@@ -34,8 +34,8 @@ export function mountDemoStageSelectScreen(root: HTMLElement): void {
           ${renderStageSelectGrid(stages, selectedId)}
         </div>
         <div class="demo-stage-actions">
-          <button type="button" id="dss-battle" class="${ARENA_CLASSES.primaryCta}">Play on this stage</button>
-          <button type="button" id="dss-fighters" class="${ARENA_CLASSES.secondaryBtn}">Change fighters first</button>
+          <button type="button" id="dss-battle" class="${ARENA_CLASSES.primaryCta}">Ready Check</button>
+          <button type="button" id="dss-fighters" class="${ARENA_CLASSES.secondaryBtn}">Change fighters</button>
         </div>
       </div>
     `;
@@ -78,7 +78,7 @@ export function mountDemoStageSelectScreen(root: HTMLElement): void {
     root.querySelector("#dss-battle")?.addEventListener("click", () => {
       persistStage();
       preview?.dispose();
-      navigateToHash(APP_ROUTES.battle);
+      navigateToHash(APP_ROUTES.matchSetupControls);
     });
 
     root.querySelector("#dss-fighters")?.addEventListener("click", () => {

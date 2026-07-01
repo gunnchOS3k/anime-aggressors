@@ -33,6 +33,8 @@ export function canStartCombatAction(player: PlayerState): boolean {
   }
   if (player.actionState === "throwing") return false;
 
+  if (player.actionState === "shielding") return false;
+
   if (player.actionState === "grabbing" && player.grabTargetId >= 0) {
     return true;
   }

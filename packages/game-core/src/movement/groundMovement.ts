@@ -4,6 +4,17 @@ import { isMovementLocked } from "./landingLag.js";
 import { computeDashSpeed, computeRunSpeed } from "./applyMovement.js";
 import { movementTuningForSize } from "./movementTuning.js";
 
+function preservesCombatState(player: PlayerState): boolean {
+  return (
+    player.actionState === "attacking" ||
+    player.actionState === "special" ||
+    player.actionState === "grabbing" ||
+    player.actionState === "throwing" ||
+    player.actionState === "shielding" ||
+    player.actionState === "hitstun"
+  );
+}
+
 function lerpVelocity(current: number, target: number, accel: number): number {
   if (current === target) return target;
   const step = Math.max(1, Math.floor(Math.abs(target - current) * (0.35 * accel)));
@@ -36,7 +47,7 @@ export function applyGroundMovement(player: PlayerState, input: InputFrame): voi
   if (input.down && !input.jump && dir === 0 && Math.abs(player.vx) < MOVEMENT_TUNING_FP.skidVelocityThreshold) {
     player.movementState = "crouch";
     player.vx = 0;
-    player.actionState = "idle";
+    if (!preservesCombatState(player)) player.actionState = "idle";
     return;
   }
 
@@ -46,13 +57,13 @@ export function applyGroundMovement(player: PlayerState, input: InputFrame): voi
       if (Math.abs(player.vx) < MOVEMENT_TUNING_FP.minGroundVelocity) {
         player.vx = 0;
         player.movementState = "idle";
-        player.actionState = "idle";
+        if (!preservesCombatState(player)) player.actionState = "idle";
       } else {
         player.movementState = "skid";
       }
     } else {
       player.movementState = "idle";
-      player.actionState = "idle";
+      if (!preservesCombatState(player)) player.actionState = "idle";
     }
     return;
   }
@@ -77,7 +88,7 @@ export function applyGroundMovement(player: PlayerState, input: InputFrame): voi
       player.movementState = "dashStart";
       player.vx = dir * Math.floor(dashSpeed * 1.15);
     }
-    player.actionState = "running";
+    if (!preservesCombatState(player)) player.actionState = "running";
     return;
   }
 
@@ -87,7 +98,7 @@ export function applyGroundMovement(player: PlayerState, input: InputFrame): voi
     player.movementState = "dashStart";
     player.dashFrames = MOVEMENT_TUNING_FRAMES.dashStartFrames;
     player.vx = dir * Math.floor(dashSpeed * 1.15);
-    player.actionState = "running";
+    if (!preservesCombatState(player)) player.actionState = "running";
     return;
   }
 
@@ -97,11 +108,11 @@ export function applyGroundMovement(player: PlayerState, input: InputFrame): voi
     if (player.dashFrames <= 0) {
       player.movementState = "run";
     }
-    player.actionState = "running";
+    if (!preservesCombatState(player)) player.actionState = "running";
     return;
   }
 
   player.movementState = Math.abs(player.vx) < runSpeed * 0.6 ? "walk" : "run";
   player.vx = lerpVelocity(player.vx, target, tuning.acceleration);
-  player.actionState = "running";
+  if (!preservesCombatState(player)) player.actionState = "running";
 }

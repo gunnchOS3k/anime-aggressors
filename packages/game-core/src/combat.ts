@@ -120,6 +120,17 @@ function startCombatAction(player: PlayerState, input: InputFrame): void {
     return;
   }
 
+  const sameMoveInProgress =
+    player.currentMoveId === selected.moveId &&
+    player.actionState === selected.actionState &&
+    (player.actionState === "attacking" || player.actionState === "special");
+  if (sameMoveInProgress) {
+    const move = getCombatMoveData(player.currentMoveId);
+    if (move && !isMoveComplete(combatMoveToFrameData(move), player.actionFrame)) {
+      return;
+    }
+  }
+
   clearMoveHitRegistry(player);
   player.actionState = selected.actionState;
   player.actionFrame = 0;

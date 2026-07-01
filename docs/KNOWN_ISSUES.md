@@ -1,62 +1,63 @@
-# Known Issues — Public Demo (M5)
+# Known Issues — Production Completion
 
-**Last updated:** 2026-07-01
+**Last updated:** 2026-07-01  
+**Severity rubric:** `docs/BUG_SEVERITY_RUBRIC.md`  
+**Blockers:** `docs/PRODUCTION_BLOCKERS.md`
 
 ---
 
-## Gameplay
+## P0 / P1 (release blockers)
 
-- Preview fighters (Nix Calder, Orion Vell, Vesper Nyx) are balance-pending — uneven vs production 4
-- Energy clash / aura systems add complexity beyond minimal platform-fighter teaching
-- 4-player modes blocked in UI (P3/P4 ship blocked)
+_None open after production completion pass._
 
-## Controls
+Fixed in this pass:
 
-- Touch/mobile on-screen controls not implemented
-- Gamepad may require button press before browser registers pad
-- Keyboard P1/P2 overlap possible on single keyboard — gamepads recommended for 2P
+- Movement scale too slow for stage size (BLK-001)
+- Combat attacks interrupted by movement state overwrites (BLK-004)
+- Navigation bypassed setup / stale localStorage (BLK-002)
+- CPU levels 2–3 not exposed in UI (BLK-003)
 
-## UI
+---
 
-- Career, replay vault, saved games reachable but not polished for public demo
-- Custom match setup has many options — easy to misconfigure for casual players
-- Some lab modes lack back-navigation polish
+## P2 — serious UX / readability
 
-## Audio / VFX
+| ID | Issue |
+|----|--------|
+| P2-001 | No touch / on-screen mobile controls |
+| P2-002 | Preview fighters (Nix, Orion, Vesper) balance-pending vs production four |
+| P2-003 | Keyboard P1/P2 overlap on single keyboard |
+| P2-004 | Training move list shows subset only (6 moves in overlay) |
+| P2-005 | Manual browser playtest not signed off (see `docs/playtest/2026-07-01-full-game-completion-check.md`) |
+| P2-006 | P3/P4 couch play blocked in UI |
 
-- All sounds are procedural Web Audio placeholders
-- VFX are simple geometry particles — not final art direction
-- Shield block audio may fire on shield start, not only on block
+---
 
-## Performance
+## P3 — polish
 
-- Three.js procedural fighters scale with scene complexity
-- Low-end GPUs may drop frames with debug overlays enabled
-- Godot embed (labs) significantly heavier than main web demo
+| ID | Issue |
+|----|--------|
+| P3-001 | Procedural Web Audio placeholders — not final SFX |
+| P3-002 | Simple geometry VFX — not final art direction |
+| P3-003 | Shield audio may fire on shield start, not only on block |
+| P3-004 | Career / replay vault not polished for casual players |
+| P3-005 | CPU not tournament-grade (functional Lv1–3) |
+| P3-006 | iOS Safari audio may need extra tap |
+| P3-007 | Low-end GPU frame drops with debug overlays |
 
-## Browser / mobile
+---
 
-- Mobile browsers untested for production quality
-- iOS Safari audio context may need extra tap after dismiss onboarding
-- No PWA/offline install flow
+## P4 — future
 
-## Training
+| ID | Issue |
+|----|--------|
+| P4-001 | Online ranked / rollback netplay |
+| P4-002 | Godot runtime as alternate engine (labs only) |
+| P4-003 | Native desktop shell |
+| P4-004 | PWA / offline install |
+| P4-005 | Final GLB fighter assets pipeline |
 
-- Dummy modes 1–4 require keyboard number keys — not documented on mobile
-- Move list overlay shows subset of moves only
+---
 
-## CPU
+## Engine note
 
-- CPU levels 1–3 functional but not tournament-grade
-- CPU discovery requires custom match setup or training dummy mode 4
-
-## Preview fighters
-
-- Vesper Nyx projectile tuning marked preview
-- Orion/Nix lack full balance pass documentation
-
-## Engine / runtime
-
-- TypeScript web runtime is demo stack — see ENGINE_MIGRATION_DECISION.md for limits
-- Godot runtime in labs is experimental — not the production path
-- No native desktop shell in M5 public demo
+TypeScript web runtime remains the production path. See `docs/ENGINE_MIGRATION_DECISION.md` for limits and future options.

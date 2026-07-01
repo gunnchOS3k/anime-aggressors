@@ -1,11 +1,15 @@
 import type { FighterSize } from "../sizeClasses.js";
 import { FP_SCALE, SIM_HZ } from "../constants.js";
 
-/** Base movement values after platform-fighter speed pass (fixed-point per frame @ 60 Hz). */
+/**
+ * Base movement values (fixed-point per frame @ 60 Hz).
+ * Display speed (u/s) = value × SIM_HZ / FP_SCALE — e.g. runSpeed 220 → ~220 u/s before multipliers.
+ * Tuned so P1 reaches P2 from default spawn (800 u) in 2–4 seconds.
+ */
 export const MOVEMENT_BASE = {
-  runSpeed: (10.2 * FP_SCALE) / SIM_HZ,
-  dashSpeed: (16 * FP_SCALE) / SIM_HZ,
-  airDrift: (5.4 * FP_SCALE) / SIM_HZ,
+  runSpeed: (220 * FP_SCALE) / SIM_HZ,
+  dashSpeed: (345 * FP_SCALE) / SIM_HZ,
+  airDrift: (116 * FP_SCALE) / SIM_HZ,
   jumpVelocity: (-17.5 * FP_SCALE) / SIM_HZ,
   fastFallMult: 180,
   chargeMoveMult: 0.45,

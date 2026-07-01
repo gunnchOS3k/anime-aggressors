@@ -4,19 +4,20 @@ import { renderHomeMarkup } from "../src/screens/homeScreenMarkup.ts";
 import { APP_ROUTES } from "../src/routes.ts";
 
 describe("home screen menu", () => {
-  it("renders Play Demo as primary CTA", () => {
+  it("renders Start Game as primary CTA", () => {
     const html = renderHomeMarkup();
-    assert.match(html, /id="btn-quick-match"/);
-    assert.match(html, />Play Demo</);
+    assert.match(html, /id="btn-start-game"/);
+    assert.match(html, />Start Game</);
     assert.match(html, /menu-btn--hero/);
     assert.match(html, /ANIME AGGRESSORS/);
-    assert.match(html, /Play Demo/);
   });
 
-  it("renders custom match setup as secondary CTA", () => {
+  it("renders Quick Play and advanced setup CTAs", () => {
     const html = renderHomeMarkup();
+    assert.match(html, /id="btn-quick-match"/);
+    assert.match(html, /Quick Play/);
     assert.match(html, /id="btn-play-match"/);
-    assert.match(html, /Custom Match Setup/);
+    assert.match(html, /Advanced Match Setup/);
   });
 
   it("includes animated scene canvas", () => {

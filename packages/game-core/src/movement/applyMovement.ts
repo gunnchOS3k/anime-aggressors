@@ -42,12 +42,12 @@ export function applyHorizontalMovement(player: PlayerState, input: InputFrame):
     const desired = -targetSpeed;
     player.vx = lerpVelocity(player.vx, desired, accel);
     player.facing = -1;
-    if (player.onGround) player.actionState = "running";
+    if (player.onGround && !combatLocksAction(player)) player.actionState = "running";
   } else if (input.right) {
     const desired = targetSpeed;
     player.vx = lerpVelocity(player.vx, desired, accel);
     player.facing = 1;
-    if (player.onGround) player.actionState = "running";
+    if (player.onGround && !combatLocksAction(player)) player.actionState = "running";
   } else if (player.onGround && player.actionState === "running") {
     player.vx = Math.floor(player.vx * 0.55);
     if (Math.abs(player.vx) < 8) {
@@ -55,6 +55,16 @@ export function applyHorizontalMovement(player: PlayerState, input: InputFrame):
       player.actionState = "idle";
     }
   }
+}
+
+function combatLocksAction(player: PlayerState): boolean {
+  return (
+    player.actionState === "attacking" ||
+    player.actionState === "special" ||
+    player.actionState === "grabbing" ||
+    player.actionState === "throwing" ||
+    player.actionState === "shielding"
+  );
 }
 
 function lerpVelocity(current: number, target: number, accel: number): number {

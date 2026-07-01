@@ -52,9 +52,9 @@ describe("match setup flow routes", () => {
     assert.doesNotMatch(src, /location\.href\s*=\s*["']\/play/);
   });
 
-  it("battle route uses ensureBattleReadySetup", () => {
+  it("battle route uses ensureBattleReadySetup and resolveBattleRoute", () => {
     const src = fs.readFileSync(path.join(webRoot, "src/main.ts"), "utf8");
     assert.match(src, /ensureBattleReadySetup/);
-    assert.doesNotMatch(src, /resolveBattleRoute/);
+    assert.match(src, /resolveBattleRoute/);
   });
 });

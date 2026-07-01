@@ -10,6 +10,7 @@ import {
   saveMatchSetup,
   applySetupToMatchSession,
   isMatchSetupReady,
+  clearMatchSetup,
   type MatchSetupSession,
 } from "./matchSetupSession.ts";
 import { APP_ROUTES, navigateToHash } from "../routes.ts";
@@ -98,4 +99,10 @@ export function ensureBattleReadySetup(): MatchSetupSession {
 export function startQuickMatch(): void {
   applyQuickMatchDefaults();
   navigateToHash(APP_ROUTES.battle);
+}
+
+/** Clear persisted match setup and in-memory session — recover from corrupt state. */
+export function resetGameState(): void {
+  clearMatchSetup();
+  applyQuickMatchDefaults();
 }

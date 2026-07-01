@@ -102,6 +102,29 @@ describe("platform fighter movement feel", () => {
     const p = state.players[0]!;
     p.fighterSize = "large";
     runFrames(state, p, 60, { right: true });
-    assert.ok(p.x > 300);
+    assert.ok(p.x > 120 * 256, "60 frames should move at least 120 display units");
+  });
+
+  it("60 frames of right input moves a visible distance", () => {
+    const state = createInitialGameState(config);
+    const p = state.players[0]!;
+    const startX = p.x;
+    runFrames(state, p, 60, { right: true });
+    const traveled = p.x - startX;
+    assert.ok(traveled >= 100 * 256, `expected >=100 display units, got ${traveled / 256}`);
+  });
+
+  it("P1 reaches P2 from default spawn within target frames", () => {
+    const state = createInitialGameState(config);
+    const p1 = state.players[0]!;
+    const p2 = state.players[1]!;
+    const targetX = p2.x - 40 * 256;
+    let frames = 0;
+    while (p1.x < targetX && frames < 240) {
+      processPlayer(state, p1, input(frames, 0, { right: true }));
+      frames += 1;
+    }
+    assert.ok(frames >= 60, "should not close instantly");
+    assert.ok(frames <= 240, `P1 should reach P2 within 4s, took ${frames} frames`);
   });
 });

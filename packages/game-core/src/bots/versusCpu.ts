@@ -102,24 +102,19 @@ export function generateVersusCpuInput(
     return base;
   }
 
-  const attackChance = config.difficulty === 1 ? 0.08 : config.difficulty === 2 ? 0.16 : 0.24;
+  const attackChance = config.difficulty === 1 ? 0.12 : config.difficulty === 2 ? 0.22 : 0.32;
   const shieldChance = config.difficulty === 1 ? 0.02 : config.difficulty === 2 ? 0.08 : 0.14;
   const dodgeChance = config.difficulty === 1 ? 0.01 : config.difficulty === 2 ? 0.05 : 0.1;
 
-  if (inRange && r(1) < attackChance) {
+  if (inRange && (r(1) < attackChance || (dist < 40 * FP_SCALE && frame % 6 < 3))) {
     base.attack = true;
     if (config.difficulty >= 3 && r(9) > 0.5) {
       if (towardRight) base.right = true;
       else base.left = true;
     }
-  }
-
-  if (inRange && r(2) < shieldChance && cpu.onGround) {
+  } else if (inRange && r(2) < shieldChance && cpu.onGround) {
     base.shield = true;
-    base.attack = false;
-  }
-
-  if (inRange && r(4) < dodgeChance) {
+  } else if (inRange && r(4) < dodgeChance) {
     base.dodge = true;
     base.attack = false;
     base.shield = false;

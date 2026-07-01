@@ -1,7 +1,40 @@
 # Release Checklist
 
-**Last updated:** 2026-06-24  
-Use this checklist before claiming a milestone release. Check only items that are **verified** with evidence (CI log, test output, video, sign-off).
+**Last updated:** 2026-07-01  
+Use this checklist before claiming a release. Check only items that are **verified** with evidence (CI log, test output, video, sign-off).
+
+---
+
+## Production completion — local platform fighter (2026-07-01)
+
+### Automated gates
+
+- [x] `npm run typecheck` passes
+- [x] `npm test` passes (364 tests)
+- [x] `npm run build` passes
+
+### Product flow
+
+- [x] Home → Start Game → Fighter Select → Stage Select → Ready → Battle (wired)
+- [x] Quick Play → Battle (≤3 clicks)
+- [x] Labs separated from main menu
+- [x] Reset Game State on Home
+- [ ] Manual browser playtest signed (`docs/playtest/2026-07-01-full-game-completion-check.md`)
+
+### Gameplay
+
+- [x] Movement scale: P1 reaches P2 in 2–4s (automated)
+- [x] Combat: point-blank and approach hits connect (automated)
+- [x] CPU Lv1–3 selectable in Ready Check
+- [x] All 7 fighters + 3 production stages validated in tests
+
+### Docs
+
+- [x] `docs/PRODUCTION_COMPLETION_PLAN.md`
+- [x] `docs/FULL_GAME_ACCEPTANCE_CRITERIA.md`
+- [x] `docs/PRODUCTION_BLOCKERS.md`
+- [x] `docs/BUG_SEVERITY_RUBRIC.md`
+- [x] `docs/PLAYER_MANUAL.md`, `docs/CONTROLS.md`, `docs/QA_TEST_PLAN.md`
 
 ---
 
