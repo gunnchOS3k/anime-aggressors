@@ -76,18 +76,11 @@ async function navigate(mode: AppRouteMode): Promise<void> {
       const { mountRulesetSelectScreen } = await import("./screens/RulesetSelectScreen.js");
       mountRulesetSelectScreen(appRoot!);
     } else if (mode === "fighter-select") {
-      const { mountFighterSelectScreen } = await import("./screens/FighterSelectScreen.js");
-      const { getMatchSetup, setMatchFighters } = await import("./match/matchSession.js");
-      const { navigateTo } = await import("./router.js");
-      mountFighterSelectScreen(appRoot!, (result) => {
-        setMatchFighters(result.p1, result.p2);
-        const setup = getMatchSetup();
-        if (setup.customFlow) {
-          navigateTo("controls-check");
-        } else {
-          navigateTo("match");
-        }
-      });
+      const { mountDemoFighterSelectScreen } = await import("./screens/DemoFighterSelectScreen.ts");
+      mountDemoFighterSelectScreen(appRoot!);
+    } else if (mode === "stage-select") {
+      const { mountDemoStageSelectScreen } = await import("./screens/DemoStageSelectScreen.ts");
+      mountDemoStageSelectScreen(appRoot!);
     } else if (mode === "controls-check") {
       const { mountControlsCheckScreen } = await import("./screens/ControlsCheckScreen.js");
       const { getMatchSetup } = await import("./match/matchSession.js");
@@ -173,6 +166,9 @@ async function navigate(mode: AppRouteMode): Promise<void> {
     } else if (mode === "feedback") {
       const { mountFeedbackScreen } = await import("./screens/FeedbackScreen.js");
       mountFeedbackScreen(appRoot!);
+    } else if (mode === "about") {
+      const { mountAboutScreen } = await import("./screens/AboutScreen.ts");
+      mountAboutScreen(appRoot!);
     } else if (mode === "career") {
       const { mountCareerScreen } = await import("./screens/CareerScreen.js");
       await mountCareerScreen(appRoot!);

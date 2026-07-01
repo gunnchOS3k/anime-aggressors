@@ -19,7 +19,7 @@ export function mountMatchResultsScreen(
   root.innerHTML = `
     <div class="${ARENA_CLASSES.shell} match-results-screen">
       ${renderWinnerHero(state)}
-      ${renderResultsScoreboard(state)}
+      ${renderResultsScoreboard(state, context.match)}
       ${context.match ? `<p class="results-meta">Match time: ${Math.floor(context.match.durationFrames / 60)}s</p>` : ""}
       ${renderResultsActions(!!context.replay)}
     </div>
@@ -33,9 +33,8 @@ export function mountMatchResultsScreen(
   root.querySelector("#vs-change-fighters")?.addEventListener("click", () => {
     navigateTo("match-setup-fighters");
   });
-  root.querySelector("#vs-career")?.addEventListener("click", () => {
-    navigateTo("career");
-    onAction("career");
+  root.querySelector("#vs-change-stage")?.addEventListener("click", () => {
+    navigateTo("stage-select");
   });
   root.querySelector("#vs-menu")?.addEventListener("click", () => onAction("menu"));
 }

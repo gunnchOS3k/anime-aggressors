@@ -10,7 +10,7 @@ import {
 } from "./CombatVfxSystems.ts";
 import { ElementalAuraChargeSystem } from "./ElementalAuraChargeSystem.ts";
 
-type Prev = { damage: number; stocks: number; onGround: boolean; action: string };
+type Prev = { damage: number; stocks: number; onGround: boolean; action: string; invuln: number };
 
 export class CombatVfxOrchestrator {
   private hitSparks = new HitSparkSystem();
@@ -52,6 +52,9 @@ export class CombatVfxOrchestrator {
         if (p.actionState === "shielding" && prev.action !== "shielding") {
           this.spawnShieldRing(scene, p, style.shield);
         }
+        if (p.invulnFrames > 0 && prev.invuln <= 0) {
+          this.spawnRespawnCue(scene, p, style.shield);
+        }
       }
 
       this.prev.set(p.id, {
@@ -59,6 +62,7 @@ export class CombatVfxOrchestrator {
         stocks: p.stocks,
         onGround: p.onGround,
         action: p.actionState,
+        invuln: p.invulnFrames,
       });
     }
 
@@ -80,6 +84,20 @@ export class CombatVfxOrchestrator {
       ring.geometry.dispose();
       (ring.material as THREE.Material).dispose();
     }, 220);
+  }
+
+  private spawnRespawnCue(scene: THREE.Scene, p: PlayerState, color: number): void {
+    const shell = new THREE.Mesh(
+      new THREE.SphereGeometry(1.1, 12, 12),
+      new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.25, wireframe: true }),
+    );
+    shell.position.set(fpToWorld(p.x), fpToWorld(p.y) + 1.0, 0.5);
+    scene.add(shell);
+    setTimeout(() => {
+      scene.remove(shell);
+      shell.geometry.dispose();
+      (shell.material as THREE.Material).dispose();
+    }, 480);
   }
 
   dispose(scene: THREE.Scene): void {

@@ -1,8 +1,9 @@
-import type { GameState } from "@anime-aggressors/game-core";
+import type { GameState, MatchRecord } from "@anime-aggressors/game-core";
 import { getCharacter } from "@anime-aggressors/game-core";
 import { renderFighterPortraitHtml } from "../../renderer-three/portraits/FighterPortraitFactory.ts";
 import { victorySubtitleForFighter } from "../../renderer-three/fighters/victoryAnimations.ts";
 import { ARENA_CLASSES } from "../theme/arenaClasses.ts";
+import { APP_ROUTES } from "../../routes.ts";
 
 export function renderWinnerHero(state: GameState): string {
   const winnerId = state.winnerId;
@@ -21,22 +22,29 @@ export function renderWinnerHero(state: GameState): string {
   </div>`;
 }
 
-export function renderResultsScoreboard(state: GameState): string {
+export function renderResultsScoreboard(state: GameState, match?: MatchRecord): string {
+  const hasMatchStats = !!match?.players?.length;
+  const headExtra = hasMatchStats ? "<th>KOs</th><th>Falls</th><th>Dmg dealt</th>" : "";
   const rows = state.players
     .map((p) => {
       const label = p.fighterName || getCharacter(p.characterId).name;
       const isWinner = state.winnerId === p.id;
+      const record = match?.players.find((mp) => mp.playerId === p.id);
+      const extra = hasMatchStats
+        ? `<td>${record?.kos ?? "—"}</td><td>${record?.falls ?? "—"}</td><td>${record?.damageDealt ?? "—"}</td>`
+        : "";
       return `<tr class="${isWinner ? "results-row--winner" : ""}">
         <td>${label}</td>
         <td>${p.damage}%</td>
         <td>${p.stocks}</td>
         <td>${p.score}</td>
+        ${extra}
       </tr>`;
     })
     .join("");
 
   return `<table class="results-scoreboard">
-    <thead><tr><th>Fighter</th><th>Damage</th><th>Stocks</th><th>Score</th></tr></thead>
+    <thead><tr><th>Fighter</th><th>Damage</th><th>Stocks</th><th>Score</th>${headExtra}</tr></thead>
     <tbody>${rows}</tbody>
   </table>`;
 }
@@ -46,7 +54,7 @@ export function renderResultsActions(hasReplay: boolean): string {
     ${hasReplay ? `<button type="button" id="vs-watch-replay" class="${ARENA_CLASSES.secondaryBtn}">Watch Replay</button>` : ""}
     <button type="button" id="vs-rematch" class="${ARENA_CLASSES.primaryCta}">Rematch</button>
     <button type="button" id="vs-change-fighters" class="${ARENA_CLASSES.secondaryBtn}">Change Fighters</button>
-    <button type="button" id="vs-career" class="${ARENA_CLASSES.secondaryBtn}">Career</button>
-    <button type="button" id="vs-menu" class="${ARENA_CLASSES.secondaryBtn}">Main Menu</button>
+    <button type="button" id="vs-change-stage" class="${ARENA_CLASSES.secondaryBtn}" data-route="${APP_ROUTES.stageSelect}">Change Stage</button>
+    <button type="button" id="vs-menu" class="${ARENA_CLASSES.secondaryBtn}">Home</button>
   </div>`;
 }

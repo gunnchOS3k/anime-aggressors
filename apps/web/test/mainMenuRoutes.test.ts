@@ -10,8 +10,9 @@ import { renderHomeMarkup } from "../src/screens/homeScreenMarkup.ts";
 const webRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 describe("main menu routes", () => {
-  it("Quick Match is primary menu entry", () => {
+  it("Play Demo is primary menu entry", () => {
     assert.equal(MAIN_MENU_PRIMARY[0]!.id, "btn-quick-match");
+    assert.equal(MAIN_MENU_PRIMARY[0]!.label, "Play Demo");
     assert.equal(MAIN_MENU_PRIMARY[0]!.route, APP_ROUTES.battle);
     assert.equal(MAIN_MENU_PRIMARY[0]!.mode, "battle");
   });
@@ -42,8 +43,9 @@ describe("main menu routes", () => {
 
   it("preserves core mode routes", () => {
     const routes = new Map(ALL_MAIN_MENU_ITEMS.map((i) => [i.id, i.route]));
-    assert.equal(routes.get("btn-custom-game"), APP_ROUTES.customGame);
     assert.equal(routes.get("btn-training"), APP_ROUTES.training);
+    assert.equal(routes.get("btn-fighter-select"), APP_ROUTES.fighterSelect);
+    assert.equal(routes.get("btn-stage-select"), APP_ROUTES.stageSelect);
     assert.equal(routes.get("btn-create-fighter"), APP_ROUTES.createFighter);
     assert.equal(routes.get("btn-career"), APP_ROUTES.career);
     assert.equal(routes.get("btn-controls"), APP_ROUTES.controls);

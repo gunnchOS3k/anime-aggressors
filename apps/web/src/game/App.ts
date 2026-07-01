@@ -3,8 +3,6 @@ import {
   simulateFrame,
   resetForRematch,
   hashState,
-  ELEMENTS,
-  SIZE_STATS,
   gameConfigFromRuleset,
   DEFAULT_RULESET,
   getActiveClash,
@@ -41,6 +39,7 @@ import { renderTrainingMoveOverlay } from "../ui/TrainingMoveOverlay.ts";
 import { renderControlsOverlayHtml, BATTLE_SHORTCUT_LINES, TRAINING_SHORTCUT_LINES } from "../input/controlReference.ts";
 import { applyTrainingLaunchSetup } from "../match/trainingSetup.ts";
 import { renderEnergyClashPrompt, isClashActive } from "../ui/EnergyClashPrompt.js";
+import { mountDemoOnboarding } from "../demo/demoOnboarding.ts";
 
 function fighterIdFromCharacterId(characterId: string): string {
   return characterId.replace(/^created:/, "");
@@ -90,6 +89,9 @@ export class PlatformFighterApp {
   private trainingOverlayEl: HTMLElement | null = null;
   private controlsOverlayEl: HTMLElement | null = null;
   private showControlsOverlay = false;
+  private disposeOnboarding: (() => void) | null = null;
+  private prevStocks: number[] = [3, 3];
+  private prevShielding: boolean[] = [false, false];
 
   private trainingDummyBehavior: import("@anime-aggressors/game-core").TrainingDummyBehavior = "idle";
 
@@ -155,6 +157,8 @@ export class PlatformFighterApp {
     this.renderer = null;
     this.bootResult = null;
     window.removeEventListener("keydown", this.onKeyDown);
+    this.disposeOnboarding?.();
+    this.disposeOnboarding = null;
     this.debugPanel?.destroy();
     this.debugPanel = null;
   }
@@ -321,6 +325,8 @@ export class PlatformFighterApp {
     this.paused = this.trainingMode;
 
     this.showFightAnnouncement();
+    this.disposeOnboarding?.();
+    this.disposeOnboarding = mountDemoOnboarding(this.root);
 
     if (!this.renderer) {
       const diagHost = this.root.querySelector("#pf-renderer-diagnostics-host") as HTMLElement;
@@ -453,6 +459,7 @@ export class PlatformFighterApp {
         replay: this.matchEndResult?.replay,
       },
     );
+    globalAudio.play("result");
   }
 
   private render(): void {
@@ -494,9 +501,15 @@ export class PlatformFighterApp {
           this.comboHits += 1;
         }
       }
-      if (p.stocks < 3 && p.actionState === "defeated") {
+      const shielding = p.actionState === "shielding";
+      if (shielding && !this.prevShielding[p.id]) {
+        globalAudio.play("shield_hit", 0.6);
+      }
+      this.prevShielding[p.id] = shielding;
+      if (p.stocks < this.prevStocks[p.id]) {
         globalAudio.play("ko");
       }
+      this.prevStocks[p.id] = p.stocks;
       this.prevDamage[p.id] = p.damage;
     }
 
@@ -522,14 +535,30 @@ export class PlatformFighterApp {
     window.setTimeout(() => banner.remove(), 2200);
   }
 
+  private formatPlayerHudLabel(
+    p: import("@anime-aggressors/game-core").PlayerState,
+    playerIndex: number,
+  ): string {
+    const cpu = this.gameState?.config.cpuOpponents?.find((c) => c.playerId === p.id);
+    const cpuTag = cpu ? ` <span class="pf-hud-cpu">CPU Lv${cpu.difficulty}</span>` : "";
+    const status = this.formatStatusChip(p);
+    return `<strong class="pf-hud-name">${p.fighterName}</strong>${cpuTag}${status}`;
+  }
+
+  private formatStatusChip(p: import("@anime-aggressors/game-core").PlayerState): string {
+    if (p.invulnFrames > 0) return `<span class="pf-hud-status pf-hud-status--invuln">INV</span>`;
+    if (p.actionState === "shielding") return `<span class="pf-hud-status pf-hud-status--shield">SHIELD</span>`;
+    if (p.actionState === "shieldStun" || p.actionState === "shieldBreak")
+      return `<span class="pf-hud-status pf-hud-status--shield-break">SHIELD STUN</span>`;
+    if (p.actionState === "hitstun") return `<span class="pf-hud-status pf-hud-status--hitstun">HITSTUN</span>`;
+    if (p.actionState === "grabbed") return `<span class="pf-hud-status pf-hud-status--grabbed">GRABBED</span>`;
+    return "";
+  }
+
   private updateHud(): void {
     if (!this.gameState) return;
     const p1 = this.gameState.players[0];
     const p2 = this.gameState.players[1];
-    const el1 = ELEMENTS[p1.fighterColor]?.name ?? "—";
-    const el2 = ELEMENTS[p2.fighterColor]?.name ?? "—";
-    const sz1 = SIZE_STATS[p1.fighterSize]?.label ?? "—";
-    const sz2 = SIZE_STATS[p2.fighterSize]?.label ?? "—";
     const matchType = this.gameState.config.ruleset?.matchType ?? "stock";
     const p1Stat =
       matchType === "stamina"
@@ -551,9 +580,9 @@ export class PlatformFighterApp {
       ${this.battleComboCount >= 2 ? `<div class="pf-combo-callout">${this.battleComboCount} HIT COMBO</div>` : ""}
       ${this.lastMoveCallout && this.battleComboDecay > 60 ? `<div class="pf-move-callout">${p1.fighterName.toUpperCase()} — ${this.lastMoveCallout}</div>` : ""}
       <div class="pf-hud-row">
-        <span><strong>${p1.fighterName}</strong> (${sz1}/${el1}) · ${p1Stat} · ${p1.stocks}♥ ${renderSuperReadyBadge(p1.aura)}</span>
+        <span class="pf-hud-player pf-hud-player--p1">${this.formatPlayerHudLabel(p1, 0)} · <span class="pf-hud-stat">${p1Stat}</span> · <span class="pf-hud-stocks">${p1.stocks}♥</span> ${renderSuperReadyBadge(p1.aura)}</span>
         <span class="pf-timer">${timerSec}s</span>
-        <span><strong>${p2.fighterName}</strong> (${sz2}/${el2}) · ${p2Stat} · ${p2.stocks}♥ ${renderSuperReadyBadge(p2.aura)}</span>
+        <span class="pf-hud-player pf-hud-player--p2">${this.formatPlayerHudLabel(p2, 1)} · <span class="pf-hud-stat">${p2Stat}</span> · <span class="pf-hud-stocks">${p2.stocks}♥</span> ${renderSuperReadyBadge(p2.aura)}</span>
       </div>
       <div class="pf-hud-aura-row">
         ${renderAuraMeter(p1.aura, p1.fighterColor, "left")}

@@ -10,10 +10,11 @@ export type MainMenuItem = {
   tier: MenuItemTier;
 };
 
+/** Main public demo path — Quick Match / Play Demo. */
 export const MAIN_MENU_PRIMARY: MainMenuItem[] = [
   {
     id: "btn-quick-match",
-    label: "Quick Match",
+    label: "Play Demo",
     route: APP_ROUTES.battle,
     mode: "battle",
     tier: "primary",
@@ -27,12 +28,20 @@ export const MAIN_MENU_PRIMARY: MainMenuItem[] = [
   },
 ];
 
+/** Discoverable demo modes — not labs. */
 export const MAIN_MENU_SECONDARY: MainMenuItem[] = [
   {
-    id: "btn-custom-game",
-    label: "Custom Game",
-    route: APP_ROUTES.customGame,
-    mode: "custom-game",
+    id: "btn-fighter-select",
+    label: "Fighter Select",
+    route: APP_ROUTES.fighterSelect,
+    mode: "fighter-select",
+    tier: "secondary",
+  },
+  {
+    id: "btn-stage-select",
+    label: "Stage Select",
+    route: APP_ROUTES.stageSelect,
+    mode: "stage-select",
     tier: "secondary",
   },
   {
@@ -43,27 +52,34 @@ export const MAIN_MENU_SECONDARY: MainMenuItem[] = [
     tier: "secondary",
   },
   {
-    id: "btn-create-fighter",
-    label: "Create Fighter",
-    route: APP_ROUTES.createFighter,
-    mode: "create-fighter",
+    id: "btn-custom-game",
+    label: "Custom Game",
+    route: APP_ROUTES.customGame,
+    mode: "custom-game",
     tier: "secondary",
   },
 ];
 
 export const MAIN_MENU_PLAYER: MainMenuItem[] = [
   {
-    id: "btn-career",
-    label: "Career",
-    route: APP_ROUTES.career,
-    mode: "career",
-    tier: "player",
-  },
-  {
     id: "btn-controls",
     label: "Controls",
     route: APP_ROUTES.controls,
     mode: "controls",
+    tier: "player",
+  },
+  {
+    id: "btn-about",
+    label: "About / Credits",
+    route: APP_ROUTES.about,
+    mode: "about",
+    tier: "player",
+  },
+  {
+    id: "btn-career",
+    label: "Career",
+    route: APP_ROUTES.career,
+    mode: "career",
     tier: "player",
   },
   {
@@ -82,7 +98,15 @@ export const MAIN_MENU_PLAYER: MainMenuItem[] = [
   },
 ];
 
+/** Experimental — separated from main demo path. */
 export const MAIN_MENU_LABS: MainMenuItem[] = [
+  {
+    id: "btn-create-fighter",
+    label: "Create Fighter",
+    route: APP_ROUTES.createFighter,
+    mode: "create-fighter",
+    tier: "labs",
+  },
   {
     id: "btn-godot-combat",
     label: "Godot Combat Prototype",

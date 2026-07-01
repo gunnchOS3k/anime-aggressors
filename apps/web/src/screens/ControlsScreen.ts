@@ -16,6 +16,8 @@ import { navigateTo } from "../router.js";
 import { resolveProfileActions } from "../input/profileInput.js";
 import { getPressedKeyCodes } from "../input/keyboard.js";
 import { getConnectedGamepads, gamepadToState } from "../input/gamepad.js";
+import { getAudioVolume, isAudioMuted, setAudioMuted, setAudioVolume } from "../demo/audioSettings.ts";
+import { resetDemoOnboarding } from "../demo/demoOnboarding.ts";
 
 export function mountControlsScreen(root: HTMLElement): void {
   ensureDefaultProfilesSaved();
@@ -33,7 +35,18 @@ export function mountControlsScreen(root: HTMLElement): void {
           <button type="button" id="ctl-back" class="btn-secondary">← Home</button>
           <h2>Controls</h2>
         </div>
-        <p class="hint">Assign input profiles per player. Remap keyboard, gamepad, or Edge-IO.</p>
+        <p class="hint">Assign input profiles per player. Remap keyboard, gamepad, or Edge-IO. Two gamepads auto-map to P1/P2 when connected.</p>
+
+        <div class="controls-audio-panel setup-hero-panel">
+          <h3>Audio</h3>
+          <label class="controls-audio-row">
+            <input type="checkbox" id="ctl-mute" ${isAudioMuted() ? "checked" : ""} /> Mute all sound
+          </label>
+          <label class="controls-audio-row">Volume
+            <input type="range" id="ctl-volume" min="0" max="100" value="${Math.round(getAudioVolume() * 100)}" />
+          </label>
+          <button type="button" id="ctl-show-help" class="btn-tertiary">Show first-match help again</button>
+        </div>
 
         <div class="slot-row">
           ${([1, 2, 3, 4] as const)
@@ -154,6 +167,16 @@ export function mountControlsScreen(root: HTMLElement): void {
       resetInputProfilesToDefaults();
       ensureDefaultProfilesSaved();
       render();
+    });
+    root.querySelector("#ctl-mute")?.addEventListener("change", (e) => {
+      setAudioMuted((e.target as HTMLInputElement).checked);
+    });
+    root.querySelector("#ctl-volume")?.addEventListener("input", (e) => {
+      setAudioVolume(Number((e.target as HTMLInputElement).value) / 100);
+    });
+    root.querySelector("#ctl-show-help")?.addEventListener("click", () => {
+      resetDemoOnboarding();
+      alert("First-match help will appear on your next battle.");
     });
   };
 
