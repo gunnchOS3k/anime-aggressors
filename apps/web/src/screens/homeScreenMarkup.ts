@@ -10,10 +10,10 @@ import { renderLabsPanel, renderMainMenuPanel } from "../ui/MainMenuPanel.ts";
 import { renderMainMenuFooter } from "../ui/MainMenuFooter.ts";
 
 export function renderHomeMarkup(): string {
-  const godotPrimary = MAIN_MENU_PRIMARY.find((m) => m.id === "btn-godot-combat") ?? MAIN_MENU_PRIMARY[0]!;
-  const legacyPrimary = MAIN_MENU_PRIMARY.find((m) => m.id === "btn-play-match");
-  const legacyCta = legacyPrimary
-    ? `<div class="arena-hub__cta arena-hub__cta--legacy">${renderMainMenuButton({ item: legacyPrimary, state: "default", variant: "secondary", tabIndex: 0 })}</div>`
+  const quickMatch = MAIN_MENU_PRIMARY.find((m) => m.id === "btn-quick-match") ?? MAIN_MENU_PRIMARY[0]!;
+  const customSetup = MAIN_MENU_PRIMARY.find((m) => m.id === "btn-play-match");
+  const secondaryCta = customSetup
+    ? `<div class="arena-hub__cta arena-hub__cta--secondary">${renderMainMenuButton({ item: customSetup, state: "default", variant: "secondary", tabIndex: 0 })}</div>`
     : "";
   return `<div class="arena-hub" data-testid="arena-hub">
     <canvas id="menu-scene-canvas" class="arena-hub__canvas" aria-hidden="true"></canvas>
@@ -28,9 +28,9 @@ export function renderHomeMarkup(): string {
       <div class="arena-hub__body">
         <div class="arena-hub__center">
           <div class="arena-hub__cta">
-            ${renderMainMenuButton({ item: godotPrimary, state: "default", variant: "primary", tabIndex: 0 })}
+            ${renderMainMenuButton({ item: quickMatch, state: "default", variant: "primary", tabIndex: 0 })}
           </div>
-          ${legacyCta}
+          ${secondaryCta}
           ${renderMainMenuCarousel(MAIN_MENU_SECONDARY)}
         </div>
         ${renderMainMenuPanel("Player", MAIN_MENU_PLAYER)}

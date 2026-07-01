@@ -1,6 +1,7 @@
 import type { MainMenuItem } from "../ui/mainMenuConfig.ts";
 import { navigateTo } from "../router.ts";
 import { setCustomFlow } from "../match/matchSession.ts";
+import { startQuickMatch } from "../match/quickMatch.ts";
 import { applyFocusRing, clearFocusRings, pulsePrimaryButton } from "../ui/focusRing.ts";
 import { carouselIdAt, carouselIndexForId } from "../ui/MainMenuCarousel.ts";
 import { menuFocusStep } from "./menuFocusUtils.ts";
@@ -44,6 +45,11 @@ function itemById(opts: MenuNavigationOptions, id: string): MainMenuItem | undef
 }
 
 function activateItem(item: MainMenuItem, onNavigate?: (item: MainMenuItem) => void): void {
+  if (item.id === "btn-quick-match") {
+    onNavigate?.(item);
+    startQuickMatch();
+    return;
+  }
   if (item.id === "btn-play-match") setCustomFlow(false);
   onNavigate?.(item);
   navigateTo(item.mode);

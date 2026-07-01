@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { APP_ROUTES, hashToMode, MODE_TO_ROUTE } from "../src/routes.ts";
-import { MAIN_MENU_PRIMARY } from "../src/ui/mainMenuConfig.ts";
+import { MAIN_MENU_LABS } from "../src/ui/mainMenuConfig.ts";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -16,8 +16,8 @@ describe("godot route", () => {
     assert.equal(MODE_TO_ROUTE.godot, "#/godot");
   });
 
-  it("main menu includes Play Godot Combat Prototype", () => {
-    const item = MAIN_MENU_PRIMARY.find((m) => m.id === "btn-godot-combat");
+  it("labs menu includes Godot Combat Prototype", () => {
+    const item = MAIN_MENU_LABS.find((m) => m.id === "btn-godot-combat");
     assert.ok(item);
     assert.match(item!.label, /Godot Combat Prototype/i);
   });

@@ -1,6 +1,5 @@
 import type { CreatedFighter, GameConfig, GameRuleset } from "@anime-aggressors/game-core";
 import {
-  DEFAULT_RULESET,
   gameConfigFromRuleset,
   getDefaultCreatedFighter,
   getStage,

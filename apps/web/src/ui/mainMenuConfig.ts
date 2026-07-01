@@ -12,15 +12,15 @@ export type MainMenuItem = {
 
 export const MAIN_MENU_PRIMARY: MainMenuItem[] = [
   {
-    id: "btn-godot-combat",
-    label: "Play Godot Combat Prototype",
-    route: APP_ROUTES.godot,
-    mode: "godot",
+    id: "btn-quick-match",
+    label: "Quick Match",
+    route: APP_ROUTES.battle,
+    mode: "battle",
     tier: "primary",
   },
   {
     id: "btn-play-match",
-    label: "Start Match (Legacy Web Prototype)",
+    label: "Custom Match Setup",
     route: APP_ROUTES.matchSetupRules,
     mode: "match-setup-rules",
     tier: "primary",
@@ -33,20 +33,6 @@ export const MAIN_MENU_SECONDARY: MainMenuItem[] = [
     label: "Custom Game",
     route: APP_ROUTES.customGame,
     mode: "custom-game",
-    tier: "secondary",
-  },
-  {
-    id: "btn-flagline-clash",
-    label: "Flagline Clash",
-    route: APP_ROUTES.flaglineSetup,
-    mode: "flagline-setup",
-    tier: "secondary",
-  },
-  {
-    id: "btn-impact-dummy-derby",
-    label: "Impact Dummy Derby",
-    route: APP_ROUTES.impactDummyDerby,
-    mode: "impact-dummy-derby",
     tier: "secondary",
   },
   {
@@ -97,6 +83,27 @@ export const MAIN_MENU_PLAYER: MainMenuItem[] = [
 ];
 
 export const MAIN_MENU_LABS: MainMenuItem[] = [
+  {
+    id: "btn-godot-combat",
+    label: "Godot Combat Prototype",
+    route: APP_ROUTES.godot,
+    mode: "godot",
+    tier: "labs",
+  },
+  {
+    id: "btn-flagline-clash",
+    label: "Flagline Clash",
+    route: APP_ROUTES.flaglineSetup,
+    mode: "flagline-setup",
+    tier: "labs",
+  },
+  {
+    id: "btn-impact-dummy-derby",
+    label: "Impact Dummy Derby",
+    route: APP_ROUTES.impactDummyDerby,
+    mode: "impact-dummy-derby",
+    tier: "labs",
+  },
   {
     id: "btn-controller",
     label: "Controller Test",
