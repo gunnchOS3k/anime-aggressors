@@ -1,9 +1,20 @@
 import type { PlayerState } from "../types.js";
+import { getCombatMoveData } from "../moves/combatMoveData.js";
+import { combatMoveToFrameData } from "../moves/combatMoveData.js";
 import { getFrameDataForMoveId } from "../moves/moveDefinitions.js";
 import { getMoveData, type MoveId } from "../moves.js";
 import { fightingTimingFromFrameData, getMovePhase, type FightingMoveTiming, type MovePhase } from "./movePhases.js";
 
 export function getFightingMoveTiming(player: PlayerState): FightingMoveTiming | null {
+  const catalog = getCombatMoveData(player.currentMoveId);
+  if (catalog) {
+    return fightingTimingFromFrameData({
+      startup: catalog.startup,
+      active: catalog.active,
+      recovery: catalog.recovery,
+      hitstop: catalog.hitstop,
+    });
+  }
   const fighterData = getFrameDataForMoveId(player.currentMoveId);
   if (fighterData) {
     return fightingTimingFromFrameData({
@@ -22,7 +33,13 @@ export function getFightingMoveTiming(player: PlayerState): FightingMoveTiming |
 }
 
 export function currentMovePhase(player: PlayerState): MovePhase {
-  if (player.actionState !== "attacking" && player.actionState !== "special") return "idle";
+  if (
+    player.actionState !== "attacking" &&
+    player.actionState !== "special" &&
+    player.actionState !== "grabbing"
+  ) {
+    return "idle";
+  }
   const timing = getFightingMoveTiming(player);
   if (!timing) return "idle";
   return getMovePhase(player.actionFrame, timing);

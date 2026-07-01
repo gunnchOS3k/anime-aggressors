@@ -2,8 +2,6 @@ import type { GameState, PlayerState } from "../types.js";
 import { FP_SCALE, HITSTUN_BASE } from "../constants.js";
 import { getCharacterForPlayer } from "../characters.js";
 import { boxesOverlap, getActiveHitboxes, getHurtbox } from "../collision.js";
-import { NEUTRAL_ATTACK, SPECIAL_ATTACK } from "../frameData.js";
-import { getMoveData, type MoveId } from "../moves.js";
 import { scaledHitDamage, scaledKnockbackTaken } from "../fighterCreation.js";
 import { applyElementOnHit } from "../elements.js";
 import { applyAuraHitPenalty } from "../aura/auraCharge.js";
@@ -11,12 +9,18 @@ import { elementGameplayEnabled } from "../rulesets.js";
 import { classifyHitStrength, cameraImpulseForStrength } from "./combatTuning.js";
 import { computeKnockback } from "./knockback.js";
 import { computeHitlag } from "./hitlag.js";
-import { computeHitstun, isLaunched } from "./hitstun.js";
+import { computeHitstun } from "./hitstun.js";
 import { createHitEvent, type HitEvent } from "./hitEvents.js";
 import { isOutsideBlastZone } from "./blastZones.js";
 import { getStage } from "../stages.js";
 import { getStageLayout } from "../stageLayouts.js";
 import { resetPlayerAfterRespawn } from "./playerLifecycle.js";
+import { getCombatMoveData } from "../moves/combatMoveData.js";
+import { combatMoveToFrameData } from "../moves/combatMoveData.js";
+import { applyDirectionalInfluence } from "./di.js";
+import { applyShieldHit } from "./shieldSystem.js";
+import { applyStaleMultiplier, recordMoveUsed } from "./staleMoves.js";
+import type { InputFrame } from "../types.js";
 
 function getDamageRatio(state: GameState): number {
   return state.config.ruleset?.damageRatio ?? 1;
@@ -26,51 +30,89 @@ function getLaunchRatio(state: GameState): number {
   return state.config.ruleset?.launchRatio ?? 1;
 }
 
+function canHitVictim(
+  attacker: PlayerState,
+  defenderId: number,
+  moveId: string,
+  frame: number,
+): boolean {
+  const move = getCombatMoveData(moveId);
+  if (!move) return !attacker.hitVictimsThisMove.includes(defenderId);
+
+  if (move.multiHit && move.canHitSameTargetAgain) {
+    const interval = move.hitIntervalFrames ?? 4;
+    const contact = attacker.multiHitContacts.find((c) => c.victimId === defenderId);
+    if (!contact) return true;
+    return frame - contact.lastHitFrame >= interval;
+  }
+
+  if (move.multiHit) return true;
+  return !attacker.hitVictimsThisMove.includes(defenderId);
+}
+
+function recordHitVictim(attacker: PlayerState, defenderId: number, frame: number, moveId: string): void {
+  const move = getCombatMoveData(moveId);
+  if (move?.multiHit && move.canHitSameTargetAgain) {
+    const existing = attacker.multiHitContacts.find((c) => c.victimId === defenderId);
+    if (existing) existing.lastHitFrame = frame;
+    else attacker.multiHitContacts.push({ victimId: defenderId, lastHitFrame: frame });
+    return;
+  }
+  if (!attacker.hitVictimsThisMove.includes(defenderId)) {
+    attacker.hitVictimsThisMove.push(defenderId);
+  }
+}
+
 export function resolveHitFromContact(
   state: GameState,
   attacker: PlayerState,
   defender: PlayerState,
   damage: number,
-  kbX: number,
-  kbY: number,
+  _kbX: number,
+  _kbY: number,
   moveId: string,
+  defenderInput?: InputFrame,
 ): HitEvent | null {
   if (defender.invulnFrames > 0) return null;
 
+  const move = getCombatMoveData(moveId);
+  const moveData = move ? combatMoveToFrameData(move) : null;
+
   if (defender.actionState === "shielding") {
-    defender.shieldHealth -= damage;
-    if (defender.shieldHealth <= 0) {
-      defender.actionState = "hitstun";
-      defender.hitstunFrames = HITSTUN_BASE * 2;
-    }
+    const shieldDmg = move?.shieldDamage ?? damage;
+    const shieldStun = move?.shieldStunFrames ?? 8;
+    const pushback = (attacker.facing * 3 * FP_SCALE) / FP_SCALE;
+    applyShieldHit(defender, shieldDmg, shieldStun, pushback);
     return null;
   }
 
   const preDamage = defender.damage;
-  const strength = classifyHitStrength(damage, moveId);
-  const char = getCharacterForPlayer(defender);
-  const launchRatio = getLaunchRatio(state);
+  const staleMult = applyStaleMultiplier(attacker, moveId);
   const dmgRatio = getDamageRatio(state);
-  const finalDamage = Math.max(1, Math.floor(scaledHitDamage(damage, attacker) * dmgRatio));
+  const launchRatio = getLaunchRatio(state);
+  const finalDamage = Math.max(1, Math.floor(scaledHitDamage(damage, attacker) * dmgRatio * staleMult));
+  const strength = classifyHitStrength(finalDamage, moveId);
 
-  const moveData =
-    attacker.actionState === "special"
-      ? getMoveData(attacker.currentMoveId as MoveId) ?? SPECIAL_ATTACK
-      : getMoveData(attacker.currentMoveId as MoveId) ?? NEUTRAL_ATTACK;
+  const char = getCharacterForPlayer(defender);
+  const angleDeg = move?.angleDeg ?? (attacker.facing > 0 ? -35 : -145);
 
   const kb = computeKnockback({
     moveDamage: finalDamage,
-    baseKnockback: moveData.baseKnockback,
-    knockbackGrowth: moveData.knockbackGrowth,
+    baseKnockback: (move?.baseKnockback ?? 8) * staleMult,
+    knockbackGrowth: move?.knockbackGrowth ?? 1.2,
     victimDamagePercent: preDamage,
     victimWeight: char.weight,
     launchRatio,
     hitStrength: strength,
-    angleDeg: kbY !== 0 ? -55 : attacker.facing > 0 ? -35 : -145,
+    angleDeg,
   });
 
-  let vx = kbX !== 0 ? kbX * launchRatio : (kb.vx * attacker.facing) / FP_SCALE;
-  let vy = kbY !== 0 ? kbY * launchRatio : kb.vy / FP_SCALE;
+  let vx = (kb.vx * attacker.facing) / FP_SCALE;
+  let vy = kb.vy / FP_SCALE;
+  const influenced = applyDirectionalInfluence(vx, vy, defenderInput, strength);
+  vx = influenced.vx;
+  vy = influenced.vy;
+
   vx = scaledKnockbackTaken(Math.floor(vx * FP_SCALE), defender) / FP_SCALE;
   vy = scaledKnockbackTaken(Math.floor(vy * FP_SCALE), defender) / FP_SCALE;
 
@@ -82,14 +124,15 @@ export function resolveHitFromContact(
 
   defender.vx += vx;
   defender.vy += vy;
-  defender.actionState = isLaunched(strength, kb.magnitude) ? "hitstun" : "hitstun";
+  defender.actionState = "hitstun";
   defender.hitstunFrames = computeHitstun(strength, defender.damage);
   defender.onGround = false;
   defender.currentMoveId = "none";
   applyAuraHitPenalty(defender, finalDamage >= 15);
+  recordMoveUsed(attacker, moveId);
 
   const elementMode = state.config.ruleset?.elementMode ?? "on";
-  if (elementGameplayEnabled(elementMode)) {
+  if (elementGameplayEnabled(elementMode) && moveData) {
     applyElementOnHit(attacker, defender, moveData, attacker.actionFrame);
   }
 
@@ -104,7 +147,7 @@ export function resolveHitFromContact(
     damage: finalDamage,
     preHitVictimDamage: preDamage,
     postHitVictimDamage: defender.damage,
-    launchAngleDeg: kbY !== 0 ? -55 : -35,
+    launchAngleDeg: angleDeg,
     knockbackX: vx,
     knockbackY: vy,
     hitlagFrames: hitlag,
@@ -115,8 +158,16 @@ export function resolveHitFromContact(
   });
 }
 
-export function resolveCombatHits(state: GameState): HitEvent[] {
+export function resolveCombatHits(
+  state: GameState,
+  inputs?: InputFrame[],
+): HitEvent[] {
   const events: HitEvent[] = [];
+  const inputByPlayer = new Map<number, InputFrame>();
+  if (inputs) {
+    for (const input of inputs) inputByPlayer.set(input.playerId, input);
+  }
+
   const hitboxes = state.players.flatMap((p) => getActiveHitboxes(p));
 
   for (const hit of hitboxes) {
@@ -131,14 +182,8 @@ export function resolveCombatHits(state: GameState): HitEvent[] {
       const hurt = getHurtbox(defender);
       if (!boxesOverlap(hit, hurt)) continue;
 
-      const moveId = attacker.currentMoveId || "neutral-attack";
-      const moveData = getMoveData(moveId as MoveId) ?? NEUTRAL_ATTACK;
-      if (
-        !moveData.multiHit &&
-        attacker.hitVictimsThisMove.includes(defender.id)
-      ) {
-        continue;
-      }
+      const moveId = attacker.currentMoveId || "neutral_attack";
+      if (!canHitVictim(attacker, defender.id, moveId, state.frame)) continue;
 
       const evt = resolveHitFromContact(
         state,
@@ -148,11 +193,10 @@ export function resolveCombatHits(state: GameState): HitEvent[] {
         hit.knockbackX,
         hit.knockbackY,
         moveId,
+        inputByPlayer.get(defender.id),
       );
       if (evt) {
-        if (!moveData.multiHit && !attacker.hitVictimsThisMove.includes(defender.id)) {
-          attacker.hitVictimsThisMove.push(defender.id);
-        }
+        recordHitVictim(attacker, defender.id, state.frame, moveId);
         events.push(evt);
       }
     }

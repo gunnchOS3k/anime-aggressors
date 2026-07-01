@@ -43,8 +43,15 @@ export type PlayerActionState =
   | "attacking"
   | "special"
   | "shielding"
+  | "shieldStun"
+  | "shieldBreak"
   | "auraCharging"
   | "dodging"
+  | "rolling"
+  | "airDodging"
+  | "grabbing"
+  | "grabbed"
+  | "throwing"
   | "hitstun"
   | "defeated";
 
@@ -73,7 +80,17 @@ export type PlayerState = {
   actionState: PlayerActionState;
   actionFrame: number;
   hitstunFrames: number;
+  shieldStunFrames: number;
+  shieldReleaseFrames: number;
   shieldHealth: number;
+  /** Recent move ids for stale move decay (Milestone 3). */
+  staleMoveQueue: string[];
+  grabTargetId: number;
+  grabbedByPlayerId: number;
+  grabFrames: number;
+  dodgeCooldownFrames: number;
+  /** Per-victim multi-hit contact tracking. */
+  multiHitContacts: { victimId: number; lastHitFrame: number }[];
   jumpsRemaining: number;
   jumpsUsed: number;
   jumpHoldFrames: number;

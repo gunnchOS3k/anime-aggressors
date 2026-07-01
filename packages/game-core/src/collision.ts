@@ -1,19 +1,13 @@
 import type { Hitbox, Hurtbox, PlayerState } from "./types.js";
-import {
-  ATTACK_HITBOX_H,
-  ATTACK_HITBOX_W,
-  FP_SCALE,
-  HURTBOX_H,
-  HURTBOX_W,
-  SPECIAL_HITBOX_H,
-  SPECIAL_HITBOX_W,
-} from "./constants.js";
-import { DODGE_MOVE, NEUTRAL_ATTACK, SPECIAL_ATTACK } from "./frameData.js";
+import { FP_SCALE, HURTBOX_H, HURTBOX_W } from "./constants.js";
 import { isInActive } from "./frameData.js";
-import { getMoveData, type MoveId } from "./moves.js";
-import { scaleKnockback } from "./feel.js";
+import { getCombatMoveData } from "./moves/combatMoveData.js";
+import { combatMoveToFrameData } from "./moves/combatMoveData.js";
 import { scaledHitDamage } from "./fighterCreation.js";
 import { scaledHurtboxDimension } from "./fighterCreation.js";
+import { applyStaleMultiplier } from "./combat/staleMoves.js";
+import { computeKnockback } from "./combat/knockback.js";
+import { getCharacterForPlayer } from "./characters.js";
 
 export function getHurtboxes(players: PlayerState[]): Hurtbox[] {
   return players
@@ -41,31 +35,79 @@ export function getHurtbox(player: PlayerState): Hurtbox {
   };
 }
 
-export function getActiveHitboxes(player: PlayerState): Hitbox[] {
-  if (player.actionState === "attacking" || player.actionState === "special") {
-    const moveId = (player.currentMoveId || "neutral_attack") as MoveId;
-    const data = getMoveData(moveId) ?? NEUTRAL_ATTACK;
-    if (!isInActive(data, player.actionFrame)) return [];
-    const kb = scaleKnockback(data, 0);
-    const offsetX = player.facing * (32 * FP_SCALE);
-    const w = moveId.includes("special") ? SPECIAL_HITBOX_W : ATTACK_HITBOX_W;
-    const h = moveId.includes("special") ? SPECIAL_HITBOX_H : ATTACK_HITBOX_H;
-    return [
-      {
-        ownerId: player.id,
-        x: player.x + offsetX - w / 2,
-        y: player.y - (48 * FP_SCALE),
-        w,
-        h,
-        damage: scaledHitDamage(data.damage, player),
-        knockbackX: (kb.kbX * player.facing) / FP_SCALE,
-        knockbackY: kb.kbY / FP_SCALE,
-        active: true,
-      },
-    ];
-  }
+export function getGrabHitbox(player: PlayerState): Hitbox | null {
+  if (player.actionState !== "grabbing") return null;
+  const move = getCombatMoveData("grab");
+  if (!move) return null;
+  const frameData = combatMoveToFrameData(move);
+  if (!isInActive(frameData, player.actionFrame)) return null;
+  const w = move.hitboxWidth * FP_SCALE;
+  const h = move.hitboxHeight * FP_SCALE;
+  const ox = move.hitboxOffsetX * FP_SCALE * player.facing;
+  const oy = move.hitboxOffsetY * FP_SCALE;
+  return {
+    ownerId: player.id,
+    x: player.x + ox - w / 2,
+    y: player.y - oy - h / 2,
+    w,
+    h,
+    damage: 0,
+    knockbackX: 0,
+    knockbackY: 0,
+    active: true,
+  };
+}
 
-  return [];
+export function getActiveHitboxes(player: PlayerState): Hitbox[] {
+  if (player.actionState !== "attacking" && player.actionState !== "special") return [];
+
+  const moveId =
+    player.currentMoveId && player.currentMoveId !== "none"
+      ? player.currentMoveId
+      : player.actionState === "special"
+        ? "special_attack"
+        : "neutral_attack";
+  const move = getCombatMoveData(moveId);
+  if (!move) return [];
+
+  const frameData = combatMoveToFrameData(move);
+  if (!isInActive(frameData, player.actionFrame)) return [];
+
+  const staleMult = applyStaleMultiplier(player, moveId);
+  const damage = Math.max(1, Math.floor(scaledHitDamage(move.damage, player) * staleMult));
+  const char = getCharacterForPlayer(player);
+  const kb = computeKnockback({
+    moveDamage: damage,
+    baseKnockback: move.baseKnockback * staleMult,
+    knockbackGrowth: move.knockbackGrowth,
+    victimDamagePercent: 0,
+    victimWeight: char.weight,
+    launchRatio: 1,
+    hitStrength: "light",
+    angleDeg: move.angleDeg,
+  });
+
+  const w = move.hitboxWidth * FP_SCALE;
+  const h = move.hitboxHeight * FP_SCALE;
+  const ox =
+    move.category === "backAir"
+      ? -Math.abs(move.hitboxOffsetX) * FP_SCALE * player.facing
+      : move.hitboxOffsetX * FP_SCALE * player.facing;
+  const oy = move.hitboxOffsetY * FP_SCALE;
+
+  return [
+    {
+      ownerId: player.id,
+      x: player.x + ox - w / 2,
+      y: player.y - oy - h / 2,
+      w,
+      h,
+      damage,
+      knockbackX: (kb.vx * player.facing) / FP_SCALE,
+      knockbackY: kb.vy / FP_SCALE,
+      active: true,
+    },
+  ];
 }
 
 export function boxesOverlap(
@@ -79,4 +121,3 @@ export function boxesOverlap(
     a.y + a.h > b.y
   );
 }
-

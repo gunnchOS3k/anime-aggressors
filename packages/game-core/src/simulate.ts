@@ -10,6 +10,8 @@ import { getStage } from "./stages.js";
 import { getStageLayout } from "./stageLayouts.js";
 import { createDefaultAuraState } from "./aura/auraTypes.js";
 import { resetMovementFields } from "./movement/movementTypes.js";
+import { resetCombatFields } from "./combat/combatState.js";
+import { clearStaleQueue } from "./combat/staleMoves.js";
 
 export function simulateFrame(state: GameState, inputs: InputFrame[]): GameState {
   const next = cloneGameState(state);
@@ -44,7 +46,7 @@ export function simulateFrame(state: GameState, inputs: InputFrame[]): GameState
       processPlayer(next, player, inputByPlayer.get(player.id));
     }
 
-    resolveCombat(next);
+    resolveCombat(next, inputs);
 
     tickEnergyAttacks(next);
     detectEnergyClashes(next);
@@ -117,7 +119,8 @@ export function resetForRematch(state: GameState): GameState {
     p.stocks = state.config.stocks;
     p.actionState = "idle";
     p.actionFrame = 0;
-    p.hitstunFrames = 0;
+    resetCombatFields(p);
+    clearStaleQueue(p);
     p.shieldHealth = 100;
     p.invulnFrames = 0;
     p.onGround = true;
@@ -127,8 +130,6 @@ export function resetForRematch(state: GameState): GameState {
     p.jumpHoldFrames = 0;
     p.wasJumpHeld = false;
     p.fastFalling = false;
-    p.currentMoveId = "none";
-    p.hitVictimsThisMove = [];
     p.currentPlatformId = layout.mainPlatformId;
     p.dropThroughFrames = 0;
     p.ignoredPlatformId = "";

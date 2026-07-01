@@ -142,6 +142,10 @@ export {
 } from "./frameData.js";
 export type { MoveFrameData } from "./frameData.js";
 export { getMoveData, actionToMoveId, isMoveComplete } from "./moves.js";
+export { selectCombatAction } from "./combat/moveSelection.js";
+export { getCombatMoveData } from "./moves/combatMoveData.js";
+export { getCatalogMove, DEFAULT_MOVE_CATALOG } from "./moves/defaultMoveCatalog.js";
+export type { CombatMoveData, CombatMoveCategory } from "./moves/defaultMoveCatalog.js";
 export type { MoveId } from "./moves.js";
 export type {
   MoveDefinition,
