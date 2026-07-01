@@ -27,12 +27,12 @@ describe("inputRemap", () => {
 
   it("conflict detection works", () => {
     const profile = getDefaultProfileForSlot(1);
-    const binding = captureKeyboardBinding("KeyZ");
+    const binding = captureKeyboardBinding("KeyJ");
     const conflict = detectBindingConflict(profile, "special", binding);
     assert.ok(conflict);
     assert.equal(conflict?.action, "attack");
     const applied = applyBinding(profile, "special", binding, true);
-    assert.equal((applied.profile.bindings.special as { code: string }).code, "KeyZ");
+    assert.equal((applied.profile.bindings.special as { code: string }).code, "KeyJ");
     assert.equal(applied.profile.bindings.attack, undefined);
   });
 

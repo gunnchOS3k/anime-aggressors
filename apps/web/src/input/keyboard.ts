@@ -1,6 +1,6 @@
 /**
- * Singleton keyboard input manager — listeners attached once at module load.
- * Player 1 default mapping (arrows + Z/X/C/V/B).
+ * Legacy keyboard fallbacks — prefer profile-based input via deviceAssignment.
+ * P1: WASD + Space/J/K/L. P2: arrows + numpad.
  */
 
 import type { InputFrame } from "./inputFrame.js";
@@ -11,6 +11,7 @@ let initialized = false;
 
 const PREVENT_DEFAULT_CODES = new Set([
   "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Space",
+  "KeyW", "KeyA", "KeyS", "KeyD",
 ]);
 
 function initKeyboard(): void {
@@ -43,36 +44,38 @@ export function pollKeyboardP1(frame: number, playerId = 0): InputFrame {
 
   return {
     ...base,
-    left: keys.has("ArrowLeft"),
-    right: keys.has("ArrowRight"),
-    up: keys.has("ArrowUp"),
-    down: keys.has("ArrowDown"),
-    jump: keys.has("ArrowUp") || keys.has("Space"),
-    attack: keys.has("KeyZ"),
-    special: keys.has("KeyX"),
-    shield: keys.has("KeyC"),
-    dodge: keys.has("KeyV"),
-    grab: keys.has("KeyB"),
+    left: keys.has("KeyA"),
+    right: keys.has("KeyD"),
+    up: keys.has("KeyW"),
+    down: keys.has("KeyS"),
+    jump: keys.has("KeyW") || keys.has("Space"),
+    attack: keys.has("KeyJ"),
+    special: keys.has("KeyK"),
+    shield: keys.has("KeyL"),
+    dodge: keys.has("ShiftLeft"),
+    grab: keys.has("KeyU"),
+    auraCharge: keys.has("KeyF"),
   };
 }
 
-/** Player 2 keyboard fallback: WASD + number row. */
+/** Player 2 keyboard fallback: arrows + numpad. */
 export function pollKeyboardP2(frame: number, playerId = 1): InputFrame {
   ensureKeyboard();
   const base = emptyInputFrame(frame, playerId);
 
   return {
     ...base,
-    left: keys.has("KeyA"),
-    right: keys.has("KeyD"),
-    up: keys.has("KeyW"),
-    down: keys.has("KeyS"),
-    jump: keys.has("KeyW") || keys.has("Numpad0"),
-    attack: keys.has("Digit1"),
-    special: keys.has("Digit2"),
-    shield: keys.has("Digit3"),
-    dodge: keys.has("Digit4"),
-    grab: keys.has("Digit5"),
+    left: keys.has("ArrowLeft"),
+    right: keys.has("ArrowRight"),
+    up: keys.has("ArrowUp"),
+    down: keys.has("ArrowDown"),
+    jump: keys.has("ArrowUp") || keys.has("Numpad0"),
+    attack: keys.has("Numpad1"),
+    special: keys.has("Numpad2"),
+    shield: keys.has("Numpad3"),
+    dodge: keys.has("Numpad4"),
+    grab: keys.has("Numpad5"),
+    auraCharge: keys.has("Slash"),
   };
 }
 

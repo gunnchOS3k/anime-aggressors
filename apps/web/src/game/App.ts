@@ -27,7 +27,6 @@ import { showResults, type ResultsAction } from "./results.js";
 import { globalAudio } from "../audio/AudioManager.js";
 import { navigateHome } from "../router.js";
 import { getMatchSetup } from "../match/matchSession.js";
-import { getProfileForSlot } from "../storage/inputProfileStorage.js";
 import { ReplayRecorder } from "../replay/ReplayRecorder.js";
 import { StatEventTracker, processMatchEnd } from "../career/careerService.js";
 import { saveCurrentGame } from "../saves/SaveGameManager.js";
@@ -35,6 +34,7 @@ import { renderAuraMeter } from "../ui/AuraMeter.ts";
 import { renderSuperReadyBadge } from "../ui/SuperReadyBadge.ts";
 import { renderComboHintOverlay } from "../ui/ComboHintOverlay.js";
 import { renderTrainingMoveOverlay } from "../ui/TrainingMoveOverlay.ts";
+import { renderControlsOverlayHtml, BATTLE_SHORTCUT_LINES } from "../input/controlReference.ts";
 import { renderEnergyClashPrompt, isClashActive } from "../ui/EnergyClashPrompt.js";
 
 function fighterIdFromCharacterId(characterId: string): string {
@@ -83,6 +83,8 @@ export class PlatformFighterApp {
   private battleComboDecay = 0;
   private lastMoveCallout = "";
   private trainingOverlayEl: HTMLElement | null = null;
+  private controlsOverlayEl: HTMLElement | null = null;
+  private showControlsOverlay = false;
 
   private options: PlatformFighterOptions;
 
@@ -91,15 +93,16 @@ export class PlatformFighterApp {
     this.options = options;
     this.trainingMode = options.trainingMode ?? false;
     this.root.innerHTML = `
-      <div class="pf-root battle-screen">
-        <div class="vs-toolbar">
+      <div class="pf-root pf-root--fullscreen battle-screen">
+        <div class="vs-toolbar vs-toolbar--battle">
           <button id="pf-back" type="button">← Home</button>
-          <span class="vs-hint">P1: ${getProfileForSlot(1).name} | P2: ${getProfileForSlot(2).name} | F1 debug | F2 hitboxes | F3 pause | F4 step | F6 renderer | R reset</span>
+          <span class="vs-hint">H controls · ${BATTLE_SHORTCUT_LINES.slice(1).join(" · ")}</span>
         </div>
         <div class="pf-viewport-wrap battle-canvas-shell">
           <div id="pf-viewport" class="pf-viewport battle-canvas-shell"></div>
           <div id="pf-hud" class="pf-hud"></div>
           <div id="pf-training-overlays" class="pf-training-overlays"></div>
+          ${renderControlsOverlayHtml()}
           <div id="pf-renderer-diagnostics-host"></div>
         </div>
       </div>
@@ -107,6 +110,7 @@ export class PlatformFighterApp {
     this.viewport = this.root.querySelector("#pf-viewport") as HTMLElement;
     this.hud = this.root.querySelector("#pf-hud") as HTMLElement;
     this.trainingOverlayEl = this.root.querySelector("#pf-training-overlays") as HTMLElement;
+    this.controlsOverlayEl = this.root.querySelector(".pf-controls-overlay") as HTMLElement;
     this.debugPanel = mountDebugPanel(this.root);
     this.root.querySelector("#pf-back")?.addEventListener("click", () => {
       this.stop();
@@ -144,6 +148,16 @@ export class PlatformFighterApp {
   }
 
   private onKeyDown = (e: KeyboardEvent): void => {
+    if (e.key === "h" || e.key === "H") {
+      if (this.state === "fighting" || this.state === "select") {
+        e.preventDefault();
+        this.showControlsOverlay = !this.showControlsOverlay;
+        if (this.controlsOverlayEl) {
+          this.controlsOverlayEl.hidden = !this.showControlsOverlay;
+        }
+      }
+      return;
+    }
     if (this.state !== "fighting") return;
     if (e.key === "F1") {
       e.preventDefault();

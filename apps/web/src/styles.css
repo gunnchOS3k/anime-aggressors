@@ -345,6 +345,90 @@ body {
   opacity: 0.9;
 }
 
+#app-root.app-root--battle {
+  max-width: none;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+#app-root.app-root--battle .pf-root--fullscreen {
+  background: #0a0a18;
+  border-radius: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#app-root.app-root--battle .vs-toolbar--battle {
+  flex: 0 0 auto;
+  padding: 0.35rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+#app-root.app-root--battle .pf-viewport-wrap {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+#app-root.app-root--battle .pf-viewport {
+  width: 100%;
+  height: min(calc(100vh - 44px), calc(100vw * 9 / 16));
+  min-height: min(480px, calc(100vw * 9 / 16));
+  max-height: calc(100vh - 44px);
+  border-radius: 0;
+}
+
+.pf-controls-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 1rem;
+  pointer-events: none;
+  z-index: 30;
+}
+
+.pf-controls-overlay[hidden] {
+  display: none !important;
+}
+
+.pf-controls-overlay__panel {
+  pointer-events: auto;
+  background: rgba(8, 8, 24, 0.92);
+  border: 1px solid #556;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  max-width: 640px;
+  font-size: 0.85rem;
+}
+
+.pf-controls-overlay__cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.pf-controls-overlay__panel ul {
+  margin: 0.25rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.pf-controls-overlay__hint {
+  margin: 0.5rem 0 0;
+  opacity: 0.8;
+  font-size: 0.75rem;
+}
+
 #app-root {
   max-width: 1100px;
   margin: 0 auto;

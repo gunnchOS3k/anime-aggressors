@@ -18,30 +18,30 @@ export type InputProfile = {
 const now = () => new Date().toISOString();
 
 export const KEYBOARD_P1_BINDINGS: InputProfile["bindings"] = {
-  moveLeft: { device: "keyboard", code: "ArrowLeft" },
-  moveRight: { device: "keyboard", code: "ArrowRight" },
-  moveUp: { device: "keyboard", code: "ArrowUp" },
-  moveDown: { device: "keyboard", code: "ArrowDown" },
-  jump: { device: "keyboard", code: "Space" },
-  attack: { device: "keyboard", code: "KeyZ" },
-  special: { device: "keyboard", code: "KeyX" },
-  shield: { device: "keyboard", code: "KeyC" },
-  dodge: { device: "keyboard", code: "KeyV" },
-  grab: { device: "keyboard", code: "KeyB" },
-  auraCharge: { device: "keyboard", code: "KeyF" },
-};
-
-export const KEYBOARD_P2_BINDINGS: InputProfile["bindings"] = {
   moveLeft: { device: "keyboard", code: "KeyA" },
   moveRight: { device: "keyboard", code: "KeyD" },
   moveUp: { device: "keyboard", code: "KeyW" },
   moveDown: { device: "keyboard", code: "KeyS" },
-  jump: { device: "keyboard", code: "KeyW" },
-  attack: { device: "keyboard", code: "Digit1" },
-  special: { device: "keyboard", code: "Digit2" },
-  shield: { device: "keyboard", code: "Digit3" },
-  dodge: { device: "keyboard", code: "Digit4" },
-  grab: { device: "keyboard", code: "Digit5" },
+  jump: { device: "keyboard", code: "Space" },
+  attack: { device: "keyboard", code: "KeyJ" },
+  special: { device: "keyboard", code: "KeyK" },
+  shield: { device: "keyboard", code: "KeyL" },
+  dodge: { device: "keyboard", code: "ShiftLeft" },
+  grab: { device: "keyboard", code: "KeyU" },
+  auraCharge: { device: "keyboard", code: "KeyF" },
+};
+
+export const KEYBOARD_P2_BINDINGS: InputProfile["bindings"] = {
+  moveLeft: { device: "keyboard", code: "ArrowLeft" },
+  moveRight: { device: "keyboard", code: "ArrowRight" },
+  moveUp: { device: "keyboard", code: "ArrowUp" },
+  moveDown: { device: "keyboard", code: "ArrowDown" },
+  jump: { device: "keyboard", code: "Numpad0" },
+  attack: { device: "keyboard", code: "Numpad1" },
+  special: { device: "keyboard", code: "Numpad2" },
+  shield: { device: "keyboard", code: "Numpad3" },
+  dodge: { device: "keyboard", code: "Numpad4" },
+  grab: { device: "keyboard", code: "Numpad5" },
   auraCharge: { device: "keyboard", code: "Slash" },
 };
 
