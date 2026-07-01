@@ -1,4 +1,4 @@
-import { listStages } from "@anime-aggressors/game-core";
+import { listStages, listProductionStageIds } from "@anime-aggressors/game-core";
 import { APP_ROUTES, navigateToHash } from "../routes.js";
 import { loadMatchSetup, saveMatchSetup } from "../match/matchSetupSession.js";
 import { renderSetupFlowShell } from "../ui/setup/SetupFlowShell.ts";
@@ -15,8 +15,7 @@ const FLAGLINE_ROOM_IDS = [
 ] as const;
 
 const MATCH_SETUP_STAGE_IDS = [
-  "skyline-arena",
-  "training-grid",
+  ...listProductionStageIds(),
   "impact-platform",
   "flagline-center-clash",
   "flagline-lunar-outpost",

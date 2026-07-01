@@ -21,6 +21,7 @@ import { getMoveData, isMoveComplete, type MoveId } from "./moves.js";
 import { getCombatMoveData } from "./moves/combatMoveData.js";
 import { combatMoveToFrameData } from "./moves/combatMoveData.js";
 import { maybeSpawnSuperEnergyAttack } from "./combat/energyClash.js";
+import { maybeSpawnFighterProjectile, resolveProjectileHits } from "./combat/fighterProjectiles.js";
 import { getMoveById, getFighterMove, fighterIdFromCharacterId } from "./moves/moveDefinitions.js";
 import {
   applyAuraHitPenalty,
@@ -228,6 +229,7 @@ function tickActionState(state: GameState, player: PlayerState): void {
     if (fighterMove) {
       maybeSpawnSuperEnergyAttack(state, player.id, fighterMove.fighterId, fighterMove, player.actionFrame);
     }
+    maybeSpawnFighterProjectile(state, player, player.currentMoveId, player.actionFrame);
     if (move && isMoveComplete(combatMoveToFrameData(move), player.actionFrame)) {
       player.actionState = "idle";
       player.currentMoveId = "none";
@@ -261,6 +263,7 @@ export function resolveCombat(state: GameState, inputs?: InputFrame[]): void {
     }
   }
   state.lastHitEvents = resolveCombatHits(state, inputs);
+  resolveProjectileHits(state, inputs);
   processBlastZoneKOs(state);
 }
 

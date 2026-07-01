@@ -122,6 +122,46 @@ export {
   serializeFlaglineState,
   deserializeFlaglineState,
 } from "./modes/flaglineClash.js";
+export {
+  PRODUCTION_FIGHTER_IDS,
+  PREVIEW_FIGHTER_IDS,
+  getProductionFighters,
+  getPreviewFighters,
+  getPlayableRoster,
+  getFighterGameplayProfile,
+  getProductionCreatedFighters,
+  getPlayableCreatedFighters,
+  isProductionFighterId,
+  isPreviewFighterId,
+  uniqueProductionArchetypes,
+} from "./fighterGameplayProfiles.js";
+export type {
+  ProductionFighterId,
+  PreviewFighterId,
+  FighterRosterStatus,
+  FighterGameplayProfile,
+} from "./fighterGameplayProfiles.js";
+export {
+  PRODUCTION_STAGES,
+  isProductionStageId,
+  getProductionStageMeta,
+  listProductionStageIds,
+} from "./productionStages.js";
+export type { ProductionStageId, ProductionStageMeta } from "./productionStages.js";
+export { generateVersusCpuInput, mergeCpuInputs, cpuActionFrequency } from "./bots/versusCpu.js";
+export type { CpuDifficulty, VersusCpuConfig } from "./bots/versusCpu.js";
+export {
+  resetTrainingDamage,
+  resetTrainingPositions,
+  applyTrainingDummyBehavior,
+  getFighterMoveList,
+} from "./training/trainingMode.js";
+export type { TrainingConfig, TrainingDummyBehavior } from "./training/trainingMode.js";
+export {
+  applyFighterMoveOverrides,
+  fighterSpawnsProjectileOnMove,
+  getProjectileStatsForMove,
+} from "./moves/fighterMoveTuning.js";
 export { generateFlaglineBotInput, generateAllBotInputs } from "./bots/simpleFlaglineBot.js";
 export { createCombatEvent } from "./combatEvents.js";
 export type { CombatEvent, CombatEventType } from "./combatEvents.js";

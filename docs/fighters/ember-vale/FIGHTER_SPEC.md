@@ -1,5 +1,7 @@
 # Ember Vale
 
+**Roster status:** Production (Milestone 4)
+
 Element: Flame
 Size: Medium
 Asset tier: production_proxy

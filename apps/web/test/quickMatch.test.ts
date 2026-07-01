@@ -21,6 +21,8 @@ describe("quick match setup", () => {
     assert.ok(isQuickMatchSetupValid(setup));
     assert.equal(setup.stageId, "skyline-arena");
     assert.equal(setup.fighters.length, 2);
+    assert.equal(setup.fighters.find((f) => f.playerId === 0)?.fighter?.id, "ember-vale");
+    assert.equal(setup.fighters.find((f) => f.playerId === 1)?.fighter?.id, "rook-ironside");
   });
 
   it("rejects corrupt partial setup", () => {

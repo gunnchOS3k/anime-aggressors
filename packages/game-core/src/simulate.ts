@@ -1,11 +1,9 @@
 import type { GameState, InputFrame } from "./types.js";
 import { cloneGameState } from "./state.js";
 import { processPlayer, resolveCombat } from "./combat.js";
-import {
-  detectEnergyClashes,
-  tickEnergyAttacks,
-  tickEnergyClashes,
-} from "./combat/energyClash.js";
+import { tickEnergyAttacks, detectEnergyClashes, tickEnergyClashes } from "./combat/energyClash.js";
+import { mergeCpuInputs } from "./bots/versusCpu.js";
+import { applyTrainingDummyBehavior } from "./training/trainingMode.js";
 import { getStage } from "./stages.js";
 import { getStageLayout } from "./stageLayouts.js";
 import { createDefaultAuraState } from "./aura/auraTypes.js";
@@ -37,8 +35,38 @@ export function simulateFrame(state: GameState, inputs: InputFrame[]): GameState
 
     next.matchTimerFrames -= 1;
 
+    let frameInputs = inputs;
+    if (next.config.cpuOpponents?.length) {
+      frameInputs = mergeCpuInputs(next, inputs, next.config.cpuOpponents);
+    }
+
+    if (next.config.training) {
+      const { dummyPlayerId, dummyBehavior } = next.config.training;
+      const dummy = next.players[dummyPlayerId];
+      if (dummy && dummyBehavior !== "cpu1") {
+        const partial = applyTrainingDummyBehavior(dummy, dummyBehavior, next.frame);
+        const existing = frameInputs.find((i) => i.playerId === dummyPlayerId);
+        const base = existing ?? {
+          frame: next.frame,
+          playerId: dummyPlayerId,
+          left: false,
+          right: false,
+          up: false,
+          down: false,
+          jump: false,
+          attack: false,
+          special: false,
+          shield: false,
+          dodge: false,
+          grab: false,
+        };
+        const merged = { ...base, ...partial, frame: next.frame, playerId: dummyPlayerId };
+        frameInputs = [...frameInputs.filter((i) => i.playerId !== dummyPlayerId), merged];
+      }
+    }
+
     const inputByPlayer = new Map<number, InputFrame>();
-    for (const input of inputs) {
+    for (const input of frameInputs) {
       inputByPlayer.set(input.playerId, input);
     }
 
@@ -46,7 +74,7 @@ export function simulateFrame(state: GameState, inputs: InputFrame[]): GameState
       processPlayer(next, player, inputByPlayer.get(player.id));
     }
 
-    resolveCombat(next, inputs);
+    resolveCombat(next, frameInputs);
 
     tickEnergyAttacks(next);
     detectEnergyClashes(next);

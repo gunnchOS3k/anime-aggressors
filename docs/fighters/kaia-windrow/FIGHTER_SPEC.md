@@ -1,5 +1,7 @@
 # Kaia Windrow
 
+**Roster status:** Production (Milestone 4)
+
 Element: Gale
 Size: Medium
 Asset tier: production_proxy

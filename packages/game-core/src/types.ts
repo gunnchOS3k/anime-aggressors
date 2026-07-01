@@ -139,6 +139,8 @@ export type GameConfig = {
   fighterProfiles?: import("./createdFighter.js").CreatedFighter[];
   ruleset?: import("./rulesets.js").GameRuleset;
   seed: number;
+  cpuOpponents?: import("./bots/versusCpu.js").VersusCpuConfig[];
+  training?: import("./training/trainingMode.js").TrainingConfig;
 };
 
 export type GameState = {

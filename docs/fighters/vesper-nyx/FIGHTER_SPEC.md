@@ -1,5 +1,7 @@
 # Vesper Nyx
 
+**Roster status:** Preview / balance-pending (Milestone 4)
+
 Element: Void
 Size: Small
 Asset tier: production_proxy

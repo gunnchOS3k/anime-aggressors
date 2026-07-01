@@ -1,5 +1,7 @@
 # Orion Vell
 
+**Roster status:** Preview / balance-pending (Milestone 4)
+
 Element: Gravity
 Size: Medium
 Asset tier: production_proxy

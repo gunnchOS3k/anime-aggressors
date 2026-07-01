@@ -21,6 +21,11 @@ export const BATTLE_SHORTCUT_LINES = [
   "F1 debug · F2 hitboxes · F3 pause · R rematch",
 ] as const;
 
+export const TRAINING_SHORTCUT_LINES = [
+  "D damage reset · P position reset · 1-4 dummy",
+  "F1 debug · F3 pause",
+] as const;
+
 export function renderControlsOverlayHtml(): string {
   return `<div class="pf-controls-overlay" data-testid="battle-controls-overlay" hidden>
     <div class="pf-controls-overlay__panel">
@@ -36,6 +41,7 @@ export function renderControlsOverlayHtml(): string {
         </div>
       </div>
       <p class="pf-controls-overlay__hint">${BATTLE_SHORTCUT_LINES.join(" · ")}</p>
+      <p class="pf-controls-overlay__hint">Two gamepads auto-map to P1 and P2 when both are connected.</p>
     </div>
   </div>`;
 }

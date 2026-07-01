@@ -11,6 +11,18 @@ import { applyEdgeIOGesture, type EdgeIOMapperConfig } from "./edgeioMapper.ts";
 
 export type PlayerSlot = 0 | 1 | 2 | 3;
 
+function resolveGamepadForPlayer(playerId: PlayerSlot, pads: (Gamepad | null)[]): ReturnType<typeof gamepadToState> | null {
+  if (pads.length >= 2) {
+    const pad = pads[playerId];
+    return pad ? gamepadToState(pad) : null;
+  }
+  const profile = getProfileForSlot((playerId + 1) as 1 | 2 | 3 | 4);
+  if (profile.deviceType === "gamepad" && pads[playerId]) {
+    return gamepadToState(pads[playerId]!);
+  }
+  return pads[0] ? gamepadToState(pads[0]) : null;
+}
+
 export function pollPlayerInput(
   frame: number,
   playerId: PlayerSlot,
@@ -21,8 +33,7 @@ export function pollPlayerInput(
   const profile = getProfileForSlot(slot);
   const keyboard = getPressedKeyCodes();
   const pads = getConnectedGamepads();
-  const padIndex = profile.deviceType === "gamepad" ? playerId : playerId;
-  const gamepad = pads[padIndex] ? gamepadToState(pads[padIndex]!) : null;
+  const gamepad = resolveGamepadForPlayer(playerId, pads);
 
   let input = profileToInputFrame(
     frame,
@@ -54,4 +65,8 @@ export function pollAllInputs(
 export function getSlotProfileSummary(slot: 1 | 2 | 3 | 4): { name: string; deviceType: string } {
   const profile = getProfileForSlot(slot);
   return { name: profile.name, deviceType: profile.deviceType };
+}
+
+export function countConnectedGamepads(): number {
+  return getConnectedGamepads().length;
 }
