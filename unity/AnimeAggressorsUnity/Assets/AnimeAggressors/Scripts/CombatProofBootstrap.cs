@@ -1,18 +1,25 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace AnimeAggressors
 {
     /// <summary>
-    /// Builds the CombatProof scene at runtime — open CombatProof.unity and
-    /// press Play. Also self-injects into any empty scene via
-    /// RuntimeInitializeOnLoadMethod so the proof cannot fail on a missing
-    /// scene reference.
+    /// Builds the CombatProof dev scene at runtime — open CombatProof.unity
+    /// and press Play. Only auto-injects when the CombatProof scene itself is
+    /// active; the launch flow scenes are owned by GameBootstrap.
     /// </summary>
     public class CombatProofBootstrap : MonoBehaviour
     {
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static void AutoLoadIfEmpty()
         {
+            SceneManager.sceneLoaded += (scene, mode) => TryInject(scene);
+            TryInject(SceneManager.GetActiveScene());
+        }
+
+        static void TryInject(Scene scene)
+        {
+            if (scene.name != "CombatProof") return;
             if (Object.FindFirstObjectByType<CombatProofBootstrap>() != null) return;
             if (Object.FindFirstObjectByType<FighterController>() != null) return;
             var go = new GameObject("CombatProofBootstrap");
