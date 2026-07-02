@@ -1,13 +1,18 @@
-using System;
 using UnityEngine;
 
 namespace AnimeAggressors
 {
+    /// <summary>
+    /// Attack trigger volume. Collider is enabled only during a move's active
+    /// frames; the red debug overlay is a separate renderer toggled by F2 and
+    /// never affects collision.
+    /// </summary>
     [RequireComponent(typeof(BoxCollider))]
     public class Hitbox : MonoBehaviour
     {
         public FighterController Owner { get; set; }
         public bool Active { get; private set; }
+        public bool DebugVisible { get; private set; } = true;
 
         BoxCollider _col;
         MeshRenderer _vis;
@@ -21,7 +26,7 @@ namespace AnimeAggressors
             var filter = gameObject.AddComponent<MeshFilter>();
             filter.sharedMesh = Resources.GetBuiltinResource<Mesh>("Cube.fbx");
             _vis.sharedMaterial = CombatVisuals.Transparent(new Color(1f, 0.2f, 0.2f, 0.45f));
-            gameObject.SetActive(false);
+            _vis.enabled = false;
         }
 
         public void Configure(Vector3 size, Vector3 localPos)
@@ -34,7 +39,13 @@ namespace AnimeAggressors
         {
             Active = on;
             _col.enabled = on;
-            gameObject.SetActive(on);
+            _vis.enabled = on && DebugVisible;
+        }
+
+        public void SetDebugVisible(bool on)
+        {
+            DebugVisible = on;
+            _vis.enabled = Active && on;
         }
 
         void OnTriggerEnter(Collider other)

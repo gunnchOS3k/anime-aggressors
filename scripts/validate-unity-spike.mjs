@@ -31,7 +31,12 @@ const REQUIRED_DOCS = [
   "docs/ENGINE_RESET_DECISION.md",
   "docs/GODOT_PROTOTYPE_RETROSPECTIVE.md",
   "docs/UNITY_SPIKE_ACCEPTANCE_CHECKLIST.md",
+  "docs/UNITY_LOCAL_RUNBOOK.md",
   "unity/AnimeAggressorsUnity/Assets/AnimeAggressors/Docs/UNITY_COMBAT_PROOF_README.md",
+];
+
+const REQUIRED_TOOLING = [
+  "scripts/detect-unity-setup.mjs",
 ];
 
 const MOVE_IDS = ["jab", "heavy", "neutral_special", "grab", "throw", "aura_burst"];
@@ -58,6 +63,16 @@ for (const d of REQUIRED_DOCS) {
   if (!fs.existsSync(p)) fail(`missing doc ${d}`);
 }
 ok("required docs");
+
+for (const t of REQUIRED_TOOLING) {
+  const p = path.join(root, t);
+  if (!fs.existsSync(p)) fail(`missing tooling ${t}`);
+}
+const runbook = fs.readFileSync(path.join(root, "docs/UNITY_LOCAL_RUNBOOK.md"), "utf8");
+for (const phrase of ["Unity Hub", "CombatProof.unity", "Press Play", "Record video"]) {
+  if (!runbook.includes(phrase)) fail(`runbook missing step: ${phrase}`);
+}
+ok("Unity runbook + setup detector");
 
 const movesPath = path.join(aaRoot, "Data/default_moves.json");
 if (!fs.existsSync(movesPath)) fail("default_moves.json missing");

@@ -23,18 +23,23 @@ If CombatProof scene is empty, `CombatProofBootstrap` still runs via `RuntimeIni
 | Key | Action |
 |-----|--------|
 | A / D | Move |
-| W | Jump |
+| Shift (hold) | Run |
+| W | Jump / double jump |
+| S | Fast fall (airborne) |
 | J | Jab |
 | H | Heavy |
 | K | Special |
 | L | Shield hold |
-| U | Grab |
+| U | Grab (J or U while holding: throw) |
 | I | Dodge |
 | K + L | Aura charge |
 | J (at 100% aura) | Aura burst |
+| B | Toggle dummy shield |
 | R | Reset fighters |
+| F1 | Toggle debug HUD |
 | F2 | Toggle hitbox viz |
 | F6 | Toggle hurtbox viz |
+| Esc | Pause / resume |
 
 **Gamepad:** Not wired in this spike — use Input System package in follow-up if proof passes.
 

@@ -15,8 +15,10 @@
 
 ## Movement
 
-- [ ] P1 moves (A/D)
+- [ ] P1 moves (A/D), runs with Shift
 - [ ] P1 jumps (W)
+- [ ] P1 double jumps (W in air)
+- [ ] P1 fast falls (S in air)
 - [ ] P1 lands on platform
 
 ---
@@ -34,9 +36,11 @@
 
 ## Shield
 
-- [ ] Shield hold (L) blocks jab — SHIELD result / no launch
-- [ ] Shield health decreases
+- [ ] Dummy shield on (B) blocks P1 jab — SHIELD result / no launch, hit spark shows
+- [ ] Shield bubble visual appears while blocking and shrinks with shield health
+- [ ] Shield health decreases on block
 - [ ] Shield stun recovers
+- [ ] P1 shield hold (L) enters ShieldHold; releasing L returns to Idle
 
 ---
 
@@ -50,8 +54,8 @@
 
 ## Aura
 
-- [ ] K+L charges meter — HUD aura increases
-- [ ] Aura ready at 100%
+- [ ] K+L charges meter — HUD aura increases, aura glow visible
+- [ ] Aura ready at 100% (glow pulses)
 - [ ] J at full aura — burst consumes meter, affects dummy
 
 ---
@@ -59,7 +63,9 @@
 ## Tools
 
 - [ ] R reset works
-- [ ] F2 / F6 toggle hitbox/hurtbox visuals
+- [ ] F1 toggles HUD
+- [ ] F2 / F6 toggle hitbox/hurtbox overlays (combat still works with overlays off)
+- [ ] Esc pauses and resumes
 
 ---
 
