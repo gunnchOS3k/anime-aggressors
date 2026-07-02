@@ -9,6 +9,46 @@ No milestone claim is valid without completing every step, including the video.
 
 ---
 
+## Before opening Unity
+
+Unity will refuse to open the project if the filesystem or the editor
+install is broken. Run these checks first, in order, and stop at the first
+failure:
+
+1. **Confirm the project is on a case-insensitive filesystem.**
+
+   ```bash
+   node scripts/check-unity-filesystem.mjs
+   ```
+
+   If it reports `CASE_SENSITIVE_FS=true`, Unity cannot open the project
+   from this location — follow `docs/UNITY_MAC_ENVIRONMENT_RESCUE.md` to
+   clone into `~/UnityProjects/anime-aggressors` (or a case-insensitive
+   APFS image at `/Volumes/UnityAA`).
+
+2. **Confirm Unity Editor 6000.0.23f1 is installed.**
+
+   ```bash
+   node scripts/check-unity-editor-integrity.mjs
+   ```
+
+3. **Confirm UnityPackageManager exists.** The same script checks
+   `Unity.app/Contents/Resources/PackageManager/Server/UnityPackageManager`.
+   If it reports `UNITY_EDITOR_INSTALL_CORRUPT=true`, uninstall and
+   reinstall 6000.0.23f1 through Unity Hub — no workarounds.
+
+4. **Confirm Unity Hub is signed in** (free Personal license is fine).
+
+5. Only then open the project folder in Unity Hub:
+   `unity/AnimeAggressorsUnity`
+
+6. Open the scene:
+   `Assets/AnimeAggressors/Scenes/CombatProof.unity`
+
+7. Press Play.
+
+---
+
 ## 0. Check your environment first
 
 ```bash
