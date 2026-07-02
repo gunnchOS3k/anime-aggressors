@@ -10,11 +10,19 @@ namespace AnimeAggressors
         public float Weight = 100f;
         public int Facing = 1;
 
+        public const float WalkSpeed = 4.5f;
+        public const float RunSpeed = 7f;
+        public const float JumpVelocity = 9f;
+        public const float FastFallVelocity = -14f;
+        public const int MaxJumps = 2;
+
         public float DamagePercent { get; private set; }
         public int ComboCount { get; private set; }
         public string LastHitResult { get; private set; } = "—";
         public bool IsGrounded { get; private set; }
-        public Vector3 Velocity => _rb.velocity;
+        public bool IsGrabbed => _grabbed;
+        public Vector3 Velocity => _rb.linearVelocity;
+        public Hitbox ActiveHitbox => _hitbox;
 
         public FighterStateMachine StateMachine { get; private set; }
         public MoveRunner MoveRunner { get; private set; }
@@ -26,10 +34,14 @@ namespace AnimeAggressors
         Hitbox _hitbox;
         Hurtbox _hurtbox;
         Transform _body;
+        Transform _facingIndicator;
+        GameObject _shieldBubble;
+        GameObject _auraGlow;
         Dictionary<string, MoveDefinition> _moves = new Dictionary<string, MoveDefinition>();
         float _hitstunTimer;
         float _hitstopTimer;
         float _simAccum;
+        int _jumpsUsed;
         bool _grabbed;
         FighterController _grabbedBy;
         HashSet<FighterController> _hitThisMove = new HashSet<FighterController>();
@@ -42,6 +54,14 @@ namespace AnimeAggressors
             _rb = GetComponent<Rigidbody>();
             _rb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
             _rb.interpolation = RigidbodyInterpolation.Interpolate;
+            _rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+
+            // Solid body collider — hitbox/hurtbox children are triggers only.
+            var capsule = gameObject.AddComponent<CapsuleCollider>();
+            capsule.center = new Vector3(0, 1f, 0);
+            capsule.height = 2f;
+            capsule.radius = 0.35f;
+
             StateMachine = new FighterStateMachine();
             MoveRunner = new MoveRunner();
             Shield = new ShieldController(this);
@@ -59,10 +79,26 @@ namespace AnimeAggressors
         void BuildVisuals()
         {
             _body = GameObject.CreatePrimitive(PrimitiveType.Capsule).transform;
+            _body.name = "Body (PROXY — NOT FINAL ART)";
             _body.SetParent(transform, false);
             _body.localPosition = new Vector3(0, 1f, 0);
             Destroy(_body.GetComponent<Collider>());
             _body.GetComponent<Renderer>().material.color = IsPlayer ? new Color(0.9f, 0.35f, 0.2f) : new Color(0.3f, 0.5f, 0.9f);
+
+            // Small nose cube so facing direction reads on a symmetric capsule.
+            _facingIndicator = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
+            _facingIndicator.name = "FacingIndicator";
+            Destroy(_facingIndicator.GetComponent<Collider>());
+            _facingIndicator.SetParent(transform, false);
+            _facingIndicator.localScale = new Vector3(0.25f, 0.15f, 0.15f);
+            _facingIndicator.localPosition = new Vector3(0.45f, 1.5f, 0);
+            _facingIndicator.GetComponent<Renderer>().material.color = Color.white;
+
+            _shieldBubble = CombatVisuals.MakeSphere(transform, "ShieldBubble", new Color(0.3f, 0.9f, 1f, 0.35f), 2.2f, new Vector3(0, 1f, 0));
+            _shieldBubble.SetActive(false);
+
+            _auraGlow = CombatVisuals.MakeSphere(transform, "AuraGlow", new Color(1f, 0.55f, 0.1f, 0.3f), 2.6f, new Vector3(0, 1f, 0));
+            _auraGlow.SetActive(false);
         }
 
         void BuildHitboxes()
@@ -91,57 +127,96 @@ namespace AnimeAggressors
         {
             if (_hitstopTimer > 0f)
             {
-                _hitstopTimer -= Time.deltaTime;
+                _hitstopTimer -= Time.unscaledDeltaTime;
                 return;
             }
 
             StateMachine.Tick(Time.deltaTime);
             Shield.Tick(Time.deltaTime);
             Grab.Tick(Time.deltaTime);
+            UpdateFeedbackVisuals();
 
             if (_grabbed && _grabbedBy != null) return;
+
+            UpdateGrounded();
 
             if (_hitstunTimer > 0f)
             {
                 _hitstunTimer -= Time.deltaTime;
-                if (_hitstunTimer <= 0f && IsGrounded)
-                    StateMachine.Enter(FighterState.Idle);
+                if (_hitstunTimer <= 0f)
+                    StateMachine.Enter(IsGrounded ? FighterState.Idle : FighterState.Fall);
                 return;
             }
 
             if (IsPlayer) ReadInput();
 
-            UpdateGrounded();
             UpdateFacing();
             UpdateMoveSim();
             UpdateStateFromMotion();
         }
 
-        void FixedUpdate()
-        {
-            if (_grabbed || StateMachine.LocksMovement) return;
-            if (!IsPlayer) return;
-        }
-
         void ReadInput()
         {
-            if (StateMachine.LocksActions && StateMachine.Current != FighterState.GrabHold) return;
+            if (Time.timeScale == 0f) return;
 
-            if (StateMachine.Current == FighterState.GrabHold)
+            var st = StateMachine.Current;
+
+            // Grab hold: J or U throws the held target.
+            if (st == FighterState.GrabHold)
             {
                 if (Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.U))
                     Grab.ReleaseThrow();
                 return;
             }
 
-            var auraCharge = Input.GetKey(KeyCode.K) && Input.GetKey(KeyCode.L);
-            if (auraCharge)
+            // Shield hold: release L to drop shield; K+L transitions to aura charge.
+            if (st == FighterState.ShieldHold)
             {
-                Aura.SetCharging(true);
-                Aura.TickCharge(Time.deltaTime);
+                if (Input.GetKey(KeyCode.K) && Input.GetKey(KeyCode.L))
+                {
+                    Shield.SetBlocking(false);
+                    Aura.SetCharging(true);
+                    return;
+                }
+                if (!Input.GetKey(KeyCode.L) || !IsGrounded)
+                {
+                    Shield.SetBlocking(false);
+                    StateMachine.Enter(FighterState.Idle);
+                }
                 return;
             }
-            Aura.SetCharging(false);
+
+            // Aura charge: keep holding K+L to fill, release to stop.
+            if (st == FighterState.AuraCharge || st == FighterState.AuraReady)
+            {
+                if (Input.GetKeyDown(KeyCode.J) && Aura.IsReady)
+                {
+                    Aura.SetCharging(false);
+                    Aura.TryBurst(GetMove("aura_burst"));
+                    return;
+                }
+                if (Input.GetKey(KeyCode.K) && Input.GetKey(KeyCode.L))
+                {
+                    Aura.TickCharge(Time.deltaTime);
+                }
+                else
+                {
+                    Aura.SetCharging(false);
+                    StateMachine.Enter(FighterState.Idle);
+                }
+                return;
+            }
+
+            if (StateMachine.LocksActions) return;
+
+            // Ensure shield drops if L was released while in a transitional state.
+            if (Shield.IsBlocking && !Input.GetKey(KeyCode.L)) Shield.SetBlocking(false);
+
+            if (Input.GetKey(KeyCode.K) && Input.GetKey(KeyCode.L) && IsGrounded)
+            {
+                Aura.SetCharging(true);
+                return;
+            }
 
             if (Input.GetKeyDown(KeyCode.J) && Aura.IsReady)
             {
@@ -154,63 +229,85 @@ namespace AnimeAggressors
                 Shield.SetBlocking(true);
                 return;
             }
-            Shield.SetBlocking(false);
 
             if (Input.GetKeyDown(KeyCode.I))
             {
                 StateMachine.Enter(FighterState.Dodge);
-                _rb.velocity = new Vector3(Facing * 8f, _rb.velocity.y, 0);
+                _rb.linearVelocity = new Vector3(Facing * 8f, _rb.linearVelocity.y, 0);
                 return;
             }
 
-            if (Input.GetKeyDown(KeyCode.U)) StartMove(GetMove("grab"));
-            if (Input.GetKeyDown(KeyCode.H)) StartMove(GetMove("heavy"));
-            if (Input.GetKeyDown(KeyCode.K) && !auraCharge) StartMove(GetMove("neutral_special"));
-            if (Input.GetKeyDown(KeyCode.J) && !Aura.IsReady) StartMove(GetMove("jab"));
+            if (Input.GetKeyDown(KeyCode.U)) { StartMove(GetMove("grab")); return; }
+            if (Input.GetKeyDown(KeyCode.H)) { StartMove(GetMove("heavy")); return; }
+            if (Input.GetKeyDown(KeyCode.K)) { StartMove(GetMove("neutral_special")); return; }
+            if (Input.GetKeyDown(KeyCode.J)) { StartMove(GetMove("jab")); return; }
 
             var mx = (Input.GetKey(KeyCode.D) ? 1f : 0f) - (Input.GetKey(KeyCode.A) ? 1f : 0f);
             if (!StateMachine.LocksMovement && Mathf.Abs(mx) > 0.01f)
             {
-                var spd = Input.GetKey(KeyCode.LeftShift) ? 7f : 4.5f;
-                _rb.velocity = new Vector3(mx * spd, _rb.velocity.y, 0);
-                StateMachine.Enter(Mathf.Abs(mx) > 0.75f ? FighterState.Run : FighterState.Walk);
+                var run = Input.GetKey(KeyCode.LeftShift);
+                _rb.linearVelocity = new Vector3(mx * (run ? RunSpeed : WalkSpeed), _rb.linearVelocity.y, 0);
+                if (IsGrounded)
+                    StateMachine.Enter(run ? FighterState.Run : FighterState.Walk);
             }
             else if (IsGrounded && !MoveRunner.Active)
             {
-                _rb.velocity = new Vector3(Mathf.MoveTowards(_rb.velocity.x, 0, 20f * Time.deltaTime), _rb.velocity.y, 0);
-                if (Mathf.Abs(_rb.velocity.x) < 0.1f) StateMachine.Enter(FighterState.Idle);
+                _rb.linearVelocity = new Vector3(Mathf.MoveTowards(_rb.linearVelocity.x, 0, 20f * Time.deltaTime), _rb.linearVelocity.y, 0);
+                if (Mathf.Abs(_rb.linearVelocity.x) < 0.1f &&
+                    (StateMachine.Current == FighterState.Walk || StateMachine.Current == FighterState.Run))
+                    StateMachine.Enter(FighterState.Idle);
             }
 
-            if (Input.GetKeyDown(KeyCode.W) && IsGrounded)
+            if (Input.GetKeyDown(KeyCode.W))
             {
-                _rb.velocity = new Vector3(_rb.velocity.x, 9f, 0);
-                StateMachine.Enter(FighterState.Jump);
+                if (IsGrounded)
+                {
+                    _jumpsUsed = 1;
+                    _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, JumpVelocity, 0);
+                    StateMachine.Enter(FighterState.Jump);
+                }
+                else if (_jumpsUsed < MaxJumps)
+                {
+                    _jumpsUsed++;
+                    _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, JumpVelocity * 0.95f, 0);
+                    StateMachine.Enter(FighterState.DoubleJump);
+                }
             }
-        }
 
-        public void ApplyMovementInput(float mx, bool run)
-        {
-            if (StateMachine.LocksMovement) return;
-            var spd = run ? 7f : 4.5f;
-            _rb.velocity = new Vector3(mx * spd, _rb.velocity.y, 0);
+            // Fast fall: press S while airborne and not rising fast.
+            if (Input.GetKey(KeyCode.S) && !IsGrounded && _rb.linearVelocity.y < 2f)
+            {
+                _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, FastFallVelocity, 0);
+                StateMachine.Enter(FighterState.FastFall);
+            }
         }
 
         void UpdateGrounded()
         {
-            IsGrounded = Physics.Raycast(transform.position + Vector3.up * 0.2f, Vector3.down, 1.3f);
-            if (!IsGrounded && _rb.velocity.y < -0.1f && StateMachine.Current != FighterState.Hitstun)
+            IsGrounded = Physics.Raycast(transform.position + Vector3.up * 0.2f, Vector3.down, 0.35f,
+                Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
+            if (IsGrounded) _jumpsUsed = 0;
+
+            var st = StateMachine.Current;
+            if (!IsGrounded && _rb.linearVelocity.y < -0.1f &&
+                (st == FighterState.Idle || st == FighterState.Walk || st == FighterState.Run ||
+                 st == FighterState.Jump || st == FighterState.DoubleJump || st == FighterState.Launched))
                 StateMachine.Enter(FighterState.Fall);
-            if (IsGrounded && _rb.velocity.y <= 0.1f && StateMachine.Current == FighterState.Fall)
+            if (IsGrounded && _rb.linearVelocity.y <= 0.1f &&
+                (st == FighterState.Fall || st == FighterState.FastFall))
                 StateMachine.Enter(FighterState.Land);
         }
 
         void UpdateFacing()
         {
-            if (_rb.velocity.x > 0.2f) Facing = 1;
-            else if (_rb.velocity.x < -0.2f) Facing = -1;
-            var s = _body.localScale;
-            s.x = Mathf.Abs(s.x) * Facing;
-            _body.localScale = s;
+            if (!StateMachine.LocksMovement)
+            {
+                if (_rb.linearVelocity.x > 0.2f) Facing = 1;
+                else if (_rb.linearVelocity.x < -0.2f) Facing = -1;
+            }
+            var p = _facingIndicator.localPosition;
+            p.x = 0.45f * Facing;
+            _facingIndicator.localPosition = p;
         }
 
         void UpdateMoveSim()
@@ -225,14 +322,37 @@ namespace AnimeAggressors
 
         void UpdateStateFromMotion()
         {
-            if (StateMachine.Current == FighterState.Land && StateMachine.StateTime > 0.08f)
+            var st = StateMachine.Current;
+            if (st == FighterState.Land && StateMachine.StateTime > 0.08f)
                 StateMachine.Enter(FighterState.Idle);
-            if (StateMachine.Current == FighterState.ShieldStun && StateMachine.StateTime > 0.25f)
+            if (st == FighterState.ShieldStun && StateMachine.StateTime > 0.25f)
                 StateMachine.Enter(FighterState.Idle);
-            if (StateMachine.Current == FighterState.GrabWhiff && StateMachine.StateTime > 0.3f)
+            if (st == FighterState.GrabWhiff && StateMachine.StateTime > 0.3f)
                 StateMachine.Enter(FighterState.Idle);
-            if (StateMachine.Current == FighterState.Dodge && StateMachine.StateTime > 0.15f)
+            if (st == FighterState.ThrowRelease && StateMachine.StateTime > 0.3f)
                 StateMachine.Enter(FighterState.Idle);
+            if (st == FighterState.Dodge && StateMachine.StateTime > 0.15f)
+                StateMachine.Enter(FighterState.Idle);
+        }
+
+        void UpdateFeedbackVisuals()
+        {
+            var blocking = Shield.IsBlocking;
+            if (_shieldBubble.activeSelf != blocking) _shieldBubble.SetActive(blocking);
+            if (blocking)
+            {
+                var t = Mathf.Clamp01(Shield.Health / Shield.MaxHealth);
+                _shieldBubble.transform.localScale = Vector3.one * Mathf.Lerp(1.1f, 2.2f, t);
+            }
+
+            var aura = Aura.Charging || Aura.IsReady;
+            if (_auraGlow.activeSelf != aura) _auraGlow.SetActive(aura);
+            if (aura)
+            {
+                var t = Mathf.Clamp01(Aura.Meter / 100f);
+                var pulse = Aura.IsReady ? 1f + Mathf.PingPong(Time.time * 2f, 0.3f) : 1f;
+                _auraGlow.transform.localScale = Vector3.one * Mathf.Lerp(1.2f, 2.6f, t) * pulse;
+            }
         }
 
         public void StartMove(MoveDefinition move)
@@ -253,7 +373,7 @@ namespace AnimeAggressors
                 if (m.is_grab)
                 {
                     StateMachine.Enter(FighterState.GrabActive);
-                    TryGrabConnect(Dummy, out var tag);
+                    TryGrabConnect(IsPlayer ? Dummy : Player, out var tag);
                     LastHitResult = tag;
                     if (tag != "GRAB") Grab.Whiff();
                 }
@@ -266,20 +386,25 @@ namespace AnimeAggressors
             else if (phase == "recovery")
             {
                 _hitbox.SetActiveHitbox(false);
-                StateMachine.Enter(FighterState.AttackRecovery);
+                if (StateMachine.Current == FighterState.GrabHold) return;
+                var m = MoveRunner.Move;
+                if (m != null && m.is_grab) return;
+                StateMachine.Enter(m != null && m.is_aura_burst ? FighterState.AuraBurstRecovery : FighterState.AttackRecovery);
             }
         }
 
         void OnMoveEnded()
         {
             _hitbox.SetActiveHitbox(false);
+            if (StateMachine.Current == FighterState.GrabHold) return;
+            if (StateMachine.Current == FighterState.Hitstun || StateMachine.Current == FighterState.Launched) return;
             StateMachine.Enter(FighterState.Idle);
         }
 
         void ApplyHitboxFromMove(MoveDefinition m)
         {
-            var off = new Vector3(m.hitbox_offset.x * Facing, m.hitbox_offset.y, 0);
-            _hitbox.Configure(new Vector3(m.hitbox_size.x, m.hitbox_size.y, 0.5f), off);
+            var off = new Vector3(m.hitbox_offset.x * Facing, m.hitbox_offset.y + 1f, 0);
+            _hitbox.Configure(new Vector3(m.hitbox_size.x, m.hitbox_size.y, 0.6f), off);
             _hitbox.SetActiveHitbox(true);
         }
 
@@ -296,7 +421,6 @@ namespace AnimeAggressors
 
         public void TryGrabConnect(FighterController target, out string tag)
         {
-            tag = "GRAB_WHIFF";
             Grab.TryConnect(target, out var ok);
             tag = ok ? "GRAB" : "GRAB_WHIFF";
         }
@@ -304,8 +428,12 @@ namespace AnimeAggressors
         public void ApplyHit(float dmg, Vector2 launch, float hitstun, float hitstop)
         {
             DamagePercent += dmg;
-            _rb.velocity = new Vector3(launch.x, launch.y, 0);
+            MoveRunner.Cancel();
+            _hitbox.SetActiveHitbox(false);
+            Shield.SetBlocking(false);
+            _rb.linearVelocity = new Vector3(launch.x, launch.y, 0);
             _hitstunTimer = hitstun;
+            _hitstopTimer = hitstop;
             ComboCount = 0;
             StateMachine.Enter(launch.y > 8f ? FighterState.Launched : FighterState.Hitstun);
         }
@@ -318,7 +446,9 @@ namespace AnimeAggressors
         {
             _grabbed = true;
             _grabbedBy = by;
-            _rb.velocity = Vector3.zero;
+            MoveRunner.Cancel();
+            _rb.linearVelocity = Vector3.zero;
+            _rb.isKinematic = true;
             StateMachine.Enter(FighterState.GrabHold);
         }
 
@@ -326,37 +456,47 @@ namespace AnimeAggressors
         {
             _grabbed = false;
             _grabbedBy = null;
+            _rb.isKinematic = false;
+            StateMachine.Enter(FighterState.Idle);
         }
 
         public void OnThrown(FighterController by)
         {
             _grabbed = false;
             _grabbedBy = null;
+            _rb.isKinematic = false;
             var throwMove = by.GetMove("throw");
             if (throwMove != null)
-                HitResolver.Resolve(by, this, throwMove, out var tag);
-            LastHitResult = "THROW";
+                HitResolver.Resolve(by, this, throwMove, out _);
+            by.LastHitResult = "THROW";
+            LastHitResult = "THROWN";
         }
 
         public void ResetFighter(Vector3 pos)
         {
             transform.position = pos;
-            _rb.velocity = Vector3.zero;
+            _rb.linearVelocity = Vector3.zero;
             DamagePercent = 0f;
             ComboCount = 0;
             Shield.ResetShield();
             Aura.Clear();
             Grab.Clear();
+            _grabbed = false;
+            _grabbedBy = null;
+            _rb.isKinematic = false;
             _hitstunTimer = 0f;
+            _hitstopTimer = 0f;
+            _jumpsUsed = 0;
             MoveRunner.Cancel();
+            _hitbox.SetActiveHitbox(false);
             StateMachine.Enter(FighterState.Idle);
             LastHitResult = "RESET";
         }
 
-        public void SetDebugBoxes(bool hit, bool hurt)
+        public void SetOverlay(bool hitboxes, bool hurtboxes)
         {
-            if (hit && MoveRunner.IsActivePhase) _hitbox.SetActiveHitbox(true);
-            _hurtbox.SetDebugVisible(hurt);
+            _hitbox.SetDebugVisible(hitboxes);
+            _hurtbox.SetDebugVisible(hurtboxes);
         }
     }
 }
