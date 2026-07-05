@@ -16,15 +16,42 @@ const FIGHTERS = [
 ];
 
 const REQUIRED_MOVE_IDS = [
-  "jab", "forward_tilt", "heavy_attack", "neutral_special", "up_special",
-  "down_special", "aerial_neutral", "grab", "throw", "aura_charge", "aura_burst",
+  "jab_1", "jab_2", "jab_finisher", "forward_tilt", "up_tilt", "down_tilt",
+  "dash_attack", "heavy_attack", "neutral_air", "forward_air", "up_air", "down_air",
+  "neutral_special_projectile", "side_special", "up_special_recovery", "down_special",
+  "grab", "throw_forward", "throw_back", "throw_up", "throw_down",
+  "aura_charge", "aura_burst",
 ];
 
 const REQUIRED_MOVE_FIELDS = [
-  "move_id", "fighter_id", "input_command", "grounded_air", "startup_frames",
-  "active_frames", "recovery_frames", "hitboxes", "damage", "angle_deg",
-  "base_knockback", "knockback_growth", "training_display_name",
+  "move_id", "fighter_id", "move_type", "direction", "input_command", "grounded_air",
+  "startup_frames", "active_frames", "recovery_frames", "hitboxes", "damage", "angle_deg",
+  "base_knockback", "knockback_growth", "shield_damage", "shield_stun_frames", "hitstop_frames",
+  "aura_scaling", "feedback", "training_display_name",
 ];
+
+const COMBAT_DOCS = [
+  "game-godot/docs/COMBAT_ARCHITECTURE.md",
+  "game-godot/docs/AURA_SYSTEM.md",
+  "game-godot/docs/PROJECTILE_SYSTEM.md",
+  "game-godot/docs/DIRECTIONAL_THROWS.md",
+  "game-godot/docs/FIGHTER_IDENTITY_MATRIX.md",
+];
+
+const COMBAT_SCRIPTS = [
+  "scripts/combat/aura_scaler.gd",
+  "scripts/combat/projectile.gd",
+  "scripts/combat/projectile_spawner.gd",
+  "scripts/combat/combat_feedback.gd",
+  "scripts/combat/throw_resolver.gd",
+  "scenes/combat/Projectile2D.tscn",
+  "data/combat/feedback_profiles.json",
+];
+
+const MELEE_MOVE_TYPES = new Set(["melee", "grab", "burst", "field", "trap", "counter"]);
+const PROJECTILE_MOVE_TYPES = new Set(["projectile"]);
+const THROW_MOVE_TYPES = new Set(["throw"]);
+const DAMAGING_MOVE_TYPES = new Set(["melee", "projectile", "throw", "burst", "field", "trap", "counter"]);
 
 const FIGHTER_FIELDS = [
   "id", "displayName", "archetype", "element", "weight", "runSpeed", "dashSpeed",
@@ -219,28 +246,83 @@ for (const id of FIGHTERS) {
 }
 ok("fighter data model");
 
-// Moves
+// Moves — schema v2
+function float(v) { return Number(v) || 0; }
+const fighterSignatures = {};
 for (const id of FIGHTERS) {
   const mp = path.join(godotRoot, "data/moves", `${id}.json`);
   if (!fs.existsSync(mp)) { fail(`missing moves ${id}`); continue; }
   const manifest = JSON.parse(fs.readFileSync(mp, "utf8"));
+  if (manifest.schema_version !== 2) fail(`fighter ${id} move manifest not schema_version 2`);
   const ids = manifest.moves?.map((m) => m.move_id) ?? [];
   for (const mid of REQUIRED_MOVE_IDS) {
     if (!ids.includes(mid)) fail(`fighter ${id} missing move ${mid}`);
   }
+  const sigParts = [];
   for (const m of manifest.moves ?? []) {
     for (const f of REQUIRED_MOVE_FIELDS) {
       if (m[f] === undefined) fail(`fighter ${id} move ${m.move_id} missing ${f}`);
     }
-    if (!Array.isArray(m.hitboxes) || m.hitboxes.length === 0) {
-      fail(`fighter ${id} move ${m.move_id} lacks hitbox data`);
+    const mt = m.move_type ?? "melee";
+    const needsHitbox = mt === "melee" || mt === "grab" || mt === "burst" || mt === "field" || mt === "trap";
+    if (needsHitbox && float(m.damage) > 0) {
+      if (!Array.isArray(m.hitboxes) || m.hitboxes.length === 0) {
+        fail(`fighter ${id} move ${m.move_id} lacks hitbox data`);
+      }
+    }
+    if (PROJECTILE_MOVE_TYPES.has(mt) && !m.projectile) {
+      fail(`fighter ${id} projectile move ${m.move_id} lacks projectile config`);
+    }
+    if (THROW_MOVE_TYPES.has(mt) && !m.throw) {
+      fail(`fighter ${id} throw move ${m.move_id} lacks throw config`);
+    }
+    if (DAMAGING_MOVE_TYPES.has(mt) && float(m.damage) > 0 && !m.feedback?.tier) {
+      fail(`fighter ${id} move ${m.move_id} lacks feedback config`);
+    }
+    if (m.move_id !== "aura_charge" && Object.keys(m.aura_scaling ?? {}).length === 0) {
+      fail(`fighter ${id} move ${m.move_id} missing aura_scaling`);
+    }
+    if (m.move_id !== "aura_charge") {
+      const scaling = m.aura_scaling ?? {};
+      let nonDamageOnly = false;
+      for (const tier of Object.values(scaling)) {
+        for (const k of Object.keys(tier)) {
+          if (!["damage_mult", "knockback_mult"].includes(k)) nonDamageOnly = true;
+        }
+      }
+      if (!nonDamageOnly && Object.keys(scaling).length > 0) {
+        fail(`fighter ${id} move ${m.move_id} aura_scaling is damage-only`);
+      }
     }
     for (const phase of ["startup_frames", "active_frames", "recovery_frames"]) {
       if (typeof m[phase] !== "number") fail(`fighter ${id} move ${m.move_id} lacks ${phase}`);
     }
+    sigParts.push(`${m.move_id}:${m.damage}:${m.angle_deg}:${JSON.stringify(m.projectile ?? {})}:${JSON.stringify(m.throw ?? {})}`);
   }
+  fighterSignatures[id] = sigParts.sort().join("|");
 }
-ok("move manifests");
+const sigValues = Object.values(fighterSignatures);
+if (new Set(sigValues).size < FIGHTERS.length) {
+  fail("fighters share identical move identity — each fighter must have unique combat data");
+}
+ok("move manifests schema v2");
+
+// Combat enhancement modules (scripts/docs only — fighter integration checked later)
+for (const rel of COMBAT_SCRIPTS) {
+  if (!fs.existsSync(path.join(godotRoot, rel))) fail(`missing combat module ${rel}`);
+}
+for (const d of COMBAT_DOCS) {
+  if (!fs.existsSync(path.join(root, d))) fail(`missing combat doc ${d}`);
+}
+const auraSrc = readGodot("scripts/combat/aura_scaler.gd");
+const projSrc = readGodot("scripts/combat/projectile.gd");
+const throwSrc = readGodot("scripts/combat/throw_resolver.gd");
+const fbSrc = readGodot("scripts/combat/combat_feedback.gd");
+if (!auraSrc.includes("aura_level")) fail("aura_scaler missing aura_level");
+if (!projSrc.includes("Area2D")) fail("projectile must use Area2D");
+if (!throwSrc.includes("read_throw_direction")) fail("throw_resolver missing direction reading");
+if (!fbSrc.includes("feedback_tier")) fail("combat_feedback missing tier handling");
+ok("combat enhancement modules");
 
 if (!fs.existsSync(path.join(godotRoot, "data/moves/move_schema.json"))) fail("move_schema.json missing");
 ok("move schema");
@@ -281,7 +363,13 @@ if (!fighterSrc.includes("execute_throw") || !fighterSrc.includes("GRAB_HOLD")) 
 if (!fighterSrc.includes("aura_burst") || !fighterSrc.includes("AURA_CHARGE")) {
   fail("aura charge/burst missing in fighter.gd");
 }
-ok("hit resolver + grab + aura");
+if (!fighterSrc.includes("ProjectileSpawner") || !fighterSrc.includes("ThrowResolver")) {
+  fail("fighter.gd missing combat enhancement integration (ProjectileSpawner/ThrowResolver)");
+}
+if (!fighterSrc.includes("AuraScaler")) {
+  fail("fighter.gd missing AuraScaler integration");
+}
+ok("hit resolver + grab + aura + combat enhancement");
 
 // PR #47 runtime hardening gates
 const battleSrc = readGodot("scripts/battle/battle_scene.gd");
@@ -363,7 +451,7 @@ ok("proxy animations");
 // Training controls
 const trainBattle = readGodot("scripts/training/training_battle_scene.gd");
 const trainMenu = readGodot("scripts/training/training_menu_scene.gd");
-const trainChecks = ["reset_position", "reset_damage", "fill_aura", "clear_aura", "F2", "F1"];
+const trainChecks = ["reset_position", "reset_damage", "fill_aura", "clear_aura", "F2", "F1", "step_frame", "freeze"];
 for (const c of trainChecks) {
   if (!trainBattle.includes(c)) fail(`training battle missing control ${c}`);
 }
@@ -373,6 +461,10 @@ ok("training scene controls");
 // Debug HUD
 const hudSrc = readGodot("scripts/debug/debug_hud.gd");
 if (!hudSrc.includes("state") || !hudSrc.includes("move")) fail("debug HUD missing state/move display");
+const TRAIN_HUD_FIELDS = ["aura_level", "projectile_count", "throw_direction", "hitstop", "element_effect", "combo_count"];
+for (const f of TRAIN_HUD_FIELDS) {
+  if (!hudSrc.includes(f)) fail(`debug HUD missing training field ${f}`);
+}
 ok("debug HUD");
 
 // Battle sim

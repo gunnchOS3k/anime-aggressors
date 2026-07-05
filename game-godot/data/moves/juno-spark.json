@@ -1,15 +1,18 @@
 {
   "fighter_id": "juno-spark",
-  "schema_version": 1,
+  "schema_version": 2,
+  "combat_tag": "speed_chain",
   "moves": [
     {
-      "move_id": "jab",
+      "move_id": "jab_1",
       "fighter_id": "juno-spark",
+      "move_type": "melee",
+      "direction": "neutral",
       "input_command": "attack_neutral",
       "grounded_air": "grounded",
-      "startup_frames": 4,
+      "startup_frames": 3,
       "active_frames": 3,
-      "recovery_frames": 10,
+      "recovery_frames": 8,
       "hitboxes": [
         {
           "offset_x": 36,
@@ -18,7 +21,85 @@
           "height": 32
         }
       ],
-      "hurtbox_changes": [],
+      "damage": 2.3000000000000003,
+      "angle_deg": 45,
+      "base_knockback": 3,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "light",
+        "hitstop_frames": 3,
+        "camera_event": "shake_light",
+        "vfx_event": "volt_spark",
+        "sfx_event": "volt_hit_light",
+        "screen_flash": false
+      },
+      "training_display_name": "Jab 1",
+      "combat_tag": "speed_chain",
+      "element_effect": {
+        "type": "volt",
+        "effect": "chain_stun",
+        "strength": 1
+      },
+      "cancel_windows": [
+        {
+          "start": 5,
+          "end": 10,
+          "requires": "hit_confirm"
+        }
+      ]
+    },
+    {
+      "move_id": "jab_2",
+      "fighter_id": "juno-spark",
+      "move_type": "melee",
+      "direction": "neutral",
+      "input_command": "attack_neutral",
+      "grounded_air": "grounded",
+      "startup_frames": 3,
+      "active_frames": 3,
+      "recovery_frames": 8,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
       "damage": 2.7600000000000002,
       "angle_deg": 45,
       "base_knockback": 4,
@@ -26,24 +107,137 @@
       "shield_damage": 3,
       "shield_stun_frames": 6,
       "hitstop_frames": 3,
-      "self_movement": {
-        "x": 0,
-        "y": 0
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
       },
-      "cancel_windows": [],
-      "aura_gain": 2,
-      "meter_cost": 0,
-      "armor_frames": 0,
-      "invulnerability_frames": 0,
-      "animation_clip": "jab",
-      "vfx_event": null,
-      "sfx_event": null,
-      "camera_event": null,
-      "training_display_name": "Jab"
+      "feedback": {
+        "tier": "light",
+        "hitstop_frames": 3,
+        "camera_event": "shake_light",
+        "vfx_event": "volt_spark",
+        "sfx_event": "volt_hit_light",
+        "screen_flash": false
+      },
+      "training_display_name": "Jab 2",
+      "combat_tag": "speed_chain",
+      "element_effect": {
+        "type": "volt",
+        "effect": "chain_stun",
+        "strength": 1
+      }
+    },
+    {
+      "move_id": "jab_finisher",
+      "fighter_id": "juno-spark",
+      "move_type": "melee",
+      "direction": "neutral",
+      "input_command": "attack_neutral",
+      "grounded_air": "grounded",
+      "startup_frames": 4,
+      "active_frames": 3,
+      "recovery_frames": 12,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "damage": 4.6000000000000005,
+      "angle_deg": 45,
+      "base_knockback": 7,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2,
+          "extra_active_frames": 1
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5,
+          "cancel_windows": [
+            {
+              "start": 6,
+              "end": 12
+            }
+          ]
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 2
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "volt_jab_fin",
+        "sfx_event": "volt_jab_fin_sfx",
+        "screen_flash": false
+      },
+      "training_display_name": "Jab Finisher",
+      "combat_tag": "speed_chain",
+      "element_effect": {
+        "type": "volt",
+        "effect": "chain_stun",
+        "strength": 1
+      }
     },
     {
       "move_id": "forward_tilt",
       "fighter_id": "juno-spark",
+      "move_type": "melee",
+      "direction": "forward",
       "input_command": "attack_forward",
       "grounded_air": "grounded",
       "startup_frames": 5,
@@ -57,7 +251,6 @@
           "height": 32
         }
       ],
-      "hurtbox_changes": [],
       "damage": 6.44,
       "angle_deg": 45,
       "base_knockback": 8,
@@ -65,24 +258,274 @@
       "shield_damage": 3,
       "shield_stun_frames": 6,
       "hitstop_frames": 3,
-      "self_movement": {
-        "x": 0,
-        "y": 0
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
       },
-      "cancel_windows": [],
-      "aura_gain": 2,
-      "meter_cost": 0,
-      "armor_frames": 0,
-      "invulnerability_frames": 0,
-      "animation_clip": "forward_tilt",
-      "vfx_event": null,
-      "sfx_event": null,
-      "camera_event": null,
-      "training_display_name": "Forward Tilt"
+      "feedback": {
+        "tier": "light",
+        "hitstop_frames": 3,
+        "camera_event": "shake_light",
+        "vfx_event": "volt_spark",
+        "sfx_event": "volt_hit_light",
+        "screen_flash": false
+      },
+      "training_display_name": "Forward Tilt",
+      "combat_tag": "speed_chain",
+      "element_effect": {
+        "type": "volt",
+        "effect": "chain_stun",
+        "strength": 1
+      }
+    },
+    {
+      "move_id": "up_tilt",
+      "fighter_id": "juno-spark",
+      "move_type": "melee",
+      "direction": "up",
+      "input_command": "attack_up",
+      "grounded_air": "grounded",
+      "startup_frames": 5,
+      "active_frames": 3,
+      "recovery_frames": 11,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "damage": 5.5200000000000005,
+      "angle_deg": 75,
+      "base_knockback": 7,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "light",
+        "hitstop_frames": 3,
+        "camera_event": "shake_light",
+        "vfx_event": "volt_spark",
+        "sfx_event": "volt_hit_light",
+        "screen_flash": false
+      },
+      "training_display_name": "Up Tilt",
+      "combat_tag": "speed_chain",
+      "element_effect": {
+        "type": "volt",
+        "effect": "chain_stun",
+        "strength": 1
+      }
+    },
+    {
+      "move_id": "down_tilt",
+      "fighter_id": "juno-spark",
+      "move_type": "melee",
+      "direction": "down",
+      "input_command": "attack_down",
+      "grounded_air": "grounded",
+      "startup_frames": 4,
+      "active_frames": 3,
+      "recovery_frames": 10,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "damage": 4.6000000000000005,
+      "angle_deg": 280,
+      "base_knockback": 6,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "light",
+        "hitstop_frames": 3,
+        "camera_event": "shake_light",
+        "vfx_event": "volt_spark",
+        "sfx_event": "volt_hit_light",
+        "screen_flash": false
+      },
+      "training_display_name": "Down Tilt",
+      "combat_tag": "speed_chain",
+      "element_effect": {
+        "type": "volt",
+        "effect": "chain_stun",
+        "strength": 1
+      }
+    },
+    {
+      "move_id": "dash_attack",
+      "fighter_id": "juno-spark",
+      "move_type": "melee",
+      "direction": "forward",
+      "input_command": "attack_dash",
+      "grounded_air": "grounded",
+      "startup_frames": 6,
+      "active_frames": 4,
+      "recovery_frames": 16,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "damage": 7.36,
+      "angle_deg": 45,
+      "base_knockback": 9,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "light",
+        "hitstop_frames": 3,
+        "camera_event": "shake_light",
+        "vfx_event": "volt_spark",
+        "sfx_event": "volt_hit_light",
+        "screen_flash": false
+      },
+      "training_display_name": "Dash Attack",
+      "combat_tag": "speed_chain",
+      "element_effect": {
+        "type": "volt",
+        "effect": "chain_stun",
+        "strength": 1
+      }
     },
     {
       "move_id": "heavy_attack",
       "fighter_id": "juno-spark",
+      "move_type": "melee",
+      "direction": "forward",
       "input_command": "attack_heavy",
       "grounded_air": "grounded",
       "startup_frames": 8,
@@ -96,7 +539,6 @@
           "height": 32
         }
       ],
-      "hurtbox_changes": [],
       "damage": 11.040000000000001,
       "angle_deg": 30,
       "base_knockback": 14,
@@ -104,141 +546,65 @@
       "shield_damage": 3,
       "shield_stun_frames": 6,
       "hitstop_frames": 3,
-      "self_movement": {
-        "x": 0,
-        "y": 0
-      },
-      "cancel_windows": [],
-      "aura_gain": 2,
-      "meter_cost": 0,
-      "armor_frames": 0,
-      "invulnerability_frames": 0,
-      "animation_clip": "heavy_attack",
-      "vfx_event": null,
-      "sfx_event": null,
-      "camera_event": null,
-      "training_display_name": "Heavy Attack"
-    },
-    {
-      "move_id": "neutral_special",
-      "fighter_id": "juno-spark",
-      "input_command": "special_neutral",
-      "grounded_air": "grounded",
-      "startup_frames": 6,
-      "active_frames": 3,
-      "recovery_frames": 16,
-      "hitboxes": [
-        {
-          "offset_x": 36,
-          "offset_y": -8,
-          "width": 40,
-          "height": 32
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2,
+          "extra_active_frames": 1
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5,
+          "cancel_windows": [
+            {
+              "start": 6,
+              "end": 12
+            }
+          ]
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 2
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
         }
-      ],
-      "hurtbox_changes": [],
-      "damage": 9.200000000000001,
-      "angle_deg": 45,
-      "base_knockback": 10,
-      "knockback_growth": 1.1,
-      "shield_damage": 3,
-      "shield_stun_frames": 6,
-      "hitstop_frames": 3,
-      "self_movement": {
-        "x": 0,
-        "y": 0
       },
-      "cancel_windows": [],
-      "aura_gain": 2,
-      "meter_cost": 0,
-      "armor_frames": 0,
-      "invulnerability_frames": 0,
-      "animation_clip": "neutral_special",
-      "vfx_event": null,
-      "sfx_event": null,
-      "camera_event": null,
-      "training_display_name": "Neutral Special"
+      "feedback": {
+        "tier": "heavy",
+        "hitstop_frames": 8,
+        "camera_event": "shake_heavy",
+        "vfx_event": "volt_heavy",
+        "sfx_event": "volt_heavy_sfx",
+        "screen_flash": false
+      },
+      "training_display_name": "Heavy Attack",
+      "combat_tag": "speed_chain",
+      "element_effect": {
+        "type": "volt",
+        "effect": "chain_stun",
+        "strength": 1
+      }
     },
     {
-      "move_id": "up_special",
+      "move_id": "neutral_air",
       "fighter_id": "juno-spark",
-      "input_command": "special_up",
-      "grounded_air": "both",
-      "startup_frames": 4,
-      "active_frames": 3,
-      "recovery_frames": 10,
-      "hitboxes": [
-        {
-          "offset_x": 36,
-          "offset_y": -8,
-          "width": 40,
-          "height": 32
-        }
-      ],
-      "hurtbox_changes": [],
-      "damage": 7.36,
-      "angle_deg": 80,
-      "base_knockback": 12,
-      "knockback_growth": 1.1,
-      "shield_damage": 3,
-      "shield_stun_frames": 6,
-      "hitstop_frames": 3,
-      "self_movement": {
-        "x": 0,
-        "y": -320
-      },
-      "cancel_windows": [],
-      "aura_gain": 2,
-      "meter_cost": 0,
-      "armor_frames": 0,
-      "invulnerability_frames": 0,
-      "animation_clip": "up_special",
-      "vfx_event": null,
-      "sfx_event": null,
-      "camera_event": null,
-      "training_display_name": "Up Special / Recovery"
-    },
-    {
-      "move_id": "down_special",
-      "fighter_id": "juno-spark",
-      "input_command": "special_down",
-      "grounded_air": "grounded",
-      "startup_frames": 4,
-      "active_frames": 3,
-      "recovery_frames": 10,
-      "hitboxes": [
-        {
-          "offset_x": 36,
-          "offset_y": -8,
-          "width": 40,
-          "height": 32
-        }
-      ],
-      "hurtbox_changes": [],
-      "damage": 8.280000000000001,
-      "angle_deg": 270,
-      "base_knockback": 9,
-      "knockback_growth": 1.1,
-      "shield_damage": 3,
-      "shield_stun_frames": 6,
-      "hitstop_frames": 3,
-      "self_movement": {
-        "x": 0,
-        "y": 0
-      },
-      "cancel_windows": [],
-      "aura_gain": 2,
-      "meter_cost": 0,
-      "armor_frames": 0,
-      "invulnerability_frames": 0,
-      "animation_clip": "down_special",
-      "vfx_event": null,
-      "sfx_event": null,
-      "camera_event": null,
-      "training_display_name": "Down Special"
-    },
-    {
-      "move_id": "aerial_neutral",
-      "fighter_id": "juno-spark",
+      "move_type": "melee",
+      "direction": "air_neutral",
       "input_command": "attack_air_neutral",
       "grounded_air": "air",
       "startup_frames": 4,
@@ -252,7 +618,6 @@
           "height": 32
         }
       ],
-      "hurtbox_changes": [],
       "damage": 5.5200000000000005,
       "angle_deg": 45,
       "base_knockback": 7,
@@ -260,65 +625,60 @@
       "shield_damage": 3,
       "shield_stun_frames": 6,
       "hitstop_frames": 3,
-      "self_movement": {
-        "x": 0,
-        "y": 0
-      },
-      "cancel_windows": [],
-      "aura_gain": 2,
-      "meter_cost": 0,
-      "armor_frames": 0,
-      "invulnerability_frames": 0,
-      "animation_clip": "aerial_neutral",
-      "vfx_event": null,
-      "sfx_event": null,
-      "camera_event": null,
-      "training_display_name": "Aerial Neutral"
-    },
-    {
-      "move_id": "grab",
-      "fighter_id": "juno-spark",
-      "input_command": "grab",
-      "grounded_air": "grounded",
-      "startup_frames": 7,
-      "active_frames": 2,
-      "recovery_frames": 20,
-      "hitboxes": [
-        {
-          "offset_x": 36,
-          "offset_y": -8,
-          "width": 40,
-          "height": 32
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
         }
-      ],
-      "hurtbox_changes": [],
-      "damage": 0,
-      "angle_deg": 45,
-      "base_knockback": 0,
-      "knockback_growth": 1.1,
-      "shield_damage": 3,
-      "shield_stun_frames": 6,
-      "hitstop_frames": 3,
-      "self_movement": {
-        "x": 0,
-        "y": 0
       },
-      "cancel_windows": [],
-      "aura_gain": 2,
-      "meter_cost": 0,
-      "armor_frames": 0,
-      "invulnerability_frames": 0,
-      "animation_clip": "grab",
-      "vfx_event": null,
-      "sfx_event": null,
-      "camera_event": null,
-      "training_display_name": "Grab (placeholder)"
+      "feedback": {
+        "tier": "light",
+        "hitstop_frames": 3,
+        "camera_event": "shake_light",
+        "vfx_event": "volt_spark",
+        "sfx_event": "volt_hit_light",
+        "screen_flash": false
+      },
+      "training_display_name": "Neutral Air",
+      "combat_tag": "speed_chain",
+      "element_effect": {
+        "type": "volt",
+        "effect": "chain_stun",
+        "strength": 1
+      }
     },
     {
-      "move_id": "throw",
+      "move_id": "forward_air",
       "fighter_id": "juno-spark",
-      "input_command": "throw_forward",
-      "grounded_air": "grounded",
+      "move_type": "melee",
+      "direction": "air_forward",
+      "input_command": "attack_air_forward",
+      "grounded_air": "air",
       "startup_frames": 4,
       "active_frames": 3,
       "recovery_frames": 10,
@@ -330,37 +690,70 @@
           "height": 32
         }
       ],
-      "hurtbox_changes": [],
-      "damage": 5.5200000000000005,
-      "angle_deg": 45,
-      "base_knockback": 16,
+      "damage": 6.44,
+      "angle_deg": 30,
+      "base_knockback": 8,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
       "hitstop_frames": 3,
-      "self_movement": {
-        "x": 0,
-        "y": 0
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
       },
-      "cancel_windows": [],
-      "aura_gain": 2,
-      "meter_cost": 0,
-      "armor_frames": 0,
-      "invulnerability_frames": 0,
-      "animation_clip": "throw",
-      "vfx_event": null,
-      "sfx_event": null,
-      "camera_event": null,
-      "training_display_name": "Throw (placeholder)"
+      "feedback": {
+        "tier": "light",
+        "hitstop_frames": 3,
+        "camera_event": "shake_light",
+        "vfx_event": "volt_spark",
+        "sfx_event": "volt_hit_light",
+        "screen_flash": false
+      },
+      "training_display_name": "Forward Air",
+      "combat_tag": "speed_chain",
+      "element_effect": {
+        "type": "volt",
+        "effect": "chain_stun",
+        "strength": 1
+      }
     },
     {
-      "move_id": "aura_charge",
+      "move_id": "up_air",
       "fighter_id": "juno-spark",
-      "input_command": "aura_charge",
-      "grounded_air": "both",
-      "startup_frames": 0,
-      "active_frames": 0,
-      "recovery_frames": 0,
+      "move_type": "melee",
+      "direction": "air_up",
+      "input_command": "attack_air_up",
+      "grounded_air": "air",
+      "startup_frames": 4,
+      "active_frames": 3,
+      "recovery_frames": 10,
       "hitboxes": [
         {
           "offset_x": 36,
@@ -369,7 +762,493 @@
           "height": 32
         }
       ],
-      "hurtbox_changes": [],
+      "damage": 5.5200000000000005,
+      "angle_deg": 80,
+      "base_knockback": 7,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "light",
+        "hitstop_frames": 3,
+        "camera_event": "shake_light",
+        "vfx_event": "volt_spark",
+        "sfx_event": "volt_hit_light",
+        "screen_flash": false
+      },
+      "training_display_name": "Up Air",
+      "combat_tag": "speed_chain",
+      "element_effect": {
+        "type": "volt",
+        "effect": "chain_stun",
+        "strength": 1
+      }
+    },
+    {
+      "move_id": "down_air",
+      "fighter_id": "juno-spark",
+      "move_type": "melee",
+      "direction": "air_down",
+      "input_command": "attack_air_down",
+      "grounded_air": "air",
+      "startup_frames": 4,
+      "active_frames": 3,
+      "recovery_frames": 10,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "damage": 7.36,
+      "angle_deg": 270,
+      "base_knockback": 9,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "volt_dair",
+        "sfx_event": "volt_dair_sfx",
+        "screen_flash": false
+      },
+      "training_display_name": "Down Air",
+      "combat_tag": "speed_chain",
+      "element_effect": {
+        "type": "volt",
+        "effect": "chain_stun",
+        "strength": 1
+      }
+    },
+    {
+      "move_id": "neutral_special_projectile",
+      "fighter_id": "juno-spark",
+      "move_type": "projectile",
+      "direction": "neutral",
+      "input_command": "special_neutral",
+      "grounded_air": "both",
+      "startup_frames": 6,
+      "active_frames": 2,
+      "recovery_frames": 16,
+      "hitboxes": [],
+      "damage": 7.36,
+      "angle_deg": 45,
+      "base_knockback": 8,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2,
+          "extra_active_frames": 1
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5,
+          "cancel_windows": [
+            {
+              "start": 6,
+              "end": 12
+            }
+          ]
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 2
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "volt_proj",
+        "sfx_event": "volt_proj_sfx",
+        "screen_flash": false
+      },
+      "training_display_name": "Volt Shot",
+      "combat_tag": "speed_chain",
+      "element_effect": {
+        "type": "volt",
+        "effect": "chain_stun",
+        "strength": 1
+      },
+      "projectile": {
+        "spawn_frame": 6,
+        "type": "volt_needle",
+        "offset_x": 40,
+        "offset_y": -12,
+        "angle_deg": 0,
+        "speed_by_aura": [
+          520,
+          580,
+          640,
+          720
+        ],
+        "damage_by_aura": [
+          7.36,
+          8.280000000000001,
+          9.200000000000001,
+          11.040000000000001
+        ],
+        "size_by_aura": [
+          14,
+          16,
+          20,
+          24
+        ],
+        "lifetime_frames_by_aura": [
+          72,
+          84,
+          96,
+          108
+        ],
+        "behavior_by_aura": [
+          "straight",
+          "straight",
+          "straight",
+          "beam"
+        ]
+      }
+    },
+    {
+      "move_id": "side_special",
+      "fighter_id": "juno-spark",
+      "move_type": "field",
+      "direction": "forward",
+      "input_command": "special_forward",
+      "grounded_air": "grounded",
+      "startup_frames": 7,
+      "active_frames": 3,
+      "recovery_frames": 18,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "damage": 8.280000000000001,
+      "angle_deg": 45,
+      "base_knockback": 10,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2,
+          "extra_active_frames": 1
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5,
+          "cancel_windows": [
+            {
+              "start": 6,
+              "end": 12
+            }
+          ]
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 2
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "light",
+        "hitstop_frames": 3,
+        "camera_event": "shake_light",
+        "vfx_event": "volt_spark",
+        "sfx_event": "volt_hit_light",
+        "screen_flash": false
+      },
+      "training_display_name": "Flash Circuit Side",
+      "combat_tag": "speed_chain",
+      "element_effect": {
+        "type": "volt",
+        "effect": "chain_stun",
+        "strength": 1
+      }
+    },
+    {
+      "move_id": "up_special_recovery",
+      "fighter_id": "juno-spark",
+      "move_type": "movement",
+      "direction": "up",
+      "input_command": "special_up",
+      "grounded_air": "both",
+      "startup_frames": 6,
+      "active_frames": 3,
+      "recovery_frames": 20,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "damage": 7.36,
+      "angle_deg": 80,
+      "base_knockback": 12,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "light",
+        "hitstop_frames": 3,
+        "camera_event": "shake_light",
+        "vfx_event": "volt_spark",
+        "sfx_event": "volt_hit_light",
+        "screen_flash": false
+      },
+      "training_display_name": "Up Special / Recovery",
+      "combat_tag": "speed_chain",
+      "element_effect": {
+        "type": "volt",
+        "effect": "chain_stun",
+        "strength": 1
+      },
+      "self_movement": {
+        "x": 0,
+        "y": -320
+      }
+    },
+    {
+      "move_id": "down_special",
+      "fighter_id": "juno-spark",
+      "move_type": "trap",
+      "direction": "down",
+      "input_command": "special_down",
+      "grounded_air": "grounded",
+      "startup_frames": 8,
+      "active_frames": 3,
+      "recovery_frames": 22,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "damage": 8.280000000000001,
+      "angle_deg": 270,
+      "base_knockback": 9,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2,
+          "extra_active_frames": 1
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5,
+          "cancel_windows": [
+            {
+              "start": 6,
+              "end": 12
+            }
+          ]
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 2
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "light",
+        "hitstop_frames": 3,
+        "camera_event": "shake_light",
+        "vfx_event": "volt_spark",
+        "sfx_event": "volt_hit_light",
+        "screen_flash": false
+      },
+      "training_display_name": "Down Special",
+      "combat_tag": "speed_chain",
+      "element_effect": {
+        "type": "volt",
+        "effect": "chain_stun",
+        "strength": 1
+      }
+    },
+    {
+      "move_id": "grab",
+      "fighter_id": "juno-spark",
+      "move_type": "grab",
+      "direction": "neutral",
+      "input_command": "grab",
+      "grounded_air": "grounded",
+      "startup_frames": 7,
+      "active_frames": 2,
+      "recovery_frames": 20,
+      "hitboxes": [
+        {
+          "offset_x": 28,
+          "offset_y": -4,
+          "width": 48,
+          "height": 36
+        }
+      ],
       "damage": 0,
       "angle_deg": 45,
       "base_knockback": 0,
@@ -377,24 +1256,411 @@
       "shield_damage": 3,
       "shield_stun_frames": 6,
       "hitstop_frames": 3,
-      "self_movement": {
-        "x": 0,
-        "y": 0
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
       },
-      "cancel_windows": [],
-      "aura_gain": 0,
-      "meter_cost": 0,
-      "armor_frames": 0,
-      "invulnerability_frames": 0,
-      "animation_clip": "aura_charge",
-      "vfx_event": null,
-      "sfx_event": null,
-      "camera_event": null,
-      "training_display_name": "Aura Charge"
+      "feedback": {
+        "tier": "light",
+        "hitstop_frames": 3,
+        "camera_event": "shake_light",
+        "vfx_event": "volt_spark",
+        "sfx_event": "volt_hit_light",
+        "screen_flash": false
+      },
+      "training_display_name": "Grab",
+      "combat_tag": "speed_chain"
+    },
+    {
+      "move_id": "throw_forward",
+      "fighter_id": "juno-spark",
+      "move_type": "throw",
+      "direction": "forward",
+      "input_command": "throw_forward",
+      "grounded_air": "both",
+      "startup_frames": 4,
+      "active_frames": 2,
+      "recovery_frames": 14,
+      "hitboxes": [],
+      "damage": 4.784000000000001,
+      "angle_deg": 40,
+      "base_knockback": 13,
+      "knockback_growth": 1.15,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5,
+          "knockback_mult": 1.08
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8,
+          "knockback_mult": 1.15
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "volt_throw",
+        "sfx_event": "volt_throw_sfx",
+        "screen_flash": false
+      },
+      "training_display_name": "Electric Palm Launch",
+      "combat_tag": "speed_chain",
+      "throw": {
+        "direction": "forward",
+        "hold_frames": 0,
+        "release_frame": 2,
+        "victim_offset": {
+          "x": 20,
+          "y": -8
+        },
+        "damage": 4.784000000000001,
+        "angle_deg": 40,
+        "base_knockback": 13,
+        "knockback_growth": 1.15,
+        "combo_role": "positioning",
+        "role": "edge_pressure"
+      },
+      "element_effect": {
+        "type": "volt",
+        "effect": "chain_stun",
+        "strength": 1
+      }
+    },
+    {
+      "move_id": "throw_back",
+      "fighter_id": "juno-spark",
+      "move_type": "throw",
+      "direction": "back",
+      "input_command": "throw_back",
+      "grounded_air": "both",
+      "startup_frames": 4,
+      "active_frames": 2,
+      "recovery_frames": 14,
+      "hitboxes": [],
+      "damage": 6.256000000000001,
+      "angle_deg": 150,
+      "base_knockback": 17,
+      "knockback_growth": 1.15,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5,
+          "knockback_mult": 1.08
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8,
+          "knockback_mult": 1.15
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "volt_throw",
+        "sfx_event": "volt_throw_sfx",
+        "screen_flash": false
+      },
+      "training_display_name": "Blink-Behind Kick",
+      "combat_tag": "speed_chain",
+      "throw": {
+        "direction": "back",
+        "hold_frames": 0,
+        "release_frame": 2,
+        "victim_offset": {
+          "x": -20,
+          "y": -8
+        },
+        "damage": 6.256000000000001,
+        "angle_deg": 150,
+        "base_knockback": 17,
+        "knockback_growth": 1.15,
+        "combo_role": "kill",
+        "role": "reversal"
+      },
+      "element_effect": {
+        "type": "volt",
+        "effect": "chain_stun",
+        "strength": 1
+      }
+    },
+    {
+      "move_id": "throw_up",
+      "fighter_id": "juno-spark",
+      "move_type": "throw",
+      "direction": "up",
+      "input_command": "throw_up",
+      "grounded_air": "both",
+      "startup_frames": 4,
+      "active_frames": 2,
+      "recovery_frames": 14,
+      "hitboxes": [],
+      "damage": 5.5200000000000005,
+      "angle_deg": 85,
+      "base_knockback": 15,
+      "knockback_growth": 1.15,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5,
+          "knockback_mult": 1.08
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8,
+          "knockback_mult": 1.15
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "volt_throw",
+        "sfx_event": "volt_throw_sfx",
+        "screen_flash": false
+      },
+      "training_display_name": "Lightning Launcher",
+      "combat_tag": "speed_chain",
+      "throw": {
+        "direction": "up",
+        "hold_frames": 0,
+        "release_frame": 2,
+        "victim_offset": {
+          "x": 20,
+          "y": -8
+        },
+        "damage": 5.5200000000000005,
+        "angle_deg": 85,
+        "base_knockback": 15,
+        "knockback_growth": 1.15,
+        "combo_role": "starter",
+        "role": "juggle"
+      },
+      "element_effect": {
+        "type": "volt",
+        "effect": "chain_stun",
+        "strength": 1
+      }
+    },
+    {
+      "move_id": "throw_down",
+      "fighter_id": "juno-spark",
+      "move_type": "throw",
+      "direction": "down",
+      "input_command": "throw_down",
+      "grounded_air": "both",
+      "startup_frames": 4,
+      "active_frames": 2,
+      "recovery_frames": 14,
+      "hitboxes": [],
+      "damage": 4.048000000000001,
+      "angle_deg": 268,
+      "base_knockback": 11,
+      "knockback_growth": 1.15,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5,
+          "knockback_mult": 1.08
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8,
+          "knockback_mult": 1.15
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "volt_throw",
+        "sfx_event": "volt_throw_sfx",
+        "screen_flash": false
+      },
+      "training_display_name": "Stun Bounce",
+      "combat_tag": "speed_chain",
+      "throw": {
+        "direction": "down",
+        "hold_frames": 0,
+        "release_frame": 2,
+        "victim_offset": {
+          "x": 20,
+          "y": -8
+        },
+        "damage": 4.048000000000001,
+        "angle_deg": 268,
+        "base_knockback": 11,
+        "knockback_growth": 1.15,
+        "combo_role": "bounce",
+        "role": "setup"
+      },
+      "element_effect": {
+        "type": "volt",
+        "effect": "chain_stun",
+        "strength": 1
+      }
+    },
+    {
+      "move_id": "aura_charge",
+      "fighter_id": "juno-spark",
+      "move_type": "charge",
+      "direction": "none",
+      "input_command": "aura_charge",
+      "grounded_air": "both",
+      "startup_frames": 0,
+      "active_frames": 0,
+      "recovery_frames": 0,
+      "hitboxes": [],
+      "damage": 0,
+      "angle_deg": 45,
+      "base_knockback": 0,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "aura_scaling": {},
+      "feedback": {
+        "tier": "light",
+        "hitstop_frames": 3,
+        "camera_event": "shake_light",
+        "vfx_event": "volt_spark",
+        "sfx_event": "volt_hit_light",
+        "screen_flash": false
+      },
+      "training_display_name": "Aura Charge",
+      "combat_tag": "speed_chain"
     },
     {
       "move_id": "aura_burst",
       "fighter_id": "juno-spark",
+      "move_type": "burst",
+      "direction": "neutral",
       "input_command": "aura_burst",
       "grounded_air": "grounded",
       "startup_frames": 10,
@@ -408,7 +1674,6 @@
           "height": 32
         }
       ],
-      "hurtbox_changes": [],
       "damage": 16.560000000000002,
       "angle_deg": 45,
       "base_knockback": 22,
@@ -416,20 +1681,53 @@
       "shield_damage": 3,
       "shield_stun_frames": 6,
       "hitstop_frames": 3,
-      "self_movement": {
-        "x": 0,
-        "y": 0
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.3,
+          "hitbox_scale": 1.5,
+          "feedback_tier": "super"
+        }
       },
-      "cancel_windows": [],
-      "aura_gain": 2,
-      "meter_cost": 100,
-      "armor_frames": 0,
-      "invulnerability_frames": 0,
-      "animation_clip": "aura_burst",
-      "vfx_event": null,
-      "sfx_event": null,
-      "camera_event": null,
-      "training_display_name": "Aura Burst (placeholder)"
+      "feedback": {
+        "tier": "super",
+        "hitstop_frames": 15,
+        "camera_event": "pulse_super",
+        "vfx_event": "volt_burst",
+        "sfx_event": "volt_burst_sfx",
+        "screen_flash": true
+      },
+      "training_display_name": "Flash Circuit",
+      "combat_tag": "speed_chain",
+      "element_effect": {
+        "type": "volt",
+        "effect": "chain_stun",
+        "strength": 2.5
+      },
+      "meter_cost": 100
     }
   ]
 }

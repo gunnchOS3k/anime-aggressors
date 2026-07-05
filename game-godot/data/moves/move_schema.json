@@ -1,14 +1,16 @@
 {
+  "schema_version": 2,
   "move_fields": [
     "move_id",
     "fighter_id",
+    "move_type",
+    "direction",
     "input_command",
     "grounded_air",
     "startup_frames",
     "active_frames",
     "recovery_frames",
     "hitboxes",
-    "hurtbox_changes",
     "damage",
     "angle_deg",
     "base_knockback",
@@ -16,16 +18,71 @@
     "shield_damage",
     "shield_stun_frames",
     "hitstop_frames",
-    "self_movement",
-    "cancel_windows",
-    "aura_gain",
-    "meter_cost",
-    "armor_frames",
-    "invulnerability_frames",
-    "animation_clip",
-    "vfx_event",
-    "sfx_event",
-    "camera_event",
+    "aura_scaling",
+    "feedback",
     "training_display_name"
+  ],
+  "conditional_fields": {
+    "projectile": [
+      "projectile"
+    ],
+    "throw": [
+      "throw"
+    ],
+    "elemental": [
+      "element_effect"
+    ],
+    "combo": [
+      "cancel_windows"
+    ]
+  },
+  "move_types": [
+    "melee",
+    "projectile",
+    "grab",
+    "throw",
+    "charge",
+    "burst",
+    "movement",
+    "counter",
+    "trap",
+    "field"
+  ],
+  "directions": [
+    "neutral",
+    "forward",
+    "back",
+    "up",
+    "down",
+    "air_neutral",
+    "air_forward",
+    "air_up",
+    "air_down",
+    "none"
+  ],
+  "required_move_ids": [
+    "jab_1",
+    "jab_2",
+    "jab_finisher",
+    "forward_tilt",
+    "up_tilt",
+    "down_tilt",
+    "dash_attack",
+    "heavy_attack",
+    "neutral_air",
+    "forward_air",
+    "up_air",
+    "down_air",
+    "neutral_special_projectile",
+    "side_special",
+    "up_special_recovery",
+    "down_special",
+    "grab",
+    "throw_forward",
+    "throw_back",
+    "throw_up",
+    "throw_down",
+    "aura_charge",
+    "aura_burst"
   ]
 }

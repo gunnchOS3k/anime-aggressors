@@ -39,6 +39,8 @@ var platform_center_x: float = 0.0
 var state_machine: FighterStateMachine
 var move_runner: MoveRunner
 var hit_resolver: HitResolver
+var projectile_spawner: ProjectileSpawner
+var combat_feedback: CombatFeedback
 var cpu: CpuController
 var animator: FighterAnimator
 
@@ -49,12 +51,21 @@ var animator: FighterAnimator
 @onready var hitbox_debug: ColorRect = $HitboxDebug
 @onready var hurtbox_debug: ColorRect = $HurtboxDebug
 @onready var aura_vfx: ColorRect = $AuraVfx
+@onready var grab_range_debug: ColorRect = $GrabRangeDebug
 
 var _hitstop: float = 0.0
 var _current_move: Dictionary = {}
 var _pending_attack_cmd: String = ""
 var _last_state: String = ""
 var _aura_sfx_hook: bool = false
+var _last_hit_result: Dictionary = {}
+var _last_knockback: Vector2 = Vector2.ZERO
+var _last_shield_damage: float = 0.0
+var _last_element_effect: String = ""
+var _throw_direction: String = ""
+var _jab_chain: int = 0
+var _show_grab_range: bool = false
+var _show_projectile_boxes: bool = false
 
 func _ready() -> void:
 	add_to_group("fighters")
@@ -69,6 +80,12 @@ func _ready() -> void:
 	move_runner.phase_changed.connect(_on_phase_changed)
 	hit_resolver = HitResolver.new()
 	add_child(hit_resolver)
+	projectile_spawner = ProjectileSpawner.new()
+	add_child(projectile_spawner)
+	projectile_spawner.setup(self)
+	combat_feedback = CombatFeedback.new()
+	add_child(combat_feedback)
+	hit_resolver.combat_feedback = combat_feedback
 	cpu = CpuController.new()
 	animator = FighterAnimator.new()
 	add_child(animator)
@@ -84,6 +101,16 @@ func _ready() -> void:
 		hurtbox_debug.add_to_group("hurtbox_debug")
 	if aura_vfx:
 		aura_vfx.visible = false
+	if grab_range_debug:
+		grab_range_debug.visible = false
+		grab_range_debug.size = Vector2(70, 36)
+		grab_range_debug.color = Color(0.2, 0.8, 1.0, 0.25)
+
+func get_aura() -> float:
+	return aura
+
+func get_aura_level() -> int:
+	return AuraScaler.aura_level(aura)
 
 func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, spawn: Vector2) -> void:
 	fighter_id = id
@@ -128,6 +155,7 @@ func tick_combat_frame() -> void:
 	if _hitstop > 0.0:
 		return
 	move_runner.tick_sim_frame()
+	projectile_spawner.tick_all()
 	_sync_attack_phase_state()
 
 func _physics_process(delta: float) -> void:
@@ -205,6 +233,9 @@ func _handle_actions() -> void:
 	if not state_machine.can_attack():
 		return
 	if state_machine.current_state == FighterStates.GRAB_HOLD:
+		_throw_direction = ThrowResolver.read_throw_direction(self)
+		if grab_range_debug:
+			grab_range_debug.visible = _show_grab_range
 		if _read_attack_pressed() or _read_grab_pressed():
 			execute_throw()
 		return
@@ -237,10 +268,49 @@ func _handle_actions() -> void:
 	if _read_grab_pressed():
 		_start_move("grab")
 	if _read_attack_pressed():
-		var cmd := "attack_air_neutral" if not is_on_floor() else ("attack_heavy" if _read_axis() > 0.5 else "attack_neutral")
+		if aura >= 100.0:
+			_start_move_by_command("aura_burst")
+			return
+		var cmd := _resolve_attack_command()
 		_start_move_by_command(cmd)
 	if _read_special_pressed() and not is_aura_input_held():
-		_start_move_by_command("special_neutral")
+		_start_move_by_command(_resolve_special_command())
+
+func _start_move(move_id: String) -> void:
+	var m := DataLoader.find_move(move_manifest, move_id)
+	if not m.is_empty():
+		_start_move_dict(m)
+
+func _resolve_attack_command() -> String:
+	if not is_on_floor():
+		var axis := _read_axis()
+		var up := _read_up()
+		var down := _read_down()
+		if up: return "attack_air_up"
+		if down: return "attack_air_down"
+		if absf(axis) > 0.3: return "attack_air_forward"
+		return "attack_air_neutral"
+	var axis := _read_axis()
+	var up := _read_up()
+	var down := _read_down()
+	if absf(axis) > 0.75 and is_on_floor():
+		return "attack_dash"
+	if up: return "attack_up"
+	if down: return "attack_down"
+	if absf(axis) > 0.3: return "attack_forward"
+	if absf(axis) > 0.5: return "attack_heavy"
+	if _jab_chain == 0: return "attack_neutral"
+	if _jab_chain == 1: return "attack_neutral"
+	return "attack_neutral"
+
+func _resolve_special_command() -> String:
+	var up := _read_up()
+	var down := _read_down()
+	var axis := _read_axis()
+	if up: return "special_up"
+	if down: return "special_down"
+	if absf(axis) > 0.3: return "special_forward"
+	return "special_neutral"
 
 func is_aura_input_held() -> bool:
 	return Input.is_action_pressed("p%d_special" % slot) and Input.is_action_pressed("p%d_shield" % slot)
@@ -249,29 +319,37 @@ func queue_attack_command(cmd: String) -> void:
 	_pending_attack_cmd = cmd
 
 func _start_move_by_command(cmd: String) -> void:
-	var m := DataLoader.find_move_by_input(move_manifest, cmd, not is_on_floor())
+	var m: Dictionary = {}
+	if cmd == "attack_neutral" and is_on_floor():
+		match _jab_chain:
+			0: m = DataLoader.find_move(move_manifest, "jab_1")
+			1: m = DataLoader.find_move(move_manifest, "jab_2")
+			_: m = DataLoader.find_move(move_manifest, "jab_finisher")
+		if not m.is_empty():
+			if _jab_chain < 2:
+				_jab_chain += 1
+			else:
+				_jab_chain = 0
+	else:
+		m = DataLoader.find_move_by_input(move_manifest, cmd, not is_on_floor())
 	if m.is_empty():
 		return
 	_start_move_dict(m)
 
-func _start_move(move_id: String) -> void:
-	var m := DataLoader.find_move(move_manifest, move_id)
-	if not m.is_empty():
-		_start_move_dict(m)
-
 func _start_move_dict(m: Dictionary) -> void:
-	_current_move = m
-	move_runner.start_move(m, self)
+	_current_move = AuraScaler.apply_to_move(m, aura)
+	move_runner.start_move(_current_move, self)
 	var mid := str(m.get("move_id", ""))
-	if mid == "grab":
+	var mt := str(m.get("move_type", "melee"))
+	if mid == "grab" or mt == "grab":
 		state_machine.enter(FighterStates.GRAB_STARTUP)
-	elif mid == "throw":
+	elif mt == "throw" or mid.begins_with("throw_"):
 		state_machine.enter(FighterStates.THROW_STARTUP)
-	elif mid == "aura_burst":
+	elif mid == "aura_burst" or mt == "burst":
 		aura = 0.0
 		_set_aura_vfx(false)
 		state_machine.enter(FighterStates.AURA_BURST_STARTUP)
-	elif str(m.get("input_command", "")).begins_with("special"):
+	elif mt == "projectile" or str(m.get("input_command", "")).begins_with("special"):
 		state_machine.enter(FighterStates.SPECIAL_STARTUP)
 	else:
 		state_machine.enter(FighterStates.ATTACK_STARTUP)
@@ -285,17 +363,26 @@ func _start_dodge() -> void:
 
 func _on_move_active(move: Dictionary) -> void:
 	var mid := str(move.get("move_id", ""))
-	if mid == "grab":
+	var mt := str(move.get("move_type", "melee"))
+	if mid == "grab" or mt == "grab":
 		state_machine.enter(FighterStates.GRAB_ACTIVE)
 		_try_grab_connect()
 		return
-	if mid == "throw":
+	if mt == "throw" or mid.begins_with("throw_"):
 		state_machine.enter(FighterStates.THROW_RELEASE)
+	if mt == "projectile" or move.has("projectile"):
+		projectile_spawner.spawn_from_move(_current_move, aura)
+		state_machine.enter(FighterStates.SPECIAL_ACTIVE)
+		return
+	var sm := move.get("self_movement", {})
+	if sm is Dictionary and (sm.get("x", 0) != 0 or sm.get("y", 0) != 0):
+		velocity += Vector2(float(sm.get("x", 0)) * facing, float(sm.get("y", 0)))
 	hitbox.monitoring = true
 	_update_hitbox_from_move(move)
-	var cat := str(move.get("input_command", ""))
-	if cat.begins_with("special") or mid == "aura_burst":
-		state_machine.enter(FighterStates.SPECIAL_ACTIVE if mid != "aura_burst" else FighterStates.AURA_BURST_ACTIVE)
+	if mt == "burst" or mid == "aura_burst":
+		state_machine.enter(FighterStates.AURA_BURST_ACTIVE)
+	elif str(move.get("input_command", "")).begins_with("special") or mt in ["field", "trap", "movement"]:
+		state_machine.enter(FighterStates.SPECIAL_ACTIVE)
 	else:
 		state_machine.enter(FighterStates.ATTACK_ACTIVE)
 
@@ -326,14 +413,15 @@ func execute_throw() -> void:
 	var target := grabbed_target
 	grabbed_target = null
 	target.grabbed_by = null
+	var direction := ThrowResolver.read_throw_direction(self)
+	_throw_direction = direction
 	state_machine.enter(FighterStates.THROW_STARTUP)
-	var throw_move := DataLoader.find_move(move_manifest, "throw")
-	if throw_move.is_empty():
-		throw_move = {"damage": 6.0, "base_knockback": 16.0, "knockback_growth": 1.1, "angle_deg": 45.0, "hitstop_frames": 4, "move_id": "throw"}
+	var throw_move := ThrowResolver.resolve_throw(self, target, move_manifest, direction)
+	ThrowResolver.apply_victim_offset(self, target, throw_move)
 	_start_move_dict(throw_move)
 	target.state_machine.enter(FighterStates.HITSTUN)
 	hit_resolver.resolve(self, target, throw_move, damage_percent)
-	grab_event.emit({"result": "throw", "target": target.fighter_id})
+	grab_event.emit({"result": "throw", "target": target.fighter_id, "direction": direction})
 
 func _update_hitbox_from_move(move: Dictionary) -> void:
 	var boxes: Array = move.get("hitboxes", [])
@@ -350,6 +438,10 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 		return
 	if str(info.get("move_id", "")) == "grab":
 		return
+	_last_hit_result = info.duplicate(true)
+	_last_knockback = info.get("launch", Vector2.ZERO)
+	_last_shield_damage = float(info.get("shield_damage", 0.0))
+	_last_element_effect = str(info.get("element", info.get("element_effect", "")))
 	if state_machine.current_state == FighterStates.SHIELD_HOLD or shielding:
 		var sdmg: float = info.get("shield_damage", info.get("damage", 0.0) * 0.8)
 		shield_health -= sdmg
@@ -439,6 +531,29 @@ func set_debug_hurtboxes(v: bool) -> void:
 func set_debug_visible(v: bool) -> void:
 	set_debug_hitboxes(v)
 	set_debug_hurtboxes(v)
+
+func set_debug_projectiles(v: bool) -> void:
+	_show_projectile_boxes = v
+	projectile_spawner.set_debug_visible(v)
+
+func set_debug_grab_range(v: bool) -> void:
+	_show_grab_range = v
+	if grab_range_debug:
+		grab_range_debug.visible = v and state_machine.current_state == FighterStates.GRAB_HOLD
+
+func debug_combat_summary() -> Dictionary:
+	return {
+		"aura_level": get_aura_level(),
+		"projectile_count": projectile_spawner.count(),
+		"throw_direction": _throw_direction,
+		"last_hit_result": _last_hit_result.get("move_id", "—"),
+		"hitstop_frames": int(_hitstop / CombatMath.frames_to_seconds(1)) if _hitstop > 0 else 0,
+		"knockback_vector": _last_knockback,
+		"shield_damage": _last_shield_damage,
+		"element_effect": _last_element_effect,
+		"combo_count": combo_count,
+		"cancel_window": move_runner.in_cancel_window if move_runner else false,
+	}
 
 func _on_move_ended(_move_id: String) -> void:
 	hitbox.monitoring = false
@@ -539,6 +654,12 @@ func _read_dodge_pressed() -> bool:
 
 func _read_grab_pressed() -> bool:
 	return Input.is_action_just_pressed("p%d_grab" % slot)
+
+func _read_up() -> bool:
+	return Input.is_action_pressed("p%d_up" % slot)
+
+func _read_down() -> bool:
+	return Input.is_action_pressed("p%d_down" % slot)
 
 func _read_aura_burst() -> bool:
 	return Input.is_action_just_pressed("p%d_attack" % slot) and aura >= 100.0

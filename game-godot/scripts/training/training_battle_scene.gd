@@ -12,6 +12,7 @@ var _hit_log: Label
 var _combo_p1: int = 0
 var _paused := false
 var _slow_mo := false
+var _freeze := false
 
 const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
 const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
@@ -102,7 +103,7 @@ func _log(msg: String) -> void:
 
 func _update_help() -> void:
 	if _hit_log:
-		_hit_log.text = "Training — F1 HUD F2 hitboxes F3 pos F4 dmg F5 aura F7 clear F8 dummy F9 pause F10 slow"
+		_hit_log.text = "Training — F1 HUD F2 hit F3 pos F4 dmg F5 aura F7 clear F8 dummy F9 pause F10 slow F11 freeze F12 step"
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
@@ -130,6 +131,16 @@ func _unhandled_input(event: InputEvent) -> void:
 				_slow_mo = not _slow_mo
 				Engine.time_scale = 0.35 if _slow_mo else 1.0
 				_log("SLOW-MO" if _slow_mo else "NORMAL SPEED")
+			KEY_F11:
+				_freeze = not _freeze
+				_battle_sim.set_freeze(_freeze)
+				fighter1.controls_enabled = not _freeze
+				fighter2.controls_enabled = not _freeze
+				_log("FREEZE" if _freeze else "UNFREEZE")
+			KEY_F12:
+				if _freeze or _paused:
+					_battle_sim.step_frame()
+					_log("STEP 1 FRAME")
 	if event.is_action_pressed("ui_cancel"):
 		Engine.time_scale = 1.0
 		SceneRouter.go("training")
