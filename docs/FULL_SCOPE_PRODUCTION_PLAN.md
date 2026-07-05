@@ -39,13 +39,22 @@ A complete Godot-first local platform fighter with:
 
 **Exit:** End-to-end navigation without dead ends.
 
-### F2 — Full roster data and move manifests
+### F2 — Full roster data and move manifests ✅
 
 - Normalized fighter JSON (7/7)
-- Move manifest per fighter (11+ moves each)
+- Move manifest per fighter (**23 moves each**, schema v2)
 - Animation manifest stubs → authored clips
+- Fighter-unique aura scaling, projectiles, throws, feedback tiers
 
 **Exit:** `validate:full-scope-production` passes roster + move gates.
+
+### F2b — Combat enhancement ✅
+
+- Aura scaler, projectile runtime, directional throws, combat feedback
+- Training mode exposes full combat internals
+- See `game-godot/docs/COMBAT_ARCHITECTURE.md`
+
+**Exit:** Validation catches missing combat data; each fighter has unique identity.
 
 ### F3 — Combat reliability and state machine
 

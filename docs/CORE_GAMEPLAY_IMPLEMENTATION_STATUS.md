@@ -2,7 +2,17 @@
 
 **Pass:** PR #46 — Godot gameplay implementation after PR #45 consolidation  
 **Runtime:** Godot 4 — `game-godot/`  
-**Last updated:** 2026-07-01
+**Last updated:** 2026-07-05
+
+## Combat enhancement (schema v2)
+
+- Move manifests upgraded to **schema_version 2** — 23 moves per fighter
+- New modules: `aura_scaler.gd`, `projectile.gd`, `projectile_spawner.gd`, `combat_feedback.gd`, `throw_resolver.gd`
+- Directional throws (`throw_forward/back/up/down`) with input priority
+- Aura scaling changes hitboxes, projectiles, cancel windows, element effects — not damage only
+- Fighter-unique projectile behaviors (shockwave, curving_blade, pull_orb, delayed_orb, etc.)
+- Training debug HUD exposes aura level, projectile count, throw direction, hitstop, element effect
+- Docs: `game-godot/docs/COMBAT_ARCHITECTURE.md`, `AURA_SYSTEM.md`, `PROJECTILE_SYSTEM.md`, `DIRECTIONAL_THROWS.md`, `FIGHTER_IDENTITY_MATRIX.md`
 
 ## PR #47 runtime hardening
 

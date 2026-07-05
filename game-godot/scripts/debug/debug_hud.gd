@@ -7,6 +7,9 @@ class_name DebugHud
 var visible_debug := true
 var show_hitboxes := false
 var show_hurtboxes := false
+var show_projectile_boxes := false
+var show_grab_range := false
+var show_aura_fields := false
 var fighters: Array = []
 var hit_logs: Array = []
 
@@ -48,8 +51,10 @@ func _update_text() -> void:
 	if label == null:
 		return
 	var lines: PackedStringArray = []
-	lines.append("[b]DEBUG HUD[/b]  F1 HUD  F2 hitboxes:%s  F6 hurtboxes:%s" % [
+	lines.append("[b]DEBUG HUD[/b]  F1 HUD  F2 hitboxes  F6 hurtboxes  F11 proj  F12 grab")
+	lines.append("hitboxes:%s hurtboxes:%s projectile_boxes:%s grab_range:%s" % [
 		str(show_hitboxes).to_lower(), str(show_hurtboxes).to_lower(),
+		str(show_projectile_boxes).to_lower(), str(show_grab_range).to_lower(),
 	])
 	for f in fighters:
 		if f == null:
@@ -60,11 +65,30 @@ func _update_text() -> void:
 		var mr := ""
 		if f.move_runner:
 			mr = f.move_runner.debug_summary()
+		var combat := {}
+		if f.has_method("debug_combat_summary"):
+			combat = f.debug_combat_summary()
 		lines.append("%s%s" % [name, proxy])
-		lines.append("  %d%% x%d aura:%d state:%s" % [
-			int(f.damage_percent), f.stocks, int(f.aura), state,
+		lines.append("  %d%% x%d aura:%d aura_level:%d state:%s" % [
+			int(f.damage_percent), f.stocks, int(f.aura),
+			combat.get("aura_level", f.get_aura_level() if f.has_method("get_aura_level") else 0),
+			state,
 		])
 		lines.append("  %s" % mr)
+		lines.append("  cancel:%s combo:%d proj:%d throw:%s" % [
+			str(combat.get("cancel_window", false)).to_lower(),
+			combat.get("combo_count", 0),
+			combat.get("projectile_count", 0),
+			combat.get("throw_direction", "—"),
+		])
+		lines.append("  last_hit:%s hitstop:%d kb:(%.0f,%.0f) shield_dmg:%.1f element:%s" % [
+			combat.get("last_hit_result", "—"),
+			combat.get("hitstop_frames", 0),
+			combat.get("knockback_vector", Vector2.ZERO).x,
+			combat.get("knockback_vector", Vector2.ZERO).y,
+			combat.get("shield_damage", 0.0),
+			combat.get("element_effect", "—"),
+		])
 		if f.has_method("input_display"):
 			lines.append("  input: %s" % f.input_display())
 	if hit_logs.size():
@@ -85,6 +109,18 @@ func _apply_hurtbox_overlay(v: bool) -> void:
 		if f and f.has_method("set_debug_hurtboxes"):
 			f.set_debug_hurtboxes(v)
 
+func _apply_projectile_overlay(v: bool) -> void:
+	show_projectile_boxes = v
+	for f in fighters:
+		if f and f.has_method("set_debug_projectiles"):
+			f.set_debug_projectiles(v)
+
+func _apply_grab_range_overlay(v: bool) -> void:
+	show_grab_range = v
+	for f in fighters:
+		if f and f.has_method("set_debug_grab_range"):
+			f.set_debug_grab_range(v)
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
 		match event.keycode:
@@ -94,3 +130,7 @@ func _unhandled_input(event: InputEvent) -> void:
 				_apply_hitbox_overlay(not show_hitboxes)
 			KEY_F6:
 				_apply_hurtbox_overlay(not show_hurtboxes)
+			KEY_F11:
+				_apply_projectile_overlay(not show_projectile_boxes)
+			KEY_F12:
+				_apply_grab_range_overlay(not show_grab_range)

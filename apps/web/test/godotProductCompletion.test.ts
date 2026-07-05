@@ -15,8 +15,11 @@ const FIGHTERS = [
 ];
 
 const PRIMARY_MOVE_IDS = [
-  "jab", "forward_tilt", "heavy_attack", "neutral_special", "up_special",
-  "down_special", "aerial_neutral", "grab", "throw", "aura_charge", "aura_burst",
+  "jab_1", "jab_2", "jab_finisher", "forward_tilt", "up_tilt", "down_tilt",
+  "dash_attack", "heavy_attack", "neutral_air", "forward_air", "up_air", "down_air",
+  "neutral_special_projectile", "side_special", "up_special_recovery", "down_special",
+  "grab", "throw_forward", "throw_back", "throw_up", "throw_down",
+  "aura_charge", "aura_burst",
 ];
 
 describe("product completion data contracts", () => {
@@ -33,7 +36,8 @@ describe("product completion data contracts", () => {
     for (const fighterId of FIGHTERS) {
       const manifest = JSON.parse(
         fs.readFileSync(path.join(primaryMovesRoot, `${fighterId}.json`), "utf8"),
-      ) as { moves: Array<{ move_id: string }> };
+      ) as { schema_version: number; moves: Array<{ move_id: string }> };
+      assert.equal(manifest.schema_version, 2, `${fighterId} schema_version`);
       const ids = manifest.moves.map((m) => m.move_id);
       for (const moveId of PRIMARY_MOVE_IDS) {
         assert.ok(ids.includes(moveId), `${fighterId}/${moveId}`);
