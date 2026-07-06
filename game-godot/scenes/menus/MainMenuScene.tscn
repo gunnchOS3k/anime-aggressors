@@ -84,6 +84,11 @@ custom_minimum_size = Vector2(360, 96)
 layout_mode = 2
 text = "Labs / Experimental"
 
+[node name="MobilePlaytest" type="Button" parent="VBox/Grid"]
+custom_minimum_size = Vector2(360, 96)
+layout_mode = 2
+text = "Mobile Playtest"
+
 [node name="FooterHint" type="Label" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
@@ -102,3 +107,4 @@ horizontal_alignment = 1
 [connection signal="pressed" from="VBox/Grid/Controls" to="." method="_on_controls_pressed"]
 [connection signal="pressed" from="VBox/Grid/Settings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="VBox/Grid/Labs" to="." method="_on_labs_pressed"]
+[connection signal="pressed" from="VBox/Grid/MobilePlaytest" to="." method="_on_mobile_playtest_pressed"]

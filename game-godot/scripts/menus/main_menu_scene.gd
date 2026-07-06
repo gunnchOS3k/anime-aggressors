@@ -29,5 +29,8 @@ func _on_settings_pressed() -> void:
 func _on_labs_pressed() -> void:
 	SceneRouter.go("labs")
 
+func _on_mobile_playtest_pressed() -> void:
+	SceneRouter.go_mobile_playtest()
+
 func footer_hint() -> String:
 	return "[A] Select tile   [B] —   Primary Runtime: Godot 4"

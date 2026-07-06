@@ -14,6 +14,16 @@
 - Training debug HUD exposes aura level, projectile count, throw direction, hitstop, element effect
 - Docs: `game-godot/docs/COMBAT_ARCHITECTURE.md`, `AURA_SYSTEM.md`, `PROJECTILE_SYSTEM.md`, `DIRECTIONAL_THROWS.md`, `FIGHTER_IDENTITY_MATRIX.md`
 
+## Mobile playtest distribution
+
+- Touch overlay: virtual stick + Jump/Attack/Special/Shield/Grab/Dodge/Aura Charge buttons
+- Settings toggle: Touch Controls Auto / On / Off
+- Mobile Playtest menu: Quick Training (2 taps to combat), Versus CPU, Controls, Feedback link
+- Web export retargeted to `game-godot/` with GL Compatibility + single-threaded Web preset
+- Android debug APK preset: `com.gunnchos.animeaggressors` → `builds/android/anime-aggressors-debug.apk`
+- Docs: `docs/playtest/ITCH_IO_MOBILE_UPLOAD.md`, `ANDROID_APK_TESTING.md`, `IOS_TESTFLIGHT_TESTING.md`, `MOBILE_PLAYTEST_CHECKLIST.md`
+- npm: `mobile:check`, `package:itch`, `godot:export:android`
+
 ## PR #47 runtime hardening
 
 Fixed gameplay-breaking paths discovered after PR #46 merge:
