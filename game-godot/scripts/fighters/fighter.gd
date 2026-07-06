@@ -313,6 +313,8 @@ func _resolve_special_command() -> String:
 	return "special_neutral"
 
 func is_aura_input_held() -> bool:
+	if TouchInputManager.is_aura_charge_touch(slot):
+		return true
 	return Input.is_action_pressed("p%d_special" % slot) and Input.is_action_pressed("p%d_shield" % slot)
 
 func queue_attack_command(cmd: String) -> void:
@@ -632,33 +634,55 @@ func _setup_shapes() -> void:
 			cs.shape = rect
 
 func _read_axis() -> float:
-	return Input.get_action_strength("p%d_right" % slot) - Input.get_action_strength("p%d_left" % slot)
+	var kb := Input.get_action_strength("p%d_right" % slot) - Input.get_action_strength("p%d_left" % slot)
+	var touch := TouchInputManager.get_axis(slot)
+	if absf(touch) > absf(kb):
+		return touch
+	return kb
 
 func _read_jump_pressed() -> bool:
+	if TouchInputManager.consume_touch_just_pressed(slot, "jump"):
+		return true
 	return Input.is_action_just_pressed("p%d_jump" % slot)
 
 func _read_jump_held() -> bool:
+	if TouchInputManager.is_touch_pressed(slot, "jump"):
+		return true
 	return Input.is_action_pressed("p%d_jump" % slot)
 
 func _read_attack_pressed() -> bool:
+	if TouchInputManager.consume_touch_just_pressed(slot, "attack"):
+		return true
 	return Input.is_action_just_pressed("p%d_attack" % slot)
 
 func _read_special_pressed() -> bool:
+	if TouchInputManager.consume_touch_just_pressed(slot, "special"):
+		return true
 	return Input.is_action_just_pressed("p%d_special" % slot)
 
 func _read_shield() -> bool:
+	if TouchInputManager.is_touch_pressed(slot, "shield"):
+		return true
 	return Input.is_action_pressed("p%d_shield" % slot)
 
 func _read_dodge_pressed() -> bool:
+	if TouchInputManager.consume_touch_just_pressed(slot, "dodge"):
+		return true
 	return Input.is_action_just_pressed("p%d_dodge" % slot)
 
 func _read_grab_pressed() -> bool:
+	if TouchInputManager.consume_touch_just_pressed(slot, "grab"):
+		return true
 	return Input.is_action_just_pressed("p%d_grab" % slot)
 
 func _read_up() -> bool:
+	if TouchInputManager.get_vertical(slot) < -0.22:
+		return true
 	return Input.is_action_pressed("p%d_up" % slot)
 
 func _read_down() -> bool:
+	if TouchInputManager.get_vertical(slot) > 0.22:
+		return true
 	return Input.is_action_pressed("p%d_down" % slot)
 
 func _read_aura_burst() -> bool:

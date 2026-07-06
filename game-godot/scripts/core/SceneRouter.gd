@@ -16,6 +16,7 @@ const SCENES := {
 	"settings": "res://scenes/menus/SettingsScene.tscn",
 	"controls": "res://scenes/menus/ControlsScene.tscn",
 	"labs": "res://scenes/menus/LabsScene.tscn",
+	"mobile_playtest": "res://scenes/menus/MobilePlaytestScene.tscn",
 }
 
 func go(scene_key: String) -> void:
@@ -33,3 +34,6 @@ func go_battle_setup() -> void:
 
 func go_training() -> void:
 	go("training")
+
+func go_mobile_playtest() -> void:
+	go("mobile_playtest")

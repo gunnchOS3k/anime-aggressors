@@ -99,6 +99,15 @@ const REQUIRED_SCENES = [
   "scenes/menus/SettingsScene.tscn",
   "scenes/menus/ControlsScene.tscn",
   "scenes/menus/LabsScene.tscn",
+  "scenes/menus/MobilePlaytestScene.tscn",
+  "scenes/ui/TouchControlsOverlay.tscn",
+];
+
+const MOBILE_PLAYTEST_DOCS = [
+  "docs/playtest/ITCH_IO_MOBILE_UPLOAD.md",
+  "docs/playtest/ANDROID_APK_TESTING.md",
+  "docs/playtest/IOS_TESTFLIGHT_TESTING.md",
+  "docs/playtest/MOBILE_PLAYTEST_CHECKLIST.md",
 ];
 
 const REQUIRED_DOCS = [
@@ -518,6 +527,34 @@ for (const line of auditLines) {
   }
 }
 ok("audit doc status language");
+
+// Mobile playtest distribution
+for (const d of MOBILE_PLAYTEST_DOCS) {
+  if (!fs.existsSync(path.join(root, d))) fail(`missing mobile playtest doc ${d}`);
+}
+if (!fs.existsSync(path.join(godotRoot, "export_presets.cfg"))) fail("missing game-godot/export_presets.cfg");
+const exportPresets = readGodot("export_presets.cfg");
+if (!/name="Web"/.test(exportPresets) || !/name="Android"/.test(exportPresets)) {
+  fail("export_presets.cfg must define Web and Android presets");
+}
+if (!/com\.gunnchos\.animeaggressors/.test(exportPresets)) {
+  fail("Android preset missing package com.gunnchos.animeaggressors");
+}
+const touchMgr = readGodot("scripts/input/touch_input_manager.gd");
+const touchOverlay = readGodot("scripts/input/touch_controls_overlay.gd");
+if (!touchMgr.includes("TouchMode") || !touchMgr.includes("should_show_touch")) {
+  fail("touch_input_manager incomplete");
+}
+if (!touchOverlay.includes("aura_charge")) fail("touch overlay missing aura charge button wiring");
+const projectGd = readGodot("project.godot");
+if (!projectGd.includes("TouchInputManager")) fail("TouchInputManager autoload missing");
+const exportWeb = read("scripts/export-godot-web.mjs");
+if (!exportWeb.includes("game-godot")) fail("export-godot-web.mjs must target game-godot/");
+const pkg = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"));
+if (!pkg.scripts?.["mobile:check"] || !pkg.scripts?.["package:itch"]) {
+  fail("package.json missing mobile:check or package:itch");
+}
+ok("mobile playtest distribution");
 
 // IP scan
 function scan(dir) {

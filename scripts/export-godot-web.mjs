@@ -12,7 +12,7 @@ import {
 } from "./godot-export-shared.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const godotDir = path.join(repoRoot, "game/godot");
+const godotDir = path.join(repoRoot, "game-godot");
 const buildId = resolveGodotBuildId(repoRoot);
 const fullCommit = process.env.GITHUB_SHA ?? (() => {
   try {
@@ -79,7 +79,7 @@ function patchRuntimeIndexForPages(indexPath) {
 
   html = html.replace(
     "setStatusMode('hidden');",
-    "setStatusMode('hidden');\n\t\t\tconsole.log('Godot engine started');\n\t\t\twindow.parent?.postMessage({ type: 'aa:godot-ready', scene: 'Main', buildId: '" +
+    "setStatusMode('hidden');\n\t\t\tconsole.log('Godot engine started');\n\t\t\twindow.parent?.postMessage({ type: 'aa:godot-ready', scene: 'BootScene', buildId: '" +
       buildId +
       "' }, '*');",
   );
