@@ -1,54 +1,53 @@
 #!/usr/bin/env python3
-"""Export all fighter GLB assets when Blender CLI is available."""
+"""Locate Blender and reproducibly build every fighter source + GLB asset."""
+
+from __future__ import annotations
+
+import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-BLOCKOUTS = ROOT / "tools" / "blender" / "generate_fighter_blockouts.py"
-EXPORT_DIR = ROOT / "assets" / "exports" / "godot" / "fighters"
-RUNTIME_DIR = ROOT / "game" / "godot" / "assets" / "fighters" / "glb"
-
-FIGHTERS = [
+GENERATOR = ROOT / "tools" / "blender" / "generate_fighter_blockouts.py"
+RUNTIME_DIR = ROOT / "game-godot" / "assets" / "characters" / "proxy"
+FIGHTERS = (
     "ember-vale", "rook-ironside", "juno-spark", "kaia-windrow",
     "nix-calder", "orion-vell", "vesper-nyx",
-]
+)
 
 
-def blender_available() -> bool:
-    try:
-        subprocess.run(["blender", "--version"], capture_output=True, check=True)
-        return True
-    except (FileNotFoundError, subprocess.CalledProcessError):
-        return False
+def find_blender() -> str | None:
+    candidates = (
+        os.environ.get("BLENDER_BIN"),
+        shutil.which("blender"),
+        "/Applications/Blender.app/Contents/MacOS/Blender",
+        str(Path.home() / "Applications" / "Blender.app" / "Contents" / "MacOS" / "Blender"),
+    )
+    for candidate in candidates:
+        if candidate and Path(candidate).is_file():
+            return candidate
+    return None
 
 
 def main() -> int:
-    if not blender_available():
-        print("Blender asset export pending — CLI not available")
-        print("Production proxy rigs in Godot satisfy runtime quality gates")
-        return 0
+    blender = find_blender()
+    if not blender:
+        print("Blender was not found. Set BLENDER_BIN to its executable.", file=sys.stderr)
+        return 2
 
-    subprocess.run([sys.executable.replace("python", "blender") if False else "blender", "--background", "--python", str(BLOCKOUTS)], check=False)
+    command = [blender, "--background", "--factory-startup", "--python", str(GENERATOR)]
+    result = subprocess.run(command, cwd=ROOT, check=False)
+    if result.returncode != 0:
+        return result.returncode
 
-    EXPORT_DIR.mkdir(parents=True, exist_ok=True)
-    RUNTIME_DIR.mkdir(parents=True, exist_ok=True)
+    missing = [fighter for fighter in FIGHTERS if not (RUNTIME_DIR / f"{fighter}.glb").is_file()]
+    if missing:
+        print(f"Blender exited successfully but assets are missing: {', '.join(missing)}", file=sys.stderr)
+        return 1
 
-    for fighter_id in FIGHTERS:
-        blend = ROOT / "assets" / "blender" / "fighters" / fighter_id / f"{fighter_id}.blend"
-        glb_out = EXPORT_DIR / f"{fighter_id}.glb"
-        runtime_glb = RUNTIME_DIR / f"{fighter_id}.glb"
-        if not blend.exists():
-            print(f"skip {fighter_id}: no .blend at {blend}")
-            continue
-        cmd = [
-            "blender", str(blend), "--background", "--python-expr",
-            f"import bpy; bpy.ops.export_scene.gltf(filepath='{glb_out}', export_format='GLB')",
-        ]
-        subprocess.run(cmd, check=False)
-        if glb_out.exists():
-            runtime_glb.write_bytes(glb_out.read_bytes())
-            print(f"exported {glb_out}")
+    print(f"Built {len(FIGHTERS)} fighter assets with {blender}")
     return 0
 
 

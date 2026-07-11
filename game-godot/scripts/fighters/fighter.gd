@@ -45,6 +45,7 @@ var cpu: CpuController
 var animator: FighterAnimator
 
 @onready var body: ColorRect = $Body
+@onready var model_3d: FighterModel3D = $Model3D
 @onready var hurtbox: Area2D = $Hurtbox
 @onready var hitbox: Area2D = $Hitbox
 @onready var label: Label = $NameLabel
@@ -120,6 +121,13 @@ func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, s
 	spawn_point = spawn
 	data = DataLoader.load_fighter(id)
 	move_manifest = DataLoader.load_moves(id)
+	var model_loaded := model_3d != null and model_3d.configure(data)
+	if body:
+		body.visible = not model_loaded
+	if model_3d:
+		model_3d.set_facing(facing)
+	if animator:
+		animator.set_proxy_visible(not model_loaded)
 	shield_health = float(data.get("shieldProfile", {}).get("maxHealth", 100))
 	cpu.setup(self, GameState.cpu_level if is_cpu else 2)
 	if body and data.has("color"):
@@ -185,8 +193,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	_sync_motion_state()
 	_check_edge()
-	if animator:
-		animator.play_for_state(state_machine.current_state)
+	_play_current_animation(state_machine.current_state)
 
 func _apply_movement(delta: float) -> void:
 	if not state_machine.can_move():
@@ -212,6 +219,8 @@ func _apply_movement(delta: float) -> void:
 		velocity.x = axis * spd
 		if body:
 			body.scale.x = absf(body.scale.x) * facing
+		if model_3d:
+			model_3d.set_facing(facing)
 	else:
 		velocity.x = move_toward(velocity.x, 0.0, get_run_speed() * delta * 8.0)
 		if is_on_floor() and not FighterStates.is_attack_state(state_machine.current_state):
@@ -376,7 +385,7 @@ func _on_move_active(move: Dictionary) -> void:
 		projectile_spawner.spawn_from_move(_current_move, aura)
 		state_machine.enter(FighterStates.SPECIAL_ACTIVE)
 		return
-	var sm := move.get("self_movement", {})
+	var sm: Dictionary = move.get("self_movement", {})
 	if sm is Dictionary and (sm.get("x", 0) != 0 or sm.get("y", 0) != 0):
 		velocity += Vector2(float(sm.get("x", 0)) * facing, float(sm.get("y", 0)))
 	hitbox.monitoring = true
@@ -623,7 +632,16 @@ func _set_aura_vfx(on: bool) -> void:
 		_aura_sfx_hook = true
 
 func _on_state_changed(_from: String, to: String) -> void:
+	_play_current_animation(to)
 	state_changed.emit(to)
+
+func _play_current_animation(state: String) -> void:
+	if not animator:
+		return
+	if model_3d and model_3d.is_model_loaded():
+		model_3d.play_for_state(state, _current_move)
+	else:
+		animator.play_for_state(state)
 
 func _setup_shapes() -> void:
 	for path in ["CollisionShape2D", "Hurtbox/HurtShape", "Hitbox/HitShape"]:

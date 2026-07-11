@@ -8,6 +8,13 @@ Direct APK sideloading lets friends test on Android without Google Play Console.
 - Android Studio (for SDK) or standalone Android SDK
 - Java JDK 17+
 
+If Godot is not installed as an app, install a matching local binary and templates:
+
+```bash
+export GODOT_BIN="$(./scripts/install-godot-ci.sh)"
+./scripts/install-godot-templates.sh
+```
+
 ## Install Godot Export Templates
 
 1. Open Godot → **Editor → Manage Export Templates**.
@@ -32,7 +39,7 @@ Direct APK sideloading lets friends test on Android without Google Play Console.
 ### From Godot Editor
 
 1. **Project → Export → Android**
-2. Choose **Export Debug** (unsigned debug APK).
+2. Choose **Export Debug** (Godot signs it with the local debug key).
 3. Save to `builds/android/anime-aggressors-debug.apk`.
 
 ### From CLI

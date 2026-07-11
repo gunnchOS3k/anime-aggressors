@@ -5,12 +5,12 @@ class_name FighterAnimator
 
 const PROXY_LABEL := "PROXY — NOT FINAL ART"
 
-var owner: AAFighter
+var _fighter: AAFighter
 var _player: AnimationPlayer
 var _proxy_label: Label
 
 func setup(fighter: AAFighter, body: ColorRect) -> void:
-	owner = fighter
+	_fighter = fighter
 	_player = AnimationPlayer.new()
 	add_child(_player)
 	_build_proxy_clips(body)
@@ -25,6 +25,10 @@ func play_for_state(state: String) -> void:
 	if _player.has_animation(clip):
 		if _player.current_animation != clip or not _player.is_playing():
 			_player.play(clip)
+
+func set_proxy_visible(value: bool) -> void:
+	if _proxy_label:
+		_proxy_label.visible = value
 
 func _build_proxy_clips(body: ColorRect) -> void:
 	var lib := AnimationLibrary.new()

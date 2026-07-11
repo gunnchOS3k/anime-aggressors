@@ -59,8 +59,8 @@ func _update_text() -> void:
 	for f in fighters:
 		if f == null:
 			continue
-		var name := f.data.get("displayName", "?") if "data" in f else "?"
-		var state := f.state_machine.current_state if f.state_machine else "?"
+		var name: String = f.data.get("displayName", "?") if "data" in f else "?"
+		var state: String = f.state_machine.current_state if f.state_machine else "?"
 		var proxy := " [color=yellow]PROXY — NOT FINAL ART[/color]"
 		var mr := ""
 		if f.move_runner:

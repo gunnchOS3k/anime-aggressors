@@ -13,6 +13,6 @@ static func run() -> bool:
 	SmokeAssert.ok(ResourceLoader.exists(boot_path), "BootScene.tscn missing")
 	var boot_res := load(boot_path) as PackedScene
 	SmokeAssert.ok(boot_res != null, "BootScene failed to load")
-	var main_scene := ProjectSettings.get_setting("application/run/main_scene", "")
+	var main_scene: Variant = ProjectSettings.get_setting("application/run/main_scene", "")
 	SmokeAssert.ok(str(main_scene).ends_with("BootScene.tscn"), "main_scene must be BootScene")
 	return SmokeAssert.passed()

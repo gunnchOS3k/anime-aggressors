@@ -54,6 +54,7 @@ Anime Aggressors is a **Godot-first full-scope** local platform fighter:
 - 7-fighter roster, move manifests, state machine, training/debug mode
 - Console-style menu flow, local 1v1 + CPU, stocks, aura, shields, dodge
 - Blender → Godot pipeline (see [BLENDER_TO_GODOT_PIPELINE.md](docs/BLENDER_TO_GODOT_PIPELINE.md))
+- Seven original rigged 3D proxy fighters with 19 imported clips each; rebuild with `npm run assets:build:fighters`
 
 Roadmap: [FULL_SCOPE_PRODUCTION_PLAN.md](docs/FULL_SCOPE_PRODUCTION_PLAN.md)  
 Build targets: [BUILD_TARGETS.md](docs/BUILD_TARGETS.md)  
@@ -116,7 +117,8 @@ npm run typecheck
 npm test
 npm run build
 npm run generate:godot-full-scope   # regenerate Godot fighter/move JSON
+npm run assets:build:fighters       # rebuild .blend + .glb character proxies (Blender required)
+npm run validate:character-assets   # verify GLB rigs, sockets, clips, hashes, runtime wiring
 ```
 
 Godot web export (secondary): `npm run godot:export:web` then `npm run build:pages` — see [BUILD_TARGETS.md](docs/BUILD_TARGETS.md).
-

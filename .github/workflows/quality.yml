@@ -28,9 +28,8 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Security audit (non-blocking)
+      - name: Security audit
         run: npm run audit:ci
-        continue-on-error: true
 
   native-engine:
     runs-on: ubuntu-latest
