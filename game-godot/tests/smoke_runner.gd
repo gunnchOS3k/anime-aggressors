@@ -6,8 +6,10 @@ func _init() -> void:
 	call_deferred("_run_all")
 
 func _suites() -> Array:
+	var ReleaseMode = preload("res://tests/smoke_release_mode.gd")
 	return [
 		["boot", SmokeBoot],
+		["release_mode", ReleaseMode],
 		["data_load", SmokeDataLoad],
 		["fighter_scene", SmokeFighterScene],
 		["training_scene", SmokeTrainingScene],
