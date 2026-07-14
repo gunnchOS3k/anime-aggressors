@@ -17,8 +17,8 @@
 | Seven fighters unique combat data | **PASS** | `visible-runner.log` + move JSON hashes |
 | Release presentation (no debug HUD / watermarks) | **PARTIAL** | Debug HUD off; identical proxy models + floating name labels + greybox stages remain |
 | Headless match harness | **PASS** | `game-godot/tests/accept_match_loop.gd` |
-| Signed Android RC + 16 KB | **NOT STARTED** | gated until Pedestrian visible cup + migration pass |
-| Pixel acceptance | **NOT TESTED** | USB Pixel absent after reconnect storm; signed RC ready |
+| Signed Android RC + 16 KB | **PASS** | APK SHA `d2d39717…b8d0`; ZIP+ELF 16 KB PASS; `debuggable=false`; evidence `android-release/VERIFY_16KB.txt` |
+| Pixel acceptance | **PARTIAL** | Signed RC cold launch without debug/16 KB warning; full touch menu→match not completed via ADB |
 | PR ready | **No** | awaiting Android gates + verifier + art presentation |
 
 ## Driver
