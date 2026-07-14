@@ -1,27 +1,35 @@
 # Acceptance Checklist — Anime Aggressors
 
-**Device:** Pixel 6a `27211JEGR06194`  
 **Branch:** `cursor/product-quality-mobile-pass`  
 **Date:** 2026-07-13
 
 ## Gates
 
-| Gate | Status |
-|------|--------|
-| Startup / title screen | **Partial** — boot scene updated; not device-recorded |
-| Full menu navigation | **Not verified on Pixel** |
-| Match flow end-to-end | **Not verified this pass** |
-| WEB_TO_GODOT_PARITY_MATRIX | **Created** — critical gaps remain |
-| Release APK on disk | **Missing** — prior APKs cleaned; rebuild blocked by disk |
-| 16 KB compatibility | **Not passed** — Godot 4.3 warning expected |
-| Screen recording | **Not captured** |
-| PR ready | **No** |
+| Gate | Status | Evidence |
+|------|--------|----------|
+| Visible cold boot / title | **PASS** | `docs/product-quality/evidence/visible-gui/01-boot.png` |
+| Main menu | **PASS** | `02-main-menu.png` |
+| Fighter / stage select | **PASS** | `03-fighter-select.png`, `04-stage-select.png` |
+| Visible match (attack/special/grab) | **PASS** | `05`–`08` |
+| Stock loss / results / rematch | **PASS** | `09`–`11` |
+| Headless match harness | **PASS** | `game-godot/tests/accept_match_loop.gd` |
+| Signed Android RC + 16 KB | **NOT STARTED** | gated until Pedestrian visible cup + migration pass |
+| Pixel acceptance | **NOT TESTED** | USB Pixel absent after reconnect storm; signed RC ready |
+| PR ready | **No** | awaiting Android gates + verifier |
 
-## Automated tests run
+## Driver
 
-- Godot `smoke_runner.gd`: boot, release_mode, fighter_scene, training_scene, battle_scene **OK**; data_load **FAIL** (pre-existing move list gaps)
+```bash
+/Applications/Godot-4.3.app/Contents/MacOS/Godot --path game-godot -s res://tests/accept_visible_match.gd
+```
 
-## Evidence paths
+Screenshots also land in Godot userdata `visible_gui/` and are copied into `docs/product-quality/evidence/visible-gui/`.
 
-- Matrix: `docs/product-quality/WEB_TO_GODOT_PARITY_MATRIX.md`
-- Plan: `../PRODUCT_QUALITY_COMPLETION_PLAN.md`
+
+## Godot 4.5 / 16 KB (2026-07-13)
+
+- Editor 4.5.stable + matching templates: PASS
+- Headless smoke_runner: PASS
+- accept_match_loop: PASS
+- Signed internal RC 0.3.0 (202): built; 16 KB ELF align PASS
+- Pixel install: blocked on physical USB reconnect

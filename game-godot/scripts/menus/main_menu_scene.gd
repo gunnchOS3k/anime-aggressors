@@ -1,4 +1,4 @@
-extends ConsoleMenuBase
+extends "res://scripts/ui/console_menu_base.gd"
 
 var _ambient_tween: Tween
 

@@ -1,4 +1,5 @@
-extends ConsoleMenuBase
+extends "res://scripts/ui/console_menu_base.gd"
+const _DataLoader = preload("res://scripts/data/data_loader.gd")
 
 @onready var dummy_option: OptionButton = %DummyBehavior
 @onready var p1_option: OptionButton = %P1Fighter
@@ -11,7 +12,7 @@ var _roster: Array = []
 var _stages: Array = []
 
 func _ready() -> void:
-	_roster = DataLoader.roster_ids()
+	_roster = _DataLoader.roster_ids()
 	_stages = GameState.production_stage_ids()
 	if _stages.is_empty():
 		_stages = ["training-grid", "skyline-arena"]
@@ -42,7 +43,7 @@ func _fill_fighter_options(opt: OptionButton) -> void:
 	if opt == null:
 		return
 	for id in _roster:
-		var d: Dictionary = DataLoader.load_fighter(id)
+		var d: Dictionary = _DataLoader.load_fighter(id)
 		opt.add_item(d.get("displayName", id))
 
 func _on_start_pressed() -> void:

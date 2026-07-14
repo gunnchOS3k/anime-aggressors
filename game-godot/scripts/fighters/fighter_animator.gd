@@ -5,11 +5,11 @@ class_name FighterAnimator
 
 const PROXY_LABEL := "PROXY — NOT FINAL ART"
 
-var _fighter: AAFighter
+var _fighter
 var _player: AnimationPlayer
 var _proxy_label: Label
 
-func setup(fighter: AAFighter, body: ColorRect) -> void:
+func setup(fighter, body: ColorRect) -> void:
 	_fighter = fighter
 	_player = AnimationPlayer.new()
 	add_child(_player)

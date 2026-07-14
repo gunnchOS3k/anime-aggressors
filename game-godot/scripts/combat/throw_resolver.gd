@@ -1,5 +1,6 @@
 extends RefCounted
 class_name ThrowResolver
+const _DataLoader = preload("res://scripts/data/data_loader.gd")
 
 ## Reads throw direction during grab hold and resolves directional throws.
 
@@ -14,7 +15,7 @@ static func read_throw_direction(fighter: Node) -> String:
 	if fighter.has_method("_read_up"):
 		up_held = fighter._read_up()
 	elif "slot" in fighter:
-		var slot: int = fighter.slot
+		var slot: int = int(fighter.slot)
 		up_held = Input.is_action_pressed("p%d_up" % slot)
 		down_held = Input.is_action_pressed("p%d_down" % slot)
 	if up_held:
@@ -32,10 +33,10 @@ static func throw_move_id(direction: String) -> String:
 	return "throw_%s" % direction
 
 static func resolve_throw(attacker: Node, target: Node, manifest: Dictionary, direction: String) -> Dictionary:
-	var move_id := throw_move_id(direction)
-	var throw_move: Dictionary = DataLoader.find_move(manifest, move_id)
+	var move_id: String = throw_move_id(direction)
+	var throw_move: Dictionary = _DataLoader.find_move(manifest, move_id)
 	if throw_move.is_empty():
-		throw_move = DataLoader.find_move(manifest, "throw_forward")
+		throw_move = _DataLoader.find_move(manifest, "throw_forward")
 	if throw_move.is_empty():
 		throw_move = {
 			"move_id": move_id,

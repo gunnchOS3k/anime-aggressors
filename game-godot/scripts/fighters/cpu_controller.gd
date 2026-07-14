@@ -5,9 +5,9 @@ class_name CpuController
 
 var level: int = 2
 var _timer: float = 0.0
-var _fighter: AAFighter
+var _fighter
 
-func setup(fighter: AAFighter, cpu_level: int) -> void:
+func setup(fighter, cpu_level: int) -> void:
 	_fighter = fighter
 	level = clampi(cpu_level, 1, 4)
 
@@ -15,7 +15,7 @@ func tick(delta: float, opponent: Node2D) -> void:
 	if _fighter == null or opponent == null:
 		return
 	_timer -= delta
-	var dx := opponent.global_position.x - _fighter.global_position.x
+	var dx: float = float(opponent.global_position.x) - float(_fighter.global_position.x)
 	var dist := absf(dx)
 	var tags: Array = _fighter.data.get("cpuBehaviorTags", [])
 	var approach := dist > 70.0
@@ -65,7 +65,7 @@ func tick(delta: float, opponent: Node2D) -> void:
 			_sim_axis(signf(dx) * -1.0)
 
 func _sim_axis(v: float) -> void:
-	var slot := _fighter.slot
+	var slot: int = int(_fighter.slot)
 	if v > 0.1:
 		Input.action_press("p%d_right" % slot)
 		Input.action_release("p%d_left" % slot)

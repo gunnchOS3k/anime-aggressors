@@ -1,4 +1,5 @@
 extends Node2D
+const _DataLoader = preload("res://scripts/data/data_loader.gd")
 
 @onready var fighters_root: Node2D = $Fighters
 @onready var stage_root: Node2D = $Stage
@@ -8,14 +9,14 @@ extends Node2D
 @onready var p2_hud: Label = %P2Hud
 @onready var ko_label: Label = %KoLabel
 
-var fighter1: AAFighter
-var fighter2: AAFighter
+var fighter1
+var fighter2
 var blast: Dictionary = {}
 var _active := false
 var _paused := false
 var _ko_lock := false
-var _debug_hud: DebugHud
-var _battle_sim: BattleSim
+var _debug_hud
+var _battle_sim
 var _pause_panel: PanelContainer
 
 const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
@@ -114,15 +115,15 @@ func _spawn_fighters() -> void:
 	fighter2.koed.connect(_on_ko.bind(fighter2))
 	_update_hud()
 
-func _connect_hitboxes(attacker: AAFighter, defender: AAFighter) -> void:
+func _connect_hitboxes(attacker, defender) -> void:
 	var hb: Area2D = attacker.get_node("Hitbox")
 	var hurt: Area2D = defender.get_node("Hurtbox")
 	hb.area_entered.connect(func(area: Area2D):
 		if area != hurt or not hb.monitoring or not attacker.move_runner.is_active_phase():
 			return
-		var move := attacker._current_move
+		var move = attacker._current_move
 		if move.is_empty():
-			move = DataLoader.find_move(attacker.move_manifest, attacker.move_runner.current_move_id())
+			move = _DataLoader.find_move(attacker.move_manifest, attacker.move_runner.current_move_id())
 		if move.is_empty() or move.get("move_id") == "grab":
 			return
 		attacker.hit_resolver.resolve(attacker, defender, move, attacker.damage_percent)
@@ -147,10 +148,10 @@ func _physics_process(_delta: float) -> void:
 	_check_blast(fighter2)
 	_check_match_end()
 
-func _check_blast(f: AAFighter) -> void:
+func _check_blast(f) -> void:
 	if f == null or f.stocks <= 0 or _ko_lock:
 		return
-	var pos := f.global_position
+	var pos: Vector2 = f.global_position
 	if pos.x < blast.get("left", -9999) or pos.x > blast.get("right", 9999) or pos.y < blast.get("top", -9999) or pos.y > blast.get("bottom", 9999):
 		_ko_lock = true
 		if ko_label:
@@ -163,7 +164,7 @@ func _check_blast(f: AAFighter) -> void:
 			_ko_lock = false
 		, CONNECT_ONE_SHOT)
 
-func _on_ko(_f: AAFighter) -> void:
+func _on_ko(_f) -> void:
 	pass
 
 func _check_match_end() -> void:

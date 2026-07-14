@@ -7,9 +7,9 @@ var current_state: String = FighterStates.IDLE
 var previous_state: String = FighterStates.IDLE
 var state_frame: int = 0
 var state_time: float = 0.0
-var _fighter: AAFighter
+var _fighter
 
-func setup(fighter: AAFighter) -> void:
+func setup(fighter) -> void:
 	_fighter = fighter
 
 func enter(state: String) -> void:

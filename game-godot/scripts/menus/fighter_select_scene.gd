@@ -1,4 +1,4 @@
-extends ConsoleMenuBase
+extends "res://scripts/ui/console_menu_base.gd"
 
 var _roster: Array = []
 var _cursor: int = 0

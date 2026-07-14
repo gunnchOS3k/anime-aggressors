@@ -1,11 +1,12 @@
 extends Node2D
+const _DataLoader = preload("res://scripts/data/data_loader.gd")
 
 @onready var fighters_root: Node2D = $Fighters
 @onready var stage_root: Node2D = $Stage
 @onready var hud: CanvasLayer = $HUD
 
-var fighter1: AAFighter
-var fighter2: AAFighter
+var fighter1
+var fighter2
 var _debug_hud: DebugHud
 var _battle_sim: BattleSim
 var _hit_log: Label
@@ -71,15 +72,15 @@ func _spawn_fighters() -> void:
 	fighter1.grab_event.connect(_on_grab)
 	fighter2.grab_event.connect(_on_grab)
 
-func _connect_hits(attacker: AAFighter, defender: AAFighter) -> void:
+func _connect_hits(attacker, defender) -> void:
 	var hb: Area2D = attacker.get_node("Hitbox")
 	var hurt: Area2D = defender.get_node("Hurtbox")
 	hb.area_entered.connect(func(area: Area2D):
 		if area != hurt or not hb.monitoring or not attacker.move_runner.is_active_phase():
 			return
-		var move := attacker._current_move
+		var move = attacker._current_move
 		if move.is_empty():
-			move = DataLoader.find_move(attacker.move_manifest, attacker.move_runner.current_move_id())
+			move = _DataLoader.find_move(attacker.move_manifest, attacker.move_runner.current_move_id())
 		if move.is_empty() or move.get("move_id") == "grab":
 			return
 		attacker.hit_resolver.resolve(attacker, defender, move, attacker.damage_percent)
