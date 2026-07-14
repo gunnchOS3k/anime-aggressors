@@ -139,9 +139,10 @@ func _set_loaded(value: bool) -> void:
 	_loaded = value
 	if _display:
 		_display.visible = value
+	# Keep developer tier watermark off in release presentation.
 	var tier_label := get_node_or_null("ModelTierLabel") as Label
 	if tier_label:
-		tier_label.visible = value
+		tier_label.visible = false
 
 
 func _find_animation_player(node: Node) -> AnimationPlayer:

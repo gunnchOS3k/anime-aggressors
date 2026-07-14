@@ -24,9 +24,13 @@ func _ready() -> void:
 	_battle_sim = BattleSim.new()
 	add_child(_battle_sim)
 	_battle_sim.bind_fighters([fighter1, fighter2])
-	_debug_hud = DEBUG_HUD_SCENE.instantiate()
-	add_child(_debug_hud)
-	_debug_hud.bind_fighters([fighter1, fighter2])
+	if OS.is_debug_build():
+		_debug_hud = DEBUG_HUD_SCENE.instantiate()
+		add_child(_debug_hud)
+		_debug_hud.bind_fighters([fighter1, fighter2])
+		_debug_hud.visible_debug = false
+		if _debug_hud.has_node("Panel"):
+			_debug_hud.get_node("Panel").visible = false
 	_hit_log = get_node_or_null("%HitLog") as Label
 	_update_help()
 

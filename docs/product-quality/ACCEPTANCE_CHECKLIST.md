@@ -1,30 +1,33 @@
 # Acceptance Checklist — Anime Aggressors
 
 **Branch:** `cursor/product-quality-mobile-pass`  
-**Date:** 2026-07-13
+**Date:** 2026-07-14
 
 ## Gates
 
 | Gate | Status | Evidence |
 |------|--------|----------|
-| Visible cold boot / title | **PASS** | `docs/product-quality/evidence/visible-gui/01-boot.png` |
-| Main menu | **PASS** | `02-main-menu.png` |
-| Fighter / stage select | **PASS** | `03-fighter-select.png`, `04-stage-select.png` |
-| Visible match (attack/special/grab) | **PASS** | `05`–`08` |
-| Stock loss / results / rematch | **PASS** | `09`–`11` |
+| **Visible GUI journey (Godot 4.5, non-headless)** | **PARTIAL** | Functional flow **PASS** (`visible-runner.log` `failed=0`, shots `01`–`26`); release art **PARTIAL** (proxy fighters + greybox stages) — see `visible-anime/NOTES.md` |
+| Visible cold boot / title (Godot 4.5) | **PASS** | `docs/product-quality/evidence/visible-anime/01-boot.png` |
+| Main menu / Start Game surface | **PASS** | `02-main-menu.png` |
+| Ruleset → fighter → stage | **PASS** | `03`–`05` |
+| Intro / countdown / combat inputs | **PASS** | `06`–`14` |
+| Damage / knockback / stock / pause | **PASS** | `15`–`18` (forced hit used when scripted jab misses) |
+| Results / rematch / training / settings persist | **PASS** | `19`–`26` |
+| Seven fighters unique combat data | **PASS** | `visible-runner.log` + move JSON hashes |
+| Release presentation (no debug HUD / watermarks) | **PARTIAL** | Debug HUD off; identical proxy models + floating name labels + greybox stages remain |
 | Headless match harness | **PASS** | `game-godot/tests/accept_match_loop.gd` |
 | Signed Android RC + 16 KB | **NOT STARTED** | gated until Pedestrian visible cup + migration pass |
 | Pixel acceptance | **NOT TESTED** | USB Pixel absent after reconnect storm; signed RC ready |
-| PR ready | **No** | awaiting Android gates + verifier |
+| PR ready | **No** | awaiting Android gates + verifier + art presentation |
 
 ## Driver
 
 ```bash
-/Applications/Godot-4.3.app/Contents/MacOS/Godot --path game-godot -s res://tests/accept_visible_match.gd
+~/Applications/Godot/Godot-4.5.app/Contents/MacOS/Godot --path game-godot -s res://tests/accept_visible_match.gd
 ```
 
-Screenshots also land in Godot userdata `visible_gui/` and are copied into `docs/product-quality/evidence/visible-gui/`.
-
+Screenshots land in Godot userdata `visible_anime/` and are copied to `docs/product-quality/evidence/visible-anime/`.
 
 ## Godot 4.5 / 16 KB (2026-07-13)
 
@@ -33,3 +36,8 @@ Screenshots also land in Godot userdata `visible_gui/` and are copied into `docs
 - accept_match_loop: PASS
 - Signed internal RC 0.3.0 (202): built; 16 KB ELF align PASS
 - Pixel install: blocked on physical USB reconnect
+
+## Visible anime pass (2026-07-14)
+
+- Godot **4.5.stable** visible window driver: `RESULT failed=0`
+- See `docs/product-quality/evidence/visible-anime/NOTES.md`

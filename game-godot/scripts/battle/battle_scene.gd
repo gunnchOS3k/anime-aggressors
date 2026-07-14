@@ -32,6 +32,10 @@ func _ready() -> void:
 		_debug_hud = DEBUG_HUD_SCENE.instantiate()
 		add_child(_debug_hud)
 		_debug_hud.bind_fighters([fighter1, fighter2])
+		# Available via F1; stay hidden for release-facing presentation.
+		_debug_hud.visible_debug = false
+		if _debug_hud.has_node("Panel"):
+			_debug_hud.get_node("Panel").visible = false
 	fighter1.controls_enabled = false
 	fighter2.controls_enabled = false
 	await _run_countdown()
@@ -202,14 +206,20 @@ func _ensure_pause_panel() -> void:
 	if _pause_panel:
 		return
 	_pause_panel = PanelContainer.new()
-	_pause_panel.set_anchors_preset(Control.PRESET_CENTER)
-	_pause_panel.position = Vector2(640, 280)
+	_pause_panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
 	_pause_panel.custom_minimum_size = Vector2(420, 220)
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.06, 0.09, 0.16, 0.94)
+	style.border_color = Color(0.95, 0.75, 0.2, 1.0)
+	style.set_border_width_all(3)
+	style.set_content_margin_all(18)
+	_pause_panel.add_theme_stylebox_override("panel", style)
 	var v := VBoxContainer.new()
 	v.add_theme_constant_override("separation", 12)
 	var title := Label.new()
 	title.text = "Paused"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 28)
 	v.add_child(title)
 	var resume_btn := Button.new()
 	resume_btn.text = "Resume"
