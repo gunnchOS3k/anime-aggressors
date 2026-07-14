@@ -26,7 +26,14 @@
 | Playable battle | Web canvas battle | `BattleScene` sim | **Already present in Godot** | |
 | Results + rematch | Web results | `ResultsScene` | **Already present in Godot** | |
 | Seven canonical fighters | Shared JSON / oracle | `data/fighters.json` | **Already present in Godot** | Single source via generator |
+| Jab / throw / grab / aura move sets | Web move tables | `data/moves/*.json` + `move_schema.json` | **Verified** | Smoke asserts full `required_move_ids` (2026-07-13); not legacy bare `jab`/`throw` aliases |
 | Stage / ruleset data | Shared packages | `data/*.json` | **Already present in Godot** | |
+| Pages hub navigation | Home + labs routes · `apps/web/` | N/A (web) | **Verified on Pages** | 2026-07-13: Training `#/training`, Stage Select `#/stage-select`, Fighter Select, battle mount |
+| Pages battle mount | `#/battle` canvas | N/A | **Verified on Pages** | Diagnostics: fighters 2, stage skyline-arena |
+| Pages stage select | Stage vault UI | `StageSelectScene` · `scripts/menus/` | **Verified on Pages** | Skyline / Training Grid / Neon Rooftops listed |
+| Pages training | Training route | `training_menu_scene.gd` / `training_battle_scene.gd` | **Verified on Pages** | `#/training` opens |
+| Move data smoke | Web tables / packages | `tests/smoke_data_load.gd` + `data/moves/*.json` | **PASS** | All suites passed headless 2026-07-13 |
+| Godot boot / menu | Pages hub energy | `boot_scene.gd`, `main_menu_scene.gd` | **PARTIAL** | Ambient pulse + press feedback; audio still light |
 | Touch input | Web touch abstractions | `TouchInputManager` | **Partially implemented** | |
 | Controller / keyboard | Web + Godot | Godot input map | **Already present in Godot** | |
 | Android back button | N/A web | Menu `ui_cancel` | **Partially implemented** | Not verified on Pixel |

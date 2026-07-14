@@ -7,6 +7,7 @@ func _init() -> void:
 
 func _suites() -> Array:
 	var ReleaseMode = preload("res://tests/smoke_release_mode.gd")
+	var MatchLoop = preload("res://tests/smoke_match_loop.gd")
 	return [
 		["boot", SmokeBoot],
 		["release_mode", ReleaseMode],
@@ -14,6 +15,7 @@ func _suites() -> Array:
 		["fighter_scene", SmokeFighterScene],
 		["training_scene", SmokeTrainingScene],
 		["battle_scene", SmokeBattleScene],
+		["match_loop", MatchLoop],
 	]
 
 func _run_all() -> void:

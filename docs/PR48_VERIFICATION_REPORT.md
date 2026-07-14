@@ -1,15 +1,15 @@
 # PR #48 Verification Report
 
-**Generated:** 2026-07-11T19:12:00.138Z
+**Generated:** 2026-07-11T19:16:48.927Z
 
-**Commit:** `cfd4f507b5021addef36d17e2eb9b3316e882b0f`
+**Commit:** `668eabf06b0b13632851467ba8d62ecbcfaaa95a`
 
 ## Verification tiers
 
 | Tier | Status |
 |------|--------|
 | Automated npm | verified |
-| Godot CLI | manual_blocker_cli_missing |
+| Godot CLI | failed |
 | Godot editor playtest | manual_signoff_required |
 | Proxy functional | partial |
 | Final art | blocked |
@@ -27,14 +27,12 @@
 
 | Field | Value |
 |-------|-------|
-| Detected | false |
-| Binary | — |
-| Version | — |
-| Headless import | skipped |
-| Smoke runner | skipped |
+| Detected | true |
+| Binary | /tmp/godot/4.3/Godot.app/Contents/MacOS/Godot |
+| Version | 4.3.stable.official.77dcf97d8 |
+| Headless import | pass |
+| Smoke runner | fail |
 
-
-> **GODOT_CLI_MISSING — manual editor signoff required**
 
 
 ## Manual signoff required

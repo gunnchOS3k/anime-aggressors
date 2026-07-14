@@ -192,22 +192,36 @@ func _toggle_pause() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
-		if not _pause_panel:
-			_pause_panel = PanelContainer.new()
-			_pause_panel.position = Vector2(200, 200)
-			var v := VBoxContainer.new()
-			var title := Label.new()
-			title.text = "Paused — Esc/B resume | R rematch | M menu"
-			v.add_child(title)
-			_pause_panel.add_child(v)
-			hud.add_child(_pause_panel)
-			_pause_panel.visible = false
+		_ensure_pause_panel()
 		_toggle_pause()
 	if _paused and event.is_action_pressed("ui_accept"):
 		_toggle_pause()
-	if _paused and event is InputEventKey and event.pressed:
-		match event.keycode:
-			KEY_M:
-				SceneRouter.go("main_menu")
-			KEY_R:
-				SceneRouter.go("battle")
+
+func _ensure_pause_panel() -> void:
+	if _pause_panel:
+		return
+	_pause_panel = PanelContainer.new()
+	_pause_panel.set_anchors_preset(Control.PRESET_CENTER)
+	_pause_panel.position = Vector2(640, 280)
+	_pause_panel.custom_minimum_size = Vector2(420, 220)
+	var v := VBoxContainer.new()
+	v.add_theme_constant_override("separation", 12)
+	var title := Label.new()
+	title.text = "Paused"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	v.add_child(title)
+	var resume_btn := Button.new()
+	resume_btn.text = "Resume"
+	resume_btn.pressed.connect(_toggle_pause)
+	v.add_child(resume_btn)
+	var rematch_btn := Button.new()
+	rematch_btn.text = "Rematch"
+	rematch_btn.pressed.connect(func(): SceneRouter.go("battle"))
+	v.add_child(rematch_btn)
+	var menu_btn := Button.new()
+	menu_btn.text = "Return to Menu"
+	menu_btn.pressed.connect(func(): SceneRouter.go("main_menu"))
+	v.add_child(menu_btn)
+	_pause_panel.add_child(v)
+	hud.add_child(_pause_panel)
+	_pause_panel.visible = false

@@ -6,6 +6,34 @@ const FIGHTERS: Array[String] = [
 	"nix-calder", "orion-vell", "vesper-nyx",
 ]
 
+## Canonical IDs from data/moves/move_schema.json required_move_ids.
+## Smoke must match the production schema (jab_1…, throw_forward…), not legacy aliases.
+const REQUIRED_MOVE_IDS: Array[String] = [
+	"jab_1",
+	"jab_2",
+	"jab_finisher",
+	"forward_tilt",
+	"up_tilt",
+	"down_tilt",
+	"dash_attack",
+	"heavy_attack",
+	"neutral_air",
+	"forward_air",
+	"up_air",
+	"down_air",
+	"neutral_special_projectile",
+	"side_special",
+	"up_special_recovery",
+	"down_special",
+	"grab",
+	"throw_forward",
+	"throw_back",
+	"throw_up",
+	"throw_down",
+	"aura_charge",
+	"aura_burst",
+]
+
 static func run() -> bool:
 	var roster := DataLoader.roster_ids()
 	SmokeAssert.ok(roster.size() >= 7, "roster should list 7 fighters, got %d" % roster.size())
@@ -17,12 +45,22 @@ static func run() -> bool:
 		var moves := DataLoader.load_moves(id)
 		SmokeAssert.ok(not moves.is_empty(), "move manifest empty: %s" % id)
 		var move_list: Array = moves.get("moves", [])
-		SmokeAssert.ok(move_list.size() >= 10, "move manifest too small for %s" % id)
-		for required in ["jab", "grab", "throw", "aura_burst"]:
-			var found := false
-			for m in move_list:
-				if m.get("move_id", "") == required:
-					found = true
-					break
-			SmokeAssert.ok(found, "%s missing move %s" % [id, required])
+		SmokeAssert.ok(move_list.size() >= REQUIRED_MOVE_IDS.size(), "move manifest too small for %s" % id)
+		var by_id: Dictionary = {}
+		for m in move_list:
+			by_id[String(m.get("move_id", ""))] = m
+		for required in REQUIRED_MOVE_IDS:
+			SmokeAssert.ok(by_id.has(required), "%s missing move %s" % [id, required])
+			if not by_id.has(required):
+				continue
+			var move: Dictionary = by_id[required]
+			SmokeAssert.ok(move.has("training_display_name"), "%s/%s missing training_display_name" % [id, required])
+			if String(required).begins_with("throw_"):
+				SmokeAssert.ok(move.get("move_type", "") == "throw", "%s/%s move_type should be throw" % [id, required])
+				SmokeAssert.ok(move.has("throw"), "%s/%s missing throw block" % [id, required])
+			elif required == "grab":
+				SmokeAssert.ok(move.get("move_type", "") == "grab" or move.has("hitboxes"), "%s grab missing shape" % id)
+			elif required.begins_with("jab_") or required.ends_with("_tilt") or required.ends_with("_air") or required in ["dash_attack", "heavy_attack"]:
+				var boxes: Array = move.get("hitboxes", [])
+				SmokeAssert.ok(boxes.size() > 0, "%s/%s missing hitboxes" % [id, required])
 	return SmokeAssert.passed()
