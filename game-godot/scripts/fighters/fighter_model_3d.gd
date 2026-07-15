@@ -454,9 +454,30 @@ func _play_victory_presentation() -> void:
 	if _presentation_tween:
 		_presentation_tween.kill()
 	_presentation_tween = create_tween()
-	_presentation_tween.tween_property(_loaded_model, "position:y", 0.12, 0.15)
-	_presentation_tween.tween_property(_loaded_model, "rotation_degrees:y", 18.0, 0.2)
-	_presentation_tween.tween_property(_loaded_model, "position:y", 0.0, 0.2)
+	var pose := str(_life.get("victory_pose", "proud_fist"))
+	match pose:
+		"fist_heart":
+			_presentation_tween.tween_property(_loaded_model, "rotation_degrees:x", -8.0, 0.18)
+			_presentation_tween.tween_property(_loaded_model, "position:y", 0.04, 0.18)
+		"snap_spin":
+			_presentation_tween.tween_property(_loaded_model, "rotation_degrees:y", 360.0, 0.35)
+			_presentation_tween.tween_property(_loaded_model, "position:y", 0.16, 0.2)
+		"lifted_arms":
+			_presentation_tween.tween_property(_loaded_model, "position:y", 0.22, 0.2)
+			_presentation_tween.tween_property(_loaded_model, "rotation_degrees:x", -12.0, 0.2)
+		"subtle_nod":
+			_presentation_tween.tween_property(_loaded_model, "rotation_degrees:x", 10.0, 0.15)
+			_presentation_tween.tween_property(_loaded_model, "rotation_degrees:x", 0.0, 0.2)
+		"arms_open":
+			_presentation_tween.tween_property(_loaded_model, "rotation_degrees:y", 28.0, 0.22)
+			_presentation_tween.tween_property(_loaded_model, "position:y", 0.1, 0.22)
+		"smirk":
+			_presentation_tween.tween_property(_loaded_model, "rotation_degrees:y", -22.0, 0.2)
+			_presentation_tween.tween_property(_loaded_model, "position:z", 0.08, 0.2)
+		_:
+			_presentation_tween.tween_property(_loaded_model, "position:y", 0.12, 0.15)
+			_presentation_tween.tween_property(_loaded_model, "rotation_degrees:y", 18.0, 0.2)
+			_presentation_tween.tween_property(_loaded_model, "position:y", 0.0, 0.2)
 
 
 func _play_defeat_presentation() -> void:
@@ -466,8 +487,23 @@ func _play_defeat_presentation() -> void:
 	if _presentation_tween:
 		_presentation_tween.kill()
 	_presentation_tween = create_tween()
-	_presentation_tween.tween_property(_loaded_model, "rotation_degrees:x", 18.0, 0.25)
-	_presentation_tween.tween_property(_loaded_model, "position:y", -0.08, 0.2)
+	var pose := str(_life.get("defeat_pose", "kneel_guard"))
+	match pose:
+		"kneel_upright", "compose", "kneel_compose":
+			_presentation_tween.tween_property(_loaded_model, "position:y", -0.12, 0.28)
+			_presentation_tween.tween_property(_loaded_model, "rotation_degrees:x", 12.0, 0.28)
+		"hips_annoyed":
+			_presentation_tween.tween_property(_loaded_model, "rotation_degrees:z", 8.0, 0.2)
+			_presentation_tween.tween_property(_loaded_model, "rotation_degrees:y", -15.0, 0.2)
+		"soft_kneel":
+			_presentation_tween.tween_property(_loaded_model, "position:y", -0.1, 0.3)
+			_presentation_tween.tween_property(_loaded_model, "rotation_degrees:x", 16.0, 0.3)
+		"fade_kneel":
+			_presentation_tween.tween_property(_loaded_model, "rotation_degrees:y", 35.0, 0.3)
+			_presentation_tween.tween_property(_loaded_model, "position:y", -0.1, 0.3)
+		_:
+			_presentation_tween.tween_property(_loaded_model, "rotation_degrees:x", 18.0, 0.25)
+			_presentation_tween.tween_property(_loaded_model, "position:y", -0.08, 0.2)
 
 
 func _expression_glyph(state: String) -> String:
