@@ -1,8 +1,8 @@
 # Character Performance Report — Anime Aggressors
 
-**Build:** `0.3.1` / versionCode `203`  
-**APK:** `build/android/anime-aggressors-release.apk`  
-**SHA-256:** `0828c6b003145bff38789be10f376ff6ed0b64bf065e1528ba844c4a30033768`  
+**Build:** `0.3.1` / versionCode `203`
+**APK:** `build/android/anime-aggressors-release.apk`
+**SHA-256:** `0828c6b003145bff38789be10f376ff6ed0b64bf065e1528ba844c4a30033768`
 **Device:** Pixel expected serial `27211JEGR06194` — **not attached** at measurement time (2026-07-15).
 
 ## Status
