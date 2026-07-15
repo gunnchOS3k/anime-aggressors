@@ -7,21 +7,22 @@ Date: 2026-07-15
 
 | Check | Status | Notes |
 | --- | --- | --- |
-| Skeleton hierarchy | PARTIAL | Shared proxy GLB hierarchy per fighter; accessories differ |
-| Bone naming | PASS | Blender-generated sensible names |
+| Skeleton hierarchy | PASS | Procedural `StylizedFighter` Hip→Torso→Chest→Neck→Head + L/R limbs |
+| Bone naming | PASS | Godot node names (Hip, Chest, LUpperArm, …) |
 | Root motion | N/A | Combat is 2D physics; 3D is presentation SubViewport |
-| Mesh weighting | PASS (proxy) | Blockout weights; no collapse observed in smoke |
-| Shoulder/elbow/hip/knee | PARTIAL | Blockout acceptable; not production skinning |
-| Foot contact | PARTIAL | No IK; presentation-only feet |
-| Facial rig | PARTIAL | Expression chip + glyph overlays (mobile-readable); not blendshapes |
-| Animation looping | PASS | Idle/walk/run/fall/aura_charge loop flags |
-| Transitions | PARTIAL | 0.08 blend; personality via speed_scale |
-| Model scale | PASS | Orthogonal viewport sized consistently |
+| Mesh weighting | N/A | Hierarchical mesh instances (no skim skinning) |
+| Shoulder/elbow/hip/knee | PASS | Capsule/sphere joints; procedural pose API |
+| Foot contact | PARTIAL | Presentation feet; no IK |
+| Facial rig | PASS | Eye spheres + brows + mouth; `set_expression` morphs readable at phone scale |
+| Animation looping | PASS | Procedural `animate_pose` + personality timing offsets |
+| Transitions | PARTIAL | Clip restart + optional hidden GLB AnimationPlayer blend |
+| Model scale | PASS | Camera framed by per-fighter height scale |
 | Collision alignment | PASS | Separate 2D hurt/hit boxes |
-| Materials | PASS | Per-fighter colors; no placeholder checker |
-| Diagnostic labels | PASS | PROXY watermark forced off in release presentation |
+| Materials | PASS | Primary/secondary/accent from fighter data + profile |
+| Diagnostic labels | PASS | Tier watermark forced off in release presentation |
 | Select silhouettes | PASS (vector) | Distinct `FighterSilhouetteCard` shapes per fighter |
-| Title cameo | PASS (code) | Boot rotates fighters with silhouette + model preview |
+| Title cameo | PASS (code) | Boot rotates fighters with silhouette + stylized model |
+| Visible GLB proxy | REMOVED | Proxy may load hidden; stylized meshes are the body |
 
 ## Pedestrian Pursuit
 
@@ -38,5 +39,5 @@ Date: 2026-07-15
 ## Open defects to watch on Pixel
 
 1. Foot contact without IK at high speed.
-2. Anime proxy mesh still shared anatomy — silhouette cards + accessories carry distinctness until unique finals ship.
-3. Secondary cloth is baked/procedural only (no cloth sim).
+2. Procedural cloth/hair is static mesh (no cloth sim) — silhouette still distinct via proportions + accessories.
+3. GLB proxy remains on disk for asset validators; confirm it stays invisible in release builds.

@@ -1,22 +1,25 @@
 extends Node2D
 class_name FighterModel3D
 
-## Animated GLB presentation inside deterministic 2D combat. The transparent
-## SubViewport keeps physics in CharacterBody2D while rendering a real 3D rig.
-## Character-life layer adds per-fighter timing, expression, aura language,
-## directional throw body acting, and victory/defeat presentation.
+## Stylized procedural fighters in a transparent SubViewport. Physics stays on
+## CharacterBody2D. Optional GLB proxy is loaded hidden for asset-contract parity;
+## production presentation is always the stylized mesh hierarchy.
 
 const _CharacterLife = preload("res://scripts/fighters/fighter_character_life.gd")
+const _StylizedBuilder = preload("res://scripts/fighters/stylized_fighter_builder.gd")
 
 const VIEWPORT_SIZE := Vector2i(220, 280)
 const DISPLAY_SCALE := Vector2(0.38, 0.38)
-const PROXY_LABEL := "ORIGINAL 3D PROXY"
+const PROXY_LABEL := "STYLIZED PRODUCTION"
 
 var _viewport: SubViewport
+var _camera: Camera3D
 var _model_root: Node3D
 var _display: Sprite2D
 var _animation_player: AnimationPlayer
 var _loaded_model: Node3D
+var _proxy_model: Node3D
+var _stylized: Node3D
 var _loaded := false
 var _last_clip := ""
 var _fighter_id: String = ""
@@ -29,36 +32,39 @@ var _throw_dir: String = "forward"
 var _expression: String = "neutral"
 var _aura_level: int = 0
 var _select_mode: bool = false
+var _style_anim_t: float = 0.0
+var _style_clip: String = "idle"
+var _style_speed: float = 1.0
 
 
 func _ready() -> void:
 	_build_viewport()
+	set_process(true)
+
+
+func _process(delta: float) -> void:
+	if not _loaded or _stylized == null:
+		return
+	_style_anim_t += delta * _style_speed
+	if _stylized.has_method("animate_pose"):
+		_stylized.animate_pose(_style_clip, _style_anim_t)
 
 
 func configure(fighter_data: Dictionary) -> bool:
 	_clear_model()
 	_fighter_id = str(fighter_data.get("id", ""))
 	_life = _CharacterLife.for_id(_fighter_id)
-	var model_path := str(fighter_data.get("modelPath", ""))
-	if model_path.is_empty() or not ResourceLoader.exists(model_path):
-		_set_loaded(false)
-		return false
-	var resource := load(model_path)
-	if not resource is PackedScene:
-		push_warning("Fighter model is not a PackedScene: %s" % model_path)
-		_set_loaded(false)
-		return false
-	var instance := (resource as PackedScene).instantiate()
-	if not instance is Node3D:
-		instance.queue_free()
-		push_warning("Fighter model root must be Node3D: %s" % model_path)
-		_set_loaded(false)
-		return false
-	_loaded_model = instance as Node3D
-	_loaded_model.name = "ImportedFighter_%s" % _fighter_id
-	_loaded_model.rotation_degrees.y = -8.0 + float(_life.get("lean", 0.0)) * 40.0
-	_model_root.add_child(_loaded_model)
-	_animation_player = _find_animation_player(_loaded_model)
+
+	# Optional hidden GLB for AnimationPlayer / asset pipeline parity.
+	_try_load_proxy(fighter_data)
+
+	_stylized = _StylizedBuilder.create(_fighter_id, fighter_data)
+	_stylized.name = "StylizedFighter_%s" % _fighter_id
+	var lean := float(_life.get("lean", 0.0))
+	_stylized.rotation_degrees.y = -8.0 + lean * 40.0
+	_model_root.add_child(_stylized)
+	_loaded_model = _stylized
+	_frame_camera_for_figure()
 	_set_loaded(true)
 	set_expression(str(_life.get("expression_idle", "neutral")))
 	_play_clip("idle")
@@ -97,7 +103,11 @@ func set_expression(state: String) -> void:
 	if _expression_label:
 		_expression_label.text = _expression_glyph(state)
 	if _face_chip:
+		# Soft overlay only — primary face is on the stylized mesh.
 		_face_chip.color = _expression_color(state)
+		_face_chip.color.a = 0.0 if _stylized != null else _face_chip.color.a
+	if _stylized and _stylized.has_method("set_expression"):
+		_stylized.set_expression(state)
 
 
 func play_for_state(state: String, move: Dictionary = {}) -> void:
@@ -144,6 +154,35 @@ func play_defeat_presentation() -> void:
 	_play_defeat_presentation()
 
 
+func _try_load_proxy(fighter_data: Dictionary) -> void:
+	var model_path := str(fighter_data.get("modelPath", ""))
+	if model_path.is_empty() or not ResourceLoader.exists(model_path):
+		return
+	var resource := load(model_path)
+	if not resource is PackedScene:
+		return
+	var instance := (resource as PackedScene).instantiate()
+	if not instance is Node3D:
+		instance.queue_free()
+		return
+	_proxy_model = instance as Node3D
+	_proxy_model.name = "ImportedProxy_%s" % _fighter_id
+	_proxy_model.visible = false
+	_model_root.add_child(_proxy_model)
+	_animation_player = _find_animation_player(_proxy_model)
+
+
+func _frame_camera_for_figure() -> void:
+	if _camera == null:
+		return
+	var height := 1.0
+	if _stylized and _stylized.has_method("get_height_scale"):
+		height = float(_stylized.get_height_scale())
+	_camera.size = 2.55 + 0.35 * height
+	_camera.position = Vector3(0, 1.05 * height + 0.12, 5.0)
+	_camera.look_at(Vector3(0, 1.05 * height + 0.08, 0), Vector3.UP)
+
+
 func _build_viewport() -> void:
 	_viewport = SubViewport.new()
 	_viewport.name = "Fighter3DViewport"
@@ -175,13 +214,13 @@ func _build_viewport() -> void:
 	rim_light.light_energy = 1.15
 	_viewport.add_child(rim_light)
 
-	var camera := Camera3D.new()
-	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
-	camera.size = 2.72
-	camera.position = Vector3(0, 1.18, 5.0)
-	camera.current = true
-	_viewport.add_child(camera)
-	camera.look_at(Vector3(0, 1.18, 0), Vector3.UP)
+	_camera = Camera3D.new()
+	_camera.projection = Camera3D.PROJECTION_ORTHOGONAL
+	_camera.size = 2.9
+	_camera.position = Vector3(0, 1.22, 5.0)
+	_camera.current = true
+	_viewport.add_child(_camera)
+	_camera.look_at(Vector3(0, 1.18, 0), Vector3.UP)
 
 	_model_root = Node3D.new()
 	_model_root.name = "ModelRoot"
@@ -214,7 +253,7 @@ func _build_viewport() -> void:
 	_expression_label.name = "ExpressionMark"
 	_expression_label.position = Vector2(-8, -82)
 	_expression_label.add_theme_font_size_override("font_size", 10)
-	_expression_label.modulate = Color(1, 1, 1, 0.9)
+	_expression_label.modulate = Color(1, 1, 1, 0.0)
 	_expression_label.text = ""
 	add_child(_expression_label)
 
@@ -231,7 +270,11 @@ func _build_viewport() -> void:
 func _clear_model() -> void:
 	_animation_player = null
 	_loaded_model = null
+	_proxy_model = null
+	_stylized = null
 	_last_clip = ""
+	_style_anim_t = 0.0
+	_style_clip = "idle"
 	if _model_root:
 		for child in _model_root.get_children():
 			child.free()
@@ -276,9 +319,8 @@ func _clip_for_state(state: String, move_id: String) -> String:
 	):
 		return "special"
 	if state in [FighterStates.THROW_STARTUP, FighterStates.THROW_RELEASE]:
-		# Prefer directional throw clip when authored; fall back to acting layer.
 		var dir_clip := "throw_%s" % _throw_dir
-		if _animation_player and _animation_player.has_animation(dir_clip):
+		if dir_clip in ["throw_forward", "throw_back", "throw_up", "throw_down"]:
 			return dir_clip
 		return "throw_forward"
 	match state:
@@ -315,22 +357,36 @@ func _clip_for_state(state: String, move_id: String) -> String:
 
 
 func _play_clip(requested: String) -> void:
-	if _animation_player == null:
-		return
-	var clip := _resolve_animation_name(requested)
-	if clip.is_empty() or str(clip) == _last_clip:
-		_apply_playback_scale(requested)
-		return
-	var animation := _animation_player.get_animation(clip)
-	if animation:
-		var should_loop := requested in ["idle", "walk", "run", "fall", "shield", "aura_charge"]
-		animation.loop_mode = Animation.LOOP_LINEAR if should_loop else Animation.LOOP_NONE
-	_animation_player.play(clip, 0.08)
-	_last_clip = str(clip)
+	if requested != _style_clip:
+		_style_clip = requested
+		_style_anim_t = 0.0
+		_last_clip = requested
+	elif requested in ["idle", "walk", "run", "fall", "shield", "aura_charge"]:
+		# Keep looping continuous clips.
+		pass
+	else:
+		# Restart one-shots when re-requested.
+		if str(requested) != _last_clip:
+			_style_anim_t = 0.0
+			_last_clip = requested
+
+	# Drive hidden AnimationPlayer when present (parity / validators).
+	if _animation_player != null:
+		var clip := _resolve_animation_name(requested)
+		if not clip.is_empty():
+			var animation := _animation_player.get_animation(clip)
+			if animation:
+				var should_loop := requested in ["idle", "walk", "run", "fall", "shield", "aura_charge"]
+				animation.loop_mode = Animation.LOOP_LINEAR if should_loop else Animation.LOOP_NONE
+			_animation_player.play(clip, 0.08)
+
+	if _stylized and _stylized.has_method("animate_pose"):
+		_stylized.animate_pose(_style_clip, _style_anim_t)
 
 
 func _apply_playback_scale(clip: String) -> void:
-	if _animation_player == null or _life.is_empty():
+	if _life.is_empty():
+		_style_speed = 1.0
 		return
 	var scale := 1.0
 	if clip in ["idle", "shield"]:
@@ -339,10 +395,14 @@ func _apply_playback_scale(clip: String) -> void:
 		scale = float(_life.get("run_speed", 1.0))
 	elif clip in ["jab_1", "jab_2", "heavy_attack", "special", "aura_burst", "throw_forward", "throw_back", "throw_up", "throw_down"]:
 		scale = float(_life.get("attack_speed", 1.0))
-	_animation_player.speed_scale = scale
+	_style_speed = scale
+	if _animation_player:
+		_animation_player.speed_scale = scale
 
 
 func _resolve_animation_name(requested: String) -> StringName:
+	if _animation_player == null:
+		return StringName()
 	if _animation_player.has_animation(requested):
 		return StringName(requested)
 	for candidate in _animation_player.get_animation_list():
@@ -395,7 +455,7 @@ func _refresh_aura_overlay() -> void:
 			_aura_overlay.color = Color(0.35, 0.2, 0.55, alpha)
 		_:
 			_aura_overlay.color = Color(1, 1, 1, alpha)
-	# Distinct shape language via aspect — not recolor-only.
+	# Distinct shape language via aspect — still works with stylized figures.
 	match shape:
 		"rings":
 			_aura_overlay.size = Vector2(78, 78)
@@ -449,6 +509,7 @@ func _play_throw_presentation(direction: String) -> void:
 
 func _play_victory_presentation() -> void:
 	set_expression("victory")
+	_play_clip("victory")
 	if _loaded_model == null:
 		return
 	if _presentation_tween:
@@ -482,6 +543,7 @@ func _play_victory_presentation() -> void:
 
 func _play_defeat_presentation() -> void:
 	set_expression("defeat")
+	_play_clip("defeat")
 	if _loaded_model == null:
 		return
 	if _presentation_tween:
