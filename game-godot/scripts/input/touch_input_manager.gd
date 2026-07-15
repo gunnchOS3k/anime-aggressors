@@ -71,8 +71,14 @@ func _save_settings() -> void:
 	cfg.save(SETTINGS_PATH)
 
 func _sync_overlay() -> void:
+	var show := should_show_touch()
 	if overlay and overlay.has_method("set_visible_controls"):
-		overlay.set_visible_controls(should_show_touch())
+		overlay.set_visible_controls(show)
+	if overlay:
+		overlay.process_mode = (
+			Node.PROCESS_MODE_INHERIT if show else Node.PROCESS_MODE_DISABLED
+		)
+		overlay.visible = show
 
 func should_show_touch() -> bool:
 	match touch_mode:

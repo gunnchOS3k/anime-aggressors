@@ -184,10 +184,18 @@ func _frame_camera_for_figure() -> void:
 
 
 func _build_viewport() -> void:
+	# Tear down any prior viewport to prevent world leakage / duplicate previews.
+	if _viewport != null and is_instance_valid(_viewport):
+		_viewport.queue_free()
+		_viewport = null
+	if _display != null and is_instance_valid(_display):
+		_display.queue_free()
+		_display = null
 	_viewport = SubViewport.new()
 	_viewport.name = "Fighter3DViewport"
 	_viewport.size = VIEWPORT_SIZE
 	_viewport.transparent_bg = true
+	# Isolated World3D per fighter presenter — no shared gameplay-world leakage.
 	_viewport.own_world_3d = true
 	_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	_viewport.msaa_3d = Viewport.MSAA_2X

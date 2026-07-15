@@ -36,6 +36,31 @@ func set_visible_controls(on: bool) -> void:
 	visible = on
 	if root:
 		root.visible = on
+		# When hidden, never intercept menu taps — full ignore + no processing.
+		root.mouse_filter = Control.MOUSE_FILTER_IGNORE if not on else Control.MOUSE_FILTER_IGNORE
+	process_mode = Node.PROCESS_MODE_DISABLED if not on else Node.PROCESS_MODE_INHERIT
+	_set_interactive_filters(on)
+	if not on:
+		_stick_touch_id = -1
+		_stick_vector = Vector2.ZERO
+		_reset_knob()
+		_push_stick()
+		# Release any held combat buttons so menus don't inherit press state.
+		for suffix in ["jump", "attack", "special", "shield", "grab", "dodge", "aura_charge"]:
+			_set_btn(suffix, false, false)
+
+
+func _set_interactive_filters(interactive: bool) -> void:
+	var filter := Control.MOUSE_FILTER_STOP if interactive else Control.MOUSE_FILTER_IGNORE
+	if stick_base:
+		stick_base.mouse_filter = filter
+	for btn in [btn_jump, btn_attack, btn_special, btn_shield, btn_grab, btn_dodge, btn_aura]:
+		if btn:
+			btn.mouse_filter = filter
+			btn.disabled = not interactive
+			btn.visible = interactive
+	if stick_base:
+		stick_base.visible = interactive
 
 func _wire_button(btn: Button, suffix: String) -> void:
 	if btn == null:

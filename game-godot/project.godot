@@ -7,11 +7,13 @@ config/description="Primary local platform fighter runtime — Godot 4"
 run/main_scene="res://scenes/boot/BootScene.tscn"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://icon.svg"
+config/quit_on_go_back=false
 
 [autoload]
 GameState="*res://scripts/core/GameState.gd"
 SceneRouter="*res://scripts/core/SceneRouter.gd"
 TouchInputManager="*res://scripts/input/touch_input_manager.gd"
+NavigationAuthority="*res://scripts/core/NavigationAuthority.gd"
 
 [display]
 window/size/viewport_width=1280

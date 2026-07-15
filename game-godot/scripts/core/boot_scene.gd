@@ -240,8 +240,18 @@ func _enter_main_menu_immediate() -> void:
 	SceneRouter.go("main_menu")
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		on_back()
+		get_viewport().set_input_as_handled()
+		return
 	if not _ready_to_start or _transitioning:
 		return
 	if event.is_action_pressed("ui_accept"):
 		_on_start_game_pressed()
 		get_viewport().set_input_as_handled()
+
+
+func on_back() -> void:
+	var nav := get_node_or_null("/root/NavigationAuthority")
+	if nav != null and nav.has_method("request_exit"):
+		nav.request_exit()

@@ -65,4 +65,12 @@ func _press_feedback() -> void:
 		Input.vibrate_handheld(18)
 
 func footer_hint() -> String:
-	return "[A] Select tile   [B] —   Primary Runtime: Godot 4"
+	return "[A] Select tile   [B] Back   Primary Runtime: Godot 4"
+
+
+func on_back() -> void:
+	# Soft exit: return to title (requires confirmation to quit from Boot).
+	var router := get_node_or_null("/root/SceneRouter")
+	if router:
+		router.skip_boot_title = false
+	SceneRouter.go("boot")
