@@ -3,6 +3,15 @@
 ## 1. Fantasy
 Defensive frost anchor — mantle and shard shoulders, slow but controlling.
 
+## 1a. Inspiration anchors (mechanic principles)
+See [POWER_REFERENCE_LIBRARY.md](../POWER_REFERENCE_LIBRARY.md#5-nix-calder--ice-frost-snow-cold-freeze-control).
+
+- Chill stacks and movement permission control
+- Persistent ice traps and terrain
+- Freeze-burst punish windows
+- Ice armor defensive aura
+- Stage-control shard projectiles
+
 ## 2. Silhouette
 Broad, frost mantle, ice shard shoulders, blue/white palette.
 

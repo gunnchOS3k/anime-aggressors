@@ -5,7 +5,7 @@ config_version=5
 config/name="Anime Aggressors"
 config/description="Primary local platform fighter runtime — Godot 4"
 run/main_scene="res://scenes/boot/BootScene.tscn"
-config/features=PackedStringArray("4.2", "Forward Plus")
+config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
@@ -18,6 +18,7 @@ window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+window/handheld/orientation=0
 
 [input]
 
@@ -156,3 +157,4 @@ ui_cancel={
 
 [rendering]
 renderer/rendering_method="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true

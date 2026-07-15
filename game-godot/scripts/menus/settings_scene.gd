@@ -1,4 +1,4 @@
-extends ConsoleMenuBase
+extends "res://scripts/ui/console_menu_base.gd"
 
 @onready var touch_mode_label: Label = %TouchModeValue
 

@@ -3,6 +3,15 @@
 ## 1. Fantasy
 Rushdown lightning striker — fast commits, electric scarf trail.
 
+## 1a. Inspiration anchors (mechanic principles)
+See [POWER_REFERENCE_LIBRARY.md](../POWER_REFERENCE_LIBRARY.md#3-juno-spark--electricity-lightning-speed-magnetism).
+
+- Touch-once speed routing and dash-cancel confirms
+- Brief electric stun on chain hits
+- Chain lightning multi-hit pressure
+- Magnetized pull/push spacing
+- Fast projectile scaling, not raw kill power
+
 ## 2. Silhouette
 Compact, yellow/black, bolt hair tufts, lightning sash.
 

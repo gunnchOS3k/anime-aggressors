@@ -1,5 +1,8 @@
 extends Node
 
+## When true, BootScene skips the title CTA and routes straight to main menu / mobile playtest.
+var skip_boot_title := false
+
 const SCENES := {
 	"boot": "res://scenes/boot/BootScene.tscn",
 	"main_menu": "res://scenes/menus/MainMenuScene.tscn",
@@ -19,7 +22,12 @@ const SCENES := {
 	"mobile_playtest": "res://scenes/menus/MobilePlaytestScene.tscn",
 }
 
+func mark_boot_title_shown() -> void:
+	skip_boot_title = true
+
 func go(scene_key: String) -> void:
+	if scene_key != "boot":
+		mark_boot_title_shown()
 	if not SCENES.has(scene_key):
 		push_error("Unknown scene key: %s" % scene_key)
 		return

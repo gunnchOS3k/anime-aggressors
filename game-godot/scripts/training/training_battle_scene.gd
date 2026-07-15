@@ -1,11 +1,12 @@
 extends Node2D
+const _DataLoader = preload("res://scripts/data/data_loader.gd")
 
 @onready var fighters_root: Node2D = $Fighters
 @onready var stage_root: Node2D = $Stage
 @onready var hud: CanvasLayer = $HUD
 
-var fighter1: AAFighter
-var fighter2: AAFighter
+var fighter1
+var fighter2
 var _debug_hud: DebugHud
 var _battle_sim: BattleSim
 var _hit_log: Label
@@ -23,9 +24,13 @@ func _ready() -> void:
 	_battle_sim = BattleSim.new()
 	add_child(_battle_sim)
 	_battle_sim.bind_fighters([fighter1, fighter2])
-	_debug_hud = DEBUG_HUD_SCENE.instantiate()
-	add_child(_debug_hud)
-	_debug_hud.bind_fighters([fighter1, fighter2])
+	if OS.is_debug_build():
+		_debug_hud = DEBUG_HUD_SCENE.instantiate()
+		add_child(_debug_hud)
+		_debug_hud.bind_fighters([fighter1, fighter2])
+		_debug_hud.visible_debug = false
+		if _debug_hud.has_node("Panel"):
+			_debug_hud.get_node("Panel").visible = false
 	_hit_log = get_node_or_null("%HitLog") as Label
 	_update_help()
 
@@ -71,15 +76,15 @@ func _spawn_fighters() -> void:
 	fighter1.grab_event.connect(_on_grab)
 	fighter2.grab_event.connect(_on_grab)
 
-func _connect_hits(attacker: AAFighter, defender: AAFighter) -> void:
+func _connect_hits(attacker, defender) -> void:
 	var hb: Area2D = attacker.get_node("Hitbox")
 	var hurt: Area2D = defender.get_node("Hurtbox")
 	hb.area_entered.connect(func(area: Area2D):
 		if area != hurt or not hb.monitoring or not attacker.move_runner.is_active_phase():
 			return
-		var move := attacker._current_move
+		var move = attacker._current_move
 		if move.is_empty():
-			move = DataLoader.find_move(attacker.move_manifest, attacker.move_runner.current_move_id())
+			move = _DataLoader.find_move(attacker.move_manifest, attacker.move_runner.current_move_id())
 		if move.is_empty() or move.get("move_id") == "grab":
 			return
 		attacker.hit_resolver.resolve(attacker, defender, move, attacker.damage_percent)

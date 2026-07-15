@@ -3,6 +3,15 @@
 ## 1. Fantasy
 Heavy armor brawler — space control with shoulder checks and ground pounds.
 
+## 1a. Inspiration anchors (mechanic principles)
+See [POWER_REFERENCE_LIBRARY.md](../POWER_REFERENCE_LIBRARY.md#2-rook-ironside--impact-strength-earth-quake-armor).
+
+- Armored commitment and interrupt resistance
+- Quake aftershocks on heavies and slams
+- Earth/terrain shockwave spacing
+- Command grab punish identity
+- Shield-breaking impact reads
+
 ## 2. Silhouette
 Broad shoulders, heavy boots, helm read, earth-brown/indigo palette.
 

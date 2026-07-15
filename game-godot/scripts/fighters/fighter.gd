@@ -1,5 +1,15 @@
 extends CharacterBody2D
 class_name AAFighter
+const _DataLoader = preload("res://scripts/data/data_loader.gd")
+const _FighterStateMachine = preload("res://scripts/fighters/fighter_state_machine.gd")
+const _MoveRunner = preload("res://scripts/combat/move_runner.gd")
+const _HitResolver = preload("res://scripts/combat/hit_resolver.gd")
+const _ProjectileSpawner = preload("res://scripts/combat/projectile_spawner.gd")
+const _CombatFeedback = preload("res://scripts/combat/combat_feedback.gd")
+const _CpuController = preload("res://scripts/fighters/cpu_controller.gd")
+const _FighterAnimator = preload("res://scripts/fighters/fighter_animator.gd")
+const _ThrowResolver = preload("res://scripts/combat/throw_resolver.gd")
+const _AuraScaler = preload("res://scripts/combat/aura_scaler.gd")
 
 signal damaged(amount: float, total: float)
 signal koed()
@@ -31,20 +41,21 @@ var controls_enabled: bool = true
 var spawn_point: Vector2 = Vector2.ZERO
 var combo_count: int = 0
 var hitstun_remaining: float = 0.0
-var grabbed_target: AAFighter = null
-var grabbed_by: AAFighter = null
+var grabbed_target = null
+var grabbed_by = null
 var platform_half_width: float = 400.0
 var platform_center_x: float = 0.0
 
-var state_machine: FighterStateMachine
-var move_runner: MoveRunner
-var hit_resolver: HitResolver
-var projectile_spawner: ProjectileSpawner
-var combat_feedback: CombatFeedback
-var cpu: CpuController
-var animator: FighterAnimator
+var state_machine
+var move_runner
+var hit_resolver
+var projectile_spawner
+var combat_feedback
+var cpu
+var animator
 
 @onready var body: ColorRect = $Body
+@onready var model_3d = $Model3D
 @onready var hurtbox: Area2D = $Hurtbox
 @onready var hitbox: Area2D = $Hitbox
 @onready var label: Label = $NameLabel
@@ -69,25 +80,25 @@ var _show_projectile_boxes: bool = false
 
 func _ready() -> void:
 	add_to_group("fighters")
-	state_machine = FighterStateMachine.new()
+	state_machine = _FighterStateMachine.new()
 	add_child(state_machine)
 	state_machine.setup(self)
 	state_machine.state_changed.connect(_on_state_changed)
-	move_runner = MoveRunner.new()
+	move_runner = _MoveRunner.new()
 	add_child(move_runner)
 	move_runner.active_frames_tick.connect(_on_move_active)
 	move_runner.move_ended.connect(_on_move_ended)
 	move_runner.phase_changed.connect(_on_phase_changed)
-	hit_resolver = HitResolver.new()
+	hit_resolver = _HitResolver.new()
 	add_child(hit_resolver)
-	projectile_spawner = ProjectileSpawner.new()
+	projectile_spawner = _ProjectileSpawner.new()
 	add_child(projectile_spawner)
 	projectile_spawner.setup(self)
-	combat_feedback = CombatFeedback.new()
+	combat_feedback = _CombatFeedback.new()
 	add_child(combat_feedback)
 	hit_resolver.combat_feedback = combat_feedback
-	cpu = CpuController.new()
-	animator = FighterAnimator.new()
+	cpu = _CpuController.new()
+	animator = _FighterAnimator.new()
 	add_child(animator)
 	if body:
 		animator.setup(self, body)
@@ -110,7 +121,7 @@ func get_aura() -> float:
 	return aura
 
 func get_aura_level() -> int:
-	return AuraScaler.aura_level(aura)
+	return _AuraScaler.aura_level(aura)
 
 func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, spawn: Vector2) -> void:
 	fighter_id = id
@@ -118,8 +129,15 @@ func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, s
 	is_cpu = cpu_flag
 	stocks = stock_count
 	spawn_point = spawn
-	data = DataLoader.load_fighter(id)
-	move_manifest = DataLoader.load_moves(id)
+	data = _DataLoader.load_fighter(id)
+	move_manifest = _DataLoader.load_moves(id)
+	var model_loaded: bool = model_3d != null and model_3d.configure(data)
+	if body:
+		body.visible = not model_loaded
+	if model_3d:
+		model_3d.set_facing(facing)
+	if animator:
+		animator.set_proxy_visible(not model_loaded)
 	shield_health = float(data.get("shieldProfile", {}).get("maxHealth", 100))
 	cpu.setup(self, GameState.cpu_level if is_cpu else 2)
 	if body and data.has("color"):
@@ -185,17 +203,16 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	_sync_motion_state()
 	_check_edge()
-	if animator:
-		animator.play_for_state(state_machine.current_state)
+	_play_current_animation(state_machine.current_state)
 
 func _apply_movement(delta: float) -> void:
 	if not state_machine.can_move():
 		if is_on_floor():
 			velocity.x = move_toward(velocity.x, 0.0, get_run_speed() * delta * 8.0)
 		return
-	var axis := _read_axis()
+	var axis: float = _read_axis()
 	if not is_on_floor():
-		var ff := FAST_FALL_MULT if velocity.y > 80 and not _read_jump_held() else 1.0
+		var ff: float = FAST_FALL_MULT if velocity.y > 80 and not _read_jump_held() else 1.0
 		velocity.y += get_fall_speed() * ff * delta
 	else:
 		air_jumps_left = int(data.get("maxJumps", 2)) - 1
@@ -203,7 +220,7 @@ func _apply_movement(delta: float) -> void:
 			velocity.y = 0.0
 	if absf(axis) > 0.1:
 		facing = 1 if axis > 0 else -1
-		var spd := get_run_speed()
+		var spd: float = get_run_speed()
 		if absf(axis) > 0.75 and is_on_floor():
 			spd = get_dash_speed()
 			state_machine.enter(FighterStates.DASH)
@@ -212,6 +229,8 @@ func _apply_movement(delta: float) -> void:
 		velocity.x = axis * spd
 		if body:
 			body.scale.x = absf(body.scale.x) * facing
+		if model_3d:
+			model_3d.set_facing(facing)
 	else:
 		velocity.x = move_toward(velocity.x, 0.0, get_run_speed() * delta * 8.0)
 		if is_on_floor() and not FighterStates.is_attack_state(state_machine.current_state):
@@ -233,7 +252,7 @@ func _handle_actions() -> void:
 	if not state_machine.can_attack():
 		return
 	if state_machine.current_state == FighterStates.GRAB_HOLD:
-		_throw_direction = ThrowResolver.read_throw_direction(self)
+		_throw_direction = _ThrowResolver.read_throw_direction(self)
 		if grab_range_debug:
 			grab_range_debug.visible = _show_grab_range
 		if _read_attack_pressed() or _read_grab_pressed():
@@ -271,28 +290,28 @@ func _handle_actions() -> void:
 		if aura >= 100.0:
 			_start_move_by_command("aura_burst")
 			return
-		var cmd := _resolve_attack_command()
+		var cmd: String = _resolve_attack_command()
 		_start_move_by_command(cmd)
 	if _read_special_pressed() and not is_aura_input_held():
 		_start_move_by_command(_resolve_special_command())
 
 func _start_move(move_id: String) -> void:
-	var m := DataLoader.find_move(move_manifest, move_id)
+	var m: Dictionary = _DataLoader.find_move(move_manifest, move_id)
 	if not m.is_empty():
 		_start_move_dict(m)
 
 func _resolve_attack_command() -> String:
 	if not is_on_floor():
-		var axis := _read_axis()
-		var up := _read_up()
-		var down := _read_down()
+		var axis: float = _read_axis()
+		var up: bool = _read_up()
+		var down: bool = _read_down()
 		if up: return "attack_air_up"
 		if down: return "attack_air_down"
 		if absf(axis) > 0.3: return "attack_air_forward"
 		return "attack_air_neutral"
-	var axis := _read_axis()
-	var up := _read_up()
-	var down := _read_down()
+	var axis: float = _read_axis()
+	var up: bool = _read_up()
+	var down: bool = _read_down()
 	if absf(axis) > 0.75 and is_on_floor():
 		return "attack_dash"
 	if up: return "attack_up"
@@ -304,9 +323,9 @@ func _resolve_attack_command() -> String:
 	return "attack_neutral"
 
 func _resolve_special_command() -> String:
-	var up := _read_up()
-	var down := _read_down()
-	var axis := _read_axis()
+	var up: bool = _read_up()
+	var down: bool = _read_down()
+	var axis: float = _read_axis()
 	if up: return "special_up"
 	if down: return "special_down"
 	if absf(axis) > 0.3: return "special_forward"
@@ -324,25 +343,25 @@ func _start_move_by_command(cmd: String) -> void:
 	var m: Dictionary = {}
 	if cmd == "attack_neutral" and is_on_floor():
 		match _jab_chain:
-			0: m = DataLoader.find_move(move_manifest, "jab_1")
-			1: m = DataLoader.find_move(move_manifest, "jab_2")
-			_: m = DataLoader.find_move(move_manifest, "jab_finisher")
+			0: m = _DataLoader.find_move(move_manifest, "jab_1")
+			1: m = _DataLoader.find_move(move_manifest, "jab_2")
+			_: m = _DataLoader.find_move(move_manifest, "jab_finisher")
 		if not m.is_empty():
 			if _jab_chain < 2:
 				_jab_chain += 1
 			else:
 				_jab_chain = 0
 	else:
-		m = DataLoader.find_move_by_input(move_manifest, cmd, not is_on_floor())
+		m = _DataLoader.find_move_by_input(move_manifest, cmd, not is_on_floor())
 	if m.is_empty():
 		return
 	_start_move_dict(m)
 
 func _start_move_dict(m: Dictionary) -> void:
-	_current_move = AuraScaler.apply_to_move(m, aura)
+	_current_move = _AuraScaler.apply_to_move(m, aura)
 	move_runner.start_move(_current_move, self)
-	var mid := str(m.get("move_id", ""))
-	var mt := str(m.get("move_type", "melee"))
+	var mid = str(m.get("move_id", ""))
+	var mt = str(m.get("move_type", "melee"))
 	if mid == "grab" or mt == "grab":
 		state_machine.enter(FighterStates.GRAB_STARTUP)
 	elif mt == "throw" or mid.begins_with("throw_"):
@@ -364,8 +383,8 @@ func _start_dodge() -> void:
 	state_machine.enter(FighterStates.DODGE_RECOVERY)
 
 func _on_move_active(move: Dictionary) -> void:
-	var mid := str(move.get("move_id", ""))
-	var mt := str(move.get("move_type", "melee"))
+	var mid = str(move.get("move_id", ""))
+	var mt = str(move.get("move_type", "melee"))
 	if mid == "grab" or mt == "grab":
 		state_machine.enter(FighterStates.GRAB_ACTIVE)
 		_try_grab_connect()
@@ -376,7 +395,7 @@ func _on_move_active(move: Dictionary) -> void:
 		projectile_spawner.spawn_from_move(_current_move, aura)
 		state_machine.enter(FighterStates.SPECIAL_ACTIVE)
 		return
-	var sm := move.get("self_movement", {})
+	var sm: Dictionary = move.get("self_movement", {})
 	if sm is Dictionary and (sm.get("x", 0) != 0 or sm.get("y", 0) != 0):
 		velocity += Vector2(float(sm.get("x", 0)) * facing, float(sm.get("y", 0)))
 	hitbox.monitoring = true
@@ -389,8 +408,8 @@ func _on_move_active(move: Dictionary) -> void:
 		state_machine.enter(FighterStates.ATTACK_ACTIVE)
 
 func _try_grab_connect() -> void:
-	var opp := _find_opponent()
-	if opp == null or not opp is AAFighter:
+	var opp = _find_opponent()
+	if opp == null or not opp != null and opp.has_method("configure"):
 		state_machine.enter(FighterStates.GRAB_WHIFF)
 		grab_event.emit({"result": "whiff"})
 		return
@@ -398,7 +417,7 @@ func _try_grab_connect() -> void:
 		state_machine.enter(FighterStates.GRAB_WHIFF)
 		grab_event.emit({"result": "whiff", "reason": "invuln"})
 		return
-	var dist := absf(opp.global_position.x - global_position.x)
+	var dist = absf(opp.global_position.x - global_position.x)
 	if dist > 70.0:
 		state_machine.enter(FighterStates.GRAB_WHIFF)
 		grab_event.emit({"result": "whiff", "reason": "range"})
@@ -412,14 +431,14 @@ func _try_grab_connect() -> void:
 func execute_throw() -> void:
 	if grabbed_target == null:
 		return
-	var target := grabbed_target
+	var target = grabbed_target
 	grabbed_target = null
 	target.grabbed_by = null
-	var direction := ThrowResolver.read_throw_direction(self)
+	var direction: String = _ThrowResolver.read_throw_direction(self)
 	_throw_direction = direction
 	state_machine.enter(FighterStates.THROW_STARTUP)
-	var throw_move := ThrowResolver.resolve_throw(self, target, move_manifest, direction)
-	ThrowResolver.apply_victim_offset(self, target, throw_move)
+	var throw_move: Dictionary = _ThrowResolver.resolve_throw(self, target, move_manifest, direction)
+	_ThrowResolver.apply_victim_offset(self, target, throw_move)
 	_start_move_dict(throw_move)
 	target.state_machine.enter(FighterStates.HITSTUN)
 	hit_resolver.resolve(self, target, throw_move, damage_percent)
@@ -466,10 +485,10 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 	velocity = launch
 	hitstun_remaining = CombatMath.hitstun_seconds(launch.length())
 	_hitstop = CombatMath.frames_to_seconds(info.get("hitstop_frames", 3))
-	if attacker is AAFighter:
+	if attacker != null and attacker.has_method("configure"):
 		attacker._hitstop = _hitstop * 0.5
 		attacker.combo_count += 1
-	var heavy := dmg >= 8.0 or launch.length() > 14.0
+	var heavy = dmg >= 8.0 or launch.length() > 14.0
 	if launch.length() > 14.0:
 		state_machine.enter(FighterStates.LAUNCHED)
 	elif heavy:
@@ -559,7 +578,7 @@ func debug_combat_summary() -> Dictionary:
 
 func _on_move_ended(_move_id: String) -> void:
 	hitbox.monitoring = false
-	var s := state_machine.current_state
+	var s: String = str(state_machine.current_state) if state_machine else ""
 	if s in [FighterStates.GRAB_ACTIVE, FighterStates.GRAB_STARTUP] and grabbed_target == null:
 		state_machine.enter(FighterStates.GRAB_WHIFF)
 	elif s in [FighterStates.ATTACK_ACTIVE, FighterStates.ATTACK_STARTUP]:
@@ -609,7 +628,7 @@ func _sync_motion_state() -> void:
 func _check_edge() -> void:
 	if not is_on_floor():
 		return
-	var edge_dist := platform_half_width - absf(global_position.x - platform_center_x)
+	var edge_dist = platform_half_width - absf(global_position.x - platform_center_x)
 	if edge_dist < EDGE_MARGIN and absf(velocity.x) > 20.0:
 		if signf(velocity.x) == signf(global_position.x - platform_center_x):
 			state_machine.enter(FighterStates.EDGE_WARNING)
@@ -623,19 +642,28 @@ func _set_aura_vfx(on: bool) -> void:
 		_aura_sfx_hook = true
 
 func _on_state_changed(_from: String, to: String) -> void:
+	_play_current_animation(to)
 	state_changed.emit(to)
+
+func _play_current_animation(state: String) -> void:
+	if not animator:
+		return
+	if model_3d and model_3d.is_model_loaded():
+		model_3d.play_for_state(state, _current_move)
+	else:
+		animator.play_for_state(state)
 
 func _setup_shapes() -> void:
 	for path in ["CollisionShape2D", "Hurtbox/HurtShape", "Hitbox/HitShape"]:
-		var cs := get_node_or_null(path) as CollisionShape2D
+		var cs = get_node_or_null(path) as CollisionShape2D
 		if cs and cs.shape == null:
-			var rect := RectangleShape2D.new()
+			var rect = RectangleShape2D.new()
 			rect.size = Vector2(40, 48) if "Hit" not in path else Vector2(36, 40)
 			cs.shape = rect
 
 func _read_axis() -> float:
-	var kb := Input.get_action_strength("p%d_right" % slot) - Input.get_action_strength("p%d_left" % slot)
-	var touch := TouchInputManager.get_axis(slot)
+	var kb = Input.get_action_strength("p%d_right" % slot) - Input.get_action_strength("p%d_left" % slot)
+	var touch = TouchInputManager.get_axis(slot)
 	if absf(touch) > absf(kb):
 		return touch
 	return kb
@@ -692,10 +720,10 @@ func _release_action(action: String) -> void:
 	Input.action_release(action)
 
 func _dummy_tick(delta: float) -> void:
-	var target := _find_opponent()
+	var target = _find_opponent()
 	if target == null:
 		return
-	var dx := target.global_position.x - global_position.x
+	var dx: float = float(target.global_position.x) - global_position.x
 	match dummy_mode:
 		"shield":
 			if not Input.is_action_pressed("p%d_shield" % slot):
@@ -710,11 +738,11 @@ func _dummy_tick(delta: float) -> void:
 			pass
 
 func _find_opponent() -> Node2D:
-	var parent := get_parent()
+	var parent = get_parent()
 	if parent == null:
 		return null
 	for c in parent.get_children():
-		if c != self and c is AAFighter:
+		if c != self and c != null and c.has_method("configure"):
 			return c
 	return null
 

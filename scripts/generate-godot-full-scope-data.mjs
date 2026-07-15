@@ -15,9 +15,9 @@ const META = {
   "rook-ironside": { displayName: "Rook Ironside", archetype: "Armored Bruiser", element: "impact", elementLabel: "Impact", color: "#f28c28", signatureMove: "Faultline Breaker", productionStatus: "proxy", combatTag: "armor_quake" },
   "juno-spark": { displayName: "Juno Spark", archetype: "Speed Confirm", element: "volt", elementLabel: "Volt", color: "#f5d042", signatureMove: "Flash Circuit", productionStatus: "proxy", combatTag: "speed_chain" },
   "kaia-windrow": { displayName: "Kaia Windrow", archetype: "Aerial Spacer", element: "gale", elementLabel: "Gale", color: "#3cb371", signatureMove: "Spiral Current", productionStatus: "proxy", combatTag: "wind_drift" },
-  "nix-calder": { displayName: "Nix Calder", archetype: "Control Tank", element: "frost", elementLabel: "Frost", color: "#4a90d9", signatureMove: "Glacier Lock", productionStatus: "placeholder", combatTag: "freeze_control" },
-  "orion-vell": { displayName: "Orion Vell", archetype: "Combo Control", element: "gravity", elementLabel: "Gravity", color: "#5b4b8a", signatureMove: "Orbit Collapse", productionStatus: "placeholder", combatTag: "gravity_pull" },
-  "vesper-nyx": { displayName: "Vesper Nyx", archetype: "Phase Trickster", element: "void", elementLabel: "Void", color: "#9b59b6", signatureMove: "Null Step", productionStatus: "placeholder", combatTag: "phase_mark" },
+  "nix-calder": { displayName: "Nix Calder", archetype: "Control Tank", element: "frost", elementLabel: "Frost", color: "#4a90d9", signatureMove: "Glacier Lock", productionStatus: "proxy", combatTag: "freeze_control" },
+  "orion-vell": { displayName: "Orion Vell", archetype: "Combo Control", element: "gravity", elementLabel: "Gravity", color: "#5b4b8a", signatureMove: "Orbit Collapse", productionStatus: "proxy", combatTag: "gravity_pull" },
+  "vesper-nyx": { displayName: "Vesper Nyx", archetype: "Phase Trickster", element: "void", elementLabel: "Void", color: "#9b59b6", signatureMove: "Null Step", productionStatus: "proxy", combatTag: "phase_mark" },
 };
 
 const STATS = {
@@ -316,6 +316,7 @@ function buildFighter(id) {
     shieldProfile: { maxHealth: 100 * (s.shieldHealthMult / 100), decayPerSecond: 18, stunMult: 1.0 },
     cpuBehaviorTags: s.cpuTags,
     productionStatus: m.productionStatus,
+    modelTier: "original_rigged_proxy_3d",
     portraitPlaceholder: `res://assets/ui/placeholders/fighter_${id}.svg`,
     modelPath: `res://assets/characters/proxy/${id}.glb`,
   };
@@ -335,7 +336,7 @@ for (const id of ids) {
   fs.writeFileSync(path.join(movesDir, `${id}.json`), JSON.stringify(buildMoveManifest(id), null, 2));
   fs.writeFileSync(
     path.join(fightersDir, `${id}_animations.json`),
-    JSON.stringify({ fighter_id: id, clips: ["idle", "walk", "run", "dash", "jump", "fall", "land", "jab_1", "jab_2", "heavy_attack", "special", "shield", "hurt_light", "hurt_heavy", "launched", "aura_charge", "aura_burst", "throw_forward", "ko"], status: "manifest_only" }, null, 2),
+    JSON.stringify({ fighter_id: id, clips: ["idle", "walk", "run", "dash", "jump", "fall", "land", "jab_1", "jab_2", "heavy_attack", "special", "shield", "hurt_light", "hurt_heavy", "launched", "aura_charge", "aura_burst", "throw_forward", "ko"], status: "proxy_3d", asset_tier: "original_rigged_proxy_3d" }, null, 2),
   );
 }
 fs.writeFileSync(path.join(fightersDir, "roster.json"), JSON.stringify({ fighters: ids }, null, 2));

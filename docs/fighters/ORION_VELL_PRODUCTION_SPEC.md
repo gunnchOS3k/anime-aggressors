@@ -3,6 +3,15 @@
 ## 1. Fantasy
 Gravity manipulator — floating stones/rings, pull-in combos.
 
+## 1a. Inspiration anchors (mechanic principles)
+See [POWER_REFERENCE_LIBRARY.md](../POWER_REFERENCE_LIBRARY.md#6-orion-vell--gravity-weight-vectors-attraction-repulsion).
+
+- Pull fields and gravity wells
+- Altered launch angles after hit
+- Suspended combo timing
+- Orbiting projectiles before release
+- Weight/vector manipulation on knockback
+
 ## 2. Silhouette
 Athletic, orbiting stone rings, indigo glow accents.
 

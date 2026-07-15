@@ -57,10 +57,14 @@ func _update_text() -> void:
 		str(show_projectile_boxes).to_lower(), str(show_grab_range).to_lower(),
 	])
 	for f in fighters:
-		if f == null:
+		if f == null or not is_instance_valid(f):
 			continue
-		var name := f.data.get("displayName", "?") if "data" in f else "?"
-		var state := f.state_machine.current_state if f.state_machine else "?"
+		if not ("data" in f) or not ("state_machine" in f):
+			lines.append("(fighter bindings incomplete)")
+			continue
+		var name: String = f.data.get("displayName", "?")
+		var sm = f.state_machine
+		var state: String = sm.current_state if sm else "?"
 		var proxy := " [color=yellow]PROXY — NOT FINAL ART[/color]"
 		var mr := ""
 		if f.move_runner:

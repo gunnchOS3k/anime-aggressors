@@ -3,6 +3,15 @@
 ## 1. Fantasy
 Close-range flame brawler who pressures with gauntlet strikes and burst specials.
 
+## 1a. Inspiration anchors (mechanic principles)
+See [POWER_REFERENCE_LIBRARY.md](../POWER_REFERENCE_LIBRARY.md#1-ember-vale--flame-fire-heat-combustion).
+
+- Full-body flame brawling and rushdown pressure
+- Martial fire forms with directional footwork
+- Precision ignition at range
+- Fire-propelled movement bursts
+- Flame armor intimidation windows
+
 ## 2. Silhouette
 Medium build, oversized flame gauntlets, angular hair crest, warm red/orange read.
 

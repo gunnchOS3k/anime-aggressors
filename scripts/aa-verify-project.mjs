@@ -178,7 +178,8 @@ fs.writeFileSync(reportJsonPath, JSON.stringify(report, null, 2));
 
 const md = `# PR #48 Verification Report
 
-**Generated:** ${report.generated_at}  
+**Generated:** ${report.generated_at}
+
 **Commit:** \`${report.commit_sha}\`
 
 ## Verification tiers

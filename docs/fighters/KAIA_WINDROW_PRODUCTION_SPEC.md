@@ -3,6 +3,15 @@
 ## 1. Fantasy
 Spacing wind fighter — sash and wing sleeves control air drift.
 
+## 1a. Inspiration anchors (mechanic principles)
+See [POWER_REFERENCE_LIBRARY.md](../POWER_REFERENCE_LIBRARY.md#4-kaia-windrow--wind-air-storm-pressure-flight).
+
+- Air-column dominance and aerial drift
+- Curved wind blade projectiles
+- Push/pull spacing control
+- Lingering cyclone multi-hits
+- Anti-edgeguard float tools
+
 ## 2. Silhouette
 Athletic, flowing sash, wing sleeve accents, green/teal palette.
 

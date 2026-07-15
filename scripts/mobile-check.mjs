@@ -41,6 +41,8 @@ ok("touch controls + mobile menu + export presets");
 
 const project = fs.readFileSync(path.join(godotRoot, "project.godot"), "utf8");
 if (!/gl_compatibility/.test(project)) fail("project.godot must use gl_compatibility renderer for web/mobile");
+if (!/GL Compatibility/.test(project)) fail("project feature tag must match the GL Compatibility renderer");
+if (!/window\/handheld\/orientation=0/.test(project)) fail("mobile build must explicitly use landscape orientation");
 if (!project.includes("TouchInputManager")) fail("TouchInputManager autoload missing from project.godot");
 ok("renderer + touch autoload");
 
@@ -50,6 +52,11 @@ if (!/name="Android"/.test(presets)) fail("missing Android export preset");
 if (!/variant\/thread_support=false/.test(presets)) fail("Web preset must use single-threaded export");
 if (!/com\.gunnchos\.animeaggressors/.test(presets)) fail("Android package name missing");
 if (!/builds\/android\/anime-aggressors-debug\.apk/.test(presets)) fail("Android export path missing");
+if (!/package\/show_as_launcher_app=true/.test(presets)) fail("Android app must appear in launcher");
+if (/gradle_build\/use_gradle_build=true/.test(presets)) {
+  if (!/gradle_build\/min_sdk="24"/.test(presets)) fail("Gradle Android min SDK must be explicit");
+  if (!/gradle_build\/target_sdk="(34|35)"/.test(presets)) fail("Gradle Android target SDK must be explicit");
+}
 ok("Web + Android export presets");
 
 const exportWeb = fs.readFileSync(path.join(root, "scripts/export-godot-web.mjs"), "utf8");

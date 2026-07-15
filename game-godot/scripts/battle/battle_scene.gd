@@ -1,4 +1,5 @@
 extends Node2D
+const _DataLoader = preload("res://scripts/data/data_loader.gd")
 
 @onready var fighters_root: Node2D = $Fighters
 @onready var stage_root: Node2D = $Stage
@@ -8,14 +9,14 @@ extends Node2D
 @onready var p2_hud: Label = %P2Hud
 @onready var ko_label: Label = %KoLabel
 
-var fighter1: AAFighter
-var fighter2: AAFighter
+var fighter1
+var fighter2
 var blast: Dictionary = {}
 var _active := false
 var _paused := false
 var _ko_lock := false
-var _debug_hud: DebugHud
-var _battle_sim: BattleSim
+var _debug_hud
+var _battle_sim
 var _pause_panel: PanelContainer
 
 const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
@@ -27,9 +28,14 @@ func _ready() -> void:
 	_battle_sim = BattleSim.new()
 	add_child(_battle_sim)
 	_battle_sim.bind_fighters([fighter1, fighter2])
-	_debug_hud = DEBUG_HUD_SCENE.instantiate()
-	add_child(_debug_hud)
-	_debug_hud.bind_fighters([fighter1, fighter2])
+	if OS.is_debug_build():
+		_debug_hud = DEBUG_HUD_SCENE.instantiate()
+		add_child(_debug_hud)
+		_debug_hud.bind_fighters([fighter1, fighter2])
+		# Available via F1; stay hidden for release-facing presentation.
+		_debug_hud.visible_debug = false
+		if _debug_hud.has_node("Panel"):
+			_debug_hud.get_node("Panel").visible = false
 	fighter1.controls_enabled = false
 	fighter2.controls_enabled = false
 	await _run_countdown()
@@ -42,6 +48,20 @@ func _build_stage() -> void:
 		c.queue_free()
 	var stage_data: Dictionary = GameState.load_stage(GameState.stage_id)
 	blast = stage_data.get("blastZones", {})
+	var bg := ColorRect.new()
+	bg.color = Color(0.04, 0.06, 0.12)
+	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	bg.size = Vector2(1920, 1080)
+	bg.z_index = -10
+	stage_root.add_child(bg)
+	for i in range(3):
+		var band := ColorRect.new()
+		band.color = Color(0.08, 0.12, 0.22, 0.35)
+		band.size = Vector2(2200, 18)
+		band.position = Vector2(-1100, -280 + i * 120)
+		band.rotation = -0.08 + i * 0.04
+		band.z_index = -9
+		stage_root.add_child(band)
 	var main: Dictionary = stage_data.get("mainPlatform", {})
 	_add_platform(main)
 	for p in stage_data.get("sidePlatforms", []):
@@ -56,10 +76,15 @@ func _add_platform(p: Dictionary) -> void:
 	body.position = Vector2(p.x, p.y + p.height / 2.0)
 	body.add_child(shape)
 	var vis := ColorRect.new()
-	vis.color = Color(0.18, 0.22, 0.32)
+	vis.color = Color(0.12, 0.14, 0.22)
 	vis.size = rect.size
 	vis.position = Vector2(-rect.size.x / 2, -rect.size.y / 2)
 	body.add_child(vis)
+	var trim := ColorRect.new()
+	trim.color = Color(0.28, 0.55, 0.95, 0.85)
+	trim.size = Vector2(rect.size.x, 6)
+	trim.position = Vector2(-rect.size.x / 2, -rect.size.y / 2)
+	body.add_child(trim)
 	stage_root.add_child(body)
 
 func _spawn_fighters() -> void:
@@ -94,15 +119,15 @@ func _spawn_fighters() -> void:
 	fighter2.koed.connect(_on_ko.bind(fighter2))
 	_update_hud()
 
-func _connect_hitboxes(attacker: AAFighter, defender: AAFighter) -> void:
+func _connect_hitboxes(attacker, defender) -> void:
 	var hb: Area2D = attacker.get_node("Hitbox")
 	var hurt: Area2D = defender.get_node("Hurtbox")
 	hb.area_entered.connect(func(area: Area2D):
 		if area != hurt or not hb.monitoring or not attacker.move_runner.is_active_phase():
 			return
-		var move := attacker._current_move
+		var move = attacker._current_move
 		if move.is_empty():
-			move = DataLoader.find_move(attacker.move_manifest, attacker.move_runner.current_move_id())
+			move = _DataLoader.find_move(attacker.move_manifest, attacker.move_runner.current_move_id())
 		if move.is_empty() or move.get("move_id") == "grab":
 			return
 		attacker.hit_resolver.resolve(attacker, defender, move, attacker.damage_percent)
@@ -127,10 +152,10 @@ func _physics_process(_delta: float) -> void:
 	_check_blast(fighter2)
 	_check_match_end()
 
-func _check_blast(f: AAFighter) -> void:
+func _check_blast(f) -> void:
 	if f == null or f.stocks <= 0 or _ko_lock:
 		return
-	var pos := f.global_position
+	var pos: Vector2 = f.global_position
 	if pos.x < blast.get("left", -9999) or pos.x > blast.get("right", 9999) or pos.y < blast.get("top", -9999) or pos.y > blast.get("bottom", 9999):
 		_ko_lock = true
 		if ko_label:
@@ -143,7 +168,7 @@ func _check_blast(f: AAFighter) -> void:
 			_ko_lock = false
 		, CONNECT_ONE_SHOT)
 
-func _on_ko(_f: AAFighter) -> void:
+func _on_ko(_f) -> void:
 	pass
 
 func _check_match_end() -> void:
@@ -172,22 +197,42 @@ func _toggle_pause() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
-		if not _pause_panel:
-			_pause_panel = PanelContainer.new()
-			_pause_panel.position = Vector2(200, 200)
-			var v := VBoxContainer.new()
-			var title := Label.new()
-			title.text = "Paused — Esc/B resume | R rematch | M menu"
-			v.add_child(title)
-			_pause_panel.add_child(v)
-			hud.add_child(_pause_panel)
-			_pause_panel.visible = false
+		_ensure_pause_panel()
 		_toggle_pause()
 	if _paused and event.is_action_pressed("ui_accept"):
 		_toggle_pause()
-	if _paused and event is InputEventKey and event.pressed:
-		match event.keycode:
-			KEY_M:
-				SceneRouter.go("main_menu")
-			KEY_R:
-				SceneRouter.go("battle")
+
+func _ensure_pause_panel() -> void:
+	if _pause_panel:
+		return
+	_pause_panel = PanelContainer.new()
+	_pause_panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+	_pause_panel.custom_minimum_size = Vector2(420, 220)
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.06, 0.09, 0.16, 0.94)
+	style.border_color = Color(0.95, 0.75, 0.2, 1.0)
+	style.set_border_width_all(3)
+	style.set_content_margin_all(18)
+	_pause_panel.add_theme_stylebox_override("panel", style)
+	var v := VBoxContainer.new()
+	v.add_theme_constant_override("separation", 12)
+	var title := Label.new()
+	title.text = "Paused"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 28)
+	v.add_child(title)
+	var resume_btn := Button.new()
+	resume_btn.text = "Resume"
+	resume_btn.pressed.connect(_toggle_pause)
+	v.add_child(resume_btn)
+	var rematch_btn := Button.new()
+	rematch_btn.text = "Rematch"
+	rematch_btn.pressed.connect(func(): SceneRouter.go("battle"))
+	v.add_child(rematch_btn)
+	var menu_btn := Button.new()
+	menu_btn.text = "Return to Menu"
+	menu_btn.pressed.connect(func(): SceneRouter.go("main_menu"))
+	v.add_child(menu_btn)
+	_pause_panel.add_child(v)
+	hud.add_child(_pause_panel)
+	_pause_panel.visible = false

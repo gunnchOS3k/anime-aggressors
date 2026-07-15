@@ -23,9 +23,11 @@ export default defineConfig({
     sourcemap: false,
     rollupOptions: {
       output: {
-        manualChunks: {
-          minigames: ["./src/minigames/bootstrap.ts"],
-          gamepad: ["./src/input/gamepad.ts"],
+        manualChunks(id) {
+          const normalized = id.replaceAll("\\", "/");
+          if (normalized.includes("/src/minigames/")) return "minigames";
+          if (normalized.endsWith("/src/input/gamepad.ts")) return "gamepad";
+          return undefined;
         },
       },
     },

@@ -6,6 +6,8 @@ enum TouchMode { AUTO, ON, OFF }
 
 const MODE_LABELS := ["Auto", "On", "Off"]
 
+const SETTINGS_PATH := "user://aa_settings.cfg"
+
 var touch_mode: TouchMode = TouchMode.AUTO
 var overlay: CanvasLayer = null
 
@@ -16,12 +18,26 @@ var _just_pressed: Dictionary = {}
 var _just_released: Dictionary = {}
 
 func _ready() -> void:
+	_load_settings()
 	var scene := preload("res://scenes/ui/TouchControlsOverlay.tscn")
 	overlay = scene.instantiate()
 	get_tree().root.call_deferred("add_child", overlay)
 	if overlay.has_method("bind_manager"):
 		overlay.bind_manager(self)
 	call_deferred("_sync_overlay")
+
+func _load_settings() -> void:
+	var cfg := ConfigFile.new()
+	if cfg.load(SETTINGS_PATH) != OK:
+		return
+	var mode := int(cfg.get_value("input", "touch_mode", TouchMode.AUTO))
+	touch_mode = clampi(mode, 0, 2) as TouchMode
+
+func _save_settings() -> void:
+	var cfg := ConfigFile.new()
+	cfg.load(SETTINGS_PATH)
+	cfg.set_value("input", "touch_mode", int(touch_mode))
+	cfg.save(SETTINGS_PATH)
 
 func _sync_overlay() -> void:
 	if overlay and overlay.has_method("set_visible_controls"):
@@ -45,6 +61,7 @@ func _detect_touch_device() -> bool:
 func cycle_touch_mode() -> void:
 	touch_mode = ((touch_mode + 1) % 3) as TouchMode
 	_sync_overlay()
+	_save_settings()
 
 func touch_mode_label() -> String:
 	return MODE_LABELS[touch_mode]

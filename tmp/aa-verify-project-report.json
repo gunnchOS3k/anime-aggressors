@@ -1,40 +1,48 @@
 {
-  "generated_at": "2026-07-01T22:44:25.958Z",
-  "commit_sha": "e223648b74f092283d21f0e0b538f52b51884b18",
+  "generated_at": "2026-07-11T19:16:48.927Z",
+  "commit_sha": "668eabf06b0b13632851467ba8d62ecbcfaaa95a",
   "npm": {
     "validate_unity_spike": {
       "status": "pass",
-      "duration_ms": 139,
-      "output_tail": "\n> anime-aggressors@0.1.0 validate:unity-spike\n> node scripts/validate-unity-spike.mjs\n\nOK: Unity project folder\nOK: CombatProof scene\nOK: required C# scripts\nOK: required docs\nOK: move data\nOK: Godot frozen policy\nOK: proof checklist\nOK: Godot prototype preserved\nOK: no full migration overclaim\nvalidate-unity-spike: all checks passed\n"
+      "duration_ms": 145,
+      "output_tail": "\n> anime-aggressors@0.1.0 validate:unity-spike\n> node scripts/validate-unity-spike.mjs\n\nOK: Unity project folder\nOK: CombatProof scene\nOK: required C# scripts\nOK: required docs\nOK: Unity runbook + setup detector\nOK: move data\nOK: Godot frozen policy\nOK: proof checklist\nOK: Godot prototype preserved\nOK: no full migration overclaim\nvalidate-unity-spike: all checks passed\n"
     },
     "validate_full_scope": {
       "status": "pass",
-      "duration_ms": 150,
-      "output_tail": "60Hz move runner\nOK: hit resolver + grab + aura\nOK: single can_hit_target gating in hit resolver\nOK: P1/P2 input actions\nOK: movement attack-state boolean check\nOK: aura input ordering\nOK: hurt state recovery\nOK: debug overlay toggles\nOK: CPU tiers\nOK: proxy animations\nOK: training scene controls\nOK: debug HUD\nOK: battle sim\nOK: required scenes\nOK: scene script path sanity\nOK: core Godot scripts\nOK: audit doc status language\nOK: IP filename scan\nvalidate-full-scope-production: all checks passed\n"
+      "duration_ms": 167,
+      "output_tail": "at enhancement\nOK: single can_hit_target gating in hit resolver\nOK: P1/P2 input actions\nOK: movement attack-state boolean check\nOK: aura input ordering\nOK: hurt state recovery\nOK: debug overlay toggles\nOK: CPU tiers\nOK: proxy animations\nOK: training scene controls\nOK: debug HUD\nOK: battle sim\nOK: required scenes\nOK: scene script path sanity\nOK: core Godot scripts\nOK: audit doc status language\nOK: mobile playtest distribution\nOK: IP filename scan\nvalidate-full-scope-production: all checks passed\n"
     },
     "typecheck": {
       "status": "pass",
-      "duration_ms": 7827,
+      "duration_ms": 10703,
       "output_tail": "gressors/game-core@0.1.0 build\n> tsc\n\n\n> @anime-aggressors/rollback@0.1.0 build\n> tsc\n\n\n> @anime-aggressors/game-core@0.1.0 typecheck\n> tsc --noEmit\n\n\n> @anime-aggressors/rollback@0.1.0 typecheck\n> tsc --noEmit\n\n\n> @anime-aggressors/netplay@0.1.0 typecheck\n> tsc --noEmit\n\n\n> @anime-aggressors/edgeio@1.0.0 typecheck\n> tsc --noEmit\n\n\n> @anime-aggressors/messages@1.0.0 typecheck\n> tsc --noEmit\n\n\n> @gunnch/input@1.0.0 typecheck\n> tsc --noEmit\n\n\n> anime-aggressors-web@0.1.0 typecheck\n> tsc --noEmit\n\n"
     },
     "test_workspaces": {
       "status": "pass",
-      "duration_ms": 11682,
-      "output_tail": "ve direction docs (2.697458ms)\n▶ unity combat proof spike validation\n  ✔ validate-unity-spike.mjs passes (47.744083ms)\n✔ unity combat proof spike validation (48.291459ms)\n▶ victory animations\n  ✔ each default fighter has a unique win animation (0.363125ms)\n  ✔ victory flavors differ between fighters (0.12475ms)\n  ✔ applyVictoryPose mutates pose (0.115625ms)\n✔ victory animations (1.078542ms)\nℹ tests 373\nℹ suites 128\nℹ pass 373\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 3470.428042\n"
+      "duration_ms": 16381,
+      "output_tail": "ve direction docs (2.472875ms)\n▶ unity combat proof spike validation\n  ✔ validate-unity-spike.mjs passes (73.317375ms)\n✔ unity combat proof spike validation (73.897375ms)\n▶ victory animations\n  ✔ each default fighter has a unique win animation (0.39575ms)\n  ✔ victory flavors differ between fighters (0.169458ms)\n  ✔ applyVictoryPose mutates pose (0.137417ms)\n✔ victory animations (1.220416ms)\nℹ tests 373\nℹ suites 128\nℹ pass 373\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 6953.639958\n"
     },
     "build": {
       "status": "pass",
-      "duration_ms": 7823,
-      "output_tail": "_c8Ud.js   15.22 kB │ gzip:   5.45 kB\ndist/assets/impactDummyDerbyView-CjF0fMs5.js                  21.63 kB │ gzip:   7.53 kB\ndist/assets/ThreeGameRenderer-DAN7Y7c_.js                     24.12 kB │ gzip:   7.62 kB\ndist/assets/App-c9V24yTV.js                                   29.10 kB │ gzip:   9.75 kB\ndist/assets/simulate-D9o36sIZ.js                              44.10 kB │ gzip:  12.93 kB\ndist/assets/index-BRirb6ux.js                                603.71 kB │ gzip: 154.75 kB\n✓ built in 1.19s\n"
+      "duration_ms": 7901,
+      "output_tail": "           7.16 kB │ gzip:   2.79 kB\ndist/assets/CustomGameScreen-DJ2zSCXJ.js                       7.63 kB │ gzip:   2.12 kB\ndist/assets/FighterAnimator-DeumhLou.js                       13.80 kB │ gzip:   3.76 kB\ndist/assets/src-Drm_CJ8f.js                                  110.83 kB │ gzip:  30.74 kB\ndist/assets/index-DmpJtryQ.js                                136.01 kB │ gzip:  41.69 kB\ndist/assets/RenderTypes-BXJMxhd-.js                          533.94 kB │ gzip: 133.81 kB\n\n✓ built in 272ms\n"
     }
   },
   "godot": {
-    "binary": null,
-    "binary_detected": false,
-    "version": null,
-    "import_headless": null,
-    "smoke_runner": null,
-    "cli_missing_message": "GODOT_CLI_MISSING — manual editor signoff required"
+    "binary": "/tmp/godot/4.3/Godot.app/Contents/MacOS/Godot",
+    "binary_detected": true,
+    "version": "4.3.stable.official.77dcf97d8",
+    "import_headless": {
+      "status": "pass",
+      "exit_code": 0,
+      "output_tail": "Godot Engine v4.3.stable.official.77dcf97d8 - https://godotengine.org\n\n\u001b[1;33mWARNING:\u001b[0;93m ObjectDB instances leaked at exit (run with --verbose for details).\n\u001b[0;90m     at: cleanup (core/object/object.cpp:2284)\u001b[0m\n"
+    },
+    "smoke_runner": {
+      "status": "fail",
+      "exit_code": 1,
+      "output_tail": "nt_utility.cpp:1092)\u001b[0m\n\u001b[1;31mERROR:\u001b[0;91m SMOKE FAIL: kaia-windrow missing move throw\n\u001b[0;90m   at: push_error (core/variant/variant_utility.cpp:1092)\u001b[0m\n\u001b[1;31mERROR:\u001b[0;91m SMOKE FAIL: nix-calder missing move jab\n\u001b[0;90m   at: push_error (core/variant/variant_utility.cpp:1092)\u001b[0m\n\u001b[1;31mERROR:\u001b[0;91m SMOKE FAIL: nix-calder missing move throw\n\u001b[0;90m   at: push_error (core/variant/variant_utility.cpp:1092)\u001b[0m\n\u001b[1;31mERROR:\u001b[0;91m SMOKE FAIL: orion-vell missing move jab\n\u001b[0;90m   at: push_error (core/variant/variant_utility.cpp:1092)\u001b[0m\n\u001b[1;31mERROR:\u001b[0;91m SMOKE FAIL: orion-vell missing move throw\n\u001b[0;90m   at: push_error (core/variant/variant_utility.cpp:1092)\u001b[0m\n\u001b[1;31mERROR:\u001b[0;91m SMOKE FAIL: vesper-nyx missing move jab\n\u001b[0;90m   at: push_error (core/variant/variant_utility.cpp:1092)\u001b[0m\n\u001b[1;31mERROR:\u001b[0;91m SMOKE FAIL: vesper-nyx missing move throw\n\u001b[0;90m   at: push_error (core/variant/variant_utility.cpp:1092)\u001b[0m\n\u001b[1;31mERROR:\u001b[0;91m SMOKE FAIL: Fighter root must be AAFighter\n\u001b[0;90m   at: push_error (core/variant/variant_utility.cpp:1092)\u001b[0m\n\u001b[1;31mERROR:\u001b[0;91m smoke_runner: 2 suite(s) failed\n\u001b[0;90m   at: push_error (core/variant/variant_utility.cpp:1092)\u001b[0m\n"
+    },
+    "cli_missing_message": null
   },
   "manual_signoff_required": true,
   "remaining_blockers": [
@@ -48,7 +56,7 @@
   ],
   "verification_tiers": {
     "automated_npm": "verified",
-    "godot_cli": "manual_blocker_cli_missing",
+    "godot_cli": "failed",
     "godot_editor_playtest": "manual_signoff_required",
     "proxy_functional": "partial",
     "final_art": "blocked"

@@ -1,4 +1,4 @@
-extends ConsoleMenuBase
+extends "res://scripts/ui/console_menu_base.gd"
 
 @onready var stock_label: Label = %StockLabel
 @onready var cpu_label: Label = %CpuLabel
