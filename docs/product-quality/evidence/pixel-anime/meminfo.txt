@@ -1,0 +1,40 @@
+Applications Memory Usage (in Kilobytes):
+Uptime: 23150519 Realtime: 23150519
+
+** MEMINFO in pid 24118 [com.gunnchos.animeaggressors] **
+                   Pss  Private  Private  SwapPss      Rss     Heap     Heap     Heap
+                 Total    Dirty    Clean    Dirty    Total     Size    Alloc     Free
+                ------   ------   ------   ------   ------   ------   ------   ------
+  Native Heap    69844    69840        0    11726    71320   116828    98443    12734
+  Dalvik Heap      800      760        0       43     6480   262144     2038   260106
+ Dalvik Other      808      796        4       13     1464                           
+        Stack      820      820        0      384      824                           
+       Ashmem       19        0        0        0      884                           
+    Other dev        4        0        4        0      348                           
+     .so mmap     5888      140     1284       34    49752                           
+    .jar mmap      537        0        0        0    33204                           
+    .apk mmap    32059     1060    30932      420    32852                           
+    .ttf mmap        8        0        0        0       52                           
+    .dex mmap     1468        0     1464        0     2248                           
+    .oat mmap      200        0        0        0    12140                           
+    .art mmap     1021      864        8       44    21596                           
+   Other mmap       14        4        0        0      768                           
+   EGL mtrack    62184    62184        0        0    62184                           
+    GL mtrack   142240   142240        0        0   142240                           
+      Unknown     1776     1684       68      830     2572                           
+        TOTAL   333184   280392    33764    13494   440928   378972   100481   272840
+ 
+ App Summary
+                       Pss(KB)                        Rss(KB)
+                        ------                         ------
+           Java Heap:     1632                          28076
+         Native Heap:    69840                          71320
+                Code:    34880                         130264
+               Stack:      820                            824
+            Graphics:   204424                         204424
+       Private Other:     2560
+              System:    19028
+             Unknown:                                    6020
+ 
+           TOTAL PSS:   333184            TOTAL RSS:   440928       TOTAL SWAP PSS:    13494
+ 

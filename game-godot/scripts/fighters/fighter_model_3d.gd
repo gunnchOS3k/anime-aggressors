@@ -188,6 +188,7 @@ func _build_viewport() -> void:
 	_viewport.name = "Fighter3DViewport"
 	_viewport.size = VIEWPORT_SIZE
 	_viewport.transparent_bg = true
+	_viewport.own_world_3d = true
 	_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	_viewport.msaa_3d = Viewport.MSAA_2X
 	add_child(_viewport)

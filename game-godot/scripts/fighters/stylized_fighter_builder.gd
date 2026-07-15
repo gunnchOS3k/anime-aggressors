@@ -344,53 +344,54 @@ func _build_face() -> void:
 		return
 	var face := Node3D.new()
 	face.name = "Face"
-	face.position = Vector3(0, 0.06, 0.11)
+	# Push face forward so eyes/mouth stay readable at mobile scale.
+	face.position = Vector3(0, 0.05, 0.14)
 	head.add_child(face)
 
 	for side in [-1.0, 1.0]:
 		var eye_white := MeshInstance3D.new()
 		eye_white.name = "EyeWhite_%s" % ("L" if side < 0 else "R")
 		var ew := SphereMesh.new()
-		ew.radius = 0.028
-		ew.height = 0.056
+		ew.radius = 0.038
+		ew.height = 0.076
 		eye_white.mesh = ew
 		eye_white.material_override = _mats["eye"]
-		eye_white.position = Vector3(side * 0.045, 0.02, 0.02)
+		eye_white.position = Vector3(side * 0.052, 0.025, 0.01)
 		face.add_child(eye_white)
 		_eyes.append(eye_white)
 
 		var iris := MeshInstance3D.new()
 		iris.name = "Iris_%s" % ("L" if side < 0 else "R")
 		var im := SphereMesh.new()
-		im.radius = 0.014
-		im.height = 0.028
+		im.radius = 0.02
+		im.height = 0.04
 		iris.mesh = im
 		iris.material_override = _mats["iris"]
-		iris.position = Vector3(side * 0.045, 0.02, 0.038)
+		iris.position = Vector3(side * 0.052, 0.025, 0.03)
 		face.add_child(iris)
 
 		var brow := MeshInstance3D.new()
 		brow.name = "Brow_%s" % ("L" if side < 0 else "R")
 		var bm := CapsuleMesh.new()
-		bm.radius = 0.008
-		bm.height = 0.05
+		bm.radius = 0.01
+		bm.height = 0.065
 		brow.mesh = bm
 		brow.material_override = _mats["brow"]
 		brow.rotation_degrees = Vector3(0, 0, 90)
-		brow.position = Vector3(side * 0.045, 0.045, 0.03)
+		brow.position = Vector3(side * 0.052, 0.055, 0.025)
 		face.add_child(brow)
 		_brows.append(brow)
 
 	_mouth = MeshInstance3D.new()
 	_mouth.name = "Mouth"
 	var mm := CapsuleMesh.new()
-	mm.radius = 0.01
-	mm.height = 0.05
+	mm.radius = 0.012
+	mm.height = 0.07
 	_mouth.mesh = mm
 	_mouth.material_override = _mats["mouth"]
 	_mouth.rotation_degrees = Vector3(0, 0, 90)
-	_mouth.position = Vector3(0, -0.03, 0.04)
-	_mouth.scale = Vector3(1.0, 0.35, 1.0)
+	_mouth.position = Vector3(0, -0.035, 0.03)
+	_mouth.scale = Vector3(1.0, 0.4, 1.0)
 	face.add_child(_mouth)
 
 
@@ -403,28 +404,35 @@ func _build_hair(kind: String) -> void:
 	head.add_child(hair)
 	match kind:
 		"flame_crest":
-			_prism(hair, "Crest", Vector3(0.08, 0.18, 0.1), _mats["accent"], Vector3(0, 0.18, -0.02))
-			_prism(hair, "Crest2", Vector3(0.06, 0.12, 0.08), _mats["hair"], Vector3(0.04, 0.14, -0.04))
+			_prism(hair, "Crest", Vector3(0.1, 0.26, 0.12), _mats["accent"], Vector3(0, 0.22, -0.02))
+			_prism(hair, "Crest2", Vector3(0.08, 0.18, 0.1), _mats["hair"], Vector3(0.05, 0.18, -0.05))
+			_prism(hair, "EmberLick", Vector3(0.05, 0.14, 0.05), _mats["accent"], Vector3(-0.06, 0.16, 0.02))
 		"helm_plate":
-			_capsule(hair, "Helm", 0.14, 0.12, _mats["secondary"], Vector3(0, 0.1, 0))
-			_prism(hair, "Visor", Vector3(0.18, 0.04, 0.08), _mats["accent"], Vector3(0, 0.08, 0.08))
+			_capsule(hair, "Helm", 0.16, 0.16, _mats["secondary"], Vector3(0, 0.1, 0))
+			_prism(hair, "Visor", Vector3(0.22, 0.05, 0.1), _mats["accent"], Vector3(0, 0.08, 0.1))
+			_prism(hair, "CrestPlate", Vector3(0.06, 0.14, 0.18), _mats["secondary"], Vector3(0, 0.2, -0.02))
 		"bolt_tufts":
-			_prism(hair, "BoltL", Vector3(0.05, 0.16, 0.05), _mats["accent"], Vector3(-0.08, 0.16, 0))
-			_prism(hair, "BoltR", Vector3(0.05, 0.14, 0.05), _mats["accent"], Vector3(0.08, 0.14, -0.02))
-			_sphere(hair, "Core", 0.08, _mats["hair"], Vector3(0, 0.12, -0.02))
+			_prism(hair, "BoltL", Vector3(0.06, 0.22, 0.06), _mats["accent"], Vector3(-0.1, 0.18, 0))
+			_prism(hair, "BoltR", Vector3(0.06, 0.18, 0.06), _mats["accent"], Vector3(0.1, 0.16, -0.03))
+			_sphere(hair, "Core", 0.09, _mats["hair"], Vector3(0, 0.12, -0.02))
+			_prism(hair, "AsymZap", Vector3(0.04, 0.12, 0.04), _mats["primary"], Vector3(0.14, 0.08, 0.04))
 		"wind_sweep":
-			_capsule(hair, "Sweep", 0.12, 0.2, _mats["hair"], Vector3(0.04, 0.12, -0.06))
-			_prism(hair, "Ribbon", Vector3(0.06, 0.2, 0.04), _mats["accent"], Vector3(-0.1, 0.1, -0.08))
+			_capsule(hair, "Sweep", 0.13, 0.28, _mats["hair"], Vector3(0.06, 0.14, -0.08))
+			_prism(hair, "Ribbon", Vector3(0.07, 0.28, 0.05), _mats["accent"], Vector3(-0.12, 0.08, -0.1))
+			_prism(hair, "Ribbon2", Vector3(0.05, 0.22, 0.04), _mats["cloth"], Vector3(-0.16, 0.0, -0.06))
 		"ice_spikes":
-			_prism(hair, "Spike1", Vector3(0.04, 0.16, 0.04), _mats["accent"], Vector3(-0.06, 0.16, -0.02))
-			_prism(hair, "Spike2", Vector3(0.04, 0.2, 0.04), _mats["accent"], Vector3(0.0, 0.18, -0.04))
-			_prism(hair, "Spike3", Vector3(0.04, 0.14, 0.04), _mats["hair"], Vector3(0.06, 0.15, -0.02))
+			_prism(hair, "Spike1", Vector3(0.05, 0.2, 0.05), _mats["accent"], Vector3(-0.07, 0.18, -0.02))
+			_prism(hair, "Spike2", Vector3(0.05, 0.26, 0.05), _mats["accent"], Vector3(0.0, 0.22, -0.05))
+			_prism(hair, "Spike3", Vector3(0.05, 0.18, 0.05), _mats["hair"], Vector3(0.07, 0.17, -0.02))
+			_prism(hair, "BrowCrystal", Vector3(0.08, 0.04, 0.04), _mats["accent"], Vector3(0, 0.06, 0.1))
 		"orbit_crown":
-			_cylinder(hair, "Crown", 0.12, 0.04, _mats["accent"], Vector3(0, 0.14, 0))
-			_sphere(hair, "Orb", 0.04, _mats["accent"], Vector3(0.12, 0.18, 0))
+			_cylinder(hair, "Crown", 0.14, 0.05, _mats["accent"], Vector3(0, 0.15, 0))
+			_sphere(hair, "Orb", 0.05, _mats["accent"], Vector3(0.14, 0.2, 0))
+			_sphere(hair, "Orb2", 0.035, _mats["primary"], Vector3(-0.12, 0.18, 0.06))
 		"shadow_hood":
-			_capsule(hair, "Hood", 0.15, 0.18, _mats["secondary"], Vector3(0, 0.08, -0.04))
-			_prism(hair, "Cowl", Vector3(0.22, 0.1, 0.12), _mats["cloth"], Vector3(0.03, 0.02, -0.08))
+			_capsule(hair, "Hood", 0.17, 0.22, _mats["secondary"], Vector3(0, 0.08, -0.05))
+			_prism(hair, "Cowl", Vector3(0.26, 0.12, 0.14), _mats["cloth"], Vector3(0.04, 0.0, -0.1))
+			_prism(hair, "AsymVeil", Vector3(0.08, 0.2, 0.06), _mats["accent"], Vector3(0.14, -0.02, -0.02))
 		_:
 			_capsule(hair, "Short", 0.12, 0.1, _mats["hair"], Vector3(0, 0.12, -0.02))
 

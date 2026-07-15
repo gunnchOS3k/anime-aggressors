@@ -11,6 +11,9 @@ const SETTINGS_PATH := "user://aa_settings.cfg"
 var touch_mode: TouchMode = TouchMode.AUTO
 var overlay: CanvasLayer = null
 
+## AUTO mode only shows the overlay during active combat scenes so menu buttons stay tappable.
+var _in_gameplay := false
+var _refresh_scheduled := false
 var _axis_x: float = 0.0
 var _axis_y: float = 0.0
 var _held: Dictionary = {}
@@ -24,7 +27,35 @@ func _ready() -> void:
 	get_tree().root.call_deferred("add_child", overlay)
 	if overlay.has_method("bind_manager"):
 		overlay.bind_manager(self)
-	call_deferred("_sync_overlay")
+	if not get_tree().tree_changed.is_connected(_on_tree_changed):
+		get_tree().tree_changed.connect(_on_tree_changed)
+	call_deferred("_schedule_gameplay_refresh")
+
+func _on_tree_changed() -> void:
+	_schedule_gameplay_refresh()
+
+func _schedule_gameplay_refresh() -> void:
+	if _refresh_scheduled:
+		return
+	_refresh_scheduled = true
+	call_deferred("_do_gameplay_refresh")
+
+func _do_gameplay_refresh() -> void:
+	_refresh_scheduled = false
+	_refresh_gameplay_flag()
+	_sync_overlay()
+
+func _refresh_gameplay_flag() -> void:
+	var sc := get_tree().current_scene
+	if sc == null:
+		_in_gameplay = false
+		return
+	var path := String(sc.scene_file_path)
+	# Combat only — hide on versus intro/pause/menus so Confirm remains tappable.
+	_in_gameplay = (
+		path.ends_with("BattleScene.tscn")
+		or path.ends_with("TrainingBattleScene.tscn")
+	)
 
 func _load_settings() -> void:
 	var cfg := ConfigFile.new()
@@ -50,7 +81,8 @@ func should_show_touch() -> bool:
 		TouchMode.OFF:
 			return false
 		_:
-			return _detect_touch_device()
+			# Auto: touchscreen devices get combat HUD only — never over menus.
+			return _detect_touch_device() and _in_gameplay
 
 func _detect_touch_device() -> bool:
 	if DisplayServer.is_touchscreen_available():
