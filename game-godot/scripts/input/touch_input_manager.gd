@@ -81,14 +81,16 @@ func _sync_overlay() -> void:
 		overlay.visible = show
 
 func should_show_touch() -> bool:
+	# Hard gate: never cover menus / select / results with combat HUD.
+	if not _in_gameplay:
+		return false
 	match touch_mode:
 		TouchMode.ON:
 			return true
 		TouchMode.OFF:
 			return false
 		_:
-			# Auto: touchscreen devices get combat HUD only — never over menus.
-			return _detect_touch_device() and _in_gameplay
+			return _detect_touch_device()
 
 func _detect_touch_device() -> bool:
 	if DisplayServer.is_touchscreen_available():
