@@ -38,18 +38,22 @@ func _ensure_preview_host() -> void:
 		# Runtime host if scene not yet patched
 		host = Control.new()
 		host.name = "PreviewHost"
-		host.custom_minimum_size = Vector2(240, 280)
+		host.custom_minimum_size = Vector2(300, 380)
 		host.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-		host.offset_left = -280.0
-		host.offset_top = 96.0
+		host.offset_left = -340.0
+		host.offset_top = 72.0
 		host.offset_right = -40.0
-		host.offset_bottom = 376.0
+		host.offset_bottom = 460.0
+		host.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		add_child(host)
+	else:
+		host.custom_minimum_size = Vector2(300, 380)
+		host.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_preview_model = host.get_node_or_null("SelectModel") as Node2D
 	if _preview_model == null:
 		_preview_model = MODEL_SCRIPT.new()
 		_preview_model.name = "SelectModel"
-		_preview_model.position = Vector2(120, 200)
+		_preview_model.position = Vector2(150, 240)
 		host.add_child(_preview_model)
 
 

@@ -10,6 +10,9 @@ const _StylizedBuilder = preload("res://scripts/fighters/stylized_fighter_builde
 
 const VIEWPORT_SIZE := Vector2i(220, 280)
 const DISPLAY_SCALE := Vector2(0.38, 0.38)
+## Selection preview must fill PreviewHost (~280×360) without relying on repeated camera shrinks.
+const SELECT_DISPLAY_SCALE := Vector2(1.35, 1.35)
+const SELECT_CAMERA_SIZE := 2.05
 const PROXY_LABEL := "STYLIZED PRODUCTION"
 
 var _viewport: SubViewport
@@ -86,6 +89,16 @@ func get_life() -> Dictionary:
 
 func set_select_mode(enabled: bool) -> void:
 	_select_mode = enabled
+	if _display:
+		_display.scale = SELECT_DISPLAY_SCALE if enabled else DISPLAY_SCALE
+		_display.position = Vector2(0, -28) if enabled else Vector2(0, -49)
+	_frame_camera_for_figure()
+	if enabled and _camera:
+		# Absolute orthographic size — never multiply per focus change.
+		_camera.size = SELECT_CAMERA_SIZE
+		_camera.position = Vector3(0, 1.15, 4.2)
+		_camera.look_at(Vector3(0, 1.05, 0), Vector3.UP)
+
 
 
 func set_facing(direction: int) -> void:
