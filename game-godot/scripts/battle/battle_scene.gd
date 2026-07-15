@@ -194,6 +194,7 @@ func _toggle_pause() -> void:
 		fighter2.controls_enabled = not _paused
 	if _pause_panel:
 		_pause_panel.visible = _paused
+	TouchInputManager._sync_overlay()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):

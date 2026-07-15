@@ -90,6 +90,10 @@ func should_show_touch() -> bool:
 	# Hard gate: never cover menus / select / results with combat HUD.
 	if not _in_gameplay:
 		return false
+	# Pause panel owns the screen — do not let the stick steal Resume taps.
+	var sc := get_tree().current_scene
+	if sc != null and bool(sc.get("_paused")):
+		return false
 	match touch_mode:
 		TouchMode.ON:
 			return true
