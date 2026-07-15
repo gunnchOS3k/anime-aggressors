@@ -24,6 +24,12 @@ func _ready() -> void:
 	_load_settings()
 	var scene := preload("res://scenes/ui/TouchControlsOverlay.tscn")
 	overlay = scene.instantiate()
+	# Force hidden before entering the tree so Boot Start Game stays tappable.
+	if overlay.has_method("set_visible_controls"):
+		overlay.set_visible_controls(false)
+	else:
+		overlay.visible = false
+		overlay.process_mode = Node.PROCESS_MODE_DISABLED
 	get_tree().root.call_deferred("add_child", overlay)
 	if overlay.has_method("bind_manager"):
 		overlay.bind_manager(self)

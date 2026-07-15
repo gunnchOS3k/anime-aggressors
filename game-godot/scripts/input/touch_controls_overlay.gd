@@ -19,6 +19,9 @@ var _stick_radius := 72.0
 
 func _ready() -> void:
 	layer = 128
+	# Start hidden — never cover Boot/Start Game before the first scene sync.
+	visible = false
+	process_mode = Node.PROCESS_MODE_DISABLED
 	_wire_button(btn_jump, "jump")
 	_wire_button(btn_attack, "attack")
 	_wire_button(btn_special, "special")
@@ -26,8 +29,16 @@ func _ready() -> void:
 	_wire_button(btn_grab, "grab")
 	_wire_button(btn_dodge, "dodge")
 	_wire_button(btn_aura, "aura_charge")
-	stick_base.gui_input.connect(_on_stick_gui_input)
-	visibility_changed.connect(func(): root.visible = visible)
+	if stick_base:
+		stick_base.gui_input.connect(_on_stick_gui_input)
+	visibility_changed.connect(func():
+		if root:
+			root.visible = visible
+	)
+	if root:
+		root.visible = false
+		root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_set_interactive_filters(false)
 
 func bind_manager(manager: Node) -> void:
 	_manager = manager

@@ -46,16 +46,19 @@ func _build_visuals() -> void:
 	var bg := $Background as ColorRect
 	if bg:
 		bg.color = Color(0.04, 0.05, 0.11, 1.0)
+		bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	_title = $Title as Label
 	if _title:
 		_title.text = "ANIME AGGRESSORS"
 		_title.modulate.a = 0.0
+		_title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	_tagline = $Subtitle as Label
 	if _tagline:
 		_tagline.text = "Create Your Legend"
 		_tagline.modulate.a = 0.0
+		_tagline.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	# Cameo stage (right side) — silhouette + optional 3D model
 	var cameo_host := Control.new()
@@ -65,6 +68,7 @@ func _build_visuals() -> void:
 	cameo_host.offset_top = -180.0
 	cameo_host.offset_right = -40.0
 	cameo_host.offset_bottom = 160.0
+	cameo_host.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(cameo_host)
 
 	_cameo_sil = SILHOUETTE_SCRIPT.new()
@@ -129,6 +133,8 @@ func _build_visuals() -> void:
 	_start_button.offset_left = -160.0
 	_start_button.offset_right = 160.0
 	_start_button.visible = false
+	_start_button.mouse_filter = Control.MOUSE_FILTER_STOP
+	_start_button.z_index = 20
 	_start_button.pressed.connect(_on_start_game_pressed)
 	add_child(_start_button)
 
@@ -139,6 +145,7 @@ func _build_visuals() -> void:
 		line.position = Vector2(-450 + float(i) * 40.0, 120.0 + float(i) * 80.0)
 		line.pivot_offset = line.custom_minimum_size * 0.5
 		line.set_anchors_preset(Control.PRESET_CENTER)
+		line.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		add_child(line)
 		_accent_lines.append(line)
 
