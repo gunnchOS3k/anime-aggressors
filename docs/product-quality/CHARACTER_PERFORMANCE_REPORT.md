@@ -1,39 +1,39 @@
-# Character Performance Report
+# Character Performance Report — Anime Aggressors
 
-Device target: Google Pixel 6a (`27211JEGR06194`). Quality tiers: Low / Medium / High.
+**Build:** `0.3.1` / versionCode `203`  
+**APK:** `build/android/anime-aggressors-release.apk`  
+**SHA-256:** `0828c6b003145bff38789be10f376ff6ed0b64bf065e1528ba844c4a30033768`  
+**Device:** Pixel expected serial `27211JEGR06194` — **not attached** at measurement time (2026-07-15).
 
-## Budget rules
+## Status
 
-Reduce particles → dynamic lights → secondary motion → shadows → post before cutting identity.
+| Signal | Result |
+| --- | --- |
+| Signed non-debug APK produced from character-life branch | PASS |
+| Package `com.gunnchos.animeaggressors` | PASS |
+| 16 KB ELF LOAD alignment (arm64) | PASS |
+| Pixel FPS / thermal / memory capture | **BLOCKED** — no device |
+| Low / Medium / High quality presets exercised on device | **BLOCKED** — no device |
 
-## Anime Aggressors
+## Quality tiers (implemented / intended)
 
-| Metric | Low | Medium | High | Notes |
-| --- | --- | --- | --- | --- |
-| Fighter viewport res | 160×200 | 220×280 | 280×360 | SubViewport per fighter |
-| MSAA | Off | 2× | 2× | Already 2× default |
-| Aura overlays | Level shapes only | + pulse alpha | + extra particles later | Shape language not recolor-only |
-| Facial | Expression chip off | Chip + glyph | Chip + glyph | Mobile-readable |
-| Secondary motion | Playback speed only | + throw tweens | + bone secondary (future) | |
-| Expected avg FPS | ≥50 | ≥45 | ≥40 | Pending Pixel profile this branch |
-| Heavy-effect min FPS | ≥30 | ≥28 | ≥25 | Aura burst + KO camera |
+| Tier | Reductions | Preserved |
+| --- | --- | --- |
+| Low | Fewer particles, shadows off/soft, fewer dynamic lights, reduced secondary motion, lighter post | Silhouette, face readability, core anims, identity colors/accessories |
+| Medium | Balanced particles + one key light | Full identity read |
+| High | Full aura/VFX budget | Full identity + polish |
 
-**Status:** Personality layer is CPU-cheap (speed_scale, ColorRect aura shapes, Label glyphs). Full Pixel capture pending rebuild on this branch.
+Wire to Settings → Graphics when Pixel validation is available. Until device numbers exist, do not claim FPS targets.
 
-## Pedestrian Pursuit
+## Headless / workstation notes
 
-| Metric | Low | Medium | High | Notes |
-| --- | --- | --- | --- | --- |
-| Runner mesh | Box figure | Box + accent | Box + hair/FX | Procedural silhouettes |
-| Name labels | Off | On | On | Label3D billboard |
-| Secondary | Off | Hair sway | Accent spin (kinetic) | No cloth sim |
-| Particles | Drift only | Drift + boost cue | Drift + boost | |
-| Expected avg FPS | ≥55 | ≥50 | ≥45 | |
+- Stylized fighters are procedural meshes (capsules/spheres/cylinders) — cost should remain mobile-friendly vs unique high-poly GLBs.
+- Full Pixel match profiling remains required before performance PASS.
 
-**Status:** Procedural bodies avoid skinning cost; four racers is intentional budget.
+## Next measurement checklist (when Pixel reconnects)
 
-## Actions before shipping High as default on Pixel
-
-1. Capture avg/min FPS during anime aura burst duel and pedestrian cup start boost piles.
-2. If min FPS < 28 Medium, force Low aura shapes and disable Label3D at distance.
-3. Record numbers into review packages.
+1. Install current SHA APK; confirm no compatibility / debuggable warnings.
+2. 60s idle title, 60s fighter select, full touch match.
+3. Record avg/min FPS, frame-time spikes, memory, load time, thermal, draw calls if available.
+4. Repeat on Low / Medium / High.
+5. Attach captures under `docs/product-quality/evidence/pixel-performance/`.

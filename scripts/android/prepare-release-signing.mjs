@@ -16,9 +16,18 @@ const APPS = {
     preset: path.join(repoRoot, "game-godot/export_presets.cfg"),
     jks: "anime-internal-release.jks",
     aliasEnv: "ANIME_KEY_ALIAS",
-    passEnv: "ANIME_KEYSTORE_PASS",
-    keyPassEnv: "ANIME_KEY_PASS",
+    passEnv: "ANIME_STORE_PASSWORD",
+    keyPassEnv: "ANIME_KEY_PASSWORD",
     defaultAlias: "anime_internal",
+  },
+  pedestrian: {
+    // Pedestrian preset lives in sibling repo; kept for CLI flexibility when invoked from monorepo wrappers.
+    preset: path.join(repoRoot, "../pedestrian-pursuit/export_presets.cfg"),
+    jks: "pedestrian-internal-release.jks",
+    aliasEnv: "PEDESTRIAN_KEY_ALIAS",
+    passEnv: "PEDESTRIAN_STORE_PASSWORD",
+    keyPassEnv: "PEDESTRIAN_KEY_PASSWORD",
+    defaultAlias: "pedestrian_internal",
   },
 };
 
@@ -75,6 +84,22 @@ if (!pass) fail(`${cfg.passEnv} (or ${cfg.keyPassEnv}) unset — source password
 if (!fs.existsSync(cfg.preset)) fail(`missing preset ${cfg.preset}`);
 
 patchPreset(cfg.preset, jks, alias, pass);
+// Clean Godot .import sidecars that break Android resource merger.
+const androidBuild = path.join(repoRoot, "game-godot/android/build");
+if (fs.existsSync(androidBuild)) {
+  const walk = (dir) => {
+    for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
+      const p = path.join(dir, ent.name);
+      if (ent.isDirectory()) walk(p);
+      else if (ent.name.endsWith(".import")) fs.unlinkSync(p);
+    }
+  };
+  try {
+    walk(path.join(androidBuild, "res"));
+  } catch {
+    // optional
+  }
+}
 console.log("Applied ephemeral signing to", cfg.preset);
 console.log("Keystore:", jks);
 console.log("Alias:", alias);

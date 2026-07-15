@@ -17,12 +17,12 @@ Keep secrets and keystores **outside** every repository.
 
 ```bash
 export GUNNCHOS_KEYSTORE_DIR="$HOME/.android/gunnchos-internal-keys"
-export ANIME_KEYSTORE_PASS='…'
+export ANIME_STORE_PASSWORD='…'
+export ANIME_KEY_PASSWORD='…'
 export ANIME_KEY_ALIAS='anime_internal'
-export ANIME_KEY_PASS='…'
-export PEDESTRIAN_KEYSTORE_PASS='…'
+export PEDESTRIAN_STORE_PASSWORD='…'
+export PEDESTRIAN_KEY_PASSWORD='…'
 export PEDESTRIAN_KEY_ALIAS='pedestrian_internal'
-export PEDESTRIAN_KEY_PASS='…'
 ```
 
 ## Required environment
@@ -33,26 +33,35 @@ export PEDESTRIAN_KEY_PASS='…'
 | `JAVA_HOME` | JDK **17** (Corretto recommended) |
 | `ANDROID_SDK_ROOT` / `ANDROID_HOME` | Android SDK |
 | `GUNNCHOS_KEYSTORE_DIR` | Directory containing `*.jks` |
-| Per-app `*_KEYSTORE_PASS` / `*_KEY_ALIAS` / `*_KEY_PASS` | Signing |
+| Per-app `*_STORE_PASSWORD` / `*_KEY_PASSWORD` / `*_KEY_ALIAS` | Signing (legacy `*_KEYSTORE_PASS` still accepted by prepare scripts) |
 
 ## Workflow
 
 1. `source ~/.android/gunnchos-internal-keys/passwords.env`
-2. Run the prepare script (patches `export_presets.cfg` **ephemerally** with keystore path + password).
-3. Export release APK.
-4. Prepare script restores empty passwords / clears absolute paths after export.
+2. Prefer the wrapper export scripts (apply signing, clean Godot `.import` sidecars during Gradle merge, restore presets).
+3. Or manually: prepare `--apply` → export → prepare `--restore`.
 
 ```bash
-# Anime
+# Anime (recommended)
+bash scripts/android/export-release-apk.sh
+
+# Pedestrian (recommended)
+bash tools/android/export-release-apk.sh
+
+# Manual Anime
 node scripts/android/prepare-release-signing.mjs --app anime --apply
 # … export …
 node scripts/android/prepare-release-signing.mjs --app anime --restore
 
-# Pedestrian
+# Manual Pedestrian
 bash tools/android/prepare_release_signing.sh apply
 # … export …
 bash tools/android/prepare_release_signing.sh restore
 ```
+
+### Godot `.import` resource merge issue
+
+Godot may write `*.import` sidecars next to launcher PNGs under `android/build/res/mipmap*/`. Android resource merge then fails (`mergeStandardReleaseResources`). The export wrappers delete those sidecars continuously during export and fall back to `./gradlew assembleStandardRelease` when needed.
 
 ## Committed presets
 
@@ -73,7 +82,8 @@ It must **not** store:
 | --- | --- |
 | `GUNNCHOS_KEYSTORE_DIR unset` | Export `GUNNCHOS_KEYSTORE_DIR` |
 | `keystore file missing` | Place the correct `.jks` in that directory |
-| `*_KEYSTORE_PASS unset` | Source `passwords.env` |
+| `*_STORE_PASSWORD unset` | Source `passwords.env` |
+| Gradle `*.png.import` resource merge error | Use `scripts/android/export-release-apk.sh` (import watchdog) |
 | `JAVA_HOME is not JDK 17` | Point `JAVA_HOME` at Corretto 17 |
 | Godot: “Release Keystore, User AND Password…” | Run prepare `--apply` before export; do not leave only one of the three fields filled |
 
