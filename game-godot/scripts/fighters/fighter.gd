@@ -638,18 +638,34 @@ func _check_edge() -> void:
 func _set_aura_vfx(on: bool) -> void:
 	if aura_vfx:
 		aura_vfx.visible = on
+		if on and data.has("auraColor"):
+			var c := Color(data.get("auraColor"))
+			c.a = clampf(0.2 + aura / 200.0, 0.2, 0.55)
+			aura_vfx.color = c
+	if model_3d and model_3d.has_method("set_aura_level"):
+		model_3d.set_aura_level(get_aura_level() if on or aura > 1.0 else 0)
 	if on and not _aura_sfx_hook:
 		_aura_sfx_hook = true
 
+
 func _on_state_changed(_from: String, to: String) -> void:
 	_play_current_animation(to)
+	if to in [FighterStates.AURA_CHARGE, FighterStates.AURA_READY, FighterStates.AURA_BURST_STARTUP, FighterStates.AURA_BURST_ACTIVE]:
+		_set_aura_vfx(true)
+	elif to in [FighterStates.IDLE, FighterStates.WALK, FighterStates.RUN] and aura < 25.0:
+		_set_aura_vfx(false)
 	state_changed.emit(to)
+
 
 func _play_current_animation(state: String) -> void:
 	if not animator:
 		return
 	if model_3d and model_3d.is_model_loaded():
-		model_3d.play_for_state(state, _current_move)
+		var move_copy: Dictionary = _current_move.duplicate()
+		move_copy["throw_direction"] = _throw_direction
+		model_3d.play_for_state(state, move_copy)
+		if model_3d.has_method("set_aura_level"):
+			model_3d.set_aura_level(get_aura_level())
 	else:
 		animator.play_for_state(state)
 
