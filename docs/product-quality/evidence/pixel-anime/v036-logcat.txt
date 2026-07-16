@@ -1,0 +1,204 @@
+--------- beginning of main
+07-15 17:09:04.952  4246  4354 D TemperatureStateSource: getDeviceTemperatures: sequence=4443 deviceTemperatureType=3 temperatureSource=0 temperatures=[37.49865]
+07-15 17:09:04.953  4246  4351 D ImpulseStateSource: Notify clients: 4489
+07-15 17:09:04.953  4246  4354 D TemperatureStateSource: sequence=4443 waitTime=10000
+07-15 17:09:04.977  1449  1568 D WifiHAL : Start debug command: mType GET_FEATURE
+07-15 17:09:04.977  1449  1568 I WifiHAL : CreateRequest mType = GET_FEATURE
+07-15 17:09:04.977  1449  1568 D WifiHAL : In DebugCommand::handleResponse, mType:GET_FEATURE
+07-15 17:09:04.977  1449  1568 D WifiHAL : len = 4, expected len = 4
+07-15 17:09:05.576  1579  1600 I WPKTRT  : process_address_event: 2601:243:e186:2200:5c8f:ffff:fee2:91ed added to wlan0
+07-15 17:09:05.576  1579  1600 I WPKTRT  : process_address_event: 2601:243:e186:2200:f85:538:2724:66c6 added to wlan0
+07-15 17:09:05.577  4164 15633 D IpClient/wlan0: addressUpdated: 2601:243:e186:2200:5c8f:ffff:fee2:91ed/64 on ifindex 47 flags 0x00000100 scope 0
+07-15 17:09:05.577  4164 15633 D IpClient/wlan0: addressUpdated: 2601:243:e186:2200:f85:538:2724:66c6/64 on ifindex 47 flags 0x00000001 scope 0
+07-15 17:09:05.578  4164 15633 W AlarmManager: Unrecognized alarm listener com.android.networkstack.android.net.ip.IpClientLinkObserver$Dhcp6PdPreferredPrefixAlarmListener@462d47f
+07-15 17:09:05.578  4164 15633 D ApfFilter: (wlan0): Ignoring RA RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e186:2200::/64 3834s/3834s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0  which matches RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e186:2200::/64 3834s/3834s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0 
+07-15 17:09:07.713  1937  1961 I system_server: Background young concurrent mark compact GC freed 6080KB AllocSpace bytes, 2(40KB) LOS objects, 87% free, 62MB/512MB, paused 1.755ms,5.255ms total 85.071ms
+07-15 17:09:07.983  1449  1568 I WifiHAL : Creating message to get link statistics; iface = 47
+07-15 17:09:08.064  1449  4753 D WifiHAL : Start debug command: mType GET_FEATURE
+07-15 17:09:08.064  1449  4753 I WifiHAL : CreateRequest mType = GET_FEATURE
+07-15 17:09:08.064  1449  4753 D WifiHAL : In DebugCommand::handleResponse, mType:GET_FEATURE
+07-15 17:09:08.064  1449  4753 D WifiHAL : len = 4, expected len = 4
+07-15 17:09:08.444  1579  1600 I WPKTRT  : process_address_event: 2601:243:e186:2200:5c8f:ffff:fee2:91ed added to wlan0
+07-15 17:09:08.444  1579  1600 I WPKTRT  : process_address_event: 2601:243:e186:2200:f85:538:2724:66c6 added to wlan0
+07-15 17:09:08.445  4164 15633 D IpClient/wlan0: addressUpdated: 2601:243:e186:2200:5c8f:ffff:fee2:91ed/64 on ifindex 47 flags 0x00000100 scope 0
+07-15 17:09:08.448  4164 15633 D IpClient/wlan0: addressUpdated: 2601:243:e186:2200:f85:538:2724:66c6/64 on ifindex 47 flags 0x00000001 scope 0
+07-15 17:09:08.449  4164 15633 W AlarmManager: Unrecognized alarm listener com.android.networkstack.android.net.ip.IpClientLinkObserver$Dhcp6PdPreferredPrefixAlarmListener@462d47f
+07-15 17:09:08.451  4164 15633 D ApfFilter: (wlan0): Ignoring RA RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e186:2200::/64 3834s/3834s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0  which matches RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e186:2200::/64 3834s/3834s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0 
+07-15 17:09:08.791  2118  2129 I pixel-thermal: cellular-emergency:37.4986 raw data: VIRTUAL-NEUTRAL:37498.6 VIRTUAL-NEUTRAL-SKIN2:37352.9 VIRTUAL-QUIET-NEUTRAL:36271.3 VIRTUAL-SKIN:37498.6 cellular-emergency:37498.6 disp_therm:35668 gnss_tcxo_therm:38027 neutral_therm:36692 quiet_therm:36091 skin_therm1:38250 skin_therm2:38895 
+07-15 17:09:08.791  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CPU:37.4986 raw data: VIRTUAL-SKIN:37498.6 VIRTUAL-SKIN-CPU:37498.6 
+07-15 17:09:08.791  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CPU power_budget=2200.54 err=3.50135 s_power=800 time_elapsed_ms=7012 p=1400.54 i=0 d=0 dt_per_min=nan compensation=0 budget transient=0 control target=3 excluded power budget=0
+07-15 17:09:08.791  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CPU binded power rails: (S4M_VDD_CPUCL0: 71.98 mW)(S2M_VDD_CPUCL2: 47.49 mW)(S3M_VDD_CPUCL1: 33.59 mW)
+07-15 17:09:08.791  2118  2129 I pixel-thermal: neutral_therm:36.692 raw data: neutral_therm:36692 
+07-15 17:09:08.791  2118  2129 I pixel-thermal: VIRTUAL-SKIN:37.4986 raw data: VIRTUAL-SKIN:37498.6 
+07-15 17:09:08.791  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CPU-GPU:37.4986 raw data: VIRTUAL-SKIN:37498.6 VIRTUAL-SKIN-CPU-GPU:37498.6 
+07-15 17:09:08.791  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CPU-GPU power_budget=3050.41 err=7.50135 s_power=800 time_elapsed_ms=7012 p=2250.41 i=0 d=0 dt_per_min=nan compensation=0 budget transient=0 control target=3 excluded power budget=0
+07-15 17:09:08.791  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CPU-GPU binded power rails: (S4M_VDD_CPUCL0: 71.98 mW)(S2M_VDD_CPUCL2: 47.49 mW)(S3M_VDD_CPUCL1: 33.59 mW)(S2S_VDD_G3D: 111.29 mW)
+07-15 17:09:08.791  2118  2129 I pixel-thermal: VIRTUAL-SKIN-HINT:37.4986 raw data: VIRTUAL-SKIN:37498.6 VIRTUAL-SKIN-HINT:37498.6 
+07-15 17:09:08.791  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CHARGE:37.4986 raw data: VIRTUAL-SKIN:37498.6 VIRTUAL-SKIN-CHARGE:37498.6 
+07-15 17:09:11.068  1449  4753 I WifiHAL : Creating message to get link statistics; iface = 47
+07-15 17:09:11.148  1449  1568 D WifiHAL : Start debug command: mType GET_FEATURE
+07-15 17:09:11.148  1449  1568 I WifiHAL : CreateRequest mType = GET_FEATURE
+07-15 17:09:11.148  1449  1568 D WifiHAL : In DebugCommand::handleResponse, mType:GET_FEATURE
+07-15 17:09:11.148  1449  1568 D WifiHAL : len = 4, expected len = 4
+--------- beginning of system
+07-15 17:09:11.286  1937  2372 D ActivityManager: freezing 17764 com.google.android.gms
+07-15 17:09:11.720  1579  1600 I WPKTRT  : process_address_event: 2601:243:e186:2200:5c8f:ffff:fee2:91ed added to wlan0
+07-15 17:09:11.720  1579  1600 I WPKTRT  : process_address_event: 2601:243:e186:2200:f85:538:2724:66c6 added to wlan0
+07-15 17:09:11.724  4164 15633 D IpClient/wlan0: addressUpdated: 2601:243:e186:2200:5c8f:ffff:fee2:91ed/64 on ifindex 47 flags 0x00000100 scope 0
+07-15 17:09:11.724  4164 15633 D IpClient/wlan0: addressUpdated: 2601:243:e186:2200:f85:538:2724:66c6/64 on ifindex 47 flags 0x00000001 scope 0
+07-15 17:09:11.725  4164 15633 W AlarmManager: Unrecognized alarm listener com.android.networkstack.android.net.ip.IpClientLinkObserver$Dhcp6PdPreferredPrefixAlarmListener@462d47f
+07-15 17:09:11.726  4164 15633 D ApfFilter: (wlan0): Ignoring RA RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e186:2200::/64 3834s/3834s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0  which matches RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e186:2200::/64 3834s/3834s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0 
+07-15 17:09:14.153  1449  1568 I WifiHAL : Creating message to get link statistics; iface = 47
+07-15 17:09:14.239  1449  1568 D WifiHAL : Start debug command: mType GET_FEATURE
+07-15 17:09:14.239  1449  1568 I WifiHAL : CreateRequest mType = GET_FEATURE
+07-15 17:09:14.239  1449  1568 D WifiHAL : In DebugCommand::handleResponse, mType:GET_FEATURE
+07-15 17:09:14.239  1449  1568 D WifiHAL : len = 4, expected len = 4
+07-15 17:09:14.587  1579  1600 I WPKTRT  : process_address_event: 2601:243:e186:2200:5c8f:ffff:fee2:91ed added to wlan0
+07-15 17:09:14.587  1579  1600 I WPKTRT  : process_address_event: 2601:243:e186:2200:f85:538:2724:66c6 added to wlan0
+07-15 17:09:14.589  4164 15633 D IpClient/wlan0: addressUpdated: 2601:243:e186:2200:5c8f:ffff:fee2:91ed/64 on ifindex 47 flags 0x00000100 scope 0
+07-15 17:09:14.589  4164 15633 D IpClient/wlan0: addressUpdated: 2601:243:e186:2200:f85:538:2724:66c6/64 on ifindex 47 flags 0x00000001 scope 0
+07-15 17:09:14.590  4164 15633 W AlarmManager: Unrecognized alarm listener com.android.networkstack.android.net.ip.IpClientLinkObserver$Dhcp6PdPreferredPrefixAlarmListener@462d47f
+07-15 17:09:14.593  4164 15633 D ApfFilter: (wlan0): Ignoring RA RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e186:2200::/64 3834s/3834s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0  which matches RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e186:2200::/64 3834s/3834s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0 
+07-15 17:09:14.956  4246  4471 D TemperatureStateSource: sequence=4443 actualDelay=10001
+07-15 17:09:14.956  4246  4471 D TemperatureStateSource: Reading temperature: sequence=4444
+07-15 17:09:14.961  2118  2118 I pixel-thermal: VIRTUAL-SKIN:37.4927 raw data: VIRTUAL-NEUTRAL:37492.7 VIRTUAL-NEUTRAL-SKIN2:37336.8 VIRTUAL-QUIET-NEUTRAL:36232.9 VIRTUAL-SKIN:37492.7 disp_therm:35645 gnss_tcxo_therm:38027 neutral_therm:36669 quiet_therm:36046 skin_therm1:38272 skin_therm2:38895 
+07-15 17:09:14.961  4246  4471 D TemperatureStateSource: getDeviceTemperatures: sequence=4444 deviceTemperatureType=3 temperatureSource=0 temperatures=[37.492702]
+07-15 17:09:14.962  4246  4471 D TemperatureStateSource: sequence=4444 waitTime=10000
+07-15 17:09:14.962  4246  4354 D ImpulseStateSource: Notify clients: 4490
+07-15 17:09:14.974  1937  2372 D ActivityManager: freezing 22826 com.google.android.apps.turbo
+07-15 17:09:14.980  1937  3984 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+07-15 17:09:14.983  1937  3984 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+07-15 17:09:14.983  1937  3984 D InetDiagMessage: Destroyed live tcp sockets for uids={10146} in 6ms
+07-15 17:09:15.798  2118  2129 I pixel-thermal: cellular-emergency:37.4927 raw data: VIRTUAL-SKIN:37492.7 cellular-emergency:37492.7 
+07-15 17:09:15.798  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CPU:37.4927 raw data: VIRTUAL-SKIN:37492.7 VIRTUAL-SKIN-CPU:37492.7 
+07-15 17:09:15.798  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CPU power_budget=2202.92 err=3.5073 s_power=800 time_elapsed_ms=7007 p=1402.92 i=0 d=0 dt_per_min=nan compensation=0 budget transient=0 control target=3 excluded power budget=0
+07-15 17:09:15.798  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CPU binded power rails: (S4M_VDD_CPUCL0: 70.65 mW)(S2M_VDD_CPUCL2: 45.79 mW)(S3M_VDD_CPUCL1: 33.52 mW)
+07-15 17:09:15.798  2118  2129 I pixel-thermal: neutral_therm:36.669 raw data: neutral_therm:36669 
+07-15 17:09:15.798  2118  2129 I pixel-thermal: VIRTUAL-SKIN:37.4927 raw data: VIRTUAL-SKIN:37492.7 
+07-15 17:09:15.799  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CPU-GPU:37.4927 raw data: VIRTUAL-SKIN:37492.7 VIRTUAL-SKIN-CPU-GPU:37492.7 
+07-15 17:09:15.799  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CPU-GPU power_budget=3052.19 err=7.5073 s_power=800 time_elapsed_ms=7007 p=2252.19 i=0 d=0 dt_per_min=nan compensation=0 budget transient=0 control target=3 excluded power budget=0
+07-15 17:09:15.799  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CPU-GPU binded power rails: (S4M_VDD_CPUCL0: 70.65 mW)(S2M_VDD_CPUCL2: 45.79 mW)(S3M_VDD_CPUCL1: 33.52 mW)(S2S_VDD_G3D: 109.17 mW)
+07-15 17:09:15.799  2118  2129 I pixel-thermal: VIRTUAL-SKIN-HINT:37.4927 raw data: VIRTUAL-SKIN:37492.7 VIRTUAL-SKIN-HINT:37492.7 
+07-15 17:09:15.799  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CHARGE:37.4927 raw data: VIRTUAL-SKIN:37492.7 VIRTUAL-SKIN-CHARGE:37492.7 
+07-15 17:09:15.865  2118  2129 I pixel-thermal: VIRTUAL-USB-UI:0 raw data: USB2-MINUS-CHG:-3673 VIRTUAL-USB-UI:0 charger_skin_therm:39652 usb_pwr_therm2:35979 
+07-15 17:09:15.865  2118  2129 I pixel-thermal: VIRTUAL-USB-THROTTLING:0 raw data: USB2-MINUS-CHG:-3673 VIRTUAL-USB-THROTTLING:0 usb_pwr_therm2:35979 
+07-15 17:09:15.865  2118  2129 I pixel-thermal: Power rails total power: 728.08 mW for 59937 ms
+07-15 17:09:15.865  2118  2129 I pixel-thermal: Power rails [L8S_UFS_VCCQ: 5.59 mW] [S2S_VDD_G3D: 112.08 mW] [S10S_VDD2L: 18.62 mW] [S5S_VDDQ_MEM: 13.35 mW] [S4S_VDD2H_MEM: 81.21 mW] [S9S_VDD_AOC: 23.92 mW] 
+07-15 17:09:15.865  2118  2129 I pixel-thermal: Power rails [S10M_VDD_TPU: 12.47 mW] [L2S_VDD_AOC_RET: 9.99 mW] [L9S_GNSS_CORE: 0.69 mW] [S1M_VDD_MIF: 85.67 mW] [S5M_VDD_INT: 41.86 mW] [S4M_VDD_CPUCL0: 78.98 mW] 
+07-15 17:09:15.865  2118  2129 I pixel-thermal: Power rails [S2M_VDD_CPUCL2: 64.02 mW] [S3M_VDD_CPUCL1: 34.61 mW] [L15M_VDD_SLC_M: 19.50 mW] [VSYS_PWR_DISPLAY: 125.53 mW] 
+07-15 17:09:15.865  2118  2129 I pixel-thermal: CDEV log usbc-port state:0 fcc state:0 thermal-cpufreq-1 state:0 tpu_cooling state:0 thermal-gpufreq-0 state:0 thermal-cpufreq-2 state:0 thermal-cpufreq-0 state:0 
+07-15 17:09:16.277  2118  2129 I pixel-thermal: usb_pwr_therm2:35.979 raw data: usb_pwr_therm2:35979 
+07-15 17:09:17.244  1449  1568 I WifiHAL : Creating message to get link statistics; iface = 47
+07-15 17:09:17.316  1449  1568 D WifiHAL : Start debug command: mType GET_FEATURE
+07-15 17:09:17.316  1449  1568 I WifiHAL : CreateRequest mType = GET_FEATURE
+07-15 17:09:17.316  1449  1568 D WifiHAL : In DebugCommand::handleResponse, mType:GET_FEATURE
+07-15 17:09:17.316  1449  1568 D WifiHAL : len = 4, expected len = 4
+07-15 17:09:17.455  1579  1600 I WPKTRT  : process_address_event: 2601:243:e186:2200:5c8f:ffff:fee2:91ed added to wlan0
+07-15 17:09:17.455  1579  1600 I WPKTRT  : process_address_event: 2601:243:e186:2200:f85:538:2724:66c6 added to wlan0
+07-15 17:09:17.456  4164 15633 D IpClient/wlan0: addressUpdated: 2601:243:e186:2200:5c8f:ffff:fee2:91ed/64 on ifindex 47 flags 0x00000100 scope 0
+07-15 17:09:17.456  4164 15633 D IpClient/wlan0: addressUpdated: 2601:243:e186:2200:f85:538:2724:66c6/64 on ifindex 47 flags 0x00000001 scope 0
+07-15 17:09:17.457  4164 15633 W AlarmManager: Unrecognized alarm listener com.android.networkstack.android.net.ip.IpClientLinkObserver$Dhcp6PdPreferredPrefixAlarmListener@462d47f
+07-15 17:09:17.460  4164 15633 D ApfFilter: (wlan0): Ignoring RA RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e186:2200::/64 3834s/3834s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0  which matches RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e186:2200::/64 3834s/3834s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0 
+07-15 17:09:20.224  1694  1694 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:settings put system user_rotation 1'
+07-15 17:09:20.259  1937  6258 V SettingsShellCmd: putForUser(userId=0, table=system, key=user_rotation, value=1, tag=null, makeDefault=false, overrideableByRestore=false)
+07-15 17:09:20.281  1694  1694 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input swipe 250 860 420 860 600'
+07-15 17:09:20.323  1449  1568 I WifiHAL : Creating message to get link statistics; iface = 47
+07-15 17:09:20.401  1449  1568 D WifiHAL : Start debug command: mType GET_FEATURE
+07-15 17:09:20.401  1449  1568 I WifiHAL : CreateRequest mType = GET_FEATURE
+07-15 17:09:20.401  1449  1568 D WifiHAL : In DebugCommand::handleResponse, mType:GET_FEATURE
+07-15 17:09:20.401  1449  1568 D WifiHAL : len = 4, expected len = 4
+07-15 17:09:20.732  4164 15633 D IpClient/wlan0: addressUpdated: 2601:243:e186:2200:5c8f:ffff:fee2:91ed/64 on ifindex 47 flags 0x00000100 scope 0
+07-15 17:09:20.733  4164 15633 D IpClient/wlan0: addressUpdated: 2601:243:e186:2200:f85:538:2724:66c6/64 on ifindex 47 flags 0x00000001 scope 0
+07-15 17:09:20.733  4164 15633 W AlarmManager: Unrecognized alarm listener com.android.networkstack.android.net.ip.IpClientLinkObserver$Dhcp6PdPreferredPrefixAlarmListener@462d47f
+07-15 17:09:20.734  4164 15633 D ApfFilter: (wlan0): Adding RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e186:2200::/64 3834s/3834s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0 
+07-15 17:09:20.734  1579  1600 I WPKTRT  : process_address_event: 2601:243:e186:2200:5c8f:ffff:fee2:91ed added to wlan0
+07-15 17:09:20.734  1579  1600 I WPKTRT  : process_address_event: 2601:243:e186:2200:f85:538:2724:66c6 added to wlan0
+07-15 17:09:20.736  1449  1568 E WifiHAL : Setting APF program, halHandle = 0xb400007a67419bd0
+07-15 17:09:20.736  1449  1568 E WifiHAL : Set apf filter for iface = wlan0
+07-15 17:09:20.736  1449  1568 I WifiHAL : createRequest: APF set program request
+07-15 17:09:20.736  1449  1568 I WifiHAL : mProgramLen : 678
+07-15 17:09:21.355  1694  1694 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 1550 920'
+07-15 17:09:21.866  1694  1694 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 1700 920'
+07-15 17:09:22.551  1694  1694 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 1700 920'
+07-15 17:09:22.809  2118  2129 I pixel-thermal: cellular-emergency:37.513 raw data: VIRTUAL-NEUTRAL:37512.9 VIRTUAL-NEUTRAL-SKIN2:37377.1 VIRTUAL-QUIET-NEUTRAL:36253 VIRTUAL-SKIN:37512.9 cellular-emergency:37512.9 disp_therm:35690 gnss_tcxo_therm:38005 neutral_therm:36736 quiet_therm:36046 skin_therm1:38272 skin_therm2:38873 
+07-15 17:09:22.809  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CPU:37.513 raw data: VIRTUAL-SKIN:37512.9 VIRTUAL-SKIN-CPU:37512.9 
+07-15 17:09:22.809  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CPU power_budget=2194.82 err=3.48705 s_power=800 time_elapsed_ms=7009 p=1394.82 i=0 d=-0 dt_per_min=nan compensation=0 budget transient=0 control target=3 excluded power budget=0
+07-15 17:09:22.809  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CPU binded power rails: (S4M_VDD_CPUCL0: 82.40 mW)(S2M_VDD_CPUCL2: 50.18 mW)(S3M_VDD_CPUCL1: 36.75 mW)
+07-15 17:09:22.809  2118  2129 I pixel-thermal: neutral_therm:36.736 raw data: neutral_therm:36736 
+07-15 17:09:22.809  2118  2129 I pixel-thermal: VIRTUAL-SKIN:37.513 raw data: VIRTUAL-SKIN:37512.9 
+07-15 17:09:22.809  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CPU-GPU:37.513 raw data: VIRTUAL-SKIN:37512.9 VIRTUAL-SKIN-CPU-GPU:37512.9 
+07-15 17:09:22.809  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CPU-GPU power_budget=3046.11 err=7.48705 s_power=800 time_elapsed_ms=7009 p=2246.11 i=0 d=-0 dt_per_min=nan compensation=0 budget transient=0 control target=3 excluded power budget=0
+07-15 17:09:22.809  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CPU-GPU binded power rails: (S4M_VDD_CPUCL0: 82.40 mW)(S2M_VDD_CPUCL2: 50.18 mW)(S3M_VDD_CPUCL1: 36.75 mW)(S2S_VDD_G3D: 104.32 mW)
+07-15 17:09:22.809  2118  2129 I pixel-thermal: VIRTUAL-SKIN-HINT:37.513 raw data: VIRTUAL-SKIN:37512.9 VIRTUAL-SKIN-HINT:37512.9 
+07-15 17:09:22.809  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CHARGE:37.513 raw data: VIRTUAL-SKIN:37512.9 VIRTUAL-SKIN-CHARGE:37512.9 
+07-15 17:09:22.946  1694  1694 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 1850 920'
+07-15 17:09:23.405  1449  1568 I WifiHAL : Creating message to get link statistics; iface = 47
+07-15 17:09:23.444  1694  1694 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input swipe 2250 920 2250 920 900'
+07-15 17:09:23.487  1449  1568 D WifiHAL : Start debug command: mType GET_FEATURE
+07-15 17:09:23.487  1449  1568 I WifiHAL : CreateRequest mType = GET_FEATURE
+07-15 17:09:23.487  1449  1568 D WifiHAL : In DebugCommand::handleResponse, mType:GET_FEATURE
+07-15 17:09:23.487  1449  1568 D WifiHAL : len = 4, expected len = 4
+07-15 17:09:23.601  4164 15633 D IpClient/wlan0: addressUpdated: 2601:243:e186:2200:5c8f:ffff:fee2:91ed/64 on ifindex 47 flags 0x00000100 scope 0
+07-15 17:09:23.601  1579  1600 I WPKTRT  : process_address_event: 2601:243:e186:2200:5c8f:ffff:fee2:91ed added to wlan0
+07-15 17:09:23.602  1579  1600 I WPKTRT  : process_address_event: 2601:243:e186:2200:f85:538:2724:66c6 added to wlan0
+07-15 17:09:23.605  4164 15633 D IpClient/wlan0: addressUpdated: 2601:243:e186:2200:f85:538:2724:66c6/64 on ifindex 47 flags 0x00000001 scope 0
+07-15 17:09:23.605  4164 15633 W AlarmManager: Unrecognized alarm listener com.android.networkstack.android.net.ip.IpClientLinkObserver$Dhcp6PdPreferredPrefixAlarmListener@462d47f
+07-15 17:09:23.606  4164 15633 D ApfFilter: (wlan0): Ignoring RA RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e186:2200::/64 3834s/3834s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0  which matches RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e186:2200::/64 3834s/3834s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0 
+07-15 17:09:24.739  1694  1694 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 2050 920'
+07-15 17:09:24.940  1449  1568 I WifiHAL : Creating message to get link statistics; iface = 47
+07-15 17:09:24.962  4246  5195 D TemperatureStateSource: sequence=4444 actualDelay=10001
+07-15 17:09:24.963  4246  5195 D TemperatureStateSource: Reading temperature: sequence=4445
+07-15 17:09:24.967  2118  2118 I pixel-thermal: VIRTUAL-SKIN:37.5008 raw data: VIRTUAL-NEUTRAL:37500.8 VIRTUAL-NEUTRAL-SKIN2:37375.2 VIRTUAL-QUIET-NEUTRAL:36246.4 VIRTUAL-SKIN:37500.8 disp_therm:35668 gnss_tcxo_therm:38005 neutral_therm:36714 quiet_therm:36046 skin_therm1:38227 skin_therm2:38918 
+07-15 17:09:24.967  4246  5195 D TemperatureStateSource: getDeviceTemperatures: sequence=4445 deviceTemperatureType=3 temperatureSource=0 temperatures=[37.5008]
+07-15 17:09:24.968  4246  5195 D TemperatureStateSource: sequence=4445 waitTime=10000
+07-15 17:09:24.968  4246  5195 D ImpulseStateSource: Notify clients: 4491
+07-15 17:09:25.390  1694  1694 I adbd    : adbd service requested 'exec:screencap '-p''
+07-15 17:09:25.524 20361 20361 W libbinder.BackendUnifiedServiceManager: Thread Pool max thread count is 0. Cannot cache binder as linkToDeath cannot be implemented. serviceName: SurfaceFlingerAIDL
+07-15 17:09:25.524 20361 20361 W libbinder.BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+07-15 17:09:25.524 20361 20361 W libbinder.ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+07-15 17:09:25.942  1694  1694 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input keyevent 4'
+07-15 17:09:25.991  9517  9517 I StylusModule: StylusModule.onUpdateToolType():774 Update tool type = 0
+07-15 17:09:26.468  4164 15633 D IpClient/wlan0: addressUpdated: 2601:243:e186:2200:5c8f:ffff:fee2:91ed/64 on ifindex 47 flags 0x00000100 scope 0
+07-15 17:09:26.468  4164 15633 D IpClient/wlan0: addressUpdated: 2601:243:e186:2200:f85:538:2724:66c6/64 on ifindex 47 flags 0x00000001 scope 0
+07-15 17:09:26.468  1579  1600 I WPKTRT  : process_address_event: 2601:243:e186:2200:5c8f:ffff:fee2:91ed added to wlan0
+07-15 17:09:26.469  1579  1600 I WPKTRT  : process_address_event: 2601:243:e186:2200:f85:538:2724:66c6 added to wlan0
+07-15 17:09:26.472  4164 15633 W AlarmManager: Unrecognized alarm listener com.android.networkstack.android.net.ip.IpClientLinkObserver$Dhcp6PdPreferredPrefixAlarmListener@462d47f
+07-15 17:09:26.473  4164 15633 D ApfFilter: (wlan0): Ignoring RA RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e186:2200::/64 3834s/3834s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0  which matches RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e186:2200::/64 3834s/3834s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0 
+07-15 17:09:26.491  1449  1568 I WifiHAL : Creating message to get link statistics; iface = 47
+07-15 17:09:26.573  1449  4753 D WifiHAL : Start debug command: mType GET_FEATURE
+07-15 17:09:26.573  1449  4753 I WifiHAL : CreateRequest mType = GET_FEATURE
+07-15 17:09:26.573  1449  4753 D WifiHAL : In DebugCommand::handleResponse, mType:GET_FEATURE
+07-15 17:09:26.573  1449  4753 D WifiHAL : len = 4, expected len = 4
+07-15 17:09:27.030  1694  1694 I adbd    : adbd service requested 'exec:screencap '-p''
+07-15 17:09:27.126 20371 20371 W libbinder.BackendUnifiedServiceManager: Thread Pool max thread count is 0. Cannot cache binder as linkToDeath cannot be implemented. serviceName: SurfaceFlingerAIDL
+07-15 17:09:27.126 20371 20371 W libbinder.BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+07-15 17:09:27.126 20371 20371 W libbinder.ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+07-15 17:09:28.578  1694  1694 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input keyevent 4'
+07-15 17:09:28.623  9517  9517 I StylusModule: StylusModule.onUpdateToolType():774 Update tool type = 0
+07-15 17:09:29.580  1449  4753 I WifiHAL : Creating message to get link statistics; iface = 47
+07-15 17:09:29.663  1694  1694 I adbd    : adbd service requested 'exec:screencap '-p''
+07-15 17:09:29.709  1449  4753 D WifiHAL : Start debug command: mType GET_FEATURE
+07-15 17:09:29.709  1449  4753 I WifiHAL : CreateRequest mType = GET_FEATURE
+07-15 17:09:29.709  1449  4753 D WifiHAL : In DebugCommand::handleResponse, mType:GET_FEATURE
+07-15 17:09:29.709  1449  4753 D WifiHAL : len = 4, expected len = 4
+07-15 17:09:29.743  4164 15633 D IpClient/wlan0: addressUpdated: 2601:243:e186:2200:5c8f:ffff:fee2:91ed/64 on ifindex 47 flags 0x00000100 scope 0
+07-15 17:09:29.744  4164 15633 D IpClient/wlan0: addressUpdated: 2601:243:e186:2200:f85:538:2724:66c6/64 on ifindex 47 flags 0x00000001 scope 0
+07-15 17:09:29.744  4164 15633 W AlarmManager: Unrecognized alarm listener com.android.networkstack.android.net.ip.IpClientLinkObserver$Dhcp6PdPreferredPrefixAlarmListener@462d47f
+07-15 17:09:29.745  1579  1600 I WPKTRT  : process_address_event: 2601:243:e186:2200:5c8f:ffff:fee2:91ed added to wlan0
+07-15 17:09:29.745  1579  1600 I WPKTRT  : process_address_event: 2601:243:e186:2200:f85:538:2724:66c6 added to wlan0
+07-15 17:09:29.748  4164 15633 D ApfFilter: (wlan0): Ignoring RA RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e186:2200::/64 3834s/3834s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0  which matches RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e186:2200::/64 3834s/3834s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0 
+07-15 17:09:29.794 20381 20381 W libbinder.BackendUnifiedServiceManager: Thread Pool max thread count is 0. Cannot cache binder as linkToDeath cannot be implemented. serviceName: SurfaceFlingerAIDL
+07-15 17:09:29.794 20381 20381 W libbinder.BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+07-15 17:09:29.794 20381 20381 W libbinder.ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+07-15 17:09:29.818  2118  2129 I pixel-thermal: cellular-emergency:37.5008 raw data: VIRTUAL-NEUTRAL:37500.8 VIRTUAL-NEUTRAL-SKIN2:37375.2 VIRTUAL-QUIET-NEUTRAL:36246.4 VIRTUAL-SKIN:37500.8 cellular-emergency:37500.8 disp_therm:35668 gnss_tcxo_therm:38005 neutral_therm:36714 quiet_therm:36046 skin_therm1:38227 skin_therm2:38918 
+07-15 17:09:29.818  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CPU:37.5008 raw data: VIRTUAL-SKIN:37500.8 VIRTUAL-SKIN-CPU:37500.8 
+07-15 17:09:29.818  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CPU power_budget=2199.68 err=3.4992 s_power=800 time_elapsed_ms=7010 p=1399.68 i=0 d=0 dt_per_min=nan compensation=0 budget transient=0 control target=3 excluded power budget=0
+07-15 17:09:29.818  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CPU binded power rails: (S4M_VDD_CPUCL0: 107.47 mW)(S2M_VDD_CPUCL2: 142.17 mW)(S3M_VDD_CPUCL1: 41.37 mW)
+07-15 17:09:29.818  2118  2129 I pixel-thermal: neutral_therm:36.714 raw data: neutral_therm:36714 
+07-15 17:09:29.818  2118  2129 I pixel-thermal: VIRTUAL-SKIN:37.5008 raw data: VIRTUAL-SKIN:37500.8 
+07-15 17:09:29.818  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CPU-GPU:37.5008 raw data: VIRTUAL-SKIN:37500.8 VIRTUAL-SKIN-CPU-GPU:37500.8 
+07-15 17:09:29.818  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CPU-GPU power_budget=3049.76 err=7.4992 s_power=800 time_elapsed_ms=7010 p=2249.76 i=0 d=0 dt_per_min=nan compensation=0 budget transient=0 control target=3 excluded power budget=0
+07-15 17:09:29.818  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CPU-GPU binded power rails: (S4M_VDD_CPUCL0: 107.47 mW)(S2M_VDD_CPUCL2: 142.17 mW)(S3M_VDD_CPUCL1: 41.37 mW)(S2S_VDD_G3D: 113.99 mW)
+07-15 17:09:29.818  2118  2129 I pixel-thermal: VIRTUAL-SKIN-HINT:37.5008 raw data: VIRTUAL-SKIN:37500.8 VIRTUAL-SKIN-HINT:37500.8 
+07-15 17:09:29.818  2118  2129 I pixel-thermal: VIRTUAL-SKIN-CHARGE:37.5008 raw data: VIRTUAL-SKIN:37500.8 VIRTUAL-SKIN-CHARGE:37500.8 
+07-15 17:09:29.996  1694  1694 I adbd    : adbd service requested 'shell,v2,TERM=dumb:export ANDROID_LOG_TAGS=''; exec logcat '-d' '-t' '200''

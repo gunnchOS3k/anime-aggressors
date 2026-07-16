@@ -26,7 +26,7 @@ anchor_bottom = 1.0
 offset_left = 48.0
 offset_top = 40.0
 offset_right = -48.0
-offset_bottom = -72.0
+offset_bottom = -160.0
 
 [node name="Title" type="Label" parent="VBox"]
 unique_name_in_owner = true
@@ -49,11 +49,32 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "P2:"
 
-[node name="FighterGrid" type="GridContainer" parent="VBox"]
-unique_name_in_owner = true
+[node name="SelectRow" type="HBoxContainer" parent="VBox"]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="FighterGrid" type="GridContainer" parent="VBox/SelectRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 columns = 4
+
+[node name="PreviewHost" type="Control" parent="VBox/SelectRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 380)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="PreviewFrame" type="ColorRect" parent="VBox/SelectRow/PreviewHost"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.08, 0.1, 0.18, 0.85)
+mouse_filter = 2
 
 [node name="Detail" type="Label" parent="VBox"]
 unique_name_in_owner = true
