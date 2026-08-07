@@ -11,3 +11,14 @@ apps/web/dist/
 **/.godot/
 .cache/
 tmp/aa-verify-project-report.json
+
+# Gate 1 runtime evidence outputs
+gate1/evidence/out/**
+!gate1/evidence/out/**/.gitkeep
+
+# Unity local caches (never commit)
+unity/**/Library/
+unity/**/Logs/
+unity/**/UserSettings/
+gate1/status/*
+!gate1/status/.gitkeep
