@@ -1,8 +1,8 @@
 # PR #48 Verification Report
 
-**Generated:** 2026-08-07T23:10:23.586Z
+**Generated:** 2026-08-07T23:14:00.851Z
 
-**Commit:** `0ec767f1695bf7a9f4bb8ba0748ec7d610455872`
+**Commit:** `d145086fd7703a7b8880d9fd40c947ab9107669f`
 
 ## Verification tiers
 
@@ -50,6 +50,7 @@
 - P2: CPU balance/tuning
 - P2: Export hardening
 - P3: Full ledge grab, rollback/netplay
+- PHYSICAL: device-role classroom soak (PHYSICAL_PENDING under PHYSICAL_EXECUTION_FREEZE)
 
 ## JSON report
 
