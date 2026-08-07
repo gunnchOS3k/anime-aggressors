@@ -12,6 +12,7 @@ func _suites() -> Array:
 		["release_mode", preload("res://tests/smoke_release_mode.gd")],
 		["data_load", preload("res://tests/smoke_data_load.gd")],
 		["combat_depth", preload("res://tests/smoke_combat_depth.gd")],
+		["device_a11y_telemetry", preload("res://tests/smoke_device_a11y_telemetry.gd")],
 		["fighter_scene", preload("res://tests/smoke_fighter_scene.gd")],
 		["training_scene", preload("res://tests/smoke_training_scene.gd")],
 		["battle_scene", preload("res://tests/smoke_battle_scene.gd")],

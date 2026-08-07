@@ -73,10 +73,15 @@ function runStep(name, cmd, opts = {}) {
 }
 
 function detectGodotBin() {
+  const home = process.env.HOME || "";
   const candidates = [
     process.env.GODOT_BIN,
     "godot4",
     "godot",
+    path.join(home, "Applications/Godot/Godot-4.5.app/Contents/MacOS/Godot"),
+    path.join(home, "Applications/Godot/Godot.app/Contents/MacOS/Godot"),
+    "/Applications/Godot-4.5.app/Contents/MacOS/Godot",
+    "/Applications/Godot-4.3.app/Contents/MacOS/Godot",
     "/Applications/Godot.app/Contents/MacOS/Godot",
     "/Applications/Godot_v4.2.app/Contents/MacOS/Godot",
   ].filter(Boolean);

@@ -56,7 +56,7 @@ export function resolveGodotBin() {
   if (process.env.GODOT_BIN) {
     return process.env.GODOT_BIN;
   }
-  for (const candidate of ["godot", "Godot"]) {
+  for (const candidate of ["godot4", "godot", "Godot"]) {
     try {
       execSync(`command -v ${candidate}`, { stdio: "pipe" });
       return candidate;
@@ -64,9 +64,18 @@ export function resolveGodotBin() {
       /* try next */
     }
   }
-  const macApp = "/Applications/Godot.app/Contents/MacOS/Godot";
-  if (fs.existsSync(macApp)) {
-    return macApp;
+  const home = process.env.HOME || "";
+  const macApps = [
+    path.join(home, "Applications/Godot/Godot-4.5.app/Contents/MacOS/Godot"),
+    path.join(home, "Applications/Godot/Godot.app/Contents/MacOS/Godot"),
+    "/Applications/Godot-4.5.app/Contents/MacOS/Godot",
+    "/Applications/Godot-4.3.app/Contents/MacOS/Godot",
+    "/Applications/Godot.app/Contents/MacOS/Godot",
+  ];
+  for (const macApp of macApps) {
+    if (fs.existsSync(macApp)) {
+      return macApp;
+    }
   }
   return null;
 }
