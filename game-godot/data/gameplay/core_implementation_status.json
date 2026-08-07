@@ -1,6 +1,6 @@
 {
-  "schema_version": 4,
-  "pass_label": "verification_playtest_loop_pr48",
+  "schema_version": 5,
+  "pass_label": "gate2_c6_product_depth",
   "verification_tiers": {
     "automated_npm": "verified_by_aa_verify_project",
     "godot_cli": "requires_cli_or_manual_blocker",
@@ -21,6 +21,11 @@
     "results_rematch": "implemented",
     "fighter_movement": "implemented",
     "fighter_states": "implemented",
+    "jump_squat_short_hop": "implemented",
+    "directional_dodge_air_dodge": "implemented",
+    "directional_influence": "implemented",
+    "landing_lag": "implemented",
+    "ledge_hang_getup": "implemented",
     "move_runner_60hz": "implemented",
     "hit_resolver": "implemented",
     "shield": "implemented",
@@ -28,10 +33,16 @@
     "grab_throw": "implemented",
     "aura_charge_burst": "implemented",
     "ko_stocks_respawn": "implemented",
+    "match_timer_rules": "implemented",
     "training_mode": "implemented",
+    "training_dummy_di": "implemented",
     "debug_hud": "implemented",
     "hitbox_overlay": "implemented",
     "cpu_tiers": "implemented",
+    "device_role_runtime": "implemented",
+    "match_telemetry": "implemented",
+    "accessibility_reduce_motion": "implemented",
+    "battle_hud_meters": "implemented",
     "proxy_animations": "functional_proxy",
     "p2_input_map": "implemented",
     "data_loading": "implemented",
@@ -48,8 +59,8 @@
     "P2: final SFX/VFX polish",
     "P2: CPU balance/tuning",
     "P2: export hardening",
-    "P3: full ledge grab",
-    "P3: rollback/netplay"
+    "P3: rollback/netplay",
+    "PHYSICAL: device-role classroom soak (PHYSICAL_PENDING)"
   ],
-  "notes": "Core systems are code-implemented; editor playtest and final art remain blockers. See docs/GODOT_VERIFICATION_PLAN.md."
+  "notes": "G2-C6 product-depth pass deepens platform-fighter feel and device-role runtime in game-godot. Physical device evidence remains frozen."
 }

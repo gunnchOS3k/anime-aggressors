@@ -94,6 +94,9 @@ func should_show_touch() -> bool:
 	var sc := get_tree().current_scene
 	if sc != null and bool(sc.get("_paused")):
 		return false
+	var role = get_node_or_null("/root/DeviceRoleRuntime")
+	if role != null and role.touch_overlay_preferred and touch_mode != TouchMode.OFF:
+		return true
 	match touch_mode:
 		TouchMode.ON:
 			return true
@@ -101,6 +104,11 @@ func should_show_touch() -> bool:
 			return false
 		_:
 			return _detect_touch_device()
+
+func force_show(on: bool) -> void:
+	touch_mode = TouchMode.ON if on else TouchMode.OFF
+	_sync_overlay()
+	_save_settings()
 
 func _detect_touch_device() -> bool:
 	if DisplayServer.is_touchscreen_available():

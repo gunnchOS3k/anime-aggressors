@@ -31,7 +31,11 @@ var _cameo_interval: float = 3.6
 var _reduced_motion := false
 
 func _ready() -> void:
-	_reduced_motion = bool(ProjectSettings.get_setting("rendering/accessibility/reduce_motion", false))
+	var role = get_node_or_null("/root/DeviceRoleRuntime")
+	if role != null:
+		_reduced_motion = role.reduce_motion
+	else:
+		_reduced_motion = bool(ProjectSettings.get_setting("rendering/accessibility/reduce_motion", false))
 	if SceneRouter.skip_boot_title:
 		_enter_main_menu_immediate()
 		return

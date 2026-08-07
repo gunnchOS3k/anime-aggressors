@@ -35,6 +35,8 @@ func _ready() -> void:
 		dummy_option.add_item("jump", 2)
 		dummy_option.add_item("attack", 3)
 		dummy_option.add_item("cpu", 4)
+		dummy_option.add_item("di_in", 5)
+		dummy_option.add_item("di_out", 6)
 		dummy_option.select(4)
 	if log_label:
 		log_label.text = "Configure fighters, stage, dummy behavior, then Start. In battle: F1 HUD, F2 hitboxes, F3–F10 tools."

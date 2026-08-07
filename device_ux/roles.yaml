@@ -3,3 +3,27 @@ devices: [student_14_5, handheld_hybrid, ds_xl_coder, edge_io_rings]
 source: field-kit-g2-c6
 evidence_class: SOFTWARE
 physical_status: PHYSICAL_PENDING
+runtime: game-godot
+autoload: DeviceRoleRuntime
+matrix: game-godot/data/device/device_role_matrix.json
+device_roles:
+  student_14_5:
+    input: keyboard_mouse
+    layout: landscape
+    fx: reduced_classroom
+  handheld_hybrid:
+    input: gamepad
+    layout: handheld
+    fx: full
+  ds_xl_coder:
+    input: keyboard
+    layout: dual_screen_code_arena
+    fx: debug
+  edge_io_rings:
+    input: ring_special
+    layout: peripheral_only
+    fx: none
+notes: >
+  SOFTWARE runtime profiles only. PHYSICAL device soak / classroom calibration remains
+  PHYSICAL_PENDING under PHYSICAL_EXECUTION_FREEZE. Original characters only —
+  no copyrighted anime IP/assets.

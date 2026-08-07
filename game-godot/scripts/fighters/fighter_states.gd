@@ -28,6 +28,9 @@ const SHIELD_BREAK := "shield_break"
 const DODGE_START := "dodge_start"
 const DODGE_ACTIVE := "dodge_active"
 const DODGE_RECOVERY := "dodge_recovery"
+const AIR_DODGE := "air_dodge"
+const LEDGE_HANG := "ledge_hang"
+const LEDGE_GETUP := "ledge_getup"
 const GRAB_STARTUP := "grab_startup"
 const GRAB_ACTIVE := "grab_active"
 const GRAB_WHIFF := "grab_whiff"
@@ -58,11 +61,11 @@ static func all_states() -> Array[String]:
 		ATTACK_STARTUP, ATTACK_ACTIVE, ATTACK_RECOVERY,
 		SPECIAL_STARTUP, SPECIAL_ACTIVE, SPECIAL_RECOVERY,
 		SHIELD_START, SHIELD_HOLD, SHIELD_STUN, SHIELD_BREAK,
-		DODGE_START, DODGE_ACTIVE, DODGE_RECOVERY,
+		DODGE_START, DODGE_ACTIVE, DODGE_RECOVERY, AIR_DODGE,
 		GRAB_STARTUP, GRAB_ACTIVE, GRAB_WHIFF, GRAB_HOLD, THROW_STARTUP, THROW_RELEASE,
 		AURA_CHARGE, AURA_READY, AURA_BURST_STARTUP, AURA_BURST_ACTIVE, AURA_BURST_RECOVERY,
 		HURT_LIGHT, HURT_HEAVY, HITSTOP, HITSTUN, LAUNCHED, TUMBLE,
-		EDGE_WARNING, LEDGE_TEETER, KO, RESPAWN, VICTORY, DEFEAT,
+		EDGE_WARNING, LEDGE_TEETER, LEDGE_HANG, LEDGE_GETUP, KO, RESPAWN, VICTORY, DEFEAT,
 	]
 
 static func is_attack_state(s: String) -> bool:
@@ -80,11 +83,12 @@ static func locks_movement(s: String) -> bool:
 	return is_attack_state(s) or is_hurt_state(s) or s in [
 		SHIELD_HOLD, SHIELD_START, GRAB_HOLD, GRAB_STARTUP, GRAB_ACTIVE,
 		AURA_CHARGE, AURA_BURST_STARTUP, AURA_BURST_ACTIVE, AURA_BURST_RECOVERY,
-		KO, RESPAWN, GRAB_WHIFF,
+		KO, RESPAWN, GRAB_WHIFF, JUMP_SQUAT, LAND, LEDGE_HANG, LEDGE_GETUP,
+		AIR_DODGE, DODGE_ACTIVE, DODGE_RECOVERY,
 	]
 
 static func locks_actions(s: String) -> bool:
-	return locks_movement(s) or s in [DODGE_ACTIVE, DODGE_START, HITSTOP]
+	return locks_movement(s) or s in [DODGE_ACTIVE, DODGE_START, AIR_DODGE, HITSTOP, JUMP_SQUAT, LAND]
 
 static func animation_for_state(s: String) -> String:
 	match s:
@@ -96,7 +100,7 @@ static func animation_for_state(s: String) -> String:
 		ATTACK_STARTUP, ATTACK_ACTIVE, ATTACK_RECOVERY: return "jab"
 		SPECIAL_STARTUP, SPECIAL_ACTIVE, SPECIAL_RECOVERY: return "special"
 		SHIELD_START, SHIELD_HOLD, SHIELD_STUN: return "shield"
-		DODGE_START, DODGE_ACTIVE: return "dash"
+		DODGE_START, DODGE_ACTIVE, AIR_DODGE: return "dash"
 		GRAB_STARTUP, GRAB_ACTIVE, GRAB_HOLD: return "grab"
 		THROW_STARTUP, THROW_RELEASE: return "throw"
 		AURA_CHARGE, AURA_READY: return "aura_charge"
@@ -107,5 +111,5 @@ static func animation_for_state(s: String) -> String:
 		KO: return "ko"
 		VICTORY: return "victory"
 		DEFEAT: return "defeat"
-		EDGE_WARNING, LEDGE_TEETER: return "idle"
+		EDGE_WARNING, LEDGE_TEETER, LEDGE_HANG, LEDGE_GETUP: return "idle"
 		_: return "idle"
