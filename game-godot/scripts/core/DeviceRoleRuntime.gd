@@ -122,10 +122,15 @@ func fx_intensity() -> float:
 		_:
 			return 1.0
 
-func apply_to_battle_hud(root: CanvasItem) -> void:
+func apply_to_battle_hud(root: Node) -> void:
+	## HUD root is a CanvasLayer in BattleScene (not a CanvasItem).
 	if root == null:
 		return
-	root.scale = Vector2(ui_scale, ui_scale) if larger_ui or ui_scale > 1.01 else Vector2.ONE
+	var scale_v := Vector2(ui_scale, ui_scale) if larger_ui or ui_scale > 1.01 else Vector2.ONE
+	if root is CanvasLayer:
+		(root as CanvasLayer).scale = scale_v
+	elif root is CanvasItem:
+		(root as CanvasItem).scale = scale_v
 
 func apply_layout_hint(camera: Camera2D) -> void:
 	if camera == null:

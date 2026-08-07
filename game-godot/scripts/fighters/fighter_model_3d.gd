@@ -7,6 +7,7 @@ class_name FighterModel3D
 
 const _CharacterLife = preload("res://scripts/fighters/fighter_character_life.gd")
 const _StylizedBuilder = preload("res://scripts/fighters/stylized_fighter_builder.gd")
+const _FighterStates = preload("res://scripts/fighters/fighter_states.gd")
 
 const VIEWPORT_SIZE := Vector2i(220, 280)
 const DISPLAY_SCALE := Vector2(0.38, 0.38)
@@ -132,9 +133,9 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 	_play_clip(clip)
 	_apply_playback_scale(clip)
 	_update_expression_for_state(state)
-	if state in [FighterStates.THROW_STARTUP, FighterStates.THROW_RELEASE]:
+	if state in [_FighterStates.THROW_STARTUP, _FighterStates.THROW_RELEASE]:
 		_play_throw_presentation(_throw_dir)
-	if state == FighterStates.KO or str(move.get("presentation", "")) == "defeat":
+	if state == _FighterStates.KO or str(move.get("presentation", "")) == "defeat":
 		_play_defeat_presentation()
 	if str(move.get("presentation", "")) == "victory":
 		_play_victory_presentation()
@@ -325,7 +326,7 @@ func _clip_for_state(state: String, move_id: String) -> String:
 	if (
 		state
 		in [
-			FighterStates.ATTACK_STARTUP, FighterStates.ATTACK_ACTIVE, FighterStates.ATTACK_RECOVERY
+			_FighterStates.ATTACK_STARTUP, _FighterStates.ATTACK_ACTIVE, _FighterStates.ATTACK_RECOVERY
 		]
 	):
 		if move_id in ["jab_1", "jab_2", "heavy_attack"]:
@@ -334,45 +335,45 @@ func _clip_for_state(state: String, move_id: String) -> String:
 	if (
 		state
 		in [
-			FighterStates.SPECIAL_STARTUP,
-			FighterStates.SPECIAL_ACTIVE,
-			FighterStates.SPECIAL_RECOVERY
+			_FighterStates.SPECIAL_STARTUP,
+			_FighterStates.SPECIAL_ACTIVE,
+			_FighterStates.SPECIAL_RECOVERY
 		]
 	):
 		return "special"
-	if state in [FighterStates.THROW_STARTUP, FighterStates.THROW_RELEASE]:
+	if state in [_FighterStates.THROW_STARTUP, _FighterStates.THROW_RELEASE]:
 		var dir_clip := "throw_%s" % _throw_dir
 		if dir_clip in ["throw_forward", "throw_back", "throw_up", "throw_down"]:
 			return dir_clip
 		return "throw_forward"
 	match state:
-		FighterStates.WALK:
+		_FighterStates.WALK:
 			return "walk"
-		FighterStates.RUN:
+		_FighterStates.RUN:
 			return "run"
-		FighterStates.DASH, FighterStates.DODGE_START, FighterStates.DODGE_ACTIVE:
+		_FighterStates.DASH, _FighterStates.DODGE_START, _FighterStates.DODGE_ACTIVE:
 			return "dash"
-		FighterStates.JUMP, FighterStates.JUMP_SQUAT, FighterStates.DOUBLE_JUMP:
+		_FighterStates.JUMP, _FighterStates.JUMP_SQUAT, _FighterStates.DOUBLE_JUMP:
 			return "jump"
-		FighterStates.FALL, FighterStates.FAST_FALL, FighterStates.TUMBLE:
+		_FighterStates.FALL, _FighterStates.FAST_FALL, _FighterStates.TUMBLE:
 			return "fall"
-		FighterStates.LAND:
+		_FighterStates.LAND:
 			return "land"
-		FighterStates.SHIELD_START, FighterStates.SHIELD_HOLD, FighterStates.SHIELD_STUN:
+		_FighterStates.SHIELD_START, _FighterStates.SHIELD_HOLD, _FighterStates.SHIELD_STUN:
 			return "shield"
-		FighterStates.GRAB_STARTUP, FighterStates.GRAB_ACTIVE, FighterStates.GRAB_HOLD:
+		_FighterStates.GRAB_STARTUP, _FighterStates.GRAB_ACTIVE, _FighterStates.GRAB_HOLD:
 			return "jab_1"
-		FighterStates.AURA_CHARGE, FighterStates.AURA_READY:
+		_FighterStates.AURA_CHARGE, _FighterStates.AURA_READY:
 			return "aura_charge"
-		FighterStates.AURA_BURST_STARTUP, FighterStates.AURA_BURST_ACTIVE, FighterStates.AURA_BURST_RECOVERY:
+		_FighterStates.AURA_BURST_STARTUP, _FighterStates.AURA_BURST_ACTIVE, _FighterStates.AURA_BURST_RECOVERY:
 			return "aura_burst"
-		FighterStates.HURT_LIGHT:
+		_FighterStates.HURT_LIGHT:
 			return "hurt_light"
-		FighterStates.HURT_HEAVY, FighterStates.HITSTUN:
+		_FighterStates.HURT_HEAVY, _FighterStates.HITSTUN:
 			return "hurt_heavy"
-		FighterStates.LAUNCHED:
+		_FighterStates.LAUNCHED:
 			return "launched"
-		FighterStates.KO:
+		_FighterStates.KO:
 			return "ko"
 		_:
 			return "idle"
@@ -439,15 +440,15 @@ func _resolve_animation_name(requested: String) -> StringName:
 
 
 func _update_expression_for_state(state: String) -> void:
-	if state in [FighterStates.AURA_CHARGE, FighterStates.AURA_READY]:
+	if state in [_FighterStates.AURA_CHARGE, _FighterStates.AURA_READY]:
 		set_expression(str(_life.get("expression_charge", "charging")))
-	elif state in [FighterStates.HURT_LIGHT, FighterStates.HURT_HEAVY, FighterStates.HITSTUN, FighterStates.LAUNCHED]:
+	elif state in [_FighterStates.HURT_LIGHT, _FighterStates.HURT_HEAVY, _FighterStates.HITSTUN, _FighterStates.LAUNCHED]:
 		set_expression(str(_life.get("expression_hurt", "hurt")))
-	elif state == FighterStates.KO:
+	elif state == _FighterStates.KO:
 		set_expression("defeat")
-	elif state in [FighterStates.ATTACK_STARTUP, FighterStates.SPECIAL_STARTUP, FighterStates.THROW_STARTUP]:
+	elif state in [_FighterStates.ATTACK_STARTUP, _FighterStates.SPECIAL_STARTUP, _FighterStates.THROW_STARTUP]:
 		set_expression("focused")
-	elif state in [FighterStates.IDLE, FighterStates.WALK]:
+	elif state in [_FighterStates.IDLE, _FighterStates.WALK]:
 		set_expression(str(_life.get("expression_idle", "neutral")))
 
 
