@@ -1,13 +1,23 @@
 name: Quality
 
 on:
+  pull_request:
+    branches: [main]
   push:
     branches: [main, revive-product-rollback-vertical-slice, fix-ci-expand-full-completion-roadmap, fix-pages-artifact-node24]
-  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   quality:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v6
 
@@ -33,6 +43,7 @@ jobs:
 
   native-engine:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v6
 

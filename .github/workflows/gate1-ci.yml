@@ -1,0 +1,81 @@
+name: Gate 1 post-merge integrity
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gate1-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gate1-game-core:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Fail on master as active base/default
+        run: |
+          set -euo pipefail
+          if grep -RInE --include='*.yml' --include='*.yaml' \
+            -e 'branches:[[:space:]]*\[[^]]*master' \
+            -e 'default[_-]branch:[[:space:]]*master' \
+            -e 'base:[[:space:]]*master' \
+            .github/workflows 2>/dev/null; then
+            echo "MAIN_BRANCH_POLICY_FAIL: active master default/base ref in workflows"
+            exit 1
+          fi
+          echo "MAIN_BRANCH_POLICY_OK"
+
+      - name: Guard — do not claim Unity Play Mode; do not touch unity/
+        run: |
+          set -euo pipefail
+          # This workflow must not reference Unity Play Mode or modify unity/
+          if git diff --name-only origin/main...HEAD 2>/dev/null | grep -E '^unity/' ; then
+            echo "BLOCKER: Gate1 branch must not overwrite Unity PR paths under unity/"
+            exit 1
+          fi
+          echo "Unity path guard OK (no Unity Play Mode claim; game-core/Godot path only)"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Gate1 game-core tests
+        run: |
+          npm run test:game-core
+          node gate1/tools/core_loop_runner.mjs
+
+      - name: Godot / headless check (if available)
+        run: |
+          set -euo pipefail
+          npm run godot:check
+          if command -v godot4 >/dev/null 2>&1 || command -v godot >/dev/null 2>&1; then
+            GODOT_BIN="$(command -v godot4 || command -v godot)"
+            echo "Godot available: $GODOT_BIN"
+            "$GODOT_BIN" --version || true
+          else
+            echo "BLOCKED_TOOLCHAIN: Godot CLI not installed in runner — godot:check completed without headless export"
+          fi
+
+      - name: Upload synthetic Gate1 summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gate1-aa-core-loop-summary
+          path: |
+            gate1/evidence/out/*summary*.json
+            gate1/status/gate1_core_loop_status.json
+          if-no-files-found: ignore
+          retention-days: 14
