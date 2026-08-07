@@ -8,6 +8,9 @@ var previous_state: String = FighterStates.IDLE
 var state_frame: int = 0
 var state_time: float = 0.0
 var _fighter
+var landing_lag: float = 0.08
+var dodge_recovery: float = 0.12
+var dodge_invuln: float = 0.10
 
 func setup(fighter) -> void:
 	_fighter = fighter
@@ -42,7 +45,7 @@ func _on_enter(state: String) -> void:
 		FighterStates.SHIELD_BREAK:
 			_fighter.shielding = false
 			_fighter.shield_health = 0.0
-		FighterStates.DODGE_ACTIVE:
+		FighterStates.DODGE_ACTIVE, FighterStates.AIR_DODGE:
 			_fighter.invincible = true
 		FighterStates.AURA_READY:
 			_fighter.aura = 100.0
@@ -53,11 +56,21 @@ func _on_enter(state: String) -> void:
 			_fighter.velocity = Vector2.ZERO
 		FighterStates.RESPAWN:
 			_fighter.invincible = true
+		FighterStates.JUMP_SQUAT:
+			_fighter.velocity.x *= 0.85
+		FighterStates.LEDGE_HANG:
+			_fighter.velocity = Vector2.ZERO
+			_fighter.invincible = true
+		FighterStates.LEDGE_GETUP:
+			_fighter.invincible = true
 
 func _on_update(state: String, delta: float) -> void:
 	if _fighter == null:
 		return
 	match state:
+		FighterStates.JUMP_SQUAT:
+			if state_frame >= CombatMath.JUMP_SQUAT_FRAMES:
+				_fighter.complete_jump_squat()
 		FighterStates.SHIELD_HOLD:
 			_fighter.shield_health = maxf(0.0, _fighter.shield_health - 8.0 * delta)
 		FighterStates.AURA_CHARGE:
@@ -66,14 +79,21 @@ func _on_update(state: String, delta: float) -> void:
 		FighterStates.SHIELD_STUN:
 			if state_time > 0.25:
 				_fighter.state_machine.enter(FighterStates.IDLE)
-		FighterStates.DODGE_RECOVERY:
-			if state_time > 0.12:
+		FighterStates.DODGE_RECOVERY, FighterStates.AIR_DODGE:
+			var rec := dodge_recovery
+			if state == FighterStates.AIR_DODGE:
+				rec = CombatMath.AIR_DODGE_RECOVERY
+			if state_time > dodge_invuln:
 				_fighter.invincible = false
-				_fighter.state_machine.enter(FighterStates.IDLE)
+			if state_time > rec:
+				_fighter.invincible = false
+				_fighter.state_machine.enter(FighterStates.IDLE if _fighter.is_on_floor() else FighterStates.FALL)
 		FighterStates.HITSTUN:
+			_fighter.apply_hitstun_di(delta)
 			if state_time > _fighter.hitstun_remaining:
 				_fighter.state_machine.enter(FighterStates.IDLE if _fighter.is_on_floor() else FighterStates.FALL)
 		FighterStates.HURT_LIGHT:
+			_fighter.apply_hitstun_di(delta)
 			if state_time > 0.06:
 				if _fighter.hitstun_remaining > 0.04:
 					_fighter.state_machine.enter(FighterStates.HITSTUN)
@@ -82,6 +102,7 @@ func _on_update(state: String, delta: float) -> void:
 				else:
 					_fighter.state_machine.enter(FighterStates.FALL)
 		FighterStates.HURT_HEAVY:
+			_fighter.apply_hitstun_di(delta)
 			if state_time > 0.12:
 				if _fighter.hitstun_remaining > 0.08:
 					_fighter.state_machine.enter(FighterStates.HITSTUN)
@@ -90,13 +111,15 @@ func _on_update(state: String, delta: float) -> void:
 				else:
 					_fighter.state_machine.enter(FighterStates.FALL)
 		FighterStates.LAUNCHED:
+			_fighter.apply_hitstun_di(delta)
 			if _fighter.is_on_floor() and _fighter.velocity.y >= 0:
-				_fighter.state_machine.enter(FighterStates.TUMBLE if _fighter.velocity.length() > 120 else FighterStates.LAND)
+				_fighter.begin_landing(true, absf(_fighter.velocity.y) > 400.0)
 		FighterStates.TUMBLE:
+			_fighter.apply_hitstun_di(delta)
 			if state_time > 0.35:
 				_fighter.state_machine.enter(FighterStates.FALL)
 		FighterStates.LAND:
-			if state_time > 0.08:
+			if state_time > landing_lag:
 				_fighter.state_machine.enter(FighterStates.IDLE)
 		FighterStates.GRAB_WHIFF:
 			if state_time > 0.3:
@@ -110,4 +133,10 @@ func _on_update(state: String, delta: float) -> void:
 		FighterStates.SHIELD_BREAK:
 			if state_time > 0.4:
 				_fighter.shield_health = float(_fighter.data.get("shieldProfile", {}).get("maxHealth", 100))
+				_fighter.state_machine.enter(FighterStates.IDLE)
+		FighterStates.LEDGE_HANG:
+			_fighter.tick_ledge_hang(delta)
+		FighterStates.LEDGE_GETUP:
+			if state_time > 0.16:
+				_fighter.invincible = false
 				_fighter.state_machine.enter(FighterStates.IDLE)

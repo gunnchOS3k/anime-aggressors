@@ -122,6 +122,23 @@ function scanDir(dir) {
 scanDir(godotRoot);
 ok("no banned IP filenames under game-godot/");
 
+// G2-C6 product-depth runtime contracts
+const DEPTH_FILES = [
+  "scripts/core/DeviceRoleRuntime.gd",
+  "scripts/core/MatchTelemetry.gd",
+  "data/device/device_role_matrix.json",
+  "scripts/ui/battle_hud_panel.gd",
+];
+for (const rel of DEPTH_FILES) {
+  if (!fs.existsSync(path.join(godotRoot, rel))) fail(`missing G2-C6 file: ${rel}`);
+}
+ok("G2-C6 product-depth runtime files");
+
+const projectTxt = fs.readFileSync(path.join(godotRoot, "project.godot"), "utf8");
+if (!projectTxt.includes("DeviceRoleRuntime")) fail("DeviceRoleRuntime autoload missing");
+if (!projectTxt.includes("MatchTelemetry")) fail("MatchTelemetry autoload missing");
+ok("G2-C6 autoloads");
+
 if (process.exitCode) {
   process.exit(process.exitCode);
 }

@@ -151,7 +151,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		SceneRouter.go("training")
 
 func _cycle_dummy() -> void:
-	var modes := ["idle", "shield", "jump", "attack", "cpu"]
+	var modes := ["idle", "shield", "jump", "attack", "cpu", "di_in", "di_out"]
 	var idx := modes.find(fighter2.dummy_mode)
 	idx = (idx + 1) % modes.size()
 	fighter2.dummy_mode = modes[idx]

@@ -77,6 +77,14 @@ var _throw_direction: String = ""
 var _jab_chain: int = 0
 var _show_grab_range: bool = false
 var _show_projectile_boxes: bool = false
+var _jump_short_hop: bool = false
+var _was_airborne: bool = false
+var _fast_falling: bool = false
+var _air_dodge_used: bool = false
+var _dodge_cooldown: float = 0.0
+var _ledge_side: int = 0
+var _di_strength: String = "medium"
+var _pending_landing_from_attack: bool = false
 
 func _ready() -> void:
 	add_to_group("fighters")
@@ -180,15 +188,23 @@ func _physics_process(delta: float) -> void:
 	if _hitstop > 0.0:
 		_hitstop -= delta
 		return
+	if _dodge_cooldown > 0.0:
+		_dodge_cooldown = maxf(0.0, _dodge_cooldown - delta)
 	state_machine.update(delta)
 	if grabbed_by != null:
 		global_position = grabbed_by.global_position + Vector2(24 * grabbed_by.facing, -8)
 		velocity = Vector2.ZERO
 		return
+	if state_machine.current_state == FighterStates.LEDGE_HANG:
+		return
 	if state_machine.current_state in [FighterStates.HITSTUN, FighterStates.LAUNCHED, FighterStates.TUMBLE, FighterStates.HURT_LIGHT, FighterStates.HURT_HEAVY]:
+		if dummy_mode in ["di_in", "di_out"]:
+			_dummy_apply_di()
 		velocity.y += get_fall_speed() * delta
 		move_and_slide()
+		_check_ledge_grab()
 		_check_edge()
+		_track_landing()
 		return
 	if is_cpu or dummy_mode == "cpu":
 		cpu.tick(delta, _find_opponent())
@@ -202,20 +218,36 @@ func _physics_process(delta: float) -> void:
 			velocity.x = move_toward(velocity.x, 0.0, get_run_speed() * delta * 8.0)
 	move_and_slide()
 	_sync_motion_state()
+	_check_ledge_grab()
 	_check_edge()
+	_track_landing()
 	_play_current_animation(state_machine.current_state)
 
 func _apply_movement(delta: float) -> void:
+	if state_machine.current_state == FighterStates.JUMP_SQUAT:
+		velocity.x = move_toward(velocity.x, 0.0, get_run_speed() * delta * 4.0)
+		if not _read_jump_held():
+			_jump_short_hop = true
+		return
+	if state_machine.current_state in [FighterStates.LAND, FighterStates.AIR_DODGE, FighterStates.DODGE_ACTIVE, FighterStates.DODGE_RECOVERY]:
+		if not is_on_floor() and state_machine.current_state == FighterStates.AIR_DODGE:
+			velocity.y += get_fall_speed() * 0.35 * delta
+		elif is_on_floor():
+			velocity.x = move_toward(velocity.x, 0.0, get_run_speed() * delta * 6.0)
+		return
 	if not state_machine.can_move():
 		if is_on_floor():
 			velocity.x = move_toward(velocity.x, 0.0, get_run_speed() * delta * 8.0)
 		return
 	var axis: float = _read_axis()
 	if not is_on_floor():
-		var ff: float = FAST_FALL_MULT if velocity.y > 80 and not _read_jump_held() else 1.0
+		_fast_falling = velocity.y > 80 and not _read_jump_held() and _read_down()
+		var ff: float = FAST_FALL_MULT if _fast_falling else 1.0
 		velocity.y += get_fall_speed() * ff * delta
 	else:
 		air_jumps_left = int(data.get("maxJumps", 2)) - 1
+		_air_dodge_used = false
+		_fast_falling = false
 		if velocity.y > 0:
 			velocity.y = 0.0
 	if absf(axis) > 0.1:
@@ -226,7 +258,7 @@ func _apply_movement(delta: float) -> void:
 			state_machine.enter(FighterStates.DASH)
 		else:
 			state_machine.enter(FighterStates.RUN if absf(velocity.x) > spd * 0.5 else FighterStates.WALK)
-		velocity.x = axis * spd
+		velocity.x = axis * (spd if is_on_floor() else get_air_speed())
 		if body:
 			body.scale.x = absf(body.scale.x) * facing
 		if model_3d:
@@ -237,10 +269,10 @@ func _apply_movement(delta: float) -> void:
 			if absf(velocity.x) < 10.0:
 				state_machine.enter(FighterStates.IDLE)
 	if _read_jump_pressed():
-		if is_on_floor():
-			velocity.y = -get_jump_strength()
-			state_machine.enter(FighterStates.JUMP)
-		elif air_jumps_left > 0:
+		if is_on_floor() and state_machine.current_state != FighterStates.JUMP_SQUAT:
+			_jump_short_hop = false
+			state_machine.enter(FighterStates.JUMP_SQUAT)
+		elif air_jumps_left > 0 and not is_on_floor():
 			velocity.y = -get_jump_strength() * 0.9
 			air_jumps_left -= 1
 			state_machine.enter(FighterStates.DOUBLE_JUMP)
@@ -376,11 +408,106 @@ func _start_move_dict(m: Dictionary) -> void:
 		state_machine.enter(FighterStates.ATTACK_STARTUP)
 
 func _start_dodge() -> void:
+	if _dodge_cooldown > 0.0:
+		return
+	var axis_x: float = _read_axis()
+	var axis_y: float = 0.0
+	if _read_up():
+		axis_y = -1.0
+	elif _read_down():
+		axis_y = 1.0
+	var dir_x: float = axis_x if absf(axis_x) > 0.25 else float(facing)
+	if not is_on_floor():
+		if _air_dodge_used:
+			return
+		_air_dodge_used = true
+		_dodge_cooldown = 0.35
+		state_machine.dodge_recovery = CombatMath.AIR_DODGE_RECOVERY
+		state_machine.dodge_invuln = CombatMath.AIR_DODGE_INVULN
+		state_machine.enter(FighterStates.AIR_DODGE)
+		velocity.x = dir_x * get_dash_speed() * 0.95
+		velocity.y = axis_y * get_dash_speed() * (0.75 if axis_y < 0.0 else 0.45)
+		invincible = true
+		return
+	_dodge_cooldown = 0.28
+	state_machine.dodge_recovery = CombatMath.GROUND_DODGE_RECOVERY
+	state_machine.dodge_invuln = CombatMath.GROUND_DODGE_INVULN
 	state_machine.enter(FighterStates.DODGE_START)
 	state_machine.enter(FighterStates.DODGE_ACTIVE)
 	invincible = true
-	velocity.x = facing * get_dash_speed()
+	facing = 1 if dir_x >= 0.0 else -1
+	velocity.x = dir_x * get_dash_speed() * 1.15
+	velocity.y = 0.0
 	state_machine.enter(FighterStates.DODGE_RECOVERY)
+
+func complete_jump_squat() -> void:
+	var short_hop := _jump_short_hop or not _read_jump_held()
+	var strength := get_jump_strength()
+	velocity.y = -CombatMath.short_hop_velocity(strength) if short_hop else -strength
+	_jump_short_hop = false
+	state_machine.enter(FighterStates.JUMP)
+
+func apply_hitstun_di(_delta: float) -> void:
+	var sx := _read_axis()
+	var sy := 0.0
+	if _read_up():
+		sy = -1.0
+	elif _read_down():
+		sy = 1.0
+	velocity = CombatMath.apply_di(velocity, sx, sy, _di_strength)
+
+func begin_landing(from_aerial: bool, from_fast_fall: bool = false) -> void:
+	var override := -1.0
+	if _current_move.has("landing_lag"):
+		override = float(_current_move.get("landing_lag"))
+	elif _pending_landing_from_attack:
+		override = CombatMath.LANDING_LAG_AERIAL
+	state_machine.landing_lag = CombatMath.landing_lag_seconds(from_aerial, from_fast_fall, override)
+	_pending_landing_from_attack = false
+	state_machine.enter(FighterStates.LAND)
+
+func _track_landing() -> void:
+	var airborne := not is_on_floor()
+	if _was_airborne and not airborne:
+		var from_attack := FighterStates.is_attack_state(state_machine.previous_state) or _pending_landing_from_attack
+		var from_hurt := state_machine.current_state in [FighterStates.LAUNCHED, FighterStates.TUMBLE, FighterStates.HITSTUN, FighterStates.FALL, FighterStates.FAST_FALL, FighterStates.AIR_DODGE]
+		if from_hurt or from_attack or state_machine.current_state in [FighterStates.FALL, FighterStates.FAST_FALL, FighterStates.JUMP, FighterStates.DOUBLE_JUMP]:
+			begin_landing(true, _fast_falling)
+	_was_airborne = airborne
+
+func _check_ledge_grab() -> void:
+	if is_on_floor() or invincible:
+		return
+	if state_machine.current_state in [FighterStates.LEDGE_HANG, FighterStates.LEDGE_GETUP, FighterStates.KO, FighterStates.RESPAWN]:
+		return
+	if velocity.y < -40.0:
+		return
+	var edge_l := platform_center_x - platform_half_width
+	var edge_r := platform_center_x + platform_half_width
+	var near_l := absf(global_position.x - edge_l) < 36.0 and global_position.y > 40.0 and global_position.y < 120.0
+	var near_r := absf(global_position.x - edge_r) < 36.0 and global_position.y > 40.0 and global_position.y < 120.0
+	if near_l or near_r:
+		_ledge_side = -1 if near_l else 1
+		global_position = Vector2(edge_l if near_l else edge_r, 56.0)
+		velocity = Vector2.ZERO
+		facing = -_ledge_side
+		state_machine.enter(FighterStates.LEDGE_HANG)
+
+func tick_ledge_hang(_delta: float) -> void:
+	velocity = Vector2.ZERO
+	if _read_jump_pressed() or _read_up():
+		velocity.y = -get_jump_strength() * 0.85
+		invincible = false
+		state_machine.enter(FighterStates.JUMP)
+		return
+	if _read_attack_pressed() or _read_dodge_pressed() or (_ledge_side < 0 and _read_axis() > 0.4) or (_ledge_side > 0 and _read_axis() < -0.4):
+		global_position.x += float(-_ledge_side) * 28.0
+		global_position.y -= 24.0
+		state_machine.enter(FighterStates.LEDGE_GETUP)
+		return
+	if _read_down() or state_machine.state_time > 2.5:
+		invincible = false
+		state_machine.enter(FighterStates.FALL)
 
 func _on_move_active(move: Dictionary) -> void:
 	var mid = str(move.get("move_id", ""))
@@ -482,7 +609,13 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 	damage_percent += dmg
 	damaged.emit(dmg, damage_percent)
 	var launch: Vector2 = info.get("launch", Vector2.ZERO)
+	_di_strength = CombatMath.di_strength_for_kb(launch.length(), dmg)
+	# Initial DI snapshot at hit confirm.
+	var sx := _read_axis()
+	var sy := -1.0 if _read_up() else (1.0 if _read_down() else 0.0)
+	launch = CombatMath.apply_di(launch, sx, sy, _di_strength)
 	velocity = launch
+	_last_knockback = launch
 	hitstun_remaining = CombatMath.hitstun_seconds(launch.length())
 	_hitstop = CombatMath.frames_to_seconds(info.get("hitstop_frames", 3))
 	if attacker != null and attacker.has_method("configure"):
@@ -496,6 +629,9 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 	else:
 		state_machine.enter(FighterStates.HURT_LIGHT)
 	hit_landed.emit(info)
+	var telem = get_node_or_null("/root/MatchTelemetry")
+	if telem and telem.has_method("record_hit"):
+		telem.record_hit(info)
 
 func reset_fighter() -> void:
 	damage_percent = 0.0
@@ -518,6 +654,12 @@ func lose_stock() -> void:
 	stocks -= 1
 	state_machine.enter(FighterStates.KO)
 	koed.emit()
+	var telem = get_node_or_null("/root/MatchTelemetry")
+	if telem:
+		if telem.has_method("record_ko"):
+			telem.record_ko(fighter_id, stocks)
+		if telem.has_method("record_stock_loss"):
+			telem.record_stock_loss(fighter_id, stocks)
 	if stocks > 0:
 		reset_fighter()
 
@@ -579,6 +721,8 @@ func debug_combat_summary() -> Dictionary:
 func _on_move_ended(_move_id: String) -> void:
 	hitbox.monitoring = false
 	var s: String = str(state_machine.current_state) if state_machine else ""
+	if not is_on_floor() and s in [FighterStates.ATTACK_ACTIVE, FighterStates.ATTACK_STARTUP, FighterStates.SPECIAL_ACTIVE, FighterStates.SPECIAL_STARTUP]:
+		_pending_landing_from_attack = true
 	if s in [FighterStates.GRAB_ACTIVE, FighterStates.GRAB_STARTUP] and grabbed_target == null:
 		state_machine.enter(FighterStates.GRAB_WHIFF)
 	elif s in [FighterStates.ATTACK_ACTIVE, FighterStates.ATTACK_STARTUP]:
@@ -735,6 +879,15 @@ func _read_aura_burst() -> bool:
 func _release_action(action: String) -> void:
 	Input.action_release(action)
 
+func _dummy_apply_di() -> void:
+	match dummy_mode:
+		"di_in":
+			var inward := -1.0 if global_position.x > platform_center_x else 1.0
+			velocity = CombatMath.apply_di(velocity, inward, -0.35, _di_strength)
+		"di_out":
+			var outward := 1.0 if global_position.x > platform_center_x else -1.0
+			velocity = CombatMath.apply_di(velocity, outward, 0.2, _di_strength)
+
 func _dummy_tick(delta: float) -> void:
 	var target = _find_opponent()
 	if target == null:
@@ -746,10 +899,16 @@ func _dummy_tick(delta: float) -> void:
 				Input.action_press("p%d_shield" % slot)
 		"jump":
 			if is_on_floor() and randf() < 0.02:
-				velocity.y = -get_jump_strength()
+				_jump_short_hop = false
+				state_machine.enter(FighterStates.JUMP_SQUAT)
 		"attack":
 			if absf(dx) < 90 and randf() < 0.03:
 				_start_move_by_command("attack_neutral")
+		"di_in", "di_out":
+			# Prefer shield between hits; DI applied in hurt path via _dummy_apply_di.
+			if state_machine.current_state in [FighterStates.IDLE, FighterStates.WALK, FighterStates.RUN]:
+				if not Input.is_action_pressed("p%d_shield" % slot) and randf() < 0.02:
+					Input.action_press("p%d_shield" % slot)
 		"idle":
 			pass
 

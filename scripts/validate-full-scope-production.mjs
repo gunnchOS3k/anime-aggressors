@@ -63,11 +63,11 @@ const REQUIRED_STATES = [
   "idle", "walk", "run", "dash", "skid", "turnaround", "jump_squat", "jump", "double_jump",
   "fall", "fast_fall", "land", "attack_startup", "attack_active", "attack_recovery",
   "special_startup", "special_active", "special_recovery", "shield_start", "shield_hold",
-  "shield_stun", "shield_break", "dodge_start", "dodge_active", "dodge_recovery",
+  "shield_stun", "shield_break", "dodge_start", "dodge_active", "dodge_recovery", "air_dodge",
   "grab_startup", "grab_active", "grab_whiff", "grab_hold", "throw_startup", "throw_release",
   "aura_charge", "aura_ready", "aura_burst_startup", "aura_burst_active", "aura_burst_recovery",
   "hurt_light", "hurt_heavy", "hitstop", "hitstun", "launched", "tumble",
-  "edge_warning", "ledge_teeter", "ko", "respawn", "victory", "defeat",
+  "edge_warning", "ledge_teeter", "ledge_hang", "ledge_getup", "ko", "respawn", "victory", "defeat",
 ];
 
 const CORE_SYSTEMS = [

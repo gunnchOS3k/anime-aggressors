@@ -63,9 +63,16 @@ func _default_hitstop(tier: String) -> int:
 	return int((range.min + range.max) / 2.0)
 
 func _trigger_camera(tier: String, event: String) -> void:
-	_shake_intensity = TIER_SHAKE.get(tier, 2.0)
-	_shake_remaining = 0.12
-	if event != "":
+	var intensity_scale := 1.0
+	var role = Engine.get_main_loop().root.get_node_or_null("/root/DeviceRoleRuntime") if Engine.get_main_loop() else null
+	if role != null:
+		if role.has_method("fx_allows_camera_shake") and not role.fx_allows_camera_shake():
+			return
+		if role.has_method("fx_intensity"):
+			intensity_scale = float(role.fx_intensity())
+	_shake_intensity = TIER_SHAKE.get(tier, 2.0) * intensity_scale
+	_shake_remaining = 0.12 * intensity_scale
+	if event != "" and intensity_scale > 0.01:
 		print("[CombatFeedback] camera_event: %s tier:%s" % [event, tier])
 
 func _log_proxy_sfx(event: String, tier: String) -> void:
@@ -83,6 +90,9 @@ func _process(delta: float) -> void:
 	_camera.offset = offset if _shake_remaining > 0.0 else Vector2.ZERO
 
 func spawn_hit_spark(parent: Node2D, pos: Vector2, element: String) -> void:
+	var role = Engine.get_main_loop().root.get_node_or_null("/root/DeviceRoleRuntime") if Engine.get_main_loop() else null
+	if role != null and role.has_method("fx_allows_hit_sparks") and not role.fx_allows_hit_sparks():
+		return
 	var spark := ColorRect.new()
 	spark.size = Vector2(12, 12)
 	spark.position = pos - spark.size / 2.0
