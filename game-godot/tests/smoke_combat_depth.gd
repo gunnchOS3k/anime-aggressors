@@ -1,4 +1,5 @@
 extends RefCounted
+class_name SmokeCombatDepth
 
 ## Headless unit-ish checks for combat depth + device role contracts.
 ## Preload class scripts: Godot `--script` / `-s` runs before global class_name registration.

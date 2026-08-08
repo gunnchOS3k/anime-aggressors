@@ -1,10 +1,12 @@
 extends Node
 class_name FighterStateMachine
+const _FighterStates = preload("res://scripts/fighters/fighter_states.gd")
+const _CombatMath = preload("res://scripts/combat/combat_math.gd")
 
 signal state_changed(from_state: String, to_state: String)
 
-var current_state: String = FighterStates.IDLE
-var previous_state: String = FighterStates.IDLE
+var current_state: String = _FighterStates.IDLE
+var previous_state: String = _FighterStates.IDLE
 var state_frame: int = 0
 var state_time: float = 0.0
 var _fighter
@@ -31,112 +33,112 @@ func update(delta: float) -> void:
 	_on_update(current_state, delta)
 
 func can_move() -> bool:
-	return not FighterStates.locks_movement(current_state) and _fighter != null and _fighter.controls_enabled
+	return not _FighterStates.locks_movement(current_state) and _fighter != null and _fighter.controls_enabled
 
 func can_attack() -> bool:
-	return not FighterStates.locks_actions(current_state) and _fighter != null and _fighter.controls_enabled
+	return not _FighterStates.locks_actions(current_state) and _fighter != null and _fighter.controls_enabled
 
 func _on_enter(state: String) -> void:
 	if _fighter == null:
 		return
 	match state:
-		FighterStates.SHIELD_START, FighterStates.SHIELD_HOLD:
+		_FighterStates.SHIELD_START, _FighterStates.SHIELD_HOLD:
 			_fighter.shielding = true
-		FighterStates.SHIELD_BREAK:
+		_FighterStates.SHIELD_BREAK:
 			_fighter.shielding = false
 			_fighter.shield_health = 0.0
-		FighterStates.DODGE_ACTIVE, FighterStates.AIR_DODGE:
+		_FighterStates.DODGE_ACTIVE, _FighterStates.AIR_DODGE:
 			_fighter.invincible = true
-		FighterStates.AURA_READY:
+		_FighterStates.AURA_READY:
 			_fighter.aura = 100.0
-		FighterStates.GRAB_HOLD:
+		_FighterStates.GRAB_HOLD:
 			if _fighter.grabbed_target:
 				_fighter.grabbed_target.grabbed_by = _fighter
-		FighterStates.KO:
+		_FighterStates.KO:
 			_fighter.velocity = Vector2.ZERO
-		FighterStates.RESPAWN:
+		_FighterStates.RESPAWN:
 			_fighter.invincible = true
-		FighterStates.JUMP_SQUAT:
+		_FighterStates.JUMP_SQUAT:
 			_fighter.velocity.x *= 0.85
-		FighterStates.LEDGE_HANG:
+		_FighterStates.LEDGE_HANG:
 			_fighter.velocity = Vector2.ZERO
 			_fighter.invincible = true
-		FighterStates.LEDGE_GETUP:
+		_FighterStates.LEDGE_GETUP:
 			_fighter.invincible = true
 
 func _on_update(state: String, delta: float) -> void:
 	if _fighter == null:
 		return
 	match state:
-		FighterStates.JUMP_SQUAT:
-			if state_frame >= CombatMath.JUMP_SQUAT_FRAMES:
+		_FighterStates.JUMP_SQUAT:
+			if state_frame >= _CombatMath.JUMP_SQUAT_FRAMES:
 				_fighter.complete_jump_squat()
-		FighterStates.SHIELD_HOLD:
+		_FighterStates.SHIELD_HOLD:
 			_fighter.shield_health = maxf(0.0, _fighter.shield_health - 8.0 * delta)
-		FighterStates.AURA_CHARGE:
+		_FighterStates.AURA_CHARGE:
 			if not _fighter.is_aura_input_held():
-				_fighter.state_machine.enter(FighterStates.AURA_READY if _fighter.aura >= 100.0 else FighterStates.IDLE)
-		FighterStates.SHIELD_STUN:
+				_fighter.state_machine.enter(_FighterStates.AURA_READY if _fighter.aura >= 100.0 else _FighterStates.IDLE)
+		_FighterStates.SHIELD_STUN:
 			if state_time > 0.25:
-				_fighter.state_machine.enter(FighterStates.IDLE)
-		FighterStates.DODGE_RECOVERY, FighterStates.AIR_DODGE:
+				_fighter.state_machine.enter(_FighterStates.IDLE)
+		_FighterStates.DODGE_RECOVERY, _FighterStates.AIR_DODGE:
 			var rec := dodge_recovery
-			if state == FighterStates.AIR_DODGE:
-				rec = CombatMath.AIR_DODGE_RECOVERY
+			if state == _FighterStates.AIR_DODGE:
+				rec = _CombatMath.AIR_DODGE_RECOVERY
 			if state_time > dodge_invuln:
 				_fighter.invincible = false
 			if state_time > rec:
 				_fighter.invincible = false
-				_fighter.state_machine.enter(FighterStates.IDLE if _fighter.is_on_floor() else FighterStates.FALL)
-		FighterStates.HITSTUN:
+				_fighter.state_machine.enter(_FighterStates.IDLE if _fighter.is_on_floor() else _FighterStates.FALL)
+		_FighterStates.HITSTUN:
 			_fighter.apply_hitstun_di(delta)
 			if state_time > _fighter.hitstun_remaining:
-				_fighter.state_machine.enter(FighterStates.IDLE if _fighter.is_on_floor() else FighterStates.FALL)
-		FighterStates.HURT_LIGHT:
+				_fighter.state_machine.enter(_FighterStates.IDLE if _fighter.is_on_floor() else _FighterStates.FALL)
+		_FighterStates.HURT_LIGHT:
 			_fighter.apply_hitstun_di(delta)
 			if state_time > 0.06:
 				if _fighter.hitstun_remaining > 0.04:
-					_fighter.state_machine.enter(FighterStates.HITSTUN)
+					_fighter.state_machine.enter(_FighterStates.HITSTUN)
 				elif _fighter.is_on_floor():
-					_fighter.state_machine.enter(FighterStates.IDLE)
+					_fighter.state_machine.enter(_FighterStates.IDLE)
 				else:
-					_fighter.state_machine.enter(FighterStates.FALL)
-		FighterStates.HURT_HEAVY:
+					_fighter.state_machine.enter(_FighterStates.FALL)
+		_FighterStates.HURT_HEAVY:
 			_fighter.apply_hitstun_di(delta)
 			if state_time > 0.12:
 				if _fighter.hitstun_remaining > 0.08:
-					_fighter.state_machine.enter(FighterStates.HITSTUN)
+					_fighter.state_machine.enter(_FighterStates.HITSTUN)
 				elif _fighter.is_on_floor():
-					_fighter.state_machine.enter(FighterStates.IDLE)
+					_fighter.state_machine.enter(_FighterStates.IDLE)
 				else:
-					_fighter.state_machine.enter(FighterStates.FALL)
-		FighterStates.LAUNCHED:
+					_fighter.state_machine.enter(_FighterStates.FALL)
+		_FighterStates.LAUNCHED:
 			_fighter.apply_hitstun_di(delta)
 			if _fighter.is_on_floor() and _fighter.velocity.y >= 0:
 				_fighter.begin_landing(true, absf(_fighter.velocity.y) > 400.0)
-		FighterStates.TUMBLE:
+		_FighterStates.TUMBLE:
 			_fighter.apply_hitstun_di(delta)
 			if state_time > 0.35:
-				_fighter.state_machine.enter(FighterStates.FALL)
-		FighterStates.LAND:
+				_fighter.state_machine.enter(_FighterStates.FALL)
+		_FighterStates.LAND:
 			if state_time > landing_lag:
-				_fighter.state_machine.enter(FighterStates.IDLE)
-		FighterStates.GRAB_WHIFF:
+				_fighter.state_machine.enter(_FighterStates.IDLE)
+		_FighterStates.GRAB_WHIFF:
 			if state_time > 0.3:
-				_fighter.state_machine.enter(FighterStates.IDLE)
-		FighterStates.GRAB_HOLD:
+				_fighter.state_machine.enter(_FighterStates.IDLE)
+		_FighterStates.GRAB_HOLD:
 			if state_time > 2.0:
 				_fighter.execute_throw()
-		FighterStates.ATTACK_RECOVERY, FighterStates.SPECIAL_RECOVERY, FighterStates.AURA_BURST_RECOVERY:
+		_FighterStates.ATTACK_RECOVERY, _FighterStates.SPECIAL_RECOVERY, _FighterStates.AURA_BURST_RECOVERY:
 			if state_time > 0.12:
-				_fighter.state_machine.enter(FighterStates.IDLE)
-		FighterStates.SHIELD_BREAK:
+				_fighter.state_machine.enter(_FighterStates.IDLE)
+		_FighterStates.SHIELD_BREAK:
 			if state_time > 0.4:
 				_fighter.shield_health = float(_fighter.data.get("shieldProfile", {}).get("maxHealth", 100))
-				_fighter.state_machine.enter(FighterStates.IDLE)
-		FighterStates.LEDGE_HANG:
+				_fighter.state_machine.enter(_FighterStates.IDLE)
+		_FighterStates.LEDGE_HANG:
 			_fighter.tick_ledge_hang(delta)
-		FighterStates.LEDGE_GETUP:
+		_FighterStates.LEDGE_GETUP:
 			if state_time > 0.16:
 				_fighter.invincible = false
-				_fighter.state_machine.enter(FighterStates.IDLE)
+				_fighter.state_machine.enter(_FighterStates.IDLE)

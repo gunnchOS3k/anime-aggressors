@@ -1,5 +1,6 @@
 extends Node2D
 const _DataLoader = preload("res://scripts/data/data_loader.gd")
+const _BattleSim = preload("res://scripts/battle/battle_sim.gd")
 
 @onready var fighters_root: Node2D = $Fighters
 @onready var stage_root: Node2D = $Stage
@@ -7,8 +8,8 @@ const _DataLoader = preload("res://scripts/data/data_loader.gd")
 
 var fighter1
 var fighter2
-var _debug_hud: DebugHud
-var _battle_sim: BattleSim
+var _debug_hud
+var _battle_sim
 var _hit_log: Label
 var _combo_p1: int = 0
 var _paused := false
@@ -21,7 +22,7 @@ const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
 func _ready() -> void:
 	_build_stage()
 	_spawn_fighters()
-	_battle_sim = BattleSim.new()
+	_battle_sim = _BattleSim.new()
 	add_child(_battle_sim)
 	_battle_sim.bind_fighters([fighter1, fighter2])
 	if OS.is_debug_build():

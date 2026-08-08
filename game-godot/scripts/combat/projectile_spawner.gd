@@ -1,7 +1,9 @@
 extends Node
 class_name ProjectileSpawner
+const _AuraScaler = preload("res://scripts/combat/aura_scaler.gd")
+const _AAProjectile = preload("res://scripts/combat/projectile.gd")
 
-## Spawns AAProjectile instances from move projectile config.
+## Spawns _AAProjectile instances from move projectile config.
 
 const PROJECTILE_SCENE := preload("res://scenes/combat/Projectile2D.tscn")
 
@@ -11,26 +13,26 @@ var active_projectiles: Array = []
 func setup(fighter: Node) -> void:
 	owner_fighter = fighter
 
-func spawn_from_move(move: Dictionary, aura_amount: float) -> AAProjectile:
+func spawn_from_move(move: Dictionary, aura_amount: float) -> Node:
 	var proj_cfg: Dictionary = move.get("projectile", {})
 	if proj_cfg.is_empty():
 		return null
-	var level := AuraScaler.aura_level(aura_amount)
+	var level: int = int(_AuraScaler.aura_level(aura_amount))
 	var speed_arr: Array = proj_cfg.get("speed_by_aura", [400])
 	var dmg_arr: Array = proj_cfg.get("damage_by_aura", [move.get("damage", 8)])
 	var size_arr: Array = proj_cfg.get("size_by_aura", [16])
 	var life_arr: Array = proj_cfg.get("lifetime_frames_by_aura", [90])
 	var beh_arr: Array = proj_cfg.get("behavior_by_aura", ["straight"])
-	var speed := AuraScaler.projectile_value_by_aura(speed_arr, aura_amount)
-	var dmg := AuraScaler.projectile_value_by_aura(dmg_arr, aura_amount)
-	var sz := AuraScaler.projectile_value_by_aura(size_arr, aura_amount)
-	var life := int(AuraScaler.projectile_value_by_aura(life_arr, aura_amount))
+	var speed: float = float(_AuraScaler.projectile_value_by_aura(speed_arr, aura_amount))
+	var dmg: float = float(_AuraScaler.projectile_value_by_aura(dmg_arr, aura_amount))
+	var sz: float = float(_AuraScaler.projectile_value_by_aura(size_arr, aura_amount))
+	var life := int(_AuraScaler.projectile_value_by_aura(life_arr, aura_amount))
 	var beh_idx := mini(level, beh_arr.size() - 1)
 	var behavior: String = beh_arr[beh_idx]
 	var spawn_frame: int = int(proj_cfg.get("spawn_frame", 0))
 	if owner_fighter == null:
 		return null
-	var proj: AAProjectile = PROJECTILE_SCENE.instantiate()
+	var proj = PROJECTILE_SCENE.instantiate()
 	var battle_root := owner_fighter.get_parent()
 	if battle_root:
 		battle_root.add_child(proj)
