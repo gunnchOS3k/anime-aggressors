@@ -8,6 +8,9 @@ const SCENES := {
 	"main_menu": "res://scenes/menus/MainMenuScene.tscn",
 	"mode_select": "res://scenes/menus/ModeSelectScene.tscn",
 	"arcade": "res://scenes/menus/ArcadeScene.tscn",
+	"tutorial": "res://scenes/menus/TutorialScene.tscn",
+	"tutorial_battle": "res://scenes/training/TutorialBattleScene.tscn",
+	"hazards": "res://scenes/menus/HazardsScene.tscn",
 	"ruleset": "res://scenes/menus/RulesetScene.tscn",
 	"fighter_select": "res://scenes/menus/FighterSelectScene.tscn",
 	"stage_select": "res://scenes/menus/StageSelectScene.tscn",
@@ -46,6 +49,12 @@ func go_training() -> void:
 
 func go_arcade() -> void:
 	go("arcade")
+
+func go_tutorial() -> void:
+	go("tutorial")
+
+func go_hazards() -> void:
+	go("hazards")
 
 func go_mobile_playtest() -> void:
 	go("mobile_playtest")

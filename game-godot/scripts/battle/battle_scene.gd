@@ -2,6 +2,7 @@ extends Node2D
 const _DataLoader = preload("res://scripts/data/data_loader.gd")
 const _BattleHudPanel = preload("res://scripts/ui/battle_hud_panel.gd")
 const _BattleSim = preload("res://scripts/battle/battle_sim.gd")
+const _HazardItemRuntime = preload("res://scripts/battle/hazard_item_runtime.gd")
 
 @onready var fighters_root: Node2D = $Fighters
 @onready var stage_root: Node2D = $Stage
@@ -19,6 +20,7 @@ var _paused := false
 var _ko_lock := false
 var _debug_hud
 var _battle_sim
+var _hazard_runtime
 var _pause_panel: PanelContainer
 var _p1_panel
 var _p2_panel
@@ -39,6 +41,12 @@ func _ready() -> void:
 	_battle_sim = _BattleSim.new()
 	add_child(_battle_sim)
 	_battle_sim.bind_fighters([fighter1, fighter2])
+	if GameState.mode == "hazards" or GameState.hazards_enabled or GameState.items_enabled:
+		_hazard_runtime = _HazardItemRuntime.new()
+		add_child(_hazard_runtime)
+		_hazard_runtime.hazards_enabled = GameState.hazards_enabled or GameState.mode == "hazards"
+		_hazard_runtime.items_enabled = GameState.items_enabled or GameState.mode == "hazards"
+		_hazard_runtime.configure(self, [fighter1, fighter2], GameState.match_seed, stage_root)
 	var show_debug := OS.is_debug_build()
 	if DeviceRoleRuntime.debug_hud_default:
 		show_debug = true
@@ -209,6 +217,8 @@ func _run_countdown() -> void:
 func _physics_process(delta: float) -> void:
 	if not _active or _paused:
 		return
+	if _hazard_runtime:
+		_hazard_runtime.tick(delta)
 	if _time_enabled:
 		_time_remaining = maxf(0.0, _time_remaining - delta)
 		_update_timer_label()

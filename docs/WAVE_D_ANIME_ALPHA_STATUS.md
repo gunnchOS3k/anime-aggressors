@@ -1,6 +1,6 @@
 # FULL PRODUCT Wave D — Anime Aggressors Alpha depth (Godot path)
 
-**Status:** IN_PROGRESS toward Alpha — **NOT Alpha exit**, **NOT content-complete**, **NOT RC**  
+**Status:** SUPERSEDED for continuation by [WAVE_D2_ANIME_ALPHA_EXIT_STATUS.md](./WAVE_D2_ANIME_ALPHA_EXIT_STATUS.md) — still **NOT Alpha exit**  
 **Branch focus:** ADR-GAME-AA-001 digital Alpha depth only (Godot).  
 **Token:** `WAVE_D_ANIME_ALPHA_DEPTH` (feature progress, not exit)
 

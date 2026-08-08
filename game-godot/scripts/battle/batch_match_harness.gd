@@ -148,3 +148,112 @@ static func assert_deterministic(match_count: int = 7, frames: int = 60, seed_va
 		if int(wa.get(id, 0)) != int(wb.get(id, 0)):
 			return false
 	return true
+
+
+static func run_full_matrix(tiers: Array = [1, 3, 5], frames_per_match: int = 72, base_seed: int = 42) -> Dictionary:
+	## Full 7×7 matchup matrix at multiple CPU tiers with deadlock + diversity metrics.
+	var results: Array = []
+	var wins: Dictionary = {}
+	var wins_by_tier: Dictionary = {}
+	for id in ROSTER:
+		wins[id] = 0
+	var deadlock_count := 0
+	var decisive_count := 0
+	var self_match_skipped := 0
+	var match_count := 0
+	for tier in tiers:
+		var t: int = clampi(int(tier), 1, 5)
+		wins_by_tier[str(t)] = {}
+		for id in ROSTER:
+			wins_by_tier[str(t)][id] = 0
+		for i in range(ROSTER.size()):
+			for j in range(ROSTER.size()):
+				var p1: String = ROSTER[i]
+				var p2: String = ROSTER[j]
+				if p1 == p2:
+					self_match_skipped += 1
+					# Mirror self-match still runs once for coverage (same fighter both sides).
+				var seed_i: int = base_seed + t * 10007 + i * 97 + j * 13
+				var outcome: Dictionary = _sim_abbreviated(p1, p2, t, frames_per_match, seed_i)
+				outcome["tier"] = t
+				outcome["matchup"] = "%s_vs_%s" % [p1, p2]
+				# Deadlock: both still at starting stocks and near-equal pct after full frames.
+				var dead := int(outcome.get("p1_stocks", 0)) == 2 and int(outcome.get("p2_stocks", 0)) == 2 \
+					and absf(float(outcome.get("p1_pct", 0.0)) - float(outcome.get("p2_pct", 0.0))) < 1.0
+				outcome["deadlock"] = dead
+				if dead:
+					deadlock_count += 1
+				else:
+					decisive_count += 1
+				results.append(outcome)
+				match_count += 1
+				var w: String = str(outcome.get("winner_id", ""))
+				if wins.has(w):
+					wins[w] = int(wins[w]) + 1
+					wins_by_tier[str(t)][w] = int(wins_by_tier[str(t)][w]) + 1
+	var diversity: Dictionary = _diversity_metrics(wins, match_count)
+	var deadlock_rate: float = float(deadlock_count) / float(maxi(1, match_count))
+	return {
+		"match_count": match_count,
+		"roster_size": ROSTER.size(),
+		"tiers": tiers,
+		"frames_per_match": frames_per_match,
+		"base_seed": base_seed,
+		"expected_matchups_per_tier": ROSTER.size() * ROSTER.size(),
+		"self_match_slots": self_match_skipped,
+		"wins": wins,
+		"wins_by_tier": wins_by_tier,
+		"deadlock_count": deadlock_count,
+		"decisive_count": decisive_count,
+		"deadlock_rate": deadlock_rate,
+		"diversity": diversity,
+		"results": results,
+		"aura_profiles": _AuraIdentity.all_fighter_ids().size(),
+		"alpha_claim": "NOT_ALPHA_EXIT — matrix harness only",
+	}
+
+
+static func _diversity_metrics(wins: Dictionary, match_count: int) -> Dictionary:
+	var total := 0
+	var nonzero := 0
+	var max_w := 0
+	var min_w := 999999
+	for id in ROSTER:
+		var w: int = int(wins.get(id, 0))
+		total += w
+		if w > 0:
+			nonzero += 1
+		max_w = maxi(max_w, w)
+		min_w = mini(min_w, w)
+	if min_w == 999999:
+		min_w = 0
+	# Shannon entropy over win shares (bits).
+	var entropy := 0.0
+	if total > 0:
+		for id in ROSTER:
+			var p: float = float(wins.get(id, 0)) / float(total)
+			if p > 0.0:
+				entropy -= p * (log(p) / log(2.0))
+	var max_entropy: float = log(float(ROSTER.size())) / log(2.0)
+	return {
+		"unique_winners": nonzero,
+		"win_total": total,
+		"max_wins": max_w,
+		"min_wins": min_w,
+		"win_spread": max_w - min_w,
+		"entropy_bits": entropy,
+		"entropy_normalized": entropy / max_entropy if max_entropy > 0.0 else 0.0,
+		"match_count": match_count,
+		"balanced_enough": nonzero >= 5 and (float(max_w) / float(maxi(1, total))) <= 0.35,
+	}
+
+
+static func write_evidence_json(report: Dictionary, path: String = "user://cpu_batch_matrix.json") -> String:
+	## Writes matrix evidence. Also mirrors to res-relative tmp when possible via absolute caller.
+	var text := JSON.stringify(report, "\t")
+	var f := FileAccess.open(path, FileAccess.WRITE)
+	if f == null:
+		return ""
+	f.store_string(text)
+	f.close()
+	return path

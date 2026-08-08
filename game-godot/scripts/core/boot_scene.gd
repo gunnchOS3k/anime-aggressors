@@ -248,6 +248,12 @@ func _on_start_game_pressed() -> void:
 	_enter_main_menu_immediate()
 
 func _enter_main_menu_immediate() -> void:
+	# Interactive first-run: offer tutorial before main menu when pending.
+	if GameState:
+		GameState.ensure_first_run_loaded()
+		if GameState.first_run_pending and not SceneRouter.skip_boot_title:
+			SceneRouter.go("tutorial")
+			return
 	SceneRouter.go("main_menu")
 
 func _unhandled_input(event: InputEvent) -> void:
