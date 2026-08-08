@@ -2,29 +2,80 @@
   "id": "cascade-foundry",
   "displayName": "Cascade Foundry",
   "layoutType": "splitPlatform",
-  "mainPlatform": { "x": 0, "y": 290, "width": 700, "height": 40 },
+  "mainPlatform": {
+    "x": 0,
+    "y": 290,
+    "width": 700,
+    "height": 40
+  },
   "sidePlatforms": [
-    { "x": -300, "y": 210, "width": 140, "height": 22 },
-    { "x": 300, "y": 210, "width": 140, "height": 22 },
-    { "x": -120, "y": 120, "width": 100, "height": 20 },
-    { "x": 120, "y": 120, "width": 100, "height": 20 }
+    {
+      "x": -300,
+      "y": 210,
+      "width": 140,
+      "height": 22
+    },
+    {
+      "x": 300,
+      "y": 210,
+      "width": 140,
+      "height": 22
+    },
+    {
+      "x": -120,
+      "y": 120,
+      "width": 100,
+      "height": 20
+    },
+    {
+      "x": 120,
+      "y": 120,
+      "width": 100,
+      "height": 20
+    }
   ],
   "spawnPoints": [
-    { "slot": 1, "x": -200, "y": 210 },
-    { "slot": 2, "x": 200, "y": 210 }
+    {
+      "slot": 1,
+      "x": -200,
+      "y": 210
+    },
+    {
+      "slot": 2,
+      "x": 200,
+      "y": 210
+    }
   ],
-  "blastZones": { "left": -540, "right": 540, "top": -360, "bottom": 450 },
+  "blastZones": {
+    "left": -540,
+    "right": 540,
+    "top": -360,
+    "bottom": 450
+  },
   "ledges": true,
   "hazardSockets": [
-    { "id": "slag_vent_l", "x": -180, "y": 250, "radius": 14 },
-    { "id": "slag_vent_r", "x": 180, "y": 250, "radius": 14 }
+    {
+      "id": "slag_vent_l",
+      "x": -180,
+      "y": 250,
+      "radius": 14
+    },
+    {
+      "id": "slag_vent_r",
+      "x": 180,
+      "y": 250,
+      "radius": 14
+    }
   ],
   "cameraProfile": {
     "mode": "platform_fighter",
     "minZoom": 0.88,
     "maxZoom": 1.38,
     "lerp": 0.13,
-    "deadzone": { "x": 75, "y": 55 }
+    "deadzone": {
+      "x": 75,
+      "y": 55
+    }
   },
   "lightingProfile": {
     "keyColor": "#ff8844",
@@ -34,15 +85,31 @@
   },
   "performanceTier": {
     "default": "high",
-    "low": { "particles": false, "bands": 1 },
-    "medium": { "particles": true, "bands": 2 },
-    "high": { "particles": true, "bands": 4 }
+    "low": {
+      "particles": false,
+      "bands": 1
+    },
+    "medium": {
+      "particles": true,
+      "bands": 2
+    },
+    "high": {
+      "particles": true,
+      "bands": 4
+    }
   },
-  "a11y": { "highContrastEdges": true, "colorblindMarkers": true },
-  "audioBed": { "event": "bed_foundry", "status": "REQUIRES_AUDIO_PRODUCTION" },
-  "previewPlaceholder": "res://assets/placeholder/stage_cascade-foundry.svg",
-  "artStatus": "REQUIRES_ART_PRODUCTION",
+  "a11y": {
+    "highContrastEdges": true,
+    "colorblindMarkers": true
+  },
+  "audioBed": {
+    "event": "bed_foundry",
+    "status": "PROCEDURAL_FINAL",
+    "path": "res://assets/audio/procedural/stages/cascade-foundry/bed.wav"
+  },
+  "previewPlaceholder": "res://assets/stages/procedural/cascade-foundry.svg",
+  "artStatus": "PROCEDURAL_FINAL",
   "productionStatus": "procedural_final",
   "geometryStatus": "PROCEDURAL_FINAL",
-  "notes": "Launch competitive geometry PROCEDURAL_FINAL. Painted art REQUIRES_ART_PRODUCTION."
+  "notes": "Launch competitive geometry + procedural environment art/audio are PROCEDURAL_FINAL. Painted remasters optional/out of token scope."
 }

@@ -1,6 +1,6 @@
 extends RefCounted
 ## Competitive procedural stage geometry — replaces greybox ColorRect-only platforms.
-## Painted environment art may still be REQUIRES_ART_PRODUCTION; geometry is PROCEDURAL_FINAL.
+## Geometry + procedural environment set-dressing are PROCEDURAL_FINAL (not greybox). Painted remasters optional.
 
 const THEMES := {
 	"skyline-arena": {
@@ -58,6 +58,7 @@ static func build(stage_root: Node2D, stage_data: Dictionary, reduce_motion: boo
 	var perf_tier := str(stage_data.get("performanceTier", {}).get("default", "high"))
 
 	_add_background(stage_root, theme, lighting, reduce_motion, perf_tier)
+	_add_environment_setdress(stage_root, stage_id, theme, perf_tier, reduce_motion)
 	_add_blast_guides(stage_root, stage_data.get("blastZones", {}), theme)
 	var main: Dictionary = stage_data.get("mainPlatform", {})
 	_add_platform(stage_root, main, theme, true)
@@ -70,6 +71,7 @@ static func build(stage_root: Node2D, stage_data: Dictionary, reduce_motion: boo
 		"stage_id": stage_id,
 		"productionStatus": str(stage_data.get("productionStatus", "")),
 		"geometry": "PROCEDURAL_FINAL",
+		"art": "PROCEDURAL_FINAL",
 		"camera": camera,
 		"lighting": lighting,
 		"performanceTier": stage_data.get("performanceTier", {}),
@@ -235,3 +237,89 @@ static func _add_a11y_edges(root: Node2D, main: Dictionary, stage_data: Dictiona
 	edge.add_point(Vector2(w / 2.0, -h / 2.0))
 	body.add_child(edge)
 	root.add_child(body)
+
+
+static func _add_environment_setdress(root: Node2D, stage_id: String, theme: Dictionary, perf_tier: String, reduce_motion: bool) -> void:
+	## Distinct non-greybox silhouettes per stage (buildings / neon / stacks / piers / lanterns / grid).
+	var count := 6 if perf_tier == "high" else (4 if perf_tier == "medium" else 2)
+	match stage_id:
+		"skyline-arena":
+			for i in range(count):
+				var tower := Polygon2D.new()
+				tower.color = Color(theme.trim.r, theme.trim.g, theme.trim.b, 0.28)
+				var x := -520.0 + i * 170.0
+				var h := 180.0 + (i % 3) * 55.0
+				tower.polygon = PackedVector2Array([
+					Vector2(x, 260), Vector2(x + 40, 260), Vector2(x + 40, 260 - h), Vector2(x, 260 - h),
+				])
+				tower.z_index = -12
+				root.add_child(tower)
+		"neon-rooftops":
+			for i in range(count):
+				var bar := Polygon2D.new()
+				bar.color = Color(theme.trim.r, theme.trim.g, theme.trim.b, 0.55)
+				var x := -480.0 + i * 190.0
+				var y := -40.0 + (i % 2) * 70.0
+				bar.polygon = PackedVector2Array([
+					Vector2(x, y), Vector2(x + 120, y), Vector2(x + 120, y + 10), Vector2(x, y + 10),
+				])
+				bar.z_index = -12
+				root.add_child(bar)
+		"cascade-foundry":
+			for i in range(mini(count, 4)):
+				var stack := Polygon2D.new()
+				stack.color = Color(theme.trim.r, theme.trim.g, theme.trim.b, 0.4)
+				var x := -360.0 + i * 220.0
+				stack.polygon = PackedVector2Array([
+					Vector2(x, 260), Vector2(x + 36, 260), Vector2(x + 36, 40), Vector2(x, 40),
+				])
+				stack.z_index = -12
+				root.add_child(stack)
+				var cap := Polygon2D.new()
+				cap.color = theme.trim
+				cap.polygon = PackedVector2Array([
+					Vector2(x - 6, 40), Vector2(x + 42, 40), Vector2(x + 42, 28), Vector2(x - 6, 28),
+				])
+				cap.z_index = -11
+				root.add_child(cap)
+		"void-pier":
+			for i in range(count):
+				var post := Polygon2D.new()
+				post.color = Color(theme.trim.r, theme.trim.g, theme.trim.b, 0.45)
+				var x := -450.0 + i * 180.0
+				post.polygon = PackedVector2Array([
+					Vector2(x, 320), Vector2(x + 14, 320), Vector2(x + 14, 200), Vector2(x, 200),
+				])
+				post.z_index = -12
+				root.add_child(post)
+			var water := Polygon2D.new()
+			water.color = Color(theme.accent.r, theme.accent.g, theme.accent.b, 0.22)
+			water.polygon = PackedVector2Array([
+				Vector2(-700, 300), Vector2(700, 300), Vector2(700, 380), Vector2(-700, 380),
+			])
+			water.z_index = -14
+			root.add_child(water)
+		"ember-courtyard":
+			for i in range(count):
+				var lantern := Polygon2D.new()
+				lantern.color = Color(theme.trim.r, theme.trim.g, theme.trim.b, 0.6)
+				var x := -400.0 + i * 150.0
+				var y := -80.0 + (i % 3) * 35.0
+				lantern.polygon = PackedVector2Array([
+					Vector2(x, y), Vector2(x + 16, y - 10), Vector2(x + 32, y), Vector2(x + 16, y + 14),
+				])
+				lantern.z_index = -12
+				root.add_child(lantern)
+		"training-grid":
+			if not reduce_motion:
+				for i in range(-6, 7):
+					var v := Polygon2D.new()
+					v.color = Color(theme.trim.r, theme.trim.g, theme.trim.b, 0.12)
+					var x := i * 90.0
+					v.polygon = PackedVector2Array([
+						Vector2(x, -400), Vector2(x + 2, -400), Vector2(x + 2, 400), Vector2(x, 400),
+					])
+					v.z_index = -16
+					root.add_child(v)
+		_:
+			pass

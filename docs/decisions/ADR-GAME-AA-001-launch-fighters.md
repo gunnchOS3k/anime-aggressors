@@ -23,5 +23,5 @@ Each fighter must be authored with unique silhouette, model presentation, animat
 ## Consequences
 
 - Roster size is frozen at 7 for Beta / RC digital claims.
-- Painted/final GLB art may remain `REQUIRES_ART_PRODUCTION`; procedural presentation may be `PROCEDURAL_FINAL`.
+- Launch shippable presentation is `PROCEDURAL_FINAL` (Blender procedural meshes + stylized runtime). Optional painted remasters are out of digital token scope.
 - No copyrighted franchise names or assets.

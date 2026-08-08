@@ -64,7 +64,7 @@ static func run() -> bool:
 		_SmokeAssert.ok(FileAccess.file_exists(sp), "stage file missing %s" % sid)
 		var sf := FileAccess.open(sp, FileAccess.READ)
 		var sd: Dictionary = JSON.parse_string(sf.get_as_text())
-		_SmokeAssert.ok(str(sd.get("artStatus", "")) == "REQUIRES_ART_PRODUCTION", "%s must mark REQUIRES_ART_PRODUCTION" % sid)
+		_SmokeAssert.ok(str(sd.get("artStatus", "")) == "PROCEDURAL_FINAL", "%s must mark PROCEDURAL_FINAL art" % sid)
 
 	# Arcade ladder wired in scripts + scene (no autoload).
 	_SmokeAssert.ok(ResourceLoader.exists("res://scenes/menus/ArcadeScene.tscn"), "ArcadeScene missing")

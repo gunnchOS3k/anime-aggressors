@@ -16,6 +16,16 @@ const fail = (m) => {
 };
 const ok = (m) => console.log(`OK: ${m}`);
 
+const closure = spawnSync(
+  process.execPath,
+  ["scripts/validate-anime-digital-art-audio-closure.mjs"],
+  { cwd: root, encoding: "utf8" },
+);
+if (closure.status !== 0) {
+  fail("art/audio closure prerequisite failed");
+  console.error(closure.stdout || closure.stderr);
+} else ok("art/audio closure prerequisite");
+
 const beta = spawnSync(process.execPath, ["scripts/validate-anime-beta-content.mjs"], {
   cwd: root,
   encoding: "utf8",

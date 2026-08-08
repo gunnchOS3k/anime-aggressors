@@ -14,7 +14,7 @@ func _ready() -> void:
 func _refresh() -> void:
 	var p1: Dictionary = GameState.load_fighter(GameState.p1_fighter_id)
 	if status_label:
-		status_label.text = "Fighter: %s\nOpponents: 7 CPU bouts (Arcade ladder)\nStages: PROCEDURAL_FINAL geometry — painted art REQUIRES_ART_PRODUCTION\nBeta content digital; not public deploy" % p1.get("displayName", GameState.p1_fighter_id)
+		status_label.text = "Fighter: %s\nOpponents: 7 CPU bouts (Arcade ladder)\nStages: PROCEDURAL_FINAL geometry — PROCEDURAL_FINAL art+audio shipped\nBeta content digital; not public deploy" % p1.get("displayName", GameState.p1_fighter_id)
 
 
 func _on_change_fighter_pressed() -> void:

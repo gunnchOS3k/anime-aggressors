@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 GENERATOR = ROOT / "tools" / "blender" / "generate_fighter_blockouts.py"
-RUNTIME_DIR = ROOT / "game-godot" / "assets" / "characters" / "proxy"
+RUNTIME_DIR = ROOT / "game-godot" / "assets" / "characters" / "procedural_final"
 FIGHTERS = (
     "ember-vale", "rook-ironside", "juno-spark", "kaia-windrow",
     "nix-calder", "orion-vell", "vesper-nyx",

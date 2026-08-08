@@ -3,7 +3,7 @@ class_name SmokeAnimeAlphaExit
 
 ## FULL PRODUCT continuation III — Alpha exit digital systems.
 ## Avoids compile-time GameState identifier (Godot 4.5 -s).
-## Does NOT claim Beta/RC. Art: REQUIRES_ART_PRODUCTION.
+## Does NOT claim Beta/RC as new. Art may be PROCEDURAL_FINAL after Cont V.
 
 const _PrivateNetplayStack = preload("res://scripts/net/private_netplay_stack.gd")
 const _BattleSceneCpuEval = preload("res://scripts/battle/battle_scene_cpu_eval.gd")

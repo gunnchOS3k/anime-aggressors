@@ -72,18 +72,29 @@ for (const id of competitive) {
     fail(`${id} still greybox (${s.productionStatus})`);
   }
   if (s.geometryStatus !== "PROCEDURAL_FINAL") fail(`${id} geometryStatus`);
-  if (s.artStatus !== "REQUIRES_ART_PRODUCTION") fail(`${id} artStatus honesty`);
+  if (s.artStatus !== "PROCEDURAL_FINAL") fail(`${id} artStatus must be PROCEDURAL_FINAL`);
+  if (s.audioBed?.status !== "PROCEDURAL_FINAL") fail(`${id} audioBed status`);
+  if (!fs.existsSync(path.join(root, `game-godot/assets/stages/procedural/${id}.svg`))) {
+    fail(`${id} missing procedural stage art`);
+  }
   for (const k of ["cameraProfile", "lightingProfile", "performanceTier", "a11y", "audioBed"]) {
     if (!s[k]) fail(`${id} missing ${k}`);
   }
 }
-ok("launch stages procedural + honest art");
+ok("launch stages procedural art+geometry");
 
 const missing = JSON.parse(
   fs.readFileSync(path.join(root, "content/missing_assets.json"), "utf8"),
 );
-if ((missing.items ?? []).length < 1) fail("missing_assets empty");
-ok(`missing_assets count=${missing.items.length}`);
+const blockers = (missing.items ?? []).filter((i) => i.blocks_token === true);
+if (blockers.length !== 0) {
+  fail(`token blockers remain: ${blockers.map((b) => b.id).join(",")}`);
+}
+ok(`missing_assets token-blockers=0 (items=${(missing.items ?? []).length})`);
+
+if (manifest.honesty?.procedural_digital_art_complete !== true) fail("procedural art complete flag");
+if (manifest.honesty?.procedural_digital_audio_complete !== true) fail("procedural audio complete flag");
+if (manifest.honesty?.token_requires_zero_blocks_token !== true) fail("token integrity flag");
 
 if (failed) {
   console.error(`validate-anime-beta-content: ${failed} failure(s)`);

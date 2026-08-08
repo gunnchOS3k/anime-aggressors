@@ -2,27 +2,68 @@
   "id": "neon-rooftops",
   "displayName": "Neon Rooftops",
   "layoutType": "casual",
-  "mainPlatform": { "x": 0, "y": 300, "width": 760, "height": 36 },
+  "mainPlatform": {
+    "x": 0,
+    "y": 300,
+    "width": 760,
+    "height": 36
+  },
   "sidePlatforms": [
-    { "x": -260, "y": 200, "width": 150, "height": 22 },
-    { "x": 260, "y": 200, "width": 150, "height": 22 },
-    { "x": 0, "y": 110, "width": 180, "height": 20 }
+    {
+      "x": -260,
+      "y": 200,
+      "width": 150,
+      "height": 22
+    },
+    {
+      "x": 260,
+      "y": 200,
+      "width": 150,
+      "height": 22
+    },
+    {
+      "x": 0,
+      "y": 110,
+      "width": 180,
+      "height": 20
+    }
   ],
   "spawnPoints": [
-    { "slot": 1, "x": -200, "y": 220 },
-    { "slot": 2, "x": 200, "y": 220 }
+    {
+      "slot": 1,
+      "x": -200,
+      "y": 220
+    },
+    {
+      "slot": 2,
+      "x": 200,
+      "y": 220
+    }
   ],
-  "blastZones": { "left": -540, "right": 540, "top": -360, "bottom": 460 },
+  "blastZones": {
+    "left": -540,
+    "right": 540,
+    "top": -360,
+    "bottom": 460
+  },
   "ledges": true,
   "hazardSockets": [
-    { "id": "neon_surge", "x": 0, "y": 40, "radius": 20 }
+    {
+      "id": "neon_surge",
+      "x": 0,
+      "y": 40,
+      "radius": 20
+    }
   ],
   "cameraProfile": {
     "mode": "platform_fighter",
     "minZoom": 0.9,
     "maxZoom": 1.4,
     "lerp": 0.14,
-    "deadzone": { "x": 70, "y": 50 }
+    "deadzone": {
+      "x": 70,
+      "y": 50
+    }
   },
   "lightingProfile": {
     "keyColor": "#ff66cc",
@@ -32,15 +73,31 @@
   },
   "performanceTier": {
     "default": "high",
-    "low": { "particles": false, "bands": 1 },
-    "medium": { "particles": true, "bands": 2 },
-    "high": { "particles": true, "bands": 4 }
+    "low": {
+      "particles": false,
+      "bands": 1
+    },
+    "medium": {
+      "particles": true,
+      "bands": 2
+    },
+    "high": {
+      "particles": true,
+      "bands": 4
+    }
   },
-  "a11y": { "highContrastEdges": true, "colorblindMarkers": true },
-  "audioBed": { "event": "bed_neon", "status": "REQUIRES_AUDIO_PRODUCTION" },
-  "previewPlaceholder": "res://assets/placeholder/stage_neon-rooftops.svg",
-  "artStatus": "REQUIRES_ART_PRODUCTION",
+  "a11y": {
+    "highContrastEdges": true,
+    "colorblindMarkers": true
+  },
+  "audioBed": {
+    "event": "bed_neon",
+    "status": "PROCEDURAL_FINAL",
+    "path": "res://assets/audio/procedural/stages/neon-rooftops/bed.wav"
+  },
+  "previewPlaceholder": "res://assets/stages/procedural/neon-rooftops.svg",
+  "artStatus": "PROCEDURAL_FINAL",
   "productionStatus": "procedural_final",
   "geometryStatus": "PROCEDURAL_FINAL",
-  "notes": "Launch competitive geometry PROCEDURAL_FINAL. Painted art REQUIRES_ART_PRODUCTION."
+  "notes": "Launch competitive geometry + procedural environment art/audio are PROCEDURAL_FINAL. Painted remasters optional/out of token scope."
 }

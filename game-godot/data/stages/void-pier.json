@@ -2,27 +2,68 @@
   "id": "void-pier",
   "displayName": "Void Pier",
   "layoutType": "narrow",
-  "mainPlatform": { "x": 0, "y": 300, "width": 640, "height": 36 },
+  "mainPlatform": {
+    "x": 0,
+    "y": 300,
+    "width": 640,
+    "height": 36
+  },
   "sidePlatforms": [
-    { "x": -220, "y": 190, "width": 120, "height": 20 },
-    { "x": 220, "y": 190, "width": 120, "height": 20 },
-    { "x": 0, "y": 90, "width": 140, "height": 18 }
+    {
+      "x": -220,
+      "y": 190,
+      "width": 120,
+      "height": 20
+    },
+    {
+      "x": 220,
+      "y": 190,
+      "width": 120,
+      "height": 20
+    },
+    {
+      "x": 0,
+      "y": 90,
+      "width": 140,
+      "height": 18
+    }
   ],
   "spawnPoints": [
-    { "slot": 1, "x": -170, "y": 220 },
-    { "slot": 2, "x": 170, "y": 220 }
+    {
+      "slot": 1,
+      "x": -170,
+      "y": 220
+    },
+    {
+      "slot": 2,
+      "x": 170,
+      "y": 220
+    }
   ],
-  "blastZones": { "left": -520, "right": 520, "top": -350, "bottom": 455 },
+  "blastZones": {
+    "left": -520,
+    "right": 520,
+    "top": -350,
+    "bottom": 455
+  },
   "ledges": true,
   "hazardSockets": [
-    { "id": "void_rift", "x": 0, "y": 40, "radius": 22 }
+    {
+      "id": "void_rift",
+      "x": 0,
+      "y": 40,
+      "radius": 22
+    }
   ],
   "cameraProfile": {
     "mode": "platform_fighter",
     "minZoom": 0.92,
     "maxZoom": 1.42,
     "lerp": 0.15,
-    "deadzone": { "x": 65, "y": 48 }
+    "deadzone": {
+      "x": 65,
+      "y": 48
+    }
   },
   "lightingProfile": {
     "keyColor": "#8866ff",
@@ -32,15 +73,31 @@
   },
   "performanceTier": {
     "default": "high",
-    "low": { "particles": false, "bands": 1 },
-    "medium": { "particles": true, "bands": 2 },
-    "high": { "particles": true, "bands": 4 }
+    "low": {
+      "particles": false,
+      "bands": 1
+    },
+    "medium": {
+      "particles": true,
+      "bands": 2
+    },
+    "high": {
+      "particles": true,
+      "bands": 4
+    }
   },
-  "a11y": { "highContrastEdges": true, "colorblindMarkers": true },
-  "audioBed": { "event": "bed_void_pier", "status": "REQUIRES_AUDIO_PRODUCTION" },
-  "previewPlaceholder": "res://assets/placeholder/stage_void-pier.svg",
-  "artStatus": "REQUIRES_ART_PRODUCTION",
+  "a11y": {
+    "highContrastEdges": true,
+    "colorblindMarkers": true
+  },
+  "audioBed": {
+    "event": "bed_void_pier",
+    "status": "PROCEDURAL_FINAL",
+    "path": "res://assets/audio/procedural/stages/void-pier/bed.wav"
+  },
+  "previewPlaceholder": "res://assets/stages/procedural/void-pier.svg",
+  "artStatus": "PROCEDURAL_FINAL",
   "productionStatus": "procedural_final",
   "geometryStatus": "PROCEDURAL_FINAL",
-  "notes": "Launch competitive geometry PROCEDURAL_FINAL. Painted art REQUIRES_ART_PRODUCTION."
+  "notes": "Launch competitive geometry + procedural environment art/audio are PROCEDURAL_FINAL. Painted remasters optional/out of token scope."
 }

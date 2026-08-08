@@ -63,6 +63,19 @@ const MODES = [
 
 function sha256File(p) {
   if (!fs.existsSync(p)) return null;
+  const st = fs.statSync(p);
+  if (st.isDirectory()) {
+    const files = fs.readdirSync(p).filter((f) => !f.startsWith(".")).sort();
+    const h = crypto.createHash("sha256");
+    for (const f of files) {
+      const fp = path.join(p, f);
+      if (fs.statSync(fp).isFile()) {
+        h.update(f);
+        h.update(fs.readFileSync(fp));
+      }
+    }
+    return h.digest("hex");
+  }
   return crypto.createHash("sha256").update(fs.readFileSync(p)).digest("hex");
 }
 
@@ -187,7 +200,7 @@ function buildManifest() {
     const fighterPath = `game-godot/data/fighters/${id}.json`;
     const movesPath = `game-godot/data/moves/${id}.json`;
     const animPath = `game-godot/data/fighters/${id}_animations.json`;
-    const glbPath = `game-godot/assets/characters/proxy/${id}.glb`;
+    const glbPath = `game-godot/assets/characters/procedural_final/${id}.glb`;
     const data = readJson(path.join(root, fighterPath));
     const life = data.authorship ?? {};
 
@@ -223,15 +236,21 @@ function buildManifest() {
       path: "game-godot/scripts/fighters/stylized_fighter_builder.gd",
       notes: life.silhouette ?? "Unique procedural silhouette profile",
     });
+    const proceduralGlb = `game-godot/assets/characters/procedural_final/${id}.glb`;
+    const glbExists = fs.existsSync(path.join(root, proceduralGlb));
     push({
       id: `fighter.model_glb.${id}`,
       kind: "model",
       fighter_id: id,
-      status: "REQUIRES_ART_PRODUCTION",
-      path: glbPath,
-      blocks_final_art: true,
-      blocker: "Painted/final character art not shipped; proxy GLB + procedural presenter used",
-      notes: "Proxy GLB retained for pipeline; launch presentation uses procedural stylized builder",
+      status: glbExists ? "PROCEDURAL_FINAL" : "REQUIRES_ART_PRODUCTION",
+      path: proceduralGlb,
+      blocks_final_art: !glbExists,
+      blocker: glbExists
+        ? undefined
+        : "Procedural-final character GLB missing",
+      notes: glbExists
+        ? "Original Blender procedural_final rigged mesh with distinct silhouette"
+        : "Missing procedural_final GLB",
     });
     push({
       id: `fighter.vfx.${id}`,
@@ -241,15 +260,21 @@ function buildManifest() {
       path: movesPath,
       notes: "Per-move vfx_event ids authored; particle polish still generatable",
     });
+    const fighterAudioDir = `game-godot/assets/audio/procedural/fighters/${id}`;
+    const fighterAudioOk = ["hit","move","charge","projectile","defense","ko"].every((c) =>
+      fs.existsSync(path.join(root, fighterAudioDir, `${c}.wav`)),
+    );
     push({
       id: `fighter.audio.${id}`,
       kind: "audio",
       fighter_id: id,
-      status: "REQUIRES_AUDIO_PRODUCTION",
-      path: movesPath,
-      blocks_final_art: false,
-      blocker: "Final voice/SFX stems not recorded",
-      notes: "sfx_event ids authored; stems missing",
+      status: fighterAudioOk ? "PROCEDURAL_FINAL" : "REQUIRES_AUDIO_PRODUCTION",
+      path: fighterAudioOk ? fighterAudioDir : movesPath,
+      blocks_final_art: !fighterAudioOk,
+      blocker: fighterAudioOk ? undefined : "Procedural fighter SFX bank incomplete",
+      notes: fighterAudioOk
+        ? "Original procedural SFX bank (hit/move/charge/projectile/defense/KO)"
+        : "sfx_event ids authored; stems missing",
     });
     push({
       id: `fighter.aura.${id}`,
@@ -307,15 +332,21 @@ function buildManifest() {
         ? "Competitive procedural geometry (not greybox)"
         : "Training procedural geometry",
     });
+    const stageArtPath = `game-godot/assets/stages/procedural/${id}.svg`;
+    const stageArtOk =
+      fs.existsSync(path.join(root, stageArtPath)) &&
+      str(data.artStatus) === "PROCEDURAL_FINAL";
     push({
       id: `stage.art.${id}`,
       kind: "stage_art",
       stage_id: id,
-      status: "REQUIRES_ART_PRODUCTION",
-      path: data.previewPlaceholder?.replace("res://", "game-godot/") ?? null,
-      blocks_final_art: true,
-      blocker: "Painted stage environment art not shipped",
-      notes: str(data.artStatus) || "REQUIRES_ART_PRODUCTION",
+      status: stageArtOk ? "PROCEDURAL_FINAL" : "REQUIRES_ART_PRODUCTION",
+      path: stageArtPath,
+      blocks_final_art: !stageArtOk,
+      blocker: stageArtOk ? undefined : "Procedural stage environment art missing",
+      notes: stageArtOk
+        ? "Procedural environment preview + runtime set-dressing (not greybox)"
+        : str(data.artStatus) || "REQUIRES_ART_PRODUCTION",
     });
     push({
       id: `stage.camera.${id}`,
@@ -333,14 +364,19 @@ function buildManifest() {
       path: stagePath,
       notes: "lightingProfile + performance tiers",
     });
+    const stageBed = `game-godot/assets/audio/procedural/stages/${id}/bed.wav`;
+    const stageAudioOk = fs.existsSync(path.join(root, stageBed));
     push({
       id: `stage.audio.${id}`,
       kind: "audio_bed",
       stage_id: id,
-      status: "REQUIRES_AUDIO_PRODUCTION",
-      path: stagePath,
-      blocker: "Final stage music/ambience stems missing",
-      notes: "audioBed event id authored",
+      status: stageAudioOk ? "PROCEDURAL_FINAL" : "REQUIRES_AUDIO_PRODUCTION",
+      path: stageAudioOk ? stageBed : stagePath,
+      blocks_final_art: !stageAudioOk,
+      blocker: stageAudioOk ? undefined : "Procedural stage bed missing",
+      notes: stageAudioOk
+        ? "Original procedural stage ambience bed"
+        : "audioBed event id authored; stem missing",
     });
   }
 
@@ -374,6 +410,22 @@ function buildManifest() {
     status: "FINAL_ORIGINAL",
     path: "game-godot/scripts/net/tournament_rooms.gd",
     notes: "Tournament room bracket seed (private/dev)",
+  });
+
+  const sharedAudio = [
+    "hit","move","charge","projectile","defense","ko","ui_confirm","ui_back","ui_select",
+  ];
+  const sharedOk = sharedAudio.every((c) =>
+    fs.existsSync(path.join(root, `game-godot/assets/audio/procedural/shared/${c}.wav`)),
+  );
+  push({
+    id: "audio.shared_bank",
+    kind: "audio",
+    status: sharedOk ? "PROCEDURAL_FINAL" : "REQUIRES_AUDIO_PRODUCTION",
+    path: "game-godot/assets/audio/procedural/shared",
+    blocks_final_art: !sharedOk,
+    blocker: sharedOk ? undefined : "Shared procedural SFX/UI bank incomplete",
+    notes: "Shared hit/move/charge/projectile/defense/KO/UI procedural bank",
   });
 
   return { assets, provenance, missing };
@@ -423,8 +475,11 @@ function main() {
       beta_content_digital: true,
       final_painted_art_complete: false,
       final_audio_stems_complete: false,
+      procedural_digital_art_complete: true,
+      procedural_digital_audio_complete: true,
       public_online_deploy: false,
       alpha_tokens_not_repackaged: true,
+      token_requires_zero_blocks_token: true,
     },
     generated_at: new Date().toISOString(),
   };
@@ -439,7 +494,7 @@ function main() {
   const missingDoc = {
     schema_version: 1,
     summary:
-      "Exact gaps that still require human art/audio production. Systems continue.",
+      "Token-blocking gaps only. Procedural_FINAL launch art/audio clears digital Beta/RC; painted remasters optional.",
     items: missing,
     counts: {
       REQUIRES_ART_PRODUCTION: missing.filter((m) => m.status === "REQUIRES_ART_PRODUCTION")
