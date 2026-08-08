@@ -127,49 +127,16 @@ func _setup_hud_panels() -> void:
 	_update_timer_label()
 
 func _build_stage() -> void:
-	for c in stage_root.get_children():
-		c.queue_free()
 	var stage_data: Dictionary = GameState.load_stage(GameState.stage_id)
+	if str(stage_data.get("id", "")) == "":
+		stage_data["id"] = GameState.stage_id
 	blast = stage_data.get("blastZones", {})
-	var bg := ColorRect.new()
-	bg.color = Color(0.04, 0.06, 0.12)
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	bg.size = Vector2(1920, 1080)
-	bg.z_index = -10
-	stage_root.add_child(bg)
-	if not DeviceRoleRuntime.reduce_motion:
-		for i in range(3):
-			var band := ColorRect.new()
-			band.color = Color(0.08, 0.12, 0.22, 0.35)
-			band.size = Vector2(2200, 18)
-			band.position = Vector2(-1100, -280 + i * 120)
-			band.rotation = -0.08 + i * 0.04
-			band.z_index = -9
-			stage_root.add_child(band)
-	var main: Dictionary = stage_data.get("mainPlatform", {})
-	_add_platform(main)
-	for p in stage_data.get("sidePlatforms", []):
-		_add_platform(p)
-
-func _add_platform(p: Dictionary) -> void:
-	var body := StaticBody2D.new()
-	var shape := CollisionShape2D.new()
-	var rect := RectangleShape2D.new()
-	rect.size = Vector2(p.width, p.height)
-	shape.shape = rect
-	body.position = Vector2(p.x, p.y + p.height / 2.0)
-	body.add_child(shape)
-	var vis := ColorRect.new()
-	vis.color = Color(0.12, 0.14, 0.22)
-	vis.size = rect.size
-	vis.position = Vector2(-rect.size.x / 2, -rect.size.y / 2)
-	body.add_child(vis)
-	var trim := ColorRect.new()
-	trim.color = Color(0.28, 0.55, 0.95, 0.85)
-	trim.size = Vector2(rect.size.x, 6)
-	trim.position = Vector2(-rect.size.x / 2, -rect.size.y / 2)
-	body.add_child(trim)
-	stage_root.add_child(body)
+	var reduce := false
+	var device = get_node_or_null("/root/DeviceRoleRuntime")
+	if device != null:
+		reduce = bool(device.reduce_motion)
+	var builder = load("res://scripts/battle/stage_procedural_builder.gd")
+	builder.build(stage_root, stage_data, reduce)
 
 func _spawn_fighters() -> void:
 	for c in fighters_root.get_children():

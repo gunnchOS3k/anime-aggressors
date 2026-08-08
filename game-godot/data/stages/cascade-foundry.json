@@ -2,8 +2,6 @@
   "id": "cascade-foundry",
   "displayName": "Cascade Foundry",
   "layoutType": "splitPlatform",
-  "artStatus": "REQUIRES_ART_PRODUCTION",
-  "productionStatus": "greybox",
   "mainPlatform": { "x": 0, "y": 290, "width": 700, "height": 40 },
   "sidePlatforms": [
     { "x": -300, "y": 210, "width": 140, "height": 22 },
@@ -17,6 +15,34 @@
   ],
   "blastZones": { "left": -540, "right": 540, "top": -360, "bottom": 450 },
   "ledges": true,
+  "hazardSockets": [
+    { "id": "slag_vent_l", "x": -180, "y": 250, "radius": 14 },
+    { "id": "slag_vent_r", "x": 180, "y": 250, "radius": 14 }
+  ],
+  "cameraProfile": {
+    "mode": "platform_fighter",
+    "minZoom": 0.88,
+    "maxZoom": 1.38,
+    "lerp": 0.13,
+    "deadzone": { "x": 75, "y": 55 }
+  },
+  "lightingProfile": {
+    "keyColor": "#ff8844",
+    "keyAlpha": 0.15,
+    "ambient": "#1a0c08",
+    "rim": "#ffaa66"
+  },
+  "performanceTier": {
+    "default": "high",
+    "low": { "particles": false, "bands": 1 },
+    "medium": { "particles": true, "bands": 2 },
+    "high": { "particles": true, "bands": 4 }
+  },
+  "a11y": { "highContrastEdges": true, "colorblindMarkers": true },
+  "audioBed": { "event": "bed_foundry", "status": "REQUIRES_AUDIO_PRODUCTION" },
   "previewPlaceholder": "res://assets/placeholder/stage_cascade-foundry.svg",
-  "notes": "Alpha greybox — layout only. Final art REQUIRES_ART_PRODUCTION."
+  "artStatus": "REQUIRES_ART_PRODUCTION",
+  "productionStatus": "procedural_final",
+  "geometryStatus": "PROCEDURAL_FINAL",
+  "notes": "Launch competitive geometry PROCEDURAL_FINAL. Painted art REQUIRES_ART_PRODUCTION."
 }

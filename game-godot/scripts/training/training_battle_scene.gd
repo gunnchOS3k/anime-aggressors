@@ -38,18 +38,10 @@ func _ready() -> void:
 func _build_stage() -> void:
 	var stage_id := GameState.stage_id if GameState.stage_id != "" else "training-grid"
 	var stage_data: Dictionary = GameState.load_stage(stage_id)
-	var main: Dictionary = stage_data.get("mainPlatform", {})
-	_add_platform(main)
-
-func _add_platform(p: Dictionary) -> void:
-	var body := StaticBody2D.new()
-	var shape := CollisionShape2D.new()
-	var rect := RectangleShape2D.new()
-	rect.size = Vector2(p.width, p.height)
-	shape.shape = rect
-	body.position = Vector2(p.x, p.y + p.height / 2.0)
-	body.add_child(shape)
-	stage_root.add_child(body)
+	if str(stage_data.get("id", "")) == "":
+		stage_data["id"] = stage_id
+	var builder = load("res://scripts/battle/stage_procedural_builder.gd")
+	builder.build(stage_root, stage_data, false)
 
 func _spawn_fighters() -> void:
 	var stage_data: Dictionary = GameState.load_stage(GameState.stage_id if GameState.stage_id != "" else "training-grid")

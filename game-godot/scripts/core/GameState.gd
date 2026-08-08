@@ -21,7 +21,7 @@ var training_dummy_mode: String = "cpu"
 var last_winner_slot: int = -1
 
 ## Arcade ladder (Alpha minimum mode beyond Versus + Training).
-var mode: String = "versus"  # versus | training | arcade | tutorial | hazards
+var mode: String = "versus"  # versus | training | arcade | tutorial | hazards | team | challenges | online_unranked | online_ranked | tournament
 var arcade_active: bool = false
 var arcade_index: int = 0
 var arcade_seed: int = 7
@@ -29,6 +29,19 @@ var arcade_player_id: String = "ember-vale"
 var arcade_wins: int = 0
 var arcade_complete: bool = false
 var arcade_failed: bool = false
+
+## Team / challenges (Beta modes).
+var team_mode: bool = false
+var team_size: int = 2
+var challenge_id: String = ""
+var challenge_objective: String = ""
+var challenge_time_limit: int = 90
+var challenge_target_damage: float = 100.0
+
+## Online architecture selection (private/dev).
+var online_queue: String = "private"  # private | unranked | ranked | tournament
+var save_version: int = 2
+const SAVE_VERSION_CURRENT: int = 2
 
 ## Tutorial / first-run interactive path.
 var first_run_pending: bool = true
@@ -156,6 +169,7 @@ func skip_tutorial() -> void:
 func begin_hazards_mode() -> void:
 	mode = "hazards"
 	arcade_active = false
+	team_mode = false
 	hazards_enabled = true
 	items_enabled = true
 	stocks = 3
@@ -166,6 +180,81 @@ func begin_hazards_mode() -> void:
 	p2_is_cpu = true
 	reset_match()
 
+
+func begin_team_mode() -> void:
+	mode = "team"
+	arcade_active = false
+	team_mode = true
+	team_size = 2
+	team_attack = false
+	hazards_enabled = false
+	items_enabled = false
+	stocks = 3
+	match_timer_seconds = 180
+	match_type = "stock"
+	ruleset_id = "team-2v2"
+	p1_is_cpu = false
+	p2_is_cpu = true
+	cpu_level = clampi(cpu_level, 1, 5)
+	reset_match()
+
+
+const CHALLENGES := [
+	{"id": "damage_100", "name": "Break 100%", "objective": "damage", "target": 100.0, "time": 90, "stage": "training-grid"},
+	{"id": "ko_90s", "name": "KO in 90s", "objective": "ko", "target": 1.0, "time": 90, "stage": "skyline-arena"},
+	{"id": "survive_stocks", "name": "Hold 1 Stock", "objective": "survive", "target": 1.0, "time": 60, "stage": "void-pier"},
+	{"id": "arcade_sprint", "name": "Two-Bout Sprint", "objective": "wins", "target": 2.0, "time": 240, "stage": "neon-rooftops"},
+]
+
+
+func begin_challenge(challenge_index: int = 0) -> void:
+	var idx := clampi(challenge_index, 0, CHALLENGES.size() - 1)
+	var c: Dictionary = CHALLENGES[idx]
+	mode = "challenges"
+	arcade_active = false
+	team_mode = false
+	challenge_id = str(c.id)
+	challenge_objective = str(c.objective)
+	challenge_time_limit = int(c.time)
+	challenge_target_damage = float(c.target)
+	hazards_enabled = false
+	items_enabled = false
+	stage_id = str(c.stage)
+	match_timer_seconds = challenge_time_limit
+	stocks = 1 if challenge_objective == "ko" or challenge_objective == "survive" else 3
+	match_type = "stock"
+	ruleset_id = "challenge-%s" % challenge_id
+	p1_is_cpu = false
+	p2_is_cpu = true
+	cpu_level = 3
+	reset_match()
+
+
+func begin_online_queue(queue: String) -> void:
+	online_queue = queue
+	mode = "online_%s" % queue if queue != "private" and queue != "tournament" else ("online_private" if queue == "private" else "tournament")
+	arcade_active = false
+	team_mode = false
+	hazards_enabled = false
+	items_enabled = false
+	p2_is_cpu = false
+	reset_match()
+
+
+func migrate_save_if_needed(cfg: ConfigFile) -> Dictionary:
+	## Digital RC save migration: v1 → v2 adds mode prefs + online queue.
+	var from_ver := int(cfg.get_value("meta", "save_version", 1))
+	var migrated := false
+	if from_ver < 2:
+		if not cfg.has_section_key("modes", "last_mode"):
+			cfg.set_value("modes", "last_mode", mode)
+		if not cfg.has_section_key("online", "queue"):
+			cfg.set_value("online", "queue", "private")
+		cfg.set_value("meta", "save_version", SAVE_VERSION_CURRENT)
+		migrated = true
+		from_ver = SAVE_VERSION_CURRENT
+	save_version = from_ver
+	return {"ok": true, "from": 1 if migrated else from_ver, "to": save_version, "migrated": migrated}
 
 func begin_arcade(player_id: String = "") -> void:
 	mode = "arcade"
@@ -256,7 +345,9 @@ func ensure_save_loaded() -> void:
 	if err != OK:
 		unlocked_fighters = roster_ids()
 		unlocked_stages = production_stage_ids()
+		save_version = SAVE_VERSION_CURRENT
 		return
+	migrate_save_if_needed(cfg)
 	career_wins = int(cfg.get_value("career", "wins", 0))
 	career_losses = int(cfg.get_value("career", "losses", 0))
 	career_matches = int(cfg.get_value("career", "matches", 0))
@@ -268,11 +359,14 @@ func ensure_save_loaded() -> void:
 	damage_ratio = float(cfg.get_value("rules", "damage_ratio", 1.0))
 	team_attack = bool(cfg.get_value("rules", "team_attack", false))
 	ruleset_preset_name = str(cfg.get_value("rules", "preset", "default"))
+	online_queue = str(cfg.get_value("online", "queue", "private"))
+	mode = str(cfg.get_value("modes", "last_mode", mode))
 
 
 func _persist_save() -> void:
 	var cfg := ConfigFile.new()
 	cfg.load("user://aa_save.cfg")
+	cfg.set_value("meta", "save_version", SAVE_VERSION_CURRENT)
 	cfg.set_value("career", "wins", career_wins)
 	cfg.set_value("career", "losses", career_losses)
 	cfg.set_value("career", "matches", career_matches)
@@ -287,8 +381,9 @@ func _persist_save() -> void:
 	cfg.set_value("rules", "stocks", stocks)
 	cfg.set_value("rules", "cpu_level", cpu_level)
 	cfg.set_value("rules", "timer", match_timer_seconds)
+	cfg.set_value("modes", "last_mode", mode)
+	cfg.set_value("online", "queue", online_queue)
 	cfg.save("user://aa_save.cfg")
-
 
 func save_ruleset_preset(name: String) -> void:
 	ruleset_preset_name = name
