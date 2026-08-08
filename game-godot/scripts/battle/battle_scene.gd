@@ -1,6 +1,7 @@
 extends Node2D
 const _DataLoader = preload("res://scripts/data/data_loader.gd")
 const _BattleHudPanel = preload("res://scripts/ui/battle_hud_panel.gd")
+const _BattleSim = preload("res://scripts/battle/battle_sim.gd")
 
 @onready var fighters_root: Node2D = $Fighters
 @onready var stage_root: Node2D = $Stage
@@ -35,7 +36,7 @@ func _ready() -> void:
 	_apply_device_role()
 	_time_remaining = float(GameState.match_timer_seconds)
 	_time_enabled = GameState.match_timer_seconds > 0 and GameState.match_type != "stock_untimed"
-	_battle_sim = BattleSim.new()
+	_battle_sim = _BattleSim.new()
 	add_child(_battle_sim)
 	_battle_sim.bind_fighters([fighter1, fighter2])
 	var show_debug := OS.is_debug_build()

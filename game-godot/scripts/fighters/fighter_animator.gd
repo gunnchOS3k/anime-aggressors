@@ -1,5 +1,6 @@
 extends Node
 class_name FighterAnimator
+const _FighterStates = preload("res://scripts/fighters/fighter_states.gd")
 
 ## Proxy AnimationPlayer clips — labeled PROXY until final authored GLB art lands.
 
@@ -21,7 +22,7 @@ func setup(fighter, body: ColorRect) -> void:
 	add_child(_proxy_label)
 
 func play_for_state(state: String) -> void:
-	var clip := FighterStates.animation_for_state(state)
+	var clip: String = str(_FighterStates.animation_for_state(state))
 	if _player.has_animation(clip):
 		if _player.current_animation != clip or not _player.is_playing():
 			_player.play(clip)

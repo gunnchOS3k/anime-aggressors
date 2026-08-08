@@ -404,10 +404,10 @@ for (const a of P2_ACTIONS) {
 }
 ok("P1/P2 input actions");
 
-if (/not in FighterStates\.is_attack_state/.test(fighterSrc)) {
+if (/not in _?FighterStates\.is_attack_state/.test(fighterSrc)) {
   fail("fighter.gd misuses `not in FighterStates.is_attack_state(...)`");
 }
-if (!fighterSrc.includes("not FighterStates.is_attack_state(")) {
+if (!/not _?FighterStates\.is_attack_state\(/.test(fighterSrc)) {
   fail("fighter.gd missing correct is_attack_state boolean check");
 }
 ok("movement attack-state boolean check");

@@ -1,10 +1,13 @@
 extends Node
 class_name HitResolver
+const _CombatFeedback = preload("res://scripts/combat/combat_feedback.gd")
+const _AuraScaler = preload("res://scripts/combat/aura_scaler.gd")
+const _CombatMath = preload("res://scripts/combat/combat_math.gd")
 
 signal hit_confirmed(attacker: Node, defender: Node, info: Dictionary)
 
 var _logs: Array = []
-var combat_feedback: CombatFeedback
+var combat_feedback: Node
 
 func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_pct: float) -> void:
 	if attacker == null or defender == null:
@@ -13,14 +16,14 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 		return
 	var scaled := move
 	if attacker.has_method("get_aura"):
-		scaled = AuraScaler.apply_to_move(move, attacker.get_aura())
+		scaled = _AuraScaler.apply_to_move(move, attacker.get_aura())
 	var weight: float = 100.0
 	if defender.has_method("get_weight"):
 		weight = defender.get_weight()
 	var dealt: float = float(scaled.get("damage", 0.0))
 	if attacker.has_method("get_damage_dealt_mult"):
 		dealt *= attacker.get_damage_dealt_mult()
-	var kb := CombatMath.knockback_vector(
+	var kb: Vector2 = _CombatMath.knockback_vector(
 		defender.damage_percent if "damage_percent" in defender else attacker_damage_pct,
 		float(scaled.get("base_knockback", 6.0)),
 		float(scaled.get("knockback_growth", 1.1)),
@@ -40,8 +43,8 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 	}
 	if combat_feedback:
 		info = combat_feedback.apply_hit(attacker, defender, scaled, info)
-	elif attacker.has_node("CombatFeedback"):
-		var fb: CombatFeedback = attacker.get_node("CombatFeedback")
+	elif attacker.has_node("_CombatFeedback"):
+		var fb = attacker.get_node("_CombatFeedback")
 		info = fb.apply_hit(attacker, defender, scaled, info)
 	if defender.has_method("receive_hit"):
 		defender.receive_hit(attacker, info)

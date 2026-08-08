@@ -1,9 +1,12 @@
 extends SceneTree
 
 ## Headless smoke runner — `godot --path game-godot --headless -s res://tests/smoke_runner.gd`
+## Always quits (never hang on suite errors). Prefer class_name suites under Godot 4.5 `-s`.
+
 
 func _init() -> void:
 	call_deferred("_run_all")
+
 
 func _suites() -> Array:
 	# Preload all suites: Godot 4.5 --script runs before global class_name registration.
@@ -19,15 +22,34 @@ func _suites() -> Array:
 		["match_loop", preload("res://tests/smoke_match_loop.gd")],
 	]
 
+
+func _invoke(suite: GDScript) -> bool:
+	# class_name scripts expose static run() on the Script resource under -s.
+	if suite == null:
+		push_error("smoke suite failed to load")
+		return false
+	if suite.has_method("run"):
+		return bool(suite.call("run"))
+	# Fallback: instantiate (covers non-static / broken static exposure).
+	var inst = suite.new()
+	if inst != null and inst.has_method("run"):
+		return bool(inst.call("run"))
+	push_error("smoke suite missing run()")
+	return false
+
+
 func _run_all() -> void:
 	var Assert = preload("res://tests/smoke_assert.gd")
 	var failed := 0
 	for entry in _suites():
 		var name: String = entry[0]
-		var suite = entry[1]
+		var suite: GDScript = entry[1]
 		Assert.reset()
 		print("[smoke] running %s" % name)
-		if not suite.run():
+		var ok := false
+		# Isolate suite failures so later suites still run and we always quit.
+		ok = _invoke(suite)
+		if not ok:
 			failed += 1
 			print("[smoke] FAIL %s:\n%s" % [name, Assert.summary()])
 		else:
