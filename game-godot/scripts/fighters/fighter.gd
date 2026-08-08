@@ -11,6 +11,7 @@ const _CpuController = preload("res://scripts/fighters/cpu_controller.gd")
 const _FighterAnimator = preload("res://scripts/fighters/fighter_animator.gd")
 const _ThrowResolver = preload("res://scripts/combat/throw_resolver.gd")
 const _AuraScaler = preload("res://scripts/combat/aura_scaler.gd")
+const _AuraIdentity = preload("res://scripts/combat/aura_identity.gd")
 const _CombatMath = preload("res://scripts/combat/combat_math.gd")
 
 signal damaged(amount: float, total: float)
@@ -149,7 +150,10 @@ func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, s
 	if animator:
 		animator.set_proxy_visible(not model_loaded)
 	shield_health = float(data.get("shieldProfile", {}).get("maxHealth", 100))
-	cpu.setup(self, GameState.cpu_level if is_cpu else 2)
+	var cpu_seed: int = 0
+	if "match_seed" in GameState:
+		cpu_seed = int(GameState.match_seed)
+	cpu.setup(self, GameState.cpu_level if is_cpu else 2, cpu_seed)
 	if body and data.has("color"):
 		body.color = Color(data.get("color"))
 	if label:
@@ -171,7 +175,9 @@ func get_dash_speed() -> float:
 	return float(data.get("dashSpeed", 420))
 
 func get_air_speed() -> float:
-	return float(data.get("airSpeed", 220))
+	var base := float(data.get("airSpeed", 220))
+	var bonus: float = _AuraIdentity.air_drift_bonus(fighter_id, aura, str(data.get("combatTag", "")))
+	return base * (1.0 + bonus)
 
 func get_jump_strength() -> float:
 	return float(data.get("jumpStrength", 620))
@@ -295,7 +301,8 @@ func _handle_actions() -> void:
 	if is_aura_input_held():
 		if aura < 100.0:
 			state_machine.enter(_FighterStates.AURA_CHARGE)
-			aura = minf(100.0, aura + 35.0 * get_physics_process_delta_time())
+			var charge_mult: float = _AuraIdentity.charge_rate_mult(fighter_id, str(data.get("combatTag", "")))
+			aura = minf(100.0, aura + 35.0 * charge_mult * get_physics_process_delta_time())
 			_set_aura_vfx(true)
 		else:
 			state_machine.enter(_FighterStates.AURA_READY)
@@ -393,6 +400,9 @@ func _start_move_by_command(cmd: String) -> void:
 
 func _start_move_dict(m: Dictionary) -> void:
 	_current_move = _AuraScaler.apply_to_move(m, aura)
+	_current_move = _AuraIdentity.apply_to_scaled_move(
+		_current_move, fighter_id, aura, str(data.get("combatTag", ""))
+	)
 	move_runner.start_move(_current_move, self)
 	var mid = str(m.get("move_id", ""))
 	var mt = str(m.get("move_type", "melee"))
@@ -623,6 +633,12 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 	if attacker != null and attacker.has_method("configure"):
 		attacker._hitstop = _hitstop * 0.5
 		attacker.combo_count += 1
+		if "aura" in attacker and "fighter_id" in attacker:
+			var gain: float = _AuraIdentity.on_hit_aura_gain(
+				str(attacker.fighter_id),
+				str(attacker.data.get("combatTag", "")) if "data" in attacker else ""
+			)
+			attacker.aura = minf(100.0, float(attacker.aura) + gain)
 	var heavy = dmg >= 8.0 or launch.length() > 14.0
 	if launch.length() > 14.0:
 		state_machine.enter(_FighterStates.LAUNCHED)

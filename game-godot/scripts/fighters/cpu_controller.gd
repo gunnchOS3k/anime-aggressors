@@ -1,68 +1,167 @@
 extends RefCounted
 class_name CpuController
 
-## Tiered CPU behavior using fighter archetype tags from JSON.
+## Competitive CPU: observation-only decisions, seeded RNG, difficulty tiers 1–5.
+## Forbidden: reading opponent private aura / move runner internals / writing opponent state.
+
+const TIER_NAMES := ["", "novice", "standard", "skilled", "expert", "master"]
 
 var level: int = 2
 var _timer: float = 0.0
 var _fighter
+var _rng := RandomNumberGenerator.new()
+var _seed: int = 0
+var _obs_cache: Dictionary = {}
 
-func setup(fighter, cpu_level: int) -> void:
+
+func setup(fighter, cpu_level: int, match_seed: int = 0) -> void:
 	_fighter = fighter
-	level = clampi(cpu_level, 1, 4)
+	level = clampi(cpu_level, 1, 5)
+	_seed = match_seed if match_seed != 0 else int(hash(str(fighter.fighter_id) + str(fighter.slot) + str(cpu_level)))
+	_rng.seed = _seed
+	_timer = 0.0
+
+
+func set_seed(seed_value: int) -> void:
+	_seed = seed_value
+	_rng.seed = seed_value
+
 
 func tick(delta: float, opponent: Node2D) -> void:
 	if _fighter == null or opponent == null:
 		return
 	_timer -= delta
-	var dx: float = float(opponent.global_position.x) - float(_fighter.global_position.x)
+	var obs := observe(opponent)
+	_obs_cache = obs
+	_act(obs, delta)
+
+
+## Public observation model — only externally visible combat facts.
+func observe(opponent: Node2D) -> Dictionary:
+	var self_pos: Vector2 = _fighter.global_position
+	var opp_pos: Vector2 = opponent.global_position
+	var dx: float = opp_pos.x - self_pos.x
+	var dy: float = opp_pos.y - self_pos.y
 	var dist := absf(dx)
+	var opp_attacking := false
+	var opp_shielding := false
+	var opp_hitstun := false
+	var opp_airborne := true
+	if opponent.has_method("is_on_floor"):
+		opp_airborne = not opponent.is_on_floor()
+	if "shielding" in opponent:
+		opp_shielding = bool(opponent.shielding)
+	if "state_machine" in opponent and opponent.state_machine != null:
+		var st: String = str(opponent.state_machine.current_state)
+		opp_attacking = st.contains("attack") or st.contains("special") or st.contains("throw") or st.contains("aura_burst")
+		opp_hitstun = st.contains("hitstun") or st.contains("hurt") or st.contains("launch") or st.contains("tumble")
+	# Visible percents / stocks only — never opponent.aura or private move frames.
+	var opp_pct: float = float(opponent.damage_percent) if "damage_percent" in opponent else 0.0
+	var opp_stocks: int = int(opponent.stocks) if "stocks" in opponent else 1
+	var self_pct: float = float(_fighter.damage_percent)
+	var self_aura: float = float(_fighter.aura)  # own meter is legal
 	var tags: Array = _fighter.data.get("cpuBehaviorTags", [])
-	var approach := dist > 70.0
-	var in_range := dist < 95.0
+	return {
+		"dx": dx,
+		"dy": dy,
+		"dist": dist,
+		"approach": dist > 70.0,
+		"in_range": dist < 95.0,
+		"close": dist < 40.0,
+		"opp_attacking": opp_attacking,
+		"opp_shielding": opp_shielding,
+		"opp_hitstun": opp_hitstun,
+		"opp_airborne": opp_airborne,
+		"opp_pct": opp_pct,
+		"opp_stocks": opp_stocks,
+		"self_pct": self_pct,
+		"self_aura": self_aura,
+		"self_on_floor": _fighter.is_on_floor(),
+		"tags": tags,
+		"facing_toward": signf(dx) == float(_fighter.facing) or absf(dx) < 8.0,
+	}
 
+
+func _act(obs: Dictionary, _delta: float) -> void:
+	var reaction := _reaction_chance()
+	# Tier 1: approach / spacing only.
 	if level >= 1:
-		if approach and _fighter.is_on_floor():
-			_sim_axis(signf(dx))
-		elif dist < 40.0 and _fighter.is_on_floor():
-			_sim_axis(-signf(dx) * 0.5)
+		if obs.approach and obs.self_on_floor:
+			_sim_axis(signf(obs.dx))
+		elif obs.close and obs.self_on_floor:
+			_sim_axis(-signf(obs.dx) * 0.5)
 
+	# Tier 2: jumps + shield vs visible attack windups.
 	if level >= 2:
-		if _fighter.is_on_floor() and randf() < 0.008 * level:
+		if obs.self_on_floor and _chance(0.006 * level):
 			_sim_jump()
-		if in_range and randf() < 0.01 * level:
+		if obs.opp_attacking and obs.in_range and _chance(reaction):
 			_sim_shield(true)
-		elif randf() < 0.02:
+		elif obs.in_range and _chance(0.008 * level):
+			_sim_shield(true)
+		elif _chance(0.02):
 			_sim_shield(false)
 
+	# Tier 3: punish / poke on timer using observed range & hitstun.
 	if level >= 3 and _timer <= 0.0:
-		_timer = 0.25 + randf() * 0.45
-		if in_range:
-			if randf() < 0.35:
+		_timer = _decision_interval()
+		if obs.opp_hitstun and obs.in_range:
+			_sim_attack("attack_neutral" if _chance(0.55) else "special_neutral")
+		elif obs.in_range:
+			if _chance(0.3):
 				_sim_attack("special_neutral")
-			elif randf() < 0.25:
+			elif _chance(0.22):
 				_sim_dodge()
 			else:
 				_sim_attack("attack_neutral")
-		elif _fighter.is_on_floor() and randf() < 0.2:
+		elif obs.self_on_floor and _chance(0.18):
 			_sim_jump()
 
+	# Tier 4–5: archetype play + legal aura (charge/burst via inputs only — no aura writes).
 	if level >= 4 and _timer <= 0.0:
-		_timer = 0.2 + randf() * 0.35
-		if "zoner" in tags and dist < 140.0:
-			_sim_axis(-signf(dx))
-			if randf() < 0.3:
+		_timer = _decision_interval() * 0.85
+		var tags: Array = obs.tags
+		if "zoner" in tags and obs.dist < 140.0:
+			_sim_axis(-signf(obs.dx))
+			if _chance(0.28):
 				_sim_attack("special_neutral")
-		elif "rushdown" in tags and dist > 60.0:
-			_sim_axis(signf(dx))
-		elif "acrobat" in tags and randf() < 0.25:
+		elif "rushdown" in tags and obs.dist > 60.0:
+			_sim_axis(signf(obs.dx))
+		elif "acrobat" in tags and _chance(0.22):
 			_sim_jump()
-		if _fighter.aura >= 100.0 and in_range and randf() < 0.35:
+		# Own aura only; never set aura = 100.
+		if obs.self_aura >= 100.0 and obs.in_range and _chance(0.32 + 0.05 * float(level)):
 			_sim_aura_burst()
-		elif _fighter.aura < 40.0 and randf() < 0.15:
+		elif obs.self_aura < 40.0 and _chance(0.12 + 0.03 * float(level)):
 			_sim_aura_charge()
-		if _fighter.damage_percent > 80.0 and dist > 120.0:
-			_sim_axis(signf(dx) * -1.0)
+		if obs.self_pct > 80.0 and obs.dist > 120.0:
+			_sim_axis(-signf(obs.dx))
+
+	if level >= 5 and obs.opp_attacking and obs.close and _chance(reaction * 1.2):
+		_sim_dodge()
+
+
+func _reaction_chance() -> float:
+	match level:
+		1: return 0.04
+		2: return 0.08
+		3: return 0.14
+		4: return 0.22
+		_: return 0.32
+
+
+func _decision_interval() -> float:
+	match level:
+		1: return 0.55 + _rng.randf() * 0.35
+		2: return 0.35 + _rng.randf() * 0.3
+		3: return 0.25 + _rng.randf() * 0.25
+		4: return 0.18 + _rng.randf() * 0.2
+		_: return 0.12 + _rng.randf() * 0.15
+
+
+func _chance(p: float) -> bool:
+	return _rng.randf() < clampf(p, 0.0, 1.0)
+
 
 func _sim_axis(v: float) -> void:
 	var slot: int = int(_fighter.slot)
@@ -76,9 +175,11 @@ func _sim_axis(v: float) -> void:
 		Input.action_release("p%d_left" % slot)
 		Input.action_release("p%d_right" % slot)
 
+
 func _sim_jump() -> void:
 	Input.action_press("p%d_jump" % _fighter.slot)
 	_fighter.call_deferred("_release_action", "p%d_jump" % _fighter.slot)
+
 
 func _sim_shield(on: bool) -> void:
 	if on:
@@ -86,18 +187,25 @@ func _sim_shield(on: bool) -> void:
 	else:
 		Input.action_release("p%d_shield" % _fighter.slot)
 
+
 func _sim_attack(cmd: String) -> void:
 	_fighter.queue_attack_command(cmd)
+
 
 func _sim_dodge() -> void:
 	Input.action_press("p%d_dodge" % _fighter.slot)
 	_fighter.call_deferred("_release_action", "p%d_dodge" % _fighter.slot)
 
+
 func _sim_aura_charge() -> void:
+	# Charge via legal inputs only (shield + special).
 	Input.action_press("p%d_shield" % _fighter.slot)
 	Input.action_press("p%d_special" % _fighter.slot)
 
+
 func _sim_aura_burst() -> void:
-	_fighter.aura = 100.0
+	# Must already have 100 aura from legal play — never forge meter.
+	if float(_fighter.aura) < 100.0:
+		return
 	Input.action_press("p%d_attack" % _fighter.slot)
 	_fighter.call_deferred("_release_action", "p%d_attack" % _fighter.slot)

@@ -445,7 +445,56 @@ const cpuSrc = readGodot("scripts/fighters/cpu_controller.gd");
 if (!cpuSrc.includes("level >= 1") || !cpuSrc.includes("level >= 4")) {
   fail("CPU levels do not map to behavior changes");
 }
+if (cpuSrc.includes("_fighter.aura = 100")) {
+  fail("CPU must not forge aura=100 (hidden-state cheating)");
+}
+if (!cpuSrc.includes("func observe")) {
+  fail("CPU missing observation model");
+}
 ok("CPU tiers");
+
+// Aura identity (script-level uniqueness, not YAML-only)
+if (!fs.existsSync(path.join(godotRoot, "scripts/combat/aura_identity.gd"))) {
+  fail("missing aura_identity.gd");
+}
+const auraIdSrc = readGodot("scripts/combat/aura_identity.gd");
+for (const id of ["ember-vale", "rook-ironside", "juno-spark", "kaia-windrow", "nix-calder", "orion-vell", "vesper-nyx"]) {
+  if (!auraIdSrc.includes(`"${id}"`)) fail(`aura_identity missing ${id}`);
+}
+const fighterSrcForAura = readGodot("scripts/fighters/fighter.gd");
+if (!fighterSrcForAura.includes("AuraIdentity") && !fighterSrcForAura.includes("aura_identity")) {
+  fail("fighter.gd must apply aura_identity in combat");
+}
+ok("aura identity combat scripts");
+
+// Arcade ladder mode
+if (!fs.existsSync(path.join(godotRoot, "scenes/menus/ArcadeScene.tscn"))) {
+  fail("missing ArcadeScene.tscn");
+}
+const modeSelectSrc = readGodot("scripts/menus/mode_select_scene.gd");
+if (!modeSelectSrc.includes("_on_arcade_pressed")) fail("mode select missing Arcade");
+const gsSrc = readGodot("scripts/core/GameState.gd");
+if (!gsSrc.includes("begin_arcade") || !gsSrc.includes("ARCADE_LADDER")) {
+  fail("GameState missing arcade ladder");
+}
+ok("arcade ladder mode");
+
+// Launch-stage greybox count (6 toward ADR; art still required)
+const prodStages = JSON.parse(fs.readFileSync(path.join(godotRoot, "data/stages/production_stages.json"), "utf8"));
+const stageList = prodStages.stages ?? [];
+if (stageList.length < 6) fail(`expected >=6 production stages, got ${stageList.length}`);
+for (const sid of ["cascade-foundry", "void-pier", "ember-courtyard"]) {
+  if (!stageList.includes(sid)) fail(`missing new greybox stage ${sid}`);
+  const sj = JSON.parse(fs.readFileSync(path.join(godotRoot, "data/stages", `${sid}.json`), "utf8"));
+  if (sj.artStatus !== "REQUIRES_ART_PRODUCTION") fail(`${sid} must mark REQUIRES_ART_PRODUCTION`);
+}
+ok("greybox stage count toward launch");
+
+// Batch match harness
+if (!fs.existsSync(path.join(godotRoot, "scripts/battle/batch_match_harness.gd"))) {
+  fail("missing batch_match_harness.gd");
+}
+ok("batch match harness");
 
 // Proxy animations
 if (!fs.existsSync(path.join(godotRoot, "scripts/fighters/fighter_animator.gd"))) {

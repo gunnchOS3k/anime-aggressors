@@ -11,8 +11,18 @@ func _ready() -> void:
 	if p1_label:
 		p1_label.text = p1.get("displayName", "P1")
 	if p2_label:
-		p2_label.text = p2.get("displayName", "P2") + (" (CPU)" if GameState.p2_is_cpu else "")
+		var cpu_tag := ""
+		if GameState.p2_is_cpu:
+			cpu_tag = " (CPU L%d)" % GameState.cpu_level
+		p2_label.text = p2.get("displayName", "P2") + cpu_tag
 	if stage_label:
-		stage_label.text = stage.get("displayName", GameState.stage_id)
+		var stage_name: String = str(stage.get("displayName", GameState.stage_id))
+		if GameState.arcade_active or GameState.mode == "arcade":
+			stage_name = "Arcade %d/%d — %s" % [
+				GameState.arcade_index + 1,
+				GameState.ARCADE_LADDER.size(),
+				stage_name,
+			]
+		stage_label.text = stage_name
 	await get_tree().create_timer(2.0).timeout
 	SceneRouter.go("battle")
