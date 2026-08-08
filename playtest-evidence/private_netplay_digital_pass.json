@@ -1,0 +1,273 @@
+{
+	"architecture": "host_authoritative_loopback_with_network_sim",
+	"components": {
+		"anti_tamper": {
+			"bad_errors": [
+				"integrity_fail",
+				"buttons_tamper_hack"
+			],
+			"fingerprint": "anime-alpha-private-1|proto=2|build=4.5-stable (official)",
+			"good": {
+				"build": "anime-alpha-private-1",
+				"errors": [],
+				"fingerprint": "anime-alpha-private-1|proto=2|build=4.5-stable (official)",
+				"ok": true
+			},
+			"ok": true,
+			"token_hint": "ANIME_PRIVATE_NETPLAY_DIGITAL_PASS"
+		},
+		"disconnect": {
+			"attempts": 3,
+			"ok": true
+		},
+		"matchmaking": {
+			"code": "AA-1000",
+			"ok": true,
+			"queue_pair": {
+				"ok": true,
+				"room": {
+					"build": "anime-alpha-private-1",
+					"code": "AA-1000",
+					"created_ms": 0.0,
+					"guests": [
+						"B"
+					],
+					"host": "A",
+					"spectators": [],
+					"status": "matched"
+				}
+			}
+		},
+		"network_sim": {
+			"alpha_claim": "PRIVATE_LOOPBACK_ONLY — network sim",
+			"loopback": {
+				"a_received": 48,
+				"alpha_claim": "PRIVATE_LOOPBACK_ONLY — network sim",
+				"b_received": 48,
+				"frames": 48,
+				"ok": true,
+				"stats_a": {
+					"alpha_claim": "PRIVATE_LOOPBACK_ONLY — network sim",
+					"clock_ms": 1133.56,
+					"delivered": 48,
+					"dropped": 0,
+					"jitter_ms": 5.0,
+					"latency_ms": 40.0,
+					"loss_rate": 0.0,
+					"queued": 0,
+					"sent": 48
+				},
+				"stats_b": {
+					"alpha_claim": "PRIVATE_LOOPBACK_ONLY — network sim",
+					"clock_ms": 1133.56,
+					"delivered": 48,
+					"dropped": 0,
+					"jitter_ms": 8.0,
+					"latency_ms": 70.0,
+					"loss_rate": 0.0,
+					"queued": 0,
+					"sent": 48
+				}
+			},
+			"loss": {
+				"alpha_claim": "PRIVATE_LOOPBACK_ONLY — network sim",
+				"attempts": 80,
+				"delivered": 56,
+				"dropped": 24,
+				"ok": true
+			},
+			"ok": true
+		},
+		"policy": {
+			"alpha_claim": "PRIVATE_LOOPBACK_ONLY — rollback/latency policy",
+			"delay_200": 3,
+			"delay_40": 2,
+			"ok": true,
+			"policy": {
+				"alpha_claim": "PRIVATE_LOOPBACK_ONLY — rollback/latency policy",
+				"checksum_interval_frames": 30,
+				"input_delay_frames": 2,
+				"max_frame_advantage": 3,
+				"max_rollback_frames": 8,
+				"rtt_delay_step_ms": 90.0,
+				"stall_timeout_ms": 3500.0
+			}
+		},
+		"protocol": {
+			"alpha_claim": "PRIVATE_LOOPBACK_ONLY — no public deploy",
+			"message_count": 5,
+			"ok": true,
+			"protocol_version": 2,
+			"types": 21
+		},
+		"replay": {
+			"chain": {
+				"checked": 12,
+				"mismatches": 0,
+				"ok": true
+			},
+			"frame_count": 12,
+			"ok": true,
+			"verify": {
+				"errors": [],
+				"frame_count": 12,
+				"ok": true
+			}
+		},
+		"rollback": {
+			"ok": true,
+			"rollback_count": 1,
+			"state": {
+				"current_frame": 10,
+				"desync_detected": false,
+				"history_len": 10,
+				"last_rollback_frame": 2,
+				"policy": {
+					"alpha_claim": "PRIVATE_LOOPBACK_ONLY — rollback/latency policy",
+					"checksum_interval_frames": 30,
+					"input_delay_frames": 2,
+					"max_frame_advantage": 3,
+					"max_rollback_frames": 8,
+					"rtt_delay_step_ms": 90.0,
+					"stall_timeout_ms": 3500.0
+				},
+				"rollback_count": 1
+			}
+		},
+		"session": {
+			"alpha_claim": "PRIVATE_LOOPBACK_ONLY — session state",
+			"final_state": "ended",
+			"ok": true
+		}
+	},
+	"features": [
+		"room_join",
+		"matchmaking_dev",
+		"input_sync",
+		"rollback",
+		"latency_jitter_loss_sim",
+		"reconnect",
+		"spectator",
+		"replay",
+		"version_compat",
+		"anti_tamper",
+		"disconnect_policy"
+	],
+	"join": {
+		"ok": true,
+		"room": {
+			"build": "anime-alpha-private-1",
+			"code": "AA-1000",
+			"created_ms": 0.0,
+			"guests": [
+				"AlphaGuest"
+			],
+			"host": "AlphaHost",
+			"spectators": [],
+			"status": "matched"
+		}
+	},
+	"lossy_ok": true,
+	"match": {
+		"frames": 96,
+		"guest_confirmed": 95,
+		"host_confirmed": 95,
+		"inputs_exchanged": 192,
+		"ok": true,
+		"replay_ok": {
+			"errors": [],
+			"frame_count": 96,
+			"ok": true
+		},
+		"rollbacks": 66,
+		"spectator_count": 1
+	},
+	"matchmaking_dev": {
+		"ok": true,
+		"room": {
+			"build": "anime-alpha-private-1",
+			"code": "AA-1000",
+			"created_ms": 0.0,
+			"guests": [
+				"Q2"
+			],
+			"host": "Q1",
+			"spectators": [],
+			"status": "matched"
+		}
+	},
+	"ok": true,
+	"public_deploy": false,
+	"reconnect": {
+		"attempted": true,
+		"attempts": 1,
+		"delivered_during_reconnect": 2,
+		"ok": true
+	},
+	"scope": "private_loopback_host_only",
+	"start": {
+		"guest": {
+			"alpha_claim": "PRIVATE_LOOPBACK_ONLY — session state",
+			"desync_detected": false,
+			"frame": 0,
+			"last_confirmed_frame": -1,
+			"lobby_id": "AA-1000",
+			"match_seed": 77,
+			"ok": true,
+			"players": [
+				{
+					"fighter_id": "ember-vale",
+					"id": 0,
+					"name": "AlphaHost",
+					"ready": true
+				},
+				{
+					"fighter_id": "rook-ironside",
+					"id": 1,
+					"name": "AlphaGuest",
+					"ready": true
+				}
+			],
+			"spectators": [
+				{
+					"name": "AlphaSpec"
+				}
+			],
+			"stage_id": "skyline-arena",
+			"state": "in_match"
+		},
+		"host": {
+			"alpha_claim": "PRIVATE_LOOPBACK_ONLY — session state",
+			"desync_detected": false,
+			"frame": 0,
+			"last_confirmed_frame": -1,
+			"lobby_id": "AA-1000",
+			"match_seed": 77,
+			"ok": true,
+			"players": [
+				{
+					"fighter_id": "ember-vale",
+					"id": 0,
+					"name": "AlphaHost",
+					"ready": true
+				},
+				{
+					"fighter_id": "rook-ironside",
+					"id": 1,
+					"name": "AlphaGuest",
+					"ready": true
+				}
+			],
+			"spectators": [
+				{
+					"name": "AlphaSpec"
+				}
+			],
+			"stage_id": "skyline-arena",
+			"state": "in_match"
+		},
+		"ok": true
+	},
+	"token": "ANIME_PRIVATE_NETPLAY_DIGITAL_PASS",
+	"token_earned": true
+}

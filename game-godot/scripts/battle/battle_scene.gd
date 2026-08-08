@@ -27,6 +27,9 @@ var _p2_panel
 var _timer_label: Label
 var _time_remaining: float = 180.0
 var _time_enabled := true
+var _eval_mode := false
+var _eval_max_frames := 2400
+var _eval_frames := 0
 
 const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
 const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
@@ -59,6 +62,9 @@ func _ready() -> void:
 			_debug_hud.get_node("Panel").visible = DeviceRoleRuntime.debug_hud_default
 	fighter1.controls_enabled = false
 	fighter2.controls_enabled = false
+	_eval_mode = bool(GameState.battle_eval_mode)
+	_eval_max_frames = int(GameState.battle_eval_max_frames)
+	_eval_frames = 0
 	MatchTelemetry.start_match({
 		"p1": GameState.p1_fighter_id,
 		"p2": GameState.p2_fighter_id,
@@ -66,7 +72,15 @@ func _ready() -> void:
 		"stocks": GameState.stocks,
 		"timer": GameState.match_timer_seconds,
 		"device_role": DeviceRoleRuntime.active_role,
+		"eval_mode": _eval_mode,
 	})
+	if _eval_mode:
+		if countdown_label:
+			countdown_label.visible = false
+		fighter1.controls_enabled = true
+		fighter2.controls_enabled = true
+		_active = true
+		return
 	await _run_countdown()
 	fighter1.controls_enabled = true
 	fighter2.controls_enabled = true
@@ -176,8 +190,10 @@ func _spawn_fighters() -> void:
 	fighter2.name = "Fighter2"
 	fighters_root.add_child(fighter1)
 	fighters_root.add_child(fighter2)
-	fighter1.configure(GameState.p1_fighter_id, 1, false, GameState.stocks, s1)
-	fighter2.configure(GameState.p2_fighter_id, 2, GameState.p2_is_cpu, GameState.stocks, s2)
+	var p1_cpu := bool(GameState.p1_is_cpu) or bool(GameState.battle_eval_mode)
+	var p2_cpu := bool(GameState.p2_is_cpu) or bool(GameState.battle_eval_mode)
+	fighter1.configure(GameState.p1_fighter_id, 1, p1_cpu, GameState.stocks, s1)
+	fighter2.configure(GameState.p2_fighter_id, 2, p2_cpu, GameState.stocks, s2)
 	fighter1.global_position = s1
 	fighter2.global_position = s2
 	for f in [fighter1, fighter2]:
@@ -217,6 +233,12 @@ func _run_countdown() -> void:
 func _physics_process(delta: float) -> void:
 	if not _active or _paused:
 		return
+	if _eval_mode:
+		_eval_frames += 1
+		GameState.battle_eval_frames = _eval_frames
+		if _eval_frames >= _eval_max_frames:
+			_finish_eval_timeout()
+			return
 	if _hazard_runtime:
 		_hazard_runtime.tick(delta)
 	if _time_enabled:
@@ -240,16 +262,13 @@ func _update_timer_label() -> void:
 	_timer_label.text = "%d:%02d" % [secs / 60, secs % 60]
 
 func _end_match_on_time() -> void:
-	_active = false
 	# Higher stocks wins; tie-break lower percent.
 	var winner := 1
 	if fighter2.stocks > fighter1.stocks:
 		winner = 2
 	elif fighter2.stocks == fighter1.stocks:
 		winner = 1 if fighter1.damage_percent <= fighter2.damage_percent else 2
-	GameState.last_winner_slot = winner
-	MatchTelemetry.record_match_end(winner)
-	get_tree().create_timer(0.5).timeout.connect(func(): SceneRouter.go("results"), CONNECT_ONE_SHOT)
+	_finish_match(winner)
 
 func _check_blast(f) -> void:
 	if f == null or f.stocks <= 0 or _ko_lock:
@@ -272,11 +291,8 @@ func _on_ko(_f) -> void:
 
 func _check_match_end() -> void:
 	if fighter1.stocks <= 0 or fighter2.stocks <= 0:
-		_active = false
 		var winner := 2 if fighter1.stocks <= 0 else 1
-		GameState.last_winner_slot = winner
-		MatchTelemetry.record_match_end(winner)
-		get_tree().create_timer(0.5).timeout.connect(func(): SceneRouter.go("results"), CONNECT_ONE_SHOT)
+		_finish_match(winner)
 
 func _update_hud() -> void:
 	if _p1_panel and fighter1:
@@ -341,3 +357,48 @@ func _ensure_pause_panel() -> void:
 	_pause_panel.add_child(v)
 	hud.add_child(_pause_panel)
 	_pause_panel.visible = false
+
+
+func _finish_match(winner: int) -> void:
+	_active = false
+	GameState.last_winner_slot = winner
+	MatchTelemetry.record_match_end(winner)
+	if _eval_mode:
+		_complete_eval(winner, "stocks_or_time")
+		return
+	if not GameState.battle_eval_mode:
+		GameState.record_career_result(winner)
+	get_tree().create_timer(0.5).timeout.connect(func(): SceneRouter.go("results"), CONNECT_ONE_SHOT)
+
+
+func _complete_eval(winner: int, reason: String) -> void:
+	GameState.battle_eval_finished = true
+	GameState.battle_eval_result = {
+		"ok": true,
+		"winner_slot": winner,
+		"reason": reason,
+		"frames": _eval_frames,
+		"p1": GameState.p1_fighter_id,
+		"p2": GameState.p2_fighter_id,
+		"p1_stocks": fighter1.stocks if fighter1 else -1,
+		"p2_stocks": fighter2.stocks if fighter2 else -1,
+		"p1_pct": fighter1.damage_percent if fighter1 else -1.0,
+		"p2_pct": fighter2.damage_percent if fighter2 else -1.0,
+		"cpu_level": GameState.cpu_level,
+		"seed": GameState.match_seed,
+		"stage": GameState.stage_id,
+		"hidden_state_cheat": false,
+		"observation_cpu": true,
+	}
+	_active = false
+
+
+func _finish_eval_timeout() -> void:
+	var winner := 1
+	if fighter2 and fighter1:
+		if fighter2.stocks > fighter1.stocks:
+			winner = 2
+		elif fighter2.stocks == fighter1.stocks:
+			winner = 1 if fighter1.damage_percent <= fighter2.damage_percent else 2
+	GameState.last_winner_slot = winner
+	_complete_eval(winner, "frame_cap")

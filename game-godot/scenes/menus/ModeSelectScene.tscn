@@ -26,9 +26,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -180.0
-offset_top = -240.0
+offset_top = -280.0
 offset_right = 180.0
-offset_bottom = 240.0
+offset_bottom = 280.0
 
 [node name="Title" type="Label" parent="VBox"]
 unique_name_in_owner = true
@@ -62,6 +62,11 @@ custom_minimum_size = Vector2(280, 72)
 layout_mode = 2
 text = "Items / Hazards"
 
+[node name="OnlinePrivate" type="Button" parent="VBox"]
+custom_minimum_size = Vector2(280, 72)
+layout_mode = 2
+text = "Private Netplay"
+
 [node name="FooterHint" type="Label" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
@@ -77,3 +82,4 @@ horizontal_alignment = 1
 [connection signal="pressed" from="VBox/Arcade" to="." method="_on_arcade_pressed"]
 [connection signal="pressed" from="VBox/Tutorial" to="." method="_on_tutorial_pressed"]
 [connection signal="pressed" from="VBox/Hazards" to="." method="_on_hazards_pressed"]
+[connection signal="pressed" from="VBox/OnlinePrivate" to="." method="_on_online_pressed"]

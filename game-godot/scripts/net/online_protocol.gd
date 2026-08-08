@@ -4,8 +4,9 @@ class_name OnlineProtocol
 ## Godot-side online protocol scaffold (Alpha architecture only).
 ## No public deploy claim — message shapes + validation for private lobby path.
 
-const PROTOCOL_VERSION := 1
-const ALPHA_CLAIM := "NOT_PUBLIC_ONLINE — protocol scaffold only"
+const PROTOCOL_VERSION := 2
+const ALPHA_CLAIM := "PRIVATE_LOOPBACK_ONLY — no public deploy"
+const PROTOCOL_SCOPE := "private_loopback_host"
 
 const MSG_HELLO := "hello"
 const MSG_JOIN_LOBBY := "join_lobby"
@@ -20,11 +21,21 @@ const MSG_SPECTATE := "spectate"
 const MSG_PING := "ping"
 const MSG_PONG := "pong"
 const MSG_DISCONNECT := "disconnect"
+const MSG_RECONNECT := "reconnect"
+const MSG_RECONNECT_ACK := "reconnect_ack"
+const MSG_MATCHMAKING_QUEUE := "matchmaking_queue"
+const MSG_MATCHMAKING_FOUND := "matchmaking_found"
+const MSG_REPLAY_CHUNK := "replay_chunk"
+const MSG_VERSION_CHECK := "version_check"
+const MSG_VERSION_OK := "version_ok"
+const MSG_TAMPER_ALERT := "tamper_alert"
 
 const ALL_TYPES := [
 	MSG_HELLO, MSG_JOIN_LOBBY, MSG_LOBBY_STATE, MSG_READY, MSG_START_MATCH,
 	MSG_INPUT, MSG_INPUT_ACK, MSG_CHECKSUM, MSG_DESYNC, MSG_SPECTATE,
-	MSG_PING, MSG_PONG, MSG_DISCONNECT,
+	MSG_PING, MSG_PONG, MSG_DISCONNECT, MSG_RECONNECT, MSG_RECONNECT_ACK,
+	MSG_MATCHMAKING_QUEUE, MSG_MATCHMAKING_FOUND, MSG_REPLAY_CHUNK,
+	MSG_VERSION_CHECK, MSG_VERSION_OK, MSG_TAMPER_ALERT,
 ]
 
 
@@ -66,6 +77,14 @@ static func validate(msg: Dictionary) -> Dictionary:
 			var s: Dictionary = msg.get("payload", {})
 			if not s.has("seed") or not s.has("roster"):
 				errors.append("start_incomplete")
+		MSG_RECONNECT:
+			var r: Dictionary = msg.get("payload", {})
+			if not r.has("lobby_id") or not r.has("player_id") or not r.has("last_confirmed_frame"):
+				errors.append("reconnect_incomplete")
+		MSG_VERSION_CHECK:
+			var vc: Dictionary = msg.get("payload", {})
+			if not vc.has("proto") or not vc.has("build"):
+				errors.append("version_incomplete")
 	return {
 		"ok": errors.is_empty(),
 		"errors": errors,

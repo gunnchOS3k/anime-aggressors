@@ -1,31 +1,31 @@
 {
-  "generated_at": "2026-08-08T00:52:47.523Z",
-  "commit_sha": "82d75d379eb57436f19dd7c3402284dd89af3b86",
+  "generated_at": "2026-08-08T01:22:00.470Z",
+  "commit_sha": "436af24d68279eefa10205becb9ed0dcad344241",
   "npm": {
     "validate_unity_spike": {
       "status": "pass",
-      "duration_ms": 152,
+      "duration_ms": 147,
       "output_tail": "\n> anime-aggressors@0.1.0 validate:unity-spike\n> node scripts/validate-unity-spike.mjs\n\nOK: Unity project folder\nOK: CombatProof scene\nOK: required C# scripts\nOK: required docs\nOK: Unity runbook + setup detector\nOK: move data\nOK: Godot frozen policy\nOK: proof checklist\nOK: Godot prototype preserved\nOK: no full migration overclaim\nvalidate-unity-spike: all checks passed\n"
     },
     "validate_full_scope": {
       "status": "pass",
-      "duration_ms": 184,
+      "duration_ms": 157,
       "output_tail": "hurt state recovery\nOK: debug overlay toggles\nOK: CPU tiers\nOK: aura identity combat scripts\nOK: arcade ladder mode\nOK: greybox stage count toward launch\nOK: batch match harness\nOK: wave d2 alpha-exit progress gates\nOK: proxy animations\nOK: training scene controls\nOK: debug HUD\nOK: battle sim\nOK: required scenes\nOK: scene script path sanity\nOK: core Godot scripts\nOK: audit doc status language\nOK: mobile playtest distribution\nOK: IP filename scan\nvalidate-full-scope-production: all checks passed\n"
     },
     "typecheck": {
       "status": "pass",
-      "duration_ms": 10011,
+      "duration_ms": 8841,
       "output_tail": "gressors/game-core@0.1.0 build\n> tsc\n\n\n> @anime-aggressors/rollback@0.1.0 build\n> tsc\n\n\n> @anime-aggressors/game-core@0.1.0 typecheck\n> tsc --noEmit\n\n\n> @anime-aggressors/rollback@0.1.0 typecheck\n> tsc --noEmit\n\n\n> @anime-aggressors/netplay@0.1.0 typecheck\n> tsc --noEmit\n\n\n> @anime-aggressors/edgeio@1.0.0 typecheck\n> tsc --noEmit\n\n\n> @anime-aggressors/messages@1.0.0 typecheck\n> tsc --noEmit\n\n\n> @gunnch/input@1.0.0 typecheck\n> tsc --noEmit\n\n\n> anime-aggressors-web@0.1.0 typecheck\n> tsc --noEmit\n\n"
     },
     "test_workspaces": {
       "status": "pass",
-      "duration_ms": 17777,
-      "output_tail": "ative direction docs (3.91ms)\n▶ unity combat proof spike validation\n  ✔ validate-unity-spike.mjs passes (58.761583ms)\n✔ unity combat proof spike validation (59.527042ms)\n▶ victory animations\n  ✔ each default fighter has a unique win animation (0.402334ms)\n  ✔ victory flavors differ between fighters (0.180584ms)\n  ✔ applyVictoryPose mutates pose (0.213167ms)\n✔ victory animations (1.352584ms)\nℹ tests 373\nℹ suites 128\nℹ pass 373\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 5365.624792\n"
+      "duration_ms": 14816,
+      "output_tail": "tive direction docs (2.052708ms)\n▶ unity combat proof spike validation\n  ✔ validate-unity-spike.mjs passes (48.304875ms)\n✔ unity combat proof spike validation (48.803ms)\n▶ victory animations\n  ✔ each default fighter has a unique win animation (0.378084ms)\n  ✔ victory flavors differ between fighters (0.128792ms)\n  ✔ applyVictoryPose mutates pose (0.115083ms)\n✔ victory animations (1.111375ms)\nℹ tests 373\nℹ suites 128\nℹ pass 373\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 4122.479584\n"
     },
     "build": {
       "status": "pass",
-      "duration_ms": 10869,
-      "output_tail": "bW3xz.js   15.22 kB │ gzip:   5.45 kB\ndist/assets/impactDummyDerbyView-C2pa5wai.js                  21.63 kB │ gzip:   7.53 kB\ndist/assets/ThreeGameRenderer-nTzE8Qh9.js                     24.12 kB │ gzip:   7.62 kB\ndist/assets/App-CdtAUmyT.js                                   29.10 kB │ gzip:   9.74 kB\ndist/assets/simulate-DzHhmxPd.js                              44.10 kB │ gzip:  12.93 kB\ndist/assets/index-DZxds9A5.js                                603.78 kB │ gzip: 154.75 kB\n✓ built in 1.36s\n"
+      "duration_ms": 9341,
+      "output_tail": "bW3xz.js   15.22 kB │ gzip:   5.45 kB\ndist/assets/impactDummyDerbyView-C2pa5wai.js                  21.63 kB │ gzip:   7.53 kB\ndist/assets/ThreeGameRenderer-nTzE8Qh9.js                     24.12 kB │ gzip:   7.62 kB\ndist/assets/App-CdtAUmyT.js                                   29.10 kB │ gzip:   9.74 kB\ndist/assets/simulate-DzHhmxPd.js                              44.10 kB │ gzip:  12.93 kB\ndist/assets/index-DZxds9A5.js                                603.78 kB │ gzip: 154.75 kB\n✓ built in 1.32s\n"
     }
   },
   "godot": {
@@ -40,7 +40,7 @@
     "smoke_runner": {
       "status": "pass",
       "exit_code": 0,
-      "output_tail": "Godot Engine v4.5.stable.official.876b29033 - https://godotengine.org\n\n[smoke] running boot\n[smoke] OK boot\n[smoke] running release_mode\n[smoke] OK release_mode\n[smoke] running data_load\n[smoke] OK data_load\n[smoke] running combat_depth\n[smoke] OK combat_depth\n[smoke] running wave_d_alpha\n[smoke] OK wave_d_alpha\n[smoke] running wave_d2_alpha_exit\n[smoke] OK wave_d2_alpha_exit\n[smoke] running device_a11y_telemetry\n[smoke] OK device_a11y_telemetry\n[smoke] running fighter_scene\n[smoke] OK fighter_scene\n[smoke] running training_scene\n[smoke] OK training_scene\n[smoke] running battle_scene\n[smoke] OK battle_scene\n[smoke] running match_loop\n[smoke] OK match_loop\n[smoke] all suites passed\n"
+      "output_tail": "Godot Engine v4.5.stable.official.876b29033 - https://godotengine.org\n\n[smoke] running boot\n[smoke] OK boot\n[smoke] running release_mode\n[smoke] OK release_mode\n[smoke] running data_load\n[smoke] OK data_load\n[smoke] running combat_depth\n[smoke] OK combat_depth\n[smoke] running wave_d_alpha\n[smoke] OK wave_d_alpha\n[smoke] running wave_d2_alpha_exit\n[smoke] OK wave_d2_alpha_exit\n[smoke] running anime_alpha_exit\n[smoke] OK anime_alpha_exit\n[smoke] running device_a11y_telemetry\n[smoke] OK device_a11y_telemetry\n[smoke] running fighter_scene\n[smoke] OK fighter_scene\n[smoke] running training_scene\n[smoke] OK training_scene\n[smoke] running battle_scene\n[smoke] OK battle_scene\n[smoke] running match_loop\n[smoke] OK match_loop\n[smoke] all suites passed\n"
     },
     "cli_missing_message": null
   },

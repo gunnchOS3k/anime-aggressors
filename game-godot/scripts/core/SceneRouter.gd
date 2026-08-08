@@ -11,6 +11,7 @@ const SCENES := {
 	"tutorial": "res://scenes/menus/TutorialScene.tscn",
 	"tutorial_battle": "res://scenes/training/TutorialBattleScene.tscn",
 	"hazards": "res://scenes/menus/HazardsScene.tscn",
+	"online_private": "res://scenes/menus/OnlinePrivateScene.tscn",
 	"ruleset": "res://scenes/menus/RulesetScene.tscn",
 	"fighter_select": "res://scenes/menus/FighterSelectScene.tscn",
 	"stage_select": "res://scenes/menus/StageSelectScene.tscn",
@@ -55,6 +56,9 @@ func go_tutorial() -> void:
 
 func go_hazards() -> void:
 	go("hazards")
+
+func go_online_private() -> void:
+	go("online_private")
 
 func go_mobile_playtest() -> void:
 	go("mobile_playtest")

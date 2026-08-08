@@ -4,6 +4,7 @@ extends Node
 
 var p1_fighter_id: String = "ember-vale"
 var p2_fighter_id: String = "rook-ironside"
+var p1_is_cpu: bool = false
 var p2_is_cpu: bool = true
 var cpu_level: int = 2
 var stage_id: String = "skyline-arena"
@@ -36,6 +37,30 @@ var tutorial_skipped: bool = false
 var tutorial_step: int = 0
 var tutorial_steps_done: Dictionary = {}
 var _first_run_loaded: bool = false
+
+
+## Headless / digital CPU eval on real BattleScene (no hidden-state cheat).
+var battle_eval_mode: bool = false
+var battle_eval_finished: bool = false
+var battle_eval_frames: int = 0
+var battle_eval_max_frames: int = 2400
+var battle_eval_result: Dictionary = {}
+
+## Local multiplayer / ruleset polish.
+var damage_ratio: float = 1.0
+var team_attack: bool = false
+var ruleset_preset_name: String = "default"
+
+## Progression / save (Alpha exit completeness).
+var career_wins: int = 0
+var career_losses: int = 0
+var career_matches: int = 0
+var unlocked_fighters: Array = []
+var unlocked_stages: Array = []
+var high_contrast: bool = false
+var colorblind_markers: bool = false
+var master_volume: float = 1.0
+var _save_loaded: bool = false
 
 ## Items / hazards mode.
 var hazards_enabled: bool = false
@@ -191,6 +216,130 @@ func advance_arcade_after_result() -> String:
 func arcade_opponent_name() -> String:
 	var id: String = ARCADE_LADDER[mini(arcade_index, ARCADE_LADDER.size() - 1)]
 	return str(load_fighter(id).get("displayName", id))
+
+
+
+func begin_local_versus(p2_cpu: bool = true) -> void:
+	mode = "versus"
+	arcade_active = false
+	hazards_enabled = false
+	items_enabled = false
+	battle_eval_mode = false
+	p1_is_cpu = false
+	p2_is_cpu = p2_cpu
+	reset_match()
+
+
+func begin_local_multiplayer() -> void:
+	## Two human players on one device.
+	begin_local_versus(false)
+	p1_is_cpu = false
+	p2_is_cpu = false
+	ruleset_id = "local-multi-%d" % stocks
+
+
+func record_career_result(winner_slot: int) -> void:
+	career_matches += 1
+	if winner_slot == 1:
+		career_wins += 1
+	elif winner_slot == 2:
+		career_losses += 1
+	_persist_save()
+
+
+func ensure_save_loaded() -> void:
+	if _save_loaded:
+		return
+	_save_loaded = true
+	var cfg := ConfigFile.new()
+	var err := cfg.load("user://aa_save.cfg")
+	if err != OK:
+		unlocked_fighters = roster_ids()
+		unlocked_stages = production_stage_ids()
+		return
+	career_wins = int(cfg.get_value("career", "wins", 0))
+	career_losses = int(cfg.get_value("career", "losses", 0))
+	career_matches = int(cfg.get_value("career", "matches", 0))
+	unlocked_fighters = cfg.get_value("progress", "fighters", roster_ids())
+	unlocked_stages = cfg.get_value("progress", "stages", production_stage_ids())
+	high_contrast = bool(cfg.get_value("a11y", "high_contrast", false))
+	colorblind_markers = bool(cfg.get_value("a11y", "colorblind_markers", false))
+	master_volume = float(cfg.get_value("audio", "master_volume", 1.0))
+	damage_ratio = float(cfg.get_value("rules", "damage_ratio", 1.0))
+	team_attack = bool(cfg.get_value("rules", "team_attack", false))
+	ruleset_preset_name = str(cfg.get_value("rules", "preset", "default"))
+
+
+func _persist_save() -> void:
+	var cfg := ConfigFile.new()
+	cfg.load("user://aa_save.cfg")
+	cfg.set_value("career", "wins", career_wins)
+	cfg.set_value("career", "losses", career_losses)
+	cfg.set_value("career", "matches", career_matches)
+	cfg.set_value("progress", "fighters", unlocked_fighters if unlocked_fighters.size() > 0 else roster_ids())
+	cfg.set_value("progress", "stages", unlocked_stages if unlocked_stages.size() > 0 else production_stage_ids())
+	cfg.set_value("a11y", "high_contrast", high_contrast)
+	cfg.set_value("a11y", "colorblind_markers", colorblind_markers)
+	cfg.set_value("audio", "master_volume", master_volume)
+	cfg.set_value("rules", "damage_ratio", damage_ratio)
+	cfg.set_value("rules", "team_attack", team_attack)
+	cfg.set_value("rules", "preset", ruleset_preset_name)
+	cfg.set_value("rules", "stocks", stocks)
+	cfg.set_value("rules", "cpu_level", cpu_level)
+	cfg.set_value("rules", "timer", match_timer_seconds)
+	cfg.save("user://aa_save.cfg")
+
+
+func save_ruleset_preset(name: String) -> void:
+	ruleset_preset_name = name
+	_persist_save()
+	var cfg := ConfigFile.new()
+	cfg.load("user://aa_rulesets.cfg")
+	cfg.set_value(name, "stocks", stocks)
+	cfg.set_value(name, "cpu_level", cpu_level)
+	cfg.set_value(name, "timer", match_timer_seconds)
+	cfg.set_value(name, "damage_ratio", damage_ratio)
+	cfg.set_value(name, "team_attack", team_attack)
+	cfg.set_value(name, "match_type", match_type)
+	cfg.save("user://aa_rulesets.cfg")
+
+
+func load_ruleset_preset(name: String) -> bool:
+	var cfg := ConfigFile.new()
+	var err := cfg.load("user://aa_rulesets.cfg")
+	if err != OK or not cfg.has_section(name):
+		return false
+	stocks = int(cfg.get_value(name, "stocks", stocks))
+	cpu_level = int(cfg.get_value(name, "cpu_level", cpu_level))
+	match_timer_seconds = int(cfg.get_value(name, "timer", match_timer_seconds))
+	damage_ratio = float(cfg.get_value(name, "damage_ratio", 1.0))
+	team_attack = bool(cfg.get_value(name, "team_attack", false))
+	match_type = str(cfg.get_value(name, "match_type", match_type))
+	ruleset_preset_name = name
+	ruleset_id = "preset-%s" % name
+	return true
+
+
+func list_ruleset_presets() -> Array:
+	var cfg := ConfigFile.new()
+	var err := cfg.load("user://aa_rulesets.cfg")
+	if err != OK:
+		return []
+	return Array(cfg.get_sections())
+
+
+func reset_battle_eval() -> void:
+	battle_eval_mode = true
+	battle_eval_finished = false
+	battle_eval_frames = 0
+	battle_eval_result = {}
+	last_winner_slot = -1
+	p1_is_cpu = true
+	p2_is_cpu = true
+	arcade_active = false
+	hazards_enabled = false
+	items_enabled = false
+	mode = "cpu_eval"
 
 
 func load_fighter(id: String) -> Dictionary:
