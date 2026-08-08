@@ -1,0 +1,1138 @@
+{
+  "schema_version": 1,
+  "token_target": "ANIME_BETA_CONTENT_COMPLETE_DIGITAL",
+  "adrs": [
+    "docs/decisions/ADR-GAME-AA-001-launch-fighters.md",
+    "docs/decisions/ADR-GAME-AA-002-launch-stages.md",
+    "docs/decisions/ADR-GAME-AA-003-launch-modes.md",
+    "docs/decisions/ADR-GAME-AA-004-online-rc-bar.md"
+  ],
+  "fighters": [
+    "ember-vale",
+    "rook-ironside",
+    "juno-spark",
+    "kaia-windrow",
+    "nix-calder",
+    "orion-vell",
+    "vesper-nyx"
+  ],
+  "stages": {
+    "competitive": [
+      "skyline-arena",
+      "neon-rooftops",
+      "cascade-foundry",
+      "void-pier",
+      "ember-courtyard"
+    ],
+    "training": [
+      "training-grid"
+    ],
+    "total": 6
+  },
+  "modes": [
+    "versus_local",
+    "versus_cpu",
+    "training",
+    "tutorial",
+    "arcade",
+    "team",
+    "items_hazards",
+    "challenges",
+    "online_unranked",
+    "online_ranked",
+    "spectator",
+    "replay",
+    "tournament_rooms"
+  ],
+  "status_vocabulary": [
+    "FINAL_ORIGINAL",
+    "LICENSED",
+    "PROCEDURAL_FINAL",
+    "GENERATABLE_INTERNAL",
+    "REQUIRES_ART_PRODUCTION",
+    "REQUIRES_AUDIO_PRODUCTION"
+  ],
+  "assets": [
+    {
+      "id": "fighter.data.ember-vale",
+      "kind": "fighter_data",
+      "fighter_id": "ember-vale",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/fighters/ember-vale.json",
+      "notes": "Stats, hit/hurt, CPU tags, authorship bundle"
+    },
+    {
+      "id": "fighter.moves.ember-vale",
+      "kind": "move_graph",
+      "fighter_id": "ember-vale",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/moves/ember-vale.json",
+      "notes": "Full move graph + hitboxes + feedback"
+    },
+    {
+      "id": "fighter.anims_manifest.ember-vale",
+      "kind": "animation_manifest",
+      "fighter_id": "ember-vale",
+      "status": "GENERATABLE_INTERNAL",
+      "path": "game-godot/data/fighters/ember-vale_animations.json",
+      "notes": "Clip list for proxy/procedural presenters"
+    },
+    {
+      "id": "fighter.silhouette.ember-vale",
+      "kind": "silhouette",
+      "fighter_id": "ember-vale",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/scripts/fighters/stylized_fighter_builder.gd",
+      "notes": "gauntlet_rush"
+    },
+    {
+      "id": "fighter.model_glb.ember-vale",
+      "kind": "model",
+      "fighter_id": "ember-vale",
+      "status": "REQUIRES_ART_PRODUCTION",
+      "path": "game-godot/assets/characters/proxy/ember-vale.glb",
+      "blocks_final_art": true,
+      "blocker": "Painted/final character art not shipped; proxy GLB + procedural presenter used",
+      "notes": "Proxy GLB retained for pipeline; launch presentation uses procedural stylized builder"
+    },
+    {
+      "id": "fighter.vfx.ember-vale",
+      "kind": "vfx",
+      "fighter_id": "ember-vale",
+      "status": "GENERATABLE_INTERNAL",
+      "path": "game-godot/data/moves/ember-vale.json",
+      "notes": "Per-move vfx_event ids authored; particle polish still generatable"
+    },
+    {
+      "id": "fighter.audio.ember-vale",
+      "kind": "audio",
+      "fighter_id": "ember-vale",
+      "status": "REQUIRES_AUDIO_PRODUCTION",
+      "path": "game-godot/data/moves/ember-vale.json",
+      "blocks_final_art": false,
+      "blocker": "Final voice/SFX stems not recorded",
+      "notes": "sfx_event ids authored; stems missing"
+    },
+    {
+      "id": "fighter.aura.ember-vale",
+      "kind": "aura",
+      "fighter_id": "ember-vale",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/scripts/combat/aura_identity.gd",
+      "notes": "Unique aura identity tag + charge curve"
+    },
+    {
+      "id": "fighter.victory.ember-vale",
+      "kind": "victory",
+      "fighter_id": "ember-vale",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/scripts/fighters/fighter_character_life.gd",
+      "notes": "proud_fist"
+    },
+    {
+      "id": "fighter.cpu.ember-vale",
+      "kind": "cpu",
+      "fighter_id": "ember-vale",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/fighters/ember-vale.json",
+      "notes": "cpuBehaviorTags + archetype"
+    },
+    {
+      "id": "fighter.training.ember-vale",
+      "kind": "training",
+      "fighter_id": "ember-vale",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/moves/ember-vale.json",
+      "notes": "training_display_name on every move"
+    },
+    {
+      "id": "fighter.data.rook-ironside",
+      "kind": "fighter_data",
+      "fighter_id": "rook-ironside",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/fighters/rook-ironside.json",
+      "notes": "Stats, hit/hurt, CPU tags, authorship bundle"
+    },
+    {
+      "id": "fighter.moves.rook-ironside",
+      "kind": "move_graph",
+      "fighter_id": "rook-ironside",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/moves/rook-ironside.json",
+      "notes": "Full move graph + hitboxes + feedback"
+    },
+    {
+      "id": "fighter.anims_manifest.rook-ironside",
+      "kind": "animation_manifest",
+      "fighter_id": "rook-ironside",
+      "status": "GENERATABLE_INTERNAL",
+      "path": "game-godot/data/fighters/rook-ironside_animations.json",
+      "notes": "Clip list for proxy/procedural presenters"
+    },
+    {
+      "id": "fighter.silhouette.rook-ironside",
+      "kind": "silhouette",
+      "fighter_id": "rook-ironside",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/scripts/fighters/stylized_fighter_builder.gd",
+      "notes": "tank_armor"
+    },
+    {
+      "id": "fighter.model_glb.rook-ironside",
+      "kind": "model",
+      "fighter_id": "rook-ironside",
+      "status": "REQUIRES_ART_PRODUCTION",
+      "path": "game-godot/assets/characters/proxy/rook-ironside.glb",
+      "blocks_final_art": true,
+      "blocker": "Painted/final character art not shipped; proxy GLB + procedural presenter used",
+      "notes": "Proxy GLB retained for pipeline; launch presentation uses procedural stylized builder"
+    },
+    {
+      "id": "fighter.vfx.rook-ironside",
+      "kind": "vfx",
+      "fighter_id": "rook-ironside",
+      "status": "GENERATABLE_INTERNAL",
+      "path": "game-godot/data/moves/rook-ironside.json",
+      "notes": "Per-move vfx_event ids authored; particle polish still generatable"
+    },
+    {
+      "id": "fighter.audio.rook-ironside",
+      "kind": "audio",
+      "fighter_id": "rook-ironside",
+      "status": "REQUIRES_AUDIO_PRODUCTION",
+      "path": "game-godot/data/moves/rook-ironside.json",
+      "blocks_final_art": false,
+      "blocker": "Final voice/SFX stems not recorded",
+      "notes": "sfx_event ids authored; stems missing"
+    },
+    {
+      "id": "fighter.aura.rook-ironside",
+      "kind": "aura",
+      "fighter_id": "rook-ironside",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/scripts/combat/aura_identity.gd",
+      "notes": "Unique aura identity tag + charge curve"
+    },
+    {
+      "id": "fighter.victory.rook-ironside",
+      "kind": "victory",
+      "fighter_id": "rook-ironside",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/scripts/fighters/fighter_character_life.gd",
+      "notes": "fist_heart"
+    },
+    {
+      "id": "fighter.cpu.rook-ironside",
+      "kind": "cpu",
+      "fighter_id": "rook-ironside",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/fighters/rook-ironside.json",
+      "notes": "cpuBehaviorTags + archetype"
+    },
+    {
+      "id": "fighter.training.rook-ironside",
+      "kind": "training",
+      "fighter_id": "rook-ironside",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/moves/rook-ironside.json",
+      "notes": "training_display_name on every move"
+    },
+    {
+      "id": "fighter.data.juno-spark",
+      "kind": "fighter_data",
+      "fighter_id": "juno-spark",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/fighters/juno-spark.json",
+      "notes": "Stats, hit/hurt, CPU tags, authorship bundle"
+    },
+    {
+      "id": "fighter.moves.juno-spark",
+      "kind": "move_graph",
+      "fighter_id": "juno-spark",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/moves/juno-spark.json",
+      "notes": "Full move graph + hitboxes + feedback"
+    },
+    {
+      "id": "fighter.anims_manifest.juno-spark",
+      "kind": "animation_manifest",
+      "fighter_id": "juno-spark",
+      "status": "GENERATABLE_INTERNAL",
+      "path": "game-godot/data/fighters/juno-spark_animations.json",
+      "notes": "Clip list for proxy/procedural presenters"
+    },
+    {
+      "id": "fighter.silhouette.juno-spark",
+      "kind": "silhouette",
+      "fighter_id": "juno-spark",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/scripts/fighters/stylized_fighter_builder.gd",
+      "notes": "spark_compact"
+    },
+    {
+      "id": "fighter.model_glb.juno-spark",
+      "kind": "model",
+      "fighter_id": "juno-spark",
+      "status": "REQUIRES_ART_PRODUCTION",
+      "path": "game-godot/assets/characters/proxy/juno-spark.glb",
+      "blocks_final_art": true,
+      "blocker": "Painted/final character art not shipped; proxy GLB + procedural presenter used",
+      "notes": "Proxy GLB retained for pipeline; launch presentation uses procedural stylized builder"
+    },
+    {
+      "id": "fighter.vfx.juno-spark",
+      "kind": "vfx",
+      "fighter_id": "juno-spark",
+      "status": "GENERATABLE_INTERNAL",
+      "path": "game-godot/data/moves/juno-spark.json",
+      "notes": "Per-move vfx_event ids authored; particle polish still generatable"
+    },
+    {
+      "id": "fighter.audio.juno-spark",
+      "kind": "audio",
+      "fighter_id": "juno-spark",
+      "status": "REQUIRES_AUDIO_PRODUCTION",
+      "path": "game-godot/data/moves/juno-spark.json",
+      "blocks_final_art": false,
+      "blocker": "Final voice/SFX stems not recorded",
+      "notes": "sfx_event ids authored; stems missing"
+    },
+    {
+      "id": "fighter.aura.juno-spark",
+      "kind": "aura",
+      "fighter_id": "juno-spark",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/scripts/combat/aura_identity.gd",
+      "notes": "Unique aura identity tag + charge curve"
+    },
+    {
+      "id": "fighter.victory.juno-spark",
+      "kind": "victory",
+      "fighter_id": "juno-spark",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/scripts/fighters/fighter_character_life.gd",
+      "notes": "snap_spin"
+    },
+    {
+      "id": "fighter.cpu.juno-spark",
+      "kind": "cpu",
+      "fighter_id": "juno-spark",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/fighters/juno-spark.json",
+      "notes": "cpuBehaviorTags + archetype"
+    },
+    {
+      "id": "fighter.training.juno-spark",
+      "kind": "training",
+      "fighter_id": "juno-spark",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/moves/juno-spark.json",
+      "notes": "training_display_name on every move"
+    },
+    {
+      "id": "fighter.data.kaia-windrow",
+      "kind": "fighter_data",
+      "fighter_id": "kaia-windrow",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/fighters/kaia-windrow.json",
+      "notes": "Stats, hit/hurt, CPU tags, authorship bundle"
+    },
+    {
+      "id": "fighter.moves.kaia-windrow",
+      "kind": "move_graph",
+      "fighter_id": "kaia-windrow",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/moves/kaia-windrow.json",
+      "notes": "Full move graph + hitboxes + feedback"
+    },
+    {
+      "id": "fighter.anims_manifest.kaia-windrow",
+      "kind": "animation_manifest",
+      "fighter_id": "kaia-windrow",
+      "status": "GENERATABLE_INTERNAL",
+      "path": "game-godot/data/fighters/kaia-windrow_animations.json",
+      "notes": "Clip list for proxy/procedural presenters"
+    },
+    {
+      "id": "fighter.silhouette.kaia-windrow",
+      "kind": "silhouette",
+      "fighter_id": "kaia-windrow",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/scripts/fighters/stylized_fighter_builder.gd",
+      "notes": "wind_tall"
+    },
+    {
+      "id": "fighter.model_glb.kaia-windrow",
+      "kind": "model",
+      "fighter_id": "kaia-windrow",
+      "status": "REQUIRES_ART_PRODUCTION",
+      "path": "game-godot/assets/characters/proxy/kaia-windrow.glb",
+      "blocks_final_art": true,
+      "blocker": "Painted/final character art not shipped; proxy GLB + procedural presenter used",
+      "notes": "Proxy GLB retained for pipeline; launch presentation uses procedural stylized builder"
+    },
+    {
+      "id": "fighter.vfx.kaia-windrow",
+      "kind": "vfx",
+      "fighter_id": "kaia-windrow",
+      "status": "GENERATABLE_INTERNAL",
+      "path": "game-godot/data/moves/kaia-windrow.json",
+      "notes": "Per-move vfx_event ids authored; particle polish still generatable"
+    },
+    {
+      "id": "fighter.audio.kaia-windrow",
+      "kind": "audio",
+      "fighter_id": "kaia-windrow",
+      "status": "REQUIRES_AUDIO_PRODUCTION",
+      "path": "game-godot/data/moves/kaia-windrow.json",
+      "blocks_final_art": false,
+      "blocker": "Final voice/SFX stems not recorded",
+      "notes": "sfx_event ids authored; stems missing"
+    },
+    {
+      "id": "fighter.aura.kaia-windrow",
+      "kind": "aura",
+      "fighter_id": "kaia-windrow",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/scripts/combat/aura_identity.gd",
+      "notes": "Unique aura identity tag + charge curve"
+    },
+    {
+      "id": "fighter.victory.kaia-windrow",
+      "kind": "victory",
+      "fighter_id": "kaia-windrow",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/scripts/fighters/fighter_character_life.gd",
+      "notes": "lifted_arms"
+    },
+    {
+      "id": "fighter.cpu.kaia-windrow",
+      "kind": "cpu",
+      "fighter_id": "kaia-windrow",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/fighters/kaia-windrow.json",
+      "notes": "cpuBehaviorTags + archetype"
+    },
+    {
+      "id": "fighter.training.kaia-windrow",
+      "kind": "training",
+      "fighter_id": "kaia-windrow",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/moves/kaia-windrow.json",
+      "notes": "training_display_name on every move"
+    },
+    {
+      "id": "fighter.data.nix-calder",
+      "kind": "fighter_data",
+      "fighter_id": "nix-calder",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/fighters/nix-calder.json",
+      "notes": "Stats, hit/hurt, CPU tags, authorship bundle"
+    },
+    {
+      "id": "fighter.moves.nix-calder",
+      "kind": "move_graph",
+      "fighter_id": "nix-calder",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/moves/nix-calder.json",
+      "notes": "Full move graph + hitboxes + feedback"
+    },
+    {
+      "id": "fighter.anims_manifest.nix-calder",
+      "kind": "animation_manifest",
+      "fighter_id": "nix-calder",
+      "status": "GENERATABLE_INTERNAL",
+      "path": "game-godot/data/fighters/nix-calder_animations.json",
+      "notes": "Clip list for proxy/procedural presenters"
+    },
+    {
+      "id": "fighter.silhouette.nix-calder",
+      "kind": "silhouette",
+      "fighter_id": "nix-calder",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/scripts/fighters/stylized_fighter_builder.gd",
+      "notes": "frost_mantle"
+    },
+    {
+      "id": "fighter.model_glb.nix-calder",
+      "kind": "model",
+      "fighter_id": "nix-calder",
+      "status": "REQUIRES_ART_PRODUCTION",
+      "path": "game-godot/assets/characters/proxy/nix-calder.glb",
+      "blocks_final_art": true,
+      "blocker": "Painted/final character art not shipped; proxy GLB + procedural presenter used",
+      "notes": "Proxy GLB retained for pipeline; launch presentation uses procedural stylized builder"
+    },
+    {
+      "id": "fighter.vfx.nix-calder",
+      "kind": "vfx",
+      "fighter_id": "nix-calder",
+      "status": "GENERATABLE_INTERNAL",
+      "path": "game-godot/data/moves/nix-calder.json",
+      "notes": "Per-move vfx_event ids authored; particle polish still generatable"
+    },
+    {
+      "id": "fighter.audio.nix-calder",
+      "kind": "audio",
+      "fighter_id": "nix-calder",
+      "status": "REQUIRES_AUDIO_PRODUCTION",
+      "path": "game-godot/data/moves/nix-calder.json",
+      "blocks_final_art": false,
+      "blocker": "Final voice/SFX stems not recorded",
+      "notes": "sfx_event ids authored; stems missing"
+    },
+    {
+      "id": "fighter.aura.nix-calder",
+      "kind": "aura",
+      "fighter_id": "nix-calder",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/scripts/combat/aura_identity.gd",
+      "notes": "Unique aura identity tag + charge curve"
+    },
+    {
+      "id": "fighter.victory.nix-calder",
+      "kind": "victory",
+      "fighter_id": "nix-calder",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/scripts/fighters/fighter_character_life.gd",
+      "notes": "subtle_nod"
+    },
+    {
+      "id": "fighter.cpu.nix-calder",
+      "kind": "cpu",
+      "fighter_id": "nix-calder",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/fighters/nix-calder.json",
+      "notes": "cpuBehaviorTags + archetype"
+    },
+    {
+      "id": "fighter.training.nix-calder",
+      "kind": "training",
+      "fighter_id": "nix-calder",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/moves/nix-calder.json",
+      "notes": "training_display_name on every move"
+    },
+    {
+      "id": "fighter.data.orion-vell",
+      "kind": "fighter_data",
+      "fighter_id": "orion-vell",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/fighters/orion-vell.json",
+      "notes": "Stats, hit/hurt, CPU tags, authorship bundle"
+    },
+    {
+      "id": "fighter.moves.orion-vell",
+      "kind": "move_graph",
+      "fighter_id": "orion-vell",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/moves/orion-vell.json",
+      "notes": "Full move graph + hitboxes + feedback"
+    },
+    {
+      "id": "fighter.anims_manifest.orion-vell",
+      "kind": "animation_manifest",
+      "fighter_id": "orion-vell",
+      "status": "GENERATABLE_INTERNAL",
+      "path": "game-godot/data/fighters/orion-vell_animations.json",
+      "notes": "Clip list for proxy/procedural presenters"
+    },
+    {
+      "id": "fighter.silhouette.orion-vell",
+      "kind": "silhouette",
+      "fighter_id": "orion-vell",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/scripts/fighters/stylized_fighter_builder.gd",
+      "notes": "orbit_crown"
+    },
+    {
+      "id": "fighter.model_glb.orion-vell",
+      "kind": "model",
+      "fighter_id": "orion-vell",
+      "status": "REQUIRES_ART_PRODUCTION",
+      "path": "game-godot/assets/characters/proxy/orion-vell.glb",
+      "blocks_final_art": true,
+      "blocker": "Painted/final character art not shipped; proxy GLB + procedural presenter used",
+      "notes": "Proxy GLB retained for pipeline; launch presentation uses procedural stylized builder"
+    },
+    {
+      "id": "fighter.vfx.orion-vell",
+      "kind": "vfx",
+      "fighter_id": "orion-vell",
+      "status": "GENERATABLE_INTERNAL",
+      "path": "game-godot/data/moves/orion-vell.json",
+      "notes": "Per-move vfx_event ids authored; particle polish still generatable"
+    },
+    {
+      "id": "fighter.audio.orion-vell",
+      "kind": "audio",
+      "fighter_id": "orion-vell",
+      "status": "REQUIRES_AUDIO_PRODUCTION",
+      "path": "game-godot/data/moves/orion-vell.json",
+      "blocks_final_art": false,
+      "blocker": "Final voice/SFX stems not recorded",
+      "notes": "sfx_event ids authored; stems missing"
+    },
+    {
+      "id": "fighter.aura.orion-vell",
+      "kind": "aura",
+      "fighter_id": "orion-vell",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/scripts/combat/aura_identity.gd",
+      "notes": "Unique aura identity tag + charge curve"
+    },
+    {
+      "id": "fighter.victory.orion-vell",
+      "kind": "victory",
+      "fighter_id": "orion-vell",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/scripts/fighters/fighter_character_life.gd",
+      "notes": "arms_open"
+    },
+    {
+      "id": "fighter.cpu.orion-vell",
+      "kind": "cpu",
+      "fighter_id": "orion-vell",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/fighters/orion-vell.json",
+      "notes": "cpuBehaviorTags + archetype"
+    },
+    {
+      "id": "fighter.training.orion-vell",
+      "kind": "training",
+      "fighter_id": "orion-vell",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/moves/orion-vell.json",
+      "notes": "training_display_name on every move"
+    },
+    {
+      "id": "fighter.data.vesper-nyx",
+      "kind": "fighter_data",
+      "fighter_id": "vesper-nyx",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/fighters/vesper-nyx.json",
+      "notes": "Stats, hit/hurt, CPU tags, authorship bundle"
+    },
+    {
+      "id": "fighter.moves.vesper-nyx",
+      "kind": "move_graph",
+      "fighter_id": "vesper-nyx",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/moves/vesper-nyx.json",
+      "notes": "Full move graph + hitboxes + feedback"
+    },
+    {
+      "id": "fighter.anims_manifest.vesper-nyx",
+      "kind": "animation_manifest",
+      "fighter_id": "vesper-nyx",
+      "status": "GENERATABLE_INTERNAL",
+      "path": "game-godot/data/fighters/vesper-nyx_animations.json",
+      "notes": "Clip list for proxy/procedural presenters"
+    },
+    {
+      "id": "fighter.silhouette.vesper-nyx",
+      "kind": "silhouette",
+      "fighter_id": "vesper-nyx",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/scripts/fighters/stylized_fighter_builder.gd",
+      "notes": "void_cloak"
+    },
+    {
+      "id": "fighter.model_glb.vesper-nyx",
+      "kind": "model",
+      "fighter_id": "vesper-nyx",
+      "status": "REQUIRES_ART_PRODUCTION",
+      "path": "game-godot/assets/characters/proxy/vesper-nyx.glb",
+      "blocks_final_art": true,
+      "blocker": "Painted/final character art not shipped; proxy GLB + procedural presenter used",
+      "notes": "Proxy GLB retained for pipeline; launch presentation uses procedural stylized builder"
+    },
+    {
+      "id": "fighter.vfx.vesper-nyx",
+      "kind": "vfx",
+      "fighter_id": "vesper-nyx",
+      "status": "GENERATABLE_INTERNAL",
+      "path": "game-godot/data/moves/vesper-nyx.json",
+      "notes": "Per-move vfx_event ids authored; particle polish still generatable"
+    },
+    {
+      "id": "fighter.audio.vesper-nyx",
+      "kind": "audio",
+      "fighter_id": "vesper-nyx",
+      "status": "REQUIRES_AUDIO_PRODUCTION",
+      "path": "game-godot/data/moves/vesper-nyx.json",
+      "blocks_final_art": false,
+      "blocker": "Final voice/SFX stems not recorded",
+      "notes": "sfx_event ids authored; stems missing"
+    },
+    {
+      "id": "fighter.aura.vesper-nyx",
+      "kind": "aura",
+      "fighter_id": "vesper-nyx",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/scripts/combat/aura_identity.gd",
+      "notes": "Unique aura identity tag + charge curve"
+    },
+    {
+      "id": "fighter.victory.vesper-nyx",
+      "kind": "victory",
+      "fighter_id": "vesper-nyx",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/scripts/fighters/fighter_character_life.gd",
+      "notes": "smirk"
+    },
+    {
+      "id": "fighter.cpu.vesper-nyx",
+      "kind": "cpu",
+      "fighter_id": "vesper-nyx",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/fighters/vesper-nyx.json",
+      "notes": "cpuBehaviorTags + archetype"
+    },
+    {
+      "id": "fighter.training.vesper-nyx",
+      "kind": "training",
+      "fighter_id": "vesper-nyx",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/moves/vesper-nyx.json",
+      "notes": "training_display_name on every move"
+    },
+    {
+      "id": "stage.layout.skyline-arena",
+      "kind": "stage_layout",
+      "stage_id": "skyline-arena",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/stages/skyline-arena.json",
+      "notes": "Platforms, spawns, blast zones"
+    },
+    {
+      "id": "stage.geometry.skyline-arena",
+      "kind": "stage_geometry",
+      "stage_id": "skyline-arena",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/scripts/battle/stage_procedural_builder.gd",
+      "notes": "Competitive procedural geometry (not greybox)"
+    },
+    {
+      "id": "stage.art.skyline-arena",
+      "kind": "stage_art",
+      "stage_id": "skyline-arena",
+      "status": "REQUIRES_ART_PRODUCTION",
+      "path": "game-godot/assets/placeholder/stage_skyline-arena.svg",
+      "blocks_final_art": true,
+      "blocker": "Painted stage environment art not shipped",
+      "notes": "REQUIRES_ART_PRODUCTION"
+    },
+    {
+      "id": "stage.camera.skyline-arena",
+      "kind": "camera",
+      "stage_id": "skyline-arena",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/stages/skyline-arena.json",
+      "notes": "cameraProfile in stage JSON"
+    },
+    {
+      "id": "stage.lighting.skyline-arena",
+      "kind": "lighting",
+      "stage_id": "skyline-arena",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/data/stages/skyline-arena.json",
+      "notes": "lightingProfile + performance tiers"
+    },
+    {
+      "id": "stage.audio.skyline-arena",
+      "kind": "audio_bed",
+      "stage_id": "skyline-arena",
+      "status": "REQUIRES_AUDIO_PRODUCTION",
+      "path": "game-godot/data/stages/skyline-arena.json",
+      "blocker": "Final stage music/ambience stems missing",
+      "notes": "audioBed event id authored"
+    },
+    {
+      "id": "stage.layout.neon-rooftops",
+      "kind": "stage_layout",
+      "stage_id": "neon-rooftops",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/stages/neon-rooftops.json",
+      "notes": "Platforms, spawns, blast zones"
+    },
+    {
+      "id": "stage.geometry.neon-rooftops",
+      "kind": "stage_geometry",
+      "stage_id": "neon-rooftops",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/scripts/battle/stage_procedural_builder.gd",
+      "notes": "Competitive procedural geometry (not greybox)"
+    },
+    {
+      "id": "stage.art.neon-rooftops",
+      "kind": "stage_art",
+      "stage_id": "neon-rooftops",
+      "status": "REQUIRES_ART_PRODUCTION",
+      "path": "game-godot/assets/placeholder/stage_neon-rooftops.svg",
+      "blocks_final_art": true,
+      "blocker": "Painted stage environment art not shipped",
+      "notes": "REQUIRES_ART_PRODUCTION"
+    },
+    {
+      "id": "stage.camera.neon-rooftops",
+      "kind": "camera",
+      "stage_id": "neon-rooftops",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/stages/neon-rooftops.json",
+      "notes": "cameraProfile in stage JSON"
+    },
+    {
+      "id": "stage.lighting.neon-rooftops",
+      "kind": "lighting",
+      "stage_id": "neon-rooftops",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/data/stages/neon-rooftops.json",
+      "notes": "lightingProfile + performance tiers"
+    },
+    {
+      "id": "stage.audio.neon-rooftops",
+      "kind": "audio_bed",
+      "stage_id": "neon-rooftops",
+      "status": "REQUIRES_AUDIO_PRODUCTION",
+      "path": "game-godot/data/stages/neon-rooftops.json",
+      "blocker": "Final stage music/ambience stems missing",
+      "notes": "audioBed event id authored"
+    },
+    {
+      "id": "stage.layout.cascade-foundry",
+      "kind": "stage_layout",
+      "stage_id": "cascade-foundry",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/stages/cascade-foundry.json",
+      "notes": "Platforms, spawns, blast zones"
+    },
+    {
+      "id": "stage.geometry.cascade-foundry",
+      "kind": "stage_geometry",
+      "stage_id": "cascade-foundry",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/scripts/battle/stage_procedural_builder.gd",
+      "notes": "Competitive procedural geometry (not greybox)"
+    },
+    {
+      "id": "stage.art.cascade-foundry",
+      "kind": "stage_art",
+      "stage_id": "cascade-foundry",
+      "status": "REQUIRES_ART_PRODUCTION",
+      "path": "game-godot/assets/placeholder/stage_cascade-foundry.svg",
+      "blocks_final_art": true,
+      "blocker": "Painted stage environment art not shipped",
+      "notes": "REQUIRES_ART_PRODUCTION"
+    },
+    {
+      "id": "stage.camera.cascade-foundry",
+      "kind": "camera",
+      "stage_id": "cascade-foundry",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/stages/cascade-foundry.json",
+      "notes": "cameraProfile in stage JSON"
+    },
+    {
+      "id": "stage.lighting.cascade-foundry",
+      "kind": "lighting",
+      "stage_id": "cascade-foundry",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/data/stages/cascade-foundry.json",
+      "notes": "lightingProfile + performance tiers"
+    },
+    {
+      "id": "stage.audio.cascade-foundry",
+      "kind": "audio_bed",
+      "stage_id": "cascade-foundry",
+      "status": "REQUIRES_AUDIO_PRODUCTION",
+      "path": "game-godot/data/stages/cascade-foundry.json",
+      "blocker": "Final stage music/ambience stems missing",
+      "notes": "audioBed event id authored"
+    },
+    {
+      "id": "stage.layout.void-pier",
+      "kind": "stage_layout",
+      "stage_id": "void-pier",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/stages/void-pier.json",
+      "notes": "Platforms, spawns, blast zones"
+    },
+    {
+      "id": "stage.geometry.void-pier",
+      "kind": "stage_geometry",
+      "stage_id": "void-pier",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/scripts/battle/stage_procedural_builder.gd",
+      "notes": "Competitive procedural geometry (not greybox)"
+    },
+    {
+      "id": "stage.art.void-pier",
+      "kind": "stage_art",
+      "stage_id": "void-pier",
+      "status": "REQUIRES_ART_PRODUCTION",
+      "path": "game-godot/assets/placeholder/stage_void-pier.svg",
+      "blocks_final_art": true,
+      "blocker": "Painted stage environment art not shipped",
+      "notes": "REQUIRES_ART_PRODUCTION"
+    },
+    {
+      "id": "stage.camera.void-pier",
+      "kind": "camera",
+      "stage_id": "void-pier",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/stages/void-pier.json",
+      "notes": "cameraProfile in stage JSON"
+    },
+    {
+      "id": "stage.lighting.void-pier",
+      "kind": "lighting",
+      "stage_id": "void-pier",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/data/stages/void-pier.json",
+      "notes": "lightingProfile + performance tiers"
+    },
+    {
+      "id": "stage.audio.void-pier",
+      "kind": "audio_bed",
+      "stage_id": "void-pier",
+      "status": "REQUIRES_AUDIO_PRODUCTION",
+      "path": "game-godot/data/stages/void-pier.json",
+      "blocker": "Final stage music/ambience stems missing",
+      "notes": "audioBed event id authored"
+    },
+    {
+      "id": "stage.layout.ember-courtyard",
+      "kind": "stage_layout",
+      "stage_id": "ember-courtyard",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/stages/ember-courtyard.json",
+      "notes": "Platforms, spawns, blast zones"
+    },
+    {
+      "id": "stage.geometry.ember-courtyard",
+      "kind": "stage_geometry",
+      "stage_id": "ember-courtyard",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/scripts/battle/stage_procedural_builder.gd",
+      "notes": "Competitive procedural geometry (not greybox)"
+    },
+    {
+      "id": "stage.art.ember-courtyard",
+      "kind": "stage_art",
+      "stage_id": "ember-courtyard",
+      "status": "REQUIRES_ART_PRODUCTION",
+      "path": "game-godot/assets/placeholder/stage_ember-courtyard.svg",
+      "blocks_final_art": true,
+      "blocker": "Painted stage environment art not shipped",
+      "notes": "REQUIRES_ART_PRODUCTION"
+    },
+    {
+      "id": "stage.camera.ember-courtyard",
+      "kind": "camera",
+      "stage_id": "ember-courtyard",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/stages/ember-courtyard.json",
+      "notes": "cameraProfile in stage JSON"
+    },
+    {
+      "id": "stage.lighting.ember-courtyard",
+      "kind": "lighting",
+      "stage_id": "ember-courtyard",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/data/stages/ember-courtyard.json",
+      "notes": "lightingProfile + performance tiers"
+    },
+    {
+      "id": "stage.audio.ember-courtyard",
+      "kind": "audio_bed",
+      "stage_id": "ember-courtyard",
+      "status": "REQUIRES_AUDIO_PRODUCTION",
+      "path": "game-godot/data/stages/ember-courtyard.json",
+      "blocker": "Final stage music/ambience stems missing",
+      "notes": "audioBed event id authored"
+    },
+    {
+      "id": "stage.layout.training-grid",
+      "kind": "stage_layout",
+      "stage_id": "training-grid",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/stages/training-grid.json",
+      "notes": "Platforms, spawns, blast zones"
+    },
+    {
+      "id": "stage.geometry.training-grid",
+      "kind": "stage_geometry",
+      "stage_id": "training-grid",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/scripts/battle/stage_procedural_builder.gd",
+      "notes": "Training procedural geometry"
+    },
+    {
+      "id": "stage.art.training-grid",
+      "kind": "stage_art",
+      "stage_id": "training-grid",
+      "status": "REQUIRES_ART_PRODUCTION",
+      "path": "game-godot/assets/placeholder/stage_training-grid.svg",
+      "blocks_final_art": true,
+      "blocker": "Painted stage environment art not shipped",
+      "notes": "REQUIRES_ART_PRODUCTION"
+    },
+    {
+      "id": "stage.camera.training-grid",
+      "kind": "camera",
+      "stage_id": "training-grid",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/data/stages/training-grid.json",
+      "notes": "cameraProfile in stage JSON"
+    },
+    {
+      "id": "stage.lighting.training-grid",
+      "kind": "lighting",
+      "stage_id": "training-grid",
+      "status": "PROCEDURAL_FINAL",
+      "path": "game-godot/data/stages/training-grid.json",
+      "notes": "lightingProfile + performance tiers"
+    },
+    {
+      "id": "stage.audio.training-grid",
+      "kind": "audio_bed",
+      "stage_id": "training-grid",
+      "status": "REQUIRES_AUDIO_PRODUCTION",
+      "path": "game-godot/data/stages/training-grid.json",
+      "blocker": "Final stage music/ambience stems missing",
+      "notes": "audioBed event id authored"
+    },
+    {
+      "id": "mode.versus_local",
+      "kind": "mode",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/scripts/menus/mode_select_scene.gd",
+      "notes": "Mode wiring for versus_local"
+    },
+    {
+      "id": "mode.versus_cpu",
+      "kind": "mode",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/scripts/menus/mode_select_scene.gd",
+      "notes": "Mode wiring for versus_cpu"
+    },
+    {
+      "id": "mode.training",
+      "kind": "mode",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/scripts/menus/mode_select_scene.gd",
+      "notes": "Mode wiring for training"
+    },
+    {
+      "id": "mode.tutorial",
+      "kind": "mode",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/scripts/menus/mode_select_scene.gd",
+      "notes": "Mode wiring for tutorial"
+    },
+    {
+      "id": "mode.arcade",
+      "kind": "mode",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/scripts/menus/mode_select_scene.gd",
+      "notes": "Mode wiring for arcade"
+    },
+    {
+      "id": "mode.team",
+      "kind": "mode",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/scripts/menus/mode_select_scene.gd",
+      "notes": "Mode wiring for team"
+    },
+    {
+      "id": "mode.items_hazards",
+      "kind": "mode",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/scripts/menus/mode_select_scene.gd",
+      "notes": "Mode wiring for items_hazards"
+    },
+    {
+      "id": "mode.challenges",
+      "kind": "mode",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/scripts/menus/mode_select_scene.gd",
+      "notes": "Mode wiring for challenges"
+    },
+    {
+      "id": "mode.online_unranked",
+      "kind": "mode",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/scripts/menus/mode_select_scene.gd",
+      "notes": "Mode wiring for online_unranked"
+    },
+    {
+      "id": "mode.online_ranked",
+      "kind": "mode",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/scripts/menus/mode_select_scene.gd",
+      "notes": "Mode wiring for online_ranked"
+    },
+    {
+      "id": "mode.spectator",
+      "kind": "mode",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/scripts/menus/mode_select_scene.gd",
+      "notes": "Mode wiring for spectator"
+    },
+    {
+      "id": "mode.replay",
+      "kind": "mode",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/scripts/menus/mode_select_scene.gd",
+      "notes": "Mode wiring for replay"
+    },
+    {
+      "id": "mode.tournament_rooms",
+      "kind": "mode",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/scripts/menus/mode_select_scene.gd",
+      "notes": "Mode wiring for tournament_rooms"
+    },
+    {
+      "id": "online.private_netplay",
+      "kind": "online",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/scripts/net/private_netplay_stack.gd",
+      "notes": "Private/dev only — not public deploy"
+    },
+    {
+      "id": "online.ranked_unranked",
+      "kind": "online",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/scripts/net/online_matchmaking_architecture.gd",
+      "notes": "Ranked + unranked DEV queues"
+    },
+    {
+      "id": "online.tournament_rooms",
+      "kind": "online",
+      "status": "FINAL_ORIGINAL",
+      "path": "game-godot/scripts/net/tournament_rooms.gd",
+      "notes": "Tournament room bracket seed (private/dev)"
+    }
+  ],
+  "counts": {
+    "assets": 129,
+    "by_status": {
+      "FINAL_ORIGINAL": 63,
+      "LICENSED": 0,
+      "PROCEDURAL_FINAL": 26,
+      "GENERATABLE_INTERNAL": 14,
+      "REQUIRES_ART_PRODUCTION": 13,
+      "REQUIRES_AUDIO_PRODUCTION": 13
+    }
+  },
+  "honesty": {
+    "beta_content_digital": true,
+    "final_painted_art_complete": false,
+    "final_audio_stems_complete": false,
+    "public_online_deploy": false,
+    "alpha_tokens_not_repackaged": true
+  },
+  "generated_at": "2026-08-08T19:48:37.740Z"
+}

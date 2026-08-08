@@ -2,52 +2,46 @@
   "id": "skyline-arena",
   "displayName": "Skyline Arena",
   "layoutType": "threePlatform",
-  "mainPlatform": {
-    "x": 0,
-    "y": 280,
-    "width": 820,
-    "height": 40
-  },
+  "mainPlatform": { "x": 0, "y": 280, "width": 820, "height": 40 },
   "sidePlatforms": [
-    {
-      "x": -280,
-      "y": 180,
-      "width": 160,
-      "height": 24
-    },
-    {
-      "x": 280,
-      "y": 180,
-      "width": 160,
-      "height": 24
-    },
-    {
-      "x": 0,
-      "y": 80,
-      "width": 200,
-      "height": 24
-    }
+    { "x": -280, "y": 180, "width": 160, "height": 24 },
+    { "x": 280, "y": 180, "width": 160, "height": 24 },
+    { "x": 0, "y": 80, "width": 200, "height": 24 }
   ],
   "spawnPoints": [
-    {
-      "slot": 1,
-      "x": -220,
-      "y": 200
-    },
-    {
-      "slot": 2,
-      "x": 220,
-      "y": 200
-    }
+    { "slot": 1, "x": -220, "y": 200 },
+    { "slot": 2, "x": 220, "y": 200 }
   ],
-  "blastZones": {
-    "left": -560,
-    "right": 560,
-    "top": -380,
-    "bottom": 440
-  },
+  "blastZones": { "left": -560, "right": 560, "top": -380, "bottom": 440 },
   "ledges": true,
+  "hazardSockets": [
+    { "id": "updraft_left", "x": -360, "y": 120, "radius": 16 },
+    { "id": "updraft_right", "x": 360, "y": 120, "radius": 16 }
+  ],
+  "cameraProfile": {
+    "mode": "platform_fighter",
+    "minZoom": 0.85,
+    "maxZoom": 1.35,
+    "lerp": 0.12,
+    "deadzone": { "x": 80, "y": 60 }
+  },
+  "lightingProfile": {
+    "keyColor": "#6aa8ff",
+    "keyAlpha": 0.14,
+    "ambient": "#0a1020",
+    "rim": "#88ccff"
+  },
+  "performanceTier": {
+    "default": "high",
+    "low": { "particles": false, "bands": 1 },
+    "medium": { "particles": true, "bands": 2 },
+    "high": { "particles": true, "bands": 4 }
+  },
+  "a11y": { "highContrastEdges": true, "colorblindMarkers": true },
+  "audioBed": { "event": "bed_skyline", "status": "REQUIRES_AUDIO_PRODUCTION" },
   "previewPlaceholder": "res://assets/placeholder/stage_skyline-arena.svg",
   "artStatus": "REQUIRES_ART_PRODUCTION",
-  "productionStatus": "greybox"
+  "productionStatus": "procedural_final",
+  "geometryStatus": "PROCEDURAL_FINAL",
+  "notes": "Launch competitive geometry PROCEDURAL_FINAL. Painted art REQUIRES_ART_PRODUCTION."
 }
