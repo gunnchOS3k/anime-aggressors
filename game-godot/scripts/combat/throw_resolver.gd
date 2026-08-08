@@ -1,5 +1,6 @@
 extends RefCounted
 class_name ThrowResolver
+const _AuraScaler = preload("res://scripts/combat/aura_scaler.gd")
 const _DataLoader = preload("res://scripts/data/data_loader.gd")
 
 ## Reads throw direction during grab hold and resolves directional throws.
@@ -58,7 +59,7 @@ static func resolve_throw(attacker: Node, target: Node, manifest: Dictionary, di
 		if throw_cfg.has("knockback_growth"):
 			throw_move["knockback_growth"] = throw_cfg.knockback_growth
 	if attacker.has_method("get_aura"):
-		throw_move = AuraScaler.apply_to_move(throw_move, attacker.aura)
+		throw_move = _AuraScaler.apply_to_move(throw_move, attacker.aura)
 	return throw_move
 
 static func apply_victim_offset(attacker: Node, target: Node, throw_move: Dictionary) -> void:

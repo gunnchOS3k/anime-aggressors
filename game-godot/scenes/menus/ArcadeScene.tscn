@@ -1,9 +1,9 @@
 [gd_scene load_steps=3 format=3]
 
-[ext_resource type="Script" path="res://scripts/menus/mode_select_scene.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/menus/arcade_scene.gd" id="1"]
 [ext_resource type="Theme" path="res://assets/placeholder/aa_theme.tres" id="2"]
 
-[node name="ModeSelectScene" type="Control"]
+[node name="ArcadeScene" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -25,32 +25,35 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -180.0
+offset_left = -220.0
 offset_top = -160.0
-offset_right = 180.0
+offset_right = 220.0
 offset_bottom = 160.0
+theme_override_constants/separation = 12
 
 [node name="Title" type="Label" parent="VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
-text = "Mode Select"
+text = "Arcade Ladder"
 horizontal_alignment = 1
 
-[node name="Versus" type="Button" parent="VBox"]
-custom_minimum_size = Vector2(280, 72)
+[node name="StatusLabel" type="Label" parent="VBox"]
+unique_name_in_owner = true
 layout_mode = 2
-text = "Versus"
+text = "Arcade"
+horizontal_alignment = 1
+autowrap_mode = 3
 
-[node name="Training" type="Button" parent="VBox"]
-custom_minimum_size = Vector2(280, 72)
+[node name="ChangeFighter" type="Button" parent="VBox"]
+custom_minimum_size = Vector2(280, 64)
 layout_mode = 2
-text = "Training"
+text = "Change Fighter"
 
-[node name="Arcade" type="Button" parent="VBox"]
+[node name="Start" type="Button" parent="VBox"]
 custom_minimum_size = Vector2(280, 72)
 layout_mode = 2
-text = "Arcade Ladder"
+text = "Start Ladder"
 
 [node name="FooterHint" type="Label" parent="."]
 unique_name_in_owner = true
@@ -62,6 +65,5 @@ anchor_bottom = 1.0
 offset_top = -48.0
 horizontal_alignment = 1
 
-[connection signal="pressed" from="VBox/Versus" to="." method="_on_versus_pressed"]
-[connection signal="pressed" from="VBox/Training" to="." method="_on_training_pressed"]
-[connection signal="pressed" from="VBox/Arcade" to="." method="_on_arcade_pressed"]
+[connection signal="pressed" from="VBox/ChangeFighter" to="." method="_on_change_fighter_pressed"]
+[connection signal="pressed" from="VBox/Start" to="." method="_on_start_pressed"]

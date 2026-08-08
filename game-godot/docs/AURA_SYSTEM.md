@@ -44,4 +44,6 @@ Aura scaling is **not** flat damage only. Each move's `aura_scaling` block can m
 
 ## Runtime
 
-`AAFighter._start_move_dict()` calls `AuraScaler.apply_to_move()` before starting the move runner. Projectiles read aura at spawn via `ProjectileSpawner.spawn_from_move()`.
+`AAFighter._start_move_dict()` calls `AuraScaler.apply_to_move()` then `AuraIdentity.apply_to_scaled_move()` so fighter-unique aura behavior lives in combat scripts (`scripts/combat/aura_identity.gd`), not YAML alone. `HitResolver` also applies identity knockback bias. Projectiles read aura at spawn via `ProjectileSpawner.spawn_from_move()`.
+
+Art/VFX for aura still **REQUIRES_ART_PRODUCTION** — script identity ≠ content-complete.

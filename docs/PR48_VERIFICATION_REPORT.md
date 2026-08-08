@@ -1,15 +1,15 @@
 # PR #48 Verification Report
 
-**Generated:** 2026-08-07T23:14:00.851Z
+**Generated:** 2026-08-08T00:18:21.277Z
 
-**Commit:** `d145086fd7703a7b8880d9fd40c947ab9107669f`
+**Commit:** `7a3789264c0a45215d2d38446654313bd87ab18b`
 
 ## Verification tiers
 
 | Tier | Status |
 |------|--------|
 | Automated npm | verified |
-| Godot CLI | manual_blocker_cli_missing |
+| Godot CLI | verified |
 | Godot editor playtest | manual_signoff_required |
 | Proxy functional | partial |
 | Final art | blocked |
@@ -27,14 +27,12 @@
 
 | Field | Value |
 |-------|-------|
-| Detected | false |
-| Binary | — |
-| Version | — |
-| Headless import | skipped |
-| Smoke runner | skipped |
+| Detected | true |
+| Binary | /Users/gunnchos/Applications/Godot/Godot-4.5.app/Contents/MacOS/Godot |
+| Version | 4.5.stable.official.876b29033 |
+| Headless import | pass |
+| Smoke runner | pass |
 
-
-> **GODOT_CLI_MISSING — manual editor signoff required**
 
 
 ## Manual signoff required
@@ -50,7 +48,6 @@
 - P2: CPU balance/tuning
 - P2: Export hardening
 - P3: Full ledge grab, rollback/netplay
-- PHYSICAL: device-role classroom soak (PHYSICAL_PENDING under PHYSICAL_EXECUTION_FREEZE)
 
 ## JSON report
 

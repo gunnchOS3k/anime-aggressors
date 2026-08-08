@@ -1,4 +1,5 @@
 extends RefCounted
+class_name SmokeDeviceA11yTelemetry
 
 ## Headless G2-C6 a11y + MatchTelemetry contracts (device-role reduce-motion / larger UI).
 ## Instantiates runtimes via preload so `-s` mode does not depend on autoload globals.
