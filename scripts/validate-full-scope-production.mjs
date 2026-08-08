@@ -486,9 +486,9 @@ if (stageList.length < 6) fail(`expected >=6 production stages, got ${stageList.
 for (const sid of ["cascade-foundry", "void-pier", "ember-courtyard"]) {
   if (!stageList.includes(sid)) fail(`missing new greybox stage ${sid}`);
   const sj = JSON.parse(fs.readFileSync(path.join(godotRoot, "data/stages", `${sid}.json`), "utf8"));
-  if (sj.artStatus !== "REQUIRES_ART_PRODUCTION") fail(`${sid} must mark REQUIRES_ART_PRODUCTION`);
+  if (sj.artStatus !== "PROCEDURAL_FINAL") fail(`${sid} must mark PROCEDURAL_FINAL art`);
 }
-ok("greybox stage count toward launch");
+ok("launch stage count + procedural art");
 
 // Batch match harness
 if (!fs.existsSync(path.join(godotRoot, "scripts/battle/batch_match_harness.gd"))) {

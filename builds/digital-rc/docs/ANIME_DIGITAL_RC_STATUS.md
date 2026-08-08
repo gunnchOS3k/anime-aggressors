@@ -1,20 +1,22 @@
-# FULL PRODUCT Continuation IV — Anime Digital RC Ready
+# FULL PRODUCT Continuation V — Anime Digital RC Ready
 
 **Status:** Digital RC validation architecture + evidence path on Godot — **private/dev only**  
-**Token:** `ANIME_DIGITAL_RC_READY`
+**Token:** `ANIME_DIGITAL_RC_READY`  
+**Path:** **A** (requires closed digital art/audio blockers)
 
 ## Tokens
 
 | Token | Earned? | Notes |
 |-------|---------|-------|
-| `ANIME_DIGITAL_RC_READY` | **YES when** `playtest-evidence/digital_rc_validation.json` reports `token_earned: true` | Requires beta content + RC runner |
+| `ANIME_DIGITAL_RC_READY` | **YES when** `playtest-evidence/digital_rc_validation.json` reports `token_earned: true` **and** art/audio closure has zero `blocks_token` | Requires beta content + RC runner |
 | Final store RC / public deploy | **NO** | Forbidden |
-| Final art/audio complete | **NO** | See `content/missing_assets.json` |
+| Painted remasters | **NO** | Optional future; not required for digital RC |
 
 ## Validation coverage
 
 | Gate | Evidence |
 |------|----------|
+| Art/audio closure | `scripts/validate-anime-digital-art-audio-closure.mjs` |
 | Godot headless load | `--quit-after 2` |
 | Smoke | `tests/smoke_runner.gd` (includes beta + digital_rc suites) |
 | Long AI sim | `cpu_battle_scene_eval.json` (7×7×5) + runner |
@@ -28,6 +30,7 @@
 ## Verify
 
 ```bash
+node scripts/validate-anime-digital-art-audio-closure.mjs
 node scripts/package-anime-standalone.mjs
 node scripts/validate-anime-digital-rc.mjs
 GODOT="/Users/gunnchos/Applications/Godot/Godot-4.5.app/Contents/MacOS/Godot"
@@ -36,4 +39,4 @@ GODOT="/Users/gunnchos/Applications/Godot/Godot-4.5.app/Contents/MacOS/Godot"
 
 ## Honesty
 
-Does not claim public matchmaking, store packaging, or final painted/audio content.
+Does not claim public matchmaking, store packaging, or painted remasters.

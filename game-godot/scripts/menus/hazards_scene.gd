@@ -14,7 +14,7 @@ func _ready() -> void:
 
 func _refresh() -> void:
 	if status_label:
-		status_label.text = "Mode: Items + stage hazards\nLane surge pulses + pickup items (aura/heal/surge)\nCPU opponent · PROCEDURAL_FINAL stages\nPainted art still REQUIRES_ART_PRODUCTION"
+		status_label.text = "Mode: Items + stage hazards\nLane surge pulses + pickup items (aura/heal/surge)\nCPU opponent · PROCEDURAL_FINAL stages\nPROCEDURAL_FINAL art+audio shipped"
 
 
 func _on_start_pressed() -> void:

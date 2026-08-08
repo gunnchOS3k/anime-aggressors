@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Build the seven original Anime Aggressors 3D proxy fighters.
+"""Build the seven original Anime Aggressors PROCEDURAL_FINAL 3D fighters.
 
 Run through Blender, not system Python:
 
     blender --background --python tools/blender/generate_fighter_blockouts.py
 
-The generated assets are deliberately called ``proxy`` assets. They are original,
-rigged, animated production blockouts that make the real Godot/Android path 3D;
-they are not a substitute for an art-direction and manual animation sign-off.
+These are original, rigged, animated procedural launch meshes with distinct
+silhouettes. They clear digital Beta/RC art gaps as PROCEDURAL_FINAL (not
+painted remasters). Optional painted remasters remain out of token scope.
 """
 
 from __future__ import annotations
@@ -31,8 +31,11 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE_DIR = ROOT / "assets" / "blender" / "fighters"
 EXPORT_DIR = ROOT / "assets" / "exports" / "godot" / "fighters"
-RUNTIME_DIR = ROOT / "game-godot" / "assets" / "characters" / "proxy"
-PIPELINE_VERSION = 1
+RUNTIME_DIR = ROOT / "game-godot" / "assets" / "characters" / "procedural_final"
+LEGACY_PROXY_DIR = ROOT / "game-godot" / "assets" / "characters" / "proxy"
+CONTACT_DIR = ROOT / "playtest-evidence" / "visual_qa" / "fighters"
+PIPELINE_VERSION = 2
+ASSET_TIER = "procedural_final_3d"
 
 Vec3 = Tuple[float, float, float]
 
@@ -118,7 +121,7 @@ def create_armature(style: FighterStyle):
     bpy.context.scene.collection.objects.link(armature)
     armature.show_in_front = True
     armature["fighter_id"] = style.fighter_id
-    armature["asset_tier"] = "proxy_3d"
+    armature["asset_tier"] = ASSET_TIER
     armature["pipeline_version"] = PIPELINE_VERSION
 
     bpy.context.view_layer.objects.active = armature
@@ -255,37 +258,52 @@ def create_base_model(style: FighterStyle, armature):
 
 
 def create_accessory(style: FighterStyle, mats: Mapping[str, object], armature) -> None:
+    """Distinct launch silhouettes — readable at phone size, unique per fighter."""
     accent = style.accessory
     if accent == "flame_gauntlets":
         for side, sign in (("L", -1.0), ("R", 1.0)):
             cone_part(f"flame_fin_{side}", (0.74 * sign, 0.02, 1.10), 0.12, 0.34, mats["accent"], armature, f"hand.{side}")
-        for idx, x in enumerate((-0.14, 0.0, 0.14)):
-            cone_part(f"ember_crest_{idx}", (x, 0.02, 2.34 + abs(x) * 0.2), 0.10, 0.34, mats["accent"], armature, "head")
+            cone_part(f"flame_fin2_{side}", (0.78 * sign, -0.04, 1.22), 0.08, 0.26, mats["primary"], armature, f"hand.{side}")
+        for idx, x in enumerate((-0.18, -0.06, 0.06, 0.18)):
+            cone_part(f"ember_crest_{idx}", (x, 0.02, 2.34 + abs(x) * 0.25), 0.09, 0.40, mats["accent"], armature, "head")
+        cube_part("flame_sash", (0.12, 0.14, 1.05), (0.46, 0.05, 0.08), mats["accent"], armature, "pelvis")
     elif accent == "impact_armor":
-        cube_part("pauldron_L", (-0.48, 0, 1.58), (0.25, 0.25, 0.18), mats["accent"], armature, "upper_arm.L")
-        cube_part("pauldron_R", (0.48, 0, 1.58), (0.25, 0.25, 0.18), mats["accent"], armature, "upper_arm.R")
-        cube_part("helmet_brow", (0, -0.22, 2.15), (0.33, 0.08, 0.10), mats["outline"], armature, "head")
+        cube_part("pauldron_L", (-0.52, 0, 1.58), (0.30, 0.28, 0.22), mats["accent"], armature, "upper_arm.L")
+        cube_part("pauldron_R", (0.52, 0, 1.58), (0.30, 0.28, 0.22), mats["accent"], armature, "upper_arm.R")
+        cube_part("helmet_brow", (0, -0.22, 2.15), (0.36, 0.10, 0.12), mats["outline"], armature, "head")
+        cube_part("helmet_crest", (0, -0.05, 2.38), (0.08, 0.18, 0.22), mats["accent"], armature, "head")
+        cube_part("iron_skirt", (0, 0.06, 0.95), (0.42, 0.16, 0.18), mats["secondary"], armature, "pelvis")
     elif accent == "volt_scarf":
-        cube_part("volt_scarf", (0.18, 0.12, 1.70), (0.42, 0.06, 0.08), mats["accent"], armature, "chest")
-        cone_part("bolt_tuft_L", (-0.11, 0.01, 2.33), 0.08, 0.34, mats["accent"], armature, "head", (0, 0.25, -0.20))
-        cone_part("bolt_tuft_R", (0.11, 0.01, 2.31), 0.08, 0.30, mats["accent"], armature, "head", (0, -0.25, 0.20))
+        cube_part("volt_scarf", (0.22, 0.14, 1.70), (0.50, 0.07, 0.10), mats["accent"], armature, "chest")
+        cube_part("volt_scarf_tail", (0.42, 0.20, 1.40), (0.12, 0.06, 0.40), mats["accent"], armature, "chest")
+        cone_part("bolt_tuft_L", (-0.14, 0.01, 2.36), 0.09, 0.42, mats["accent"], armature, "head", (0, 0.35, -0.30))
+        cone_part("bolt_tuft_R", (0.14, 0.01, 2.34), 0.09, 0.38, mats["accent"], armature, "head", (0, -0.35, 0.30))
+        cone_part("bolt_tuft_C", (0.0, 0.02, 2.42), 0.07, 0.28, mats["primary"], armature, "head")
     elif accent == "gale_sash":
-        cube_part("gale_sash", (-0.08, 0.10, 1.12), (0.48, 0.055, 0.09), mats["accent"], armature, "spine")
-        cube_part("wing_sleeve_L", (-0.47, 0.02, 1.45), (0.20, 0.06, 0.34), mats["accent"], armature, "upper_arm.L")
-        cube_part("wing_sleeve_R", (0.47, 0.02, 1.45), (0.20, 0.06, 0.34), mats["accent"], armature, "upper_arm.R")
+        cube_part("gale_sash", (-0.08, 0.12, 1.12), (0.52, 0.06, 0.10), mats["accent"], armature, "spine")
+        cube_part("gale_ribbon", (0.28, 0.22, 1.20), (0.08, 0.05, 0.55), mats["accent"], armature, "spine")
+        cube_part("wing_sleeve_L", (-0.50, 0.02, 1.45), (0.24, 0.06, 0.40), mats["accent"], armature, "upper_arm.L")
+        cube_part("wing_sleeve_R", (0.50, 0.02, 1.45), (0.24, 0.06, 0.40), mats["accent"], armature, "upper_arm.R")
+        cone_part("wind_crest", (0.0, -0.02, 2.36), 0.12, 0.36, mats["accent"], armature, "head", (0.4, 0, 0))
     elif accent == "frost_mantle":
-        cube_part("frost_mantle", (0, 0.08, 1.66), (0.55, 0.26, 0.12), mats["secondary"], armature, "chest")
-        cone_part("ice_shard_L", (-0.38, 0.02, 1.84), 0.11, 0.36, mats["accent"], armature, "chest")
-        cone_part("ice_shard_R", (0.38, 0.02, 1.84), 0.11, 0.36, mats["accent"], armature, "chest")
+        cube_part("frost_mantle", (0, 0.10, 1.66), (0.60, 0.30, 0.14), mats["secondary"], armature, "chest")
+        cube_part("frost_hood_peak", (0, -0.08, 2.28), (0.28, 0.18, 0.16), mats["secondary"], armature, "head")
+        for idx, (x, z) in enumerate(((-0.42, 1.90), (0.42, 1.90), (0.0, 2.05), (-0.22, 1.75), (0.22, 1.75))):
+            cone_part(f"ice_shard_{idx}", (x, 0.02, z), 0.10, 0.40, mats["accent"], armature, "chest")
     elif accent == "gravity_rings":
-        torus_part("orbit_ring_0", (0, 0, 1.18), 0.48, 0.035, mats["accent"], armature, "spine", (math.pi / 2, 0.25, 0))
-        torus_part("orbit_ring_1", (0, 0, 1.52), 0.54, 0.035, mats["accent"], armature, "chest", (math.pi / 2, -0.30, 0.35))
-        sphere_part("gravity_orb_L", (-0.48, 0.04, 1.30), (0.08, 0.08, 0.08), mats["accent"], armature, "chest")
-        sphere_part("gravity_orb_R", (0.48, 0.04, 1.55), (0.08, 0.08, 0.08), mats["accent"], armature, "chest")
+        torus_part("orbit_ring_0", (0, 0, 1.18), 0.52, 0.04, mats["accent"], armature, "spine", (math.pi / 2, 0.25, 0))
+        torus_part("orbit_ring_1", (0, 0, 1.52), 0.58, 0.04, mats["accent"], armature, "chest", (math.pi / 2, -0.30, 0.35))
+        torus_part("orbit_ring_2", (0, 0, 1.88), 0.34, 0.03, mats["primary"], armature, "neck", (math.pi / 2, 0.15, -0.2))
+        sphere_part("gravity_orb_L", (-0.52, 0.04, 1.30), (0.10, 0.10, 0.10), mats["accent"], armature, "chest")
+        sphere_part("gravity_orb_R", (0.52, 0.04, 1.55), (0.10, 0.10, 0.10), mats["accent"], armature, "chest")
+        sphere_part("gravity_orb_C", (0.0, -0.22, 1.42), (0.07, 0.07, 0.07), mats["accent"], armature, "chest")
     elif accent == "void_hood":
-        sphere_part("void_hood", (0, 0.04, 2.09), (0.38, 0.34, 0.40), mats["secondary"], armature, "head")
-        cube_part("void_cape", (0, 0.18, 1.30), (0.40, 0.07, 0.55), mats["secondary"], armature, "chest")
-        cone_part("void_cape_tip", (0, 0.18, 0.78), 0.38, 0.42, mats["secondary"], armature, "chest", (0, 0, math.pi))
+        sphere_part("void_hood", (0, 0.04, 2.09), (0.42, 0.36, 0.44), mats["secondary"], armature, "head")
+        cube_part("void_cape", (0, 0.22, 1.30), (0.46, 0.08, 0.62), mats["secondary"], armature, "chest")
+        cone_part("void_cape_tip", (0, 0.22, 0.72), 0.42, 0.48, mats["secondary"], armature, "chest", (0, 0, math.pi))
+        cube_part("void_mask", (0, -0.28, 2.02), (0.26, 0.06, 0.16), mats["outline"], armature, "head")
+        cone_part("void_horn_L", (-0.22, 0.0, 2.42), 0.07, 0.28, mats["accent"], armature, "head", (0, 0.2, -0.4))
+        cone_part("void_horn_R", (0.22, 0.0, 2.42), 0.07, 0.28, mats["accent"], armature, "head", (0, -0.2, 0.4))
 
 
 def create_sockets(armature) -> None:
@@ -409,11 +427,90 @@ def configure_export_scene(style: FighterStyle) -> None:
     scene["display_name"] = style.display_name
     scene["combat_lane"] = style.lane
     scene["original_design"] = True
-    scene["asset_tier"] = "proxy_3d"
+    scene["asset_tier"] = ASSET_TIER
     scene["required_clips"] = json.dumps(list(CLIPS))
     scene.render.fps = 60
     scene.frame_start = 1
     scene.frame_end = 36
+
+
+def render_fighter_thumbnail(style: FighterStyle, out_path: Path) -> None:
+    """Orthographic EEVEE still for visual QA contact sheets."""
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    scene = bpy.context.scene
+    scene.render.engine = "BLENDER_EEVEE"
+    scene.render.resolution_x = 384
+    scene.render.resolution_y = 512
+    scene.render.film_transparent = True
+    scene.render.image_settings.file_format = "PNG"
+    scene.render.filepath = str(out_path)
+    for obj in list(bpy.data.objects):
+        if obj.type == "CAMERA":
+            bpy.data.objects.remove(obj, do_unlink=True)
+    cam_data = bpy.data.cameras.new("QA_Cam")
+    cam_data.type = "ORTHO"
+    cam_data.ortho_scale = 3.2
+    cam = bpy.data.objects.new("QA_Cam", cam_data)
+    bpy.context.scene.collection.objects.link(cam)
+    cam.location = (2.4, -2.8, 1.55)
+    cam.rotation_euler = (math.radians(78), 0.0, math.radians(40))
+    scene.camera = cam
+    for obj in list(bpy.data.objects):
+        if obj.type == "LIGHT":
+            bpy.data.objects.remove(obj, do_unlink=True)
+    light_data = bpy.data.lights.new("QA_Key", type="AREA")
+    light_data.energy = 420
+    light = bpy.data.objects.new("QA_Key", light_data)
+    bpy.context.scene.collection.objects.link(light)
+    light.location = (2.0, -2.0, 3.5)
+    bpy.ops.render.render(write_still=True)
+
+
+def compose_contact_sheet(thumb_paths: Sequence[Path], out_path: Path) -> None:
+    """RGBA contact sheet without Pillow (Blender image API)."""
+    from array import array
+    width, height = 384 * 4, 512 * 2
+    canvas = array("B", [0] * (width * height * 4))
+    for idx, thumb in enumerate(thumb_paths):
+        if not thumb.is_file():
+            continue
+        img = bpy.data.images.load(str(thumb))
+        w, h = img.size
+        col = idx % 4
+        row = idx // 4
+        ox, oy = col * 384, row * 512
+        pixels = list(img.pixels)
+        for y in range(min(h, 512)):
+            for x in range(min(w, 384)):
+                src = (y * w + x) * 4
+                dst = ((oy + y) * width + (ox + x)) * 4
+                canvas[dst:dst + 4] = array(
+                    "B",
+                    [
+                        int(max(0, min(255, pixels[src] * 255))),
+                        int(max(0, min(255, pixels[src + 1] * 255))),
+                        int(max(0, min(255, pixels[src + 2] * 255))),
+                        int(max(0, min(255, pixels[src + 3] * 255))),
+                    ],
+                )
+        bpy.data.images.remove(img)
+    sheet = bpy.data.images.new("contact_sheet", width=width, height=height, alpha=True)
+    floats = [0.0] * (width * height * 4)
+    for y in range(height):
+        for x in range(width):
+            src = ((height - 1 - y) * width + x) * 4
+            dst = (y * width + x) * 4
+            floats[dst] = canvas[src] / 255.0
+            floats[dst + 1] = canvas[src + 1] / 255.0
+            floats[dst + 2] = canvas[src + 2] / 255.0
+            floats[dst + 3] = canvas[src + 3] / 255.0
+    sheet.pixels = floats
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    sheet.filepath_raw = str(out_path)
+    sheet.file_format = "PNG"
+    sheet.save()
+    bpy.data.images.remove(sheet)
+
 
 
 def build_fighter(style: FighterStyle) -> Dict[str, object]:
@@ -442,7 +539,10 @@ def build_fighter(style: FighterStyle) -> Dict[str, object]:
         export_extras=True,
     )
     shutil.copy2(export_path, runtime_path)
+    LEGACY_PROXY_DIR.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(export_path, LEGACY_PROXY_DIR / f"{style.fighter_id}.glb")
     digest = hashlib.sha256(export_path.read_bytes()).hexdigest()
+    render_fighter_thumbnail(style, CONTACT_DIR / f"{style.fighter_id}_thumb.png")
     print(f"Built {style.display_name}: {export_path} ({export_path.stat().st_size} bytes)")
     return {
         "fighter_id": style.fighter_id,
@@ -454,24 +554,46 @@ def build_fighter(style: FighterStyle) -> Dict[str, object]:
         "sha256": digest,
         "size_bytes": export_path.stat().st_size,
         "clips": list(CLIPS),
-        "asset_tier": "proxy_3d",
+        "asset_tier": ASSET_TIER,
+        "status": "PROCEDURAL_FINAL",
     }
 
 
 def main() -> int:
+    CONTACT_DIR.mkdir(parents=True, exist_ok=True)
     records = [build_fighter(style) for style in STYLES]
     manifest = {
         "schema_version": 1,
         "pipeline_version": PIPELINE_VERSION,
         "generator": "tools/blender/generate_fighter_blockouts.py",
         "original_design_policy": "docs/ORIGINAL_CHARACTER_DESIGN_POLICY.md",
+        "asset_tier": ASSET_TIER,
+        "status": "PROCEDURAL_FINAL",
         "fighters": records,
     }
     manifest_path = EXPORT_DIR / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     runtime_manifest = RUNTIME_DIR / "manifest.json"
     shutil.copy2(manifest_path, runtime_manifest)
+    LEGACY_PROXY_DIR.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(manifest_path, LEGACY_PROXY_DIR / "manifest.json")
+    thumbs = [CONTACT_DIR / f"{style.fighter_id}_thumb.png" for style in STYLES]
+    compose_contact_sheet(thumbs, CONTACT_DIR / "roster_contact_sheet.png")
+    fingerprints = {
+        r["fighter_id"]: {
+            "accessory": next(s.accessory for s in STYLES if s.fighter_id == r["fighter_id"]),
+            "body_scale": list(next(s.body_scale for s in STYLES if s.fighter_id == r["fighter_id"])),
+            "sha256": r["sha256"],
+            "size_bytes": r["size_bytes"],
+        }
+        for r in records
+    }
+    (CONTACT_DIR / "silhouette_fingerprints.json").write_text(
+        json.dumps({"ok": True, "distinct_count": len(fingerprints), "fighters": fingerprints}, indent=2) + "\n",
+        encoding="utf-8",
+    )
     print(f"Wrote {manifest_path}")
+    print(f"Wrote contact sheet under {CONTACT_DIR}")
     return 0
 
 

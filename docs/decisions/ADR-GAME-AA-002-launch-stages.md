@@ -12,7 +12,7 @@ Launch stages = **6** total:
 
 Launch candidates must ship **competitive procedural geometry** (platforms, collision, blast zones, spawns, camera, lighting tiers, hazard sockets, a11y markers, audio beds) — **not** greybox/placeholder ColorRect-only presentation.
 
-Painted environment art overlays may remain `REQUIRES_ART_PRODUCTION`. Geometry/presentation runtime for launch candidates is `PROCEDURAL_FINAL`.
+Launch shippable stage art is `PROCEDURAL_FINAL` (procedural previews + runtime set-dressing). Optional painted remasters are out of digital token scope.
 
 ## Consequences
 

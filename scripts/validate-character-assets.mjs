@@ -5,7 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const runtimeDir = path.join(root, "game-godot/assets/characters/proxy");
+const runtimeDir = path.join(root, "game-godot/assets/characters/procedural_final");
 const manifestPath = path.join(runtimeDir, "manifest.json");
 const fighterIds = [
   "ember-vale", "rook-ironside", "juno-spark", "kaia-windrow",
@@ -54,8 +54,8 @@ const manifest = fs.existsSync(manifestPath)
   ? JSON.parse(fs.readFileSync(manifestPath, "utf8"))
   : { fighters: [] };
 
-if (manifest.schema_version !== 1 || manifest.pipeline_version !== 1) {
-  fail("character manifest must use schema_version=1 and pipeline_version=1");
+if (manifest.schema_version !== 1 || ![1, 2].includes(manifest.pipeline_version)) {
+  fail("character manifest must use schema_version=1 and pipeline_version=1|2");
 }
 if (manifest.original_design_policy !== "docs/ORIGINAL_CHARACTER_DESIGN_POLICY.md") {
   fail("character manifest must reference the original-design policy");
@@ -90,7 +90,7 @@ for (const fighterId of fighterIds) {
       } else if (sha256(fs.readFileSync(canonicalExport)) !== record.sha256) {
         fail(`${fighterId}: canonical export digest differs from manifest`);
       }
-      if (record.runtime !== `game-godot/assets/characters/proxy/${fighterId}.glb`) {
+      if (record.runtime !== `game-godot/assets/characters/procedural_final/${fighterId}.glb`) {
         fail(`${fighterId}: manifest runtime path is incorrect`);
       }
     }
@@ -109,14 +109,14 @@ for (const fighterId of fighterIds) {
   }
 
   const fighterData = JSON.parse(fs.readFileSync(fighterDataPath, "utf8"));
-  if (fighterData.modelPath !== `res://assets/characters/proxy/${fighterId}.glb`) {
+  if (fighterData.modelPath !== `res://assets/characters/procedural_final/${fighterId}.glb`) {
     fail(`${fighterId}: fighter data points at the wrong model`);
   }
-  if (fighterData.modelTier !== "original_rigged_proxy_3d") {
-    fail(`${fighterId}: fighter data must label its model tier`);
+  if (fighterData.modelTier !== "original_rigged_procedural_final_3d") {
+    fail(`${fighterId}: fighter data must label procedural_final model tier`);
   }
   const animationData = JSON.parse(fs.readFileSync(animationDataPath, "utf8"));
-  if (animationData.status !== "proxy_3d") fail(`${fighterId}: animation status is not proxy_3d`);
+  if (animationData.status !== "procedural_final_3d") fail(`${fighterId}: animation status is not procedural_final_3d`);
   for (const clip of requiredClips) {
     if (!animationData.clips?.includes(clip)) fail(`${fighterId}: animation manifest missing ${clip}`);
   }
@@ -141,4 +141,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`Character assets OK: ${fighterIds.length} rigged original 3D proxies, ${requiredClips.length} clips each`);
+console.log(`Character assets OK: ${fighterIds.length} rigged procedural_final 3D meshes, ${requiredClips.length} clips each`);

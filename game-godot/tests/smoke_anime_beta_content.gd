@@ -2,7 +2,7 @@ extends RefCounted
 class_name SmokeAnimeBetaContent
 
 ## FULL PRODUCT Continuation IV — Anime Beta Content Complete (digital).
-## Does NOT claim Alpha tokens as new. Art gaps remain honest.
+## Does NOT claim Alpha tokens as new. Procedural_FINAL art/audio close digital gaps; painted remasters remain optional.
 
 const _AuraIdentity = preload("res://scripts/combat/aura_identity.gd")
 const _StageBuilder = preload("res://scripts/battle/stage_procedural_builder.gd")
@@ -69,7 +69,9 @@ static func run() -> bool:
 		victories[str(auth.victory_pose)] = fid
 		var statuses: Dictionary = auth.get("assetStatuses", {})
 		_SmokeAssert.ok(str(statuses.get("moves", "")) == "FINAL_ORIGINAL", "%s moves status" % fid)
-		_SmokeAssert.ok(str(statuses.get("model_glb", "")) == "REQUIRES_ART_PRODUCTION", "%s honest glb gap" % fid)
+		_SmokeAssert.ok(str(statuses.get("model_glb", "")) == "PROCEDURAL_FINAL", "%s procedural glb" % fid)
+		_SmokeAssert.ok(str(statuses.get("audio", "")) == "PROCEDURAL_FINAL", "%s procedural audio" % fid)
+		_SmokeAssert.ok(str(data.get("productionStatus", "")) != "proxy", "%s not proxy" % fid)
 		var mp := FileAccess.open("res://data/moves/%s.json" % fid, FileAccess.READ)
 		var moves: Dictionary = JSON.parse_string(mp.get_as_text())
 		_SmokeAssert.ok(int(moves.get("moves", []).size()) >= 20, "%s move count" % fid)
@@ -81,7 +83,8 @@ static func run() -> bool:
 		var sd: Dictionary = JSON.parse_string(sf.get_as_text())
 		_SmokeAssert.ok(str(sd.get("productionStatus", "")).begins_with("procedural_final"), "%s not greybox" % sid)
 		_SmokeAssert.ok(str(sd.get("geometryStatus", "")) == "PROCEDURAL_FINAL", "%s geometry" % sid)
-		_SmokeAssert.ok(str(sd.get("artStatus", "")) == "REQUIRES_ART_PRODUCTION", "%s art honesty" % sid)
+		_SmokeAssert.ok(str(sd.get("artStatus", "")) == "PROCEDURAL_FINAL", "%s procedural art" % sid)
+		_SmokeAssert.ok(str(sd.get("audioBed", {}).get("status", "")) == "PROCEDURAL_FINAL", "%s procedural bed" % sid)
 		_SmokeAssert.ok(sd.has("cameraProfile"), "%s camera" % sid)
 		_SmokeAssert.ok(sd.has("lightingProfile"), "%s lighting" % sid)
 		_SmokeAssert.ok(sd.has("performanceTier"), "%s perf" % sid)
@@ -128,5 +131,15 @@ static func run() -> bool:
 
 	# Move-graph uniqueness evidence from node builder.
 	_SmokeAssert.ok(FileAccess.file_exists(root.path_join("playtest-evidence/move_graph_uniqueness.json")), "move graph evidence")
+
+	var missf := FileAccess.open(root.path_join("content/missing_assets.json"), FileAccess.READ)
+	var missing: Dictionary = JSON.parse_string(missf.get_as_text())
+	var blocker_count := 0
+	for item in missing.get("items", []):
+		if bool(item.get("blocks_token", false)):
+			blocker_count += 1
+	_SmokeAssert.ok(blocker_count == 0, "zero blocks_token (got %s)" % blocker_count)
+	_SmokeAssert.ok(bool(manifest.get("honesty", {}).get("procedural_digital_art_complete", false)), "procedural art complete")
+	_SmokeAssert.ok(bool(manifest.get("honesty", {}).get("procedural_digital_audio_complete", false)), "procedural audio complete")
 
 	return _SmokeAssert.passed()

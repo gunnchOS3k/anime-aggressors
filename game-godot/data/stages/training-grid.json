@@ -2,13 +2,31 @@
   "id": "training-grid",
   "displayName": "Training Grid",
   "layoutType": "flat",
-  "mainPlatform": { "x": 0, "y": 280, "width": 900, "height": 40 },
+  "mainPlatform": {
+    "x": 0,
+    "y": 280,
+    "width": 900,
+    "height": 40
+  },
   "sidePlatforms": [],
   "spawnPoints": [
-    { "slot": 1, "x": -180, "y": 200 },
-    { "slot": 2, "x": 180, "y": 200 }
+    {
+      "slot": 1,
+      "x": -180,
+      "y": 200
+    },
+    {
+      "slot": 2,
+      "x": 180,
+      "y": 200
+    }
   ],
-  "blastZones": { "left": -520, "right": 520, "top": -360, "bottom": 420 },
+  "blastZones": {
+    "left": -520,
+    "right": 520,
+    "top": -360,
+    "bottom": 420
+  },
   "ledges": false,
   "hazardSockets": [],
   "cameraProfile": {
@@ -16,7 +34,10 @@
     "minZoom": 1.0,
     "maxZoom": 1.0,
     "lerp": 0.2,
-    "deadzone": { "x": 120, "y": 80 }
+    "deadzone": {
+      "x": 120,
+      "y": 80
+    }
   },
   "lightingProfile": {
     "keyColor": "#66cc88",
@@ -26,15 +47,31 @@
   },
   "performanceTier": {
     "default": "high",
-    "low": { "particles": false, "bands": 1 },
-    "medium": { "particles": true, "bands": 2 },
-    "high": { "particles": true, "bands": 3 }
+    "low": {
+      "particles": false,
+      "bands": 1
+    },
+    "medium": {
+      "particles": true,
+      "bands": 2
+    },
+    "high": {
+      "particles": true,
+      "bands": 3
+    }
   },
-  "a11y": { "highContrastEdges": true, "colorblindMarkers": true },
-  "audioBed": { "event": "bed_training", "status": "REQUIRES_AUDIO_PRODUCTION" },
-  "previewPlaceholder": "res://assets/placeholder/stage_training-grid.svg",
-  "artStatus": "REQUIRES_ART_PRODUCTION",
+  "a11y": {
+    "highContrastEdges": true,
+    "colorblindMarkers": true
+  },
+  "audioBed": {
+    "event": "bed_training",
+    "status": "PROCEDURAL_FINAL",
+    "path": "res://assets/audio/procedural/stages/training-grid/bed.wav"
+  },
+  "previewPlaceholder": "res://assets/stages/procedural/training-grid.svg",
+  "artStatus": "PROCEDURAL_FINAL",
   "productionStatus": "procedural_final_training",
   "geometryStatus": "PROCEDURAL_FINAL",
-  "notes": "Training launch stage — procedural geometry, not greybox ColorRect."
+  "notes": "Launch competitive geometry + procedural environment art/audio are PROCEDURAL_FINAL. Painted remasters optional/out of token scope."
 }
