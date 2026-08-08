@@ -29,6 +29,8 @@ const SCENES := {
 	"controls": "res://scenes/menus/ControlsScene.tscn",
 	"labs": "res://scenes/menus/LabsScene.tscn",
 	"mobile_playtest": "res://scenes/menus/MobilePlaytestScene.tscn",
+	"credits": "res://scenes/menus/CreditsScene.tscn",
+	"crash_recovery": "res://scenes/ui/CrashRecoveryScene.tscn",
 }
 
 func mark_boot_title_shown() -> void:

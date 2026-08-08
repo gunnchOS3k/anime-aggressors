@@ -1,6 +1,6 @@
-# FULL PRODUCT Continuation V — Anime Digital RC Ready
+# FULL PRODUCT Continuation VI — Anime Digital RC Ready
 
-**Status:** Digital RC validation architecture + evidence path on Godot — **private/dev only**  
+**Status:** Digital RC validation + Path A package/runtime hardening on Godot — **private/dev only**  
 **Token:** `ANIME_DIGITAL_RC_READY`  
 **Path:** **A** (requires closed digital art/audio blockers)
 
@@ -23,7 +23,12 @@
 | Net fault injection | `NetworkSim.run_loopback_test` + private netplay stack |
 | Replay verify | `ReplayStore.self_test` |
 | Save migration | `GameState.migrate_save_if_needed` v1→v2 |
-| Standalone package | `builds/digital-rc/` via `package-anime-standalone.mjs` |
+| Corrupted profile | `GameState.recover_corrupted_profile` |
+| Content/version hash | `ContentIntegrity` + anti-tamper build id |
+| Controller disconnect | `ControllerWatchdog` |
+| Update/rollback | `scripts/digital-rc-update-rollback.mjs` |
+| Credits / crash / splash / icon | scenes + `project.godot` boot splash |
+| Standalone package | `builds/digital-rc/` includes Path A assets |
 | Clean install | `builds/digital-rc/CLEAN_INSTALL.md` |
 | Performance thresholds | `playtest-evidence/digital_rc_performance.json` |
 

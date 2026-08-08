@@ -1,7 +1,9 @@
 extends Node
 class_name CombatFeedback
 
-## Data-driven hit feedback: hitstop, camera, VFX, SFX proxy hooks.
+## Data-driven hit feedback: hitstop, camera, VFX, Path A procedural SFX.
+
+const _ProceduralAudio = preload("res://scripts/audio/procedural_audio_bank.gd")
 
 signal feedback_triggered(info: Dictionary)
 
@@ -9,6 +11,7 @@ var _profiles: Dictionary = {}
 var _camera: Camera2D = null
 var _shake_remaining: float = 0.0
 var _shake_intensity: float = 0.0
+var fighter_id: String = ""
 
 const TIER_HITSTOP := {
 	"light": {"min": 2, "max": 3},
@@ -53,7 +56,7 @@ func apply_hit(attacker: Node, defender: Node, move: Dictionary, info: Dictionar
 	result["camera_event"] = fb.get("camera_event", "")
 	result["screen_flash"] = fb.get("screen_flash", false)
 	result["element"] = move.get("element_effect", {}).get("type", "")
-	_log_proxy_sfx(result.sfx_event, tier)
+	_play_procedural_sfx(result.sfx_event, tier, attacker)
 	_trigger_camera(tier, fb.get("camera_event", ""))
 	feedback_triggered.emit(result)
 	return result
@@ -75,9 +78,22 @@ func _trigger_camera(tier: String, event: String) -> void:
 	if event != "" and intensity_scale > 0.01:
 		print("[CombatFeedback] camera_event: %s tier:%s" % [event, tier])
 
-func _log_proxy_sfx(event: String, tier: String) -> void:
-	if event != "":
-		print("[CombatFeedback] sfx_event: %s tier:%s" % [event, tier])
+func _play_procedural_sfx(event: String, tier: String, attacker: Node) -> void:
+	if event == "":
+		return
+	var fid := fighter_id
+	if fid == "" and attacker != null and "fighter_id" in attacker:
+		fid = str(attacker.fighter_id)
+	elif fid == "" and attacker != null and attacker.has_method("get") and attacker.get("data") is Dictionary:
+		fid = str((attacker.get("data") as Dictionary).get("id", ""))
+	var cat := _ProceduralAudio.map_sfx_event_to_category(event)
+	var played: Dictionary
+	if fid != "":
+		played = _ProceduralAudio.play_fighter(fid, cat, self)
+	else:
+		played = _ProceduralAudio.play_shared(cat, self)
+	if not bool(played.get("ok", false)):
+		print("[CombatFeedback] sfx_miss: %s tier:%s cat:%s" % [event, tier, cat])
 
 func _process(delta: float) -> void:
 	if _camera == null or _shake_remaining <= 0.0:

@@ -59,6 +59,27 @@ const pkgManifest = JSON.parse(
 );
 if (pkgManifest.public_deploy !== false) fail("must not claim public deploy");
 if (!pkgManifest.clean_install_steps?.length) fail("clean install steps missing");
+const assets = pkgManifest.assets_included || {};
+if ((assets.procedural_final_glb || 0) < 7) fail("package missing fighter GLBs");
+if ((assets.stage_svg || 0) < 6) fail("package missing stage SVGs");
+if ((assets.procedural_wav || 0) < 48) fail("package missing procedural WAV bank");
+for (const id of [
+  "ember-vale",
+  "rook-ironside",
+  "juno-spark",
+  "kaia-windrow",
+  "nix-calder",
+  "orion-vell",
+  "vesper-nyx",
+]) {
+  const glb = path.join(root, `builds/digital-rc/game-godot/assets/characters/procedural_final/${id}.glb`);
+  if (!fs.existsSync(glb)) fail(`package missing ${id}.glb`);
+}
+ok("package contains Path A assets");
+
+const rollbackScript = path.join(root, "scripts/digital-rc-update-rollback.mjs");
+if (!fs.existsSync(rollbackScript)) fail("missing update/rollback script");
+ok("update/rollback helper present");
 ok("package manifest honesty");
 
 // Performance threshold document (evidence filled by Godot runner when available)

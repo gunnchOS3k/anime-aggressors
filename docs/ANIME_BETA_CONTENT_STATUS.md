@@ -1,8 +1,8 @@
-# FULL PRODUCT Continuation V — Anime Beta Content Complete (digital)
+# FULL PRODUCT Continuation VI — Anime Beta Content Complete (digital)
 
-**Status:** Digital Beta content + procedural art/audio closed on Godot path — **NOT painted remasters**, **NOT public online deploy**  
-**Branch:** `cursor/full-product-continuation-v-anime-closure`  
-**Base:** `origin/main` @ #68 / `1555ba3`  
+**Status:** Path A audit repaired — digital Beta content + procedural art/audio closed on Godot path — **NOT painted remasters**, **NOT public online deploy**  
+**Branch:** `cursor/full-product-continuation-vi-anime-path-a-audit`  
+**Base:** `origin/main` @ #69 / `b3c823c`  
 **Token:** `ANIME_BETA_CONTENT_COMPLETE_DIGITAL`  
 **Path:** **A** (procedural/original final digital assets)
 
@@ -15,13 +15,13 @@
 | `ANIME_COMPETITIVE_AI_DIGITALLY_VALIDATED` | Prior | Not repackaged |
 | `ANIME_DIGITAL_RC_READY` | Follow-on / paired | See `ANIME_DIGITAL_RC_STATUS.md` |
 
-## Delivered (Continuation V Path A)
+## Cont VI Path A audit repairs
 
-1. **7 fighter GLBs** regenerated as `PROCEDURAL_FINAL` (Blender, distinct silhouettes) under `game-godot/assets/characters/procedural_final/`
-2. **6 stage environment previews** + runtime set-dressing (`PROCEDURAL_FINAL`, not greybox)
-3. **Procedural audio bank** — shared + per-fighter hit/move/charge/projectile/defense/KO/UI + stage beds
-4. **Visual QA** contact sheets + silhouette fingerprints under `playtest-evidence/visual_qa/`
-5. **Integrity validators** — `validate-anime-digital-art-audio-closure.mjs` enforces zero token blockers
+1. Godot `.import` sidecars for procedural_final GLBs, stage SVGs, and procedural WAV bank
+2. Runtime audio bank loads synthesized WAVs (combat + stage beds + UI)
+3. Stage preview textures load in battle builder + stage select
+4. Standalone package now includes Path A asset trees (not manifests-only)
+5. No second asset system; candidate `modelPath` remains `procedural_final/` (not `proxy/`)
 
 ## Honesty
 

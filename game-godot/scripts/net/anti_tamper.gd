@@ -6,8 +6,8 @@ class_name AntiTamper
 
 const _OnlineProtocol = preload("res://scripts/net/online_protocol.gd")
 
-const BUILD_ID := "anime-alpha-private-1"
-const TOKEN_HINT := "ANIME_PRIVATE_NETPLAY_DIGITAL_PASS"
+const BUILD_ID := "anime-digital-rc-private-1"
+const TOKEN_HINT := "ANIME_DIGITAL_RC_READY"
 
 
 static func build_fingerprint() -> String:
@@ -70,7 +70,7 @@ static func validate_envelope(msg: Dictionary, expect_build: bool = true) -> Dic
 static func version_compatible(remote_proto: int, remote_build: String) -> bool:
 	if remote_proto != _OnlineProtocol.PROTOCOL_VERSION:
 		return false
-	return remote_build.begins_with("anime-alpha-private")
+	return remote_build.begins_with("anime-digital-rc-private") or remote_build.begins_with("anime-alpha-private")
 
 
 static func self_test() -> Dictionary:

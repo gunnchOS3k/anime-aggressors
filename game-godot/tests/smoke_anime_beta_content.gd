@@ -72,6 +72,9 @@ static func run() -> bool:
 		_SmokeAssert.ok(str(statuses.get("model_glb", "")) == "PROCEDURAL_FINAL", "%s procedural glb" % fid)
 		_SmokeAssert.ok(str(statuses.get("audio", "")) == "PROCEDURAL_FINAL", "%s procedural audio" % fid)
 		_SmokeAssert.ok(str(data.get("productionStatus", "")) != "proxy", "%s not proxy" % fid)
+		_SmokeAssert.ok(str(data.get("modelPath", "")).contains("procedural_final/"), "%s final modelPath" % fid)
+		_SmokeAssert.ok(not str(data.get("modelPath", "")).contains("/proxy/"), "%s no proxy modelPath" % fid)
+		_SmokeAssert.ok(ResourceLoader.exists(str(data.get("modelPath", ""))), "%s model loads" % fid)
 		var mp := FileAccess.open("res://data/moves/%s.json" % fid, FileAccess.READ)
 		var moves: Dictionary = JSON.parse_string(mp.get_as_text())
 		_SmokeAssert.ok(int(moves.get("moves", []).size()) >= 20, "%s move count" % fid)
@@ -91,12 +94,26 @@ static func run() -> bool:
 		_SmokeAssert.ok(sd.has("a11y"), "%s a11y" % sid)
 		_SmokeAssert.ok(sd.has("audioBed"), "%s audioBed" % sid)
 		_SmokeAssert.ok(sd.has("blastZones") and sd.has("spawnPoints"), "%s spawn/blast" % sid)
+		var preview := str(sd.get("previewPlaceholder", ""))
+		_SmokeAssert.ok(preview != "" and (ResourceLoader.exists(preview) or FileAccess.file_exists(preview)), "%s preview loads" % sid)
+		var bed := str(sd.get("audioBed", {}).get("path", ""))
+		_SmokeAssert.ok(bed != "" and (ResourceLoader.exists(bed) or FileAccess.file_exists(bed)), "%s bed loads" % sid)
 
-	# Procedural builder present + themed.
+	var _ProceduralAudio = preload("res://scripts/audio/procedural_audio_bank.gd")
+	_SmokeAssert.ok(bool(_ProceduralAudio.self_test().get("ok", false)), "procedural audio bank loads")
+
+	# Procedural builder present + themed + builds with preview/audio meta.
 	_SmokeAssert.ok(FileAccess.file_exists("res://scripts/battle/stage_procedural_builder.gd"), "stage builder")
 	var themes: Dictionary = _StageBuilder.THEMES
 	for sid in COMPETITIVE:
 		_SmokeAssert.ok(themes.has(sid), "theme for %s" % sid)
+	var stage_root := Node2D.new()
+	var sample := FileAccess.open("res://data/stages/skyline-arena.json", FileAccess.READ)
+	var sample_data: Dictionary = JSON.parse_string(sample.get_as_text())
+	var built: Dictionary = _StageBuilder.build(stage_root, sample_data, true)
+	_SmokeAssert.ok(bool(built.get("audioBedLoaded", false)), "stage bed stream loads")
+	_SmokeAssert.ok(bool(built.get("previewLoaded", false)), "stage preview texture loads")
+	stage_root.free()
 
 	# Modes wired.
 	var router := FileAccess.open("res://scripts/core/SceneRouter.gd", FileAccess.READ).get_as_text()
