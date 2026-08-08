@@ -256,6 +256,33 @@ func migrate_save_if_needed(cfg: ConfigFile) -> Dictionary:
 	save_version = from_ver
 	return {"ok": true, "from": 1 if migrated else from_ver, "to": save_version, "migrated": migrated}
 
+
+func recover_corrupted_profile(cfg: ConfigFile = null) -> Dictionary:
+	## Reset unlocks/career to safe defaults when save values are nonsensical.
+	var source := cfg
+	if source == null:
+		source = ConfigFile.new()
+		source.load("user://aa_save.cfg")
+	var corrupt := false
+	var wins := int(source.get_value("career", "wins", 0))
+	var losses := int(source.get_value("career", "losses", 0))
+	var matches := int(source.get_value("career", "matches", 0))
+	if wins < 0 or losses < 0 or matches < 0 or matches < wins + losses:
+		corrupt = true
+	var fighters = source.get_value("progress", "fighters", [])
+	if typeof(fighters) != TYPE_ARRAY:
+		corrupt = true
+	if corrupt:
+		career_wins = 0
+		career_losses = 0
+		career_matches = 0
+		unlocked_fighters = roster_ids()
+		unlocked_stages = production_stage_ids()
+		save_version = SAVE_VERSION_CURRENT
+		_persist_save()
+		return {"ok": true, "recovered": true, "reason": "corrupted_profile"}
+	return {"ok": true, "recovered": false}
+
 func begin_arcade(player_id: String = "") -> void:
 	mode = "arcade"
 	arcade_active = true
@@ -348,6 +375,9 @@ func ensure_save_loaded() -> void:
 		save_version = SAVE_VERSION_CURRENT
 		return
 	migrate_save_if_needed(cfg)
+	var recovery: Dictionary = recover_corrupted_profile(cfg)
+	if bool(recovery.get("recovered", false)):
+		return
 	career_wins = int(cfg.get_value("career", "wins", 0))
 	career_losses = int(cfg.get_value("career", "losses", 0))
 	career_matches = int(cfg.get_value("career", "matches", 0))

@@ -1,0 +1,103 @@
+{
+  "id": "ember-courtyard",
+  "displayName": "Ember Courtyard",
+  "layoutType": "wide",
+  "mainPlatform": {
+    "x": 0,
+    "y": 285,
+    "width": 880,
+    "height": 42
+  },
+  "sidePlatforms": [
+    {
+      "x": -320,
+      "y": 175,
+      "width": 170,
+      "height": 24
+    },
+    {
+      "x": 320,
+      "y": 175,
+      "width": 170,
+      "height": 24
+    }
+  ],
+  "spawnPoints": [
+    {
+      "slot": 1,
+      "x": -240,
+      "y": 205
+    },
+    {
+      "slot": 2,
+      "x": 240,
+      "y": 205
+    }
+  ],
+  "blastZones": {
+    "left": -580,
+    "right": 580,
+    "top": -370,
+    "bottom": 450
+  },
+  "ledges": true,
+  "hazardSockets": [
+    {
+      "id": "brazier_l",
+      "x": -400,
+      "y": 240,
+      "radius": 16
+    },
+    {
+      "id": "brazier_r",
+      "x": 400,
+      "y": 240,
+      "radius": 16
+    }
+  ],
+  "cameraProfile": {
+    "mode": "platform_fighter",
+    "minZoom": 0.82,
+    "maxZoom": 1.3,
+    "lerp": 0.11,
+    "deadzone": {
+      "x": 90,
+      "y": 60
+    }
+  },
+  "lightingProfile": {
+    "keyColor": "#ff6644",
+    "keyAlpha": 0.15,
+    "ambient": "#180a08",
+    "rim": "#ff8866"
+  },
+  "performanceTier": {
+    "default": "high",
+    "low": {
+      "particles": false,
+      "bands": 1
+    },
+    "medium": {
+      "particles": true,
+      "bands": 2
+    },
+    "high": {
+      "particles": true,
+      "bands": 4
+    }
+  },
+  "a11y": {
+    "highContrastEdges": true,
+    "colorblindMarkers": true
+  },
+  "audioBed": {
+    "event": "bed_ember_courtyard",
+    "status": "PROCEDURAL_FINAL",
+    "path": "res://assets/audio/procedural/stages/ember-courtyard/bed.wav"
+  },
+  "previewPlaceholder": "res://assets/stages/procedural/ember-courtyard.svg",
+  "artStatus": "PROCEDURAL_FINAL",
+  "productionStatus": "procedural_final",
+  "geometryStatus": "PROCEDURAL_FINAL",
+  "notes": "Launch competitive geometry + procedural environment art/audio are PROCEDURAL_FINAL. Painted remasters optional/out of token scope."
+}

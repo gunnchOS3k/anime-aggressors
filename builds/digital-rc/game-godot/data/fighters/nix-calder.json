@@ -1,0 +1,64 @@
+{
+  "id": "nix-calder",
+  "displayName": "Nix Calder",
+  "archetype": "Control Tank",
+  "element": "Frost",
+  "size": "large",
+  "color": "#4a90d9",
+  "auraColor": "#4a90d9",
+  "weight": 118,
+  "runSpeed": 252,
+  "dashSpeed": 378,
+  "airSpeed": 198,
+  "jumpStrength": 589,
+  "fallSpeed": 1890,
+  "maxJumps": 2,
+  "damageTakenMult": 0.9,
+  "damageDealtMult": 1.05,
+  "shieldHealthMult": 1.1,
+  "signatureMove": "Glacier Lock",
+  "combatTag": "freeze_control",
+  "defaultSkin": "procedural_final_nix-calder",
+  "animationManifestPath": "res://data/fighters/nix-calder_animations.json",
+  "moveListPath": "res://data/moves/nix-calder.json",
+  "hitHurtProfile": {
+    "hurtboxWidth": 40,
+    "hurtboxHeight": 48,
+    "hitboxScale": 1
+  },
+  "shieldProfile": {
+    "maxHealth": 110.00000000000001,
+    "decayPerSecond": 18,
+    "stunMult": 1
+  },
+  "cpuBehaviorTags": [
+    "control",
+    "defensive"
+  ],
+  "productionStatus": "procedural_final",
+  "modelTier": "original_rigged_procedural_final_3d",
+  "portraitPlaceholder": "res://assets/ui/placeholders/fighter_nix-calder.svg",
+  "modelPath": "res://assets/characters/procedural_final/nix-calder.glb",
+  "authorship": {
+    "silhouette": "frost_mantle",
+    "victory_pose": "subtle_nod",
+    "victory_line": "Precision holds.",
+    "audio_voice_id": "vo_nix",
+    "model_presentation": "procedural_stylized",
+    "hitbox_profile": "control_zone",
+    "assetStatuses": {
+      "data": "FINAL_ORIGINAL",
+      "moves": "FINAL_ORIGINAL",
+      "silhouette": "PROCEDURAL_FINAL",
+      "model_glb": "PROCEDURAL_FINAL",
+      "animations": "GENERATABLE_INTERNAL",
+      "vfx": "GENERATABLE_INTERNAL",
+      "audio": "PROCEDURAL_FINAL",
+      "aura": "FINAL_ORIGINAL",
+      "victory": "PROCEDURAL_FINAL",
+      "cpu": "FINAL_ORIGINAL",
+      "training": "FINAL_ORIGINAL",
+      "hitboxes": "FINAL_ORIGINAL"
+    }
+  }
+}

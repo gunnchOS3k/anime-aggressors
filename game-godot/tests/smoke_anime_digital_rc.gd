@@ -51,6 +51,18 @@ static func run() -> bool:
 	var replay_self: Dictionary = _ReplayStore.self_test()
 	_SmokeAssert.ok(bool(replay_self.get("ok", false)), "replay self_test ok")
 
+	var _ContentIntegrity = preload("res://scripts/core/content_integrity.gd")
+	var _ControllerWatchdog = preload("res://scripts/input/controller_watchdog.gd")
+	var _ProceduralAudio = preload("res://scripts/audio/procedural_audio_bank.gd")
+	_SmokeAssert.ok(bool(_ContentIntegrity.self_test().get("ok", false)), "content hash mismatch gate")
+	_SmokeAssert.ok(bool(_ControllerWatchdog.self_test().get("ok", false)), "controller disconnect gate")
+	_SmokeAssert.ok(bool(_ProceduralAudio.self_test().get("ok", false)), "synthesized audio loads")
+	_SmokeAssert.ok(ResourceLoader.exists("res://scenes/menus/CreditsScene.tscn"), "credits scene")
+	_SmokeAssert.ok(ResourceLoader.exists("res://scenes/ui/CrashRecoveryScene.tscn"), "crash screen")
+	_SmokeAssert.ok(FileAccess.file_exists("res://assets/branding/splash-icon.png"), "splash icon")
+	_SmokeAssert.ok(FileAccess.file_exists("res://icon.svg"), "app icon")
+	_SmokeAssert.ok(FileAccess.file_exists(root.path_join("scripts/digital-rc-update-rollback.mjs")), "update/rollback")
+
 	# Ranked/unranked + tournament architecture
 	_SmokeAssert.ok(bool(_OnlineMM.digital_self_test().get("ok", false)), "ranked/unranked")
 	_SmokeAssert.ok(bool(_TournamentRooms.digital_self_test().get("ok", false)), "tournament")
@@ -66,6 +78,13 @@ static func run() -> bool:
 		_SmokeAssert.ok(bool(mig.get("ok", false)), "migrate ok")
 		_SmokeAssert.ok(bool(mig.get("migrated", false)), "migrated v1→v2")
 		_SmokeAssert.ok(int(cfg.get_value("meta", "save_version", 0)) == gs.SAVE_VERSION_CURRENT, "save version current")
+		var bad := ConfigFile.new()
+		bad.set_value("career", "wins", 9)
+		bad.set_value("career", "losses", 0)
+		bad.set_value("career", "matches", 1)
+		bad.set_value("progress", "fighters", "not-an-array")
+		var recovered: Dictionary = gs.recover_corrupted_profile(bad)
+		_SmokeAssert.ok(bool(recovered.get("recovered", false)), "corrupted profile recovery")
 		gs.ensure_save_loaded()
 		gs._persist_save()
 

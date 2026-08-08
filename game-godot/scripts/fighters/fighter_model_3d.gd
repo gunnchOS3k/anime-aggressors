@@ -2,8 +2,8 @@ extends Node2D
 class_name FighterModel3D
 
 ## Stylized procedural fighters in a transparent SubViewport. Physics stays on
-## CharacterBody2D. Optional GLB proxy is loaded hidden for asset-contract parity;
-## production presentation is always the stylized mesh hierarchy.
+## CharacterBody2D. Path A procedural_final GLB is loaded hidden for AnimationPlayer
+## parity; production presentation is the stylized mesh hierarchy (not proxy/).
 
 const _CharacterLife = preload("res://scripts/fighters/fighter_character_life.gd")
 const _StylizedBuilder = preload("res://scripts/fighters/stylized_fighter_builder.gd")
@@ -59,8 +59,8 @@ func configure(fighter_data: Dictionary) -> bool:
 	_fighter_id = str(fighter_data.get("id", ""))
 	_life = _CharacterLife.for_id(_fighter_id)
 
-	# Optional hidden GLB for AnimationPlayer / asset pipeline parity.
-	_try_load_proxy(fighter_data)
+	# Optional hidden procedural_final GLB for AnimationPlayer / asset pipeline parity.
+	_try_load_final_glb(fighter_data)
 
 	_stylized = _StylizedBuilder.create(_fighter_id, fighter_data)
 	_stylized.name = "StylizedFighter_%s" % _fighter_id
@@ -168,9 +168,11 @@ func play_defeat_presentation() -> void:
 	_play_defeat_presentation()
 
 
-func _try_load_proxy(fighter_data: Dictionary) -> void:
+func _try_load_final_glb(fighter_data: Dictionary) -> void:
 	var model_path := str(fighter_data.get("modelPath", ""))
-	if model_path.is_empty() or not ResourceLoader.exists(model_path):
+	if model_path.is_empty() or model_path.contains("/proxy/"):
+		return
+	if not ResourceLoader.exists(model_path):
 		return
 	var resource := load(model_path)
 	if not resource is PackedScene:
@@ -180,7 +182,7 @@ func _try_load_proxy(fighter_data: Dictionary) -> void:
 		instance.queue_free()
 		return
 	_proxy_model = instance as Node3D
-	_proxy_model.name = "ImportedProxy_%s" % _fighter_id
+	_proxy_model.name = "ImportedFinal_%s" % _fighter_id
 	_proxy_model.visible = false
 	_model_root.add_child(_proxy_model)
 	_animation_player = _find_animation_player(_proxy_model)

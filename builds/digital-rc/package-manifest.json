@@ -2,22 +2,39 @@
   "schema_version": 1,
   "name": "anime-aggressors-digital-rc",
   "public_deploy": false,
+  "path": "A",
+  "assets_included": {
+    "procedural_final_glb": 7,
+    "stage_svg": 6,
+    "procedural_wav": 48,
+    "trees": {
+      "game-godot/assets/characters/procedural_final": 16,
+      "game-godot/assets/stages/procedural": 13,
+      "game-godot/assets/audio/procedural": 129,
+      "game-godot/assets/branding": 4,
+      "game-godot/data/fighters": 15,
+      "game-godot/data/stages": 7
+    }
+  },
   "clean_install_steps": [
     "install_godot_4_5",
+    "import_assets",
     "headless_quit_after",
     "smoke_runner",
     "rc_validation_runner",
     "validate-anime-digital-rc.mjs"
   ],
   "files": {
-    "content/production_manifest.json": "f066d5f064d838f233c470831bbeab0bbca1dab654c640bc092be9ecd1006707",
-    "content/provenance.json": "d9c897431053a1ee67e3825ef732206831d3df6eb0ea38b11dd6a65b52413bfd",
+    "content/production_manifest.json": "175361098dfe168b827f608445637ccc94936b1ed3b75df69396ee1741969ce4",
+    "content/provenance.json": "efaa6b87d716c1b6a638b3ff811b4118079ae4f54a376ff0ab1195faccbfd930",
     "content/missing_assets.json": "5188e9d58595a5db0c7a1fe0cd55fb78c9ca56e647aa106861fe01a26e30cbf9",
-    "game-godot/project.godot": "ebff387f32d0eb837e1cc23ff6d097ef0a1f63de939ea0c9aa55c0a17baca9fc",
+    "game-godot/project.godot": "91128aad882989af15113fcb9ecb139453c0ca43939d064a1a14e0acaa5f3fb8",
+    "game-godot/icon.svg": "a4a1ae20394e24547de5cf4652e9a510643045d024896134fd9a840d18efbfbc",
     "game-godot/data/stages/production_stages.json": "a8f9a7aebe98977211b81945381fd56e076dff03bab115b5b673e59b901ef922",
     "game-godot/data/fighters/roster.json": "8ee78847cafbbba6b69e629df69064d1566b72ee882fd8c39c1f3ea5538ab283",
-    "docs/ANIME_BETA_CONTENT_STATUS.md": "46f88ab0d88348309d313d67ef3d3938b4c076471b1b3eae27806d3d73259f46",
-    "docs/ANIME_DIGITAL_RC_STATUS.md": "af734ea7a075bff37078d8193a45399afa36e2b2fc9282245b2643744b16d942"
+    "docs/ANIME_BETA_CONTENT_STATUS.md": "cc87be107e129a9ff95435faf31cde947a1446543ef2a8420928e17e4b188cf7",
+    "docs/ANIME_DIGITAL_RC_STATUS.md": "dc83a1c0ce0b9471e6d7a436cb77f80cfb72d2f60e9d9ad154a9c2e34c5bb215",
+    "CLEAN_INSTALL.md": "eac150fc355b600a351d234439f4cba49830c919200e5ab262817b3a398d0701"
   },
-  "generated_at": "2026-08-08T20:19:28.651Z"
+  "generated_at": "2026-08-08T20:59:50.660Z"
 }

@@ -2,6 +2,8 @@ extends RefCounted
 ## Competitive procedural stage geometry — replaces greybox ColorRect-only platforms.
 ## Geometry + procedural environment set-dressing are PROCEDURAL_FINAL (not greybox). Painted remasters optional.
 
+const _ProceduralAudio = preload("res://scripts/audio/procedural_audio_bank.gd")
+
 const THEMES := {
 	"skyline-arena": {
 		"bg": Color(0.05, 0.08, 0.16),
@@ -67,6 +69,12 @@ static func build(stage_root: Node2D, stage_data: Dictionary, reduce_motion: boo
 	_add_hazard_sockets(stage_root, stage_data.get("hazardSockets", []), theme)
 	_add_spawn_markers(stage_root, stage_data.get("spawnPoints", []), theme)
 	_add_a11y_edges(stage_root, main, stage_data)
+	_add_preview_plane(stage_root, stage_data)
+	var audio_bed: Dictionary = stage_data.get("audioBed", {})
+	var bed_path := str(audio_bed.get("path", _ProceduralAudio.stage_bed_path(stage_id)))
+	var bed_loaded := _ProceduralAudio.load_stream(bed_path) != null
+	if bed_loaded and stage_root.is_inside_tree():
+		_ProceduralAudio.play(bed_path, stage_root, -10.0)
 	return {
 		"stage_id": stage_id,
 		"productionStatus": str(stage_data.get("productionStatus", "")),
@@ -75,7 +83,9 @@ static func build(stage_root: Node2D, stage_data: Dictionary, reduce_motion: boo
 		"camera": camera,
 		"lighting": lighting,
 		"performanceTier": stage_data.get("performanceTier", {}),
-		"audioBed": stage_data.get("audioBed", {}),
+		"audioBed": audio_bed,
+		"audioBedLoaded": bed_loaded,
+		"previewLoaded": bool(stage_root.get_meta("preview_loaded", false)),
 	}
 
 
@@ -237,6 +247,32 @@ static func _add_a11y_edges(root: Node2D, main: Dictionary, stage_data: Dictiona
 	edge.add_point(Vector2(w / 2.0, -h / 2.0))
 	body.add_child(edge)
 	root.add_child(body)
+
+
+static func _add_preview_plane(root: Node2D, stage_data: Dictionary) -> void:
+	var preview_path := str(stage_data.get("previewPlaceholder", ""))
+	root.set_meta("preview_loaded", false)
+	if preview_path.is_empty():
+		return
+	if not ResourceLoader.exists(preview_path) and not FileAccess.file_exists(preview_path):
+		return
+	var tex: Texture2D = null
+	if ResourceLoader.exists(preview_path):
+		tex = load(preview_path) as Texture2D
+	if tex == null:
+		return
+	var sprite := Sprite2D.new()
+	sprite.name = "StagePreviewArt"
+	sprite.texture = tex
+	sprite.centered = true
+	sprite.position = Vector2(0, -40)
+	sprite.modulate = Color(1, 1, 1, 0.35)
+	sprite.z_index = -19
+	var sz := tex.get_size()
+	if sz.x > 0.0:
+		sprite.scale = Vector2(900.0 / sz.x, 320.0 / maxf(1.0, sz.y))
+	root.add_child(sprite)
+	root.set_meta("preview_loaded", true)
 
 
 static func _add_environment_setdress(root: Node2D, stage_id: String, theme: Dictionary, perf_tier: String, reduce_motion: bool) -> void:

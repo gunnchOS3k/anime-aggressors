@@ -47,9 +47,11 @@ ok("manifest rebuilt");
 for (const id of fighters) {
   const glb = path.join(root, `game-godot/assets/characters/procedural_final/${id}.glb`);
   if (!fs.existsSync(glb) || fs.statSync(glb).size < 100_000) fail(`glb ${id}`);
+  if (!fs.existsSync(`${glb}.import`)) fail(`glb import missing ${id}`);
   for (const cat of ["hit", "move", "charge", "projectile", "defense", "ko"]) {
     const wav = path.join(root, `game-godot/assets/audio/procedural/fighters/${id}/${cat}.wav`);
     if (!fs.existsSync(wav) || fs.statSync(wav).size < 100) fail(`audio ${id}.${cat}`);
+    if (!fs.existsSync(`${wav}.import`)) fail(`audio import ${id}.${cat}`);
   }
   const data = JSON.parse(
     fs.readFileSync(path.join(root, `game-godot/data/fighters/${id}.json`), "utf8"),
@@ -57,19 +59,26 @@ for (const id of fighters) {
   if (data.authorship?.assetStatuses?.model_glb !== "PROCEDURAL_FINAL") fail(`${id} model status`);
   if (data.authorship?.assetStatuses?.audio !== "PROCEDURAL_FINAL") fail(`${id} audio status`);
   if (data.productionStatus === "proxy") fail(`${id} still proxy productionStatus`);
+  if (!String(data.modelPath || "").includes("procedural_final/")) fail(`${id} modelPath not final`);
+  if (String(data.modelPath || "").includes("/proxy/")) fail(`${id} modelPath still proxy`);
 }
 ok("7 fighters procedural art+audio");
 
 for (const id of stages) {
-  if (!fs.existsSync(path.join(root, `game-godot/assets/stages/procedural/${id}.svg`))) {
+  const svg = path.join(root, `game-godot/assets/stages/procedural/${id}.svg`);
+  if (!fs.existsSync(svg)) {
     fail(`stage art ${id}`);
   }
-  if (!fs.existsSync(path.join(root, `game-godot/assets/audio/procedural/stages/${id}/bed.wav`))) {
+  if (!fs.existsSync(`${svg}.import`)) fail(`stage import ${id}`);
+  const bed = path.join(root, `game-godot/assets/audio/procedural/stages/${id}/bed.wav`);
+  if (!fs.existsSync(bed)) {
     fail(`stage bed ${id}`);
   }
+  if (!fs.existsSync(`${bed}.import`)) fail(`stage bed import ${id}`);
   const s = JSON.parse(fs.readFileSync(path.join(root, `game-godot/data/stages/${id}.json`), "utf8"));
   if (s.artStatus !== "PROCEDURAL_FINAL") fail(`${id} artStatus`);
   if (s.audioBed?.status !== "PROCEDURAL_FINAL") fail(`${id} audioBed`);
+  if (String(s.productionStatus || "").includes("greybox")) fail(`${id} greybox tag`);
 }
 ok("6 stages procedural art+audio");
 

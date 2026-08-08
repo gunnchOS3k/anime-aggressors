@@ -56,11 +56,18 @@ func _on_mobile_playtest_pressed() -> void:
 	_press_feedback()
 	SceneRouter.go_mobile_playtest()
 
+func _on_credits_pressed() -> void:
+	_press_feedback()
+	SceneRouter.go("credits")
+
 func _press_feedback() -> void:
-	# Soft scale nudge — stands in until dedicated menu SFX bus is wired.
+	# Soft scale nudge + Path A UI confirm SFX when available.
 	var tap := create_tween()
 	tap.tween_property(self, "scale", Vector2(0.995, 0.995), 0.05)
 	tap.tween_property(self, "scale", Vector2.ONE, 0.08)
+	var audio = load("res://scripts/audio/procedural_audio_bank.gd")
+	if audio:
+		audio.play_shared("ui_confirm", self)
 	if DisplayServer.is_touchscreen_available():
 		Input.vibrate_handheld(18)
 

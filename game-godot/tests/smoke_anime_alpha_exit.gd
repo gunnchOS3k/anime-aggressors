@@ -98,6 +98,10 @@ static func run() -> bool:
 	_SmokeAssert.ok(router.contains("online_private"), "router online_private")
 	var mode := FileAccess.open("res://scripts/menus/mode_select_scene.gd", FileAccess.READ).get_as_text()
 	_SmokeAssert.ok(mode.contains("_on_online_pressed"), "mode select online")
-	_SmokeAssert.ok(_AntiTamper.build_fingerprint().contains("anime-alpha-private"), "build fingerprint")
+	var fp := str(_AntiTamper.build_fingerprint())
+	_SmokeAssert.ok(
+		("anime-digital-rc-private" in fp) or ("anime-alpha-private" in fp),
+		"build fingerprint (%s)" % fp,
+	)
 
 	return _SmokeAssert.passed()
