@@ -494,7 +494,59 @@ ok("greybox stage count toward launch");
 if (!fs.existsSync(path.join(godotRoot, "scripts/battle/batch_match_harness.gd"))) {
   fail("missing batch_match_harness.gd");
 }
+const batchSrc = readGodot("scripts/battle/batch_match_harness.gd");
+if (!batchSrc.includes("run_full_matrix") || !batchSrc.includes("deadlock_rate") || !batchSrc.includes("diversity")) {
+  fail("batch harness missing 7x7 matrix / deadlock / diversity");
+}
 ok("batch match harness");
+
+// Wave D2 — tutorial, hazards mode, aura runtime, online scaffold
+for (const p of [
+  "scenes/menus/TutorialScene.tscn",
+  "scenes/training/TutorialBattleScene.tscn",
+  "scripts/menus/tutorial_scene.gd",
+  "scripts/training/tutorial_battle_scene.gd",
+  "scenes/menus/HazardsScene.tscn",
+  "scripts/menus/hazards_scene.gd",
+  "scripts/battle/hazard_item_runtime.gd",
+  "scripts/combat/aura_special_runtime.gd",
+  "scripts/net/online_protocol.gd",
+  "scripts/net/session_state.gd",
+  "scripts/net/rollback_latency_policy.gd",
+  "scripts/net/network_sim.gd",
+  "tests/smoke_wave_d2_alpha_exit.gd",
+]) {
+  if (!fs.existsSync(path.join(godotRoot, p))) fail(`Wave D2 missing ${p}`);
+}
+if (!gsSrc.includes("begin_tutorial") || !gsSrc.includes("begin_hazards_mode") || !gsSrc.includes("first_run_pending")) {
+  fail("GameState missing tutorial/hazards/first-run APIs");
+}
+if (!modeSelectSrc.includes("_on_tutorial_pressed") || !modeSelectSrc.includes("_on_hazards_pressed")) {
+  fail("mode select missing Tutorial/Hazards hooks");
+}
+const routerSrc = readGodot("scripts/core/SceneRouter.gd");
+if (!routerSrc.includes('"tutorial"') || !routerSrc.includes('"hazards"')) {
+  fail("SceneRouter missing tutorial/hazards routes");
+}
+const specialRuntime = readGodot("scripts/combat/aura_special_runtime.gd");
+for (const id of FIGHTERS) {
+  if (!specialRuntime.includes(`"${id}"`)) fail(`aura_special_runtime missing ${id}`);
+}
+const fighterRuntime = readGodot("scripts/fighters/fighter.gd");
+if (!fighterRuntime.includes("aura_special_runtime") && !fighterRuntime.includes("AuraSpecialRuntime")) {
+  fail("fighter.gd must wire AuraSpecialRuntime");
+}
+const hitRuntime = readGodot("scripts/combat/hit_resolver.gd");
+if (!hitRuntime.includes("apply_attacker_on_confirm") || !hitRuntime.includes("should_block_hit_with_armor")) {
+  fail("hit_resolver missing special runtime hooks");
+}
+const smokeRunnerSrc = readGodot("tests/smoke_runner.gd");
+if (!smokeRunnerSrc.includes("wave_d2_alpha_exit")) {
+  fail("smoke_runner missing wave_d2_alpha_exit suite");
+}
+const protoSrc = readGodot("scripts/net/online_protocol.gd");
+if (!/NOT_PUBLIC/.test(protoSrc)) fail("online protocol must not claim public deploy");
+ok("wave d2 alpha-exit progress gates");
 
 // Proxy animations
 if (!fs.existsSync(path.join(godotRoot, "scripts/fighters/fighter_animator.gd"))) {

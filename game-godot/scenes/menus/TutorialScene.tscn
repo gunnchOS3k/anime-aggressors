@@ -1,0 +1,81 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/menus/tutorial_scene.gd" id="1"]
+[ext_resource type="Theme" path="res://assets/placeholder/aa_theme.tres" id="2"]
+
+[node name="TutorialScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("2")
+script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.05, 0.07, 0.12, 1)
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.0
+offset_top = -200.0
+offset_right = 260.0
+offset_bottom = 200.0
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Tutorial"
+horizontal_alignment = 1
+
+[node name="StepLabel" type="Label" parent="VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Step"
+horizontal_alignment = 1
+
+[node name="StatusLabel" type="Label" parent="VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Tutorial"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="StartGuided" type="Button" parent="VBox"]
+custom_minimum_size = Vector2(280, 72)
+layout_mode = 2
+text = "Start Guided Battle"
+
+[node name="NextStep" type="Button" parent="VBox"]
+custom_minimum_size = Vector2(280, 56)
+layout_mode = 2
+text = "Next Step Preview"
+
+[node name="Skip" type="Button" parent="VBox"]
+custom_minimum_size = Vector2(280, 56)
+layout_mode = 2
+text = "Skip Tutorial"
+
+[node name="FooterHint" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -48.0
+horizontal_alignment = 1
+
+[connection signal="pressed" from="VBox/StartGuided" to="." method="_on_start_guided_pressed"]
+[connection signal="pressed" from="VBox/NextStep" to="." method="_on_next_step_pressed"]
+[connection signal="pressed" from="VBox/Skip" to="." method="_on_skip_pressed"]

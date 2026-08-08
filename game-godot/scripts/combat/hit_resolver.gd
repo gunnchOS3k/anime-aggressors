@@ -3,6 +3,7 @@ class_name HitResolver
 const _CombatFeedback = preload("res://scripts/combat/combat_feedback.gd")
 const _AuraScaler = preload("res://scripts/combat/aura_scaler.gd")
 const _AuraIdentity = preload("res://scripts/combat/aura_identity.gd")
+const _AuraSpecialRuntime = preload("res://scripts/combat/aura_special_runtime.gd")
 const _CombatMath = preload("res://scripts/combat/combat_math.gd")
 
 signal hit_confirmed(attacker: Node, defender: Node, info: Dictionary)
@@ -14,6 +15,26 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 	if attacker == null or defender == null:
 		return
 	if not attacker.move_runner.can_hit_target(defender):
+		return
+	# Active armor frames (Rook heavies / Nix ice window) fully gate the hit.
+	if "armor_frames_remaining" in defender and float(defender.armor_frames_remaining) > 0.0:
+		var armor_info := {
+			"damage": 0.0,
+			"launch": Vector2.ZERO,
+			"hitstop_frames": 2,
+			"shield_damage": 0.0,
+			"move_id": move.get("move_id", ""),
+			"blocked": true,
+			"armor_block": true,
+			"element": "",
+			"element_effect": "",
+		}
+		if defender.has_method("receive_hit"):
+			defender.receive_hit(attacker, armor_info)
+		if defender.has_method("stamp_runtime_hook"):
+			defender.stamp_runtime_hook("passive_armor")
+		hit_confirmed.emit(attacker, defender, armor_info)
+		log_hit("ARMOR %s -> %s" % [move.get("move_id", ""), defender.name if defender else "?"])
 		return
 	var scaled := move
 	var aura_amt := 0.0
@@ -34,6 +55,11 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 	var dealt: float = float(scaled.get("damage", 0.0))
 	if attacker.has_method("get_damage_dealt_mult"):
 		dealt *= attacker.get_damage_dealt_mult()
+	# Passive aura armor (Rook L3+ / Nix ice) chips damage — script runtime, not data-only.
+	if _AuraSpecialRuntime.should_block_hit_with_armor(defender):
+		dealt *= 0.55
+		if defender.has_method("stamp_runtime_hook"):
+			defender.stamp_runtime_hook("passive_armor")
 	var kb: Vector2 = _CombatMath.knockback_vector(
 		defender.damage_percent if "damage_percent" in defender else attacker_damage_pct,
 		float(scaled.get("base_knockback", 6.0)),
@@ -44,6 +70,8 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 	)
 	if fid != "":
 		kb = _AuraIdentity.modify_knockback(kb, fid, aura_amt, tag)
+	if _AuraSpecialRuntime.should_block_hit_with_armor(defender):
+		kb *= 0.65
 	var info := {
 		"damage": dealt,
 		"launch": kb,
@@ -54,6 +82,9 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 		"element": scaled.get("element_effect", {}).get("type", ""),
 		"element_effect": scaled.get("element_effect", {}).get("effect", ""),
 	}
+	info = _AuraSpecialRuntime.apply_attacker_on_confirm(attacker, defender, scaled, info)
+	dealt = float(info.get("damage", dealt))
+	kb = info.get("launch", kb)
 	if combat_feedback:
 		info = combat_feedback.apply_hit(attacker, defender, scaled, info)
 	elif attacker.has_node("_CombatFeedback"):

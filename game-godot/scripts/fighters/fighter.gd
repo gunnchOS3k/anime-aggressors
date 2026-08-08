@@ -12,6 +12,7 @@ const _FighterAnimator = preload("res://scripts/fighters/fighter_animator.gd")
 const _ThrowResolver = preload("res://scripts/combat/throw_resolver.gd")
 const _AuraScaler = preload("res://scripts/combat/aura_scaler.gd")
 const _AuraIdentity = preload("res://scripts/combat/aura_identity.gd")
+const _AuraSpecialRuntime = preload("res://scripts/combat/aura_special_runtime.gd")
 const _CombatMath = preload("res://scripts/combat/combat_math.gd")
 
 signal damaged(amount: float, total: float)
@@ -88,6 +89,10 @@ var _dodge_cooldown: float = 0.0
 var _ledge_side: int = 0
 var _di_strength: String = "medium"
 var _pending_landing_from_attack: bool = false
+var armor_frames_remaining: float = 0.0
+var phase_cancel_remaining: float = 0.0
+var dash_cancel_remaining: float = 0.0
+var _runtime_hooks_seen: Dictionary = {}
 
 func _ready() -> void:
 	add_to_group("fighters")
@@ -198,6 +203,10 @@ func _physics_process(delta: float) -> void:
 		return
 	if _dodge_cooldown > 0.0:
 		_dodge_cooldown = maxf(0.0, _dodge_cooldown - delta)
+	_AuraSpecialRuntime.tick_fighter(self, delta)
+	# Kaia air-drift stamp (runtime, not data-only).
+	if not is_on_floor() and _AuraIdentity.air_drift_bonus(fighter_id, aura, str(data.get("combatTag", ""))) > 0.0:
+		stamp_runtime_hook("air_drift")
 	state_machine.update(delta)
 	if grabbed_by != null:
 		global_position = grabbed_by.global_position + Vector2(24 * grabbed_by.facing, -8)
@@ -289,6 +298,9 @@ func _handle_actions() -> void:
 	if _pending_attack_cmd != "":
 		_start_move_by_command(_pending_attack_cmd)
 		_pending_attack_cmd = ""
+	# Vesper phase cancel / Juno dash cancel — interrupt recovery when windows are live.
+	if _try_identity_cancel():
+		return
 	if not state_machine.can_attack():
 		return
 	if state_machine.current_state == _FighterStates.GRAB_HOLD:
@@ -403,6 +415,18 @@ func _start_move_dict(m: Dictionary) -> void:
 	_current_move = _AuraIdentity.apply_to_scaled_move(
 		_current_move, fighter_id, aura, str(data.get("combatTag", ""))
 	)
+	_AuraSpecialRuntime.begin_move_armor(self, _current_move)
+	if bool(_current_move.get("dash_cancel_enabled", false)):
+		stamp_runtime_hook("dash_cancel")
+	if int(_current_move.get("phase_cancel_frames", 0)) > 0:
+		stamp_runtime_hook("phase_cancel")
+	if _AuraIdentity.charge_rate_mult(fighter_id, str(data.get("combatTag", ""))) != 1.0:
+		stamp_runtime_hook("charge_rate")
+	var scaled_boxes: Array = _current_move.get("hitboxes", [])
+	var base_boxes: Array = m.get("hitboxes", [])
+	if not scaled_boxes.is_empty() and not base_boxes.is_empty():
+		if int(scaled_boxes[0].get("width", 40)) > int(base_boxes[0].get("width", 40)):
+			stamp_runtime_hook("hitbox_extend")
 	move_runner.start_move(_current_move, self)
 	var mid = str(m.get("move_id", ""))
 	var mt = str(m.get("move_type", "melee"))
@@ -593,6 +617,60 @@ func _update_hitbox_from_move(move: Dictionary) -> void:
 		hitbox_debug.size = Vector2(hb.get("width", 40), hb.get("height", 32))
 		hitbox_debug.position = hitbox.position - hitbox_debug.size / 2.0
 
+func set_armor_frames(seconds: float) -> void:
+	armor_frames_remaining = maxf(armor_frames_remaining, seconds)
+
+
+func enable_dash_cancel(seconds: float) -> void:
+	dash_cancel_remaining = maxf(dash_cancel_remaining, seconds)
+	stamp_runtime_hook("dash_cancel")
+
+
+func enable_phase_cancel(seconds: float) -> void:
+	phase_cancel_remaining = maxf(phase_cancel_remaining, seconds)
+	# Brief phase invuln on Vesper cancel window.
+	invincible = true
+	stamp_runtime_hook("phase_cancel")
+	stamp_runtime_hook("phase_invuln")
+	get_tree().create_timer(minf(seconds, 0.12)).timeout.connect(func():
+		if phase_cancel_remaining <= 0.0:
+			invincible = false
+	, CONNECT_ONE_SHOT)
+
+
+func stamp_runtime_hook(hook: String) -> void:
+	_runtime_hooks_seen[hook] = true
+
+
+func runtime_hooks_seen() -> Array:
+	return _runtime_hooks_seen.keys()
+
+
+func _try_identity_cancel() -> bool:
+	if not _FighterStates.is_attack_state(state_machine.current_state):
+		return false
+	if phase_cancel_remaining > 0.0 and (_read_dodge_pressed() or _read_special_pressed()):
+		move_runner.cancel()
+		hitbox.monitoring = false
+		phase_cancel_remaining = 0.0
+		stamp_runtime_hook("phase_cancel")
+		if _read_dodge_pressed():
+			_start_dodge()
+		else:
+			state_machine.enter(_FighterStates.IDLE)
+			_start_move_by_command(_resolve_special_command())
+		return true
+	if dash_cancel_remaining > 0.0 and absf(_read_axis()) > 0.75 and is_on_floor():
+		move_runner.cancel()
+		hitbox.monitoring = false
+		dash_cancel_remaining = 0.0
+		stamp_runtime_hook("dash_cancel")
+		state_machine.enter(_FighterStates.DASH)
+		velocity.x = _read_axis() * get_dash_speed()
+		return true
+	return false
+
+
 func receive_hit(attacker: Node, info: Dictionary) -> void:
 	if invincible or grabbed_by != null:
 		return
@@ -602,6 +680,10 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 	_last_knockback = info.get("launch", Vector2.ZERO)
 	_last_shield_damage = float(info.get("shield_damage", 0.0))
 	_last_element_effect = str(info.get("element", info.get("element_effect", "")))
+	if info.get("armor_block", false):
+		stamp_runtime_hook("passive_armor")
+		hit_landed.emit(info)
+		return
 	if state_machine.current_state == _FighterStates.SHIELD_HOLD or shielding:
 		var sdmg: float = info.get("shield_damage", info.get("damage", 0.0) * 0.8)
 		shield_health -= sdmg

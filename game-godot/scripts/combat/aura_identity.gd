@@ -159,11 +159,16 @@ static func apply_to_scaled_move(move: Dictionary, fighter_id: String, aura_amou
 		scaled["armor_frames"] = maxi(int(scaled.get("armor_frames", 0)), 4 + level)
 
 	if profile.get("dash_cancel_after_hit", false) and level >= 2:
+		scaled["dash_cancel_enabled"] = true
 		var windows: Array = scaled.get("cancel_windows", [])
 		if windows is Array:
 			var w := windows.duplicate()
-			if not w.has("dash"):
-				w.append("dash")
+			var startup: int = int(scaled.get("startup_frames", 0))
+			var active_f: int = int(scaled.get("active_frames", 0))
+			var recovery: int = int(scaled.get("recovery_frames", 0))
+			var start_f: int = maxi(1, startup + active_f - 2)
+			var end_f: int = startup + active_f + recovery
+			w.append({"start": start_f, "end": end_f, "action": "dash", "requires": "hit_confirm"})
 			scaled["cancel_windows"] = w
 
 	if int(profile.get("ice_armor_at_level", -1)) >= 0 and level >= int(profile.ice_armor_at_level):
