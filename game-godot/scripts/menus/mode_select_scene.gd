@@ -31,5 +31,9 @@ func _on_hazards_pressed() -> void:
 	GameState.mode = "hazards"
 	SceneRouter.go_hazards()
 
+func _on_online_pressed() -> void:
+	GameState.mode = "online_private"
+	SceneRouter.go_online_private()
+
 func on_back() -> void:
 	SceneRouter.go("main_menu")

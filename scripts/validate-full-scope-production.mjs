@@ -545,7 +545,7 @@ if (!smokeRunnerSrc.includes("wave_d2_alpha_exit")) {
   fail("smoke_runner missing wave_d2_alpha_exit suite");
 }
 const protoSrc = readGodot("scripts/net/online_protocol.gd");
-if (!/NOT_PUBLIC/.test(protoSrc)) fail("online protocol must not claim public deploy");
+if (!/(NOT_PUBLIC|PRIVATE_LOOPBACK_ONLY|no public deploy)/.test(protoSrc)) fail("online protocol must not claim public deploy");
 ok("wave d2 alpha-exit progress gates");
 
 // Proxy animations

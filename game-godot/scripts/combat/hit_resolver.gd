@@ -55,6 +55,8 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 	var dealt: float = float(scaled.get("damage", 0.0))
 	if attacker.has_method("get_damage_dealt_mult"):
 		dealt *= attacker.get_damage_dealt_mult()
+	if "damage_ratio" in GameState:
+		dealt *= float(GameState.damage_ratio)
 	# Passive aura armor (Rook L3+ / Nix ice) chips damage — script runtime, not data-only.
 	if _AuraSpecialRuntime.should_block_hit_with_armor(defender):
 		dealt *= 0.55

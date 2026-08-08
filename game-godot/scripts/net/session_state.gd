@@ -24,7 +24,7 @@ var stage_id: String = "skyline-arena"
 var frame: int = 0
 var last_confirmed_frame: int = -1
 var desync_detected: bool = false
-var alpha_claim: String = "NOT_PUBLIC_ONLINE — session scaffold only"
+var alpha_claim: String = "PRIVATE_LOOPBACK_ONLY — session state"
 
 
 func reset() -> void:
@@ -53,8 +53,18 @@ func join_lobby(id: String, guest_name: String) -> Dictionary:
 	lobby_id = id
 	state = ST_LOBBY
 	var pid: int = players.size()
+	# Avoid duplicate name appends when mirroring.
+	for existing in players:
+		if str(existing.get("name", "")) == guest_name:
+			return _snapshot()
 	players.append({"id": pid, "name": guest_name, "ready": false, "fighter_id": "rook-ironside"})
-	local_player_id = pid
+	# Joining client owns the new id; host mirrors without changing local id.
+	if pid == 0 or local_player_id < 0:
+		local_player_id = pid
+	elif state == ST_LOBBY and pid > 0 and local_player_id == 0:
+		pass
+	else:
+		local_player_id = pid
 	return _snapshot()
 
 
@@ -122,6 +132,18 @@ func end_match() -> Dictionary:
 	return _snapshot()
 
 
+func attempt_reconnect(player_id: int, last_frame: int) -> Dictionary:
+	## Resume from stall into in_match if lobby still valid.
+	if state == ST_ENDED:
+		return {"ok": false, "error": "match_ended"}
+	if players.is_empty():
+		return {"ok": false, "error": "no_players"}
+	last_confirmed_frame = maxi(last_confirmed_frame, last_frame)
+	if state != ST_IN_MATCH and state != ST_SPECTATING:
+		state = ST_IN_MATCH
+	return _snapshot()
+
+
 func apply_protocol_message(msg: Dictionary) -> Dictionary:
 	var v: Dictionary = _OnlineProtocol.validate(msg)
 	if not bool(v.get("ok", false)):
@@ -182,7 +204,7 @@ static func self_test() -> Dictionary:
 	s.set_ready(0, true)
 	s.set_ready(1, true)
 	var started: Dictionary = s.begin_match(77, "neon-rooftops")
-	var ok := str(started.get("state", "")) == ST_IN_MATCH
+	var ok: bool = str(started.get("state", "")) == ST_IN_MATCH
 	s.advance_frame(true)
 	s.advance_frame(true)
 	ok = ok and s.frame == 2 and s.last_confirmed_frame == 2

@@ -6,7 +6,7 @@ class_name NetworkSim
 
 const _OnlineProtocol = preload("res://scripts/net/online_protocol.gd")
 
-const ALPHA_CLAIM := "NOT_PUBLIC_ONLINE — network sim only"
+const ALPHA_CLAIM := "PRIVATE_LOOPBACK_ONLY — network sim"
 
 var latency_ms: float = 50.0
 var jitter_ms: float = 10.0
@@ -105,7 +105,7 @@ static func run_loopback_test(seed_value: int = 11, frames: int = 60) -> Diction
 	for _i in range(20):
 		b_got += a.advance(16.67).size()
 		a_got += b.advance(16.67).size()
-	var ok := a_got == frames and b_got == frames and int(a.stats().get("dropped", 1)) == 0
+	var ok: bool = a_got == frames and b_got == frames and int(a.stats().get("dropped", 1)) == 0
 	return {
 		"ok": ok,
 		"frames": frames,
@@ -131,7 +131,7 @@ static func run_loss_test(seed_value: int = 99) -> Dictionary:
 	var st: Dictionary = sim.stats()
 	var dropped: int = int(st.get("dropped", 0))
 	var delivered: int = int(st.get("delivered", 0))
-	var ok := dropped > 0 and delivered > 0 and dropped + delivered == attempts
+	var ok: bool = dropped > 0 and delivered > 0 and dropped + delivered == attempts
 	return {
 		"ok": ok,
 		"dropped": dropped,

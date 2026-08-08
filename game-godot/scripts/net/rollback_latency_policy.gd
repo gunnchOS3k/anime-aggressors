@@ -4,7 +4,7 @@ class_name RollbackLatencyPolicy
 ## Rollback + latency policy for private online (scaffold).
 ## Tunables only — does not claim production netcode readiness.
 
-const ALPHA_CLAIM := "NOT_PUBLIC_ONLINE — rollback/latency policy scaffold only"
+const ALPHA_CLAIM := "PRIVATE_LOOPBACK_ONLY — rollback/latency policy"
 
 ## Input delay (frames) applied before local input is considered committed.
 @export var input_delay_frames: int = 2
@@ -74,7 +74,7 @@ static func self_test() -> Dictionary:
 	p.configure(2, 8, 3)
 	var d40: int = p.recommend_delay_for_rtt(40.0)
 	var d200: int = p.recommend_delay_for_rtt(200.0)
-	var ok := d40 == 2 and d200 > d40
+	var ok: bool = d40 == 2 and d200 > d40
 	ok = ok and p.can_rollback(10, 16) and not p.can_rollback(10, 20)
 	ok = ok and p.should_stall(20, 10, 50.0)
 	ok = ok and not p.should_stall(5, 4, 40.0)

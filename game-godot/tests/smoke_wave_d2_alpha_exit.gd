@@ -67,7 +67,7 @@ static func run() -> bool:
 		_SmokeAssert.ok(FileAccess.file_exists(p), "missing %s" % p)
 	var proto: Dictionary = _OnlineProtocol.self_test()
 	_SmokeAssert.ok(bool(proto.get("ok", false)), "online protocol self_test")
-	_SmokeAssert.ok(str(proto.get("alpha_claim", "")).contains("NOT_PUBLIC"), "protocol must not claim public online")
+	_SmokeAssert.ok(("NOT_PUBLIC" in str(proto.get("alpha_claim", ""))) or ("PRIVATE_LOOPBACK" in str(proto.get("alpha_claim", ""))), "protocol must not claim public online")
 	var sess: Dictionary = _OnlineSessionState.self_test()
 	_SmokeAssert.ok(bool(sess.get("ok", false)), "session_state self_test")
 	var pol: Dictionary = _RollbackLatencyPolicy.self_test()

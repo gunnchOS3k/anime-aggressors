@@ -1,6 +1,6 @@
 # FULL PRODUCT Wave D2 — Anime Aggressors toward Alpha exit (Godot path)
 
-**Status:** IN_PROGRESS toward Alpha — **NOT Alpha exit**, **NOT content-complete**, **NOT RC**  
+**Status:** SUPERSEDED for continuation by [ANIME_ALPHA_EXIT_STATUS.md](./ANIME_ALPHA_EXIT_STATUS.md) — Wave D2 was progress-only  
 **Branch:** `cursor/full-product-wave-d2-anime-alpha-exit` (from `origin/main` incl. #65)  
 **Token:** `WAVE_D2_ANIME_ALPHA_EXIT_PROGRESS` (progress only)
 
