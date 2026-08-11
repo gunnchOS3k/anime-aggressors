@@ -1,0 +1,127 @@
+{
+  "schema": "wp014_product_gate/v1",
+  "cycle": "operating-cycle-3b",
+  "work_package": "WP-014",
+  "game": "anime-aggressors",
+  "branch": "operating-cycle-3b/wp-014-anime-aggressors",
+  "base": "origin/main",
+  "base_commit": "249270383eab87cf4d1240ea17e66bfff44d4b8c",
+  "generated_at": "2026-08-11T19:46:24Z",
+  "evidence_file": "gate1/evidence/out/actual_production_runtime.json",
+  "priority_blocker_addressed": {
+    "claim": "Godot production runtime needs real InputMap drive + save/load + pause freeze, not gate1 JS mirror / --script smokes",
+    "finding": "Prior gate1/tools/core_loop_runner.mjs is a Node mirror, not Godot. Fighter.dummy_mode defaulted to 'cpu', so human P1 still ran CpuController (sticky p1_shield via Input.action_press) dual-driven with real input. Battle pause only flipped controls_enabled/BattleSim.paused \u2014 CharacterBody2D kept sliding. HitResolver never called MatchTelemetry.record_hit. CpuController._sim_aura_charge pressed shield/special without release.",
+    "fix": "ProductionGateHarness autoload boots real main scene; pause uses get_tree().paused; dummy_mode default idle + configure() clears cpu dummy for humans; HitResolver wires record_hit; CPU aura-charge releases inputs; fighter rising-edge input helpers.",
+    "real_defect_found_and_fixed": "Human local-versus P1 was dual-driven by CpuController because @export dummy_mode defaulted to 'cpu' (is_cpu=false was not enough). Pause did not freeze physics. Verified via production harness before/after."
+  },
+  "gates": {
+    "ACTUAL_PRODUCTION_RUNTIME": "PASS",
+    "TITLE_MENU_PASS": "PASS",
+    "NEW_GAME_SESSION_PASS": "PASS",
+    "INPUT_PASS": "PASS",
+    "CORE_GAME_LOOP_PASS": "PASS",
+    "PAUSE_PASS": "PASS",
+    "SAVE_PASS": "PASS",
+    "LOAD_PASS": "PASS",
+    "SUSPEND_RESUME_OR_CHECKPOINT_PASS": "PASS",
+    "SETTINGS_PASS": "PASS",
+    "AUDIO_HOOK_PASS": "PARTIAL \u2014 AudioDirector not separately probed this cycle; settings persist master_volume only",
+    "A11Y_BASELINE_PASS": "PASS",
+    "CRASH_RECOVERY_PASS": "PASS",
+    "LOGGING_PASS": "PASS",
+    "PERF_TELEMETRY_PASS": "PASS",
+    "CLEAN_EXIT_PASS": "PASS",
+    "DEVICE_LAB_PASS": "PARTIAL_PENDING_WP-011R_GUEST",
+    "PHYSICAL_HARDWARE_PLAYTEST": "PENDING"
+  },
+  "gate_evidence_detail": {
+    "title_menu": {
+      "boot_title_screen_rendered_first": true,
+      "scene_file_path": "res://scenes/menus/MainMenuScene.tscn"
+    },
+    "new_game_session_fighters_loaded": {
+      "p1_fighter_id": "ember-vale",
+      "p2_fighter_id": "rook-ironside",
+      "scene_file_path": "res://scenes/battle/BattleScene.tscn"
+    },
+    "real_input_movement": {
+      "axis_strength_seen": 1.0,
+      "battle_active": true,
+      "controls_enabled": true,
+      "distance_traveled": 229.389114379883,
+      "end": [
+        -13.5532531738281,
+        279.925201416016
+      ],
+      "start": [
+        -220.0,
+        179.929656982422
+      ]
+    },
+    "aura_charge": {
+      "aura_level_after": 4,
+      "aura_level_before": 0,
+      "aura_value": 100.0
+    },
+    "grab_input_read": {
+      "grab_pressed_seen": true,
+      "inputmap_has_p1_grab": true
+    },
+    "h2h_core_loop": {
+      "attack_state_seen": "idle",
+      "damage_after": 5.0,
+      "damage_before": 0.0,
+      "hit_landed": true,
+      "hit_resolver_logs": [
+        "HIT jab_finisher -> Fighter2 dmg:5.0 kb:5.6"
+      ],
+      "joypads": [],
+      "match_telemetry_hit_events_after": 1,
+      "match_telemetry_hit_events_before": 0,
+      "p1_shield_stuck": false,
+      "p2_shield_stuck": false
+    },
+    "stock_loss_and_stage_bounds": {
+      "stocks_after": 2,
+      "stocks_before": 3
+    },
+    "pause_resume": {
+      "frame_frozen_while_paused": true,
+      "paused_after_ui_cancel": true,
+      "resumed_after_ui_accept": true
+    },
+    "settings_a11y_baseline": {
+      "disk_high_contrast": true,
+      "disk_master_volume": 0.5,
+      "persisted_to_disk": true
+    },
+    "save_load_lifecycle": {
+      "fresh_instance_reload_matches_live": true,
+      "matches_after": 2,
+      "matches_before": 1,
+      "wins_after": 2,
+      "wins_before": 1
+    },
+    "crash_recovery": {
+      "result": {
+        "ok": true,
+        "reason": "corrupted_profile",
+        "recovered": true
+      }
+    },
+    "logging_perf_telemetry": {
+      "avg_fps": 139.618477455607,
+      "frame_samples": 1012,
+      "hit_events": 1,
+      "ko_or_stock_loss_events": 2,
+      "match_start_events": 1
+    }
+  },
+  "defects": {
+    "S0_open": 0,
+    "S1_open": 0,
+    "S1_found_and_fixed_this_cycle": 3,
+    "S1_fixed_detail": "dummy_mode cpu dual-drive on human P1; pause non-freeze; sticky CPU aura-charge inputs + missing hit telemetry wiring"
+  },
+  "market_parity_claim": "None. Digital automated-evidence production-runtime only."
+}

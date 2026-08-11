@@ -198,9 +198,25 @@ func _sim_dodge() -> void:
 
 
 func _sim_aura_charge() -> void:
-	# Charge via legal inputs only (shield + special).
-	Input.action_press("p%d_shield" % _fighter.slot)
-	Input.action_press("p%d_special" % _fighter.slot)
+	# Charge via legal inputs only (shield + special). Always schedule a
+	# release — previously these action_press calls were sticky, so a CPU that
+	# started charging could leave pN_shield/pN_special held for the rest of
+	# the match (and after is_cpu flipped false), blocking real H2H damage.
+	var slot: int = int(_fighter.slot)
+	Input.action_press("p%d_shield" % slot)
+	Input.action_press("p%d_special" % slot)
+	_fighter.call_deferred("_release_action", "p%d_shield" % slot)
+	_fighter.call_deferred("_release_action", "p%d_special" % slot)
+
+
+func clear_simulated_inputs() -> void:
+	if _fighter == null:
+		return
+	var slot: int = int(_fighter.slot)
+	for suffix in ["left", "right", "up", "down", "jump", "attack", "special", "shield", "grab", "dodge"]:
+		var action := "p%d_%s" % [slot, suffix]
+		if InputMap.has_action(action) and Input.is_action_pressed(action):
+			Input.action_release(action)
 
 
 func _sim_aura_burst() -> void:

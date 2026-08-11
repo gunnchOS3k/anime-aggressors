@@ -1,0 +1,37 @@
+{
+  "schema": "wp014_content_register/v1",
+  "game": "anime-aggressors",
+  "generated_at": "2026-08-11T19:46:24Z",
+  "source_commit": "249270383eab87cf4d1240ea17e66bfff44d4b8c",
+  "counts": {
+    "fighters": 15,
+    "stages": 7,
+    "move_manifests": 8
+  },
+  "modes": [
+    "local_versus",
+    "arcade",
+    "training",
+    "tutorial",
+    "online_private (scaffold)"
+  ],
+  "systems_verified_this_cycle": [
+    "real InputMap p1_right movement on BattleScene",
+    "H2H jab via real hitbox/HitResolver (damage>0)",
+    "blast-zone stock loss",
+    "pause/resume with SceneTree.paused freeze",
+    "career save/load user://aa_save.cfg",
+    "a11y settings persistence",
+    "crash profile recovery",
+    "MatchTelemetry hit/stock events"
+  ],
+  "not_claimed": [
+    "No Smash-level market parity",
+    "No physical/device-lab pass this cycle",
+    "Audio cue playback not separately evidenced beyond volume persist"
+  ],
+  "provenance": {
+    "art": "game-godot/assets + playtest-evidence visual_qa carried over",
+    "audio": "prior digital RC bank"
+  }
+}
