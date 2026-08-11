@@ -216,16 +216,32 @@ func _step_aura_and_grab() -> void:
 	Input.action_release("p1_grab")
 	# Fighter1's own _physics_process legitimately reacts to this real p1_grab
 	# press too (dummy_mode/is_cpu are already reset by this point) and can
-	# enter GRAB_STARTUP for real. Resetting state_machine.current_state alone
-	# leaves move_runner.active=true on the orphaned grab move, which keeps
-	# ticking phases in the background and re-corrupts state later — cancel
-	# the move itself, not just the visible state label.
+	# enter GRAB_STARTUP for real. A press+release synthesized within one
+	# script frame (no yield) still leaves a queued "just_pressed" edge that
+	# Fighter._physics_process only consumes on the *next* physics tick — a
+	# state reset executed synchronously right here runs strictly before
+	# that tick, so the real grab fires anyway a frame later and clobbers
+	# the reset. Explicitly wait for that tick to land, let the real grab
+	# start (and possibly connect fighter2.grabbed_by), then cancel it.
+	await get_tree().physics_frame
+	await get_tree().physics_frame
 	if fighter1.get("move_runner") != null and fighter1.move_runner.has_method("cancel"):
 		fighter1.move_runner.cancel()
 	if fighter1.get("state_machine") != null and fighter1.state_machine.has_method("enter"):
 		fighter1.state_machine.enter("idle")
 	fighter1.set("grabbed_target", null)
 	fighter1.set("grabbed_by", null)
+	# fighter.gd's real grab lands the "grabbed_by" flag on the *opponent*
+	# (try_grab() does opp.grabbed_by = self), not on the grabber. Only
+	# clearing fighter1's own grabbed_by left fighter2 permanently pinned to
+	# fighter1's grab-hold offset in every later physics frame, which is what
+	# was silently overriding every H2H repositioning below.
+	fighter2.set("grabbed_by", null)
+	if fighter2.get("state_machine") != null and fighter2.state_machine.has_method("enter"):
+		fighter2.state_machine.enter("idle")
+	# One more tick so the freshly-idled state machines settle before any
+	# later step reads current_state, instead of catching them mid-transition.
+	await get_tree().physics_frame
 	_emit("grab_input_read", grab_pressed_seen and InputMap.has_action("p1_grab"), {
 		"grab_pressed_seen": grab_pressed_seen,
 		"inputmap_has_p1_grab": InputMap.has_action("p1_grab"),
@@ -263,7 +279,24 @@ func _step_h2h_and_stock_loss() -> void:
 	if fighter1.state_machine and fighter1.state_machine.has_method("enter"):
 		fighter1.state_machine.enter("idle")
 	fighter1.facing = 1
-	fighter2.global_position = fighter1.global_position + Vector2(36, 0)
+	# The earlier grab probe (_step_aura_and_grab) leaves fighter2.grabbed_by
+	# pointing at fighter1 even after the grab whiffs/expires in this harness
+	# path. fighter._physics_process() unconditionally snaps a grabbed
+	# fighter to grabbed_by.global_position + (24*facing, -8) every frame
+	# while grabbed_by != null, which silently overrode every repositioning
+	# below and made every "jab" whiff at a fixed 24px hold-distance instead
+	# of the intended 64px stand-off — a real state-leak in the grab system,
+	# not just a harness ordering issue.
+	fighter1.grabbed_by = null
+	fighter2.grabbed_by = null
+	if fighter2.state_machine and fighter2.state_machine.has_method("enter"):
+		fighter2.state_machine.enter("idle")
+	# jab_1's resolved hit region is offset_x*facing (36) plus HitShape's own
+	# local offset (32) minus half its width (~18) — i.e. roughly x in
+	# [50,86] ahead of the attacker, not 36. Stand fighter2 well inside that
+	# band so a landed jab is measuring the real hit pipeline, not a whiff
+	# caused by under-shooting the actual collision shape's reach.
+	fighter2.global_position = fighter1.global_position + Vector2(64, 0)
 	fighter2.velocity = Vector2.ZERO
 	# Prime the move/hitbox pipeline once via a direct call before the real
 	# input-driven attempts below. Without this, the first jab after the
@@ -282,21 +315,19 @@ func _step_h2h_and_stock_loss() -> void:
 	var last_hit_logs: Array = []
 	# Exact accept_visible_match.gd pattern: hold p1_attack, wait, measure.
 	for attempt in 4:
-		fighter2.global_position = fighter1.global_position + Vector2(36, 0)
+		# Zero BOTH fighters' velocity and re-anchor fighter1 too — residual
+		# dash momentum from the earlier real_input_movement/grab probes was
+		# still carrying fighter1 forward here, closing (or opening) the gap
+		# before the hitbox's active window and turning a real jab into a
+		# whiff purely from stale velocity, not a game defect.
+		fighter1.velocity = Vector2.ZERO
+		fighter1.facing = 1
+		fighter2.global_position = fighter1.global_position + Vector2(64, 0)
 		fighter2.velocity = Vector2.ZERO
 		fighter2.shielding = false
 		fighter2.invincible = false
 		Input.action_press("p1_attack")
-		print("DBG press attempt=%d just=%s pressed=%s can_attack=%s locks=%s state=%s controls=%s is_cpu=%s dummy=%s dist=%s" % [
-			attempt, Input.is_action_just_pressed("p1_attack"), Input.is_action_pressed("p1_attack"),
-			fighter1.state_machine.can_attack(), fighter1.state_machine.current_state,
-			fighter1.state_machine.current_state, fighter1.controls_enabled, fighter1.is_cpu, fighter1.dummy_mode,
-			fighter1.global_position.distance_to(fighter2.global_position),
-		])
 		await get_tree().create_timer(0.18).timeout
-		print("DBG after_hold attempt=%d state=%s move_active=%s hitbox_mon=%s" % [
-			attempt, fighter1.state_machine.current_state, fighter1.move_runner.active, fighter1.hitbox.monitoring,
-		])
 		Input.action_release("p1_attack")
 		await get_tree().create_timer(0.45).timeout
 		if fighter1.get("state_machine") != null:

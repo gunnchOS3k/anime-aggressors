@@ -1,14 +1,14 @@
 {
-  "all_steps_pass": false,
-  "commit": "249270383eab87cf4d1240ea17e66bfff44d4b8c",
-  "duration_msec": 9356,
+  "all_steps_pass": true,
+  "commit": "64617d0808889935e250c9f6ccfc9868f2d85245",
+  "duration_msec": 6516,
   "engine": "godot",
   "engine_version": "4.7.1-stable (official)",
   "game": "anime-aggressors",
   "headless": true,
   "run_mode": "main_scene_boot_with_autoloads",
   "schema": "aa_actual_production_runtime/v1",
-  "started_at": "2026-08-11T19:50:59",
+  "started_at": "2026-08-11T20:01:53",
   "steps": [
     {
       "detail": {
@@ -17,7 +17,7 @@
       },
       "result": "pass",
       "step": "title_menu",
-      "timestamp": "2026-08-11T19:50:50"
+      "timestamp": "2026-08-11T20:01:48"
     },
     {
       "detail": {
@@ -27,7 +27,7 @@
       },
       "result": "pass",
       "step": "new_game_session_fighters_loaded",
-      "timestamp": "2026-08-11T19:50:51"
+      "timestamp": "2026-08-11T20:01:48"
     },
     {
       "detail": {
@@ -46,7 +46,7 @@
       },
       "result": "pass",
       "step": "real_input_movement",
-      "timestamp": "2026-08-11T19:50:56"
+      "timestamp": "2026-08-11T20:01:52"
     },
     {
       "detail": {
@@ -56,7 +56,7 @@
       },
       "result": "pass",
       "step": "aura_charge",
-      "timestamp": "2026-08-11T19:50:56"
+      "timestamp": "2026-08-11T20:01:52"
     },
     {
       "detail": {
@@ -65,24 +65,26 @@
       },
       "result": "pass",
       "step": "grab_input_read",
-      "timestamp": "2026-08-11T19:50:56"
+      "timestamp": "2026-08-11T20:01:52"
     },
     {
       "detail": {
         "attack_state_seen": "idle",
-        "damage_after": 0.0,
+        "damage_after": 3.0,
         "damage_before": 0.0,
-        "hit_landed": false,
-        "hit_resolver_logs": [],
+        "hit_landed": true,
+        "hit_resolver_logs": [
+          "HIT jab_2 -> Fighter2 dmg:3.0 kb:3.2"
+        ],
         "joypads": [],
-        "match_telemetry_hit_events_after": 0,
+        "match_telemetry_hit_events_after": 1,
         "match_telemetry_hit_events_before": 0,
         "p1_shield_stuck": false,
         "p2_shield_stuck": false
       },
-      "result": "fail",
+      "result": "pass",
       "step": "h2h_core_loop",
-      "timestamp": "2026-08-11T19:50:58"
+      "timestamp": "2026-08-11T20:01:53"
     },
     {
       "detail": {
@@ -91,7 +93,7 @@
       },
       "result": "pass",
       "step": "stock_loss_and_stage_bounds",
-      "timestamp": "2026-08-11T19:50:58"
+      "timestamp": "2026-08-11T20:01:53"
     },
     {
       "detail": {
@@ -101,7 +103,7 @@
       },
       "result": "pass",
       "step": "pause_resume",
-      "timestamp": "2026-08-11T19:50:58"
+      "timestamp": "2026-08-11T20:01:53"
     },
     {
       "detail": {
@@ -111,7 +113,7 @@
       },
       "result": "pass",
       "step": "settings_a11y_baseline",
-      "timestamp": "2026-08-11T19:50:58"
+      "timestamp": "2026-08-11T20:01:53"
     },
     {
       "detail": {
@@ -123,7 +125,7 @@
       },
       "result": "pass",
       "step": "save_load_lifecycle",
-      "timestamp": "2026-08-11T19:50:58"
+      "timestamp": "2026-08-11T20:01:53"
     },
     {
       "detail": {
@@ -135,19 +137,19 @@
       },
       "result": "pass",
       "step": "crash_recovery",
-      "timestamp": "2026-08-11T19:50:58"
+      "timestamp": "2026-08-11T20:01:53"
     },
     {
       "detail": {
-        "avg_fps": 135.508239298211,
-        "frame_samples": 1176,
-        "hit_events": 0,
+        "avg_fps": 139.137819675447,
+        "frame_samples": 922,
+        "hit_events": 1,
         "ko_or_stock_loss_events": 2,
         "match_start_events": 1
       },
-      "result": "fail",
+      "result": "pass",
       "step": "logging_perf_telemetry",
-      "timestamp": "2026-08-11T19:50:58"
+      "timestamp": "2026-08-11T20:01:53"
     }
   ]
 }
