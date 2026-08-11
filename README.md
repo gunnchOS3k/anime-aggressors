@@ -1,6 +1,6 @@
 # anime-aggressors
 
-Original fighter game for the gunnchOS3k family — **Godot 4** production gameplay runtime with a TypeScript/web shell for packaging and Labs.
+Original fighter game for the gunnchOS3k family — **`game-godot` is the primary runtime** (Godot 4) with a TypeScript/web shell for packaging and Labs.
 
 > **Current release/state:** `INTEGRATED` game repo — **not** automatic Device Lab four-game *production* runtime proof.
 
@@ -43,7 +43,7 @@ npm run validate:full-scope-production
 
 ## Architecture
 
-See [docs/RUNTIME_SOURCE_OF_TRUTH.md](docs/RUNTIME_SOURCE_OF_TRUTH.md). Godot = gameplay SoT; web = shell; `packages/game-core` = oracle not shipping renderer.
+See [docs/RUNTIME_SOURCE_OF_TRUTH.md](docs/RUNTIME_SOURCE_OF_TRUTH.md). **`game-godot/` is the primary runtime** (gameplay source of truth); web = shell; `packages/game-core` = oracle not shipping renderer.
 
 ## Repo map
 
