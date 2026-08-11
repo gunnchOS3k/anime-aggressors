@@ -103,6 +103,8 @@ No commercial 6G · game repo ≠ Device Lab PASS · Cursor DRAFT-only.
 
 Full prior README: [docs/history/README_PRE_WP012.md](docs/history/README_PRE_WP012.md).
 
+**Completion is not claimed** until full-scope gates and signed playtests pass. The project remains in **product-completion mode** — not complete until all 7 fighters, stages, moves, training, and production gates pass.
+
 ### Quick start (retained)
 
 ```bash
@@ -110,3 +112,14 @@ npm run validate:full-scope-production
 npm run generate:godot-full-scope
 npm run dev   # web shell secondary
 ```
+
+### Aura Charge
+
+Aura Charge builds elemental power. At full meter, your fighter becomes **Super Ready** and **Aura Burst** is available (Godot: hold Shield + Special to charge; burst when full).
+
+| Player | Keyboard (legacy web) | Godot P1 |
+|--------|----------------------|----------|
+| P1 | Hold **F** (or Shield + Special) | Shield + Special hold |
+| P2 | Hold **/** (or Shield + Special) | P2 mappings TBD |
+
+Aura Charge slows movement while charging and can be interrupted by heavy hits.
