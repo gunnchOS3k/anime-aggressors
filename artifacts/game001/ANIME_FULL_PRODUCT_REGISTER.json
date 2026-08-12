@@ -1,0 +1,1122 @@
+{
+  "schema": "anime_full_product_register/v1",
+  "work_item": "GAME-001",
+  "game": "anime-aggressors",
+  "successor_of": {
+    "pr": 72,
+    "merge_commit": "16df36d0025a6d124817a1800de65abef689d51f",
+    "tip_included": "a320c7c"
+  },
+  "generated_at": "2026-08-12T21:09:16Z",
+  "source_commit_base": "16df36d0025a6d124817a1800de65abef689d51f",
+  "FULL_GAME_CONTENT_COMPLETE": false,
+  "claim": "FIGHTER_IDENTITY_DEPTH_PARTIAL \u2014 data/runtime differentiation proven; HUMAN_POLISH / fun HUMAN_PENDING; visual thumbs ALPHA",
+  "HUMAN_POLISH": "HUMAN_PENDING",
+  "fun": "HUMAN_PENDING",
+  "self_challenge": {
+    "identical_fighter_logic": "PASS",
+    "failures": [],
+    "checked": [
+      "moveset_fingerprint",
+      "special_frame_profiles",
+      "aura_charge_rate",
+      "cpuBehaviorTags"
+    ]
+  },
+  "fighters": {
+    "ember-vale": {
+      "display_name": "Ember Vale",
+      "combat_tag": "burn_rushdown",
+      "archetype": "Rushdown Striker",
+      "movement": {
+        "weight": 100,
+        "runSpeed": 294,
+        "dashSpeed": 441,
+        "airSpeed": 224.4,
+        "jumpStrength": 620,
+        "fallSpeed": 1800,
+        "status": "PASS_DATA",
+        "evidence": "game-godot/data/fighters/ember-vale.json + balance mobility mults"
+      },
+      "normals": {
+        "status": "PASS_DATA",
+        "jab_startup": 3,
+        "forward_tilt_angle": 38,
+        "evidence": "game-godot/data/moves/ember-vale.json"
+      },
+      "h2h_strings": {
+        "status": "PASS_DATA",
+        "links": [
+          "jab_1->jab_2",
+          "jab_2->jab_finisher",
+          "jab_finisher->side_special"
+        ],
+        "count": 3
+      },
+      "aura_charge_scaling": {
+        "status": "PASS_DATA",
+        "charge_rate_mult": 1.12,
+        "scaling_curve": "aggressive",
+        "runtime": "aura_identity.gd + aura_special_runtime.gd"
+      },
+      "projectile_special": {
+        "status": "PASS_DATA",
+        "type": "flame_shot",
+        "speed": 520,
+        "lifetime_frames": 36,
+        "frame_fingerprint": "2bbbe3e4936989e3"
+      },
+      "directional_grabs": {
+        "status": "PASS_DATA",
+        "throws": {
+          "throw_forward": {
+            "angle": 32,
+            "kb": 15,
+            "damage": 6.0
+          },
+          "throw_back": {
+            "angle": 138,
+            "kb": 17,
+            "damage": 7.5
+          },
+          "throw_up": {
+            "angle": 85,
+            "kb": 16,
+            "damage": 6.8
+          },
+          "throw_down": {
+            "angle": 272,
+            "kb": 10,
+            "damage": 5.2
+          }
+        },
+        "grab_range": 34
+      },
+      "recovery": {
+        "status": "PASS_DATA",
+        "up_b_distance": 420,
+        "profile": {
+          "snap_ledge": true,
+          "air_friction": 0.92,
+          "landing_lag": 10
+        },
+        "frame_fingerprint": "fa056f7fde0eddd5"
+      },
+      "defense": {
+        "status": "PASS_DATA",
+        "profile": {
+          "shield_mult": 1.0,
+          "dodge_invuln_frames": 10,
+          "spot_dodge_frames": 18,
+          "air_dodge_frames": 22
+        },
+        "hurtbox": {
+          "hurtboxWidth": 40,
+          "hurtboxHeight": 48,
+          "hitboxScale": 1.0
+        }
+      },
+      "mobility": {
+        "status": "PASS_DATA",
+        "mults": {
+          "run_mult": 1.05,
+          "dash_mult": 1.05,
+          "air_mult": 1.02,
+          "jump_mult": 1.0,
+          "fall_mult": 1.0
+        }
+      },
+      "ai": {
+        "status": "PASS_DATA",
+        "cpuBehaviorTags": [
+          "rushdown",
+          "approach"
+        ],
+        "ai_weights": {
+          "approach": 0.72,
+          "projectile": 0.18,
+          "grab": 0.22,
+          "shield": 0.25,
+          "aerial": 0.35
+        },
+        "runtime": "cpu_controller.gd::_act_archetype"
+      },
+      "visual_audio_hooks": {
+        "status": "PARTIAL",
+        "vfx_prefix": "flame",
+        "sfx_voice": "vo_ember",
+        "thumb": "playtest-evidence/visual_qa/fighters/ember-vale_thumb.png",
+        "note": "Procedural low-poly thumbs exist; live framebuffer polish HUMAN_PENDING"
+      },
+      "balance_config": {
+        "status": "PASS_DATA",
+        "path": "game-godot/data/balance/ember-vale.json",
+        "schema": "game001_fighter_balance/v1"
+      },
+      "move_fingerprint": "f9d5006242ec5a31f3216fd7adc705e96e5cc20627865b8e14a82407ff57f474",
+      "special_frame_fingerprints": {
+        "neutral_special_projectile": "2bbbe3e4936989e3",
+        "side_special": "d15095092da1c5bd",
+        "up_special_recovery": "fa056f7fde0eddd5",
+        "down_special": "329a1d521dc43121"
+      }
+    },
+    "rook-ironside": {
+      "display_name": "Rook Ironside",
+      "combat_tag": "armor_quake",
+      "archetype": "Armored Bruiser",
+      "movement": {
+        "weight": 125,
+        "runSpeed": 238,
+        "dashSpeed": 357,
+        "airSpeed": 193.6,
+        "jumpStrength": 570.4,
+        "fallSpeed": 1944.0000000000002,
+        "status": "PASS_DATA",
+        "evidence": "game-godot/data/fighters/rook-ironside.json + balance mobility mults"
+      },
+      "normals": {
+        "status": "PASS_DATA",
+        "jab_startup": 5,
+        "forward_tilt_angle": 30,
+        "evidence": "game-godot/data/moves/rook-ironside.json"
+      },
+      "h2h_strings": {
+        "status": "PASS_DATA",
+        "links": [
+          "jab_1->jab_2",
+          "jab_2->jab_finisher",
+          "down_tilt->forward_tilt"
+        ],
+        "count": 3
+      },
+      "aura_charge_scaling": {
+        "status": "PASS_DATA",
+        "charge_rate_mult": 0.88,
+        "scaling_curve": "armor",
+        "runtime": "aura_identity.gd + aura_special_runtime.gd"
+      },
+      "projectile_special": {
+        "status": "PASS_DATA",
+        "type": "quake_slab",
+        "speed": 280,
+        "lifetime_frames": 28,
+        "frame_fingerprint": "89ace4af187fb4fc"
+      },
+      "directional_grabs": {
+        "status": "PASS_DATA",
+        "throws": {
+          "throw_forward": {
+            "angle": 22,
+            "kb": 22,
+            "damage": 9.5
+          },
+          "throw_back": {
+            "angle": 165,
+            "kb": 24,
+            "damage": 10.5
+          },
+          "throw_up": {
+            "angle": 75,
+            "kb": 20,
+            "damage": 8.8
+          },
+          "throw_down": {
+            "angle": 260,
+            "kb": 16,
+            "damage": 8.0
+          }
+        },
+        "grab_range": 38
+      },
+      "recovery": {
+        "status": "PASS_DATA",
+        "up_b_distance": 300,
+        "profile": {
+          "snap_ledge": true,
+          "air_friction": 0.98,
+          "landing_lag": 16
+        },
+        "frame_fingerprint": "3dc188f310711376"
+      },
+      "defense": {
+        "status": "PASS_DATA",
+        "profile": {
+          "shield_mult": 1.15,
+          "dodge_invuln_frames": 8,
+          "spot_dodge_frames": 20,
+          "air_dodge_frames": 20,
+          "armor_on_heavies": true
+        },
+        "hurtbox": {
+          "hurtboxWidth": 48,
+          "hurtboxHeight": 56,
+          "hitboxScale": 1.15
+        }
+      },
+      "mobility": {
+        "status": "PASS_DATA",
+        "mults": {
+          "run_mult": 0.85,
+          "dash_mult": 0.85,
+          "air_mult": 0.88,
+          "jump_mult": 0.92,
+          "fall_mult": 1.08
+        }
+      },
+      "ai": {
+        "status": "PASS_DATA",
+        "cpuBehaviorTags": [
+          "tank",
+          "punish"
+        ],
+        "ai_weights": {
+          "approach": 0.45,
+          "projectile": 0.12,
+          "grab": 0.28,
+          "shield": 0.4,
+          "aerial": 0.15
+        },
+        "runtime": "cpu_controller.gd::_act_archetype"
+      },
+      "visual_audio_hooks": {
+        "status": "PARTIAL",
+        "vfx_prefix": "impact",
+        "sfx_voice": "vo_rook",
+        "thumb": "playtest-evidence/visual_qa/fighters/rook-ironside_thumb.png",
+        "note": "Procedural low-poly thumbs exist; live framebuffer polish HUMAN_PENDING"
+      },
+      "balance_config": {
+        "status": "PASS_DATA",
+        "path": "game-godot/data/balance/rook-ironside.json",
+        "schema": "game001_fighter_balance/v1"
+      },
+      "move_fingerprint": "45a7b817512fb025bd5b4eb8c4522ab25bf3d7f40ab0b19d46baf1c1221cc02f",
+      "special_frame_fingerprints": {
+        "neutral_special_projectile": "89ace4af187fb4fc",
+        "side_special": "a698e9938e1be537",
+        "up_special_recovery": "3dc188f310711376",
+        "down_special": "16e002237a0910ea"
+      }
+    },
+    "juno-spark": {
+      "display_name": "Juno Spark",
+      "combat_tag": "speed_chain",
+      "archetype": "Speed Confirm",
+      "movement": {
+        "weight": 82,
+        "runSpeed": 330.4,
+        "dashSpeed": 495.59999999999997,
+        "airSpeed": 268.4,
+        "jumpStrength": 669.6,
+        "fallSpeed": 1836,
+        "status": "PASS_DATA",
+        "evidence": "game-godot/data/fighters/juno-spark.json + balance mobility mults"
+      },
+      "normals": {
+        "status": "PASS_DATA",
+        "jab_startup": 2,
+        "forward_tilt_angle": 50,
+        "evidence": "game-godot/data/moves/juno-spark.json"
+      },
+      "h2h_strings": {
+        "status": "PASS_DATA",
+        "links": [
+          "jab_1->jab_2",
+          "jab_2->jab_finisher",
+          "jab_finisher->dash_attack",
+          "neutral_air->forward_air"
+        ],
+        "count": 4
+      },
+      "aura_charge_scaling": {
+        "status": "PASS_DATA",
+        "charge_rate_mult": 1.2,
+        "scaling_curve": "chain",
+        "runtime": "aura_identity.gd + aura_special_runtime.gd"
+      },
+      "projectile_special": {
+        "status": "PASS_DATA",
+        "type": "volt_bolt",
+        "speed": 640,
+        "lifetime_frames": 30,
+        "frame_fingerprint": "60fcc362e43004cb"
+      },
+      "directional_grabs": {
+        "status": "PASS_DATA",
+        "throws": {
+          "throw_forward": {
+            "angle": 42,
+            "kb": 12,
+            "damage": 4.5
+          },
+          "throw_back": {
+            "angle": 150,
+            "kb": 14,
+            "damage": 5.5
+          },
+          "throw_up": {
+            "angle": 90,
+            "kb": 13,
+            "damage": 5.0
+          },
+          "throw_down": {
+            "angle": 268,
+            "kb": 9,
+            "damage": 4.0
+          }
+        },
+        "grab_range": 30
+      },
+      "recovery": {
+        "status": "PASS_DATA",
+        "up_b_distance": 480,
+        "profile": {
+          "snap_ledge": true,
+          "air_friction": 0.85,
+          "landing_lag": 8
+        },
+        "frame_fingerprint": "46ef02e225465a3e"
+      },
+      "defense": {
+        "status": "PASS_DATA",
+        "profile": {
+          "shield_mult": 0.9,
+          "dodge_invuln_frames": 12,
+          "spot_dodge_frames": 16,
+          "air_dodge_frames": 24
+        },
+        "hurtbox": {
+          "hurtboxWidth": 34,
+          "hurtboxHeight": 44,
+          "hitboxScale": 0.92
+        }
+      },
+      "mobility": {
+        "status": "PASS_DATA",
+        "mults": {
+          "run_mult": 1.18,
+          "dash_mult": 1.18,
+          "air_mult": 1.22,
+          "jump_mult": 1.08,
+          "fall_mult": 1.02
+        }
+      },
+      "ai": {
+        "status": "PASS_DATA",
+        "cpuBehaviorTags": [
+          "speed",
+          "combo"
+        ],
+        "ai_weights": {
+          "approach": 0.8,
+          "projectile": 0.3,
+          "grab": 0.18,
+          "shield": 0.2,
+          "aerial": 0.55
+        },
+        "runtime": "cpu_controller.gd::_act_archetype"
+      },
+      "visual_audio_hooks": {
+        "status": "PARTIAL",
+        "vfx_prefix": "volt",
+        "sfx_voice": "vo_juno",
+        "thumb": "playtest-evidence/visual_qa/fighters/juno-spark_thumb.png",
+        "note": "Procedural low-poly thumbs exist; live framebuffer polish HUMAN_PENDING"
+      },
+      "balance_config": {
+        "status": "PASS_DATA",
+        "path": "game-godot/data/balance/juno-spark.json",
+        "schema": "game001_fighter_balance/v1"
+      },
+      "move_fingerprint": "51e001396363da76d0ff0e79643edf5089e84e836a8f52397a53068202f99332",
+      "special_frame_fingerprints": {
+        "neutral_special_projectile": "60fcc362e43004cb",
+        "side_special": "20412a96e8570f21",
+        "up_special_recovery": "46ef02e225465a3e",
+        "down_special": "5a60db9604f6b150"
+      }
+    },
+    "kaia-windrow": {
+      "display_name": "Kaia Windrow",
+      "combat_tag": "wind_drift",
+      "archetype": "Aerial Spacer",
+      "movement": {
+        "weight": 96,
+        "runSpeed": 274.4,
+        "dashSpeed": 411.59999999999997,
+        "airSpeed": 246.40000000000003,
+        "jumpStrength": 644.8000000000001,
+        "fallSpeed": 1728,
+        "status": "PASS_DATA",
+        "evidence": "game-godot/data/fighters/kaia-windrow.json + balance mobility mults"
+      },
+      "normals": {
+        "status": "PASS_DATA",
+        "jab_startup": 4,
+        "forward_tilt_angle": 55,
+        "evidence": "game-godot/data/moves/kaia-windrow.json"
+      },
+      "h2h_strings": {
+        "status": "PASS_DATA",
+        "links": [
+          "jab_1->jab_2",
+          "jab_2->up_tilt",
+          "neutral_air->up_air",
+          "up_air->forward_air"
+        ],
+        "count": 4
+      },
+      "aura_charge_scaling": {
+        "status": "PASS_DATA",
+        "charge_rate_mult": 1.05,
+        "scaling_curve": "drift",
+        "runtime": "aura_identity.gd + aura_special_runtime.gd"
+      },
+      "projectile_special": {
+        "status": "PASS_DATA",
+        "type": "gale_gust",
+        "speed": 380,
+        "lifetime_frames": 48,
+        "frame_fingerprint": "1cca201611548f3e"
+      },
+      "directional_grabs": {
+        "status": "PASS_DATA",
+        "throws": {
+          "throw_forward": {
+            "angle": 28,
+            "kb": 11,
+            "damage": 4.8
+          },
+          "throw_back": {
+            "angle": 145,
+            "kb": 13,
+            "damage": 5.8
+          },
+          "throw_up": {
+            "angle": 95,
+            "kb": 15,
+            "damage": 5.5
+          },
+          "throw_down": {
+            "angle": 275,
+            "kb": 9,
+            "damage": 4.2
+          }
+        },
+        "grab_range": 36
+      },
+      "recovery": {
+        "status": "PASS_DATA",
+        "up_b_distance": 520,
+        "profile": {
+          "snap_ledge": true,
+          "air_friction": 0.78,
+          "landing_lag": 9,
+          "air_drift_bonus": 0.22
+        },
+        "frame_fingerprint": "d15adb39e8bfcaa4"
+      },
+      "defense": {
+        "status": "PASS_DATA",
+        "profile": {
+          "shield_mult": 0.95,
+          "dodge_invuln_frames": 11,
+          "spot_dodge_frames": 17,
+          "air_dodge_frames": 26
+        },
+        "hurtbox": {
+          "hurtboxWidth": 38,
+          "hurtboxHeight": 50,
+          "hitboxScale": 1.0
+        }
+      },
+      "mobility": {
+        "status": "PASS_DATA",
+        "mults": {
+          "run_mult": 0.98,
+          "dash_mult": 0.98,
+          "air_mult": 1.12,
+          "jump_mult": 1.04,
+          "fall_mult": 0.96
+        }
+      },
+      "ai": {
+        "status": "PASS_DATA",
+        "cpuBehaviorTags": [
+          "spacing",
+          "aerial"
+        ],
+        "ai_weights": {
+          "approach": 0.4,
+          "projectile": 0.45,
+          "grab": 0.15,
+          "shield": 0.22,
+          "aerial": 0.75
+        },
+        "runtime": "cpu_controller.gd::_act_archetype"
+      },
+      "visual_audio_hooks": {
+        "status": "PARTIAL",
+        "vfx_prefix": "gale",
+        "sfx_voice": "vo_kaia",
+        "thumb": "playtest-evidence/visual_qa/fighters/kaia-windrow_thumb.png",
+        "note": "Procedural low-poly thumbs exist; live framebuffer polish HUMAN_PENDING"
+      },
+      "balance_config": {
+        "status": "PASS_DATA",
+        "path": "game-godot/data/balance/kaia-windrow.json",
+        "schema": "game001_fighter_balance/v1"
+      },
+      "move_fingerprint": "49616b48114b1797b0e0e821fc5625616e9c0cfd366a875fcea26ae69ec52b9e",
+      "special_frame_fingerprints": {
+        "neutral_special_projectile": "1cca201611548f3e",
+        "side_special": "a16de73271f95c06",
+        "up_special_recovery": "d15adb39e8bfcaa4",
+        "down_special": "7fcd375648293eb9"
+      }
+    },
+    "nix-calder": {
+      "display_name": "Nix Calder",
+      "combat_tag": "freeze_control",
+      "archetype": "Control Tank",
+      "movement": {
+        "weight": 118,
+        "runSpeed": 252,
+        "dashSpeed": 378,
+        "airSpeed": 198,
+        "jumpStrength": 589,
+        "fallSpeed": 1890,
+        "status": "PASS_DATA",
+        "evidence": "game-godot/data/fighters/nix-calder.json + balance mobility mults"
+      },
+      "normals": {
+        "status": "PASS_DATA",
+        "jab_startup": 4,
+        "forward_tilt_angle": 20,
+        "evidence": "game-godot/data/moves/nix-calder.json"
+      },
+      "h2h_strings": {
+        "status": "PASS_DATA",
+        "links": [
+          "jab_1->jab_2",
+          "jab_2->down_tilt",
+          "down_tilt->forward_tilt",
+          "neutral_special_projectile->grab"
+        ],
+        "count": 4
+      },
+      "aura_charge_scaling": {
+        "status": "PASS_DATA",
+        "charge_rate_mult": 0.95,
+        "scaling_curve": "freeze",
+        "runtime": "aura_identity.gd + aura_special_runtime.gd"
+      },
+      "projectile_special": {
+        "status": "PASS_DATA",
+        "type": "frost_orb",
+        "speed": 260,
+        "lifetime_frames": 55,
+        "frame_fingerprint": "8b05401e787906eb"
+      },
+      "directional_grabs": {
+        "status": "PASS_DATA",
+        "throws": {
+          "throw_forward": {
+            "angle": 25,
+            "kb": 10,
+            "damage": 5.0
+          },
+          "throw_back": {
+            "angle": 158,
+            "kb": 12,
+            "damage": 6.2
+          },
+          "throw_up": {
+            "angle": 78,
+            "kb": 12,
+            "damage": 5.5
+          },
+          "throw_down": {
+            "angle": 278,
+            "kb": 8,
+            "damage": 4.5
+          }
+        },
+        "grab_range": 36
+      },
+      "recovery": {
+        "status": "PASS_DATA",
+        "up_b_distance": 340,
+        "profile": {
+          "snap_ledge": true,
+          "air_friction": 0.95,
+          "landing_lag": 14,
+          "ice_armor": true
+        },
+        "frame_fingerprint": "9adab62eec0be779"
+      },
+      "defense": {
+        "status": "PASS_DATA",
+        "profile": {
+          "shield_mult": 1.1,
+          "dodge_invuln_frames": 9,
+          "spot_dodge_frames": 19,
+          "air_dodge_frames": 21,
+          "ice_armor_at_aura": 2
+        },
+        "hurtbox": {
+          "hurtboxWidth": 44,
+          "hurtboxHeight": 52,
+          "hitboxScale": 1.08
+        }
+      },
+      "mobility": {
+        "status": "PASS_DATA",
+        "mults": {
+          "run_mult": 0.9,
+          "dash_mult": 0.9,
+          "air_mult": 0.9,
+          "jump_mult": 0.95,
+          "fall_mult": 1.05
+        }
+      },
+      "ai": {
+        "status": "PASS_DATA",
+        "cpuBehaviorTags": [
+          "control",
+          "defensive"
+        ],
+        "ai_weights": {
+          "approach": 0.35,
+          "projectile": 0.5,
+          "grab": 0.32,
+          "shield": 0.45,
+          "aerial": 0.2
+        },
+        "runtime": "cpu_controller.gd::_act_archetype"
+      },
+      "visual_audio_hooks": {
+        "status": "PARTIAL",
+        "vfx_prefix": "frost",
+        "sfx_voice": "vo_nix",
+        "thumb": "playtest-evidence/visual_qa/fighters/nix-calder_thumb.png",
+        "note": "Procedural low-poly thumbs exist; live framebuffer polish HUMAN_PENDING"
+      },
+      "balance_config": {
+        "status": "PASS_DATA",
+        "path": "game-godot/data/balance/nix-calder.json",
+        "schema": "game001_fighter_balance/v1"
+      },
+      "move_fingerprint": "1976270a620260f846106f4048733c46d652d0cf8ca7d1b2489e6e6ee91d841f",
+      "special_frame_fingerprints": {
+        "neutral_special_projectile": "8b05401e787906eb",
+        "side_special": "01af81a623369573",
+        "up_special_recovery": "9adab62eec0be779",
+        "down_special": "99615fe98bddf3d5"
+      }
+    },
+    "orion-vell": {
+      "display_name": "Orion Vell",
+      "combat_tag": "gravity_pull",
+      "archetype": "Combo Control",
+      "movement": {
+        "weight": 100,
+        "runSpeed": 280,
+        "dashSpeed": 420,
+        "airSpeed": 220,
+        "jumpStrength": 620,
+        "fallSpeed": 1800,
+        "status": "PASS_DATA",
+        "evidence": "game-godot/data/fighters/orion-vell.json + balance mobility mults"
+      },
+      "normals": {
+        "status": "PASS_DATA",
+        "jab_startup": 3,
+        "forward_tilt_angle": 40,
+        "evidence": "game-godot/data/moves/orion-vell.json"
+      },
+      "h2h_strings": {
+        "status": "PASS_DATA",
+        "links": [
+          "jab_1->jab_2",
+          "jab_2->jab_finisher",
+          "jab_finisher->up_tilt",
+          "down_tilt->up_air"
+        ],
+        "count": 4
+      },
+      "aura_charge_scaling": {
+        "status": "PASS_DATA",
+        "charge_rate_mult": 0.9,
+        "scaling_curve": "pull",
+        "runtime": "aura_identity.gd + aura_special_runtime.gd"
+      },
+      "projectile_special": {
+        "status": "PASS_DATA",
+        "type": "gravity_orb",
+        "speed": 300,
+        "lifetime_frames": 42,
+        "frame_fingerprint": "f0ddb9361ef9cbde"
+      },
+      "directional_grabs": {
+        "status": "PASS_DATA",
+        "throws": {
+          "throw_forward": {
+            "angle": 30,
+            "kb": 12,
+            "damage": 5.5
+          },
+          "throw_back": {
+            "angle": 150,
+            "kb": 14,
+            "damage": 6.5
+          },
+          "throw_up": {
+            "angle": 100,
+            "kb": 11,
+            "damage": 5.0
+          },
+          "throw_down": {
+            "angle": 255,
+            "kb": 14,
+            "damage": 6.0
+          }
+        },
+        "grab_range": 40
+      },
+      "recovery": {
+        "status": "PASS_DATA",
+        "up_b_distance": 400,
+        "profile": {
+          "snap_ledge": true,
+          "air_friction": 0.9,
+          "landing_lag": 11,
+          "orbit_assist": true
+        },
+        "frame_fingerprint": "3d45fe610aa8b404"
+      },
+      "defense": {
+        "status": "PASS_DATA",
+        "profile": {
+          "shield_mult": 1.0,
+          "dodge_invuln_frames": 10,
+          "spot_dodge_frames": 18,
+          "air_dodge_frames": 22
+        },
+        "hurtbox": {
+          "hurtboxWidth": 40,
+          "hurtboxHeight": 48,
+          "hitboxScale": 1.02
+        }
+      },
+      "mobility": {
+        "status": "PASS_DATA",
+        "mults": {
+          "run_mult": 1.0,
+          "dash_mult": 1.0,
+          "air_mult": 1.0,
+          "jump_mult": 1.0,
+          "fall_mult": 1.0
+        }
+      },
+      "ai": {
+        "status": "PASS_DATA",
+        "cpuBehaviorTags": [
+          "combo",
+          "neutral"
+        ],
+        "ai_weights": {
+          "approach": 0.55,
+          "projectile": 0.35,
+          "grab": 0.4,
+          "shield": 0.28,
+          "aerial": 0.4
+        },
+        "runtime": "cpu_controller.gd::_act_archetype"
+      },
+      "visual_audio_hooks": {
+        "status": "PARTIAL",
+        "vfx_prefix": "gravity",
+        "sfx_voice": "vo_orion",
+        "thumb": "playtest-evidence/visual_qa/fighters/orion-vell_thumb.png",
+        "note": "Procedural low-poly thumbs exist; live framebuffer polish HUMAN_PENDING"
+      },
+      "balance_config": {
+        "status": "PASS_DATA",
+        "path": "game-godot/data/balance/orion-vell.json",
+        "schema": "game001_fighter_balance/v1"
+      },
+      "move_fingerprint": "765fad9077a17ed567e31ffb623f6d7a0f7c398120ea90b60021b58b51d78548",
+      "special_frame_fingerprints": {
+        "neutral_special_projectile": "f0ddb9361ef9cbde",
+        "side_special": "7a11a19f1757cf4b",
+        "up_special_recovery": "3d45fe610aa8b404",
+        "down_special": "fb3980ea973a618f"
+      }
+    },
+    "vesper-nyx": {
+      "display_name": "Vesper Nyx",
+      "combat_tag": "phase_mark",
+      "archetype": "Phase Trickster",
+      "movement": {
+        "weight": 88,
+        "runSpeed": 266,
+        "dashSpeed": 399,
+        "airSpeed": 215.6,
+        "jumpStrength": 607.6,
+        "fallSpeed": 1728,
+        "status": "PASS_DATA",
+        "evidence": "game-godot/data/fighters/vesper-nyx.json + balance mobility mults"
+      },
+      "normals": {
+        "status": "PASS_DATA",
+        "jab_startup": 3,
+        "forward_tilt_angle": 45,
+        "evidence": "game-godot/data/moves/vesper-nyx.json"
+      },
+      "h2h_strings": {
+        "status": "PASS_DATA",
+        "links": [
+          "jab_1->jab_2",
+          "jab_2->jab_finisher",
+          "jab_finisher->down_special",
+          "down_air->neutral_special_projectile"
+        ],
+        "count": 4
+      },
+      "aura_charge_scaling": {
+        "status": "PASS_DATA",
+        "charge_rate_mult": 1.08,
+        "scaling_curve": "phase",
+        "runtime": "aura_identity.gd + aura_special_runtime.gd"
+      },
+      "projectile_special": {
+        "status": "PASS_DATA",
+        "type": "void_mark",
+        "speed": 420,
+        "lifetime_frames": 34,
+        "frame_fingerprint": "f92995a6bf4f7b9d"
+      },
+      "directional_grabs": {
+        "status": "PASS_DATA",
+        "throws": {
+          "throw_forward": {
+            "angle": 40,
+            "kb": 11,
+            "damage": 4.6
+          },
+          "throw_back": {
+            "angle": 155,
+            "kb": 13,
+            "damage": 5.6
+          },
+          "throw_up": {
+            "angle": 88,
+            "kb": 12,
+            "damage": 5.2
+          },
+          "throw_down": {
+            "angle": 265,
+            "kb": 8,
+            "damage": 3.5
+          }
+        },
+        "grab_range": 32
+      },
+      "recovery": {
+        "status": "PASS_DATA",
+        "up_b_distance": 450,
+        "profile": {
+          "snap_ledge": true,
+          "air_friction": 0.86,
+          "landing_lag": 9,
+          "phase_iframe": 6
+        },
+        "frame_fingerprint": "7c135fc5eaa599a3"
+      },
+      "defense": {
+        "status": "PASS_DATA",
+        "profile": {
+          "shield_mult": 0.92,
+          "dodge_invuln_frames": 13,
+          "spot_dodge_frames": 15,
+          "air_dodge_frames": 25,
+          "phase_cancel": true
+        },
+        "hurtbox": {
+          "hurtboxWidth": 36,
+          "hurtboxHeight": 46,
+          "hitboxScale": 0.95
+        }
+      },
+      "mobility": {
+        "status": "PASS_DATA",
+        "mults": {
+          "run_mult": 0.95,
+          "dash_mult": 0.95,
+          "air_mult": 0.98,
+          "jump_mult": 0.98,
+          "fall_mult": 0.96
+        }
+      },
+      "ai": {
+        "status": "PASS_DATA",
+        "cpuBehaviorTags": [
+          "trickster",
+          "mixup"
+        ],
+        "ai_weights": {
+          "approach": 0.5,
+          "projectile": 0.4,
+          "grab": 0.25,
+          "shield": 0.3,
+          "aerial": 0.45
+        },
+        "runtime": "cpu_controller.gd::_act_archetype"
+      },
+      "visual_audio_hooks": {
+        "status": "PARTIAL",
+        "vfx_prefix": "void",
+        "sfx_voice": "vo_vesper",
+        "thumb": "playtest-evidence/visual_qa/fighters/vesper-nyx_thumb.png",
+        "note": "Procedural low-poly thumbs exist; live framebuffer polish HUMAN_PENDING"
+      },
+      "balance_config": {
+        "status": "PASS_DATA",
+        "path": "game-godot/data/balance/vesper-nyx.json",
+        "schema": "game001_fighter_balance/v1"
+      },
+      "move_fingerprint": "274a74ec97de7a3fcb000b6c318f901a6ff6ce88d7e23b5546129fe2091a69b3",
+      "special_frame_fingerprints": {
+        "neutral_special_projectile": "f92995a6bf4f7b9d",
+        "side_special": "6f1647facdc7d964",
+        "up_special_recovery": "7c135fc5eaa599a3",
+        "down_special": "76e6be6eecdb1536"
+      }
+    }
+  },
+  "product_surfaces": {
+    "character_select": {
+      "status": "PASS_DATA",
+      "evidence": "FighterSelectScene.tscn + fighter_select_scene.gd"
+    },
+    "stages": {
+      "status": "PASS_DATA",
+      "count": 7,
+      "evidence": "game-godot/data/stages/"
+    },
+    "rules": {
+      "status": "PASS_DATA",
+      "evidence": "RulesetScene + ruleset_scene.gd"
+    },
+    "cpu_difficulty": {
+      "status": "PASS_DATA",
+      "tiers": 5,
+      "evidence": "cpu_controller.gd + GameState.cpu_level"
+    },
+    "training": {
+      "status": "PASS_DATA",
+      "evidence": "TrainingScene + TrainingBattleScene"
+    },
+    "local_versus": {
+      "status": "PASS_DATA",
+      "evidence": "VersusScene + BattleScene dual InputMap"
+    },
+    "touch_controller_keyboard": {
+      "status": "PASS_DATA",
+      "evidence": "TouchInputManager + InputMap + ControlsScene"
+    },
+    "pause_rematch": {
+      "status": "PASS_DATA",
+      "evidence": "battle_scene.gd; GAME-001 fixed tree.paused leak",
+      "fix": "S1 pause rematch left SceneTree.paused"
+    },
+    "a11y": {
+      "status": "PASS_DATA",
+      "evidence": "GameState a11y + settings_scene + boot reduced_motion"
+    },
+    "save_settings": {
+      "status": "PASS_DATA",
+      "evidence": "GameState user://aa_save.cfg"
+    },
+    "telemetry": {
+      "status": "PASS_DATA",
+      "evidence": "MatchTelemetry.gd"
+    },
+    "performance": {
+      "status": "PARTIAL",
+      "evidence": "playtest-evidence/digital_rc_performance.json",
+      "note": "OPEN for fresh GAME-001 frame budget proof"
+    },
+    "crash_recovery": {
+      "status": "PASS_DATA",
+      "evidence": "CrashRecoveryScene + production_gate_harness"
+    }
+  },
+  "open_rows": [
+    {
+      "fighter": "ember-vale",
+      "dimension": "visual_audio_hooks",
+      "status": "PARTIAL"
+    },
+    {
+      "fighter": "rook-ironside",
+      "dimension": "visual_audio_hooks",
+      "status": "PARTIAL"
+    },
+    {
+      "fighter": "juno-spark",
+      "dimension": "visual_audio_hooks",
+      "status": "PARTIAL"
+    },
+    {
+      "fighter": "kaia-windrow",
+      "dimension": "visual_audio_hooks",
+      "status": "PARTIAL"
+    },
+    {
+      "fighter": "nix-calder",
+      "dimension": "visual_audio_hooks",
+      "status": "PARTIAL"
+    },
+    {
+      "fighter": "orion-vell",
+      "dimension": "visual_audio_hooks",
+      "status": "PARTIAL"
+    },
+    {
+      "fighter": "vesper-nyx",
+      "dimension": "visual_audio_hooks",
+      "status": "PARTIAL"
+    },
+    {
+      "surface": "performance",
+      "status": "PARTIAL"
+    }
+  ],
+  "severity": {
+    "S0": [],
+    "S1": [
+      {
+        "id": "GAME001-S1-PAUSE-REMATCH-TREE-FROZEN",
+        "status": "REMEDIATED",
+        "summary": "Pause Rematch/Return Menu left get_tree().paused=true; fixed in battle_scene.gd"
+      }
+    ],
+    "S2": [
+      {
+        "id": "GAME001-S2-PROCEDURAL-VISUAL-ALPHA",
+        "status": "OPEN",
+        "summary": "Fighter thumbs are low-poly procedural proxies; not market-polish identity art"
+      }
+    ]
+  },
+  "not_claimed": [
+    "FULL_GAME_CONTENT_COMPLETE",
+    "HUMAN_POLISH complete",
+    "fun validated by humans",
+    "Smash-level market parity",
+    "live framebuffer experience polish"
+  ]
+}

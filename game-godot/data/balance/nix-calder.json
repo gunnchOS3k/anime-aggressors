@@ -1,0 +1,44 @@
+{
+  "schema": "game001_fighter_balance/v1",
+  "fighter_id": "nix-calder",
+  "combat_tag": "freeze_control",
+  "archetype": "Control Tank",
+  "mobility": {
+    "run_mult": 0.9,
+    "dash_mult": 0.9,
+    "air_mult": 0.9,
+    "jump_mult": 0.95,
+    "fall_mult": 1.05
+  },
+  "defense": {
+    "shield_mult": 1.1,
+    "dodge_invuln_frames": 9,
+    "spot_dodge_frames": 19,
+    "air_dodge_frames": 21,
+    "ice_armor_at_aura": 2
+  },
+  "aura": {
+    "charge_rate_mult": 0.95,
+    "burst_damage_mult": 1.12,
+    "scaling_curve": "freeze"
+  },
+  "recovery": {
+    "up_b_distance": 340,
+    "side_b_distance": 70,
+    "ledge_snap_priority": "medium"
+  },
+  "ai_weights": {
+    "approach": 0.35,
+    "projectile": 0.5,
+    "grab": 0.32,
+    "shield": 0.45,
+    "aerial": 0.2
+  },
+  "h2h_priority": [
+    "jab_1",
+    "jab_2",
+    "down_tilt",
+    "forward_tilt"
+  ],
+  "source": "GAME-001 identity depth pass"
+}

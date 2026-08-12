@@ -120,15 +120,7 @@ func _act(obs: Dictionary, _delta: float) -> void:
 	# Tier 4–5: archetype play + legal aura (charge/burst via inputs only — no aura writes).
 	if level >= 4 and _timer <= 0.0:
 		_timer = _decision_interval() * 0.85
-		var tags: Array = obs.tags
-		if "zoner" in tags and obs.dist < 140.0:
-			_sim_axis(-signf(obs.dx))
-			if _chance(0.28):
-				_sim_attack("special_neutral")
-		elif "rushdown" in tags and obs.dist > 60.0:
-			_sim_axis(signf(obs.dx))
-		elif "acrobat" in tags and _chance(0.22):
-			_sim_jump()
+		_act_archetype(obs)
 		# Own aura only; never set aura = 100.
 		if obs.self_aura >= 100.0 and obs.in_range and _chance(0.32 + 0.05 * float(level)):
 			_sim_aura_burst()
@@ -139,6 +131,85 @@ func _act(obs: Dictionary, _delta: float) -> void:
 
 	if level >= 5 and obs.opp_attacking and obs.close and _chance(reaction * 1.2):
 		_sim_dodge()
+
+
+## Per-fighter cpuBehaviorTags — must diverge (GAME-001 anti-reskin).
+func _act_archetype(obs: Dictionary) -> void:
+	var tags: Array = obs.tags
+	# Ember / rushdown: close distance aggressively.
+	if ("rushdown" in tags or "approach" in tags) and obs.dist > 55.0:
+		_sim_axis(signf(obs.dx))
+		if _chance(0.2):
+			_sim_attack("special_forward")
+		return
+	# Rook / tank-punish: shield space then heavy commit.
+	if ("tank" in tags or "punish" in tags):
+		if obs.opp_attacking and obs.in_range:
+			_sim_shield(true)
+		elif obs.in_range and _chance(0.35):
+			_sim_attack("attack_heavy" if _chance(0.55) else "special_down")
+		elif obs.dist > 100.0:
+			_sim_axis(signf(obs.dx) * 0.6)
+		return
+	# Juno / speed-combo: dash-in confirms + aerial chains.
+	if ("speed" in tags or "combo" in tags):
+		if obs.opp_hitstun and obs.in_range:
+			_sim_attack("attack_neutral")
+		elif obs.dist > 70.0:
+			_sim_axis(signf(obs.dx))
+			if _chance(0.25):
+				_sim_attack("special_forward")
+		elif _chance(0.3):
+			_sim_jump()
+			_sim_attack("attack_air_neutral" if obs.opp_airborne else "attack_neutral")
+		return
+	# Kaia / spacing-aerial: keep air advantage + projectiles.
+	if ("spacing" in tags or "aerial" in tags):
+		if obs.dist < 90.0:
+			_sim_axis(-signf(obs.dx))
+		if obs.self_on_floor and _chance(0.28):
+			_sim_jump()
+		elif _chance(0.32):
+			_sim_attack("special_neutral")
+		elif not obs.self_on_floor and _chance(0.4):
+			_sim_attack("attack_air_up" if _chance(0.5) else "attack_air_forward")
+		return
+	# Nix / control-defensive: freeze space + grab after projectile.
+	if ("control" in tags or "defensive" in tags):
+		if obs.dist < 110.0 and _chance(0.4):
+			_sim_attack("special_neutral")
+		elif obs.close and _chance(0.28):
+			_sim_attack("grab")
+		elif obs.opp_attacking:
+			_sim_shield(true)
+		elif obs.dist > 130.0:
+			_sim_axis(signf(obs.dx) * 0.5)
+		return
+	# Orion / combo-neutral: pull tools then juggle.
+	if "neutral" in tags and "combo" in tags:
+		if obs.dist > 80.0 and _chance(0.4):
+			_sim_attack("special_forward")
+		elif obs.in_range:
+			_sim_attack("attack_up" if _chance(0.45) else "special_neutral")
+		return
+	# Vesper / trickster-mixup: phase tools + crossups.
+	if ("trickster" in tags or "mixup" in tags):
+		if _chance(0.3):
+			_sim_attack("special_down")
+		elif obs.dist > 75.0 and _chance(0.35):
+			_sim_attack("special_neutral")
+		elif obs.close and _chance(0.25):
+			_sim_attack("grab")
+		elif _chance(0.2):
+			_sim_dodge()
+		return
+	# Legacy fallbacks.
+	if "zoner" in tags and obs.dist < 140.0:
+		_sim_axis(-signf(obs.dx))
+		if _chance(0.28):
+			_sim_attack("special_neutral")
+	elif "acrobat" in tags and _chance(0.22):
+		_sim_jump()
 
 
 func _reaction_chance() -> float:

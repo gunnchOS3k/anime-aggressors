@@ -1,0 +1,43 @@
+{
+  "schema": "game001_fighter_balance/v1",
+  "fighter_id": "ember-vale",
+  "combat_tag": "burn_rushdown",
+  "archetype": "Rushdown Striker",
+  "mobility": {
+    "run_mult": 1.05,
+    "dash_mult": 1.05,
+    "air_mult": 1.02,
+    "jump_mult": 1.0,
+    "fall_mult": 1.0
+  },
+  "defense": {
+    "shield_mult": 1.0,
+    "dodge_invuln_frames": 10,
+    "spot_dodge_frames": 18,
+    "air_dodge_frames": 22
+  },
+  "aura": {
+    "charge_rate_mult": 1.12,
+    "burst_damage_mult": 1.15,
+    "scaling_curve": "aggressive"
+  },
+  "recovery": {
+    "up_b_distance": 420,
+    "side_b_distance": 180,
+    "ledge_snap_priority": "high"
+  },
+  "ai_weights": {
+    "approach": 0.72,
+    "projectile": 0.18,
+    "grab": 0.22,
+    "shield": 0.25,
+    "aerial": 0.35
+  },
+  "h2h_priority": [
+    "jab_1",
+    "jab_2",
+    "jab_finisher",
+    "side_special"
+  ],
+  "source": "GAME-001 identity depth pass"
+}

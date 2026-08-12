@@ -1,0 +1,44 @@
+{
+  "schema": "game001_fighter_balance/v1",
+  "fighter_id": "rook-ironside",
+  "combat_tag": "armor_quake",
+  "archetype": "Armored Bruiser",
+  "mobility": {
+    "run_mult": 0.85,
+    "dash_mult": 0.85,
+    "air_mult": 0.88,
+    "jump_mult": 0.92,
+    "fall_mult": 1.08
+  },
+  "defense": {
+    "shield_mult": 1.15,
+    "dodge_invuln_frames": 8,
+    "spot_dodge_frames": 20,
+    "air_dodge_frames": 20,
+    "armor_on_heavies": true
+  },
+  "aura": {
+    "charge_rate_mult": 0.88,
+    "burst_damage_mult": 1.25,
+    "scaling_curve": "armor"
+  },
+  "recovery": {
+    "up_b_distance": 300,
+    "side_b_distance": 90,
+    "ledge_snap_priority": "medium"
+  },
+  "ai_weights": {
+    "approach": 0.45,
+    "projectile": 0.12,
+    "grab": 0.28,
+    "shield": 0.4,
+    "aerial": 0.15
+  },
+  "h2h_priority": [
+    "jab_1",
+    "jab_2",
+    "jab_finisher",
+    "forward_tilt"
+  ],
+  "source": "GAME-001 identity depth pass"
+}

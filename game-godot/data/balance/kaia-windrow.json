@@ -1,0 +1,43 @@
+{
+  "schema": "game001_fighter_balance/v1",
+  "fighter_id": "kaia-windrow",
+  "combat_tag": "wind_drift",
+  "archetype": "Aerial Spacer",
+  "mobility": {
+    "run_mult": 0.98,
+    "dash_mult": 0.98,
+    "air_mult": 1.12,
+    "jump_mult": 1.04,
+    "fall_mult": 0.96
+  },
+  "defense": {
+    "shield_mult": 0.95,
+    "dodge_invuln_frames": 11,
+    "spot_dodge_frames": 17,
+    "air_dodge_frames": 26
+  },
+  "aura": {
+    "charge_rate_mult": 1.05,
+    "burst_damage_mult": 1.08,
+    "scaling_curve": "drift"
+  },
+  "recovery": {
+    "up_b_distance": 520,
+    "side_b_distance": 140,
+    "ledge_snap_priority": "very_high"
+  },
+  "ai_weights": {
+    "approach": 0.4,
+    "projectile": 0.45,
+    "grab": 0.15,
+    "shield": 0.22,
+    "aerial": 0.75
+  },
+  "h2h_priority": [
+    "jab_1",
+    "jab_2",
+    "up_tilt",
+    "up_air"
+  ],
+  "source": "GAME-001 identity depth pass"
+}

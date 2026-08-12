@@ -57,6 +57,9 @@ jobs:
           npm run test:game-core
           node gate1/tools/core_loop_runner.mjs
 
+      - name: GAME-001 fighter identity self-challenge
+        run: npm run validate:game001
+
       - name: Godot / headless check (if available)
         run: |
           set -euo pipefail

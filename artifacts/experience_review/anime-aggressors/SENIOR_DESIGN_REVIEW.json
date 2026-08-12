@@ -1,0 +1,44 @@
+{
+  "schema": "experience_review_senior_design/v1",
+  "subject": "anime-aggressors",
+  "work_item": "GAME-001",
+  "generated_at": "2026-08-12T21:07:41Z",
+  "VISUAL_MODEL_REVIEW": "PARTIAL_THUMBS_ONLY",
+  "live_framebuffer": "UNAVAILABLE",
+  "pixel_evidence": [
+    "playtest-evidence/visual_qa/fighters/ember-vale_thumb.png",
+    "playtest-evidence/visual_qa/fighters/rook-ironside_thumb.png",
+    "playtest-evidence/visual_qa/fighters/juno-spark_thumb.png",
+    "playtest-evidence/visual_qa/fighters/roster_contact_sheet.png"
+  ],
+  "classification": "ALPHA",
+  "confidence": "high",
+  "findings": [
+    {
+      "severity": "S2",
+      "id": "EXP-S2-PROCEDURAL-SILHOUETTE",
+      "summary": "Roster thumbs are disconnected low-poly primitives with limited silhouette differentiation; readable as prototypes, not launch art.",
+      "evidence": "thumb PNG inspection"
+    },
+    {
+      "severity": "S2",
+      "id": "EXP-S2-COLOR-ONLY-IDENTITY",
+      "summary": "Fighter identity currently leans on palette/prop accents rather than finished costume/face language.",
+      "evidence": "ember vs rook vs juno thumbs"
+    },
+    {
+      "severity": "S1",
+      "id": "EXP-S1-PAUSE-NAV-FREEZE",
+      "summary": "Pause rematch/menu previously left SceneTree paused (digital UX defect).",
+      "status": "REMEDIATED_IN_GAME001",
+      "evidence": "battle_scene.gd pause handlers"
+    }
+  ],
+  "backlog": [
+    "Commission/generate finished fighter presentation passes",
+    "Capture live battle framebuffer for council re-review",
+    "Stage/UI composition review still unavailable without live pixels"
+  ],
+  "human_polish": "HUMAN_PENDING",
+  "notes": "Do not invent live UI critique; only thumbs + code-path evidence used."
+}

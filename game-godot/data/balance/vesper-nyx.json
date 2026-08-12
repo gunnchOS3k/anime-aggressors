@@ -1,0 +1,44 @@
+{
+  "schema": "game001_fighter_balance/v1",
+  "fighter_id": "vesper-nyx",
+  "combat_tag": "phase_mark",
+  "archetype": "Phase Trickster",
+  "mobility": {
+    "run_mult": 0.95,
+    "dash_mult": 0.95,
+    "air_mult": 0.98,
+    "jump_mult": 0.98,
+    "fall_mult": 0.96
+  },
+  "defense": {
+    "shield_mult": 0.92,
+    "dodge_invuln_frames": 13,
+    "spot_dodge_frames": 15,
+    "air_dodge_frames": 25,
+    "phase_cancel": true
+  },
+  "aura": {
+    "charge_rate_mult": 1.08,
+    "burst_damage_mult": 1.1,
+    "scaling_curve": "phase"
+  },
+  "recovery": {
+    "up_b_distance": 450,
+    "side_b_distance": 200,
+    "ledge_snap_priority": "high"
+  },
+  "ai_weights": {
+    "approach": 0.5,
+    "projectile": 0.4,
+    "grab": 0.25,
+    "shield": 0.3,
+    "aerial": 0.45
+  },
+  "h2h_priority": [
+    "jab_1",
+    "jab_2",
+    "jab_finisher",
+    "down_special"
+  ],
+  "source": "GAME-001 identity depth pass"
+}
