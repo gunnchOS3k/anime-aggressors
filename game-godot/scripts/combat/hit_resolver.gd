@@ -35,6 +35,7 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 			defender.stamp_runtime_hook("passive_armor")
 		hit_confirmed.emit(attacker, defender, armor_info)
 		log_hit("ARMOR %s -> %s" % [move.get("move_id", ""), defender.name if defender else "?"])
+		_record_hit_telemetry(armor_info)
 		return
 	var scaled := move
 	var aura_amt := 0.0
@@ -97,6 +98,17 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 	hit_confirmed.emit(attacker, defender, info)
 	var hit_tag := "BLOCK" if info.get("blocked", false) else "HIT"
 	log_hit("%s %s -> %s dmg:%.1f kb:%.1f" % [hit_tag, scaled.get("move_id", ""), defender.name if defender else "?", dealt, kb.length()])
+	_record_hit_telemetry(info)
+
+
+func _record_hit_telemetry(info: Dictionary) -> void:
+	# record_hit() existed on MatchTelemetry but was never called from the
+	# real hit-resolution path — only match_start/match_end and KO/stock-loss
+	# (fighter.gd:lose_stock) were wired, so H2H hits landed with no
+	# inspectable telemetry event at all.
+	var telem := get_node_or_null("/root/MatchTelemetry")
+	if telem and telem.has_method("record_hit"):
+		telem.record_hit(info)
 
 func log_hit(text: String) -> void:
 	_logs.append(text)

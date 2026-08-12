@@ -30,7 +30,7 @@ const EDGE_MARGIN := 28.0
 @export var fighter_id: String = "ember-vale"
 @export var is_cpu: bool = false
 @export var facing: int = 1
-@export var dummy_mode: String = "cpu"
+@export var dummy_mode: String = "idle"  # "cpu" is training-only; default idle so human P1 is not dual-driven
 
 var data: Dictionary = {}
 var move_manifest: Dictionary = {}
@@ -42,6 +42,7 @@ var air_jumps_left: int = 1
 var invincible: bool = false
 var shielding: bool = false
 var controls_enabled: bool = true
+var _input_edge_held: Dictionary = {}
 var spawn_point: Vector2 = Vector2.ZERO
 var combo_count: int = 0
 var hitstun_remaining: float = 0.0
@@ -143,6 +144,11 @@ func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, s
 	fighter_id = id
 	slot = player_slot
 	is_cpu = cpu_flag
+	# Human-controlled slots must not inherit the training "cpu" dummy default,
+	# or CpuController keeps synthesizing pN_shield/attack on top of real input
+	# (production local-versus P1 was dual-driven and could trap in shield_hold).
+	if not cpu_flag and dummy_mode == "cpu":
+		dummy_mode = "idle"
 	stocks = stock_count
 	spawn_point = spawn
 	data = _DataLoader.load_fighter(id)
@@ -729,9 +735,7 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 	else:
 		state_machine.enter(_FighterStates.HURT_LIGHT)
 	hit_landed.emit(info)
-	var telem = get_node_or_null("/root/MatchTelemetry")
-	if telem and telem.has_method("record_hit"):
-		telem.record_hit(info)
+	# Hit telemetry is recorded by HitResolver.resolve (single source of truth).
 
 func reset_fighter() -> void:
 	damage_percent = 0.0
@@ -931,22 +935,44 @@ func _read_axis() -> float:
 func _read_jump_pressed() -> bool:
 	if TouchInputManager.consume_touch_just_pressed(slot, "jump"):
 		return true
-	return Input.is_action_just_pressed("p%d_jump" % slot)
+	if Input.is_action_just_pressed("p%d_jump" % slot):
+		_input_edge_held["jump"] = true
+		return true
+	return _input_edge("jump")
 
 func _read_jump_held() -> bool:
 	if TouchInputManager.is_touch_pressed(slot, "jump"):
 		return true
 	return Input.is_action_pressed("p%d_jump" % slot)
 
+func _input_edge(suffix: String) -> bool:
+	# Rising edge on Input.is_action_pressed. Input.action_press() from scripts /
+	# CPU / touch mirrors only guarantees is_action_just_pressed for the issuing
+	# frame; if that frame's idle callback runs after CharacterBody physics,
+	# attacks/grabs silently drop. Edge-on-pressed matches real digital-button
+	# semantics and keeps synthetic presses reliable.
+	var action := "p%d_%s" % [slot, suffix]
+	var held := Input.is_action_pressed(action)
+	var was := bool(_input_edge_held.get(suffix, false))
+	_input_edge_held[suffix] = held
+	return held and not was
+
+
 func _read_attack_pressed() -> bool:
 	if TouchInputManager.consume_touch_just_pressed(slot, "attack"):
 		return true
-	return Input.is_action_just_pressed("p%d_attack" % slot)
+	if Input.is_action_just_pressed("p%d_attack" % slot):
+		_input_edge_held["attack"] = true
+		return true
+	return _input_edge("attack")
 
 func _read_special_pressed() -> bool:
 	if TouchInputManager.consume_touch_just_pressed(slot, "special"):
 		return true
-	return Input.is_action_just_pressed("p%d_special" % slot)
+	if Input.is_action_just_pressed("p%d_special" % slot):
+		_input_edge_held["special"] = true
+		return true
+	return _input_edge("special")
 
 func _read_shield() -> bool:
 	if TouchInputManager.is_touch_pressed(slot, "shield"):
@@ -956,12 +982,18 @@ func _read_shield() -> bool:
 func _read_dodge_pressed() -> bool:
 	if TouchInputManager.consume_touch_just_pressed(slot, "dodge"):
 		return true
-	return Input.is_action_just_pressed("p%d_dodge" % slot)
+	if Input.is_action_just_pressed("p%d_dodge" % slot):
+		_input_edge_held["dodge"] = true
+		return true
+	return _input_edge("dodge")
 
 func _read_grab_pressed() -> bool:
 	if TouchInputManager.consume_touch_just_pressed(slot, "grab"):
 		return true
-	return Input.is_action_just_pressed("p%d_grab" % slot)
+	if Input.is_action_just_pressed("p%d_grab" % slot):
+		_input_edge_held["grab"] = true
+		return true
+	return _input_edge("grab")
 
 func _read_up() -> bool:
 	if TouchInputManager.get_vertical(slot) < -0.22:

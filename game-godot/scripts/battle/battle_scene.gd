@@ -35,6 +35,7 @@ const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
 const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build_stage()
 	_spawn_fighters()
 	_setup_hud_panels()
@@ -273,22 +274,37 @@ func _update_hud() -> void:
 
 func _toggle_pause() -> void:
 	_paused = not _paused
+	# Freeze the SceneTree so CharacterBody2D physics / CPU / hazards stop.
+	# Prior behavior only flipped controls_enabled + BattleSim.paused, so
+	# fighters kept sliding under gravity/velocity while the pause panel showed
+	# — keyboard/gamepad players saw a non-frozen "pause".
+	get_tree().paused = _paused
 	if _battle_sim:
 		_battle_sim.set_paused(_paused)
 	if fighter1:
 		fighter1.controls_enabled = not _paused
+		if _paused:
+			fighter1.velocity = Vector2.ZERO
 	if fighter2:
 		fighter2.controls_enabled = not _paused
+		if _paused:
+			fighter2.velocity = Vector2.ZERO
 	if _pause_panel:
+		_pause_panel.process_mode = Node.PROCESS_MODE_ALWAYS
 		_pause_panel.visible = _paused
+	# BattleScene must keep receiving ui_cancel/ui_accept while the tree is paused.
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	TouchInputManager._sync_overlay()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		_ensure_pause_panel()
 		_toggle_pause()
+		get_viewport().set_input_as_handled()
+		return
 	if _paused and event.is_action_pressed("ui_accept"):
 		_toggle_pause()
+		get_viewport().set_input_as_handled()
 
 func _ensure_pause_panel() -> void:
 	if _pause_panel:

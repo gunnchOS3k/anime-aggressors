@@ -1,0 +1,148 @@
+{
+  "schema": "wp014_product_gate/v1",
+  "cycle": "operating-cycle-3b",
+  "work_package": "WP-014R",
+  "game": "anime-aggressors",
+  "branch": "operating-cycle-3b/wp-014-anime-aggressors",
+  "base": "origin/main",
+  "base_commit": "249270383eab87cf4d1240ea17e66bfff44d4b8c",
+  "generated_at": "2026-08-12T18:09:28Z",
+  "evidence_file": "gate1/evidence/out/actual_production_runtime.json",
+  "stability": "6/6 consecutive full headless runs PASS (production_gate_harness.gd, Godot 4.7.1)",
+  "priority_blocker_addressed": {
+    "claim": "Godot production runtime needs real InputMap drive + save/load + pause freeze, not gate1 JS mirror / --script smokes",
+    "finding": "Prior gate1/tools/core_loop_runner.mjs is a Node mirror, not Godot. Fighter.dummy_mode defaulted to 'cpu', so human P1 still ran CpuController (sticky p1_shield via Input.action_press) dual-driven with real input. Battle pause only flipped controls_enabled/BattleSim.paused \u2014 CharacterBody2D kept sliding. HitResolver never called MatchTelemetry.record_hit. CpuController._sim_aura_charge pressed shield/special without release. Fighter.try_grab() sets the OPPONENT's grabbed_by (not the grabber's), and Fighter._physics_process() unconditionally teleports any fighter with grabbed_by != null to the grab-hold offset every frame \u2014 the grab probe step only cleared the grabber's own grabbed_by, so a real (and unavoidable, input-triggered) grab-startup on fighter1 left fighter2 permanently pinned 24px from fighter1 for the rest of the match, silently defeating every later H2H repositioning and making every jab whiff.",
+    "fix": "ProductionGateHarness autoload boots real main scene; pause uses get_tree().paused; dummy_mode default idle + configure() clears cpu dummy for humans; HitResolver wires record_hit; CPU aura-charge releases inputs; fighter rising-edge input helpers; grab probe now awaits the physics tick that actually consumes the synthesized press before cancelling the resulting move, and clears grabbed_by on BOTH fighters (attacker and the correct opponent-side flag).",
+    "real_defect_found_and_fixed": "Human local-versus P1 was dual-driven by CpuController because @export dummy_mode defaulted to 'cpu' (is_cpu=false was not enough). Pause did not freeze physics. A synthesized grab input that lands one physics tick after being read/released left the *victim* fighter's grabbed_by flag set, permanently pinning it to the grabber's hold offset \u2014 a real state-leak in Fighter.gd's grab system reachable by any grab attempt that starts just as controls change hands, not just a harness artifact. Verified via production harness before/after, 6/6 stable runs."
+  },
+  "gates": {
+    "ACTUAL_PRODUCTION_RUNTIME": "PASS",
+    "TITLE_MENU_PASS": "PASS",
+    "NEW_GAME_SESSION_PASS": "PASS",
+    "INPUT_PASS": "PASS",
+    "CORE_GAME_LOOP_PASS": "PASS",
+    "PAUSE_PASS": "PASS",
+    "SAVE_PASS": "PASS",
+    "LOAD_PASS": "PASS",
+    "SUSPEND_RESUME_OR_CHECKPOINT_PASS": "PASS",
+    "SETTINGS_PASS": "PASS",
+    "AUDIO_HOOK_PASS": "PASS \u2014 real AudioDirector autoload probed via ProductionGateHarness (master volume, UI/SFX/music paths, pause/resume state, persist, fail-soft, stuck-clear)",
+    "A11Y_BASELINE_PASS": "PASS",
+    "CRASH_RECOVERY_PASS": "PASS",
+    "LOGGING_PASS": "PASS",
+    "PERF_TELEMETRY_PASS": "PASS",
+    "CLEAN_EXIT_PASS": "PASS",
+    "DEVICE_LAB_PASS": "PENDING_ACCEPTED_MAIN_WP011R",
+    "PHYSICAL_HARDWARE_PLAYTEST": "PENDING",
+    "ACOUSTIC_OUTPUT_PHYSICAL": "PHYSICAL_PENDING"
+  },
+  "gate_evidence_detail": {
+    "title_menu": {
+      "boot_title_screen_rendered_first": true,
+      "scene_file_path": "res://scenes/menus/MainMenuScene.tscn"
+    },
+    "new_game_session_fighters_loaded": {
+      "p1_fighter_id": "ember-vale",
+      "p2_fighter_id": "rook-ironside",
+      "scene_file_path": "res://scenes/battle/BattleScene.tscn"
+    },
+    "real_input_movement": {
+      "axis_strength_seen": 1.0,
+      "battle_active": true,
+      "controls_enabled": true,
+      "distance_traveled": 229.977294921875,
+      "end": [
+        -12.8999195098877,
+        279.925201416016
+      ],
+      "start": [
+        -220.0,
+        179.929656982422
+      ]
+    },
+    "aura_charge": {
+      "aura_level_after": 4,
+      "aura_level_before": 0,
+      "aura_value": 100.0
+    },
+    "grab_input_read": {
+      "grab_pressed_seen": true,
+      "inputmap_has_p1_grab": true
+    },
+    "h2h_core_loop": {
+      "attack_state_seen": "idle",
+      "damage_after": 3.0,
+      "damage_before": 0.0,
+      "hit_landed": true,
+      "hit_resolver_logs": [
+        "HIT jab_2 -> Fighter2 dmg:3.0 kb:3.2"
+      ],
+      "joypads": [],
+      "match_telemetry_hit_events_after": 1,
+      "match_telemetry_hit_events_before": 0,
+      "p1_shield_stuck": false,
+      "p2_shield_stuck": false
+    },
+    "stock_loss_and_stage_bounds": {
+      "stocks_after": 2,
+      "stocks_before": 3
+    },
+    "pause_resume": {
+      "frame_frozen_while_paused": true,
+      "paused_after_ui_cancel": true,
+      "resumed_after_ui_accept": true
+    },
+    "settings_a11y_baseline": {
+      "disk_high_contrast": true,
+      "disk_master_volume": 0.5,
+      "persisted_to_disk": true
+    },
+    "save_load_lifecycle": {
+      "fresh_instance_reload_matches_live": true,
+      "matches_after": 2,
+      "matches_before": 1,
+      "wins_after": 2,
+      "wins_before": 1
+    },
+    "crash_recovery": {
+      "result": {
+        "ok": true,
+        "reason": "corrupted_profile",
+        "recovered": true
+      }
+    },
+    "logging_perf_telemetry": {
+      "avg_fps": 139.137819675447,
+      "frame_samples": 922,
+      "hit_events": 1,
+      "ko_or_stock_loss_events": 2,
+      "match_start_events": 1
+    },
+    "audio_hook": {
+      "subsystem": "AudioDirector autoload over ProceduralAudioBank",
+      "ACOUSTIC_OUTPUT_PHYSICAL": "PHYSICAL_PENDING",
+      "note": "Headless/null audio driver may not emit acoustic energy; call-path + state transitions evidenced."
+    }
+  },
+  "defects": {
+    "S0_open": 0,
+    "S1_open": 0,
+    "S1_found_and_fixed_this_cycle": 4,
+    "S1_fixed_detail": "dummy_mode cpu dual-drive on human P1; pause non-freeze; sticky CPU aura-charge inputs + missing hit telemetry wiring; grabbed_by state-leak pinned the grab victim to the grabber's hold offset for the rest of the match after any grab attempt"
+  },
+  "market_parity_claim": "None. Digital automated-evidence production-runtime only.",
+  "device_lab": {
+    "DEVICE_LAB_PASS": "PENDING_ACCEPTED_MAIN_WP011R",
+    "runtime_class": "GUEST_CHROMIUM_WAYLAND",
+    "guest_game_id": "anime-aggressors",
+    "evidence": "gunnchos-device-os@071f9b2 artifacts/wp011r/games/four_games_in_guest.json (independent-accepted FOUR_GAME on tip 9d8ce2d / commit 071f9b2) \u2014 HOST_PLAYWRIGHT_REJECTED; http.server alone rejected",
+    "HOST_PLAYWRIGHT_REJECTED": true,
+    "independent_accepted_tip": "9d8ce2d3b60d21f4d4d851bad9f4b17e8ac43fff",
+    "independent_pass_commit": "071f9b28b2cccd0549885e5f8427af4db3c162c5",
+    "note": "DEVICE_LAB_STATUS=PENDING_ACCEPTED_MAIN_WP011R while device-os #103 remains unmerged. Independent FOUR_GAME branch evidence retained as INDEPENDENT_BRANCH_EVIDENCE_OBSERVED only \u2014 not accepted-main proof. No circular DRAFT-branch acceptance.",
+    "wp011r_pr": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/103",
+    "DEVICE_LAB_STATUS": "PENDING_ACCEPTED_MAIN_WP011R",
+    "INDEPENDENT_BRANCH_EVIDENCE_OBSERVED": true,
+    "circular_accepted_main_claim": false
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "all_steps_pass": true,
+  "commit": "860c3431136dc6d1b107c4df45f7e022f673d831",
+  "duration_msec": 6661,
+  "engine": "godot",
+  "engine_version": "4.7.1-stable (official)",
+  "game": "anime-aggressors",
+  "headless": true,
+  "run_mode": "main_scene_boot_with_autoloads",
+  "schema": "aa_actual_production_runtime/v1",
+  "started_at": "2026-08-12T18:14:18",
+  "steps": [
+    {
+      "detail": {
+        "boot_title_screen_rendered_first": true,
+        "scene_file_path": "res://scenes/menus/MainMenuScene.tscn"
+      },
+      "result": "pass",
+      "step": "title_menu",
+      "timestamp": "2026-08-12T18:14:13"
+    },
+    {
+      "detail": {
+        "p1_fighter_id": "ember-vale",
+        "p2_fighter_id": "rook-ironside",
+        "scene_file_path": "res://scenes/battle/BattleScene.tscn"
+      },
+      "result": "pass",
+      "step": "new_game_session_fighters_loaded",
+      "timestamp": "2026-08-12T18:14:13"
+    },
+    {
+      "detail": {
+        "axis_strength_seen": 1.0,
+        "battle_active": true,
+        "controls_enabled": true,
+        "distance_traveled": 229.389114379883,
+        "end": [
+          -13.5532531738281,
+          279.925201416016
+        ],
+        "start": [
+          -220.0,
+          179.929656982422
+        ]
+      },
+      "result": "pass",
+      "step": "real_input_movement",
+      "timestamp": "2026-08-12T18:14:17"
+    },
+    {
+      "detail": {
+        "aura_level_after": 4,
+        "aura_level_before": 0,
+        "aura_value": 100.0
+      },
+      "result": "pass",
+      "step": "aura_charge",
+      "timestamp": "2026-08-12T18:14:17"
+    },
+    {
+      "detail": {
+        "grab_pressed_seen": true,
+        "inputmap_has_p1_grab": true
+      },
+      "result": "pass",
+      "step": "grab_input_read",
+      "timestamp": "2026-08-12T18:14:17"
+    },
+    {
+      "detail": {
+        "attack_state_seen": "idle",
+        "damage_after": 3.0,
+        "damage_before": 0.0,
+        "hit_landed": true,
+        "hit_resolver_logs": [
+          "HIT jab_2 -> Fighter2 dmg:3.0 kb:3.2"
+        ],
+        "joypads": [],
+        "match_telemetry_hit_events_after": 1,
+        "match_telemetry_hit_events_before": 0,
+        "p1_shield_stuck": false,
+        "p2_shield_stuck": false
+      },
+      "result": "pass",
+      "step": "h2h_core_loop",
+      "timestamp": "2026-08-12T18:14:18"
+    },
+    {
+      "detail": {
+        "stocks_after": 2,
+        "stocks_before": 3
+      },
+      "result": "pass",
+      "step": "stock_loss_and_stage_bounds",
+      "timestamp": "2026-08-12T18:14:18"
+    },
+    {
+      "detail": {
+        "frame_frozen_while_paused": true,
+        "paused_after_ui_cancel": true,
+        "resumed_after_ui_accept": true
+      },
+      "result": "pass",
+      "step": "pause_resume",
+      "timestamp": "2026-08-12T18:14:18"
+    },
+    {
+      "detail": {
+        "disk_high_contrast": true,
+        "disk_master_volume": 0.5,
+        "persisted_to_disk": true
+      },
+      "result": "pass",
+      "step": "settings_a11y_baseline",
+      "timestamp": "2026-08-12T18:14:18"
+    },
+    {
+      "detail": {
+        "ACOUSTIC_OUTPUT_PHYSICAL": "PHYSICAL_PENDING",
+        "describe": {
+          "ACOUSTIC_OUTPUT_PHYSICAL": "PHYSICAL_PENDING",
+          "bus_volume_db": -5.19274616241455,
+          "degraded": false,
+          "enabled": true,
+          "last_music_stage": "training-grid",
+          "last_sfx": "ember-vale:hit",
+          "last_ui": "ui_confirm",
+          "music_playing": true,
+          "schema": "aa_audio_director/v1"
+        },
+        "fail_soft_ok": true,
+        "instantiated": true,
+        "master_volume_applied": true,
+        "music_ok": true,
+        "pause_resume_state_ok": true,
+        "persisted_volume": 0.55,
+        "sfx_ok": true,
+        "stuck_playback_cleared": true,
+        "ui_ok": true
+      },
+      "result": "pass",
+      "step": "audio_hook",
+      "timestamp": "2026-08-12T18:14:18"
+    },
+    {
+      "detail": {
+        "fresh_instance_reload_matches_live": true,
+        "matches_after": 3,
+        "matches_before": 2,
+        "wins_after": 2,
+        "wins_before": 1
+      },
+      "result": "pass",
+      "step": "save_load_lifecycle",
+      "timestamp": "2026-08-12T18:14:18"
+    },
+    {
+      "detail": {
+        "result": {
+          "ok": true,
+          "reason": "corrupted_profile",
+          "recovered": true
+        }
+      },
+      "result": "pass",
+      "step": "crash_recovery",
+      "timestamp": "2026-08-12T18:14:18"
+    },
+    {
+      "detail": {
+        "avg_fps": 137.691759944428,
+        "frame_samples": 915,
+        "hit_events": 1,
+        "ko_or_stock_loss_events": 2,
+        "match_start_events": 1
+      },
+      "result": "pass",
+      "step": "logging_perf_telemetry",
+      "timestamp": "2026-08-12T18:14:18"
+    }
+  ]
+}

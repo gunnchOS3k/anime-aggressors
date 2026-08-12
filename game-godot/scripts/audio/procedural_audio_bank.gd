@@ -44,8 +44,12 @@ static func load_stream(path: String) -> AudioStream:
 	if not ResourceLoader.exists(path) and not FileAccess.file_exists(path):
 		return null
 	var stream: AudioStream = null
+	# Prefer imported AudioStreamWAV after a clean `godot --import`.
 	if ResourceLoader.exists(path):
 		stream = load(path) as AudioStream
+	# Fallback when .import remaps exist but .godot/imported/*.sample is absent.
+	if stream == null and FileAccess.file_exists(path):
+		stream = AudioStreamWAV.load_from_file(path) as AudioStream
 	if stream == null:
 		return null
 	_cache[path] = stream

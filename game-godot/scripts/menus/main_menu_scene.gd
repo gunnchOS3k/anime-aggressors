@@ -65,9 +65,13 @@ func _press_feedback() -> void:
 	var tap := create_tween()
 	tap.tween_property(self, "scale", Vector2(0.995, 0.995), 0.05)
 	tap.tween_property(self, "scale", Vector2.ONE, 0.08)
-	var audio = load("res://scripts/audio/procedural_audio_bank.gd")
-	if audio:
-		audio.play_shared("ui_confirm", self)
+	var director = get_node_or_null("/root/AudioDirector")
+	if director and director.has_method("play_ui"):
+		director.play_ui("ui_confirm")
+	else:
+		var audio = load("res://scripts/audio/procedural_audio_bank.gd")
+		if audio:
+			audio.play_shared("ui_confirm", self)
 	if DisplayServer.is_touchscreen_available():
 		Input.vibrate_handheld(18)
 
