@@ -95,6 +95,22 @@ jobs:
           chmod +x Godot_v4.7.1-stable_linux.x86_64
           sudo mv Godot_v4.7.1-stable_linux.x86_64 /usr/local/bin/godot
 
+      - name: Deterministic Godot asset import (clean checkout)
+        working-directory: game-godot
+        run: |
+          set -euo pipefail
+          # Fresh clones have source WAVs + .import sidecars but no .godot/imported/*.sample.
+          # Import must run before ProductionGateHarness audio paths load AudioStreamWAV.
+          test -f assets/audio/procedural/stages/training-grid/bed.wav
+          test -f assets/audio/procedural/fighters/ember-vale/hit.wav
+          xvfb-run -a godot --headless --path . --import
+          # Fail closed if critical imported samples are still missing after import.
+          test -d .godot/imported
+          test -n "$(find .godot/imported -name 'bed.wav-*.sample' -print -quit)"
+          test -n "$(find .godot/imported -name 'hit.wav-*.sample' -print -quit)"
+        env:
+          DISPLAY: ":99"
+
       - name: WP-014 ACTUAL_PRODUCTION_RUNTIME gate (real engine boot, real input, real H2H/save)
         working-directory: game-godot
         run: |
