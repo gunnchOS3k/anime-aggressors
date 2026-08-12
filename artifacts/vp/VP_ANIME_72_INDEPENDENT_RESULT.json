@@ -1,0 +1,120 @@
+{
+  "schema": "VP_ANIME_72_INDEPENDENT_RESULT/v1",
+  "verified_at": "2026-08-12T20:54:14Z",
+  "pr": 72,
+  "pr_url": "https://github.com/gunnchOS3k/anime-aggressors/pull/72",
+  "pr_state_observed": "MERGED",
+  "pr_merged_at_observed": "2026-08-12T20:08:21Z",
+  "tip_sha": "a320c7c7edf0f6d60f27833a6488fcee8038b3e0",
+  "tip_matches_expected": true,
+  "expected_tip_sha": "a320c7c7edf0f6d60f27833a6488fcee8038b3e0",
+  "worktree": "/tmp/vp-anime-72-a320c7c",
+  "godot_version": "4.7.1.stable.official.a13da4feb",
+  "ci_green": true,
+  "ci_checks": [
+    "firmware-audit",
+    "gate1-game-core",
+    "native-engine",
+    "quality",
+    "web",
+    "wp014-actual-production-runtime"
+  ],
+  "import_pass": true,
+  "imported_samples": {
+    "bed_wav_sample_files": 6,
+    "hit_wav_sample_files": 8,
+    "note": ".godot wiped then godot --headless --path . --import; .godot/imported/{bed,hit}.wav-*.sample present"
+  },
+  "source_assets_present": {
+    "procedural_wavs": true,
+    "fighter_glbs": true,
+    "stage_svgs": true
+  },
+  "production_gate_pass": true,
+  "production_gate_runs": 2,
+  "flake_repro_pass": true,
+  "evidence_paths": [
+    "artifacts/wp014/actual_production_runtime.json",
+    "artifacts/vp/actual_production_runtime_independent.json",
+    "game-godot/gate1/evidence/out/actual_production_runtime.json"
+  ],
+  "steps": {
+    "title_menu": "pass",
+    "new_game_session_fighters_loaded": "pass",
+    "real_input_movement": "pass",
+    "aura_charge": "pass",
+    "grab_input_read": "pass",
+    "h2h_core_loop": "pass",
+    "stock_loss_and_stage_bounds": "pass",
+    "pause_resume": "pass",
+    "settings_a11y_baseline": "pass",
+    "audio_hook": "pass",
+    "save_load_lifecycle": "pass",
+    "crash_recovery": "pass",
+    "logging_perf_telemetry": "pass"
+  },
+  "steps_mission_alias": {
+    "title": "pass",
+    "fighters": "pass",
+    "movement": "pass",
+    "aura": "pass",
+    "grab": "pass",
+    "H2H": "pass",
+    "stock/stage": "pass",
+    "pause/resume": "pass",
+    "settings/a11y": "pass",
+    "audio_hook": "pass",
+    "save/load": "pass",
+    "crash recovery": "pass",
+    "logging/perf": "pass"
+  },
+  "challenges": {
+    "godot_cache_dependency": {
+      "pass": true,
+      "detail": "Clean worktree had no .godot; wiped and re-imported before gate."
+    },
+    "missing_source_assets": {
+      "pass": true,
+      "detail": "Procedural WAVs, fighter GLBs, stage SVGs present under game-godot/assets."
+    },
+    "host_only_fake_audio": {
+      "pass": true,
+      "detail": "AudioDirector autoload exercised; ACOUSTIC_OUTPUT_PHYSICAL=PHYSICAL_PENDING (not claimed physical)."
+    },
+    "hardcoded_PASS": {
+      "pass": true,
+      "detail": "Harness emits per-step results into JSON; all_steps_pass derived from step results."
+    },
+    "test_only_scene": {
+      "pass": true,
+      "detail": "run_mode=main_scene_boot_with_autoloads; title uses MainMenuScene; combat uses BattleScene."
+    },
+    "skipped_checks": {
+      "pass": true,
+      "detail": "All 13 required production-gate steps present with result=pass; none skipped."
+    },
+    "nondeterministic_import": {
+      "pass": true,
+      "detail": "Import completed; bed/hit samples materialized under .godot/imported."
+    },
+    "flake": {
+      "pass": true,
+      "detail": "Production gate run twice consecutively; both PRODUCTION_GATE_PASS."
+    }
+  },
+  "S0": 0,
+  "S1": 0,
+  "VP_ANIME_72_INDEPENDENT_RESULT": "PASS",
+  "ANIME_72_READY_FOR_EDMUND_MERGE": true,
+  "FULL_GAME_CONTENT_COMPLETE": false,
+  "HUMAN_POLISH_VALIDATED": false,
+  "ACOUSTIC_OUTPUT_PHYSICAL": "PHYSICAL_PENDING",
+  "DEVICE_LAB": "PENDING_ACCEPTED_MAIN",
+  "scope_freeze": "common production-runtime / clean-checkout / audio remediation ONLY",
+  "defects_found": [],
+  "notes": [
+    "Independent verifier used clean git worktree at tip; not implementer dirty tree.",
+    "PR #72 observed already MERGED at verify time; evidence still recorded on head branch.",
+    "Do NOT claim FULL_GAME_CONTENT_COMPLETE or HUMAN_POLISH."
+  ]
+}
