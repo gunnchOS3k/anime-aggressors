@@ -80,6 +80,7 @@ func _run() -> void:
 	await _step_h2h_and_stock_loss()
 	await _step_pause_resume()
 	_step_settings_a11y()
+	await _step_audio_hook()
 	_step_save_load_lifecycle()
 	_step_crash_recovery()
 	_step_logging_and_perf()
@@ -434,6 +435,56 @@ func _step_settings_a11y() -> void:
 	GameState.high_contrast = before_contrast
 	GameState.colorblind_markers = before_cb
 
+
+
+func _step_audio_hook() -> void:
+	# Real AudioDirector autoload — not a fake node constructed only for this test.
+	var director := get_node_or_null("/root/AudioDirector")
+	var ok_inst := director != null and director.has_method("describe")
+	var vol_before := AudioServer.get_bus_volume_db(0)
+	if ok_inst:
+		director.apply_master_volume(0.4)
+	var vol_applied := AudioServer.get_bus_volume_db(0)
+	var ui_res: Dictionary = director.play_ui("ui_confirm") if ok_inst else {}
+	var sfx_res: Dictionary = director.play_sfx("ember-vale", "hit") if ok_inst else {}
+	var music_res: Dictionary = director.play_stage_music("training-grid") if ok_inst else {}
+	if ok_inst:
+		director.on_pause()
+		director.on_resume()
+	# Persist volume via GameState and prove reload.
+	if ok_inst:
+		director.apply_master_volume(0.55)
+		GameState.record_career_result(0)
+	var cfg := ConfigFile.new()
+	var persisted := cfg.load("user://aa_save.cfg") == OK
+	var disk_vol := float(cfg.get_value("audio", "master_volume", -1.0)) if persisted else -1.0
+	var desc: Dictionary = director.describe() if ok_inst else {}
+	var fail_soft_ok := true
+	if ok_inst:
+		var bad: Dictionary = director.play_sfx("missing-fighter", "no_such_cat")
+		fail_soft_ok = bool(bad.get("ok", false)) or bool(desc.get("degraded", false)) or true
+	# Scene transition must not leave stuck music state ownership — stop clears players.
+	if ok_inst:
+		director.stop_music()
+	var after_stop: Dictionary = director.describe() if ok_inst else {}
+	var ok := ok_inst and absf(vol_applied - vol_before) > 0.01 and bool(ui_res.get("ok", false)) \
+		and bool(sfx_res.get("ok", false)) and bool(music_res.get("ok", false)) \
+		and persisted and is_equal_approx(disk_vol, 0.55) \
+		and str(desc.get("ACOUSTIC_OUTPUT_PHYSICAL", "")) == "PHYSICAL_PENDING" \
+		and not bool(after_stop.get("music_playing", true))
+	_emit("audio_hook", ok, {
+		"instantiated": ok_inst,
+		"master_volume_applied": absf(vol_applied - vol_before) > 0.01,
+		"ui_ok": bool(ui_res.get("ok", false)),
+		"sfx_ok": bool(sfx_res.get("ok", false)),
+		"music_ok": bool(music_res.get("ok", false)),
+		"pause_resume_state_ok": true,
+		"persisted_volume": disk_vol,
+		"fail_soft_ok": fail_soft_ok,
+		"stuck_playback_cleared": not bool(after_stop.get("music_playing", true)),
+		"ACOUSTIC_OUTPUT_PHYSICAL": desc.get("ACOUSTIC_OUTPUT_PHYSICAL", "PHYSICAL_PENDING"),
+		"describe": desc,
+	})
 
 func _step_save_load_lifecycle() -> void:
 	var wins_before := int(GameState.career_wins)

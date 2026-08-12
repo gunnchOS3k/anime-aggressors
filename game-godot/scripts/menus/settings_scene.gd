@@ -103,7 +103,11 @@ func _on_volume_pressed() -> void:
 			break
 	idx = (idx + 1) % steps.size()
 	GameState.master_volume = steps[idx]
-	AudioServer.set_bus_volume_db(0, linear_to_db(maxf(0.0001, GameState.master_volume)) if GameState.master_volume > 0.0 else -80.0)
+	var director = get_node_or_null("/root/AudioDirector")
+	if director and director.has_method("apply_master_volume"):
+		director.apply_master_volume(GameState.master_volume)
+	else:
+		AudioServer.set_bus_volume_db(0, linear_to_db(maxf(0.0001, GameState.master_volume)) if GameState.master_volume > 0.0 else -80.0)
 	GameState._persist_save()
 	_refresh_access_labels()
 

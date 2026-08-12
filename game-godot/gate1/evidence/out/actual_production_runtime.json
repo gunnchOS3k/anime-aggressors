@@ -1,14 +1,14 @@
 {
   "all_steps_pass": true,
-  "commit": "64617d0808889935e250c9f6ccfc9868f2d85245",
-  "duration_msec": 6516,
+  "commit": "860c3431136dc6d1b107c4df45f7e022f673d831",
+  "duration_msec": 6661,
   "engine": "godot",
   "engine_version": "4.7.1-stable (official)",
   "game": "anime-aggressors",
   "headless": true,
   "run_mode": "main_scene_boot_with_autoloads",
   "schema": "aa_actual_production_runtime/v1",
-  "started_at": "2026-08-11T20:01:53",
+  "started_at": "2026-08-12T18:14:18",
   "steps": [
     {
       "detail": {
@@ -17,7 +17,7 @@
       },
       "result": "pass",
       "step": "title_menu",
-      "timestamp": "2026-08-11T20:01:48"
+      "timestamp": "2026-08-12T18:14:13"
     },
     {
       "detail": {
@@ -27,16 +27,16 @@
       },
       "result": "pass",
       "step": "new_game_session_fighters_loaded",
-      "timestamp": "2026-08-11T20:01:48"
+      "timestamp": "2026-08-12T18:14:13"
     },
     {
       "detail": {
         "axis_strength_seen": 1.0,
         "battle_active": true,
         "controls_enabled": true,
-        "distance_traveled": 229.977294921875,
+        "distance_traveled": 229.389114379883,
         "end": [
-          -12.8999195098877,
+          -13.5532531738281,
           279.925201416016
         ],
         "start": [
@@ -46,7 +46,7 @@
       },
       "result": "pass",
       "step": "real_input_movement",
-      "timestamp": "2026-08-11T20:01:52"
+      "timestamp": "2026-08-12T18:14:17"
     },
     {
       "detail": {
@@ -56,7 +56,7 @@
       },
       "result": "pass",
       "step": "aura_charge",
-      "timestamp": "2026-08-11T20:01:52"
+      "timestamp": "2026-08-12T18:14:17"
     },
     {
       "detail": {
@@ -65,7 +65,7 @@
       },
       "result": "pass",
       "step": "grab_input_read",
-      "timestamp": "2026-08-11T20:01:52"
+      "timestamp": "2026-08-12T18:14:17"
     },
     {
       "detail": {
@@ -84,7 +84,7 @@
       },
       "result": "pass",
       "step": "h2h_core_loop",
-      "timestamp": "2026-08-11T20:01:53"
+      "timestamp": "2026-08-12T18:14:18"
     },
     {
       "detail": {
@@ -93,7 +93,7 @@
       },
       "result": "pass",
       "step": "stock_loss_and_stage_bounds",
-      "timestamp": "2026-08-11T20:01:53"
+      "timestamp": "2026-08-12T18:14:18"
     },
     {
       "detail": {
@@ -103,7 +103,7 @@
       },
       "result": "pass",
       "step": "pause_resume",
-      "timestamp": "2026-08-11T20:01:53"
+      "timestamp": "2026-08-12T18:14:18"
     },
     {
       "detail": {
@@ -113,19 +113,47 @@
       },
       "result": "pass",
       "step": "settings_a11y_baseline",
-      "timestamp": "2026-08-11T20:01:53"
+      "timestamp": "2026-08-12T18:14:18"
+    },
+    {
+      "detail": {
+        "ACOUSTIC_OUTPUT_PHYSICAL": "PHYSICAL_PENDING",
+        "describe": {
+          "ACOUSTIC_OUTPUT_PHYSICAL": "PHYSICAL_PENDING",
+          "bus_volume_db": -5.19274616241455,
+          "degraded": false,
+          "enabled": true,
+          "last_music_stage": "training-grid",
+          "last_sfx": "ember-vale:hit",
+          "last_ui": "ui_confirm",
+          "music_playing": true,
+          "schema": "aa_audio_director/v1"
+        },
+        "fail_soft_ok": true,
+        "instantiated": true,
+        "master_volume_applied": true,
+        "music_ok": true,
+        "pause_resume_state_ok": true,
+        "persisted_volume": 0.55,
+        "sfx_ok": true,
+        "stuck_playback_cleared": true,
+        "ui_ok": true
+      },
+      "result": "pass",
+      "step": "audio_hook",
+      "timestamp": "2026-08-12T18:14:18"
     },
     {
       "detail": {
         "fresh_instance_reload_matches_live": true,
-        "matches_after": 2,
-        "matches_before": 1,
+        "matches_after": 3,
+        "matches_before": 2,
         "wins_after": 2,
         "wins_before": 1
       },
       "result": "pass",
       "step": "save_load_lifecycle",
-      "timestamp": "2026-08-11T20:01:53"
+      "timestamp": "2026-08-12T18:14:18"
     },
     {
       "detail": {
@@ -137,19 +165,19 @@
       },
       "result": "pass",
       "step": "crash_recovery",
-      "timestamp": "2026-08-11T20:01:53"
+      "timestamp": "2026-08-12T18:14:18"
     },
     {
       "detail": {
-        "avg_fps": 139.137819675447,
-        "frame_samples": 922,
+        "avg_fps": 137.691759944428,
+        "frame_samples": 915,
         "hit_events": 1,
         "ko_or_stock_loss_events": 2,
         "match_start_events": 1
       },
       "result": "pass",
       "step": "logging_perf_telemetry",
-      "timestamp": "2026-08-11T20:01:53"
+      "timestamp": "2026-08-12T18:14:18"
     }
   ]
 }

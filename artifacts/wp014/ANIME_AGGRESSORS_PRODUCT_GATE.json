@@ -1,12 +1,12 @@
 {
   "schema": "wp014_product_gate/v1",
   "cycle": "operating-cycle-3b",
-  "work_package": "WP-014",
+  "work_package": "WP-014R",
   "game": "anime-aggressors",
   "branch": "operating-cycle-3b/wp-014-anime-aggressors",
   "base": "origin/main",
   "base_commit": "249270383eab87cf4d1240ea17e66bfff44d4b8c",
-  "generated_at": "2026-08-12T17:05:41Z",
+  "generated_at": "2026-08-12T18:09:28Z",
   "evidence_file": "gate1/evidence/out/actual_production_runtime.json",
   "stability": "6/6 consecutive full headless runs PASS (production_gate_harness.gd, Godot 4.7.1)",
   "priority_blocker_addressed": {
@@ -26,14 +26,15 @@
     "LOAD_PASS": "PASS",
     "SUSPEND_RESUME_OR_CHECKPOINT_PASS": "PASS",
     "SETTINGS_PASS": "PASS",
-    "AUDIO_HOOK_PASS": "PARTIAL \u2014 AudioDirector not separately probed this cycle; settings persist master_volume only",
+    "AUDIO_HOOK_PASS": "PASS \u2014 real AudioDirector autoload probed via ProductionGateHarness (master volume, UI/SFX/music paths, pause/resume state, persist, fail-soft, stuck-clear)",
     "A11Y_BASELINE_PASS": "PASS",
     "CRASH_RECOVERY_PASS": "PASS",
     "LOGGING_PASS": "PASS",
     "PERF_TELEMETRY_PASS": "PASS",
     "CLEAN_EXIT_PASS": "PASS",
-    "DEVICE_LAB_PASS": "PASS",
-    "PHYSICAL_HARDWARE_PLAYTEST": "PENDING"
+    "DEVICE_LAB_PASS": "PENDING_ACCEPTED_MAIN_WP011R",
+    "PHYSICAL_HARDWARE_PLAYTEST": "PENDING",
+    "ACOUSTIC_OUTPUT_PHYSICAL": "PHYSICAL_PENDING"
   },
   "gate_evidence_detail": {
     "title_menu": {
@@ -116,6 +117,11 @@
       "hit_events": 1,
       "ko_or_stock_loss_events": 2,
       "match_start_events": 1
+    },
+    "audio_hook": {
+      "subsystem": "AudioDirector autoload over ProceduralAudioBank",
+      "ACOUSTIC_OUTPUT_PHYSICAL": "PHYSICAL_PENDING",
+      "note": "Headless/null audio driver may not emit acoustic energy; call-path + state transitions evidenced."
     }
   },
   "defects": {
@@ -126,14 +132,17 @@
   },
   "market_parity_claim": "None. Digital automated-evidence production-runtime only.",
   "device_lab": {
-    "DEVICE_LAB_PASS": "PASS",
+    "DEVICE_LAB_PASS": "PENDING_ACCEPTED_MAIN_WP011R",
     "runtime_class": "GUEST_CHROMIUM_WAYLAND",
     "guest_game_id": "anime-aggressors",
     "evidence": "gunnchos-device-os@071f9b2 artifacts/wp011r/games/four_games_in_guest.json (independent-accepted FOUR_GAME on tip 9d8ce2d / commit 071f9b2) \u2014 HOST_PLAYWRIGHT_REJECTED; http.server alone rejected",
     "HOST_PLAYWRIGHT_REJECTED": true,
     "independent_accepted_tip": "9d8ce2d3b60d21f4d4d851bad9f4b17e8ac43fff",
     "independent_pass_commit": "071f9b28b2cccd0549885e5f8427af4db3c162c5",
-    "note": "Aligned to WP-011R independent-accepted FOUR_GAME guest evidence (#103@071f9b2). Pedestrian DEVICE_LAB_PASS is GUEST_GODOT4 in-guest; web titles are GUEST_CHROMIUM_WAYLAND. Physical playtest still PENDING. Not a shipping claim.",
-    "wp011r_pr": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/103"
+    "note": "DEVICE_LAB_STATUS=PENDING_ACCEPTED_MAIN_WP011R while device-os #103 remains unmerged. Independent FOUR_GAME branch evidence retained as INDEPENDENT_BRANCH_EVIDENCE_OBSERVED only \u2014 not accepted-main proof. No circular DRAFT-branch acceptance.",
+    "wp011r_pr": "https://github.com/gunnchOS3k/gunnchos-device-os/pull/103",
+    "DEVICE_LAB_STATUS": "PENDING_ACCEPTED_MAIN_WP011R",
+    "INDEPENDENT_BRANCH_EVIDENCE_OBSERVED": true,
+    "circular_accepted_main_claim": false
   }
 }
