@@ -79,6 +79,7 @@ func _run() -> void:
 	_step_aura_and_grab()
 	await _step_h2h_and_stock_loss()
 	await _step_pause_resume()
+	_step_playthrough_achievements()
 	_step_settings_a11y()
 	await _step_audio_hook()
 	_step_save_load_lifecycle()
@@ -412,6 +413,45 @@ func _step_pause_resume() -> void:
 		"paused_after_ui_cancel": paused_ok,
 		"frame_frozen_while_paused": frozen_ok,
 		"resumed_after_ui_accept": resumed_ok,
+	})
+
+
+func _step_playthrough_achievements() -> void:
+	var ach := get_node_or_null("/root/AchievementRuntime")
+	if ach == null:
+		_emit("playthrough_achievements", false, {"reason": "AchievementRuntime autoload missing"})
+		return
+	# complete_tutorial() already ran in _ready — real first-run persist path.
+	var tutorial_ok: bool = bool(ach.is_unlocked("aa.first_steps"))
+	var stamp := str(ach.unlocked_at("aa.first_steps"))
+	GameState.complete_tutorial()
+	var dup_ok: bool = str(ach.unlocked_at("aa.first_steps")) == stamp
+	# Arcade clear uses the real ladder advance, not a cheat unlock.
+	GameState.begin_arcade("ember-vale")
+	var arcade_next := ""
+	for _i in GameState.ARCADE_LADDER.size():
+		GameState.last_winner_slot = 1
+		arcade_next = GameState.advance_arcade_after_result()
+	var arcade_ok: bool = arcade_next == "arcade_clear" and bool(ach.is_unlocked("aa.arcade_clear"))
+	var hidden_ok: bool = bool(ach.is_unlocked("aa.hidden_undefeated"))
+	GameState.begin_challenge(0)
+	var ch: Dictionary = GameState.resolve_challenge(1, 3, 120.0)
+	var challenge_ok: bool = bool(ch.get("complete", false)) and bool(ach.is_unlocked("aa.break_100"))
+	var pause_ok: bool = bool(ach.is_unlocked("aa.pause_and_breathe"))
+	var pct := float(ach.completion_percent())
+	var browser: Array = ach.browser_entries()
+	var browser_ok: bool = browser.size() == int(ach.catalog_count())
+	var save_ok: bool = FileAccess.file_exists("user://achievements_v1.json")
+	_emit("playthrough_achievements", tutorial_ok and dup_ok and arcade_ok and hidden_ok and challenge_ok and pause_ok and browser_ok and save_ok, {
+		"tutorial": tutorial_ok,
+		"duplicate_prevention": dup_ok,
+		"arcade_clear": arcade_ok,
+		"hidden_undefeated": hidden_ok,
+		"challenge_break_100": challenge_ok,
+		"pause_resume_unlock": pause_ok,
+		"completion_percent": pct,
+		"browser_entries": browser.size(),
+		"offline_save": save_ok,
 	})
 
 

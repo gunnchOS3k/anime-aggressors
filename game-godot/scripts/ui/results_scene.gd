@@ -38,6 +38,15 @@ func _ready_display() -> void:
 			change_fighters_btn.visible = false
 		if change_stage_btn:
 			change_stage_btn.visible = false
+	elif GameState.mode == "challenges":
+		var done := GameState.completed_challenges.has(GameState.challenge_id)
+		if title_label:
+			if done:
+				title_label.text = "Challenge Complete — %s" % GameState.challenge_id
+			else:
+				title_label.text = "Challenge Result — %s" % name
+		if rematch_btn and GameState.challenge_objective == "wins" and not done:
+			rematch_btn.text = "Continue Challenge"
 	elif title_label:
 		title_label.text = "%s Wins!" % name
 
@@ -55,6 +64,10 @@ func _on_rematch_pressed() -> void:
 			_:
 				GameState.reset_match()
 				SceneRouter.go("battle")
+		return
+	if GameState.mode == "challenges" and GameState.challenge_objective == "wins" and not GameState.completed_challenges.has(GameState.challenge_id):
+		GameState.reset_match()
+		SceneRouter.go("battle")
 		return
 	GameState.reset_match()
 	SceneRouter.go("battle")

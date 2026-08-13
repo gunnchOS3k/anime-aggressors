@@ -278,7 +278,12 @@ func _toggle_pause() -> void:
 	# Prior behavior only flipped controls_enabled + BattleSim.paused, so
 	# fighters kept sliding under gravity/velocity while the pause panel showed
 	# — keyboard/gamepad players saw a non-frozen "pause".
+	var resuming := not _paused
 	get_tree().paused = _paused
+	if resuming:
+		var ach := get_node_or_null("/root/AchievementRuntime")
+		if ach != null and ach.has_method("report_event"):
+			ach.report_event("pause_resume")
 	if _battle_sim:
 		_battle_sim.set_paused(_paused)
 	if fighter1:
@@ -375,6 +380,10 @@ func _finish_match(winner: int) -> void:
 		return
 	if not GameState.battle_eval_mode:
 		GameState.record_career_result(winner)
+		if GameState.mode == "challenges":
+			var p1_stocks: int = int(fighter1.stocks) if fighter1 else 0
+			var p2_dmg: float = float(fighter2.damage_percent) if fighter2 else 0.0
+			GameState.resolve_challenge(winner, p1_stocks, p2_dmg)
 	get_tree().create_timer(0.5).timeout.connect(func(): SceneRouter.go("results"), CONNECT_ONE_SHOT)
 
 

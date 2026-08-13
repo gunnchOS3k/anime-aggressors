@@ -6,6 +6,9 @@ func _ready() -> void:
 	super._ready()
 	if title_label:
 		title_label.text = "Credits"
+	var ach := get_node_or_null("/root/AchievementRuntime")
+	if ach != null and ach.has_method("report_event"):
+		ach.report_event("credits_opened")
 	var body := get_node_or_null("%CreditsBody") as Label
 	if body == null:
 		body = Label.new()

@@ -54,6 +54,7 @@
     "verify:project": "node scripts/aa-verify-project.mjs",
     "test": "npm run validate:character-assets && npm run validate:anime-digital-art-audio-closure && npm run validate:anime-beta-content && node scripts/aa-verify-project.mjs",
     "validate:game001": "node scripts/validate-game001-fighter-identity.mjs",
+    "validate:game-rc": "python3 tools/validate_game_rc_contracts.py",
     "test:product-depth": "npm run validate:g2-c6-product-depth && npm run test:g2-c6-product-depth && npm run validate:game-godot-primary",
     "test:game001": "npm run validate:game001",
     "verify": "npm run mobile:check && npm run typecheck && npm run test && npm run build",

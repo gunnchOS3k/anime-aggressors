@@ -1,0 +1,36 @@
+{
+  "schema": "gunnchos.game_rc.playthrough_contract/v1",
+  "game": "anime-aggressors",
+  "contract_version": 1,
+  "playthrough_id": "aa.tutorial_to_arcade_clear.v1",
+  "digitally_executable": true,
+  "human_playtest_validated": false,
+  "notes": "Boot title → first-run tutorial battle → mode select → arcade/versus → pause/resume → results. Arcade clear is the campaign ending. Credits is an optional post-ending beat.",
+  "pause_resume": {
+    "required": true,
+    "status": "CLOSED",
+    "evidence": "BattleScene._toggle_pause uses get_tree().paused; production_gate_harness pause_resume step; AchievementRuntime event pause_resume."
+  },
+  "ending": {
+    "id": "arcade_clear_or_versus_results",
+    "status": "CLOSED",
+    "description": "ResultsScene shows versus winner, arcade continue/fail, or Arcade Clear after seven ladder wins. CreditsScene is reachable from main menu."
+  },
+  "steps": [
+    { "id": "boot_title", "scene": "res://scenes/boot/BootScene.tscn", "required": true, "status": "CLOSED" },
+    { "id": "first_run_tutorial_offer", "scene": "res://scenes/menus/TutorialScene.tscn", "required": true, "status": "CLOSED", "notes": "Boot routes first_run_pending players to tutorial." },
+    { "id": "tutorial_battle", "scene": "res://scenes/training/TutorialBattleScene.tscn", "required": true, "status": "CLOSED", "notes": "move/jump/attack/special/aura then complete_tutorial persist." },
+    { "id": "mode_select", "scene": "res://scenes/menus/ModeSelectScene.tscn", "required": true, "status": "CLOSED" },
+    { "id": "arcade_or_versus", "scene": "res://scenes/battle/BattleScene.tscn", "required": true, "status": "CLOSED" },
+    { "id": "pause_resume", "scene": "res://scenes/battle/BattleScene.tscn", "required": true, "status": "CLOSED" },
+    { "id": "results", "scene": "res://scenes/ui/ResultsScene.tscn", "required": true, "status": "CLOSED" },
+    { "id": "arcade_clear_ending", "scene": "res://scenes/ui/ResultsScene.tscn", "required": true, "status": "CLOSED" },
+    { "id": "achievements_browser", "scene": "res://scenes/menus/AchievementsScene.tscn", "required": true, "status": "CLOSED" },
+    { "id": "credits", "scene": "res://scenes/menus/CreditsScene.tscn", "required": false, "status": "CLOSED" }
+  ],
+  "open_placeholders": [
+    { "id": "HUMAN_PLAYTEST_VALIDATED", "severity": "S2", "summary": "No human playtest this packet." },
+    { "id": "PUBLIC_ONLINE", "severity": "S2", "summary": "Online ranked/unranked remains private/dev architecture." },
+    { "id": "PAINTED_REMASTERS", "severity": "S3", "summary": "Launch art is PROCEDURAL_FINAL, not painted remasters." }
+  ]
+}

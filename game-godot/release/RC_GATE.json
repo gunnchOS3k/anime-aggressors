@@ -1,0 +1,45 @@
+{
+  "schema": "gunnchos.game_rc.rc_gate/v1",
+  "game": "anime-aggressors",
+  "packet": "GAME-RC-001",
+  "generated_at": "2026-08-13T18:40:00Z",
+  "claims": {
+    "POLISHED_RELEASE_CANDIDATE": false,
+    "FEATURE_COMPLETE_RC": false,
+    "HUMAN_PLAYTEST_VALIDATED": false,
+    "DIGITAL_PLAYTHROUGH_EXECUTABLE": true,
+    "ACHIEVEMENT_SUBSYSTEM": true
+  },
+  "critic_class": "ALPHA",
+  "critic_class_rationale": "Digital tutorial→results playthrough and achievement runtime are executable. S0/S1 for this packet's digital scope are 0. S2 experience (fun, juice, human playtest, visual polish) is not 0, VISUAL is UNAVAILABLE, so critic stays ALPHA. POLISHED_RELEASE_CANDIDATE and FEATURE_COMPLETE_RC are not claimed.",
+  "defects": {
+    "S0_open": 0,
+    "S1_open": 0,
+    "S2_open": 4,
+    "S2_items": [
+      "HUMAN_PLAYTEST_VALIDATED=false",
+      "Public online ranked not shipped",
+      "Procedural-final art vs painted remasters",
+      "Experience/juice not human-validated"
+    ]
+  },
+  "visual": {
+    "VISUAL_MODEL_REVIEW": "UNAVAILABLE",
+    "reason": "This packet ran headless Godot / contract validation. No pixel inspection of a displayed frame was performed."
+  },
+  "playthrough": {
+    "status": "DIGITAL_EXECUTABLE",
+    "contract": "release/PLAYTHROUGH_CONTRACT.json"
+  },
+  "achievements": {
+    "catalog": "release/ACHIEVEMENTS.json",
+    "count": 12,
+    "tested_count": 12,
+    "notes": "Isolated AchievementRuntime tests fire real catalog conditions (flags/events/stats). No cheat unlock API."
+  },
+  "next_packets": {
+    "archive-of-life-artifact-world": "GAME-RC-002 — contracts + achievement runtime (not in this 2-PR packet)",
+    "beatlink-party": "GAME-RC-002 — contracts + achievement runtime (not in this 2-PR packet)"
+  },
+  "notes": "Cursor does not merge. Device-lab / physical playtest remain pending from prior WP-014."
+}
