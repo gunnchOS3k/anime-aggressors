@@ -10,20 +10,20 @@
       "direction": "neutral",
       "input_command": "attack_neutral",
       "grounded_air": "grounded",
-      "startup_frames": 3,
-      "active_frames": 3,
-      "recovery_frames": 8,
+      "startup_frames": 2,
+      "active_frames": 2,
+      "recovery_frames": 5,
       "hitboxes": [
         {
-          "offset_x": 36,
-          "offset_y": -8,
-          "width": 40,
-          "height": 32
+          "offset_x": 40,
+          "offset_y": -10,
+          "width": 36,
+          "height": 26
         }
       ],
       "damage": 2.3000000000000003,
-      "angle_deg": 45,
-      "base_knockback": 3,
+      "angle_deg": 55,
+      "base_knockback": 2.4,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -79,8 +79,15 @@
           "start": 5,
           "end": 10,
           "requires": "hit_confirm"
+        },
+        {
+          "start": 3,
+          "end": 9,
+          "requires": "hit_confirm",
+          "to": "jab_2"
         }
-      ]
+      ],
+      "h2h_string_id": "juno-spark:jab_1->jab_2"
     },
     {
       "move_id": "jab_2",
@@ -89,20 +96,20 @@
       "direction": "neutral",
       "input_command": "attack_neutral",
       "grounded_air": "grounded",
-      "startup_frames": 3,
-      "active_frames": 3,
-      "recovery_frames": 8,
+      "startup_frames": 2,
+      "active_frames": 2,
+      "recovery_frames": 6,
       "hitboxes": [
         {
-          "offset_x": 36,
-          "offset_y": -8,
-          "width": 40,
-          "height": 32
+          "offset_x": 42,
+          "offset_y": -10,
+          "width": 38,
+          "height": 26
         }
       ],
       "damage": 2.7600000000000002,
-      "angle_deg": 45,
-      "base_knockback": 4,
+      "angle_deg": 52,
+      "base_knockback": 3.0,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -152,7 +159,16 @@
         "type": "volt",
         "effect": "chain_stun",
         "strength": 1
-      }
+      },
+      "cancel_windows": [
+        {
+          "start": 3,
+          "end": 10,
+          "requires": "hit_confirm",
+          "to": "jab_finisher"
+        }
+      ],
+      "h2h_string_id": "juno-spark:jab_2->jab_finisher"
     },
     {
       "move_id": "jab_finisher",
@@ -161,20 +177,20 @@
       "direction": "neutral",
       "input_command": "attack_neutral",
       "grounded_air": "grounded",
-      "startup_frames": 4,
-      "active_frames": 3,
-      "recovery_frames": 12,
+      "startup_frames": 3,
+      "active_frames": 2,
+      "recovery_frames": 9,
       "hitboxes": [
         {
-          "offset_x": 36,
+          "offset_x": 44,
           "offset_y": -8,
           "width": 40,
-          "height": 32
+          "height": 28
         }
       ],
       "damage": 4.6000000000000005,
-      "angle_deg": 45,
-      "base_knockback": 7,
+      "angle_deg": 60,
+      "base_knockback": 6.0,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -231,7 +247,17 @@
         "type": "volt",
         "effect": "chain_stun",
         "strength": 1
-      }
+      },
+      "cancel_windows": [
+        {
+          "start": 6,
+          "end": 12,
+          "requires": "hit_confirm",
+          "to": "dash_attack",
+          "action": "dash"
+        }
+      ],
+      "h2h_string_id": "juno-spark:jab_finisher->dash_attack"
     },
     {
       "move_id": "forward_tilt",
@@ -240,20 +266,20 @@
       "direction": "forward",
       "input_command": "attack_forward",
       "grounded_air": "grounded",
-      "startup_frames": 5,
-      "active_frames": 3,
-      "recovery_frames": 12,
+      "startup_frames": 4,
+      "active_frames": 2,
+      "recovery_frames": 9,
       "hitboxes": [
         {
-          "offset_x": 36,
-          "offset_y": -8,
-          "width": 40,
-          "height": 32
+          "offset_x": 46,
+          "offset_y": -10,
+          "width": 44,
+          "height": 24
         }
       ],
       "damage": 6.44,
-      "angle_deg": 45,
-      "base_knockback": 8,
+      "angle_deg": 50,
+      "base_knockback": 6.5,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -456,9 +482,9 @@
       "direction": "forward",
       "input_command": "attack_dash",
       "grounded_air": "grounded",
-      "startup_frames": 6,
-      "active_frames": 4,
-      "recovery_frames": 16,
+      "startup_frames": 4,
+      "active_frames": 3,
+      "recovery_frames": 12,
       "hitboxes": [
         {
           "offset_x": 36,
@@ -468,8 +494,8 @@
         }
       ],
       "damage": 7.36,
-      "angle_deg": 45,
-      "base_knockback": 9,
+      "angle_deg": 48,
+      "base_knockback": 7.5,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -607,9 +633,9 @@
       "direction": "air_neutral",
       "input_command": "attack_air_neutral",
       "grounded_air": "air",
-      "startup_frames": 4,
+      "startup_frames": 2,
       "active_frames": 3,
-      "recovery_frames": 10,
+      "recovery_frames": 7,
       "hitboxes": [
         {
           "offset_x": 36,
@@ -619,8 +645,8 @@
         }
       ],
       "damage": 5.5200000000000005,
-      "angle_deg": 45,
-      "base_knockback": 7,
+      "angle_deg": 55,
+      "base_knockback": 5.0,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -670,7 +696,16 @@
         "type": "volt",
         "effect": "chain_stun",
         "strength": 1
-      }
+      },
+      "cancel_windows": [
+        {
+          "start": 6,
+          "end": 12,
+          "requires": "hit_confirm",
+          "to": "forward_air"
+        }
+      ],
+      "h2h_string_id": "juno-spark:neutral_air->forward_air"
     },
     {
       "move_id": "forward_air",
@@ -679,9 +714,9 @@
       "direction": "air_forward",
       "input_command": "attack_air_forward",
       "grounded_air": "air",
-      "startup_frames": 4,
-      "active_frames": 3,
-      "recovery_frames": 10,
+      "startup_frames": 3,
+      "active_frames": 2,
+      "recovery_frames": 8,
       "hitboxes": [
         {
           "offset_x": 36,
@@ -691,8 +726,8 @@
         }
       ],
       "damage": 6.44,
-      "angle_deg": 30,
-      "base_knockback": 8,
+      "angle_deg": 35,
+      "base_knockback": 6.5,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -895,13 +930,13 @@
       "direction": "neutral",
       "input_command": "special_neutral",
       "grounded_air": "both",
-      "startup_frames": 6,
+      "startup_frames": 4,
       "active_frames": 2,
-      "recovery_frames": 16,
+      "recovery_frames": 12,
       "hitboxes": [],
       "damage": 7.36,
       "angle_deg": 45,
-      "base_knockback": 8,
+      "base_knockback": 6.0,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -960,10 +995,10 @@
         "strength": 1
       },
       "projectile": {
-        "spawn_frame": 6,
-        "type": "volt_needle",
-        "offset_x": 40,
-        "offset_y": -12,
+        "spawn_frame": 4,
+        "type": "volt_bolt",
+        "offset_x": 48,
+        "offset_y": -6,
         "angle_deg": 0,
         "speed_by_aura": [
           520,
@@ -994,7 +1029,13 @@
           "straight",
           "straight",
           "beam"
-        ]
+        ],
+        "speed": 640,
+        "lifetime_frames": 30,
+        "size": 8,
+        "pierce": false,
+        "homing": 0.15,
+        "chain_stun_frames": 8
       }
     },
     {
@@ -1004,20 +1045,20 @@
       "direction": "forward",
       "input_command": "special_forward",
       "grounded_air": "grounded",
-      "startup_frames": 7,
+      "startup_frames": 5,
       "active_frames": 3,
-      "recovery_frames": 18,
+      "recovery_frames": 12,
       "hitboxes": [
         {
-          "offset_x": 36,
+          "offset_x": 52,
           "offset_y": -8,
-          "width": 40,
-          "height": 32
+          "width": 48,
+          "height": 26
         }
       ],
       "damage": 8.280000000000001,
-      "angle_deg": 45,
-      "base_knockback": 10,
+      "angle_deg": 40,
+      "base_knockback": 8,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -1074,7 +1115,13 @@
         "type": "volt",
         "effect": "chain_stun",
         "strength": 1
-      }
+      },
+      "self_movement": {
+        "dx": 260,
+        "dy": 0,
+        "frames": 6
+      },
+      "dash_cancel_enabled": true
     },
     {
       "move_id": "up_special_recovery",
@@ -1083,20 +1130,20 @@
       "direction": "up",
       "input_command": "special_up",
       "grounded_air": "both",
-      "startup_frames": 6,
+      "startup_frames": 4,
       "active_frames": 3,
-      "recovery_frames": 20,
+      "recovery_frames": 14,
       "hitboxes": [
         {
-          "offset_x": 36,
-          "offset_y": -8,
-          "width": 40,
-          "height": 32
+          "offset_x": 24,
+          "offset_y": -32,
+          "width": 30,
+          "height": 50
         }
       ],
       "damage": 7.36,
-      "angle_deg": 80,
-      "base_knockback": 12,
+      "angle_deg": 88,
+      "base_knockback": 9,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -1149,7 +1196,15 @@
       },
       "self_movement": {
         "x": 0,
-        "y": -320
+        "y": -320,
+        "dx": 60,
+        "dy": -480,
+        "frames": 10
+      },
+      "recovery_profile": {
+        "snap_ledge": true,
+        "air_friction": 0.85,
+        "landing_lag": 8
       }
     },
     {
@@ -1159,20 +1214,20 @@
       "direction": "down",
       "input_command": "special_down",
       "grounded_air": "grounded",
-      "startup_frames": 8,
-      "active_frames": 3,
-      "recovery_frames": 22,
+      "startup_frames": 6,
+      "active_frames": 4,
+      "recovery_frames": 16,
       "hitboxes": [
         {
-          "offset_x": 36,
-          "offset_y": -8,
-          "width": 40,
-          "height": 32
+          "offset_x": 20,
+          "offset_y": 6,
+          "width": 50,
+          "height": 22
         }
       ],
       "damage": 8.280000000000001,
-      "angle_deg": 270,
-      "base_knockback": 9,
+      "angle_deg": 280,
+      "base_knockback": 7,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -1229,6 +1284,10 @@
         "type": "volt",
         "effect": "chain_stun",
         "strength": 1
+      },
+      "trap": {
+        "linger_frames": 24,
+        "stun_pulses": 2
       }
     },
     {
@@ -1238,9 +1297,9 @@
       "direction": "neutral",
       "input_command": "grab",
       "grounded_air": "grounded",
-      "startup_frames": 7,
+      "startup_frames": 4,
       "active_frames": 2,
-      "recovery_frames": 20,
+      "recovery_frames": 14,
       "hitboxes": [
         {
           "offset_x": 28,
@@ -1296,7 +1355,8 @@
         "screen_flash": false
       },
       "training_display_name": "Grab",
-      "combat_tag": "speed_chain"
+      "combat_tag": "speed_chain",
+      "grab_range": 30
     },
     {
       "move_id": "throw_forward",
@@ -1305,13 +1365,13 @@
       "direction": "forward",
       "input_command": "throw_forward",
       "grounded_air": "both",
-      "startup_frames": 4,
+      "startup_frames": 3,
       "active_frames": 2,
-      "recovery_frames": 14,
+      "recovery_frames": 10,
       "hitboxes": [],
-      "damage": 4.784000000000001,
-      "angle_deg": 40,
-      "base_knockback": 13,
+      "damage": 4.5,
+      "angle_deg": 42,
+      "base_knockback": 12,
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -1387,13 +1447,13 @@
       "direction": "back",
       "input_command": "throw_back",
       "grounded_air": "both",
-      "startup_frames": 4,
+      "startup_frames": 3,
       "active_frames": 2,
-      "recovery_frames": 14,
+      "recovery_frames": 10,
       "hitboxes": [],
-      "damage": 6.256000000000001,
+      "damage": 5.5,
       "angle_deg": 150,
-      "base_knockback": 17,
+      "base_knockback": 14,
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -1469,13 +1529,13 @@
       "direction": "up",
       "input_command": "throw_up",
       "grounded_air": "both",
-      "startup_frames": 4,
+      "startup_frames": 3,
       "active_frames": 2,
-      "recovery_frames": 14,
+      "recovery_frames": 10,
       "hitboxes": [],
-      "damage": 5.5200000000000005,
-      "angle_deg": 85,
-      "base_knockback": 15,
+      "damage": 5.0,
+      "angle_deg": 90,
+      "base_knockback": 13,
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -1553,11 +1613,11 @@
       "grounded_air": "both",
       "startup_frames": 4,
       "active_frames": 2,
-      "recovery_frames": 14,
+      "recovery_frames": 11,
       "hitboxes": [],
-      "damage": 4.048000000000001,
+      "damage": 4.0,
       "angle_deg": 268,
-      "base_knockback": 11,
+      "base_knockback": 9,
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -1729,5 +1789,11 @@
       },
       "meter_cost": 100
     }
-  ]
+  ],
+  "game001_identity": {
+    "schema": "game001_fighter_identity/v1",
+    "combat_tag": "speed_chain",
+    "h2h_links": 4,
+    "special_frame_fingerprint": true
+  }
 }

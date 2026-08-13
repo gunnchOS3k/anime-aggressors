@@ -1,0 +1,50 @@
+{
+  "schema": "experience_review_game_critic/v1",
+  "subject": "anime-aggressors",
+  "work_item": "GAME-001",
+  "generated_at": "2026-08-12T21:07:41Z",
+  "VISUAL_MODEL_REVIEW": "PARTIAL_THUMBS_ONLY",
+  "live_framebuffer": "UNAVAILABLE",
+  "classification": "ALPHA",
+  "classification_rationale": [
+    "Procedural low-poly fighter presentation (thumb evidence)",
+    "Systems depth exists in data/runtime (moves/aura/AI/balance) but content polish incomplete",
+    "HUMAN_POLISH and fun remain HUMAN_PENDING",
+    "Not RC: missing finished art, live UI polish proof, and human fun validation"
+  ],
+  "not_rc": true,
+  "likely_not_beta_polished": true,
+  "evidence_based": true,
+  "findings": [
+    {
+      "severity": "S0",
+      "id": "none",
+      "summary": "No S0 crash/blocker newly evidenced in this digital pass beyond remediated pause freeze."
+    },
+    {
+      "severity": "S1",
+      "id": "CRIT-S1-PAUSE-REMATCH",
+      "status": "REMEDIATED",
+      "summary": "Pause rematch tree freeze was a real digital UX blocker; fixed in GAME-001."
+    },
+    {
+      "severity": "S2",
+      "id": "CRIT-S2-RESKIN-RISK-MITIGATED-DATA",
+      "summary": "Pre-pass specials shared frame data (damage-only reskins). GAME-001 applied unique frame/projectile/H2H profiles; self-challenge PASS.",
+      "evidence": "artifacts/game001/SELF_CHALLENGE_IDENTICAL_FIGHTER_LOGIC.json"
+    },
+    {
+      "severity": "S2",
+      "id": "CRIT-S2-ART-ALPHA",
+      "summary": "Visual identity remains ALPHA procedural proxies.",
+      "evidence": "thumb PNGs"
+    }
+  ],
+  "scores_heuristic": {
+    "systems_depth": 0.72,
+    "presentation": 0.28,
+    "content_completeness": 0.45,
+    "ship_readiness": 0.35
+  },
+  "verdict": "ALPHA \u2014 promising fighter system differentiation; not a polished beta/RC product experience."
+}

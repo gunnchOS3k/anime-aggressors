@@ -1,0 +1,43 @@
+{
+  "schema": "game001_fighter_balance/v1",
+  "fighter_id": "juno-spark",
+  "combat_tag": "speed_chain",
+  "archetype": "Speed Confirm",
+  "mobility": {
+    "run_mult": 1.18,
+    "dash_mult": 1.18,
+    "air_mult": 1.22,
+    "jump_mult": 1.08,
+    "fall_mult": 1.02
+  },
+  "defense": {
+    "shield_mult": 0.9,
+    "dodge_invuln_frames": 12,
+    "spot_dodge_frames": 16,
+    "air_dodge_frames": 24
+  },
+  "aura": {
+    "charge_rate_mult": 1.2,
+    "burst_damage_mult": 1.05,
+    "scaling_curve": "chain"
+  },
+  "recovery": {
+    "up_b_distance": 480,
+    "side_b_distance": 260,
+    "ledge_snap_priority": "high"
+  },
+  "ai_weights": {
+    "approach": 0.8,
+    "projectile": 0.3,
+    "grab": 0.18,
+    "shield": 0.2,
+    "aerial": 0.55
+  },
+  "h2h_priority": [
+    "jab_1",
+    "jab_2",
+    "jab_finisher",
+    "dash_attack"
+  ],
+  "source": "GAME-001 identity depth pass"
+}

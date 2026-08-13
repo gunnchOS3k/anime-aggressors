@@ -1,0 +1,30 @@
+{
+  "schema": "experience_review_student_engagement/v1",
+  "subject": "anime-aggressors",
+  "work_item": "GAME-001",
+  "generated_at": "2026-08-12T21:07:41Z",
+  "VISUAL_MODEL_REVIEW": "PARTIAL_THUMBS_ONLY",
+  "live_framebuffer": "UNAVAILABLE",
+  "classification": "ALPHA",
+  "likely_engagement": "PARTIAL",
+  "findings": [
+    {
+      "severity": "S2",
+      "id": "EXP-S2-ENGAGE-ARCHETYPE-READ",
+      "summary": "Data-side archetypes (rushdown/tank/speed/etc.) are distinct; student players may not yet *see* that identity from procedural thumbs alone.",
+      "evidence": "register + thumbs"
+    },
+    {
+      "severity": "S1",
+      "id": "EXP-S1-CPU-DIFFICULTY-PRESENT",
+      "summary": "CPU 1\u20135 + training/versus paths exist in menus \u2014 onboarding surface present digitally.",
+      "status": "PASS_DATA",
+      "evidence": "ruleset_scene.gd / TrainingScene"
+    }
+  ],
+  "backlog": [
+    "Human classroom playtest for fun/engagement (HUMAN_PENDING)",
+    "Tutorial clarity pass with live screenshots"
+  ],
+  "fun": "HUMAN_PENDING"
+}

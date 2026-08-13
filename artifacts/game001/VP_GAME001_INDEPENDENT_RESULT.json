@@ -1,0 +1,258 @@
+{
+  "schema": "vp_game001_independent_result/v1",
+  "work_item": "GAME-001",
+  "pr": 74,
+  "pr_url": "https://github.com/gunnchOS3k/anime-aggressors/pull/74",
+  "verifier": "independent",
+  "verifier_role": "did_not_implement",
+  "verified_at": "2026-08-12T21:17:58Z",
+  "tip": {
+    "sha": "5114f682cb8e4ab76458d145ff1724b7e94d4538",
+    "short": "5114f68",
+    "live_confirmed": true,
+    "message": "chore(GAME-001): stamp register source_commit to tip"
+  },
+  "base": {
+    "includes_pr72_merge": true,
+    "merge_commit": "16df36d0025a6d124817a1800de65abef689d51f",
+    "short": "16df36d",
+    "ancestor_of_tip": true
+  },
+  "ci": {
+    "tip_green": true,
+    "production_gate": {
+      "name": "wp014-actual-production-runtime",
+      "conclusion": "SUCCESS",
+      "url": "https://github.com/gunnchOS3k/anime-aggressors/actions/runs/31641208519/job/94263857679"
+    },
+    "checks": [
+      {
+        "name": "firmware-audit",
+        "conclusion": "SUCCESS"
+      },
+      {
+        "name": "gate1-game-core",
+        "conclusion": "SUCCESS"
+      },
+      {
+        "name": "native-engine",
+        "conclusion": "SUCCESS"
+      },
+      {
+        "name": "quality",
+        "conclusion": "SUCCESS"
+      },
+      {
+        "name": "web",
+        "conclusion": "SUCCESS"
+      },
+      {
+        "name": "wp014-actual-production-runtime",
+        "conclusion": "SUCCESS"
+      }
+    ]
+  },
+  "method": {
+    "fresh_worktree": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vp74-indep",
+    "worktree_sha": "5114f682cb8e4ab76458d145ff1724b7e94d4538",
+    "validator": "scripts/validate-game001-fighter-identity.mjs",
+    "validator_result": "PASS",
+    "independent_data_compare": true,
+    "live_framebuffer": "UNAVAILABLE",
+    "visual_pixel_critique": "NOT_PERFORMED_VISUAL_UNAVAILABLE"
+  },
+  "fighter_differentiation": {
+    "verdict": "PASS_NOT_IDENTICAL_RESKINS",
+    "roster_size": 7,
+    "fighters": [
+      "ember-vale",
+      "rook-ironside",
+      "juno-spark",
+      "kaia-windrow",
+      "nix-calder",
+      "orion-vell",
+      "vesper-nyx"
+    ],
+    "unique_move_file_hashes": 7,
+    "unique_fighter_file_hashes": 7,
+    "unique_balance_file_hashes": 7,
+    "unique_combat_sigs_cosmetic_stripped": 7,
+    "clone_pairs": [],
+    "near_reskin_all_specials_identical_frame_pairs": [],
+    "specials_unique_across_roster": [
+      "neutral_special_projectile",
+      "side_special",
+      "up_special_recovery",
+      "down_special"
+    ],
+    "aura_charge_rates_unique": true,
+    "cpuBehaviorTags_unique": true,
+    "runtime_hooks_present": [
+      "aura_identity.gd PROFILES x7 distinct tags/rates",
+      "aura_special_runtime.gd per-fighter hooks",
+      "cpu_controller.gd::_act_archetype tag branches"
+    ],
+    "sample_matrix": [
+      {
+        "id": "ember-vale",
+        "combatTag": "burn_rushdown",
+        "weight": 100,
+        "aura": 1.12,
+        "jab_startup": 3,
+        "proj": "flame_shot",
+        "cpu": [
+          "rushdown",
+          "approach"
+        ]
+      },
+      {
+        "id": "rook-ironside",
+        "combatTag": "armor_quake",
+        "weight": 125,
+        "aura": 0.88,
+        "jab_startup": 5,
+        "proj": "quake_slab",
+        "cpu": [
+          "tank",
+          "punish"
+        ]
+      },
+      {
+        "id": "juno-spark",
+        "combatTag": "speed_chain",
+        "weight": 82,
+        "aura": 1.2,
+        "jab_startup": 2,
+        "proj": "volt_bolt",
+        "cpu": [
+          "speed",
+          "combo"
+        ]
+      },
+      {
+        "id": "kaia-windrow",
+        "combatTag": "wind_drift",
+        "weight": 96,
+        "aura": 1.05,
+        "jab_startup": 4,
+        "proj": "gale_gust",
+        "cpu": [
+          "spacing",
+          "aerial"
+        ]
+      },
+      {
+        "id": "nix-calder",
+        "combatTag": "freeze_control",
+        "weight": 118,
+        "aura": 0.95,
+        "jab_startup": 4,
+        "proj": "frost_orb",
+        "cpu": [
+          "control",
+          "defensive"
+        ]
+      },
+      {
+        "id": "orion-vell",
+        "combatTag": "gravity_pull",
+        "weight": 100,
+        "aura": 0.9,
+        "jab_startup": 3,
+        "proj": "gravity_orb",
+        "cpu": [
+          "combo",
+          "neutral"
+        ]
+      },
+      {
+        "id": "vesper-nyx",
+        "combatTag": "phase_mark",
+        "weight": 88,
+        "aura": 1.08,
+        "jab_startup": 3,
+        "proj": "void_mark",
+        "cpu": [
+          "trickster",
+          "mixup"
+        ]
+      }
+    ],
+    "S0_opened": [],
+    "S1_opened": []
+  },
+  "product_surfaces": {
+    "character_select": {
+      "status": "PASS_CODE",
+      "evidence": "fighter_select_scene.gd loads GameState.roster_ids() from roster.json (7) and builds grid for all"
+    },
+    "stages": {
+      "status": "PASS_DATA",
+      "launch_stage_count": 6,
+      "evidence": "game-godot/data/stages/production_stages.json",
+      "note": "Register lists stages.count=7 (dir listing inflated by production_stages meta); launch ADR target is 6 \u2014 honesty NIT only, not differentiation FAIL"
+    },
+    "pause_rematch": {
+      "status": "PASS_CODE",
+      "fix": "GAME001-S1-PAUSE-REMATCH-TREE-FROZEN",
+      "evidence": "battle_scene.gd::_clear_pause_for_nav clears get_tree().paused before rematch/menu nav"
+    },
+    "training": {
+      "status": "PASS_CODE",
+      "evidence": "SceneRouter training + TrainingScene.tscn + TrainingBattleScene.tscn"
+    },
+    "local_versus": {
+      "status": "PASS_CODE",
+      "evidence": "SceneRouter versus + VersusScene.tscn"
+    }
+  },
+  "honesty_flags": {
+    "FULL_GAME_CONTENT_COMPLETE": false,
+    "FULL_GAME_CONTENT_COMPLETE_earned": false,
+    "HUMAN_POLISH": "HUMAN_PENDING",
+    "fun": "HUMAN_PENDING",
+    "register_claim": "FIGHTER_IDENTITY_DEPTH_PARTIAL \u2014 data/runtime differentiation proven; HUMAN_POLISH / fun HUMAN_PENDING; visual thumbs ALPHA"
+  },
+  "experience": {
+    "critic_classification": "ALPHA",
+    "VISUAL_MODEL_REVIEW": "PARTIAL_THUMBS_ONLY",
+    "live_framebuffer": "UNAVAILABLE",
+    "S0_open": 0,
+    "S1_open": 0,
+    "S2_open": 5,
+    "S2_backlog": [
+      "GAME001-S2-PROCEDURAL-VISUAL-ALPHA",
+      "EXP-S2-PROCEDURAL-SILHOUETTE",
+      "EXP-S2-COLOR-ONLY-IDENTITY",
+      "EXP-S2-ENGAGE-ARCHETYPE-READ",
+      "CRIT-S2-ART-ALPHA"
+    ],
+    "evidence": "artifacts/experience_review/anime-aggressors/{GAME_CRITIC_REVIEW,BACKLOG}.json"
+  },
+  "severity": {
+    "S0_open": [],
+    "S1_open": [],
+    "S1_remediated_observed": [
+      "GAME001-S1-PAUSE-REMATCH-TREE-FROZEN"
+    ],
+    "S2_open_count": 5
+  },
+  "remediation": {
+    "performed": false,
+    "reason": "Independent differentiation/regression checks PASS; no FAIL requiring fix"
+  },
+  "nits_non_blocking": [
+    "Register source_commit stamped to parent d7dd308 rather than tip 5114f68 (chicken-egg stamp)",
+    "Register stages.count=7 vs production_stages launch total=6"
+  ],
+  "verdict": "PASS",
+  "ANIME_74_READY_FOR_EDMUND_MERGE": true,
+  "READY_FOR_MERGE": true,
+  "ready_gate": {
+    "independent_pass": true,
+    "ci_green_including_production_gate": true,
+    "S0_open_eq_0": true,
+    "S1_open_eq_0": true
+  },
+  "scope_note": "GAME-001 fighter/product depth only; #72 freeze issues not reopened (no regression of pause freeze \u2014 remediation present)."
+}

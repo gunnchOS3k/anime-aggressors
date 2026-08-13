@@ -1,0 +1,43 @@
+{
+  "schema": "game001_fighter_balance/v1",
+  "fighter_id": "orion-vell",
+  "combat_tag": "gravity_pull",
+  "archetype": "Combo Control",
+  "mobility": {
+    "run_mult": 1.0,
+    "dash_mult": 1.0,
+    "air_mult": 1.0,
+    "jump_mult": 1.0,
+    "fall_mult": 1.0
+  },
+  "defense": {
+    "shield_mult": 1.0,
+    "dodge_invuln_frames": 10,
+    "spot_dodge_frames": 18,
+    "air_dodge_frames": 22
+  },
+  "aura": {
+    "charge_rate_mult": 0.9,
+    "burst_damage_mult": 1.18,
+    "scaling_curve": "pull"
+  },
+  "recovery": {
+    "up_b_distance": 400,
+    "side_b_distance": 40,
+    "ledge_snap_priority": "high"
+  },
+  "ai_weights": {
+    "approach": 0.55,
+    "projectile": 0.35,
+    "grab": 0.4,
+    "shield": 0.28,
+    "aerial": 0.4
+  },
+  "h2h_priority": [
+    "jab_1",
+    "jab_2",
+    "jab_finisher",
+    "up_tilt"
+  ],
+  "source": "GAME-001 identity depth pass"
+}

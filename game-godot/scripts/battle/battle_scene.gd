@@ -331,15 +331,39 @@ func _ensure_pause_panel() -> void:
 	v.add_child(resume_btn)
 	var rematch_btn := Button.new()
 	rematch_btn.text = "Rematch"
-	rematch_btn.pressed.connect(func(): SceneRouter.go("battle"))
+	# GAME-001 S1: leaving get_tree().paused=true after SceneRouter.go stranded
+	# the next battle/menu under a frozen tree (buttons unresponsive).
+	rematch_btn.pressed.connect(_on_pause_rematch)
 	v.add_child(rematch_btn)
 	var menu_btn := Button.new()
 	menu_btn.text = "Return to Menu"
-	menu_btn.pressed.connect(func(): SceneRouter.go("main_menu"))
+	menu_btn.pressed.connect(_on_pause_return_menu)
 	v.add_child(menu_btn)
 	_pause_panel.add_child(v)
 	hud.add_child(_pause_panel)
 	_pause_panel.visible = false
+
+
+func _clear_pause_for_nav() -> void:
+	_paused = false
+	get_tree().paused = false
+	if _battle_sim:
+		_battle_sim.set_paused(false)
+	if _pause_panel:
+		_pause_panel.visible = false
+	process_mode = Node.PROCESS_MODE_INHERIT
+	TouchInputManager._sync_overlay()
+
+
+func _on_pause_rematch() -> void:
+	_clear_pause_for_nav()
+	GameState.reset_match()
+	SceneRouter.go("battle")
+
+
+func _on_pause_return_menu() -> void:
+	_clear_pause_for_nav()
+	SceneRouter.go("main_menu")
 
 
 func _finish_match(winner: int) -> void:

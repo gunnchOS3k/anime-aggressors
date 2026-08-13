@@ -22,8 +22,8 @@
         }
       ],
       "damage": 2.5,
-      "angle_deg": 45,
-      "base_knockback": 3,
+      "angle_deg": 55,
+      "base_knockback": 3.0,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -79,8 +79,15 @@
           "start": 5,
           "end": 10,
           "requires": "hit_confirm"
+        },
+        {
+          "start": 5,
+          "end": 11,
+          "requires": "hit_confirm",
+          "to": "jab_2"
         }
-      ]
+      ],
+      "h2h_string_id": "orion-vell:jab_1->jab_2"
     },
     {
       "move_id": "jab_2",
@@ -94,15 +101,15 @@
       "recovery_frames": 8,
       "hitboxes": [
         {
-          "offset_x": 36,
+          "offset_x": 38,
           "offset_y": -8,
-          "width": 40,
+          "width": 42,
           "height": 32
         }
       ],
       "damage": 3,
-      "angle_deg": 45,
-      "base_knockback": 4,
+      "angle_deg": 60,
+      "base_knockback": 3.8,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -152,7 +159,16 @@
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
-      }
+      },
+      "cancel_windows": [
+        {
+          "start": 5,
+          "end": 12,
+          "requires": "hit_confirm",
+          "to": "jab_finisher"
+        }
+      ],
+      "h2h_string_id": "orion-vell:jab_2->jab_finisher"
     },
     {
       "move_id": "jab_finisher",
@@ -161,20 +177,20 @@
       "direction": "neutral",
       "input_command": "attack_neutral",
       "grounded_air": "grounded",
-      "startup_frames": 4,
+      "startup_frames": 5,
       "active_frames": 3,
       "recovery_frames": 12,
       "hitboxes": [
         {
           "offset_x": 36,
-          "offset_y": -8,
-          "width": 40,
-          "height": 32
+          "offset_y": -12,
+          "width": 46,
+          "height": 38
         }
       ],
       "damage": 5,
-      "angle_deg": 45,
-      "base_knockback": 7,
+      "angle_deg": 70,
+      "base_knockback": 7.2,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -225,7 +241,16 @@
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
-      }
+      },
+      "cancel_windows": [
+        {
+          "start": 8,
+          "end": 14,
+          "requires": "hit_confirm",
+          "to": "up_tilt"
+        }
+      ],
+      "h2h_string_id": "orion-vell:jab_finisher->up_tilt"
     },
     {
       "move_id": "forward_tilt",
@@ -234,20 +259,20 @@
       "direction": "forward",
       "input_command": "attack_forward",
       "grounded_air": "grounded",
-      "startup_frames": 5,
+      "startup_frames": 6,
       "active_frames": 3,
-      "recovery_frames": 12,
+      "recovery_frames": 13,
       "hitboxes": [
         {
-          "offset_x": 36,
-          "offset_y": -8,
-          "width": 40,
-          "height": 32
+          "offset_x": 44,
+          "offset_y": -6,
+          "width": 50,
+          "height": 30
         }
       ],
       "damage": 7,
-      "angle_deg": 45,
-      "base_knockback": 8,
+      "angle_deg": 40,
+      "base_knockback": 8.0,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -441,7 +466,16 @@
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
-      }
+      },
+      "cancel_windows": [
+        {
+          "start": 9,
+          "end": 16,
+          "requires": "hit_confirm",
+          "to": "up_air"
+        }
+      ],
+      "h2h_string_id": "orion-vell:down_tilt->up_air"
     },
     {
       "move_id": "dash_attack",
@@ -451,8 +485,8 @@
       "input_command": "attack_dash",
       "grounded_air": "grounded",
       "startup_frames": 6,
-      "active_frames": 4,
-      "recovery_frames": 16,
+      "active_frames": 3,
+      "recovery_frames": 15,
       "hitboxes": [
         {
           "offset_x": 36,
@@ -462,8 +496,8 @@
         }
       ],
       "damage": 8,
-      "angle_deg": 45,
-      "base_knockback": 9,
+      "angle_deg": 35,
+      "base_knockback": 9.0,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -596,7 +630,7 @@
       "input_command": "attack_air_neutral",
       "grounded_air": "air",
       "startup_frames": 4,
-      "active_frames": 3,
+      "active_frames": 4,
       "recovery_frames": 10,
       "hitboxes": [
         {
@@ -607,8 +641,8 @@
         }
       ],
       "damage": 6,
-      "angle_deg": 45,
-      "base_knockback": 7,
+      "angle_deg": 70,
+      "base_knockback": 6.0,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -667,9 +701,9 @@
       "direction": "air_forward",
       "input_command": "attack_air_forward",
       "grounded_air": "air",
-      "startup_frames": 4,
+      "startup_frames": 5,
       "active_frames": 3,
-      "recovery_frames": 10,
+      "recovery_frames": 11,
       "hitboxes": [
         {
           "offset_x": 36,
@@ -679,8 +713,8 @@
         }
       ],
       "damage": 7,
-      "angle_deg": 30,
-      "base_knockback": 8,
+      "angle_deg": 45,
+      "base_knockback": 7.5,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -883,13 +917,13 @@
       "direction": "neutral",
       "input_command": "special_neutral",
       "grounded_air": "both",
-      "startup_frames": 6,
+      "startup_frames": 7,
       "active_frames": 2,
-      "recovery_frames": 16,
+      "recovery_frames": 15,
       "hitboxes": [],
       "damage": 8,
-      "angle_deg": 45,
-      "base_knockback": 8,
+      "angle_deg": 60,
+      "base_knockback": 7.0,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -942,10 +976,10 @@
         "strength": 1
       },
       "projectile": {
-        "spawn_frame": 6,
+        "spawn_frame": 7,
         "type": "gravity_orb",
-        "offset_x": 42,
-        "offset_y": -12,
+        "offset_x": 38,
+        "offset_y": -10,
         "angle_deg": 0,
         "speed_by_aura": [
           160,
@@ -976,7 +1010,13 @@
           "pull_orb",
           "pull_orb",
           "pull_orb"
-        ]
+        ],
+        "speed": 300,
+        "lifetime_frames": 42,
+        "size": 14,
+        "pierce": false,
+        "homing": 0.35,
+        "pull_strength": 180
       }
     },
     {
@@ -986,20 +1026,20 @@
       "direction": "forward",
       "input_command": "special_forward",
       "grounded_air": "grounded",
-      "startup_frames": 7,
-      "active_frames": 3,
-      "recovery_frames": 18,
+      "startup_frames": 8,
+      "active_frames": 5,
+      "recovery_frames": 17,
       "hitboxes": [
         {
-          "offset_x": 36,
+          "offset_x": 50,
           "offset_y": -8,
-          "width": 40,
-          "height": 32
+          "width": 64,
+          "height": 36
         }
       ],
       "damage": 9,
-      "angle_deg": 45,
-      "base_knockback": 10,
+      "angle_deg": 75,
+      "base_knockback": 6.0,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -1050,6 +1090,15 @@
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
+      },
+      "self_movement": {
+        "dx": 40,
+        "dy": 0,
+        "frames": 8
+      },
+      "field": {
+        "pull_strength": 220,
+        "radius": 90
       }
     },
     {
@@ -1060,19 +1109,19 @@
       "input_command": "special_up",
       "grounded_air": "both",
       "startup_frames": 6,
-      "active_frames": 3,
-      "recovery_frames": 20,
+      "active_frames": 4,
+      "recovery_frames": 19,
       "hitboxes": [
         {
-          "offset_x": 36,
-          "offset_y": -8,
-          "width": 40,
-          "height": 32
+          "offset_x": 10,
+          "offset_y": -30,
+          "width": 48,
+          "height": 52
         }
       ],
       "damage": 8,
-      "angle_deg": 80,
-      "base_knockback": 12,
+      "angle_deg": 90,
+      "base_knockback": 10,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -1125,7 +1174,16 @@
       },
       "self_movement": {
         "x": 0,
-        "y": -320
+        "y": -320,
+        "dx": 10,
+        "dy": -400,
+        "frames": 12
+      },
+      "recovery_profile": {
+        "snap_ledge": true,
+        "air_friction": 0.9,
+        "landing_lag": 11,
+        "orbit_assist": true
       }
     },
     {
@@ -1135,20 +1193,20 @@
       "direction": "down",
       "input_command": "special_down",
       "grounded_air": "grounded",
-      "startup_frames": 8,
-      "active_frames": 3,
-      "recovery_frames": 22,
+      "startup_frames": 9,
+      "active_frames": 5,
+      "recovery_frames": 21,
       "hitboxes": [
         {
-          "offset_x": 36,
-          "offset_y": -8,
-          "width": 40,
-          "height": 32
+          "offset_x": 0,
+          "offset_y": 6,
+          "width": 70,
+          "height": 30
         }
       ],
       "damage": 9,
-      "angle_deg": 270,
-      "base_knockback": 9,
+      "angle_deg": 260,
+      "base_knockback": 11,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -1199,6 +1257,10 @@
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
+      },
+      "trap": {
+        "linger_frames": 36,
+        "pull_pulses": 3
       }
     },
     {
@@ -1208,9 +1270,9 @@
       "direction": "neutral",
       "input_command": "grab",
       "grounded_air": "grounded",
-      "startup_frames": 7,
-      "active_frames": 2,
-      "recovery_frames": 20,
+      "startup_frames": 5,
+      "active_frames": 3,
+      "recovery_frames": 17,
       "hitboxes": [
         {
           "offset_x": 28,
@@ -1266,7 +1328,8 @@
         "screen_flash": false
       },
       "training_display_name": "Grab",
-      "combat_tag": "gravity_pull"
+      "combat_tag": "gravity_pull",
+      "grab_range": 40
     },
     {
       "move_id": "throw_forward",
@@ -1277,11 +1340,11 @@
       "grounded_air": "both",
       "startup_frames": 4,
       "active_frames": 2,
-      "recovery_frames": 14,
+      "recovery_frames": 12,
       "hitboxes": [],
-      "damage": 5.2,
-      "angle_deg": 32,
-      "base_knockback": 13,
+      "damage": 5.5,
+      "angle_deg": 30,
+      "base_knockback": 12,
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -1359,11 +1422,11 @@
       "grounded_air": "both",
       "startup_frames": 4,
       "active_frames": 2,
-      "recovery_frames": 14,
+      "recovery_frames": 12,
       "hitboxes": [],
-      "damage": 6.800000000000001,
-      "angle_deg": 148,
-      "base_knockback": 17,
+      "damage": 6.5,
+      "angle_deg": 150,
+      "base_knockback": 14,
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -1441,11 +1504,11 @@
       "grounded_air": "both",
       "startup_frames": 4,
       "active_frames": 2,
-      "recovery_frames": 14,
+      "recovery_frames": 11,
       "hitboxes": [],
-      "damage": 4.800000000000001,
-      "angle_deg": 86,
-      "base_knockback": 12,
+      "damage": 5.0,
+      "angle_deg": 100,
+      "base_knockback": 11,
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -1521,12 +1584,12 @@
       "direction": "down",
       "input_command": "throw_down",
       "grounded_air": "both",
-      "startup_frames": 4,
-      "active_frames": 2,
+      "startup_frames": 5,
+      "active_frames": 3,
       "recovery_frames": 14,
       "hitboxes": [],
-      "damage": 5.6000000000000005,
-      "angle_deg": 270,
+      "damage": 6.0,
+      "angle_deg": 255,
       "base_knockback": 14,
       "knockback_growth": 1.15,
       "shield_damage": 3,
@@ -1699,5 +1762,11 @@
       },
       "meter_cost": 100
     }
-  ]
+  ],
+  "game001_identity": {
+    "schema": "game001_fighter_identity/v1",
+    "combat_tag": "gravity_pull",
+    "h2h_links": 4,
+    "special_frame_fingerprint": true
+  }
 }

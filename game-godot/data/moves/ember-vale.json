@@ -11,19 +11,19 @@
       "input_command": "attack_neutral",
       "grounded_air": "grounded",
       "startup_frames": 3,
-      "active_frames": 3,
-      "recovery_frames": 8,
+      "active_frames": 2,
+      "recovery_frames": 7,
       "hitboxes": [
         {
-          "offset_x": 36,
-          "offset_y": -8,
-          "width": 40,
-          "height": 32
+          "offset_x": 38,
+          "offset_y": -6,
+          "width": 42,
+          "height": 30
         }
       ],
       "damage": 2.5,
-      "angle_deg": 45,
-      "base_knockback": 3,
+      "angle_deg": 42,
+      "base_knockback": 3.2,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -79,8 +79,15 @@
           "start": 5,
           "end": 10,
           "requires": "hit_confirm"
+        },
+        {
+          "start": 5,
+          "end": 11,
+          "requires": "hit_confirm",
+          "to": "jab_2"
         }
-      ]
+      ],
+      "h2h_string_id": "ember-vale:jab_1->jab_2"
     },
     {
       "move_id": "jab_2",
@@ -90,19 +97,19 @@
       "input_command": "attack_neutral",
       "grounded_air": "grounded",
       "startup_frames": 3,
-      "active_frames": 3,
+      "active_frames": 2,
       "recovery_frames": 8,
       "hitboxes": [
         {
-          "offset_x": 36,
-          "offset_y": -8,
-          "width": 40,
-          "height": 32
+          "offset_x": 40,
+          "offset_y": -6,
+          "width": 44,
+          "height": 30
         }
       ],
       "damage": 3,
-      "angle_deg": 45,
-      "base_knockback": 4,
+      "angle_deg": 40,
+      "base_knockback": 4.1,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -152,7 +159,16 @@
         "type": "flame",
         "effect": "burn",
         "strength": 1
-      }
+      },
+      "cancel_windows": [
+        {
+          "start": 5,
+          "end": 12,
+          "requires": "hit_confirm",
+          "to": "jab_finisher"
+        }
+      ],
+      "h2h_string_id": "ember-vale:jab_2->jab_finisher"
     },
     {
       "move_id": "jab_finisher",
@@ -163,18 +179,18 @@
       "grounded_air": "grounded",
       "startup_frames": 4,
       "active_frames": 3,
-      "recovery_frames": 12,
+      "recovery_frames": 11,
       "hitboxes": [
         {
-          "offset_x": 36,
-          "offset_y": -8,
-          "width": 40,
-          "height": 32
+          "offset_x": 42,
+          "offset_y": -4,
+          "width": 48,
+          "height": 34
         }
       ],
       "damage": 5,
-      "angle_deg": 45,
-      "base_knockback": 7,
+      "angle_deg": 48,
+      "base_knockback": 7.5,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -224,7 +240,16 @@
         "type": "flame",
         "effect": "burn",
         "strength": 1
-      }
+      },
+      "cancel_windows": [
+        {
+          "start": 8,
+          "end": 14,
+          "requires": "hit_confirm",
+          "to": "side_special"
+        }
+      ],
+      "h2h_string_id": "ember-vale:jab_finisher->side_special"
     },
     {
       "move_id": "forward_tilt",
@@ -235,18 +260,18 @@
       "grounded_air": "grounded",
       "startup_frames": 5,
       "active_frames": 3,
-      "recovery_frames": 12,
+      "recovery_frames": 11,
       "hitboxes": [
         {
-          "offset_x": 36,
+          "offset_x": 44,
           "offset_y": -8,
-          "width": 40,
-          "height": 32
+          "width": 52,
+          "height": 28
         }
       ],
       "damage": 7,
-      "angle_deg": 45,
-      "base_knockback": 8,
+      "angle_deg": 38,
+      "base_knockback": 8.5,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -449,9 +474,9 @@
       "direction": "forward",
       "input_command": "attack_dash",
       "grounded_air": "grounded",
-      "startup_frames": 6,
+      "startup_frames": 5,
       "active_frames": 4,
-      "recovery_frames": 16,
+      "recovery_frames": 15,
       "hitboxes": [
         {
           "offset_x": 36,
@@ -461,8 +486,8 @@
         }
       ],
       "damage": 8,
-      "angle_deg": 45,
-      "base_knockback": 9,
+      "angle_deg": 35,
+      "base_knockback": 9.5,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -593,9 +618,9 @@
       "direction": "air_neutral",
       "input_command": "attack_air_neutral",
       "grounded_air": "air",
-      "startup_frames": 4,
+      "startup_frames": 3,
       "active_frames": 3,
-      "recovery_frames": 10,
+      "recovery_frames": 9,
       "hitboxes": [
         {
           "offset_x": 36,
@@ -605,8 +630,8 @@
         }
       ],
       "damage": 6,
-      "angle_deg": 45,
-      "base_knockback": 7,
+      "angle_deg": 50,
+      "base_knockback": 6.5,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -677,8 +702,8 @@
         }
       ],
       "damage": 7,
-      "angle_deg": 30,
-      "base_knockback": 8,
+      "angle_deg": 28,
+      "base_knockback": 8.2,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -881,13 +906,13 @@
       "direction": "neutral",
       "input_command": "special_neutral",
       "grounded_air": "both",
-      "startup_frames": 6,
+      "startup_frames": 5,
       "active_frames": 2,
-      "recovery_frames": 16,
+      "recovery_frames": 14,
       "hitboxes": [],
       "damage": 8,
-      "angle_deg": 45,
-      "base_knockback": 8,
+      "angle_deg": 40,
+      "base_knockback": 7.5,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -939,10 +964,10 @@
         "strength": 1
       },
       "projectile": {
-        "spawn_frame": 6,
+        "spawn_frame": 5,
         "type": "flame_shot",
-        "offset_x": 44,
-        "offset_y": -12,
+        "offset_x": 46,
+        "offset_y": -2,
         "angle_deg": 0,
         "speed_by_aura": [
           400,
@@ -973,7 +998,12 @@
           "straight",
           "beam",
           "beam"
-        ]
+        ],
+        "speed": 520,
+        "lifetime_frames": 36,
+        "size": 10,
+        "pierce": false,
+        "homing": 0.0
       }
     },
     {
@@ -983,20 +1013,20 @@
       "direction": "forward",
       "input_command": "special_forward",
       "grounded_air": "grounded",
-      "startup_frames": 7,
-      "active_frames": 3,
-      "recovery_frames": 18,
+      "startup_frames": 6,
+      "active_frames": 4,
+      "recovery_frames": 16,
       "hitboxes": [
         {
-          "offset_x": 36,
-          "offset_y": -8,
-          "width": 40,
-          "height": 32
+          "offset_x": 48,
+          "offset_y": -6,
+          "width": 56,
+          "height": 30
         }
       ],
       "damage": 9,
-      "angle_deg": 45,
-      "base_knockback": 10,
+      "angle_deg": 32,
+      "base_knockback": 11,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -1046,7 +1076,13 @@
         "type": "flame",
         "effect": "burn",
         "strength": 1
-      }
+      },
+      "self_movement": {
+        "dx": 180,
+        "dy": 0,
+        "frames": 8
+      },
+      "armor_frames": 0
     },
     {
       "move_id": "up_special_recovery",
@@ -1055,20 +1091,20 @@
       "direction": "up",
       "input_command": "special_up",
       "grounded_air": "both",
-      "startup_frames": 6,
-      "active_frames": 3,
-      "recovery_frames": 20,
+      "startup_frames": 5,
+      "active_frames": 4,
+      "recovery_frames": 18,
       "hitboxes": [
         {
-          "offset_x": 36,
-          "offset_y": -8,
-          "width": 40,
-          "height": 32
+          "offset_x": 20,
+          "offset_y": -28,
+          "width": 36,
+          "height": 48
         }
       ],
       "damage": 8,
-      "angle_deg": 80,
-      "base_knockback": 12,
+      "angle_deg": 78,
+      "base_knockback": 11,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -1121,7 +1157,15 @@
       },
       "self_movement": {
         "x": 0,
-        "y": -320
+        "y": -320,
+        "dx": 40,
+        "dy": -420,
+        "frames": 12
+      },
+      "recovery_profile": {
+        "snap_ledge": true,
+        "air_friction": 0.92,
+        "landing_lag": 10
       }
     },
     {
@@ -1131,20 +1175,20 @@
       "direction": "down",
       "input_command": "special_down",
       "grounded_air": "grounded",
-      "startup_frames": 8,
-      "active_frames": 3,
-      "recovery_frames": 22,
+      "startup_frames": 7,
+      "active_frames": 5,
+      "recovery_frames": 20,
       "hitboxes": [
         {
-          "offset_x": 36,
-          "offset_y": -8,
-          "width": 40,
-          "height": 32
+          "offset_x": 12,
+          "offset_y": 8,
+          "width": 60,
+          "height": 24
         }
       ],
       "damage": 9,
-      "angle_deg": 270,
-      "base_knockback": 9,
+      "angle_deg": 265,
+      "base_knockback": 8.5,
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -1194,6 +1238,10 @@
         "type": "flame",
         "effect": "burn",
         "strength": 1
+      },
+      "trap": {
+        "linger_frames": 40,
+        "burn_ticks": 3
       }
     },
     {
@@ -1203,9 +1251,9 @@
       "direction": "neutral",
       "input_command": "grab",
       "grounded_air": "grounded",
-      "startup_frames": 7,
-      "active_frames": 2,
-      "recovery_frames": 20,
+      "startup_frames": 5,
+      "active_frames": 3,
+      "recovery_frames": 18,
       "hitboxes": [
         {
           "offset_x": 28,
@@ -1261,7 +1309,8 @@
         "screen_flash": false
       },
       "training_display_name": "Grab",
-      "combat_tag": "burn_rushdown"
+      "combat_tag": "burn_rushdown",
+      "grab_range": 34
     },
     {
       "move_id": "throw_forward",
@@ -1272,11 +1321,11 @@
       "grounded_air": "both",
       "startup_frames": 4,
       "active_frames": 2,
-      "recovery_frames": 14,
+      "recovery_frames": 12,
       "hitboxes": [],
-      "damage": 5.6000000000000005,
-      "angle_deg": 35,
-      "base_knockback": 14,
+      "damage": 6.0,
+      "angle_deg": 32,
+      "base_knockback": 15,
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -1352,13 +1401,13 @@
       "direction": "back",
       "input_command": "throw_back",
       "grounded_air": "both",
-      "startup_frames": 4,
+      "startup_frames": 5,
       "active_frames": 2,
-      "recovery_frames": 14,
+      "recovery_frames": 13,
       "hitboxes": [],
-      "damage": 7.2,
-      "angle_deg": 140,
-      "base_knockback": 18,
+      "damage": 7.5,
+      "angle_deg": 138,
+      "base_knockback": 17,
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -1436,10 +1485,10 @@
       "grounded_air": "both",
       "startup_frames": 4,
       "active_frames": 2,
-      "recovery_frames": 14,
+      "recovery_frames": 12,
       "hitboxes": [],
-      "damage": 6.4,
-      "angle_deg": 82,
+      "damage": 6.8,
+      "angle_deg": 85,
       "base_knockback": 16,
       "knockback_growth": 1.15,
       "shield_damage": 3,
@@ -1516,13 +1565,13 @@
       "direction": "down",
       "input_command": "throw_down",
       "grounded_air": "both",
-      "startup_frames": 4,
-      "active_frames": 2,
+      "startup_frames": 5,
+      "active_frames": 3,
       "recovery_frames": 14,
       "hitboxes": [],
-      "damage": 4.800000000000001,
-      "angle_deg": 270,
-      "base_knockback": 12,
+      "damage": 5.2,
+      "angle_deg": 272,
+      "base_knockback": 10,
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
@@ -1694,5 +1743,11 @@
       },
       "meter_cost": 100
     }
-  ]
+  ],
+  "game001_identity": {
+    "schema": "game001_fighter_identity/v1",
+    "combat_tag": "burn_rushdown",
+    "h2h_links": 3,
+    "special_frame_fingerprint": true
+  }
 }
