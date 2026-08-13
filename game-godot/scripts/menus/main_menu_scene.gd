@@ -60,6 +60,10 @@ func _on_credits_pressed() -> void:
 	_press_feedback()
 	SceneRouter.go("credits")
 
+func _on_achievements_pressed() -> void:
+	_press_feedback()
+	SceneRouter.go("achievements")
+
 func _press_feedback() -> void:
 	# Soft scale nudge + Path A UI confirm SFX when available.
 	var tap := create_tween()

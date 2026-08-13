@@ -1,0 +1,101 @@
+{
+  "schema": "gunnchos.game_rc.achievements/v1",
+  "game": "anime-aggressors",
+  "catalog_version": 1,
+  "save_version": 1,
+  "offline": true,
+  "duplicate_prevention": true,
+  "notes": "Unlocks fire from real GameState / BattleScene / tutorial / arcade / challenge paths. No test-only unlock type exists.",
+  "achievements": [
+    {
+      "id": "aa.first_steps",
+      "title": "First Steps",
+      "description": "Complete the interactive first-run tutorial.",
+      "hidden": false,
+      "unlock": { "type": "flag", "flag": "tutorial_completed" }
+    },
+    {
+      "id": "aa.first_blood",
+      "title": "First Blood",
+      "description": "Win a local match.",
+      "hidden": false,
+      "unlock": { "type": "event_count", "event": "match_won", "count": 1 }
+    },
+    {
+      "id": "aa.veteran",
+      "title": "Ring Veteran",
+      "description": "Finish five matches.",
+      "hidden": false,
+      "unlock": { "type": "event_count", "event": "match_complete", "count": 5 }
+    },
+    {
+      "id": "aa.pause_and_breathe",
+      "title": "Pause and Breathe",
+      "description": "Pause a live battle and resume it.",
+      "hidden": false,
+      "unlock": { "type": "event_count", "event": "pause_resume", "count": 1 }
+    },
+    {
+      "id": "aa.arcade_clear",
+      "title": "Arcade Clear",
+      "description": "Defeat the full seven-bout arcade ladder.",
+      "hidden": false,
+      "unlock": { "type": "flag", "flag": "arcade_complete" }
+    },
+    {
+      "id": "aa.break_100",
+      "title": "Break 100",
+      "description": "Complete the Break 100% challenge.",
+      "hidden": false,
+      "unlock": { "type": "flag", "flag": "challenge:damage_100" }
+    },
+    {
+      "id": "aa.ko_clock",
+      "title": "KO Clock",
+      "description": "Complete the KO in 90s challenge.",
+      "hidden": false,
+      "unlock": { "type": "flag", "flag": "challenge:ko_90s" }
+    },
+    {
+      "id": "aa.hold_the_line",
+      "title": "Hold the Line",
+      "description": "Complete the Hold 1 Stock challenge.",
+      "hidden": false,
+      "unlock": { "type": "flag", "flag": "challenge:survive_stocks" }
+    },
+    {
+      "id": "aa.sprint_two",
+      "title": "Two-Bout Sprint",
+      "description": "Complete the Two-Bout Sprint challenge.",
+      "hidden": false,
+      "unlock": { "type": "flag", "flag": "challenge:arcade_sprint" }
+    },
+    {
+      "id": "aa.credits_roll",
+      "title": "Credits Roll",
+      "description": "Open the credits screen after a session.",
+      "hidden": false,
+      "unlock": { "type": "event_count", "event": "credits_opened", "count": 1 }
+    },
+    {
+      "id": "aa.hidden_undefeated",
+      "title": "Undefeated Ladder",
+      "description": "Clear arcade without a loss (seven straight wins).",
+      "hidden": true,
+      "unlock": {
+        "type": "all",
+        "conditions": [
+          { "type": "flag", "flag": "arcade_complete" },
+          { "type": "stat_at_least", "stat": "arcade_wins", "threshold": 7 }
+        ]
+      }
+    },
+    {
+      "id": "aa.challenge_set",
+      "title": "Challenge Set",
+      "description": "Complete any three challenges.",
+      "hidden": false,
+      "unlock": { "type": "event_count", "event": "challenge_complete", "count": 3 }
+    }
+  ]
+}

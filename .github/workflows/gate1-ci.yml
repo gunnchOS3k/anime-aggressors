@@ -60,6 +60,9 @@ jobs:
       - name: GAME-001 fighter identity self-challenge
         run: npm run validate:game001
 
+      - name: GAME-RC-001 contract validation
+        run: python3 tools/validate_game_rc_contracts.py
+
       - name: Godot / headless check (if available)
         run: |
           set -euo pipefail

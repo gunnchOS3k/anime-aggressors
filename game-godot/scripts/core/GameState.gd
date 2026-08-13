@@ -37,6 +37,8 @@ var challenge_id: String = ""
 var challenge_objective: String = ""
 var challenge_time_limit: int = 90
 var challenge_target_damage: float = 100.0
+var challenge_session_wins: int = 0
+var completed_challenges: Dictionary = {}
 
 ## Online architecture selection (private/dev).
 var online_queue: String = "private"  # private | unranked | ranked | tournament
@@ -157,6 +159,7 @@ func complete_tutorial() -> void:
 	tutorial_skipped = false
 	first_run_pending = false
 	_persist_first_run()
+	_ach_set_flag("tutorial_completed", true)
 
 
 func skip_tutorial() -> void:
@@ -217,6 +220,7 @@ func begin_challenge(challenge_index: int = 0) -> void:
 	challenge_objective = str(c.objective)
 	challenge_time_limit = int(c.time)
 	challenge_target_damage = float(c.target)
+	challenge_session_wins = 0
 	hazards_enabled = false
 	items_enabled = false
 	stage_id = str(c.stage)
@@ -321,6 +325,9 @@ func advance_arcade_after_result() -> String:
 		if arcade_index >= ARCADE_LADDER.size():
 			arcade_complete = true
 			arcade_active = false
+			_ach_set_flag("arcade_complete", true)
+			_ach_set_stat("arcade_wins", float(arcade_wins))
+			_ach_event("arcade_clear")
 			return "arcade_clear"
 		_apply_arcade_bout()
 		return "battle"
@@ -361,6 +368,10 @@ func record_career_result(winner_slot: int) -> void:
 	elif winner_slot == 2:
 		career_losses += 1
 	_persist_save()
+	_ach_event("match_complete")
+	if winner_slot == 1:
+		_ach_event("match_won")
+		_ach_set_stat("career_wins", float(career_wins))
 
 
 func ensure_save_loaded() -> void:
@@ -381,6 +392,7 @@ func ensure_save_loaded() -> void:
 	career_wins = int(cfg.get_value("career", "wins", 0))
 	career_losses = int(cfg.get_value("career", "losses", 0))
 	career_matches = int(cfg.get_value("career", "matches", 0))
+	completed_challenges = cfg.get_value("progress", "challenges", {})
 	unlocked_fighters = cfg.get_value("progress", "fighters", roster_ids())
 	unlocked_stages = cfg.get_value("progress", "stages", production_stage_ids())
 	high_contrast = bool(cfg.get_value("a11y", "high_contrast", false))
@@ -400,6 +412,7 @@ func _persist_save() -> void:
 	cfg.set_value("career", "wins", career_wins)
 	cfg.set_value("career", "losses", career_losses)
 	cfg.set_value("career", "matches", career_matches)
+	cfg.set_value("progress", "challenges", completed_challenges)
 	cfg.set_value("progress", "fighters", unlocked_fighters if unlocked_fighters.size() > 0 else roster_ids())
 	cfg.set_value("progress", "stages", unlocked_stages if unlocked_stages.size() > 0 else production_stage_ids())
 	cfg.set_value("a11y", "high_contrast", high_contrast)
@@ -483,6 +496,56 @@ func load_stage(id: String) -> Dictionary:
 		return {}
 	var f := FileAccess.open(path, FileAccess.READ)
 	return JSON.parse_string(f.get_as_text())
+
+
+func resolve_challenge(winner: int, p1_stocks: int, p2_damage: float) -> Dictionary:
+	if mode != "challenges" or challenge_id == "":
+		return {"ok": false, "complete": false, "id": ""}
+	var complete := false
+	match challenge_objective:
+		"damage":
+			complete = p2_damage >= challenge_target_damage
+		"ko":
+			complete = winner == 1
+		"survive":
+			complete = p1_stocks >= int(challenge_target_damage) and winner != 2
+		"wins":
+			if winner == 1:
+				challenge_session_wins += 1
+			complete = challenge_session_wins >= int(challenge_target_damage)
+		_:
+			complete = winner == 1
+	if complete:
+		completed_challenges[challenge_id] = Time.get_datetime_string_from_system(true)
+		_ach_set_flag("challenge:%s" % challenge_id, true)
+		_ach_event("challenge_complete")
+		_persist_save()
+	return {"ok": true, "complete": complete, "id": challenge_id, "wins": challenge_session_wins}
+
+
+func _achievements() -> Node:
+	var tree := Engine.get_main_loop() as SceneTree
+	if tree == null or tree.root == null:
+		return null
+	return tree.root.get_node_or_null("AchievementRuntime")
+
+
+func _ach_event(event_id: String, amount: int = 1) -> void:
+	var ach := _achievements()
+	if ach != null and ach.has_method("report_event"):
+		ach.report_event(event_id, amount)
+
+
+func _ach_set_flag(flag: String, value: bool = true) -> void:
+	var ach := _achievements()
+	if ach != null and ach.has_method("set_flag"):
+		ach.set_flag(flag, value)
+
+
+func _ach_set_stat(stat: String, value: float) -> void:
+	var ach := _achievements()
+	if ach != null and ach.has_method("set_stat"):
+		ach.set_stat(stat, value)
 
 
 func roster_ids() -> Array:

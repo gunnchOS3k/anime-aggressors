@@ -20,6 +20,7 @@ func _suites() -> Array:
 		["anime_alpha_exit", preload("res://tests/smoke_anime_alpha_exit.gd")],
 		["anime_beta_content", preload("res://tests/smoke_anime_beta_content.gd")],
 		["anime_digital_rc", preload("res://tests/smoke_anime_digital_rc.gd")],
+		["game_rc_achievements", preload("res://tests/smoke_game_rc_achievements.gd")],
 		["device_a11y_telemetry", preload("res://tests/smoke_device_a11y_telemetry.gd")],
 		["fighter_scene", preload("res://tests/smoke_fighter_scene.gd")],
 		["training_scene", preload("res://tests/smoke_training_scene.gd")],

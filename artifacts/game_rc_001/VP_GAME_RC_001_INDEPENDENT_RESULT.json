@@ -1,0 +1,172 @@
+{
+  "schema": "gunnchos.game_rc_001.independent_verifier_result.v1",
+  "work_item": "GAME-RC-001",
+  "game": "anime-aggressors",
+  "verifier_role": "INDEPENDENT_VERIFIER_AGENT",
+  "did_not_implement": true,
+  "did_not_merge": true,
+  "did_not_claim_HUMAN_PLAYTEST": true,
+  "did_not_claim_POLISHED_RC": true,
+  "did_not_claim_FEATURE_COMPLETE_RC": true,
+  "generated_at_utc": "2026-08-13T19:09:12Z",
+  "pr": {
+    "number": 75,
+    "url": "https://github.com/gunnchOS3k/anime-aggressors/pull/75",
+    "draft": true,
+    "branch": "cursor/game-rc-001-playthrough-achievements",
+    "title": "GAME-RC-001: playthrough contracts + real achievement runtime",
+    "mergeable_observed_at_start": "MERGEABLE",
+    "mergeStateStatus_observed_at_start": "UNSTABLE_ci_in_progress"
+  },
+  "claimed_tip": "f5f4500cb4ac8ad6f7964d5e3388f90d31232b01",
+  "claimed_tip_live_confirmed": true,
+  "verified_tip": "f5f4500cb4ac8ad6f7964d5e3388f90d31232b01",
+  "verified_tip_short": "f5f4500",
+  "verified_tip_subject": "feat(GAME-RC-001): playthrough contracts and real achievement runtime",
+  "base_main_parent": "e18115e2d3c6fbffdd72125c9183a6a98cf2f4fa",
+  "godot_version_local": "4.7.1.stable.official.a13da4feb",
+  "godot_version_ci": "4.7.1.stable.official.a13da4feb",
+  "worktree": "/tmp/vp-game-rc-001-aa",
+  "VP_GAME_RC_001_INDEPENDENT_RESULT": "PASS",
+  "ANIME_75_READY_FOR_EDMUND_MERGE": true,
+  "READY_FOR_EDMUND_MERGE": true,
+  "critic_class": "ALPHA",
+  "S0": 0,
+  "S1": 0,
+  "S1_scope": "packet_digital_GAME-RC-001",
+  "S2": 4,
+  "VISUAL_MODEL_REVIEW": "UNAVAILABLE",
+  "playthrough_reproduced": true,
+  "achievements_runtime_tested": "12/12",
+  "challenges": {
+    "live_pr_tip_vs_claimed": {
+      "verdict": "PASS",
+      "live_head": "f5f4500cb4ac8ad6f7964d5e3388f90d31232b01",
+      "single_content_commit": true
+    },
+    "ci_status": {
+      "verdict": "PASS",
+      "head_sha": "f5f4500cb4ac8ad6f7964d5e3388f90d31232b01",
+      "godot": "4.7.1",
+      "checks": [
+        {"name": "firmware-audit", "conclusion": "success", "url": "https://github.com/gunnchOS3k/anime-aggressors/actions/runs/31733923977/job/94560845815"},
+        {"name": "gate1-game-core", "conclusion": "success", "url": "https://github.com/gunnchOS3k/anime-aggressors/actions/runs/31733923898/job/94560845245"},
+        {"name": "native-engine", "conclusion": "success", "url": "https://github.com/gunnchOS3k/anime-aggressors/actions/runs/31733923977/job/94560845770"},
+        {"name": "quality", "conclusion": "success", "url": "https://github.com/gunnchOS3k/anime-aggressors/actions/runs/31733923977/job/94560845752"},
+        {"name": "web", "conclusion": "success", "url": "https://github.com/gunnchOS3k/anime-aggressors/actions/runs/31733923842/job/94560844685"},
+        {"name": "wp014-actual-production-runtime", "conclusion": "success", "url": "https://github.com/gunnchOS3k/anime-aggressors/actions/runs/31733923898/job/94560845219"}
+      ],
+      "ci_tokens": ["PRODUCTION_GATE_PASS", "[PASS] playthrough_achievements"]
+    },
+    "contracts_not_hand_edited_pass": {
+      "verdict": "PASS",
+      "files": [
+        "release/PLAYTHROUGH_CONTRACT.json",
+        "release/CONTENT_MANIFEST.json",
+        "release/ACHIEVEMENTS.json",
+        "release/RC_GATE.json"
+      ],
+      "game_godot_release_mirrors_root_release": true,
+      "validator": "python3 tools/validate_game_rc_contracts.py → GAME_RC_CONTRACTS_OK",
+      "FEATURE_COMPLETE_RC": false,
+      "POLISHED_RELEASE_CANDIDATE": false,
+      "HUMAN_PLAYTEST_VALIDATED": false,
+      "critic_class": "ALPHA",
+      "S2_open": 4
+    },
+    "achievement_subsystem_real": {
+      "verdict": "PASS",
+      "shared_runtime_sha256": "5348af79f2d1427a008cab44ddf4a393d2a36c11fe8682675d5d8008cc10388f",
+      "identical_to_pedestrian_pursuit_runtime": true,
+      "catalog_count": 12,
+      "local_smoke": "godot --headless --path game-godot -s res://tests/smoke_runner.gd → [smoke] OK game_rc_achievements; all suites passed",
+      "no_cheat_unlock_api": true,
+      "no_test_only_unlock_type": true,
+      "features": {
+        "id_title_desc_hidden": true,
+        "unlock_conditions_flags_events_stats": true,
+        "progress_percent": true,
+        "timestamp": true,
+        "persist_user_achievements_v1": true,
+        "offline": true,
+        "duplicate_prevention": true,
+        "catalog_version_save_version": true,
+        "ui_toast_autoload": "AchievementToast",
+        "browser_scene": "res://scenes/menus/AchievementsScene.tscn",
+        "completion_percent": true
+      },
+      "gameplay_hooks": [
+        "GameState.complete_tutorial → tutorial_completed",
+        "GameState.record_career_result → match_complete/match_won",
+        "GameState.advance_arcade_after_result → arcade_complete",
+        "GameState.resolve_challenge → challenge:*",
+        "BattleScene pause/resume → pause_resume",
+        "CreditsScene → credits_opened"
+      ]
+    },
+    "production_gate_local_reproduce": {
+      "verdict": "PASS",
+      "command": "godot --headless --path game-godot -- --production-gate",
+      "exit_code": 0,
+      "token": "PRODUCTION_GATE_PASS",
+      "playthrough_achievements": "pass",
+      "quit_after_before_playthrough": false,
+      "zombie_process": false,
+      "fixture_save": false,
+      "import_gate": "wiped .godot; godot --import; bed.wav and hit.wav samples present",
+      "not_http_server": true,
+      "not_python_mirror_as_the_game": true,
+      "evidence": "artifacts/game_rc_001/actual_production_runtime_independent.json"
+    },
+    "content_manifest_placeholders": {
+      "verdict": "PASS",
+      "fighters_on_disk": 7,
+      "stages_on_disk": 6,
+      "closed_items_have_data_files": true,
+      "open_not_claimed_complete": [
+        "painted_hero_remasters",
+        "public_online",
+        "studio_audio_stems"
+      ]
+    },
+    "playthrough_in_game_code": {
+      "verdict": "PASS",
+      "not_json_narrative_only": true,
+      "boot_title": "BootScene.tscn",
+      "tutorial": "TutorialScene.tscn + TutorialBattleScene.complete_tutorial",
+      "pause_resume": "BattleScene._toggle_pause / get_tree().paused",
+      "ending": "ResultsScene Arcade Clear after GameState.advance_arcade_after_result",
+      "note": "Arcade Clear banner/achievement currently commits when Continue is pressed after the 7th win, not on first ResultsScene load. Persona can still finish. Listed OPEN as S2 UX, not S1."
+    },
+    "critic_alpha_honest": {
+      "verdict": "PASS",
+      "S2_not_zero": true,
+      "S1_zero_packet_scope_ok": true,
+      "full_rc_gaps_vs_packet_scope": [
+        "online_ranked_public OPEN (architecture only)",
+        "painted remasters OPEN",
+        "HUMAN_PLAYTEST_VALIDATED=false",
+        "experience/juice not human-validated"
+      ]
+    },
+    "profile_readme_freeze": {
+      "verdict": "PASS",
+      "readme_or_profile_in_pr_diff": false
+    }
+  },
+  "remaining_OPEN": [
+    "HUMAN_PLAYTEST_VALIDATED=false (S2)",
+    "Public online ranked not shipped (S2)",
+    "Procedural-final art vs painted remasters (S2)",
+    "Experience/juice not human-validated (S2)",
+    "Arcade Clear unlock/banner waits for Continue after 7th win (S2 UX)",
+    "Production gate pre-completes tutorial; does not drive TutorialBattleScene",
+    "smoke_runner 12/12 not in Quality CI job (reproduced locally; production gate CI covers playthrough_achievements)",
+    "Archive of Life / Beat Link Party deferred to GAME-RC-002"
+  ],
+  "notes": [
+    "Independent verifier used clean git worktree at tip; not implementer dirty tree.",
+    "Cursor does not merge. Do not claim POLISHED_RC / FEATURE_COMPLETE_RC / HUMAN_PLAYTEST.",
+    "Shared AchievementRuntime.gd byte-identical with pedestrian-pursuit; catalogs are per-game."
+  ]
+}

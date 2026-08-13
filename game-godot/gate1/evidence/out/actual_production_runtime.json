@@ -1,14 +1,14 @@
 {
   "all_steps_pass": true,
-  "commit": "860c3431136dc6d1b107c4df45f7e022f673d831",
-  "duration_msec": 6661,
+  "commit": "e18115e2d3c6fbffdd72125c9183a6a98cf2f4fa",
+  "duration_msec": 6653,
   "engine": "godot",
   "engine_version": "4.7.1-stable (official)",
   "game": "anime-aggressors",
   "headless": true,
   "run_mode": "main_scene_boot_with_autoloads",
   "schema": "aa_actual_production_runtime/v1",
-  "started_at": "2026-08-12T18:14:18",
+  "started_at": "2026-08-13T19:02:28",
   "steps": [
     {
       "detail": {
@@ -17,7 +17,7 @@
       },
       "result": "pass",
       "step": "title_menu",
-      "timestamp": "2026-08-12T18:14:13"
+      "timestamp": "2026-08-13T19:02:22"
     },
     {
       "detail": {
@@ -27,7 +27,7 @@
       },
       "result": "pass",
       "step": "new_game_session_fighters_loaded",
-      "timestamp": "2026-08-12T18:14:13"
+      "timestamp": "2026-08-13T19:02:22"
     },
     {
       "detail": {
@@ -46,7 +46,7 @@
       },
       "result": "pass",
       "step": "real_input_movement",
-      "timestamp": "2026-08-12T18:14:17"
+      "timestamp": "2026-08-13T19:02:27"
     },
     {
       "detail": {
@@ -56,7 +56,7 @@
       },
       "result": "pass",
       "step": "aura_charge",
-      "timestamp": "2026-08-12T18:14:17"
+      "timestamp": "2026-08-13T19:02:27"
     },
     {
       "detail": {
@@ -65,7 +65,7 @@
       },
       "result": "pass",
       "step": "grab_input_read",
-      "timestamp": "2026-08-12T18:14:17"
+      "timestamp": "2026-08-13T19:02:27"
     },
     {
       "detail": {
@@ -74,7 +74,7 @@
         "damage_before": 0.0,
         "hit_landed": true,
         "hit_resolver_logs": [
-          "HIT jab_2 -> Fighter2 dmg:3.0 kb:3.2"
+          "HIT jab_2 -> Fighter2 dmg:3.0 kb:3.3"
         ],
         "joypads": [],
         "match_telemetry_hit_events_after": 1,
@@ -84,7 +84,7 @@
       },
       "result": "pass",
       "step": "h2h_core_loop",
-      "timestamp": "2026-08-12T18:14:18"
+      "timestamp": "2026-08-13T19:02:27"
     },
     {
       "detail": {
@@ -93,7 +93,7 @@
       },
       "result": "pass",
       "step": "stock_loss_and_stage_bounds",
-      "timestamp": "2026-08-12T18:14:18"
+      "timestamp": "2026-08-13T19:02:27"
     },
     {
       "detail": {
@@ -103,7 +103,23 @@
       },
       "result": "pass",
       "step": "pause_resume",
-      "timestamp": "2026-08-12T18:14:18"
+      "timestamp": "2026-08-13T19:02:28"
+    },
+    {
+      "detail": {
+        "arcade_clear": true,
+        "browser_entries": 12,
+        "challenge_break_100": true,
+        "completion_percent": 41.6666666666667,
+        "duplicate_prevention": true,
+        "hidden_undefeated": true,
+        "offline_save": true,
+        "pause_resume_unlock": true,
+        "tutorial": true
+      },
+      "result": "pass",
+      "step": "playthrough_achievements",
+      "timestamp": "2026-08-13T19:02:28"
     },
     {
       "detail": {
@@ -113,7 +129,7 @@
       },
       "result": "pass",
       "step": "settings_a11y_baseline",
-      "timestamp": "2026-08-12T18:14:18"
+      "timestamp": "2026-08-13T19:02:28"
     },
     {
       "detail": {
@@ -141,7 +157,7 @@
       },
       "result": "pass",
       "step": "audio_hook",
-      "timestamp": "2026-08-12T18:14:18"
+      "timestamp": "2026-08-13T19:02:28"
     },
     {
       "detail": {
@@ -153,7 +169,7 @@
       },
       "result": "pass",
       "step": "save_load_lifecycle",
-      "timestamp": "2026-08-12T18:14:18"
+      "timestamp": "2026-08-13T19:02:28"
     },
     {
       "detail": {
@@ -165,19 +181,19 @@
       },
       "result": "pass",
       "step": "crash_recovery",
-      "timestamp": "2026-08-12T18:14:18"
+      "timestamp": "2026-08-13T19:02:28"
     },
     {
       "detail": {
-        "avg_fps": 137.691759944428,
-        "frame_samples": 915,
+        "avg_fps": 138.405510984051,
+        "frame_samples": 920,
         "hit_events": 1,
         "ko_or_stock_loss_events": 2,
         "match_start_events": 1
       },
       "result": "pass",
       "step": "logging_perf_telemetry",
-      "timestamp": "2026-08-12T18:14:18"
+      "timestamp": "2026-08-13T19:02:28"
     }
   ]
 }

@@ -30,6 +30,7 @@ const SCENES := {
 	"labs": "res://scenes/menus/LabsScene.tscn",
 	"mobile_playtest": "res://scenes/menus/MobilePlaytestScene.tscn",
 	"credits": "res://scenes/menus/CreditsScene.tscn",
+	"achievements": "res://scenes/menus/AchievementsScene.tscn",
 	"crash_recovery": "res://scenes/ui/CrashRecoveryScene.tscn",
 }
 

@@ -1,0 +1,52 @@
+{
+  "schema": "gunnchos.game_rc.content_manifest/v1",
+  "game": "anime-aggressors",
+  "manifest_version": 1,
+  "generated_at": "2026-08-13T18:40:00Z",
+  "counts": {
+    "fighters": 7,
+    "stages": 6,
+    "arcade_bouts": 7,
+    "challenges": 4,
+    "achievements": 12
+  },
+  "modes": [
+    { "id": "versus", "status": "CLOSED" },
+    { "id": "training", "status": "CLOSED" },
+    { "id": "arcade", "status": "CLOSED" },
+    { "id": "tutorial", "status": "CLOSED" },
+    { "id": "challenges", "status": "CLOSED" },
+    { "id": "team", "status": "CLOSED", "notes": "Local team ruleset vs CPU. Full 2v2 human couch is not a separate playable mode." },
+    { "id": "hazards", "status": "CLOSED" },
+    { "id": "online_private", "status": "CLOSED", "notes": "Private/dev stack only." },
+    { "id": "online_ranked_public", "status": "OPEN", "notes": "Architecture only — not a public matchmaking product." },
+    { "id": "achievements_browser", "status": "CLOSED" }
+  ],
+  "items": [
+    { "id": "ember-vale", "kind": "fighter", "status": "CLOSED" },
+    { "id": "rook-ironside", "kind": "fighter", "status": "CLOSED" },
+    { "id": "juno-spark", "kind": "fighter", "status": "CLOSED" },
+    { "id": "kaia-windrow", "kind": "fighter", "status": "CLOSED" },
+    { "id": "nix-calder", "kind": "fighter", "status": "CLOSED" },
+    { "id": "orion-vell", "kind": "fighter", "status": "CLOSED" },
+    { "id": "vesper-nyx", "kind": "fighter", "status": "CLOSED" },
+    { "id": "training-grid", "kind": "stage", "status": "CLOSED" },
+    { "id": "skyline-arena", "kind": "stage", "status": "CLOSED" },
+    { "id": "neon-rooftops", "kind": "stage", "status": "CLOSED" },
+    { "id": "cascade-foundry", "kind": "stage", "status": "CLOSED" },
+    { "id": "void-pier", "kind": "stage", "status": "CLOSED" },
+    { "id": "ember-courtyard", "kind": "stage", "status": "CLOSED" },
+    { "id": "painted_hero_remasters", "kind": "art", "status": "OPEN", "notes": "Launch presentation is PROCEDURAL_FINAL." }
+  ],
+  "open_placeholders": [
+    { "id": "painted_hero_remasters", "summary": "No painted remaster claim." },
+    { "id": "public_online", "summary": "Ranked/unranked public matchmaking not shipped." },
+    { "id": "studio_audio_stems", "summary": "Audio bank is procedural/synthesized digital RC." }
+  ],
+  "not_claimed": [
+    "Smash-level market parity",
+    "Physical device-lab pass",
+    "POLISHED_RELEASE_CANDIDATE",
+    "FEATURE_COMPLETE_RC"
+  ]
+}
