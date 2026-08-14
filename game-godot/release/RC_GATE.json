@@ -1,31 +1,36 @@
 {
   "schema": "gunnchos.game_rc.rc_gate/v1",
   "game": "anime-aggressors",
-  "packet": "GAME-RC-001",
-  "generated_at": "2026-08-13T18:40:00Z",
+  "packet": "GAME-RC-003",
+  "generated_at": "2026-08-14T21:35:00Z",
   "claims": {
     "POLISHED_RELEASE_CANDIDATE": false,
     "FEATURE_COMPLETE_RC": false,
     "HUMAN_PLAYTEST_VALIDATED": false,
     "DIGITAL_PLAYTHROUGH_EXECUTABLE": true,
-    "ACHIEVEMENT_SUBSYSTEM": true
+    "ACHIEVEMENT_SUBSYSTEM": true,
+    "ANIME_CONTENT_FEATURE_COMPLETE_DIGITAL": true,
+    "ANIME_AI_HEURISTIC_POLISH_PASS": true,
+    "ANIME_MULTI_PLATFORM_BUILD_FOUNDATION": true,
+    "PLATFORM_PUBLISHED": false,
+    "CONSOLE_CERTIFIED": false
   },
-  "critic_class": "ALPHA",
-  "critic_class_rationale": "Digital tutorial→results playthrough and achievement runtime are executable. S0/S1 for this packet's digital scope are 0. S2 experience (fun, juice, human playtest, visual polish) is not 0, VISUAL is UNAVAILABLE, so critic stays ALPHA. POLISHED_RELEASE_CANDIDATE and FEATURE_COMPLETE_RC are not claimed.",
+  "critic_class": "BETA",
+  "critic_class_rationale": "Mirror of release/RC_GATE.json for game-godot path consumers. Launch content CLOSED with ADR exclusions. Digital polish heuristic only. Not POLISHED_RELEASE_CANDIDATE.",
   "defects": {
     "S0_open": 0,
     "S1_open": 0,
     "S2_open": 4,
     "S2_items": [
       "HUMAN_PLAYTEST_VALIDATED=false",
-      "Public online ranked not shipped",
-      "Procedural-final art vs painted remasters",
-      "Experience/juice not human-validated"
+      "Public online ranked excluded from launch (ADR-GAME-AA-005)",
+      "Procedural-final art vs painted remasters (excluded)",
+      "Experience/juice not human-validated — POLISHED_RELEASE_CANDIDATE=false"
     ]
   },
   "visual": {
     "VISUAL_MODEL_REVIEW": "UNAVAILABLE",
-    "reason": "This packet ran headless Godot / contract validation. No pixel inspection of a displayed frame was performed."
+    "reason": "Capture harness + pack metadata produced; no pixel inspection of displayed frames in this agent run."
   },
   "playthrough": {
     "status": "DIGITAL_EXECUTABLE",
@@ -35,11 +40,11 @@
     "catalog": "release/ACHIEVEMENTS.json",
     "count": 12,
     "tested_count": 12,
-    "notes": "Isolated AchievementRuntime tests fire real catalog conditions (flags/events/stats). No cheat unlock API."
+    "notes": "Synced with repo-root release/RC_GATE.json for GAME-RC-003 (was stale GAME-RC-001/ALPHA)."
   },
   "next_packets": {
-    "archive-of-life-artifact-world": "GAME-RC-002 — contracts + achievement runtime (not in this 2-PR packet)",
-    "beatlink-party": "GAME-RC-002 — contracts + achievement runtime (not in this 2-PR packet)"
+    "archive-of-life-artifact-world": "GAME-RC-004 — Archive polish (not this PR)",
+    "beatlink-party": "GAME-RC-004 — Beat Link polish (not this PR)"
   },
-  "notes": "Cursor does not merge. Device-lab / physical playtest remain pending from prior WP-014."
+  "notes": "Synced mirror of ../../release/RC_GATE.json. Cursor does not merge."
 }
