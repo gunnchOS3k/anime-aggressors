@@ -260,6 +260,9 @@ func _sim_shield(on: bool) -> void:
 
 
 func _sim_attack(cmd: String) -> void:
+	## GAME-RC-003: expose a short telegraph so players can read CPU commitment.
+	if _fighter != null and _fighter.has_method("begin_cpu_telegraph"):
+		_fighter.begin_cpu_telegraph(cmd, 0.18 + 0.02 * float(6 - level))
 	_fighter.queue_attack_command(cmd)
 
 

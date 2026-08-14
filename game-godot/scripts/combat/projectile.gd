@@ -55,8 +55,12 @@ func configure(cfg: Dictionary, owner_node: Node) -> void:
 	if debug_rect:
 		debug_rect.size = size
 		debug_rect.position = -size / 2.0
-		debug_rect.color = cfg.get("color", Color(0.9, 0.5, 0.2, 0.7))
-		debug_rect.visible = debug_visible
+		# GAME-RC-003: projectiles stay readable in launch play (not debug-only).
+		var base_col: Color = cfg.get("color", Color(0.9, 0.5, 0.2, 0.85))
+		base_col.a = maxf(base_col.a, 0.72)
+		debug_rect.color = base_col
+		debug_rect.visible = true
+		debug_rect.modulate = Color(1.2, 1.2, 1.2, 1.0)
 	monitoring = true
 
 func tick_sim_frame() -> void:

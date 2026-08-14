@@ -117,6 +117,38 @@ func spawn_hit_spark(parent: Node2D, pos: Vector2, element: String) -> void:
 	var tween := spark.create_tween()
 	tween.tween_property(spark, "modulate:a", 0.0, 0.15)
 	tween.tween_callback(spark.queue_free)
+	# GAME-RC-003: secondary ring for heavy/aura readability.
+	var ring := ColorRect.new()
+	ring.size = Vector2(22, 22)
+	ring.position = pos - ring.size / 2.0
+	ring.color = Color(_element_color(element).r, _element_color(element).g, _element_color(element).b, 0.35)
+	parent.add_child(ring)
+	var rt := ring.create_tween()
+	rt.tween_property(ring, "scale", Vector2(1.8, 1.8), 0.18)
+	rt.parallel().tween_property(ring, "modulate:a", 0.0, 0.18)
+	rt.tween_callback(ring.queue_free)
+
+## Grab release / recovery cue — short flash so throws are readable.
+func spawn_grab_recovery_flash(parent: Node2D, pos: Vector2, direction: String) -> void:
+	var role = Engine.get_main_loop().root.get_node_or_null("/root/DeviceRoleRuntime") if Engine.get_main_loop() else null
+	if role != null and role.has_method("fx_allows_hit_sparks") and not role.fx_allows_hit_sparks():
+		return
+	var flash := ColorRect.new()
+	flash.size = Vector2(28, 18)
+	flash.position = pos - flash.size / 2.0
+	match direction:
+		"up":
+			flash.color = Color(0.95, 0.95, 1.0, 0.8)
+		"down":
+			flash.color = Color(0.9, 0.55, 0.2, 0.8)
+		"back":
+			flash.color = Color(0.6, 0.8, 1.0, 0.8)
+		_:
+			flash.color = Color(1.0, 0.75, 0.35, 0.8)
+	parent.add_child(flash)
+	var tw := flash.create_tween()
+	tw.tween_property(flash, "modulate:a", 0.0, 0.22)
+	tw.tween_callback(flash.queue_free)
 
 func _element_color(element: String) -> Color:
 	match element:

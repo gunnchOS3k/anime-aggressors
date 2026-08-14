@@ -1,8 +1,11 @@
 {
   "schema": "gunnchos.game_rc.content_manifest/v1",
   "game": "anime-aggressors",
-  "manifest_version": 1,
-  "generated_at": "2026-08-13T18:40:00Z",
+  "manifest_version": 2,
+  "packet": "GAME-RC-003",
+  "generated_at": "2026-08-14T21:20:13Z",
+  "base_main_sha": "4c817f820ae8c992b5bac0d20e52c999650ca287",
+  "launch_scope_decision": "docs/decisions/ADR-GAME-AA-005-launch-scope-exclusions.md",
   "counts": {
     "fighters": 7,
     "stages": 6,
@@ -10,6 +13,25 @@
     "challenges": 4,
     "achievements": 12
   },
+  "content_checklist": [
+    { "id": "fighters_7_differentiated", "status": "CLOSED", "evidence": "playtest-evidence/move_graph_uniqueness.json" },
+    { "id": "aura_charge_identity", "status": "CLOSED", "evidence": "game-godot/scripts/combat/aura_identity.gd" },
+    { "id": "projectile_identity", "status": "CLOSED", "evidence": "game-godot/scripts/combat/projectile.gd" },
+    { "id": "hand_to_hand_identity", "status": "CLOSED", "evidence": "game-godot/data/moves/" },
+    { "id": "grab_directions", "status": "CLOSED", "evidence": "game-godot/scripts/combat/throw_resolver.gd" },
+    { "id": "cpu_behaviors", "status": "CLOSED", "evidence": "game-godot/scripts/fighters/cpu_controller.gd" },
+    { "id": "training", "status": "CLOSED" },
+    { "id": "local_versus", "status": "CLOSED" },
+    { "id": "cpu_versus", "status": "CLOSED" },
+    { "id": "arcade_campaign_ladder", "status": "CLOSED", "notes": "Arcade ladder is the campaign path for launch." },
+    { "id": "stages", "status": "CLOSED" },
+    { "id": "progression_unlocks", "status": "CLOSED" },
+    { "id": "results", "status": "CLOSED" },
+    { "id": "credits_completion", "status": "CLOSED" },
+    { "id": "achievements", "status": "CLOSED" },
+    { "id": "settings", "status": "CLOSED" },
+    { "id": "accessibility", "status": "CLOSED" }
+  ],
   "modes": [
     { "id": "versus", "status": "CLOSED" },
     { "id": "training", "status": "CLOSED" },
@@ -19,7 +41,7 @@
     { "id": "team", "status": "CLOSED", "notes": "Local team ruleset vs CPU. Full 2v2 human couch is not a separate playable mode." },
     { "id": "hazards", "status": "CLOSED" },
     { "id": "online_private", "status": "CLOSED", "notes": "Private/dev stack only." },
-    { "id": "online_ranked_public", "status": "OPEN", "notes": "Architecture only — not a public matchmaking product." },
+    { "id": "online_ranked_public", "status": "OPEN", "notes": "Explicitly OUT OF LAUNCH SCOPE per ADR-GAME-AA-005." },
     { "id": "achievements_browser", "status": "CLOSED" }
   ],
   "items": [
@@ -36,17 +58,19 @@
     { "id": "cascade-foundry", "kind": "stage", "status": "CLOSED" },
     { "id": "void-pier", "kind": "stage", "status": "CLOSED" },
     { "id": "ember-courtyard", "kind": "stage", "status": "CLOSED" },
-    { "id": "painted_hero_remasters", "kind": "art", "status": "OPEN", "notes": "Launch presentation is PROCEDURAL_FINAL." }
+    { "id": "painted_hero_remasters", "kind": "art", "status": "OPEN", "notes": "OUT OF LAUNCH SCOPE (ADR-GAME-AA-005). Launch presentation is PROCEDURAL_FINAL." }
   ],
   "open_placeholders": [
-    { "id": "painted_hero_remasters", "summary": "No painted remaster claim." },
-    { "id": "public_online", "summary": "Ranked/unranked public matchmaking not shipped." },
-    { "id": "studio_audio_stems", "summary": "Audio bank is procedural/synthesized digital RC." }
+    { "id": "painted_hero_remasters", "summary": "Excluded from launch via ADR-GAME-AA-005." },
+    { "id": "public_online", "summary": "Excluded from launch via ADR-GAME-AA-005." },
+    { "id": "studio_audio_stems", "summary": "Excluded from launch via ADR-GAME-AA-005." }
   ],
+  "ANIME_CONTENT_FEATURE_COMPLETE_DIGITAL": true,
   "not_claimed": [
     "Smash-level market parity",
     "Physical device-lab pass",
     "POLISHED_RELEASE_CANDIDATE",
-    "FEATURE_COMPLETE_RC"
+    "FEATURE_COMPLETE_RC",
+    "HUMAN_PLAYTEST_VALIDATED"
   ]
 }
