@@ -1,45 +1,52 @@
 {
   "schema": "gunnchos.game_rc.rc_gate/v1",
   "game": "anime-aggressors",
-  "packet": "GAME-RC-001",
-  "generated_at": "2026-08-13T18:40:00Z",
+  "packet": "GAME-RC-003",
+  "generated_at": "2026-08-14T21:20:13Z",
+  "base_main_sha": "4c817f820ae8c992b5bac0d20e52c999650ca287",
+  "predecessor": {
+    "packet": "GAME-RC-001",
+    "merged_pr": 75,
+    "merge_sha": "4c817f820ae8c992b5bac0d20e52c999650ca287"
+  },
   "claims": {
     "POLISHED_RELEASE_CANDIDATE": false,
     "FEATURE_COMPLETE_RC": false,
     "HUMAN_PLAYTEST_VALIDATED": false,
     "DIGITAL_PLAYTHROUGH_EXECUTABLE": true,
-    "ACHIEVEMENT_SUBSYSTEM": true
+    "ACHIEVEMENT_SUBSYSTEM": true,
+    "ANIME_CONTENT_FEATURE_COMPLETE_DIGITAL": true,
+    "ANIME_AI_HEURISTIC_POLISH_PASS": true,
+    "ANIME_MULTI_PLATFORM_BUILD_FOUNDATION": true,
+    "PLATFORM_PUBLISHED": false,
+    "CONSOLE_CERTIFIED": false
   },
-  "critic_class": "ALPHA",
-  "critic_class_rationale": "Digital tutorial→results playthrough and achievement runtime are executable. S0/S1 for this packet's digital scope are 0. S2 experience (fun, juice, human playtest, visual polish) is not 0, VISUAL is UNAVAILABLE, so critic stays ALPHA. POLISHED_RELEASE_CANDIDATE and FEATURE_COMPLETE_RC are not claimed.",
+  "critic_class": "BETA_DIGITAL",
+  "critic_class_rationale": "Launch content checklist CLOSED with explicit ADR exclusions. Digital polish systems (hit-stop, a11y shake gate, impact VFX, aura, projectile readability, CPU telegraph, results celebration, HUD/menus) are wired and heuristically verified — not human-validated. VISUAL_MODEL_REVIEW=UNAVAILABLE. Critic advances to BETA_DIGITAL (not POLISHED_RELEASE_CANDIDATE). FEATURE_COMPLETE_RC remains false.",
   "defects": {
     "S0_open": 0,
     "S1_open": 0,
     "S2_open": 4,
     "S2_items": [
       "HUMAN_PLAYTEST_VALIDATED=false",
-      "Public online ranked not shipped",
-      "Procedural-final art vs painted remasters",
-      "Experience/juice not human-validated"
+      "Public online ranked excluded from launch (ADR-GAME-AA-005)",
+      "Procedural-final art vs painted remasters (excluded)",
+      "Experience/juice not human-validated — POLISHED_RELEASE_CANDIDATE=false"
     ]
   },
   "visual": {
     "VISUAL_MODEL_REVIEW": "UNAVAILABLE",
-    "reason": "This packet ran headless Godot / contract validation. No pixel inspection of a displayed frame was performed."
+    "reason": "Capture harness + pack metadata produced; no pixel inspection of displayed frames in this agent run.",
+    "pack": "artifacts/game_rc_003/visual_pack/PACK_MANIFEST.json"
   },
-  "playthrough": {
-    "status": "DIGITAL_EXECUTABLE",
-    "contract": "release/PLAYTHROUGH_CONTRACT.json"
+  "polish": {
+    "AI_HEURISTIC_POLISH_PASS": true,
+    "evidence": "artifacts/experience_review/anime-aggressors/GAME_RC_003_AI_HEURISTIC_POLISH.json",
+    "note": "Pass is digital-system heuristic only; not a human polish token."
   },
-  "achievements": {
-    "catalog": "release/ACHIEVEMENTS.json",
-    "count": 12,
-    "tested_count": 12,
-    "notes": "Isolated AchievementRuntime tests fire real catalog conditions (flags/events/stats). No cheat unlock API."
+  "platform": {
+    "matrix": "release/PLATFORM_MATRIX.json",
+    "publishing": "release/PUBLISHING_READINESS.json"
   },
-  "next_packets": {
-    "archive-of-life-artifact-world": "GAME-RC-002 — contracts + achievement runtime (not in this 2-PR packet)",
-    "beatlink-party": "GAME-RC-002 — contracts + achievement runtime (not in this 2-PR packet)"
-  },
-  "notes": "Cursor does not merge. Device-lab / physical playtest remain pending from prior WP-014."
+  "notes": "Cursor does not merge. Archive/Beat Link polish is GAME-RC-004."
 }

@@ -49,6 +49,17 @@ func _ready_display() -> void:
 			rematch_btn.text = "Continue Challenge"
 	elif title_label:
 		title_label.text = "%s Wins!" % name
+	_play_results_celebration()
+
+func _play_results_celebration() -> void:
+	## GAME-RC-003: short digital result celebration (scale pulse). Human juice still pending.
+	if title_label == null:
+		return
+	title_label.pivot_offset = title_label.size * 0.5
+	title_label.scale = Vector2(0.86, 0.86)
+	var tw := create_tween()
+	tw.tween_property(title_label, "scale", Vector2(1.08, 1.08), 0.18).set_trans(Tween.TRANS_BACK)
+	tw.tween_property(title_label, "scale", Vector2.ONE, 0.12)
 
 func _on_rematch_pressed() -> void:
 	if GameState.mode == "arcade" or GameState.arcade_active or GameState.arcade_complete or GameState.arcade_failed:

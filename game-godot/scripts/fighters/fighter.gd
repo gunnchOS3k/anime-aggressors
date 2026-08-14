@@ -77,6 +77,10 @@ var _aura_sfx_hook: bool = false
 var _last_hit_result: Dictionary = {}
 var _last_knockback: Vector2 = Vector2.ZERO
 var _last_shield_damage: float = 0.0
+var _cpu_telegraph_remaining: float = 0.0
+var _cpu_telegraph_cmd: String = ""
+var _telegraph_pulse: ColorRect = null
+var _base_modulate: Color = Color.WHITE
 var _last_element_effect: String = ""
 var _throw_direction: String = ""
 var _jab_chain: int = 0
@@ -204,6 +208,7 @@ func tick_combat_frame() -> void:
 	_sync_attack_phase_state()
 
 func _physics_process(delta: float) -> void:
+	_tick_cpu_telegraph(delta)
 	if _hitstop > 0.0:
 		_hitstop -= delta
 		return
@@ -397,6 +402,43 @@ func is_aura_input_held() -> bool:
 
 func queue_attack_command(cmd: String) -> void:
 	_pending_attack_cmd = cmd
+
+## GAME-RC-003 — short visible CPU wind-up flash before the queued attack commits.
+func begin_cpu_telegraph(cmd: String, duration: float = 0.2) -> void:
+	_cpu_telegraph_cmd = cmd
+	_cpu_telegraph_remaining = maxf(_cpu_telegraph_remaining, duration)
+	_ensure_telegraph_pulse()
+	if _telegraph_pulse != null:
+		_telegraph_pulse.visible = true
+		_telegraph_pulse.modulate = Color(1.0, 0.85, 0.2, 0.85)
+
+func _ensure_telegraph_pulse() -> void:
+	if _telegraph_pulse != null:
+		return
+	_telegraph_pulse = ColorRect.new()
+	_telegraph_pulse.name = "CpuTelegraphPulse"
+	_telegraph_pulse.size = Vector2(40, 56)
+	_telegraph_pulse.position = Vector2(-20, -60)
+	_telegraph_pulse.color = Color(1.0, 0.8, 0.15, 0.55)
+	_telegraph_pulse.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_telegraph_pulse.visible = false
+	add_child(_telegraph_pulse)
+
+func _tick_cpu_telegraph(delta: float) -> void:
+	if _cpu_telegraph_remaining <= 0.0:
+		if _telegraph_pulse != null:
+			_telegraph_pulse.visible = false
+		return
+	_cpu_telegraph_remaining = maxf(0.0, _cpu_telegraph_remaining - delta)
+	if _telegraph_pulse != null:
+		var pulse := 0.45 + 0.4 * absf(sin(Time.get_ticks_msec() * 0.02))
+		_telegraph_pulse.modulate.a = pulse
+		_telegraph_pulse.visible = _cpu_telegraph_remaining > 0.0
+	# Soft body flash while telegraphing (a11y: still visible with reduce_motion via alpha only).
+	if body != null and _cpu_telegraph_remaining > 0.0:
+		body.modulate = Color(1.25, 1.1, 0.7, 1.0)
+	elif body != null:
+		body.modulate = _base_modulate
 
 func _start_move_by_command(cmd: String) -> void:
 	var m: Dictionary = {}
@@ -612,6 +654,8 @@ func execute_throw() -> void:
 	target.state_machine.enter(_FighterStates.HITSTUN)
 	hit_resolver.resolve(self, target, throw_move, damage_percent)
 	grab_event.emit({"result": "throw", "target": target.fighter_id, "direction": direction})
+	if combat_feedback != null and combat_feedback.has_method("spawn_grab_recovery_flash"):
+		combat_feedback.spawn_grab_recovery_flash(self, global_position + Vector2(0, -24), direction)
 
 func _update_hitbox_from_move(move: Dictionary) -> void:
 	var boxes: Array = move.get("hitboxes", [])
