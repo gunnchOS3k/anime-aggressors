@@ -1,0 +1,58 @@
+{
+  "schema": "gunnchos.game_rc.playtest_packet.v1",
+  "game": "anime-aggressors",
+  "packet": "STREAM-B-PKT-002",
+  "base_main_sha": "9770674fdce94e19270d0f5683e6fcf74b4111f3",
+  "rotation_choice": {
+    "selected": "anime-aggressors",
+    "candidates": ["anime-aggressors", "archive-of-life-artifact-world", "beatlink-party"],
+    "pedestrian_already_done": true,
+    "rationale": "Highest digital impact: DIGITAL_RC reclaim/polish surface after GAME-RC-003; Godot (avoid Unity #51/#52)."
+  },
+  "HUMAN_PLAYTEST_VALIDATED": false,
+  "FEATURE_COMPLETE_RC": false,
+  "POLISHED_RELEASE_CANDIDATE": false,
+  "scaffolding_only": true,
+  "sessions": [
+    {
+      "id": "PT-AA-001",
+      "mode": "versus_cpu",
+      "goal": "Complete one CPU match; note HUD % readability and achievement toast fade",
+      "status": "OPEN",
+      "human_required": true
+    },
+    {
+      "id": "PT-AA-002",
+      "mode": "local_mp",
+      "goal": "2P local match; pause/resume; confirm toast does not soft-lock input",
+      "status": "OPEN",
+      "human_required": true
+    },
+    {
+      "id": "PT-AA-003",
+      "mode": "training",
+      "goal": "Training mode hit confirm; capture perf sample (fps/frame time)",
+      "status": "OPEN",
+      "human_required": true
+    },
+    {
+      "id": "PT-AA-004",
+      "mode": "accessibility",
+      "goal": "Colorblind-safe markers + captions path + large text toast smoke",
+      "status": "OPEN",
+      "human_required": true
+    }
+  ],
+  "artifacts": {
+    "telemetry_schema": "release/playtest/TELEMETRY_SCHEMA_STREAM_B_PKT_002.json",
+    "a11y_checklist": "release/playtest/A11Y_CHECKLIST_STREAM_B_PKT_002.md",
+    "feedback_form": "release/playtest/FEEDBACK_FORM_STREAM_B_PKT_002.md",
+    "visual_perf_pack": "artifacts/stream_b/visual_perf/PACK_MANIFEST.json",
+    "playtest_build_note": "release/playtest/PLAYTEST_BUILD_NOTE.md"
+  },
+  "digital_polish_this_packet": [
+    "Achievement toast fade/slide juice (heuristic polish only)",
+    "Playtest session scaffolding (tokens stay false)"
+  ],
+  "claim_boundary": "Playtest packets are scaffolding only. HUMAN_PLAYTEST_VALIDATED remains false until a human runs sessions. Not POLISHED_RELEASE_CANDIDATE. Avoid Unity #51/#52."
+}
