@@ -1,99 +1,117 @@
-# Anime Aggressors
+# anime-aggressors
 
-> Create your fighter. Pick your element. Launch your rivals.
+Original fighter game for the gunnchOS3k family — **`game-godot` is the primary runtime** (Godot 4) with a TypeScript/web shell for packaging and Labs.
 
-**Production gameplay runtime:** Godot 4 — [`game-godot/`](game-godot/)  
-**TypeScript / web:** launcher, validation oracle, legacy reference preview only
+> **Current release/state:** `INTEGRATED` game repo — **not** automatic Device Lab four-game *production* runtime proof.
 
-See **[docs/RUNTIME_SOURCE_OF_TRUTH.md](docs/RUNTIME_SOURCE_OF_TRUTH.md)** for where work belongs.
+Ecosystem portal: [gunnchos-research-portal](https://github.com/gunnchOS3k/gunnchos-research-portal) · Product charter: [gunnchOS3k_PRODUCT_CHARTER.md](https://github.com/gunnchOS3k/gunnchos-7gc-ai-ran-field-kit/blob/main/program/charter/gunnchOS3k_PRODUCT_CHARTER.md)
 
----
+## What is this?
 
-## Quick start (production path)
+Anime Aggressors game sources: Godot battle runtime, web shell, validation oracle, assets.
+
+## Why does it exist?
+
+First-party playable creation that exercises handheld/DS-XL/Student game journeys without erasing education/work purpose.
+
+## Where does it fit?
+
+Product Charter **layer 9** (games). Consumed by Device Lab packaging paths when wired — repo presence ≠ Lab PASS.
+
+## What is real today?
+
+- Godot 4 project under `game-godot/`
+- `npm run validate:full-scope-production` / generators
+- Web shell for Pages/embed (may lag editor)
+
+## What is simulated / modelled?
+
+- Legacy web runtime under Labs — reference only
+- Placeholder/stage assets where labeled
+
+## What is physical / external pending?
+
+- Device Lab production-runtime earn tokens (host/browser dependent)
+- Physical device FPS/human certification tokens
+
+## Try / inspect in 5 minutes
 
 ```bash
-# Open in Godot 4.2+
-# Import game-godot/project.godot → press F5
-
-# Validate data + docs from repo root:
+# Godot 4.2+: open game-godot/project.godot → F5
 npm run validate:full-scope-production
-
-# Regenerate fighter/move JSON from specs:
-npm run generate:godot-full-scope
 ```
-
-## Web shell (secondary)
-
-```bash
-npm run dev          # Home, routing, Godot embed, labeled legacy routes
-npm run build        # TypeScript packages + web shell
-```
-
-- **[Godot Primary Runtime](https://gunnchos3k.github.io/anime-aggressors/#/godot)** — web embed (may lag editor build)
-- **Legacy Web Runtime** — under Labs — reference only, not final gameplay
-
----
 
 ## Architecture
 
-| Layer | Path | Role |
-|-------|------|------|
-| **Production runtime** | `game-godot/` | Menus, battle, training, combat, assets |
-| **Web shell** | `apps/web` | GitHub Pages, routing, embed, legacy preview |
-| **Spec oracle** | `packages/game-core` | Tests, rules reference — **not shipping renderer** |
-| **Blender** | `tools/blender/`, `assets/blender/` | Character/animation source |
-| **Unreal** | R&D / look-dev only | Not required to ship |
-| **Deprecated** | `game/godot/` | Pre-consolidation Godot tree |
+See [docs/RUNTIME_SOURCE_OF_TRUTH.md](docs/RUNTIME_SOURCE_OF_TRUTH.md). **`game-godot/` is the primary runtime** (gameplay source of truth); web = shell; `packages/game-core` = oracle not shipping renderer.
+
+## Repo map
+
+| Path | Role |
+|---|---|
+| `game-godot/` | Production runtime |
+| `apps/web` | Shell / Pages |
+| `packages/game-core` | Spec oracle |
+| `playtest-evidence/` | Playtest artifacts |
+| `legacy/` | HISTORICAL paths |
+
+## Interfaces
+
+Packaging hooks toward `gunnchos-device-os` Device Lab; no claim that Lab tokens are green from this repo alone.
+
+## Tests
+
+```bash
+npm run validate:full-scope-production
+```
+
+## Evidence
+
+`playtest-evidence/` and CI validators. Lab scorecards live in device-os.
+
+## Known gaps
+
+Lab production runtime earn; content polish; device performance certification.
+
+## Beginner path
+
+Pick a fighter, pick an element, play — Godot is the real game.
+
+## Intern path
+
+Run validators; change one move JSON; regenerate; re-validate.
+
+## Expert path
+
+Keep runtime SoT clear; avoid claiming Unreal/web as shipping gameplay.
+
+## Contribution path
+
+Godot gameplay, validators, honest packaging. Label legacy web as non-final.
+
+## Current release / state
+
+**INTEGRATED** sources. Claim boundary: `game_repo_not_lab_runtime_proof`.
+
+## Claim boundary
+
+No commercial 6G · game repo ≠ Device Lab PASS · Cursor DRAFT-only.
 
 ---
 
-## Full-scope product
+## Retained detail (post–Cycle 3A front door)
 
-Anime Aggressors is a **Godot-first full-scope** local platform fighter:
-
-- 7-fighter roster, move manifests, state machine, training/debug mode
-- Console-style menu flow, local 1v1 + CPU, stocks, aura, shields, dodge
-- Blender → Godot pipeline (see [BLENDER_TO_GODOT_PIPELINE.md](docs/BLENDER_TO_GODOT_PIPELINE.md))
-- Seven original rigged 3D proxy fighters with 19 imported clips each; rebuild with `npm run assets:build:fighters`
-
-Roadmap: [FULL_SCOPE_PRODUCTION_PLAN.md](docs/FULL_SCOPE_PRODUCTION_PLAN.md)  
-Build targets: [BUILD_TARGETS.md](docs/BUILD_TARGETS.md)  
-Blockers: [PRODUCTION_BLOCKERS.md](docs/PRODUCTION_BLOCKERS.md)
+Full prior README: [docs/history/README_PRE_WP012.md](docs/history/README_PRE_WP012.md).
 
 **Completion is not claimed** until full-scope gates and signed playtests pass. The project remains in **product-completion mode** — not complete until all 7 fighters, stages, moves, training, and production gates pass.
 
----
-
-## Quality gates
+### Quick start (retained)
 
 ```bash
-npm run typecheck
-npm test                    # includes validate:full-scope-production
-npm run build
+npm run validate:full-scope-production
+npm run generate:godot-full-scope
+npm run dev   # web shell secondary
 ```
-
----
-
-## Links
-
-[Godot embed](https://gunnchos3k.github.io/anime-aggressors/#/godot) · [Web home](https://gunnchos3k.github.io/anime-aggressors/) · [PC playtest guide](docs/playtest/PC_PLAYTEST_GUIDE.md)
-
-**Do not use** `https://gunnchos3k.github.io/play` — use project site `/anime-aggressors/`.
-
----
-
-## Controls (legacy web reference)
-
-Production controls are defined in Godot `game-godot/project.godot`. Legacy web bindings:
-
-| Action | P1 Keyboard | Gamepad |
-|--------|-------------|---------|
-| Move | A / D | Left stick |
-| Jump | W | A |
-| Attack | J | X |
-| Special | K | B |
-| Shield | L | Y |
-| Dodge | I | — |
 
 ### Aura Charge
 
@@ -105,20 +123,3 @@ Aura Charge builds elemental power. At full meter, your fighter becomes **Super 
 | P2 | Hold **/** (or Shield + Special) | P2 mappings TBD |
 
 Aura Charge slows movement while charging and can be interrupted by heavy hits.
-
----
-
-## Developer quick start
-
-```bash
-npm ci
-npm run dev
-npm run typecheck
-npm test
-npm run build
-npm run generate:godot-full-scope   # regenerate Godot fighter/move JSON
-npm run assets:build:fighters       # rebuild .blend + .glb character proxies (Blender required)
-npm run validate:character-assets   # verify GLB rigs, sockets, clips, hashes, runtime wiring
-```
-
-Godot web export (secondary): `npm run godot:export:web` then `npm run build:pages` — see [BUILD_TARGETS.md](docs/BUILD_TARGETS.md).
