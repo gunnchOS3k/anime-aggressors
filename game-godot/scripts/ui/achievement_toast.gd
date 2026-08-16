@@ -2,6 +2,7 @@ extends CanvasLayer
 
 ## UI notification for newly unlocked achievements. PROCESS_MODE_ALWAYS
 ## so toasts still appear while a match is paused.
+## STREAM-B-PKT-002: fade/slide juice (digital heuristic polish only).
 
 var _panel: PanelContainer
 var _title: Label
@@ -9,6 +10,7 @@ var _body: Label
 var _queue: Array = []
 var _showing: bool = false
 var _timer: float = 0.0
+var _tween: Tween
 
 
 func _ready() -> void:
@@ -29,6 +31,7 @@ func _build() -> void:
 	_panel.offset_top = 24
 	_panel.offset_right = -24
 	_panel.offset_bottom = 140
+	_panel.modulate.a = 0.0
 	add_child(_panel)
 	var v := VBoxContainer.new()
 	v.add_theme_constant_override("separation", 6)
@@ -63,6 +66,28 @@ func _show_next() -> void:
 	_showing = true
 	visible = true
 	_timer = 3.2
+	_play_in()
+
+
+func _play_in() -> void:
+	if _tween != null:
+		_tween.kill()
+	_panel.modulate.a = 0.0
+	_panel.position.x = 48.0
+	_tween = create_tween()
+	_tween.set_parallel(true)
+	_tween.tween_property(_panel, "modulate:a", 1.0, 0.22)
+	_tween.tween_property(_panel, "position:x", 0.0, 0.22).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+
+
+func _play_out_then_next() -> void:
+	if _tween != null:
+		_tween.kill()
+	_tween = create_tween()
+	_tween.set_parallel(true)
+	_tween.tween_property(_panel, "modulate:a", 0.0, 0.18)
+	_tween.tween_property(_panel, "position:x", 36.0, 0.18).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	_tween.chain().tween_callback(_show_next)
 
 
 func _process(delta: float) -> void:
@@ -70,4 +95,4 @@ func _process(delta: float) -> void:
 		return
 	_timer -= delta
 	if _timer <= 0.0:
-		_show_next()
+		_play_out_then_next()

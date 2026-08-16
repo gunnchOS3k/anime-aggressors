@@ -1,0 +1,18 @@
+{
+  "schema": "gunnchos.anime.playtest_telemetry.v1",
+  "packet": "STREAM-B-PKT-002",
+  "extends": "game-godot/scripts/core/MatchTelemetry.gd",
+  "pii": false,
+  "events": [
+    {"kind": "match_start", "required_payload": ["match_id", "p1", "p2", "stage"]},
+    {"kind": "hit", "required_payload": ["move_id", "damage"]},
+    {"kind": "ko", "required_payload": ["fighter_id", "stocks_left"]},
+    {"kind": "stock_loss", "required_payload": ["fighter_id", "stocks_left"]},
+    {"kind": "match_end", "required_payload": ["winner_slot", "match_id"]},
+    {"kind": "playtest_session_mark", "required_payload": ["session_id", "status"], "note": "Human playtest marker only; not auto-validated"},
+    {"kind": "perf_sample", "required_payload": ["fps", "frame_ms"], "note": "Captured during PT-AA-003"},
+    {"kind": "a11y_flag", "required_payload": ["captions", "colorblind_safe", "large_text"], "note": "PT-AA-004"}
+  ],
+  "ring_buffer_max": 128,
+  "HUMAN_PLAYTEST_VALIDATED": false
+}
