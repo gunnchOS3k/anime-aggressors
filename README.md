@@ -3,9 +3,14 @@
 > Create your fighter. Pick your element. Launch your rivals.
 
 **Production gameplay runtime:** Godot 4 — [`game-godot/`](game-godot/)  
-**TypeScript / web:** launcher, validation oracle, legacy reference preview only
+**TypeScript / web:** launcher, validation oracle, legacy reference preview only — **not** the shipping fighter.
 
-See **[docs/RUNTIME_SOURCE_OF_TRUTH.md](docs/RUNTIME_SOURCE_OF_TRUTH.md)** for where work belongs.
+See **[docs/RUNTIME_SOURCE_OF_TRUTH.md](docs/RUNTIME_SOURCE_OF_TRUTH.md)** for where work belongs.  
+Identity: [docs/PRODUCT_IDENTITY.md](docs/PRODUCT_IDENTITY.md) (`com.gunnchos.animeaggressors`).  
+UML: [docs/uml/README.md](docs/uml/README.md).  
+Pixel 6a: [docs/PIXEL_6A_ACCEPTANCE.md](docs/PIXEL_6A_ACCEPTANCE.md) — **BLOCKED / unauthorized**.  
+Human playtest: [docs/HUMAN_PLAYTEST_PACKET.md](docs/HUMAN_PLAYTEST_PACKET.md) — `HUMAN_QA_PENDING`.  
+Workload notes (not a telecom thesis claim): [docs/research/6G_WORKLOAD_RELEVANCE.md](docs/research/6G_WORKLOAD_RELEVANCE.md).
 
 ---
 

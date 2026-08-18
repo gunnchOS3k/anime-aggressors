@@ -24,12 +24,12 @@ Requires `godot` on PATH or `GODOT_BIN=/path/to/godot`. Output lands in `apps/we
 Equivalent manual command:
 
 ```bash
-godot --headless --path game/godot --export-release "Web" apps/web/public/godot/index.html
+godot --headless --path game-godot --export-release "Web" apps/web/public/godot/index.html
 ```
 
 ## GitHub Pages compatibility
 
-Use the **Web** export preset with **single-threaded** export (`variant/thread_support=false` in `game/godot/export_presets.cfg`).
+Use the **Web** export preset with **single-threaded** export (`variant/thread_support=false` in `game-godot/export_presets.cfg`).
 
 | Requirement | Why |
 |-------------|-----|
@@ -42,7 +42,7 @@ Use the **Web** export preset with **single-threaded** export (`variant/thread_s
 ## Verify project
 
 ```bash
-godot --headless --path game/godot --check-only
+godot --headless --path game-godot --check-only
 ```
 
 ## CI / GitHub Pages

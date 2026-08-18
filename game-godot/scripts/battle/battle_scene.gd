@@ -30,6 +30,8 @@ var _time_enabled := true
 var _eval_mode := false
 var _eval_max_frames := 2400
 var _eval_frames := 0
+var _pad_prompt: Label
+var _controller_watchdog
 
 const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
 const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
@@ -126,6 +128,7 @@ func _setup_hud_panels() -> void:
 	_p1_panel.configure(fighter1.data.get("displayName", "P1"), a1, GameState.stocks, false)
 	_p2_panel.configure(fighter2.data.get("displayName", "P2"), a2, GameState.stocks, true)
 	_update_timer_label()
+	_ensure_pad_prompt()
 
 func _build_stage() -> void:
 	var stage_data: Dictionary = GameState.load_stage(GameState.stage_id)
@@ -224,7 +227,7 @@ func _update_timer_label() -> void:
 	if _timer_label == null:
 		return
 	if not _time_enabled:
-		_timer_label.text = "∞"
+		_timer_label.text = "?"
 		return
 	var secs := int(ceil(_time_remaining))
 	_timer_label.text = "%d:%02d" % [secs / 60, secs % 60]
@@ -277,7 +280,7 @@ func _toggle_pause() -> void:
 	# Freeze the SceneTree so CharacterBody2D physics / CPU / hazards stop.
 	# Prior behavior only flipped controls_enabled + BattleSim.paused, so
 	# fighters kept sliding under gravity/velocity while the pause panel showed
-	# — keyboard/gamepad players saw a non-frozen "pause".
+	# " keyboard/gamepad players saw a non-frozen "pause".
 	var resuming := not _paused
 	get_tree().paused = _paused
 	if resuming:
@@ -310,6 +313,36 @@ func _unhandled_input(event: InputEvent) -> void:
 	if _paused and event.is_action_pressed("ui_accept"):
 		_toggle_pause()
 		get_viewport().set_input_as_handled()
+	if event is InputEventJoypadButton and event.pressed:
+		_refresh_pad_prompt()
+
+
+func _ensure_pad_prompt() -> void:
+	if _pad_prompt:
+		return
+	var Watchdog := load("res://scripts/input/controller_watchdog.gd")
+	_controller_watchdog = Watchdog.new()
+	add_child(_controller_watchdog)
+	_controller_watchdog.controller_reconnected.connect(func(_id): _refresh_pad_prompt())
+	_controller_watchdog.controller_disconnected.connect(func(_id): _refresh_pad_prompt())
+	_pad_prompt = Label.new()
+	_pad_prompt.name = "PadPrompt"
+	_pad_prompt.text = "Press any gamepad button to wake P1/P2 pads (keyboard still works)."
+	_pad_prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_pad_prompt.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
+	_pad_prompt.offset_top = -72
+	_pad_prompt.add_theme_font_size_override("font_size", 16)
+	_pad_prompt.process_mode = Node.PROCESS_MODE_ALWAYS
+	hud.add_child(_pad_prompt)
+	_refresh_pad_prompt()
+
+
+func _refresh_pad_prompt() -> void:
+	if _pad_prompt == null:
+		return
+	var pads: Array = Input.get_connected_joypads()
+	_pad_prompt.visible = pads.is_empty() and not DisplayServer.is_touchscreen_available()
+
 
 func _ensure_pause_panel() -> void:
 	if _pause_panel:
