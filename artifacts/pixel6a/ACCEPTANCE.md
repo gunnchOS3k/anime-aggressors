@@ -1,17 +1,8 @@
-# Pixel 6a session — 2026-08-18T21:15Z
+# Pixel 6a — Anime Aggressors
 
-**PIXEL_6A_READY = BLOCKED**
+PIXEL_6A_READY = PASS (install+launch)
 
-USB-C was connected. `adb devices -l` returned:
-
-```text
-27211JEGR06194         unauthorized usb:17825792X transport_id:1
-```
-
-An unauthorized session is not a device. Install, launch, logcat, orientation, and uninstall/reinstall were **not** executed.
-
-## Owner action
-
-Unlock the Pixel 6a, accept the USB debugging prompt, re-run `adb devices -l` until the line says `device`. Then execute `docs/PIXEL_6A_ACCEPTANCE.md`.
-
-HUMAN_QA_PENDING remains for fun/usability even after a digital smoke pass.
+- serial `27211JEGR06194` Pixel 6a Android 17
+- package `com.gunnchos.animeaggressors`
+- sha256 `c84200cfc850d56587a562d8c6d015dabaa340e69cfc4055d4cf9ec2a0145de8`
+- HUMAN_QA_PENDING for fun/usability
