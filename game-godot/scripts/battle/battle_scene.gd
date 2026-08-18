@@ -280,7 +280,7 @@ func _toggle_pause() -> void:
 	# Freeze the SceneTree so CharacterBody2D physics / CPU / hazards stop.
 	# Prior behavior only flipped controls_enabled + BattleSim.paused, so
 	# fighters kept sliding under gravity/velocity while the pause panel showed
-	# ù keyboard/gamepad players saw a non-frozen "pause".
+	# " keyboard/gamepad players saw a non-frozen "pause".
 	var resuming := not _paused
 	get_tree().paused = _paused
 	if resuming:

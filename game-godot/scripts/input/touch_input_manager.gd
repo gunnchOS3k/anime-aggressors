@@ -92,7 +92,7 @@ func should_show_touch() -> bool:
 		return false
 	# Pause panel owns the screen — do not let the stick steal Resume taps.
 	var sc := get_tree().current_scene
-	if sc != null and bool(sc.get("_paused")):
+	if sc != null and sc.get("_paused") == true:
 		return false
 	var role = get_node_or_null("/root/DeviceRoleRuntime")
 	if role != null and role.touch_overlay_preferred and touch_mode != TouchMode.OFF:
