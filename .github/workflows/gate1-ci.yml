@@ -132,6 +132,7 @@ jobs:
           pip install 'jsonschema>=4.20'
           mkdir -p gate1/evidence/out
           echo "${GITHUB_SHA}" > gate1/evidence/out/commit_sha.txt
+          godot --headless --path . --script res://tests/input_persistence_test.gd
           xvfb-run -a godot --headless --path . --rendering-driver opengl3 -- --cross-device-contract
           test -f gate1/evidence/out/cross_device_contract.json
           python3 - <<'PY'

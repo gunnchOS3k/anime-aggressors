@@ -3,7 +3,7 @@
 		"active": {
 			"colorblind_markers": false,
 			"high_contrast": false,
-			"master_volume": 1
+			"master_volume": 1.0
 		},
 		"settings_persisted": true,
 		"vocabulary": [
@@ -37,7 +37,7 @@
 		"role_id": "handheld_hybrid"
 	},
 	"game_id": "anime-aggressors",
-	"generated_at_utc": "2026-08-19T21:20:58Z",
+	"generated_at_utc": "2026-08-19T22:17:10Z",
 	"input_profile": {
 		"layout_id": "keyboard_default",
 		"normalized_actions": [
@@ -51,11 +51,11 @@
 			"pause",
 			"ui_accept"
 		],
-		"remapping_persisted": false,
+		"remapping_persisted": true,
 		"schema": "gunnchos.normalized_actions.v1"
 	},
 	"presentation_profile": {
-		"hud_scale": 1,
+		"hud_scale": 1.0,
 		"orientation": "landscape",
 		"profiles_supported": [
 			"phone",
@@ -109,7 +109,17 @@
 					"grab",
 					"pause",
 					"ui_accept"
-				]
+				],
+				"remapping_persistence": {
+					"changed_key": 81,
+					"default_applied_to_input_map": true,
+					"defaults_exist": true,
+					"file_written": true,
+					"input_map_receives": true,
+					"invalid_rejected": true,
+					"reload_matches": true,
+					"reset_restores_defaults": true
+				}
 			},
 			"status": "pass"
 		},
@@ -130,7 +140,7 @@
 		"quality": {
 			"detail": {
 				"match_timer_seconds": 180,
-				"observed_fps_hint": 1,
+				"observed_fps_hint": 1.0,
 				"tier_timing_unchanged": true
 			},
 			"status": "pass"
@@ -167,14 +177,14 @@
 		]
 	},
 	"rules_surface": {
-		"canonical_hash": "0000001665127165",
+		"canonical_hash": "0000003116892059",
 		"rules_version": "stock-3",
 		"ruleset_id": "stock-3"
 	},
 	"runtime": {
 		"build_id": "aa-godot-headless",
-		"commit": "a7d11537625b",
-		"engine": "godot-4.3-stable (official)",
+		"commit": "695fa546684f",
+		"engine": "godot-4.7.1-stable (official)",
 		"platform": "macos"
 	},
 	"schema_versions": {

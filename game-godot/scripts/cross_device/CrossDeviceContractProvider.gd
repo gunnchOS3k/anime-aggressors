@@ -16,6 +16,8 @@ const A11Y_VOCABULARY := [
 	"high_contrast", "colorblind_markers", "reduce_motion", "master_volume", "larger_ui"
 ]
 
+const _InputPersistence = preload("res://scripts/input/InputPersistenceService.gd")
+
 
 static func should_run_from_cli() -> bool:
 	for arg in OS.get_cmdline_user_args():
@@ -28,6 +30,7 @@ static func should_run_from_cli() -> bool:
 
 
 static func build_snapshot() -> Dictionary:
+	_InputPersistence.ensure_loaded()
 	var platform := _PlatformServices.new()
 	platform._ready()
 	var role_id := "handheld_hybrid"
@@ -72,10 +75,11 @@ static func _build_input_profile() -> Dictionary:
 	var layout := "keyboard_default"
 	if Input.get_connected_joypads().size() > 0:
 		layout = "gamepad_default"
+	var probe := _probe_input_remapping_persistence()
 	return {
 		"schema": "gunnchos.normalized_actions.v1",
 		"layout_id": layout,
-		"remapping_persisted": FileAccess.file_exists("user://input_profiles.cfg"),
+		"remapping_persisted": probe.get("ok", false),
 		"normalized_actions": NORMALIZED_ACTIONS.duplicate(),
 	}
 
@@ -215,6 +219,10 @@ static func _probe_score() -> Dictionary:
 	}
 
 
+static func _probe_input_remapping_persistence() -> Dictionary:
+	return _InputPersistence.probe_roundtrip()
+
+
 static func _probe_input() -> Dictionary:
 	var required := [
 		"p1_left", "p1_right", "p1_jump", "p1_attack", "p1_special",
@@ -224,9 +232,14 @@ static func _probe_input() -> Dictionary:
 	for action in required:
 		if not InputMap.has_action(action):
 			missing.append(action)
+	var remap := _probe_input_remapping_persistence()
 	return {
-		"status": "pass" if missing.is_empty() else "fail",
-		"detail": {"missing_actions": missing, "normalized_actions": NORMALIZED_ACTIONS},
+		"status": "pass" if missing.is_empty() and remap.get("ok", false) else "fail",
+		"detail": {
+			"missing_actions": missing,
+			"normalized_actions": NORMALIZED_ACTIONS,
+			"remapping_persistence": remap.get("detail", {}),
+		},
 	}
 
 
