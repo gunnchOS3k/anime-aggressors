@@ -139,7 +139,7 @@ jobs:
           from jsonschema import Draft202012Validator
           from pathlib import Path
           doc = json.loads(Path("gate1/evidence/out/cross_device_contract.json").read_text())
-          schema = json.loads(Path("gate1/contracts/cross_device_game_contract.v1.schema.json").read_text())
+          schema = json.loads(Path("../gate1/contracts/cross_device_game_contract.v1.schema.json").read_text())
           Draft202012Validator(schema).validate(doc)
           assert doc["game_id"] == "anime-aggressors"
           print("WAVE001_CROSS_DEVICE_CONTRACT_OK")
