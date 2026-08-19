@@ -2,6 +2,8 @@ extends Node
 
 ## Session state for menu → battle flow (autoload).
 
+const _InputPersistence = preload("res://scripts/input/InputPersistenceService.gd")
+
 var p1_fighter_id: String = "ember-vale"
 var p2_fighter_id: String = "rook-ironside"
 var p1_is_cpu: bool = false
@@ -403,6 +405,7 @@ func ensure_save_loaded() -> void:
 	ruleset_preset_name = str(cfg.get_value("rules", "preset", "default"))
 	online_queue = str(cfg.get_value("online", "queue", "private"))
 	mode = str(cfg.get_value("modes", "last_mode", mode))
+	_InputPersistence.ensure_loaded()
 
 
 func _persist_save() -> void:

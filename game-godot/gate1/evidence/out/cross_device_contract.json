@@ -1,0 +1,199 @@
+{
+	"accessibility_profile": {
+		"active": {
+			"colorblind_markers": false,
+			"high_contrast": false,
+			"master_volume": 1.0
+		},
+		"settings_persisted": true,
+		"vocabulary": [
+			"high_contrast",
+			"colorblind_markers",
+			"reduce_motion",
+			"master_volume",
+			"larger_ui"
+		]
+	},
+	"capability_model": {
+		"adapted_features": [
+			"touch_overlay",
+			"gamepad_layout",
+			"hud_scale_by_device_role"
+		],
+		"blocked_features": [
+			"console_sdk_entitlements:EXTERNAL_PENDING",
+			"ranked_online:FOUNDATION_ONLY"
+		],
+		"required_features": [
+			"core_combat_loop",
+			"save_progression",
+			"local_versus",
+			"training_mode"
+		]
+	},
+	"contract_version": "1.0.0",
+	"device_profile": {
+		"presentation_tier": "desktop",
+		"role_id": "handheld_hybrid"
+	},
+	"game_id": "anime-aggressors",
+	"generated_at_utc": "2026-08-19T22:17:10Z",
+	"input_profile": {
+		"layout_id": "keyboard_default",
+		"normalized_actions": [
+			"move_left",
+			"move_right",
+			"jump",
+			"shield",
+			"attack",
+			"special",
+			"grab",
+			"pause",
+			"ui_accept"
+		],
+		"remapping_persisted": true,
+		"schema": "gunnchos.normalized_actions.v1"
+	},
+	"presentation_profile": {
+		"hud_scale": 1.0,
+		"orientation": "landscape",
+		"profiles_supported": [
+			"phone",
+			"desktop",
+			"web"
+		]
+	},
+	"probes": {
+		"accessibility": {
+			"detail": {
+				"settings_persisted": true,
+				"vocabulary": [
+					"high_contrast",
+					"colorblind_markers",
+					"reduce_motion",
+					"master_volume",
+					"larger_ui"
+				]
+			},
+			"status": "pass"
+		},
+		"core_loop": {
+			"detail": {
+				"autoloads": [
+					"GameState",
+					"MatchTelemetry",
+					"DeviceRoleRuntime"
+				],
+				"note": "Gate1 status file absent in headless export; runtime autoloads verified",
+				"runtime_ready": true
+			},
+			"status": "pass"
+		},
+		"deterministic_replay": {
+			"detail": {
+				"battle_eval_mode_available": true,
+				"boundary": "battle_eval_mode CPU-vs-CPU on real BattleScene; human input nondeterministic"
+			},
+			"status": "pass"
+		},
+		"input": {
+			"detail": {
+				"missing_actions": [],
+				"normalized_actions": [
+					"move_left",
+					"move_right",
+					"jump",
+					"shield",
+					"attack",
+					"special",
+					"grab",
+					"pause",
+					"ui_accept"
+				],
+				"remapping_persistence": {
+					"changed_key": 81,
+					"default_applied_to_input_map": true,
+					"defaults_exist": true,
+					"file_written": true,
+					"input_map_receives": true,
+					"invalid_rejected": true,
+					"reload_matches": true,
+					"reset_restores_defaults": true
+				}
+			},
+			"status": "pass"
+		},
+		"multiplayer": {
+			"detail": {
+				"local_multiplayer": true,
+				"online_queue": "private",
+				"online_ranked": "FOUNDATION_ONLY"
+			},
+			"status": "pass"
+		},
+		"presentation": {
+			"detail": {
+				"viewport": "(1280, 720)"
+			},
+			"status": "pass"
+		},
+		"quality": {
+			"detail": {
+				"match_timer_seconds": 180,
+				"observed_fps_hint": 1.0,
+				"tier_timing_unchanged": true
+			},
+			"status": "pass"
+		},
+		"save_roundtrip": {
+			"detail": {
+				"checksum_after": "0000000223450509",
+				"checksum_before": "0000000223450476",
+				"migration": {
+					"from": 2,
+					"migrated": false,
+					"ok": true,
+					"to": 2
+				},
+				"save_version": 2
+			},
+			"status": "pass"
+		},
+		"score": {
+			"detail": {
+				"expected_ruleset_token": "aa_score_stock-3_3",
+				"golden_checksum": "0000003175930727"
+			},
+			"status": "pass"
+		}
+	},
+	"quality_profile": {
+		"gameplay_timing_locked": true,
+		"tier": "medium",
+		"tiers_supported": [
+			"low",
+			"medium",
+			"high"
+		]
+	},
+	"rules_surface": {
+		"canonical_hash": "0000003116892059",
+		"rules_version": "stock-3",
+		"ruleset_id": "stock-3"
+	},
+	"runtime": {
+		"build_id": "aa-godot-headless",
+		"commit": "695fa546684f",
+		"engine": "godot-4.7.1-stable (official)",
+		"platform": "macos"
+	},
+	"schema_versions": {
+		"accessibility": "1.0.0",
+		"input": "1.0.0",
+		"presentation": "1.0.0",
+		"quality": "1.0.0",
+		"rules": "1.0.0",
+		"save": "2",
+		"scoring": "1.0.0"
+	}
+}
