@@ -277,6 +277,15 @@ func trigger_hit_flash(intensity: float = 1.0) -> void:
 		_material_controller.set_hit_flash(intensity)
 
 
+func capture_viewport_image() -> Image:
+	if _viewport == null:
+		return null
+	var tex: Texture2D = _viewport.get_texture()
+	if tex == null:
+		return null
+	return tex.get_image()
+
+
 func _resolve_and_load_model(fighter_data: Dictionary) -> Dictionary:
 	var explicit := str(fighter_data.get("modelPath", ""))
 	if _is_approved_final_path(explicit):

@@ -41,11 +41,11 @@ func _run() -> void:
 			var rel := "artifacts/engineering_wave014/runtime_renders/%s/%s.png" % [fighter_id, shot.name]
 			var abs := ProjectSettings.globalize_path("res://").path_join("..").path_join(rel)
 			DirAccess.make_dir_recursive_absolute(abs.get_base_dir())
-			var tex: Texture2D = model.get_node("ModelDisplay").texture
-			if tex:
-				var img := tex.get_image()
-				if img:
-					img.save_png(abs)
+			var img: Image = null
+			if model.has_method("capture_viewport_image"):
+				img = model.capture_viewport_image()
+			if img != null and not img.is_empty():
+				img.save_png(abs)
 			renders.append({
 				"fighter_id": fighter_id,
 				"shot": shot.name,
