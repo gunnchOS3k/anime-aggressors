@@ -10,6 +10,7 @@ const FrameDataTable = preload("res://scripts/combat/frame_data_table.gd")
 const CompetitiveRules = preload("res://scripts/combat/competitive_rules.gd")
 const ThrowResolver = preload("res://scripts/combat/throw_resolver.gd")
 const DataLoader = preload("res://scripts/data/data_loader.gd")
+const Common = preload("res://tests/engineering_wave011/Wave011EvidenceCommon.gd")
 
 var _failures: PackedStringArray = PackedStringArray()
 var _observations: Dictionary = {}
@@ -28,6 +29,7 @@ func _run() -> void:
 	await _test_projectile_hit_resolver_path()
 	_test_throws()
 	_test_movement_fingerprints()
+	await _test_dodge_iframe_runtime()
 	_test_defense_constants()
 	_test_identities()
 	_test_impact_and_stale()
@@ -233,6 +235,48 @@ func _test_defense_constants() -> void:
 		"tech": CombatMath.TECH_WINDOW_SEC,
 		"interrupt": CombatMath.AURA_HIT_INTERRUPT_LOSS,
 		"decay": decay,
+		"ground_dodge_invuln": CombatMath.GROUND_DODGE_INVULN,
+	}
+
+
+func _test_dodge_iframe_runtime() -> void:
+	var boot: Dictionary = await Common.spawn_fresh_battle(self, "ember-vale", "rook-ironside")
+	if not bool(boot.get("ok", false)):
+		_fail("dodge iframe bootstrap: %s" % str(boot.get("error", "")))
+		return
+	var p1 = boot.p1
+	var p2 = boot.p2
+	Common.restage_on_platform(p1, p2, 46.0)
+	await Common.wait_frames(self, 12)
+	for _s in 24:
+		await physics_frame
+		if p2.is_on_floor() and absf(p2.velocity.y) < 8.0:
+			break
+	if not p2.is_on_floor():
+		await Common.teardown_active_battle(self)
+		_fail("dodge iframe trial: defender not grounded for ground dodge")
+	p2.velocity = Vector2.ZERO
+	p2.reset_damage()
+	Input.action_press("p2_dodge")
+	await process_frame
+	var saw_invuln := false
+	var ground_dodge := false
+	for _i in 10:
+		await physics_frame
+		if str(p2.state_machine.current_state) in ["dodge_active", "dodge_recovery", "dodge_start"]:
+			ground_dodge = true
+		if p2.invincible:
+			saw_invuln = true
+	Common.release_p2()
+	await Common.teardown_active_battle(self)
+	if not ground_dodge:
+		_fail("REAL_DODGE_IFRAME_PATH false (ground dodge path not taken)")
+	if not saw_invuln:
+		_fail("REAL_DODGE_IFRAME_PATH false (no invuln during ground dodge)")
+	_observations["dodge_iframe"] = {
+		"observed": saw_invuln and ground_dodge,
+		"REAL_DODGE_IFRAME_PATH": saw_invuln and ground_dodge,
+		"ground_dodge_observed": ground_dodge,
 	}
 
 

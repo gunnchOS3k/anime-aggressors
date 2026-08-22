@@ -48,7 +48,8 @@ func _on_enter(state: String) -> void:
 			_fighter.shielding = false
 			_fighter.shield_health = 0.0
 		_FighterStates.DODGE_ACTIVE, _FighterStates.AIR_DODGE:
-			_fighter.invincible = true
+			if dodge_invuln > 0.0:
+				_fighter.invincible = true
 		_FighterStates.AURA_READY:
 			pass
 		_FighterStates.GRAB_HOLD:

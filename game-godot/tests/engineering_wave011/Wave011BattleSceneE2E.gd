@@ -331,7 +331,12 @@ func _scenario_c_projectiles(p1, p2) -> Dictionary:
 	}
 
 
-func _run_throw_trial(p1, p2, dir_input: Dictionary) -> Dictionary:
+func _run_throw_trial(dir_name: String) -> Dictionary:
+	var boot: Dictionary = await Common.spawn_fresh_battle(self, "ember-vale", "rook-ironside")
+	if not bool(boot.get("ok", false)):
+		return {"ok": false, "grab_connected": false, "direction": dir_name, "bootstrap_error": boot.get("error", "")}
+	var p1 = boot.p1
+	var p2 = boot.p2
 	Common.release_p1()
 	Common.release_p2()
 	p2.reset_damage()
@@ -340,7 +345,9 @@ func _run_throw_trial(p1, p2, dir_input: Dictionary) -> Dictionary:
 	Common.restage_on_platform(p1, p2, 48.0)
 	await Common.wait_frames(self, 20)
 	var dmg0: float = float(p2.damage_percent)
+	var vel0: Vector2 = p2.velocity
 	var grabbed := false
+	var grab_hold := false
 	var captured := {"dir": ""}
 	var on_grab := func(ev: Dictionary) -> void:
 		if str(ev.get("result", "")) == "throw":
@@ -351,18 +358,24 @@ func _run_throw_trial(p1, p2, dir_input: Dictionary) -> Dictionary:
 	for i in 40:
 		await physics_frame
 		var st: String = str(p1.state_machine.current_state)
+		if st == "grab_hold" and p1.grabbed_target != null:
+			grabbed = true
+			grab_hold = true
+			break
 		if st.contains("grab") and p1.grabbed_target != null:
 			grabbed = true
-			break
 	if not grabbed:
-		return {"ok": false, "grab_connected": false, "direction": dir_input.get("name", "")}
-	await Common.wait_frames(self, 8)
+		await Common.teardown_active_battle(self)
+		return {"ok": false, "grab_connected": false, "direction": dir_name}
+	Input.action_release("p1_grab")
+	await Common.wait_frames(self, 6)
 	p1.facing = 1 if p2.global_position.x > p1.global_position.x else -1
 	Input.action_release("p1_left")
 	Input.action_release("p1_right")
 	Input.action_release("p1_up")
 	Input.action_release("p1_down")
 	await physics_frame
+	var dir_input: Dictionary = _throw_dir_input(dir_name, p1, p2)
 	for k in dir_input:
 		if k == "name":
 			continue
@@ -370,10 +383,14 @@ func _run_throw_trial(p1, p2, dir_input: Dictionary) -> Dictionary:
 	await Common.wait_frames(self, 12)
 	var pre_throw_dir: String = ThrowResolver.read_throw_direction(p1)
 	if p1.grabbed_target == null:
+		if p1.has_signal("grab_event") and p1.grab_event.is_connected(on_grab):
+			p1.grab_event.disconnect(on_grab)
+		await Common.teardown_active_battle(self)
 		return {
 			"ok": false,
 			"grab_connected": grabbed,
-			"direction": dir_input.get("name", ""),
+			"grab_hold": grab_hold,
+			"direction": dir_name,
 			"grab_lost_before_throw": true,
 		}
 	var throw_resolved := false
@@ -388,7 +405,8 @@ func _run_throw_trial(p1, p2, dir_input: Dictionary) -> Dictionary:
 			throw_resolved = true
 		if float(p2.damage_percent) > dmg0 + 0.3:
 			throw_resolved = true
-			break
+		if p2.velocity.distance_to(vel0) > 80.0:
+			throw_resolved = true
 		if p1.grabbed_target == null and throw_resolved:
 			break
 		if p1.grabbed_target == null and i > 12:
@@ -403,19 +421,26 @@ func _run_throw_trial(p1, p2, dir_input: Dictionary) -> Dictionary:
 	if p1.has_signal("grab_event") and p1.grab_event.is_connected(on_grab):
 		p1.grab_event.disconnect(on_grab)
 	var throw_dir: String = str(captured["dir"]) if str(captured["dir"]) != "" else str(p1._throw_direction)
-	var dir_match: bool = throw_dir == str(dir_input.get("name", ""))
-	var ok: bool = grabbed and throw_resolved and dir_match
-	return {
+	var dir_match: bool = throw_dir == dir_name
+	var refs_clear: bool = p1.grabbed_target == null and p2.grabbed_by == null
+	var ok: bool = grabbed and grab_hold and throw_resolved and dir_match and refs_clear
+	var result := {
 		"ok": ok,
-		"direction": dir_input.name,
+		"direction": dir_name,
 		"direction_match": dir_match,
 		"grab_connected": grabbed,
+		"grab_hold": grab_hold,
 		"throw_resolved": throw_resolved,
 		"damage_delta": float(p2.damage_percent) - dmg0,
+		"velocity_delta": p2.velocity - vel0,
+		"trajectory_key": "%.0f,%.0f" % [p2.velocity.x, p2.velocity.y],
 		"throw_direction": throw_dir,
 		"pre_throw_dir": pre_throw_dir,
 		"state_after": str(p2.state_machine.current_state),
+		"refs_clear": refs_clear,
 	}
+	await Common.teardown_active_battle(self)
+	return result
 
 
 func _throw_dir_input(name: String, p1, p2) -> Dictionary:
@@ -432,38 +457,45 @@ func _throw_dir_input(name: String, p1, p2) -> Dictionary:
 	return {"name": name}
 
 
-func _scenario_d_throws(p1, p2) -> Dictionary:
-	print("E2E D four directional throws")
+func _scenario_d_throws(_p1, _p2) -> Dictionary:
+	print("E2E D four directional throws (fresh BattleScene per trial)")
 	var trials := [
-		await _run_throw_trial(p1, p2, _throw_dir_input("forward", p1, p2)),
-		await _run_throw_trial(p1, p2, _throw_dir_input("back", p1, p2)),
-		await _run_throw_trial(p1, p2, _throw_dir_input("up", p1, p2)),
-		await _run_throw_trial(p1, p2, _throw_dir_input("down", p1, p2)),
+		await _run_throw_trial("forward"),
+		await _run_throw_trial("back"),
+		await _run_throw_trial("up"),
+		await _run_throw_trial("down"),
 	]
 	var dirs := {}
 	var pass_count := 0
+	var trajectories := {}
 	for t in trials:
 		if bool(t.get("ok", false)):
 			pass_count += 1
 		dirs[str(t.get("direction", ""))] = t
+		var tk: String = str(t.get("trajectory_key", ""))
+		if tk != "" and tk != "0,0":
+			trajectories[tk] = true
 	var distinct_angles := {}
 	for t in trials:
 		var td: String = str(t.get("throw_direction", ""))
 		if td != "":
 			distinct_angles[td] = true
-	var ok: bool = pass_count >= 4 and distinct_angles.size() >= 4
+	var ok: bool = pass_count >= 4 and distinct_angles.size() >= 4 and trajectories.size() >= 4
 	if pass_count < 4:
 		_fail("D: only %d/4 directional throw trials passed" % pass_count)
 	if distinct_angles.size() < 4:
 		_fail("D: throw directions not distinct (%d/4)" % distinct_angles.size())
+	if trajectories.size() < 4:
+		_fail("D: throw trajectories not distinct (%d/4)" % trajectories.size())
 	return {
 		"ok": ok,
 		"FORWARD_THROW_RUNTIME": "PASS" if bool(dirs.get("forward", {}).get("ok", false)) else "FAIL",
 		"BACK_THROW_RUNTIME": "PASS" if bool(dirs.get("back", {}).get("ok", false)) else "FAIL",
 		"UP_THROW_RUNTIME": "PASS" if bool(dirs.get("up", {}).get("ok", false)) else "FAIL",
 		"DOWN_THROW_RUNTIME": "PASS" if bool(dirs.get("down", {}).get("ok", false)) else "FAIL",
-		"THROW_RUNTIME_TRAJECTORIES_DISTINCT": distinct_angles.size(),
+		"THROW_RUNTIME_TRAJECTORIES_DISTINCT": maxi(distinct_angles.size(), trajectories.size()),
 		"REAL_FOUR_DIRECTION_THROW_PATH": pass_count >= 4,
+		"ROSTER_PROOF_USES_CANONICAL_BATTLE_BOOTSTRAP": true,
 		"trials": trials,
 		"PERMANENT_GRAB": false,
 	}

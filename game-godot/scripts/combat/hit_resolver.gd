@@ -15,7 +15,9 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 	if attacker == null or defender == null:
 		return
 	var from_projectile := bool(move.get("_from_projectile", false))
-	if not from_projectile:
+	var move_id := str(move.get("move_id", ""))
+	var is_direct_throw := move_id.begins_with("throw_") or str(move.get("move_type", "")) == "throw"
+	if not from_projectile and not is_direct_throw:
 		if attacker.move_runner == null or not attacker.move_runner.can_hit_target(defender):
 			return
 	# Active armor frames (Rook heavies / Nix ice window) fully gate the hit.
@@ -92,6 +94,9 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 		"element_effect": scaled.get("element_effect", {}).get("effect", ""),
 	}
 	info = _AuraSpecialRuntime.apply_attacker_on_confirm(attacker, defender, scaled, info)
+	for hook in info.get("aura_runtime_hooks", []):
+		if attacker != null and attacker.has_method("stamp_runtime_hook"):
+			attacker.stamp_runtime_hook(str(hook))
 	dealt = float(info.get("damage", dealt))
 	kb = info.get("launch", kb)
 	if combat_feedback:

@@ -1,38 +1,73 @@
 {
-	"BACK_THROW_RUNTIME": "FAIL",
-	"DOWN_THROW_RUNTIME": "FAIL",
-	"FORWARD_THROW_RUNTIME": "FAIL",
+	"BACK_THROW_RUNTIME": "PASS",
+	"DOWN_THROW_RUNTIME": "PASS",
+	"FORWARD_THROW_RUNTIME": "PASS",
 	"PERMANENT_GRAB": false,
-	"REAL_FOUR_DIRECTION_THROW_PATH": false,
-	"THROW_RUNTIME_TRAJECTORIES_DISTINCT": 1,
-	"UP_THROW_RUNTIME": "FAIL",
-	"ok": false,
+	"REAL_FOUR_DIRECTION_THROW_PATH": true,
+	"ROSTER_PROOF_USES_CANONICAL_BATTLE_BOOTSTRAP": true,
+	"THROW_RUNTIME_TRAJECTORIES_DISTINCT": 4,
+	"UP_THROW_RUNTIME": "PASS",
+	"ok": true,
 	"trials": [
 		{
-			"damage_delta": 0.0,
+			"damage_delta": 5.6,
 			"direction": "forward",
 			"direction_match": true,
 			"grab_connected": true,
-			"ok": false,
+			"grab_hold": true,
+			"ok": true,
 			"pre_throw_dir": "forward",
-			"state_after": "idle",
+			"refs_clear": true,
+			"state_after": "hurt_light",
 			"throw_direction": "forward",
-			"throw_resolved": false
+			"throw_resolved": true,
+			"trajectory_key": "9,-6",
+			"velocity_delta": "(9.174503, -6.424056)"
 		},
 		{
+			"damage_delta": 7.2,
 			"direction": "back",
-			"grab_connected": false,
-			"ok": false
+			"direction_match": true,
+			"grab_connected": true,
+			"grab_hold": true,
+			"ok": true,
+			"pre_throw_dir": "back",
+			"refs_clear": true,
+			"state_after": "launched",
+			"throw_direction": "back",
+			"throw_resolved": true,
+			"trajectory_key": "-11,-9",
+			"velocity_delta": "(-11.03104, -9.256142)"
 		},
 		{
+			"damage_delta": 6.4,
 			"direction": "up",
-			"grab_connected": false,
-			"ok": false
+			"direction_match": true,
+			"grab_connected": true,
+			"grab_hold": true,
+			"ok": true,
+			"pre_throw_dir": "up",
+			"refs_clear": true,
+			"state_after": "hurt_light",
+			"throw_direction": "up",
+			"throw_resolved": true,
+			"trajectory_key": "2,-13",
+			"velocity_delta": "(1.781416, -12.67543)"
 		},
 		{
+			"damage_delta": 4.8,
 			"direction": "down",
-			"grab_connected": false,
-			"ok": false
+			"direction_match": true,
+			"grab_connected": true,
+			"grab_hold": true,
+			"ok": true,
+			"pre_throw_dir": "down",
+			"refs_clear": true,
+			"state_after": "hurt_light",
+			"throw_direction": "down",
+			"throw_resolved": true,
+			"trajectory_key": "-0,10",
+			"velocity_delta": "(-0.0, 9.6)"
 		}
 	]
 }

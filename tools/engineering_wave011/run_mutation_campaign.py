@@ -18,6 +18,10 @@ ROOT = Path(__file__).resolve().parents[2]
 GODOT_SRC = ROOT / "game-godot"
 OUT = ROOT / "artifacts/engineering_wave011/MUTATION_RESULT.json"
 
+ROSTER_SCRIPT = "res://tests/engineering_wave011/Wave011RosterRuntimeE2E.gd"
+
+MUTATION_ROSTER_HARNESS = {"charge_move_mult_zero"}
+
 MUTATIONS = [
     (
         "charge_disabled",
@@ -93,9 +97,9 @@ MUTATIONS = [
     ),
     (
         "charge_move_mult_zero",
-        "scripts/combat/combat_math.gd",
-        "const CHARGE_MOVE_MULT := 0.42",
-        "const CHARGE_MOVE_MULT := 0.0",
+        "scripts/combat/aura_identity.gd",
+        '"charge_move_mult": 0.48,',
+        '"charge_move_mult": 0.0,',
     ),
 ]
 
@@ -143,13 +147,6 @@ def copy_tree(dst: Path) -> None:
             ignore=shutil.ignore_patterns("*.glb", "*.import", "procedural_final", "characters"),
             dirs_exist_ok=True,
         )
-    godot_cache = GODOT_SRC / ".godot"
-    if godot_cache.exists():
-        shutil.copytree(
-            godot_cache,
-            dst / ".godot",
-            ignore=shutil.ignore_patterns("imported", "editor", "shader_cache"),
-        )
     (dst / "artifacts/engineering_wave011").mkdir(parents=True, exist_ok=True)
 
 
@@ -172,6 +169,25 @@ def run_component(godot: str, work: Path) -> tuple[int, str]:
     return proc.returncode, log
 
 
+def run_roster(godot: str, work: Path) -> tuple[int, str]:
+    proc = subprocess.run(
+        [
+            godot,
+            "--headless",
+            "--path",
+            str(work),
+            "--script",
+            ROSTER_SCRIPT,
+        ],
+        cwd=work,
+        capture_output=True,
+        text=True,
+        timeout=600,
+    )
+    log = (proc.stdout or "") + (proc.stderr or "")
+    return proc.returncode, log
+
+
 def parse_ok(log: str) -> bool:
     bad = ("Parse Error", "Compilation failed", "SCRIPT ERROR: Parse Error")
     return not any(b in log for b in bad)
@@ -183,6 +199,16 @@ def behavioral_fail(log: str, code: int) -> bool:
     if "Wave011RuntimeTest FAIL" in log or "FAIL:" in log:
         return True
     if code != 0 and "Wave011RuntimeTest PASS" not in log and "WAVE011_COMPONENT_RUNTIME_PASS" not in log:
+        return "FAIL:" in log
+    return False
+
+
+def roster_behavioral_fail(log: str, code: int) -> bool:
+    if not parse_ok(log):
+        return False
+    if "Wave011RosterRuntimeE2E FAIL" in log or "FAIL:" in log:
+        return True
+    if code != 0 and "Wave011RosterRuntimeE2E PASS" not in log:
         return "FAIL:" in log
     return False
 
@@ -230,6 +256,27 @@ def run_one(godot: str, work: Path, mid: str, rel: str, old: str, new: str, clea
             "log_tail": "\n".join(log.splitlines()[-40:]),
         }
     if "Wave011RuntimeTest PASS" in log and "WAVE011_COMPONENT_RUNTIME_PASS" in log and code == 0:
+        if mid in MUTATION_ROSTER_HARNESS:
+            rcode, rlog = run_roster(godot, work)
+            if not parse_ok(rlog):
+                return {
+                    "id": mid,
+                    "killed": False,
+                    "invalid": True,
+                    "reason": "INVALID_MUTATION:roster_harness_parse_failed",
+                    "exit": rcode,
+                    "log_tail": "\n".join(rlog.splitlines()[-40:]),
+                }
+            if roster_behavioral_fail(rlog, rcode):
+                return {
+                    "id": mid,
+                    "killed": True,
+                    "invalid": False,
+                    "behavioral": True,
+                    "reason": "behavioral_kill:roster_harness",
+                    "exit": rcode,
+                    "log_tail": "\n".join(rlog.splitlines()[-30:]),
+                }
         return {
             "id": mid,
             "killed": False,

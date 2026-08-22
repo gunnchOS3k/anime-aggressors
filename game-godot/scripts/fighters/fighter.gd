@@ -247,6 +247,10 @@ func _physics_process(delta: float) -> void:
 	# Kaia air-drift stamp (runtime, not data-only).
 	if not is_on_floor() and _AuraIdentity.air_drift_bonus(fighter_id, aura, str(data.get("combatTag", ""))) > 0.0:
 		stamp_runtime_hook("air_drift")
+	if grabbed_target != null and state_machine.current_state not in [
+		_FighterStates.GRAB_HOLD, _FighterStates.THROW_STARTUP, _FighterStates.THROW_RELEASE,
+	]:
+		state_machine.enter(_FighterStates.GRAB_HOLD)
 	state_machine.update(delta)
 	if grabbed_by != null:
 		global_position = grabbed_by.global_position + Vector2(24 * grabbed_by.facing, -8)
@@ -352,14 +356,6 @@ func _handle_actions() -> void:
 		_throw_direction = _ThrowResolver.read_throw_direction(self)
 		if grab_range_debug:
 			grab_range_debug.visible = _show_grab_range
-		var attack_held := Input.is_action_pressed("p%d_attack" % slot)
-		if attack_held and not _grab_throw_latch:
-			_grab_throw_latch = true
-			execute_throw()
-		elif not attack_held:
-			_grab_throw_latch = false
-		elif _read_grab_pressed() and state_machine.state_time > 0.08:
-			execute_throw()
 		return
 	if not state_machine.can_attack():
 		return
@@ -558,14 +554,14 @@ func _start_dodge() -> void:
 		state_machine.enter(_FighterStates.AIR_DODGE)
 		velocity.x = dir_x * get_dash_speed() * 0.95
 		velocity.y = axis_y * get_dash_speed() * (0.75 if axis_y < 0.0 else 0.45)
-		invincible = true
+		invincible = _CombatMath.AIR_DODGE_INVULN > 0.0
 		return
 	_dodge_cooldown = 0.28
 	state_machine.dodge_recovery = _CombatMath.GROUND_DODGE_RECOVERY
 	state_machine.dodge_invuln = _CombatMath.GROUND_DODGE_INVULN
 	state_machine.enter(_FighterStates.DODGE_START)
 	state_machine.enter(_FighterStates.DODGE_ACTIVE)
-	invincible = true
+	invincible = _CombatMath.GROUND_DODGE_INVULN > 0.0
 	facing = 1 if dir_x >= 0.0 else -1
 	velocity.x = dir_x * get_dash_speed() * 1.15
 	velocity.y = 0.0
@@ -714,6 +710,8 @@ func _try_grab_connect() -> void:
 	grab_mash = 0.0
 	_grab_throw_latch = false
 	_throw_direction = ""
+	_input_edge_held["attack"] = false
+	_input_edge_held["grab"] = false
 	state_machine.enter(_FighterStates.GRAB_HOLD)
 	opp.state_machine.enter(_FighterStates.GRAB_HOLD)
 	grab_event.emit({"result": "success", "target": opp.fighter_id})
@@ -810,6 +808,17 @@ func _tick_shield_regen(delta: float) -> void:
 func tick_grab_hold(_delta: float) -> void:
 	if grabbed_target == null:
 		state_machine.enter(_FighterStates.IDLE)
+		return
+	_throw_direction = _ThrowResolver.read_throw_direction(self)
+	var attack_action := "p%d_attack" % slot
+	var attack_now := Input.is_action_pressed(attack_action)
+	if not attack_now:
+		_input_edge_held["attack"] = false
+		_grab_throw_latch = false
+	elif attack_now and not _grab_throw_latch:
+		_grab_throw_latch = true
+		_input_edge_held["attack"] = true
+		execute_throw()
 		return
 	if grabbed_target.has_method("tick_grab_mash"):
 		grabbed_target.tick_grab_mash(_delta)
@@ -1060,6 +1069,8 @@ func debug_combat_summary() -> Dictionary:
 func _on_move_ended(_move_id: String) -> void:
 	hitbox.monitoring = false
 	var s: String = str(state_machine.current_state) if state_machine else ""
+	if s == _FighterStates.GRAB_HOLD:
+		return
 	if not is_on_floor() and s in [_FighterStates.ATTACK_ACTIVE, _FighterStates.ATTACK_STARTUP, _FighterStates.SPECIAL_ACTIVE, _FighterStates.SPECIAL_STARTUP]:
 		_pending_landing_from_attack = true
 	if s in [_FighterStates.GRAB_ACTIVE, _FighterStates.GRAB_STARTUP] and grabbed_target == null:

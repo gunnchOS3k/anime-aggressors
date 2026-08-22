@@ -139,12 +139,15 @@ def derive_requirements(
 
     # 005 seven-fighter movement runtime
     mv_count = int(movement.get("FIGHTERS_RUNTIME_MOVEMENT_TESTED", 0))
+    mv_collisions = int(movement.get("RUNTIME_MOVEMENT_FINGERPRINT_COLLISIONS", 99))
     if (
         mv_count >= 7
         and not _bool(movement, "STAT_ONLY_PROFILE_CALLS_USED_AS_RUNTIME_PROOF", default=True)
         and int(movement.get("MATERIAL_RUNTIME_MOVEMENT_IDENTITIES", 0)) >= 7
+        and mv_collisions == 0
+        and _bool(movement, "pass")
     ):
-        row("GAME-AA-005", "IMPLEMENTED", ["FIGHTER_MOVEMENT_RUNTIME_MATRIX"], "Seven Fighter scene movement trials")
+        row("GAME-AA-005", "IMPLEMENTED", ["FIGHTER_MOVEMENT_RUNTIME_MATRIX"], "Seven BattleScene movement trials")
     else:
         row("GAME-AA-005", "PARTIAL", ["FIGHTER_MOVEMENT_RUNTIME_MATRIX"], "Movement matrix incomplete")
 
@@ -162,11 +165,19 @@ def derive_requirements(
     # 007 identities
     id_count = int(identity.get("FIGHTERS_RUNTIME_IDENTITY_TESTED", 0))
     id_runtime = int(identity.get("MATERIAL_RUNTIME_IDENTITY_ROWS", 0))
+    sig_dupes = int(identity.get("SIGNATURE_MECHANIC_DUPLICATES", 1))
+    stat_dupes = int(identity.get("STAT_ONLY_DUPLICATES", 1))
     if id_runtime == 0:
         rows = identity.get("rows", [])
         id_runtime = sum(1 for r in rows if r.get("runtime_observed"))
-    if id_count >= 7 and id_runtime >= 7 and int(identity.get("STAT_ONLY_DUPLICATES", 1)) == 0:
-        row("GAME-AA-007", "IMPLEMENTED", ["FIGHTER_IDENTITY_RUNTIME_MATRIX"], "Seven runtime identity rows")
+    if (
+        id_count >= 7
+        and id_runtime >= 7
+        and stat_dupes == 0
+        and sig_dupes == 0
+        and _bool(identity, "pass")
+    ):
+        row("GAME-AA-007", "IMPLEMENTED", ["FIGHTER_IDENTITY_RUNTIME_MATRIX", "FIGHTER_SIGNATURE_RUNTIME_RESULT"], "Seven runtime identity rows")
     else:
         row("GAME-AA-007", "PARTIAL", ["FIGHTER_IDENTITY_RUNTIME_MATRIX"], "Identity matrix incomplete")
 
