@@ -85,6 +85,18 @@ MUTATIONS = [
         "const STOCKS := 3",
         "const STOCKS := 99",
     ),
+    (
+        "dodge_invuln_zero",
+        "scripts/combat/combat_math.gd",
+        "const GROUND_DODGE_INVULN := 0.10",
+        "const GROUND_DODGE_INVULN := 0.0",
+    ),
+    (
+        "charge_move_mult_zero",
+        "scripts/combat/combat_math.gd",
+        "const CHARGE_MOVE_MULT := 0.42",
+        "const CHARGE_MOVE_MULT := 0.0",
+    ),
 ]
 
 

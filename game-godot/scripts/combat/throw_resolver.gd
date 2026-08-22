@@ -10,11 +10,12 @@ const PRIORITY := ["up", "down", "forward", "back"]
 static func read_throw_direction(fighter: Node) -> String:
 	if not fighter.has_method("_read_axis"):
 		return "forward"
-	var axis: float = fighter._read_axis()
 	var up_held := false
 	var down_held := false
 	if fighter.has_method("_read_up"):
 		up_held = fighter._read_up()
+	if fighter.has_method("_read_down"):
+		down_held = fighter._read_down()
 	elif "slot" in fighter:
 		var slot: int = int(fighter.slot)
 		up_held = Input.is_action_pressed("p%d_up" % slot)
@@ -23,6 +24,7 @@ static func read_throw_direction(fighter: Node) -> String:
 		return "up"
 	if down_held:
 		return "down"
+	var axis: float = fighter._read_axis()
 	if absf(axis) > 0.3:
 		var facing: int = fighter.facing if "facing" in fighter else 1
 		if signf(axis) == signf(float(facing)):

@@ -45,6 +45,13 @@ if emit.exists():
         findings.append({"severity": "S1", "id": "BLANKET_REQUIREMENT_ASSIGNMENT", "path": str(emit.relative_to(root))})
     if re.search(r'for rid in REQ_IDS:\s*\n\s*req\[rid\] = "IMPLEMENTED"', et):
         findings.append({"severity": "S0", "id": "BLANKET_IMPLEMENTED_LOOP", "path": str(emit.relative_to(root))})
+    weak = [
+        (r"spawned\s+or\s+hit", "WEAK_PROXY_SPAWN_OR_HIT"),
+        (r"grab_ok\s+or\s+throw_ok", "WEAK_PROXY_GRAB_OR_THROW"),
+    ]
+    for pat, wid in weak:
+        if re.search(pat, et, re.I):
+            findings.append({"severity": "S0", "id": wid, "path": str(emit.relative_to(root))})
 
 new_s0 = sum(1 for f in findings if f["severity"] == "S0")
 new_s1 = sum(1 for f in findings if f["severity"] == "S1")

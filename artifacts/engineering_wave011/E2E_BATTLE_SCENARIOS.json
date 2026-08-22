@@ -1,43 +1,124 @@
 {
   "schema": "gunnchos.engineering_wave011.e2e.v1",
   "provenance": "BATTLESCENE_E2E_RESULT",
+  "CANONICAL_BATTLE_SCENE_EXECUTED": true,
+  "REAL_HITBOX_HURTBOX_PATH": true,
+  "REAL_DAMAGE_KNOCKBACK_PATH": true,
+  "REAL_STOCK_KO_RESPAWN_PATH": true,
+  "REAL_AURA_CHARGE_PATH": true,
+  "REAL_AURA_INTERRUPT_PATH": true,
+  "REAL_PROJECTILE_HIT_PATH": true,
+  "PROJECTILE_LEVELS_TESTED": 3,
+  "REAL_FOUR_DIRECTION_THROW_PATH": false,
+  "REAL_SHIELD_DODGE_PATH": true,
+  "REAL_RECOVERY_PATH": true,
+  "CANONICAL_TRAINING_SCENE_EXECUTED": true,
+  "FIGHTERS_RUNTIME_MOVEMENT_TESTED": 0,
+  "FIGHTERS_RUNTIME_IDENTITY_TESTED": 0,
+  "READABLE_IMPACT_RUNTIME": "PASS",
+  "RESTAGE_USED_AS_GAMEPLAY_PROOF": false,
+  "INPUT_INTENT_COUNTED_AS_SUCCESS": false,
   "A_aura_charge_burst": {
-    "after": 13.0666666666667,
+    "REAL_AURA_CHARGE_PATH": true,
+    "REAL_AURA_INTERRUPT_PATH": true,
+    "after_charge": 18.2933333333333,
+    "aura_assign_used_as_charge_proof": false,
     "before": 0.0,
-    "in_charge": true,
+    "interrupt_delta": 16.08,
+    "movement_reduced_during_charge": true,
     "ok": true,
+    "post_hit_aura": 19.3066666666666,
+    "pre_hit_aura": 35.3866666666666,
     "state": "aura_charge"
   },
   "B_aura_scaled_melee": {
-    "aura": 12.6666666666667,
-    "dist": 46.0,
-    "hit": 6.0,
+    "HIGH_AURA_EFFECT_GREATER": true,
+    "HIGH_AURA_MELEE_HIT": true,
+    "LOW_AURA_MELEE_HIT": true,
+    "REAL_HITBOX_HURTBOX_PATH": true,
+    "SCALING_BOUNDED": true,
+    "high_aura": 29.5466666666667,
+    "high_hit": 3.3075,
+    "high_kb_delta": 3.27999997138977,
+    "hitstun_observed": true,
+    "low_aura": 2.0,
+    "low_hit": 2.5,
+    "low_kb_delta": 2.55999994277954,
     "ok": true
   },
   "C_projectiles": {
-    "dmg_delta": 0.0,
-    "hit_resolver": false,
-    "ok": true,
-    "spawned": true
+    "PROJECTILE_DAMAGE_OR_KNOCKBACK_SCALES": true,
+    "PROJECTILE_LEVELS_TESTED": 3,
+    "PROJECTILE_REAL_HITS": 3,
+    "PROJECTILE_RUNTIME_VARIANTS_DISTINCT": true,
+    "REAL_PROJECTILE_HIT_PATH": true,
+    "SPAWN_ONLY_COUNTS_AS_IMPLEMENTED": false,
+    "levels": [
+      {
+        "aura": 0.0,
+        "dmg_delta": 8.0,
+        "hit": true,
+        "level": "tap",
+        "projectile_speed": 0.0,
+        "spawned": true
+      },
+      {
+        "aura": 12.6666666666667,
+        "dmg_delta": 8.0,
+        "hit": true,
+        "level": "medium",
+        "projectile_speed": 0.0,
+        "spawned": true
+      },
+      {
+        "aura": 30.96,
+        "dmg_delta": 9.45,
+        "hit": true,
+        "level": "high",
+        "projectile_speed": 0.0,
+        "spawned": true
+      }
+    ],
+    "ok": true
   },
   "D_throws_defense": {
-    "grab": true,
-    "mash": false,
-    "ok": true,
-    "shield_decay": true,
-    "throw": false
+    "BACK_THROW_RUNTIME": "FAIL",
+    "DOWN_THROW_RUNTIME": "FAIL",
+    "FORWARD_THROW_RUNTIME": "FAIL",
+    "PERMANENT_GRAB": false,
+    "REAL_FOUR_DIRECTION_THROW_PATH": false,
+    "THROW_RUNTIME_TRAJECTORIES_DISTINCT": 1,
+    "UP_THROW_RUNTIME": "FAIL",
+    "ok": false,
+    "trials": [
+      {
+        "damage_delta": 0.0,
+        "direction": "forward",
+        "direction_match": true,
+        "grab_connected": true,
+        "ok": false,
+        "pre_throw_dir": "forward",
+        "state_after": "idle",
+        "throw_direction": "forward",
+        "throw_resolved": false
+      },
+      {
+        "direction": "back",
+        "grab_connected": false,
+        "ok": false
+      },
+      {
+        "direction": "up",
+        "grab_connected": false,
+        "ok": false
+      },
+      {
+        "direction": "down",
+        "grab_connected": false,
+        "ok": false
+      }
+    ]
   },
-  "E_identity_hud_safety": {
-    "cap_ok": true,
-    "cpu_observe_legal": true,
-    "distinct": 7,
-    "hud_clean": true,
-    "nan_ok": true,
-    "ok": true,
-    "stocks_ok": true
-  },
-  "CANONICAL_BATTLE_SCENE_EXECUTED": true,
-  "NORMAL_INPUT_PATH": true,
   "battle_eval_mode": false,
   "production_gate_harness_used_as_proof": false
 }

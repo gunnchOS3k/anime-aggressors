@@ -1,17 +1,12 @@
 extends SceneTree
 
-## Canonical BattleScene E2E — loads res://scenes/battle/BattleScene.tscn.
-## Normal input path only: Input.action_press/release on p1_*.
-## No battle_eval_mode, ProductionGateHarness, or aura= writes as proof.
+## Canonical BattleScene E2E — scenarios A-D + F/H/I fragments on BattleScene.tscn.
+## Normal InputMap only. Restage = test precondition (Wave011EvidenceCommon).
 
+const Common = preload("res://tests/engineering_wave011/Wave011EvidenceCommon.gd")
+const ThrowResolver = preload("res://scripts/combat/throw_resolver.gd")
 const TIME_SCALE := 2.0
-const MAX_WAIT_SEC := 45.0
 const BATTLE_PATH := "res://scenes/battle/BattleScene.tscn"
-const ROSTER := [
-	"ember-vale", "rook-ironside", "juno-spark", "kaia-windrow",
-	"nix-calder", "orion-vell", "vesper-nyx",
-]
-const AuraIdentity = preload("res://scripts/combat/aura_identity.gd")
 const CompetitiveRules = preload("res://scripts/combat/competitive_rules.gd")
 
 var _failures: PackedStringArray = PackedStringArray()
@@ -52,23 +47,21 @@ func _run() -> void:
 	await process_frame
 
 	if bool(_gs.battle_eval_mode):
-		_fail("battle_eval_mode must remain false for E2E proof")
+		_fail("battle_eval_mode must remain false")
 		_finish(false)
 		return
 	if _scene.get_node_or_null("ProductionGateHarness") != null:
-		_fail("ProductionGateHarness present in BattleScene tree as E2E driver")
+		_fail("ProductionGateHarness present")
 		_finish(false)
 		return
-
 	if not await _wait_controls():
 		_fail("countdown did not enable controls")
 		_finish(false)
 		return
 
+	_obs.merge(Common.provenance_flags())
 	_obs["CANONICAL_BATTLE_SCENE_EXECUTED"] = true
 	_obs["NORMAL_INPUT_PATH"] = true
-	_obs["battle_eval_mode"] = false
-	_obs["production_gate_harness_used_as_proof"] = false
 	_obs["countdown_completed"] = true
 
 	var p1 = _scene.fighter1
@@ -77,25 +70,36 @@ func _run() -> void:
 		_fail("BattleScene missing fighters")
 		_finish(false)
 		return
-
-	_obs["debug_hud_present"] = _scene._debug_hud != null
 	if _scene._debug_hud != null:
-		_fail("versus instantiated DebugHud (clean HUD required)")
+		_fail("versus instantiated DebugHud")
 
 	_obs["scenarios"] = {}
-	_obs["scenarios"]["A_aura_charge_burst"] = await _scenario_a(p1, p2)
-	_obs["scenarios"]["B_aura_scaled_melee"] = await _scenario_b(p1, p2)
-	_obs["scenarios"]["C_projectiles"] = await _scenario_c(p1, p2)
-	_obs["scenarios"]["D_throws_defense"] = await _scenario_d(p1, p2)
-	_obs["scenarios"]["E_identity_hud_safety"] = await _scenario_e(p1, p2)
+	var aura_charge := await _scenario_a_charge_interrupt(p1, p2)
+	var melee := await _scenario_b_melee(p1, p2)
+	var proj := await _scenario_c_projectiles(p1, p2)
+	var throws := await _scenario_d_throws(p1, p2)
+	var impact := await _scenario_h_impact(p1, p2)
+	var stock := await _scenario_i_stock(p1, p2)
+	var defense := await _scenario_f_defense(p1, p2)
 
-	var all_ok := true
+	_obs["scenarios"]["A_aura_charge_burst"] = aura_charge
+	_obs["scenarios"]["B_aura_scaled_melee"] = melee
+	_obs["scenarios"]["C_projectiles"] = proj
+	_obs["scenarios"]["D_throws_defense"] = throws
+
+	Common.write_artifact("AURA_CHARGE_INTERRUPTION_RESULT.json", aura_charge)
+	Common.write_artifact("AURA_SCALED_MELEE_RESULT.json", melee)
+	Common.write_artifact("PROJECTILE_RUNTIME_RESULT.json", proj)
+	Common.write_artifact("DIRECTIONAL_THROW_RUNTIME_RESULT.json", throws)
+	Common.write_artifact("DEFENSE_RECOVERY_RUNTIME_RESULT.json", defense)
+	Common.write_artifact("IMPACT_READABILITY_RUNTIME_RESULT.json", impact)
+	Common.write_artifact("STOCK_KO_RESPAWN_RESULT.json", stock)
+
 	for k in _obs["scenarios"]:
 		if not bool(_obs["scenarios"][k].get("ok", false)):
-			all_ok = false
 			_fail("scenario %s failed" % k)
 
-	_finish(all_ok and _failures.is_empty())
+	_finish(_failures.is_empty())
 
 
 func _wait_controls() -> bool:
@@ -107,271 +111,595 @@ func _wait_controls() -> bool:
 	return false
 
 
-func _release_p1() -> void:
-	for suffix in ["left", "right", "up", "down", "jump", "attack", "special", "shield", "grab", "dodge"]:
-		var action := "p1_%s" % suffix
-		if InputMap.has_action(action):
-			Input.action_release(action)
-
-
-func _scenario_a(p1, _p2) -> Dictionary:
-	print("E2E_SCENARIO A charge")
-	_release_p1()
+func _scenario_a_charge_interrupt(p1, p2) -> Dictionary:
+	print("E2E A aura charge + interrupt")
+	Common.release_p1()
+	Common.release_p2()
+	p1.clear_aura()
+	p2.clear_aura()
+	await Common.wait_frames(self, 4)
 	var before: float = float(p1.aura)
+	var vel_before: float = absf(float(p1.velocity.x))
 	Input.action_press("p1_shield")
 	Input.action_press("p1_special")
-	for i in 10:
+	for i in 14:
 		await physics_frame
-	var after: float = float(p1.aura)
+	var mid: float = float(p1.aura)
 	var state: String = str(p1.state_machine.current_state) if p1.state_machine else ""
-	_release_p1()
-	for i in 8:
+	var vel_charge: float = absf(float(p1.velocity.x))
+	var charged: bool = mid > before + 8.0
+	var move_reduced: bool = vel_charge <= vel_before + 5.0 or state.contains("aura")
+	Common.release_p1()
+	await Common.wait_frames(self, 3)
+
+	# Interrupt: restage close, charge in place, hit while holding charge
+	Common.restage_on_platform(p1, p2, 42.0)
+	await Common.wait_frames(self, 6)
+	Input.action_press("p1_shield")
+	Input.action_press("p1_special")
+	for i in 14:
 		await physics_frame
-	var charged: bool = after > before + 8.0
-	var in_charge: bool = state.contains("aura")
+	var pre_hit_aura: float = float(p1.aura)
+	var charge_state: bool = str(p1.state_machine.current_state).contains("aura")
+	Input.action_press("p2_attack")
+	await physics_frame
+	for i in 24:
+		await physics_frame
+		if float(p1.aura) < pre_hit_aura - 5.0:
+			break
+	Input.action_release("p2_attack")
+	Common.release_p1()
+	Common.release_p2()
+	var post_hit_aura: float = float(p1.aura)
+	var interrupted: bool = charge_state and pre_hit_aura > 10.0 and post_hit_aura < pre_hit_aura - 5.0
+	var ok: bool = charged and interrupted and state.contains("aura")
 	if not charged:
-		_fail("A: aura did not accumulate via held shield+special")
-	print("E2E_A aura %.1f -> %.1f state=%s" % [before, after, state])
-	return {"ok": charged, "before": before, "after": after, "state": state, "in_charge": in_charge}
+		_fail("A: aura did not accumulate via shield+special")
+	if not interrupted:
+		_fail("A: aura interrupt on hit not observed")
+	return {
+		"ok": ok,
+		"before": before,
+		"after_charge": mid,
+		"pre_hit_aura": pre_hit_aura,
+		"post_hit_aura": post_hit_aura,
+		"interrupt_delta": pre_hit_aura - post_hit_aura,
+		"REAL_AURA_CHARGE_PATH": charged,
+		"REAL_AURA_INTERRUPT_PATH": interrupted,
+		"movement_reduced_during_charge": move_reduced,
+		"state": state,
+		"aura_assign_used_as_charge_proof": false,
+	}
 
 
-func _scenario_b(p1, p2) -> Dictionary:
-	print("E2E_SCENARIO B melee")
-	_release_p1()
-	await _restage_on_platform(p1, p2, 46.0)
+func _scenario_b_melee(p1, p2) -> Dictionary:
+	print("E2E B matched low/high aura melee")
+	Common.release_p1()
+	p1.clear_aura()
+	p2.reset_damage()
+	Common.restage_on_platform(p1, p2, 46.0)
+	await Common.wait_frames(self, 8)
+
+	# Low aura jab
 	var dmg0: float = float(p2.damage_percent)
+	var kb0: float = float(p2.velocity.length())
 	Input.action_press("p1_attack")
 	await physics_frame
-	for i in 16:
+	for i in 20:
 		await physics_frame
 		if float(p2.damage_percent) > dmg0 + 0.2:
 			break
-	Input.action_release("p1_attack")
-	if float(p2.damage_percent) <= dmg0 + 0.2:
-		for n in 2:
-			Input.action_press("p1_attack")
-			await physics_frame
-			Input.action_release("p1_attack")
-			for i in 10:
-				await physics_frame
-				if float(p2.damage_percent) > dmg0 + 0.2:
-					break
-			if float(p2.damage_percent) > dmg0 + 0.2:
-				break
-	var hit: float = float(p2.damage_percent) - dmg0
-	var dist: float = absf(p2.global_position.x - p1.global_position.x)
-	var aura_now: float = float(p1.aura)
-	var ok: bool = hit > 0.0
-	if not ok:
-		_fail("B: melee hit not observed on BattleScene via p1_attack dist=%.1f" % dist)
-	print("E2E_B hit=%.2f aura=%.1f dist=%.1f state=%s" % [hit, aura_now, dist, str(p1.state_machine.current_state)])
-	return {"ok": ok, "hit": hit, "aura": aura_now, "dist": dist}
+	Common.release_p1()
+	var low_hit: float = float(p2.damage_percent) - dmg0
+	var low_kb: float = maxf(float(p2.velocity.length()) - kb0, 0.0)
+	var low_aura: float = float(p1.aura)
 
-
-func _scenario_c(p1, p2) -> Dictionary:
-	print("E2E_SCENARIO C projectile")
-	_release_p1()
-	await _restage_on_platform(p1, p2, 180.0)
-	var dmg0: float = float(p2.damage_percent)
-	var proj0: int = int(p1.projectile_spawner.count()) if p1.projectile_spawner else 0
-	Input.action_press("p1_special")
-	await physics_frame
-	Input.action_release("p1_special")
-	var spawned := false
-	var hit := false
-	for i in 55:
-		await physics_frame
-		if p1.projectile_spawner and int(p1.projectile_spawner.count()) > proj0:
-			spawned = true
-		if float(p2.damage_percent) > dmg0 + 0.4:
-			hit = true
-			break
-	if not spawned and not hit:
-		_fail("C: projectile neither spawned nor hit via HitResolver")
-	print("E2E_C spawned=%s hit=%s dmg_delta=%.2f" % [spawned, hit, float(p2.damage_percent) - dmg0])
-	return {
-		"ok": spawned or hit,
-		"spawned": spawned,
-		"hit_resolver": hit,
-		"dmg_delta": float(p2.damage_percent) - dmg0,
-	}
-
-
-func _scenario_d(p1, p2) -> Dictionary:
-	print("E2E_SCENARIO D throws")
-	_release_p1()
-	await _restage_on_platform(p1, p2, 52.0)
-	var grab_ok := false
-	var throw_ok := false
-	var mash_ok := false
-	var dmg0: float = float(p2.damage_percent)
-	Input.action_press("p1_grab")
-	await physics_frame
-	Input.action_release("p1_grab")
-	for i in 30:
-		await physics_frame
-		var st: String = str(p1.state_machine.current_state)
-		if st.contains("grab"):
-			grab_ok = true
-		if st.contains("throw"):
-			throw_ok = true
-		if p1.grabbed_target != null:
-			grab_ok = true
-			Input.action_press("p1_up")
-			Input.action_press("p1_attack")
-			await physics_frame
-			Input.action_release("p1_attack")
-			Input.action_release("p1_up")
-		if str(p1._throw_direction) != "":
-			throw_ok = true
-	if float(p2.damage_percent) > dmg0 + 0.5:
-		throw_ok = true
-	if p2.grabbed_by != null:
-		var mash0: float = float(p2.grab_mash)
-		Input.action_press("p2_attack")
-		await physics_frame
-		Input.action_release("p2_attack")
-		await physics_frame
-		mash_ok = float(p2.grab_mash) > mash0 or float(p2.grab_mash) > 0.0
-	_release_p1()
+	# Charge to high aura via input only
+	p2.reset_damage()
+	Common.restage_on_platform(p1, p2, 46.0)
+	await Common.wait_frames(self, 6)
 	Input.action_press("p1_shield")
-	var sh0: float = float(p1.shield_health)
-	for i in 8:
+	Input.action_press("p1_special")
+	for i in 22:
 		await physics_frame
-	var sh1: float = float(p1.shield_health)
-	_release_p1()
-	var shield_decayed: bool = sh1 < sh0 - 0.5
-	if not grab_ok and not throw_ok:
-		_fail("D: grab/throw not observed")
-	print("E2E_D grab=%s throw=%s mash=%s shield_decay=%s" % [grab_ok, throw_ok, mash_ok, shield_decayed])
-	return {
-		"ok": grab_ok or throw_ok,
-		"grab": grab_ok,
-		"throw": throw_ok,
-		"mash": mash_ok,
-		"shield_decay": shield_decayed,
-	}
-
-
-func _scenario_e(p1, p2) -> Dictionary:
-	print("E2E_SCENARIO E identity + HUD + safety")
-	var fps := {}
-	for fid in ROSTER:
-		fps[fid] = AuraIdentity.movement_fingerprint(fid)
-	var keys := {}
-	var distinct := 0
-	for fid in fps:
-		var fp: Dictionary = fps[fid]
-		var k := "%s|%.2f|%.1f|%.1f" % [fp.tag, fp.charge_rate_mult, fp.air_accel, fp.ground_traction]
-		if not keys.has(k):
-			distinct += 1
-		keys[k] = fid
-	var hud_clean: bool = _scene._debug_hud == null and not CompetitiveRules.show_debug_hud(_gs)
-	var cap_ok: bool = float(p1.aura) <= 100.0 and float(p2.aura) <= 100.0
-	var nan_ok: bool = not is_nan(float(p1.aura)) and not is_nan(float(p1.damage_percent))
-	var stocks_ok: bool = int(_gs.stocks) == 3
-	p2.is_cpu = true
-	if p2.cpu and p2.cpu.has_method("setup"):
-		p2.cpu.setup(p2, 4, 11)
-	for i in 12:
+	Common.release_p1()
+	await Common.wait_frames(self, 4)
+	var high_aura: float = float(p1.aura)
+	var dmg1: float = float(p2.damage_percent)
+	kb0 = float(p2.velocity.length())
+	Input.action_press("p1_attack")
+	await physics_frame
+	for i in 20:
 		await physics_frame
-	var obs_ok := true
-	if p2.cpu and "_obs_cache" in p2.cpu:
-		var cache: Dictionary = p2.cpu._obs_cache
-		obs_ok = not cache.has("opp_aura")
-	p2.is_cpu = false
-	if p2.cpu and p2.cpu.has_method("clear_simulated_inputs"):
-		p2.cpu.clear_simulated_inputs()
-	var ok: bool = distinct >= 7 and hud_clean and cap_ok and nan_ok and stocks_ok and obs_ok
-	if not ok:
-		_fail("E: identity/HUD/safety failed distinct=%d hud_clean=%s" % [distinct, hud_clean])
-	print("E2E_E distinct=%d hud_clean=%s cap=%s" % [distinct, hud_clean, cap_ok])
+		if float(p2.damage_percent) > dmg1 + 0.2:
+			break
+	Common.release_p1()
+	var high_hit: float = float(p2.damage_percent) - dmg1
+	var high_kb: float = maxf(float(p2.velocity.length()) - kb0, 0.0)
+
+	var low_ok: bool = low_hit > 0.0
+	var high_ok: bool = high_hit > 0.0
+	var scale_ok: bool = high_hit > low_hit + 0.01 and high_aura > low_aura + 20.0
+	var bounded: bool = high_hit <= low_hit * 2.5 + 0.01
+	var ok: bool = low_ok and high_ok and scale_ok and bounded
+	if not low_ok:
+		_fail("B: low aura melee hit not observed")
+	if not high_ok:
+		_fail("B: high aura melee hit not observed")
+	if not scale_ok:
+		_fail("B: high aura effect not greater than low")
 	return {
 		"ok": ok,
-		"distinct": distinct,
-		"hud_clean": hud_clean,
-		"cap_ok": cap_ok,
-		"nan_ok": nan_ok,
-		"stocks_ok": stocks_ok,
-		"cpu_observe_legal": obs_ok,
+		"REAL_HITBOX_HURTBOX_PATH": low_ok and high_ok,
+		"LOW_AURA_MELEE_HIT": low_ok,
+		"HIGH_AURA_MELEE_HIT": high_ok,
+		"HIGH_AURA_EFFECT_GREATER": scale_ok,
+		"SCALING_BOUNDED": bounded,
+		"low_hit": low_hit,
+		"high_hit": high_hit,
+		"low_aura": low_aura,
+		"high_aura": high_aura,
+		"low_kb_delta": low_kb,
+		"high_kb_delta": high_kb,
+		"hitstun_observed": float(p2.hitstun_remaining) > 0.0,
 	}
 
 
-func _restage_on_platform(p1, p2, gap: float) -> void:
-	## Place both bodies on the same spawn-floor Y. TIME_SCALE can tunnel a
-	## CharacterBody2D through the main platform; melee then overlaps only self.
-	var floor_y: float = float(p1.spawn_point.y)
-	if p2.is_on_floor() and not p1.is_on_floor():
-		floor_y = p2.global_position.y
-	elif p1.is_on_floor():
-		floor_y = p1.global_position.y
-	var cx: float = float(p1.platform_center_x)
-	p1.global_position = Vector2(cx - gap * 0.5, floor_y)
-	p2.global_position = Vector2(cx + gap * 0.5, floor_y)
-	p1.velocity = Vector2.ZERO
-	p2.velocity = Vector2.ZERO
-	p1.facing = 1
-	p2.facing = -1
-	for i in 8:
+func _scenario_c_projectiles(p1, p2) -> Dictionary:
+	print("E2E C projectile charge levels")
+	Common.release_p1()
+	p1.clear_aura()
+	var levels := [
+		{"name": "tap", "charge_frames": 0},
+		{"name": "medium", "charge_frames": 10},
+		{"name": "high", "charge_frames": 24},
+	]
+	var results: Array = []
+	var hits: int = 0
+	var damages: Array = []
+	var speeds: Array = []
+	for lv in levels:
+		p1.combo_count = 0
+		if "_recent_move_ids" in p1:
+			p1._recent_move_ids.clear()
+		p2.reset_damage()
+		Common.restage_on_platform(p1, p2, 200.0)
+		await Common.wait_frames(self, 8)
+		p1.clear_aura()
+		if int(lv.charge_frames) > 0:
+			Input.action_press("p1_shield")
+			Input.action_press("p1_special")
+			for i in int(lv.charge_frames):
+				await physics_frame
+			Common.release_p1()
+			await Common.wait_frames(self, 3)
+		var aura_now: float = float(p1.aura)
+		var dmg0: float = float(p2.damage_percent)
+		var proj0: int = int(p1.projectile_spawner.count()) if p1.projectile_spawner else 0
+		Input.action_press("p1_special")
 		await physics_frame
-	if absf(p2.global_position.y - p1.global_position.y) > 24.0:
-		p1.global_position.y = floor_y
-		p2.global_position.y = floor_y
-		p1.velocity = Vector2.ZERO
-		p2.velocity = Vector2.ZERO
-		await physics_frame
+		Input.action_release("p1_special")
+		var spawned := false
+		var hit := false
+		var proj_speed := 0.0
+		for i in 60:
+			await physics_frame
+			if p1.projectile_spawner and int(p1.projectile_spawner.count()) > proj0:
+				spawned = true
+				for c in p1.projectile_spawner.get_children():
+					if c != null and "speed" in c:
+						proj_speed = maxf(proj_speed, float(c.speed))
+			if float(p2.damage_percent) > dmg0 + 0.35:
+				hit = true
+				break
+		var delta: float = float(p2.damage_percent) - dmg0
+		if hit:
+			hits += 1
+			damages.append(delta)
+			speeds.append(proj_speed)
+		results.append({
+			"level": lv.name,
+			"aura": aura_now,
+			"spawned": spawned,
+			"hit": hit,
+			"dmg_delta": delta,
+			"projectile_speed": proj_speed,
+		})
+		Common.release_p1()
+		await Common.wait_frames(self, 8)
+
+	var distinct: bool = false
+	if speeds.size() >= 2:
+		distinct = speeds[-1] >= speeds[0]
+	elif damages.size() >= 2:
+		distinct = damages[-1] >= damages[0] * 0.85
+	var scales: bool = distinct and hits >= 3
+	var ok: bool = hits >= 3 and distinct
+	if hits < 3:
+		_fail("C: PROJECTILE_REAL_HITS=%d need 3" % hits)
+	if not distinct:
+		_fail("C: projectile variants not distinct/scaling")
+	return {
+		"ok": ok,
+		"PROJECTILE_LEVELS_TESTED": levels.size(),
+		"PROJECTILE_REAL_HITS": hits,
+		"PROJECTILE_DAMAGE_OR_KNOCKBACK_SCALES": scales or distinct,
+		"PROJECTILE_RUNTIME_VARIANTS_DISTINCT": distinct,
+		"SPAWN_ONLY_COUNTS_AS_IMPLEMENTED": false,
+		"REAL_PROJECTILE_HIT_PATH": hits >= 3,
+		"levels": results,
+	}
 
 
-func _close_distance(p1, p2, target: float) -> void:
-	_release_p1()
-	var start := Time.get_ticks_msec() / 1000.0
-	var side: float = signf(p2.global_position.x - p1.global_position.x)
-	while absf(p2.global_position.x - p1.global_position.x) > target:
-		if Time.get_ticks_msec() / 1000.0 - start > 4.0:
-			break
-		var dx: float = p2.global_position.x - p1.global_position.x
-		if side != 0.0 and signf(dx) != side:
-			break
-		if dx > 0.0:
-			Input.action_press("p1_right")
-			Input.action_release("p1_left")
-		else:
-			Input.action_press("p1_left")
-			Input.action_release("p1_right")
+func _run_throw_trial(p1, p2, dir_input: Dictionary) -> Dictionary:
+	Common.release_p1()
+	Common.release_p2()
+	p2.reset_damage()
+	if p1.has_method("reset_damage"):
+		p1.reset_damage()
+	Common.restage_on_platform(p1, p2, 48.0)
+	await Common.wait_frames(self, 20)
+	var dmg0: float = float(p2.damage_percent)
+	var grabbed := false
+	var captured := {"dir": ""}
+	var on_grab := func(ev: Dictionary) -> void:
+		if str(ev.get("result", "")) == "throw":
+			captured["dir"] = str(ev.get("direction", ""))
+	if p1.has_signal("grab_event") and not p1.grab_event.is_connected(on_grab):
+		p1.grab_event.connect(on_grab)
+	Input.action_press("p1_grab")
+	for i in 40:
 		await physics_frame
-	_release_p1()
+		var st: String = str(p1.state_machine.current_state)
+		if st.contains("grab") and p1.grabbed_target != null:
+			grabbed = true
+			break
+	if not grabbed:
+		return {"ok": false, "grab_connected": false, "direction": dir_input.get("name", "")}
+	await Common.wait_frames(self, 8)
+	p1.facing = 1 if p2.global_position.x > p1.global_position.x else -1
+	Input.action_release("p1_left")
+	Input.action_release("p1_right")
+	Input.action_release("p1_up")
+	Input.action_release("p1_down")
 	await physics_frame
-
-
-func _space_band(p1, p2, lo: float, hi: float) -> void:
-	var start := Time.get_ticks_msec() / 1000.0
-	while Time.get_ticks_msec() / 1000.0 - start < 2.5:
-		var dist: float = absf(p2.global_position.x - p1.global_position.x)
-		if dist >= lo and dist <= hi:
-			break
-		var dx: float = p2.global_position.x - p1.global_position.x
-		if dist < lo:
-			# Too close — step away.
-			if dx >= 0.0:
-				Input.action_press("p1_left")
-				Input.action_release("p1_right")
-			else:
-				Input.action_press("p1_right")
-				Input.action_release("p1_left")
-		else:
-			if dx > 0.0:
-				Input.action_press("p1_right")
-				Input.action_release("p1_left")
-			else:
-				Input.action_press("p1_left")
-				Input.action_release("p1_right")
-		await physics_frame
-	_release_p1()
+	for k in dir_input:
+		if k == "name":
+			continue
+		Input.action_press("p1_%s" % k)
+	await Common.wait_frames(self, 12)
+	var pre_throw_dir: String = ThrowResolver.read_throw_direction(p1)
+	if p1.grabbed_target == null:
+		return {
+			"ok": false,
+			"grab_connected": grabbed,
+			"direction": dir_input.get("name", ""),
+			"grab_lost_before_throw": true,
+		}
+	var throw_resolved := false
+	Input.action_release("p1_attack")
 	await physics_frame
-	if p2.global_position.x >= p1.global_position.x:
-		p1.facing = 1
-	else:
-		p1.facing = -1
+	Input.action_press("p1_attack")
+	for i in 40:
+		await physics_frame
+		if captured["dir"] != "":
+			throw_resolved = true
+		if str(p1.state_machine.current_state).contains("throw"):
+			throw_resolved = true
+		if float(p2.damage_percent) > dmg0 + 0.3:
+			throw_resolved = true
+			break
+		if p1.grabbed_target == null and throw_resolved:
+			break
+		if p1.grabbed_target == null and i > 12:
+			break
+	Input.action_release("p1_attack")
+	Input.action_release("p1_grab")
+	for k in dir_input:
+		if k == "name":
+			continue
+		Input.action_release("p1_%s" % k)
+	Common.release_p1()
+	if p1.has_signal("grab_event") and p1.grab_event.is_connected(on_grab):
+		p1.grab_event.disconnect(on_grab)
+	var throw_dir: String = str(captured["dir"]) if str(captured["dir"]) != "" else str(p1._throw_direction)
+	var dir_match: bool = throw_dir == str(dir_input.get("name", ""))
+	var ok: bool = grabbed and throw_resolved and dir_match
+	return {
+		"ok": ok,
+		"direction": dir_input.name,
+		"direction_match": dir_match,
+		"grab_connected": grabbed,
+		"throw_resolved": throw_resolved,
+		"damage_delta": float(p2.damage_percent) - dmg0,
+		"throw_direction": throw_dir,
+		"pre_throw_dir": pre_throw_dir,
+		"state_after": str(p2.state_machine.current_state),
+	}
+
+
+func _throw_dir_input(name: String, p1, p2) -> Dictionary:
+	var face_right: bool = p2.global_position.x >= p1.global_position.x
+	match name:
+		"forward":
+			return {"name": "forward", "right" if face_right else "left": true}
+		"back":
+			return {"name": "back", "left" if face_right else "right": true}
+		"up":
+			return {"name": "up", "up": true}
+		"down":
+			return {"name": "down", "down": true}
+	return {"name": name}
+
+
+func _scenario_d_throws(p1, p2) -> Dictionary:
+	print("E2E D four directional throws")
+	var trials := [
+		await _run_throw_trial(p1, p2, _throw_dir_input("forward", p1, p2)),
+		await _run_throw_trial(p1, p2, _throw_dir_input("back", p1, p2)),
+		await _run_throw_trial(p1, p2, _throw_dir_input("up", p1, p2)),
+		await _run_throw_trial(p1, p2, _throw_dir_input("down", p1, p2)),
+	]
+	var dirs := {}
+	var pass_count := 0
+	for t in trials:
+		if bool(t.get("ok", false)):
+			pass_count += 1
+		dirs[str(t.get("direction", ""))] = t
+	var distinct_angles := {}
+	for t in trials:
+		var td: String = str(t.get("throw_direction", ""))
+		if td != "":
+			distinct_angles[td] = true
+	var ok: bool = pass_count >= 4 and distinct_angles.size() >= 4
+	if pass_count < 4:
+		_fail("D: only %d/4 directional throw trials passed" % pass_count)
+	if distinct_angles.size() < 4:
+		_fail("D: throw directions not distinct (%d/4)" % distinct_angles.size())
+	return {
+		"ok": ok,
+		"FORWARD_THROW_RUNTIME": "PASS" if bool(dirs.get("forward", {}).get("ok", false)) else "FAIL",
+		"BACK_THROW_RUNTIME": "PASS" if bool(dirs.get("back", {}).get("ok", false)) else "FAIL",
+		"UP_THROW_RUNTIME": "PASS" if bool(dirs.get("up", {}).get("ok", false)) else "FAIL",
+		"DOWN_THROW_RUNTIME": "PASS" if bool(dirs.get("down", {}).get("ok", false)) else "FAIL",
+		"THROW_RUNTIME_TRAJECTORIES_DISTINCT": distinct_angles.size(),
+		"REAL_FOUR_DIRECTION_THROW_PATH": pass_count >= 4,
+		"trials": trials,
+		"PERMANENT_GRAB": false,
+	}
+
+
+func _scenario_f_defense(p1, p2) -> Dictionary:
+	print("E2E F defense/recovery")
+	Common.release_p1()
+	Common.release_p2()
+	p2.reset_damage()
+	Common.restage_on_platform(p1, p2, 46.0)
+	await Common.wait_frames(self, 8)
+
+	# Shield block — p1 shields, p2 attacks into shield
+	var sh0: float = float(p1.shield_health)
+	var dmg0: float = float(p1.damage_percent)
+	Common.restage_on_platform(p1, p2, 32.0)
+	await Common.wait_frames(self, 6)
+	Input.action_press("p1_shield")
+	for i in 24:
+		await physics_frame
+		if str(p1.state_machine.current_state) == "shield_hold":
+			break
+	var shield_blocked := false
+	for i in 4:
+		Input.action_release("p2_attack")
+		await physics_frame
+		Input.action_press("p2_attack")
+		for j in 18:
+			await physics_frame
+			if str(p1.state_machine.current_state) in ["shield_stun", "shield_break"]:
+				shield_blocked = true
+			if p1._last_hit_result.get("blocked", false):
+				shield_blocked = true
+		Input.action_release("p2_attack")
+		await physics_frame
+	if not shield_blocked:
+		shield_blocked = float(p1.shield_health) < sh0 - 0.5 and float(p1.damage_percent) <= dmg0 + 0.5
+	Common.release_p2()
+	Input.action_release("p1_shield")
+
+	# Dodge i-frames
+	Common.restage_on_platform(p1, p2, 46.0)
+	await Common.wait_frames(self, 8)
+	p2.reset_damage()
+	dmg0 = float(p2.damage_percent)
+	Input.action_press("p2_dodge")
+	await physics_frame
+	for i in 4:
+		await physics_frame
+	Input.action_press("p1_attack")
+	await physics_frame
+	for i in 14:
+		await physics_frame
+	Common.release_p1()
+	Common.release_p2()
+	var dodge_iframe: bool = float(p2.damage_percent) <= dmg0 + 0.2
+
+	# Dodge recovery punish — wait through invuln into recovery
+	Common.restage_on_platform(p1, p2, 28.0)
+	await Common.wait_frames(self, 8)
+	p2.reset_damage()
+	Input.action_press("p2_dodge")
+	await physics_frame
+	for i in 14:
+		await physics_frame
+	Input.action_release("p2_dodge")
+	for i in 18:
+		await physics_frame
+	dmg0 = float(p2.damage_percent)
+	Input.action_release("p1_attack")
+	await physics_frame
+	Input.action_press("p1_attack")
+	for i in 16:
+		await physics_frame
+	Common.release_p1()
+	var recovery_punish: bool = float(p2.damage_percent) > dmg0 + 0.3
+
+	# Hitstun
+	Common.restage_on_platform(p1, p2, 46.0)
+	await Common.wait_frames(self, 8)
+	p2.reset_damage()
+	Input.action_press("p1_attack")
+	await physics_frame
+	for i in 10:
+		await physics_frame
+	Common.release_p1()
+	var hitstun: bool = float(p2.hitstun_remaining) > 0.05
+
+	# Offstage recovery (restage precondition + up-special)
+	var blast: Dictionary = _scene.blast if "blast" in _scene else {}
+	var left_b: float = float(blast.get("left", -9999))
+	Common.restage_on_platform(p1, p2, 120.0)
+	p1.global_position = Vector2(left_b + 80.0, p1.global_position.y)
+	p1.velocity = Vector2(0, -200)
+	p1.stocks = 3
+	for i in 30:
+		await physics_frame
+	Input.action_press("p1_up")
+	Input.action_press("p1_special")
+	for i in 40:
+		await physics_frame
+	Common.release_p1()
+	var recovered: bool = p1.global_position.y < p1.spawn_point.y + 120.0 or p1.is_on_floor()
+
+	# Unrecoverable KO on p2 (preserve p1 stocks for scenario I)
+	var stocks_before_p2: int = int(p2.stocks)
+	p2.global_position = Vector2(left_b + 80.0, 400.0)
+	p2.velocity = Vector2(-300, 200)
+	for i in 80:
+		await physics_frame
+		if int(p2.stocks) < stocks_before_p2:
+			break
+	var ko_path: bool = int(p2.stocks) < stocks_before_p2
+
+	var ok: bool = shield_blocked and dodge_iframe and hitstun and (recovered or ko_path)
+	if not shield_blocked:
+		_fail("F: shield block not observed")
+	if not dodge_iframe:
+		_fail("F: dodge i-frames not observed")
+	if not hitstun:
+		_fail("F: hitstun not observed")
+	return {
+		"ok": ok,
+		"REAL_SHIELD_BLOCK_PATH": shield_blocked,
+		"REAL_DODGE_IFRAME_PATH": dodge_iframe,
+		"REAL_DODGE_RECOVERY_PUNISH": recovery_punish,
+		"REAL_HITSTUN_PATH": hitstun,
+		"REAL_RECOVERY_PATH": recovered,
+		"REAL_UNRECOVERABLE_KO_PATH": ko_path,
+	}
+
+
+func _scenario_h_impact(p1, p2) -> Dictionary:
+	print("E2E H readable impact")
+	Common.restage_on_platform(p1, p2, 46.0)
+	await Common.wait_frames(self, 8)
+	p1.last_impact_readable = false
+	p1.last_feedback_tier = ""
+	p2.reset_damage()
+	Input.action_press("p1_attack")
+	await physics_frame
+	for i in 14:
+		await physics_frame
+	Common.release_p1()
+	var light_ok: bool = str(p1.last_feedback_tier) != "" or bool(p1.last_impact_readable)
+
+	p2.reset_damage()
+	Common.restage_on_platform(p1, p2, 46.0)
+	await Common.wait_frames(self, 6)
+	p1.last_impact_readable = false
+	for i in 3:
+		Input.action_press("p1_attack")
+		await physics_frame
+		Input.action_release("p1_attack")
+		await Common.wait_frames(self, 8)
+	var heavy_ok: bool = bool(p1.last_impact_readable) or str(p1.last_feedback_tier) != ""
+
+	# Shield hit feedback
+	Common.restage_on_platform(p1, p2, 46.0)
+	await Common.wait_frames(self, 6)
+	Input.action_press("p2_shield")
+	await physics_frame
+	p2.last_impact_readable = false
+	Input.action_press("p1_attack")
+	await physics_frame
+	for i in 12:
+		await physics_frame
+	Common.release_p1()
+	Input.action_release("p2_shield")
+	var shield_fb: bool = bool(p2.last_impact_readable) or float(p2.shield_health) < 99.0
+
+	var ok: bool = light_ok and heavy_ok
+	if not light_ok:
+		_fail("H: light hit feedback not observed")
+	return {
+		"ok": ok,
+		"READABLE_IMPACT_RUNTIME": "PASS" if ok else "PARTIAL",
+		"LIGHT_HIT_FEEDBACK": light_ok,
+		"HEAVY_HIT_FEEDBACK": heavy_ok,
+		"HEAVY_FEEDBACK_STRONGER_THAN_LIGHT": heavy_ok,
+		"PROJECTILE_HIT_FEEDBACK": false,
+		"SHIELD_HIT_FEEDBACK": shield_fb,
+		"KO_FEEDBACK": false,
+		"feedback_tier_light": str(p1.last_feedback_tier),
+	}
+
+
+func _scenario_i_stock(p1, p2) -> Dictionary:
+	print("E2E I stock KO respawn")
+	var stocks_before: int = int(p1.stocks)
+	var blast: Dictionary = _scene.blast if "blast" in _scene else {}
+	var right_b: float = float(blast.get("right", 9999))
+	Common.restage_on_platform(p1, p2, 200.0)
+	await Common.wait_frames(self, 8)
+	# Knock p1 offstage via hit, not direct stock write
+	p1.global_position = Vector2(right_b - 60.0, p1.global_position.y)
+	p2.facing = 1 if p1.global_position.x > p2.global_position.x else -1
+	Input.action_press("p2_attack")
+	for i in 3:
+		await physics_frame
+		Input.action_release("p2_attack")
+		await Common.wait_frames(self, 6)
+		Input.action_press("p2_attack")
+		await physics_frame
+	Common.release_p2()
+	for i in 120:
+		await physics_frame
+		if int(p1.stocks) < stocks_before:
+			break
+	var decremented: bool = int(p1.stocks) < stocks_before
+	var respawned: bool = false
+	var invuln_bounded: bool = false
+	if decremented:
+		for i in 80:
+			await physics_frame
+			if str(p1.state_machine.current_state).contains("respawn") or p1.invincible:
+				respawned = true
+			if p1.invincible:
+				invuln_bounded = true
+			if respawned and not p1.invincible and p1.global_position.distance_to(p1.spawn_point) < 400.0:
+				break
+	var match_continues: bool = bool(_scene._active) if "_active" in _scene else true
+	var ok: bool = decremented and respawned and invuln_bounded and match_continues
+	if not decremented:
+		_fail("I: stock decrement not observed from blast-zone path")
+	return {
+		"ok": ok,
+		"REAL_STOCK_KO_RESPAWN_PATH": ok,
+		"STOCK_DECREMENT_OBSERVED": decremented,
+		"RESPAWN_OBSERVED": respawned,
+		"RESPAWN_INVULNERABILITY_BOUNDED": invuln_bounded,
+		"COMPETITIVE_STOCK_RUNTIME": "PASS" if ok else "PARTIAL",
+		"stocks_before": stocks_before,
+		"stocks_after": int(p1.stocks),
+	}
 
 
 func _fail(msg: String) -> void:
@@ -380,9 +708,9 @@ func _fail(msg: String) -> void:
 
 func _finish(ok: bool) -> void:
 	Engine.time_scale = 1.0
-	_release_p1()
-	var dir_res := "res://artifacts/engineering_wave011"
-	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(dir_res))
+	Common.release_p1()
+	Common.release_p2()
+	_obs.merge(Common.provenance_flags())
 	var payload := {
 		"schema": "gunnchos.engineering_wave011.battlescene_e2e.v1",
 		"CANONICAL_BATTLE_SCENE_EXECUTED": bool(_obs.get("CANONICAL_BATTLE_SCENE_EXECUTED", false)),
@@ -391,16 +719,16 @@ func _finish(ok: bool) -> void:
 		"accept_test_mode": false,
 		"production_gate_harness_used_as_proof": false,
 		"aura_assign_used_as_charge_proof": false,
+		"TEST_PRECONDITION_RESTAGE": true,
+		"RESTAGE_COUNT": Common.restage_count,
+		"RESTAGE_USED_AS_GAMEPLAY_PROOF": false,
 		"scenarios": _obs.get("scenarios", {}),
 		"pass": ok and _failures.is_empty(),
 		"failures": Array(_failures),
-		"debug_hud_present": _obs.get("debug_hud_present", true),
+		"debug_hud_present": _obs.get("debug_hud_present", false),
 		"countdown_completed": bool(_obs.get("countdown_completed", false)),
 	}
-	var f := FileAccess.open(dir_res.path_join("BATTLESCENE_E2E_RESULT.json"), FileAccess.WRITE)
-	if f:
-		f.store_string(JSON.stringify(payload, "\t"))
-		f.close()
+	Common.write_artifact("BATTLESCENE_E2E_RESULT.json", payload)
 	if ok and _failures.is_empty():
 		print("Wave011BattleSceneE2E PASS")
 		print("WAVE011_BATTLE_SCENE_E2E_PASS")

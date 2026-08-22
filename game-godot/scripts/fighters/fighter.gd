@@ -83,6 +83,7 @@ var _telegraph_pulse: ColorRect = null
 var _base_modulate: Color = Color.WHITE
 var _last_element_effect: String = ""
 var _throw_direction: String = ""
+var _grab_throw_latch: bool = false
 var _jab_chain: int = 0
 var _show_grab_range: bool = false
 var _show_projectile_boxes: bool = false
@@ -169,10 +170,15 @@ func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, s
 	if animator:
 		animator.set_proxy_visible(not model_loaded)
 	shield_health = float(data.get("shieldProfile", {}).get("maxHealth", 100))
+	var gs = get_node_or_null("/root/GameState")
 	var cpu_seed: int = 0
-	if "match_seed" in GameState:
-		cpu_seed = int(GameState.match_seed)
-	cpu.setup(self, GameState.cpu_level if is_cpu else 2, cpu_seed)
+	var cpu_level: int = 2
+	if gs != null:
+		if "match_seed" in gs:
+			cpu_seed = int(gs.match_seed)
+		if is_cpu and "cpu_level" in gs:
+			cpu_level = int(gs.cpu_level)
+	cpu.setup(self, cpu_level, cpu_seed)
 	if body and data.has("color"):
 		body.color = Color(data.get("color"))
 	if label:
@@ -342,14 +348,20 @@ func _handle_actions() -> void:
 	# Vesper phase cancel / Juno dash cancel — interrupt recovery when windows are live.
 	if _try_identity_cancel():
 		return
-	if not state_machine.can_attack():
-		return
 	if state_machine.current_state == _FighterStates.GRAB_HOLD:
 		_throw_direction = _ThrowResolver.read_throw_direction(self)
 		if grab_range_debug:
 			grab_range_debug.visible = _show_grab_range
-		if _read_attack_pressed() or _read_grab_pressed():
+		var attack_held := Input.is_action_pressed("p%d_attack" % slot)
+		if attack_held and not _grab_throw_latch:
+			_grab_throw_latch = true
 			execute_throw()
+		elif not attack_held:
+			_grab_throw_latch = false
+		elif _read_grab_pressed() and state_machine.state_time > 0.08:
+			execute_throw()
+		return
+	if not state_machine.can_attack():
 		return
 	if is_aura_input_held():
 		tick_aura_charge(get_physics_process_delta_time())
@@ -700,6 +712,8 @@ func _try_grab_connect() -> void:
 	opp.grabbed_by = self
 	opp.grab_mash = 0.0
 	grab_mash = 0.0
+	_grab_throw_latch = false
+	_throw_direction = ""
 	state_machine.enter(_FighterStates.GRAB_HOLD)
 	opp.state_machine.enter(_FighterStates.GRAB_HOLD)
 	grab_event.emit({"result": "success", "target": opp.fighter_id})
