@@ -1,0 +1,4557 @@
+{
+  "schema_version": 1,
+  "wave": "wave012",
+  "CORE_PIPELINE_MONETARY_COST_USD": 0,
+  "fighters": {
+    "ember-vale": {
+      "display_name": "Ember Vale",
+      "aura_grammar": "charges to overwhelm",
+      "clips": {
+        "idle": {
+          "intent": "ember-vale:idle",
+          "anticipation_frames": 4,
+          "contact_or_release": "loop",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.ember-vale.idle.vfx",
+          "sfx_cue": "juice.ember-vale.idle.sfx",
+          "camera_cue": "juice.ember-vale.idle.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "run": {
+          "intent": "ember-vale:run",
+          "anticipation_frames": 4,
+          "contact_or_release": "loop",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.ember-vale.run.vfx",
+          "sfx_cue": "juice.ember-vale.run.sfx",
+          "camera_cue": "juice.ember-vale.run.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "jump": {
+          "intent": "ember-vale:jump",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.ember-vale.jump.vfx",
+          "sfx_cue": "juice.ember-vale.jump.sfx",
+          "camera_cue": "juice.ember-vale.jump.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "fall": {
+          "intent": "ember-vale:fall",
+          "anticipation_frames": 4,
+          "contact_or_release": "loop",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.ember-vale.fall.vfx",
+          "sfx_cue": "juice.ember-vale.fall.sfx",
+          "camera_cue": "juice.ember-vale.fall.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "landing": {
+          "intent": "ember-vale:landing",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.ember-vale.landing.vfx",
+          "sfx_cue": "juice.ember-vale.landing.sfx",
+          "camera_cue": "juice.ember-vale.landing.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "jab_chain": {
+          "intent": "ember-vale:jab_chain",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "see moves json",
+          "vfx_cue": "juice.ember-vale.jab_chain.vfx",
+          "sfx_cue": "juice.ember-vale.jab_chain.sfx",
+          "camera_cue": "juice.ember-vale.jab_chain.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "directional_normals": {
+          "intent": "ember-vale:directional_normals",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.ember-vale.directional_normals.vfx",
+          "sfx_cue": "juice.ember-vale.directional_normals.sfx",
+          "camera_cue": "juice.ember-vale.directional_normals.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "aerials": {
+          "intent": "ember-vale:aerials",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "see moves json",
+          "vfx_cue": "juice.ember-vale.aerials.vfx",
+          "sfx_cue": "juice.ember-vale.aerials.sfx",
+          "camera_cue": "juice.ember-vale.aerials.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "heavy": {
+          "intent": "ember-vale:heavy",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "see moves json",
+          "vfx_cue": "juice.ember-vale.heavy.vfx",
+          "sfx_cue": "juice.ember-vale.heavy.sfx",
+          "camera_cue": "juice.ember-vale.heavy.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "aura_charge": {
+          "intent": "ember-vale:aura_charge",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.ember-vale.aura_charge.vfx",
+          "sfx_cue": "juice.ember-vale.aura_charge.sfx",
+          "camera_cue": "juice.ember-vale.aura_charge.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "projectile_tap": {
+          "intent": "ember-vale:projectile_tap",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.ember-vale.projectile_tap.vfx",
+          "sfx_cue": "juice.ember-vale.projectile_tap.sfx",
+          "camera_cue": "juice.ember-vale.projectile_tap.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "projectile_medium": {
+          "intent": "ember-vale:projectile_medium",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.ember-vale.projectile_medium.vfx",
+          "sfx_cue": "juice.ember-vale.projectile_medium.sfx",
+          "camera_cue": "juice.ember-vale.projectile_medium.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "projectile_full": {
+          "intent": "ember-vale:projectile_full",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.ember-vale.projectile_full.vfx",
+          "sfx_cue": "juice.ember-vale.projectile_full.sfx",
+          "camera_cue": "juice.ember-vale.projectile_full.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "grab": {
+          "intent": "ember-vale:grab",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.ember-vale.grab.vfx",
+          "sfx_cue": "juice.ember-vale.grab.sfx",
+          "camera_cue": "juice.ember-vale.grab.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_forward": {
+          "intent": "ember-vale:throw_forward",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.ember-vale.throw_forward.vfx",
+          "sfx_cue": "juice.ember-vale.throw_forward.sfx",
+          "camera_cue": "juice.ember-vale.throw_forward.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_back": {
+          "intent": "ember-vale:throw_back",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.ember-vale.throw_back.vfx",
+          "sfx_cue": "juice.ember-vale.throw_back.sfx",
+          "camera_cue": "juice.ember-vale.throw_back.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_up": {
+          "intent": "ember-vale:throw_up",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.ember-vale.throw_up.vfx",
+          "sfx_cue": "juice.ember-vale.throw_up.sfx",
+          "camera_cue": "juice.ember-vale.throw_up.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_down": {
+          "intent": "ember-vale:throw_down",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.ember-vale.throw_down.vfx",
+          "sfx_cue": "juice.ember-vale.throw_down.sfx",
+          "camera_cue": "juice.ember-vale.throw_down.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "shield": {
+          "intent": "ember-vale:shield",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.ember-vale.shield.vfx",
+          "sfx_cue": "juice.ember-vale.shield.sfx",
+          "camera_cue": "juice.ember-vale.shield.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "dodge": {
+          "intent": "ember-vale:dodge",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.ember-vale.dodge.vfx",
+          "sfx_cue": "juice.ember-vale.dodge.sfx",
+          "camera_cue": "juice.ember-vale.dodge.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "air_dodge": {
+          "intent": "ember-vale:air_dodge",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.ember-vale.air_dodge.vfx",
+          "sfx_cue": "juice.ember-vale.air_dodge.sfx",
+          "camera_cue": "juice.ember-vale.air_dodge.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "hurt": {
+          "intent": "ember-vale:hurt",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.ember-vale.hurt.vfx",
+          "sfx_cue": "juice.ember-vale.hurt.sfx",
+          "camera_cue": "juice.ember-vale.hurt.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "launch": {
+          "intent": "ember-vale:launch",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.ember-vale.launch.vfx",
+          "sfx_cue": "juice.ember-vale.launch.sfx",
+          "camera_cue": "juice.ember-vale.launch.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "tumble": {
+          "intent": "ember-vale:tumble",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.ember-vale.tumble.vfx",
+          "sfx_cue": "juice.ember-vale.tumble.sfx",
+          "camera_cue": "juice.ember-vale.tumble.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "recovery": {
+          "intent": "ember-vale:recovery",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.ember-vale.recovery.vfx",
+          "sfx_cue": "juice.ember-vale.recovery.sfx",
+          "camera_cue": "juice.ember-vale.recovery.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "ko": {
+          "intent": "ember-vale:ko",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.ember-vale.ko.vfx",
+          "sfx_cue": "juice.ember-vale.ko.sfx",
+          "camera_cue": "juice.ember-vale.ko.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "victory": {
+          "intent": "ember-vale:victory",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.ember-vale.victory.vfx",
+          "sfx_cue": "juice.ember-vale.victory.sfx",
+          "camera_cue": "juice.ember-vale.victory.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "defeat": {
+          "intent": "ember-vale:defeat",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.ember-vale.defeat.vfx",
+          "sfx_cue": "juice.ember-vale.defeat.sfx",
+          "camera_cue": "juice.ember-vale.defeat.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        }
+      }
+    },
+    "rook-ironside": {
+      "display_name": "Rook Ironside",
+      "aura_grammar": "charges to armor through",
+      "clips": {
+        "idle": {
+          "intent": "rook-ironside:idle",
+          "anticipation_frames": 4,
+          "contact_or_release": "loop",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.rook-ironside.idle.vfx",
+          "sfx_cue": "juice.rook-ironside.idle.sfx",
+          "camera_cue": "juice.rook-ironside.idle.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "run": {
+          "intent": "rook-ironside:run",
+          "anticipation_frames": 4,
+          "contact_or_release": "loop",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.rook-ironside.run.vfx",
+          "sfx_cue": "juice.rook-ironside.run.sfx",
+          "camera_cue": "juice.rook-ironside.run.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "jump": {
+          "intent": "rook-ironside:jump",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.rook-ironside.jump.vfx",
+          "sfx_cue": "juice.rook-ironside.jump.sfx",
+          "camera_cue": "juice.rook-ironside.jump.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "fall": {
+          "intent": "rook-ironside:fall",
+          "anticipation_frames": 4,
+          "contact_or_release": "loop",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.rook-ironside.fall.vfx",
+          "sfx_cue": "juice.rook-ironside.fall.sfx",
+          "camera_cue": "juice.rook-ironside.fall.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "landing": {
+          "intent": "rook-ironside:landing",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.rook-ironside.landing.vfx",
+          "sfx_cue": "juice.rook-ironside.landing.sfx",
+          "camera_cue": "juice.rook-ironside.landing.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "jab_chain": {
+          "intent": "rook-ironside:jab_chain",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "see moves json",
+          "vfx_cue": "juice.rook-ironside.jab_chain.vfx",
+          "sfx_cue": "juice.rook-ironside.jab_chain.sfx",
+          "camera_cue": "juice.rook-ironside.jab_chain.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "directional_normals": {
+          "intent": "rook-ironside:directional_normals",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.rook-ironside.directional_normals.vfx",
+          "sfx_cue": "juice.rook-ironside.directional_normals.sfx",
+          "camera_cue": "juice.rook-ironside.directional_normals.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "aerials": {
+          "intent": "rook-ironside:aerials",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "see moves json",
+          "vfx_cue": "juice.rook-ironside.aerials.vfx",
+          "sfx_cue": "juice.rook-ironside.aerials.sfx",
+          "camera_cue": "juice.rook-ironside.aerials.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "heavy": {
+          "intent": "rook-ironside:heavy",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "see moves json",
+          "vfx_cue": "juice.rook-ironside.heavy.vfx",
+          "sfx_cue": "juice.rook-ironside.heavy.sfx",
+          "camera_cue": "juice.rook-ironside.heavy.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "aura_charge": {
+          "intent": "rook-ironside:aura_charge",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.rook-ironside.aura_charge.vfx",
+          "sfx_cue": "juice.rook-ironside.aura_charge.sfx",
+          "camera_cue": "juice.rook-ironside.aura_charge.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "projectile_tap": {
+          "intent": "rook-ironside:projectile_tap",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.rook-ironside.projectile_tap.vfx",
+          "sfx_cue": "juice.rook-ironside.projectile_tap.sfx",
+          "camera_cue": "juice.rook-ironside.projectile_tap.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "projectile_medium": {
+          "intent": "rook-ironside:projectile_medium",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.rook-ironside.projectile_medium.vfx",
+          "sfx_cue": "juice.rook-ironside.projectile_medium.sfx",
+          "camera_cue": "juice.rook-ironside.projectile_medium.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "projectile_full": {
+          "intent": "rook-ironside:projectile_full",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.rook-ironside.projectile_full.vfx",
+          "sfx_cue": "juice.rook-ironside.projectile_full.sfx",
+          "camera_cue": "juice.rook-ironside.projectile_full.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "grab": {
+          "intent": "rook-ironside:grab",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.rook-ironside.grab.vfx",
+          "sfx_cue": "juice.rook-ironside.grab.sfx",
+          "camera_cue": "juice.rook-ironside.grab.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_forward": {
+          "intent": "rook-ironside:throw_forward",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.rook-ironside.throw_forward.vfx",
+          "sfx_cue": "juice.rook-ironside.throw_forward.sfx",
+          "camera_cue": "juice.rook-ironside.throw_forward.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_back": {
+          "intent": "rook-ironside:throw_back",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.rook-ironside.throw_back.vfx",
+          "sfx_cue": "juice.rook-ironside.throw_back.sfx",
+          "camera_cue": "juice.rook-ironside.throw_back.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_up": {
+          "intent": "rook-ironside:throw_up",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.rook-ironside.throw_up.vfx",
+          "sfx_cue": "juice.rook-ironside.throw_up.sfx",
+          "camera_cue": "juice.rook-ironside.throw_up.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_down": {
+          "intent": "rook-ironside:throw_down",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.rook-ironside.throw_down.vfx",
+          "sfx_cue": "juice.rook-ironside.throw_down.sfx",
+          "camera_cue": "juice.rook-ironside.throw_down.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "shield": {
+          "intent": "rook-ironside:shield",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.rook-ironside.shield.vfx",
+          "sfx_cue": "juice.rook-ironside.shield.sfx",
+          "camera_cue": "juice.rook-ironside.shield.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "dodge": {
+          "intent": "rook-ironside:dodge",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.rook-ironside.dodge.vfx",
+          "sfx_cue": "juice.rook-ironside.dodge.sfx",
+          "camera_cue": "juice.rook-ironside.dodge.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "air_dodge": {
+          "intent": "rook-ironside:air_dodge",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.rook-ironside.air_dodge.vfx",
+          "sfx_cue": "juice.rook-ironside.air_dodge.sfx",
+          "camera_cue": "juice.rook-ironside.air_dodge.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "hurt": {
+          "intent": "rook-ironside:hurt",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.rook-ironside.hurt.vfx",
+          "sfx_cue": "juice.rook-ironside.hurt.sfx",
+          "camera_cue": "juice.rook-ironside.hurt.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "launch": {
+          "intent": "rook-ironside:launch",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.rook-ironside.launch.vfx",
+          "sfx_cue": "juice.rook-ironside.launch.sfx",
+          "camera_cue": "juice.rook-ironside.launch.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "tumble": {
+          "intent": "rook-ironside:tumble",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.rook-ironside.tumble.vfx",
+          "sfx_cue": "juice.rook-ironside.tumble.sfx",
+          "camera_cue": "juice.rook-ironside.tumble.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "recovery": {
+          "intent": "rook-ironside:recovery",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.rook-ironside.recovery.vfx",
+          "sfx_cue": "juice.rook-ironside.recovery.sfx",
+          "camera_cue": "juice.rook-ironside.recovery.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "ko": {
+          "intent": "rook-ironside:ko",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.rook-ironside.ko.vfx",
+          "sfx_cue": "juice.rook-ironside.ko.sfx",
+          "camera_cue": "juice.rook-ironside.ko.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "victory": {
+          "intent": "rook-ironside:victory",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.rook-ironside.victory.vfx",
+          "sfx_cue": "juice.rook-ironside.victory.sfx",
+          "camera_cue": "juice.rook-ironside.victory.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "defeat": {
+          "intent": "rook-ironside:defeat",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.rook-ironside.defeat.vfx",
+          "sfx_cue": "juice.rook-ironside.defeat.sfx",
+          "camera_cue": "juice.rook-ironside.defeat.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        }
+      }
+    },
+    "juno-spark": {
+      "display_name": "Juno Spark",
+      "aura_grammar": "charges to confirm",
+      "clips": {
+        "idle": {
+          "intent": "juno-spark:idle",
+          "anticipation_frames": 4,
+          "contact_or_release": "loop",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.juno-spark.idle.vfx",
+          "sfx_cue": "juice.juno-spark.idle.sfx",
+          "camera_cue": "juice.juno-spark.idle.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "run": {
+          "intent": "juno-spark:run",
+          "anticipation_frames": 4,
+          "contact_or_release": "loop",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.juno-spark.run.vfx",
+          "sfx_cue": "juice.juno-spark.run.sfx",
+          "camera_cue": "juice.juno-spark.run.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "jump": {
+          "intent": "juno-spark:jump",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.juno-spark.jump.vfx",
+          "sfx_cue": "juice.juno-spark.jump.sfx",
+          "camera_cue": "juice.juno-spark.jump.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "fall": {
+          "intent": "juno-spark:fall",
+          "anticipation_frames": 4,
+          "contact_or_release": "loop",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.juno-spark.fall.vfx",
+          "sfx_cue": "juice.juno-spark.fall.sfx",
+          "camera_cue": "juice.juno-spark.fall.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "landing": {
+          "intent": "juno-spark:landing",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.juno-spark.landing.vfx",
+          "sfx_cue": "juice.juno-spark.landing.sfx",
+          "camera_cue": "juice.juno-spark.landing.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "jab_chain": {
+          "intent": "juno-spark:jab_chain",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "see moves json",
+          "vfx_cue": "juice.juno-spark.jab_chain.vfx",
+          "sfx_cue": "juice.juno-spark.jab_chain.sfx",
+          "camera_cue": "juice.juno-spark.jab_chain.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "directional_normals": {
+          "intent": "juno-spark:directional_normals",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.juno-spark.directional_normals.vfx",
+          "sfx_cue": "juice.juno-spark.directional_normals.sfx",
+          "camera_cue": "juice.juno-spark.directional_normals.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "aerials": {
+          "intent": "juno-spark:aerials",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "see moves json",
+          "vfx_cue": "juice.juno-spark.aerials.vfx",
+          "sfx_cue": "juice.juno-spark.aerials.sfx",
+          "camera_cue": "juice.juno-spark.aerials.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "heavy": {
+          "intent": "juno-spark:heavy",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "see moves json",
+          "vfx_cue": "juice.juno-spark.heavy.vfx",
+          "sfx_cue": "juice.juno-spark.heavy.sfx",
+          "camera_cue": "juice.juno-spark.heavy.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "aura_charge": {
+          "intent": "juno-spark:aura_charge",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.juno-spark.aura_charge.vfx",
+          "sfx_cue": "juice.juno-spark.aura_charge.sfx",
+          "camera_cue": "juice.juno-spark.aura_charge.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "projectile_tap": {
+          "intent": "juno-spark:projectile_tap",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.juno-spark.projectile_tap.vfx",
+          "sfx_cue": "juice.juno-spark.projectile_tap.sfx",
+          "camera_cue": "juice.juno-spark.projectile_tap.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "projectile_medium": {
+          "intent": "juno-spark:projectile_medium",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.juno-spark.projectile_medium.vfx",
+          "sfx_cue": "juice.juno-spark.projectile_medium.sfx",
+          "camera_cue": "juice.juno-spark.projectile_medium.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "projectile_full": {
+          "intent": "juno-spark:projectile_full",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.juno-spark.projectile_full.vfx",
+          "sfx_cue": "juice.juno-spark.projectile_full.sfx",
+          "camera_cue": "juice.juno-spark.projectile_full.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "grab": {
+          "intent": "juno-spark:grab",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.juno-spark.grab.vfx",
+          "sfx_cue": "juice.juno-spark.grab.sfx",
+          "camera_cue": "juice.juno-spark.grab.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_forward": {
+          "intent": "juno-spark:throw_forward",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.juno-spark.throw_forward.vfx",
+          "sfx_cue": "juice.juno-spark.throw_forward.sfx",
+          "camera_cue": "juice.juno-spark.throw_forward.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_back": {
+          "intent": "juno-spark:throw_back",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.juno-spark.throw_back.vfx",
+          "sfx_cue": "juice.juno-spark.throw_back.sfx",
+          "camera_cue": "juice.juno-spark.throw_back.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_up": {
+          "intent": "juno-spark:throw_up",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.juno-spark.throw_up.vfx",
+          "sfx_cue": "juice.juno-spark.throw_up.sfx",
+          "camera_cue": "juice.juno-spark.throw_up.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_down": {
+          "intent": "juno-spark:throw_down",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.juno-spark.throw_down.vfx",
+          "sfx_cue": "juice.juno-spark.throw_down.sfx",
+          "camera_cue": "juice.juno-spark.throw_down.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "shield": {
+          "intent": "juno-spark:shield",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.juno-spark.shield.vfx",
+          "sfx_cue": "juice.juno-spark.shield.sfx",
+          "camera_cue": "juice.juno-spark.shield.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "dodge": {
+          "intent": "juno-spark:dodge",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.juno-spark.dodge.vfx",
+          "sfx_cue": "juice.juno-spark.dodge.sfx",
+          "camera_cue": "juice.juno-spark.dodge.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "air_dodge": {
+          "intent": "juno-spark:air_dodge",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.juno-spark.air_dodge.vfx",
+          "sfx_cue": "juice.juno-spark.air_dodge.sfx",
+          "camera_cue": "juice.juno-spark.air_dodge.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "hurt": {
+          "intent": "juno-spark:hurt",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.juno-spark.hurt.vfx",
+          "sfx_cue": "juice.juno-spark.hurt.sfx",
+          "camera_cue": "juice.juno-spark.hurt.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "launch": {
+          "intent": "juno-spark:launch",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.juno-spark.launch.vfx",
+          "sfx_cue": "juice.juno-spark.launch.sfx",
+          "camera_cue": "juice.juno-spark.launch.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "tumble": {
+          "intent": "juno-spark:tumble",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.juno-spark.tumble.vfx",
+          "sfx_cue": "juice.juno-spark.tumble.sfx",
+          "camera_cue": "juice.juno-spark.tumble.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "recovery": {
+          "intent": "juno-spark:recovery",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.juno-spark.recovery.vfx",
+          "sfx_cue": "juice.juno-spark.recovery.sfx",
+          "camera_cue": "juice.juno-spark.recovery.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "ko": {
+          "intent": "juno-spark:ko",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.juno-spark.ko.vfx",
+          "sfx_cue": "juice.juno-spark.ko.sfx",
+          "camera_cue": "juice.juno-spark.ko.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "victory": {
+          "intent": "juno-spark:victory",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.juno-spark.victory.vfx",
+          "sfx_cue": "juice.juno-spark.victory.sfx",
+          "camera_cue": "juice.juno-spark.victory.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "defeat": {
+          "intent": "juno-spark:defeat",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.juno-spark.defeat.vfx",
+          "sfx_cue": "juice.juno-spark.defeat.sfx",
+          "camera_cue": "juice.juno-spark.defeat.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        }
+      }
+    },
+    "kaia-windrow": {
+      "display_name": "Kaia Windrow",
+      "aura_grammar": "charges to control air",
+      "clips": {
+        "idle": {
+          "intent": "kaia-windrow:idle",
+          "anticipation_frames": 4,
+          "contact_or_release": "loop",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.kaia-windrow.idle.vfx",
+          "sfx_cue": "juice.kaia-windrow.idle.sfx",
+          "camera_cue": "juice.kaia-windrow.idle.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "run": {
+          "intent": "kaia-windrow:run",
+          "anticipation_frames": 4,
+          "contact_or_release": "loop",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.kaia-windrow.run.vfx",
+          "sfx_cue": "juice.kaia-windrow.run.sfx",
+          "camera_cue": "juice.kaia-windrow.run.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "jump": {
+          "intent": "kaia-windrow:jump",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.kaia-windrow.jump.vfx",
+          "sfx_cue": "juice.kaia-windrow.jump.sfx",
+          "camera_cue": "juice.kaia-windrow.jump.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "fall": {
+          "intent": "kaia-windrow:fall",
+          "anticipation_frames": 4,
+          "contact_or_release": "loop",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.kaia-windrow.fall.vfx",
+          "sfx_cue": "juice.kaia-windrow.fall.sfx",
+          "camera_cue": "juice.kaia-windrow.fall.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "landing": {
+          "intent": "kaia-windrow:landing",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.kaia-windrow.landing.vfx",
+          "sfx_cue": "juice.kaia-windrow.landing.sfx",
+          "camera_cue": "juice.kaia-windrow.landing.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "jab_chain": {
+          "intent": "kaia-windrow:jab_chain",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "see moves json",
+          "vfx_cue": "juice.kaia-windrow.jab_chain.vfx",
+          "sfx_cue": "juice.kaia-windrow.jab_chain.sfx",
+          "camera_cue": "juice.kaia-windrow.jab_chain.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "directional_normals": {
+          "intent": "kaia-windrow:directional_normals",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.kaia-windrow.directional_normals.vfx",
+          "sfx_cue": "juice.kaia-windrow.directional_normals.sfx",
+          "camera_cue": "juice.kaia-windrow.directional_normals.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "aerials": {
+          "intent": "kaia-windrow:aerials",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "see moves json",
+          "vfx_cue": "juice.kaia-windrow.aerials.vfx",
+          "sfx_cue": "juice.kaia-windrow.aerials.sfx",
+          "camera_cue": "juice.kaia-windrow.aerials.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "heavy": {
+          "intent": "kaia-windrow:heavy",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "see moves json",
+          "vfx_cue": "juice.kaia-windrow.heavy.vfx",
+          "sfx_cue": "juice.kaia-windrow.heavy.sfx",
+          "camera_cue": "juice.kaia-windrow.heavy.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "aura_charge": {
+          "intent": "kaia-windrow:aura_charge",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.kaia-windrow.aura_charge.vfx",
+          "sfx_cue": "juice.kaia-windrow.aura_charge.sfx",
+          "camera_cue": "juice.kaia-windrow.aura_charge.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "projectile_tap": {
+          "intent": "kaia-windrow:projectile_tap",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.kaia-windrow.projectile_tap.vfx",
+          "sfx_cue": "juice.kaia-windrow.projectile_tap.sfx",
+          "camera_cue": "juice.kaia-windrow.projectile_tap.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "projectile_medium": {
+          "intent": "kaia-windrow:projectile_medium",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.kaia-windrow.projectile_medium.vfx",
+          "sfx_cue": "juice.kaia-windrow.projectile_medium.sfx",
+          "camera_cue": "juice.kaia-windrow.projectile_medium.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "projectile_full": {
+          "intent": "kaia-windrow:projectile_full",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.kaia-windrow.projectile_full.vfx",
+          "sfx_cue": "juice.kaia-windrow.projectile_full.sfx",
+          "camera_cue": "juice.kaia-windrow.projectile_full.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "grab": {
+          "intent": "kaia-windrow:grab",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.kaia-windrow.grab.vfx",
+          "sfx_cue": "juice.kaia-windrow.grab.sfx",
+          "camera_cue": "juice.kaia-windrow.grab.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_forward": {
+          "intent": "kaia-windrow:throw_forward",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.kaia-windrow.throw_forward.vfx",
+          "sfx_cue": "juice.kaia-windrow.throw_forward.sfx",
+          "camera_cue": "juice.kaia-windrow.throw_forward.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_back": {
+          "intent": "kaia-windrow:throw_back",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.kaia-windrow.throw_back.vfx",
+          "sfx_cue": "juice.kaia-windrow.throw_back.sfx",
+          "camera_cue": "juice.kaia-windrow.throw_back.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_up": {
+          "intent": "kaia-windrow:throw_up",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.kaia-windrow.throw_up.vfx",
+          "sfx_cue": "juice.kaia-windrow.throw_up.sfx",
+          "camera_cue": "juice.kaia-windrow.throw_up.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_down": {
+          "intent": "kaia-windrow:throw_down",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.kaia-windrow.throw_down.vfx",
+          "sfx_cue": "juice.kaia-windrow.throw_down.sfx",
+          "camera_cue": "juice.kaia-windrow.throw_down.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "shield": {
+          "intent": "kaia-windrow:shield",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.kaia-windrow.shield.vfx",
+          "sfx_cue": "juice.kaia-windrow.shield.sfx",
+          "camera_cue": "juice.kaia-windrow.shield.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "dodge": {
+          "intent": "kaia-windrow:dodge",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.kaia-windrow.dodge.vfx",
+          "sfx_cue": "juice.kaia-windrow.dodge.sfx",
+          "camera_cue": "juice.kaia-windrow.dodge.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "air_dodge": {
+          "intent": "kaia-windrow:air_dodge",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.kaia-windrow.air_dodge.vfx",
+          "sfx_cue": "juice.kaia-windrow.air_dodge.sfx",
+          "camera_cue": "juice.kaia-windrow.air_dodge.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "hurt": {
+          "intent": "kaia-windrow:hurt",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.kaia-windrow.hurt.vfx",
+          "sfx_cue": "juice.kaia-windrow.hurt.sfx",
+          "camera_cue": "juice.kaia-windrow.hurt.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "launch": {
+          "intent": "kaia-windrow:launch",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.kaia-windrow.launch.vfx",
+          "sfx_cue": "juice.kaia-windrow.launch.sfx",
+          "camera_cue": "juice.kaia-windrow.launch.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "tumble": {
+          "intent": "kaia-windrow:tumble",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.kaia-windrow.tumble.vfx",
+          "sfx_cue": "juice.kaia-windrow.tumble.sfx",
+          "camera_cue": "juice.kaia-windrow.tumble.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "recovery": {
+          "intent": "kaia-windrow:recovery",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.kaia-windrow.recovery.vfx",
+          "sfx_cue": "juice.kaia-windrow.recovery.sfx",
+          "camera_cue": "juice.kaia-windrow.recovery.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "ko": {
+          "intent": "kaia-windrow:ko",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.kaia-windrow.ko.vfx",
+          "sfx_cue": "juice.kaia-windrow.ko.sfx",
+          "camera_cue": "juice.kaia-windrow.ko.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "victory": {
+          "intent": "kaia-windrow:victory",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.kaia-windrow.victory.vfx",
+          "sfx_cue": "juice.kaia-windrow.victory.sfx",
+          "camera_cue": "juice.kaia-windrow.victory.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "defeat": {
+          "intent": "kaia-windrow:defeat",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.kaia-windrow.defeat.vfx",
+          "sfx_cue": "juice.kaia-windrow.defeat.sfx",
+          "camera_cue": "juice.kaia-windrow.defeat.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        }
+      }
+    },
+    "nix-calder": {
+      "display_name": "Nix Calder",
+      "aura_grammar": "charges to lock space",
+      "clips": {
+        "idle": {
+          "intent": "nix-calder:idle",
+          "anticipation_frames": 4,
+          "contact_or_release": "loop",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.nix-calder.idle.vfx",
+          "sfx_cue": "juice.nix-calder.idle.sfx",
+          "camera_cue": "juice.nix-calder.idle.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "run": {
+          "intent": "nix-calder:run",
+          "anticipation_frames": 4,
+          "contact_or_release": "loop",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.nix-calder.run.vfx",
+          "sfx_cue": "juice.nix-calder.run.sfx",
+          "camera_cue": "juice.nix-calder.run.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "jump": {
+          "intent": "nix-calder:jump",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.nix-calder.jump.vfx",
+          "sfx_cue": "juice.nix-calder.jump.sfx",
+          "camera_cue": "juice.nix-calder.jump.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "fall": {
+          "intent": "nix-calder:fall",
+          "anticipation_frames": 4,
+          "contact_or_release": "loop",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.nix-calder.fall.vfx",
+          "sfx_cue": "juice.nix-calder.fall.sfx",
+          "camera_cue": "juice.nix-calder.fall.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "landing": {
+          "intent": "nix-calder:landing",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.nix-calder.landing.vfx",
+          "sfx_cue": "juice.nix-calder.landing.sfx",
+          "camera_cue": "juice.nix-calder.landing.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "jab_chain": {
+          "intent": "nix-calder:jab_chain",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "see moves json",
+          "vfx_cue": "juice.nix-calder.jab_chain.vfx",
+          "sfx_cue": "juice.nix-calder.jab_chain.sfx",
+          "camera_cue": "juice.nix-calder.jab_chain.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "directional_normals": {
+          "intent": "nix-calder:directional_normals",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.nix-calder.directional_normals.vfx",
+          "sfx_cue": "juice.nix-calder.directional_normals.sfx",
+          "camera_cue": "juice.nix-calder.directional_normals.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "aerials": {
+          "intent": "nix-calder:aerials",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "see moves json",
+          "vfx_cue": "juice.nix-calder.aerials.vfx",
+          "sfx_cue": "juice.nix-calder.aerials.sfx",
+          "camera_cue": "juice.nix-calder.aerials.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "heavy": {
+          "intent": "nix-calder:heavy",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "see moves json",
+          "vfx_cue": "juice.nix-calder.heavy.vfx",
+          "sfx_cue": "juice.nix-calder.heavy.sfx",
+          "camera_cue": "juice.nix-calder.heavy.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "aura_charge": {
+          "intent": "nix-calder:aura_charge",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.nix-calder.aura_charge.vfx",
+          "sfx_cue": "juice.nix-calder.aura_charge.sfx",
+          "camera_cue": "juice.nix-calder.aura_charge.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "projectile_tap": {
+          "intent": "nix-calder:projectile_tap",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.nix-calder.projectile_tap.vfx",
+          "sfx_cue": "juice.nix-calder.projectile_tap.sfx",
+          "camera_cue": "juice.nix-calder.projectile_tap.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "projectile_medium": {
+          "intent": "nix-calder:projectile_medium",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.nix-calder.projectile_medium.vfx",
+          "sfx_cue": "juice.nix-calder.projectile_medium.sfx",
+          "camera_cue": "juice.nix-calder.projectile_medium.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "projectile_full": {
+          "intent": "nix-calder:projectile_full",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.nix-calder.projectile_full.vfx",
+          "sfx_cue": "juice.nix-calder.projectile_full.sfx",
+          "camera_cue": "juice.nix-calder.projectile_full.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "grab": {
+          "intent": "nix-calder:grab",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.nix-calder.grab.vfx",
+          "sfx_cue": "juice.nix-calder.grab.sfx",
+          "camera_cue": "juice.nix-calder.grab.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_forward": {
+          "intent": "nix-calder:throw_forward",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.nix-calder.throw_forward.vfx",
+          "sfx_cue": "juice.nix-calder.throw_forward.sfx",
+          "camera_cue": "juice.nix-calder.throw_forward.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_back": {
+          "intent": "nix-calder:throw_back",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.nix-calder.throw_back.vfx",
+          "sfx_cue": "juice.nix-calder.throw_back.sfx",
+          "camera_cue": "juice.nix-calder.throw_back.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_up": {
+          "intent": "nix-calder:throw_up",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.nix-calder.throw_up.vfx",
+          "sfx_cue": "juice.nix-calder.throw_up.sfx",
+          "camera_cue": "juice.nix-calder.throw_up.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_down": {
+          "intent": "nix-calder:throw_down",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.nix-calder.throw_down.vfx",
+          "sfx_cue": "juice.nix-calder.throw_down.sfx",
+          "camera_cue": "juice.nix-calder.throw_down.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "shield": {
+          "intent": "nix-calder:shield",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.nix-calder.shield.vfx",
+          "sfx_cue": "juice.nix-calder.shield.sfx",
+          "camera_cue": "juice.nix-calder.shield.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "dodge": {
+          "intent": "nix-calder:dodge",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.nix-calder.dodge.vfx",
+          "sfx_cue": "juice.nix-calder.dodge.sfx",
+          "camera_cue": "juice.nix-calder.dodge.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "air_dodge": {
+          "intent": "nix-calder:air_dodge",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.nix-calder.air_dodge.vfx",
+          "sfx_cue": "juice.nix-calder.air_dodge.sfx",
+          "camera_cue": "juice.nix-calder.air_dodge.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "hurt": {
+          "intent": "nix-calder:hurt",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.nix-calder.hurt.vfx",
+          "sfx_cue": "juice.nix-calder.hurt.sfx",
+          "camera_cue": "juice.nix-calder.hurt.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "launch": {
+          "intent": "nix-calder:launch",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.nix-calder.launch.vfx",
+          "sfx_cue": "juice.nix-calder.launch.sfx",
+          "camera_cue": "juice.nix-calder.launch.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "tumble": {
+          "intent": "nix-calder:tumble",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.nix-calder.tumble.vfx",
+          "sfx_cue": "juice.nix-calder.tumble.sfx",
+          "camera_cue": "juice.nix-calder.tumble.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "recovery": {
+          "intent": "nix-calder:recovery",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.nix-calder.recovery.vfx",
+          "sfx_cue": "juice.nix-calder.recovery.sfx",
+          "camera_cue": "juice.nix-calder.recovery.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "ko": {
+          "intent": "nix-calder:ko",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.nix-calder.ko.vfx",
+          "sfx_cue": "juice.nix-calder.ko.sfx",
+          "camera_cue": "juice.nix-calder.ko.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "victory": {
+          "intent": "nix-calder:victory",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.nix-calder.victory.vfx",
+          "sfx_cue": "juice.nix-calder.victory.sfx",
+          "camera_cue": "juice.nix-calder.victory.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "defeat": {
+          "intent": "nix-calder:defeat",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.nix-calder.defeat.vfx",
+          "sfx_cue": "juice.nix-calder.defeat.sfx",
+          "camera_cue": "juice.nix-calder.defeat.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        }
+      }
+    },
+    "orion-vell": {
+      "display_name": "Orion Vell",
+      "aura_grammar": "charges to manipulate launch",
+      "clips": {
+        "idle": {
+          "intent": "orion-vell:idle",
+          "anticipation_frames": 4,
+          "contact_or_release": "loop",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.orion-vell.idle.vfx",
+          "sfx_cue": "juice.orion-vell.idle.sfx",
+          "camera_cue": "juice.orion-vell.idle.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "run": {
+          "intent": "orion-vell:run",
+          "anticipation_frames": 4,
+          "contact_or_release": "loop",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.orion-vell.run.vfx",
+          "sfx_cue": "juice.orion-vell.run.sfx",
+          "camera_cue": "juice.orion-vell.run.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "jump": {
+          "intent": "orion-vell:jump",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.orion-vell.jump.vfx",
+          "sfx_cue": "juice.orion-vell.jump.sfx",
+          "camera_cue": "juice.orion-vell.jump.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "fall": {
+          "intent": "orion-vell:fall",
+          "anticipation_frames": 4,
+          "contact_or_release": "loop",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.orion-vell.fall.vfx",
+          "sfx_cue": "juice.orion-vell.fall.sfx",
+          "camera_cue": "juice.orion-vell.fall.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "landing": {
+          "intent": "orion-vell:landing",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.orion-vell.landing.vfx",
+          "sfx_cue": "juice.orion-vell.landing.sfx",
+          "camera_cue": "juice.orion-vell.landing.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "jab_chain": {
+          "intent": "orion-vell:jab_chain",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "see moves json",
+          "vfx_cue": "juice.orion-vell.jab_chain.vfx",
+          "sfx_cue": "juice.orion-vell.jab_chain.sfx",
+          "camera_cue": "juice.orion-vell.jab_chain.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "directional_normals": {
+          "intent": "orion-vell:directional_normals",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.orion-vell.directional_normals.vfx",
+          "sfx_cue": "juice.orion-vell.directional_normals.sfx",
+          "camera_cue": "juice.orion-vell.directional_normals.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "aerials": {
+          "intent": "orion-vell:aerials",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "see moves json",
+          "vfx_cue": "juice.orion-vell.aerials.vfx",
+          "sfx_cue": "juice.orion-vell.aerials.sfx",
+          "camera_cue": "juice.orion-vell.aerials.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "heavy": {
+          "intent": "orion-vell:heavy",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "see moves json",
+          "vfx_cue": "juice.orion-vell.heavy.vfx",
+          "sfx_cue": "juice.orion-vell.heavy.sfx",
+          "camera_cue": "juice.orion-vell.heavy.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "aura_charge": {
+          "intent": "orion-vell:aura_charge",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.orion-vell.aura_charge.vfx",
+          "sfx_cue": "juice.orion-vell.aura_charge.sfx",
+          "camera_cue": "juice.orion-vell.aura_charge.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "projectile_tap": {
+          "intent": "orion-vell:projectile_tap",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.orion-vell.projectile_tap.vfx",
+          "sfx_cue": "juice.orion-vell.projectile_tap.sfx",
+          "camera_cue": "juice.orion-vell.projectile_tap.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "projectile_medium": {
+          "intent": "orion-vell:projectile_medium",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.orion-vell.projectile_medium.vfx",
+          "sfx_cue": "juice.orion-vell.projectile_medium.sfx",
+          "camera_cue": "juice.orion-vell.projectile_medium.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "projectile_full": {
+          "intent": "orion-vell:projectile_full",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.orion-vell.projectile_full.vfx",
+          "sfx_cue": "juice.orion-vell.projectile_full.sfx",
+          "camera_cue": "juice.orion-vell.projectile_full.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "grab": {
+          "intent": "orion-vell:grab",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.orion-vell.grab.vfx",
+          "sfx_cue": "juice.orion-vell.grab.sfx",
+          "camera_cue": "juice.orion-vell.grab.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_forward": {
+          "intent": "orion-vell:throw_forward",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.orion-vell.throw_forward.vfx",
+          "sfx_cue": "juice.orion-vell.throw_forward.sfx",
+          "camera_cue": "juice.orion-vell.throw_forward.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_back": {
+          "intent": "orion-vell:throw_back",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.orion-vell.throw_back.vfx",
+          "sfx_cue": "juice.orion-vell.throw_back.sfx",
+          "camera_cue": "juice.orion-vell.throw_back.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_up": {
+          "intent": "orion-vell:throw_up",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.orion-vell.throw_up.vfx",
+          "sfx_cue": "juice.orion-vell.throw_up.sfx",
+          "camera_cue": "juice.orion-vell.throw_up.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_down": {
+          "intent": "orion-vell:throw_down",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.orion-vell.throw_down.vfx",
+          "sfx_cue": "juice.orion-vell.throw_down.sfx",
+          "camera_cue": "juice.orion-vell.throw_down.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "shield": {
+          "intent": "orion-vell:shield",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.orion-vell.shield.vfx",
+          "sfx_cue": "juice.orion-vell.shield.sfx",
+          "camera_cue": "juice.orion-vell.shield.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "dodge": {
+          "intent": "orion-vell:dodge",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.orion-vell.dodge.vfx",
+          "sfx_cue": "juice.orion-vell.dodge.sfx",
+          "camera_cue": "juice.orion-vell.dodge.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "air_dodge": {
+          "intent": "orion-vell:air_dodge",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.orion-vell.air_dodge.vfx",
+          "sfx_cue": "juice.orion-vell.air_dodge.sfx",
+          "camera_cue": "juice.orion-vell.air_dodge.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "hurt": {
+          "intent": "orion-vell:hurt",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.orion-vell.hurt.vfx",
+          "sfx_cue": "juice.orion-vell.hurt.sfx",
+          "camera_cue": "juice.orion-vell.hurt.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "launch": {
+          "intent": "orion-vell:launch",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.orion-vell.launch.vfx",
+          "sfx_cue": "juice.orion-vell.launch.sfx",
+          "camera_cue": "juice.orion-vell.launch.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "tumble": {
+          "intent": "orion-vell:tumble",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.orion-vell.tumble.vfx",
+          "sfx_cue": "juice.orion-vell.tumble.sfx",
+          "camera_cue": "juice.orion-vell.tumble.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "recovery": {
+          "intent": "orion-vell:recovery",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.orion-vell.recovery.vfx",
+          "sfx_cue": "juice.orion-vell.recovery.sfx",
+          "camera_cue": "juice.orion-vell.recovery.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "ko": {
+          "intent": "orion-vell:ko",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.orion-vell.ko.vfx",
+          "sfx_cue": "juice.orion-vell.ko.sfx",
+          "camera_cue": "juice.orion-vell.ko.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "victory": {
+          "intent": "orion-vell:victory",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.orion-vell.victory.vfx",
+          "sfx_cue": "juice.orion-vell.victory.sfx",
+          "camera_cue": "juice.orion-vell.victory.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "defeat": {
+          "intent": "orion-vell:defeat",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.orion-vell.defeat.vfx",
+          "sfx_cue": "juice.orion-vell.defeat.sfx",
+          "camera_cue": "juice.orion-vell.defeat.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        }
+      }
+    },
+    "vesper-nyx": {
+      "display_name": "Vesper Nyx",
+      "aura_grammar": "charges to misdirect/deceive",
+      "clips": {
+        "idle": {
+          "intent": "vesper-nyx:idle",
+          "anticipation_frames": 4,
+          "contact_or_release": "loop",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.vesper-nyx.idle.vfx",
+          "sfx_cue": "juice.vesper-nyx.idle.sfx",
+          "camera_cue": "juice.vesper-nyx.idle.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "run": {
+          "intent": "vesper-nyx:run",
+          "anticipation_frames": 4,
+          "contact_or_release": "loop",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.vesper-nyx.run.vfx",
+          "sfx_cue": "juice.vesper-nyx.run.sfx",
+          "camera_cue": "juice.vesper-nyx.run.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "jump": {
+          "intent": "vesper-nyx:jump",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.vesper-nyx.jump.vfx",
+          "sfx_cue": "juice.vesper-nyx.jump.sfx",
+          "camera_cue": "juice.vesper-nyx.jump.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "fall": {
+          "intent": "vesper-nyx:fall",
+          "anticipation_frames": 4,
+          "contact_or_release": "loop",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.vesper-nyx.fall.vfx",
+          "sfx_cue": "juice.vesper-nyx.fall.sfx",
+          "camera_cue": "juice.vesper-nyx.fall.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "landing": {
+          "intent": "vesper-nyx:landing",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.vesper-nyx.landing.vfx",
+          "sfx_cue": "juice.vesper-nyx.landing.sfx",
+          "camera_cue": "juice.vesper-nyx.landing.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "jab_chain": {
+          "intent": "vesper-nyx:jab_chain",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "see moves json",
+          "vfx_cue": "juice.vesper-nyx.jab_chain.vfx",
+          "sfx_cue": "juice.vesper-nyx.jab_chain.sfx",
+          "camera_cue": "juice.vesper-nyx.jab_chain.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "directional_normals": {
+          "intent": "vesper-nyx:directional_normals",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.vesper-nyx.directional_normals.vfx",
+          "sfx_cue": "juice.vesper-nyx.directional_normals.sfx",
+          "camera_cue": "juice.vesper-nyx.directional_normals.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "aerials": {
+          "intent": "vesper-nyx:aerials",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "see moves json",
+          "vfx_cue": "juice.vesper-nyx.aerials.vfx",
+          "sfx_cue": "juice.vesper-nyx.aerials.sfx",
+          "camera_cue": "juice.vesper-nyx.aerials.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "heavy": {
+          "intent": "vesper-nyx:heavy",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "see moves json",
+          "vfx_cue": "juice.vesper-nyx.heavy.vfx",
+          "sfx_cue": "juice.vesper-nyx.heavy.sfx",
+          "camera_cue": "juice.vesper-nyx.heavy.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "aura_charge": {
+          "intent": "vesper-nyx:aura_charge",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.vesper-nyx.aura_charge.vfx",
+          "sfx_cue": "juice.vesper-nyx.aura_charge.sfx",
+          "camera_cue": "juice.vesper-nyx.aura_charge.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "projectile_tap": {
+          "intent": "vesper-nyx:projectile_tap",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.vesper-nyx.projectile_tap.vfx",
+          "sfx_cue": "juice.vesper-nyx.projectile_tap.sfx",
+          "camera_cue": "juice.vesper-nyx.projectile_tap.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "projectile_medium": {
+          "intent": "vesper-nyx:projectile_medium",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.vesper-nyx.projectile_medium.vfx",
+          "sfx_cue": "juice.vesper-nyx.projectile_medium.sfx",
+          "camera_cue": "juice.vesper-nyx.projectile_medium.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "projectile_full": {
+          "intent": "vesper-nyx:projectile_full",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.vesper-nyx.projectile_full.vfx",
+          "sfx_cue": "juice.vesper-nyx.projectile_full.sfx",
+          "camera_cue": "juice.vesper-nyx.projectile_full.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "grab": {
+          "intent": "vesper-nyx:grab",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.vesper-nyx.grab.vfx",
+          "sfx_cue": "juice.vesper-nyx.grab.sfx",
+          "camera_cue": "juice.vesper-nyx.grab.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_forward": {
+          "intent": "vesper-nyx:throw_forward",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.vesper-nyx.throw_forward.vfx",
+          "sfx_cue": "juice.vesper-nyx.throw_forward.sfx",
+          "camera_cue": "juice.vesper-nyx.throw_forward.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_back": {
+          "intent": "vesper-nyx:throw_back",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.vesper-nyx.throw_back.vfx",
+          "sfx_cue": "juice.vesper-nyx.throw_back.sfx",
+          "camera_cue": "juice.vesper-nyx.throw_back.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_up": {
+          "intent": "vesper-nyx:throw_up",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.vesper-nyx.throw_up.vfx",
+          "sfx_cue": "juice.vesper-nyx.throw_up.sfx",
+          "camera_cue": "juice.vesper-nyx.throw_up.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "throw_down": {
+          "intent": "vesper-nyx:throw_down",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.vesper-nyx.throw_down.vfx",
+          "sfx_cue": "juice.vesper-nyx.throw_down.sfx",
+          "camera_cue": "juice.vesper-nyx.throw_down.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "shield": {
+          "intent": "vesper-nyx:shield",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.vesper-nyx.shield.vfx",
+          "sfx_cue": "juice.vesper-nyx.shield.sfx",
+          "camera_cue": "juice.vesper-nyx.shield.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "dodge": {
+          "intent": "vesper-nyx:dodge",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.vesper-nyx.dodge.vfx",
+          "sfx_cue": "juice.vesper-nyx.dodge.sfx",
+          "camera_cue": "juice.vesper-nyx.dodge.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "air_dodge": {
+          "intent": "vesper-nyx:air_dodge",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.vesper-nyx.air_dodge.vfx",
+          "sfx_cue": "juice.vesper-nyx.air_dodge.sfx",
+          "camera_cue": "juice.vesper-nyx.air_dodge.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "hurt": {
+          "intent": "vesper-nyx:hurt",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.vesper-nyx.hurt.vfx",
+          "sfx_cue": "juice.vesper-nyx.hurt.sfx",
+          "camera_cue": "juice.vesper-nyx.hurt.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "launch": {
+          "intent": "vesper-nyx:launch",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.vesper-nyx.launch.vfx",
+          "sfx_cue": "juice.vesper-nyx.launch.sfx",
+          "camera_cue": "juice.vesper-nyx.launch.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "tumble": {
+          "intent": "vesper-nyx:tumble",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.vesper-nyx.tumble.vfx",
+          "sfx_cue": "juice.vesper-nyx.tumble.sfx",
+          "camera_cue": "juice.vesper-nyx.tumble.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "recovery": {
+          "intent": "vesper-nyx:recovery",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.vesper-nyx.recovery.vfx",
+          "sfx_cue": "juice.vesper-nyx.recovery.sfx",
+          "camera_cue": "juice.vesper-nyx.recovery.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "ko": {
+          "intent": "vesper-nyx:ko",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.vesper-nyx.ko.vfx",
+          "sfx_cue": "juice.vesper-nyx.ko.sfx",
+          "camera_cue": "juice.vesper-nyx.ko.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "victory": {
+          "intent": "vesper-nyx:victory",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.vesper-nyx.victory.vfx",
+          "sfx_cue": "juice.vesper-nyx.victory.sfx",
+          "camera_cue": "juice.vesper-nyx.victory.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        },
+        "defeat": {
+          "intent": "vesper-nyx:defeat",
+          "anticipation_frames": 4,
+          "contact_or_release": "contact",
+          "follow_through_frames": 6,
+          "recovery_frames": 8,
+          "silhouette_poses": [
+            "anticipation",
+            "extremum",
+            "recovery"
+          ],
+          "timing_ms_target": 400,
+          "hitbox_window": "n/a",
+          "vfx_cue": "juice.vesper-nyx.defeat.vfx",
+          "sfx_cue": "juice.vesper-nyx.defeat.sfx",
+          "camera_cue": "juice.vesper-nyx.defeat.camera",
+          "cancels": [],
+          "accessibility": {
+            "reduce_flash": true,
+            "reduce_shake": true
+          },
+          "status": "REQUIRES_ART_PRODUCTION"
+        }
+      }
+    }
+  }
+}

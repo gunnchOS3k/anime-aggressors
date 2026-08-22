@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "generated_for": "engineering_wave012",
+  "CORE_PIPELINE_MONETARY_COST_USD": 0,
+  "pins": {
+    "anyCreature": {
+      "url": "https://github.com/Ariescar/anyCreature",
+      "commit": "ab5b1ce5c13e632f00f7f7cbfdb7a746e315000d",
+      "license": "MIT",
+      "classification": "CORE",
+      "required_for_build": false,
+      "role": "creatures_props_silhouette_optional_humanoid_pilot"
+    },
+    "mixamo-llm-mocap": {
+      "url": "https://github.com/squall01337/mixamo-llm-mocap",
+      "commit": "00dfd5385506022d533c84f6737a09f5f4392623",
+      "license": "MIT (README); GitHub license field NOASSERTION",
+      "classification": "OPTIONAL",
+      "required_for_build": false,
+      "gpu_requirement": "NVIDIA ~8GB VRAM CUDA",
+      "blender_requirement": "5.1+"
+    },
+    "sprite-sheet-creator-fal-ai": {
+      "classification": "REJECTED",
+      "required_for_build": false,
+      "reason": "fal.ai API not permanently $0"
+    },
+    "Twinforge": {
+      "classification": "EXPERIMENTAL_TRANSIENT_TOOL",
+      "required_for_build": false,
+      "reason": "Not pinned; unclear zero-cost permanence / license"
+    }
+  },
+  "prerequisites": {
+    "ANIME_ACCEPTED_MAIN_SHA": "3b01c3d3473ec5372c5c1e3126305488dc26a08a",
+    "ANIME_PR_81": "MERGED",
+    "FIELD_KIT_ACCEPTED_MAIN_SHA": "12f4416fee08d266b4a34fd43198094ba42ef6d1",
+    "FIELD_KIT_PR_117": "MERGED",
+    "WAVE011_ACCEPTED_MAIN_STATUS": "PASS"
+  }
+}

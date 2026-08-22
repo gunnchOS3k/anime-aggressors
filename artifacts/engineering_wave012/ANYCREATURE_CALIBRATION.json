@@ -1,0 +1,27 @@
+{
+  "tool": "anyCreature",
+  "url": "https://github.com/Ariescar/anyCreature",
+  "pin": "ab5b1ce5c13e632f00f7f7cbfdb7a746e315000d",
+  "pin_state": {
+    "cloned": true,
+    "head": "ab5b1ce5c13e632f00f7f7cbfdb7a746e315000d",
+    "wanted": "ab5b1ce5c13e632f00f7f7cbfdb7a746e315000d"
+  },
+  "node_present": true,
+  "setup_attempted": true,
+  "setup_ok": false,
+  "example_attempted": true,
+  "example_ok": false,
+  "ANYCREATURE_HUMANOID_FIGHTER_FIT": "LIMITED",
+  "recommended_use": [
+    "creatures",
+    "props",
+    "silhouette_studies"
+  ],
+  "hero_fighter_path": false,
+  "generated_at_utc": "2026-08-22T18:32:00Z",
+  "setup_log_tail": "\nadded 69 packages in 5s\npython deps missing\nnpm warn Unknown env config \"devdir\". This will stop working in the next major version of npm.\nnpm notice\nnpm notice New minor version of npm available! 11.6.0 -> 11.19.0\nnpm notice Changelog: https://github.com/npm/cli/releases/tag/v11.19.0\nnpm notice To update run: npm install -g npm@11.19.0\nnpm notice\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import numpy, PIL, scipy.ndimage\nModuleNotFoundError: No module named 'numpy'\n",
+  "example_log_tail": "/anime-aggressors/.worktrees/wave012-anime-free-art-pipeline/third_party/anyCreature/engine/cli.js:8\nconst fs = require('fs');\n           ^\n\nReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/wave012-anime-free-art-pipeline/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at file:///Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/wave012-anime-free-art-pipeline/third_party/anyCreature/engine/cli.js:8:12\n    at ModuleJob.run (node:internal/modules/esm/module_job:377:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:689:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)\n\nNode.js v24.9.0\n",
+  "humanoid_pilot_spec": "tools/art_pipeline/anycreature_adapter/ember_humanoid_pilot.json",
+  "rationale": "anyCreature is strong for creatures/props/silhouette ideation; humanoid fighter anatomy, face/hand/foot readability, and competitive animation compatibility are not proven to hero quality. Keep off hero path."
+}
