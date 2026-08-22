@@ -1,0 +1,115 @@
+{
+  "fighter_id": "vesper-nyx",
+  "display_name": "Vesper Nyx",
+  "visual_language": "asymmetric void hood",
+  "status": "PROCEDURAL_PRODUCTION_PROXY",
+  "export": {
+    "fighter_id": "vesper-nyx",
+    "status": "PROCEDURAL_PRODUCTION_PROXY",
+    "source_glb": "game-godot/assets/characters/procedural_final/vesper-nyx.glb",
+    "export_glb": "content/fighters/vesper-nyx/model/vesper-nyx_procedural_proxy.glb",
+    "sha256": "c7989f456348cf6eb1541343e45ad3d2bd625650682b56c337500e113db15155",
+    "size_bytes": 690568,
+    "triangle_budget_preferred": 35000,
+    "material_budget": 6
+  },
+  "materials": {
+    "fighter_id": "vesper-nyx",
+    "shader": "game-godot/shaders/fighter_toon.gdshader",
+    "material_count": 6,
+    "max_texture_resolution": "2048x2048",
+    "slots": [
+      {
+        "name": "skin",
+        "hex": "7C3EA2",
+        "emission": 0.0,
+        "toon_band": 3
+      },
+      {
+        "name": "cloth",
+        "hex": "1D1830",
+        "emission": 0.0,
+        "toon_band": 3
+      },
+      {
+        "name": "accent",
+        "hex": "D272FF",
+        "emission": 0.15,
+        "toon_band": 2
+      },
+      {
+        "name": "outline",
+        "hex": "0D0B14",
+        "emission": 0.0,
+        "toon_band": 1
+      },
+      {
+        "name": "accessory",
+        "hex": "D272FF",
+        "emission": 0.25,
+        "toon_band": 2
+      },
+      {
+        "name": "aura_shell",
+        "hex": "D272FF",
+        "emission": 0.45,
+        "toon_band": 2
+      }
+    ],
+    "status": "PROCEDURAL_PRODUCTION_PROXY"
+  },
+  "rig": {
+    "schema_version": 1,
+    "fighter_id": "vesper-nyx",
+    "normalized": true,
+    "wave012_compatible": true,
+    "bones": [
+      "Root",
+      "Hips",
+      "Spine",
+      "Chest",
+      "Neck",
+      "Head",
+      "Shoulder_L",
+      "UpperArm_L",
+      "LowerArm_L",
+      "Hand_L",
+      "Shoulder_R",
+      "UpperArm_R",
+      "LowerArm_R",
+      "Hand_R",
+      "UpperLeg_L",
+      "LowerLeg_L",
+      "Foot_L",
+      "Toes_L",
+      "UpperLeg_R",
+      "LowerLeg_R",
+      "Foot_R",
+      "Toes_R"
+    ],
+    "sockets": [
+      "hand_l",
+      "hand_r",
+      "foot_l",
+      "foot_r",
+      "chest",
+      "head",
+      "back",
+      "aura_root",
+      "projectile_origin",
+      "recovery_origin"
+    ],
+    "source": "procedural_roster/generate_character.py",
+    "root_motion_authority": "PHYSICS_AUTHORITATIVE",
+    "competitive_gameplay_root_motion": "PHYSICS_AUTHORITATIVE"
+  },
+  "silhouette_contract": {
+    "accessory": "void_hood",
+    "body_scale": [
+      0.94,
+      0.98,
+      0.94
+    ],
+    "mass_read": "asymmetric_void"
+  }
+}

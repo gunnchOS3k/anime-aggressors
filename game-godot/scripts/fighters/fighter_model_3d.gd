@@ -61,6 +61,7 @@ func configure(fighter_data: Dictionary) -> bool:
 
 	# Optional hidden procedural_final GLB for AnimationPlayer / asset pipeline parity.
 	_try_load_final_glb(fighter_data)
+	_try_load_procedural_proxy(fighter_data)
 
 	_stylized = _StylizedBuilder.create(_fighter_id, fighter_data)
 	_stylized.name = "StylizedFighter_%s" % _fighter_id
@@ -166,6 +167,30 @@ func play_victory_presentation() -> void:
 
 func play_defeat_presentation() -> void:
 	_play_defeat_presentation()
+
+
+func _try_load_procedural_proxy(fighter_data: Dictionary) -> void:
+	var resolver := load("res://scripts/visual/fighter_asset_resolver.gd")
+	if resolver == null:
+		return
+	var info: Dictionary = resolver.resolve_model_path(_fighter_id, fighter_data)
+	var model_path := str(info.get("path", ""))
+	if model_path.is_empty() or not ResourceLoader.exists(model_path):
+		return
+	var resource := load(model_path)
+	if not resource is PackedScene:
+		return
+	var instance := (resource as PackedScene).instantiate()
+	if not instance is Node3D:
+		instance.queue_free()
+		return
+	if _proxy_model != null:
+		_proxy_model.queue_free()
+	_proxy_model = instance as Node3D
+	_proxy_model.name = "ProceduralProxy_%s" % _fighter_id
+	_proxy_model.visible = false
+	_model_root.add_child(_proxy_model)
+	_animation_player = _find_animation_player(_proxy_model)
 
 
 func _try_load_final_glb(fighter_data: Dictionary) -> void:
