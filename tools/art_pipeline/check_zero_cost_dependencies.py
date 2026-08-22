@@ -198,30 +198,56 @@ def _anycreature_pin(pins: dict) -> dict:
     declared = str(pins.get("pins", {}).get("anyCreature", {}).get("version_or_commit", ""))
     vendor = ROOT / "third_party/anyCreature"
     actual = None
-    match = False
-    if vendor.exists():
-        try:
-            import subprocess
+    source = None
+    try:
+        import subprocess
 
-            actual = subprocess.check_output(
-                ["git", "rev-parse", "HEAD"], cwd=vendor, text=True
-            ).strip()
-            match = actual == declared or (
-                bool(declared) and actual.startswith(declared[:12])
-            ) or (bool(actual) and declared.startswith(actual[:12]))
-            # Prefer exact match
-            match = actual == declared
-        except Exception as exc:  # noqa: BLE001
-            return {
-                "ANYCREATURE_DECLARED_COMMIT": declared,
-                "ANYCREATURE_ACTUAL_COMMIT": None,
-                "ANYCREATURE_PIN_MATCH": False,
-                "error": str(exc),
-            }
+        parent = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True
+        ).strip()
+        # Authoritative gitlink recorded in the parent tree (works in CI without submodule checkout).
+        ls = subprocess.check_output(
+            ["git", "ls-tree", "HEAD", "third_party/anyCreature"],
+            cwd=ROOT,
+            text=True,
+        ).strip()
+        gitlink = None
+        parts = ls.split()
+        if len(parts) >= 3 and parts[0] == "160000" and parts[1] == "commit":
+            gitlink = parts[2]
+            actual = gitlink
+            source = "gitlink"
+
+        nested = None
+        if vendor.exists() and ((vendor / ".git").exists() or (vendor / "LICENSE").exists()):
+            try:
+                nested = subprocess.check_output(
+                    ["git", "rev-parse", "HEAD"], cwd=vendor, text=True
+                ).strip()
+            except Exception:
+                nested = None
+            # Nested rev-parse can walk up to the parent when submodule content is absent.
+            if nested and nested != parent:
+                actual = nested
+                source = "nested_repo"
+            elif nested == parent and gitlink:
+                actual = gitlink
+                source = "gitlink_fallback_nested_was_parent"
+
+        match = bool(declared) and bool(actual) and actual == declared
+    except Exception as exc:  # noqa: BLE001
+        return {
+            "ANYCREATURE_DECLARED_COMMIT": declared,
+            "ANYCREATURE_ACTUAL_COMMIT": None,
+            "ANYCREATURE_PIN_MATCH": False,
+            "ANYCREATURE_PIN_SOURCE": None,
+            "error": str(exc),
+        }
     return {
         "ANYCREATURE_DECLARED_COMMIT": declared,
         "ANYCREATURE_ACTUAL_COMMIT": actual,
         "ANYCREATURE_PIN_MATCH": match,
+        "ANYCREATURE_PIN_SOURCE": source,
     }
 
 
