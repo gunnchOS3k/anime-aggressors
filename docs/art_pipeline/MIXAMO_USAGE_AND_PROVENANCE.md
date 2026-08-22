@@ -1,15 +1,20 @@
 # Mixamo Usage and Provenance
 
-Adobe Mixamo is a **no-cost utility** (Adobe ID) for rigging/animation reference where currently available.
+Adobe Mixamo is an **OPTIONAL** no-cost human-account animation utility for Wave012.
+
+Flags (canonical in `vendor_pins/WAVE012_TOOL_PINS.json`):
+- `MIXAMO_REQUIRED_FOR_BUILD=false`
+- `MIXAMO_REQUIRED_FOR_PIPELINE_PASS=false`
+- `MIXAMO_REQUIRED_FOR_FINAL_ART=false`
+
+Core repo build and Wave012 pipeline PASS succeed with **zero** Mixamo assets.
 
 ## Rules
-1. Do **not** redistribute raw Mixamo stock assets in the repository or releases.
-2. Prefer modified / original choreography for signature moves.
-3. Record acquisition date, Adobe account action, terms snapshot, and derivative transform.
-4. If login/manual download is required: `MIXAMO_ASSET_ACQUISITION=HUMAN_ACCOUNT_ACTION_REQUIRED`.
 
-## Current status
-`MIXAMO_ASSET_ACQUISITION=HUMAN_ACCOUNT_ACTION_REQUIRED`
+1. Do **not** redistribute raw Mixamo assets in the repo or releases.
+2. Human Adobe account action is required for any acquisition (`MIXAMO_ASSET_ACQUISITION=HUMAN_ACCOUNT_ACTION_REQUIRED`).
+3. Log acquisition + originality/retarget provenance before any derived clip is treated as production-ready.
+4. Software/service ToS ≠ automatic production redistribution rights.
+5. Prefer original choreography specs in `content/choreography/` when Mixamo is unavailable.
 
-No Mixamo FBX files are committed in Wave012.
-Derived original clips (after human acquisition + retarget + originality pass) may be logged later under `FINAL_LICENSED` or `FINAL_ORIGINAL` with provenance.
+See also `docs/art_pipeline/FREE_TOOLCHAIN_AND_LICENSE_MATRIX.md` and `content/wave012_provenance_overlay.json`.

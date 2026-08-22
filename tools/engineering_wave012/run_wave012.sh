@@ -35,6 +35,7 @@ run() {
 
 run mocap_env python3 tools/art_pipeline/mocap/check_environment.py
 run zero_cost python3 tools/art_pipeline/check_zero_cost_dependencies.py
+run provenance python3 tools/art_pipeline/validate_toolchain_provenance.py
 
 cat > artifacts/wave012/canonical_rig_fixture.json <<'EOF'
 {

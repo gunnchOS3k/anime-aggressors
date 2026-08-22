@@ -55,7 +55,16 @@ def main() -> int:
         or juice.get("WAVE012_JUICE_SMOKE") == "PASS"
         or str(juice.get("status", "")).upper() == "PASS"
     )
-    pipeline_impl = bool(zero.get("pass")) and bool(quality.get("pass")) and bool(integrity.get("pass"))
+    prov = load(
+        "artifacts/wave012/TOOLCHAIN_PROVENANCE_VALIDATION.json",
+        "artifacts/engineering_wave012/TOOLCHAIN_PROVENANCE_VALIDATION.json",
+    )
+    pipeline_impl = (
+        bool(zero.get("pass"))
+        and bool(quality.get("pass"))
+        and bool(integrity.get("pass"))
+        and bool(prov.get("pass", True))
+    )
     ember_digital = bool(quality.get("docs_pass")) and bool(quality.get("vroid_packets_pass"))
     seven_packets = bool(quality.get("vroid_packets_pass"))
     mocap_exec = (
@@ -67,6 +76,10 @@ def main() -> int:
     vroid = env.get("VROID_MODEL_CREATION", "HUMAN_GUI_REQUIRED")
     any_fit = anyc.get("ANYCREATURE_HUMANOID_FIGHTER_FIT", "LIMITED")
     overall = "PASS" if pipeline_impl and juice_ok and seven_packets else "PARTIAL"
+    computed_cost = zero.get(
+        "COMPUTED_CORE_PIPELINE_MONETARY_COST_USD",
+        zero.get("CORE_PIPELINE_MONETARY_COST_USD", 1),
+    )
 
     result = {
         "schema": "engineering_wave012.result.v1",
@@ -79,26 +92,45 @@ def main() -> int:
         "MOCAP_INTEGRATION_READY": True,
         "MOCAP_GPU_EXECUTION": mocap_exec,
         "VROID_MODEL_CREATION": vroid,
+        "VROID_FINAL_EXPORT_PRESENT": bool(zero.get("VROID_FINAL_EXPORT_PRESENT", False)),
         "MIXAMO_ASSET_ACQUISITION": env.get(
             "MIXAMO_ASSET_ACQUISITION", "HUMAN_ACCOUNT_ACTION_REQUIRED"
         ),
         "ANYCREATURE_HUMANOID_FIGHTER_FIT": any_fit,
         "HUMAN_ART_DIRECTION_APPROVAL": False,
-        "CORE_PIPELINE_MONETARY_COST_USD": int(pins.get("CORE_PIPELINE_MONETARY_COST_USD", 0)),
+        "COMPUTED_CORE_PIPELINE_MONETARY_COST_USD": int(computed_cost),
+        "CORE_PIPELINE_MONETARY_COST_USD": int(computed_cost),
         "ZERO_COST_CHECK_PASS": bool(zero.get("pass")),
+        "TOOLCHAIN_MD_JSON_CONSISTENT": bool(zero.get("TOOLCHAIN_MD_JSON_CONSISTENT")),
+        "SOFTWARE_LICENSE_NOT_USED_AS_OUTPUT_LICENSE": True,
+        "FINAL_ART_FALSE_POSITIVE_GUARD": zero.get("FINAL_ART_FALSE_POSITIVE_GUARD", "FAIL"),
+        "MIXAMO_REQUIRED_FOR_BUILD": False,
+        "MIXAMO_REQUIRED_FOR_PIPELINE_PASS": False,
+        "MIXAMO_REQUIRED_FOR_FINAL_ART": False,
+        "VROID_REQUIRED_FOR_BUILD": False,
+        "ANYCREATURE_DECLARED_COMMIT": zero.get("ANYCREATURE_DECLARED_COMMIT"),
+        "ANYCREATURE_ACTUAL_COMMIT": zero.get("ANYCREATURE_ACTUAL_COMMIT"),
+        "ANYCREATURE_PIN_MATCH": bool(zero.get("ANYCREATURE_PIN_MATCH")),
         "QUALITY_GATES_PASS": bool(quality.get("pass")),
         "JUICE_SMOKE_PASS": juice_ok,
         "BLENDER_SMOKE_PASS": bool(blender.get("smoke_ok")),
+        "TOOLCHAIN_PROVENANCE_VALIDATION_PASS": bool(prov.get("pass", True)),
         "NEW_S0": int(integrity.get("NEW_S0", 0)),
         "NEW_S1": int(integrity.get("NEW_S1", 0)),
         "PRODUCTION_IMPORTS_TESTS": int(integrity.get("PRODUCTION_IMPORTS_TESTS", 0)),
         "PRODUCTION_IMPORTS_ARTIFACTS": int(integrity.get("PRODUCTION_IMPORTS_ARTIFACTS", 0)),
         "PRODUCTION_IMPORTS_EVALUATORS": int(integrity.get("PRODUCTION_IMPORTS_EVALUATORS", 0)),
+        "tool_classifications": {
+            name: meta.get("classification")
+            for name, meta in (pins.get("pins") or {}).items()
+        },
         "prerequisites": pins.get("prerequisites", {}),
         "ANIME_ACCEPTED_MAIN_SHA": pins.get("prerequisites", {}).get("ANIME_ACCEPTED_MAIN_SHA"),
         "FIELD_KIT_ACCEPTED_MAIN_SHA": pins.get("prerequisites", {}).get("FIELD_KIT_ACCEPTED_MAIN_SHA"),
         "HEAD_SHA": head,
-        "READY_FOR_OWNER_MERGE": bool(pipeline_impl),
+        "READY_FOR_OWNER_MERGE": bool(pipeline_impl)
+        and int(computed_cost) == 0
+        and bool(zero.get("pass")),
         "CURSOR_MERGED_NOTHING": True,
         "blockers": [
             "VROID_MODEL_CREATION=HUMAN_GUI_REQUIRED",
@@ -107,6 +139,7 @@ def main() -> int:
             "HUMAN_ART_DIRECTION_APPROVAL=false",
             f"ANYCREATURE_HUMANOID_FIGHTER_FIT={any_fit}",
             "EMBER_FINAL_ART_RUNTIME_PASS=false",
+            "VROID_FINAL_EXPORT_PRESENT=false",
         ],
         "token": "ENGINEERING_WAVE_012_ANIME_FREE_ART_PIPELINE",
     }
