@@ -1,0 +1,115 @@
+{
+  "fighter_id": "orion-vell",
+  "display_name": "Orion Vell",
+  "visual_language": "orbit geometry rings",
+  "status": "PROCEDURAL_PRODUCTION_PROXY",
+  "export": {
+    "fighter_id": "orion-vell",
+    "status": "PROCEDURAL_PRODUCTION_PROXY",
+    "source_glb": "game-godot/assets/characters/procedural_final/orion-vell.glb",
+    "export_glb": "content/fighters/orion-vell/model/orion-vell_procedural_proxy.glb",
+    "sha256": "4970c2756874727c12acdb9dd55e32e24c64a51593930e0d93c4947454e85f1c",
+    "size_bytes": 752136,
+    "triangle_budget_preferred": 35000,
+    "material_budget": 6
+  },
+  "materials": {
+    "fighter_id": "orion-vell",
+    "shader": "game-godot/shaders/fighter_toon.gdshader",
+    "material_count": 6,
+    "max_texture_resolution": "2048x2048",
+    "slots": [
+      {
+        "name": "skin",
+        "hex": "6554A6",
+        "emission": 0.0,
+        "toon_band": 3
+      },
+      {
+        "name": "cloth",
+        "hex": "252340",
+        "emission": 0.0,
+        "toon_band": 3
+      },
+      {
+        "name": "accent",
+        "hex": "C795FF",
+        "emission": 0.15,
+        "toon_band": 2
+      },
+      {
+        "name": "outline",
+        "hex": "161522",
+        "emission": 0.0,
+        "toon_band": 1
+      },
+      {
+        "name": "accessory",
+        "hex": "C795FF",
+        "emission": 0.25,
+        "toon_band": 2
+      },
+      {
+        "name": "aura_shell",
+        "hex": "C795FF",
+        "emission": 0.45,
+        "toon_band": 2
+      }
+    ],
+    "status": "PROCEDURAL_PRODUCTION_PROXY"
+  },
+  "rig": {
+    "schema_version": 1,
+    "fighter_id": "orion-vell",
+    "normalized": true,
+    "wave012_compatible": true,
+    "bones": [
+      "Root",
+      "Hips",
+      "Spine",
+      "Chest",
+      "Neck",
+      "Head",
+      "Shoulder_L",
+      "UpperArm_L",
+      "LowerArm_L",
+      "Hand_L",
+      "Shoulder_R",
+      "UpperArm_R",
+      "LowerArm_R",
+      "Hand_R",
+      "UpperLeg_L",
+      "LowerLeg_L",
+      "Foot_L",
+      "Toes_L",
+      "UpperLeg_R",
+      "LowerLeg_R",
+      "Foot_R",
+      "Toes_R"
+    ],
+    "sockets": [
+      "hand_l",
+      "hand_r",
+      "foot_l",
+      "foot_r",
+      "chest",
+      "head",
+      "back",
+      "aura_root",
+      "projectile_origin",
+      "recovery_origin"
+    ],
+    "source": "procedural_roster/generate_character.py",
+    "root_motion_authority": "PHYSICS_AUTHORITATIVE",
+    "competitive_gameplay_root_motion": "PHYSICS_AUTHORITATIVE"
+  },
+  "silhouette_contract": {
+    "accessory": "gravity_rings",
+    "body_scale": [
+      1.02,
+      1.0,
+      0.98
+    ],
+    "mass_read": "orbit_vector"
+  }
+}

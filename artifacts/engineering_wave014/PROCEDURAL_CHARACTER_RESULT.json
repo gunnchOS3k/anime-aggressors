@@ -1,0 +1,812 @@
+{
+  "schema_version": 1,
+  "status": "PROCEDURAL_PRODUCTION_PROXY",
+  "fighter_count": 7,
+  "fighters": [
+    {
+      "fighter_id": "ember-vale",
+      "display_name": "Ember Vale",
+      "visual_language": "athletic ignition",
+      "status": "PROCEDURAL_PRODUCTION_PROXY",
+      "export": {
+        "fighter_id": "ember-vale",
+        "status": "PROCEDURAL_PRODUCTION_PROXY",
+        "source_glb": "game-godot/assets/characters/procedural_final/ember-vale.glb",
+        "export_glb": "content/fighters/ember-vale/model/ember-vale_procedural_proxy.glb",
+        "sha256": "35be3054afe942fba22f79d178e27614175e1519431eba7585a6d6beb6898587",
+        "size_bytes": 685120,
+        "triangle_budget_preferred": 35000,
+        "material_budget": 6
+      },
+      "materials": {
+        "fighter_id": "ember-vale",
+        "shader": "game-godot/shaders/fighter_toon.gdshader",
+        "material_count": 6,
+        "max_texture_resolution": "2048x2048",
+        "slots": [
+          {
+            "name": "skin",
+            "hex": "E84A3C",
+            "emission": 0.0,
+            "toon_band": 3
+          },
+          {
+            "name": "cloth",
+            "hex": "6C2630",
+            "emission": 0.0,
+            "toon_band": 3
+          },
+          {
+            "name": "accent",
+            "hex": "FFB33B",
+            "emission": 0.15,
+            "toon_band": 2
+          },
+          {
+            "name": "outline",
+            "hex": "241922",
+            "emission": 0.0,
+            "toon_band": 1
+          },
+          {
+            "name": "accessory",
+            "hex": "FFB33B",
+            "emission": 0.25,
+            "toon_band": 2
+          },
+          {
+            "name": "aura_shell",
+            "hex": "FFB33B",
+            "emission": 0.45,
+            "toon_band": 2
+          }
+        ],
+        "status": "PROCEDURAL_PRODUCTION_PROXY"
+      },
+      "rig": {
+        "schema_version": 1,
+        "fighter_id": "ember-vale",
+        "normalized": true,
+        "wave012_compatible": true,
+        "bones": [
+          "Root",
+          "Hips",
+          "Spine",
+          "Chest",
+          "Neck",
+          "Head",
+          "Shoulder_L",
+          "UpperArm_L",
+          "LowerArm_L",
+          "Hand_L",
+          "Shoulder_R",
+          "UpperArm_R",
+          "LowerArm_R",
+          "Hand_R",
+          "UpperLeg_L",
+          "LowerLeg_L",
+          "Foot_L",
+          "Toes_L",
+          "UpperLeg_R",
+          "LowerLeg_R",
+          "Foot_R",
+          "Toes_R"
+        ],
+        "sockets": [
+          "hand_l",
+          "hand_r",
+          "foot_l",
+          "foot_r",
+          "chest",
+          "head",
+          "back",
+          "aura_root",
+          "projectile_origin",
+          "recovery_origin"
+        ],
+        "source": "procedural_roster/generate_character.py",
+        "root_motion_authority": "PHYSICS_AUTHORITATIVE",
+        "competitive_gameplay_root_motion": "PHYSICS_AUTHORITATIVE"
+      },
+      "silhouette_contract": {
+        "accessory": "flame_gauntlets",
+        "body_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "mass_read": "light_aggressive"
+      }
+    },
+    {
+      "fighter_id": "rook-ironside",
+      "display_name": "Rook Ironside",
+      "visual_language": "mass armor plates",
+      "status": "PROCEDURAL_PRODUCTION_PROXY",
+      "export": {
+        "fighter_id": "rook-ironside",
+        "status": "PROCEDURAL_PRODUCTION_PROXY",
+        "source_glb": "game-godot/assets/characters/procedural_final/rook-ironside.glb",
+        "export_glb": "content/fighters/rook-ironside/model/rook-ironside_procedural_proxy.glb",
+        "sha256": "58fd43045a6e1a6d393dde04c883a729e2efe76485c38edfc77b0d326b06c6f7",
+        "size_bytes": 675920,
+        "triangle_budget_preferred": 35000,
+        "material_budget": 6
+      },
+      "materials": {
+        "fighter_id": "rook-ironside",
+        "shader": "game-godot/shaders/fighter_toon.gdshader",
+        "material_count": 6,
+        "max_texture_resolution": "2048x2048",
+        "slots": [
+          {
+            "name": "skin",
+            "hex": "8C5A3C",
+            "emission": 0.0,
+            "toon_band": 3
+          },
+          {
+            "name": "cloth",
+            "hex": "30384A",
+            "emission": 0.0,
+            "toon_band": 3
+          },
+          {
+            "name": "accent",
+            "hex": "E28A36",
+            "emission": 0.15,
+            "toon_band": 2
+          },
+          {
+            "name": "outline",
+            "hex": "181A20",
+            "emission": 0.0,
+            "toon_band": 1
+          },
+          {
+            "name": "accessory",
+            "hex": "E28A36",
+            "emission": 0.25,
+            "toon_band": 2
+          },
+          {
+            "name": "aura_shell",
+            "hex": "E28A36",
+            "emission": 0.45,
+            "toon_band": 2
+          }
+        ],
+        "status": "PROCEDURAL_PRODUCTION_PROXY"
+      },
+      "rig": {
+        "schema_version": 1,
+        "fighter_id": "rook-ironside",
+        "normalized": true,
+        "wave012_compatible": true,
+        "bones": [
+          "Root",
+          "Hips",
+          "Spine",
+          "Chest",
+          "Neck",
+          "Head",
+          "Shoulder_L",
+          "UpperArm_L",
+          "LowerArm_L",
+          "Hand_L",
+          "Shoulder_R",
+          "UpperArm_R",
+          "LowerArm_R",
+          "Hand_R",
+          "UpperLeg_L",
+          "LowerLeg_L",
+          "Foot_L",
+          "Toes_L",
+          "UpperLeg_R",
+          "LowerLeg_R",
+          "Foot_R",
+          "Toes_R"
+        ],
+        "sockets": [
+          "hand_l",
+          "hand_r",
+          "foot_l",
+          "foot_r",
+          "chest",
+          "head",
+          "back",
+          "aura_root",
+          "projectile_origin",
+          "recovery_origin"
+        ],
+        "source": "procedural_roster/generate_character.py",
+        "root_motion_authority": "PHYSICS_AUTHORITATIVE",
+        "competitive_gameplay_root_motion": "PHYSICS_AUTHORITATIVE"
+      },
+      "silhouette_contract": {
+        "accessory": "impact_armor",
+        "body_scale": [
+          1.18,
+          1.1,
+          1.05
+        ],
+        "mass_read": "heavy_armored"
+      }
+    },
+    {
+      "fighter_id": "juno-spark",
+      "display_name": "Juno Spark",
+      "visual_language": "compact speed lines",
+      "status": "PROCEDURAL_PRODUCTION_PROXY",
+      "export": {
+        "fighter_id": "juno-spark",
+        "status": "PROCEDURAL_PRODUCTION_PROXY",
+        "source_glb": "game-godot/assets/characters/procedural_final/juno-spark.glb",
+        "export_glb": "content/fighters/juno-spark/model/juno-spark_procedural_proxy.glb",
+        "sha256": "f9dd1713d349bdc8cf1855e67bc42e40d76f2e4db2c92d31f269e60e0cbf47d2",
+        "size_bytes": 676400,
+        "triangle_budget_preferred": 35000,
+        "material_budget": 6
+      },
+      "materials": {
+        "fighter_id": "juno-spark",
+        "shader": "game-godot/shaders/fighter_toon.gdshader",
+        "material_count": 6,
+        "max_texture_resolution": "2048x2048",
+        "slots": [
+          {
+            "name": "skin",
+            "hex": "F4D94E",
+            "emission": 0.0,
+            "toon_band": 3
+          },
+          {
+            "name": "cloth",
+            "hex": "202839",
+            "emission": 0.0,
+            "toon_band": 3
+          },
+          {
+            "name": "accent",
+            "hex": "72E6FF",
+            "emission": 0.15,
+            "toon_band": 2
+          },
+          {
+            "name": "outline",
+            "hex": "12151D",
+            "emission": 0.0,
+            "toon_band": 1
+          },
+          {
+            "name": "accessory",
+            "hex": "72E6FF",
+            "emission": 0.25,
+            "toon_band": 2
+          },
+          {
+            "name": "aura_shell",
+            "hex": "72E6FF",
+            "emission": 0.45,
+            "toon_band": 2
+          }
+        ],
+        "status": "PROCEDURAL_PRODUCTION_PROXY"
+      },
+      "rig": {
+        "schema_version": 1,
+        "fighter_id": "juno-spark",
+        "normalized": true,
+        "wave012_compatible": true,
+        "bones": [
+          "Root",
+          "Hips",
+          "Spine",
+          "Chest",
+          "Neck",
+          "Head",
+          "Shoulder_L",
+          "UpperArm_L",
+          "LowerArm_L",
+          "Hand_L",
+          "Shoulder_R",
+          "UpperArm_R",
+          "LowerArm_R",
+          "Hand_R",
+          "UpperLeg_L",
+          "LowerLeg_L",
+          "Foot_L",
+          "Toes_L",
+          "UpperLeg_R",
+          "LowerLeg_R",
+          "Foot_R",
+          "Toes_R"
+        ],
+        "sockets": [
+          "hand_l",
+          "hand_r",
+          "foot_l",
+          "foot_r",
+          "chest",
+          "head",
+          "back",
+          "aura_root",
+          "projectile_origin",
+          "recovery_origin"
+        ],
+        "source": "procedural_roster/generate_character.py",
+        "root_motion_authority": "PHYSICS_AUTHORITATIVE",
+        "competitive_gameplay_root_motion": "PHYSICS_AUTHORITATIVE"
+      },
+      "silhouette_contract": {
+        "accessory": "volt_scarf",
+        "body_scale": [
+          0.9,
+          0.94,
+          0.92
+        ],
+        "mass_read": "compact_fast"
+      }
+    },
+    {
+      "fighter_id": "kaia-windrow",
+      "display_name": "Kaia Windrow",
+      "visual_language": "flowing aerial sash",
+      "status": "PROCEDURAL_PRODUCTION_PROXY",
+      "export": {
+        "fighter_id": "kaia-windrow",
+        "status": "PROCEDURAL_PRODUCTION_PROXY",
+        "source_glb": "game-godot/assets/characters/procedural_final/kaia-windrow.glb",
+        "export_glb": "content/fighters/kaia-windrow/model/kaia-windrow_procedural_proxy.glb",
+        "sha256": "3e3d3811dc855dfa72612be2a9a7f7bc69f225fc849b14de63ca806e3b40dd67",
+        "size_bytes": 676040,
+        "triangle_budget_preferred": 35000,
+        "material_budget": 6
+      },
+      "materials": {
+        "fighter_id": "kaia-windrow",
+        "shader": "game-godot/shaders/fighter_toon.gdshader",
+        "material_count": 6,
+        "max_texture_resolution": "2048x2048",
+        "slots": [
+          {
+            "name": "skin",
+            "hex": "3CBF91",
+            "emission": 0.0,
+            "toon_band": 3
+          },
+          {
+            "name": "cloth",
+            "hex": "1F5360",
+            "emission": 0.0,
+            "toon_band": 3
+          },
+          {
+            "name": "accent",
+            "hex": "B8FFF1",
+            "emission": 0.15,
+            "toon_band": 2
+          },
+          {
+            "name": "outline",
+            "hex": "15262B",
+            "emission": 0.0,
+            "toon_band": 1
+          },
+          {
+            "name": "accessory",
+            "hex": "B8FFF1",
+            "emission": 0.25,
+            "toon_band": 2
+          },
+          {
+            "name": "aura_shell",
+            "hex": "B8FFF1",
+            "emission": 0.45,
+            "toon_band": 2
+          }
+        ],
+        "status": "PROCEDURAL_PRODUCTION_PROXY"
+      },
+      "rig": {
+        "schema_version": 1,
+        "fighter_id": "kaia-windrow",
+        "normalized": true,
+        "wave012_compatible": true,
+        "bones": [
+          "Root",
+          "Hips",
+          "Spine",
+          "Chest",
+          "Neck",
+          "Head",
+          "Shoulder_L",
+          "UpperArm_L",
+          "LowerArm_L",
+          "Hand_L",
+          "Shoulder_R",
+          "UpperArm_R",
+          "LowerArm_R",
+          "Hand_R",
+          "UpperLeg_L",
+          "LowerLeg_L",
+          "Foot_L",
+          "Toes_L",
+          "UpperLeg_R",
+          "LowerLeg_R",
+          "Foot_R",
+          "Toes_R"
+        ],
+        "sockets": [
+          "hand_l",
+          "hand_r",
+          "foot_l",
+          "foot_r",
+          "chest",
+          "head",
+          "back",
+          "aura_root",
+          "projectile_origin",
+          "recovery_origin"
+        ],
+        "source": "procedural_roster/generate_character.py",
+        "root_motion_authority": "PHYSICS_AUTHORITATIVE",
+        "competitive_gameplay_root_motion": "PHYSICS_AUTHORITATIVE"
+      },
+      "silhouette_contract": {
+        "accessory": "gale_sash",
+        "body_scale": [
+          0.94,
+          0.98,
+          0.92
+        ],
+        "mass_read": "flowing_aerial"
+      }
+    },
+    {
+      "fighter_id": "nix-calder",
+      "display_name": "Nix Calder",
+      "visual_language": "crystalline mantle",
+      "status": "PROCEDURAL_PRODUCTION_PROXY",
+      "export": {
+        "fighter_id": "nix-calder",
+        "status": "PROCEDURAL_PRODUCTION_PROXY",
+        "source_glb": "game-godot/assets/characters/procedural_final/nix-calder.glb",
+        "export_glb": "content/fighters/nix-calder/model/nix-calder_procedural_proxy.glb",
+        "sha256": "724779a753e8810822a13b745cf4656a7b61ac54663195d11f7cdb35935359d3",
+        "size_bytes": 680516,
+        "triangle_budget_preferred": 35000,
+        "material_budget": 6
+      },
+      "materials": {
+        "fighter_id": "nix-calder",
+        "shader": "game-godot/shaders/fighter_toon.gdshader",
+        "material_count": 6,
+        "max_texture_resolution": "2048x2048",
+        "slots": [
+          {
+            "name": "skin",
+            "hex": "4C91D8",
+            "emission": 0.0,
+            "toon_band": 3
+          },
+          {
+            "name": "cloth",
+            "hex": "D8F4FF",
+            "emission": 0.0,
+            "toon_band": 3
+          },
+          {
+            "name": "accent",
+            "hex": "83E8FF",
+            "emission": 0.15,
+            "toon_band": 2
+          },
+          {
+            "name": "outline",
+            "hex": "172A42",
+            "emission": 0.0,
+            "toon_band": 1
+          },
+          {
+            "name": "accessory",
+            "hex": "83E8FF",
+            "emission": 0.25,
+            "toon_band": 2
+          },
+          {
+            "name": "aura_shell",
+            "hex": "83E8FF",
+            "emission": 0.45,
+            "toon_band": 2
+          }
+        ],
+        "status": "PROCEDURAL_PRODUCTION_PROXY"
+      },
+      "rig": {
+        "schema_version": 1,
+        "fighter_id": "nix-calder",
+        "normalized": true,
+        "wave012_compatible": true,
+        "bones": [
+          "Root",
+          "Hips",
+          "Spine",
+          "Chest",
+          "Neck",
+          "Head",
+          "Shoulder_L",
+          "UpperArm_L",
+          "LowerArm_L",
+          "Hand_L",
+          "Shoulder_R",
+          "UpperArm_R",
+          "LowerArm_R",
+          "Hand_R",
+          "UpperLeg_L",
+          "LowerLeg_L",
+          "Foot_L",
+          "Toes_L",
+          "UpperLeg_R",
+          "LowerLeg_R",
+          "Foot_R",
+          "Toes_R"
+        ],
+        "sockets": [
+          "hand_l",
+          "hand_r",
+          "foot_l",
+          "foot_r",
+          "chest",
+          "head",
+          "back",
+          "aura_root",
+          "projectile_origin",
+          "recovery_origin"
+        ],
+        "source": "procedural_roster/generate_character.py",
+        "root_motion_authority": "PHYSICS_AUTHORITATIVE",
+        "competitive_gameplay_root_motion": "PHYSICS_AUTHORITATIVE"
+      },
+      "silhouette_contract": {
+        "accessory": "frost_mantle",
+        "body_scale": [
+          1.08,
+          1.06,
+          1.04
+        ],
+        "mass_read": "crystalline_control"
+      }
+    },
+    {
+      "fighter_id": "orion-vell",
+      "display_name": "Orion Vell",
+      "visual_language": "orbit geometry rings",
+      "status": "PROCEDURAL_PRODUCTION_PROXY",
+      "export": {
+        "fighter_id": "orion-vell",
+        "status": "PROCEDURAL_PRODUCTION_PROXY",
+        "source_glb": "game-godot/assets/characters/procedural_final/orion-vell.glb",
+        "export_glb": "content/fighters/orion-vell/model/orion-vell_procedural_proxy.glb",
+        "sha256": "4970c2756874727c12acdb9dd55e32e24c64a51593930e0d93c4947454e85f1c",
+        "size_bytes": 752136,
+        "triangle_budget_preferred": 35000,
+        "material_budget": 6
+      },
+      "materials": {
+        "fighter_id": "orion-vell",
+        "shader": "game-godot/shaders/fighter_toon.gdshader",
+        "material_count": 6,
+        "max_texture_resolution": "2048x2048",
+        "slots": [
+          {
+            "name": "skin",
+            "hex": "6554A6",
+            "emission": 0.0,
+            "toon_band": 3
+          },
+          {
+            "name": "cloth",
+            "hex": "252340",
+            "emission": 0.0,
+            "toon_band": 3
+          },
+          {
+            "name": "accent",
+            "hex": "C795FF",
+            "emission": 0.15,
+            "toon_band": 2
+          },
+          {
+            "name": "outline",
+            "hex": "161522",
+            "emission": 0.0,
+            "toon_band": 1
+          },
+          {
+            "name": "accessory",
+            "hex": "C795FF",
+            "emission": 0.25,
+            "toon_band": 2
+          },
+          {
+            "name": "aura_shell",
+            "hex": "C795FF",
+            "emission": 0.45,
+            "toon_band": 2
+          }
+        ],
+        "status": "PROCEDURAL_PRODUCTION_PROXY"
+      },
+      "rig": {
+        "schema_version": 1,
+        "fighter_id": "orion-vell",
+        "normalized": true,
+        "wave012_compatible": true,
+        "bones": [
+          "Root",
+          "Hips",
+          "Spine",
+          "Chest",
+          "Neck",
+          "Head",
+          "Shoulder_L",
+          "UpperArm_L",
+          "LowerArm_L",
+          "Hand_L",
+          "Shoulder_R",
+          "UpperArm_R",
+          "LowerArm_R",
+          "Hand_R",
+          "UpperLeg_L",
+          "LowerLeg_L",
+          "Foot_L",
+          "Toes_L",
+          "UpperLeg_R",
+          "LowerLeg_R",
+          "Foot_R",
+          "Toes_R"
+        ],
+        "sockets": [
+          "hand_l",
+          "hand_r",
+          "foot_l",
+          "foot_r",
+          "chest",
+          "head",
+          "back",
+          "aura_root",
+          "projectile_origin",
+          "recovery_origin"
+        ],
+        "source": "procedural_roster/generate_character.py",
+        "root_motion_authority": "PHYSICS_AUTHORITATIVE",
+        "competitive_gameplay_root_motion": "PHYSICS_AUTHORITATIVE"
+      },
+      "silhouette_contract": {
+        "accessory": "gravity_rings",
+        "body_scale": [
+          1.02,
+          1.0,
+          0.98
+        ],
+        "mass_read": "orbit_vector"
+      }
+    },
+    {
+      "fighter_id": "vesper-nyx",
+      "display_name": "Vesper Nyx",
+      "visual_language": "asymmetric void hood",
+      "status": "PROCEDURAL_PRODUCTION_PROXY",
+      "export": {
+        "fighter_id": "vesper-nyx",
+        "status": "PROCEDURAL_PRODUCTION_PROXY",
+        "source_glb": "game-godot/assets/characters/procedural_final/vesper-nyx.glb",
+        "export_glb": "content/fighters/vesper-nyx/model/vesper-nyx_procedural_proxy.glb",
+        "sha256": "c7989f456348cf6eb1541343e45ad3d2bd625650682b56c337500e113db15155",
+        "size_bytes": 690568,
+        "triangle_budget_preferred": 35000,
+        "material_budget": 6
+      },
+      "materials": {
+        "fighter_id": "vesper-nyx",
+        "shader": "game-godot/shaders/fighter_toon.gdshader",
+        "material_count": 6,
+        "max_texture_resolution": "2048x2048",
+        "slots": [
+          {
+            "name": "skin",
+            "hex": "7C3EA2",
+            "emission": 0.0,
+            "toon_band": 3
+          },
+          {
+            "name": "cloth",
+            "hex": "1D1830",
+            "emission": 0.0,
+            "toon_band": 3
+          },
+          {
+            "name": "accent",
+            "hex": "D272FF",
+            "emission": 0.15,
+            "toon_band": 2
+          },
+          {
+            "name": "outline",
+            "hex": "0D0B14",
+            "emission": 0.0,
+            "toon_band": 1
+          },
+          {
+            "name": "accessory",
+            "hex": "D272FF",
+            "emission": 0.25,
+            "toon_band": 2
+          },
+          {
+            "name": "aura_shell",
+            "hex": "D272FF",
+            "emission": 0.45,
+            "toon_band": 2
+          }
+        ],
+        "status": "PROCEDURAL_PRODUCTION_PROXY"
+      },
+      "rig": {
+        "schema_version": 1,
+        "fighter_id": "vesper-nyx",
+        "normalized": true,
+        "wave012_compatible": true,
+        "bones": [
+          "Root",
+          "Hips",
+          "Spine",
+          "Chest",
+          "Neck",
+          "Head",
+          "Shoulder_L",
+          "UpperArm_L",
+          "LowerArm_L",
+          "Hand_L",
+          "Shoulder_R",
+          "UpperArm_R",
+          "LowerArm_R",
+          "Hand_R",
+          "UpperLeg_L",
+          "LowerLeg_L",
+          "Foot_L",
+          "Toes_L",
+          "UpperLeg_R",
+          "LowerLeg_R",
+          "Foot_R",
+          "Toes_R"
+        ],
+        "sockets": [
+          "hand_l",
+          "hand_r",
+          "foot_l",
+          "foot_r",
+          "chest",
+          "head",
+          "back",
+          "aura_root",
+          "projectile_origin",
+          "recovery_origin"
+        ],
+        "source": "procedural_roster/generate_character.py",
+        "root_motion_authority": "PHYSICS_AUTHORITATIVE",
+        "competitive_gameplay_root_motion": "PHYSICS_AUTHORITATIVE"
+      },
+      "silhouette_contract": {
+        "accessory": "void_hood",
+        "body_scale": [
+          0.94,
+          0.98,
+          0.94
+        ],
+        "mass_read": "asymmetric_void"
+      }
+    }
+  ]
+}
