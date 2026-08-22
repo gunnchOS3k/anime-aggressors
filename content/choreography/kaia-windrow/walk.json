@@ -2,19 +2,19 @@
   "schema_version": 1,
   "action_id": "kaia-windrow.walk",
   "fighter_id": "kaia-windrow",
-  "display_name": "Kaia Slow Locomotion 01",
+  "display_name": "Kaia Windrow Slow Locomotion",
   "category": "movement",
   "lane": "wind/air/storm/flight/pressure",
   "notes_driven": true,
   "inspiration_notes": {
     "research_anchors": [
-      "genre platform-fighter grammar",
+      "fighter_motion_blueprints.json",
       "wind/air/storm/flight/pressure lane studies",
       "ICONIC_MOMENT_TO_ORIGINAL_MOVE_MATRIX"
     ],
-    "iconic_moment_summary": "Notes-driven synthesis for slow locomotion respecting floating arcs, ribbon lag, pressure-wave releases.",
-    "motion_principle": "anticipation \u2192 committed contact \u2192 readable follow-through",
-    "power_principle": "aura controls air scaling on payoff frames",
+    "iconic_moment_summary": "Blueprint-driven slow locomotion for ribbon_glider.",
+    "motion_principle": "gale_lag",
+    "power_principle": "aura controls air via air_control_stack",
     "do_not_copy": [
       "franchise costumes",
       "named techniques",
@@ -22,24 +22,24 @@
       "licensed SFX/VFX glyphs"
     ]
   },
-  "original_move_name": "Kaia Slow Locomotion 01",
+  "original_move_name": "Kaia Windrow Slow Locomotion",
   "originality": {
     "direct_1_to_1_reference_moves": 0,
     "franchise_assets_in_production": 0,
-    "composite_synthesis": "\u22653-anchor composite for Kaia Windrow walk",
+    "composite_synthesis": "blueprint-driven composite for Kaia Windrow walk",
     "originality_review_status": "NOTES_DRIVEN_PENDING_HUMAN_REVIEW"
   },
   "timing": {
-    "anticipation_frames": 4,
-    "active_frames": 5,
-    "recovery_frames": 7,
-    "total_frames": 17,
+    "anticipation_frames": 3,
+    "active_frames": 7,
+    "recovery_frames": 8,
+    "total_frames": 18,
     "cancel_windows": []
   },
   "motion_grammar": {
     "weight": "medium",
     "tempo": "moderate",
-    "arc_type": "linear",
+    "arc_type": "floating_arc",
     "contact_points": [
       "root"
     ],
@@ -51,21 +51,21 @@
     "fighter_motion_grammar": "floating arcs, ribbon lag, pressure-wave releases"
   },
   "camera": {
-    "framing": "medium",
+    "framing": "medium_high",
     "push_in": false,
     "shake_tier": "light"
   },
   "impact": {
     "hitstop_tier": "medium",
     "lane_flash": true,
-    "risk_reward": "high commitment on smash/heavy; low on jab/projectile_tap"
+    "risk_reward": "upward_sweep"
   },
   "vfx_cue": "juice.kaia-windrow.walk.vfx",
   "sfx_cue": "juice.kaia-windrow.walk.sfx",
   "hitbox": {
-    "window_start_frame": 4,
-    "window_end_frame": 8,
-    "notes": "align to moves json at runtime integration"
+    "window_start_frame": 3,
+    "window_end_frame": 10,
+    "notes": "aligned via runtime_alignment.hitbox_phase_sync"
   },
   "accessibility": {
     "reduce_flash": true,
@@ -83,8 +83,16 @@
     "path": null
   },
   "provenance": {
-    "source_class": "NOTES_DRIVEN_SYNTHETIC_SPEC",
+    "source_class": "BLUEPRINT_DRIVEN_SYNTHETIC_SPEC",
     "real_user_motion": false,
     "edmund_personal_motion": false
+  },
+  "runtime_alignment": {
+    "moves_json_key": "walk",
+    "animatic_binding": null,
+    "hitbox_phase_sync": true,
+    "root_motion_style": "floating_arc",
+    "ground_coupling": "light",
+    "cancel_graph_nodes": []
   }
 }

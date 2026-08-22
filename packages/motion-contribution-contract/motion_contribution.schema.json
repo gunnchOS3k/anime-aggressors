@@ -1,18 +1,24 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "motion-contribution-contract/motion_contribution.schema.json",
-  "title": "Portable Motion Contribution Contract",
+  "title": "Contributor Motion Declaration (Record A)",
+  "description": "Contributor declaration only — CANNOT set APPROVED_FOR_PRODUCTION",
   "type": "object",
-  "required": ["schema_version", "contribution_id", "consent", "privacy", "provenance"],
+  "required": ["schema_version", "contribution_id", "contributor_pseudonym", "consent", "privacy", "state"],
   "properties": {
     "schema_version": { "type": "integer", "const": 1 },
     "contribution_id": { "type": "string" },
+    "contributor_pseudonym": { "type": "string" },
+    "state": {
+      "type": "string",
+      "enum": ["QUARANTINED", "VALIDATED", "NORMALIZED", "RETARGETED", "QA_PASSED", "REVIEW_PENDING", "REJECTED"]
+    },
     "consent": {
       "type": "object",
-      "required": ["stages", "production_use_after_approval", "biometric_inference_forbidden"],
+      "required": ["stages", "biometric_inference_forbidden"],
       "properties": {
         "stages": { "type": "array", "items": { "type": "string" } },
-        "production_use_after_approval": { "type": "boolean" },
+        "production_use_after_approval": { "type": "boolean", "const": false },
         "biometric_inference_forbidden": { "type": "boolean", "const": true }
       }
     },
@@ -23,12 +29,9 @@
         "metadata_stripped": { "type": "boolean" }
       }
     },
-    "provenance": {
-      "type": "object",
-      "properties": {
-        "real_user_motion": { "type": "boolean" },
-        "fixture_class": { "type": "string" }
-      }
-    }
+    "CONTRIBUTOR_CAN_SELF_APPROVE_PRODUCTION": { "type": "boolean", "const": false }
+  },
+  "not": {
+    "properties": { "production_status": { "const": "APPROVED_FOR_PRODUCTION" } }
   }
 }

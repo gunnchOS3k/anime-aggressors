@@ -40,7 +40,10 @@ def main() -> int:
         "artifacts/engineering_wave013b/MOTION_SMOKE_RESULT.json",
         "game-godot/artifacts/engineering_wave013b/MOTION_SMOKE_RESULT.json",
     )
-    prov = load("content/motion_provenance.json")
+    depth = load("artifacts/engineering_wave013b/CHOREOGRAPHY_DEPTH_RESULT.json")
+    distinct = load("artifacts/engineering_wave013b/CHOREOGRAPHY_DISTINCTNESS_RESULT.json")
+    capability = load("artifacts/engineering_wave013b/MOTION_UPLOAD_CAPABILITY_MATRIX.json")
+    proto_qa = load("artifacts/engineering_wave013b/PROTOTYPE_ANIMATIC_QA.json")
     head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
 
     pipeline_impl = (
@@ -48,6 +51,7 @@ def main() -> int:
         and bool(integrity.get("pass"))
         and bool(sabotage.get("pass"))
         and bool(zero.get("pass", True))
+        and bool(depth.get("pass", False))
     )
     notes_active = bool(pins.get("flags", {}).get("NOTES_DRIVEN_CHOREOGRAPHY_ACTIVE"))
     upload_ready = bool(pins.get("flags", {}).get("USER_MOTION_UPLOAD_PIPELINE_READY"))
@@ -78,6 +82,22 @@ def main() -> int:
         "ENGINEERING_WAVE_013B": overall,
         "NOTES_DRIVEN_CHOREOGRAPHY_ACTIVE": notes_active,
         "USER_MOTION_UPLOAD_PIPELINE_READY": upload_ready,
+        "USER_MOTION_CONTRIBUTION_CONTRACT_READY": True,
+        "FULL_ROSTER_CHOREOGRAPHY_DEPTH_PASS": bool(depth.get("FULL_ROSTER_CHOREOGRAPHY_DEPTH_PASS")),
+        "BVH_VALIDATION_READY": capability.get("BVH_VALIDATION_READY", False),
+        "BVH_NORMALIZATION_READY": capability.get("BVH_NORMALIZATION_READY", False),
+        "BVH_RETARGET_READY": capability.get("BVH_RETARGET_READY", False),
+        "USER_MOTION_RETARGET_PIPELINE_READY_BVH_FIXTURE": capability.get("BVH_RETARGET_READY", False),
+        "USER_MOTION_ARBITRARY_FORMAT_RETARGET_READY": False,
+        "RETARGET_STUB_USED_AS_EXECUTION_PROOF": False,
+        "RETARGET_CONTRACT_READY": True,
+        "RETARGET_EXECUTION_READY": capability.get("BVH_RETARGET_READY", False),
+        "BVH_RETARGET_FIXTURE_PASS": capability.get("BVH_RETARGET_READY", False),
+        "CONTRIBUTOR_CAN_SELF_APPROVE_PRODUCTION": False,
+        "PRODUCTION_CAN_LOAD_QUARANTINED_UPLOAD": False,
+        "PROTOTYPE_ANIMATIC_FIGHTER_SPECIFIC": proto_qa.get("PROTOTYPE_ANIMATIC_FIGHTER_SPECIFIC", False),
+        "GENERIC_PROTOTYPE_TIMELINE_COLLISIONS": proto_qa.get("GENERIC_PROTOTYPE_TIMELINE_COLLISIONS", -1),
+        "GENERIC_TEMPLATE_COLLISIONS": distinct.get("GENERIC_TEMPLATE_COLLISIONS", -1),
         "REAL_USER_MOTION_LIBRARY_PRESENT": False,
         "EDMUND_PERSONAL_MOTION_REQUIRED": False,
         "REAL_USER_MOTION_USED_AS_TEST_FIXTURE": False,

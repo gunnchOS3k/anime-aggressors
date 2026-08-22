@@ -4,47 +4,62 @@
   "fighter_id": "vesper-nyx",
   "kind": "REFERENCE_ANIMATIC",
   "fps": 60.0,
-  "duration_frames": 32,
+  "duration_frames": 28,
   "events": [
     {
       "frame": 0,
       "event_type": "anticipation_start",
       "payload": {
-        "pose": "neutral"
+        "pose": "shadow_flicker",
+        "fighter": "vesper-nyx"
       }
     },
     {
-      "frame": 4,
+      "frame": 5,
       "event_type": "active_start",
       "payload": {
-        "contact": "jab"
+        "contact": "jab",
+        "root": "phase_drift",
+        "lane_offset": 0.30000000000000004
       }
     },
     {
-      "frame": 8,
+      "frame": 7,
       "event_type": "hitbox_on",
       "payload": {
-        "socket": "hand_r"
+        "socket": "hand_l",
+        "lane": "void/darkness/shadow/phase/intangibility",
+        "impulse": "diagonal_back"
       }
     },
     {
       "frame": 12,
       "event_type": "hitbox_off",
-      "payload": {}
+      "payload": {
+        "vfx": "void_wisp",
+        "fighter_id": "vesper-nyx"
+      }
+    },
+    {
+      "frame": 22,
+      "event_type": "recovery_start",
+      "payload": {
+        "follow": "presence_drop"
+      }
     },
     {
       "frame": 28,
-      "event_type": "recovery_start",
-      "payload": {}
-    },
-    {
-      "frame": 32,
       "event_type": "loop_end",
-      "payload": {}
+      "payload": {
+        "fighter_specific": true,
+        "signature": "vesper-nyx:jab"
+      }
     }
   ],
+  "fighter_motion_signature": "void_cape:vesper-nyx:jab",
   "provenance": {
-    "source_class": "SYNTHETIC_PROTOTYPE",
-    "final_animation": false
+    "source_class": "BLUEPRINT_DRIVEN_PROTOTYPE",
+    "final_animation": false,
+    "PROTOTYPE_ANIMATIC_FIGHTER_SPECIFIC": true
   }
 }

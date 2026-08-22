@@ -3,7 +3,7 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$ROOT"
-mkdir -p artifacts/wave013b artifacts/engineering_wave013b tmp game-godot/artifacts/engineering_wave013b
+mkdir -p artifacts/wave013b artifacts/engineering_wave013b tmp game-godot/artifacts/engineering_wave013b content/approved_motion
 
 resolve_godot() {
   if [[ -n "${GODOT_BIN:-}" && -x "${GODOT_BIN}" ]]; then echo "${GODOT_BIN}"; return; fi
@@ -43,10 +43,16 @@ run generate_content python3 tools/engineering_wave013b/generate_wave013b_conten
 run zero_cost python3 tools/art_pipeline/check_zero_cost_dependencies.py
 cp artifacts/engineering_wave012/ZERO_COST_DEPENDENCY_CHECK.json artifacts/wave013b/ZERO_COST_DEPENDENCY_CHECK.json 2>/dev/null || true
 run quality_gates python3 tools/engineering_wave013b/run_quality_gates.py
+run choreography_distinctness python3 tools/motion_pipeline/qa/validate_choreography_distinctness.py
+run runtime_alignment python3 tools/motion_pipeline/qa/validate_runtime_choreography_alignment.py
+run choreography_depth python3 tools/motion_pipeline/qa/validate_choreography_depth.py
+run prototype_animatics python3 tools/motion_pipeline/qa/validate_prototype_animatics.py
 run motion_qa python3 tools/motion_pipeline/qa/run_motion_qa.py
-run upload_ready python3 tools/motion_pipeline/user_upload/validate_upload.py
-run normalize_ready python3 tools/motion_pipeline/user_upload/normalize_motion.py
+run upload_ready python3 tools/motion_pipeline/user_upload/validate_upload.py --fixture-bvh
+run normalize_fixture python3 tools/motion_pipeline/user_upload/normalize_motion.py --fixture-bvh
 run retarget_ready python3 tools/motion_pipeline/user_upload/retarget/retarget_to_canonical.py
+run capability_matrix python3 tools/motion_pipeline/qa/emit_capability_matrix.py
+run security_git_check python3 tools/motion_pipeline/security/check_no_raw_user_motion_in_git.py
 run sabotage python3 tools/engineering_wave013b/run_sabotage_checks.py
 run integrity bash tools/engineering_wave013b/run_code_integrity.sh
 run godot_import "$GODOT" --headless --path "$ROOT/game-godot" --import
@@ -57,7 +63,7 @@ echo "=== Wave013B harness complete ==="
 python3 - <<'PY'
 import json
 d=json.load(open("artifacts/engineering_wave013b/WAVE013B_RESULT.json"))
-for k in ["ENGINEERING_WAVE_013B","NOTES_DRIVEN_CHOREOGRAPHY_ACTIVE","USER_MOTION_UPLOAD_PIPELINE_READY","REAL_USER_MOTION_LIBRARY_PRESENT","EDMUND_PERSONAL_MOTION_REQUIRED","ACTION_SPECS_TOTAL","PROTOTYPE_ANIMATICS_COUNT","READY_FOR_OWNER_MERGE","CURSOR_MERGED_NOTHING"]:
+for k in ["ENGINEERING_WAVE_013B","FULL_ROSTER_CHOREOGRAPHY_DEPTH_PASS","USER_MOTION_CONTRIBUTION_CONTRACT_READY","BVH_RETARGET_READY","RETARGET_STUB_USED_AS_EXECUTION_PROOF","READY_FOR_OWNER_MERGE"]:
     print(f"{k}={d.get(k)}")
 print("token=", d.get("token"))
 PY

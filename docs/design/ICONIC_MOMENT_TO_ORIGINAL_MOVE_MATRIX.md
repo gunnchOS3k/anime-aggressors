@@ -537,3 +537,135 @@ _Total studies: 36_
 - **Broad moment description:** misdirect recovery
 - **Why memorable:** readable lane identity
 - **Original Anime Aggressors concept:** `Umbral Echo Dodge` for Vesper Nyx
+
+## Wave013B Additional Studies (notes-driven expansion)
+
+### Study — Flare Step Rush
+- **Reference character/work (design only):** Shōnen dash-in grammar
+- **Broad moment description:** closing distance before strike
+- **Why memorable:** readable lane identity
+- **Original Anime Aggressors concept:** `Flare Step Rush` for Ember Vale
+
+### Study — Basalt March
+- **Reference character/work (design only):** Heavy armor tank walk
+- **Broad moment description:** unstoppable advance
+- **Why memorable:** readable lane identity
+- **Original Anime Aggressors concept:** `Basalt March` for Rook Ironside
+
+### Study — Capacitor Prime
+- **Reference character/work (design only):** Static charge buildup
+- **Broad moment description:** visible confirm window
+- **Why memorable:** readable lane identity
+- **Original Anime Aggressors concept:** `Capacitor Prime` for Juno Spark
+
+### Study — Ribbon Updraft
+- **Reference character/work (design only):** Updraft recovery
+- **Broad moment description:** air control reset
+- **Why memorable:** readable lane identity
+- **Original Anime Aggressors concept:** `Ribbon Updraft` for Kaia Windrow
+
+### Study — Rime Brake
+- **Reference character/work (design only):** Skating stop
+- **Broad moment description:** space lock on landing
+- **Why memorable:** readable lane identity
+- **Original Anime Aggressors concept:** `Rime Brake` for Nix Calder
+
+### Study — Orbit Hang
+- **Reference character/work (design only):** Low-gravity float
+- **Broad moment description:** hang-time manipulation
+- **Why memorable:** readable lane identity
+- **Original Anime Aggressors concept:** `Orbit Hang` for Orion Vell
+
+### Study — Umbral Echo Dodge
+- **Reference character/work (design only):** Shadow afterimage dodge
+- **Broad moment description:** misdirect recovery
+- **Why memorable:** readable lane identity
+- **Original Anime Aggressors concept:** `Umbral Echo Dodge` for Vesper Nyx
+
+## Wave013B Additional Studies (notes-driven expansion)
+
+### Study — Flare Step Rush
+- **Reference character/work (design only):** Shōnen dash-in grammar
+- **Broad moment description:** closing distance before strike
+- **Why memorable:** readable lane identity
+- **Original Anime Aggressors concept:** `Flare Step Rush` for Ember Vale
+
+### Study — Basalt March
+- **Reference character/work (design only):** Heavy armor tank walk
+- **Broad moment description:** unstoppable advance
+- **Why memorable:** readable lane identity
+- **Original Anime Aggressors concept:** `Basalt March` for Rook Ironside
+
+### Study — Capacitor Prime
+- **Reference character/work (design only):** Static charge buildup
+- **Broad moment description:** visible confirm window
+- **Why memorable:** readable lane identity
+- **Original Anime Aggressors concept:** `Capacitor Prime` for Juno Spark
+
+### Study — Ribbon Updraft
+- **Reference character/work (design only):** Updraft recovery
+- **Broad moment description:** air control reset
+- **Why memorable:** readable lane identity
+- **Original Anime Aggressors concept:** `Ribbon Updraft` for Kaia Windrow
+
+### Study — Rime Brake
+- **Reference character/work (design only):** Skating stop
+- **Broad moment description:** space lock on landing
+- **Why memorable:** readable lane identity
+- **Original Anime Aggressors concept:** `Rime Brake` for Nix Calder
+
+### Study — Orbit Hang
+- **Reference character/work (design only):** Low-gravity float
+- **Broad moment description:** hang-time manipulation
+- **Why memorable:** readable lane identity
+- **Original Anime Aggressors concept:** `Orbit Hang` for Orion Vell
+
+### Study — Umbral Echo Dodge
+- **Reference character/work (design only):** Shadow afterimage dodge
+- **Broad moment description:** misdirect recovery
+- **Why memorable:** readable lane identity
+- **Original Anime Aggressors concept:** `Umbral Echo Dodge` for Vesper Nyx
+
+## Wave013B Additional Studies (notes-driven expansion)
+
+### Study — Flare Step Rush
+- **Reference character/work (design only):** Shōnen dash-in grammar
+- **Broad moment description:** closing distance before strike
+- **Why memorable:** readable lane identity
+- **Original Anime Aggressors concept:** `Flare Step Rush` for Ember Vale
+
+### Study — Basalt March
+- **Reference character/work (design only):** Heavy armor tank walk
+- **Broad moment description:** unstoppable advance
+- **Why memorable:** readable lane identity
+- **Original Anime Aggressors concept:** `Basalt March` for Rook Ironside
+
+### Study — Capacitor Prime
+- **Reference character/work (design only):** Static charge buildup
+- **Broad moment description:** visible confirm window
+- **Why memorable:** readable lane identity
+- **Original Anime Aggressors concept:** `Capacitor Prime` for Juno Spark
+
+### Study — Ribbon Updraft
+- **Reference character/work (design only):** Updraft recovery
+- **Broad moment description:** air control reset
+- **Why memorable:** readable lane identity
+- **Original Anime Aggressors concept:** `Ribbon Updraft` for Kaia Windrow
+
+### Study — Rime Brake
+- **Reference character/work (design only):** Skating stop
+- **Broad moment description:** space lock on landing
+- **Why memorable:** readable lane identity
+- **Original Anime Aggressors concept:** `Rime Brake` for Nix Calder
+
+### Study — Orbit Hang
+- **Reference character/work (design only):** Low-gravity float
+- **Broad moment description:** hang-time manipulation
+- **Why memorable:** readable lane identity
+- **Original Anime Aggressors concept:** `Orbit Hang` for Orion Vell
+
+### Study — Umbral Echo Dodge
+- **Reference character/work (design only):** Shadow afterimage dodge
+- **Broad moment description:** misdirect recovery
+- **Why memorable:** readable lane identity
+- **Original Anime Aggressors concept:** `Umbral Echo Dodge` for Vesper Nyx

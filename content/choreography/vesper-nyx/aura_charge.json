@@ -2,19 +2,19 @@
   "schema_version": 1,
   "action_id": "vesper-nyx.aura_charge",
   "fighter_id": "vesper-nyx",
-  "display_name": "Vesper Aura Buildup 26",
+  "display_name": "Vesper Nyx Aura Buildup",
   "category": "special",
   "lane": "void/darkness/shadow/phase/intangibility",
   "notes_driven": true,
   "inspiration_notes": {
     "research_anchors": [
-      "genre platform-fighter grammar",
+      "fighter_motion_blueprints.json",
       "void/darkness/shadow/phase/intangibility lane studies",
       "ICONIC_MOMENT_TO_ORIGINAL_MOVE_MATRIX"
     ],
-    "iconic_moment_summary": "Notes-driven synthesis for aura buildup respecting phase cancels, presence drops, misdirection feints.",
-    "motion_principle": "anticipation \u2192 committed contact \u2192 readable follow-through",
-    "power_principle": "aura misdirects scaling on payoff frames",
+    "iconic_moment_summary": "Blueprint-driven aura buildup for void_cape.",
+    "motion_principle": "presence_drop",
+    "power_principle": "aura misdirects via misdirect_stack",
     "do_not_copy": [
       "franchise costumes",
       "named techniques",
@@ -22,29 +22,29 @@
       "licensed SFX/VFX glyphs"
     ]
   },
-  "original_move_name": "Vesper Aura Buildup 26",
+  "original_move_name": "Vesper Nyx Aura Buildup",
   "originality": {
     "direct_1_to_1_reference_moves": 0,
     "franchise_assets_in_production": 0,
-    "composite_synthesis": "\u22653-anchor composite for Vesper Nyx aura_charge",
+    "composite_synthesis": "blueprint-driven composite for Vesper Nyx aura_charge",
     "originality_review_status": "NOTES_DRIVEN_PENDING_HUMAN_REVIEW"
   },
   "timing": {
-    "anticipation_frames": 5,
+    "anticipation_frames": 6,
     "active_frames": 6,
-    "recovery_frames": 8,
-    "total_frames": 18,
+    "recovery_frames": 10,
+    "total_frames": 22,
     "cancel_windows": [
       "dash",
       "shield"
     ]
   },
   "motion_grammar": {
-    "weight": "medium",
+    "weight": "light",
     "tempo": "moderate",
     "arc_type": "arc",
     "contact_points": [
-      "root"
+      "hand_l"
     ],
     "silhouette_poses": [
       "anticipation",
@@ -54,21 +54,21 @@
     "fighter_motion_grammar": "phase cancels, presence drops, misdirection feints"
   },
   "camera": {
-    "framing": "medium",
-    "push_in": true,
+    "framing": "medium_shadow",
+    "push_in": false,
     "shake_tier": "light"
   },
   "impact": {
     "hitstop_tier": "aura",
     "lane_flash": true,
-    "risk_reward": "high commitment on smash/heavy; low on jab/projectile_tap"
+    "risk_reward": "diagonal_back"
   },
   "vfx_cue": "juice.vesper-nyx.aura_charge.vfx",
   "sfx_cue": "juice.vesper-nyx.aura_charge.sfx",
   "hitbox": {
-    "window_start_frame": 4,
-    "window_end_frame": 8,
-    "notes": "align to moves json at runtime integration"
+    "window_start_frame": 6,
+    "window_end_frame": 12,
+    "notes": "aligned via runtime_alignment.hitbox_phase_sync"
   },
   "accessibility": {
     "reduce_flash": true,
@@ -86,8 +86,19 @@
     "path": "tools/motion_pipeline/reference_animation/vesper-nyx/aura_charge.json"
   },
   "provenance": {
-    "source_class": "NOTES_DRIVEN_SYNTHETIC_SPEC",
+    "source_class": "BLUEPRINT_DRIVEN_SYNTHETIC_SPEC",
     "real_user_motion": false,
     "edmund_personal_motion": false
+  },
+  "runtime_alignment": {
+    "moves_json_key": "aura_charge",
+    "animatic_binding": "tools/motion_pipeline/reference_animation/vesper-nyx/aura_charge.json",
+    "hitbox_phase_sync": true,
+    "root_motion_style": "phase_drift",
+    "ground_coupling": "minimal",
+    "cancel_graph_nodes": [
+      "dash",
+      "shield"
+    ]
   }
 }

@@ -4,47 +4,62 @@
   "fighter_id": "orion-vell",
   "kind": "REFERENCE_ANIMATIC",
   "fps": 60.0,
-  "duration_frames": 32,
+  "duration_frames": 28,
   "events": [
     {
       "frame": 0,
       "event_type": "anticipation_start",
       "payload": {
-        "pose": "neutral"
+        "pose": "float_nodes",
+        "fighter": "orion-vell"
       }
     },
     {
       "frame": 4,
       "event_type": "active_start",
       "payload": {
-        "contact": "tilt_forward"
+        "contact": "tilt_forward",
+        "root": "orbit_pivot",
+        "lane_offset": 0.30000000000000004
       }
     },
     {
-      "frame": 8,
+      "frame": 6,
       "event_type": "hitbox_on",
       "payload": {
-        "socket": "hand_r"
+        "socket": "hand_both",
+        "lane": "gravity/weight/vectors/attraction/repulsion",
+        "impulse": "vector_launch"
       }
     },
     {
-      "frame": 12,
+      "frame": 9,
       "event_type": "hitbox_off",
-      "payload": {}
+      "payload": {
+        "vfx": "orbit_trace",
+        "fighter_id": "orion-vell"
+      }
+    },
+    {
+      "frame": 24,
+      "event_type": "recovery_start",
+      "payload": {
+        "follow": "orbit_handoff"
+      }
     },
     {
       "frame": 28,
-      "event_type": "recovery_start",
-      "payload": {}
-    },
-    {
-      "frame": 32,
       "event_type": "loop_end",
-      "payload": {}
+      "payload": {
+        "fighter_specific": true,
+        "signature": "orion-vell:tilt_forward"
+      }
     }
   ],
+  "fighter_motion_signature": "gravity_rings:orion-vell:tilt_forward",
   "provenance": {
-    "source_class": "SYNTHETIC_PROTOTYPE",
-    "final_animation": false
+    "source_class": "BLUEPRINT_DRIVEN_PROTOTYPE",
+    "final_animation": false,
+    "PROTOTYPE_ANIMATIC_FIGHTER_SPECIFIC": true
   }
 }

@@ -2,19 +2,19 @@
   "schema_version": 1,
   "action_id": "orion-vell.jab_chain_2",
   "fighter_id": "orion-vell",
-  "display_name": "Orion Second Chain Link 09",
+  "display_name": "Orion Vell Second Chain Link",
   "category": "melee",
   "lane": "gravity/weight/vectors/attraction/repulsion",
   "notes_driven": true,
   "inspiration_notes": {
     "research_anchors": [
-      "genre platform-fighter grammar",
+      "fighter_motion_blueprints.json",
       "gravity/weight/vectors/attraction/repulsion lane studies",
       "ICONIC_MOMENT_TO_ORIGINAL_MOVE_MATRIX"
     ],
-    "iconic_moment_summary": "Notes-driven synthesis for second chain link respecting vector remaps, orbit pivots, launch-vector handoffs.",
-    "motion_principle": "anticipation \u2192 committed contact \u2192 readable follow-through",
-    "power_principle": "aura manipulates launch scaling on payoff frames",
+    "iconic_moment_summary": "Blueprint-driven second chain link for gravity_rings.",
+    "motion_principle": "orbit_handoff",
+    "power_principle": "aura manipulates launch via launch_vector",
     "do_not_copy": [
       "franchise costumes",
       "named techniques",
@@ -22,18 +22,18 @@
       "licensed SFX/VFX glyphs"
     ]
   },
-  "original_move_name": "Orion Second Chain Link 09",
+  "original_move_name": "Orion Vell Second Chain Link",
   "originality": {
     "direct_1_to_1_reference_moves": 0,
     "franchise_assets_in_production": 0,
-    "composite_synthesis": "\u22653-anchor composite for Orion Vell jab_chain_2",
+    "composite_synthesis": "blueprint-driven composite for Orion Vell jab_chain_2",
     "originality_review_status": "NOTES_DRIVEN_PENDING_HUMAN_REVIEW"
   },
   "timing": {
-    "anticipation_frames": 4,
-    "active_frames": 7,
-    "recovery_frames": 7,
-    "total_frames": 25,
+    "anticipation_frames": 6,
+    "active_frames": 10,
+    "recovery_frames": 11,
+    "total_frames": 27,
     "cancel_windows": [
       "dash",
       "shield"
@@ -44,7 +44,7 @@
     "tempo": "moderate",
     "arc_type": "arc",
     "contact_points": [
-      "hand_r"
+      "hand_both"
     ],
     "silhouette_poses": [
       "anticipation",
@@ -54,21 +54,21 @@
     "fighter_motion_grammar": "vector remaps, orbit pivots, launch-vector handoffs"
   },
   "camera": {
-    "framing": "medium",
+    "framing": "dynamic_orbit",
     "push_in": true,
     "shake_tier": "light"
   },
   "impact": {
     "hitstop_tier": "medium",
     "lane_flash": true,
-    "risk_reward": "high commitment on smash/heavy; low on jab/projectile_tap"
+    "risk_reward": "vector_launch"
   },
   "vfx_cue": "juice.orion-vell.jab_chain_2.vfx",
   "sfx_cue": "juice.orion-vell.jab_chain_2.sfx",
   "hitbox": {
-    "window_start_frame": 4,
-    "window_end_frame": 8,
-    "notes": "align to moves json at runtime integration"
+    "window_start_frame": 6,
+    "window_end_frame": 16,
+    "notes": "aligned via runtime_alignment.hitbox_phase_sync"
   },
   "accessibility": {
     "reduce_flash": true,
@@ -86,8 +86,19 @@
     "path": null
   },
   "provenance": {
-    "source_class": "NOTES_DRIVEN_SYNTHETIC_SPEC",
+    "source_class": "BLUEPRINT_DRIVEN_SYNTHETIC_SPEC",
     "real_user_motion": false,
     "edmund_personal_motion": false
+  },
+  "runtime_alignment": {
+    "moves_json_key": "jab_chain_2",
+    "animatic_binding": null,
+    "hitbox_phase_sync": true,
+    "root_motion_style": "orbit_pivot",
+    "ground_coupling": "variable",
+    "cancel_graph_nodes": [
+      "dash",
+      "shield"
+    ]
   }
 }

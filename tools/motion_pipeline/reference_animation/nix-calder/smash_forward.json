@@ -4,47 +4,62 @@
   "fighter_id": "nix-calder",
   "kind": "REFERENCE_ANIMATIC",
   "fps": 60.0,
-  "duration_frames": 32,
+  "duration_frames": 30,
   "events": [
     {
       "frame": 0,
       "event_type": "anticipation_start",
       "payload": {
-        "pose": "neutral"
+        "pose": "frost_breath",
+        "fighter": "nix-calder"
       }
     },
     {
       "frame": 4,
       "event_type": "active_start",
       "payload": {
-        "contact": "smash_forward"
+        "contact": "smash_forward",
+        "root": "glide_stop",
+        "lane_offset": 0.1
       }
     },
     {
-      "frame": 8,
+      "frame": 7,
       "event_type": "hitbox_on",
       "payload": {
-        "socket": "hand_r"
+        "socket": "hand_l",
+        "lane": "ice/frost/snow/freezing/control",
+        "impulse": "low_freeze"
       }
     },
     {
-      "frame": 12,
+      "frame": 13,
       "event_type": "hitbox_off",
-      "payload": {}
+      "payload": {
+        "vfx": "frost_trail",
+        "fighter_id": "nix-calder"
+      }
     },
     {
-      "frame": 28,
+      "frame": 26,
       "event_type": "recovery_start",
-      "payload": {}
+      "payload": {
+        "follow": "crystalline_hold"
+      }
     },
     {
-      "frame": 32,
+      "frame": 30,
       "event_type": "loop_end",
-      "payload": {}
+      "payload": {
+        "fighter_specific": true,
+        "signature": "nix-calder:smash_forward"
+      }
     }
   ],
+  "fighter_motion_signature": "frost_mantle:nix-calder:smash_forward",
   "provenance": {
-    "source_class": "SYNTHETIC_PROTOTYPE",
-    "final_animation": false
+    "source_class": "BLUEPRINT_DRIVEN_PROTOTYPE",
+    "final_animation": false,
+    "PROTOTYPE_ANIMATIC_FIGHTER_SPECIFIC": true
   }
 }

@@ -2,19 +2,19 @@
   "schema_version": 1,
   "action_id": "kaia-windrow.idle",
   "fighter_id": "kaia-windrow",
-  "display_name": "Kaia Neutral Loop 00",
+  "display_name": "Kaia Windrow Neutral Loop",
   "category": "movement",
   "lane": "wind/air/storm/flight/pressure",
   "notes_driven": true,
   "inspiration_notes": {
     "research_anchors": [
-      "genre platform-fighter grammar",
+      "fighter_motion_blueprints.json",
       "wind/air/storm/flight/pressure lane studies",
       "ICONIC_MOMENT_TO_ORIGINAL_MOVE_MATRIX"
     ],
-    "iconic_moment_summary": "Notes-driven synthesis for neutral loop respecting floating arcs, ribbon lag, pressure-wave releases.",
-    "motion_principle": "anticipation \u2192 committed contact \u2192 readable follow-through",
-    "power_principle": "aura controls air scaling on payoff frames",
+    "iconic_moment_summary": "Blueprint-driven neutral loop for ribbon_glider.",
+    "motion_principle": "gale_lag",
+    "power_principle": "aura controls air via air_control_stack",
     "do_not_copy": [
       "franchise costumes",
       "named techniques",
@@ -22,24 +22,24 @@
       "licensed SFX/VFX glyphs"
     ]
   },
-  "original_move_name": "Kaia Neutral Loop 00",
+  "original_move_name": "Kaia Windrow Neutral Loop",
   "originality": {
     "direct_1_to_1_reference_moves": 0,
     "franchise_assets_in_production": 0,
-    "composite_synthesis": "\u22653-anchor composite for Kaia Windrow idle",
+    "composite_synthesis": "blueprint-driven composite for Kaia Windrow idle",
     "originality_review_status": "NOTES_DRIVEN_PENDING_HUMAN_REVIEW"
   },
   "timing": {
     "anticipation_frames": 3,
-    "active_frames": 4,
-    "recovery_frames": 6,
-    "total_frames": 16,
+    "active_frames": 6,
+    "recovery_frames": 8,
+    "total_frames": 17,
     "cancel_windows": []
   },
   "motion_grammar": {
     "weight": "medium",
     "tempo": "moderate",
-    "arc_type": "linear",
+    "arc_type": "floating_arc",
     "contact_points": [
       "root"
     ],
@@ -51,21 +51,21 @@
     "fighter_motion_grammar": "floating arcs, ribbon lag, pressure-wave releases"
   },
   "camera": {
-    "framing": "medium",
+    "framing": "medium_high",
     "push_in": false,
     "shake_tier": "light"
   },
   "impact": {
     "hitstop_tier": "medium",
     "lane_flash": true,
-    "risk_reward": "high commitment on smash/heavy; low on jab/projectile_tap"
+    "risk_reward": "upward_sweep"
   },
   "vfx_cue": "juice.kaia-windrow.idle.vfx",
   "sfx_cue": "juice.kaia-windrow.idle.sfx",
   "hitbox": {
-    "window_start_frame": 4,
-    "window_end_frame": 8,
-    "notes": "align to moves json at runtime integration"
+    "window_start_frame": 3,
+    "window_end_frame": 9,
+    "notes": "aligned via runtime_alignment.hitbox_phase_sync"
   },
   "accessibility": {
     "reduce_flash": true,
@@ -83,8 +83,16 @@
     "path": "tools/motion_pipeline/reference_animation/kaia-windrow/idle.json"
   },
   "provenance": {
-    "source_class": "NOTES_DRIVEN_SYNTHETIC_SPEC",
+    "source_class": "BLUEPRINT_DRIVEN_SYNTHETIC_SPEC",
     "real_user_motion": false,
     "edmund_personal_motion": false
+  },
+  "runtime_alignment": {
+    "moves_json_key": "idle",
+    "animatic_binding": "tools/motion_pipeline/reference_animation/kaia-windrow/idle.json",
+    "hitbox_phase_sync": true,
+    "root_motion_style": "floating_arc",
+    "ground_coupling": "light",
+    "cancel_graph_nodes": []
   }
 }

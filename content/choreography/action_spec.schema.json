@@ -25,7 +25,8 @@
     "production_status",
     "animation_source_priority",
     "reference_animatic",
-    "provenance"
+    "provenance",
+    "runtime_alignment"
   ],
   "properties": {
     "schema_version": {
@@ -265,6 +266,40 @@
         "edmund_personal_motion": {
           "type": "boolean",
           "const": false
+        }
+      }
+    },
+    "runtime_alignment": {
+      "type": "object",
+      "required": [
+        "moves_json_key",
+        "animatic_binding",
+        "hitbox_phase_sync"
+      ],
+      "properties": {
+        "moves_json_key": {
+          "type": "string"
+        },
+        "animatic_binding": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "hitbox_phase_sync": {
+          "type": "boolean"
+        },
+        "root_motion_style": {
+          "type": "string"
+        },
+        "ground_coupling": {
+          "type": "string"
+        },
+        "cancel_graph_nodes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     }

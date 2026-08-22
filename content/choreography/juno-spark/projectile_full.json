@@ -2,19 +2,19 @@
   "schema_version": 1,
   "action_id": "juno-spark.projectile_full",
   "fighter_id": "juno-spark",
-  "display_name": "Juno Full Charge Projectile 25",
+  "display_name": "Juno Spark Full Charge Projectile",
   "category": "special",
   "lane": "electricity/lightning/speed/magnetism",
   "notes_driven": true,
   "inspiration_notes": {
     "research_anchors": [
-      "genre platform-fighter grammar",
+      "fighter_motion_blueprints.json",
       "electricity/lightning/speed/magnetism lane studies",
       "ICONIC_MOMENT_TO_ORIGINAL_MOVE_MATRIX"
     ],
-    "iconic_moment_summary": "Notes-driven synthesis for full charge projectile respecting snap confirms, afterimage trails, tight recovery windows.",
-    "motion_principle": "anticipation \u2192 committed contact \u2192 readable follow-through",
-    "power_principle": "aura confirms scaling on payoff frames",
+    "iconic_moment_summary": "Blueprint-driven full charge projectile for capacitor_spine.",
+    "motion_principle": "afterimage_trail",
+    "power_principle": "aura confirms via confirm_spike",
     "do_not_copy": [
       "franchise costumes",
       "named techniques",
@@ -22,29 +22,29 @@
       "licensed SFX/VFX glyphs"
     ]
   },
-  "original_move_name": "Juno Full Charge Projectile 25",
+  "original_move_name": "Juno Spark Full Charge Projectile",
   "originality": {
     "direct_1_to_1_reference_moves": 0,
     "franchise_assets_in_production": 0,
-    "composite_synthesis": "\u22653-anchor composite for Juno Spark projectile_full",
+    "composite_synthesis": "blueprint-driven composite for Juno Spark projectile_full",
     "originality_review_status": "NOTES_DRIVEN_PENDING_HUMAN_REVIEW"
   },
   "timing": {
-    "anticipation_frames": 4,
-    "active_frames": 5,
-    "recovery_frames": 7,
-    "total_frames": 17,
+    "anticipation_frames": 6,
+    "active_frames": 4,
+    "recovery_frames": 8,
+    "total_frames": 18,
     "cancel_windows": [
       "dash",
       "shield"
     ]
   },
   "motion_grammar": {
-    "weight": "medium",
+    "weight": "light",
     "tempo": "fast",
     "arc_type": "arc",
     "contact_points": [
-      "root"
+      "hand_r"
     ],
     "silhouette_poses": [
       "anticipation",
@@ -61,14 +61,14 @@
   "impact": {
     "hitstop_tier": "medium",
     "lane_flash": true,
-    "risk_reward": "high commitment on smash/heavy; low on jab/projectile_tap"
+    "risk_reward": "sharp_diagonal"
   },
   "vfx_cue": "juice.juno-spark.projectile_full.vfx",
   "sfx_cue": "juice.juno-spark.projectile_full.sfx",
   "hitbox": {
-    "window_start_frame": 4,
-    "window_end_frame": 8,
-    "notes": "align to moves json at runtime integration"
+    "window_start_frame": 6,
+    "window_end_frame": 10,
+    "notes": "aligned via runtime_alignment.hitbox_phase_sync"
   },
   "accessibility": {
     "reduce_flash": true,
@@ -86,8 +86,19 @@
     "path": null
   },
   "provenance": {
-    "source_class": "NOTES_DRIVEN_SYNTHETIC_SPEC",
+    "source_class": "BLUEPRINT_DRIVEN_SYNTHETIC_SPEC",
     "real_user_motion": false,
     "edmund_personal_motion": false
+  },
+  "runtime_alignment": {
+    "moves_json_key": "projectile_full",
+    "animatic_binding": null,
+    "hitbox_phase_sync": true,
+    "root_motion_style": "snap_step",
+    "ground_coupling": "minimal",
+    "cancel_graph_nodes": [
+      "dash",
+      "shield"
+    ]
   }
 }

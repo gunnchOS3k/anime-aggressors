@@ -2,19 +2,19 @@
   "schema_version": 1,
   "action_id": "ember-vale.run",
   "fighter_id": "ember-vale",
-  "display_name": "Ember Committed Dash Approach 02",
+  "display_name": "Ember Vale Committed Dash Approach",
   "category": "movement",
   "lane": "fire/heat/combustion",
   "notes_driven": true,
   "inspiration_notes": {
     "research_anchors": [
-      "genre platform-fighter grammar",
+      "fighter_motion_blueprints.json",
       "fire/heat/combustion lane studies",
       "ICONIC_MOMENT_TO_ORIGINAL_MOVE_MATRIX"
     ],
-    "iconic_moment_summary": "Notes-driven synthesis for committed dash approach respecting acceleration bursts, forward lean, heat-trail follow-through.",
-    "motion_principle": "anticipation \u2192 committed contact \u2192 readable follow-through",
-    "power_principle": "aura overwhelms scaling on payoff frames",
+    "iconic_moment_summary": "Blueprint-driven committed dash approach for forward_flame_sweep.",
+    "motion_principle": "heat_trail_linger",
+    "power_principle": "aura overwhelms via exponential_payoff",
     "do_not_copy": [
       "franchise costumes",
       "named techniques",
@@ -22,24 +22,24 @@
       "licensed SFX/VFX glyphs"
     ]
   },
-  "original_move_name": "Ember Committed Dash Approach 02",
+  "original_move_name": "Ember Vale Committed Dash Approach",
   "originality": {
     "direct_1_to_1_reference_moves": 0,
     "franchise_assets_in_production": 0,
-    "composite_synthesis": "\u22653-anchor composite for Ember Vale run",
+    "composite_synthesis": "blueprint-driven composite for Ember Vale run",
     "originality_review_status": "NOTES_DRIVEN_PENDING_HUMAN_REVIEW"
   },
   "timing": {
-    "anticipation_frames": 5,
-    "active_frames": 6,
-    "recovery_frames": 8,
-    "total_frames": 18,
+    "anticipation_frames": 2,
+    "active_frames": 7,
+    "recovery_frames": 7,
+    "total_frames": 16,
     "cancel_windows": []
   },
   "motion_grammar": {
-    "weight": "medium",
-    "tempo": "moderate",
-    "arc_type": "linear",
+    "weight": "light",
+    "tempo": "fast",
+    "arc_type": "burst_forward",
     "contact_points": [
       "root"
     ],
@@ -51,21 +51,21 @@
     "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
   },
   "camera": {
-    "framing": "medium",
+    "framing": "medium_tight",
     "push_in": false,
     "shake_tier": "light"
   },
   "impact": {
     "hitstop_tier": "medium",
     "lane_flash": true,
-    "risk_reward": "high commitment on smash/heavy; low on jab/projectile_tap"
+    "risk_reward": "diagonal_up"
   },
   "vfx_cue": "juice.ember-vale.run.vfx",
   "sfx_cue": "juice.ember-vale.run.sfx",
   "hitbox": {
-    "window_start_frame": 4,
-    "window_end_frame": 8,
-    "notes": "align to moves json at runtime integration"
+    "window_start_frame": 2,
+    "window_end_frame": 9,
+    "notes": "aligned via runtime_alignment.hitbox_phase_sync"
   },
   "accessibility": {
     "reduce_flash": true,
@@ -83,8 +83,16 @@
     "path": "tools/motion_pipeline/reference_animation/ember-vale/run.json"
   },
   "provenance": {
-    "source_class": "NOTES_DRIVEN_SYNTHETIC_SPEC",
+    "source_class": "BLUEPRINT_DRIVEN_SYNTHETIC_SPEC",
     "real_user_motion": false,
     "edmund_personal_motion": false
+  },
+  "runtime_alignment": {
+    "moves_json_key": "run",
+    "animatic_binding": "tools/motion_pipeline/reference_animation/ember-vale/run.json",
+    "hitbox_phase_sync": true,
+    "root_motion_style": "burst_forward",
+    "ground_coupling": "light",
+    "cancel_graph_nodes": []
   }
 }

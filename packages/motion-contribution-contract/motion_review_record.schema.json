@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "motion-contribution-contract/motion_review_record.schema.json",
+  "title": "Motion Review Record (Record C — trusted reviewer only)",
+  "type": "object",
+  "required": ["schema_version", "contribution_id", "reviewer_role", "decision", "all_checks_passed"],
+  "properties": {
+    "schema_version": { "type": "integer", "const": 1 },
+    "contribution_id": { "type": "string" },
+    "reviewer_role": { "type": "string", "const": "trusted_owner_reviewer" },
+    "decision": {
+      "type": "string",
+      "enum": ["APPROVED_FOR_PRODUCTION", "REJECTED", "NEEDS_REVISION"]
+    },
+    "all_checks_passed": { "type": "boolean" },
+    "local_owner_review_mode": { "type": "boolean" },
+    "reviewed_at_utc": { "type": "string" }
+  }
+}

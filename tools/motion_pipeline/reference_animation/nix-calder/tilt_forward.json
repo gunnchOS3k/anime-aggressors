@@ -4,47 +4,62 @@
   "fighter_id": "nix-calder",
   "kind": "REFERENCE_ANIMATIC",
   "fps": 60.0,
-  "duration_frames": 32,
+  "duration_frames": 28,
   "events": [
     {
       "frame": 0,
       "event_type": "anticipation_start",
       "payload": {
-        "pose": "neutral"
+        "pose": "frost_breath",
+        "fighter": "nix-calder"
       }
     },
     {
-      "frame": 4,
+      "frame": 5,
       "event_type": "active_start",
       "payload": {
-        "contact": "tilt_forward"
+        "contact": "tilt_forward",
+        "root": "glide_stop",
+        "lane_offset": 0.1
       }
     },
     {
-      "frame": 8,
+      "frame": 7,
       "event_type": "hitbox_on",
       "payload": {
-        "socket": "hand_r"
+        "socket": "hand_l",
+        "lane": "ice/frost/snow/freezing/control",
+        "impulse": "low_freeze"
       }
     },
     {
-      "frame": 12,
+      "frame": 10,
       "event_type": "hitbox_off",
-      "payload": {}
+      "payload": {
+        "vfx": "frost_trail",
+        "fighter_id": "nix-calder"
+      }
+    },
+    {
+      "frame": 23,
+      "event_type": "recovery_start",
+      "payload": {
+        "follow": "crystalline_hold"
+      }
     },
     {
       "frame": 28,
-      "event_type": "recovery_start",
-      "payload": {}
-    },
-    {
-      "frame": 32,
       "event_type": "loop_end",
-      "payload": {}
+      "payload": {
+        "fighter_specific": true,
+        "signature": "nix-calder:tilt_forward"
+      }
     }
   ],
+  "fighter_motion_signature": "frost_mantle:nix-calder:tilt_forward",
   "provenance": {
-    "source_class": "SYNTHETIC_PROTOTYPE",
-    "final_animation": false
+    "source_class": "BLUEPRINT_DRIVEN_PROTOTYPE",
+    "final_animation": false,
+    "PROTOTYPE_ANIMATIC_FIGHTER_SPECIFIC": true
   }
 }

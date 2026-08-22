@@ -10,41 +10,56 @@
       "frame": 0,
       "event_type": "anticipation_start",
       "payload": {
-        "pose": "neutral"
+        "pose": "rivet_pulse",
+        "fighter": "rook-ironside"
       }
     },
     {
-      "frame": 4,
+      "frame": 6,
       "event_type": "active_start",
       "payload": {
-        "contact": "idle"
+        "contact": "idle",
+        "root": "planted_pivot",
+        "lane_offset": 0.30000000000000004
       }
     },
     {
-      "frame": 8,
+      "frame": 9,
       "event_type": "hitbox_on",
       "payload": {
-        "socket": "hand_r"
+        "socket": "fist_both",
+        "lane": "impact/strength/earth/quake/armor",
+        "impulse": "horizontal_heavy"
       }
     },
     {
-      "frame": 12,
+      "frame": 16,
       "event_type": "hitbox_off",
-      "payload": {}
+      "payload": {
+        "vfx": "dust_shock",
+        "fighter_id": "rook-ironside"
+      }
     },
     {
-      "frame": 20,
+      "frame": 18,
       "event_type": "recovery_start",
-      "payload": {}
+      "payload": {
+        "follow": "ground_coupled_settle"
+      }
     },
     {
       "frame": 24,
       "event_type": "loop_end",
-      "payload": {}
+      "payload": {
+        "fighter_specific": true,
+        "signature": "rook-ironside:idle"
+      }
     }
   ],
+  "fighter_motion_signature": "basalt_block:rook-ironside:idle",
   "provenance": {
-    "source_class": "SYNTHETIC_PROTOTYPE",
-    "final_animation": false
+    "source_class": "BLUEPRINT_DRIVEN_PROTOTYPE",
+    "final_animation": false,
+    "PROTOTYPE_ANIMATIC_FIGHTER_SPECIFIC": true
   }
 }

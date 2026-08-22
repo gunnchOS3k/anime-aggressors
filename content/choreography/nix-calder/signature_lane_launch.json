@@ -2,19 +2,19 @@
   "schema_version": 1,
   "action_id": "nix-calder.signature_lane_launch",
   "fighter_id": "nix-calder",
-  "display_name": "Nix Signature Lane Launch 47",
+  "display_name": "Glacier Launch",
   "category": "signature",
   "lane": "ice/frost/snow/freezing/control",
   "notes_driven": true,
   "inspiration_notes": {
     "research_anchors": [
-      "genre platform-fighter grammar",
+      "fighter_motion_blueprints.json",
       "ice/frost/snow/freezing/control lane studies",
-      "ICONIC_MOMENT_TO_ORIGINAL_MOVE_MATRIX"
+      "FIGHTER_SIGNATURE_MOVE_BIBLE"
     ],
-    "iconic_moment_summary": "Notes-driven synthesis for signature lane launch respecting held poses, crystalline stops, space-denial extensions.",
-    "motion_principle": "anticipation \u2192 committed contact \u2192 readable follow-through",
-    "power_principle": "aura locks space scaling on payoff frames",
+    "iconic_moment_summary": "Ice pillar launch with hang.",
+    "motion_principle": "crystalline_hold",
+    "power_principle": "aura locks space via space_lock_stack",
     "do_not_copy": [
       "franchise costumes",
       "named techniques",
@@ -22,18 +22,18 @@
       "licensed SFX/VFX glyphs"
     ]
   },
-  "original_move_name": "Nix Signature Lane Launch 47",
+  "original_move_name": "Glacier Launch",
   "originality": {
     "direct_1_to_1_reference_moves": 0,
     "franchise_assets_in_production": 0,
-    "composite_synthesis": "\u22653-anchor composite for Nix Calder signature_lane_launch",
+    "composite_synthesis": "blueprint-driven composite for Nix Calder signature_lane_launch",
     "originality_review_status": "NOTES_DRIVEN_PENDING_HUMAN_REVIEW"
   },
   "timing": {
     "anticipation_frames": 6,
-    "active_frames": 9,
-    "recovery_frames": 13,
-    "total_frames": 27,
+    "active_frames": 10,
+    "recovery_frames": 12,
+    "total_frames": 32,
     "cancel_windows": []
   },
   "motion_grammar": {
@@ -41,7 +41,7 @@
     "tempo": "moderate",
     "arc_type": "arc",
     "contact_points": [
-      "root"
+      "hand_both"
     ],
     "silhouette_poses": [
       "anticipation",
@@ -51,21 +51,21 @@
     "fighter_motion_grammar": "held poses, crystalline stops, space-denial extensions"
   },
   "camera": {
-    "framing": "medium",
-    "push_in": false,
-    "shake_tier": "light"
+    "framing": "medium_cool",
+    "push_in": true,
+    "shake_tier": "medium"
   },
   "impact": {
     "hitstop_tier": "medium",
     "lane_flash": true,
-    "risk_reward": "high commitment on smash/heavy; low on jab/projectile_tap"
+    "risk_reward": "low_freeze"
   },
   "vfx_cue": "juice.nix-calder.signature_lane_launch.vfx",
   "sfx_cue": "juice.nix-calder.signature_lane_launch.sfx",
   "hitbox": {
-    "window_start_frame": 4,
-    "window_end_frame": 8,
-    "notes": "align to moves json at runtime integration"
+    "window_start_frame": 6,
+    "window_end_frame": 16,
+    "notes": "aligned via runtime_alignment.hitbox_phase_sync"
   },
   "accessibility": {
     "reduce_flash": true,
@@ -83,8 +83,16 @@
     "path": null
   },
   "provenance": {
-    "source_class": "NOTES_DRIVEN_SYNTHETIC_SPEC",
+    "source_class": "BLUEPRINT_DRIVEN_SYNTHETIC_SPEC",
     "real_user_motion": false,
     "edmund_personal_motion": false
+  },
+  "runtime_alignment": {
+    "moves_json_key": "signature_lane_launch",
+    "animatic_binding": null,
+    "hitbox_phase_sync": true,
+    "root_motion_style": "glide_stop",
+    "ground_coupling": "medium",
+    "cancel_graph_nodes": []
   }
 }

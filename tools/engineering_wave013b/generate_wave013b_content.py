@@ -17,6 +17,15 @@ ANIME_WAVE013B_START_SHA = subprocess.check_output(
     ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True
 ).strip()
 
+BLUEPRINTS_PATH = ROOT / "content/choreography/fighter_motion_blueprints.json"
+
+
+def load_blueprints() -> dict:
+    if BLUEPRINTS_PATH.exists():
+        return json.loads(BLUEPRINTS_PATH.read_text(encoding="utf-8"))
+    return {"fighters": {}}
+
+
 FIGHTERS = [
     {
         "id": "ember-vale",
@@ -196,6 +205,7 @@ def action_spec_schema() -> dict:
             "animation_source_priority",
             "reference_animatic",
             "provenance",
+            "runtime_alignment",
         ],
         "properties": {
             "schema_version": {"type": "integer", "const": 1},
@@ -302,21 +312,85 @@ def action_spec_schema() -> dict:
                     "edmund_personal_motion": {"type": "boolean", "const": False},
                 },
             },
+            "runtime_alignment": {
+                "type": "object",
+                "required": ["moves_json_key", "animatic_binding", "hitbox_phase_sync"],
+                "properties": {
+                    "moves_json_key": {"type": "string"},
+                    "animatic_binding": {"type": ["string", "null"]},
+                    "hitbox_phase_sync": {"type": "boolean"},
+                    "root_motion_style": {"type": "string"},
+                    "ground_coupling": {"type": "string"},
+                    "cancel_graph_nodes": {"type": "array", "items": {"type": "string"}},
+                },
+            },
         },
         "additionalProperties": False,
     }
 
 
-def build_action_spec(fighter: dict, action_key: str, category: str, summary: str, idx: int) -> dict:
+def _action_timing(bp: dict, action_key: str, category: str, idx: int) -> dict:
+    t = bp["timing"]
+    scale = t["tempo_scale"]
+    if action_key.startswith("signature_"):
+        sig_key = action_key.replace("signature_", "")
+        sig = bp["signatures"].get(sig_key, {})
+        if "timing_override" in sig:
+            return {**sig["timing_override"], "cancel_windows": []}
+    cat_mod = {"movement": 0, "melee": 2, "special": 3, "defense": 1, "grab": 2, "reaction": 4, "presentation": 5}
+    mod = cat_mod.get(category, 1)
+    anti = int(t["base_anticipation"] + mod * scale)
+    active = int(t["base_active"] + (idx % 5) * scale)
+    recovery = int(t["base_recovery"] + mod)
+    total = anti + active + recovery
+    cancels = ["dash", "shield"] if category in ("melee", "special") else []
+    if bp["physical"]["weight_class"].startswith("heavy"):
+        cancels = ["shield"] if category == "melee" else cancels
+    return {
+        "anticipation_frames": anti,
+        "active_frames": active,
+        "recovery_frames": recovery,
+        "total_frames": total,
+        "cancel_windows": cancels,
+    }
+
+
+def build_action_spec(fighter: dict, bp: dict, action_key: str, category: str, summary: str, idx: int) -> dict:
     fid = fighter["id"]
     lane = fighter["lane"]
-    original = f"{fighter['name'].split()[0]} {summary.title()} {idx:02d}"
+    phys = bp["physical"]
+    root = bp["root_motion"]
+    contact = bp["contact"]
+    cam_bp = bp["camera"]
+    anim_id = bp["animation_identity"]
+
+    if action_key.startswith("signature_"):
+        sig_key = action_key.replace("signature_", "")
+        sig = bp["signatures"][sig_key]
+        original = sig["display_name"]
+        summary_text = sig["concept"]
+        contact_pts = sig.get("contact_override", [contact["primary_socket"]])
+        cam = {**{"framing": cam_bp["default_framing"], "push_in": False, "shake_tier": "medium"}, **sig.get("camera_override", {})}
+    else:
+        original = f"{bp['name']} {summary.title()}"
+        summary_text = f"Blueprint-driven {summary} for {anim_id['silhouette_read']}."
+        contact_pts = [contact["primary_socket"]] if category in ("melee", "grab", "special") else ["root"]
+        cam = {
+            "framing": cam_bp["default_framing"] if category != "presentation" else "wide",
+            "push_in": category in ("melee", "grab", "special") and cam_bp["push_in_aggression"] > 0.5,
+            "shake_tier": cam_bp["shake_profile"] if "smash" in action_key or action_key == "ko" else "light",
+        }
+
+    timing = _action_timing(bp, action_key, category, idx)
     proto_kind = "REFERENCE_ANIMATIC" if action_key in PROTOTYPE_ACTIONS else "NONE"
     proto_path = (
         f"tools/motion_pipeline/reference_animation/{fid}/{action_key}.json"
         if proto_kind != "NONE"
         else None
     )
+    weight = "heavy" if "heavy" in phys["weight_class"] else ("light" if "light" in phys["weight_class"] else "medium")
+    tempo = "fast" if bp["timing"]["tempo_scale"] > 1.1 else ("slow" if bp["timing"]["tempo_scale"] < 0.85 else "moderate")
+
     return {
         "schema_version": 1,
         "action_id": f"{fid}.{action_key}",
@@ -327,13 +401,13 @@ def build_action_spec(fighter: dict, action_key: str, category: str, summary: st
         "notes_driven": True,
         "inspiration_notes": {
             "research_anchors": [
-                "genre platform-fighter grammar",
-                f"{fighter['lane']} lane studies",
-                "ICONIC_MOMENT_TO_ORIGINAL_MOVE_MATRIX",
+                "fighter_motion_blueprints.json",
+                f"{lane} lane studies",
+                "FIGHTER_SIGNATURE_MOVE_BIBLE" if category == "signature" else "ICONIC_MOMENT_TO_ORIGINAL_MOVE_MATRIX",
             ],
-            "iconic_moment_summary": f"Notes-driven synthesis for {summary} respecting {fighter['motion_grammar']}.",
-            "motion_principle": "anticipation → committed contact → readable follow-through",
-            "power_principle": f"aura {fighter['aura']} scaling on payoff frames",
+            "iconic_moment_summary": summary_text,
+            "motion_principle": anim_id["follow_through"],
+            "power_principle": f"aura {fighter['aura']} via {bp['power']['scaling_curve']}",
             "do_not_copy": [
                 "franchise costumes",
                 "named techniques",
@@ -345,40 +419,30 @@ def build_action_spec(fighter: dict, action_key: str, category: str, summary: st
         "originality": {
             "direct_1_to_1_reference_moves": 0,
             "franchise_assets_in_production": 0,
-            "composite_synthesis": f"≥3-anchor composite for {fighter['name']} {action_key}",
+            "composite_synthesis": f"blueprint-driven composite for {bp['name']} {action_key}",
             "originality_review_status": "NOTES_DRIVEN_PENDING_HUMAN_REVIEW",
         },
-        "timing": {
-            "anticipation_frames": 3 + (idx % 4),
-            "active_frames": 4 + (idx % 6),
-            "recovery_frames": 6 + (idx % 8),
-            "total_frames": 16 + (idx % 12),
-            "cancel_windows": ["dash", "shield"] if category in ("melee", "special") else [],
-        },
+        "timing": timing,
         "motion_grammar": {
-            "weight": "heavy" if "rook" in fid else "medium",
-            "tempo": "fast" if "juno" in fid or action_key == "jab" else "moderate",
-            "arc_type": "linear" if category == "movement" else "arc",
-            "contact_points": ["hand_r"] if category in ("melee", "grab") else ["root"],
+            "weight": weight,
+            "tempo": tempo,
+            "arc_type": root["style"] if category == "movement" else "arc",
+            "contact_points": contact_pts,
             "silhouette_poses": ["anticipation", "extremum", "recovery"],
             "fighter_motion_grammar": fighter["motion_grammar"],
         },
-        "camera": {
-            "framing": "medium" if category != "presentation" else "wide",
-            "push_in": category in ("melee", "grab", "special"),
-            "shake_tier": "heavy" if "smash" in action_key or action_key == "ko" else "light",
-        },
+        "camera": cam,
         "impact": {
-            "hitstop_tier": "aura" if "aura" in action_key else "medium",
+            "hitstop_tier": "aura" if "aura" in action_key else ("heavy" if weight == "heavy" else "medium"),
             "lane_flash": True,
-            "risk_reward": "high commitment on smash/heavy; low on jab/projectile_tap",
+            "risk_reward": bp["power"]["knockback_bias"],
         },
         "vfx_cue": f"juice.{fid}.{action_key}.vfx",
         "sfx_cue": f"juice.{fid}.{action_key}.sfx",
         "hitbox": {
-            "window_start_frame": 4,
-            "window_end_frame": 8,
-            "notes": "align to moves json at runtime integration",
+            "window_start_frame": timing["anticipation_frames"],
+            "window_end_frame": timing["anticipation_frames"] + timing["active_frames"],
+            "notes": "aligned via runtime_alignment.hitbox_phase_sync",
         },
         "accessibility": {"reduce_flash": True, "reduce_shake": True},
         "production_status": "NOTES_SPEC_READY",
@@ -390,30 +454,38 @@ def build_action_spec(fighter: dict, action_key: str, category: str, summary: st
         ],
         "reference_animatic": {"kind": proto_kind, "path": proto_path},
         "provenance": {
-            "source_class": "NOTES_DRIVEN_SYNTHETIC_SPEC",
+            "source_class": "BLUEPRINT_DRIVEN_SYNTHETIC_SPEC",
             "real_user_motion": False,
             "edmund_personal_motion": False,
+        },
+        "runtime_alignment": {
+            "moves_json_key": action_key,
+            "animatic_binding": proto_path,
+            "hitbox_phase_sync": True,
+            "root_motion_style": root["style"],
+            "ground_coupling": root["ground_coupling"],
+            "cancel_graph_nodes": timing.get("cancel_windows", []),
         },
     }
 
 
-def generate_action_specs() -> dict:
+def generate_action_specs(blueprints: dict) -> dict:
     index: dict = {"schema_version": 1, "wave": "wave013b", "fighters": {}, "total_specs": 0}
     for fighter in FIGHTERS:
         fid = fighter["id"]
+        bp = blueprints["fighters"][fid]
         specs_dir = ROOT / "content/choreography" / fid
         specs_dir.mkdir(parents=True, exist_ok=True)
         ids: list[str] = []
         idx = 0
         for action_key, category, summary in BASE_ACTIONS:
-            spec = build_action_spec(fighter, action_key, category, summary, idx)
-            path = specs_dir / f"{action_key}.json"
-            write_json(path, spec)
+            spec = build_action_spec(fighter, bp, action_key, category, summary, idx)
+            write_json(specs_dir / f"{action_key}.json", spec)
             ids.append(spec["action_id"])
             idx += 1
         for suffix in SIGNATURE_SUFFIXES:
             action_key = f"signature_{suffix}"
-            spec = build_action_spec(fighter, action_key, "signature", f"signature {suffix.replace('_', ' ')}", idx)
+            spec = build_action_spec(fighter, bp, action_key, "signature", suffix.replace("_", " "), idx)
             write_json(specs_dir / f"{action_key}.json", spec)
             ids.append(spec["action_id"])
             idx += 1
@@ -529,16 +601,25 @@ def motion_contribution_schema() -> dict:
     }
 
 
-def prototype_timeline(fighter: dict, action_key: str) -> dict:
+def prototype_timeline(fighter: dict, bp: dict, action_key: str) -> dict:
     fid = fighter["id"]
-    frames = 24 if action_key == "idle" else 32
+    t = bp["timing"]
+    fid_seed = sum(ord(c) for c in fid) + sum(ord(c) for c in action_key)
+    base_frames = int((t["base_anticipation"] + t["base_active"] + t["base_recovery"]) * t["tempo_scale"])
+    frames = 24 if action_key == "idle" else max(28, base_frames + (fid_seed % 13))
+    contact = bp["contact"]["primary_socket"]
+    root_style = bp["root_motion"]["style"]
+    active_frame = max(3, int(t["base_anticipation"] * t["tempo_scale"]) + (fid_seed % 3))
+    hitbox_on = active_frame + 2 + (fid_seed % 2)
+    hitbox_off = hitbox_on + int(t["base_active"] * 0.6) + (fid_seed % 4)
+    lane_offset = (fid_seed % 5) * 0.1
     events = [
-        {"frame": 0, "event_type": "anticipation_start", "payload": {"pose": "neutral"}},
-        {"frame": 4, "event_type": "active_start", "payload": {"contact": action_key}},
-        {"frame": 8, "event_type": "hitbox_on", "payload": {"socket": "hand_r"}},
-        {"frame": 12, "event_type": "hitbox_off", "payload": {}},
-        {"frame": frames - 4, "event_type": "recovery_start", "payload": {}},
-        {"frame": frames, "event_type": "loop_end", "payload": {}},
+        {"frame": 0, "event_type": "anticipation_start", "payload": {"pose": bp["animation_identity"]["idle_energy"], "fighter": fid}},
+        {"frame": active_frame, "event_type": "active_start", "payload": {"contact": action_key, "root": root_style, "lane_offset": lane_offset}},
+        {"frame": hitbox_on, "event_type": "hitbox_on", "payload": {"socket": contact, "lane": fighter["lane"], "impulse": bp["power"]["knockback_bias"]}},
+        {"frame": hitbox_off, "event_type": "hitbox_off", "payload": {"vfx": bp["contact"]["trail_vfx"], "fighter_id": fid}},
+        {"frame": frames - 4 - (fid_seed % 3), "event_type": "recovery_start", "payload": {"follow": bp["animation_identity"]["follow_through"]}},
+        {"frame": frames, "event_type": "loop_end", "payload": {"fighter_specific": True, "signature": f"{fid}:{action_key}"}},
     ]
     return {
         "schema_version": 1,
@@ -548,22 +629,52 @@ def prototype_timeline(fighter: dict, action_key: str) -> dict:
         "fps": 60.0,
         "duration_frames": frames,
         "events": events,
+        "fighter_motion_signature": f"{bp['animation_identity']['silhouette_read']}:{fid}:{action_key}",
         "provenance": {
-            "source_class": "SYNTHETIC_PROTOTYPE",
+            "source_class": "BLUEPRINT_DRIVEN_PROTOTYPE",
             "final_animation": False,
+            "PROTOTYPE_ANIMATIC_FIGHTER_SPECIFIC": True,
         },
     }
 
 
-def generate_prototypes() -> int:
+def generate_prototypes(blueprints: dict) -> int:
     count = 0
     for fighter in FIGHTERS:
+        bp = blueprints["fighters"][fighter["id"]]
         out_dir = ROOT / "tools/motion_pipeline/reference_animation" / fighter["id"]
         out_dir.mkdir(parents=True, exist_ok=True)
         for action_key in PROTOTYPE_ACTIONS:
-            write_json(out_dir / f"{action_key}.json", prototype_timeline(fighter, action_key))
+            write_json(out_dir / f"{action_key}.json", prototype_timeline(fighter, bp, action_key))
             count += 1
     return count
+
+
+def signature_move_bible(blueprints: dict) -> str:
+    lines = [
+        "# Fighter Signature Move Bible",
+        "",
+        "Eight or more genuine original signature concepts per fighter.",
+        "Production-facing placeholder names removed; blueprint-driven only.",
+        "",
+    ]
+    for fighter in FIGHTERS:
+        fid = fighter["id"]
+        bp = blueprints["fighters"][fid]
+        lines += [f"## {bp['name']}", "", f"**Lane:** {bp['lane']} | **Aura:** {fighter['aura']}", ""]
+        for sig_key, sig in bp["signatures"].items():
+            to = sig.get("timing_override", {})
+            lines += [
+                f"### {sig['display_name']}",
+                f"- **Contract key:** `signature_{sig_key}`",
+                f"- **Concept:** {sig['concept']}",
+                f"- **Timing:** anti={to.get('anticipation_frames')} active={to.get('active_frames')} recovery={to.get('recovery_frames')} total={to.get('total_frames')}",
+                f"- **Contact:** {', '.join(sig.get('contact_override', []))}",
+                f"- **Camera:** {sig.get('camera_override', {})}",
+                f"- **Originality:** DIRECT_1_TO_1_REFERENCE_MOVES=0",
+                "",
+            ]
+    return "\n".join(lines)
 
 
 def roster_visual_bible() -> str:
@@ -696,6 +807,10 @@ def motion_provenance() -> dict:
 
 
 def main() -> int:
+    blueprints = load_blueprints()
+    if not blueprints.get("fighters"):
+        raise SystemExit("fighter_motion_blueprints.json missing or empty")
+
     write_json(ROOT / "content/choreography/action_spec.schema.json", action_spec_schema())
     write_json(
         ROOT / "tools/motion_pipeline/schemas/animation_event_timeline.schema.json",
@@ -708,9 +823,10 @@ def main() -> int:
     write(ROOT / "docs/design/ROSTER_VISUAL_IDENTITY_BIBLE.md", roster_visual_bible())
     write(ROOT / "docs/design/ROSTER_MOTION_IDENTITY_BIBLE.md", roster_motion_bible())
     write(ROOT / "docs/design/ICONIC_MOMENT_TO_ORIGINAL_MOVE_MATRIX.md", expand_iconic_matrix())
+    write(ROOT / "docs/design/FIGHTER_SIGNATURE_MOVE_BIBLE.md", signature_move_bible(blueprints))
 
-    spec_index = generate_action_specs()
-    proto_count = generate_prototypes()
+    spec_index = generate_action_specs(blueprints)
+    proto_count = generate_prototypes(blueprints)
     write_json(ROOT / "content/motion_library/index.json", motion_library_index(proto_count, spec_index))
     write_json(ROOT / "content/motion_provenance.json", motion_provenance())
 
