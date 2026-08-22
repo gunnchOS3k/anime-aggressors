@@ -1,0 +1,20 @@
+{
+  "dry_run": true,
+  "input": null,
+  "output": null,
+  "steps": [
+    "import_vrm_or_glb",
+    "normalize_transform_scale_orientation",
+    "inspect_armature",
+    "audit_mesh_materials",
+    "fix_normals_tangents",
+    "pack_textures",
+    "safe_optimize_lod",
+    "slice_animation_clips",
+    "apply_root_motion_policy",
+    "export_glb",
+    "godot_import_smoke_hook"
+  ],
+  "art_source_separated": true,
+  "status": "DRY_RUN_OK"
+}

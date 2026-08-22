@@ -1,0 +1,81 @@
+name: Engineering Wave012 Anime Free Art Pipeline
+
+on:
+  push:
+    branches: [main, "eng/wave012-anime-free-art-pipeline", "eng/**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  wave012:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Godot 4.5
+        run: |
+          set -euo pipefail
+          curl -L -o godot.zip https://github.com/godotengine/godot-builds/releases/download/4.5-stable/Godot_v4.5-stable_linux.x86_64.zip
+          unzip -o godot.zip
+          chmod +x Godot_v4.5-stable_linux.x86_64
+          echo "GODOT_BIN=$PWD/Godot_v4.5-stable_linux.x86_64" >> "$GITHUB_ENV"
+
+      - name: Install Blender (best effort)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender || true
+
+      - name: Run Engineering Wave012
+        env:
+          GODOT_BIN: ${{ env.GODOT_BIN }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_ACTIONS: "true"
+        run: make engineering-wave012
+
+      - name: Upload Wave012 artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: engineering-wave012-evidence
+          path: |
+            artifacts/wave012/
+            artifacts/engineering_wave012/
+
+      - name: CI final gate — truthful PASS/PARTIAL
+        if: github.event_name == 'pull_request'
+        run: |
+          python3 - <<'PY'
+          import json
+          d=json.load(open("artifacts/engineering_wave012/WAVE012_RESULT.json"))
+          assert d.get("CURSOR_MERGED_NOTHING") is True
+          assert int(d.get("COMPUTED_CORE_PIPELINE_MONETARY_COST_USD", d.get("CORE_PIPELINE_MONETARY_COST_USD", 1))) == 0
+          assert d.get("ZERO_COST_CHECK_PASS") is True
+          assert d.get("TOOLCHAIN_MD_JSON_CONSISTENT") is True
+          assert d.get("SOFTWARE_LICENSE_NOT_USED_AS_OUTPUT_LICENSE") is True
+          assert d.get("FINAL_ART_FALSE_POSITIVE_GUARD") == "PASS"
+          assert d.get("MIXAMO_REQUIRED_FOR_BUILD") is False
+          assert d.get("MIXAMO_REQUIRED_FOR_PIPELINE_PASS") is False
+          assert d.get("VROID_REQUIRED_FOR_BUILD") is False
+          assert d.get("VROID_FINAL_EXPORT_PRESENT") is False
+          assert d.get("ANYCREATURE_PIN_MATCH") is True
+          assert d.get("PIPELINE_IMPLEMENTATION_PASS") is True
+          assert d.get("EMBER_FINAL_ART_RUNTIME_PASS") is False
+          assert d.get("HUMAN_ART_DIRECTION_APPROVAL") is False
+          assert d.get("VROID_MODEL_CREATION") == "HUMAN_GUI_REQUIRED"
+          assert "BLOCKED" in str(d.get("MOCAP_GPU_EXECUTION", ""))
+          assert int(d.get("NEW_S0", 1)) == 0
+          assert int(d.get("NEW_S1", 1)) == 0
+          assert d.get("ENGINEERING_WAVE_012") in ("PASS", "PARTIAL")
+          z=json.load(open("artifacts/engineering_wave012/ZERO_COST_DEPENDENCY_CHECK.json"))
+          assert int(z.get("COMPUTED_CORE_PIPELINE_MONETARY_COST_USD", 1)) == 0
+          assert z.get("pass") is True
+          p=json.load(open("artifacts/engineering_wave012/TOOLCHAIN_PROVENANCE_VALIDATION.json"))
+          assert p.get("pass") is True
+          print("CI final gate OK", d.get("ENGINEERING_WAVE_012"), d.get("token"))
+          PY

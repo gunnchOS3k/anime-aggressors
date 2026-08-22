@@ -58,8 +58,48 @@ func apply_hit(attacker: Node, defender: Node, move: Dictionary, info: Dictionar
 	result["element"] = move.get("element_effect", {}).get("type", "")
 	_play_procedural_sfx(result.sfx_event, tier, attacker)
 	_trigger_camera(tier, fb.get("camera_event", ""))
+	_emit_juice("hitstop", {"tier": tier, "frames": hitstop})
+	_emit_juice("impact_vfx", {
+		"socket": fb.get("vfx_socket", "chest"),
+		"element": result["element"],
+		"tier": tier,
+		"vfx_event": result["vfx_event"],
+	})
+	_emit_juice("sfx", {"event_id": result["sfx_event"], "category": "hit", "tier": tier})
 	feedback_triggered.emit(result)
 	return result
+
+func emit_aura_buildup(fid: String, level: int, pct: float) -> void:
+	_emit_juice("aura_buildup", {"fighter_id": fid, "level": level, "pct": pct})
+
+func emit_shield_flash(fid: String) -> void:
+	_emit_juice("shield_flash", {"fighter_id": fid})
+
+func emit_dodge_phase(fid: String, air: bool) -> void:
+	_emit_juice("dodge_phase", {"fighter_id": fid, "air": air})
+
+func emit_landing_dust(fid: String) -> void:
+	_emit_juice("landing_dust", {"fighter_id": fid})
+
+func emit_recovery_trail(element: String) -> void:
+	_emit_juice("recovery_trail", {"element": element})
+
+func emit_ko_burst(fid: String) -> void:
+	_emit_juice("ko_burst", {"fighter_id": fid, "tier": "heavy"})
+
+func emit_victory_presentation(fid: String) -> void:
+	_emit_juice("victory_presentation", {"fighter_id": fid})
+
+func emit_projectile_trail(element: String, charge: String) -> void:
+	_emit_juice("projectile_trail", {"element": element, "charge": charge})
+
+func emit_optional_rumble(strength: float, duration_ms: int) -> void:
+	_emit_juice("rumble", {"strength": strength, "duration_ms": duration_ms})
+
+func _emit_juice(event_name: String, payload: Dictionary) -> void:
+	var bus = Engine.get_main_loop().root.get_node_or_null("/root/JuiceEventBus") if Engine.get_main_loop() else null
+	if bus != null and bus.has_method("emit_event"):
+		bus.emit_event(event_name, payload)
 
 func _default_hitstop(tier: String) -> int:
 	var range: Dictionary = TIER_HITSTOP.get(tier, TIER_HITSTOP.light)
@@ -75,6 +115,12 @@ func _trigger_camera(tier: String, event: String) -> void:
 			intensity_scale = float(role.fx_intensity())
 	_shake_intensity = TIER_SHAKE.get(tier, 2.0) * intensity_scale
 	_shake_remaining = 0.12 * intensity_scale
+	_emit_juice("camera_shake", {
+		"tier": tier,
+		"intensity": _shake_intensity,
+		"duration_s": _shake_remaining,
+		"camera_event": event,
+	})
 	if event != "" and intensity_scale > 0.01:
 		print("[CombatFeedback] camera_event: %s tier:%s" % [event, tier])
 
