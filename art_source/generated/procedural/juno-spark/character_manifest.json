@@ -1,0 +1,115 @@
+{
+  "fighter_id": "juno-spark",
+  "display_name": "Juno Spark",
+  "visual_language": "compact speed lines",
+  "status": "PROCEDURAL_PRODUCTION_PROXY",
+  "export": {
+    "fighter_id": "juno-spark",
+    "status": "PROCEDURAL_PRODUCTION_PROXY",
+    "source_glb": "game-godot/assets/characters/procedural_final/juno-spark.glb",
+    "export_glb": "content/fighters/juno-spark/model/juno-spark_procedural_proxy.glb",
+    "sha256": "f9dd1713d349bdc8cf1855e67bc42e40d76f2e4db2c92d31f269e60e0cbf47d2",
+    "size_bytes": 676400,
+    "triangle_budget_preferred": 35000,
+    "material_budget": 6
+  },
+  "materials": {
+    "fighter_id": "juno-spark",
+    "shader": "game-godot/shaders/fighter_toon.gdshader",
+    "material_count": 6,
+    "max_texture_resolution": "2048x2048",
+    "slots": [
+      {
+        "name": "skin",
+        "hex": "F4D94E",
+        "emission": 0.0,
+        "toon_band": 3
+      },
+      {
+        "name": "cloth",
+        "hex": "202839",
+        "emission": 0.0,
+        "toon_band": 3
+      },
+      {
+        "name": "accent",
+        "hex": "72E6FF",
+        "emission": 0.15,
+        "toon_band": 2
+      },
+      {
+        "name": "outline",
+        "hex": "12151D",
+        "emission": 0.0,
+        "toon_band": 1
+      },
+      {
+        "name": "accessory",
+        "hex": "72E6FF",
+        "emission": 0.25,
+        "toon_band": 2
+      },
+      {
+        "name": "aura_shell",
+        "hex": "72E6FF",
+        "emission": 0.45,
+        "toon_band": 2
+      }
+    ],
+    "status": "PROCEDURAL_PRODUCTION_PROXY"
+  },
+  "rig": {
+    "schema_version": 1,
+    "fighter_id": "juno-spark",
+    "normalized": true,
+    "wave012_compatible": true,
+    "bones": [
+      "Root",
+      "Hips",
+      "Spine",
+      "Chest",
+      "Neck",
+      "Head",
+      "Shoulder_L",
+      "UpperArm_L",
+      "LowerArm_L",
+      "Hand_L",
+      "Shoulder_R",
+      "UpperArm_R",
+      "LowerArm_R",
+      "Hand_R",
+      "UpperLeg_L",
+      "LowerLeg_L",
+      "Foot_L",
+      "Toes_L",
+      "UpperLeg_R",
+      "LowerLeg_R",
+      "Foot_R",
+      "Toes_R"
+    ],
+    "sockets": [
+      "hand_l",
+      "hand_r",
+      "foot_l",
+      "foot_r",
+      "chest",
+      "head",
+      "back",
+      "aura_root",
+      "projectile_origin",
+      "recovery_origin"
+    ],
+    "source": "procedural_roster/generate_character.py",
+    "root_motion_authority": "PHYSICS_AUTHORITATIVE",
+    "competitive_gameplay_root_motion": "PHYSICS_AUTHORITATIVE"
+  },
+  "silhouette_contract": {
+    "accessory": "volt_scarf",
+    "body_scale": [
+      0.9,
+      0.94,
+      0.92
+    ],
+    "mass_read": "compact_fast"
+  }
+}

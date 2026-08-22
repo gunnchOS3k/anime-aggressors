@@ -187,6 +187,11 @@ func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, s
 		aura_vfx.color = Color(data.get("auraColor"))
 		aura_vfx.color.a = 0.35
 
+
+func is_model_loaded() -> bool:
+	return model_3d != null and model_3d.is_model_loaded()
+
+
 func get_weight() -> float:
 	return float(data.get("weight", 100))
 

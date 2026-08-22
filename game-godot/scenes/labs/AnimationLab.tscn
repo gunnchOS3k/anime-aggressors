@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=3 uid="uid://wave014_animation_lab"]
+
+[ext_resource type="Script" path="res://scripts/labs/animation_lab.gd" id="1"]
+
+[node name="AnimationLab" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 900.0
+offset_bottom = 48.0
+text = "Animation Lab — procedural runtime clip compare + combat alignment overlay"
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 56.0
+offset_right = 900.0
+offset_bottom = 520.0
+
+[node name="List" type="ItemList" parent="Panel"]
+custom_minimum_size = Vector2(280, 420)
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="Detail" type="Label" parent="Panel"]
+custom_minimum_size = Vector2(560, 420)
+layout_mode = 2
+size_flags_horizontal = 3
+autowrap_mode = 3
+text = "Select a fighter to inspect procedural animation manifest."
