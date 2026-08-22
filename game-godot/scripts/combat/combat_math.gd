@@ -14,6 +14,20 @@ const AIR_DODGE_RECOVERY := 0.18
 const GROUND_DODGE_RECOVERY := 0.12
 const AIR_DODGE_INVULN := 0.14
 const GROUND_DODGE_INVULN := 0.10
+## WAVE011 competitive depth — canonical constants (mutation-sensitive).
+const AURA_CHARGE_PER_SECOND := 35.0
+const AURA_IDLE_DECAY_PER_SECOND := 4.0
+const AURA_HIT_INTERRUPT_LOSS := 20.0
+const CHARGE_MOVE_MULT := 0.42
+const GRAB_MASH_ESCAPE := 1.0
+const GRAB_MASH_PER_PRESS := 0.28
+const TECH_WINDOW_SEC := 0.12
+const SHIELD_REGEN_PER_SECOND := 14.0
+const STALE_DECAY := 0.12
+const STALE_FLOOR := 0.55
+const DEFAULT_AIR_ACCEL := 1400.0
+const DEFAULT_TRACTION := 1800.0
+const GRAB_RANGE_PX := 70.0
 
 static func frames_to_seconds(frames: int) -> float:
 	return float(frames) / FPS
@@ -70,3 +84,21 @@ static func landing_lag_seconds(from_aerial: bool, from_fast_fall: bool, move_ov
 	if from_aerial:
 		return LANDING_LAG_AERIAL
 	return LANDING_LAG_NORMAL
+
+
+static func stale_multiplier(repeat_count: int) -> float:
+	return maxf(STALE_FLOOR, 1.0 - STALE_DECAY * float(maxi(0, repeat_count)))
+
+
+static func combo_decay(combo_count: int) -> float:
+	if combo_count <= 1:
+		return 1.0
+	return maxf(0.62, 1.0 - 0.06 * float(combo_count - 1))
+
+
+static func shield_decay_per_second(profile: Dictionary) -> float:
+	return float(profile.get("decayPerSecond", 18.0))
+
+
+static func tech_window_seconds() -> float:
+	return TECH_WINDOW_SEC

@@ -14,8 +14,10 @@ var combat_feedback: Node
 func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_pct: float) -> void:
 	if attacker == null or defender == null:
 		return
-	if not attacker.move_runner.can_hit_target(defender):
-		return
+	var from_projectile := bool(move.get("_from_projectile", false))
+	if not from_projectile:
+		if attacker.move_runner == null or not attacker.move_runner.can_hit_target(defender):
+			return
 	# Active armor frames (Rook heavies / Nix ice window) fully gate the hit.
 	if "armor_frames_remaining" in defender and float(defender.armor_frames_remaining) > 0.0:
 		var armor_info := {
@@ -58,6 +60,10 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 		dealt *= attacker.get_damage_dealt_mult()
 	if "damage_ratio" in GameState:
 		dealt *= float(GameState.damage_ratio)
+	if attacker.has_method("stale_repeat_count"):
+		dealt *= _CombatMath.stale_multiplier(int(attacker.stale_repeat_count(str(scaled.get("move_id", "")))))
+	if "combo_count" in attacker:
+		dealt *= _CombatMath.combo_decay(int(attacker.combo_count))
 	# Passive aura armor (Rook L3+ / Nix ice) chips damage — script runtime, not data-only.
 	if _AuraSpecialRuntime.should_block_hit_with_armor(defender):
 		dealt *= 0.55
@@ -90,6 +96,11 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 	kb = info.get("launch", kb)
 	if combat_feedback:
 		info = combat_feedback.apply_hit(attacker, defender, scaled, info)
+		if combat_feedback.has_method("spawn_hit_spark") and defender is Node2D:
+			combat_feedback.spawn_hit_spark(defender, defender.global_position + Vector2(0, -24), str(info.get("element", "")))
+		if attacker != null and "last_impact_readable" in attacker:
+			attacker.last_impact_readable = true
+			attacker.last_feedback_tier = str(info.get("feedback_tier", ""))
 	elif attacker.has_node("_CombatFeedback"):
 		var fb = attacker.get_node("_CombatFeedback")
 		info = fb.apply_hit(attacker, defender, scaled, info)

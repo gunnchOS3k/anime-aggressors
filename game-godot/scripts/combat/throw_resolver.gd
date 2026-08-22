@@ -38,7 +38,8 @@ static func resolve_throw(attacker: Node, target: Node, manifest: Dictionary, di
 	var throw_move: Dictionary = _DataLoader.find_move(manifest, move_id)
 	if throw_move.is_empty():
 		throw_move = _DataLoader.find_move(manifest, "throw_forward")
-	if throw_move.is_empty():
+	var synthesized := throw_move.is_empty()
+	if synthesized:
 		throw_move = {
 			"move_id": move_id,
 			"damage": 6.0,
@@ -47,7 +48,26 @@ static func resolve_throw(attacker: Node, target: Node, manifest: Dictionary, di
 			"angle_deg": 45.0,
 			"hitstop_frames": 4,
 			"feedback": {"tier": "medium", "hitstop_frames": 5},
+			"throw": {"direction": direction, "victim_offset": {"x": 20, "y": -8}},
 		}
+		match direction:
+			"up":
+				throw_move["angle_deg"] = 88.0
+				throw_move["base_knockback"] = 18.0
+				throw_move["throw"] = {"direction": "up", "victim_offset": {"x": 4, "y": -28}}
+			"down":
+				throw_move["angle_deg"] = 270.0
+				throw_move["base_knockback"] = 10.0
+				throw_move["throw"] = {"direction": "down", "victim_offset": {"x": 8, "y": 16}}
+			"back":
+				throw_move["angle_deg"] = 135.0
+				throw_move["base_knockback"] = 16.0
+				throw_move["throw"] = {"direction": "back", "victim_offset": {"x": -22, "y": -8}}
+			_:
+				throw_move["angle_deg"] = 38.0
+				throw_move["throw"] = {"direction": "forward", "victim_offset": {"x": 22, "y": -8}}
+	throw_move = throw_move.duplicate(true)
+	throw_move["direction"] = direction
 	var throw_cfg: Dictionary = throw_move.get("throw", {})
 	if not throw_cfg.is_empty():
 		if throw_cfg.has("damage"):
@@ -58,7 +78,7 @@ static func resolve_throw(attacker: Node, target: Node, manifest: Dictionary, di
 			throw_move["base_knockback"] = throw_cfg.base_knockback
 		if throw_cfg.has("knockback_growth"):
 			throw_move["knockback_growth"] = throw_cfg.knockback_growth
-	if attacker.has_method("get_aura"):
+	if attacker != null and attacker.has_method("get_aura"):
 		throw_move = _AuraScaler.apply_to_move(throw_move, attacker.aura)
 	return throw_move
 

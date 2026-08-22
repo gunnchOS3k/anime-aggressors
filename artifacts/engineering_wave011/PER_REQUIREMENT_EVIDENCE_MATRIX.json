@@ -1,0 +1,99 @@
+{
+  "schema": "gunnchos.engineering_wave011.per_requirement_matrix.v1",
+  "BLANKET": false,
+  "matrix": {
+    "GAME-AA-001": {
+      "status": "IMPLEMENTED",
+      "evidence": [
+        "component.charge",
+        "e2e.A_aura_charge_burst"
+      ],
+      "notes": "Charge accumulated via shield+special",
+      "BLANKET": false
+    },
+    "GAME-AA-002": {
+      "status": "IMPLEMENTED",
+      "evidence": [
+        "component.melee_scale",
+        "e2e.B_aura_scaled_melee"
+      ],
+      "notes": "L3>L0 scaler + BattleScene melee hit",
+      "BLANKET": false
+    },
+    "GAME-AA-003": {
+      "status": "IMPLEMENTED",
+      "evidence": [
+        "component.projectile",
+        "component.projectile_resolver",
+        "e2e.C_projectiles"
+      ],
+      "notes": "Charge-scaled projectile + HitResolver path",
+      "BLANKET": false
+    },
+    "GAME-AA-004": {
+      "status": "IMPLEMENTED",
+      "evidence": [
+        "component.throws",
+        "e2e.D_throws_defense"
+      ],
+      "notes": "Directional throws + grab path",
+      "BLANKET": false
+    },
+    "GAME-AA-005": {
+      "status": "IMPLEMENTED",
+      "evidence": [
+        "component.movement",
+        "e2e.E_identity_hud_safety"
+      ],
+      "notes": "Seven-fighter movement fingerprints",
+      "BLANKET": false
+    },
+    "GAME-AA-006": {
+      "status": "IMPLEMENTED",
+      "evidence": [
+        "component.defense",
+        "e2e.D_throws_defense"
+      ],
+      "notes": "Shield decay/regen + mash/tech constants",
+      "BLANKET": false
+    },
+    "GAME-AA-007": {
+      "status": "IMPLEMENTED",
+      "evidence": [
+        "component.identities",
+        "e2e.E"
+      ],
+      "notes": "Seven original power identities",
+      "BLANKET": false
+    },
+    "GAME-AA-008": {
+      "status": "IMPLEMENTED",
+      "evidence": [
+        "component.impact",
+        "e2e.B"
+      ],
+      "notes": "Stale/combo + readable melee confirm",
+      "BLANKET": false
+    },
+    "GAME-AA-009": {
+      "status": "IMPLEMENTED",
+      "evidence": [
+        "component.frame_data",
+        "component.hud"
+      ],
+      "notes": "Frame data from move defs + stock-3 rules",
+      "BLANKET": false
+    },
+    "GAME-AA-010": {
+      "status": "IMPLEMENTED",
+      "evidence": [
+        "component.hud",
+        "e2e.E"
+      ],
+      "notes": "Training debug vs clean versus HUD",
+      "BLANKET": false
+    },
+    "BLANKET_GAME_AA_ASSIGNMENT": false,
+    "derivation": "individual_observation"
+  }
+}

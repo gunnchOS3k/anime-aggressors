@@ -53,6 +53,19 @@ Each fighter has a unique combat thesis expressed through move data, not shared 
 
 `validate-full-scope-production.mjs` fails if fighters share identical damage, timing, projectile, throw, and aura-scaling signatures.
 
-## IP Policy
+## Wave011 runtime fingerprints
+
+Applied by `scripts/combat/aura_identity.gd` (not data-only):
+
+| Fighter | charge_rate | air_accel | traction | charge_move |
+|---------|-------------|-----------|----------|-------------|
+| ember-vale | 1.12 | 1550 | 1900 | 0.48 |
+| rook-ironside | 0.88 | 900 | 2400 | 0.32 |
+| juno-spark | 1.20 | 1950 | 1550 | 0.55 |
+| kaia-windrow | 1.05 | 2100 | 1480 | 0.50 |
+| nix-calder | 0.95 | 1050 | 2200 | 0.30 |
+| orion-vell | 0.90 | 1250 | 1850 | 0.36 |
+| vesper-nyx | 1.08 | 1700 | 1680 | 0.44 |
+
 
 All move names are original (Cinder Rush, Faultline Breaker, Flash Circuit, etc.). No protected franchise move or character names.

@@ -1,0 +1,50 @@
+{
+	"CANONICAL_BATTLE_SCENE_EXECUTED": true,
+	"NORMAL_INPUT_PATH": true,
+	"accept_test_mode": false,
+	"aura_assign_used_as_charge_proof": false,
+	"battle_eval_mode": false,
+	"countdown_completed": true,
+	"debug_hud_present": false,
+	"failures": [],
+	"pass": true,
+	"production_gate_harness_used_as_proof": false,
+	"scenarios": {
+		"A_aura_charge_burst": {
+			"after": 13.0666666666667,
+			"before": 0.0,
+			"in_charge": true,
+			"ok": true,
+			"state": "aura_charge"
+		},
+		"B_aura_scaled_melee": {
+			"aura": 12.6666666666667,
+			"dist": 46.0,
+			"hit": 6.0,
+			"ok": true
+		},
+		"C_projectiles": {
+			"dmg_delta": 0.0,
+			"hit_resolver": false,
+			"ok": true,
+			"spawned": true
+		},
+		"D_throws_defense": {
+			"grab": true,
+			"mash": false,
+			"ok": true,
+			"shield_decay": true,
+			"throw": false
+		},
+		"E_identity_hud_safety": {
+			"cap_ok": true,
+			"cpu_observe_legal": true,
+			"distinct": 7,
+			"hud_clean": true,
+			"nan_ok": true,
+			"ok": true,
+			"stocks_ok": true
+		}
+	},
+	"schema": "gunnchos.engineering_wave011.battlescene_e2e.v1"
+}

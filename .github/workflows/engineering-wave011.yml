@@ -1,0 +1,82 @@
+name: Engineering Wave011 Anime Aggressors
+
+on:
+  push:
+    branches: [main, "eng/wave011-anime-combat-depth", "eng/**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  wave011:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Godot 4.5
+        run: |
+          set -euo pipefail
+          curl -L -o godot.zip https://github.com/godotengine/godot-builds/releases/download/4.5-stable/Godot_v4.5-stable_linux.x86_64.zip
+          unzip -o godot.zip
+          chmod +x Godot_v4.5-stable_linux.x86_64
+          echo "GODOT_BIN=$PWD/Godot_v4.5-stable_linux.x86_64" >> "$GITHUB_ENV"
+
+      - name: Run Engineering Wave011
+        env:
+          GODOT_BIN: ${{ env.GODOT_BIN }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_ACTIONS: "true"
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          WAVE011_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          WAVE011_PR_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          WAVE011_REQUIRE_PASS: ${{ github.event_name == 'pull_request' && '1' || '0' }}
+        run: make engineering-wave011
+
+      - name: Upload Wave011 artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: engineering-wave011-evidence
+          path: artifacts/engineering_wave011/
+
+      - name: CI final gate — PASS only
+        if: github.event_name == 'pull_request'
+        run: |
+          python3 - <<'PY'
+          import json, os
+          d=json.load(open("artifacts/engineering_wave011/WAVE011_RESULT.json"))
+          e2e=json.load(open("artifacts/engineering_wave011/BATTLESCENE_E2E_RESULT.json"))
+          mut=json.load(open("artifacts/engineering_wave011/MUTATION_RESULT.json"))
+          integ=json.load(open("artifacts/engineering_wave011/CODE_INTEGRITY_RESULT.json"))
+          prov=json.load(open("artifacts/engineering_wave011/CI_PROVENANCE_SCHEMA.json"))
+          matrix=json.load(open("artifacts/engineering_wave011/PER_REQUIREMENT_EVIDENCE_MATRIX.json"))
+
+          assert d.get("ENGINEERING_WAVE_011") == "PASS", d.get("ENGINEERING_WAVE_011")
+          assert int(d.get("IMPLEMENTED_COUNT", 0)) == 10
+          reqs=d.get("requirement_results", {})
+          assert sum(1 for v in reqs.values() if v == "IMPLEMENTED") == 10, reqs
+          assert d.get("CANONICAL_BATTLE_SCENE_EXECUTED") is True
+          assert d.get("NORMAL_INPUT_PATH") is True
+          assert d.get("BATTLE_EVAL_MODE_USED_AS_PROOF") is False
+          assert d.get("PRODUCTION_GATE_HARNESS_USED_AS_PROOF") is False
+          assert e2e.get("NORMAL_INPUT_PATH") is True
+          assert e2e.get("battle_eval_mode") is False
+          assert e2e.get("production_gate_harness_used_as_proof") is False
+          assert int(mut.get("WAVE011_INVALID_MUTATIONS", 1)) == 0
+          assert int(mut.get("WAVE011_BEHAVIORAL_KILLED", 0)) >= 10
+          assert int(mut.get("WAVE011_MUTATIONS_ATTEMPTED", 0)) >= 10
+          assert int(mut.get("WAVE011_BEHAVIORAL_KILLED", 0)) == int(mut.get("WAVE011_MUTATIONS_ATTEMPTED", -1))
+          assert int(integ.get("NEW_S0", 1)) == 0
+          assert int(integ.get("NEW_S1", 1)) == 0
+          assert int(integ.get("PRODUCTION_IMPORTS_EVALUATORS", 1)) == 0
+          assert int(integ.get("WAVE_DUPLICATE_CANONICAL_IMPLEMENTATIONS", 1)) == 0
+          assert matrix.get("BLANKET") is False
+          assert prov.get("TESTED_CHECKOUT_SHA") == os.environ.get("GITHUB_SHA")
+          assert prov.get("AUTHORITATIVE_EVIDENCE_BOUND_TO_PR_HEAD") is True
+          assert prov.get("committed_evidence_class") == "LOCAL_OR_PRECOMMIT_SNAPSHOT"
+          assert "PR_HEAD_SHA" in prov and "PR_BASE_SHA" in prov
+          assert d.get("MUTATED_FILES_COMMITTED") is False
+          assert d.get("CURSOR_MERGED_NOTHING") is True
+          print("CI final gate PASS", d.get("token"), "tested", prov.get("TESTED_CHECKOUT_SHA"), "pr_head", prov.get("PR_HEAD_SHA"))
+          PY

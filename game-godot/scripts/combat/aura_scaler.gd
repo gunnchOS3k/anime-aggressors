@@ -1,6 +1,8 @@
 extends RefCounted
 class_name AuraScaler
 
+const _CombatMath = preload("res://scripts/combat/combat_math.gd")
+
 ## Resolves aura amount into levels and applies aura_scaling to move data.
 
 const LEVELS := [
@@ -87,3 +89,19 @@ static func validate_scaling_not_damage_only(scaling: Dictionary) -> bool:
 		if has_non_damage:
 			break
 	return has_non_damage
+
+
+static func charge_delta(delta: float, charge_rate_mult: float) -> float:
+	return _CombatMath.AURA_CHARGE_PER_SECOND * charge_rate_mult * delta
+
+
+static func idle_decay_delta(delta: float) -> float:
+	return _CombatMath.AURA_IDLE_DECAY_PER_SECOND * delta
+
+
+static func apply_charge_tick(current_aura: float, delta: float, charging: bool, charge_rate_mult: float) -> float:
+	if charging:
+		return minf(100.0, current_aura + charge_delta(delta, charge_rate_mult))
+	if current_aura <= 0.0:
+		return 0.0
+	return maxf(0.0, current_aura - idle_decay_delta(delta))

@@ -98,6 +98,10 @@ var armor_frames_remaining: float = 0.0
 var phase_cancel_remaining: float = 0.0
 var dash_cancel_remaining: float = 0.0
 var _runtime_hooks_seen: Dictionary = {}
+var grab_mash: float = 0.0
+var _recent_move_ids: Array = []
+var last_impact_readable: bool = false
+var last_feedback_tier: String = ""
 
 func _ready() -> void:
 	add_to_group("fighters")
@@ -135,7 +139,7 @@ func _ready() -> void:
 		aura_vfx.visible = false
 	if grab_range_debug:
 		grab_range_debug.visible = false
-		grab_range_debug.size = Vector2(70, 36)
+		grab_range_debug.size = Vector2(_CombatMath.GRAB_RANGE_PX, 36)
 		grab_range_debug.color = Color(0.2, 0.8, 1.0, 0.25)
 
 func get_aura() -> float:
@@ -194,6 +198,21 @@ func get_air_speed() -> float:
 	var bonus: float = _AuraIdentity.air_drift_bonus(fighter_id, aura, str(data.get("combatTag", "")))
 	return base * (1.0 + bonus)
 
+func get_air_accel() -> float:
+	var from_data := float(data.get("airAccel", 0.0))
+	if from_data > 1.0:
+		return from_data
+	return _AuraIdentity.air_accel(fighter_id, str(data.get("combatTag", "")))
+
+func get_traction() -> float:
+	var from_data := float(data.get("groundTraction", 0.0))
+	if from_data > 1.0:
+		return from_data
+	return _AuraIdentity.ground_traction(fighter_id, str(data.get("combatTag", "")))
+
+func get_charge_move_mult() -> float:
+	return _AuraIdentity.charge_move_mult(fighter_id, str(data.get("combatTag", "")))
+
 func get_jump_strength() -> float:
 	return float(data.get("jumpStrength", 620))
 
@@ -206,6 +225,8 @@ func tick_combat_frame() -> void:
 	move_runner.tick_sim_frame()
 	projectile_spawner.tick_all()
 	_sync_attack_phase_state()
+	if move_runner != null and move_runner.is_active_phase():
+		_poll_hitbox_overlaps()
 
 func _physics_process(delta: float) -> void:
 	_tick_cpu_telegraph(delta)
@@ -215,6 +236,8 @@ func _physics_process(delta: float) -> void:
 	if _dodge_cooldown > 0.0:
 		_dodge_cooldown = maxf(0.0, _dodge_cooldown - delta)
 	_AuraSpecialRuntime.tick_fighter(self, delta)
+	_tick_idle_aura_decay(delta)
+	_tick_shield_regen(delta)
 	# Kaia air-drift stamp (runtime, not data-only).
 	if not is_on_floor() and _AuraIdentity.air_drift_bonus(fighter_id, aura, str(data.get("combatTag", ""))) > 0.0:
 		stamp_runtime_hook("air_drift")
@@ -286,13 +309,20 @@ func _apply_movement(delta: float) -> void:
 			state_machine.enter(_FighterStates.DASH)
 		else:
 			state_machine.enter(_FighterStates.RUN if absf(velocity.x) > spd * 0.5 else _FighterStates.WALK)
-		velocity.x = axis * (spd if is_on_floor() else get_air_speed())
+		if state_machine.current_state == _FighterStates.AURA_CHARGE:
+			spd *= get_charge_move_mult()
+		var target_x: float = axis * (spd if is_on_floor() else get_air_speed())
+		if is_on_floor():
+			velocity.x = move_toward(velocity.x, target_x, get_traction() * delta)
+		else:
+			velocity.x = move_toward(velocity.x, target_x, get_air_accel() * delta)
 		if body:
 			body.scale.x = absf(body.scale.x) * facing
 		if model_3d:
 			model_3d.set_facing(facing)
 	else:
-		velocity.x = move_toward(velocity.x, 0.0, get_run_speed() * delta * 8.0)
+		var stop: float = get_traction() if is_on_floor() else get_air_accel() * 0.45
+		velocity.x = move_toward(velocity.x, 0.0, stop * delta)
 		if is_on_floor() and not _FighterStates.is_attack_state(state_machine.current_state):
 			if absf(velocity.x) < 10.0:
 				state_machine.enter(_FighterStates.IDLE)
@@ -322,14 +352,19 @@ func _handle_actions() -> void:
 			execute_throw()
 		return
 	if is_aura_input_held():
+		tick_aura_charge(get_physics_process_delta_time())
 		if aura < 100.0:
 			state_machine.enter(_FighterStates.AURA_CHARGE)
-			var charge_mult: float = _AuraIdentity.charge_rate_mult(fighter_id, str(data.get("combatTag", "")))
-			aura = minf(100.0, aura + 35.0 * charge_mult * get_physics_process_delta_time())
 			_set_aura_vfx(true)
 		else:
 			state_machine.enter(_FighterStates.AURA_READY)
 			_set_aura_vfx(true)
+		# Jump cancels charge (platform-fighter interrupt, not locked).
+		if _read_jump_pressed() and is_on_floor() and state_machine.current_state != _FighterStates.JUMP_SQUAT:
+			_set_aura_vfx(false)
+			_jump_short_hop = false
+			state_machine.enter(_FighterStates.JUMP_SQUAT)
+			return
 	elif state_machine.current_state in [_FighterStates.AURA_CHARGE, _FighterStates.AURA_READY]:
 		state_machine.enter(_FighterStates.IDLE)
 		_set_aura_vfx(false)
@@ -341,7 +376,6 @@ func _handle_actions() -> void:
 			state_machine.enter(_FighterStates.SHIELD_START)
 		state_machine.enter(_FighterStates.SHIELD_HOLD)
 		shielding = true
-		shield_health = minf(float(data.get("shieldProfile", {}).get("maxHealth", 100)), shield_health + 20.0 * get_physics_process_delta_time())
 		return
 	if state_machine.current_state in [_FighterStates.SHIELD_HOLD, _FighterStates.SHIELD_START]:
 		shielding = false
@@ -464,6 +498,7 @@ func _start_move_dict(m: Dictionary) -> void:
 		_current_move, fighter_id, aura, str(data.get("combatTag", ""))
 	)
 	_AuraSpecialRuntime.begin_move_armor(self, _current_move)
+	record_move_use(str(_current_move.get("move_id", "")))
 	if bool(_current_move.get("dash_cancel_enabled", false)):
 		stamp_runtime_hook("dash_cancel")
 	if int(_current_move.get("phase_cancel_frames", 0)) > 0:
@@ -611,12 +646,40 @@ func _on_move_active(move: Dictionary) -> void:
 		velocity += Vector2(float(sm.get("x", 0)) * facing, float(sm.get("y", 0)))
 	hitbox.monitoring = true
 	_update_hitbox_from_move(move)
+	_poll_hitbox_overlaps()
+	call_deferred("_poll_hitbox_overlaps")
 	if mt == "burst" or mid == "aura_burst":
 		state_machine.enter(_FighterStates.AURA_BURST_ACTIVE)
 	elif str(move.get("input_command", "")).begins_with("special") or mt in ["field", "trap", "movement"]:
 		state_machine.enter(_FighterStates.SPECIAL_ACTIVE)
 	else:
 		state_machine.enter(_FighterStates.ATTACK_ACTIVE)
+
+
+func _poll_hitbox_overlaps() -> void:
+	## Active-frame overlap poll: Area2D.area_entered can miss if the hurtbox
+	## was already overlapping when monitoring flipped on.
+	if hitbox == null or not hitbox.monitoring:
+		return
+	if move_runner == null or not move_runner.is_active_phase():
+		return
+	var move: Dictionary = _current_move
+	if move.is_empty():
+		move = _DataLoader.find_move(move_manifest, move_runner.current_move_id())
+	if move.is_empty() or str(move.get("move_id", "")) == "grab":
+		return
+	for area in hitbox.get_overlapping_areas():
+		if area == null or area == hurtbox:
+			continue
+		if str(area.name) != "Hurtbox":
+			continue
+		var defender: Node = area.get_parent()
+		if defender == null or defender == self:
+			continue
+		if not defender.has_method("receive_hit"):
+			continue
+		hit_resolver.resolve(self, defender, move, damage_percent)
+
 
 func _try_grab_connect() -> void:
 	var opp = _find_opponent()
@@ -629,12 +692,14 @@ func _try_grab_connect() -> void:
 		grab_event.emit({"result": "whiff", "reason": "invuln"})
 		return
 	var dist = absf(opp.global_position.x - global_position.x)
-	if dist > 70.0:
+	if dist > _CombatMath.GRAB_RANGE_PX:
 		state_machine.enter(_FighterStates.GRAB_WHIFF)
 		grab_event.emit({"result": "whiff", "reason": "range"})
 		return
 	grabbed_target = opp
 	opp.grabbed_by = self
+	opp.grab_mash = 0.0
+	grab_mash = 0.0
 	state_machine.enter(_FighterStates.GRAB_HOLD)
 	opp.state_machine.enter(_FighterStates.GRAB_HOLD)
 	grab_event.emit({"result": "success", "target": opp.fighter_id})
@@ -662,9 +727,19 @@ func _update_hitbox_from_move(move: Dictionary) -> void:
 	if boxes.is_empty():
 		return
 	var hb: Dictionary = boxes[0]
-	hitbox.position = Vector2(hb.get("offset_x", 36) * facing, hb.get("offset_y", -8))
+	var w: float = float(hb.get("width", 40))
+	var h: float = float(hb.get("height", 32))
+	hitbox.position = Vector2(float(hb.get("offset_x", 36)) * float(facing), float(hb.get("offset_y", -8)))
+	var cs := hitbox.get_node_or_null("HitShape") as CollisionShape2D
+	if cs:
+		cs.position = Vector2.ZERO
+		var rect := cs.shape as RectangleShape2D
+		if rect == null:
+			rect = RectangleShape2D.new()
+			cs.shape = rect
+		rect.size = Vector2(w, h)
 	if hitbox_debug:
-		hitbox_debug.size = Vector2(hb.get("width", 40), hb.get("height", 32))
+		hitbox_debug.size = Vector2(w, h)
 		hitbox_debug.position = hitbox.position - hitbox_debug.size / 2.0
 
 func set_armor_frames(seconds: float) -> void:
@@ -686,6 +761,104 @@ func enable_phase_cancel(seconds: float) -> void:
 		if phase_cancel_remaining <= 0.0:
 			invincible = false
 	, CONNECT_ONE_SHOT)
+
+
+func tick_aura_charge(delta: float) -> void:
+	var charge_mult: float = _AuraIdentity.charge_rate_mult(fighter_id, str(data.get("combatTag", "")))
+	var before := aura
+	aura = _AuraScaler.apply_charge_tick(aura, delta, true, charge_mult)
+	stamp_runtime_hook("charge_rate")
+	if aura > before:
+		_set_aura_vfx(true)
+
+
+func _tick_idle_aura_decay(delta: float) -> void:
+	if is_aura_input_held():
+		return
+	if state_machine != null and str(state_machine.current_state).begins_with("aura_burst"):
+		return
+	if aura <= 0.0:
+		return
+	aura = _AuraScaler.apply_charge_tick(aura, delta, false, 1.0)
+
+
+func _tick_shield_regen(delta: float) -> void:
+	if shielding or state_machine == null:
+		return
+	if state_machine.current_state in [_FighterStates.SHIELD_HOLD, _FighterStates.SHIELD_START, _FighterStates.SHIELD_BREAK, _FighterStates.SHIELD_STUN]:
+		return
+	var mx: float = float(data.get("shieldProfile", {}).get("maxHealth", 100))
+	if shield_health >= mx:
+		return
+	shield_health = minf(mx, shield_health + _CombatMath.SHIELD_REGEN_PER_SECOND * delta)
+
+
+func tick_grab_hold(_delta: float) -> void:
+	if grabbed_target == null:
+		state_machine.enter(_FighterStates.IDLE)
+		return
+	if grabbed_target.has_method("tick_grab_mash"):
+		grabbed_target.tick_grab_mash(_delta)
+	if float(grabbed_target.grab_mash) >= _CombatMath.GRAB_MASH_ESCAPE:
+		_break_grab_mash()
+		return
+	if state_machine.state_time > 2.0:
+		execute_throw()
+
+
+func tick_grab_mash(_delta: float) -> void:
+	if grabbed_by == null:
+		return
+	if _read_attack_pressed() or _read_jump_pressed() or _read_grab_pressed():
+		grab_mash = minf(_CombatMath.GRAB_MASH_ESCAPE, grab_mash + _CombatMath.GRAB_MASH_PER_PRESS)
+
+
+func _break_grab_mash() -> void:
+	var attacker = grabbed_by
+	grabbed_by = null
+	grab_mash = 0.0
+	if attacker != null:
+		attacker.grabbed_target = null
+		if attacker.state_machine:
+			attacker.state_machine.enter(_FighterStates.GRAB_WHIFF)
+	state_machine.enter(_FighterStates.IDLE)
+	velocity.x = -float(facing) * 180.0
+	grab_event.emit({"result": "mash_escape"})
+
+
+func try_tech() -> bool:
+	if not is_on_floor():
+		return false
+	if not _read_dodge_pressed() and not _read_shield():
+		return false
+	invincible = true
+	velocity = Vector2.ZERO
+	state_machine.landing_lag = 0.04
+	state_machine.enter(_FighterStates.LAND)
+	get_tree().create_timer(_CombatMath.TECH_WINDOW_SEC).timeout.connect(func():
+		invincible = false
+	, CONNECT_ONE_SHOT)
+	stamp_runtime_hook("tech")
+	return true
+
+
+func record_move_use(move_id: String) -> int:
+	_recent_move_ids.append(move_id)
+	if _recent_move_ids.size() > 8:
+		_recent_move_ids.pop_front()
+	var repeats := 0
+	for mid in _recent_move_ids:
+		if str(mid) == move_id:
+			repeats += 1
+	return maxi(0, repeats - 1)
+
+
+func stale_repeat_count(move_id: String) -> int:
+	var repeats := 0
+	for mid in _recent_move_ids:
+		if str(mid) == move_id:
+			repeats += 1
+	return maxi(0, repeats - 1)
 
 
 func stamp_runtime_hook(hook: String) -> void:
@@ -748,7 +921,7 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 		return
 	var dmg: float = info.get("damage", 0.0)
 	if state_machine.current_state == _FighterStates.AURA_CHARGE:
-		aura = maxf(0.0, aura - 20.0)
+		aura = maxf(0.0, aura - _CombatMath.AURA_HIT_INTERRUPT_LOSS)
 		_set_aura_vfx(false)
 	damage_percent += dmg
 	damaged.emit(dmg, damage_percent)
@@ -864,6 +1037,10 @@ func debug_combat_summary() -> Dictionary:
 		"element_effect": _last_element_effect,
 		"combo_count": combo_count,
 		"cancel_window": move_runner.in_cancel_window if move_runner else false,
+		"stale_window": _recent_move_ids.duplicate(),
+		"impact_readable": last_impact_readable,
+		"feedback_tier": last_feedback_tier,
+		"grab_mash": grab_mash,
 	}
 
 func _on_move_ended(_move_id: String) -> void:

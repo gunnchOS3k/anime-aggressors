@@ -16,6 +16,9 @@ const PROFILES := {
 		"on_hit_aura_gain": 2.0,
 		"armor_on_heavies": false,
 		"air_drift_bonus": 0.0,
+		"air_accel": 1550.0,
+		"ground_traction": 1900.0,
+		"charge_move_mult": 0.48,
 		"launch_angle_bias_deg": 0.0,
 		"phase_cancel": false,
 		"dash_cancel_after_hit": false,
@@ -30,6 +33,9 @@ const PROFILES := {
 		"on_hit_aura_gain": 1.0,
 		"armor_on_heavies": true,
 		"air_drift_bonus": 0.0,
+		"air_accel": 900.0,
+		"ground_traction": 2400.0,
+		"charge_move_mult": 0.32,
 		"launch_angle_bias_deg": -4.0,
 		"phase_cancel": false,
 		"dash_cancel_after_hit": false,
@@ -44,6 +50,9 @@ const PROFILES := {
 		"on_hit_aura_gain": 3.0,
 		"armor_on_heavies": false,
 		"air_drift_bonus": 0.05,
+		"air_accel": 1950.0,
+		"ground_traction": 1550.0,
+		"charge_move_mult": 0.55,
 		"launch_angle_bias_deg": 0.0,
 		"phase_cancel": false,
 		"dash_cancel_after_hit": true,
@@ -58,6 +67,9 @@ const PROFILES := {
 		"on_hit_aura_gain": 1.5,
 		"armor_on_heavies": false,
 		"air_drift_bonus": 0.22,
+		"air_accel": 2100.0,
+		"ground_traction": 1480.0,
+		"charge_move_mult": 0.50,
 		"launch_angle_bias_deg": 6.0,
 		"phase_cancel": false,
 		"dash_cancel_after_hit": false,
@@ -72,6 +84,9 @@ const PROFILES := {
 		"on_hit_aura_gain": 1.2,
 		"armor_on_heavies": false,
 		"air_drift_bonus": 0.0,
+		"air_accel": 1050.0,
+		"ground_traction": 2200.0,
+		"charge_move_mult": 0.30,
 		"launch_angle_bias_deg": -2.0,
 		"phase_cancel": false,
 		"dash_cancel_after_hit": false,
@@ -86,6 +101,9 @@ const PROFILES := {
 		"on_hit_aura_gain": 1.0,
 		"armor_on_heavies": false,
 		"air_drift_bonus": 0.0,
+		"air_accel": 1250.0,
+		"ground_traction": 1850.0,
+		"charge_move_mult": 0.36,
 		"launch_angle_bias_deg": -12.0,
 		"phase_cancel": false,
 		"dash_cancel_after_hit": false,
@@ -100,6 +118,9 @@ const PROFILES := {
 		"on_hit_aura_gain": 2.5,
 		"armor_on_heavies": false,
 		"air_drift_bonus": 0.08,
+		"air_accel": 1700.0,
+		"ground_traction": 1680.0,
+		"charge_move_mult": 0.44,
 		"launch_angle_bias_deg": 2.0,
 		"phase_cancel": true,
 		"dash_cancel_after_hit": false,
@@ -123,6 +144,9 @@ static func profile_for(fighter_id: String, combat_tag: String = "") -> Dictiona
 		"on_hit_aura_gain": 1.0,
 		"armor_on_heavies": false,
 		"air_drift_bonus": 0.0,
+		"air_accel": 1400.0,
+		"ground_traction": 1800.0,
+		"charge_move_mult": 0.42,
 		"launch_angle_bias_deg": 0.0,
 		"phase_cancel": false,
 		"dash_cancel_after_hit": false,
@@ -212,6 +236,35 @@ static func air_drift_bonus(fighter_id: String, aura_amount: float, combat_tag: 
 
 static func on_hit_aura_gain(fighter_id: String, combat_tag: String = "") -> float:
 	return float(profile_for(fighter_id, combat_tag).get("on_hit_aura_gain", 1.0))
+
+
+static func air_accel(fighter_id: String, combat_tag: String = "") -> float:
+	return float(profile_for(fighter_id, combat_tag).get("air_accel", 1400.0))
+
+
+static func ground_traction(fighter_id: String, combat_tag: String = "") -> float:
+	return float(profile_for(fighter_id, combat_tag).get("ground_traction", 1800.0))
+
+
+static func charge_move_mult(fighter_id: String, combat_tag: String = "") -> float:
+	return float(profile_for(fighter_id, combat_tag).get("charge_move_mult", 0.42))
+
+
+static func movement_fingerprint(fighter_id: String, combat_tag: String = "") -> Dictionary:
+	var p := profile_for(fighter_id, combat_tag)
+	return {
+		"tag": str(p.get("tag", "")),
+		"charge_rate_mult": float(p.get("charge_rate_mult", 1.0)),
+		"air_drift_bonus": float(p.get("air_drift_bonus", 0.0)),
+		"air_accel": float(p.get("air_accel", 1400.0)),
+		"ground_traction": float(p.get("ground_traction", 1800.0)),
+		"charge_move_mult": float(p.get("charge_move_mult", 0.42)),
+		"launch_angle_bias_deg": float(p.get("launch_angle_bias_deg", 0.0)),
+		"on_hit_aura_gain": float(p.get("on_hit_aura_gain", 1.0)),
+		"armor_on_heavies": bool(p.get("armor_on_heavies", false)),
+		"phase_cancel": bool(p.get("phase_cancel", false)),
+		"dash_cancel_after_hit": bool(p.get("dash_cancel_after_hit", false)),
+	}
 
 
 static func has_passive_armor(fighter_id: String, aura_amount: float, combat_tag: String = "") -> bool:

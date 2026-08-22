@@ -62,6 +62,44 @@ func configure(cfg: Dictionary, owner_node: Node) -> void:
 		debug_rect.visible = true
 		debug_rect.modulate = Color(1.2, 1.2, 1.2, 1.0)
 	monitoring = true
+	collision_layer = 8
+	collision_mask = 6
+	if not area_entered.is_connected(_on_area_entered):
+		area_entered.connect(_on_area_entered)
+	if not body_entered.is_connected(_on_body_entered):
+		body_entered.connect(_on_body_entered)
+
+
+func _deliver_hit(target: Node) -> void:
+	if not active or target == null or target == owner_fighter:
+		return
+	if not target.has_method("receive_hit"):
+		return
+	var id := str(target.get_instance_id())
+	if hit_targets.has(id):
+		return
+	hit_targets[id] = true
+	var hit_move := move_data.duplicate(true)
+	hit_move["damage"] = damage
+	hit_move["_from_projectile"] = true
+	var resolver = null
+	if owner_fighter != null and "hit_resolver" in owner_fighter:
+		resolver = owner_fighter.hit_resolver
+	if resolver != null and resolver.has_method("resolve"):
+		resolver.resolve(owner_fighter, target, hit_move, owner_fighter.damage_percent if "damage_percent" in owner_fighter else 0.0)
+	projectile_hit.emit(target, hit_move)
+	if behavior != "beam":
+		_expire()
+
+
+func _on_body_entered(body: Node) -> void:
+	_deliver_hit(body)
+
+
+func _on_area_entered(area: Area2D) -> void:
+	if area == null:
+		return
+	_deliver_hit(area.get_parent())
 
 func tick_sim_frame() -> void:
 	if not active:
@@ -95,7 +133,7 @@ func tick_sim_frame() -> void:
 
 func _expire() -> void:
 	active = false
-	monitoring = false
+	set_deferred("monitoring", false)
 	projectile_expired.emit()
 	queue_free()
 
@@ -103,23 +141,3 @@ func set_debug_visible(v: bool) -> void:
 	debug_visible = v
 	if debug_rect:
 		debug_rect.visible = v
-
-func _on_area_entered(area: Area2D) -> void:
-	if not active or owner_fighter == null:
-		return
-	var target := area.get_parent()
-	if target == owner_fighter:
-		return
-	if not target.has_method("receive_hit"):
-		return
-	var id := str(target.get_instance_id())
-	if hit_targets.has(id):
-		return
-	hit_targets[id] = true
-	var hit_move := move_data.duplicate(true)
-	hit_move["damage"] = damage
-	if owner_fighter.has_method("hit_resolver"):
-		owner_fighter.hit_resolver.resolve(owner_fighter, target, hit_move, owner_fighter.damage_percent if "damage_percent" in owner_fighter else 0.0)
-	projectile_hit.emit(target, hit_move)
-	if behavior != "beam":
-		_expire()

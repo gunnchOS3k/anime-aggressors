@@ -12,6 +12,7 @@ var _fighter
 var _rng := RandomNumberGenerator.new()
 var _seed: int = 0
 var _obs_cache: Dictionary = {}
+var _charge_hold_remaining: float = 0.0
 
 
 func setup(fighter, cpu_level: int, match_seed: int = 0) -> void:
@@ -31,6 +32,15 @@ func tick(delta: float, opponent: Node2D) -> void:
 	if _fighter == null or opponent == null:
 		return
 	_timer -= delta
+	if _charge_hold_remaining > 0.0:
+		_charge_hold_remaining -= delta
+		var slot: int = int(_fighter.slot)
+		Input.action_press("p%d_shield" % slot)
+		Input.action_press("p%d_special" % slot)
+		if _charge_hold_remaining <= 0.0:
+			Input.action_release("p%d_shield" % slot)
+			Input.action_release("p%d_special" % slot)
+		return
 	var obs := observe(opponent)
 	_obs_cache = obs
 	_act(obs, delta)
@@ -272,18 +282,16 @@ func _sim_dodge() -> void:
 
 
 func _sim_aura_charge() -> void:
-	# Charge via legal inputs only (shield + special). Always schedule a
-	# release — previously these action_press calls were sticky, so a CPU that
-	# started charging could leave pN_shield/pN_special held for the rest of
-	# the match (and after is_cpu flipped false), blocking real H2H damage.
+	# Charge via legal inputs only (shield + special). Hold for a short window
+	# so aura actually accumulates, then release so inputs do not stick.
 	var slot: int = int(_fighter.slot)
 	Input.action_press("p%d_shield" % slot)
 	Input.action_press("p%d_special" % slot)
-	_fighter.call_deferred("_release_action", "p%d_shield" % slot)
-	_fighter.call_deferred("_release_action", "p%d_special" % slot)
+	_charge_hold_remaining = 0.55 + _rng.randf() * 0.35
 
 
 func clear_simulated_inputs() -> void:
+	_charge_hold_remaining = 0.0
 	if _fighter == null:
 		return
 	var slot: int = int(_fighter.slot)
