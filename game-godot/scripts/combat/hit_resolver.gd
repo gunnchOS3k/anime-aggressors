@@ -14,8 +14,12 @@ var combat_feedback: Node
 func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_pct: float) -> void:
 	if attacker == null or defender == null:
 		return
-	if not attacker.move_runner.can_hit_target(defender):
-		return
+	var from_projectile := bool(move.get("_from_projectile", false))
+	var move_id := str(move.get("move_id", ""))
+	var is_direct_throw := move_id.begins_with("throw_") or str(move.get("move_type", "")) == "throw"
+	if not from_projectile and not is_direct_throw:
+		if attacker.move_runner == null or not attacker.move_runner.can_hit_target(defender):
+			return
 	# Active armor frames (Rook heavies / Nix ice window) fully gate the hit.
 	if "armor_frames_remaining" in defender and float(defender.armor_frames_remaining) > 0.0:
 		var armor_info := {
@@ -58,6 +62,10 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 		dealt *= attacker.get_damage_dealt_mult()
 	if "damage_ratio" in GameState:
 		dealt *= float(GameState.damage_ratio)
+	if attacker.has_method("stale_repeat_count"):
+		dealt *= _CombatMath.stale_multiplier(int(attacker.stale_repeat_count(str(scaled.get("move_id", "")))))
+	if "combo_count" in attacker:
+		dealt *= _CombatMath.combo_decay(int(attacker.combo_count))
 	# Passive aura armor (Rook L3+ / Nix ice) chips damage — script runtime, not data-only.
 	if _AuraSpecialRuntime.should_block_hit_with_armor(defender):
 		dealt *= 0.55
@@ -86,10 +94,18 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 		"element_effect": scaled.get("element_effect", {}).get("effect", ""),
 	}
 	info = _AuraSpecialRuntime.apply_attacker_on_confirm(attacker, defender, scaled, info)
+	for hook in info.get("aura_runtime_hooks", []):
+		if attacker != null and attacker.has_method("stamp_runtime_hook"):
+			attacker.stamp_runtime_hook(str(hook))
 	dealt = float(info.get("damage", dealt))
 	kb = info.get("launch", kb)
 	if combat_feedback:
 		info = combat_feedback.apply_hit(attacker, defender, scaled, info)
+		if combat_feedback.has_method("spawn_hit_spark") and defender is Node2D:
+			combat_feedback.spawn_hit_spark(defender, defender.global_position + Vector2(0, -24), str(info.get("element", "")))
+		if attacker != null and "last_impact_readable" in attacker:
+			attacker.last_impact_readable = true
+			attacker.last_feedback_tier = str(info.get("feedback_tier", ""))
 	elif attacker.has_node("_CombatFeedback"):
 		var fb = attacker.get_node("_CombatFeedback")
 		info = fb.apply_hit(attacker, defender, scaled, info)

@@ -1,0 +1,72 @@
+{
+	"FIGHTERS_RUNTIME_IDENTITY_TESTED": 7,
+	"SIGNATURE_MECHANIC_DUPLICATES": 0,
+	"STAT_ONLY_DUPLICATES": 0,
+	"pass": true,
+	"schema": "gunnchos.engineering_wave011.fighter_signature_runtime.v1",
+	"signatures": [
+		{
+			"fighter_id": "ember-vale",
+			"runtime_hooks": [
+				"burn_trail_tick",
+				"charge_rate",
+				"hitbox_extend"
+			],
+			"signature_mechanic": "burn_trail_tick|hitbox_extend"
+		},
+		{
+			"fighter_id": "rook-ironside",
+			"runtime_hooks": [
+				"charge_rate",
+				"heavy_armor",
+				"hitbox_extend"
+			],
+			"signature_mechanic": "heavy_armor|hitbox_extend"
+		},
+		{
+			"fighter_id": "juno-spark",
+			"runtime_hooks": [
+				"chain_aura_gain",
+				"charge_rate",
+				"dash_cancel",
+				"hitbox_extend"
+			],
+			"signature_mechanic": "chain_aura_gain|dash_cancel|hitbox_extend"
+		},
+		{
+			"fighter_id": "kaia-windrow",
+			"runtime_hooks": [
+				"air_drift",
+				"charge_rate"
+			],
+			"signature_mechanic": "air_drift"
+		},
+		{
+			"fighter_id": "nix-calder",
+			"runtime_hooks": [
+				"charge_rate"
+			],
+			"signature_mechanic": "charge_rate"
+		},
+		{
+			"fighter_id": "orion-vell",
+			"runtime_hooks": [
+				"charge_rate",
+				"gravity_pull",
+				"hitbox_extend",
+				"pull_on_hit"
+			],
+			"signature_mechanic": "gravity_pull|hitbox_extend|pull_on_hit"
+		},
+		{
+			"fighter_id": "vesper-nyx",
+			"runtime_hooks": [
+				"charge_rate",
+				"mark_aura_gain",
+				"phase_cancel",
+				"phase_invuln"
+			],
+			"signature_mechanic": "mark_aura_gain|phase_cancel|phase_invuln"
+		}
+	]
+}

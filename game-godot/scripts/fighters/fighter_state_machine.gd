@@ -48,9 +48,10 @@ func _on_enter(state: String) -> void:
 			_fighter.shielding = false
 			_fighter.shield_health = 0.0
 		_FighterStates.DODGE_ACTIVE, _FighterStates.AIR_DODGE:
-			_fighter.invincible = true
+			if dodge_invuln > 0.0:
+				_fighter.invincible = true
 		_FighterStates.AURA_READY:
-			_fighter.aura = 100.0
+			pass
 		_FighterStates.GRAB_HOLD:
 			if _fighter.grabbed_target:
 				_fighter.grabbed_target.grabbed_by = _fighter
@@ -74,7 +75,13 @@ func _on_update(state: String, delta: float) -> void:
 			if state_frame >= _CombatMath.JUMP_SQUAT_FRAMES:
 				_fighter.complete_jump_squat()
 		_FighterStates.SHIELD_HOLD:
-			_fighter.shield_health = maxf(0.0, _fighter.shield_health - 8.0 * delta)
+			var decay: float = _CombatMath.shield_decay_per_second(
+				_fighter.data.get("shieldProfile", {}) if "data" in _fighter else {}
+			)
+			_fighter.shield_health = maxf(0.0, _fighter.shield_health - decay * delta)
+			if _fighter.shield_health <= 0.0:
+				_fighter.shielding = false
+				_fighter.state_machine.enter(_FighterStates.SHIELD_BREAK)
 		_FighterStates.AURA_CHARGE:
 			if not _fighter.is_aura_input_held():
 				_fighter.state_machine.enter(_FighterStates.AURA_READY if _fighter.aura >= 100.0 else _FighterStates.IDLE)
@@ -114,8 +121,16 @@ func _on_update(state: String, delta: float) -> void:
 					_fighter.state_machine.enter(_FighterStates.FALL)
 		_FighterStates.LAUNCHED:
 			_fighter.apply_hitstun_di(delta)
+			if _fighter.has_method("try_tech") and _fighter.is_on_floor() and _fighter.velocity.y >= 0:
+				if _fighter.try_tech():
+					return
 			if _fighter.is_on_floor() and _fighter.velocity.y >= 0:
 				_fighter.begin_landing(true, absf(_fighter.velocity.y) > 400.0)
+		_FighterStates.GRAB_HOLD:
+			if _fighter.has_method("tick_grab_hold"):
+				_fighter.tick_grab_hold(delta)
+			elif state_time > 2.0:
+				_fighter.execute_throw()
 		_FighterStates.TUMBLE:
 			_fighter.apply_hitstun_di(delta)
 			if state_time > 0.35:
@@ -126,9 +141,6 @@ func _on_update(state: String, delta: float) -> void:
 		_FighterStates.GRAB_WHIFF:
 			if state_time > 0.3:
 				_fighter.state_machine.enter(_FighterStates.IDLE)
-		_FighterStates.GRAB_HOLD:
-			if state_time > 2.0:
-				_fighter.execute_throw()
 		_FighterStates.ATTACK_RECOVERY, _FighterStates.SPECIAL_RECOVERY, _FighterStates.AURA_BURST_RECOVERY:
 			if state_time > 0.12:
 				_fighter.state_machine.enter(_FighterStates.IDLE)

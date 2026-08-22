@@ -1,0 +1,92 @@
+{
+  "schema": "gunnchos.engineering_wave011.per_requirement_matrix.v1",
+  "BLANKET": false,
+  "matrix": {
+    "GAME-AA-001": {
+      "status": "IMPLEMENTED",
+      "evidence": [
+        "AURA_CHARGE_INTERRUPTION_RESULT",
+        "BATTLESCENE_E2E"
+      ],
+      "notes": "Input charge + hit interrupt",
+      "BLANKET": false
+    },
+    "GAME-AA-002": {
+      "status": "IMPLEMENTED",
+      "evidence": [
+        "AURA_SCALED_MELEE_RESULT"
+      ],
+      "notes": "Matched low/high aura hitbox hits",
+      "BLANKET": false
+    },
+    "GAME-AA-003": {
+      "status": "IMPLEMENTED",
+      "evidence": [
+        "PROJECTILE_RUNTIME_RESULT"
+      ],
+      "notes": "Three charge levels with real hits",
+      "BLANKET": false
+    },
+    "GAME-AA-004": {
+      "status": "IMPLEMENTED",
+      "evidence": [
+        "DIRECTIONAL_THROW_RUNTIME_RESULT"
+      ],
+      "notes": "Four runtime throw directions",
+      "BLANKET": false
+    },
+    "GAME-AA-005": {
+      "status": "IMPLEMENTED",
+      "evidence": [
+        "FIGHTER_MOVEMENT_RUNTIME_MATRIX"
+      ],
+      "notes": "Seven BattleScene movement trials",
+      "BLANKET": false
+    },
+    "GAME-AA-006": {
+      "status": "IMPLEMENTED",
+      "evidence": [
+        "DEFENSE_RECOVERY_RUNTIME_RESULT"
+      ],
+      "notes": "Shield/dodge/hitstun/recovery runtime",
+      "BLANKET": false
+    },
+    "GAME-AA-007": {
+      "status": "IMPLEMENTED",
+      "evidence": [
+        "FIGHTER_IDENTITY_RUNTIME_MATRIX",
+        "FIGHTER_SIGNATURE_RUNTIME_RESULT"
+      ],
+      "notes": "Seven runtime identity rows",
+      "BLANKET": false
+    },
+    "GAME-AA-008": {
+      "status": "IMPLEMENTED",
+      "evidence": [
+        "IMPACT_READABILITY_RUNTIME_RESULT"
+      ],
+      "notes": "Light/heavy feedback observed",
+      "BLANKET": false
+    },
+    "GAME-AA-009": {
+      "status": "IMPLEMENTED",
+      "evidence": [
+        "STOCK_KO_RESPAWN_RESULT",
+        "COMPETITIVE_FRAME_RESULT"
+      ],
+      "notes": "Stock KO/respawn + frame rules",
+      "BLANKET": false
+    },
+    "GAME-AA-010": {
+      "status": "IMPLEMENTED",
+      "evidence": [
+        "TRAINING_RUNTIME_RESULT"
+      ],
+      "notes": "TrainingBattleScene controls observed",
+      "BLANKET": false
+    },
+    "BLANKET_GAME_AA_ASSIGNMENT": false,
+    "derivation": "individual_observation",
+    "WEAK_PROXY_CLOSURE_RULES": 0
+  }
+}

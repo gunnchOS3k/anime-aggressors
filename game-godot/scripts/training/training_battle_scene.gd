@@ -1,4 +1,5 @@
 extends Node2D
+const _FrameDataTable = preload("res://scripts/combat/frame_data_table.gd")
 const _DataLoader = preload("res://scripts/data/data_loader.gd")
 const _BattleSim = preload("res://scripts/battle/battle_sim.gd")
 
@@ -15,25 +16,33 @@ var _combo_p1: int = 0
 var _paused := false
 var _slow_mo := false
 var _freeze := false
+var _frame_overlay: Label
 
 const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
 const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
 
 func _ready() -> void:
+	if GameState.has_method("begin_training") and str(GameState.mode) != "training":
+		GameState.begin_training()
 	_build_stage()
 	_spawn_fighters()
 	_battle_sim = _BattleSim.new()
 	add_child(_battle_sim)
 	_battle_sim.bind_fighters([fighter1, fighter2])
-	if OS.is_debug_build():
+	var rules = load("res://scripts/combat/competitive_rules.gd")
+	var show_debug := true
+	if rules != null:
+		show_debug = bool(rules.show_debug_hud(GameState))
+	if show_debug:
 		_debug_hud = DEBUG_HUD_SCENE.instantiate()
 		add_child(_debug_hud)
 		_debug_hud.bind_fighters([fighter1, fighter2])
-		_debug_hud.visible_debug = false
+		_debug_hud.visible_debug = true
 		if _debug_hud.has_node("Panel"):
-			_debug_hud.get_node("Panel").visible = false
+			_debug_hud.get_node("Panel").visible = true
 	_hit_log = get_node_or_null("%HitLog") as Label
 	_update_help()
+	_ensure_frame_overlay()
 
 func _build_stage() -> void:
 	var stage_id := GameState.stage_id if GameState.stage_id != "" else "training-grid"
@@ -150,3 +159,25 @@ func _cycle_dummy() -> void:
 	fighter2.dummy_mode = modes[idx]
 	fighter2.is_cpu = fighter2.dummy_mode == "cpu"
 	_log("Dummy: %s" % fighter2.dummy_mode)
+
+
+func _ensure_frame_overlay() -> void:
+	if _frame_overlay != null:
+		return
+	_frame_overlay = Label.new()
+	_frame_overlay.name = "FrameDataOverlay"
+	_frame_overlay.position = Vector2(24, 86)
+	_frame_overlay.add_theme_font_size_override("font_size", 16)
+	if hud:
+		hud.add_child(_frame_overlay)
+	else:
+		add_child(_frame_overlay)
+
+
+func _process(_delta: float) -> void:
+	if _frame_overlay == null or fighter1 == null:
+		return
+	var move: Dictionary = fighter1._current_move if "_current_move" in fighter1 else {}
+	if move.is_empty() and fighter1.move_manifest:
+		move = _DataLoader.find_move(fighter1.move_manifest, fighter1.move_runner.current_move_id() if fighter1.move_runner else "")
+	_frame_overlay.text = _FrameDataTable.overlay_line(move, fighter1.move_runner)

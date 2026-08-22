@@ -53,6 +53,8 @@ func go_battle_setup() -> void:
 	go("ruleset")
 
 func go_training() -> void:
+	if GameState.has_method("begin_training"):
+		GameState.begin_training()
 	go("training")
 
 func go_arcade() -> void:

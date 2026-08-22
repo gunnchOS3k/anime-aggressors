@@ -21,6 +21,7 @@ var p2_ready: bool = false
 
 var training_dummy_mode: String = "cpu"
 var last_winner_slot: int = -1
+var debug_combat_hud: bool = false
 
 ## Arcade ladder (Alpha minimum mode beyond Versus + Training).
 var mode: String = "versus"  # versus | training | arcade | tutorial | hazards | team | challenges | online_unranked | online_ranked | tournament
@@ -344,14 +345,40 @@ func arcade_opponent_name() -> String:
 
 
 
+func apply_competitive_ruleset() -> void:
+	var rules = load("res://scripts/combat/competitive_rules.gd")
+	if rules != null:
+		rules.apply_to_gamestate(self)
+
+
+func begin_training() -> void:
+	mode = "training"
+	arcade_active = false
+	hazards_enabled = false
+	items_enabled = false
+	battle_eval_mode = false
+	debug_combat_hud = true
+	p1_is_cpu = false
+	p2_is_cpu = false
+	training_dummy_mode = "idle"
+	stocks = 99
+	match_timer_seconds = 0
+	match_type = "training"
+	ruleset_id = "training"
+	stage_id = "training-grid"
+	reset_match()
+
+
 func begin_local_versus(p2_cpu: bool = true) -> void:
 	mode = "versus"
 	arcade_active = false
 	hazards_enabled = false
 	items_enabled = false
 	battle_eval_mode = false
+	debug_combat_hud = false
 	p1_is_cpu = false
 	p2_is_cpu = p2_cpu
+	apply_competitive_ruleset()
 	reset_match()
 
 

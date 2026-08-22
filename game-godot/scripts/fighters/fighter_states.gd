@@ -82,7 +82,7 @@ static func is_hurt_state(s: String) -> bool:
 static func locks_movement(s: String) -> bool:
 	return is_attack_state(s) or is_hurt_state(s) or s in [
 		SHIELD_HOLD, SHIELD_START, GRAB_HOLD, GRAB_STARTUP, GRAB_ACTIVE,
-		AURA_CHARGE, AURA_BURST_STARTUP, AURA_BURST_ACTIVE, AURA_BURST_RECOVERY,
+		AURA_BURST_STARTUP, AURA_BURST_ACTIVE, AURA_BURST_RECOVERY,
 		KO, RESPAWN, GRAB_WHIFF, JUMP_SQUAT, LAND, LEDGE_HANG, LEDGE_GETUP,
 		AIR_DODGE, DODGE_ACTIVE, DODGE_RECOVERY,
 	]
