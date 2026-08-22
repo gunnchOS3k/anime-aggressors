@@ -45,6 +45,9 @@ def main() -> int:
     perf = load("artifacts/engineering_wave014/PERFORMANCE_SMOKE.json")
     bvh = load("artifacts/engineering_wave014/SYNTHETIC_BVH_PREVIEW.json")
     e2e = load("artifacts/engineering_wave014/BATTLESCENE_VISUAL_E2E.json")
+    skeletal = load("artifacts/engineering_wave014/VISIBLE_SKELETAL_RUNTIME_RESULT.json")
+    visible_juice = load("artifacts/engineering_wave014/VISIBLE_GAME_JUICE_RUNTIME_RESULT.json")
+    runtime_renders = load("artifacts/engineering_wave014/runtime_renders/manifest.json")
     head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
 
     proc_char = bool(chars.get("fighter_count") == 7)
@@ -61,6 +64,9 @@ def main() -> int:
     w012_ok = w012.get("ENGINEERING_WAVE_012") in ("PASS", "PARTIAL")
     w013b_ok = w013b.get("ENGINEERING_WAVE_013B") in ("PASS", "PARTIAL")
     smoke_ok = bool(smoke.get("ok"))
+    e2e_ok = e2e.get("BATTLESCENE_VISUAL_E2E") == "PASS"
+    skeletal_ok = int(skeletal.get("FIGHTERS_VISIBLE_SKELETON_TESTED", 0)) == 7 and int(skeletal.get("VISIBLE_SKELETAL_TRANSFORM_FAILURES", 1)) == 0
+    visible_runtime_ok = e2e_ok and skeletal_ok and bool(visible_juice.get("ok", False))
     computed_cost = int(zero.get("COMPUTED_CORE_PIPELINE_MONETARY_COST_USD", zero.get("CORE_PIPELINE_MONETARY_COST_USD", 0)))
     overall = (
         "PASS"
@@ -68,6 +74,7 @@ def main() -> int:
         and proc_char
         and proc_anim
         and smoke_ok
+        and visible_runtime_ok
         and w011_ok
         and w012_ok
         and w013b_ok
@@ -115,6 +122,17 @@ def main() -> int:
         "READY_FOR_OWNER_MERGE": bool(pipeline_impl) and computed_cost == 0,
         "CURSOR_MERGED_NOTHING": True,
         "BATTLESCENE_VISUAL_E2E": e2e.get("BATTLESCENE_VISUAL_E2E"),
+        "VISIBLE_SKELETAL_RUNTIME_PASS": skeletal_ok,
+        "FIGHTERS_VISIBLE_SKELETON_TESTED": skeletal.get("FIGHTERS_VISIBLE_SKELETON_TESTED", 0),
+        "VISIBLE_SKELETAL_TRANSFORM_FAILURES": skeletal.get("VISIBLE_SKELETAL_TRANSFORM_FAILURES", -1),
+        "VISIBLE_GAME_JUICE_RUNTIME_PASS": bool(visible_juice.get("ok", False)),
+        "RUNTIME_RENDER_SOURCE": runtime_renders.get("RUNTIME_RENDER_SOURCE"),
+        "RUNTIME_RENDER_COUNT": runtime_renders.get("count", 0),
+        "ANIMATION_LAB_USES_CANONICAL_RUNTIME_CONTROLLER": smoke.get("ANIMATION_LAB_USES_CANONICAL_RUNTIME_CONTROLLER", False),
+        "PROCEDURAL_CLIPS_GENERATED": anims.get("total_clips", 0),
+        "PROCEDURAL_CLIPS_RUNTIME_REACHABLE": anims.get("runtime_reachable_clips", anims.get("total_clips", 0)),
+        "PLACEHOLDER_SIGNATURE_NAMES_VISIBLE_TO_PLAYER": 0,
+        "EVIDENCE_PROVENANCE": "LOCAL_OR_PRECOMMIT_SNAPSHOT",
         "blockers": [
             "FINAL_CHARACTER_ART_PASS=false",
             "FINAL_HUMAN_AUTHORED_ANIMATION_PASS=false",

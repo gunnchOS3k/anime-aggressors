@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Behavioral sabotage checks for Wave014 truth model (section 33 — 12+ cases)."""
+"""Behavioral sabotage checks for Wave014 visible-runtime truth model (16+ cases)."""
 from __future__ import annotations
 
 import json
@@ -11,6 +11,16 @@ ROOT = Path(__file__).resolve().parents[2]
 def _load(rel: str) -> dict:
     p = ROOT / rel
     return json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
+
+
+def _fighter_model_text() -> str:
+    p = ROOT / "game-godot/scripts/fighters/fighter_model_3d.gd"
+    return p.read_text(encoding="utf-8") if p.exists() else ""
+
+
+def _resolver_text() -> str:
+    p = ROOT / "game-godot/scripts/visual/fighter_asset_resolver.gd"
+    return p.read_text(encoding="utf-8") if p.exists() else ""
 
 
 CHECKS = [
@@ -30,6 +40,14 @@ CHECKS = [
     ("clip_count_minimum", lambda: int(_load("artifacts/engineering_wave014/PROCEDURAL_ANIMATION_RESULT.json").get("total_clips", 0)) >= 315),
     ("signature_clip_minimum", lambda: int(_load("artifacts/engineering_wave014/PROCEDURAL_ANIMATION_RESULT.json").get("signature_clips", 0)) >= 56),
     ("physical_pixel6a_not_claimed", lambda: _load("artifacts/engineering_wave014/PERFORMANCE_SMOKE.json").get("PHYSICAL_PIXEL6A_VALIDATED") is False),
+    ("proxy_visible_not_hidden", lambda: "_proxy_model.visible = true" in _fighter_model_text()),
+    ("stylized_hidden_when_procedural_healthy", lambda: "_stylized.visible = false" in _fighter_model_text()),
+    ("no_unconditional_truth_hardcode", lambda: "PROCEDURAL_CHARACTER_RUNTIME_PASS\": true" not in _resolver_text()),
+    ("visible_skeletal_evidence", lambda: int(_load("artifacts/engineering_wave014/VISIBLE_SKELETAL_RUNTIME_RESULT.json").get("FIGHTERS_VISIBLE_SKELETON_TESTED", 0)) == 7),
+    ("visible_skeletal_failures_zero", lambda: int(_load("artifacts/engineering_wave014/VISIBLE_SKELETAL_RUNTIME_RESULT.json").get("VISIBLE_SKELETAL_TRANSFORM_FAILURES", 1)) == 0),
+    ("battle_e2e_procedural_visible", lambda: _load("artifacts/engineering_wave014/BATTLESCENE_VISUAL_E2E.json").get("PROCEDURAL_PROXY_VISIBLE_ALL_FIGHTERS") is True),
+    ("canonical_runtime_render_source", lambda: _load("artifacts/engineering_wave014/runtime_renders/manifest.json").get("RUNTIME_RENDER_SOURCE") == "CANONICAL_GODOT_VISIBLE_MODEL"),
+    ("placeholder_signature_names_zero", lambda: len(_load("game-godot/data/runtime/signature_move_names.json")) == 7),
 ]
 
 
@@ -54,7 +72,7 @@ def main() -> int:
         "passed": passed,
         "total": len(results),
         "INVALID_SABOTAGE_CASES": invalid,
-        "pass": passed == len(results) and len(results) >= 12 and invalid == 0,
+        "pass": passed == len(results) and len(results) >= 16 and invalid == 0,
     }
     dest = ROOT / "artifacts/engineering_wave014/SABOTAGE_CHECKS.json"
     dest.parent.mkdir(parents=True, exist_ok=True)

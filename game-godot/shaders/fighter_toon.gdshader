@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode cull_back, diffuse_toon;
+render_mode cull_back, unshaded;
 
 uniform vec4 base_color : source_color = vec4(1.0);
 uniform vec4 team_tint : source_color = vec4(1.0);
@@ -13,7 +13,8 @@ uniform bool accessibility_reduce_flash = false;
 
 void fragment() {
 	vec3 albedo = base_color.rgb * team_tint.rgb;
-	float NdotL = clamp(dot(normalize(NORMAL), normalize(LIGHT)), 0.0, 1.0);
+	vec3 light_dir = normalize(vec3(-0.35, 0.85, 0.4));
+	float NdotL = clamp(dot(normalize(NORMAL), light_dir), 0.0, 1.0);
 	float band = floor(NdotL * toon_bands) / toon_bands;
 	vec3 toon = albedo * (0.35 + band * 0.65);
 	vec3 rim = vec3(rim_strength) * pow(1.0 - clamp(dot(normalize(NORMAL), normalize(VIEW)), 0.0, 1.0), 2.0);

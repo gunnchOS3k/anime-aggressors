@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Emit game juice runtime evidence for Wave014 roster."""
+"""Emit visible game juice runtime evidence for Wave014 roster."""
 from __future__ import annotations
 
 import json
@@ -21,12 +21,16 @@ IMPACT_TIERS = [f"TIER_{i}" for i in range(6)]
 
 
 def main() -> int:
+    visible = json.loads((ROOT / "artifacts/engineering_wave014/VISIBLE_GAME_JUICE_RUNTIME_RESULT.json").read_text(encoding="utf-8")) if (ROOT / "artifacts/engineering_wave014/VISIBLE_GAME_JUICE_RUNTIME_RESULT.json").exists() else {}
     out = {
-        "pass": True,
+        "pass": bool(visible.get("ok", False)),
         "fighters": {fid: {"juice_profile": profile, "reduce_flash_mode": True, "reduce_shake_mode": True} for fid, profile in JUICE.items()},
         "impact_tiers": IMPACT_TIERS,
         "JuiceEventBus": "res://scripts/juice/juice_event_bus.gd",
         "animation_event_bridge": "res://scripts/visual/animation_event_bridge.gd",
+        "fighter_material_controller": "res://scripts/visual/fighter_material_controller.gd",
+        "toon_shader": "res://shaders/fighter_toon.gdshader",
+        "VISIBLE_GAME_JUICE_RUNTIME": visible,
     }
     dest = ROOT / "artifacts/engineering_wave014/GAME_JUICE_RUNTIME.json"
     dest.parent.mkdir(parents=True, exist_ok=True)

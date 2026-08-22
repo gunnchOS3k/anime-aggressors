@@ -1,29 +1,34 @@
 extends Node2D
 class_name FighterModel3D
 
-## Stylized procedural fighters in a transparent SubViewport. Physics stays on
-## CharacterBody2D. Path A procedural_final GLB is loaded hidden for AnimationPlayer
-## parity; production presentation is the stylized mesh hierarchy (not proxy/).
+## Procedural production-proxy GLB is the visible runtime model when healthy.
+## Legacy StylizedBuilder remains hidden/inactive as fallback only.
 
 const _CharacterLife = preload("res://scripts/fighters/fighter_character_life.gd")
 const _StylizedBuilder = preload("res://scripts/fighters/stylized_fighter_builder.gd")
 const _FighterStates = preload("res://scripts/fighters/fighter_states.gd")
+const _AssetResolver = preload("res://scripts/visual/fighter_asset_resolver.gd")
+const _AnimationController = preload("res://scripts/visual/fighter_animation_controller.gd")
+const _MaterialController = preload("res://scripts/visual/fighter_material_controller.gd")
+const _MoveResolver = preload("res://scripts/visual/runtime_move_resolver.gd")
+const _BoneMap = preload("res://scripts/visual/procedural_bone_map.gd")
 
 const VIEWPORT_SIZE := Vector2i(220, 280)
 const DISPLAY_SCALE := Vector2(0.38, 0.38)
-## Selection preview must fill PreviewHost (~280×360) without relying on repeated camera shrinks.
 const SELECT_DISPLAY_SCALE := Vector2(1.35, 1.35)
 const SELECT_CAMERA_SIZE := 2.05
-const PROXY_LABEL := "STYLIZED PRODUCTION"
+const PROXY_LABEL := "PROCEDURAL PRODUCTION PROXY"
 
 var _viewport: SubViewport
 var _camera: Camera3D
 var _model_root: Node3D
 var _display: Sprite2D
-var _animation_player: AnimationPlayer
 var _loaded_model: Node3D
 var _proxy_model: Node3D
 var _stylized: Node3D
+var _animation_controller: Node
+var _material_controller: Node
+var _visible_skeleton: Skeleton3D
 var _loaded := false
 var _last_clip := ""
 var _fighter_id: String = ""
@@ -39,15 +44,20 @@ var _select_mode: bool = false
 var _style_anim_t: float = 0.0
 var _style_clip: String = "idle"
 var _style_speed: float = 1.0
+var _current_model_source: String = "MISSING"
+var _current_animation_source: String = "LEGACY_STYLIZED_POSE"
+var _procedural_healthy: bool = false
+var _using_stylized_fallback: bool = false
 
 
 func _ready() -> void:
-	_build_viewport()
+	if _viewport == null:
+		_build_viewport()
 	set_process(true)
 
 
 func _process(delta: float) -> void:
-	if not _loaded or _stylized == null:
+	if not _loaded or not _using_stylized_fallback or _stylized == null:
 		return
 	_style_anim_t += delta * _style_speed
 	if _stylized.has_method("animate_pose"):
@@ -55,26 +65,45 @@ func _process(delta: float) -> void:
 
 
 func configure(fighter_data: Dictionary) -> bool:
+	if _model_root == null:
+		_build_viewport()
 	_clear_model()
 	_fighter_id = str(fighter_data.get("id", ""))
 	_life = _CharacterLife.for_id(_fighter_id)
+	_current_model_source = "MISSING"
+	_current_animation_source = "LEGACY_STYLIZED_POSE"
+	_procedural_healthy = false
+	_using_stylized_fallback = false
 
-	# Optional hidden procedural_final GLB for AnimationPlayer / asset pipeline parity.
-	_try_load_final_glb(fighter_data)
-	_try_load_procedural_proxy(fighter_data)
+	var model_info := _resolve_and_load_model(fighter_data)
+	_current_model_source = str(model_info.get("source", "MISSING"))
 
 	_stylized = _StylizedBuilder.create(_fighter_id, fighter_data)
 	_stylized.name = "StylizedFighter_%s" % _fighter_id
 	var lean := float(_life.get("lean", 0.0))
 	_stylized.rotation_degrees.y = -8.0 + lean * 40.0
 	_model_root.add_child(_stylized)
-	_loaded_model = _stylized
+
+	if _procedural_healthy and _proxy_model != null:
+		_loaded_model = _proxy_model
+		_stylized.visible = false
+		_stylized.process_mode = Node.PROCESS_MODE_DISABLED
+		_using_stylized_fallback = false
+		_setup_procedural_runtime(fighter_data)
+	else:
+		_loaded_model = _stylized
+		_stylized.visible = true
+		_using_stylized_fallback = true
+		if _proxy_model != null:
+			_proxy_model.visible = false
+			_proxy_model.process_mode = Node.PROCESS_MODE_DISABLED
+
 	_frame_camera_for_figure()
-	_set_loaded(true)
+	_set_loaded(_loaded_model != null)
 	set_expression(str(_life.get("expression_idle", "neutral")))
 	_play_clip("idle")
 	_apply_playback_scale("idle")
-	return true
+	return _loaded
 
 
 func is_model_loaded() -> bool:
@@ -82,11 +111,75 @@ func is_model_loaded() -> bool:
 
 
 func has_imported_animations() -> bool:
-	return _animation_player != null and not _animation_player.get_animation_list().is_empty()
+	if _animation_controller and _animation_controller.has_method("get_loaded_clip_names"):
+		return not _animation_controller.get_loaded_clip_names().is_empty()
+	return false
 
 
 func get_life() -> Dictionary:
 	return _life
+
+
+func get_current_model_source() -> String:
+	return _current_model_source
+
+
+func get_current_animation_source() -> String:
+	return _current_animation_source
+
+
+func is_procedural_proxy_visible() -> bool:
+	return _procedural_healthy and _proxy_model != null and _proxy_model.visible
+
+
+func is_stylized_visible() -> bool:
+	return _stylized != null and _stylized.visible
+
+
+func get_visible_model_node() -> Node3D:
+	return _loaded_model
+
+
+func get_visible_skeleton() -> Skeleton3D:
+	return _visible_skeleton
+
+
+func get_active_animation_clip() -> String:
+	if _animation_controller and _animation_controller.has_method("get_active_clip"):
+		return str(_animation_controller.get_active_clip())
+	return _last_clip
+
+
+func get_animation_controller() -> Node:
+	return _animation_controller
+
+
+func count_visible_representations() -> int:
+	var count := 0
+	if _proxy_model != null and _proxy_model.visible:
+		count += 1
+	if _stylized != null and _stylized.visible:
+		count += 1
+	return count
+
+
+func truth_flags() -> Dictionary:
+	return {
+		"PROCEDURAL_CHARACTER_RUNTIME_PASS": _procedural_healthy,
+		"PROCEDURAL_RUNTIME_ANIMATION_PASS": _procedural_healthy and has_imported_animations(),
+		"FINAL_CHARACTER_ART_PASS": _current_model_source in ["FINAL_CUSTOM", "APPROVED_VROID"],
+		"FINAL_HUMAN_AUTHORED_ANIMATION_PASS": false,
+		"HUMAN_ART_DIRECTION_APPROVAL": false,
+		"CURRENT_MODEL_SOURCE": _current_model_source,
+		"CURRENT_ANIMATION_SOURCE": _current_animation_source,
+		"PROCEDURAL_PROXY_VISIBLE": is_procedural_proxy_visible(),
+		"VISIBLE_MODEL_NODE": _loaded_model.name if _loaded_model else "",
+		"VISIBLE_SKELETON_PRESENT": _visible_skeleton != null,
+		"ACTIVE_ANIMATION_CLIP": get_active_animation_clip(),
+		"COMPETITIVE_GAMEPLAY_ROOT_MOTION": "PHYSICS_AUTHORITATIVE",
+		"VISIBLE_RUNTIME_ANIMATION_CONTROLLERS_PER_FIGHTER": 1 if _animation_controller else 0,
+		"STYLIZED_FALLBACK_VISIBLE": is_stylized_visible(),
+	}
 
 
 func set_select_mode(enabled: bool) -> void:
@@ -96,11 +189,9 @@ func set_select_mode(enabled: bool) -> void:
 		_display.position = Vector2(0, -28) if enabled else Vector2(0, -49)
 	_frame_camera_for_figure()
 	if enabled and _camera:
-		# Absolute orthographic size — never multiply per focus change.
 		_camera.size = SELECT_CAMERA_SIZE
 		_camera.position = Vector3(0, 1.15, 4.2)
 		_camera.look_at(Vector3(0, 1.05, 0), Vector3.UP)
-
 
 
 func set_facing(direction: int) -> void:
@@ -111,6 +202,8 @@ func set_facing(direction: int) -> void:
 func set_aura_level(level: int) -> void:
 	_aura_level = clampi(level, 0, 4)
 	_refresh_aura_overlay()
+	if _material_controller and _material_controller.has_method("set_charge_emission"):
+		_material_controller.set_charge_emission(float(level) * 0.35)
 
 
 func set_expression(state: String) -> void:
@@ -118,9 +211,8 @@ func set_expression(state: String) -> void:
 	if _expression_label:
 		_expression_label.text = _expression_glyph(state)
 	if _face_chip:
-		# Soft overlay only — primary face is on the stylized mesh.
 		_face_chip.color = _expression_color(state)
-		_face_chip.color.a = 0.0 if _stylized != null else _face_chip.color.a
+		_face_chip.color.a = 0.0 if _procedural_healthy else _face_chip.color.a
 	if _stylized and _stylized.has_method("set_expression"):
 		_stylized.set_expression(state)
 
@@ -131,7 +223,7 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 	if move.has("throw_direction"):
 		_throw_dir = str(move.get("throw_direction", "forward"))
 	var clip := _clip_for_state(state, str(move.get("move_id", "")))
-	_play_clip(clip)
+	_play_clip(clip, state, move)
 	_apply_playback_scale(clip)
 	_update_expression_for_state(state)
 	if state in [_FighterStates.THROW_STARTUP, _FighterStates.THROW_RELEASE]:
@@ -169,55 +261,147 @@ func play_defeat_presentation() -> void:
 	_play_defeat_presentation()
 
 
-func _try_load_procedural_proxy(fighter_data: Dictionary) -> void:
-	var resolver := load("res://scripts/visual/fighter_asset_resolver.gd")
-	if resolver == null:
-		return
-	var info: Dictionary = resolver.resolve_model_path(_fighter_id, fighter_data)
+func sample_bone_transform(canonical_bone: String) -> Transform3D:
+	if _visible_skeleton == null or not is_instance_valid(_visible_skeleton):
+		return Transform3D.IDENTITY
+	var glb_bone := _BoneMap.resolve_on_skeleton(_visible_skeleton, canonical_bone)
+	var idx := _visible_skeleton.find_bone(glb_bone)
+	if idx < 0:
+		return Transform3D.IDENTITY
+	_visible_skeleton.force_update_bone_child_transform(idx)
+	return _visible_skeleton.get_bone_global_pose(idx)
+
+
+func trigger_hit_flash(intensity: float = 1.0) -> void:
+	if _material_controller and _material_controller.has_method("set_hit_flash"):
+		_material_controller.set_hit_flash(intensity)
+
+
+func _resolve_and_load_model(fighter_data: Dictionary) -> Dictionary:
+	var explicit := str(fighter_data.get("modelPath", ""))
+	if _is_approved_final_path(explicit):
+		var final_info := _try_load_final_glb(fighter_data)
+		if final_info.get("loaded", false):
+			return final_info
+	var proxy_info := _try_load_procedural_proxy(fighter_data)
+	if proxy_info.get("loaded", false):
+		return proxy_info
+	if not explicit.is_empty() and not explicit.contains("/proxy/"):
+		var legacy_info := _try_load_final_glb(fighter_data)
+		if legacy_info.get("loaded", false):
+			legacy_info["source"] = "PROCEDURAL_PRODUCTION_PROXY"
+			return legacy_info
+	return {"source": "MISSING", "loaded": false}
+
+
+func _is_approved_final_path(path: String) -> bool:
+	if path.is_empty():
+		return false
+	if path.contains("procedural_final") or path.contains("procedural_proxy"):
+		return false
+	return path.contains("/approved/") or path.contains("/final/") or path.contains("/approved_vroid/") or path.contains("vroid")
+
+
+func _try_load_procedural_proxy(fighter_data: Dictionary) -> Dictionary:
+	var info: Dictionary = _AssetResolver.resolve_model_path(_fighter_id, fighter_data)
 	var model_path := str(info.get("path", ""))
 	if model_path.is_empty() or not ResourceLoader.exists(model_path):
-		return
+		return {"source": "MISSING", "loaded": false}
 	var resource := load(model_path)
 	if not resource is PackedScene:
-		return
+		return {"source": "MISSING", "loaded": false}
 	var instance := (resource as PackedScene).instantiate()
 	if not instance is Node3D:
 		instance.queue_free()
-		return
+		return {"source": "MISSING", "loaded": false}
 	if _proxy_model != null:
 		_proxy_model.queue_free()
 	_proxy_model = instance as Node3D
 	_proxy_model.name = "ProceduralProxy_%s" % _fighter_id
-	_proxy_model.visible = false
+	_proxy_model.visible = true
 	_model_root.add_child(_proxy_model)
-	_animation_player = _find_animation_player(_proxy_model)
+	_visible_skeleton = _find_skeleton(_proxy_model)
+	_procedural_healthy = _visible_skeleton != null
+	return {
+		"source": str(info.get("source", "PROCEDURAL_PRODUCTION_PROXY")),
+		"loaded": _procedural_healthy,
+		"path": model_path,
+	}
 
 
-func _try_load_final_glb(fighter_data: Dictionary) -> void:
+func _try_load_final_glb(fighter_data: Dictionary) -> Dictionary:
 	var model_path := str(fighter_data.get("modelPath", ""))
 	if model_path.is_empty() or model_path.contains("/proxy/"):
-		return
+		return {"source": "MISSING", "loaded": false}
+	if model_path.contains("procedural_proxy"):
+		return {"source": "MISSING", "loaded": false}
 	if not ResourceLoader.exists(model_path):
-		return
+		return {"source": "MISSING", "loaded": false}
 	var resource := load(model_path)
 	if not resource is PackedScene:
-		return
+		return {"source": "MISSING", "loaded": false}
 	var instance := (resource as PackedScene).instantiate()
 	if not instance is Node3D:
 		instance.queue_free()
-		return
+		return {"source": "MISSING", "loaded": false}
 	_proxy_model = instance as Node3D
 	_proxy_model.name = "ImportedFinal_%s" % _fighter_id
-	_proxy_model.visible = false
+	_proxy_model.visible = true
 	_model_root.add_child(_proxy_model)
-	_animation_player = _find_animation_player(_proxy_model)
+	_visible_skeleton = _find_skeleton(_proxy_model)
+	var source := "FINAL_CUSTOM"
+	if model_path.contains("vroid") or model_path.contains("/approved_vroid/"):
+		source = "APPROVED_VROID"
+	_procedural_healthy = _visible_skeleton != null
+	return {"source": source, "loaded": _visible_skeleton != null, "path": model_path}
+
+
+func _setup_procedural_runtime(fighter_data: Dictionary) -> void:
+	_current_animation_source = "PROCEDURAL_RUNTIME_ANIMATION"
+	_animation_controller = _AnimationController.new()
+	_animation_controller.name = "FighterAnimationController"
+	add_child(_animation_controller)
+	_animation_controller.setup({"fighter_id": _fighter_id}, _proxy_model)
+	_visible_skeleton = _animation_controller.get_skeleton() if _animation_controller.has_method("get_skeleton") else _visible_skeleton
+	_material_controller = _MaterialController.new()
+	_material_controller.name = "FighterMaterialController"
+	add_child(_material_controller)
+	_material_controller.bind_model(_proxy_model)
+	_apply_toon_materials(_proxy_model, fighter_data)
+	if fighter_data.has("color"):
+		_material_controller.set_team_color(Color(fighter_data.get("color")))
+
+
+func _apply_toon_materials(root: Node3D, fighter_data: Dictionary) -> void:
+	var base_color := Color(fighter_data.get("color", Color(0.85, 0.85, 0.9)))
+	_apply_toon_recursive(root, base_color)
+
+
+func _apply_toon_recursive(node: Node, base_color: Color) -> void:
+	if node is MeshInstance3D:
+		var mesh := node as MeshInstance3D
+		var shader_res: Resource = load("res://shaders/fighter_toon.gdshader")
+		if shader_res is Shader:
+			var mat := ShaderMaterial.new()
+			mat.shader = shader_res as Shader
+			mat.set_shader_parameter("base_color", base_color)
+			mat.set_shader_parameter("team_tint", base_color)
+			mesh.material_override = mat
+		else:
+			var fallback := StandardMaterial3D.new()
+			fallback.albedo_color = base_color
+			mesh.material_override = fallback
+	for child in node.get_children():
+		_apply_toon_recursive(child, base_color)
 
 
 func _frame_camera_for_figure() -> void:
 	if _camera == null:
 		return
 	var height := 1.0
-	if _stylized and _stylized.has_method("get_height_scale"):
+	if _procedural_healthy:
+		height = 1.05
+	elif _stylized and _stylized.has_method("get_height_scale"):
 		height = float(_stylized.get_height_scale())
 	_camera.size = 2.55 + 0.35 * height
 	_camera.position = Vector3(0, 1.05 * height + 0.12, 5.0)
@@ -225,18 +409,12 @@ func _frame_camera_for_figure() -> void:
 
 
 func _build_viewport() -> void:
-	# Tear down any prior viewport to prevent world leakage / duplicate previews.
-	if _viewport != null and is_instance_valid(_viewport):
-		_viewport.queue_free()
-		_viewport = null
-	if _display != null and is_instance_valid(_display):
-		_display.queue_free()
-		_display = null
+	if _viewport != null and is_instance_valid(_viewport) and _model_root != null and is_instance_valid(_model_root):
+		return
 	_viewport = SubViewport.new()
 	_viewport.name = "Fighter3DViewport"
 	_viewport.size = VIEWPORT_SIZE
 	_viewport.transparent_bg = true
-	# Isolated World3D per fighter presenter — no shared gameplay-world leakage.
 	_viewport.own_world_3d = true
 	_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	_viewport.msaa_3d = Viewport.MSAA_2X
@@ -318,7 +496,13 @@ func _build_viewport() -> void:
 
 
 func _clear_model() -> void:
-	_animation_player = null
+	if _animation_controller != null and is_instance_valid(_animation_controller):
+		_animation_controller.queue_free()
+	if _material_controller != null and is_instance_valid(_material_controller):
+		_material_controller.queue_free()
+	_animation_controller = null
+	_material_controller = null
+	_visible_skeleton = null
 	_loaded_model = null
 	_proxy_model = null
 	_stylized = null
@@ -336,101 +520,52 @@ func _set_loaded(value: bool) -> void:
 		_display.visible = value
 	var tier_label := get_node_or_null("ModelTierLabel") as Label
 	if tier_label:
-		tier_label.visible = false
+		tier_label.visible = _procedural_healthy
+		tier_label.text = PROXY_LABEL if _procedural_healthy else "STYLIZED FALLBACK"
 
 
-func _find_animation_player(node: Node) -> AnimationPlayer:
-	if node is AnimationPlayer:
-		return node as AnimationPlayer
+func _find_skeleton(node: Node) -> Skeleton3D:
+	if node is Skeleton3D:
+		return node as Skeleton3D
 	for child in node.get_children():
-		var found := _find_animation_player(child)
+		var found := _find_skeleton(child)
 		if found:
 			return found
 	return null
 
 
 func _clip_for_state(state: String, move_id: String) -> String:
-	if (
-		state
-		in [
-			_FighterStates.ATTACK_STARTUP, _FighterStates.ATTACK_ACTIVE, _FighterStates.ATTACK_RECOVERY
-		]
-	):
-		if move_id in ["jab_1", "jab_2", "heavy_attack"]:
-			return move_id
-		return "heavy_attack" if "heavy" in move_id else "jab_1"
-	if (
-		state
-		in [
-			_FighterStates.SPECIAL_STARTUP,
-			_FighterStates.SPECIAL_ACTIVE,
-			_FighterStates.SPECIAL_RECOVERY
-		]
-	):
-		return "special"
-	if state in [_FighterStates.THROW_STARTUP, _FighterStates.THROW_RELEASE]:
-		var dir_clip := "throw_%s" % _throw_dir
-		if dir_clip in ["throw_forward", "throw_back", "throw_up", "throw_down"]:
-			return dir_clip
-		return "throw_forward"
-	match state:
-		_FighterStates.WALK:
-			return "walk"
-		_FighterStates.RUN:
-			return "run"
-		_FighterStates.DASH, _FighterStates.DODGE_START, _FighterStates.DODGE_ACTIVE:
-			return "dash"
-		_FighterStates.JUMP, _FighterStates.JUMP_SQUAT, _FighterStates.DOUBLE_JUMP:
-			return "jump"
-		_FighterStates.FALL, _FighterStates.FAST_FALL, _FighterStates.TUMBLE:
-			return "fall"
-		_FighterStates.LAND:
-			return "land"
-		_FighterStates.SHIELD_START, _FighterStates.SHIELD_HOLD, _FighterStates.SHIELD_STUN:
-			return "shield"
-		_FighterStates.GRAB_STARTUP, _FighterStates.GRAB_ACTIVE, _FighterStates.GRAB_HOLD:
-			return "jab_1"
-		_FighterStates.AURA_CHARGE, _FighterStates.AURA_READY:
-			return "aura_charge"
-		_FighterStates.AURA_BURST_STARTUP, _FighterStates.AURA_BURST_ACTIVE, _FighterStates.AURA_BURST_RECOVERY:
-			return "aura_burst"
-		_FighterStates.HURT_LIGHT:
-			return "hurt_light"
-		_FighterStates.HURT_HEAVY, _FighterStates.HITSTUN:
-			return "hurt_heavy"
-		_FighterStates.LAUNCHED:
-			return "launched"
-		_FighterStates.KO:
-			return "ko"
-		_:
-			return "idle"
+	var resolved: Dictionary = _MoveResolver.resolve_clip(state, move_id, _loaded_clip_dict())
+	return str(resolved.get("requested", "idle"))
 
 
-func _play_clip(requested: String) -> void:
+func _loaded_clip_dict() -> Dictionary:
+	var clips := {}
+	if _animation_controller and _animation_controller.has_method("get_loaded_clip_names"):
+		for clip in _animation_controller.get_loaded_clip_names():
+			clips[str(clip)] = true
+	return clips
+
+
+func _play_clip(requested: String, state: String = "", move: Dictionary = {}) -> void:
 	if requested != _style_clip:
 		_style_clip = requested
 		_style_anim_t = 0.0
 		_last_clip = requested
 	elif requested in ["idle", "walk", "run", "fall", "shield", "aura_charge"]:
-		# Keep looping continuous clips.
 		pass
 	else:
-		# Restart one-shots when re-requested.
 		if str(requested) != _last_clip:
 			_style_anim_t = 0.0
 			_last_clip = requested
 
-	# Drive hidden AnimationPlayer when present (parity / validators).
-	if _animation_player != null:
-		var clip := _resolve_animation_name(requested)
-		if not clip.is_empty():
-			var animation := _animation_player.get_animation(clip)
-			if animation:
-				var should_loop := requested in ["idle", "walk", "run", "fall", "shield", "aura_charge"]
-				animation.loop_mode = Animation.LOOP_LINEAR if should_loop else Animation.LOOP_NONE
-			_animation_player.play(clip, 0.08)
-
-	if _stylized and _stylized.has_method("animate_pose"):
+	if _procedural_healthy and _animation_controller:
+		var move_copy := move.duplicate() if not move.is_empty() else {}
+		if state.is_empty():
+			move_copy["move_id"] = requested
+		_animation_controller.play_for_state(state if not state.is_empty() else _FighterStates.IDLE, move_copy)
+		_last_clip = _animation_controller.get_active_clip() if _animation_controller.has_method("get_active_clip") else requested
+	elif _stylized and _stylized.has_method("animate_pose"):
 		_stylized.animate_pose(_style_clip, _style_anim_t)
 
 
@@ -446,24 +581,10 @@ func _apply_playback_scale(clip: String) -> void:
 	elif clip in ["jab_1", "jab_2", "heavy_attack", "special", "aura_burst", "throw_forward", "throw_back", "throw_up", "throw_down"]:
 		scale = float(_life.get("attack_speed", 1.0))
 	_style_speed = scale
-	if _animation_player:
-		_animation_player.speed_scale = scale
-
-
-func _resolve_animation_name(requested: String) -> StringName:
-	if _animation_player == null:
-		return StringName()
-	if _animation_player.has_animation(requested):
-		return StringName(requested)
-	for candidate in _animation_player.get_animation_list():
-		var candidate_text := str(candidate)
-		if (
-			candidate_text.ends_with("/" + requested)
-			or candidate_text.ends_with("|" + requested)
-			or candidate_text.ends_with("_" + requested)
-		):
-			return candidate
-	return StringName()
+	if _animation_controller and _animation_controller.has_method("get_animation_player"):
+		var player: AnimationPlayer = _animation_controller.get_animation_player()
+		if player:
+			player.speed_scale = scale
 
 
 func _update_expression_for_state(state: String) -> void:
@@ -505,7 +626,6 @@ func _refresh_aura_overlay() -> void:
 			_aura_overlay.color = Color(0.35, 0.2, 0.55, alpha)
 		_:
 			_aura_overlay.color = Color(1, 1, 1, alpha)
-	# Distinct shape language via aspect — still works with stylized figures.
 	match shape:
 		"rings":
 			_aura_overlay.size = Vector2(78, 78)

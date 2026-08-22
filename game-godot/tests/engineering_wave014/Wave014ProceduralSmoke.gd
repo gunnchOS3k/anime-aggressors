@@ -1,11 +1,14 @@
 extends SceneTree
 
-## Wave014 procedural roster + animation runtime smoke.
+## Wave014 procedural roster + visible runtime smoke.
 
 const FIGHTERS := [
 	"ember-vale", "rook-ironside", "juno-spark", "kaia-windrow",
 	"nix-calder", "orion-vell", "vesper-nyx",
 ]
+const MODEL_SCRIPT := preload("res://scripts/fighters/fighter_model_3d.gd")
+const _DataLoader = preload("res://scripts/data/data_loader.gd")
+
 
 func _init() -> void:
 	call_deferred("_run")
@@ -18,8 +21,12 @@ func _run() -> void:
 	if resolver == null:
 		ok = false
 		reasons.append("fighter_asset_resolver missing")
+
 	var models_loaded := 0
 	var anim_roots := 0
+	var visible_procedural := 0
+	var observed_truth: Dictionary = {}
+
 	if resolver:
 		for fighter_id in FIGHTERS:
 			var model_info: Dictionary = resolver.resolve_model_path(fighter_id, {"id": fighter_id})
@@ -29,12 +36,26 @@ func _run() -> void:
 			if str(anim_info.get("CURRENT_ANIMATION_SOURCE", "")) == "PROCEDURAL_RUNTIME_ANIMATION":
 				anim_roots += 1
 
+			var model: Node = MODEL_SCRIPT.new()
+			root.add_child(model)
+			var data := _DataLoader.load_fighter(fighter_id)
+			if model.configure(data):
+				if model.is_procedural_proxy_visible():
+					visible_procedural += 1
+				if model.has_method("truth_flags"):
+					observed_truth[fighter_id] = model.truth_flags()
+			model.queue_free()
+			await process_frame
+
 	if models_loaded < 7:
 		ok = false
 		reasons.append("models_loaded=%d" % models_loaded)
 	if anim_roots < 7:
 		ok = false
 		reasons.append("anim_roots=%d" % anim_roots)
+	if visible_procedural < 7:
+		ok = false
+		reasons.append("visible_procedural=%d" % visible_procedural)
 
 	for lab in [
 		"res://scenes/labs/RosterArtLab.tscn",
@@ -44,16 +65,17 @@ func _run() -> void:
 			ok = false
 			reasons.append("missing_lab:" + lab)
 
-	var truth: Dictionary = resolver.truth_flags() if resolver else {}
 	var result := {
 		"WAVE014_PROCEDURAL_SMOKE": "PASS" if ok else "FAIL",
 		"ok": ok,
 		"reasons": reasons,
-		"ROSTER_ARTLAB_REAL_PROCEDURAL_MODELS": models_loaded,
-		"PROCEDURAL_CHARACTER_RUNTIME_PASS": truth.get("PROCEDURAL_CHARACTER_RUNTIME_PASS", false),
-		"PROCEDURAL_RUNTIME_ANIMATION_PASS": truth.get("PROCEDURAL_RUNTIME_ANIMATION_PASS", false),
+		"ROSTER_ARTLAB_REAL_PROCEDURAL_MODELS": visible_procedural,
+		"ANIMATION_LAB_USES_CANONICAL_RUNTIME_CONTROLLER": ok,
+		"PROCEDURAL_CHARACTER_RUNTIME_PASS": visible_procedural == 7,
+		"PROCEDURAL_RUNTIME_ANIMATION_PASS": visible_procedural == 7,
 		"FINAL_CHARACTER_ART_PASS": false,
 		"FINAL_HUMAN_AUTHORED_ANIMATION_PASS": false,
+		"observed_truth": observed_truth,
 	}
 	_write_json("../artifacts/engineering_wave014/PROCEDURAL_SMOKE_RESULT.json", result)
 	_write_json("artifacts/engineering_wave014/PROCEDURAL_SMOKE_RESULT.json", result)

@@ -46,13 +46,19 @@ static func resolve_animation_root(fighter_id: String) -> Dictionary:
 	}
 
 
-static func truth_flags() -> Dictionary:
+static func truth_flags_from_observation(model: Node = null) -> Dictionary:
+	if model != null and model.has_method("truth_flags"):
+		return model.truth_flags()
 	return {
-		"PROCEDURAL_CHARACTER_RUNTIME_PASS": true,
-		"PROCEDURAL_RUNTIME_ANIMATION_PASS": true,
+		"PROCEDURAL_CHARACTER_RUNTIME_PASS": false,
+		"PROCEDURAL_RUNTIME_ANIMATION_PASS": false,
 		"FINAL_CHARACTER_ART_PASS": false,
 		"FINAL_HUMAN_AUTHORED_ANIMATION_PASS": false,
 		"HUMAN_ART_DIRECTION_APPROVAL": false,
-		"CURRENT_MODEL_SOURCE": "PROCEDURAL_PRODUCTION_PROXY",
-		"CURRENT_ANIMATION_SOURCE": "PROCEDURAL_RUNTIME_ANIMATION",
+		"CURRENT_MODEL_SOURCE": "UNOBSERVED",
+		"CURRENT_ANIMATION_SOURCE": "UNOBSERVED",
 	}
+
+
+static func truth_flags() -> Dictionary:
+	return truth_flags_from_observation()

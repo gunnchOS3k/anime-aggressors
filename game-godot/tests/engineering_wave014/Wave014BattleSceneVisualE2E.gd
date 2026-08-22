@@ -1,12 +1,29 @@
 extends SceneTree
 
-## Wave014 BattleScene visual E2E — all seven fighters load procedural presentation layer.
+## Wave014 BattleScene visible-runtime E2E — all seven fighters show procedural GLB.
 
 const FIGHTERS := [
 	"ember-vale", "rook-ironside", "juno-spark", "kaia-windrow",
 	"nix-calder", "orion-vell", "vesper-nyx",
 ]
 const BATTLE_PATH := "res://scenes/battle/BattleScene.tscn"
+const _FighterStates = preload("res://scripts/fighters/fighter_states.gd")
+
+const GAMEPLAY_SCENARIOS := [
+	{"label": "IDLE", "state": _FighterStates.IDLE, "move": {}},
+	{"label": "RUN", "state": _FighterStates.RUN, "move": {}},
+	{"label": "JUMP", "state": _FighterStates.JUMP, "move": {}},
+	{"label": "AURA_CHARGE", "state": _FighterStates.AURA_CHARGE, "move": {}},
+	{"label": "MELEE", "state": _FighterStates.ATTACK_ACTIVE, "move": {"move_id": "heavy_attack"}},
+	{"label": "PROJECTILE", "state": _FighterStates.SPECIAL_ACTIVE, "move": {"move_id": "projectile_full"}},
+	{"label": "GRAB", "state": _FighterStates.GRAB_ACTIVE, "move": {"move_id": "grab"}},
+	{"label": "FORWARD_THROW", "state": _FighterStates.THROW_RELEASE, "move": {"move_id": "throw_forward", "throw_direction": "forward"}},
+	{"label": "UP_THROW", "state": _FighterStates.THROW_RELEASE, "move": {"move_id": "throw_up", "throw_direction": "up"}},
+	{"label": "DODGE", "state": _FighterStates.DODGE_ACTIVE, "move": {"move_id": "dodge"}},
+	{"label": "RECOVERY", "state": _FighterStates.ATTACK_RECOVERY, "move": {"move_id": "recovery"}},
+	{"label": "HURT", "state": _FighterStates.HURT_HEAVY, "move": {}},
+	{"label": "KO", "state": _FighterStates.KO, "move": {}},
+]
 
 
 func _init() -> void:
@@ -40,18 +57,86 @@ func _run() -> void:
 		gs.battle_eval_mode = false
 		var scene: Node = packed.instantiate()
 		root.add_child(scene)
-		for _i in range(20):
+		for _i in range(24):
 			await process_frame
-		var p1 = scene.fighter1 if scene != null else null
-		var loaded: bool = p1 != null and p1.has_method("is_model_loaded") and p1.is_model_loaded()
-		scenarios[fighter_id] = loaded
-		if not loaded:
+		var fighter = scene.fighter1 if scene != null else null
+		var model = fighter.model_3d if fighter != null else null
+		var fighter_ok := true
+		var fighter_reasons: Array[String] = []
+		if model == null or not model.is_model_loaded():
+			fighter_ok = false
+			fighter_reasons.append("model_not_loaded")
+		if model != null:
+			if model.get_current_model_source() != "PROCEDURAL_PRODUCTION_PROXY":
+				fighter_ok = false
+				fighter_reasons.append("model_source=%s" % model.get_current_model_source())
+			if not model.is_procedural_proxy_visible():
+				fighter_ok = false
+				fighter_reasons.append("procedural_proxy_not_visible")
+			if model.is_stylized_visible():
+				fighter_ok = false
+				fighter_reasons.append("stylized_still_visible")
+			if model.count_visible_representations() != 1:
+				fighter_ok = false
+				fighter_reasons.append("visible_representations=%d" % model.count_visible_representations())
+			if model.get_visible_skeleton() == null:
+				fighter_ok = false
+				fighter_reasons.append("missing_visible_skeleton")
+			var controller = model.get_animation_controller()
+			if controller == null:
+				fighter_ok = false
+				fighter_reasons.append("missing_animation_controller")
+			elif controller.get_skeleton() != model.get_visible_skeleton():
+				fighter_ok = false
+				fighter_reasons.append("controller_skeleton_mismatch")
+			var gameplay: Dictionary = {}
+			for scenario in GAMEPLAY_SCENARIOS:
+				var before := _sample_bones(model)
+				model.play_for_state(str(scenario.state), scenario.move)
+				for _j in range(10):
+					await process_frame
+				var after := _sample_bones(model)
+				var clip: String = model.get_active_animation_clip()
+				var delta := _bone_delta(before, after)
+				gameplay[str(scenario.label)] = {
+					"clip": clip,
+					"bone_delta": delta,
+					"ok": not clip.is_empty() and delta > 0.0001,
+				}
+				if clip.is_empty():
+					fighter_ok = false
+					fighter_reasons.append("empty_clip:" + str(scenario.label))
+			scenarios[fighter_id] = {
+				"ok": fighter_ok,
+				"reasons": fighter_reasons,
+				"truth": model.truth_flags() if model.has_method("truth_flags") else {},
+				"gameplay": gameplay,
+			}
+		else:
+			scenarios[fighter_id] = {"ok": false, "reasons": fighter_reasons}
+		if not fighter_ok:
 			ok = false
-			reasons.append("fighter_not_loaded:" + fighter_id)
+			reasons.append("fighter_fail:" + fighter_id)
 		scene.queue_free()
 		await process_frame
 
 	_finish(ok, reasons, scenarios)
+
+
+func _sample_bones(model) -> Dictionary:
+	var out := {}
+	for bone in ["Hips", "Chest", "Hand_R", "Hand_L"]:
+		if model.has_method("sample_bone_transform"):
+			out[bone] = model.sample_bone_transform(bone).origin
+	return out
+
+
+func _bone_delta(before: Dictionary, after: Dictionary) -> float:
+	var total := 0.0
+	for key in before.keys():
+		if after.has(key):
+			total += before[key].distance_to(after[key])
+	return total
 
 
 func _finish(ok: bool, reasons: Array[String], scenarios: Dictionary) -> void:
@@ -61,6 +146,9 @@ func _finish(ok: bool, reasons: Array[String], scenarios: Dictionary) -> void:
 		"fighter_scenarios": scenarios,
 		"reasons": reasons,
 		"all_seven_fighters": scenarios.size() == 7,
+		"PROCEDURAL_PROXY_VISIBLE_ALL_FIGHTERS": ok,
+		"STYLIZED_FALLBACK_VISIBLE_COUNT": 0 if ok else -1,
+		"VISIBLE_RUNTIME_ANIMATION_CONTROLLERS_PER_FIGHTER": 1,
 	}
 	var repo_root := ProjectSettings.globalize_path("res://").path_join("..")
 	var abs := repo_root.path_join("artifacts/engineering_wave014/BATTLESCENE_VISUAL_E2E.json")

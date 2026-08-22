@@ -1,48 +1,88 @@
 extends Node
 class_name FighterAnimationController
 
-## State-driven animation controller — observes Fighter state, does not author gameplay.
+## Single canonical animation controller — observes Fighter state, does not author gameplay.
 
 const _FighterStates = preload("res://scripts/fighters/fighter_states.gd")
 const _AssetResolver = preload("res://scripts/visual/fighter_asset_resolver.gd")
+const _BoneMap = preload("res://scripts/visual/procedural_bone_map.gd")
+const _MoveResolver = preload("res://scripts/visual/runtime_move_resolver.gd")
 
 var _fighter
 var _player: AnimationPlayer
-var _tree: AnimationTree
-var _state_machine: AnimationNodeStateMachinePlayback
+var _skeleton: Skeleton3D
+var _skeleton_path: NodePath = NodePath()
 var _loaded_clips: Dictionary = {}
 var _fighter_id: String = ""
+var _active_clip: String = ""
+var _throw_dir: String = "forward"
 
 
 func setup(fighter, model_root: Node3D) -> void:
 	_fighter = fighter
-	_fighter_id = str(fighter.fighter_id if fighter else "")
+	_fighter_id = ""
+	if fighter != null:
+		if "fighter_id" in fighter:
+			_fighter_id = str(fighter.fighter_id)
+		elif fighter.has_method("get"):
+			_fighter_id = str(fighter.get("fighter_id"))
+	_skeleton = _find_skeleton(model_root)
+	if _skeleton == null:
+		return
+	_skeleton_path = model_root.get_path_to(_skeleton)
+	_disable_embedded_players(model_root)
 	_player = AnimationPlayer.new()
-	_player.name = "ProceduralAnimationPlayer"
-	add_child(_player)
-	_tree = AnimationTree.new()
-	_tree.name = "ProceduralAnimationTree"
-	_tree.tree_root = AnimationNodeBlendTree.new()
-	_tree.anim_player = _player.get_path()
-	add_child(_tree)
+	_player.name = "CanonicalProceduralAnimationPlayer"
+	model_root.add_child(_player)
 	_load_procedural_clips(model_root)
-	_tree.active = true
 
 
 func play_for_state(state: String, move: Dictionary = {}) -> void:
-	var clip := _clip_for_state(state, str(move.get("move_id", "")))
-	if clip.is_empty():
+	if _player == null or _skeleton == null:
 		return
-	if _player.has_animation(clip):
-		var should_loop := clip in ["idle", "run", "walk", "fall", "shield", "aura_charge"]
-		var anim := _player.get_animation(clip)
-		if anim:
-			anim.loop_mode = Animation.LOOP_LINEAR if should_loop else Animation.LOOP_NONE
-		if _player.current_animation != clip or (not should_loop and not _player.is_playing()):
-			_player.play(clip)
+	if move.has("throw_direction"):
+		_throw_dir = str(move.get("throw_direction", "forward"))
+	var move_id := str(move.get("move_id", ""))
+	var resolved: Dictionary = _MoveResolver.resolve_clip(state, move_id, _loaded_clips)
+	var clip := str(resolved.get("clip", ""))
+	if clip.is_empty() or not _loaded_clips.has(clip):
+		clip = _fallback_clip(state, move_id)
+	if clip.is_empty() or not _player.has_animation(clip):
+		return
+	var should_loop := clip in ["idle", "run", "walk", "fall", "shield", "aura_charge"]
+	var anim := _player.get_animation(clip)
+	if anim:
+		anim.loop_mode = Animation.LOOP_LINEAR if should_loop else Animation.LOOP_NONE
+	if _player.current_animation != clip or (not should_loop and not _player.is_playing()):
+		_player.play(clip, 0.08)
+	_active_clip = clip
 
 
-func _load_procedural_clips(_model_root: Node3D) -> void:
+func get_active_clip() -> String:
+	return _active_clip
+
+
+func get_skeleton() -> Skeleton3D:
+	return _skeleton
+
+
+func get_animation_player() -> AnimationPlayer:
+	return _player
+
+
+func get_loaded_clip_names() -> Array:
+	return _loaded_clips.keys()
+
+
+func _fallback_clip(state: String, move_id: String) -> String:
+	if state in [_FighterStates.THROW_STARTUP, _FighterStates.THROW_RELEASE]:
+		var dir_clip := "throw_%s" % _throw_dir
+		if _loaded_clips.has(dir_clip):
+			return dir_clip
+	return str(_FighterStates.animation_for_state(state))
+
+
+func _load_procedural_clips(model_root: Node3D) -> void:
 	var info: Dictionary = _AssetResolver.resolve_animation_root(_fighter_id)
 	var root_path := str(info.get("root", ""))
 	if root_path.is_empty():
@@ -79,14 +119,17 @@ func _animation_from_json(path: String) -> Animation:
 		return null
 	var data: Dictionary = parsed
 	var anim := Animation.new()
-	anim.length = float(data.get("duration_frames", 24)) / 60.0
+	anim.length = maxf(float(data.get("duration_frames", 24)) / 60.0, 0.05)
 	var tracks: Dictionary = data.get("bone_tracks", {})
 	for bone in tracks.keys():
 		var keys: Array = tracks[bone]
 		if keys.is_empty():
 			continue
+		var glb_bone := _BoneMap.resolve_on_skeleton(_skeleton, str(bone))
+		if glb_bone.is_empty():
+			continue
 		var track_idx := anim.add_track(Animation.TYPE_ROTATION_3D)
-		anim.track_set_path(track_idx, NodePath("ModelRoot/%s" % bone))
+		anim.track_set_path(track_idx, NodePath("%s:%s" % [_skeleton_path, glb_bone]))
 		for key in keys:
 			var rot: Array = key.get("rotation_rad", [0.0, 0.0, 0.0])
 			var quat := Quaternion.from_euler(Vector3(float(rot[0]), float(rot[1]), float(rot[2])))
@@ -94,9 +137,19 @@ func _animation_from_json(path: String) -> Animation:
 	return anim
 
 
-func _clip_for_state(state: String, move_id: String) -> String:
-	if move_id != "" and _loaded_clips.has(move_id):
-		return move_id
-	if move_id.begins_with("signature_") and _loaded_clips.has(move_id):
-		return move_id
-	return str(_FighterStates.animation_for_state(state))
+func _find_skeleton(node: Node) -> Skeleton3D:
+	if node is Skeleton3D:
+		return node as Skeleton3D
+	for child in node.get_children():
+		var found := _find_skeleton(child)
+		if found:
+			return found
+	return null
+
+
+func _disable_embedded_players(node: Node) -> void:
+	if node is AnimationPlayer and node.name != "CanonicalProceduralAnimationPlayer":
+		node.active = false
+		node.process_mode = Node.PROCESS_MODE_DISABLED
+	for child in node.get_children():
+		_disable_embedded_players(child)

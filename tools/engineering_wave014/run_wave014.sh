@@ -51,10 +51,8 @@ run synthetic_bvh python3 tools/engineering_wave014/run_synthetic_bvh_preview.py
 run zero_cost python3 tools/art_pipeline/check_zero_cost_dependencies.py
 cp artifacts/engineering_wave012/ZERO_COST_DEPENDENCY_CHECK.json artifacts/wave014/ZERO_COST_DEPENDENCY_CHECK.json 2>/dev/null || true
 run quality_gates python3 tools/engineering_wave014/run_quality_gates.py
-run game_juice python3 tools/engineering_wave014/emit_game_juice_result.py
 run renders python3 tools/engineering_wave014/generate_renders.py
 run performance_smoke python3 tools/engineering_wave014/run_performance_smoke.py
-run sabotage python3 tools/engineering_wave014/run_sabotage_checks.py
 run integrity bash tools/engineering_wave014/run_code_integrity.sh
 
 for fighter in ember-vale rook-ironside juno-spark kaia-windrow nix-calder orion-vell vesper-nyx; do
@@ -73,7 +71,12 @@ done
 
 run godot_import "$GODOT" --headless --path "$ROOT/game-godot" --import
 run procedural_smoke "$GODOT" --headless --path "$ROOT/game-godot" --script res://tests/engineering_wave014/Wave014ProceduralSmoke.gd
+run visible_skeletal "$GODOT" --headless --path "$ROOT/game-godot" --script res://tests/engineering_wave014/Wave014VisibleSkeletalRuntime.gd
+run visible_game_juice "$GODOT" --headless --path "$ROOT/game-godot" --script res://tests/engineering_wave014/Wave014VisibleGameJuice.gd
+run game_juice python3 tools/engineering_wave014/emit_game_juice_result.py
+run runtime_renders "$GODOT" --headless --path "$ROOT/game-godot" --script res://tests/engineering_wave014/Wave014RuntimeRenders.gd
 run battle_e2e "$GODOT" --headless --path "$ROOT/game-godot" --script res://tests/engineering_wave014/Wave014BattleSceneVisualE2E.gd
+run sabotage python3 tools/engineering_wave014/run_sabotage_checks.py
 python3 tools/engineering_wave014/emit_wave014_result.py
 
 echo "=== Wave014 harness complete ==="

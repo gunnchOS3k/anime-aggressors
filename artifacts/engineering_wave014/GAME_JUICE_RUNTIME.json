@@ -46,5 +46,175 @@
     "TIER_5"
   ],
   "JuiceEventBus": "res://scripts/juice/juice_event_bus.gd",
-  "animation_event_bridge": "res://scripts/visual/animation_event_bridge.gd"
+  "animation_event_bridge": "res://scripts/visual/animation_event_bridge.gd",
+  "fighter_material_controller": "res://scripts/visual/fighter_material_controller.gd",
+  "toon_shader": "res://shaders/fighter_toon.gdshader",
+  "VISIBLE_GAME_JUICE_RUNTIME": {
+    "ACCESSIBILITY_REDUCE_FLASH": true,
+    "TOON_SHADER_ON_VISIBLE_PROCEDURAL_MESH": true,
+    "fighters": {
+      "ember-vale": {
+        "aura_charge": true,
+        "hit_flash": true,
+        "ok": true,
+        "reduce_flash": true,
+        "team_tint": true,
+        "truth": {
+          "ACTIVE_ANIMATION_CLIP": "aura_charge",
+          "COMPETITIVE_GAMEPLAY_ROOT_MOTION": "PHYSICS_AUTHORITATIVE",
+          "CURRENT_ANIMATION_SOURCE": "PROCEDURAL_RUNTIME_ANIMATION",
+          "CURRENT_MODEL_SOURCE": "PROCEDURAL_PRODUCTION_PROXY",
+          "FINAL_CHARACTER_ART_PASS": false,
+          "FINAL_HUMAN_AUTHORED_ANIMATION_PASS": false,
+          "HUMAN_ART_DIRECTION_APPROVAL": false,
+          "PROCEDURAL_CHARACTER_RUNTIME_PASS": true,
+          "PROCEDURAL_PROXY_VISIBLE": true,
+          "PROCEDURAL_RUNTIME_ANIMATION_PASS": true,
+          "STYLIZED_FALLBACK_VISIBLE": false,
+          "VISIBLE_MODEL_NODE": "ProceduralProxy_ember-vale",
+          "VISIBLE_RUNTIME_ANIMATION_CONTROLLERS_PER_FIGHTER": 1,
+          "VISIBLE_SKELETON_PRESENT": true
+        }
+      },
+      "juno-spark": {
+        "aura_charge": true,
+        "hit_flash": true,
+        "ok": true,
+        "reduce_flash": true,
+        "team_tint": true,
+        "truth": {
+          "ACTIVE_ANIMATION_CLIP": "aura_charge",
+          "COMPETITIVE_GAMEPLAY_ROOT_MOTION": "PHYSICS_AUTHORITATIVE",
+          "CURRENT_ANIMATION_SOURCE": "PROCEDURAL_RUNTIME_ANIMATION",
+          "CURRENT_MODEL_SOURCE": "PROCEDURAL_PRODUCTION_PROXY",
+          "FINAL_CHARACTER_ART_PASS": false,
+          "FINAL_HUMAN_AUTHORED_ANIMATION_PASS": false,
+          "HUMAN_ART_DIRECTION_APPROVAL": false,
+          "PROCEDURAL_CHARACTER_RUNTIME_PASS": true,
+          "PROCEDURAL_PROXY_VISIBLE": true,
+          "PROCEDURAL_RUNTIME_ANIMATION_PASS": true,
+          "STYLIZED_FALLBACK_VISIBLE": false,
+          "VISIBLE_MODEL_NODE": "ProceduralProxy_juno-spark",
+          "VISIBLE_RUNTIME_ANIMATION_CONTROLLERS_PER_FIGHTER": 1,
+          "VISIBLE_SKELETON_PRESENT": true
+        }
+      },
+      "kaia-windrow": {
+        "aura_charge": true,
+        "hit_flash": true,
+        "ok": true,
+        "reduce_flash": true,
+        "team_tint": true,
+        "truth": {
+          "ACTIVE_ANIMATION_CLIP": "aura_charge",
+          "COMPETITIVE_GAMEPLAY_ROOT_MOTION": "PHYSICS_AUTHORITATIVE",
+          "CURRENT_ANIMATION_SOURCE": "PROCEDURAL_RUNTIME_ANIMATION",
+          "CURRENT_MODEL_SOURCE": "PROCEDURAL_PRODUCTION_PROXY",
+          "FINAL_CHARACTER_ART_PASS": false,
+          "FINAL_HUMAN_AUTHORED_ANIMATION_PASS": false,
+          "HUMAN_ART_DIRECTION_APPROVAL": false,
+          "PROCEDURAL_CHARACTER_RUNTIME_PASS": true,
+          "PROCEDURAL_PROXY_VISIBLE": true,
+          "PROCEDURAL_RUNTIME_ANIMATION_PASS": true,
+          "STYLIZED_FALLBACK_VISIBLE": false,
+          "VISIBLE_MODEL_NODE": "ProceduralProxy_kaia-windrow",
+          "VISIBLE_RUNTIME_ANIMATION_CONTROLLERS_PER_FIGHTER": 1,
+          "VISIBLE_SKELETON_PRESENT": true
+        }
+      },
+      "nix-calder": {
+        "aura_charge": true,
+        "hit_flash": true,
+        "ok": true,
+        "reduce_flash": true,
+        "team_tint": true,
+        "truth": {
+          "ACTIVE_ANIMATION_CLIP": "aura_charge",
+          "COMPETITIVE_GAMEPLAY_ROOT_MOTION": "PHYSICS_AUTHORITATIVE",
+          "CURRENT_ANIMATION_SOURCE": "PROCEDURAL_RUNTIME_ANIMATION",
+          "CURRENT_MODEL_SOURCE": "PROCEDURAL_PRODUCTION_PROXY",
+          "FINAL_CHARACTER_ART_PASS": false,
+          "FINAL_HUMAN_AUTHORED_ANIMATION_PASS": false,
+          "HUMAN_ART_DIRECTION_APPROVAL": false,
+          "PROCEDURAL_CHARACTER_RUNTIME_PASS": true,
+          "PROCEDURAL_PROXY_VISIBLE": true,
+          "PROCEDURAL_RUNTIME_ANIMATION_PASS": true,
+          "STYLIZED_FALLBACK_VISIBLE": false,
+          "VISIBLE_MODEL_NODE": "ProceduralProxy_nix-calder",
+          "VISIBLE_RUNTIME_ANIMATION_CONTROLLERS_PER_FIGHTER": 1,
+          "VISIBLE_SKELETON_PRESENT": true
+        }
+      },
+      "orion-vell": {
+        "aura_charge": true,
+        "hit_flash": true,
+        "ok": true,
+        "reduce_flash": true,
+        "team_tint": true,
+        "truth": {
+          "ACTIVE_ANIMATION_CLIP": "aura_charge",
+          "COMPETITIVE_GAMEPLAY_ROOT_MOTION": "PHYSICS_AUTHORITATIVE",
+          "CURRENT_ANIMATION_SOURCE": "PROCEDURAL_RUNTIME_ANIMATION",
+          "CURRENT_MODEL_SOURCE": "PROCEDURAL_PRODUCTION_PROXY",
+          "FINAL_CHARACTER_ART_PASS": false,
+          "FINAL_HUMAN_AUTHORED_ANIMATION_PASS": false,
+          "HUMAN_ART_DIRECTION_APPROVAL": false,
+          "PROCEDURAL_CHARACTER_RUNTIME_PASS": true,
+          "PROCEDURAL_PROXY_VISIBLE": true,
+          "PROCEDURAL_RUNTIME_ANIMATION_PASS": true,
+          "STYLIZED_FALLBACK_VISIBLE": false,
+          "VISIBLE_MODEL_NODE": "ProceduralProxy_orion-vell",
+          "VISIBLE_RUNTIME_ANIMATION_CONTROLLERS_PER_FIGHTER": 1,
+          "VISIBLE_SKELETON_PRESENT": true
+        }
+      },
+      "rook-ironside": {
+        "aura_charge": true,
+        "hit_flash": true,
+        "ok": true,
+        "reduce_flash": true,
+        "team_tint": true,
+        "truth": {
+          "ACTIVE_ANIMATION_CLIP": "aura_charge",
+          "COMPETITIVE_GAMEPLAY_ROOT_MOTION": "PHYSICS_AUTHORITATIVE",
+          "CURRENT_ANIMATION_SOURCE": "PROCEDURAL_RUNTIME_ANIMATION",
+          "CURRENT_MODEL_SOURCE": "PROCEDURAL_PRODUCTION_PROXY",
+          "FINAL_CHARACTER_ART_PASS": false,
+          "FINAL_HUMAN_AUTHORED_ANIMATION_PASS": false,
+          "HUMAN_ART_DIRECTION_APPROVAL": false,
+          "PROCEDURAL_CHARACTER_RUNTIME_PASS": true,
+          "PROCEDURAL_PROXY_VISIBLE": true,
+          "PROCEDURAL_RUNTIME_ANIMATION_PASS": true,
+          "STYLIZED_FALLBACK_VISIBLE": false,
+          "VISIBLE_MODEL_NODE": "ProceduralProxy_rook-ironside",
+          "VISIBLE_RUNTIME_ANIMATION_CONTROLLERS_PER_FIGHTER": 1,
+          "VISIBLE_SKELETON_PRESENT": true
+        }
+      },
+      "vesper-nyx": {
+        "aura_charge": true,
+        "hit_flash": true,
+        "ok": true,
+        "reduce_flash": true,
+        "team_tint": true,
+        "truth": {
+          "ACTIVE_ANIMATION_CLIP": "aura_charge",
+          "COMPETITIVE_GAMEPLAY_ROOT_MOTION": "PHYSICS_AUTHORITATIVE",
+          "CURRENT_ANIMATION_SOURCE": "PROCEDURAL_RUNTIME_ANIMATION",
+          "CURRENT_MODEL_SOURCE": "PROCEDURAL_PRODUCTION_PROXY",
+          "FINAL_CHARACTER_ART_PASS": false,
+          "FINAL_HUMAN_AUTHORED_ANIMATION_PASS": false,
+          "HUMAN_ART_DIRECTION_APPROVAL": false,
+          "PROCEDURAL_CHARACTER_RUNTIME_PASS": true,
+          "PROCEDURAL_PROXY_VISIBLE": true,
+          "PROCEDURAL_RUNTIME_ANIMATION_PASS": true,
+          "STYLIZED_FALLBACK_VISIBLE": false,
+          "VISIBLE_MODEL_NODE": "ProceduralProxy_vesper-nyx",
+          "VISIBLE_RUNTIME_ANIMATION_CONTROLLERS_PER_FIGHTER": 1,
+          "VISIBLE_SKELETON_PRESENT": true
+        }
+      }
+    },
+    "ok": true
+  }
 }
