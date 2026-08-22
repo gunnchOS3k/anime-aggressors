@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "action_id": "rook-ironside.aura_charge",
+  "fighter_id": "rook-ironside",
+  "kind": "REFERENCE_ANIMATIC",
+  "fps": 60.0,
+  "duration_frames": 32,
+  "events": [
+    {
+      "frame": 0,
+      "event_type": "anticipation_start",
+      "payload": {
+        "pose": "neutral"
+      }
+    },
+    {
+      "frame": 4,
+      "event_type": "active_start",
+      "payload": {
+        "contact": "aura_charge"
+      }
+    },
+    {
+      "frame": 8,
+      "event_type": "hitbox_on",
+      "payload": {
+        "socket": "hand_r"
+      }
+    },
+    {
+      "frame": 12,
+      "event_type": "hitbox_off",
+      "payload": {}
+    },
+    {
+      "frame": 28,
+      "event_type": "recovery_start",
+      "payload": {}
+    },
+    {
+      "frame": 32,
+      "event_type": "loop_end",
+      "payload": {}
+    }
+  ],
+  "provenance": {
+    "source_class": "SYNTHETIC_PROTOTYPE",
+    "final_animation": false
+  }
+}

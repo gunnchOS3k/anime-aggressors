@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "action_id": "nix-calder.idle",
+  "fighter_id": "nix-calder",
+  "kind": "REFERENCE_ANIMATIC",
+  "fps": 60.0,
+  "duration_frames": 24,
+  "events": [
+    {
+      "frame": 0,
+      "event_type": "anticipation_start",
+      "payload": {
+        "pose": "neutral"
+      }
+    },
+    {
+      "frame": 4,
+      "event_type": "active_start",
+      "payload": {
+        "contact": "idle"
+      }
+    },
+    {
+      "frame": 8,
+      "event_type": "hitbox_on",
+      "payload": {
+        "socket": "hand_r"
+      }
+    },
+    {
+      "frame": 12,
+      "event_type": "hitbox_off",
+      "payload": {}
+    },
+    {
+      "frame": 20,
+      "event_type": "recovery_start",
+      "payload": {}
+    },
+    {
+      "frame": 24,
+      "event_type": "loop_end",
+      "payload": {}
+    }
+  ],
+  "provenance": {
+    "source_class": "SYNTHETIC_PROTOTYPE",
+    "final_animation": false
+  }
+}

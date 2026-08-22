@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://wave013b_motion_review_lab"]
+
+[ext_resource type="Script" path="res://scripts/motion/motion_review_service.gd" id="1"]
+
+[node name="MotionReviewLab" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Service" type="Node" parent="."]
+script = ExtResource("1")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 640.0
+offset_bottom = 80.0
+text = "Motion Review Lab — spec-to-animatic comparison (REFERENCE_ANIMATIC only)"

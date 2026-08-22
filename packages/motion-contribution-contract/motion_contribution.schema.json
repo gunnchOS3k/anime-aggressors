@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "motion-contribution-contract/motion_contribution.schema.json",
+  "title": "Portable Motion Contribution Contract",
+  "type": "object",
+  "required": ["schema_version", "contribution_id", "consent", "privacy", "provenance"],
+  "properties": {
+    "schema_version": { "type": "integer", "const": 1 },
+    "contribution_id": { "type": "string" },
+    "consent": {
+      "type": "object",
+      "required": ["stages", "production_use_after_approval", "biometric_inference_forbidden"],
+      "properties": {
+        "stages": { "type": "array", "items": { "type": "string" } },
+        "production_use_after_approval": { "type": "boolean" },
+        "biometric_inference_forbidden": { "type": "boolean", "const": true }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "properties": {
+        "raw_upload_gitignored": { "type": "boolean", "const": true },
+        "metadata_stripped": { "type": "boolean" }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "real_user_motion": { "type": "boolean" },
+        "fixture_class": { "type": "string" }
+      }
+    }
+  }
+}

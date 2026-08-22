@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "anime-aggressors/motion_contribution.schema.json",
+  "title": "User Motion Contribution (future-ready)",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "contribution_id",
+    "contributor_pseudonym",
+    "consent",
+    "privacy",
+    "upload",
+    "validation",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "contribution_id": {
+      "type": "string"
+    },
+    "contributor_pseudonym": {
+      "type": "string"
+    },
+    "consent": {
+      "type": "object",
+      "required": [
+        "stages",
+        "production_use_after_approval"
+      ],
+      "properties": {
+        "stages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "production_use_after_approval": {
+          "type": "boolean"
+        },
+        "biometric_inference_forbidden": {
+          "type": "boolean",
+          "const": true
+        }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "properties": {
+        "raw_upload_gitignored": {
+          "type": "boolean",
+          "const": true
+        },
+        "metadata_stripped": {
+          "type": "boolean"
+        },
+        "local_only_dirs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "upload": {
+      "type": "object",
+      "properties": {
+        "original_filename": {
+          "type": "string"
+        },
+        "content_hash_sha256": {
+          "type": "string"
+        },
+        "format": {
+          "type": "string"
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "properties": {
+        "schema_valid": {
+          "type": "boolean"
+        },
+        "normalize_pass": {
+          "type": "boolean"
+        },
+        "retarget_pass": {
+          "type": "boolean"
+        },
+        "qa_pass": {
+          "type": "boolean"
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "real_user_motion": {
+          "type": "boolean"
+        },
+        "edmund_personal_motion": {
+          "type": "boolean"
+        },
+        "fixture_class": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

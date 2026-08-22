@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "anime-aggressors/animation_event_timeline.schema.json",
+  "title": "Reference Animatic Event Timeline",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "action_id",
+    "fighter_id",
+    "kind",
+    "fps",
+    "events"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "action_id": {
+      "type": "string"
+    },
+    "fighter_id": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "PROTOTYPE_ANIMATION",
+        "REFERENCE_ANIMATIC"
+      ]
+    },
+    "fps": {
+      "type": "number",
+      "const": 60.0
+    },
+    "duration_frames": {
+      "type": "integer"
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "frame",
+          "event_type"
+        ],
+        "properties": {
+          "frame": {
+            "type": "integer"
+          },
+          "event_type": {
+            "type": "string"
+          },
+          "payload": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "source_class": {
+          "type": "string"
+        },
+        "final_animation": {
+          "type": "boolean",
+          "const": false
+        }
+      }
+    }
+  }
+}

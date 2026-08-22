@@ -1,0 +1,273 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "anime-aggressors/action_spec.schema.json",
+  "title": "Notes-Driven Action Spec",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "action_id",
+    "fighter_id",
+    "display_name",
+    "category",
+    "lane",
+    "notes_driven",
+    "inspiration_notes",
+    "original_move_name",
+    "originality",
+    "timing",
+    "motion_grammar",
+    "camera",
+    "impact",
+    "vfx_cue",
+    "sfx_cue",
+    "hitbox",
+    "accessibility",
+    "production_status",
+    "animation_source_priority",
+    "reference_animatic",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "action_id": {
+      "type": "string"
+    },
+    "fighter_id": {
+      "type": "string"
+    },
+    "display_name": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "lane": {
+      "type": "string"
+    },
+    "notes_driven": {
+      "type": "boolean"
+    },
+    "inspiration_notes": {
+      "type": "object",
+      "required": [
+        "research_anchors",
+        "iconic_moment_summary",
+        "do_not_copy"
+      ],
+      "properties": {
+        "research_anchors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "iconic_moment_summary": {
+          "type": "string"
+        },
+        "motion_principle": {
+          "type": "string"
+        },
+        "power_principle": {
+          "type": "string"
+        },
+        "do_not_copy": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "original_move_name": {
+      "type": "string"
+    },
+    "originality": {
+      "type": "object",
+      "required": [
+        "direct_1_to_1_reference_moves",
+        "franchise_assets_in_production"
+      ],
+      "properties": {
+        "direct_1_to_1_reference_moves": {
+          "type": "integer",
+          "const": 0
+        },
+        "franchise_assets_in_production": {
+          "type": "integer",
+          "const": 0
+        },
+        "composite_synthesis": {
+          "type": "string"
+        },
+        "originality_review_status": {
+          "type": "string"
+        }
+      }
+    },
+    "timing": {
+      "type": "object",
+      "required": [
+        "anticipation_frames",
+        "active_frames",
+        "recovery_frames",
+        "total_frames"
+      ],
+      "properties": {
+        "anticipation_frames": {
+          "type": "integer"
+        },
+        "active_frames": {
+          "type": "integer"
+        },
+        "recovery_frames": {
+          "type": "integer"
+        },
+        "total_frames": {
+          "type": "integer"
+        },
+        "cancel_windows": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "motion_grammar": {
+      "type": "object",
+      "properties": {
+        "weight": {
+          "type": "string"
+        },
+        "tempo": {
+          "type": "string"
+        },
+        "arc_type": {
+          "type": "string"
+        },
+        "contact_points": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "silhouette_poses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fighter_motion_grammar": {
+          "type": "string"
+        }
+      }
+    },
+    "camera": {
+      "type": "object",
+      "properties": {
+        "framing": {
+          "type": "string"
+        },
+        "push_in": {
+          "type": "boolean"
+        },
+        "shake_tier": {
+          "type": "string"
+        }
+      }
+    },
+    "impact": {
+      "type": "object",
+      "properties": {
+        "hitstop_tier": {
+          "type": "string"
+        },
+        "lane_flash": {
+          "type": "boolean"
+        },
+        "risk_reward": {
+          "type": "string"
+        }
+      }
+    },
+    "vfx_cue": {
+      "type": "string"
+    },
+    "sfx_cue": {
+      "type": "string"
+    },
+    "hitbox": {
+      "type": "object",
+      "properties": {
+        "window_start_frame": {
+          "type": "integer"
+        },
+        "window_end_frame": {
+          "type": "integer"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "accessibility": {
+      "type": "object",
+      "properties": {
+        "reduce_flash": {
+          "type": "boolean"
+        },
+        "reduce_shake": {
+          "type": "boolean"
+        }
+      }
+    },
+    "production_status": {
+      "type": "string"
+    },
+    "animation_source_priority": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "reference_animatic": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "PROTOTYPE_ANIMATION",
+            "REFERENCE_ANIMATIC",
+            "NONE"
+          ]
+        },
+        "path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "source_class": {
+          "type": "string"
+        },
+        "real_user_motion": {
+          "type": "boolean",
+          "const": false
+        },
+        "edmund_personal_motion": {
+          "type": "boolean",
+          "const": false
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "action_id": "nix-calder.air_drift",
+  "fighter_id": "nix-calder",
+  "display_name": "Nix Aerial Control Drift 07",
+  "category": "movement",
+  "lane": "ice/frost/snow/freezing/control",
+  "notes_driven": true,
+  "inspiration_notes": {
+    "research_anchors": [
+      "genre platform-fighter grammar",
+      "ice/frost/snow/freezing/control lane studies",
+      "ICONIC_MOMENT_TO_ORIGINAL_MOVE_MATRIX"
+    ],
+    "iconic_moment_summary": "Notes-driven synthesis for aerial control drift respecting held poses, crystalline stops, space-denial extensions.",
+    "motion_principle": "anticipation \u2192 committed contact \u2192 readable follow-through",
+    "power_principle": "aura locks space scaling on payoff frames",
+    "do_not_copy": [
+      "franchise costumes",
+      "named techniques",
+      "1:1 choreography",
+      "licensed SFX/VFX glyphs"
+    ]
+  },
+  "original_move_name": "Nix Aerial Control Drift 07",
+  "originality": {
+    "direct_1_to_1_reference_moves": 0,
+    "franchise_assets_in_production": 0,
+    "composite_synthesis": "\u22653-anchor composite for Nix Calder air_drift",
+    "originality_review_status": "NOTES_DRIVEN_PENDING_HUMAN_REVIEW"
+  },
+  "timing": {
+    "anticipation_frames": 6,
+    "active_frames": 5,
+    "recovery_frames": 13,
+    "total_frames": 23,
+    "cancel_windows": []
+  },
+  "motion_grammar": {
+    "weight": "medium",
+    "tempo": "moderate",
+    "arc_type": "linear",
+    "contact_points": [
+      "root"
+    ],
+    "silhouette_poses": [
+      "anticipation",
+      "extremum",
+      "recovery"
+    ],
+    "fighter_motion_grammar": "held poses, crystalline stops, space-denial extensions"
+  },
+  "camera": {
+    "framing": "medium",
+    "push_in": false,
+    "shake_tier": "light"
+  },
+  "impact": {
+    "hitstop_tier": "medium",
+    "lane_flash": true,
+    "risk_reward": "high commitment on smash/heavy; low on jab/projectile_tap"
+  },
+  "vfx_cue": "juice.nix-calder.air_drift.vfx",
+  "sfx_cue": "juice.nix-calder.air_drift.sfx",
+  "hitbox": {
+    "window_start_frame": 4,
+    "window_end_frame": 8,
+    "notes": "align to moves json at runtime integration"
+  },
+  "accessibility": {
+    "reduce_flash": true,
+    "reduce_shake": true
+  },
+  "production_status": "NOTES_SPEC_READY",
+  "animation_source_priority": [
+    "FINAL_ORIGINAL_HUMAN_PRODUCTION",
+    "REFERENCE_ANIMATIC",
+    "PROTOTYPE_ANIMATION",
+    "PROCEDURAL_RUNTIME_PROXY"
+  ],
+  "reference_animatic": {
+    "kind": "NONE",
+    "path": null
+  },
+  "provenance": {
+    "source_class": "NOTES_DRIVEN_SYNTHETIC_SPEC",
+    "real_user_motion": false,
+    "edmund_personal_motion": false
+  }
+}
