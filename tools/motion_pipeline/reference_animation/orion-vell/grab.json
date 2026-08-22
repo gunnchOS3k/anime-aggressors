@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "action_id": "orion-vell.grab",
+  "fighter_id": "orion-vell",
+  "kind": "REFERENCE_ANIMATIC",
+  "fps": 60.0,
+  "duration_frames": 28,
+  "events": [
+    {
+      "frame": 0,
+      "event_type": "anticipation_start",
+      "payload": {
+        "pose": "float_nodes",
+        "fighter": "orion-vell"
+      }
+    },
+    {
+      "frame": 4,
+      "event_type": "active_start",
+      "payload": {
+        "contact": "grab",
+        "root": "orbit_pivot",
+        "lane_offset": 0.30000000000000004
+      }
+    },
+    {
+      "frame": 7,
+      "event_type": "hitbox_on",
+      "payload": {
+        "socket": "hand_both",
+        "lane": "gravity/weight/vectors/attraction/repulsion",
+        "impulse": "vector_launch"
+      }
+    },
+    {
+      "frame": 13,
+      "event_type": "hitbox_off",
+      "payload": {
+        "vfx": "orbit_trace",
+        "fighter_id": "orion-vell"
+      }
+    },
+    {
+      "frame": 24,
+      "event_type": "recovery_start",
+      "payload": {
+        "follow": "orbit_handoff"
+      }
+    },
+    {
+      "frame": 28,
+      "event_type": "loop_end",
+      "payload": {
+        "fighter_specific": true,
+        "signature": "orion-vell:grab"
+      }
+    }
+  ],
+  "fighter_motion_signature": "gravity_rings:orion-vell:grab",
+  "provenance": {
+    "source_class": "BLUEPRINT_DRIVEN_PROTOTYPE",
+    "final_animation": false,
+    "PROTOTYPE_ANIMATIC_FIGHTER_SPECIFIC": true
+  }
+}

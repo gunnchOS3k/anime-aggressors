@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "action_id": "vesper-nyx.tilt_up",
+  "fighter_id": "vesper-nyx",
+  "display_name": "Vesper Nyx Anti-Air Tilt",
+  "category": "melee",
+  "lane": "void/darkness/shadow/phase/intangibility",
+  "notes_driven": true,
+  "inspiration_notes": {
+    "research_anchors": [
+      "fighter_motion_blueprints.json",
+      "void/darkness/shadow/phase/intangibility lane studies",
+      "ICONIC_MOMENT_TO_ORIGINAL_MOVE_MATRIX"
+    ],
+    "iconic_moment_summary": "Blueprint-driven anti-air tilt for void_cape.",
+    "motion_principle": "presence_drop",
+    "power_principle": "aura misdirects via misdirect_stack",
+    "do_not_copy": [
+      "franchise costumes",
+      "named techniques",
+      "1:1 choreography",
+      "licensed SFX/VFX glyphs"
+    ]
+  },
+  "original_move_name": "Vesper Nyx Anti-Air Tilt",
+  "originality": {
+    "direct_1_to_1_reference_moves": 0,
+    "franchise_assets_in_production": 0,
+    "composite_synthesis": "blueprint-driven composite for Vesper Nyx tilt_up",
+    "originality_review_status": "NOTES_DRIVEN_PENDING_HUMAN_REVIEW"
+  },
+  "timing": {
+    "anticipation_frames": 5,
+    "active_frames": 7,
+    "recovery_frames": 9,
+    "total_frames": 21,
+    "cancel_windows": [
+      "dash",
+      "shield"
+    ]
+  },
+  "motion_grammar": {
+    "weight": "light",
+    "tempo": "moderate",
+    "arc_type": "arc",
+    "contact_points": [
+      "hand_l"
+    ],
+    "silhouette_poses": [
+      "anticipation",
+      "extremum",
+      "recovery"
+    ],
+    "fighter_motion_grammar": "phase cancels, presence drops, misdirection feints"
+  },
+  "camera": {
+    "framing": "medium_shadow",
+    "push_in": false,
+    "shake_tier": "light"
+  },
+  "impact": {
+    "hitstop_tier": "medium",
+    "lane_flash": true,
+    "risk_reward": "diagonal_back"
+  },
+  "vfx_cue": "juice.vesper-nyx.tilt_up.vfx",
+  "sfx_cue": "juice.vesper-nyx.tilt_up.sfx",
+  "hitbox": {
+    "window_start_frame": 5,
+    "window_end_frame": 12,
+    "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+  },
+  "accessibility": {
+    "reduce_flash": true,
+    "reduce_shake": true
+  },
+  "production_status": "NOTES_SPEC_READY",
+  "animation_source_priority": [
+    "FINAL_ORIGINAL_HUMAN_PRODUCTION",
+    "REFERENCE_ANIMATIC",
+    "PROTOTYPE_ANIMATION",
+    "PROCEDURAL_RUNTIME_PROXY"
+  ],
+  "reference_animatic": {
+    "kind": "NONE",
+    "path": null
+  },
+  "provenance": {
+    "source_class": "BLUEPRINT_DRIVEN_SYNTHETIC_SPEC",
+    "real_user_motion": false,
+    "edmund_personal_motion": false
+  },
+  "runtime_alignment": {
+    "moves_json_key": "tilt_up",
+    "animatic_binding": null,
+    "hitbox_phase_sync": true,
+    "root_motion_style": "phase_drift",
+    "ground_coupling": "minimal",
+    "cancel_graph_nodes": [
+      "dash",
+      "shield"
+    ]
+  }
+}

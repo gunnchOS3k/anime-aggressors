@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "action_id": "kaia-windrow.aura_charge",
+  "fighter_id": "kaia-windrow",
+  "display_name": "Kaia Windrow Aura Buildup",
+  "category": "special",
+  "lane": "wind/air/storm/flight/pressure",
+  "notes_driven": true,
+  "inspiration_notes": {
+    "research_anchors": [
+      "fighter_motion_blueprints.json",
+      "wind/air/storm/flight/pressure lane studies",
+      "ICONIC_MOMENT_TO_ORIGINAL_MOVE_MATRIX"
+    ],
+    "iconic_moment_summary": "Blueprint-driven aura buildup for ribbon_glider.",
+    "motion_principle": "gale_lag",
+    "power_principle": "aura controls air via air_control_stack",
+    "do_not_copy": [
+      "franchise costumes",
+      "named techniques",
+      "1:1 choreography",
+      "licensed SFX/VFX glyphs"
+    ]
+  },
+  "original_move_name": "Kaia Windrow Aura Buildup",
+  "originality": {
+    "direct_1_to_1_reference_moves": 0,
+    "franchise_assets_in_production": 0,
+    "composite_synthesis": "blueprint-driven composite for Kaia Windrow aura_charge",
+    "originality_review_status": "NOTES_DRIVEN_PENDING_HUMAN_REVIEW"
+  },
+  "timing": {
+    "anticipation_frames": 6,
+    "active_frames": 7,
+    "recovery_frames": 11,
+    "total_frames": 24,
+    "cancel_windows": [
+      "dash",
+      "shield"
+    ]
+  },
+  "motion_grammar": {
+    "weight": "medium",
+    "tempo": "moderate",
+    "arc_type": "arc",
+    "contact_points": [
+      "leg_r"
+    ],
+    "silhouette_poses": [
+      "anticipation",
+      "extremum",
+      "recovery"
+    ],
+    "fighter_motion_grammar": "floating arcs, ribbon lag, pressure-wave releases"
+  },
+  "camera": {
+    "framing": "medium_high",
+    "push_in": false,
+    "shake_tier": "light"
+  },
+  "impact": {
+    "hitstop_tier": "aura",
+    "lane_flash": true,
+    "risk_reward": "upward_sweep"
+  },
+  "vfx_cue": "juice.kaia-windrow.aura_charge.vfx",
+  "sfx_cue": "juice.kaia-windrow.aura_charge.sfx",
+  "hitbox": {
+    "window_start_frame": 6,
+    "window_end_frame": 13,
+    "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+  },
+  "accessibility": {
+    "reduce_flash": true,
+    "reduce_shake": true
+  },
+  "production_status": "NOTES_SPEC_READY",
+  "animation_source_priority": [
+    "FINAL_ORIGINAL_HUMAN_PRODUCTION",
+    "REFERENCE_ANIMATIC",
+    "PROTOTYPE_ANIMATION",
+    "PROCEDURAL_RUNTIME_PROXY"
+  ],
+  "reference_animatic": {
+    "kind": "REFERENCE_ANIMATIC",
+    "path": "tools/motion_pipeline/reference_animation/kaia-windrow/aura_charge.json"
+  },
+  "provenance": {
+    "source_class": "BLUEPRINT_DRIVEN_SYNTHETIC_SPEC",
+    "real_user_motion": false,
+    "edmund_personal_motion": false
+  },
+  "runtime_alignment": {
+    "moves_json_key": "aura_charge",
+    "animatic_binding": "tools/motion_pipeline/reference_animation/kaia-windrow/aura_charge.json",
+    "hitbox_phase_sync": true,
+    "root_motion_style": "floating_arc",
+    "ground_coupling": "light",
+    "cancel_graph_nodes": [
+      "dash",
+      "shield"
+    ]
+  }
+}

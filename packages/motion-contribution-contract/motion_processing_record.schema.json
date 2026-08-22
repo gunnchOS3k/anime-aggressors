@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "motion-contribution-contract/motion_processing_record.schema.json",
+  "title": "Motion Processing Record (Record B — system-generated)",
+  "type": "object",
+  "required": ["schema_version", "contribution_id", "generated_by", "schema_valid", "normalize_pass"],
+  "properties": {
+    "schema_version": { "type": "integer", "const": 1 },
+    "contribution_id": { "type": "string" },
+    "generated_by": { "type": "string", "const": "motion_pipeline" },
+    "schema_valid": { "type": "boolean" },
+    "normalize_pass": { "type": "boolean" },
+    "retarget_pass": { "type": "boolean" },
+    "qa_pass": { "type": "boolean" },
+    "bvh_normalization_execution_ready": { "type": "boolean" },
+    "retarget_execution_ready": { "type": "boolean" },
+    "METADATA_ONLY_NORMALIZATION": { "type": "boolean" },
+    "format": { "type": "string" }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "action_id": "ember-vale.tilt_forward",
+  "fighter_id": "ember-vale",
+  "kind": "REFERENCE_ANIMATIC",
+  "fps": 60.0,
+  "duration_frames": 28,
+  "events": [
+    {
+      "frame": 0,
+      "event_type": "anticipation_start",
+      "payload": {
+        "pose": "ember_flicker",
+        "fighter": "ember-vale"
+      }
+    },
+    {
+      "frame": 3,
+      "event_type": "active_start",
+      "payload": {
+        "contact": "tilt_forward",
+        "root": "burst_forward",
+        "lane_offset": 0.4
+      }
+    },
+    {
+      "frame": 6,
+      "event_type": "hitbox_on",
+      "payload": {
+        "socket": "hand_r",
+        "lane": "fire/heat/combustion",
+        "impulse": "diagonal_up"
+      }
+    },
+    {
+      "frame": 10,
+      "event_type": "hitbox_off",
+      "payload": {
+        "vfx": "heat_ribbon",
+        "fighter_id": "ember-vale"
+      }
+    },
+    {
+      "frame": 24,
+      "event_type": "recovery_start",
+      "payload": {
+        "follow": "heat_trail_linger"
+      }
+    },
+    {
+      "frame": 28,
+      "event_type": "loop_end",
+      "payload": {
+        "fighter_specific": true,
+        "signature": "ember-vale:tilt_forward"
+      }
+    }
+  ],
+  "fighter_motion_signature": "forward_flame_sweep:ember-vale:tilt_forward",
+  "provenance": {
+    "source_class": "BLUEPRINT_DRIVEN_PROTOTYPE",
+    "final_animation": false,
+    "PROTOTYPE_ANIMATIC_FIGHTER_SPECIFIC": true
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "action_id": "vesper-nyx.fall",
+  "fighter_id": "vesper-nyx",
+  "display_name": "Vesper Nyx Air Descent",
+  "category": "movement",
+  "lane": "void/darkness/shadow/phase/intangibility",
+  "notes_driven": true,
+  "inspiration_notes": {
+    "research_anchors": [
+      "fighter_motion_blueprints.json",
+      "void/darkness/shadow/phase/intangibility lane studies",
+      "ICONIC_MOMENT_TO_ORIGINAL_MOVE_MATRIX"
+    ],
+    "iconic_moment_summary": "Blueprint-driven air descent for void_cape.",
+    "motion_principle": "presence_drop",
+    "power_principle": "aura misdirects via misdirect_stack",
+    "do_not_copy": [
+      "franchise costumes",
+      "named techniques",
+      "1:1 choreography",
+      "licensed SFX/VFX glyphs"
+    ]
+  },
+  "original_move_name": "Vesper Nyx Air Descent",
+  "originality": {
+    "direct_1_to_1_reference_moves": 0,
+    "franchise_assets_in_production": 0,
+    "composite_synthesis": "blueprint-driven composite for Vesper Nyx fall",
+    "originality_review_status": "NOTES_DRIVEN_PENDING_HUMAN_REVIEW"
+  },
+  "timing": {
+    "anticipation_frames": 3,
+    "active_frames": 5,
+    "recovery_frames": 7,
+    "total_frames": 15,
+    "cancel_windows": []
+  },
+  "motion_grammar": {
+    "weight": "light",
+    "tempo": "moderate",
+    "arc_type": "phase_drift",
+    "contact_points": [
+      "root"
+    ],
+    "silhouette_poses": [
+      "anticipation",
+      "extremum",
+      "recovery"
+    ],
+    "fighter_motion_grammar": "phase cancels, presence drops, misdirection feints"
+  },
+  "camera": {
+    "framing": "medium_shadow",
+    "push_in": false,
+    "shake_tier": "light"
+  },
+  "impact": {
+    "hitstop_tier": "medium",
+    "lane_flash": true,
+    "risk_reward": "diagonal_back"
+  },
+  "vfx_cue": "juice.vesper-nyx.fall.vfx",
+  "sfx_cue": "juice.vesper-nyx.fall.sfx",
+  "hitbox": {
+    "window_start_frame": 3,
+    "window_end_frame": 8,
+    "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+  },
+  "accessibility": {
+    "reduce_flash": true,
+    "reduce_shake": true
+  },
+  "production_status": "NOTES_SPEC_READY",
+  "animation_source_priority": [
+    "FINAL_ORIGINAL_HUMAN_PRODUCTION",
+    "REFERENCE_ANIMATIC",
+    "PROTOTYPE_ANIMATION",
+    "PROCEDURAL_RUNTIME_PROXY"
+  ],
+  "reference_animatic": {
+    "kind": "NONE",
+    "path": null
+  },
+  "provenance": {
+    "source_class": "BLUEPRINT_DRIVEN_SYNTHETIC_SPEC",
+    "real_user_motion": false,
+    "edmund_personal_motion": false
+  },
+  "runtime_alignment": {
+    "moves_json_key": "fall",
+    "animatic_binding": null,
+    "hitbox_phase_sync": true,
+    "root_motion_style": "phase_drift",
+    "ground_coupling": "minimal",
+    "cancel_graph_nodes": []
+  }
+}

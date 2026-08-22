@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "action_id": "rook-ironside.landing",
+  "fighter_id": "rook-ironside",
+  "display_name": "Rook Ironside Ground Contact Settle",
+  "category": "movement",
+  "lane": "impact/strength/earth/quake/armor",
+  "notes_driven": true,
+  "inspiration_notes": {
+    "research_anchors": [
+      "fighter_motion_blueprints.json",
+      "impact/strength/earth/quake/armor lane studies",
+      "ICONIC_MOMENT_TO_ORIGINAL_MOVE_MATRIX"
+    ],
+    "iconic_moment_summary": "Blueprint-driven ground contact settle for basalt_block.",
+    "motion_principle": "ground_coupled_settle",
+    "power_principle": "aura armors through via linear_armor_stack",
+    "do_not_copy": [
+      "franchise costumes",
+      "named techniques",
+      "1:1 choreography",
+      "licensed SFX/VFX glyphs"
+    ]
+  },
+  "original_move_name": "Rook Ironside Ground Contact Settle",
+  "originality": {
+    "direct_1_to_1_reference_moves": 0,
+    "franchise_assets_in_production": 0,
+    "composite_synthesis": "blueprint-driven composite for Rook Ironside landing",
+    "originality_review_status": "NOTES_DRIVEN_PENDING_HUMAN_REVIEW"
+  },
+  "timing": {
+    "anticipation_frames": 6,
+    "active_frames": 7,
+    "recovery_frames": 12,
+    "total_frames": 25,
+    "cancel_windows": []
+  },
+  "motion_grammar": {
+    "weight": "heavy",
+    "tempo": "slow",
+    "arc_type": "planted_pivot",
+    "contact_points": [
+      "root"
+    ],
+    "silhouette_poses": [
+      "anticipation",
+      "extremum",
+      "recovery"
+    ],
+    "fighter_motion_grammar": "ground-coupled weight, planted pivots, delayed follow-through"
+  },
+  "camera": {
+    "framing": "wide_low",
+    "push_in": false,
+    "shake_tier": "light"
+  },
+  "impact": {
+    "hitstop_tier": "heavy",
+    "lane_flash": true,
+    "risk_reward": "horizontal_heavy"
+  },
+  "vfx_cue": "juice.rook-ironside.landing.vfx",
+  "sfx_cue": "juice.rook-ironside.landing.sfx",
+  "hitbox": {
+    "window_start_frame": 6,
+    "window_end_frame": 13,
+    "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+  },
+  "accessibility": {
+    "reduce_flash": true,
+    "reduce_shake": true
+  },
+  "production_status": "NOTES_SPEC_READY",
+  "animation_source_priority": [
+    "FINAL_ORIGINAL_HUMAN_PRODUCTION",
+    "REFERENCE_ANIMATIC",
+    "PROTOTYPE_ANIMATION",
+    "PROCEDURAL_RUNTIME_PROXY"
+  ],
+  "reference_animatic": {
+    "kind": "NONE",
+    "path": null
+  },
+  "provenance": {
+    "source_class": "BLUEPRINT_DRIVEN_SYNTHETIC_SPEC",
+    "real_user_motion": false,
+    "edmund_personal_motion": false
+  },
+  "runtime_alignment": {
+    "moves_json_key": "landing",
+    "animatic_binding": null,
+    "hitbox_phase_sync": true,
+    "root_motion_style": "planted_pivot",
+    "ground_coupling": "heavy",
+    "cancel_graph_nodes": []
+  }
+}

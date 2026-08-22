@@ -1,0 +1,78 @@
+name: Engineering Wave013B Anime Notes-Driven Motion Upload Pipeline
+
+on:
+  push:
+    branches: [main, "eng/wave013b-anime-notes-motion-upload", "eng/**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  wave013b:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Godot 4.5
+        run: |
+          set -euo pipefail
+          curl -L -o godot.zip https://github.com/godotengine/godot-builds/releases/download/4.5-stable/Godot_v4.5-stable_linux.x86_64.zip
+          unzip -o godot.zip
+          chmod +x Godot_v4.5-stable_linux.x86_64
+          echo "GODOT_BIN=$PWD/Godot_v4.5-stable_linux.x86_64" >> "$GITHUB_ENV"
+
+      - name: Install Blender (best effort)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender || true
+
+      - name: Run Engineering Wave013B
+        env:
+          GODOT_BIN: ${{ env.GODOT_BIN }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_ACTIONS: "true"
+        run: make engineering-wave013b
+
+      - name: Upload Wave013B artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: engineering-wave013b-evidence
+          path: |
+            artifacts/wave013b/
+            artifacts/engineering_wave013b/
+
+      - name: CI final gate — truthful PASS/PARTIAL
+        if: github.event_name == 'pull_request'
+        run: |
+          python3 - <<'PY'
+          import json
+          d=json.load(open("artifacts/engineering_wave013b/WAVE013B_RESULT.json"))
+          assert d.get("CURSOR_MERGED_NOTHING") is True
+          assert int(d.get("COMPUTED_CORE_PIPELINE_MONETARY_COST_USD", 1)) == 0
+          assert d.get("ZERO_COST_CHECK_PASS") is True
+          assert d.get("NOTES_DRIVEN_CHOREOGRAPHY_ACTIVE") is True
+          assert d.get("USER_MOTION_UPLOAD_PIPELINE_READY") is True
+          assert d.get("REAL_USER_MOTION_LIBRARY_PRESENT") is False
+          assert d.get("EDMUND_PERSONAL_MOTION_REQUIRED") is False
+          assert d.get("REAL_USER_MOTION_USED_AS_TEST_FIXTURE") is False
+          assert d.get("EDMUND_PERSONAL_MOTION_USED") is False
+          assert d.get("DIRECT_1_TO_1_REFERENCE_MOVES") == 0
+          assert d.get("FRANCHISE_ASSETS_IN_PRODUCTION") == 0
+          assert d.get("VROID_SOURCE_MODELS_PRESENT") == 0
+          assert d.get("FINAL_ANIMATION_PRESENT") is False
+          assert d.get("MISSING_ART_DOES_NOT_BREAK_BATTLE") is True
+          assert int(d.get("NEW_S0", 1)) == 0
+          assert int(d.get("NEW_S1", 1)) == 0
+          assert int(d.get("ACTION_SPECS_TOTAL", 0)) >= 280
+          assert int(d.get("PROTOTYPE_ANIMATICS_COUNT", 0)) >= 91
+          assert d.get("PIPELINE_IMPLEMENTATION_PASS") is True
+          assert d.get("ENGINEERING_WAVE_013B") in ("PASS", "PARTIAL")
+          assert d.get("token") == "ENGINEERING_WAVE_013B_NOTES_DRIVEN_MOTION_UPLOAD_READY_PASS"
+          print("CI final gate OK", d.get("ENGINEERING_WAVE_013B"), d.get("token"))
+          PY

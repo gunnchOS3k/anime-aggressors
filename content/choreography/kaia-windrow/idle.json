@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "action_id": "kaia-windrow.idle",
+  "fighter_id": "kaia-windrow",
+  "display_name": "Kaia Windrow Neutral Loop",
+  "category": "movement",
+  "lane": "wind/air/storm/flight/pressure",
+  "notes_driven": true,
+  "inspiration_notes": {
+    "research_anchors": [
+      "fighter_motion_blueprints.json",
+      "wind/air/storm/flight/pressure lane studies",
+      "ICONIC_MOMENT_TO_ORIGINAL_MOVE_MATRIX"
+    ],
+    "iconic_moment_summary": "Blueprint-driven neutral loop for ribbon_glider.",
+    "motion_principle": "gale_lag",
+    "power_principle": "aura controls air via air_control_stack",
+    "do_not_copy": [
+      "franchise costumes",
+      "named techniques",
+      "1:1 choreography",
+      "licensed SFX/VFX glyphs"
+    ]
+  },
+  "original_move_name": "Kaia Windrow Neutral Loop",
+  "originality": {
+    "direct_1_to_1_reference_moves": 0,
+    "franchise_assets_in_production": 0,
+    "composite_synthesis": "blueprint-driven composite for Kaia Windrow idle",
+    "originality_review_status": "NOTES_DRIVEN_PENDING_HUMAN_REVIEW"
+  },
+  "timing": {
+    "anticipation_frames": 3,
+    "active_frames": 6,
+    "recovery_frames": 8,
+    "total_frames": 17,
+    "cancel_windows": []
+  },
+  "motion_grammar": {
+    "weight": "medium",
+    "tempo": "moderate",
+    "arc_type": "floating_arc",
+    "contact_points": [
+      "root"
+    ],
+    "silhouette_poses": [
+      "anticipation",
+      "extremum",
+      "recovery"
+    ],
+    "fighter_motion_grammar": "floating arcs, ribbon lag, pressure-wave releases"
+  },
+  "camera": {
+    "framing": "medium_high",
+    "push_in": false,
+    "shake_tier": "light"
+  },
+  "impact": {
+    "hitstop_tier": "medium",
+    "lane_flash": true,
+    "risk_reward": "upward_sweep"
+  },
+  "vfx_cue": "juice.kaia-windrow.idle.vfx",
+  "sfx_cue": "juice.kaia-windrow.idle.sfx",
+  "hitbox": {
+    "window_start_frame": 3,
+    "window_end_frame": 9,
+    "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+  },
+  "accessibility": {
+    "reduce_flash": true,
+    "reduce_shake": true
+  },
+  "production_status": "NOTES_SPEC_READY",
+  "animation_source_priority": [
+    "FINAL_ORIGINAL_HUMAN_PRODUCTION",
+    "REFERENCE_ANIMATIC",
+    "PROTOTYPE_ANIMATION",
+    "PROCEDURAL_RUNTIME_PROXY"
+  ],
+  "reference_animatic": {
+    "kind": "REFERENCE_ANIMATIC",
+    "path": "tools/motion_pipeline/reference_animation/kaia-windrow/idle.json"
+  },
+  "provenance": {
+    "source_class": "BLUEPRINT_DRIVEN_SYNTHETIC_SPEC",
+    "real_user_motion": false,
+    "edmund_personal_motion": false
+  },
+  "runtime_alignment": {
+    "moves_json_key": "idle",
+    "animatic_binding": "tools/motion_pipeline/reference_animation/kaia-windrow/idle.json",
+    "hitbox_phase_sync": true,
+    "root_motion_style": "floating_arc",
+    "ground_coupling": "light",
+    "cancel_graph_nodes": []
+  }
+}

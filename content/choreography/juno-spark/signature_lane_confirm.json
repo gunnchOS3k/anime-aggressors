@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "action_id": "juno-spark.signature_lane_confirm",
+  "fighter_id": "juno-spark",
+  "display_name": "Arc Confirm",
+  "category": "signature",
+  "lane": "electricity/lightning/speed/magnetism",
+  "notes_driven": true,
+  "inspiration_notes": {
+    "research_anchors": [
+      "fighter_motion_blueprints.json",
+      "electricity/lightning/speed/magnetism lane studies",
+      "FIGHTER_SIGNATURE_MOVE_BIBLE"
+    ],
+    "iconic_moment_summary": "Visible charge arc then snap confirm.",
+    "motion_principle": "afterimage_trail",
+    "power_principle": "aura confirms via confirm_spike",
+    "do_not_copy": [
+      "franchise costumes",
+      "named techniques",
+      "1:1 choreography",
+      "licensed SFX/VFX glyphs"
+    ]
+  },
+  "original_move_name": "Arc Confirm",
+  "originality": {
+    "direct_1_to_1_reference_moves": 0,
+    "franchise_assets_in_production": 0,
+    "composite_synthesis": "blueprint-driven composite for Juno Spark signature_lane_confirm",
+    "originality_review_status": "NOTES_DRIVEN_PENDING_HUMAN_REVIEW"
+  },
+  "timing": {
+    "anticipation_frames": 6,
+    "active_frames": 3,
+    "recovery_frames": 5,
+    "total_frames": 16,
+    "cancel_windows": []
+  },
+  "motion_grammar": {
+    "weight": "light",
+    "tempo": "fast",
+    "arc_type": "arc",
+    "contact_points": [
+      "hand_r"
+    ],
+    "silhouette_poses": [
+      "anticipation",
+      "extremum",
+      "recovery"
+    ],
+    "fighter_motion_grammar": "snap confirms, afterimage trails, tight recovery windows"
+  },
+  "camera": {
+    "framing": "medium",
+    "push_in": true,
+    "shake_tier": "medium"
+  },
+  "impact": {
+    "hitstop_tier": "medium",
+    "lane_flash": true,
+    "risk_reward": "sharp_diagonal"
+  },
+  "vfx_cue": "juice.juno-spark.signature_lane_confirm.vfx",
+  "sfx_cue": "juice.juno-spark.signature_lane_confirm.sfx",
+  "hitbox": {
+    "window_start_frame": 6,
+    "window_end_frame": 9,
+    "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+  },
+  "accessibility": {
+    "reduce_flash": true,
+    "reduce_shake": true
+  },
+  "production_status": "NOTES_SPEC_READY",
+  "animation_source_priority": [
+    "FINAL_ORIGINAL_HUMAN_PRODUCTION",
+    "REFERENCE_ANIMATIC",
+    "PROTOTYPE_ANIMATION",
+    "PROCEDURAL_RUNTIME_PROXY"
+  ],
+  "reference_animatic": {
+    "kind": "NONE",
+    "path": null
+  },
+  "provenance": {
+    "source_class": "BLUEPRINT_DRIVEN_SYNTHETIC_SPEC",
+    "real_user_motion": false,
+    "edmund_personal_motion": false
+  },
+  "runtime_alignment": {
+    "moves_json_key": "signature_lane_confirm",
+    "animatic_binding": null,
+    "hitbox_phase_sync": true,
+    "root_motion_style": "snap_step",
+    "ground_coupling": "minimal",
+    "cancel_graph_nodes": []
+  }
+}

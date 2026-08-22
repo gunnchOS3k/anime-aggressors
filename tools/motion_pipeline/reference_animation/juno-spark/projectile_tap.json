@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "action_id": "juno-spark.projectile_tap",
+  "fighter_id": "juno-spark",
+  "kind": "REFERENCE_ANIMATIC",
+  "fps": 60.0,
+  "duration_frames": 28,
+  "events": [
+    {
+      "frame": 0,
+      "event_type": "anticipation_start",
+      "payload": {
+        "pose": "static_hum",
+        "fighter": "juno-spark"
+      }
+    },
+    {
+      "frame": 3,
+      "event_type": "active_start",
+      "payload": {
+        "contact": "projectile_tap",
+        "root": "snap_step",
+        "lane_offset": 0.2
+      }
+    },
+    {
+      "frame": 6,
+      "event_type": "hitbox_on",
+      "payload": {
+        "socket": "hand_r",
+        "lane": "electricity/lightning/speed/magnetism",
+        "impulse": "sharp_diagonal"
+      }
+    },
+    {
+      "frame": 11,
+      "event_type": "hitbox_off",
+      "payload": {
+        "vfx": "arc_afterimage",
+        "fighter_id": "juno-spark"
+      }
+    },
+    {
+      "frame": 23,
+      "event_type": "recovery_start",
+      "payload": {
+        "follow": "afterimage_trail"
+      }
+    },
+    {
+      "frame": 28,
+      "event_type": "loop_end",
+      "payload": {
+        "fighter_specific": true,
+        "signature": "juno-spark:projectile_tap"
+      }
+    }
+  ],
+  "fighter_motion_signature": "capacitor_spine:juno-spark:projectile_tap",
+  "provenance": {
+    "source_class": "BLUEPRINT_DRIVEN_PROTOTYPE",
+    "final_animation": false,
+    "PROTOTYPE_ANIMATIC_FIGHTER_SPECIFIC": true
+  }
+}

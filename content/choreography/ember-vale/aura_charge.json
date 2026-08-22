@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "action_id": "ember-vale.aura_charge",
+  "fighter_id": "ember-vale",
+  "display_name": "Ember Vale Aura Buildup",
+  "category": "special",
+  "lane": "fire/heat/combustion",
+  "notes_driven": true,
+  "inspiration_notes": {
+    "research_anchors": [
+      "fighter_motion_blueprints.json",
+      "fire/heat/combustion lane studies",
+      "ICONIC_MOMENT_TO_ORIGINAL_MOVE_MATRIX"
+    ],
+    "iconic_moment_summary": "Blueprint-driven aura buildup for forward_flame_sweep.",
+    "motion_principle": "heat_trail_linger",
+    "power_principle": "aura overwhelms via exponential_payoff",
+    "do_not_copy": [
+      "franchise costumes",
+      "named techniques",
+      "1:1 choreography",
+      "licensed SFX/VFX glyphs"
+    ]
+  },
+  "original_move_name": "Ember Vale Aura Buildup",
+  "originality": {
+    "direct_1_to_1_reference_moves": 0,
+    "franchise_assets_in_production": 0,
+    "composite_synthesis": "blueprint-driven composite for Ember Vale aura_charge",
+    "originality_review_status": "NOTES_DRIVEN_PENDING_HUMAN_REVIEW"
+  },
+  "timing": {
+    "anticipation_frames": 5,
+    "active_frames": 6,
+    "recovery_frames": 10,
+    "total_frames": 21,
+    "cancel_windows": [
+      "dash",
+      "shield"
+    ]
+  },
+  "motion_grammar": {
+    "weight": "light",
+    "tempo": "fast",
+    "arc_type": "arc",
+    "contact_points": [
+      "hand_r"
+    ],
+    "silhouette_poses": [
+      "anticipation",
+      "extremum",
+      "recovery"
+    ],
+    "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
+  },
+  "camera": {
+    "framing": "medium_tight",
+    "push_in": true,
+    "shake_tier": "light"
+  },
+  "impact": {
+    "hitstop_tier": "aura",
+    "lane_flash": true,
+    "risk_reward": "diagonal_up"
+  },
+  "vfx_cue": "juice.ember-vale.aura_charge.vfx",
+  "sfx_cue": "juice.ember-vale.aura_charge.sfx",
+  "hitbox": {
+    "window_start_frame": 5,
+    "window_end_frame": 11,
+    "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+  },
+  "accessibility": {
+    "reduce_flash": true,
+    "reduce_shake": true
+  },
+  "production_status": "NOTES_SPEC_READY",
+  "animation_source_priority": [
+    "FINAL_ORIGINAL_HUMAN_PRODUCTION",
+    "REFERENCE_ANIMATIC",
+    "PROTOTYPE_ANIMATION",
+    "PROCEDURAL_RUNTIME_PROXY"
+  ],
+  "reference_animatic": {
+    "kind": "REFERENCE_ANIMATIC",
+    "path": "tools/motion_pipeline/reference_animation/ember-vale/aura_charge.json"
+  },
+  "provenance": {
+    "source_class": "BLUEPRINT_DRIVEN_SYNTHETIC_SPEC",
+    "real_user_motion": false,
+    "edmund_personal_motion": false
+  },
+  "runtime_alignment": {
+    "moves_json_key": "aura_charge",
+    "animatic_binding": "tools/motion_pipeline/reference_animation/ember-vale/aura_charge.json",
+    "hitbox_phase_sync": true,
+    "root_motion_style": "burst_forward",
+    "ground_coupling": "light",
+    "cancel_graph_nodes": [
+      "dash",
+      "shield"
+    ]
+  }
+}

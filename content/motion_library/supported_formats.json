@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "wave": "wave013b",
+  "USER_MOTION_ARBITRARY_FORMAT_RETARGET_READY": false,
+  "formats": [
+    {
+      "id": "bvh",
+      "extensions": [".bvh"],
+      "upload_allowed": true,
+      "structural_validation": true,
+      "normalization": "execution",
+      "BVH_NORMALIZATION_EXECUTION_READY": true,
+      "METADATA_ONLY_NORMALIZATION": false,
+      "retarget_profile": "generic_bvh_humanoid",
+      "RETARGET_CONTRACT_READY": true,
+      "RETARGET_EXECUTION_READY": true,
+      "production_ready": false
+    },
+    {
+      "id": "json_timeline",
+      "extensions": [".json"],
+      "upload_allowed": true,
+      "structural_validation": true,
+      "normalization": "metadata_strip",
+      "retarget_profile": null,
+      "RETARGET_CONTRACT_READY": false,
+      "RETARGET_EXECUTION_READY": false,
+      "production_ready": false
+    },
+    {
+      "id": "glb",
+      "extensions": [".glb"],
+      "upload_allowed": true,
+      "structural_validation": "header_only",
+      "normalization": false,
+      "retarget_profile": null,
+      "RETARGET_CONTRACT_READY": false,
+      "RETARGET_EXECUTION_READY": false,
+      "production_ready": false
+    },
+    {
+      "id": "fbx",
+      "extensions": [".fbx"],
+      "upload_allowed": true,
+      "structural_validation": false,
+      "normalization": false,
+      "retarget_profile": null,
+      "RETARGET_CONTRACT_READY": false,
+      "RETARGET_EXECUTION_READY": false,
+      "production_ready": false
+    }
+  ]
+}

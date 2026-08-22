@@ -1,0 +1,448 @@
+{
+  "schema_version": 1,
+  "wave": "wave013b",
+  "description": "Per-fighter motion identity blueprints driving choreography generation (not modulo templates).",
+  "fighters": {
+    "ember-vale": {
+      "name": "Ember Vale",
+      "lane": "fire/heat/combustion",
+      "aura": "overwhelms",
+      "physical": {
+        "weight_class": "light_aggressive",
+        "height_bias": "low_forward",
+        "limb_length": "medium",
+        "center_of_mass": "anterior"
+      },
+      "timing": {
+        "base_anticipation": 2,
+        "base_active": 5,
+        "base_recovery": 7,
+        "tempo_scale": 1.15,
+        "hitstop_bias_frames": 1
+      },
+      "root_motion": {
+        "style": "burst_forward",
+        "ground_coupling": "light",
+        "aerial_drift": 0.35,
+        "dash_commitment": "high"
+      },
+      "contact": {
+        "primary_socket": "hand_r",
+        "secondary_socket": "knee_l",
+        "impact_style": "explosive_snap",
+        "trail_vfx": "heat_ribbon"
+      },
+      "power": {
+        "scaling_curve": "exponential_payoff",
+        "aura_charge_rate": 1.2,
+        "knockback_bias": "diagonal_up"
+      },
+      "camera": {
+        "default_framing": "medium_tight",
+        "push_in_aggression": 0.8,
+        "shake_profile": "sharp_micro"
+      },
+      "animation_identity": {
+        "silhouette_read": "forward_flame_sweep",
+        "follow_through": "heat_trail_linger",
+        "idle_energy": "ember_flicker"
+      },
+      "signatures": {
+        "lane_burst": {
+          "original_name": "Flare Step Rush",
+          "display_name": "Flare Step Rush",
+          "concept": "Three-beat dash-in with trailing heat ribbon before strike apex.",
+          "timing_override": { "anticipation_frames": 4, "active_frames": 8, "recovery_frames": 10, "total_frames": 28 },
+          "contact_override": ["foot_r", "hand_r"],
+          "camera_override": { "push_in": true, "shake_tier": "medium" }
+        },
+        "lane_control": {
+          "original_name": "Cinder Veil",
+          "display_name": "Cinder Veil",
+          "concept": "Low crouch heat curtain that denies approach angles.",
+          "timing_override": { "anticipation_frames": 6, "active_frames": 12, "recovery_frames": 8, "total_frames": 32 },
+          "contact_override": ["root"],
+          "camera_override": { "framing": "wide", "push_in": false }
+        },
+        "lane_confirm": {
+          "original_name": "Ignition Confirm",
+          "display_name": "Ignition Confirm",
+          "concept": "Visible charge window then snap confirm on lane flash.",
+          "timing_override": { "anticipation_frames": 8, "active_frames": 4, "recovery_frames": 6, "total_frames": 22 },
+          "contact_override": ["hand_r"],
+          "camera_override": { "push_in": true, "shake_tier": "light" }
+        },
+        "lane_trap": {
+          "original_name": "Ash Trap Coil",
+          "display_name": "Ash Trap Coil",
+          "concept": "Ground ash ring that punishes roll-in on delayed pop.",
+          "timing_override": { "anticipation_frames": 10, "active_frames": 6, "recovery_frames": 14, "total_frames": 36 },
+          "contact_override": ["root", "hand_l"],
+          "camera_override": { "framing": "medium", "shake_tier": "medium" }
+        },
+        "lane_launch": {
+          "original_name": "Solar Launch",
+          "display_name": "Solar Launch",
+          "concept": "Upward combustion pillar launch with readable hang-time.",
+          "timing_override": { "anticipation_frames": 5, "active_frames": 10, "recovery_frames": 12, "total_frames": 30 },
+          "contact_override": ["hand_both"],
+          "camera_override": { "push_in": true, "shake_tier": "heavy" }
+        },
+        "lane_feint": {
+          "original_name": "Ember Feint Slide",
+          "display_name": "Ember Feint Slide",
+          "concept": "False dash feint with heat afterimage misdirect.",
+          "timing_override": { "anticipation_frames": 3, "active_frames": 3, "recovery_frames": 5, "total_frames": 14 },
+          "contact_override": ["foot_l"],
+          "camera_override": { "framing": "medium", "push_in": false }
+        },
+        "lane_counter": {
+          "original_name": "Heat Counter Snap",
+          "display_name": "Heat Counter Snap",
+          "concept": "Parry-adjacent counter with instant lane flash payoff.",
+          "timing_override": { "anticipation_frames": 2, "active_frames": 6, "recovery_frames": 8, "total_frames": 20 },
+          "contact_override": ["elbow_r"],
+          "camera_override": { "push_in": true, "shake_tier": "medium" }
+        },
+        "lane_finisher": {
+          "original_name": "Nova Finisher",
+          "display_name": "Nova Finisher",
+          "concept": "Full aura dump radial burst finisher with long recovery.",
+          "timing_override": { "anticipation_frames": 12, "active_frames": 14, "recovery_frames": 18, "total_frames": 48 },
+          "contact_override": ["hand_both", "root"],
+          "camera_override": { "framing": "wide", "push_in": true, "shake_tier": "heavy" }
+        }
+      }
+    },
+    "rook-ironside": {
+      "name": "Rook Ironside",
+      "lane": "impact/strength/earth/quake/armor",
+      "aura": "armors through",
+      "physical": {
+        "weight_class": "heavy_tank",
+        "height_bias": "low_wide",
+        "limb_length": "short_dense",
+        "center_of_mass": "grounded"
+      },
+      "timing": {
+        "base_anticipation": 6,
+        "base_active": 7,
+        "base_recovery": 12,
+        "tempo_scale": 0.75,
+        "hitstop_bias_frames": 3
+      },
+      "root_motion": {
+        "style": "planted_pivot",
+        "ground_coupling": "heavy",
+        "aerial_drift": 0.05,
+        "dash_commitment": "low"
+      },
+      "contact": {
+        "primary_socket": "fist_both",
+        "secondary_socket": "shoulder_r",
+        "impact_style": "seismic_thud",
+        "trail_vfx": "dust_shock"
+      },
+      "power": {
+        "scaling_curve": "linear_armor_stack",
+        "aura_charge_rate": 0.85,
+        "knockback_bias": "horizontal_heavy"
+      },
+      "camera": {
+        "default_framing": "wide_low",
+        "push_in_aggression": 0.4,
+        "shake_profile": "deep_rumble"
+      },
+      "animation_identity": {
+        "silhouette_read": "basalt_block",
+        "follow_through": "ground_coupled_settle",
+        "idle_energy": "rivet_pulse"
+      },
+      "signatures": {
+        "lane_burst": { "original_name": "Basalt March", "display_name": "Basalt March", "concept": "Unstoppable forward march with quake footfalls.", "timing_override": { "anticipation_frames": 8, "active_frames": 10, "recovery_frames": 14, "total_frames": 36 }, "contact_override": ["foot_both"], "camera_override": { "shake_tier": "heavy" } },
+        "lane_control": { "original_name": "Rift Anchor", "display_name": "Rift Anchor", "concept": "Planted stance that reduces knockback received.", "timing_override": { "anticipation_frames": 4, "active_frames": 20, "recovery_frames": 6, "total_frames": 34 }, "contact_override": ["root"], "camera_override": { "framing": "wide_low" } },
+        "lane_confirm": { "original_name": "Rivet Confirm", "display_name": "Rivet Confirm", "concept": "Armored wind-up with single rivet-impact confirm.", "timing_override": { "anticipation_frames": 10, "active_frames": 5, "recovery_frames": 10, "total_frames": 28 }, "contact_override": ["fist_r"], "camera_override": { "push_in": true } },
+        "lane_trap": { "original_name": "Quake Trap", "display_name": "Quake Trap", "concept": "Ground fissure trap on delayed fracture pop.", "timing_override": { "anticipation_frames": 14, "active_frames": 8, "recovery_frames": 16, "total_frames": 42 }, "contact_override": ["fist_both"], "camera_override": { "shake_tier": "heavy" } },
+        "lane_launch": { "original_name": "Catapult Launch", "display_name": "Catapult Launch", "concept": "Grab-and-heave launch with armor follow-through.", "timing_override": { "anticipation_frames": 8, "active_frames": 12, "recovery_frames": 14, "total_frames": 38 }, "contact_override": ["hand_both"], "camera_override": { "push_in": true, "shake_tier": "heavy" } },
+        "lane_feint": { "original_name": "Iron Feint", "display_name": "Iron Feint", "concept": "Shoulder fake into delayed true slam.", "timing_override": { "anticipation_frames": 6, "active_frames": 4, "recovery_frames": 8, "total_frames": 22 }, "contact_override": ["shoulder_r"], "camera_override": { "framing": "medium" } },
+        "lane_counter": { "original_name": "Counter Slam", "display_name": "Counter Slam", "concept": "Armor-through counter into body blow.", "timing_override": { "anticipation_frames": 3, "active_frames": 8, "recovery_frames": 12, "total_frames": 26 }, "contact_override": ["fist_l"], "camera_override": { "shake_tier": "medium" } },
+        "lane_finisher": { "original_name": "Tectonic Finisher", "display_name": "Tectonic Finisher", "concept": "Full quake slam with screen-wide rumble.", "timing_override": { "anticipation_frames": 16, "active_frames": 12, "recovery_frames": 20, "total_frames": 52 }, "contact_override": ["fist_both", "root"], "camera_override": { "shake_tier": "heavy", "framing": "wide_low" } }
+      }
+    },
+    "juno-spark": {
+      "name": "Juno Spark",
+      "lane": "electricity/lightning/speed/magnetism",
+      "aura": "confirms",
+      "physical": {
+        "weight_class": "light_precision",
+        "height_bias": "compact",
+        "limb_length": "short",
+        "center_of_mass": "central"
+      },
+      "timing": {
+        "base_anticipation": 2,
+        "base_active": 4,
+        "base_recovery": 5,
+        "tempo_scale": 1.35,
+        "hitstop_bias_frames": 0
+      },
+      "root_motion": {
+        "style": "snap_step",
+        "ground_coupling": "minimal",
+        "aerial_drift": 0.25,
+        "dash_commitment": "very_high"
+      },
+      "contact": {
+        "primary_socket": "hand_r",
+        "secondary_socket": "foot_r",
+        "impact_style": "volt_snap",
+        "trail_vfx": "arc_afterimage"
+      },
+      "power": {
+        "scaling_curve": "confirm_spike",
+        "aura_charge_rate": 1.1,
+        "knockback_bias": "sharp_diagonal"
+      },
+      "camera": {
+        "default_framing": "medium",
+        "push_in_aggression": 0.6,
+        "shake_profile": "staccato"
+      },
+      "animation_identity": {
+        "silhouette_read": "capacitor_spine",
+        "follow_through": "afterimage_trail",
+        "idle_energy": "static_hum"
+      },
+      "signatures": {
+        "lane_burst": { "original_name": "Capacitor Rush", "display_name": "Capacitor Rush", "concept": "Blink-dash confirm chain opener.", "timing_override": { "anticipation_frames": 2, "active_frames": 6, "recovery_frames": 6, "total_frames": 18 }, "contact_override": ["hand_r"], "camera_override": { "push_in": true } },
+        "lane_control": { "original_name": "Static Field", "display_name": "Static Field", "concept": "Area denial static zone with tick damage.", "timing_override": { "anticipation_frames": 4, "active_frames": 16, "recovery_frames": 6, "total_frames": 30 }, "contact_override": ["root"], "camera_override": { "framing": "wide" } },
+        "lane_confirm": { "original_name": "Arc Confirm", "display_name": "Arc Confirm", "concept": "Visible charge arc then snap confirm.", "timing_override": { "anticipation_frames": 6, "active_frames": 3, "recovery_frames": 5, "total_frames": 16 }, "contact_override": ["hand_r"], "camera_override": { "push_in": true } },
+        "lane_trap": { "original_name": "Magnet Snare", "display_name": "Magnet Snare", "concept": "Magnetic pull trap on delayed snap.", "timing_override": { "anticipation_frames": 8, "active_frames": 6, "recovery_frames": 10, "total_frames": 28 }, "contact_override": ["hand_l"], "camera_override": { "shake_tier": "light" } },
+        "lane_launch": { "original_name": "Coil Launch", "display_name": "Coil Launch", "concept": "Magnetic coil vertical launch.", "timing_override": { "anticipation_frames": 4, "active_frames": 8, "recovery_frames": 8, "total_frames": 24 }, "contact_override": ["hand_both"], "camera_override": { "push_in": true } },
+        "lane_feint": { "original_name": "Spark Feint", "display_name": "Spark Feint", "concept": "Afterimage feint with false contact frame.", "timing_override": { "anticipation_frames": 2, "active_frames": 2, "recovery_frames": 4, "total_frames": 10 }, "contact_override": ["foot_r"], "camera_override": { "framing": "medium" } },
+        "lane_counter": { "original_name": "Volt Counter", "display_name": "Volt Counter", "concept": "Frame-perfect counter into arc burst.", "timing_override": { "anticipation_frames": 1, "active_frames": 5, "recovery_frames": 6, "total_frames": 14 }, "contact_override": ["elbow_r"], "camera_override": { "shake_tier": "medium" } },
+        "lane_finisher": { "original_name": "Thunderclap Finisher", "display_name": "Thunderclap Finisher", "concept": "Full discharge radial finisher.", "timing_override": { "anticipation_frames": 8, "active_frames": 10, "recovery_frames": 14, "total_frames": 36 }, "contact_override": ["hand_both"], "camera_override": { "shake_tier": "heavy" } }
+      }
+    },
+    "kaia-windrow": {
+      "name": "Kaia Windrow",
+      "lane": "wind/air/storm/flight/pressure",
+      "aura": "controls air",
+      "physical": {
+        "weight_class": "medium_aerial",
+        "height_bias": "tall_uplift",
+        "limb_length": "long",
+        "center_of_mass": "elevated"
+      },
+      "timing": {
+        "base_anticipation": 3,
+        "base_active": 6,
+        "base_recovery": 8,
+        "tempo_scale": 1.05,
+        "hitstop_bias_frames": 1
+      },
+      "root_motion": {
+        "style": "floating_arc",
+        "ground_coupling": "light",
+        "aerial_drift": 0.65,
+        "dash_commitment": "medium"
+      },
+      "contact": {
+        "primary_socket": "leg_r",
+        "secondary_socket": "hand_l",
+        "impact_style": "pressure_wave",
+        "trail_vfx": "ribbon_gale"
+      },
+      "power": {
+        "scaling_curve": "air_control_stack",
+        "aura_charge_rate": 1.0,
+        "knockback_bias": "upward_sweep"
+      },
+      "camera": {
+        "default_framing": "medium_high",
+        "push_in_aggression": 0.5,
+        "shake_profile": "sway"
+      },
+      "animation_identity": {
+        "silhouette_read": "ribbon_glider",
+        "follow_through": "gale_lag",
+        "idle_energy": "ribbon_drift"
+      },
+      "signatures": {
+        "lane_burst": { "original_name": "Gale Surge", "display_name": "Gale Surge", "concept": "Ribbon-boosted forward surge.", "timing_override": { "anticipation_frames": 3, "active_frames": 9, "recovery_frames": 8, "total_frames": 24 }, "contact_override": ["foot_r"], "camera_override": { "push_in": true } },
+        "lane_control": { "original_name": "Pressure Dome", "display_name": "Pressure Dome", "concept": "Aerial space control dome.", "timing_override": { "anticipation_frames": 5, "active_frames": 18, "recovery_frames": 7, "total_frames": 34 }, "contact_override": ["root"], "camera_override": { "framing": "wide" } },
+        "lane_confirm": { "original_name": "Updraft Confirm", "display_name": "Updraft Confirm", "concept": "Updraft lift into confirm strike.", "timing_override": { "anticipation_frames": 5, "active_frames": 5, "recovery_frames": 7, "total_frames": 20 }, "contact_override": ["leg_r"], "camera_override": { "push_in": true } },
+        "lane_trap": { "original_name": "Crosswind Snare", "display_name": "Crosswind Snare", "concept": "Cross-body wind trap on delay.", "timing_override": { "anticipation_frames": 9, "active_frames": 7, "recovery_frames": 12, "total_frames": 32 }, "contact_override": ["hand_l"], "camera_override": { "shake_tier": "light" } },
+        "lane_launch": { "original_name": "Ribbon Launch", "display_name": "Ribbon Launch", "concept": "Ribbon-assisted vertical launch.", "timing_override": { "anticipation_frames": 4, "active_frames": 11, "recovery_frames": 10, "total_frames": 28 }, "contact_override": ["hand_both"], "camera_override": { "push_in": true } },
+        "lane_feint": { "original_name": "Gust Feint", "display_name": "Gust Feint", "concept": "Aerial drift feint with ribbon misdirect.", "timing_override": { "anticipation_frames": 2, "active_frames": 3, "recovery_frames": 5, "total_frames": 12 }, "contact_override": ["root"], "camera_override": { "framing": "medium_high" } },
+        "lane_counter": { "original_name": "Shear Counter", "display_name": "Shear Counter", "concept": "Crosswind counter into launch.", "timing_override": { "anticipation_frames": 2, "active_frames": 7, "recovery_frames": 9, "total_frames": 20 }, "contact_override": ["leg_l"], "camera_override": { "shake_tier": "medium" } },
+        "lane_finisher": { "original_name": "Tempest Finisher", "display_name": "Tempest Finisher", "concept": "Full storm vortex finisher.", "timing_override": { "anticipation_frames": 10, "active_frames": 12, "recovery_frames": 16, "total_frames": 42 }, "contact_override": ["hand_both", "root"], "camera_override": { "shake_tier": "heavy" } }
+      }
+    },
+    "nix-calder": {
+      "name": "Nix Calder",
+      "lane": "ice/frost/snow/freezing/control",
+      "aura": "locks space",
+      "physical": {
+        "weight_class": "medium_control",
+        "height_bias": "tall_narrow",
+        "limb_length": "long_reach",
+        "center_of_mass": "posterior"
+      },
+      "timing": {
+        "base_anticipation": 5,
+        "base_active": 6,
+        "base_recovery": 10,
+        "tempo_scale": 0.9,
+        "hitstop_bias_frames": 2
+      },
+      "root_motion": {
+        "style": "glide_stop",
+        "ground_coupling": "medium",
+        "aerial_drift": 0.2,
+        "dash_commitment": "medium"
+      },
+      "contact": {
+        "primary_socket": "hand_l",
+        "secondary_socket": "foot_l",
+        "impact_style": "crystalline_stop",
+        "trail_vfx": "frost_trail"
+      },
+      "power": {
+        "scaling_curve": "space_lock_stack",
+        "aura_charge_rate": 0.95,
+        "knockback_bias": "low_freeze"
+      },
+      "camera": {
+        "default_framing": "medium_cool",
+        "push_in_aggression": 0.45,
+        "shake_profile": "crisp"
+      },
+      "animation_identity": {
+        "silhouette_read": "frost_mantle",
+        "follow_through": "crystalline_hold",
+        "idle_energy": "frost_breath"
+      },
+      "signatures": {
+        "lane_burst": { "original_name": "Rime Brake", "display_name": "Rime Brake", "concept": "Skating stop into ice burst.", "timing_override": { "anticipation_frames": 5, "active_frames": 7, "recovery_frames": 10, "total_frames": 26 }, "contact_override": ["foot_l"], "camera_override": { "shake_tier": "medium" } },
+        "lane_control": { "original_name": "Frost Lattice", "display_name": "Frost Lattice", "concept": "Ground lattice that slows movement.", "timing_override": { "anticipation_frames": 7, "active_frames": 20, "recovery_frames": 8, "total_frames": 38 }, "contact_override": ["root"], "camera_override": { "framing": "wide" } },
+        "lane_confirm": { "original_name": "Crystal Confirm", "display_name": "Crystal Confirm", "concept": "Held pose confirm on freeze frame.", "timing_override": { "anticipation_frames": 8, "active_frames": 4, "recovery_frames": 8, "total_frames": 24 }, "contact_override": ["hand_l"], "camera_override": { "push_in": true } },
+        "lane_trap": { "original_name": "Icicle Trap", "display_name": "Icicle Trap", "concept": "Delayed icicle pop trap.", "timing_override": { "anticipation_frames": 12, "active_frames": 6, "recovery_frames": 14, "total_frames": 36 }, "contact_override": ["hand_l"], "camera_override": { "shake_tier": "light" } },
+        "lane_launch": { "original_name": "Glacier Launch", "display_name": "Glacier Launch", "concept": "Ice pillar launch with hang.", "timing_override": { "anticipation_frames": 6, "active_frames": 10, "recovery_frames": 12, "total_frames": 32 }, "contact_override": ["hand_both"], "camera_override": { "push_in": true } },
+        "lane_feint": { "original_name": "Shatter Feint", "display_name": "Shatter Feint", "concept": "False shatter feint into true strike.", "timing_override": { "anticipation_frames": 4, "active_frames": 3, "recovery_frames": 6, "total_frames": 16 }, "contact_override": ["hand_r"], "camera_override": { "framing": "medium" } },
+        "lane_counter": { "original_name": "Freeze Counter", "display_name": "Freeze Counter", "concept": "Counter into brief freeze lock.", "timing_override": { "anticipation_frames": 3, "active_frames": 6, "recovery_frames": 10, "total_frames": 22 }, "contact_override": ["elbow_l"], "camera_override": { "shake_tier": "medium" } },
+        "lane_finisher": { "original_name": "Absolute Zero Finisher", "display_name": "Absolute Zero Finisher", "concept": "Full arena freeze finisher.", "timing_override": { "anticipation_frames": 14, "active_frames": 10, "recovery_frames": 18, "total_frames": 46 }, "contact_override": ["hand_both", "root"], "camera_override": { "shake_tier": "heavy" } }
+      }
+    },
+    "orion-vell": {
+      "name": "Orion Vell",
+      "lane": "gravity/weight/vectors/attraction/repulsion",
+      "aura": "manipulates launch",
+      "physical": {
+        "weight_class": "medium_vector",
+        "height_bias": "medium_offset",
+        "limb_length": "medium",
+        "center_of_mass": "variable"
+      },
+      "timing": {
+        "base_anticipation": 4,
+        "base_active": 6,
+        "base_recovery": 9,
+        "tempo_scale": 1.0,
+        "hitstop_bias_frames": 1
+      },
+      "root_motion": {
+        "style": "orbit_pivot",
+        "ground_coupling": "variable",
+        "aerial_drift": 0.5,
+        "dash_commitment": "medium"
+      },
+      "contact": {
+        "primary_socket": "hand_both",
+        "secondary_socket": "root",
+        "impact_style": "vector_remap",
+        "trail_vfx": "orbit_trace"
+      },
+      "power": {
+        "scaling_curve": "launch_vector",
+        "aura_charge_rate": 1.05,
+        "knockback_bias": "vector_launch"
+      },
+      "camera": {
+        "default_framing": "dynamic_orbit",
+        "push_in_aggression": 0.55,
+        "shake_profile": "orbital"
+      },
+      "animation_identity": {
+        "silhouette_read": "gravity_rings",
+        "follow_through": "orbit_handoff",
+        "idle_energy": "float_nodes"
+      },
+      "signatures": {
+        "lane_burst": { "original_name": "Orbit Rush", "display_name": "Orbit Rush", "concept": "Orbit-node assisted rush.", "timing_override": { "anticipation_frames": 4, "active_frames": 8, "recovery_frames": 9, "total_frames": 25 }, "contact_override": ["hand_r"], "camera_override": { "push_in": true } },
+        "lane_control": { "original_name": "Gravity Well", "display_name": "Gravity Well", "concept": "Localized gravity well control zone.", "timing_override": { "anticipation_frames": 6, "active_frames": 18, "recovery_frames": 8, "total_frames": 36 }, "contact_override": ["root"], "camera_override": { "framing": "wide" } },
+        "lane_confirm": { "original_name": "Vector Confirm", "display_name": "Vector Confirm", "concept": "Vector remap confirm strike.", "timing_override": { "anticipation_frames": 6, "active_frames": 5, "recovery_frames": 7, "total_frames": 20 }, "contact_override": ["hand_both"], "camera_override": { "push_in": true } },
+        "lane_trap": { "original_name": "Singularity Snare", "display_name": "Singularity Snare", "concept": "Pull trap with delayed vector snap.", "timing_override": { "anticipation_frames": 10, "active_frames": 7, "recovery_frames": 13, "total_frames": 34 }, "contact_override": ["root"], "camera_override": { "shake_tier": "medium" } },
+        "lane_launch": { "original_name": "Orbit Hang", "display_name": "Orbit Hang", "concept": "Low-gravity hang launch.", "timing_override": { "anticipation_frames": 5, "active_frames": 12, "recovery_frames": 10, "total_frames": 30 }, "contact_override": ["hand_both"], "camera_override": { "push_in": true } },
+        "lane_feint": { "original_name": "Phase Feint", "display_name": "Phase Feint", "concept": "Vector feint with orbit misdirect.", "timing_override": { "anticipation_frames": 3, "active_frames": 3, "recovery_frames": 5, "total_frames": 13 }, "contact_override": ["root"], "camera_override": { "framing": "dynamic_orbit" } },
+        "lane_counter": { "original_name": "Repulse Counter", "display_name": "Repulse Counter", "concept": "Repulsion counter into launch.", "timing_override": { "anticipation_frames": 2, "active_frames": 7, "recovery_frames": 9, "total_frames": 20 }, "contact_override": ["hand_l"], "camera_override": { "shake_tier": "medium" } },
+        "lane_finisher": { "original_name": "Collapse Finisher", "display_name": "Collapse Finisher", "concept": "Gravity collapse arena finisher.", "timing_override": { "anticipation_frames": 12, "active_frames": 11, "recovery_frames": 17, "total_frames": 44 }, "contact_override": ["hand_both", "root"], "camera_override": { "shake_tier": "heavy" } }
+      }
+    },
+    "vesper-nyx": {
+      "name": "Vesper Nyx",
+      "lane": "void/darkness/shadow/phase/intangibility",
+      "aura": "misdirects",
+      "physical": {
+        "weight_class": "light_phasing",
+        "height_bias": "narrow_hooded",
+        "limb_length": "medium_hidden",
+        "center_of_mass": "shifting"
+      },
+      "timing": {
+        "base_anticipation": 3,
+        "base_active": 5,
+        "base_recovery": 7,
+        "tempo_scale": 1.1,
+        "hitstop_bias_frames": 0
+      },
+      "root_motion": {
+        "style": "phase_drift",
+        "ground_coupling": "minimal",
+        "aerial_drift": 0.4,
+        "dash_commitment": "high"
+      },
+      "contact": {
+        "primary_socket": "hand_l",
+        "secondary_socket": "cloak",
+        "impact_style": "phase_strike",
+        "trail_vfx": "void_wisp"
+      },
+      "power": {
+        "scaling_curve": "misdirect_stack",
+        "aura_charge_rate": 1.0,
+        "knockback_bias": "diagonal_back"
+      },
+      "camera": {
+        "default_framing": "medium_shadow",
+        "push_in_aggression": 0.5,
+        "shake_profile": "subtle"
+      },
+      "animation_identity": {
+        "silhouette_read": "void_cape",
+        "follow_through": "presence_drop",
+        "idle_energy": "shadow_flicker"
+      },
+      "signatures": {
+        "lane_burst": { "original_name": "Umbral Rush", "display_name": "Umbral Rush", "concept": "Phase-dash burst with void trail.", "timing_override": { "anticipation_frames": 2, "active_frames": 7, "recovery_frames": 7, "total_frames": 18 }, "contact_override": ["hand_l"], "camera_override": { "push_in": true } },
+        "lane_control": { "original_name": "Void Curtain", "display_name": "Void Curtain", "concept": "Shadow curtain space denial.", "timing_override": { "anticipation_frames": 5, "active_frames": 16, "recovery_frames": 7, "total_frames": 32 }, "contact_override": ["cloak"], "camera_override": { "framing": "wide" } },
+        "lane_confirm": { "original_name": "Echo Confirm", "display_name": "Echo Confirm", "concept": "Afterimage confirm on true strike.", "timing_override": { "anticipation_frames": 5, "active_frames": 4, "recovery_frames": 6, "total_frames": 17 }, "contact_override": ["hand_l"], "camera_override": { "push_in": true } },
+        "lane_trap": { "original_name": "Shadow Snare", "display_name": "Shadow Snare", "concept": "Delayed shadow pop trap.", "timing_override": { "anticipation_frames": 9, "active_frames": 6, "recovery_frames": 11, "total_frames": 30 }, "contact_override": ["cloak"], "camera_override": { "shake_tier": "light" } },
+        "lane_launch": { "original_name": "Phase Launch", "display_name": "Phase Launch", "concept": "Intangible lift into strike.", "timing_override": { "anticipation_frames": 4, "active_frames": 9, "recovery_frames": 9, "total_frames": 26 }, "contact_override": ["hand_both"], "camera_override": { "push_in": true } },
+        "lane_feint": { "original_name": "Umbral Feint", "display_name": "Umbral Feint", "concept": "Presence-drop feint misdirect.", "timing_override": { "anticipation_frames": 2, "active_frames": 2, "recovery_frames": 4, "total_frames": 10 }, "contact_override": ["root"], "camera_override": { "framing": "medium_shadow" } },
+        "lane_counter": { "original_name": "Void Counter", "display_name": "Void Counter", "concept": "Phase-through counter strike.", "timing_override": { "anticipation_frames": 1, "active_frames": 6, "recovery_frames": 7, "total_frames": 16 }, "contact_override": ["hand_r"], "camera_override": { "shake_tier": "medium" } },
+        "lane_finisher": { "original_name": "Eclipse Finisher", "display_name": "Eclipse Finisher", "concept": "Full void eclipse arena finisher.", "timing_override": { "anticipation_frames": 10, "active_frames": 10, "recovery_frames": 16, "total_frames": 40 }, "contact_override": ["hand_both", "cloak"], "camera_override": { "shake_tier": "heavy" } }
+      }
+    }
+  }
+}

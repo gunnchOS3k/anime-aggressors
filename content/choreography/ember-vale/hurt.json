@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "action_id": "ember-vale.hurt",
+  "fighter_id": "ember-vale",
+  "display_name": "Ember Vale Hit Reaction",
+  "category": "reaction",
+  "lane": "fire/heat/combustion",
+  "notes_driven": true,
+  "inspiration_notes": {
+    "research_anchors": [
+      "fighter_motion_blueprints.json",
+      "fire/heat/combustion lane studies",
+      "ICONIC_MOMENT_TO_ORIGINAL_MOVE_MATRIX"
+    ],
+    "iconic_moment_summary": "Blueprint-driven hit reaction for forward_flame_sweep.",
+    "motion_principle": "heat_trail_linger",
+    "power_principle": "aura overwhelms via exponential_payoff",
+    "do_not_copy": [
+      "franchise costumes",
+      "named techniques",
+      "1:1 choreography",
+      "licensed SFX/VFX glyphs"
+    ]
+  },
+  "original_move_name": "Ember Vale Hit Reaction",
+  "originality": {
+    "direct_1_to_1_reference_moves": 0,
+    "franchise_assets_in_production": 0,
+    "composite_synthesis": "blueprint-driven composite for Ember Vale hurt",
+    "originality_review_status": "NOTES_DRIVEN_PENDING_HUMAN_REVIEW"
+  },
+  "timing": {
+    "anticipation_frames": 6,
+    "active_frames": 7,
+    "recovery_frames": 11,
+    "total_frames": 24,
+    "cancel_windows": []
+  },
+  "motion_grammar": {
+    "weight": "light",
+    "tempo": "fast",
+    "arc_type": "arc",
+    "contact_points": [
+      "root"
+    ],
+    "silhouette_poses": [
+      "anticipation",
+      "extremum",
+      "recovery"
+    ],
+    "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
+  },
+  "camera": {
+    "framing": "medium_tight",
+    "push_in": false,
+    "shake_tier": "light"
+  },
+  "impact": {
+    "hitstop_tier": "medium",
+    "lane_flash": true,
+    "risk_reward": "diagonal_up"
+  },
+  "vfx_cue": "juice.ember-vale.hurt.vfx",
+  "sfx_cue": "juice.ember-vale.hurt.sfx",
+  "hitbox": {
+    "window_start_frame": 6,
+    "window_end_frame": 13,
+    "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+  },
+  "accessibility": {
+    "reduce_flash": true,
+    "reduce_shake": true
+  },
+  "production_status": "NOTES_SPEC_READY",
+  "animation_source_priority": [
+    "FINAL_ORIGINAL_HUMAN_PRODUCTION",
+    "REFERENCE_ANIMATIC",
+    "PROTOTYPE_ANIMATION",
+    "PROCEDURAL_RUNTIME_PROXY"
+  ],
+  "reference_animatic": {
+    "kind": "NONE",
+    "path": null
+  },
+  "provenance": {
+    "source_class": "BLUEPRINT_DRIVEN_SYNTHETIC_SPEC",
+    "real_user_motion": false,
+    "edmund_personal_motion": false
+  },
+  "runtime_alignment": {
+    "moves_json_key": "hurt",
+    "animatic_binding": null,
+    "hitbox_phase_sync": true,
+    "root_motion_style": "burst_forward",
+    "ground_coupling": "light",
+    "cancel_graph_nodes": []
+  }
+}

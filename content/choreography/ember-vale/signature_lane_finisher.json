@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "action_id": "ember-vale.signature_lane_finisher",
+  "fighter_id": "ember-vale",
+  "display_name": "Nova Finisher",
+  "category": "signature",
+  "lane": "fire/heat/combustion",
+  "notes_driven": true,
+  "inspiration_notes": {
+    "research_anchors": [
+      "fighter_motion_blueprints.json",
+      "fire/heat/combustion lane studies",
+      "FIGHTER_SIGNATURE_MOVE_BIBLE"
+    ],
+    "iconic_moment_summary": "Full aura dump radial burst finisher with long recovery.",
+    "motion_principle": "heat_trail_linger",
+    "power_principle": "aura overwhelms via exponential_payoff",
+    "do_not_copy": [
+      "franchise costumes",
+      "named techniques",
+      "1:1 choreography",
+      "licensed SFX/VFX glyphs"
+    ]
+  },
+  "original_move_name": "Nova Finisher",
+  "originality": {
+    "direct_1_to_1_reference_moves": 0,
+    "franchise_assets_in_production": 0,
+    "composite_synthesis": "blueprint-driven composite for Ember Vale signature_lane_finisher",
+    "originality_review_status": "NOTES_DRIVEN_PENDING_HUMAN_REVIEW"
+  },
+  "timing": {
+    "anticipation_frames": 12,
+    "active_frames": 14,
+    "recovery_frames": 18,
+    "total_frames": 48,
+    "cancel_windows": []
+  },
+  "motion_grammar": {
+    "weight": "light",
+    "tempo": "fast",
+    "arc_type": "arc",
+    "contact_points": [
+      "hand_both",
+      "root"
+    ],
+    "silhouette_poses": [
+      "anticipation",
+      "extremum",
+      "recovery"
+    ],
+    "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
+  },
+  "camera": {
+    "framing": "wide",
+    "push_in": true,
+    "shake_tier": "heavy"
+  },
+  "impact": {
+    "hitstop_tier": "medium",
+    "lane_flash": true,
+    "risk_reward": "diagonal_up"
+  },
+  "vfx_cue": "juice.ember-vale.signature_lane_finisher.vfx",
+  "sfx_cue": "juice.ember-vale.signature_lane_finisher.sfx",
+  "hitbox": {
+    "window_start_frame": 12,
+    "window_end_frame": 26,
+    "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+  },
+  "accessibility": {
+    "reduce_flash": true,
+    "reduce_shake": true
+  },
+  "production_status": "NOTES_SPEC_READY",
+  "animation_source_priority": [
+    "FINAL_ORIGINAL_HUMAN_PRODUCTION",
+    "REFERENCE_ANIMATIC",
+    "PROTOTYPE_ANIMATION",
+    "PROCEDURAL_RUNTIME_PROXY"
+  ],
+  "reference_animatic": {
+    "kind": "NONE",
+    "path": null
+  },
+  "provenance": {
+    "source_class": "BLUEPRINT_DRIVEN_SYNTHETIC_SPEC",
+    "real_user_motion": false,
+    "edmund_personal_motion": false
+  },
+  "runtime_alignment": {
+    "moves_json_key": "signature_lane_finisher",
+    "animatic_binding": null,
+    "hitbox_phase_sync": true,
+    "root_motion_style": "burst_forward",
+    "ground_coupling": "light",
+    "cancel_graph_nodes": []
+  }
+}

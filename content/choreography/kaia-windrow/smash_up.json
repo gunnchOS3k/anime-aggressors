@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "action_id": "kaia-windrow.smash_up",
+  "fighter_id": "kaia-windrow",
+  "display_name": "Kaia Windrow Charged Upward Smash",
+  "category": "melee",
+  "lane": "wind/air/storm/flight/pressure",
+  "notes_driven": true,
+  "inspiration_notes": {
+    "research_anchors": [
+      "fighter_motion_blueprints.json",
+      "wind/air/storm/flight/pressure lane studies",
+      "ICONIC_MOMENT_TO_ORIGINAL_MOVE_MATRIX"
+    ],
+    "iconic_moment_summary": "Blueprint-driven charged upward smash for ribbon_glider.",
+    "motion_principle": "gale_lag",
+    "power_principle": "aura controls air via air_control_stack",
+    "do_not_copy": [
+      "franchise costumes",
+      "named techniques",
+      "1:1 choreography",
+      "licensed SFX/VFX glyphs"
+    ]
+  },
+  "original_move_name": "Kaia Windrow Charged Upward Smash",
+  "originality": {
+    "direct_1_to_1_reference_moves": 0,
+    "franchise_assets_in_production": 0,
+    "composite_synthesis": "blueprint-driven composite for Kaia Windrow smash_up",
+    "originality_review_status": "NOTES_DRIVEN_PENDING_HUMAN_REVIEW"
+  },
+  "timing": {
+    "anticipation_frames": 5,
+    "active_frames": 6,
+    "recovery_frames": 10,
+    "total_frames": 21,
+    "cancel_windows": [
+      "dash",
+      "shield"
+    ]
+  },
+  "motion_grammar": {
+    "weight": "medium",
+    "tempo": "moderate",
+    "arc_type": "arc",
+    "contact_points": [
+      "leg_r"
+    ],
+    "silhouette_poses": [
+      "anticipation",
+      "extremum",
+      "recovery"
+    ],
+    "fighter_motion_grammar": "floating arcs, ribbon lag, pressure-wave releases"
+  },
+  "camera": {
+    "framing": "medium_high",
+    "push_in": false,
+    "shake_tier": "sway"
+  },
+  "impact": {
+    "hitstop_tier": "medium",
+    "lane_flash": true,
+    "risk_reward": "upward_sweep"
+  },
+  "vfx_cue": "juice.kaia-windrow.smash_up.vfx",
+  "sfx_cue": "juice.kaia-windrow.smash_up.sfx",
+  "hitbox": {
+    "window_start_frame": 5,
+    "window_end_frame": 11,
+    "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+  },
+  "accessibility": {
+    "reduce_flash": true,
+    "reduce_shake": true
+  },
+  "production_status": "NOTES_SPEC_READY",
+  "animation_source_priority": [
+    "FINAL_ORIGINAL_HUMAN_PRODUCTION",
+    "REFERENCE_ANIMATIC",
+    "PROTOTYPE_ANIMATION",
+    "PROCEDURAL_RUNTIME_PROXY"
+  ],
+  "reference_animatic": {
+    "kind": "NONE",
+    "path": null
+  },
+  "provenance": {
+    "source_class": "BLUEPRINT_DRIVEN_SYNTHETIC_SPEC",
+    "real_user_motion": false,
+    "edmund_personal_motion": false
+  },
+  "runtime_alignment": {
+    "moves_json_key": "smash_up",
+    "animatic_binding": null,
+    "hitbox_phase_sync": true,
+    "root_motion_style": "floating_arc",
+    "ground_coupling": "light",
+    "cancel_graph_nodes": [
+      "dash",
+      "shield"
+    ]
+  }
+}

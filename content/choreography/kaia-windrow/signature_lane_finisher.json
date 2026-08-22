@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "action_id": "kaia-windrow.signature_lane_finisher",
+  "fighter_id": "kaia-windrow",
+  "display_name": "Tempest Finisher",
+  "category": "signature",
+  "lane": "wind/air/storm/flight/pressure",
+  "notes_driven": true,
+  "inspiration_notes": {
+    "research_anchors": [
+      "fighter_motion_blueprints.json",
+      "wind/air/storm/flight/pressure lane studies",
+      "FIGHTER_SIGNATURE_MOVE_BIBLE"
+    ],
+    "iconic_moment_summary": "Full storm vortex finisher.",
+    "motion_principle": "gale_lag",
+    "power_principle": "aura controls air via air_control_stack",
+    "do_not_copy": [
+      "franchise costumes",
+      "named techniques",
+      "1:1 choreography",
+      "licensed SFX/VFX glyphs"
+    ]
+  },
+  "original_move_name": "Tempest Finisher",
+  "originality": {
+    "direct_1_to_1_reference_moves": 0,
+    "franchise_assets_in_production": 0,
+    "composite_synthesis": "blueprint-driven composite for Kaia Windrow signature_lane_finisher",
+    "originality_review_status": "NOTES_DRIVEN_PENDING_HUMAN_REVIEW"
+  },
+  "timing": {
+    "anticipation_frames": 10,
+    "active_frames": 12,
+    "recovery_frames": 16,
+    "total_frames": 42,
+    "cancel_windows": []
+  },
+  "motion_grammar": {
+    "weight": "medium",
+    "tempo": "moderate",
+    "arc_type": "arc",
+    "contact_points": [
+      "hand_both",
+      "root"
+    ],
+    "silhouette_poses": [
+      "anticipation",
+      "extremum",
+      "recovery"
+    ],
+    "fighter_motion_grammar": "floating arcs, ribbon lag, pressure-wave releases"
+  },
+  "camera": {
+    "framing": "medium_high",
+    "push_in": false,
+    "shake_tier": "heavy"
+  },
+  "impact": {
+    "hitstop_tier": "medium",
+    "lane_flash": true,
+    "risk_reward": "upward_sweep"
+  },
+  "vfx_cue": "juice.kaia-windrow.signature_lane_finisher.vfx",
+  "sfx_cue": "juice.kaia-windrow.signature_lane_finisher.sfx",
+  "hitbox": {
+    "window_start_frame": 10,
+    "window_end_frame": 22,
+    "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+  },
+  "accessibility": {
+    "reduce_flash": true,
+    "reduce_shake": true
+  },
+  "production_status": "NOTES_SPEC_READY",
+  "animation_source_priority": [
+    "FINAL_ORIGINAL_HUMAN_PRODUCTION",
+    "REFERENCE_ANIMATIC",
+    "PROTOTYPE_ANIMATION",
+    "PROCEDURAL_RUNTIME_PROXY"
+  ],
+  "reference_animatic": {
+    "kind": "NONE",
+    "path": null
+  },
+  "provenance": {
+    "source_class": "BLUEPRINT_DRIVEN_SYNTHETIC_SPEC",
+    "real_user_motion": false,
+    "edmund_personal_motion": false
+  },
+  "runtime_alignment": {
+    "moves_json_key": "signature_lane_finisher",
+    "animatic_binding": null,
+    "hitbox_phase_sync": true,
+    "root_motion_style": "floating_arc",
+    "ground_coupling": "light",
+    "cancel_graph_nodes": []
+  }
+}

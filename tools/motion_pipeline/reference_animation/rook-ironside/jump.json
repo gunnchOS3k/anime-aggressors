@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "action_id": "rook-ironside.jump",
+  "fighter_id": "rook-ironside",
+  "kind": "REFERENCE_ANIMATIC",
+  "fps": 60.0,
+  "duration_frames": 30,
+  "events": [
+    {
+      "frame": 0,
+      "event_type": "anticipation_start",
+      "payload": {
+        "pose": "rivet_pulse",
+        "fighter": "rook-ironside"
+      }
+    },
+    {
+      "frame": 6,
+      "event_type": "active_start",
+      "payload": {
+        "contact": "jump",
+        "root": "planted_pivot",
+        "lane_offset": 0.30000000000000004
+      }
+    },
+    {
+      "frame": 9,
+      "event_type": "hitbox_on",
+      "payload": {
+        "socket": "fist_both",
+        "lane": "impact/strength/earth/quake/armor",
+        "impulse": "horizontal_heavy"
+      }
+    },
+    {
+      "frame": 14,
+      "event_type": "hitbox_off",
+      "payload": {
+        "vfx": "dust_shock",
+        "fighter_id": "rook-ironside"
+      }
+    },
+    {
+      "frame": 24,
+      "event_type": "recovery_start",
+      "payload": {
+        "follow": "ground_coupled_settle"
+      }
+    },
+    {
+      "frame": 30,
+      "event_type": "loop_end",
+      "payload": {
+        "fighter_specific": true,
+        "signature": "rook-ironside:jump"
+      }
+    }
+  ],
+  "fighter_motion_signature": "basalt_block:rook-ironside:jump",
+  "provenance": {
+    "source_class": "BLUEPRINT_DRIVEN_PROTOTYPE",
+    "final_animation": false,
+    "PROTOTYPE_ANIMATIC_FIGHTER_SPECIFIC": true
+  }
+}
