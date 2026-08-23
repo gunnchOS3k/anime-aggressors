@@ -5,6 +5,11 @@ ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$ROOT"
 mkdir -p artifacts/wave014 artifacts/engineering_wave014 tmp game-godot/artifacts/engineering_wave014
 
+# shellcheck source=tools/engineering_wave015/godot_orchestration.sh
+source "${ROOT}/tools/engineering_wave015/godot_orchestration.sh"
+export GODOT_ORCH_ROOT="${ROOT}"
+godot_orchestration_prepare "wave014" "${ROOT}"
+
 resolve_godot() {
   if [[ -n "${GODOT_BIN:-}" && -x "${GODOT_BIN}" ]]; then echo "${GODOT_BIN}"; return; fi
   for c in /Applications/Godot.app/Contents/MacOS/Godot /Users/gunnchos/Applications/Godot/Godot-4.5.app/Contents/MacOS/Godot /opt/homebrew/bin/godot; do
@@ -69,7 +74,9 @@ PY
   fi
 done
 
-run godot_import "$GODOT" --headless --path "$ROOT/game-godot" --import
+godot_orchestration_teardown "${ROOT}"
+godot_orchestration_prepare "wave014-godot_import" "${ROOT}"
+run godot_import bash -c 'source "$1" && godot_orchestration_import "$2" "$3" 3 wave014-godot_import "$4"' _ "${ROOT}/tools/engineering_wave015/godot_orchestration.sh" "$GODOT" "$ROOT/game-godot" "$ROOT"
 run procedural_smoke "$GODOT" --headless --path "$ROOT/game-godot" --script res://tests/engineering_wave014/Wave014ProceduralSmoke.gd
 run visible_skeletal "$GODOT" --headless --path "$ROOT/game-godot" --script res://tests/engineering_wave014/Wave014VisibleSkeletalRuntime.gd
 run visible_game_juice "$GODOT" --headless --path "$ROOT/game-godot" --script res://tests/engineering_wave014/Wave014VisibleGameJuice.gd

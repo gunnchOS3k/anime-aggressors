@@ -1,0 +1,29 @@
+{
+  "schema": "engineering_wave015.runtime_affecting_paths.v1",
+  "description": "Tracked paths whose content changes affect Android APK runtime behavior. Orchestration/docs/artifacts excluded.",
+  "include_globs": [
+    "game-godot/**",
+    "content/fighters/**",
+    "content/choreography/**",
+    "packages/game-core/**",
+    "packages/rollback/**",
+    "packages/netplay/**",
+    "packages/edgeio/**",
+    "packages/messages/**",
+    "packages/input/**",
+    "game-godot/export_presets.cfg",
+    "android/**",
+    "scripts/export-godot-android.mjs",
+    "package.json",
+    "package-lock.json"
+  ],
+  "exclude_globs": [
+    "game-godot/.godot/**",
+    "game-godot/artifacts/**",
+    "**/*.uid",
+    "**/tmp/**",
+    "artifacts/**",
+    "docs/**",
+    "builds/**"
+  ]
+}
