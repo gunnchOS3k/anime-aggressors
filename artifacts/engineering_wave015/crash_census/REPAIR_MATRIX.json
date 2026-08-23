@@ -1,0 +1,40 @@
+{
+  "schema": "engineering_wave015.repair_matrix.v1",
+  "generated_at_utc": "2026-08-23T07:20:00Z",
+  "repairs": [
+    {
+      "family": "GDSCRIPT_TYPE_INFERENCE_ROSTER_ART_LAB",
+      "signature_ids_before": ["GODOT_SCRIPT_ERROR:65255e8e39a9"],
+      "root_cause": "Typed inference failed on Node.configure() return (Variant) in roster_art_lab.gd",
+      "fix": "Use bool(model.call(\"configure\", data)) instead of inferred := from untyped Node method",
+      "files": ["game-godot/scripts/labs/roster_art_lab.gd"],
+      "regression": "tools/engineering_wave015/regressions/test_roster_art_lab_configure_typing.py",
+      "status": "REPAIRED"
+    },
+    {
+      "family": "FREED_ANIMATION_CONTROLLER_PLAY",
+      "signature_ids_before": [],
+      "root_cause": "play_for_state / speed_scale could touch freed AnimationPlayer or Skeleton3D after model recycle",
+      "fix": "is_instance_valid guards on AnimationPlayer, Skeleton3D, and controller before play/scale",
+      "files": [
+        "game-godot/scripts/visual/fighter_animation_controller.gd",
+        "game-godot/scripts/fighters/fighter_model_3d.gd"
+      ],
+      "regression": "tools/engineering_wave015/regressions/test_animation_freed_node_guards.py",
+      "status": "REPAIRED"
+    },
+    {
+      "family": "SUBVIEWPORT_MSAA_GRALLOC_FORMAT",
+      "signature_ids_before": ["GODOT_ERROR:81beb7618939", "GODOT_ERROR:3bcb7070527e", "GODOT_ERROR:6b370ef795f3", "GODOT_ERROR:90629c272b9b", "GODOT_ERROR:d7f97bd9376c", "GODOT_ERROR:625f8d56b44f"],
+      "root_cause": "Pixel 6a gralloc rejects MSAA render-target format 0x3b used by FighterModel3D SubViewport",
+      "fix": "Disable SubViewport MSAA_3D on Compatibility/mobile path; improve crash clustering to exclude non-app gralloc noise",
+      "files": [
+        "game-godot/scripts/fighters/fighter_model_3d.gd",
+        "tools/engineering_wave015/cluster_crashes.py"
+      ],
+      "regression": "tools/engineering_wave015/regressions/test_subviewport_msaa_disabled.py",
+      "status": "REPAIRED",
+      "note": "Baseline ABCD completed with 0 process crashes; gralloc lines were noise, still hardened SubViewport path"
+    }
+  ]
+}

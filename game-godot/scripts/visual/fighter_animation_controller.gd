@@ -38,7 +38,9 @@ func setup(fighter, model_root: Node3D) -> void:
 
 
 func play_for_state(state: String, move: Dictionary = {}) -> void:
-	if _player == null or _skeleton == null:
+	if _player == null or not is_instance_valid(_player):
+		return
+	if _skeleton == null or not is_instance_valid(_skeleton):
 		return
 	if move.has("throw_direction"):
 		_throw_dir = str(move.get("throw_direction", "forward"))

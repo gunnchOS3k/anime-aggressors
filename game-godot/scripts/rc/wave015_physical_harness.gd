@@ -55,7 +55,7 @@ func _run() -> void:
 		var model: Node = MODEL_SCRIPT.new()
 		add_child(model)
 		var data := _DataLoader.load_fighter(fighter_id)
-		var configured: bool = model.configure(data)
+		var configured := bool(model.configure(data))
 		await get_tree().process_frame
 		await get_tree().process_frame
 
