@@ -1,0 +1,116 @@
+name: Engineering Wave015 Pixel 6a Non-Physical Gate
+
+on:
+  push:
+    branches: [main, "eng/wave015-pixel6a-physical-repairs", "eng/**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  wave015:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Godot 4.5
+        run: |
+          set -euo pipefail
+          curl -L -o godot.zip https://github.com/godotengine/godot-builds/releases/download/4.5-stable/Godot_v4.5-stable_linux.x86_64.zip
+          unzip -o godot.zip
+          chmod +x Godot_v4.5-stable_linux.x86_64
+          echo "GODOT_BIN=$PWD/Godot_v4.5-stable_linux.x86_64" >> "$GITHUB_ENV"
+
+      - name: Assert physical flags unset for CI
+        run: |
+          set -euo pipefail
+          # CI must never pretend a Pixel 6a was attached.
+          if [[ "${WAVE015_RUN_PHYSICAL:-0}" == "1" ]]; then
+            echo "WAVE015_RUN_PHYSICAL must not be set in CI" >&2
+            exit 1
+          fi
+          if [[ "${WAVE015_RUN_PHYSICAL_CENSUS:-0}" == "1" ]]; then
+            echo "WAVE015_RUN_PHYSICAL_CENSUS must not be set in CI" >&2
+            exit 1
+          fi
+          echo "physical flags unset OK"
+
+      - name: Run Wave015 regression fixtures
+        run: |
+          set -euo pipefail
+          for t in tools/engineering_wave015/regressions/test_*.py; do
+            echo "=== $t ==="
+            python3 "$t"
+          done
+
+      - name: Run Engineering Wave015 (non-physical)
+        env:
+          GODOT_BIN: ${{ env.GODOT_BIN }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_ACTIONS: "true"
+          # Explicitly omit WAVE015_RUN_PHYSICAL / WAVE015_RUN_PHYSICAL_CENSUS
+        run: make engineering-wave015
+
+      - name: Upload Wave015 artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: engineering-wave015-evidence
+          path: artifacts/engineering_wave015/
+
+      - name: CI final gate — non-physical honesty
+        if: github.event_name == 'pull_request'
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          assert os.environ.get("WAVE015_RUN_PHYSICAL", "0") != "1"
+          assert os.environ.get("WAVE015_RUN_PHYSICAL_CENSUS", "0") != "1"
+
+          d = json.load(open("artifacts/engineering_wave015/WAVE015_RESULT.json"))
+          assert d.get("CURSOR_MERGED_NOTHING") is True
+          assert d.get("token") == "ENGINEERING_WAVE_015_PHYSICAL_PIXEL6A"
+          assert d.get("HUMAN_ART_DIRECTION_APPROVAL") is False
+          assert d.get("HUMAN_PLAYTEST_COMPLETE") is False
+
+          # CI does not attach a phone. Objective/stability True is allowed only when
+          # committed crash_census evidence is present in the checkout (local Pixel run).
+          objective = d.get("PHYSICAL_PIXEL6A_OBJECTIVE_VALIDATED")
+          stability = d.get("PIXEL6A_STABILITY_VALIDATED")
+          census_final = Path("artifacts/engineering_wave015/crash_census/FINAL_STABILITY_RESULT.json")
+          if objective is True or stability is True:
+              assert census_final.is_file(), (
+                  "CI must not claim PHYSICAL_PIXEL6A_OBJECTIVE_VALIDATED / "
+                  "PIXEL6A_STABILITY_VALIDATED without committed census evidence"
+              )
+              final = json.load(census_final.open())
+              assert final.get("status") == "PHYSICAL_STABILITY_PASS" or final.get(
+                  "PIXEL6A_STABILITY_VALIDATED"
+              ) is True
+
+          allowed = {
+              "PHYSICAL_STABILITY_PASS",
+              "PARTIAL",
+              "BLOCKED",
+              "SUPERSEDED_BY_HUMAN_CRASH_REPORT",
+          }
+          assert d.get("ENGINEERING_WAVE_015") in allowed, d.get("ENGINEERING_WAVE_015")
+          print(
+              "CI final gate OK",
+              d.get("ENGINEERING_WAVE_015"),
+              "objective=",
+              objective,
+              "stability=",
+              stability,
+              "(from committed evidence only if True)",
+          )
+          PY
