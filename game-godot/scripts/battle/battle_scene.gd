@@ -33,6 +33,7 @@ var _eval_max_frames := 2400
 var _eval_frames := 0
 var _pad_prompt: Label
 var _controller_watchdog
+var _flight_accum: float = 0.0
 
 const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
 const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
@@ -76,6 +77,9 @@ func _ready() -> void:
 		"device_role": DeviceRoleRuntime.active_role,
 		"eval_mode": _eval_mode,
 	})
+	var rec = get_node_or_null("/root/RuntimeFlightRecorder")
+	if rec and rec.has_method("set_scene_instance"):
+		rec.set_scene_instance(self)
 	if _eval_mode:
 		if countdown_label:
 			countdown_label.visible = false
@@ -221,6 +225,23 @@ func _physics_process(delta: float) -> void:
 	_check_blast(fighter1)
 	_check_blast(fighter2)
 	_check_match_end()
+	_flight_accum += delta
+	if _flight_accum >= 0.2:
+		_flight_accum = 0.0
+		_emit_flight_snapshot()
+
+
+func _emit_flight_snapshot() -> void:
+	var rec = get_node_or_null("/root/RuntimeFlightRecorder")
+	if rec == null or not rec.has_method("record_battlescene_snapshot"):
+		return
+	rec.record_battlescene_snapshot(self, fighter1, fighter2, {
+		"active": _active,
+		"paused": _paused,
+		"eval_mode": _eval_mode,
+		"eval_frames": _eval_frames,
+		"time_remaining": _time_remaining,
+	})
 
 func _update_timer_label() -> void:
 	if _timer_label == null:

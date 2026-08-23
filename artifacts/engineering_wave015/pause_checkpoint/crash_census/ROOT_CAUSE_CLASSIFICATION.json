@@ -1,0 +1,58 @@
+{
+  "schema": "engineering_wave015.root_cause_classification.v1",
+  "generated_at_utc": "2026-08-23T16:58:00Z",
+  "PR85_HEAD_BEFORE": "305e4984317806c94a8f9bb8418bae4e8614e30e",
+  "items": [
+    {
+      "id": "ROSTER_ART_LAB_TYPED_CONFIGURE",
+      "classification": "PROVEN_ROOT_CAUSE",
+      "tied_to_captured_fatal": true,
+      "signature_ids": ["GODOT_SCRIPT_ERROR:65255e8e39a9"],
+      "evidence": "Typed := inference on Node.configure() Variant return caused SCRIPT ERROR in RosterArtLab on device.",
+      "fix": "bool(model.call(\"configure\", data))",
+      "status": "REPAIRED",
+      "notes": "Keep as proven script failure; lab path, not primary BattleScene human play path."
+    },
+    {
+      "id": "FREED_ANIMATION_CONTROLLER_PLAY",
+      "classification": "PREVENTIVE_HARDENING",
+      "tied_to_captured_fatal": false,
+      "signature_ids": [],
+      "evidence": "No captured HUMAN-CRASH or process-death signature attributed to freed AnimationPlayer/Skeleton3D.",
+      "fix": "is_instance_valid guards before play/scale",
+      "status": "HARDENED",
+      "notes": "Do not count as repaired crash family without captured fatal evidence."
+    },
+    {
+      "id": "SUBVIEWPORT_MSAA_GRALLOC_FORMAT",
+      "classification": "NONFATAL_WARNING",
+      "alias": "NONFATAL_PLATFORM_GRAPHICS_WARNING_HARDENING",
+      "tied_to_captured_fatal": false,
+      "signature_ids": [
+        "GODOT_ERROR:81beb7618939",
+        "GODOT_ERROR:3bcb7070527e",
+        "GODOT_ERROR:6b370ef795f3",
+        "GODOT_ERROR:90629c272b9b",
+        "GODOT_ERROR:d7f97bd9376c",
+        "GODOT_ERROR:625f8d56b44f"
+      ],
+      "evidence": "gralloc5 format 0x3b errors in logcat with FATAL=0 and process remaining alive.",
+      "fix": "Disable SubViewport MSAA_3D on mobile; exclude gralloc from crash clustering",
+      "status": "HARDENED",
+      "notes": "Unrelated to process death; platform graphics noise hardening."
+    },
+    {
+      "id": "BASELINE_ABCD_UNEXPECTED_TERMINATION_FALSE_POSITIVE",
+      "classification": "UNRELATED_PLATFORM_NOISE",
+      "tied_to_captured_fatal": false,
+      "evidence": "ADB waiter misclassified harness clean quit as unexpected_termination.",
+      "fix": "process_death.py classification + clean_shutdown heartbeat awareness",
+      "status": "RECONCILED"
+    }
+  ],
+  "PROVEN_ROOT_CAUSES": ["ROSTER_ART_LAB_TYPED_CONFIGURE"],
+  "LIKELY_CONTRIBUTORS": [],
+  "PREVENTIVE_HARDENING": ["FREED_ANIMATION_CONTROLLER_PLAY"],
+  "NONFATAL_PLATFORM_WARNINGS": ["SUBVIEWPORT_MSAA_GRALLOC_FORMAT"],
+  "UNRELATED_PLATFORM_NOISE": ["BASELINE_ABCD_UNEXPECTED_TERMINATION_FALSE_POSITIVE"]
+}

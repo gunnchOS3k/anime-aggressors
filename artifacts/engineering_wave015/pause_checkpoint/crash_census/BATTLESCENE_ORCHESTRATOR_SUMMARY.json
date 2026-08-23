@@ -1,0 +1,40 @@
+{
+  "schema": "engineering_wave015.battlescene_stability_orchestrator.v1",
+  "generated_at_utc": "2026-08-23T18:26:05Z",
+  "HEAD_SHA": "305e4984317806c94a8f9bb8418bae4e8614e30e",
+  "APK_SHA256": "7294cc1a956afc2de90938e185a779f24a6eb0fca237b5219d8bb787f577b415",
+  "DEVICE_MODEL": "Pixel 6a",
+  "BATTLESCENE_FUZZ_EVENTS": 25200,
+  "BATTLESCENE_FUZZ_PROCESS_DEATHS": 0,
+  "BATTLESCENE_TRANSITIONS_TESTED": 189,
+  "BATTLESCENE_TRANSITION_CRASHES": 0,
+  "MATCHUPS_ATTEMPTED": 49,
+  "MATCHUPS_COMPLETED_WITHOUT_CRASH": 49,
+  "REAL_BATTLESCENE_CYCLES": 50,
+  "REAL_BATTLESCENE_CYCLE_CRASHES": 0,
+  "BATTLESCENE_SOAK_MIN": 30,
+  "UNEXPECTED_PROCESS_DEATHS": 0,
+  "run_info": {
+    "MATCHUP": {
+      "wait": {
+        "completed": true,
+        "unexpected_termination": false,
+        "classification": "HARNESS_REQUESTED_QUIT",
+        "counts_as_crash": false,
+        "marker": "files/wave015_battlescene_stability/BATTLESCENE_MATCHUP_DONE.json",
+        "last_pid": "13234",
+        "elapsed_s": 50.387834787368774
+      },
+      "pulled": {
+        "pulled": [
+          "artifacts/engineering_wave015/crash_census/device_pull_battlescene/BATTLESCENE_MATCHUP_RESULT.partial.json",
+          "artifacts/engineering_wave015/crash_census/device_pull_battlescene/BATTLESCENE_MATCHUP_RESULT.json",
+          "artifacts/engineering_wave015/crash_census/device_pull_battlescene/BATTLESCENE_MATCHUP_DONE.json",
+          "artifacts/engineering_wave015/crash_census/device_pull_battlescene/BATTLESCENE_STABILITY_SUMMARY.json",
+          "artifacts/engineering_wave015/crash_census/device_pull_battlescene/replays/final.jsonl"
+        ],
+        "count": 5
+      }
+    }
+  }
+}
