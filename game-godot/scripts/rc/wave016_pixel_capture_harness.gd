@@ -159,60 +159,123 @@ func _capture_case(fighter, tim, scene, case: Dictionary) -> Dictionary:
 	var kind := str(case.get("kind"))
 	await _reset(fighter, bool(case.get("air", false)), float(case.get("tier_aura", 40.0)))
 
+	# Drive input, then sample mid-window while move is still active.
+	var observed_move := ""
+	var observed_clip := ""
 	match kind:
 		"idle":
 			if fighter.state_machine:
 				fighter.state_machine.enter("idle")
-			for _i in range(10):
+			for _i in range(8):
 				await get_tree().process_frame
+			observed_move = _move_id(fighter)
+			observed_clip = _clip(fighter)
 		"attack":
 			var axis: Vector2 = case.get("axis", Vector2.ZERO)
 			if label == "ember_back_air":
 				fighter.facing = 1
 				axis = Vector2(-0.75, 0)
 			await _pulse(tim, "attack", axis, 6)
+			for _i in range(8):
+				await get_tree().process_frame
+				observed_move = _move_id(fighter)
+				observed_clip = _clip(fighter)
+				if observed_move == str(case.get("expect_move", "")) or observed_clip == str(case.get("expect_clip", "")):
+					break
 		"special":
 			await _pulse(tim, "special", case.get("axis", Vector2.ZERO), 6)
+			for _i in range(8):
+				await get_tree().process_frame
+				observed_move = _move_id(fighter)
+				observed_clip = _clip(fighter)
+				if observed_move == str(case.get("expect_move", "")):
+					break
 		"projectile":
 			fighter.aura = float(case.get("tier_aura", 20.0))
 			await _pulse(tim, "special", Vector2.ZERO, 6)
+			for _i in range(10):
+				await get_tree().process_frame
+				observed_move = _move_id(fighter)
+				observed_clip = _clip(fighter)
+				if observed_clip.begins_with("projectile_"):
+					break
 		"aura_charge":
 			fighter.aura = 15.0
-			await _pulse(tim, "aura_charge", Vector2.ZERO, 20)
+			await _pulse(tim, "aura_charge", Vector2.ZERO, 16)
+			# Sample during hold
+			if tim:
+				tim.set_button("aura_charge", true, false)
+			Input.action_press("p1_special")
+			Input.action_press("p1_shield")
+			for _i in range(8):
+				await get_tree().process_frame
+			observed_move = _move_id(fighter)
+			observed_clip = _clip(fighter)
+			_release()
 		"aura_burst":
 			fighter.aura = 100.0
+			for _w in range(20):
+				if fighter.state_machine and fighter.state_machine.can_attack():
+					break
+				await get_tree().process_frame
+				fighter.aura = 100.0
 			await _pulse(tim, "attack", Vector2.ZERO, 8)
+			for _i in range(10):
+				await get_tree().process_frame
+				observed_move = _move_id(fighter)
+				observed_clip = _clip(fighter)
+				if observed_move == "aura_burst" or observed_clip == "signature_lane_burst":
+					break
 		"grab":
 			await _place_near_opp(fighter)
 			await _pulse(tim, "grab", Vector2.ZERO, 6)
+			for _i in range(10):
+				await get_tree().process_frame
+				observed_move = _move_id(fighter)
+				observed_clip = _clip(fighter)
+				if observed_move == "grab":
+					break
 		"throw":
 			await _do_throw(fighter, tim, case.get("axis", Vector2(0.8, 0)))
+			for _i in range(8):
+				await get_tree().process_frame
+				observed_move = _move_id(fighter)
+				observed_clip = _clip(fighter)
+				if str(observed_move).begins_with("throw_"):
+					break
 		"ko":
 			if fighter.state_machine:
 				fighter.state_machine.enter("ko")
-			for _i in range(12):
+			for _i in range(8):
 				await get_tree().process_frame
+			observed_move = _move_id(fighter)
+			observed_clip = _clip(fighter)
 		"respawn":
 			if fighter.state_machine:
 				fighter.state_machine.enter("respawn")
-			for _i in range(12):
+			for _i in range(8):
 				await get_tree().process_frame
 			if fighter.state_machine:
 				fighter.state_machine.enter("idle")
+			observed_move = _move_id(fighter)
+			observed_clip = _clip(fighter)
 		_:
-			pass
+			observed_move = _move_id(fighter)
+			observed_clip = _clip(fighter)
 
-	for _i in range(14):
-		await get_tree().process_frame
+	if observed_move == "":
+		observed_move = _move_id(fighter)
+	if observed_clip == "":
+		observed_clip = _clip(fighter)
 
-	var move_id := _move_id(fighter)
-	var clip := _clip(fighter)
+	var move_id := observed_move
+	var clip := observed_clip
 	var expect_move := str(case.get("expect_move", ""))
 	var expect_clip := str(case.get("expect_clip", ""))
 	var move_ok := expect_move == "" or move_id == expect_move
 	var clip_ok := expect_clip == "" or clip == expect_clip or (expect_clip.begins_with("projectile_") and clip.begins_with("projectile_"))
 	if kind == "respawn":
-		clip_ok = clip != "" # idle or respawn presentation
+		clip_ok = clip != ""
 		move_ok = true
 	if kind == "ko":
 		var st := str(fighter.state_machine.current_state) if fighter.state_machine else ""
@@ -225,11 +288,14 @@ func _capture_case(fighter, tim, scene, case: Dictionary) -> Dictionary:
 		var st2 := str(fighter.state_machine.current_state) if fighter.state_machine else ""
 		clip_ok = clip == "aura_charge" or st2.find("aura") >= 0
 		move_ok = true
+	# Aura burst: accept signature clip even if move_id cleared mid-recovery.
+	if kind == "aura_burst":
+		move_ok = move_id == "aura_burst" or clip == "signature_lane_burst"
+		clip_ok = clip == "signature_lane_burst" or clip == "aura_release" or move_id == "aura_burst"
 
 	var model_ok := _model_visible(fighter)
 	var verified := move_ok and clip_ok and model_ok
 	var shot := _capture_screenshot(label)
-	# Projectile extras
 	var proj_ok := true
 	if kind == "projectile":
 		proj_ok = clip.begins_with("projectile_") and clip != "jab"
@@ -240,8 +306,8 @@ func _capture_case(fighter, tim, scene, case: Dictionary) -> Dictionary:
 		"pixel_device": true,
 		"device_model": OS.get_model_name(),
 		"fighter_id": FIGHTER,
-		"gameplay_move_id": move_id if move_id != "" else expect_move,
-		"active_clip": clip if clip != "" else expect_clip,
+		"gameplay_move_id": move_id,
+		"active_clip": clip,
 		"input_route": "TouchInputManager|Input -> Fighter._handle_actions",
 		"state_verified": verified,
 		"model_visible": model_ok,
@@ -249,6 +315,8 @@ func _capture_case(fighter, tim, scene, case: Dictionary) -> Dictionary:
 		"path": shot.get("relative", ""),
 		"expect_move": expect_move,
 		"expect_clip": expect_clip,
+		"move_ok": move_ok,
+		"clip_ok": clip_ok,
 		"projectile_visual_ok": proj_ok if kind == "projectile" else null,
 	}
 
