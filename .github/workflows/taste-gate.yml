@@ -1,0 +1,52 @@
+name: Game Taste Gate
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main, "eng/game-taste-gate", "eng/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: taste-gate-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  taste-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run taste-gate (non-physical)
+        run: make taste-gate
+
+      - name: Assert honesty fields
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path("artifacts/taste_gate/GAME_TASTE_GATE_REPORT.json").read_text())
+          assert r.get("HUMAN_Q5") is False, "tooling must never assign HUMAN_Q5"
+          assert r.get("HUMAN_TARGET_QUALITY_APPROVAL") is False
+          assert r.get("OWNER_TASTE_REVIEW") == "PENDING"
+          assert r.get("CURSOR_MERGED_NOTHING") is True
+          q = r.get("CURRENT_QUALITY_LEVEL")
+          assert q in {"Q0", "Q1", "Q2"}, f"automated quality must be ≤Q2, got {q}"
+          print("honesty fields OK:", q, r.get("GAME_TASTE_GATE"))
+          PY
+
+      - name: Upload taste-gate artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: taste-gate-report
+          path: artifacts/taste_gate/

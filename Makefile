@@ -1,6 +1,6 @@
 # Anime Aggressors — repo-native targets
 
-.PHONY: engineering-wave011 engineering-wave012 engineering-wave013b engineering-wave014 engineering-wave015 motion-promote wave015-human-crash-capture wave015-battlescene-stability
+.PHONY: engineering-wave011 engineering-wave012 engineering-wave013b engineering-wave014 engineering-wave015 motion-promote wave015-human-crash-capture wave015-battlescene-stability taste-gate engineering-taste-gate
 
 engineering-wave011:
 	bash tools/engineering_wave011/run_wave011.sh
@@ -25,3 +25,10 @@ wave015-battlescene-stability:
 
 motion-promote:
 	bash tools/motion_pipeline/production/promote_contribution.sh
+
+# Game Taste Gate — placeholder detect + model visibility static + report emit.
+# Does not invent Pixel evidence or assign HUMAN_Q5.
+taste-gate engineering-taste-gate:
+	python3 tools/quality/check_placeholder_visuals.py
+	python3 tools/quality/check_model_visibility_reliability.py
+	python3 tools/quality/emit_taste_gate_report.py
