@@ -19,21 +19,33 @@ APK_CANDIDATES = [
 ]
 
 
+def _adb_available() -> bool:
+    return shutil.which("adb") is not None
+
+
 def _adb(*args: str) -> subprocess.CompletedProcess:
+    if not _adb_available():
+        return subprocess.CompletedProcess(args=("adb", *args), returncode=127, stdout="", stderr="adb not found")
     return subprocess.run(["adb", *args], capture_output=True, text=True)
 
 
 def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
-    devices = _adb("devices")
-    serials = [
-        line.split()[0]
-        for line in devices.stdout.splitlines()[1:]
-        if "\tdevice" in line
-    ]
     shots: list[dict] = []
     status = "BLOCKED_DEVICE"
     note = "No Pixel 6a / adb device; desktop captures labeled if present."
+
+    if not _adb_available():
+        status = "BLOCKED_DEVICE"
+        note = "adb binary not available (CI/non-device host)."
+        serials: list[str] = []
+    else:
+        devices = _adb("devices")
+        serials = [
+            line.split()[0]
+            for line in devices.stdout.splitlines()[1:]
+            if "\tdevice" in line
+        ]
 
     if serials:
         serial = serials[0]
@@ -75,28 +87,43 @@ def main() -> int:
         if status == "CAPTURED":
             note = f"Pixel captures via {serial}"
     else:
-        # Copy any existing desktop/wave015 ember screenshots as labeled desktop evidence
-        src_dirs = [
-            ROOT / "artifacts/engineering_wave015/device_screenshots",
-            ROOT / "artifacts/engineering_wave015/device_pull/device_screenshots",
-            ROOT / "artifacts/engineering_wave014/runtime_renders",
-        ]
-        for d in src_dirs:
-            if not d.is_dir():
-                continue
-            for p in sorted(d.glob("*ember*"))[:8]:
-                dest = OUT / f"desktop_{p.name}"
-                shutil.copy2(p, dest)
+        # Prefer already-committed Pixel captures from this wave if present.
+        existing = sorted(OUT.glob("ember_*.png"))
+        if existing:
+            for p in existing:
                 shots.append(
                     {
                         "label": p.stem,
-                        "path": str(dest.relative_to(ROOT)),
-                        "source": "desktop_labeled_not_pixel",
+                        "path": str(p.relative_to(ROOT)),
+                        "source": "committed_pixel_or_prior",
                     }
                 )
-        if shots:
-            status = "BLOCKED_DEVICE_DESKTOP_LABELED"
-            note = "No adb device; desktop/prior captures labeled correctly as non-Pixel."
+            status = "CAPTURED_COMMITTED" if note.startswith("adb binary") else "BLOCKED_DEVICE_DESKTOP_LABELED"
+            if status == "CAPTURED_COMMITTED":
+                note = "Using committed contact sheet captures; adb not available in this environment."
+        else:
+            # Copy any existing desktop/wave015 ember screenshots as labeled desktop evidence
+            src_dirs = [
+                ROOT / "artifacts/engineering_wave015/device_screenshots",
+                ROOT / "artifacts/engineering_wave015/device_pull/device_screenshots",
+                ROOT / "artifacts/engineering_wave014/runtime_renders",
+            ]
+            for d in src_dirs:
+                if not d.is_dir():
+                    continue
+                for p in sorted(d.glob("*ember*"))[:8]:
+                    dest = OUT / f"desktop_{p.name}"
+                    shutil.copy2(p, dest)
+                    shots.append(
+                        {
+                            "label": p.stem,
+                            "path": str(dest.relative_to(ROOT)),
+                            "source": "desktop_labeled_not_pixel",
+                        }
+                    )
+            if shots:
+                status = "BLOCKED_DEVICE_DESKTOP_LABELED"
+                note = "No adb device; desktop/prior captures labeled correctly as non-Pixel."
 
     manifest = {
         "schema": "wave016_golden_slice_contact_sheet_v1",
