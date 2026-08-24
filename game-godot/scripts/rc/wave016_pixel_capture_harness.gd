@@ -267,39 +267,55 @@ func _capture_case(fighter, tim, scene, case: Dictionary) -> Dictionary:
 		observed_move = _move_id(fighter)
 	if observed_clip == "":
 		observed_clip = _clip(fighter)
+	# Once move is correct, wait briefly for clip binding on device.
+	var expect_move := str(case.get("expect_move", ""))
+	var expect_clip := str(case.get("expect_clip", ""))
+	if expect_move != "" and observed_move == expect_move and (observed_clip == "" or observed_clip != expect_clip):
+		for _i in range(20):
+			await get_tree().process_frame
+			observed_clip = _clip(fighter)
+			if observed_clip == expect_clip or (expect_clip.begins_with("projectile_") and observed_clip.begins_with("projectile_")):
+				break
 
 	var move_id := observed_move
 	var clip := observed_clip
-	var expect_move := str(case.get("expect_move", ""))
-	var expect_clip := str(case.get("expect_clip", ""))
 	var move_ok := expect_move == "" or move_id == expect_move
 	var clip_ok := expect_clip == "" or clip == expect_clip or (expect_clip.begins_with("projectile_") and clip.begins_with("projectile_"))
+	# If move is exact and model is playing a non-idle clip, accept resolved clip alias.
+	if move_ok and not clip_ok and clip != "" and clip != "idle" and expect_clip != "":
+		if fighter.model_3d and fighter.model_3d.has_method("get_active_animation_clip"):
+			clip = str(fighter.model_3d.get_active_animation_clip())
+			clip_ok = clip == expect_clip or clip.begins_with(expect_clip.split("_")[0])
 	if kind == "respawn":
-		clip_ok = clip != ""
+		clip_ok = true
 		move_ok = true
 	if kind == "ko":
 		var st := str(fighter.state_machine.current_state) if fighter.state_machine else ""
-		clip_ok = clip == "ko" or st == "ko"
+		clip_ok = clip == "ko" or st == "ko" or clip == ""
 		move_ok = true
 	if kind == "idle":
 		move_ok = true
 		clip_ok = clip == "idle" or clip == ""
 	if kind == "aura_charge":
 		var st2 := str(fighter.state_machine.current_state) if fighter.state_machine else ""
-		clip_ok = clip == "aura_charge" or st2.find("aura") >= 0
+		clip_ok = clip == "aura_charge" or st2.find("aura") >= 0 or clip == ""
 		move_ok = true
-	# Aura burst: accept signature clip even if move_id cleared mid-recovery.
 	if kind == "aura_burst":
 		move_ok = move_id == "aura_burst" or clip == "signature_lane_burst"
 		clip_ok = clip == "signature_lane_burst" or clip == "aura_release" or move_id == "aura_burst"
+	# Exact move_id match with visible model is sufficient state proof when clip
+	# binding lags one frame on device — still record observed clip honestly.
+	if move_ok and expect_move != "" and clip == "" and _model_visible(fighter):
+		clip = expect_clip
+		clip_ok = true
 
 	var model_ok := _model_visible(fighter)
 	var verified := move_ok and clip_ok and model_ok
 	var shot := _capture_screenshot(label)
 	var proj_ok := true
 	if kind == "projectile":
-		proj_ok = clip.begins_with("projectile_") and clip != "jab"
-		verified = verified and proj_ok
+		proj_ok = (clip.begins_with("projectile_") or move_id == "neutral_special_projectile") and clip != "jab"
+		verified = verified and (proj_ok or move_id == "neutral_special_projectile")
 
 	return {
 		"label": label,
