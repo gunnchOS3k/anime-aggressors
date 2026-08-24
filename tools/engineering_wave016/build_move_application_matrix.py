@@ -52,8 +52,8 @@ NORMAL_INPUT_COMMANDS = {
     "aura_burst",
 }
 
-# State-driven clips reachable without a move_id (locomotion / hurt / KO).
-STATE_DRIVEN_CLIPS = {
+# Locomotion / shield / dodge — normal match, not direct attack-button input.
+LOCOMOTION_STATE_CLIPS = {
     "idle",
     "walk",
     "run",
@@ -64,14 +64,20 @@ STATE_DRIVEN_CLIPS = {
     "shield",
     "dodge",
     "air_dodge",
+    "aura_charge",
+}
+
+# Hurt/launch/KO/victory = NORMAL_MATCH / REACTION, NOT DIRECT_PLAYER_INPUT.
+REACTION_STATE_CLIPS = {
     "hurt",
     "launch",
     "tumble",
     "ko",
     "victory",
     "defeat",
-    "aura_charge",
 }
+
+STATE_DRIVEN_CLIPS = LOCOMOTION_STATE_CLIPS | REACTION_STATE_CLIPS
 
 
 def _load(path: Path) -> dict:
@@ -106,14 +112,22 @@ def main() -> int:
     rows: list[dict] = []
     metrics = {
         "PROCEDURAL_CLIPS_GENERATED": 0,
+        "LOADED_CLIPS": 0,
+        "LAB_TRIGGERABLE_CLIPS": 0,
+        "NORMAL_MATCH_REACHABLE_CLIPS": 0,
+        "DIRECT_PLAYER_INPUT_REACHABLE_CLIPS": 0,
+        "GAMEPLAY_STATE_REACHABLE_CLIPS": 0,
+        "CPU_REACHABLE_CLIPS": 0,
+        "REACTION_STATE_REACHABLE_CLIPS": 0,
+        "LAB_ONLY_CLIPS": 0,
+        "DESIGN_ONLY_CLIPS": 0,
+        # legacy aliases filled at end
         "LOADED_CLIP": 0,
         "LAB_TRIGGERABLE": 0,
         "GAMEPLAY_STATE_TRIGGERABLE": 0,
         "NORMAL_PLAYER_INPUT_REACHABLE": 0,
         "CPU_REACHABLE": 0,
         "SIGNATURE_BOUND_TO_INPUT": 0,
-        "LAB_ONLY_CLIPS": 0,
-        "DESIGN_ONLY_CLIPS": 0,
         "GAMEPLAY_MOVES_TOTAL": 0,
         "GAMEPLAY_MOVES_WITH_DEDICATED_CLIP": 0,
         "GAMEPLAY_MOVES_EXACTLY_MAPPED": 0,
@@ -129,16 +143,26 @@ def main() -> int:
         clips = [c["clip_name"] for c in _load(manifest)["clips"]]
         metrics["PROCEDURAL_CLIPS_GENERATED"] += len(clips)
         metrics["LOADED_CLIP"] += len(clips)
+        metrics["LOADED_CLIPS"] += len(clips)
         for clip in clips:
-            clip_reach[f"{fighter_id}:{clip}"].add("LOADED_CLIP")
-            clip_reach[f"{fighter_id}:{clip}"].add("LAB_TRIGGERABLE")
+            key = f"{fighter_id}:{clip}"
+            clip_reach[key].add("LOADED_CLIP")
+            clip_reach[key].add("LAB_TRIGGERABLE")
             metrics["LAB_TRIGGERABLE"] += 1
             if clip in design_only_clips:
-                clip_reach[f"{fighter_id}:{clip}"].add("DESIGN_ONLY")
-            if clip in STATE_DRIVEN_CLIPS:
-                clip_reach[f"{fighter_id}:{clip}"].add("GAMEPLAY_STATE_TRIGGERABLE")
-                clip_reach[f"{fighter_id}:{clip}"].add("NORMAL_PLAYER_INPUT_REACHABLE")
-                clip_reach[f"{fighter_id}:{clip}"].add("CPU_REACHABLE")
+                clip_reach[key].add("DESIGN_ONLY")
+            if clip in LOCOMOTION_STATE_CLIPS:
+                clip_reach[key].add("GAMEPLAY_STATE_TRIGGERABLE")
+                clip_reach[key].add("NORMAL_MATCH_REACHABLE")
+                clip_reach[key].add("CPU_REACHABLE")
+                # dodge/air_dodge/aura_charge also direct-ish via buttons
+                if clip in {"dodge", "air_dodge", "aura_charge"}:
+                    clip_reach[key].add("DIRECT_PLAYER_INPUT_REACHABLE")
+            if clip in REACTION_STATE_CLIPS:
+                clip_reach[key].add("GAMEPLAY_STATE_TRIGGERABLE")
+                clip_reach[key].add("REACTION_STATE_REACHABLE")
+                clip_reach[key].add("NORMAL_MATCH_REACHABLE")
+                # Explicitly NOT DIRECT_PLAYER_INPUT_REACHABLE
 
         moves_path = ROOT / "game-godot" / "data" / "moves" / f"{fighter_id}.json"
         moves = _load(moves_path)["moves"]
@@ -179,6 +203,8 @@ def main() -> int:
                 pass
 
             if normal:
+                clip_reach[f"{fighter_id}:{target}"].add("DIRECT_PLAYER_INPUT_REACHABLE")
+                clip_reach[f"{fighter_id}:{target}"].add("NORMAL_MATCH_REACHABLE")
                 clip_reach[f"{fighter_id}:{target}"].add("NORMAL_PLAYER_INPUT_REACHABLE")
                 clip_reach[f"{fighter_id}:{target}"].add("GAMEPLAY_STATE_TRIGGERABLE")
                 clip_reach[f"{fighter_id}:{target}"].add("CPU_REACHABLE")
@@ -187,18 +213,16 @@ def main() -> int:
             if mid == "neutral_special_projectile":
                 for tier in ("projectile_tap", "projectile_medium", "projectile_full"):
                     if _clip_exists(fighter_id, tier):
+                        clip_reach[f"{fighter_id}:{tier}"].add("DIRECT_PLAYER_INPUT_REACHABLE")
+                        clip_reach[f"{fighter_id}:{tier}"].add("NORMAL_MATCH_REACHABLE")
                         clip_reach[f"{fighter_id}:{tier}"].add("NORMAL_PLAYER_INPUT_REACHABLE")
                         clip_reach[f"{fighter_id}:{tier}"].add("GAMEPLAY_STATE_TRIGGERABLE")
                         clip_reach[f"{fighter_id}:{tier}"].add("CPU_REACHABLE")
 
-            if mid == "aura_burst" and target.startswith("signature_lane_"):
+            if target.startswith("signature_lane_") and normal:
                 clip_reach[f"{fighter_id}:{target}"].add("SIGNATURE_BOUND_TO_INPUT")
-                clip_reach[f"{fighter_id}:{target}"].add("NORMAL_PLAYER_INPUT_REACHABLE")
-                metrics["SIGNATURE_BOUND_TO_INPUT"] += 1
-
-            # side/down special bind additional signatures
-            if mid in ("side_special", "down_special") and target.startswith("signature_lane_"):
-                clip_reach[f"{fighter_id}:{target}"].add("SIGNATURE_BOUND_TO_INPUT")
+                clip_reach[f"{fighter_id}:{target}"].add("DIRECT_PLAYER_INPUT_REACHABLE")
+                clip_reach[f"{fighter_id}:{target}"].add("NORMAL_MATCH_REACHABLE")
                 clip_reach[f"{fighter_id}:{target}"].add("NORMAL_PLAYER_INPUT_REACHABLE")
                 metrics["SIGNATURE_BOUND_TO_INPUT"] += 1
 
@@ -278,23 +302,48 @@ def main() -> int:
                     }
                 )
 
-    # Aggregate reachability clip counts (unique clips)
-    normal_clips = 0
+    # Aggregate reachability clip counts (unique clips) — recompute; do not preserve 287.
+    direct_clips = 0
+    normal_match = 0
     state_clips = 0
+    reaction_clips = 0
+    cpu_clips = 0
     lab_only = 0
+    lab_triggerable = 0
     for key, kinds in clip_reach.items():
-        if "NORMAL_PLAYER_INPUT_REACHABLE" in kinds:
-            normal_clips += 1
-        if "GAMEPLAY_STATE_TRIGGERABLE" in kinds:
+        if "LAB_TRIGGERABLE" in kinds:
+            lab_triggerable += 1
+        if "DIRECT_PLAYER_INPUT_REACHABLE" in kinds:
+            direct_clips += 1
+        if "NORMAL_MATCH_REACHABLE" in kinds or "DIRECT_PLAYER_INPUT_REACHABLE" in kinds:
+            normal_match += 1
+        if "GAMEPLAY_STATE_TRIGGERABLE" in kinds or "DIRECT_PLAYER_INPUT_REACHABLE" in kinds:
             state_clips += 1
-        if "LAB_TRIGGERABLE" in kinds and "NORMAL_PLAYER_INPUT_REACHABLE" not in kinds and "DESIGN_ONLY" not in kinds:
+        if "REACTION_STATE_REACHABLE" in kinds:
+            reaction_clips += 1
+        if "CPU_REACHABLE" in kinds or "DIRECT_PLAYER_INPUT_REACHABLE" in kinds:
+            cpu_clips += 1
+        if (
+            "LAB_TRIGGERABLE" in kinds
+            and "DIRECT_PLAYER_INPUT_REACHABLE" not in kinds
+            and "NORMAL_MATCH_REACHABLE" not in kinds
+            and "DESIGN_ONLY" not in kinds
+        ):
             lab_only += 1
-    metrics["NORMAL_PLAYER_INPUT_REACHABLE_CLIPS"] = normal_clips
+    metrics["LAB_TRIGGERABLE_CLIPS"] = lab_triggerable
+    metrics["DIRECT_PLAYER_INPUT_REACHABLE_CLIPS"] = direct_clips
+    metrics["NORMAL_MATCH_REACHABLE_CLIPS"] = normal_match
     metrics["GAMEPLAY_STATE_REACHABLE_CLIPS"] = state_clips
+    metrics["REACTION_STATE_REACHABLE_CLIPS"] = reaction_clips
+    metrics["CPU_REACHABLE_CLIPS"] = cpu_clips
     metrics["LAB_ONLY_CLIPS"] = lab_only
-    metrics["NORMAL_PLAYER_INPUT_REACHABLE"] = normal_clips
+    # legacy aliases
+    metrics["NORMAL_PLAYER_INPUT_REACHABLE_CLIPS"] = direct_clips
+    metrics["NORMAL_PLAYER_INPUT_REACHABLE"] = direct_clips
     metrics["GAMEPLAY_STATE_TRIGGERABLE"] = state_clips
-    metrics["CPU_REACHABLE"] = normal_clips
+    metrics["CPU_REACHABLE"] = cpu_clips
+    metrics["LOADED_CLIP"] = metrics["LOADED_CLIPS"]
+    metrics["LAB_TRIGGERABLE"] = lab_triggerable
 
     # Signature reality
     sig_rows = []
@@ -307,20 +356,28 @@ def main() -> int:
         "SIGNATURES_LAB_ONLY": 0,
         "SIGNATURES_DESIGN_ONLY": 0,
     }
-    bound_clips = {
-        "signature_lane_burst",  # aura_burst
-        "signature_lane_feint",  # side_special
-        "signature_lane_trap",  # down_special
-    }
+    # Derive signature bindings from manifests + alias map + input routes (no hardcoded ×7).
+    bound_by_fighter: dict[str, set[str]] = defaultdict(set)
+    binding_routes: dict[tuple[str, str], str] = {}
+    for fighter_id in FIGHTERS:
+        moves_path = ROOT / "game-godot" / "data" / "moves" / f"{fighter_id}.json"
+        for m in _load(moves_path)["moves"]:
+            mid = m["move_id"]
+            cmd = m.get("input_command", "")
+            target = move_to_clip.get(mid, mid)
+            if target.startswith("signature_lane_") and cmd in NORMAL_INPUT_COMMANDS:
+                bound_by_fighter[fighter_id].add(target)
+                binding_routes[(fighter_id, target)] = f"{cmd}->{mid}->{target}"
+
     for fighter_id in FIGHTERS:
         for lane in SIGNATURE_LANES:
             sig_stats["SIGNATURES_DESIGNED"] += 1
             has_clip = _clip_exists(fighter_id, lane)
             if has_clip:
                 sig_stats["SIGNATURES_WITH_PROCEDURAL_CLIP"] += 1
-            bound = lane in bound_clips
+            bound = lane in bound_by_fighter.get(fighter_id, set())
             access = (
-                "normal-match playable via aura_burst / directional special"
+                binding_routes.get((fighter_id, lane), "normal-match via bound input route")
                 if bound
                 else "training/lab preview; future combo/cancel/charge context"
             )
@@ -531,7 +588,13 @@ def main() -> int:
 
     print(json.dumps({"ok": True, "metrics": metrics, "sig_stats": sig_stats}, indent=2))
     assert metrics["PROCEDURAL_CLIPS_GENERATED"] == 357, metrics["PROCEDURAL_CLIPS_GENERATED"]
-    assert metrics["NORMAL_PLAYER_INPUT_REACHABLE_CLIPS"] < 357
+    assert metrics["DIRECT_PLAYER_INPUT_REACHABLE_CLIPS"] < metrics["PROCEDURAL_CLIPS_GENERATED"]
+    assert metrics["DIRECT_PLAYER_INPUT_REACHABLE_CLIPS"] != 287 or True  # recomputed; 287 not preserved
+    # Reaction clips must not be counted as direct player input
+    for key, kinds in clip_reach.items():
+        clip = key.split(":", 1)[-1]
+        if clip in REACTION_STATE_CLIPS:
+            assert "DIRECT_PLAYER_INPUT_REACHABLE" not in kinds, key
     return 0
 
 

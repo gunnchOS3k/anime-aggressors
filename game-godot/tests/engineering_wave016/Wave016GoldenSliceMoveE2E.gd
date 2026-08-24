@@ -1,10 +1,12 @@
 extends SceneTree
 
-## Wave016 Golden Slice — Ember Vale move application E2E.
-## Issues real queue_attack_command / start paths; records move_id, clip, bone motion proxies.
+## Wave016 DETERMINISTIC_MOVE_ROUTING_E2E — Ember Vale.
+## May use queue_attack_command / _start_move_by_command for deterministic routing proof.
+## Real-input proof lives in Wave016RealInputMoveE2E.gd.
 
 const BATTLE_PATH := "res://scenes/battle/BattleScene.tscn"
-const OUT_PATH := "res://../artifacts/wave016/GOLDEN_SLICE_MOVE_APPLICATION_E2E.json"
+const OUT_PATH := "res://../artifacts/wave016/DETERMINISTIC_MOVE_ROUTING_E2E.json"
+const LEGACY_OUT_PATH := "res://../artifacts/wave016/GOLDEN_SLICE_MOVE_APPLICATION_E2E.json"
 const FIGHTER := "ember-vale"
 
 const CASES := [
@@ -230,13 +232,16 @@ func _run_case(fighter, case: Dictionary) -> Dictionary:
 
 
 func _write(payload: Dictionary) -> void:
-	var abs_out := ProjectSettings.globalize_path(OUT_PATH)
-	var dir := abs_out.get_base_dir()
-	DirAccess.make_dir_recursive_absolute(dir)
-	var f := FileAccess.open(abs_out, FileAccess.WRITE)
-	if f:
-		f.store_string(JSON.stringify(payload, "\t"))
-		f.close()
+	payload["schema"] = "DETERMINISTIC_MOVE_ROUTING_E2E_v1"
+	payload["proof_class"] = "DETERMINISTIC_MOVE_ROUTING_E2E"
+	for path in [OUT_PATH, LEGACY_OUT_PATH]:
+		var abs_out := ProjectSettings.globalize_path(path)
+		var dir := abs_out.get_base_dir()
+		DirAccess.make_dir_recursive_absolute(dir)
+		var f := FileAccess.open(abs_out, FileAccess.WRITE)
+		if f:
+			f.store_string(JSON.stringify(payload, "\t"))
+			f.close()
 
 
 func _finish(ok: bool, results: Array, reasons: Array) -> void:

@@ -4,7 +4,7 @@ Wave016 canonical truth chain:
 `PLAYER INPUT -> command -> move_id -> timing/hitboxes -> choreography action_id -> visible clip -> VFX/SFX/camera -> interaction`
 
 - PROCEDURAL_CLIPS_GENERATED: **357**
-- NORMAL_PLAYER_INPUT_REACHABLE_CLIPS: **287**
+- NORMAL_PLAYER_INPUT_REACHABLE_CLIPS: **189**
 - GAMEPLAY_STATE_REACHABLE_CLIPS: **287**
 - LAB_ONLY_CLIPS: **42**
 - DESIGN_ONLY_CLIPS: **28**

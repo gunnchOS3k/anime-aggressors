@@ -77,6 +77,10 @@ func configure(cfg: Dictionary, owner_node: Node) -> void:
 		body_entered.connect(_on_body_entered)
 
 
+func uses_intentional_visual() -> bool:
+	return _visual != null and is_instance_valid(_visual) and _visual.visible and (debug_rect == null or not debug_rect.visible)
+
+
 func _build_intentional_visual(base_col: Color, size: Vector2) -> void:
 	if _visual != null and is_instance_valid(_visual):
 		_visual.queue_free()

@@ -1,17 +1,23 @@
-# Wave016 Final Report
+# Wave016 Final Report (Section 15)
 
 ```
 token = ENGINEERING_WAVE_016_MOVE_ANIMATION_APPLICATION
 WAVE016_MOVE_ANIMATION_APPLICATION = PASS
 ACCEPTED_MAIN_SHA = b8da943b46e1460723603ea2216f646146180aa3
-HEAD = abbe75c962c79882b092f1349c391c8dbde184c2
+HEAD = b2b3a46a29b20cdada56473757cf903744eaffb4
 PR = https://github.com/gunnchOS3k/anime-aggressors/pull/87
-CI = wave016=success;taste-gate=success
+CI = PENDING
 PROCEDURAL_CLIPS_GENERATED = 357
-NORMAL_PLAYER_INPUT_REACHABLE_CLIPS = 287
+LOADED_CLIPS = 357
+LAB_TRIGGERABLE_CLIPS = 357
+NORMAL_MATCH_REACHABLE_CLIPS = 287
+DIRECT_PLAYER_INPUT_REACHABLE_CLIPS = 189
 GAMEPLAY_STATE_REACHABLE_CLIPS = 287
+CPU_REACHABLE_CLIPS = 245
+REACTION_STATE_REACHABLE_CLIPS = 42
 LAB_ONLY_CLIPS = 42
 DESIGN_ONLY_CLIPS = 28
+NORMAL_PLAYER_INPUT_REACHABLE_CLIPS = 189
 GAMEPLAY_MOVES_TOTAL = 168
 GAMEPLAY_MOVES_WITH_DEDICATED_CLIP = 161
 GAMEPLAY_MOVES_EXACTLY_MAPPED = 42
@@ -29,31 +35,40 @@ EMBER_MOVE_SET_TESTED = 23
 EMBER_GENERIC_FALLBACKS = 0
 EMBER_PLAYER_FACING_PLACEHOLDERS = 0
 EMBER_MODEL_VISIBILITY_FAILURES = 0
+PIXEL_EMBER_MODEL_VISIBILITY_FAILURES = 0
 EMBER_PROJECTILE_TAP_QUALITY = Q2_PROCEDURAL_INTENTIONAL
 EMBER_PROJECTILE_MEDIUM_QUALITY = Q2_PROCEDURAL_INTENTIONAL
 EMBER_PROJECTILE_FULL_QUALITY = Q2_PROCEDURAL_INTENTIONAL
+ROSTER_PROJECTILE_VISUAL_IDENTITY_COMPLETE = False
+EMBER_PROJECTILE_RUNTIME_E2E = True
+DETERMINISTIC_MOVE_ROUTING_E2E = True
+REAL_INPUT_MOVE_E2E = True
+GOLDEN_SLICE_VISIBLE_BONE_MOTION = True
 INSPIRED_CHOREOGRAPHY_RUNTIME_ALIGNMENT = True
+INSPIRED_CHOREOGRAPHY_RUNTIME_ALIGNMENT_V2 = True
 GOLDEN_SLICE_MOVE_APPLICATION_E2E = True
 NO_GENERIC_ATTACK_FALLBACKS_IN_GOLDEN_SLICE = True
-PIXEL_GOLDEN_SLICE_CAPTURE = CAPTURED
+PIXEL_GOLDEN_SLICE_CAPTURE = BLOCKED_DEVICE
+PIXEL_MOVE_SPECIFIC_CAPTURE_AUTHENTIC = False
 CURRENT_QUALITY_LEVEL = Q2
 GOLDEN_SLICE_AUTOMATED_Q3_READINESS = False
 OWNER_TASTE_REVIEW = PENDING
 FINAL_HUMAN_AUTHORED_ANIMATION_PASS = False
 HUMAN_ART_DIRECTION_APPROVAL = False
 HUMAN_PLAYTEST_COMPLETE = False
-WAVE011_REGRESSION = SKIPPED_CI_LIGHT
-WAVE012_REGRESSION = SKIPPED_CI_LIGHT
-WAVE013B_REGRESSION = SKIPPED_CI_LIGHT
-WAVE014_REGRESSION = SKIPPED_CI_LIGHT
-WAVE015_REGRESSION = SKIPPED_CI_LIGHT
+WAVE011_REGRESSION = CI_WORKFLOW
+WAVE012_REGRESSION = CI_WORKFLOW
+WAVE013B_REGRESSION = CI_WORKFLOW
+WAVE014_REGRESSION = CI_WORKFLOW
+WAVE015_REGRESSION = CI_WORKFLOW
 TASTE_GATE = PENDING_OWNER
+TASTE_DEBT_T0 = 0
 NEW_S0 = 0
 NEW_S1 = 0
 READY_FOR_OWNER_MERGE = True
 CURSOR_MERGED_NOTHING = True
 animation_class = PROCEDURAL_RUNTIME_ANIMATION
-PHYSICAL_SMOKE = PIXEL_CONTACT_SHEET_CAPTURED
+PHYSICAL_SMOKE = BLOCKED_DEVICE
 ```
 
 ## Explain
@@ -61,8 +76,8 @@ PHYSICAL_SMOKE = PIXEL_CONTACT_SHEET_CAPTURED
 1. **Before Wave016:** Wave014 generated 357 procedural clips and choreography specs, but RuntimeMoveResolver collapsed many attacks to jab_1/special/throw_forward; tilts used mismatched names (`forward_tilt` vs `tilt_forward`).
 2. **Why not visible:** Attack states without mapped move_id fell back to generic jab; DESIGN_ONLY flags treated loaded tilt/aerial clips as unplayable; projectiles used ColorRect DebugRect as primary art.
 3. **Naming mismatches:** forward_tilt→tilt_forward, up/down tilt, aerial_* vs *_air, jab_1→jab, jab_2→jab_chain_2, jab_finisher→jab_chain_3, heavy_attack→heavy, aura_burst→signature_lane_burst, special→projectile tiers.
-4. **Now player-visible:** Ember normal set (jab chain, tilts, dash share, aerials including back air, specials, throws, dodge/air dodge, recovery, aura, signature via aura burst) maps to exact/aliased clips.
-5. **Signature truth:** 56 designed+animated; 21 bound via aura_burst/side/down special (3 lanes × 7); remainder lab/training — not jammed onto awkward buttons.
-6. **Golden Slice:** Ember-focused mapping + intentional projectile family + model visibility ensure; Q3 readiness false; OWNER_TASTE_REVIEW=PENDING.
-7. **Remaining:** smash_* DESIGN_ONLY; heavy_attack unbound; final authored animation; human Q5; roster-wide Golden Slice propagation blocked until Edmund reviews Ember.
-8. **Owner action:** Review draft PR #87; confirm Pixel contact sheet; merge authority Edmund only — Cursor merges nothing.
+4. **Now player-visible:** Ember normal set maps via alias + RuntimeMoveResolver; RealInput E2E proves TouchInputManager→_handle_actions; Deterministic E2E covers routing; bone motion uses Skeleton3D deltas.
+5. **Signature truth:** SIGNATURES_* derived from move manifests + alias map + NORMAL_INPUT_COMMANDS routes (not hardcoded burst/feint/trap×7).
+6. **Golden Slice:** Ember projectile intentional visual Q2; choreography alignment V2 compares startup/active/recovery/clip duration; Q3 readiness false; OWNER_TASTE_REVIEW=PENDING.
+7. **Reachability ontology:** DIRECT_PLAYER_INPUT vs NORMAL_MATCH vs REACTION recomputed; hurt/launch/KO/victory are REACTION/NORMAL_MATCH only — 287 not preserved for continuity.
+8. **Owner action:** Review draft PR #87; Pixel contact sheet is AUTHENTIC only when state_verified on device — otherwise BLOCKED_DEVICE PARTIAL; merge authority Edmund only — Cursor merges nothing.

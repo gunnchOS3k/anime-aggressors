@@ -110,6 +110,13 @@ func force_show(on: bool) -> void:
 	_sync_overlay()
 	_save_settings()
 
+
+## Wave016 / CI harness: allow TouchInputManager injection without overlay UI.
+func enable_test_harness() -> void:
+	touch_mode = TouchMode.ON
+	_in_gameplay = true
+	_sync_overlay()
+
 func _detect_touch_device() -> bool:
 	if DisplayServer.is_touchscreen_available():
 		return true
