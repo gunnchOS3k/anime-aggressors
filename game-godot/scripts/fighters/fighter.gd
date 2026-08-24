@@ -272,7 +272,6 @@ func _physics_process(delta: float) -> void:
 	if _dodge_cooldown > 0.0:
 		_dodge_cooldown = maxf(0.0, _dodge_cooldown - delta)
 	_AuraSpecialRuntime.tick_fighter(self, delta)
-	_tick_idle_aura_decay(delta)
 	_tick_shield_regen(delta)
 	# Kaia air-drift stamp (runtime, not data-only).
 	if not is_on_floor() and _AuraIdentity.air_drift_bonus(fighter_id, aura, str(data.get("combatTag", ""))) > 0.0:
@@ -303,10 +302,13 @@ func _physics_process(delta: float) -> void:
 		_dummy_tick(delta)
 	if controls_enabled:
 		_apply_movement(delta)
+		# Handle attack/special BEFORE idle aura decay so a full meter (100)
+		# can still trigger aura_burst on the same frame it would otherwise decay.
 		_handle_actions()
 	else:
 		if is_on_floor():
 			velocity.x = move_toward(velocity.x, 0.0, get_run_speed() * delta * 8.0)
+	_tick_idle_aura_decay(delta)
 	move_and_slide()
 	_sync_motion_state()
 	_check_ledge_grab()
