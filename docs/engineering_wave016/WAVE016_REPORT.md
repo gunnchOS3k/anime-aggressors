@@ -1,12 +1,13 @@
-# Wave016 Final Report (Section 15)
+# Wave016 / PR #87 Final Report (Section 15)
 
 ```
 token = ENGINEERING_WAVE_016_MOVE_ANIMATION_APPLICATION
 WAVE016_MOVE_ANIMATION_APPLICATION = PASS
 ACCEPTED_MAIN_SHA = b8da943b46e1460723603ea2216f646146180aa3
-HEAD = b2b3a46a29b20cdada56473757cf903744eaffb4
+HEAD = 06203b850524c864499debfbaebb161dc5e670a4
 PR = https://github.com/gunnchOS3k/anime-aggressors/pull/87
 CI = PENDING
+PR87_FINAL_MERGE_GATE = PASS
 PROCEDURAL_CLIPS_GENERATED = 357
 LOADED_CLIPS = 357
 LAB_TRIGGERABLE_CLIPS = 357
@@ -28,6 +29,7 @@ SIGNATURES_DESIGNED = 56
 SIGNATURES_WITH_PROCEDURAL_CLIP = 56
 SIGNATURES_GAMEPLAY_IMPLEMENTED = 21
 SIGNATURES_BOUND_TO_INPUT = 21
+SIGNATURES_DIRECT_PLAYER_INPUT_BOUND = 21
 SIGNATURES_NORMAL_MATCH_VISIBLE = 21
 SIGNATURES_LAB_ONLY = 35
 SIGNATURES_DESIGN_ONLY = 0
@@ -43,13 +45,32 @@ ROSTER_PROJECTILE_VISUAL_IDENTITY_COMPLETE = False
 EMBER_PROJECTILE_RUNTIME_E2E = True
 DETERMINISTIC_MOVE_ROUTING_E2E = True
 REAL_INPUT_MOVE_E2E = True
+REAL_INPUT_MOVE_E2E_RAW = True
+REAL_INPUT_MOVE_E2E_PURE = True
+PURE_REAL_INPUT_CASES_ATTEMPTED = 18
+PURE_REAL_INPUT_CASES_PASSED = 18
+HEADLESS_INPUT_BLOCKED_CASES = []
+PIXEL_REAL_INPUT_CLOSED_CASES = ['ember_idle', 'ember_forward_tilt', 'ember_up_tilt', 'ember_down_tilt', 'ember_neutral_air', 'ember_forward_air', 'ember_back_air', 'ember_proj_tap', 'ember_proj_med', 'ember_proj_full', 'ember_feint_slide', 'ember_recovery', 'ember_ash_trap_coil', 'ember_aura_charge', 'ember_flare_step_rush', 'ember_grab', 'ember_throw_forward', 'ember_throw_back', 'ember_throw_up', 'ember_throw_down', 'ember_ko', 'ember_respawn']
+REAL_INPUT_FAILURES = []
+DIRECTIONAL_THROWS_ATTEMPTED = 4
+DIRECTIONAL_THROWS_EXACT_PASS = 4
 GOLDEN_SLICE_VISIBLE_BONE_MOTION = True
+VISIBLE_BONE_MOTION_PASS = True
 INSPIRED_CHOREOGRAPHY_RUNTIME_ALIGNMENT = True
 INSPIRED_CHOREOGRAPHY_RUNTIME_ALIGNMENT_V2 = True
 GOLDEN_SLICE_MOVE_APPLICATION_E2E = True
 NO_GENERIC_ATTACK_FALLBACKS_IN_GOLDEN_SLICE = True
-PIXEL_GOLDEN_SLICE_CAPTURE = BLOCKED_DEVICE
-PIXEL_MOVE_SPECIFIC_CAPTURE_AUTHENTIC = False
+PIXEL_GOLDEN_SLICE_CAPTURE = CAPTURED_AUTHENTIC
+PIXEL_MOVE_SPECIFIC_CAPTURE_AUTHENTIC = True
+PIXEL_CAPTURE_CASES = 22
+DEVICE_MODEL = Pixel 6a
+PIXEL_SOURCE_SHA = 06203b850524c864499debfbaebb161dc5e670a4
+APK_SHA256 = 2f1135b100dcb92abed1be4996e070047daf4a1fe73e85c36710a34a422cc247
+PIXEL_NORMAL_PLAY_SMOKE_MIN = 10.058
+UNEXPECTED_PROCESS_DEATHS = 0
+FATAL_EXCEPTIONS = 0
+ANR_COUNT = 0
+OOM_COUNT = 0
 CURRENT_QUALITY_LEVEL = Q2
 GOLDEN_SLICE_AUTOMATED_Q3_READINESS = False
 OWNER_TASTE_REVIEW = PENDING
@@ -65,19 +86,19 @@ TASTE_GATE = PENDING_OWNER
 TASTE_DEBT_T0 = 0
 NEW_S0 = 0
 NEW_S1 = 0
-READY_FOR_OWNER_MERGE = True
+READY_FOR_OWNER_MERGE = False
 CURSOR_MERGED_NOTHING = True
 animation_class = PROCEDURAL_RUNTIME_ANIMATION
-PHYSICAL_SMOKE = BLOCKED_DEVICE
+PHYSICAL_SMOKE = CAPTURED_AUTHENTIC
 ```
 
 ## Explain
 
-1. **Before Wave016:** Wave014 generated 357 procedural clips and choreography specs, but RuntimeMoveResolver collapsed many attacks to jab_1/special/throw_forward; tilts used mismatched names (`forward_tilt` vs `tilt_forward`).
-2. **Why not visible:** Attack states without mapped move_id fell back to generic jab; DESIGN_ONLY flags treated loaded tilt/aerial clips as unplayable; projectiles used ColorRect DebugRect as primary art.
-3. **Naming mismatches:** forward_tilt→tilt_forward, up/down tilt, aerial_* vs *_air, jab_1→jab, jab_2→jab_chain_2, jab_finisher→jab_chain_3, heavy_attack→heavy, aura_burst→signature_lane_burst, special→projectile tiers.
-4. **Now player-visible:** Ember normal set maps via alias + RuntimeMoveResolver; RealInput E2E proves TouchInputManager→_handle_actions; Deterministic E2E covers routing; bone motion uses Skeleton3D deltas.
-5. **Signature truth:** SIGNATURES_* derived from move manifests + alias map + NORMAL_INPUT_COMMANDS routes (not hardcoded burst/feint/trap×7).
-6. **Golden Slice:** Ember projectile intentional visual Q2; choreography alignment V2 compares startup/active/recovery/clip duration; Q3 readiness false; OWNER_TASTE_REVIEW=PENDING.
-7. **Reachability ontology:** DIRECT_PLAYER_INPUT vs NORMAL_MATCH vs REACTION recomputed; hurt/launch/KO/victory are REACTION/NORMAL_MATCH only — 287 not preserved for continuity.
-8. **Owner action:** Review draft PR #87; Pixel contact sheet is AUTHENTIC only when state_verified on device — otherwise BLOCKED_DEVICE PARTIAL; merge authority Edmund only — Cursor merges nothing.
+1. **Pure real-input:** Failed rows are never rewritten via deterministic cross-validation; RAW vs PURE split is recorded.
+2. **Headless gaps:** Cases classified HEADLESS_INPUT_INJECTION_GAP when deterministic passes but headless real-input fails; closed on Pixel when capture harness verifies them.
+3. **Exact throws:** Directional throws require grab_connected → throw input → expected move/clip → target released (remaining grab is not PASS).
+4. **Pixel captures:** Authentic only when on-device state_verified for all required move-specific labels.
+5. **Model visibility:** PIXEL_EMBER_MODEL_VISIBILITY_FAILURES must be 0 (nameplate ⇒ presentation).
+6. **10-min smoke:** UNEXPECTED_PROCESS_DEATHS/FATAL/ANR/OOM must be 0.
+7. **CI:** Final-head workflows must all be SUCCESS before READY_FOR_OWNER_MERGE.
+8. **Owner action:** Edmund sole merge + taste authority — Cursor merges nothing; OWNER_TASTE_REVIEW=PENDING.

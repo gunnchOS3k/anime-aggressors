@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 from pathlib import Path
 
@@ -139,9 +140,10 @@ def main() -> int:
 
     generic = int(metrics.get("GENERIC_FALLBACK_GAMEPLAY_MOVES", 99))
     unmapped = int(metrics.get("UNMAPPED_GAMEPLAY_MOVES", 99))
-    ci_status = "PENDING"  # filled by CI poll script / later
+    # Optional override after CI poll: WAVE016_CI_STATUS=SUCCESS|PENDING|...
+    ci_status = os.environ.get("WAVE016_CI_STATUS", "PENDING")
 
-    section14 = all(
+    device_section14 = all(
         [
             generic == 0,
             unmapped == 0,
@@ -162,13 +164,15 @@ def main() -> int:
             int(taste.get("TASTE_DEBT_T0", 99)) == 0,
         ]
     )
+    section14 = device_section14 and ci_status == "SUCCESS"
 
     if gate_dev.get("PR87_FINAL_MERGE_GATE") == "BLOCKED_PIXEL6A":
         merge_gate = "BLOCKED_PIXEL6A"
         ready = False
-    elif section14:
+    elif device_section14:
+        # Device/objective gate can PASS while CI is still pending; READY waits on CI.
         merge_gate = "PASS"
-        ready = True
+        ready = section14
     elif pixel_authentic or routing_ok:
         merge_gate = "PARTIAL"
         ready = False

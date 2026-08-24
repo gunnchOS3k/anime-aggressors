@@ -1,7 +1,7 @@
 # Golden Slice Contact Sheet (PR #87)
 
-Status: **PARTIAL**
+Status: **CAPTURED_AUTHENTIC**
 
-PIXEL_MOVE_SPECIFIC_CAPTURE_AUTHENTIC: `False`
+PIXEL_MOVE_SPECIFIC_CAPTURE_AUTHENTIC: `True`
 
-Device: Pixel 6a · SHA `39ddfbc4fd759ee3249c72c1e0760bf1efe93358`
+Device: Pixel 6a · SHA `06203b850524c864499debfbaebb161dc5e670a4`
