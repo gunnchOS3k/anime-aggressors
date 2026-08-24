@@ -1,7 +1,7 @@
-# Golden Slice Contact Sheet
+# Golden Slice Contact Sheet (PR #87)
 
-Status: **BLOCKED_DEVICE**
+Status: **PARTIAL**
 
 PIXEL_MOVE_SPECIFIC_CAPTURE_AUTHENTIC: `False`
 
-adb present; no device. State rows derived from E2E where verified; PIXEL_MOVE_SPECIFIC_CAPTURE_AUTHENTIC=false.
+Device: Pixel 6a · SHA `39ddfbc4fd759ee3249c72c1e0760bf1efe93358`

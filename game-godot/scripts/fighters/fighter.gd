@@ -526,7 +526,10 @@ func _tick_cpu_telegraph(delta: float) -> void:
 func _start_move_by_command(cmd: String) -> void:
 	var m: Dictionary = {}
 	var airborne := (not is_on_floor()) or _force_airborne_test
-	if cmd == "attack_neutral" and not airborne:
+	if cmd == "aura_burst":
+		# Direct lookup — input_command routing can miss burst when airborne flag races.
+		m = _DataLoader.find_move(move_manifest, "aura_burst")
+	elif cmd == "attack_neutral" and not airborne:
 		match _jab_chain:
 			0: m = _DataLoader.find_move(move_manifest, "jab_1")
 			1: m = _DataLoader.find_move(move_manifest, "jab_2")
