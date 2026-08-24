@@ -1,0 +1,76 @@
+name: Engineering Wave016 Move Animation Application
+
+on:
+  push:
+    branches: [main, "eng/wave016-move-animation-application", "eng/**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  wave016:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Godot 4.5
+        run: |
+          set -euo pipefail
+          curl -L -o godot.zip https://github.com/godotengine/godot-builds/releases/download/4.5-stable/Godot_v4.5-stable_linux.x86_64.zip
+          unzip -o godot.zip
+          chmod +x Godot_v4.5-stable_linux.x86_64
+          echo "GODOT_BIN=$PWD/Godot_v4.5-stable_linux.x86_64" >> "$GITHUB_ENV"
+
+      - name: Alias unit + matrix
+        run: |
+          python3 tools/engineering_wave016/test_alias_resolver.py
+          python3 tools/engineering_wave016/build_move_application_matrix.py
+
+      - name: Taste gate
+        run: make taste-gate
+
+      - name: Engineering Wave016
+        env:
+          GODOT_BIN: ${{ env.GODOT_BIN }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_ACTIONS: "true"
+          WAVE016_FULL_REGRESSION: "0"
+          WAVE016_SKIP_PIXEL_GATE: "1"
+        run: make engineering-wave016
+
+      - name: Upload Wave016 artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: engineering-wave016-evidence
+          path: |
+            artifacts/wave016/
+            artifacts/engineering_wave016/
+            content/runtime/
+
+      - name: CI final gate — honesty
+        if: github.event_name == 'pull_request'
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          d = json.load(open("artifacts/engineering_wave016/WAVE016_RESULT.json"))
+          assert d.get("CURSOR_MERGED_NOTHING") is True
+          assert d.get("FINAL_HUMAN_AUTHORED_ANIMATION_PASS") is False
+          assert d.get("HUMAN_ART_DIRECTION_APPROVAL") is False
+          assert d.get("HUMAN_PLAYTEST_COMPLETE") is False
+          assert d.get("OWNER_TASTE_REVIEW") == "PENDING"
+          assert d.get("PROCEDURAL_CLIPS_GENERATED") == 357
+          assert d.get("NORMAL_PLAYER_INPUT_REACHABLE_CLIPS", 357) < 357
+          assert d.get("GOLDEN_SLICE_AUTOMATED_Q3_READINESS") is False
+          m = json.load(open("content/runtime/move_animation_application_matrix.json"))
+          assert m["metrics"]["PROCEDURAL_CLIPS_GENERATED"] == 357
+          print("CI final gate OK", d.get("WAVE016_MOVE_ANIMATION_APPLICATION"))
+          PY

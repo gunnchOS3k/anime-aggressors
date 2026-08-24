@@ -1,0 +1,957 @@
+{
+  "schema": "signature_reality_closure_v1",
+  "wave": "016",
+  "access_architecture": {
+    "normal_match": "aura_burst -> signature_lane_burst; side_special -> signature_lane_feint; down_special -> signature_lane_trap",
+    "not_bound": "Remaining 5 lanes per fighter: training/lab preview and future combo/cancel/charge \u2014 not jammed onto extra buttons"
+  },
+  "stats": {
+    "SIGNATURES_DESIGNED": 56,
+    "SIGNATURES_WITH_PROCEDURAL_CLIP": 56,
+    "SIGNATURES_GAMEPLAY_IMPLEMENTED": 21,
+    "SIGNATURES_BOUND_TO_INPUT": 21,
+    "SIGNATURES_NORMAL_MATCH_VISIBLE": 21,
+    "SIGNATURES_LAB_ONLY": 35,
+    "SIGNATURES_DESIGN_ONLY": 0
+  },
+  "signatures": [
+    {
+      "fighter_id": "ember-vale",
+      "contract_key": "signature_lane_burst",
+      "display_name": "Flare Step Rush",
+      "has_procedural_clip": true,
+      "access_architecture": "aura_burst->aura_burst->signature_lane_burst",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_GAMEPLAY_IMPLEMENTED",
+        "SIGNATURE_BOUND_TO_INPUT",
+        "SIGNATURE_PLAYER_VISIBLE"
+      ],
+      "normal_match_playable": true,
+      "context_combo_playable": false,
+      "training_lab_only": false,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "ember-vale",
+      "contract_key": "signature_lane_control",
+      "display_name": "Cinder Veil",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "ember-vale",
+      "contract_key": "signature_lane_confirm",
+      "display_name": "Ignition Confirm",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "ember-vale",
+      "contract_key": "signature_lane_trap",
+      "display_name": "Ash Trap Coil",
+      "has_procedural_clip": true,
+      "access_architecture": "special_down->down_special->signature_lane_trap",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_GAMEPLAY_IMPLEMENTED",
+        "SIGNATURE_BOUND_TO_INPUT",
+        "SIGNATURE_PLAYER_VISIBLE"
+      ],
+      "normal_match_playable": true,
+      "context_combo_playable": false,
+      "training_lab_only": false,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "ember-vale",
+      "contract_key": "signature_lane_launch",
+      "display_name": "Solar Launch",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "ember-vale",
+      "contract_key": "signature_lane_feint",
+      "display_name": "Ember Feint Slide",
+      "has_procedural_clip": true,
+      "access_architecture": "special_forward->side_special->signature_lane_feint",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_GAMEPLAY_IMPLEMENTED",
+        "SIGNATURE_BOUND_TO_INPUT",
+        "SIGNATURE_PLAYER_VISIBLE"
+      ],
+      "normal_match_playable": true,
+      "context_combo_playable": false,
+      "training_lab_only": false,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "ember-vale",
+      "contract_key": "signature_lane_counter",
+      "display_name": "Heat Counter Snap",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "ember-vale",
+      "contract_key": "signature_lane_finisher",
+      "display_name": "Nova Finisher",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "rook-ironside",
+      "contract_key": "signature_lane_burst",
+      "display_name": "Basalt March",
+      "has_procedural_clip": true,
+      "access_architecture": "aura_burst->aura_burst->signature_lane_burst",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_GAMEPLAY_IMPLEMENTED",
+        "SIGNATURE_BOUND_TO_INPUT",
+        "SIGNATURE_PLAYER_VISIBLE"
+      ],
+      "normal_match_playable": true,
+      "context_combo_playable": false,
+      "training_lab_only": false,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "rook-ironside",
+      "contract_key": "signature_lane_control",
+      "display_name": "Rift Anchor",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "rook-ironside",
+      "contract_key": "signature_lane_confirm",
+      "display_name": "Rivet Confirm",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "rook-ironside",
+      "contract_key": "signature_lane_trap",
+      "display_name": "Quake Trap",
+      "has_procedural_clip": true,
+      "access_architecture": "special_down->down_special->signature_lane_trap",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_GAMEPLAY_IMPLEMENTED",
+        "SIGNATURE_BOUND_TO_INPUT",
+        "SIGNATURE_PLAYER_VISIBLE"
+      ],
+      "normal_match_playable": true,
+      "context_combo_playable": false,
+      "training_lab_only": false,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "rook-ironside",
+      "contract_key": "signature_lane_launch",
+      "display_name": "Catapult Launch",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "rook-ironside",
+      "contract_key": "signature_lane_feint",
+      "display_name": "Iron Feint",
+      "has_procedural_clip": true,
+      "access_architecture": "special_forward->side_special->signature_lane_feint",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_GAMEPLAY_IMPLEMENTED",
+        "SIGNATURE_BOUND_TO_INPUT",
+        "SIGNATURE_PLAYER_VISIBLE"
+      ],
+      "normal_match_playable": true,
+      "context_combo_playable": false,
+      "training_lab_only": false,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "rook-ironside",
+      "contract_key": "signature_lane_counter",
+      "display_name": "Counter Slam",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "rook-ironside",
+      "contract_key": "signature_lane_finisher",
+      "display_name": "Tectonic Finisher",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "juno-spark",
+      "contract_key": "signature_lane_burst",
+      "display_name": "Capacitor Rush",
+      "has_procedural_clip": true,
+      "access_architecture": "aura_burst->aura_burst->signature_lane_burst",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_GAMEPLAY_IMPLEMENTED",
+        "SIGNATURE_BOUND_TO_INPUT",
+        "SIGNATURE_PLAYER_VISIBLE"
+      ],
+      "normal_match_playable": true,
+      "context_combo_playable": false,
+      "training_lab_only": false,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "juno-spark",
+      "contract_key": "signature_lane_control",
+      "display_name": "Static Field",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "juno-spark",
+      "contract_key": "signature_lane_confirm",
+      "display_name": "Arc Confirm",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "juno-spark",
+      "contract_key": "signature_lane_trap",
+      "display_name": "Magnet Snare",
+      "has_procedural_clip": true,
+      "access_architecture": "special_down->down_special->signature_lane_trap",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_GAMEPLAY_IMPLEMENTED",
+        "SIGNATURE_BOUND_TO_INPUT",
+        "SIGNATURE_PLAYER_VISIBLE"
+      ],
+      "normal_match_playable": true,
+      "context_combo_playable": false,
+      "training_lab_only": false,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "juno-spark",
+      "contract_key": "signature_lane_launch",
+      "display_name": "Coil Launch",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "juno-spark",
+      "contract_key": "signature_lane_feint",
+      "display_name": "Spark Feint",
+      "has_procedural_clip": true,
+      "access_architecture": "special_forward->side_special->signature_lane_feint",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_GAMEPLAY_IMPLEMENTED",
+        "SIGNATURE_BOUND_TO_INPUT",
+        "SIGNATURE_PLAYER_VISIBLE"
+      ],
+      "normal_match_playable": true,
+      "context_combo_playable": false,
+      "training_lab_only": false,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "juno-spark",
+      "contract_key": "signature_lane_counter",
+      "display_name": "Volt Counter",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "juno-spark",
+      "contract_key": "signature_lane_finisher",
+      "display_name": "Thunderclap Finisher",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "kaia-windrow",
+      "contract_key": "signature_lane_burst",
+      "display_name": "Gale Surge",
+      "has_procedural_clip": true,
+      "access_architecture": "aura_burst->aura_burst->signature_lane_burst",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_GAMEPLAY_IMPLEMENTED",
+        "SIGNATURE_BOUND_TO_INPUT",
+        "SIGNATURE_PLAYER_VISIBLE"
+      ],
+      "normal_match_playable": true,
+      "context_combo_playable": false,
+      "training_lab_only": false,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "kaia-windrow",
+      "contract_key": "signature_lane_control",
+      "display_name": "Pressure Dome",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "kaia-windrow",
+      "contract_key": "signature_lane_confirm",
+      "display_name": "Updraft Confirm",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "kaia-windrow",
+      "contract_key": "signature_lane_trap",
+      "display_name": "Crosswind Snare",
+      "has_procedural_clip": true,
+      "access_architecture": "special_down->down_special->signature_lane_trap",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_GAMEPLAY_IMPLEMENTED",
+        "SIGNATURE_BOUND_TO_INPUT",
+        "SIGNATURE_PLAYER_VISIBLE"
+      ],
+      "normal_match_playable": true,
+      "context_combo_playable": false,
+      "training_lab_only": false,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "kaia-windrow",
+      "contract_key": "signature_lane_launch",
+      "display_name": "Ribbon Launch",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "kaia-windrow",
+      "contract_key": "signature_lane_feint",
+      "display_name": "Gust Feint",
+      "has_procedural_clip": true,
+      "access_architecture": "special_forward->side_special->signature_lane_feint",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_GAMEPLAY_IMPLEMENTED",
+        "SIGNATURE_BOUND_TO_INPUT",
+        "SIGNATURE_PLAYER_VISIBLE"
+      ],
+      "normal_match_playable": true,
+      "context_combo_playable": false,
+      "training_lab_only": false,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "kaia-windrow",
+      "contract_key": "signature_lane_counter",
+      "display_name": "Shear Counter",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "kaia-windrow",
+      "contract_key": "signature_lane_finisher",
+      "display_name": "Tempest Finisher",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "nix-calder",
+      "contract_key": "signature_lane_burst",
+      "display_name": "Rime Brake",
+      "has_procedural_clip": true,
+      "access_architecture": "aura_burst->aura_burst->signature_lane_burst",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_GAMEPLAY_IMPLEMENTED",
+        "SIGNATURE_BOUND_TO_INPUT",
+        "SIGNATURE_PLAYER_VISIBLE"
+      ],
+      "normal_match_playable": true,
+      "context_combo_playable": false,
+      "training_lab_only": false,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "nix-calder",
+      "contract_key": "signature_lane_control",
+      "display_name": "Frost Lattice",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "nix-calder",
+      "contract_key": "signature_lane_confirm",
+      "display_name": "Crystal Confirm",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "nix-calder",
+      "contract_key": "signature_lane_trap",
+      "display_name": "Icicle Trap",
+      "has_procedural_clip": true,
+      "access_architecture": "special_down->down_special->signature_lane_trap",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_GAMEPLAY_IMPLEMENTED",
+        "SIGNATURE_BOUND_TO_INPUT",
+        "SIGNATURE_PLAYER_VISIBLE"
+      ],
+      "normal_match_playable": true,
+      "context_combo_playable": false,
+      "training_lab_only": false,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "nix-calder",
+      "contract_key": "signature_lane_launch",
+      "display_name": "Glacier Launch",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "nix-calder",
+      "contract_key": "signature_lane_feint",
+      "display_name": "Shatter Feint",
+      "has_procedural_clip": true,
+      "access_architecture": "special_forward->side_special->signature_lane_feint",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_GAMEPLAY_IMPLEMENTED",
+        "SIGNATURE_BOUND_TO_INPUT",
+        "SIGNATURE_PLAYER_VISIBLE"
+      ],
+      "normal_match_playable": true,
+      "context_combo_playable": false,
+      "training_lab_only": false,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "nix-calder",
+      "contract_key": "signature_lane_counter",
+      "display_name": "Freeze Counter",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "nix-calder",
+      "contract_key": "signature_lane_finisher",
+      "display_name": "Absolute Zero Finisher",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "orion-vell",
+      "contract_key": "signature_lane_burst",
+      "display_name": "Orbit Rush",
+      "has_procedural_clip": true,
+      "access_architecture": "aura_burst->aura_burst->signature_lane_burst",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_GAMEPLAY_IMPLEMENTED",
+        "SIGNATURE_BOUND_TO_INPUT",
+        "SIGNATURE_PLAYER_VISIBLE"
+      ],
+      "normal_match_playable": true,
+      "context_combo_playable": false,
+      "training_lab_only": false,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "orion-vell",
+      "contract_key": "signature_lane_control",
+      "display_name": "Gravity Well",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "orion-vell",
+      "contract_key": "signature_lane_confirm",
+      "display_name": "Vector Confirm",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "orion-vell",
+      "contract_key": "signature_lane_trap",
+      "display_name": "Singularity Snare",
+      "has_procedural_clip": true,
+      "access_architecture": "special_down->down_special->signature_lane_trap",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_GAMEPLAY_IMPLEMENTED",
+        "SIGNATURE_BOUND_TO_INPUT",
+        "SIGNATURE_PLAYER_VISIBLE"
+      ],
+      "normal_match_playable": true,
+      "context_combo_playable": false,
+      "training_lab_only": false,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "orion-vell",
+      "contract_key": "signature_lane_launch",
+      "display_name": "Orbit Hang",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "orion-vell",
+      "contract_key": "signature_lane_feint",
+      "display_name": "Phase Feint",
+      "has_procedural_clip": true,
+      "access_architecture": "special_forward->side_special->signature_lane_feint",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_GAMEPLAY_IMPLEMENTED",
+        "SIGNATURE_BOUND_TO_INPUT",
+        "SIGNATURE_PLAYER_VISIBLE"
+      ],
+      "normal_match_playable": true,
+      "context_combo_playable": false,
+      "training_lab_only": false,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "orion-vell",
+      "contract_key": "signature_lane_counter",
+      "display_name": "Repulse Counter",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "orion-vell",
+      "contract_key": "signature_lane_finisher",
+      "display_name": "Collapse Finisher",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "vesper-nyx",
+      "contract_key": "signature_lane_burst",
+      "display_name": "Umbral Rush",
+      "has_procedural_clip": true,
+      "access_architecture": "aura_burst->aura_burst->signature_lane_burst",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_GAMEPLAY_IMPLEMENTED",
+        "SIGNATURE_BOUND_TO_INPUT",
+        "SIGNATURE_PLAYER_VISIBLE"
+      ],
+      "normal_match_playable": true,
+      "context_combo_playable": false,
+      "training_lab_only": false,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "vesper-nyx",
+      "contract_key": "signature_lane_control",
+      "display_name": "Void Curtain",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "vesper-nyx",
+      "contract_key": "signature_lane_confirm",
+      "display_name": "Echo Confirm",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "vesper-nyx",
+      "contract_key": "signature_lane_trap",
+      "display_name": "Shadow Snare",
+      "has_procedural_clip": true,
+      "access_architecture": "special_down->down_special->signature_lane_trap",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_GAMEPLAY_IMPLEMENTED",
+        "SIGNATURE_BOUND_TO_INPUT",
+        "SIGNATURE_PLAYER_VISIBLE"
+      ],
+      "normal_match_playable": true,
+      "context_combo_playable": false,
+      "training_lab_only": false,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "vesper-nyx",
+      "contract_key": "signature_lane_launch",
+      "display_name": "Phase Launch",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "vesper-nyx",
+      "contract_key": "signature_lane_feint",
+      "display_name": "Umbral Feint",
+      "has_procedural_clip": true,
+      "access_architecture": "special_forward->side_special->signature_lane_feint",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_GAMEPLAY_IMPLEMENTED",
+        "SIGNATURE_BOUND_TO_INPUT",
+        "SIGNATURE_PLAYER_VISIBLE"
+      ],
+      "normal_match_playable": true,
+      "context_combo_playable": false,
+      "training_lab_only": false,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "vesper-nyx",
+      "contract_key": "signature_lane_counter",
+      "display_name": "Void Counter",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    },
+    {
+      "fighter_id": "vesper-nyx",
+      "contract_key": "signature_lane_finisher",
+      "display_name": "Eclipse Finisher",
+      "has_procedural_clip": true,
+      "access_architecture": "training/lab preview; future combo/cancel/charge context",
+      "classes": [
+        "SIGNATURE_DESIGNED",
+        "SIGNATURE_ANIMATED_PROXY",
+        "SIGNATURE_LAB_ONLY"
+      ],
+      "normal_match_playable": false,
+      "context_combo_playable": false,
+      "training_lab_only": true,
+      "future_design_only": false
+    }
+  ]
+}

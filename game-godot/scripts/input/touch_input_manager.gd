@@ -110,6 +110,13 @@ func force_show(on: bool) -> void:
 	_sync_overlay()
 	_save_settings()
 
+
+## Wave016 / CI harness: allow TouchInputManager injection without overlay UI.
+func enable_test_harness() -> void:
+	touch_mode = TouchMode.ON
+	_in_gameplay = true
+	_sync_overlay()
+
 func _detect_touch_device() -> bool:
 	if DisplayServer.is_touchscreen_available():
 		return true
@@ -186,15 +193,15 @@ func _apply_synthetic_actions() -> void:
 
 func _set_axis_actions(prefix: String, axis_x: float, axis_y: float) -> void:
 	var dead := 0.22
-	_set_action(prefix + "left", axis_x < -dead)
-	_set_action(prefix + "right", axis_x > dead)
-	_set_action(prefix + "up", axis_y < -dead)
-	_set_action(prefix + "down", axis_y > dead)
+	# Preserve analog strength so tilt (0.3–0.75) is not collapsed to dash (>0.75).
+	_set_action(prefix + "left", axis_x < -dead, absf(axis_x))
+	_set_action(prefix + "right", axis_x > dead, absf(axis_x))
+	_set_action(prefix + "up", axis_y < -dead, absf(axis_y))
+	_set_action(prefix + "down", axis_y > dead, absf(axis_y))
 
-func _set_action(action: String, pressed: bool) -> void:
+func _set_action(action: String, pressed: bool, strength: float = 1.0) -> void:
 	if pressed:
-		if not Input.is_action_pressed(action):
-			Input.action_press(action)
+		Input.action_press(action, clampf(strength, 0.0, 1.0))
 	else:
 		if Input.is_action_pressed(action):
 			Input.action_release(action)

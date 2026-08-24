@@ -550,7 +550,10 @@ func _find_skeleton(node: Node) -> Skeleton3D:
 
 func _clip_for_state(state: String, move_id: String) -> String:
 	var resolved: Dictionary = _MoveResolver.resolve_clip(state, move_id, _loaded_clip_dict())
-	return str(resolved.get("requested", "idle"))
+	var clip := str(resolved.get("clip", ""))
+	if clip.is_empty():
+		clip = str(resolved.get("requested", "idle"))
+	return clip
 
 
 func _loaded_clip_dict() -> Dictionary:

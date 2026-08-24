@@ -1,0 +1,36 @@
+{
+  "schema": "directional_input_audit_v1",
+  "wave": "016",
+  "checks": [
+    {
+      "name": "forward_air_vs_back_air",
+      "distinguished": true,
+      "implementation": "Facing-relative stick vs facing in Fighter._resolve_attack_command"
+    },
+    {
+      "name": "tilt_vs_smash_heavy",
+      "distinguished": false,
+      "implementation": "DESIGN_ONLY \u2014 CONTROLS.md has no smash/heavy distinct input; heavy_attack not bound"
+    },
+    {
+      "name": "projectile_tap_medium_full",
+      "distinguished": true,
+      "implementation": "Aura level selects cast clip + projectile tier (no new buttons)"
+    },
+    {
+      "name": "four_throws",
+      "distinguished": true,
+      "implementation": "Direction + attack while grabbing"
+    },
+    {
+      "name": "directional_specials",
+      "distinguished": true,
+      "implementation": "special_neutral/forward/up/down"
+    },
+    {
+      "name": "signature_commands",
+      "distinguished": true,
+      "implementation": "aura_burst + side/down special bind 3 signature lanes; others lab-only"
+    }
+  ]
+}

@@ -42,10 +42,20 @@ func spawn_from_move(move: Dictionary, aura_amount: float) -> Node:
 	var offset := Vector2(float(proj_cfg.get("offset_x", 40)) * facing, float(proj_cfg.get("offset_y", -12)))
 	proj.global_position = owner_fighter.global_position + offset
 	var element: String = move.get("element_effect", {}).get("type", "")
+	var tier := str(move.get("projectile_tier", ""))
+	if tier.is_empty():
+		match level:
+			0, 1:
+				tier = "projectile_tap"
+			2:
+				tier = "projectile_medium"
+			_:
+				tier = "projectile_full"
 	var cfg := {
 		"fighter_id": owner_fighter.fighter_id if "fighter_id" in owner_fighter else "",
 		"move_id": move.get("move_id", ""),
 		"aura_level": level,
+		"projectile_tier": tier,
 		"team_slot": owner_fighter.slot if "slot" in owner_fighter else 1,
 		"lifetime_frames": life,
 		"speed": speed,

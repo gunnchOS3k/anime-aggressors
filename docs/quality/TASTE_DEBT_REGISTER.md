@@ -5,19 +5,19 @@ Do not close items to inflate quality ladder.
 
 | ID | Title | Severity | Quality band | Status | Notes |
 |----|-------|----------|--------------|--------|-------|
-| **TASTE-001** | Projectiles render as ColorRect rectangles | **T1** | **Q1** | OPEN | `Projectile2D.tscn` DebugRect forced visible as primary player-facing projectile art (`projectile.gd` configure). Not lane fantasy VFX. |
-| **TASTE-002** | Nameplate visible while model missing | **T0** | **Q0** | OPEN (failure mode) | Desktop Wave014 BattleScene E2E asserts model loaded; failure mode remains gated. Pixel campaign must re-validate — do not invent Pixel pass. Detector: `NAMEPLATE_VISIBLE_AND_MODEL_MISSING`. |
-| **TASTE-003** | Procedural production-proxy models rough | **T1** | **Q1** | OPEN | Roster uses procedural GLB proxies; readable as blockout/proxy, not final character art. |
+| **TASTE-001** | Projectiles render as ColorRect rectangles | **T1** | **Q1→Q2** | **CLOSED (Wave016)** | Ember intentional ember-silhouette + trail family in `projectile.gd`; DebugRect no longer forced visible. Evidence: `artifacts/wave016/before_after/projectile.md`. |
+| **TASTE-002** | Nameplate visible while model missing | **T0** | **Q0** | **CLOSED (Wave016)** | `Fighter.ensure_visible_presentation()` keeps body fallback or hides nameplate; lifecycle hooks on KO/respawn. Detector still treats as failure mode if violated. |
+| **TASTE-003** | Procedural production-proxy models rough | **T1** | **Q1** | OPEN | Roster uses procedural GLB proxies; readable as blockout/proxy, not final character art. Out of Wave016 projectile/mapping scope. |
 | **TASTE-004** | Overall far from final polish | **T2** | Q1–Q2 overall | OPEN | Coherent prototype direction exists; not ship polish across VFX, animation craft, UI, audio mix. |
 
 ---
 
-## Counts (seed baseline)
+## Counts (Wave016)
 
 | Severity | Open |
 |----------|------|
-| T0 | 1 (TASTE-002) |
-| T1 | 2 (TASTE-001, TASTE-003) |
+| T0 | 0 |
+| T1 | 1 (TASTE-003) |
 | T2 | 1 (TASTE-004) |
 | T3 | 0 |
 

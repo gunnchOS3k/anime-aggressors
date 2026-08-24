@@ -14,6 +14,7 @@ const _AuraScaler = preload("res://scripts/combat/aura_scaler.gd")
 const _AuraIdentity = preload("res://scripts/combat/aura_identity.gd")
 const _AuraSpecialRuntime = preload("res://scripts/combat/aura_special_runtime.gd")
 const _CombatMath = preload("res://scripts/combat/combat_math.gd")
+const _MoveResolver = preload("res://scripts/visual/runtime_move_resolver.gd")
 
 signal damaged(amount: float, total: float)
 signal koed()
@@ -169,6 +170,7 @@ func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, s
 		model_3d.set_facing(facing)
 	if animator:
 		animator.set_proxy_visible(not model_loaded)
+	ensure_visible_presentation()
 	shield_health = float(data.get("shieldProfile", {}).get("maxHealth", 100))
 	var gs = get_node_or_null("/root/GameState")
 	var cpu_seed: int = 0
@@ -190,6 +192,29 @@ func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, s
 
 func is_model_loaded() -> bool:
 	return model_3d != null and model_3d.is_model_loaded()
+
+
+## Wave016 Q0: never leave nameplate visible with no fighter body representation.
+func ensure_visible_presentation() -> void:
+	var model_ok := is_model_loaded()
+	var body_ok := body != null and body.visible
+	if not model_ok and body != null:
+		body.visible = true
+		body_ok = true
+		if animator and animator.has_method("set_proxy_visible"):
+			animator.set_proxy_visible(true)
+	if label:
+		# Nameplate allowed only when a model or ColorRect body fallback is present.
+		label.visible = model_ok or body_ok
+	if model_ok and body != null:
+		body.visible = false
+
+
+## Test harness hook — forces airborne resolution without inventing player controls.
+var _force_airborne_test: bool = false
+
+func force_airborne_for_test(airborne: bool) -> void:
+	_force_airborne_test = airborne
 
 
 func get_weight() -> float:
@@ -247,7 +272,6 @@ func _physics_process(delta: float) -> void:
 	if _dodge_cooldown > 0.0:
 		_dodge_cooldown = maxf(0.0, _dodge_cooldown - delta)
 	_AuraSpecialRuntime.tick_fighter(self, delta)
-	_tick_idle_aura_decay(delta)
 	_tick_shield_regen(delta)
 	# Kaia air-drift stamp (runtime, not data-only).
 	if not is_on_floor() and _AuraIdentity.air_drift_bonus(fighter_id, aura, str(data.get("combatTag", ""))) > 0.0:
@@ -278,10 +302,13 @@ func _physics_process(delta: float) -> void:
 		_dummy_tick(delta)
 	if controls_enabled:
 		_apply_movement(delta)
+		# Handle attack/special BEFORE idle aura decay so a full meter (100)
+		# can still trigger aura_burst on the same frame it would otherwise decay.
 		_handle_actions()
 	else:
 		if is_on_floor():
 			velocity.x = move_toward(velocity.x, 0.0, get_run_speed() * delta * 8.0)
+	_tick_idle_aura_decay(delta)
 	move_and_slide()
 	_sync_motion_state()
 	_check_ledge_grab()
@@ -317,13 +344,17 @@ func _apply_movement(delta: float) -> void:
 		if velocity.y > 0:
 			velocity.y = 0.0
 	if absf(axis) > 0.1:
-		facing = 1 if axis > 0 else -1
+		# Grounded facing follows stick. Airborne facing stays put so back-airs
+		# remain reachable (stick opposite facing) — matches facing-relative aerials.
+		if is_on_floor():
+			facing = 1 if axis > 0 else -1
 		var spd: float = get_run_speed()
 		if absf(axis) > 0.75 and is_on_floor():
 			spd = get_dash_speed()
 			state_machine.enter(_FighterStates.DASH)
 		else:
-			state_machine.enter(_FighterStates.RUN if absf(velocity.x) > spd * 0.5 else _FighterStates.WALK)
+			if is_on_floor():
+				state_machine.enter(_FighterStates.RUN if absf(velocity.x) > spd * 0.5 else _FighterStates.WALK)
 		if state_machine.current_state == _FighterStates.AURA_CHARGE:
 			spd *= get_charge_move_mult()
 		var target_x: float = axis * (spd if is_on_floor() else get_air_speed())
@@ -418,7 +449,11 @@ func _resolve_attack_command() -> String:
 		var down: bool = _read_down()
 		if up: return "attack_air_up"
 		if down: return "attack_air_down"
-		if absf(axis) > 0.3: return "attack_air_forward"
+		# Facing-relative aerial: stick with facing = forward air; opposite = back air.
+		# Matches docs/CONTROLS.md back aerial without inventing a new button.
+		if absf(axis) > 0.3:
+			var stick_forward := (axis > 0.0 and facing > 0) or (axis < 0.0 and facing < 0)
+			return "attack_air_forward" if stick_forward else "attack_air_back"
 		return "attack_air_neutral"
 	var axis: float = _read_axis()
 	var up: bool = _read_up()
@@ -428,7 +463,7 @@ func _resolve_attack_command() -> String:
 	if up: return "attack_up"
 	if down: return "attack_down"
 	if absf(axis) > 0.3: return "attack_forward"
-	if absf(axis) > 0.5: return "attack_heavy"
+	# heavy_attack / smash remain DESIGN_ONLY: CONTROLS do not distinguish tilt vs smash/heavy.
 	if _jab_chain == 0: return "attack_neutral"
 	if _jab_chain == 1: return "attack_neutral"
 	return "attack_neutral"
@@ -492,7 +527,11 @@ func _tick_cpu_telegraph(delta: float) -> void:
 
 func _start_move_by_command(cmd: String) -> void:
 	var m: Dictionary = {}
-	if cmd == "attack_neutral" and is_on_floor():
+	var airborne := (not is_on_floor()) or _force_airborne_test
+	if cmd == "aura_burst":
+		# Direct lookup — input_command routing can miss burst when airborne flag races.
+		m = _DataLoader.find_move(move_manifest, "aura_burst")
+	elif cmd == "attack_neutral" and not airborne:
 		match _jab_chain:
 			0: m = _DataLoader.find_move(move_manifest, "jab_1")
 			1: m = _DataLoader.find_move(move_manifest, "jab_2")
@@ -503,7 +542,7 @@ func _start_move_by_command(cmd: String) -> void:
 			else:
 				_jab_chain = 0
 	else:
-		m = _DataLoader.find_move_by_input(move_manifest, cmd, not is_on_floor())
+		m = _DataLoader.find_move_by_input(move_manifest, cmd, airborne)
 	if m.is_empty():
 		return
 	_start_move_dict(m)
@@ -513,6 +552,15 @@ func _start_move_dict(m: Dictionary) -> void:
 	_current_move = _AuraIdentity.apply_to_scaled_move(
 		_current_move, fighter_id, aura, str(data.get("combatTag", ""))
 	)
+	# Neutral special cast clip follows aura tier (tap/medium/full) — no new buttons.
+	var mid0 := str(_current_move.get("move_id", m.get("move_id", "")))
+	if mid0 == "neutral_special_projectile" or str(m.get("move_type", "")) == "projectile":
+		var tier_clip := _MoveResolver.projectile_clip_for_aura(get_aura_level())
+		_current_move["visual_move_id"] = tier_clip
+		_current_move["projectile_tier"] = tier_clip
+	elif mid0 == "aura_burst":
+		# Normal-match signature access: aura burst plays signature_lane_burst.
+		_current_move["visual_move_id"] = "signature_lane_burst"
 	_AuraSpecialRuntime.begin_move_armor(self, _current_move)
 	record_move_use(str(_current_move.get("move_id", "")))
 	if bool(_current_move.get("dash_cancel_enabled", false)):
@@ -996,15 +1044,18 @@ func reset_fighter() -> void:
 	global_position = spawn_point
 	invincible = true
 	state_machine.enter(_FighterStates.RESPAWN)
+	ensure_visible_presentation()
 	get_tree().create_timer(1.2).timeout.connect(func():
 		invincible = false
 		state_machine.enter(_FighterStates.IDLE)
+		ensure_visible_presentation()
 		respawned.emit()
 	, CONNECT_ONE_SHOT)
 
 func lose_stock() -> void:
 	stocks -= 1
 	state_machine.enter(_FighterStates.KO)
+	ensure_visible_presentation()
 	koed.emit()
 	var telem = get_node_or_null("/root/MatchTelemetry")
 	if telem:
@@ -1162,9 +1213,13 @@ func _on_state_changed(_from: String, to: String) -> void:
 func _play_current_animation(state: String) -> void:
 	if not animator:
 		return
+	ensure_visible_presentation()
 	if model_3d and model_3d.is_model_loaded():
 		var move_copy: Dictionary = _current_move.duplicate()
 		move_copy["throw_direction"] = _throw_direction
+		# Prefer visual_move_id (projectile tier / signature bind) when set.
+		if move_copy.has("visual_move_id") and str(move_copy.get("visual_move_id", "")) != "":
+			move_copy["move_id"] = str(move_copy.get("visual_move_id"))
 		model_3d.play_for_state(state, move_copy)
 		if model_3d.has_method("set_aura_level"):
 			model_3d.set_aura_level(get_aura_level())
@@ -1180,8 +1235,13 @@ func _setup_shapes() -> void:
 			cs.shape = rect
 
 func _read_axis() -> float:
-	var kb = Input.get_action_strength("p%d_right" % slot) - Input.get_action_strength("p%d_left" % slot)
 	var touch = TouchInputManager.get_axis(slot)
+	# Prefer live touch stick when the overlay/harness is active — TIM also
+	# mirrors axis into Input actions, and a digital full-press would otherwise
+	# outrank an analog tilt and collapse forward_tilt into dash_attack.
+	if TouchInputManager.should_show_touch() and slot == 1 and absf(touch) > 0.01:
+		return touch
+	var kb = Input.get_action_strength("p%d_right" % slot) - Input.get_action_strength("p%d_left" % slot)
 	if absf(touch) > absf(kb):
 		return touch
 	return kb
