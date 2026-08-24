@@ -4,9 +4,9 @@
 token = ENGINEERING_WAVE_016_MOVE_ANIMATION_APPLICATION
 WAVE016_MOVE_ANIMATION_APPLICATION = PASS
 ACCEPTED_MAIN_SHA = b8da943b46e1460723603ea2216f646146180aa3
-HEAD = b8da943b46e1460723603ea2216f646146180aa3
-PR = PENDING_CREATE
-CI = PENDING
+HEAD = abbe75c962c79882b092f1349c391c8dbde184c2
+PR = https://github.com/gunnchOS3k/anime-aggressors/pull/87
+CI = wave016=success;taste-gate=success
 PROCEDURAL_CLIPS_GENERATED = 357
 NORMAL_PLAYER_INPUT_REACHABLE_CLIPS = 287
 GAMEPLAY_STATE_REACHABLE_CLIPS = 287
@@ -42,17 +42,18 @@ OWNER_TASTE_REVIEW = PENDING
 FINAL_HUMAN_AUTHORED_ANIMATION_PASS = False
 HUMAN_ART_DIRECTION_APPROVAL = False
 HUMAN_PLAYTEST_COMPLETE = False
-WAVE011_REGRESSION = SKIPPED_OR_PASS
-WAVE012_REGRESSION = SKIPPED_OR_PASS
-WAVE013B_REGRESSION = SKIPPED_OR_PASS
-WAVE014_REGRESSION = SKIPPED_OR_PASS
-WAVE015_REGRESSION = SKIPPED_OR_PASS
+WAVE011_REGRESSION = SKIPPED_CI_LIGHT
+WAVE012_REGRESSION = SKIPPED_CI_LIGHT
+WAVE013B_REGRESSION = SKIPPED_CI_LIGHT
+WAVE014_REGRESSION = SKIPPED_CI_LIGHT
+WAVE015_REGRESSION = SKIPPED_CI_LIGHT
 TASTE_GATE = PENDING_OWNER
 NEW_S0 = 0
 NEW_S1 = 0
 READY_FOR_OWNER_MERGE = True
 CURSOR_MERGED_NOTHING = True
 animation_class = PROCEDURAL_RUNTIME_ANIMATION
+PHYSICAL_SMOKE = PIXEL_CONTACT_SHEET_CAPTURED
 ```
 
 ## Explain
@@ -64,4 +65,4 @@ animation_class = PROCEDURAL_RUNTIME_ANIMATION
 5. **Signature truth:** 56 designed+animated; 21 bound via aura_burst/side/down special (3 lanes × 7); remainder lab/training — not jammed onto awkward buttons.
 6. **Golden Slice:** Ember-focused mapping + intentional projectile family + model visibility ensure; Q3 readiness false; OWNER_TASTE_REVIEW=PENDING.
 7. **Remaining:** smash_* DESIGN_ONLY; heavy_attack unbound; final authored animation; human Q5; roster-wide Golden Slice propagation blocked until Edmund reviews Ember.
-8. **Owner action:** Review draft PR; run/confirm Pixel contact sheet if needed; merge authority Edmund only — Cursor merges nothing.
+8. **Owner action:** Review draft PR #87; confirm Pixel contact sheet; merge authority Edmund only — Cursor merges nothing.
