@@ -532,10 +532,55 @@ func _set_loaded(value: bool) -> void:
 	_loaded = value
 	if _display:
 		_display.visible = value
+	# Wave017: player builds never show MODEL tier / PROXY / DEBUG labels.
 	var tier_label := get_node_or_null("ModelTierLabel") as Label
 	if tier_label:
-		tier_label.visible = _procedural_healthy
+		tier_label.visible = _developer_labels_enabled()
 		tier_label.text = PROXY_LABEL if _procedural_healthy else "STYLIZED FALLBACK"
+
+
+func _developer_labels_enabled() -> bool:
+	var gs = get_node_or_null("/root/GameState")
+	if gs != null and "debug_combat_hud" in gs and bool(gs.debug_combat_hud):
+		return true
+	if gs != null and str(gs.mode) == "training":
+		var rules = load("res://scripts/combat/competitive_rules.gd")
+		if rules and rules.has_method("show_debug_hud"):
+			return bool(rules.show_debug_hud(gs))
+	return false
+
+
+## Wave017 visibility invariant helper — body mesh must be renderable when expected.
+func is_visible_renderable_body() -> bool:
+	if not _loaded:
+		return false
+	if _display == null or not is_instance_valid(_display) or not _display.visible:
+		return false
+	if _viewport == null or not is_instance_valid(_viewport):
+		return false
+	if _loaded_model == null or not is_instance_valid(_loaded_model) or not _loaded_model.visible:
+		return false
+	# Prefer mesh presence when procedural; stylized always has meshes under root.
+	if _procedural_healthy and _visible_skeleton == null:
+		return false
+	return true
+
+
+func heal_visibility_if_needed() -> bool:
+	## Rebind display texture / force viewport update after bg/fg or SubViewport loss.
+	if _viewport == null or not is_instance_valid(_viewport):
+		_build_viewport()
+	if _display == null or not is_instance_valid(_display):
+		return false
+	if _display.texture == null and _viewport != null:
+		_display.texture = _viewport.get_texture()
+	_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	if _loaded_model != null and is_instance_valid(_loaded_model):
+		_loaded_model.visible = true
+		_display.visible = true
+		_loaded = true
+		return true
+	return false
 
 
 func _find_skeleton(node: Node) -> Skeleton3D:

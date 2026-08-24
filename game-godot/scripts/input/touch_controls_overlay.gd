@@ -22,6 +22,14 @@ func _ready() -> void:
 	# Start hidden — never cover Boot/Start Game before the first scene sync.
 	visible = false
 	process_mode = Node.PROCESS_MODE_DISABLED
+	# Wave017: iconographic touch affordances, readable press states.
+	_style_btn(btn_jump, "JP", Color(0.55, 0.85, 1.0))
+	_style_btn(btn_attack, "A", Color(1.0, 0.45, 0.35))
+	_style_btn(btn_special, "S", Color(1.0, 0.7, 0.25))
+	_style_btn(btn_shield, "SH", Color(0.45, 0.75, 1.0))
+	_style_btn(btn_grab, "G", Color(0.85, 0.55, 1.0))
+	_style_btn(btn_dodge, "DG", Color(0.7, 0.95, 0.55))
+	_style_btn(btn_aura, "AU", Color(1.0, 0.55, 0.2))
 	_wire_button(btn_jump, "jump")
 	_wire_button(btn_attack, "attack")
 	_wire_button(btn_special, "special")
@@ -73,11 +81,27 @@ func _set_interactive_filters(interactive: bool) -> void:
 	if stick_base:
 		stick_base.visible = interactive
 
+func _style_btn(btn: Button, glyph: String, accent: Color) -> void:
+	if btn == null:
+		return
+	btn.text = glyph
+	btn.modulate = Color(1, 1, 1, 0.72)
+	btn.add_theme_color_override("font_color", accent.lightened(0.15))
+	btn.add_theme_color_override("font_pressed_color", Color.WHITE)
+	btn.add_theme_font_size_override("font_size", 22)
+
+
 func _wire_button(btn: Button, suffix: String) -> void:
 	if btn == null:
 		return
-	btn.button_down.connect(func(): _set_btn(suffix, true, true))
-	btn.button_up.connect(func(): _set_btn(suffix, false, false))
+	btn.button_down.connect(func():
+		btn.modulate = Color(1, 1, 1, 1.0)
+		_set_btn(suffix, true, true)
+	)
+	btn.button_up.connect(func():
+		btn.modulate = Color(1, 1, 1, 0.72)
+		_set_btn(suffix, false, false)
+	)
 	btn.focus_mode = Control.FOCUS_NONE
 
 func _set_btn(suffix: String, pressed: bool, edge: bool) -> void:

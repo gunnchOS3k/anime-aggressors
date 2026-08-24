@@ -20,3 +20,10 @@
 6. Set `PIXEL_MODEL_VISIBILITY_VALIDATED` only after Edmund accepts the pack.
 
 **This gate PR does not invent that evidence.**
+
+
+## Wave017 additions
+
+- Taste debt `TASTE-T0-MODEL-VISIBILITY-001` lifecycle investigation + `assert_visible_body_invariant()` / heal path.
+- Desktop harness: `game-godot/tests/engineering_wave017/Wave017GhostLifecycle.gd` → `artifacts/wave017/GHOST_LIFECYCLE_HARNESS.json`.
+- Pixel campaign required for device claim; do not invent `PIXEL_MODEL_VISIBILITY_VALIDATED=true`.

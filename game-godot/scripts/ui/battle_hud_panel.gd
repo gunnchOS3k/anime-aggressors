@@ -27,8 +27,9 @@ func _build() -> void:
 	root.add_child(top)
 
 	_name_label = Label.new()
-	_name_label.add_theme_font_size_override("font_size", 18)
+	_name_label.add_theme_font_size_override("font_size", 17)
 	_name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	# Wave017: readable HUD typography; no developer strings.
 	top.add_child(_name_label)
 
 	_pct_label = Label.new()
@@ -45,6 +46,11 @@ func _build() -> void:
 	_aura_bar.show_percentage = false
 	_aura_bar.custom_minimum_size = Vector2(0, 10)
 	_aura_bar.tooltip_text = "Aura"
+	var aura_lbl := Label.new()
+	aura_lbl.text = "AURA"
+	aura_lbl.add_theme_font_size_override("font_size", 9)
+	aura_lbl.modulate = Color(1, 1, 1, 0.55)
+	root.add_child(aura_lbl)
 	root.add_child(_aura_bar)
 
 	_shield_bar = ProgressBar.new()

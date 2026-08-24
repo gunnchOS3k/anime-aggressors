@@ -61,6 +61,8 @@ static func build(stage_root: Node2D, stage_data: Dictionary, reduce_motion: boo
 
 	_add_background(stage_root, theme, lighting, reduce_motion, perf_tier)
 	_add_environment_setdress(stage_root, stage_id, theme, perf_tier, reduce_motion)
+	if stage_id == "ember-courtyard":
+		_add_ember_golden_slice_layers(stage_root, theme, reduce_motion, perf_tier)
 	_add_blast_guides(stage_root, stage_data.get("blastZones", {}), theme)
 	var main: Dictionary = stage_data.get("mainPlatform", {})
 	_add_platform(stage_root, main, theme, true)
@@ -359,3 +361,63 @@ static func _add_environment_setdress(root: Node2D, stage_id: String, theme: Dic
 					root.add_child(v)
 		_:
 			pass
+
+
+static func _add_ember_golden_slice_layers(root: Node2D, theme: Dictionary, reduce_motion: bool, perf_tier: String) -> void:
+	## Wave017 Golden Slice stage reconstruction — depth, parallax bands, integrated platforms feel.
+	var far := Polygon2D.new()
+	far.name = "Wave017GoldenSliceFar"
+	far.z_index = -18
+	far.color = Color(0.18, 0.06, 0.05, 0.85)
+	far.polygon = PackedVector2Array([
+		Vector2(-900, 40), Vector2(-500, -80), Vector2(-100, -40), Vector2(300, -100),
+		Vector2(700, -50), Vector2(980, 60), Vector2(980, 320), Vector2(-900, 320),
+	])
+	root.add_child(far)
+	var mid := Polygon2D.new()
+	mid.name = "Wave017GoldenSliceMid"
+	mid.z_index = -14
+	mid.color = Color(0.32, 0.12, 0.08, 0.55)
+	mid.polygon = PackedVector2Array([
+		Vector2(-760, 120), Vector2(-420, 40), Vector2(-40, 90), Vector2(360, 30),
+		Vector2(720, 100), Vector2(720, 300), Vector2(-760, 300),
+	])
+	root.add_child(mid)
+	# Warm key wash
+	var wash := ColorRect.new()
+	wash.name = "EmberKeyWash"
+	wash.z_index = -12
+	wash.position = Vector2(-700, -400)
+	wash.size = Vector2(1400, 900)
+	wash.color = Color(1.0, 0.35, 0.18, 0.08 if reduce_motion else 0.12)
+	wash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(wash)
+	# Courtyard pillars (readable boundaries)
+	for x in [-480.0, 480.0]:
+		var pillar := Polygon2D.new()
+		pillar.z_index = -8
+		pillar.color = Color(0.22, 0.10, 0.08, 0.92)
+		pillar.polygon = PackedVector2Array([
+			Vector2(x - 28, 40), Vector2(x + 28, 40), Vector2(x + 36, 300), Vector2(x - 36, 300),
+		])
+		root.add_child(pillar)
+		var flame := Polygon2D.new()
+		flame.z_index = -7
+		flame.color = Color(1.0, 0.55, 0.2, 0.55)
+		flame.polygon = PackedVector2Array([
+			Vector2(x - 14, 20), Vector2(x, -30), Vector2(x + 14, 20),
+		])
+		root.add_child(flame)
+	if not reduce_motion and perf_tier != "low":
+		var parallax := Node2D.new()
+		parallax.name = "EmberParallaxHints"
+		parallax.z_index = -16
+		for i in 5:
+			var ember := Polygon2D.new()
+			ember.color = Color(1.0, 0.6, 0.25, 0.25)
+			var ox := -600.0 + i * 280.0
+			ember.polygon = PackedVector2Array([
+				Vector2(ox, -120), Vector2(ox + 18, -160), Vector2(ox + 36, -120),
+			])
+			parallax.add_child(ember)
+		root.add_child(parallax)

@@ -52,14 +52,29 @@ func _ready_display() -> void:
 	_play_results_celebration()
 
 func _play_results_celebration() -> void:
-	## GAME-RC-003: short digital result celebration (scale pulse). Human juice still pending.
+	## Wave017: winner theme pulse + subtle VFX; no developer runtime label.
 	if title_label == null:
 		return
 	title_label.pivot_offset = title_label.size * 0.5
 	title_label.scale = Vector2(0.86, 0.86)
+	var accent := Color(1.0, 0.55, 0.25)
+	var winner := GameState.last_winner_slot
+	var fid := GameState.p1_fighter_id if winner == 1 else GameState.p2_fighter_id
+	var fdata: Dictionary = GameState.load_fighter(fid)
+	accent = Color(fdata.get("color", accent))
+	title_label.add_theme_color_override("font_color", accent.lightened(0.2))
 	var tw := create_tween()
 	tw.tween_property(title_label, "scale", Vector2(1.08, 1.08), 0.18).set_trans(Tween.TRANS_BACK)
 	tw.tween_property(title_label, "scale", Vector2.ONE, 0.12)
+	var spark := ColorRect.new()
+	spark.name = "VictoryAccent"
+	spark.color = Color(accent.r, accent.g, accent.b, 0.2)
+	spark.size = Vector2(640, 8)
+	spark.position = Vector2(40, 120)
+	spark.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(spark)
+	var tw2 := create_tween()
+	tw2.tween_property(spark, "modulate:a", 0.0, 0.8)
 
 func _on_rematch_pressed() -> void:
 	if GameState.mode == "arcade" or GameState.arcade_active or GameState.arcade_complete or GameState.arcade_failed:

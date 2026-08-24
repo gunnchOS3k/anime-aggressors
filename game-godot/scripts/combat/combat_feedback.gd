@@ -115,6 +115,19 @@ func _trigger_camera(tier: String, event: String) -> void:
 			intensity_scale = float(role.fx_intensity())
 	_shake_intensity = TIER_SHAKE.get(tier, 2.0) * intensity_scale
 	_shake_remaining = 0.12 * intensity_scale
+	# Wave017 optional impact zoom via battle camera controller
+	if _camera != null and is_instance_valid(_camera):
+		var scene = _camera.get_parent()
+		if scene != null:
+			var bcc = scene.get_node_or_null("BattleCameraController")
+			if bcc != null and bcc.has_method("trigger_impact_zoom"):
+				var boost := 0.04
+				match tier:
+					"heavy", "aura":
+						boost = 0.07
+					"super":
+						boost = 0.10
+				bcc.trigger_impact_zoom(boost * intensity_scale, 0.14)
 	_emit_juice("camera_shake", {
 		"tier": tier,
 		"intensity": _shake_intensity,

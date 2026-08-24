@@ -19,6 +19,7 @@ func setup(fighter, body: ColorRect) -> void:
 	_proxy_label.text = PROXY_LABEL
 	_proxy_label.add_theme_font_size_override("font_size", 8)
 	_proxy_label.position = Vector2(-50, -88)
+	_proxy_label.visible = false
 	add_child(_proxy_label)
 
 func play_for_state(state: String) -> void:
@@ -28,8 +29,10 @@ func play_for_state(state: String) -> void:
 			_player.play(clip)
 
 func set_proxy_visible(value: bool) -> void:
+	# Wave017: ColorRect proxy path may animate, but PROXY text is developer-only.
 	if _proxy_label:
-		_proxy_label.visible = value
+		_proxy_label.visible = false
+		_proxy_label.text = PROXY_LABEL if value else ""
 
 func _build_proxy_clips(body: ColorRect) -> void:
 	var lib := AnimationLibrary.new()

@@ -97,10 +97,13 @@ func _build_intentional_visual(base_col: Color, size: Vector2) -> void:
 		_:
 			scale_m = 1.0
 
+	# Wave017: distinct tap / medium / full silhouettes (not capsule-pill dominant).
+	var glow_poly := _tier_poly(projectile_tier, size.x * 0.95 * scale_m, size.y * 0.75 * scale_m, true)
+	var core_poly := _tier_poly(projectile_tier, size.x * 0.55 * scale_m, size.y * 0.45 * scale_m, false)
 	_glow = Polygon2D.new()
 	_glow.name = "Glow"
-	_glow.color = Color(base_col.r, base_col.g, base_col.b, 0.28)
-	_glow.polygon = _ember_poly(size.x * 0.9 * scale_m, size.y * 0.7 * scale_m)
+	_glow.color = Color(base_col.r, base_col.g, base_col.b, 0.30)
+	_glow.polygon = glow_poly
 	_visual.add_child(_glow)
 
 	_core = Polygon2D.new()
@@ -111,26 +114,38 @@ func _build_intentional_visual(base_col: Color, size: Vector2) -> void:
 		minf(1.0, base_col.b * 0.85),
 		0.95
 	)
-	_core.polygon = _ember_poly(size.x * 0.55 * scale_m, size.y * 0.45 * scale_m)
+	_core.polygon = core_poly
 	_visual.add_child(_core)
 
 	_trail = Line2D.new()
 	_trail.name = "Trail"
-	_trail.width = maxf(3.0, size.y * 0.35 * scale_m)
+	var trail_w := maxf(3.0, size.y * 0.35 * scale_m)
+	match projectile_tier:
+		"projectile_medium":
+			trail_w *= 1.25
+		"projectile_full":
+			trail_w *= 1.55
+	_trail.width = trail_w
 	_trail.default_color = Color(base_col.r, base_col.g * 0.7, base_col.b * 0.4, 0.55)
 	_trail.begin_cap_mode = Line2D.LINE_CAP_ROUND
 	_trail.end_cap_mode = Line2D.LINE_CAP_ROUND
 	_trail.points = PackedVector2Array([Vector2.ZERO, Vector2.ZERO])
 	_visual.add_child(_trail)
-	# Spawn flash ring
+	# Spawn flash ring — denser for full charge
 	var ring := Polygon2D.new()
 	ring.name = "SpawnFlash"
-	ring.color = Color(1.0, 0.85, 0.45, 0.65)
-	ring.polygon = _ring_poly(size.x * 0.8 * scale_m)
+	ring.color = Color(1.0, 0.85, 0.45, 0.65 if projectile_tier != "projectile_full" else 0.85)
+	ring.polygon = _ring_poly(size.x * (0.8 if projectile_tier != "projectile_full" else 1.15) * scale_m)
 	_visual.add_child(ring)
 	var tw := create_tween()
 	tw.tween_property(ring, "modulate:a", 0.0, 0.18)
 	tw.tween_callback(ring.queue_free)
+	if projectile_tier == "projectile_full":
+		var corona := Polygon2D.new()
+		corona.name = "FullCorona"
+		corona.color = Color(1.0, 0.45, 0.12, 0.35)
+		corona.polygon = _ring_poly(size.x * 1.4 * scale_m)
+		_visual.add_child(corona)
 
 
 func _ember_poly(w: float, h: float) -> PackedVector2Array:
@@ -143,6 +158,33 @@ func _ember_poly(w: float, h: float) -> PackedVector2Array:
 		Vector2(w * 0.35, h * 0.35),
 		Vector2(-w * 0.15, h * 0.55),
 	])
+
+
+func _tier_poly(tier: String, w: float, h: float, glow: bool) -> PackedVector2Array:
+	match tier:
+		"projectile_medium":
+			# Twin-ember / forked heat bolt
+			return PackedVector2Array([
+				Vector2(-w * 0.5, 0.0),
+				Vector2(-w * 0.1, -h * 0.7),
+				Vector2(w * 0.25, -h * 0.25),
+				Vector2(w * 0.7, -h * 0.15),
+				Vector2(w * 0.45, 0.0),
+				Vector2(w * 0.7, h * 0.15),
+				Vector2(w * 0.25, h * 0.25),
+				Vector2(-w * 0.1, h * 0.7),
+			])
+		"projectile_full":
+			# Broad combustion star — distinct from tap teardrop
+			var pts := PackedVector2Array()
+			var spikes := 7 if glow else 5
+			for i in spikes:
+				var a := TAU * float(i) / float(spikes)
+				var r := (w if i % 2 == 0 else w * 0.55)
+				pts.append(Vector2(cos(a), sin(a)) * r * 0.55)
+			return pts
+		_:
+			return _ember_poly(w, h)
 
 
 func _ring_poly(r: float) -> PackedVector2Array:
@@ -181,10 +223,20 @@ func _spawn_impact() -> void:
 		return
 	var burst := Polygon2D.new()
 	burst.color = Color(1.0, 0.7, 0.25, 0.85)
-	burst.polygon = _ember_poly(22.0, 16.0)
+	var scale_i := 1.0
+	match projectile_tier:
+		"projectile_medium":
+			scale_i = 1.35
+			burst.polygon = _tier_poly(projectile_tier, 26.0, 18.0, false)
+		"projectile_full":
+			scale_i = 1.8
+			burst.polygon = _tier_poly(projectile_tier, 32.0, 24.0, true)
+			burst.color = Color(1.0, 0.55, 0.15, 0.9)
+		_:
+			burst.polygon = _ember_poly(22.0, 16.0)
 	_visual.add_child(burst)
 	var tw := create_tween()
-	tw.tween_property(burst, "scale", Vector2(1.8, 1.8), 0.12)
+	tw.tween_property(burst, "scale", Vector2(1.8, 1.8) * scale_i, 0.12)
 	tw.parallel().tween_property(burst, "modulate:a", 0.0, 0.12)
 
 

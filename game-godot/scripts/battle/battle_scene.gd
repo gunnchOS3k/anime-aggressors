@@ -4,6 +4,7 @@ const _CompetitiveRules = preload("res://scripts/combat/competitive_rules.gd")
 const _BattleHudPanel = preload("res://scripts/ui/battle_hud_panel.gd")
 const _BattleSim = preload("res://scripts/battle/battle_sim.gd")
 const _HazardItemRuntime = preload("res://scripts/battle/hazard_item_runtime.gd")
+const _BattleCamera = preload("res://scripts/battle/battle_camera_controller.gd")
 
 @onready var fighters_root: Node2D = $Fighters
 @onready var stage_root: Node2D = $Stage
@@ -34,6 +35,8 @@ var _eval_frames := 0
 var _pad_prompt: Label
 var _controller_watchdog
 var _flight_accum: float = 0.0
+var _battle_camera
+var _stage_camera_profile: Dictionary = {}
 
 const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
 const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
@@ -101,6 +104,12 @@ func _apply_device_role() -> void:
 	for f in [fighter1, fighter2]:
 		if f and f.combat_feedback and cam:
 			f.combat_feedback.bind_camera(cam)
+	if cam and fighter1 and fighter2:
+		if _battle_camera == null:
+			_battle_camera = _BattleCamera.new()
+			_battle_camera.name = "BattleCameraController"
+			add_child(_battle_camera)
+		_battle_camera.configure(cam, _stage_camera_profile, [fighter1, fighter2], blast)
 	TouchInputManager._sync_overlay()
 
 func _setup_hud_panels() -> void:
@@ -138,6 +147,7 @@ func _build_stage() -> void:
 	if str(stage_data.get("id", "")) == "":
 		stage_data["id"] = GameState.stage_id
 	blast = stage_data.get("blastZones", {})
+	_stage_camera_profile = stage_data.get("cameraProfile", {})
 	var reduce := false
 	var device = get_node_or_null("/root/DeviceRoleRuntime")
 	if device != null:
