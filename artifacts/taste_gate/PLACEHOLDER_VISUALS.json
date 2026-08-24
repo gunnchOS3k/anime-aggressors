@@ -1,0 +1,33 @@
+{
+  "ok": true,
+  "PLAYER_FACING_UNAPPROVED_PLACEHOLDER_VISUALS": 3,
+  "findings": [
+    {
+      "code": "PROJECTILE_COLORRECT_FORCED_VISIBLE",
+      "path": "game-godot/scripts/combat/projectile.gd",
+      "severity": "T1",
+      "note": "ColorRect DebugRect forced visible for launch readability (unapproved final art); TASTE-001"
+    },
+    {
+      "code": "PROJECTILE_COLORRECT_PRIMARY",
+      "path": "game-godot/scenes/combat/Projectile2D.tscn",
+      "severity": "T1",
+      "note": "Projectile uses ColorRect as player-facing visual"
+    },
+    {
+      "code": "PROJECTILE_COLORRECT_PRIMARY",
+      "path": "game-godot/scripts/combat/projectile.gd",
+      "severity": "T1",
+      "note": "Projectile uses ColorRect as player-facing visual"
+    }
+  ],
+  "scan_roots": [
+    "game-godot/scenes/combat",
+    "game-godot/scripts/combat",
+    "game-godot/scripts/fighters",
+    "game-godot/scenes/fighters",
+    "game-godot/scenes/battle"
+  ],
+  "HUMAN_Q5": false,
+  "note": "Count is detector hits, not quality ladder level."
+}

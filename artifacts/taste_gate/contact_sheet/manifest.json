@@ -1,0 +1,76 @@
+{
+  "schema": "taste_gate_contact_sheet_v1",
+  "purpose": "Index feasible player-facing captures for taste review. Sources labeled honestly. No fabricated Pixel model-visibility proof.",
+  "PIXEL_MODEL_VISIBILITY_VALIDATED": false,
+  "HUMAN_Q5": false,
+  "entries": [
+    {
+      "id": "roster_contact_playtest",
+      "role": "roster_overview",
+      "source_kind": "PLAYTEST_VISUAL_QA",
+      "path": "playtest-evidence/visual_qa/fighters/roster_contact_sheet.png",
+      "exists_at_authoring": true,
+      "pixel_device": false,
+      "note": "Existing playtest roster contact sheet — not Pixel BattleScene proof"
+    },
+    {
+      "id": "ember_portrait_wave014",
+      "role": "fighter_portrait",
+      "fighter_id": "ember-vale",
+      "source_kind": "WAVE014_PROCEDURAL_RENDER",
+      "path": "artifacts/engineering_wave014/renders/ember-vale_portrait.png",
+      "exists_at_authoring": true,
+      "pixel_device": false,
+      "note": "Offline procedural portrait; not live BattleScene projectile proof"
+    },
+    {
+      "id": "ember_silhouette_wave014",
+      "role": "silhouette",
+      "fighter_id": "ember-vale",
+      "source_kind": "WAVE014_PROCEDURAL_RENDER",
+      "path": "artifacts/engineering_wave014/renders/ember-vale_silhouette_icon.png",
+      "exists_at_authoring": true,
+      "pixel_device": false
+    },
+    {
+      "id": "ember_device_dash_wave015",
+      "role": "device_screenshot",
+      "fighter_id": "ember-vale",
+      "source_kind": "WAVE015_DEVICE_SCREENSHOT",
+      "path": "artifacts/engineering_wave015/device_screenshots/ember-vale_dash_05.png",
+      "exists_at_authoring": true,
+      "pixel_device": true,
+      "note": "Wave015 device screenshot; does NOT alone certify NAMEPLATE+MODEL co-visibility campaign"
+    },
+    {
+      "id": "wave014_runtime_renders_manifest",
+      "role": "runtime_render_index",
+      "source_kind": "WAVE014_RUNTIME_RENDER_MANIFEST",
+      "path": "artifacts/engineering_wave014/runtime_renders/manifest.json",
+      "exists_at_authoring": true,
+      "pixel_device": false,
+      "note": "Manifest lists Godot visible-model shots; PNG bodies may be absent in sparse checkouts — do not invent files"
+    },
+    {
+      "id": "golden_slice_desktop_pending",
+      "role": "golden_slice_combat_loop",
+      "fighter_id": "ember-vale",
+      "source_kind": "PENDING_CAPTURE",
+      "path": null,
+      "exists_at_authoring": false,
+      "pixel_device": false,
+      "note": "Full Ember combat-loop contact sheet not yet captured in this gate PR"
+    }
+  ],
+  "capture_policy": {
+    "allow_copy_from_existing": true,
+    "allow_fabricate_pixel": false,
+    "prefer_labels": [
+      "PLAYTEST_VISUAL_QA",
+      "WAVE014_PROCEDURAL_RENDER",
+      "WAVE014_RUNTIME_RENDER",
+      "WAVE015_DEVICE_SCREENSHOT",
+      "PENDING_CAPTURE"
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "NAMEPLATE_VISIBLE_AND_MODEL_MISSING": "failure",
+  "STATIC_CONTRACT_DEFINED": true,
+  "STATIC_CHECKS": [
+    {
+      "id": "nameplate_node_present",
+      "pass": true,
+      "note": "Fighter exposes NameLabel (nameplate)"
+    },
+    {
+      "id": "body_hidden_when_model_loaded",
+      "pass": true,
+      "note": "ColorRect Body hidden when 3D model loads (anti nameplate-only)"
+    },
+    {
+      "id": "is_model_loaded_api",
+      "pass": true,
+      "note": "Runtime API to detect model load"
+    },
+    {
+      "id": "godot_harness_present",
+      "pass": true,
+      "note": "TasteGateModelVisibility.gd harness available for BattleScene"
+    }
+  ],
+  "DESKTOP_BATTLESCENE_EVIDENCE": {
+    "path": "artifacts/engineering_wave014/BATTLESCENE_VISUAL_E2E.json",
+    "present": true,
+    "interpreted_pass": true,
+    "note": "Wave014 BattleScene visual E2E asserts model loaded for seven fighters. Re-run harness for fresh SHA; do not treat stale JSON as Pixel proof."
+  },
+  "PIXEL_CAMPAIGN": {
+    "PIXEL_MODEL_VISIBILITY_VALIDATED": false,
+    "PIXEL_EVIDENCE_INVENTED": false,
+    "requirement": "Physical Pixel 6a campaign must capture co-visibility of nameplate + model in BattleScene; do not mark pass without device screenshots + harness log.",
+    "campaign_doc": "docs/design/GOLDEN_VERTICAL_SLICE.md",
+    "reliability_doc": "docs/quality/MODEL_VISIBILITY_RELIABILITY.md"
+  },
+  "HUMAN_Q5": false,
+  "pass": true
+}
