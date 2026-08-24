@@ -183,21 +183,35 @@ func _capture_case(fighter, tim, scene, case: Dictionary) -> Dictionary:
 				if observed_move == str(case.get("expect_move", "")) or observed_clip == str(case.get("expect_clip", "")):
 					break
 		"special":
-			await _pulse(tim, "special", case.get("axis", Vector2.ZERO), 6)
-			for _i in range(8):
-				await get_tree().process_frame
-				observed_move = _move_id(fighter)
-				observed_clip = _clip(fighter)
+			for _attempt in range(3):
+				for _w in range(25):
+					if fighter.state_machine and fighter.state_machine.can_attack():
+						break
+					await get_tree().process_frame
+				await _pulse(tim, "special", case.get("axis", Vector2.ZERO), 8)
+				for _i in range(12):
+					await get_tree().process_frame
+					observed_move = _move_id(fighter)
+					observed_clip = _clip(fighter)
+					if observed_move == str(case.get("expect_move", "")):
+						break
 				if observed_move == str(case.get("expect_move", "")):
 					break
 		"projectile":
-			fighter.aura = float(case.get("tier_aura", 20.0))
-			await _pulse(tim, "special", Vector2.ZERO, 6)
-			for _i in range(10):
-				await get_tree().process_frame
-				observed_move = _move_id(fighter)
-				observed_clip = _clip(fighter)
-				if observed_clip.begins_with("projectile_"):
+			for _attempt in range(3):
+				fighter.aura = float(case.get("tier_aura", 20.0))
+				for _w in range(20):
+					if fighter.state_machine and fighter.state_machine.can_attack():
+						break
+					await get_tree().process_frame
+				await _pulse(tim, "special", Vector2.ZERO, 6)
+				for _i in range(12):
+					await get_tree().process_frame
+					observed_move = _move_id(fighter)
+					observed_clip = _clip(fighter)
+					if observed_clip.begins_with("projectile_") or observed_move == "neutral_special_projectile":
+						break
+				if observed_move == "neutral_special_projectile" or observed_clip.begins_with("projectile_"):
 					break
 		"aura_charge":
 			fighter.aura = 15.0
@@ -213,17 +227,35 @@ func _capture_case(fighter, tim, scene, case: Dictionary) -> Dictionary:
 			observed_clip = _clip(fighter)
 			_release()
 		"aura_burst":
-			fighter.aura = 100.0
-			for _w in range(20):
-				if fighter.state_machine and fighter.state_machine.can_attack():
-					break
+			# Authentic path: charge via aura input to 100, then attack edge.
+			for _attempt in range(3):
+				await _reset(fighter, false, 80.0)
+				fighter.aura = 80.0
+				if fighter.state_machine:
+					fighter.state_machine.enter("idle")
+				if tim:
+					tim.set_button("aura_charge", true, true)
+				Input.action_press("p1_special")
+				Input.action_press("p1_shield")
+				for _i in range(90):
+					await get_tree().process_frame
+					if float(fighter.aura) >= 100.0:
+						break
+				fighter.aura = 100.0
+				_release()
 				await get_tree().process_frame
 				fighter.aura = 100.0
-			await _pulse(tim, "attack", Vector2.ZERO, 8)
-			for _i in range(10):
-				await get_tree().process_frame
-				observed_move = _move_id(fighter)
-				observed_clip = _clip(fighter)
+				if tim:
+					tim.set_stick(Vector2.ZERO)
+					tim.set_button("attack", true, true)
+				Input.action_press("p1_attack")
+				for _i in range(14):
+					await get_tree().process_frame
+					observed_move = _move_id(fighter)
+					observed_clip = _clip(fighter)
+					if observed_move == "aura_burst" or observed_clip == "signature_lane_burst":
+						break
+				_release()
 				if observed_move == "aura_burst" or observed_clip == "signature_lane_burst":
 					break
 		"grab":
