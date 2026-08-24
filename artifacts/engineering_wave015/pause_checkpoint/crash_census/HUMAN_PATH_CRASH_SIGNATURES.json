@@ -1,0 +1,18 @@
+{
+  "schema": "engineering_wave015.human_path_crash_signatures.v1",
+  "generated_at_utc": "2026-08-23T19:14:14Z",
+  "UNIQUE_CRASH_SIGNATURES": 1,
+  "UNIQUE_CRASH_SIGNATURES_OPEN": 0,
+  "signatures": [
+    {
+      "signature_id": "HUMAN-CRASH-3C67ED5D",
+      "classification": "UNRELATED_PLATFORM_NOISE",
+      "status": "CLOSED_FALSE_POSITIVE_LAUNCH_RACE",
+      "notes": "Empty logcat/heartbeat at smoke start; ADB/zygote launch race. Not a proven app crash.",
+      "occurrences": 1,
+      "deaths": [
+        "artifacts/engineering_wave015/crash_census/human_path/death_1_1787509630"
+      ]
+    }
+  ]
+}

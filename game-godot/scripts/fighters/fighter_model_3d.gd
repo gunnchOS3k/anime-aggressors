@@ -220,6 +220,9 @@ func set_expression(state: String) -> void:
 func play_for_state(state: String, move: Dictionary = {}) -> void:
 	if not _loaded:
 		return
+	var rec = get_node_or_null("/root/RuntimeFlightRecorder")
+	if rec and rec.has_method("record_action"):
+		rec.record_action(_fighter_id, str(move.get("move_id", state)), "FighterModel3D.play_for_state", {"state": state})
 	if move.has("throw_direction"):
 		_throw_dir = str(move.get("throw_direction", "forward"))
 	var clip := _clip_for_state(state, str(move.get("move_id", "")))
@@ -426,7 +429,8 @@ func _build_viewport() -> void:
 	_viewport.transparent_bg = true
 	_viewport.own_world_3d = true
 	_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
-	_viewport.msaa_3d = Viewport.MSAA_2X
+	# Pixel 6a gralloc rejects some MSAA render-target formats (0x3b); keep Compatibility-safe path.
+	_viewport.msaa_3d = Viewport.MSAA_DISABLED
 	add_child(_viewport)
 
 	var environment_node := WorldEnvironment.new()
@@ -518,9 +522,10 @@ func _clear_model() -> void:
 	_last_clip = ""
 	_style_anim_t = 0.0
 	_style_clip = "idle"
-	if _model_root:
+	if _model_root != null and is_instance_valid(_model_root):
 		for child in _model_root.get_children():
-			child.free()
+			if is_instance_valid(child):
+				child.free()
 
 
 func _set_loaded(value: bool) -> void:
@@ -568,13 +573,14 @@ func _play_clip(requested: String, state: String = "", move: Dictionary = {}) ->
 			_style_anim_t = 0.0
 			_last_clip = requested
 
-	if _procedural_healthy and _animation_controller:
+	if _procedural_healthy and _animation_controller != null and is_instance_valid(_animation_controller):
 		var move_copy := move.duplicate() if not move.is_empty() else {}
 		if state.is_empty():
 			move_copy["move_id"] = requested
-		_animation_controller.play_for_state(state if not state.is_empty() else _FighterStates.IDLE, move_copy)
+		if _animation_controller.has_method("play_for_state"):
+			_animation_controller.play_for_state(state if not state.is_empty() else _FighterStates.IDLE, move_copy)
 		_last_clip = _animation_controller.get_active_clip() if _animation_controller.has_method("get_active_clip") else requested
-	elif _stylized and _stylized.has_method("animate_pose"):
+	elif _stylized != null and is_instance_valid(_stylized) and _stylized.has_method("animate_pose"):
 		_stylized.animate_pose(_style_clip, _style_anim_t)
 
 
@@ -590,9 +596,9 @@ func _apply_playback_scale(clip: String) -> void:
 	elif clip in ["jab_1", "jab_2", "heavy_attack", "special", "aura_burst", "throw_forward", "throw_back", "throw_up", "throw_down"]:
 		scale = float(_life.get("attack_speed", 1.0))
 	_style_speed = scale
-	if _animation_controller and _animation_controller.has_method("get_animation_player"):
+	if _animation_controller != null and is_instance_valid(_animation_controller) and _animation_controller.has_method("get_animation_player"):
 		var player: AnimationPlayer = _animation_controller.get_animation_player()
-		if player:
+		if player != null and is_instance_valid(player):
 			player.speed_scale = scale
 
 

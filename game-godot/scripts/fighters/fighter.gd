@@ -448,6 +448,9 @@ func is_aura_input_held() -> bool:
 	return Input.is_action_pressed("p%d_special" % slot) and Input.is_action_pressed("p%d_shield" % slot)
 
 func queue_attack_command(cmd: String) -> void:
+	var rec = get_node_or_null("/root/RuntimeFlightRecorder")
+	if rec and rec.has_method("record_action"):
+		rec.record_action(fighter_id, cmd, "Fighter.queue_attack_command", {})
 	_pending_attack_cmd = cmd
 
 ## GAME-RC-003 — short visible CPU wind-up flash before the queued attack commits.

@@ -1,0 +1,37 @@
+{
+  "schema": "engineering_wave015.baseline_reconciliation.v1",
+  "generated_at_utc": "2026-08-23T16:58:00Z",
+  "PR85_HEAD_BEFORE": "305e4984317806c94a8f9bb8418bae4e8614e30e",
+  "BASELINE_CRASH_CENSUS_SHA": "6fe535c81b461176f4bebcff6a22ff7ee11c8d5c",
+  "prior_evidence_preserved": true,
+  "prior_evidence_paths": [
+    "artifacts/engineering_wave015/crash_census/BASELINE_CRASH_CENSUS.json",
+    "artifacts/engineering_wave015/crash_census/baseline_preserve/",
+    "artifacts/engineering_wave015/crash_census/logcat/",
+    "artifacts/engineering_wave015/crash_census/REPAIR_MATRIX.json"
+  ],
+  "unexpected_termination_true_explanation": {
+    "observation": "run_crash_census.wait_for_census returned unexpected_termination=true for ABCD (~214s, last_pid=5760).",
+    "in_app_alive_true": "On-device harness wrote CENSUS_SUMMARY / MATCHUP_STRESS with alive=true and crashes_observed=0; stage_D_partial shows 49/49 matchups finished.",
+    "heartbeat": "baseline_preserve/session_heartbeat.json shows clean_shutdown=true, last_kind=CLEAN_SHUTDOWN.",
+    "classification": "HARNESS_REQUESTED_QUIT",
+    "root_cause": "External ADB waiter treated get_tree().quit(0) PID disappearance as a crash before/without confirming the stage marker race. No AndroidRuntime FATAL, native signal, ANR, or LMKD kill for the package was present in death logcats (FATAL=0 across stage_*_death.txt).",
+    "was_game_failure": false,
+    "was_harness_requested": true,
+    "was_adb_artifact": true,
+    "was_os_kill": false
+  },
+  "original_seven_signatures": {
+    "count": 7,
+    "fatal_process_deaths": false,
+    "classification": "NONFATAL_PLATFORM_GRAPHICS_WARNING",
+    "family": "gralloc5 Format allocation info not found for format 0x3b (SubViewport MSAA path)",
+    "evidence": "stage_A_final.txt and other logcats show repeated gralloc5 ERROR lines without process death; later cluster_crashes.py excluded gralloc noise.",
+    "impact": "Nonfatal graphics allocator warnings on Pixel 6a Compatibility/mobile SubViewport path; did not terminate the app process."
+  },
+  "OWNER_NORMAL_PLAY_CRASHES_REPRODUCED": false,
+  "notes": [
+    "Old evidence is not overwritten; this file reconciles the contradiction for the human-path BattleScene gate.",
+    "Prior PHYSICAL_STABILITY_PASS from standalone FighterModel3D fuzz/soak is superseded until full BattleScene + human-path gates pass."
+  ]
+}

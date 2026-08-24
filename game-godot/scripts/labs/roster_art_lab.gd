@@ -28,8 +28,8 @@ func _populate() -> void:
 		model.name = "Preview_%s" % fighter_id
 		card.add_child(model)
 		var data := _DataLoader.load_fighter(fighter_id)
-		var configured := model.configure(data)
-		if configured and model.is_procedural_proxy_visible():
+		var configured := bool(model.call("configure", data))
+		if configured and model.has_method("is_procedural_proxy_visible") and model.is_procedural_proxy_visible():
 			loaded += 1
 		var caption := Label.new()
 		caption.autowrap_mode = TextServer.AUTOWRAP_WORD

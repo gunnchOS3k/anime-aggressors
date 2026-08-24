@@ -1,0 +1,88 @@
+{
+  "schema": "engineering_wave015.baseline_crash_census.v1",
+  "generated_at_utc": "2026-08-23T07:14:45Z",
+  "phase": "baseline",
+  "BASELINE_CRASH_CENSUS_SHA": "6fe535c81b461176f4bebcff6a22ff7ee11c8d5c",
+  "HEAD_SHA": "6fe535c81b461176f4bebcff6a22ff7ee11c8d5c",
+  "APK_SHA256": "a1e1459bdd28ad680102ae9a11c099d5861183a9e4efc49bd08007844ccf33f1",
+  "DEVICE_MODEL": "Pixel 6a",
+  "PRIOR_WAVE015_OBJECTIVE_PASS": "SUPERSEDED_BY_HUMAN_CRASH_REPORT",
+  "PHYSICAL_PIXEL6A_OBJECTIVE_VALIDATED": false,
+  "PIXEL6A_STABILITY_VALIDATED": false,
+  "UNIQUE_CRASH_SIGNATURES": 7,
+  "UNIQUE_CRASH_SIGNATURES_OPEN": 7,
+  "ACTION_ISOLATION_ROWS": 2940,
+  "TRANSITION_CELLS": 1792,
+  "FUZZ_EVENTS": 25000,
+  "MATCHUPS": 49,
+  "SCENE_CYCLES": 0,
+  "SOAK_PASS": false,
+  "run_info": {
+    "ABCD": {
+      "wait": {
+        "completed": false,
+        "unexpected_termination": true,
+        "last_pid": "5760",
+        "elapsed_s": 214.7232129573822
+      },
+      "pulled": {
+        "pulled": [
+          "artifacts/engineering_wave015/crash_census/device_pull/ACTION_ISOLATION_MATRIX.json",
+          "artifacts/engineering_wave015/crash_census/device_pull/replays/stage_a.jsonl",
+          "artifacts/engineering_wave015/crash_census/device_pull/replays/stage_b.jsonl",
+          "artifacts/engineering_wave015/crash_census/device_pull/replays/stage_c.jsonl",
+          "artifacts/engineering_wave015/crash_census/device_pull/replays/stage_d.jsonl",
+          "artifacts/engineering_wave015/crash_census/device_pull/replays/final.jsonl",
+          "artifacts/engineering_wave015/crash_census/device_pull/ACTION_TRANSITION_MATRIX.json",
+          "artifacts/engineering_wave015/crash_census/device_pull/FUZZ_CAMPAIGN_RESULT.partial.json",
+          "artifacts/engineering_wave015/crash_census/device_pull/FUZZ_CAMPAIGN_RESULT.json",
+          "artifacts/engineering_wave015/crash_census/device_pull/MATCHUP_STRESS_RESULT.partial.json",
+          "artifacts/engineering_wave015/crash_census/device_pull/MATCHUP_STRESS_RESULT.json",
+          "artifacts/engineering_wave015/crash_census/device_pull/CENSUS_SUMMARY.json",
+          "artifacts/engineering_wave015/crash_census/device_pull/diagnostics/last_action_trace.jsonl",
+          "artifacts/engineering_wave015/crash_census/device_pull/diagnostics/session_heartbeat.json"
+        ],
+        "count": 14
+      }
+    }
+  },
+  "census_summary": {
+    "action_events": 32024,
+    "alive": true,
+    "crashes_observed": 0,
+    "generated_at_utc": "2026-08-23T07:14:43",
+    "schema": "engineering_wave015.census_summary.v1",
+    "seed": 152026,
+    "stage": "ABCD",
+    "stages": {
+      "A": {
+        "action_events": 2940,
+        "alive": true,
+        "name": "ISOLATED_ACTION_CENSUS",
+        "reps_per_action": 10,
+        "rows": 2940
+      },
+      "B": {
+        "action_events": 6524,
+        "alive": true,
+        "cells": 1792,
+        "name": "ACTION_TRANSITION_MATRIX"
+      },
+      "C": {
+        "alive": true,
+        "crashes": 0,
+        "events": 25000,
+        "name": "SEEDED_FUZZ",
+        "seed": 152026,
+        "target_events": 25000
+      },
+      "D": {
+        "alive": true,
+        "expected": 49,
+        "matchups": 49,
+        "name": "MATCHUP_STRESS"
+      }
+    }
+  },
+  "status": "BASELINE_CAPTURED"
+}

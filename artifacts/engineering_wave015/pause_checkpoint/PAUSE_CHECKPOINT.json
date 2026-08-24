@@ -1,0 +1,113 @@
+{
+  "schema": "engineering_wave015.pause_checkpoint.v1",
+  "generated_at_utc": "2026-08-23T19:15:17Z",
+  "reason": "OWNER_REQUESTED_GRACEFUL_PAUSE",
+  "EXPECTED_TERMINATION": true,
+  "PAUSED_BY_OWNER_REQUEST": true,
+  "PR85_HUMAN_PATH_STABILITY_REPAIR": "PAUSED",
+  "READY_FOR_OWNER_MERGE": false,
+  "PHYSICAL_PIXEL6A_OBJECTIVE_VALIDATED": false,
+  "PIXEL6A_STABILITY_VALIDATED": false,
+  "HUMAN_PLAYTEST_COMPLETE": false,
+  "HUMAN_ART_DIRECTION_APPROVAL": false,
+  "CURSOR_MERGED_NOTHING": true,
+  "do_not_emit_PHYSICAL_STABILITY_PASS": true,
+  "do_not_convert_incomplete_to_PASS_or_FAIL": true,
+  "repo": "gunnchOS3k/anime-aggressors",
+  "pr_number": 85,
+  "branch": "eng/wave015-pixel6a-physical-repairs",
+  "PR85_HEAD_BEFORE_SESSION": "305e4984317806c94a8f9bb8418bae4e8614e30e",
+  "HEAD_SHA_AT_PAUSE": "305e4984317806c94a8f9bb8418bae4e8614e30e",
+  "upstream": "305e4984317806c94a8f9bb8418bae4e8614e30e",
+  "ahead_behind_vs_upstream": "0\t0",
+  "working_tree_dirty": true,
+  "working_tree_summary_path": "artifacts/engineering_wave015/pause_checkpoint/GIT_STATUS_PORCELAIN.txt",
+  "device": {
+    "adb_state": "device",
+    "model": "Pixel 6a",
+    "serial_redacted": "2721\u20266194",
+    "package": "com.gunnchos.animeaggressors",
+    "app_force_stopped_for_pause": true,
+    "app_data_cleared": false,
+    "usb_debugging_revoked": false
+  },
+  "apk": {
+    "path": "builds/android/anime-aggressors-debug.apk",
+    "sha256": "7294cc1a956afc2de90938e185a779f24a6eb0fca237b5219d8bb787f577b415",
+    "present": true
+  },
+  "OWNER_HUMAN_PATH_STATUS": "PARTIAL_PAUSED",
+  "stage_statuses": {
+    "HUMAN_PATH_CAPTURE": "IN_PROGRESS_PAUSED",
+    "BATTLESCENE_FUZZ": "COMPLETE_PASS",
+    "BATTLESCENE_TRANSITION": "COMPLETE_PASS",
+    "BATTLESCENE_MATCHUP": "COMPLETE_PASS",
+    "BATTLESCENE_LIFECYCLE": "COMPLETE_PASS",
+    "BATTLESCENE_SOAK": "COMPLETE_PASS",
+    "OWNER_STABILITY_SMOKE": "COMPLETE_PASS",
+    "WAVE_REGRESSIONS_011_015": "IN_PROGRESS_PAUSED",
+    "PR_PUSH_CI": "NOT_STARTED"
+  },
+  "campaign_counters": {
+    "HUMAN_PATH_CRASHES_CAPTURED": 0,
+    "HUMAN_PATH_UNIQUE_SIGNATURES": 0,
+    "HUMAN_PATH_CRASH_SIGNATURES_OPEN": 0,
+    "OWNER_NORMAL_PLAY_CRASHES_REPRODUCED": false,
+    "BATTLESCENE_FUZZ_EVENTS": 25200,
+    "BATTLESCENE_FUZZ_PROCESS_DEATHS": 0,
+    "REAL_HITS": 83,
+    "REAL_GRABS": 4,
+    "REAL_PROJECTILES": 0,
+    "REAL_INPUT_ROUTE_EVENTS": 25000,
+    "BATTLESCENE_TRANSITIONS_TESTED": 189,
+    "BATTLESCENE_TRANSITION_CRASHES": 0,
+    "MATCHUPS_ATTEMPTED": 49,
+    "MATCHUPS_COMPLETED_WITHOUT_CRASH": 49,
+    "MATCHUP_PARTIAL": false,
+    "REAL_BATTLESCENE_CYCLES": 50,
+    "REAL_BATTLESCENE_CYCLE_CRASHES": 0,
+    "BATTLESCENE_SOAK_MIN": 30,
+    "SOAK_ELAPSED_SECONDS": 1800,
+    "SOAK_UNEXPECTED_PROCESS_DEATHS": 0,
+    "OWNER_SMOKE_DURATION_MIN": 10.011,
+    "OWNER_SMOKE_UNEXPECTED_TERMINATIONS": 0,
+    "OWNER_SMOKE_PASS": true
+  },
+  "signatures": {
+    "UNIQUE_CRASH_SIGNATURES": 0,
+    "UNIQUE_CRASH_SIGNATURES_OPEN": 0,
+    "open_signature_ids": [],
+    "completed_or_closed": []
+  },
+  "processes_stopped": {
+    "host_orchestration_sigterm": true,
+    "godot_headless_sigterm": true,
+    "adb_logcat_host_watchers": "none_running_at_pause",
+    "screenrecord": "none_observed",
+    "app_force_stop_expected_termination": true
+  },
+  "evidence_paths": {
+    "pause_checkpoint_dir": "artifacts/engineering_wave015/pause_checkpoint/",
+    "crash_census": "artifacts/engineering_wave015/crash_census/",
+    "logcat_index": "artifacts/engineering_wave015/pause_checkpoint/LOGCAT_INDEX.json",
+    "session_pause_marker": "artifacts/engineering_wave015/pause_checkpoint/SESSION_PAUSE_MARKER.json",
+    "baseline_reconciliation": "artifacts/engineering_wave015/crash_census/BASELINE_RECONCILIATION.json",
+    "root_cause_classification": "artifacts/engineering_wave015/crash_census/ROOT_CAUSE_CLASSIFICATION.json"
+  },
+  "resume": {
+    "worktree": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/wave015-pixel6a-crash-census",
+    "branch": "eng/wave015-pixel6a-physical-repairs",
+    "exact_command": "cd /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/wave015-pixel6a-crash-census && export GODOT_BIN=\"$HOME/Applications/Godot/Godot-4.5.app/Contents/MacOS/Godot\" && adb devices -l && # 1) Re-authorize Pixel if needed; 2) Re-read PAUSE_CHECKPOINT.json; # 3) If OWNER_STABILITY_SMOKE not COMPLETE_PASS: python3 tools/engineering_wave015/capture_human_play_crash.py --skip-build --duration-min 10 --owner-smoke && # 4) make engineering-wave011 && make engineering-wave012 && make engineering-wave013b && make engineering-wave014 && make engineering-wave015 && # 5) git add -A relevant && commit if needed && git push -u origin HEAD && gh pr checks 85 --repo gunnchOS3k/anime-aggressors --watch && # 6) Only then emit FINAL_STABILITY_RESULT / PHYSICAL_STABILITY_PASS if Section 21 gates all met",
+    "notes": [
+      "Do not restart long campaigns until Edmund explicitly asks to resume.",
+      "Re-authorize Pixel 6a USB debugging if adb shows unauthorized.",
+      "Preserve .partial files; do not delete pause_checkpoint.",
+      "Do not claim PHYSICAL_STABILITY_PASS until Section 21 gates all met post-resume."
+    ]
+  },
+  "CHECKPOINT_COMMIT_CREATED": true,
+  "CHECKPOINT_PUSHED": true,
+  "CHECKPOINT_COMMIT_SHA": "efa8f0f4f3fc264bbea6d05d2d5756cc3260f052",
+  "HEAD_SHA_AFTER_CHECKPOINT_COMMITS": "5fd5e50628f1489907c08969e7cb950f5039c866",
+  "PR_URL": "https://github.com/gunnchOS3k/anime-aggressors/pull/85"
+}
