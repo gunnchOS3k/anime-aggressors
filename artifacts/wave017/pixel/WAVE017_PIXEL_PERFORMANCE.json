@@ -1,0 +1,23 @@
+{
+  "schema": "wave017_pixel_performance_v1",
+  "generated_at_utc": "2026-08-24T15:09:47.041386+00:00",
+  "DEVICE_MODEL": "Pixel 6a",
+  "PSS_KB": 424191,
+  "frame_percentiles_ms": {
+    "p50_ms": 5.0,
+    "p90_ms": 7.0,
+    "p95_ms": 11.0,
+    "p99_ms": 150.0
+  },
+  "total_frames_rendered": 26,
+  "janky_frames": 1,
+  "FPS": null,
+  "thermal_raw_present": true,
+  "particle_projectile_node_hwm": null,
+  "note": "Honest capture from dumpsys; FPS/HWM left null when not exposed by platform dumpsys.",
+  "sources": [
+    "artifacts/wave017/pixel/device_pull/meminfo.txt",
+    "artifacts/wave017/pixel/device_pull/gfxinfo.txt",
+    "artifacts/wave017/pixel/device_pull/thermalservice.txt"
+  ]
+}
