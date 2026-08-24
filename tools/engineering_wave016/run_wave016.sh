@@ -79,9 +79,17 @@ run ember_projectile_e2e "$GODOT" --headless --path "$ROOT/game-godot" --script 
 run model_visibility "$GODOT" --headless --path "$ROOT/game-godot" --script res://tests/quality/TasteGateModelVisibility.gd || true
 
 run emit_result python3 tools/engineering_wave016/emit_wave016_result.py
-run contact_sheet python3 tools/engineering_wave016/capture_contact_sheet.py
-# Re-emit after contact sheet so PIXEL_* fields are final
+
+# Pixel merge gate (authorized Pixel 6a): build APK, authentic capture, 10-min smoke.
+# If no device: records BLOCKED_PIXEL6A and READY_FOR_OWNER_MERGE=false.
+if [[ "${WAVE016_SKIP_PIXEL_GATE:-0}" != "1" ]]; then
+  run pixel_merge_gate python3 tools/engineering_wave016/run_pr87_pixel_merge_gate.py || true
+else
+  run contact_sheet python3 tools/engineering_wave016/capture_contact_sheet.py
+fi
+
+# Re-emit after Pixel gate so PIXEL_* / READY_FOR_OWNER_MERGE fields are final
 run emit_result_final python3 tools/engineering_wave016/emit_wave016_result.py
 
 godot_orchestration_teardown "${ROOT}" || true
-echo "=== WAVE016 complete (draft PR #87; do not merge) ==="
+echo "=== WAVE016 / PR87 final gate complete (do not merge; Edmund sole authority) ==="

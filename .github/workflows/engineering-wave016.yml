@@ -42,6 +42,7 @@ jobs:
           GITHUB_SHA: ${{ github.sha }}
           GITHUB_ACTIONS: "true"
           WAVE016_FULL_REGRESSION: "0"
+          WAVE016_SKIP_PIXEL_GATE: "1"
         run: make engineering-wave016
 
       - name: Upload Wave016 artifacts

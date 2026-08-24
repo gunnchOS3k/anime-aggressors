@@ -1,24 +1,5 @@
 {
 	"CURSOR_MERGED_NOTHING": true,
-	"DIRECTIONAL_THROWS_ATTEMPTED": 4,
-	"DIRECTIONAL_THROWS_EXACT_PASS": 4,
-	"GOLDEN_SLICE_AUTOMATED_Q3_READINESS": false,
-	"GOLDEN_SLICE_FIGHTER": "ember-vale",
-	"HEADLESS_INPUT_BLOCKED_CASES": [
-		"aura_burst"
-	],
-	"HUMAN_Q5": false,
-	"NO_GENERIC_ATTACK_FALLBACKS_IN_GOLDEN_SLICE": true,
-	"OWNER_TASTE_REVIEW": "PENDING",
-	"PURE_REAL_INPUT_CASES_ATTEMPTED": 18,
-	"PURE_REAL_INPUT_CASES_PASSED": 17,
-	"REAL_INPUT_FAILURES": [
-		"aura_burst"
-	],
-	"REAL_INPUT_MOVE_E2E_PURE": false,
-	"REAL_INPUT_MOVE_E2E_RAW": false,
-	"VISIBLE_BONE_MOTION_OK": true,
-	"animation_class": "PROCEDURAL_RUNTIME_ANIMATION",
 	"cases": [
 		{
 			"active_clip": "jab",
@@ -1719,13 +1700,8 @@
 			"used_start_move_by_command": false
 		}
 	],
-	"forbidden_primary_apis": [
-		"queue_attack_command",
-		"_start_move_by_command"
-	],
-	"generic_fallback_count": 0,
+	"note": "Observed real-input outcomes without deterministic rewrite",
 	"ok": false,
-	"proof_class": "REAL_INPUT_MOVE_E2E",
-	"route": "TouchInputManager|Input -> Fighter._handle_actions",
-	"schema": "REAL_INPUT_MOVE_E2E_v2"
+	"proof_class": "REAL_INPUT_MOVE_E2E_RAW",
+	"schema": "REAL_INPUT_MOVE_E2E_RAW_v1"
 }

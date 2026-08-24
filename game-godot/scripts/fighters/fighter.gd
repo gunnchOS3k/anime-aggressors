@@ -342,13 +342,17 @@ func _apply_movement(delta: float) -> void:
 		if velocity.y > 0:
 			velocity.y = 0.0
 	if absf(axis) > 0.1:
-		facing = 1 if axis > 0 else -1
+		# Grounded facing follows stick. Airborne facing stays put so back-airs
+		# remain reachable (stick opposite facing) — matches facing-relative aerials.
+		if is_on_floor():
+			facing = 1 if axis > 0 else -1
 		var spd: float = get_run_speed()
 		if absf(axis) > 0.75 and is_on_floor():
 			spd = get_dash_speed()
 			state_machine.enter(_FighterStates.DASH)
 		else:
-			state_machine.enter(_FighterStates.RUN if absf(velocity.x) > spd * 0.5 else _FighterStates.WALK)
+			if is_on_floor():
+				state_machine.enter(_FighterStates.RUN if absf(velocity.x) > spd * 0.5 else _FighterStates.WALK)
 		if state_machine.current_state == _FighterStates.AURA_CHARGE:
 			spd *= get_charge_move_mult()
 		var target_x: float = axis * (spd if is_on_floor() else get_air_speed())
@@ -1226,8 +1230,13 @@ func _setup_shapes() -> void:
 			cs.shape = rect
 
 func _read_axis() -> float:
-	var kb = Input.get_action_strength("p%d_right" % slot) - Input.get_action_strength("p%d_left" % slot)
 	var touch = TouchInputManager.get_axis(slot)
+	# Prefer live touch stick when the overlay/harness is active — TIM also
+	# mirrors axis into Input actions, and a digital full-press would otherwise
+	# outrank an analog tilt and collapse forward_tilt into dash_attack.
+	if TouchInputManager.should_show_touch() and slot == 1 and absf(touch) > 0.01:
+		return touch
+	var kb = Input.get_action_strength("p%d_right" % slot) - Input.get_action_strength("p%d_left" % slot)
 	if absf(touch) > absf(kb):
 		return touch
 	return kb
