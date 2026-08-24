@@ -184,7 +184,7 @@ func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, s
 	if body and data.has("color"):
 		body.color = Color(data.get("color"))
 	if label:
-		label.text = data.get("displayName", id)
+		_apply_slot_combat_label()
 	if aura_vfx and data.has("auraColor"):
 		aura_vfx.color = Color(data.get("auraColor"))
 		aura_vfx.color.a = 0.35
@@ -194,9 +194,15 @@ func is_model_loaded() -> bool:
 	return model_3d != null and model_3d.is_model_loaded()
 
 
-## Wave016 Q0: never leave nameplate visible with no fighter body representation.
+## Wave016/017: never leave nameplate visible with no fighter body representation.
+## Invariant: FIGHTER_LOGIC_ACTIVE && FIGHTER_EXPECTED_VISIBLE -> VISIBLE_RENDERABLE_FIGHTER_BODY_REQUIRED
 func ensure_visible_presentation() -> void:
 	var model_ok := is_model_loaded()
+	if model_ok and model_3d != null and model_3d.has_method("is_visible_renderable_body"):
+		if not model_3d.is_visible_renderable_body():
+			if model_3d.has_method("heal_visibility_if_needed"):
+				model_3d.heal_visibility_if_needed()
+			model_ok = model_3d.is_visible_renderable_body() if model_3d.has_method("is_visible_renderable_body") else is_model_loaded()
 	var body_ok := body != null and body.visible
 	if not model_ok and body != null:
 		body.visible = true
@@ -204,14 +210,50 @@ func ensure_visible_presentation() -> void:
 		if animator and animator.has_method("set_proxy_visible"):
 			animator.set_proxy_visible(true)
 	if label:
-		# Nameplate allowed only when a model or ColorRect body fallback is present.
+		# Wave017: subtle P1/P2/CPU tags — never floating full name as sole identity.
+		_apply_slot_combat_label()
 		label.visible = model_ok or body_ok
 	if model_ok and body != null:
 		body.visible = false
+	# Never allow floating name as only representation.
+	if label and label.visible and not model_ok and not body_ok:
+		label.visible = false
+
+
+func _apply_slot_combat_label() -> void:
+	if label == null:
+		return
+	var tag := "P%d" % slot
+	if is_cpu:
+		tag = "CPU" if slot != 1 else "P1"
+	label.text = tag
+	label.add_theme_font_size_override("font_size", 11)
+	label.modulate = Color(1, 1, 1, 0.72)
+
+
+func assert_visible_body_invariant() -> Dictionary:
+	var logic_active := stocks > 0 and visible
+	var expected := logic_active and is_inside_tree()
+	var model_ok := is_model_loaded()
+	if model_ok and model_3d != null and model_3d.has_method("is_visible_renderable_body"):
+		model_ok = model_3d.is_visible_renderable_body()
+	var body_ok := body != null and body.visible and body.modulate.a > 0.05
+	var ok := (not expected) or model_ok or body_ok
+	var name_only := label != null and label.visible and not model_ok and not body_ok
+	return {
+		"FIGHTER_LOGIC_ACTIVE": logic_active,
+		"FIGHTER_EXPECTED_VISIBLE": expected,
+		"VISIBLE_RENDERABLE_FIGHTER_BODY": model_ok or body_ok,
+		"NAMEPLATE_ONLY_GHOST": name_only,
+		"PASS": ok and not name_only,
+	}
 
 
 ## Test harness hook — forces airborne resolution without inventing player controls.
 var _force_airborne_test: bool = false
+
+var _wave017_vis_accum: float = 0.0
+var _wave017_ghost_events: int = 0
 
 func force_airborne_for_test(airborne: bool) -> void:
 	_force_airborne_test = airborne
@@ -265,6 +307,14 @@ func tick_combat_frame() -> void:
 		_poll_hitbox_overlaps()
 
 func _physics_process(delta: float) -> void:
+	_wave017_vis_accum += delta
+	if _wave017_vis_accum >= 0.25:
+		_wave017_vis_accum = 0.0
+		var inv := assert_visible_body_invariant()
+		if not bool(inv.get("PASS", true)):
+			_wave017_ghost_events += 1
+			ensure_visible_presentation()
+
 	_tick_cpu_telegraph(delta)
 	if _hitstop > 0.0:
 		_hitstop -= delta

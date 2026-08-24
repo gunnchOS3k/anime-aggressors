@@ -228,7 +228,93 @@ def add_socket(name: str, world_location: Vec3, armature, bone: str):
     return empty
 
 
+
+def cylinder_part(name: str, location: Vec3, radius: float, depth: float, mat, armature, bone: str, rotation: Vec3 = (0, 0, 0), vertices: int = 12):
+    bpy.ops.mesh.primitive_cylinder_add(vertices=vertices, radius=radius, depth=depth, location=location, rotation=rotation)
+    obj = bpy.context.object
+    obj.name = name
+    apply_material(obj, mat)
+    rigid_bind(obj, armature, bone)
+    return obj
+
+
+def create_ember_character_model(style: FighterStyle, armature):
+    """Wave017 Golden Slice: character-like Ember (not cube blockout). Same armature/bones."""
+    sx, sy, sz = style.body_scale
+    mats = {
+        "primary": material(f"{style.fighter_id}_primary", style.primary),
+        "secondary": material(f"{style.fighter_id}_secondary", style.secondary),
+        "accent": material(f"{style.fighter_id}_accent", style.accent, 0.35),
+        "outline": material(f"{style.fighter_id}_outline", style.outline),
+        "skin": material(f"{style.fighter_id}_skin", "E8B898"),
+        "hair": material(f"{style.fighter_id}_hair", "FF8A2B", 0.22),
+        "eye": material(f"{style.fighter_id}_eye", "FFF8F0", 0.1),
+        "iris": material(f"{style.fighter_id}_iris", "1A0E0C"),
+        "cloth": material(f"{style.fighter_id}_cloth", "4A1818"),
+        "boot": material(f"{style.fighter_id}_boot", "2A1410"),
+    }
+
+    # Pelvis / hips — rounded clothing volume
+    sphere_part("hips_mesh", (0, 0, 0.84), (0.26 * sx, 0.18 * sy, 0.18 * sz), mats["secondary"], armature, "pelvis")
+    cylinder_part("pelvis_plate", (0, 0.02, 0.92), 0.20 * sx, 0.12 * sz, mats["cloth"], armature, "pelvis", (math.pi / 2, 0, 0))
+
+    # Torso / chest — athletic taper via stacked capsules
+    cylinder_part("torso_mesh", (0, 0.01, 1.18), 0.17 * sx, 0.34 * sz, mats["primary"], armature, "spine", (0, 0, 0))
+    sphere_part("chest_mesh", (0, 0.02, 1.42), (0.24 * sx, 0.16 * sy, 0.20 * sz), mats["primary"], armature, "chest")
+    # Ignition sash / chest plate accent
+    cube_part("ember_chest_plate", (0, -0.12, 1.40), (0.22 * sx, 0.04, 0.16 * sz), mats["accent"], armature, "chest", bevel=0.04)
+    cube_part("flame_sash", (0.02, 0.12, 1.05), (0.42, 0.04, 0.07), mats["accent"], armature, "pelvis", bevel=0.03)
+
+    # Neck + head with readable face
+    cylinder_part("neck_mesh", (0, 0, 1.74), 0.055 * sx, 0.10 * sz, mats["skin"], armature, "neck")
+    sphere_part("head_mesh", (0, -0.01, 2.00), (0.17 * style.head_scale, 0.16 * style.head_scale, 0.19 * style.head_scale), mats["skin"], armature, "head")
+    # Jaw / cheek suggestion
+    sphere_part("jaw_mesh", (0, -0.06, 1.90), (0.12, 0.08, 0.08), mats["skin"], armature, "head")
+
+    for side, sign in (("L", -1.0), ("R", 1.0)):
+        # Eyes
+        sphere_part(f"eye_white_{side}", (0.055 * sign, -0.145, 2.02), (0.035, 0.018, 0.045), mats["eye"], armature, "head")
+        sphere_part(f"iris_{side}", (0.055 * sign, -0.160, 2.02), (0.018, 0.012, 0.022), mats["iris"], armature, "head")
+        # Brow
+        cube_part(f"brow_{side}", (0.055 * sign, -0.150, 2.075), (0.045, 0.012, 0.012), mats["outline"], armature, "head", bevel=0.01)
+        # Mouth
+        if side == "L":
+            cube_part("mouth", (0.0, -0.155, 1.94), (0.045, 0.01, 0.012), mats["outline"], armature, "head", bevel=0.008)
+        # Arms — tapered cylinders (not boxes)
+        cylinder_part(f"upper_arm_{side}", (0.34 * sign, 0.0, 1.42), 0.065 * sx, 0.30 * sz, mats["primary"], armature, f"upper_arm.{side}", (0.55 * sign, 0, 0.35 * sign))
+        cylinder_part(f"lower_arm_{side}", (0.55 * sign, 0.0, 1.14), 0.052 * sx, 0.26 * sz, mats["skin"], armature, f"lower_arm.{side}", (0.45 * sign, 0, 0.2 * sign))
+        # Gauntlets + hands
+        cylinder_part(f"gauntlet_{side}", (0.66 * sign, 0.0, 1.00), 0.065, 0.10, mats["accent"], armature, f"hand.{side}")
+        sphere_part(f"hand_{side}", (0.72 * sign, -0.01, 0.90), (0.09 * style.hand_scale, 0.07 * style.hand_scale, 0.09 * style.hand_scale), mats["skin"], armature, f"hand.{side}")
+        cone_part(f"flame_fin_{side}", (0.74 * sign, 0.02, 1.05), 0.09, 0.22, mats["accent"], armature, f"hand.{side}")
+        # Legs
+        cylinder_part(f"upper_leg_{side}", (0.12 * sign, 0.0, 0.58), 0.08 * sx, 0.32 * sz, mats["secondary"], armature, f"upper_leg.{side}")
+        cylinder_part(f"lower_leg_{side}", (0.13 * sign, 0.0, 0.28), 0.065 * sx, 0.28 * sz, mats["primary"], armature, f"lower_leg.{side}")
+        # Boots with toe volume
+        cube_part(f"boot_{side}", (0.13 * sign, -0.08, 0.08), (0.11 * style.boot_scale, 0.20 * style.boot_scale, 0.09 * style.boot_scale), mats["boot"], armature, f"foot.{side}", bevel=0.03)
+        sphere_part(f"boot_toe_{side}", (0.13 * sign, -0.18, 0.07), (0.07, 0.08, 0.05), mats["boot"], armature, f"foot.{side}")
+
+    # Flame-crest hair — multi-lick silhouette
+    for idx, (x, z, r, d) in enumerate((
+        (-0.06, 2.28, 0.07, 0.34),
+        (0.0, 2.36, 0.09, 0.42),
+        (0.07, 2.30, 0.07, 0.36),
+        (-0.12, 2.18, 0.05, 0.24),
+        (0.12, 2.20, 0.05, 0.26),
+    )):
+        cone_part(f"ember_crest_{idx}", (x, 0.02, z), r, d, mats["hair"] if idx % 2 else mats["accent"], armature, "head")
+    # Side hair volume
+    sphere_part("hair_side_L", (-0.14, 0.02, 2.00), (0.08, 0.10, 0.12), mats["hair"], armature, "head")
+    sphere_part("hair_side_R", (0.14, 0.02, 2.00), (0.08, 0.10, 0.12), mats["hair"], armature, "head")
+    # Shoulder ignition accents
+    sphere_part("shoulder_ember_L", (-0.28, 0.02, 1.55), (0.07, 0.06, 0.07), mats["accent"], armature, "chest")
+    sphere_part("shoulder_ember_R", (0.28, 0.02, 1.55), (0.07, 0.06, 0.07), mats["accent"], armature, "chest")
+    return mats
+
+
 def create_base_model(style: FighterStyle, armature):
+    if style.fighter_id == "ember-vale":
+        return create_ember_character_model(style, armature)
     sx, sy, sz = style.body_scale
     mats = {
         "primary": material(f"{style.fighter_id}_primary", style.primary),
@@ -560,8 +646,13 @@ def build_fighter(style: FighterStyle) -> Dict[str, object]:
 
 
 def main() -> int:
+    import os
     CONTACT_DIR.mkdir(parents=True, exist_ok=True)
-    records = [build_fighter(style) for style in STYLES]
+    filt = os.environ.get("FIGHTER_FILTER", "").strip()
+    styles = [s for s in STYLES if not filt or s.fighter_id == filt]
+    if not styles:
+        raise SystemExit(f"No fighters match FIGHTER_FILTER={filt!r}")
+    records = [build_fighter(style) for style in styles]
     manifest = {
         "schema_version": 1,
         "pipeline_version": PIPELINE_VERSION,
