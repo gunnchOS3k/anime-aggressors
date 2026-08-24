@@ -52,7 +52,6 @@ def main() -> int:
 
         if ("Projectile2D" in rel or rel.endswith("projectile.gd")) and (
             "debug_rect.visible = true" in text
-            or ("DebugRect" in text and "ColorRect" in text)
         ):
             findings.append(
                 {

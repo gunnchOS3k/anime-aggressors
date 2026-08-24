@@ -611,7 +611,9 @@
         "type": "frost",
         "effect": "chill_freeze",
         "strength": 1
-      }
+      },
+      "wave016_reachability": "DESIGN_ONLY_NO_DISTINCT_CONTROL",
+      "note": "CONTROLS.md does not distinguish tilt vs smash/heavy; not bound to avoid awkward inputs."
     },
     {
       "move_id": "neutral_air",
@@ -750,6 +752,78 @@
         "screen_flash": false
       },
       "training_display_name": "Forward Air",
+      "combat_tag": "freeze_control",
+      "element_effect": {
+        "type": "frost",
+        "effect": "chill_freeze",
+        "strength": 1
+      }
+    },
+    {
+      "move_id": "back_air",
+      "fighter_id": "nix-calder",
+      "move_type": "melee",
+      "direction": "back",
+      "input_command": "attack_air_back",
+      "grounded_air": "air",
+      "startup_frames": 6,
+      "active_frames": 3,
+      "recovery_frames": 13,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "damage": 7.3500000000000005,
+      "angle_deg": 160.0,
+      "base_knockback": 8.0,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "light",
+        "hitstop_frames": 3,
+        "camera_event": "shake_light",
+        "vfx_event": "frost_spark",
+        "sfx_event": "frost_hit_light",
+        "screen_flash": false
+      },
+      "training_display_name": "Back Air",
       "combat_tag": "freeze_control",
       "element_effect": {
         "type": "frost",
