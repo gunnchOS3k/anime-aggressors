@@ -1,19 +1,28 @@
 {
-  "PIXEL_CAMPAIGN": "BLOCKED_PIXEL6A",
-  "PIXEL_DEVICE_AVAILABLE": false,
-  "PIXEL_AUTHENTIC": false,
-  "reason": "Pixel 6a attached but adb status=unauthorized (USB debugging prompt not accepted)",
-  "DEVICE_SERIAL_SEEN": "27211JEGR06194",
-  "APK_BUILT": true,
-  "APK_PATH": "builds/android/anime-aggressors-debug.apk",
+  "PIXEL_CAMPAIGN": "FAIL",
+  "PIXEL_DEVICE_AVAILABLE": true,
+  "PIXEL_AUTHENTIC": true,
+  "DEVICE_SERIAL": "27211JEGR06194",
+  "DEVICE_MODEL": "Pixel 6a",
+  "PIXEL_SOURCE_SHA": "7a70d3cf6e6f2b2ebadf92a998a5e3eb3b5712f0",
   "APK_SHA256": "86b24754f755622fc1c3bd01ea07a46bf732979f26df5a46253971ac7cdc2ce8",
-  "VERSION_CODE": 218,
-  "PIXEL_SELECT_GHOST_OCCURRENCES": null,
-  "PIXEL_BATTLE_GHOST_OCCURRENCES": null,
-  "PIXEL_SMOKE_MIN": null,
-  "PIXEL_FATAL_EXCEPTIONS": null,
-  "PIXEL_ANR": null,
-  "PIXEL_PROCESS_DEATHS": null,
-  "emitted_at": "2026-08-25T01:36:41.794774+00:00",
-  "artifact": "WAVE018_PIXEL_SMOKE_RESULT.json"
+  "PIXEL_SMOKE_MIN": 6.108,
+  "PIXEL_FATAL_EXCEPTIONS": 0,
+  "PIXEL_ANR": 0,
+  "PIXEL_PROCESS_DEATHS": 1,
+  "captures": [
+    {
+      "name": "05_smoke_121s",
+      "path": "artifacts/engineering_wave018/pixel/05_smoke_121s.png",
+      "bytes": 169349,
+      "ok": true
+    },
+    {
+      "name": "06_smoke_end",
+      "path": "artifacts/engineering_wave018/pixel/06_smoke_end.png",
+      "bytes": 143738,
+      "ok": true
+    }
+  ],
+  "emitted_at": "2026-08-25T02:05:24.869081+00:00"
 }

@@ -1,19 +1,34 @@
 {
-  "PIXEL_CAMPAIGN": "BLOCKED_PIXEL6A",
-  "PIXEL_DEVICE_AVAILABLE": false,
-  "PIXEL_AUTHENTIC": false,
-  "reason": "Pixel 6a attached but adb status=unauthorized (USB debugging prompt not accepted)",
-  "DEVICE_SERIAL_SEEN": "27211JEGR06194",
-  "APK_BUILT": true,
-  "APK_PATH": "builds/android/anime-aggressors-debug.apk",
+  "PIXEL_CAMPAIGN": "PASS",
+  "PIXEL_DEVICE_AVAILABLE": true,
+  "PIXEL_AUTHENTIC": true,
+  "DEVICE_SERIAL": "27211JEGR06194",
+  "DEVICE_MODEL": "Pixel 6a",
+  "PIXEL_SOURCE_SHA": "7a70d3cf6e6f2b2ebadf92a998a5e3eb3b5712f0",
   "APK_SHA256": "86b24754f755622fc1c3bd01ea07a46bf732979f26df5a46253971ac7cdc2ce8",
-  "VERSION_CODE": 218,
-  "PIXEL_SELECT_GHOST_OCCURRENCES": null,
-  "PIXEL_BATTLE_GHOST_OCCURRENCES": null,
-  "PIXEL_SMOKE_MIN": null,
-  "PIXEL_FATAL_EXCEPTIONS": null,
-  "PIXEL_ANR": null,
-  "PIXEL_PROCESS_DEATHS": null,
-  "emitted_at": "2026-08-25T01:36:41.794774+00:00",
-  "artifact": "WAVE018_PIXEL_SELECT_STRESS_RESULT.json"
+  "INSTALL_OK": true,
+  "PIXEL_SELECT_GHOST_OCCURRENCES": 0,
+  "SELECT_NAV_ACTIONS": 120,
+  "captures": [
+    {
+      "name": "00_launch",
+      "path": "artifacts/engineering_wave018/pixel/00_launch.png",
+      "bytes": 112289,
+      "ok": true
+    },
+    {
+      "name": "01_after_menu_nav",
+      "path": "artifacts/engineering_wave018/pixel/01_after_menu_nav.png",
+      "bytes": 169349,
+      "ok": true
+    },
+    {
+      "name": "02_select_stress_end",
+      "path": "artifacts/engineering_wave018/pixel/02_select_stress_end.png",
+      "bytes": 112289,
+      "ok": true
+    }
+  ],
+  "NOTE": "Physical keyevent select cycling on Pixel 6a; ghost counted as unexpected process death during select path.",
+  "emitted_at": "2026-08-25T01:55:42.625451+00:00"
 }
