@@ -33,34 +33,30 @@ def main() -> int:
     desktop_s2b = load("SELECT_TO_BATTLE_VISIBILITY_RESULT.json")
     desktop_battle = load("BATTLE_VISIBILITY_INVARIANT_RESULT.json")
 
-    runtime_changed = git(
-        "diff",
-        "--name-only",
-        f"{PHYSICALLY_TESTED_CANDIDATE}..{head}",
-        "--",
-        "game-godot/",
-    ).splitlines()
-    evidence_changed = git(
-        "diff",
-        "--name-only",
-        f"{PHYSICALLY_TESTED_CANDIDATE}..{head}",
-    ).splitlines()
-    evidence_only = [p for p in evidence_changed if p not in runtime_changed]
-
     physical_sha = (
         select.get("PIXEL_SOURCE_SHA")
         or smoke.get("PIXEL_SOURCE_SHA")
         or result.get("PHYSICALLY_TESTED_RUNTIME_SHA")
         or head
     )
+    # Diff vs physically tested SHA (not the older prior candidate) for honest equivalence.
+    runtime_changed = git(
+        "diff",
+        "--name-only",
+        f"{physical_sha}..{head}",
+        "--",
+        "game-godot/",
+    ).splitlines()
+    evidence_changed = git(
+        "diff",
+        "--name-only",
+        f"{physical_sha}..{head}",
+    ).splitlines()
+    evidence_only = [p for p in evidence_changed if p not in runtime_changed]
+
     apk = select.get("APK_SHA256") or smoke.get("APK_SHA256") or result.get("APK_SHA256")
-    # Equivalence: no game-runtime delta vs the SHA that was physically retested this pass.
-    equiv = physical_sha == head and (
-        not runtime_changed or physical_sha != PHYSICALLY_TESTED_CANDIDATE
-    )
-    # If this head includes telemetry runtime files and Pixel was run on this head, equivalent=true.
-    if physical_sha == head:
-        equiv = True
+    # Equivalent when tip has no game-godot delta after the physically tested runtime.
+    equiv = physical_sha == head or len(runtime_changed) == 0
 
     seal = {
         "schema": "engineering_wave018.final_provenance_seal.v1",

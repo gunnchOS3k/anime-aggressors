@@ -220,15 +220,34 @@ def emit_result() -> dict:
     if pixel_avail:
         pixel_ok_for_merge = pixel_campaign == "PASS"
         # Section-14 Pixel renderability gate (ghost != process death).
+        def _i(v, default: int = 99) -> int:
+            return default if v is None else int(v)
+
+        def _f(v, default: float = 0.0) -> float:
+            return default if v is None else float(v)
+
+        sel_ghost = pixel_sel.get(
+            "PIXEL_SELECT_RENDER_GHOST_OCCURRENCES",
+            pixel_sel.get("PIXEL_SELECT_GHOST_OCCURRENCES"),
+        )
+        bat_ghost = pixel_vis.get(
+            "PIXEL_BATTLE_RENDER_GHOST_OCCURRENCES",
+            pixel_vis.get("PIXEL_BATTLE_GHOST_OCCURRENCES"),
+        )
+        viol = pixel_smoke.get(
+            "PIXEL_VISIBILITY_INVARIANT_VIOLATIONS",
+            pixel_vis.get("PIXEL_VISIBILITY_INVARIANT_VIOLATIONS"),
+        )
+        # Note: do not use `x or 99` — legitimate zero counters are falsy.
         pixel_ok_for_merge = pixel_ok_for_merge and (
-            int(pixel_sel.get("PIXEL_SELECT_RENDER_GHOST_OCCURRENCES", pixel_sel.get("PIXEL_SELECT_GHOST_OCCURRENCES", 99)) or 99) == 0
-            and int(pixel_vis.get("PIXEL_BATTLE_RENDER_GHOST_OCCURRENCES", pixel_vis.get("PIXEL_BATTLE_GHOST_OCCURRENCES", 99)) or 99) == 0
-            and int(pixel_smoke.get("PIXEL_VISIBILITY_INVARIANT_VIOLATIONS", pixel_vis.get("PIXEL_VISIBILITY_INVARIANT_VIOLATIONS", 99)) or 99) == 0
-            and float(pixel_smoke.get("PIXEL_SMOKE_MIN", 0) or 0) >= 10.0
-            and int(pixel_smoke.get("PIXEL_PROCESS_DEATHS", 99) or 99) == 0
-            and int(pixel_smoke.get("PIXEL_FATAL_EXCEPTIONS", 99) or 99) == 0
-            and int(pixel_smoke.get("PIXEL_ANR", 99) or 99) == 0
-            and int(pixel_smoke.get("PIXEL_OOM", 0) or 0) == 0
+            _i(sel_ghost) == 0
+            and _i(bat_ghost) == 0
+            and _i(viol) == 0
+            and _f(pixel_smoke.get("PIXEL_SMOKE_MIN")) >= 10.0
+            and _i(pixel_smoke.get("PIXEL_PROCESS_DEATHS")) == 0
+            and _i(pixel_smoke.get("PIXEL_FATAL_EXCEPTIONS")) == 0
+            and _i(pixel_smoke.get("PIXEL_ANR")) == 0
+            and _i(pixel_smoke.get("PIXEL_OOM"), 0) == 0
         )
     else:
         pixel_ok_for_merge = False  # Pixel unavailable => not merge-ready for this seal
