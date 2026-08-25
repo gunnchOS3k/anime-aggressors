@@ -22,13 +22,3 @@ Non-primitive reads: 7
 ## Truth
 
 FINAL_CHARACTER_ART_PASS=false · HUMAN_ART_DIRECTION_APPROVAL=false · CURSOR_DECLARED_Q3=false · CURSOR_MERGED_NOTHING=true
-
-
-## Pixel 6a
-
-- Device serial seen: `27211JEGR06194`
-- Status: **BLOCKED_PIXEL6A** (`adb unauthorized`)
-- APK built for owner install: `builds/android/anime-aggressors-debug.apk`
-- SHA-256: `86b24754f755622fc1c3bd01ea07a46bf732979f26df5a46253971ac7cdc2ce8`
-- Version code: 218
-- Do not invent physical ghost=0 from desktop alone.

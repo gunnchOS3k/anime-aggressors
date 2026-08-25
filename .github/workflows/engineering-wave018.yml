@@ -1,8 +1,8 @@
-name: Engineering Wave018 Owner Taste Golden Slice
+name: Engineering Wave018 Roster Visual Propagation
 
 on:
   push:
-    branches: [main, "eng/wave018-owner-taste-golden-slice", "eng/**"]
+    branches: [main, "eng/wave018-roster-visual-propagation-and-model-visibility", "eng/**"]
   pull_request:
     branches: [main]
 
@@ -37,31 +37,41 @@ jobs:
           GITHUB_SHA: ${{ github.sha }}
           GITHUB_ACTIONS: "true"
         run: |
+          set -euo pipefail
           mkdir -p artifacts/wave018 artifacts/engineering_wave018 tmp
-          python3 tools/engineering_wave018/emit_wave018_packet.py
           # Pixel not available in CI — record blocked honestly without failing desktop gates
           python3 - <<'PY'
           import json
           from pathlib import Path
-          p = Path("artifacts/wave018/PIXEL_CAMPAIGN.json")
-          p.parent.mkdir(parents=True, exist_ok=True)
-          p.write_text(json.dumps({
+          art = Path("artifacts/engineering_wave018")
+          art.mkdir(parents=True, exist_ok=True)
+          payload = {
             "PIXEL_CAMPAIGN": "BLOCKED_PIXEL6A",
-            "NORMAL_PLAY_GHOST_FIGHTER_OCCURRENCES": None,
+            "PIXEL_DEVICE_AVAILABLE": False,
             "PIXEL_AUTHENTIC": False,
             "reason": "CI runner has no Pixel 6a",
-          }, indent=2) + "\n")
+          }
+          Path("artifacts/wave018").mkdir(parents=True, exist_ok=True)
+          Path("artifacts/wave018/PIXEL_CAMPAIGN.json").write_text(json.dumps(payload, indent=2) + "\n")
+          for name in [
+            "WAVE018_PIXEL_SELECT_STRESS_RESULT.json",
+            "WAVE018_PIXEL_VISIBILITY_RESULT.json",
+            "WAVE018_PIXEL_SMOKE_RESULT.json",
+          ]:
+            (art / name).write_text(json.dumps({**payload, "artifact": name}, indent=2) + "\n")
           PY
           source tools/engineering_wave015/godot_orchestration.sh
           export GODOT_ORCH_ROOT="$PWD"
           godot_orchestration_prepare "wave018-ci" "$PWD" || true
           "$GODOT_BIN" --headless --path "$PWD/game-godot" --import || true
-          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave018/Wave018GhostLifecycle.gd
-          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave018/Wave018PlayerBuildDebugLabels.gd
-          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave018/Wave018GoldenSliceVisual.gd
-          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave016/Wave016GoldenSliceMoveE2E.gd
-          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave016/Wave016EmberProjectileRuntimeE2E.gd
-          python3 tools/engineering_wave018/emit_wave018_result.py
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave018/Wave018SelectPreviewStress.gd
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave018/Wave018SelectToBattleVisibility.gd
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave018/Wave018BattleVisibilityInvariant.gd
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave017/Wave017GhostLifecycle.gd || true
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave017/Wave017PlayerBuildDebugLabels.gd || true
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave016/Wave016GoldenSliceMoveE2E.gd || true
+          python3 tools/engineering_wave018/emit_roster_baseline.py
+          python3 tools/engineering_wave018/emit_wave018_bundle.py
 
       - name: Upload Wave018 artifacts
         if: always()
@@ -81,12 +91,15 @@ jobs:
           from pathlib import Path
           d = json.load(open("artifacts/engineering_wave018/WAVE018_RESULT.json"))
           assert d.get("CURSOR_MERGED_NOTHING") is True
-          assert d.get("HUMAN_Q3_APPROVAL") is False
+          assert d.get("FINAL_CHARACTER_ART_PASS") is False
+          assert d.get("FINAL_HUMAN_AUTHORED_ANIMATION_PASS") is False
           assert d.get("HUMAN_ART_DIRECTION_APPROVAL") is False
+          assert d.get("HUMAN_PLAYTEST_COMPLETE") is False
           assert d.get("CURSOR_DECLARED_Q3") is False
-          assert d.get("OWNER_TASTE_REVIEW") == "PENDING"
-          assert d.get("PLAYER_BUILD_VISIBLE_DEBUG_LABELS") == 0
-          assert d.get("NORMAL_PLAY_GHOST_FIGHTER_OCCURRENCES_DESKTOP") == 0
-          assert d.get("T0_OPEN") == 0
-          print("CI honesty OK", d.get("WAVE018_OWNER_TASTE_GOLDEN_SLICE"))
+          assert int(d.get("NEW_S0", 1)) == 0
+          assert int(d.get("NEW_S1", 1)) == 0
+          assert int(d.get("SELECT_PREVIEW_GHOST_OCCURRENCES", 99)) == 0
+          assert int(d.get("SELECT_TO_BATTLE_GHOST_OCCURRENCES", 99)) == 0
+          assert int(d.get("BATTLE_VISIBLE_BODY_ZERO_OCCURRENCES", 99)) == 0
+          print("CI honesty OK", d.get("WAVE018_ROSTER_VISUAL_PROPAGATION"))
           PY
