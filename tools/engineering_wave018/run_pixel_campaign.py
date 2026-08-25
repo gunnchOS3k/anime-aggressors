@@ -24,6 +24,7 @@ FORBIDDEN_PACKAGES = (
     "com.gunnchos.pedestrianpursuit",
     "com.gunnchos.beatlink",
     "com.gunnchos.archive",
+    "com.android.settings",
 )
 FIGHTERS = [
     "ember-vale",
@@ -113,16 +114,22 @@ def write_blocked(reason: str, extra: dict | None = None) -> int:
 
 
 def run_as_cat(rel: str) -> str:
-    r = subprocess.run(
-        ["adb", "exec-out", "run-as", PKG, "cat", rel],
-        cwd=ROOT,
-        capture_output=True,
-        text=True,
-        timeout=60,
-    )
-    if r.returncode != 0:
-        return ""
-    return r.stdout
+    last_err = ""
+    for _ in range(3):
+        r = subprocess.run(
+            ["adb", "exec-out", "run-as", PKG, "cat", rel],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            timeout=60,
+        )
+        if r.returncode == 0:
+            return r.stdout
+        last_err = (r.stderr or r.stdout or "")[-200:]
+        time.sleep(0.4)
+    if last_err:
+        print(f"run-as cat failed for {rel}: {last_err}")
+    return ""
 
 
 def clear_telemetry() -> None:
@@ -264,22 +271,7 @@ def launch_app(*, reset_telemetry: bool = False) -> bool:
     time.sleep(0.5)
     if reset_telemetry:
         clear_telemetry()
-    # monkey launcher start reliably brings AA to window focus on Pixel 6a.
     r = adb(
-        "shell",
-        "monkey",
-        "-p",
-        PKG,
-        "-c",
-        "android.intent.category.LAUNCHER",
-        "1",
-    )
-    time.sleep(5.0)
-    fg = foreground_package()
-    if PKG in fg:
-        return True
-    # Fallback: explicit component start (no --activity-brought-to-front; that can bounce to launcher).
-    adb(
         "shell",
         "am",
         "start",
@@ -291,10 +283,10 @@ def launch_app(*, reset_telemetry: bool = False) -> bool:
         "-c",
         "android.intent.category.LAUNCHER",
     )
-    time.sleep(3.0)
+    time.sleep(4.0)
     fg = foreground_package()
     if PKG not in fg and not pidof():
-        print(f"LAUNCH FAIL: expected {PKG}, foreground={fg!r}, monkey={r.stdout}{r.stderr}")
+        print(f"LAUNCH FAIL: expected {PKG}, foreground={fg!r}, am={r.stdout}{r.stderr}")
         return False
     if PKG not in fg:
         print(f"LAUNCH WARN: foreground={fg!r} after starting {COMPONENT}")
@@ -302,23 +294,37 @@ def launch_app(*, reset_telemetry: bool = False) -> bool:
     return True
 
 
+def bring_aa_to_front() -> bool:
+    """Resume AA without force-stop (preserves in-memory scene + telemetry file)."""
+    adb(
+        "shell",
+        "am",
+        "start",
+        "-n",
+        COMPONENT,
+        "-a",
+        "android.intent.action.MAIN",
+        "-c",
+        "android.intent.category.LAUNCHER",
+    )
+    time.sleep(1.5)
+    return bool(pidof())
+
+
 def ensure_aa_foreground(context: str) -> bool:
     if not pidof():
-        return launch_app()
+        return launch_app(reset_telemetry=False)
     fg = foreground_package()
     if fg in FORBIDDEN_PACKAGES:
         print(f"force-stopping forbidden package during {context}: {fg}")
         adb("shell", "am", "force-stop", fg)
-        return launch_app()
-    if PKG in fg:
+        return bring_aa_to_front()
+    if PKG in fg or not fg:
+        # Empty fg: dumpsys lag — still send input if process alive.
         return True
-    # Soft recover: monkey bring-to-front without force-stop (preserve telemetry).
+    # Launcher/settings/other: soft resume only.
     print(f"re-focusing AA ({context}); was foreground={fg!r}")
-    adb("shell", "monkey", "-p", PKG, "-c", "android.intent.category.LAUNCHER", "1")
-    time.sleep(2.0)
-    if PKG in foreground_package():
-        return True
-    return launch_app()
+    return bring_aa_to_front()
 
 
 def soft_back_in_aa(actions: list | None = None) -> None:
@@ -331,9 +337,7 @@ def soft_back_in_aa(actions: list | None = None) -> None:
     if actions is not None:
         actions.append("BACK")
     if PKG not in foreground_package():
-        # Bounce home is common on Android; refocus AA without touching other apps.
-        adb("shell", "monkey", "-p", PKG, "-c", "android.intent.category.LAUNCHER", "1")
-        time.sleep(1.2)
+        bring_aa_to_front()
     ensure_aa_foreground("soft_back_post")
 
 
@@ -454,7 +458,7 @@ def select_stress(actions: list) -> dict:
             actions.append("RANDOM")
         stats["random_reselections"] += 1
 
-    # Confirm / soft-back loops (stay in AA)
+    # Confirm / soft-cancel loops (stay in AA). Avoid Android BACK (exits to launcher).
     for _ in range(20):
         if not ensure_aa_foreground("select_confirm_back"):
             stats["process_deaths"] += 1
@@ -463,9 +467,12 @@ def select_stress(actions: list) -> dict:
         time.sleep(0.22)
         stats["nav_actions"] += 1
         actions.append("CONFIRM")
-        if PKG in foreground_package():
-            soft_back_in_aa(actions)
-            stats["nav_actions"] += 1
+        key("21")
+        time.sleep(0.12)
+        key("22")
+        time.sleep(0.12)
+        stats["nav_actions"] += 2
+        actions.append("SOFT_CANCEL_CYCLE")
         stats["confirm_back"] += 1
 
     return stats

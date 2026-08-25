@@ -5,33 +5,56 @@
     "PIXEL_AUTHENTIC": true,
     "DEVICE_SERIAL": "27211JEGR06194",
     "DEVICE_MODEL": "Pixel 6a",
-    "PIXEL_SOURCE_SHA": "32558493894eca1d4f208fabd63722bc8ce240eb",
-    "APK_SHA256": "f408676881deb2ccc470704ffc5cafe3fe1b4cc26f74e2ca6ff80dd9c453df7e",
+    "PIXEL_SOURCE_SHA": "6e9dca3947e6097964c36cb8ce35d0e32a5164c4",
+    "APK_SHA256": "c16e63a573b452fdf6c48611aae070f427beac57dae2c5965ee37b5d75302bae",
     "INSTALL_OK": true,
-    "PIXEL_SELECT_GHOST_OCCURRENCES": 0,
-    "SELECT_NAV_ACTIONS": 120,
+    "PIXEL_SELECT_RENDER_GHOST_OCCURRENCES": 0,
+    "PIXEL_SELECT_VISIBILITY_INVARIANT_VIOLATIONS": 0,
+    "PIXEL_FALLBACK_RECOVERIES": 0,
+    "PIXEL_PROCESS_DEATHS": 0,
+    "SELECT_NAV_ACTIONS": 313,
+    "PIXEL_FULL_ROSTER_SWEEPS": 20,
+    "CONFIRM_BACK_CYCLES": 20,
+    "RANDOM_RESELECTIONS": 24,
+    "TELEMETRY_SELECT_ROWS": 428,
+    "NOTE": "Render ghost = expected_visible AND visible_renderable_mesh_count==0. Process death tracked separately as PIXEL_PROCESS_DEATHS.",
     "captures": [
       {
+        "capture": "00_launch",
         "name": "00_launch",
         "path": "artifacts/engineering_wave018/pixel/00_launch.png",
         "bytes": 112279,
-        "ok": true
+        "ok": true,
+        "timestamp": "2026-08-25T17:56:04.729974+00:00"
       },
       {
+        "capture": "01_after_menu_nav",
         "name": "01_after_menu_nav",
         "path": "artifacts/engineering_wave018/pixel/01_after_menu_nav.png",
-        "bytes": 169349,
-        "ok": true
+        "bytes": 242224,
+        "ok": true,
+        "timestamp": "2026-08-25T17:56:19.765072+00:00",
+        "scene": "fighter_select",
+        "fighter_id": "ember-vale",
+        "telemetry_record_id": "w018-vis-18903-11",
+        "visible_renderable_mesh_count": 43,
+        "visibility_invariant_pass": true
       },
       {
+        "capture": "02_select_stress_end",
         "name": "02_select_stress_end",
         "path": "artifacts/engineering_wave018/pixel/02_select_stress_end.png",
-        "bytes": 112289,
-        "ok": true
+        "bytes": 171861,
+        "ok": true,
+        "timestamp": "2026-08-25T17:58:35.365576+00:00",
+        "scene": "fighter_select",
+        "fighter_id": "rook-ironside",
+        "telemetry_record_id": "w018-vis-154695-428",
+        "visible_renderable_mesh_count": 35,
+        "visibility_invariant_pass": true
       }
     ],
-    "NOTE": "Physical keyevent select cycling on Pixel 6a; ghost counted as unexpected process death during select path.",
-    "emitted_at": "2026-08-25T02:15:15.219514+00:00"
+    "emitted_at": "2026-08-25T17:58:35.365651+00:00"
   },
   "visibility": {
     "PIXEL_CAMPAIGN": "PASS",
@@ -39,57 +62,123 @@
     "PIXEL_AUTHENTIC": true,
     "DEVICE_SERIAL": "27211JEGR06194",
     "DEVICE_MODEL": "Pixel 6a",
-    "PIXEL_SOURCE_SHA": "32558493894eca1d4f208fabd63722bc8ce240eb",
-    "APK_SHA256": "f408676881deb2ccc470704ffc5cafe3fe1b4cc26f74e2ca6ff80dd9c453df7e",
-    "PIXEL_BATTLE_GHOST_OCCURRENCES": 0,
-    "SELECT_TO_BATTLE_ATTEMPTS": 6,
+    "PIXEL_SOURCE_SHA": "6e9dca3947e6097964c36cb8ce35d0e32a5164c4",
+    "APK_SHA256": "c16e63a573b452fdf6c48611aae070f427beac57dae2c5965ee37b5d75302bae",
+    "PIXEL_BATTLE_RENDER_GHOST_OCCURRENCES": 0,
+    "PIXEL_BATTLE_VISIBILITY_INVARIANT_VIOLATIONS": 0,
+    "PIXEL_VISIBILITY_INVARIANT_VIOLATIONS": 0,
+    "PIXEL_FALLBACK_RECOVERIES": 0,
+    "PIXEL_PROCESS_DEATHS": 0,
+    "SELECT_TO_BATTLE_ATTEMPTS": 14,
+    "PIXEL_SELECT_TO_BATTLE_LAUNCHES": 14,
+    "BATTLE_PATHS": [
+      "normal",
+      "back_reenter",
+      "arcade_next",
+      "ko_respawn_attempt",
+      "rematch_attempt",
+      "normal",
+      "back_reenter",
+      "arcade_next",
+      "ko_respawn_attempt",
+      "rematch_attempt",
+      "normal",
+      "back_reenter",
+      "arcade_next",
+      "ko_respawn_attempt"
+    ],
+    "TELEMETRY_BATTLE_ROWS": 186,
     "DISAPPEARING_BODY_REPRO_ATTEMPTED": true,
+    "NOTE": "Render ghost = expected_visible AND logic_active AND visible_renderable_mesh_count==0. Process death is NOT counted as a battle render ghost.",
     "captures": [
       {
+        "capture": "03_battle_attempt_0",
         "name": "03_battle_attempt_0",
         "path": "artifacts/engineering_wave018/pixel/03_battle_attempt_0.png",
-        "bytes": 169349,
-        "ok": true
+        "bytes": 170087,
+        "ok": true,
+        "timestamp": "2026-08-25T18:13:28.830460+00:00",
+        "scene": "battle",
+        "fighter_id": "rook-ironside",
+        "telemetry_record_id": "w018-vis-191615-646",
+        "visible_renderable_mesh_count": 35,
+        "visibility_invariant_pass": true
       },
       {
+        "capture": "03_battle_attempt_1",
         "name": "03_battle_attempt_1",
         "path": "artifacts/engineering_wave018/pixel/03_battle_attempt_1.png",
-        "bytes": 169349,
-        "ok": true
+        "bytes": 170087,
+        "ok": true,
+        "timestamp": "2026-08-25T18:13:29.130058+00:00",
+        "scene": "battle",
+        "fighter_id": "rook-ironside",
+        "telemetry_record_id": "w018-vis-191616-647",
+        "visible_renderable_mesh_count": 35,
+        "visibility_invariant_pass": true
       },
       {
+        "capture": "03_battle_attempt_2",
         "name": "03_battle_attempt_2",
         "path": "artifacts/engineering_wave018/pixel/03_battle_attempt_2.png",
-        "bytes": 169349,
-        "ok": true
+        "bytes": 170087,
+        "ok": true,
+        "timestamp": "2026-08-25T18:13:29.682124+00:00",
+        "scene": "battle",
+        "fighter_id": "rook-ironside",
+        "telemetry_record_id": "w018-vis-191616-647",
+        "visible_renderable_mesh_count": 35,
+        "visibility_invariant_pass": true
       },
       {
+        "capture": "03_battle_attempt_3",
         "name": "03_battle_attempt_3",
         "path": "artifacts/engineering_wave018/pixel/03_battle_attempt_3.png",
-        "bytes": 169349,
-        "ok": true
+        "bytes": 170087,
+        "ok": true,
+        "timestamp": "2026-08-25T18:13:30.058093+00:00",
+        "scene": "battle",
+        "fighter_id": "rook-ironside",
+        "telemetry_record_id": "w018-vis-191616-647",
+        "visible_renderable_mesh_count": 35,
+        "visibility_invariant_pass": true
       },
       {
+        "capture": "03_battle_attempt_4",
         "name": "03_battle_attempt_4",
         "path": "artifacts/engineering_wave018/pixel/03_battle_attempt_4.png",
-        "bytes": 169349,
-        "ok": true
+        "bytes": 170087,
+        "ok": true,
+        "timestamp": "2026-08-25T18:13:30.482350+00:00",
+        "scene": "battle",
+        "fighter_id": "rook-ironside",
+        "telemetry_record_id": "w018-vis-191616-647",
+        "visible_renderable_mesh_count": 35,
+        "visibility_invariant_pass": true
       },
       {
+        "capture": "03_battle_attempt_5",
         "name": "03_battle_attempt_5",
         "path": "artifacts/engineering_wave018/pixel/03_battle_attempt_5.png",
-        "bytes": 169349,
-        "ok": true
+        "bytes": 170087,
+        "ok": true,
+        "timestamp": "2026-08-25T18:13:30.879470+00:00",
+        "scene": "battle",
+        "fighter_id": "rook-ironside",
+        "telemetry_record_id": "w018-vis-191616-647",
+        "visible_renderable_mesh_count": 35,
+        "visibility_invariant_pass": true
       },
       {
+        "capture": "04_visibility_end",
         "name": "04_visibility_end",
         "path": "artifacts/engineering_wave018/pixel/04_visibility_end.png",
-        "bytes": 112289,
-        "ok": true
+        "bytes": 170087,
+        "ok": true,
+        "timestamp": "2026-08-25T18:13:31.257953+00:00"
       }
     ],
-    "NOTE": "Battle entry after select cycling; process death counted as ghost. Owner still confirms visual body presence from captures.",
-    "emitted_at": "2026-08-25T02:18:35.587023+00:00"
+    "emitted_at": "2026-08-25T18:13:31.258057+00:00"
   },
   "smoke": {
     "PIXEL_CAMPAIGN": "PASS",
@@ -97,53 +186,106 @@
     "PIXEL_AUTHENTIC": true,
     "DEVICE_SERIAL": "27211JEGR06194",
     "DEVICE_MODEL": "Pixel 6a",
-    "PIXEL_SOURCE_SHA": "32558493894eca1d4f208fabd63722bc8ce240eb",
-    "APK_SHA256": "f408676881deb2ccc470704ffc5cafe3fe1b4cc26f74e2ca6ff80dd9c453df7e",
-    "PIXEL_SMOKE_MIN": 10.051,
+    "PIXEL_SOURCE_SHA": "6e9dca3947e6097964c36cb8ce35d0e32a5164c4",
+    "APK_SHA256": "c16e63a573b452fdf6c48611aae070f427beac57dae2c5965ee37b5d75302bae",
+    "PIXEL_SMOKE_MIN": 10.056,
     "PIXEL_FATAL_EXCEPTIONS": 0,
     "PIXEL_ANR": 0,
+    "PIXEL_OOM": 0,
     "PIXEL_PROCESS_DEATHS": 0,
+    "PIXEL_SELECT_RENDER_GHOST_OCCURRENCES": 0,
+    "PIXEL_BATTLE_RENDER_GHOST_OCCURRENCES": 0,
+    "PIXEL_VISIBILITY_INVARIANT_VIOLATIONS": 0,
+    "PIXEL_FALLBACK_RECOVERIES": 0,
     "UNAUTHORIZED_INTERRUPT": false,
     "PIXEL_SMOKE_TARGET_SEC": 600,
+    "NOTE": "Smoke pass requires zero process deaths AND zero render ghosts/invariant violations.",
     "captures": [
       {
-        "name": "05_smoke_120s",
-        "path": "artifacts/engineering_wave018/pixel/05_smoke_120s.png",
-        "bytes": 169349,
-        "ok": true
+        "capture": "05_smoke_121s",
+        "name": "05_smoke_121s",
+        "path": "artifacts/engineering_wave018/pixel/05_smoke_121s.png",
+        "bytes": 242224,
+        "ok": true,
+        "timestamp": "2026-08-25T18:16:00.093370+00:00",
+        "scene": "battle",
+        "fighter_id": "rook-ironside",
+        "telemetry_record_id": "w018-vis-191616-647",
+        "visible_renderable_mesh_count": 35,
+        "visibility_invariant_pass": true
       },
       {
-        "name": "05_smoke_242s",
-        "path": "artifacts/engineering_wave018/pixel/05_smoke_242s.png",
-        "bytes": 169349,
-        "ok": true
+        "capture": "05_smoke_240s",
+        "name": "05_smoke_240s",
+        "path": "artifacts/engineering_wave018/pixel/05_smoke_240s.png",
+        "bytes": 242224,
+        "ok": true,
+        "timestamp": "2026-08-25T18:17:59.878533+00:00",
+        "scene": "battle",
+        "fighter_id": "rook-ironside",
+        "telemetry_record_id": "w018-vis-191616-647",
+        "visible_renderable_mesh_count": 35,
+        "visibility_invariant_pass": true
       },
       {
-        "name": "05_smoke_360s",
-        "path": "artifacts/engineering_wave018/pixel/05_smoke_360s.png",
-        "bytes": 169349,
-        "ok": true
+        "capture": "05_smoke_362s",
+        "name": "05_smoke_362s",
+        "path": "artifacts/engineering_wave018/pixel/05_smoke_362s.png",
+        "bytes": 242224,
+        "ok": true,
+        "timestamp": "2026-08-25T18:20:01.319146+00:00",
+        "scene": "battle",
+        "fighter_id": "rook-ironside",
+        "telemetry_record_id": "w018-vis-191616-647",
+        "visible_renderable_mesh_count": 35,
+        "visibility_invariant_pass": true
       },
       {
-        "name": "05_smoke_481s",
-        "path": "artifacts/engineering_wave018/pixel/05_smoke_481s.png",
-        "bytes": 169349,
-        "ok": true
+        "capture": "05_smoke_480s",
+        "name": "05_smoke_480s",
+        "path": "artifacts/engineering_wave018/pixel/05_smoke_480s.png",
+        "bytes": 242224,
+        "ok": true,
+        "timestamp": "2026-08-25T18:21:59.601273+00:00",
+        "scene": "battle",
+        "fighter_id": "rook-ironside",
+        "telemetry_record_id": "w018-vis-191616-647",
+        "visible_renderable_mesh_count": 35,
+        "visibility_invariant_pass": true
       },
       {
+        "capture": "05_smoke_602s",
         "name": "05_smoke_602s",
         "path": "artifacts/engineering_wave018/pixel/05_smoke_602s.png",
-        "bytes": 169349,
-        "ok": true
+        "bytes": 242224,
+        "ok": true,
+        "timestamp": "2026-08-25T18:24:01.728017+00:00",
+        "scene": "battle",
+        "fighter_id": "rook-ironside",
+        "telemetry_record_id": "w018-vis-191616-647",
+        "visible_renderable_mesh_count": 35,
+        "visibility_invariant_pass": true
       },
       {
+        "capture": "06_smoke_end",
         "name": "06_smoke_end",
         "path": "artifacts/engineering_wave018/pixel/06_smoke_end.png",
-        "bytes": 169349,
-        "ok": true
+        "bytes": 242224,
+        "ok": true,
+        "timestamp": "2026-08-25T18:24:02.446368+00:00",
+        "scene": "battle",
+        "fighter_id": null,
+        "telemetry_record_id": "w018-vis-191616-647",
+        "visible_renderable_mesh_count": null,
+        "visibility_invariant_pass": null
       }
     ],
-    "emitted_at": "2026-08-25T02:28:54.232565+00:00"
+    "emitted_at": "2026-08-25T18:24:02.446548+00:00"
   },
-  "PIXEL_CAMPAIGN": "PASS"
+  "PIXEL_CAMPAIGN": "PASS",
+  "PIXEL_SELECT_RENDER_GHOST_OCCURRENCES": 0,
+  "PIXEL_BATTLE_RENDER_GHOST_OCCURRENCES": 0,
+  "PIXEL_PROCESS_DEATHS": 0,
+  "PIXEL_FALLBACK_RECOVERIES": 0,
+  "PIXEL_VISIBILITY_INVARIANT_VIOLATIONS": 0
 }
