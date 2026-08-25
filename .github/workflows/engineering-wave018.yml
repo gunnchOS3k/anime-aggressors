@@ -1,0 +1,92 @@
+name: Engineering Wave018 Owner Taste Golden Slice
+
+on:
+  push:
+    branches: [main, "eng/wave018-owner-taste-golden-slice", "eng/**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  wave018:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Godot 4.5
+        run: |
+          set -euo pipefail
+          curl -L -o godot.zip https://github.com/godotengine/godot-builds/releases/download/4.5-stable/Godot_v4.5-stable_linux.x86_64.zip
+          unzip -o godot.zip
+          chmod +x Godot_v4.5-stable_linux.x86_64
+          echo "GODOT_BIN=$PWD/Godot_v4.5-stable_linux.x86_64" >> "$GITHUB_ENV"
+
+      - name: Taste gate
+        run: make taste-gate
+
+      - name: Engineering Wave018 (desktop; Pixel skipped in CI)
+        env:
+          GODOT_BIN: ${{ env.GODOT_BIN }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_ACTIONS: "true"
+        run: |
+          mkdir -p artifacts/wave018 artifacts/engineering_wave018 tmp
+          python3 tools/engineering_wave018/emit_wave018_packet.py
+          # Pixel not available in CI — record blocked honestly without failing desktop gates
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path("artifacts/wave018/PIXEL_CAMPAIGN.json")
+          p.parent.mkdir(parents=True, exist_ok=True)
+          p.write_text(json.dumps({
+            "PIXEL_CAMPAIGN": "BLOCKED_PIXEL6A",
+            "NORMAL_PLAY_GHOST_FIGHTER_OCCURRENCES": None,
+            "PIXEL_AUTHENTIC": False,
+            "reason": "CI runner has no Pixel 6a",
+          }, indent=2) + "\n")
+          PY
+          source tools/engineering_wave015/godot_orchestration.sh
+          export GODOT_ORCH_ROOT="$PWD"
+          godot_orchestration_prepare "wave018-ci" "$PWD" || true
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --import || true
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave018/Wave018GhostLifecycle.gd
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave018/Wave018PlayerBuildDebugLabels.gd
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave018/Wave018GoldenSliceVisual.gd
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave016/Wave016GoldenSliceMoveE2E.gd
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave016/Wave016EmberProjectileRuntimeE2E.gd
+          python3 tools/engineering_wave018/emit_wave018_result.py
+
+      - name: Upload Wave018 artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: engineering-wave018-evidence
+          path: |
+            artifacts/wave018/
+            artifacts/engineering_wave018/
+            artifacts/taste_gate/
+
+      - name: CI honesty gate
+        if: github.event_name == 'pull_request'
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          d = json.load(open("artifacts/engineering_wave018/WAVE018_RESULT.json"))
+          assert d.get("CURSOR_MERGED_NOTHING") is True
+          assert d.get("HUMAN_Q3_APPROVAL") is False
+          assert d.get("HUMAN_ART_DIRECTION_APPROVAL") is False
+          assert d.get("CURSOR_DECLARED_Q3") is False
+          assert d.get("OWNER_TASTE_REVIEW") == "PENDING"
+          assert d.get("PLAYER_BUILD_VISIBLE_DEBUG_LABELS") == 0
+          assert d.get("NORMAL_PLAY_GHOST_FIGHTER_OCCURRENCES_DESKTOP") == 0
+          assert d.get("T0_OPEN") == 0
+          print("CI honesty OK", d.get("WAVE018_OWNER_TASTE_GOLDEN_SLICE"))
+          PY

@@ -7,6 +7,7 @@ Do not close items to inflate quality ladder.
 |----|-------|----------|--------------|--------|-------|
 | **TASTE-001** | Projectiles render as ColorRect rectangles | **T1** | **Q1→Q2** | **CLOSED (Wave016)** | Ember intentional ember-silhouette + trail family in `projectile.gd`; DebugRect no longer forced visible. Evidence: `artifacts/wave016/before_after/projectile.md`. |
 | **TASTE-002** | Nameplate visible while model missing | **T0** | **Q0** | **CLOSED (Wave016)** | Superseded/strengthened by **TASTE-T0-MODEL-VISIBILITY-001** in Wave017. |
+| **TASTE-T0-SELECT-PREVIEW-001** | Disappearing select preview / battle body after cycling | **T0** | **Q0** | **CLOSED (Wave018)** | Generation tokens, heal, teardown, battle post-spawn ensure; desktop stress ghosts=0 required. |
 | **TASTE-T0-MODEL-VISIBILITY-001** | Ghost fighter / missing renderable body across lifecycle | **T0** | **Q0** | **CLOSED (Wave017)** | Lifecycle: deferred load, model replace, fallback, AnimationPlayer/Skeleton, hidden, freed, materials, respawn/reparent, ladder, Android bg/fg, restart, SubViewport. Invariant: `FIGHTER_LOGIC_ACTIVE && FIGHTER_EXPECTED_VISIBLE -> VISIBLE_RENDERABLE_FIGHTER_BODY_REQUIRED`. Close only with Pixel campaign `NORMAL_PLAY_GHOST_FIGHTER_OCCURRENCES=0` + harness evidence — not null guards alone. |
 | **TASTE-T1-001** | Player-build proxy/debug labels | **T1** | Q1 | **MITIGATED (Wave017)** | Zero of PROCEDURAL PRODUCTION PROXY / PROXY / DEBUG / MODEL_PENDING / PLACEHOLDER in player builds. |
 | **TASTE-T1-002** | Ember cube/blockout presentation | **T1** | Q1 | **MITIGATED (Wave017)** | Character-like Ember Blender mesh (head/face/hair/torso/limbs/clothing/fire motifs); Wave016 skeleton preserved. |
@@ -19,7 +20,7 @@ Do not close items to inflate quality ladder.
 | **TASTE-T1-009** | Touch controls utilitarian | **T1** | Q1 | **MITIGATED (Wave017)** | Iconographic glyphs, opacity, press states. |
 | **TASTE-T1-010** | Versus / victory thin | **T1** | Q1 | **MITIGATED (Wave017)** | Portraits on versus; victory accent; no developer footer. |
 | **TASTE-T1-011** | Ember animation readability | **T1** | Q1–Q2 | **OPEN** | Wave016 mappings preserved; further anticipation/weight refinement remains owner-taste. |
-| **TASTE-003** | Procedural production-proxy models rough (roster) | **T1** | **Q1** | OPEN | Roster outside Golden Slice still blockout; Wave017 does not propagate roster-wide. |
+| **TASTE-003** | Procedural production-proxy models rough (roster) | **T1** | **Q1** | **MITIGATED (Wave018)** | Roster uplift v1: character-like meshes + distinct silhouettes/palettes for all 7; not Ember parity; not final art. |
 | **TASTE-004** | Overall far from final polish | **T2** | Q1–Q2 overall | OPEN | Coherent Golden Slice direction; not ship polish. |
 
 ---

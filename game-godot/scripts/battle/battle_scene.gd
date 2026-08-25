@@ -183,6 +183,13 @@ func _spawn_fighters() -> void:
 	for f in [fighter1, fighter2]:
 		f.platform_half_width = float(main.get("width", 800)) / 2.0
 		f.platform_center_x = float(main.get("x", 0))
+		# Wave018: battle must not inherit select-preview ghosts / stuck visibility.
+		if f.has_method("ensure_visible_presentation"):
+			f.ensure_visible_presentation()
+		if f.model_3d != null and f.model_3d.has_method("heal_visibility_if_needed"):
+			f.model_3d.heal_visibility_if_needed()
+		if f.model_3d != null and f.model_3d.has_method("set_select_mode"):
+			f.model_3d.set_select_mode(false)
 	_connect_hitboxes(fighter1, fighter2)
 	_connect_hitboxes(fighter2, fighter1)
 	fighter1.koed.connect(_on_ko.bind(fighter1))
