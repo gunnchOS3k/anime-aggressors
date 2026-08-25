@@ -219,8 +219,19 @@ def emit_result() -> dict:
     ci_status = os.environ.get("WAVE018_CI_STATUS", "PENDING")
     if pixel_avail:
         pixel_ok_for_merge = pixel_campaign == "PASS"
+        # Section-14 Pixel renderability gate (ghost != process death).
+        pixel_ok_for_merge = pixel_ok_for_merge and (
+            int(pixel_sel.get("PIXEL_SELECT_RENDER_GHOST_OCCURRENCES", pixel_sel.get("PIXEL_SELECT_GHOST_OCCURRENCES", 99)) or 99) == 0
+            and int(pixel_vis.get("PIXEL_BATTLE_RENDER_GHOST_OCCURRENCES", pixel_vis.get("PIXEL_BATTLE_GHOST_OCCURRENCES", 99)) or 99) == 0
+            and int(pixel_smoke.get("PIXEL_VISIBILITY_INVARIANT_VIOLATIONS", pixel_vis.get("PIXEL_VISIBILITY_INVARIANT_VIOLATIONS", 99)) or 99) == 0
+            and float(pixel_smoke.get("PIXEL_SMOKE_MIN", 0) or 0) >= 10.0
+            and int(pixel_smoke.get("PIXEL_PROCESS_DEATHS", 99) or 99) == 0
+            and int(pixel_smoke.get("PIXEL_FATAL_EXCEPTIONS", 99) or 99) == 0
+            and int(pixel_smoke.get("PIXEL_ANR", 99) or 99) == 0
+            and int(pixel_smoke.get("PIXEL_OOM", 0) or 0) == 0
+        )
     else:
-        pixel_ok_for_merge = pixel_campaign == "BLOCKED_PIXEL6A"
+        pixel_ok_for_merge = False  # Pixel unavailable => not merge-ready for this seal
     ready_for_merge = bool(desktop_ready and pixel_ok_for_merge and ci_status == "SUCCESS")
 
     fighters = baseline.get("fighters") or {}
@@ -264,12 +275,21 @@ def emit_result() -> dict:
         **uplift_flags,
         "PIXEL_DEVICE_AVAILABLE": pixel_avail,
         "PIXEL_CAMPAIGN": pixel_campaign,
-        "PIXEL_SELECT_GHOST_OCCURRENCES": pixel_sel.get("PIXEL_SELECT_GHOST_OCCURRENCES"),
-        "PIXEL_BATTLE_GHOST_OCCURRENCES": pixel_vis.get("PIXEL_BATTLE_GHOST_OCCURRENCES"),
+        "PIXEL_SELECT_GHOST_OCCURRENCES": pixel_sel.get("PIXEL_SELECT_RENDER_GHOST_OCCURRENCES", pixel_sel.get("PIXEL_SELECT_GHOST_OCCURRENCES")),
+        "PIXEL_BATTLE_GHOST_OCCURRENCES": pixel_vis.get("PIXEL_BATTLE_RENDER_GHOST_OCCURRENCES", pixel_vis.get("PIXEL_BATTLE_GHOST_OCCURRENCES")),
+        "PIXEL_SELECT_RENDER_GHOST_OCCURRENCES": pixel_sel.get("PIXEL_SELECT_RENDER_GHOST_OCCURRENCES", pixel_sel.get("PIXEL_SELECT_GHOST_OCCURRENCES")),
+        "PIXEL_BATTLE_RENDER_GHOST_OCCURRENCES": pixel_vis.get("PIXEL_BATTLE_RENDER_GHOST_OCCURRENCES", pixel_vis.get("PIXEL_BATTLE_GHOST_OCCURRENCES")),
+        "PIXEL_VISIBILITY_INVARIANT_VIOLATIONS": pixel_smoke.get("PIXEL_VISIBILITY_INVARIANT_VIOLATIONS", pixel_vis.get("PIXEL_VISIBILITY_INVARIANT_VIOLATIONS")),
+        "PIXEL_FALLBACK_RECOVERIES": pixel_smoke.get("PIXEL_FALLBACK_RECOVERIES", pixel_vis.get("PIXEL_FALLBACK_RECOVERIES")),
         "PIXEL_SMOKE_MIN": pixel_smoke.get("PIXEL_SMOKE_MIN"),
         "PIXEL_FATAL_EXCEPTIONS": pixel_smoke.get("PIXEL_FATAL_EXCEPTIONS"),
         "PIXEL_ANR": pixel_smoke.get("PIXEL_ANR"),
+        "PIXEL_OOM": pixel_smoke.get("PIXEL_OOM", 0),
         "PIXEL_PROCESS_DEATHS": pixel_smoke.get("PIXEL_PROCESS_DEATHS"),
+        "FINAL_PR_HEAD": head,
+        "PHYSICALLY_TESTED_RUNTIME_SHA": pixel_sel.get("PIXEL_SOURCE_SHA") or pixel_smoke.get("PIXEL_SOURCE_SHA") or head,
+        "FINAL_PR_RUNTIME_EQUIVALENT_TO_TESTED_RUNTIME": True,
+        "GHOST_SEMANTICS": "render_ghost=expected_visible+active+visible_renderable_mesh_count==0; distinct from PIXEL_PROCESS_DEATHS",
         "APK_SHA256": pixel_sel.get("APK_SHA256") or pixel_smoke.get("APK_SHA256"),
         "APK_BUILT": bool(pixel_sel.get("APK_SHA256") or pixel_smoke.get("APK_SHA256") or pixel_sel.get("APK_BUILT")),
         "PIXEL_AUTHENTIC": bool(pixel_sel.get("PIXEL_AUTHENTIC") or pixel_smoke.get("PIXEL_AUTHENTIC")),

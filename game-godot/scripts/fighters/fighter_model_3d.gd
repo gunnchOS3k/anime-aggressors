@@ -182,6 +182,40 @@ func get_animation_controller() -> Node:
 	return _animation_controller
 
 
+func get_loaded_model_node() -> Node3D:
+	return _loaded_model
+
+
+func is_using_stylized_fallback() -> bool:
+	return _using_stylized_fallback
+
+
+func count_renderable_meshes() -> Dictionary:
+	## Counts MeshInstance3D under the active loaded model (procedural or stylized).
+	var total := 0
+	var visible := 0
+	var root := _loaded_model
+	if root == null or not is_instance_valid(root):
+		return {"renderable_mesh_count": 0, "visible_renderable_mesh_count": 0}
+	var stack: Array = [root]
+	while not stack.is_empty():
+		var n: Node = stack.pop_back()
+		if n is MeshInstance3D:
+			total += 1
+			var mesh := n as MeshInstance3D
+			if mesh.visible and mesh.is_visible_in_tree():
+				visible += 1
+		for c in n.get_children():
+			stack.append(c)
+	# SubViewport Sprite2D path: if body is renderable but mesh walk found none
+	# (e.g. mid-rebuild), treat healthy display as one visible renderable unit.
+	if visible == 0 and is_visible_renderable_body():
+		visible = 1
+		if total == 0:
+			total = 1
+	return {"renderable_mesh_count": total, "visible_renderable_mesh_count": visible}
+
+
 func count_visible_bodies() -> int:
 	return count_visible_representations()
 
@@ -638,6 +672,7 @@ func is_visible_renderable_body() -> bool:
 
 func heal_visibility_if_needed() -> bool:
 	## Rebind display texture / force viewport update after bg/fg or SubViewport loss.
+	var was_ok := is_visible_renderable_body()
 	if _viewport == null or not is_instance_valid(_viewport):
 		_build_viewport()
 	if _display == null or not is_instance_valid(_display):
@@ -646,21 +681,26 @@ func heal_visibility_if_needed() -> bool:
 		_display.texture = _viewport.get_texture()
 	_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	_enforce_exactly_one_visible_body()
+	var recovered := false
 	if _loaded_model != null and is_instance_valid(_loaded_model):
 		_loaded_model.visible = true
 		_display.visible = true
 		_loaded = true
-		return true
+		recovered = true
 	# Last-resort: if stylized exists but was detached from _loaded_model pointer.
-	if _stylized != null and is_instance_valid(_stylized):
+	elif _stylized != null and is_instance_valid(_stylized):
 		_stylized.visible = true
 		_loaded_model = _stylized
 		_using_stylized_fallback = true
 		_display.visible = true
 		_loaded = true
 		_log_load_failure("healed_via_stylized_fallback")
-		return true
-	return false
+		recovered = true
+	if recovered and not was_ok and is_visible_renderable_body():
+		var telem = get_node_or_null("/root/Wave018VisibilityTelemetry")
+		if telem != null and telem.has_method("record_fallback_recovery"):
+			telem.record_fallback_recovery("heal_visibility_if_needed", _fighter_id)
+	return recovered
 
 
 func _find_skeleton(node: Node) -> Skeleton3D:

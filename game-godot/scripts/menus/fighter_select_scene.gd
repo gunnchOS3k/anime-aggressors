@@ -171,6 +171,7 @@ func _update_preview(index: int, lock_in: bool) -> void:
 		_preview_model.heal_visibility_if_needed()
 	if _preview_model.has_method("_enforce_exactly_one_visible_body"):
 		_preview_model._enforce_exactly_one_visible_body()
+	_emit_preview_visibility_telemetry()
 	if lock_in and _preview_model.has_method("play_lock_in"):
 		_preview_model.play_lock_in()
 	elif _preview_model.has_method("play_selection_focus"):
@@ -188,6 +189,33 @@ func _recreate_preview_model() -> void:
 	_preview_model.position = Vector2(150, 240)
 	host.add_child(_preview_model)
 	_preview_fighter_id = ""
+
+
+
+func _emit_preview_visibility_telemetry() -> void:
+	var telem = get_node_or_null("/root/Wave018VisibilityTelemetry")
+	if telem == null or not telem.has_method("emit_select_row"):
+		return
+	var snap: Dictionary = {}
+	if telem.has_method("snapshot_model"):
+		snap = telem.snapshot_model(_preview_model)
+	var expected: bool = visible and is_inside_tree() and _roster.size() > 0
+	var inv: Dictionary = assert_preview_visibility_invariant()
+	var rid: String = str(telem.emit_select_row({
+		"selected_fighter_id": _preview_fighter_id,
+		"preview_generation": _preview_generation,
+		"preview_expected_visible": expected,
+		"preview_root_valid": bool(snap.get("model_root_valid", _preview_model != null and is_instance_valid(_preview_model))),
+		"preview_visible_in_tree": bool(snap.get("model_visible_in_tree", false)),
+		"renderable_mesh_count": int(snap.get("renderable_mesh_count", 0)),
+		"visible_renderable_mesh_count": int(snap.get("visible_renderable_mesh_count", 0)),
+		"skeleton_valid": bool(snap.get("skeleton_valid", false)),
+		"controller_valid": bool(snap.get("controller_valid", false)),
+		"fallback_active": bool(snap.get("fallback_active", false)),
+		"visibility_invariant_pass": bool(inv.get("PASS", false)),
+	}))
+	# Stash last record id for screenshot binding.
+	set_meta("wave018_last_telemetry_record_id", rid)
 
 
 func assert_preview_visibility_invariant() -> Dictionary:
