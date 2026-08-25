@@ -105,9 +105,13 @@ static func play_stage_bed(stage_id: String, host: Node = null) -> Dictionary:
 
 static func map_sfx_event_to_category(sfx_event: String) -> String:
 	var e := sfx_event.to_lower()
+	if e.contains("signature"):
+		return "signature"
 	if e.contains("proj"):
 		return "projectile"
-	if e.contains("heavy") or e.contains("burst") or e.contains("charge"):
+	if e.contains("burst") and not e.contains("proj"):
+		return "signature"
+	if e.contains("heavy") or e.contains("charge") or e.contains("aura"):
 		return "charge"
 	if e.contains("dair") or e.contains("defense") or e.contains("shield"):
 		return "defense"
@@ -131,7 +135,7 @@ static func preload_launch_bank() -> Dictionary:
 		"ember-vale", "rook-ironside", "juno-spark", "kaia-windrow",
 		"nix-calder", "orion-vell", "vesper-nyx",
 	]:
-		for cat in ["hit", "move", "charge", "projectile", "defense", "ko"]:
+		for cat in ["hit", "move", "charge", "projectile", "signature", "defense", "ko"]:
 			var p := fighter_path(fid, cat)
 			if load_stream(p) != null:
 				loaded += 1

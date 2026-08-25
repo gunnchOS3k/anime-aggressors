@@ -1,0 +1,26 @@
+{
+  "wave": "WAVE020",
+  "owner_symptom": "After ~6 character browses, select preview disappears; battle may start with missing body (HUD/nameplate may remain).",
+  "root_causes": [
+    {
+      "id": "RC-001",
+      "title": "SubViewport texture staleness after full-roster browse cycles",
+      "mechanism": "Repeated configure/swap on a single FighterModel3D reused SubViewport\u2192Sprite2D binding; on mobile the render target handle could remain non-null while producing zero visible meshes.",
+      "fix": "Wave020 refresh_viewport_texture() rebinds texture every heal; forced UPDATE_ONCE/ALWAYS every 7 swaps; select scene hard-recycles preview host every 7 browses."
+    },
+    {
+      "id": "RC-002",
+      "title": "Rapid tile focus race superseding configure",
+      "mechanism": "Focus events could stack configure() calls before prior swap finished, leaving _loaded true but _visible_skeleton null.",
+      "fix": "Deferred _flush_preview_update() coalesces rapid focus; existing _preview_generation token preserved; post-failure _recreate_preview_model()."
+    },
+    {
+      "id": "RC-003",
+      "title": "Select preview not torn down before battle (regression guard)",
+      "mechanism": "Stale select SubViewport could leak into battle spawn path.",
+      "fix": "Preserved Wave018 _teardown_preview() on confirm/back; battle post-spawn ensure_visible_presentation + heal_visibility_if_needed."
+    }
+  ],
+  "ghost_definition": "expected_visible && active && visible_renderable_mesh_count==0",
+  "emitted_at": "2026-08-25T22:54:47.574962+00:00"
+}

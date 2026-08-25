@@ -18,6 +18,10 @@ var _tiles: Array = []
 var _preview_generation: int = 0
 var _preview_fighter_id: String = ""
 var _preview_failures: int = 0
+## Wave020: track full-roster browse cycles for proactive preview recycle.
+var _preview_browse_count: int = 0
+var _preview_pending_index: int = -1
+var _preview_pending_lock: bool = false
 var _move_list_panel: Control
 var _move_list_btn: Button
 
@@ -127,8 +131,25 @@ func _build_grid() -> void:
 func _on_tile_focused(index: int) -> void:
 	_cursor = index
 	_refresh()
-	_update_preview(index, false)
+	_schedule_preview_update(index, false)
 	_set_tile_focus_visuals(index)
+
+
+func _schedule_preview_update(index: int, lock_in: bool) -> void:
+	_preview_pending_index = index
+	_preview_pending_lock = lock_in
+	if not is_node_ready():
+		return
+	call_deferred("_flush_preview_update")
+
+
+func _flush_preview_update() -> void:
+	if _preview_pending_index < 0:
+		return
+	var idx := _preview_pending_index
+	var lock := _preview_pending_lock
+	_preview_pending_index = -1
+	_update_preview(idx, lock)
 
 
 func _on_tile_pressed(index: int) -> void:
@@ -154,6 +175,7 @@ func _set_tile_focus_visuals(index: int) -> void:
 func _update_preview(index: int, lock_in: bool) -> void:
 	_preview_generation += 1
 	var gen := _preview_generation
+	_preview_browse_count += 1
 	_ensure_preview_host()
 	if _preview_model == null or not is_instance_valid(_preview_model):
 		_preview_failures += 1
@@ -162,6 +184,13 @@ func _update_preview(index: int, lock_in: bool) -> void:
 	if index < 0 or index >= _roster.size():
 		return
 	var id: String = _roster[index]
+	# Wave020: after each full-roster sweep, hard-recycle preview host (owner P0 after ~6 browses).
+	if _preview_browse_count > 0 and _preview_browse_count % 7 == 0:
+		_recreate_preview_model()
+		if gen != _preview_generation:
+			return
+		if _preview_model.has_method("refresh_viewport_texture"):
+			_preview_model.refresh_viewport_texture(true)
 	var data: Dictionary = GameState.load_fighter(id)
 	# Reuse cache when same fighter + already renderable (hold/reselect).
 	var same: bool = id == _preview_fighter_id

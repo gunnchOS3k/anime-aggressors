@@ -16,6 +16,7 @@ var _stick_radius := 72.0
 @onready var btn_grab: Button = $Root/Buttons/Grab
 @onready var btn_dodge: Button = $Root/Buttons/Dodge
 @onready var btn_aura: Button = $Root/Buttons/AuraCharge
+@onready var btn_pause: Button = $Root/Pause
 
 func _ready() -> void:
 	layer = 128
@@ -30,6 +31,7 @@ func _ready() -> void:
 	_style_btn(btn_grab, "G", Color(0.85, 0.55, 1.0))
 	_style_btn(btn_dodge, "DG", Color(0.7, 0.95, 0.55))
 	_style_btn(btn_aura, "AU", Color(1.0, 0.55, 0.2))
+	_style_btn(btn_pause, "II", Color(0.92, 0.92, 1.0))
 	_wire_button(btn_jump, "jump")
 	_wire_button(btn_attack, "attack")
 	_wire_button(btn_special, "special")
@@ -37,6 +39,8 @@ func _ready() -> void:
 	_wire_button(btn_grab, "grab")
 	_wire_button(btn_dodge, "dodge")
 	_wire_button(btn_aura, "aura_charge")
+	if btn_pause:
+		btn_pause.pressed.connect(_on_pause_pressed)
 	if stick_base:
 		stick_base.gui_input.connect(_on_stick_gui_input)
 	visibility_changed.connect(func():
@@ -78,6 +82,10 @@ func _set_interactive_filters(interactive: bool) -> void:
 			btn.mouse_filter = filter
 			btn.disabled = not interactive
 			btn.visible = interactive
+	if btn_pause:
+		btn_pause.mouse_filter = filter
+		btn_pause.disabled = not interactive
+		btn_pause.visible = interactive
 	if stick_base:
 		stick_base.visible = interactive
 
@@ -139,3 +147,8 @@ func _reset_knob() -> void:
 func _push_stick() -> void:
 	if _manager and _manager.has_method("set_stick"):
 		_manager.set_stick(_stick_vector)
+
+
+func _on_pause_pressed() -> void:
+	if _manager and _manager.has_method("request_pause"):
+		_manager.request_pause()

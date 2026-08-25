@@ -51,6 +51,9 @@ var _using_stylized_fallback: bool = false
 ## Wave018: generation token cancels superseded configure/swap races.
 var _configure_generation: int = 0
 var _load_failure_logged: bool = false
+## Wave020: full-roster browse cycles can stale SubViewport textures on mobile.
+var _configure_swap_count: int = 0
+const VIEWPORT_REFRESH_EVERY_SWAPS := 7
 
 
 func _ready() -> void:
@@ -123,6 +126,9 @@ func configure(fighter_data: Dictionary) -> bool:
 	_enforce_exactly_one_visible_body()
 	_frame_camera_for_figure()
 	_set_loaded(_loaded_model != null)
+	_configure_swap_count += 1
+	if _configure_swap_count % VIEWPORT_REFRESH_EVERY_SWAPS == 0:
+		refresh_viewport_texture(true)
 	heal_visibility_if_needed()
 	set_expression(str(_life.get("expression_idle", "neutral")))
 	_play_clip("idle")
@@ -130,6 +136,8 @@ func configure(fighter_data: Dictionary) -> bool:
 	if not is_visible_renderable_body():
 		_log_load_failure("post_configure_not_renderable")
 		heal_visibility_if_needed()
+		if not is_visible_renderable_body():
+			refresh_viewport_texture(true)
 	# Return loaded; callers/harnesses check is_visible_renderable_body for invariant.
 	return _loaded
 
@@ -685,6 +693,21 @@ func is_visible_renderable_body() -> bool:
 	return true
 
 
+func refresh_viewport_texture(force: bool = false) -> void:
+	## Wave020: rebind SubViewport → Sprite2D even when texture handle exists but is blank.
+	if _viewport == null or not is_instance_valid(_viewport):
+		_build_viewport()
+	if _display == null or not is_instance_valid(_display):
+		return
+	var tex := _viewport.get_texture()
+	if force or _display.texture == null or _display.texture != tex:
+		_display.texture = tex
+	if force:
+		_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+	_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	_display.visible = _loaded
+
+
 func heal_visibility_if_needed() -> bool:
 	## Rebind display texture / force viewport update after bg/fg or SubViewport loss.
 	var was_ok := is_visible_renderable_body()
@@ -692,8 +715,7 @@ func heal_visibility_if_needed() -> bool:
 		_build_viewport()
 	if _display == null or not is_instance_valid(_display):
 		return false
-	if _display.texture == null and _viewport != null:
-		_display.texture = _viewport.get_texture()
+	refresh_viewport_texture(false)
 	_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	_enforce_exactly_one_visible_body()
 	var recovered := false

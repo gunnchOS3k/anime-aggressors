@@ -390,9 +390,12 @@ func _toggle_pause() -> void:
 		fighter2.controls_enabled = not _paused
 		if _paused:
 			fighter2.velocity = Vector2.ZERO
+	_ensure_pause_panel()
 	if _pause_panel:
 		_pause_panel.process_mode = Node.PROCESS_MODE_ALWAYS
 		_pause_panel.visible = _paused
+	if _move_list_panel != null and is_instance_valid(_move_list_panel) and _move_list_panel.visible and _paused:
+		_move_list_panel.close_panel()
 	# BattleScene must keep receiving ui_cancel/ui_accept while the tree is paused.
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	TouchInputManager._sync_overlay()
@@ -480,6 +483,7 @@ func _ensure_pause_panel() -> void:
 
 
 func _open_move_list_from_pause() -> void:
+	TouchInputManager._sync_overlay()
 	if _move_list_panel == null or not is_instance_valid(_move_list_panel):
 		_move_list_panel = MOVE_LIST_PANEL.new()
 		_move_list_panel.name = "MoveListPanel"

@@ -25,8 +25,10 @@ const MOVE_LIST_PANEL := preload("res://scripts/ui/move_list_panel.gd")
 var _move_list_panel: Control
 var _pin_reminder: Label
 var _move_list_btn: Button
+var _pause_panel: PanelContainer
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	if GameState.has_method("begin_training") and str(GameState.mode) != "training":
 		GameState.begin_training()
 	_build_stage()
@@ -71,6 +73,7 @@ func _ensure_move_list_access() -> void:
 
 
 func _open_training_move_list() -> void:
+	TouchInputManager._sync_overlay()
 	if _move_list_panel == null or not is_instance_valid(_move_list_panel):
 		_move_list_panel = MOVE_LIST_PANEL.new()
 		_move_list_panel.name = "TrainingMoveList"
@@ -123,6 +126,10 @@ func _spawn_fighters() -> void:
 	for f in [fighter1, fighter2]:
 		f.platform_half_width = float(main.get("width", 800)) / 2.0
 		f.platform_center_x = float(main.get("x", 0))
+		if f.has_method("ensure_visible_presentation"):
+			f.ensure_visible_presentation()
+		if f.model_3d != null and f.model_3d.has_method("heal_visibility_if_needed"):
+			f.model_3d.heal_visibility_if_needed()
 	_connect_hits(fighter1, fighter2)
 	_connect_hits(fighter2, fighter1)
 	fighter2.hit_landed.connect(_on_dummy_hit)
@@ -161,7 +168,84 @@ func _log(msg: String) -> void:
 
 func _update_help() -> void:
 	if _hit_log:
-		_hit_log.text = "Training — F1 HUD F2 hit F3 pos F4 dmg F5 aura F7 clear F8 dummy F9 pause F10 slow F11 freeze F12 step"
+		_hit_log.text = "Training — F1 HUD F2 hit | Pause: Esc/Back/Touch II | Move List | F3 pos F4 dmg F5 aura F7 clear F8 dummy F9 pause F10 slow F11 freeze F12 step"
+
+
+func _toggle_pause() -> void:
+	_paused = not _paused
+	get_tree().paused = _paused
+	if _battle_sim:
+		_battle_sim.set_paused(_paused)
+	if fighter1:
+		fighter1.controls_enabled = not _paused
+		if _paused:
+			fighter1.velocity = Vector2.ZERO
+	if fighter2:
+		fighter2.controls_enabled = not _paused
+		if _paused:
+			fighter2.velocity = Vector2.ZERO
+	_ensure_pause_panel()
+	if _pause_panel:
+		_pause_panel.process_mode = Node.PROCESS_MODE_ALWAYS
+		_pause_panel.visible = _paused
+	if _move_list_panel != null and is_instance_valid(_move_list_panel) and _move_list_panel.visible and _paused:
+		_move_list_panel.close_panel()
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	TouchInputManager._sync_overlay()
+	_log("PAUSED" if _paused else "RESUMED")
+
+
+func _ensure_pause_panel() -> void:
+	if _pause_panel:
+		return
+	_pause_panel = PanelContainer.new()
+	_pause_panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+	_pause_panel.custom_minimum_size = Vector2(420, 220)
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.06, 0.09, 0.16, 0.94)
+	style.border_color = Color(0.95, 0.75, 0.2, 1.0)
+	style.set_border_width_all(3)
+	style.set_content_margin_all(18)
+	_pause_panel.add_theme_stylebox_override("panel", style)
+	var v := VBoxContainer.new()
+	v.add_theme_constant_override("separation", 12)
+	var title := Label.new()
+	title.text = "Training Paused"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 28)
+	v.add_child(title)
+	var resume_btn := Button.new()
+	resume_btn.text = "Resume"
+	resume_btn.pressed.connect(_toggle_pause)
+	v.add_child(resume_btn)
+	var move_list_btn := Button.new()
+	move_list_btn.text = "Move List / Command Guide"
+	move_list_btn.pressed.connect(_open_training_move_list)
+	v.add_child(move_list_btn)
+	var menu_btn := Button.new()
+	menu_btn.text = "Return to Training Menu"
+	menu_btn.pressed.connect(_on_training_pause_return)
+	v.add_child(menu_btn)
+	_pause_panel.add_child(v)
+	if hud:
+		hud.add_child(_pause_panel)
+	else:
+		add_child(_pause_panel)
+	_pause_panel.visible = false
+
+
+func _on_training_pause_return() -> void:
+	_paused = false
+	get_tree().paused = false
+	if _battle_sim:
+		_battle_sim.set_paused(false)
+	Engine.time_scale = 1.0
+	if _pause_panel:
+		_pause_panel.visible = false
+	process_mode = Node.PROCESS_MODE_INHERIT
+	TouchInputManager._sync_overlay()
+	SceneRouter.go("training")
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
@@ -180,11 +264,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			KEY_F8:
 				_cycle_dummy()
 			KEY_F9:
-				_paused = not _paused
-				_battle_sim.set_paused(_paused)
-				fighter1.controls_enabled = not _paused
-				fighter2.controls_enabled = not _paused
-				_log("PAUSED" if _paused else "RESUMED")
+				_toggle_pause()
 			KEY_F10:
 				_slow_mo = not _slow_mo
 				Engine.time_scale = 0.35 if _slow_mo else 1.0
@@ -200,8 +280,13 @@ func _unhandled_input(event: InputEvent) -> void:
 					_battle_sim.step_frame()
 					_log("STEP 1 FRAME")
 	if event.is_action_pressed("ui_cancel"):
-		Engine.time_scale = 1.0
-		SceneRouter.go("training")
+		_ensure_pause_panel()
+		_toggle_pause()
+		get_viewport().set_input_as_handled()
+		return
+	if _paused and event.is_action_pressed("ui_accept"):
+		_toggle_pause()
+		get_viewport().set_input_as_handled()
 
 func _cycle_dummy() -> void:
 	var modes := ["idle", "shield", "jump", "attack", "cpu", "di_in", "di_out"]

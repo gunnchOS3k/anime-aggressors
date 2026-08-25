@@ -169,6 +169,12 @@ func consume_touch_just_pressed(slot: int, suffix: String) -> bool:
 func is_aura_charge_touch(slot: int) -> bool:
 	return is_touch_pressed(slot, "aura_charge")
 
+
+func request_pause() -> void:
+	var sc := get_tree().current_scene
+	if sc != null and sc.has_method("_toggle_pause"):
+		sc.call("_toggle_pause")
+
 func _process(_delta: float) -> void:
 	if not should_show_touch():
 		_axis_x = 0.0
