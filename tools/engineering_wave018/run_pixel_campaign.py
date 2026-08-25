@@ -404,7 +404,7 @@ def select_stress(actions: list) -> dict:
         for _i in range(7):
             if not ensure_aa_foreground("select_forward"):
                 stats["process_deaths"] += 1
-                if not launch_app(reset_telemetry=True):
+                if not launch_app():
                     return stats
                 navigate_to_fighter_select(actions)
             key("22")  # RIGHT
@@ -587,6 +587,7 @@ def main() -> int:
     actions: list[str] = []
 
     # ---- Select preview stress ----
+    clear_telemetry()
     if not launch_app():
         return write_blocked("LAUNCH_FAILED_WRONG_OR_MISSING_PACKAGE")
     capture_manifest.append(screencap("00_launch"))

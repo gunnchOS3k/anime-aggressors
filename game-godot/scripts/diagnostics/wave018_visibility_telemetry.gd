@@ -22,12 +22,16 @@ func _ready() -> void:
 	_enabled = OS.is_debug_build()
 	if not _enabled:
 		return
-	# Truncate prior session so campaign pulls only this run.
-	var abs_path := ProjectSettings.globalize_path(TRACE_PATH)
-	var f := FileAccess.open(TRACE_PATH, FileAccess.WRITE)
-	if f:
-		f.close()
-	_persist_counters()
+	# Do not truncate here — Pixel campaigns clear via run-as between phases.
+	# Truncating on every cold start wiped mid-campaign rows after soft relaunch.
+	if not FileAccess.file_exists(TRACE_PATH):
+		var f := FileAccess.open(TRACE_PATH, FileAccess.WRITE)
+		if f:
+			f.close()
+	if not FileAccess.file_exists(COUNTERS_PATH):
+		_persist_counters()
+	else:
+		_load_counters()
 
 
 func is_enabled() -> bool:
@@ -272,6 +276,27 @@ func counters() -> Dictionary:
 		"PIXEL_FALLBACK_RECOVERIES": _fallback_recoveries,
 		"records": _seq,
 	}
+
+
+func _load_counters() -> void:
+	if not FileAccess.file_exists(COUNTERS_PATH):
+		return
+	var f := FileAccess.open(COUNTERS_PATH, FileAccess.READ)
+	if f == null:
+		return
+	var raw := f.get_as_text()
+	f.close()
+	var parsed = JSON.parse_string(raw)
+	if typeof(parsed) != TYPE_DICTIONARY:
+		return
+	var d: Dictionary = parsed
+	_select_render_ghosts = int(d.get("PIXEL_SELECT_RENDER_GHOST_OCCURRENCES", 0))
+	_battle_render_ghosts = int(d.get("PIXEL_BATTLE_RENDER_GHOST_OCCURRENCES", 0))
+	_invariant_violations = int(d.get("PIXEL_VISIBILITY_INVARIANT_VIOLATIONS", 0))
+	_select_invariant_violations = int(d.get("PIXEL_SELECT_VISIBILITY_INVARIANT_VIOLATIONS", 0))
+	_battle_invariant_violations = int(d.get("PIXEL_BATTLE_VISIBILITY_INVARIANT_VIOLATIONS", 0))
+	_fallback_recoveries = int(d.get("PIXEL_FALLBACK_RECOVERIES", 0))
+	_seq = int(d.get("records", 0))
 
 
 func _append(row: Dictionary) -> void:
