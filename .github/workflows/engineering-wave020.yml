@@ -1,8 +1,8 @@
-name: Engineering Wave020 Visibility Pause Audio
+name: Engineering Wave020 Visibility Showcase Flourish
 
 on:
   push:
-    branches: [main, "eng/wave020-character-visibility-pause-movelist-and-elemental-audio", "eng/**"]
+    branches: [main, "eng/wave020-revised-showcase-framing-flourish", "eng/**"]
   pull_request:
     branches: [main]
 
@@ -76,6 +76,11 @@ jobs:
           "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave018/Wave018SelectPreviewStress.gd
           "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave018/Wave018BattleVisibilityInvariant.gd
           "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave019/Wave019MoveListCatalogGate.gd
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave020/Wave020OwnerReg008Diagnostic.gd
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave020/Wave020SelectFraming.gd
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave020/Wave020SelectFlourish.gd
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave020/Wave020VisibilityAdversarial.gd
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave020/Wave020VisibilityAcceptance.gd
           "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave020/Wave020SevenBrowseVisibility.gd
           "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave020/Wave020PauseMoveList.gd
           "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave020/Wave020ElementalAudio.gd

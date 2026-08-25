@@ -1,44 +1,82 @@
-# WAVE020 — Owner Review Packet
+# WAVE020 REVISED — Owner Review Packet
 
 **Reviewer:** Edmund  
-**Build under review:** `eng/wave020-character-visibility-pause-movelist-and-elemental-audio`  
+**Build under review:** `eng/wave020-revised-showcase-framing-flourish`  
 **Cursor:** leave all ratings blank. Do not self-score.
 
 ---
 
-## Visibility (P0)
+## Missing-character confidence
 
 | Question | Rating / Notes |
 |----------|----------------|
-| After browsing all 7 fighters, does preview stay visible? |  |
-| Does battle start with a visible body (not nameplate-only)? |  |
-| Any regressions vs Wave018/019 roster identity? |  |
+| Any preview disappear after browsing 7 fighters? |  |
+| Any battle start with missing body (HUD-only)? |  |
+| Seven-selection cliff reproduced on device? |  |
+
+---
+
+## Preview composition — per fighter
+
+| Fighter | FACE/HEAD /5 | SILHOUETTE /5 | FULL-BODY /5 | VFX ROOM /5 |
+|---------|--------------|---------------|--------------|-------------|
+| Ember Vale |  |  |  |  |
+| Rook Ironside |  |  |  |  |
+| Juno Spark |  |  |  |  |
+| Kaia Windrow |  |  |  |  |
+| Nix Calder |  |  |  |  |
+| Orion Vell |  |  |  |  |
+| Vesper Nyx |  |  |  |  |
+
+---
+
+## Showcase flourish — per fighter
+
+| Fighter | IDENTITY /5 | EXCITEMENT /5 | READABILITY /5 | SOUND/VFX /5 |
+|---------|-------------|---------------|----------------|--------------|
+| Ember Vale |  |  |  |  |
+| Rook Ironside |  |  |  |  |
+| Juno Spark |  |  |  |  |
+| Kaia Windrow |  |  |  |  |
+| Nix Calder |  |  |  |  |
+| Orion Vell |  |  |  |  |
+| Vesper Nyx |  |  |  |  |
+
+---
 
 ## Pause + Move List
 
-| Question | Rating / Notes |
-|----------|----------------|
-| Can you pause mid-match on Pixel (touch II / back / overlay)? |  |
-| Is Move List reachable and understandable from pause? |  |
-| Does training mode pause behave like versus? |  |
-| SIMPLE vs ADVANCED views useful? |  |
+| Question | Rating /5 |
+|----------|-----------|
+| PAUSE_DISCOVERABILITY |  |
+| MOVE_LIST_CLARITY |  |
+| PREVIEW_USEFULNESS |  |
+| RETURN_TO_FIGHT |  |
 
-## Elemental Audio
+---
 
-| Fighter | Charge/Aura distinct? | Projectile distinct? | Signature distinct? |
-|---------|----------------------|----------------------|---------------------|
-| Ember Vale (fire) |  |  |  |
-| Juno Spark (electric) |  |  |  |
-| Kaia Windrow (wind) |  |  |  |
-| Nix Calder (frost) |  |  |  |
-| Orion Vell (gravity) |  |  |  |
-| Vesper Nyx (shadow) |  |  |  |
-| Rook Ironside (earth) |  |  |  |
+## Elemental audio — per fighter
+
+| Fighter | SOUND_IDENTITY /5 | CHARGE_FEEL /5 | SPECIAL_FEEL /5 | REPETITION /5 |
+|---------|-------------------|----------------|-----------------|---------------|
+| Ember Vale |  |  |  |  |
+| Rook Ironside |  |  |  |  |
+| Juno Spark |  |  |  |  |
+| Kaia Windrow |  |  |  |  |
+| Nix Calder |  |  |  |  |
+| Orion Vell |  |  |  |  |
+| Vesper Nyx |  |  |  |  |
+
+---
 
 ## Overall
 
 | Metric | Score |
 |--------|-------|
+| CAST_DISTINCTIVENESS /5 |  |
+| GAME_FEEL /5 |  |
+| POLISH /5 |  |
+| SHOWCASE_READINESS /5 |  |
 | READY_FOR_MERGE |  |
 | BLOCKERS |  |
 

@@ -5,6 +5,7 @@ const _Presentation = preload("res://scripts/fighters/fighter_presentation_profi
 const FIGHTER_BUTTON_SCENE := preload("res://scenes/ui/FighterTile.tscn")
 const MODEL_SCRIPT := preload("res://scripts/fighters/fighter_model_3d.gd")
 const MOVE_LIST_PANEL := preload("res://scripts/ui/move_list_panel.gd")
+const SHOWCASE_FLOURISH := preload("res://scripts/menus/character_select_showcase_flourish.gd")
 
 var _roster: Array = []
 var _cursor: int = 0
@@ -24,6 +25,12 @@ var _preview_pending_index: int = -1
 var _preview_pending_lock: bool = false
 var _move_list_panel: Control
 var _move_list_btn: Button
+var _flourish: CharacterSelectShowcaseFlourish
+var _flourish_btn: Button
+var _motion_label: Label
+var _last_accel: Vector3 = Vector3.ZERO
+var _shake_cooldown_ms: int = 0
+const SHAKE_THRESHOLD := 2.35
 
 @onready var grid: GridContainer = %FighterGrid
 @onready var p1_name: Label = %P1Name
@@ -38,10 +45,71 @@ func _ready() -> void:
 	if title_label:
 		title_label.text = "Fighter Select"
 	_ensure_preview_host()
+	_ensure_showcase_flourish()
 	_build_grid()
 	_refresh()
 	_update_preview(_cursor, false)
 	_ensure_select_move_list_button()
+	_ensure_flourish_controls()
+
+
+func _ensure_showcase_flourish() -> void:
+	if _flourish != null:
+		return
+	_flourish = SHOWCASE_FLOURISH.new()
+	_flourish.name = "ShowcaseFlourish"
+	add_child(_flourish)
+	if _preview_model != null:
+		_flourish.bind_model(_preview_model)
+
+
+func _ensure_flourish_controls() -> void:
+	if _flourish_btn != null:
+		return
+	_flourish_btn = Button.new()
+	_flourish_btn.text = "Showcase"
+	_flourish_btn.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	_flourish_btn.position = Vector2(-320, 480)
+	_flourish_btn.pressed.connect(func(): _try_showcase_flourish("touch"))
+	add_child(_flourish_btn)
+	_motion_label = Label.new()
+	_motion_label.text = "Motion: %s" % ("ON" if GameState.motion_gestures_enabled else "OFF")
+	_motion_label.position = Vector2(-320, 520)
+	add_child(_motion_label)
+
+
+func _try_showcase_flourish(source: String) -> void:
+	if _flourish == null or _roster.is_empty():
+		return
+	var fid := str(_roster[_cursor])
+	_flourish.bind_model(_preview_model)
+	_flourish.set_fighter(fid)
+	_flourish.trigger(source, fid)
+
+
+func _input(event: InputEvent) -> void:
+	if not GameState.motion_gestures_enabled:
+		return
+	if event is InputEventAccelerometer:
+		var acc := (event as InputEventAccelerometer).acceleration
+		var delta := acc - _last_accel
+		_last_accel = acc
+		if Time.get_ticks_msec() < _shake_cooldown_ms:
+			return
+		if delta.length() >= SHAKE_THRESHOLD:
+			_shake_cooldown_ms = Time.get_ticks_msec() + 1200
+			_try_showcase_flourish("motion_shake")
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_F:
+			_try_showcase_flourish("keyboard")
+			get_viewport().set_input_as_handled()
+	if event is InputEventJoypadButton and event.pressed:
+		if event.button_index == JOY_BUTTON_LEFT_STICK or event.button_index == JOY_BUTTON_Y:
+			_try_showcase_flourish("controller")
+			get_viewport().set_input_as_handled()
 
 
 func _ensure_select_move_list_button() -> void:
@@ -226,9 +294,16 @@ func _update_preview(index: int, lock_in: bool) -> void:
 		_preview_model._enforce_exactly_one_visible_body()
 	_emit_preview_visibility_telemetry()
 	if lock_in and _preview_model.has_method("play_lock_in"):
+		if _flourish != null and _flourish.is_active():
+			_flourish.cancel_flourish()
 		_preview_model.play_lock_in()
 	elif _preview_model.has_method("play_selection_focus"):
 		_preview_model.play_selection_focus()
+	if _flourish != null:
+		_flourish.bind_model(_preview_model)
+		_flourish.set_fighter(id)
+	if _motion_label != null:
+		_motion_label.text = "Motion: %s" % ("ON" if GameState.motion_gestures_enabled else "OFF")
 
 
 func _recreate_preview_model() -> void:
@@ -242,6 +317,8 @@ func _recreate_preview_model() -> void:
 	_preview_model.position = Vector2(150, 240)
 	host.add_child(_preview_model)
 	_preview_fighter_id = ""
+	if _flourish != null:
+		_flourish.bind_model(_preview_model)
 
 
 
@@ -345,6 +422,12 @@ func _on_next_player_pressed() -> void:
 		GameState.p2_ready = true
 		_teardown_preview()
 		SceneRouter.go("stage_select")
+
+
+func get_showcase_flourish_counters() -> Dictionary:
+	if _flourish == null:
+		return {}
+	return _flourish.counters()
 
 
 func on_back() -> void:
