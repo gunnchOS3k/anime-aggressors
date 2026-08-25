@@ -4,6 +4,7 @@ const _CharacterLife = preload("res://scripts/fighters/fighter_character_life.gd
 const _Presentation = preload("res://scripts/fighters/fighter_presentation_profile.gd")
 const FIGHTER_BUTTON_SCENE := preload("res://scenes/ui/FighterTile.tscn")
 const MODEL_SCRIPT := preload("res://scripts/fighters/fighter_model_3d.gd")
+const MOVE_LIST_PANEL := preload("res://scripts/ui/move_list_panel.gd")
 
 var _roster: Array = []
 var _cursor: int = 0
@@ -17,6 +18,8 @@ var _tiles: Array = []
 var _preview_generation: int = 0
 var _preview_fighter_id: String = ""
 var _preview_failures: int = 0
+var _move_list_panel: Control
+var _move_list_btn: Button
 
 @onready var grid: GridContainer = %FighterGrid
 @onready var p1_name: Label = %P1Name
@@ -34,6 +37,27 @@ func _ready() -> void:
 	_build_grid()
 	_refresh()
 	_update_preview(_cursor, false)
+	_ensure_select_move_list_button()
+
+
+func _ensure_select_move_list_button() -> void:
+	if _move_list_btn != null:
+		return
+	_move_list_btn = Button.new()
+	_move_list_btn.text = "Command Guide"
+	_move_list_btn.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
+	_move_list_btn.position = Vector2(24, 640)
+	_move_list_btn.pressed.connect(_open_select_move_list)
+	add_child(_move_list_btn)
+
+
+func _open_select_move_list() -> void:
+	if _move_list_panel == null or not is_instance_valid(_move_list_panel):
+		_move_list_panel = MOVE_LIST_PANEL.new()
+		_move_list_panel.name = "SelectMoveList"
+		add_child(_move_list_panel)
+	var fid := str(_roster[_cursor]) if _roster.size() > 0 else "ember-vale"
+	_move_list_panel.open_for_fighter(fid)
 
 
 func _exit_tree() -> void:
