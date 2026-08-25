@@ -34,7 +34,7 @@ EXPORT_DIR = ROOT / "assets" / "exports" / "godot" / "fighters"
 RUNTIME_DIR = ROOT / "game-godot" / "assets" / "characters" / "procedural_final"
 LEGACY_PROXY_DIR = ROOT / "game-godot" / "assets" / "characters" / "proxy"
 CONTACT_DIR = ROOT / "playtest-evidence" / "visual_qa" / "fighters"
-PIPELINE_VERSION = 2
+PIPELINE_VERSION = 3
 ASSET_TIER = "procedural_final_3d"
 
 Vec3 = Tuple[float, float, float]
@@ -312,35 +312,65 @@ def create_ember_character_model(style: FighterStyle, armature):
     return mats
 
 
-def create_base_model(style: FighterStyle, armature):
-    if style.fighter_id == "ember-vale":
-        return create_ember_character_model(style, armature)
+def create_character_like_model(style: FighterStyle, armature, *, hair_hex: str, cloth_hex: str, boot_hex: str, iris_hex: str = "1A0E0C"):
+    """Wave018 roster uplift v1: character-like body (not cube blockout). Same armature."""
     sx, sy, sz = style.body_scale
     mats = {
         "primary": material(f"{style.fighter_id}_primary", style.primary),
         "secondary": material(f"{style.fighter_id}_secondary", style.secondary),
-        "accent": material(f"{style.fighter_id}_accent", style.accent, 0.18),
+        "accent": material(f"{style.fighter_id}_accent", style.accent, 0.28),
         "outline": material(f"{style.fighter_id}_outline", style.outline),
-        "skin": material(f"{style.fighter_id}_skin", "E5B28F"),
-        "eye": material(f"{style.fighter_id}_eye", "F7FBFF", 0.12),
+        "skin": material(f"{style.fighter_id}_skin", "E8B898"),
+        "hair": material(f"{style.fighter_id}_hair", hair_hex, 0.12),
+        "eye": material(f"{style.fighter_id}_eye", "FFF8F0", 0.1),
+        "iris": material(f"{style.fighter_id}_iris", iris_hex),
+        "cloth": material(f"{style.fighter_id}_cloth", cloth_hex),
+        "boot": material(f"{style.fighter_id}_boot", boot_hex),
     }
 
-    cube_part("hips_mesh", (0, 0, 0.84), (0.29 * sx, 0.19 * sy, 0.20 * sz), mats["secondary"], armature, "pelvis")
-    cube_part("torso_mesh", (0, 0, 1.35), (0.38 * sx, 0.22 * sy, 0.43 * sz), mats["primary"], armature, "chest")
-    sphere_part("head_mesh", (0, -0.01, 2.01), (0.30 * style.head_scale, 0.28 * style.head_scale, 0.32 * style.head_scale), mats["skin"], armature, "head")
+    sphere_part("hips_mesh", (0, 0, 0.84), (0.26 * sx, 0.18 * sy, 0.18 * sz), mats["secondary"], armature, "pelvis")
+    cylinder_part("pelvis_plate", (0, 0.02, 0.92), 0.20 * sx, 0.12 * sz, mats["cloth"], armature, "pelvis", (math.pi / 2, 0, 0))
+    cylinder_part("torso_mesh", (0, 0.01, 1.18), 0.17 * sx, 0.34 * sz, mats["primary"], armature, "spine", (0, 0, 0))
+    sphere_part("chest_mesh", (0, 0.02, 1.42), (0.24 * sx, 0.16 * sy, 0.20 * sz), mats["primary"], armature, "chest")
+    cylinder_part("neck_mesh", (0, 0, 1.74), 0.055 * sx, 0.10 * sz, mats["skin"], armature, "neck")
+    sphere_part("head_mesh", (0, -0.01, 2.00), (0.17 * style.head_scale, 0.16 * style.head_scale, 0.19 * style.head_scale), mats["skin"], armature, "head")
+    sphere_part("jaw_mesh", (0, -0.06, 1.90), (0.12, 0.08, 0.08), mats["skin"], armature, "head")
 
     for side, sign in (("L", -1.0), ("R", 1.0)):
-        cube_part(f"upper_arm_{side}", (0.42 * sign, 0, 1.43), (0.14 * sx, 0.14 * sy, 0.28 * sz), mats["primary"], armature, f"upper_arm.{side}")
-        cube_part(f"lower_arm_{side}", (0.63 * sign, 0, 1.16), (0.12 * sx, 0.13 * sy, 0.25 * sz), mats["secondary"], armature, f"lower_arm.{side}")
-        sphere_part(f"hand_{side}", (0.72 * sign, -0.01, 0.93), (0.17 * style.hand_scale, 0.15 * style.hand_scale, 0.18 * style.hand_scale), mats["accent"], armature, f"hand.{side}")
-        cube_part(f"upper_leg_{side}", (0.17 * sign, 0, 0.59), (0.16 * sx, 0.17 * sy, 0.30 * sz), mats["secondary"], armature, f"upper_leg.{side}")
-        cube_part(f"lower_leg_{side}", (0.18 * sign, 0, 0.27), (0.14 * sx, 0.15 * sy, 0.27 * sz), mats["primary"], armature, f"lower_leg.{side}")
-        cube_part(f"boot_{side}", (0.18 * sign, -0.12, 0.08), (0.18 * style.boot_scale, 0.29 * style.boot_scale, 0.11 * style.boot_scale), mats["outline"], armature, f"foot.{side}")
-        # Eyes are deliberately graphic and oversized for phone-size readability.
-        sphere_part(f"eye_{side}", (0.105 * sign, -0.266, 2.055), (0.045, 0.025, 0.075), mats["eye"], armature, "head")
+        sphere_part(f"eye_white_{side}", (0.055 * sign, -0.145, 2.02), (0.035, 0.018, 0.045), mats["eye"], armature, "head")
+        sphere_part(f"iris_{side}", (0.055 * sign, -0.160, 2.02), (0.018, 0.012, 0.022), mats["iris"], armature, "head")
+        cube_part(f"brow_{side}", (0.055 * sign, -0.150, 2.075), (0.045, 0.012, 0.012), mats["outline"], armature, "head", bevel=0.01)
+        if side == "L":
+            cube_part("mouth", (0.0, -0.155, 1.94), (0.045, 0.01, 0.012), mats["outline"], armature, "head", bevel=0.008)
+        cylinder_part(f"upper_arm_{side}", (0.34 * sign * sx, 0.0, 1.42), 0.065 * sx, 0.30 * sz, mats["primary"], armature, f"upper_arm.{side}", (0.55 * sign, 0, 0.35 * sign))
+        cylinder_part(f"lower_arm_{side}", (0.55 * sign * sx, 0.0, 1.14), 0.052 * sx, 0.26 * sz, mats["skin"], armature, f"lower_arm.{side}", (0.45 * sign, 0, 0.2 * sign))
+        sphere_part(f"hand_{side}", (0.72 * sign * sx, -0.01, 0.90), (0.09 * style.hand_scale, 0.07 * style.hand_scale, 0.09 * style.hand_scale), mats["skin"], armature, f"hand.{side}")
+        cylinder_part(f"upper_leg_{side}", (0.12 * sign * sx, 0.0, 0.58), 0.08 * sx, 0.32 * sz, mats["secondary"], armature, f"upper_leg.{side}")
+        cylinder_part(f"lower_leg_{side}", (0.13 * sign * sx, 0.0, 0.28), 0.065 * sx, 0.28 * sz, mats["primary"], armature, f"lower_leg.{side}")
+        cube_part(f"boot_{side}", (0.13 * sign * sx, -0.08, 0.08), (0.11 * style.boot_scale, 0.20 * style.boot_scale, 0.09 * style.boot_scale), mats["boot"], armature, f"foot.{side}", bevel=0.03)
+        sphere_part(f"boot_toe_{side}", (0.13 * sign * sx, -0.18, 0.07), (0.07, 0.08, 0.05), mats["boot"], armature, f"foot.{side}")
 
+    # Soft hair volume baseline (fighter accessories add signature silhouette).
+    sphere_part("hair_side_L", (-0.14 * style.head_scale, 0.02, 2.00), (0.07, 0.09, 0.11), mats["hair"], armature, "head")
+    sphere_part("hair_side_R", (0.14 * style.head_scale, 0.02, 2.00), (0.07, 0.09, 0.11), mats["hair"], armature, "head")
     create_accessory(style, mats, armature)
     return mats
+
+
+def create_base_model(style: FighterStyle, armature):
+    # Wave017 Ember golden slice preserved; Wave018 propagates character-like philosophy to roster.
+    if style.fighter_id == "ember-vale":
+        return create_ember_character_model(style, armature)
+    roster_look = {
+        "rook-ironside": dict(hair_hex="3A2A22", cloth_hex="2A3038", boot_hex="181A20", iris_hex="2A1A10"),
+        "juno-spark": dict(hair_hex="F4D94E", cloth_hex="202839", boot_hex="12151D", iris_hex="0A3040"),
+        "kaia-windrow": dict(hair_hex="2E8A6A", cloth_hex="1F5360", boot_hex="15262B", iris_hex="0E4038"),
+        "nix-calder": dict(hair_hex="D8F4FF", cloth_hex="2A4A6A", boot_hex="172A42", iris_hex="204868"),
+        "orion-vell": dict(hair_hex="3A2A55", cloth_hex="252340", boot_hex="161522", iris_hex="2A1850"),
+        "vesper-nyx": dict(hair_hex="1D1830", cloth_hex="120E1C", boot_hex="0D0B14", iris_hex="4A1860"),
+    }
+    look = roster_look.get(style.fighter_id, dict(hair_hex="4A3A2A", cloth_hex="2A2A30", boot_hex="1A1A1E"))
+    return create_character_like_model(style, armature, **look)
 
 
 def create_accessory(style: FighterStyle, mats: Mapping[str, object], armature) -> None:

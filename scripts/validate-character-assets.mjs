@@ -54,8 +54,8 @@ const manifest = fs.existsSync(manifestPath)
   ? JSON.parse(fs.readFileSync(manifestPath, "utf8"))
   : { fighters: [] };
 
-if (manifest.schema_version !== 1 || ![1, 2].includes(manifest.pipeline_version)) {
-  fail("character manifest must use schema_version=1 and pipeline_version=1|2");
+if (manifest.schema_version !== 1 || ![1, 2, 3].includes(manifest.pipeline_version)) {
+  fail("character manifest must use schema_version=1 and pipeline_version=1|2|3");
 }
 if (manifest.original_design_policy !== "docs/ORIGINAL_CHARACTER_DESIGN_POLICY.md") {
   fail("character manifest must reference the original-design policy");

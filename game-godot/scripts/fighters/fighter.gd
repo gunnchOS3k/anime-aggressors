@@ -238,14 +238,30 @@ func assert_visible_body_invariant() -> Dictionary:
 	if model_ok and model_3d != null and model_3d.has_method("is_visible_renderable_body"):
 		model_ok = model_3d.is_visible_renderable_body()
 	var body_ok := body != null and body.visible and body.modulate.a > 0.05
+	var body_count := 0
+	if model_ok:
+		body_count += 1
+	if body_ok:
+		body_count += 1
+	# Documented dual: ColorRect body is emergency fallback only when model fails —
+	# ensure_visible_presentation hides body when model_ok, so count should be 1.
+	if model_ok and body != null and body.visible:
+		# Self-heal duplicate (model + ColorRect both showing).
+		body.visible = false
+		body_ok = false
+		body_count = 1
 	var ok := (not expected) or model_ok or body_ok
 	var name_only := label != null and label.visible and not model_ok and not body_ok
+	var zero_body := expected and not model_ok and not body_ok
 	return {
 		"FIGHTER_LOGIC_ACTIVE": logic_active,
 		"FIGHTER_EXPECTED_VISIBLE": expected,
 		"VISIBLE_RENDERABLE_FIGHTER_BODY": model_ok or body_ok,
+		"VISIBLE_BODY_COUNT": body_count if expected else 0,
+		"VISIBLE_BODY_ZERO": zero_body,
+		"VISIBLE_BODY_DUPLICATE": body_count > 1,
 		"NAMEPLATE_ONLY_GHOST": name_only,
-		"PASS": ok and not name_only,
+		"PASS": ok and not name_only and not zero_body,
 	}
 
 

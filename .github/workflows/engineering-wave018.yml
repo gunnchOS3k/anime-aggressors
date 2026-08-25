@@ -1,0 +1,105 @@
+name: Engineering Wave018 Roster Visual Propagation
+
+on:
+  push:
+    branches: [main, "eng/wave018-roster-visual-propagation-and-model-visibility", "eng/**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  wave018:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Godot 4.5
+        run: |
+          set -euo pipefail
+          curl -L -o godot.zip https://github.com/godotengine/godot-builds/releases/download/4.5-stable/Godot_v4.5-stable_linux.x86_64.zip
+          unzip -o godot.zip
+          chmod +x Godot_v4.5-stable_linux.x86_64
+          echo "GODOT_BIN=$PWD/Godot_v4.5-stable_linux.x86_64" >> "$GITHUB_ENV"
+
+      - name: Taste gate
+        run: make taste-gate
+
+      - name: Engineering Wave018 (desktop; Pixel skipped in CI)
+        env:
+          GODOT_BIN: ${{ env.GODOT_BIN }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_ACTIONS: "true"
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/wave018 artifacts/engineering_wave018 tmp
+          # Pixel not available in CI — record blocked honestly without failing desktop gates
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          art = Path("artifacts/engineering_wave018")
+          art.mkdir(parents=True, exist_ok=True)
+          payload = {
+            "PIXEL_CAMPAIGN": "BLOCKED_PIXEL6A",
+            "PIXEL_DEVICE_AVAILABLE": False,
+            "PIXEL_AUTHENTIC": False,
+            "reason": "CI runner has no Pixel 6a",
+          }
+          Path("artifacts/wave018").mkdir(parents=True, exist_ok=True)
+          Path("artifacts/wave018/PIXEL_CAMPAIGN.json").write_text(json.dumps(payload, indent=2) + "\n")
+          for name in [
+            "WAVE018_PIXEL_SELECT_STRESS_RESULT.json",
+            "WAVE018_PIXEL_VISIBILITY_RESULT.json",
+            "WAVE018_PIXEL_SMOKE_RESULT.json",
+          ]:
+            (art / name).write_text(json.dumps({**payload, "artifact": name}, indent=2) + "\n")
+          PY
+          source tools/engineering_wave015/godot_orchestration.sh
+          export GODOT_ORCH_ROOT="$PWD"
+          godot_orchestration_prepare "wave018-ci" "$PWD" || true
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --import || true
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave018/Wave018SelectPreviewStress.gd
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave018/Wave018SelectToBattleVisibility.gd
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave018/Wave018BattleVisibilityInvariant.gd
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave017/Wave017GhostLifecycle.gd || true
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave017/Wave017PlayerBuildDebugLabels.gd || true
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave016/Wave016GoldenSliceMoveE2E.gd || true
+          python3 tools/engineering_wave018/emit_roster_baseline.py
+          python3 tools/engineering_wave018/emit_wave018_bundle.py
+
+      - name: Upload Wave018 artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: engineering-wave018-evidence
+          path: |
+            artifacts/wave018/
+            artifacts/engineering_wave018/
+            artifacts/taste_gate/
+
+      - name: CI honesty gate
+        if: github.event_name == 'pull_request'
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          d = json.load(open("artifacts/engineering_wave018/WAVE018_RESULT.json"))
+          assert d.get("CURSOR_MERGED_NOTHING") is True
+          assert d.get("FINAL_CHARACTER_ART_PASS") is False
+          assert d.get("FINAL_HUMAN_AUTHORED_ANIMATION_PASS") is False
+          assert d.get("HUMAN_ART_DIRECTION_APPROVAL") is False
+          assert d.get("HUMAN_PLAYTEST_COMPLETE") is False
+          assert d.get("CURSOR_DECLARED_Q3") is False
+          assert int(d.get("NEW_S0", 1)) == 0
+          assert int(d.get("NEW_S1", 1)) == 0
+          assert int(d.get("SELECT_PREVIEW_GHOST_OCCURRENCES", 99)) == 0
+          assert int(d.get("SELECT_TO_BATTLE_GHOST_OCCURRENCES", 99)) == 0
+          assert int(d.get("BATTLE_VISIBLE_BODY_ZERO_OCCURRENCES", 99)) == 0
+          print("CI honesty OK", d.get("WAVE018_ROSTER_VISUAL_PROPAGATION"))
+          PY

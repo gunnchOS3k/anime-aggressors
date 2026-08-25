@@ -37,6 +37,8 @@ var _controller_watchdog
 var _flight_accum: float = 0.0
 var _battle_camera
 var _stage_camera_profile: Dictionary = {}
+var _wave018_vis_accum: float = 0.0
+var _wave018_last_telemetry_ids: Array = []
 
 const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
 const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
@@ -183,11 +185,64 @@ func _spawn_fighters() -> void:
 	for f in [fighter1, fighter2]:
 		f.platform_half_width = float(main.get("width", 800)) / 2.0
 		f.platform_center_x = float(main.get("x", 0))
+		# Wave018: battle must not inherit select-preview ghosts / stuck visibility.
+		if f.has_method("ensure_visible_presentation"):
+			f.ensure_visible_presentation()
+		if f.model_3d != null and f.model_3d.has_method("heal_visibility_if_needed"):
+			f.model_3d.heal_visibility_if_needed()
+		if f.model_3d != null and f.model_3d.has_method("set_select_mode"):
+			f.model_3d.set_select_mode(false)
+	_emit_battle_visibility_telemetry()
 	_connect_hitboxes(fighter1, fighter2)
 	_connect_hitboxes(fighter2, fighter1)
 	fighter1.koed.connect(_on_ko.bind(fighter1))
 	fighter2.koed.connect(_on_ko.bind(fighter2))
 	_update_hud()
+
+
+func _emit_battle_visibility_telemetry() -> void:
+	var telem = get_node_or_null("/root/Wave018VisibilityTelemetry")
+	if telem == null or not telem.has_method("emit_battle_row"):
+		return
+	_wave018_last_telemetry_ids.clear()
+	for f in [fighter1, fighter2]:
+		if f == null or not is_instance_valid(f):
+			continue
+		var model = f.get("model_3d")
+		var snap: Dictionary = {}
+		if telem.has_method("snapshot_model"):
+			snap = telem.snapshot_model(model)
+		var inv: Dictionary = {}
+		if f.has_method("assert_visible_body_invariant"):
+			inv = f.assert_visible_body_invariant()
+		var stocks_left: int = int(f.get("stocks"))
+		var logic_active: bool = bool(inv.get("FIGHTER_LOGIC_ACTIVE", stocks_left > 0 and f.visible))
+		var expected: bool = bool(inv.get("FIGHTER_EXPECTED_VISIBLE", logic_active and f.is_inside_tree()))
+		var state_name: String = ""
+		var sm = f.get("state_machine")
+		if sm != null:
+			state_name = str(sm.current_state)
+		var ko_state: bool = (state_name == "ko") or (stocks_left <= 0)
+		var respawn_state: bool = state_name == "respawn"
+		var rid: String = str(telem.emit_battle_row({
+			"fighter_slot": int(f.get("slot")),
+			"fighter_id": str(f.get("fighter_id")),
+			"logic_active": logic_active,
+			"expected_visible": expected,
+			"model_root_valid": bool(snap.get("model_root_valid", false)),
+			"model_visible_in_tree": bool(snap.get("model_visible_in_tree", false)),
+			"renderable_mesh_count": int(snap.get("renderable_mesh_count", 0)),
+			"visible_renderable_mesh_count": int(snap.get("visible_renderable_mesh_count", 0)),
+			"skeleton_valid": bool(snap.get("skeleton_valid", false)),
+			"controller_valid": bool(snap.get("controller_valid", false)),
+			"fallback_active": bool(snap.get("fallback_active", false)),
+			"ko_state": ko_state,
+			"respawn_state": respawn_state,
+			"visibility_invariant_pass": bool(inv.get("PASS", true)),
+		}))
+		_wave018_last_telemetry_ids.append(rid)
+	set_meta("wave018_last_telemetry_record_ids", _wave018_last_telemetry_ids.duplicate())
+
 
 func _connect_hitboxes(attacker, defender) -> void:
 	var hb: Area2D = attacker.get_node("Hitbox")
@@ -215,6 +270,10 @@ func _run_countdown() -> void:
 		countdown_label.visible = false
 
 func _physics_process(delta: float) -> void:
+	_wave018_vis_accum += delta
+	if _wave018_vis_accum >= 0.5:
+		_wave018_vis_accum = 0.0
+		_emit_battle_visibility_telemetry()
 	if not _active or _paused:
 		return
 	if _eval_mode:

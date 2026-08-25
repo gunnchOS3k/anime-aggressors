@@ -97,9 +97,9 @@ func _build_intentional_visual(base_col: Color, size: Vector2) -> void:
 		_:
 			scale_m = 1.0
 
-	# Wave017: distinct tap / medium / full silhouettes (not capsule-pill dominant).
-	var glow_poly := _tier_poly(projectile_tier, size.x * 0.95 * scale_m, size.y * 0.75 * scale_m, true)
-	var core_poly := _tier_poly(projectile_tier, size.x * 0.55 * scale_m, size.y * 0.45 * scale_m, false)
+	# Wave018: roster-wide intentional silhouettes (not moving-rectangle primary).
+	var glow_poly := _fighter_tier_poly(fighter_id, projectile_tier, size.x * 0.95 * scale_m, size.y * 0.75 * scale_m, true)
+	var core_poly := _fighter_tier_poly(fighter_id, projectile_tier, size.x * 0.55 * scale_m, size.y * 0.45 * scale_m, false)
 	_glow = Polygon2D.new()
 	_glow.name = "Glow"
 	_glow.color = Color(base_col.r, base_col.g, base_col.b, 0.30)
@@ -143,7 +143,7 @@ func _build_intentional_visual(base_col: Color, size: Vector2) -> void:
 	if projectile_tier == "projectile_full":
 		var corona := Polygon2D.new()
 		corona.name = "FullCorona"
-		corona.color = Color(1.0, 0.45, 0.12, 0.35)
+		corona.color = Color(base_col.r, base_col.g, base_col.b, 0.35)
 		corona.polygon = _ring_poly(size.x * 1.4 * scale_m)
 		_visual.add_child(corona)
 
@@ -161,9 +161,31 @@ func _ember_poly(w: float, h: float) -> PackedVector2Array:
 
 
 func _tier_poly(tier: String, w: float, h: float, glow: bool) -> PackedVector2Array:
+	return _fighter_tier_poly(fighter_id, tier, w, h, glow)
+
+
+func _fighter_tier_poly(fid: String, tier: String, w: float, h: float, glow: bool) -> PackedVector2Array:
+	match fid:
+		"rook-ironside":
+			return _rook_poly(tier, w, h)
+		"juno-spark":
+			return _juno_poly(tier, w, h)
+		"kaia-windrow":
+			return _kaia_poly(tier, w, h)
+		"nix-calder":
+			return _nix_poly(tier, w, h)
+		"orion-vell":
+			return _orion_poly(tier, w, h, glow)
+		"vesper-nyx":
+			return _vesper_poly(tier, w, h)
+		_:
+			# Ember Vale default family (Wave016/017)
+			return _ember_tier_poly(tier, w, h, glow)
+
+
+func _ember_tier_poly(tier: String, w: float, h: float, glow: bool) -> PackedVector2Array:
 	match tier:
 		"projectile_medium":
-			# Twin-ember / forked heat bolt
 			return PackedVector2Array([
 				Vector2(-w * 0.5, 0.0),
 				Vector2(-w * 0.1, -h * 0.7),
@@ -175,7 +197,6 @@ func _tier_poly(tier: String, w: float, h: float, glow: bool) -> PackedVector2Ar
 				Vector2(-w * 0.1, h * 0.7),
 			])
 		"projectile_full":
-			# Broad combustion star — distinct from tap teardrop
 			var pts := PackedVector2Array()
 			var spikes := 7 if glow else 5
 			for i in spikes:
@@ -185,6 +206,109 @@ func _tier_poly(tier: String, w: float, h: float, glow: bool) -> PackedVector2Ar
 			return pts
 		_:
 			return _ember_poly(w, h)
+
+
+func _rook_poly(tier: String, w: float, h: float) -> PackedVector2Array:
+	# Heavy hammer / impact wedge
+	match tier:
+		"projectile_medium":
+			return PackedVector2Array([
+				Vector2(-w * 0.55, -h * 0.35), Vector2(w * 0.35, -h * 0.55),
+				Vector2(w * 0.65, 0.0), Vector2(w * 0.35, h * 0.55), Vector2(-w * 0.55, h * 0.35),
+			])
+		"projectile_full":
+			return PackedVector2Array([
+				Vector2(-w * 0.6, -h * 0.5), Vector2(w * 0.2, -h * 0.7), Vector2(w * 0.75, 0.0),
+				Vector2(w * 0.2, h * 0.7), Vector2(-w * 0.6, h * 0.5), Vector2(-w * 0.35, 0.0),
+			])
+		_:
+			return PackedVector2Array([
+				Vector2(-w * 0.5, -h * 0.4), Vector2(w * 0.55, -h * 0.25),
+				Vector2(w * 0.55, h * 0.25), Vector2(-w * 0.5, h * 0.4),
+			])
+
+
+func _juno_poly(tier: String, w: float, h: float) -> PackedVector2Array:
+	# Zigzag bolt
+	match tier:
+		"projectile_medium":
+			return PackedVector2Array([
+				Vector2(-w * 0.55, 0.0), Vector2(-w * 0.1, -h * 0.55), Vector2(w * 0.15, -h * 0.1),
+				Vector2(w * 0.55, -h * 0.45), Vector2(w * 0.7, 0.0), Vector2(w * 0.55, h * 0.45),
+				Vector2(w * 0.15, h * 0.1), Vector2(-w * 0.1, h * 0.55),
+			])
+		"projectile_full":
+			return PackedVector2Array([
+				Vector2(-w * 0.65, 0.0), Vector2(-w * 0.2, -h * 0.7), Vector2(w * 0.05, -h * 0.15),
+				Vector2(w * 0.45, -h * 0.65), Vector2(w * 0.8, 0.0), Vector2(w * 0.45, h * 0.65),
+				Vector2(w * 0.05, h * 0.15), Vector2(-w * 0.2, h * 0.7),
+			])
+		_:
+			return PackedVector2Array([
+				Vector2(-w * 0.5, 0.0), Vector2(0.0, -h * 0.45), Vector2(w * 0.2, -h * 0.05),
+				Vector2(w * 0.6, -h * 0.35), Vector2(w * 0.35, 0.0), Vector2(w * 0.6, h * 0.35),
+				Vector2(w * 0.2, h * 0.05), Vector2(0.0, h * 0.45),
+			])
+
+
+func _kaia_poly(tier: String, w: float, h: float) -> PackedVector2Array:
+	# Crescent gale blade
+	var amp := 1.15 if tier == "projectile_full" else (1.0 if tier == "projectile_medium" else 0.85)
+	return PackedVector2Array([
+		Vector2(-w * 0.4 * amp, 0.0),
+		Vector2(-w * 0.05, -h * 0.7 * amp),
+		Vector2(w * 0.55 * amp, -h * 0.25),
+		Vector2(w * 0.35 * amp, 0.0),
+		Vector2(w * 0.55 * amp, h * 0.25),
+		Vector2(-w * 0.05, h * 0.7 * amp),
+	])
+
+
+func _nix_poly(tier: String, w: float, h: float) -> PackedVector2Array:
+	# Crystal shard
+	match tier:
+		"projectile_full":
+			return PackedVector2Array([
+				Vector2(-w * 0.35, 0.0), Vector2(0.0, -h * 0.75), Vector2(w * 0.55, -h * 0.2),
+				Vector2(w * 0.75, 0.0), Vector2(w * 0.55, h * 0.2), Vector2(0.0, h * 0.75),
+			])
+		_:
+			return PackedVector2Array([
+				Vector2(-w * 0.4, 0.0), Vector2(0.0, -h * 0.6), Vector2(w * 0.65, 0.0), Vector2(0.0, h * 0.6),
+			])
+
+
+func _orion_poly(tier: String, w: float, h: float, glow: bool) -> PackedVector2Array:
+	# Orbit ring / node cluster
+	var pts := PackedVector2Array()
+	var n := 10 if glow or tier == "projectile_full" else 8
+	var r_outer := w * (0.55 if tier != "projectile_tap" else 0.45)
+	var r_inner := r_outer * (0.55 if tier == "projectile_full" else 0.7)
+	for i in n:
+		var a := TAU * float(i) / float(n)
+		var r := r_outer if i % 2 == 0 else r_inner
+		pts.append(Vector2(cos(a), sin(a)) * r)
+	return pts
+
+
+func _vesper_poly(tier: String, w: float, h: float) -> PackedVector2Array:
+	# Asymmetric void sickle
+	match tier:
+		"projectile_medium":
+			return PackedVector2Array([
+				Vector2(-w * 0.5, -h * 0.15), Vector2(w * 0.1, -h * 0.65), Vector2(w * 0.7, -h * 0.1),
+				Vector2(w * 0.25, 0.05), Vector2(w * 0.55, h * 0.45), Vector2(-w * 0.35, h * 0.25),
+			])
+		"projectile_full":
+			return PackedVector2Array([
+				Vector2(-w * 0.6, -h * 0.2), Vector2(0.0, -h * 0.8), Vector2(w * 0.8, -h * 0.15),
+				Vector2(w * 0.3, 0.05), Vector2(w * 0.7, h * 0.55), Vector2(-w * 0.4, h * 0.35),
+			])
+		_:
+			return PackedVector2Array([
+				Vector2(-w * 0.45, 0.0), Vector2(w * 0.15, -h * 0.55), Vector2(w * 0.6, 0.0),
+				Vector2(w * 0.1, h * 0.35),
+			])
 
 
 func _ring_poly(r: float) -> PackedVector2Array:
@@ -233,7 +357,7 @@ func _spawn_impact() -> void:
 			burst.polygon = _tier_poly(projectile_tier, 32.0, 24.0, true)
 			burst.color = Color(1.0, 0.55, 0.15, 0.9)
 		_:
-			burst.polygon = _ember_poly(22.0, 16.0)
+			burst.polygon = _fighter_tier_poly(fighter_id, projectile_tier, 22.0, 16.0, false)
 	_visual.add_child(burst)
 	var tw := create_tween()
 	tw.tween_property(burst, "scale", Vector2(1.8, 1.8) * scale_i, 0.12)

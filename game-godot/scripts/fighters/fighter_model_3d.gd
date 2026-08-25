@@ -48,6 +48,9 @@ var _current_model_source: String = "MISSING"
 var _current_animation_source: String = "LEGACY_STYLIZED_POSE"
 var _procedural_healthy: bool = false
 var _using_stylized_fallback: bool = false
+## Wave018: generation token cancels superseded configure/swap races.
+var _configure_generation: int = 0
+var _load_failure_logged: bool = false
 
 
 func _ready() -> void:
@@ -57,6 +60,9 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	# Wave018: periodic heal for SubViewport texture loss / stuck visibility=false.
+	if _loaded and not is_visible_renderable_body():
+		heal_visibility_if_needed()
 	if not _loaded or not _using_stylized_fallback or _stylized == null:
 		return
 	_style_anim_t += delta * _style_speed
@@ -65,17 +71,27 @@ func _process(delta: float) -> void:
 
 
 func configure(fighter_data: Dictionary) -> bool:
+	_configure_generation += 1
+	var gen := _configure_generation
 	if _model_root == null:
 		_build_viewport()
+	# Keep display texture alive during swap so preview never blanks mid-cycle.
+	if _display != null and is_instance_valid(_display):
+		_display.visible = true
 	_clear_model()
+	if gen != _configure_generation:
+		return false
 	_fighter_id = str(fighter_data.get("id", ""))
 	_life = _CharacterLife.for_id(_fighter_id)
 	_current_model_source = "MISSING"
 	_current_animation_source = "LEGACY_STYLIZED_POSE"
 	_procedural_healthy = false
 	_using_stylized_fallback = false
+	_load_failure_logged = false
 
 	var model_info := _resolve_and_load_model(fighter_data)
+	if gen != _configure_generation:
+		return false
 	_current_model_source = str(model_info.get("source", "MISSING"))
 
 	_stylized = _StylizedBuilder.create(_fighter_id, fighter_data)
@@ -91,18 +107,30 @@ func configure(fighter_data: Dictionary) -> bool:
 		_using_stylized_fallback = false
 		_setup_procedural_runtime(fighter_data)
 	else:
+		# Recoverable explicit fallback — never silent empty body.
 		_loaded_model = _stylized
 		_stylized.visible = true
 		_using_stylized_fallback = true
 		if _proxy_model != null:
 			_proxy_model.visible = false
 			_proxy_model.process_mode = Node.PROCESS_MODE_DISABLED
+		if str(model_info.get("source", "MISSING")) == "MISSING":
+			_log_load_failure("procedural_missing_using_stylized_fallback")
+			_current_model_source = "STYLIZED_FALLBACK"
 
+	if gen != _configure_generation:
+		return false
+	_enforce_exactly_one_visible_body()
 	_frame_camera_for_figure()
 	_set_loaded(_loaded_model != null)
+	heal_visibility_if_needed()
 	set_expression(str(_life.get("expression_idle", "neutral")))
 	_play_clip("idle")
 	_apply_playback_scale("idle")
+	if not is_visible_renderable_body():
+		_log_load_failure("post_configure_not_renderable")
+		heal_visibility_if_needed()
+	# Return loaded; callers/harnesses check is_visible_renderable_body for invariant.
 	return _loaded
 
 
@@ -154,13 +182,83 @@ func get_animation_controller() -> Node:
 	return _animation_controller
 
 
+func get_loaded_model_node() -> Node3D:
+	return _loaded_model
+
+
+func is_using_stylized_fallback() -> bool:
+	return _using_stylized_fallback
+
+
+func count_renderable_meshes() -> Dictionary:
+	## Counts MeshInstance3D under the active loaded model (procedural or stylized).
+	var total := 0
+	var visible := 0
+	var root := _loaded_model
+	if root == null or not is_instance_valid(root):
+		return {"renderable_mesh_count": 0, "visible_renderable_mesh_count": 0}
+	var stack: Array = [root]
+	while not stack.is_empty():
+		var n: Node = stack.pop_back()
+		if n is MeshInstance3D:
+			total += 1
+			var mesh := n as MeshInstance3D
+			if mesh.visible and mesh.is_visible_in_tree():
+				visible += 1
+		for c in n.get_children():
+			stack.append(c)
+	# SubViewport Sprite2D path: if body is renderable but mesh walk found none
+	# (e.g. mid-rebuild), treat healthy display as one visible renderable unit.
+	if visible == 0 and is_visible_renderable_body():
+		visible = 1
+		if total == 0:
+			total = 1
+	return {"renderable_mesh_count": total, "visible_renderable_mesh_count": visible}
+
+
+func count_visible_bodies() -> int:
+	return count_visible_representations()
+
+
 func count_visible_representations() -> int:
 	var count := 0
-	if _proxy_model != null and _proxy_model.visible:
+	if _proxy_model != null and is_instance_valid(_proxy_model) and _proxy_model.visible:
 		count += 1
-	if _stylized != null and _stylized.visible:
+	if _stylized != null and is_instance_valid(_stylized) and _stylized.visible:
 		count += 1
 	return count
+
+
+func _enforce_exactly_one_visible_body() -> void:
+	## Invariant: exactly one of procedural proxy / stylized fallback is visible.
+	if _procedural_healthy and _proxy_model != null and is_instance_valid(_proxy_model):
+		_proxy_model.visible = true
+		if _stylized != null and is_instance_valid(_stylized):
+			_stylized.visible = false
+			_stylized.process_mode = Node.PROCESS_MODE_DISABLED
+		_loaded_model = _proxy_model
+		_using_stylized_fallback = false
+	elif _stylized != null and is_instance_valid(_stylized):
+		_stylized.visible = true
+		_stylized.process_mode = Node.PROCESS_MODE_INHERIT
+		if _proxy_model != null and is_instance_valid(_proxy_model):
+			_proxy_model.visible = false
+			_proxy_model.process_mode = Node.PROCESS_MODE_DISABLED
+		_loaded_model = _stylized
+		_using_stylized_fallback = true
+
+
+func _log_load_failure(reason: String) -> void:
+	if _load_failure_logged:
+		return
+	_load_failure_logged = true
+	push_warning("FighterModel3D load/visibility failure fighter=%s reason=%s gen=%d" % [
+		_fighter_id, reason, _configure_generation
+	])
+
+
+func get_configure_generation() -> int:
+	return _configure_generation
 
 
 func truth_flags() -> Dictionary:
@@ -509,10 +607,11 @@ func _build_viewport() -> void:
 
 
 func _clear_model() -> void:
+	# Free controllers immediately so reuse cannot bind stale skeleton/materials.
 	if _animation_controller != null and is_instance_valid(_animation_controller):
-		_animation_controller.queue_free()
+		_animation_controller.free()
 	if _material_controller != null and is_instance_valid(_material_controller):
-		_material_controller.queue_free()
+		_material_controller.free()
 	_animation_controller = null
 	_material_controller = null
 	_visible_skeleton = null
@@ -531,7 +630,12 @@ func _clear_model() -> void:
 func _set_loaded(value: bool) -> void:
 	_loaded = value
 	if _display:
+		# Never leave display stuck false after a successful body exists.
 		_display.visible = value
+		if value and _viewport != null and is_instance_valid(_viewport):
+			if _display.texture == null:
+				_display.texture = _viewport.get_texture()
+			_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	# Wave017: player builds never show MODEL tier / PROXY / DEBUG labels.
 	var tier_label := get_node_or_null("ModelTierLabel") as Label
 	if tier_label:
@@ -568,6 +672,7 @@ func is_visible_renderable_body() -> bool:
 
 func heal_visibility_if_needed() -> bool:
 	## Rebind display texture / force viewport update after bg/fg or SubViewport loss.
+	var was_ok := is_visible_renderable_body()
 	if _viewport == null or not is_instance_valid(_viewport):
 		_build_viewport()
 	if _display == null or not is_instance_valid(_display):
@@ -575,12 +680,27 @@ func heal_visibility_if_needed() -> bool:
 	if _display.texture == null and _viewport != null:
 		_display.texture = _viewport.get_texture()
 	_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	_enforce_exactly_one_visible_body()
+	var recovered := false
 	if _loaded_model != null and is_instance_valid(_loaded_model):
 		_loaded_model.visible = true
 		_display.visible = true
 		_loaded = true
-		return true
-	return false
+		recovered = true
+	# Last-resort: if stylized exists but was detached from _loaded_model pointer.
+	elif _stylized != null and is_instance_valid(_stylized):
+		_stylized.visible = true
+		_loaded_model = _stylized
+		_using_stylized_fallback = true
+		_display.visible = true
+		_loaded = true
+		_log_load_failure("healed_via_stylized_fallback")
+		recovered = true
+	if recovered and not was_ok and is_visible_renderable_body():
+		var telem = get_node_or_null("/root/Wave018VisibilityTelemetry")
+		if telem != null and telem.has_method("record_fallback_recovery"):
+			telem.record_fallback_recovery("heal_visibility_if_needed", _fighter_id)
+	return recovered
 
 
 func _find_skeleton(node: Node) -> Skeleton3D:

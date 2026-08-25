@@ -1,6 +1,6 @@
 # Anime Aggressors — repo-native targets
 
-.PHONY: engineering-wave011 engineering-wave012 engineering-wave013b engineering-wave014 engineering-wave015 engineering-wave016 engineering-wave017 motion-promote wave015-human-crash-capture wave015-battlescene-stability taste-gate engineering-taste-gate
+.PHONY: engineering-wave011 engineering-wave012 engineering-wave013b engineering-wave014 engineering-wave015 engineering-wave016 engineering-wave017 engineering-wave018 motion-promote wave015-human-crash-capture wave015-battlescene-stability taste-gate engineering-taste-gate
 
 engineering-wave011:
 	bash tools/engineering_wave011/run_wave011.sh
@@ -22,6 +22,9 @@ engineering-wave016:
 
 engineering-wave017:
 	bash tools/engineering_wave017/run_wave017.sh
+
+engineering-wave018:
+	bash tools/engineering_wave018/run_wave018.sh
 
 wave015-human-crash-capture:
 	python3 tools/engineering_wave015/capture_human_play_crash.py

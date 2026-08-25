@@ -13,6 +13,10 @@ var _selecting_p2: bool = false
 var _locked_p1: bool = false
 var _preview_model: Node2D
 var _tiles: Array = []
+## Wave018: cancel superseded preview swaps (focus before previous configure resolves).
+var _preview_generation: int = 0
+var _preview_fighter_id: String = ""
+var _preview_failures: int = 0
 
 @onready var grid: GridContainer = %FighterGrid
 @onready var p1_name: Label = %P1Name
@@ -30,6 +34,19 @@ func _ready() -> void:
 	_build_grid()
 	_refresh()
 	_update_preview(_cursor, false)
+
+
+func _exit_tree() -> void:
+	# Tear down preview so battle never inherits a stale SubViewport/cache.
+	_teardown_preview()
+
+
+func _teardown_preview() -> void:
+	_preview_generation += 1
+	if _preview_model != null and is_instance_valid(_preview_model):
+		_preview_model.queue_free()
+	_preview_model = null
+	_preview_fighter_id = ""
 
 
 func _ensure_preview_host() -> void:
@@ -50,7 +67,7 @@ func _ensure_preview_host() -> void:
 		host.custom_minimum_size = Vector2(300, 380)
 		host.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_preview_model = host.get_node_or_null("SelectModel") as Node2D
-	if _preview_model == null:
+	if _preview_model == null or not is_instance_valid(_preview_model):
 		_preview_model = MODEL_SCRIPT.new()
 		_preview_model.name = "SelectModel"
 		_preview_model.position = Vector2(150, 240)
@@ -111,18 +128,116 @@ func _set_tile_focus_visuals(index: int) -> void:
 
 
 func _update_preview(index: int, lock_in: bool) -> void:
-	if _preview_model == null or index < 0 or index >= _roster.size():
+	_preview_generation += 1
+	var gen := _preview_generation
+	_ensure_preview_host()
+	if _preview_model == null or not is_instance_valid(_preview_model):
+		_preview_failures += 1
+		push_warning("SelectPreview: model host missing gen=%d" % gen)
+		return
+	if index < 0 or index >= _roster.size():
 		return
 	var id: String = _roster[index]
 	var data: Dictionary = GameState.load_fighter(id)
-	if _preview_model.has_method("configure"):
-		_preview_model.configure(data)
+	# Reuse cache when same fighter + already renderable (hold/reselect).
+	var same: bool = id == _preview_fighter_id
+	var already_ok: bool = same and _preview_model.has_method("is_visible_renderable_body") and bool(_preview_model.is_visible_renderable_body())
+	if not already_ok:
+		var ok := false
+		if _preview_model.has_method("configure"):
+			ok = bool(_preview_model.configure(data))
+		if gen != _preview_generation:
+			return  # superseded by newer cursor/select
+		if not ok:
+			_preview_failures += 1
+			push_warning("SelectPreview: configure failed fighter=%s gen=%d — attempting heal/fallback" % [id, gen])
+			if _preview_model.has_method("heal_visibility_if_needed"):
+				_preview_model.heal_visibility_if_needed()
+			# One hard recreate if still dead (corrupted SubViewport / stuck false).
+			if not (_preview_model.has_method("is_visible_renderable_body") and _preview_model.is_visible_renderable_body()):
+				_recreate_preview_model()
+				if gen != _preview_generation:
+					return
+				if _preview_model.has_method("configure"):
+					ok = bool(_preview_model.configure(data))
+				if not ok:
+					push_warning("SelectPreview: recoverable fallback still failed fighter=%s" % id)
+	if gen != _preview_generation:
+		return
+	_preview_fighter_id = id
 	if _preview_model.has_method("set_select_mode"):
 		_preview_model.set_select_mode(true)
+	if _preview_model.has_method("heal_visibility_if_needed"):
+		_preview_model.heal_visibility_if_needed()
+	if _preview_model.has_method("_enforce_exactly_one_visible_body"):
+		_preview_model._enforce_exactly_one_visible_body()
+	_emit_preview_visibility_telemetry()
 	if lock_in and _preview_model.has_method("play_lock_in"):
 		_preview_model.play_lock_in()
 	elif _preview_model.has_method("play_selection_focus"):
 		_preview_model.play_selection_focus()
+
+
+func _recreate_preview_model() -> void:
+	var host := get_node_or_null("%PreviewHost") as Control
+	if host == null:
+		return
+	if _preview_model != null and is_instance_valid(_preview_model):
+		_preview_model.free()
+	_preview_model = MODEL_SCRIPT.new()
+	_preview_model.name = "SelectModel"
+	_preview_model.position = Vector2(150, 240)
+	host.add_child(_preview_model)
+	_preview_fighter_id = ""
+
+
+
+func _emit_preview_visibility_telemetry() -> void:
+	var telem = get_node_or_null("/root/Wave018VisibilityTelemetry")
+	if telem == null or not telem.has_method("emit_select_row"):
+		return
+	var snap: Dictionary = {}
+	if telem.has_method("snapshot_model"):
+		snap = telem.snapshot_model(_preview_model)
+	var expected: bool = visible and is_inside_tree() and _roster.size() > 0
+	var inv: Dictionary = assert_preview_visibility_invariant()
+	var rid: String = str(telem.emit_select_row({
+		"selected_fighter_id": _preview_fighter_id,
+		"preview_generation": _preview_generation,
+		"preview_expected_visible": expected,
+		"preview_root_valid": bool(snap.get("model_root_valid", _preview_model != null and is_instance_valid(_preview_model))),
+		"preview_visible_in_tree": bool(snap.get("model_visible_in_tree", false)),
+		"renderable_mesh_count": int(snap.get("renderable_mesh_count", 0)),
+		"visible_renderable_mesh_count": int(snap.get("visible_renderable_mesh_count", 0)),
+		"skeleton_valid": bool(snap.get("skeleton_valid", false)),
+		"controller_valid": bool(snap.get("controller_valid", false)),
+		"fallback_active": bool(snap.get("fallback_active", false)),
+		"visibility_invariant_pass": bool(inv.get("PASS", false)),
+	}))
+	# Stash last record id for screenshot binding.
+	set_meta("wave018_last_telemetry_record_id", rid)
+
+
+func assert_preview_visibility_invariant() -> Dictionary:
+	var expected := visible and is_inside_tree() and _roster.size() > 0
+	var body_ok: bool = false
+	if _preview_model != null and is_instance_valid(_preview_model) and _preview_model.has_method("is_visible_renderable_body"):
+		body_ok = bool(_preview_model.is_visible_renderable_body())
+	var bodies := 0
+	if _preview_model != null and _preview_model.has_method("count_visible_bodies"):
+		bodies = int(_preview_model.count_visible_bodies())
+	var ghost: bool = expected and not body_ok
+	var dup: bool = bodies > 1
+	return {
+		"FIGHTER_SHOULD_BE_PRESENT": expected,
+		"VISIBLE_RENDERABLE_BODY": body_ok,
+		"VISIBLE_BODY_COUNT": bodies,
+		"GHOST": ghost,
+		"DUPLICATE_BODY": dup,
+		"PASS": (not expected) or (body_ok and not dup),
+		"preview_fighter_id": _preview_fighter_id,
+		"preview_failures": _preview_failures,
+	}
 
 
 func _refresh() -> void:
@@ -175,6 +290,7 @@ func _on_next_player_pressed() -> void:
 		GameState.p2_fighter_id = _roster[_p2_pick]
 		GameState.p1_ready = true
 		GameState.p2_ready = true
+		_teardown_preview()
 		SceneRouter.go("stage_select")
 
 
@@ -183,4 +299,5 @@ func on_back() -> void:
 		_selecting_p2 = false
 		_refresh()
 	else:
+		_teardown_preview()
 		SceneRouter.go("ruleset")
