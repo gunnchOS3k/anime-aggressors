@@ -42,6 +42,10 @@ var _wave018_last_telemetry_ids: Array = []
 
 const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
 const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
+const MOVE_LIST_PANEL := preload("res://scripts/ui/move_list_panel.gd")
+
+var _move_list_panel: Control
+var _training_pin_label: Label
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -462,6 +466,10 @@ func _ensure_pause_panel() -> void:
 	# the next battle/menu under a frozen tree (buttons unresponsive).
 	rematch_btn.pressed.connect(_on_pause_rematch)
 	v.add_child(rematch_btn)
+	var move_list_btn := Button.new()
+	move_list_btn.text = "Move List / Command Guide"
+	move_list_btn.pressed.connect(_open_move_list_from_pause)
+	v.add_child(move_list_btn)
 	var menu_btn := Button.new()
 	menu_btn.text = "Return to Menu"
 	menu_btn.pressed.connect(_on_pause_return_menu)
@@ -469,6 +477,41 @@ func _ensure_pause_panel() -> void:
 	_pause_panel.add_child(v)
 	hud.add_child(_pause_panel)
 	_pause_panel.visible = false
+
+
+func _open_move_list_from_pause() -> void:
+	if _move_list_panel == null or not is_instance_valid(_move_list_panel):
+		_move_list_panel = MOVE_LIST_PANEL.new()
+		_move_list_panel.name = "MoveListPanel"
+		_move_list_panel.process_mode = Node.PROCESS_MODE_ALWAYS
+		hud.add_child(_move_list_panel)
+		_move_list_panel.pin_requested.connect(_on_move_list_pin)
+		_move_list_panel.closed.connect(func(): pass)
+	var fid := ""
+	if fighter1 != null and "fighter_id" in fighter1:
+		fid = str(fighter1.fighter_id)
+	elif GameState.p1_fighter_id:
+		fid = str(GameState.p1_fighter_id)
+	else:
+		fid = "ember-vale"
+	_move_list_panel.open_for_fighter(fid)
+
+
+func _on_move_list_pin(entry: Dictionary) -> void:
+	if _training_pin_label == null or not is_instance_valid(_training_pin_label):
+		_training_pin_label = Label.new()
+		_training_pin_label.name = "PinnedMoveReminder"
+		_training_pin_label.position = Vector2(24, 120)
+		_training_pin_label.add_theme_font_size_override("font_size", 16)
+		_training_pin_label.modulate = Color(1.0, 0.9, 0.45)
+		_training_pin_label.process_mode = Node.PROCESS_MODE_ALWAYS
+		hud.add_child(_training_pin_label)
+	var glyphs: Dictionary = entry.get("input_glyphs", {})
+	_training_pin_label.text = "TRY THIS: %s  %s" % [
+		str(entry.get("display_name", "")),
+		str(glyphs.get("compact", "")),
+	]
+	_training_pin_label.visible = true
 
 
 func _clear_pause_for_nav() -> void:

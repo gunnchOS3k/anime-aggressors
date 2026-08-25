@@ -8,7 +8,7 @@ const PROFILES := {
 	"ember-vale": {
 		"display": "Ember Vale",
 		"personality": ["Intense", "Confident", "Forward"],
-		"fantasy": "Close the gap as heat.",
+		"fantasy": "I build heat and pressure until every opening becomes an explosive release.",
 		"line": "Pressure first. Apologize never.",
 		"idle_speed": 1.18,
 		"run_speed": 1.12,
@@ -28,7 +28,7 @@ const PROFILES := {
 	"rook-ironside": {
 		"display": "Rook Ironside",
 		"personality": ["Stable", "Protective", "Deliberate"],
-		"fantasy": "Be the wall.",
+		"fantasy": "I absorb commitment and return it with overwhelming mass.",
 		"line": "Plant. Hold. Shatter.",
 		"idle_speed": 0.72,
 		"run_speed": 0.82,
@@ -48,7 +48,7 @@ const PROFILES := {
 	"juno-spark": {
 		"display": "Juno Spark",
 		"personality": ["Quick", "Mischievous", "Electric"],
-		"fantasy": "Think three beats ahead.",
+		"fantasy": "I turn tiny openings into impossible speed.",
 		"line": "Blink once. You're late.",
 		"idle_speed": 1.35,
 		"run_speed": 1.28,
@@ -68,7 +68,7 @@ const PROFILES := {
 	"kaia-windrow": {
 		"display": "Kaia Windrow",
 		"personality": ["Graceful", "Free", "Calm"],
-		"fantasy": "Own the air.",
+		"fantasy": "I control space by never being where you expect.",
 		"line": "Wind never asks permission.",
 		"idle_speed": 0.95,
 		"run_speed": 1.05,
@@ -88,7 +88,7 @@ const PROFILES := {
 	"nix-calder": {
 		"display": "Nix Calder",
 		"personality": ["Composed", "Precise", "Cold"],
-		"fantasy": "Win without raising your voice.",
+		"fantasy": "I make the arena predictable for me and dangerous for you.",
 		"line": "Precision is louder than shouting.",
 		"idle_speed": 0.68,
 		"run_speed": 0.9,
@@ -108,7 +108,7 @@ const PROFILES := {
 	"orion-vell": {
 		"display": "Orion Vell",
 		"personality": ["Curious", "Authoritative", "Cosmic"],
-		"fantasy": "Move like gravity obeys you.",
+		"fantasy": "I decide where motion is allowed to go.",
 		"line": "Orbits wait for intention.",
 		"idle_speed": 0.8,
 		"run_speed": 0.88,
@@ -128,7 +128,7 @@ const PROFILES := {
 	"vesper-nyx": {
 		"display": "Vesper Nyx",
 		"personality": ["Mysterious", "Dangerous", "Deceptive"],
-		"fantasy": "Strike where they look last.",
+		"fantasy": "I attack from the gaps between where you think I am.",
 		"line": "Shadows don't telegraph.",
 		"idle_speed": 1.08,
 		"run_speed": 1.1,

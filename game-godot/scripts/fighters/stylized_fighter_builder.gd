@@ -8,92 +8,113 @@ const EYE_WHITE := Color(0.98, 0.98, 1.0)
 const IRIS_DARK := Color(0.08, 0.08, 0.12)
 const MOUTH_DARK := Color(0.35, 0.12, 0.14)
 
-## Per-fighter silhouette scales + clothing language.
+## Per-fighter silhouette scales + clothing language (Wave019: more extreme proportion deltas).
 const PROFILES := {
 	"ember-vale": {
 		"height": 1.0,
-		"width": 0.92,
-		"limb": 1.0,
-		"head": 1.02,
-		"lean_x": -10.0,
+		"width": 0.90,
+		"limb": 1.02,
+		"head": 1.04,
+		"lean_x": -12.0,
 		"hair": "flame_crest",
-		"clothes": ["chest_plate", "gauntlets", "sash"],
+		"clothes": ["chest_plate", "gauntlets", "sash", "flame_asym"],
 		"secondary": Color(0.24, 0.08, 0.06),
 		"accent": Color(1.0, 0.65, 0.20),
 		"timing": 1.18,
+		"material_family": "ignition_plate",
+		"hand_scale": 1.1,
+		"foot_scale": 1.0,
 	},
 	"rook-ironside": {
-		"height": 1.06,
-		"width": 1.28,
-		"limb": 1.1,
-		"head": 0.96,
-		"lean_x": 4.0,
+		"height": 1.10,
+		"width": 1.38,
+		"limb": 1.18,
+		"head": 0.92,
+		"lean_x": 6.0,
 		"hair": "helm_plate",
-		"clothes": ["pauldrons", "chest_plate", "skirt"],
+		"clothes": ["pauldrons", "chest_plate", "skirt", "heavy_boots"],
 		"secondary": Color(0.16, 0.14, 0.14),
 		"accent": Color(0.72, 0.56, 0.38),
-		"timing": 0.72,
+		"timing": 0.68,
+		"material_family": "stone_iron",
+		"hand_scale": 1.25,
+		"foot_scale": 1.45,
 	},
 	"juno-spark": {
-		"height": 0.88,
-		"width": 0.86,
-		"limb": 0.92,
-		"head": 1.12,
-		"lean_x": -6.0,
+		"height": 0.84,
+		"width": 0.80,
+		"limb": 0.88,
+		"head": 1.18,
+		"lean_x": -8.0,
 		"hair": "bolt_tufts",
 		"clothes": ["scarf", "sash", "gauntlets"],
 		"secondary": Color(0.17, 0.18, 0.30),
 		"accent": Color(0.80, 0.95, 1.0),
-		"timing": 1.35,
+		"timing": 1.42,
+		"material_family": "volt_cloth",
+		"hand_scale": 0.95,
+		"foot_scale": 0.9,
 	},
 	"kaia-windrow": {
-		"height": 1.12,
-		"width": 0.9,
-		"limb": 1.05,
-		"head": 1.0,
-		"lean_x": -3.0,
+		"height": 1.16,
+		"width": 0.86,
+		"limb": 1.12,
+		"head": 0.98,
+		"lean_x": -4.0,
 		"hair": "wind_sweep",
-		"clothes": ["skirt", "sash", "scarf"],
+		"clothes": ["skirt", "sash", "wing_sleeves", "gale_sash"],
 		"secondary": Color(0.10, 0.24, 0.14),
 		"accent": Color(0.72, 1.0, 0.84),
-		"timing": 0.95,
+		"timing": 0.92,
+		"material_family": "gale_silk",
+		"hand_scale": 1.0,
+		"foot_scale": 0.95,
 	},
 	"nix-calder": {
-		"height": 1.04,
-		"width": 0.94,
-		"limb": 1.0,
-		"head": 0.98,
-		"lean_x": 0.0,
+		"height": 1.06,
+		"width": 0.92,
+		"limb": 0.98,
+		"head": 0.96,
+		"lean_x": 1.0,
 		"hair": "ice_spikes",
-		"clothes": ["hood", "mantle", "chest_plate"],
+		"clothes": ["hood", "mantle", "chest_plate", "shoulder_crystals"],
 		"secondary": Color(0.08, 0.15, 0.30),
 		"accent": Color(0.70, 0.90, 1.0),
-		"timing": 0.68,
+		"timing": 0.62,
+		"material_family": "frost_crystal",
+		"hand_scale": 1.0,
+		"foot_scale": 1.05,
 	},
 	"orion-vell": {
-		"height": 1.18,
-		"width": 1.02,
-		"limb": 1.08,
-		"head": 0.94,
-		"lean_x": 2.0,
+		"height": 1.22,
+		"width": 1.00,
+		"limb": 1.12,
+		"head": 0.90,
+		"lean_x": 3.0,
 		"hair": "orbit_crown",
-		"clothes": ["mantle", "chest_plate", "pauldrons"],
+		"clothes": ["mantle", "chest_plate", "gravity_rings", "orbit_nodes"],
 		"secondary": Color(0.15, 0.09, 0.28),
 		"accent": Color(0.86, 0.82, 1.0),
-		"timing": 0.8,
+		"timing": 0.78,
+		"material_family": "orbit_metal",
+		"hand_scale": 1.05,
+		"foot_scale": 1.1,
 	},
 	"vesper-nyx": {
 		"height": 1.02,
-		"width": 0.96,
+		"width": 0.94,
 		"limb": 1.0,
-		"head": 1.04,
-		"lean_x": -8.0,
-		"asym_z": 0.06,
+		"head": 1.06,
+		"lean_x": -10.0,
+		"asym_z": 0.09,
 		"hair": "shadow_hood",
-		"clothes": ["hood", "mantle", "scarf"],
+		"clothes": ["hood", "mantle", "scarf", "asym_cape"],
 		"secondary": Color(0.13, 0.05, 0.20),
 		"accent": Color(0.92, 0.48, 0.98),
-		"timing": 1.08,
+		"timing": 1.12,
+		"material_family": "void_cloth",
+		"hand_scale": 1.0,
+		"foot_scale": 1.0,
 	},
 }
 
@@ -287,8 +308,32 @@ func _parse_color(value: Variant, fallback: Color) -> Color:
 func _mat(color: Color) -> StandardMaterial3D:
 	var m := StandardMaterial3D.new()
 	m.albedo_color = color
-	m.roughness = 0.72
-	m.metallic = 0.05
+	# Wave019: intentional material families (not identical roughness everywhere).
+	match fighter_id:
+		"rook-ironside":
+			m.roughness = 0.55
+			m.metallic = 0.45
+		"juno-spark":
+			m.roughness = 0.35
+			m.metallic = 0.2
+			m.emission_enabled = true
+			m.emission = color * 0.25
+			m.emission_energy_multiplier = 0.4
+		"nix-calder":
+			m.roughness = 0.25
+			m.metallic = 0.15
+		"orion-vell":
+			m.roughness = 0.4
+			m.metallic = 0.55
+		"vesper-nyx":
+			m.roughness = 0.85
+			m.metallic = 0.05
+		"kaia-windrow":
+			m.roughness = 0.7
+			m.metallic = 0.02
+		_:
+			m.roughness = 0.62
+			m.metallic = 0.12
 	return m
 
 
@@ -320,22 +365,26 @@ func _build_body(profile: Dictionary) -> void:
 
 
 func _arm(side: String, chest: Node3D, dir: float, h: float, w: float, limb: float) -> void:
+	var profile: Dictionary = PROFILES.get(fighter_id, {})
+	var hand_s: float = float(profile.get("hand_scale", 1.0))
 	var upper := _joint("%sUpperArm" % side, chest, Vector3(dir * 0.2 * w, 0.08 * h, 0))
 	upper.rotation_degrees.z = dir * 12.0
 	_capsule(upper, "Mesh", 0.055 * limb, 0.22 * limb * h, _mats["primary"], Vector3(0, -0.1 * limb * h, 0))
 	var fore := _joint("%sForeArm" % side, upper, Vector3(0, -0.22 * limb * h, 0))
 	_capsule(fore, "Mesh", 0.045 * limb, 0.2 * limb * h, _mats["skin"], Vector3(0, -0.09 * limb * h, 0))
 	var hand := _joint("%sHand" % side, fore, Vector3(0, -0.2 * limb * h, 0.02))
-	_sphere(hand, "Mesh", 0.055 * limb * w, _mats["accent"], Vector3.ZERO)
+	_sphere(hand, "Mesh", 0.055 * limb * w * hand_s, _mats["accent"], Vector3.ZERO)
 
 
 func _leg(side: String, hip: Node3D, dir: float, h: float, w: float, limb: float) -> void:
+	var profile: Dictionary = PROFILES.get(fighter_id, {})
+	var foot_s: float = float(profile.get("foot_scale", 1.0))
 	var thigh := _joint("%sThigh" % side, hip, Vector3(dir * 0.09 * w, -0.05 * h, 0))
 	_capsule(thigh, "Mesh", 0.07 * limb * w, 0.26 * limb * h, _mats["secondary"], Vector3(0, -0.12 * limb * h, 0))
 	var shin := _joint("%sShin" % side, thigh, Vector3(0, -0.28 * limb * h, 0))
 	_capsule(shin, "Mesh", 0.055 * limb * w, 0.24 * limb * h, _mats["primary"], Vector3(0, -0.1 * limb * h, 0))
 	var foot := _joint("%sFoot" % side, shin, Vector3(0, -0.24 * limb * h, 0.04))
-	_prism(foot, "Mesh", Vector3(0.1 * w, 0.05, 0.16 * limb), _mats["accent"], Vector3(0.02, -0.01, 0.04))
+	_prism(foot, "Mesh", Vector3(0.1 * w * foot_s, 0.05 * foot_s, 0.16 * limb * foot_s), _mats["accent"], Vector3(0.02, -0.01, 0.04))
 
 
 func _build_face() -> void:
@@ -471,6 +520,36 @@ func _build_clothes(kinds: Array) -> void:
 					_cylinder(lf, "GauntletL", 0.055, 0.08, _mats["accent"], Vector3(0, -0.04, 0))
 				if rf:
 					_cylinder(rf, "GauntletR", 0.055, 0.08, _mats["accent"], Vector3(0, -0.04, 0))
+			"flame_asym":
+				# Asymmetric flame gauntlet accent (Ember) — larger right flare.
+				var rf2: Node3D = _parts.get("RForeArm")
+				if rf2:
+					_prism(rf2, "FlameGauntlet", Vector3(0.08, 0.16, 0.06), _mats["accent"], Vector3(0.04, -0.02, 0.05))
+			"heavy_boots":
+				for side_name in ["LFoot", "RFoot"]:
+					var ft: Node3D = _parts.get(side_name)
+					if ft:
+						_prism(ft, "BootPlate", Vector3(0.14, 0.08, 0.2), _mats["secondary"], Vector3(0.02, 0.02, 0.02))
+			"wing_sleeves":
+				var lu: Node3D = _parts.get("LUpperArm")
+				var ru: Node3D = _parts.get("RUpperArm")
+				if lu:
+					_prism(lu, "WingSleeveL", Vector3(0.06, 0.28, 0.14), _mats["cloth"], Vector3(-0.08, -0.04, -0.06))
+				if ru:
+					_prism(ru, "WingSleeveR", Vector3(0.06, 0.28, 0.14), _mats["cloth"], Vector3(0.08, -0.04, -0.06))
+			"gale_sash":
+				_prism(chest, "GaleSash", Vector3(0.08, 0.34, 0.05), _mats["accent"], Vector3(0.12, -0.08, 0.06))
+			"shoulder_crystals":
+				_prism(chest, "CrystalL", Vector3(0.06, 0.12, 0.06), _mats["accent"], Vector3(-0.18, 0.12, 0.02))
+				_prism(chest, "CrystalR", Vector3(0.05, 0.1, 0.05), _mats["accent"], Vector3(0.18, 0.1, 0.02))
+			"gravity_rings":
+				_cylinder(chest, "GravRing", 0.22, 0.03, _mats["accent"], Vector3(0, 0.02, 0))
+				_cylinder(chest, "GravRing2", 0.16, 0.025, _mats["primary"], Vector3(0, -0.06, 0.02))
+			"orbit_nodes":
+				_sphere(chest, "OrbitNodeA", 0.04, _mats["accent"], Vector3(0.2, 0.06, 0.08))
+				_sphere(chest, "OrbitNodeB", 0.03, _mats["accent"], Vector3(-0.18, -0.02, 0.1))
+			"asym_cape":
+				_prism(chest, "AsymCape", Vector3(0.18, 0.42, 0.05), _mats["secondary"], Vector3(0.12, -0.12, -0.14))
 
 
 func _joint(part_name: String, parent: Node3D, pos: Vector3) -> Node3D:
@@ -566,13 +645,40 @@ func _rot(part: String, degrees: Vector3) -> void:
 
 func _pose_idle(phase: float) -> void:
 	var bob := sin(phase) * 0.015
+	var arm_amp := 4.0
+	var head_yaw := 6.0
+	match fighter_id:
+		"rook-ironside":
+			bob *= 0.35
+			arm_amp = 2.0
+			head_yaw = 2.0
+		"juno-spark":
+			bob *= 1.6
+			arm_amp = 7.0
+			head_yaw = 10.0
+		"kaia-windrow":
+			bob *= 1.3
+			arm_amp = 5.5
+		"nix-calder":
+			bob *= 0.25
+			arm_amp = 1.5
+			head_yaw = 1.5
+		"orion-vell":
+			bob *= 0.7
+			arm_amp = 3.0
+		"vesper-nyx":
+			bob *= 0.9
+			arm_amp = 5.0
+			head_yaw = 12.0
+		_:
+			pass
 	var hip: Node3D = _parts.get("Hip")
 	if hip:
 		hip.position.y = float(_rest["Hip"]["position"].y) + bob
 	_rot("Torso", Vector3(sin(phase * 0.5) * 2.0, 0, 0))
-	_rot("LUpperArm", Vector3(sin(phase) * 4.0, 0, -4.0))
-	_rot("RUpperArm", Vector3(-sin(phase) * 4.0, 0, 4.0))
-	_rot("Head", Vector3(sin(phase * 0.7) * 3.0, sin(phase * 0.35) * 6.0, 0))
+	_rot("LUpperArm", Vector3(sin(phase) * arm_amp, 0, -4.0))
+	_rot("RUpperArm", Vector3(-sin(phase) * arm_amp, 0, 4.0))
+	_rot("Head", Vector3(sin(phase * 0.7) * 3.0, sin(phase * 0.35) * head_yaw, 0))
 
 
 func _pose_locomotion(phase: float, bounce: float, swing: float) -> void:
@@ -701,10 +807,37 @@ func _pose_ko(u: float) -> void:
 
 
 func _pose_victory(phase: float) -> void:
-	_rot("RUpperArm", Vector3(-140.0 + sin(phase) * 8.0, 0, 20.0))
-	_rot("LUpperArm", Vector3(-20.0, 0, -25.0))
-	_rot("Chest", Vector3(-8.0, 12.0, 0))
-	_rot("Head", Vector3(-5.0, sin(phase * 0.5) * 10.0, 0))
+	match fighter_id:
+		"rook-ironside":
+			_rot("RUpperArm", Vector3(-90.0, 0, 10.0))
+			_rot("LUpperArm", Vector3(-90.0, 0, -10.0))
+			_rot("Chest", Vector3(-4.0, 0, 0))
+		"juno-spark":
+			_rot("RUpperArm", Vector3(-160.0 + sin(phase * 2.0) * 12.0, 0, 30.0))
+			_rot("LUpperArm", Vector3(-40.0, 0, -35.0))
+			_rot("Torso", Vector3(0, sin(phase) * 20.0, 0))
+		"kaia-windrow":
+			_rot("RUpperArm", Vector3(-150.0, 0, 35.0))
+			_rot("LUpperArm", Vector3(-150.0, 0, -35.0))
+			_rot("Chest", Vector3(-12.0, 0, 0))
+		"nix-calder":
+			_rot("RUpperArm", Vector3(-50.0, 0, 8.0))
+			_rot("Head", Vector3(-8.0, 6.0, 0))
+			_rot("Chest", Vector3(-2.0, 0, 0))
+		"orion-vell":
+			_rot("RUpperArm", Vector3(-120.0, 20.0, 15.0))
+			_rot("LUpperArm", Vector3(-80.0, -20.0, -15.0))
+			_rot("Head", Vector3(-10.0, sin(phase * 0.3) * 8.0, 0))
+		"vesper-nyx":
+			_rot("RUpperArm", Vector3(-70.0, 0, 40.0))
+			_rot("LUpperArm", Vector3(-110.0 + sin(phase) * 6.0, 0, -20.0))
+			_rot("Torso", Vector3(8.0, -18.0, 0))
+			_rot("Head", Vector3(5.0, 15.0, 0))
+		_:
+			_rot("RUpperArm", Vector3(-140.0 + sin(phase) * 8.0, 0, 20.0))
+			_rot("LUpperArm", Vector3(-20.0, 0, -25.0))
+			_rot("Chest", Vector3(-8.0, 12.0, 0))
+			_rot("Head", Vector3(-5.0, sin(phase * 0.5) * 10.0, 0))
 
 
 func _pose_defeat() -> void:

@@ -315,6 +315,21 @@ func set_expression(state: String) -> void:
 		_stylized.set_expression(state)
 
 
+## Wave019 move-list preview: play the same clip family used by gameplay mapping.
+func play_clip(clip_name: String) -> void:
+	_play_clip(clip_name)
+
+
+func animate_preview(clip_name: String, t: float) -> void:
+	_style_clip = clip_name
+	_style_anim_t = t
+	if _stylized != null and _stylized.has_method("animate_pose"):
+		# Prefer stylized pose for authentic preview identity even if GLB is primary.
+		if not _stylized.visible:
+			_stylized.visible = true
+		_stylized.animate_pose(clip_name, t)
+
+
 func play_for_state(state: String, move: Dictionary = {}) -> void:
 	if not _loaded:
 		return

@@ -1,0 +1,401 @@
+--------- beginning of main
+08-25 15:36:24.619  2357  3072 D libnfc_nci: nfaConnectionCallback: NFA_ACTIVATED_EVT: gIsSelectingRfInterface=0, sIsDisabling=0
+08-25 15:36:24.619  2357  3072 D libnfc_nci: updateNfcID0Param: nfcID0 =0000
+08-25 15:36:24.619  2357  3072 D libnfc_nci: NfcTag::setActivationState: state=2
+08-25 15:36:24.619  2357  3072 D libnfc_nci: notifyTagDiscovered: discovered=1
+08-25 15:36:24.620  2357  3072 D NfcService: onTagRfDiscovered: true
+08-25 15:36:24.620  2357  3072 D libnfc_nci: NfcTag::discoverTechnologies (activation): enter
+08-25 15:36:24.620  2357  3072 D libnfc_nci: NfcTag::discoverTechnologies (activation): index=0; tech=0x1; handle=1; nfc type=0x2
+08-25 15:36:24.620  2357  3072 D libnfc_nci: NfcTag::discoverTechnologies (activation): index=1; tech=0x9; handle=1; nfc type=0x2
+08-25 15:36:24.620  2357  3072 D libnfc_nci: NfcStatsUtil::logNfcTagType: protocol 2, mode 0
+08-25 15:36:24.620  2357  3072 D libnfc_nci: NfcStatsUtil::writeNfcStatsTagTypeOccurred: tagType=2
+08-25 15:36:24.620  2357  3072 D libnfc_nci: NfcTag::discoverTechnologies (activation): exit
+08-25 15:36:24.620  2357  3072 D libnfc_nci: NfcTag::createNativeNfcTag: enter
+08-25 15:36:24.620  2357  3072 D libnfc_nci: NfcTag::fillNativeNfcTagMembers1
+08-25 15:36:24.621  2357  3072 D libnfc_nci: NfcTag::fillNativeNfcTagMembers2
+08-25 15:36:24.621  2357  3072 D libnfc_nci: NfcTag::fillNativeNfcTagMembers3: index=0; rf tech params mode=0
+08-25 15:36:24.621  2357  3072 D libnfc_nci: NfcTag::fillNativeNfcTagMembers3: tech A
+08-25 15:36:24.621  2357  3072 D libnfc_nci: NfcTag::fillNativeNfcTagMembers3: index=1; rf tech params mode=0
+08-25 15:36:24.621  2357  3072 D libnfc_nci: NfcTag::fillNativeNfcTagMembers3: tech A
+08-25 15:36:24.621  2357  3072 D libnfc_nci: NfcTag::fillNativeNfcTagMembers4: index=0
+08-25 15:36:24.621  2357  3072 D libnfc_nci: NfcTag::fillNativeNfcTagMembers4: T2T; tech A
+08-25 15:36:24.621  2357  3072 D libnfc_nci: NfcTag::fillNativeNfcTagMembers4: index=1
+08-25 15:36:24.621  2357  3072 D libnfc_nci: NfcTag::fillNativeNfcTagMembers4: T2T; tech A
+08-25 15:36:24.621  2357  3072 D libnfc_nci: NfcTag::fillNativeNfcTagMembers5: tech A
+08-25 15:36:24.621  2357  3072 D libnfc_nci: NfcTag::fillNativeNfcTagMembers5: mTechListTail=0
+08-25 15:36:24.621  2357  3072 D libnfc_nci: NfcTag::createNativeNfcTag:  mNumDiscNtf=0
+08-25 15:36:24.621  2357  3072 D libnfc_nci: NfcTag::createNativeNfcTag: try notify nfc service
+08-25 15:36:24.621  2357  3072 D NfcService: onRemoteEndpointDiscovered
+08-25 15:36:24.621  2357  2357 D NfcService: Tag detected, notifying applications
+08-25 15:36:24.621  2357  2357 D NfcHostEmulationManager: onTagDiscovered: Cancelling observe mode monitor.
+08-25 15:36:24.621  2357  2357 D NativeNfcTag: connectWithIdx: idx: 0
+08-25 15:36:24.621  2357  2357 D libnfc_nci: nativeNfcTag_doConnect: targetIdx = 0, force=0
+08-25 15:36:24.621  2357  2357 D libnfc_nci: nativeNfcTag_doConnect: Nfc type = 0x2, do nothing for non ISO_DEP and non Mifare 
+08-25 15:36:24.621  2357  2357 D libnfc_nci: nativeNfcTag_doConnect: exit 0x0
+08-25 15:36:24.621  2357  2357 D libnfc_nci: nativeNfcTag_doIsIsoDepNdefFormatable
+08-25 15:36:24.621  2357  2357 D libnfc_nci: NfcTag::isMifareUltralight: return=1
+08-25 15:36:24.621  2357  2357 D libnfc_nci: nativeNfcTag_doIsNdefFormatable: is formattable=1
+08-25 15:36:24.621  2357  2357 D libnfc_nci: nativeNfcTag_doCheckNdef: enter
+08-25 15:36:24.621  2357  2357 D libnfc_nci: nativeNfcTag_doCheckNdef: try NFA_RwDetectNDef
+08-25 15:36:24.621  2357  2357 D libnfc_nci: nativeNfcTag_doCheckNdef: wait for check NDEF completion
+08-25 15:36:24.621  2357  3072 D libnfc_nci: deleteglobaldata: enter
+08-25 15:36:24.621  2357  3072 D libnfc_nci: deleteglobaldata: exit
+08-25 15:36:24.621  2357  3072 D libnfc_nci: NfcTag::createNativeNfcTag: exit
+08-25 15:36:24.630  2357  3072 W libnfc_nci: rw_t2t_handle_rsp: NDEF Detection failed!, CC[0]=0x00, CC[1]=0x00, CC[3]: 0x00
+08-25 15:36:24.630  2357  3072 D libnfc_nci: nfaConnectionCallback: NFA_NDEF_DETECT_EVT: status = 0x3, protocol = 2, max_size = 46, cur_size = 0, flags = 0x34
+08-25 15:36:24.630  2357  3072 D libnfc_nci: nativeNfcTag_doCheckNdefResult: flag ndef supported
+08-25 15:36:24.630  2357  3072 D libnfc_nci: nativeNfcTag_doCheckNdefResult: flag formattable
+08-25 15:36:24.630  2357  3072 D libnfc_nci: nativeNfcTag_doCheckNdefResult: exit
+08-25 15:36:24.630  2357  2357 D libnfc_nci: nativeNfcTag_doCheckNdef: exit; status=0x3
+08-25 15:36:24.630  2357  2357 D NativeNfcTag: findAndReadNdef: Check NDEF Failed, status = 3
+08-25 15:36:24.630  2357  2357 D NativeNfcTag: connectWithIdx: idx: 1
+08-25 15:36:24.630  2357  2357 D libnfc_nci: nativeNfcTag_doConnect: targetIdx = 1, force=0
+08-25 15:36:24.630  2357  2357 D libnfc_nci: nativeNfcTag_doConnect: Nfc type = 0x2, do nothing for non ISO_DEP and non Mifare 
+08-25 15:36:24.630  2357  2357 D libnfc_nci: nativeNfcTag_doConnect: exit 0x0
+08-25 15:36:24.631  2357  2357 D libnfc_nci: nativeNfcTag_doCheckNdef: enter
+08-25 15:36:24.631  2357  2357 D libnfc_nci: nativeNfcTag_doCheckNdef: try NFA_RwDetectNDef
+08-25 15:36:24.631  2357  2357 D libnfc_nci: nativeNfcTag_doCheckNdef: wait for check NDEF completion
+08-25 15:36:24.631  2357  3072 W libnfc_nci: RW_T2tLocateTlv: Invalid NDEF Magic Number!, CC[0]=0x00, CC[1]=0x00, CC[3]=0x00
+08-25 15:36:24.631  2357  3072 D libnfc_nci: nfaConnectionCallback: NFA_NDEF_DETECT_EVT: status = 0x3, protocol = 0, max_size = 0, cur_size = 0, flags = 0x8
+08-25 15:36:24.631  2357  3072 D libnfc_nci: nativeNfcTag_doCheckNdefResult: flag all unknown
+08-25 15:36:24.631  2357  3072 D libnfc_nci: nativeNfcTag_doCheckNdefResult: exit
+08-25 15:36:24.631  2357  2357 D libnfc_nci: nativeNfcTag_doCheckNdef: exit; status=0x3
+08-25 15:36:24.631  2357  2357 D NativeNfcTag: findAndReadNdef: Check NDEF Failed, status = 3
+08-25 15:36:24.631  2357  2357 D NativeNfcTag: reconnect
+08-25 15:36:24.631  2357  2357 D libnfc_nci: nativeNfcTag_doReconnect(enter): sCurrentConnectedTargetIdx=0x1
+08-25 15:36:24.631  2357  2357 D libnfc_nci: reSelect: enter; rf intf = 0x1, current intf = 0x1
+08-25 15:36:24.631  2357  2357 D libnfc_nci: nativeNfcTag_doReconnect(exit): sCurrentConnectedTargetIdx=0x0, retCode=0x0
+08-25 15:36:24.632  2357  2357 D libnfc_nci: nativeNfcTag_doTransceive: enter; raw=0; timeout = 618
+08-25 15:36:24.632  2357 10016 D NativeNfcTag: Starting background presence check
+08-25 15:36:24.638  2357  3072 D libnfc_nci: nfaConnectionCallback: NFA_DATA_EVT: status = 0x0, len = 16
+08-25 15:36:24.638  2357  3072 D libnfc_nci: nativeNfcTag_doTransceiveStatus: data len=16
+08-25 15:36:24.638  2357  2357 D libnfc_nci: nativeNfcTag_doTransceive: response 16 bytes
+08-25 15:36:24.638  2357  2357 D libnfc_nci: NfcTag::isT2tNackResponse: return 0
+08-25 15:36:24.638  2357  2357 D libnfc_nci: nativeNfcTag_doTransceive: exit
+08-25 15:36:24.639  2357  2357 D NfcDispatcher: dispatchTag
+08-25 15:36:24.639  2357  2357 D NfcDispatcher: dispatchTag: TAG: Tech [android.nfc.tech.NfcA, android.nfc.tech.MifareUltralight, android.nfc.tech.NdefFormatable] message: null
+08-25 15:36:24.641  2357  2357 D NfcDispatcher: tryStartActivity: activities.size() = 0
+08-25 15:36:24.642  2357  2357 I NfcDispatcher: dispatchTag: no match
+08-25 15:36:24.642  2357  2357 D NfcService: isEndPointRemovalDetectionSupported: not supported
+08-25 15:36:24.642  2357  2357 D NfcService: dispatchTagEndpoint: Tag dispatch failed
+08-25 15:36:24.642  2357  2357 D libnfc_nci: startStopPolling: enter; isStart=0
+08-25 15:36:24.645  2357  3072 D libnfc_nci: nfaDeviceManagementCallback: enter; event=0x2
+08-25 15:36:24.645  2357  3072 D libnfc_nci: nfaDeviceManagementCallback: NFA_DM_SET_CONFIG_EVT
+08-25 15:36:24.645  2357  2357 D libnfc_nci: startStopPolling: exit
+08-25 15:36:24.645  2357  2357 D NfcService: pollingDelay: delay 10000
+08-25 15:36:24.645  2357  2357 D NfcService: isEndPointRemovalDetectionSupported: not supported
+08-25 15:36:24.645  2357 10016 D NativeNfcTag: Tag lost, restarting polling loop
+08-25 15:36:24.645  2357 10016 D libnfc_nci: nativeNfcTag_doDisconnect: enter
+08-25 15:36:24.647  2357  3072 D libnfc_nci: nfaConnectionCallback: NFA_DEACTIVATED_EVT   Type=3, gIsTagDeactivating=0, gIsSelectingRfInterface=0
+08-25 15:36:24.648  2357  3072 D libnfc_nci: NfcTag::setDeactivationState: state=0
+08-25 15:36:24.648  2357  3072 D libnfc_nci: NfcTag::resetTechnologies
+08-25 15:36:24.648  2357 10016 D libnfc_nci: nativeNfcTag_doDisconnect: exit
+08-25 15:36:24.648  2357 10016 D NativeNfcTag: Stopping background presence check
+08-25 15:36:24.648  2357  3072 D libnfc_nci: notifyTagDiscovered: discovered=0
+08-25 15:36:24.648  2357  3072 D NfcService: onTagRfDiscovered: false
+08-25 15:36:24.648  2357  3072 D libnfc_nci: nativeNfcTag_abortWaits
+08-25 15:36:24.702  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:24.776  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:24.855  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:24.930  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 300 1600'
+08-25 15:36:24.955  1155  1158 I WPKTRT  : process_address_event: 2601:243:e103:fa90:5c8f:ffff:fee2:91ed added to wlan0
+08-25 15:36:24.955  1155  1158 I WPKTRT  : process_address_event: 2601:243:e103:fa90:af4e:6876:1c9b:6eb8 added to wlan0
+08-25 15:36:24.962  1018  1111 I WifiHAL : Creating message to get link statistics; iface = 47
+08-25 15:36:24.963  2217 22833 D IpClient/wlan0: addressUpdated: 2601:243:e103:fa90:5c8f:ffff:fee2:91ed/64 on ifindex 47 flags 0x00000100 scope 0
+08-25 15:36:24.963  2217 22833 D IpClient/wlan0: addressUpdated: 2601:243:e103:fa90:af4e:6876:1c9b:6eb8/64 on ifindex 47 flags 0x00000001 scope 0
+08-25 15:36:24.963  2217 22833 W AlarmManager: Unrecognized alarm listener com.android.networkstack.android.net.ip.IpClientLinkObserver$Dhcp6PdPreferredPrefixAlarmListener@d60979
+08-25 15:36:24.964  2217 22833 D ApfFilter: (wlan0): Ignoring RA RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e103:fa90::/64 5949s/5949s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0  which matches RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e103:fa90::/64 5949s/5949s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0 
+08-25 15:36:25.043  1018  1111 D WifiHAL : Start debug command: mType GET_FEATURE
+08-25 15:36:25.043  1018  1111 I WifiHAL : CreateRequest mType = GET_FEATURE
+08-25 15:36:25.043  1018  1111 D WifiHAL : In DebugCommand::handleResponse, mType:GET_FEATURE
+08-25 15:36:25.043  1018  1111 D WifiHAL : len = 4, expected len = 4
+08-25 15:36:25.449  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 800 1600'
+08-25 15:36:25.945  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:26.079  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:26.154  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:26.267  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:26.342  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 300 1600'
+08-25 15:36:26.852  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 800 1600'
+08-25 15:36:27.338  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:27.463  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:27.525  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:27.619  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:27.691  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 300 1600'
+08-25 15:36:27.823  1155  1158 I WPKTRT  : process_address_event: 2601:243:e103:fa90:5c8f:ffff:fee2:91ed added to wlan0
+08-25 15:36:27.823  1155  1158 I WPKTRT  : process_address_event: 2601:243:e103:fa90:af4e:6876:1c9b:6eb8 added to wlan0
+08-25 15:36:27.830  2217 22833 D IpClient/wlan0: addressUpdated: 2601:243:e103:fa90:5c8f:ffff:fee2:91ed/64 on ifindex 47 flags 0x00000100 scope 0
+08-25 15:36:27.830  2217 22833 D IpClient/wlan0: addressUpdated: 2601:243:e103:fa90:af4e:6876:1c9b:6eb8/64 on ifindex 47 flags 0x00000001 scope 0
+08-25 15:36:27.830  2217 22833 W AlarmManager: Unrecognized alarm listener com.android.networkstack.android.net.ip.IpClientLinkObserver$Dhcp6PdPreferredPrefixAlarmListener@d60979
+08-25 15:36:27.830  2217 22833 D ApfFilter: (wlan0): Ignoring RA RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e103:fa90::/64 5949s/5949s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0  which matches RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e103:fa90::/64 5949s/5949s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0 
+08-25 15:36:28.051  1018  1111 I WifiHAL : Creating message to get link statistics; iface = 47
+08-25 15:36:28.181  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 800 1600'
+08-25 15:36:28.198  1018  1111 D WifiHAL : Start debug command: mType GET_FEATURE
+08-25 15:36:28.198  1018  1111 I WifiHAL : CreateRequest mType = GET_FEATURE
+08-25 15:36:28.198  1018  1111 D WifiHAL : In DebugCommand::handleResponse, mType:GET_FEATURE
+08-25 15:36:28.198  1018  1111 D WifiHAL : len = 4, expected len = 4
+08-25 15:36:28.667  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:28.781  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:28.847  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:28.935  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:28.967  1513  1696 I system_server: Background young concurrent mark compact GC freed 35MB AllocSpace bytes, 26(520KB) LOS objects, 85% free, 72MB/512MB, paused 1.216ms,8.111ms total 73.280ms
+08-25 15:36:28.990  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 300 1600'
+08-25 15:36:29.207  2233  2513 D TemperatureStateSource: sequence=11979 actualDelay=10002
+08-25 15:36:29.207  2233  2513 D TemperatureStateSource: Reading temperature: sequence=11980
+08-25 15:36:29.212  1734  1734 I pixel-thermal: VIRTUAL-SKIN:31.8435 raw data: VIRTUAL-NEUTRAL:31754.3 VIRTUAL-NEUTRAL-SKIN2:31843.5 VIRTUAL-QUIET-NEUTRAL:31149 VIRTUAL-SKIN:31843.5 disp_therm:30882 gnss_tcxo_therm:31794 neutral_therm:31149 quiet_therm:31149 skin_therm1:31928 skin_therm2:33464 
+08-25 15:36:29.213  2233  2513 D TemperatureStateSource: getDeviceTemperatures: sequence=11980 deviceTemperatureType=3 temperatureSource=0 temperatures=[31.843502]
+08-25 15:36:29.215  2233  2513 D TemperatureStateSource: sequence=11980 waitTime=10000
+08-25 15:36:29.216  1734  1734 I pixel-thermal: VIRTUAL-SKIN:31.8435 raw data: VIRTUAL-SKIN:31843.5 
+08-25 15:36:29.216  2233  2389 I TemperatureStateSource: temperature was set
+08-25 15:36:29.216  2233  2389 D ImpulseStateSource: Notify clients: 12140
+08-25 15:36:29.487  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 800 1600'
+08-25 15:36:29.983  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:29.989  1734  1751 I pixel-thermal: VIRTUAL-SKIN:31.8435 raw data: VIRTUAL-SKIN:31843.5 
+08-25 15:36:29.989  1734  1751 I pixel-thermal: VIRTUAL-SKIN-CPU-GPU:31.8435 raw data: VIRTUAL-SKIN:31843.5 VIRTUAL-SKIN-CPU-GPU:31843.5 
+08-25 15:36:29.990  1734  1751 I pixel-thermal: VIRTUAL-SKIN-HINT:31.8435 raw data: VIRTUAL-SKIN:31843.5 VIRTUAL-SKIN-HINT:31843.5 
+08-25 15:36:29.990  1734  1751 I pixel-thermal: VIRTUAL-SKIN-CHARGE:31.8435 raw data: VIRTUAL-SKIN:31843.5 VIRTUAL-SKIN-CHARGE:31843.5 
+08-25 15:36:30.113  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:30.185  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:30.272  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:30.339  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 300 1600'
+08-25 15:36:30.691  1155  1158 I WPKTRT  : process_address_event: 2601:243:e103:fa90:5c8f:ffff:fee2:91ed added to wlan0
+08-25 15:36:30.691  1155  1158 I WPKTRT  : process_address_event: 2601:243:e103:fa90:af4e:6876:1c9b:6eb8 added to wlan0
+08-25 15:36:30.697  2217 22833 D IpClient/wlan0: addressUpdated: 2601:243:e103:fa90:5c8f:ffff:fee2:91ed/64 on ifindex 47 flags 0x00000100 scope 0
+08-25 15:36:30.697  2217 22833 D IpClient/wlan0: addressUpdated: 2601:243:e103:fa90:af4e:6876:1c9b:6eb8/64 on ifindex 47 flags 0x00000001 scope 0
+08-25 15:36:30.697  2217 22833 W AlarmManager: Unrecognized alarm listener com.android.networkstack.android.net.ip.IpClientLinkObserver$Dhcp6PdPreferredPrefixAlarmListener@d60979
+08-25 15:36:30.698  2217 22833 D ApfFilter: (wlan0): Ignoring RA RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e103:fa90::/64 5949s/5949s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0  which matches RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e103:fa90::/64 5949s/5949s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0 
+08-25 15:36:30.842  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 800 1600'
+08-25 15:36:31.210  1018  1018 I WifiHAL : Creating message to get link statistics; iface = 47
+08-25 15:36:31.346  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:31.349  1018  1018 D WifiHAL : Start debug command: mType GET_FEATURE
+08-25 15:36:31.349  1018  1018 I WifiHAL : CreateRequest mType = GET_FEATURE
+08-25 15:36:31.350  1018  1018 D WifiHAL : In DebugCommand::handleResponse, mType:GET_FEATURE
+08-25 15:36:31.350  1018  1018 D WifiHAL : len = 4, expected len = 4
+08-25 15:36:31.449  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:31.520  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:31.602  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:31.678  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 300 1600'
+08-25 15:36:32.182  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 800 1600'
+08-25 15:36:32.673  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:32.783  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:32.847  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:32.931  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:32.985  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 300 1600'
+08-25 15:36:33.486  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 800 1600'
+08-25 15:36:33.968  1155  1158 I WPKTRT  : process_address_event: 2601:243:e103:fa90:5c8f:ffff:fee2:91ed added to wlan0
+08-25 15:36:33.968  1155  1158 I WPKTRT  : process_address_event: 2601:243:e103:fa90:af4e:6876:1c9b:6eb8 added to wlan0
+08-25 15:36:33.971  2217 22833 D IpClient/wlan0: addressUpdated: 2601:243:e103:fa90:5c8f:ffff:fee2:91ed/64 on ifindex 47 flags 0x00000100 scope 0
+08-25 15:36:33.971  2217 22833 D IpClient/wlan0: addressUpdated: 2601:243:e103:fa90:af4e:6876:1c9b:6eb8/64 on ifindex 47 flags 0x00000001 scope 0
+08-25 15:36:33.971  2217 22833 W AlarmManager: Unrecognized alarm listener com.android.networkstack.android.net.ip.IpClientLinkObserver$Dhcp6PdPreferredPrefixAlarmListener@d60979
+08-25 15:36:33.971  2217 22833 D ApfFilter: (wlan0): Ignoring RA RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e103:fa90::/64 5949s/5949s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0  which matches RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e103:fa90::/64 5949s/5949s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0 
+08-25 15:36:33.983  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:34.095  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:34.164  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:34.238  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:34.310  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 300 1600'
+08-25 15:36:34.357  1018  1111 I WifiHAL : Creating message to get link statistics; iface = 47
+08-25 15:36:34.453  1018  1111 D WifiHAL : Start debug command: mType GET_FEATURE
+08-25 15:36:34.453  1018  1111 I WifiHAL : CreateRequest mType = GET_FEATURE
+08-25 15:36:34.453  1018  1111 D WifiHAL : In DebugCommand::handleResponse, mType:GET_FEATURE
+08-25 15:36:34.453  1018  1111 D WifiHAL : len = 4, expected len = 4
+08-25 15:36:34.656  2357  2357 D NfcService: handleMessage: MSG_DELAY_POLLING
+08-25 15:36:34.657  2357  2357 D libnfc_nci: startStopPolling: enter; isStart=1
+08-25 15:36:34.668  2357  3072 D libnfc_nci: nfaDeviceManagementCallback: enter; event=0x2
+08-25 15:36:34.668  2357  3072 D libnfc_nci: nfaDeviceManagementCallback: NFA_DM_SET_CONFIG_EVT
+08-25 15:36:34.669  2357  2357 D libnfc_nci: startStopPolling: exit
+08-25 15:36:34.669  2357  2357 D NfcService: handleMessage: Polling is started
+08-25 15:36:34.753  2357  3072 D libnfc_nci: nfaConnectionCallback: NFA_ACTIVATED_EVT: gIsSelectingRfInterface=0, sIsDisabling=0
+08-25 15:36:34.754  2357  3072 D libnfc_nci: updateNfcID0Param: nfcID0 =0000
+08-25 15:36:34.754  2357  3072 D libnfc_nci: NfcTag::setActivationState: state=2
+08-25 15:36:34.755  2357  3072 D libnfc_nci: notifyTagDiscovered: discovered=1
+08-25 15:36:34.755  2357  3072 D NfcService: onTagRfDiscovered: true
+08-25 15:36:34.756  2357  3072 D libnfc_nci: NfcTag::discoverTechnologies (activation): enter
+08-25 15:36:34.756  2357  3072 D libnfc_nci: NfcTag::discoverTechnologies (activation): index=0; tech=0x1; handle=1; nfc type=0x2
+08-25 15:36:34.756  2357  3072 D libnfc_nci: NfcTag::discoverTechnologies (activation): index=1; tech=0x9; handle=1; nfc type=0x2
+08-25 15:36:34.756  2357  3072 D libnfc_nci: NfcStatsUtil::logNfcTagType: protocol 2, mode 0
+08-25 15:36:34.756  2357  3072 D libnfc_nci: NfcStatsUtil::writeNfcStatsTagTypeOccurred: tagType=2
+08-25 15:36:34.757  2357  3072 D libnfc_nci: NfcTag::discoverTechnologies (activation): exit
+08-25 15:36:34.757  2357  3072 D libnfc_nci: NfcTag::createNativeNfcTag: enter
+08-25 15:36:34.757  2357  3072 D libnfc_nci: NfcTag::fillNativeNfcTagMembers1
+08-25 15:36:34.757  2357  3072 D libnfc_nci: NfcTag::fillNativeNfcTagMembers2
+08-25 15:36:34.758  2357  3072 D libnfc_nci: NfcTag::fillNativeNfcTagMembers3: index=0; rf tech params mode=0
+08-25 15:36:34.758  2357  3072 D libnfc_nci: NfcTag::fillNativeNfcTagMembers3: tech A
+08-25 15:36:34.758  2357  3072 D libnfc_nci: NfcTag::fillNativeNfcTagMembers3: index=1; rf tech params mode=0
+08-25 15:36:34.758  2357  3072 D libnfc_nci: NfcTag::fillNativeNfcTagMembers3: tech A
+08-25 15:36:34.758  2357  3072 D libnfc_nci: NfcTag::fillNativeNfcTagMembers4: index=0
+08-25 15:36:34.758  2357  3072 D libnfc_nci: NfcTag::fillNativeNfcTagMembers4: T2T; tech A
+08-25 15:36:34.758  2357  3072 D libnfc_nci: NfcTag::fillNativeNfcTagMembers4: index=1
+08-25 15:36:34.758  2357  3072 D libnfc_nci: NfcTag::fillNativeNfcTagMembers4: T2T; tech A
+08-25 15:36:34.758  2357  3072 D libnfc_nci: NfcTag::fillNativeNfcTagMembers5: tech A
+08-25 15:36:34.758  2357  3072 D libnfc_nci: NfcTag::fillNativeNfcTagMembers5: mTechListTail=0
+08-25 15:36:34.758  2357  3072 D libnfc_nci: NfcTag::createNativeNfcTag:  mNumDiscNtf=0
+08-25 15:36:34.758  2357  3072 D libnfc_nci: NfcTag::createNativeNfcTag: try notify nfc service
+08-25 15:36:34.758  2357  3072 D NfcService: onRemoteEndpointDiscovered
+08-25 15:36:34.759  2357  3072 D libnfc_nci: deleteglobaldata: enter
+08-25 15:36:34.759  2357  3072 D libnfc_nci: deleteglobaldata: exit
+08-25 15:36:34.759  2357  3072 D libnfc_nci: NfcTag::createNativeNfcTag: exit
+08-25 15:36:34.759  2357  2357 D NfcService: Tag detected, notifying applications
+08-25 15:36:34.759  2357  2357 D NfcHostEmulationManager: onTagDiscovered: Cancelling observe mode monitor.
+08-25 15:36:34.760  2357  2357 D NativeNfcTag: connectWithIdx: idx: 0
+08-25 15:36:34.760  2357  2357 D libnfc_nci: nativeNfcTag_doConnect: targetIdx = 0, force=0
+08-25 15:36:34.760  2357  2357 D libnfc_nci: nativeNfcTag_doConnect: Nfc type = 0x2, do nothing for non ISO_DEP and non Mifare 
+08-25 15:36:34.760  2357  2357 D libnfc_nci: nativeNfcTag_doConnect: exit 0x0
+08-25 15:36:34.760  2357  2357 D libnfc_nci: nativeNfcTag_doIsIsoDepNdefFormatable
+08-25 15:36:34.760  2357  2357 D libnfc_nci: NfcTag::isMifareUltralight: return=1
+08-25 15:36:34.760  2357  2357 D libnfc_nci: nativeNfcTag_doIsNdefFormatable: is formattable=1
+08-25 15:36:34.760  2357  2357 D libnfc_nci: nativeNfcTag_doCheckNdef: enter
+08-25 15:36:34.760  2357  2357 D libnfc_nci: nativeNfcTag_doCheckNdef: try NFA_RwDetectNDef
+08-25 15:36:34.761  2357  2357 D libnfc_nci: nativeNfcTag_doCheckNdef: wait for check NDEF completion
+08-25 15:36:34.769  2357  3072 W libnfc_nci: rw_t2t_handle_rsp: NDEF Detection failed!, CC[0]=0x00, CC[1]=0x00, CC[3]: 0x00
+08-25 15:36:34.769  2357  3072 D libnfc_nci: nfaConnectionCallback: NFA_NDEF_DETECT_EVT: status = 0x3, protocol = 2, max_size = 46, cur_size = 0, flags = 0x34
+08-25 15:36:34.769  2357  3072 D libnfc_nci: nativeNfcTag_doCheckNdefResult: flag ndef supported
+08-25 15:36:34.769  2357  3072 D libnfc_nci: nativeNfcTag_doCheckNdefResult: flag formattable
+08-25 15:36:34.770  2357  3072 D libnfc_nci: nativeNfcTag_doCheckNdefResult: exit
+08-25 15:36:34.770  2357  2357 D libnfc_nci: nativeNfcTag_doCheckNdef: exit; status=0x3
+08-25 15:36:34.770  2357  2357 D NativeNfcTag: findAndReadNdef: Check NDEF Failed, status = 3
+08-25 15:36:34.770  2357  2357 D NativeNfcTag: connectWithIdx: idx: 1
+08-25 15:36:34.770  2357  2357 D libnfc_nci: nativeNfcTag_doConnect: targetIdx = 1, force=0
+08-25 15:36:34.770  2357  2357 D libnfc_nci: nativeNfcTag_doConnect: Nfc type = 0x2, do nothing for non ISO_DEP and non Mifare 
+08-25 15:36:34.770  2357  2357 D libnfc_nci: nativeNfcTag_doConnect: exit 0x0
+08-25 15:36:34.771  2357  2357 D libnfc_nci: nativeNfcTag_doCheckNdef: enter
+08-25 15:36:34.771  2357  2357 D libnfc_nci: nativeNfcTag_doCheckNdef: try NFA_RwDetectNDef
+08-25 15:36:34.771  2357  2357 D libnfc_nci: nativeNfcTag_doCheckNdef: wait for check NDEF completion
+08-25 15:36:34.771  2357  3072 W libnfc_nci: RW_T2tLocateTlv: Invalid NDEF Magic Number!, CC[0]=0x00, CC[1]=0x00, CC[3]=0x00
+08-25 15:36:34.771  2357  3072 D libnfc_nci: nfaConnectionCallback: NFA_NDEF_DETECT_EVT: status = 0x3, protocol = 0, max_size = 0, cur_size = 0, flags = 0x8
+08-25 15:36:34.771  2357  3072 D libnfc_nci: nativeNfcTag_doCheckNdefResult: flag all unknown
+08-25 15:36:34.771  2357  3072 D libnfc_nci: nativeNfcTag_doCheckNdefResult: exit
+08-25 15:36:34.772  2357  2357 D libnfc_nci: nativeNfcTag_doCheckNdef: exit; status=0x3
+08-25 15:36:34.772  2357  2357 D NativeNfcTag: findAndReadNdef: Check NDEF Failed, status = 3
+08-25 15:36:34.772  2357  2357 D NativeNfcTag: reconnect
+08-25 15:36:34.772  2357  2357 D libnfc_nci: nativeNfcTag_doReconnect(enter): sCurrentConnectedTargetIdx=0x1
+08-25 15:36:34.772  2357  2357 D libnfc_nci: reSelect: enter; rf intf = 0x1, current intf = 0x1
+08-25 15:36:34.772  2357  2357 D libnfc_nci: nativeNfcTag_doReconnect(exit): sCurrentConnectedTargetIdx=0x0, retCode=0x0
+08-25 15:36:34.774  2357  2357 D libnfc_nci: nativeNfcTag_doTransceive: enter; raw=0; timeout = 618
+08-25 15:36:34.775  2357 10284 D NativeNfcTag: Starting background presence check
+08-25 15:36:34.779  2357  3072 D libnfc_nci: nfaConnectionCallback: NFA_DATA_EVT: status = 0x0, len = 16
+08-25 15:36:34.779  2357  3072 D libnfc_nci: nativeNfcTag_doTransceiveStatus: data len=16
+08-25 15:36:34.779  2357  2357 D libnfc_nci: nativeNfcTag_doTransceive: response 16 bytes
+08-25 15:36:34.779  2357  2357 D libnfc_nci: NfcTag::isT2tNackResponse: return 0
+08-25 15:36:34.779  2357  2357 D libnfc_nci: nativeNfcTag_doTransceive: exit
+08-25 15:36:34.779  2357  2357 D NfcDispatcher: dispatchTag
+08-25 15:36:34.781  2357  2357 D NfcDispatcher: dispatchTag: TAG: Tech [android.nfc.tech.NfcA, android.nfc.tech.MifareUltralight, android.nfc.tech.NdefFormatable] message: null
+08-25 15:36:34.783  2357  2357 D NfcDispatcher: tryStartActivity: activities.size() = 0
+08-25 15:36:34.784  2357  2357 I NfcDispatcher: dispatchTag: no match
+08-25 15:36:34.784  2357  2357 D NfcService: isEndPointRemovalDetectionSupported: not supported
+08-25 15:36:34.784  2357  2357 D NfcService: dispatchTagEndpoint: Tag dispatch failed
+08-25 15:36:34.784  2357  2357 D libnfc_nci: startStopPolling: enter; isStart=0
+08-25 15:36:34.787  2357  3072 D libnfc_nci: nfaDeviceManagementCallback: enter; event=0x2
+08-25 15:36:34.787  2357  3072 D libnfc_nci: nfaDeviceManagementCallback: NFA_DM_SET_CONFIG_EVT
+08-25 15:36:34.787  2357  2357 D libnfc_nci: startStopPolling: exit
+08-25 15:36:34.787  2357  2357 D NfcService: pollingDelay: delay 10000
+08-25 15:36:34.787  2357  2357 D NfcService: isEndPointRemovalDetectionSupported: not supported
+08-25 15:36:34.788  2357 10284 D NativeNfcTag: Tag lost, restarting polling loop
+08-25 15:36:34.788  2357 10284 D libnfc_nci: nativeNfcTag_doDisconnect: enter
+08-25 15:36:34.790  2357  3072 D libnfc_nci: nfaConnectionCallback: NFA_DEACTIVATED_EVT   Type=3, gIsTagDeactivating=0, gIsSelectingRfInterface=0
+08-25 15:36:34.791  2357  3072 D libnfc_nci: NfcTag::setDeactivationState: state=0
+08-25 15:36:34.791  2357  3072 D libnfc_nci: NfcTag::resetTechnologies
+08-25 15:36:34.791  2357 10284 D libnfc_nci: nativeNfcTag_doDisconnect: exit
+08-25 15:36:34.791  2357 10284 D NativeNfcTag: Stopping background presence check
+08-25 15:36:34.791  2357  3072 D libnfc_nci: notifyTagDiscovered: discovered=0
+08-25 15:36:34.791  2357  3072 D NfcService: onTagRfDiscovered: false
+08-25 15:36:34.791  2357  3072 D libnfc_nci: nativeNfcTag_abortWaits
+08-25 15:36:34.800  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 800 1600'
+08-25 15:36:35.281  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:35.387  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:35.450  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:35.542  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:35.614  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 300 1600'
+08-25 15:36:36.132  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 800 1600'
+08-25 15:36:36.620  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:36.726  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:36.794  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:36.834  1155  1158 I WPKTRT  : process_address_event: 2601:243:e103:fa90:5c8f:ffff:fee2:91ed added to wlan0
+08-25 15:36:36.834  1155  1158 I WPKTRT  : process_address_event: 2601:243:e103:fa90:af4e:6876:1c9b:6eb8 added to wlan0
+08-25 15:36:36.834  2217 22833 D IpClient/wlan0: addressUpdated: 2601:243:e103:fa90:5c8f:ffff:fee2:91ed/64 on ifindex 47 flags 0x00000100 scope 0
+08-25 15:36:36.834  2217 22833 D IpClient/wlan0: addressUpdated: 2601:243:e103:fa90:af4e:6876:1c9b:6eb8/64 on ifindex 47 flags 0x00000001 scope 0
+08-25 15:36:36.834  2217 22833 W AlarmManager: Unrecognized alarm listener com.android.networkstack.android.net.ip.IpClientLinkObserver$Dhcp6PdPreferredPrefixAlarmListener@d60979
+08-25 15:36:36.837  2217 22833 D ApfFilter: (wlan0): Adding RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e103:fa90::/64 5949s/5949s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0 
+08-25 15:36:36.838  1018  1018 E WifiHAL : Setting APF program, halHandle = 0xb400007b14807490
+08-25 15:36:36.838  1018  1018 E WifiHAL : Set apf filter for iface = wlan0
+08-25 15:36:36.838  1018  1018 I WifiHAL : createRequest: APF set program request
+08-25 15:36:36.838  1018  1018 I WifiHAL : mProgramLen : 678
+08-25 15:36:36.872  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:36.946  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 300 1600'
+08-25 15:36:36.989  1734  1751 I pixel-thermal: cellular-emergency:31.8654 raw data: VIRTUAL-NEUTRAL:31756.5 VIRTUAL-NEUTRAL-SKIN2:31865.4 VIRTUAL-QUIET-NEUTRAL:31166.3 VIRTUAL-SKIN:31865.4 cellular-emergency:31865.4 disp_therm:30882 gnss_tcxo_therm:31772 neutral_therm:31104 quiet_therm:31193 skin_therm1:31906 skin_therm2:33642 
+08-25 15:36:36.989  1734  1751 I pixel-thermal: VIRTUAL-SKIN-CPU:31.8654 raw data: VIRTUAL-SKIN:31865.4 VIRTUAL-SKIN-CPU:31865.4 
+08-25 15:36:37.449  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 800 1600'
+08-25 15:36:37.461  1018  1018 I WifiHAL : Creating message to get link statistics; iface = 47
+08-25 15:36:37.546  1018  1018 D WifiHAL : Start debug command: mType GET_FEATURE
+08-25 15:36:37.546  1018  1018 I WifiHAL : CreateRequest mType = GET_FEATURE
+08-25 15:36:37.546  1018  1018 D WifiHAL : In DebugCommand::handleResponse, mType:GET_FEATURE
+08-25 15:36:37.546  1018  1018 D WifiHAL : len = 4, expected len = 4
+08-25 15:36:37.938  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:38.072  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:38.152  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:38.199  1513  1696 I system_server: Background young concurrent mark compact GC freed 34MB AllocSpace bytes, 26(520KB) LOS objects, 85% free, 73MB/512MB, paused 1.324ms,9.707ms total 73.545ms
+08-25 15:36:38.230  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:38.293  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 300 1600'
+08-25 15:36:38.785  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 800 1600'
+08-25 15:36:38.946  1734  1751 I pixel-thermal: neutral_therm:31.104 raw data: neutral_therm:31104 
+08-25 15:36:39.213  2233  2389 D ImpulseConnection: timeout didn't happen: com.google.android.apps.turbo
+08-25 15:36:39.216  2233  2358 D TemperatureStateSource: sequence=11980 actualDelay=10001
+08-25 15:36:39.217  2233  2358 D TemperatureStateSource: Reading temperature: sequence=11981
+08-25 15:36:39.223  1734  1734 I pixel-thermal: VIRTUAL-SKIN:31.8654 raw data: VIRTUAL-NEUTRAL:31756.5 VIRTUAL-NEUTRAL-SKIN2:31865.4 VIRTUAL-QUIET-NEUTRAL:31166.3 VIRTUAL-SKIN:31865.4 disp_therm:30882 gnss_tcxo_therm:31772 neutral_therm:31104 quiet_therm:31193 skin_therm1:31906 skin_therm2:33642 
+08-25 15:36:39.224  2233  2358 D TemperatureStateSource: getDeviceTemperatures: sequence=11981 deviceTemperatureType=3 temperatureSource=0 temperatures=[31.8654]
+08-25 15:36:39.225  2233  2358 D TemperatureStateSource: sequence=11981 waitTime=10000
+08-25 15:36:39.226  2233  2513 D ImpulseStateSource: Notify clients: 12141
+08-25 15:36:39.285  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:39.393  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:39.566  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:39.661  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:39.700  1155  1158 I WPKTRT  : process_address_event: 2601:243:e103:fa90:5c8f:ffff:fee2:91ed added to wlan0
+08-25 15:36:39.700  1155  1158 I WPKTRT  : process_address_event: 2601:243:e103:fa90:af4e:6876:1c9b:6eb8 added to wlan0
+08-25 15:36:39.701  2217 22833 D IpClient/wlan0: addressUpdated: 2601:243:e103:fa90:5c8f:ffff:fee2:91ed/64 on ifindex 47 flags 0x00000100 scope 0
+08-25 15:36:39.701  2217 22833 D IpClient/wlan0: addressUpdated: 2601:243:e103:fa90:af4e:6876:1c9b:6eb8/64 on ifindex 47 flags 0x00000001 scope 0
+08-25 15:36:39.705  2217 22833 W AlarmManager: Unrecognized alarm listener com.android.networkstack.android.net.ip.IpClientLinkObserver$Dhcp6PdPreferredPrefixAlarmListener@d60979
+08-25 15:36:39.705  2217 22833 D ApfFilter: (wlan0): Ignoring RA RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e103:fa90::/64 5949s/5949s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0  which matches RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e103:fa90::/64 5949s/5949s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0 
+08-25 15:36:39.742  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 300 1600'
+08-25 15:36:40.261  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 800 1600'
+08-25 15:36:40.345 28064 28084 I AiAiStatsd: (REDACTED) No op: atoms for %s already uploaded.
+08-25 15:36:40.555  1018  1018 I WifiHAL : Creating message to get link statistics; iface = 47
+08-25 15:36:40.669  1018  1018 D WifiHAL : Start debug command: mType GET_FEATURE
+08-25 15:36:40.669  1018  1018 I WifiHAL : CreateRequest mType = GET_FEATURE
+08-25 15:36:40.669  1018  1018 D WifiHAL : In DebugCommand::handleResponse, mType:GET_FEATURE
+08-25 15:36:40.669  1018  1018 D WifiHAL : len = 4, expected len = 4
+08-25 15:36:40.751  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:40.864  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:40.929  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:40.994  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:41.063  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 300 1600'
+08-25 15:36:41.558  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 800 1600'
+08-25 15:36:42.049  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:42.160  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:42.229  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:42.313  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:42.378  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 300 1600'
+08-25 15:36:42.888  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 800 1600'
+08-25 15:36:42.979  1155  1158 I WPKTRT  : process_address_event: 2601:243:e103:fa90:5c8f:ffff:fee2:91ed added to wlan0
+08-25 15:36:42.979  1155  1158 I WPKTRT  : process_address_event: 2601:243:e103:fa90:af4e:6876:1c9b:6eb8 added to wlan0
+08-25 15:36:42.979  2217 22833 D IpClient/wlan0: addressUpdated: 2601:243:e103:fa90:5c8f:ffff:fee2:91ed/64 on ifindex 47 flags 0x00000100 scope 0
+08-25 15:36:42.980  2217 22833 D IpClient/wlan0: addressUpdated: 2601:243:e103:fa90:af4e:6876:1c9b:6eb8/64 on ifindex 47 flags 0x00000001 scope 0
+08-25 15:36:42.980  2217 22833 W AlarmManager: Unrecognized alarm listener com.android.networkstack.android.net.ip.IpClientLinkObserver$Dhcp6PdPreferredPrefixAlarmListener@d60979
+08-25 15:36:42.982  2217 22833 D ApfFilter: (wlan0): Ignoring RA RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e103:fa90::/64 5949s/5949s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0  which matches RA fe80::eea8:1fff:fe03:27a -> ff02::1 180s 2601:243:e103:fa90::/64 5949s/5949s DNS 180s 2001:558:feed::1 2001:558:feed::2 RIO 180s ::/0 
+08-25 15:36:43.371  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:43.463  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:43.533  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:43.603  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:43.664  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 300 1600'
+08-25 15:36:43.677  1018  1018 I WifiHAL : Creating message to get link statistics; iface = 47
+08-25 15:36:43.761  1018  1018 D WifiHAL : Start debug command: mType GET_FEATURE
+08-25 15:36:43.761  1018  1018 I WifiHAL : CreateRequest mType = GET_FEATURE
+08-25 15:36:43.761  1018  1018 D WifiHAL : In DebugCommand::handleResponse, mType:GET_FEATURE
+08-25 15:36:43.761  1018  1018 D WifiHAL : len = 4, expected len = 4
+08-25 15:36:44.176  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:input tap 800 1600'
+08-25 15:36:44.653  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys window windows'
+08-25 15:36:44.759  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys activity activities'
+08-25 15:36:44.792  2357  2357 D NfcService: handleMessage: MSG_DELAY_POLLING
+08-25 15:36:44.792  2357  2357 D libnfc_nci: startStopPolling: enter; isStart=1
+08-25 15:36:44.798  2357  3072 D libnfc_nci: nfaDeviceManagementCallback: enter; event=0x2
+08-25 15:36:44.798  2357  3072 D libnfc_nci: nfaDeviceManagementCallback: NFA_DM_SET_CONFIG_EVT
+08-25 15:36:44.798  2357  2357 D libnfc_nci: startStopPolling: exit
+08-25 15:36:44.799  2357  2357 D NfcService: handleMessage: Polling is started
+08-25 15:36:44.825  1281  1281 I adbd    : adbd service requested 'shell,v2,TERM=dumb:export ANDROID_LOG_TAGS=''; exec logcat '-d' '-t' '400''

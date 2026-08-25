@@ -20,6 +20,11 @@ var _frame_overlay: Label
 
 const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
 const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
+const MOVE_LIST_PANEL := preload("res://scripts/ui/move_list_panel.gd")
+
+var _move_list_panel: Control
+var _pin_reminder: Label
+var _move_list_btn: Button
 
 func _ready() -> void:
 	if GameState.has_method("begin_training") and str(GameState.mode) != "training":
@@ -43,6 +48,52 @@ func _ready() -> void:
 	_hit_log = get_node_or_null("%HitLog") as Label
 	_update_help()
 	_ensure_frame_overlay()
+	_ensure_move_list_access()
+
+
+func _ensure_move_list_access() -> void:
+	if _move_list_btn != null:
+		return
+	_move_list_btn = Button.new()
+	_move_list_btn.text = "Move List / Command Guide"
+	_move_list_btn.position = Vector2(24, 48)
+	_move_list_btn.process_mode = Node.PROCESS_MODE_ALWAYS
+	_move_list_btn.pressed.connect(_open_training_move_list)
+	if hud:
+		hud.add_child(_move_list_btn)
+	_pin_reminder = Label.new()
+	_pin_reminder.position = Vector2(24, 88)
+	_pin_reminder.add_theme_font_size_override("font_size", 15)
+	_pin_reminder.modulate = Color(1.0, 0.88, 0.4)
+	_pin_reminder.process_mode = Node.PROCESS_MODE_ALWAYS
+	if hud:
+		hud.add_child(_pin_reminder)
+
+
+func _open_training_move_list() -> void:
+	if _move_list_panel == null or not is_instance_valid(_move_list_panel):
+		_move_list_panel = MOVE_LIST_PANEL.new()
+		_move_list_panel.name = "TrainingMoveList"
+		_move_list_panel.process_mode = Node.PROCESS_MODE_ALWAYS
+		if hud:
+			hud.add_child(_move_list_panel)
+		else:
+			add_child(_move_list_panel)
+		_move_list_panel.pin_requested.connect(_on_training_pin)
+	var fid := str(GameState.p1_fighter_id) if GameState.p1_fighter_id else "ember-vale"
+	if fighter1 != null and "fighter_id" in fighter1:
+		fid = str(fighter1.fighter_id)
+	_move_list_panel.open_for_fighter(fid)
+
+
+func _on_training_pin(entry: Dictionary) -> void:
+	var glyphs: Dictionary = entry.get("input_glyphs", {})
+	if _pin_reminder:
+		_pin_reminder.text = "PINNED: %s  %s  (success detection: not implemented)" % [
+			str(entry.get("display_name", "")),
+			str(glyphs.get("compact", "")),
+		]
+		_pin_reminder.visible = true
 
 func _build_stage() -> void:
 	var stage_id := GameState.stage_id if GameState.stage_id != "" else "training-grid"
