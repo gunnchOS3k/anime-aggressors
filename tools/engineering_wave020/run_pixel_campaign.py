@@ -8,9 +8,12 @@ GUARD POLICY (never violate):
 - If BACK lands on Pixel launcher or a sibling app, relaunch AA BEFORE any further input.
 - NEVER tap launcher icons — no global coordinates on home screen.
 - Force-stop known sibling packages if they steal focus (Pedestrian Pursuit, etc.).
+- NEVER open Android Settings UI — no `am start` settings, no Settings taps.
+- Runtime permissions granted via `adb shell pm grant` only (never Settings UI).
 
-Root cause (Wave018): BACK → launcher → unguarded tap opens sibling apps. Wrong install
-target was NOT the issue; missing foreground guards were.
+Root cause (Wave018): BACK → launcher → unguarded tap opens sibling apps (Settings,
+Pedestrian Pursuit, etc.). Wrong install target was NOT the issue; missing foreground
+guards were. Settings was never an intentional permission step.
 """
 from __future__ import annotations
 
@@ -34,6 +37,11 @@ FORBIDDEN_PACKAGES = (
     "com.gunnchos.beatlink",
     "com.gunnchos.archive",
     "com.android.settings",
+)
+# Godot export preset enables INTERNET + VIBRATE (install-time). ACCESS_LOCAL_NETWORK is
+# the only runtime permission; grant via adb — never open Settings UI.
+RUNTIME_PERMISSIONS = (
+    "android.permission.ACCESS_LOCAL_NETWORK",
 )
 
 
@@ -98,12 +106,22 @@ def pidof(serial: str) -> str:
     return adb(["-s", serial, "shell", "pidof", PKG]).stdout.strip()
 
 
+def grant_aa_runtime_permissions(serial: str) -> dict:
+    """Grant AA runtime permissions via adb — never open Settings UI."""
+    results: dict[str, str] = {}
+    for perm in RUNTIME_PERMISSIONS:
+        r = adb(["-s", serial, "shell", "pm", "grant", PKG, perm])
+        ok = r.returncode == 0 or "already" in (r.stderr + r.stdout).lower()
+        results[perm] = "granted" if ok else (r.stderr or r.stdout or "failed").strip()[:120]
+    # Debug APK telemetry uses `adb exec-out run-as` — no storage/overlay permission needed.
+    return results
+
+
 def launch_app(serial: str) -> bool:
-    """Launch AA only — never monkey, never launcher taps."""
-    for bad in FORBIDDEN_PACKAGES:
-        adb(["-s", serial, "shell", "am", "force-stop", bad])
+    """Launch AA only — never monkey, never launcher taps, never Settings."""
     adb(["-s", serial, "shell", "am", "force-stop", PKG])
     time.sleep(0.5)
+    grant_aa_runtime_permissions(serial)
     r = adb(
         ["-s", serial, "shell", "am", "start", "-W", "-n", COMPONENT,
          "-a", "android.intent.action.MAIN", "-c", "android.intent.category.LAUNCHER"],
@@ -218,6 +236,8 @@ def main() -> None:
             "PIXEL_DEVICE_AVAILABLE": False,
             "PIXEL_AUTHENTIC": False,
             "AA_ONLY_GUARDS": True,
+        "SETTINGS_UI_USED": False,
+        "PERMISSION_GRANT_METHOD": "adb_pm_grant",
             "reason": "No adb device",
             "emitted_at": utc_now(),
         })
@@ -235,6 +255,8 @@ def main() -> None:
                 "PIXEL_DEVICE_AVAILABLE": True,
                 "PIXEL_AUTHENTIC": False,
                 "AA_ONLY_GUARDS": True,
+        "SETTINGS_UI_USED": False,
+        "PERMISSION_GRANT_METHOD": "adb_pm_grant",
                 "DEVICE_SERIAL": serial,
                 "DEVICE_MODEL": model,
                 "reason": "APK_BUILD_FAILED",
@@ -250,6 +272,8 @@ def main() -> None:
         "PACKAGE": PKG,
         "COMPONENT": COMPONENT,
         "AA_ONLY_GUARDS": True,
+        "SETTINGS_UI_USED": False,
+        "PERMISSION_GRANT_METHOD": "adb_pm_grant",
         "DEVICE_SERIAL": serial,
         "DEVICE_MODEL": model,
         "emitted_at": utc_now(),
@@ -264,6 +288,8 @@ def main() -> None:
             "PIXEL_DEVICE_AVAILABLE": True,
             "PIXEL_AUTHENTIC": False,
             "AA_ONLY_GUARDS": True,
+        "SETTINGS_UI_USED": False,
+        "PERMISSION_GRANT_METHOD": "adb_pm_grant",
             "reason": "APK_INSTALL_FAILED",
             "emitted_at": utc_now(),
         })
@@ -275,10 +301,22 @@ def main() -> None:
             "PIXEL_DEVICE_AVAILABLE": True,
             "PIXEL_AUTHENTIC": False,
             "AA_ONLY_GUARDS": True,
+        "SETTINGS_UI_USED": False,
+        "PERMISSION_GRANT_METHOD": "adb_pm_grant",
+            "SETTINGS_UI_USED": False,
             "reason": "AA_LAUNCH_FAILED",
             "emitted_at": utc_now(),
         })
         return
+
+    perm_grants = grant_aa_runtime_permissions(serial)
+    (PIXEL / "permission_grants.json").write_text(json.dumps({
+        "package": PKG,
+        "method": "adb_pm_grant",
+        "settings_ui_used": False,
+        "grants": perm_grants,
+        "emitted_at": utc_now(),
+    }, indent=2) + "\n")
 
     captures = []
     fighters_reviewed = 0
@@ -384,6 +422,8 @@ def main() -> None:
         "PIXEL_DEVICE_AVAILABLE": True,
         "PIXEL_AUTHENTIC": True,
         "AA_ONLY_GUARDS": True,
+        "SETTINGS_UI_USED": False,
+        "PERMISSION_GRANT_METHOD": "adb_pm_grant",
         "DEVICE_SERIAL": serial,
         "DEVICE_MODEL": model,
         "PIXEL_SOURCE_SHA": source_sha,
