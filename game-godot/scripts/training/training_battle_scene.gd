@@ -168,7 +168,7 @@ func _log(msg: String) -> void:
 
 func _update_help() -> void:
 	if _hit_log:
-		_hit_log.text = "Training — Pause: Esc/Back/Touch II | Move List button | F9 debug pause"
+		_hit_log.text = "Training — F1 HUD F2 hit | Pause: Esc/Back/Touch II | Move List | F3 pos F4 dmg F5 aura F7 clear F8 dummy F9 pause F10 slow F11 freeze F12 step"
 
 
 func _toggle_pause() -> void:
