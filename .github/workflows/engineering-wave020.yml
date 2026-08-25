@@ -1,0 +1,88 @@
+name: Engineering Wave020 Visibility Pause Audio
+
+on:
+  push:
+    branches: [main, "eng/wave020-character-visibility-pause-movelist-and-elemental-audio", "eng/**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  wave020:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Godot 4.5
+        run: |
+          set -euo pipefail
+          curl -L -o godot.zip https://github.com/godotengine/godot-builds/releases/download/4.5-stable/Godot_v4.5-stable_linux.x86_64.zip
+          unzip -o godot.zip
+          chmod +x Godot_v4.5-stable_linux.x86_64
+          echo "GODOT_BIN=$PWD/Godot_v4.5-stable_linux.x86_64" >> "$GITHUB_ENV"
+
+      - name: Taste gate
+        run: make taste-gate
+
+      - name: Engineering Wave020 (desktop; Pixel skipped in CI)
+        env:
+          GODOT_BIN: ${{ env.GODOT_BIN }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_ACTIONS: "true"
+        run: |
+          set -euo pipefail
+          python3 tools/audio/generate_procedural_sfx.py
+          mkdir -p artifacts/engineering_wave020 tmp
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          art = Path("artifacts/engineering_wave020")
+          art.mkdir(parents=True, exist_ok=True)
+          payload = {
+            "PIXEL_CAMPAIGN": "BLOCKED_PIXEL6A",
+            "PIXEL_DEVICE_AVAILABLE": False,
+            "PIXEL_AUTHENTIC": False,
+            "reason": "CI runner has no Pixel 6a",
+            "PIXEL_RENDER_GHOSTS": None,
+            "PIXEL_VISIBILITY_INVARIANT_VIOLATIONS": None,
+            "PIXEL_FALLBACK_RECOVERIES": None,
+            "PIXEL_PROCESS_DEATHS": None,
+            "PIXEL_FATAL": None,
+            "PIXEL_ANR": None,
+            "PIXEL_OOM": None,
+            "PIXEL_SMOKE_MIN": None,
+            "PIXEL_CAPTURE_CASES": 0,
+            "PIXEL_FIGHTERS_REVIEWED": 0,
+            "PIXEL_MOVE_LIST_OPEN_CLOSE_CYCLES": 0,
+            "PIXEL_MOVE_PREVIEWS_RENDERED": 0,
+            "PIXEL_MOVE_LIST_GHOST_REGRESSIONS": 0,
+            "PIXEL_MOVE_LIST_CRASHES": 0,
+            "PIXEL_AUDIO_SMOKE_FIGHTERS": 0,
+            "PIXEL_AUDIO_RUNTIME_PASS": None,
+          }
+          (art / "PIXEL_CAMPAIGN.json").write_text(json.dumps(payload, indent=2) + "\n")
+          PY
+          source tools/engineering_wave015/godot_orchestration.sh
+          export GODOT_ORCH_ROOT="$PWD"
+          godot_orchestration_prepare "wave020-ci" "$PWD" || true
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --import || true
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave018/Wave018SelectPreviewStress.gd
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave018/Wave018BattleVisibilityInvariant.gd
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave019/Wave019MoveListCatalogGate.gd
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave020/Wave020SevenBrowseVisibility.gd
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave020/Wave020PauseMoveList.gd
+          "$GODOT_BIN" --headless --path "$PWD/game-godot" --script res://tests/engineering_wave020/Wave020ElementalAudio.gd
+          python3 tools/engineering_wave020/emit_wave020.py
+
+      - name: Upload Wave020 artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: engineering-wave020
+          path: artifacts/engineering_wave020/

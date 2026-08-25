@@ -1,8 +1,9 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "status": "PROCEDURAL_FINAL",
   "license": "ORIGINAL_INTERNAL",
   "generator": "tools/audio/generate_procedural_sfx.py",
+  "wave": "WAVE020",
   "categories": [
     "hit",
     "move",
@@ -13,9 +14,19 @@
     "ui_confirm",
     "ui_back",
     "ui_select",
+    "signature",
     "stage",
     "vo_short"
   ],
+  "fighter_elements": {
+    "ember-vale": "fire",
+    "rook-ironside": "earth",
+    "juno-spark": "electric",
+    "kaia-windrow": "wind",
+    "nix-calder": "frost",
+    "orion-vell": "gravity",
+    "vesper-nyx": "shadow"
+  },
   "files": [
     {
       "id": "shared.hit",
@@ -66,295 +77,393 @@
       "id": "fighter.ember-vale.hit",
       "path": "game-godot/assets/audio/procedural/fighters/ember-vale/hit.wav",
       "fighter": "ember-vale",
-      "category": "hit"
+      "category": "hit",
+      "element": "fire"
     },
     {
       "id": "fighter.ember-vale.move",
       "path": "game-godot/assets/audio/procedural/fighters/ember-vale/move.wav",
       "fighter": "ember-vale",
-      "category": "move"
+      "category": "move",
+      "element": "fire"
     },
     {
       "id": "fighter.ember-vale.charge",
       "path": "game-godot/assets/audio/procedural/fighters/ember-vale/charge.wav",
       "fighter": "ember-vale",
-      "category": "charge"
+      "category": "charge",
+      "element": "fire"
     },
     {
       "id": "fighter.ember-vale.projectile",
       "path": "game-godot/assets/audio/procedural/fighters/ember-vale/projectile.wav",
       "fighter": "ember-vale",
-      "category": "projectile"
+      "category": "projectile",
+      "element": "fire"
+    },
+    {
+      "id": "fighter.ember-vale.signature",
+      "path": "game-godot/assets/audio/procedural/fighters/ember-vale/signature.wav",
+      "fighter": "ember-vale",
+      "category": "signature",
+      "element": "fire"
     },
     {
       "id": "fighter.ember-vale.defense",
       "path": "game-godot/assets/audio/procedural/fighters/ember-vale/defense.wav",
       "fighter": "ember-vale",
-      "category": "defense"
+      "category": "defense",
+      "element": "fire"
     },
     {
       "id": "fighter.ember-vale.ko",
       "path": "game-godot/assets/audio/procedural/fighters/ember-vale/ko.wav",
       "fighter": "ember-vale",
-      "category": "ko"
+      "category": "ko",
+      "element": "fire"
     },
     {
       "id": "fighter.ember-vale.vo_short",
       "path": "game-godot/assets/audio/procedural/fighters/ember-vale/vo_short.wav",
       "fighter": "ember-vale",
-      "category": "vo_short"
+      "category": "vo_short",
+      "element": "fire"
     },
     {
       "id": "fighter.rook-ironside.hit",
       "path": "game-godot/assets/audio/procedural/fighters/rook-ironside/hit.wav",
       "fighter": "rook-ironside",
-      "category": "hit"
+      "category": "hit",
+      "element": "earth"
     },
     {
       "id": "fighter.rook-ironside.move",
       "path": "game-godot/assets/audio/procedural/fighters/rook-ironside/move.wav",
       "fighter": "rook-ironside",
-      "category": "move"
+      "category": "move",
+      "element": "earth"
     },
     {
       "id": "fighter.rook-ironside.charge",
       "path": "game-godot/assets/audio/procedural/fighters/rook-ironside/charge.wav",
       "fighter": "rook-ironside",
-      "category": "charge"
+      "category": "charge",
+      "element": "earth"
     },
     {
       "id": "fighter.rook-ironside.projectile",
       "path": "game-godot/assets/audio/procedural/fighters/rook-ironside/projectile.wav",
       "fighter": "rook-ironside",
-      "category": "projectile"
+      "category": "projectile",
+      "element": "earth"
+    },
+    {
+      "id": "fighter.rook-ironside.signature",
+      "path": "game-godot/assets/audio/procedural/fighters/rook-ironside/signature.wav",
+      "fighter": "rook-ironside",
+      "category": "signature",
+      "element": "earth"
     },
     {
       "id": "fighter.rook-ironside.defense",
       "path": "game-godot/assets/audio/procedural/fighters/rook-ironside/defense.wav",
       "fighter": "rook-ironside",
-      "category": "defense"
+      "category": "defense",
+      "element": "earth"
     },
     {
       "id": "fighter.rook-ironside.ko",
       "path": "game-godot/assets/audio/procedural/fighters/rook-ironside/ko.wav",
       "fighter": "rook-ironside",
-      "category": "ko"
+      "category": "ko",
+      "element": "earth"
     },
     {
       "id": "fighter.rook-ironside.vo_short",
       "path": "game-godot/assets/audio/procedural/fighters/rook-ironside/vo_short.wav",
       "fighter": "rook-ironside",
-      "category": "vo_short"
+      "category": "vo_short",
+      "element": "earth"
     },
     {
       "id": "fighter.juno-spark.hit",
       "path": "game-godot/assets/audio/procedural/fighters/juno-spark/hit.wav",
       "fighter": "juno-spark",
-      "category": "hit"
+      "category": "hit",
+      "element": "electric"
     },
     {
       "id": "fighter.juno-spark.move",
       "path": "game-godot/assets/audio/procedural/fighters/juno-spark/move.wav",
       "fighter": "juno-spark",
-      "category": "move"
+      "category": "move",
+      "element": "electric"
     },
     {
       "id": "fighter.juno-spark.charge",
       "path": "game-godot/assets/audio/procedural/fighters/juno-spark/charge.wav",
       "fighter": "juno-spark",
-      "category": "charge"
+      "category": "charge",
+      "element": "electric"
     },
     {
       "id": "fighter.juno-spark.projectile",
       "path": "game-godot/assets/audio/procedural/fighters/juno-spark/projectile.wav",
       "fighter": "juno-spark",
-      "category": "projectile"
+      "category": "projectile",
+      "element": "electric"
+    },
+    {
+      "id": "fighter.juno-spark.signature",
+      "path": "game-godot/assets/audio/procedural/fighters/juno-spark/signature.wav",
+      "fighter": "juno-spark",
+      "category": "signature",
+      "element": "electric"
     },
     {
       "id": "fighter.juno-spark.defense",
       "path": "game-godot/assets/audio/procedural/fighters/juno-spark/defense.wav",
       "fighter": "juno-spark",
-      "category": "defense"
+      "category": "defense",
+      "element": "electric"
     },
     {
       "id": "fighter.juno-spark.ko",
       "path": "game-godot/assets/audio/procedural/fighters/juno-spark/ko.wav",
       "fighter": "juno-spark",
-      "category": "ko"
+      "category": "ko",
+      "element": "electric"
     },
     {
       "id": "fighter.juno-spark.vo_short",
       "path": "game-godot/assets/audio/procedural/fighters/juno-spark/vo_short.wav",
       "fighter": "juno-spark",
-      "category": "vo_short"
+      "category": "vo_short",
+      "element": "electric"
     },
     {
       "id": "fighter.kaia-windrow.hit",
       "path": "game-godot/assets/audio/procedural/fighters/kaia-windrow/hit.wav",
       "fighter": "kaia-windrow",
-      "category": "hit"
+      "category": "hit",
+      "element": "wind"
     },
     {
       "id": "fighter.kaia-windrow.move",
       "path": "game-godot/assets/audio/procedural/fighters/kaia-windrow/move.wav",
       "fighter": "kaia-windrow",
-      "category": "move"
+      "category": "move",
+      "element": "wind"
     },
     {
       "id": "fighter.kaia-windrow.charge",
       "path": "game-godot/assets/audio/procedural/fighters/kaia-windrow/charge.wav",
       "fighter": "kaia-windrow",
-      "category": "charge"
+      "category": "charge",
+      "element": "wind"
     },
     {
       "id": "fighter.kaia-windrow.projectile",
       "path": "game-godot/assets/audio/procedural/fighters/kaia-windrow/projectile.wav",
       "fighter": "kaia-windrow",
-      "category": "projectile"
+      "category": "projectile",
+      "element": "wind"
+    },
+    {
+      "id": "fighter.kaia-windrow.signature",
+      "path": "game-godot/assets/audio/procedural/fighters/kaia-windrow/signature.wav",
+      "fighter": "kaia-windrow",
+      "category": "signature",
+      "element": "wind"
     },
     {
       "id": "fighter.kaia-windrow.defense",
       "path": "game-godot/assets/audio/procedural/fighters/kaia-windrow/defense.wav",
       "fighter": "kaia-windrow",
-      "category": "defense"
+      "category": "defense",
+      "element": "wind"
     },
     {
       "id": "fighter.kaia-windrow.ko",
       "path": "game-godot/assets/audio/procedural/fighters/kaia-windrow/ko.wav",
       "fighter": "kaia-windrow",
-      "category": "ko"
+      "category": "ko",
+      "element": "wind"
     },
     {
       "id": "fighter.kaia-windrow.vo_short",
       "path": "game-godot/assets/audio/procedural/fighters/kaia-windrow/vo_short.wav",
       "fighter": "kaia-windrow",
-      "category": "vo_short"
+      "category": "vo_short",
+      "element": "wind"
     },
     {
       "id": "fighter.nix-calder.hit",
       "path": "game-godot/assets/audio/procedural/fighters/nix-calder/hit.wav",
       "fighter": "nix-calder",
-      "category": "hit"
+      "category": "hit",
+      "element": "frost"
     },
     {
       "id": "fighter.nix-calder.move",
       "path": "game-godot/assets/audio/procedural/fighters/nix-calder/move.wav",
       "fighter": "nix-calder",
-      "category": "move"
+      "category": "move",
+      "element": "frost"
     },
     {
       "id": "fighter.nix-calder.charge",
       "path": "game-godot/assets/audio/procedural/fighters/nix-calder/charge.wav",
       "fighter": "nix-calder",
-      "category": "charge"
+      "category": "charge",
+      "element": "frost"
     },
     {
       "id": "fighter.nix-calder.projectile",
       "path": "game-godot/assets/audio/procedural/fighters/nix-calder/projectile.wav",
       "fighter": "nix-calder",
-      "category": "projectile"
+      "category": "projectile",
+      "element": "frost"
+    },
+    {
+      "id": "fighter.nix-calder.signature",
+      "path": "game-godot/assets/audio/procedural/fighters/nix-calder/signature.wav",
+      "fighter": "nix-calder",
+      "category": "signature",
+      "element": "frost"
     },
     {
       "id": "fighter.nix-calder.defense",
       "path": "game-godot/assets/audio/procedural/fighters/nix-calder/defense.wav",
       "fighter": "nix-calder",
-      "category": "defense"
+      "category": "defense",
+      "element": "frost"
     },
     {
       "id": "fighter.nix-calder.ko",
       "path": "game-godot/assets/audio/procedural/fighters/nix-calder/ko.wav",
       "fighter": "nix-calder",
-      "category": "ko"
+      "category": "ko",
+      "element": "frost"
     },
     {
       "id": "fighter.nix-calder.vo_short",
       "path": "game-godot/assets/audio/procedural/fighters/nix-calder/vo_short.wav",
       "fighter": "nix-calder",
-      "category": "vo_short"
+      "category": "vo_short",
+      "element": "frost"
     },
     {
       "id": "fighter.orion-vell.hit",
       "path": "game-godot/assets/audio/procedural/fighters/orion-vell/hit.wav",
       "fighter": "orion-vell",
-      "category": "hit"
+      "category": "hit",
+      "element": "gravity"
     },
     {
       "id": "fighter.orion-vell.move",
       "path": "game-godot/assets/audio/procedural/fighters/orion-vell/move.wav",
       "fighter": "orion-vell",
-      "category": "move"
+      "category": "move",
+      "element": "gravity"
     },
     {
       "id": "fighter.orion-vell.charge",
       "path": "game-godot/assets/audio/procedural/fighters/orion-vell/charge.wav",
       "fighter": "orion-vell",
-      "category": "charge"
+      "category": "charge",
+      "element": "gravity"
     },
     {
       "id": "fighter.orion-vell.projectile",
       "path": "game-godot/assets/audio/procedural/fighters/orion-vell/projectile.wav",
       "fighter": "orion-vell",
-      "category": "projectile"
+      "category": "projectile",
+      "element": "gravity"
+    },
+    {
+      "id": "fighter.orion-vell.signature",
+      "path": "game-godot/assets/audio/procedural/fighters/orion-vell/signature.wav",
+      "fighter": "orion-vell",
+      "category": "signature",
+      "element": "gravity"
     },
     {
       "id": "fighter.orion-vell.defense",
       "path": "game-godot/assets/audio/procedural/fighters/orion-vell/defense.wav",
       "fighter": "orion-vell",
-      "category": "defense"
+      "category": "defense",
+      "element": "gravity"
     },
     {
       "id": "fighter.orion-vell.ko",
       "path": "game-godot/assets/audio/procedural/fighters/orion-vell/ko.wav",
       "fighter": "orion-vell",
-      "category": "ko"
+      "category": "ko",
+      "element": "gravity"
     },
     {
       "id": "fighter.orion-vell.vo_short",
       "path": "game-godot/assets/audio/procedural/fighters/orion-vell/vo_short.wav",
       "fighter": "orion-vell",
-      "category": "vo_short"
+      "category": "vo_short",
+      "element": "gravity"
     },
     {
       "id": "fighter.vesper-nyx.hit",
       "path": "game-godot/assets/audio/procedural/fighters/vesper-nyx/hit.wav",
       "fighter": "vesper-nyx",
-      "category": "hit"
+      "category": "hit",
+      "element": "shadow"
     },
     {
       "id": "fighter.vesper-nyx.move",
       "path": "game-godot/assets/audio/procedural/fighters/vesper-nyx/move.wav",
       "fighter": "vesper-nyx",
-      "category": "move"
+      "category": "move",
+      "element": "shadow"
     },
     {
       "id": "fighter.vesper-nyx.charge",
       "path": "game-godot/assets/audio/procedural/fighters/vesper-nyx/charge.wav",
       "fighter": "vesper-nyx",
-      "category": "charge"
+      "category": "charge",
+      "element": "shadow"
     },
     {
       "id": "fighter.vesper-nyx.projectile",
       "path": "game-godot/assets/audio/procedural/fighters/vesper-nyx/projectile.wav",
       "fighter": "vesper-nyx",
-      "category": "projectile"
+      "category": "projectile",
+      "element": "shadow"
+    },
+    {
+      "id": "fighter.vesper-nyx.signature",
+      "path": "game-godot/assets/audio/procedural/fighters/vesper-nyx/signature.wav",
+      "fighter": "vesper-nyx",
+      "category": "signature",
+      "element": "shadow"
     },
     {
       "id": "fighter.vesper-nyx.defense",
       "path": "game-godot/assets/audio/procedural/fighters/vesper-nyx/defense.wav",
       "fighter": "vesper-nyx",
-      "category": "defense"
+      "category": "defense",
+      "element": "shadow"
     },
     {
       "id": "fighter.vesper-nyx.ko",
       "path": "game-godot/assets/audio/procedural/fighters/vesper-nyx/ko.wav",
       "fighter": "vesper-nyx",
-      "category": "ko"
+      "category": "ko",
+      "element": "shadow"
     },
     {
       "id": "fighter.vesper-nyx.vo_short",
       "path": "game-godot/assets/audio/procedural/fighters/vesper-nyx/vo_short.wav",
       "fighter": "vesper-nyx",
-      "category": "vo_short"
+      "category": "vo_short",
+      "element": "shadow"
     },
     {
       "id": "stage.skyline-arena.bed",
@@ -394,7 +503,7 @@
     }
   ],
   "counts": {
-    "total": 64,
+    "total": 71,
     "fighters": 7,
     "stages": 6,
     "shared": 9
