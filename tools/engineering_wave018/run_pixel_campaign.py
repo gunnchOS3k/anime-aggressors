@@ -221,11 +221,26 @@ def screencap(name: str, *, telemetry_meta: dict | None = None) -> dict:
 
 
 def foreground_package() -> str:
+    """Prefer window focus — dumpsys activity topResumed can lag behind Godot."""
+    win = adb("shell", "dumpsys", "window").stdout
+    for line in win.splitlines():
+        if "mCurrentFocus=" not in line and "mFocusedApp=" not in line:
+            continue
+        # e.g. mCurrentFocus=Window{abc u0 com.gunnchos.animeaggressors/com.godot.game.GodotApp}
+        if PKG in line:
+            return PKG
+        for bad in FORBIDDEN_PACKAGES:
+            if bad in line:
+                return bad
+        if "nexuslauncher" in line.lower() or "launcher" in line.lower():
+            return "com.google.android.apps.nexuslauncher"
     out = adb("shell", "dumpsys", "activity", "activities").stdout
     for marker in ("topResumedActivity=", "mResumedActivity=", "mFocusedApp="):
         for line in out.splitlines():
             if marker not in line:
                 continue
+            if PKG in line:
+                return PKG
             if " " not in line:
                 continue
             try:
@@ -249,10 +264,26 @@ def launch_app(*, reset_telemetry: bool = False) -> bool:
     time.sleep(0.5)
     if reset_telemetry:
         clear_telemetry()
+    # monkey launcher start reliably brings AA to window focus on Pixel 6a.
     r = adb(
+        "shell",
+        "monkey",
+        "-p",
+        PKG,
+        "-c",
+        "android.intent.category.LAUNCHER",
+        "1",
+    )
+    time.sleep(5.0)
+    fg = foreground_package()
+    if PKG in fg:
+        return True
+    # Fallback: explicit component start (no --activity-brought-to-front; that can bounce to launcher).
+    adb(
         "shell",
         "am",
         "start",
+        "-W",
         "-n",
         COMPONENT,
         "-a",
@@ -260,12 +291,12 @@ def launch_app(*, reset_telemetry: bool = False) -> bool:
         "-c",
         "android.intent.category.LAUNCHER",
     )
-    time.sleep(4.0)
+    time.sleep(3.0)
     fg = foreground_package()
     if PKG not in fg and not pidof():
-        print(f"LAUNCH FAIL: expected {PKG}, foreground={fg!r}, am_start={r.stdout}{r.stderr}")
+        print(f"LAUNCH FAIL: expected {PKG}, foreground={fg!r}, monkey={r.stdout}{r.stderr}")
         return False
-    if fg and PKG not in fg:
+    if PKG not in fg:
         print(f"LAUNCH WARN: foreground={fg!r} after starting {COMPONENT}")
         return False
     return True
@@ -281,8 +312,29 @@ def ensure_aa_foreground(context: str) -> bool:
         return launch_app()
     if PKG in fg:
         return True
-    print(f"re-launching AA ({context}); was foreground={fg!r}")
+    # Soft recover: monkey bring-to-front without force-stop (preserve telemetry).
+    print(f"re-focusing AA ({context}); was foreground={fg!r}")
+    adb("shell", "monkey", "-p", PKG, "-c", "android.intent.category.LAUNCHER", "1")
+    time.sleep(2.0)
+    if PKG in foreground_package():
+        return True
     return launch_app()
+
+
+def soft_back_in_aa(actions: list | None = None) -> None:
+    """Issue BACK only while AA focused; never drive launcher afterward."""
+    if PKG not in foreground_package():
+        ensure_aa_foreground("soft_back_pre")
+        return
+    adb("shell", "input", "keyevent", "4")
+    time.sleep(0.25)
+    if actions is not None:
+        actions.append("BACK")
+    if PKG not in foreground_package():
+        # Bounce home is common on Android; refocus AA without touching other apps.
+        adb("shell", "monkey", "-p", PKG, "-c", "android.intent.category.LAUNCHER", "1")
+        time.sleep(1.2)
+    ensure_aa_foreground("soft_back_post")
 
 
 def tap(x: int, y: int) -> None:
@@ -293,6 +345,10 @@ def tap(x: int, y: int) -> None:
 
 def key(code: str) -> None:
     if not ensure_aa_foreground(f"key {code}"):
+        return
+    # Never send BACK through generic key() — use soft_back_in_aa.
+    if str(code) in ("4", "KEYCODE_BACK"):
+        soft_back_in_aa()
         return
     adb("shell", "input", "keyevent", code)
 
@@ -408,11 +464,8 @@ def select_stress(actions: list) -> dict:
         stats["nav_actions"] += 1
         actions.append("CONFIRM")
         if PKG in foreground_package():
-            key("4")
-            time.sleep(0.22)
+            soft_back_in_aa(actions)
             stats["nav_actions"] += 1
-            actions.append("BACK")
-            ensure_aa_foreground("select_after_back")
         stats["confirm_back"] += 1
 
     return stats
