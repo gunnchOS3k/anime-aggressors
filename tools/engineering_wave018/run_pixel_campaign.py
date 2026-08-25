@@ -47,6 +47,16 @@ def adb(*args: str, timeout: int = 180) -> subprocess.CompletedProcess:
     return subprocess.run(["adb", *args], cwd=ROOT, capture_output=True, text=True, timeout=timeout)
 
 
+def adb_authorized() -> bool:
+    raw = adb("devices").stdout
+    for ln in raw.splitlines()[1:]:
+        parts = ln.split()
+        if len(parts) >= 2 and parts[1] == "device":
+            return True
+    return False
+
+
+
 def discover_pixel6a() -> dict:
     subprocess.run(["adb", "start-server"], capture_output=True, text=True)
     raw = adb("devices", "-l").stdout
@@ -373,11 +383,22 @@ def main() -> int:
     smoke_sec = int(os.environ.get("WAVE018_PIXEL_SMOKE_SEC", "600"))
     start = time.time()
     deaths = 0
+    unauthorized_interrupt = False
     while time.time() - start < smoke_sec:
+        if not adb_authorized():
+            print("SMOKE INTERRUPTED: adb unauthorized mid-campaign")
+            unauthorized_interrupt = True
+            break
+        # Keep AA foreground; count unexpected loss as death but continue full duration.
         if not ensure_aa_foreground("smoke"):
             deaths += 1
+            # retry once; never drive other packages
             if not launch_app():
-                break
+                time.sleep(3.0)
+                if not launch_app():
+                    # still continue timer honestly; do not send input without AA
+                    time.sleep(2.0)
+                    continue
             time.sleep(2.0)
             continue
         # Light combat-ish input (AA-only via helpers)
@@ -392,7 +413,8 @@ def main() -> int:
         if not pidof():
             deaths += 1
             if not launch_app():
-                break
+                time.sleep(3.0)
+                launch_app()
             time.sleep(2.0)
         # periodic capture every ~2 min
         elapsed = time.time() - start
@@ -407,7 +429,11 @@ def main() -> int:
     captures.append(screencap("06_smoke_end"))
 
     smoke_payload = {
-        "PIXEL_CAMPAIGN": "PASS" if deaths == 0 and fatals == 0 else "FAIL",
+        "PIXEL_CAMPAIGN": (
+            "BLOCKED_PIXEL6A"
+            if unauthorized_interrupt
+            else ("PASS" if deaths == 0 and fatals == 0 and elapsed >= smoke_sec * 0.95 else "FAIL")
+        ),
         "PIXEL_DEVICE_AVAILABLE": True,
         "PIXEL_AUTHENTIC": True,
         "DEVICE_SERIAL": serial,
@@ -418,6 +444,8 @@ def main() -> int:
         "PIXEL_FATAL_EXCEPTIONS": fatals,
         "PIXEL_ANR": anrs,
         "PIXEL_PROCESS_DEATHS": deaths,
+        "UNAUTHORIZED_INTERRUPT": unauthorized_interrupt,
+        "PIXEL_SMOKE_TARGET_SEC": smoke_sec,
         "captures": [c for c in captures if str(c.get("name", "")).startswith("05_") or c.get("name") == "06_smoke_end"],
         "emitted_at": utc_now(),
     }

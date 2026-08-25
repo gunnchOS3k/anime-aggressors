@@ -5,8 +5,8 @@
     "PIXEL_AUTHENTIC": true,
     "DEVICE_SERIAL": "27211JEGR06194",
     "DEVICE_MODEL": "Pixel 6a",
-    "PIXEL_SOURCE_SHA": "7a70d3cf6e6f2b2ebadf92a998a5e3eb3b5712f0",
-    "APK_SHA256": "86b24754f755622fc1c3bd01ea07a46bf732979f26df5a46253971ac7cdc2ce8",
+    "PIXEL_SOURCE_SHA": "32558493894eca1d4f208fabd63722bc8ce240eb",
+    "APK_SHA256": "f408676881deb2ccc470704ffc5cafe3fe1b4cc26f74e2ca6ff80dd9c453df7e",
     "INSTALL_OK": true,
     "PIXEL_SELECT_GHOST_OCCURRENCES": 0,
     "SELECT_NAV_ACTIONS": 120,
@@ -14,7 +14,7 @@
       {
         "name": "00_launch",
         "path": "artifacts/engineering_wave018/pixel/00_launch.png",
-        "bytes": 112289,
+        "bytes": 112279,
         "ok": true
       },
       {
@@ -31,7 +31,7 @@
       }
     ],
     "NOTE": "Physical keyevent select cycling on Pixel 6a; ghost counted as unexpected process death during select path.",
-    "emitted_at": "2026-08-25T01:55:42.625451+00:00"
+    "emitted_at": "2026-08-25T02:15:15.219514+00:00"
   },
   "visibility": {
     "PIXEL_CAMPAIGN": "PASS",
@@ -39,8 +39,8 @@
     "PIXEL_AUTHENTIC": true,
     "DEVICE_SERIAL": "27211JEGR06194",
     "DEVICE_MODEL": "Pixel 6a",
-    "PIXEL_SOURCE_SHA": "7a70d3cf6e6f2b2ebadf92a998a5e3eb3b5712f0",
-    "APK_SHA256": "86b24754f755622fc1c3bd01ea07a46bf732979f26df5a46253971ac7cdc2ce8",
+    "PIXEL_SOURCE_SHA": "32558493894eca1d4f208fabd63722bc8ce240eb",
+    "APK_SHA256": "f408676881deb2ccc470704ffc5cafe3fe1b4cc26f74e2ca6ff80dd9c453df7e",
     "PIXEL_BATTLE_GHOST_OCCURRENCES": 0,
     "SELECT_TO_BATTLE_ATTEMPTS": 6,
     "DISAPPEARING_BODY_REPRO_ATTEMPTED": true,
@@ -84,40 +84,66 @@
       {
         "name": "04_visibility_end",
         "path": "artifacts/engineering_wave018/pixel/04_visibility_end.png",
-        "bytes": 112279,
+        "bytes": 112289,
         "ok": true
       }
     ],
     "NOTE": "Battle entry after select cycling; process death counted as ghost. Owner still confirms visual body presence from captures.",
-    "emitted_at": "2026-08-25T01:59:02.704825+00:00"
+    "emitted_at": "2026-08-25T02:18:35.587023+00:00"
   },
   "smoke": {
-    "PIXEL_CAMPAIGN": "FAIL",
+    "PIXEL_CAMPAIGN": "PASS",
     "PIXEL_DEVICE_AVAILABLE": true,
     "PIXEL_AUTHENTIC": true,
     "DEVICE_SERIAL": "27211JEGR06194",
     "DEVICE_MODEL": "Pixel 6a",
-    "PIXEL_SOURCE_SHA": "7a70d3cf6e6f2b2ebadf92a998a5e3eb3b5712f0",
-    "APK_SHA256": "86b24754f755622fc1c3bd01ea07a46bf732979f26df5a46253971ac7cdc2ce8",
-    "PIXEL_SMOKE_MIN": 6.108,
+    "PIXEL_SOURCE_SHA": "32558493894eca1d4f208fabd63722bc8ce240eb",
+    "APK_SHA256": "f408676881deb2ccc470704ffc5cafe3fe1b4cc26f74e2ca6ff80dd9c453df7e",
+    "PIXEL_SMOKE_MIN": 10.051,
     "PIXEL_FATAL_EXCEPTIONS": 0,
     "PIXEL_ANR": 0,
-    "PIXEL_PROCESS_DEATHS": 1,
+    "PIXEL_PROCESS_DEATHS": 0,
+    "UNAUTHORIZED_INTERRUPT": false,
+    "PIXEL_SMOKE_TARGET_SEC": 600,
     "captures": [
       {
-        "name": "05_smoke_121s",
-        "path": "artifacts/engineering_wave018/pixel/05_smoke_121s.png",
+        "name": "05_smoke_120s",
+        "path": "artifacts/engineering_wave018/pixel/05_smoke_120s.png",
+        "bytes": 169349,
+        "ok": true
+      },
+      {
+        "name": "05_smoke_242s",
+        "path": "artifacts/engineering_wave018/pixel/05_smoke_242s.png",
+        "bytes": 169349,
+        "ok": true
+      },
+      {
+        "name": "05_smoke_360s",
+        "path": "artifacts/engineering_wave018/pixel/05_smoke_360s.png",
+        "bytes": 169349,
+        "ok": true
+      },
+      {
+        "name": "05_smoke_481s",
+        "path": "artifacts/engineering_wave018/pixel/05_smoke_481s.png",
+        "bytes": 169349,
+        "ok": true
+      },
+      {
+        "name": "05_smoke_602s",
+        "path": "artifacts/engineering_wave018/pixel/05_smoke_602s.png",
         "bytes": 169349,
         "ok": true
       },
       {
         "name": "06_smoke_end",
         "path": "artifacts/engineering_wave018/pixel/06_smoke_end.png",
-        "bytes": 143738,
+        "bytes": 169349,
         "ok": true
       }
     ],
-    "emitted_at": "2026-08-25T02:05:24.869081+00:00"
+    "emitted_at": "2026-08-25T02:28:54.232565+00:00"
   },
-  "PIXEL_CAMPAIGN": "FAIL"
+  "PIXEL_CAMPAIGN": "PASS"
 }
