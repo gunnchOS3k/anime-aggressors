@@ -57,6 +57,7 @@ var _load_failure_logged: bool = false
 var _configure_swap_count: int = 0
 const VIEWPORT_REFRESH_EVERY_SWAPS := 7
 var _last_framing_report: Dictionary = {}
+var _last_presentation: Dictionary = {}
 
 
 func _ready() -> void:
@@ -332,12 +333,20 @@ func play_clip(clip_name: String) -> void:
 
 
 func animate_preview(clip_name: String, t: float) -> void:
+	## Wave020 CP2: Move Preview must drive the canonical GLB body, not dual-show stylized.
 	_style_clip = clip_name
 	_style_anim_t = t
+	if _procedural_healthy and _loaded:
+		if _stylized != null:
+			_stylized.visible = false
+		_using_stylized_fallback = false
+		_play_clip(clip_name)
+		return
+	# Emergency only when canonical body is unavailable.
+	_AssetResolver.note_emergency_fallback()
 	if _stylized != null and _stylized.has_method("animate_pose"):
-		# Prefer stylized pose for authentic preview identity even if GLB is primary.
-		if not _stylized.visible:
-			_stylized.visible = true
+		_stylized.visible = true
+		_using_stylized_fallback = true
 		_stylized.animate_pose(clip_name, t)
 
 
@@ -414,6 +423,11 @@ func capture_viewport_image() -> Image:
 
 
 func _resolve_and_load_model(fighter_data: Dictionary) -> Dictionary:
+	## Route through canonical presentation authority — reject deprecated player paths.
+	var presentation: Dictionary = _AssetResolver.resolve_presentation(
+		_fighter_id, _AssetResolver.CTX_BATTLE if not _select_mode else _AssetResolver.CTX_SELECT_PREVIEW, fighter_data
+	)
+	_last_presentation = presentation
 	var explicit := str(fighter_data.get("modelPath", ""))
 	if _is_approved_final_path(explicit):
 		var final_info := _try_load_final_glb(fighter_data)
@@ -422,12 +436,23 @@ func _resolve_and_load_model(fighter_data: Dictionary) -> Dictionary:
 	var proxy_info := _try_load_procedural_proxy(fighter_data)
 	if proxy_info.get("loaded", false):
 		return proxy_info
-	if not explicit.is_empty() and not explicit.contains("/proxy/"):
-		var legacy_info := _try_load_final_glb(fighter_data)
-		if legacy_info.get("loaded", false):
-			legacy_info["source"] = "PROCEDURAL_PRODUCTION_PROXY"
-			return legacy_info
+	# Do NOT load assets/characters/procedural_final as success for player builds.
+	_AssetResolver.note_canonical_failure()
 	return {"source": "MISSING", "loaded": false}
+
+
+func get_presentation_trace() -> Dictionary:
+	return _last_presentation.duplicate() if typeof(_last_presentation) == TYPE_DICTIONARY else {}
+
+
+func capture_portrait_image() -> Image:
+	refresh_viewport_texture(true)
+	if _viewport == null:
+		return null
+	var tex: Texture2D = _viewport.get_texture()
+	if tex == null:
+		return null
+	return tex.get_image()
 
 
 func _is_approved_final_path(path: String) -> bool:

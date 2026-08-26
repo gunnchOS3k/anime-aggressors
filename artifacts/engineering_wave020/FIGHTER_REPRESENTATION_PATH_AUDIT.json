@@ -1,0 +1,197 @@
+{
+  "artifact": "FIGHTER_REPRESENTATION_PATH_AUDIT",
+  "wave": "wave020_cp2",
+  "emitted_at": "2026-08-26T02:24:00+00:00",
+  "source_audit_agent": "c799c431-9904-4d36-a4bd-bf26953d5f40",
+  "architecture_layers": [
+    {
+      "id": "A_vector_silhouette",
+      "description": "fighter_silhouette_card.gd stick/primitive _draw shapes",
+      "classification": "DEPRECATED",
+      "player_visible_today": true,
+      "surfaces": ["select_card", "boot_cameo_silhouette"]
+    },
+    {
+      "id": "B_fighter_model_3d",
+      "description": "SubViewport GLB via content/..._procedural_proxy.glb + stylized fallback",
+      "classification": "CURRENT_PLAYER_FACING",
+      "player_visible_today": true,
+      "surfaces": ["select_preview", "versus", "battle", "move_preview", "boot_cameo_model", "training"]
+    },
+    {
+      "id": "C_colorrect_body",
+      "description": "Fighter.tscn ColorRect Body + fighter_animator proxy",
+      "classification": "DEPRECATED",
+      "player_visible_today": true,
+      "surfaces": ["battle_emergency_fallback", "training_emergency_fallback"]
+    }
+  ],
+  "canonical_asset_pattern": "res://content/fighters/{id}/model/{id}_procedural_proxy.glb",
+  "legacy_asset_patterns": [
+    "res://assets/characters/procedural_final/{id}.glb",
+    "res://assets/characters/proxy/{id}.glb",
+    "res://assets/ui/placeholders/fighter_{id}.svg"
+  ],
+  "roster_ids": [
+    "ember-vale",
+    "rook-ironside",
+    "juno-spark",
+    "kaia-windrow",
+    "nix-calder",
+    "orion-vell",
+    "vesper-nyx"
+  ],
+  "surfaces": [
+    {
+      "surface": "boot_title_cameo",
+      "scene": "game-godot/scenes/boot/BootScene.tscn",
+      "script": "game-godot/scripts/core/boot_scene.gd",
+      "representation_source": "silhouette_card + FighterModel3D.configure",
+      "asset_type": "vector_silhouette + subviewport_glb",
+      "asset_path": "content/fighters/{id}/model/{id}_procedural_proxy.glb",
+      "fighter_id_mapping": "roster_slug",
+      "is_current_canonical": false,
+      "is_legacy": true,
+      "legacy_component": "silhouette_card",
+      "fallback_behavior": "stylized_builder; athlete stick draw",
+      "player_visible": true
+    },
+    {
+      "surface": "select_card",
+      "scene": "game-godot/scenes/menus/FighterSelectScene.tscn + scenes/ui/FighterTile.tscn",
+      "script": "game-godot/scripts/menus/fighter_select_scene.gd + scripts/ui/fighter_silhouette_card.gd",
+      "representation_source": "FighterTile Silhouette.configure",
+      "asset_type": "vector_silhouette",
+      "asset_path": null,
+      "fighter_id_mapping": "hardcoded match in _draw",
+      "is_current_canonical": false,
+      "is_legacy": true,
+      "fallback_behavior": "_draw_athlete",
+      "player_visible": true
+    },
+    {
+      "surface": "select_preview",
+      "scene": "FighterSelectScene PreviewHost/SelectModel",
+      "script": "fighter_select_scene.gd + fighter_model_3d.gd",
+      "representation_source": "FighterModel3D.configure(load_fighter)",
+      "asset_type": "subviewport_glb",
+      "asset_path": "content/fighters/{id}/model/{id}_procedural_proxy.glb",
+      "fighter_id_mapping": "data.id",
+      "is_current_canonical": true,
+      "is_legacy": false,
+      "fallback_behavior": "stylized_fighter_builder",
+      "player_visible": true
+    },
+    {
+      "surface": "versus",
+      "scene": "game-godot/scenes/menus/VersusScene.tscn",
+      "script": "game-godot/scripts/menus/versus_scene.gd",
+      "representation_source": "FighterModel3D Portrait_P1/P2",
+      "asset_type": "subviewport_glb",
+      "asset_path": "content/fighters/{id}/model/{id}_procedural_proxy.glb",
+      "fighter_id_mapping": "GameState.p1/p2_fighter_id",
+      "is_current_canonical": true,
+      "is_legacy": false,
+      "fallback_behavior": "stylized; silent omit if script fails",
+      "player_visible": true
+    },
+    {
+      "surface": "battle",
+      "scene": "game-godot/scenes/battle/BattleScene.tscn + scenes/fighters/Fighter.tscn",
+      "script": "battle_scene.gd + fighter.gd + fighter_model_3d.gd",
+      "representation_source": "Model3D.configure; ColorRect Body if not renderable",
+      "asset_type": "subviewport_glb | colorrect_proxy",
+      "asset_path": "content/fighters/{id}/model/{id}_procedural_proxy.glb",
+      "fighter_id_mapping": "GameState fighter ids",
+      "is_current_canonical": true,
+      "is_legacy": true,
+      "legacy_component": "ColorRect Body emergency",
+      "fallback_behavior": "body.visible=true when model not renderable",
+      "player_visible": true
+    },
+    {
+      "surface": "respawn",
+      "scene": "Fighter under Battle/Training",
+      "script": "fighter.gd RESPAWN",
+      "representation_source": "same Model3D; ensure_visible_presentation",
+      "asset_type": "same as battle",
+      "asset_path": "same",
+      "fighter_id_mapping": "unchanged",
+      "is_current_canonical": true,
+      "is_legacy": true,
+      "legacy_component": "ColorRect possible",
+      "fallback_behavior": "re-heal model or show ColorRect",
+      "player_visible": true
+    },
+    {
+      "surface": "pause_menu",
+      "scene": "runtime PanelContainer on Battle HUD",
+      "script": "battle_scene.gd _ensure_pause_panel",
+      "representation_source": "text buttons only",
+      "asset_type": null,
+      "asset_path": null,
+      "fighter_id_mapping": null,
+      "is_current_canonical": false,
+      "is_legacy": false,
+      "fallback_behavior": null,
+      "player_visible": true,
+      "notes": "OWNER-REG-013 layout clipped bottom-right"
+    },
+    {
+      "surface": "move_list_preview",
+      "scene": "runtime MoveListPanel",
+      "script": "move_list_panel.gd",
+      "representation_source": "MovePreviewModel FighterModel3D; animate_preview may force stylized",
+      "asset_type": "subviewport_glb + stylized_pose",
+      "asset_path": "content/fighters/{id}/model/{id}_procedural_proxy.glb",
+      "fighter_id_mapping": "p1 or select cursor",
+      "is_current_canonical": false,
+      "is_legacy": true,
+      "legacy_component": "animate_preview stylized dual-show",
+      "fallback_behavior": "stylized animate_pose",
+      "player_visible": true
+    },
+    {
+      "surface": "victory_results",
+      "scene": "game-godot/scenes/ui/ResultsScene.tscn",
+      "script": "results_scene.gd",
+      "representation_source": "name + color only",
+      "asset_type": "ui_text",
+      "asset_path": null,
+      "fighter_id_mapping": "last_winner_slot",
+      "is_current_canonical": false,
+      "is_legacy": false,
+      "fallback_behavior": "P1/P2 label",
+      "player_visible": true,
+      "notes": "no fighter body currently"
+    },
+    {
+      "surface": "training_battle",
+      "scene": "TrainingBattleScene.tscn",
+      "script": "training_battle_scene.gd",
+      "representation_source": "same Fighter.tscn path as battle",
+      "asset_type": "subviewport_glb | colorrect",
+      "asset_path": "same as battle",
+      "fighter_id_mapping": "GameState p1/p2",
+      "is_current_canonical": true,
+      "is_legacy": true,
+      "legacy_component": "ColorRect possible",
+      "fallback_behavior": "same as battle",
+      "player_visible": true
+    }
+  ],
+  "key_resolver_files": [
+    "game-godot/scripts/visual/fighter_asset_resolver.gd",
+    "game-godot/scripts/fighters/fighter_model_3d.gd",
+    "game-godot/scripts/fighters/stylized_fighter_builder.gd",
+    "game-godot/scripts/ui/fighter_silhouette_card.gd",
+    "game-godot/scripts/fighters/fighter.gd",
+    "game-godot/scripts/ui/move_list_panel.gd",
+    "game-godot/scripts/battle/battle_scene.gd"
+  ],
+  "owner_regs_mapped": {
+    "OWNER_REG_011": "select_card silhouette + ColorRect battle + move_preview stylized dual",
+    "OWNER_REG_012": "battle Model3D intermittent + ColorRect mask as success",
+    "OWNER_REG_013": "pause/movelist hard-coded bottom-right layout"
+  }
+}

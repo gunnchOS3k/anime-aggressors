@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://scripts/ui/fighter_silhouette_card.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/ui/fighter_card_portrait.gd" id="1"]
 
 [node name="FighterTile" type="Button"]
 custom_minimum_size = Vector2(168, 168)
@@ -19,11 +19,13 @@ offset_bottom = -6.0
 mouse_filter = 2
 theme_override_constants/separation = 2
 
-[node name="Silhouette" type="Control" parent="VBox"]
+[node name="Silhouette" type="TextureRect" parent="VBox"]
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
 script = ExtResource("1")
 
 [node name="NameLabel" type="Label" parent="VBox"]
