@@ -13,6 +13,8 @@ func _init() -> void:
 
 func _run() -> void:
 	var gs = root.get_node_or_null("/root/GameState")
+	var gates = preload("res://scripts/menus/wave020_presentation_gates.gd")
+	gates.enable_slice_a_framing()
 	var roster: Array = gs.roster_ids()
 	var host := Node2D.new()
 	root.add_child(host)

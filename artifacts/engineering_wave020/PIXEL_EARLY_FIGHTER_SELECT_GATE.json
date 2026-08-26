@@ -1,0 +1,21 @@
+{
+  "PIXEL_EARLY_GATE": "BLOCKED_PIXEL6A",
+  "PIXEL_CAMPAIGN": "EARLY_GATE_BLOCKED_UNAUTHORIZED",
+  "PIXEL_DEVICE_AVAILABLE": false,
+  "PIXEL_AUTHENTIC": false,
+  "AA_ONLY_GUARDS": true,
+  "SETTINGS_UI_USED": false,
+  "PERMISSION_GRANT_METHOD": "adb_pm_grant",
+  "DEVICE_SERIAL_OBSERVED": "27211JEGR06194",
+  "DEVICE_ADB_STATE": "unauthorized",
+  "PIXEL_FIGHTER_SELECT_DYNAMIC_CONTENT_COMPLETE": false,
+  "PIXEL_OWNER_REG_009": "BLOCKED",
+  "PIXEL_OWNER_REG_008": "BLOCKED",
+  "PIXEL_SELECT_RENDER_GHOST_OCCURRENCES": null,
+  "PIXEL_BATTLE_RENDER_GHOST_OCCURRENCES": null,
+  "APK_REBUILT": true,
+  "APK": "builds/android/anime-aggressors-debug.apk",
+  "reason": "Pixel 6a adb unauthorized after APK rebuild; accept RSA dialog on device then re-run early gate",
+  "owner_action": "Unlock Pixel, accept 'Allow USB debugging', then: WAVE020_FORCE_APK_REBUILD=0 python3 tools/engineering_wave020/run_pixel_early_fighter_select_gate.py",
+  "emitted_at": "2026-08-26T00:36:53.408368+00:00"
+}

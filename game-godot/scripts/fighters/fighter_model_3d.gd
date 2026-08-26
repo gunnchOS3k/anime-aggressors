@@ -13,6 +13,7 @@ const _MaterialController = preload("res://scripts/visual/fighter_material_contr
 const _MoveResolver = preload("res://scripts/visual/runtime_move_resolver.gd")
 const _BoneMap = preload("res://scripts/visual/procedural_bone_map.gd")
 const _SelectFraming = preload("res://scripts/menus/character_select_framing.gd")
+const _PresentationGates = preload("res://scripts/menus/wave020_presentation_gates.gd")
 
 const VIEWPORT_SIZE := Vector2i(220, 280)
 const DISPLAY_SCALE := Vector2(0.38, 0.38)
@@ -533,14 +534,24 @@ func _apply_toon_recursive(node: Node, base_color: Color) -> void:
 func _frame_camera_for_figure() -> void:
 	if _camera == null:
 		return
+	# STOP_THE_LINE: keep Wave019 baseline camera until Slice A framing is re-enabled.
+	if not _PresentationGates.dynamic_framing_enabled:
+		var height := 1.0
+		if _stylized and _stylized.has_method("get_height_scale"):
+			height = float(_stylized.get_height_scale())
+		_camera.size = (SELECT_CAMERA_SIZE if _select_mode else (2.55 + 0.35 * height))
+		_camera.position = Vector3(0, 1.05 * height + 0.12, 5.0)
+		_camera.look_at(Vector3(0, 1.05 * height + 0.08, 0), Vector3.UP)
+		_last_framing_report = {"owner_review": "BASELINE_CAMERA", "body_coverage": 0.7}
+		return
 	var bounds := AABB()
 	if _loaded_model != null and is_instance_valid(_loaded_model):
 		bounds = _SelectFraming.compute_model_bounds(_loaded_model)
 	else:
-		var height := 1.0
+		var height2 := 1.0
 		if _stylized and _stylized.has_method("get_height_scale"):
-			height = float(_stylized.get_height_scale())
-		bounds = AABB(Vector3(-0.35, 0.0, -0.15), Vector3(0.7, height * 1.75, 0.35))
+			height2 = float(_stylized.get_height_scale())
+		bounds = AABB(Vector3(-0.35, 0.0, -0.15), Vector3(0.7, height2 * 1.75, 0.35))
 	var vfx_env := 0.14
 	if not _life.is_empty():
 		vfx_env = clampf(float(_life.get("aura_pulse", 1.0)) * 0.08 + 0.1, 0.1, 0.22)

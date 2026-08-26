@@ -18,6 +18,8 @@ func _run() -> void:
 		_write({"ok": false, "error": "GameState missing"})
 		quit(1)
 		return
+	var gates = preload("res://scripts/menus/wave020_presentation_gates.gd")
+	gates.enable_slice_b_flourish()
 	var roster: Array = gs.roster_ids()
 	var host := Node.new()
 	root.add_child(host)
