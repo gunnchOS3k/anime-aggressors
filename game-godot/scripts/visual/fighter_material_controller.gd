@@ -13,8 +13,23 @@ var _base_colors: Dictionary = {}
 func bind_model(root: Node3D) -> void:
 	_mesh_instances.clear()
 	_base_colors.clear()
+	_localize_materials(root)
 	_collect_meshes(root)
 	_apply_team_tint()
+
+
+func _localize_materials(node: Node) -> void:
+	## Wave020 isolation: duplicate shared GLB materials so runtime tint never whiteouts siblings.
+	if node is MeshInstance3D:
+		var mesh := node as MeshInstance3D
+		var active: Material = mesh.get_active_material(0)
+		if active != null:
+			var local: Material = active.duplicate(true)
+			if local is Resource:
+				(local as Resource).resource_local_to_scene = true
+			mesh.material_override = local
+	for child in node.get_children():
+		_localize_materials(child)
 
 
 func set_hit_flash(intensity: float = 1.0) -> void:

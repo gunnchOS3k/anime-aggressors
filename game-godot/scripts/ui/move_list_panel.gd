@@ -5,6 +5,7 @@ extends Control
 const Catalog = preload("res://scripts/ui/move_list_catalog.gd")
 const Glyphs = preload("res://scripts/ui/input_glyph_presenter.gd")
 const MODEL_SCRIPT = preload("res://scripts/fighters/fighter_model_3d.gd")
+const _PresentationContext = preload("res://scripts/visual/presentation_context.gd")
 
 signal closed
 signal pin_requested(move_entry: Dictionary)
@@ -360,17 +361,16 @@ func _ensure_preview() -> void:
 		return
 	_preview_model = MODEL_SCRIPT.new()
 	_preview_model.name = "MovePreviewModel"
-	# OWNER-REG-015: keep preview host large enough for select-scale SubViewportContainer.
 	_preview_model.position = Vector2(40, 40)
 	_preview_host.add_child(_preview_model)
 	var data: Dictionary = {"id": fighter_id, "displayName": fighter_id}
 	var gs := get_node_or_null("/root/GameState")
 	if gs != null and gs.has_method("load_fighter"):
 		data = gs.load_fighter(fighter_id)
+	if _preview_model.has_method("set_presentation_context"):
+		_preview_model.set_presentation_context(_PresentationContext.CTX_MOVE_PREVIEW)
 	if _preview_model.has_method("configure"):
 		_preview_model.configure(data)
-	if _preview_model.has_method("set_select_mode"):
-		_preview_model.set_select_mode(true)
 	if _preview_model.has_method("heal_final_screen_visibility_if_needed"):
 		_preview_model.heal_final_screen_visibility_if_needed()
 	elif _preview_model.has_method("heal_visibility_if_needed"):
@@ -382,7 +382,9 @@ func get_move_preview_final_screen_witness() -> Dictionary:
 	if _preview_model != null and _preview_model.has_method("get_final_screen_visibility_witness"):
 		var w: Dictionary = _preview_model.get_final_screen_visibility_witness()
 		w["OWNER_REG_015"] = "PASS" if bool(w.get("FINAL_SCREEN_VISIBLE", false)) else "FAIL"
+		w["OWNER_REG_019"] = "PASS" if bool(w.get("FINAL_SCREEN_SCALE_CONTRACT_PASS", true)) and _PresentationContext.CTX_MOVE_PREVIEW == str(w.get("presentation_context", "")) else "FAIL"
 		w["pane_visible"] = visible and _preview_host != null and _preview_host.is_visible_in_tree()
+		w["preview_inside_host"] = _preview_host.get_rect().has_point(_preview_model.position)
 		return w
 	return {
 		"SCENE_TREE_VISIBLE": false,

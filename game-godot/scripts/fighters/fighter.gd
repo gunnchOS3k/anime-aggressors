@@ -15,6 +15,7 @@ const _AuraIdentity = preload("res://scripts/combat/aura_identity.gd")
 const _AuraSpecialRuntime = preload("res://scripts/combat/aura_special_runtime.gd")
 const _CombatMath = preload("res://scripts/combat/combat_math.gd")
 const _MoveResolver = preload("res://scripts/visual/runtime_move_resolver.gd")
+const _PresentationContext = preload("res://scripts/visual/presentation_context.gd")
 
 signal damaged(amount: float, total: float)
 signal koed()
@@ -163,6 +164,8 @@ func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, s
 	spawn_point = spawn
 	data = _DataLoader.load_fighter(id)
 	move_manifest = _DataLoader.load_moves(id)
+	if model_3d != null and model_3d.has_method("set_presentation_context"):
+		model_3d.set_presentation_context(_PresentationContext.battle_context_for_slot(slot, cpu_flag))
 	var model_loaded: bool = model_3d != null and model_3d.configure(data)
 	if body:
 		# CP2: keep ColorRect hidden unless ensure_visible_presentation proves model failed.

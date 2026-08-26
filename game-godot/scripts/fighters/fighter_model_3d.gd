@@ -14,6 +14,8 @@ const _MoveResolver = preload("res://scripts/visual/runtime_move_resolver.gd")
 const _BoneMap = preload("res://scripts/visual/procedural_bone_map.gd")
 const _SelectFraming = preload("res://scripts/menus/character_select_framing.gd")
 const _PresentationGates = preload("res://scripts/menus/wave020_presentation_gates.gd")
+const _PresentationContext = preload("res://scripts/visual/presentation_context.gd")
+const _PresentationCache = preload("res://scripts/visual/fighter_presentation_cache.gd")
 
 const VIEWPORT_SIZE := Vector2i(256, 320)
 ## Battle bodies must be owner-visible on Pixel; prior 0.38 read as absent.
@@ -47,6 +49,9 @@ var _throw_dir: String = "forward"
 var _expression: String = "neutral"
 var _aura_level: int = 0
 var _select_mode: bool = false
+var _presentation_context: String = _PresentationContext.CTX_BATTLE
+var _owner_generation: int = 0
+var _witness_probe_model: Node3D = null
 var _style_anim_t: float = 0.0
 var _style_clip: String = "idle"
 var _style_speed: float = 1.0
@@ -140,6 +145,7 @@ func configure(fighter_data: Dictionary) -> bool:
 	if gen != _configure_generation:
 		return false
 	_enforce_exactly_one_visible_body()
+	_reset_model_root_transform()
 	_frame_camera_for_figure()
 	_set_loaded(_loaded_model != null)
 	_configure_swap_count += 1
@@ -155,7 +161,18 @@ func configure(fighter_data: Dictionary) -> bool:
 		if not is_visible_renderable_body():
 			refresh_viewport_texture(true)
 	call_deferred("_deferred_finalize_display")
+	_PresentationCache.register_live(self, _presentation_context, _fighter_id, _configure_generation)
 	return _loaded
+
+
+func _reset_model_root_transform() -> void:
+	if _model_root == null or not is_instance_valid(_model_root):
+		return
+	_model_root.scale = Vector3.ONE
+	_model_root.rotation = Vector3.ZERO
+	_model_root.position = Vector3.ZERO
+	if _loaded_model != null and is_instance_valid(_loaded_model):
+		_loaded_model.scale = Vector3.ONE
 
 
 func is_model_loaded() -> bool:
@@ -299,12 +316,46 @@ func truth_flags() -> Dictionary:
 	}
 
 
+func set_presentation_context(context: String) -> void:
+	_presentation_context = _PresentationContext.normalize_context(context)
+	_select_mode = _presentation_context in [
+		_PresentationContext.CTX_SELECT_PREVIEW,
+		_PresentationContext.CTX_VERSUS,
+		_PresentationContext.CTX_MOVE_PREVIEW,
+	]
+	_apply_context_display_contract()
+	_PresentationCache.register_live(self, _presentation_context, _fighter_id, _configure_generation)
+
+
+func get_presentation_context() -> String:
+	return _presentation_context
+
+
 func set_select_mode(enabled: bool) -> void:
-	_select_mode = enabled
+	if enabled:
+		set_presentation_context(_PresentationContext.CTX_SELECT_PREVIEW)
+	else:
+		if _presentation_context in [_PresentationContext.CTX_SELECT_PREVIEW, _PresentationContext.CTX_VERSUS]:
+			set_presentation_context(_PresentationContext.CTX_BATTLE)
+		else:
+			_select_mode = false
+			_apply_context_display_contract()
+
+
+func _apply_context_display_contract() -> void:
+	var contract: Dictionary = _PresentationContext.display_contract(_presentation_context)
 	if _display:
-		_display.scale = SELECT_DISPLAY_SCALE if enabled else DISPLAY_SCALE
-		_display.position = Vector2(0, -28) if enabled else Vector2(0, -56)
+		var scale: Vector2 = contract.get("display_scale", DISPLAY_SCALE)
+		_display.scale = scale
+		_display.position = contract.get("display_offset", Vector2(0, -56))
 		_display.z_index = 2
+	if _viewport != null and is_instance_valid(_viewport):
+		var vp_size: Vector2i = contract.get("viewport_size", VIEWPORT_SIZE)
+		if vp_size != _viewport.size:
+			_viewport.size = vp_size
+	if _model_root != null and is_instance_valid(_model_root):
+		# Canonical model root stays unit scale — camera/wrapper only.
+		_model_root.scale = Vector3.ONE
 	_frame_camera_for_figure()
 
 
@@ -433,7 +484,7 @@ func capture_viewport_image() -> Image:
 func _resolve_and_load_model(fighter_data: Dictionary) -> Dictionary:
 	## Route through canonical presentation authority — reject deprecated player paths.
 	var presentation: Dictionary = _AssetResolver.resolve_presentation(
-		_fighter_id, _AssetResolver.CTX_BATTLE if not _select_mode else _AssetResolver.CTX_SELECT_PREVIEW, fighter_data
+		_fighter_id, _PresentationContext.resolver_context(_presentation_context), fighter_data
 	)
 	_last_presentation = presentation
 	var explicit := str(fighter_data.get("modelPath", ""))
@@ -549,17 +600,31 @@ func _apply_toon_materials(root: Node3D, fighter_data: Dictionary) -> void:
 func _apply_toon_recursive(node: Node, base_color: Color) -> void:
 	if node is MeshInstance3D:
 		var mesh := node as MeshInstance3D
-		var shader_res: Resource = load("res://shaders/fighter_toon.gdshader")
-		if shader_res is Shader:
-			var mat := ShaderMaterial.new()
-			mat.shader = shader_res as Shader
-			mat.set_shader_parameter("base_color", base_color)
-			mat.set_shader_parameter("team_tint", base_color)
-			mesh.material_override = mat
+		var existing: Material = mesh.get_active_material(0)
+		if existing != null:
+			var local: Material = existing.duplicate(true)
+			if local is Resource:
+				(local as Resource).resource_local_to_scene = true
+			if local is ShaderMaterial:
+				(local as ShaderMaterial).set_shader_parameter("base_color", base_color)
+				(local as ShaderMaterial).set_shader_parameter("team_tint", base_color)
+			elif local is StandardMaterial3D:
+				(local as StandardMaterial3D).albedo_color = base_color
+			mesh.material_override = local
 		else:
-			var fallback := StandardMaterial3D.new()
-			fallback.albedo_color = base_color
-			mesh.material_override = fallback
+			var shader_res: Resource = load("res://shaders/fighter_toon.gdshader")
+			if shader_res is Shader:
+				var mat := ShaderMaterial.new()
+				mat.resource_local_to_scene = true
+				mat.shader = shader_res as Shader
+				mat.set_shader_parameter("base_color", base_color)
+				mat.set_shader_parameter("team_tint", base_color)
+				mesh.material_override = mat
+			else:
+				var fallback := StandardMaterial3D.new()
+				fallback.resource_local_to_scene = true
+				fallback.albedo_color = base_color
+				mesh.material_override = fallback
 	for child in node.get_children():
 		_apply_toon_recursive(child, base_color)
 
@@ -709,6 +774,10 @@ func _viewport_bank() -> Node:
 
 
 func _exit_tree() -> void:
+	_PresentationCache.release_live(self)
+	if _witness_probe_model != null and is_instance_valid(_witness_probe_model):
+		_witness_probe_model.queue_free()
+		_witness_probe_model = null
 	# Free bank-hosted SubViewport so battle→select transitions don't leak RTs.
 	if _viewport != null and is_instance_valid(_viewport):
 		_viewport.queue_free()
@@ -863,6 +932,69 @@ func classify_invisible_but_valid_failure() -> String:
 	return ""
 
 
+func sample_material_identity() -> Dictionary:
+	var colors: Array = []
+	var whiteout_meshes := 0
+	var mesh_count := 0
+	if _loaded_model == null or not is_instance_valid(_loaded_model):
+		return {"mesh_count": 0, "mean_luma": 0.0, "whiteout_meshes": 0, "material_fingerprint": ""}
+	var stack: Array = [_loaded_model]
+	while not stack.is_empty():
+		var n: Node = stack.pop_back()
+		if n is MeshInstance3D:
+			mesh_count += 1
+			var mesh := n as MeshInstance3D
+			var mat: Material = mesh.get_active_material(0)
+			var col := Color.WHITE
+			if mat is ShaderMaterial:
+				var bc = (mat as ShaderMaterial).get_shader_parameter("base_color")
+				if bc is Color:
+					col = bc
+			elif mat is StandardMaterial3D:
+				col = (mat as StandardMaterial3D).albedo_color
+			colors.append(col)
+			if col.r + col.g + col.b < _PresentationContext.MIN_MATERIAL_LUMA:
+				whiteout_meshes += 1
+		for c in n.get_children():
+			stack.append(c)
+	var mean_luma := 0.0
+	for c in colors:
+		if c is Color:
+			mean_luma += (c.r + c.g + c.b) / 3.0
+	if colors.size() > 0:
+		mean_luma /= float(colors.size())
+	var fp := "%d:%.3f:%d" % [mesh_count, mean_luma, whiteout_meshes]
+	return {
+		"mesh_count": mesh_count,
+		"mean_luma": mean_luma,
+		"whiteout_meshes": whiteout_meshes,
+		"material_fingerprint": fp,
+	}
+
+
+func sample_scale_contract() -> Dictionary:
+	var model_root_scale := Vector3.ONE
+	if _model_root != null and is_instance_valid(_model_root):
+		model_root_scale = _model_root.scale
+	var display_scale := Vector2.ZERO
+	if _display != null and is_instance_valid(_display):
+		display_scale = _display.scale
+	var contract: Dictionary = _PresentationContext.display_contract(_presentation_context)
+	var max_scale := _PresentationContext.MAX_BATTLE_DISPLAY_SCALE
+	if _presentation_context != _PresentationContext.CTX_BATTLE and _presentation_context != _PresentationContext.CTX_BATTLE_P1 and _presentation_context != _PresentationContext.CTX_BATTLE_P2_CPU and _presentation_context != _PresentationContext.CTX_TRAINING:
+		max_scale = _PresentationContext.MAX_PREVIEW_DISPLAY_SCALE
+	var overscale := absf(display_scale.x) > max_scale or absf(display_scale.y) > max_scale
+	var root_scaled := model_root_scale != Vector3.ONE
+	return {
+		"presentation_context": _presentation_context,
+		"model_root_scale": {"x": model_root_scale.x, "y": model_root_scale.y, "z": model_root_scale.z},
+		"display_scale": {"x": display_scale.x, "y": display_scale.y},
+		"model_root_scale_violation": root_scaled,
+		"display_overscale": overscale,
+		"scale_contract_pass": not root_scaled and not overscale,
+	}
+
+
 func get_final_screen_visibility_witness() -> Dictionary:
 	var scene_vis := is_visible_renderable_body()
 	var px: Dictionary = count_viewport_opaque_pixels()
@@ -871,11 +1003,20 @@ func get_final_screen_visibility_witness() -> Dictionary:
 		final_vis = bool(px.get("viewport_image_valid", false)) and int(px.get("viewport_opaque_pixels", 0)) >= FINAL_SCREEN_MIN_OPAQUE_PIXELS
 	var fail := "" if final_vis else classify_invisible_but_valid_failure()
 	var meshes: Dictionary = count_renderable_meshes()
+	var mat_id: Dictionary = sample_material_identity()
+	var scale_c: Dictionary = sample_scale_contract()
 	_last_witness = {
 		"fighter_id": _fighter_id,
+		"presentation_context": _presentation_context,
 		"SCENE_TREE_VISIBLE": scene_vis,
 		"FINAL_SCREEN_VISIBLE": final_vis,
 		"FINAL_SCREEN_WITNESS_AVAILABLE": not bool(px.get("viewport_image_unreadable", false)),
+		"FINAL_SCREEN_BODY_PRESENT_PASS": scene_vis and int(meshes.get("visible_renderable_mesh_count", 0)) > 0,
+		"FINAL_SCREEN_IDENTITY_MATCH_PASS": _fighter_id != "" and _procedural_healthy,
+		"FINAL_SCREEN_MATERIAL_IDENTITY_PASS": int(mat_id.get("whiteout_meshes", 0)) == 0 and float(mat_id.get("mean_luma", 0.0)) >= _PresentationContext.MIN_MATERIAL_LUMA,
+		"FINAL_SCREEN_SCALE_CONTRACT_PASS": bool(scale_c.get("scale_contract_pass", false)),
+		"material_identity": mat_id,
+		"scale_contract": scale_c,
 		"viewport_opaque_pixels": int(px.get("viewport_opaque_pixels", 0)),
 		"viewport_total_pixels": int(px.get("viewport_total_pixels", 0)),
 		"viewport_image_valid": bool(px.get("viewport_image_valid", false)),
@@ -894,6 +1035,8 @@ func get_final_screen_visibility_witness() -> Dictionary:
 		"final_screen_heal_attempts": _final_screen_heal_attempts,
 		"invisible_failure_class": fail,
 		"select_mode": _select_mode,
+		"configure_generation": _configure_generation,
+		"witness_non_invasive": true,
 	}
 	return _last_witness.duplicate(true)
 
@@ -962,12 +1105,8 @@ func heal_final_screen_visibility_if_needed() -> bool:
 	refresh_viewport_texture(true)
 	if is_final_screen_visible_body():
 		return true
-	# Force StandardMaterial3D if SV framebuffer is blank (shader miss on mobile).
-	var px: Dictionary = count_viewport_opaque_pixels()
-	if not bool(px.get("viewport_image_unreadable", false)) and int(px.get("viewport_opaque_pixels", 0)) < FINAL_SCREEN_MIN_OPAQUE_PIXELS:
-		if _loaded_model != null and is_instance_valid(_loaded_model):
-			_force_standard_materials(_loaded_model, Color(0.85, 0.85, 0.9, 1.0))
-			refresh_viewport_texture(true)
+	# Wave020 isolation: never mutate live materials for heal — rebind viewport only.
+	refresh_viewport_texture(true)
 	return is_final_screen_visible_body()
 
 

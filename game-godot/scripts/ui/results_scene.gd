@@ -4,6 +4,7 @@ extends "res://scripts/ui/console_menu_base.gd"
 
 const PORTRAIT_SCRIPT = preload("res://scripts/ui/fighter_card_portrait.gd")
 const _AssetResolver = preload("res://scripts/visual/fighter_asset_resolver.gd")
+const _PresentationContext = preload("res://scripts/visual/presentation_context.gd")
 
 @onready var rematch_btn: Button = $VBox/Rematch
 @onready var change_fighters_btn: Button = $VBox/ChangeFighters
@@ -85,11 +86,15 @@ func _configure_victory_portrait(fighter_id: String) -> void:
 	var accent := Color(1.0, 0.85, 0.3)
 	var data: Dictionary = GameState.load_fighter(fighter_id)
 	accent = Color(data.get("color", accent))
-	if victory_portrait.has_method("configure"):
+	if victory_portrait.has_method("configure_for_context"):
+		victory_portrait.configure_for_context(fighter_id, Color(data.get("color", accent)), accent, _PresentationContext.CTX_VICTORY)
+	elif victory_portrait.has_method("configure"):
 		victory_portrait.configure(fighter_id, Color(data.get("color", accent)), accent)
 	elif victory_portrait.get_script() == null and PORTRAIT_SCRIPT:
 		victory_portrait.set_script(PORTRAIT_SCRIPT)
-		if victory_portrait.has_method("configure"):
+		if victory_portrait.has_method("configure_for_context"):
+			victory_portrait.configure_for_context(fighter_id, Color(data.get("color", accent)), accent, _PresentationContext.CTX_VICTORY)
+		elif victory_portrait.has_method("configure"):
 			victory_portrait.configure(fighter_id, Color(data.get("color", accent)), accent)
 	victory_portrait.visible = true
 	victory_portrait.custom_minimum_size = Vector2(220, 220)
