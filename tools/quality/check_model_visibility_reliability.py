@@ -28,7 +28,14 @@ def main() -> int:
     tscn_text = FIGHTER_TSCN.read_text(encoding="utf-8") if FIGHTER_TSCN.exists() else ""
 
     has_nameplate = "NameLabel" in tscn_text or "NameLabel" in fighter_text
-    hides_body_when_model = "body.visible = not model_loaded" in fighter_text
+    hides_body_when_model = (
+        "body.visible = not model_loaded" in fighter_text
+        or (
+            "ensure_visible_presentation" in fighter_text
+            and "body.visible = false" in fighter_text
+            and "model_ok and body != null" in fighter_text
+        )
+    )
     has_is_model_loaded = (
         "func is_model_loaded()" in fighter_text or "func is_model_loaded()" in model_text
     )

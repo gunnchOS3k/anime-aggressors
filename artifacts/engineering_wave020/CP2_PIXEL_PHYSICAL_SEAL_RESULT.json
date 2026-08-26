@@ -1,13 +1,21 @@
 {
-  "WAVE020_CP2_PIXEL_PHYSICAL_SEAL": "PASS",
+  "WAVE020_CP2_PIXEL_PHYSICAL_SEAL": "PARTIAL",
   "CP2_SEALED": false,
+  "CP2_SEALED_CANDIDATE": true,
+  "REOPENED": true,
+  "REOPEN_BLOCKERS": [
+    "CP2_SEALED_requires_full_§18_reopen_criteria",
+    "CI_taste_gate_PIXEL_MODEL_VISIBILITY_VALIDATED=false",
+    "wave011_013b_014_015_ci_pending"
+  ],
+  "PIXEL_VESPER_KAIA_FINAL_SCREEN_PASS": true,
   "ok": true,
-  "PHYSICALLY_TESTED_RUNTIME_SHA": "3cf55f6494b12cba8c10b8792bb0075ddb288b45",
-  "APK_SHA256": "50755512022cc9ef635b6b76b7ff373e02f273952a8cff9488a032b1ab36b8e4",
+  "PHYSICALLY_TESTED_RUNTIME_SHA": "3e9581314df5fdf19783125942c0947533c0420a",
+  "APK_SHA256": "731be3654c474f29f0352d93f511ced7993df3d5ebd7c45f319604b5b82d7c00",
   "PACKAGE": "com.gunnchos.animeaggressors",
   "VERSION_CODE": "218",
   "GODOT_VERSION": "4.5.stable.official.876b29033",
-  "BUILD_TIMESTAMP": "2026-08-26T02:57:06.325841+00:00",
+  "BUILD_TIMESTAMP": "2026-08-26T04:23:53.554724+00:00",
   "reused_existing_apk": true,
   "DEVICE_SERIAL": "27211JEGR06194",
   "DEVICE_MODEL": "Pixel 6a",
@@ -54,7 +62,7 @@
     "VICTORY_CANONICAL_CURRENT_COUNT": 7,
     "VICTORY_LEGACY_REPRESENTATION_OCCURRENCES": 0,
     "VICTORY_WRONG_FIGHTER_OCCURRENCES": 0,
-    "apk_sha256": "50755512022cc9ef635b6b76b7ff373e02f273952a8cff9488a032b1ab36b8e4",
+    "apk_sha256": "731be3654c474f29f0352d93f511ced7993df3d5ebd7c45f319604b5b82d7c00",
     "device_model": "Pixel 6a",
     "first_failure": {},
     "gate1": {
@@ -151,10 +159,14 @@
       "pass": true,
       "samples_head": [
         {
+          "FINAL_SCREEN_VISIBLE": true,
+          "SCENE_TREE_VISIBLE": true,
           "duplicate_body": false,
           "expected_visible": true,
           "fallback_used": false,
           "fighter_id": "ember-vale",
+          "final_screen_witness_pass": true,
+          "invisible_failure_class": "",
           "is_canonical": true,
           "is_legacy": false,
           "lifecycle_state": "battle_spawn",
@@ -163,14 +175,19 @@
           "select_card_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "select_preview_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "selected_fighter_id": "ember-vale",
-          "selection_session_id": "ember-vale_3080",
-          "visible_renderable_mesh_count": 1
+          "selection_session_id": "ember-vale_3477",
+          "viewport_opaque_pixels": 25204,
+          "visible_renderable_mesh_count": 43
         },
         {
+          "FINAL_SCREEN_VISIBLE": true,
+          "SCENE_TREE_VISIBLE": true,
           "duplicate_body": false,
           "expected_visible": true,
           "fallback_used": false,
           "fighter_id": "ember-vale",
+          "final_screen_witness_pass": true,
+          "invisible_failure_class": "",
           "is_canonical": true,
           "is_legacy": false,
           "lifecycle_state": "t_250ms",
@@ -179,14 +196,19 @@
           "select_card_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "select_preview_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "selected_fighter_id": "ember-vale",
-          "selection_session_id": "ember-vale_3080",
-          "visible_renderable_mesh_count": 1
+          "selection_session_id": "ember-vale_3477",
+          "viewport_opaque_pixels": 25204,
+          "visible_renderable_mesh_count": 43
         },
         {
+          "FINAL_SCREEN_VISIBLE": true,
+          "SCENE_TREE_VISIBLE": true,
           "duplicate_body": false,
           "expected_visible": true,
           "fallback_used": false,
           "fighter_id": "ember-vale",
+          "final_screen_witness_pass": true,
+          "invisible_failure_class": "",
           "is_canonical": true,
           "is_legacy": false,
           "lifecycle_state": "t_500ms",
@@ -195,14 +217,19 @@
           "select_card_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "select_preview_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "selected_fighter_id": "ember-vale",
-          "selection_session_id": "ember-vale_3080",
-          "visible_renderable_mesh_count": 1
+          "selection_session_id": "ember-vale_3477",
+          "viewport_opaque_pixels": 25204,
+          "visible_renderable_mesh_count": 43
         },
         {
+          "FINAL_SCREEN_VISIBLE": true,
+          "SCENE_TREE_VISIBLE": true,
           "duplicate_body": false,
           "expected_visible": true,
           "fallback_used": false,
           "fighter_id": "ember-vale",
+          "final_screen_witness_pass": true,
+          "invisible_failure_class": "",
           "is_canonical": true,
           "is_legacy": false,
           "lifecycle_state": "t_1000ms",
@@ -211,14 +238,19 @@
           "select_card_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "select_preview_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "selected_fighter_id": "ember-vale",
-          "selection_session_id": "ember-vale_3080",
-          "visible_renderable_mesh_count": 1
+          "selection_session_id": "ember-vale_3477",
+          "viewport_opaque_pixels": 25204,
+          "visible_renderable_mesh_count": 43
         },
         {
+          "FINAL_SCREEN_VISIBLE": true,
+          "SCENE_TREE_VISIBLE": true,
           "duplicate_body": false,
           "expected_visible": true,
           "fallback_used": false,
           "fighter_id": "ember-vale",
+          "final_screen_witness_pass": true,
+          "invisible_failure_class": "",
           "is_canonical": true,
           "is_legacy": false,
           "lifecycle_state": "idle",
@@ -227,14 +259,19 @@
           "select_card_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "select_preview_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "selected_fighter_id": "ember-vale",
-          "selection_session_id": "ember-vale_3080",
-          "visible_renderable_mesh_count": 1
+          "selection_session_id": "ember-vale_3477",
+          "viewport_opaque_pixels": 25204,
+          "visible_renderable_mesh_count": 43
         },
         {
+          "FINAL_SCREEN_VISIBLE": true,
+          "SCENE_TREE_VISIBLE": true,
           "duplicate_body": false,
           "expected_visible": true,
           "fallback_used": false,
           "fighter_id": "ember-vale",
+          "final_screen_witness_pass": true,
+          "invisible_failure_class": "",
           "is_canonical": true,
           "is_legacy": false,
           "lifecycle_state": "run_movement",
@@ -243,14 +280,19 @@
           "select_card_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "select_preview_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "selected_fighter_id": "ember-vale",
-          "selection_session_id": "ember-vale_3080",
-          "visible_renderable_mesh_count": 1
+          "selection_session_id": "ember-vale_3477",
+          "viewport_opaque_pixels": 25204,
+          "visible_renderable_mesh_count": 43
         },
         {
+          "FINAL_SCREEN_VISIBLE": true,
+          "SCENE_TREE_VISIBLE": true,
           "duplicate_body": false,
           "expected_visible": true,
           "fallback_used": false,
           "fighter_id": "ember-vale",
+          "final_screen_witness_pass": true,
+          "invisible_failure_class": "",
           "is_canonical": true,
           "is_legacy": false,
           "lifecycle_state": "jump_aerial",
@@ -259,14 +301,19 @@
           "select_card_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "select_preview_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "selected_fighter_id": "ember-vale",
-          "selection_session_id": "ember-vale_3080",
-          "visible_renderable_mesh_count": 1
+          "selection_session_id": "ember-vale_3477",
+          "viewport_opaque_pixels": 25204,
+          "visible_renderable_mesh_count": 43
         },
         {
+          "FINAL_SCREEN_VISIBLE": true,
+          "SCENE_TREE_VISIBLE": true,
           "duplicate_body": false,
           "expected_visible": true,
           "fallback_used": false,
           "fighter_id": "ember-vale",
+          "final_screen_witness_pass": true,
+          "invisible_failure_class": "",
           "is_canonical": true,
           "is_legacy": false,
           "lifecycle_state": "normal_attack",
@@ -275,14 +322,19 @@
           "select_card_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "select_preview_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "selected_fighter_id": "ember-vale",
-          "selection_session_id": "ember-vale_3080",
-          "visible_renderable_mesh_count": 1
+          "selection_session_id": "ember-vale_3477",
+          "viewport_opaque_pixels": 25204,
+          "visible_renderable_mesh_count": 43
         },
         {
+          "FINAL_SCREEN_VISIBLE": true,
+          "SCENE_TREE_VISIBLE": true,
           "duplicate_body": false,
           "expected_visible": true,
           "fallback_used": false,
           "fighter_id": "ember-vale",
+          "final_screen_witness_pass": true,
+          "invisible_failure_class": "",
           "is_canonical": true,
           "is_legacy": false,
           "lifecycle_state": "special",
@@ -291,14 +343,19 @@
           "select_card_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "select_preview_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "selected_fighter_id": "ember-vale",
-          "selection_session_id": "ember-vale_3080",
-          "visible_renderable_mesh_count": 1
+          "selection_session_id": "ember-vale_3477",
+          "viewport_opaque_pixels": 25204,
+          "visible_renderable_mesh_count": 43
         },
         {
+          "FINAL_SCREEN_VISIBLE": true,
+          "SCENE_TREE_VISIBLE": true,
           "duplicate_body": false,
           "expected_visible": true,
           "fallback_used": false,
           "fighter_id": "ember-vale",
+          "final_screen_witness_pass": true,
+          "invisible_failure_class": "",
           "is_canonical": true,
           "is_legacy": false,
           "lifecycle_state": "projectile_power",
@@ -307,14 +364,19 @@
           "select_card_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "select_preview_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "selected_fighter_id": "ember-vale",
-          "selection_session_id": "ember-vale_3080",
-          "visible_renderable_mesh_count": 1
+          "selection_session_id": "ember-vale_3477",
+          "viewport_opaque_pixels": 25204,
+          "visible_renderable_mesh_count": 43
         },
         {
+          "FINAL_SCREEN_VISIBLE": true,
+          "SCENE_TREE_VISIBLE": true,
           "duplicate_body": false,
           "expected_visible": true,
           "fallback_used": false,
           "fighter_id": "ember-vale",
+          "final_screen_witness_pass": true,
+          "invisible_failure_class": "",
           "is_canonical": true,
           "is_legacy": false,
           "lifecycle_state": "hitstun_damage",
@@ -323,14 +385,19 @@
           "select_card_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "select_preview_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "selected_fighter_id": "ember-vale",
-          "selection_session_id": "ember-vale_3080",
-          "visible_renderable_mesh_count": 1
+          "selection_session_id": "ember-vale_3477",
+          "viewport_opaque_pixels": 25204,
+          "visible_renderable_mesh_count": 43
         },
         {
+          "FINAL_SCREEN_VISIBLE": true,
+          "SCENE_TREE_VISIBLE": true,
           "duplicate_body": false,
           "expected_visible": true,
           "fallback_used": false,
           "fighter_id": "ember-vale",
+          "final_screen_witness_pass": true,
+          "invisible_failure_class": "",
           "is_canonical": true,
           "is_legacy": false,
           "lifecycle_state": "pause_opened",
@@ -339,14 +406,19 @@
           "select_card_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "select_preview_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "selected_fighter_id": "ember-vale",
-          "selection_session_id": "ember-vale_3080",
-          "visible_renderable_mesh_count": 1
+          "selection_session_id": "ember-vale_3477",
+          "viewport_opaque_pixels": 25204,
+          "visible_renderable_mesh_count": 43
         },
         {
+          "FINAL_SCREEN_VISIBLE": true,
+          "SCENE_TREE_VISIBLE": true,
           "duplicate_body": false,
           "expected_visible": true,
           "fallback_used": false,
           "fighter_id": "ember-vale",
+          "final_screen_witness_pass": true,
+          "invisible_failure_class": "",
           "is_canonical": true,
           "is_legacy": false,
           "lifecycle_state": "movelist_opened",
@@ -355,14 +427,19 @@
           "select_card_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "select_preview_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "selected_fighter_id": "ember-vale",
-          "selection_session_id": "ember-vale_3080",
-          "visible_renderable_mesh_count": 1
+          "selection_session_id": "ember-vale_3477",
+          "viewport_opaque_pixels": 25204,
+          "visible_renderable_mesh_count": 43
         },
         {
+          "FINAL_SCREEN_VISIBLE": true,
+          "SCENE_TREE_VISIBLE": true,
           "duplicate_body": false,
           "expected_visible": true,
           "fallback_used": false,
           "fighter_id": "ember-vale",
+          "final_screen_witness_pass": true,
+          "invisible_failure_class": "",
           "is_canonical": true,
           "is_legacy": false,
           "lifecycle_state": "movepreview_opened",
@@ -371,14 +448,19 @@
           "select_card_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "select_preview_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "selected_fighter_id": "ember-vale",
-          "selection_session_id": "ember-vale_3080",
-          "visible_renderable_mesh_count": 1
+          "selection_session_id": "ember-vale_3477",
+          "viewport_opaque_pixels": 25204,
+          "visible_renderable_mesh_count": 43
         },
         {
+          "FINAL_SCREEN_VISIBLE": true,
+          "SCENE_TREE_VISIBLE": true,
           "duplicate_body": false,
           "expected_visible": true,
           "fallback_used": false,
           "fighter_id": "ember-vale",
+          "final_screen_witness_pass": true,
+          "invisible_failure_class": "",
           "is_canonical": true,
           "is_legacy": false,
           "lifecycle_state": "movelist_closed",
@@ -387,14 +469,19 @@
           "select_card_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "select_preview_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "selected_fighter_id": "ember-vale",
-          "selection_session_id": "ember-vale_3080",
-          "visible_renderable_mesh_count": 1
+          "selection_session_id": "ember-vale_3477",
+          "viewport_opaque_pixels": 25204,
+          "visible_renderable_mesh_count": 43
         },
         {
+          "FINAL_SCREEN_VISIBLE": true,
+          "SCENE_TREE_VISIBLE": true,
           "duplicate_body": false,
           "expected_visible": true,
           "fallback_used": false,
           "fighter_id": "ember-vale",
+          "final_screen_witness_pass": true,
+          "invisible_failure_class": "",
           "is_canonical": true,
           "is_legacy": false,
           "lifecycle_state": "resume",
@@ -403,14 +490,19 @@
           "select_card_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "select_preview_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "selected_fighter_id": "ember-vale",
-          "selection_session_id": "ember-vale_3080",
-          "visible_renderable_mesh_count": 1
+          "selection_session_id": "ember-vale_3477",
+          "viewport_opaque_pixels": 25204,
+          "visible_renderable_mesh_count": 43
         },
         {
+          "FINAL_SCREEN_VISIBLE": true,
+          "SCENE_TREE_VISIBLE": true,
           "duplicate_body": false,
           "expected_visible": false,
           "fallback_used": false,
           "fighter_id": "ember-vale",
+          "final_screen_witness_pass": true,
+          "invisible_failure_class": "",
           "is_canonical": true,
           "is_legacy": false,
           "lifecycle_state": "ko",
@@ -419,14 +511,19 @@
           "select_card_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "select_preview_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "selected_fighter_id": "ember-vale",
-          "selection_session_id": "ember-vale_3080",
-          "visible_renderable_mesh_count": 1
+          "selection_session_id": "ember-vale_3477",
+          "viewport_opaque_pixels": 25156,
+          "visible_renderable_mesh_count": 43
         },
         {
+          "FINAL_SCREEN_VISIBLE": true,
+          "SCENE_TREE_VISIBLE": true,
           "duplicate_body": false,
           "expected_visible": true,
           "fallback_used": false,
           "fighter_id": "ember-vale",
+          "final_screen_witness_pass": true,
+          "invisible_failure_class": "",
           "is_canonical": true,
           "is_legacy": false,
           "lifecycle_state": "respawn",
@@ -435,14 +532,19 @@
           "select_card_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "select_preview_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "selected_fighter_id": "ember-vale",
-          "selection_session_id": "ember-vale_3080",
-          "visible_renderable_mesh_count": 1
+          "selection_session_id": "ember-vale_3477",
+          "viewport_opaque_pixels": 25184,
+          "visible_renderable_mesh_count": 43
         },
         {
+          "FINAL_SCREEN_VISIBLE": true,
+          "SCENE_TREE_VISIBLE": true,
           "duplicate_body": false,
           "expected_visible": true,
           "fallback_used": false,
           "fighter_id": "ember-vale",
+          "final_screen_witness_pass": true,
+          "invisible_failure_class": "",
           "is_canonical": true,
           "is_legacy": false,
           "lifecycle_state": "next_bout",
@@ -451,14 +553,19 @@
           "select_card_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "select_preview_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "selected_fighter_id": "ember-vale",
-          "selection_session_id": "ember-vale_3080",
-          "visible_renderable_mesh_count": 1
+          "selection_session_id": "ember-vale_3477",
+          "viewport_opaque_pixels": 25092,
+          "visible_renderable_mesh_count": 43
         },
         {
+          "FINAL_SCREEN_VISIBLE": true,
+          "SCENE_TREE_VISIBLE": true,
           "duplicate_body": false,
           "expected_visible": true,
           "fallback_used": false,
           "fighter_id": "ember-vale",
+          "final_screen_witness_pass": true,
+          "invisible_failure_class": "",
           "is_canonical": true,
           "is_legacy": false,
           "lifecycle_state": "return_select_new_battle",
@@ -467,14 +574,19 @@
           "select_card_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "select_preview_representation_id": "ember-vale::PROCEDURAL_PRODUCTION_PROXY",
           "selected_fighter_id": "ember-vale",
-          "selection_session_id": "ember-vale_3080",
-          "visible_renderable_mesh_count": 1
+          "selection_session_id": "ember-vale_3477",
+          "viewport_opaque_pixels": 25120,
+          "visible_renderable_mesh_count": 43
         },
         {
+          "FINAL_SCREEN_VISIBLE": true,
+          "SCENE_TREE_VISIBLE": true,
           "duplicate_body": false,
           "expected_visible": true,
           "fallback_used": false,
           "fighter_id": "rook-ironside",
+          "final_screen_witness_pass": true,
+          "invisible_failure_class": "",
           "is_canonical": true,
           "is_legacy": false,
           "lifecycle_state": "battle_spawn",
@@ -483,14 +595,19 @@
           "select_card_representation_id": "rook-ironside::PROCEDURAL_PRODUCTION_PROXY",
           "select_preview_representation_id": "rook-ironside::PROCEDURAL_PRODUCTION_PROXY",
           "selected_fighter_id": "rook-ironside",
-          "selection_session_id": "rook-ironside_6349",
-          "visible_renderable_mesh_count": 1
+          "selection_session_id": "rook-ironside_8968",
+          "viewport_opaque_pixels": 25420,
+          "visible_renderable_mesh_count": 35
         },
         {
+          "FINAL_SCREEN_VISIBLE": true,
+          "SCENE_TREE_VISIBLE": true,
           "duplicate_body": false,
           "expected_visible": true,
           "fallback_used": false,
           "fighter_id": "rook-ironside",
+          "final_screen_witness_pass": true,
+          "invisible_failure_class": "",
           "is_canonical": true,
           "is_legacy": false,
           "lifecycle_state": "t_250ms",
@@ -499,14 +616,19 @@
           "select_card_representation_id": "rook-ironside::PROCEDURAL_PRODUCTION_PROXY",
           "select_preview_representation_id": "rook-ironside::PROCEDURAL_PRODUCTION_PROXY",
           "selected_fighter_id": "rook-ironside",
-          "selection_session_id": "rook-ironside_6349",
-          "visible_renderable_mesh_count": 1
+          "selection_session_id": "rook-ironside_8968",
+          "viewport_opaque_pixels": 25420,
+          "visible_renderable_mesh_count": 35
         },
         {
+          "FINAL_SCREEN_VISIBLE": true,
+          "SCENE_TREE_VISIBLE": true,
           "duplicate_body": false,
           "expected_visible": true,
           "fallback_used": false,
           "fighter_id": "rook-ironside",
+          "final_screen_witness_pass": true,
+          "invisible_failure_class": "",
           "is_canonical": true,
           "is_legacy": false,
           "lifecycle_state": "t_500ms",
@@ -515,14 +637,19 @@
           "select_card_representation_id": "rook-ironside::PROCEDURAL_PRODUCTION_PROXY",
           "select_preview_representation_id": "rook-ironside::PROCEDURAL_PRODUCTION_PROXY",
           "selected_fighter_id": "rook-ironside",
-          "selection_session_id": "rook-ironside_6349",
-          "visible_renderable_mesh_count": 1
+          "selection_session_id": "rook-ironside_8968",
+          "viewport_opaque_pixels": 25420,
+          "visible_renderable_mesh_count": 35
         },
         {
+          "FINAL_SCREEN_VISIBLE": true,
+          "SCENE_TREE_VISIBLE": true,
           "duplicate_body": false,
           "expected_visible": true,
           "fallback_used": false,
           "fighter_id": "rook-ironside",
+          "final_screen_witness_pass": true,
+          "invisible_failure_class": "",
           "is_canonical": true,
           "is_legacy": false,
           "lifecycle_state": "t_1000ms",
@@ -531,8 +658,9 @@
           "select_card_representation_id": "rook-ironside::PROCEDURAL_PRODUCTION_PROXY",
           "select_preview_representation_id": "rook-ironside::PROCEDURAL_PRODUCTION_PROXY",
           "selected_fighter_id": "rook-ironside",
-          "selection_session_id": "rook-ironside_6349",
-          "visible_renderable_mesh_count": 1
+          "selection_session_id": "rook-ironside_8968",
+          "viewport_opaque_pixels": 25420,
+          "visible_renderable_mesh_count": 35
         }
       ],
       "stress": {
@@ -568,7 +696,7 @@
         "y": 0.0
       }
     },
-    "generated_at_utc": "2026-08-26T02:57:41",
+    "generated_at_utc": "2026-08-26T04:24:50",
     "move_preview": {
       "PIXEL_MOVE_PREVIEW_CASES": 31,
       "PIXEL_MOVE_PREVIEW_LEGACY_MODEL_CASES": 0,
@@ -619,7 +747,7 @@
       "pass": true
     },
     "schema": "wave020_cp2_pixel_physical_seal_v1",
-    "source_sha": "3cf55f6494b12cba8c10b8792bb0075ddb288b45",
+    "source_sha": "3e9581314df5fdf19783125942c0947533c0420a",
     "stress": {
       "PIXEL_PAUSE_MOVELIST_CRASHES": 0,
       "PIXEL_PAUSE_MOVELIST_GHOST_REGRESSIONS": 0,
@@ -646,7 +774,7 @@
       "pass": true
     }
   },
-  "emitted_at": "2026-08-26T02:57:43.593079+00:00",
+  "emitted_at": "2026-08-26T04:24:51.526217+00:00",
   "PIXEL_SELECT_CARDS_CANONICAL_CURRENT_COUNT": 7,
   "PIXEL_SELECT_PREVIEWS_CANONICAL_CURRENT_COUNT": 7,
   "PIXEL_SELECT_LEGACY_CARD_OCCURRENCES": 0,
@@ -692,11 +820,5 @@
     "PLAYER_VISIBLE_LEGACY_MODEL_OCCURRENCES": 0,
     "PLAYER_VISIBLE_LEGACY_MOVE_PREVIEW_OCCURRENCES": 0,
     "PLAYER_VISIBLE_LEGACY_VICTORY_OCCURRENCES": 0
-  },
-  "CP2_SEALED_CANDIDATE": false,
-  "SAFE_TO_START_CP3_FLOURISH": false,
-  "SAFE_TO_START_CP5_ELEMENTAL_AUDIO": false,
-  "REOPENED": true,
-  "REOPEN_REASON": "Owner-visible Pixel contradiction: battle bodies absent + move preview empty despite prior SCENE_TREE false-green",
-  "reopened_at": "2026-08-26T03:45:00Z"
+  }
 }
