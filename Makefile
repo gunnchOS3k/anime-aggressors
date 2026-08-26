@@ -1,6 +1,6 @@
 # Anime Aggressors — repo-native targets
 
-.PHONY: engineering-wave011 engineering-wave012 engineering-wave013b engineering-wave014 engineering-wave015 engineering-wave016 engineering-wave017 engineering-wave018 engineering-wave019 engineering-wave020 wave020-visibility-diagnostic wave020-select-flourish-diagnostic wave020-pause-diagnostic wave020-audio-diagnostic motion-promote wave015-human-crash-capture wave015-battlescene-stability taste-gate engineering-taste-gate
+.PHONY: engineering-wave011 engineering-wave012 engineering-wave013b engineering-wave014 engineering-wave015 engineering-wave016 engineering-wave017 engineering-wave018 engineering-wave019 engineering-wave020 wave020-fighter-select-diagnostic wave020-visibility-diagnostic wave020-select-flourish-diagnostic wave020-pause-diagnostic wave020-audio-diagnostic motion-promote wave015-human-crash-capture wave015-battlescene-stability taste-gate engineering-taste-gate
 
 engineering-wave011:
 	bash tools/engineering_wave011/run_wave011.sh
@@ -31,6 +31,9 @@ engineering-wave019:
 
 engineering-wave020:
 	bash tools/engineering_wave020/run_wave020.sh
+
+wave020-fighter-select-diagnostic:
+	bash tools/engineering_wave020/run_fighter_select_diagnostic.sh
 
 wave020-visibility-diagnostic:
 	bash tools/engineering_wave020/run_visibility_diagnostic.sh
