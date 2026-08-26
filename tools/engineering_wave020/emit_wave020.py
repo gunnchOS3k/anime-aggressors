@@ -161,7 +161,11 @@ def emit_result() -> dict:
     desktop_pause_ok = bool(pause.get("PAUSE_MOVE_LIST_DESKTOP_PASS", False))
     desktop_audio_ok = bool(audio.get("DESKTOP_AUDIO_RUNTIME_PASS", False))
     pixel_available = bool(pixel.get("PIXEL_DEVICE_AVAILABLE", False))
-    pixel_ok = bool(pixel.get("PIXEL_CAMPAIGN") == "PASS")
+    pixel_campaign_status = str(pixel.get("PIXEL_CAMPAIGN") or "")
+    pixel_ok = pixel_campaign_status == "PASS"
+    pixel_move_list_pass = None
+    if pixel_ok:
+        pixel_move_list_pass = int(pixel.get("PIXEL_MOVE_LIST_CRASHES", 0) or 0) == 0
 
     select_ghosts = int(
         acceptance.get("SELECT_PREVIEW_GHOST_OCCURRENCES", seven.get("SELECT_PREVIEW_GHOST_OCCURRENCES", 0))
@@ -262,7 +266,7 @@ def emit_result() -> dict:
         "FLOURISH_BATTLE_HANDOFF_REGRESSIONS": int(flourish.get("FLOURISH_BATTLE_HANDOFF_REGRESSIONS", 0)),
         "PAUSE_MENU_IMPLEMENTED": bool(pause.get("PAUSE_MENU_IMPLEMENTED", False)),
         "IN_MATCH_MOVE_LIST_IMPLEMENTED": bool(pause.get("IN_MATCH_MOVE_LIST_IMPLEMENTED", False)),
-        "PAUSE_MOVE_LIST_PIXEL_PASS": pixel.get("PIXEL_MOVE_LIST_CRASHES", 0) == 0 if pixel_available else None,
+        "PAUSE_MOVE_LIST_PIXEL_PASS": pixel_move_list_pass,
         "PAUSE_MOVE_LIST_DESKTOP_PASS": desktop_pause_ok,
         "PAUSE_MOVE_LIST_CONTROLLER_PASS": bool(pause.get("PAUSE_MOVE_LIST_CONTROLLER_PASS", False)),
         "PAUSE_MOVE_LIST_TRAINING_PASS": bool(pause.get("PAUSE_MOVE_LIST_TRAINING_PASS", False)),
