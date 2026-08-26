@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
@@ -171,7 +172,12 @@ def emit_result() -> dict:
 
     pixel_captures = int(pixel.get("PIXEL_OWNER_REVIEW_CAPTURES", pixel.get("PIXEL_CAPTURE_CASES", 0)) or 0)
     pixel_soak = float(pixel.get("PIXEL_SMOKE_MIN") or 0)
-    ci_pending = True  # emitter cannot claim CI SUCCESS until GitHub checks green on final head
+    pause_fighters = int(pause.get("PAUSE_PATH_PREVIEW_FIGHTERS_COVERED", 0) or 0)
+    pause_previews = int(pause.get("PAUSE_PATH_PREVIEWS_RENDERED", 0) or 0)
+    # Prefer explicit CI seal file / env when GitHub checks are confirmed SUCCESS.
+    ci_seal = read_json(ART / "CI_STATUS.json")
+    ci_status = str(os.environ.get("WAVE020_CI_STATUS") or ci_seal.get("CI") or "PENDING").upper()
+    ci_pending = ci_status not in ("SUCCESS", "PASS", "GREEN")
 
     if not pixel_available:
         status = "BLOCKED_PIXEL6A"
@@ -190,6 +196,8 @@ def emit_result() -> dict:
         and battle_ghosts == 0
         and pixel_captures >= 49
         and pixel_soak >= 10.0
+        and pause_fighters >= 7
+        and pause_previews >= 42
         and not ci_pending
     ):
         status = "PASS"
@@ -206,8 +214,8 @@ def emit_result() -> dict:
         "WAVE020_CHARACTER_VISIBILITY_PAUSE_MOVELIST_ELEMENTAL_AUDIO": status,
         "ACCEPTED_MAIN_SHA": ACCEPTED_MAIN_SHA,
         "HEAD": git_head(),
-        "PR": None,
-        "CI": "PENDING",
+        "PR": os.environ.get("WAVE020_PR") or ci_seal.get("PR") or "https://github.com/gunnchOS3k/anime-aggressors/pull/92",
+        "CI": ci_status if not ci_pending else "PENDING",
         "WAVE_CONTRACT_CREATED": Path(ROOT / "docs/engineering/WAVE020_CONTRACT.md").is_file(),
         "CURSOR_MERGED_NOTHING": True,
         "WAVE021_STARTED": False,

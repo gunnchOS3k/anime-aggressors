@@ -1,5 +1,8 @@
 # WAVE020 REVISED — Owner Review Packet
 
+**Automation status (Cursor):** `PARTIAL` / `READY_FOR_OWNER_MERGE=false`. Pause-path previews now cover 7 fighters × ≥6 = 42. Pixel 7×7 owner-review re-capture + tip APK rebuild + CI seal were blocked in this follow-up (seatbelt sandbox lost ADB USB after `adb kill-server`; Gradle `getifaddrs` denied; `gh` token invalid). Prior 31 captures invalidated (launcher/boot contamination — not counted). Null Pixel battle-ghost / audio fields left null intentionally.
+
+
 **Reviewer:** Edmund  
 **Build under review:** `eng/wave020-revised-showcase-framing-flourish`  
 **Cursor:** leave all ratings blank. Do not self-score.

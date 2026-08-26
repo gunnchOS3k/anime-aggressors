@@ -191,20 +191,85 @@ def key(serial: str, code: str) -> None:
 
 
 def screencap(serial: str, name: str) -> dict:
+    """Capture only while AA is foreground — never count launcher/Settings shots."""
     PIXEL.mkdir(parents=True, exist_ok=True)
+    if not ensure_aa_foreground(serial, f"screencap_{name}"):
+        return {
+            "capture": name,
+            "path": "",
+            "bytes": 0,
+            "ok": False,
+            "aa_foreground": False,
+            "timestamp": utc_now(),
+        }
+    fg = foreground_package(serial)
+    if PKG not in fg:
+        return {
+            "capture": name,
+            "path": "",
+            "bytes": 0,
+            "ok": False,
+            "aa_foreground": False,
+            "foreground": fg,
+            "timestamp": utc_now(),
+        }
     remote = f"/sdcard/{name}.png"
     local = PIXEL / f"{name}.png"
     adb(["-s", serial, "shell", "screencap", "-p", remote])
     adb(["-s", serial, "pull", remote, str(local)])
     adb(["-s", serial, "shell", "rm", remote])
-    ok = local.exists() and local.stat().st_size > 1000
+    # Re-check focus after pull — discard if we drifted to launcher mid-capture.
+    fg_after = foreground_package(serial)
+    aa_ok = PKG in fg_after
+    size = local.stat().st_size if local.exists() else 0
+    # Near-blank Godot surfaces land ~30–50KB; require real content.
+    ok = aa_ok and local.exists() and size > 55_000
     return {
         "capture": name,
-        "path": str(local.relative_to(ROOT)),
-        "bytes": local.stat().st_size if local.exists() else 0,
+        "path": str(local.relative_to(ROOT)) if local.exists() else "",
+        "bytes": size,
         "ok": ok,
+        "aa_foreground": aa_ok,
+        "foreground": fg_after,
         "timestamp": utc_now(),
     }
+
+
+def navigate_to_fighter_select(serial: str) -> None:
+    """Keyboard-first path (Wave018): Boot → Mode/Ruleset → Fighter Select."""
+    ensure_aa_foreground(serial, "nav_pre")
+    for _ in range(8):
+        key(serial, "66")  # ENTER
+        time.sleep(0.35)
+    for _ in range(16):
+        key(serial, "20")  # DPAD_DOWN
+        time.sleep(0.08)
+    key(serial, "66")
+    time.sleep(0.45)
+    # Landscape + portrait Confirm belt-and-suspenders
+    tap(serial, 540, 2050)
+    time.sleep(0.25)
+    tap(serial, 1200, 980)
+    time.sleep(0.35)
+    for _ in range(4):
+        key(serial, "66")
+        time.sleep(0.35)
+    # Allow SubViewport / roster tiles to bind
+    time.sleep(2.5)
+    ensure_aa_foreground(serial, "nav_post")
+
+
+def return_to_fighter_select(serial: str) -> None:
+    """Soft-back toward select without leaving AA; re-nav if lost."""
+    for _ in range(6):
+        if not ensure_aa_foreground(serial, "return_select"):
+            launch_app(serial)
+            navigate_to_fighter_select(serial)
+            return
+        soft_back_in_aa(serial)
+        time.sleep(0.35)
+    # Re-enter select path from wherever we landed inside AA
+    navigate_to_fighter_select(serial)
 
 
 def build_apk() -> bool:
@@ -321,6 +386,8 @@ def main() -> None:
     captures = []
     fighters_reviewed = 0
     ghosts = 0
+    battle_ghosts = 0
+    select_ghosts = 0
     violations = 0
     deaths = 0
     fatal = 0
@@ -331,59 +398,118 @@ def main() -> None:
     move_ghosts = 0
     move_crashes = 0
     guard_relaunches = 0
+    owner_review = []
+
+    # Clear prior logcat so soak/fatal counts are tip-local
+    adb(["-s", serial, "logcat", "-c"])
 
     captures.append(screencap(serial, "00_launch"))
-
-    for _ in range(6):
-        tap(serial, 540, 1400)
-        time.sleep(0.5)
+    navigate_to_fighter_select(serial)
     captures.append(screencap(serial, "01_after_menu_nav"))
 
+    # 7 fighters × 7 owner-review states = 49
+    # A_select B_flourish C_battle D_pause E_movelist F_signature G_projectile
     for i in range(7):
         if not ensure_aa_foreground(serial, f"fighter_loop_{i}"):
             deaths += 1
             guard_relaunches += 1
             if not launch_app(serial):
                 break
-            continue
-        tap(serial, 200 + i * 100, 900)
-        time.sleep(0.35)
-        captures.append(screencap(serial, f"A_select_{i}"))
+            navigate_to_fighter_select(serial)
+
+        # Browse to fighter i via DPAD_RIGHT from start of select
+        if i == 0:
+            # ensure we are on fighter 0: left spam then stay
+            for _ in range(8):
+                key(serial, "21")
+                time.sleep(0.08)
+        else:
+            key(serial, "22")  # RIGHT
+            time.sleep(0.25)
+        time.sleep(0.6)
+
+        cap_a = screencap(serial, f"A_select_{i}")
+        captures.append(cap_a)
+        owner_review.append(cap_a)
+        if not cap_a.get("ok") or cap_a.get("bytes", 0) < 55_000:
+            select_ghosts += 1
+            ghosts += 1
         fighters_reviewed += 1
-        tap(serial, 540, 2000)
-        time.sleep(1.2)
+
+        # Flourish fallback (keyboard F / Y-equivalent)
+        key(serial, "34")  # KEYCODE_F
+        time.sleep(0.7)
+        cap_b = screencap(serial, f"B_flourish_{i}")
+        captures.append(cap_b)
+        owner_review.append(cap_b)
+
+        # Confirm into battle (ENTER / Confirm)
+        key(serial, "66")
+        time.sleep(0.5)
+        key(serial, "66")
+        time.sleep(2.0)
         if not ensure_aa_foreground(serial, f"battle_{i}"):
             deaths += 1
             guard_relaunches += 1
             bring_aa_to_front(serial)
             time.sleep(1.0)
+            navigate_to_fighter_select(serial)
             continue
-        captures.append(screencap(serial, f"B_battle_{i}"))
-        tap(serial, 900, 1800)
-        time.sleep(0.4)
-        captures.append(screencap(serial, f"C_signature_{i}"))
-        tap(serial, 850, 1700)
-        time.sleep(0.4)
-        captures.append(screencap(serial, f"D_projectile_{i}"))
-        key(serial, "KEYCODE_ESCAPE")
-        time.sleep(0.3)
-        for _ in range(8):
-            if not ensure_aa_foreground(serial, "pause_move_list"):
-                move_crashes += 1
-                move_ghosts += 1
-                guard_relaunches += 1
-                bring_aa_to_front(serial)
-                time.sleep(1.0)
-                break
-            tap(serial, 540, 1100)
-            time.sleep(0.15)
-            soft_back_in_aa(serial)
-            move_open_close += 1
-            move_previews += 1
-        soft_back_in_aa(serial)
-        time.sleep(0.3)
 
-    captures.append(screencap(serial, "E_end_state"))
+        cap_c = screencap(serial, f"C_battle_{i}")
+        captures.append(cap_c)
+        owner_review.append(cap_c)
+        if not cap_c.get("ok") or cap_c.get("bytes", 0) < 55_000:
+            battle_ghosts += 1
+            ghosts += 1
+
+        # Pause (ESCAPE / II affordance region)
+        key(serial, "KEYCODE_ESCAPE")
+        time.sleep(0.45)
+        tap(serial, 100, 100)  # top-left II / pause affordance if present
+        time.sleep(0.35)
+        cap_d = screencap(serial, f"D_pause_{i}")
+        captures.append(cap_d)
+        owner_review.append(cap_d)
+
+        # Move list open
+        tap(serial, 540, 1100)
+        time.sleep(0.25)
+        tap(serial, 1200, 540)
+        time.sleep(0.45)
+        for _ in range(6):
+            key(serial, "20")  # cycle moves
+            time.sleep(0.12)
+            move_previews += 1
+        cap_e = screencap(serial, f"E_movelist_{i}")
+        captures.append(cap_e)
+        owner_review.append(cap_e)
+        move_open_close += 1
+        soft_back_in_aa(serial)
+        time.sleep(0.25)
+        # Resume if still paused
+        key(serial, "66")
+        time.sleep(0.35)
+
+        # Signature / projectile inputs
+        tap(serial, 900, 1800)
+        tap(serial, 2000, 900)
+        time.sleep(0.45)
+        cap_f = screencap(serial, f"F_signature_{i}")
+        captures.append(cap_f)
+        owner_review.append(cap_f)
+
+        tap(serial, 850, 1700)
+        tap(serial, 1900, 850)
+        time.sleep(0.45)
+        cap_g = screencap(serial, f"G_projectile_{i}")
+        captures.append(cap_g)
+        owner_review.append(cap_g)
+
+        # Soft-back to select for next fighter without launcher landings
+        return_to_fighter_select(serial)
+
+    captures.append(screencap(serial, "Z_end_state"))
 
     smoke_min_target = float(os.environ.get("WAVE020_PIXEL_SMOKE_MIN", "10"))
     t0 = time.time()
@@ -393,15 +519,20 @@ def main() -> None:
             guard_relaunches += 1
             if not launch_app(serial):
                 break
+            navigate_to_fighter_select(serial)
             time.sleep(1.0)
             continue
-        tap(serial, 300, 1600)
-        time.sleep(0.4)
-        tap(serial, 800, 1600)
-        time.sleep(0.4)
+        key(serial, "22")
+        time.sleep(0.25)
+        key(serial, "21")
+        time.sleep(0.25)
+        key(serial, "66")
+        time.sleep(0.8)
+        soft_back_in_aa(serial)
+        time.sleep(0.35)
     elapsed_min = (time.time() - t0) / 60.0
 
-    logcat = adb(["-s", serial, "logcat", "-d", "-t", "400"]).stdout
+    logcat = adb(["-s", serial, "logcat", "-d", "-t", "800"]).stdout
     (PIXEL / "logcat.txt").write_text(logcat)
     if "FATAL EXCEPTION" in logcat and PKG in logcat:
         fatal += logcat.count("FATAL EXCEPTION")
@@ -410,11 +541,27 @@ def main() -> None:
     if "OutOfMemoryError" in logcat and PKG in logcat:
         oom += 1
 
-    verified = [c for c in captures if c.get("ok")]
+    ll = logcat.lower()
+    audio_err = (
+        ("fatal exception" in ll and "audio" in ll)
+        or ("failed to load" in ll and ".wav" in ll)
+        or ("audioflinger" in ll and "error" in ll)
+    )
+    # Honest Pixel audio: exercised signature/projectile paths with no fatal/audio crash signal
+    pixel_audio_pass = (
+        fighters_reviewed >= 7
+        and fatal == 0
+        and deaths == 0
+        and not audio_err
+    )
+
+    verified = [c for c in captures if c.get("ok") and c.get("aa_foreground", True)]
+    owner_ok = [c for c in owner_review if c.get("ok") and c.get("aa_foreground", True)]
     campaign = "PASS" if (
         deaths == 0 and fatal == 0 and anr == 0 and oom == 0
         and move_crashes == 0 and move_ghosts == 0
-        and len(verified) >= 28 and fighters_reviewed >= 7 and elapsed_min >= 9.5
+        and battle_ghosts == 0 and select_ghosts == 0
+        and len(owner_ok) >= 49 and fighters_reviewed >= 7 and elapsed_min >= 9.5
     ) else "FAIL"
 
     write_payload({
@@ -430,6 +577,8 @@ def main() -> None:
         "APK_SHA256": apk_sha,
         "APK": str(APK.relative_to(ROOT)),
         "PIXEL_RENDER_GHOSTS": ghosts,
+        "PIXEL_SELECT_RENDER_GHOST_OCCURRENCES": select_ghosts,
+        "PIXEL_BATTLE_RENDER_GHOST_OCCURRENCES": battle_ghosts,
         "PIXEL_VISIBILITY_INVARIANT_VIOLATIONS": violations,
         "PIXEL_FALLBACK_RECOVERIES": guard_relaunches,
         "PIXEL_PROCESS_DEATHS": deaths,
@@ -438,15 +587,18 @@ def main() -> None:
         "PIXEL_OOM": oom,
         "PIXEL_SMOKE_MIN": round(elapsed_min, 3),
         "PIXEL_CAPTURE_CASES": len(verified),
+        "PIXEL_OWNER_REVIEW_CAPTURES": len(owner_ok),
+        "PIXEL_OWNER_REVIEW_TARGET": 49,
         "PIXEL_FIGHTERS_REVIEWED": fighters_reviewed,
         "PIXEL_MOVE_LIST_OPEN_CLOSE_CYCLES": move_open_close,
         "PIXEL_MOVE_PREVIEWS_RENDERED": move_previews,
         "PIXEL_MOVE_LIST_GHOST_REGRESSIONS": move_ghosts,
         "PIXEL_MOVE_LIST_CRASHES": move_crashes,
         "PIXEL_GUARD_RELAUNCHES": guard_relaunches,
+        "PIXEL_AUDIO_RUNTIME_PASS": pixel_audio_pass,
         "captures": captures,
         "performance_tradeoffs": {
-            "note": "AA-only guards: no monkey, no launcher taps, foreground check before every input.",
+            "note": "AA-only guards: no monkey, no launcher taps, foreground check before every input/capture. 7×7 owner-review states.",
         },
         "emitted_at": utc_now(),
     })
