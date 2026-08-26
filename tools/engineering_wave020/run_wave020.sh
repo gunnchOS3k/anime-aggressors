@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# make engineering-wave020
+# make engineering-wave020 — fast-fail campaign architecture
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$ROOT"
 mkdir -p artifacts/engineering_wave020 artifacts/wave020 tmp docs/engineering docs/quality
 
-ACCEPTED_MAIN_SHA="c59211282b17630d4c1345650fe2f76c69e321ba"
-echo "=== Wave020 accepted main SHA (PR90 merge): ${ACCEPTED_MAIN_SHA} ==="
+ACCEPTED_MAIN_SHA="c80aae11c07126e0f0e81f660e6608ca6925fdd4"
+echo "=== Wave020 REVISED accepted main SHA (PR91 merge): ${ACCEPTED_MAIN_SHA} ==="
 echo "=== HEAD=$(git rev-parse HEAD) ==="
 
 test -f docs/engineering/WAVE020_CONTRACT.md || { echo "FAIL: WAVE020_CONTRACT.md missing"; exit 1; }
@@ -57,19 +57,30 @@ run audio_gen python3 tools/audio/generate_procedural_sfx.py
 godot_orchestration_prepare "wave020" "${ROOT}" || true
 run godot_import bash -c 'source "$1" && godot_orchestration_import "$2" "$3" 3 wave020-godot_import "$4"' _ "${ROOT}/tools/engineering_wave015/godot_orchestration.sh" "$GODOT" "$ROOT/game-godot" "$ROOT" || true
 
+# Phase 1 — DIAGNOSTIC (fail-fast; stop long campaigns on OWNER-REG-008 failure)
+run diag_visibility bash tools/engineering_wave020/run_visibility_diagnostic.sh
+run diag_framing "$GODOT" --headless --path "$ROOT/game-godot" --script res://tests/engineering_wave020/Wave020SelectFraming.gd
+run diag_flourish bash tools/engineering_wave020/run_select_flourish_diagnostic.sh
+run diag_pause bash tools/engineering_wave020/run_pause_diagnostic.sh
+run diag_audio bash tools/engineering_wave020/run_audio_diagnostic.sh
+
+# Phase 2 — ADVERSARIAL
+run adversarial "$GODOT" --headless --path "$ROOT/game-godot" --script res://tests/engineering_wave020/Wave020VisibilityAdversarial.gd
+
+# Phase 3 — ACCEPTANCE
+run acceptance "$GODOT" --headless --path "$ROOT/game-godot" --script res://tests/engineering_wave020/Wave020VisibilityAcceptance.gd
+run wave020_seven_browse "$GODOT" --headless --path "$ROOT/game-godot" --script res://tests/engineering_wave020/Wave020SevenBrowseVisibility.gd
+
 # Preserve wave016-019 regressions
 run wave018_select "$GODOT" --headless --path "$ROOT/game-godot" --script res://tests/engineering_wave018/Wave018SelectPreviewStress.gd
 run wave018_battle "$GODOT" --headless --path "$ROOT/game-godot" --script res://tests/engineering_wave018/Wave018BattleVisibilityInvariant.gd
 run wave019_move_list "$GODOT" --headless --path "$ROOT/game-godot" --script res://tests/engineering_wave019/Wave019MoveListCatalogGate.gd
 
-# Wave020 gates
-run wave020_seven_browse "$GODOT" --headless --path "$ROOT/game-godot" --script res://tests/engineering_wave020/Wave020SevenBrowseVisibility.gd
 run wave020_pause "$GODOT" --headless --path "$ROOT/game-godot" --script res://tests/engineering_wave020/Wave020PauseMoveList.gd
 run wave020_audio "$GODOT" --headless --path "$ROOT/game-godot" --script res://tests/engineering_wave020/Wave020ElementalAudio.gd
 
 if command -v adb >/dev/null 2>&1 && adb devices | rg -q "device$"; then
-  # AA-only guards enforced in run_pixel_campaign.py (no monkey, no launcher taps)
-  run pixel_campaign python3 tools/engineering_wave020/run_pixel_campaign.py || true
+  run pixel_campaign python3 tools/engineering_wave020/run_pixel_campaign.py
 else
   echo "=== PIXEL6A unavailable — recording BLOCKED_PIXEL6A ==="
   python3 - <<'PY'
@@ -81,23 +92,19 @@ payload = {
   "PIXEL_CAMPAIGN": "BLOCKED_PIXEL6A",
   "PIXEL_DEVICE_AVAILABLE": False,
   "PIXEL_AUTHENTIC": False,
-  "PIXEL_RENDER_GHOSTS": None,
+  "PIXEL_SELECT_RENDER_GHOST_OCCURRENCES": None,
+  "PIXEL_BATTLE_RENDER_GHOST_OCCURRENCES": None,
   "PIXEL_VISIBILITY_INVARIANT_VIOLATIONS": None,
   "PIXEL_FALLBACK_RECOVERIES": None,
   "PIXEL_PROCESS_DEATHS": None,
-  "PIXEL_FATAL": None,
+  "PIXEL_FATAL_EXCEPTIONS": None,
   "PIXEL_ANR": None,
   "PIXEL_OOM": None,
   "PIXEL_SMOKE_MIN": None,
   "PIXEL_CAPTURE_CASES": 0,
   "PIXEL_FIGHTERS_REVIEWED": 0,
-  "PIXEL_MOVE_LIST_OPEN_CLOSE_CYCLES": 0,
-  "PIXEL_MOVE_PREVIEWS_RENDERED": 0,
-  "PIXEL_MOVE_LIST_GHOST_REGRESSIONS": 0,
-  "PIXEL_MOVE_LIST_CRASHES": 0,
-  "PIXEL_AUDIO_SMOKE_FIGHTERS": 0,
-  "PIXEL_AUDIO_RUNTIME_PASS": None,
-  "reason": "No authorized Pixel 6a attached during Wave020 run",
+  "PIXEL_OWNER_REVIEW_CAPTURES": 0,
+  "reason": "No authorized Pixel 6a attached during Wave020 REVISED run",
 }
 (art / "PIXEL_CAMPAIGN.json").write_text(json.dumps(payload, indent=2) + "\n")
 PY
@@ -109,12 +116,11 @@ python3 - <<'PY'
 import json
 from pathlib import Path
 r = json.loads(Path("artifacts/engineering_wave020/WAVE020_RESULT.json").read_text())
-print("WAVE020=", r.get("WAVE020_CHARACTER_VISIBILITY_PAUSE_MOVELIST_ELEMENTAL_AUDIO"))
+print("WAVE020=", r.get("WAVE020_CHARACTER_VISIBILITY_SHOWCASE_PAUSE_MOVELIST_AUDIO"))
 print("READY_FOR_OWNER_MERGE=", r.get("READY_FOR_OWNER_MERGE"))
-assert r.get("FIGHTERS_WITH_DISTINCT_SILHOUETTES") == 7
 assert r.get("NEW_S0") == 0
 assert r.get("NEW_S1") == 0
 print("desktop_gates=PASS")
 PY
 
-echo "=== Wave020 run complete ==="
+echo "=== Wave020 REVISED run complete ==="

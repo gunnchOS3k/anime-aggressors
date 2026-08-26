@@ -12,6 +12,7 @@ const _AnimationController = preload("res://scripts/visual/fighter_animation_con
 const _MaterialController = preload("res://scripts/visual/fighter_material_controller.gd")
 const _MoveResolver = preload("res://scripts/visual/runtime_move_resolver.gd")
 const _BoneMap = preload("res://scripts/visual/procedural_bone_map.gd")
+const _SelectFraming = preload("res://scripts/menus/character_select_framing.gd")
 
 const VIEWPORT_SIZE := Vector2i(220, 280)
 const DISPLAY_SCALE := Vector2(0.38, 0.38)
@@ -54,6 +55,7 @@ var _load_failure_logged: bool = false
 ## Wave020: full-roster browse cycles can stale SubViewport textures on mobile.
 var _configure_swap_count: int = 0
 const VIEWPORT_REFRESH_EVERY_SWAPS := 7
+var _last_framing_report: Dictionary = {}
 
 
 func _ready() -> void:
@@ -294,10 +296,10 @@ func set_select_mode(enabled: bool) -> void:
 		_display.scale = SELECT_DISPLAY_SCALE if enabled else DISPLAY_SCALE
 		_display.position = Vector2(0, -28) if enabled else Vector2(0, -49)
 	_frame_camera_for_figure()
-	if enabled and _camera:
-		_camera.size = SELECT_CAMERA_SIZE
-		_camera.position = Vector3(0, 1.15, 4.2)
-		_camera.look_at(Vector3(0, 1.05, 0), Vector3.UP)
+
+
+func get_select_framing_report() -> Dictionary:
+	return _last_framing_report.duplicate(true)
 
 
 func set_facing(direction: int) -> void:
@@ -531,14 +533,28 @@ func _apply_toon_recursive(node: Node, base_color: Color) -> void:
 func _frame_camera_for_figure() -> void:
 	if _camera == null:
 		return
-	var height := 1.0
-	if _procedural_healthy:
-		height = 1.05
-	elif _stylized and _stylized.has_method("get_height_scale"):
-		height = float(_stylized.get_height_scale())
-	_camera.size = 2.55 + 0.35 * height
-	_camera.position = Vector3(0, 1.05 * height + 0.12, 5.0)
-	_camera.look_at(Vector3(0, 1.05 * height + 0.08, 0), Vector3.UP)
+	var bounds := AABB()
+	if _loaded_model != null and is_instance_valid(_loaded_model):
+		bounds = _SelectFraming.compute_model_bounds(_loaded_model)
+	else:
+		var height := 1.0
+		if _stylized and _stylized.has_method("get_height_scale"):
+			height = float(_stylized.get_height_scale())
+		bounds = AABB(Vector3(-0.35, 0.0, -0.15), Vector3(0.7, height * 1.75, 0.35))
+	var vfx_env := 0.14
+	if not _life.is_empty():
+		vfx_env = clampf(float(_life.get("aura_pulse", 1.0)) * 0.08 + 0.1, 0.1, 0.22)
+	_last_framing_report = _SelectFraming.framing_for_fighter(_fighter_id, bounds, _select_mode, vfx_env)
+	var cam: Dictionary = _last_framing_report.get("camera_parameters", {})
+	var ortho := float(cam.get("orthographic_size", SELECT_CAMERA_SIZE if _select_mode else 2.9))
+	var pos_arr: Array = cam.get("position", [0.0, 1.15, 4.2])
+	var look_arr: Array = cam.get("look_at", [0.0, 1.05, 0.0])
+	_camera.size = ortho
+	_camera.position = Vector3(float(pos_arr[0]), float(pos_arr[1]), float(pos_arr[2]))
+	_camera.look_at(Vector3(float(look_arr[0]), float(look_arr[1]), float(look_arr[2])), Vector3.UP)
+	if _loaded_model != null and is_instance_valid(_loaded_model):
+		var lean := float(cam.get("lean_offset", 0.0))
+		_loaded_model.rotation_degrees.y = -8.0 + lean * 40.0
 
 
 func _build_viewport() -> void:

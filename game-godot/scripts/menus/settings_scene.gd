@@ -8,6 +8,7 @@ var _role_label: Label
 var _contrast_label: Label
 var _cb_label: Label
 var _vol_label: Label
+var _motion_gestures_label: Label
 var _career_label: Label
 
 func _ready() -> void:
@@ -33,6 +34,7 @@ func _ensure_accessibility_rows() -> void:
 		_role_label = _add_toggle_row(vbox, "DeviceRoleRow", "Device Role", _on_device_role_pressed, "Cycle")
 		_contrast_label = _add_toggle_row(vbox, "ContrastRow", "High Contrast HUD", _on_contrast_pressed)
 		_cb_label = _add_toggle_row(vbox, "ColorblindRow", "Colorblind Markers", _on_colorblind_pressed)
+		_motion_gestures_label = _add_toggle_row(vbox, "MotionGesturesRow", "Motion Gestures", _on_motion_gestures_pressed)
 		_vol_label = _add_toggle_row(vbox, "VolumeRow", "Master Volume", _on_volume_pressed, "Cycle")
 		_career_label = Label.new()
 		_career_label.name = "CareerLabel"
@@ -47,6 +49,7 @@ func _ensure_accessibility_rows() -> void:
 		_role_label = vbox.get_node_or_null("DeviceRoleRow/RoleValue")
 		_contrast_label = vbox.get_node_or_null("ContrastRow/ReduceValue")
 		_cb_label = vbox.get_node_or_null("ColorblindRow/ReduceValue")
+		_motion_gestures_label = vbox.get_node_or_null("MotionGesturesRow/ReduceValue")
 		_vol_label = vbox.get_node_or_null("VolumeRow/ReduceValue")
 		_career_label = vbox.get_node_or_null("CareerLabel")
 
@@ -94,6 +97,12 @@ func _on_colorblind_pressed() -> void:
 	GameState._persist_save()
 	_refresh_access_labels()
 
+
+func _on_motion_gestures_pressed() -> void:
+	GameState.motion_gestures_enabled = not GameState.motion_gestures_enabled
+	GameState._persist_save()
+	_refresh_access_labels()
+
 func _on_volume_pressed() -> void:
 	var steps := [0.0, 0.25, 0.5, 0.75, 1.0]
 	var idx := 0
@@ -130,6 +139,8 @@ func _refresh_access_labels() -> void:
 		_contrast_label.text = "On" if GameState.high_contrast else "Off"
 	if _cb_label:
 		_cb_label.text = "On" if GameState.colorblind_markers else "Off"
+	if _motion_gestures_label:
+		_motion_gestures_label.text = "On" if GameState.motion_gestures_enabled else "Off"
 	if _vol_label:
 		_vol_label.text = "%d%%" % int(GameState.master_volume * 100.0)
 	if _career_label:

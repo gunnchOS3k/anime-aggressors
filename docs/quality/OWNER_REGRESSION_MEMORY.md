@@ -12,6 +12,7 @@
 | OWNER-REG-005 | Placeholder projectile | Projectile looks like moving rectangle/capsule placeholder | Power identity v2 + intentional poly audit |
 | OWNER-REG-006 | Debug labels | Development/proxy labels visible in player build | Player-build debug label scan |
 | OWNER-REG-007 | Mannequin sameness | Character models too similar / procedural-mannequin-like | Proportion/silhouette fingerprints + owner blind sheet |
+| OWNER-REG-008 | Seven-selection visibility cliff | After ~6 browses, next preview disappears; battle may start with missing body | Wave020 diagnostic: fresh select → fighters 1–7 preview → confirm #7 → battle bodies |
 
 ## Rules
 
@@ -31,3 +32,16 @@
 | OWNER-REG-005 | Partially improved (Wave018 polys) | Strengthen beyond color-only |
 | OWNER-REG-006 | Guarded (player-build scan) | Preserve |
 | OWNER-REG-007 | Open (uplifted proxies) | Material distinctness toward STRONGLY_DISTINCT_NONFINAL_CANDIDATES |
+| OWNER-REG-008 | Open (owner-reported cliff) | Zero ghosts after 7 sequential browses + battle handoff |
+
+## Wave020 adversarial coverage for OWNER-REG-008
+
+Fast regression path (diagnostic must fail-fast):
+
+```text
+fresh select → fighter 1..7 each exactly one visible preview → confirm fighter 7 → battle both bodies visible
+```
+
+Also: reverse sequence, wraparound, random order, select/back/select.
+
+If OWNER-REG-008 fails in diagnostic: STOP — do not run acceptance or soak.

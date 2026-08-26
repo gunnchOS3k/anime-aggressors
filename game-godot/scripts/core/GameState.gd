@@ -77,6 +77,7 @@ var unlocked_fighters: Array = []
 var unlocked_stages: Array = []
 var high_contrast: bool = false
 var colorblind_markers: bool = false
+var motion_gestures_enabled: bool = true
 var master_volume: float = 1.0
 var _save_loaded: bool = false
 
@@ -426,6 +427,7 @@ func ensure_save_loaded() -> void:
 	unlocked_stages = cfg.get_value("progress", "stages", production_stage_ids())
 	high_contrast = bool(cfg.get_value("a11y", "high_contrast", false))
 	colorblind_markers = bool(cfg.get_value("a11y", "colorblind_markers", false))
+	motion_gestures_enabled = bool(cfg.get_value("a11y", "motion_gestures_enabled", true))
 	master_volume = float(cfg.get_value("audio", "master_volume", 1.0))
 	damage_ratio = float(cfg.get_value("rules", "damage_ratio", 1.0))
 	team_attack = bool(cfg.get_value("rules", "team_attack", false))
@@ -447,6 +449,7 @@ func _persist_save() -> void:
 	cfg.set_value("progress", "stages", unlocked_stages if unlocked_stages.size() > 0 else production_stage_ids())
 	cfg.set_value("a11y", "high_contrast", high_contrast)
 	cfg.set_value("a11y", "colorblind_markers", colorblind_markers)
+	cfg.set_value("a11y", "motion_gestures_enabled", motion_gestures_enabled)
 	cfg.set_value("audio", "master_volume", master_volume)
 	cfg.set_value("rules", "damage_ratio", damage_ratio)
 	cfg.set_value("rules", "team_attack", team_attack)
