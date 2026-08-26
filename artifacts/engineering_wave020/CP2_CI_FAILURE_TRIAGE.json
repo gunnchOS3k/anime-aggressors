@@ -2,67 +2,48 @@
   "artifact": "CP2_CI_FAILURE_TRIAGE",
   "wave": "wave020_cp2_reopen_screen_witness",
   "live_pr": 94,
-  "emitted_at": "2026-08-26T04:36:00Z",
-  "local_head_at_triage": "pending_commit",
-  "remote_head_at_triage": "3e9581314df5fdf19783125942c0947533c0420a",
-  "push_status": "PENDING",
+  "emitted_at": "2026-08-26T05:12:00Z",
+  "local_head_at_triage": "48cd87d5842400b948e22ca84b0a4ceda358723e",
+  "remote_head_at_triage": "48cd87d5842400b948e22ca84b0a4ceda358723e",
+  "push_status": "SUCCESS",
   "CP2_SEALED": false,
-  "triage_status": "REPAIRS_PUSHED_AWAITING_CI",
+  "triage_status": "LIVE_GH_ACTIONS_ALL_PASS_AT_HEAD",
   "checks_verified_at_head": {
     "quality": {
-      "status": "repaired_locally",
-      "prior_root_cause": "validate:character-assets — all 7 fighters 'fighter data points at the wrong model'",
-      "repair": "scripts/validate-character-assets.mjs accepts content/fighters/{id}_procedural_proxy.glb canonical path"
+      "status": "pass",
+      "run_id": 32931119284,
+      "repair": "validate-character-assets.mjs + validate-anime-digital-art-audio-closure.mjs accept content/fighters procedural_proxy"
     },
     "taste-gate": {
-      "status": "repaired_locally",
-      "prior_root_cause": "check_model_visibility_reliability STATIC_CONTRACT_DEFINED=false (stale body.visible = not model_loaded grep)",
-      "repair": "tools/quality/check_model_visibility_reliability.py recognizes CP2 ensure_visible_presentation contract",
-      "note": "PIXEL_MODEL_VISIBILITY_VALIDATED remains false until Edmund accepts Pixel co-visibility pack (honest default)"
+      "status": "pass",
+      "run_id": 32931119222,
+      "repair": "check_model_visibility_reliability.py CP2 ensure_visible_presentation contract",
+      "note": "PIXEL_MODEL_VISIBILITY_VALIDATED remains false in report (honest; Edmund review pending)"
     },
-    "wave016": {
-      "status": "repaired_locally_expected_pass",
-      "prior_first_fail": "taste_gate make taste-gate",
-      "repair": "same taste-gate static contract fix"
-    },
-    "wave017": {
-      "status": "repaired_locally_expected_pass",
-      "prior_first_fail": "taste_gate make taste-gate",
-      "repair": "same taste-gate static contract fix"
-    },
-    "wave018": {
-      "status": "repaired_locally_expected_pass",
-      "prior_first_fail": "taste_gate make taste-gate",
-      "repair": "same taste-gate static contract fix"
-    },
-    "wave019": {
-      "status": "repaired_locally_expected_pass",
-      "prior_first_fail": "taste_gate make taste-gate",
-      "repair": "same taste-gate static contract fix"
-    },
-    "wave020": {
-      "status": "repaired_locally_expected_pass",
-      "prior_first_fail": "taste_gate make taste-gate (|| true in script; emit assert may still pass)",
-      "repair": "taste-gate static pass; screen witness nav+eval fixes"
-    },
-    "wave011": { "status": "pending_ci", "note": "long workflow; prior run pending at 3e95813" },
-    "wave012": { "status": "pass", "run_id": 32930004475 },
-    "wave013b": { "status": "pending_ci" },
-    "wave014": { "status": "pending_ci" },
-    "wave015": { "status": "pending_ci" },
-    "gate1-game-core": { "status": "pass" },
-    "web": { "status": "pass" }
+    "wave011": { "status": "pass", "run_id": 32931119314 },
+    "wave012": { "status": "pass", "run_id": 32931119288 },
+    "wave013b": { "status": "pass", "run_id": 32931119258 },
+    "wave014": { "status": "pass", "run_id": 32931119212 },
+    "wave015": { "status": "pass", "run_id": 32931119309 },
+    "wave016": { "status": "pass", "run_id": 32931119274 },
+    "wave017": { "status": "pass", "run_id": 32931119280 },
+    "wave018": { "status": "pass", "run_id": 32931119240 },
+    "wave019": { "status": "pass", "run_id": 32931119237 },
+    "wave020": { "status": "pass", "run_id": 32931119217 },
+    "gate1-game-core": { "status": "pass", "run_id": 32931119254 },
+    "web": { "status": "pass", "run_id": 32931119278 }
   },
   "pixel_blockers_resolved": [
     "PIXEL_USB_UNAUTHORIZED",
     "PIXEL_VESPER_KAIA_SCREEN_WITNESS_THRESHOLD_FAIL_at_fight_plus_1000ms",
     "CI_QUALITY_CHARACTER_ASSET_VALIDATION",
+    "CI_QUALITY_ART_AUDIO_CLOSURE_MODELPATH",
     "CI_TASTE_GATE_STATIC_CONTRACT"
   ],
   "pixel_blockers_open": [
     "CP2_SEALED_requires_full_§18_reopen_criteria",
     "PIXEL_MODEL_VISIBILITY_VALIDATED_edmund_review_pending",
-    "wave011_013b_014_015_ci_pending"
+    "HUMAN_Q5_and_OWNER_TASTE_REVIEW_PENDING"
   ],
   "screen_witness_repair": {
     "root_cause": "fight_plus_* captures hit victory screen (Vesper Nyx Wins!) not animation dip",
@@ -74,5 +55,5 @@
   },
   "repairs_claimed": true,
   "failures": 0,
-  "in_progress": "wave011,wave013b,wave014,wave015,post_push_ci"
+  "in_progress": ""
 }
