@@ -154,16 +154,16 @@
     {
       "surface": "victory_results",
       "scene": "game-godot/scenes/ui/ResultsScene.tscn",
-      "script": "results_scene.gd",
-      "representation_source": "name + color only",
-      "asset_type": "ui_text",
-      "asset_path": null,
-      "fighter_id_mapping": "last_winner_slot",
-      "is_current_canonical": false,
+      "script": "results_scene.gd + fighter_card_portrait.gd",
+      "representation_source": "FighterCardPortrait bake from FighterModel3D (CTX_VICTORY)",
+      "asset_type": "baked_canonical_portrait",
+      "asset_path": "content/fighters/{id}/model/{id}_procedural_proxy.glb",
+      "fighter_id_mapping": "last_winner_slot → p1/p2 fighter_id",
+      "is_current_canonical": true,
       "is_legacy": false,
-      "fallback_behavior": "P1/P2 label",
+      "fallback_behavior": "none; legacy victory counted via PLAYER_VISIBLE_LEGACY_VICTORY_OCCURRENCES",
       "player_visible": true,
-      "notes": "no fighter body currently"
+      "notes": "Wave020 CP2 Pixel seal — portrait + accent; not text-only"
     },
     {
       "surface": "training_battle",

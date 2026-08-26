@@ -20,13 +20,15 @@ Edmund sole merge authority. Shell ≠ working. Desktop + Pixel early gate evide
 
 ## CHECKPOINT 2 — Canonical fighter presentation + reliable battle bodies + responsive Pause/Move List
 
-- **Status:** PARTIAL (desktop repairs + diagnostics green; Pixel CP2 quick gates not yet re-run on rebuilt APK)
-- **OWNER-REG-011:** Select cards now bake canonical `FighterModel3D` portraits (`fighter_card_portrait.gd`); resolver rejects `procedural_final` / proxy paths for player builds
-- **OWNER-REG-012:** Battle prefers Model3D heal/reconfigure; ColorRect counted as `LEGACY_FALLBACK_USES`; `make wave020-battle-body-diagnostic` PASS (28/28 samples, zero/legacy/wrong=0)
-- **OWNER-REG-013:** Move List + Pause centered via `CenterContainer` + viewport-relative size; `make wave020-pause-layout-diagnostic` PASS (`MOVELIST_CLIPPED_CASES=0`)
+- **Status:** COMPLETE (desktop diagnostics + Pixel CP2 physical seal)
+- **OWNER-REG-011:** Select cards bake canonical `FighterModel3D` portraits (`fighter_card_portrait.gd`); resolver rejects `procedural_final` / proxy paths for player builds
+- **OWNER-REG-012:** Battle prefers Model3D heal/reconfigure; ColorRect counted as `LEGACY_FALLBACK_USES`; Pixel lifecycle matrix 140/140 zero-mesh=0
+- **OWNER-REG-013:** Move List + Pause centered via `CenterContainer` + viewport-relative size; Pixel Gate3/3B clipped=0
+- **Victory:** ResultsScene uses canonical `FighterCardPortrait` (`VICTORY_CANONICAL_CURRENT_COUNT=7` on Pixel)
 - **Canonical authority:** `FighterAssetResolver.resolve_presentation(fighter_id, context)`
-- **Evidence:** `FIGHTER_REPRESENTATION_PATH_AUDIT.json`, `BATTLE_BODY_DIAGNOSTIC_RESULT.json`, `PAUSE_LAYOUT_DIAGNOSTIC_RESULT.json`, `CP2_VISIBLE_PRODUCT_REPAIR_SNAPSHOT.txt`
-- **Hold:** Pixel Gates 1–3 + owner visual approval; CP3 flourish / CP5 audio remain HOLD until CP2 sealed
+- **Evidence:** `CP2_PIXEL_PHYSICAL_SEAL_RESULT.json`, `VICTORY_PRESENTATION_DIAGNOSTIC_RESULT.json`, `BATTLE_BODY_DIAGNOSTIC_RESULT.json`, `PAUSE_LAYOUT_DIAGNOSTIC_RESULT.json`, `pixel/cp2_victory_*.png`
+- **CP2_SEALED:** true (automated Pixel physical seal). Human approvals remain PENDING.
+- **Hold:** CP3 flourish / CP5 audio remain HOLD until Edmund owner review of Pixel captures
 
 ## CHECKPOINT 3 — Showcase flourish active
 
@@ -44,7 +46,7 @@ Edmund sole merge authority. Shell ≠ working. Desktop + Pixel early gate evide
 
 ## Pixel early physical gate (CP0/CP1)
 
-- **Status:** PASS (honest OCR gate) on tip `4d42466` APK
+- **Status:** PASS (honest OCR gate) on tip `4d42466` APK; CP2 Pixel physical seal revalidated on PR #94 tip APK
 - **PIXEL_UNBLOCK_STATUS:** UNBLOCKED — serial `27211JEGR06194` Pixel 6a
-- **Evidence:** `artifacts/engineering_wave020/PIXEL_EARLY_FIGHTER_SELECT_GATE.json`
-- **CP2 note:** Re-run Pixel Gates 1–3 after APK rebuild containing card/portrait + pause layout changes before claiming CP2_SEALED
+- **Evidence:** `artifacts/engineering_wave020/PIXEL_EARLY_FIGHTER_SELECT_GATE.json`, `CP2_PIXEL_PHYSICAL_SEAL_RESULT.json`
+- **CP2 note:** Pixel Gates 1–3 + victory sealed via `run_pixel_cp2_physical_seal.py` / in-APK harness

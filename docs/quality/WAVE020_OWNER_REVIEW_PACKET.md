@@ -1,7 +1,7 @@
 # WAVE020 REVISED — Owner Review Packet
 
 **Reviewer:** Edmund  
-**Build under review:** `eng/wave020-revised-showcase-framing-flourish`  
+**Build under review:** `eng/wave020-pixel-early-gate-continuation` (PR #94)  
 **Cursor:** leave all ratings blank. Do not self-score.
 
 ---
@@ -66,6 +66,47 @@
 | Nix Calder |  |  |  |  |
 | Orion Vell |  |  |  |  |
 | Vesper Nyx |  |  |  |  |
+
+---
+
+## CP2 — Canonical presentation + battle bodies + Pause/Move List + Victory
+
+Leave owner answers blank.
+
+### Models
+
+| Question | Owner answer |
+|----------|--------------|
+| Do Select cards now look like the current fighters? |  |
+| Do Select preview and Battle look like the same character? |  |
+| Did any old proxy/stick body appear? |  |
+
+### Battle reliability
+
+| Question | Owner answer |
+|----------|--------------|
+| Did any fighter disappear? |  |
+| Did pause/resume cause disappearance? |  |
+| Did KO/respawn recover correctly? |  |
+
+### Pause / Move List
+
+| Question | Owner answer |
+|----------|--------------|
+| Is Pause centered? |  |
+| Is Move List centered? |  |
+| Is any content clipped? |  |
+| Is scrolling comfortable? |  |
+| Is Move Preview fully visible? |  |
+| Is return to battle clean? |  |
+
+### Victory
+
+| Question | Owner answer |
+|----------|--------------|
+| Does result screen use the current winner presentation? |  |
+
+**Automated Pixel CP2 evidence (not owner approval):** see `artifacts/engineering_wave020/CP2_PIXEL_PHYSICAL_SEAL_RESULT.json` and `pixel/cp2_victory_*.png`.
 
 ---
 
