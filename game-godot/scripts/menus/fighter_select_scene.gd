@@ -6,6 +6,7 @@ const FIGHTER_BUTTON_SCENE := preload("res://scenes/ui/FighterTile.tscn")
 const MODEL_SCRIPT := preload("res://scripts/fighters/fighter_model_3d.gd")
 const MOVE_LIST_PANEL := preload("res://scripts/ui/move_list_panel.gd")
 const SHOWCASE_FLOURISH := preload("res://scripts/menus/character_select_showcase_flourish.gd")
+const _PresentationGates = preload("res://scripts/menus/wave020_presentation_gates.gd")
 
 var _roster: Array = []
 var _cursor: int = 0
@@ -45,15 +46,20 @@ func _ready() -> void:
 	if title_label:
 		title_label.text = "Fighter Select"
 	_ensure_preview_host()
-	_ensure_showcase_flourish()
+	if _PresentationGates.showcase_flourish_enabled:
+		_ensure_showcase_flourish()
 	_build_grid()
 	_refresh()
 	_update_preview(_cursor, false)
-	_ensure_select_move_list_button()
-	_ensure_flourish_controls()
+	if _PresentationGates.pause_movelist_enabled:
+		_ensure_select_move_list_button()
+	if _PresentationGates.showcase_flourish_enabled:
+		_ensure_flourish_controls()
 
 
 func _ensure_showcase_flourish() -> void:
+	if not _PresentationGates.showcase_flourish_enabled:
+		return
 	if _flourish != null:
 		return
 	_flourish = SHOWCASE_FLOURISH.new()
@@ -64,6 +70,8 @@ func _ensure_showcase_flourish() -> void:
 
 
 func _ensure_flourish_controls() -> void:
+	if not _PresentationGates.showcase_flourish_enabled:
+		return
 	if _flourish_btn != null:
 		return
 	_flourish_btn = Button.new()
@@ -79,6 +87,8 @@ func _ensure_flourish_controls() -> void:
 
 
 func _try_showcase_flourish(source: String) -> void:
+	if not _PresentationGates.showcase_flourish_enabled:
+		return
 	if _flourish == null or _roster.is_empty():
 		return
 	var fid := str(_roster[_cursor])
@@ -87,21 +97,27 @@ func _try_showcase_flourish(source: String) -> void:
 	_flourish.trigger(source, fid)
 
 
-func _input(event: InputEvent) -> void:
+func _process(_delta: float) -> void:
+	# Godot 4 has no InputEventAccelerometer — poll Input.get_accelerometer() instead.
+	if not _PresentationGates.showcase_flourish_enabled:
+		return
 	if not GameState.motion_gestures_enabled:
 		return
-	if event is InputEventAccelerometer:
-		var acc := (event as InputEventAccelerometer).acceleration
-		var delta := acc - _last_accel
-		_last_accel = acc
-		if Time.get_ticks_msec() < _shake_cooldown_ms:
-			return
-		if delta.length() >= SHAKE_THRESHOLD:
-			_shake_cooldown_ms = Time.get_ticks_msec() + 1200
-			_try_showcase_flourish("motion_shake")
+	var acc := Input.get_accelerometer()
+	if acc == Vector3.ZERO and _last_accel == Vector3.ZERO:
+		return
+	var delta_v := acc - _last_accel
+	_last_accel = acc
+	if Time.get_ticks_msec() < _shake_cooldown_ms:
+		return
+	if delta_v.length() >= SHAKE_THRESHOLD:
+		_shake_cooldown_ms = Time.get_ticks_msec() + 1200
+		_try_showcase_flourish("motion_shake")
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if not _PresentationGates.showcase_flourish_enabled:
+		return
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_F:
 			_try_showcase_flourish("keyboard")
@@ -299,7 +315,7 @@ func _update_preview(index: int, lock_in: bool) -> void:
 		_preview_model.play_lock_in()
 	elif _preview_model.has_method("play_selection_focus"):
 		_preview_model.play_selection_focus()
-	if _flourish != null:
+	if _PresentationGates.showcase_flourish_enabled and _flourish != null:
 		_flourish.bind_model(_preview_model)
 		_flourish.set_fighter(id)
 	if _motion_label != null:

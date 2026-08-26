@@ -1,0 +1,61 @@
+{
+  "audit_id": "FIGHTER_SELECT_REGRESSION_DIFF_AUDIT",
+  "captured_at_utc": "2026-08-26T00:30:00Z",
+  "branch": "eng/wave020-revised-showcase-framing-flourish",
+  "head": "c80befdd46743b8bb9edcfef368b7733b947d87f",
+  "accepted_main_sha": "c80aae11c07126e0f0e81f660e6608ca6925fdd4",
+  "wave019_tip": "29ba7d4",
+  "requested_worktree": ".worktrees/wave020-revised-showcase-framing-flourish",
+  "requested_worktree_exists": false,
+  "active_checkout": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors",
+  "owner_classification": {
+    "id": "OWNER-REG-009",
+    "name": "FIGHTER_SELECT_DYNAMIC_CONTENT_EMPTY",
+    "severity": "STOP_THE_LINE / PLAYER_BLOCKING",
+    "shell_equals_working": false
+  },
+  "files_touched_select_path": [
+    {
+      "path": "game-godot/scripts/menus/fighter_select_scene.gd",
+      "vs_wave019": "+flourish preload/init/controls/motion input; deferred preview schedule; browse recycle %7; flourish bind in preview",
+      "risk": "CRITICAL — InputEventAccelerometer parse failure prevents entire script attach"
+    },
+    {
+      "path": "game-godot/scripts/menus/character_select_showcase_flourish.gd",
+      "vs_wave019": "NEW",
+      "risk": "MEDIUM — only runs if select script loads"
+    },
+    {
+      "path": "game-godot/scripts/menus/character_select_framing.gd",
+      "vs_wave019": "NEW; dirty uncommitted head/feet refit",
+      "risk": "MEDIUM — used from fighter_model_3d after configure"
+    },
+    {
+      "path": "game-godot/scripts/fighters/fighter_model_3d.gd",
+      "vs_wave019": "dynamic framing via CharacterSelectFraming",
+      "risk": "MEDIUM — not first failure; framing never reached while script unload"
+    },
+    {
+      "path": "game-godot/scenes/menus/FighterSelectScene.tscn",
+      "vs_wave019": "unchanged shell: Title, P1:/P2:, empty FighterGrid, PreviewFrame ColorRect, buttons",
+      "risk": "LOW — explains shell-without-data owner observation"
+    }
+  ],
+  "hypotheses": {
+    "1_framing_throw": "REJECTED_AS_FIRST — framing never executes while select script fails to parse",
+    "2_invalid_bounds_abort_roster": "REJECTED_AS_FIRST — _build_grid never runs",
+    "3_shake_sensor_unsupported": "CONFIRMED_FIRST — InputEventAccelerometer does not exist in Godot 4.7.1; parse error lines 93-95",
+    "4_flourish_before_preview": "REJECTED_AS_FIRST — flourish init unreachable",
+    "5_empty_roster": "REJECTED — GameState.roster_ids() returns 7 fighters",
+    "6_invalid_index": "REJECTED_AS_FIRST — script not attached",
+    "7_roster_signal": "REJECTED — roster is sync FileAccess load",
+    "8_subviewport": "REJECTED_AS_FIRST — preview host never configured",
+    "9_node_paths": "REJECTED — %FighterGrid/%P1Name/%PreviewHost present in scene",
+    "10_autoload_init": "REJECTED_AS_FIRST — GameState present; roster readable",
+    "11_async_cancel": "REJECTED_AS_FIRST",
+    "12_error_skips_ui": "N/A — parse prevents _ready",
+    "13_p1_p2_mode": "REJECTED_AS_FIRST",
+    "14_test_hook_leak": "REJECTED"
+  },
+  "first_failure_summary": "Parse Error: Could not find type InputEventAccelerometer → Failed to load fighter_select_scene.gd → SCRIPT=<null> → static .tscn shell only"
+}

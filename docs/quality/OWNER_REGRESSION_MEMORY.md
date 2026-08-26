@@ -13,6 +13,7 @@
 | OWNER-REG-006 | Debug labels | Development/proxy labels visible in player build | Player-build debug label scan |
 | OWNER-REG-007 | Mannequin sameness | Character models too similar / procedural-mannequin-like | Proportion/silhouette fingerprints + owner blind sheet |
 | OWNER-REG-008 | Seven-selection visibility cliff | After ~6 browses, next preview disappears; battle may start with missing body | Wave020 diagnostic: fresh select → fighters 1–7 preview → confirm #7 → battle bodies |
+| OWNER-REG-009 | Fighter Select dynamic content empty | Select shell (title/P1/P2/buttons/preview frame) renders but roster names/data/models absent | Wave020 fail-fast: script attached + 7 tiles + P1/P2 identity + 7 visible previews + confirm→battle |
 
 ## Rules
 
@@ -33,6 +34,7 @@
 | OWNER-REG-006 | Guarded (player-build scan) | Preserve |
 | OWNER-REG-007 | Open (uplifted proxies) | Material distinctness toward STRONGLY_DISTINCT_NONFINAL_CANDIDATES |
 | OWNER-REG-008 | Open (owner-reported cliff) | Zero ghosts after 7 sequential browses + battle handoff |
+| OWNER-REG-009 | STOP_THE_LINE (empty dynamic content) | Script attached + roster/identity/preview complete on fresh select |
 
 ## Wave020 adversarial coverage for OWNER-REG-008
 

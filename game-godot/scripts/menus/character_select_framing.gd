@@ -57,15 +57,30 @@ static func framing_for_fighter(
 	var pad_x := 0.14 + vfx_envelope * 0.6
 	var ortho_size := maxf(height * 0.52 + pad_y, width * 0.95 + pad_x)
 	if select_mode:
-		ortho_size *= 0.92
-	var cam_y := center.y + height * 0.06 + pad_y * 0.35
+		# Mild zoom only — never clip feet/head for "tight" framing.
+		ortho_size *= 0.96
+	var head_y := bounds.position.y + bounds.size.y
+	var feet_y := bounds.position.y
+	# Bias slightly above geometric center so heads read, then expand to fit both ends.
+	var cam_y := center.y + height * 0.04 + pad_y * 0.25
+	var margin := 0.95
+	var span_up := head_y - cam_y
+	var span_down := cam_y - feet_y
+	ortho_size = maxf(ortho_size, maxf(span_up / margin, maxf(span_down / margin, height * 0.52 + pad_y)))
+	# If expansion would crush coverage below readable, recenter and re-fit.
+	if height / (ortho_size * 2.0) < 0.55:
+		cam_y = (feet_y + head_y) * 0.5
+		span_up = head_y - cam_y
+		span_down = cam_y - feet_y
+		ortho_size = maxf(
+			maxf(height * 0.52 + pad_y, width * 0.95 + pad_x),
+			maxf(span_up / margin, span_down / margin)
+		)
 	var cam_z := 4.6 + depth * 0.35 + vfx_envelope
 	var look_y := center.y + height * 0.02
 	var coverage := clampf(height / (ortho_size * 2.0), 0.0, 1.0)
-	var head_y := bounds.position.y + bounds.size.y
-	var feet_y := bounds.position.y
-	var head_visible := head_y <= cam_y + ortho_size * 0.95
-	var feet_visible := feet_y >= cam_y - ortho_size * 0.95
+	var head_visible := head_y <= cam_y + ortho_size * margin
+	var feet_visible := feet_y >= cam_y - ortho_size * margin
 	return {
 		"visible_bounds": {
 			"min": [bounds.position.x, bounds.position.y, bounds.position.z],
