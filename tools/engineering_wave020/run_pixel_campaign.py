@@ -175,6 +175,152 @@ def soft_back_in_aa(serial: str) -> None:
     ensure_aa_foreground(serial, "soft_back_post")
 
 
+def display_wh(serial: str) -> tuple[int, int]:
+    """Current input coordinate space (landscape AA is typically 2400x1080)."""
+    out = adb(["-s", serial, "shell", "wm", "size"]).stdout
+    # Prefer Override size if present (rotated), else Physical.
+    w = h = 0
+    for line in out.splitlines():
+        if "Override size:" in line or "Physical size:" in line:
+            try:
+                part = line.split(":", 1)[1].strip()
+                ww, hh = part.split("x")
+                w, h = int(ww), int(hh)
+                if "Override" in line and w and h:
+                    break
+            except ValueError:
+                continue
+    # AA export is landscape; if device reports portrait physical, swap for taps.
+    if w and h and h > w:
+        return h, w
+    if w and h:
+        return w, h
+    return 2400, 1080
+
+
+def navigate_to_fighter_select(serial: str) -> bool:
+    """Best-effort AA-only path from launch/menu into Fighter Select.
+
+    Flow: Title/Main → Rulesets → Confirm → Fighter Select.
+    Rulesets focuses the first Button (Stocks -); bare ENTER never reaches Confirm
+    (Wave018 lesson). Drive DPAD_DOWN to Confirm, then ENTER + tap Confirm region.
+    Pixel captures are landscape 2400x1080 — do not use portrait-only Y>1080 taps.
+    Never opens Settings/launcher.
+    """
+    if not ensure_aa_foreground(serial, "nav_select_pre"):
+        if not launch_app(serial):
+            return False
+    w, h = display_wh(serial)
+    # Leave splash / title / main / mode menus (Start Game center-ish)
+    cx, cy = w // 2, int(h * 0.62)
+    for _ in range(4):
+        tap(serial, cx, cy)
+        time.sleep(0.35)
+    for _ in range(8):
+        key(serial, "66")  # ENTER / ui_accept
+        time.sleep(0.35)
+    # Rulesets: move focus to Confirm (many buttons above it)
+    for _ in range(16):
+        key(serial, "20")  # DPAD_DOWN
+        time.sleep(0.08)
+    key(serial, "66")
+    time.sleep(0.45)
+    # Confirm Ruleset button sits lower-left in landscape content
+    tap(serial, int(w * 0.22), int(h * 0.88))
+    time.sleep(0.4)
+    for _ in range(4):
+        key(serial, "66")
+        time.sleep(0.35)
+    return ensure_aa_foreground(serial, "nav_select_post")
+
+
+def tap_roster_index(serial: str, index: int) -> None:
+    """Tap fighter tile i (0..6) on landscape Fighter Select."""
+    w, h = display_wh(serial)
+    # Grid is left ~55% of width, 4 columns x 2 rows.
+    col = index % 4
+    row = index // 4
+    x0, x1 = int(w * 0.06), int(w * 0.52)
+    y0, y1 = int(h * 0.18), int(h * 0.52)
+    cell_w = (x1 - x0) / 4.0
+    cell_h = (y1 - y0) / 2.0
+    x = int(x0 + cell_w * (col + 0.5))
+    y = int(y0 + cell_h * (row + 0.5))
+    tap(serial, x, y)
+
+
+def tesseract_word_boxes(path: Path) -> list[tuple[str, int, int, int]]:
+    """Return (text, cx, cy, top) from tesseract TSV; empty if unavailable."""
+    if not path.is_file():
+        return []
+    try:
+        r = subprocess.run(
+            ["tesseract", str(path), "stdout", "tsv"],
+            capture_output=True,
+            text=True,
+            timeout=60,
+        )
+    except Exception:
+        return []
+    out: list[tuple[str, int, int, int]] = []
+    for line in (r.stdout or "").splitlines()[1:]:
+        parts = line.split("\t")
+        if len(parts) < 12:
+            continue
+        text = (parts[11] or "").strip().lower()
+        if not text:
+            continue
+        try:
+            left, top, w, h = int(parts[6]), int(parts[7]), int(parts[8]), int(parts[9])
+        except ValueError:
+            continue
+        out.append((text, left + w // 2, top + h // 2, top))
+    return out
+
+
+def find_label_tap(path: Path, *needles: str, max_top: int = 1000) -> tuple[int, int] | None:
+    """Tap center for first OCR word matching any needle (exclude footer by max_top)."""
+    boxes = tesseract_word_boxes(path)
+    hits = [b for b in boxes if b[3] <= max_top and any(n in b[0] for n in needles)]
+    if not hits:
+        return None
+    # Prefer the rightmost hit in the cluster (Next sits right of Toggle CPU).
+    hits.sort(key=lambda b: b[1])
+    return hits[-1][1], hits[-1][2]
+
+
+def confirm_fighter_select_into_battle(serial: str) -> bool:
+    """P1 Next → P2 Next → Confirm Stage → versus/battle.
+
+    Landscape Pixel: OCR-locate "Next"/"Confirm" (not footer [A] Confirm at y>~1000).
+    Fallback hardcoded center of Next/Confirm label ~ (360, 941) on 2400x1080.
+    """
+    if not ensure_aa_foreground(serial, "confirm_select_pre"):
+        return False
+    fallback_next = (360, 941)
+    fallback_stage = (1200, 980)
+    for step in ("p1", "p2"):
+        cap = screencap(serial, f"nav_confirm_{step}")
+        path = PIXEL / f"nav_confirm_{step}.png"
+        xy = find_label_tap(path, "next", "confirm") if path.is_file() else None
+        x, y = xy or fallback_next
+        tap(serial, x, y)
+        time.sleep(0.7)
+    cap = screencap(serial, "nav_confirm_stage")
+    path = PIXEL / "nav_confirm_stage.png"
+    xy = find_label_tap(path, "confirm", "stage") if path.is_file() else None
+    if xy is None and path.is_file():
+        # Stage button is often "Confirm Stage" — match stage alone
+        xy = find_label_tap(path, "stage")
+    x, y = xy or fallback_stage
+    tap(serial, x, y)
+    time.sleep(0.6)
+    for _ in range(4):
+        key(serial, "66")
+        time.sleep(0.4)
+    return ensure_aa_foreground(serial, "confirm_select_post")
+
+
 def tap(serial: str, x: int, y: int) -> None:
     if not ensure_aa_foreground(serial, f"tap {x},{y}"):
         return
