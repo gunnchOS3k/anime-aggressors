@@ -45,9 +45,17 @@ if (build.status !== 0) {
 ok("manifest rebuilt");
 
 for (const id of fighters) {
-  const glb = path.join(root, `game-godot/assets/characters/procedural_final/${id}.glb`);
+  const legacyGlb = path.join(root, `game-godot/assets/characters/procedural_final/${id}.glb`);
+  const canonicalGlb = path.join(
+    root,
+    `game-godot/content/fighters/${id}/model/${id}_procedural_proxy.glb`,
+  );
+  const glb = fs.existsSync(canonicalGlb) ? canonicalGlb : legacyGlb;
   if (!fs.existsSync(glb) || fs.statSync(glb).size < 100_000) fail(`glb ${id}`);
-  if (!fs.existsSync(`${glb}.import`)) fail(`glb import missing ${id}`);
+  const importPath = fs.existsSync(`${canonicalGlb}.import`)
+    ? `${canonicalGlb}.import`
+    : `${legacyGlb}.import`;
+  if (!fs.existsSync(importPath)) fail(`glb import missing ${id}`);
   for (const cat of ["hit", "move", "charge", "projectile", "defense", "ko"]) {
     const wav = path.join(root, `game-godot/assets/audio/procedural/fighters/${id}/${cat}.wav`);
     if (!fs.existsSync(wav) || fs.statSync(wav).size < 100) fail(`audio ${id}.${cat}`);
@@ -59,7 +67,12 @@ for (const id of fighters) {
   if (data.authorship?.assetStatuses?.model_glb !== "PROCEDURAL_FINAL") fail(`${id} model status`);
   if (data.authorship?.assetStatuses?.audio !== "PROCEDURAL_FINAL") fail(`${id} audio status`);
   if (data.productionStatus === "proxy") fail(`${id} still proxy productionStatus`);
-  if (!String(data.modelPath || "").includes("procedural_final/")) fail(`${id} modelPath not final`);
+  const expectedModel = `res://content/fighters/${id}/model/${id}_procedural_proxy.glb`;
+  const modelPath = String(data.modelPath || "");
+  const modelFinal =
+    modelPath === expectedModel
+    || (modelPath.includes("procedural_final/") && !modelPath.includes("/proxy/"));
+  if (!modelFinal) fail(`${id} modelPath not final`);
   if (String(data.modelPath || "").includes("/proxy/")) fail(`${id} modelPath still proxy`);
 }
 ok("7 fighters procedural art+audio");
