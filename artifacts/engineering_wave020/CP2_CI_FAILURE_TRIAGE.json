@@ -1,0 +1,34 @@
+{
+  "artifact": "CP2_CI_FAILURE_TRIAGE",
+  "wave": "wave020_cp2_reopen_screen_witness",
+  "live_pr": 94,
+  "emitted_at": "2026-08-26T04:10:00Z",
+  "note": "Exact-head CI gate deferred until tip push after screen-witness repair; do not claim SUCCESS from local artifacts.",
+  "local_head_at_triage": "ac772258f9d64b627af8e3fb529af8c28a32ada9",
+  "CP2_SEALED": false,
+  "triage_status": "PENDING_PUSH_THEN_LIVE_GH_ACTIONS",
+  "checks_to_verify_after_push": [
+    "Quality",
+    "Taste Gate",
+    "Wave016",
+    "Wave017",
+    "Wave018",
+    "Wave019",
+    "Wave020"
+  ],
+  "known_local_blockers": [
+    {
+      "id": "PIXEL_USB_UNAUTHORIZED",
+      "impact": "Cannot complete Vesper vs Kaia final-screen Pixel witness until device returns authorized",
+      "status": "BLOCKED_PIXEL6A"
+    },
+    {
+      "id": "PRIOR_FALSE_GREEN",
+      "impact": "SCENE_TREE_VISIBLE used as body pass; OWNER-REG-014 added to prevent recurrence",
+      "status": "FIXED_IN_CODE_PENDING_PIXEL_PROOF"
+    }
+  ],
+  "repairs_claimed": false,
+  "failures": 0,
+  "in_progress": "unknown_until_live_gh"
+}

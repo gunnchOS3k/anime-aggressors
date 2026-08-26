@@ -568,9 +568,32 @@ func _sample_body(fighter, state_name: String, fid: String, session_id: String, 
 	var is_legacy := false
 	var fallback := false
 	var duplicate := false
-	if fighter.model_3d != null and fighter.model_3d.has_method("is_visible_renderable_body"):
-		if fighter.model_3d.is_visible_renderable_body():
-			mesh = 1
+	var scene_tree_vis := false
+	var final_screen_vis := false
+	var fail_class := ""
+	var opaque := 0
+	if fighter.model_3d != null and fighter.model_3d.has_method("count_renderable_meshes"):
+		var mc: Dictionary = fighter.model_3d.count_renderable_meshes()
+		mesh = int(mc.get("visible_renderable_mesh_count", 0))
+	if fighter.has_method("get_final_screen_visibility_witness"):
+		var w: Dictionary = fighter.get_final_screen_visibility_witness()
+		scene_tree_vis = bool(w.get("SCENE_TREE_VISIBLE", false))
+		final_screen_vis = bool(w.get("FINAL_SCREEN_VISIBLE", false))
+		fail_class = str(w.get("invisible_failure_class", ""))
+		opaque = int(w.get("viewport_opaque_pixels", 0))
+		# OWNER-REG-014: final-screen is the pass criterion when witness is available.
+		if bool(w.get("FINAL_SCREEN_WITNESS_AVAILABLE", true)):
+			if not final_screen_vis:
+				mesh = 0
+			elif mesh <= 0 and final_screen_vis:
+				mesh = 1
+		elif scene_tree_vis and mesh > 0:
+			# Headless / unreadable RT — do not invent FINAL_SCREEN pass.
+			pass
+	elif fighter.model_3d != null and fighter.model_3d.has_method("is_visible_renderable_body"):
+		scene_tree_vis = bool(fighter.model_3d.is_visible_renderable_body())
+		if scene_tree_vis and mesh <= 0:
+			mesh = 0
 	var presentation: Dictionary = _AssetResolver.resolve_presentation(fid, _AssetResolver.CTX_BATTLE)
 	is_canon = bool(presentation.get("is_current_canonical", false))
 	is_legacy = bool(presentation.get("is_legacy", false))
@@ -580,7 +603,6 @@ func _sample_body(fighter, state_name: String, fid: String, session_id: String, 
 		fallback = true
 		if mesh > 0:
 			duplicate = true
-	# During KO presentation may briefly hide; do not treat as body-disappear failure.
 	var expected_visible := true
 	if state_name == "ko":
 		expected_visible = false
@@ -593,6 +615,11 @@ func _sample_body(fighter, state_name: String, fid: String, session_id: String, 
 		"select_preview_representation_id": str(prev_pres.get("representation_id", "")),
 		"expected_visible": expected_visible,
 		"visible_renderable_mesh_count": mesh,
+		"SCENE_TREE_VISIBLE": scene_tree_vis,
+		"FINAL_SCREEN_VISIBLE": final_screen_vis,
+		"final_screen_witness_pass": final_screen_vis,
+		"viewport_opaque_pixels": opaque,
+		"invisible_failure_class": fail_class,
 		"representation_id": rep,
 		"is_canonical": is_canon,
 		"is_legacy": is_legacy,
@@ -705,6 +732,16 @@ func _exercise_move_previews(scene, fighter, fid: String) -> Dictionary:
 			legacy += 1
 		if model == null:
 			missing += 1
+		elif ml.has_method("get_move_preview_final_screen_witness"):
+			var pw: Dictionary = ml.get_move_preview_final_screen_witness()
+			# OWNER-REG-015: pane present but FINAL_SCREEN empty counts as missing.
+			if bool(pw.get("FINAL_SCREEN_WITNESS_AVAILABLE", true)) and not bool(pw.get("FINAL_SCREEN_VISIBLE", false)):
+				missing += 1
+			elif model.has_method("is_visible_renderable_body") and not model.is_visible_renderable_body():
+				missing += 1
+		elif model.has_method("is_final_screen_visible_body"):
+			if not model.is_final_screen_visible_body():
+				missing += 1
 		elif model.has_method("is_visible_renderable_body") and not model.is_visible_renderable_body():
 			missing += 1
 		if str(ml.fighter_id) != fid:

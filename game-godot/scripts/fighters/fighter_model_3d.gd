@@ -15,11 +15,15 @@ const _BoneMap = preload("res://scripts/visual/procedural_bone_map.gd")
 const _SelectFraming = preload("res://scripts/menus/character_select_framing.gd")
 const _PresentationGates = preload("res://scripts/menus/wave020_presentation_gates.gd")
 
-const VIEWPORT_SIZE := Vector2i(220, 280)
-const DISPLAY_SCALE := Vector2(0.38, 0.38)
+const VIEWPORT_SIZE := Vector2i(256, 320)
+## Battle bodies must be owner-visible on Pixel; prior 0.38 read as absent.
+const DISPLAY_SCALE := Vector2(0.85, 0.85)
 const SELECT_DISPLAY_SCALE := Vector2(1.35, 1.35)
 const SELECT_CAMERA_SIZE := 2.05
 const PROXY_LABEL := "PROCEDURAL PRODUCTION PROXY"
+const FINAL_SCREEN_MIN_OPAQUE_PIXELS := 64
+const FINAL_SCREEN_ALPHA_THRESHOLD := 0.08
+const FINAL_SCREEN_LUMA_THRESHOLD := 0.12
 
 var _viewport: SubViewport
 var _camera: Camera3D
@@ -58,6 +62,11 @@ var _configure_swap_count: int = 0
 const VIEWPORT_REFRESH_EVERY_SWAPS := 7
 var _last_framing_report: Dictionary = {}
 var _last_presentation: Dictionary = {}
+var _last_witness: Dictionary = {}
+var _viewport_rebuild_count: int = 0
+var _final_screen_heal_attempts: int = 0
+var _viewport_image_unreadable: bool = false
+var _display_path: String = "ViewportBank+Sprite2D"
 
 
 func _ready() -> void:
@@ -67,9 +76,12 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	# Wave018: periodic heal for SubViewport texture loss / stuck visibility=false.
+	# Wave018/020: heal scene-tree visibility AND blank SubViewport framebuffers.
 	if _loaded and not is_visible_renderable_body():
 		heal_visibility_if_needed()
+	elif _loaded and not _viewport_image_unreadable and not is_final_screen_visible_body():
+		if _final_screen_heal_attempts < 6:
+			heal_final_screen_visibility_if_needed()
 	if not _loaded or not _using_stylized_fallback or _stylized == null:
 		return
 	_style_anim_t += delta * _style_speed
@@ -142,7 +154,7 @@ func configure(fighter_data: Dictionary) -> bool:
 		heal_visibility_if_needed()
 		if not is_visible_renderable_body():
 			refresh_viewport_texture(true)
-	# Return loaded; callers/harnesses check is_visible_renderable_body for invariant.
+	call_deferred("_deferred_finalize_display")
 	return _loaded
 
 
@@ -219,12 +231,7 @@ func count_renderable_meshes() -> Dictionary:
 				visible += 1
 		for c in n.get_children():
 			stack.append(c)
-	# SubViewport Sprite2D path: if body is renderable but mesh walk found none
-	# (e.g. mid-rebuild), treat healthy display as one visible renderable unit.
-	if visible == 0 and is_visible_renderable_body():
-		visible = 1
-		if total == 0:
-			total = 1
+	# OWNER-REG-014: never invent mesh counts from scene-tree display flags alone.
 	return {"renderable_mesh_count": total, "visible_renderable_mesh_count": visible}
 
 
@@ -296,7 +303,8 @@ func set_select_mode(enabled: bool) -> void:
 	_select_mode = enabled
 	if _display:
 		_display.scale = SELECT_DISPLAY_SCALE if enabled else DISPLAY_SCALE
-		_display.position = Vector2(0, -28) if enabled else Vector2(0, -49)
+		_display.position = Vector2(0, -28) if enabled else Vector2(0, -56)
+		_display.z_index = 2
 	_frame_camera_for_figure()
 
 
@@ -597,14 +605,19 @@ func _build_viewport() -> void:
 	if _viewport != null and is_instance_valid(_viewport) and _model_root != null and is_instance_valid(_model_root):
 		return
 	_viewport = SubViewport.new()
-	_viewport.name = "Fighter3DViewport"
+	_viewport.name = "Fighter3DViewport_%s" % str(get_instance_id())
 	_viewport.size = VIEWPORT_SIZE
 	_viewport.transparent_bg = true
 	_viewport.own_world_3d = true
 	_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	# Pixel 6a gralloc rejects some MSAA render-target formats (0x3b); keep Compatibility-safe path.
 	_viewport.msaa_3d = Viewport.MSAA_DISABLED
-	add_child(_viewport)
+	_viewport.handle_input_locally = false
+	# OWNER-REG-014: keep SubViewport on a stable root bank — parenting under CharacterBody2D
+	# blanked the RT on Pixel battle while select (Control-hosted) still worked.
+	var bank := _viewport_bank()
+	bank.add_child(_viewport)
+	_display_path = "ViewportBank+Sprite2D"
 
 	var environment_node := WorldEnvironment.new()
 	var environment := Environment.new()
@@ -612,7 +625,7 @@ func _build_viewport() -> void:
 	environment.background_color = Color(0, 0, 0, 0)
 	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	environment.ambient_light_color = Color(0.72, 0.78, 0.92)
-	environment.ambient_light_energy = 1.15
+	environment.ambient_light_energy = 1.25
 	environment.tonemap_mode = Environment.TONE_MAPPER_FILMIC
 	environment_node.environment = environment
 	_viewport.add_child(environment_node)
@@ -641,9 +654,11 @@ func _build_viewport() -> void:
 	_viewport.add_child(_model_root)
 	_display = Sprite2D.new()
 	_display.name = "ModelDisplay"
+	_display.centered = true
 	_display.texture = _viewport.get_texture()
-	_display.position = Vector2(0, -49)
+	_display.position = Vector2(0, -56)
 	_display.scale = DISPLAY_SCALE
+	_display.z_index = 2
 	_display.visible = false
 	add_child(_display)
 
@@ -679,6 +694,25 @@ func _build_viewport() -> void:
 	proxy_label.modulate = Color(0.78, 0.9, 1.0, 0.82)
 	proxy_label.visible = false
 	add_child(proxy_label)
+
+
+func _viewport_bank() -> Node:
+	if not is_inside_tree():
+		return self
+	var root := get_tree().root
+	var bank := root.get_node_or_null("FighterViewportBank")
+	if bank == null:
+		bank = Node.new()
+		bank.name = "FighterViewportBank"
+		root.add_child(bank)
+	return bank
+
+
+func _exit_tree() -> void:
+	# Free bank-hosted SubViewport so battle→select transitions don't leak RTs.
+	if _viewport != null and is_instance_valid(_viewport):
+		_viewport.queue_free()
+		_viewport = null
 
 
 func _clear_model() -> void:
@@ -729,7 +763,7 @@ func _developer_labels_enabled() -> bool:
 	return false
 
 
-## Wave017 visibility invariant helper — body mesh must be renderable when expected.
+## Wave017 visibility invariant helper — SCENE_TREE only (not FINAL_SCREEN).
 func is_visible_renderable_body() -> bool:
 	if not _loaded:
 		return false
@@ -742,15 +776,140 @@ func is_visible_renderable_body() -> bool:
 	# Prefer mesh presence when procedural; stylized always has meshes under root.
 	if _procedural_healthy and _visible_skeleton == null:
 		return false
+	if absf(_display.scale.x) < 0.05 or absf(_display.scale.y) < 0.05:
+		return false
+	if _display.modulate.a < 0.05:
+		return false
 	return true
 
 
+func count_viewport_opaque_pixels() -> Dictionary:
+	var out := {
+		"viewport_opaque_pixels": 0,
+		"viewport_total_pixels": 0,
+		"viewport_image_valid": false,
+		"viewport_image_unreadable": _viewport_image_unreadable,
+		"display_rect": {"x": 0.0, "y": 0.0, "w": 0.0, "h": 0.0},
+		"display_path": _display_path,
+	}
+	if _display != null and is_instance_valid(_display):
+		var sz := Vector2(float(VIEWPORT_SIZE.x) * absf(_display.scale.x), float(VIEWPORT_SIZE.y) * absf(_display.scale.y))
+		var top_left := _display.global_position - sz * 0.5
+		out["display_rect"] = {"x": top_left.x, "y": top_left.y, "w": sz.x, "h": sz.y}
+	if _viewport_image_unreadable:
+		return out
+	if _viewport == null or not is_instance_valid(_viewport):
+		return out
+	var tex: Texture2D = _viewport.get_texture()
+	if tex == null:
+		return out
+	var img: Image = tex.get_image()
+	if img == null or img.get_width() <= 0 or img.get_height() <= 0:
+		_viewport_image_unreadable = true
+		out["viewport_image_unreadable"] = true
+		return out
+	out["viewport_image_valid"] = true
+	var total := img.get_width() * img.get_height()
+	var opaque := 0
+	var step := 2 if total > 20000 else 1
+	for y in range(0, img.get_height(), step):
+		for x in range(0, img.get_width(), step):
+			var c: Color = img.get_pixel(x, y)
+			if c.a > FINAL_SCREEN_ALPHA_THRESHOLD and (c.r + c.g + c.b) > FINAL_SCREEN_LUMA_THRESHOLD:
+				opaque += 1
+	out["viewport_opaque_pixels"] = opaque * step * step
+	out["viewport_total_pixels"] = total
+	return out
+
+
+func is_final_screen_visible_body() -> bool:
+	if not is_visible_renderable_body():
+		return false
+	var px: Dictionary = count_viewport_opaque_pixels()
+	if bool(px.get("viewport_image_unreadable", false)):
+		return false
+	return bool(px.get("viewport_image_valid", false)) and int(px.get("viewport_opaque_pixels", 0)) >= FINAL_SCREEN_MIN_OPAQUE_PIXELS
+
+
+func classify_invisible_but_valid_failure() -> String:
+	if not _loaded:
+		return "NOT_LOADED"
+	if _display == null or not is_instance_valid(_display):
+		return "DISPLAY_NODE_MISSING"
+	if not _display.visible:
+		return "DISPLAY_VISIBLE_FALSE"
+	if absf(_display.scale.x) < 0.05 or absf(_display.scale.y) < 0.05:
+		return "ZERO_SCALE"
+	if _display.modulate.a < 0.05:
+		return "TRANSPARENT_MODULATE"
+	if _viewport == null or not is_instance_valid(_viewport):
+		return "VIEWPORT_MISSING"
+	if _loaded_model == null or not is_instance_valid(_loaded_model):
+		return "MODEL_MISSING"
+	if not _loaded_model.visible:
+		return "MODEL_VISIBLE_FALSE"
+	var meshes: Dictionary = count_renderable_meshes()
+	if int(meshes.get("visible_renderable_mesh_count", 0)) <= 0:
+		return "ZERO_VISIBLE_MESH"
+	if _display.texture == null:
+		return "DISPLAY_TEXTURE_NULL"
+	var px: Dictionary = count_viewport_opaque_pixels()
+	if bool(px.get("viewport_image_unreadable", false)):
+		return "VIEWPORT_IMAGE_UNREADABLE_NO_FINAL_SCREEN_CLAIM"
+	if not bool(px.get("viewport_image_valid", false)):
+		return "VIEWPORT_IMAGE_INVALID"
+	if int(px.get("viewport_opaque_pixels", 0)) < FINAL_SCREEN_MIN_OPAQUE_PIXELS:
+		return "STALE_OR_TRANSPARENT_SV_TEXTURE"
+	return ""
+
+
+func get_final_screen_visibility_witness() -> Dictionary:
+	var scene_vis := is_visible_renderable_body()
+	var px: Dictionary = count_viewport_opaque_pixels()
+	var final_vis := false
+	if scene_vis and not bool(px.get("viewport_image_unreadable", false)):
+		final_vis = bool(px.get("viewport_image_valid", false)) and int(px.get("viewport_opaque_pixels", 0)) >= FINAL_SCREEN_MIN_OPAQUE_PIXELS
+	var fail := "" if final_vis else classify_invisible_but_valid_failure()
+	var meshes: Dictionary = count_renderable_meshes()
+	_last_witness = {
+		"fighter_id": _fighter_id,
+		"SCENE_TREE_VISIBLE": scene_vis,
+		"FINAL_SCREEN_VISIBLE": final_vis,
+		"FINAL_SCREEN_WITNESS_AVAILABLE": not bool(px.get("viewport_image_unreadable", false)),
+		"viewport_opaque_pixels": int(px.get("viewport_opaque_pixels", 0)),
+		"viewport_total_pixels": int(px.get("viewport_total_pixels", 0)),
+		"viewport_image_valid": bool(px.get("viewport_image_valid", false)),
+		"display_rect": px.get("display_rect", {}),
+		"display_path": _display_path,
+		"display_visible": _display != null and is_instance_valid(_display) and _display.visible,
+		"display_scale": {"x": _display.scale.x if _display else 0.0, "y": _display.scale.y if _display else 0.0},
+		"display_modulate_a": _display.modulate.a if _display else 0.0,
+		"viewport_size": {"w": VIEWPORT_SIZE.x, "h": VIEWPORT_SIZE.y},
+		"render_target_update_mode": int(_viewport.render_target_update_mode) if _viewport else -1,
+		"transparent_bg": bool(_viewport.transparent_bg) if _viewport else false,
+		"model_source": _current_model_source,
+		"visible_renderable_mesh_count": int(meshes.get("visible_renderable_mesh_count", 0)),
+		"renderable_mesh_count": int(meshes.get("renderable_mesh_count", 0)),
+		"viewport_rebuild_count": _viewport_rebuild_count,
+		"final_screen_heal_attempts": _final_screen_heal_attempts,
+		"invisible_failure_class": fail,
+		"select_mode": _select_mode,
+	}
+	return _last_witness.duplicate(true)
+
+
 func refresh_viewport_texture(force: bool = false) -> void:
-	## Wave020: rebind SubViewport → Sprite2D even when texture handle exists but is blank.
+	## Wave020: rebind SubViewport → Sprite2D; reparent SV onto bank if needed.
 	if _viewport == null or not is_instance_valid(_viewport):
 		_build_viewport()
 	if _display == null or not is_instance_valid(_display):
 		return
+	if _viewport.get_parent() == self and is_inside_tree():
+		var bank := _viewport_bank()
+		if bank != self:
+			remove_child(_viewport)
+			bank.add_child(_viewport)
+	_viewport.size = VIEWPORT_SIZE
 	var tex := _viewport.get_texture()
 	if force or _display.texture == null or _display.texture != tex:
 		_display.texture = tex
@@ -758,6 +917,7 @@ func refresh_viewport_texture(force: bool = false) -> void:
 		_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 	_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	_display.visible = _loaded
+	_display.z_index = 2
 
 
 func heal_visibility_if_needed() -> bool:
@@ -767,16 +927,18 @@ func heal_visibility_if_needed() -> bool:
 		_build_viewport()
 	if _display == null or not is_instance_valid(_display):
 		return false
-	refresh_viewport_texture(false)
+	refresh_viewport_texture(true)
 	_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	_enforce_exactly_one_visible_body()
 	var recovered := false
 	if _loaded_model != null and is_instance_valid(_loaded_model):
 		_loaded_model.visible = true
 		_display.visible = true
+		_display.modulate = Color(1, 1, 1, 1)
+		if absf(_display.scale.x) < 0.05 or absf(_display.scale.y) < 0.05:
+			_display.scale = SELECT_DISPLAY_SCALE if _select_mode else DISPLAY_SCALE
 		_loaded = true
 		recovered = true
-	# Last-resort: if stylized exists but was detached from _loaded_model pointer.
 	elif _stylized != null and is_instance_valid(_stylized):
 		_stylized.visible = true
 		_loaded_model = _stylized
@@ -790,6 +952,46 @@ func heal_visibility_if_needed() -> bool:
 		if telem != null and telem.has_method("record_fallback_recovery"):
 			telem.record_fallback_recovery("heal_visibility_if_needed", _fighter_id)
 	return recovered
+
+
+func heal_final_screen_visibility_if_needed() -> bool:
+	if _viewport_image_unreadable:
+		return false
+	_final_screen_heal_attempts += 1
+	heal_visibility_if_needed()
+	refresh_viewport_texture(true)
+	if is_final_screen_visible_body():
+		return true
+	# Force StandardMaterial3D if SV framebuffer is blank (shader miss on mobile).
+	var px: Dictionary = count_viewport_opaque_pixels()
+	if not bool(px.get("viewport_image_unreadable", false)) and int(px.get("viewport_opaque_pixels", 0)) < FINAL_SCREEN_MIN_OPAQUE_PIXELS:
+		if _loaded_model != null and is_instance_valid(_loaded_model):
+			_force_standard_materials(_loaded_model, Color(0.85, 0.85, 0.9, 1.0))
+			refresh_viewport_texture(true)
+	return is_final_screen_visible_body()
+
+
+func _deferred_finalize_display() -> void:
+	if not is_inside_tree():
+		return
+	refresh_viewport_texture(true)
+	if _display != null and is_instance_valid(_display):
+		_display.visible = _loaded
+		_display.z_index = 2
+	if _loaded and not _viewport_image_unreadable and not is_final_screen_visible_body():
+		heal_final_screen_visibility_if_needed()
+
+
+func _force_standard_materials(node: Node, base_color: Color) -> void:
+	if node is MeshInstance3D:
+		var mesh := node as MeshInstance3D
+		mesh.visible = true
+		var mat := StandardMaterial3D.new()
+		mat.albedo_color = base_color
+		mat.transparency = BaseMaterial3D.TRANSPARENCY_DISABLED
+		mesh.material_override = mat
+	for child in node.get_children():
+		_force_standard_materials(child, base_color)
 
 
 func _find_skeleton(node: Node) -> Skeleton3D:

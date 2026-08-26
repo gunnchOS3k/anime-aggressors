@@ -20,15 +20,17 @@ Edmund sole merge authority. Shell ≠ working. Desktop + Pixel early gate evide
 
 ## CHECKPOINT 2 — Canonical fighter presentation + reliable battle bodies + responsive Pause/Move List
 
-- **Status:** COMPLETE (desktop diagnostics + Pixel CP2 physical seal)
-- **OWNER-REG-011:** Select cards bake canonical `FighterModel3D` portraits (`fighter_card_portrait.gd`); resolver rejects `procedural_final` / proxy paths for player builds
-- **OWNER-REG-012:** Battle prefers Model3D heal/reconfigure; ColorRect counted as `LEGACY_FALLBACK_USES`; Pixel lifecycle matrix 140/140 zero-mesh=0
-- **OWNER-REG-013:** Move List + Pause centered via `CenterContainer` + viewport-relative size; Pixel Gate3/3B clipped=0
-- **Victory:** ResultsScene uses canonical `FighterCardPortrait` (`VICTORY_CANONICAL_CURRENT_COUNT=7` on Pixel)
-- **Canonical authority:** `FighterAssetResolver.resolve_presentation(fighter_id, context)`
-- **Evidence:** `CP2_PIXEL_PHYSICAL_SEAL_RESULT.json`, `VICTORY_PRESENTATION_DIAGNOSTIC_RESULT.json`, `BATTLE_BODY_DIAGNOSTIC_RESULT.json`, `PAUSE_LAYOUT_DIAGNOSTIC_RESULT.json`, `pixel/cp2_victory_*.png`
-- **CP2_SEALED:** true (automated Pixel physical seal). Human approvals remain PENDING.
-- **Hold:** CP3 flourish / CP5 audio remain HOLD until Edmund owner review of Pixel captures
+- **Status:** REOPENED — owner-visible Pixel contradiction (battle bodies + move preview)
+- **CP2_SEALED:** false
+- **SAFE_TO_START_CP3_FLOURISH:** false
+- **SAFE_TO_START_CP5_ELEMENTAL_AUDIO:** false
+- **Owner contradiction:** Vesper vs Kaia — HUD/labels/stage/timer visible, fighter bodies absent; Move Preview pane visible without clearly visible fighter
+- **False-green root:** prior Pixel seal used `SCENE_TREE_VISIBLE` (`is_visible_renderable_body`) as body pass — not `FINAL_SCREEN_VISIBLE` framebuffer witness
+- **OWNER-REG-014:** Render telemetry visible / final screen body absent
+- **OWNER-REG-015:** Move Preview pane exists / preview visually empty
+- **Repair in progress:** SubViewportContainer final compositor + final-screen opaque-pixel witness
+- **Human approvals:** remain PENDING
+- **Hold:** CP3 flourish / CP5 audio remain HOLD until CP2 re-sealed with owner-visible proof
 
 ## CHECKPOINT 3 — Showcase flourish active
 
@@ -46,7 +48,7 @@ Edmund sole merge authority. Shell ≠ working. Desktop + Pixel early gate evide
 
 ## Pixel early physical gate (CP0/CP1)
 
-- **Status:** PASS (honest OCR gate) on tip `4d42466` APK; CP2 Pixel physical seal revalidated on PR #94 tip APK
+- **Status:** PASS (honest OCR gate) on tip `4d42466` APK; CP2 Pixel physical seal **reopened** on PR #94
 - **PIXEL_UNBLOCK_STATUS:** UNBLOCKED — serial `27211JEGR06194` Pixel 6a
-- **Evidence:** `artifacts/engineering_wave020/PIXEL_EARLY_FIGHTER_SELECT_GATE.json`, `CP2_PIXEL_PHYSICAL_SEAL_RESULT.json`
-- **CP2 note:** Pixel Gates 1–3 + victory sealed via `run_pixel_cp2_physical_seal.py` / in-APK harness
+- **Evidence:** `artifacts/engineering_wave020/PIXEL_EARLY_FIGHTER_SELECT_GATE.json`; CP2 screen-witness reopen under `CP2_*SCREEN_WITNESS*` / `CP2_VESPER_KAIA_FIRST_FAILURE.json`
+- **CP2 note:** Do not claim FINAL_SCREEN from SCENE_TREE-only. Prior `PIXEL_BATTLE_BODY_ZERO_SAMPLES=0` contradicted by owner-visible Pixel capture.

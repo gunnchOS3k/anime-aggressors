@@ -360,7 +360,8 @@ func _ensure_preview() -> void:
 		return
 	_preview_model = MODEL_SCRIPT.new()
 	_preview_model.name = "MovePreviewModel"
-	_preview_model.position = Vector2(150, 260)
+	# OWNER-REG-015: keep preview host large enough for select-scale SubViewportContainer.
+	_preview_model.position = Vector2(40, 40)
 	_preview_host.add_child(_preview_model)
 	var data: Dictionary = {"id": fighter_id, "displayName": fighter_id}
 	var gs := get_node_or_null("/root/GameState")
@@ -370,6 +371,25 @@ func _ensure_preview() -> void:
 		_preview_model.configure(data)
 	if _preview_model.has_method("set_select_mode"):
 		_preview_model.set_select_mode(true)
+	if _preview_model.has_method("heal_final_screen_visibility_if_needed"):
+		_preview_model.heal_final_screen_visibility_if_needed()
+	elif _preview_model.has_method("heal_visibility_if_needed"):
+		_preview_model.heal_visibility_if_needed()
+
+
+func get_move_preview_final_screen_witness() -> Dictionary:
+	_ensure_preview()
+	if _preview_model != null and _preview_model.has_method("get_final_screen_visibility_witness"):
+		var w: Dictionary = _preview_model.get_final_screen_visibility_witness()
+		w["OWNER_REG_015"] = "PASS" if bool(w.get("FINAL_SCREEN_VISIBLE", false)) else "FAIL"
+		w["pane_visible"] = visible and _preview_host != null and _preview_host.is_visible_in_tree()
+		return w
+	return {
+		"SCENE_TREE_VISIBLE": false,
+		"FINAL_SCREEN_VISIBLE": false,
+		"OWNER_REG_015": "FAIL",
+		"invisible_failure_class": "PREVIEW_MODEL_MISSING",
+	}
 
 
 func _replay_preview() -> void:

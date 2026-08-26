@@ -205,12 +205,19 @@ func ensure_visible_presentation() -> void:
 			if model_3d.has_method("heal_visibility_if_needed"):
 				model_3d.heal_visibility_if_needed()
 			model_ok = model_3d.is_visible_renderable_body() if model_3d.has_method("is_visible_renderable_body") else is_model_loaded()
+	# OWNER-REG-014: attempt final-screen heal without immediately demoting to ColorRect.
+	# SubViewport may need a frame before opaque pixels exist; ColorRect only after scene-tree fail.
+	if model_ok and model_3d != null and model_3d.has_method("heal_final_screen_visibility_if_needed"):
+		if model_3d.has_method("is_final_screen_visible_body") and not model_3d.is_final_screen_visible_body():
+			model_3d.heal_final_screen_visibility_if_needed()
 	# Retry canonical configure once before any ColorRect fallback.
 	if not model_ok and model_3d != null and not data.is_empty():
 		if model_3d.has_method("configure"):
 			model_3d.configure(data)
 		if model_3d.has_method("heal_visibility_if_needed"):
 			model_3d.heal_visibility_if_needed()
+		if model_3d.has_method("heal_final_screen_visibility_if_needed"):
+			model_3d.heal_final_screen_visibility_if_needed()
 		model_ok = is_model_loaded()
 		if model_ok and model_3d.has_method("is_visible_renderable_body"):
 			model_ok = model_3d.is_visible_renderable_body()
@@ -236,6 +243,20 @@ func ensure_visible_presentation() -> void:
 			animator.set_proxy_visible(false)
 	if label and label.visible and not model_ok and not body_ok:
 		label.visible = false
+
+
+func get_final_screen_visibility_witness() -> Dictionary:
+	if model_3d != null and model_3d.has_method("get_final_screen_visibility_witness"):
+		var w: Dictionary = model_3d.get_final_screen_visibility_witness()
+		w["fighter_slot"] = slot
+		w["fighter_global_position"] = {"x": global_position.x, "y": global_position.y}
+		w["legacy_colorrect_visible"] = body != null and body.visible
+		return w
+	return {
+		"SCENE_TREE_VISIBLE": false,
+		"FINAL_SCREEN_VISIBLE": false,
+		"invisible_failure_class": "MODEL3D_MISSING",
+	}
 
 
 func get_battle_presentation_trace() -> Dictionary:

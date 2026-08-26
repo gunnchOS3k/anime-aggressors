@@ -1,0 +1,86 @@
+{
+  "artifact": "CP2_FINAL_SCREEN_RENDER_PATH_AUDIT",
+  "wave": "wave020_cp2_reopen_screen_witness",
+  "emitted_at": "2026-08-26T03:45:00Z",
+  "live_pr": 94,
+  "live_head": "ac772258f9d64b627af8e3fb529af8c28a32ada9",
+  "CP2_SEALED": false,
+  "SAFE_TO_START_CP3_FLOURISH": false,
+  "SAFE_TO_START_CP5_ELEMENTAL_AUDIO": false,
+  "owner_contradiction": {
+    "battle": "Vesper Nyx vs Kaia Windrow — HUD/labels/stage/timer visible; fighter bodies absent at countdown and after timer",
+    "move_preview": "pane + heading visible; fighter not clearly visible",
+    "prior_false_green": {
+      "PIXEL_BATTLE_BODY_ZERO_SAMPLES": 0,
+      "PIXEL_MOVE_PREVIEW_MISSING_MODEL_CASES": 0,
+      "root_cause": "harness treated SCENE_TREE_VISIBLE (is_visible_renderable_body / mesh proxy) as FINAL_SCREEN_VISIBLE"
+    },
+    "prior_pixel_evidence": "artifacts/engineering_wave020/pixel/early_C_battle.png (Vesper vs Rook: P1/CPU labels, no bodies)"
+  },
+  "final_on_screen_node": {
+    "P1": "Fighter1/Model3D/ModelDisplay (Sprite2D) compositing /root/FighterViewportBank SubViewport RT",
+    "P2_CPU": "Fighter2/Model3D/ModelDisplay (Sprite2D) compositing /root/FighterViewportBank SubViewport RT",
+    "previous_path": "SubViewport parented under FighterModel3D (CharacterBody2D) — SCENE_TREE-green / FINAL_SCREEN-empty on Pixel battle",
+    "repaired_path": "SubViewport on /root/FighterViewportBank + Sprite2D under fighter (select already proved SV→pixels on Pixel)"
+  },
+  "layers": [
+    {
+      "id": "asset",
+      "path": "res://content/fighters/{id}/model/{id}_procedural_proxy.glb",
+      "resolver": "fighter_asset_resolver.gd resolve_presentation(CTX_BATTLE|CTX_SELECT_PREVIEW)"
+    },
+    {
+      "id": "model_root",
+      "node": "FighterModel3D._model_root (Node3D inside SubViewport)",
+      "alternates": ["ProceduralProxy_*", "StylizedFighter_*"]
+    },
+    {
+      "id": "subviewport",
+      "node": "ModelDisplay/Fighter3DViewport",
+      "size": [256, 320],
+      "transparent_bg": true,
+      "own_world_3d": true,
+      "update_mode": "UPDATE_ALWAYS",
+      "msaa_3d": "DISABLED"
+    },
+    {
+      "id": "final_compositor",
+      "node": "ModelDisplay (SubViewportContainer)",
+      "role": "ONLY node that puts fighter body pixels onto the 2D battle/select/move-preview canvas",
+      "battle_scale": [0.72, 0.72],
+      "select_scale": [1.35, 1.35]
+    },
+    {
+      "id": "fighter_host",
+      "node": "BattleScene/Fighters/Fighter{1,2} (CharacterBody2D)",
+      "label": "NameLabel (P1/CPU) — can be visible while body compositor is empty (OWNER-REG-014)"
+    },
+    {
+      "id": "legacy_colorrect",
+      "node": "Fighter/Body (ColorRect)",
+      "status": "DEPRECATED emergency only; must stay hidden when canonical Model3D FINAL_SCREEN_VISIBLE"
+    }
+  ],
+  "surfaces": {
+    "battle_p1": {"final_node": "Fighter1/Model3D/ModelDisplay", "path": "SubViewportContainer"},
+    "battle_p2_cpu": {"final_node": "Fighter2/Model3D/ModelDisplay", "path": "SubViewportContainer"},
+    "move_preview": {"final_node": "MoveListPanel/.../MovePreviewModel/ModelDisplay", "path": "SubViewportContainer"},
+    "select_preview": {"final_node": "SelectModel/ModelDisplay", "path": "SubViewportContainer"}
+  },
+  "invariants": {
+    "SCENE_TREE_VISIBLE": "is_visible_renderable_body() — display/model/viewport flags only",
+    "FINAL_SCREEN_VISIBLE": "SCENE_TREE_VISIBLE + SubViewport opaque pixel witness (Proof B) when image readable",
+    "OWNER_REG_014": "telemetry SCENE_TREE_VISIBLE && !FINAL_SCREEN_VISIBLE (off-camera, zero-size, transparent, stale SV, cull, compositing)",
+    "OWNER_REG_015": "Move Preview pane exists && preview FINAL_SCREEN_VISIBLE == false"
+  },
+  "invisible_but_valid_failure_classes": [
+    "DISPLAY_VISIBLE_FALSE",
+    "ZERO_SCALE",
+    "TRANSPARENT_MODULATE",
+    "ZERO_SIZE_DISPLAY",
+    "ZERO_VISIBLE_MESH",
+    "STALE_OR_TRANSPARENT_SV_TEXTURE",
+    "VIEWPORT_IMAGE_INVALID",
+    "VIEWPORT_IMAGE_UNREADABLE_NO_FINAL_SCREEN_CLAIM"
+  ]
+}
