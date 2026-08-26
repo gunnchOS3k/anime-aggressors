@@ -165,11 +165,12 @@ func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, s
 	move_manifest = _DataLoader.load_moves(id)
 	var model_loaded: bool = model_3d != null and model_3d.configure(data)
 	if body:
-		body.visible = not model_loaded
+		# CP2: keep ColorRect hidden unless ensure_visible_presentation proves model failed.
+		body.visible = false
 	if model_3d:
 		model_3d.set_facing(facing)
 	if animator:
-		animator.set_proxy_visible(not model_loaded)
+		animator.set_proxy_visible(false)
 	ensure_visible_presentation()
 	shield_health = float(data.get("shieldProfile", {}).get("maxHealth", 100))
 	var gs = get_node_or_null("/root/GameState")
@@ -194,8 +195,9 @@ func is_model_loaded() -> bool:
 	return model_3d != null and model_3d.is_model_loaded()
 
 
-## Wave016/017: never leave nameplate visible with no fighter body representation.
+## Wave016/017/020: never leave nameplate visible with no fighter body representation.
 ## Invariant: FIGHTER_LOGIC_ACTIVE && FIGHTER_EXPECTED_VISIBLE -> VISIBLE_RENDERABLE_FIGHTER_BODY_REQUIRED
+## CP2: prefer canonical Model3D heal/recreate; ColorRect Body is legacy and counted.
 func ensure_visible_presentation() -> void:
 	var model_ok := is_model_loaded()
 	if model_ok and model_3d != null and model_3d.has_method("is_visible_renderable_body"):
@@ -203,21 +205,78 @@ func ensure_visible_presentation() -> void:
 			if model_3d.has_method("heal_visibility_if_needed"):
 				model_3d.heal_visibility_if_needed()
 			model_ok = model_3d.is_visible_renderable_body() if model_3d.has_method("is_visible_renderable_body") else is_model_loaded()
+	# OWNER-REG-014: attempt final-screen heal without immediately demoting to ColorRect.
+	# SubViewport may need a frame before opaque pixels exist; ColorRect only after scene-tree fail.
+	if model_ok and model_3d != null and model_3d.has_method("heal_final_screen_visibility_if_needed"):
+		if model_3d.has_method("is_final_screen_visible_body") and not model_3d.is_final_screen_visible_body():
+			model_3d.heal_final_screen_visibility_if_needed()
+	# Retry canonical configure once before any ColorRect fallback.
+	if not model_ok and model_3d != null and not data.is_empty():
+		if model_3d.has_method("configure"):
+			model_3d.configure(data)
+		if model_3d.has_method("heal_visibility_if_needed"):
+			model_3d.heal_visibility_if_needed()
+		if model_3d.has_method("heal_final_screen_visibility_if_needed"):
+			model_3d.heal_final_screen_visibility_if_needed()
+		model_ok = is_model_loaded()
+		if model_ok and model_3d.has_method("is_visible_renderable_body"):
+			model_ok = model_3d.is_visible_renderable_body()
+		if model_ok:
+			var _AssetResolver = load("res://scripts/visual/fighter_asset_resolver.gd")
+			if _AssetResolver:
+				_AssetResolver.note_canonical_recovery()
 	var body_ok := body != null and body.visible
 	if not model_ok and body != null:
 		body.visible = true
 		body_ok = true
 		if animator and animator.has_method("set_proxy_visible"):
 			animator.set_proxy_visible(true)
+		var _AR = load("res://scripts/visual/fighter_asset_resolver.gd")
+		if _AR:
+			_AR.note_legacy_fallback()
 	if label:
-		# Wave017: subtle P1/P2/CPU tags — never floating full name as sole identity.
 		_apply_slot_combat_label()
 		label.visible = model_ok or body_ok
 	if model_ok and body != null:
 		body.visible = false
-	# Never allow floating name as only representation.
+		if animator and animator.has_method("set_proxy_visible"):
+			animator.set_proxy_visible(false)
 	if label and label.visible and not model_ok and not body_ok:
 		label.visible = false
+
+
+func get_final_screen_visibility_witness() -> Dictionary:
+	if model_3d != null and model_3d.has_method("get_final_screen_visibility_witness"):
+		var w: Dictionary = model_3d.get_final_screen_visibility_witness()
+		w["fighter_slot"] = slot
+		w["fighter_global_position"] = {"x": global_position.x, "y": global_position.y}
+		w["legacy_colorrect_visible"] = body != null and body.visible
+		return w
+	return {
+		"SCENE_TREE_VISIBLE": false,
+		"FINAL_SCREEN_VISIBLE": false,
+		"invisible_failure_class": "MODEL3D_MISSING",
+	}
+
+
+func get_battle_presentation_trace() -> Dictionary:
+	var trace := {
+		"selected_fighter_id": fighter_id,
+		"battle_requested_fighter_id": fighter_id,
+		"battle_model_instance_id": str(model_3d.get_instance_id()) if model_3d else "",
+		"battle_visible_mesh_count": 0,
+		"fallback_used": body != null and body.visible,
+	}
+	if model_3d != null and model_3d.has_method("get_presentation_trace"):
+		var p: Dictionary = model_3d.get_presentation_trace()
+		trace["battle_representation_id"] = str(p.get("representation_id", ""))
+		trace["battle_model_asset"] = str(p.get("path", ""))
+		trace["select_representation_id"] = str(p.get("representation_id", ""))
+	if model_3d != null and model_3d.has_method("is_visible_renderable_body") and model_3d.is_visible_renderable_body():
+		trace["battle_visible_mesh_count"] = 1
+	elif body != null and body.visible:
+		trace["battle_visible_mesh_count"] = 0 # ColorRect is not a renderable mesh success for CP2
+	return trace
 
 
 func _apply_slot_combat_label() -> void:
@@ -544,7 +603,8 @@ func _resolve_special_command() -> String:
 	return "special_neutral"
 
 func is_aura_input_held() -> bool:
-	if TouchInputManager.is_aura_charge_touch(slot):
+	var tim = get_node_or_null("/root/TouchInputManager")
+	if tim != null and tim.has_method("is_aura_charge_touch") and tim.is_aura_charge_touch(slot):
 		return true
 	return Input.is_action_pressed("p%d_special" % slot) and Input.is_action_pressed("p%d_shield" % slot)
 

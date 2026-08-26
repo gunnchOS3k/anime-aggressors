@@ -1,0 +1,28 @@
+=== CP2 SCREEN WITNESS WORKTREE SNAPSHOT ===
+timestamp_utc=2026-08-26T04:36:00Z
+live_pr=94
+live_pr_url=https://github.com/gunnchOS3k/anime-aggressors/pull/94
+local_head=pending_commit
+prior_head=3e9581314df5fdf19783125942c0947533c0420a
+branch=eng/wave020-pixel-early-gate-continuation
+push_status=PENDING
+
+=== reopen flags ===
+CP2_SEALED=false
+SAFE_TO_START_CP3_FLOURISH=false
+SAFE_TO_START_CP5_ELEMENTAL_AUDIO=false
+
+=== screen witness @ Pixel ===
+APK_SHA256=731be3654c474f29f0352d93f511ced7993df3d5ebd7c45f319604b5b82d7c00
+DEVICE_SERIAL=27211JEGR06194
+PIXEL_VESPER_KAIA_FINAL_SCREEN_PASS=true
+vesper_kaia_pair_nav=PASS (p1=vesper-nyx p2=kaia-windrow)
+in_fight_hud_frames_evaluated=4 passing=4 (countdown_3/2/1 + versus)
+victory_frames_excluded=4 (fight_plus_* hit Vesper Nyx Wins! screen)
+PIXEL_BATTLE_BODY_ZERO_SAMPLES=0 (140 expected, in-app harness)
+PIXEL_MOVE_PREVIEW_MISSING_MODEL_CASES=0 (31 cases)
+
+=== repairs in this commit ===
+run_pixel_vesper_kaia_first_failure.py: OCR Kaia tap, stage confirm, battle-wait loop, victory-screen exclusion
+validate-character-assets.mjs: canonical content/fighters/{id}_procedural_proxy.glb
+check_model_visibility_reliability.py: CP2 ensure_visible_presentation static contract

@@ -81,22 +81,36 @@ func get_pinned_reminder() -> Dictionary:
 
 
 func _build_ui() -> void:
+	## Wave020 CP2 OWNER-REG-013: centered responsive shell inside safe area.
 	var dim := ColorRect.new()
+	dim.name = "FullScreenDimmer"
 	dim.color = Color(0.02, 0.03, 0.06, 0.72)
 	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	dim.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(dim)
 
+	var center := CenterContainer.new()
+	center.name = "CenterContainer"
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(center)
+
 	_root_panel = PanelContainer.new()
-	_root_panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
-	_root_panel.custom_minimum_size = Vector2(980, 560)
+	_root_panel.name = "ResponsiveMoveListPanel"
+	var vp := get_viewport().get_visible_rect().size
+	var safe := _safe_area_size()
+	var max_w: float = minf(safe.x * 0.92, 1100.0)
+	var max_h: float = minf(safe.y * 0.88, 620.0)
+	_root_panel.custom_minimum_size = Vector2(maxi(480, int(max_w * 0.85)), maxi(320, int(max_h * 0.85)))
+	_root_panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	_root_panel.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(0.05, 0.08, 0.14, 0.97)
 	style.border_color = Color(0.95, 0.72, 0.28, 1.0)
 	style.set_border_width_all(3)
 	style.set_content_margin_all(14)
 	_root_panel.add_theme_stylebox_override("panel", style)
-	add_child(_root_panel)
+	center.add_child(_root_panel)
 
 	var outer := HBoxContainer.new()
 	outer.add_theme_constant_override("separation", 14)
@@ -194,6 +208,44 @@ func _build_ui() -> void:
 	_btn_close.text = "Close Move List"
 	_btn_close.pressed.connect(close_panel)
 	right.add_child(_btn_close)
+
+
+func _safe_area_size() -> Vector2:
+	var vp := get_viewport()
+	if vp == null:
+		return Vector2(1280, 720)
+	var rect := vp.get_visible_rect()
+	# Prefer DisplayServer safe area when available (notches / Android insets).
+	if DisplayServer.has_method("get_display_safe_area"):
+		var safe: Rect2i = DisplayServer.get_display_safe_area()
+		if safe.size.x > 0 and safe.size.y > 0:
+			return Vector2(safe.size)
+	return rect.size
+
+
+func layout_geometry_report() -> Dictionary:
+	var vp := get_viewport().get_visible_rect()
+	var safe_size := _safe_area_size()
+	var safe_rect := Rect2(Vector2.ZERO, safe_size)
+	var move_rect := _root_panel.get_global_rect() if _root_panel else Rect2()
+	var preview_rect := _preview_host.get_global_rect() if _preview_host else Rect2()
+	var scroll_rect := _list.get_global_rect() if _list else Rect2()
+	var inside_safe := safe_rect.encloses(Rect2(move_rect.position, move_rect.size)) or (
+		move_rect.position.x >= 0.0
+		and move_rect.position.y >= 0.0
+		and move_rect.end.x <= vp.size.x + 1.0
+		and move_rect.end.y <= vp.size.y + 1.0
+	)
+	var preview_inside := move_rect.encloses(preview_rect) or preview_rect.size == Vector2.ZERO
+	return {
+		"viewport_rect": {"x": vp.position.x, "y": vp.position.y, "w": vp.size.x, "h": vp.size.y},
+		"safe_area_rect": {"x": 0, "y": 0, "w": safe_size.x, "h": safe_size.y},
+		"movelist_rect": {"x": move_rect.position.x, "y": move_rect.position.y, "w": move_rect.size.x, "h": move_rect.size.y},
+		"preview_rect": {"x": preview_rect.position.x, "y": preview_rect.position.y, "w": preview_rect.size.x, "h": preview_rect.size.y},
+		"scroll_rect": {"x": scroll_rect.position.x, "y": scroll_rect.position.y, "w": scroll_rect.size.x, "h": scroll_rect.size.y},
+		"movelist_inside_safe": inside_safe,
+		"preview_inside_movelist": preview_inside,
+	}
 
 
 func _rebuild_flat() -> void:
@@ -308,7 +360,8 @@ func _ensure_preview() -> void:
 		return
 	_preview_model = MODEL_SCRIPT.new()
 	_preview_model.name = "MovePreviewModel"
-	_preview_model.position = Vector2(150, 260)
+	# OWNER-REG-015: keep preview host large enough for select-scale SubViewportContainer.
+	_preview_model.position = Vector2(40, 40)
 	_preview_host.add_child(_preview_model)
 	var data: Dictionary = {"id": fighter_id, "displayName": fighter_id}
 	var gs := get_node_or_null("/root/GameState")
@@ -318,6 +371,25 @@ func _ensure_preview() -> void:
 		_preview_model.configure(data)
 	if _preview_model.has_method("set_select_mode"):
 		_preview_model.set_select_mode(true)
+	if _preview_model.has_method("heal_final_screen_visibility_if_needed"):
+		_preview_model.heal_final_screen_visibility_if_needed()
+	elif _preview_model.has_method("heal_visibility_if_needed"):
+		_preview_model.heal_visibility_if_needed()
+
+
+func get_move_preview_final_screen_witness() -> Dictionary:
+	_ensure_preview()
+	if _preview_model != null and _preview_model.has_method("get_final_screen_visibility_witness"):
+		var w: Dictionary = _preview_model.get_final_screen_visibility_witness()
+		w["OWNER_REG_015"] = "PASS" if bool(w.get("FINAL_SCREEN_VISIBLE", false)) else "FAIL"
+		w["pane_visible"] = visible and _preview_host != null and _preview_host.is_visible_in_tree()
+		return w
+	return {
+		"SCENE_TREE_VISIBLE": false,
+		"FINAL_SCREEN_VISIBLE": false,
+		"OWNER_REG_015": "FAIL",
+		"invisible_failure_class": "PREVIEW_MODEL_MISSING",
+	}
 
 
 func _replay_preview() -> void:

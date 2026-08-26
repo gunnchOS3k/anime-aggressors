@@ -24,6 +24,7 @@ var _debug_hud
 var _battle_sim
 var _hazard_runtime
 var _pause_panel: PanelContainer
+var _pause_center: CenterContainer
 var _p1_panel
 var _p2_panel
 var _timer_label: Label
@@ -394,6 +395,9 @@ func _toggle_pause() -> void:
 	if _pause_panel:
 		_pause_panel.process_mode = Node.PROCESS_MODE_ALWAYS
 		_pause_panel.visible = _paused
+	if _pause_center:
+		_pause_center.visible = _paused
+		_pause_center.process_mode = Node.PROCESS_MODE_ALWAYS
 	if _move_list_panel != null and is_instance_valid(_move_list_panel) and _move_list_panel.visible and _paused:
 		_move_list_panel.close_panel()
 	# BattleScene must keep receiving ui_cancel/ui_accept while the tree is paused.
@@ -443,9 +447,17 @@ func _refresh_pad_prompt() -> void:
 func _ensure_pause_panel() -> void:
 	if _pause_panel:
 		return
+	## Wave020 CP2: centered pause shell (not bottom-right clipped).
+	var center := CenterContainer.new()
+	center.name = "PauseCenter"
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	center.process_mode = Node.PROCESS_MODE_ALWAYS
+	hud.add_child(center)
 	_pause_panel = PanelContainer.new()
-	_pause_panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
-	_pause_panel.custom_minimum_size = Vector2(420, 220)
+	_pause_panel.name = "PausePanel"
+	var vp := get_viewport().get_visible_rect().size
+	_pause_panel.custom_minimum_size = Vector2(minf(420.0, vp.x * 0.55), minf(280.0, vp.y * 0.55))
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(0.06, 0.09, 0.16, 0.94)
 	style.border_color = Color(0.95, 0.75, 0.2, 1.0)
@@ -465,8 +477,6 @@ func _ensure_pause_panel() -> void:
 	v.add_child(resume_btn)
 	var rematch_btn := Button.new()
 	rematch_btn.text = "Rematch"
-	# GAME-001 S1: leaving get_tree().paused=true after SceneRouter.go stranded
-	# the next battle/menu under a frozen tree (buttons unresponsive).
 	rematch_btn.pressed.connect(_on_pause_rematch)
 	v.add_child(rematch_btn)
 	var move_list_btn := Button.new()
@@ -478,8 +488,9 @@ func _ensure_pause_panel() -> void:
 	menu_btn.pressed.connect(_on_pause_return_menu)
 	v.add_child(menu_btn)
 	_pause_panel.add_child(v)
-	hud.add_child(_pause_panel)
+	center.add_child(_pause_panel)
 	_pause_panel.visible = false
+	_pause_center = center
 
 
 func _open_move_list_from_pause() -> void:

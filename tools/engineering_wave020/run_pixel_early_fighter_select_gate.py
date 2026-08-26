@@ -56,6 +56,88 @@ def mean_luma(path: Path) -> float:
     return acc / float(max(n, 1))
 
 
+def ocr_text(path: Path) -> str:
+    """Best-effort OCR; empty string if unavailable."""
+    if not path.is_file():
+        return ""
+    try:
+        r = subprocess.run(
+            ["tesseract", str(path), "stdout"],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+        return (r.stdout or "").lower()
+    except Exception:
+        return ""
+
+
+# Unique bio/signature lines only — roster strip lists all 7 names every frame.
+FIGHTER_FOCUS_MARKERS: list[tuple[str, tuple[str, ...]]] = [
+    ("ember", ("pressure first", "cinder rush", "controlled fire")),
+    ("rook", ("plant. hold", "plant hold", "faultline", "iron guard")),
+    ("juno", ("blink once", "flash circuit", "arc impulse")),
+    ("kaia", ("wind never", "spiral current", "sky current")),
+    ("nix", ("precision is louder", "glacier lock", "frost lattice")),
+    ("orion", ("orbits wait", "gravity well", "decide where motion")),
+    ("vesper", ("shadows don't", "shadows dont", "null step", "eclipse veil")),
+]
+
+
+def looks_like_fighter_select(path: Path) -> bool:
+    text = ocr_text(path)
+    if text:
+        markers = ("fighter select", "toggle cpu", "showcase", "next / confirm", "next/confirm")
+        # Roster names alone are insufficient (all 7 appear on every select frame).
+        ruleset_markers = ("rulesets", "stocks:", "match time", "damage ratio", "confirm ruleset")
+        if any(m in text for m in ruleset_markers) and not any(m in text for m in markers):
+            return False
+        if "ember vale" in text and "rook ironside" in text and ("toggle" in text or "showcase" in text):
+            return True
+        return any(m in text for m in markers)
+    # No OCR: reject near-black / tiny; require substantial capture (weak fallback).
+    if not path.is_file() or path.stat().st_size < 90_000:
+        return False
+    luma = mean_luma(path)
+    return luma < 0 or luma >= 0.04
+
+
+def focused_fighter_id(path: Path) -> str:
+    """Best-effort focused fighter from bio OCR (not the full roster strip)."""
+    text = ocr_text(path)
+    if not text:
+        return ""
+    scores: dict[str, int] = {}
+    for fid, markers in FIGHTER_FOCUS_MARKERS:
+        scores[fid] = sum(1 for m in markers if m in text)
+    best = max(scores, key=scores.get)
+    return best if scores[best] > 0 else ""
+
+
+def looks_like_left_select(path: Path) -> bool:
+    """True if still on Fighter Select (battle capture must not match this)."""
+    return looks_like_fighter_select(path)
+
+
+def looks_like_post_select(path: Path) -> bool:
+    """Stage / versus / battle — must leave Fighter Select chrome."""
+    text = ocr_text(path)
+    if not text:
+        return False
+    if looks_like_fighter_select(path):
+        return False
+    markers = (
+        "stage select",
+        "confirm stage",
+        "versus",
+        "training grid",
+        "aura",
+        "3:00",
+        "jp",
+    )
+    return any(m in text for m in markers)
+
+
 def main() -> None:
     ART.mkdir(parents=True, exist_ok=True)
     PIXEL.mkdir(parents=True, exist_ok=True)
@@ -138,42 +220,73 @@ def main() -> None:
     cap_select = rpc.screencap(serial, "early_01_fighter_select")
     captures.append(cap_select)
 
-    # Heuristic: blank/shell-only select captures are tiny or near-black.
     select_path = PIXEL / "early_01_fighter_select.png"
     luma = mean_luma(select_path) if select_path.is_file() else -1.0
-    shell_only = (not cap_select.get("ok")) or cap_select.get("bytes", 0) < 55_000 or (0 <= luma < 0.04)
+    ocr = ocr_text(select_path)
+    on_select = looks_like_fighter_select(select_path)
+    shell_only = (not cap_select.get("ok")) or (not on_select)
     if shell_only:
         select_ghosts += 1
+        write_early({
+            "PIXEL_EARLY_GATE": "FAIL",
+            "reason": "NOT_ON_FIGHTER_SELECT_AFTER_NAV",
+            "PIXEL_DEVICE_AVAILABLE": True,
+            "PIXEL_AUTHENTIC": True,
+            "DEVICE_SERIAL": serial,
+            "DEVICE_MODEL": model,
+            "PIXEL_SOURCE_SHA": source_sha,
+            "APK_SHA256": apk_sha,
+            "SELECT_MEAN_LUMA": luma,
+            "SELECT_OCR_SNIPPET": ocr[:400],
+            "PIXEL_FIGHTER_SELECT_DYNAMIC_CONTENT_COMPLETE": False,
+            "PIXEL_OWNER_REG_009": "FAIL",
+            "PIXEL_OWNER_REG_008": "FAIL",
+            "PIXEL_SELECT_RENDER_GHOST_OCCURRENCES": select_ghosts,
+            "PREVIOUS_FALSE_PASS_NOTE": "Prior byte-size-only heuristic could PASS while stuck on Rulesets",
+            "captures": captures,
+            "emitted_at": utc_now(),
+        })
+        raise SystemExit(1)
 
-    # Browse fighters 1..7
+    # Browse fighters 1..7 via landscape roster taps (DPAD drifts to Showcase).
+    expected = [fid for fid, _ in FIGHTER_FOCUS_MARKERS]
+    seen_focus: list[str] = []
     for i in range(7):
         if not rpc.ensure_aa_foreground(serial, f"early_browse_{i}"):
             deaths += 1
             rpc.launch_app(serial)
             rpc.navigate_to_fighter_select(serial)
-        if i == 0:
-            for _ in range(8):
-                rpc.key(serial, "21")
-                time.sleep(0.06)
-        else:
-            rpc.key(serial, "22")
-            time.sleep(0.22)
-        time.sleep(0.55)
+        rpc.tap_roster_index(serial, i)
+        time.sleep(0.65)
         cap = rpc.screencap(serial, f"early_A_select_{i}")
         captures.append(cap)
+        p = PIXEL / f"early_A_select_{i}.png"
+        if not looks_like_fighter_select(p):
+            select_ghosts += 1
         if not cap.get("ok") or cap.get("bytes", 0) < 55_000:
             select_ghosts += 1
+        focus = focused_fighter_id(p)
+        seen_focus.append(focus)
+        if focus and focus != expected[i]:
+            # Soft: OCR may miss; still require distinct focus ids across browse.
+            pass
 
-    # Confirm fighter 7 path into battle
-    rpc.key(serial, "66")
-    time.sleep(0.45)
-    rpc.key(serial, "66")
+    distinct_focus = len({f for f in seen_focus if f})
+    browse_complete = distinct_focus >= 5  # allow mild OCR miss; require real movement
+
+    # Confirm into stage/versus/battle (must leave Fighter Select).
+    rpc.confirm_fighter_select_into_battle(serial)
     time.sleep(2.0)
     if not rpc.ensure_aa_foreground(serial, "early_battle"):
         deaths += 1
     cap_battle = rpc.screencap(serial, "early_C_battle")
     captures.append(cap_battle)
-    if not cap_battle.get("ok") or cap_battle.get("bytes", 0) < 55_000:
+    battle_path = PIXEL / "early_C_battle.png"
+    still_on_select = looks_like_left_select(battle_path)
+    if still_on_select or not looks_like_post_select(battle_path):
+        battle_ghosts += 1
+    # Battle HUD frames are dark/simple — often ~35-50KB; do not reuse select's 55KB floor.
+    if not cap_battle.get("ok") or cap_battle.get("bytes", 0) < 20_000:
         battle_ghosts += 1
 
     logcat = rpc.adb(["-s", serial, "logcat", "-d", "-t", "400"]).stdout
@@ -183,14 +296,22 @@ def main() -> None:
     dynamic_complete = (
         not shell_only
         and select_ghosts == 0
+        and browse_complete
         and battle_ghosts == 0
         and deaths == 0
         and fatal == 0
         and len([c for c in captures if c.get("ok")]) >= 9
     )
-    reg009 = "PASS" if dynamic_complete else "FAIL"
-    reg008 = "PASS" if (select_ghosts == 0 and battle_ghosts == 0 and deaths == 0) else "FAIL"
-    gate = "PASS" if (reg009 == "PASS" and reg008 == "PASS") else "FAIL"
+    # REG-009: select shell populated with roster + preview (entry capture).
+    reg009 = "PASS" if (not shell_only and select_ghosts == 0 and deaths == 0 and fatal == 0) else "FAIL"
+    # REG-008: seven-browse + leave-select without render ghosts / deaths.
+    reg008 = "PASS" if (browse_complete and select_ghosts == 0 and battle_ghosts == 0 and deaths == 0) else "FAIL"
+    gate = "PASS" if (reg009 == "PASS" and reg008 == "PASS" and dynamic_complete) else "FAIL"
+    reason = None
+    if still_on_select:
+        reason = "BATTLE_CAPTURE_STILL_FIGHTER_SELECT"
+    elif not browse_complete:
+        reason = f"BROWSE_FOCUS_INCOMPLETE distinct={distinct_focus} seen={seen_focus}"
 
     write_early({
         "PIXEL_EARLY_GATE": gate,
@@ -214,6 +335,13 @@ def main() -> None:
         "PIXEL_FATAL": fatal,
         "SELECT_SHELL_ONLY_HEURISTIC": shell_only,
         "SELECT_MEAN_LUMA": luma,
+        "SELECT_OCR_SNIPPET": ocr[:400],
+        "BROWSE_FOCUS_IDS": seen_focus,
+        "BROWSE_DISTINCT_FOCUS": distinct_focus,
+        "BATTLE_STILL_ON_SELECT": still_on_select,
+        "reason": reason,
+        "DISPLAY_COORD_SPACE": "landscape_preferred",
+        "PREVIOUS_FALSE_PASS_NOTE": "Byte-size-only and ENTER-only nav could PASS while stuck on Rulesets/select",
         "captures": captures,
         "emitted_at": utc_now(),
     })
@@ -221,4 +349,14 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except SystemExit:
+        raise
+    except Exception as exc:
+        write_early({
+            "PIXEL_EARLY_GATE": "FAIL",
+            "reason": f"EXCEPTION:{type(exc).__name__}:{exc}",
+            "emitted_at": utc_now(),
+        })
+        raise

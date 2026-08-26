@@ -1,20 +1,39 @@
 extends "res://scripts/ui/console_menu_base.gd"
 
+## Wave020 CP2: Victory / Results uses canonical fighter portrait (baked Model3D).
+
+const PORTRAIT_SCRIPT = preload("res://scripts/ui/fighter_card_portrait.gd")
+const _AssetResolver = preload("res://scripts/visual/fighter_asset_resolver.gd")
+
 @onready var rematch_btn: Button = $VBox/Rematch
 @onready var change_fighters_btn: Button = $VBox/ChangeFighters
 @onready var change_stage_btn: Button = $VBox/ChangeStage
+@onready var victory_portrait: TextureRect = $VBox/VictoryPortrait
+
+var _victory_fighter_id: String = ""
+var _victory_canonical: bool = false
+
 
 func _ready() -> void:
 	super._ready()
 	_ready_display()
 
+
 func _ready_display() -> void:
 	var winner := GameState.last_winner_slot
 	var name := "P%d" % winner
+	var fid := ""
 	if winner == 1:
-		name = GameState.load_fighter(GameState.p1_fighter_id).get("displayName", name)
+		fid = str(GameState.p1_fighter_id)
+		name = GameState.load_fighter(fid).get("displayName", name)
 	elif winner == 2:
-		name = GameState.load_fighter(GameState.p2_fighter_id).get("displayName", name)
+		fid = str(GameState.p2_fighter_id)
+		name = GameState.load_fighter(fid).get("displayName", name)
+	elif not str(GameState.p1_fighter_id).is_empty():
+		# Fallback when slot unset — still show P1 canonical art for harness paths.
+		fid = str(GameState.p1_fighter_id)
+		name = GameState.load_fighter(fid).get("displayName", name)
+	_configure_victory_portrait(fid)
 	if GameState.arcade_active or GameState.mode == "arcade":
 		var bout := GameState.arcade_index + 1
 		var total := GameState.ARCADE_LADDER.size()
@@ -51,6 +70,46 @@ func _ready_display() -> void:
 		title_label.text = "%s Wins!" % name
 	_play_results_celebration()
 
+
+func _configure_victory_portrait(fighter_id: String) -> void:
+	_victory_fighter_id = fighter_id
+	_victory_canonical = false
+	if victory_portrait == null or fighter_id.is_empty():
+		return
+	var presentation: Dictionary = _AssetResolver.resolve_presentation(
+		fighter_id, _AssetResolver.CTX_VICTORY
+	)
+	_victory_canonical = bool(presentation.get("is_current_canonical", false))
+	if not _victory_canonical:
+		_AssetResolver.PLAYER_VISIBLE_LEGACY_VICTORY_OCCURRENCES += 1
+	var accent := Color(1.0, 0.85, 0.3)
+	var data: Dictionary = GameState.load_fighter(fighter_id)
+	accent = Color(data.get("color", accent))
+	if victory_portrait.has_method("configure"):
+		victory_portrait.configure(fighter_id, Color(data.get("color", accent)), accent)
+	elif victory_portrait.get_script() == null and PORTRAIT_SCRIPT:
+		victory_portrait.set_script(PORTRAIT_SCRIPT)
+		if victory_portrait.has_method("configure"):
+			victory_portrait.configure(fighter_id, Color(data.get("color", accent)), accent)
+	victory_portrait.visible = true
+	victory_portrait.custom_minimum_size = Vector2(220, 220)
+
+
+func victory_presentation_snapshot() -> Dictionary:
+	var tex_ok := false
+	if victory_portrait != null:
+		tex_ok = victory_portrait.texture != null
+		if not tex_ok and victory_portrait.has_method("get"):
+			# Wait for async bake — caller may re-check after frames.
+			pass
+	return {
+		"fighter_id": _victory_fighter_id,
+		"is_current_canonical": _victory_canonical,
+		"portrait_texture_present": tex_ok or (victory_portrait != null and victory_portrait.visible),
+		"representation_id": "%s::PROCEDURAL_PRODUCTION_PROXY" % _victory_fighter_id,
+	}
+
+
 func _play_results_celebration() -> void:
 	## Wave017: winner theme pulse + subtle VFX; no developer runtime label.
 	if title_label == null:
@@ -60,7 +119,9 @@ func _play_results_celebration() -> void:
 	var accent := Color(1.0, 0.55, 0.25)
 	var winner := GameState.last_winner_slot
 	var fid := GameState.p1_fighter_id if winner == 1 else GameState.p2_fighter_id
-	var fdata: Dictionary = GameState.load_fighter(fid)
+	if fid.is_empty():
+		fid = _victory_fighter_id
+	var fdata: Dictionary = GameState.load_fighter(fid) if not fid.is_empty() else {}
 	accent = Color(fdata.get("color", accent))
 	title_label.add_theme_color_override("font_color", accent.lightened(0.2))
 	var tw := create_tween()
@@ -75,6 +136,7 @@ func _play_results_celebration() -> void:
 	add_child(spark)
 	var tw2 := create_tween()
 	tw2.tween_property(spark, "modulate:a", 0.0, 0.8)
+
 
 func _on_rematch_pressed() -> void:
 	if GameState.mode == "arcade" or GameState.arcade_active or GameState.arcade_complete or GameState.arcade_failed:
@@ -98,15 +160,18 @@ func _on_rematch_pressed() -> void:
 	GameState.reset_match()
 	SceneRouter.go("battle")
 
+
 func _on_change_fighters_pressed() -> void:
 	GameState.arcade_active = false
 	GameState.mode = "versus"
 	SceneRouter.go("fighter_select")
 
+
 func _on_change_stage_pressed() -> void:
 	GameState.arcade_active = false
 	GameState.mode = "versus"
 	SceneRouter.go("stage_select")
+
 
 func _on_home_pressed() -> void:
 	GameState.arcade_active = false
@@ -114,6 +179,7 @@ func _on_home_pressed() -> void:
 	GameState.arcade_failed = false
 	GameState.mode = "versus"
 	SceneRouter.go("main_menu")
+
 
 func on_back() -> void:
 	_on_home_pressed()

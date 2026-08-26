@@ -21,6 +21,12 @@ const requiredSockets = [
   "root", "chest", "head", "left_hand", "right_hand", "left_foot",
   "right_foot", "weapon_tip", "aura_core", "hit_spark_center",
 ];
+const canonicalModelPath = (fighterId) =>
+  `res://content/fighters/${fighterId}/model/${fighterId}_procedural_proxy.glb`;
+const legacyModelPath = (fighterId) =>
+  `res://assets/characters/procedural_final/${fighterId}.glb`;
+const contentGlbPath = (fighterId) =>
+  path.join(root, `game-godot/content/fighters/${fighterId}/model/${fighterId}_procedural_proxy.glb`);
 const errors = [];
 
 function fail(message) {
@@ -109,8 +115,30 @@ for (const fighterId of fighterIds) {
   }
 
   const fighterData = JSON.parse(fs.readFileSync(fighterDataPath, "utf8"));
-  if (fighterData.modelPath !== `res://assets/characters/procedural_final/${fighterId}.glb`) {
-    fail(`${fighterId}: fighter data points at the wrong model`);
+  const expectedModel = canonicalModelPath(fighterId);
+  if (fighterData.modelPath !== expectedModel) {
+    fail(`${fighterId}: fighter data points at the wrong model (expected ${expectedModel})`);
+  }
+  const playerGlb = contentGlbPath(fighterId);
+  if (!fs.existsSync(playerGlb)) {
+    fail(`${fighterId}: missing canonical player-facing GLB at ${playerGlb}`);
+  } else {
+    try {
+      const { buffer, json } = readGlb(playerGlb);
+      if (buffer.length < 150_000) fail(`${fighterId}: canonical GLB is too small to be rigged`);
+      const clips = new Set((json.animations ?? []).map((item) => item.name));
+      const nodes = new Set((json.nodes ?? []).map((item) => item.name));
+      for (const clip of requiredClips) {
+        if (!clips.has(clip)) fail(`${fighterId}: canonical GLB missing animation ${clip}`);
+      }
+      for (const socket of requiredSockets) {
+        if (!nodes.has(socket)) fail(`${fighterId}: canonical GLB missing socket ${socket}`);
+      }
+      if (!json.skins?.length) fail(`${fighterId}: canonical GLB has no skin/armature binding`);
+      if (!json.meshes?.length) fail(`${fighterId}: canonical GLB has no meshes`);
+    } catch (error) {
+      fail(`${fighterId}: canonical GLB ${error.message}`);
+    }
   }
   if (fighterData.modelTier !== "original_rigged_procedural_final_3d") {
     fail(`${fighterId}: fighter data must label procedural_final model tier`);
