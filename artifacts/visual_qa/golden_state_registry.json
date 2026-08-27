@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "system": "GoldenVisualQA",
+  "wave_introduced": "WAVE020_PR95",
+  "approval_levels": [
+    "ENGINEERING_REFERENCE",
+    "OWNER_CANDIDATE",
+    "OWNER_APPROVED_GOLDEN",
+    "DEPRECATED"
+  ],
+  "cursor_may_set_owner_approved_golden": false,
+  "states": [
+    {
+      "state_id": "SELECT_INITIAL",
+      "surface": "fighter_select",
+      "approval_level": "ENGINEERING_REFERENCE",
+      "reference_image": "artifacts/visual_qa/references/SELECT_INITIAL.png",
+      "seed_source": "artifacts/engineering_wave020/pixel/early_01_fighter_select.png",
+      "semantic_contracts": ["correct_scene", "fighter_present", "material_identity_match", "no_stale_presentation_context"]
+    },
+    {
+      "state_id": "SELECT_FIGHTER_EMBER",
+      "surface": "fighter_select",
+      "fighter_id": "ember-vale",
+      "approval_level": "ENGINEERING_REFERENCE",
+      "reference_image": "artifacts/visual_qa/references/SELECT_FIGHTER_EMBER.png",
+      "seed_source": "artifacts/engineering_wave020/pixel/early_A_select_0.png",
+      "semantic_contracts": ["fighter_id_match", "canonical_representation", "material_identity_match", "bounds_inside_target"]
+    },
+    {
+      "state_id": "SELECT_FIGHTER_ROOK",
+      "surface": "fighter_select",
+      "fighter_id": "rook-ironside",
+      "approval_level": "ENGINEERING_REFERENCE",
+      "reference_image": "artifacts/visual_qa/references/SELECT_FIGHTER_ROOK.png",
+      "seed_source": "artifacts/engineering_wave020/pixel/early_A_select_1.png",
+      "semantic_contracts": ["fighter_id_match", "canonical_representation", "material_identity_match"]
+    },
+    {
+      "state_id": "SELECT_FIGHTER_JUNO",
+      "surface": "fighter_select",
+      "fighter_id": "juno-spark",
+      "approval_level": "ENGINEERING_REFERENCE",
+      "reference_image": "artifacts/visual_qa/references/SELECT_FIGHTER_JUNO.png",
+      "seed_source": "artifacts/engineering_wave020/pixel/early_A_select_2.png",
+      "semantic_contracts": ["fighter_id_match", "canonical_representation", "material_identity_match"]
+    },
+    {
+      "state_id": "SELECT_FIGHTER_KAIA",
+      "surface": "fighter_select",
+      "fighter_id": "kaia-windrow",
+      "approval_level": "ENGINEERING_REFERENCE",
+      "reference_image": "artifacts/visual_qa/references/SELECT_FIGHTER_KAIA.png",
+      "seed_source": "artifacts/engineering_wave020/pixel/early_A_select_3.png",
+      "semantic_contracts": ["fighter_id_match", "canonical_representation", "material_identity_match"]
+    },
+    {
+      "state_id": "SELECT_FIGHTER_NIX",
+      "surface": "fighter_select",
+      "fighter_id": "nix-calder",
+      "approval_level": "ENGINEERING_REFERENCE",
+      "reference_image": "artifacts/visual_qa/references/SELECT_FIGHTER_NIX.png",
+      "seed_source": "artifacts/engineering_wave020/pixel/early_A_select_4.png",
+      "semantic_contracts": ["fighter_id_match", "canonical_representation", "material_identity_match"]
+    },
+    {
+      "state_id": "SELECT_FIGHTER_ORION",
+      "surface": "fighter_select",
+      "fighter_id": "orion-vell",
+      "approval_level": "ENGINEERING_REFERENCE",
+      "reference_image": "artifacts/visual_qa/references/SELECT_FIGHTER_ORION.png",
+      "seed_source": "artifacts/engineering_wave020/pixel/early_A_select_5.png",
+      "semantic_contracts": ["fighter_id_match", "canonical_representation", "material_identity_match"]
+    },
+    {
+      "state_id": "SELECT_FIGHTER_VESPER",
+      "surface": "fighter_select",
+      "fighter_id": "vesper-nyx",
+      "approval_level": "ENGINEERING_REFERENCE",
+      "reference_image": "artifacts/visual_qa/references/SELECT_FIGHTER_VESPER.png",
+      "seed_source": "artifacts/engineering_wave020/pixel/early_A_select_6.png",
+      "semantic_contracts": ["fighter_id_match", "canonical_representation", "material_identity_match"]
+    },
+    {
+      "state_id": "SELECT_AFTER_7_TRANSITIONS",
+      "surface": "fighter_select",
+      "approval_level": "ENGINEERING_REFERENCE",
+      "reference_image": "artifacts/visual_qa/references/SELECT_AFTER_7_TRANSITIONS.png",
+      "seed_source": "artifacts/engineering_wave020/pixel/early_A_select_6.png",
+      "semantic_contracts": ["correct_scene", "no_stale_presentation_context", "fighter_present"]
+    },
+    {
+      "state_id": "SELECT_AFTER_20_SWEEPS",
+      "surface": "fighter_select",
+      "approval_level": "ENGINEERING_REFERENCE",
+      "reference_image": null,
+      "seed_source": null,
+      "semantic_contracts": ["correct_scene", "no_stale_presentation_context", "material_identity_match"],
+      "note": "Validated via PIXEL_FAST_GATES Gate A telemetry; capture pending live Pixel when device online."
+    },
+    {
+      "state_id": "PAUSE_MENU",
+      "surface": "pause",
+      "approval_level": "ENGINEERING_REFERENCE",
+      "reference_image": null,
+      "seed_source": null,
+      "semantic_contracts": ["modal_inside_safe_area", "focus_state_visible", "no_clipped_controls", "text_hierarchy_present"]
+    },
+    {
+      "state_id": "MOVELIST_SIMPLE",
+      "surface": "move_list",
+      "approval_level": "ENGINEERING_REFERENCE",
+      "reference_image": null,
+      "seed_source": null,
+      "semantic_contracts": ["modal_inside_safe_area", "text_hierarchy_present", "no_major_overlap"]
+    },
+    {
+      "state_id": "MOVELIST_ADVANCED",
+      "surface": "move_list",
+      "approval_level": "ENGINEERING_REFERENCE",
+      "reference_image": null,
+      "seed_source": null,
+      "semantic_contracts": ["modal_inside_safe_area", "text_hierarchy_present"]
+    },
+    {
+      "state_id": "MOVELIST_MOVE_PREVIEW",
+      "surface": "move_preview",
+      "approval_level": "ENGINEERING_REFERENCE",
+      "reference_image": "artifacts/visual_qa/references/MOVELIST_MOVE_PREVIEW.png",
+      "seed_source": "artifacts/engineering_wave020/pixel/owner/owner_move_preview_0.png",
+      "semantic_contracts": ["fighter_present", "bounds_inside_target", "material_identity_match", "occupancy_ratio"]
+    },
+    {
+      "state_id": "BATTLE_SPAWN",
+      "surface": "battle",
+      "approval_level": "ENGINEERING_REFERENCE",
+      "reference_image": "artifacts/visual_qa/references/BATTLE_SPAWN.png",
+      "seed_source": "artifacts/engineering_wave020/pixel/owner/owner_battle_0.png",
+      "semantic_contracts": ["fighter_present", "stage_contact_valid", "camera_fit_valid", "both_fighters_readable"]
+    },
+    {
+      "state_id": "BATTLE_ACTIVE",
+      "surface": "battle",
+      "approval_level": "ENGINEERING_REFERENCE",
+      "reference_image": "artifacts/visual_qa/references/BATTLE_ACTIVE.png",
+      "seed_source": "artifacts/engineering_wave020/pixel/owner/owner_battle_3.png",
+      "semantic_contracts": ["fighter_present", "camera_fit_valid", "material_identity_match", "both_fighters_readable"]
+    },
+    {
+      "state_id": "BATTLE_AFTER_PAUSE_RESUME",
+      "surface": "battle",
+      "approval_level": "ENGINEERING_REFERENCE",
+      "reference_image": null,
+      "seed_source": null,
+      "semantic_contracts": ["correct_state", "no_stale_presentation_context", "fighter_present"]
+    },
+    {
+      "state_id": "BATTLE_KO",
+      "surface": "battle",
+      "approval_level": "ENGINEERING_REFERENCE",
+      "reference_image": null,
+      "seed_source": null,
+      "semantic_contracts": ["correct_state", "fighter_present"]
+    },
+    {
+      "state_id": "BATTLE_RESPAWN",
+      "surface": "battle",
+      "approval_level": "ENGINEERING_REFERENCE",
+      "reference_image": null,
+      "seed_source": null,
+      "semantic_contracts": ["fighter_present", "stage_contact_valid", "material_identity_match"]
+    },
+    {
+      "state_id": "VICTORY",
+      "surface": "victory",
+      "approval_level": "ENGINEERING_REFERENCE",
+      "reference_image": null,
+      "seed_source": null,
+      "semantic_contracts": ["fighter_present", "material_identity_match", "canonical_representation", "bounds_inside_target"],
+      "note": "Pixel Gate D blocked offline; desktop victory diagnostic used for semantic layer."
+    }
+  ],
+  "OWNER_APPROVED_GOLDEN_COUNT": 0,
+  "ENGINEERING_REFERENCE_COUNT": 20,
+  "OWNER_CANDIDATE_COUNT": 0,
+  "DEPRECATED_COUNT": 0,
+  "emitted_at": "2026-08-27T02:45:00+00:00"
+}

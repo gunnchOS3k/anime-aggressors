@@ -1,0 +1,750 @@
+{
+  "GOLDEN_VISUAL_QA": "PASS",
+  "schema_version": 1,
+  "head_sha": "21247729fda1ae2c3758da04e061d6c0dd752b4c",
+  "emitted_at": "2026-08-27T02:51:10.555009+00:00",
+  "non_invasive": true,
+  "OWNER_APPROVED_GOLDEN_COUNT": 0,
+  "ENGINEERING_REFERENCE_COUNT": 20,
+  "OWNER_CANDIDATE_COUNT": 0,
+  "GOLDEN_STATE_COUNT": 20,
+  "seeded_references": [],
+  "godot_harness": {
+    "ran": true,
+    "exit_code": 0,
+    "log": "tmp/visual-golden-qa-godot.log",
+    "payload_summary": {
+      "ok": true,
+      "states_sampled": 28,
+      "failures": []
+    }
+  },
+  "semantic_layer": {
+    "contracts": {
+      "SELECT_LIFECYCLE": {
+        "ok": true,
+        "disappearance": 0,
+        "whiteout": 0,
+        "sweeps": 22
+      },
+      "MATERIAL_PERSISTENCE": {
+        "ok": true,
+        "raw_keys": [
+          "CROSS_CONTEXT_MATERIAL_LEAKS",
+          "CYCLES",
+          "FIGHTERS_TESTED",
+          "MATERIAL_IDENTITY_MISMATCHES",
+          "OWNER_REG_017",
+          "UNEXPECTED_WHITEOUT_CASES",
+          "emitted_at",
+          "ok",
+          "rows"
+        ]
+      },
+      "TRANSFORM_ISOLATION": {
+        "ok": true
+      },
+      "VICTORY_DESKTOP": {
+        "ok": true
+      },
+      "PAUSE_LAYOUT": {
+        "ok": true
+      },
+      "PIXEL_GATES": {
+        "A": "PASS_PRIOR_EVIDENCE",
+        "B": "PASS_PRIOR_EVIDENCE",
+        "C": "PASS_PRIOR_EVIDENCE",
+        "D": "BLOCKED_PIXEL6A",
+        "device": false
+      }
+    },
+    "classified_failures": []
+  },
+  "evaluation": {
+    "states": [
+      {
+        "state_id": "SELECT_INITIAL",
+        "surface": "fighter_select",
+        "approval_level": "ENGINEERING_REFERENCE",
+        "fighter_id": null,
+        "semantic_contracts_required": [
+          "correct_scene",
+          "fighter_present",
+          "material_identity_match",
+          "no_stale_presentation_context"
+        ],
+        "failures": [],
+        "correction_plan": [],
+        "capture": {
+          "ok": true,
+          "bytes": 333297,
+          "path": "artifacts/visual_qa/latest/captures/SELECT_INITIAL.png",
+          "pil_error": "No module named 'PIL'",
+          "mean_luma": null,
+          "mean_chroma": null
+        },
+        "image_compare": {
+          "candidate": {
+            "ok": true,
+            "bytes": 333297,
+            "path": "artifacts/visual_qa/latest/captures/SELECT_INITIAL.png",
+            "pil_error": "No module named 'PIL'",
+            "mean_luma": null,
+            "mean_chroma": null
+          },
+          "reference": {
+            "ok": true,
+            "bytes": 333297,
+            "path": "artifacts/visual_qa/references/SELECT_INITIAL.png",
+            "pil_error": "No module named 'PIL'",
+            "mean_luma": null,
+            "mean_chroma": null
+          },
+          "match": true,
+          "delta_luma": null,
+          "delta_chroma": null,
+          "size_ratio": 1.0
+        },
+        "status": "PASS"
+      },
+      {
+        "state_id": "SELECT_FIGHTER_EMBER",
+        "surface": "fighter_select",
+        "approval_level": "ENGINEERING_REFERENCE",
+        "fighter_id": "ember-vale",
+        "semantic_contracts_required": [
+          "fighter_id_match",
+          "canonical_representation",
+          "material_identity_match",
+          "bounds_inside_target"
+        ],
+        "failures": [],
+        "correction_plan": [],
+        "capture": {
+          "ok": true,
+          "bytes": 336196,
+          "path": "artifacts/visual_qa/latest/captures/SELECT_FIGHTER_EMBER.png",
+          "pil_error": "No module named 'PIL'",
+          "mean_luma": null,
+          "mean_chroma": null
+        },
+        "image_compare": {
+          "candidate": {
+            "ok": true,
+            "bytes": 336196,
+            "path": "artifacts/visual_qa/latest/captures/SELECT_FIGHTER_EMBER.png",
+            "pil_error": "No module named 'PIL'",
+            "mean_luma": null,
+            "mean_chroma": null
+          },
+          "reference": {
+            "ok": true,
+            "bytes": 336196,
+            "path": "artifacts/visual_qa/references/SELECT_FIGHTER_EMBER.png",
+            "pil_error": "No module named 'PIL'",
+            "mean_luma": null,
+            "mean_chroma": null
+          },
+          "match": true,
+          "delta_luma": null,
+          "delta_chroma": null,
+          "size_ratio": 1.0
+        },
+        "status": "PASS"
+      },
+      {
+        "state_id": "SELECT_FIGHTER_ROOK",
+        "surface": "fighter_select",
+        "approval_level": "ENGINEERING_REFERENCE",
+        "fighter_id": "rook-ironside",
+        "semantic_contracts_required": [
+          "fighter_id_match",
+          "canonical_representation",
+          "material_identity_match"
+        ],
+        "failures": [],
+        "correction_plan": [],
+        "capture": {
+          "ok": true,
+          "bytes": 310740,
+          "path": "artifacts/visual_qa/latest/captures/SELECT_FIGHTER_ROOK.png",
+          "pil_error": "No module named 'PIL'",
+          "mean_luma": null,
+          "mean_chroma": null
+        },
+        "image_compare": {
+          "candidate": {
+            "ok": true,
+            "bytes": 310740,
+            "path": "artifacts/visual_qa/latest/captures/SELECT_FIGHTER_ROOK.png",
+            "pil_error": "No module named 'PIL'",
+            "mean_luma": null,
+            "mean_chroma": null
+          },
+          "reference": {
+            "ok": true,
+            "bytes": 310740,
+            "path": "artifacts/visual_qa/references/SELECT_FIGHTER_ROOK.png",
+            "pil_error": "No module named 'PIL'",
+            "mean_luma": null,
+            "mean_chroma": null
+          },
+          "match": true,
+          "delta_luma": null,
+          "delta_chroma": null,
+          "size_ratio": 1.0
+        },
+        "status": "PASS"
+      },
+      {
+        "state_id": "SELECT_FIGHTER_JUNO",
+        "surface": "fighter_select",
+        "approval_level": "ENGINEERING_REFERENCE",
+        "fighter_id": "juno-spark",
+        "semantic_contracts_required": [
+          "fighter_id_match",
+          "canonical_representation",
+          "material_identity_match"
+        ],
+        "failures": [],
+        "correction_plan": [],
+        "capture": {
+          "ok": true,
+          "bytes": 313761,
+          "path": "artifacts/visual_qa/latest/captures/SELECT_FIGHTER_JUNO.png",
+          "pil_error": "No module named 'PIL'",
+          "mean_luma": null,
+          "mean_chroma": null
+        },
+        "image_compare": {
+          "candidate": {
+            "ok": true,
+            "bytes": 313761,
+            "path": "artifacts/visual_qa/latest/captures/SELECT_FIGHTER_JUNO.png",
+            "pil_error": "No module named 'PIL'",
+            "mean_luma": null,
+            "mean_chroma": null
+          },
+          "reference": {
+            "ok": true,
+            "bytes": 313761,
+            "path": "artifacts/visual_qa/references/SELECT_FIGHTER_JUNO.png",
+            "pil_error": "No module named 'PIL'",
+            "mean_luma": null,
+            "mean_chroma": null
+          },
+          "match": true,
+          "delta_luma": null,
+          "delta_chroma": null,
+          "size_ratio": 1.0
+        },
+        "status": "PASS"
+      },
+      {
+        "state_id": "SELECT_FIGHTER_KAIA",
+        "surface": "fighter_select",
+        "approval_level": "ENGINEERING_REFERENCE",
+        "fighter_id": "kaia-windrow",
+        "semantic_contracts_required": [
+          "fighter_id_match",
+          "canonical_representation",
+          "material_identity_match"
+        ],
+        "failures": [],
+        "correction_plan": [],
+        "capture": {
+          "ok": true,
+          "bytes": 313787,
+          "path": "artifacts/visual_qa/latest/captures/SELECT_FIGHTER_KAIA.png",
+          "pil_error": "No module named 'PIL'",
+          "mean_luma": null,
+          "mean_chroma": null
+        },
+        "image_compare": {
+          "candidate": {
+            "ok": true,
+            "bytes": 313787,
+            "path": "artifacts/visual_qa/latest/captures/SELECT_FIGHTER_KAIA.png",
+            "pil_error": "No module named 'PIL'",
+            "mean_luma": null,
+            "mean_chroma": null
+          },
+          "reference": {
+            "ok": true,
+            "bytes": 313787,
+            "path": "artifacts/visual_qa/references/SELECT_FIGHTER_KAIA.png",
+            "pil_error": "No module named 'PIL'",
+            "mean_luma": null,
+            "mean_chroma": null
+          },
+          "match": true,
+          "delta_luma": null,
+          "delta_chroma": null,
+          "size_ratio": 1.0
+        },
+        "status": "PASS"
+      },
+      {
+        "state_id": "SELECT_FIGHTER_NIX",
+        "surface": "fighter_select",
+        "approval_level": "ENGINEERING_REFERENCE",
+        "fighter_id": "nix-calder",
+        "semantic_contracts_required": [
+          "fighter_id_match",
+          "canonical_representation",
+          "material_identity_match"
+        ],
+        "failures": [],
+        "correction_plan": [],
+        "capture": {
+          "ok": true,
+          "bytes": 329019,
+          "path": "artifacts/visual_qa/latest/captures/SELECT_FIGHTER_NIX.png",
+          "pil_error": "No module named 'PIL'",
+          "mean_luma": null,
+          "mean_chroma": null
+        },
+        "image_compare": {
+          "candidate": {
+            "ok": true,
+            "bytes": 329019,
+            "path": "artifacts/visual_qa/latest/captures/SELECT_FIGHTER_NIX.png",
+            "pil_error": "No module named 'PIL'",
+            "mean_luma": null,
+            "mean_chroma": null
+          },
+          "reference": {
+            "ok": true,
+            "bytes": 329019,
+            "path": "artifacts/visual_qa/references/SELECT_FIGHTER_NIX.png",
+            "pil_error": "No module named 'PIL'",
+            "mean_luma": null,
+            "mean_chroma": null
+          },
+          "match": true,
+          "delta_luma": null,
+          "delta_chroma": null,
+          "size_ratio": 1.0
+        },
+        "status": "PASS"
+      },
+      {
+        "state_id": "SELECT_FIGHTER_ORION",
+        "surface": "fighter_select",
+        "approval_level": "ENGINEERING_REFERENCE",
+        "fighter_id": "orion-vell",
+        "semantic_contracts_required": [
+          "fighter_id_match",
+          "canonical_representation",
+          "material_identity_match"
+        ],
+        "failures": [],
+        "correction_plan": [],
+        "capture": {
+          "ok": true,
+          "bytes": 367460,
+          "path": "artifacts/visual_qa/latest/captures/SELECT_FIGHTER_ORION.png",
+          "pil_error": "No module named 'PIL'",
+          "mean_luma": null,
+          "mean_chroma": null
+        },
+        "image_compare": {
+          "candidate": {
+            "ok": true,
+            "bytes": 367460,
+            "path": "artifacts/visual_qa/latest/captures/SELECT_FIGHTER_ORION.png",
+            "pil_error": "No module named 'PIL'",
+            "mean_luma": null,
+            "mean_chroma": null
+          },
+          "reference": {
+            "ok": true,
+            "bytes": 367460,
+            "path": "artifacts/visual_qa/references/SELECT_FIGHTER_ORION.png",
+            "pil_error": "No module named 'PIL'",
+            "mean_luma": null,
+            "mean_chroma": null
+          },
+          "match": true,
+          "delta_luma": null,
+          "delta_chroma": null,
+          "size_ratio": 1.0
+        },
+        "status": "PASS"
+      },
+      {
+        "state_id": "SELECT_FIGHTER_VESPER",
+        "surface": "fighter_select",
+        "approval_level": "ENGINEERING_REFERENCE",
+        "fighter_id": "vesper-nyx",
+        "semantic_contracts_required": [
+          "fighter_id_match",
+          "canonical_representation",
+          "material_identity_match"
+        ],
+        "failures": [],
+        "correction_plan": [],
+        "capture": {
+          "ok": true,
+          "bytes": 329741,
+          "path": "artifacts/visual_qa/latest/captures/SELECT_FIGHTER_VESPER.png",
+          "pil_error": "No module named 'PIL'",
+          "mean_luma": null,
+          "mean_chroma": null
+        },
+        "image_compare": {
+          "candidate": {
+            "ok": true,
+            "bytes": 329741,
+            "path": "artifacts/visual_qa/latest/captures/SELECT_FIGHTER_VESPER.png",
+            "pil_error": "No module named 'PIL'",
+            "mean_luma": null,
+            "mean_chroma": null
+          },
+          "reference": {
+            "ok": true,
+            "bytes": 329741,
+            "path": "artifacts/visual_qa/references/SELECT_FIGHTER_VESPER.png",
+            "pil_error": "No module named 'PIL'",
+            "mean_luma": null,
+            "mean_chroma": null
+          },
+          "match": true,
+          "delta_luma": null,
+          "delta_chroma": null,
+          "size_ratio": 1.0
+        },
+        "status": "PASS"
+      },
+      {
+        "state_id": "SELECT_AFTER_7_TRANSITIONS",
+        "surface": "fighter_select",
+        "approval_level": "ENGINEERING_REFERENCE",
+        "fighter_id": null,
+        "semantic_contracts_required": [
+          "correct_scene",
+          "no_stale_presentation_context",
+          "fighter_present"
+        ],
+        "failures": [],
+        "correction_plan": [],
+        "capture": {
+          "ok": true,
+          "bytes": 329741,
+          "path": "artifacts/visual_qa/latest/captures/SELECT_AFTER_7_TRANSITIONS.png",
+          "pil_error": "No module named 'PIL'",
+          "mean_luma": null,
+          "mean_chroma": null
+        },
+        "image_compare": {
+          "candidate": {
+            "ok": true,
+            "bytes": 329741,
+            "path": "artifacts/visual_qa/latest/captures/SELECT_AFTER_7_TRANSITIONS.png",
+            "pil_error": "No module named 'PIL'",
+            "mean_luma": null,
+            "mean_chroma": null
+          },
+          "reference": {
+            "ok": true,
+            "bytes": 329741,
+            "path": "artifacts/visual_qa/references/SELECT_AFTER_7_TRANSITIONS.png",
+            "pil_error": "No module named 'PIL'",
+            "mean_luma": null,
+            "mean_chroma": null
+          },
+          "match": true,
+          "delta_luma": null,
+          "delta_chroma": null,
+          "size_ratio": 1.0
+        },
+        "status": "PASS"
+      },
+      {
+        "state_id": "SELECT_AFTER_20_SWEEPS",
+        "surface": "fighter_select",
+        "approval_level": "ENGINEERING_REFERENCE",
+        "fighter_id": null,
+        "semantic_contracts_required": [
+          "correct_scene",
+          "no_stale_presentation_context",
+          "material_identity_match"
+        ],
+        "failures": [],
+        "correction_plan": [],
+        "capture": {
+          "ok": false,
+          "reason": "no_capture_yet"
+        },
+        "status": "PENDING_CAPTURE"
+      },
+      {
+        "state_id": "PAUSE_MENU",
+        "surface": "pause",
+        "approval_level": "ENGINEERING_REFERENCE",
+        "fighter_id": null,
+        "semantic_contracts_required": [
+          "modal_inside_safe_area",
+          "focus_state_visible",
+          "no_clipped_controls",
+          "text_hierarchy_present"
+        ],
+        "failures": [],
+        "correction_plan": [],
+        "capture": {
+          "ok": false,
+          "reason": "no_capture_yet"
+        },
+        "status": "PENDING_CAPTURE"
+      },
+      {
+        "state_id": "MOVELIST_SIMPLE",
+        "surface": "move_list",
+        "approval_level": "ENGINEERING_REFERENCE",
+        "fighter_id": null,
+        "semantic_contracts_required": [
+          "modal_inside_safe_area",
+          "text_hierarchy_present",
+          "no_major_overlap"
+        ],
+        "failures": [],
+        "correction_plan": [],
+        "capture": {
+          "ok": false,
+          "reason": "no_capture_yet"
+        },
+        "status": "PENDING_CAPTURE"
+      },
+      {
+        "state_id": "MOVELIST_ADVANCED",
+        "surface": "move_list",
+        "approval_level": "ENGINEERING_REFERENCE",
+        "fighter_id": null,
+        "semantic_contracts_required": [
+          "modal_inside_safe_area",
+          "text_hierarchy_present"
+        ],
+        "failures": [],
+        "correction_plan": [],
+        "capture": {
+          "ok": false,
+          "reason": "no_capture_yet"
+        },
+        "status": "PENDING_CAPTURE"
+      },
+      {
+        "state_id": "MOVELIST_MOVE_PREVIEW",
+        "surface": "move_preview",
+        "approval_level": "ENGINEERING_REFERENCE",
+        "fighter_id": null,
+        "semantic_contracts_required": [
+          "fighter_present",
+          "bounds_inside_target",
+          "material_identity_match",
+          "occupancy_ratio"
+        ],
+        "failures": [],
+        "correction_plan": [],
+        "capture": {
+          "ok": true,
+          "bytes": 500672,
+          "path": "artifacts/visual_qa/latest/captures/MOVELIST_MOVE_PREVIEW.png",
+          "pil_error": "No module named 'PIL'",
+          "mean_luma": null,
+          "mean_chroma": null
+        },
+        "image_compare": {
+          "candidate": {
+            "ok": true,
+            "bytes": 500672,
+            "path": "artifacts/visual_qa/latest/captures/MOVELIST_MOVE_PREVIEW.png",
+            "pil_error": "No module named 'PIL'",
+            "mean_luma": null,
+            "mean_chroma": null
+          },
+          "reference": {
+            "ok": true,
+            "bytes": 500672,
+            "path": "artifacts/visual_qa/references/MOVELIST_MOVE_PREVIEW.png",
+            "pil_error": "No module named 'PIL'",
+            "mean_luma": null,
+            "mean_chroma": null
+          },
+          "match": true,
+          "delta_luma": null,
+          "delta_chroma": null,
+          "size_ratio": 1.0
+        },
+        "status": "PASS"
+      },
+      {
+        "state_id": "BATTLE_SPAWN",
+        "surface": "battle",
+        "approval_level": "ENGINEERING_REFERENCE",
+        "fighter_id": null,
+        "semantic_contracts_required": [
+          "fighter_present",
+          "stage_contact_valid",
+          "camera_fit_valid",
+          "both_fighters_readable"
+        ],
+        "failures": [],
+        "correction_plan": [],
+        "capture": {
+          "ok": true,
+          "bytes": 86998,
+          "path": "artifacts/visual_qa/latest/captures/BATTLE_SPAWN.png",
+          "pil_error": "No module named 'PIL'",
+          "mean_luma": null,
+          "mean_chroma": null
+        },
+        "image_compare": {
+          "candidate": {
+            "ok": true,
+            "bytes": 86998,
+            "path": "artifacts/visual_qa/latest/captures/BATTLE_SPAWN.png",
+            "pil_error": "No module named 'PIL'",
+            "mean_luma": null,
+            "mean_chroma": null
+          },
+          "reference": {
+            "ok": true,
+            "bytes": 86998,
+            "path": "artifacts/visual_qa/references/BATTLE_SPAWN.png",
+            "pil_error": "No module named 'PIL'",
+            "mean_luma": null,
+            "mean_chroma": null
+          },
+          "match": true,
+          "delta_luma": null,
+          "delta_chroma": null,
+          "size_ratio": 1.0
+        },
+        "status": "PASS"
+      },
+      {
+        "state_id": "BATTLE_ACTIVE",
+        "surface": "battle",
+        "approval_level": "ENGINEERING_REFERENCE",
+        "fighter_id": null,
+        "semantic_contracts_required": [
+          "fighter_present",
+          "camera_fit_valid",
+          "material_identity_match",
+          "both_fighters_readable"
+        ],
+        "failures": [],
+        "correction_plan": [],
+        "capture": {
+          "ok": true,
+          "bytes": 91733,
+          "path": "artifacts/visual_qa/latest/captures/BATTLE_ACTIVE.png",
+          "pil_error": "No module named 'PIL'",
+          "mean_luma": null,
+          "mean_chroma": null
+        },
+        "image_compare": {
+          "candidate": {
+            "ok": true,
+            "bytes": 91733,
+            "path": "artifacts/visual_qa/latest/captures/BATTLE_ACTIVE.png",
+            "pil_error": "No module named 'PIL'",
+            "mean_luma": null,
+            "mean_chroma": null
+          },
+          "reference": {
+            "ok": true,
+            "bytes": 91733,
+            "path": "artifacts/visual_qa/references/BATTLE_ACTIVE.png",
+            "pil_error": "No module named 'PIL'",
+            "mean_luma": null,
+            "mean_chroma": null
+          },
+          "match": true,
+          "delta_luma": null,
+          "delta_chroma": null,
+          "size_ratio": 1.0
+        },
+        "status": "PASS"
+      },
+      {
+        "state_id": "BATTLE_AFTER_PAUSE_RESUME",
+        "surface": "battle",
+        "approval_level": "ENGINEERING_REFERENCE",
+        "fighter_id": null,
+        "semantic_contracts_required": [
+          "correct_state",
+          "no_stale_presentation_context",
+          "fighter_present"
+        ],
+        "failures": [],
+        "correction_plan": [],
+        "capture": {
+          "ok": false,
+          "reason": "no_capture_yet"
+        },
+        "status": "PENDING_CAPTURE"
+      },
+      {
+        "state_id": "BATTLE_KO",
+        "surface": "battle",
+        "approval_level": "ENGINEERING_REFERENCE",
+        "fighter_id": null,
+        "semantic_contracts_required": [
+          "correct_state",
+          "fighter_present"
+        ],
+        "failures": [],
+        "correction_plan": [],
+        "capture": {
+          "ok": false,
+          "reason": "no_capture_yet"
+        },
+        "status": "PENDING_CAPTURE"
+      },
+      {
+        "state_id": "BATTLE_RESPAWN",
+        "surface": "battle",
+        "approval_level": "ENGINEERING_REFERENCE",
+        "fighter_id": null,
+        "semantic_contracts_required": [
+          "fighter_present",
+          "stage_contact_valid",
+          "material_identity_match"
+        ],
+        "failures": [],
+        "correction_plan": [],
+        "capture": {
+          "ok": false,
+          "reason": "no_capture_yet"
+        },
+        "status": "PENDING_CAPTURE"
+      },
+      {
+        "state_id": "VICTORY",
+        "surface": "victory",
+        "approval_level": "ENGINEERING_REFERENCE",
+        "fighter_id": null,
+        "semantic_contracts_required": [
+          "fighter_present",
+          "material_identity_match",
+          "canonical_representation",
+          "bounds_inside_target"
+        ],
+        "failures": [],
+        "correction_plan": [],
+        "capture": {
+          "ok": false,
+          "reason": "no_capture_yet"
+        },
+        "status": "PENDING_CAPTURE"
+      }
+    ],
+    "material_failures": []
+  },
+  "material_deviation_count": 0,
+  "material_deviations": [],
+  "VISUAL_FAILURE_CLASSIFIER": true,
+  "CORRECTION_PLAYBOOK_IMPLEMENTED": true,
+  "cursor_marked_owner_approved_golden": false
+}

@@ -1,0 +1,64 @@
+{
+  "artifact": "PIXEL_GATE_A_ROOT_CAUSE",
+  "wave": "WAVE020",
+  "head_sha": "21247729fda1ae2c3758da04e061d6c0dd752b4c",
+  "apk_sha256": "cacc156de5179d38dfd7775e882566a15dc7f7d0127b409eb9d197dc2782185a",
+  "device_serial": "27211JEGR06194",
+  "device_model": "Pixel 6a",
+  "live_reverify_at": "2026-08-27T02:45:00+00:00",
+  "live_reverify_status": "BLOCKED_PIXEL6A",
+  "live_reverify_note": "adb lists 27211JEGR06194 as offline after soft reconnect (adb reconnect / reconnect offline / disconnect+usb). No adb kill-server used.",
+  "prior_false_fail": {
+    "result": "NOT_ON_FIGHTER_SELECT_AFTER_NAV",
+    "PIXEL_SELECT_RENDER_GHOST_OCCURRENCES": 1,
+    "classification": "AUTOMATION_NAVIGATION_FAILURE",
+    "detail": "OCR classifier required markers like 'toggle cpu' that were absent/noisy while P1/P2 roster chrome was present. False ghost counted when select OCR rejected a valid select frame."
+  },
+  "repair": {
+    "commits": [
+      "3777750 fix(wave020): repair Pixel gate OCR nav and fast-gate orchestration"
+    ],
+    "summary": "Centralized looks_like_fighter_select with roster-name + p1:/p2: acceptance; Achievements/title recovery; telemetry-backed select stress."
+  },
+  "head_gate_a_evidence": {
+    "source": "artifacts/engineering_wave020/PIXEL_FAST_GATES.json",
+    "PIXEL_GATE_A": "PASS",
+    "PIXEL_SELECT_ROSTER_SWEEPS": 20,
+    "PIXEL_SELECT_DISAPPEARANCE_CASES": 0,
+    "PIXEL_SELECT_WHITEOUT_CASES": 0,
+    "PIXEL_SELECT_MATERIAL_MISMATCHES": 0,
+    "PIXEL_SELECT_RENDER_GHOST_OCCURRENCES": 0,
+    "PIXEL_SOURCE_SHA": "21247729fda1ae2c3758da04e061d6c0dd752b4c",
+    "desktop_corroboration": {
+      "SELECT_LIFECYCLE_DIAGNOSTIC_RESULT": "PASS",
+      "SELECT_DIAGNOSTIC_ROSTER_SWEEPS": 22,
+      "SELECT_DISAPPEARANCE_CASES": 0,
+      "SELECT_WHITEOUT_CASES": 0
+    }
+  },
+  "launch_state": "AA_FOREGROUND_REACHABLE_WHEN_DEVICE_ONLINE",
+  "nav_actions": [
+    "app_launch",
+    "home_menu",
+    "start_game",
+    "fighter_select",
+    "dpad_right_roster_sweep_x20"
+  ],
+  "expected_scene": "FIGHTER_SELECT",
+  "actual_scene": "FIGHTER_SELECT_AT_HEAD_PASS_EVIDENCE; LIVE_UNVERIFIED_DEVICE_OFFLINE",
+  "fighter_select_scene_loaded": true,
+  "roster_count": 7,
+  "selected_fighter_id": "ember-vale",
+  "preview_expected": true,
+  "preview_instance_valid": true,
+  "preview_final_screen_visible": true,
+  "render_ghost": false,
+  "automation_navigation_failure": true,
+  "game_navigation_failure": false,
+  "presentation_failure": false,
+  "root_cause": "AUTOMATION_NAVIGATION_FAILURE",
+  "root_cause_detail": "Initial Gate A FAIL was an OCR false-negative / automation nav classifier failure, not a PresentationContext or FighterPresentationCache regression. At HEAD 2124772 Gate A previously PASSed with all counters 0; live Pixel re-run blocked by adb offline.",
+  "gate_a_at_head": "PASS_PRIOR_EVIDENCE",
+  "gate_a_live": "BLOCKED_PIXEL6A",
+  "emitted_at": "2026-08-27T02:45:00+00:00"
+}
