@@ -175,6 +175,161 @@ def soft_back_in_aa(serial: str) -> None:
     ensure_aa_foreground(serial, "soft_back_post")
 
 
+TRACE_REMOTE = "files/wave018_visibility_trace.jsonl"
+COUNTERS_REMOTE = "files/wave018_visibility_counters.json"
+
+ROSTER_OCR_NAMES = (
+    "ember vale",
+    "rook ironside",
+    "juno spark",
+    "kaia windrow",
+    "nix calder",
+    "orion vell",
+    "vesper nyx",
+)
+
+SELECT_SCENE_MARKERS = (
+    "fighter select",
+    "toggle cpu",
+    "showcase",
+    "next / confirm",
+    "next/confirm",
+    "p1:",
+    "p2:",
+    "face-off",
+    "rushdown",
+    "glass cannon",
+    "mix-up",
+    "zoning",
+    "power mix-up",
+)
+
+RULESET_SCENE_MARKERS = (
+    "rulesets",
+    "stocks:",
+    "match time",
+    "damage ratio",
+    "confirm ruleset",
+)
+
+
+def ocr_text(path: Path) -> str:
+    """Best-effort OCR; empty string if unavailable."""
+    if not path.is_file():
+        return ""
+    try:
+        r = subprocess.run(
+            ["tesseract", str(path), "stdout"],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+        return (r.stdout or "").lower()
+    except Exception:
+        return ""
+
+
+def looks_like_rulesets(path: Path) -> bool:
+    text = ocr_text(path)
+    if not text:
+        return False
+    return any(m in text for m in RULESET_SCENE_MARKERS) and not any(
+        m in text for m in ("p1:", "p2:", "toggle cpu", "showcase", "fighter select")
+    )
+
+
+def looks_like_fighter_select(path: Path) -> bool:
+    """True when OCR shows Fighter Select chrome (reject Rulesets-only frames)."""
+    text = ocr_text(path)
+    if text:
+        if looks_like_rulesets(path):
+            return False
+        roster_hits = sum(1 for n in ROSTER_OCR_NAMES if n in text)
+        if roster_hits >= 3 and ("p1:" in text or "p2:" in text):
+            return True
+        if "ember vale" in text and "rook ironside" in text and roster_hits >= 2:
+            return True
+        if roster_hits >= 4:
+            return True
+        return any(m in text for m in SELECT_SCENE_MARKERS)
+    if not path.is_file() or path.stat().st_size < 90_000:
+        return False
+    return path.stat().st_size >= 200_000
+
+
+def run_as_cat(serial: str, rel: str) -> str:
+    last_err = ""
+    for _ in range(3):
+        r = subprocess.run(
+            ["adb", "-s", serial, "exec-out", "run-as", PKG, "cat", rel],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            timeout=60,
+        )
+        if r.returncode == 0:
+            return r.stdout
+        last_err = (r.stderr or r.stdout or "")[-200:]
+        time.sleep(0.4)
+    if last_err:
+        print(f"run-as cat failed for {rel}: {last_err}")
+    return ""
+
+
+def clear_telemetry(serial: str) -> None:
+    adb(["-s", serial, "shell", f"run-as {PKG} rm -f {TRACE_REMOTE} {COUNTERS_REMOTE}"])
+
+
+def pull_trace_rows(serial: str) -> list[dict]:
+    raw = run_as_cat(serial, TRACE_REMOTE)
+    rows: list[dict] = []
+    for ln in raw.splitlines():
+        ln = ln.strip()
+        if not ln:
+            continue
+        try:
+            rows.append(json.loads(ln))
+        except json.JSONDecodeError:
+            continue
+    return rows
+
+
+def pull_counters(serial: str) -> dict:
+    raw = run_as_cat(serial, COUNTERS_REMOTE)
+    if not raw.strip():
+        return {}
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        return {}
+
+
+def analyze_select_telemetry(serial: str) -> dict:
+    rows = pull_trace_rows(serial)
+    select_rows = [r for r in rows if r.get("scene") == "fighter_select"]
+    select_ghosts = sum(
+        1
+        for r in select_rows
+        if r.get("render_ghost")
+        or (
+            bool(r.get("preview_expected_visible"))
+            and int(r.get("visible_renderable_mesh_count", 0)) == 0
+        )
+    )
+    select_viol = sum(1 for r in select_rows if not bool(r.get("visibility_invariant_pass", True)))
+    counters = pull_counters(serial)
+    return {
+        "select_rows": len(select_rows),
+        "PIXEL_SELECT_RENDER_GHOST_OCCURRENCES": int(
+            counters.get("PIXEL_SELECT_RENDER_GHOST_OCCURRENCES", select_ghosts)
+        ),
+        "PIXEL_SELECT_VISIBILITY_INVARIANT_VIOLATIONS": int(
+            counters.get("PIXEL_SELECT_VISIBILITY_INVARIANT_VIOLATIONS", select_viol)
+        ),
+        "counters": counters,
+    }
+
+
 def display_wh(serial: str) -> tuple[int, int]:
     """Current input coordinate space (landscape AA is typically 2400x1080)."""
     out = adb(["-s", serial, "shell", "wm", "size"]).stdout
@@ -196,6 +351,28 @@ def display_wh(serial: str) -> tuple[int, int]:
     if w and h:
         return w, h
     return 2400, 1080
+
+
+def looks_like_title(path: Path) -> bool:
+    text = ocr_text(path)
+    return bool(text) and ("start game" in text or "create your legend" in text)
+
+
+def looks_like_achievements(path: Path) -> bool:
+    text = ocr_text(path)
+    return bool(text) and "achievements" in text
+
+
+def recover_to_menu(serial: str, path: Path) -> None:
+    """Soft-back out of Achievements / nested menus without leaving AA."""
+    if looks_like_achievements(path) or looks_like_rulesets(path):
+        for _ in range(3):
+            soft_back_in_aa(serial)
+            time.sleep(0.35)
+    elif looks_like_title(path):
+        w, h = display_wh(serial)
+        tap(serial, w // 2, int(h * 0.62))
+        time.sleep(0.4)
 
 
 def navigate_to_fighter_select(serial: str) -> bool:
