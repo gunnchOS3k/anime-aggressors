@@ -29,6 +29,13 @@ static func find_move(manifest: Dictionary, move_id: String) -> Dictionary:
 			return m
 	return {}
 
+static func load_forms(fighter_id: String) -> Dictionary:
+	var path := "res://data/forms/%s.json" % fighter_id
+	if not FileAccess.file_exists(path):
+		return {}
+	var f := FileAccess.open(path, FileAccess.READ)
+	return JSON.parse_string(f.get_as_text())
+
 static func find_move_by_input(manifest: Dictionary, command: String, airborne: bool) -> Dictionary:
 	for m in manifest.get("moves", []):
 		if m.get("input_command", "") != command:

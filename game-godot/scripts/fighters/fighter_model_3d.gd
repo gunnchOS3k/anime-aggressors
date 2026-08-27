@@ -16,6 +16,7 @@ const _SelectFraming = preload("res://scripts/menus/character_select_framing.gd"
 const _PresentationGates = preload("res://scripts/menus/wave020_presentation_gates.gd")
 const _PresentationContext = preload("res://scripts/visual/presentation_context.gd")
 const _PresentationCache = preload("res://scripts/visual/fighter_presentation_cache.gd")
+const _ArtDirection = preload("res://scripts/visual/art_direction_contract.gd")
 
 const VIEWPORT_SIZE := Vector2i(256, 320)
 ## Battle bodies must be owner-visible on Pixel; prior 0.38 read as absent.
@@ -48,6 +49,10 @@ var _presentation_tween: Tween
 var _throw_dir: String = "forward"
 var _expression: String = "neutral"
 var _aura_level: int = 0
+var _aura_tier: int = 0
+var _form_id: String = ""
+var _form_presentation: Dictionary = {}
+var _transform_progress: float = 0.0
 var _select_mode: bool = false
 var _presentation_context: String = _PresentationContext.CTX_BATTLE
 var _owner_generation: int = 0
@@ -372,7 +377,55 @@ func set_aura_level(level: int) -> void:
 	_aura_level = clampi(level, 0, 4)
 	_refresh_aura_overlay()
 	if _material_controller and _material_controller.has_method("set_charge_emission"):
-		_material_controller.set_charge_emission(float(level) * 0.35)
+		var form_boost := float(_form_presentation.get("emission_strength", 0.0))
+		_material_controller.set_charge_emission(float(level) * 0.35 + form_boost)
+
+
+func set_aura_tier(tier: int) -> void:
+	_aura_tier = clampi(tier, 0, 3)
+	_refresh_aura_overlay()
+
+
+func set_form_id(form_id: String, form_entry: Dictionary = {}) -> void:
+	_form_id = form_id
+	_form_presentation = form_entry.get("presentation", {})
+	_apply_faceless_head_presentation()
+	_refresh_aura_overlay()
+	if _model_root != null and is_instance_valid(_model_root):
+		var body_scale := float(form_entry.get("body_scale", 1.0))
+		_model_root.scale = Vector3.ONE * body_scale
+
+
+func set_transform_progress(progress: float) -> void:
+	_transform_progress = clampf(progress, 0.0, 1.0)
+	if _material_controller and _material_controller.has_method("set_charge_emission"):
+		var base := float(_form_presentation.get("emission_strength", 0.15))
+		_material_controller.set_charge_emission(base + _transform_progress * 0.65)
+
+
+func get_form_id() -> String:
+	return _form_id
+
+
+func get_body_scale_contract() -> Dictionary:
+	var scale := 1.0
+	if _model_root != null and is_instance_valid(_model_root):
+		scale = _model_root.scale.x
+	return {
+		"form_id": _form_id,
+		"body_scale": scale,
+		"ascended_not_oversized": scale <= 1.05,
+	}
+
+
+func _apply_faceless_head_presentation() -> void:
+	if not _ArtDirection.head_is_faceless():
+		return
+	if _face_chip:
+		_face_chip.color = Color(0.85, 0.88, 0.92, 0.35)
+		_face_chip.color.a = 0.35 if _procedural_healthy else 0.0
+	if _expression_label:
+		_expression_label.modulate.a = 0.0
 
 
 func set_expression(state: String) -> void:
@@ -380,8 +433,13 @@ func set_expression(state: String) -> void:
 	if _expression_label:
 		_expression_label.text = _expression_glyph(state)
 	if _face_chip:
-		_face_chip.color = _expression_color(state)
-		_face_chip.color.a = 0.0 if _procedural_healthy else _face_chip.color.a
+		if _ArtDirection.head_is_faceless() and _procedural_healthy:
+			_face_chip.color = Color(0.85, 0.88, 0.92, 0.35)
+		else:
+			_face_chip.color = _expression_color(state)
+			_face_chip.color.a = 0.0 if _procedural_healthy else _face_chip.color.a
+	if _expression_label:
+		_expression_label.modulate.a = 0.0 if (_ArtDirection.head_is_faceless() and _procedural_healthy) else _expression_label.modulate.a
 	if _stylized and _stylized.has_method("set_expression"):
 		_stylized.set_expression(state)
 
@@ -1216,12 +1274,14 @@ func _update_expression_for_state(state: String) -> void:
 func _refresh_aura_overlay() -> void:
 	if _aura_overlay == null:
 		return
-	if _aura_level <= 0:
+	var tier_alpha := clampf(0.08 + float(_aura_tier) * 0.12, 0.08, 0.48)
+	if _aura_level <= 0 and _aura_tier <= 0 and _form_presentation.is_empty():
 		_aura_overlay.color.a = 0.0
 		return
-	var shape := str(_life.get("aura_shape", "orb"))
+	var shape := str(_form_presentation.get("aura_shape", _life.get("aura_shape", "orb")))
 	var pulse := float(_life.get("aura_pulse", 1.0))
-	var alpha := clampf(0.12 + float(_aura_level) * 0.1 * pulse, 0.12, 0.55)
+	var form_boost := float(_form_presentation.get("emission_strength", 0.0))
+	var alpha := clampf(0.12 + float(_aura_level) * 0.1 * pulse + tier_alpha + form_boost * 0.25, 0.12, 0.65)
 	match shape:
 		"tongues":
 			_aura_overlay.color = Color(1.0, 0.35, 0.1, alpha)

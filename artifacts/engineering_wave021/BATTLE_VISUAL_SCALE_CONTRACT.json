@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "wave": "WAVE021",
+  "contract": "battle_visual_scale",
+  "OWNER_REG_025": "PASS",
+  "rules": {
+    "preview_scale_must_not_leak_to_battle": true,
+    "aura_must_not_change_collision_scale": true,
+    "model_root_scale_in_battle": 1.0,
+    "max_battle_body_scale": 1.05
+  },
+  "fighters": {
+    "ember-vale": {
+      "EMBER_BASE_BODY_SCALE": 1.0,
+      "EMBER_AWAKENED_BUILD_BODY_SCALE": 1.0,
+      "EMBER_ASCENDED_BODY_SCALE": 1.0,
+      "EMBER_ASCENDED_APPROX_BASE": true,
+      "ascended_not_oversized": true
+    }
+  },
+  "presentation_contexts": {
+    "battle": {"display_scale_max": 1.05, "allow_model_root_scale": false},
+    "select_preview": {"display_scale_max": 1.45, "isolated_from_battle": true},
+    "versus": {"display_scale_max": 1.45, "isolated_from_battle": true},
+    "victory": {"display_scale_max": 1.25, "isolated_from_battle": true}
+  },
+  "emitted_at": "2026-08-27T04:00:00+00:00"
+}

@@ -16,6 +16,10 @@ const _AuraSpecialRuntime = preload("res://scripts/combat/aura_special_runtime.g
 const _CombatMath = preload("res://scripts/combat/combat_math.gd")
 const _MoveResolver = preload("res://scripts/visual/runtime_move_resolver.gd")
 const _PresentationContext = preload("res://scripts/visual/presentation_context.gd")
+const _FighterDefinition = preload("res://scripts/combat/fighter_definition.gd")
+const _FormDefinition = preload("res://scripts/combat/form_definition.gd")
+const _TransformPipeline = preload("res://scripts/combat/transform_pipeline.gd")
+const _AuraTierContract = preload("res://scripts/combat/aura_tier_contract.gd")
 
 signal damaged(amount: float, total: float)
 signal koed()
@@ -105,6 +109,12 @@ var grab_mash: float = 0.0
 var _recent_move_ids: Array = []
 var last_impact_readable: bool = false
 var last_feedback_tier: String = ""
+var _fighter_def: Dictionary = {}
+var _forms_doc: Dictionary = {}
+var _current_form_id: String = ""
+var _transform_pipeline
+var _transform_activations: int = 0
+var _transform_sequence_active: bool = false
 
 func _ready() -> void:
 	add_to_group("fighters")
@@ -128,6 +138,9 @@ func _ready() -> void:
 	cpu = _CpuController.new()
 	animator = _FighterAnimator.new()
 	add_child(animator)
+	_transform_pipeline = _TransformPipeline.new()
+	_transform_pipeline.setup(self)
+	_transform_pipeline.transform_completed.connect(_on_transform_completed)
 	if body:
 		animator.setup(self, body)
 	facing = 1 if slot == 1 else -1
@@ -151,6 +164,67 @@ func get_aura() -> float:
 func get_aura_level() -> int:
 	return _AuraScaler.aura_level(aura)
 
+
+func get_aura_tier() -> int:
+	return _AuraTierContract.tier_from_aura(aura)
+
+
+func get_forms_doc() -> Dictionary:
+	return _forms_doc
+
+
+func get_current_form_id() -> String:
+	return _current_form_id
+
+
+func get_transform_activations() -> int:
+	return _transform_activations
+
+
+func attempt_transform() -> bool:
+	if _transform_pipeline == null:
+		return false
+	return _transform_pipeline.attempt_transform()
+
+
+func tick_transform_pipeline(delta: float, game_paused: bool = false) -> void:
+	if _transform_pipeline != null:
+		_transform_pipeline.tick(delta, game_paused)
+
+
+func apply_form(form_id: String) -> void:
+	if _forms_doc.is_empty():
+		return
+	var entry: Dictionary = _FormDefinition.form_entry(_forms_doc, form_id)
+	if entry.is_empty():
+		return
+	_current_form_id = form_id
+	if model_3d != null and model_3d.has_method("set_form_id"):
+		model_3d.set_form_id(form_id, entry)
+	var idle_clip := str(entry.get("transformed_idle_clip", entry.get("idle_clip", "idle")))
+	if model_3d != null and model_3d.has_method("play_clip"):
+		model_3d.play_clip(idle_clip)
+
+
+func on_transform_sequence_start(_from: String, _to: String) -> void:
+	_transform_sequence_active = true
+	state_machine.enter(_FighterStates.AURA_BURST_STARTUP)
+	if model_3d != null and model_3d.has_method("play_clip"):
+		var target: Dictionary = _FormDefinition.form_entry(_forms_doc, _to)
+		model_3d.play_clip(str(target.get("transform_in_clip", "aura_charge")))
+
+
+func on_transform_sequence_tick(progress: float) -> void:
+	if model_3d != null and model_3d.has_method("set_transform_progress"):
+		model_3d.set_transform_progress(progress)
+
+
+func _on_transform_completed(_fid: String, _form_id: String) -> void:
+	_transform_sequence_active = false
+	_transform_activations += 1
+	state_machine.enter(_FighterStates.IDLE)
+	aura = maxf(0.0, aura - 25.0)
+
 func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, spawn: Vector2) -> void:
 	fighter_id = id
 	slot = player_slot
@@ -164,6 +238,11 @@ func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, s
 	spawn_point = spawn
 	data = _DataLoader.load_fighter(id)
 	move_manifest = _DataLoader.load_moves(id)
+	_fighter_def = _FighterDefinition.build(id, data)
+	_forms_doc = _fighter_def.get("forms_doc", {})
+	_current_form_id = str(_fighter_def.get("default_form_id", ""))
+	if model_3d != null and model_3d.has_method("set_form_id") and not _current_form_id.is_empty():
+		model_3d.set_form_id(_current_form_id, _FormDefinition.form_entry(_forms_doc, _current_form_id))
 	if model_3d != null and model_3d.has_method("set_presentation_context"):
 		model_3d.set_presentation_context(_PresentationContext.battle_context_for_slot(slot, cpu_flag))
 	var model_loaded: bool = model_3d != null and model_3d.configure(data)
@@ -400,6 +479,9 @@ func _physics_process(delta: float) -> void:
 	if _dodge_cooldown > 0.0:
 		_dodge_cooldown = maxf(0.0, _dodge_cooldown - delta)
 	_AuraSpecialRuntime.tick_fighter(self, delta)
+	if _transform_pipeline != null:
+		var paused := get_tree().paused if get_tree() != null else false
+		_transform_pipeline.tick(delta, paused)
 	_tick_shield_regen(delta)
 	# Kaia air-drift stamp (runtime, not data-only).
 	if not is_on_floor() and _AuraIdentity.air_drift_bonus(fighter_id, aura, str(data.get("combatTag", ""))) > 0.0:
@@ -523,6 +605,9 @@ func _handle_actions() -> void:
 		return
 	if not state_machine.can_attack():
 		return
+	if _read_transform_input() and _transform_pipeline != null and _transform_pipeline.can_attempt_transform():
+		if _transform_pipeline.attempt_transform():
+			return
 	if is_aura_input_held():
 		tick_aura_charge(get_physics_process_delta_time())
 		if aura < 100.0:
@@ -677,7 +762,11 @@ func _start_move_by_command(cmd: String) -> void:
 	_start_move_dict(m)
 
 func _start_move_dict(m: Dictionary) -> void:
-	_current_move = _AuraScaler.apply_to_move(m, aura)
+	var base_move := m
+	if not _current_form_id.is_empty() and not _forms_doc.is_empty():
+		var form_entry: Dictionary = _FormDefinition.form_entry(_forms_doc, _current_form_id)
+		base_move = _FormDefinition.apply_move_override(m, form_entry, str(m.get("move_id", "")))
+	_current_move = _AuraScaler.apply_to_move(base_move, aura)
 	_current_move = _AuraIdentity.apply_to_scaled_move(
 		_current_move, fighter_id, aura, str(data.get("combatTag", ""))
 	)
@@ -1326,6 +1415,8 @@ func _set_aura_vfx(on: bool) -> void:
 			aura_vfx.color = c
 	if model_3d and model_3d.has_method("set_aura_level"):
 		model_3d.set_aura_level(get_aura_level() if on or aura > 1.0 else 0)
+	if model_3d and model_3d.has_method("set_aura_tier"):
+		model_3d.set_aura_tier(get_aura_tier() if on or aura > 1.0 else 0)
 	if on and not _aura_sfx_hook:
 		_aura_sfx_hook = true
 
@@ -1408,6 +1499,16 @@ func _read_attack_pressed() -> bool:
 		_input_edge_held["attack"] = true
 		return true
 	return _input_edge("attack")
+
+func _read_transform_input() -> bool:
+	if not _FighterDefinition.ascension_runtime_enabled(_fighter_def):
+		return false
+	if not _AuraTierContract.can_initiate_transform(aura):
+		return false
+	if _transform_sequence_active:
+		return false
+	return _read_shield() and _read_special_pressed() and _read_attack_pressed()
+
 
 func _read_special_pressed() -> bool:
 	if TouchInputManager.consume_touch_just_pressed(slot, "special"):

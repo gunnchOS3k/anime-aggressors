@@ -1,0 +1,65 @@
+{
+  "schema_version": 2,
+  "system": "GoldenVisualQA",
+  "wave": "WAVE021",
+  "extends": "golden_state_registry.json",
+  "cursor_may_set_owner_approved_golden": false,
+  "ideal_states": [
+    {
+      "state_id": "EMBER_BASE_BATTLE",
+      "fighter_id": "ember-vale",
+      "form_id": "EMBER_BASE",
+      "surface": "battle",
+      "semantic_contracts": ["fighter_present", "faceless_head", "body_scale_near_1", "material_identity_match"]
+    },
+    {
+      "state_id": "EMBER_AWAKENED_BATTLE",
+      "fighter_id": "ember-vale",
+      "form_id": "EMBER_AWAKENED_BUILD",
+      "surface": "battle",
+      "semantic_contracts": ["fighter_present", "faceless_head", "body_scale_near_1", "aura_tier_visible"]
+    },
+    {
+      "state_id": "EMBER_ASCENDED_BATTLE",
+      "fighter_id": "ember-vale",
+      "form_id": "EMBER_ASCENDED",
+      "surface": "battle",
+      "semantic_contracts": ["fighter_present", "faceless_head", "ascended_not_oversized", "body_scale_near_1"]
+    },
+    {
+      "state_id": "EMBER_TRANSFORM_SEQUENCE",
+      "fighter_id": "ember-vale",
+      "surface": "battle",
+      "semantic_contracts": ["transform_in_progress", "pause_safe", "no_scale_leak"]
+    },
+    {
+      "state_id": "SELECT_LOCK_IN_CEREMONY",
+      "surface": "fighter_select",
+      "semantic_contracts": ["focus_visible", "preview_entrance", "material_identity_match"]
+    },
+    {
+      "state_id": "VERSUS_CEREMONY",
+      "surface": "versus",
+      "semantic_contracts": ["both_portraits_present", "context_isolated", "no_preview_leak"]
+    },
+    {
+      "state_id": "MOVELIST_FORM_SECTION",
+      "surface": "move_list",
+      "semantic_contracts": ["form_section_present", "transform_glyphs", "modal_centered"]
+    },
+    {
+      "state_id": "VICTORY_CURRENT_FORM",
+      "surface": "victory",
+      "semantic_contracts": ["fighter_present", "current_form_not_oversized", "faceless_head"]
+    }
+  ],
+  "failure_taxonomy_extensions": [
+    "FACE_LEAK_REALISTIC",
+    "ASCENDED_OVERSCALE",
+    "FORM_STATE_MISMATCH",
+    "TRANSFORM_SCALE_LEAK",
+    "AURA_TIER_AUDIO_MISSING",
+    "FORM_SECTION_MISSING"
+  ],
+  "OWNER_APPROVED_GOLDEN_COUNT": 0
+}

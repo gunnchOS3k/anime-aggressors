@@ -1,0 +1,103 @@
+{
+  "fighter_id": "ember-vale",
+  "schema_version": 1,
+  "ascension_runtime": true,
+  "default_form": "EMBER_BASE",
+  "form_ladder": ["EMBER_BASE", "EMBER_AWAKENED_BUILD", "EMBER_ASCENDED"],
+  "transform_rules": {
+    "require_aura_tier": 3,
+    "input": "shield_special_attack",
+    "pause_safe": true,
+    "min_aura_percent": 75.0
+  },
+  "forms": {
+    "EMBER_BASE": {
+      "form_id": "EMBER_BASE",
+      "display_name": "Ember Vale",
+      "ladder_step": "BASE",
+      "body_scale": 1.0,
+      "head_presentation": "faceless_abstract_cap",
+      "aura_tier_visual_max": 3,
+      "idle_clip": "idle",
+      "transform_in_seconds": 0.0,
+      "presentation": {
+        "emission_strength": 0.15,
+        "aura_shape": "tongues",
+        "element_accent": "#e8453c"
+      },
+      "move_overrides": {}
+    },
+    "EMBER_AWAKENED_BUILD": {
+      "form_id": "EMBER_AWAKENED_BUILD",
+      "display_name": "Ember Vale — Awakened",
+      "ladder_step": "AWAKENED_BUILD",
+      "body_scale": 1.0,
+      "head_presentation": "faceless_abstract_cap",
+      "aura_tier_visual_max": 3,
+      "idle_clip": "idle",
+      "transform_in_seconds": 1.0,
+      "transform_in_clip": "aura_charge",
+      "presentation": {
+        "emission_strength": 0.45,
+        "aura_shape": "tongues",
+        "element_accent": "#ff6b4a"
+      },
+      "move_overrides": {
+        "jab_1": {
+          "damage": 3.2,
+          "training_display_name": "Ember Jab (Awakened)"
+        },
+        "forward_tilt": {
+          "damage": 7.5,
+          "training_display_name": "Flame Lunge (Awakened)"
+        },
+        "neutral_special_projectile": {
+          "damage": 6.0,
+          "training_display_name": "Cinder Bolt (Awakened)"
+        }
+      }
+    },
+    "EMBER_ASCENDED": {
+      "form_id": "EMBER_ASCENDED",
+      "display_name": "Ember Vale — Ascended",
+      "ladder_step": "ASCENDED",
+      "body_scale": 1.0,
+      "head_presentation": "faceless_abstract_cap",
+      "aura_tier_visual_max": 3,
+      "idle_clip": "idle",
+      "transform_in_seconds": 1.2,
+      "transform_in_clip": "signature_lane_burst",
+      "transformed_idle_clip": "aura_charge",
+      "presentation": {
+        "emission_strength": 0.72,
+        "aura_shape": "tongues",
+        "element_accent": "#ffb347",
+        "ascended_glow": true,
+        "not_oversized": true
+      },
+      "move_overrides": {
+        "jab_1": {
+          "damage": 4.0,
+          "training_display_name": "Ascended Jab"
+        },
+        "forward_tilt": {
+          "damage": 9.5,
+          "training_display_name": "Ascended Flame Lunge"
+        },
+        "neutral_special_projectile": {
+          "damage": 8.5,
+          "training_display_name": "Ascended Cinder Bolt",
+          "projectile": {
+            "speed_mult": 1.25,
+            "lifetime_frames": 90
+          }
+        },
+        "signature_lane_burst": {
+          "damage": 14.0,
+          "training_display_name": "Ascension Rush",
+          "presentation": "signature"
+        }
+      }
+    }
+  }
+}

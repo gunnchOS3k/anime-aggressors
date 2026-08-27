@@ -1,8 +1,100 @@
 {
   "GOLDEN_VISUAL_QA": "PASS",
-  "schema_version": 1,
-  "head_sha": "d7a65b8740c6674883780ad10d059c888ddd5c1b",
-  "emitted_at": "2026-08-27T02:52:17.185127+00:00",
+  "schema_version": 2,
+  "wave021_ideal_states": [
+    {
+      "state_id": "EMBER_BASE_BATTLE",
+      "fighter_id": "ember-vale",
+      "form_id": "EMBER_BASE",
+      "surface": "battle",
+      "semantic_contracts": [
+        "fighter_present",
+        "faceless_head",
+        "body_scale_near_1",
+        "material_identity_match"
+      ]
+    },
+    {
+      "state_id": "EMBER_AWAKENED_BATTLE",
+      "fighter_id": "ember-vale",
+      "form_id": "EMBER_AWAKENED_BUILD",
+      "surface": "battle",
+      "semantic_contracts": [
+        "fighter_present",
+        "faceless_head",
+        "body_scale_near_1",
+        "aura_tier_visible"
+      ]
+    },
+    {
+      "state_id": "EMBER_ASCENDED_BATTLE",
+      "fighter_id": "ember-vale",
+      "form_id": "EMBER_ASCENDED",
+      "surface": "battle",
+      "semantic_contracts": [
+        "fighter_present",
+        "faceless_head",
+        "ascended_not_oversized",
+        "body_scale_near_1"
+      ]
+    },
+    {
+      "state_id": "EMBER_TRANSFORM_SEQUENCE",
+      "fighter_id": "ember-vale",
+      "surface": "battle",
+      "semantic_contracts": [
+        "transform_in_progress",
+        "pause_safe",
+        "no_scale_leak"
+      ]
+    },
+    {
+      "state_id": "SELECT_LOCK_IN_CEREMONY",
+      "surface": "fighter_select",
+      "semantic_contracts": [
+        "focus_visible",
+        "preview_entrance",
+        "material_identity_match"
+      ]
+    },
+    {
+      "state_id": "VERSUS_CEREMONY",
+      "surface": "versus",
+      "semantic_contracts": [
+        "both_portraits_present",
+        "context_isolated",
+        "no_preview_leak"
+      ]
+    },
+    {
+      "state_id": "MOVELIST_FORM_SECTION",
+      "surface": "move_list",
+      "semantic_contracts": [
+        "form_section_present",
+        "transform_glyphs",
+        "modal_centered"
+      ]
+    },
+    {
+      "state_id": "VICTORY_CURRENT_FORM",
+      "surface": "victory",
+      "semantic_contracts": [
+        "fighter_present",
+        "current_form_not_oversized",
+        "faceless_head"
+      ]
+    }
+  ],
+  "wave021_failure_taxonomy_extensions": [
+    "FACE_LEAK_REALISTIC",
+    "ASCENDED_OVERSCALE",
+    "FORM_STATE_MISMATCH",
+    "TRANSFORM_SCALE_LEAK",
+    "AURA_TIER_AUDIO_MISSING",
+    "FORM_SECTION_MISSING"
+  ],
+  "head_sha": "0d094349e2aa6a7bbb4e7cdec4694ab33e585593",
+  "emitted_at": "2026-08-27T04:00:04.472635+00:00",
   "non_invasive": true,
   "OWNER_APPROVED_GOLDEN_COUNT": 0,
   "ENGINEERING_REFERENCE_COUNT": 20,
@@ -51,10 +143,10 @@
         "ok": true
       },
       "PIXEL_GATES": {
-        "A": "PASS_PRIOR_EVIDENCE",
-        "B": "PASS_PRIOR_EVIDENCE",
-        "C": "PASS_PRIOR_EVIDENCE",
-        "D": "BLOCKED_PIXEL6A",
+        "A": "NOT_RUN_BLOCKED_PIXEL6A",
+        "B": "NOT_RUN_BLOCKED_PIXEL6A",
+        "C": "NOT_RUN_BLOCKED_PIXEL6A",
+        "D": "NOT_RUN_BLOCKED_PIXEL6A",
         "device": false
       }
     },

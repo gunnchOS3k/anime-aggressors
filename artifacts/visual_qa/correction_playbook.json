@@ -160,7 +160,39 @@
         "run transform + material persistence diagnostics",
         "confirm battle/move/select contracts diverge correctly"
       ]
+    },
+    "FACE_LEAK_REALISTIC": {
+      "severity": "S1",
+      "likely_causes": ["REALISTIC_HUMANOID_FACE_AS_DEFAULT true", "expression chip visible on procedural"],
+      "diagnostic_steps": [
+        "inspect ArtDirectionContract.head_is_faceless()",
+        "confirm face chip alpha 0 on procedural healthy path"
+      ]
+    },
+    "ASCENDED_OVERSCALE": {
+      "severity": "S0",
+      "likely_causes": ["form body_scale > 1.05", "preview scale leaked to battle"],
+      "diagnostic_steps": [
+        "run Wave021BattleScaleDiagnostic",
+        "inspect BATTLE_VISUAL_SCALE_CONTRACT.json"
+      ]
+    },
+    "FORM_STATE_MISMATCH": {
+      "severity": "S1",
+      "likely_causes": ["form_id not applied to model", "move override missing"],
+      "diagnostic_steps": ["inspect FormDefinition.apply_move_override", "verify data/forms JSON"]
+    },
+    "TRANSFORM_SCALE_LEAK": {
+      "severity": "S0",
+      "likely_causes": ["transform sequence mutates model_root scale"],
+      "diagnostic_steps": ["run Wave020TransformIsolationDiagnostic", "inspect transform pipeline tick"]
+    },
+    "FORM_SECTION_MISSING": {
+      "severity": "S2",
+      "likely_causes": ["move_list_catalog missing FORM / TRANSFORMATION"],
+      "diagnostic_steps": ["run Wave021UIFeelDiagnostic"]
     }
   },
-  "emitted_at": "2026-08-27T02:45:00+00:00"
+  "wave021_extensions": true,
+  "emitted_at": "2026-08-27T04:00:00+00:00"
 }

@@ -285,10 +285,55 @@ def looks_like_battle_hud(path: Path) -> bool:
     return has_timer or has_fight or has_aura
 
 
+SELECT_OVERLAY_MARKERS = (
+    "move list",
+    "command guide",
+    "close move list",
+    "lab ref",
+    "movelist",
+    "move preview",
+)
+
+
+def looks_like_select_overlay(path: Path) -> bool:
+    """True when Move List / Command Guide modal obscures Fighter Select."""
+    text = ocr_text(path)
+    return bool(text) and any(m in text for m in SELECT_OVERLAY_MARKERS)
+
+
+def dismiss_select_overlays(serial: str, max_attempts: int = 5) -> None:
+    """Close Move List or back out of nested menus before roster sweeps."""
+    for i in range(max_attempts):
+        name = f"nav_overlay_check_{i}"
+        screencap(serial, name)
+        path = PIXEL / f"{name}.png"
+        if not path.is_file():
+            break
+        if looks_like_select_overlay(path):
+            w, h = display_wh(serial)
+            xy = find_label_tap(path, "close", "list", max_top=1080)
+            if xy is None:
+                xy = find_label_tap(path, "close", max_top=1080)
+            if xy is None:
+                # Close Move List button — lower-right of modal (landscape Pixel).
+                xy = (int(w * 0.72), int(h * 0.88))
+            tap(serial, xy[0], xy[1])
+            time.sleep(0.55)
+            continue
+        if looks_like_achievements(path) or looks_like_rulesets(path):
+            recover_to_menu(serial, path)
+            navigate_to_fighter_select(serial)
+            time.sleep(0.8)
+            continue
+        break
+
+
 def looks_like_fighter_select(path: Path) -> bool:
     """True when OCR shows Fighter Select chrome (reject Rulesets-only frames)."""
     text = ocr_text(path)
     if text:
+        if looks_like_select_overlay(path):
+            return False
         if looks_like_battle_hud(path):
             return False
         if looks_like_rulesets(path):
@@ -453,10 +498,8 @@ def navigate_to_fighter_select(serial: str) -> bool:
     time.sleep(0.45)
     # Confirm Ruleset button sits lower-left in landscape content
     tap(serial, int(w * 0.22), int(h * 0.88))
-    time.sleep(0.4)
-    for _ in range(4):
-        key(serial, "66")
-        time.sleep(0.35)
+    time.sleep(0.6)
+    dismiss_select_overlays(serial)
     return ensure_aa_foreground(serial, "nav_select_post")
 
 
@@ -536,6 +579,7 @@ def confirm_fighter_select_into_battle(serial: str) -> bool:
     Landscape Pixel: OCR-locate "Next"/"Confirm" (not footer [A] Confirm at y>~1000).
     Fallback hardcoded center of Next/Confirm label ~ (360, 941) on 2400x1080.
     """
+    dismiss_select_overlays(serial)
     if not ensure_aa_foreground(serial, "confirm_select_pre"):
         return False
     fallback_next = (360, 941)
