@@ -74,8 +74,12 @@ def on_fighter_select(serial: str, attempts: int = 4) -> bool:
         time.sleep(1.0 if attempt == 0 else 1.5)
         rpc.screencap(serial, f"nav_select_check_{attempt}")
         p = PIXEL / f"nav_select_check_{attempt}.png"
+        if rpc.looks_like_select_overlay(p):
+            rpc.dismiss_select_overlays(serial)
         if rpc.looks_like_fighter_select(p):
-            return True
+            rpc.dismiss_select_overlays(serial)
+            rpc.screencap(serial, "nav_select_clean")
+            return rpc.looks_like_fighter_select(PIXEL / "nav_select_clean.png")
         if rpc.looks_like_achievements(p) or rpc.looks_like_title(p) or rpc.looks_like_rulesets(p):
             rpc.recover_to_menu(serial, p)
             continue
@@ -87,7 +91,23 @@ def on_fighter_select(serial: str, attempts: int = 4) -> bool:
                 rpc.key(serial, "66")
                 time.sleep(0.35)
     rpc.screencap(serial, "nav_select_final")
-    return rpc.looks_like_fighter_select(PIXEL / "nav_select_final.png")
+    final = PIXEL / "nav_select_final.png"
+    if rpc.looks_like_select_overlay(final):
+        rpc.dismiss_select_overlays(serial)
+        rpc.screencap(serial, "nav_select_clean")
+        return rpc.looks_like_fighter_select(PIXEL / "nav_select_clean.png")
+    if rpc.looks_like_fighter_select(final):
+        rpc.dismiss_select_overlays(serial)
+        rpc.screencap(serial, "nav_select_clean")
+        return rpc.looks_like_fighter_select(PIXEL / "nav_select_clean.png")
+    return False
+
+
+def _select_screen_ok(path: Path) -> bool:
+    """True on unobstructed Fighter Select."""
+    if rpc.looks_like_select_overlay(path) or rpc.looks_like_achievements(path) or rpc.looks_like_rulesets(path) or rpc.looks_like_title(path):
+        return False
+    return rpc.looks_like_fighter_select(path)
 
 
 def gate_a_select_sweeps(serial: str, captures: list) -> dict:
@@ -111,16 +131,30 @@ def gate_a_select_sweeps(serial: str, captures: list) -> dict:
             "PIXEL_SELECT_MATERIAL_MISMATCHES": 0,
         }
 
+    rpc.dismiss_select_overlays(serial)
+
     cap = rpc.screencap(serial, "gate_a_00_select_entry")
+    entry_path = PIXEL / "gate_a_00_select_entry.png"
+    if not _select_screen_ok(entry_path):
+        return {
+            "PIXEL_GATE_A": "FAIL",
+            "reason": "NOT_ON_FIGHTER_SELECT_AT_ENTRY",
+            "SELECT_OCR_SNIPPET": rpc.ocr_text(entry_path)[:400] if entry_path.is_file() else "",
+            "PIXEL_SELECT_DISAPPEARANCE_CASES": 1,
+            "PIXEL_SELECT_WHITEOUT_CASES": 0,
+            "PIXEL_SELECT_MATERIAL_MISMATCHES": 0,
+        }
 
     sweep_idx = 0
     for sweep in range(SWEEPS):
-        for _i in range(7):
-            if not rpc.ensure_aa_foreground(serial, f"gate_a_sweep_{sweep}"):
+        for roster_idx in ROSTER:
+            if not rpc.ensure_aa_foreground(serial, f"gate_a_sweep_{sweep}_{roster_idx}"):
                 rpc.launch_app(serial)
                 rpc.navigate_to_fighter_select(serial)
-            rpc.key(serial, "22")  # DPAD_RIGHT
-            time.sleep(0.12)
+                time.sleep(0.8)
+            # Landscape roster taps — DPAD_RIGHT drifts to Showcase/Achievements (Wave020 early gate).
+            rpc.tap_roster_index(serial, roster_idx)
+            time.sleep(0.14)
         sweep_idx = sweep + 1
         time.sleep(0.35)
         if sweep_idx in (7, 14):
@@ -130,12 +164,19 @@ def gate_a_select_sweeps(serial: str, captures: list) -> dict:
             captures.append(c)
             owner_caps.append(name)
             p = PIXEL / f"{name}.png"
-            if not rpc.looks_like_fighter_select(p):
-                disappearance += 1
+            if not _select_screen_ok(p):
+                if rpc.looks_like_select_overlay(p):
+                    rpc.dismiss_select_overlays(serial)
+                    c2 = rpc.screencap(serial, f"{name}_retry")
+                    captures.append(c2)
+                    p = PIXEL / f"{name}_retry.png"
+                if not _select_screen_ok(p):
+                    disappearance += 1
 
     time.sleep(1.5)
     telem = rpc.analyze_select_telemetry(serial)
-    disappearance = max(disappearance, int(telem.get("PIXEL_SELECT_RENDER_GHOST_OCCURRENCES", 0)))
+    render_ghost = int(telem.get("PIXEL_SELECT_RENDER_GHOST_OCCURRENCES", 0))
+    disappearance = max(disappearance, render_ghost)
     material_mismatch = int(telem.get("PIXEL_SELECT_VISIBILITY_INVARIANT_VIOLATIONS", 0))
 
     ok = disappearance == 0 and whiteout == 0 and material_mismatch == 0
@@ -145,7 +186,7 @@ def gate_a_select_sweeps(serial: str, captures: list) -> dict:
         "PIXEL_SELECT_DISAPPEARANCE_CASES": disappearance,
         "PIXEL_SELECT_WHITEOUT_CASES": whiteout,
         "PIXEL_SELECT_MATERIAL_MISMATCHES": material_mismatch,
-        "PIXEL_SELECT_RENDER_GHOST_OCCURRENCES": disappearance,
+        "PIXEL_SELECT_RENDER_GHOST_OCCURRENCES": render_ghost,
         "telemetry": telem,
         "owner_captures": owner_caps,
         "reason": None if ok else "SELECT_SWEEP_INVARIANT_FAIL",
@@ -198,9 +239,9 @@ def gate_b_move_preview(serial: str, captures: list) -> dict:
                 "PIXEL_MOVE_PREVIEW_BOUNDS_FAILURES": bounds_failure,
                 "failed_at_fighter": i,
             }
-        rpc.tap_roster_index(serial, i)
-        time.sleep(0.5)
-        rpc.confirm_fighter_select_into_battle(serial)
+        if not select_fighter_into_battle(serial, i):
+            bounds_failure += 1
+            continue
         time.sleep(2.5)
         if not rpc.ensure_aa_foreground(serial, f"gate_b_battle_{i}"):
             bounds_failure += 1
@@ -222,6 +263,7 @@ def gate_b_move_preview(serial: str, captures: list) -> dict:
         for _ in range(8):
             rpc.soft_back_in_aa(serial)
             time.sleep(0.25)
+        rpc.dismiss_select_overlays(serial)
         if not on_fighter_select(serial, attempts=5):
             return {
                 "PIXEL_GATE_B": "FAIL",
@@ -250,13 +292,38 @@ def dismiss_pause_or_move_list(serial: str) -> None:
         time.sleep(0.45)
 
 
+def dismiss_move_list_stuck(serial: str, path: Path | None = None) -> None:
+    """Dismiss Move List on Fighter Select (tap Close) or in-battle pause (ESC)."""
+    if path is None or not path.is_file():
+        name = "overlay_dismiss_check"
+        rpc.screencap(serial, name)
+        path = PIXEL / f"{name}.png"
+    if rpc.looks_like_select_overlay(path):
+        rpc.dismiss_select_overlays(serial)
+    else:
+        dismiss_pause_or_move_list(serial)
+
+
+def select_fighter_into_battle(serial: str, fighter_idx: int) -> bool:
+    """Tap roster tile and confirm — always clear select Move List overlay first."""
+    rpc.dismiss_select_overlays(serial)
+    rpc.tap_roster_index(serial, fighter_idx)
+    time.sleep(0.5)
+    rpc.dismiss_select_overlays(serial)
+    pre = rpc.screencap(serial, f"pre_confirm_{fighter_idx}")
+    pre_path = PIXEL / f"pre_confirm_{fighter_idx}.png"
+    if rpc.looks_like_select_overlay(pre_path):
+        rpc.dismiss_select_overlays(serial)
+        rpc.tap_roster_index(serial, fighter_idx)
+        time.sleep(0.5)
+    return rpc.confirm_fighter_select_into_battle(serial)
+
+
 def reenter_battle_from_select(serial: str, fighter_idx: int) -> bool:
     """Recover from title/menu into battle for a specific roster index."""
     if not on_fighter_select(serial, attempts=5):
         return False
-    rpc.tap_roster_index(serial, fighter_idx)
-    time.sleep(0.5)
-    return rpc.confirm_fighter_select_into_battle(serial)
+    return select_fighter_into_battle(serial, fighter_idx)
 
 
 def wait_for_battle_hud(
@@ -278,7 +345,13 @@ def wait_for_battle_hud(
             stable_hits = 0
             continue
         if any(m in text for m in ("move list", "command guide", "move preview", "playstyle:")):
-            dismiss_pause_or_move_list(serial)
+            on_select = rpc.looks_like_select_overlay(p) or (
+                "p1:" in text and ("toggle cpu" in text or "next" in text)
+            )
+            dismiss_move_list_stuck(serial, p)
+            if on_select and fighter_idx is not None:
+                select_fighter_into_battle(serial, fighter_idx)
+                reentered = True
             stable_hits = 0
             continue
         if rpc.looks_like_title(p) or rpc.looks_like_fighter_select(p) or rpc.looks_like_achievements(p):
@@ -351,9 +424,10 @@ def gate_c_battle_all(serial: str, captures: list) -> dict:
             body_missing += 1
             failed_fighters.append(i)
             continue
-        rpc.tap_roster_index(serial, i)
-        time.sleep(0.5)
-        rpc.confirm_fighter_select_into_battle(serial)
+        if not select_fighter_into_battle(serial, i):
+            body_missing += 1
+            failed_fighters.append(i)
+            continue
         time.sleep(1.0)
         if not wait_for_battle_hud(serial, f"gate_c_{i}", timeout=32, fighter_idx=i):
             body_missing += 1
@@ -515,9 +589,10 @@ def gate_d_victory(serial: str, captures: list) -> dict:
             missing += 1
             failed_fighters.append(i)
             continue
-        rpc.tap_roster_index(serial, i)
-        time.sleep(0.45)
-        rpc.confirm_fighter_select_into_battle(serial)
+        if not select_fighter_into_battle(serial, i):
+            missing += 1
+            failed_fighters.append(i)
+            continue
         time.sleep(1.0)
         if not wait_for_battle_hud(serial, f"gate_d_{i}", timeout=32, fighter_idx=i):
             missing += 1
