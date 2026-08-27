@@ -1,0 +1,114 @@
+{
+  "schema_version": 2,
+  "system": "GoldenVisualQA",
+  "wave": "WAVE022",
+  "extends": "wave021/ideal_state_specs.json",
+  "cursor_may_set_owner_approved_golden": false,
+  "ideal_states": [
+    {
+      "state_id": "ROOK_BASE_BATTLE",
+      "fighter_id": "rook-ironside",
+      "form_id": "ROOK_BASE",
+      "surface": "battle",
+      "semantic_contracts": ["fighter_present", "faceless_head", "body_scale_near_1", "material_identity_match"]
+    },
+    {
+      "state_id": "ROOK_ASCENDED_BATTLE",
+      "fighter_id": "rook-ironside",
+      "form_id": "ROOK_ASCENDED",
+      "surface": "battle",
+      "semantic_contracts": ["fighter_present", "faceless_head", "ascended_not_oversized", "body_scale_near_1"]
+    },
+    {
+      "state_id": "JUNO_BASE_BATTLE",
+      "fighter_id": "juno-spark",
+      "form_id": "JUNO_BASE",
+      "surface": "battle",
+      "semantic_contracts": ["fighter_present", "faceless_head", "body_scale_near_1", "material_identity_match"]
+    },
+    {
+      "state_id": "JUNO_ASCENDED_BATTLE",
+      "fighter_id": "juno-spark",
+      "form_id": "JUNO_ASCENDED",
+      "surface": "battle",
+      "semantic_contracts": ["fighter_present", "faceless_head", "ascended_not_oversized", "body_scale_near_1"]
+    },
+    {
+      "state_id": "KAIA_BASE_BATTLE",
+      "fighter_id": "kaia-windrow",
+      "form_id": "KAIA_BASE",
+      "surface": "battle",
+      "semantic_contracts": ["fighter_present", "faceless_head", "body_scale_near_1", "material_identity_match"]
+    },
+    {
+      "state_id": "KAIA_ASCENDED_BATTLE",
+      "fighter_id": "kaia-windrow",
+      "form_id": "KAIA_ASCENDED",
+      "surface": "battle",
+      "semantic_contracts": ["fighter_present", "faceless_head", "ascended_not_oversized", "body_scale_near_1"]
+    },
+    {
+      "state_id": "NIX_BASE_BATTLE",
+      "fighter_id": "nix-calder",
+      "form_id": "NIX_BASE",
+      "surface": "battle",
+      "semantic_contracts": ["fighter_present", "faceless_head", "body_scale_near_1", "material_identity_match"]
+    },
+    {
+      "state_id": "NIX_ASCENDED_BATTLE",
+      "fighter_id": "nix-calder",
+      "form_id": "NIX_ASCENDED",
+      "surface": "battle",
+      "semantic_contracts": ["fighter_present", "faceless_head", "ascended_not_oversized", "body_scale_near_1"]
+    },
+    {
+      "state_id": "ORION_BASE_BATTLE",
+      "fighter_id": "orion-vell",
+      "form_id": "ORION_BASE",
+      "surface": "battle",
+      "semantic_contracts": ["fighter_present", "faceless_head", "body_scale_near_1", "material_identity_match"]
+    },
+    {
+      "state_id": "ORION_ASCENDED_BATTLE",
+      "fighter_id": "orion-vell",
+      "form_id": "ORION_ASCENDED",
+      "surface": "battle",
+      "semantic_contracts": ["fighter_present", "faceless_head", "ascended_not_oversized", "body_scale_near_1"]
+    },
+    {
+      "state_id": "VESPER_BASE_BATTLE",
+      "fighter_id": "vesper-nyx",
+      "form_id": "VESPER_BASE",
+      "surface": "battle",
+      "semantic_contracts": ["fighter_present", "faceless_head", "body_scale_near_1", "material_identity_match"]
+    },
+    {
+      "state_id": "VESPER_ASCENDED_BATTLE",
+      "fighter_id": "vesper-nyx",
+      "form_id": "VESPER_ASCENDED",
+      "surface": "battle",
+      "semantic_contracts": ["fighter_present", "faceless_head", "ascended_not_oversized", "body_scale_near_1"]
+    },
+    {
+      "state_id": "FULL_ROSTER_MOVELIST_FORM",
+      "surface": "move_list",
+      "semantic_contracts": ["form_section_present", "transform_glyphs", "full_roster_coverage"]
+    },
+    {
+      "state_id": "FULL_ROSTER_VERSUS",
+      "surface": "versus",
+      "semantic_contracts": ["both_portraits_present", "context_isolated", "full_roster_identity"]
+    },
+    {
+      "state_id": "FULL_ROSTER_VICTORY",
+      "surface": "victory",
+      "semantic_contracts": ["fighter_present", "current_form_not_oversized", "faceless_head"]
+    }
+  ],
+  "failure_taxonomy_extensions": [
+    "ROSTER_FORM_MISSING",
+    "GENERIC_RECOLOR_ASCENSION",
+    "FIGHTER_IDENTITY_COLLAPSE"
+  ],
+  "OWNER_APPROVED_GOLDEN_COUNT": 0
+}

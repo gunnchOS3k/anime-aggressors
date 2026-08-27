@@ -1,0 +1,103 @@
+{
+  "fighter_id": "rook-ironside",
+  "schema_version": 1,
+  "ascension_runtime": true,
+  "default_form": "ROOK_BASE",
+  "form_ladder": ["ROOK_BASE", "ROOK_AWAKENED_BUILD", "ROOK_ASCENDED"],
+  "transform_rules": {
+    "require_aura_tier": 3,
+    "input": "shield_special_attack",
+    "pause_safe": true,
+    "min_aura_percent": 75.0
+  },
+  "forms": {
+    "ROOK_BASE": {
+      "form_id": "ROOK_BASE",
+      "display_name": "Rook Ironside",
+      "ladder_step": "BASE",
+      "body_scale": 1.0,
+      "head_presentation": "faceless_abstract_cap",
+      "aura_tier_visual_max": 3,
+      "idle_clip": "idle",
+      "transform_in_seconds": 0.0,
+      "presentation": {
+        "emission_strength": 0.12,
+        "aura_shape": "rings",
+        "element_accent": "#f28c28"
+      },
+      "move_overrides": {}
+    },
+    "ROOK_AWAKENED_BUILD": {
+      "form_id": "ROOK_AWAKENED_BUILD",
+      "display_name": "Rook Ironside — Awakened",
+      "ladder_step": "AWAKENED_BUILD",
+      "body_scale": 1.0,
+      "head_presentation": "faceless_abstract_cap",
+      "aura_tier_visual_max": 3,
+      "idle_clip": "idle",
+      "transform_in_seconds": 1.1,
+      "transform_in_clip": "aura_charge",
+      "presentation": {
+        "emission_strength": 0.42,
+        "aura_shape": "rings",
+        "element_accent": "#d47020"
+      },
+      "move_overrides": {
+        "jab_1": {
+          "damage": 3.5,
+          "training_display_name": "Plate Jab (Awakened)"
+        },
+        "forward_tilt": {
+          "damage": 8.2,
+          "training_display_name": "Basalt Lunge (Awakened)"
+        },
+        "neutral_special_projectile": {
+          "damage": 6.5,
+          "training_display_name": "Quake Shard (Awakened)"
+        }
+      }
+    },
+    "ROOK_ASCENDED": {
+      "form_id": "ROOK_ASCENDED",
+      "display_name": "Rook Ironside — Ascended",
+      "ladder_step": "ASCENDED",
+      "body_scale": 1.0,
+      "head_presentation": "faceless_abstract_cap",
+      "aura_tier_visual_max": 3,
+      "idle_clip": "idle",
+      "transform_in_seconds": 1.3,
+      "transform_in_clip": "signature_lane_burst",
+      "transformed_idle_clip": "aura_charge",
+      "presentation": {
+        "emission_strength": 0.68,
+        "aura_shape": "rings",
+        "element_accent": "#b85c18",
+        "ascended_glow": true,
+        "not_oversized": true
+      },
+      "move_overrides": {
+        "jab_1": {
+          "damage": 4.2,
+          "training_display_name": "Ascended Plate Jab"
+        },
+        "forward_tilt": {
+          "damage": 10.5,
+          "training_display_name": "Ascended Basalt Lunge"
+        },
+        "neutral_special_projectile": {
+          "damage": 9.0,
+          "training_display_name": "Ascended Quake Shard",
+          "projectile": {
+            "speed_mult": 0.95,
+            "lifetime_frames": 100
+          }
+        },
+        "aura_burst": {
+          "damage": 16.0,
+          "training_display_name": "Faultline Breaker Ascended",
+          "presentation": "signature"
+        }
+      }
+    }
+  }
+}

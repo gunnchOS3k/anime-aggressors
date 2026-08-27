@@ -359,6 +359,7 @@ def main() -> int:
     registry = load_json(REGISTRY)
     playbook = load_json(PLAYBOOK)
     wave021_specs = load_json(ROOT / "artifacts" / "visual_qa" / "wave021" / "ideal_state_specs.json")
+    wave022_specs = load_json(ROOT / "artifacts" / "visual_qa" / "wave022" / "ideal_state_specs.json")
     if not registry or not playbook:
         print("FAIL: missing registry or playbook", file=sys.stderr)
         return 2
@@ -402,6 +403,8 @@ def main() -> int:
         "schema_version": 2,
         "wave021_ideal_states": wave021_specs.get("ideal_states", []),
         "wave021_failure_taxonomy_extensions": wave021_specs.get("failure_taxonomy_extensions", []),
+        "wave022_ideal_states": wave022_specs.get("ideal_states", []),
+        "wave022_failure_taxonomy_extensions": wave022_specs.get("failure_taxonomy_extensions", []),
         "head_sha": git_sha(),
         "emitted_at": utc_now(),
         "non_invasive": True,

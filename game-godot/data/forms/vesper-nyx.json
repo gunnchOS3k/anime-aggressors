@@ -1,0 +1,103 @@
+{
+  "fighter_id": "vesper-nyx",
+  "schema_version": 1,
+  "ascension_runtime": true,
+  "default_form": "VESPER_BASE",
+  "form_ladder": ["VESPER_BASE", "VESPER_AWAKENED_BUILD", "VESPER_ASCENDED"],
+  "transform_rules": {
+    "require_aura_tier": 3,
+    "input": "shield_special_attack",
+    "pause_safe": true,
+    "min_aura_percent": 75.0
+  },
+  "forms": {
+    "VESPER_BASE": {
+      "form_id": "VESPER_BASE",
+      "display_name": "Vesper Nyx",
+      "ladder_step": "BASE",
+      "body_scale": 1.0,
+      "head_presentation": "faceless_abstract_cap",
+      "aura_tier_visual_max": 3,
+      "idle_clip": "idle",
+      "transform_in_seconds": 0.0,
+      "presentation": {
+        "emission_strength": 0.11,
+        "aura_shape": "smoke",
+        "element_accent": "#9b59b6"
+      },
+      "move_overrides": {}
+    },
+    "VESPER_AWAKENED_BUILD": {
+      "form_id": "VESPER_AWAKENED_BUILD",
+      "display_name": "Vesper Nyx — Awakened",
+      "ladder_step": "AWAKENED_BUILD",
+      "body_scale": 1.0,
+      "head_presentation": "faceless_abstract_cap",
+      "aura_tier_visual_max": 3,
+      "idle_clip": "idle",
+      "transform_in_seconds": 1.0,
+      "transform_in_clip": "aura_charge",
+      "presentation": {
+        "emission_strength": 0.38,
+        "aura_shape": "smoke",
+        "element_accent": "#b07cc8"
+      },
+      "move_overrides": {
+        "jab_1": {
+          "damage": 2.7,
+          "training_display_name": "Void Jab (Awakened)"
+        },
+        "forward_tilt": {
+          "damage": 6.4,
+          "training_display_name": "Shadow Lunge (Awakened)"
+        },
+        "neutral_special_projectile": {
+          "damage": 5.6,
+          "training_display_name": "Null Bolt (Awakened)"
+        }
+      }
+    },
+    "VESPER_ASCENDED": {
+      "form_id": "VESPER_ASCENDED",
+      "display_name": "Vesper Nyx — Ascended",
+      "ladder_step": "ASCENDED",
+      "body_scale": 1.0,
+      "head_presentation": "faceless_abstract_cap",
+      "aura_tier_visual_max": 3,
+      "idle_clip": "idle",
+      "transform_in_seconds": 1.15,
+      "transform_in_clip": "signature_lane_burst",
+      "transformed_idle_clip": "aura_charge",
+      "presentation": {
+        "emission_strength": 0.62,
+        "aura_shape": "smoke",
+        "element_accent": "#c99ee0",
+        "ascended_glow": true,
+        "not_oversized": true
+      },
+      "move_overrides": {
+        "jab_1": {
+          "damage": 3.3,
+          "training_display_name": "Ascended Void Jab"
+        },
+        "forward_tilt": {
+          "damage": 7.9,
+          "training_display_name": "Ascended Shadow Lunge"
+        },
+        "neutral_special_projectile": {
+          "damage": 7.2,
+          "training_display_name": "Ascended Null Bolt",
+          "projectile": {
+            "speed_mult": 1.20,
+            "lifetime_frames": 80
+          }
+        },
+        "aura_burst": {
+          "damage": 13.8,
+          "training_display_name": "Null Step Ascended",
+          "presentation": "signature"
+        }
+      }
+    }
+  }
+}
