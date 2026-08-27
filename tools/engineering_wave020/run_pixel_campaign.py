@@ -128,7 +128,19 @@ def launch_app(serial: str) -> bool:
          "-a", "android.intent.action.MAIN", "-c", "android.intent.category.LAUNCHER"],
         timeout=60,
     )
-    time.sleep(4.0)
+    # Cold Godot start + occasional adb dumpsys lag after reconnect.
+    for wait_s in (4.0, 2.0, 2.0, 2.0):
+        time.sleep(wait_s)
+        fg = foreground_package(serial)
+        if PKG in fg:
+            return True
+        if pidof(serial):
+            # Process up but focus probe lagged — try bring-to-front once.
+            bring_aa_to_front(serial)
+            time.sleep(1.0)
+            fg = foreground_package(serial)
+            if PKG in fg:
+                return True
     fg = foreground_package(serial)
     if PKG not in fg and not pidof(serial):
         print(f"LAUNCH FAIL: expected {PKG}, foreground={fg!r}, am={r.stdout}{r.stderr}")

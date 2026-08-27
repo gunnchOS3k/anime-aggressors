@@ -297,6 +297,30 @@ def wait_for_battle_hud(
     return False
 
 
+def wait_for_adb_device(serial: str, timeout_s: float = 45.0) -> bool:
+    """Wait out transient 'unauthorized' / missing device after USB prompts."""
+    deadline = time.time() + timeout_s
+    while time.time() < deadline:
+        out = rpc.adb(["devices"]).stdout
+        for line in out.splitlines():
+            if serial in line and "\tdevice" in line:
+                return True
+        time.sleep(2.0)
+    return False
+
+
+def launch_with_retry(serial: str, attempts: int = 5) -> bool:
+    """Launch AA with short retries (handles transient adb unauthorized/disconnect)."""
+    for attempt in range(attempts):
+        if not wait_for_adb_device(serial, timeout_s=20.0 if attempt else 5.0):
+            print(f"adb wait failed for {serial} (attempt {attempt})")
+            continue
+        if rpc.launch_app(serial):
+            return True
+        time.sleep(1.5 + attempt)
+    return False
+
+
 def gate_c_battle_all(serial: str, captures: list) -> dict:
     overscale = 0
     stage_clip = 0
@@ -305,13 +329,21 @@ def gate_c_battle_all(serial: str, captures: list) -> dict:
     owner_caps: list[str] = []
     failed_fighters: list[int] = []
 
-    rpc.launch_app(serial)
-    time.sleep(1.0)
+    if not launch_with_retry(serial):
+        return {
+            "PIXEL_GATE_C": "FAIL",
+            "reason": "LAUNCH_FAILED",
+            "PIXEL_BATTLE_OVERSCALE_CASES": 0,
+            "PIXEL_BATTLE_STAGE_CLIP_CASES": 0,
+            "PIXEL_BATTLE_MATERIAL_MISMATCHES": 0,
+            "PIXEL_BATTLE_BODY_MISSING_CASES": 7,
+            "failed_fighters_gate_c": list(ROSTER),
+        }
 
     for i in ROSTER:
         rpc.adb(["-s", serial, "shell", "am", "force-stop", PKG])
         time.sleep(0.4)
-        if not rpc.launch_app(serial):
+        if not launch_with_retry(serial):
             body_missing += 1
             failed_fighters.append(i)
             continue
@@ -384,7 +416,7 @@ def gate_d_victory(serial: str, captures: list) -> dict:
     for i in ROSTER:
         rpc.adb(["-s", serial, "shell", "am", "force-stop", PKG])
         time.sleep(0.4)
-        if not rpc.launch_app(serial):
+        if not launch_with_retry(serial):
             missing += 1
             failed_fighters.append(i)
             continue
