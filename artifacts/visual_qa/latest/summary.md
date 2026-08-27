@@ -1,6 +1,6 @@
 # GoldenVisualQA PASS
 
-- head: `21247729fda1ae2c3758da04e061d6c0dd752b4c`
+- head: `d7a65b8740c6674883780ad10d059c888ddd5c1b`
 - states: 20
 - engineering references: 20
 - owner-approved goldens: 0 (Cursor never sets)
