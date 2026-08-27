@@ -243,19 +243,33 @@ def gate_b_move_preview(serial: str, captures: list) -> dict:
     }
 
 
-def wait_for_battle_hud(serial: str, tag: str, timeout: int = 16) -> bool:
+def wait_for_battle_hud(serial: str, tag: str, timeout: int = 28) -> bool:
+    """Poll until in-fight HUD visible; retry stage confirm if stuck on stage select."""
+    stable_hits = 0
     for tick in range(timeout):
         time.sleep(0.5)
         rpc.screencap(serial, f"{tag}_battle_wait_{tick}")
         p = PIXEL / f"{tag}_battle_wait_{tick}.png"
         text = rpc.ocr_text(p)
-        if "move list" in text or "command guide" in text:
-            for _ in range(3):
-                rpc.soft_back_in_aa(serial)
-                time.sleep(0.2)
+        if "stage select" in text or "confirm stage" in text:
+            rpc.tap_confirm_stage(serial)
+            stable_hits = 0
+            continue
+        if any(m in text for m in ("move list", "command guide", "move preview", "playstyle:")):
+            # Pause/move-list bleed — dismiss without leaving AA.
+            rpc.key(serial, "66")
+            time.sleep(0.35)
+            rpc.soft_back_in_aa(serial)
+            time.sleep(0.35)
+            stable_hits = 0
             continue
         if looks_like_fight_hud(p):
-            return True
+            stable_hits += 1
+            if stable_hits >= 2:
+                time.sleep(0.8)
+                return True
+            continue
+        stable_hits = 0
     return False
 
 
@@ -265,6 +279,7 @@ def gate_c_battle_all(serial: str, captures: list) -> dict:
     material_mismatch = 0
     body_missing = 0
     owner_caps: list[str] = []
+    failed_fighters: list[int] = []
 
     rpc.launch_app(serial)
     time.sleep(1.0)
@@ -274,34 +289,44 @@ def gate_c_battle_all(serial: str, captures: list) -> dict:
         time.sleep(0.4)
         if not rpc.launch_app(serial):
             body_missing += 1
+            failed_fighters.append(i)
             continue
         if not on_fighter_select(serial, attempts=5):
             body_missing += 1
+            failed_fighters.append(i)
             continue
         rpc.tap_roster_index(serial, i)
         time.sleep(0.5)
         rpc.confirm_fighter_select_into_battle(serial)
         time.sleep(1.0)
-        if not wait_for_battle_hud(serial, f"gate_c_{i}", timeout=24):
+        if not wait_for_battle_hud(serial, f"gate_c_{i}", timeout=28):
             body_missing += 1
+            failed_fighters.append(i)
             continue
         name = f"gate_c_battle_{i}"
         c = rpc.screencap(serial, name)
         captures.append(c)
         p = PIXEL / f"{name}.png"
-        if i in (0, 3, 6):
-            owner_name = f"owner_battle_{i}"
-            (OWNER / f"{owner_name}.png").write_bytes(p.read_bytes())
-            owner_caps.append(owner_name)
+        OWNER.mkdir(parents=True, exist_ok=True)
+        owner_name = f"owner_battle_{i}"
+        (OWNER / f"{owner_name}.png").write_bytes(p.read_bytes())
+        owner_caps.append(owner_name)
         text = rpc.ocr_text(p)
-        if "move list" in text or not looks_like_fight_hud(p):
-            body_missing += 1
+        fighter_fail = False
+        if any(m in text for m in ("move list", "command guide", "move preview", "playstyle:")):
+            fighter_fail = True
+        elif not looks_like_fight_hud(p):
+            fighter_fail = True
         else:
             a = analyze_stage_colorful(p)
             if a.get("bodies_likely_absent"):
-                body_missing += 1
+                fighter_fail = True
             if float(a.get("stage_colorful_pct", 0)) > 50.0:
                 overscale += 1
+                fighter_fail = True
+        if fighter_fail:
+            body_missing += 1
+            failed_fighters.append(i)
         for _ in range(6):
             rpc.soft_back_in_aa(serial)
             time.sleep(0.25)
@@ -314,6 +339,7 @@ def gate_c_battle_all(serial: str, captures: list) -> dict:
         "PIXEL_BATTLE_STAGE_CLIP_CASES": stage_clip,
         "PIXEL_BATTLE_MATERIAL_MISMATCHES": material_mismatch,
         "PIXEL_BATTLE_BODY_MISSING_CASES": body_missing,
+        "failed_fighters_gate_c": failed_fighters,
         "owner_captures": owner_caps,
         "reason": None if ok else "BATTLE_INVARIANT_FAIL",
     }
@@ -324,20 +350,33 @@ def gate_d_victory(serial: str, captures: list) -> dict:
     missing = 0
     owner_caps: list[str] = []
     attempted = 0
+    failed_fighters: list[int] = []
 
     for i in ROSTER:
-        if not ensure_select(serial, f"gate_d_{i}"):
+        rpc.adb(["-s", serial, "shell", "am", "force-stop", PKG])
+        time.sleep(0.4)
+        if not rpc.launch_app(serial):
             missing += 1
+            failed_fighters.append(i)
+            continue
+        if not on_fighter_select(serial, attempts=5):
+            missing += 1
+            failed_fighters.append(i)
             continue
         rpc.tap_roster_index(serial, i)
         time.sleep(0.45)
         rpc.confirm_fighter_select_into_battle(serial)
-        time.sleep(2.0)
+        time.sleep(1.0)
+        if not wait_for_battle_hud(serial, f"gate_d_{i}", timeout=28):
+            missing += 1
+            failed_fighters.append(i)
+            continue
+        attempted += 1
         # Light damage spam — may not always KO within budget
-        for _ in range(24):
+        for _ in range(36):
             rpc.tap(serial, 900, int(rpc.display_wh(serial)[1] * 0.82))
             time.sleep(0.15)
-        attempted += 1
+        time.sleep(1.0)
         name = f"gate_d_post_{i}"
         c = rpc.screencap(serial, name)
         captures.append(c)
@@ -348,18 +387,17 @@ def gate_d_victory(serial: str, captures: list) -> dict:
             owner_caps.append(owner_name)
         else:
             missing += 1
+            failed_fighters.append(i)
         for _ in range(8):
             rpc.soft_back_in_aa(serial)
             time.sleep(0.2)
-        rpc.navigate_to_fighter_select(serial)
-        time.sleep(0.6)
 
-    # Practical gate: require at least 3 victory captures + no crash
     ok = missing <= 4 and attempted >= 5
     return {
         "PIXEL_GATE_D": "PASS" if ok else "FAIL",
         "PIXEL_VICTORY_MISSING_CASES": missing,
         "PIXEL_VICTORY_ATTEMPTED": attempted,
+        "failed_fighters_gate_d": failed_fighters,
         "owner_captures": owner_caps,
         "reason": None if ok else "VICTORY_INCOMPLETE",
         "note": "Practical gate: ≥3 victory screens or ≤4 misses across 7 attempts",

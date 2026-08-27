@@ -175,19 +175,8 @@ def looks_like_victory_screen(path: Path) -> bool:
 
 
 def looks_like_fight_hud(path: Path) -> bool:
-    text = ocr_text(path)
-    if not text:
-        return False
-    if looks_like_victory_screen(path):
-        return False
-    if "move list" in text or "command guide" in text:
-        return False
-    if "stage select" in text or "confirm stage" in text:
-        return False
-    if looks_like_fighter_select(path):
-        return False
-
-    return bool(re.search(r"\d:\d{2}", text)) or "fight!" in text or "versus" in text or "aura" in text
+    """Delegate to campaign battle HUD detector (avoids select false-positive)."""
+    return rpc.looks_like_battle_hud(path)
 
 
 def battle_hud_fighters(path: Path) -> tuple[str, str]:

@@ -20,6 +20,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import subprocess
 import time
 from datetime import datetime, timezone
@@ -238,10 +239,46 @@ def looks_like_rulesets(path: Path) -> bool:
     )
 
 
+def looks_like_battle_hud(path: Path) -> bool:
+    """True when OCR shows in-fight HUD (timer/stocks/aura), not select/move-list."""
+    text = ocr_text(path)
+    if not text:
+        return False
+    reject = (
+        "move list",
+        "command guide",
+        "move preview",
+        "ve preview",
+        "playstyle:",
+        "difficulty:",
+        "stage select",
+        "confirm stage",
+        "toggle cpu",
+        "showcase",
+        "next / confirm",
+        "next/confirm",
+        "face-off",
+        "p1:",
+        "p2:",
+        "fighter select",
+    )
+    if any(m in text for m in reject):
+        return False
+    has_timer = bool(re.search(r"\d:\d{2}", text))
+    has_aura = "aura" in text
+    has_fight = "fight!" in text or "versus" in text
+    # Loading screens often OCR as a single partial fighter name.
+    if len(text.strip()) < 24 and not has_timer and not has_fight:
+        return False
+    return has_timer or has_fight or has_aura
+
+
 def looks_like_fighter_select(path: Path) -> bool:
     """True when OCR shows Fighter Select chrome (reject Rulesets-only frames)."""
     text = ocr_text(path)
     if text:
+        if looks_like_battle_hud(path):
+            return False
         if looks_like_rulesets(path):
             return False
         roster_hits = sum(1 for n in ROSTER_OCR_NAMES if n in text)
@@ -466,6 +503,21 @@ def find_label_tap(path: Path, *needles: str, max_top: int = 1000) -> tuple[int,
     return hits[-1][1], hits[-1][2]
 
 
+def tap_confirm_stage(serial: str) -> None:
+    """OCR-locate Confirm Stage and accept (PR #94 battle-entry pattern)."""
+    cap = screencap(serial, "nav_confirm_stage")
+    path = PIXEL / "nav_confirm_stage.png"
+    xy = find_label_tap(path, "confirm", "stage", max_top=1080) if path.is_file() else None
+    if xy is None and path.is_file():
+        xy = find_label_tap(path, "confirm", max_top=1080)
+    w, h = display_wh(serial)
+    x, y = xy or (w // 2, int(h * 0.94))
+    tap(serial, x, y)
+    time.sleep(0.5)
+    key(serial, "66")
+    time.sleep(1.0)
+
+
 def confirm_fighter_select_into_battle(serial: str) -> bool:
     """P1 Next → P2 Next → Confirm Stage → versus/battle.
 
@@ -475,7 +527,6 @@ def confirm_fighter_select_into_battle(serial: str) -> bool:
     if not ensure_aa_foreground(serial, "confirm_select_pre"):
         return False
     fallback_next = (360, 941)
-    fallback_stage = (1200, 980)
     for step in ("p1", "p2"):
         cap = screencap(serial, f"nav_confirm_{step}")
         path = PIXEL / f"nav_confirm_{step}.png"
@@ -483,18 +534,7 @@ def confirm_fighter_select_into_battle(serial: str) -> bool:
         x, y = xy or fallback_next
         tap(serial, x, y)
         time.sleep(0.7)
-    cap = screencap(serial, "nav_confirm_stage")
-    path = PIXEL / "nav_confirm_stage.png"
-    xy = find_label_tap(path, "confirm", "stage") if path.is_file() else None
-    if xy is None and path.is_file():
-        # Stage button is often "Confirm Stage" — match stage alone
-        xy = find_label_tap(path, "stage")
-    x, y = xy or fallback_stage
-    tap(serial, x, y)
-    time.sleep(0.6)
-    for _ in range(4):
-        key(serial, "66")
-        time.sleep(0.4)
+    tap_confirm_stage(serial)
     return ensure_aa_foreground(serial, "confirm_select_post")
 
 
