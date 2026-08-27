@@ -30,6 +30,13 @@ MATERIAL_CLASSES = {
     "STALE_INSTANCE",
     "CONTEXT_STATE_LEAK",
     "OFFSCREEN",
+    # Wave021 v2 extensions
+    "FACE_LEAK_REALISTIC",
+    "ASCENDED_OVERSCALE",
+    "FORM_STATE_MISMATCH",
+    "TRANSFORM_SCALE_LEAK",
+    "AURA_TIER_AUDIO_MISSING",
+    "FORM_SECTION_MISSING",
 }
 
 
@@ -351,6 +358,7 @@ def main() -> int:
 
     registry = load_json(REGISTRY)
     playbook = load_json(PLAYBOOK)
+    wave021_specs = load_json(ROOT / "artifacts" / "visual_qa" / "wave021" / "ideal_state_specs.json")
     if not registry or not playbook:
         print("FAIL: missing registry or playbook", file=sys.stderr)
         return 2
@@ -391,7 +399,9 @@ def main() -> int:
 
     report = {
         "GOLDEN_VISUAL_QA": "PASS" if ok else "FAIL",
-        "schema_version": 1,
+        "schema_version": 2,
+        "wave021_ideal_states": wave021_specs.get("ideal_states", []),
+        "wave021_failure_taxonomy_extensions": wave021_specs.get("failure_taxonomy_extensions", []),
         "head_sha": git_sha(),
         "emitted_at": utc_now(),
         "non_invasive": True,
