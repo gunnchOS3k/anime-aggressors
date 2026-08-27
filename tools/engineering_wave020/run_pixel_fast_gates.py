@@ -243,9 +243,31 @@ def gate_b_move_preview(serial: str, captures: list) -> dict:
     }
 
 
-def wait_for_battle_hud(serial: str, tag: str, timeout: int = 28) -> bool:
-    """Poll until in-fight HUD visible; retry stage confirm if stuck on stage select."""
+def dismiss_pause_or_move_list(serial: str) -> None:
+    """Close pause/move-list with ESC only — never soft_back (that exits to title)."""
+    for _ in range(3):
+        rpc.key(serial, "KEYCODE_ESCAPE")
+        time.sleep(0.45)
+
+
+def reenter_battle_from_select(serial: str, fighter_idx: int) -> bool:
+    """Recover from title/menu into battle for a specific roster index."""
+    if not on_fighter_select(serial, attempts=5):
+        return False
+    rpc.tap_roster_index(serial, fighter_idx)
+    time.sleep(0.5)
+    return rpc.confirm_fighter_select_into_battle(serial)
+
+
+def wait_for_battle_hud(
+    serial: str,
+    tag: str,
+    timeout: int = 28,
+    fighter_idx: int | None = None,
+) -> bool:
+    """Poll until in-fight HUD visible; retry stage confirm / re-enter if stuck."""
     stable_hits = 0
+    reentered = False
     for tick in range(timeout):
         time.sleep(0.5)
         rpc.screencap(serial, f"{tag}_battle_wait_{tick}")
@@ -256,11 +278,13 @@ def wait_for_battle_hud(serial: str, tag: str, timeout: int = 28) -> bool:
             stable_hits = 0
             continue
         if any(m in text for m in ("move list", "command guide", "move preview", "playstyle:")):
-            # Pause/move-list bleed — dismiss without leaving AA.
-            rpc.key(serial, "66")
-            time.sleep(0.35)
-            rpc.soft_back_in_aa(serial)
-            time.sleep(0.35)
+            dismiss_pause_or_move_list(serial)
+            stable_hits = 0
+            continue
+        if rpc.looks_like_title(p) or rpc.looks_like_fighter_select(p) or rpc.looks_like_achievements(p):
+            if fighter_idx is not None and not reentered:
+                reenter_battle_from_select(serial, fighter_idx)
+                reentered = True
             stable_hits = 0
             continue
         if looks_like_fight_hud(p):
@@ -299,7 +323,7 @@ def gate_c_battle_all(serial: str, captures: list) -> dict:
         time.sleep(0.5)
         rpc.confirm_fighter_select_into_battle(serial)
         time.sleep(1.0)
-        if not wait_for_battle_hud(serial, f"gate_c_{i}", timeout=28):
+        if not wait_for_battle_hud(serial, f"gate_c_{i}", timeout=32, fighter_idx=i):
             body_missing += 1
             failed_fighters.append(i)
             continue
@@ -314,6 +338,14 @@ def gate_c_battle_all(serial: str, captures: list) -> dict:
         text = rpc.ocr_text(p)
         fighter_fail = False
         if any(m in text for m in ("move list", "command guide", "move preview", "playstyle:")):
+            dismiss_pause_or_move_list(serial)
+            time.sleep(0.5)
+            c = rpc.screencap(serial, name)
+            captures.append(c)
+            p = PIXEL / f"{name}.png"
+            (OWNER / f"{owner_name}.png").write_bytes(p.read_bytes())
+            text = rpc.ocr_text(p)
+        if any(m in text for m in ("move list", "command guide", "move preview", "playstyle:")):
             fighter_fail = True
         elif not looks_like_fight_hud(p):
             fighter_fail = True
@@ -327,10 +359,7 @@ def gate_c_battle_all(serial: str, captures: list) -> dict:
         if fighter_fail:
             body_missing += 1
             failed_fighters.append(i)
-        for _ in range(6):
-            rpc.soft_back_in_aa(serial)
-            time.sleep(0.25)
-        on_fighter_select(serial, attempts=5)
+        # Force-stop next iteration; avoid soft_back chain that lands on title.
 
     ok = overscale == 0 and stage_clip == 0 and material_mismatch == 0 and body_missing == 0
     return {
@@ -367,7 +396,7 @@ def gate_d_victory(serial: str, captures: list) -> dict:
         time.sleep(0.45)
         rpc.confirm_fighter_select_into_battle(serial)
         time.sleep(1.0)
-        if not wait_for_battle_hud(serial, f"gate_d_{i}", timeout=28):
+        if not wait_for_battle_hud(serial, f"gate_d_{i}", timeout=32, fighter_idx=i):
             missing += 1
             failed_fighters.append(i)
             continue
@@ -388,9 +417,7 @@ def gate_d_victory(serial: str, captures: list) -> dict:
         else:
             missing += 1
             failed_fighters.append(i)
-        for _ in range(8):
-            rpc.soft_back_in_aa(serial)
-            time.sleep(0.2)
+        # Next fighter force-stops; avoid soft_back → title.
 
     ok = missing <= 4 and attempted >= 5
     return {
