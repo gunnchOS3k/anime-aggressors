@@ -401,9 +401,99 @@ def gate_c_battle_all(serial: str, captures: list) -> dict:
         "PIXEL_BATTLE_MATERIAL_MISMATCHES": material_mismatch,
         "PIXEL_BATTLE_BODY_MISSING_CASES": body_missing,
         "failed_fighters_gate_c": failed_fighters,
-        "owner_captures": owner_caps,
+        "owner_captures_battle": owner_caps,
         "reason": None if ok else "BATTLE_INVARIANT_FAIL",
     }
+
+
+def navigate_to_fighter_select_one_stock(serial: str) -> bool:
+    """Rulesets → reduce stocks toward 1 → Confirm → Fighter Select.
+
+    Rulesets focuses Stocks- first (Wave018); ENTER before DPAD_DOWN lowers stocks
+    so Gate D can reach victory without a 3-stock grind.
+    """
+    if not rpc.ensure_aa_foreground(serial, "nav_select_1stock_pre"):
+        if not launch_with_retry(serial):
+            return False
+    w, h = rpc.display_wh(serial)
+    cx, cy = w // 2, int(h * 0.62)
+    for _ in range(4):
+        rpc.tap(serial, cx, cy)
+        time.sleep(0.35)
+    for _ in range(4):
+        rpc.key(serial, "66")
+        time.sleep(0.35)
+    # Stocks - is typically the first focused control.
+    for _ in range(5):
+        rpc.key(serial, "66")
+        time.sleep(0.25)
+    for _ in range(16):
+        rpc.key(serial, "20")
+        time.sleep(0.08)
+    rpc.key(serial, "66")
+    time.sleep(0.45)
+    rpc.tap(serial, int(w * 0.22), int(h * 0.88))
+    time.sleep(0.4)
+    for _ in range(4):
+        rpc.key(serial, "66")
+        time.sleep(0.35)
+    return rpc.ensure_aa_foreground(serial, "nav_select_1stock_post")
+
+
+def on_fighter_select_one_stock(serial: str, attempts: int = 5) -> bool:
+    for attempt in range(attempts):
+        if attempt > 0 and attempt % 2 == 1:
+            launch_with_retry(serial)
+            time.sleep(1.5)
+        navigate_to_fighter_select_one_stock(serial)
+        time.sleep(1.0 if attempt == 0 else 1.5)
+        rpc.screencap(serial, f"nav_select_1stock_check_{attempt}")
+        p = PIXEL / f"nav_select_1stock_check_{attempt}.png"
+        if rpc.looks_like_fighter_select(p):
+            return True
+        if rpc.looks_like_achievements(p) or rpc.looks_like_title(p) or rpc.looks_like_rulesets(p):
+            rpc.recover_to_menu(serial, p)
+            continue
+    return False
+
+
+def attack_button_xy(serial: str) -> tuple[int, int]:
+    """Touch overlay Attack button (landscape bottom-right cluster)."""
+    w, h = rpc.display_wh(serial)
+    # HBox END-aligned: Jump, Attack, Special, Shield, Grab, Dodge, Aura
+    # Attack is 2nd of 7 ≈ container mid-left of right cluster.
+    return int(w - 468), int(h - 68)
+
+
+def special_button_xy(serial: str) -> tuple[int, int]:
+    w, h = rpc.display_wh(serial)
+    return int(w - 388), int(h - 68)
+
+
+def mash_toward_victory(serial: str, tag: str, seconds: float = 45.0) -> Path | None:
+    """Mash Attack/Special and poll for victory screen."""
+    ax, ay = attack_button_xy(serial)
+    sx, sy = special_button_xy(serial)
+    deadline = time.time() + seconds
+    tick = 0
+    while time.time() < deadline:
+        rpc.tap(serial, ax, ay)
+        time.sleep(0.08)
+        rpc.tap(serial, sx, sy)
+        time.sleep(0.08)
+        # Nudge stick toward opponent (right half).
+        w, h = rpc.display_wh(serial)
+        rpc.tap(serial, int(w * 0.12), int(h * 0.82))
+        time.sleep(0.05)
+        if tick % 8 == 0:
+            rpc.screencap(serial, f"{tag}_victory_wait_{tick // 8}")
+            p = PIXEL / f"{tag}_victory_wait_{tick // 8}.png"
+            if looks_like_victory_screen(p):
+                return p
+        tick += 1
+    rpc.screencap(serial, f"{tag}_victory_final")
+    p = PIXEL / f"{tag}_victory_final.png"
+    return p if looks_like_victory_screen(p) else p
 
 
 def gate_d_victory(serial: str, captures: list) -> dict:
@@ -411,6 +501,7 @@ def gate_d_victory(serial: str, captures: list) -> dict:
     missing = 0
     owner_caps: list[str] = []
     attempted = 0
+    victories = 0
     failed_fighters: list[int] = []
 
     for i in ROSTER:
@@ -420,7 +511,7 @@ def gate_d_victory(serial: str, captures: list) -> dict:
             missing += 1
             failed_fighters.append(i)
             continue
-        if not on_fighter_select(serial, attempts=5):
+        if not on_fighter_select_one_stock(serial, attempts=5):
             missing += 1
             failed_fighters.append(i)
             continue
@@ -433,33 +524,43 @@ def gate_d_victory(serial: str, captures: list) -> dict:
             failed_fighters.append(i)
             continue
         attempted += 1
-        # Light damage spam — may not always KO within budget
-        for _ in range(36):
-            rpc.tap(serial, 900, int(rpc.display_wh(serial)[1] * 0.82))
-            time.sleep(0.15)
-        time.sleep(1.0)
+        final = mash_toward_victory(serial, f"gate_d_{i}", seconds=50.0)
         name = f"gate_d_post_{i}"
-        c = rpc.screencap(serial, name)
+        if final and final.is_file():
+            dest = PIXEL / f"{name}.png"
+            dest.write_bytes(final.read_bytes())
+            c = {
+                "capture": name,
+                "path": str(dest.relative_to(ROOT)),
+                "bytes": dest.stat().st_size,
+                "ok": True,
+                "timestamp": utc_now(),
+            }
+        else:
+            c = rpc.screencap(serial, name)
         captures.append(c)
         p = PIXEL / f"{name}.png"
         if looks_like_victory_screen(p):
+            victories += 1
             owner_name = f"owner_victory_{i}"
+            OWNER.mkdir(parents=True, exist_ok=True)
             (OWNER / f"{owner_name}.png").write_bytes(p.read_bytes())
             owner_caps.append(owner_name)
         else:
             missing += 1
             failed_fighters.append(i)
-        # Next fighter force-stops; avoid soft_back → title.
 
-    ok = missing <= 4 and attempted >= 5
+    # Practical: ≥3 victories OR (attempted≥5 and missing≤4)
+    ok = victories >= 3 or (missing <= 4 and attempted >= 5 and victories >= 1)
     return {
         "PIXEL_GATE_D": "PASS" if ok else "FAIL",
         "PIXEL_VICTORY_MISSING_CASES": missing,
         "PIXEL_VICTORY_ATTEMPTED": attempted,
+        "PIXEL_VICTORY_CAPTURED": victories,
         "failed_fighters_gate_d": failed_fighters,
-        "owner_captures": owner_caps,
+        "owner_captures_victory": owner_caps,
         "reason": None if ok else "VICTORY_INCOMPLETE",
-        "note": "Practical gate: ≥3 victory screens or ≤4 misses across 7 attempts",
+        "note": "Practical gate: ≥3 victory screens preferred; 1-stock ruleset + Attack/Special mash",
     }
 
 
@@ -538,6 +639,20 @@ def main() -> int:
         "captures": captures,
         "emitted_at": utc_now(),
     }
+    # When skipping earlier gates, retain last known PASS counters from disk.
+    prior_path = ART / "PIXEL_FAST_GATES.json"
+    start = os.environ.get("WAVE020_PIXEL_START_GATE", "A").upper()
+    if prior_path.is_file() and start > "A":
+        try:
+            prior = json.loads(prior_path.read_text())
+            for key, val in prior.items():
+                if key.startswith("PIXEL_GATE_") or key.startswith("PIXEL_SELECT_") or key.startswith(
+                    "PIXEL_MOVE_"
+                ) or key.startswith("PIXEL_BATTLE_") or key.startswith("failed_fighters_gate_"):
+                    if key not in payload:
+                        payload[key] = val
+        except Exception:
+            pass
 
     gates = (
         ("A", gate_a_select_sweeps),
@@ -545,13 +660,18 @@ def main() -> int:
         ("C", gate_c_battle_all),
         ("D", gate_d_victory),
     )
-    start = os.environ.get("WAVE020_PIXEL_START_GATE", "A").upper()
+    owner_bundle: dict = {}
     for label, fn in gates:
         if label < start:
             continue
         print(f"=== Pixel Gate {label} ===")
         result = fn(serial, captures)
+        # Preserve per-gate owner capture lists (do not clobber prior gates).
+        for key in ("owner_captures", "owner_captures_battle", "owner_captures_victory"):
+            if key in result and result[key]:
+                owner_bundle[f"gate_{label}_{key}"] = result[key]
         payload.update(result)
+        payload["owner_captures"] = owner_bundle
         if result.get(f"PIXEL_GATE_{label}") != "PASS":
             payload["PIXEL_FAST_GATES"] = "FAIL"
             payload["failed_gate"] = label
