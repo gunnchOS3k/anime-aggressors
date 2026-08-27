@@ -1,0 +1,103 @@
+{
+  "fighter_id": "nix-calder",
+  "schema_version": 1,
+  "ascension_runtime": true,
+  "default_form": "NIX_BASE",
+  "form_ladder": ["NIX_BASE", "NIX_AWAKENED_BUILD", "NIX_ASCENDED"],
+  "transform_rules": {
+    "require_aura_tier": 3,
+    "input": "shield_special_attack",
+    "pause_safe": true,
+    "min_aura_percent": 75.0
+  },
+  "forms": {
+    "NIX_BASE": {
+      "form_id": "NIX_BASE",
+      "display_name": "Nix Calder",
+      "ladder_step": "BASE",
+      "body_scale": 1.0,
+      "head_presentation": "faceless_abstract_cap",
+      "aura_tier_visual_max": 3,
+      "idle_clip": "idle",
+      "transform_in_seconds": 0.0,
+      "presentation": {
+        "emission_strength": 0.12,
+        "aura_shape": "crystals",
+        "element_accent": "#4a90d9"
+      },
+      "move_overrides": {}
+    },
+    "NIX_AWAKENED_BUILD": {
+      "form_id": "NIX_AWAKENED_BUILD",
+      "display_name": "Nix Calder — Awakened",
+      "ladder_step": "AWAKENED_BUILD",
+      "body_scale": 1.0,
+      "head_presentation": "faceless_abstract_cap",
+      "aura_tier_visual_max": 3,
+      "idle_clip": "idle",
+      "transform_in_seconds": 1.05,
+      "transform_in_clip": "aura_charge",
+      "presentation": {
+        "emission_strength": 0.40,
+        "aura_shape": "crystals",
+        "element_accent": "#6ab0f0"
+      },
+      "move_overrides": {
+        "jab_1": {
+          "damage": 2.9,
+          "training_display_name": "Facet Jab (Awakened)"
+        },
+        "forward_tilt": {
+          "damage": 6.2,
+          "training_display_name": "Frost Lunge (Awakened)"
+        },
+        "neutral_special_projectile": {
+          "damage": 6.2,
+          "training_display_name": "Ice Shard (Awakened)"
+        }
+      }
+    },
+    "NIX_ASCENDED": {
+      "form_id": "NIX_ASCENDED",
+      "display_name": "Nix Calder — Ascended",
+      "ladder_step": "ASCENDED",
+      "body_scale": 1.0,
+      "head_presentation": "faceless_abstract_cap",
+      "aura_tier_visual_max": 3,
+      "idle_clip": "idle",
+      "transform_in_seconds": 1.25,
+      "transform_in_clip": "signature_lane_burst",
+      "transformed_idle_clip": "aura_charge",
+      "presentation": {
+        "emission_strength": 0.65,
+        "aura_shape": "crystals",
+        "element_accent": "#8ec8ff",
+        "ascended_glow": true,
+        "not_oversized": true
+      },
+      "move_overrides": {
+        "jab_1": {
+          "damage": 3.5,
+          "training_display_name": "Ascended Facet Jab"
+        },
+        "forward_tilt": {
+          "damage": 7.8,
+          "training_display_name": "Ascended Frost Lunge"
+        },
+        "neutral_special_projectile": {
+          "damage": 8.2,
+          "training_display_name": "Ascended Ice Shard",
+          "projectile": {
+            "speed_mult": 1.05,
+            "lifetime_frames": 110
+          }
+        },
+        "aura_burst": {
+          "damage": 14.5,
+          "training_display_name": "Glacier Lock Ascended",
+          "presentation": "signature"
+        }
+      }
+    }
+  }
+}

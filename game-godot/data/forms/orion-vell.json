@@ -1,0 +1,103 @@
+{
+  "fighter_id": "orion-vell",
+  "schema_version": 1,
+  "ascension_runtime": true,
+  "default_form": "ORION_BASE",
+  "form_ladder": ["ORION_BASE", "ORION_AWAKENED_BUILD", "ORION_ASCENDED"],
+  "transform_rules": {
+    "require_aura_tier": 3,
+    "input": "shield_special_attack",
+    "pause_safe": true,
+    "min_aura_percent": 75.0
+  },
+  "forms": {
+    "ORION_BASE": {
+      "form_id": "ORION_BASE",
+      "display_name": "Orion Vell",
+      "ladder_step": "BASE",
+      "body_scale": 1.0,
+      "head_presentation": "faceless_abstract_cap",
+      "aura_tier_visual_max": 3,
+      "idle_clip": "idle",
+      "transform_in_seconds": 0.0,
+      "presentation": {
+        "emission_strength": 0.14,
+        "aura_shape": "orbit",
+        "element_accent": "#5b4b8a"
+      },
+      "move_overrides": {}
+    },
+    "ORION_AWAKENED_BUILD": {
+      "form_id": "ORION_AWAKENED_BUILD",
+      "display_name": "Orion Vell — Awakened",
+      "ladder_step": "AWAKENED_BUILD",
+      "body_scale": 1.0,
+      "head_presentation": "faceless_abstract_cap",
+      "aura_tier_visual_max": 3,
+      "idle_clip": "idle",
+      "transform_in_seconds": 1.1,
+      "transform_in_clip": "aura_charge",
+      "presentation": {
+        "emission_strength": 0.46,
+        "aura_shape": "orbit",
+        "element_accent": "#7a6aaa"
+      },
+      "move_overrides": {
+        "jab_1": {
+          "damage": 3.0,
+          "training_display_name": "Orbit Jab (Awakened)"
+        },
+        "forward_tilt": {
+          "damage": 7.0,
+          "training_display_name": "Gravity Lunge (Awakened)"
+        },
+        "neutral_special_projectile": {
+          "damage": 6.0,
+          "training_display_name": "Void Orb (Awakened)"
+        }
+      }
+    },
+    "ORION_ASCENDED": {
+      "form_id": "ORION_ASCENDED",
+      "display_name": "Orion Vell — Ascended",
+      "ladder_step": "ASCENDED",
+      "body_scale": 1.0,
+      "head_presentation": "faceless_abstract_cap",
+      "aura_tier_visual_max": 3,
+      "idle_clip": "idle",
+      "transform_in_seconds": 1.2,
+      "transform_in_clip": "signature_lane_burst",
+      "transformed_idle_clip": "aura_charge",
+      "presentation": {
+        "emission_strength": 0.72,
+        "aura_shape": "orbit",
+        "element_accent": "#9a8acc",
+        "ascended_glow": true,
+        "not_oversized": true
+      },
+      "move_overrides": {
+        "jab_1": {
+          "damage": 3.8,
+          "training_display_name": "Ascended Orbit Jab"
+        },
+        "forward_tilt": {
+          "damage": 9.0,
+          "training_display_name": "Ascended Gravity Lunge"
+        },
+        "neutral_special_projectile": {
+          "damage": 8.0,
+          "training_display_name": "Ascended Void Orb",
+          "projectile": {
+            "speed_mult": 1.10,
+            "lifetime_frames": 85
+          }
+        },
+        "aura_burst": {
+          "damage": 15.0,
+          "training_display_name": "Orbit Collapse Ascended",
+          "presentation": "signature"
+        }
+      }
+    }
+  }
+}

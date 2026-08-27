@@ -1,0 +1,103 @@
+{
+  "fighter_id": "kaia-windrow",
+  "schema_version": 1,
+  "ascension_runtime": true,
+  "default_form": "KAIA_BASE",
+  "form_ladder": ["KAIA_BASE", "KAIA_AWAKENED_BUILD", "KAIA_ASCENDED"],
+  "transform_rules": {
+    "require_aura_tier": 3,
+    "input": "shield_special_attack",
+    "pause_safe": true,
+    "min_aura_percent": 75.0
+  },
+  "forms": {
+    "KAIA_BASE": {
+      "form_id": "KAIA_BASE",
+      "display_name": "Kaia Windrow",
+      "ladder_step": "BASE",
+      "body_scale": 1.0,
+      "head_presentation": "faceless_abstract_cap",
+      "aura_tier_visual_max": 3,
+      "idle_clip": "idle",
+      "transform_in_seconds": 0.0,
+      "presentation": {
+        "emission_strength": 0.13,
+        "aura_shape": "ribbons",
+        "element_accent": "#3cb371"
+      },
+      "move_overrides": {}
+    },
+    "KAIA_AWAKENED_BUILD": {
+      "form_id": "KAIA_AWAKENED_BUILD",
+      "display_name": "Kaia Windrow — Awakened",
+      "ladder_step": "AWAKENED_BUILD",
+      "body_scale": 1.0,
+      "head_presentation": "faceless_abstract_cap",
+      "aura_tier_visual_max": 3,
+      "idle_clip": "idle",
+      "transform_in_seconds": 1.0,
+      "transform_in_clip": "aura_charge",
+      "presentation": {
+        "emission_strength": 0.44,
+        "aura_shape": "ribbons",
+        "element_accent": "#5cd68a"
+      },
+      "move_overrides": {
+        "jab_1": {
+          "damage": 2.6,
+          "training_display_name": "Ribbon Jab (Awakened)"
+        },
+        "forward_tilt": {
+          "damage": 6.5,
+          "training_display_name": "Current Lunge (Awakened)"
+        },
+        "neutral_special_projectile": {
+          "damage": 5.8,
+          "training_display_name": "Gust Needle (Awakened)"
+        }
+      }
+    },
+    "KAIA_ASCENDED": {
+      "form_id": "KAIA_ASCENDED",
+      "display_name": "Kaia Windrow — Ascended",
+      "ladder_step": "ASCENDED",
+      "body_scale": 1.0,
+      "head_presentation": "faceless_abstract_cap",
+      "aura_tier_visual_max": 3,
+      "idle_clip": "idle",
+      "transform_in_seconds": 1.15,
+      "transform_in_clip": "signature_lane_burst",
+      "transformed_idle_clip": "aura_charge",
+      "presentation": {
+        "emission_strength": 0.70,
+        "aura_shape": "ribbons",
+        "element_accent": "#7ee8a0",
+        "ascended_glow": true,
+        "not_oversized": true
+      },
+      "move_overrides": {
+        "jab_1": {
+          "damage": 3.2,
+          "training_display_name": "Ascended Ribbon Jab"
+        },
+        "forward_tilt": {
+          "damage": 8.0,
+          "training_display_name": "Ascended Current Lunge"
+        },
+        "neutral_special_projectile": {
+          "damage": 7.8,
+          "training_display_name": "Ascended Gust Needle",
+          "projectile": {
+            "speed_mult": 1.15,
+            "lifetime_frames": 95
+          }
+        },
+        "aura_burst": {
+          "damage": 13.0,
+          "training_display_name": "Spiral Current Ascended",
+          "presentation": "signature"
+        }
+      }
+    }
+  }
+}

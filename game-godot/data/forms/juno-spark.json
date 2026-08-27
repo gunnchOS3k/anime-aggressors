@@ -1,0 +1,103 @@
+{
+  "fighter_id": "juno-spark",
+  "schema_version": 1,
+  "ascension_runtime": true,
+  "default_form": "JUNO_BASE",
+  "form_ladder": ["JUNO_BASE", "JUNO_AWAKENED_BUILD", "JUNO_ASCENDED"],
+  "transform_rules": {
+    "require_aura_tier": 3,
+    "input": "shield_special_attack",
+    "pause_safe": true,
+    "min_aura_percent": 75.0
+  },
+  "forms": {
+    "JUNO_BASE": {
+      "form_id": "JUNO_BASE",
+      "display_name": "Juno Spark",
+      "ladder_step": "BASE",
+      "body_scale": 1.0,
+      "head_presentation": "faceless_abstract_cap",
+      "aura_tier_visual_max": 3,
+      "idle_clip": "idle",
+      "transform_in_seconds": 0.0,
+      "presentation": {
+        "emission_strength": 0.14,
+        "aura_shape": "arcs",
+        "element_accent": "#f5d042"
+      },
+      "move_overrides": {}
+    },
+    "JUNO_AWAKENED_BUILD": {
+      "form_id": "JUNO_AWAKENED_BUILD",
+      "display_name": "Juno Spark — Awakened",
+      "ladder_step": "AWAKENED_BUILD",
+      "body_scale": 1.0,
+      "head_presentation": "faceless_abstract_cap",
+      "aura_tier_visual_max": 3,
+      "idle_clip": "idle",
+      "transform_in_seconds": 0.9,
+      "transform_in_clip": "aura_charge",
+      "presentation": {
+        "emission_strength": 0.48,
+        "aura_shape": "arcs",
+        "element_accent": "#ffe066"
+      },
+      "move_overrides": {
+        "jab_1": {
+          "damage": 2.8,
+          "training_display_name": "Arc Snap (Awakened)"
+        },
+        "forward_tilt": {
+          "damage": 6.8,
+          "training_display_name": "Circuit Rush (Awakened)"
+        },
+        "neutral_special_projectile": {
+          "damage": 5.5,
+          "training_display_name": "Bolt Needle (Awakened)"
+        }
+      }
+    },
+    "JUNO_ASCENDED": {
+      "form_id": "JUNO_ASCENDED",
+      "display_name": "Juno Spark — Ascended",
+      "ladder_step": "ASCENDED",
+      "body_scale": 1.0,
+      "head_presentation": "faceless_abstract_cap",
+      "aura_tier_visual_max": 3,
+      "idle_clip": "idle",
+      "transform_in_seconds": 1.0,
+      "transform_in_clip": "signature_lane_burst",
+      "transformed_idle_clip": "aura_charge",
+      "presentation": {
+        "emission_strength": 0.75,
+        "aura_shape": "arcs",
+        "element_accent": "#fff176",
+        "ascended_glow": true,
+        "not_oversized": true
+      },
+      "move_overrides": {
+        "jab_1": {
+          "damage": 3.4,
+          "training_display_name": "Ascended Arc Snap"
+        },
+        "forward_tilt": {
+          "damage": 8.5,
+          "training_display_name": "Ascended Circuit Rush"
+        },
+        "neutral_special_projectile": {
+          "damage": 7.5,
+          "training_display_name": "Ascended Bolt Needle",
+          "projectile": {
+            "speed_mult": 1.35,
+            "lifetime_frames": 75
+          }
+        },
+        "aura_burst": {
+          "damage": 13.5,
+          "training_display_name": "Flash Circuit Ascended",
+          "presentation": "signature"
+        }
+      }
+    }
+  }
+}
