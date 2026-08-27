@@ -34,6 +34,7 @@ const CATEGORY_ORDER := [
 	"HEAVY / SMASH ATTACKS",
 	"SPECIALS",
 	"AURA / CHARGE",
+	"FORM / TRANSFORMATION",
 	"GRAB",
 	"THROWS",
 	"DEFENSE",
@@ -107,6 +108,8 @@ static func build_fighter_catalog(fighter_id: String) -> Dictionary:
 			"is_core": false,
 		}
 		entries.append(lab)
+
+	_append_form_transformation_entries(fighter_id, entries)
 
 	var categories: Dictionary = {}
 	for e in entries:
@@ -295,3 +298,42 @@ static func lab_entries(catalog: Dictionary) -> Array:
 		if str(e.get("reachability", "")) == "LAB_ONLY":
 			out.append(e)
 	return out
+
+
+static func _append_form_transformation_entries(fighter_id: String, entries: Array) -> void:
+	var forms_path := "res://data/forms/%s.json" % fighter_id
+	var forms_doc := load_json(forms_path)
+	if forms_doc.is_empty() or not bool(forms_doc.get("ascension_runtime", false)):
+		return
+	var ladder: Array = forms_doc.get("form_ladder", [])
+	var rules: Dictionary = forms_doc.get("transform_rules", {})
+	for form_key in ladder:
+		var form: Dictionary = forms_doc.get("forms", {}).get(form_key, {})
+		if form.is_empty():
+			continue
+		var overrides: Dictionary = form.get("move_overrides", {})
+		var transformed_moves: PackedStringArray = []
+		for mid in overrides.keys():
+			transformed_moves.append(str(mid))
+		entries.append({
+			"fighter_id": fighter_id,
+			"move_id": "form_%s" % str(form.get("form_id", form_key)).to_lower(),
+			"display_name": str(form.get("display_name", form_key)),
+			"input_command": str(rules.get("input", "shield_special_attack")),
+			"input_glyphs": {"transform": "Shield + Special + Attack @ Tier 3"},
+			"category": "FORM / TRANSFORMATION",
+			"move_type": "transformation",
+			"grounded_air": "grounded",
+			"aura_requirement": "ASCENSION_READY (Tier 3)",
+			"damage_role": "form_state",
+			"tactical_purpose": "Ascend along form ladder — faceless presentation, no body overscale.",
+			"playable": true,
+			"reachability": "ASCENSION",
+			"animation_clip": str(form.get("transform_in_clip", "aura_charge")),
+			"form_id": str(form.get("form_id", form_key)),
+			"ladder_step": str(form.get("ladder_step", "")),
+			"transformed_move_ids": transformed_moves,
+			"short_description": "Form state: %s" % str(form.get("ladder_step", "")),
+			"is_core": form_key == forms_doc.get("default_form", ""),
+			"transform_marker": form_key != forms_doc.get("default_form", ""),
+		})
