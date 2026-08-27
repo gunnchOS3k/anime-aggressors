@@ -1,6 +1,6 @@
 # Anime Aggressors — repo-native targets
 
-.PHONY: engineering-wave011 engineering-wave012 engineering-wave013b engineering-wave014 engineering-wave015 engineering-wave016 engineering-wave017 engineering-wave018 engineering-wave019 engineering-wave020 wave020-fighter-select-diagnostic wave020-visibility-diagnostic wave020-select-flourish-diagnostic wave020-pause-diagnostic wave020-audio-diagnostic wave020-battle-body-diagnostic wave020-pause-layout-diagnostic wave020-victory-diagnostic wave020-pixel-cp2-seal motion-promote wave015-human-crash-capture wave015-battlescene-stability taste-gate engineering-taste-gate
+.PHONY: engineering-wave011 engineering-wave012 engineering-wave013b engineering-wave014 engineering-wave015 engineering-wave016 engineering-wave017 engineering-wave018 engineering-wave019 engineering-wave020 wave020-fighter-select-diagnostic wave020-visibility-diagnostic wave020-select-flourish-diagnostic wave020-pause-diagnostic wave020-audio-diagnostic wave020-battle-body-diagnostic wave020-pause-layout-diagnostic wave020-victory-diagnostic wave020-select-lifecycle-diagnostic wave020-material-persistence-diagnostic wave020-transform-isolation-diagnostic wave020-pixel-cp2-seal motion-promote wave015-human-crash-capture wave015-battlescene-stability taste-gate engineering-taste-gate visual-golden-qa
 
 engineering-wave011:
 	bash tools/engineering_wave011/run_wave011.sh
@@ -53,6 +53,15 @@ wave020-pause-layout-diagnostic:
 wave020-victory-diagnostic:
 	bash tools/engineering_wave020/run_victory_diagnostic.sh
 
+wave020-select-lifecycle-diagnostic:
+	bash tools/engineering_wave020/run_select_lifecycle_diagnostic.sh
+
+wave020-material-persistence-diagnostic:
+	bash tools/engineering_wave020/run_material_persistence_diagnostic.sh
+
+wave020-transform-isolation-diagnostic:
+	bash tools/engineering_wave020/run_transform_isolation_diagnostic.sh
+
 wave020-pixel-cp2-seal:
 	python3 tools/engineering_wave020/run_pixel_cp2_physical_seal.py
 
@@ -74,3 +83,8 @@ taste-gate engineering-taste-gate:
 	python3 tools/quality/check_placeholder_visuals.py
 	python3 tools/quality/check_model_visibility_reliability.py
 	python3 tools/quality/emit_taste_gate_report.py
+
+# Golden Visual QA v1 — reference + semantic contracts (non-invasive).
+# Exits non-zero on material deviations. Never marks OWNER_APPROVED_GOLDEN.
+visual-golden-qa:
+	python3 tools/quality/run_visual_golden_qa.py

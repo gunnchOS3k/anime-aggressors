@@ -1,8 +1,40 @@
 # WAVE020 REVISED — Owner Review Packet
 
 **Reviewer:** Edmund  
-**Build under review:** `eng/wave020-pixel-early-gate-continuation` (PR #94)  
+**Build under review:** `eng/wave020-presentation-state-isolation` (PR #95)  
 **Cursor:** leave all ratings blank. Do not self-score.
+
+---
+
+## Candidate provenance (engineering — not owner approval)
+
+| Field | Value |
+|-------|-------|
+| PR | 95 (OPEN, draft) |
+| CURRENT_PR_HEAD | `69147aab9f7e38b5fb8089f74d193bdc03fb8dc2` |
+| ACCEPTED_MAIN_SHA | `5697f078d3f698c583e09f2b753d433e35fc3eed` |
+| PHYSICALLY_TESTED_RUNTIME_SHA | _(none this session — Pixel blocked)_ |
+| APK_SHA256 | _(not installed this session)_ |
+| PIXEL_CONNECTIVITY | BLOCKED |
+| Closeout seal | `artifacts/engineering_wave020/PR95_FINAL_RUNTIME_PROVENANCE_SEAL.json` |
+
+### Fighter Select
+- 20-sweep live Pixel result: **NOT_RUN** (`BLOCKED_PIXEL6A`)
+- final colored roster / disappearance / whiteout / ghost: **not verified live this session**
+
+### Move Preview
+- all seven / bounds / materials: **NOT_RUN** (`BLOCKED_PIXEL6A`)
+
+### Battle
+- all seven / stage scale / body / pause-resume / respawn: **NOT_RUN** (`BLOCKED_PIXEL6A`)
+
+### Victory
+- current fighter / palette / scale: **NOT_RUN** (`BLOCKED_PIXEL6A`) — Gate D never physically completed
+
+### GoldenVisualQA
+- Physical Golden capture on exact tip: **NOT_RERUN** (device blocked)
+- Desktop golden artifacts may exist under `artifacts/visual_qa/latest/` from prior tip work — **not** used as Pixel gate substitute
+- OWNER_APPROVED_GOLDEN_COUNT remains 0 (Cursor must not set OWNER_APPROVED_GOLDEN)
 
 ---
 

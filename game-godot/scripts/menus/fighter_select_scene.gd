@@ -302,7 +302,9 @@ func _update_preview(index: int, lock_in: bool) -> void:
 	if gen != _preview_generation:
 		return
 	_preview_fighter_id = id
-	if _preview_model.has_method("set_select_mode"):
+	if _preview_model.has_method("set_presentation_context"):
+		_preview_model.set_presentation_context("SELECT_PREVIEW")
+	elif _preview_model.has_method("set_select_mode"):
 		_preview_model.set_select_mode(true)
 	if _preview_model.has_method("heal_visibility_if_needed"):
 		_preview_model.heal_visibility_if_needed()
@@ -331,6 +333,8 @@ func _recreate_preview_model() -> void:
 	_preview_model = MODEL_SCRIPT.new()
 	_preview_model.name = "SelectModel"
 	_preview_model.position = Vector2(150, 240)
+	if _preview_model.has_method("set_presentation_context"):
+		_preview_model.set_presentation_context("SELECT_PREVIEW")
 	host.add_child(_preview_model)
 	_preview_fighter_id = ""
 	if _flourish != null:

@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "system": "GoldenVisualQA",
+  "taxonomy": {
+    "MISSING_MODEL": {
+      "severity": "S0",
+      "likely_causes": ["cache miss", "instance freed", "generation race", "viewport empty"],
+      "diagnostic_steps": [
+        "inspect FighterPresentationCache occupancy for context key",
+        "inspect PresentationContext.cache_key(fighter_id, context)",
+        "inspect SubViewport / display Sprite2D visibility",
+        "run wave020-select-lifecycle-diagnostic or battle-body diagnostic",
+        "capture non-invasive screen witness (no material heal)"
+      ]
+    },
+    "WRONG_FIGHTER": {
+      "severity": "S0",
+      "likely_causes": ["stale cache entry", "focus index desync", "wrong fighter_id binding"],
+      "diagnostic_steps": [
+        "compare expected fighter_id vs witness fighter_id",
+        "inspect select focus telemetry",
+        "force context-local instance rebuild for that surface only"
+      ]
+    },
+    "LEGACY_MODEL": {
+      "severity": "S1",
+      "likely_causes": ["old GLB path", "procedural fallback unexpectedly used", "asset path regression"],
+      "diagnostic_steps": [
+        "inspect model_source in witness",
+        "diff FIGHTER_REPRESENTATION_PATH_AUDIT",
+        "confirm canonical asset path for fighter_id"
+      ]
+    },
+    "MATERIAL_WHITEOUT": {
+      "severity": "S0",
+      "likely_causes": ["shared mutable GLB materials", "material_override leak", "witness heal mutation"],
+      "diagnostic_steps": [
+        "inspect material fingerprint / mean_luma / whiteout_meshes",
+        "inspect shared resources vs localized duplicates",
+        "inspect material_override on MeshInstance3D",
+        "inspect witness instrumentation (must be non-invasive)",
+        "inspect card/victory bake path"
+      ]
+    },
+    "MATERIAL_GRAYSCALE": {
+      "severity": "S1",
+      "likely_causes": ["palette bake failure", "modulate collapse", "albedo strip"],
+      "diagnostic_steps": [
+        "inspect material fingerprint chroma",
+        "inspect display_modulate",
+        "compare canonical palette contract"
+      ]
+    },
+    "WRONG_PALETTE": {
+      "severity": "S1",
+      "likely_causes": ["cross-fighter material reuse", "context bake mixup"],
+      "diagnostic_steps": [
+        "compare material_identity contract vs fighter_id",
+        "inspect localized material duplication",
+        "run wave020-material-persistence-diagnostic"
+      ]
+    },
+    "OVERSCALE": {
+      "severity": "S0",
+      "likely_causes": ["SELECT_PREVIEW scale leaked into battle/move preview", "model_root_scale mutated"],
+      "diagnostic_steps": [
+        "inspect PresentationContext.display_contract(context)",
+        "inspect display_scale vs MAX_* contracts",
+        "inspect camera framing",
+        "verify model root scale remains Vector3.ONE",
+        "inspect cross-context state leak",
+        "run wave020-transform-isolation-diagnostic"
+      ]
+    },
+    "UNDERSCALE": {
+      "severity": "S1",
+      "likely_causes": ["wrong display contract", "camera_size too large"],
+      "diagnostic_steps": [
+        "inspect display_contract for context",
+        "inspect camera_size and display_offset",
+        "compare occupancy_ratio against target band"
+      ]
+    },
+    "OFFSCREEN": {
+      "severity": "S0",
+      "likely_causes": ["display_offset error", "camera framing", "parent transform"],
+      "diagnostic_steps": [
+        "inspect projected_bounds vs target_region",
+        "inspect display_offset / camera",
+        "confirm head_visible / feet_visible_when_required"
+      ]
+    },
+    "STAGE_CLIP": {
+      "severity": "S1",
+      "likely_causes": ["battle overscale", "spawn Y error", "camera too tight"],
+      "diagnostic_steps": [
+        "inspect stage_contact_valid",
+        "inspect BATTLE display scale contract",
+        "inspect spawn/feet alignment"
+      ]
+    },
+    "CAMERA_FIT": {
+      "severity": "S1",
+      "likely_causes": ["BattleCameraController zoom", "fighter separation"],
+      "diagnostic_steps": [
+        "inspect camera_fit_valid",
+        "sample both_fighters_readable",
+        "inspect BattleCameraController zoom limits"
+      ]
+    },
+    "MOVE_PREVIEW_OVERFLOW": {
+      "severity": "S1",
+      "likely_causes": ["move preview used select scale", "viewport too small"],
+      "diagnostic_steps": [
+        "inspect MOVE_PREVIEW display_contract",
+        "inspect projected_bounds inside preview pane",
+        "confirm root scale Vector3.ONE"
+      ]
+    },
+    "UI_CLIP": {
+      "severity": "S1",
+      "likely_causes": ["safe-area ignore", "layout anchors"],
+      "diagnostic_steps": [
+        "inspect modal_inside_safe_area",
+        "inspect no_clipped_controls",
+        "run pause-layout diagnostic"
+      ]
+    },
+    "UI_OFFSCREEN": {
+      "severity": "S1",
+      "likely_causes": ["anchor/offset regression", "resolution mismatch"],
+      "diagnostic_steps": [
+        "inspect control global rect vs viewport",
+        "inspect safe area margins"
+      ]
+    },
+    "FOCUS_NOT_VISIBLE": {
+      "severity": "S1",
+      "likely_causes": ["focus style missing", "modulate hide"],
+      "diagnostic_steps": [
+        "inspect focus_state_visible",
+        "inspect selected roster chrome",
+        "capture select focus telemetry"
+      ]
+    },
+    "STALE_INSTANCE": {
+      "severity": "S0",
+      "likely_causes": ["generation race", "shared SubViewport", "cache not invalidated"],
+      "diagnostic_steps": [
+        "inspect configure_generation",
+        "inspect context-local instance ownership",
+        "force rebuild for that PresentationContext only"
+      ]
+    },
+    "CONTEXT_STATE_LEAK": {
+      "severity": "S0",
+      "likely_causes": ["cross-context display scale", "shared materials", "shared live instance"],
+      "diagnostic_steps": [
+        "inspect PresentationContext isolation",
+        "run transform + material persistence diagnostics",
+        "confirm battle/move/select contracts diverge correctly"
+      ]
+    }
+  },
+  "emitted_at": "2026-08-27T02:45:00+00:00"
+}

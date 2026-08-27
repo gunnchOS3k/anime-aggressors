@@ -1,0 +1,251 @@
+PR95_FINAL_CLOSEOUT_WORKTREE_SNAPSHOT
+emitted_at=2026-08-27T03:08:00+00:00
+PR_NUMBER=95
+PR_STATE=OPEN
+PR_DRAFT=true
+PR_MERGED=false
+PR_HEAD=69147aab9f7e38b5fb8089f74d193bdc03fb8dc2
+PR_BASE=5697f078d3f698c583e09f2b753d433e35fc3eed
+PR_BASE_REF=main
+PR_HEAD_REF=eng/wave020-presentation-state-isolation
+ACCEPTED_MAIN_SHA=5697f078d3f698c583e09f2b753d433e35fc3eed
+CURRENT_BRANCH=eng/wave020-presentation-state-isolation
+CURRENT_HEAD=69147aab9f7e38b5fb8089f74d193bdc03fb8dc2
+PIXEL_CONNECTIVITY=BLOCKED
+PIXEL_CONNECTIVITY_DETAIL=device serial 27211JEGR06194 seen offline; after soft reconnect + one adb kill-server/start-server, device absent from adb devices and from system_profiler USB tree. Physical closeout STOPPED per §2.
+GIT_STATUS_SHORT_BRANCH_LINE=## eng/wave020-presentation-state-isolation...origin/eng/wave020-presentation-state-isolation
+RUNTIME_AFFECTING_UNCOMMITTED=NONE
+EVIDENCE_ONLY_UNCOMMITTED_COUNT=226
+OTHER_UNCOMMITTED_COUNT=0
+NOTE_UNCOMMITTED=Uncommitted tree is evidence/pixel captures, builds sha256, Godot .uid sidecars, .worktrees/, tmp/. No runtime .gd/.tscn/.tres diffs vs HEAD.
+NOTE_NO_RESET_HARD=true
+NOTE_NO_FORCE_PUSH=true
+
+--- git status --short ---
+ M artifacts/engineering_wave020/pixel/apk_build_log.txt
+ M artifacts/engineering_wave020/pixel/gate_c_battle_0.png
+ M artifacts/engineering_wave020/pixel/gate_c_battle_1.png
+ M artifacts/engineering_wave020/pixel/gate_c_battle_2.png
+ M artifacts/engineering_wave020/pixel/gate_c_battle_3.png
+ M artifacts/engineering_wave020/pixel/gate_c_battle_4.png
+ M artifacts/engineering_wave020/pixel/gate_c_battle_5.png
+ M artifacts/engineering_wave020/pixel/gate_c_battle_6.png
+ M artifacts/engineering_wave020/pixel/install.txt
+ M artifacts/engineering_wave020/pixel/nav_confirm_p1.png
+ M artifacts/engineering_wave020/pixel/nav_confirm_p2.png
+ M artifacts/engineering_wave020/pixel/owner/owner_battle_0.png
+ M artifacts/engineering_wave020/pixel/owner/owner_battle_3.png
+ M artifacts/engineering_wave020/pixel/owner/owner_battle_6.png
+ M builds/android/anime-aggressors-debug.apk.sha256
+?? .worktrees/
+?? artifacts/engineering_wave020/pixel/gate_c_0_battle_wait_0.png
+?? artifacts/engineering_wave020/pixel/gate_c_0_battle_wait_1.png
+?? artifacts/engineering_wave020/pixel/gate_c_0_battle_wait_10.png
+?? artifacts/engineering_wave020/pixel/gate_c_0_battle_wait_11.png
+?? artifacts/engineering_wave020/pixel/gate_c_0_battle_wait_12.png
+?? artifacts/engineering_wave020/pixel/gate_c_0_battle_wait_13.png
+?? artifacts/engineering_wave020/pixel/gate_c_0_battle_wait_14.png
+?? artifacts/engineering_wave020/pixel/gate_c_0_battle_wait_15.png
+?? artifacts/engineering_wave020/pixel/gate_c_0_battle_wait_16.png
+?? artifacts/engineering_wave020/pixel/gate_c_0_battle_wait_17.png
+?? artifacts/engineering_wave020/pixel/gate_c_0_battle_wait_18.png
+?? artifacts/engineering_wave020/pixel/gate_c_0_battle_wait_19.png
+?? artifacts/engineering_wave020/pixel/gate_c_0_battle_wait_2.png
+?? artifacts/engineering_wave020/pixel/gate_c_0_battle_wait_20.png
+?? artifacts/engineering_wave020/pixel/gate_c_0_battle_wait_21.png
+?? artifacts/engineering_wave020/pixel/gate_c_0_battle_wait_22.png
+?? artifacts/engineering_wave020/pixel/gate_c_0_battle_wait_23.png
+?? artifacts/engineering_wave020/pixel/gate_c_0_battle_wait_3.png
+?? artifacts/engineering_wave020/pixel/gate_c_0_battle_wait_4.png
+?? artifacts/engineering_wave020/pixel/gate_c_0_battle_wait_5.png
+?? artifacts/engineering_wave020/pixel/gate_c_0_battle_wait_6.png
+?? artifacts/engineering_wave020/pixel/gate_c_0_battle_wait_7.png
+?? artifacts/engineering_wave020/pixel/gate_c_0_battle_wait_8.png
+?? artifacts/engineering_wave020/pixel/gate_c_0_battle_wait_9.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_0.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_1.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_10.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_11.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_12.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_13.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_14.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_15.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_16.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_17.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_18.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_19.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_2.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_20.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_21.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_22.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_23.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_24.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_25.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_26.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_27.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_3.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_4.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_5.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_6.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_7.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_8.png
+?? artifacts/engineering_wave020/pixel/gate_c_1_battle_wait_9.png
+?? artifacts/engineering_wave020/pixel/gate_c_2_battle_wait_0.png
+?? artifacts/engineering_wave020/pixel/gate_c_2_battle_wait_1.png
+?? artifacts/engineering_wave020/pixel/gate_c_2_battle_wait_10.png
+?? artifacts/engineering_wave020/pixel/gate_c_2_battle_wait_11.png
+?? artifacts/engineering_wave020/pixel/gate_c_2_battle_wait_12.png
+?? artifacts/engineering_wave020/pixel/gate_c_2_battle_wait_13.png
+?? artifacts/engineering_wave020/pixel/gate_c_2_battle_wait_14.png
+?? artifacts/engineering_wave020/pixel/gate_c_2_battle_wait_15.png
+?? artifacts/engineering_wave020/pixel/gate_c_2_battle_wait_2.png
+?? artifacts/engineering_wave020/pixel/gate_c_2_battle_wait_3.png
+?? artifacts/engineering_wave020/pixel/gate_c_2_battle_wait_4.png
+?? artifacts/engineering_wave020/pixel/gate_c_2_battle_wait_5.png
+?? artifacts/engineering_wave020/pixel/gate_c_2_battle_wait_6.png
+?? artifacts/engineering_wave020/pixel/gate_c_2_battle_wait_7.png
+?? artifacts/engineering_wave020/pixel/gate_c_2_battle_wait_8.png
+?? artifacts/engineering_wave020/pixel/gate_c_2_battle_wait_9.png
+?? artifacts/engineering_wave020/pixel/gate_c_3_battle_wait_0.png
+?? artifacts/engineering_wave020/pixel/gate_c_3_battle_wait_1.png
+?? artifacts/engineering_wave020/pixel/gate_c_3_battle_wait_10.png
+?? artifacts/engineering_wave020/pixel/gate_c_3_battle_wait_11.png
+?? artifacts/engineering_wave020/pixel/gate_c_3_battle_wait_12.png
+?? artifacts/engineering_wave020/pixel/gate_c_3_battle_wait_13.png
+?? artifacts/engineering_wave020/pixel/gate_c_3_battle_wait_14.png
+?? artifacts/engineering_wave020/pixel/gate_c_3_battle_wait_15.png
+?? artifacts/engineering_wave020/pixel/gate_c_3_battle_wait_16.png
+?? artifacts/engineering_wave020/pixel/gate_c_3_battle_wait_17.png
+?? artifacts/engineering_wave020/pixel/gate_c_3_battle_wait_18.png
+?? artifacts/engineering_wave020/pixel/gate_c_3_battle_wait_19.png
+?? artifacts/engineering_wave020/pixel/gate_c_3_battle_wait_2.png
+?? artifacts/engineering_wave020/pixel/gate_c_3_battle_wait_20.png
+?? artifacts/engineering_wave020/pixel/gate_c_3_battle_wait_21.png
+?? artifacts/engineering_wave020/pixel/gate_c_3_battle_wait_22.png
+?? artifacts/engineering_wave020/pixel/gate_c_3_battle_wait_23.png
+?? artifacts/engineering_wave020/pixel/gate_c_3_battle_wait_3.png
+?? artifacts/engineering_wave020/pixel/gate_c_3_battle_wait_4.png
+?? artifacts/engineering_wave020/pixel/gate_c_3_battle_wait_5.png
+?? artifacts/engineering_wave020/pixel/gate_c_3_battle_wait_6.png
+?? artifacts/engineering_wave020/pixel/gate_c_3_battle_wait_7.png
+?? artifacts/engineering_wave020/pixel/gate_c_3_battle_wait_8.png
+?? artifacts/engineering_wave020/pixel/gate_c_3_battle_wait_9.png
+?? artifacts/engineering_wave020/pixel/gate_c_4_battle_wait_0.png
+?? artifacts/engineering_wave020/pixel/gate_c_4_battle_wait_1.png
+?? artifacts/engineering_wave020/pixel/gate_c_4_battle_wait_10.png
+?? artifacts/engineering_wave020/pixel/gate_c_4_battle_wait_11.png
+?? artifacts/engineering_wave020/pixel/gate_c_4_battle_wait_12.png
+?? artifacts/engineering_wave020/pixel/gate_c_4_battle_wait_13.png
+?? artifacts/engineering_wave020/pixel/gate_c_4_battle_wait_14.png
+?? artifacts/engineering_wave020/pixel/gate_c_4_battle_wait_15.png
+?? artifacts/engineering_wave020/pixel/gate_c_4_battle_wait_2.png
+?? artifacts/engineering_wave020/pixel/gate_c_4_battle_wait_3.png
+?? artifacts/engineering_wave020/pixel/gate_c_4_battle_wait_4.png
+?? artifacts/engineering_wave020/pixel/gate_c_4_battle_wait_5.png
+?? artifacts/engineering_wave020/pixel/gate_c_4_battle_wait_6.png
+?? artifacts/engineering_wave020/pixel/gate_c_4_battle_wait_7.png
+?? artifacts/engineering_wave020/pixel/gate_c_4_battle_wait_8.png
+?? artifacts/engineering_wave020/pixel/gate_c_4_battle_wait_9.png
+?? artifacts/engineering_wave020/pixel/gate_c_5_battle_wait_0.png
+?? artifacts/engineering_wave020/pixel/gate_c_5_battle_wait_1.png
+?? artifacts/engineering_wave020/pixel/gate_c_5_battle_wait_10.png
+?? artifacts/engineering_wave020/pixel/gate_c_5_battle_wait_11.png
+?? artifacts/engineering_wave020/pixel/gate_c_5_battle_wait_12.png
+?? artifacts/engineering_wave020/pixel/gate_c_5_battle_wait_13.png
+?? artifacts/engineering_wave020/pixel/gate_c_5_battle_wait_14.png
+?? artifacts/engineering_wave020/pixel/gate_c_5_battle_wait_15.png
+?? artifacts/engineering_wave020/pixel/gate_c_5_battle_wait_2.png
+?? artifacts/engineering_wave020/pixel/gate_c_5_battle_wait_3.png
+?? artifacts/engineering_wave020/pixel/gate_c_5_battle_wait_4.png
+?? artifacts/engineering_wave020/pixel/gate_c_5_battle_wait_5.png
+?? artifacts/engineering_wave020/pixel/gate_c_5_battle_wait_6.png
+?? artifacts/engineering_wave020/pixel/gate_c_5_battle_wait_7.png
+?? artifacts/engineering_wave020/pixel/gate_c_5_battle_wait_8.png
+?? artifacts/engineering_wave020/pixel/gate_c_5_battle_wait_9.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_0.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_1.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_10.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_11.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_12.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_13.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_14.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_15.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_16.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_17.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_18.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_19.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_2.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_20.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_21.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_22.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_23.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_24.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_25.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_26.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_27.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_3.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_4.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_5.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_6.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_7.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_8.png
+?? artifacts/engineering_wave020/pixel/gate_c_6_battle_wait_9.png
+?? artifacts/engineering_wave020/pixel/gate_d_0_battle_wait_0.png
+?? artifacts/engineering_wave020/pixel/gate_d_5_battle_wait_0.png
+?? artifacts/engineering_wave020/pixel/gate_d_5_battle_wait_1.png
+?? artifacts/engineering_wave020/pixel/gate_d_6_battle_wait_0.png
+?? artifacts/engineering_wave020/pixel/gate_d_6_battle_wait_1.png
+?? artifacts/engineering_wave020/pixel/gate_d_post_5.png
+?? artifacts/engineering_wave020/pixel/gate_d_post_6.png
+?? artifacts/engineering_wave020/pixel/nav_select_check_0.png
+?? artifacts/engineering_wave020/pixel/nav_select_check_1.png
+?? artifacts/engineering_wave020/pixel/nav_select_check_2.png
+?? artifacts/engineering_wave020/pixel/nav_select_check_3.png
+?? artifacts/engineering_wave020/pixel/nav_select_final.png
+?? artifacts/engineering_wave020/pixel/owner/owner_battle_1.png
+?? artifacts/engineering_wave020/pixel/owner/owner_battle_2.png
+?? artifacts/engineering_wave020/pixel/owner/owner_battle_4.png
+?? artifacts/engineering_wave020/pixel/owner/owner_battle_5.png
+?? game-godot/scripts/audio/AudioDirector.gd.uid
+?? game-godot/scripts/audio/procedural_audio_bank.gd.uid
+?? game-godot/scripts/core/content_integrity.gd.uid
+?? game-godot/scripts/cross_device/CrossDeviceContractProvider.gd.uid
+?? game-godot/scripts/cross_device/cross_device_contract_runner.gd.uid
+?? game-godot/scripts/diagnostics/runtime_flight_recorder.gd.uid
+?? game-godot/scripts/input/InputPersistenceService.gd.uid
+?? game-godot/scripts/input/controller_watchdog.gd.uid
+?? game-godot/scripts/menus/character_select_framing.gd.uid
+?? game-godot/scripts/menus/character_select_showcase_flourish.gd.uid
+?? game-godot/scripts/menus/credits_scene.gd.uid
+?? game-godot/scripts/platform/ConsolePlatformBridge.gd.uid
+?? game-godot/scripts/platform/PlatformServices.gd.uid
+?? game-godot/scripts/rc/production_gate_harness.gd.uid
+?? game-godot/scripts/rc/wave020_cp2_pixel_physical_harness.gd.uid
+?? game-godot/scripts/ui/crash_recovery_scene.gd.uid
+?? game-godot/scripts/ui/fighter_card_portrait.gd.uid
+?? game-godot/scripts/visual/fighter_presentation_cache.gd.uid
+?? game-godot/scripts/visual/presentation_context.gd.uid
+?? game-godot/scripts/visual/procedural_bone_map.gd.uid
+?? game-godot/scripts/visual/runtime_move_resolver.gd.uid
+?? game-godot/scripts/visual/signature_name_registry.gd.uid
+?? game-godot/tests/engineering_wave020/Wave020BattleBodyDiagnostic.gd.uid
+?? game-godot/tests/engineering_wave020/Wave020ElementalAudio.gd.uid
+?? game-godot/tests/engineering_wave020/Wave020FinalScreenWitnessProbe.gd.uid
+?? game-godot/tests/engineering_wave020/Wave020MaterialPersistenceDiagnostic.gd.uid
+?? game-godot/tests/engineering_wave020/Wave020OwnerReg008Diagnostic.gd.uid
+?? game-godot/tests/engineering_wave020/Wave020OwnerReg014015.gd.uid
+?? game-godot/tests/engineering_wave020/Wave020PauseLayoutDiagnostic.gd.uid
+?? game-godot/tests/engineering_wave020/Wave020PauseMoveList.gd.uid
+?? game-godot/tests/engineering_wave020/Wave020SelectFlourish.gd.uid
+?? game-godot/tests/engineering_wave020/Wave020SelectFraming.gd.uid
+?? game-godot/tests/engineering_wave020/Wave020SelectLifecycleDiagnostic.gd.uid
+?? game-godot/tests/engineering_wave020/Wave020SevenBrowseVisibility.gd.uid
+?? game-godot/tests/engineering_wave020/Wave020TransformIsolationDiagnostic.gd.uid
+?? game-godot/tests/engineering_wave020/Wave020VictoryDiagnostic.gd.uid
+?? game-godot/tests/engineering_wave020/Wave020VisibilityAcceptance.gd.uid
+?? game-godot/tests/engineering_wave020/Wave020VisibilityAdversarial.gd.uid
+?? game-godot/tests/input_persistence_test.gd.uid
+?? game-godot/tests/quality/TasteGateModelVisibility.gd.uid
+?? game-godot/tests/rc003_visual_capture.gd.uid
+?? tmp/
+

@@ -163,13 +163,7 @@ def focused_fighter_id(path: Path) -> str:
 
 
 def looks_like_fighter_select(path: Path) -> bool:
-    text = ocr_text(path)
-    if not text:
-        return False
-    markers = ("fighter select", "toggle cpu", "showcase", "next / confirm", "next/confirm")
-    if "ember vale" in text and "rook ironside" in text and ("toggle" in text or "showcase" in text):
-        return True
-    return any(m in text for m in markers)
+    return rpc.looks_like_fighter_select(path)
 
 
 def looks_like_victory_screen(path: Path) -> bool:
@@ -181,15 +175,8 @@ def looks_like_victory_screen(path: Path) -> bool:
 
 
 def looks_like_fight_hud(path: Path) -> bool:
-    text = ocr_text(path)
-    if not text:
-        return False
-    if looks_like_victory_screen(path):
-        return False
-    if "stage select" in text or "confirm stage" in text:
-        return False
-
-    return bool(re.search(r"\d:\d{2}", text)) or "fight!" in text or "versus" in text
+    """Delegate to campaign battle HUD detector (avoids select false-positive)."""
+    return rpc.looks_like_battle_hud(path)
 
 
 def battle_hud_fighters(path: Path) -> tuple[str, str]:

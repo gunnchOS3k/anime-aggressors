@@ -85,21 +85,7 @@ FIGHTER_FOCUS_MARKERS: list[tuple[str, tuple[str, ...]]] = [
 
 
 def looks_like_fighter_select(path: Path) -> bool:
-    text = ocr_text(path)
-    if text:
-        markers = ("fighter select", "toggle cpu", "showcase", "next / confirm", "next/confirm")
-        # Roster names alone are insufficient (all 7 appear on every select frame).
-        ruleset_markers = ("rulesets", "stocks:", "match time", "damage ratio", "confirm ruleset")
-        if any(m in text for m in ruleset_markers) and not any(m in text for m in markers):
-            return False
-        if "ember vale" in text and "rook ironside" in text and ("toggle" in text or "showcase" in text):
-            return True
-        return any(m in text for m in markers)
-    # No OCR: reject near-black / tiny; require substantial capture (weak fallback).
-    if not path.is_file() or path.stat().st_size < 90_000:
-        return False
-    luma = mean_luma(path)
-    return luma < 0 or luma >= 0.04
+    return rpc.looks_like_fighter_select(path)
 
 
 def focused_fighter_id(path: Path) -> str:

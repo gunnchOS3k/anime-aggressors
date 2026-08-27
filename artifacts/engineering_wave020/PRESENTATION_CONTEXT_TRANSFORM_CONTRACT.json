@@ -1,0 +1,45 @@
+{
+  "wave": "WAVE020_PRESENTATION_STATE_ISOLATION",
+  "ACCEPTED_MAIN_SHA": "5697f078d3f698c583e09f2b753d433e35fc3eed",
+  "HEAD": "5697f078d3f698c583e09f2b753d433e35fc3eed",
+  "architecture": "IMMUTABLE_CANONICAL_ASSET -> CONTEXT_LOCAL_INSTANCE -> CONTEXT_LOCAL_WRAPPER",
+  "contexts": [
+    "SELECT_CARD",
+    "SELECT_PREVIEW",
+    "VERSUS",
+    "BATTLE_P1",
+    "BATTLE_P2_CPU",
+    "MOVE_PREVIEW",
+    "VICTORY",
+    "TRAINING"
+  ],
+  "rules": [
+    "never_mutate_shared_source_resources_at_runtime",
+    "never_scale_model_root_for_preview",
+    "camera_and_display_wrapper_only",
+    "context_owns_live_instance_generation_token"
+  ],
+  "contracts": {
+    "BATTLE_DISPLAY_SCALE": {
+      "x": 0.85,
+      "y": 0.85
+    },
+    "SELECT_PREVIEW_DISPLAY_SCALE": {
+      "x": 1.35,
+      "y": 1.35
+    },
+    "MOVE_PREVIEW_DISPLAY_SCALE": {
+      "x": 1.05,
+      "y": 1.05
+    },
+    "MODEL_ROOT_SCALE": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "MAX_BATTLE_DISPLAY_SCALE": 1.05,
+    "MAX_PREVIEW_DISPLAY_SCALE": 1.45
+  },
+  "diagnostic_transform_leaks": 0,
+  "emitted_at": "2026-08-26T23:09:36.863051+00:00"
+}

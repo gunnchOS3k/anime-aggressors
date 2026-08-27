@@ -1,22 +1,30 @@
 extends TextureRect
 class_name FighterCardPortrait
-## Wave020 CP2: select-card art from canonical FighterModel3D (not stick silhouettes).
-## Bakes once per fighter_id into a shared static cache to avoid 7 live SubViewports.
+## Wave020 isolation: bake immutable textures per fighter+context; never share live SubViewports.
 
 const MODEL_SCRIPT = preload("res://scripts/fighters/fighter_model_3d.gd")
 const _AssetResolver = preload("res://scripts/visual/fighter_asset_resolver.gd")
+const _PresentationContext = preload("res://scripts/visual/presentation_context.gd")
+const _PresentationCache = preload("res://scripts/visual/fighter_presentation_cache.gd")
 
-static var _cache: Dictionary = {} # fighter_id -> ImageTexture
-static var _baking: Dictionary = {} # fighter_id -> bool
+static var _baking: Dictionary = {} # cache_key -> generation
 
 var fighter_id: String = ""
+var _portrait_context: String = _PresentationContext.CTX_SELECT_CARD
 var focused: bool = false
 var _accent: Color = Color(1, 0.85, 0.3)
+var _bake_generation: int = 0
 
 
 func configure(id: String, _primary_color: Color, accent_color: Color) -> void:
+	configure_for_context(id, _primary_color, accent_color, _PresentationContext.CTX_SELECT_CARD)
+
+
+func configure_for_context(id: String, _primary_color: Color, accent_color: Color, context: String) -> void:
 	fighter_id = id
+	_portrait_context = _PresentationContext.normalize_context(context)
 	_accent = accent_color
+	_bake_generation += 1
 	expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -30,33 +38,36 @@ func set_focused(value: bool) -> void:
 
 
 func _apply_cached_or_bake() -> void:
-	if _cache.has(fighter_id):
-		texture = _cache[fighter_id]
+	var key := _PresentationContext.cache_key(fighter_id, _portrait_context)
+	var cached: Texture2D = _PresentationCache.get_texture(key)
+	if cached != null:
+		texture = cached
 		return
-	# Prefer deferred bake so tile layout exists.
 	call_deferred("_bake_portrait")
 
 
 func _bake_portrait() -> void:
 	if fighter_id.is_empty():
 		return
-	if _cache.has(fighter_id):
-		texture = _cache[fighter_id]
+	var key := _PresentationContext.cache_key(fighter_id, _portrait_context)
+	var gen := _bake_generation
+	var cached: Texture2D = _PresentationCache.get_texture(key)
+	if cached != null:
+		texture = cached
 		return
-	if bool(_baking.get(fighter_id, false)):
+	if bool(_baking.get(key, false)):
 		return
-	_baking[fighter_id] = true
+	_baking[key] = true
 	var presentation: Dictionary = _AssetResolver.resolve_presentation(
-		fighter_id, _AssetResolver.CTX_SELECT_CARD
+		fighter_id, _PresentationContext.resolver_context(_portrait_context)
 	)
 	if not bool(presentation.get("is_current_canonical", false)):
 		_AssetResolver.PLAYER_VISIBLE_LEGACY_CARD_OCCURRENCES += 1
 	var host := Node2D.new()
-	host.name = "CardBakeHost_%s" % fighter_id
-	# Park off-tree bake under the scene tree root briefly.
+	host.name = "CardBakeHost_%s_%s" % [fighter_id, _portrait_context]
 	var tree := Engine.get_main_loop() as SceneTree
 	if tree == null:
-		_baking[fighter_id] = false
+		_baking[key] = false
 		return
 	tree.root.add_child(host)
 	var model: Node2D = MODEL_SCRIPT.new()
@@ -68,27 +79,30 @@ func _bake_portrait() -> void:
 		data = gs.load_fighter(fighter_id)
 	else:
 		data = {"id": fighter_id}
+	if model.has_method("set_presentation_context"):
+		model.set_presentation_context(_portrait_context)
+	elif model.has_method("set_select_mode"):
+		model.set_select_mode(_portrait_context == _PresentationContext.CTX_SELECT_CARD or _portrait_context == _PresentationContext.CTX_SELECT_PREVIEW)
 	if model.has_method("configure"):
 		model.configure(data)
-	if model.has_method("set_select_mode"):
-		model.set_select_mode(true)
-	# Allow SubViewport to paint.
 	await tree.process_frame
 	await tree.process_frame
+	if gen != _bake_generation:
+		host.queue_free()
+		_baking[key] = false
+		return
 	var img: Image = null
 	if model.has_method("capture_portrait_image"):
 		img = model.capture_portrait_image()
-	elif model.has_method("get_viewport_image"):
-		img = model.get_viewport_image()
 	if img != null and img.get_width() > 0:
 		var tex := ImageTexture.create_from_image(img)
-		_cache[fighter_id] = tex
-		if is_instance_valid(self):
+		_PresentationCache.put_texture(key, tex, gen)
+		if is_instance_valid(self) and gen == _bake_generation:
 			texture = tex
 	else:
 		_AssetResolver.CANONICAL_MODEL_LOAD_FAILURES += 1
 	host.queue_free()
-	_baking[fighter_id] = false
+	_baking[key] = false
 
 
 func _draw() -> void:
