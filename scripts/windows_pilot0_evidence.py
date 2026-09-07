@@ -71,25 +71,41 @@ def main() -> int:
     # Prefer prebuilt web dist if present; else require godot export (CI installs Godot).
     index = WEB_DIST / "index.html"
     if not index.is_file():
-        godot = os.environ.get("GODOT_BIN", "godot")
-        WEB_DIST.mkdir(parents=True, exist_ok=True)
-        export = subprocess.run(
-            [
-                godot,
-                "--headless",
-                "--path",
-                str(ROOT / "game-godot"),
-                "--export-release",
-                "Web",
-                str(WEB_DIST / "index.html"),
-            ],
-            text=True,
-            capture_output=True,
+        godot = (
+            os.environ.get("GODOT")
+            or os.environ.get("GODOT4")
+            or os.environ.get("GODOT_BIN")
+            or "godot"
         )
+        WEB_DIST.mkdir(parents=True, exist_ok=True)
+        try:
+            export = subprocess.run(
+                [
+                    godot,
+                    "--headless",
+                    "--path",
+                    str(ROOT / "game-godot"),
+                    "--export-release",
+                    "Web",
+                    str(WEB_DIST / "index.html"),
+                ],
+                text=True,
+                capture_output=True,
+            )
+            export_err = None
+        except FileNotFoundError as exc:
+            export = None
+            export_err = str(exc)
         checks["compile_package"] = {
             "status": "PASS" if (WEB_DIST / "index.html").is_file() else "FAIL",
-            "export_exit": export.returncode,
-            "tail": ((export.stdout or "") + (export.stderr or ""))[-1500:],
+            "godot_bin": godot,
+            "export_exit": None if export is None else export.returncode,
+            "error": export_err,
+            "tail": (
+                ""
+                if export is None
+                else ((export.stdout or "") + (export.stderr or ""))[-1500:]
+            ),
             "path": "Godot Web export (authentic; no fake native wrapper)",
             "repeatability": "REPEATABLE",
             "signing": "UNSIGNED_PILOT_ARTIFACT_NOT_FOR_PRODUCTION",
