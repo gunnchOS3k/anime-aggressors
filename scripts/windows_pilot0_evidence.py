@@ -91,11 +91,17 @@ def main() -> int:
                 ],
                 text=True,
                 capture_output=True,
+                timeout=900,
             )
             export_err = None
+        except subprocess.TimeoutExpired as exc:
+            export = None
+            export_err = f"godot web export timed out after 900s: {exc}"
+            print(f"::error title=WINDOWS_PILOT0::{export_err}")
         except FileNotFoundError as exc:
             export = None
             export_err = str(exc)
+            print(f"::error title=WINDOWS_PILOT0::godot missing: {export_err}")
         checks["compile_package"] = {
             "status": "PASS" if (WEB_DIST / "index.html").is_file() else "FAIL",
             "godot_bin": godot,
@@ -113,7 +119,7 @@ def main() -> int:
         if checks["compile_package"]["status"] != "PASS":
             blockers.append("WEB_EXPORT_FAILED")
             skipped_required += 1
-    else:
+            print("::error title=WINDOWS_PILOT0::WEB_EXPORT_FAILED")    else:
         checks["compile_package"] = {
             "status": "PASS",
             "path": str(index),
