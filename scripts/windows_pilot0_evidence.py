@@ -4,6 +4,9 @@
 Authentic path on accepted main: Godot Web export in a Windows browser.
 Unity path is recorded as BLOCKED_ENGINE_LICENSE (not used for PASS).
 ANIME_PIXEL_ACCEPTANCE remains PENDING_DEVICE (separate gate).
+
+Timeout / incomplete proof => PARTIAL or BLOCKED (never silent PASS).
+CI exits non-zero unless claim is WINDOWS_PILOT0_PASS.
 """
 from __future__ import annotations
 
@@ -98,6 +101,7 @@ def main() -> int:
             export = None
             export_err = f"godot web export timed out after 900s: {exc}"
             print(f"::error title=WINDOWS_PILOT0::{export_err}")
+            blockers.append("WEB_EXPORT_TIMEOUT")
         except FileNotFoundError as exc:
             export = None
             export_err = str(exc)
@@ -119,7 +123,8 @@ def main() -> int:
         if checks["compile_package"]["status"] != "PASS":
             blockers.append("WEB_EXPORT_FAILED")
             skipped_required += 1
-            print("::error title=WINDOWS_PILOT0::WEB_EXPORT_FAILED")    else:
+            print("::error title=WINDOWS_PILOT0::WEB_EXPORT_FAILED")
+    else:
         checks["compile_package"] = {
             "status": "PASS",
             "path": str(index),
@@ -142,7 +147,6 @@ def main() -> int:
         t = threading.Thread(target=_serve, daemon=True)
         t.start()
         time.sleep(1)
-        # Prefer msedge; fallback to powershell Start-Process
         edge = Path(os.environ.get("ProgramFiles(x86)", r"C:\Program Files (x86)")) / "Microsoft/Edge/Application/msedge.exe"
         if not edge.is_file():
             edge = Path(r"C:\Program Files\Microsoft\Edge\Application\msedge.exe")
@@ -216,7 +220,8 @@ def main() -> int:
         if checks["soak_30min"]["status"] != "PASS":
             blockers.append("SOAK_FAILED")
     else:
-        checks["soak_30min"] = {"status": "FAIL"}
+        checks["soak_30min"] = {"status": "FAIL", "detail": "no web index; soak not started"}
+        blockers.append("SOAK_NOT_STARTED")
         skipped_required += 1
 
     checks["standard_user_probe"] = {
@@ -249,14 +254,21 @@ def main() -> int:
             "Does not claim Pixel device acceptance",
             "Does not claim Unity Windows licensed build PASS",
             "Does not invent a fake native desktop wrapper",
+            "PARTIAL/BLOCKED never count as gate PASS",
         ],
     }
     (REPORTS / "WINDOWS_PILOT0_EVIDENCE.json").write_text(json.dumps(evidence, indent=2) + "\n")
     (REPORTS / "WINDOWS_PILOT0_EVIDENCE.md").write_text(
         f"# Windows Pilot 0 — Anime Aggressors\n\n- claim: `{claim}`\n- path: Godot Web on Windows browser\n- ANIME_PIXEL_ACCEPTANCE: PENDING_DEVICE\n"
     )
+    for b in blockers:
+        print(f"::error title=WINDOWS_PILOT0::{b}")
+    for k in hard_failed:
+        print(f"::error title=WINDOWS_PILOT0_CHECK_FAIL::{k}")
+    print(f"::notice title=WINDOWS_PILOT0_CLAIM::{claim} head={sha[:12]}")
     print(json.dumps({"claim": claim, "sha12": sha[:12], "blockers": blockers}, indent=2))
-    return 0 if claim in {"WINDOWS_PILOT0_PASS", "WINDOWS_PILOT0_PARTIAL"} else 1
+    # Fail-closed: only authentic PASS greens CI. PARTIAL/BLOCKED stay red.
+    return 0 if claim == "WINDOWS_PILOT0_PASS" else 1
 
 
 if __name__ == "__main__":
