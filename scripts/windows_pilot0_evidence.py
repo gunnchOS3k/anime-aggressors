@@ -259,7 +259,8 @@ def main() -> int:
     }
 
     hard_failed = [k for k, v in checks.items() if v.get("status") == "FAIL"]
-    if hard_failed or skipped_required:
+    timed_out = any("TIMEOUT" in b for b in blockers)
+    if hard_failed or skipped_required or timed_out:
         claim = "WINDOWS_PILOT0_PARTIAL" if (WEB_DIST / "index.html").is_file() else "WINDOWS_PILOT0_BLOCKED"
     else:
         claim = "WINDOWS_PILOT0_PASS"
