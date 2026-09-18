@@ -1,0 +1,115 @@
+{
+  "a11y": {
+    "blocker_class": "HUMAN_VALIDATION_REQUIRED",
+    "evidence": "automation incomplete for disabled-user validation",
+    "notes": "",
+    "status": "HUMAN_VALIDATION_REQUIRED"
+  },
+  "android": {
+    "blocker_class": "PHYSICAL_HARDWARE_REQUIRED",
+    "evidence": "no adb device",
+    "notes": "",
+    "status": "BLOCKED"
+  },
+  "asset_validation": {
+    "evidence": "npm run validate:character-assets",
+    "notes": "",
+    "status": "PASS"
+  },
+  "audio": {
+    "evidence": "npm run validate:anime-digital-art-audio-closure",
+    "notes": "Subjective mix quality remains HUMAN_VALIDATION_REQUIRED",
+    "status": "PASS"
+  },
+  "build": {
+    "evidence": "Godot project import/load",
+    "notes": "Full export/Android not required for host digital exhaust if import+smoke pass",
+    "status": "PASS"
+  },
+  "crash_recovery": {
+    "blocker_class": "HUMAN_VALIDATION_REQUIRED",
+    "evidence": "mini_soak 5x headless quit",
+    "notes": "Full crash-dump capture on device remains PHYSICAL_HARDWARE_REQUIRED",
+    "status": "PARTIAL"
+  },
+  "frame_pacing": {
+    "blocker_class": "PHYSICAL_HARDWARE_REQUIRED",
+    "evidence": "device/frame telemetry needs interactive or device run",
+    "notes": "",
+    "status": "BLOCKED"
+  },
+  "input": {
+    "blocker_class": "HUMAN_VALIDATION_REQUIRED",
+    "evidence": "regression scripts exist; host smoke limited",
+    "notes": "",
+    "status": "PARTIAL"
+  },
+  "install_update": {
+    "blocker_class": "HUMAN_VALIDATION_REQUIRED",
+    "evidence": "digital-rc-update-rollback.mjs exists",
+    "notes": "",
+    "status": "PARTIAL"
+  },
+  "launch": {
+    "evidence": "godot --headless --quit-after 1",
+    "notes": "",
+    "status": "PASS"
+  },
+  "leaks": {
+    "blocker_class": "PHYSICAL_HARDWARE_REQUIRED",
+    "evidence": "leak instrumentation needs longer soak + profiler",
+    "notes": "",
+    "status": "BLOCKED"
+  },
+  "loading": {
+    "evidence": "headless import",
+    "notes": "",
+    "status": "PASS"
+  },
+  "local_multiplayer": {
+    "blocker_class": "HUMAN_VALIDATION_REQUIRED",
+    "evidence": "local versus paths exist; need bot/host soak",
+    "notes": "",
+    "status": "PARTIAL"
+  },
+  "menus": {
+    "blocker_class": "HUMAN_VALIDATION_REQUIRED",
+    "evidence": "res://tests/smoke_runner.gd",
+    "notes": "Covered by headless smoke where script exercises menus",
+    "status": "PARTIAL"
+  },
+  "networking": {
+    "evidence": "npm run test:netplay + test:rollback",
+    "notes": "",
+    "status": "PASS"
+  },
+  "offline": {
+    "evidence": "Godot local offline primary runtime",
+    "notes": "",
+    "status": "PASS"
+  },
+  "pause_resume": {
+    "blocker_class": "HUMAN_VALIDATION_REQUIRED",
+    "evidence": "wave020 pause diagnostics exist historically; smoke coverage",
+    "notes": "",
+    "status": "PARTIAL"
+  },
+  "persistence": {
+    "blocker_class": "HUMAN_VALIDATION_REQUIRED",
+    "evidence": "test:game-core / persistence tests",
+    "notes": "Persistence covered where unit tests exist",
+    "status": "PARTIAL"
+  },
+  "resolution": {
+    "blocker_class": "HUMAN_VALIDATION_REQUIRED",
+    "evidence": "viewport/export presets present",
+    "notes": "",
+    "status": "PARTIAL"
+  },
+  "save_load": {
+    "blocker_class": "HUMAN_VALIDATION_REQUIRED",
+    "evidence": "test:game-core / persistence tests",
+    "notes": "Persistence covered where unit tests exist",
+    "status": "PARTIAL"
+  }
+}

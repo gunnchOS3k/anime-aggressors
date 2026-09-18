@@ -1,0 +1,177 @@
+{
+  "adb_devices": {
+    "cmd": [
+      "/opt/homebrew/bin/adb",
+      "devices"
+    ],
+    "cwd": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/stream-c-pre-human-playtest",
+    "exit_code": 0,
+    "ok": true,
+    "seconds": 0.561,
+    "stderr_tail": "",
+    "stdout_tail": "List of devices attached\n\n"
+  },
+  "godot": {
+    "godot_bin": "/opt/homebrew/bin/godot",
+    "godot_root": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/stream-c-pre-human-playtest/game-godot",
+    "import_quit": {
+      "cmd": [
+        "/opt/homebrew/bin/godot",
+        "--headless",
+        "--path",
+        "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/stream-c-pre-human-playtest/game-godot",
+        "--quit-after",
+        "1"
+      ],
+      "cwd": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/stream-c-pre-human-playtest",
+      "exit_code": 0,
+      "ok": true,
+      "seconds": 1.347,
+      "stderr_tail": "ERROR: Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.\n   at: add_child (scene/main/node.cpp:1721)\n   GDScript backtrace (most recent call first):\n       [0] _viewport_bank (res://scripts/fighters/fighter_model_3d.gd:830)\n       [1] _build_viewport (res://scripts/fighters/fighter_model_3d.gd:741)\n       [2] _ready (res://scripts/fighters/fighter_model_3d.gd:84)\n       [3] _build_visuals (res://scripts/core/boot_scene.gd:87)\n       [4] _ready (res://scripts/core/boot_scene.gd:43)\nERROR: Node not inside tree. Use look_at_from_position() instead.\n   at: look_at (scene/3d/node_3d.cpp:1253)\n   GDScript backtrace (most recent call first):\n       [0] _build_viewport (res://scripts/fighters/fighter_model_3d.gd:773)\n       [1] _ready (res://scripts/fighters/fighter_model_3d.gd:84)\n       [2] _build_visuals (res://scripts/core/boot_scene.gd:87)\n       [3] _ready (res://scripts/core/boot_scene.gd:43)\nWARNING: 1 ObjectDB instance was leaked at exit (run with `--verbose` for details).\n   at: cleanup (core/object/object.cpp:2536)\n",
+      "stdout_tail": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\n\n"
+    },
+    "mini_soak": {
+      "ok": true,
+      "passes": 5,
+      "runs": [
+        {
+          "exit_code": 0,
+          "i": 0,
+          "ok": true,
+          "seconds": 0.856
+        },
+        {
+          "exit_code": 0,
+          "i": 1,
+          "ok": true,
+          "seconds": 0.867
+        },
+        {
+          "exit_code": 0,
+          "i": 2,
+          "ok": true,
+          "seconds": 0.743
+        },
+        {
+          "exit_code": 0,
+          "i": 3,
+          "ok": true,
+          "seconds": 0.832
+        },
+        {
+          "exit_code": 0,
+          "i": 4,
+          "ok": true,
+          "seconds": 0.742
+        }
+      ]
+    },
+    "smoke": {
+      "cmd": [
+        "/opt/homebrew/bin/godot",
+        "--headless",
+        "--path",
+        "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/stream-c-pre-human-playtest/game-godot",
+        "-s",
+        "res://tests/smoke_runner.gd"
+      ],
+      "cwd": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/stream-c-pre-human-playtest",
+      "exit_code": 1,
+      "ok": false,
+      "seconds": 1.508,
+      "stderr_tail": "\n   GDScript backtrace (most recent call first):\n       [0] load_stream (res://scripts/audio/procedural_audio_bank.gd:49)\n       [1] preload_launch_bank (res://scripts/audio/procedural_audio_bank.gd:149)\n       [2] self_test (res://scripts/audio/procedural_audio_bank.gd:163)\n       [3] run (res://tests/smoke_anime_digital_rc.gd:59)\n       [4] _invoke (res://tests/smoke_runner.gd:38)\n       [5] _run_all (res://tests/smoke_runner.gd:57)\nERROR: Failed loading resource: res://assets/audio/procedural/stages/ember-courtyard/bed.wav.\n   at: _load (core/io/resource_loader.cpp:317)\n   GDScript backtrace (most recent call first):\n       [0] load_stream (res://scripts/audio/procedural_audio_bank.gd:49)\n       [1] preload_launch_bank (res://scripts/audio/procedural_audio_bank.gd:149)\n       [2] self_test (res://scripts/audio/procedural_audio_bank.gd:163)\n       [3] run (res://tests/smoke_anime_digital_rc.gd:59)\n       [4] _invoke (res://tests/smoke_runner.gd:38)\n       [5] _run_all (res://tests/smoke_runner.gd:57)\nERROR: Cannot open file 'res://.godot/imported/bed.wav-bf1688624e3476b73f173107ab092983.sample'.\n   at: load (core/io/resource_format_binary.cpp:1156)\n   GDScript backtrace (most recent call first):\n       [0] load_stream (res://scripts/audio/procedural_audio_bank.gd:49)\n       [1] preload_launch_bank (res://scripts/audio/procedural_audio_bank.gd:149)\n       [2] self_test (res://scripts/audio/procedural_audio_bank.gd:163)\n       [3] run (res://tests/smoke_anime_digital_rc.gd:59)\n       [4] _invoke (res://tests/smoke_runner.gd:38)\n       [5] _run_all (res://tests/smoke_runner.gd:57)\nERROR: Failed loading resource: res://.godot/imported/bed.wav-bf1688624e3476b73f173107ab092983.sample.\n   at: _load (core/io/resource_loader.cpp:317)\n   GDScript backtrace (most recent call first):\n       [0] load_stream (res://scripts/audio/procedural_audio_bank.gd:49)\n       [1] preload_launch_bank (res://scripts/audio/procedural_audio_bank.gd:149)\n       [2] self_test (res://scripts/audio/procedural_audio_bank.gd:163)\n       [3] run (res://tests/smoke_anime_digital_rc.gd:59)\n       [4] _invoke (res://tests/smoke_runner.gd:38)\n       [5] _run_all (res://tests/smoke_runner.gd:57)\nERROR: Failed loading resource: res://assets/audio/procedural/stages/training-grid/bed.wav.\n   at: _load (core/io/resource_loader.cpp:317)\n   GDScript backtrace (most recent call first):\n       [0] load_stream (res://scripts/audio/procedural_audio_bank.gd:49)\n       [1] preload_launch_bank (res://scripts/audio/procedural_audio_bank.gd:149)\n       [2] self_test (res://scripts/audio/procedural_audio_bank.gd:163)\n       [3] run (res://tests/smoke_anime_digital_rc.gd:59)\n       [4] _invoke (res://tests/smoke_runner.gd:38)\n       [5] _run_all (res://tests/smoke_runner.gd:57)\nSCRIPT ERROR: Parse Error: Could not find type \"CharacterSelectShowcaseFlourish\" in the current scope.\n          at: GDScript::reload (res://scripts/menus/fighter_select_scene.gd:29)\n          GDScript backtrace (most recent call first):\n              [0] run (res://tests/smoke_match_loop.gd:29)\n              [1] _invoke (res://tests/smoke_runner.gd:38)\n              [2] _run_all (res://tests/smoke_runner.gd:57)\nERROR: Failed to load script \"res://scripts/menus/fighter_select_scene.gd\" with error \"Parse error\".\n   at: load (modules/gdscript/gdscript_resource_format.cpp:46)\n   GDScript backtrace (most recent call first):\n       [0] run (res://tests/smoke_match_loop.gd:29)\n       [1] _invoke (res://tests/smoke_runner.gd:38)\n       [2] _run_all (res://tests/smoke_runner.gd:57)\nERROR: smoke_runner: 2 suite(s) failed\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace (most recent call first):\n       [0] _run_all (res://tests/smoke_runner.gd:64)\nWARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\n   at: cleanup (core/object/object.cpp:2536)\nERROR: 2 resources still in use at exit (run with --verbose for details).\n   at: clear (core/io/resource.cpp:822)\n",
+      "stdout_tail": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\n\n[smoke] running boot\n[smoke] OK boot\n[smoke] running release_mode\n[smoke] FAIL release_mode:\nDebug HUD must be gated by OS.is_debug_build()\n[smoke] running data_load\n[smoke] OK data_load\n[smoke] running combat_depth\n[smoke] OK combat_depth\n[smoke] running wave_d_alpha\n[smoke] OK wave_d_alpha\n[smoke] running wave_d2_alpha_exit\n[smoke] OK wave_d2_alpha_exit\n[smoke] running anime_alpha_exit\n[smoke] OK anime_alpha_exit\n[smoke] running anime_beta_content\n[smoke] FAIL anime_beta_content:\nember-vale final modelPath\nrook-ironside final modelPath\njuno-spark final modelPath\nkaia-windrow final modelPath\nnix-calder final modelPath\norion-vell final modelPath\nvesper-nyx final modelPath\nstage preview texture loads\n[smoke] running anime_digital_rc\n[smoke] OK anime_digital_rc\n[smoke] running game_rc_achievements\n[smoke] OK game_rc_achievements\n[smoke] running device_a11y_telemetry\n[smoke] OK device_a11y_telemetry\n[smoke] running fighter_scene\n[smoke] OK fighter_scene\n[smoke] running training_scene\n[smoke] OK training_scene\n[smoke] running battle_scene\n[smoke] OK battle_scene\n[smoke] running match_loop\n[smoke] OK match_loop\n"
+    },
+    "smoke_script": "res://tests/smoke_runner.gd",
+    "version": {
+      "cmd": [
+        "/opt/homebrew/bin/godot",
+        "--version"
+      ],
+      "cwd": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/stream-c-pre-human-playtest",
+      "exit_code": 0,
+      "ok": true,
+      "seconds": 0.434,
+      "stderr_tail": "",
+      "stdout_tail": "4.7.1.stable.official.a13da4feb\n"
+    }
+  },
+  "godot_check": {
+    "cmd": [
+      "npm",
+      "run",
+      "godot:check"
+    ],
+    "cwd": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/stream-c-pre-human-playtest",
+    "exit_code": 0,
+    "ok": true,
+    "seconds": 1.421,
+    "stderr_tail": "npm warn Unknown env config \"devdir\". This will stop working in the next major version of npm.\nGodot export missing or placeholder: /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/stream-c-pre-human-playtest/apps/web/public/godot: missing .wasm file; /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/stream-c-pre-human-playtest/apps/web/public/godot: missing .pck file\n",
+    "stdout_tail": "\n> anime-aggressors@0.1.0 godot:check\n> node scripts/check-godot-runtime.mjs\n\nGodot project found: /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/stream-c-pre-human-playtest/game/godot/project.godot\nGodot CLI: godot\ngodot:check complete\n"
+  },
+  "test_game_core": {
+    "cmd": [
+      "npm",
+      "run",
+      "test:game-core"
+    ],
+    "cwd": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/stream-c-pre-human-playtest",
+    "exit_code": 0,
+    "ok": true,
+    "seconds": 11.206,
+    "stderr_tail": "npm warn Unknown env config \"devdir\". This will stop working in the next major version of npm.\nnpm warn Unknown env config \"devdir\". This will stop working in the next major version of npm.\nnpm warn Unknown env config \"devdir\". This will stop working in the next major version of npm.\n",
+    "stdout_tail": "de can spawn and move (1.850542ms)\n  \u2714 juno-spark can spawn and move (1.097333ms)\n  \u2714 kaia-windrow can spawn and move (1.456583ms)\n  \u2714 nix-calder can spawn and move (1.958417ms)\n  \u2714 orion-vell can spawn and move (1.6985ms)\n  \u2714 vesper-nyx can spawn and move (1.016291ms)\n\u2714 production completion \u2014 roster (10.913625ms)\n\u25b6 production completion \u2014 stages\n  \u2714 training-grid loads with valid spawns and ledges (2.9565ms)\n  \u2714 skyline-arena loads with valid spawns and ledges (0.043333ms)\n  \u2714 neon-rooftops loads with valid spawns and ledges (0.036917ms)\n\u2714 production completion \u2014 stages (3.127084ms)\n\u25b6 production completion \u2014 CPU\n  \u2714 CPU approaches idle target (11.101708ms)\n  \u2714 CPU can hit idle target within 20 seconds (3.301334ms)\n\u2714 production completion \u2014 CPU (14.608417ms)\n\u25b6 production completion \u2014 training\n  \u2714 training reset damage and positions work (1.349917ms)\n  \u2714 dummy shield and jump behaviors produce input (0.178208ms)\n\u2714 production completion \u2014 training (1.645292ms)\n\u25b6 energy projectiles\n  \u2714 creates clashable super energy attack (1.89125ms)\n  \u2714 detects overlap between opposing clashable attacks (0.192084ms)\n  \u2714 does not overlap same-player attacks (0.132292ms)\n  \u2714 ticks attack position and duration (0.123375ms)\n  \u2714 serializes and deserializes energy attack (0.150542ms)\n\u2714 energy projectiles (3.367416ms)\n\u25b6 replay record\n  \u2714 stores initial state, input log, and final hash (2.282375ms)\n  \u2714 same replay reproduces final hash (3.61375ms)\n\u2714 replay record (6.808459ms)\n\u25b6 ruleset match integration\n  \u2714 custom stock ruleset applies stocks (1.485334ms)\n  \u2714 time ruleset applies timer (0.158083ms)\n  \u2714 stamina ruleset applies HP (0.118875ms)\n  \u2714 damage ratio changes damage (0.487292ms)\n  \u2714 launch ratio changes knockback velocity (0.307042ms)\n  \u2714 element visual-only disables gameplay element modifiers (0.283125ms)\n\u2714 ruleset match integration (4.028625ms)\n\u25b6 rulesets\n  \u2714 default ruleset is valid (1.833292ms)\n  \u2714 presets include required names (0.2535ms)\n  \u2714 gameConfigFromRuleset maps stage and stocks (0.750667ms)\n  \u2714 element mode helpers (0.41975ms)\n  \u2714 timer frames conversion (0.407292ms)\n\u2714 rulesets (5.028292ms)\n\u25b6 save game record\n  \u2714 stores serialized state (1.578875ms)\n  \u2714 saved game can be loaded (1.261667ms)\n\u2714 save game record (3.9875ms)\n\u25b6 simpleFlaglineBot\n  \u2714 generates inputs for bot slots (2.484416ms)\n  \u2714 bot inputs are deterministic across frames (1.317125ms)\n\u2714 simpleFlaglineBot (5.279458ms)\n\u25b6 single hit per move instance\n  \u2714 attack overlaps hurtbox increases defender damage (6.81325ms)\n  \u2714 same move active for multiple frames does not repeatedly damage every frame (1.759875ms)\n  \u2714 defender enters hitstun on hit (0.709792ms)\n  \u2714 defender receives knockback on hit (1.307958ms)\n  \u2714 stocks decrease after leaving blast zone (8.707083ms)\n\u2714 single hit per move instance (22.779416ms)\n\u25b6 hit overlap helpers\n  \u2714 active hitbox overlaps hurtbox when positioned correctly (3.06025ms)\n\u2714 hit overlap helpers (3.155209ms)\n\u25b6 size classes\n  \u2714 small fighter is faster and weaker (14.027375ms)\n  \u2714 large fighter is slower and stronger (0.254792ms)\n  \u2714 medium fighter has neutral modifiers (0.27675ms)\n  \u2714 applies speed and damage in match helpers (0.377625ms)\n\u2714 size classes (16.728666ms)\n\u25b6 spawn helpers\n  \u2714 defaultBattleSpawns places P1 left and P2 right on floor (1.433541ms)\n  \u2714 spawnDisplayX returns stage thirds (0.315667ms)\n  \u2714 validateSpawnPoints passes for default skyline arena (0.98125ms)\n\u2714 spawn helpers (4.090792ms)\n\u25b6 stage platform collision\n  \u2714 player lands on main platform (1.264125ms)\n  \u2714 player lands on side platform (0.312ms)\n  \u2714 player falls past a platform when moving upward from below (0.2995ms)\n  \u2714 player resets jumps on landing via processPlayer (1.879333ms)\n\u2714 stage platform collision (4.891791ms)\n\u25b6 platform collision horizontal bounds\n  \u2714 misses platform when horizontally out of range (0.300292ms)\n\u2714 platform collision horizontal bounds (0.457583ms)\n\u2139 tests 313\n\u2139 suites 84\n\u2139 pass 313\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 3310.999917\n"
+  },
+  "test_netplay": {
+    "cmd": [
+      "npm",
+      "run",
+      "test:netplay"
+    ],
+    "cwd": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/stream-c-pre-human-playtest",
+    "exit_code": 0,
+    "ok": true,
+    "seconds": 2.796,
+    "stderr_tail": "npm warn Unknown env config \"devdir\". This will stop working in the next major version of npm.\nnpm warn Unknown env config \"devdir\". This will stop working in the next major version of npm.\nnpm warn Unknown env config \"devdir\". This will stop working in the next major version of npm.\n",
+    "stdout_tail": "\n> anime-aggressors@0.1.0 test:netplay\n> npm run test -w @anime-aggressors/netplay\n\n\n> @anime-aggressors/netplay@0.1.0 test\n> npm run build && node --test dist/test/*.test.js\n\n\n> @anime-aggressors/netplay@0.1.0 build\n> tsc\n\n\u25b6 local loopback netplay\n  \u2714 two peers exchange inputs and reach same final hash (23.327125ms)\n\u2714 local loopback netplay (24.429375ms)\n\u2139 tests 1\n\u2139 suites 1\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 238.119916\n"
+  },
+  "test_rollback": {
+    "cmd": [
+      "npm",
+      "run",
+      "test:rollback"
+    ],
+    "cwd": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/stream-c-pre-human-playtest",
+    "exit_code": 0,
+    "ok": true,
+    "seconds": 3.905,
+    "stderr_tail": "npm warn Unknown env config \"devdir\". This will stop working in the next major version of npm.\nnpm warn Unknown env config \"devdir\". This will stop working in the next major version of npm.\nnpm warn Unknown env config \"devdir\". This will stop working in the next major version of npm.\n",
+    "stdout_tail": "\n> anime-aggressors@0.1.0 test:rollback\n> npm run test -w @anime-aggressors/rollback\n\n\n> @anime-aggressors/rollback@0.1.0 test\n> npm run build && node --test dist/test/*.test.js\n\n\n> @anime-aggressors/rollback@0.1.0 build\n> tsc\n\n\u25b6 RollbackSession\n  \u2714 predicted input wrong triggers rollback and final hash matches authoritative replay (4.844208ms)\n  \u2714 exposes rollback count (0.806125ms)\n  \u2714 tracks desync when state diverges (0.466833ms)\n\u2714 RollbackSession (6.818958ms)\n\u2139 tests 3\n\u2139 suites 1\n\u2139 pass 3\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 161.952208\n"
+  },
+  "validate_audio_closure": {
+    "cmd": [
+      "npm",
+      "run",
+      "validate:anime-digital-art-audio-closure"
+    ],
+    "cwd": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/stream-c-pre-human-playtest",
+    "exit_code": 0,
+    "ok": true,
+    "seconds": 1.01,
+    "stderr_tail": "npm warn Unknown env config \"devdir\". This will stop working in the next major version of npm.\n",
+    "stdout_tail": "\n> anime-aggressors@0.1.0 validate:anime-digital-art-audio-closure\n> node scripts/validate-anime-digital-art-audio-closure.mjs\n\nOK: manifest rebuilt\nOK: 7 fighters procedural art+audio\nOK: 6 stages procedural art+audio\nOK: shared combat/UI bank\nOK: visual/audio QA evidence\nOK: 7 distinct silhouette accessories\nOK: zero blocks_token\nOK: token honesty\nvalidate-anime-digital-art-audio-closure: PASS\nPATH: A\nTOKENS_VALID: ANIME_BETA_CONTENT_COMPLETE_DIGITAL (+ ANIME_DIGITAL_RC_READY when RC runner evidence present)\n"
+  },
+  "validate_character_assets": {
+    "cmd": [
+      "npm",
+      "run",
+      "validate:character-assets"
+    ],
+    "cwd": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/stream-c-pre-human-playtest",
+    "exit_code": 0,
+    "ok": true,
+    "seconds": 0.406,
+    "stderr_tail": "npm warn Unknown env config \"devdir\". This will stop working in the next major version of npm.\n",
+    "stdout_tail": "\n> anime-aggressors@0.1.0 validate:character-assets\n> node scripts/validate-character-assets.mjs\n\nCharacter assets OK: 7 rigged procedural_final 3D meshes, 19 clips each\n"
+  }
+}
