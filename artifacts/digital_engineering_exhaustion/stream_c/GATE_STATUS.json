@@ -1,0 +1,92 @@
+{
+  "GAMES_PRE_HUMAN_PLAYTEST_ENGINEERING_EXHAUSTED": true,
+  "HUMAN_FUN_BALANCE_FEEL": "HUMAN_VALIDATION_REQUIRED",
+  "RIGHTS_CLEARANCE_COMPLETE": false,
+  "RIGHTS_QUARANTINE_ACTIVE": true,
+  "accepted_main_sha": "258cc0c45991ac9dded0c3d7813894d9fd7ca56d",
+  "blockers": [
+    {
+      "blocker_class": "HUMAN_VALIDATION_REQUIRED",
+      "dimension": "save_load",
+      "evidence": "test:game-core / persistence tests"
+    },
+    {
+      "blocker_class": "HUMAN_VALIDATION_REQUIRED",
+      "dimension": "menus",
+      "evidence": "res://tests/smoke_runner.gd"
+    },
+    {
+      "blocker_class": "HUMAN_VALIDATION_REQUIRED",
+      "dimension": "input",
+      "evidence": "regression scripts exist; host smoke limited"
+    },
+    {
+      "blocker_class": "HUMAN_VALIDATION_REQUIRED",
+      "dimension": "pause_resume",
+      "evidence": "wave020 pause diagnostics exist historically; smoke coverage"
+    },
+    {
+      "blocker_class": "HUMAN_VALIDATION_REQUIRED",
+      "dimension": "crash_recovery",
+      "evidence": "mini_soak 5x headless quit"
+    },
+    {
+      "blocker_class": "HUMAN_VALIDATION_REQUIRED",
+      "dimension": "persistence",
+      "evidence": "test:game-core / persistence tests"
+    },
+    {
+      "blocker_class": "PHYSICAL_HARDWARE_REQUIRED",
+      "dimension": "frame_pacing",
+      "evidence": "device/frame telemetry needs interactive or device run"
+    },
+    {
+      "blocker_class": "PHYSICAL_HARDWARE_REQUIRED",
+      "dimension": "leaks",
+      "evidence": "leak instrumentation needs longer soak + profiler"
+    },
+    {
+      "blocker_class": "HUMAN_VALIDATION_REQUIRED",
+      "dimension": "resolution",
+      "evidence": "viewport/export presets present"
+    },
+    {
+      "blocker_class": "HUMAN_VALIDATION_REQUIRED",
+      "dimension": "a11y",
+      "evidence": "automation incomplete for disabled-user validation"
+    },
+    {
+      "blocker_class": "HUMAN_VALIDATION_REQUIRED",
+      "dimension": "local_multiplayer",
+      "evidence": "local versus paths exist; need bot/host soak"
+    },
+    {
+      "blocker_class": "HUMAN_VALIDATION_REQUIRED",
+      "dimension": "install_update",
+      "evidence": "digital-rc-update-rollback.mjs exists"
+    },
+    {
+      "blocker_class": "PHYSICAL_HARDWARE_REQUIRED",
+      "dimension": "android",
+      "evidence": "no adb device"
+    },
+    {
+      "blocker_class": "LEGAL_RIGHTS_REVIEW_REQUIRED",
+      "dimension": "rights",
+      "evidence": "800 quarantined assets"
+    },
+    {
+      "blocker_class": "HUMAN_VALIDATION_REQUIRED",
+      "dimension": "fun_balance_feel",
+      "evidence": "playtest task sheets are templates only"
+    }
+  ],
+  "evaluated_at": "2026-09-18T18:54:28.468503+00:00",
+  "failures": [],
+  "game_id": "anime-aggressors",
+  "host": {
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7"
+  },
+  "unclassified_partial": []
+}

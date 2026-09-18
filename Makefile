@@ -127,3 +127,7 @@ taste-gate engineering-taste-gate:
 # Exits non-zero on material deviations. Never marks OWNER_APPROVED_GOLDEN.
 visual-golden-qa:
 	python3 tools/quality/run_visual_golden_qa.py
+
+.PHONY: stream-c-exhaust
+stream-c-exhaust:
+	python3 tools/digital_engineering_exhaustion/stream_c/run_stream_c.py
