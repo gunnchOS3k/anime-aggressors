@@ -1,6 +1,6 @@
 # Rights quarantine
 
-Count: **800**
+Count: **802**
 
 Unclear / unprovenanced binary assets are listed in `RIGHTS_QUARANTINE.json` and copied (when small) under `quarantine/unclear_third_party/`.
 
@@ -16,6 +16,8 @@ Unclear / unprovenanced binary assets are listed in `RIGHTS_QUARANTINE.json` and
 - `art_source/generated/procedural/orion-vell/orion-vell_procedural_proxy.glb` — UNPROVENANCED: no provenance entry for binary asset path
 - `art_source/generated/procedural/rook-ironside/rook-ironside_procedural_proxy.glb` — UNPROVENANCED: no provenance entry for binary asset path
 - `art_source/generated/procedural/vesper-nyx/vesper-nyx_procedural_proxy.glb` — UNPROVENANCED: no provenance entry for binary asset path
+- `artifacts/digital_engineering_exhaustion/stream_c/quarantine/unclear_third_party/artifacts__digital_engineering_exhaustion__stream_c__quarantine__unclear_third_party__docs__product-quality__evidence__visible-anime__16-stock-loss-respawn.png` — MARKER_QUARANTINE: path contains third-party/unclear marker
+- `artifacts/digital_engineering_exhaustion/stream_c/quarantine/unclear_third_party/artifacts__digital_engineering_exhaustion__stream_c__quarantine__unclear_third_party__docs__product-quality__evidence__visible-gui__09-stock-loss.png` — MARKER_QUARANTINE: path contains third-party/unclear marker
 - `artifacts/digital_engineering_exhaustion/stream_c/quarantine/unclear_third_party/docs__product-quality__evidence__visible-anime__16-stock-loss-respawn.png` — MARKER_QUARANTINE: path contains third-party/unclear marker
 - `artifacts/digital_engineering_exhaustion/stream_c/quarantine/unclear_third_party/docs__product-quality__evidence__visible-gui__09-stock-loss.png` — MARKER_QUARANTINE: path contains third-party/unclear marker
 - `artifacts/wave016/golden_slice_contact_sheet/ember_ash_trap_coil.png` — UNPROVENANCED: no provenance entry for binary asset path
@@ -204,7 +206,5 @@ Unclear / unprovenanced binary assets are listed in `RIGHTS_QUARANTINE.json` and
 - `docs/character-design/anime-character-review/rendered/ember-vale-expression-neutral.png` — UNPROVENANCED: no provenance entry for binary asset path
 - `docs/character-design/anime-character-review/rendered/ember-vale-expression-surprised.png` — UNPROVENANCED: no provenance entry for binary asset path
 - `docs/character-design/anime-character-review/rendered/ember-vale-expression-victory.png` — UNPROVENANCED: no provenance entry for binary asset path
-- `docs/character-design/anime-character-review/rendered/ember-vale-focus.png` — UNPROVENANCED: no provenance entry for binary asset path
-- `docs/character-design/anime-character-review/rendered/ember-vale-freeze.png` — UNPROVENANCED: no provenance entry for binary asset path
 
 _(truncated)_

@@ -26,7 +26,9 @@ var _preview_pending_index: int = -1
 var _preview_pending_lock: bool = false
 var _move_list_panel: Control
 var _move_list_btn: Button
-var _flourish: CharacterSelectShowcaseFlourish
+## Typed via preload (SHOWCASE_FLOURISH) so clean-room parse does not depend on
+## global_script_class_cache being warm before --import completes.
+var _flourish: Node
 var _flourish_btn: Button
 var _motion_label: Label
 var _last_accel: Vector3 = Vector3.ZERO

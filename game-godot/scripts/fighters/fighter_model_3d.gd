@@ -80,8 +80,11 @@ var _display_path: String = "ViewportBank+Sprite2D"
 
 
 func _ready() -> void:
+	# Defer viewport bank construction — root may still be busy adding children
+	# during boot (_ready), which makes synchronous add_child fail and leaves
+	# Camera3D outside the tree before look_at.
 	if _viewport == null:
-		_build_viewport()
+		call_deferred("_build_viewport")
 	set_process(true)
 
 
@@ -718,7 +721,11 @@ func _frame_camera_for_figure() -> void:
 	var look_arr: Array = cam.get("look_at", [0.0, 1.05, 0.0])
 	_camera.size = ortho
 	_camera.position = Vector3(float(pos_arr[0]), float(pos_arr[1]), float(pos_arr[2]))
-	_camera.look_at(Vector3(float(look_arr[0]), float(look_arr[1]), float(look_arr[2])), Vector3.UP)
+	var look_target := Vector3(float(look_arr[0]), float(look_arr[1]), float(look_arr[2]))
+	if _camera.is_inside_tree():
+		_camera.look_at(look_target, Vector3.UP)
+	else:
+		_camera.look_at_from_position(_camera.position, look_target, Vector3.UP)
 	if _loaded_model != null and is_instance_valid(_loaded_model):
 		var lean := float(cam.get("lean_offset", 0.0))
 		_loaded_model.rotation_degrees.y = -8.0 + lean * 40.0
@@ -770,7 +777,13 @@ func _build_viewport() -> void:
 	_camera.position = Vector3(0, 1.22, 5.0)
 	_camera.current = true
 	_viewport.add_child(_camera)
-	_camera.look_at(Vector3(0, 1.18, 0), Vector3.UP)
+	# look_at requires the node to be inside the scene tree; use from-position
+	# when the SubViewport bank is not yet attached (deferred add_child path).
+	var look_target := Vector3(0, 1.18, 0)
+	if _camera.is_inside_tree():
+		_camera.look_at(look_target, Vector3.UP)
+	else:
+		_camera.look_at_from_position(_camera.position, look_target, Vector3.UP)
 
 	_model_root = Node3D.new()
 	_model_root.name = "ModelRoot"
@@ -827,7 +840,8 @@ func _viewport_bank() -> Node:
 	if bank == null:
 		bank = Node.new()
 		bank.name = "FighterViewportBank"
-		root.add_child(bank)
+		# Root is often busy during nested _ready; defer attachment.
+		root.add_child.call_deferred(bank)
 	return bank
 
 

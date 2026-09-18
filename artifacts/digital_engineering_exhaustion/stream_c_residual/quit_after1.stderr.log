@@ -1,0 +1,17 @@
+ERROR: Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.
+   at: add_child (scene/main/node.cpp:1721)
+   GDScript backtrace (most recent call first):
+       [0] _viewport_bank (res://scripts/fighters/fighter_model_3d.gd:830)
+       [1] _build_viewport (res://scripts/fighters/fighter_model_3d.gd:741)
+       [2] _ready (res://scripts/fighters/fighter_model_3d.gd:84)
+       [3] _build_visuals (res://scripts/core/boot_scene.gd:87)
+       [4] _ready (res://scripts/core/boot_scene.gd:43)
+ERROR: Node not inside tree. Use look_at_from_position() instead.
+   at: look_at (scene/3d/node_3d.cpp:1253)
+   GDScript backtrace (most recent call first):
+       [0] _build_viewport (res://scripts/fighters/fighter_model_3d.gd:773)
+       [1] _ready (res://scripts/fighters/fighter_model_3d.gd:84)
+       [2] _build_visuals (res://scripts/core/boot_scene.gd:87)
+       [3] _ready (res://scripts/core/boot_scene.gd:43)
+WARNING: 1 ObjectDB instance was leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

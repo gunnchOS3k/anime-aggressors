@@ -1,0 +1,15 @@
+{
+  "cmd": [
+    "/opt/homebrew/bin/godot",
+    "--headless",
+    "--path",
+    "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/stream-c-anime-headless-residual/game-godot",
+    "-s",
+    "res://tests/smoke_runner.gd"
+  ],
+  "exit_code": 0,
+  "signal_name": null,
+  "engine_crash": false,
+  "stdout": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\n\n[smoke] running boot\n[smoke] OK boot\n[smoke] running release_mode\n[smoke] OK release_mode\n[smoke] running data_load\n[smoke] OK data_load\n[smoke] running combat_depth\n[smoke] OK combat_depth\n[smoke] running wave_d_alpha\n[smoke] OK wave_d_alpha\n[smoke] running wave_d2_alpha_exit\n[smoke] OK wave_d2_alpha_exit\n[smoke] running anime_alpha_exit\n[smoke] OK anime_alpha_exit\n[smoke] running anime_beta_content\n[smoke] OK anime_beta_content\n[smoke] running anime_digital_rc\n[smoke] OK anime_digital_rc\n[smoke] running game_rc_achievements\n[smoke] OK game_rc_achievements\n[smoke] running device_a11y_telemetry\n[smoke] OK device_a11y_telemetry\n[smoke] running fighter_scene\n[smoke] OK fighter_scene\n[smoke] running training_scene\n[smoke] OK training_scene\n[smoke] running battle_scene\n[smoke] OK battle_scene\n[smoke] running match_loop\n[smoke] OK match_loop\n[smoke] all suites passed\n",
+  "stderr": "WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).\n   at: cleanup (core/object/object.cpp:2536)\nERROR: 2 resources still in use at exit (run with --verbose for details).\n   at: clear (core/io/resource.cpp:822)\n"
+}
