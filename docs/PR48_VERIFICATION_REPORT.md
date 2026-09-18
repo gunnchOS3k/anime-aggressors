@@ -1,8 +1,8 @@
 # PR #48 Verification Report
 
-**Generated:** 2026-08-08T01:22:00.470Z
+**Generated:** 2026-09-18T21:02:14.624Z
 
-**Commit:** `436af24d68279eefa10205becb9ed0dcad344241`
+**Commit:** `836bb4ace3bcb136c4cf40724b9182a627baa08c`
 
 ## Verification tiers
 
@@ -28,8 +28,8 @@
 | Field | Value |
 |-------|-------|
 | Detected | true |
-| Binary | /Users/gunnchos/Applications/Godot/Godot-4.5.app/Contents/MacOS/Godot |
-| Version | 4.5.stable.official.876b29033 |
+| Binary | godot |
+| Version | 4.7.1.stable.official.a13da4feb |
 | Headless import | pass |
 | Smoke runner | pass |
 

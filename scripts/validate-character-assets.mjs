@@ -21,10 +21,10 @@ const requiredSockets = [
   "root", "chest", "head", "left_hand", "right_hand", "left_foot",
   "right_foot", "weapon_tip", "aura_core", "hit_spark_center",
 ];
-const canonicalModelPath = (fighterId) =>
-  `res://content/fighters/${fighterId}/model/${fighterId}_procedural_proxy.glb`;
-const legacyModelPath = (fighterId) =>
+const digitalBetaModelPath = (fighterId) =>
   `res://assets/characters/procedural_final/${fighterId}.glb`;
+const runtimeProxyGlbPath = (fighterId) =>
+  `res://content/fighters/${fighterId}/model/${fighterId}_procedural_proxy.glb`;
 const contentGlbPath = (fighterId) =>
   path.join(root, `game-godot/content/fighters/${fighterId}/model/${fighterId}_procedural_proxy.glb`);
 const errors = [];
@@ -115,13 +115,18 @@ for (const fighterId of fighterIds) {
   }
 
   const fighterData = JSON.parse(fs.readFileSync(fighterDataPath, "utf8"));
-  const expectedModel = canonicalModelPath(fighterId);
+  // Digital beta content smoke requires modelPath under procedural_final/.
+  // Wave020 runtime may still prefer content/*_procedural_proxy.glb via resolver.
+  const expectedModel = digitalBetaModelPath(fighterId);
   if (fighterData.modelPath !== expectedModel) {
     fail(`${fighterId}: fighter data points at the wrong model (expected ${expectedModel})`);
   }
+  if (String(fighterData.modelPath).includes("/proxy/") || String(fighterData.modelPath).includes("procedural_proxy")) {
+    fail(`${fighterId}: modelPath must not remain on proxy path for digital beta closure`);
+  }
   const playerGlb = contentGlbPath(fighterId);
   if (!fs.existsSync(playerGlb)) {
-    fail(`${fighterId}: missing canonical player-facing GLB at ${playerGlb}`);
+    fail(`${fighterId}: missing Wave020 player-facing proxy GLB at ${playerGlb} (runtime canonical ${runtimeProxyGlbPath(fighterId)})`);
   } else {
     try {
       const { buffer, json } = readGlb(playerGlb);

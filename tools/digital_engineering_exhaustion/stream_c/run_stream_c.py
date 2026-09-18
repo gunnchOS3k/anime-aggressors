@@ -15,6 +15,7 @@ import json
 import os
 import platform
 import shutil
+import signal
 import subprocess
 import sys
 import time
@@ -65,12 +66,114 @@ def sha256_file(path: Path) -> str:
     return h.hexdigest()
 
 
+def annotate_exit(exit_code: int | None) -> dict[str, Any]:
+    """Normalize process exit codes, including negative Unix signal codes."""
+    if exit_code is None:
+        return {
+            "exit_code": None,
+            "signal": None,
+            "signal_name": None,
+            "engine_crash": False,
+            "ok": False,
+        }
+    sig = None
+    sig_name = None
+    if exit_code < 0:
+        sig = -exit_code
+    elif exit_code > 128:
+        sig = exit_code - 128
+    if sig is not None:
+        try:
+            sig_name = signal.Signals(sig).name
+        except ValueError:
+            sig_name = f"SIG{sig}"
+    engine_crash = bool(sig is not None) or exit_code in {134, 139, -6, -11}
+    return {
+        "exit_code": exit_code,
+        "signal": sig,
+        "signal_name": sig_name,
+        "engine_crash": engine_crash,
+        "ok": exit_code == 0,
+    }
+
+
+def classify_godot_failure(
+    *,
+    exit_code: int | None,
+    stderr: str,
+    stdout: str = "",
+    phase: str,
+) -> str:
+    """Classify headless Godot failure without inventing evidence."""
+    ann = annotate_exit(exit_code)
+    text = f"{stderr or ''}\n{stdout or ''}"
+    lower = text.lower()
+    if ann["engine_crash"]:
+        if "sandbox" in lower or "seatbelt" in lower:
+            return "WRAPPER_ENVIRONMENT_DEFECT"
+        return "PLATFORM_SPECIFIC_ENGINE_DEFECT" if sys.platform == "darwin" else "GODOT_BINARY_DEFECT"
+    if "could not find type" in lower or "parse error" in lower or "failed to load script" in lower:
+        return "PROJECT_CODE_DEFECT"
+    if "failed loading resource" in lower or "cannot open file" in lower and ".godot/imported" in lower:
+        if "stale" in lower or "reimport" in lower:
+            return "STALE_IMPORT_CACHE"
+        return "RESOURCE_IMPORT_DEFECT"
+    if "no smoke script" in lower or "godot binary missing" in lower:
+        return "WRAPPER_ENVIRONMENT_DEFECT"
+    if exit_code not in (0, None) and phase == "smoke" and "smoke fail" in lower:
+        return "PROJECT_CODE_DEFECT"
+    if exit_code not in (0, None):
+        return "UNKNOWN"
+    return "NONE"
+
+
+def import_cache_state(godot_root: Path) -> dict[str, Any]:
+    cache = godot_root / ".godot"
+    imported = cache / "imported"
+    class_cache = cache / "global_script_class_cache.cfg"
+    imported_count = 0
+    if imported.is_dir():
+        imported_count = sum(1 for _ in imported.rglob("*") if _.is_file())
+    return {
+        "path": str(cache),
+        "present": cache.is_dir(),
+        "imported_file_count": imported_count,
+        "global_script_class_cache_present": class_cache.is_file(),
+    }
+
+
+def ensure_procedural_audio(godot_root: Path) -> dict[str, Any]:
+    """Deterministically regenerate procedural WAVs when stage beds are missing."""
+    beds = list((godot_root / "assets" / "audio" / "procedural" / "stages").glob("*/bed.wav"))
+    gen = ROOT / "tools" / "audio" / "generate_procedural_sfx.py"
+    result: dict[str, Any] = {
+        "beds_found": len(beds),
+        "generator": str(gen.relative_to(ROOT)) if gen.exists() else None,
+        "ran": False,
+        "ok": len(beds) >= 6,
+    }
+    if len(beds) >= 6:
+        return result
+    if not gen.exists():
+        result["ok"] = False
+        result["error"] = "generator missing and beds incomplete"
+        return result
+    ran = run_cmd([sys.executable, str(gen)], timeout=300)
+    result["ran"] = True
+    result["generate"] = ran
+    beds_after = list((godot_root / "assets" / "audio" / "procedural" / "stages").glob("*/bed.wav"))
+    result["beds_found"] = len(beds_after)
+    result["ok"] = ran.get("ok", False) and len(beds_after) >= 6
+    return result
+
+
 def run_cmd(
     cmd: list[str],
     *,
     cwd: Path | None = None,
     timeout: int = 600,
     env: dict[str, str] | None = None,
+    log_path: Path | None = None,
 ) -> dict[str, Any]:
     started = time.time()
     merged = os.environ.copy()
@@ -85,35 +188,64 @@ def run_cmd(
             timeout=timeout,
             env=merged,
         )
-        return {
+        ann = annotate_exit(proc.returncode)
+        payload = {
             "cmd": cmd,
             "cwd": str(cwd or ROOT),
-            "exit_code": proc.returncode,
-            "ok": proc.returncode == 0,
+            "exit_code": ann["exit_code"],
+            "signal": ann["signal"],
+            "signal_name": ann["signal_name"],
+            "engine_crash": ann["engine_crash"],
+            "ok": ann["ok"],
             "seconds": round(time.time() - started, 3),
             "stdout_tail": (proc.stdout or "")[-4000:],
             "stderr_tail": (proc.stderr or "")[-4000:],
         }
     except subprocess.TimeoutExpired as exc:
-        return {
+        payload = {
             "cmd": cmd,
             "cwd": str(cwd or ROOT),
             "exit_code": 124,
+            "signal": None,
+            "signal_name": None,
+            "engine_crash": False,
             "ok": False,
             "seconds": round(time.time() - started, 3),
             "stdout_tail": ((exc.stdout or b"") if isinstance(exc.stdout, bytes) else (exc.stdout or ""))[-2000:],
             "stderr_tail": f"TIMEOUT after {timeout}s",
         }
     except FileNotFoundError as exc:
-        return {
+        payload = {
             "cmd": cmd,
             "cwd": str(cwd or ROOT),
             "exit_code": 127,
+            "signal": None,
+            "signal_name": None,
+            "engine_crash": False,
             "ok": False,
             "seconds": round(time.time() - started, 3),
             "stdout_tail": "",
             "stderr_tail": str(exc),
         }
+    if log_path is not None:
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+        log_path.write_text(
+            json.dumps(
+                {
+                    "cmd": payload["cmd"],
+                    "exit_code": payload["exit_code"],
+                    "signal_name": payload.get("signal_name"),
+                    "engine_crash": payload.get("engine_crash"),
+                    "stdout": payload.get("stdout_tail"),
+                    "stderr": payload.get("stderr_tail"),
+                },
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        payload["log_path"] = str(log_path.relative_to(ROOT)) if log_path.is_relative_to(ROOT) else str(log_path)
+    return payload
 
 
 def detect_game() -> dict[str, str]:
@@ -460,12 +592,53 @@ def write_fixtures(game: dict[str, str]) -> dict[str, Any]:
 
 def run_godot_checks(game: dict[str, str], godot: str) -> dict[str, Any]:
     godot_root = (ROOT / game["godot_path"]).resolve() if game["godot_path"] != "." else ROOT
-    results: dict[str, Any] = {"godot_bin": godot, "godot_root": str(godot_root)}
-    results["version"] = run_cmd([godot, "--version"], timeout=30)
-    results["import_quit"] = run_cmd(
+    crash_dir = OUT / "crash_dumps"
+    crash_dir.mkdir(parents=True, exist_ok=True)
+    results: dict[str, Any] = {
+        "godot_bin": godot,
+        "godot_root": str(godot_root),
+        "import_cache_before": import_cache_state(godot_root),
+    }
+    ver = run_cmd([godot, "--version"], timeout=30)
+    results["version"] = ver
+    results["godot_version"] = (ver.get("stdout_tail") or "").strip().splitlines()[-1] if ver.get("ok") else None
+
+    # Deterministic audio beds before import/smoke (missing ≠ crash).
+    results["procedural_audio"] = ensure_procedural_audio(godot_root)
+
+    # Canonical import path: --import waits for resources then quits.
+    # --quit-after 1 alone is NOT a full import and must not gate as import PASS.
+    results["import"] = run_cmd(
+        [godot, "--headless", "--path", str(godot_root), "--import"],
+        timeout=600,
+        log_path=crash_dir / "godot_import.json",
+    )
+    results["import"]["blocker_class"] = classify_godot_failure(
+        exit_code=results["import"].get("exit_code"),
+        stderr=results["import"].get("stderr_tail") or "",
+        stdout=results["import"].get("stdout_tail") or "",
+        phase="import",
+    )
+    results["import_cache_after_import"] = import_cache_state(godot_root)
+
+    # Legacy alias kept for artifact consumers; mirrors canonical import result.
+    results["import_quit"] = {
+        **results["import"],
+        "note": "Canonical Stream C import uses --import; --quit-after is soak-only",
+    }
+
+    results["quit_after"] = run_cmd(
         [godot, "--headless", "--path", str(godot_root), "--quit-after", "1"],
         timeout=300,
+        log_path=crash_dir / "godot_quit_after.json",
     )
+    results["quit_after"]["blocker_class"] = classify_godot_failure(
+        exit_code=results["quit_after"].get("exit_code"),
+        stderr=results["quit_after"].get("stderr_tail") or "",
+        stdout=results["quit_after"].get("stdout_tail") or "",
+        phase="quit_after",
+    )
+
     smoke_candidates = [
         godot_root / "tests" / "smoke_runner.gd",
         ROOT / "tests" / "TestRunner.gd",
@@ -477,27 +650,89 @@ def run_godot_checks(game: dict[str, str], godot: str) -> dict[str, Any]:
         results["smoke"] = run_cmd(
             [godot, "--headless", "--path", str(godot_root), "-s", rel],
             timeout=600,
+            log_path=crash_dir / "godot_smoke.json",
         )
         results["smoke_script"] = rel
     else:
-        results["smoke"] = {"ok": False, "stderr_tail": "no smoke script found", "exit_code": 2}
+        results["smoke"] = {
+            "ok": False,
+            "stderr_tail": "no smoke script found",
+            "exit_code": 2,
+            "engine_crash": False,
+            "signal": None,
+            "signal_name": None,
+        }
+        results["smoke_script"] = None
+    results["smoke"]["blocker_class"] = classify_godot_failure(
+        exit_code=results["smoke"].get("exit_code"),
+        stderr=results["smoke"].get("stderr_tail") or "",
+        stdout=results["smoke"].get("stdout_tail") or "",
+        phase="smoke",
+    )
+    results["smoke"]["assertion_failure"] = (
+        not results["smoke"].get("ok", False)
+        and not results["smoke"].get("engine_crash", False)
+        and int(results["smoke"].get("exit_code") or 1) == 1
+    )
+
     # Short soak: re-enter headless quit loop N times as crash-recovery proxy
+    # (after import cache is warm). Engine crash never counts as soak pass.
     soak_ok = 0
     soak_runs = []
     for i in range(5):
         r = run_cmd(
             [godot, "--headless", "--path", str(godot_root), "--quit-after", "1"],
             timeout=180,
+            log_path=crash_dir / f"godot_soak_{i}.json",
         )
-        soak_runs.append({"i": i, "ok": r["ok"], "seconds": r["seconds"], "exit_code": r["exit_code"]})
-        if r["ok"]:
+        crash = bool(r.get("engine_crash"))
+        passed = bool(r.get("ok")) and not crash
+        soak_runs.append({
+            "i": i,
+            "ok": passed,
+            "seconds": r["seconds"],
+            "exit_code": r["exit_code"],
+            "signal_name": r.get("signal_name"),
+            "engine_crash": crash,
+        })
+        if passed:
             soak_ok += 1
     results["mini_soak"] = {"ok": soak_ok == 5, "passes": soak_ok, "runs": soak_runs}
     write_json(OUT / "soak" / "MINI_SOAK.json", results["mini_soak"])
-    write_json(OUT / "crash_dumps" / "HEADLESS_RUN_LOG.json", {
-        "import_quit": results["import_quit"],
+
+    # Never treat a canonical import/smoke engine crash as overall pass.
+    canonical_ok = (
+        bool(results["import"].get("ok"))
+        and not results["import"].get("engine_crash")
+        and bool(results["smoke"].get("ok"))
+        and not results["smoke"].get("engine_crash")
+        and bool(results["mini_soak"].get("ok"))
+    )
+    results["canonical_headless_ok"] = canonical_ok
+    results["primary_blocker_class"] = (
+        "NONE"
+        if canonical_ok
+        else (
+            results["smoke"].get("blocker_class")
+            if not results["smoke"].get("ok")
+            else results["import"].get("blocker_class")
+            if not results["import"].get("ok")
+            else "UNKNOWN"
+        )
+    )
+    write_json(crash_dir / "HEADLESS_RUN_LOG.json", {
+        "godot_bin": godot,
+        "godot_version": results.get("godot_version"),
+        "import_cache_before": results["import_cache_before"],
+        "import_cache_after_import": results["import_cache_after_import"],
+        "procedural_audio": results["procedural_audio"],
+        "import": results["import"],
+        "quit_after": results["quit_after"],
         "smoke": results.get("smoke"),
-        "note": "Headless exit logs only; not a physical crash dump",
+        "mini_soak": results["mini_soak"],
+        "canonical_headless_ok": canonical_ok,
+        "primary_blocker_class": results["primary_blocker_class"],
+        "note": "Headless exit logs only; not a physical crash dump. Engine crash never gates PASS.",
     })
     return results
 
@@ -509,26 +744,45 @@ def run_anime(game: dict[str, str]) -> tuple[dict[str, Any], dict[str, dict[str,
     if godot:
         g = run_godot_checks(game, godot)
         cmds["godot"] = g
+        import_ok = bool(g.get("import", g.get("import_quit", {})).get("ok")) and not g.get("import", {}).get("engine_crash")
+        smoke_ok = bool(g.get("smoke", {}).get("ok")) and not g.get("smoke", {}).get("engine_crash")
+        launch_ok = import_ok and smoke_ok
         dims["launch"] = dim(
-            "PASS" if g["import_quit"]["ok"] else "FAIL",
-            "godot --headless --quit-after 1",
+            "PASS" if launch_ok else "FAIL",
+            "godot --import + smoke_runner (canonical)",
+            None if launch_ok else g.get("primary_blocker_class") or "PROJECT_CODE_DEFECT",
+            notes="Smoke failure or engine crash cannot PASS launch",
         )
         dims["build"] = dim(
-            "PASS" if g["import_quit"]["ok"] else "PARTIAL",
-            "Godot project import/load",
+            "PASS" if import_ok else "FAIL",
+            "Godot --import",
+            None if import_ok else g.get("import", {}).get("blocker_class"),
             notes="Full export/Android not required for host digital exhaust if import+smoke pass",
         )
-        smoke_ok = bool(g.get("smoke", {}).get("ok"))
-        dims["menus"] = dim("PASS" if smoke_ok else "PARTIAL", g.get("smoke_script", "smoke"), None if smoke_ok else "HUMAN_VALIDATION_REQUIRED", notes="Covered by headless smoke where script exercises menus")
+        dims["menus"] = dim(
+            "PASS" if smoke_ok else "FAIL",
+            g.get("smoke_script", "smoke"),
+            None if smoke_ok else g.get("smoke", {}).get("blocker_class") or "PROJECT_CODE_DEFECT",
+            notes="Covered by headless smoke where script exercises menus",
+        )
         dims["input"] = dim("PARTIAL", "regression scripts exist; host smoke limited", "HUMAN_VALIDATION_REQUIRED")
         dims["pause_resume"] = dim("PARTIAL", "wave020 pause diagnostics exist historically; smoke coverage", "HUMAN_VALIDATION_REQUIRED")
-        dims["crash_recovery"] = dim("PARTIAL" if g["mini_soak"]["ok"] else "FAIL", "mini_soak 5x headless quit", "HUMAN_VALIDATION_REQUIRED", notes="Full crash-dump capture on device remains PHYSICAL_HARDWARE_REQUIRED")
+        dims["crash_recovery"] = dim(
+            "PARTIAL" if g["mini_soak"]["ok"] else "FAIL",
+            "mini_soak 5x headless quit",
+            "HUMAN_VALIDATION_REQUIRED" if g["mini_soak"]["ok"] else "PROJECT_CODE_DEFECT",
+            notes="Full crash-dump capture on device remains PHYSICAL_HARDWARE_REQUIRED; engine crash never counts as soak pass",
+        )
         dims["frame_pacing"] = dim("BLOCKED", "device/frame telemetry needs interactive or device run", "PHYSICAL_HARDWARE_REQUIRED")
         dims["leaks"] = dim("BLOCKED", "leak instrumentation needs longer soak + profiler", "PHYSICAL_HARDWARE_REQUIRED")
-        dims["loading"] = dim("PASS" if g["import_quit"]["ok"] else "FAIL", "headless import")
+        dims["loading"] = dim(
+            "PASS" if import_ok else "FAIL",
+            "godot --import",
+            None if import_ok else g.get("import", {}).get("blocker_class"),
+        )
     else:
-        dims["launch"] = dim("FAIL", "Godot binary missing")
-        dims["build"] = dim("FAIL", "Godot binary missing")
+        dims["launch"] = dim("FAIL", "Godot binary missing", "WRAPPER_ENVIRONMENT_DEFECT")
+        dims["build"] = dim("FAIL", "Godot binary missing", "WRAPPER_ENVIRONMENT_DEFECT")
 
     # Node validators if present
     if (ROOT / "package.json").exists():
@@ -788,6 +1042,10 @@ def evaluate_gate(
     if any(not v.get("evidence") for v in dims.values()):
         digital_exhausted = False
         failures.append("empty_evidence")
+
+    # Hard fail-closed: launch/menus FAIL (includes smoke/engine crash) cannot exhaust.
+    if any(dims.get(k, {}).get("status") == "FAIL" for k in ("launch", "menus", "loading", "build")):
+        digital_exhausted = False
 
     return {
         "GAMES_PRE_HUMAN_PLAYTEST_ENGINEERING_EXHAUSTED": digital_exhausted,

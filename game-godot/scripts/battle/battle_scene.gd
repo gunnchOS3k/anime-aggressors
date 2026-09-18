@@ -65,7 +65,8 @@ func _ready() -> void:
 		_hazard_runtime.hazards_enabled = GameState.hazards_enabled or GameState.mode == "hazards"
 		_hazard_runtime.items_enabled = GameState.items_enabled or GameState.mode == "hazards"
 		_hazard_runtime.configure(self, [fighter1, fighter2], GameState.match_seed, stage_root)
-	var show_debug := _CompetitiveRules.show_debug_hud(GameState)
+	# Release builds must never surface the combat debug HUD; gate on OS.is_debug_build().
+	var show_debug := OS.is_debug_build() and _CompetitiveRules.show_debug_hud(GameState)
 	if show_debug:
 		_debug_hud = DEBUG_HUD_SCENE.instantiate()
 		add_child(_debug_hud)
