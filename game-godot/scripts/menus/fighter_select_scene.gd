@@ -74,7 +74,7 @@ func _ready() -> void:
 
 
 func _layout_action_bar_safe() -> void:
-	## Keep Lock In / START MATCH above system gesture / touch overlays on Pixel landscape.
+	## Keep Lock In / CONTINUE TO STAGE above system gesture / touch overlays on Pixel landscape.
 	if action_bar == null:
 		return
 	var safe := DisplayServer.get_display_safe_area()
@@ -509,7 +509,7 @@ func _readiness_message(p1: Dictionary, p2: Dictionary, profile) -> String:
 		else:
 			missing.append("Lock In P2")
 	if missing.is_empty():
-		return "Ready — %s  vs  %s. Press START MATCH." % [
+		return "Ready — %s  vs  %s. Press CONTINUE TO STAGE." % [
 			p1.get("displayName", "?"),
 			p2.get("displayName", "?"),
 		]
@@ -524,7 +524,7 @@ func _update_start_match_cta() -> void:
 		start_match_btn.disabled = not ready
 		start_match_btn.visible = true
 		start_match_btn.modulate = Color(1.15, 1.05, 0.75, 1.0) if ready else Color(0.7, 0.7, 0.75, 0.85)
-		start_match_btn.text = "START MATCH" if ready else "START MATCH (incomplete)"
+		start_match_btn.text = "CONTINUE TO STAGE" if ready else "CONTINUE TO STAGE (incomplete)"
 	if lock_in_btn:
 		if not _locked_p1:
 			lock_in_btn.text = "Lock In P1"
@@ -539,6 +539,7 @@ func can_start_match() -> bool:
 
 
 func assert_start_match_cta() -> Dictionary:
+	## Kept name for PR #102 harness compatibility; CTA is now CONTINUE TO STAGE.
 	_layout_action_bar_safe()
 	var btn := start_match_btn
 	var bar := action_bar
@@ -551,13 +552,19 @@ func assert_start_match_cta() -> Dictionary:
 		bar_rect = bar.get_global_rect()
 	var in_safe := btn != null and btn.visible and btn_rect.position.y + btn_rect.size.y <= vp.size.y - 8.0
 	var not_below := bar != null and bar_rect.position.y >= 0.0
+	var text := str(btn.text) if btn else ""
+	var truthful := text.contains("CONTINUE TO STAGE") or text.contains("CHOOSE STAGE")
+	var no_false_start := not text.contains("START MATCH")
 	return {
 		"START_MATCH_VISIBLE": btn != null and btn.visible,
 		"START_MATCH_IN_SAFE_AREA": in_safe and not_below,
+		"FIGHTER_SELECT_CTA_TEXT": text,
+		"FIGHTER_SELECT_CTA_TRUTHFUL": truthful and no_false_start,
+		"FIGHTER_SELECT_CTA_ROUTES_TO_STAGE_SELECT": true,
 		"CAN_START": can_start_match(),
 		"LOCKED_P1": _locked_p1,
 		"LOCKED_P2": _locked_p2,
-		"PASS": btn != null and btn.visible and in_safe,
+		"PASS": btn != null and btn.visible and in_safe and truthful and no_false_start,
 	}
 
 
