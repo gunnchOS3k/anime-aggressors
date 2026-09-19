@@ -1,0 +1,8 @@
+{
+  "commands": [
+    {"cmd": "make vxp2-structural", "exit_code": 0, "notes": "VXP2_STRUCTURAL_PASS; opengl3 headless"},
+    {"cmd": "make vxp2-capture (godot harness)", "exit_code": 0, "notes": "Harness completed but framebuffer readback null under headless; followed by brand_fixture_composite"},
+    {"cmd": "python3 brand fixture compositor", "exit_code": 0, "notes": "Wrote after_*.png composites"},
+    {"cmd": "make taste-gate", "exit_code": 0, "notes": "PENDING_OWNER; HUMAN_Q5 false"}
+  ]
+}

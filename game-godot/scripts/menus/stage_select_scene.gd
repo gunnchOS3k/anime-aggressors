@@ -1,5 +1,9 @@
 extends "res://scripts/ui/console_menu_base.gd"
 
+const Vxp2BrandScript = preload("res://scripts/vxp2/vxp2_brand.gd")
+const Vxp2A11yScript = preload("res://scripts/vxp2/vxp2_accessibility_chrome.gd")
+const Vxp2GlyphScript = preload("res://scripts/vxp2/vxp2_glyph_strip.gd")
+
 var _stages: Array = []
 var _cursor: int = 0
 var _preview_tex: TextureRect
@@ -13,11 +17,14 @@ const STAGE_TILE_SCENE := preload("res://scenes/ui/StageTile.tscn")
 func _ready() -> void:
 	_stages = GameState.production_stage_ids()
 	super._ready()
+	Vxp2BrandScript.apply_surface_chrome(self)
 	if title_label:
-		title_label.text = "Stage Select"
+		title_label.text = "Choose Destination"
 	_ensure_preview_texture()
 	_build_grid()
 	_refresh()
+	Vxp2GlyphScript.attach(self, ["confirm", "back"])
+	Vxp2A11yScript.apply(self)
 
 func _ensure_preview_texture() -> void:
 	var vbox := get_node_or_null("VBox") as VBoxContainer
@@ -65,13 +72,10 @@ func _refresh() -> void:
 	var id: String = _stages[_cursor]
 	var data: Dictionary = GameState.load_stage(id)
 	if preview:
-		preview.text = "%s\nLayout: %s\nArt: %s" % [
-			data.get("displayName", id),
-			data.get("layoutType", ""),
-			data.get("artStatus", ""),
-		]
+		# Player-facing destination copy only — never PROCEDURAL_FINAL / artStatus.
+		preview.text = Vxp2BrandScript.player_destination_copy(data)
 	if rules:
-		rules.text = "Stocks: %d | CPU Lv%d" % [GameState.stocks, GameState.cpu_level]
+		rules.text = "Stocks %d · CPU Lv%d" % [GameState.stocks, GameState.cpu_level]
 	_load_stage_preview(data)
 
 func _load_stage_preview(data: Dictionary) -> void:

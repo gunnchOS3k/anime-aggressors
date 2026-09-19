@@ -6,6 +6,7 @@ const PRELOAD_PATHS: Array[String] = [
 	"res://data/fighters.json",
 	"res://data/stages.json",
 	"res://data/rulesets.json",
+	"res://assets/ui/themes/aa_vxp2_theme.tres",
 	"res://assets/placeholder/aa_theme.tres",
 ]
 const _CharacterLife = preload("res://scripts/fighters/fighter_character_life.gd")
