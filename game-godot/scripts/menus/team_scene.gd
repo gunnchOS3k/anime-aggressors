@@ -42,7 +42,7 @@ func _ensure_ui() -> void:
 
 func _refresh() -> void:
 	if status_label:
-		status_label.text = "2v2 stocks ruleset (team_attack toggle in Ruleset).\nP1 human vs CPU ally-pressure bout.\nGeometry: PROCEDURAL_FINAL launch stages."
+		status_label.text = "2v2 stocks ruleset (team_attack toggle in Ruleset).\nP1 human vs CPU ally-pressure bout.\nLaunch stages ready."
 
 
 func _on_start() -> void:

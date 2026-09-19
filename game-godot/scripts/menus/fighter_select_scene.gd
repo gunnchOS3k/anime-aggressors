@@ -7,6 +7,9 @@ const MODEL_SCRIPT := preload("res://scripts/fighters/fighter_model_3d.gd")
 const MOVE_LIST_PANEL := preload("res://scripts/ui/move_list_panel.gd")
 const SHOWCASE_FLOURISH := preload("res://scripts/menus/character_select_showcase_flourish.gd")
 const _PresentationGates = preload("res://scripts/menus/wave020_presentation_gates.gd")
+const Vxp2BrandScript = preload("res://scripts/vxp2/vxp2_brand.gd")
+const Vxp2A11yScript = preload("res://scripts/vxp2/vxp2_accessibility_chrome.gd")
+const Vxp2GlyphScript = preload("res://scripts/vxp2/vxp2_glyph_strip.gd")
 
 var _roster: Array = []
 var _cursor: int = 0
@@ -45,9 +48,11 @@ const SHAKE_THRESHOLD := 2.35
 func _ready() -> void:
 	_roster = GameState.roster_ids()
 	super._ready()
+	Vxp2BrandScript.apply_surface_chrome(self)
 	if title_label:
-		title_label.text = "Fighter Select"
+		title_label.text = "Choose Your Fighter"
 	_ensure_preview_host()
+	_skin_preview_frame()
 	if _PresentationGates.showcase_flourish_enabled:
 		_ensure_showcase_flourish()
 	_build_grid()
@@ -57,6 +62,24 @@ func _ready() -> void:
 		_ensure_select_move_list_button()
 	if _PresentationGates.showcase_flourish_enabled:
 		_ensure_flourish_controls()
+	Vxp2GlyphScript.attach(self, ["confirm", "back"])
+	Vxp2A11yScript.apply(self)
+
+
+func _skin_preview_frame() -> void:
+	var frame := get_node_or_null("%PreviewHost/PreviewFrame") as ColorRect
+	if frame == null:
+		frame = find_child("PreviewFrame", true, false) as ColorRect
+	if frame:
+		frame.color = Color(0.05, 0.08, 0.14, 0.92) if not Vxp2BrandScript.high_contrast_active() else Color(0, 0, 0, 1)
+	# Element non-color cue host: thin gold rule under player names.
+	var panels := get_node_or_null("VBox/Panels") as Control
+	if panels and panels.get_node_or_null("Vxp2NameRule") == null:
+		var rule := ColorRect.new()
+		rule.name = "Vxp2NameRule"
+		rule.custom_minimum_size = Vector2(0, 3)
+		rule.color = Vxp2BrandScript.COLOR_GOLD
+		panels.add_sibling(rule)
 
 
 func _ensure_showcase_flourish() -> void:
@@ -406,12 +429,31 @@ func _refresh() -> void:
 		p2_name.text = "P2: %s%s" % [p2.get("displayName", "?"), " (CPU)" if GameState.p2_is_cpu else ""]
 	if detail:
 		var traits: PackedStringArray = profile.personality_traits
-		detail.text = "%s  ·  %s\n%s\n\"%s\"\n%s | Wt %d · Run %d · Jump %d\nSig: %s" % [
+		var element := str(focus.get("element", "")).capitalize()
+		# Shape/text cue for element (not color-only).
+		var element_mark := "◆"
+		match element.to_lower():
+			"fire", "ember":
+				element_mark = "▲"
+			"ice", "water":
+				element_mark = "●"
+			"wind", "air":
+				element_mark = "◇"
+			"void", "dark":
+				element_mark = "■"
+			"earth", "metal":
+				element_mark = "■"
+			"electric", "lightning":
+				element_mark = "⚡"
+			_:
+				element_mark = "◆"
+		detail.text = "%s  ·  %s\n%s\n\"%s\"\n%s %s | Wt %d · Run %d · Jump %d\nSig: %s" % [
 			profile.power_identity,
 			profile.select_archetype,
 			" · ".join(traits),
 			profile.selection_line,
-			focus.get("element", ""),
+			element_mark,
+			element,
 			int(focus.get("weight", 0)),
 			int(focus.get("runSpeed", 0)),
 			int(focus.get("jumpStrength", 0)),
