@@ -5,51 +5,51 @@
   "mainPlatform": {
     "x": 0,
     "y": 290,
-    "width": 700,
+    "width": 826,
     "height": 40
   },
   "sidePlatforms": [
     {
       "x": -300,
       "y": 210,
-      "width": 140,
+      "width": 165,
       "height": 22
     },
     {
       "x": 300,
       "y": 210,
-      "width": 140,
+      "width": 165,
       "height": 22
     },
     {
       "x": -120,
       "y": 120,
-      "width": 100,
+      "width": 118,
       "height": 20
     },
     {
       "x": 120,
       "y": 120,
-      "width": 100,
+      "width": 118,
       "height": 20
     }
   ],
   "spawnPoints": [
     {
       "slot": 1,
-      "x": -200,
+      "x": -224,
       "y": 210
     },
     {
       "slot": 2,
-      "x": 200,
+      "x": 224,
       "y": 210
     }
   ],
   "blastZones": {
-    "left": -540,
-    "right": 540,
-    "top": -360,
+    "left": -605,
+    "right": 605,
+    "top": -378,
     "bottom": 450
   },
   "ledges": true,
@@ -69,8 +69,8 @@
   ],
   "cameraProfile": {
     "mode": "platform_fighter",
-    "minZoom": 0.88,
-    "maxZoom": 1.38,
+    "minZoom": 0.72,
+    "maxZoom": 1.18,
     "lerp": 0.13,
     "deadzone": {
       "x": 75,
@@ -111,5 +111,19 @@
   "artStatus": "PROCEDURAL_FINAL",
   "productionStatus": "procedural_final",
   "geometryStatus": "PROCEDURAL_FINAL",
-  "notes": "Launch competitive geometry + procedural environment art/audio are PROCEDURAL_FINAL. Painted remasters optional/out of token scope."
+  "notes": "Launch competitive geometry + procedural environment art/audio are PROCEDURAL_FINAL. Painted remasters optional/out of token scope.",
+  "ledgeAnchors": [
+    {
+      "id": "left",
+      "x": -413.0,
+      "y": 290.0,
+      "facing": 1
+    },
+    {
+      "id": "right",
+      "x": 413.0,
+      "y": 290.0,
+      "facing": -1
+    }
+  ]
 }

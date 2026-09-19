@@ -30,7 +30,8 @@ signal state_changed(state: String)
 
 const GRAVITY := 1800.0
 const FAST_FALL_MULT := 1.45
-const EDGE_MARGIN := 28.0
+const EDGE_MARGIN := 36.0
+const _CombatSpace = preload("res://scripts/combat/combat_space_contract.gd")
 
 @export var slot: int = 1
 @export var fighter_id: String = "ember-vale"
@@ -56,6 +57,10 @@ var grabbed_target = null
 var grabbed_by = null
 var platform_half_width: float = 400.0
 var platform_center_x: float = 0.0
+var platform_surface_y: float = 280.0
+var ledges_enabled: bool = true
+var _ledge_anchor_l: Vector2 = Vector2(-400, 280)
+var _ledge_anchor_r: Vector2 = Vector2(400, 280)
 
 var state_machine
 var move_runner
@@ -264,6 +269,7 @@ func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, s
 		if is_cpu and "cpu_level" in gs:
 			cpu_level = int(gs.cpu_level)
 	cpu.setup(self, cpu_level, cpu_seed)
+	_setup_shapes()
 	if body and data.has("color"):
 		body.color = Color(data.get("color"))
 	if label:
@@ -507,7 +513,10 @@ func _physics_process(delta: float) -> void:
 		_track_landing()
 		return
 	if is_cpu or dummy_mode == "cpu":
-		cpu.tick(delta, _find_opponent())
+		if controls_enabled:
+			cpu.tick(delta, _find_opponent())
+		elif cpu != null and cpu.has_method("clear_simulated_inputs"):
+			cpu.clear_simulated_inputs()
 	elif dummy_mode != "idle":
 		_dummy_tick(delta)
 	if controls_enabled:
@@ -877,38 +886,120 @@ func _track_landing() -> void:
 	_was_airborne = airborne
 
 func _check_ledge_grab() -> void:
+	if not ledges_enabled:
+		return
 	if is_on_floor() or invincible:
 		return
-	if state_machine.current_state in [_FighterStates.LEDGE_HANG, _FighterStates.LEDGE_GETUP, _FighterStates.KO, _FighterStates.RESPAWN]:
+	if state_machine.current_state in [
+		_FighterStates.LEDGE_HANG, _FighterStates.LEDGE_GETUP,
+		_FighterStates.KO, _FighterStates.RESPAWN,
+	]:
 		return
-	if velocity.y < -40.0:
-		return
-	var edge_l := platform_center_x - platform_half_width
-	var edge_r := platform_center_x + platform_half_width
-	var near_l := absf(global_position.x - edge_l) < 36.0 and global_position.y > 40.0 and global_position.y < 120.0
-	var near_r := absf(global_position.x - edge_r) < 36.0 and global_position.y > 40.0 and global_position.y < 120.0
-	if near_l or near_r:
-		_ledge_side = -1 if near_l else 1
-		global_position = Vector2(edge_l if near_l else edge_r, 56.0)
+	# Rising fighters do not magnet onto ledges.
+	var rising_too_fast := velocity.y < -_CombatSpace.LEDGE_SNAP_MAX_SPEED_UP
+	var candidates: Array = [
+		{"side": -1, "anchor": _ledge_anchor_l},
+		{"side": 1, "anchor": _ledge_anchor_r},
+	]
+	for c in candidates:
+		var side: int = int(c.side)
+		var anchor: Vector2 = c.anchor
+		if not _CombatSpace.in_ledge_grab_window(global_position, anchor, rising_too_fast):
+			continue
+		if _ledge_occupied(side):
+			continue
+		# Prefer grabs when moving toward stage or nearly still horizontally.
+		var toward_stage := signf(platform_center_x - global_position.x)
+		if absf(velocity.x) > 80.0 and signf(velocity.x) == -toward_stage:
+			continue
+		_ledge_side = side
+		global_position = _CombatSpace.ledge_hang_position(anchor.x, platform_surface_y, side)
 		velocity = Vector2.ZERO
 		facing = -_ledge_side
 		state_machine.enter(_FighterStates.LEDGE_HANG)
+		return
+
+
+func _ledge_occupied(side: int) -> bool:
+	var tree := get_tree()
+	if tree == null:
+		return false
+	for node in tree.get_nodes_in_group("fighters"):
+		if node == self or node == null or not is_instance_valid(node):
+			continue
+		if not ("state_machine" in node) or node.state_machine == null:
+			continue
+		if str(node.state_machine.current_state) != _FighterStates.LEDGE_HANG:
+			continue
+		if node.has_method("get_ledge_side"):
+			if int(node.get_ledge_side()) == side:
+				return true
+		elif int(node.get("_ledge_side")) == side:
+			return true
+	return false
+
 
 func tick_ledge_hang(_delta: float) -> void:
 	velocity = Vector2.ZERO
+	global_position = _CombatSpace.ledge_hang_position(
+		_ledge_anchor_l.x if _ledge_side < 0 else _ledge_anchor_r.x,
+		platform_surface_y,
+		_ledge_side
+	)
 	if _read_jump_pressed() or _read_up():
 		velocity.y = -get_jump_strength() * 0.85
+		velocity.x = float(-_ledge_side) * get_air_speed() * 0.35
 		invincible = false
 		state_machine.enter(_FighterStates.JUMP)
 		return
 	if _read_attack_pressed() or _read_dodge_pressed() or (_ledge_side < 0 and _read_axis() > 0.4) or (_ledge_side > 0 and _read_axis() < -0.4):
 		global_position.x += float(-_ledge_side) * 28.0
-		global_position.y -= 24.0
+		global_position.y = platform_surface_y - 8.0
 		state_machine.enter(_FighterStates.LEDGE_GETUP)
 		return
 	if _read_down() or state_machine.state_time > 2.5:
 		invincible = false
+		global_position.y += 6.0
 		state_machine.enter(_FighterStates.FALL)
+
+
+func configure_stage_geometry(main: Dictionary, anchors: Array = [], enable_ledges: bool = true) -> void:
+	platform_center_x = float(main.get("x", 0))
+	platform_half_width = float(main.get("width", 800)) / 2.0
+	platform_surface_y = float(main.get("y", 280))
+	ledges_enabled = enable_ledges
+	_ledge_anchor_l = Vector2(platform_center_x - platform_half_width, platform_surface_y)
+	_ledge_anchor_r = Vector2(platform_center_x + platform_half_width, platform_surface_y)
+	for a in anchors:
+		if not (a is Dictionary):
+			continue
+		var ax := float(a.get("x", 0))
+		var ay := float(a.get("y", platform_surface_y))
+		var aid := str(a.get("id", ""))
+		if aid == "left" or ax < platform_center_x:
+			_ledge_anchor_l = Vector2(ax, ay)
+		else:
+			_ledge_anchor_r = Vector2(ax, ay)
+
+
+func get_ledge_side() -> int:
+	return _ledge_side
+
+
+func is_offstage() -> bool:
+	if is_on_floor():
+		return false
+	return absf(global_position.x - platform_center_x) > platform_half_width + 8.0
+
+
+func nearest_ledge_anchor() -> Vector2:
+	var dl := absf(global_position.x - _ledge_anchor_l.x)
+	var dr := absf(global_position.x - _ledge_anchor_r.x)
+	return _ledge_anchor_l if dl <= dr else _ledge_anchor_r
+
+
+func stage_center_x() -> float:
+	return platform_center_x
 
 func _on_move_active(move: Dictionary) -> void:
 	var mid = str(move.get("move_id", ""))
@@ -1447,12 +1538,31 @@ func _play_current_animation(state: String) -> void:
 		animator.play_for_state(state)
 
 func _setup_shapes() -> void:
+	var profile: Dictionary = {}
+	if data is Dictionary:
+		profile = data.get("hitHurtProfile", {})
+	var hurt_sz: Vector2 = _CombatSpace.hurt_size_from_profile(profile)
+	var col_sz: Vector2 = _CombatSpace.collision_size_from_profile(profile)
 	for path in ["CollisionShape2D", "Hurtbox/HurtShape", "Hitbox/HitShape"]:
 		var cs = get_node_or_null(path) as CollisionShape2D
-		if cs and cs.shape == null:
-			var rect = RectangleShape2D.new()
-			rect.size = Vector2(40, 48) if "Hit" not in path else Vector2(36, 40)
+		if cs == null:
+			continue
+		var rect := cs.shape as RectangleShape2D
+		if rect == null:
+			rect = RectangleShape2D.new()
 			cs.shape = rect
+		if "Hit" in path:
+			rect.size = Vector2(hurt_sz.x * 0.9, hurt_sz.y * 0.85)
+		elif "Hurt" in path:
+			rect.size = hurt_sz
+		else:
+			rect.size = col_sz
+	if hurtbox_debug:
+		hurtbox_debug.size = hurt_sz
+		hurtbox_debug.position = -hurt_sz / 2.0
+	if body:
+		body.size = col_sz
+		body.position = -col_sz / 2.0
 
 func _read_axis() -> float:
 	var touch = TouchInputManager.get_axis(slot)

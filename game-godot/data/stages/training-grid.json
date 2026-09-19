@@ -5,33 +5,33 @@
   "mainPlatform": {
     "x": 0,
     "y": 280,
-    "width": 900,
+    "width": 1062,
     "height": 40
   },
   "sidePlatforms": [],
   "spawnPoints": [
     {
       "slot": 1,
-      "x": -180,
+      "x": -202,
       "y": 200
     },
     {
       "slot": 2,
-      "x": 180,
+      "x": 202,
       "y": 200
     }
   ],
   "blastZones": {
-    "left": -520,
-    "right": 520,
-    "top": -360,
+    "left": -582,
+    "right": 582,
+    "top": -378,
     "bottom": 420
   },
   "ledges": false,
   "hazardSockets": [],
   "cameraProfile": {
     "mode": "fixed_training",
-    "minZoom": 1.0,
+    "minZoom": 0.72,
     "maxZoom": 1.0,
     "lerp": 0.2,
     "deadzone": {
@@ -73,5 +73,19 @@
   "artStatus": "PROCEDURAL_FINAL",
   "productionStatus": "procedural_final_training",
   "geometryStatus": "PROCEDURAL_FINAL",
-  "notes": "Launch competitive geometry + procedural environment art/audio are PROCEDURAL_FINAL. Painted remasters optional/out of token scope."
+  "notes": "Launch competitive geometry + procedural environment art/audio are PROCEDURAL_FINAL. Painted remasters optional/out of token scope.",
+  "ledgeAnchors": [
+    {
+      "id": "left",
+      "x": -531.0,
+      "y": 280.0,
+      "facing": 1
+    },
+    {
+      "id": "right",
+      "x": 531.0,
+      "y": 280.0,
+      "facing": -1
+    }
+  ]
 }

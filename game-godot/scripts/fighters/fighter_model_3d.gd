@@ -20,7 +20,7 @@ const _ArtDirection = preload("res://scripts/visual/art_direction_contract.gd")
 
 const VIEWPORT_SIZE := Vector2i(256, 320)
 ## Battle bodies must be owner-visible on Pixel; prior 0.38 read as absent.
-const DISPLAY_SCALE := Vector2(0.85, 0.85)
+const DISPLAY_SCALE := Vector2(0.58, 0.58)
 const SELECT_DISPLAY_SCALE := Vector2(1.35, 1.35)
 const SELECT_CAMERA_SIZE := 2.05
 const PROXY_LABEL := "PROCEDURAL PRODUCTION PROXY"
