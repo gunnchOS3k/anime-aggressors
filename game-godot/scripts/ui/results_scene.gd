@@ -1,10 +1,14 @@
 extends "res://scripts/ui/console_menu_base.gd"
 
 ## Wave020 CP2: Victory / Results uses canonical fighter portrait (baked Model3D).
+## VXP-2: AURA FORGE victory chrome + a11y-aware celebration.
 
 const PORTRAIT_SCRIPT = preload("res://scripts/ui/fighter_card_portrait.gd")
 const _AssetResolver = preload("res://scripts/visual/fighter_asset_resolver.gd")
 const _PresentationContext = preload("res://scripts/visual/presentation_context.gd")
+const Vxp2BrandScript = preload("res://scripts/vxp2/vxp2_brand.gd")
+const Vxp2A11yScript = preload("res://scripts/vxp2/vxp2_accessibility_chrome.gd")
+const Vxp2GlyphScript = preload("res://scripts/vxp2/vxp2_glyph_strip.gd")
 
 @onready var rematch_btn: Button = $VBox/Rematch
 @onready var change_fighters_btn: Button = $VBox/ChangeFighters
@@ -17,7 +21,10 @@ var _victory_canonical: bool = false
 
 func _ready() -> void:
 	super._ready()
+	Vxp2BrandScript.apply_surface_chrome(self, {"title_size": Vxp2BrandScript.TYPE_HERO})
 	_ready_display()
+	Vxp2GlyphScript.attach(self, ["confirm", "back"])
+	Vxp2A11yScript.apply(self)
 
 
 func _ready_display() -> void:
@@ -116,11 +123,10 @@ func victory_presentation_snapshot() -> Dictionary:
 
 
 func _play_results_celebration() -> void:
-	## Wave017: winner theme pulse + subtle VFX; no developer runtime label.
+	## Wave017 + VXP-2: winner theme pulse; honor reduce-motion.
 	if title_label == null:
 		return
 	title_label.pivot_offset = title_label.size * 0.5
-	title_label.scale = Vector2(0.86, 0.86)
 	var accent := Color(1.0, 0.55, 0.25)
 	var winner := GameState.last_winner_slot
 	var fid := GameState.p1_fighter_id if winner == 1 else GameState.p2_fighter_id
@@ -128,17 +134,29 @@ func _play_results_celebration() -> void:
 		fid = _victory_fighter_id
 	var fdata: Dictionary = GameState.load_fighter(fid) if not fid.is_empty() else {}
 	accent = Color(fdata.get("color", accent))
-	title_label.add_theme_color_override("font_color", accent.lightened(0.2))
-	var tw := create_tween()
-	tw.tween_property(title_label, "scale", Vector2(1.08, 1.08), 0.18).set_trans(Tween.TRANS_BACK)
-	tw.tween_property(title_label, "scale", Vector2.ONE, 0.12)
+	title_label.add_theme_color_override("font_color", accent.lightened(0.2) if not Vxp2BrandScript.high_contrast_active() else Vxp2BrandScript.COLOR_HC_ACCENT)
 	var spark := ColorRect.new()
 	spark.name = "VictoryAccent"
-	spark.color = Color(accent.r, accent.g, accent.b, 0.2)
+	spark.color = Color(accent.r, accent.g, accent.b, 0.35)
 	spark.size = Vector2(640, 8)
 	spark.position = Vector2(40, 120)
 	spark.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(spark)
+	# Non-color victory cue: second rule + "WIN" chip.
+	var chip := Label.new()
+	chip.name = "VictoryChip"
+	chip.text = "WIN"
+	chip.add_theme_font_size_override("font_size", Vxp2BrandScript.TYPE_META)
+	chip.add_theme_color_override("font_color", Vxp2BrandScript.COLOR_GOLD_BRIGHT)
+	chip.position = Vector2(40, 96)
+	add_child(chip)
+	if Vxp2BrandScript.reduce_motion_active():
+		title_label.scale = Vector2.ONE
+		return
+	title_label.scale = Vector2(0.86, 0.86)
+	var tw := create_tween()
+	tw.tween_property(title_label, "scale", Vector2(1.08, 1.08), 0.18).set_trans(Tween.TRANS_BACK)
+	tw.tween_property(title_label, "scale", Vector2.ONE, 0.12)
 	var tw2 := create_tween()
 	tw2.tween_property(spark, "modulate:a", 0.0, 0.8)
 

@@ -1,7 +1,9 @@
 extends Control
 class_name BattleHudPanel
 
-## Compact stock / % / aura meters without clutter.
+## Compact stock / % / aura meters — VXP-2 AURA FORGE skin alignment.
+
+const Vxp2BrandScript = preload("res://scripts/vxp2/vxp2_brand.gd")
 
 var _name_label: Label
 var _pct_label: Label
@@ -11,29 +13,44 @@ var _shield_bar: ProgressBar
 var _stock_pips: Array = []
 var _max_stocks: int = 3
 var _accent: Color = Color(0.95, 0.55, 0.2)
+var _panel_bg: PanelContainer
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_build()
 
 func _build() -> void:
+	_panel_bg = PanelContainer.new()
+	_panel_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var panel_style := StyleBoxFlat.new()
+	panel_style.bg_color = Color(0.04, 0.07, 0.12, 0.78)
+	panel_style.border_color = Vxp2BrandScript.COLOR_GOLD
+	panel_style.set_border_width_all(1)
+	panel_style.set_corner_radius_all(6)
+	panel_style.content_margin_left = 10
+	panel_style.content_margin_right = 10
+	panel_style.content_margin_top = 8
+	panel_style.content_margin_bottom = 8
+	_panel_bg.add_theme_stylebox_override("panel", panel_style)
+	_panel_bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(_panel_bg)
+
 	var root := VBoxContainer.new()
 	root.add_theme_constant_override("separation", 4)
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	add_child(root)
+	_panel_bg.add_child(root)
 
 	var top := HBoxContainer.new()
 	top.add_theme_constant_override("separation", 10)
 	root.add_child(top)
 
 	_name_label = Label.new()
-	_name_label.add_theme_font_size_override("font_size", 17)
+	_name_label.add_theme_font_size_override("font_size", Vxp2BrandScript.TYPE_HUD)
 	_name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	# Wave017: readable HUD typography; no developer strings.
 	top.add_child(_name_label)
 
 	_pct_label = Label.new()
-	_pct_label.add_theme_font_size_override("font_size", 28)
+	_pct_label.add_theme_font_size_override("font_size", Vxp2BrandScript.TYPE_HUD_PCT)
 	_pct_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	top.add_child(_pct_label)
 
@@ -75,9 +92,11 @@ func _rebuild_pips() -> void:
 		c.queue_free()
 	_stock_pips.clear()
 	for i in _max_stocks:
+		# Diamond pip — shape cue beyond color-only stock count.
 		var pip := ColorRect.new()
-		pip.custom_minimum_size = Vector2(14, 14)
+		pip.custom_minimum_size = Vector2(12, 12)
 		pip.color = _accent
+		pip.rotation_degrees = 45.0
 		_stock_row.add_child(pip)
 		_stock_pips.append(pip)
 
