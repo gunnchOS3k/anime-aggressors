@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="g" cx="50%" cy="42%" r="60%">
+      <stop offset="0%" stop-color="#1A2A44"/>
+      <stop offset="70%" stop-color="#0A1220"/>
+      <stop offset="100%" stop-color="#05080F"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F5D06A"/>
+      <stop offset="55%" stop-color="#E8B84A"/>
+      <stop offset="100%" stop-color="#B8872A"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#g)"/>
+  <circle cx="256" cy="256" r="196" fill="none" stroke="url(#gold)" stroke-width="14"/>
+  <circle cx="256" cy="256" r="168" fill="none" stroke="#3A4F72" stroke-width="3" opacity="0.85"/>
+  <!-- forge anvil silhouette -->
+  <path d="M156 300 h200 v28 h-36 l-18 48 H210 l-18-48 H156 Z" fill="url(#gold)"/>
+  <path d="M186 268 h140 c18 0 28 12 28 28 H158 c0-16 10-28 28-28 Z" fill="#F5D06A"/>
+  <!-- rising aura wedge -->
+  <path d="M256 112 L292 220 H220 Z" fill="#E85A2A" opacity="0.95"/>
+  <path d="M256 148 L276 220 H236 Z" fill="#F5D06A"/>
+  <text x="256" y="430" text-anchor="middle" font-family="Georgia, serif" font-size="28" fill="#E8B84A" letter-spacing="6">AA</text>
+</svg>
