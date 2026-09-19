@@ -197,9 +197,13 @@ func _test_fighter_select_start_match() -> void:
 	if scene.has_method("assert_start_match_cta"):
 		cta = scene.assert_start_match_cta()
 	_results["fighter_select_cta"] = cta
-	_ok(bool(cta.get("START_MATCH_VISIBLE", false)), "START MATCH visible")
-	_ok(bool(cta.get("START_MATCH_IN_SAFE_AREA", false)), "START MATCH in safe area")
-	_ok(bool(cta.get("CAN_START", false)), "can start after dual lock")
+	_ok(bool(cta.get("START_MATCH_VISIBLE", false)), "stage CTA visible")
+	_ok(bool(cta.get("START_MATCH_IN_SAFE_AREA", false)), "stage CTA in safe area")
+	_ok(bool(cta.get("FIGHTER_SELECT_CTA_TRUTHFUL", false)), "fighter select CTA truthful")
+	_ok(bool(cta.get("CAN_START", false)), "can continue after dual lock")
+	var cta_text := str(cta.get("FIGHTER_SELECT_CTA_TEXT", ""))
+	_ok(cta_text.contains("CONTINUE TO STAGE") or cta_text.contains("CHOOSE STAGE"), "CTA text CONTINUE TO STAGE")
+	_ok(not cta_text.contains("START MATCH"), "no false START MATCH label")
 	if scene.has_method("on_back"):
 		scene.on_back()
 		await process_frame
