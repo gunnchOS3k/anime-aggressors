@@ -19,6 +19,7 @@ func _ready() -> void:
 	_ensure_accessibility_rows()
 	_refresh_touch_label()
 	_refresh_access_labels()
+	_ensure_feedback_button()
 
 func _ensure_accessibility_rows() -> void:
 	var vbox := get_node_or_null("VBox") as VBoxContainer
@@ -156,3 +157,20 @@ func on_back() -> void:
 		SceneRouter.go("mobile_playtest")
 	else:
 		SceneRouter.go("main_menu")
+
+func _ensure_feedback_button() -> void:
+	var vbox := get_node_or_null("VBox") as VBoxContainer
+	if vbox == null:
+		return
+	if vbox.get_node_or_null("FeedbackBtn") != null:
+		return
+	var fb := Button.new()
+	fb.name = "FeedbackBtn"
+	fb.text = "Feedback & Suggestions"
+	fb.pressed.connect(_on_feedback_pressed)
+	vbox.add_child(fb)
+
+func _on_feedback_pressed() -> void:
+	# Canonical accepted-main hub — no combat interrupt (Settings only). Public component marker only.
+	var url := "https://github.com/gunnchOS3k/gunnchos-research-portal/blob/main/FEEDBACK.md?component=Anime%20Aggressors"
+	OS.shell_open(url)
