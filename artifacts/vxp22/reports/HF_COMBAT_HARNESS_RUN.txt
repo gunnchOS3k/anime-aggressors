@@ -1,0 +1,159 @@
+cmd=/Users/gunnchos/Applications/Godot/Godot-4.5.app/Contents/MacOS/Godot --headless --rendering-driver opengl3 --path /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-2-2-anime-human-feedback-combat-closure/game-godot -s res://tests/vxp22_hf/HfCombatClosureHarness.gd
+exit=0
+
+STDOUT
+Godot Engine v4.5.stable.official.876b29033 - https://godotengine.org
+
+=== VXP22 HF Combat Harness ===
+HF OK: Fighter.tscn loads after autoloads
+HF OK: combat space calibration band
+HF OK: battle display scale 0.58
+HF OK: battle scale under max
+HF OK: ledge window accepts below-lip
+HF OK: ledge window rejects rising
+HF OK: old absolute Y=56 is invalid
+HF OK: core moves have human display names
+HF OK: reaction increases lv1->2
+HF OK: recovery quality increases lv1->2
+HF OK: reaction increases lv2->3
+HF OK: recovery quality increases lv2->3
+HF OK: reaction increases lv3->4
+HF OK: recovery quality increases lv3->4
+HF OK: reaction increases lv4->5
+HF OK: recovery quality increases lv4->5
+HF OK: CPU does not chase off outer edge
+HF OK: CPU idle during countdown lock
+HF OK: fighter exposes is_offstage
+HF OK: fighter select scene loads
+HF OK: fighter select current
+HF OK: START MATCH visible
+HF OK: START MATCH in safe area
+HF OK: can start after dual lock
+HF OK: incomplete blocks start
+HF OK: ledge grab from offstage approach
+HF OK: ledge getup/jump
+HF OK: no magnetic grab while rising fast
+HF OK: offstage detection
+HF OK: leaving platform is not instant KO
+HF OK: offstage position inside blast is not KO
+HF OK: past blast zone is KO
+HF OK: idle state
+HF OK: run state
+HF OK: jump state
+HF OK: land state
+HF OK: collision shape present
+HF OK: collision height calibrated
+Wrote /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-2-2-anime-human-feedback-combat-closure/game-godot/../artifacts/vxp22/reports/HF_COMBAT_HARNESS.json
+Wrote /Users/gunnchos/Library/Application Support/Godot/app_userdata/Anime Aggressors/HF_COMBAT_HARNESS.json
+HF_COMBAT_HARNESS ok=true failures=0
+
+
+STDERR
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] count_viewport_opaque_pixels (res://scripts/fighters/fighter_model_3d.gd:947)
+       [1] is_final_screen_visible_body (res://scripts/fighters/fighter_model_3d.gd:969)
+       [2] ensure_visible_presentation (res://scripts/fighters/fighter.gd:299)
+       [3] configure (res://scripts/fighters/fighter.gd:261)
+       [4] _test_cpu_difficulty_with_fighter (res://tests/vxp22_hf/HfCombatClosureHarness.gd:175)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] count_viewport_opaque_pixels (res://scripts/fighters/fighter_model_3d.gd:947)
+       [1] is_final_screen_visible_body (res://scripts/fighters/fighter_model_3d.gd:969)
+       [2] _deferred_finalize_display (res://scripts/fighters/fighter_model_3d.gd:1192)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] count_viewport_opaque_pixels (res://scripts/fighters/fighter_model_3d.gd:947)
+       [1] is_final_screen_visible_body (res://scripts/fighters/fighter_model_3d.gd:969)
+       [2] _deferred_finalize_display (res://scripts/fighters/fighter_model_3d.gd:1192)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] count_viewport_opaque_pixels (res://scripts/fighters/fighter_model_3d.gd:947)
+       [1] is_final_screen_visible_body (res://scripts/fighters/fighter_model_3d.gd:969)
+       [2] _deferred_finalize_display (res://scripts/fighters/fighter_model_3d.gd:1192)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] count_viewport_opaque_pixels (res://scripts/fighters/fighter_model_3d.gd:947)
+       [1] is_final_screen_visible_body (res://scripts/fighters/fighter_model_3d.gd:969)
+       [2] _deferred_finalize_display (res://scripts/fighters/fighter_model_3d.gd:1192)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] count_viewport_opaque_pixels (res://scripts/fighters/fighter_model_3d.gd:947)
+       [1] is_final_screen_visible_body (res://scripts/fighters/fighter_model_3d.gd:969)
+       [2] _deferred_finalize_display (res://scripts/fighters/fighter_model_3d.gd:1192)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] count_viewport_opaque_pixels (res://scripts/fighters/fighter_model_3d.gd:947)
+       [1] is_final_screen_visible_body (res://scripts/fighters/fighter_model_3d.gd:969)
+       [2] _deferred_finalize_display (res://scripts/fighters/fighter_model_3d.gd:1192)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] count_viewport_opaque_pixels (res://scripts/fighters/fighter_model_3d.gd:947)
+       [1] is_final_screen_visible_body (res://scripts/fighters/fighter_model_3d.gd:969)
+       [2] _deferred_finalize_display (res://scripts/fighters/fighter_model_3d.gd:1192)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] count_viewport_opaque_pixels (res://scripts/fighters/fighter_model_3d.gd:947)
+       [1] is_final_screen_visible_body (res://scripts/fighters/fighter_model_3d.gd:969)
+       [2] _deferred_finalize_display (res://scripts/fighters/fighter_model_3d.gd:1192)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] capture_portrait_image (res://scripts/fighters/fighter_model_3d.gd:575)
+       [1] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:96)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] capture_portrait_image (res://scripts/fighters/fighter_model_3d.gd:575)
+       [1] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:96)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] capture_portrait_image (res://scripts/fighters/fighter_model_3d.gd:575)
+       [1] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:96)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] capture_portrait_image (res://scripts/fighters/fighter_model_3d.gd:575)
+       [1] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:96)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] capture_portrait_image (res://scripts/fighters/fighter_model_3d.gd:575)
+       [1] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:96)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] capture_portrait_image (res://scripts/fighters/fighter_model_3d.gd:575)
+       [1] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:96)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] capture_portrait_image (res://scripts/fighters/fighter_model_3d.gd:575)
+       [1] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:96)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] count_viewport_opaque_pixels (res://scripts/fighters/fighter_model_3d.gd:947)
+       [1] is_final_screen_visible_body (res://scripts/fighters/fighter_model_3d.gd:969)
+       [2] ensure_visible_presentation (res://scripts/fighters/fighter.gd:299)
+       [3] configure (res://scripts/fighters/fighter.gd:261)
+       [4] _test_ledge_and_recovery (res://tests/vxp22_hf/HfCombatClosureHarness.gd:233)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] count_viewport_opaque_pixels (res://scripts/fighters/fighter_model_3d.gd:947)
+       [1] is_final_screen_visible_body (res://scripts/fighters/fighter_model_3d.gd:969)
+       [2] ensure_visible_presentation (res://scripts/fighters/fighter.gd:299)
+       [3] configure (res://scripts/fighters/fighter.gd:261)
+       [4] _test_idle_run_jump_land (res://tests/vxp22_hf/HfCombatClosureHarness.gd:290)
+

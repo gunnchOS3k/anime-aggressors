@@ -141,10 +141,10 @@ func _build_ui() -> void:
 	var view_row := HBoxContainer.new()
 	_btn_simple = Button.new()
 	_btn_simple.text = "SIMPLE"
-	_btn_simple.pressed.connect(func(): _advanced = false; _refresh_detail())
+	_btn_simple.pressed.connect(func(): _advanced = false; _show_lab = false; _refresh_header(); _refresh_detail())
 	_btn_advanced = Button.new()
 	_btn_advanced.text = "ADVANCED"
-	_btn_advanced.pressed.connect(func(): _advanced = true; _refresh_detail())
+	_btn_advanced.pressed.connect(func(): _advanced = true; _refresh_header(); _refresh_detail())
 	var lab_btn := Button.new()
 	lab_btn.text = "LAB REF"
 	lab_btn.pressed.connect(func(): _show_lab = not _show_lab; _rebuild_flat(); _populate_list())
@@ -291,7 +291,8 @@ func _populate_list() -> void:
 
 func _refresh_header() -> void:
 	var beginner: Dictionary = _catalog.get("beginner", {})
-	_title.text = "MOVE LIST — %s" % fighter_id.replace("-", " ").capitalize()
+	var display_fighter := str(_catalog.get("display_name", fighter_id.replace("-", " ").capitalize()))
+	_title.text = "MOVE LIST — %s" % display_fighter
 	_summary.text = "PLAYSTYLE: %s\nDIFFICULTY: %s\nBEST AT: %s\nWATCH OUT FOR: %s\nCORE GAME PLAN: %s" % [
 		str(beginner.get("playstyle", "")),
 		str(beginner.get("difficulty", "")),
@@ -300,7 +301,20 @@ func _refresh_header() -> void:
 		str(beginner.get("core_game_plan", "")),
 	]
 	var cores: Array = _catalog.get("core_move_ids", [])
-	_core_label.text = "CORE MOVES: " + ", ".join(PackedStringArray(cores))
+	var core_names: PackedStringArray = PackedStringArray()
+	for mid in cores:
+		var nice := ""
+		for e in _flat_playable:
+			if str(e.get("move_id", "")) == str(mid):
+				nice = str(e.get("display_name", ""))
+				break
+		if nice.is_empty() or nice == str(mid):
+			nice = str(mid).replace("_", " ").capitalize()
+		core_names.append(nice)
+	if _advanced or _show_lab:
+		_core_label.text = "CORE MOVES (lab ids): " + ", ".join(PackedStringArray(cores))
+	else:
+		_core_label.text = "CORE MOVES: " + ", ".join(core_names)
 
 
 func _on_item_selected(index: int) -> void:

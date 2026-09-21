@@ -1,0 +1,503 @@
+Godot Engine v4.5.stable.official.876b29033 - https://godotengine.org
+
+=== VXP22 HF Combat Harness ===
+HF OK: Fighter.tscn loads after autoloads
+HF OK: combat space calibration band
+HF OK: battle display scale 0.58
+HF OK: battle scale under max
+HF OK: ledge window accepts below-lip
+HF OK: ledge window rejects rising
+HF OK: old absolute Y=56 is invalid
+HF OK: core moves have human display names
+HF OK: reaction increases lv1->2
+HF OK: recovery quality increases lv1->2
+HF OK: reaction increases lv2->3
+HF OK: recovery quality increases lv2->3
+HF OK: reaction increases lv3->4
+HF OK: recovery quality increases lv3->4
+HF OK: reaction increases lv4->5
+HF OK: recovery quality increases lv4->5
+HF OK: CPU does not chase off outer edge
+HF OK: CPU idle during countdown lock
+ERROR: Cannot open file 'res://.godot/imported/ember-vale_procedural_proxy.glb-790c03dd47fb378585ed41869d795428.scn'.
+   at: load (core/io/resource_format_binary.cpp:1220)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] configure (res://scripts/fighters/fighter.gd:253)
+       [4] _test_cpu_difficulty_with_fighter (res://tests/vxp22_hf/HfCombatClosureHarness.gd:175)
+ERROR: Failed loading resource: res://.godot/imported/ember-vale_procedural_proxy.glb-790c03dd47fb378585ed41869d795428.scn.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] configure (res://scripts/fighters/fighter.gd:253)
+       [4] _test_cpu_difficulty_with_fighter (res://tests/vxp22_hf/HfCombatClosureHarness.gd:175)
+ERROR: Failed loading resource: res://content/fighters/ember-vale/model/ember-vale_procedural_proxy.glb.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] configure (res://scripts/fighters/fighter.gd:253)
+       [4] _test_cpu_difficulty_with_fighter (res://tests/vxp22_hf/HfCombatClosureHarness.gd:175)
+WARNING: FighterModel3D load/visibility failure fighter=ember-vale reason=procedural_missing_using_stylized_fallback gen=1
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _log_load_failure (res://scripts/fighters/fighter_model_3d.gd:299)
+         [1] configure (res://scripts/fighters/fighter_model_3d.gd:150)
+         [2] configure (res://scripts/fighters/fighter.gd:253)
+         [3] _test_cpu_difficulty_with_fighter (res://tests/vxp22_hf/HfCombatClosureHarness.gd:175)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] count_viewport_opaque_pixels (res://scripts/fighters/fighter_model_3d.gd:947)
+       [1] is_final_screen_visible_body (res://scripts/fighters/fighter_model_3d.gd:969)
+       [2] ensure_visible_presentation (res://scripts/fighters/fighter.gd:299)
+       [3] configure (res://scripts/fighters/fighter.gd:261)
+       [4] _test_cpu_difficulty_with_fighter (res://tests/vxp22_hf/HfCombatClosureHarness.gd:175)
+HF OK: fighter exposes is_offstage
+HF OK: fighter select scene loads
+ERROR: Cannot open file 'res://.godot/imported/ember-vale_procedural_proxy.glb-790c03dd47fb378585ed41869d795428.scn'.
+   at: load (core/io/resource_format_binary.cpp:1220)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] _update_preview (res://scripts/menus/fighter_select_scene.gd:341)
+       [4] _ready (res://scripts/menus/fighter_select_scene.gd:66)
+ERROR: Failed loading resource: res://.godot/imported/ember-vale_procedural_proxy.glb-790c03dd47fb378585ed41869d795428.scn.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] _update_preview (res://scripts/menus/fighter_select_scene.gd:341)
+       [4] _ready (res://scripts/menus/fighter_select_scene.gd:66)
+ERROR: Failed loading resource: res://content/fighters/ember-vale/model/ember-vale_procedural_proxy.glb.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] _update_preview (res://scripts/menus/fighter_select_scene.gd:341)
+       [4] _ready (res://scripts/menus/fighter_select_scene.gd:66)
+WARNING: FighterModel3D load/visibility failure fighter=ember-vale reason=procedural_missing_using_stylized_fallback gen=1
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _log_load_failure (res://scripts/fighters/fighter_model_3d.gd:299)
+         [1] configure (res://scripts/fighters/fighter_model_3d.gd:150)
+         [2] _update_preview (res://scripts/menus/fighter_select_scene.gd:341)
+         [3] _ready (res://scripts/menus/fighter_select_scene.gd:66)
+ERROR: Unable to open file: res://.godot/imported/glyph_confirm.png-6e4886d4a700b090b6e0be179afb1203.ctex.
+   at: _load_data (scene/resources/compressed_texture.cpp:41)
+   GDScript backtrace (most recent call first):
+       [0] glyph_texture (res://scripts/vxp2/vxp2_brand.gd:92)
+       [1] attach (res://scripts/vxp2/vxp2_glyph_strip.gd:22)
+       [2] _ready (res://scripts/menus/fighter_select_scene.gd:71)
+ERROR: Failed loading resource: res://.godot/imported/glyph_confirm.png-6e4886d4a700b090b6e0be179afb1203.ctex.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] glyph_texture (res://scripts/vxp2/vxp2_brand.gd:92)
+       [1] attach (res://scripts/vxp2/vxp2_glyph_strip.gd:22)
+       [2] _ready (res://scripts/menus/fighter_select_scene.gd:71)
+ERROR: Failed loading resource: res://assets/branding/vxp2/glyphs/glyph_confirm.png.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] glyph_texture (res://scripts/vxp2/vxp2_brand.gd:92)
+       [1] attach (res://scripts/vxp2/vxp2_glyph_strip.gd:22)
+       [2] _ready (res://scripts/menus/fighter_select_scene.gd:71)
+ERROR: Unable to open file: res://.godot/imported/glyph_back.png-1a77f1fb246e32897f0a21ff818d4543.ctex.
+   at: _load_data (scene/resources/compressed_texture.cpp:41)
+   GDScript backtrace (most recent call first):
+       [0] glyph_texture (res://scripts/vxp2/vxp2_brand.gd:92)
+       [1] attach (res://scripts/vxp2/vxp2_glyph_strip.gd:22)
+       [2] _ready (res://scripts/menus/fighter_select_scene.gd:71)
+ERROR: Failed loading resource: res://.godot/imported/glyph_back.png-1a77f1fb246e32897f0a21ff818d4543.ctex.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] glyph_texture (res://scripts/vxp2/vxp2_brand.gd:92)
+       [1] attach (res://scripts/vxp2/vxp2_glyph_strip.gd:22)
+       [2] _ready (res://scripts/menus/fighter_select_scene.gd:71)
+ERROR: Failed loading resource: res://assets/branding/vxp2/glyphs/glyph_back.png.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] glyph_texture (res://scripts/vxp2/vxp2_brand.gd:92)
+       [1] attach (res://scripts/vxp2/vxp2_glyph_strip.gd:22)
+       [2] _ready (res://scripts/menus/fighter_select_scene.gd:71)
+ERROR: Cannot open file 'res://.godot/imported/ember-vale_procedural_proxy.glb-790c03dd47fb378585ed41869d795428.scn'.
+   at: load (core/io/resource_format_binary.cpp:1220)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+ERROR: Failed loading resource: res://.godot/imported/ember-vale_procedural_proxy.glb-790c03dd47fb378585ed41869d795428.scn.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+ERROR: Failed loading resource: res://content/fighters/ember-vale/model/ember-vale_procedural_proxy.glb.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+WARNING: FighterModel3D load/visibility failure fighter=ember-vale reason=procedural_missing_using_stylized_fallback gen=1
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _log_load_failure (res://scripts/fighters/fighter_model_3d.gd:299)
+         [1] configure (res://scripts/fighters/fighter_model_3d.gd:150)
+         [2] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+ERROR: Cannot open file 'res://.godot/imported/rook-ironside_procedural_proxy.glb-e9a63db53da163dc1c74b40ff472d692.scn'.
+   at: load (core/io/resource_format_binary.cpp:1220)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+ERROR: Failed loading resource: res://.godot/imported/rook-ironside_procedural_proxy.glb-e9a63db53da163dc1c74b40ff472d692.scn.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+ERROR: Failed loading resource: res://content/fighters/rook-ironside/model/rook-ironside_procedural_proxy.glb.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+WARNING: FighterModel3D load/visibility failure fighter=rook-ironside reason=procedural_missing_using_stylized_fallback gen=1
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _log_load_failure (res://scripts/fighters/fighter_model_3d.gd:299)
+         [1] configure (res://scripts/fighters/fighter_model_3d.gd:150)
+         [2] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+ERROR: Cannot open file 'res://.godot/imported/juno-spark_procedural_proxy.glb-25f2244e5defa2d87469f22d6a7392f1.scn'.
+   at: load (core/io/resource_format_binary.cpp:1220)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+ERROR: Failed loading resource: res://.godot/imported/juno-spark_procedural_proxy.glb-25f2244e5defa2d87469f22d6a7392f1.scn.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+ERROR: Failed loading resource: res://content/fighters/juno-spark/model/juno-spark_procedural_proxy.glb.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+WARNING: FighterModel3D load/visibility failure fighter=juno-spark reason=procedural_missing_using_stylized_fallback gen=1
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _log_load_failure (res://scripts/fighters/fighter_model_3d.gd:299)
+         [1] configure (res://scripts/fighters/fighter_model_3d.gd:150)
+         [2] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+ERROR: Cannot open file 'res://.godot/imported/kaia-windrow_procedural_proxy.glb-7d32a906ebc2a81790872825a152b073.scn'.
+   at: load (core/io/resource_format_binary.cpp:1220)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+ERROR: Failed loading resource: res://.godot/imported/kaia-windrow_procedural_proxy.glb-7d32a906ebc2a81790872825a152b073.scn.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+ERROR: Failed loading resource: res://content/fighters/kaia-windrow/model/kaia-windrow_procedural_proxy.glb.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+WARNING: FighterModel3D load/visibility failure fighter=kaia-windrow reason=procedural_missing_using_stylized_fallback gen=1
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _log_load_failure (res://scripts/fighters/fighter_model_3d.gd:299)
+         [1] configure (res://scripts/fighters/fighter_model_3d.gd:150)
+         [2] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+ERROR: Cannot open file 'res://.godot/imported/nix-calder_procedural_proxy.glb-4dda8a942d12bba706940cd3ff4de81d.scn'.
+   at: load (core/io/resource_format_binary.cpp:1220)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+ERROR: Failed loading resource: res://.godot/imported/nix-calder_procedural_proxy.glb-4dda8a942d12bba706940cd3ff4de81d.scn.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+ERROR: Failed loading resource: res://content/fighters/nix-calder/model/nix-calder_procedural_proxy.glb.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+WARNING: FighterModel3D load/visibility failure fighter=nix-calder reason=procedural_missing_using_stylized_fallback gen=1
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _log_load_failure (res://scripts/fighters/fighter_model_3d.gd:299)
+         [1] configure (res://scripts/fighters/fighter_model_3d.gd:150)
+         [2] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+ERROR: Cannot open file 'res://.godot/imported/orion-vell_procedural_proxy.glb-953835db1133952b5c8dd221f3164b32.scn'.
+   at: load (core/io/resource_format_binary.cpp:1220)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+ERROR: Failed loading resource: res://.godot/imported/orion-vell_procedural_proxy.glb-953835db1133952b5c8dd221f3164b32.scn.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+ERROR: Failed loading resource: res://content/fighters/orion-vell/model/orion-vell_procedural_proxy.glb.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+WARNING: FighterModel3D load/visibility failure fighter=orion-vell reason=procedural_missing_using_stylized_fallback gen=1
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _log_load_failure (res://scripts/fighters/fighter_model_3d.gd:299)
+         [1] configure (res://scripts/fighters/fighter_model_3d.gd:150)
+         [2] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+ERROR: Cannot open file 'res://.godot/imported/vesper-nyx_procedural_proxy.glb-eca505121bd23fb2194d5c7a05f02a15.scn'.
+   at: load (core/io/resource_format_binary.cpp:1220)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+ERROR: Failed loading resource: res://.godot/imported/vesper-nyx_procedural_proxy.glb-eca505121bd23fb2194d5c7a05f02a15.scn.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+ERROR: Failed loading resource: res://content/fighters/vesper-nyx/model/vesper-nyx_procedural_proxy.glb.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+WARNING: FighterModel3D load/visibility failure fighter=vesper-nyx reason=procedural_missing_using_stylized_fallback gen=1
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _log_load_failure (res://scripts/fighters/fighter_model_3d.gd:299)
+         [1] configure (res://scripts/fighters/fighter_model_3d.gd:150)
+         [2] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:87)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] count_viewport_opaque_pixels (res://scripts/fighters/fighter_model_3d.gd:947)
+       [1] is_final_screen_visible_body (res://scripts/fighters/fighter_model_3d.gd:969)
+       [2] _deferred_finalize_display (res://scripts/fighters/fighter_model_3d.gd:1192)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] count_viewport_opaque_pixels (res://scripts/fighters/fighter_model_3d.gd:947)
+       [1] is_final_screen_visible_body (res://scripts/fighters/fighter_model_3d.gd:969)
+       [2] _deferred_finalize_display (res://scripts/fighters/fighter_model_3d.gd:1192)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] count_viewport_opaque_pixels (res://scripts/fighters/fighter_model_3d.gd:947)
+       [1] is_final_screen_visible_body (res://scripts/fighters/fighter_model_3d.gd:969)
+       [2] _deferred_finalize_display (res://scripts/fighters/fighter_model_3d.gd:1192)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] count_viewport_opaque_pixels (res://scripts/fighters/fighter_model_3d.gd:947)
+       [1] is_final_screen_visible_body (res://scripts/fighters/fighter_model_3d.gd:969)
+       [2] _deferred_finalize_display (res://scripts/fighters/fighter_model_3d.gd:1192)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] count_viewport_opaque_pixels (res://scripts/fighters/fighter_model_3d.gd:947)
+       [1] is_final_screen_visible_body (res://scripts/fighters/fighter_model_3d.gd:969)
+       [2] _deferred_finalize_display (res://scripts/fighters/fighter_model_3d.gd:1192)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] count_viewport_opaque_pixels (res://scripts/fighters/fighter_model_3d.gd:947)
+       [1] is_final_screen_visible_body (res://scripts/fighters/fighter_model_3d.gd:969)
+       [2] _deferred_finalize_display (res://scripts/fighters/fighter_model_3d.gd:1192)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] count_viewport_opaque_pixels (res://scripts/fighters/fighter_model_3d.gd:947)
+       [1] is_final_screen_visible_body (res://scripts/fighters/fighter_model_3d.gd:969)
+       [2] _deferred_finalize_display (res://scripts/fighters/fighter_model_3d.gd:1192)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] count_viewport_opaque_pixels (res://scripts/fighters/fighter_model_3d.gd:947)
+       [1] is_final_screen_visible_body (res://scripts/fighters/fighter_model_3d.gd:969)
+       [2] _deferred_finalize_display (res://scripts/fighters/fighter_model_3d.gd:1192)
+HF OK: fighter select current
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] capture_portrait_image (res://scripts/fighters/fighter_model_3d.gd:575)
+       [1] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:96)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] capture_portrait_image (res://scripts/fighters/fighter_model_3d.gd:575)
+       [1] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:96)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] capture_portrait_image (res://scripts/fighters/fighter_model_3d.gd:575)
+       [1] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:96)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] capture_portrait_image (res://scripts/fighters/fighter_model_3d.gd:575)
+       [1] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:96)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] capture_portrait_image (res://scripts/fighters/fighter_model_3d.gd:575)
+       [1] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:96)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] capture_portrait_image (res://scripts/fighters/fighter_model_3d.gd:575)
+       [1] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:96)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] capture_portrait_image (res://scripts/fighters/fighter_model_3d.gd:575)
+       [1] _bake_portrait (res://scripts/ui/fighter_card_portrait.gd:96)
+HF OK: stage CTA visible
+HF OK: stage CTA in safe area
+HF OK: fighter select CTA truthful
+HF OK: can continue after dual lock
+HF OK: CTA text CONTINUE TO STAGE
+HF OK: no false START MATCH label
+HF OK: incomplete blocks start
+ERROR: Cannot open file 'res://.godot/imported/ember-vale_procedural_proxy.glb-790c03dd47fb378585ed41869d795428.scn'.
+   at: load (core/io/resource_format_binary.cpp:1220)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] configure (res://scripts/fighters/fighter.gd:253)
+       [4] _test_ledge_and_recovery (res://tests/vxp22_hf/HfCombatClosureHarness.gd:237)
+ERROR: Failed loading resource: res://.godot/imported/ember-vale_procedural_proxy.glb-790c03dd47fb378585ed41869d795428.scn.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] configure (res://scripts/fighters/fighter.gd:253)
+       [4] _test_ledge_and_recovery (res://tests/vxp22_hf/HfCombatClosureHarness.gd:237)
+ERROR: Failed loading resource: res://content/fighters/ember-vale/model/ember-vale_procedural_proxy.glb.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] configure (res://scripts/fighters/fighter.gd:253)
+       [4] _test_ledge_and_recovery (res://tests/vxp22_hf/HfCombatClosureHarness.gd:237)
+WARNING: FighterModel3D load/visibility failure fighter=ember-vale reason=procedural_missing_using_stylized_fallback gen=1
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _log_load_failure (res://scripts/fighters/fighter_model_3d.gd:299)
+         [1] configure (res://scripts/fighters/fighter_model_3d.gd:150)
+         [2] configure (res://scripts/fighters/fighter.gd:253)
+         [3] _test_ledge_and_recovery (res://tests/vxp22_hf/HfCombatClosureHarness.gd:237)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] count_viewport_opaque_pixels (res://scripts/fighters/fighter_model_3d.gd:947)
+       [1] is_final_screen_visible_body (res://scripts/fighters/fighter_model_3d.gd:969)
+       [2] ensure_visible_presentation (res://scripts/fighters/fighter.gd:299)
+       [3] configure (res://scripts/fighters/fighter.gd:261)
+       [4] _test_ledge_and_recovery (res://tests/vxp22_hf/HfCombatClosureHarness.gd:237)
+HF OK: ledge grab from offstage approach
+HF OK: ledge getup/jump
+HF OK: no magnetic grab while rising fast
+HF OK: offstage detection
+HF OK: leaving platform is not instant KO
+HF OK: offstage position inside blast is not KO
+HF OK: past blast zone is KO
+ERROR: Cannot open file 'res://.godot/imported/juno-spark_procedural_proxy.glb-25f2244e5defa2d87469f22d6a7392f1.scn'.
+   at: load (core/io/resource_format_binary.cpp:1220)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] configure (res://scripts/fighters/fighter.gd:253)
+       [4] _test_idle_run_jump_land (res://tests/vxp22_hf/HfCombatClosureHarness.gd:294)
+ERROR: Failed loading resource: res://.godot/imported/juno-spark_procedural_proxy.glb-25f2244e5defa2d87469f22d6a7392f1.scn.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] configure (res://scripts/fighters/fighter.gd:253)
+       [4] _test_idle_run_jump_land (res://tests/vxp22_hf/HfCombatClosureHarness.gd:294)
+ERROR: Failed loading resource: res://content/fighters/juno-spark/model/juno-spark_procedural_proxy.glb.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] _try_load_procedural_proxy (res://scripts/fighters/fighter_model_3d.gd:591)
+       [1] _resolve_and_load_model (res://scripts/fighters/fighter_model_3d.gd:556)
+       [2] configure (res://scripts/fighters/fighter_model_3d.gd:124)
+       [3] configure (res://scripts/fighters/fighter.gd:253)
+       [4] _test_idle_run_jump_land (res://tests/vxp22_hf/HfCombatClosureHarness.gd:294)
+WARNING: FighterModel3D load/visibility failure fighter=juno-spark reason=procedural_missing_using_stylized_fallback gen=1
+     at: push_warning (core/variant/variant_utility.cpp:1034)
+     GDScript backtrace (most recent call first):
+         [0] _log_load_failure (res://scripts/fighters/fighter_model_3d.gd:299)
+         [1] configure (res://scripts/fighters/fighter_model_3d.gd:150)
+         [2] configure (res://scripts/fighters/fighter.gd:253)
+         [3] _test_idle_run_jump_land (res://tests/vxp22_hf/HfCombatClosureHarness.gd:294)
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (servers/rendering/dummy/storage/texture_storage.h:106)
+   GDScript backtrace (most recent call first):
+       [0] count_viewport_opaque_pixels (res://scripts/fighters/fighter_model_3d.gd:947)
+       [1] is_final_screen_visible_body (res://scripts/fighters/fighter_model_3d.gd:969)
+       [2] ensure_visible_presentation (res://scripts/fighters/fighter.gd:299)
+       [3] configure (res://scripts/fighters/fighter.gd:261)
+       [4] _test_idle_run_jump_land (res://tests/vxp22_hf/HfCombatClosureHarness.gd:294)
+HF OK: idle state
+HF OK: run state
+HF OK: jump state
+HF OK: land state
+HF OK: collision shape present
+HF OK: collision height calibrated
+Wrote /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-2-3-anime-match-settings-pixel-progression/game-godot/../artifacts/vxp22/reports/HF_COMBAT_HARNESS.json
+Wrote /Users/gunnchos/Library/Application Support/Godot/app_userdata/Anime Aggressors/HF_COMBAT_HARNESS.json
+HF_COMBAT_HARNESS ok=true failures=0

@@ -18,59 +18,221 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color(0.05, 0.07, 0.12, 1)
 
-[node name="VBox" type="VBoxContainer" parent="."]
+[node name="RootColumn" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 64.0
-offset_top = 64.0
-offset_right = -64.0
-offset_bottom = -80.0
-theme_override_constants/separation = 20
+offset_left = 48.0
+offset_top = 28.0
+offset_right = -48.0
+offset_bottom = -112.0
+theme_override_constants/separation = 12
 
-[node name="Title" type="Label" parent="VBox"]
+[node name="Title" type="Label" parent="RootColumn"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 36
-text = "Rulesets"
+theme_override_font_sizes/font_size = 34
+text = "Match Settings"
 
-[node name="StockLabel" type="Label" parent="VBox"]
+[node name="Subtitle" type="Label" parent="RootColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.75, 0.8, 0.9, 1)
+text = "Set the rules, then choose your fighters."
+
+[node name="ScrollBody" type="ScrollContainer" parent="RootColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+follow_focus = true
+
+[node name="SettingsVBox" type="VBoxContainer" parent="RootColumn/ScrollBody"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 14
+
+[node name="MatchHeader" type="Label" parent="RootColumn/ScrollBody/SettingsVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.95, 0.82, 0.45, 1)
+text = "MATCH"
+
+[node name="StockLabel" type="Label" parent="RootColumn/ScrollBody/SettingsVBox"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Stocks: 3"
 
-[node name="StockRow" type="HBoxContainer" parent="VBox"]
+[node name="StockRow" type="HBoxContainer" parent="RootColumn/ScrollBody/SettingsVBox"]
 layout_mode = 2
+theme_override_constants/separation = 12
 
-[node name="StockMinus" type="Button" parent="VBox/StockRow"]
+[node name="StockMinus" type="Button" parent="RootColumn/ScrollBody/SettingsVBox/StockRow"]
+custom_minimum_size = Vector2(120, 48)
 layout_mode = 2
 text = "Stocks -"
 
-[node name="StockPlus" type="Button" parent="VBox/StockRow"]
+[node name="StockPlus" type="Button" parent="RootColumn/ScrollBody/SettingsVBox/StockRow"]
+custom_minimum_size = Vector2(120, 48)
 layout_mode = 2
 text = "Stocks +"
 
-[node name="CpuLabel" type="Label" parent="VBox"]
+[node name="TimerLabel" type="Label" parent="RootColumn/ScrollBody/SettingsVBox"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "CPU Level: 2"
+text = "Match Time: 180s"
 
-[node name="CpuRow" type="HBoxContainer" parent="VBox"]
+[node name="TimerRow" type="HBoxContainer" parent="RootColumn/ScrollBody/SettingsVBox"]
 layout_mode = 2
+theme_override_constants/separation = 12
 
-[node name="CpuMinus" type="Button" parent="VBox/CpuRow"]
+[node name="TimeMinus" type="Button" parent="RootColumn/ScrollBody/SettingsVBox/TimerRow"]
+custom_minimum_size = Vector2(120, 48)
+layout_mode = 2
+text = "Time -"
+
+[node name="TimePlus" type="Button" parent="RootColumn/ScrollBody/SettingsVBox/TimerRow"]
+custom_minimum_size = Vector2(120, 48)
+layout_mode = 2
+text = "Time +"
+
+[node name="OpponentHeader" type="Label" parent="RootColumn/ScrollBody/SettingsVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.95, 0.82, 0.45, 1)
+text = "OPPONENT"
+
+[node name="P2ModeLabel" type="Label" parent="RootColumn/ScrollBody/SettingsVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "P2: CPU"
+
+[node name="P2Row" type="HBoxContainer" parent="RootColumn/ScrollBody/SettingsVBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ToggleP2" type="Button" parent="RootColumn/ScrollBody/SettingsVBox/P2Row"]
+custom_minimum_size = Vector2(200, 48)
+layout_mode = 2
+text = "Toggle P2 Human/CPU"
+
+[node name="LocalMulti" type="Button" parent="RootColumn/ScrollBody/SettingsVBox/P2Row"]
+custom_minimum_size = Vector2(180, 48)
+layout_mode = 2
+text = "Local Multi (2P)"
+
+[node name="CpuLabel" type="Label" parent="RootColumn/ScrollBody/SettingsVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "CPU: Lv 2 — Standard"
+
+[node name="CpuRow" type="HBoxContainer" parent="RootColumn/ScrollBody/SettingsVBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="CpuMinus" type="Button" parent="RootColumn/ScrollBody/SettingsVBox/CpuRow"]
+custom_minimum_size = Vector2(120, 48)
 layout_mode = 2
 text = "CPU -"
 
-[node name="CpuPlus" type="Button" parent="VBox/CpuRow"]
+[node name="CpuPlus" type="Button" parent="RootColumn/ScrollBody/SettingsVBox/CpuRow"]
+custom_minimum_size = Vector2(120, 48)
 layout_mode = 2
 text = "CPU +"
 
-[node name="Confirm" type="Button" parent="VBox"]
-custom_minimum_size = Vector2(320, 72)
+[node name="RulesHeader" type="Label" parent="RootColumn/ScrollBody/SettingsVBox"]
 layout_mode = 2
-text = "Confirm Ruleset"
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.95, 0.82, 0.45, 1)
+text = "RULES"
+
+[node name="DamageLabel" type="Label" parent="RootColumn/ScrollBody/SettingsVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Damage Ratio: 1.00  |  Team Attack: Off"
+
+[node name="DamageRow" type="HBoxContainer" parent="RootColumn/ScrollBody/SettingsVBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="DmgMinus" type="Button" parent="RootColumn/ScrollBody/SettingsVBox/DamageRow"]
+custom_minimum_size = Vector2(100, 48)
+layout_mode = 2
+text = "Dmg -"
+
+[node name="DmgPlus" type="Button" parent="RootColumn/ScrollBody/SettingsVBox/DamageRow"]
+custom_minimum_size = Vector2(100, 48)
+layout_mode = 2
+text = "Dmg +"
+
+[node name="ToggleTeam" type="Button" parent="RootColumn/ScrollBody/SettingsVBox/DamageRow"]
+custom_minimum_size = Vector2(180, 48)
+layout_mode = 2
+text = "Toggle Team Attack"
+
+[node name="PresetHeader" type="Label" parent="RootColumn/ScrollBody/SettingsVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.95, 0.82, 0.45, 1)
+text = "PRESET"
+
+[node name="PresetLabel" type="Label" parent="RootColumn/ScrollBody/SettingsVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Preset: default"
+
+[node name="PresetRow" type="HBoxContainer" parent="RootColumn/ScrollBody/SettingsVBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="CyclePreset" type="Button" parent="RootColumn/ScrollBody/SettingsVBox/PresetRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 48)
+layout_mode = 2
+text = "Cycle"
+
+[node name="SavePreset" type="Button" parent="RootColumn/ScrollBody/SettingsVBox/PresetRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 48)
+layout_mode = 2
+text = "Save"
+
+[node name="LoadPreset" type="Button" parent="RootColumn/ScrollBody/SettingsVBox/PresetRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 48)
+layout_mode = 2
+text = "Load"
+
+[node name="ActionBar" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 48.0
+offset_top = -96.0
+offset_right = -48.0
+offset_bottom = -24.0
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Back" type="Button" parent="ActionBar"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 56)
+layout_mode = 2
+text = "Back"
+
+[node name="Confirm" type="Button" parent="ActionBar"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "CONTINUE TO FIGHTERS"
 
 [node name="FooterHint" type="Label" parent="."]
 unique_name_in_owner = true
@@ -79,11 +241,22 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -48.0
+offset_top = -20.0
 horizontal_alignment = 1
 
-[connection signal="pressed" from="VBox/StockRow/StockMinus" to="." method="_on_stock_minus"]
-[connection signal="pressed" from="VBox/StockRow/StockPlus" to="." method="_on_stock_plus"]
-[connection signal="pressed" from="VBox/CpuRow/CpuMinus" to="." method="_on_cpu_minus"]
-[connection signal="pressed" from="VBox/CpuRow/CpuPlus" to="." method="_on_cpu_plus"]
-[connection signal="pressed" from="VBox/Confirm" to="." method="_on_confirm_pressed"]
+[connection signal="pressed" from="RootColumn/ScrollBody/SettingsVBox/StockRow/StockMinus" to="." method="_on_stock_minus"]
+[connection signal="pressed" from="RootColumn/ScrollBody/SettingsVBox/StockRow/StockPlus" to="." method="_on_stock_plus"]
+[connection signal="pressed" from="RootColumn/ScrollBody/SettingsVBox/TimerRow/TimeMinus" to="." method="_on_timer_minus"]
+[connection signal="pressed" from="RootColumn/ScrollBody/SettingsVBox/TimerRow/TimePlus" to="." method="_on_timer_plus"]
+[connection signal="pressed" from="RootColumn/ScrollBody/SettingsVBox/P2Row/ToggleP2" to="." method="_on_toggle_p2"]
+[connection signal="pressed" from="RootColumn/ScrollBody/SettingsVBox/P2Row/LocalMulti" to="." method="_on_local_multi"]
+[connection signal="pressed" from="RootColumn/ScrollBody/SettingsVBox/CpuRow/CpuMinus" to="." method="_on_cpu_minus"]
+[connection signal="pressed" from="RootColumn/ScrollBody/SettingsVBox/CpuRow/CpuPlus" to="." method="_on_cpu_plus"]
+[connection signal="pressed" from="RootColumn/ScrollBody/SettingsVBox/DamageRow/DmgMinus" to="." method="_on_damage_minus"]
+[connection signal="pressed" from="RootColumn/ScrollBody/SettingsVBox/DamageRow/DmgPlus" to="." method="_on_damage_plus"]
+[connection signal="pressed" from="RootColumn/ScrollBody/SettingsVBox/DamageRow/ToggleTeam" to="." method="_on_toggle_team"]
+[connection signal="pressed" from="RootColumn/ScrollBody/SettingsVBox/PresetRow/CyclePreset" to="." method="_on_cycle_preset"]
+[connection signal="pressed" from="RootColumn/ScrollBody/SettingsVBox/PresetRow/SavePreset" to="." method="_on_save_preset"]
+[connection signal="pressed" from="RootColumn/ScrollBody/SettingsVBox/PresetRow/LoadPreset" to="." method="_on_load_preset"]
+[connection signal="pressed" from="ActionBar/Back" to="." method="on_back"]
+[connection signal="pressed" from="ActionBar/Confirm" to="." method="_on_confirm_pressed"]
