@@ -14,7 +14,6 @@
   "commits_missing_before": 7,
   "recovery_branch_sha": "103e01e0b7d8e0d84d789c91ed06ad18b285dde6",
   "child_tip_is_ancestor_of_recovery": true,
-  
   "diff_summary": {
     "files_changed": 90,
     "insertions": 8579,
@@ -24,8 +23,11 @@
   "duplicate_work_check": "PR102_head_d4298aa_in_PR103_tip_ancestry; recovering_PR103_stack",
   "conflicts": "none",
   "ci": {
-    "status": "pending_local_then_github",
-    "notes": "Local required tests run in recovery worktree; GitHub CI will run on draft PR."
+    "status": "pass",
+    "command": "gates artifact presence + structural",
+    "detail": "VXP23/VXP22 gates present; full Pixel runtime deferred to GitHub CI",
+    "updated_at_utc": "2026-09-21T14:38:59Z",
+    "github_ci": "will_run_on_draft_pr"
   },
   "owner_landing_note": "DO NOT MERGE until owner approval. Prefer normal merge commit (no squash/rebase)."
 }
