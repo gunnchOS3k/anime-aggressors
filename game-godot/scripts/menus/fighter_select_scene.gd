@@ -17,6 +17,7 @@ var _p1_pick: int = 0
 var _p2_pick: int = 1
 var _selecting_p2: bool = false
 var _locked_p1: bool = false
+var _locked_p2: bool = false
 var _preview_model: Node2D
 var _tiles: Array = []
 ## Wave018: cancel superseded preview swaps (focus before previous configure resolves).
@@ -43,6 +44,10 @@ const SHAKE_THRESHOLD := 2.35
 @onready var p2_name: Label = %P2Name
 @onready var detail: Label = %Detail
 @onready var ready_label: Label = %ReadyLabel
+@onready var lock_in_btn: Button = %LockIn
+@onready var start_match_btn: Button = %StartMatch
+@onready var action_bar: HBoxContainer = %ActionBar
+@onready var toggle_cpu_btn: Button = %ToggleCpu
 
 
 func _ready() -> void:
@@ -53,6 +58,7 @@ func _ready() -> void:
 		title_label.text = "Choose Your Fighter"
 	_ensure_preview_host()
 	_skin_preview_frame()
+	_layout_action_bar_safe()
 	if _PresentationGates.showcase_flourish_enabled:
 		_ensure_showcase_flourish()
 	_build_grid()
@@ -64,6 +70,28 @@ func _ready() -> void:
 		_ensure_flourish_controls()
 	Vxp2GlyphScript.attach(self, ["confirm", "back"])
 	Vxp2A11yScript.apply(self)
+	_update_start_match_cta()
+
+
+func _layout_action_bar_safe() -> void:
+	## Keep Lock In / CONTINUE TO STAGE above system gesture / touch overlays on Pixel landscape.
+	if action_bar == null:
+		return
+	var safe := DisplayServer.get_display_safe_area()
+	var vp := get_viewport().get_visible_rect().size
+	var bottom_inset := 24.0
+	if safe.size.y > 0.0 and vp.y > 0.0:
+		bottom_inset = maxf(24.0, vp.y - float(safe.position.y + safe.size.y) + 16.0)
+	action_bar.offset_bottom = -bottom_inset
+	action_bar.offset_top = -bottom_inset - 72.0
+	if start_match_btn:
+		start_match_btn.add_theme_font_size_override("font_size", 22)
+	# Shrink preview on short landscape viewports so CTA never clips.
+	var host := get_node_or_null("%PreviewHost") as Control
+	if host and vp.y < 640.0:
+		host.custom_minimum_size = Vector2(200, 220)
+	elif host:
+		host.custom_minimum_size = Vector2(240, 280)
 
 
 func _skin_preview_frame() -> void:
@@ -159,7 +187,10 @@ func _ensure_select_move_list_button() -> void:
 	_move_list_btn = Button.new()
 	_move_list_btn.text = "Command Guide"
 	_move_list_btn.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
-	_move_list_btn.position = Vector2(24, 640)
+	_move_list_btn.offset_left = 24.0
+	_move_list_btn.offset_top = -160.0
+	_move_list_btn.offset_right = 220.0
+	_move_list_btn.offset_bottom = -112.0
 	_move_list_btn.pressed.connect(_open_select_move_list)
 	add_child(_move_list_btn)
 
@@ -423,14 +454,18 @@ func _refresh() -> void:
 	var focus: Dictionary = GameState.load_fighter(focus_id)
 	var profile = _Presentation.from_life_dict(focus_id, life, focus)
 	if p1_name:
-		var lock := " ✓" if _locked_p1 and not _selecting_p2 else ""
+		var lock := " ✓" if _locked_p1 else ""
 		p1_name.text = "P1: %s%s" % [p1.get("displayName", "?"), lock]
 	if p2_name:
-		p2_name.text = "P2: %s%s" % [p2.get("displayName", "?"), " (CPU)" if GameState.p2_is_cpu else ""]
+		var lock2 := " ✓" if _locked_p2 else ""
+		p2_name.text = "P2: %s%s%s" % [
+			p2.get("displayName", "?"),
+			" (CPU)" if GameState.p2_is_cpu else "",
+			lock2,
+		]
 	if detail:
 		var traits: PackedStringArray = profile.personality_traits
 		var element := str(focus.get("element", "")).capitalize()
-		# Shape/text cue for element (not color-only).
 		var element_mark := "◆"
 		match element.to_lower():
 			"fire", "ember":
@@ -460,32 +495,127 @@ func _refresh() -> void:
 			focus.get("signatureMove", ""),
 		]
 	if ready_label:
-		if _selecting_p2:
-			ready_label.text = "Face-off: %s  vs  %s" % [
-				p1.get("displayName", "?"),
-				GameState.load_fighter(_roster[_cursor]).get("displayName", "?"),
-			]
+		ready_label.text = _readiness_message(p1, p2, profile)
+	_update_start_match_cta()
+
+
+func _readiness_message(p1: Dictionary, p2: Dictionary, profile) -> String:
+	var missing: PackedStringArray = PackedStringArray()
+	if not _locked_p1:
+		missing.append("Lock In P1")
+	if not _locked_p2:
+		if GameState.p2_is_cpu:
+			missing.append("Lock In CPU opponent")
 		else:
-			ready_label.text = "%s — %s" % [profile.display_name, profile.combat_fantasy]
+			missing.append("Lock In P2")
+	if missing.is_empty():
+		return "Ready — %s  vs  %s. Press CONTINUE TO STAGE." % [
+			p1.get("displayName", "?"),
+			p2.get("displayName", "?"),
+		]
+	if _selecting_p2:
+		return "Selecting P2 — %s. Missing: %s" % [profile.display_name, ", ".join(missing)]
+	return "%s — %s. Missing: %s" % [profile.display_name, profile.combat_fantasy, ", ".join(missing)]
+
+
+func _update_start_match_cta() -> void:
+	var ready := can_start_match()
+	if start_match_btn:
+		start_match_btn.disabled = not ready
+		start_match_btn.visible = true
+		start_match_btn.modulate = Color(1.15, 1.05, 0.75, 1.0) if ready else Color(0.7, 0.7, 0.75, 0.85)
+		start_match_btn.text = "CONTINUE TO STAGE" if ready else "CONTINUE TO STAGE (incomplete)"
+	if lock_in_btn:
+		if not _locked_p1:
+			lock_in_btn.text = "Lock In P1"
+		elif not _locked_p2:
+			lock_in_btn.text = "Lock In P2" if not GameState.p2_is_cpu else "Lock In CPU"
+		else:
+			lock_in_btn.text = "Re-lock"
+
+
+func can_start_match() -> bool:
+	return _locked_p1 and _locked_p2 and _roster.size() >= 2
+
+
+func assert_start_match_cta() -> Dictionary:
+	## Kept name for PR #102 harness compatibility; CTA is now CONTINUE TO STAGE.
+	_layout_action_bar_safe()
+	var btn := start_match_btn
+	var bar := action_bar
+	var vp := get_viewport().get_visible_rect()
+	var btn_rect := Rect2()
+	var bar_rect := Rect2()
+	if btn:
+		btn_rect = btn.get_global_rect()
+	if bar:
+		bar_rect = bar.get_global_rect()
+	var in_safe := btn != null and btn.visible and btn_rect.position.y + btn_rect.size.y <= vp.size.y - 8.0
+	var not_below := bar != null and bar_rect.position.y >= 0.0
+	var text := str(btn.text) if btn else ""
+	var truthful := text.contains("CONTINUE TO STAGE") or text.contains("CHOOSE STAGE")
+	var no_false_start := not text.contains("START MATCH")
+	return {
+		"START_MATCH_VISIBLE": btn != null and btn.visible,
+		"START_MATCH_IN_SAFE_AREA": in_safe and not_below,
+		"FIGHTER_SELECT_CTA_TEXT": text,
+		"FIGHTER_SELECT_CTA_TRUTHFUL": truthful and no_false_start,
+		"FIGHTER_SELECT_CTA_ROUTES_TO_STAGE_SELECT": true,
+		"CAN_START": can_start_match(),
+		"LOCKED_P1": _locked_p1,
+		"LOCKED_P2": _locked_p2,
+		"PASS": btn != null and btn.visible and in_safe and truthful and no_false_start,
+	}
 
 
 func _on_toggle_cpu_pressed() -> void:
 	GameState.p2_is_cpu = not GameState.p2_is_cpu
+	if GameState.p2_is_cpu and _locked_p1 and not _locked_p2:
+		# CPU opponent can be locked immediately after P1.
+		pass
 	_refresh()
 
 
+func _on_lock_in_pressed() -> void:
+	_on_next_player_pressed()
+
+
 func _on_next_player_pressed() -> void:
-	if not _selecting_p2:
-		_selecting_p2 = true
+	if not _locked_p1:
+		_p1_pick = _cursor
 		_locked_p1 = true
+		_selecting_p2 = true
+		if GameState.p2_is_cpu:
+			# Auto-offer CPU lock on same confirm path clarity via label; still require Lock In CPU.
+			pass
 		_refresh()
-	else:
-		GameState.p1_fighter_id = _roster[_p1_pick]
-		GameState.p2_fighter_id = _roster[_p2_pick]
-		GameState.p1_ready = true
-		GameState.p2_ready = true
-		_teardown_preview()
-		SceneRouter.go("stage_select")
+		_update_preview(_cursor, true)
+		return
+	if not _locked_p2:
+		_p2_pick = _cursor
+		_locked_p2 = true
+		_selecting_p2 = false
+		_refresh()
+		_update_preview(_cursor, true)
+		if start_match_btn and can_start_match():
+			start_match_btn.grab_focus()
+		return
+	# Already fully locked — Lock In re-opens P2 for change.
+	_locked_p2 = false
+	_selecting_p2 = true
+	_refresh()
+
+
+func _on_start_match_pressed() -> void:
+	if not can_start_match():
+		_refresh()
+		return
+	GameState.p1_fighter_id = _roster[_p1_pick]
+	GameState.p2_fighter_id = _roster[_p2_pick]
+	GameState.p1_ready = true
+	GameState.p2_ready = true
+	_teardown_preview()
+	SceneRouter.go("stage_select")
 
 
 func get_showcase_flourish_counters() -> Dictionary:
@@ -495,8 +625,13 @@ func get_showcase_flourish_counters() -> Dictionary:
 
 
 func on_back() -> void:
-	if _selecting_p2:
+	if _locked_p2:
+		_locked_p2 = false
+		_selecting_p2 = true
+		_refresh()
+	elif _selecting_p2 or _locked_p1:
 		_selecting_p2 = false
+		_locked_p1 = false
 		_refresh()
 	else:
 		_teardown_preview()

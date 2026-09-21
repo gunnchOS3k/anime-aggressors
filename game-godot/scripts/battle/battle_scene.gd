@@ -189,8 +189,11 @@ func _spawn_fighters() -> void:
 	fighter1.global_position = s1
 	fighter2.global_position = s2
 	for f in [fighter1, fighter2]:
-		f.platform_half_width = float(main.get("width", 800)) / 2.0
-		f.platform_center_x = float(main.get("x", 0))
+		if f.has_method("configure_stage_geometry"):
+			f.configure_stage_geometry(main, stage_data.get("ledgeAnchors", []), bool(stage_data.get("ledges", true)))
+		else:
+			f.platform_half_width = float(main.get("width", 800)) / 2.0
+			f.platform_center_x = float(main.get("x", 0))
 		# Wave018: battle must not inherit select-preview ghosts / stuck visibility.
 		if f.has_method("ensure_visible_presentation"):
 			f.ensure_visible_presentation()

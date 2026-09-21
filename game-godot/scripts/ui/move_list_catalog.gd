@@ -71,6 +71,8 @@ static func build_fighter_catalog(fighter_id: String) -> Dictionary:
 	var display_all := load_json(DISPLAY_PATH)
 	var display_map: Dictionary = display_all.get(fighter_id, {})
 	var clip_map: Dictionary = alias.get("move_id_to_clip", {})
+	var fighter_doc := load_json("res://data/fighters/%s.json" % fighter_id)
+	var fighter_display := str(fighter_doc.get("displayName", fighter_id.replace("-", " ").capitalize()))
 
 	var entries: Array = []
 	for raw in moves_doc.get("moves", []):
@@ -123,6 +125,7 @@ static func build_fighter_catalog(fighter_id: String) -> Dictionary:
 
 	return {
 		"fighter_id": fighter_id,
+		"display_name": fighter_display,
 		"schema": "wave019_move_list_catalog_v1",
 		"beginner": meta.get("beginner", {}),
 		"core_move_ids": meta.get("core_moves", []),

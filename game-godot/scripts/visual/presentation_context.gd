@@ -13,7 +13,9 @@ const CTX_MOVE_PREVIEW := "MOVE_PREVIEW"
 const CTX_VICTORY := "VICTORY"
 const CTX_TRAINING := "TRAINING"
 
-const BATTLE_DISPLAY_SCALE := Vector2(0.85, 0.85)
+## VXP-2.2 human feedback: battle bodies must fit platform spacing / ledge recovery.
+## Select/preview stay larger for readability; battle is deliberately smaller.
+const BATTLE_DISPLAY_SCALE := Vector2(0.58, 0.58)
 const SELECT_PREVIEW_DISPLAY_SCALE := Vector2(1.35, 1.35)
 const MOVE_PREVIEW_DISPLAY_SCALE := Vector2(1.05, 1.05)
 const VICTORY_DISPLAY_SCALE := Vector2(1.2, 1.2)
@@ -21,7 +23,7 @@ const SELECT_CARD_VIEWPORT := Vector2i(192, 240)
 const DEFAULT_VIEWPORT := Vector2i(256, 320)
 const MOVE_PREVIEW_VIEWPORT := Vector2i(240, 280)
 
-const MAX_BATTLE_DISPLAY_SCALE := 1.05
+const MAX_BATTLE_DISPLAY_SCALE := 0.72
 const MAX_PREVIEW_DISPLAY_SCALE := 1.45
 const MIN_MATERIAL_LUMA := 0.08
 
@@ -103,9 +105,9 @@ static func display_contract(context: String) -> Dictionary:
 			return {
 				"context": ctx,
 				"display_scale": BATTLE_DISPLAY_SCALE,
-				"display_offset": Vector2(0, -56),
+				"display_offset": Vector2(0, -40),
 				"viewport_size": DEFAULT_VIEWPORT,
-				"camera_size": 2.55,
+				"camera_size": 2.95,
 				"allow_model_root_scale": false,
 				"bake_only": false,
 			}
@@ -113,9 +115,9 @@ static func display_contract(context: String) -> Dictionary:
 			return {
 				"context": ctx,
 				"display_scale": BATTLE_DISPLAY_SCALE,
-				"display_offset": Vector2(0, -56),
+				"display_offset": Vector2(0, -40),
 				"viewport_size": DEFAULT_VIEWPORT,
-				"camera_size": 2.55,
+				"camera_size": 2.95,
 				"allow_model_root_scale": false,
 				"bake_only": false,
 			}

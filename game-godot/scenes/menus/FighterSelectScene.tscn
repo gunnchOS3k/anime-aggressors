@@ -26,7 +26,7 @@ anchor_bottom = 1.0
 offset_left = 48.0
 offset_top = 40.0
 offset_right = -48.0
-offset_bottom = -160.0
+offset_bottom = -120.0
 
 [node name="Title" type="Label" parent="VBox"]
 unique_name_in_owner = true
@@ -63,7 +63,7 @@ columns = 4
 
 [node name="PreviewHost" type="Control" parent="VBox/SelectRow"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(300, 380)
+custom_minimum_size = Vector2(240, 280)
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
@@ -85,16 +85,37 @@ autowrap_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Actions" type="HBoxContainer" parent="VBox"]
-layout_mode = 2
+[node name="ActionBar" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 48.0
+offset_top = -96.0
+offset_right = -48.0
+offset_bottom = -24.0
+theme_override_constants/separation = 16
+alignment = 1
 
-[node name="ToggleCpu" type="Button" parent="VBox/Actions"]
+[node name="ToggleCpu" type="Button" parent="ActionBar"]
+unique_name_in_owner = true
 layout_mode = 2
+custom_minimum_size = Vector2(160, 52)
 text = "Toggle CPU"
 
-[node name="NextPlayer" type="Button" parent="VBox/Actions"]
+[node name="LockIn" type="Button" parent="ActionBar"]
+unique_name_in_owner = true
 layout_mode = 2
+custom_minimum_size = Vector2(160, 52)
 text = "Lock In"
+
+[node name="StartMatch" type="Button" parent="ActionBar"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(220, 56)
+text = "CONTINUE TO STAGE"
 
 [node name="FooterHint" type="Label" parent="."]
 unique_name_in_owner = true
@@ -103,8 +124,9 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -48.0
+offset_top = -22.0
 horizontal_alignment = 1
 
-[connection signal="pressed" from="VBox/Actions/ToggleCpu" to="." method="_on_toggle_cpu_pressed"]
-[connection signal="pressed" from="VBox/Actions/NextPlayer" to="." method="_on_next_player_pressed"]
+[connection signal="pressed" from="ActionBar/ToggleCpu" to="." method="_on_toggle_cpu_pressed"]
+[connection signal="pressed" from="ActionBar/LockIn" to="." method="_on_lock_in_pressed"]
+[connection signal="pressed" from="ActionBar/StartMatch" to="." method="_on_start_match_pressed"]
