@@ -127,3 +127,11 @@ npm run validate:character-assets   # verify GLB rigs, sockets, clips, hashes, r
 ```
 
 Godot web export (secondary): `npm run godot:export:web` then `npm run build:pages` — see [BUILD_TARGETS.md](docs/BUILD_TARGETS.md).
+
+## Feedback & Suggestions
+
+Tried this project? File public feedback via the ecosystem hub:
+
+https://github.com/gunnchOS3k/gunnchos-research-portal/blob/main/FEEDBACK.md
+
+Security vulnerabilities: private only — https://github.com/gunnchOS3k/gunnchos-research-portal/blob/main/SECURITY.md

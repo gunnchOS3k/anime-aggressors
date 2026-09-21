@@ -16,6 +16,7 @@ var _victory_canonical: bool = false
 
 
 func _ready() -> void:
+	_ensure_results_feedback_button()
 	super._ready()
 	_ready_display()
 
@@ -188,3 +189,19 @@ func _on_home_pressed() -> void:
 
 func on_back() -> void:
 	_on_home_pressed()
+
+func _ready_feedback_link() -> void:
+	# Safe on results only — never during combat.
+	pass
+
+func open_public_feedback() -> void:
+	OS.shell_open("https://github.com/gunnchOS3k/gunnchos-research-portal/blob/main/FEEDBACK.md?component=Anime%20Aggressors")
+
+func _ensure_results_feedback_button() -> void:
+	if has_node("FeedbackBtn"):
+		return
+	var fb := Button.new()
+	fb.name = "FeedbackBtn"
+	fb.text = "Feedback & Suggestions"
+	fb.pressed.connect(open_public_feedback)
+	add_child(fb)
