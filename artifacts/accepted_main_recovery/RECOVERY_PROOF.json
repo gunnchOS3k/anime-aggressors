@@ -1,0 +1,31 @@
+{
+  "schema": "accepted_main_recovery.v1",
+  "generated_at_utc": "2026-09-21T14:36:59Z",
+  "repo": "anime-aggressors",
+  "original_pr": 103,
+  "recovery_branch": "recovery/pr103-accepted-main-convergence",
+  "merge_authorized": false,
+  "method": "git merge --no-ff <exact-missing-child-tip> onto current origin/main",
+  "history_rewrite": false,
+  "force_push": false,
+  "main_sha": "d17f9f08ed166b40cfa90335bc0c3d51631248dd",
+  "missing_child_sha": "106e92e31bae019498828b9880cc677e425426f0",
+  "merge_base": "af8dbf5941db21ed45e9206f6cd807d80ee3377d",
+  "commits_missing_before": 7,
+  "recovery_branch_sha": "103e01e0b7d8e0d84d789c91ed06ad18b285dde6",
+  "child_tip_is_ancestor_of_recovery": true,
+  
+  "diff_summary": {
+    "files_changed": 90,
+    "insertions": 8579,
+    "deletions": 284,
+    "shortstat": "90 files changed, 8579 insertions(+), 284 deletions(-)"
+  },
+  "duplicate_work_check": "PR102_head_d4298aa_in_PR103_tip_ancestry; recovering_PR103_stack",
+  "conflicts": "none",
+  "ci": {
+    "status": "pending_local_then_github",
+    "notes": "Local required tests run in recovery worktree; GitHub CI will run on draft PR."
+  },
+  "owner_landing_note": "DO NOT MERGE until owner approval. Prefer normal merge commit (no squash/rebase)."
+}
