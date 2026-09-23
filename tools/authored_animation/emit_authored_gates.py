@@ -46,7 +46,7 @@ def main() -> None:
 
     gates = {
         "program": "VXP-3",
-        "title": "Authored animation production pipeline first pass (not final art)",
+        "title": "Authored animation production infrastructure + spectacle + golden-slice prep (not final art)",
         "head_sha": sh(["git", "rev-parse", "HEAD"]),
         "base_sha": "6cd1b3100a7e467c2c991394576891660deb1162",
         "branch": sh(["git", "rev-parse", "--abbrev-ref", "HEAD"]),
@@ -63,6 +63,8 @@ def main() -> None:
         "AUTHORED_SECONDARY_PASS": False,
         "AURA_CLASH_SYSTEM_PASS": clash_ok,
         "CINEMATIC_COMBAT_DIRECTOR_PASS": cine_ok,
+        "ANIMATION_PRODUCTION_BLENDER_VERSION": "3.3.1",
+        "MESH_BINDING_NEEDS_HUMAN_WEIGHT_PAINT": True,
         "PIXEL_AUTHORED_COMBAT_PERF_PASS": False,
         "HUMAN_ANIMATION_QUALITY_PASS": False,
         "HUMAN_COMBAT_FEEL_PASS": False,

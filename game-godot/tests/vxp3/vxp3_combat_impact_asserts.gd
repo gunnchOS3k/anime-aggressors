@@ -100,6 +100,32 @@ func _run() -> void:
 	_ok(not _Provenance.automation_may_write(_Provenance.AUTHORED_APPROVED), "automation must not write APPROVED")
 	_ok(_Secondary.provenance() == "PROCEDURAL_FALLBACK", "secondary is fallback")
 	_ok(not _Secondary.should_apply(true), "secondary respects reduce-motion")
+	_ok(_Clash.cannot_deadlock(), "clash state machine cannot deadlock")
+	_ok(not _Clash.is_clashable({"move_id": "forward_tilt", "move_type": "melee"}), "ordinary melee does not clash")
+	var det_a: Dictionary = _Clash.debug_force(
+		{"move_id": "aura_burst", "move_type": "aura", "startup_frames": 8, "active_frames": 6},
+		{"move_id": "signature_lane_finisher", "move_type": "super", "startup_frames": 14, "active_frames": 8},
+		{"fighter_id": "nix-calder", "aura": 80.0},
+		{"fighter_id": "rook-ironside", "aura": 80.0}
+	)
+	var det_b: Dictionary = _Clash.debug_force(
+		{"move_id": "aura_burst", "move_type": "aura", "startup_frames": 8, "active_frames": 6},
+		{"move_id": "signature_lane_finisher", "move_type": "super", "startup_frames": 14, "active_frames": 8},
+		{"fighter_id": "nix-calder", "aura": 80.0},
+		{"fighter_id": "rook-ironside", "aura": 80.0}
+	)
+	_ok(str(det_a.get("winner")) == str(det_b.get("winner")), "clash resolution deterministic")
+	_ok(not bool(det_a.get("HUMAN_AURA_CLASH_PASS")), "human clash gate stays false")
+	_ok(_Clash.preset("rook_orion").get("a") == "rook-ironside", "preset rook/orion")
+	_ok(_Clash.preset("juno_kaia").get("a") == "juno-spark", "preset juno/kaia")
+	_ok(_Clash.preset("ember_nix").get("a") == "ember-vale", "preset ember/nix")
+	_ok(_Clash.preset("vesper_ember").get("a") == "vesper-nyx", "preset vesper/ember")
+	_ok(_Clash.preset("nix_rook").get("a") == "nix-calder", "preset nix/rook")
+	_ok(_Cinematic.shot_for_class(_Cinematic.CLASS_SUPER).get("duration") != _Cinematic.shot_for_class(_Cinematic.CLASS_CLASH).get("duration"), "super shot is not the clash shot")
+	_ok(_Cinematic.restore_always(), "camera always restores")
+	_ok(FileAccess.file_exists("res://scenes/training/AuthoredAnimPreview.tscn"), "authored preview scene")
+	_ok(FileAccess.file_exists("res://data/vfx/aura_clash_slots.json"), "vfx slots")
+	_ok(FileAccess.file_exists("res://data/combat/clash_eligibility.json"), "clash eligibility schema")
 	var proof := "res://assets/characters/authored/ember-vale/pipeline_proof.glb"
 	_ok(ResourceLoader.exists(proof) or FileAccess.file_exists(proof), "ember authored GLB exists")
 

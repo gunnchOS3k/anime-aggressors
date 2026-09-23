@@ -18,7 +18,7 @@
 1. Open each fighter control-rig `.blend` (see LFS setup below).
 2. Fill the pose bible stills in `art_source/animation/fighters/<id>/pose_bible/`.
 3. Author the 14 Wave A hero actions per fighter (98 total). One clip per export file.
-4. Export via `tools/authored_animation/run_export_action.py` (when added) or the documented glTF preset.
+4. Export via `python3 tools/authored_animation/export_action.py --fighter rook-ironside --action heavy`. Preview via `npm run anim:preview -- --fighter rook-ironside --action heavy`. Submit via `npm run anim:submit-check -- --fighter rook-ironside --action heavy`.
 5. Do **not** move gameplay frame data if a shot is late. Flag the sidecar.
 
 ## Wave A hero set (14)

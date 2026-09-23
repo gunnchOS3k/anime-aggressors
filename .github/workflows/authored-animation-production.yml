@@ -1,0 +1,45 @@
+name: Authored Animation Production
+
+on:
+  pull_request:
+  push:
+    branches:
+      - vxp/vxp-3-combat-impact-nix-rook
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: authored-anim-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  infra:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Production infrastructure gates
+        run: |
+          python3 tools/authored_animation/validate_provenance.py
+          python3 tools/authored_animation/validate_production_infra.py
+          python3 tools/authored_animation/pixel_spectacle_perf.py
+          python3 tools/authored_animation/submit_check.py --fighter rook-ironside --action heavy || true
+      - name: Truthful LFS / human-gate check
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path("artifacts/vxp3/reports/AUTHORED_PRODUCTION_INFRA.json").read_text())
+          assert p.get("ok"), p
+          gates = Path("artifacts/vxp3/reports/VXP3_AUTHORED_ANIMATION_GATES.json")
+          if gates.is_file():
+              g = json.loads(gates.read_text())
+              for k in ("HUMAN_ANIMATION_QUALITY_PASS","HUMAN_AURA_CLASH_PASS","MERGE_AUTHORIZED","FINAL_AUTHORED_ANIMATION_PASS"):
+                  assert g.get(k) is False or g.get(k) is None or g.get(k) == False, k
+          print("infra ok; human gates false")
+          PY

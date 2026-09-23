@@ -1,0 +1,224 @@
+{
+  "fighter": "juno-spark",
+  "blend": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/art_source/animation/fighters/juno-spark/source/juno-spark_animation_master.blend",
+  "status": "READY_TO_ANIMATE_PROXY",
+  "mesh": "skinned_proxy_cylinder",
+  "mesh_binding": "MESH_BINDING_NEEDS_HUMAN_WEIGHT_PAINT",
+  "real_mesh_bound": false,
+  "control_rig": {
+    "controls_created": [
+      "CTRL_FK_Hips",
+      "CTRL_FK_Spine",
+      "CTRL_FK_Chest",
+      "CTRL_FK_Neck",
+      "CTRL_FK_Head",
+      "CTRL_FK_UpperArm_L",
+      "CTRL_FK_LowerArm_L",
+      "CTRL_FK_Hand_L",
+      "CTRL_FK_UpperArm_R",
+      "CTRL_FK_LowerArm_R",
+      "CTRL_FK_Hand_R",
+      "CTRL_FK_UpperLeg_L",
+      "CTRL_FK_LowerLeg_L",
+      "CTRL_FK_Foot_L",
+      "CTRL_FK_UpperLeg_R",
+      "CTRL_FK_LowerLeg_R",
+      "CTRL_FK_Foot_R",
+      "CTRL_IK_Hand_L",
+      "CTRL_IK_Foot_L",
+      "CTRL_PV_Elbow_L",
+      "CTRL_IK_Hand_R",
+      "CTRL_IK_Foot_R",
+      "CTRL_PV_Elbow_R"
+    ],
+    "final_acting_authored": false,
+    "note": "Tooling only. FK copy-rotation live. IK handles present, constraints off until animator enables them.",
+    "operators": [
+      "select_rig",
+      "reset_pose",
+      "mirror_pose",
+      "copy_pose",
+      "paste_pose",
+      "set_ik_fk",
+      "snap_fk_to_ik",
+      "snap_ik_to_fk",
+      "foot_roll",
+      "scale_cheat",
+      "torso_squash",
+      "shoulder_overshoot",
+      "create_named_action",
+      "set_action_frame_range",
+      "add_contact_marker",
+      "add_gameplay_markers",
+      "set_stepped_preview",
+      "export_pose_thumbnail"
+    ]
+  },
+  "actions": [
+    {
+      "action": "idle",
+      "frame_range": [
+        1,
+        48
+      ],
+      "contact_frame": 0,
+      "keys": 0,
+      "status": "MISSING",
+      "note": "Empty WIP slot. Not authored animation."
+    },
+    {
+      "action": "personality_idle",
+      "frame_range": [
+        1,
+        48
+      ],
+      "contact_frame": 0,
+      "keys": 0,
+      "status": "MISSING",
+      "note": "Empty WIP slot. Not authored animation."
+    },
+    {
+      "action": "walk",
+      "frame_range": [
+        1,
+        48
+      ],
+      "contact_frame": 0,
+      "keys": 0,
+      "status": "MISSING",
+      "note": "Empty WIP slot. Not authored animation."
+    },
+    {
+      "action": "run",
+      "frame_range": [
+        1,
+        48
+      ],
+      "contact_frame": 0,
+      "keys": 0,
+      "status": "MISSING",
+      "note": "Empty WIP slot. Not authored animation."
+    },
+    {
+      "action": "dash",
+      "frame_range": [
+        1,
+        24
+      ],
+      "contact_frame": 0,
+      "keys": 0,
+      "status": "MISSING",
+      "note": "Empty WIP slot. Not authored animation."
+    },
+    {
+      "action": "charged_idle",
+      "frame_range": [
+        1,
+        48
+      ],
+      "contact_frame": 0,
+      "keys": 0,
+      "status": "MISSING",
+      "note": "Empty WIP slot. Not authored animation."
+    },
+    {
+      "action": "charge_start",
+      "frame_range": [
+        1,
+        8
+      ],
+      "contact_frame": 1,
+      "keys": 0,
+      "status": "MISSING",
+      "note": "Empty WIP slot. Not authored animation."
+    },
+    {
+      "action": "charge_full",
+      "frame_range": [
+        1,
+        8
+      ],
+      "contact_frame": 1,
+      "keys": 0,
+      "status": "MISSING",
+      "note": "Empty WIP slot. Not authored animation."
+    },
+    {
+      "action": "heavy",
+      "frame_range": [
+        1,
+        30
+      ],
+      "contact_frame": 10,
+      "keys": 0,
+      "status": "MISSING",
+      "note": "Empty WIP slot. Not authored animation."
+    },
+    {
+      "action": "hurt_heavy",
+      "frame_range": [
+        1,
+        24
+      ],
+      "contact_frame": 1,
+      "keys": 0,
+      "status": "MISSING",
+      "note": "Empty WIP slot. Not authored animation."
+    },
+    {
+      "action": "launch_tumble",
+      "frame_range": [
+        1,
+        24
+      ],
+      "contact_frame": 0,
+      "keys": 0,
+      "status": "MISSING",
+      "note": "Empty WIP slot. Not authored animation."
+    },
+    {
+      "action": "aura_signature",
+      "frame_range": [
+        1,
+        40
+      ],
+      "contact_frame": 13,
+      "keys": 0,
+      "status": "MISSING",
+      "note": "Empty WIP slot. Not authored animation."
+    },
+    {
+      "action": "ko_reaction",
+      "frame_range": [
+        1,
+        24
+      ],
+      "contact_frame": 0,
+      "keys": 0,
+      "status": "MISSING",
+      "note": "Empty WIP slot. Not authored animation."
+    },
+    {
+      "action": "aura_burst_super_pose",
+      "frame_range": [
+        1,
+        40
+      ],
+      "contact_frame": 13,
+      "keys": 0,
+      "status": "MISSING",
+      "note": "Empty WIP slot. Not authored animation."
+    }
+  ],
+  "collections": [
+    "AA_EXPORT",
+    "AA_CONTROL",
+    "AA_MESH",
+    "AA_SOCKETS",
+    "AA_CAMERA_REF",
+    "AA_LIGHTING_REF"
+  ],
+  "not_final_art": true,
+  "human_approved": false,
+  "blender": "3.3.1"
+}

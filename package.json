@@ -61,7 +61,12 @@
     "quality": "npm run typecheck && npm run test && npm run validate:godot-product && npm run build",
     "release:check": "npm run quality && npm run build:pages",
     "audit:ci": "npm audit --audit-level=high",
-    "clean": "rm -rf apps/web/dist packages/*/dist legacy/web/dist"
+    "clean": "rm -rf apps/web/dist packages/*/dist legacy/web/dist",
+    "anim:preview": "python3 tools/authored_animation/preview_action.py",
+    "anim:render-review": "python3 tools/authored_animation/render_review.py",
+    "anim:submit-check": "python3 tools/authored_animation/submit_check.py",
+    "anim:export": "python3 tools/authored_animation/export_action.py",
+    "anim:validate": "python3 tools/authored_animation/validate_production_infra.py"
   },
   "devDependencies": {
     "typescript": "^5.3.0"

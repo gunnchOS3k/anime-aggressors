@@ -28,6 +28,16 @@ Mixed-identity clashes (`attacker_id != defender_id`) combine both palettes for 
 Training Impact Lab → **Debug aura clash**.  
 `GameState.last_aura_clash` holds the last result.
 
+## State machine
+
+`NONE → QUALIFY → SNAP → CONTACT → LOCK → ESCALATE → RESOLVE_A|RESOLVE_B|RESOLVE_NEUTRAL → RECOVER`
+
+Deterministic. No mash. No hidden RNG. No CombatMath change. No authoritative teleport.
+
+Training → **Open Aura Clash Lab**. Presets: Rook/Orion, Juno/Kaia, Ember/Nix, Vesper/Ember, Nix/Rook.
+
+Acting hooks (`clash_start/lock/push/losing/winning/break`) are WIP fallbacks until a human authors them.
+
 ## Quality
 
 `AURA_CLASH_SYSTEM_PASS` may be true for architecture + debug path.  

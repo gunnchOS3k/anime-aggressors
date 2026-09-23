@@ -16,9 +16,20 @@ def hide_non_deform(armature_obj: Any) -> list[str]:
 
 def export_glb(bpy: Any, filepath: Path, action_name: str | None = None) -> None:
     filepath.parent.mkdir(parents=True, exist_ok=True)
-    bpy.ops.object.select_all(action="DESELECT")
+    if bpy.context.view_layer.objects.active is None:
+        for obj in bpy.context.scene.objects:
+            if obj.type == "ARMATURE":
+                bpy.context.view_layer.objects.active = obj
+                break
+    try:
+        if bpy.context.object and bpy.context.object.mode != "OBJECT":
+            bpy.ops.object.mode_set(mode="OBJECT")
+        bpy.ops.object.select_all(action="DESELECT")
+    except RuntimeError:
+        pass
     for obj in bpy.context.scene.objects:
-        obj.select_set(obj.type in {"ARMATURE", "MESH", "EMPTY"})
+        skip = obj.name.startswith("AA_Ref") or obj.name.startswith("AA_Key") or obj.name.startswith("AA_Fill")
+        obj.select_set((not skip) and obj.type in {"ARMATURE", "MESH", "EMPTY"})
     kwargs = dict(
         filepath=str(filepath),
         export_format="GLB",

@@ -84,6 +84,11 @@ func _build() -> void:
 	_btn(col, "Replay Sequence", _replay_sequence)
 	_btn(col, "Play authored proof", _play_authored_proof)
 	_btn(col, "Debug aura clash", _debug_clash)
+	_btn(col, "Open Aura Clash Lab", _open_clash_lab)
+	_row(col, ["Rook heavy loop", "Nix hurt loop"], [_preview_action.bind("rook-ironside", "heavy"), _preview_action.bind("nix-calder", "hurt_heavy")])
+	_btn(col, "Golden Slice sync preview", _golden_slice_sync)
+	_row(col, ["100%", "50%", "25%"], [_preview_speed.bind(1.0), _preview_speed.bind(0.5), _preview_speed.bind(0.25)])
+	_row(col, ["Silhouette", "Skeleton", "Collision"], [_toggle_preview.bind("silhouette"), _toggle_preview.bind("skeleton"), _toggle_preview.bind("collision")])
 
 
 func _btn(col: VBoxContainer, label: String, cb: Callable) -> void:
@@ -259,6 +264,45 @@ func _play_authored_proof() -> void:
 	if f.model_3d.has_method("play_for_state"):
 		f.model_3d.play_for_state("idle", {"reaction_clip": "pipeline_proof"})
 	_log("AUTHORED PROOF %s" % _Provenance.debug_line(FIGHTERS[_p1_idx], "pipeline_proof"))
+
+
+func _open_clash_lab() -> void:
+	var lab = load("res://scripts/training/training_clash_lab.gd")
+	if lab == null:
+		_log("CLASH LAB MISSING")
+		return
+	var node = lab.new()
+	node.name = "TrainingClashLab"
+	add_child(node)
+	if node.has_method("setup"):
+		node.setup(_scene)
+	_log("AURA CLASH LAB")
+
+
+func _preview_action(fid: String, action: String) -> void:
+	if GameState:
+		GameState.p1_fighter_id = fid
+	_p1_idx = FIGHTERS.find(fid)
+	if _p1_idx < 0:
+		_p1_idx = 0
+	_apply_roster()
+	_log("PREVIEW %s %s %s" % [fid, action, _Provenance.debug_line(fid, action)])
+
+
+func _golden_slice_sync() -> void:
+	_p1_idx = FIGHTERS.find("rook-ironside")
+	_p2_idx = FIGHTERS.find("nix-calder")
+	_apply_roster()
+	_log("GOLDEN SLICE SYNC rook-heavy → nix-hurt_heavy (authored acting pending)")
+
+
+func _preview_speed(value: float) -> void:
+	Engine.time_scale = value
+	_log("PREVIEW SPEED %.2f" % value)
+
+
+func _toggle_preview(kind: String) -> void:
+	_log("PREVIEW TOGGLE %s" % kind)
 
 
 func _debug_clash() -> void:
