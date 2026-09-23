@@ -7,8 +7,8 @@ Draft PR #106. Do not merge. Not human-authored final art. RC1 `v1.0.0-rc.1` unt
 - PR: https://github.com/gunnchOS3k/anime-aggressors/pull/106
 - Branch: `vxp/vxp-3-combat-impact-nix-rook`
 - Start head: `3fc912af385bf40aebff018b2b851de3ec1f3c1e`
+- New head: `3f07eb891cb84929e86eded091b7f0db46f538c1`
 - Base / accepted main: `6cd1b3100a7e467c2c991394576891660deb1162`
-- This rescue adds a new commit on the same draft branch (head SHA after push)
 
 ## B — generator v2 architecture
 
