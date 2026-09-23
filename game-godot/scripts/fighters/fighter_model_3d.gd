@@ -227,6 +227,12 @@ func get_active_animation_clip() -> String:
 	return _last_clip
 
 
+func get_clip_provenance(clip: String = "") -> String:
+	if _animation_controller and _animation_controller.has_method("get_clip_provenance"):
+		return str(_animation_controller.get_clip_provenance(clip))
+	return "PROCEDURAL_FALLBACK"
+
+
 func get_animation_controller() -> Node:
 	return _animation_controller
 

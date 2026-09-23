@@ -8,12 +8,15 @@ const _AssetResolver = preload("res://scripts/visual/fighter_asset_resolver.gd")
 const _BoneMap = preload("res://scripts/visual/procedural_bone_map.gd")
 const _MoveResolver = preload("res://scripts/visual/runtime_move_resolver.gd")
 const _Charged = preload("res://scripts/visual/charged_animation_layer.gd")
+const _Provenance = preload("res://scripts/visual/animation_provenance.gd")
+const _Authored = preload("res://scripts/visual/authored_clip_loader.gd")
 
 var _fighter
 var _player: AnimationPlayer
 var _skeleton: Skeleton3D
 var _skeleton_path: NodePath = NodePath()
 var _loaded_clips: Dictionary = {}
+var _clip_provenance: Dictionary = {}
 var _fighter_id: String = ""
 var _active_clip: String = ""
 var _throw_dir: String = "forward"
@@ -38,6 +41,7 @@ func setup(fighter, model_root: Node3D) -> void:
 	_player.name = "CanonicalProceduralAnimationPlayer"
 	model_root.add_child(_player)
 	_load_procedural_clips(model_root)
+	_load_authored_proof()
 
 
 func set_charge_pct(pct: float) -> void:
@@ -105,6 +109,17 @@ func get_loaded_clip_names() -> Array:
 	return _loaded_clips.keys()
 
 
+func get_clip_provenance(clip: String = "") -> String:
+	var name := clip if not clip.is_empty() else _active_clip
+	if _clip_provenance.has(name):
+		return str(_clip_provenance[name])
+	return _Provenance.status_for(_fighter_id, name)
+
+
+func get_provenance_debug() -> String:
+	return _Provenance.debug_line(_fighter_id, _active_clip)
+
+
 func _fallback_clip(state: String, move_id: String) -> String:
 	if state in [_FighterStates.THROW_STARTUP, _FighterStates.THROW_RELEASE]:
 		var dir_clip := "throw_%s" % _throw_dir
@@ -165,6 +180,17 @@ func _load_procedural_clips(model_root: Node3D) -> void:
 	dir.list_dir_end()
 	if lib.get_animation_list().size() > 0:
 		_player.add_animation_library("", lib)
+	for clip_name in _loaded_clips.keys():
+		_clip_provenance[clip_name] = _Provenance.PROCEDURAL_FALLBACK
+
+
+func _load_authored_proof() -> void:
+	if _player == null or _fighter_id.is_empty():
+		return
+	var result: Dictionary = _Authored.load_into(_player, _skeleton, _fighter_id, "pipeline_proof", _skeleton_path)
+	if bool(result.get("ok", false)):
+		_loaded_clips["pipeline_proof"] = true
+		_clip_provenance["pipeline_proof"] = _Provenance.AUTHORED_WIP
 
 
 func _animation_from_json(path: String) -> Animation:

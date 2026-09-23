@@ -5,6 +5,8 @@ class_name TrainingImpactLab
 ## Touch-first: no ADB / keyboard / terminal required.
 
 const _Debug = preload("res://scripts/training/training_impact_debug.gd")
+const _Provenance = preload("res://scripts/visual/animation_provenance.gd")
+const _Clash = preload("res://scripts/combat/aura_clash_director.gd")
 
 const FIGHTERS := [
 	"ember-vale",
@@ -80,6 +82,8 @@ func _build() -> void:
 	_btn(col, "Charged / Base", _toggle_charged)
 	_row(col, ["Freeze", "Step"], [_freeze, _step])
 	_btn(col, "Replay Sequence", _replay_sequence)
+	_btn(col, "Play authored proof", _play_authored_proof)
+	_btn(col, "Debug aura clash", _debug_clash)
 
 
 func _btn(col: VBoxContainer, label: String, cb: Callable) -> void:
@@ -247,11 +251,41 @@ func _replay_sequence() -> void:
 	_replay()
 
 
+func _play_authored_proof() -> void:
+	var f = _f1()
+	if f == null or f.model_3d == null:
+		_log("NO P1 MODEL")
+		return
+	if f.model_3d.has_method("play_for_state"):
+		f.model_3d.play_for_state("idle", {"reaction_clip": "pipeline_proof"})
+	_log("AUTHORED PROOF %s" % _Provenance.debug_line(FIGHTERS[_p1_idx], "pipeline_proof"))
+
+
+func _debug_clash() -> void:
+	var a := {"move_id": "aura_burst", "move_type": "aura", "startup_frames": 12, "active_frames": 8, "choreography": {"clashable": true}}
+	var b := {"move_id": "signature_lane_finisher", "move_type": "super", "startup_frames": 16, "active_frames": 6, "choreography": {"clashable": true}}
+	var jab := {"move_id": "jab_1", "move_type": "jab", "startup_frames": 4, "active_frames": 2}
+	var forced: Dictionary = _Clash.debug_force(a, b, _f1(), _f2())
+	var jab_blocked: Dictionary = _Clash.debug_force(jab, a, _f1(), _f2())
+	if GameState:
+		GameState.last_aura_clash = forced
+	_log("CLASH %s jab_clashable=%s" % [forced, _Clash.is_clashable(jab)])
+
+
 func _refresh() -> void:
 	if _status == null:
 		return
 	var gs = GameState
-	_status.text = "P1 %s  P2 %s\nTier %s  Aura %.0f  React %s\nCam %s VFX %s SFX %s  HUD %s" % [
+	var p1_clip := ""
+	var p1_prov := _Provenance.status_for(FIGHTERS[_p1_idx], "pipeline_proof")
+	if _f1() != null and _f1().model_3d != null:
+		if _f1().model_3d.has_method("get_active_animation_clip"):
+			p1_clip = str(_f1().model_3d.get_active_animation_clip())
+		if _f1().model_3d.has_method("get_clip_provenance"):
+			p1_prov = str(_f1().model_3d.get_clip_provenance())
+	if gs and p1_prov != "":
+		gs.last_animation_provenance = p1_prov
+	_status.text = "P1 %s  P2 %s\nTier %s  Aura %.0f  React %s\nCam %s VFX %s SFX %s  HUD %s\nAnim %s  Prov %s\nClash %s" % [
 		FIGHTERS[_p1_idx],
 		FIGHTERS[_p2_idx],
 		str(gs.training_force_hit_tier) if gs else "",
@@ -261,4 +295,7 @@ func _refresh() -> void:
 		str(gs.training_vfx_enabled) if gs else "true",
 		str(gs.training_sfx_enabled) if gs else "true",
 		"hidden" if (gs and gs.training_hide_hud) else "shown",
+		p1_clip,
+		p1_prov,
+		str(gs.last_aura_clash.get("winner", "none")) if gs else "none",
 	]

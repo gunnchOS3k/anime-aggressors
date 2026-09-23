@@ -6,6 +6,7 @@ const _AuraIdentity = preload("res://scripts/combat/aura_identity.gd")
 const _AuraSpecialRuntime = preload("res://scripts/combat/aura_special_runtime.gd")
 const _CombatMath = preload("res://scripts/combat/combat_math.gd")
 const _TrainingImpactDebug = preload("res://scripts/training/training_impact_debug.gd")
+const _AuraClash = preload("res://scripts/combat/aura_clash_director.gd")
 
 signal hit_confirmed(attacker: Node, defender: Node, info: Dictionary)
 
@@ -15,6 +16,14 @@ var combat_feedback: Node
 func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_pct: float) -> void:
 	if attacker == null or defender == null:
 		return
+	var clash: Dictionary = _AuraClash.try_resolve(attacker, defender, move)
+	if bool(clash.get("clash", false)):
+		log_hit("CLASH %s vs %s winner=%s" % [clash.get("attacker_move"), clash.get("defender_move"), clash.get("winner")])
+		if str(clash.get("winner")) != "attacker":
+			# Draw or defender-win: incoming confirm is cancelled. No mash window.
+			hit_confirmed.emit(attacker, defender, clash)
+			_record_hit_telemetry(clash)
+			return
 	var from_projectile := bool(move.get("_from_projectile", false))
 	var move_id := str(move.get("move_id", ""))
 	var is_direct_throw := move_id.begins_with("throw_") or str(move.get("move_type", "")) == "throw"

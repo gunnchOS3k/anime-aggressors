@@ -1,0 +1,694 @@
+{
+  "schema": "aa_provenance_v1",
+  "labels": [
+    "AUTHORED_APPROVED",
+    "AUTHORED_WIP",
+    "PROCEDURAL_FALLBACK",
+    "MISSING"
+  ],
+  "automation_may_write": [
+    "AUTHORED_WIP",
+    "PROCEDURAL_FALLBACK",
+    "MISSING"
+  ],
+  "automation_must_never_write": [
+    "AUTHORED_APPROVED"
+  ],
+  "wave_a_hero": [
+    {
+      "id": "ember-vale.idle",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "ember-vale",
+      "action_id": "idle"
+    },
+    {
+      "id": "ember-vale.walk",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "ember-vale",
+      "action_id": "walk"
+    },
+    {
+      "id": "ember-vale.run",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "ember-vale",
+      "action_id": "run"
+    },
+    {
+      "id": "ember-vale.dash",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "ember-vale",
+      "action_id": "dash"
+    },
+    {
+      "id": "ember-vale.jump",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "ember-vale",
+      "action_id": "jump"
+    },
+    {
+      "id": "ember-vale.light",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "ember-vale",
+      "action_id": "light"
+    },
+    {
+      "id": "ember-vale.medium",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "ember-vale",
+      "action_id": "medium"
+    },
+    {
+      "id": "ember-vale.heavy",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "ember-vale",
+      "action_id": "heavy"
+    },
+    {
+      "id": "ember-vale.aura",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "ember-vale",
+      "action_id": "aura"
+    },
+    {
+      "id": "ember-vale.super",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "ember-vale",
+      "action_id": "super"
+    },
+    {
+      "id": "ember-vale.hurt_heavy",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "ember-vale",
+      "action_id": "hurt_heavy"
+    },
+    {
+      "id": "ember-vale.launch",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "ember-vale",
+      "action_id": "launch"
+    },
+    {
+      "id": "ember-vale.charge",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "ember-vale",
+      "action_id": "charge"
+    },
+    {
+      "id": "ember-vale.ko",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "ember-vale",
+      "action_id": "ko"
+    },
+    {
+      "id": "rook-ironside.idle",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "rook-ironside",
+      "action_id": "idle"
+    },
+    {
+      "id": "rook-ironside.walk",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "rook-ironside",
+      "action_id": "walk"
+    },
+    {
+      "id": "rook-ironside.run",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "rook-ironside",
+      "action_id": "run"
+    },
+    {
+      "id": "rook-ironside.dash",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "rook-ironside",
+      "action_id": "dash"
+    },
+    {
+      "id": "rook-ironside.jump",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "rook-ironside",
+      "action_id": "jump"
+    },
+    {
+      "id": "rook-ironside.light",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "rook-ironside",
+      "action_id": "light"
+    },
+    {
+      "id": "rook-ironside.medium",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "rook-ironside",
+      "action_id": "medium"
+    },
+    {
+      "id": "rook-ironside.heavy",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "rook-ironside",
+      "action_id": "heavy"
+    },
+    {
+      "id": "rook-ironside.aura",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "rook-ironside",
+      "action_id": "aura"
+    },
+    {
+      "id": "rook-ironside.super",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "rook-ironside",
+      "action_id": "super"
+    },
+    {
+      "id": "rook-ironside.hurt_heavy",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "rook-ironside",
+      "action_id": "hurt_heavy"
+    },
+    {
+      "id": "rook-ironside.launch",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "rook-ironside",
+      "action_id": "launch"
+    },
+    {
+      "id": "rook-ironside.charge",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "rook-ironside",
+      "action_id": "charge"
+    },
+    {
+      "id": "rook-ironside.ko",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "rook-ironside",
+      "action_id": "ko"
+    },
+    {
+      "id": "juno-spark.idle",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "juno-spark",
+      "action_id": "idle"
+    },
+    {
+      "id": "juno-spark.walk",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "juno-spark",
+      "action_id": "walk"
+    },
+    {
+      "id": "juno-spark.run",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "juno-spark",
+      "action_id": "run"
+    },
+    {
+      "id": "juno-spark.dash",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "juno-spark",
+      "action_id": "dash"
+    },
+    {
+      "id": "juno-spark.jump",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "juno-spark",
+      "action_id": "jump"
+    },
+    {
+      "id": "juno-spark.light",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "juno-spark",
+      "action_id": "light"
+    },
+    {
+      "id": "juno-spark.medium",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "juno-spark",
+      "action_id": "medium"
+    },
+    {
+      "id": "juno-spark.heavy",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "juno-spark",
+      "action_id": "heavy"
+    },
+    {
+      "id": "juno-spark.aura",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "juno-spark",
+      "action_id": "aura"
+    },
+    {
+      "id": "juno-spark.super",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "juno-spark",
+      "action_id": "super"
+    },
+    {
+      "id": "juno-spark.hurt_heavy",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "juno-spark",
+      "action_id": "hurt_heavy"
+    },
+    {
+      "id": "juno-spark.launch",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "juno-spark",
+      "action_id": "launch"
+    },
+    {
+      "id": "juno-spark.charge",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "juno-spark",
+      "action_id": "charge"
+    },
+    {
+      "id": "juno-spark.ko",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "juno-spark",
+      "action_id": "ko"
+    },
+    {
+      "id": "kaia-windrow.idle",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "kaia-windrow",
+      "action_id": "idle"
+    },
+    {
+      "id": "kaia-windrow.walk",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "kaia-windrow",
+      "action_id": "walk"
+    },
+    {
+      "id": "kaia-windrow.run",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "kaia-windrow",
+      "action_id": "run"
+    },
+    {
+      "id": "kaia-windrow.dash",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "kaia-windrow",
+      "action_id": "dash"
+    },
+    {
+      "id": "kaia-windrow.jump",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "kaia-windrow",
+      "action_id": "jump"
+    },
+    {
+      "id": "kaia-windrow.light",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "kaia-windrow",
+      "action_id": "light"
+    },
+    {
+      "id": "kaia-windrow.medium",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "kaia-windrow",
+      "action_id": "medium"
+    },
+    {
+      "id": "kaia-windrow.heavy",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "kaia-windrow",
+      "action_id": "heavy"
+    },
+    {
+      "id": "kaia-windrow.aura",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "kaia-windrow",
+      "action_id": "aura"
+    },
+    {
+      "id": "kaia-windrow.super",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "kaia-windrow",
+      "action_id": "super"
+    },
+    {
+      "id": "kaia-windrow.hurt_heavy",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "kaia-windrow",
+      "action_id": "hurt_heavy"
+    },
+    {
+      "id": "kaia-windrow.launch",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "kaia-windrow",
+      "action_id": "launch"
+    },
+    {
+      "id": "kaia-windrow.charge",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "kaia-windrow",
+      "action_id": "charge"
+    },
+    {
+      "id": "kaia-windrow.ko",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "kaia-windrow",
+      "action_id": "ko"
+    },
+    {
+      "id": "nix-calder.idle",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "nix-calder",
+      "action_id": "idle"
+    },
+    {
+      "id": "nix-calder.walk",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "nix-calder",
+      "action_id": "walk"
+    },
+    {
+      "id": "nix-calder.run",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "nix-calder",
+      "action_id": "run"
+    },
+    {
+      "id": "nix-calder.dash",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "nix-calder",
+      "action_id": "dash"
+    },
+    {
+      "id": "nix-calder.jump",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "nix-calder",
+      "action_id": "jump"
+    },
+    {
+      "id": "nix-calder.light",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "nix-calder",
+      "action_id": "light"
+    },
+    {
+      "id": "nix-calder.medium",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "nix-calder",
+      "action_id": "medium"
+    },
+    {
+      "id": "nix-calder.heavy",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "nix-calder",
+      "action_id": "heavy"
+    },
+    {
+      "id": "nix-calder.aura",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "nix-calder",
+      "action_id": "aura"
+    },
+    {
+      "id": "nix-calder.super",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "nix-calder",
+      "action_id": "super"
+    },
+    {
+      "id": "nix-calder.hurt_heavy",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "nix-calder",
+      "action_id": "hurt_heavy"
+    },
+    {
+      "id": "nix-calder.launch",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "nix-calder",
+      "action_id": "launch"
+    },
+    {
+      "id": "nix-calder.charge",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "nix-calder",
+      "action_id": "charge"
+    },
+    {
+      "id": "nix-calder.ko",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "nix-calder",
+      "action_id": "ko"
+    },
+    {
+      "id": "orion-vell.idle",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "orion-vell",
+      "action_id": "idle"
+    },
+    {
+      "id": "orion-vell.walk",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "orion-vell",
+      "action_id": "walk"
+    },
+    {
+      "id": "orion-vell.run",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "orion-vell",
+      "action_id": "run"
+    },
+    {
+      "id": "orion-vell.dash",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "orion-vell",
+      "action_id": "dash"
+    },
+    {
+      "id": "orion-vell.jump",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "orion-vell",
+      "action_id": "jump"
+    },
+    {
+      "id": "orion-vell.light",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "orion-vell",
+      "action_id": "light"
+    },
+    {
+      "id": "orion-vell.medium",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "orion-vell",
+      "action_id": "medium"
+    },
+    {
+      "id": "orion-vell.heavy",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "orion-vell",
+      "action_id": "heavy"
+    },
+    {
+      "id": "orion-vell.aura",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "orion-vell",
+      "action_id": "aura"
+    },
+    {
+      "id": "orion-vell.super",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "orion-vell",
+      "action_id": "super"
+    },
+    {
+      "id": "orion-vell.hurt_heavy",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "orion-vell",
+      "action_id": "hurt_heavy"
+    },
+    {
+      "id": "orion-vell.launch",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "orion-vell",
+      "action_id": "launch"
+    },
+    {
+      "id": "orion-vell.charge",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "orion-vell",
+      "action_id": "charge"
+    },
+    {
+      "id": "orion-vell.ko",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "orion-vell",
+      "action_id": "ko"
+    },
+    {
+      "id": "vesper-nyx.idle",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "vesper-nyx",
+      "action_id": "idle"
+    },
+    {
+      "id": "vesper-nyx.walk",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "vesper-nyx",
+      "action_id": "walk"
+    },
+    {
+      "id": "vesper-nyx.run",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "vesper-nyx",
+      "action_id": "run"
+    },
+    {
+      "id": "vesper-nyx.dash",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "vesper-nyx",
+      "action_id": "dash"
+    },
+    {
+      "id": "vesper-nyx.jump",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "vesper-nyx",
+      "action_id": "jump"
+    },
+    {
+      "id": "vesper-nyx.light",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "vesper-nyx",
+      "action_id": "light"
+    },
+    {
+      "id": "vesper-nyx.medium",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "vesper-nyx",
+      "action_id": "medium"
+    },
+    {
+      "id": "vesper-nyx.heavy",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "vesper-nyx",
+      "action_id": "heavy"
+    },
+    {
+      "id": "vesper-nyx.aura",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "vesper-nyx",
+      "action_id": "aura"
+    },
+    {
+      "id": "vesper-nyx.super",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "vesper-nyx",
+      "action_id": "super"
+    },
+    {
+      "id": "vesper-nyx.hurt_heavy",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "vesper-nyx",
+      "action_id": "hurt_heavy"
+    },
+    {
+      "id": "vesper-nyx.launch",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "vesper-nyx",
+      "action_id": "launch"
+    },
+    {
+      "id": "vesper-nyx.charge",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "vesper-nyx",
+      "action_id": "charge"
+    },
+    {
+      "id": "vesper-nyx.ko",
+      "status": "PROCEDURAL_FALLBACK",
+      "fighter_id": "vesper-nyx",
+      "action_id": "ko"
+    }
+  ],
+  "pipeline_proof": [
+    {
+      "id": "ember-vale.pipeline_proof",
+      "fighter_id": "ember-vale",
+      "action_id": "pipeline_proof",
+      "runtime_clip": "pipeline_proof",
+      "status": "AUTHORED_WIP",
+      "kind": "import_proof",
+      "not_final_art": true,
+      "human_approved": false,
+      "export_glb": "art_source/animation/fighters/ember-vale/export/pipeline_proof.glb",
+      "runtime_glb": "game-godot/assets/characters/authored/ember-vale/pipeline_proof.glb"
+    },
+    {
+      "id": "rook-ironside.pipeline_proof",
+      "fighter_id": "rook-ironside",
+      "action_id": "pipeline_proof",
+      "runtime_clip": "pipeline_proof",
+      "status": "AUTHORED_WIP",
+      "kind": "import_proof",
+      "not_final_art": true,
+      "human_approved": false,
+      "export_glb": "art_source/animation/fighters/rook-ironside/export/pipeline_proof.glb",
+      "runtime_glb": "game-godot/assets/characters/authored/rook-ironside/pipeline_proof.glb"
+    },
+    {
+      "id": "juno-spark.pipeline_proof",
+      "fighter_id": "juno-spark",
+      "action_id": "pipeline_proof",
+      "runtime_clip": "pipeline_proof",
+      "status": "AUTHORED_WIP",
+      "kind": "import_proof",
+      "not_final_art": true,
+      "human_approved": false,
+      "export_glb": "art_source/animation/fighters/juno-spark/export/pipeline_proof.glb",
+      "runtime_glb": "game-godot/assets/characters/authored/juno-spark/pipeline_proof.glb"
+    },
+    {
+      "id": "kaia-windrow.pipeline_proof",
+      "fighter_id": "kaia-windrow",
+      "action_id": "pipeline_proof",
+      "runtime_clip": "pipeline_proof",
+      "status": "AUTHORED_WIP",
+      "kind": "import_proof",
+      "not_final_art": true,
+      "human_approved": false,
+      "export_glb": "art_source/animation/fighters/kaia-windrow/export/pipeline_proof.glb",
+      "runtime_glb": "game-godot/assets/characters/authored/kaia-windrow/pipeline_proof.glb"
+    },
+    {
+      "id": "nix-calder.pipeline_proof",
+      "fighter_id": "nix-calder",
+      "action_id": "pipeline_proof",
+      "runtime_clip": "pipeline_proof",
+      "status": "AUTHORED_WIP",
+      "kind": "import_proof",
+      "not_final_art": true,
+      "human_approved": false,
+      "export_glb": "art_source/animation/fighters/nix-calder/export/pipeline_proof.glb",
+      "runtime_glb": "game-godot/assets/characters/authored/nix-calder/pipeline_proof.glb"
+    },
+    {
+      "id": "orion-vell.pipeline_proof",
+      "fighter_id": "orion-vell",
+      "action_id": "pipeline_proof",
+      "runtime_clip": "pipeline_proof",
+      "status": "AUTHORED_WIP",
+      "kind": "import_proof",
+      "not_final_art": true,
+      "human_approved": false,
+      "export_glb": "art_source/animation/fighters/orion-vell/export/pipeline_proof.glb",
+      "runtime_glb": "game-godot/assets/characters/authored/orion-vell/pipeline_proof.glb"
+    },
+    {
+      "id": "vesper-nyx.pipeline_proof",
+      "fighter_id": "vesper-nyx",
+      "action_id": "pipeline_proof",
+      "runtime_clip": "pipeline_proof",
+      "status": "AUTHORED_WIP",
+      "kind": "import_proof",
+      "not_final_art": true,
+      "human_approved": false,
+      "export_glb": "art_source/animation/fighters/vesper-nyx/export/pipeline_proof.glb",
+      "runtime_glb": "game-godot/assets/characters/authored/vesper-nyx/pipeline_proof.glb"
+    }
+  ],
+  "procedural_library_note": "game-godot/content/fighters/*/animations/procedural/*.anim.json are PROCEDURAL_FALLBACK placeholders, not authored animation."
+}

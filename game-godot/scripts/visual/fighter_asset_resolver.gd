@@ -148,13 +148,22 @@ static func resolve_model_path(fighter_id: String, fighter_data: Dictionary = {}
 	return {"path": explicit, "source": "MISSING", "tier": "MISSING", "CURRENT_MODEL_SOURCE": "MISSING"}
 
 
+static func authored_animation_glb(fighter_id: String, clip: String = "pipeline_proof") -> String:
+	return "res://assets/characters/authored/%s/%s.glb" % [fighter_id, clip]
+
+
 static func resolve_animation_root(fighter_id: String) -> Dictionary:
+	var authored := authored_animation_glb(fighter_id, "pipeline_proof")
+	var has_authored := ResourceLoader.exists(authored) or FileAccess.file_exists(authored)
 	var procedural := "res://content/fighters/%s/animations/procedural" % fighter_id
 	if DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(procedural)):
 		return {
 			"root": procedural,
 			"source": STATUS_PROCEDURAL_ANIM,
 			"CURRENT_ANIMATION_SOURCE": "PROCEDURAL_RUNTIME_ANIMATION",
+			"AUTHORED_PROOF_PATH": authored if has_authored else "",
+			"AUTHORED_PROOF_STATUS": "AUTHORED_WIP" if has_authored else "MISSING",
+			"note": "Procedural library is fallback. Authored proof is GLB import, not JSON keys.",
 		}
 	return {
 		"root": "res://data/fighters/%s_animations.json" % fighter_id,

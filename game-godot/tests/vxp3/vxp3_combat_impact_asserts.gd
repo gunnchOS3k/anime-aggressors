@@ -9,6 +9,9 @@ const _Juice = preload("res://scripts/juice/juice_event_bus.gd")
 const _Training = preload("res://scripts/training/training_impact_debug.gd")
 const _Cinematic = preload("res://scripts/combat/combat_cinematic_director.gd")
 const _Charged = preload("res://scripts/visual/charged_animation_layer.gd")
+const _Clash = preload("res://scripts/combat/aura_clash_director.gd")
+const _Provenance = preload("res://scripts/visual/animation_provenance.gd")
+const _Secondary = preload("res://scripts/visual/secondary_motion_layer.gd")
 
 var _failures: Array = []
 
@@ -79,6 +82,26 @@ func _run() -> void:
 	_ok(_Charged.band_for(100.0) == 100, "charge full band")
 	_ok(_Charged.overlay_clip("idle", {}, 80.0, {"charged_idle": true}) == "charged_idle", "charged idle remap")
 	_ok(_Training.controls_present_in("F11 freeze F12 step replay"), "training debug tokens")
+
+	_ok(_Cinematic.CLASS_CLASH == "CLASH", "cinematic class CLASH")
+	_ok(_Cinematic.class_for("ko") == _Cinematic.CLASS_KO, "cinematic class KO")
+	_ok(_Cinematic.class_for("heavy", true) == _Cinematic.CLASS_CLASH, "clash overrides heavy")
+	_ok(not _Clash.is_clashable({"move_id": "jab_1", "move_type": "jab"}), "jabs never clash")
+	_ok(_Clash.is_clashable({"move_id": "aura_burst", "move_type": "aura"}), "aura clashes")
+	var clash_dbg: Dictionary = _Clash.debug_force(
+		{"move_id": "aura_burst", "move_type": "aura", "startup_frames": 8, "active_frames": 6, "choreography": {"clashable": true}},
+		{"move_id": "super", "move_type": "super", "startup_frames": 14, "active_frames": 8, "choreography": {"clashable": true}},
+		{"fighter_id": "ember-vale", "aura": 100.0},
+		{"fighter_id": "rook-ironside", "aura": 40.0}
+	)
+	_ok(bool(clash_dbg.get("clash")), "debug clash fires")
+	_ok(not bool(clash_dbg.get("mash_used")), "clash has no mash")
+	_ok(_Provenance.automation_may_write(_Provenance.AUTHORED_WIP), "automation may write WIP")
+	_ok(not _Provenance.automation_may_write(_Provenance.AUTHORED_APPROVED), "automation must not write APPROVED")
+	_ok(_Secondary.provenance() == "PROCEDURAL_FALLBACK", "secondary is fallback")
+	_ok(not _Secondary.should_apply(true), "secondary respects reduce-motion")
+	var proof := "res://assets/characters/authored/ember-vale/pipeline_proof.glb"
+	_ok(ResourceLoader.exists(proof) or FileAccess.file_exists(proof), "ember authored GLB exists")
 
 	var payload := {
 		"ok": _failures.is_empty(),

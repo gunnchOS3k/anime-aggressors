@@ -32,6 +32,8 @@ var training_sfx_enabled: bool = true
 var training_hide_hud: bool = false
 var training_last_hit: Dictionary = {}
 var last_contact_class: String = ""
+var last_aura_clash: Dictionary = {}
+var last_animation_provenance: String = ""
 
 ## Arcade ladder (Alpha minimum mode beyond Versus + Training).
 var mode: String = "versus"  # versus | training | arcade | tutorial | hazards | team | challenges | online_unranked | online_ranked | tournament
