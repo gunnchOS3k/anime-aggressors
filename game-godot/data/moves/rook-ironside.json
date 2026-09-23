@@ -87,7 +87,22 @@
           "to": "jab_2"
         }
       ],
-      "h2h_string_id": "rook-ironside:jab_1->jab_2"
+      "h2h_string_id": "rook-ironside:jab_1->jab_2",
+      "impact_profile": "light",
+      "choreography": {
+        "contact_socket": "hand_r",
+        "contact_frame": 6,
+        "contact_pose_clip": "contact_light",
+        "victim_reaction_family": "flinch",
+        "charged_layer": "none",
+        "cinematic_hook": ""
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
+      }
     },
     {
       "move_id": "jab_2",
@@ -168,7 +183,22 @@
           "to": "jab_finisher"
         }
       ],
-      "h2h_string_id": "rook-ironside:jab_2->jab_finisher"
+      "h2h_string_id": "rook-ironside:jab_2->jab_finisher",
+      "impact_profile": "light",
+      "choreography": {
+        "contact_socket": "hand_r",
+        "contact_frame": 6,
+        "contact_pose_clip": "contact_light",
+        "victim_reaction_family": "flinch",
+        "charged_layer": "none",
+        "cinematic_hook": ""
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
+      }
     },
     {
       "move_id": "jab_finisher",
@@ -245,7 +275,22 @@
         "effect": "quake",
         "strength": 1
       },
-      "armor_frames": 4
+      "armor_frames": 4,
+      "impact_profile": "medium",
+      "choreography": {
+        "contact_socket": "hand_r",
+        "contact_frame": 9,
+        "contact_pose_clip": "contact_medium",
+        "victim_reaction_family": "stagger",
+        "charged_layer": "none",
+        "cinematic_hook": ""
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
+      }
     },
     {
       "move_id": "forward_tilt",
@@ -318,7 +363,22 @@
         "effect": "quake",
         "strength": 1
       },
-      "armor_frames": 3
+      "armor_frames": 3,
+      "impact_profile": "light",
+      "choreography": {
+        "contact_socket": "hand_r",
+        "contact_frame": 10,
+        "contact_pose_clip": "contact_light",
+        "victim_reaction_family": "flinch",
+        "charged_layer": "none",
+        "cinematic_hook": ""
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
+      }
     },
     {
       "move_id": "up_tilt",
@@ -390,6 +450,21 @@
         "type": "impact",
         "effect": "quake",
         "strength": 1
+      },
+      "impact_profile": "light",
+      "choreography": {
+        "contact_socket": "hand_r",
+        "contact_frame": 6,
+        "contact_pose_clip": "contact_light",
+        "victim_reaction_family": "flinch",
+        "charged_layer": "none",
+        "cinematic_hook": ""
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -471,7 +546,22 @@
           "to": "forward_tilt"
         }
       ],
-      "h2h_string_id": "rook-ironside:down_tilt->forward_tilt"
+      "h2h_string_id": "rook-ironside:down_tilt->forward_tilt",
+      "impact_profile": "light",
+      "choreography": {
+        "contact_socket": "foot_r",
+        "contact_frame": 5,
+        "contact_pose_clip": "contact_light",
+        "victim_reaction_family": "flinch",
+        "charged_layer": "none",
+        "cinematic_hook": ""
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
+      }
     },
     {
       "move_id": "dash_attack",
@@ -544,7 +634,22 @@
         "effect": "quake",
         "strength": 1
       },
-      "armor_frames": 5
+      "armor_frames": 5,
+      "impact_profile": "medium",
+      "choreography": {
+        "contact_socket": "hand_r",
+        "contact_frame": 10,
+        "contact_pose_clip": "contact_medium",
+        "victim_reaction_family": "stagger",
+        "charged_layer": "none",
+        "cinematic_hook": ""
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
+      }
     },
     {
       "move_id": "heavy_attack",
@@ -622,7 +727,22 @@
         "strength": 1
       },
       "wave016_reachability": "DESIGN_ONLY_NO_DISTINCT_CONTROL",
-      "note": "CONTROLS.md does not distinguish tilt vs smash/heavy; not bound to avoid awkward inputs."
+      "note": "CONTROLS.md does not distinguish tilt vs smash/heavy; not bound to avoid awkward inputs.",
+      "impact_profile": "heavy",
+      "choreography": {
+        "contact_socket": "hand_r",
+        "contact_frame": 10,
+        "contact_pose_clip": "contact_heavy",
+        "victim_reaction_family": "body_snap",
+        "charged_layer": "none",
+        "cinematic_hook": "warranted_heavy"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
+      }
     },
     {
       "move_id": "neutral_air",
@@ -694,6 +814,21 @@
         "type": "impact",
         "effect": "quake",
         "strength": 1
+      },
+      "impact_profile": "medium",
+      "choreography": {
+        "contact_socket": "foot_r",
+        "contact_frame": 8,
+        "contact_pose_clip": "contact_medium",
+        "victim_reaction_family": "stagger",
+        "charged_layer": "none",
+        "cinematic_hook": ""
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -766,6 +901,21 @@
         "type": "impact",
         "effect": "quake",
         "strength": 1
+      },
+      "impact_profile": "medium",
+      "choreography": {
+        "contact_socket": "foot_r",
+        "contact_frame": 9,
+        "contact_pose_clip": "contact_medium",
+        "victim_reaction_family": "stagger",
+        "charged_layer": "none",
+        "cinematic_hook": ""
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -838,6 +988,21 @@
         "type": "impact",
         "effect": "quake",
         "strength": 1
+      },
+      "impact_profile": "light",
+      "choreography": {
+        "contact_socket": "foot_r",
+        "contact_frame": 9,
+        "contact_pose_clip": "contact_light",
+        "victim_reaction_family": "flinch",
+        "charged_layer": "none",
+        "cinematic_hook": ""
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -910,6 +1075,21 @@
         "type": "impact",
         "effect": "quake",
         "strength": 1
+      },
+      "impact_profile": "medium",
+      "choreography": {
+        "contact_socket": "foot_r",
+        "contact_frame": 5,
+        "contact_pose_clip": "contact_medium",
+        "victim_reaction_family": "stagger",
+        "charged_layer": "none",
+        "cinematic_hook": ""
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -982,6 +1162,21 @@
         "type": "impact",
         "effect": "quake",
         "strength": 1
+      },
+      "impact_profile": "medium",
+      "choreography": {
+        "contact_socket": "foot_r",
+        "contact_frame": 5,
+        "contact_pose_clip": "contact_medium",
+        "victim_reaction_family": "stagger",
+        "charged_layer": "none",
+        "cinematic_hook": ""
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -1093,6 +1288,21 @@
         "size": 18,
         "pierce": true,
         "homing": 0.0
+      },
+      "impact_profile": "medium",
+      "choreography": {
+        "contact_socket": "hand_r",
+        "contact_frame": 10,
+        "contact_pose_clip": "contact_medium",
+        "victim_reaction_family": "stagger",
+        "charged_layer": "none",
+        "cinematic_hook": ""
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -1175,7 +1385,22 @@
         "dy": 0,
         "frames": 10
       },
-      "armor_frames": 8
+      "armor_frames": 8,
+      "impact_profile": "medium",
+      "choreography": {
+        "contact_socket": "hand_r",
+        "contact_frame": 12,
+        "contact_pose_clip": "contact_medium",
+        "victim_reaction_family": "stagger",
+        "charged_layer": "none",
+        "cinematic_hook": ""
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
+      }
     },
     {
       "move_id": "up_special_recovery",
@@ -1259,6 +1484,21 @@
         "snap_ledge": true,
         "air_friction": 0.98,
         "landing_lag": 16
+      },
+      "impact_profile": "medium",
+      "choreography": {
+        "contact_socket": "hand_r",
+        "contact_frame": 9,
+        "contact_pose_clip": "contact_medium",
+        "victim_reaction_family": "stagger",
+        "charged_layer": "none",
+        "cinematic_hook": ""
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -1340,7 +1580,22 @@
         "linger_frames": 20,
         "quake_pulses": 2
       },
-      "armor_frames": 6
+      "armor_frames": 6,
+      "impact_profile": "heavy",
+      "choreography": {
+        "contact_socket": "foot_r",
+        "contact_frame": 15,
+        "contact_pose_clip": "contact_heavy",
+        "victim_reaction_family": "body_snap",
+        "charged_layer": "none",
+        "cinematic_hook": "warranted_heavy"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
+      }
     },
     {
       "move_id": "grab",
@@ -1408,7 +1663,22 @@
       },
       "training_display_name": "Grab",
       "combat_tag": "armor_quake",
-      "grab_range": 38
+      "grab_range": 38,
+      "impact_profile": "light",
+      "choreography": {
+        "contact_socket": "hand_r",
+        "contact_frame": 8,
+        "contact_pose_clip": "contact_light",
+        "victim_reaction_family": "flinch",
+        "charged_layer": "none",
+        "cinematic_hook": ""
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
+      }
     },
     {
       "move_id": "throw_forward",
@@ -1490,6 +1760,21 @@
         "type": "impact",
         "effect": "quake",
         "strength": 1
+      },
+      "impact_profile": "heavy",
+      "choreography": {
+        "contact_socket": "hand_r",
+        "contact_frame": 7,
+        "contact_pose_clip": "contact_heavy",
+        "victim_reaction_family": "body_snap",
+        "charged_layer": "none",
+        "cinematic_hook": "warranted_heavy"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -1572,6 +1857,21 @@
         "type": "impact",
         "effect": "quake",
         "strength": 1
+      },
+      "impact_profile": "heavy",
+      "choreography": {
+        "contact_socket": "hand_r",
+        "contact_frame": 7,
+        "contact_pose_clip": "contact_heavy",
+        "victim_reaction_family": "body_snap",
+        "charged_layer": "none",
+        "cinematic_hook": "warranted_heavy"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -1654,6 +1954,21 @@
         "type": "impact",
         "effect": "quake",
         "strength": 1
+      },
+      "impact_profile": "heavy",
+      "choreography": {
+        "contact_socket": "hand_r",
+        "contact_frame": 7,
+        "contact_pose_clip": "contact_heavy",
+        "victim_reaction_family": "body_snap",
+        "charged_layer": "none",
+        "cinematic_hook": "warranted_heavy"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -1736,6 +2051,21 @@
         "type": "impact",
         "effect": "quake",
         "strength": 1
+      },
+      "impact_profile": "heavy",
+      "choreography": {
+        "contact_socket": "foot_r",
+        "contact_frame": 9,
+        "contact_pose_clip": "contact_heavy",
+        "victim_reaction_family": "body_snap",
+        "charged_layer": "none",
+        "cinematic_hook": "warranted_heavy"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -1766,7 +2096,22 @@
         "screen_flash": false
       },
       "training_display_name": "Aura Charge",
-      "combat_tag": "armor_quake"
+      "combat_tag": "armor_quake",
+      "impact_profile": "aura",
+      "choreography": {
+        "contact_socket": "hand_r",
+        "contact_frame": 0,
+        "contact_pose_clip": "contact_aura",
+        "victim_reaction_family": "launch",
+        "charged_layer": "hold",
+        "cinematic_hook": "warranted_heavy"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
+      }
     },
     {
       "move_id": "aura_burst",
@@ -1839,7 +2184,22 @@
         "effect": "quake",
         "strength": 2.5
       },
-      "meter_cost": 100
+      "meter_cost": 100,
+      "impact_profile": "aura",
+      "choreography": {
+        "contact_socket": "hand_r",
+        "contact_frame": 13,
+        "contact_pose_clip": "contact_aura",
+        "victim_reaction_family": "launch",
+        "charged_layer": "release",
+        "cinematic_hook": "warranted_heavy"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
+      }
     }
   ],
   "game001_identity": {

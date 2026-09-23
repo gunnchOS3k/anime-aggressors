@@ -45,13 +45,28 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 	if move.has("throw_direction"):
 		_throw_dir = str(move.get("throw_direction", "forward"))
 	var move_id := str(move.get("move_id", ""))
+	var reaction_clip := str(move.get("reaction_clip", ""))
+	if reaction_clip != "" and _loaded_clips.has(reaction_clip) and _player.has_animation(reaction_clip):
+		_play_named(reaction_clip, false)
+		return
 	var resolved: Dictionary = _MoveResolver.resolve_clip(state, move_id, _loaded_clips)
 	var clip := str(resolved.get("clip", ""))
+	if clip == "special":
+		# No silent generic special. Prefer explicit move clip or projectile_full.
+		clip = ""
 	if clip.is_empty() or not _loaded_clips.has(clip):
 		clip = _fallback_clip(state, move_id)
+	if clip == "special":
+		if _loaded_clips.has("projectile_full"):
+			clip = "projectile_full"
+		else:
+			return
 	if clip.is_empty() or not _player.has_animation(clip):
 		return
-	var should_loop := clip in ["idle", "run", "walk", "fall", "shield", "aura_charge"]
+	_play_named(clip, clip in ["idle", "run", "walk", "fall", "shield", "aura_charge"])
+
+
+func _play_named(clip: String, should_loop: bool) -> void:
 	var anim := _player.get_animation(clip)
 	if anim:
 		anim.loop_mode = Animation.LOOP_LINEAR if should_loop else Animation.LOOP_NONE
@@ -81,7 +96,12 @@ func _fallback_clip(state: String, move_id: String) -> String:
 		var dir_clip := "throw_%s" % _throw_dir
 		if _loaded_clips.has(dir_clip):
 			return dir_clip
-	return str(_FighterStates.animation_for_state(state))
+	var named := str(_FighterStates.animation_for_state(state))
+	if named == "special":
+		if _loaded_clips.has("projectile_full"):
+			return "projectile_full"
+		return ""
+	return named
 
 
 func _load_procedural_clips(model_root: Node3D) -> void:

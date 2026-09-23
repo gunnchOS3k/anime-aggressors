@@ -1,7 +1,6 @@
 {
   "fighter_id": "nix-calder",
-  "clip_count": 51,
-  "signature_clip_count": 8,
+  "clip_count": 74,
   "clips": [
     {
       "clip_name": "aerial_back",
@@ -40,13 +39,48 @@
     },
     {
       "clip_name": "aura_charge",
-      "signature": "4833fd4032343be263662edf1724fc25e17e532340af773f3dcb1d44f28418fe",
+      "signature": "37d38a840e5a4915325c88eed5f04d8e8a78a96ae18839fda862e65c357dfe2f",
       "path": "content/fighters/nix-calder/animations/procedural/aura_charge.anim.json"
     },
     {
       "clip_name": "aura_release",
       "signature": "e01e3f40ec852a635cdde868b9ed701b31da38fbb56b736ae416131250e936af",
       "path": "content/fighters/nix-calder/animations/procedural/aura_release.anim.json"
+    },
+    {
+      "clip_name": "charged_hold",
+      "signature": "25bc7ea38d903fb46ccf07142c9d2208e51a6e5a0bf842f34d581437c2277f6b",
+      "path": "content/fighters/nix-calder/animations/procedural/charged_hold.anim.json"
+    },
+    {
+      "clip_name": "contact_aura",
+      "signature": "78fa6962c19affc28d9d07614c689e105692c298617ec49ebe25ee42b050795d",
+      "path": "content/fighters/nix-calder/animations/procedural/contact_aura.anim.json"
+    },
+    {
+      "clip_name": "contact_heavy",
+      "signature": "b010fced1308ceed883f0047d41179a0cc9e768955fa7a171c741d0ce7f8ae25",
+      "path": "content/fighters/nix-calder/animations/procedural/contact_heavy.anim.json"
+    },
+    {
+      "clip_name": "contact_ko",
+      "signature": "d8310619d1dbad3bc3e2c69a30c727f251d3a5e8aec9c2f4e2a39067bf431f57",
+      "path": "content/fighters/nix-calder/animations/procedural/contact_ko.anim.json"
+    },
+    {
+      "clip_name": "contact_light",
+      "signature": "816920eb16e025e9858e46e5bf29a66406aae405e3aebe5b307548e6b46106dc",
+      "path": "content/fighters/nix-calder/animations/procedural/contact_light.anim.json"
+    },
+    {
+      "clip_name": "contact_medium",
+      "signature": "01784b342fba34acb0935394eb16d49a7d9d97a0db3b3916553a11ab759204b7",
+      "path": "content/fighters/nix-calder/animations/procedural/contact_medium.anim.json"
+    },
+    {
+      "clip_name": "contact_super",
+      "signature": "10c295c8213605fbe1b691a31f8007e4d91d7efe8de17174b42041a0c5d9b2e5",
+      "path": "content/fighters/nix-calder/animations/procedural/contact_super.anim.json"
     },
     {
       "clip_name": "dash",
@@ -75,22 +109,82 @@
     },
     {
       "clip_name": "heavy",
-      "signature": "81854bf748a8ffd1bd9d8c47c962479b866bcfe4000191f5421541c4963a42b0",
+      "signature": "6d75e00efcc406f2020320570b9bda76ca33ee5ddd1d3c400c7e786983fef50f",
       "path": "content/fighters/nix-calder/animations/procedural/heavy.anim.json"
     },
     {
       "clip_name": "hurt",
-      "signature": "a61cf1c851748d431d963bf98179b04bdac467b41c08d8c3d461ec8ea64aff54",
+      "signature": "8b56842ffed93431bb1ad2fded9c5170b313a5f4532f6deba0e0043924be49de",
       "path": "content/fighters/nix-calder/animations/procedural/hurt.anim.json"
     },
     {
+      "clip_name": "hurt_body_snap",
+      "signature": "7312327a6156c7c697b6af32bdf95cb650e40c324c063833199a475cf133363f",
+      "path": "content/fighters/nix-calder/animations/procedural/hurt_body_snap.anim.json"
+    },
+    {
+      "clip_name": "hurt_crumple",
+      "signature": "efdcf33c651572dfa1f623652f93c5631bb8ef8e7ce46988743f03d6e06e2fec",
+      "path": "content/fighters/nix-calder/animations/procedural/hurt_crumple.anim.json"
+    },
+    {
+      "clip_name": "hurt_flinch",
+      "signature": "786456e313639651f2eb41ce1fd28039fa77eb968879e51a3c7a5b71577447f4",
+      "path": "content/fighters/nix-calder/animations/procedural/hurt_flinch.anim.json"
+    },
+    {
+      "clip_name": "hurt_freeze_stiffness",
+      "signature": "e5a6e454a8af40b0c3faaf0f1a280c5f48b4de953236e6e9e7516b78ea0d1248",
+      "path": "content/fighters/nix-calder/animations/procedural/hurt_freeze_stiffness.anim.json"
+    },
+    {
+      "clip_name": "hurt_ground_bounce",
+      "signature": "fd500acd6942cc6b77960edabffd0a6d70bf66bdb03cc4db3d58cf3353737390",
+      "path": "content/fighters/nix-calder/animations/procedural/hurt_ground_bounce.anim.json"
+    },
+    {
+      "clip_name": "hurt_ko_spin",
+      "signature": "257a932b9d9442fd075f56873dcf9b667169fe433b64eb8f77a22d288aaefa25",
+      "path": "content/fighters/nix-calder/animations/procedural/hurt_ko_spin.anim.json"
+    },
+    {
+      "clip_name": "hurt_launch",
+      "signature": "e83f3716b9248a19dfbda3b154d92d869ad723bfb6694eac7251b8e17bc0460f",
+      "path": "content/fighters/nix-calder/animations/procedural/hurt_launch.anim.json"
+    },
+    {
+      "clip_name": "hurt_shield_recoil",
+      "signature": "46a2f0cd2e79a955a11e95bf9fb1a485418d4a77c12b23266030bde805f777ab",
+      "path": "content/fighters/nix-calder/animations/procedural/hurt_shield_recoil.anim.json"
+    },
+    {
+      "clip_name": "hurt_spike",
+      "signature": "ee38c10c4453f7b8fce603568963d56e6106668b0b38605889ca6256f0997ccc",
+      "path": "content/fighters/nix-calder/animations/procedural/hurt_spike.anim.json"
+    },
+    {
+      "clip_name": "hurt_stagger",
+      "signature": "9c2bd5be68b7258966f581442c4412fbcf5222ab772554b4d62ccc5551b33e4b",
+      "path": "content/fighters/nix-calder/animations/procedural/hurt_stagger.anim.json"
+    },
+    {
+      "clip_name": "hurt_tumble",
+      "signature": "45b66fe36a4acf104969690a182ef0899c13a32aa212a033a697e81ef72314d7",
+      "path": "content/fighters/nix-calder/animations/procedural/hurt_tumble.anim.json"
+    },
+    {
+      "clip_name": "hurt_wall_splat",
+      "signature": "152529a7bbe3f75cb6ce93dd29eff9cd40ae571962a5bd5464dd6a17874af042",
+      "path": "content/fighters/nix-calder/animations/procedural/hurt_wall_splat.anim.json"
+    },
+    {
       "clip_name": "idle",
-      "signature": "9a8757737de34b1e0bfdd909ebec6f370594249b2351fa0bd57db6723e600d3f",
+      "signature": "5485169cf1fc1c51146ce89c729f830b99d25aa62ddea97ccaed4a6bc520a126",
       "path": "content/fighters/nix-calder/animations/procedural/idle.anim.json"
     },
     {
       "clip_name": "jab",
-      "signature": "dc415df18b74c849fbc7af2b6aa73b86deeba73ece9c8b55c84e61c3c785c852",
+      "signature": "485564419b8fdfb58b0fb4121e14eb973a11141196402ed4ed6e5023ce824a22",
       "path": "content/fighters/nix-calder/animations/procedural/jab.anim.json"
     },
     {
@@ -120,7 +214,7 @@
     },
     {
       "clip_name": "launch",
-      "signature": "3725f6777d3e86ba08d44e1045694530cef5927b0800ee2d87942012f770e11a",
+      "signature": "a152eac53ee647bcee23949d51ccc8e6aa1de37a6b505d011152821fff003743",
       "path": "content/fighters/nix-calder/animations/procedural/launch.anim.json"
     },
     {
@@ -140,12 +234,17 @@
     },
     {
       "clip_name": "recovery",
-      "signature": "b54e2de5019a83dc28f4cb3bddd58c93b2b8d1424bde7a504ea3af7ba8a11526",
+      "signature": "640847df0475e1391449ce962bd0bec31fce7f900a0eafda10dbb9f47b53bef3",
       "path": "content/fighters/nix-calder/animations/procedural/recovery.anim.json"
     },
     {
+      "clip_name": "recovery_identity",
+      "signature": "9e540bc79f90e7f348be1625dc220ed246735b8497e396dceb5128019352f8f3",
+      "path": "content/fighters/nix-calder/animations/procedural/recovery_identity.anim.json"
+    },
+    {
       "clip_name": "run",
-      "signature": "96fa1ee0e6e6e64c975e2c895617e351802624a68ec322ee3b63ea0501a8e738",
+      "signature": "2f05c909f311194bf0cf087f17638b5d38766a462a8f501fb248c2ebbb483e11",
       "path": "content/fighters/nix-calder/animations/procedural/run.anim.json"
     },
     {
@@ -244,9 +343,24 @@
       "path": "content/fighters/nix-calder/animations/procedural/tilt_up.anim.json"
     },
     {
+      "clip_name": "transition_idle_walk",
+      "signature": "e0e315c01df41bcf64aeb38f2d335c7fe391a7e22da127b0117e1709fc888621",
+      "path": "content/fighters/nix-calder/animations/procedural/transition_idle_walk.anim.json"
+    },
+    {
+      "clip_name": "transition_walk_run",
+      "signature": "1796d869f202a11b277ba103f082c307e9b8e0a97a397b020c921f0e3be457bc",
+      "path": "content/fighters/nix-calder/animations/procedural/transition_walk_run.anim.json"
+    },
+    {
       "clip_name": "tumble",
-      "signature": "efff7f0bd47db750841dd09699e0b6ce03acbaf54ec61c1caae051bb107e6656",
+      "signature": "b16a9b740cdb9dfb82ec68dfae6f9b061fbd92a9858844584842d7d884016799",
       "path": "content/fighters/nix-calder/animations/procedural/tumble.anim.json"
+    },
+    {
+      "clip_name": "uncharged_release",
+      "signature": "b6ea5f33b85129bf4ecc114e1c124c196da98e3e34f56ad9b375d09d0eac3948",
+      "path": "content/fighters/nix-calder/animations/procedural/uncharged_release.anim.json"
     },
     {
       "clip_name": "victory",
@@ -255,9 +369,11 @@
     },
     {
       "clip_name": "walk",
-      "signature": "8663135f89d7b8ecb462f6165d5171763b3095e461189576e82bf05214c37466",
+      "signature": "7f0dcac0f57d6d1ec9b72bf633ec95aaafef50a475a0b83edfe98a80d335b82c",
       "path": "content/fighters/nix-calder/animations/procedural/walk.anim.json"
     }
   ],
-  "status": "PROCEDURAL_RUNTIME_ANIMATION"
+  "status": "PROCEDURAL_RUNTIME_ANIMATION",
+  "vxp3_phase": 1,
+  "not_final_art": true
 }

@@ -98,7 +98,7 @@ static func animation_for_state(s: String) -> String:
 		FALL, FAST_FALL, TUMBLE: return "fall"
 		LAND: return "land"
 		ATTACK_STARTUP, ATTACK_ACTIVE, ATTACK_RECOVERY: return "jab"
-		SPECIAL_STARTUP, SPECIAL_ACTIVE, SPECIAL_RECOVERY: return "special"
+		SPECIAL_STARTUP, SPECIAL_ACTIVE, SPECIAL_RECOVERY: return "projectile_full"
 		SHIELD_START, SHIELD_HOLD, SHIELD_STUN: return "shield"
 		DODGE_START, DODGE_ACTIVE: return "dodge"
 		AIR_DODGE: return "air_dodge"

@@ -1,0 +1,30 @@
+{
+  "ok": true,
+  "commands": [
+    {
+      "cmd": "python3 tools/vxp3/generate_nix_rook_impact_clips.py",
+      "exit": 0
+    },
+    {
+      "cmd": "python3 tools/vxp3/validate_combat_impact.py",
+      "exit": 0
+    },
+    {
+      "cmd": "godot --headless --rendering-driver opengl3 --path game-godot -s res://tests/vxp3/vxp3_combat_impact_asserts.gd",
+      "exit": 0,
+      "notes": "PASS outside sandbox on Godot 4.7.1. Sandbox cannot write user:// logs."
+    },
+    {
+      "cmd": "npm run validate:game-godot-primary",
+      "exit": 0
+    },
+    {
+      "cmd": "npm run validate:game-rc",
+      "exit": 0
+    },
+    {
+      "cmd": "npm run validate:godot-product",
+      "exit": 0
+    }
+  ]
+}

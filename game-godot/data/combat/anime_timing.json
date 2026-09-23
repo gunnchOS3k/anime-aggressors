@@ -1,0 +1,34 @@
+{
+  "schema_id": "anime_aggressors.anime_timing.v1",
+  "schema_version": 1,
+  "grammar": "pose_to_pose",
+  "defaults": {
+    "anticipation_holds": 2,
+    "impact_accent_frames": 2,
+    "recovery_settle": 3,
+    "stiffness_hold_frames": 3
+  },
+  "fighter_timing": {
+    "nix-calder": {
+      "idle_breath_amp": 0.018,
+      "walk_foot_precision": 0.92,
+      "contact_hold_frames": 3,
+      "stiffness_before_launch": 4,
+      "recovery_settle": 4,
+      "notes": "Still idle, precise feet, crystalline contact, brief freeze before launch."
+    },
+    "rook-ironside": {
+      "idle_breath_amp": 0.04,
+      "walk_plant_weight": 1.35,
+      "follow_through_overshoot": 1.4,
+      "body_snap_frames": 3,
+      "recovery_settle": 5,
+      "notes": "Planted walk, enormous follow-through, snap then launch."
+    },
+    "ember-vale": { "phase": "docs_only", "hook": "phase_2" },
+    "juno-spark": { "phase": "docs_only", "hook": "phase_2" },
+    "kaia-windrow": { "phase": "docs_only", "hook": "phase_2" },
+    "orion-vell": { "phase": "docs_only", "hook": "phase_2" },
+    "vesper-nyx": { "phase": "docs_only", "hook": "phase_2" }
+  }
+}

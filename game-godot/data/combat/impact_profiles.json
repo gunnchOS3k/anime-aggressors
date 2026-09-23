@@ -1,0 +1,102 @@
+{
+  "schema_id": "anime_aggressors.impact_profile.v1",
+  "schema_version": 1,
+  "description": "Presentation-only impact classes. Physics knockback and competitive distances remain authoritative in CombatMath / HitResolver.",
+  "tiers": ["light", "medium", "heavy", "aura", "super", "ko"],
+  "profiles": {
+    "light": {
+      "hitstop_frames": 3,
+      "attacker_hitstop_frames": 3,
+      "defender_hitstop_frames": 3,
+      "hitstop_sync": true,
+      "camera_impulse": false,
+      "camera_shake": 0.0,
+      "screen_flash": false,
+      "spark_scale": 0.7,
+      "spark_style": "crystalline_chip",
+      "hud_hidden_class": "light",
+      "launch_readability": 0.35,
+      "warranted_camera": false
+    },
+    "medium": {
+      "hitstop_frames": 5,
+      "attacker_hitstop_frames": 5,
+      "defender_hitstop_frames": 5,
+      "hitstop_sync": true,
+      "camera_impulse": false,
+      "camera_shake": 0.0,
+      "screen_flash": false,
+      "spark_scale": 1.0,
+      "spark_style": "element_burst",
+      "hud_hidden_class": "medium",
+      "launch_readability": 0.55,
+      "warranted_camera": false
+    },
+    "heavy": {
+      "hitstop_frames": 9,
+      "attacker_hitstop_frames": 9,
+      "defender_hitstop_frames": 9,
+      "hitstop_sync": true,
+      "camera_impulse": true,
+      "camera_shake": 7.0,
+      "screen_flash": false,
+      "spark_scale": 1.45,
+      "spark_style": "heavy_ring",
+      "hud_hidden_class": "heavy",
+      "launch_readability": 0.85,
+      "warranted_camera": true
+    },
+    "aura": {
+      "hitstop_frames": 12,
+      "attacker_hitstop_frames": 12,
+      "defender_hitstop_frames": 12,
+      "hitstop_sync": true,
+      "camera_impulse": true,
+      "camera_shake": 10.0,
+      "screen_flash": true,
+      "spark_scale": 1.7,
+      "spark_style": "aura_fracture",
+      "hud_hidden_class": "aura",
+      "launch_readability": 1.0,
+      "warranted_camera": true
+    },
+    "super": {
+      "hitstop_frames": 15,
+      "attacker_hitstop_frames": 15,
+      "defender_hitstop_frames": 15,
+      "hitstop_sync": true,
+      "camera_impulse": true,
+      "camera_shake": 13.0,
+      "screen_flash": true,
+      "spark_scale": 2.0,
+      "spark_style": "super_bloom",
+      "hud_hidden_class": "super",
+      "launch_readability": 1.15,
+      "warranted_camera": true
+    },
+    "ko": {
+      "hitstop_frames": 18,
+      "attacker_hitstop_frames": 18,
+      "defender_hitstop_frames": 18,
+      "hitstop_sync": true,
+      "camera_impulse": true,
+      "camera_shake": 16.0,
+      "screen_flash": true,
+      "spark_scale": 2.4,
+      "spark_style": "ko_shatter",
+      "hud_hidden_class": "ko",
+      "launch_readability": 1.35,
+      "warranted_camera": true
+    }
+  },
+  "contact_classes": ["whiff", "shield", "light", "medium", "heavy", "aura", "ko"],
+  "resolution_order": [
+    "training_force_tier",
+    "explicit_impact_profile",
+    "feedback.tier",
+    "ko_upgrade",
+    "aura_upgrade",
+    "move_type_default"
+  ],
+  "no_silent_special_fallback": true
+}

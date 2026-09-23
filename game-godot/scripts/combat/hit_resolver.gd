@@ -5,6 +5,7 @@ const _AuraScaler = preload("res://scripts/combat/aura_scaler.gd")
 const _AuraIdentity = preload("res://scripts/combat/aura_identity.gd")
 const _AuraSpecialRuntime = preload("res://scripts/combat/aura_special_runtime.gd")
 const _CombatMath = preload("res://scripts/combat/combat_math.gd")
+const _TrainingImpactDebug = preload("res://scripts/training/training_impact_debug.gd")
 
 signal hit_confirmed(attacker: Node, defender: Node, info: Dictionary)
 
@@ -102,10 +103,19 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 	if combat_feedback:
 		info = combat_feedback.apply_hit(attacker, defender, scaled, info)
 		if combat_feedback.has_method("spawn_hit_spark") and defender is Node2D:
-			combat_feedback.spawn_hit_spark(defender, defender.global_position + Vector2(0, -24), str(info.get("element", "")))
+			var sock := str(info.get("contact_socket", "chest"))
+			var offset := Vector2(0, -24)
+			if sock.contains("hand") or sock.contains("fist"):
+				offset = Vector2(18 * (attacker.facing if attacker != null and "facing" in attacker else 1), -28)
+			elif sock.contains("foot") or sock.contains("leg"):
+				offset = Vector2(12 * (attacker.facing if attacker != null and "facing" in attacker else 1), -8)
+			combat_feedback.spawn_hit_spark(defender, defender.global_position + offset, str(info.get("element", "")))
 		if attacker != null and "last_impact_readable" in attacker:
 			attacker.last_impact_readable = true
 			attacker.last_feedback_tier = str(info.get("feedback_tier", ""))
+			if "last_impact_class" in attacker:
+				attacker.last_impact_class = str(info.get("impact_class", ""))
+		_TrainingImpactDebug.remember_hit(attacker, defender, scaled, info)
 	elif attacker.has_node("_CombatFeedback"):
 		var fb = attacker.get_node("_CombatFeedback")
 		info = fb.apply_hit(attacker, defender, scaled, info)

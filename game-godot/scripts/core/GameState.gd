@@ -22,6 +22,16 @@ var p2_ready: bool = false
 var training_dummy_mode: String = "cpu"
 var last_winner_slot: int = -1
 var debug_combat_hud: bool = false
+## VXP-3 training impact debug — same training session, not a second debug system.
+var training_force_hit_tier: String = ""
+var training_force_reaction: String = ""
+var training_aura_threshold: float = 100.0
+var training_camera_enabled: bool = true
+var training_vfx_enabled: bool = true
+var training_sfx_enabled: bool = true
+var training_hide_hud: bool = false
+var training_last_hit: Dictionary = {}
+var last_contact_class: String = ""
 
 ## Arcade ladder (Alpha minimum mode beyond Versus + Training).
 var mode: String = "versus"  # versus | training | arcade | tutorial | hazards | team | challenges | online_unranked | online_ranked | tournament

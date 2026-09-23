@@ -1,0 +1,138 @@
+{
+  "schema_id": "anime_aggressors.hurt_reaction_library.v1",
+  "schema_version": 1,
+  "phase": 1,
+  "slice_fighters": ["nix-calder", "rook-ironside"],
+  "extensible_roster": [
+    "ember-vale",
+    "rook-ironside",
+    "juno-spark",
+    "kaia-windrow",
+    "nix-calder",
+    "orion-vell",
+    "vesper-nyx"
+  ],
+  "families": {
+    "flinch": {
+      "gameplay_state": "hurt_light",
+      "clip": "hurt_flinch",
+      "legacy_clip": "hurt",
+      "percent_hint": [0, 40],
+      "kb_hint": [0, 8]
+    },
+    "stagger": {
+      "gameplay_state": "hurt_heavy",
+      "clip": "hurt_stagger",
+      "legacy_clip": "hurt",
+      "percent_hint": [20, 80],
+      "kb_hint": [6, 14]
+    },
+    "crumple": {
+      "gameplay_state": "hurt_heavy",
+      "clip": "hurt_crumple",
+      "legacy_clip": "hurt",
+      "percent_hint": [50, 999],
+      "kb_hint": [4, 12]
+    },
+    "launch": {
+      "gameplay_state": "launched",
+      "clip": "hurt_launch",
+      "legacy_clip": "launch",
+      "percent_hint": [0, 999],
+      "kb_hint": [14, 999]
+    },
+    "tumble": {
+      "gameplay_state": "tumble",
+      "clip": "hurt_tumble",
+      "legacy_clip": "tumble",
+      "percent_hint": [60, 999],
+      "kb_hint": [12, 999]
+    },
+    "spike": {
+      "gameplay_state": "launched",
+      "clip": "hurt_spike",
+      "legacy_clip": "launch",
+      "percent_hint": [0, 999],
+      "angle_hint": "down"
+    },
+    "freeze_stiffness": {
+      "gameplay_state": "hurt_heavy",
+      "clip": "hurt_freeze_stiffness",
+      "legacy_clip": "hurt",
+      "identity_owner": "nix-calder",
+      "notes": "Brief crystalline hold before launch — Nix lane, available as victim reaction vs frost."
+    },
+    "body_snap": {
+      "gameplay_state": "hurt_heavy",
+      "clip": "hurt_body_snap",
+      "legacy_clip": "hurt",
+      "identity_owner": "rook-ironside",
+      "notes": "Torso whip then launch — Rook lane, available as victim reaction vs impact."
+    },
+    "shield_recoil": {
+      "gameplay_state": "shield_stun",
+      "clip": "hurt_shield_recoil",
+      "legacy_clip": "shield"
+    },
+    "ground_bounce": {
+      "gameplay_state": "tumble",
+      "clip": "hurt_ground_bounce",
+      "legacy_clip": "tumble"
+    },
+    "wall_splat": {
+      "gameplay_state": "hurt_heavy",
+      "clip": "hurt_wall_splat",
+      "legacy_clip": "hurt"
+    },
+    "ko_spin": {
+      "gameplay_state": "ko",
+      "clip": "hurt_ko_spin",
+      "legacy_clip": "ko"
+    }
+  },
+  "minimum_families": [
+    "flinch",
+    "stagger",
+    "crumple",
+    "launch",
+    "tumble",
+    "spike",
+    "freeze_stiffness",
+    "body_snap",
+    "shield_recoil",
+    "ground_bounce",
+    "wall_splat",
+    "ko_spin"
+  ],
+  "fighter_clip_overrides": {
+    "nix-calder": {
+      "flinch": "hurt_flinch",
+      "stagger": "hurt_stagger",
+      "crumple": "hurt_crumple",
+      "launch": "hurt_launch",
+      "tumble": "hurt_tumble",
+      "spike": "hurt_spike",
+      "freeze_stiffness": "hurt_freeze_stiffness",
+      "body_snap": "hurt_body_snap",
+      "shield_recoil": "hurt_shield_recoil",
+      "ground_bounce": "hurt_ground_bounce",
+      "wall_splat": "hurt_wall_splat",
+      "ko_spin": "hurt_ko_spin"
+    },
+    "rook-ironside": {
+      "flinch": "hurt_flinch",
+      "stagger": "hurt_stagger",
+      "crumple": "hurt_crumple",
+      "launch": "hurt_launch",
+      "tumble": "hurt_tumble",
+      "spike": "hurt_spike",
+      "freeze_stiffness": "hurt_freeze_stiffness",
+      "body_snap": "hurt_body_snap",
+      "shield_recoil": "hurt_shield_recoil",
+      "ground_bounce": "hurt_ground_bounce",
+      "wall_splat": "hurt_wall_splat",
+      "ko_spin": "hurt_ko_spin"
+    }
+  },
+  "architecture_note": "Phase 1 wires Nix and Rook clips. Other fighters resolve families to legacy hurt/launch/tumble until Phase 2+ choreography."
+}

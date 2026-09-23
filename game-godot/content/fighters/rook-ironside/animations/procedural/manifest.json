@@ -1,7 +1,6 @@
 {
   "fighter_id": "rook-ironside",
-  "clip_count": 51,
-  "signature_clip_count": 8,
+  "clip_count": 74,
   "clips": [
     {
       "clip_name": "aerial_back",
@@ -40,13 +39,48 @@
     },
     {
       "clip_name": "aura_charge",
-      "signature": "31ece1797e1bce45401fdd664ef2c58df19fc9e650354ca623fac417633b82c2",
+      "signature": "820c928e52cd15964ff627adc3b3a2feed01021fe2bc93046c1cd2bbe4040502",
       "path": "content/fighters/rook-ironside/animations/procedural/aura_charge.anim.json"
     },
     {
       "clip_name": "aura_release",
       "signature": "868b6617ccf5110216e9eb1767b6acf84dc7f6bf68e1d7a2d9143c31a0c17a1e",
       "path": "content/fighters/rook-ironside/animations/procedural/aura_release.anim.json"
+    },
+    {
+      "clip_name": "charged_hold",
+      "signature": "e0113d06a014871d5bd07c523bcfda82b1c27e9e4ed130f8a5eacac7cae2eb8a",
+      "path": "content/fighters/rook-ironside/animations/procedural/charged_hold.anim.json"
+    },
+    {
+      "clip_name": "contact_aura",
+      "signature": "8ac72d51076e06f80d1cd4ab0726e67c5648a761cd4f2f05ee29be9438d4e0ae",
+      "path": "content/fighters/rook-ironside/animations/procedural/contact_aura.anim.json"
+    },
+    {
+      "clip_name": "contact_heavy",
+      "signature": "791f6d70ffd65255fefade962804ff3506f9d0005b7905da00fbe9b2a86bf795",
+      "path": "content/fighters/rook-ironside/animations/procedural/contact_heavy.anim.json"
+    },
+    {
+      "clip_name": "contact_ko",
+      "signature": "f15a290cd4e3d6eed8cf5e63394ed658dc59d413bbe9e87fa9202274a440419a",
+      "path": "content/fighters/rook-ironside/animations/procedural/contact_ko.anim.json"
+    },
+    {
+      "clip_name": "contact_light",
+      "signature": "b2f09c39b79706f94d0a7589e4b2231334dfb836cfddfd507b7e9cacbeaeae6a",
+      "path": "content/fighters/rook-ironside/animations/procedural/contact_light.anim.json"
+    },
+    {
+      "clip_name": "contact_medium",
+      "signature": "5b4b39bef3a11d79a525843b6c42316650d34e088578ce63274796294a701311",
+      "path": "content/fighters/rook-ironside/animations/procedural/contact_medium.anim.json"
+    },
+    {
+      "clip_name": "contact_super",
+      "signature": "165964c9ea091553f4cb9d7fa5a1ea19d320fefa75518fede70e22da14ec747b",
+      "path": "content/fighters/rook-ironside/animations/procedural/contact_super.anim.json"
     },
     {
       "clip_name": "dash",
@@ -75,22 +109,82 @@
     },
     {
       "clip_name": "heavy",
-      "signature": "6e01ea5ef6f9b6f5b1fe73fc8633e4a04d557ad0fa7077ace86a3d9545ec6e1b",
+      "signature": "c4e477dbd61321b438170eed289487c27d4e696fc25d262a2d82effa3cd24691",
       "path": "content/fighters/rook-ironside/animations/procedural/heavy.anim.json"
     },
     {
       "clip_name": "hurt",
-      "signature": "c4f381159e1c668778ae588e13cb14a46eb758b54192aec8429022a8cf75546d",
+      "signature": "162e4f1a739feffe01f53a965d02800a9a84000fd40c947d66b3d917549f6450",
       "path": "content/fighters/rook-ironside/animations/procedural/hurt.anim.json"
     },
     {
+      "clip_name": "hurt_body_snap",
+      "signature": "a19536883b06a9325cdfd1c281cf3d9d9f53ba7b292781564eca21096180e5cb",
+      "path": "content/fighters/rook-ironside/animations/procedural/hurt_body_snap.anim.json"
+    },
+    {
+      "clip_name": "hurt_crumple",
+      "signature": "4b98222be7c1b9df299d2c61df8f3479c959486129be55e21a1782e71c5a15ff",
+      "path": "content/fighters/rook-ironside/animations/procedural/hurt_crumple.anim.json"
+    },
+    {
+      "clip_name": "hurt_flinch",
+      "signature": "6618f65f79d696e223c4015aec0bab7d14c974964b1151d0deeecc52985ca73e",
+      "path": "content/fighters/rook-ironside/animations/procedural/hurt_flinch.anim.json"
+    },
+    {
+      "clip_name": "hurt_freeze_stiffness",
+      "signature": "a2d5171a7390c1dfc3ff6094e0fa0a652aad511f433d95a7b83ab42df7b084fc",
+      "path": "content/fighters/rook-ironside/animations/procedural/hurt_freeze_stiffness.anim.json"
+    },
+    {
+      "clip_name": "hurt_ground_bounce",
+      "signature": "a977b6437b3918b06e178f26737b8868ed521bd84e6a1fd2004c4d8f9f45a004",
+      "path": "content/fighters/rook-ironside/animations/procedural/hurt_ground_bounce.anim.json"
+    },
+    {
+      "clip_name": "hurt_ko_spin",
+      "signature": "6974ff34dff0b67663d78a16d489785f97f98fc2333fe675efb19548bcc3bf67",
+      "path": "content/fighters/rook-ironside/animations/procedural/hurt_ko_spin.anim.json"
+    },
+    {
+      "clip_name": "hurt_launch",
+      "signature": "9386e102c28fc9c1598bc8a71c398ba65dc781a26ce613cc59c5b4e5e8323afc",
+      "path": "content/fighters/rook-ironside/animations/procedural/hurt_launch.anim.json"
+    },
+    {
+      "clip_name": "hurt_shield_recoil",
+      "signature": "21714f4d70b49d5a9927469890588b997f600877d4c17a0e860e90e048612435",
+      "path": "content/fighters/rook-ironside/animations/procedural/hurt_shield_recoil.anim.json"
+    },
+    {
+      "clip_name": "hurt_spike",
+      "signature": "0f8385667c152886f436e5fbcf5713dc3f7ff82d1352a4ae2beb78b2ce7bda95",
+      "path": "content/fighters/rook-ironside/animations/procedural/hurt_spike.anim.json"
+    },
+    {
+      "clip_name": "hurt_stagger",
+      "signature": "321db171fddd95923bcd1111d76982970c1549eb7c2bff09f0fe9fd9703ae1c6",
+      "path": "content/fighters/rook-ironside/animations/procedural/hurt_stagger.anim.json"
+    },
+    {
+      "clip_name": "hurt_tumble",
+      "signature": "d09b0ee60155e16dff3551ca3f596447efb4c7bd1778c12d31a1998eaab22557",
+      "path": "content/fighters/rook-ironside/animations/procedural/hurt_tumble.anim.json"
+    },
+    {
+      "clip_name": "hurt_wall_splat",
+      "signature": "4bf71d1881d55a4db0eb63ae609f78dec12b19c3b2781707bbf37baaca8fe87a",
+      "path": "content/fighters/rook-ironside/animations/procedural/hurt_wall_splat.anim.json"
+    },
+    {
       "clip_name": "idle",
-      "signature": "b4d25410e17aeab81f0edf2fdd3b2881d029ca2869db5c21b4699d299ccc446c",
+      "signature": "dcb264de280c5ab90891b2e2ed19eb5a0ac367fb60babedb802bef26dd8b7eed",
       "path": "content/fighters/rook-ironside/animations/procedural/idle.anim.json"
     },
     {
       "clip_name": "jab",
-      "signature": "ee14515498aac5067a56e1e9c082038e4e0843962a48c4deb6a5eaa7a1c53247",
+      "signature": "530893f575c0861ac5371458370b53e70a79957bba856155744ebad5300c4b89",
       "path": "content/fighters/rook-ironside/animations/procedural/jab.anim.json"
     },
     {
@@ -120,7 +214,7 @@
     },
     {
       "clip_name": "launch",
-      "signature": "611bfc85e412faefdbdaa6a4308e3b490472d2fe50c313aed6dc2670b5b7a737",
+      "signature": "a7d5030f57cb409932dd9fca1c79c25986dd184695e9d15812a2269981510140",
       "path": "content/fighters/rook-ironside/animations/procedural/launch.anim.json"
     },
     {
@@ -140,12 +234,17 @@
     },
     {
       "clip_name": "recovery",
-      "signature": "135e7478fa8e997220216307f86ef2b780031eab686837d71f96cadb9c5c481d",
+      "signature": "c6217f0e5c3250f34c70228025af4121845c3bf11fce4041a042e9bb75324ff2",
       "path": "content/fighters/rook-ironside/animations/procedural/recovery.anim.json"
     },
     {
+      "clip_name": "recovery_identity",
+      "signature": "44090b00766a2db3c0e024046ddc4f8d2129b17755ee95d7d058904fba72bc62",
+      "path": "content/fighters/rook-ironside/animations/procedural/recovery_identity.anim.json"
+    },
+    {
       "clip_name": "run",
-      "signature": "2cbb0495d89239fa1f1464c94459e287f8a528cf075945acc5b62eda9799d0ba",
+      "signature": "928f897625dfaff36a527747e14cf1035dac20a84eeccadb8f5e40e618efe745",
       "path": "content/fighters/rook-ironside/animations/procedural/run.anim.json"
     },
     {
@@ -244,9 +343,24 @@
       "path": "content/fighters/rook-ironside/animations/procedural/tilt_up.anim.json"
     },
     {
+      "clip_name": "transition_idle_walk",
+      "signature": "0e1fc777ec6bf4fbf9bfd218e6a7756c5032607844692a3df72bd6b67d94f44f",
+      "path": "content/fighters/rook-ironside/animations/procedural/transition_idle_walk.anim.json"
+    },
+    {
+      "clip_name": "transition_walk_run",
+      "signature": "ad6031a002fb180eaea4efa8af00388d8e9b6a28d778022acb72e496fc0667ac",
+      "path": "content/fighters/rook-ironside/animations/procedural/transition_walk_run.anim.json"
+    },
+    {
       "clip_name": "tumble",
-      "signature": "a1540d944444e16bbe1ca317b891e1808b1c6e593848acf6d68ae99bef406105",
+      "signature": "8ed4c1fdb07563e22a79f77dcccb093d944236c0e11b7c89ecc3442a7d7aebb8",
       "path": "content/fighters/rook-ironside/animations/procedural/tumble.anim.json"
+    },
+    {
+      "clip_name": "uncharged_release",
+      "signature": "38180b4b8c0ba93121d6d29c6e795e2df3e044012e3f1dac176f61fb14ff78f0",
+      "path": "content/fighters/rook-ironside/animations/procedural/uncharged_release.anim.json"
     },
     {
       "clip_name": "victory",
@@ -255,9 +369,11 @@
     },
     {
       "clip_name": "walk",
-      "signature": "f14a8a18336a49363eba8dbe51077a7f276d8963bf170885031e52f57984f2fb",
+      "signature": "d7249ccbf16e73e057ff5c5262bbcba6c6b7d0ae81d462739019e4da85761497",
       "path": "content/fighters/rook-ironside/animations/procedural/walk.anim.json"
     }
   ],
-  "status": "PROCEDURAL_RUNTIME_ANIMATION"
+  "status": "PROCEDURAL_RUNTIME_ANIMATION",
+  "vxp3_phase": 1,
+  "not_final_art": true
 }
