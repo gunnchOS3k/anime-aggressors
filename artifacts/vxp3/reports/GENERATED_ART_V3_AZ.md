@@ -2,7 +2,7 @@
 
 Generated production art only. Not human-authored final art. Do not merge.
 
-**A new head:** `ec91aaa4c3c636d379bd8e5be2c5d5a5e7da2b2a`
+**A new head:** `e44258549698332f7815ae79e30fe3a81066fad8`
 **PR:** https://github.com/gunnchOS3k/anime-aggressors/pull/106
 **Base:** `6cd1b3100a7e467c2c991394576891660deb1162`
 **RC1:** `v1.0.0-rc.1` untouched
@@ -180,7 +180,7 @@ Visible remaining defects (honest, from stills — not owner taste):
 - Ember still has a small detached flame-tongue bit in silhouette
 - Hands read as beveled blocks, not fully articulated stylized hands
 - Costume plates are attached but still thin/secondary versus the nude remesh body
-- Digital "Q3-like" is structural scoring only. Visible read is generated blockout / Q3-direction pending owner
+- Digital Q3-like is structural scoring only. Visible read is generated blockout / Q3-direction pending owner
 - APK withheld: exact-head CI is not on this new head yet, and obvious generated-blockout language remains
 
 1. Do these look like intentional game characters rather than remesh toys?
