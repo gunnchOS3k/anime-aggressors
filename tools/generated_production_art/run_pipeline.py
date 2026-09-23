@@ -30,7 +30,12 @@ from generated_production_art.generate_audio import generate_all as gen_audio  #
 from generated_production_art.generate_vfx import generate_all as gen_vfx  # noqa: E402
 from generated_production_art.validate_exaggeration import validate  # noqa: E402
 from generated_production_art.make_contact_sheets import main as make_sheets  # noqa: E402
+from generated_production_art.make_v3_sheets import main as make_v3_sheets  # noqa: E402
+from generated_production_art.score_visual_v3 import score as score_v3  # noqa: E402
 from generated_production_art.validate_geometry_v2 import validate as validate_geom  # noqa: E402
+from generated_production_art.validate_geometry_v3 import validate as validate_geom_v3  # noqa: E402
+from generated_production_art.validate_hero_v3 import validate as validate_hero  # noqa: E402
+from generated_production_art.validate_silhouette_v3 import validate as validate_sil  # noqa: E402
 
 
 def _run(cmd: list[str]) -> subprocess.CompletedProcess:
@@ -43,6 +48,7 @@ def generate_masters() -> dict:
         return {"ok": False, "reason": "blender_missing", "fighters": {}}
     script = ROOT / "tools/generated_production_art/blender/gp_build_production_master.py"
     render = ROOT / "tools/generated_production_art/blender/gp_render_review.py"
+    render_v3 = ROOT / "tools/generated_production_art/blender/gp_render_v3.py"
     reports = {}
     for fid in FIGHTER_IDS:
         blend = production_master_blend(fid).resolve()
@@ -68,6 +74,7 @@ def generate_masters() -> dict:
         ok = proc.returncode == 0 and glb.is_file()
         render_dir = ROOT / "artifacts/vxp3/review/generated_production"
         deform_dir = ROOT / "artifacts/vxp3/review/deformation_v2"
+        v3_dir = ROOT / "artifacts/vxp3/review/generated_art_v3"
         if ok:
             _run(
                 [
@@ -83,6 +90,22 @@ def generate_masters() -> dict:
                     str(render_dir),
                     "--deform-dir",
                     str(deform_dir),
+                ]
+            )
+            _run(
+                [
+                    blender,
+                    "--background",
+                    str(blend),
+                    "--python",
+                    str(render_v3),
+                    "--",
+                    "--fighter",
+                    fid,
+                    "--out-dir",
+                    str(v3_dir),
+                    "--sheet-dir",
+                    str(v3_dir / "design_sheets"),
                 ]
             )
         reports[fid] = {
@@ -230,12 +253,21 @@ def main() -> int:
     write_manifest(masters, anims, audio, vfx, exaggeration)
     geometry = validate_geom()
     write_json(REPORTS / "GENERATED_PRODUCTION_GEOMETRY_V2.json", geometry)
+    geometry_v3 = validate_geom_v3()
+    write_json(REPORTS / "GENERATED_PRODUCTION_GEOMETRY_V3.json", geometry_v3)
     make_sheets()
-    print(json_summary(masters, anims, audio, vfx, exaggeration, geometry))
+    make_v3_sheets()
+    sil = validate_sil()
+    hero = validate_hero()
+    quality = score_v3()
+    write_json(REPORTS / "GENERATED_ART_V3_SILHOUETTE.json", sil)
+    write_json(REPORTS / "GENERATED_ART_V3_HERO.json", hero)
+    write_json(REPORTS / "GENERATED_ART_V3_QUALITY.json", quality)
+    print(json_summary(masters, anims, audio, vfx, exaggeration, geometry, geometry_v3, sil, hero))
     return 0 if exaggeration.get("ok") and masters.get("ok") else 2
 
 
-def json_summary(masters, anims, audio, vfx, exaggeration, geometry=None) -> str:
+def json_summary(masters, anims, audio, vfx, exaggeration, geometry=None, geometry_v3=None, sil=None, hero=None) -> str:
     import json
 
     return json.dumps(
@@ -247,7 +279,10 @@ def json_summary(masters, anims, audio, vfx, exaggeration, geometry=None) -> str
             "exaggeration_ok": exaggeration.get("ok"),
             "exaggeration_failures": exaggeration.get("failures"),
             "geometry_ok": (geometry or {}).get("ok"),
+            "geometry_v3_ok": (geometry_v3 or {}).get("ok"),
             "unintentional_floating": (geometry or {}).get("UNINTENTIONAL_FLOATING_ACCESSORIES"),
+            "silhouette_ok": (sil or {}).get("ok"),
+            "hero_ok": (hero or {}).get("ok"),
         },
         indent=2,
     )

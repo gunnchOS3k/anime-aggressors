@@ -14,7 +14,7 @@ sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(HERE.parent.parent))
 
 from generated_production_art.action_catalog import all_actions, duration_for  # noqa: E402
-from generated_production_art.body_v2 import recipe  # noqa: E402
+from generated_production_art.body_v3 import recipe  # noqa: E402
 from generated_production_art.common import (  # noqa: E402
     CANONICAL_BONES,
     GENERATOR,
@@ -26,7 +26,8 @@ from generated_production_art.common import (  # noqa: E402
 from generated_production_art.pose_library import locations_for, phase_times, poses_for_action  # noqa: E402
 from generated_production_art.profiles import profile  # noqa: E402
 
-from gp_body_v2 import _toon_mat, _assign, build_cohesive_fighter  # noqa: E402
+from gp_body_v2 import _assign  # noqa: E402
+from gp_body_v3 import _toon_mat_v3, build_crafted_fighter  # noqa: E402
 
 PARENT = {
     "Root": None,
@@ -313,7 +314,7 @@ def setup_review_camera() -> None:
     bpy.ops.mesh.primitive_plane_add(size=6.0, location=(0.0, 0.0, 0.0))
     ground = bpy.context.active_object
     ground.name = "AA_RefGround"
-    _assign(ground, _toon_mat("AA_Ground", (0.10, 0.10, 0.11), 0.0, 0.0, 0.92))
+    _assign(ground, _toon_mat_v3("AA_Ground", (0.10, 0.10, 0.11), 0.0, 2, 0.04, 0.0, 0.92))
 
 
 def build(fid: str, out_blend: Path, out_glb: Path, skip_anim: bool) -> dict:
@@ -325,7 +326,7 @@ def build(fid: str, out_blend: Path, out_glb: Path, skip_anim: bool) -> dict:
     mesh_col = _collection("AA_MESH")
     arm, extras = build_armature(fid, p)
     _link(export_col, arm)
-    body, costume, geom = build_cohesive_fighter(fid, p, arm)
+    body, costume, geom = build_crafted_fighter(fid, p, arm)
     _link(mesh_col, body)
     for obj in costume:
         _link(mesh_col, obj)

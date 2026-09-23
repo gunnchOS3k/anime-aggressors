@@ -2,13 +2,13 @@
   "fighter": "ember-vale",
   "status": "GENERATED_PRODUCTION_ART",
   "generator": "aa_generated_production_art",
-  "generator_version": "2.0.0",
-  "generator_revision": "cohesive_body_v2_remesh",
+  "generator_version": "3.0.0",
+  "generator_revision": "character_craft_v3",
   "blend": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/art_source/animation/fighters/ember-vale/source/ember-vale_production_master.blend",
   "glb": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/game-godot/content/fighters/ember-vale/model/ember-vale_generated_production.glb",
-  "triangles": 15100,
+  "triangles": 12535,
   "body_connected_components": 1,
-  "material_count": 10,
+  "material_count": 18,
   "bones": [
     "Root",
     "Hips",
@@ -176,95 +176,171 @@
   "action_count": 113,
   "geometry": {
     "fighter": "ember-vale",
-    "generator_revision": "cohesive_body_v2_remesh",
+    "generator_revision": "character_craft_v3",
     "body_connected_components": 1,
-    "triangles": 15100,
-    "body_triangles": 14744,
-    "material_count": 10,
+    "triangles": 12535,
+    "body_triangles": 11049,
+    "material_count": 18,
     "foot_ground_gap_m": 0.0,
     "weight": {
-      "vertex_count": 13086,
+      "vertex_count": 9643,
       "zero_weight_vertices": 0,
       "unnormalized_vertices": 0,
       "smooth_skinning": true
     },
     "accessories": [
       {
+        "name": "head_shell",
+        "classification": "BODY",
+        "parent_bone": "Head",
+        "distance_m": 0.0458,
+        "intentional_float": false,
+        "unintentional_floating": false,
+        "vertex_count": 150,
+        "designed": true
+      },
+      {
+        "name": "hand_L",
+        "classification": "BODY",
+        "parent_bone": "Hand_L",
+        "distance_m": 0.0797,
+        "intentional_float": false,
+        "unintentional_floating": false,
+        "vertex_count": 324,
+        "designed": true
+      },
+      {
+        "name": "boot_L",
+        "classification": "BODY",
+        "parent_bone": "Foot_L",
+        "distance_m": 0.0064,
+        "intentional_float": false,
+        "unintentional_floating": false,
+        "vertex_count": 204,
+        "designed": true
+      },
+      {
+        "name": "hand_R",
+        "classification": "BODY",
+        "parent_bone": "Hand_R",
+        "distance_m": 0.0797,
+        "intentional_float": false,
+        "unintentional_floating": false,
+        "vertex_count": 324,
+        "designed": true
+      },
+      {
+        "name": "boot_R",
+        "classification": "BODY",
+        "parent_bone": "Foot_R",
+        "distance_m": 0.0064,
+        "intentional_float": false,
+        "unintentional_floating": false,
+        "vertex_count": 204,
+        "designed": true
+      },
+      {
         "name": "gauntlet_r",
         "classification": "ARMOR",
         "parent_bone": "Hand_R",
-        "distance_m": 0.0704,
+        "distance_m": 0.0359,
         "intentional_float": false,
-        "unintentional_floating": false
+        "unintentional_floating": false,
+        "vertex_count": 56,
+        "designed": true
       },
       {
         "name": "gauntlet_l",
         "classification": "ARMOR",
         "parent_bone": "Hand_L",
-        "distance_m": 0.0614,
+        "distance_m": 0.0265,
         "intentional_float": false,
-        "unintentional_floating": false
+        "unintentional_floating": false,
+        "vertex_count": 56,
+        "designed": true
       },
       {
         "name": "chest_vent",
         "classification": "ARMOR",
         "parent_bone": "Chest",
-        "distance_m": 0.0292,
+        "distance_m": 0.0852,
         "intentional_float": false,
-        "unintentional_floating": false
+        "unintentional_floating": false,
+        "vertex_count": 56,
+        "designed": true
+      },
+      {
+        "name": "heat_guard_r",
+        "classification": "ARMOR",
+        "parent_bone": "UpperLeg_R",
+        "distance_m": 0.0205,
+        "intentional_float": false,
+        "unintentional_floating": false,
+        "vertex_count": 56,
+        "designed": true
+      },
+      {
+        "name": "heat_guard_l",
+        "classification": "ARMOR",
+        "parent_bone": "UpperLeg_L",
+        "distance_m": 0.0205,
+        "intentional_float": false,
+        "unintentional_floating": false,
+        "vertex_count": 56,
+        "designed": true
+      },
+      {
+        "name": "shoulder_accent",
+        "classification": "ARMOR",
+        "parent_bone": "Shoulder_R",
+        "distance_m": 0.0327,
+        "intentional_float": false,
+        "unintentional_floating": false,
+        "vertex_count": 56,
+        "designed": true
       },
       {
         "name": "flame_tongue_r",
         "classification": "ELEMENTAL_ORBIT_VFX",
         "parent_bone": "Hand_R",
-        "distance_m": 0.0289,
+        "distance_m": 0.0282,
         "intentional_float": true,
-        "unintentional_floating": false
+        "unintentional_floating": false,
+        "vertex_count": 16,
+        "designed": true
       },
       {
         "name": "flame_tongue_l",
         "classification": "ELEMENTAL_ORBIT_VFX",
         "parent_bone": "Hand_L",
-        "distance_m": 0.0253,
+        "distance_m": 0.0245,
         "intentional_float": true,
-        "unintentional_floating": false
+        "unintentional_floating": false,
+        "vertex_count": 16,
+        "designed": true
       }
     ],
     "unintentional_floating_accessories": 0,
-    "costume_meta": [
-      {
-        "name": "gauntlet_r",
-        "classification": "ARMOR",
-        "parent_bone": "Hand_R",
-        "intentional_float": false
-      },
-      {
-        "name": "gauntlet_l",
-        "classification": "ARMOR",
-        "parent_bone": "Hand_L",
-        "intentional_float": false
-      },
-      {
-        "name": "chest_vent",
-        "classification": "ARMOR",
-        "parent_bone": "Chest",
-        "intentional_float": false
-      },
-      {
-        "name": "flame_tongue_r",
-        "classification": "ELEMENTAL_ORBIT_VFX",
-        "parent_bone": "Hand_R",
-        "intentional_float": true
-      },
-      {
-        "name": "flame_tongue_l",
-        "classification": "ELEMENTAL_ORBIT_VFX",
-        "parent_bone": "Hand_L",
-        "intentional_float": true
-      }
+    "shape_profile": {
+      "head_style": "ember_crest_heat_mask",
+      "boot_style": "heat_resistant",
+      "hand_default": "fist",
+      "hand_scale": 1.34,
+      "hand_strength": 1.22,
+      "costume_profile": "heat_vent_gauntlets"
+    },
+    "designed_head": true,
+    "designed_hands": true,
+    "designed_boots": true,
+    "designed_costume": true,
+    "toon_bands": 3,
+    "hand_shapes": [
+      "neutral",
+      "fist",
+      "open"
     ]
   },
-  "recipe": "ember_cap",
+  "recipe": "ember_crest_heat_mask",
   "human_authored": false,
   "future_human_replaceable": true,
   "blender": "3.3.1"

@@ -41,6 +41,10 @@ def main() -> None:
     exaggeration = read_json(ROOT / "artifacts/vxp3/reports/GENERATED_PRODUCTION_EXAGGERATION.json")
     manifest = read_json(ROOT / "artifacts/vxp3/reports/GENERATED_PRODUCTION_ART_MANIFEST.json")
     geom = read_json(ROOT / "artifacts/vxp3/reports/GENERATED_PRODUCTION_GEOMETRY_V2.json")
+    geom3 = read_json(ROOT / "artifacts/vxp3/reports/GENERATED_PRODUCTION_GEOMETRY_V3.json")
+    sil3 = read_json(ROOT / "artifacts/vxp3/reports/GENERATED_ART_V3_SILHOUETTE.json")
+    hero3 = read_json(ROOT / "artifacts/vxp3/reports/GENERATED_ART_V3_HERO.json")
+    quality3 = read_json(ROOT / "artifacts/vxp3/reports/GENERATED_ART_V3_QUALITY.json")
     accessory = read_json(ROOT / "artifacts/vxp3/reports/FLOATING_ACCESSORY_AUDIT.json")
     fighters = masters.get("fighters", {})
     files_ok = bool(masters.get("ok")) and all(row.get("ok") for row in fighters.values()) if fighters else False
@@ -65,15 +69,28 @@ def main() -> None:
     v2_mat = files_ok
     v2_retarget = anim_ok and files_ok
     all_v2 = all((v2_cohesive, v2_gaps, v2_float, v2_read, v2_costume, v2_skin, v2_deform, v2_sil, v2_mat, v2_retarget))
+    v3_hands = bool(geom3.get("GEN_ART_V3_HANDS_PASS"))
+    v3_feet = bool(geom3.get("GEN_ART_V3_FEET_PASS"))
+    v3_head = bool(geom3.get("GEN_ART_V3_HEAD_DESIGN_PASS"))
+    v3_costume = bool(geom3.get("GEN_ART_V3_COSTUME_CRAFT_PASS"))
+    v3_sil = bool(sil3.get("GEN_ART_V3_SILHOUETTE_PASS"))
+    v3_mat = bool(geom3.get("GEN_ART_V3_MATERIAL_PASS"))
+    v3_hero = bool(hero3.get("GEN_ART_V3_HERO_POSE_PASS"))
+    v3_heavy = bool(hero3.get("GEN_ART_V3_HEAVY_CONTACT_PASS"))
+    v3_hurt = bool(hero3.get("GEN_ART_V3_HURT_POSE_PASS"))
+    v3_charge = bool(hero3.get("GEN_ART_V3_CHARGE_BODY_READ_PASS"))
+    v3_super = bool(hero3.get("GEN_ART_V3_SUPER_POSE_PASS"))
+    v3_sheet = bool(hero3.get("GEN_ART_V3_DESIGN_SHEET_PASS"))
+    all_v3 = all((v3_hands, v3_feet, v3_head, v3_costume, v3_sil, v3_mat, v3_hero, v3_heavy, v3_hurt, v3_charge, v3_super, v3_sheet))
     floating_count = accessory.get("UNINTENTIONAL_FLOATING_ACCESSORIES")
     if floating_count is None:
         floating_count = 1
-    no_blockout = all_v2 and int(floating_count) == 0
-    model_pass = files_ok and all_v2
-    art_pass = model_pass and anim_ok and audio_ok and vfx_ok and no_blockout
+    no_blockout = all_v2 and all_v3 and int(floating_count) == 0
+    model_pass = files_ok and all_v2 and all_v3
+    art_pass = model_pass and anim_ok and audio_ok and vfx_ok and no_blockout and all_v3
     gates = {
         "program": "VXP-3",
-        "title": "Generated production art v2 cohesive-body rescue (not human-authored final art)",
+        "title": "Generated art v3 character craft (not human-authored final art)",
         "head_sha": sh(["git", "rev-parse", "HEAD"]),
         "base_sha": "6cd1b3100a7e467c2c991394576891660deb1162",
         "branch": sh(["git", "rev-parse", "--abbrev-ref", "HEAD"]),
@@ -88,6 +105,18 @@ def main() -> None:
         "GEN_ART_V2_SILHOUETTE_ROSTER_PASS": v2_sil,
         "GEN_ART_V2_MATERIAL_READ_PASS": v2_mat,
         "GEN_ART_V2_ANIMATION_RETARGET_PASS": v2_retarget,
+        "GEN_ART_V3_HANDS_PASS": v3_hands,
+        "GEN_ART_V3_FEET_PASS": v3_feet,
+        "GEN_ART_V3_HEAD_DESIGN_PASS": v3_head,
+        "GEN_ART_V3_COSTUME_CRAFT_PASS": v3_costume,
+        "GEN_ART_V3_SILHOUETTE_PASS": v3_sil,
+        "GEN_ART_V3_MATERIAL_PASS": v3_mat,
+        "GEN_ART_V3_HERO_POSE_PASS": v3_hero,
+        "GEN_ART_V3_HEAVY_CONTACT_PASS": v3_heavy,
+        "GEN_ART_V3_HURT_POSE_PASS": v3_hurt,
+        "GEN_ART_V3_CHARGE_BODY_READ_PASS": v3_charge,
+        "GEN_ART_V3_SUPER_POSE_PASS": v3_super,
+        "GEN_ART_V3_DESIGN_SHEET_PASS": v3_sheet,
         "NO_OBVIOUS_BLOCKOUT_DEFECTS": no_blockout,
         "GENERATED_PRODUCTION_MODEL_ROSTER_PASS": model_pass,
         "GENERATED_PRODUCTION_RIG_ROSTER_PASS": model_pass,
@@ -116,12 +145,16 @@ def main() -> None:
         "deformation_renders_present": deform_ok,
         "exaggeration": exaggeration,
         "geometry_v2": geom,
+        "geometry_v3": geom3,
+        "silhouette_v3": sil3,
+        "hero_v3": hero3,
+        "quality_v3": quality3,
         "manifest_assets": len(manifest.get("assets", [])),
         "automated_only": True,
         "owner_visual_unanswered": True,
         "visual_quality_note": (
-            "v2 cohesive remesh roster. Automated geometry gates only. "
-            "Owner questions 1-12 unanswered. Not human-authored final art."
+            "v3 character-craft pass. Automated digital gates only. "
+            "Owner questions 1-12 unanswered. Not human-authored final art. Not merge authorized."
         ),
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)

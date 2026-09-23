@@ -12,17 +12,22 @@ Blender 3.3.1 (`/Applications/Blender.app/Contents/MacOS/Blender` or `BLENDER_BI
 
 ## Inputs
 
-- `tools/generated_production_art/profiles.py` — proportions, palettes, accessories, timing
+- `game-godot/data/art/generated_v3/fighter_shape_profiles.json` — versioned per-fighter shape control
+- `tools/generated_production_art/profiles.py` — palettes, timing, motion notes
+- `tools/generated_production_art/body_v3.py` — designed extremity and costume recipes
 - Canonical deform skeleton + sockets
 - Gameplay frame windows (animation late ≠ move hitboxes)
 
-## Mesh method
+## Mesh method (v3 character craft)
 
-1. Primitive-driven body parts (cubes, capsules, spheres) at rest-bone positions
-2. Fighter-specific costume pieces (gauntlets, scarf, rings, coat panels, crystals)
-3. Join to one production mesh
-4. Proximity/region vertex weights against deform + accessory bones
-5. Normalize weights; no third-party topology
+1. Primitive-driven **body core** at rest-bone positions (torso, limbs, connection stubs)
+2. Voxel remesh + smooth the core only so the body stays one cohesive island
+3. Attach designed (not remeshed) head shells, hands, boots, and costume plates
+4. Hands: palm block + thumb wedge + grouped fingers + knuckle + wrist cuff
+5. Boots: heel / toe / sole / ankle, fighter-specific silhouette
+6. Heads stay faceless/abstract with fighter-specific silhouette language
+7. Proximity/region vertex weights against deform + accessory bones
+8. Normalize weights; no third-party topology
 
 ## Materials
 

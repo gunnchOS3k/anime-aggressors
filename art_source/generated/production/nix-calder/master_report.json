@@ -2,13 +2,13 @@
   "fighter": "nix-calder",
   "status": "GENERATED_PRODUCTION_ART",
   "generator": "aa_generated_production_art",
-  "generator_version": "2.0.0",
-  "generator_revision": "cohesive_body_v2_remesh",
+  "generator_version": "3.0.0",
+  "generator_revision": "character_craft_v3",
   "blend": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/art_source/animation/fighters/nix-calder/source/nix-calder_production_master.blend",
   "glb": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/game-godot/content/fighters/nix-calder/model/nix-calder_generated_production.glb",
-  "triangles": 15251,
+  "triangles": 12941,
   "body_connected_components": 1,
-  "material_count": 9,
+  "material_count": 15,
   "bones": [
     "Root",
     "Hips",
@@ -174,81 +174,141 @@
   "action_count": 113,
   "geometry": {
     "fighter": "nix-calder",
-    "generator_revision": "cohesive_body_v2_remesh",
+    "generator_revision": "character_craft_v3",
     "body_connected_components": 1,
-    "triangles": 15251,
-    "body_triangles": 14987,
-    "material_count": 9,
+    "triangles": 12941,
+    "body_triangles": 11791,
+    "material_count": 15,
     "foot_ground_gap_m": 0.0,
     "weight": {
-      "vertex_count": 13304,
+      "vertex_count": 10473,
       "zero_weight_vertices": 0,
       "unnormalized_vertices": 0,
       "smooth_skinning": true
     },
     "accessories": [
       {
+        "name": "head_shell",
+        "classification": "BODY",
+        "parent_bone": "Head",
+        "distance_m": 0.0317,
+        "intentional_float": false,
+        "unintentional_floating": false,
+        "vertex_count": 48,
+        "designed": true
+      },
+      {
+        "name": "hand_L",
+        "classification": "BODY",
+        "parent_bone": "Hand_L",
+        "distance_m": 0.0991,
+        "intentional_float": false,
+        "unintentional_floating": false,
+        "vertex_count": 324,
+        "designed": true
+      },
+      {
+        "name": "boot_L",
+        "classification": "BODY",
+        "parent_bone": "Foot_L",
+        "distance_m": 0.0373,
+        "intentional_float": false,
+        "unintentional_floating": false,
+        "vertex_count": 136,
+        "designed": true
+      },
+      {
+        "name": "hand_R",
+        "classification": "BODY",
+        "parent_bone": "Hand_R",
+        "distance_m": 0.0991,
+        "intentional_float": false,
+        "unintentional_floating": false,
+        "vertex_count": 324,
+        "designed": true
+      },
+      {
+        "name": "boot_R",
+        "classification": "BODY",
+        "parent_bone": "Foot_R",
+        "distance_m": 0.0373,
+        "intentional_float": false,
+        "unintentional_floating": false,
+        "vertex_count": 136,
+        "designed": true
+      },
+      {
         "name": "crystal_core",
         "classification": "ARMOR",
         "parent_bone": "Chest",
-        "distance_m": 0.044,
+        "distance_m": 0.0512,
         "intentional_float": false,
-        "unintentional_floating": false
+        "unintentional_floating": false,
+        "vertex_count": 12,
+        "designed": true
+      },
+      {
+        "name": "chest_plate",
+        "classification": "ARMOR",
+        "parent_bone": "Chest",
+        "distance_m": 0.0952,
+        "intentional_float": false,
+        "unintentional_floating": false,
+        "vertex_count": 56,
+        "designed": true
       },
       {
         "name": "crystal_shoulder",
         "classification": "ARMOR",
         "parent_bone": "Shoulder_L",
-        "distance_m": 0.012,
+        "distance_m": 0.022,
         "intentional_float": false,
-        "unintentional_floating": false
+        "unintentional_floating": false,
+        "vertex_count": 12,
+        "designed": true
       },
       {
-        "name": "glove_plate_r",
+        "name": "forearm_plate_r",
         "classification": "ARMOR",
-        "parent_bone": "Hand_R",
-        "distance_m": 0.045,
+        "parent_bone": "LowerArm_R",
+        "distance_m": 0.0266,
         "intentional_float": false,
-        "unintentional_floating": false
+        "unintentional_floating": false,
+        "vertex_count": 56,
+        "designed": true
       },
       {
-        "name": "glove_plate_l",
+        "name": "forearm_plate_l",
         "classification": "ARMOR",
-        "parent_bone": "Hand_L",
-        "distance_m": 0.045,
+        "parent_bone": "LowerArm_L",
+        "distance_m": 0.0266,
         "intentional_float": false,
-        "unintentional_floating": false
+        "unintentional_floating": false,
+        "vertex_count": 56,
+        "designed": true
       }
     ],
     "unintentional_floating_accessories": 0,
-    "costume_meta": [
-      {
-        "name": "crystal_core",
-        "classification": "ARMOR",
-        "parent_bone": "Chest",
-        "intentional_float": false
-      },
-      {
-        "name": "crystal_shoulder",
-        "classification": "ARMOR",
-        "parent_bone": "Shoulder_L",
-        "intentional_float": false
-      },
-      {
-        "name": "glove_plate_r",
-        "classification": "ARMOR",
-        "parent_bone": "Hand_R",
-        "intentional_float": false
-      },
-      {
-        "name": "glove_plate_l",
-        "classification": "ARMOR",
-        "parent_bone": "Hand_L",
-        "intentional_float": false
-      }
+    "shape_profile": {
+      "head_style": "crystal_facet_mask",
+      "boot_style": "frost_geometric",
+      "hand_default": "guard",
+      "hand_scale": 1.18,
+      "hand_strength": 1.04,
+      "costume_profile": "crystal_control"
+    },
+    "designed_head": true,
+    "designed_hands": true,
+    "designed_boots": true,
+    "designed_costume": true,
+    "toon_bands": 3,
+    "hand_shapes": [
+      "neutral",
+      "fist",
+      "open"
     ]
   },
-  "recipe": "crystal_facet",
+  "recipe": "crystal_facet_mask",
   "human_authored": false,
   "future_human_replaceable": true,
   "blender": "3.3.1"

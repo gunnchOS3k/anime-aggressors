@@ -15,7 +15,9 @@
     "SETTLE": 0,
     "ANTICIPATION": 4,
     "CONTACT": 9,
+    "HITSTOP_HOLD": 11,
     "OVERSHOOT": 13,
+    "FOLLOW_THROUGH": 16,
     "RETURN": 23
   },
   "bone_tracks": {
@@ -25,7 +27,7 @@
         "time_s": 0.0,
         "rotation_rad": [
           0.004,
-          0.01,
+          0.17,
           0.0
         ]
       },
@@ -33,36 +35,54 @@
         "frame": 4,
         "time_s": 0.0667,
         "rotation_rad": [
-          -0.276,
-          0.13,
-          0.0
+          -0.0884,
+          0.401,
+          0.0336
         ]
       },
       {
         "frame": 9,
         "time_s": 0.15,
         "rotation_rad": [
-          -0.276,
-          0.13,
-          0.0
+          -0.216,
+          0.72,
+          0.08
+        ]
+      },
+      {
+        "frame": 11,
+        "time_s": 0.1833,
+        "rotation_rad": [
+          -0.216,
+          0.72,
+          0.08
         ]
       },
       {
         "frame": 13,
         "time_s": 0.2167,
         "rotation_rad": [
-          -0.396,
-          0.13,
-          0.0
+          -0.296,
+          0.72,
+          0.08
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
+        "rotation_rad": [
+          -0.1544,
+          0.566,
+          0.0576
         ]
       },
       {
         "frame": 23,
         "time_s": 0.3833,
         "rotation_rad": [
-          -0.164,
-          0.082,
-          0.0
+          -0.1236,
+          0.489,
+          0.0464
         ]
       }
     ],
@@ -80,36 +100,54 @@
         "frame": 4,
         "time_s": 0.0667,
         "rotation_rad": [
-          -0.578,
-          0.236,
-          0.004
+          -0.0224,
+          0.3184,
+          0.0544
         ]
       },
       {
         "frame": 9,
         "time_s": 0.15,
         "rotation_rad": [
-          -0.578,
-          0.236,
-          0.004
+          0.082,
+          0.736,
+          0.124
+        ]
+      },
+      {
+        "frame": 11,
+        "time_s": 0.1833,
+        "rotation_rad": [
+          0.082,
+          0.736,
+          0.124
         ]
       },
       {
         "frame": 13,
         "time_s": 0.2167,
         "rotation_rad": [
-          -0.578,
-          0.236,
-          0.004
+          0.082,
+          0.736,
+          0.124
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
+        "rotation_rad": [
+          0.0316,
+          0.5344,
+          0.0904
         ]
       },
       {
         "frame": 23,
         "time_s": 0.3833,
         "rotation_rad": [
-          -0.386,
-          0.148,
-          0.004
+          0.0064,
+          0.4336,
+          0.0736
         ]
       }
     ],
@@ -127,36 +165,54 @@
         "frame": 4,
         "time_s": 0.0667,
         "rotation_rad": [
-          -0.736,
-          0.3,
-          0.005
+          0.0016,
+          0.4064,
+          0.0638
         ]
       },
       {
         "frame": 9,
         "time_s": 0.15,
         "rotation_rad": [
-          0.314,
-          0.58,
-          0.005
+          0.164,
+          0.94,
+          0.145
+        ]
+      },
+      {
+        "frame": 11,
+        "time_s": 0.1833,
+        "rotation_rad": [
+          0.164,
+          0.94,
+          0.145
         ]
       },
       {
         "frame": 13,
         "time_s": 0.2167,
         "rotation_rad": [
-          0.314,
-          0.58,
-          0.005
+          0.164,
+          0.94,
+          0.145
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
+        "rotation_rad": [
+          0.0856,
+          0.6824,
+          0.1058
         ]
       },
       {
         "frame": 23,
         "time_s": 0.3833,
         "rotation_rad": [
-          0.142,
-          0.356,
-          0.005
+          0.0464,
+          0.5536,
+          0.0862
         ]
       }
     ],
@@ -189,8 +245,26 @@
         ]
       },
       {
+        "frame": 11,
+        "time_s": 0.1833,
+        "rotation_rad": [
+          0.06,
+          -0.004,
+          0.0
+        ]
+      },
+      {
         "frame": 13,
         "time_s": 0.2167,
+        "rotation_rad": [
+          0.06,
+          -0.004,
+          0.0
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
         "rotation_rad": [
           0.06,
           -0.004,
@@ -212,45 +286,63 @@
         "frame": 0,
         "time_s": 0.0,
         "rotation_rad": [
-          0.16,
-          -0.22,
-          0.08
+          0.36,
+          -0.5,
+          0.18
         ]
       },
       {
         "frame": 4,
         "time_s": 0.0667,
         "rotation_rad": [
-          -0.18,
-          -0.12,
-          0.08
+          0.4104,
+          -0.3236,
+          0.222
         ]
       },
       {
         "frame": 9,
         "time_s": 0.15,
         "rotation_rad": [
-          -0.4,
-          0.04,
-          0.08
+          0.48,
+          -0.08,
+          0.28
+        ]
+      },
+      {
+        "frame": 11,
+        "time_s": 0.1833,
+        "rotation_rad": [
+          0.48,
+          -0.08,
+          0.28
         ]
       },
       {
         "frame": 13,
         "time_s": 0.2167,
         "rotation_rad": [
-          -0.4,
-          0.04,
-          0.08
+          0.48,
+          -0.08,
+          0.28
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
+        "rotation_rad": [
+          0.4464,
+          -0.1976,
+          0.252
         ]
       },
       {
         "frame": 23,
         "time_s": 0.3833,
         "rotation_rad": [
-          -0.176,
-          -0.064,
-          0.08
+          0.4296,
+          -0.2564,
+          0.238
         ]
       }
     ],
@@ -283,8 +375,26 @@
         ]
       },
       {
+        "frame": 11,
+        "time_s": 0.1833,
+        "rotation_rad": [
+          0.04,
+          0.12,
+          -0.1
+        ]
+      },
+      {
         "frame": 13,
         "time_s": 0.2167,
+        "rotation_rad": [
+          0.04,
+          0.12,
+          -0.1
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
         "rotation_rad": [
           0.04,
           0.12,
@@ -306,45 +416,63 @@
         "frame": 0,
         "time_s": 0.0,
         "rotation_rad": [
-          -0.12,
-          0.64,
-          -0.42
+          -0.3,
+          1.36,
+          -0.9
         ]
       },
       {
         "frame": 4,
         "time_s": 0.0667,
         "rotation_rad": [
-          -1.04,
-          1.26,
-          -0.8
+          -0.1656,
+          1.129,
+          -1.0596
         ]
       },
       {
         "frame": 9,
         "time_s": 0.15,
         "rotation_rad": [
-          -1.04,
-          1.26,
-          -0.8
+          0.02,
+          0.81,
+          -1.28
+        ]
+      },
+      {
+        "frame": 11,
+        "time_s": 0.1833,
+        "rotation_rad": [
+          0.02,
+          0.81,
+          -1.28
         ]
       },
       {
         "frame": 13,
         "time_s": 0.2167,
         "rotation_rad": [
-          -1.04,
-          1.26,
-          -0.8
+          0.02,
+          0.81,
+          -1.28
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
+        "rotation_rad": [
+          -0.0696,
+          0.964,
+          -1.1736
         ]
       },
       {
         "frame": 23,
         "time_s": 0.3833,
         "rotation_rad": [
-          -0.672,
-          1.012,
-          -0.648
+          -0.1144,
+          1.041,
+          -1.1204
         ]
       }
     ],
@@ -353,45 +481,63 @@
         "frame": 0,
         "time_s": 0.0,
         "rotation_rad": [
-          0.16,
-          0.18,
-          -0.08
+          0.38,
+          0.36,
+          -0.2
         ]
       },
       {
         "frame": 4,
         "time_s": 0.0667,
         "rotation_rad": [
-          0.16,
-          0.18,
-          -0.08
+          0.38,
+          0.36,
+          -0.2
         ]
       },
       {
         "frame": 9,
         "time_s": 0.15,
         "rotation_rad": [
-          0.16,
-          0.18,
-          -0.08
+          0.38,
+          0.36,
+          -0.2
+        ]
+      },
+      {
+        "frame": 11,
+        "time_s": 0.1833,
+        "rotation_rad": [
+          0.38,
+          0.36,
+          -0.2
         ]
       },
       {
         "frame": 13,
         "time_s": 0.2167,
         "rotation_rad": [
-          0.16,
-          0.18,
-          -0.08
+          0.38,
+          0.36,
+          -0.2
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
+        "rotation_rad": [
+          0.38,
+          0.36,
+          -0.2
         ]
       },
       {
         "frame": 23,
         "time_s": 0.3833,
         "rotation_rad": [
-          0.16,
-          0.18,
-          -0.08
+          0.38,
+          0.36,
+          -0.2
         ]
       }
     ],
@@ -424,8 +570,26 @@
         ]
       },
       {
+        "frame": 11,
+        "time_s": 0.1833,
+        "rotation_rad": [
+          0.08,
+          0.06,
+          -0.12
+        ]
+      },
+      {
         "frame": 13,
         "time_s": 0.2167,
+        "rotation_rad": [
+          0.08,
+          0.06,
+          -0.12
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
         "rotation_rad": [
           0.08,
           0.06,
@@ -471,8 +635,26 @@
         ]
       },
       {
+        "frame": 11,
+        "time_s": 0.1833,
+        "rotation_rad": [
+          0.04,
+          -0.12,
+          0.1
+        ]
+      },
+      {
         "frame": 13,
         "time_s": 0.2167,
+        "rotation_rad": [
+          0.04,
+          -0.12,
+          0.1
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
         "rotation_rad": [
           0.04,
           -0.12,
@@ -494,45 +676,63 @@
         "frame": 0,
         "time_s": 0.0,
         "rotation_rad": [
-          0.08,
-          -0.72,
-          0.18
+          0.12,
+          -1.54,
+          0.3
         ]
       },
       {
         "frame": 4,
         "time_s": 0.0667,
         "rotation_rad": [
-          -0.97,
-          -1.14,
-          0.73
+          0.0276,
+          -0.9184,
+          0.4764
         ]
       },
       {
         "frame": 9,
         "time_s": 0.15,
         "rotation_rad": [
-          -0.25,
-          0.14,
-          1.28
+          -0.1,
+          -0.06,
+          0.72
+        ]
+      },
+      {
+        "frame": 11,
+        "time_s": 0.1833,
+        "rotation_rad": [
+          -0.1,
+          -0.06,
+          0.72
         ]
       },
       {
         "frame": 13,
         "time_s": 0.2167,
         "rotation_rad": [
-          -0.25,
-          0.14,
-          1.28
+          -0.1,
+          -0.06,
+          0.72
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
+        "rotation_rad": [
+          -0.0384,
+          -0.4744,
+          0.6024
         ]
       },
       {
         "frame": 23,
         "time_s": 0.3833,
         "rotation_rad": [
-          -0.118,
-          -0.204,
-          0.84
+          -0.0076,
+          -0.6816,
+          0.5436
         ]
       }
     ],
@@ -565,8 +765,26 @@
         ]
       },
       {
+        "frame": 11,
+        "time_s": 0.1833,
+        "rotation_rad": [
+          0.18,
+          -0.22,
+          0.1
+        ]
+      },
+      {
         "frame": 13,
         "time_s": 0.2167,
+        "rotation_rad": [
+          0.18,
+          -0.22,
+          0.1
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
         "rotation_rad": [
           0.18,
           -0.22,
@@ -612,8 +830,26 @@
         ]
       },
       {
+        "frame": 11,
+        "time_s": 0.1833,
+        "rotation_rad": [
+          0.1,
+          -0.08,
+          0.16
+        ]
+      },
+      {
         "frame": 13,
         "time_s": 0.2167,
+        "rotation_rad": [
+          0.1,
+          -0.08,
+          0.16
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
         "rotation_rad": [
           0.1,
           -0.08,
@@ -635,45 +871,63 @@
         "frame": 0,
         "time_s": 0.0,
         "rotation_rad": [
+          -0.04,
           0.06,
-          -0.02,
-          -0.264
+          -0.444
         ]
       },
       {
         "frame": 4,
         "time_s": 0.0667,
         "rotation_rad": [
-          -0.12,
-          -0.02,
-          -0.364
+          -0.1576,
+          0.0096,
+          -0.5196
         ]
       },
       {
         "frame": 9,
         "time_s": 0.15,
         "rotation_rad": [
-          -0.12,
-          -0.02,
-          -0.364
+          -0.32,
+          -0.06,
+          -0.624
+        ]
+      },
+      {
+        "frame": 11,
+        "time_s": 0.1833,
+        "rotation_rad": [
+          -0.32,
+          -0.06,
+          -0.624
         ]
       },
       {
         "frame": 13,
         "time_s": 0.2167,
         "rotation_rad": [
-          -0.12,
-          -0.02,
-          -0.364
+          -0.32,
+          -0.06,
+          -0.624
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
+        "rotation_rad": [
+          -0.2416,
+          -0.0264,
+          -0.5736
         ]
       },
       {
         "frame": 23,
         "time_s": 0.3833,
         "rotation_rad": [
-          -0.048,
-          -0.02,
-          -0.324
+          -0.2024,
+          -0.0096,
+          -0.5484
         ]
       }
     ],
@@ -706,8 +960,26 @@
         ]
       },
       {
+        "frame": 11,
+        "time_s": 0.1833,
+        "rotation_rad": [
+          0.1,
+          0.0,
+          -0.03
+        ]
+      },
+      {
         "frame": 13,
         "time_s": 0.2167,
+        "rotation_rad": [
+          0.1,
+          0.0,
+          -0.03
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
         "rotation_rad": [
           0.1,
           0.0,
@@ -753,8 +1025,26 @@
         ]
       },
       {
+        "frame": 11,
+        "time_s": 0.1833,
+        "rotation_rad": [
+          -0.04,
+          -0.02,
+          -0.02
+        ]
+      },
+      {
         "frame": 13,
         "time_s": 0.2167,
+        "rotation_rad": [
+          -0.04,
+          -0.02,
+          -0.02
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
         "rotation_rad": [
           -0.04,
           -0.02,
@@ -800,8 +1090,26 @@
         ]
       },
       {
+        "frame": 11,
+        "time_s": 0.1833,
+        "rotation_rad": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
         "frame": 13,
         "time_s": 0.2167,
+        "rotation_rad": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
         "rotation_rad": [
           0.0,
           0.0,
@@ -832,36 +1140,54 @@
         "frame": 4,
         "time_s": 0.0667,
         "rotation_rad": [
-          0.352,
+          0.132,
           0.04,
-          0.372
+          0.252
         ]
       },
       {
         "frame": 9,
         "time_s": 0.15,
         "rotation_rad": [
-          0.352,
+          0.132,
           0.04,
-          0.372
+          0.252
+        ]
+      },
+      {
+        "frame": 11,
+        "time_s": 0.1833,
+        "rotation_rad": [
+          0.132,
+          0.04,
+          0.252
         ]
       },
       {
         "frame": 13,
         "time_s": 0.2167,
         "rotation_rad": [
-          0.352,
+          0.132,
           0.04,
-          0.372
+          0.252
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
+        "rotation_rad": [
+          0.132,
+          0.04,
+          0.252
         ]
       },
       {
         "frame": 23,
         "time_s": 0.3833,
         "rotation_rad": [
-          0.264,
+          0.132,
           0.04,
-          0.324
+          0.252
         ]
       }
     ],
@@ -894,8 +1220,26 @@
         ]
       },
       {
+        "frame": 11,
+        "time_s": 0.1833,
+        "rotation_rad": [
+          0.144,
+          0.0,
+          0.03
+        ]
+      },
+      {
         "frame": 13,
         "time_s": 0.2167,
+        "rotation_rad": [
+          0.144,
+          0.0,
+          0.03
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
         "rotation_rad": [
           0.144,
           0.0,
@@ -941,8 +1285,26 @@
         ]
       },
       {
+        "frame": 11,
+        "time_s": 0.1833,
+        "rotation_rad": [
+          -0.06,
+          0.04,
+          0.02
+        ]
+      },
+      {
         "frame": 13,
         "time_s": 0.2167,
+        "rotation_rad": [
+          -0.06,
+          0.04,
+          0.02
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
         "rotation_rad": [
           -0.06,
           0.04,
@@ -988,8 +1350,26 @@
         ]
       },
       {
+        "frame": 11,
+        "time_s": 0.1833,
+        "rotation_rad": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
         "frame": 13,
         "time_s": 0.2167,
+        "rotation_rad": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
         "rotation_rad": [
           0.0,
           0.0,
@@ -1009,11 +1389,11 @@
   },
   "location_tracks": {},
   "exaggeration": {
-    "pelvis_rotation": 0.3046,
-    "chest_rotation": 0.706,
-    "arm_travel": 1.4347,
-    "head_reaction": 0.6174,
-    "silhouette_delta": 5.2201
+    "pelvis_rotation": 0.5977,
+    "chest_rotation": 0.9718,
+    "arm_travel": 1.5541,
+    "head_reaction": 0.4481,
+    "silhouette_delta": 5.4185
   },
   "identity": {
     "element": "volt",
@@ -1042,6 +1422,20 @@
         "tier": "wave_a",
         "socket": "hand_r"
       }
+    },
+    {
+      "frame": 11,
+      "event_type": "hitstop_hold",
+      "payload": {
+        "visual_only": true
+      }
+    },
+    {
+      "frame": 16,
+      "event_type": "follow_through",
+      "payload": {
+        "element": "volt"
+      }
     }
   ],
   "provenance": {
@@ -1049,11 +1443,11 @@
     "fighter_id": "juno-spark",
     "category": "animation",
     "generator": "aa_generated_production_art",
-    "generator_version": "2.0.0",
+    "generator_version": "3.0.0",
     "source_master": "art_source/animation/fighters/juno-spark/source/juno-spark_production_master.blend",
     "input_profile": "juno-spark",
     "status": "GENERATED_PRODUCTION_ANIMATION",
     "future_human_replaceable": true
   },
-  "curve_signature": "3aa806170b300f53dfed6e99f0424cd52c243bd2c5296c91f099d8b886d1b69a"
+  "curve_signature": "1728c40296ca90e02ce6ecb5abeb0b32b96e249c651b5fcdcffd254d5dacea35"
 }

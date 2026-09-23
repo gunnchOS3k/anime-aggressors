@@ -2,12 +2,20 @@
 
 Generated production art ships now. Human replacement stays contract-compatible.
 
+Generated v3 design sheets are starting references, not mandatory final designs:
+
+`artifacts/vxp3/review/generated_art_v3/design_sheets/<fighter>/`
+
+Preserve combat identity and silhouette intent. Improve craft/finish.
+
 ## v1.x (this cycle)
 
 - Generated production meshes, materials, rigs, animation, VFX, and audio ship
+- v3 character-craft pass: designed heads/hands/feet/costume on cohesive bodies
 - Defects repaired in the generator
 - No wholesale redesign required
 - Owner visual/feel gates remain human answers
+- Design sheets are generated references for later internal/external artists
 
 ## v1.1 / v1.2 or later
 

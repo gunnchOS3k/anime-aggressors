@@ -490,11 +490,38 @@ def phase_times(action: str, frames: int, p: FighterProfile) -> dict[str, int]:
 
 
 def poses_for_action(fid: str, action: str) -> dict[str, Pose]:
-    idle = identity_idle(fid)
+    from .hero_poses_v3 import (  # noqa: WPS433 — avoid import cycle at module load
+        charge_100_v3,
+        heavy_sequence_v3,
+        hurt_heavy_sequence_v3,
+        idle_v3,
+        super_sequence_v3,
+        walk_sequence_v3,
+    )
+
+    idle = idle_v3(fid)
     if action in {"heavy", "smash_forward"}:
-        return heavy_sequence(fid)
+        return heavy_sequence_v3(fid)
     if action in {"hurt_heavy", "hurt_heavy_front", "hurt_stagger"}:
-        return hurt_heavy_sequence(fid)
+        return hurt_heavy_sequence_v3(fid)
+    if action == "idle":
+        return {"SETTLE": idle, "CONTACT": idle, "RETURN": idle}
+    if action in {"walk"}:
+        return walk_sequence_v3(fid)
+    if action in {"aura_burst_super_pose", "signature_lane_finisher", "super"}:
+        return super_sequence_v3(fid)
+    if action in {"charged_idle", "charge_full"}:
+        charged = charge_100_v3(fid)
+        return {
+            "SETTLE": idle,
+            "ANTICIPATION": mix(idle, charged, 0.55),
+            "CONTACT": charged,
+            "FOLLOW_THROUGH": charged,
+            "RETURN": charged,
+        }
+    if action == "charge_start":
+        charged = charge_100_v3(fid)
+        return {"SETTLE": idle, "CONTACT": mix(idle, charged, 0.45), "RETURN": mix(idle, charged, 0.55)}
     if action == "hurt_heavy_back":
         seq = hurt_heavy_sequence(fid)
         return {k: add(v, {"Spine": _e(-0.22, 0.0, 0.0), "Chest": _e(-0.28, 0.0, 0.0)}) for k, v in seq.items()}

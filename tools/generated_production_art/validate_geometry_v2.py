@@ -42,7 +42,12 @@ def evaluate_fighter(fid: str, report: dict) -> dict:
     if geom.get("unintentional_floating_accessories") is not None:
         unintentional = int(geom["unintentional_floating_accessories"])
     rec = recipe(fid)
-    required = {spec.name for spec in rec.accessories}
+    try:
+        from .body_v3 import recipe as recipe_v3
+
+        required = {spec.name for spec in recipe_v3(fid).accessories}
+    except Exception:
+        required = {spec.name for spec in rec.accessories}
     present = {row.get("name") for row in accessories}
     missing = sorted(required - present)
     hand_wrist = 0.0
