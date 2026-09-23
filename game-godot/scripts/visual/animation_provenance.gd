@@ -5,10 +5,11 @@ class_name AnimationProvenance
 
 const AUTHORED_APPROVED := "AUTHORED_APPROVED"
 const AUTHORED_WIP := "AUTHORED_WIP"
+const GENERATED_PRODUCTION := "GENERATED_PRODUCTION_ANIMATION"
 const PROCEDURAL_FALLBACK := "PROCEDURAL_FALLBACK"
 const MISSING := "MISSING"
 
-const LABELS := [AUTHORED_APPROVED, AUTHORED_WIP, PROCEDURAL_FALLBACK, MISSING]
+const LABELS := [AUTHORED_APPROVED, AUTHORED_WIP, GENERATED_PRODUCTION, PROCEDURAL_FALLBACK, MISSING]
 
 static var _roster: Dictionary = {}
 static var _loaded := false
@@ -45,6 +46,9 @@ static func status_for(fighter_id: String, clip: String) -> String:
 			return str(row.get("status", PROCEDURAL_FALLBACK))
 	if clip.is_empty():
 		return MISSING
+	var generated := "res://content/fighters/%s/animations/generated_production/%s.anim.json" % [fighter_id, clip]
+	if FileAccess.file_exists(generated):
+		return GENERATED_PRODUCTION
 	return PROCEDURAL_FALLBACK
 
 
@@ -57,7 +61,7 @@ static func label_ok(label: String) -> bool:
 
 
 static func automation_may_write(label: String) -> bool:
-	return label in [AUTHORED_WIP, PROCEDURAL_FALLBACK, MISSING]
+	return label in [AUTHORED_WIP, GENERATED_PRODUCTION, PROCEDURAL_FALLBACK, MISSING]
 
 
 static func debug_line(fighter_id: String, clip: String) -> String:

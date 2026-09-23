@@ -39,7 +39,10 @@ static func mix(a_id: String, b_id: String, winner: String) -> Dictionary:
 		"b": b_id,
 		"winner": winner,
 		"layers": cues,
+		"bed": "res://assets/audio/generated_production/shared/clash_bed.wav",
+		"resolution": "res://assets/audio/generated_production/shared/clash_resolution.wav",
 		"silent": reduce,
 		"loops_stop_on_recover": true,
 		"HUMAN_AURA_CLASH_PASS": false,
+		"status": "GENERATED_PRODUCTION_AUDIO",
 	}

@@ -6,6 +6,8 @@ class_name ProceduralAudioBank
 const SHARED_ROOT := "res://assets/audio/procedural/shared"
 const FIGHTER_ROOT := "res://assets/audio/procedural/fighters"
 const STAGE_ROOT := "res://assets/audio/procedural/stages"
+const GENERATED_SHARED := "res://assets/audio/generated_production/shared"
+const GENERATED_FIGHTER := "res://assets/audio/generated_production/fighters"
 
 const SHARED_CATS: Array[String] = [
 	"hit", "move", "charge", "projectile", "defense", "ko",
@@ -57,10 +59,25 @@ static func load_stream(path: String) -> AudioStream:
 
 
 static func shared_path(category: String) -> String:
+	var generated := "%s/%s.wav" % [GENERATED_SHARED, category]
+	if ResourceLoader.exists(generated) or FileAccess.file_exists(generated):
+		return generated
+	var aliases := {
+		"hit": "hit_medium",
+		"move": "whoosh",
+		"charge": "charge_mid",
+	}
+	var mapped := str(aliases.get(category, category))
+	var generated_mapped := "%s/%s.wav" % [GENERATED_SHARED, mapped]
+	if ResourceLoader.exists(generated_mapped) or FileAccess.file_exists(generated_mapped):
+		return generated_mapped
 	return "%s/%s.wav" % [SHARED_ROOT, category]
 
 
 static func fighter_path(fighter_id: String, category: String) -> String:
+	var generated := "%s/%s/%s.wav" % [GENERATED_FIGHTER, fighter_id, category]
+	if ResourceLoader.exists(generated) or FileAccess.file_exists(generated):
+		return generated
 	return "%s/%s/%s.wav" % [FIGHTER_ROOT, fighter_id, category]
 
 

@@ -180,8 +180,11 @@ func _load_procedural_clips(model_root: Node3D) -> void:
 	dir.list_dir_end()
 	if lib.get_animation_list().size() > 0:
 		_player.add_animation_library("", lib)
+	var generated_source := str(info.get("source", "")) == _AssetResolver.STATUS_GENERATED_ANIM
 	for clip_name in _loaded_clips.keys():
-		_clip_provenance[clip_name] = _Provenance.PROCEDURAL_FALLBACK
+		_clip_provenance[clip_name] = _Provenance.GENERATED_PRODUCTION if generated_source else _Provenance.PROCEDURAL_FALLBACK
+	if generated_source:
+		_fill_missing_from_procedural(lib)
 
 
 func _load_authored_proof() -> void:
@@ -218,7 +221,45 @@ func _animation_from_json(path: String) -> Animation:
 			var rot: Array = key.get("rotation_rad", [0.0, 0.0, 0.0])
 			var quat := Quaternion.from_euler(Vector3(float(rot[0]), float(rot[1]), float(rot[2])))
 			anim.track_insert_key(track_idx, float(key.get("time_s", 0.0)), quat)
+	var loc_tracks: Dictionary = data.get("location_tracks", {})
+	for bone in loc_tracks.keys():
+		if str(bone) == "Root":
+			continue
+		var keys: Array = loc_tracks[bone]
+		if keys.is_empty():
+			continue
+		var glb_bone := _BoneMap.resolve_on_skeleton(_skeleton, str(bone))
+		if glb_bone.is_empty():
+			continue
+		var track_idx := anim.add_track(Animation.TYPE_POSITION_3D)
+		anim.track_set_path(track_idx, NodePath("%s:%s" % [_skeleton_path, glb_bone]))
+		for key in keys:
+			var loc: Array = key.get("location_m", [0.0, 0.0, 0.0])
+			anim.track_insert_key(track_idx, float(key.get("time_s", 0.0)), Vector3(float(loc[0]), float(loc[1]), float(loc[2])))
 	return anim
+
+
+func _fill_missing_from_procedural(lib: AnimationLibrary) -> void:
+	var fallback := "res://content/fighters/%s/animations/procedural" % _fighter_id
+	var abs_root := ProjectSettings.globalize_path(fallback)
+	if not DirAccess.dir_exists_absolute(abs_root):
+		return
+	var dir := DirAccess.open(abs_root)
+	if dir == null:
+		return
+	dir.list_dir_begin()
+	var file_name := dir.get_next()
+	while file_name != "":
+		if file_name.ends_with(".anim.json") and not dir.current_is_dir():
+			var clip_name := file_name.replace(".anim.json", "")
+			if not _loaded_clips.has(clip_name):
+				var anim := _animation_from_json(abs_root.path_join(file_name))
+				if anim:
+					lib.add_animation(clip_name, anim)
+					_loaded_clips[clip_name] = true
+					_clip_provenance[clip_name] = _Provenance.PROCEDURAL_FALLBACK
+		file_name = dir.get_next()
+	dir.list_dir_end()
 
 
 func _find_skeleton(node: Node) -> Skeleton3D:
