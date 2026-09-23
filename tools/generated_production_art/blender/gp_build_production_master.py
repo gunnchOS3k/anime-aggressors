@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import json
-import math
 import sys
 from pathlib import Path
 
@@ -11,18 +10,23 @@ from mathutils import Vector
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
+sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(HERE.parent.parent))
 
 from generated_production_art.action_catalog import all_actions, duration_for  # noqa: E402
+from generated_production_art.body_v2 import recipe  # noqa: E402
 from generated_production_art.common import (  # noqa: E402
     CANONICAL_BONES,
     GENERATOR,
+    GENERATOR_REVISION,
     GENERATOR_VERSION,
     generated_model_glb,
     production_master_blend,
 )
 from generated_production_art.pose_library import locations_for, phase_times, poses_for_action  # noqa: E402
 from generated_production_art.profiles import profile  # noqa: E402
+
+from gp_body_v2 import _toon_mat, _assign, build_cohesive_fighter  # noqa: E402
 
 PARENT = {
     "Root": None,
@@ -75,13 +79,32 @@ REST = {
 }
 
 ACCESSORIES = {
-    "ember-vale": (("Cloth_Flame_R", "Hand_R", (0.08, 0.0, 0.0)), ("Cloth_Flame_L", "Hand_L", (-0.08, 0.0, 0.0))),
-    "rook-ironside": (("Cloth_ArmorFlap", "Chest", (0.0, -0.12, -0.08)),),
-    "juno-spark": (("Cloth_VoltTag", "Chest", (0.10, 0.08, 0.04)),),
-    "kaia-windrow": (("Cloth_Scarf", "Neck", (0.0, -0.18, 0.02)), ("Hair_Ribbon", "Head", (0.0, -0.16, 0.08))),
-    "nix-calder": (("Cloth_Crystal", "Chest", (0.0, 0.10, 0.06)),),
-    "orion-vell": (("Cloth_Orbit", "Chest", (0.0, 0.0, 0.16)),),
-    "vesper-nyx": (("Coat_Panel_L", "Chest", (0.16, -0.18, -0.04)), ("Coat_Panel_R", "Chest", (-0.10, -0.12, -0.02))),
+    "ember-vale": (("Cloth_Flame_R", "Hand_R", (0.04, 0.02, 0.01)), ("Cloth_Flame_L", "Hand_L", (-0.04, 0.02, 0.01))),
+    "rook-ironside": (("Cloth_ArmorFlap", "Chest", (0.0, -0.08, -0.04)),),
+    "juno-spark": (("Cloth_VoltTag", "Chest", (0.07, 0.06, 0.02)),),
+    "kaia-windrow": (("Cloth_Scarf", "Neck", (0.0, -0.10, -0.02)), ("Hair_Ribbon", "Head", (0.04, -0.10, 0.0))),
+    "nix-calder": (("Cloth_Crystal", "Chest", (0.0, 0.08, 0.02)),),
+    "orion-vell": (("Cloth_Orbit", "Chest", (0.0, 0.0, 0.08)),),
+    "vesper-nyx": (("Coat_Panel_L", "Hips", (0.10, -0.08, 0.04)), ("Coat_Panel_R", "Hips", (-0.07, -0.06, 0.04))),
+}
+
+SOCKETS = {
+    "hand_l": "Hand_L",
+    "hand_r": "Hand_R",
+    "foot_l": "Foot_L",
+    "foot_r": "Foot_R",
+    "chest": "Chest",
+    "head": "Head",
+    "back": "Chest",
+    "projectile_origin": "Hand_R",
+    "aura_root": "Hips",
+}
+
+TWIST = {
+    "TwistArm_L": ("UpperArm_L", "LowerArm_L"),
+    "TwistArm_R": ("UpperArm_R", "LowerArm_R"),
+    "TwistLeg_L": ("UpperLeg_L", "LowerLeg_L"),
+    "TwistLeg_R": ("UpperLeg_R", "LowerLeg_R"),
 }
 
 
@@ -118,46 +141,6 @@ def _link(col, obj) -> None:
         bpy.context.scene.collection.objects.unlink(obj)
 
 
-def _mat(name: str, color, emit=0.0, metallic=0.0, rough=0.62):
-    mat = bpy.data.materials.new(name)
-    mat.use_nodes = True
-    nt = mat.node_tree
-    bsdf = nt.nodes.get("Principled BSDF")
-    if bsdf:
-        bsdf.inputs["Base Color"].default_value = (color[0], color[1], color[2], 1.0)
-        if "Roughness" in bsdf.inputs:
-            bsdf.inputs["Roughness"].default_value = rough
-        if "Metallic" in bsdf.inputs:
-            bsdf.inputs["Metallic"].default_value = metallic
-        if "Emission" in bsdf.inputs:
-            bsdf.inputs["Emission"].default_value = (color[0], color[1], color[2], 1.0)
-        if "Emission Strength" in bsdf.inputs:
-            bsdf.inputs["Emission Strength"].default_value = emit
-    mat.diffuse_color = (color[0], color[1], color[2], 1.0)
-    return mat
-
-
-def _prim(kind: str, loc, scale, name: str):
-    if kind == "cube":
-        bpy.ops.mesh.primitive_cube_add(size=1.0, location=loc)
-    elif kind == "sphere":
-        bpy.ops.mesh.primitive_uv_sphere_add(radius=0.5, location=loc, segments=16, ring_count=10)
-    else:
-        bpy.ops.mesh.primitive_cylinder_add(radius=0.5, depth=1.0, location=loc, vertices=12)
-    obj = bpy.context.active_object
-    obj.name = name
-    obj.scale = scale
-    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
-    return obj
-
-
-def _assign_mat(obj, mat) -> None:
-    if obj.data.materials:
-        obj.data.materials[0] = mat
-    else:
-        obj.data.materials.append(mat)
-
-
 def build_armature(fid: str, p):
     arm = bpy.data.armatures.new(f"{fid}.skeleton")
     obj = bpy.data.objects.new(f"{fid}.skeleton", arm)
@@ -178,107 +161,62 @@ def build_armature(fid: str, p):
         if parent:
             created[name].parent = created[parent]
     extra = []
+    for twist_name, (parent_name, child_name) in TWIST.items():
+        parent_eb = created[parent_name]
+        child_eb = created[child_name]
+        eb = arm.edit_bones.new(twist_name)
+        mid_head = (Vector(parent_eb.head) + Vector(parent_eb.tail)) * 0.5
+        eb.head = mid_head
+        eb.tail = Vector(parent_eb.tail)
+        if (eb.tail - eb.head).length < 0.04:
+            eb.tail = Vector(child_eb.head)
+        eb.use_deform = True
+        eb.parent = parent_eb
+        created[twist_name] = eb
+        extra.append(twist_name)
     for acc_name, parent, offset in ACCESSORIES[fid]:
         parent_eb = created[parent]
         eb = arm.edit_bones.new(acc_name)
         base = Vector(parent_eb.tail)
         off = Vector(offset)
         eb.head = base + off
-        eb.tail = base + off + Vector((0.0, -0.12, -0.04))
+        eb.tail = base + off + Vector((0.0, -0.08, -0.02))
         eb.use_deform = True
         eb.parent = parent_eb
         extra.append(acc_name)
     bpy.ops.object.mode_set(mode="OBJECT")
+    bpy.ops.object.mode_set(mode="POSE")
+    for twist_name, (parent_name, child_name) in TWIST.items():
+        pb = obj.pose.bones.get(twist_name)
+        if pb is None:
+            continue
+        con = pb.constraints.new("COPY_ROTATION")
+        con.target = obj
+        con.subtarget = child_name
+        con.use_x = False
+        con.use_y = True
+        con.use_z = False
+        con.mix_mode = "BEFORE"
+        con.influence = 0.45
+        con.target_space = "LOCAL"
+        con.owner_space = "LOCAL"
+    bpy.ops.object.mode_set(mode="OBJECT")
     return obj, extra
 
 
-def build_mesh(fid: str, p, arm_obj):
-    sx, sy, sz = p.body_scale
-    tw = p.torso_width
-    skin = _mat(f"{fid}.mat.skin", p.skin, 0.02, 0.0, 0.55)
-    cloth = _mat(f"{fid}.mat.cloth", p.primary, 0.04, 0.05, 0.68)
-    accent = _mat(f"{fid}.mat.accent", p.accent, 0.35, 0.15, 0.42)
-    hair_m = _mat(f"{fid}.mat.hair", p.hair, 0.08, 0.0, 0.5)
-    dark = _mat(f"{fid}.mat.secondary", p.secondary, 0.02, 0.12, 0.7)
-    parts = []
-
-    def add(kind, loc, scale, name, mat, bone):
-        obj = _prim(kind, loc, scale, name)
-        _assign_mat(obj, mat)
-        vg = obj.vertex_groups.new(name=bone)
-        vg.add([v.index for v in obj.data.vertices], 1.0, "REPLACE")
-        parts.append(obj)
-        return obj
-
-    add("cube", (0.0, 0.02 * p.lean, 0.96 * sz), (0.18 * tw, 0.14, 0.12 * sz), "hips", cloth, "Hips")
-    add("cube", (0.0, 0.03 * p.lean, 1.12 * sz), (0.20 * tw, 0.14, 0.18 * sz), "waist", cloth, "Spine")
-    add("cube", (0.0, 0.04 * p.lean, 1.30 * sz), (0.24 * tw, 0.16, 0.22 * sz), "chest", cloth, "Chest")
-    add("sphere", (0.0, 0.04, 1.62 * sz), (0.15 * p.head_scale, 0.16 * p.head_scale, 0.16 * p.head_scale), "head", skin, "Head")
-    add("cube", (0.0, 0.02, 1.48 * sz), (0.08, 0.08, 0.08), "neck", skin, "Neck")
-    add("cube", (0.0, 0.03, 1.72 * sz), (0.16 * p.head_scale, 0.18 * p.head_scale, 0.11), "hair", hair_m, "Head")
-    add("sphere", (0.04, 0.12, 1.64 * sz), (0.025, 0.018, 0.018), "eye_l", dark, "Head")
-    add("sphere", (-0.04, 0.12, 1.64 * sz), (0.025, 0.018, 0.018), "eye_r", dark, "Head")
-    for side, sgn in (("L", 1.0), ("R", -1.0)):
-        add("cube", (0.20 * sx * sgn, 0.0, 1.36 * sz), (0.09, 0.08, 0.07), f"shoulder_{side}", cloth, f"Shoulder_{side}")
-        add("cylinder", (0.28 * sx * sgn, 0.0, 1.24 * sz), (0.06, 0.06, 0.28 * sz), f"upper_arm_{side}", skin, f"UpperArm_{side}")
-        add("cylinder", (0.44 * sx * sgn, 0.0, 1.04 * sz), (0.05, 0.05, 0.24 * sz), f"lower_arm_{side}", skin, f"LowerArm_{side}")
-        add("cube", (0.58 * sx * sgn, 0.02, 0.92 * sz), (0.09 * p.hand_scale, 0.07 * p.hand_scale, 0.06), f"hand_{side}", accent, f"Hand_{side}")
-        add("cylinder", (0.11 * sx * sgn, 0.0, 0.70 * sz), (0.08 * tw, 0.08, 0.40 * sz), f"upper_leg_{side}", dark, f"UpperLeg_{side}")
-        add("cylinder", (0.11 * sx * sgn, 0.0, 0.32 * sz), (0.06, 0.06, 0.34 * sz), f"lower_leg_{side}", dark, f"LowerLeg_{side}")
-        add("cube", (0.11 * sx * sgn, 0.09, 0.05), (0.10 * p.foot_scale, 0.18 * p.foot_scale, 0.07), f"foot_{side}", accent, f"Foot_{side}")
-    # Costume silhouettes.
-    if fid == "ember-vale":
-        add("cube", (0.0, 0.12, 1.28 * sz), (0.12, 0.05, 0.18), "vent", accent, "Chest")
-        add("cube", (0.60 * sx, 0.0, 0.92 * sz), (0.12, 0.09, 0.08), "gauntlet_r", accent, "Hand_R")
-        add("cube", (-0.60 * sx, 0.0, 0.92 * sz), (0.12, 0.09, 0.08), "gauntlet_l", accent, "Hand_L")
-    elif fid == "rook-ironside":
-        add("cube", (0.0, 0.14, 1.32 * sz), (0.30, 0.09, 0.24), "plating", dark, "Chest")
-        add("cube", (0.0, -0.14, 1.18 * sz), (0.22, 0.07, 0.20), "backplate", dark, "Cloth_ArmorFlap")
-        add("cube", (0.13 * sx, 0.12, 0.06), (0.13, 0.22, 0.09), "boot_r", accent, "Foot_R")
-        add("cube", (-0.13 * sx, 0.12, 0.06), (0.13, 0.22, 0.09), "boot_l", accent, "Foot_L")
-    elif fid == "juno-spark":
-        add("cube", (0.16, 0.08, 1.34 * sz), (0.05, 0.13, 0.20), "panel_a", accent, "Cloth_VoltTag")
-        add("cube", (-0.10, -0.06, 1.20 * sz), (0.04, 0.11, 0.16), "panel_b", accent, "Chest")
-        add("cube", (0.0, 0.16, 1.74 * sz), (0.05, 0.12, 0.05), "hair_spike", hair_m, "Head")
-    elif fid == "kaia-windrow":
-        add("cube", (0.0, -0.22, 1.36 * sz), (0.06, 0.32, 0.09), "scarf", accent, "Cloth_Scarf")
-        add("cube", (0.16, -0.24, 1.18 * sz), (0.05, 0.26, 0.05), "ribbon", accent, "Hair_Ribbon")
-        add("cube", (-0.12, 0.12, 1.42 * sz), (0.18, 0.04, 0.09), "airfoil", accent, "Chest")
-    elif fid == "nix-calder":
-        add("cube", (0.0, 0.14, 1.36 * sz), (0.11, 0.07, 0.11), "crystal", accent, "Cloth_Crystal")
-        add("cube", (0.08, 0.12, 1.48 * sz), (0.06, 0.06, 0.09), "crystal_b", accent, "Chest")
-        add("cube", (0.58 * sx, 0.0, 0.92 * sz), (0.11, 0.08, 0.08), "glove_r", accent, "Hand_R")
-    elif fid == "orion-vell":
-        bpy.ops.mesh.primitive_torus_add(location=(0.0, 0.0, 1.34 * sz), major_radius=0.30, minor_radius=0.02)
-        ring = bpy.context.active_object
-        ring.name = "orbit_ring"
-        _assign_mat(ring, accent)
-        vg = ring.vertex_groups.new(name="Cloth_Orbit")
-        vg.add([v.index for v in ring.data.vertices], 1.0, "REPLACE")
-        parts.append(ring)
-        add("cube", (0.0, 0.0, 1.22 * sz), (0.22, 0.17, 0.05), "layer", dark, "Chest")
-    elif fid == "vesper-nyx":
-        add("cube", (0.18, -0.18, 1.20 * sz), (0.12, 0.24, 0.32), "coat_l", dark, "Coat_Panel_L")
-        add("cube", (-0.08, -0.12, 1.26 * sz), (0.08, 0.16, 0.20), "coat_r", dark, "Coat_Panel_R")
-        add("cube", (0.10, 0.08, 1.74 * sz), (0.14, 0.12, 0.09), "hood", hair_m, "Head")
-
-    bpy.ops.object.select_all(action="DESELECT")
-    for part in parts:
-        part.select_set(True)
-    bpy.context.view_layer.objects.active = parts[0]
-    bpy.ops.object.join()
-    body = bpy.context.active_object
-    body.name = f"{fid}.mesh"
-    _armature_mod(body, arm_obj)
-    body.parent = arm_obj
-    return body
-
-
-def _armature_mod(mesh_obj, arm_obj) -> None:
-    bpy.context.view_layer.objects.active = mesh_obj
-    mod = mesh_obj.modifiers.new("AA_Armature", "ARMATURE")
-    mod.object = arm_obj
-    mod.use_vertex_groups = True
+def add_sockets(arm_obj) -> list[str]:
+    names = []
+    for sock, parent in SOCKETS.items():
+        empty = bpy.data.objects.new(f"socket_{sock}", None)
+        empty.empty_display_type = "PLAIN_AXES"
+        empty.empty_display_size = 0.04
+        bpy.context.collection.objects.link(empty)
+        empty.parent = arm_obj
+        empty.parent_type = "BONE"
+        empty.parent_bone = parent
+        empty.location = (0.0, 0.0, 0.0)
+        names.append(empty.name)
+    return names
 
 
 def apply_animations(fid: str, arm_obj) -> list[str]:
@@ -330,7 +268,7 @@ def export_glb(path: Path) -> None:
         export_nla_strips=True,
         export_skins=True,
         export_morph=False,
-        export_apply=True,
+        export_apply=False,
         export_yup=True,
         export_cameras=False,
         export_lights=False,
@@ -340,6 +278,16 @@ def export_glb(path: Path) -> None:
 
 
 def setup_review_camera() -> None:
+    world = bpy.data.worlds.new("AA_World")
+    world.use_nodes = True
+    bg = world.node_tree.nodes.get("Background")
+    if bg:
+        bg.inputs[0].default_value = (0.03, 0.03, 0.035, 1.0)
+        bg.inputs[1].default_value = 0.35
+    bpy.context.scene.world = world
+    if hasattr(bpy.context.scene, "eevee"):
+        bpy.context.scene.eevee.use_bloom = True
+        bpy.context.scene.eevee.bloom_intensity = 0.12
     cam_data = bpy.data.cameras.new("AA_ReviewCam")
     cam_data.lens = 50
     cam = bpy.data.objects.new("AA_ReviewCam", cam_data)
@@ -348,24 +296,24 @@ def setup_review_camera() -> None:
     bpy.context.collection.objects.link(cam)
     bpy.context.scene.camera = cam
     key = bpy.data.lights.new("AA_Key", "AREA")
-    key.energy = 500
+    key.energy = 620
     key_obj = bpy.data.objects.new("AA_Key", key)
     key_obj.location = (1.6, -1.4, 2.4)
     bpy.context.collection.objects.link(key_obj)
     rim = bpy.data.lights.new("AA_Rim", "AREA")
-    rim.energy = 260
+    rim.energy = 340
     rim_obj = bpy.data.objects.new("AA_Rim", rim)
     rim_obj.location = (-1.6, 1.2, 2.0)
     bpy.context.collection.objects.link(rim_obj)
     fill = bpy.data.lights.new("AA_Fill", "AREA")
-    fill.energy = 120
+    fill.energy = 160
     fill_obj = bpy.data.objects.new("AA_Fill", fill)
     fill_obj.location = (0.0, 2.0, 1.6)
     bpy.context.collection.objects.link(fill_obj)
     bpy.ops.mesh.primitive_plane_add(size=6.0, location=(0.0, 0.0, 0.0))
     ground = bpy.context.active_object
     ground.name = "AA_RefGround"
-    _assign_mat(ground, _mat("AA_Ground", (0.08, 0.08, 0.09), 0.0, 0.0, 0.9))
+    _assign(ground, _toon_mat("AA_Ground", (0.10, 0.10, 0.11), 0.0, 0.0, 0.92))
 
 
 def build(fid: str, out_blend: Path, out_glb: Path, skip_anim: bool) -> dict:
@@ -377,25 +325,34 @@ def build(fid: str, out_blend: Path, out_glb: Path, skip_anim: bool) -> dict:
     mesh_col = _collection("AA_MESH")
     arm, extras = build_armature(fid, p)
     _link(export_col, arm)
-    mesh = build_mesh(fid, p, arm)
-    _link(mesh_col, mesh)
+    body, costume, geom = build_cohesive_fighter(fid, p, arm)
+    _link(mesh_col, body)
+    for obj in costume:
+        _link(mesh_col, obj)
+    sockets = add_sockets(arm)
     setup_review_camera()
     actions = [] if skip_anim else apply_animations(fid, arm)
     out_blend.parent.mkdir(parents=True, exist_ok=True)
     bpy.ops.wm.save_as_mainfile(filepath=str(out_blend))
     export_glb(out_glb)
-    tris = len(mesh.data.polygons)
     return {
         "fighter": fid,
         "status": "GENERATED_PRODUCTION_ART",
         "generator": GENERATOR,
         "generator_version": GENERATOR_VERSION,
+        "generator_revision": GENERATOR_REVISION,
         "blend": str(out_blend),
         "glb": str(out_glb),
-        "triangles": tris,
+        "triangles": geom.get("triangles"),
+        "body_connected_components": geom.get("body_connected_components"),
+        "material_count": geom.get("material_count"),
         "bones": [b.name for b in arm.data.bones],
         "secondary_bones": extras,
+        "sockets": sockets,
         "actions": actions,
+        "action_count": len(actions),
+        "geometry": geom,
+        "recipe": recipe(fid).head_style,
         "human_authored": False,
         "future_human_replaceable": True,
         "blender": bpy.app.version_string,

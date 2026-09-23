@@ -2,10 +2,13 @@
   "fighter": "rook-ironside",
   "status": "GENERATED_PRODUCTION_ART",
   "generator": "aa_generated_production_art",
-  "generator_version": "1.0.0",
+  "generator_version": "2.0.0",
+  "generator_revision": "cohesive_body_v2_remesh",
   "blend": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/art_source/animation/fighters/rook-ironside/source/rook-ironside_production_master.blend",
   "glb": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/game-godot/content/fighters/rook-ironside/model/rook-ironside_generated_production.glb",
-  "triangles": 682,
+  "triangles": 19368,
+  "body_connected_components": 1,
+  "material_count": 9,
   "bones": [
     "Root",
     "Hips",
@@ -17,22 +20,41 @@
     "UpperArm_L",
     "LowerArm_L",
     "Hand_L",
+    "TwistArm_L",
     "Shoulder_R",
     "UpperArm_R",
     "LowerArm_R",
     "Hand_R",
+    "TwistArm_R",
     "Cloth_ArmorFlap",
     "UpperLeg_L",
     "LowerLeg_L",
     "Foot_L",
     "Toes_L",
+    "TwistLeg_L",
     "UpperLeg_R",
     "LowerLeg_R",
     "Foot_R",
-    "Toes_R"
+    "Toes_R",
+    "TwistLeg_R"
   ],
   "secondary_bones": [
+    "TwistArm_L",
+    "TwistArm_R",
+    "TwistLeg_L",
+    "TwistLeg_R",
     "Cloth_ArmorFlap"
+  ],
+  "sockets": [
+    "socket_hand_l",
+    "socket_hand_r",
+    "socket_foot_l",
+    "socket_foot_r",
+    "socket_chest",
+    "socket_head",
+    "socket_back",
+    "socket_projectile_origin",
+    "socket_aura_root"
   ],
   "actions": [
     "idle",
@@ -149,6 +171,84 @@
     "ko_reaction",
     "launch_tumble"
   ],
+  "action_count": 113,
+  "geometry": {
+    "fighter": "rook-ironside",
+    "generator_revision": "cohesive_body_v2_remesh",
+    "body_connected_components": 1,
+    "triangles": 19368,
+    "body_triangles": 18920,
+    "material_count": 9,
+    "foot_ground_gap_m": 0.0,
+    "weight": {
+      "vertex_count": 16435,
+      "zero_weight_vertices": 0,
+      "unnormalized_vertices": 0,
+      "smooth_skinning": true
+    },
+    "accessories": [
+      {
+        "name": "chest_plate",
+        "classification": "ARMOR",
+        "parent_bone": "Chest",
+        "distance_m": 0.0333,
+        "intentional_float": false,
+        "unintentional_floating": false
+      },
+      {
+        "name": "shoulder_pad_l",
+        "classification": "ARMOR",
+        "parent_bone": "Shoulder_L",
+        "distance_m": 0.1,
+        "intentional_float": false,
+        "unintentional_floating": false
+      },
+      {
+        "name": "shoulder_pad_r",
+        "classification": "ARMOR",
+        "parent_bone": "Shoulder_R",
+        "distance_m": 0.1,
+        "intentional_float": false,
+        "unintentional_floating": false
+      },
+      {
+        "name": "back_plate",
+        "classification": "ARMOR",
+        "parent_bone": "Chest",
+        "distance_m": 0.0082,
+        "intentional_float": false,
+        "unintentional_floating": false
+      }
+    ],
+    "unintentional_floating_accessories": 0,
+    "costume_meta": [
+      {
+        "name": "chest_plate",
+        "classification": "ARMOR",
+        "parent_bone": "Chest",
+        "intentional_float": false
+      },
+      {
+        "name": "shoulder_pad_l",
+        "classification": "ARMOR",
+        "parent_bone": "Shoulder_L",
+        "intentional_float": false
+      },
+      {
+        "name": "shoulder_pad_r",
+        "classification": "ARMOR",
+        "parent_bone": "Shoulder_R",
+        "intentional_float": false
+      },
+      {
+        "name": "back_plate",
+        "classification": "ARMOR",
+        "parent_bone": "Chest",
+        "intentional_float": false
+      }
+    ]
+  },
+  "recipe": "plate_helm",
   "human_authored": false,
   "future_human_replaceable": true,
   "blender": "3.3.1"

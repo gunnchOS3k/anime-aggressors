@@ -2,10 +2,13 @@
   "fighter": "orion-vell",
   "status": "GENERATED_PRODUCTION_ART",
   "generator": "aa_generated_production_art",
-  "generator_version": "1.0.0",
+  "generator_version": "2.0.0",
+  "generator_revision": "cohesive_body_v2_remesh",
   "blend": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/art_source/animation/fighters/orion-vell/source/orion-vell_production_master.blend",
   "glb": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/game-godot/content/fighters/orion-vell/model/orion-vell_generated_production.glb",
-  "triangles": 1240,
+  "triangles": 14725,
+  "body_connected_components": 1,
+  "material_count": 7,
   "bones": [
     "Root",
     "Hips",
@@ -17,22 +20,41 @@
     "UpperArm_L",
     "LowerArm_L",
     "Hand_L",
+    "TwistArm_L",
     "Shoulder_R",
     "UpperArm_R",
     "LowerArm_R",
     "Hand_R",
+    "TwistArm_R",
     "Cloth_Orbit",
     "UpperLeg_L",
     "LowerLeg_L",
     "Foot_L",
     "Toes_L",
+    "TwistLeg_L",
     "UpperLeg_R",
     "LowerLeg_R",
     "Foot_R",
-    "Toes_R"
+    "Toes_R",
+    "TwistLeg_R"
   ],
   "secondary_bones": [
+    "TwistArm_L",
+    "TwistArm_R",
+    "TwistLeg_L",
+    "TwistLeg_R",
     "Cloth_Orbit"
+  ],
+  "sockets": [
+    "socket_hand_l",
+    "socket_hand_r",
+    "socket_foot_l",
+    "socket_foot_r",
+    "socket_chest",
+    "socket_head",
+    "socket_back",
+    "socket_projectile_origin",
+    "socket_aura_root"
   ],
   "actions": [
     "idle",
@@ -149,6 +171,56 @@
     "ko_reaction",
     "launch_tumble"
   ],
+  "action_count": 113,
+  "geometry": {
+    "fighter": "orion-vell",
+    "generator_revision": "cohesive_body_v2_remesh",
+    "body_connected_components": 1,
+    "triangles": 14725,
+    "body_triangles": 14037,
+    "material_count": 7,
+    "foot_ground_gap_m": 0.0,
+    "weight": {
+      "vertex_count": 12446,
+      "zero_weight_vertices": 0,
+      "unnormalized_vertices": 0,
+      "smooth_skinning": true
+    },
+    "accessories": [
+      {
+        "name": "vest_layer",
+        "classification": "CLOTHING",
+        "parent_bone": "Chest",
+        "distance_m": 0.0576,
+        "intentional_float": false,
+        "unintentional_floating": false
+      },
+      {
+        "name": "orbit_ring",
+        "classification": "ELEMENTAL_ORBIT_VFX",
+        "parent_bone": "Chest",
+        "distance_m": 0.2118,
+        "intentional_float": true,
+        "unintentional_floating": false
+      }
+    ],
+    "unintentional_floating_accessories": 0,
+    "costume_meta": [
+      {
+        "name": "vest_layer",
+        "classification": "CLOTHING",
+        "parent_bone": "Chest",
+        "intentional_float": false
+      },
+      {
+        "name": "orbit_ring",
+        "classification": "ELEMENTAL_ORBIT_VFX",
+        "parent_bone": "Chest",
+        "intentional_float": true
+      }
+    ]
+  },
+  "recipe": "orbit_halo",
   "human_authored": false,
   "future_human_replaceable": true,
   "blender": "3.3.1"

@@ -1,143 +1,150 @@
-# Generated Production Art — A–Z
+# Generated Production Art Rescue v2 — A–Z
 
 Draft PR #106. Do not merge. Not human-authored final art. RC1 `v1.0.0-rc.1` untouched.
 
-## A — current head/base
+## A — new head / base
 
 - PR: https://github.com/gunnchOS3k/anime-aggressors/pull/106
 - Branch: `vxp/vxp-3-combat-impact-nix-rook`
-- Start head: `002fddc6bcdb39f4f5af139faa0ba25b26f9002b`
+- Start head: `3fc912af385bf40aebff018b2b851de3ec1f3c1e`
 - Base / accepted main: `6cd1b3100a7e467c2c991394576891660deb1162`
-- This pass adds a new commit on the same draft branch (head SHA after push)
+- This rescue adds a new commit on the same draft branch (head SHA after push)
 
-## B — master files
+## B — generator v2 architecture
 
-Seven generated production masters at:
+Volumetric construction → voxel remesh → smooth/decimate → nearest-bone material regions → Blender automatic weights.
 
-`art_source/animation/fighters/<id>/source/<id>_production_master.blend`
+- Canonical 22 deform bones kept
+- Optional twist bones `TwistArm_*` / `TwistLeg_*` with local copy-rotation
+- Fighter accessory bones kept and moved closer to attachment
+- Required sockets exported as empties
+- Costume/VFX classified (`BODY`/`CLOTHING`/`ARMOR`/`SECONDARY_MOTION`/`ELEMENTAL_ORBIT_VFX`)
+- Runtime GLB id preserved: `content/fighters/<id>/model/<id>_generated_production.glb`
+- `GENERATOR_VERSION=2.0.0` / `cohesive_body_v2_remesh`
 
-Fighters: ember-vale, rook-ironside, juno-spark, kaia-windrow, nix-calder, orion-vell, vesper-nyx.
+## C — Ember
 
-Each master includes production mesh, canonical deform rig, accessory chains, materials, action library, sockets, review camera/lights. SHA256 recorded in `GENERATED_PRODUCTION_MASTERS.json`. Blends stay gitignored (LFS remote auth still unavailable).
+Cohesive athletic body, ember-cap crest, attached mittens/boots, chest vent + flame tongues (VFX, attached). Forward idle, connected heavy punch, deep hurt fold, charge pose. 15100 tris.
 
-## C — source-storage status
+## D — Rook
 
-- git-lfs installed; `*.blend` tracked in `.gitattributes`
-- GitHub LFS upload still not configured
-- Masters generated locally, SHA256 recorded, not committed
-- Committed: deterministic generator + exported GLBs + JSON clips + audio + VFX + review stills
-- `GENERATED_MASTER_REPRODUCIBLE=true` for equivalent export contracts from the committed generator
+Widest tank mass, plate-helm void, attached chest/shoulder/back plates, heavy boots. Strongest silhouette. 19368 tris.
 
-## D — roster mesh summary
+## E — Juno
 
-Stylized segmented mannequins (not cylinders). Per-fighter body scale, costume pieces, palettes. Runtime:
+Lean compact frame, arc-crown, attached volt panels/tag. Fastest visual read. 12436 tris.
 
-`game-godot/content/fighters/<id>/model/<id>_generated_production.glb` (~4.5 MB each, mesh + 113 actions).
+## F — Kaia
 
-Honest visual: readable as distinct blockout characters, **not** finished anime sculpts. Some accessory blocks float off limb ends. Owner Q1 is likely “no”.
+Longer slim aerial frame. Scarf/ribbon attached at neck/head. Veil still soft. 11620 tris.
 
-## E — roster material summary
+## G — Nix
 
-Original generated principled/toon slots: skin, cloth, accent emission, hair, secondary. Charged palette is brighter accent. No third-party textures. `GENERATED_PRODUCTION_MATERIAL_ROSTER_PASS` automated true.
+Compact centered frame, crystal-facet head, attached crystals/gloves. 15251 tris.
 
-## F — roster rig summary
+## H — Orion
 
-Canonical 22 deform bones + sockets + fighter accessory bones (`Cloth_*`, `Coat_*`, `Hair_*`). Rigid per-part vertex groups. `MESH_BINDING_NEEDS_HUMAN_WEIGHT_PAINT=false` for this generated method. Extreme poses still show gaps/floaters.
+Taller authority frame, vest layer attached, orbit ring as `ELEMENTAL_ORBIT_VFX`. 14725 tris.
 
-## G — Ember Vale
+## I — Vesper
 
-Flame rushdown. Warm cloth, ember hair block, gauntlet cubes, chest vent. Forward-lean idle, explosive heavy, flame-follow arms. 113 generated clips.
+Asymmetric idle, smoke-cowl head, coat volumes attached at hips. 13061 tris.
 
-## H — Rook Ironside
+## J — topology counts
 
-Impact bruiser. Broad torso, back plate, heavy boots. Planted stance, slow-load / huge-release heavy. Strongest mass silhouette of the seven.
+| Fighter | Tris | Islands | Foot gap |
+| --- | --- | --- | --- |
+| ember-vale | 15100 | 1 | 0.0 |
+| rook-ironside | 19368 | 1 | 0.0 |
+| juno-spark | 12436 | 1 | 0.0 |
+| kaia-windrow | 11620 | 1 | 0.0 |
+| nix-calder | 15251 | 1 | 0.0 |
+| orion-vell | 14725 | 1 | 0.0 |
+| vesper-nyx | 13061 | 1 | 0.0 |
 
-## I — Juno Spark
+Target 12k–35k. Clean remesh, no zero-area dependency.
 
-Volt speed. Lean yellow body, cyan panels, hair spike. Staccato idle, snap attacks, fast recovery timing profile.
+## K — body connectedness
 
-## J — Kaia Windrow
+All seven: `body_connected_components=1`. Neutral and hero poses no longer show exploded-doll gaps.
 
-Gale aerial. Teal body, scarf/ribbon/airfoil extras. Arc/buoyancy loco, cloth secondary bone `Cloth_Scarf`.
+## L — floating-accessory audit
 
-## K — Nix Calder
+`artifacts/vxp3/reports/FLOATING_ACCESSORY_AUDIT.json`
 
-Frost precision. Compact cool silhouette, crystal extras, strong glove/boot accents. Tight motion, stiffness-on-impact hurt.
+`UNINTENTIONAL_FLOATING_ACCESSORIES=0`
 
-## L — Orion Vell
+Orion orbit ring is the only intentional float (`ELEMENTAL_ORBIT_VFX`).
 
-Gravity control. Purple layered cloth, orbit torus on `Cloth_Orbit`. Hand-led / delayed-body timing.
+## M — skinning
 
-## M — Vesper Nyx
+Automatic blended weights. Zero-weight body verts = 0. Twist bones present. Not human weight-paint. Extreme poses can still squash.
 
-Void trickster. Asymmetric coat panels, hood. False-start / delayed-tell motion profile.
+## N — deformation
 
-## N — full animation coverage matrix
+Sheets: `artifacts/vxp3/review/deformation_v2/<id>/`
 
-113 unique actions × 7 fighters written to `content/fighters/<id>/animations/generated_production/`.
+Overhead / punch / twist / crouch / run / jump / heavy / hurt / charge hold as one mesh. No joint separation. Some shoulder squash.
 
-Covers: existing 52 gameplay clips + locomotion extras + charge family + hurt family + clash acting + Wave A aliases.
+## O — materials
 
-Wave A 98 labeled `GENERATED_PRODUCTION_ANIMATION` in `art_source/animation/manifests/WAVE_A_GENERATED_PRODUCTION_98.json`. Not `AUTHORED_APPROVED`. Resolver prefers generated_production over procedural placeholders.
+Principled + cheap rim/emission toon stack. Body/cloth/secondary/accent/hair/charged slots. Pixel-readable, no texture soup. Godot import stays principled.
 
-## O — hurt coverage
+## P — action retarget
 
-hurt_light/mid/high/low, medium front/back, heavy front/back, launch family, tumble, ground_bounce, wall_splat, shield hits, grabbed/throw victim, ko_launch. Exaggeration guard passed (head/chest/arm/silhouette floors).
+Same canonical skeleton; 113 generated actions rewritten onto the new cohesive mesh. No resolver id change.
 
-## P — charge coverage
+## Q — heavy / hurt visual strength
 
-charge_start/low/mid/high/full/release + charged loco. Base vs 100% charged_idle exceeds calibrated silhouette/chest floors.
+Heavy contact is a connected punch silhouette. Hurt-heavy is a full-body fold/recoil before the later launch keys. Still generated motion, not human acting.
 
-## Q — secondary-motion coverage
+## R — charge
 
-Accessory bones on all seven. Runtime `SecondaryMotionLayer` prefixes include Cloth/Coat/Hair. Provenance `GENERATED_PRODUCTION_SECONDARY`. Spring fallback remains; not human cloth sim.
+`charged_idle` / charge 100 stills show a wider stance and raised-arm focus pose. Head posture helps sell charge. Not a Super-Saiyan parody.
 
-## R — VFX coverage
+## S — secondary-motion attachment
 
-`game-godot/data/vfx/generated_production/` palettes + clash mix presets (Rook/Orion, Juno/Kaia, Ember/Nix, Vesper/Ember, Nix/Rook). Short-lived, socket-aligned, a11y-reducible descriptors. No third-party plates.
+Kaia scarf/ribbon attached. Vesper coats attached at hips. Rook plates attached. Ember flames attached as VFX. Orion orbit tracked as VFX.
 
-## S — audio coverage
+## T — review still paths
 
-41 original WAV files under `assets/audio/generated_production/` (whoosh, hit tiers, charge tiers, clash bed/resolution, per-fighter element layers). No copyrighted samples. Resolver prefers generated paths.
+- `artifacts/vxp3/review/generated_production/<id>/` — idle, personality, walk, run, dash, charge_100, heavy family, hurt-heavy, aura, super, KO, close_body_3q, silhouette, costume_detail, deformation_stress
+- `artifacts/vxp3/review/deformation_v2/<id>/`
+- `artifacts/vxp3/review/generated_production/roster/roster_compare.html`
 
-## T — super coverage
+## U — quality classification
 
-Per-fighter `signature_lane_finisher` / `aura_burst_super_pose` with distinct pose templates (not one color-swap cinematic). Camera classes already exist; HUMAN cinematic approval stays false.
+See `GENERATED_PRODUCTION_QUALITY_V2.json`. Roster **Q2+**. Exploded mannequin defect removed. Not finished anime. Not Q4. No art-director sign-off.
 
-## U — Aura Clash coverage
+## V — exact-head CI
 
-Acting hooks `clash_start/lock/push/winning/losing/break` generated per fighter. Director + mixed-identity presets remain. `HUMAN_AURA_CLASH_PASS=false`.
+Local digital checks run on this worktree (recipe unit test, geometry v2, exaggeration). Exact-head GitHub CI is whatever the new pushed SHA reports. Do not claim green while pending.
 
-## V — generated-art manifest
+## W — APK
 
-`artifacts/vxp3/reports/GENERATED_PRODUCTION_ART_MANIFEST.json`
+Not built. Owner-review APK waits for exact-head CI green plus owner look at stills. Target would be `anime-aggressors-generated-art-v2-owner-review.apk`. RC1 not touched.
 
-Every asset: generator, version, source_master, sha256 (GLB), `GENERATED_PRODUCTION_*`, `future_human_replaceable=true`.
+## X — Pixel install
 
-## W — performance results
+Not run. No `adb install -r` this pass.
 
-No Pixel profile this pass (no device attached). Art is low-poly segmented meshes + short VFX/audio. Do not treat as `PIXEL_*_PASS`. Motion was not deleted for perf.
-
-## X — APK path + SHA256
-
-Not built this pass. `export_presets.cfg` has Android/gradle, but no device and no owner-review APK export was completed. Path target remains `anime-aggressors-generated-production-art-owner-review.apk` when a human/CI Android export runs. RC1 not touched. `adb install -r` not run.
-
-## Y — owner / human gate states
+## Y — gate states
 
 | Gate | Value |
-|------|-------|
-| GENERATED_PRODUCTION_MODEL_ROSTER_PASS | true (automated) |
-| GENERATED_PRODUCTION_RIG_ROSTER_PASS | true (automated) |
-| GENERATED_PRODUCTION_MATERIAL_ROSTER_PASS | true (automated) |
-| GENERATED_PRODUCTION_ANIMATION_ROSTER_PASS | true (automated) |
-| GENERATED_PRODUCTION_HURT_ROSTER_PASS | true (automated) |
-| GENERATED_PRODUCTION_CHARGE_ROSTER_PASS | true (automated) |
-| GENERATED_PRODUCTION_SECONDARY_ROSTER_PASS | true (automated) |
-| GENERATED_PRODUCTION_VFX_ROSTER_PASS | true (automated) |
-| GENERATED_PRODUCTION_AUDIO_ROSTER_PASS | true (automated) |
-| GENERATED_PRODUCTION_SUPER_ROSTER_PASS | true (automated) |
-| GENERATED_PRODUCTION_AURA_CLASH_PASS | true (automated) |
-| GENERATED_PRODUCTION_ART_PASS | true (automated only) |
+| --- | --- |
+| GEN_ART_V2_COHESIVE_BODY_ROSTER_PASS | true |
+| GEN_ART_V2_NO_BODY_GAPS_PASS | true |
+| GEN_ART_V2_NO_FLOATING_ACCESSORY_PASS | true |
+| GEN_ART_V2_HAND_FOOT_HEAD_READ_PASS | true |
+| GEN_ART_V2_COSTUME_ATTACHMENT_PASS | true |
+| GEN_ART_V2_SMOOTH_SKINNING_PASS | true |
+| GEN_ART_V2_DEFORMATION_ROSTER_PASS | true |
+| GEN_ART_V2_SILHOUETTE_ROSTER_PASS | true |
+| GEN_ART_V2_MATERIAL_READ_PASS | true |
+| GEN_ART_V2_ANIMATION_RETARGET_PASS | true |
+| NO_OBVIOUS_BLOCKOUT_DEFECTS | true (exploded mannequin removed; stills are cohesive remesh figures) |
+| GENERATED_PRODUCTION_MODEL_ROSTER_PASS | true (automated v2) |
+| GENERATED_PRODUCTION_ART_PASS | true (automated v2 only) |
 | HUMAN_AUTHORED_ART_PASS | false |
 | HUMAN_AUTHORED_ANIMATION_PASS | false |
 | HUMAN_ART_DIRECTION_APPROVAL | false |
@@ -148,15 +155,14 @@ Not built this pass. `export_presets.cfg` has Android/gradle, but no device and 
 | MERGE_AUTHORIZED | false |
 | FINAL_AUTHORED_ANIMATION_PASS | false |
 
-Owner questions 1–12 unanswered. Review stills: `artifacts/vxp3/review/generated_production/<id>/*.png`.
+## Z — remaining visible defects / next human step
 
-## Z — remaining defects / next human step
+Remaining:
 
-Defects:
+1. Figures are still smooth remesh toys, not finished anime costumes/faces (faceless is canonical; costume language is still soft).
+2. Hands are mitten blobs; heads are designed volumes but simple.
+3. No Pixel install / owner-review APK this pass.
+4. Blend masters stay gitignored until LFS remote auth exists.
+5. Owner questions 1–12 unanswered.
 
-1. Meshes are mannequin blockouts with floating accessory cubes — not finished anime characters.
-2. No Pixel install / combat recording / APK.
-3. Git LFS still cannot push `.blend` masters.
-4. Owner visual/feel gates cannot be automated.
-
-**Exact next human step:** Open PR #106 review stills (especially idle + heavy_contact + hurt_heavy + charge_100 for all seven). Answer owner questions 1–12. If the mannequin roster is acceptable as generated production while planning v1.1 human art, say so explicitly. Do **not** set HUMAN_* / MERGE_AUTHORIZED until that answer. Then export/install `anime-aggressors-generated-production-art-owner-review.apk` with `adb install -r` (do not uninstall, do not touch RC1).
+**Exact next human step:** Open PR #106 stills — especially `idle`, `close_body_3q`, `heavy_contact`, `hurt_heavy`, `charge_100` for all seven, plus `deformation_v2`. Answer whether these cohesive remesh bodies are acceptable generated art for this release before later human-art upgrades. Do **not** set HUMAN_* / MERGE_AUTHORIZED until that answer. Then, only if exact-head CI is green, export/install `anime-aggressors-generated-art-v2-owner-review.apk` with `adb install -r` (do not uninstall, do not touch RC1).

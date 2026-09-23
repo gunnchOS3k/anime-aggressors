@@ -2,10 +2,13 @@
   "fighter": "ember-vale",
   "status": "GENERATED_PRODUCTION_ART",
   "generator": "aa_generated_production_art",
-  "generator_version": "1.0.0",
+  "generator_version": "2.0.0",
+  "generator_revision": "cohesive_body_v2_remesh",
   "blend": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/art_source/animation/fighters/ember-vale/source/ember-vale_production_master.blend",
   "glb": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/game-godot/content/fighters/ember-vale/model/ember-vale_generated_production.glb",
-  "triangles": 676,
+  "triangles": 15100,
+  "body_connected_components": 1,
+  "material_count": 10,
   "bones": [
     "Root",
     "Hips",
@@ -18,23 +21,42 @@
     "LowerArm_L",
     "Hand_L",
     "Cloth_Flame_L",
+    "TwistArm_L",
     "Shoulder_R",
     "UpperArm_R",
     "LowerArm_R",
     "Hand_R",
     "Cloth_Flame_R",
+    "TwistArm_R",
     "UpperLeg_L",
     "LowerLeg_L",
     "Foot_L",
     "Toes_L",
+    "TwistLeg_L",
     "UpperLeg_R",
     "LowerLeg_R",
     "Foot_R",
-    "Toes_R"
+    "Toes_R",
+    "TwistLeg_R"
   ],
   "secondary_bones": [
+    "TwistArm_L",
+    "TwistArm_R",
+    "TwistLeg_L",
+    "TwistLeg_R",
     "Cloth_Flame_R",
     "Cloth_Flame_L"
+  ],
+  "sockets": [
+    "socket_hand_l",
+    "socket_hand_r",
+    "socket_foot_l",
+    "socket_foot_r",
+    "socket_chest",
+    "socket_head",
+    "socket_back",
+    "socket_projectile_origin",
+    "socket_aura_root"
   ],
   "actions": [
     "idle",
@@ -151,6 +173,98 @@
     "ko_reaction",
     "launch_tumble"
   ],
+  "action_count": 113,
+  "geometry": {
+    "fighter": "ember-vale",
+    "generator_revision": "cohesive_body_v2_remesh",
+    "body_connected_components": 1,
+    "triangles": 15100,
+    "body_triangles": 14744,
+    "material_count": 10,
+    "foot_ground_gap_m": 0.0,
+    "weight": {
+      "vertex_count": 13086,
+      "zero_weight_vertices": 0,
+      "unnormalized_vertices": 0,
+      "smooth_skinning": true
+    },
+    "accessories": [
+      {
+        "name": "gauntlet_r",
+        "classification": "ARMOR",
+        "parent_bone": "Hand_R",
+        "distance_m": 0.0704,
+        "intentional_float": false,
+        "unintentional_floating": false
+      },
+      {
+        "name": "gauntlet_l",
+        "classification": "ARMOR",
+        "parent_bone": "Hand_L",
+        "distance_m": 0.0614,
+        "intentional_float": false,
+        "unintentional_floating": false
+      },
+      {
+        "name": "chest_vent",
+        "classification": "ARMOR",
+        "parent_bone": "Chest",
+        "distance_m": 0.0292,
+        "intentional_float": false,
+        "unintentional_floating": false
+      },
+      {
+        "name": "flame_tongue_r",
+        "classification": "ELEMENTAL_ORBIT_VFX",
+        "parent_bone": "Hand_R",
+        "distance_m": 0.0289,
+        "intentional_float": true,
+        "unintentional_floating": false
+      },
+      {
+        "name": "flame_tongue_l",
+        "classification": "ELEMENTAL_ORBIT_VFX",
+        "parent_bone": "Hand_L",
+        "distance_m": 0.0253,
+        "intentional_float": true,
+        "unintentional_floating": false
+      }
+    ],
+    "unintentional_floating_accessories": 0,
+    "costume_meta": [
+      {
+        "name": "gauntlet_r",
+        "classification": "ARMOR",
+        "parent_bone": "Hand_R",
+        "intentional_float": false
+      },
+      {
+        "name": "gauntlet_l",
+        "classification": "ARMOR",
+        "parent_bone": "Hand_L",
+        "intentional_float": false
+      },
+      {
+        "name": "chest_vent",
+        "classification": "ARMOR",
+        "parent_bone": "Chest",
+        "intentional_float": false
+      },
+      {
+        "name": "flame_tongue_r",
+        "classification": "ELEMENTAL_ORBIT_VFX",
+        "parent_bone": "Hand_R",
+        "intentional_float": true
+      },
+      {
+        "name": "flame_tongue_l",
+        "classification": "ELEMENTAL_ORBIT_VFX",
+        "parent_bone": "Hand_L",
+        "intentional_float": true
+      }
+    ]
+  },
+  "recipe": "ember_cap",
   "human_authored": false,
   "future_human_replaceable": true,
   "blender": "3.3.1"

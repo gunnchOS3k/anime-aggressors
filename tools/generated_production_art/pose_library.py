@@ -421,11 +421,11 @@ def locations_for(fid: str, action: str, pose_name: str) -> Loc:
     if action in {"heavy", "smash_forward", "smash_up", "signature_lane_burst", "signature_lane_finisher"}:
         table = {
             "SETTLE": (0.0, 0.0, 0.0),
-            "ANTICIPATION": (-0.06 * p.weight, 0.0, -0.04),
-            "ACCELERATION": (0.04, 0.0, 0.02),
-            "CONTACT": (0.10 + 0.04 * p.weight, 0.0, 0.03),
-            "HITSTOP_HOLD": (0.10 + 0.04 * p.weight, 0.0, 0.03),
-            "OVERSHOOT": (0.14 + 0.05 * p.weight, 0.0, 0.02),
+            "ANTICIPATION": (-0.10 * p.weight, 0.0, -0.06),
+            "ACCELERATION": (0.06, 0.0, 0.03),
+            "CONTACT": (0.14 + 0.06 * p.weight, 0.0, 0.045),
+            "HITSTOP_HOLD": (0.14 + 0.06 * p.weight, 0.0, 0.045),
+            "OVERSHOOT": (0.18 + 0.06 * p.weight, 0.0, 0.03),
             "FOLLOW_THROUGH": (0.08, 0.0, 0.01),
             "RECOVERY": (0.03, 0.0, 0.0),
             "RETURN": (0.0, 0.0, 0.0),
@@ -433,8 +433,8 @@ def locations_for(fid: str, action: str, pose_name: str) -> Loc:
         loc["Hips"] = table.get(pose_name, (0.0, 0.0, 0.0))
     if action.startswith("hurt") or action in {"launch", "tumble", "ko"}:
         if pose_name in {"CONTACT", "HITSTOP_HOLD", "OVERSHOOT"}:
-            loc["Hips"] = (-0.08, 0.0, 0.04)
-            loc["Head"] = (-0.02, 0.0, 0.03)
+            loc["Hips"] = (-0.11, 0.0, 0.05)
+            loc["Head"] = (-0.04, 0.0, 0.05)
         if pose_name in {"RECOVERY", "RETURN"} and action in {"launch", "tumble", "ko", "hurt_heavy"}:
             loc["Hips"] = (0.04, 0.0, 0.10)
     if action.startswith("charge") or action.startswith("charged"):

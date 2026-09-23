@@ -2,10 +2,13 @@
   "fighter": "kaia-windrow",
   "status": "GENERATED_PRODUCTION_ART",
   "generator": "aa_generated_production_art",
-  "generator_version": "1.0.0",
+  "generator_version": "2.0.0",
+  "generator_revision": "cohesive_body_v2_remesh",
   "blend": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/art_source/animation/fighters/kaia-windrow/source/kaia-windrow_production_master.blend",
   "glb": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/game-godot/content/fighters/kaia-windrow/model/kaia-windrow_generated_production.glb",
-  "triangles": 676,
+  "triangles": 11620,
+  "body_connected_components": 1,
+  "material_count": 8,
   "bones": [
     "Root",
     "Hips",
@@ -19,22 +22,41 @@
     "UpperArm_L",
     "LowerArm_L",
     "Hand_L",
+    "TwistArm_L",
     "Shoulder_R",
     "UpperArm_R",
     "LowerArm_R",
     "Hand_R",
+    "TwistArm_R",
     "UpperLeg_L",
     "LowerLeg_L",
     "Foot_L",
     "Toes_L",
+    "TwistLeg_L",
     "UpperLeg_R",
     "LowerLeg_R",
     "Foot_R",
-    "Toes_R"
+    "Toes_R",
+    "TwistLeg_R"
   ],
   "secondary_bones": [
+    "TwistArm_L",
+    "TwistArm_R",
+    "TwistLeg_L",
+    "TwistLeg_R",
     "Cloth_Scarf",
     "Hair_Ribbon"
+  ],
+  "sockets": [
+    "socket_hand_l",
+    "socket_hand_r",
+    "socket_foot_l",
+    "socket_foot_r",
+    "socket_chest",
+    "socket_head",
+    "socket_back",
+    "socket_projectile_origin",
+    "socket_aura_root"
   ],
   "actions": [
     "idle",
@@ -151,6 +173,70 @@
     "ko_reaction",
     "launch_tumble"
   ],
+  "action_count": 113,
+  "geometry": {
+    "fighter": "kaia-windrow",
+    "generator_revision": "cohesive_body_v2_remesh",
+    "body_connected_components": 1,
+    "triangles": 11620,
+    "body_triangles": 11284,
+    "material_count": 8,
+    "foot_ground_gap_m": 0.0,
+    "weight": {
+      "vertex_count": 10236,
+      "zero_weight_vertices": 0,
+      "unnormalized_vertices": 0,
+      "smooth_skinning": true
+    },
+    "accessories": [
+      {
+        "name": "scarf",
+        "classification": "SECONDARY_MOTION",
+        "parent_bone": "Neck",
+        "distance_m": 0.05,
+        "intentional_float": false,
+        "unintentional_floating": false
+      },
+      {
+        "name": "ribbon",
+        "classification": "SECONDARY_MOTION",
+        "parent_bone": "Head",
+        "distance_m": 0.045,
+        "intentional_float": false,
+        "unintentional_floating": false
+      },
+      {
+        "name": "airfoil",
+        "classification": "CLOTHING",
+        "parent_bone": "Chest",
+        "distance_m": 0.02,
+        "intentional_float": false,
+        "unintentional_floating": false
+      }
+    ],
+    "unintentional_floating_accessories": 0,
+    "costume_meta": [
+      {
+        "name": "scarf",
+        "classification": "SECONDARY_MOTION",
+        "parent_bone": "Neck",
+        "intentional_float": false
+      },
+      {
+        "name": "ribbon",
+        "classification": "SECONDARY_MOTION",
+        "parent_bone": "Head",
+        "intentional_float": false
+      },
+      {
+        "name": "airfoil",
+        "classification": "CLOTHING",
+        "parent_bone": "Chest",
+        "intentional_float": false
+      }
+    ]
+  },
+  "recipe": "ribbon_veil",
   "human_authored": false,
   "future_human_replaceable": true,
   "blender": "3.3.1"

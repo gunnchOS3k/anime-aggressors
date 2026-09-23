@@ -29,6 +29,8 @@ from generated_production_art.generate_animations import generate_all as gen_ani
 from generated_production_art.generate_audio import generate_all as gen_audio  # noqa: E402
 from generated_production_art.generate_vfx import generate_all as gen_vfx  # noqa: E402
 from generated_production_art.validate_exaggeration import validate  # noqa: E402
+from generated_production_art.make_contact_sheets import main as make_sheets  # noqa: E402
+from generated_production_art.validate_geometry_v2 import validate as validate_geom  # noqa: E402
 
 
 def _run(cmd: list[str]) -> subprocess.CompletedProcess:
@@ -65,6 +67,7 @@ def generate_masters() -> dict:
         proc = _run(cmd)
         ok = proc.returncode == 0 and glb.is_file()
         render_dir = ROOT / "artifacts/vxp3/review/generated_production"
+        deform_dir = ROOT / "artifacts/vxp3/review/deformation_v2"
         if ok:
             _run(
                 [
@@ -78,6 +81,8 @@ def generate_masters() -> dict:
                     fid,
                     "--out-dir",
                     str(render_dir),
+                    "--deform-dir",
+                    str(deform_dir),
                 ]
             )
         reports[fid] = {
@@ -223,11 +228,14 @@ def main() -> int:
     masters = generate_masters()
     write_json(REPORTS / "GENERATED_PRODUCTION_MASTERS.json", masters)
     write_manifest(masters, anims, audio, vfx, exaggeration)
-    print(json_summary(masters, anims, audio, vfx, exaggeration))
-    return 0 if exaggeration.get("ok") else 2
+    geometry = validate_geom()
+    write_json(REPORTS / "GENERATED_PRODUCTION_GEOMETRY_V2.json", geometry)
+    make_sheets()
+    print(json_summary(masters, anims, audio, vfx, exaggeration, geometry))
+    return 0 if exaggeration.get("ok") and masters.get("ok") else 2
 
 
-def json_summary(masters, anims, audio, vfx, exaggeration) -> str:
+def json_summary(masters, anims, audio, vfx, exaggeration, geometry=None) -> str:
     import json
 
     return json.dumps(
@@ -238,6 +246,8 @@ def json_summary(masters, anims, audio, vfx, exaggeration) -> str:
             "vfx": vfx.get("status"),
             "exaggeration_ok": exaggeration.get("ok"),
             "exaggeration_failures": exaggeration.get("failures"),
+            "geometry_ok": (geometry or {}).get("ok"),
+            "unintentional_floating": (geometry or {}).get("UNINTENTIONAL_FLOATING_ACCESSORIES"),
         },
         indent=2,
     )

@@ -29,6 +29,8 @@ jobs:
           python3 tools/authored_animation/validate_production_infra.py
           python3 tools/authored_animation/pixel_spectacle_perf.py
           python3 tools/authored_animation/submit_check.py --fighter rook-ironside --action heavy || true
+          python3 tools/generated_production_art/tests/test_body_v2.py
+          PYTHONPATH=tools python3 -c "from generated_production_art.validate_geometry_v2 import validate; validate()"
       - name: Truthful LFS / human-gate check
         run: |
           python3 - <<'PY'
