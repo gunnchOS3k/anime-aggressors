@@ -1,8 +1,16 @@
 {
   "ok": false,
   "authentic_60fps": false,
-  "reason": "Exactly one Pixel 6a (27211JEGR06194) is attached and already has com.gunnchos.animeaggressors installed. Phase 1 did not deploy a new APK (signer-mismatch / uninstall risk) and did not record new app-only 60fps clips. Honest skip.",
-  "device": "Pixel 6a bluejay 27211JEGR06194",
+  "VXP3_PIXEL_CAPTURE_PASS": false,
+  "reason": "PR #106 debug APK from live head 30d4c07 was signer-safe installed on PIXEL_USB_DEVICE_1 (Pixel 6a). App launched to Boot/Start Game, then Main Menu, then Match Settings (FIGHT path). USB debugging dropped repeatedly after launch; no Training battle and no app-only 60fps combat recording of light/medium/heavy. Remaining authentic stills are boot-title only. Main Menu and Match Settings were reached and visually confirmed, but those two PNGs were deleted in a local cleanup error and are not reconstructed. Human visual / combat-feel / fun / merge stay false.",
+  "device": "PIXEL_USB_DEVICE_1 Pixel 6a bluejay",
   "uninstall_performed": false,
-  "pm_clear_performed": false
+  "pm_clear_performed": false,
+  "screenshots": [
+    "boot_start_game.png",
+    "boot_usb_banner.png"
+  ],
+  "video": null,
+  "playtest_path_reached": "Boot -> Main Menu -> Match Settings. Did not reach Training battle or Nix vs Rook combat.",
+  "usb_note": "Authorized USB ADB was flaky after install; last confirmed app screen was Match Settings. Device later absent from adb."
 }

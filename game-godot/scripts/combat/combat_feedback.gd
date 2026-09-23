@@ -107,11 +107,16 @@ func apply_hit(attacker: Node, defender: Node, move: Dictionary, info: Dictionar
 		"sync": attacker_hs == defender_hs,
 	})
 	if _training_allows("training_vfx_enabled"):
+		var attacker_id := ""
+		if attacker != null and "fighter_id" in attacker:
+			attacker_id = str(attacker.fighter_id)
 		_emit_juice("impact_vfx", {
 			"socket": result["contact_socket"],
 			"element": result["element"],
 			"tier": tier,
 			"vfx_event": result["vfx_event"],
+			"fighter_id": attacker_id,
+			"attacker_id": attacker_id,
 		})
 		_emit_juice("contact_pose", {
 			"clip": result["contact_pose_clip"],
@@ -271,24 +276,33 @@ func spawn_hit_spark(parent: Node2D, pos: Vector2, element: String) -> void:
 	var role = Engine.get_main_loop().root.get_node_or_null("/root/DeviceRoleRuntime") if Engine.get_main_loop() else null
 	if role != null and role.has_method("fx_allows_hit_sparks") and not role.fx_allows_hit_sparks():
 		return
-	_emit_juice("hit_spark", {"element": element, "socket": "contact", "pos": pos})
+	_emit_juice("hit_spark", {"element": element, "socket": "contact", "pos": pos, "fighter_id": fighter_id})
+	var director = parent.get_node_or_null("ImpactVfxDirector")
+	if director != null and director.has_method("spawn"):
+		director.spawn(parent, {
+			"element": element,
+			"pos": pos,
+			"fighter_id": fighter_id,
+			"tier": "medium",
+			"dir": Vector2.RIGHT,
+		})
+		return
 	var spark := ColorRect.new()
-	spark.size = Vector2(12, 12)
+	spark.size = Vector2(16, 16)
 	spark.position = pos - spark.size / 2.0
 	spark.color = _element_color(element)
 	parent.add_child(spark)
 	var tween := spark.create_tween()
-	tween.tween_property(spark, "modulate:a", 0.0, 0.15)
+	tween.tween_property(spark, "modulate:a", 0.0, 0.14)
 	tween.tween_callback(spark.queue_free)
-	# GAME-RC-003: secondary ring for heavy/aura readability.
 	var ring := ColorRect.new()
-	ring.size = Vector2(22, 22)
+	ring.size = Vector2(26, 26)
 	ring.position = pos - ring.size / 2.0
 	ring.color = Color(_element_color(element).r, _element_color(element).g, _element_color(element).b, 0.35)
 	parent.add_child(ring)
 	var rt := ring.create_tween()
-	rt.tween_property(ring, "scale", Vector2(1.8, 1.8), 0.18)
-	rt.parallel().tween_property(ring, "modulate:a", 0.0, 0.18)
+	rt.tween_property(ring, "scale", Vector2(1.9, 1.9), 0.16)
+	rt.parallel().tween_property(ring, "modulate:a", 0.0, 0.16)
 	rt.tween_callback(ring.queue_free)
 
 ## Grab release / recovery cue — short flash so throws are readable.

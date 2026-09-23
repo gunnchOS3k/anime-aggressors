@@ -7,6 +7,7 @@ const _FighterStates = preload("res://scripts/fighters/fighter_states.gd")
 const _AssetResolver = preload("res://scripts/visual/fighter_asset_resolver.gd")
 const _BoneMap = preload("res://scripts/visual/procedural_bone_map.gd")
 const _MoveResolver = preload("res://scripts/visual/runtime_move_resolver.gd")
+const _Charged = preload("res://scripts/visual/charged_animation_layer.gd")
 
 var _fighter
 var _player: AnimationPlayer
@@ -16,6 +17,8 @@ var _loaded_clips: Dictionary = {}
 var _fighter_id: String = ""
 var _active_clip: String = ""
 var _throw_dir: String = "forward"
+var _charge_pct: float = 0.0
+var _prev_state: String = ""
 
 
 func setup(fighter, model_root: Node3D) -> void:
@@ -37,6 +40,10 @@ func setup(fighter, model_root: Node3D) -> void:
 	_load_procedural_clips(model_root)
 
 
+func set_charge_pct(pct: float) -> void:
+	_charge_pct = pct
+
+
 func play_for_state(state: String, move: Dictionary = {}) -> void:
 	if _player == null or not is_instance_valid(_player):
 		return
@@ -44,10 +51,13 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 		return
 	if move.has("throw_direction"):
 		_throw_dir = str(move.get("throw_direction", "forward"))
+	if move.has("attacker_aura"):
+		_charge_pct = float(move.get("attacker_aura", _charge_pct))
 	var move_id := str(move.get("move_id", ""))
 	var reaction_clip := str(move.get("reaction_clip", ""))
 	if reaction_clip != "" and _loaded_clips.has(reaction_clip) and _player.has_animation(reaction_clip):
 		_play_named(reaction_clip, false)
+		_prev_state = state
 		return
 	var resolved: Dictionary = _MoveResolver.resolve_clip(state, move_id, _loaded_clips)
 	var clip := str(resolved.get("clip", ""))
@@ -61,9 +71,13 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 			clip = "projectile_full"
 		else:
 			return
+	clip = _loco_transition_clip(state, clip)
+	if _Charged.should_apply(_fighter_id, move) or _charge_pct >= 25.0:
+		clip = _Charged.overlay_clip(clip, move, _charge_pct, _loaded_clips)
 	if clip.is_empty() or not _player.has_animation(clip):
 		return
-	_play_named(clip, clip in ["idle", "run", "walk", "fall", "shield", "aura_charge"])
+	_play_named(clip, clip in ["idle", "idle_personality", "run", "walk", "fall", "shield", "aura_charge", "charged_idle", "charged_walk", "charged_run", "charge_low", "charge_mid", "charge_high", "charge_full"])
+	_prev_state = state
 
 
 func _play_named(clip: String, should_loop: bool) -> void:
@@ -101,7 +115,29 @@ func _fallback_clip(state: String, move_id: String) -> String:
 		if _loaded_clips.has("projectile_full"):
 			return "projectile_full"
 		return ""
+	if _loaded_clips.has(named):
+		return named
+	if named == "landing" and _loaded_clips.has("landing"):
+		return "landing"
+	if named == "land" and _loaded_clips.has("landing"):
+		return "landing"
 	return named
+
+
+func _loco_transition_clip(state: String, clip: String) -> String:
+	if state == _FighterStates.WALK and _prev_state == _FighterStates.IDLE and _loaded_clips.has("walk_start"):
+		return "walk_start"
+	if state == _FighterStates.IDLE and _prev_state == _FighterStates.WALK and _loaded_clips.has("walk_stop"):
+		return "walk_stop"
+	if state == _FighterStates.RUN and _prev_state in [_FighterStates.WALK, _FighterStates.IDLE] and _loaded_clips.has("run_start"):
+		return "run_start"
+	if state == _FighterStates.IDLE and _prev_state == _FighterStates.RUN and _loaded_clips.has("run_stop"):
+		return "run_stop"
+	if state == _FighterStates.IDLE and _prev_state == _FighterStates.DASH and _loaded_clips.has("dash_stop"):
+		return "dash_stop"
+	if state == _FighterStates.TURNAROUND and _loaded_clips.has("turn"):
+		return "turn"
+	return clip
 
 
 func _load_procedural_clips(model_root: Node3D) -> void:

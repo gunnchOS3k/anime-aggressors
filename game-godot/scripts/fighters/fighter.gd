@@ -1555,6 +1555,11 @@ func _play_current_animation(state: String) -> void:
 			move_copy["move_id"] = str(move_copy.get("visual_move_id"))
 		if last_reaction_clip != "" and state in [_FighterStates.HURT_LIGHT, _FighterStates.HURT_HEAVY, _FighterStates.LAUNCHED, _FighterStates.TUMBLE, _FighterStates.HITSTUN, _FighterStates.KO]:
 			move_copy["reaction_clip"] = last_reaction_clip
+		move_copy["attacker_aura"] = aura
+		if model_3d.has_method("get_animation_controller"):
+			var ac = model_3d.get_animation_controller()
+			if ac != null and ac.has_method("set_charge_pct"):
+				ac.set_charge_pct(aura)
 		model_3d.play_for_state(state, move_copy)
 		if model_3d.has_method("set_aura_level"):
 			model_3d.set_aura_level(get_aura_level())

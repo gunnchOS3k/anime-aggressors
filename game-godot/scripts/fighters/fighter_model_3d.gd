@@ -1288,9 +1288,20 @@ func _update_expression_for_state(state: String) -> void:
 func _refresh_aura_overlay() -> void:
 	if _aura_overlay == null:
 		return
-	var tier_alpha := clampf(0.08 + float(_aura_tier) * 0.12, 0.08, 0.48)
-	if _aura_level <= 0 and _aura_tier <= 0 and _form_presentation.is_empty():
+	var band := 0
+	if _aura_level >= 4:
+		band = 100
+	elif _aura_level >= 3:
+		band = 75
+	elif _aura_level >= 2:
+		band = 50
+	elif _aura_level >= 1:
+		band = 25
+	var tier_alpha := clampf(0.06 + float(band) / 100.0 * 0.42, 0.0, 0.55)
+	if band <= 0 and _aura_tier <= 0 and _form_presentation.is_empty():
 		_aura_overlay.color.a = 0.0
+		_aura_overlay.size = Vector2(70, 90)
+		_aura_overlay.position = Vector2(-35, -95)
 		return
 	var shape := str(_form_presentation.get("aura_shape", _life.get("aura_shape", "orb")))
 	var pulse := float(_life.get("aura_pulse", 1.0))
@@ -1335,6 +1346,12 @@ func _refresh_aura_overlay() -> void:
 		_:
 			_aura_overlay.size = Vector2(70, 90)
 			_aura_overlay.position = Vector2(-35, -95)
+	# Charge-band silhouette shift (presentation only). 100 gets a brief bloom.
+	var band_scale := 1.0 + float(band) / 220.0
+	if band >= 100:
+		band_scale += 0.12
+	_aura_overlay.size *= band_scale
+	_aura_overlay.position = Vector2(-_aura_overlay.size.x * 0.5, -95.0 - float(band) * 0.08)
 
 
 func _play_throw_presentation(direction: String) -> void:

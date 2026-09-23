@@ -87,7 +87,23 @@
           "to": "jab_2"
         }
       ],
-      "h2h_string_id": "orion-vell:jab_1->jab_2"
+      "h2h_string_id": "orion-vell:jab_1->jab_2",
+      "impact_profile": "light",
+      "choreography": {
+        "contact_socket": "chest",
+        "contact_frame": 4,
+        "contact_pose_clip": "contact_light",
+        "victim_reaction_family": "stagger",
+        "charged_layer": "none",
+        "cinematic_hook": "",
+        "identity": "orbital_sink"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
+      }
     },
     {
       "move_id": "jab_2",
@@ -168,7 +184,23 @@
           "to": "jab_finisher"
         }
       ],
-      "h2h_string_id": "orion-vell:jab_2->jab_finisher"
+      "h2h_string_id": "orion-vell:jab_2->jab_finisher",
+      "impact_profile": "light",
+      "choreography": {
+        "contact_socket": "chest",
+        "contact_frame": 4,
+        "contact_pose_clip": "contact_light",
+        "victim_reaction_family": "stagger",
+        "charged_layer": "none",
+        "cinematic_hook": "",
+        "identity": "orbital_sink"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
+      }
     },
     {
       "move_id": "jab_finisher",
@@ -250,7 +282,23 @@
           "to": "up_tilt"
         }
       ],
-      "h2h_string_id": "orion-vell:jab_finisher->up_tilt"
+      "h2h_string_id": "orion-vell:jab_finisher->up_tilt",
+      "impact_profile": "medium",
+      "choreography": {
+        "contact_socket": "chest",
+        "contact_frame": 6,
+        "contact_pose_clip": "contact_medium",
+        "victim_reaction_family": "crumple",
+        "charged_layer": "none",
+        "cinematic_hook": "",
+        "identity": "orbital_sink"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
+      }
     },
     {
       "move_id": "forward_tilt",
@@ -322,6 +370,22 @@
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
+      },
+      "impact_profile": "light",
+      "choreography": {
+        "contact_socket": "chest",
+        "contact_frame": 7,
+        "contact_pose_clip": "contact_light",
+        "victim_reaction_family": "stagger",
+        "charged_layer": "none",
+        "cinematic_hook": "",
+        "identity": "orbital_sink"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -394,6 +458,22 @@
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
+      },
+      "impact_profile": "light",
+      "choreography": {
+        "contact_socket": "chest",
+        "contact_frame": 6,
+        "contact_pose_clip": "contact_light",
+        "victim_reaction_family": "stagger",
+        "charged_layer": "none",
+        "cinematic_hook": "",
+        "identity": "orbital_sink"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -475,7 +555,23 @@
           "to": "up_air"
         }
       ],
-      "h2h_string_id": "orion-vell:down_tilt->up_air"
+      "h2h_string_id": "orion-vell:down_tilt->up_air",
+      "impact_profile": "light",
+      "choreography": {
+        "contact_socket": "chest",
+        "contact_frame": 5,
+        "contact_pose_clip": "contact_light",
+        "victim_reaction_family": "stagger",
+        "charged_layer": "none",
+        "cinematic_hook": "",
+        "identity": "orbital_sink"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
+      }
     },
     {
       "move_id": "dash_attack",
@@ -547,6 +643,22 @@
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
+      },
+      "impact_profile": "medium",
+      "choreography": {
+        "contact_socket": "chest",
+        "contact_frame": 7,
+        "contact_pose_clip": "contact_medium",
+        "victim_reaction_family": "crumple",
+        "charged_layer": "none",
+        "cinematic_hook": "",
+        "identity": "orbital_sink"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -622,7 +734,23 @@
         "strength": 1
       },
       "wave016_reachability": "DESIGN_ONLY_NO_DISTINCT_CONTROL",
-      "note": "CONTROLS.md does not distinguish tilt vs smash/heavy; not bound to avoid awkward inputs."
+      "note": "CONTROLS.md does not distinguish tilt vs smash/heavy; not bound to avoid awkward inputs.",
+      "impact_profile": "heavy",
+      "choreography": {
+        "contact_socket": "chest",
+        "contact_frame": 10,
+        "contact_pose_clip": "contact_heavy",
+        "victim_reaction_family": "crumple",
+        "charged_layer": "none",
+        "cinematic_hook": "warranted_heavy",
+        "identity": "orbital_sink"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
+      }
     },
     {
       "move_id": "neutral_air",
@@ -694,6 +822,22 @@
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
+      },
+      "impact_profile": "medium",
+      "choreography": {
+        "contact_socket": "chest",
+        "contact_frame": 6,
+        "contact_pose_clip": "contact_medium",
+        "victim_reaction_family": "crumple",
+        "charged_layer": "none",
+        "cinematic_hook": "",
+        "identity": "orbital_sink"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -766,6 +910,22 @@
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
+      },
+      "impact_profile": "medium",
+      "choreography": {
+        "contact_socket": "chest",
+        "contact_frame": 6,
+        "contact_pose_clip": "contact_medium",
+        "victim_reaction_family": "crumple",
+        "charged_layer": "none",
+        "cinematic_hook": "",
+        "identity": "orbital_sink"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -838,6 +998,22 @@
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
+      },
+      "impact_profile": "medium",
+      "choreography": {
+        "contact_socket": "chest",
+        "contact_frame": 6,
+        "contact_pose_clip": "contact_medium",
+        "victim_reaction_family": "crumple",
+        "charged_layer": "none",
+        "cinematic_hook": "",
+        "identity": "orbital_sink"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -910,6 +1086,22 @@
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
+      },
+      "impact_profile": "medium",
+      "choreography": {
+        "contact_socket": "chest",
+        "contact_frame": 5,
+        "contact_pose_clip": "contact_medium",
+        "victim_reaction_family": "crumple",
+        "charged_layer": "none",
+        "cinematic_hook": "",
+        "identity": "orbital_sink"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -982,6 +1174,22 @@
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
+      },
+      "impact_profile": "medium",
+      "choreography": {
+        "contact_socket": "chest",
+        "contact_frame": 5,
+        "contact_pose_clip": "contact_medium",
+        "victim_reaction_family": "crumple",
+        "charged_layer": "none",
+        "cinematic_hook": "",
+        "identity": "orbital_sink"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -1091,6 +1299,22 @@
         "pierce": false,
         "homing": 0.35,
         "pull_strength": 180
+      },
+      "impact_profile": "medium",
+      "choreography": {
+        "contact_socket": "chest",
+        "contact_frame": 8,
+        "contact_pose_clip": "contact_medium",
+        "victim_reaction_family": "crumple",
+        "charged_layer": "none",
+        "cinematic_hook": "",
+        "identity": "orbital_sink"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -1173,6 +1397,22 @@
       "field": {
         "pull_strength": 220,
         "radius": 90
+      },
+      "impact_profile": "medium",
+      "choreography": {
+        "contact_socket": "chest",
+        "contact_frame": 10,
+        "contact_pose_clip": "contact_medium",
+        "victim_reaction_family": "crumple",
+        "charged_layer": "none",
+        "cinematic_hook": "",
+        "identity": "orbital_sink"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -1258,6 +1498,22 @@
         "air_friction": 0.9,
         "landing_lag": 11,
         "orbit_assist": true
+      },
+      "impact_profile": "medium",
+      "choreography": {
+        "contact_socket": "chest",
+        "contact_frame": 8,
+        "contact_pose_clip": "contact_medium",
+        "victim_reaction_family": "crumple",
+        "charged_layer": "none",
+        "cinematic_hook": "",
+        "identity": "orbital_sink"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -1335,6 +1591,22 @@
       "trap": {
         "linger_frames": 36,
         "pull_pulses": 3
+      },
+      "impact_profile": "heavy",
+      "choreography": {
+        "contact_socket": "chest",
+        "contact_frame": 11,
+        "contact_pose_clip": "contact_heavy",
+        "victim_reaction_family": "crumple",
+        "charged_layer": "none",
+        "cinematic_hook": "warranted_heavy",
+        "identity": "orbital_sink"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -1403,7 +1675,23 @@
       },
       "training_display_name": "Grab",
       "combat_tag": "gravity_pull",
-      "grab_range": 40
+      "grab_range": 40,
+      "impact_profile": "light",
+      "choreography": {
+        "contact_socket": "chest",
+        "contact_frame": 6,
+        "contact_pose_clip": "contact_light",
+        "victim_reaction_family": "stagger",
+        "charged_layer": "none",
+        "cinematic_hook": "",
+        "identity": "orbital_sink"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
+      }
     },
     {
       "move_id": "throw_forward",
@@ -1485,6 +1773,22 @@
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
+      },
+      "impact_profile": "heavy",
+      "choreography": {
+        "contact_socket": "chest",
+        "contact_frame": 5,
+        "contact_pose_clip": "contact_heavy",
+        "victim_reaction_family": "crumple",
+        "charged_layer": "none",
+        "cinematic_hook": "warranted_heavy",
+        "identity": "orbital_sink"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -1567,6 +1871,22 @@
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
+      },
+      "impact_profile": "heavy",
+      "choreography": {
+        "contact_socket": "chest",
+        "contact_frame": 5,
+        "contact_pose_clip": "contact_heavy",
+        "victim_reaction_family": "crumple",
+        "charged_layer": "none",
+        "cinematic_hook": "warranted_heavy",
+        "identity": "orbital_sink"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -1649,6 +1969,22 @@
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
+      },
+      "impact_profile": "heavy",
+      "choreography": {
+        "contact_socket": "chest",
+        "contact_frame": 5,
+        "contact_pose_clip": "contact_heavy",
+        "victim_reaction_family": "crumple",
+        "charged_layer": "none",
+        "cinematic_hook": "warranted_heavy",
+        "identity": "orbital_sink"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -1731,6 +2067,22 @@
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
+      },
+      "impact_profile": "heavy",
+      "choreography": {
+        "contact_socket": "chest",
+        "contact_frame": 6,
+        "contact_pose_clip": "contact_heavy",
+        "victim_reaction_family": "crumple",
+        "charged_layer": "none",
+        "cinematic_hook": "warranted_heavy",
+        "identity": "orbital_sink"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
       }
     },
     {
@@ -1761,7 +2113,23 @@
         "screen_flash": false
       },
       "training_display_name": "Aura Charge",
-      "combat_tag": "gravity_pull"
+      "combat_tag": "gravity_pull",
+      "impact_profile": "aura",
+      "choreography": {
+        "contact_socket": "chest",
+        "contact_frame": 0,
+        "contact_pose_clip": "contact_aura",
+        "victim_reaction_family": "launch",
+        "charged_layer": "hold",
+        "cinematic_hook": "warranted_heavy",
+        "identity": "orbital_sink"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
+      }
     },
     {
       "move_id": "aura_burst",
@@ -1834,7 +2202,23 @@
         "effect": "gravity_pull",
         "strength": 2.5
       },
-      "meter_cost": 100
+      "meter_cost": 100,
+      "impact_profile": "aura",
+      "choreography": {
+        "contact_socket": "chest",
+        "contact_frame": 13,
+        "contact_pose_clip": "contact_aura",
+        "victim_reaction_family": "launch",
+        "charged_layer": "release",
+        "cinematic_hook": "warranted_heavy",
+        "identity": "orbital_sink"
+      },
+      "anime_timing": {
+        "anticipation_holds": 2,
+        "impact_accent_frames": 3,
+        "recovery_settle": 5,
+        "pose_to_pose": true
+      }
     }
   ],
   "game001_identity": {

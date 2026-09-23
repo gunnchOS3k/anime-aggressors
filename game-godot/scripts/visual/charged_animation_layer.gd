@@ -1,9 +1,46 @@
 extends RefCounted
 class_name ChargedAnimationLayer
 
-## Phase 1 hook only. Does not silently replace uncharged clips.
+## Presentation-only charged performances. Does not change CombatMath.
 
-const READY := false
+const READY := true
+const BANDS := [0.0, 25.0, 50.0, 75.0, 100.0]
+const LOCO_MAP := {
+	"idle": "charged_idle",
+	"walk": "charged_walk",
+	"run": "charged_run",
+	"dash": "charged_dash",
+	"jump": "charged_jump",
+	"fall": "charged_fall",
+	"landing": "charged_land",
+	"land": "charged_land",
+}
+
+
+static func band_for(aura: float) -> int:
+	if aura >= 100.0:
+		return 100
+	if aura >= 75.0:
+		return 75
+	if aura >= 50.0:
+		return 50
+	if aura >= 25.0:
+		return 25
+	return 0
+
+
+static func charge_clip_for_band(band: int) -> String:
+	match band:
+		100:
+			return "charge_full"
+		75:
+			return "charge_high"
+		50:
+			return "charge_mid"
+		25:
+			return "charge_low"
+		_:
+			return "charge_start"
 
 
 static func layer_for_move(move: Dictionary) -> String:
@@ -11,14 +48,30 @@ static func layer_for_move(move: Dictionary) -> String:
 	return str(choreo.get("charged_layer", "none"))
 
 
-static func overlay_clip(base_clip: String, move: Dictionary) -> String:
+static func overlay_clip(base_clip: String, move: Dictionary, aura: float = 0.0, loaded: Dictionary = {}) -> String:
 	var layer := layer_for_move(move)
 	if layer == "hold":
-		return "charged_hold"
+		return _prefer(charge_clip_for_band(band_for(aura)), loaded, "charged_hold")
 	if layer == "release":
-		return "uncharged_release" if base_clip.is_empty() else base_clip
+		if loaded.has("charge_release"):
+			return "charge_release"
+		return base_clip
+	if aura >= 25.0 and LOCO_MAP.has(base_clip):
+		return _prefer(str(LOCO_MAP[base_clip]), loaded, base_clip)
 	return base_clip
 
 
-static func should_apply(_fighter_id: String, _move: Dictionary) -> bool:
-	return READY
+static func should_apply(_fighter_id: String, move: Dictionary) -> bool:
+	if not READY:
+		return false
+	if layer_for_move(move) != "none":
+		return true
+	return float(move.get("attacker_aura", 0.0)) >= 25.0
+
+
+static func _prefer(name: String, loaded: Dictionary, fallback: String) -> String:
+	if loaded.is_empty() or loaded.has(name):
+		return name
+	if loaded.has(fallback):
+		return fallback
+	return name

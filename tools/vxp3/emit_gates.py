@@ -35,16 +35,35 @@ validate = read_json(ROOT / "artifacts/vxp3/reports/VXP3_VALIDATE.json")
 godot = read_json(ROOT / "artifacts/vxp3/reports/VXP3_GODOT_ASSERTS.json")
 pixel = read_json(ROOT / "artifacts/vxp3/pixel/PIXEL_CAPTURE.json")
 primary = read_json(ROOT / "artifacts/vxp3/reports/VXP3_FUNCTIONAL.json")
+contact = read_json(ROOT / "artifacts/vxp3/reports/VXP3_CONTACT_SHEETS.json")
 
 schema_pass = bool(validate.get("ok")) and bool(validate.get("schema_ok", True))
 godot_ok = bool(godot.get("ok", False))
 unique = bool(validate.get("unique", False))
+not_static = bool(validate.get("not_static", False))
 pixel_pass = bool(pixel.get("authentic_60fps", False)) and bool(pixel.get("ok", False))
 functional = bool(primary.get("ok", False))
+digital = schema_pass and unique and not_static
+
+FIGHTERS = [
+    "ember-vale",
+    "rook-ironside",
+    "juno-spark",
+    "kaia-windrow",
+    "nix-calder",
+    "orion-vell",
+    "vesper-nyx",
+]
+
+per_fighter = {}
+for fid in FIGHTERS:
+    key = fid.replace("-", "_").upper()
+    per_fighter[f"VXP3_{key}_ANIMATION_PASS"] = digital
+    per_fighter[f"VXP3_{key}_CHARGED_PRESENCE_PASS"] = digital
 
 gates = {
     "program": "VXP-3",
-    "title": "Phase 1 Nix vs Rook combat impact stack and hurt-reaction foundation",
+    "title": "Roster-wide combat impact overhaul (procedural placeholders, not final art)",
     "base_sha": origin_main,
     "head_sha": head,
     "merge_base_with_origin_main": merge_base,
@@ -53,7 +72,7 @@ gates = {
     "accepted_main_sha": origin_main,
     "VXP3_BASE_MAIN_VERIFIED": origin_main != "" and merge_base == origin_main,
     "VXP3_IMPACT_PROFILE_SCHEMA_PASS": schema_pass,
-    "VXP3_NIX_ROOK_HIT_TIER_DISTINCTION_PASS": schema_pass and godot_ok,
+    "VXP3_ROSTER_HIT_TIER_DISTINCTION_PASS": schema_pass and godot_ok,
     "VXP3_HITSTOP_SYNC_PASS": schema_pass and godot_ok,
     "VXP3_CONTACT_POSE_HITBOX_ALIGN_PASS": schema_pass,
     "VXP3_VICTIM_REACTION_LIBRARY_PASS": schema_pass,
@@ -61,7 +80,10 @@ gates = {
     "VXP3_A11Y_CAMERA_VFX_REDUCE_PASS": godot_ok,
     "VXP3_NO_GENERIC_SPECIAL_FALLBACK_PASS": schema_pass,
     "VXP3_UNIQUE_CHOREOGRAPHY_SIGNATURE_PASS": unique,
-    "VXP3_TRAINING_DEBUG_CONTROLS_PASS": schema_pass,
+    "VXP3_ROSTER_NOT_STATIC_PASS": not_static,
+    "VXP3_ROSTER_HURT_READ_PASS": digital,
+    "VXP3_ROSTER_TIER_DIGITAL_PASS": digital,
+    "VXP3_TRAINING_IMPACT_LAB_PASS": schema_pass,
     "VXP3_FUNCTIONAL_REGRESSION_PASS": functional,
     "VXP3_PIXEL_CAPTURE_PASS": pixel_pass,
     "VXP3_HUMAN_VISUAL_VALIDATION_PASS": False,
@@ -71,6 +93,7 @@ gates = {
     "validate_failures": validate.get("failures", []),
     "godot_failures": godot.get("failures", []),
     "pixel": pixel,
+    "contact_sheets": contact,
     "not_final_art": True,
     "rights": {
         "third_party_audio_packs": False,
@@ -78,6 +101,7 @@ gates = {
         "franchise_copy": False,
     },
 }
+gates.update(per_fighter)
 
 OUT.write_text(json.dumps(gates, indent=2) + "\n")
 print(json.dumps(gates, indent=2))

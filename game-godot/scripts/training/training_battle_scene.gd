@@ -3,6 +3,8 @@ const _FrameDataTable = preload("res://scripts/combat/frame_data_table.gd")
 const _DataLoader = preload("res://scripts/data/data_loader.gd")
 const _BattleSim = preload("res://scripts/battle/battle_sim.gd")
 const _TrainingImpactDebug = preload("res://scripts/training/training_impact_debug.gd")
+const _TrainingImpactLab = preload("res://scripts/training/training_impact_lab.gd")
+const _ImpactVfx = preload("res://scripts/combat/impact_vfx_director.gd")
 
 @onready var fighters_root: Node2D = $Fighters
 @onready var stage_root: Node2D = $Stage
@@ -27,6 +29,8 @@ var _move_list_panel: Control
 var _pin_reminder: Label
 var _move_list_btn: Button
 var _pause_panel: PanelContainer
+var _impact_lab: CanvasLayer
+var _impact_vfx: Node
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -52,6 +56,7 @@ func _ready() -> void:
 	_update_help()
 	_ensure_frame_overlay()
 	_ensure_move_list_access()
+	_ensure_impact_lab()
 
 
 func _ensure_move_list_access() -> void:
@@ -317,12 +322,26 @@ func _unhandled_input(event: InputEvent) -> void:
 		_toggle_pause()
 		get_viewport().set_input_as_handled()
 
+func _ensure_impact_lab() -> void:
+	if _impact_lab != null:
+		return
+	_impact_lab = _TrainingImpactLab.new()
+	_impact_lab.name = "TrainingImpactLab"
+	add_child(_impact_lab)
+	_impact_lab.setup(self)
+	_impact_vfx = _ImpactVfx.new()
+	_impact_vfx.name = "ImpactVfxDirector"
+	add_child(_impact_vfx)
+
+
 func _apply_hide_hud(hidden: bool) -> void:
 	if hud:
 		hud.visible = not hidden
 	if _debug_hud:
 		_debug_hud.visible = not hidden
 		_debug_hud.visible_debug = not hidden
+	if _impact_lab:
+		_impact_lab.visible = true
 	_log("HUD HIDDEN" if hidden else "HUD VISIBLE")
 
 

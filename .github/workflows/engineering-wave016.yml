@@ -60,17 +60,26 @@ jobs:
         run: |
           python3 - <<'PY'
           import json
+          import sys
           from pathlib import Path
+          sys.path.insert(0, "tools/engineering_wave016")
+          from derive_clip_totals import derive_clip_totals
+          totals = derive_clip_totals(Path("."))
+          expected = totals["expected_from_manifests"]
           d = json.load(open("artifacts/engineering_wave016/WAVE016_RESULT.json"))
           assert d.get("CURSOR_MERGED_NOTHING") is True
           assert d.get("FINAL_HUMAN_AUTHORED_ANIMATION_PASS") is False
           assert d.get("HUMAN_ART_DIRECTION_APPROVAL") is False
           assert d.get("HUMAN_PLAYTEST_COMPLETE") is False
           assert d.get("OWNER_TASTE_REVIEW") == "PENDING"
-          assert d.get("PROCEDURAL_CLIPS_GENERATED") == 357
-          assert d.get("NORMAL_PLAYER_INPUT_REACHABLE_CLIPS", 357) < 357
+          assert d.get("PROCEDURAL_CLIPS_GENERATED") == expected
+          assert d.get("GENERIC_FALLBACK_GAMEPLAY_MOVES") == 0
+          assert d.get("UNMAPPED_GAMEPLAY_MOVES") == 0
+          assert d.get("NORMAL_PLAYER_INPUT_REACHABLE_CLIPS", expected) < expected
           assert d.get("GOLDEN_SLICE_AUTOMATED_Q3_READINESS") is False
           m = json.load(open("content/runtime/move_animation_application_matrix.json"))
-          assert m["metrics"]["PROCEDURAL_CLIPS_GENERATED"] == 357
-          print("CI final gate OK", d.get("WAVE016_MOVE_ANIMATION_APPLICATION"))
+          assert m["metrics"]["PROCEDURAL_CLIPS_GENERATED"] == expected
+          assert m["metrics"]["GENERIC_FALLBACK_GAMEPLAY_MOVES"] == 0
+          assert m["metrics"]["UNMAPPED_GAMEPLAY_MOVES"] == 0
+          print("CI final gate OK", d.get("WAVE016_MOVE_ANIMATION_APPLICATION"), "derived_clips", expected)
           PY

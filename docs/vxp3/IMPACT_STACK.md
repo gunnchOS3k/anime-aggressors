@@ -31,8 +31,13 @@ Library families: flinch, stagger, crumple, launch, tumble, spike, freeze_stiffn
 
 Gameplay still enters `hurt_light` / `hurt_heavy` / `launched` so competitive state locks do not change. The clip is the family performance.
 
-## Hooks (not fully authored this PR)
+## Roster-wide presentation (placeholders, not final art)
 
-- `charged_animation_layer.gd` — READY=false
-- `combat_cinematic_director.gd` — READY=false
+All seven fighters have unique pose-to-pose clips: locomotion start/loop/stop, charged loco, charge bands 0/25/50/75/100, distinct heavy / aura / super, and a 12-family hurt library. Training Impact Lab is Pixel-touch and Training-only.
+
+## Hooks
+
+- `charged_animation_layer.gd` — READY=true (presentation remap only)
+- `combat_cinematic_director.gd` — camera still a11y-gated
+- `impact_vfx_director.gd` — short-lived fighter palettes at contact
 - `anime_timing` / `choreography` metadata on moves

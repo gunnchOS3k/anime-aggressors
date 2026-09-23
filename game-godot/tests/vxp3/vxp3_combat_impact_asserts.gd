@@ -75,7 +75,9 @@ func _run() -> void:
 	_ok(_Cinematic.should_direct("heavy", true), "cinematic hook heavy")
 	_ok(not _Cinematic.should_direct("light", true), "cinematic hook skips light")
 	_ok(not _Cinematic.should_direct("heavy", false), "cinematic respects a11y")
-	_ok(not _Charged.should_apply("nix-calder", {}), "charged layer remains hook")
+	_ok(_Charged.should_apply("nix-calder", {"choreography": {"charged_layer": "hold"}, "attacker_aura": 75.0}), "charged layer live")
+	_ok(_Charged.band_for(100.0) == 100, "charge full band")
+	_ok(_Charged.overlay_clip("idle", {}, 80.0, {"charged_idle": true}) == "charged_idle", "charged idle remap")
 	_ok(_Training.controls_present_in("F11 freeze F12 step replay"), "training debug tokens")
 
 	var payload := {
