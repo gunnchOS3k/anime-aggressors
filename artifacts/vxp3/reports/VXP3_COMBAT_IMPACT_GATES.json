@@ -2,7 +2,7 @@
   "program": "VXP-3",
   "title": "Roster-wide combat impact overhaul (procedural placeholders, not final art)",
   "base_sha": "6cd1b3100a7e467c2c991394576891660deb1162",
-  "head_sha": "7ed92b08d00022f80f93d85bae13fef4b5c5aeb0",
+  "head_sha": "b9cb6ff10732a9c15daf453d0f8f8abe0f22fd1c",
   "merge_base_with_origin_main": "6cd1b3100a7e467c2c991394576891660deb1162",
   "branch": "vxp/vxp-3-combat-impact-nix-rook",
   "rc1_tag_untouched": true,
@@ -33,17 +33,19 @@
     "ok": false,
     "authentic_60fps": false,
     "VXP3_PIXEL_CAPTURE_PASS": false,
-    "reason": "PR #106 debug APK from live head 30d4c07 was signer-safe installed on PIXEL_USB_DEVICE_1 (Pixel 6a). App launched to Boot/Start Game, then Main Menu, then Match Settings (FIGHT path). USB debugging dropped repeatedly after launch; no Training battle and no app-only 60fps combat recording of light/medium/heavy. Remaining authentic stills are boot-title only. Main Menu and Match Settings were reached and visually confirmed, but those two PNGs were deleted in a local cleanup error and are not reconstructed. Human visual / combat-feel / fun / merge stay false.",
+    "reason": "Roster-wide owner-review APK (SHA256 d75fb71863dbc8c260f4543e3d558d389defc2d9e5b8d7461757f4ecdf12a12c) was signer-safe installed with adb install -r on PIXEL_USB_DEVICE_1 (Pixel 6a, bluejay). App launched (pid 16550). Authentic boot-title stills exist. No Training battle, no Training Impact Lab session, and no app-only 60fps combat recording of light/medium/heavy/aura/KO. Human visual / combat-feel / fun / merge stay false. Automation does not set those gates.",
     "device": "PIXEL_USB_DEVICE_1 Pixel 6a bluejay",
     "uninstall_performed": false,
     "pm_clear_performed": false,
     "screenshots": [
       "boot_start_game.png",
-      "boot_usb_banner.png"
+      "boot_usb_banner.png",
+      "02_after_roster_install.png",
+      "03_after_routing_fix.png"
     ],
     "video": null,
-    "playtest_path_reached": "Boot -> Main Menu -> Match Settings. Did not reach Training battle or Nix vs Rook combat.",
-    "usb_note": "Authorized USB ADB was flaky after install; last confirmed app screen was Match Settings. Device later absent from adb."
+    "playtest_path_reached": "Boot title (Start Game). Training Impact Lab and roster combat not entered in this install pass.",
+    "usb_note": "Authorized USB ADB stayed connected after install. Owner should screen-record Training Impact Lab on-device. Serial redacted as PIXEL_USB_DEVICE_1."
   },
   "contact_sheets": {
     "per_fighter": {

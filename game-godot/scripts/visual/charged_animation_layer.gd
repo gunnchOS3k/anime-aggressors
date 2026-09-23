@@ -53,12 +53,29 @@ static func overlay_clip(base_clip: String, move: Dictionary, aura: float = 0.0,
 	if layer == "hold":
 		return _prefer(charge_clip_for_band(band_for(aura)), loaded, "charged_hold")
 	if layer == "release":
-		if loaded.has("charge_release"):
-			return "charge_release"
-		return base_clip
+		# Unique burst/super/attack clips stay fighter-specific. Generic charge_release
+		# is only for charge-state release, never a silent signature remap.
+		if _keeps_attack_identity(base_clip):
+			return _prefer("charged_%s" % base_clip, loaded, base_clip)
+		return _prefer("charge_release", loaded, base_clip)
 	if aura >= 25.0 and LOCO_MAP.has(base_clip):
 		return _prefer(str(LOCO_MAP[base_clip]), loaded, base_clip)
 	return base_clip
+
+
+static func _keeps_attack_identity(clip: String) -> bool:
+	if clip.begins_with("signature_") or clip.begins_with("aerial_") or clip.begins_with("tilt_") or clip.begins_with("jab"):
+		return true
+	return clip in [
+		"aura_release",
+		"super",
+		"heavy",
+		"grab",
+		"projectile_tap",
+		"projectile_medium",
+		"projectile_full",
+		"recovery",
+	]
 
 
 static func should_apply(_fighter_id: String, move: Dictionary) -> bool:

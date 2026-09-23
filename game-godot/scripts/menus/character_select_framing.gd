@@ -7,6 +7,8 @@ class_name CharacterSelectFraming
 static func compute_model_bounds(root: Node3D) -> AABB:
 	if root == null or not is_instance_valid(root):
 		return AABB(Vector3.ZERO, Vector3(0.01, 1.8, 0.01))
+	if not root.is_inside_tree():
+		return AABB(Vector3(-0.35, 0.0, -0.2), Vector3(0.7, 1.75, 0.4))
 	var combined := AABB()
 	var first := true
 	var stack: Array = [root]
