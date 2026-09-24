@@ -1,0 +1,43 @@
+{
+  "ok": true,
+  "ART_IMPACT_REVIEW_TOOL_PASS": true,
+  "pairs": {
+    "rook-ironside -> nix-calder": {
+      "socket": "hand_r",
+      "anchor": "CHEST",
+      "attacker_socket_world": [
+        0.54,
+        0.12,
+        0.94
+      ],
+      "defender_location": [
+        0.59,
+        0.06,
+        -0.34
+      ],
+      "contact_distance": 0.05,
+      "frozen_contact": true,
+      "vfx": "OFF",
+      "camera_shake": "OFF",
+      "review_only": true,
+      "gameplay_unchanged": true,
+      "combat_math_unchanged": true,
+      "ok": true
+    },
+    "anchors": [
+      "HEAD",
+      "CHEST",
+      "TORSO_LEFT",
+      "TORSO_RIGHT",
+      "PELVIS",
+      "UPPER_GUARD",
+      "LOWER_GUARD"
+    ],
+    "frames": [
+      "contact",
+      "hurt",
+      "follow_through"
+    ]
+  },
+  "note": "Review staging only. CombatMath / hitboxes / frame data stay on main."
+}

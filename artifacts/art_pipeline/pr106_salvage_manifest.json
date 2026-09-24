@@ -1,0 +1,187 @@
+{
+  "source_pr": 106,
+  "source_head": "8cd3e1359f11644787c79de4a6f03e17dbf1ec56",
+  "accepted_main": "6cd1b3100a7e467c2c991394576891660deb1162",
+  "files": [
+    {
+      "path": "art_source/animation/shared/deform_skeleton/CANONICAL_DEFORM_SKELETON.json",
+      "classification": "SALVAGE",
+      "reason": "canonical deform skeleton",
+      "destination": "same",
+      "source": "8cd3e135",
+      "shipping_impact": "none",
+      "production_resolver_impact": "none"
+    },
+    {
+      "path": "art_source/animation/CONTRACT.md",
+      "classification": "REIMPLEMENT_CLEANLY",
+      "reason": "strip generated-shipping assumptions",
+      "destination": "same",
+      "source": "8cd3e135 rewritten",
+      "shipping_impact": "none",
+      "production_resolver_impact": "none"
+    },
+    {
+      "path": "docs/animation/HUMAN_ART_REPLACEMENT_CONTRACT.md",
+      "classification": "REIMPLEMENT_CLEANLY",
+      "reason": "generated art does not ship",
+      "destination": "same",
+      "source": "8cd3e135 rewritten",
+      "shipping_impact": "none",
+      "production_resolver_impact": "none"
+    },
+    {
+      "path": "tools/generated_production_art/review_cameras_v4.py",
+      "classification": "REIMPLEMENT_CLEANLY",
+      "reason": "generic cameras without generated package",
+      "destination": "tools/art_pipeline/human_art/cameras.py",
+      "source": "8cd3e135",
+      "shipping_impact": "none",
+      "production_resolver_impact": "none"
+    },
+    {
+      "path": "tools/generated_art_v9/validate_attachment_integrity.py",
+      "classification": "REIMPLEMENT_CLEANLY",
+      "reason": "drop V9 object names",
+      "destination": "tools/art_pipeline/human_art/validate_attachments.py",
+      "source": "8cd3e135",
+      "shipping_impact": "none",
+      "production_resolver_impact": "none"
+    },
+    {
+      "path": "tools/generated_art_v9/impact_pair_solver.py",
+      "classification": "REIMPLEMENT_CLEANLY",
+      "reason": "review-only generic anchors",
+      "destination": "tools/art_pipeline/human_art/impact_review.py",
+      "source": "8cd3e135",
+      "shipping_impact": "none",
+      "production_resolver_impact": "none"
+    },
+    {
+      "path": "game-godot/scripts/menus/character_select_framing.gd",
+      "classification": "SALVAGE",
+      "reason": "Kaia accessory-width / full-body framing",
+      "destination": "same",
+      "source": "8cd3e135 hunk",
+      "shipping_impact": "framing only",
+      "production_resolver_impact": "none"
+    },
+    {
+      "path": "game-godot/scripts/visual/fighter_asset_resolver.gd",
+      "classification": "REIMPLEMENT_CLEANLY",
+      "reason": "reject generated roster; add ACTIVE_CHARACTER_PRESENTATION; isolate staging",
+      "destination": "same",
+      "source": "main + salvage, not #106 generated prefer",
+      "shipping_impact": "preserves accepted art",
+      "production_resolver_impact": "blocks generated V2\u2013V9"
+    },
+    {
+      "path": "tools/authored_animation/*",
+      "classification": "SALVAGE",
+      "reason": "generic validators / submit-check",
+      "destination": "tools/authored_animation",
+      "source": "8cd3e135 stripped of generated proofs",
+      "shipping_impact": "none",
+      "production_resolver_impact": "none"
+    },
+    {
+      "path": "art_source/generated/**",
+      "classification": "EXPERIMENT_ONLY",
+      "reason": "generated masters",
+      "destination": "remain on PR #106",
+      "source": "8cd3e135",
+      "shipping_impact": "excluded",
+      "production_resolver_impact": "none"
+    },
+    {
+      "path": "game-godot/content/fighters/**/ *_generated_production.glb",
+      "classification": "EXPERIMENT_ONLY",
+      "reason": "generated shipping copies",
+      "destination": "remain on PR #106",
+      "source": "8cd3e135",
+      "shipping_impact": "excluded",
+      "production_resolver_impact": "blocked"
+    },
+    {
+      "path": "artifacts/vxp3/**",
+      "classification": "DROP",
+      "reason": "giant review packets",
+      "destination": "reference PR #106",
+      "source": "8cd3e135",
+      "shipping_impact": "excluded",
+      "production_resolver_impact": "none"
+    },
+    {
+      "path": "tools/generated_art_v5..v9/**",
+      "classification": "EXPERIMENT_ONLY",
+      "reason": "generator implementation",
+      "destination": "remain on PR #106",
+      "source": "8cd3e135",
+      "shipping_impact": "excluded",
+      "production_resolver_impact": "none"
+    },
+    {
+      "path": "game-godot/scripts/combat/*clash*",
+      "classification": "DROP",
+      "reason": "gameplay change not authorized",
+      "destination": "remain on PR #106",
+      "source": "8cd3e135",
+      "shipping_impact": "excluded",
+      "production_resolver_impact": "none"
+    },
+    {
+      "path": "docs/art/CHARACTER_ART_DIRECTION_CONTRACT.md",
+      "classification": "ALREADY_ON_MAIN",
+      "reason": "accepted identity",
+      "destination": "unchanged",
+      "source": "6cd1b310",
+      "shipping_impact": "none",
+      "production_resolver_impact": "none"
+    },
+    {
+      "path": "game-godot/content/fighters/**/_procedural_proxy.glb",
+      "classification": "ALREADY_ON_MAIN",
+      "reason": "current accepted art",
+      "destination": "unchanged",
+      "source": "6cd1b310",
+      "shipping_impact": "shipping",
+      "production_resolver_impact": "still selected"
+    },
+    {
+      "path": "prefix artifacts/vxp3 (~2490 files)",
+      "classification": "DROP",
+      "reason": "review PNGs / v9 reports",
+      "destination": "PR #106",
+      "source": "8cd3e135",
+      "shipping_impact": "excluded",
+      "production_resolver_impact": "none"
+    },
+    {
+      "path": "prefix game-godot/content generated (~1554)",
+      "classification": "EXPERIMENT_ONLY",
+      "reason": "generated runtime copies",
+      "destination": "PR #106",
+      "source": "8cd3e135",
+      "shipping_impact": "excluded",
+      "production_resolver_impact": "blocked"
+    },
+    {
+      "path": "prefix content/fighters generated (~742)",
+      "classification": "EXPERIMENT_ONLY",
+      "reason": "generated content tree",
+      "destination": "PR #106",
+      "source": "8cd3e135",
+      "shipping_impact": "excluded",
+      "production_resolver_impact": "blocked"
+    },
+    {
+      "path": "prefix tools/generated_* (~152)",
+      "classification": "EXPERIMENT_ONLY",
+      "reason": "V5\u2013V9 generators",
+      "destination": "PR #106",
+      "source": "8cd3e135",
+      "shipping_impact": "excluded",
+      "production_resolver_impact": "none"
+    }
+  ]
+}

@@ -7,12 +7,17 @@ class_name FighterAssetResolver
 
 const STATUS_PROCEDURAL := "PROCEDURAL_PRODUCTION_PROXY"
 const STATUS_PROCEDURAL_ANIM := "PROCEDURAL_RUNTIME_ANIMATION"
+const STATUS_STAGING := "HUMAN_CANDIDATE"
 
 const CLASS_CURRENT := "CURRENT_PLAYER_FACING"
 const CLASS_DEV := "DEV_ONLY"
 const CLASS_TEST := "TEST_ONLY"
 const CLASS_HISTORICAL := "HISTORICAL"
 const CLASS_DEPRECATED := "DEPRECATED"
+const CLASS_RESEARCH := "RESEARCH_ONLY"
+
+## Salvage invariant: PR #106 generated roster never ships from this branch.
+const PR106_GENERATED_ROSTER_NOT_SHIPPING := true
 
 const CTX_SELECT_CARD := "select_card"
 const CTX_SELECT_PREVIEW := "select_preview"
@@ -41,6 +46,12 @@ static func canonical_glb_path(fighter_id: String) -> String:
 static func classify_path(path: String) -> String:
 	if path.is_empty():
 		return CLASS_DEPRECATED
+	if path.contains("human_art_staging"):
+		return CLASS_DEV
+	if path.contains("generated_production") or path.contains("generated_art") or path.contains("/generated/"):
+		return CLASS_RESEARCH
+	if path.contains("_generated_production.glb"):
+		return CLASS_RESEARCH
 	if path.contains("/content/fighters/") and path.ends_with("_procedural_proxy.glb"):
 		return CLASS_CURRENT
 	if path.contains("/approved/") or path.contains("/final/") or path.contains("vroid"):
@@ -91,6 +102,7 @@ static func resolve_presentation(fighter_id: String, context: String, fighter_da
 			model["legacy_rejected"] = true
 			model["canonical_missing"] = true
 	var representation_id := "%s::%s" % [fighter_id, str(model.get("source", "UNKNOWN"))]
+	var presentation := str(model.get("CURRENT_MODEL_SOURCE", model.get("source", "MISSING")))
 	return {
 		"fighter_id": fighter_id,
 		"context": context,
@@ -101,7 +113,9 @@ static func resolve_presentation(fighter_id: String, context: String, fighter_da
 		"is_legacy": classification != CLASS_CURRENT,
 		"source": model.get("source", "MISSING"),
 		"tier": model.get("tier", "MISSING"),
-		"CURRENT_MODEL_SOURCE": model.get("CURRENT_MODEL_SOURCE", model.get("source", "MISSING")),
+		"CURRENT_MODEL_SOURCE": presentation,
+		"ACTIVE_CHARACTER_PRESENTATION": presentation,
+		"PR106_GENERATED_ROSTER_NOT_SHIPPING": PR106_GENERATED_ROSTER_NOT_SHIPPING,
 		"model": model,
 	}
 
@@ -120,13 +134,36 @@ static func _count_legacy_reject(context: String) -> void:
 			PLAYER_VISIBLE_LEGACY_MODEL_OCCURRENCES += 1
 
 
+static func human_art_staging_enabled() -> bool:
+	var env := str(OS.get_environment("HUMAN_ART_STAGING"))
+	return env == "1" or env.to_lower() == "true"
+
+
+static func staging_glb_path(fighter_id: String) -> String:
+	return "res://content/human_art_staging/%s/%s.glb" % [fighter_id, fighter_id]
+
+
 static func resolve_model_path(fighter_id: String, fighter_data: Dictionary = {}) -> Dictionary:
 	var explicit := str(fighter_data.get("modelPath", ""))
 	# Approved / final / vroid — only if path itself is not a procedural_final legacy alias.
 	if explicit.contains("/approved/") or (explicit.contains("/final/") and not explicit.contains("procedural_final")):
-		return {"path": explicit, "source": "FINAL_CUSTOM", "tier": "FINAL_CUSTOM", "CURRENT_MODEL_SOURCE": "FINAL_CUSTOM"}
+		return {"path": explicit, "source": "FINAL_CUSTOM", "tier": "FINAL_CUSTOM", "CURRENT_MODEL_SOURCE": "FINAL_CUSTOM", "ACTIVE_CHARACTER_PRESENTATION": "FINAL_CUSTOM"}
 	if explicit.contains("vroid") or explicit.contains("/approved_vroid/"):
-		return {"path": explicit, "source": "APPROVED_VROID", "tier": "APPROVED_VROID", "CURRENT_MODEL_SOURCE": "APPROVED_VROID"}
+		return {"path": explicit, "source": "APPROVED_VROID", "tier": "APPROVED_VROID", "CURRENT_MODEL_SOURCE": "APPROVED_VROID", "ACTIVE_CHARACTER_PRESENTATION": "APPROVED_VROID"}
+	# Staging is opt-in only. Default HUMAN_ART_STAGING=0 keeps accepted art.
+	if human_art_staging_enabled():
+		var staged := staging_glb_path(fighter_id)
+		if ResourceLoader.exists(staged) or FileAccess.file_exists(staged):
+			return {
+				"path": staged,
+				"source": STATUS_STAGING,
+				"tier": STATUS_STAGING,
+				"CURRENT_MODEL_SOURCE": STATUS_STAGING,
+				"ACTIVE_CHARACTER_PRESENTATION": "HUMAN_CANDIDATE",
+				"classification": CLASS_DEV,
+				"shipping": false,
+			}
+	# Generated V2–V9 research assets are never selected here.
 	var proxy := canonical_glb_path(fighter_id)
 	if ResourceLoader.exists(proxy):
 		return {
@@ -134,6 +171,8 @@ static func resolve_model_path(fighter_id: String, fighter_data: Dictionary = {}
 			"source": "PROCEDURAL_PRODUCTION_PROXY",
 			"tier": STATUS_PROCEDURAL,
 			"CURRENT_MODEL_SOURCE": "PROCEDURAL_PRODUCTION_PROXY",
+			"ACTIVE_CHARACTER_PRESENTATION": "CURRENT_ACCEPTED_ART",
+			"PR106_GENERATED_ROSTER_NOT_SHIPPING": PR106_GENERATED_ROSTER_NOT_SHIPPING,
 		}
 	# Legacy secondary — still discoverable for labs, but marked DEPRECATED.
 	var legacy := "res://assets/characters/procedural_final/%s.glb" % fighter_id
@@ -155,6 +194,7 @@ static func resolve_animation_root(fighter_id: String) -> Dictionary:
 			"root": procedural,
 			"source": STATUS_PROCEDURAL_ANIM,
 			"CURRENT_ANIMATION_SOURCE": "PROCEDURAL_RUNTIME_ANIMATION",
+			"ACTIVE_CHARACTER_PRESENTATION": "CURRENT_ACCEPTED_ART",
 		}
 	return {
 		"root": "res://data/fighters/%s_animations.json" % fighter_id,

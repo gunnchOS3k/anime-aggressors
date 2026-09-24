@@ -1,0 +1,35 @@
+{
+  "schema": "aa_blender_gltf_export_v1",
+  "format": "GLB",
+  "gltf_version": "2.0",
+  "include": {
+    "meshes": true,
+    "deform_skeleton": true,
+    "skins": true,
+    "animations": true,
+    "control_rig_bones": false,
+    "ik_bones": false,
+    "mch_bones": false
+  },
+  "transform": {
+    "apply_modifiers": true,
+    "y_up": true,
+    "plus_y_up": true,
+    "scale": 1.0,
+    "visual_root_motion": false
+  },
+  "animation": {
+    "mode": "ACTIVE_ACTIONS_MERGED_PER_CLIP_FILE",
+    "fps": 60,
+    "sampling": true,
+    "optimize": true,
+    "export_frame_range": true
+  },
+  "naming": {
+    "clip_file": "<fighter-id>_<action_id>.glb",
+    "pipeline_proof_file": "pipeline_proof.glb",
+    "action_name_must_match_file_stem_or_pipeline_proof": true
+  },
+  "godot_dest": "game-godot/assets/characters/authored/<fighter-id>/",
+  "art_source_dest": "art_source/animation/fighters/<fighter-id>/export/"
+}

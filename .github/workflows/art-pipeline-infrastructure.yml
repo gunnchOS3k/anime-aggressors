@@ -1,0 +1,45 @@
+name: Art pipeline infrastructure salvage
+
+on:
+  push:
+    branches: [main, "art-pipeline/**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  infra:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Infrastructure gates
+        run: python3 tools/art_pipeline/human_art/emit_infra_gates.py
+      - name: Unit tests
+        run: python3 tools/art_pipeline/human_art/tests/test_infra.py
+      - name: Authored provenance
+        run: python3 tools/authored_animation/validate_provenance.py
+      - name: Upload gates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: art-pipeline-infra-gates
+          path: artifacts/art_pipeline/
+      - name: Honest HUMAN_* stay false
+        run: |
+          python3 - <<'PY'
+          import json
+          d=json.load(open("artifacts/art_pipeline/PR106_INFRA_GATES.json"))
+          g=d["gates"]
+          assert g["HUMAN_ART_DIRECTION_APPROVAL"] is False
+          assert g["HUMAN_ANIMATION_QUALITY_PASS"] is False
+          assert g["HUMAN_COMBAT_FEEL_PASS"] is False
+          assert g["HUMAN_AURA_CLASH_PASS"] is False
+          assert g["HUMAN_CLIP_WORTHY_PASS"] is False
+          assert g["FINAL_AUTHORED_ANIMATION_PASS"] is False
+          assert g["MERGE_AUTHORIZED"] is False
+          assert g["PR106_GENERATED_ROSTER_NOT_SHIPPING"] is True
+          print("honest gates ok")
+          PY

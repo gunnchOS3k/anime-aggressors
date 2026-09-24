@@ -1,6 +1,6 @@
 # Anime Aggressors — repo-native targets
 
-.PHONY: vxp2-structural vxp2-capture vxp2-gates engineering-wave011 engineering-wave012 engineering-wave013b engineering-wave014 engineering-wave015 engineering-wave016 engineering-wave017 engineering-wave018 engineering-wave019 engineering-wave020 engineering-wave021 engineering-wave022 wave020-fighter-select-diagnostic wave020-visibility-diagnostic wave020-select-flourish-diagnostic wave020-pause-diagnostic wave020-audio-diagnostic wave020-battle-body-diagnostic wave020-pause-layout-diagnostic wave020-victory-diagnostic wave020-select-lifecycle-diagnostic wave020-material-persistence-diagnostic wave020-transform-isolation-diagnostic wave020-pixel-cp2-seal wave021-art-direction wave021-form-architecture wave021-aura-tiers wave021-ember-ascension wave021-battle-scale wave021-ui-feel motion-promote wave015-human-crash-capture wave015-battlescene-stability taste-gate engineering-taste-gate visual-golden-qa
+.PHONY: vxp2-structural vxp2-capture vxp2-gates engineering-wave011 engineering-wave012 engineering-wave013b engineering-wave014 engineering-wave015 engineering-wave016 engineering-wave017 engineering-wave018 engineering-wave019 engineering-wave020 engineering-wave021 engineering-wave022 wave020-fighter-select-diagnostic wave020-visibility-diagnostic wave020-select-flourish-diagnostic wave020-pause-diagnostic wave020-audio-diagnostic wave020-battle-body-diagnostic wave020-pause-layout-diagnostic wave020-victory-diagnostic wave020-select-lifecycle-diagnostic wave020-material-persistence-diagnostic wave020-transform-isolation-diagnostic wave020-pixel-cp2-seal wave021-art-direction wave021-form-architecture wave021-aura-tiers wave021-ember-ascension wave021-battle-scale wave021-ui-feel motion-promote wave015-human-crash-capture wave015-battlescene-stability taste-gate engineering-taste-gate visual-golden-qa art-pipeline-infra
 
 engineering-wave011:
 	bash tools/engineering_wave011/run_wave011.sh
@@ -142,3 +142,8 @@ vxp2-capture:
 
 vxp2-gates:
 	python3 tools/vxp2/emit_gates.py
+
+art-pipeline-infra:
+	python3 tools/art_pipeline/human_art/emit_infra_gates.py
+	python3 tools/art_pipeline/human_art/tests/test_infra.py
+	python3 tools/authored_animation/validate_provenance.py

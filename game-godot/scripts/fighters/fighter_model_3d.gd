@@ -76,13 +76,31 @@ var _last_witness: Dictionary = {}
 var _viewport_rebuild_count: int = 0
 var _final_screen_heal_attempts: int = 0
 var _viewport_image_unreadable: bool = false
+var _viewport_evidence_source: String = "UNTESTED"
 var _display_path: String = "ViewportBank+Sprite2D"
+
+
+func viewport_pixel_read_supported() -> bool:
+	## Dummy/headless backends expose a Texture2D whose RID is unreadable.
+	## Never blindly call texture_2d_get / get_image() there — it null-derefs.
+	if OS.has_feature("headless"):
+		return false
+	if str(DisplayServer.get_name()).to_lower() == "headless":
+		return false
+	return true
+
+
+func _mark_structural_visibility_only() -> void:
+	_viewport_image_unreadable = true
+	_viewport_evidence_source = "STRUCTURAL"
 
 
 func _ready() -> void:
 	# Defer viewport bank construction — root may still be busy adding children
 	# during boot (_ready), which makes synchronous add_child fail and leaves
 	# Camera3D outside the tree before look_at.
+	if not viewport_pixel_read_supported():
+		_mark_structural_visibility_only()
 	if _viewport == null:
 		call_deferred("_build_viewport")
 	set_process(true)
@@ -930,6 +948,7 @@ func count_viewport_opaque_pixels() -> Dictionary:
 		"viewport_total_pixels": 0,
 		"viewport_image_valid": false,
 		"viewport_image_unreadable": _viewport_image_unreadable,
+		"viewport_evidence_source": _viewport_evidence_source,
 		"display_rect": {"x": 0.0, "y": 0.0, "w": 0.0, "h": 0.0},
 		"display_path": _display_path,
 	}
@@ -937,19 +956,37 @@ func count_viewport_opaque_pixels() -> Dictionary:
 		var sz := Vector2(float(VIEWPORT_SIZE.x) * absf(_display.scale.x), float(VIEWPORT_SIZE.y) * absf(_display.scale.y))
 		var top_left := _display.global_position - sz * 0.5
 		out["display_rect"] = {"x": top_left.x, "y": top_left.y, "w": sz.x, "h": sz.y}
+	if not viewport_pixel_read_supported():
+		_mark_structural_visibility_only()
+		out["viewport_image_unreadable"] = true
+		out["viewport_evidence_source"] = "STRUCTURAL"
+		return out
 	if _viewport_image_unreadable:
+		out["viewport_evidence_source"] = _viewport_evidence_source
 		return out
 	if _viewport == null or not is_instance_valid(_viewport):
 		return out
 	var tex: Texture2D = _viewport.get_texture()
 	if tex == null:
+		_mark_structural_visibility_only()
+		out["viewport_image_unreadable"] = true
+		out["viewport_evidence_source"] = "STRUCTURAL"
+		return out
+	# Dummy renderer can return a non-null Texture2D with an invalid RID.
+	if not tex.get_rid().is_valid() or tex.get_width() <= 0 or tex.get_height() <= 0:
+		_mark_structural_visibility_only()
+		out["viewport_image_unreadable"] = true
+		out["viewport_evidence_source"] = "STRUCTURAL"
 		return out
 	var img: Image = tex.get_image()
 	if img == null or img.get_width() <= 0 or img.get_height() <= 0:
-		_viewport_image_unreadable = true
+		_mark_structural_visibility_only()
 		out["viewport_image_unreadable"] = true
+		out["viewport_evidence_source"] = "STRUCTURAL"
 		return out
 	out["viewport_image_valid"] = true
+	out["viewport_evidence_source"] = "PIXEL"
+	_viewport_evidence_source = "PIXEL"
 	var total := img.get_width() * img.get_height()
 	var opaque := 0
 	var step := 2 if total > 20000 else 1
