@@ -1,0 +1,28 @@
+{
+  "schema": "aa_provenance_roster_v2",
+  "labels": [
+    "CURRENT_ACCEPTED_ART",
+    "HUMAN_CANDIDATE",
+    "HUMAN_APPROVED",
+    "GENERATED_EXPERIMENT",
+    "PROCEDURAL_FALLBACK",
+    "MISSING"
+  ],
+  "legacy_aliases": {
+    "AUTHORED_APPROVED": "HUMAN_APPROVED",
+    "AUTHORED_WIP": "HUMAN_CANDIDATE"
+  },
+  "automation_may_write": [
+    "CURRENT_ACCEPTED_ART",
+    "HUMAN_CANDIDATE",
+    "GENERATED_EXPERIMENT",
+    "PROCEDURAL_FALLBACK",
+    "MISSING"
+  ],
+  "automation_may_not_write": [
+    "HUMAN_APPROVED",
+    "AUTHORED_APPROVED"
+  ],
+  "generated_v2_v9": "GENERATED_EXPERIMENT",
+  "current_shipping": "CURRENT_ACCEPTED_ART"
+}
