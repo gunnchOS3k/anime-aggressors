@@ -8,6 +8,11 @@ class_name FighterAssetResolver
 const STATUS_PROCEDURAL := "PROCEDURAL_PRODUCTION_PROXY"
 const STATUS_PROCEDURAL_ANIM := "PROCEDURAL_RUNTIME_ANIMATION"
 const STATUS_STAGING := "HUMAN_CANDIDATE"
+const STATUS_APPROVED := "HUMAN_APPROVED"
+const STATUS_ACCEPTED := "CURRENT_ACCEPTED_ART"
+const STATUS_FALLBACK := "PROCEDURAL_FALLBACK"
+## Staging resolver chain: HUMAN_APPROVED → HUMAN_CANDIDATE → CURRENT_ACCEPTED_ART → PROCEDURAL_FALLBACK.
+## GENERATED_EXPERIMENT_EXCLUDED — never part of the automatic fallback chain.
 
 const CLASS_CURRENT := "CURRENT_PLAYER_FACING"
 const CLASS_DEV := "DEV_ONLY"
@@ -83,7 +88,10 @@ static func resolve_presentation(fighter_id: String, context: String, fighter_da
 	var model := resolve_model_path(fighter_id, data)
 	var path := str(model.get("path", ""))
 	var classification := classify_path(path)
-	if classification != CLASS_CURRENT and is_player_build():
+	if staging_review_enabled() and (classification == CLASS_DEV) and path.contains("human_art_staging"):
+		# Staging review may show HUMAN_CANDIDATE / HUMAN_APPROVED. Production default is unchanged.
+		pass
+	elif classification != CLASS_CURRENT and is_player_build():
 		# Reject legacy — force canonical content proxy.
 		var forced := canonical_glb_path(fighter_id)
 		if ResourceLoader.exists(forced):
@@ -115,6 +123,7 @@ static func resolve_presentation(fighter_id: String, context: String, fighter_da
 		"tier": model.get("tier", "MISSING"),
 		"CURRENT_MODEL_SOURCE": presentation,
 		"ACTIVE_CHARACTER_PRESENTATION": presentation,
+		"ART_SOURCE": art_source_public_label(str(model.get("source", "")), path),
 		"PR106_GENERATED_ROSTER_NOT_SHIPPING": PR106_GENERATED_ROSTER_NOT_SHIPPING,
 		"model": model,
 	}
@@ -134,13 +143,74 @@ static func _count_legacy_reject(context: String) -> void:
 			PLAYER_VISIBLE_LEGACY_MODEL_OCCURRENCES += 1
 
 
-static func human_art_staging_enabled() -> bool:
-	var env := str(OS.get_environment("HUMAN_ART_STAGING"))
+const MODE_A_PACKED_PATH := "res://content/review/mode_a_integration_baseline.json"
+
+
+static func _env_flag(name: String) -> bool:
+	var env := str(OS.get_environment(name))
 	return env == "1" or env.to_lower() == "true"
+
+
+static func _packed_mode_a() -> Dictionary:
+	if not FileAccess.file_exists(MODE_A_PACKED_PATH):
+		return {}
+	var file := FileAccess.open(MODE_A_PACKED_PATH, FileAccess.READ)
+	if file == null:
+		return {}
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	file.close()
+	if typeof(parsed) != TYPE_DICTIONARY:
+		return {}
+	return parsed
+
+
+static func _review_flag(name: String) -> bool:
+	## Env defaults remain 0. Packed Mode A marker is review-build only.
+	if _env_flag(name):
+		return true
+	var packed := _packed_mode_a()
+	if packed.is_empty():
+		return false
+	if name == "MODE_B_HUMAN_ART_QUALITY_REVIEW":
+		return false
+	var value: Variant = packed.get(name, false)
+	return value == true or str(value) == "1"
+
+
+static func human_art_staging_enabled() -> bool:
+	return _review_flag("HUMAN_ART_STAGING")
+
+
+static func full_roster_review_enabled() -> bool:
+	## HUMAN_ART_FULL_ROSTER_REVIEW=0 default. Owner-review / Mode A overlay only.
+	return _review_flag("HUMAN_ART_FULL_ROSTER_REVIEW") or _review_flag("MODE_A_INTEGRATION_BASELINE")
+
+
+static func staging_review_enabled() -> bool:
+	return human_art_staging_enabled() or full_roster_review_enabled()
 
 
 static func staging_glb_path(fighter_id: String) -> String:
 	return "res://content/human_art_staging/%s/%s.glb" % [fighter_id, fighter_id]
+
+
+static func approved_glb_path(fighter_id: String) -> String:
+	return "res://content/human_art_staging/%s/approved/%s.glb" % [fighter_id, fighter_id]
+
+
+static func art_source_public_label(source: String, path: String = "") -> String:
+	## Never show raw internal paths in review UI.
+	if source == STATUS_APPROVED:
+		return "HUMAN_APPROVED"
+	if source == STATUS_STAGING or path.contains("human_art_staging"):
+		return "HUMAN_CANDIDATE"
+	if source == STATUS_ACCEPTED or source == "PROCEDURAL_PRODUCTION_PROXY" or path.ends_with("_procedural_proxy.glb"):
+		return "CURRENT_ACCEPTED_ART"
+	if source == STATUS_FALLBACK or path.contains("procedural_final") or path.contains("/proxy/"):
+		return "PROCEDURAL_FALLBACK"
+	if path.contains("generated_production") or path.contains("generated_art"):
+		return "GENERATED_EXPERIMENT"
+	return "CURRENT_ACCEPTED_ART"
 
 
 static func resolve_model_path(fighter_id: String, fighter_data: Dictionary = {}) -> Dictionary:
@@ -150,8 +220,22 @@ static func resolve_model_path(fighter_id: String, fighter_data: Dictionary = {}
 		return {"path": explicit, "source": "FINAL_CUSTOM", "tier": "FINAL_CUSTOM", "CURRENT_MODEL_SOURCE": "FINAL_CUSTOM", "ACTIVE_CHARACTER_PRESENTATION": "FINAL_CUSTOM"}
 	if explicit.contains("vroid") or explicit.contains("/approved_vroid/"):
 		return {"path": explicit, "source": "APPROVED_VROID", "tier": "APPROVED_VROID", "CURRENT_MODEL_SOURCE": "APPROVED_VROID", "ACTIVE_CHARACTER_PRESENTATION": "APPROVED_VROID"}
-	# Staging is opt-in only. Default HUMAN_ART_STAGING=0 keeps accepted art.
-	if human_art_staging_enabled():
+	# Staging is opt-in only. Default HUMAN_ART_STAGING=0 / HUMAN_ART_FULL_ROSTER_REVIEW=0.
+	# Priority when enabled: HUMAN_APPROVED → HUMAN_CANDIDATE → CURRENT_ACCEPTED_ART → PROCEDURAL_FALLBACK.
+	# GENERATED_EXPERIMENT_EXCLUDED from this chain.
+	if staging_review_enabled():
+		var approved := approved_glb_path(fighter_id)
+		if ResourceLoader.exists(approved) or FileAccess.file_exists(approved):
+			return {
+				"path": approved,
+				"source": STATUS_APPROVED,
+				"tier": STATUS_APPROVED,
+				"CURRENT_MODEL_SOURCE": STATUS_APPROVED,
+				"ACTIVE_CHARACTER_PRESENTATION": "HUMAN_APPROVED",
+				"classification": CLASS_DEV,
+				"shipping": false,
+				"ART_SOURCE": "HUMAN_APPROVED",
+			}
 		var staged := staging_glb_path(fighter_id)
 		if ResourceLoader.exists(staged) or FileAccess.file_exists(staged):
 			return {
@@ -162,6 +246,7 @@ static func resolve_model_path(fighter_id: String, fighter_data: Dictionary = {}
 				"ACTIVE_CHARACTER_PRESENTATION": "HUMAN_CANDIDATE",
 				"classification": CLASS_DEV,
 				"shipping": false,
+				"ART_SOURCE": "HUMAN_CANDIDATE",
 			}
 	# Generated V2–V9 research assets are never selected here.
 	var proxy := canonical_glb_path(fighter_id)
@@ -172,6 +257,7 @@ static func resolve_model_path(fighter_id: String, fighter_data: Dictionary = {}
 			"tier": STATUS_PROCEDURAL,
 			"CURRENT_MODEL_SOURCE": "PROCEDURAL_PRODUCTION_PROXY",
 			"ACTIVE_CHARACTER_PRESENTATION": "CURRENT_ACCEPTED_ART",
+			"ART_SOURCE": "CURRENT_ACCEPTED_ART",
 			"PR106_GENERATED_ROSTER_NOT_SHIPPING": PR106_GENERATED_ROSTER_NOT_SHIPPING,
 		}
 	# Legacy secondary — still discoverable for labs, but marked DEPRECATED.
@@ -183,8 +269,9 @@ static func resolve_model_path(fighter_id: String, fighter_data: Dictionary = {}
 			"tier": STATUS_PROCEDURAL,
 			"CURRENT_MODEL_SOURCE": "LEGACY_PROCEDURAL_FINAL",
 			"classification": CLASS_DEPRECATED,
+			"ART_SOURCE": "PROCEDURAL_FALLBACK",
 		}
-	return {"path": explicit, "source": "MISSING", "tier": "MISSING", "CURRENT_MODEL_SOURCE": "MISSING"}
+	return {"path": explicit, "source": "MISSING", "tier": "MISSING", "CURRENT_MODEL_SOURCE": "MISSING", "ART_SOURCE": "PROCEDURAL_FALLBACK"}
 
 
 static func resolve_animation_root(fighter_id: String) -> Dictionary:
@@ -250,3 +337,36 @@ static func truth_flags_from_observation(model: Node = null) -> Dictionary:
 
 static func truth_flags() -> Dictionary:
 	return truth_flags_from_observation()
+
+
+static func roster_review_counts() -> Dictionary:
+	var candidate := 0
+	var validated := 0
+	var approved := 0
+	var ids := ["ember-vale", "rook-ironside", "juno-spark", "kaia-windrow", "nix-calder", "orion-vell", "vesper-nyx"]
+	for fighter_id in ids:
+		var manifest_path := "res://content/human_art_staging/%s/candidate_manifest.json" % fighter_id
+		if FileAccess.file_exists(manifest_path):
+			var file := FileAccess.open(manifest_path, FileAccess.READ)
+			if file:
+				var parsed: Variant = JSON.parse_string(file.get_as_text())
+				file.close()
+				if typeof(parsed) == TYPE_DICTIONARY:
+					var status := str(parsed.get("candidate_status", "MISSING"))
+					if status == "HUMAN_CANDIDATE":
+						candidate += 1
+					if bool(parsed.get("validated", false)):
+						validated += 1
+					# owner_approved is owner-only; automation never increments this.
+					if bool(parsed.get("owner_approved", false)):
+						approved += 1
+		var staged := staging_glb_path(fighter_id)
+		if (ResourceLoader.exists(staged) or FileAccess.file_exists(staged)) and not FileAccess.file_exists(manifest_path):
+			candidate += 1
+	return {
+		"candidate": candidate,
+		"validated": validated,
+		"owner_approved": approved,
+		"total": ids.size(),
+		"label": "Candidate: %d/7\nValidated: %d/7\nOwner approved: %d/7" % [candidate, validated, approved],
+	}

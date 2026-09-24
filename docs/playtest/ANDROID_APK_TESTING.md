@@ -6,7 +6,7 @@ Direct APK sideloading lets friends test on Android without Google Play Console.
 
 - Godot 4.3+ with export templates installed
 - Android Studio (for SDK) or standalone Android SDK
-- Java JDK 17+
+- Java JDK 17 (`JAVA_HOME` must point at JDK 17; Android Gradle export fails on newer majors)
 
 If Godot is not installed as an app, install a matching local binary and templates:
 
@@ -42,10 +42,30 @@ export GODOT_BIN="$(./scripts/install-godot-ci.sh)"
 2. Choose **Export Debug** (Godot signs it with the local debug key).
 3. Save to `builds/android/anime-aggressors-debug.apk`.
 
+### JDK 17 (portable)
+
+Android Gradle export needs JDK 17. Do not commit a machine-specific `JAVA_HOME` path.
+
+```bash
+# macOS — resolve whatever JDK 17 is registered
+export JAVA_HOME="$(/usr/libexec/java_home -v 17)"
+export PATH="$JAVA_HOME/bin:$PATH"
+java -version
+javac -version
+```
+
+If `java_home -v 17` fails, install one JDK 17 via Homebrew (`brew install openjdk@17` or `brew install temurin@17`) or use an existing Corretto 17 install, then rerun the commands above.
+
+`npm run godot:export:full-roster-baseline` resolves JDK 17 the same way when `JAVA_HOME` is unset.
+
+Gradle Android exports need the Godot Android build template under `game-godot/android/build/` (gitignored). The export script installs it automatically when missing (`--install-android-build-template`).
+
 ### From CLI
 
 ```bash
 npm run godot:export:android
+# Mode A full-roster integration baseline (accepted/fallback art; not a human-art review)
+npm run godot:export:full-roster-baseline
 ```
 
 ## Install on a Local Android Device
