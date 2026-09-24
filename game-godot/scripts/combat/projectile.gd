@@ -49,6 +49,8 @@ func configure(cfg: Dictionary, owner_node: Node) -> void:
 	damage = float(cfg.get("damage", move_data.get("damage", 8.0)))
 	var angle_deg: float = cfg.get("angle_deg", 0.0)
 	var facing: int = owner_node.facing if owner_node and "facing" in owner_node else 1
+	if owner_node and "attack_direction" in owner_node and int(owner_node.attack_direction) != 0:
+		facing = int(owner_node.attack_direction)
 	direction = Vector2(cos(deg_to_rad(angle_deg)), sin(deg_to_rad(angle_deg)))
 	if direction.x < 0:
 		direction.x *= facing

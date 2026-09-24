@@ -13,6 +13,50 @@ import { resolveGodotBin } from "./godot-export-shared.mjs";
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const godotDir = path.join(repoRoot, "game-godot");
 const apkPath = path.join(repoRoot, "builds/android/anime-aggressors-debug.apk");
+const reviewApkPath = path.join(
+  repoRoot,
+  "builds/android/anime-aggressors-elemental-specials-owner-review.apk",
+);
+
+function stampBuildIdentity() {
+  execFileSync(
+    "python3",
+    [
+      path.join(repoRoot, "tools/art_pipeline/build_identity/generate_build_identity.py"),
+      "--repo-root",
+      repoRoot,
+      "--flavor",
+      "owner-review-debug",
+    ],
+    { stdio: "inherit", cwd: repoRoot },
+  );
+  const stamped = JSON.parse(
+    fs.readFileSync(path.join(godotDir, "data/runtime/build_identity.json"), "utf8"),
+  );
+  if (!stamped.git_sha || String(stamped.git_sha).toUpperCase() === "UNKNOWN") {
+    console.error("Review APK refused: embedded SHA is UNKNOWN.");
+    process.exit(1);
+  }
+  return stamped;
+}
+
+function assertApkEmbedsSha(apk, sha) {
+  try {
+    execFileSync(
+      "python3",
+      [
+        "-c",
+        "import sys, zipfile\nsha=sys.argv[1].encode()\nwith zipfile.ZipFile(sys.argv[2]) as z:\n    for name in z.namelist():\n        if sha in z.read(name):\n            sys.exit(0)\nsys.exit(1)\n",
+        sha,
+        apk,
+      ],
+      { cwd: repoRoot },
+    );
+  } catch {
+    console.error("Review APK refused: packed APK does not embed", sha);
+    process.exit(1);
+  }
+}
 
 const godotBin = resolveGodotBin();
 if (!godotBin) {
@@ -20,6 +64,7 @@ if (!godotBin) {
   process.exit(1);
 }
 
+const stampedIdentity = stampBuildIdentity();
 fs.mkdirSync(path.dirname(apkPath), { recursive: true });
 
 const androidSdk = process.env.ANDROID_SDK_ROOT
@@ -79,7 +124,12 @@ if (!fs.existsSync(apkPath)) {
   process.exit(1);
 }
 
+assertApkEmbedsSha(apkPath, stampedIdentity.git_sha);
 const digest = crypto.createHash("sha256").update(fs.readFileSync(apkPath)).digest("hex");
 fs.writeFileSync(`${apkPath}.sha256`, `${digest}  ${path.basename(apkPath)}\n`);
+fs.copyFileSync(apkPath, reviewApkPath);
+fs.writeFileSync(`${reviewApkPath}.sha256`, `${digest}  ${path.basename(reviewApkPath)}\n`);
 console.log("Exported Android debug APK:", apkPath);
+console.log("Owner-review APK:", reviewApkPath);
+console.log("Embedded SHA:", stampedIdentity.git_sha);
 console.log("SHA-256:", digest);

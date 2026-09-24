@@ -80,6 +80,8 @@ static func display_contract(context: String) -> Dictionary:
 				"camera_size": 2.05,
 				"allow_model_root_scale": false,
 				"bake_only": false,
+				"camera": "front_3q",
+				"identity_source": "elemental_material_language",
 			}
 		CTX_MOVE_PREVIEW:
 			return {

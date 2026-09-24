@@ -47,11 +47,11 @@ const validator = fs.existsSync(validatorPath) ? readJson(validatorPath) : {};
 const packed = fs.existsSync(packedModeB) ? readJson(packedModeB) : {};
 const eligibility = {
   FULL_ROSTER_HUMAN_CANDIDATES_COMPLETE: Boolean(validator.FULL_ROSTER_HUMAN_CANDIDATES_COMPLETE),
-  HUMAN_CANDIDATE_RIGHTS_READY: Boolean(validator.HUMAN_CANDIDATE_RIGHTS_READY),
+  CANDIDATE_RIGHTS_READY: Boolean(validator.CANDIDATE_RIGHTS_READY || validator.HUMAN_CANDIDATE_RIGHTS_READY),
   HUMAN_APPROVED: false,
   MODE_B_HUMAN_ART_QUALITY_REVIEW: false,
   Mode_B_eligible: Boolean(
-    validator.FULL_ROSTER_HUMAN_CANDIDATES_COMPLETE && validator.HUMAN_CANDIDATE_RIGHTS_READY,
+    validator.FULL_ROSTER_HUMAN_CANDIDATES_COMPLETE && (validator.CANDIDATE_RIGHTS_READY || validator.HUMAN_CANDIDATE_RIGHTS_READY),
   ),
   label: "FULL_ROSTER_HUMAN_CANDIDATES_REVIEW",
 };

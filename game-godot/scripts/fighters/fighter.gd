@@ -20,6 +20,9 @@ const _FighterDefinition = preload("res://scripts/combat/fighter_definition.gd")
 const _FormDefinition = preload("res://scripts/combat/form_definition.gd")
 const _TransformPipeline = preload("res://scripts/combat/transform_pipeline.gd")
 const _AuraTierContract = preload("res://scripts/combat/aura_tier_contract.gd")
+const _FacingContract = preload("res://scripts/combat/fighter_facing_contract.gd")
+const _HitReaction = preload("res://scripts/combat/directional_hit_reaction.gd")
+const _SignaturePresentation = preload("res://scripts/visual/signature_move_presentation.gd")
 
 signal damaged(amount: float, total: float)
 signal koed()
@@ -38,6 +41,9 @@ const _CombatSpace = preload("res://scripts/combat/combat_space_contract.gd")
 @export var is_cpu: bool = false
 @export var facing: int = 1
 @export var dummy_mode: String = "idle"  # "cpu" is training-only; default idle so human P1 is not dual-driven
+var attack_direction: int = 1
+var _attack_facing_locked: bool = false
+var _last_hurt_reaction: Dictionary = {}
 
 var data: Dictionary = {}
 var move_manifest: Dictionary = {}
@@ -563,9 +569,9 @@ func _apply_movement(delta: float) -> void:
 		if velocity.y > 0:
 			velocity.y = 0.0
 	if absf(axis) > 0.1:
-		# Grounded facing follows stick. Airborne facing stays put so back-airs
-		# remain reachable (stick opposite facing) — matches facing-relative aerials.
-		if is_on_floor():
+		# Grounded facing follows stick unless an attack locked presentation facing.
+		# Airborne facing stays put so back-airs remain reachable.
+		if is_on_floor() and not _attack_facing_locked:
 			facing = 1 if axis > 0 else -1
 		var spd: float = get_run_speed()
 		if absf(axis) > 0.75 and is_on_floor():
@@ -788,6 +794,13 @@ func _start_move_dict(m: Dictionary) -> void:
 	elif mid0 == "aura_burst":
 		# Normal-match signature access: aura burst plays signature_lane_burst.
 		_current_move["visual_move_id"] = "signature_lane_burst"
+	var lock := _FacingContract.lock_attack_direction(
+		_FacingContract.logical_facing_from_int(facing), _current_move
+	)
+	attack_direction = int(lock.get("attack_direction", facing))
+	_attack_facing_locked = bool(lock.get("locked", true))
+	if model_3d and model_3d.has_method("set_attack_facing_lock"):
+		model_3d.set_attack_facing_lock(lock)
 	_AuraSpecialRuntime.begin_move_armor(self, _current_move)
 	record_move_use(str(_current_move.get("move_id", "")))
 	if bool(_current_move.get("dash_cancel_enabled", false)):
@@ -1332,6 +1345,10 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 				str(attacker.data.get("combatTag", "")) if "data" in attacker else ""
 			)
 			attacker.aura = minf(100.0, float(attacker.aura) + gain)
+	# Presentation-only: readable hurt pose family before launch clip. CombatMath velocity already applied.
+	_last_hurt_reaction = _HitReaction.resolve(fighter_id, launch, info)
+	if model_3d and model_3d.has_method("apply_hurt_reaction"):
+		model_3d.apply_hurt_reaction(_last_hurt_reaction)
 	var heavy = dmg >= 8.0 or launch.length() > 14.0
 	if launch.length() > 14.0:
 		state_machine.enter(_FighterStates.LAUNCHED)
@@ -1435,6 +1452,9 @@ func debug_combat_summary() -> Dictionary:
 	}
 
 func _on_move_ended(_move_id: String) -> void:
+	_attack_facing_locked = false
+	if model_3d and model_3d.has_method("clear_attack_facing_lock"):
+		model_3d.clear_attack_facing_lock()
 	hitbox.monitoring = false
 	var s: String = str(state_machine.current_state) if state_machine else ""
 	if s == _FighterStates.GRAB_HOLD:

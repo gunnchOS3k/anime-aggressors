@@ -110,7 +110,7 @@ def adapt_fighter(blender: str, mapping: dict, fighter_id: str) -> dict:
         "attribution_appreciated": pack["attribution_appreciated"],
         "redistribution_in_repo_allowed": pack["redistribution_in_repo_allowed"],
         "GENERATED_EXPERIMENT": False,
-        "HUMAN_CANDIDATE_RIGHTS_READY": True,
+        "CANDIDATE_RIGHTS_READY": True,
         "ai_generated": False,
     }
     source_payload = {
@@ -174,7 +174,7 @@ def adapt_fighter(blender: str, mapping: dict, fighter_id: str) -> dict:
         "RIGHTS_DECLARATION_PRESENT": True,
         "COMMERCIAL_USE_STATUS": "commercial_use_allowed",
         "GENERATED_EXPERIMENT": False,
-        "HUMAN_CANDIDATE_RIGHTS_READY": True,
+        "CANDIDATE_RIGHTS_READY": True,
         "approximation": row["approximation"],
         "identity_lane": row["identity_lane"],
         "source_sha256": source_hash,

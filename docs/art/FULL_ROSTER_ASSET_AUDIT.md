@@ -53,7 +53,7 @@ Clip mapping (source name → contract id) is in each `candidate_manifest.json` 
 
 ## Rights matrix
 
-| Fighter | SOURCE_KNOWN | RIGHTS_DECLARATION_PRESENT | COMMERCIAL_USE_STATUS | GENERATED_EXPERIMENT | HUMAN_CANDIDATE_RIGHTS_READY |
+| Fighter | SOURCE_KNOWN | RIGHTS_DECLARATION_PRESENT | COMMERCIAL_USE_STATUS | GENERATED_EXPERIMENT | CANDIDATE_RIGHTS_READY |
 |---------|--------------|----------------------------|-----------------------|----------------------|------------------------------|
 | all seven | true | true | commercial_use_allowed | false | true |
 

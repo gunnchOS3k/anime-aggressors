@@ -85,6 +85,7 @@ func _fallback_navigation(sc: Node, _source: String) -> void:
 		path.ends_with("SettingsScene.tscn")
 		or path.ends_with("ControlsScene.tscn")
 		or path.ends_with("LabsScene.tscn")
+		or path.ends_with("BuildInfoScene.tscn")
 		or path.ends_with("TrainingMenuScene.tscn")
 		or path.ends_with("TrainingScene.tscn")
 		or path.ends_with("MobilePlaytestScene.tscn")
