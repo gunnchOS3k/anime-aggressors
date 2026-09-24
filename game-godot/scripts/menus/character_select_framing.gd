@@ -75,15 +75,14 @@ static func framing_for_fighter(
 	var span_up := head_y - cam_y
 	var span_down := cam_y - feet_y
 	ortho_size = maxf(ortho_size, maxf(span_up / margin, maxf(span_down / margin, height * 0.52 + pad_y)))
-	# If expansion would crush coverage below readable, recenter and re-fit.
+	# If accessory width zoomed past a readable body, recenter and fit height.
+	# Do not re-expand with width*0.95 — that is what crushed Kaia to 0.36.
 	if height / (ortho_size * 2.0) < 0.55:
 		cam_y = (feet_y + head_y) * 0.5
 		span_up = head_y - cam_y
 		span_down = cam_y - feet_y
-		ortho_size = maxf(
-			maxf(height * 0.52 + pad_y, width * 0.95 + pad_x),
-			maxf(span_up / margin, span_down / margin)
-		)
+		var height_fit := maxf(height * 0.52 + pad_y, maxf(span_up / margin, span_down / margin))
+		ortho_size = height_fit
 	var cam_z := 4.6 + depth * 0.35 + vfx_envelope
 	var look_y := center.y + height * 0.02
 	var coverage := clampf(height / (ortho_size * 2.0), 0.0, 1.0)
