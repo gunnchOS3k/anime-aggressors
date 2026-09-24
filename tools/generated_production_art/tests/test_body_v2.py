@@ -38,7 +38,7 @@ class BodyV2RecipeTests(unittest.TestCase):
         self.assertTrue(classify_float(spec, 0.40))
 
     def test_generator_version(self) -> None:
-        self.assertEqual(GENERATOR_VERSION, "3.0.0")
+        self.assertEqual(GENERATOR_VERSION, "4.0.0")
 
 
 if __name__ == "__main__":
