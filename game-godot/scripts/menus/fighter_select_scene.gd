@@ -12,6 +12,8 @@ const Vxp2A11yScript = preload("res://scripts/vxp2/vxp2_accessibility_chrome.gd"
 const Vxp2GlyphScript = preload("res://scripts/vxp2/vxp2_glyph_strip.gd")
 const _ArtOverlay := preload("res://scripts/visual/art_source_review_overlay.gd")
 const _AssetResolver := preload("res://scripts/visual/fighter_asset_resolver.gd")
+const _Announcer := preload("res://scripts/audio/fighter_announcer.gd")
+const _Callout := preload("res://scripts/ui/lockin_name_callout.gd")
 
 var _roster: Array = []
 var _cursor: int = 0
@@ -40,6 +42,7 @@ var _motion_label: Label
 var _last_accel: Vector3 = Vector3.ZERO
 var _shake_cooldown_ms: int = 0
 var _art_overlay: CanvasLayer
+var _lockin_callout: CanvasLayer
 const SHAKE_THRESHOLD := 2.35
 
 @onready var grid: GridContainer = %FighterGrid
@@ -75,6 +78,7 @@ func _ready() -> void:
 	Vxp2A11yScript.apply(self)
 	_update_start_match_cta()
 	_ensure_art_review_overlay()
+	_ensure_lockin_callout()
 
 
 func _layout_action_bar_safe() -> void:
@@ -623,6 +627,7 @@ func _on_next_player_pressed() -> void:
 		if GameState.p2_is_cpu:
 			# Auto-offer CPU lock on same confirm path clarity via label; still require Lock In CPU.
 			pass
+		_announce_lock(1, _roster[_p1_pick])
 		_refresh()
 		_update_preview(_cursor, true)
 		return
@@ -630,6 +635,7 @@ func _on_next_player_pressed() -> void:
 		_p2_pick = _cursor
 		_locked_p2 = true
 		_selecting_p2 = false
+		_announce_lock(2, _roster[_p2_pick])
 		_refresh()
 		_update_preview(_cursor, true)
 		if start_match_btn and can_start_match():
@@ -657,6 +663,21 @@ func get_showcase_flourish_counters() -> Dictionary:
 	if _flourish == null:
 		return {}
 	return _flourish.counters()
+
+
+func _ensure_lockin_callout() -> void:
+	if _lockin_callout != null:
+		return
+	_lockin_callout = _Callout.new()
+	_lockin_callout.name = "LockinNameCallout"
+	add_child(_lockin_callout)
+
+
+func _announce_lock(slot: int, fighter_id: String) -> Dictionary:
+	var announced := _Announcer.announce_lock(slot, fighter_id, self, false)
+	if _lockin_callout != null and _lockin_callout.has_method("play") and bool(announced.get("announced", false)):
+		_lockin_callout.play(fighter_id)
+	return announced
 
 
 func _ensure_art_review_overlay() -> void:
