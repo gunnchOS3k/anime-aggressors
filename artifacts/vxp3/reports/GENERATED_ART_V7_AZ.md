@@ -2,7 +2,7 @@
 
 Generated production art only. Graphic combat polish on the v6 style lock. Not human-authored final art. Do not merge.
 
-**A new head:** `7453d70aeb46e1d4a99fd20d1747808ca958a0bf`
+**A new head:** `4f6fa29c0e4289a5f8f256dc73ce4b61c9bfef77`
 **PR:** https://github.com/gunnchOS3k/anime-aggressors/pull/106
 **Base:** `6cd1b3100a7e467c2c991394576891660deb1162`
 **RC1:** `v1.0.0-rc.1` untouched
