@@ -2,7 +2,7 @@
 
 Generated production art only. Not human-authored final art. Do not merge.
 
-**A new head:** `262f6d59484bd7fa96c02d6b0c1421e29927fbc9`
+**A new head:** `7c7d4f2185d8d294707f743be47d3e637c845c3d`
 **PR:** https://github.com/gunnchOS3k/anime-aggressors/pull/106
 **Base:** `6cd1b3100a7e467c2c991394576891660deb1162`
 **RC1:** `v1.0.0-rc.1` untouched
