@@ -61,6 +61,18 @@ def bind_character(body, extras, arm_obj, bone_map: dict[str, str]) -> dict:
     correctives = add_corrective_shapes(body)
     for obj in extras:
         bone = bone_map.get(obj.name)
+        if bone is None:
+            lowered = obj.name.lower()
+            if lowered.startswith("hand_l") or lowered.startswith("glove_l"):
+                bone = "Hand_L"
+            elif lowered.startswith("hand_r") or lowered.startswith("glove_r"):
+                bone = "Hand_R"
+            elif lowered.startswith("boot_l"):
+                bone = "Foot_L"
+            elif lowered.startswith("boot_r"):
+                bone = "Foot_R"
+            elif "head" in lowered or lowered.startswith("mask"):
+                bone = "Head"
         if bone:
             bind_to_bone(obj, arm_obj, bone)
     return {"weight": weight, "correctives": correctives}

@@ -1,0 +1,39 @@
+{
+  "generator": "aa_generated_art_v6",
+  "generator_version": "6.0.0",
+  "human_authored": false,
+  "GEN_ART_V6_NO_PEACH_BODY_DIGITAL": true,
+  "GEN_ART_V6_VALUE_BLOCKING_DIGITAL": false,
+  "GENERATED_ART_RELEASE_CEILING_REACHED": false,
+  "note": "v6 locked the generated roster to graphic faceless combat figures: dark undersuits, block gauntlets/boots, faceless masks, and hard palette plates. FRONT cameras stay 7/7. Peach/clay mannequin bodies are gone. Stills still read as low-poly toy/blockout fighters, not finished game heroes. Nix remains too uniformly pale. Glove/boot detail cameras are often too close. Heavy-contact shots are attacker-only, not pairs. Visual acting gates stay false. Not human-authored final art. Not APK-eligible. Not merge authorized.",
+  "next_human": "Open artifacts/vxp3/review/generated_art_v6/ roster select_lineup, front, glove, boot, and silhouette sheets. Do not set HUMAN_* or MERGE. Do not install an APK. Next agent pass should keep the graphic style and push Nix dark-suit/pale-armor split, pull glove/boot cameras back, and add a contrasting defender to heavy-contact pairs.",
+  "ci_note": "Exact-head CI must be re-run on the v6 push. Wave014/Wave020 were green on 0ce724a8 before this head. Report pending/failure/success honestly after the new SHA.",
+  "apk_note": "Not eligible. File forbids APK until the v6 packet is a coherent graphic style, digital gates pass, Wave014/Wave020 stay green, exact-head required CI is green, and no obvious blockout is in the shipping resolver. Stills still read as graphic toys.",
+  "visual": {
+    "GEN_ART_V6_IDLE_IDENTITY_PASS": false,
+    "GEN_ART_V6_HEAVY_CONTACT_READ_PASS": false,
+    "GEN_ART_V6_HURT_READ_PASS": false,
+    "GEN_ART_V6_CHARGE_BODY_READ_PASS": false,
+    "GEN_ART_V6_SUPER_SILHOUETTE_PASS": false,
+    "GEN_ART_V6_CLASH_ACTING_PASS": false,
+    "GEN_ART_V6_MOBILE_READ_PASS": false
+  },
+  "honest_stills": {
+    "ember-vale": "Dark undersuit, orange chest/thigh plates, yellow block gauntlets, crest mask, slab boots. Graphic, still a toy.",
+    "rook-ironside": "Darkest mass, box helm, shoulder pads, belt, block hands/boots. Reads heavy. Still a toy.",
+    "juno-spark": "Narrow dark suit, yellow chest/thighs, speed-cap mask, compact dark gloves. Graphic speed read.",
+    "kaia-windrow": "Teal suit, scarf/airfoils, block gloves. Value groups still close together.",
+    "nix-calder": "Helmet + chest band + block gloves/boots exist, but the figure stays one pale blue-gray. Value split still fails.",
+    "orion-vell": "Purple suit, halo nub, block gloves. Coat/orbit masses are thin.",
+    "vesper-nyx": "Dark purple, asymmetric coat panel, cowl, block hands. Closest to the intended graphic read."
+  },
+  "fighters": {
+    "ember-vale": {"peach_ratio": 0.0168, "value_groups": 2, "mean_luma": 0.1784, "peach_dominant": false, "value_collapse": true},
+    "rook-ironside": {"peach_ratio": 0.0004, "value_groups": 3, "mean_luma": 0.1979, "peach_dominant": false, "value_collapse": false},
+    "juno-spark": {"peach_ratio": 0.0104, "value_groups": 2, "mean_luma": 0.1668, "peach_dominant": false, "value_collapse": true},
+    "kaia-windrow": {"peach_ratio": 0.0, "value_groups": 2, "mean_luma": 0.1804, "peach_dominant": false, "value_collapse": true},
+    "nix-calder": {"peach_ratio": 0.0, "value_groups": 2, "mean_luma": 0.187, "peach_dominant": false, "value_collapse": true},
+    "orion-vell": {"peach_ratio": 0.0, "value_groups": 2, "mean_luma": 0.1728, "peach_dominant": false, "value_collapse": true},
+    "vesper-nyx": {"peach_ratio": 0.0, "value_groups": 2, "mean_luma": 0.1494, "peach_dominant": false, "value_collapse": true}
+  }
+}
