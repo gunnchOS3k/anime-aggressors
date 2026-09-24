@@ -17,8 +17,8 @@ jobs:
           python-version: "3.11"
       - name: Infrastructure gates
         run: python3 tools/art_pipeline/human_art/emit_infra_gates.py
-          - name: Unit tests
-            run: python3 tools/art_pipeline/human_art/tests/test_infra.py
+      - name: Unit tests
+        run: python3 tools/art_pipeline/human_art/tests/test_infra.py
       - name: Authored provenance
         run: python3 tools/authored_animation/validate_provenance.py
       - name: Upload gates
