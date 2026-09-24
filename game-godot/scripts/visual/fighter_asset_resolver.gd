@@ -143,18 +143,47 @@ static func _count_legacy_reject(context: String) -> void:
 			PLAYER_VISIBLE_LEGACY_MODEL_OCCURRENCES += 1
 
 
+const MODE_A_PACKED_PATH := "res://content/review/mode_a_integration_baseline.json"
+
+
 static func _env_flag(name: String) -> bool:
 	var env := str(OS.get_environment(name))
 	return env == "1" or env.to_lower() == "true"
 
 
+static func _packed_mode_a() -> Dictionary:
+	if not FileAccess.file_exists(MODE_A_PACKED_PATH):
+		return {}
+	var file := FileAccess.open(MODE_A_PACKED_PATH, FileAccess.READ)
+	if file == null:
+		return {}
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	file.close()
+	if typeof(parsed) != TYPE_DICTIONARY:
+		return {}
+	return parsed
+
+
+static func _review_flag(name: String) -> bool:
+	## Env defaults remain 0. Packed Mode A marker is review-build only.
+	if _env_flag(name):
+		return true
+	var packed := _packed_mode_a()
+	if packed.is_empty():
+		return false
+	if name == "MODE_B_HUMAN_ART_QUALITY_REVIEW":
+		return false
+	var value: Variant = packed.get(name, false)
+	return value == true or str(value) == "1"
+
+
 static func human_art_staging_enabled() -> bool:
-	return _env_flag("HUMAN_ART_STAGING")
+	return _review_flag("HUMAN_ART_STAGING")
 
 
 static func full_roster_review_enabled() -> bool:
 	## HUMAN_ART_FULL_ROSTER_REVIEW=0 default. Owner-review / Mode A overlay only.
-	return _env_flag("HUMAN_ART_FULL_ROSTER_REVIEW")
+	return _review_flag("HUMAN_ART_FULL_ROSTER_REVIEW") or _review_flag("MODE_A_INTEGRATION_BASELINE")
 
 
 static func staging_review_enabled() -> bool:
