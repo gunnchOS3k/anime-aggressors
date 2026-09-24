@@ -1,0 +1,31 @@
+{
+  "schema": "aa_generated_art_v8_pair_matchups",
+  "generator": "aa_generated_art_v8",
+  "human_authored": false,
+  "notes": "Review-only contact staging. Does not change CombatMath, hitboxes, or frame data.",
+  "heavy": {
+    "ember-vale": "rook-ironside",
+    "rook-ironside": "nix-calder",
+    "juno-spark": "orion-vell",
+    "kaia-windrow": "vesper-nyx",
+    "nix-calder": "ember-vale",
+    "orion-vell": "kaia-windrow",
+    "vesper-nyx": "juno-spark"
+  },
+  "contact": {
+    "ember-vale": {"socket": "hand_r", "anchor": "CHEST", "normal": [1.0, 0.0, 0.0]},
+    "rook-ironside": {"socket": "hand_r", "anchor": "CHEST", "normal": [1.0, 0.0, 0.0]},
+    "juno-spark": {"socket": "hand_r", "anchor": "TORSO_LEFT", "normal": [1.0, 0.12, 0.0]},
+    "kaia-windrow": {"socket": "foot_l", "anchor": "CHEST", "normal": [1.0, 0.0, 0.08]},
+    "nix-calder": {"socket": "hand_r", "anchor": "UPPER_GUARD", "normal": [1.0, 0.0, 0.0]},
+    "orion-vell": {"socket": "hand_r", "anchor": "PELVIS", "normal": [1.0, 0.0, -0.08]},
+    "vesper-nyx": {"socket": "hand_r", "anchor": "TORSO_RIGHT", "normal": [1.0, -0.08, 0.0]}
+  },
+  "clash_presets": [
+    ["rook-ironside", "orion-vell"],
+    ["juno-spark", "kaia-windrow"],
+    ["ember-vale", "nix-calder"],
+    ["vesper-nyx", "ember-vale"],
+    ["nix-calder", "rook-ironside"]
+  ]
+}

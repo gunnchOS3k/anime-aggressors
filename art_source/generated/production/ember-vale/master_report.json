@@ -1,10 +1,10 @@
 {
   "fighter": "ember-vale",
   "status": "GENERATED_PRODUCTION_ART",
-  "generator": "aa_generated_art_v7",
+  "generator": "aa_generated_art_v8",
   "runtime_generator": "aa_generated_art_v6",
-  "generator_version": "7.0.0",
-  "generator_revision": "graphic_hero_combat_polish",
+  "generator_version": "8.0.0",
+  "generator_revision": "rigged_costume_impact_choreography",
   "blend": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/art_source/animation/fighters/ember-vale/source/ember-vale_production_master.blend",
   "glb": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/game-godot/content/fighters/ember-vale/model/ember-vale_generated_production.glb",
   "human_authored": false,
@@ -15,7 +15,7 @@
     "construction": "profile_loft_no_voxel_remesh",
     "visible_style": "graphic_lowpoly_cel_combat",
     "used_voxel_remesh": false,
-    "triangles": 5810,
+    "triangles": 6034,
     "body_triangles": 5372,
     "body_connected_components": 1,
     "material_count": 7,
@@ -27,7 +27,7 @@
     "undersuit": true,
     "glove_thumb": true,
     "boot_sole": true,
-    "outline_hulls": 15,
+    "outline_hulls": 19,
     "foot_ground_gap_m": 0.0,
     "weight": {
       "vertex_count": 5353,
@@ -42,6 +42,223 @@
       "heavy_hurt_bend",
       "extreme_punch_reach"
     ],
+    "attachments": [
+      {
+        "name": "head_shell",
+        "class": "BONE_RIGID",
+        "bone": "Head",
+        "rest_anchor_distance": 1.6168,
+        "local_offset": [
+          0.0,
+          -1.6168,
+          0.0
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "hand_L",
+        "class": "BONE_RIGID",
+        "bone": "Hand_L",
+        "rest_anchor_distance": 1.0686,
+        "local_offset": [
+          -0.2669,
+          -0.4007,
+          -0.954
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "hand_R",
+        "class": "BONE_RIGID",
+        "bone": "Hand_R",
+        "rest_anchor_distance": 1.0686,
+        "local_offset": [
+          0.2669,
+          -0.4007,
+          -0.954
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "hand_L_open",
+        "class": "BONE_RIGID",
+        "bone": "Hand_L",
+        "rest_anchor_distance": 1.0686,
+        "local_offset": [
+          -0.2669,
+          -0.4007,
+          -0.954
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "hand_R_open",
+        "class": "BONE_RIGID",
+        "bone": "Hand_R",
+        "rest_anchor_distance": 1.0686,
+        "local_offset": [
+          0.2669,
+          -0.4007,
+          -0.954
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "hand_L_guard",
+        "class": "BONE_RIGID",
+        "bone": "Hand_L",
+        "rest_anchor_distance": 1.0686,
+        "local_offset": [
+          -0.2669,
+          -0.4007,
+          -0.954
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "hand_R_guard",
+        "class": "BONE_RIGID",
+        "bone": "Hand_R",
+        "rest_anchor_distance": 1.0686,
+        "local_offset": [
+          0.2669,
+          -0.4007,
+          -0.954
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "boot_L",
+        "class": "BONE_RIGID",
+        "bone": "Foot_L",
+        "rest_anchor_distance": 0.1761,
+        "local_offset": [
+          -0.096,
+          -0.1088,
+          -0.0998
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "boot_R",
+        "class": "BONE_RIGID",
+        "bone": "Foot_R",
+        "rest_anchor_distance": 0.1761,
+        "local_offset": [
+          0.096,
+          -0.1088,
+          -0.0998
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "torso_shell",
+        "class": "SKINNED_COSTUME",
+        "weight": {
+          "vertex_count": 42,
+          "zero_weight_vertices": 0,
+          "unnormalized_vertices": 0,
+          "smooth_skinning": true
+        }
+      },
+      {
+        "name": "forearm_mass_r",
+        "class": "BONE_RIGID",
+        "bone": "LowerArm_R",
+        "rest_anchor_distance": 1.0244,
+        "local_offset": [
+          0.7239,
+          0.3058,
+          -0.6572
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "forearm_mass_l",
+        "class": "BONE_RIGID",
+        "bone": "LowerArm_L",
+        "rest_anchor_distance": 1.0244,
+        "local_offset": [
+          -0.7239,
+          0.3058,
+          -0.6572
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "thigh_mass_r",
+        "class": "BONE_RIGID",
+        "bone": "UpperLeg_R",
+        "rest_anchor_distance": 0.4797,
+        "local_offset": [
+          0.096,
+          0.47,
+          0.0
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "thigh_mass_l",
+        "class": "BONE_RIGID",
+        "bone": "UpperLeg_L",
+        "rest_anchor_distance": 0.4797,
+        "local_offset": [
+          -0.096,
+          0.47,
+          -0.0
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "heat_cuirass",
+        "class": "BONE_RIGID",
+        "bone": "Chest",
+        "rest_anchor_distance": 1.2972,
+        "local_offset": [
+          0.0,
+          -1.2972,
+          0.0
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "heat_vent",
+        "class": "BONE_RIGID",
+        "bone": "Chest",
+        "rest_anchor_distance": 1.2972,
+        "local_offset": [
+          0.0,
+          -1.2972,
+          0.0
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "shoulder_heat_wedge",
+        "class": "BONE_RIGID",
+        "bone": "UpperArm_R",
+        "rest_anchor_distance": 1.1142,
+        "local_offset": [
+          0.7197,
+          0.5193,
+          -0.6737
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "shoulder_wedge_r",
+        "class": "BONE_RIGID",
+        "bone": "UpperArm_R",
+        "rest_anchor_distance": 1.1142,
+        "local_offset": [
+          0.7197,
+          0.5193,
+          -0.6737
+        ],
+        "intentional_floating": false
+      }
+    ],
+    "unintentional_floating": 0,
     "head_style": "ember_angular_mask",
     "boot_style": "heat_aggressive",
     "glove_family": "POWER_GAUNTLET",

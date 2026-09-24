@@ -1,10 +1,10 @@
 {
   "fighter": "rook-ironside",
   "status": "GENERATED_PRODUCTION_ART",
-  "generator": "aa_generated_art_v7",
+  "generator": "aa_generated_art_v8",
   "runtime_generator": "aa_generated_art_v6",
-  "generator_version": "7.0.0",
-  "generator_revision": "graphic_hero_combat_polish",
+  "generator_version": "8.0.0",
+  "generator_revision": "rigged_costume_impact_choreography",
   "blend": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/art_source/animation/fighters/rook-ironside/source/rook-ironside_production_master.blend",
   "glb": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/game-godot/content/fighters/rook-ironside/model/rook-ironside_generated_production.glb",
   "human_authored": false,
@@ -15,7 +15,7 @@
     "construction": "profile_loft_no_voxel_remesh",
     "visible_style": "graphic_lowpoly_cel_combat",
     "used_voxel_remesh": false,
-    "triangles": 7060,
+    "triangles": 7284,
     "body_triangles": 6620,
     "body_connected_components": 1,
     "material_count": 7,
@@ -27,7 +27,7 @@
     "undersuit": true,
     "glove_thumb": true,
     "boot_sole": true,
-    "outline_hulls": 15,
+    "outline_hulls": 19,
     "foot_ground_gap_m": 0.0,
     "weight": {
       "vertex_count": 6596,
@@ -42,6 +42,223 @@
       "heavy_hurt_bend",
       "extreme_punch_reach"
     ],
+    "attachments": [
+      {
+        "name": "head_shell",
+        "class": "BONE_RIGID",
+        "bone": "Head",
+        "rest_anchor_distance": 1.9264,
+        "local_offset": [
+          0.0,
+          -1.9264,
+          0.0
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "hand_L",
+        "class": "BONE_RIGID",
+        "bone": "Hand_L",
+        "rest_anchor_distance": 1.3055,
+        "local_offset": [
+          -0.3008,
+          -0.5467,
+          -1.1467
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "hand_R",
+        "class": "BONE_RIGID",
+        "bone": "Hand_R",
+        "rest_anchor_distance": 1.3055,
+        "local_offset": [
+          0.3008,
+          -0.5467,
+          -1.1467
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "hand_L_open",
+        "class": "BONE_RIGID",
+        "bone": "Hand_L",
+        "rest_anchor_distance": 1.3055,
+        "local_offset": [
+          -0.3008,
+          -0.5467,
+          -1.1467
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "hand_R_open",
+        "class": "BONE_RIGID",
+        "bone": "Hand_R",
+        "rest_anchor_distance": 1.3055,
+        "local_offset": [
+          0.3008,
+          -0.5467,
+          -1.1467
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "hand_L_guard",
+        "class": "BONE_RIGID",
+        "bone": "Hand_L",
+        "rest_anchor_distance": 1.3055,
+        "local_offset": [
+          -0.3008,
+          -0.5467,
+          -1.1467
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "hand_R_guard",
+        "class": "BONE_RIGID",
+        "bone": "Hand_R",
+        "rest_anchor_distance": 1.3055,
+        "local_offset": [
+          0.3008,
+          -0.5467,
+          -1.1467
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "boot_L",
+        "class": "BONE_RIGID",
+        "bone": "Foot_L",
+        "rest_anchor_distance": 0.2015,
+        "local_offset": [
+          -0.122,
+          -0.1106,
+          -0.1162
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "boot_R",
+        "class": "BONE_RIGID",
+        "bone": "Foot_R",
+        "rest_anchor_distance": 0.2015,
+        "local_offset": [
+          0.122,
+          -0.1106,
+          -0.1162
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "torso_shell",
+        "class": "SKINNED_COSTUME",
+        "weight": {
+          "vertex_count": 56,
+          "zero_weight_vertices": 0,
+          "unnormalized_vertices": 0,
+          "smooth_skinning": true
+        }
+      },
+      {
+        "name": "forearm_mass_r",
+        "class": "BONE_RIGID",
+        "bone": "LowerArm_R",
+        "rest_anchor_distance": 1.2419,
+        "local_offset": [
+          0.8661,
+          0.2981,
+          -0.8387
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "forearm_mass_l",
+        "class": "BONE_RIGID",
+        "bone": "LowerArm_L",
+        "rest_anchor_distance": 1.2419,
+        "local_offset": [
+          -0.8661,
+          0.2981,
+          -0.8387
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "thigh_mass_r",
+        "class": "BONE_RIGID",
+        "bone": "UpperLeg_R",
+        "rest_anchor_distance": 0.5731,
+        "local_offset": [
+          0.122,
+          0.56,
+          0.0
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "thigh_mass_l",
+        "class": "BONE_RIGID",
+        "bone": "UpperLeg_L",
+        "rest_anchor_distance": 0.5731,
+        "local_offset": [
+          -0.122,
+          0.56,
+          -0.0
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "shoulder_pad_l",
+        "class": "BONE_RIGID",
+        "bone": "Shoulder_L",
+        "rest_anchor_distance": 1.5357,
+        "local_offset": [
+          -0.0,
+          -0.1952,
+          -1.5232
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "shoulder_pad_r",
+        "class": "BONE_RIGID",
+        "bone": "UpperArm_R",
+        "rest_anchor_distance": 1.3373,
+        "local_offset": [
+          0.8593,
+          0.5601,
+          -0.8581
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "belt_plate",
+        "class": "BONE_RIGID",
+        "bone": "Chest",
+        "rest_anchor_distance": 1.5456,
+        "local_offset": [
+          0.0,
+          -1.5456,
+          0.0
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "chest_mass",
+        "class": "BONE_RIGID",
+        "bone": "Chest",
+        "rest_anchor_distance": 1.5456,
+        "local_offset": [
+          0.0,
+          -1.5456,
+          0.0
+        ],
+        "intentional_floating": false
+      }
+    ],
+    "unintentional_floating": 0,
     "head_style": "rook_armored_helm",
     "boot_style": "armored_planted",
     "glove_family": "POWER_GAUNTLET",
