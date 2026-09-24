@@ -1,14 +1,44 @@
 {
   "fighter": "nix-calder",
   "status": "GENERATED_PRODUCTION_ART",
-  "generator": "aa_generated_production_art",
-  "generator_version": "4.0.0",
-  "generator_revision": "character_craft_v4",
+  "generator": "aa_generated_art_v5",
+  "generator_version": "5.0.0",
+  "generator_revision": "non_remesh_character_builder",
   "blend": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/art_source/animation/fighters/nix-calder/source/nix-calder_production_master.blend",
   "glb": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/game-godot/content/fighters/nix-calder/model/nix-calder_generated_production.glb",
-  "triangles": 13401,
-  "body_connected_components": 1,
-  "material_count": 15,
+  "human_authored": false,
+  "future_human_replaceable": true,
+  "construction": "profile_loft_no_voxel_remesh",
+  "geometry": {
+    "construction": "profile_loft_no_voxel_remesh",
+    "used_voxel_remesh": false,
+    "triangles": 1828,
+    "body_triangles": 1292,
+    "body_connected_components": 1,
+    "material_count": 7,
+    "hand_parts": 5,
+    "boot_parts": 4,
+    "head_parts": 4,
+    "costume_parts": 9,
+    "foot_ground_gap_m": 0.0,
+    "weight": {
+      "vertex_count": 1283,
+      "zero_weight_vertices": 0,
+      "unnormalized_vertices": 0,
+      "smooth_skinning": true
+    },
+    "correctives": [
+      "shoulder_raise",
+      "torso_twist",
+      "deep_crouch",
+      "heavy_hurt_bend",
+      "extreme_punch_reach"
+    ],
+    "head_style": "crystal_facet_mask",
+    "boot_style": "frost_geometric",
+    "hand_default": "guard",
+    "costume_profile": "geometric_frost"
+  },
   "bones": [
     "Root",
     "Hips",
@@ -172,150 +202,5 @@
     "launch_tumble"
   ],
   "action_count": 113,
-  "geometry": {
-    "fighter": "nix-calder",
-    "generator_revision": "character_craft_v4",
-    "front_marker": "AA_FrontMarker",
-    "canonical_forward": [
-      0.0,
-      1.0,
-      0.0
-    ],
-    "body_connected_components": 1,
-    "triangles": 13401,
-    "body_triangles": 11791,
-    "material_count": 15,
-    "foot_ground_gap_m": 0.0,
-    "weight": {
-      "vertex_count": 10473,
-      "zero_weight_vertices": 0,
-      "unnormalized_vertices": 0,
-      "smooth_skinning": true
-    },
-    "accessories": [
-      {
-        "name": "head_shell",
-        "classification": "BODY",
-        "parent_bone": "Head",
-        "distance_m": 0.0578,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 104,
-        "designed": true
-      },
-      {
-        "name": "hand_L",
-        "classification": "BODY",
-        "parent_bone": "Hand_L",
-        "distance_m": 0.0326,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 364,
-        "designed": true
-      },
-      {
-        "name": "boot_L",
-        "classification": "BODY",
-        "parent_bone": "Foot_L",
-        "distance_m": 0.0859,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 192,
-        "designed": true
-      },
-      {
-        "name": "hand_R",
-        "classification": "BODY",
-        "parent_bone": "Hand_R",
-        "distance_m": 0.0326,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 364,
-        "designed": true
-      },
-      {
-        "name": "boot_R",
-        "classification": "BODY",
-        "parent_bone": "Foot_R",
-        "distance_m": 0.0859,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 192,
-        "designed": true
-      },
-      {
-        "name": "crystal_core",
-        "classification": "ARMOR",
-        "parent_bone": "Chest",
-        "distance_m": 0.0282,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 12,
-        "designed": true
-      },
-      {
-        "name": "chest_plate",
-        "classification": "ARMOR",
-        "parent_bone": "Chest",
-        "distance_m": 0.0616,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 112,
-        "designed": true
-      },
-      {
-        "name": "crystal_shoulder",
-        "classification": "ARMOR",
-        "parent_bone": "Shoulder_L",
-        "distance_m": 0.0306,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 12,
-        "designed": true
-      },
-      {
-        "name": "forearm_plate_r",
-        "classification": "ARMOR",
-        "parent_bone": "LowerArm_R",
-        "distance_m": 0.0313,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 140,
-        "designed": true
-      },
-      {
-        "name": "forearm_plate_l",
-        "classification": "ARMOR",
-        "parent_bone": "LowerArm_L",
-        "distance_m": 0.0313,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 140,
-        "designed": true
-      }
-    ],
-    "unintentional_floating_accessories": 0,
-    "shape_profile": {
-      "head_style": "crystal_facet_mask",
-      "boot_style": "frost_geometric",
-      "hand_default": "guard",
-      "hand_scale": 1.18,
-      "hand_strength": 1.04,
-      "costume_profile": "crystal_control"
-    },
-    "designed_head": true,
-    "designed_hands": true,
-    "designed_boots": true,
-    "designed_costume": true,
-    "toon_bands": 3,
-    "hand_shapes": [
-      "neutral",
-      "fist",
-      "open"
-    ]
-  },
-  "recipe": "crystal_facet_mask",
-  "human_authored": false,
-  "future_human_replaceable": true,
   "blender": "3.3.1"
 }

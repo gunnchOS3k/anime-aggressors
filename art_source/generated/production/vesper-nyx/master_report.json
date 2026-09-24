@@ -1,14 +1,44 @@
 {
   "fighter": "vesper-nyx",
   "status": "GENERATED_PRODUCTION_ART",
-  "generator": "aa_generated_production_art",
-  "generator_version": "4.0.0",
-  "generator_revision": "character_craft_v4",
+  "generator": "aa_generated_art_v5",
+  "generator_version": "5.0.0",
+  "generator_revision": "non_remesh_character_builder",
   "blend": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/art_source/animation/fighters/vesper-nyx/source/vesper-nyx_production_master.blend",
   "glb": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/game-godot/content/fighters/vesper-nyx/model/vesper-nyx_generated_production.glb",
-  "triangles": 11174,
-  "body_connected_components": 1,
-  "material_count": 15,
+  "human_authored": false,
+  "future_human_replaceable": true,
+  "construction": "profile_loft_no_voxel_remesh",
+  "geometry": {
+    "construction": "profile_loft_no_voxel_remesh",
+    "used_voxel_remesh": false,
+    "triangles": 1778,
+    "body_triangles": 1176,
+    "body_connected_components": 1,
+    "material_count": 7,
+    "hand_parts": 5,
+    "boot_parts": 4,
+    "head_parts": 4,
+    "costume_parts": 12,
+    "foot_ground_gap_m": 0.0,
+    "weight": {
+      "vertex_count": 1166,
+      "zero_weight_vertices": 0,
+      "unnormalized_vertices": 0,
+      "smooth_skinning": true
+    },
+    "correctives": [
+      "shoulder_raise",
+      "torso_twist",
+      "deep_crouch",
+      "heavy_hurt_bend",
+      "extreme_punch_reach"
+    ],
+    "head_style": "smoke_cowl_void",
+    "boot_style": "asymmetric_narrow",
+    "hand_default": "relaxed",
+    "costume_profile": "asymmetric_void_coat"
+  },
   "bones": [
     "Root",
     "Hips",
@@ -174,150 +204,5 @@
     "launch_tumble"
   ],
   "action_count": 113,
-  "geometry": {
-    "fighter": "vesper-nyx",
-    "generator_revision": "character_craft_v4",
-    "front_marker": "AA_FrontMarker",
-    "canonical_forward": [
-      0.0,
-      1.0,
-      0.0
-    ],
-    "body_connected_components": 1,
-    "triangles": 11174,
-    "body_triangles": 9512,
-    "material_count": 15,
-    "foot_ground_gap_m": 0.0,
-    "weight": {
-      "vertex_count": 8628,
-      "zero_weight_vertices": 0,
-      "unnormalized_vertices": 0,
-      "smooth_skinning": true
-    },
-    "accessories": [
-      {
-        "name": "head_shell",
-        "classification": "BODY",
-        "parent_bone": "Head",
-        "distance_m": 0.0613,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 242,
-        "designed": true
-      },
-      {
-        "name": "hand_L",
-        "classification": "BODY",
-        "parent_bone": "Hand_L",
-        "distance_m": 0.0219,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 364,
-        "designed": true
-      },
-      {
-        "name": "boot_L",
-        "classification": "BODY",
-        "parent_bone": "Foot_L",
-        "distance_m": 0.0744,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 200,
-        "designed": true
-      },
-      {
-        "name": "hand_R",
-        "classification": "BODY",
-        "parent_bone": "Hand_R",
-        "distance_m": 0.0219,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 364,
-        "designed": true
-      },
-      {
-        "name": "boot_R",
-        "classification": "BODY",
-        "parent_bone": "Foot_R",
-        "distance_m": 0.0727,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 200,
-        "designed": true
-      },
-      {
-        "name": "coat_panel_l",
-        "classification": "SECONDARY_MOTION",
-        "parent_bone": "Hips",
-        "distance_m": 0.1034,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 56,
-        "designed": true
-      },
-      {
-        "name": "coat_panel_r",
-        "classification": "SECONDARY_MOTION",
-        "parent_bone": "Hips",
-        "distance_m": 0.085,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 56,
-        "designed": true
-      },
-      {
-        "name": "coat_tail_l",
-        "classification": "SECONDARY_MOTION",
-        "parent_bone": "Hips",
-        "distance_m": 0.1178,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 56,
-        "designed": true
-      },
-      {
-        "name": "coat_tail_r",
-        "classification": "SECONDARY_MOTION",
-        "parent_bone": "Hips",
-        "distance_m": 0.0593,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 56,
-        "designed": true
-      },
-      {
-        "name": "void_trim",
-        "classification": "CLOTHING",
-        "parent_bone": "Chest",
-        "distance_m": 0.0518,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 112,
-        "designed": true
-      }
-    ],
-    "unintentional_floating_accessories": 0,
-    "shape_profile": {
-      "head_style": "smoke_cowl_void",
-      "boot_style": "asymmetric_narrow",
-      "hand_default": "guard",
-      "hand_scale": 1.12,
-      "hand_strength": 0.94,
-      "costume_profile": "split_coat_cowl"
-    },
-    "designed_head": true,
-    "designed_hands": true,
-    "designed_boots": true,
-    "designed_costume": true,
-    "toon_bands": 3,
-    "hand_shapes": [
-      "neutral",
-      "fist",
-      "open"
-    ]
-  },
-  "recipe": "smoke_cowl_void",
-  "human_authored": false,
-  "future_human_replaceable": true,
   "blender": "3.3.1"
 }

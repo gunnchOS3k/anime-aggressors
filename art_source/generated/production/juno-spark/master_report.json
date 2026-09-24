@@ -1,14 +1,44 @@
 {
   "fighter": "juno-spark",
   "status": "GENERATED_PRODUCTION_ART",
-  "generator": "aa_generated_production_art",
-  "generator_version": "4.0.0",
-  "generator_revision": "character_craft_v4",
+  "generator": "aa_generated_art_v5",
+  "generator_version": "5.0.0",
+  "generator_revision": "non_remesh_character_builder",
   "blend": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/art_source/animation/fighters/juno-spark/source/juno-spark_production_master.blend",
   "glb": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/game-godot/content/fighters/juno-spark/model/juno-spark_generated_production.glb",
-  "triangles": 10764,
-  "body_connected_components": 1,
-  "material_count": 14,
+  "human_authored": false,
+  "future_human_replaceable": true,
+  "construction": "profile_loft_no_voxel_remesh",
+  "geometry": {
+    "construction": "profile_loft_no_voxel_remesh",
+    "used_voxel_remesh": false,
+    "triangles": 1728,
+    "body_triangles": 1154,
+    "body_connected_components": 1,
+    "material_count": 7,
+    "hand_parts": 5,
+    "boot_parts": 4,
+    "head_parts": 4,
+    "costume_parts": 10,
+    "foot_ground_gap_m": 0.0,
+    "weight": {
+      "vertex_count": 1144,
+      "zero_weight_vertices": 0,
+      "unnormalized_vertices": 0,
+      "smooth_skinning": true
+    },
+    "correctives": [
+      "shoulder_raise",
+      "torso_twist",
+      "deep_crouch",
+      "heavy_hurt_bend",
+      "extreme_punch_reach"
+    ],
+    "head_style": "arc_crown_cap",
+    "boot_style": "speed_shoe",
+    "hand_default": "open",
+    "costume_profile": "sharp_speed_suit"
+  },
   "bones": [
     "Root",
     "Hips",
@@ -172,140 +202,5 @@
     "launch_tumble"
   ],
   "action_count": 113,
-  "geometry": {
-    "fighter": "juno-spark",
-    "generator_revision": "character_craft_v4",
-    "front_marker": "AA_FrontMarker",
-    "canonical_forward": [
-      0.0,
-      1.0,
-      0.0
-    ],
-    "body_connected_components": 1,
-    "triangles": 10764,
-    "body_triangles": 8714,
-    "material_count": 14,
-    "foot_ground_gap_m": 0.0,
-    "weight": {
-      "vertex_count": 7908,
-      "zero_weight_vertices": 0,
-      "unnormalized_vertices": 0,
-      "smooth_skinning": true
-    },
-    "accessories": [
-      {
-        "name": "head_shell",
-        "classification": "BODY",
-        "parent_bone": "Head",
-        "distance_m": 0.0654,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 746,
-        "designed": true
-      },
-      {
-        "name": "hand_L",
-        "classification": "BODY",
-        "parent_bone": "Hand_L",
-        "distance_m": 0.0221,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 364,
-        "designed": true
-      },
-      {
-        "name": "boot_L",
-        "classification": "BODY",
-        "parent_bone": "Foot_L",
-        "distance_m": 0.0269,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 200,
-        "designed": true
-      },
-      {
-        "name": "hand_R",
-        "classification": "BODY",
-        "parent_bone": "Hand_R",
-        "distance_m": 0.0221,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 364,
-        "designed": true
-      },
-      {
-        "name": "boot_R",
-        "classification": "BODY",
-        "parent_bone": "Foot_R",
-        "distance_m": 0.0269,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 200,
-        "designed": true
-      },
-      {
-        "name": "volt_panel_a",
-        "classification": "CLOTHING",
-        "parent_bone": "Chest",
-        "distance_m": 0.1684,
-        "intentional_float": false,
-        "unintentional_floating": true,
-        "vertex_count": 56,
-        "designed": true
-      },
-      {
-        "name": "volt_panel_b",
-        "classification": "CLOTHING",
-        "parent_bone": "Chest",
-        "distance_m": 0.1698,
-        "intentional_float": false,
-        "unintentional_floating": true,
-        "vertex_count": 56,
-        "designed": true
-      },
-      {
-        "name": "volt_sash",
-        "classification": "CLOTHING",
-        "parent_bone": "Chest",
-        "distance_m": 0.1097,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 56,
-        "designed": true
-      },
-      {
-        "name": "volt_tag",
-        "classification": "CLOTHING",
-        "parent_bone": "Chest",
-        "distance_m": 0.2214,
-        "intentional_float": false,
-        "unintentional_floating": true,
-        "vertex_count": 56,
-        "designed": true
-      }
-    ],
-    "unintentional_floating_accessories": 3,
-    "shape_profile": {
-      "head_style": "arc_crown_cap",
-      "boot_style": "speed_shoe",
-      "hand_default": "open",
-      "hand_scale": 1.04,
-      "hand_strength": 0.86,
-      "costume_profile": "sharp_speed_panels"
-    },
-    "designed_head": true,
-    "designed_hands": true,
-    "designed_boots": true,
-    "designed_costume": true,
-    "toon_bands": 3,
-    "hand_shapes": [
-      "neutral",
-      "fist",
-      "open"
-    ]
-  },
-  "recipe": "arc_crown_cap",
-  "human_authored": false,
-  "future_human_replaceable": true,
   "blender": "3.3.1"
 }

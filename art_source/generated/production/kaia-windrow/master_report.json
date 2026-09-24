@@ -1,14 +1,44 @@
 {
   "fighter": "kaia-windrow",
   "status": "GENERATED_PRODUCTION_ART",
-  "generator": "aa_generated_production_art",
-  "generator_version": "4.0.0",
-  "generator_revision": "character_craft_v4",
+  "generator": "aa_generated_art_v5",
+  "generator_version": "5.0.0",
+  "generator_revision": "non_remesh_character_builder",
   "blend": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/art_source/animation/fighters/kaia-windrow/source/kaia-windrow_production_master.blend",
   "glb": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/game-godot/content/fighters/kaia-windrow/model/kaia-windrow_generated_production.glb",
-  "triangles": 11913,
-  "body_connected_components": 1,
-  "material_count": 15,
+  "human_authored": false,
+  "future_human_replaceable": true,
+  "construction": "profile_loft_no_voxel_remesh",
+  "geometry": {
+    "construction": "profile_loft_no_voxel_remesh",
+    "used_voxel_remesh": false,
+    "triangles": 1736,
+    "body_triangles": 1136,
+    "body_connected_components": 1,
+    "material_count": 6,
+    "hand_parts": 5,
+    "boot_parts": 4,
+    "head_parts": 4,
+    "costume_parts": 11,
+    "foot_ground_gap_m": 0.0,
+    "weight": {
+      "vertex_count": 1131,
+      "zero_weight_vertices": 0,
+      "unnormalized_vertices": 0,
+      "smooth_skinning": true
+    },
+    "correctives": [
+      "shoulder_raise",
+      "torso_twist",
+      "deep_crouch",
+      "heavy_hurt_bend",
+      "extreme_punch_reach"
+    ],
+    "head_style": "ribbon_veil",
+    "boot_style": "aerial_boot",
+    "hand_default": "open",
+    "costume_profile": "aerial_suit_scarf"
+  },
   "bones": [
     "Root",
     "Hips",
@@ -174,150 +204,5 @@
     "launch_tumble"
   ],
   "action_count": 113,
-  "geometry": {
-    "fighter": "kaia-windrow",
-    "generator_revision": "character_craft_v4",
-    "front_marker": "AA_FrontMarker",
-    "canonical_forward": [
-      0.0,
-      1.0,
-      0.0
-    ],
-    "body_connected_components": 1,
-    "triangles": 11913,
-    "body_triangles": 10081,
-    "material_count": 15,
-    "foot_ground_gap_m": 0.001,
-    "weight": {
-      "vertex_count": 8990,
-      "zero_weight_vertices": 0,
-      "unnormalized_vertices": 0,
-      "smooth_skinning": true
-    },
-    "accessories": [
-      {
-        "name": "head_shell",
-        "classification": "BODY",
-        "parent_bone": "Head",
-        "distance_m": 0.1396,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 226,
-        "designed": true
-      },
-      {
-        "name": "hand_L",
-        "classification": "BODY",
-        "parent_bone": "Hand_L",
-        "distance_m": 0.0302,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 364,
-        "designed": true
-      },
-      {
-        "name": "boot_L",
-        "classification": "BODY",
-        "parent_bone": "Foot_L",
-        "distance_m": 0.0533,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 240,
-        "designed": true
-      },
-      {
-        "name": "hand_R",
-        "classification": "BODY",
-        "parent_bone": "Hand_R",
-        "distance_m": 0.0302,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 364,
-        "designed": true
-      },
-      {
-        "name": "boot_R",
-        "classification": "BODY",
-        "parent_bone": "Foot_R",
-        "distance_m": 0.0533,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 240,
-        "designed": true
-      },
-      {
-        "name": "scarf",
-        "classification": "SECONDARY_MOTION",
-        "parent_bone": "Neck",
-        "distance_m": 0.0296,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 168,
-        "designed": true
-      },
-      {
-        "name": "ribbon",
-        "classification": "SECONDARY_MOTION",
-        "parent_bone": "Head",
-        "distance_m": 0.0735,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 56,
-        "designed": true
-      },
-      {
-        "name": "airfoil_l",
-        "classification": "CLOTHING",
-        "parent_bone": "Shoulder_L",
-        "distance_m": 0.0126,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 56,
-        "designed": true
-      },
-      {
-        "name": "airfoil_r",
-        "classification": "CLOTHING",
-        "parent_bone": "Shoulder_R",
-        "distance_m": 0.0126,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 56,
-        "designed": true
-      },
-      {
-        "name": "core_panel",
-        "classification": "CLOTHING",
-        "parent_bone": "Chest",
-        "distance_m": 0.0631,
-        "intentional_float": false,
-        "unintentional_floating": false,
-        "vertex_count": 112,
-        "designed": true
-      }
-    ],
-    "unintentional_floating_accessories": 0,
-    "shape_profile": {
-      "head_style": "ribbon_veil",
-      "boot_style": "aerial_boot",
-      "hand_default": "open",
-      "hand_scale": 1.1,
-      "hand_strength": 0.88,
-      "costume_profile": "scarf_airfoil"
-    },
-    "designed_head": true,
-    "designed_hands": true,
-    "designed_boots": true,
-    "designed_costume": true,
-    "toon_bands": 3,
-    "hand_shapes": [
-      "neutral",
-      "fist",
-      "open"
-    ]
-  },
-  "recipe": "ribbon_veil",
-  "human_authored": false,
-  "future_human_replaceable": true,
   "blender": "3.3.1"
 }
