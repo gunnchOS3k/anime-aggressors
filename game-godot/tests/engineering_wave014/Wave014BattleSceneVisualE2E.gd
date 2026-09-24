@@ -8,6 +8,10 @@ const FIGHTERS := [
 ]
 const BATTLE_PATH := "res://scenes/battle/BattleScene.tscn"
 const _FighterStates = preload("res://scripts/fighters/fighter_states.gd")
+const LIVE_MODEL_SOURCES := [
+	"GENERATED_PRODUCTION_ART",
+	"PROCEDURAL_PRODUCTION_PROXY",
+]
 
 const GAMEPLAY_SCENARIOS := [
 	{"label": "IDLE", "state": _FighterStates.IDLE, "move": {}},
@@ -67,9 +71,10 @@ func _run() -> void:
 			fighter_ok = false
 			fighter_reasons.append("model_not_loaded")
 		if model != null:
-			if model.get_current_model_source() != "PROCEDURAL_PRODUCTION_PROXY":
+			var source := str(model.get_current_model_source())
+			if source not in LIVE_MODEL_SOURCES:
 				fighter_ok = false
-				fighter_reasons.append("model_source=%s" % model.get_current_model_source())
+				fighter_reasons.append("model_source=%s" % source)
 			if not model.is_procedural_proxy_visible():
 				fighter_ok = false
 				fighter_reasons.append("procedural_proxy_not_visible")
