@@ -3,15 +3,17 @@
 Generated production art ships now. Human replacement stays contract-compatible.
 
 v6 locks the generated roster to a deliberate **graphic low-poly / cel-shaded
-combat** style. That style is the current-release reference, not a claim of
-human-authored final art.
+combat** style. v7 polishes that lock (value groups, cameras, pair impacts,
+acting) without changing the direction. That style is the current-release
+reference, not a claim of human-authored final art.
 
 ## Release reference (v6)
 
 Use these as the starting point for later artists:
 
 - Style lock: `docs/art/GENERATED_ART_V6_STYLE_LOCK.md`
-- Review packet: `artifacts/vxp3/review/generated_art_v6/`
+- Review packet: `artifacts/vxp3/review/generated_art_v7/`
+- Prior lock packet: `artifacts/vxp3/review/generated_art_v6/`
 - Silhouette sheets, select lineup, heavy/hurt/charge/super/clash stills
 - Per-fighter costume/mask/glove/boot families
 
@@ -28,8 +30,8 @@ Future artists are free to redesign details while preserving:
 ## v1.x (this cycle)
 
 - Generated production meshes, materials, rigs, animation, VFX, and audio ship
-- v6 graphic-combat style lock: undersuit, gloves/gauntlets, boots, masks,
-  cel shading, exaggerated posing
+- v6 graphic-combat style lock + v7 hero polish: undersuit, gloves/gauntlets,
+  boots, masks, cel shading, value blocking, pair impacts, exaggerated posing
 - Defects repaired in the generator
 - No wholesale redesign required to keep the game playable
 - Owner visual/feel gates remain human answers
