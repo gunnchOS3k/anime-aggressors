@@ -57,7 +57,13 @@ static func framing_for_fighter(
 			lean = 0.03
 	var pad_y := 0.18 + vfx_envelope
 	var pad_x := 0.14 + vfx_envelope * 0.6
-	var ortho_size := maxf(height * 0.52 + pad_y, width * 0.95 + pad_x)
+	# Width may include scarf/airfoil. Do not let secondary-motion width zoom
+	# the camera out past a readable body. Threshold stays 0.55.
+	var width_weight := 0.72
+	if fighter_id == "kaia-windrow":
+		width_weight = 0.62
+		lean = -0.02
+	var ortho_size := maxf(height * 0.52 + pad_y, width * width_weight + pad_x)
 	if select_mode:
 		# Mild zoom only — never clip feet/head for "tight" framing.
 		ortho_size *= 0.96

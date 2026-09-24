@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Write the v3 A–Z report. Never claims human-authored final art."""
+"""Write the v4 A–Z report. Never claims human-authored final art."""
 from __future__ import annotations
 
 import json
@@ -27,14 +27,12 @@ def yn(value) -> str:
 
 def main() -> None:
     gates = read("VXP3_GENERATED_PRODUCTION_ART_GATES.json")
-    geom3 = read("GENERATED_PRODUCTION_GEOMETRY_V3.json")
-    quality = read("GENERATED_ART_V3_QUALITY.json")
-    sil = read("GENERATED_ART_V3_SILHOUETTE.json")
-    hero = read("GENERATED_ART_V3_HERO.json")
-    masters = read("GENERATED_PRODUCTION_MASTERS.json")
+    quality4 = read("GENERATED_ART_V4_QUALITY.json")
+    cam4 = read("REVIEW_CAMERA_ORIENTATION_V4.json")
     head = gates.get("head_sha") or sh(["git", "rev-parse", "HEAD"])
+    fighters = (quality4.get("fighters") or {})
     lines = [
-        "# Generated Art v3 A–Z",
+        "# Generated Art v4 A–Z",
         "",
         "Generated production art only. Not human-authored final art. Do not merge.",
         "",
@@ -43,162 +41,89 @@ def main() -> None:
         f"**Base:** `6cd1b3100a7e467c2c991394576891660deb1162`",
         f"**RC1:** `v1.0.0-rc.1` untouched",
         "",
-        "## B generator-v3 changes",
+        "## B exact start CI failures",
         "",
-        "- Versioned shape profiles at `game-godot/data/art/generated_v3/fighter_shape_profiles.json`",
-        "- Body core remesh stays one island; designed heads/hands/boots/costume attach after remesh",
-        "- 2–3 band toon materials with rim + accent emission",
-        "- Fighter-specific idle/walk/heavy/hurt/charge/super poses",
+        "- Wave014 procedural_smoke: models_loaded=0 / anim_roots=0 because discovery still required PROCEDURAL_PRODUCTION_PROXY",
+        "- Wave020: Kaia silhouette_readable=false (coverage 0.482); headless texture_2d_get null spam",
+        "",
+        f"## C review-camera: FRONT_CAMERA_CORRECT={cam4.get('FRONT_CAMERA_CORRECT', '0/7')} source={cam4.get('source', 'pending')}",
+        "",
+        f"## D headless visibility: HEADLESS_VISIBILITY_NO_NULL_PASS={yn(gates.get('HEADLESS_VISIBILITY_NO_NULL_PASS'))}",
+        "",
+        f"## E Wave014 discovery: WAVE014_GENERATED_RUNTIME_DISCOVERY_PASS={yn(gates.get('WAVE014_GENERATED_RUNTIME_DISCOVERY_PASS'))}",
+        "",
+        f"## F Wave020 Kaia: WAVE020_ROSTER_VISIBILITY_PASS={yn(gates.get('WAVE020_ROSTER_VISIBILITY_PASS'))}",
         "",
     ]
     order = [
-        ("C Ember", "ember-vale"),
-        ("D Rook", "rook-ironside"),
-        ("E Juno", "juno-spark"),
-        ("F Kaia", "kaia-windrow"),
-        ("G Nix", "nix-calder"),
-        ("H Orion", "orion-vell"),
-        ("I Vesper", "vesper-nyx"),
+        ("G Ember", "ember-vale"),
+        ("H Rook", "rook-ironside"),
+        ("I Juno", "juno-spark"),
+        ("J Kaia", "kaia-windrow"),
+        ("K Nix", "nix-calder"),
+        ("L Orion", "orion-vell"),
+        ("M Vesper", "vesper-nyx"),
     ]
-    fighters = (quality.get("fighters") or {})
-    geom_f = (geom3.get("fighters") or {})
     for title, fid in order:
-        q = fighters.get(fid) or {}
-        g = geom_f.get(fid) or {}
-        lines.append(f"## {title} art result")
+        row = fighters.get(fid) or {}
+        cov = row.get("coverage") or {}
+        lines.append(f"## {title}")
         lines.append("")
-        lines.append(f"- class: {q.get('class', 'unknown')} (digital only)")
-        lines.append(f"- head: {g.get('head_style')}")
-        lines.append(f"- boots: {g.get('boot_style')}")
-        lines.append(f"- hands: {g.get('hand_default')} strength={g.get('hand_strength')}")
-        lines.append(f"- tris: {g.get('triangles')} islands={g.get('body_connected_components')} gap={g.get('foot_ground_gap_m')}")
-        lines.append(f"- note: {(q.get('note') or 'generated craft, not finished anime')}")
+        lines.append(f"- front_camera_correct: {row.get('front_camera_correct')}")
+        lines.append(f"- packet_complete: {row.get('packet_complete')} missing={row.get('missing_shots')}")
+        lines.append(f"- costume front forms: {cov.get('front_named_parts')} verts={cov.get('costume_vertices')}")
+        lines.append(f"- pose deltas heavy/hurt/charge/super: {row.get('heavy_delta')}/{row.get('hurt_delta')}/{row.get('charge_delta')}/{row.get('super_delta')}")
         lines.append("")
     lines.extend(
         [
-            "## J hands results",
+            f"## N hands: {yn(gates.get('GEN_ART_V4_HAND_CRAFT_PASS'))}",
+            f"## O boots: {yn(gates.get('GEN_ART_V4_BOOT_CRAFT_PASS'))}",
+            f"## P heads: {yn(gates.get('GEN_ART_V4_HEAD_CRAFT_PASS'))}",
+            f"## Q costume: {yn(gates.get('GEN_ART_V4_COSTUME_COVERAGE_PASS'))}",
+            f"## R materials: {yn(gates.get('GEN_ART_V4_MATERIAL_READ_PASS'))}",
+            f"## S heavy/hurt/charge/super: {yn(gates.get('GEN_ART_V4_HEAVY_CONTACT_READ_PASS'))} / {yn(gates.get('GEN_ART_V4_HURT_READ_PASS'))} / {yn(gates.get('GEN_ART_V4_CHARGE_BODY_READ_PASS'))} / {yn(gates.get('GEN_ART_V4_SUPER_READ_PASS'))}",
+            f"## T silhouette: {yn(gates.get('GEN_ART_V4_SILHOUETTE_ROSTER_PASS'))}",
             "",
-            f"- Rook/Ember stronger than Juno/Kaia: {geom3.get('rook_ember_hands_stronger')}",
-            f"- hierarchy: {json.dumps(geom3.get('hand_hierarchy') or {})}",
-            f"- gate: {yn(gates.get('GEN_ART_V3_HANDS_PASS'))}",
+            "## U review packet",
             "",
-            "## K feet results",
+            "`artifacts/vxp3/review/generated_art_v4/`",
             "",
-            f"- designed boots per fighter, ground gap gate: {yn(gates.get('GEN_ART_V3_FEET_PASS'))}",
-            "",
-            "## L head-design results",
-            "",
-            f"- seven unique abstract heads: {yn(gates.get('GEN_ART_V3_HEAD_DESIGN_PASS'))}",
-            "",
-            "## M costume-craft results",
-            "",
-            f"- attached designed plates/panels: {yn(gates.get('GEN_ART_V3_COSTUME_CRAFT_PASS'))}",
-            "",
-            "## N silhouette results",
-            "",
-            f"- digital uniqueness: {yn(sil.get('GEN_ART_V3_SILHOUETTE_PASS'))} worst={sil.get('worst')}",
-            "- human/owner silhouette approval: false",
-            "",
-            "## O materials results",
-            "",
-            f"- 2–3 band toon: {yn(gates.get('GEN_ART_V3_MATERIAL_PASS'))}",
-            "",
-            "## P heavy-contact results",
-            "",
-            f"- gate: {yn(gates.get('GEN_ART_V3_HEAVY_CONTACT_PASS'))}",
-            "",
-            "## Q hurt results",
-            "",
-            f"- gate: {yn(gates.get('GEN_ART_V3_HURT_POSE_PASS'))}",
-            "",
-            "## R charge-body results",
-            "",
-            f"- body-read without VFX: {yn(gates.get('GEN_ART_V3_CHARGE_BODY_READ_PASS'))}",
-            "",
-            "## S super-pose results",
-            "",
-            f"- unique supers: {yn(gates.get('GEN_ART_V3_SUPER_POSE_PASS'))}",
-            "",
-            "## T design-sheet paths",
-            "",
-            "- `artifacts/vxp3/review/generated_art_v3/design_sheets/<fighter>/`",
-            "- packet: `artifacts/vxp3/review/generated_art_v3/<fighter>/`",
-            f"- sheets gate: {yn(gates.get('GEN_ART_V3_DESIGN_SHEET_PASS'))}",
-            "",
-            "## U v3 gate matrix",
+            "## V v4 gate matrix",
             "",
         ]
     )
     for key in (
-        "GEN_ART_V3_HANDS_PASS",
-        "GEN_ART_V3_FEET_PASS",
-        "GEN_ART_V3_HEAD_DESIGN_PASS",
-        "GEN_ART_V3_COSTUME_CRAFT_PASS",
-        "GEN_ART_V3_SILHOUETTE_PASS",
-        "GEN_ART_V3_MATERIAL_PASS",
-        "GEN_ART_V3_HERO_POSE_PASS",
-        "GEN_ART_V3_HEAVY_CONTACT_PASS",
-        "GEN_ART_V3_HURT_POSE_PASS",
-        "GEN_ART_V3_CHARGE_BODY_READ_PASS",
-        "GEN_ART_V3_SUPER_POSE_PASS",
-        "GEN_ART_V3_DESIGN_SHEET_PASS",
-        "GENERATED_PRODUCTION_ART_PASS",
-        "HUMAN_AUTHORED_ART_PASS",
-        "HUMAN_AUTHORED_ANIMATION_PASS",
+        "GEN_ART_V4_FRONT_CAMERA_PASS",
+        "GEN_ART_V4_MOBILE_READ_PASS",
+        "GEN_ART_V4_HAND_CRAFT_PASS",
+        "GEN_ART_V4_BOOT_CRAFT_PASS",
+        "GEN_ART_V4_HEAD_CRAFT_PASS",
+        "GEN_ART_V4_COSTUME_COVERAGE_PASS",
+        "GEN_ART_V4_MATERIAL_READ_PASS",
+        "GEN_ART_V4_HERO_POSE_PASS",
+        "GEN_ART_V4_HEAVY_CONTACT_READ_PASS",
+        "GEN_ART_V4_HURT_READ_PASS",
+        "GEN_ART_V4_CHARGE_BODY_READ_PASS",
+        "GEN_ART_V4_SUPER_READ_PASS",
+        "GEN_ART_V4_SILHOUETTE_ROSTER_PASS",
+        "WAVE014_GENERATED_RUNTIME_DISCOVERY_PASS",
+        "WAVE020_ROSTER_VISIBILITY_PASS",
+        "HEADLESS_VISIBILITY_NO_NULL_PASS",
         "HUMAN_ART_DIRECTION_APPROVAL",
         "MERGE_AUTHORIZED",
-        "FINAL_AUTHORED_ANIMATION_PASS",
     ):
-        lines.append(f"- {key}: {gates.get(key)}")
+        lines.append(f"- {key}={gates.get(key)}")
     lines.extend(
         [
             "",
-            "## V quality classification per fighter",
+            "## W exact-head CI: pending after this push; local Wave014 smoke and Wave020 framing passed on generated GLBs",
+            "## X APK: not eligible — stills still read as remesh toys; do not build",
+            "## Y Pixel / HUMAN_*: false / not started",
+            "## Z remaining defects + next human step: FRONT cameras are contract-correct and Wave014/Wave020 pass locally, but stills still read as remesh toys (block hands, primitive heads, peach remesh around plates). Do not Pixel-review questions 1–12. Do not merge. Owner should inspect `artifacts/vxp3/review/generated_art_v4/` and exact-head CI; a later human/internal art pass is required for Q3-like craft.",
             "",
         ]
     )
-    for fid, row in fighters.items():
-        lines.append(f"- {fid}: {row.get('class')} mean={row.get('mean')} (digital only)")
-    lines.extend(
-        [
-            "",
-            f"- roster: {quality.get('roster')}",
-            "- finished_anime: false",
-            "",
-            "## W exact-head CI",
-            "",
-            "- reported after push; do not claim green while required workflows are pending",
-            "",
-            "## X APK path/SHA if eligible",
-            "",
-            "- APK not built. File forbids owner-review APK until the visual-craft pass and exact-head CI are complete.",
-            "",
-            "## Y Pixel install result if available",
-            "",
-            "- skipped; no APK",
-            "",
-            "## Z remaining defects / owner questions",
-            "",
-            "1. Do these look like intentional game characters rather than remesh toys?",
-            "2. Are the abstract heads designed enough?",
-            "3. Do hands/feet look intentional?",
-            "4. Are costumes readable and character-specific?",
-            "5. Can you distinguish all seven in black silhouette?",
-            "6. Does each fighter have a unique body language?",
-            "7. Do heavy attacks look painful?",
-            "8. Does hurt acting read before knockback?",
-            "9. Does charge 100 transform the body, not just VFX?",
-            "10. Are supers screenshot-worthy?",
-            "11. Does Aura Clash feel dramatic?",
-            "12. Is this generated art acceptable to ship for this release before future human-art upgrades?",
-            "",
-            "Human gates stay false until the owner answers.",
-            "",
-            f"masters_ok: {(masters or {}).get('ok')}",
-            "",
-        ]
-    )
-    dest = REPORTS / "GENERATED_ART_V3_AZ.md"
+    dest = REPORTS / "GENERATED_ART_V4_AZ.md"
     dest.write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(dest)
 

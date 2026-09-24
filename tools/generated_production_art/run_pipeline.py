@@ -36,6 +36,8 @@ from generated_production_art.validate_geometry_v2 import validate as validate_g
 from generated_production_art.validate_geometry_v3 import validate as validate_geom_v3  # noqa: E402
 from generated_production_art.validate_hero_v3 import validate as validate_hero  # noqa: E402
 from generated_production_art.validate_silhouette_v3 import validate as validate_sil  # noqa: E402
+from generated_production_art.validate_art_v4 import validate as validate_v4  # noqa: E402
+from generated_production_art.emit_gates import main as emit_gates  # noqa: E402
 
 
 def _run(cmd: list[str]) -> subprocess.CompletedProcess:
@@ -49,6 +51,7 @@ def generate_masters() -> dict:
     script = ROOT / "tools/generated_production_art/blender/gp_build_production_master.py"
     render = ROOT / "tools/generated_production_art/blender/gp_render_review.py"
     render_v3 = ROOT / "tools/generated_production_art/blender/gp_render_v3.py"
+    render_v4 = ROOT / "tools/generated_production_art/blender/gp_render_v4.py"
     reports = {}
     for fid in FIGHTER_IDS:
         blend = production_master_blend(fid).resolve()
@@ -75,6 +78,7 @@ def generate_masters() -> dict:
         render_dir = ROOT / "artifacts/vxp3/review/generated_production"
         deform_dir = ROOT / "artifacts/vxp3/review/deformation_v2"
         v3_dir = ROOT / "artifacts/vxp3/review/generated_art_v3"
+        v4_dir = ROOT / "artifacts/vxp3/review/generated_art_v4"
         if ok:
             _run(
                 [
@@ -106,6 +110,20 @@ def generate_masters() -> dict:
                     str(v3_dir),
                     "--sheet-dir",
                     str(v3_dir / "design_sheets"),
+                ]
+            )
+            _run(
+                [
+                    blender,
+                    "--background",
+                    str(blend),
+                    "--python",
+                    str(render_v4),
+                    "--",
+                    "--fighter",
+                    fid,
+                    "--out-dir",
+                    str(v4_dir),
                 ]
             )
         reports[fid] = {
@@ -263,11 +281,13 @@ def main() -> int:
     write_json(REPORTS / "GENERATED_ART_V3_SILHOUETTE.json", sil)
     write_json(REPORTS / "GENERATED_ART_V3_HERO.json", hero)
     write_json(REPORTS / "GENERATED_ART_V3_QUALITY.json", quality)
-    print(json_summary(masters, anims, audio, vfx, exaggeration, geometry, geometry_v3, sil, hero))
+    v4 = validate_v4()
+    emit_gates()
+    print(json_summary(masters, anims, audio, vfx, exaggeration, geometry, geometry_v3, sil, hero, v4))
     return 0 if exaggeration.get("ok") and masters.get("ok") else 2
 
 
-def json_summary(masters, anims, audio, vfx, exaggeration, geometry=None, geometry_v3=None, sil=None, hero=None) -> str:
+def json_summary(masters, anims, audio, vfx, exaggeration, geometry=None, geometry_v3=None, sil=None, hero=None, v4=None) -> str:
     import json
 
     return json.dumps(
@@ -283,6 +303,8 @@ def json_summary(masters, anims, audio, vfx, exaggeration, geometry=None, geomet
             "unintentional_floating": (geometry or {}).get("UNINTENTIONAL_FLOATING_ACCESSORIES"),
             "silhouette_ok": (sil or {}).get("ok"),
             "hero_ok": (hero or {}).get("ok"),
+            "v4_front_camera": (v4 or {}).get("FRONT_CAMERA_CORRECT"),
+            "v4_costume": (v4 or {}).get("GEN_ART_V4_COSTUME_COVERAGE_PASS"),
         },
         indent=2,
     )

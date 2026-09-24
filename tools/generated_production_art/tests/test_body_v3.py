@@ -69,8 +69,8 @@ class BodyV3RecipeTests(unittest.TestCase):
         self.assertEqual(len(styles), 7)
 
     def test_generator_version(self) -> None:
-        self.assertEqual(GENERATOR_VERSION, "3.0.0")
-        self.assertEqual(GENERATOR_REVISION, "character_craft_v3")
+        self.assertEqual(GENERATOR_VERSION, "4.0.0")
+        self.assertEqual(GENERATOR_REVISION, "character_craft_v4")
 
 
 class HeroPoseV3Tests(unittest.TestCase):

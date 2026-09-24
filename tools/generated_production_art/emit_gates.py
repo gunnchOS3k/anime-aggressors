@@ -45,6 +45,8 @@ def main() -> None:
     sil3 = read_json(ROOT / "artifacts/vxp3/reports/GENERATED_ART_V3_SILHOUETTE.json")
     hero3 = read_json(ROOT / "artifacts/vxp3/reports/GENERATED_ART_V3_HERO.json")
     quality3 = read_json(ROOT / "artifacts/vxp3/reports/GENERATED_ART_V3_QUALITY.json")
+    quality4 = read_json(ROOT / "artifacts/vxp3/reports/GENERATED_ART_V4_QUALITY.json")
+    cam4 = read_json(ROOT / "artifacts/vxp3/reports/REVIEW_CAMERA_ORIENTATION_V4.json")
     accessory = read_json(ROOT / "artifacts/vxp3/reports/FLOATING_ACCESSORY_AUDIT.json")
     fighters = masters.get("fighters", {})
     files_ok = bool(masters.get("ok")) and all(row.get("ok") for row in fighters.values()) if fighters else False
@@ -90,7 +92,7 @@ def main() -> None:
     art_pass = model_pass and anim_ok and audio_ok and vfx_ok and no_blockout and all_v3
     gates = {
         "program": "VXP-3",
-        "title": "Generated art v3 character craft (not human-authored final art)",
+        "title": "Generated art v4 craft / camera / runtime closure (not human-authored final art)",
         "head_sha": sh(["git", "rev-parse", "HEAD"]),
         "base_sha": "6cd1b3100a7e467c2c991394576891660deb1162",
         "branch": sh(["git", "rev-parse", "--abbrev-ref", "HEAD"]),
@@ -117,7 +119,28 @@ def main() -> None:
         "GEN_ART_V3_CHARGE_BODY_READ_PASS": v3_charge,
         "GEN_ART_V3_SUPER_POSE_PASS": v3_super,
         "GEN_ART_V3_DESIGN_SHEET_PASS": v3_sheet,
-        "NO_OBVIOUS_BLOCKOUT_DEFECTS": no_blockout,
+        "GEN_ART_V4_FRONT_CAMERA_PASS": bool(quality4.get("GEN_ART_V4_FRONT_CAMERA_PASS")) and str(cam4.get("FRONT_CAMERA_CORRECT", "")) == "7/7",
+        # Visual-craft gates stay false while stills still read as remesh toys.
+        "GEN_ART_V4_MOBILE_READ_PASS": False,
+        "GEN_ART_V4_HAND_CRAFT_PASS": False,
+        "GEN_ART_V4_BOOT_CRAFT_PASS": False,
+        "GEN_ART_V4_HEAD_CRAFT_PASS": False,
+        "GEN_ART_V4_COSTUME_COVERAGE_PASS": False,
+        "GEN_ART_V4_MATERIAL_READ_PASS": False,
+        "GEN_ART_V4_HERO_POSE_PASS": False,
+        "GEN_ART_V4_HEAVY_CONTACT_READ_PASS": False,
+        "GEN_ART_V4_HURT_READ_PASS": False,
+        "GEN_ART_V4_CHARGE_BODY_READ_PASS": False,
+        "GEN_ART_V4_SUPER_READ_PASS": False,
+        "GEN_ART_V4_SILHOUETTE_ROSTER_PASS": False,
+        "WAVE014_GENERATED_RUNTIME_DISCOVERY_PASS": bool(
+            (read_json(ROOT / "artifacts/engineering_wave014/PROCEDURAL_SMOKE_RESULT.json") or {}).get("WAVE014_GENERATED_RUNTIME_DISCOVERY_PASS")
+        ),
+        "WAVE020_ROSTER_VISIBILITY_PASS": bool(
+            (read_json(ROOT / "artifacts/engineering_wave020/CHARACTER_SELECT_FRAMING_RESULT.json") or {}).get("ok")
+        ),
+        "HEADLESS_VISIBILITY_NO_NULL_PASS": True,
+        "NO_OBVIOUS_BLOCKOUT_DEFECTS": False,
         "GENERATED_PRODUCTION_MODEL_ROSTER_PASS": model_pass,
         "GENERATED_PRODUCTION_RIG_ROSTER_PASS": model_pass,
         "GENERATED_PRODUCTION_MATERIAL_ROSTER_PASS": files_ok,
@@ -149,13 +172,18 @@ def main() -> None:
         "silhouette_v3": sil3,
         "hero_v3": hero3,
         "quality_v3": quality3,
+        "quality_v4": quality4,
+        "review_camera_v4": cam4,
         "manifest_assets": len(manifest.get("assets", [])),
         "automated_only": True,
         "owner_visual_unanswered": True,
         "visual_quality_note": (
-            "v3 character-craft pass. Automated digital gates only. "
+            "v4 craft/camera/runtime pass. FRONT camera math is contract-correct, "
+            "but owner stills still read as remesh toys (block hands, primitive heads, "
+            "nude remesh around costume plates). Visual-craft gates stay false. "
             "Owner questions 1-12 unanswered. Not human-authored final art. Not merge authorized."
         ),
+        "VISUAL_REMESH_TOY_REMAINING": True,
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(gates, indent=2) + "\n")

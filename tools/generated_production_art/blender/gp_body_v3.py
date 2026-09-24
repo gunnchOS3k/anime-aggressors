@@ -49,7 +49,7 @@ def _orient(obj, track: Vector, up=Vector((0.0, 0.0, 1.0))) -> None:
     _apply(obj)
 
 
-def _toon_mat_v3(name, color, emit=0.05, bands=3, rim=0.28, metallic=0.04, rough=0.62):
+def _toon_mat_v3(name, color, emit=0.05, bands=3, rim=0.28, metallic=0.04, rough=0.62, shadow_hue=None):
     mat = bpy.data.materials.new(name)
     mat.use_nodes = True
     nt = mat.node_tree
@@ -66,11 +66,12 @@ def _toon_mat_v3(name, color, emit=0.05, bands=3, rim=0.28, metallic=0.04, rough
     ramp.color_ramp.interpolation = "CONSTANT"
     while len(ramp.color_ramp.elements) < bands:
         ramp.color_ramp.elements.new(0.5)
-    stops = [0.18, 0.46, 0.78][:bands]
+    stops = [0.16, 0.48, 0.80][:bands]
+    hue = shadow_hue or (color[0] * 0.55, color[1] * 0.42, color[2] * 0.62)
     shades = [
-        (color[0] * 0.22, color[1] * 0.22, color[2] * 0.22, 1.0),
-        (color[0] * 0.62, color[1] * 0.62, color[2] * 0.62, 1.0),
-        (min(1.0, color[0] * 1.08), min(1.0, color[1] * 1.08), min(1.0, color[2] * 1.08), 1.0),
+        (hue[0] * 0.35, hue[1] * 0.32, hue[2] * 0.40, 1.0),
+        (color[0] * 0.58, color[1] * 0.56, color[2] * 0.60, 1.0),
+        (min(1.0, color[0] * 1.12), min(1.0, color[1] * 1.10), min(1.0, color[2] * 1.08), 1.0),
     ]
     for i, (pos, shade) in enumerate(zip(stops, shades)):
         ramp.color_ramp.elements[i].position = pos
@@ -83,13 +84,13 @@ def _toon_mat_v3(name, color, emit=0.05, bands=3, rim=0.28, metallic=0.04, rough
     add = nt.nodes.new("ShaderNodeAddShader")
     add.location = (540, 20)
     fresnel = nt.nodes.new("ShaderNodeFresnel")
-    fresnel.inputs["IOR"].default_value = 1.48
+    fresnel.inputs["IOR"].default_value = 1.42
     fresnel.location = (180, -160)
     rim_n = nt.nodes.new("ShaderNodeEmission")
     rim_n.inputs["Color"].default_value = (
-        min(1.0, color[0] * 1.45),
-        min(1.0, color[1] * 1.45),
-        min(1.0, color[2] * 1.45),
+        min(1.0, color[0] * 1.35),
+        min(1.0, color[1] * 1.35),
+        min(1.0, color[2] * 1.35),
         1.0,
     )
     rim_n.inputs["Strength"].default_value = rim
@@ -99,7 +100,7 @@ def _toon_mat_v3(name, color, emit=0.05, bands=3, rim=0.28, metallic=0.04, rough
     nt.links.new(diffuse.outputs["BSDF"], to_rgb.inputs["Shader"])
     nt.links.new(to_rgb.outputs["Color"], ramp.inputs["Fac"])
     emission_from_ramp = nt.nodes.new("ShaderNodeEmission")
-    emission_from_ramp.inputs["Strength"].default_value = 0.85
+    emission_from_ramp.inputs["Strength"].default_value = 0.92
     emission_from_ramp.location = (520, 120)
     nt.links.new(ramp.outputs["Color"], emission_from_ramp.inputs["Color"])
     nt.links.new(emission_from_ramp.outputs["Emission"], add.inputs[0])
@@ -110,8 +111,8 @@ def _toon_mat_v3(name, color, emit=0.05, bands=3, rim=0.28, metallic=0.04, rough
     nt.links.new(mix.outputs["Shader"], out.inputs["Surface"])
     if metallic > 0.08:
         gloss = nt.nodes.new("ShaderNodeBsdfGlossy")
-        gloss.inputs["Roughness"].default_value = 0.28
-        gloss.inputs["Color"].default_value = (color[0], color[1], color[2], 1.0)
+        gloss.inputs["Roughness"].default_value = 0.22
+        gloss.inputs["Color"].default_value = (min(1.0, color[0] * 1.2), min(1.0, color[1] * 1.2), min(1.0, color[2] * 1.2), 1.0)
     mat.diffuse_color = (color[0], color[1], color[2], 1.0)
     mat["aa_toon_bands"] = bands
     mat["aa_charge_ready"] = 1
@@ -133,6 +134,26 @@ def _taper_limb(obj, axis="z", tip=0.72) -> None:
         factor = 1.0 - (1.0 - tip) * max(0.0, min(1.0, (v.co.z + 0.2)))
         v.co.x *= factor
         v.co.y *= factor
+
+
+def _wrap_bone(arm_obj, bone_name, radius, name, extra=0.03):
+    """Cylinder larger than the remesh limb so costume actually covers it."""
+    h, t = _bone_pts(arm_obj, bone_name)
+    mid = (h + t) * 0.5
+    length = max(0.07, (t - h).length + extra)
+    cyl = _prim_cylinder(mid, radius, length, name, verts=10)
+    _orient(cyl, t - h)
+    _bevel(cyl, min(0.010, radius * 0.18))
+    return cyl
+
+
+def _torso_shell(arm_obj, name, sx, sy, sz, y_bias=0.03):
+    """Front cuirass with a keel back to the chest bone so attach audit stays honest."""
+    chest_h, chest_t = _bone_pts(arm_obj, "Chest")
+    mid = (chest_h + chest_t) * 0.5
+    shell = _plate(mid + Vector((0.0, 0.20 + y_bias, 0.0)), (sx, sy, sz), name + "_shell", bevel=0.016)
+    keel = _plate(mid + Vector((0.0, 0.10, 0.0)), (sx * 0.42, 0.22, sz * 0.48), name + "_keel", bevel=0.006)
+    return _join([shell, keel], name)
 
 
 def build_core_volumes(fid: str, p: FighterProfile, arm_obj):
@@ -197,123 +218,139 @@ def build_core_volumes(fid: str, p: FighterProfile, arm_obj):
 
 
 def _designed_hand(loc, side_sign, scale, strength, style, name):
+    """Stylized low-poly hand: wide palm, side thumb wedge, grouped fingers, wrist cuff."""
     loc = Vector(loc)
-    hs = scale * (1.55 if strength > 1.1 else 1.35)
-    parts = []
-    palm = _plate(loc + Vector((0.012 * side_sign, 0.018 * hs, -0.004)), (0.052 * hs, 0.038 * hs, 0.022 * hs), name + "_palm", bevel=0.008)
-    parts.append(palm)
+    hs = scale * (2.45 if strength > 1.1 else 2.15)
+    # Palm is a flat slab, not a cube. +Y is canonical front.
+    palm = _plate(
+        loc + Vector((0.006 * side_sign, 0.012, 0.0)),
+        (0.088 * hs, 0.028 * hs, 0.052 * hs),
+        name + "_palm",
+        bevel=0.008,
+    )
     if style == "fist":
         fingers = _plate(
-            loc + Vector((0.028 * side_sign, 0.052 * hs, -0.002)),
-            (0.048 * hs, 0.036 * hs, 0.034 * hs),
+            loc + Vector((0.008 * side_sign, 0.046 * hs, 0.006)),
+            (0.082 * hs, 0.052 * hs, 0.056 * hs),
             name + "_fingers",
-            bevel=0.006,
+            bevel=0.010,
         )
         knuckle = _plate(
-            loc + Vector((0.026 * side_sign, 0.040 * hs, 0.018 * hs)),
-            (0.046 * hs, 0.016 * hs, 0.010 * hs),
-            name + "_knuckle",
-            bevel=0.004,
-        )
-        thumb = _prim_cone(
-            loc + Vector((0.046 * side_sign, 0.006, 0.010)),
-            0.016 * hs,
-            0.007 * hs,
-            0.046 * hs,
-            name + "_thumb",
-            rot=(1.15, 0.0, 0.55 * side_sign),
-        )
-    elif style == "open":
-        fingers = _plate(
-            loc + Vector((0.034 * side_sign, 0.078 * hs, -0.004)),
-            (0.046 * hs, 0.062 * hs, 0.014 * hs),
-            name + "_fingers",
-            bevel=0.005,
-        )
-        knuckle = _plate(
-            loc + Vector((0.028 * side_sign, 0.046 * hs, 0.014 * hs)),
-            (0.044 * hs, 0.012 * hs, 0.008 * hs),
+            loc + Vector((0.008 * side_sign, 0.028 * hs, 0.030 * hs)),
+            (0.080 * hs, 0.016 * hs, 0.016 * hs),
             name + "_knuckle",
             bevel=0.003,
         )
-        thumb = _prim_cone(
-            loc + Vector((0.052 * side_sign, 0.022, 0.012)),
-            0.014 * hs,
-            0.006 * hs,
-            0.052 * hs,
+        thumb = _plate(
+            loc + Vector((0.095 * side_sign, 0.012, 0.012)),
+            (0.048 * hs, 0.032 * hs, 0.028 * hs),
             name + "_thumb",
-            rot=(0.85, 0.0, 0.72 * side_sign),
+            rot=(0.10, 0.0, 0.35 * side_sign),
+            bevel=0.006,
         )
-    else:  # guard / neutral
+    elif style == "open":
         fingers = _plate(
-            loc + Vector((0.030 * side_sign, 0.062 * hs, 0.004)),
-            (0.046 * hs, 0.048 * hs, 0.018 * hs),
+            loc + Vector((0.008 * side_sign, 0.078 * hs, 0.004)),
+            (0.078 * hs, 0.088 * hs, 0.018 * hs),
             name + "_fingers",
             bevel=0.006,
         )
         knuckle = _plate(
-            loc + Vector((0.028 * side_sign, 0.042 * hs, 0.016 * hs)),
-            (0.044 * hs, 0.014 * hs, 0.009 * hs),
+            loc + Vector((0.008 * side_sign, 0.030 * hs, 0.022 * hs)),
+            (0.076 * hs, 0.016 * hs, 0.012 * hs),
             name + "_knuckle",
-            bevel=0.004,
+            bevel=0.003,
         )
-        thumb = _prim_cone(
-            loc + Vector((0.048 * side_sign, 0.014, 0.012)),
-            0.015 * hs,
-            0.006 * hs,
-            0.048 * hs,
+        thumb = _plate(
+            loc + Vector((0.078 * side_sign, 0.028 * hs, 0.012)),
+            (0.026 * hs, 0.052 * hs, 0.018 * hs),
             name + "_thumb",
-            rot=(1.00, 0.0, 0.60 * side_sign),
+            rot=(0.10, 0.0, 0.70 * side_sign),
+            bevel=0.005,
         )
-    cuff = _prim_cylinder(loc + Vector((-0.008 * side_sign, -0.006, 0.0)), 0.026 * hs, 0.034 * hs, name + "_wrist", rot=(0.0, 1.57, 0.0), verts=10)
-    _bevel(cuff, 0.004)
-    parts.extend([fingers, knuckle, thumb, cuff])
-    return _join(parts, name)
+    else:  # guard / relaxed
+        fingers = _plate(
+            loc + Vector((0.006 * side_sign, 0.052 * hs, 0.016)),
+            (0.074 * hs, 0.056 * hs, 0.028 * hs),
+            name + "_fingers",
+            rot=(0.55, 0.0, 0.0),
+            bevel=0.007,
+        )
+        knuckle = _plate(
+            loc + Vector((0.006 * side_sign, 0.026 * hs, 0.024 * hs)),
+            (0.072 * hs, 0.014 * hs, 0.012 * hs),
+            name + "_knuckle",
+            bevel=0.003,
+        )
+        thumb = _plate(
+            loc + Vector((0.070 * side_sign, 0.016, 0.016)),
+            (0.032 * hs, 0.034 * hs, 0.020 * hs),
+            name + "_thumb",
+            rot=(0.40, 0.0, 0.48 * side_sign),
+            bevel=0.005,
+        )
+    cuff = _prim_cylinder(
+        loc + Vector((-0.022 * side_sign, -0.006, 0.0)),
+        0.034 * hs,
+        0.055 * hs,
+        name + "_wrist",
+        rot=(0.0, 1.57, 0.0),
+        verts=10,
+    )
+    _bevel(cuff, 0.005)
+    return _join([palm, fingers, knuckle, thumb, cuff], name)
 
 
 def _designed_boot(fid, loc, scale, style, name):
     loc = Vector(loc)
-    fs = scale * 1.28
+    fs = scale * 1.72
+    y = loc.y + 0.05 * fs  # toe toward +Y
     parts = []
     if style == "armored_heavy":
-        parts.append(_plate((loc.x, loc.y + 0.02, 0.055 * fs), (0.078 * fs, 0.070 * fs, 0.055 * fs), name + "_body", bevel=0.014))
-        parts.append(_plate((loc.x, loc.y - 0.02, 0.018), (0.070 * fs, 0.046 * fs, 0.016), name + "_heel", bevel=0.006))
-        parts.append(_plate((loc.x, loc.y + 0.12 * fs, 0.022), (0.068 * fs, 0.070 * fs, 0.018), name + "_toe", bevel=0.008))
-        parts.append(_plate((loc.x, loc.y + 0.05 * fs, 0.006), (0.080 * fs, 0.14 * fs, 0.010), name + "_sole", bevel=0.003))
-        parts.append(_prim_cylinder((loc.x, loc.y, 0.10 * fs), 0.042 * fs, 0.08 * fs, name + "_ankle", verts=10))
+        parts.append(_plate((loc.x, y + 0.02, 0.062 * fs), (0.086 * fs, 0.078 * fs, 0.062 * fs), name + "_body", bevel=0.016))
+        parts.append(_plate((loc.x, y - 0.05 * fs, 0.022), (0.078 * fs, 0.048 * fs, 0.020), name + "_heel", bevel=0.008))
+        parts.append(_plate((loc.x, y + 0.14 * fs, 0.028), (0.074 * fs, 0.072 * fs, 0.022), name + "_toe", bevel=0.010))
+        parts.append(_plate((loc.x, y + 0.04 * fs, 0.008), (0.090 * fs, 0.16 * fs, 0.012), name + "_sole", bevel=0.003))
+        parts.append(_prim_cylinder((loc.x, y, 0.12 * fs), 0.048 * fs, 0.10 * fs, name + "_ankle", verts=10))
+        parts.append(_plate((loc.x, y, 0.16 * fs), (0.070 * fs, 0.040 * fs, 0.055 * fs), name + "_shin", bevel=0.010))
     elif style == "speed_shoe":
-        parts.append(_plate((loc.x, loc.y + 0.04, 0.028 * fs), (0.048 * fs, 0.090 * fs, 0.022 * fs), name + "_body", bevel=0.006))
-        parts.append(_prim_cone((loc.x, loc.y + 0.12 * fs, 0.016), 0.022 * fs, 0.008, 0.055 * fs, name + "_toe", rot=(1.57, 0.0, 0.0)))
-        parts.append(_plate((loc.x, loc.y + 0.03, 0.005), (0.050 * fs, 0.12 * fs, 0.008), name + "_sole", bevel=0.002))
-        parts.append(_prim_cylinder((loc.x, loc.y - 0.01, 0.034), 0.022 * fs, 0.04, name + "_ankle", verts=8))
+        parts.append(_plate((loc.x, y + 0.05, 0.032 * fs), (0.052 * fs, 0.100 * fs, 0.024 * fs), name + "_body", bevel=0.006))
+        parts.append(_prim_cone((loc.x, y + 0.14 * fs, 0.018), 0.024 * fs, 0.008, 0.062 * fs, name + "_toe", rot=(1.57, 0.0, 0.0)))
+        parts.append(_plate((loc.x, y + 0.04, 0.006), (0.054 * fs, 0.14 * fs, 0.010), name + "_sole", bevel=0.002))
+        parts.append(_plate((loc.x, y - 0.04 * fs, 0.018), (0.046 * fs, 0.028 * fs, 0.014), name + "_heel", bevel=0.004))
+        parts.append(_prim_cylinder((loc.x, y, 0.055), 0.024 * fs, 0.048, name + "_ankle", verts=8))
     elif style == "aerial_boot":
-        parts.append(_plate((loc.x, loc.y + 0.03, 0.032 * fs), (0.046 * fs, 0.080 * fs, 0.024 * fs), name + "_body", bevel=0.007))
-        parts.append(_plate((loc.x, loc.y + 0.10 * fs, 0.016), (0.040 * fs, 0.046 * fs, 0.012), name + "_toe", bevel=0.004))
-        parts.append(_plate((loc.x, loc.y + 0.04, 0.005), (0.048 * fs, 0.12 * fs, 0.008), name + "_sole", bevel=0.002))
-        parts.append(_prim_cylinder((loc.x, loc.y, 0.07 * fs), 0.024 * fs, 0.055 * fs, name + "_ankle", verts=8))
+        parts.append(_plate((loc.x, y + 0.04, 0.036 * fs), (0.050 * fs, 0.088 * fs, 0.026 * fs), name + "_body", bevel=0.007))
+        parts.append(_plate((loc.x, y + 0.12 * fs, 0.018), (0.042 * fs, 0.050 * fs, 0.014), name + "_toe", bevel=0.004))
+        parts.append(_plate((loc.x, y + 0.04, 0.006), (0.052 * fs, 0.13 * fs, 0.010), name + "_sole", bevel=0.002))
+        parts.append(_plate((loc.x, y - 0.03 * fs, 0.016), (0.044 * fs, 0.026 * fs, 0.012), name + "_heel", bevel=0.003))
+        parts.append(_prim_cylinder((loc.x, y, 0.08 * fs), 0.026 * fs, 0.062 * fs, name + "_ankle", verts=8))
     elif style == "frost_geometric":
-        parts.append(_plate((loc.x, loc.y + 0.02, 0.040 * fs), (0.060 * fs, 0.070 * fs, 0.036 * fs), name + "_body", bevel=0.004))
-        parts.append(_prim_ico((loc.x, loc.y + 0.10 * fs, 0.024), 0.028 * fs, name + "_toe", 1))
-        parts.append(_plate((loc.x, loc.y + 0.03, 0.006), (0.064 * fs, 0.13 * fs, 0.010), name + "_sole", bevel=0.002))
-        parts.append(_prim_cylinder((loc.x, loc.y, 0.09 * fs), 0.032 * fs, 0.06 * fs, name + "_ankle", verts=6))
+        parts.append(_plate((loc.x, y + 0.02, 0.046 * fs), (0.066 * fs, 0.076 * fs, 0.040 * fs), name + "_body", bevel=0.004))
+        parts.append(_prim_ico((loc.x, y + 0.12 * fs, 0.026), 0.030 * fs, name + "_toe", 1))
+        parts.append(_plate((loc.x, y + 0.03, 0.008), (0.070 * fs, 0.14 * fs, 0.012), name + "_sole", bevel=0.002))
+        parts.append(_plate((loc.x, y - 0.04 * fs, 0.018), (0.056 * fs, 0.030 * fs, 0.014), name + "_heel", bevel=0.003))
+        parts.append(_prim_cylinder((loc.x, y, 0.10 * fs), 0.034 * fs, 0.07 * fs, name + "_ankle", verts=6))
     elif style == "cosmic_layered":
-        parts.append(_plate((loc.x, loc.y + 0.02, 0.042 * fs), (0.058 * fs, 0.072 * fs, 0.034 * fs), name + "_body", bevel=0.010))
-        parts.append(_plate((loc.x, loc.y + 0.02, 0.058 * fs), (0.066 * fs, 0.078 * fs, 0.010), name + "_layer", bevel=0.004))
-        parts.append(_plate((loc.x, loc.y + 0.11 * fs, 0.018), (0.048 * fs, 0.050 * fs, 0.014), name + "_toe", bevel=0.005))
-        parts.append(_plate((loc.x, loc.y + 0.04, 0.006), (0.062 * fs, 0.13 * fs, 0.010), name + "_sole", bevel=0.002))
-        parts.append(_prim_cylinder((loc.x, loc.y, 0.09 * fs), 0.030 * fs, 0.055 * fs, name + "_ankle", verts=10))
+        parts.append(_plate((loc.x, y + 0.02, 0.046 * fs), (0.064 * fs, 0.078 * fs, 0.038 * fs), name + "_body", bevel=0.010))
+        parts.append(_plate((loc.x, y + 0.02, 0.066 * fs), (0.072 * fs, 0.084 * fs, 0.012), name + "_layer", bevel=0.004))
+        parts.append(_plate((loc.x, y + 0.13 * fs, 0.020), (0.052 * fs, 0.054 * fs, 0.016), name + "_toe", bevel=0.005))
+        parts.append(_plate((loc.x, y + 0.04, 0.008), (0.068 * fs, 0.14 * fs, 0.012), name + "_sole", bevel=0.002))
+        parts.append(_prim_cylinder((loc.x, y, 0.10 * fs), 0.032 * fs, 0.062 * fs, name + "_ankle", verts=10))
     elif style == "asymmetric_narrow":
-        offset = 0.012 if "R" in name else -0.006
-        parts.append(_plate((loc.x + offset, loc.y + 0.03, 0.030 * fs), (0.038 * fs, 0.092 * fs, 0.020 * fs), name + "_body", bevel=0.005))
-        parts.append(_prim_cone((loc.x + offset, loc.y + 0.12 * fs, 0.014), 0.016 * fs, 0.006, 0.05, name + "_toe", rot=(1.57, 0.0, 0.0)))
-        parts.append(_plate((loc.x + offset, loc.y + 0.04, 0.005), (0.040 * fs, 0.13 * fs, 0.007), name + "_sole", bevel=0.002))
-        parts.append(_prim_cylinder((loc.x, loc.y, 0.06 * fs), 0.020 * fs, 0.045, name + "_ankle", verts=8))
+        offset = 0.014 if "R" in name else -0.008
+        parts.append(_plate((loc.x + offset, y + 0.04, 0.034 * fs), (0.042 * fs, 0.100 * fs, 0.022 * fs), name + "_body", bevel=0.005))
+        parts.append(_prim_cone((loc.x + offset, y + 0.14 * fs, 0.016), 0.018 * fs, 0.006, 0.055, name + "_toe", rot=(1.57, 0.0, 0.0)))
+        parts.append(_plate((loc.x + offset, y + 0.04, 0.006), (0.044 * fs, 0.14 * fs, 0.008), name + "_sole", bevel=0.002))
+        parts.append(_plate((loc.x + offset, y - 0.04 * fs, 0.016), (0.036 * fs, 0.024 * fs, 0.012), name + "_heel", bevel=0.003))
+        parts.append(_prim_cylinder((loc.x, y, 0.07 * fs), 0.022 * fs, 0.050, name + "_ankle", verts=8))
     else:  # heat_resistant
-        parts.append(_plate((loc.x, loc.y + 0.03, 0.040 * fs), (0.060 * fs, 0.078 * fs, 0.032 * fs), name + "_body", bevel=0.010))
-        parts.append(_plate((loc.x, loc.y - 0.01, 0.016), (0.052 * fs, 0.036 * fs, 0.014), name + "_heel", bevel=0.005))
-        parts.append(_prim_cone((loc.x, loc.y + 0.12 * fs, 0.020), 0.026 * fs, 0.010, 0.055 * fs, name + "_toe", rot=(1.45, 0.0, 0.0)))
-        parts.append(_plate((loc.x, loc.y + 0.04, 0.006), (0.064 * fs, 0.13 * fs, 0.010), name + "_sole", bevel=0.003))
-        parts.append(_prim_cylinder((loc.x, loc.y, 0.085 * fs), 0.032 * fs, 0.06 * fs, name + "_ankle", verts=10))
+        parts.append(_plate((loc.x, y + 0.04, 0.046 * fs), (0.066 * fs, 0.086 * fs, 0.036 * fs), name + "_body", bevel=0.010))
+        parts.append(_plate((loc.x, y - 0.04 * fs, 0.020), (0.058 * fs, 0.040 * fs, 0.016), name + "_heel", bevel=0.006))
+        parts.append(_prim_cone((loc.x, y + 0.14 * fs, 0.022), 0.028 * fs, 0.010, 0.060 * fs, name + "_toe", rot=(1.45, 0.0, 0.0)))
+        parts.append(_plate((loc.x, y + 0.04, 0.008), (0.070 * fs, 0.14 * fs, 0.012), name + "_sole", bevel=0.003))
+        parts.append(_prim_cylinder((loc.x, y, 0.10 * fs), 0.034 * fs, 0.07 * fs, name + "_ankle", verts=10))
+        parts.append(_plate((loc.x, y, 0.14 * fs), (0.048 * fs, 0.028 * fs, 0.040 * fs), name + "_shin", bevel=0.008))
     return _join(parts, name)
 
 
@@ -321,84 +358,85 @@ def _designed_head(fid, p, arm_obj, mats):
     s = shape_profile(fid)
     head_h, head_t = _bone_pts(arm_obj, "Head")
     center = (head_h + head_t) * 0.5
-    center = Vector((center.x, center.y + 0.01 * p.lean, center.z))
-    hs = s.head_scale * 1.18
+    center = Vector((center.x, center.y + 0.01 * p.lean, center.z + 0.02))
+    hs = s.head_scale * 1.38
     style = s.head_style
     parts = []
     if style == "ember_crest_heat_mask":
-        core = _prim_ico(center, 0.118 * hs, "head_core", 2)
+        core = _prim_ico(center, 0.155 * hs, "head_core", 2)
         for v in core.data.vertices:
-            v.co.x *= 1.18
-            v.co.y *= 0.70
-            v.co.z *= 0.88
+            v.co.x *= 1.10
+            v.co.y *= 0.86
+            v.co.z *= 0.92
             if v.co.y < 0.0:
-                v.co.y *= 0.42
+                v.co.y *= 0.62
         parts.append(core)
-        mask = _plate((center.x, center.y - 0.055 * hs, center.z + 0.008), (0.11 * hs, 0.012, 0.055 * hs), "heat_mask", bevel=0.003)
-        parts.append(mask)
-        crest = _prim_cone((center.x + 0.02, center.y - 0.01, center.z + 0.16 * hs), 0.055 * hs, 0.008, 0.22 * hs, "ember_crest")
-        parts.append(crest)
-        parts.append(_prim_cone((center.x + 0.06, center.y, center.z + 0.10), 0.028, 0.006, 0.12, "crest_fin"))
-        parts.append(_prim_cylinder((center.x, center.y, center.z - 0.10), 0.048 * hs, 0.06, "neck_ring", verts=10))
+        parts.append(_plate((center.x, center.y + 0.14 * hs, center.z + 0.008), (0.16 * hs, 0.055, 0.090 * hs), "heat_mask", bevel=0.006))
+        parts.append(_plate((center.x, center.y + 0.04, center.z + 0.18 * hs), (0.16 * hs, 0.12 * hs, 0.070 * hs), "ember_cap_a", bevel=0.010))
+        parts.append(_plate((center.x + 0.03, center.y + 0.06, center.z + 0.26 * hs), (0.090 * hs, 0.070 * hs, 0.050 * hs), "ember_cap_b", bevel=0.008))
+        parts.append(_plate((center.x + 0.08 * hs, center.y + 0.01, center.z + 0.06), (0.032, 0.070, 0.10), "crest_fin", bevel=0.005))
+        parts.append(_prim_cylinder((center.x, center.y, center.z - 0.11), 0.058 * hs, 0.07, "neck_ring", verts=10))
     elif style == "plate_helm_void":
-        helm = _plate(center, (0.15 * hs, 0.13 * hs, 0.13 * hs), "helm", bevel=0.016)
-        parts.append(helm)
-        parts.append(_plate((center.x, center.y, center.z + 0.12 * hs), (0.16 * hs, 0.12 * hs, 0.04), "helm_brow", bevel=0.008))
-        parts.append(_plate((center.x, center.y - 0.07, center.z + 0.01), (0.10 * hs, 0.012, 0.036), "visor_void", bevel=0.002))
-        parts.append(_prim_cylinder((center.x, center.y, center.z - 0.11), 0.08, 0.07, "helm_neck", verts=10))
-        parts.append(_prim_sphere((center.x, center.y - 0.02, center.z), 0.07 * hs, "void_shade", segs=10))
+        parts.append(_plate(center, (0.20 * hs, 0.18 * hs, 0.18 * hs), "helm", bevel=0.022))
+        parts.append(_plate((center.x, center.y + 0.08 * hs, center.z + 0.10 * hs), (0.22 * hs, 0.055, 0.048), "helm_brow", bevel=0.010))
+        parts.append(_plate((center.x, center.y + 0.12 * hs, center.z + 0.01), (0.14 * hs, 0.028, 0.050), "visor_void", bevel=0.003))
+        parts.append(_plate((center.x, center.y - 0.06, center.z + 0.04), (0.18 * hs, 0.050, 0.12 * hs), "helm_rear", bevel=0.012))
+        parts.append(_prim_cylinder((center.x, center.y, center.z - 0.12), 0.090, 0.08, "helm_neck", verts=10))
     elif style == "arc_crown_cap":
-        cap = _prim_ico(center, 0.108 * hs, "head_core", 2)
+        cap = _prim_ico(center, 0.138 * hs, "head_core", 2)
         for v in cap.data.vertices:
-            v.co.z *= 0.86
-            v.co.x *= 1.06
+            v.co.z *= 0.80
+            v.co.x *= 1.12
+            v.co.y *= 0.94
         parts.append(cap)
-        parts.append(_prim_torus((center.x, center.y, center.z + 0.10 * hs), 0.10 * hs, 0.014, "arc_crown"))
-        parts.append(_prim_cone((center.x, center.y, center.z + 0.18 * hs), 0.028, 0.004, 0.12, "arc_spike"))
-        parts.append(_plate((center.x + 0.05, center.y - 0.01, center.z + 0.08), (0.04, 0.012, 0.05), "cap_fin", bevel=0.003))
-        parts.append(_prim_cylinder((center.x, center.y, center.z - 0.09), 0.042, 0.05, "neck_ring", verts=8))
+        parts.append(_plate((center.x, center.y + 0.10 * hs, center.z + 0.02), (0.12 * hs, 0.036, 0.060), "cap_mask", bevel=0.004))
+        parts.append(_prim_torus((center.x, center.y + 0.02, center.z + 0.14 * hs), 0.14 * hs, 0.022, "arc_crown"))
+        parts.append(_plate((center.x + 0.07, center.y + 0.06, center.z + 0.08), (0.055, 0.028, 0.070), "cap_fin", bevel=0.004))
+        parts.append(_prim_cylinder((center.x, center.y, center.z - 0.10), 0.050, 0.06, "neck_ring", verts=8))
     elif style == "ribbon_veil":
-        core = _prim_ico(center, 0.112 * hs, "head_core", 2)
+        core = _prim_ico(center, 0.140 * hs, "head_core", 2)
         for v in core.data.vertices:
-            v.co.z *= 1.12
-            v.co.x *= 0.86
-            v.co.y *= 0.90
-        parts.append(core)
-        parts.append(_plate((center.x, center.y + 0.02, center.z + 0.08), (0.10 * hs, 0.08, 0.018), "veil_band", bevel=0.004))
-        ribbon = _plate((center.x + 0.03, center.y + 0.10, center.z - 0.02), (0.018, 0.12, 0.012), "veil_fall", bevel=0.003)
-        parts.append(ribbon)
-        parts.append(_prim_cylinder((center.x, center.y, center.z - 0.09), 0.040, 0.05, "neck_ring", verts=8))
-    elif style == "crystal_facet_mask":
-        crystal = _prim_ico(center, 0.122 * hs, "head_core", 1)
-        for v in crystal.data.vertices:
-            v.co *= 1.10
             v.co.z *= 1.18
-        parts.append(crystal)
-        parts.append(_prim_ico((center.x, center.y - 0.04, center.z + 0.02), 0.055, "facet_mask", 1))
-        parts.append(_prim_ico((center.x + 0.05, center.y, center.z + 0.08), 0.032, "facet_accent", 1))
-        parts.append(_prim_cylinder((center.x, center.y, center.z - 0.10), 0.044, 0.055, "neck_ring", verts=6))
-    elif style == "authority_orbit_halo":
-        core = _prim_ico(center, 0.116 * hs, "head_core", 2)
-        for v in core.data.vertices:
-            v.co.z *= 1.16
-            v.co.x *= 0.96
+            v.co.x *= 0.86
+            v.co.y *= 0.94
         parts.append(core)
-        parts.append(_prim_torus((center.x, center.y + 0.01, center.z + 0.10), 0.12 * hs, 0.012, "orbit_halo"))
-        parts.append(_plate((center.x, center.y - 0.04, center.z + 0.02), (0.08, 0.012, 0.04), "authority_brow", bevel=0.004))
-        parts.append(_prim_cylinder((center.x, center.y, center.z - 0.10), 0.046, 0.055, "neck_ring", verts=10))
-    else:  # smoke_cowl_void
-        cowl = _prim_ico(center + Vector((0.02, 0.05, 0.04)), 0.15 * hs, "cowl", 2)
-        for v in cowl.data.vertices:
-            v.co.y *= 1.28
+        parts.append(_plate((center.x, center.y + 0.10 * hs, center.z + 0.02), (0.11 * hs, 0.032, 0.058), "veil_mask", bevel=0.004))
+        parts.append(_plate((center.x, center.y + 0.04, center.z + 0.12 * hs), (0.16 * hs, 0.10, 0.032), "veil_band", bevel=0.006))
+        parts.append(_plate((center.x + 0.05, center.y + 0.10, center.z - 0.06), (0.030, 0.14, 0.022), "veil_fall", bevel=0.004))
+        parts.append(_prim_cylinder((center.x, center.y, center.z - 0.10), 0.048, 0.06, "neck_ring", verts=8))
+    elif style == "crystal_facet_mask":
+        crystal = _prim_ico(center, 0.148 * hs, "head_core", 1)
+        for v in crystal.data.vertices:
+            v.co.x *= 1.08
+            v.co.y *= 0.90
             v.co.z *= 1.16
-            if v.co.y < -0.02:
-                v.co.y *= 0.40
-            if v.co.x > 0.04:
-                v.co.x *= 1.18
+        parts.append(crystal)
+        parts.append(_prim_ico((center.x, center.y + 0.10 * hs, center.z + 0.02), 0.072, "facet_mask", 1))
+        parts.append(_prim_ico((center.x + 0.07, center.y + 0.04, center.z + 0.10), 0.040, "facet_accent", 1))
+        parts.append(_plate((center.x, center.y + 0.08 * hs, center.z + 0.08), (0.11, 0.024, 0.036), "facet_brow", bevel=0.003))
+        parts.append(_prim_cylinder((center.x, center.y, center.z - 0.11), 0.052, 0.06, "neck_ring", verts=6))
+    elif style == "authority_orbit_halo":
+        core = _prim_ico(center, 0.145 * hs, "head_core", 2)
+        for v in core.data.vertices:
+            v.co.z *= 1.18
+            v.co.x *= 1.00
+            v.co.y *= 0.86
+        parts.append(core)
+        parts.append(_plate((center.x, center.y + 0.10 * hs, center.z + 0.02), (0.12, 0.036, 0.060), "authority_plane", bevel=0.006))
+        parts.append(_prim_torus((center.x + 0.05, center.y + 0.07, center.z + 0.14), 0.15 * hs, 0.016, "orbit_halo"))
+        parts.append(_prim_cylinder((center.x, center.y, center.z - 0.11), 0.054, 0.06, "neck_ring", verts=10))
+    else:  # smoke_cowl_void
+        cowl = _prim_ico(center + Vector((0.04, 0.03, 0.05)), 0.18 * hs, "cowl", 2)
+        for v in cowl.data.vertices:
+            v.co.y *= 1.22
+            v.co.z *= 1.20
+            if v.co.x > 0.03:
+                v.co.x *= 1.28
         parts.append(cowl)
-        parts.append(_prim_sphere(center, 0.09 * hs, "cowl_core", segs=10))
-        parts.append(_plate((center.x - 0.01, center.y - 0.06, center.z), (0.07, 0.012, 0.05), "void_plane", bevel=0.002))
-        parts.append(_prim_cylinder((center.x, center.y, center.z - 0.10), 0.046, 0.06, "neck_ring", verts=8))
+        parts.append(_prim_sphere(center, 0.100 * hs, "cowl_core", segs=10))
+        parts.append(_plate((center.x - 0.03, center.y + 0.12 * hs, center.z), (0.11, 0.032, 0.070), "void_plane", bevel=0.003))
+        parts.append(_plate((center.x + 0.08, center.y - 0.02, center.z + 0.05), (0.055, 0.080, 0.10), "cowl_asymm", bevel=0.008))
+        parts.append(_prim_cylinder((center.x, center.y, center.z - 0.11), 0.054, 0.07, "neck_ring", verts=8))
     head = _join(parts, "head_shell")
     _assign(head, mats["hair"])
     return head
@@ -435,87 +473,78 @@ def build_costume_v3(fid: str, p: FighterProfile, arm_obj, mats: dict):
     if fid == "ember-vale":
         _hr, ht = _bone_pts(arm_obj, "Hand_R")
         _hl, hlt = _bone_pts(arm_obj, "Hand_L")
-        _ch, ct = _bone_pts(arm_obj, "Chest")
-        _ulr, ulrt = _bone_pts(arm_obj, "UpperLeg_R")
-        _ull, ullt = _bone_pts(arm_obj, "UpperLeg_L")
         _sr, srt = _bone_pts(arm_obj, "Shoulder_R")
-        add(_plate(ht, (0.078, 0.062, 0.052), "gauntlet_r", bevel=0.010), "gauntlet_r", "accent")
-        add(_plate(hlt, (0.058, 0.048, 0.042), "gauntlet_l", bevel=0.008), "gauntlet_l", "accent")
-        vent = _plate((0.0, ct.y + 0.09, ct.z - 0.01), (0.070, 0.022, 0.050), "chest_vent", bevel=0.004)
-        add(vent, "chest_vent", "charged")
-        add(_plate((ulrt.x, ulrt.y + 0.02, ulrt.z), (0.055, 0.030, 0.070), "heat_guard_r", bevel=0.008), "heat_guard_r", "secondary")
-        add(_plate((ullt.x, ullt.y + 0.02, ullt.z), (0.055, 0.030, 0.070), "heat_guard_l", bevel=0.008), "heat_guard_l", "secondary")
-        add(_plate(srt + Vector((0.02, 0.02, 0.03)), (0.070, 0.040, 0.045), "shoulder_accent", bevel=0.010), "shoulder_accent", "accent")
-        add(_prim_cone((ht.x + 0.02, ht.y + 0.04, ht.z + 0.04), 0.022, 0.004, 0.10, "flame_tongue_r"), "flame_tongue_r", "charged")
-        add(_prim_cone((hlt.x - 0.02, hlt.y + 0.03, hlt.z + 0.03), 0.016, 0.003, 0.08, "flame_tongue_l"), "flame_tongue_l", "charged")
+        add(_wrap_bone(arm_obj, "LowerArm_R", 0.125, "gauntlet_r", extra=0.06), "gauntlet_r", "accent")
+        add(_wrap_bone(arm_obj, "LowerArm_L", 0.115, "gauntlet_l", extra=0.06), "gauntlet_l", "accent")
+        add(_torso_shell(arm_obj, "chest_vent", 0.40, 0.12, 0.34, y_bias=0.04), "chest_vent", "charged")
+        add(_wrap_bone(arm_obj, "UpperLeg_R", 0.135, "heat_guard_r", extra=0.05), "heat_guard_r", "secondary")
+        add(_wrap_bone(arm_obj, "UpperLeg_L", 0.135, "heat_guard_l", extra=0.05), "heat_guard_l", "secondary")
+        add(_plate(srt + Vector((0.02, 0.02, 0.03)), (0.12, 0.10, 0.10), "shoulder_accent", bevel=0.016), "shoulder_accent", "accent")
+        add(_prim_cone((ht.x + 0.01, ht.y + 0.06, ht.z + 0.01), 0.030, 0.010, 0.08, "flame_tongue_r", rot=(1.2, 0.0, 0.0)), "flame_tongue_r", "charged")
+        add(_prim_cone((hlt.x - 0.01, hlt.y + 0.05, hlt.z + 0.01), 0.024, 0.008, 0.07, "flame_tongue_l", rot=(1.2, 0.0, 0.0)), "flame_tongue_l", "charged")
     elif fid == "rook-ironside":
-        _ch, ct = _bone_pts(arm_obj, "Chest")
         _sl, slt = _bone_pts(arm_obj, "Shoulder_L")
         _sr, srt = _bone_pts(arm_obj, "Shoulder_R")
-        _lal, lalt = _bone_pts(arm_obj, "LowerArm_L")
-        _lar, lart = _bone_pts(arm_obj, "LowerArm_R")
         _hp, hpt = _bone_pts(arm_obj, "Hips")
-        add(_plate((0.0, ct.y + 0.10, ct.z - 0.01), (0.20, 0.050, 0.15), "chest_plate", bevel=0.016), "chest_plate", "secondary")
-        add(_plate(slt + Vector((0.02, 0.02, 0.02)), (0.13, 0.090, 0.090), "shoulder_pad_l", bevel=0.016), "shoulder_pad_l", "secondary")
-        add(_plate(srt + Vector((-0.02, 0.02, 0.02)), (0.13, 0.090, 0.090), "shoulder_pad_r", bevel=0.016), "shoulder_pad_r", "secondary")
-        add(_plate(lalt, (0.055, 0.040, 0.080), "forearm_plate_l", bevel=0.010), "forearm_plate_l", "secondary")
-        add(_plate(lart, (0.055, 0.040, 0.080), "forearm_plate_r", bevel=0.010), "forearm_plate_r", "secondary")
-        add(_plate((0.0, hpt.y + 0.04, hpt.z + 0.02), (0.16, 0.040, 0.045), "belt_plate", bevel=0.010), "belt_plate", "accent")
-        add(_plate((0.0, ct.y - 0.10, ct.z - 0.02), (0.14, 0.036, 0.10), "back_plate", bevel=0.012), "back_plate", "secondary")
+        _ch, ct = _bone_pts(arm_obj, "Chest")
+        add(_torso_shell(arm_obj, "chest_plate", 0.42, 0.24, 0.34, y_bias=0.04), "chest_plate", "secondary")
+        add(_plate(slt + Vector((0.03, 0.02, 0.03)), (0.20, 0.16, 0.16), "shoulder_pad_l", bevel=0.022), "shoulder_pad_l", "secondary")
+        add(_plate(srt + Vector((-0.03, 0.02, 0.03)), (0.20, 0.16, 0.16), "shoulder_pad_r", bevel=0.022), "shoulder_pad_r", "secondary")
+        add(_wrap_bone(arm_obj, "LowerArm_L", 0.072, "forearm_plate_l", extra=0.04), "forearm_plate_l", "secondary")
+        add(_wrap_bone(arm_obj, "LowerArm_R", 0.072, "forearm_plate_r", extra=0.04), "forearm_plate_r", "secondary")
+        add(_plate((0.0, hpt.y + 0.04, hpt.z + 0.02), (0.28, 0.12, 0.10), "belt_plate", bevel=0.014), "belt_plate", "accent")
+        add(_plate((0.0, ct.y - 0.08, ct.z), (0.28, 0.10, 0.22), "back_plate", bevel=0.016), "back_plate", "secondary")
     elif fid == "juno-spark":
         _ch, ct = _bone_pts(arm_obj, "Chest")
-        add(_plate((0.07, ct.y + 0.07, ct.z), (0.055, 0.012, 0.070), "volt_panel_a", bevel=0.003), "volt_panel_a", "accent")
-        add(_plate((-0.05, ct.y + 0.02, ct.z - 0.04), (0.045, 0.010, 0.055), "volt_panel_b", bevel=0.003), "volt_panel_b", "accent")
-        sash = _plate((0.02, ct.y + 0.04, ct.z - 0.02), (0.14, 0.010, 0.028), "volt_sash", rot=(0.0, 0.0, 0.70), bevel=0.002)
+        mid = Vector((0.0, ct.y + 0.18, ct.z))
+        add(_plate(mid + Vector((0.09, 0.02, 0.02)), (0.14, 0.08, 0.18), "volt_panel_a", bevel=0.006), "volt_panel_a", "accent")
+        add(_plate(mid + Vector((-0.07, 0.01, -0.02)), (0.12, 0.07, 0.15), "volt_panel_b", bevel=0.006), "volt_panel_b", "accent")
+        sash = _plate(mid + Vector((0.02, 0.03, 0.0)), (0.36, 0.08, 0.10), "volt_sash", rot=(0.0, 0.0, 0.72), bevel=0.006)
         add(sash, "volt_sash", "charged")
-        add(_plate((0.08, ct.y + 0.08, ct.z + 0.03), (0.028, 0.010, 0.040), "volt_tag", bevel=0.002), "volt_tag", "charged")
+        add(_plate(mid + Vector((0.10, 0.05, 0.04)), (0.060, 0.045, 0.080), "volt_tag", bevel=0.004), "volt_tag", "charged")
     elif fid == "kaia-windrow":
         _nh, nt = _bone_pts(arm_obj, "Neck")
         _hh, ht = _bone_pts(arm_obj, "Head")
-        _ch, ct = _bone_pts(arm_obj, "Chest")
         _sl, slt = _bone_pts(arm_obj, "Shoulder_L")
         _sr, srt = _bone_pts(arm_obj, "Shoulder_R")
         scarf = _join(
             [
-                _plate(nt, (0.055, 0.022, 0.028), "scarf_collar", bevel=0.006),
-                _plate((nt.x + 0.02, nt.y - 0.06, nt.z - 0.04), (0.022, 0.090, 0.012), "scarf_fall_a", bevel=0.004),
-                _plate((nt.x + 0.04, nt.y - 0.12, nt.z - 0.10), (0.016, 0.080, 0.008), "scarf_fall_b", bevel=0.003),
+                _plate((nt.x, nt.y + 0.02, nt.z), (0.16, 0.10, 0.08), "scarf_collar", bevel=0.012),
+                _plate((nt.x + 0.04, nt.y + 0.06, nt.z - 0.16), (0.070, 0.10, 0.28), "scarf_fall_a", bevel=0.010),
+                _plate((nt.x + 0.07, nt.y + 0.04, nt.z - 0.32), (0.050, 0.08, 0.20), "scarf_fall_b", bevel=0.008),
             ],
             "scarf",
         )
         add(scarf, "scarf", "accent")
-        add(_plate((ht.x + 0.04, ht.y - 0.08, ht.z), (0.014, 0.10, 0.010), "ribbon", bevel=0.003), "ribbon", "accent")
-        add(_plate(slt + Vector((0.04, -0.04, 0.0)), (0.090, 0.016, 0.040), "airfoil_l", bevel=0.004), "airfoil_l", "accent")
-        add(_plate(srt + Vector((-0.04, -0.04, 0.0)), (0.090, 0.016, 0.040), "airfoil_r", bevel=0.004), "airfoil_r", "accent")
-        add(_plate((0.0, ct.y + 0.06, ct.z), (0.10, 0.016, 0.08), "core_panel", bevel=0.006), "core_panel", "cloth")
+        add(_plate((ht.x + 0.05, ht.y + 0.04, ht.z - 0.02), (0.032, 0.08, 0.18), "ribbon", bevel=0.005), "ribbon", "accent")
+        add(_plate(slt + Vector((0.05, 0.02, 0.12)), (0.10, 0.055, 0.22), "airfoil_l", bevel=0.008), "airfoil_l", "accent")
+        add(_plate(srt + Vector((-0.05, 0.02, 0.12)), (0.10, 0.055, 0.22), "airfoil_r", bevel=0.008), "airfoil_r", "accent")
+        add(_torso_shell(arm_obj, "core_panel", 0.28, 0.16, 0.24, y_bias=0.03), "core_panel", "cloth")
     elif fid == "nix-calder":
         _ch, ct = _bone_pts(arm_obj, "Chest")
         _sl, slt = _bone_pts(arm_obj, "Shoulder_L")
-        _lar, lart = _bone_pts(arm_obj, "LowerArm_R")
-        _lal, lalt = _bone_pts(arm_obj, "LowerArm_L")
-        add(_prim_ico((0.0, ct.y + 0.09, ct.z), 0.048, "crystal_core", 1), "crystal_core", "charged")
-        add(_plate((0.0, ct.y + 0.08, ct.z - 0.01), (0.12, 0.018, 0.08), "chest_plate", bevel=0.004), "chest_plate", "secondary")
-        add(_prim_ico((slt.x, slt.y + 0.03, slt.z + 0.02), 0.038, "crystal_shoulder", 1), "crystal_shoulder", "accent")
-        add(_plate(lart, (0.042, 0.028, 0.070), "forearm_plate_r", bevel=0.004), "forearm_plate_r", "accent")
-        add(_plate(lalt, (0.042, 0.028, 0.070), "forearm_plate_l", bevel=0.004), "forearm_plate_l", "accent")
+        add(_prim_ico((0.0, ct.y + 0.06, ct.z + 0.02), 0.070, "crystal_core", 1), "crystal_core", "charged")
+        add(_torso_shell(arm_obj, "chest_plate", 0.32, 0.18, 0.26, y_bias=0.03), "chest_plate", "secondary")
+        add(_prim_ico((slt.x, slt.y + 0.03, slt.z + 0.02), 0.058, "crystal_shoulder", 1), "crystal_shoulder", "accent")
+        add(_wrap_bone(arm_obj, "LowerArm_R", 0.062, "forearm_plate_r", extra=0.03), "forearm_plate_r", "accent")
+        add(_wrap_bone(arm_obj, "LowerArm_L", 0.062, "forearm_plate_l", extra=0.03), "forearm_plate_l", "accent")
     elif fid == "orion-vell":
         _ch, ct = _bone_pts(arm_obj, "Chest")
-        add(_plate((0.0, ct.y + 0.06, ct.z - 0.02), (0.13, 0.028, 0.12), "vest_layer", bevel=0.010), "vest_layer", "secondary")
-        add(_plate((0.0, ct.y - 0.02, ct.z - 0.06), (0.15, 0.022, 0.16), "coat_layer", bevel=0.010), "coat_layer", "cloth")
-        add(_prim_torus((0.0, ct.y + 0.07, ct.z + 0.01), 0.08, 0.008, "orbit_trim"), "orbit_trim", "accent")
-        ring = _prim_torus((0.0, 0.02, ct.z + 0.06), 0.20, 0.010, "orbit_ring")
+        add(_torso_shell(arm_obj, "vest_layer", 0.30, 0.16, 0.26, y_bias=0.04), "vest_layer", "secondary")
+        add(_torso_shell(arm_obj, "coat_layer", 0.36, 0.14, 0.34, y_bias=0.00), "coat_layer", "cloth")
+        add(_prim_torus((0.0, ct.y + 0.05, ct.z + 0.02), 0.12, 0.016, "orbit_trim"), "orbit_trim", "accent")
+        ring = _prim_torus((0.06, 0.10, ct.z + 0.08), 0.20, 0.014, "orbit_ring")
         for v in ring.data.vertices:
-            if abs(v.co.x) > 0.12:
-                v.co.z *= 1.18
+            if abs(v.co.x) > 0.10:
+                v.co.z *= 1.12
         add(ring, "orbit_ring", "charged")
     elif fid == "vesper-nyx":
         hp, _ht = _bone_pts(arm_obj, "Hips")
-        _ch, ct = _bone_pts(arm_obj, "Chest")
-        add(_plate((0.10, hp.y - 0.04, hp.z + 0.08), (0.055, 0.028, 0.12), "coat_panel_l", bevel=0.008), "coat_panel_l", "secondary")
-        add(_plate((-0.06, hp.y - 0.03, hp.z + 0.06), (0.040, 0.022, 0.10), "coat_panel_r", bevel=0.006), "coat_panel_r", "secondary")
-        add(_plate((0.10, hp.y - 0.02, hp.z + 0.02), (0.028, 0.070, 0.014), "coat_tail_l", bevel=0.005), "coat_tail_l", "secondary")
-        add(_plate((-0.06, hp.y - 0.01, hp.z + 0.01), (0.020, 0.055, 0.010), "coat_tail_r", bevel=0.004), "coat_tail_r", "secondary")
-        add(_plate((0.03, ct.y + 0.07, ct.z), (0.08, 0.012, 0.10), "void_trim", bevel=0.003), "void_trim", "accent")
+        add(_plate((0.12, hp.y + 0.04, hp.z + 0.10), (0.14, 0.10, 0.26), "coat_panel_l", bevel=0.014), "coat_panel_l", "secondary")
+        add(_plate((-0.06, hp.y + 0.03, hp.z + 0.08), (0.10, 0.08, 0.20), "coat_panel_r", bevel=0.010), "coat_panel_r", "secondary")
+        add(_plate((0.14, hp.y + 0.02, hp.z - 0.06), (0.06, 0.14, 0.28), "coat_tail_l", bevel=0.008), "coat_tail_l", "secondary")
+        add(_plate((-0.07, hp.y + 0.01, hp.z - 0.04), (0.045, 0.10, 0.22), "coat_tail_r", bevel=0.006), "coat_tail_r", "secondary")
+        add(_torso_shell(arm_obj, "void_trim", 0.24, 0.12, 0.20, y_bias=0.04), "void_trim", "accent")
     return pieces
 
 
@@ -571,22 +600,23 @@ def snap_character(meshes) -> float:
 
 def paint_regions_v3(mesh_obj, arm_obj, mats: dict) -> None:
     mesh_obj.data.materials.clear()
-    order = ["skin", "cloth", "secondary", "accent", "hair"]
+    # Cloth first: an unpainted poly must read as costume, never nude skin.
+    order = ["cloth", "secondary", "accent", "hair", "skin"]
     for key in order:
         mesh_obj.data.materials.append(mats[key])
     index = {k: i for i, k in enumerate(order)}
     bone_region = {
         "Head": "hair",
-        "Neck": "skin",
+        "Neck": "cloth",
         "Chest": "cloth",
         "Spine": "cloth",
         "Hips": "cloth",
         "Shoulder_L": "cloth",
         "Shoulder_R": "cloth",
-        "UpperArm_L": "skin",
-        "UpperArm_R": "skin",
-        "LowerArm_L": "skin",
-        "LowerArm_R": "skin",
+        "UpperArm_L": "cloth",
+        "UpperArm_R": "cloth",
+        "LowerArm_L": "secondary",
+        "LowerArm_R": "secondary",
         "Hand_L": "accent",
         "Hand_R": "accent",
         "UpperLeg_L": "secondary",
@@ -607,10 +637,28 @@ def paint_regions_v3(mesh_obj, arm_obj, mats: dict) -> None:
         tree.insert(mid, i)
     tree.balance()
     mw = mesh_obj.matrix_world
+    neck_h, _neck_t = _bone_pts(arm_obj, "Neck")
+    hips_h, _hips_t = _bone_pts(arm_obj, "Hips")
     for poly in mesh_obj.data.polygons:
         center = mw @ poly.center
         _co, idx, _dist = tree.find(center)
-        poly.material_index = index[bone_region[bones[idx].name]]
+        key = bone_region[bones[idx].name]
+        if center.z >= neck_h.z + 0.02:
+            key = "hair"
+        elif center.z >= hips_h.z + 0.02:
+            key = "cloth"
+        elif center.z >= 0.14:
+            key = "secondary"
+        else:
+            key = "accent"
+        if bones[idx].name.startswith("Hand"):
+            key = "accent"
+        poly.material_index = index[key]
+    # Remesh must never read as nude skin. Keep skin only as an unused slot.
+    if mats["skin"] in list(mesh_obj.data.materials):
+        slot = list(mesh_obj.data.materials).index(mats["skin"])
+        mesh_obj.data.materials[slot] = mats["cloth"]
+    mesh_obj.data.update()
 
 
 def audit_accessories(arm_obj, piece_pairs) -> tuple[list[dict], int]:
@@ -646,12 +694,12 @@ def build_crafted_fighter(fid: str, p: FighterProfile, arm_obj):
     s = shape_profile(fid)
     rec = recipe(fid)
     mats = {
-        "skin": _toon_mat_v3(f"{fid}.mat.skin", p.skin, 0.02, 3, 0.16, 0.0, 0.55),
-        "cloth": _toon_mat_v3(f"{fid}.mat.cloth", p.primary, 0.07, 3, 0.24, 0.05, 0.66),
-        "secondary": _toon_mat_v3(f"{fid}.mat.secondary", p.secondary, 0.04, 3, 0.18, 0.16, 0.72),
-        "accent": _toon_mat_v3(f"{fid}.mat.accent", p.accent, 0.48, 2, 0.34, 0.20, 0.36),
-        "hair": _toon_mat_v3(f"{fid}.mat.hair", p.hair, 0.12, 3, 0.22, 0.02, 0.48),
-        "charged": _toon_mat_v3(f"{fid}.mat.charged", p.charged, 0.78, 2, 0.40, 0.10, 0.30),
+        "skin": _toon_mat_v3(f"{fid}.mat.skin", p.skin, 0.01, 3, 0.08, 0.0, 0.62, shadow_hue=(0.28, 0.16, 0.22)),
+        "cloth": _toon_mat_v3(f"{fid}.mat.cloth", p.primary, 0.03, 3, 0.20, 0.02, 0.58, shadow_hue=(p.secondary[0], p.secondary[1], p.secondary[2])),
+        "secondary": _toon_mat_v3(f"{fid}.mat.secondary", p.secondary, 0.02, 3, 0.16, 0.28, 0.42),
+        "accent": _toon_mat_v3(f"{fid}.mat.accent", p.accent, 0.18, 2, 0.24, 0.34, 0.28),
+        "hair": _toon_mat_v3(f"{fid}.mat.hair", p.hair, 0.05, 3, 0.18, 0.02, 0.46),
+        "charged": _toon_mat_v3(f"{fid}.mat.charged", p.charged, 0.28, 2, 0.22, 0.12, 0.26),
     }
     construction = build_core_volumes(fid, p, arm_obj)
     body = _join(construction, f"{fid}.mesh")
@@ -677,6 +725,16 @@ def build_crafted_fighter(fid: str, p: FighterProfile, arm_obj):
             continue
         bind_to_bone(obj, arm_obj, spec.parent_bone)
         keep.add(obj.name)
+    marker = bpy.data.objects.new("AA_FrontMarker", None)
+    marker.empty_display_type = "ARROWS"
+    marker.empty_display_size = 0.18
+    chest_h, chest_t = _bone_pts(arm_obj, "Chest")
+    marker.location = ((chest_h + chest_t) * 0.5) + Vector((0.0, 0.16, 0.0))
+    marker.rotation_euler = (0.0, 0.0, 0.0)
+    marker["aa_forward"] = (0.0, 1.0, 0.0)
+    bpy.context.collection.objects.link(marker)
+    bind_to_bone(marker, arm_obj, "Chest")
+    keep.add(marker.name)
     _purge_stray_meshes(keep)
     accessory_rows, unintentional = audit_accessories(arm_obj, attached)
     visible = [(obj, spec) for obj, spec in attached if spec and not obj.hide_render]
@@ -685,7 +743,9 @@ def build_crafted_fighter(fid: str, p: FighterProfile, arm_obj):
         tris += len(obj.data.polygons)
     report = {
         "fighter": fid,
-        "generator_revision": "character_craft_v3",
+        "generator_revision": "character_craft_v4",
+        "front_marker": "AA_FrontMarker",
+        "canonical_forward": [0.0, 1.0, 0.0],
         "body_connected_components": islands,
         "triangles": tris,
         "body_triangles": len(body.data.polygons),
