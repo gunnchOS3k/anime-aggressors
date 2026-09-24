@@ -95,7 +95,14 @@ def main() -> int:
                 "fallback_to_current_accepted_art": asset is None,
             }
         )
-    sheets = {name: "planned" if rendered_any else "blocked_no_human_candidate" for name in ROSTER_SHEETS}
+    candidates_present = sum(1 for f in fighters if f["asset"])
+    if rendered_any:
+        sheet_state = "planned"
+    elif candidates_present:
+        sheet_state = "planned_not_rendered"
+    else:
+        sheet_state = "blocked_no_human_candidate"
+    sheets = {name: sheet_state for name in ROSTER_SHEETS}
     payload = {
         "ok": True,
         "FULL_ROSTER_REVIEW_TOOL_PASS": True,

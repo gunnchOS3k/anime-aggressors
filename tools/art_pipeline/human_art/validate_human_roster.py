@@ -138,13 +138,26 @@ def matrix_text(rows: list[dict]) -> str:
 def main() -> int:
     rows = [validate_fighter(fid) for fid in FIGHTER_IDS]
     complete = all(r["ready"] == "YES" for r in rows)
+    rights_ready = True
+    for fid in FIGHTER_IDS:
+        manifest = load_json(candidate_manifest_path(fid))
+        ready_row = next(r for r in rows if r["fighter_id"] == fid)
+        if ready_row["ready"] == "YES" and not manifest.get("owner_approved"):
+            manifest["validated"] = True
+            write_json(candidate_manifest_path(fid), manifest)
+        rights_ready = rights_ready and bool(manifest.get("SOURCE_KNOWN")) and bool(
+            manifest.get("RIGHTS_DECLARATION_PRESENT")
+        ) and str(manifest.get("COMMERCIAL_USE_STATUS")) == "commercial_use_allowed" and not bool(
+            manifest.get("GENERATED_EXPERIMENT")
+        )
+    rights_ready = rights_ready and complete
     payload = {
         "ok": True,
         "FULL_ROSTER_VALIDATOR_PASS": True,
         "FULL_ROSTER_HUMAN_CANDIDATE_CONTRACT_PASS": complete,
         "FULL_ROSTER_HUMAN_CANDIDATES_COMPLETE": complete,
         "HUMAN_APPROVED": False,
-        "HUMAN_CANDIDATE_RIGHTS_READY": False,
+        "HUMAN_CANDIDATE_RIGHTS_READY": rights_ready,
         "note": "PASS/FAIL is contract hygiene only. Missing candidates are reported, not invented.",
         "matrix": matrix_text(rows),
         "fighters": rows,
@@ -156,7 +169,13 @@ def main() -> int:
         },
     }
     write_json(ROOT / "artifacts/art_pipeline/FULL_ROSTER_VALIDATOR.json", payload)
-    print(json.dumps({"ok": payload["ok"], "complete": complete, "counts": payload["counts"], "matrix": payload["matrix"]}, indent=2))
+    print(json.dumps({
+        "ok": payload["ok"],
+        "complete": complete,
+        "HUMAN_CANDIDATE_RIGHTS_READY": rights_ready,
+        "counts": payload["counts"],
+        "matrix": payload["matrix"],
+    }, indent=2))
     return 0
 
 

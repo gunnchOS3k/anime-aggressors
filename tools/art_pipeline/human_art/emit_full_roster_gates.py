@@ -15,6 +15,7 @@ from common import (  # noqa: E402
     ROOT,
     STAGING,
     candidate_manifest_path,
+    load_json,
     write_json,
 )
 
@@ -99,6 +100,17 @@ def main() -> int:
         if script == "validate_human_roster.py":
             gates["FULL_ROSTER_HUMAN_CANDIDATE_CONTRACT_PASS"] = bool(row.get("complete"))
             gates["FULL_ROSTER_HUMAN_CANDIDATES_COMPLETE"] = bool(row.get("complete"))
+            gates["HUMAN_CANDIDATE_RIGHTS_READY"] = bool(row.get("HUMAN_CANDIDATE_RIGHTS_READY"))
+            validator_payload = load_json(ROOT / "artifacts/art_pipeline/FULL_ROSTER_VALIDATOR.json")
+            gates["HUMAN_CANDIDATE_RIGHTS_READY"] = bool(
+                row.get("HUMAN_CANDIDATE_RIGHTS_READY") or validator_payload.get("HUMAN_CANDIDATE_RIGHTS_READY")
+            )
+            gates["Mode_B_eligible"] = bool(
+                gates["FULL_ROSTER_HUMAN_CANDIDATES_COMPLETE"]
+                and gates["HUMAN_CANDIDATE_RIGHTS_READY"]
+                and gates["GENERATED_EXPERIMENT_NOT_SELECTED_PASS"]
+                and gates["FULL_ROSTER_RESOLVER_PASS"]
+            )
     results["resolver"] = {"ok": resolver_ok, "failures": resolver_fails}
     required = (
         "FULL_ROSTER_MANIFEST_PASS",

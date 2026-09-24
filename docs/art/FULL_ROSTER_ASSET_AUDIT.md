@@ -1,57 +1,60 @@
 # Full-roster asset audit
 
-`FULL_ROSTER_HUMAN_CANDIDATES_COMPLETE=false`
-
-No human-authored candidate meshes exist in this checkout. Automation did not invent them.
+`FULL_ROSTER_HUMAN_CANDIDATES_COMPLETE` is computed by `tools/art_pipeline/human_art/audit_full_roster_assets.py`.
 
 Machine-readable: `artifacts/art_pipeline/full_roster_asset_audit.json`
+
+This pass sources **KayKit CC0** characters, adapts them to the existing staging contract, and labels them `HUMAN_CANDIDATE` only. Production still defaults to `CURRENT_ACCEPTED_ART`.
 
 ## Provenance rules used
 
 | Label | Meaning |
 |-------|---------|
-| CURRENT_ACCEPTED_ART | Accepted main procedural proxy / its blender source / godot export copy |
-| HUMAN_CANDIDATE | Staging asset with real human-source evidence |
+| CURRENT_ACCEPTED_ART | Accepted main procedural proxy / blender source / godot export copy |
+| HUMAN_CANDIDATE | Staging asset with real CC0 source evidence |
 | HUMAN_APPROVED | Owner-only. Never set by this pass |
 | GENERATED_EXPERIMENT | PR #106 V2–V9 / `art_source/generated` |
 | PROCEDURAL_FALLBACK | Historical `proxy/` and `procedural_final/` copies |
 | UNKNOWN | Unpromotable leftover |
 
+## Source packs (verified)
+
+| Pack | Author | License | Repo redistribution | Used |
+|------|--------|---------|---------------------|------|
+| [KayKit Character Pack : Adventurers 1.0](https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0) | Kay Lousberg | CC0 1.0 | Yes (GitHub publish) | Ember, Rook, Juno, Kaia, Orion |
+| [KayKit Character Pack : Skeletons 1.0](https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Skeletons-1.0) | Kay Lousberg | CC0 1.0 | Yes (GitHub publish) | Nix, Vesper |
+| Kenney Mini / Blocky / Prototype | Kenney | CC0 1.0 | Yes | Inspected only; 8-bone / no-skin rigs cannot meet the 22-bone deform contract without fabricating bones |
+| Quaternius Ultimate Animated Character Pack | Quaternius | OGA 2021 listing said CC0; current [QAL v1.0](https://quaternius.com/license.html) forbids redistributing assets as assets | Unclear | **Not used** |
+
 ## Per fighter
 
-All seven: `ember-vale` `rook-ironside` `juno-spark` `kaia-windrow` `nix-calder` `orion-vell` `vesper-nyx`
+| Fighter | Source character | License | Mesh/rig/materials | Min clips | Complete | Resolver label |
+|---------|------------------|---------|--------------------|-----------|----------|----------------|
+| Ember Vale | KayKit Mage | CC0 1.0 | Adapted GLB + 1 material | 9/9 mapped | yes | HUMAN_CANDIDATE |
+| Rook Ironside | KayKit Barbarian | CC0 1.0 | Adapted GLB + 1 material | 9/9 mapped | yes | HUMAN_CANDIDATE |
+| Juno Spark | KayKit Rogue | CC0 1.0 | Adapted GLB + 1 material | 9/9 mapped | yes | HUMAN_CANDIDATE |
+| Kaia Windrow | KayKit Rogue Hooded | CC0 1.0 | Adapted GLB + 1 material | 9/9 mapped | yes | HUMAN_CANDIDATE |
+| Nix Calder | KayKit Skeleton Mage | CC0 1.0 | Adapted GLB + 2 materials | 9/9 mapped | yes | HUMAN_CANDIDATE |
+| Orion Vell | KayKit Knight | CC0 1.0 | Adapted GLB + 1 material | 9/9 mapped | yes | HUMAN_CANDIDATE |
+| Vesper Nyx | KayKit Skeleton Rogue | CC0 1.0 | Adapted GLB + 2 materials | 9/9 mapped | yes | HUMAN_CANDIDATE |
 
-| Slot | Candidate | Rights | Approved | Fallback shown in Mode A |
-|------|-----------|--------|----------|--------------------------|
-| Ember Vale | MISSING | undocumented | false | CURRENT_ACCEPTED_ART |
-| Rook Ironside | MISSING | undocumented | false | CURRENT_ACCEPTED_ART |
-| Juno Spark | MISSING | undocumented | false | CURRENT_ACCEPTED_ART |
-| Kaia Windrow | MISSING | undocumented | false | CURRENT_ACCEPTED_ART |
-| Nix Calder | MISSING | undocumented | false | CURRENT_ACCEPTED_ART |
-| Orion Vell | MISSING | undocumented | false | CURRENT_ACCEPTED_ART |
-| Vesper Nyx | MISSING | undocumented | false | CURRENT_ACCEPTED_ART |
+Identity is **silhouette / gear / palette approximation**. None of these are custom lore-accurate originals.
 
-Typical accepted files per fighter:
+Clip mapping (source name → contract id) is in each `candidate_manifest.json` and `tools/art_pipeline/human_art/cc0_roster_map.json`.
 
-- `game-godot/content/fighters/<id>/model/<id>_procedural_proxy.glb`
-- `assets/blender/fighters/<id>/<id>.blend`
-- `assets/exports/godot/fighters/<id>.glb`
+## Honest adaptations
 
-Generated experiment on this branch (not selected):
-
-- `art_source/generated/procedural/<id>/<id>_procedural_proxy.glb`
-
-Generated production GLBs exist only on frozen PR #106 (`8cd3e135…`) as `<id>_generated_production.glb`. They are `GENERATED_EXPERIMENT` and stay off this resolver.
-
-`UNKNOWN` leftovers (repo-root `content/fighters/...` copies) are classified as current accepted art after path-normalization. Nothing UNKNOWN is promoted.
+- Rename KayKit deform bones to the canonical contract names.
+- Insert empty `Neck`, `Shoulder_L`, `Shoulder_R` because KayKit has no separate neck/shoulder deform bones.
+- Add required socket empties.
+- Keep only the nine min-review clips and rename them.
+- Tint imported materials for lane color. Textures remain KayKit atlas/gradient textures.
+- IK/control bones from the source pack remain; they are not claimed as the deform contract.
 
 ## Rights matrix
 
 | Fighter | SOURCE_KNOWN | RIGHTS_DECLARATION_PRESENT | COMMERCIAL_USE_STATUS | GENERATED_EXPERIMENT | HUMAN_CANDIDATE_RIGHTS_READY |
 |---------|--------------|----------------------------|-----------------------|----------------------|------------------------------|
-| all seven | false | false | undocumented | false | false |
+| all seven | true | true | commercial_use_allowed | false | true |
 
-## Missing for Pixel Mode B
-
-Every fighter is missing the production mesh/rig and the minimum review actions:
-`idle walk run charged_idle heavy hurt_heavy launch super clash_lock`
+Attribution is not required. Credit Kay Lousberg if convenient.

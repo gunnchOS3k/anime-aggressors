@@ -10,8 +10,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import (  # noqa: E402
     FIGHTER_IDS,
     FIGHTER_META,
+    MIN_REVIEW_ACTIONS,
     ROOT,
+    STAGING,
+    candidate_manifest_path,
     empty_candidate_manifest,
+    glb_stats,
+    load_json,
     path_looks_generated,
     path_looks_staging,
     write_json,
@@ -110,11 +115,17 @@ def main() -> int:
         rows = by_fighter[fid]
         provenances = {r["provenance"] for r in rows}
         human = [r for r in rows if r["provenance"] == "HUMAN_CANDIDATE"]
+        manifest = load_json(candidate_manifest_path(fid))
+        staged = STAGING / fid / f"{fid}.glb"
+        stats = glb_stats(staged) if staged.is_file() else {}
+        anims = {str(n or "") for n in (stats.get("animation_names") or [])}
+        missing_actions = [a for a in MIN_REVIEW_ACTIONS if a not in anims]
+        rights_ready = bool(manifest.get("HUMAN_CANDIDATE_RIGHTS_READY"))
         lanes[fid] = {
             "fighter_id": fid,
             "display_name": FIGHTER_META[fid]["name"],
             "lane": FIGHTER_META[fid]["lane"],
-            "candidate_status": "HUMAN_CANDIDATE" if human else "MISSING",
+            "candidate_status": manifest.get("candidate_status") or ("HUMAN_CANDIDATE" if human else "MISSING"),
             "owner_approved": False,
             "asset_count": len(rows),
             "provenances_present": sorted(provenances),
@@ -124,32 +135,31 @@ def main() -> int:
                 r["path"] for r in rows if r["provenance"] == "GENERATED_EXPERIMENT"
             ],
             "unknown": [r["path"] for r in rows if r["provenance"] == "UNKNOWN"],
+            "animation_names": sorted(anims),
+            "HUMAN_CANDIDATE_RIGHTS_READY": rights_ready,
         }
         missing[fid] = {
-            "mesh": True,
-            "rig": True,
-            "min_review_actions": [
-                "idle",
-                "walk",
-                "run",
-                "charged_idle",
-                "heavy",
-                "hurt_heavy",
-                "launch",
-                "super",
-                "clash_lock",
-            ],
-            "rights": "undocumented",
-            "source": "none",
+            "mesh": not staged.is_file(),
+            "rig": int(stats.get("skin_count") or 0) < 1,
+            "min_review_actions": missing_actions,
+            "rights": "documented" if rights_ready else "undocumented",
+            "source": manifest.get("source_reference") or "none",
         }
+    complete = all(
+        lanes[fid]["candidate_status"] == "HUMAN_CANDIDATE"
+        and not missing[fid]["mesh"]
+        and not missing[fid]["rig"]
+        and not missing[fid]["min_review_actions"]
+        for fid in FIGHTER_IDS
+    )
     payload = {
         "ok": True,
-        "FULL_ROSTER_HUMAN_CANDIDATES_COMPLETE": False,
+        "FULL_ROSTER_HUMAN_CANDIDATES_COMPLETE": complete,
         "HUMAN_APPROVED": False,
         "generated_experiment_excluded_from_resolver": True,
         "note": (
-            "No human-authored candidate meshes exist in this checkout. "
-            "Procedural proxies remain CURRENT_ACCEPTED_ART. "
+            "Candidate completeness is computed from staging manifests and GLBs. "
+            "Procedural proxies remain CURRENT_ACCEPTED_ART in production. "
             "PR #106 generated V2–V9 production GLBs stay on the frozen R&D branch."
         ),
         "fighters": lanes,
@@ -162,9 +172,9 @@ def main() -> int:
     write_json(
         ROOT / "artifacts/art_pipeline/FULL_ROSTER_MISSING_ASSETS.json",
         {
-            "FULL_ROSTER_HUMAN_CANDIDATES_COMPLETE": False,
+            "FULL_ROSTER_HUMAN_CANDIDATES_COMPLETE": complete,
             "fighters": missing,
-            "Mode_B_eligible": False,
+            "Mode_B_eligible": complete,
             "Mode_A_purpose": "integration baseline only — not a human-art quality review",
         },
     )

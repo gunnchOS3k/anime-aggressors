@@ -1,23 +1,26 @@
 {
   "ok": true,
-  "FULL_ROSTER_HUMAN_CANDIDATES_COMPLETE": false,
+  "FULL_ROSTER_HUMAN_CANDIDATES_COMPLETE": true,
   "HUMAN_APPROVED": false,
   "generated_experiment_excluded_from_resolver": true,
-  "note": "No human-authored candidate meshes exist in this checkout. Procedural proxies remain CURRENT_ACCEPTED_ART. PR #106 generated V2\u2013V9 production GLBs stay on the frozen R&D branch.",
+  "note": "Candidate completeness is computed from staging manifests and GLBs. Procedural proxies remain CURRENT_ACCEPTED_ART in production. PR #106 generated V2\u2013V9 production GLBs stay on the frozen R&D branch.",
   "fighters": {
     "ember-vale": {
       "fighter_id": "ember-vale",
       "display_name": "Ember Vale",
       "lane": "flame / rush",
-      "candidate_status": "MISSING",
+      "candidate_status": "HUMAN_CANDIDATE",
       "owner_approved": false,
-      "asset_count": 8,
+      "asset_count": 9,
       "provenances_present": [
         "CURRENT_ACCEPTED_ART",
         "GENERATED_EXPERIMENT",
+        "HUMAN_CANDIDATE",
         "PROCEDURAL_FALLBACK"
       ],
-      "human_candidate_assets": [],
+      "human_candidate_assets": [
+        "game-godot/content/human_art_staging/ember-vale/ember-vale.glb"
+      ],
       "current_accepted_art": [
         "assets/blender/fighters/ember-vale/ember-vale.blend",
         "assets/exports/godot/fighters/ember-vale.glb",
@@ -27,21 +30,36 @@
       "generated_experiment_on_this_branch": [
         "art_source/generated/procedural/ember-vale/ember-vale_procedural_proxy.glb"
       ],
-      "unknown": []
+      "unknown": [],
+      "animation_names": [
+        "charged_idle",
+        "clash_lock",
+        "heavy",
+        "hurt_heavy",
+        "idle",
+        "launch",
+        "run",
+        "super",
+        "walk"
+      ],
+      "HUMAN_CANDIDATE_RIGHTS_READY": true
     },
     "rook-ironside": {
       "fighter_id": "rook-ironside",
       "display_name": "Rook Ironside",
       "lane": "impact / armor",
-      "candidate_status": "MISSING",
+      "candidate_status": "HUMAN_CANDIDATE",
       "owner_approved": false,
-      "asset_count": 8,
+      "asset_count": 9,
       "provenances_present": [
         "CURRENT_ACCEPTED_ART",
         "GENERATED_EXPERIMENT",
+        "HUMAN_CANDIDATE",
         "PROCEDURAL_FALLBACK"
       ],
-      "human_candidate_assets": [],
+      "human_candidate_assets": [
+        "game-godot/content/human_art_staging/rook-ironside/rook-ironside.glb"
+      ],
       "current_accepted_art": [
         "assets/blender/fighters/rook-ironside/rook-ironside.blend",
         "assets/exports/godot/fighters/rook-ironside.glb",
@@ -51,21 +69,36 @@
       "generated_experiment_on_this_branch": [
         "art_source/generated/procedural/rook-ironside/rook-ironside_procedural_proxy.glb"
       ],
-      "unknown": []
+      "unknown": [],
+      "animation_names": [
+        "charged_idle",
+        "clash_lock",
+        "heavy",
+        "hurt_heavy",
+        "idle",
+        "launch",
+        "run",
+        "super",
+        "walk"
+      ],
+      "HUMAN_CANDIDATE_RIGHTS_READY": true
     },
     "juno-spark": {
       "fighter_id": "juno-spark",
       "display_name": "Juno Spark",
       "lane": "volt / trick",
-      "candidate_status": "MISSING",
+      "candidate_status": "HUMAN_CANDIDATE",
       "owner_approved": false,
-      "asset_count": 8,
+      "asset_count": 9,
       "provenances_present": [
         "CURRENT_ACCEPTED_ART",
         "GENERATED_EXPERIMENT",
+        "HUMAN_CANDIDATE",
         "PROCEDURAL_FALLBACK"
       ],
-      "human_candidate_assets": [],
+      "human_candidate_assets": [
+        "game-godot/content/human_art_staging/juno-spark/juno-spark.glb"
+      ],
       "current_accepted_art": [
         "assets/blender/fighters/juno-spark/juno-spark.blend",
         "assets/exports/godot/fighters/juno-spark.glb",
@@ -75,21 +108,36 @@
       "generated_experiment_on_this_branch": [
         "art_source/generated/procedural/juno-spark/juno-spark_procedural_proxy.glb"
       ],
-      "unknown": []
+      "unknown": [],
+      "animation_names": [
+        "charged_idle",
+        "clash_lock",
+        "heavy",
+        "hurt_heavy",
+        "idle",
+        "launch",
+        "run",
+        "super",
+        "walk"
+      ],
+      "HUMAN_CANDIDATE_RIGHTS_READY": true
     },
     "kaia-windrow": {
       "fighter_id": "kaia-windrow",
       "display_name": "Kaia Windrow",
       "lane": "gale / carry",
-      "candidate_status": "MISSING",
+      "candidate_status": "HUMAN_CANDIDATE",
       "owner_approved": false,
-      "asset_count": 8,
+      "asset_count": 9,
       "provenances_present": [
         "CURRENT_ACCEPTED_ART",
         "GENERATED_EXPERIMENT",
+        "HUMAN_CANDIDATE",
         "PROCEDURAL_FALLBACK"
       ],
-      "human_candidate_assets": [],
+      "human_candidate_assets": [
+        "game-godot/content/human_art_staging/kaia-windrow/kaia-windrow.glb"
+      ],
       "current_accepted_art": [
         "assets/blender/fighters/kaia-windrow/kaia-windrow.blend",
         "assets/exports/godot/fighters/kaia-windrow.glb",
@@ -99,21 +147,36 @@
       "generated_experiment_on_this_branch": [
         "art_source/generated/procedural/kaia-windrow/kaia-windrow_procedural_proxy.glb"
       ],
-      "unknown": []
+      "unknown": [],
+      "animation_names": [
+        "charged_idle",
+        "clash_lock",
+        "heavy",
+        "hurt_heavy",
+        "idle",
+        "launch",
+        "run",
+        "super",
+        "walk"
+      ],
+      "HUMAN_CANDIDATE_RIGHTS_READY": true
     },
     "nix-calder": {
       "fighter_id": "nix-calder",
       "display_name": "Nix Calder",
       "lane": "frost / control",
-      "candidate_status": "MISSING",
+      "candidate_status": "HUMAN_CANDIDATE",
       "owner_approved": false,
-      "asset_count": 8,
+      "asset_count": 9,
       "provenances_present": [
         "CURRENT_ACCEPTED_ART",
         "GENERATED_EXPERIMENT",
+        "HUMAN_CANDIDATE",
         "PROCEDURAL_FALLBACK"
       ],
-      "human_candidate_assets": [],
+      "human_candidate_assets": [
+        "game-godot/content/human_art_staging/nix-calder/nix-calder.glb"
+      ],
       "current_accepted_art": [
         "assets/blender/fighters/nix-calder/nix-calder.blend",
         "assets/exports/godot/fighters/nix-calder.glb",
@@ -123,21 +186,36 @@
       "generated_experiment_on_this_branch": [
         "art_source/generated/procedural/nix-calder/nix-calder_procedural_proxy.glb"
       ],
-      "unknown": []
+      "unknown": [],
+      "animation_names": [
+        "charged_idle",
+        "clash_lock",
+        "heavy",
+        "hurt_heavy",
+        "idle",
+        "launch",
+        "run",
+        "super",
+        "walk"
+      ],
+      "HUMAN_CANDIDATE_RIGHTS_READY": true
     },
     "orion-vell": {
       "fighter_id": "orion-vell",
       "display_name": "Orion Vell",
       "lane": "gravity / trap",
-      "candidate_status": "MISSING",
+      "candidate_status": "HUMAN_CANDIDATE",
       "owner_approved": false,
-      "asset_count": 8,
+      "asset_count": 9,
       "provenances_present": [
         "CURRENT_ACCEPTED_ART",
         "GENERATED_EXPERIMENT",
+        "HUMAN_CANDIDATE",
         "PROCEDURAL_FALLBACK"
       ],
-      "human_candidate_assets": [],
+      "human_candidate_assets": [
+        "game-godot/content/human_art_staging/orion-vell/orion-vell.glb"
+      ],
       "current_accepted_art": [
         "assets/blender/fighters/orion-vell/orion-vell.blend",
         "assets/exports/godot/fighters/orion-vell.glb",
@@ -147,21 +225,36 @@
       "generated_experiment_on_this_branch": [
         "art_source/generated/procedural/orion-vell/orion-vell_procedural_proxy.glb"
       ],
-      "unknown": []
+      "unknown": [],
+      "animation_names": [
+        "charged_idle",
+        "clash_lock",
+        "heavy",
+        "hurt_heavy",
+        "idle",
+        "launch",
+        "run",
+        "super",
+        "walk"
+      ],
+      "HUMAN_CANDIDATE_RIGHTS_READY": true
     },
     "vesper-nyx": {
       "fighter_id": "vesper-nyx",
       "display_name": "Vesper Nyx",
       "lane": "void / mix",
-      "candidate_status": "MISSING",
+      "candidate_status": "HUMAN_CANDIDATE",
       "owner_approved": false,
-      "asset_count": 8,
+      "asset_count": 9,
       "provenances_present": [
         "CURRENT_ACCEPTED_ART",
         "GENERATED_EXPERIMENT",
+        "HUMAN_CANDIDATE",
         "PROCEDURAL_FALLBACK"
       ],
-      "human_candidate_assets": [],
+      "human_candidate_assets": [
+        "game-godot/content/human_art_staging/vesper-nyx/vesper-nyx.glb"
+      ],
       "current_accepted_art": [
         "assets/blender/fighters/vesper-nyx/vesper-nyx.blend",
         "assets/exports/godot/fighters/vesper-nyx.glb",
@@ -171,7 +264,19 @@
       "generated_experiment_on_this_branch": [
         "art_source/generated/procedural/vesper-nyx/vesper-nyx_procedural_proxy.glb"
       ],
-      "unknown": []
+      "unknown": [],
+      "animation_names": [
+        "charged_idle",
+        "clash_lock",
+        "heavy",
+        "hurt_heavy",
+        "idle",
+        "launch",
+        "run",
+        "super",
+        "walk"
+      ],
+      "HUMAN_CANDIDATE_RIGHTS_READY": true
     }
   },
   "assets_on_this_branch": [
@@ -251,6 +356,16 @@
       "suffix": ".glb",
       "bytes": 885040,
       "provenance": "CURRENT_ACCEPTED_ART",
+      "human_source_evidence": false,
+      "owner_approved": false,
+      "on_pr106_only": false
+    },
+    {
+      "path": "game-godot/content/human_art_staging/ember-vale/ember-vale.glb",
+      "fighter_id": "ember-vale",
+      "suffix": ".glb",
+      "bytes": 1059416,
+      "provenance": "HUMAN_CANDIDATE",
       "human_source_evidence": false,
       "owner_approved": false,
       "on_pr106_only": false
@@ -336,6 +451,16 @@
       "on_pr106_only": false
     },
     {
+      "path": "game-godot/content/human_art_staging/juno-spark/juno-spark.glb",
+      "fighter_id": "juno-spark",
+      "suffix": ".glb",
+      "bytes": 1121876,
+      "provenance": "HUMAN_CANDIDATE",
+      "human_source_evidence": false,
+      "owner_approved": false,
+      "on_pr106_only": false
+    },
+    {
       "path": "art_source/generated/procedural/kaia-windrow/kaia-windrow_procedural_proxy.glb",
       "fighter_id": "kaia-windrow",
       "suffix": ".glb",
@@ -411,6 +536,16 @@
       "suffix": ".glb",
       "bytes": 840048,
       "provenance": "CURRENT_ACCEPTED_ART",
+      "human_source_evidence": false,
+      "owner_approved": false,
+      "on_pr106_only": false
+    },
+    {
+      "path": "game-godot/content/human_art_staging/kaia-windrow/kaia-windrow.glb",
+      "fighter_id": "kaia-windrow",
+      "suffix": ".glb",
+      "bytes": 1101196,
+      "provenance": "HUMAN_CANDIDATE",
       "human_source_evidence": false,
       "owner_approved": false,
       "on_pr106_only": false
@@ -496,6 +631,16 @@
       "on_pr106_only": false
     },
     {
+      "path": "game-godot/content/human_art_staging/nix-calder/nix-calder.glb",
+      "fighter_id": "nix-calder",
+      "suffix": ".glb",
+      "bytes": 1188752,
+      "provenance": "HUMAN_CANDIDATE",
+      "human_source_evidence": false,
+      "owner_approved": false,
+      "on_pr106_only": false
+    },
+    {
       "path": "art_source/generated/procedural/orion-vell/orion-vell_procedural_proxy.glb",
       "fighter_id": "orion-vell",
       "suffix": ".glb",
@@ -571,6 +716,16 @@
       "suffix": ".glb",
       "bytes": 914796,
       "provenance": "CURRENT_ACCEPTED_ART",
+      "human_source_evidence": false,
+      "owner_approved": false,
+      "on_pr106_only": false
+    },
+    {
+      "path": "game-godot/content/human_art_staging/orion-vell/orion-vell.glb",
+      "fighter_id": "orion-vell",
+      "suffix": ".glb",
+      "bytes": 1157244,
+      "provenance": "HUMAN_CANDIDATE",
       "human_source_evidence": false,
       "owner_approved": false,
       "on_pr106_only": false
@@ -656,6 +811,16 @@
       "on_pr106_only": false
     },
     {
+      "path": "game-godot/content/human_art_staging/rook-ironside/rook-ironside.glb",
+      "fighter_id": "rook-ironside",
+      "suffix": ".glb",
+      "bytes": 993648,
+      "provenance": "HUMAN_CANDIDATE",
+      "human_source_evidence": false,
+      "owner_approved": false,
+      "on_pr106_only": false
+    },
+    {
       "path": "art_source/generated/procedural/vesper-nyx/vesper-nyx_procedural_proxy.glb",
       "fighter_id": "vesper-nyx",
       "suffix": ".glb",
@@ -731,6 +896,16 @@
       "suffix": ".glb",
       "bytes": 854532,
       "provenance": "CURRENT_ACCEPTED_ART",
+      "human_source_evidence": false,
+      "owner_approved": false,
+      "on_pr106_only": false
+    },
+    {
+      "path": "game-godot/content/human_art_staging/vesper-nyx/vesper-nyx.glb",
+      "fighter_id": "vesper-nyx",
+      "suffix": ".glb",
+      "bytes": 1264012,
+      "provenance": "HUMAN_CANDIDATE",
       "human_source_evidence": false,
       "owner_approved": false,
       "on_pr106_only": false

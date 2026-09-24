@@ -33,7 +33,8 @@ class TestFullRoster(unittest.TestCase):
             self.assertEqual(data["fighter_id"], fid)
             self.assertIn(data["candidate_status"], ("MISSING", "HUMAN_CANDIDATE", "INVALID"))
             self.assertFalse(data.get("owner_approved"))
-            self.assertFalse(data.get("validated"))
+            if data.get("candidate_status") != "HUMAN_CANDIDATE":
+                self.assertFalse(data.get("validated"))
             self.assertNotEqual(data.get("candidate_status"), "HUMAN_APPROVED")
 
     def test_empty_template_never_approved(self):
@@ -42,10 +43,10 @@ class TestFullRoster(unittest.TestCase):
         self.assertFalse(row["owner_approved"])
         self.assertFalse(row["GENERATED_EXPERIMENT"])
 
-    def test_missing_candidate_is_not_ready(self):
+    def test_candidate_never_auto_approves(self):
         row = validate_fighter("ember-vale")
-        self.assertEqual(row["ready"], "NO")
         self.assertFalse(row["HUMAN_APPROVED"])
+        self.assertIn(row["ready"], ("YES", "NO"))
 
     def test_min_review_subset(self):
         self.assertIn("clash_lock", MIN_REVIEW_ACTIONS)

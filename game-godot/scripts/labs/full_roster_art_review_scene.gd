@@ -14,7 +14,7 @@ const FIGHTERS := [
 	"orion-vell",
 	"vesper-nyx",
 ]
-const ACTIONS := ["idle", "walk", "run", "charge", "heavy", "hurt", "super", "clash"]
+const ACTIONS := ["idle", "walk", "run", "charged_idle", "heavy", "hurt_heavy", "launch", "super", "clash_lock"]
 const SPEEDS := [1.0, 0.5, 0.25]
 
 var _index: int = 0
@@ -45,7 +45,7 @@ func _exit_tree() -> void:
 
 
 func footer_hint() -> String:
-	return "Mode A baseline — accepted/fallback art. Not a human-candidate review. [A] action  [LB/RB] fighter  [Y] speed"
+	return "Candidate review — sourced HUMAN_CANDIDATE packages. Not owner-approved. [A] action  [LB/RB] fighter  [Y] speed"
 
 
 func on_back() -> void:
@@ -101,7 +101,8 @@ func _ensure_preview() -> void:
 	_mode_label = Label.new()
 	_mode_label.name = "ModeABanner"
 	_mode_label.add_theme_font_size_override("font_size", 16)
-	_mode_label.text = "MODE A INTEGRATION BASELINE — Candidate 0/7  Validated 0/7  Owner approved 0/7"
+	var counts: Dictionary = _Resolver.roster_review_counts()
+	_mode_label.text = "MODE B CANDIDATE REVIEW — %s" % str(counts.get("label", "Candidate: 0/7")).replace("\n", "  ")
 	_mode_label.position = Vector2(48, 64)
 	add_child(_mode_label)
 	_name_label = Label.new()
@@ -174,6 +175,9 @@ func _ensure_preview() -> void:
 func _refresh() -> void:
 	var fighter_id: String = FIGHTERS[_index]
 	var action: String = ACTIONS[_action_index]
+	if _mode_label:
+		var counts: Dictionary = _Resolver.roster_review_counts()
+		_mode_label.text = "MODE B CANDIDATE REVIEW — %s" % str(counts.get("label", "Candidate: 0/7")).replace("\n", "  ")
 	if _name_label:
 		_name_label.text = "%d / 7  %s" % [_index + 1, fighter_id]
 	if _action_label:

@@ -7,9 +7,9 @@ Device alias: `PIXEL_REVIEW_DEVICE` (never print raw serials).
 Build under review:
 
 - [ ] Mode A — `anime-aggressors-full-roster-integration-baseline.apk` (accepted/fallback art)
-- [ ] Mode B — `anime-aggressors-full-roster-human-candidate-review.apk` (7/7 HUMAN_CANDIDATE required)
+- [ ] Mode B — `anime-aggressors-full-roster-human-candidates-review.apk` (7/7 HUMAN_CANDIDATE required)
 
-`FULL_ROSTER_HUMAN_CANDIDATES_COMPLETE=false` until real candidates exist.
+`FULL_ROSTER_HUMAN_CANDIDATES_COMPLETE` is computed by the roster validator. This pass stages CC0 candidates; owner boxes stay empty.
 
 ## Per fighter
 

@@ -144,6 +144,7 @@ static func _count_legacy_reject(context: String) -> void:
 
 
 const MODE_A_PACKED_PATH := "res://content/review/mode_a_integration_baseline.json"
+const MODE_B_PACKED_PATH := "res://content/review/mode_b_human_candidates_review.json"
 
 
 static func _env_flag(name: String) -> bool:
@@ -151,10 +152,10 @@ static func _env_flag(name: String) -> bool:
 	return env == "1" or env.to_lower() == "true"
 
 
-static func _packed_mode_a() -> Dictionary:
-	if not FileAccess.file_exists(MODE_A_PACKED_PATH):
+static func _read_packed_json(path: String) -> Dictionary:
+	if not FileAccess.file_exists(path):
 		return {}
-	var file := FileAccess.open(MODE_A_PACKED_PATH, FileAccess.READ)
+	var file := FileAccess.open(path, FileAccess.READ)
 	if file == null:
 		return {}
 	var parsed: Variant = JSON.parse_string(file.get_as_text())
@@ -164,11 +165,22 @@ static func _packed_mode_a() -> Dictionary:
 	return parsed
 
 
+static func _packed_mode_a() -> Dictionary:
+	return _read_packed_json(MODE_A_PACKED_PATH)
+
+
+static func _packed_review() -> Dictionary:
+	var mode_b := _read_packed_json(MODE_B_PACKED_PATH)
+	if not mode_b.is_empty():
+		return mode_b
+	return _packed_mode_a()
+
+
 static func _review_flag(name: String) -> bool:
 	## Env defaults remain 0. Packed Mode A marker is review-build only.
 	if _env_flag(name):
 		return true
-	var packed := _packed_mode_a()
+	var packed := _packed_review()
 	if packed.is_empty():
 		return false
 	if name == "MODE_B_HUMAN_ART_QUALITY_REVIEW":

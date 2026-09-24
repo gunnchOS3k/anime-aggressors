@@ -1,0 +1,38 @@
+{
+  "fighter_id": "ember-vale",
+  "source_type": "cc0_pack",
+  "pack_title": "KayKit Character Pack : Adventurers",
+  "author": "Kay Lousberg",
+  "publisher": "KayKit Game Assets",
+  "source_url": "https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0",
+  "homepage": "https://kaylousberg.itch.io/kaykit-adventurers",
+  "source_character": "Mage",
+  "source_relpath": "addons/kaykit_character_pack_adventures/Characters/gltf/Mage.glb",
+  "source_sha256": "cf898585da33fab50c724d31605fb931eb2912e6d2280092141e98ca81ad507d",
+  "source_bytes": 3589240,
+  "license": "CC0 1.0 Universal",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "git_commit": "672074b73ba276876a19e8816ecdc5241817ab47",
+  "identity_lane": "flame / rushdown",
+  "approximation": "KayKit Mage silhouette + warm tint. Not a custom Ember Vale model.",
+  "clip_mapping": {
+    "idle": "Idle",
+    "walk": "Walking_A",
+    "run": "Running_A",
+    "charged_idle": "Spellcasting",
+    "heavy": "Spellcast_Long",
+    "hurt_heavy": "Hit_A",
+    "launch": "Death_A",
+    "super": "Spellcast_Raise",
+    "clash_lock": "Blocking"
+  },
+  "modifications": [
+    "Rename KayKit deform bones to canonical contract names",
+    "Insert missing Neck / Shoulder_L / Shoulder_R bones",
+    "Add required socket empties",
+    "Keep only mapped min-review clips and rename them to contract action ids",
+    "Apply a fighter identity tint on imported materials",
+    "Leave IK/control bones from the source pack; they are not the deform contract"
+  ],
+  "captured_at": "2026-09-24T15:46:34.951834+00:00"
+}
