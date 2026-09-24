@@ -57,7 +57,13 @@ try {
     cwd: repoRoot,
     env: exportEnv,
   });
-  execFileSync(godotBin, ["--headless", "--path", godotDir, "--export-debug", "Android", apkPath], {
+  const androidBuild = path.join(godotDir, "android", "build");
+  const exportArgs = ["--headless", "--path", godotDir, "--export-debug", "Android", apkPath];
+  if (!fs.existsSync(path.join(androidBuild, "build.gradle"))) {
+    exportArgs.splice(3, 0, "--install-android-build-template");
+    console.log("Android Gradle template missing; installing from export templates.");
+  }
+  execFileSync(godotBin, exportArgs, {
     stdio: "inherit",
     cwd: repoRoot,
     env: exportEnv,

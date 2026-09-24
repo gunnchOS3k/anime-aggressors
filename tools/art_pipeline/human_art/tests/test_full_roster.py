@@ -68,6 +68,17 @@ class TestFullRoster(unittest.TestCase):
         self.assertIn("roster_art_review", router)
         self.assertTrue((ROOT / "game-godot/scenes/labs/FullRosterArtReviewScene.tscn").is_file())
 
+    def test_mode_a_packed_marker_is_not_mode_b(self):
+        packed = load_json(ROOT / "game-godot/content/review/mode_a_integration_baseline.json")
+        self.assertTrue(packed["MODE_A_INTEGRATION_BASELINE"])
+        self.assertFalse(packed["MODE_B_HUMAN_ART_QUALITY_REVIEW"])
+        self.assertFalse(packed["FULL_ROSTER_HUMAN_CANDIDATES_COMPLETE"])
+        self.assertEqual(packed["HUMAN_CANDIDATE_COUNT"], 0)
+        self.assertEqual(packed["HUMAN_APPROVED_COUNT"], 0)
+        review = (ROOT / "game-godot/scripts/labs/full_roster_art_review_scene.gd").read_text()
+        self.assertIn("Engine.time_scale", review)
+        self.assertIn("0.25", review)
+
 
 if __name__ == "__main__":
     unittest.main()
