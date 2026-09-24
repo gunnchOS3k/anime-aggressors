@@ -2,7 +2,7 @@
 
 Generated production art only. Rigged costume integrity + impact choreography on the v6/v7 graphic style. Not human-authored final art. Do not merge.
 
-**A new head:** `80d8e6d2dbe75a31ea2563d09cfff30572cf9b19`
+**A new head:** `3c4b3cb4783891ab4323c91374109cb7b8c8416d`
 **PR:** https://github.com/gunnchOS3k/anime-aggressors/pull/106
 **Base:** `6cd1b3100a7e467c2c991394576891660deb1162`
 **RC1:** `v1.0.0-rc.1` untouched
@@ -117,7 +117,7 @@ Generated production art only. Rigged costume integrity + impact choreography on
 - HUMAN_*: all false
 - MERGE_AUTHORIZED: false
 
-## X exact-head CI: pending after push
+## X exact-head CI: pending after push of 3c4b3cb4783891ab4323c91374109cb7b8c8416d
 ## Y APK/Pixel: not eligible: stills are toys; heavy visual read is false; not a review candidate
 
 ## Z generated-review-candidate vs release-ceiling
