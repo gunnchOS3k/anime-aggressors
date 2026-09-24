@@ -1,10 +1,10 @@
 {
   "fighter": "ember-vale",
   "status": "GENERATED_PRODUCTION_ART",
-  "generator": "aa_generated_art_v8",
+  "generator": "aa_generated_art_v9",
   "runtime_generator": "aa_generated_art_v6",
-  "generator_version": "8.0.0",
-  "generator_revision": "rigged_costume_impact_choreography",
+  "generator_version": "9.0.0",
+  "generator_revision": "hero_proportions_contact_choreography",
   "blend": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/art_source/animation/fighters/ember-vale/source/ember-vale_production_master.blend",
   "glb": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/game-godot/content/fighters/ember-vale/model/ember-vale_generated_production.glb",
   "human_authored": false,
@@ -14,9 +14,25 @@
   "geometry": {
     "construction": "profile_loft_no_voxel_remesh",
     "visible_style": "graphic_lowpoly_cel_combat",
+    "hero_proportions": {
+      "display_name": "Ember Vale",
+      "intent": "slightly wider shoulders, larger gauntlets, forward-biased chest, larger aggressive boots, larger crest",
+      "shoulder_scale": 1.18,
+      "forearm_scale": 1.26,
+      "hand_scale": 1.22,
+      "boot_scale": 1.2,
+      "head_scale": 1.14,
+      "torso_taper": 1.16,
+      "leg_length": 1.0,
+      "stance_width": 1.16,
+      "hero_feature_scale": 1.36,
+      "chest_bias": 1.18,
+      "action_line": "horizontal_diagonal_drive"
+    },
+    "hero_feature_scale": 1.36,
     "used_voxel_remesh": false,
-    "triangles": 6034,
-    "body_triangles": 5372,
+    "triangles": 6574,
+    "body_triangles": 5800,
     "body_connected_components": 1,
     "material_count": 7,
     "hand_parts": 9,
@@ -27,10 +43,10 @@
     "undersuit": true,
     "glove_thumb": true,
     "boot_sole": true,
-    "outline_hulls": 19,
+    "outline_hulls": 21,
     "foot_ground_gap_m": 0.0,
     "weight": {
-      "vertex_count": 5353,
+      "vertex_count": 5768,
       "zero_weight_vertices": 0,
       "unnormalized_vertices": 0,
       "smooth_skinning": true
@@ -117,6 +133,30 @@
       },
       {
         "name": "hand_R_guard",
+        "class": "BONE_RIGID",
+        "bone": "Hand_R",
+        "rest_anchor_distance": 1.0686,
+        "local_offset": [
+          0.2669,
+          -0.4007,
+          -0.954
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "hand_L_cast",
+        "class": "BONE_RIGID",
+        "bone": "Hand_L",
+        "rest_anchor_distance": 1.0686,
+        "local_offset": [
+          -0.2669,
+          -0.4007,
+          -0.954
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "hand_R_cast",
         "class": "BONE_RIGID",
         "bone": "Hand_R",
         "rest_anchor_distance": 1.0686,

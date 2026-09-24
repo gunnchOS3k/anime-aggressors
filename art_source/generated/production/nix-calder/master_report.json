@@ -1,10 +1,10 @@
 {
   "fighter": "nix-calder",
   "status": "GENERATED_PRODUCTION_ART",
-  "generator": "aa_generated_art_v8",
+  "generator": "aa_generated_art_v9",
   "runtime_generator": "aa_generated_art_v6",
-  "generator_version": "8.0.0",
-  "generator_revision": "rigged_costume_impact_choreography",
+  "generator_version": "9.0.0",
+  "generator_revision": "hero_proportions_contact_choreography",
   "blend": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/art_source/animation/fighters/nix-calder/source/nix-calder_production_master.blend",
   "glb": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/game-godot/content/fighters/nix-calder/model/nix-calder_generated_production.glb",
   "human_authored": false,
@@ -14,9 +14,25 @@
   "geometry": {
     "construction": "profile_loft_no_voxel_remesh",
     "visible_style": "graphic_lowpoly_cel_combat",
+    "hero_proportions": {
+      "display_name": "Nix Calder",
+      "intent": "compact torso, medium hands, strong geometric forearms, broader shin/boot armor, enlarged crystal mask",
+      "shoulder_scale": 1.08,
+      "forearm_scale": 1.28,
+      "hand_scale": 1.18,
+      "boot_scale": 1.3,
+      "head_scale": 1.16,
+      "torso_taper": 1.06,
+      "leg_length": 0.98,
+      "stance_width": 1.06,
+      "hero_feature_scale": 1.32,
+      "chest_bias": 1.04,
+      "action_line": "tight_precision_stiff"
+    },
+    "hero_feature_scale": 1.32,
     "used_voxel_remesh": false,
-    "triangles": 5866,
-    "body_triangles": 5232,
+    "triangles": 6178,
+    "body_triangles": 5432,
     "body_connected_components": 1,
     "material_count": 8,
     "hand_parts": 9,
@@ -27,10 +43,10 @@
     "undersuit": true,
     "glove_thumb": true,
     "boot_sole": true,
-    "outline_hulls": 21,
+    "outline_hulls": 23,
     "foot_ground_gap_m": 0.0,
     "weight": {
-      "vertex_count": 5209,
+      "vertex_count": 5401,
       "zero_weight_vertices": 0,
       "unnormalized_vertices": 0,
       "smooth_skinning": true
@@ -117,6 +133,30 @@
       },
       {
         "name": "hand_R_guard",
+        "class": "BONE_RIGID",
+        "bone": "Hand_R",
+        "rest_anchor_distance": 1.1363,
+        "local_offset": [
+          0.2842,
+          -0.4251,
+          -1.0147
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "hand_L_cast",
+        "class": "BONE_RIGID",
+        "bone": "Hand_L",
+        "rest_anchor_distance": 1.1363,
+        "local_offset": [
+          -0.2842,
+          -0.4251,
+          -1.0147
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "hand_R_cast",
         "class": "BONE_RIGID",
         "bone": "Hand_R",
         "rest_anchor_distance": 1.1363,

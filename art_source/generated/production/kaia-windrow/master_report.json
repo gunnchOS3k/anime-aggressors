@@ -1,10 +1,10 @@
 {
   "fighter": "kaia-windrow",
   "status": "GENERATED_PRODUCTION_ART",
-  "generator": "aa_generated_art_v8",
+  "generator": "aa_generated_art_v9",
   "runtime_generator": "aa_generated_art_v6",
-  "generator_version": "8.0.0",
-  "generator_revision": "rigged_costume_impact_choreography",
+  "generator_version": "9.0.0",
+  "generator_revision": "hero_proportions_contact_choreography",
   "blend": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/art_source/animation/fighters/kaia-windrow/source/kaia-windrow_production_master.blend",
   "glb": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/game-godot/content/fighters/kaia-windrow/model/kaia-windrow_generated_production.glb",
   "human_authored": false,
@@ -14,9 +14,25 @@
   "geometry": {
     "construction": "profile_loft_no_voxel_remesh",
     "visible_style": "graphic_lowpoly_cel_combat",
+    "hero_proportions": {
+      "display_name": "Kaia Windrow",
+      "intent": "longest limbs, smallest torso depth, larger scarf/airfoil, light readable boots",
+      "shoulder_scale": 0.94,
+      "forearm_scale": 0.92,
+      "hand_scale": 1.1,
+      "boot_scale": 1.18,
+      "head_scale": 1.04,
+      "torso_taper": 1.18,
+      "leg_length": 1.26,
+      "stance_width": 1.08,
+      "hero_feature_scale": 1.48,
+      "chest_bias": 0.88,
+      "action_line": "curved_sweep_arc"
+    },
+    "hero_feature_scale": 1.48,
     "used_voxel_remesh": false,
-    "triangles": 5142,
-    "body_triangles": 4520,
+    "triangles": 5386,
+    "body_triangles": 4664,
     "body_connected_components": 1,
     "material_count": 7,
     "hand_parts": 8,
@@ -27,10 +43,10 @@
     "undersuit": true,
     "glove_thumb": true,
     "boot_sole": true,
-    "outline_hulls": 20,
+    "outline_hulls": 22,
     "foot_ground_gap_m": 0.0,
     "weight": {
-      "vertex_count": 4504,
+      "vertex_count": 4649,
       "zero_weight_vertices": 0,
       "unnormalized_vertices": 0,
       "smooth_skinning": true
@@ -117,6 +133,30 @@
       },
       {
         "name": "hand_R_guard",
+        "class": "BONE_RIGID",
+        "bone": "Hand_R",
+        "rest_anchor_distance": 1.046,
+        "local_offset": [
+          0.2611,
+          -0.3926,
+          -0.9337
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "hand_L_cast",
+        "class": "BONE_RIGID",
+        "bone": "Hand_L",
+        "rest_anchor_distance": 1.046,
+        "local_offset": [
+          -0.2611,
+          -0.3926,
+          -0.9337
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "hand_R_cast",
         "class": "BONE_RIGID",
         "bone": "Hand_R",
         "rest_anchor_distance": 1.046,

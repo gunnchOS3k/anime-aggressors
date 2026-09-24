@@ -1,10 +1,10 @@
 {
   "fighter": "rook-ironside",
   "status": "GENERATED_PRODUCTION_ART",
-  "generator": "aa_generated_art_v8",
+  "generator": "aa_generated_art_v9",
   "runtime_generator": "aa_generated_art_v6",
-  "generator_version": "8.0.0",
-  "generator_revision": "rigged_costume_impact_choreography",
+  "generator_version": "9.0.0",
+  "generator_revision": "hero_proportions_contact_choreography",
   "blend": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/art_source/animation/fighters/rook-ironside/source/rook-ironside_production_master.blend",
   "glb": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/vxp-3-combat-impact-nix-rook/game-godot/content/fighters/rook-ironside/model/rook-ironside_generated_production.glb",
   "human_authored": false,
@@ -14,9 +14,25 @@
   "geometry": {
     "construction": "profile_loft_no_voxel_remesh",
     "visible_style": "graphic_lowpoly_cel_combat",
+    "hero_proportions": {
+      "display_name": "Rook Ironside",
+      "intent": "broadest shoulder/chest, largest forearms/gauntlets/boots, lower visual center, smaller head vs mass",
+      "shoulder_scale": 1.3,
+      "forearm_scale": 1.38,
+      "hand_scale": 1.3,
+      "boot_scale": 1.32,
+      "head_scale": 0.84,
+      "torso_taper": 0.86,
+      "leg_length": 0.9,
+      "stance_width": 1.42,
+      "hero_feature_scale": 1.24,
+      "chest_bias": 1.22,
+      "action_line": "short_crush_down"
+    },
+    "hero_feature_scale": 1.24,
     "used_voxel_remesh": false,
-    "triangles": 7284,
-    "body_triangles": 6620,
+    "triangles": 8008,
+    "body_triangles": 7232,
     "body_connected_components": 1,
     "material_count": 7,
     "hand_parts": 9,
@@ -27,10 +43,10 @@
     "undersuit": true,
     "glove_thumb": true,
     "boot_sole": true,
-    "outline_hulls": 19,
+    "outline_hulls": 21,
     "foot_ground_gap_m": 0.0,
     "weight": {
-      "vertex_count": 6596,
+      "vertex_count": 7212,
       "zero_weight_vertices": 0,
       "unnormalized_vertices": 0,
       "smooth_skinning": true
@@ -117,6 +133,30 @@
       },
       {
         "name": "hand_R_guard",
+        "class": "BONE_RIGID",
+        "bone": "Hand_R",
+        "rest_anchor_distance": 1.3055,
+        "local_offset": [
+          0.3008,
+          -0.5467,
+          -1.1467
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "hand_L_cast",
+        "class": "BONE_RIGID",
+        "bone": "Hand_L",
+        "rest_anchor_distance": 1.3055,
+        "local_offset": [
+          -0.3008,
+          -0.5467,
+          -1.1467
+        ],
+        "intentional_floating": false
+      },
+      {
+        "name": "hand_R_cast",
         "class": "BONE_RIGID",
         "bone": "Hand_R",
         "rest_anchor_distance": 1.3055,
