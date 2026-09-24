@@ -1,6 +1,9 @@
-# Rook / Nix Golden Slice
+# Rook / Nix Golden Slice (superseded)
 
-First human-art milestone. This is the only authorized visible-art path after PR #106.
+Owner replaced this slice with the **full-roster** plan. See `FULL_ROSTER_PRODUCTION_BRIEF.md`.
+This page remains as history. Do not treat Rook/Nix-only as the live milestone.
+
+First human-art milestone (historical). This was the authorized visible-art path after PR #106.
 
 ## Rook
 
