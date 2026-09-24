@@ -95,7 +95,7 @@ static func framing_for_fighter(
 		},
 		"camera_parameters": {
 			"orthographic_size": ortho_size,
-			"position": [0.0, cam_y, cam_z],
+			"position": [0.22 if select_mode else 0.0, cam_y, cam_z],
 			"look_at": [0.0, look_y, 0.0],
 			"lean_offset": lean,
 		},

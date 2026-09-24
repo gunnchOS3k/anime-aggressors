@@ -50,10 +50,18 @@ static func from_life_dict(fighter_id: String, life: Dictionary, fighter_data: D
 	p.victory_pose = str(life.get("victory_pose", "proud_fist"))
 	p.defeat_pose = str(life.get("defeat_pose", "kneel_guard"))
 	p.throw_style = str(life.get("throw_style", "blast"))
-	if fighter_data.has("color"):
-		p.primary_color = Color(fighter_data.get("color"))
-	if fighter_data.has("auraColor"):
-		p.accent_color = Color(fighter_data.get("auraColor"))
+	var identity: Dictionary = {}
+	var contract := load("res://scripts/visual/elemental_material_contract.gd")
+	if contract != null and contract.has_method("identity_colors"):
+		identity = contract.identity_colors(fighter_id)
+	if not identity.is_empty():
+		p.primary_color = identity.get("tile_primary", p.primary_color)
+		p.accent_color = identity.get("tile_accent", p.accent_color)
+	else:
+		if fighter_data.has("color"):
+			p.primary_color = Color(fighter_data.get("color"))
+		if fighter_data.has("auraColor"):
+			p.accent_color = Color(fighter_data.get("auraColor"))
 	p.silhouette_kind = _kind_for(fighter_id)
 	p.posture_style = _posture_for(fighter_id)
 	p.movement_style = str(life.get("movement", life.get("rhythm", "sharp")))

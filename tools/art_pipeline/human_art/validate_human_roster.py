@@ -157,7 +157,7 @@ def main() -> int:
         "FULL_ROSTER_HUMAN_CANDIDATE_CONTRACT_PASS": complete,
         "FULL_ROSTER_HUMAN_CANDIDATES_COMPLETE": complete,
         "HUMAN_APPROVED": False,
-        "HUMAN_CANDIDATE_RIGHTS_READY": rights_ready,
+        "CANDIDATE_RIGHTS_READY": rights_ready,
         "note": "PASS/FAIL is contract hygiene only. Missing candidates are reported, not invented.",
         "matrix": matrix_text(rows),
         "fighters": rows,
@@ -172,7 +172,7 @@ def main() -> int:
     print(json.dumps({
         "ok": payload["ok"],
         "complete": complete,
-        "HUMAN_CANDIDATE_RIGHTS_READY": rights_ready,
+        "CANDIDATE_RIGHTS_READY": rights_ready,
         "counts": payload["counts"],
         "matrix": payload["matrix"],
     }, indent=2))

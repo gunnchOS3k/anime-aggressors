@@ -17,6 +17,11 @@ Shared cel language for all seven fighters. Identity lives in body materials fir
 | rim_strength | 0.32 | 0.40–0.50 | 0.50 |
 | aura_emission | 0.12 | up to 0.85 | 0.70–0.85 |
 
+## Source of truth
+Select tiles, Showcase preview, Labs review, and in-match spawn all derive from `game-godot/data/runtime/elemental_material_language.json`. Separate material instances are allowed only if they copy that identity.
+
+Layers: A translucent body uniform, B structural detail, C controlled emissive accents, D rim/readability (preview slightly stronger).
+
 ## Per-fighter value groups
 See `game-godot/data/runtime/elemental_material_language.json`.
 

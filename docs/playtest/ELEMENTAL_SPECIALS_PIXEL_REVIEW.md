@@ -31,4 +31,6 @@ Per fighter (mark Keep / Revise / Replace):
 11. Does clash read as force?
 12. Keep / revise / replace?
 
+Also fill `docs/playtest/SELECT_MATCH_COLOR_PARITY.md` for select tiles / Showcase / Labs review / in-match color.
+
 Human gates stay false until this form is filled by the owner.

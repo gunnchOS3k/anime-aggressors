@@ -12,6 +12,7 @@ var _mesh_instances: Array[MeshInstance3D] = []
 var _base_colors: Dictionary = {}
 var _bound_root: Node3D
 var _fighter_id: String = ""
+var _presentation_context: String = ""
 
 
 func bind_model(root: Node3D, fighter_id: String = "") -> void:
@@ -23,7 +24,13 @@ func bind_model(root: Node3D, fighter_id: String = "") -> void:
 	_collect_meshes(root)
 	_apply_team_tint()
 	if not fighter_id.is_empty():
-		_ElementalMaterial.apply_to_root(root, fighter_id, 0.0, true)
+		_ElementalMaterial.apply_to_root(root, fighter_id, 0.0, true, _presentation_context)
+
+
+func set_presentation_context(context: String) -> void:
+	_presentation_context = context
+	if _bound_root != null and not _fighter_id.is_empty():
+		_ElementalMaterial.apply_to_root(_bound_root, _fighter_id, 0.0, true, _presentation_context)
 
 
 func _localize_materials(node: Node) -> void:
@@ -54,7 +61,7 @@ func set_hit_flash(intensity: float = 1.0) -> void:
 func set_charge_emission(level: float) -> void:
 	var charged := clampf(level, 0.0, 2.0)
 	if _bound_root != null and not _fighter_id.is_empty():
-		_ElementalMaterial.apply_to_root(_bound_root, _fighter_id, clampf(charged / 2.0, 0.0, 1.0), true)
+		_ElementalMaterial.apply_to_root(_bound_root, _fighter_id, clampf(charged / 2.0, 0.0, 1.0), true, _presentation_context)
 	for mesh in _mesh_instances:
 		if mesh == null:
 			continue

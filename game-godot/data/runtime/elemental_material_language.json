@@ -1,77 +1,167 @@
 {
-  "schema": "elemental_material_language/v1",
+  "schema": "elemental_material_language/v2",
+  "source_of_truth": true,
+  "consumers": [
+    "select_tiles",
+    "select_showcase_preview",
+    "roster_art_review_preview",
+    "in_match_spawn"
+  ],
   "cel_shading": {
     "toon_bands": 3.0,
     "outline_width": 0.018,
     "rim_strength": 0.32,
     "roughness_proxy": 0.45,
-    "emission_idle": 0.12,
+    "emission_idle": 0.16,
     "emission_charge_max": 0.85,
     "mobile_read_target": "pixel_compact_silhouette"
   },
+  "layers": {
+    "A": "translucent_body_uniform",
+    "B": "structural_detail",
+    "C": "controlled_emissive_accents",
+    "D": "rim_readability"
+  },
+  "style": {
+    "translucent_body": true,
+    "body_alpha_min": 0.72,
+    "body_alpha_max": 0.88,
+    "structure_alpha_min": 0.90,
+    "preserve_texture_detail": true,
+    "rounded_silhouette": true,
+    "elemental_body_first": true
+  },
+  "preview": {
+    "rim_multiplier": 1.38,
+    "emission_multiplier": 1.16,
+    "ambient": [0.94, 0.90, 0.84],
+    "ambient_energy": 0.82,
+    "key_color": [1.0, 0.95, 0.88],
+    "key_energy": 1.45,
+    "key_rotation_deg": [-28, -18, 0],
+    "camera": "front_3q",
+    "camera_x_offset": 0.22,
+    "tonemap": "linear",
+    "avoid": "cool_gray_wash"
+  },
+  "gameplay": {
+    "rim_multiplier": 1.0,
+    "emission_multiplier": 1.0
+  },
+  "roygbiv_order": [
+    "ember-vale",
+    "rook-ironside",
+    "juno-spark",
+    "kaia-windrow",
+    "nix-calder",
+    "orion-vell",
+    "vesper-nyx"
+  ],
   "fighters": {
     "ember-vale": {
       "element": "flame",
-      "core": [0.18, 0.05, 0.03],
-      "structure": [0.42, 0.16, 0.08],
-      "accent": [1.0, 0.62, 0.16],
-      "emission": [1.0, 0.38, 0.08],
+      "roygbiv_family": "red-orange",
+      "family_hue_deg": 14,
+      "core": [0.90, 0.22, 0.08, 0.80],
+      "structure": [0.28, 0.09, 0.05, 0.95],
+      "accent": [1.0, 0.78, 0.16, 1.0],
+      "emission": [1.0, 0.40, 0.07],
+      "rim": [1.0, 0.52, 0.14],
+      "tile_primary": [0.93, 0.26, 0.10],
+      "tile_accent": [1.0, 0.74, 0.18],
       "charge": "hotter_brighter_core_crown_hands",
-      "avoid": "generic_fire_mage_clothing"
+      "avoid": "generic_fire_mage_clothing",
+      "bible_detail": "living-flame body: molten core, charcoal structure, hot yellow seams, oversized ignition hands"
     },
     "rook-ironside": {
       "element": "impact",
-      "core": [0.14, 0.14, 0.16],
-      "structure": [0.32, 0.30, 0.28],
-      "accent": [0.72, 0.38, 0.18],
-      "emission": [0.55, 0.42, 0.28],
+      "roygbiv_family": "orange-iron",
+      "family_hue_deg": 34,
+      "core": [0.78, 0.40, 0.18, 0.84],
+      "structure": [0.46, 0.40, 0.34, 0.96],
+      "accent": [0.86, 0.64, 0.26, 1.0],
+      "emission": [0.62, 0.38, 0.16],
+      "rim": [0.90, 0.58, 0.24],
+      "tile_primary": [0.80, 0.42, 0.20],
+      "tile_accent": [0.86, 0.64, 0.28],
       "charge": "lower_denser_restrained_glow",
-      "avoid": "electric_looking_vfx"
+      "avoid": "electric_looking_vfx",
+      "bible_detail": "fortress mass: orange-iron body, tan-steel plates, brass impact edges, heavy boots and forearms"
     },
     "juno-spark": {
       "element": "volt",
-      "core": [0.08, 0.06, 0.16],
-      "structure": [0.18, 0.14, 0.32],
-      "accent": [0.98, 0.90, 0.18],
-      "emission": [0.35, 0.92, 1.0],
+      "roygbiv_family": "yellow-gold",
+      "family_hue_deg": 52,
+      "core": [0.14, 0.10, 0.28, 0.80],
+      "structure": [0.92, 0.78, 0.16, 0.94],
+      "accent": [0.28, 0.94, 1.0, 1.0],
+      "emission": [0.40, 0.96, 1.0],
+      "rim": [1.0, 0.92, 0.28],
+      "tile_primary": [0.94, 0.80, 0.16],
+      "tile_accent": [0.30, 0.94, 1.0],
       "charge": "tighter_flickering_current",
-      "avoid": "full_body_yellow_wash"
+      "avoid": "full_body_yellow_wash",
+      "bible_detail": "charged substrate: navy-violet body, gold kinetic panels, cyan-electric current, arc-crown"
     },
     "kaia-windrow": {
       "element": "gale",
-      "core": [0.06, 0.22, 0.22],
-      "structure": [0.18, 0.48, 0.42],
-      "accent": [0.82, 0.96, 0.90],
-      "emission": [0.55, 0.90, 0.85],
+      "roygbiv_family": "green",
+      "family_hue_deg": 160,
+      "core": [0.10, 0.42, 0.36, 0.76],
+      "structure": [0.22, 0.72, 0.58, 0.90],
+      "accent": [0.90, 0.98, 0.94, 1.0],
+      "emission": [0.55, 0.92, 0.84],
+      "rim": [0.70, 1.0, 0.88],
+      "tile_primary": [0.18, 0.70, 0.56],
+      "tile_accent": [0.88, 0.98, 0.94],
       "charge": "lighter_lifted_air_panels",
-      "avoid": "green_particles_only"
+      "avoid": "green_particles_only",
+      "bible_detail": "air spirit: mint-teal body, sea-green structure, white-air ribbons, light scarf/airfoil"
     },
     "nix-calder": {
       "element": "frost",
-      "core": [0.05, 0.08, 0.16],
-      "structure": [0.55, 0.72, 0.82],
-      "accent": [0.70, 0.96, 1.0],
-      "emission": [0.45, 0.85, 1.0],
+      "roygbiv_family": "blue",
+      "family_hue_deg": 210,
+      "core": [0.08, 0.16, 0.36, 0.80],
+      "structure": [0.62, 0.82, 0.94, 0.94],
+      "accent": [0.55, 0.96, 1.0, 1.0],
+      "emission": [0.42, 0.86, 1.0],
+      "rim": [0.72, 0.96, 1.0],
+      "tile_primary": [0.28, 0.58, 0.92],
+      "tile_accent": [0.78, 0.96, 1.0],
       "charge": "more_crystalline_frost_growth",
-      "avoid": "pale_on_pale_collapse"
+      "avoid": "pale_on_pale_collapse",
+      "bible_detail": "ice being: navy-cold core, pale ice armor, cyan-ice edges, crystal mask and shins"
     },
     "orion-vell": {
       "element": "gravity",
-      "core": [0.04, 0.04, 0.10],
-      "structure": [0.28, 0.16, 0.48],
-      "accent": [0.85, 0.82, 1.0],
-      "emission": [0.72, 0.62, 1.0],
+      "roygbiv_family": "indigo",
+      "family_hue_deg": 262,
+      "core": [0.08, 0.06, 0.22, 0.82],
+      "structure": [0.36, 0.24, 0.68, 0.94],
+      "accent": [0.88, 0.84, 1.0, 1.0],
+      "emission": [0.70, 0.58, 1.0],
+      "rim": [0.62, 0.52, 1.0],
+      "tile_primary": [0.22, 0.16, 0.52],
+      "tile_accent": [0.86, 0.82, 1.0],
       "charge": "constellation_connected_orbit_tight",
-      "avoid": "random_particles_no_nodes"
+      "avoid": "random_particles_no_nodes",
+      "bible_detail": "cosmic enforcer: midnight body, indigo structure, starlight-violet nodes, orbit halo"
     },
     "vesper-nyx": {
       "element": "void",
-      "core": [0.06, 0.03, 0.10],
-      "structure": [0.32, 0.14, 0.28],
-      "accent": [0.86, 0.72, 0.92],
-      "emission": [0.62, 0.28, 0.72],
+      "roygbiv_family": "violet",
+      "family_hue_deg": 296,
+      "core": [0.16, 0.06, 0.22, 0.74],
+      "structure": [0.46, 0.18, 0.48, 0.92],
+      "accent": [0.88, 0.74, 0.94, 1.0],
+      "emission": [0.70, 0.30, 0.78],
+      "rim": [0.82, 0.58, 0.96],
+      "tile_primary": [0.48, 0.18, 0.56],
+      "tile_accent": [0.88, 0.74, 0.94],
       "charge": "partial_phase_ghost_offset",
-      "avoid": "permanent_invisibility"
+      "avoid": "permanent_invisibility",
+      "bible_detail": "void trickster: plum-phase body, dark void cowl, pale lilac edges, split tails"
     }
   }
 }

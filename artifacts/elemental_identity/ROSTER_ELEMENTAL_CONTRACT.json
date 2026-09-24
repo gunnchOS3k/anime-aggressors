@@ -1,20 +1,30 @@
 {
-  "schema": "elemental_identity/v1",
+  "schema": "elemental_identity/v2",
   "source": "game-godot/data/runtime/elemental_material_language.json",
+  "source_of_truth": true,
+  "consumers": [
+    "select_tiles",
+    "select_showcase_preview",
+    "roster_art_review_preview",
+    "in_match_spawn"
+  ],
   "cel": {
     "toon_bands": 3,
     "outline_width": 0.018,
     "rim_strength": 0.32
   },
   "fighters": {
-    "ember-vale": "flame / hotter_brighter_core_crown_hands",
-    "rook-ironside": "impact / lower_denser_restrained_glow",
-    "juno-spark": "volt / tighter_flickering_current",
-    "kaia-windrow": "gale / lighter_lifted_air_panels",
-    "nix-calder": "frost / more_crystalline_frost_growth",
-    "orion-vell": "gravity / constellation_connected_orbit_tight",
-    "vesper-nyx": "void / partial_phase_ghost_offset"
+    "ember-vale": "flame / red-orange / hotter_brighter_core_crown_hands",
+    "rook-ironside": "impact / orange-iron / lower_denser_restrained_glow",
+    "juno-spark": "volt / yellow-gold / tighter_flickering_current",
+    "kaia-windrow": "gale / green / lighter_lifted_air_panels",
+    "nix-calder": "frost / blue / more_crystalline_frost_growth",
+    "orion-vell": "gravity / indigo / constellation_connected_orbit_tight",
+    "vesper-nyx": "void / violet / partial_phase_ghost_offset"
   },
   "HUMAN_APPROVED": false,
-  "note": "KayKit candidate geometry kept. Materials remapped. Not shipping-approved art."
+  "OWNER_SELECT_COLOR_APPROVAL": false,
+  "OWNER_MATCH_COLOR_APPROVAL": false,
+  "OWNER_ROSTER_ROYGBIV_APPROVAL": false,
+  "note": "KayKit candidate geometry kept. Materials remapped from one identity file. Not shipping-approved art."
 }

@@ -359,6 +359,9 @@ func set_presentation_context(context: String) -> void:
 		_PresentationContext.CTX_MOVE_PREVIEW,
 	]
 	_apply_context_display_contract()
+	if _material_controller and _material_controller.has_method("set_presentation_context"):
+		_material_controller.set_presentation_context(_presentation_context)
+	_refresh_elemental_materials()
 	_PresentationCache.register_live(self, _presentation_context, _fighter_id, _configure_generation)
 
 
@@ -759,6 +762,8 @@ func _setup_procedural_runtime(fighter_data: Dictionary) -> void:
 	_material_controller = _MaterialController.new()
 	_material_controller.name = "FighterMaterialController"
 	add_child(_material_controller)
+	if _material_controller.has_method("set_presentation_context"):
+		_material_controller.set_presentation_context(_presentation_context)
 	_material_controller.bind_model(_proxy_model, _fighter_id)
 	_apply_toon_materials(_proxy_model, fighter_data)
 	_refresh_elemental_materials()
@@ -776,11 +781,45 @@ func _apply_toon_materials(root: Node3D, fighter_data: Dictionary) -> void:
 	_apply_toon_recursive(root, base_color)
 
 
+func _apply_identity_lighting() -> void:
+	if _viewport == null or not is_instance_valid(_viewport):
+		return
+	var preview := _ElementalMaterial.is_preview_context(_presentation_context)
+	var env_node := _viewport.get_node_or_null("IdentityEnvironment") as WorldEnvironment
+	if env_node != null and env_node.environment != null:
+		var env := env_node.environment
+		if preview:
+			env.ambient_light_color = Color(0.94, 0.90, 0.84)
+			env.ambient_light_energy = 0.82
+			env.tonemap_mode = Environment.TONE_MAPPER_LINEAR
+		else:
+			env.ambient_light_color = Color(0.72, 0.78, 0.92)
+			env.ambient_light_energy = 1.25
+			env.tonemap_mode = Environment.TONE_MAPPER_FILMIC
+	var key := _viewport.get_node_or_null("IdentityKeyLight") as DirectionalLight3D
+	if key:
+		if preview:
+			key.rotation_degrees = Vector3(-28, -18, 0)
+			key.light_color = Color(1.0, 0.95, 0.88)
+			key.light_energy = 1.45
+		else:
+			key.rotation_degrees = Vector3(-38, -28, 0)
+			key.light_color = Color(1.0, 0.87, 0.72)
+			key.light_energy = 1.8
+	var rim := _viewport.get_node_or_null("IdentityRimLight") as DirectionalLight3D
+	if rim:
+		var colors: Dictionary = _ElementalMaterial.identity_colors(_fighter_id)
+		var rim_col: Color = colors.get("rim", Color(0.45, 0.66, 1.0))
+		rim.light_color = rim_col if preview else Color(0.45, 0.66, 1.0)
+		rim.light_energy = 1.35 if preview else 1.15
+
+
 func _refresh_elemental_materials() -> void:
 	var root := _proxy_model if _proxy_model != null else _loaded_model
 	if root == null or not is_instance_valid(root):
 		return
-	_ElementalMaterial.apply_to_root(root, _fighter_id, _charge_level, _vfx_enabled)
+	_ElementalMaterial.apply_to_root(root, _fighter_id, _charge_level, _vfx_enabled, _presentation_context)
+	_apply_identity_lighting()
 	if _material_controller and _material_controller.has_method("set_charge_emission"):
 		_material_controller.set_charge_emission(_charge_level * 1.4)
 
@@ -886,15 +925,18 @@ func _build_viewport() -> void:
 	environment.ambient_light_color = Color(0.72, 0.78, 0.92)
 	environment.ambient_light_energy = 1.25
 	environment.tonemap_mode = Environment.TONE_MAPPER_FILMIC
+	environment_node.name = "IdentityEnvironment"
 	environment_node.environment = environment
 	_viewport.add_child(environment_node)
 
 	var key_light := DirectionalLight3D.new()
+	key_light.name = "IdentityKeyLight"
 	key_light.rotation_degrees = Vector3(-38, -28, 0)
 	key_light.light_color = Color(1.0, 0.87, 0.72)
 	key_light.light_energy = 1.8
 	_viewport.add_child(key_light)
 	var rim_light := DirectionalLight3D.new()
+	rim_light.name = "IdentityRimLight"
 	rim_light.rotation_degrees = Vector3(20, 150, 0)
 	rim_light.light_color = Color(0.45, 0.66, 1.0)
 	rim_light.light_energy = 1.15

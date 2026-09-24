@@ -255,6 +255,8 @@ func _apply_preview(preview: Node2D, fighter_id: String, action: String, facing:
 		var gs = Engine.get_main_loop().root.get_node_or_null("/root/GameState")
 		if gs != null and gs.has_method("load_fighter"):
 			data = gs.load_fighter(fighter_id)
+	if preview.has_method("set_presentation_context"):
+		preview.set_presentation_context("SELECT_PREVIEW")
 	if preview.has_method("configure"):
 		preview.configure(data)
 	if preview.has_method("set_facing"):

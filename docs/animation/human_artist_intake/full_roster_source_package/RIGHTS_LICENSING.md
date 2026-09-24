@@ -18,4 +18,4 @@ Work-for-hire / license grant: _______________
 Commercial use: _______________
 Training-data / generative tools used: _______________ (must be original; no third-party IP)
 
-`HUMAN_CANDIDATE_RIGHTS_READY` is documentary only. It is not a quality pass.
+`CANDIDATE_RIGHTS_READY` is documentary only. It is not a quality pass. The old name `HUMAN_CANDIDATE_RIGHTS_READY` is a deprecated alias and must not be treated as owner visual approval.

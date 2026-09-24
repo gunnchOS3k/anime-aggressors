@@ -265,11 +265,40 @@ func _build_grid() -> void:
 			arch_l.text = str(profile.select_archetype)
 		if sil and sil.has_method("configure"):
 			sil.configure(id, profile.primary_color, profile.accent_color)
+		_apply_tile_identity_chrome(tile, id, profile)
 		tile.pressed.connect(_on_tile_pressed.bind(i))
 		tile.focus_entered.connect(_on_tile_focused.bind(i))
 		tile.mouse_entered.connect(_on_tile_focused.bind(i))
 		grid.add_child(tile)
 		_tiles.append(tile)
+
+
+func _apply_tile_identity_chrome(tile: Button, fighter_id: String, profile) -> void:
+	var identity: Dictionary = {}
+	var contract := load("res://scripts/visual/elemental_material_contract.gd")
+	if contract != null and contract.has_method("identity_colors"):
+		identity = contract.identity_colors(fighter_id)
+	var primary: Color = identity.get("tile_primary", profile.primary_color)
+	var accent: Color = identity.get("tile_accent", profile.accent_color)
+	var plate := tile.get_node_or_null("IdentityPlate") as ColorRect
+	if plate == null:
+		plate = ColorRect.new()
+		plate.name = "IdentityPlate"
+		plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		plate.set_anchors_preset(Control.PRESET_FULL_RECT)
+		tile.add_child(plate)
+		tile.move_child(plate, 0)
+	plate.color = Color(primary.r, primary.g, primary.b, 0.28)
+	var rule := tile.get_node_or_null("IdentityAccent") as ColorRect
+	if rule == null:
+		rule = ColorRect.new()
+		rule.name = "IdentityAccent"
+		rule.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		rule.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+		rule.offset_top = -6.0
+		tile.add_child(rule)
+	rule.color = Color(accent.r, accent.g, accent.b, 0.92)
+	tile.add_theme_color_override("font_color", accent.lerp(Color.WHITE, 0.15))
 
 
 func _on_tile_focused(index: int) -> void:

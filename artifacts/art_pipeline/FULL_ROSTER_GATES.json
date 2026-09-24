@@ -13,7 +13,10 @@
     "FULL_ROSTER_HUMAN_CANDIDATES_COMPLETE": true,
     "HUMAN_ART_STAGING": 0,
     "HUMAN_ART_FULL_ROSTER_REVIEW": 0,
-    "HUMAN_CANDIDATE_RIGHTS_READY": true,
+    "CANDIDATE_RIGHTS_READY": true,
+    "OWNER_SELECT_COLOR_APPROVAL": false,
+    "OWNER_MATCH_COLOR_APPROVAL": false,
+    "OWNER_ROSTER_ROYGBIV_APPROVAL": false,
     "Mode_B_eligible": true,
     "HUMAN_ART_DIRECTION_APPROVAL": false,
     "HUMAN_ANIMATION_QUALITY_PASS": false,
@@ -53,5 +56,8 @@
   "HUMAN_ART_DIRECTION_APPROVAL": false,
   "FINAL_AUTHORED_ANIMATION_PASS": false,
   "MERGE_AUTHORIZED": false,
-  "note": "Infrastructure only. Human quality remains false until an owner sets it after Pixel review."
+  "note": "Infrastructure only. Human quality remains false until an owner sets it after Pixel review.",
+  "deprecated_metadata": {
+    "HUMAN_CANDIDATE_RIGHTS_READY": "renamed to CANDIDATE_RIGHTS_READY; documentary only, not an owner-quality PASS"
+  }
 }

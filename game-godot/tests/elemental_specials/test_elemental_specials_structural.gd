@@ -43,6 +43,11 @@ func _init() -> void:
 	for fid in FIGHTERS:
 		if not _Material.has_three_value_groups(fid):
 			failures.append("material_missing:%s" % fid)
+		if _Material.has_method("has_layered_identity") and not _Material.has_layered_identity(fid):
+			failures.append("layered_identity_missing:%s" % fid)
+		var colors: Dictionary = _Material.identity_colors(fid) if _Material.has_method("identity_colors") else {}
+		if colors.is_empty() or not colors.has("tile_primary"):
+			failures.append("identity_colors_missing:%s" % fid)
 		var sil := _Signature.unique_super_silhouette(fid)
 		if sil.is_empty() or silhouettes.has(sil):
 			failures.append("super_silhouette_not_unique:%s" % fid)

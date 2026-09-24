@@ -7,8 +7,14 @@ from __future__ import annotations
 
 import json
 import subprocess
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
+
+_HERE = Path(__file__).resolve().parent
+if str(_HERE) not in sys.path:
+    sys.path.insert(0, str(_HERE))
+from validate_select_match_parity import evaluate as evaluate_parity  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[3]
 FIGHTER_IDS = (
@@ -36,6 +42,12 @@ STRUCTURAL_GATES = (
     "CLASH_PRESENTATION_STRUCTURAL_PASS",
     "ELEMENTAL_VFX_FAMILY_PASS",
     "PIXEL_REVIEW_ROUTE_PASS",
+    "SELECT_PREVIEW_SOURCE_OF_TRUTH_PASS",
+    "SELECT_MATCH_PARITY_STRUCTURAL_PASS",
+    "ROSTER_ROYGBIV_SPACING_PASS",
+    "TRANSLUCENT_BODY_STYLE_PASS",
+    "FIGHTER_ART_BIBLE_DETAIL_PASS",
+    "PIXEL_SELECT_REVIEW_ROUTE_PASS",
 )
 HUMAN_GATES_FALSE = {
     "HUMAN_ART_DIRECTION_APPROVAL": False,
@@ -59,6 +71,9 @@ HUMAN_GATES_FALSE = {
     "HUMAN_ROSTER_CLASH_PASS": False,
     "HUMAN_ROSTER_MOBILE_READ_PASS": False,
     "HUMAN_ROSTER_CLIP_WORTHY_PASS": False,
+    "OWNER_SELECT_COLOR_APPROVAL": False,
+    "OWNER_MATCH_COLOR_APPROVAL": False,
+    "OWNER_ROSTER_ROYGBIV_APPROVAL": False,
 }
 REQUIRED_DOCS = (
     "docs/art/ANIME_AGGRESSORS_FIGHTER_ART_BIBLE_V1.md",
@@ -68,6 +83,7 @@ REQUIRED_DOCS = (
     "docs/vfx/ELEMENTAL_VFX_LANGUAGE_V1.md",
     "docs/animation/DIRECTIONAL_HIT_REACTION_CONTRACT.md",
     "docs/playtest/ELEMENTAL_SPECIALS_PIXEL_REVIEW.md",
+    "docs/playtest/SELECT_MATCH_COLOR_PARITY.md",
 )
 REQUIRED_RUNTIME = (
     "game-godot/data/runtime/elemental_material_language.json",
@@ -145,7 +161,7 @@ def material_contract(failures: list[str]) -> bool:
         ok = False
     for fid in FIGHTER_IDS:
         entry = fighters.get(fid, {})
-        for key in ("core", "structure", "accent", "charge", "element"):
+        for key in ("core", "structure", "accent", "charge", "element", "emission", "rim", "family_hue_deg"):
             if key not in entry:
                 failures.append(f"material_missing:{fid}:{key}")
                 ok = False
@@ -403,6 +419,9 @@ def main() -> int:
     hurt_dir_ok, hurt_read_ok = hit_reaction_pass(failures)
     route_ok = review_route(failures)
     evidence_ok = evidence_pass()
+    parity = evaluate_parity()
+    parity_gates = parity.get("gates", {})
+    failures.extend(parity.get("failures", []))
 
     gates = {
         "ROSTER_ELEMENTAL_MATERIAL_CONTRACT_PASS": materials_ok,
@@ -420,6 +439,12 @@ def main() -> int:
         "CLASH_PRESENTATION_STRUCTURAL_PASS": clash_ok,
         "ELEMENTAL_VFX_FAMILY_PASS": vfx_ok,
         "PIXEL_REVIEW_ROUTE_PASS": route_ok,
+        "SELECT_PREVIEW_SOURCE_OF_TRUTH_PASS": bool(parity_gates.get("SELECT_PREVIEW_SOURCE_OF_TRUTH_PASS")),
+        "SELECT_MATCH_PARITY_STRUCTURAL_PASS": bool(parity_gates.get("SELECT_MATCH_PARITY_STRUCTURAL_PASS")),
+        "ROSTER_ROYGBIV_SPACING_PASS": bool(parity_gates.get("ROSTER_ROYGBIV_SPACING_PASS")),
+        "TRANSLUCENT_BODY_STYLE_PASS": bool(parity_gates.get("TRANSLUCENT_BODY_STYLE_PASS")),
+        "FIGHTER_ART_BIBLE_DETAIL_PASS": bool(parity_gates.get("FIGHTER_ART_BIBLE_DETAIL_PASS")),
+        "PIXEL_SELECT_REVIEW_ROUTE_PASS": bool(parity_gates.get("PIXEL_SELECT_REVIEW_ROUTE_PASS")),
         "REQUIRED_DOCS_PASS": docs_ok,
         "COMBAT_MATH_UNCHANGED_PASS": math_ok,
         "EVIDENCE_DIRS_PASS": evidence_ok,
