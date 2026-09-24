@@ -672,6 +672,9 @@ func _setup_procedural_runtime(fighter_data: Dictionary) -> void:
 
 
 func _apply_toon_materials(root: Node3D, fighter_data: Dictionary) -> void:
+	# Keep sourced candidate / approved materials visible. Team-tint override is for procedural proxies.
+	if _current_model_source in ["HUMAN_CANDIDATE", "HUMAN_APPROVED"]:
+		return
 	var base_color := Color(fighter_data.get("color", Color(0.85, 0.85, 0.9)))
 	_apply_toon_recursive(root, base_color)
 

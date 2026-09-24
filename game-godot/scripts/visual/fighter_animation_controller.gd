@@ -30,6 +30,14 @@ func setup(fighter, model_root: Node3D) -> void:
 	if _skeleton == null:
 		return
 	_skeleton_path = model_root.get_path_to(_skeleton)
+	if _should_use_embedded_candidate(model_root):
+		var embedded := _find_embedded_player(model_root)
+		if embedded != null:
+			_player = embedded
+			_player.active = true
+			_player.process_mode = Node.PROCESS_MODE_INHERIT
+			_ingest_embedded_clips()
+			return
 	_disable_embedded_players(model_root)
 	_player = AnimationPlayer.new()
 	_player.name = "CanonicalProceduralAnimationPlayer"
@@ -51,7 +59,7 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 		clip = _fallback_clip(state, move_id)
 	if clip.is_empty() or not _player.has_animation(clip):
 		return
-	var should_loop := clip in ["idle", "run", "walk", "fall", "shield", "aura_charge"]
+	var should_loop := clip in ["idle", "run", "walk", "fall", "shield", "aura_charge", "charged_idle"]
 	var anim := _player.get_animation(clip)
 	if anim:
 		anim.loop_mode = Animation.LOOP_LINEAR if should_loop else Animation.LOOP_NONE
@@ -155,3 +163,46 @@ func _disable_embedded_players(node: Node) -> void:
 		node.process_mode = Node.PROCESS_MODE_DISABLED
 	for child in node.get_children():
 		_disable_embedded_players(child)
+
+
+func _should_use_embedded_candidate(_model_root: Node3D) -> bool:
+	if not _AssetResolver.staging_review_enabled():
+		return false
+	var info: Dictionary = _AssetResolver.resolve_model_path(_fighter_id)
+	return str(info.get("path", "")).contains("human_art_staging")
+
+
+func _find_embedded_player(node: Node) -> AnimationPlayer:
+	if node is AnimationPlayer:
+		return node as AnimationPlayer
+	for child in node.get_children():
+		var found := _find_embedded_player(child)
+		if found:
+			return found
+	return null
+
+
+func _ingest_embedded_clips() -> void:
+	if _player == null:
+		return
+	for lib_name in _player.get_animation_library_list():
+		var lib: AnimationLibrary = _player.get_animation_library(lib_name)
+		if lib == null:
+			continue
+		for clip in lib.get_animation_list():
+			_loaded_clips[str(clip)] = true
+	var aliases := {
+		"charge": "charged_idle",
+		"aura_charge": "charged_idle",
+		"hurt": "hurt_heavy",
+		"clash": "clash_lock",
+		"launched": "launch",
+	}
+	var extra := AnimationLibrary.new()
+	for alias in aliases.keys():
+		var src := str(aliases[alias])
+		if _player.has_animation(src) and not _player.has_animation(alias):
+			extra.add_animation(alias, _player.get_animation(src))
+			_loaded_clips[alias] = true
+	if extra.get_animation_list().size() > 0:
+		_player.add_animation_library("candidate_aliases", extra)

@@ -122,6 +122,123 @@ HUMAN_GATES_FALSE = {
     "MERGE_AUTHORIZED": False,
 }
 
+HUMAN_ROSTER_GATES_FALSE = {
+    "HUMAN_ROSTER_ART_DIRECTION_PASS": False,
+    "HUMAN_ROSTER_SILHOUETTE_PASS": False,
+    "HUMAN_ROSTER_ANIMATION_QUALITY_PASS": False,
+    "HUMAN_ROSTER_COMBAT_FEEL_PASS": False,
+    "HUMAN_ROSTER_HURT_READ_PASS": False,
+    "HUMAN_ROSTER_SUPER_PASS": False,
+    "HUMAN_ROSTER_CLASH_PASS": False,
+    "HUMAN_ROSTER_MOBILE_READ_PASS": False,
+    "HUMAN_ROSTER_CLIP_WORTHY_PASS": False,
+}
+
+MIN_REVIEW_ACTIONS = (
+    "idle",
+    "walk",
+    "run",
+    "charged_idle",
+    "heavy",
+    "hurt_heavy",
+    "launch",
+    "super",
+    "clash_lock",
+)
+
+FULL_PRODUCTION_ACTIONS = (
+    "idle",
+    "personality_idle",
+    "walk",
+    "run",
+    "dash",
+    "jump",
+    "fall",
+    "landing",
+    "light",
+    "heavy_anticipation",
+    "heavy",
+    "heavy_follow",
+    "grab",
+    "hurt_light",
+    "hurt_heavy",
+    "launch",
+    "ko",
+    "charge",
+    "charged_idle",
+    "aura",
+    "super",
+    "clash_start",
+    "clash_lock",
+    "clash_push",
+    "clash_winning",
+    "clash_losing",
+    "clash_break",
+)
+
+FULL_ROSTER_IMPACT_PAIRS = (
+    ("ember-vale", "rook-ironside"),
+    ("rook-ironside", "nix-calder"),
+    ("juno-spark", "orion-vell"),
+    ("kaia-windrow", "vesper-nyx"),
+    ("nix-calder", "ember-vale"),
+    ("orion-vell", "kaia-windrow"),
+    ("vesper-nyx", "juno-spark"),
+)
+
+IMPACT_FRAMES = (
+    "anticipation",
+    "pre_contact",
+    "contact_vfx_off",
+    "peak_hurt_vfx_off",
+    "follow_through",
+    "launch_start",
+    "contact_vfx_on",
+)
+
+ROSTER_REVIEW_SHOTS = (
+    "front",
+    "front_3q",
+    "side",
+    "back",
+    "gameplay_scale",
+    "select_preview",
+    "silhouette",
+    "idle",
+    "walk",
+    "run",
+    "charged_idle",
+    "heavy_anticipation",
+    "heavy_contact",
+    "heavy_follow",
+    "hurt_heavy",
+    "launch",
+    "super",
+    "clash_lock",
+    "attachment_stress",
+)
+
+ROSTER_SHEETS = (
+    "full_roster_select.png",
+    "full_roster_front_3q.png",
+    "full_roster_silhouette.png",
+    "full_roster_gameplay_scale.png",
+    "full_roster_heavy.png",
+    "full_roster_hurt.png",
+    "full_roster_super.png",
+    "full_roster_clash.png",
+)
+
+STAGING_RESOLVER_CHAIN = (
+    "HUMAN_APPROVED",
+    "HUMAN_CANDIDATE",
+    "CURRENT_ACCEPTED_ART",
+    "PROCEDURAL_FALLBACK",
+)
+EXCLUDED_RESOLVER_CHAIN = ("GENERATED_EXPERIMENT",)
+
+SUPPORTED_CANDIDATE_SUFFIXES = (".glb", ".gltf")
+
 
 def load_json(path: Path) -> dict:
     if not path.is_file():
@@ -138,8 +255,40 @@ def load_skeleton() -> dict:
     return load_json(SKELETON)
 
 
+def env_flag(name: str, default: str = "0") -> bool:
+    return os.environ.get(name, default) not in ("", "0", "false", "False")
+
+
 def human_art_staging_enabled() -> bool:
-    return os.environ.get("HUMAN_ART_STAGING", "0") not in ("", "0", "false", "False")
+    return env_flag("HUMAN_ART_STAGING")
+
+
+def human_art_full_roster_review_enabled() -> bool:
+    return env_flag("HUMAN_ART_FULL_ROSTER_REVIEW")
+
+
+def candidate_manifest_path(fighter_id: str) -> Path:
+    return staging_dir(fighter_id) / "candidate_manifest.json"
+
+
+def empty_candidate_manifest(fighter_id: str) -> dict:
+    return {
+        "fighter_id": fighter_id,
+        "candidate_status": "MISSING",
+        "source_type": "unknown",
+        "source_reference": None,
+        "license_or_rights_status": "pending",
+        "mesh_path": None,
+        "animation_paths": [],
+        "submitted_at": None,
+        "validated": False,
+        "owner_approved": False,
+        "SOURCE_KNOWN": False,
+        "RIGHTS_DECLARATION_PRESENT": False,
+        "COMMERCIAL_USE_STATUS": "undocumented",
+        "GENERATED_EXPERIMENT": False,
+        "HUMAN_CANDIDATE_RIGHTS_READY": False,
+    }
 
 
 def path_looks_generated(path: str) -> bool:
