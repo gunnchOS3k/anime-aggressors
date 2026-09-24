@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import sys
 from collections import defaultdict
 from pathlib import Path
 
@@ -53,14 +54,37 @@ NORMAL_INPUT_COMMANDS = {
 }
 
 # Locomotion / shield / dodge — normal match, not direct attack-button input.
+# Derived usage: any clip listed here is state-reachable. Do not hardcode roster totals.
 LOCOMOTION_STATE_CLIPS = {
     "idle",
+    "idle_personality",
     "walk",
+    "walk_start",
+    "walk_stop",
     "run",
+    "run_start",
+    "run_stop",
     "dash",
+    "dash_stop",
+    "turn",
     "jump",
+    "jump_squat",
+    "jump_apex",
     "fall",
     "landing",
+    "charged_idle",
+    "charged_walk",
+    "charged_run",
+    "charged_dash",
+    "charged_jump",
+    "charged_fall",
+    "charged_land",
+    "charge_start",
+    "charge_low",
+    "charge_mid",
+    "charge_high",
+    "charge_full",
+    "charge_release",
     "shield",
     "dodge",
     "air_dodge",
@@ -70,6 +94,26 @@ LOCOMOTION_STATE_CLIPS = {
 # Hurt/launch/KO/victory = NORMAL_MATCH / REACTION, NOT DIRECT_PLAYER_INPUT.
 REACTION_STATE_CLIPS = {
     "hurt",
+    "hurt_light",
+    "hurt_medium",
+    "hurt_heavy",
+    "hurt_flinch",
+    "hurt_stagger",
+    "hurt_crumple",
+    "hurt_launch",
+    "hurt_tumble",
+    "hurt_spike",
+    "hurt_freeze_stiffness",
+    "hurt_body_snap",
+    "hurt_shield_recoil",
+    "hurt_ground_bounce",
+    "hurt_wall_splat",
+    "hurt_ko_spin",
+    "grab_victim",
+    "throw_victim_forward",
+    "throw_victim_back",
+    "throw_victim_up",
+    "throw_victim_down",
     "launch",
     "tumble",
     "ko",
@@ -503,7 +547,7 @@ def main() -> int:
             "",
             "EXACT, ALIASED, MISSING_CLIP, MISSING_GAMEPLAY_MOVE, DESIGN_ONLY, SIGNATURE_NOT_BOUND_TO_INPUT, GENERIC_FALLBACK, BROKEN.",
             "",
-            "Reachability is honest: generated ≠ reachable. 357 is LOADED/GENERATED only.",
+            "Reachability is honest: generated ≠ reachable. Totals are derived from fighter manifests.",
             "",
         ]
     )
@@ -587,9 +631,19 @@ def main() -> int:
     )
 
     print(json.dumps({"ok": True, "metrics": metrics, "sig_stats": sig_stats}, indent=2))
-    assert metrics["PROCEDURAL_CLIPS_GENERATED"] == 357, metrics["PROCEDURAL_CLIPS_GENERATED"]
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from derive_clip_totals import derive_clip_totals
+
+    derived = derive_clip_totals(ROOT)
+    assert metrics["PROCEDURAL_CLIPS_GENERATED"] == derived["expected_from_manifests"], (
+        metrics["PROCEDURAL_CLIPS_GENERATED"],
+        derived["expected_from_manifests"],
+    )
+    assert metrics["LOADED_CLIPS"] == derived["loaded_clip_files"]
+    assert metrics["GENERIC_FALLBACK_GAMEPLAY_MOVES"] == 0
+    assert metrics["UNMAPPED_GAMEPLAY_MOVES"] == 0
+    assert derived["unmapped_gameplay_moves"] == 0
     assert metrics["DIRECT_PLAYER_INPUT_REACHABLE_CLIPS"] < metrics["PROCEDURAL_CLIPS_GENERATED"]
-    assert metrics["DIRECT_PLAYER_INPUT_REACHABLE_CLIPS"] != 287 or True  # recomputed; 287 not preserved
     # Reaction clips must not be counted as direct player input
     for key, kinds in clip_reach.items():
         clip = key.split(":", 1)[-1]

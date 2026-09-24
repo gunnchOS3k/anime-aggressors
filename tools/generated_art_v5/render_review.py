@@ -1,0 +1,56 @@
+"""v5 review packet labels. Cameras stay on the v4 contract."""
+from __future__ import annotations
+
+PACKET = (
+    ("front", "", 1, "FRONT_ORTHO", False, False),
+    ("front_3q", "", 1, "FRONT_3Q", False, False),
+    ("side", "", 1, "SIDE", False, False),
+    ("back", "", 1, "BACK", False, False),
+    ("gameplay", "idle", 1, "GAMEPLAY_LEFT", False, False),
+    ("select_preview", "idle", 1, "FRONT_ORTHO", False, False),
+    ("gameplay_scale", "idle", 1, "GAMEPLAY_LEFT", False, False),
+    ("close_body_3q", "idle", 1, "FRONT_3Q", False, False),
+    ("head_detail_front", "idle", 1, "DETAIL_HEAD", False, False),
+    ("head_detail_profile", "idle", 1, "SIDE", False, False),
+    ("head_detail_3q", "idle", 1, "DETAIL_HEAD", False, False),
+    ("hand_fist", "idle", 1, "DETAIL_HANDS", False, False),
+    ("boot_detail", "idle", 1, "DETAIL_FEET", False, False),
+    ("costume_front", "idle", 1, "DETAIL_COSTUME", False, False),
+    ("costume_3q", "idle", 1, "FRONT_3Q", False, False),
+    ("silhouette_idle", "idle", 1, "SILHOUETTE", True, False),
+    ("silhouette_heavy", "heavy", 11, "SILHOUETTE", True, False),
+    ("silhouette_super", "signature_lane_finisher", 16, "SILHOUETTE", True, False),
+    ("idle", "idle", 1, "FRONT_3Q", False, False),
+    ("personality_idle", "personality_idle", 8, "FRONT_3Q", False, False),
+    ("walk", "walk", 8, "FRONT_3Q", False, False),
+    ("run", "run", 6, "GAMEPLAY_LEFT", False, False),
+    ("charge_0_vfx_off", "idle", 1, "FRONT_3Q", False, True),
+    ("charge_100_vfx_off", "charged_idle", 12, "FRONT_3Q", False, True),
+    ("charge_100_vfx_on", "charged_idle", 12, "FRONT_3Q", False, False),
+    ("heavy_anticipation_pair", "heavy", 4, "FRONT_3Q", False, False),
+    ("heavy_contact_pair_vfx_off", "heavy", 11, "FRONT_3Q", False, True),
+    ("heavy_contact_pair_vfx_on", "heavy", 11, "FRONT_3Q", False, False),
+    ("heavy_follow", "heavy", 16, "FRONT_3Q", False, False),
+    ("hurt_heavy_no_knockback", "hurt_heavy", 6, "FRONT_3Q", False, False),
+    ("aura", "aura_signature", 12, "FRONT_3Q", False, False),
+    ("super_vfx_off", "signature_lane_finisher", 16, "FRONT_3Q", False, True),
+    ("super_vfx_on", "signature_lane_finisher", 16, "FRONT_3Q", False, False),
+    ("clash_lock", "clash_lock", 12, "FRONT_3Q", False, False),
+    ("KO", "ko", 12, "FRONT_3Q", False, False),
+)
+
+REQUIRED_SHOTS = tuple(row[0] for row in PACKET)
+
+ROSTER_SHEETS = (
+    "bodies",
+    "heads",
+    "hands",
+    "boots",
+    "costumes",
+    "gameplay_silhouettes",
+    "heavy_contacts",
+    "hurt_reactions",
+    "charge_0_vs_100",
+    "supers",
+    "clash_poses",
+)

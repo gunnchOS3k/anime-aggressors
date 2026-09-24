@@ -1,0 +1,42 @@
+{
+  "program": "VXP-3",
+  "title": "Authored animation production infrastructure + spectacle + golden-slice prep (not final art)",
+  "head_sha": "56711f2438fb18fa5018611d35c429d8816ff785",
+  "base_sha": "6cd1b3100a7e467c2c991394576891660deb1162",
+  "branch": "vxp/vxp-3-combat-impact-nix-rook",
+  "rc1_tag_untouched": true,
+  "accepted_main_sha": "6cd1b3100a7e467c2c991394576891660deb1162",
+  "not_final_art": true,
+  "BLENDER_SOURCE_STORAGE_SETUP_REQUIRED": true,
+  "AUTHORED_RIG_PIPELINE_PASS": true,
+  "AUTHORED_EXPORT_IMPORT_PASS": true,
+  "AUTHORED_HERO_SET_ROSTER_PASS": false,
+  "AUTHORED_POSE_BIBLE_PASS": false,
+  "AUTHORED_HURT_PASS": false,
+  "AUTHORED_CHARGE_PASS": false,
+  "AUTHORED_SECONDARY_PASS": false,
+  "AURA_CLASH_SYSTEM_PASS": true,
+  "CINEMATIC_COMBAT_DIRECTOR_PASS": true,
+  "ANIMATION_PRODUCTION_BLENDER_VERSION": "3.3.1",
+  "MESH_BINDING_NEEDS_HUMAN_WEIGHT_PAINT": true,
+  "PIXEL_AUTHORED_COMBAT_PERF_PASS": false,
+  "HUMAN_ANIMATION_QUALITY_PASS": false,
+  "HUMAN_COMBAT_FEEL_PASS": false,
+  "HUMAN_AURA_CLASH_PASS": false,
+  "HUMAN_CLIP_WORTHY_PASS": false,
+  "MERGE_AUTHORIZED": false,
+  "FINAL_AUTHORED_ANIMATION_PASS": false,
+  "provenance_ok": true,
+  "mesh_audit_ok": true,
+  "pixel_reason": "No authored-combat Pixel profile this pass. Device may be present; APK was not rebuilt for authored GLBs.",
+  "pixel": {
+    "ok": false,
+    "reason": "Roster-wide owner-review APK (SHA256 d75fb71863dbc8c260f4543e3d558d389defc2d9e5b8d7461757f4ecdf12a12c) was signer-safe installed with adb install -r on PIXEL_USB_DEVICE_1 (Pixel 6a, bluejay). App launched (pid 16550). Authentic boot-title stills exist. No Training battle, no Training Impact Lab session, and no app-only 60fps combat recording of light/medium/heavy/aura/KO. Human visual / combat-feel / fun / merge stay false. Automation does not set those gates."
+  },
+  "validate": {
+    "skeleton": [],
+    "export": [],
+    "provenance": [],
+    "godot": []
+  }
+}

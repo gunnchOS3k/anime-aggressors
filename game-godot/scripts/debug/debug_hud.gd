@@ -93,6 +93,12 @@ func _update_text() -> void:
 			combat.get("shield_damage", 0.0),
 			combat.get("element_effect", "—"),
 		])
+		lines.append("  impact_class:%s reaction:%s clip:%s readable:%.2f (HUD-hidden)" % [
+			combat.get("impact_class", "—"),
+			combat.get("reaction_family", "—"),
+			combat.get("reaction_clip", "—"),
+			combat.get("launch_readability", 0.0),
+		])
 		if f.has_method("input_display"):
 			lines.append("  input: %s" % f.input_display())
 	if hit_logs.size():

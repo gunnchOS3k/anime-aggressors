@@ -76,13 +76,31 @@ var _last_witness: Dictionary = {}
 var _viewport_rebuild_count: int = 0
 var _final_screen_heal_attempts: int = 0
 var _viewport_image_unreadable: bool = false
+var _viewport_evidence_source: String = "UNTESTED"
 var _display_path: String = "ViewportBank+Sprite2D"
+
+
+func viewport_pixel_read_supported() -> bool:
+	## Dummy/headless backends expose a Texture2D whose RID is unreadable.
+	## Never call texture_2d_get / get_image() there — it null-derefs.
+	if OS.has_feature("headless"):
+		return false
+	if str(DisplayServer.get_name()).to_lower() == "headless":
+		return false
+	return true
+
+
+func _mark_structural_visibility_only() -> void:
+	_viewport_image_unreadable = true
+	_viewport_evidence_source = "STRUCTURAL"
 
 
 func _ready() -> void:
 	# Defer viewport bank construction — root may still be busy adding children
 	# during boot (_ready), which makes synchronous add_child fail and leaves
 	# Camera3D outside the tree before look_at.
+	if not viewport_pixel_read_supported():
+		_mark_structural_visibility_only()
 	if _viewport == null:
 		call_deferred("_build_viewport")
 	set_process(true)
@@ -225,6 +243,12 @@ func get_active_animation_clip() -> String:
 	if _animation_controller and _animation_controller.has_method("get_active_clip"):
 		return str(_animation_controller.get_active_clip())
 	return _last_clip
+
+
+func get_clip_provenance(clip: String = "") -> String:
+	if _animation_controller and _animation_controller.has_method("get_clip_provenance"):
+		return str(_animation_controller.get_clip_provenance(clip))
+	return "PROCEDURAL_FALLBACK"
 
 
 func get_animation_controller() -> Node:
@@ -930,6 +954,7 @@ func count_viewport_opaque_pixels() -> Dictionary:
 		"viewport_total_pixels": 0,
 		"viewport_image_valid": false,
 		"viewport_image_unreadable": _viewport_image_unreadable,
+		"viewport_evidence_source": _viewport_evidence_source,
 		"display_rect": {"x": 0.0, "y": 0.0, "w": 0.0, "h": 0.0},
 		"display_path": _display_path,
 	}
@@ -937,19 +962,37 @@ func count_viewport_opaque_pixels() -> Dictionary:
 		var sz := Vector2(float(VIEWPORT_SIZE.x) * absf(_display.scale.x), float(VIEWPORT_SIZE.y) * absf(_display.scale.y))
 		var top_left := _display.global_position - sz * 0.5
 		out["display_rect"] = {"x": top_left.x, "y": top_left.y, "w": sz.x, "h": sz.y}
+	if not viewport_pixel_read_supported():
+		_mark_structural_visibility_only()
+		out["viewport_image_unreadable"] = true
+		out["viewport_evidence_source"] = "STRUCTURAL"
+		return out
 	if _viewport_image_unreadable:
+		out["viewport_evidence_source"] = _viewport_evidence_source
 		return out
 	if _viewport == null or not is_instance_valid(_viewport):
 		return out
 	var tex: Texture2D = _viewport.get_texture()
 	if tex == null:
+		_mark_structural_visibility_only()
+		out["viewport_image_unreadable"] = true
+		out["viewport_evidence_source"] = "STRUCTURAL"
+		return out
+	# Dummy renderer can return a non-null Texture2D with an invalid RID.
+	if not tex.get_rid().is_valid() or tex.get_width() <= 0 or tex.get_height() <= 0:
+		_mark_structural_visibility_only()
+		out["viewport_image_unreadable"] = true
+		out["viewport_evidence_source"] = "STRUCTURAL"
 		return out
 	var img: Image = tex.get_image()
 	if img == null or img.get_width() <= 0 or img.get_height() <= 0:
-		_viewport_image_unreadable = true
+		_mark_structural_visibility_only()
 		out["viewport_image_unreadable"] = true
+		out["viewport_evidence_source"] = "STRUCTURAL"
 		return out
 	out["viewport_image_valid"] = true
+	out["viewport_evidence_source"] = "PIXEL"
+	_viewport_evidence_source = "PIXEL"
 	var total := img.get_width() * img.get_height()
 	var opaque := 0
 	var step := 2 if total > 20000 else 1
@@ -1092,6 +1135,7 @@ func get_final_screen_visibility_witness() -> Dictionary:
 		"viewport_opaque_pixels": int(px.get("viewport_opaque_pixels", 0)),
 		"viewport_total_pixels": int(px.get("viewport_total_pixels", 0)),
 		"viewport_image_valid": bool(px.get("viewport_image_valid", false)),
+		"viewport_evidence_source": str(px.get("viewport_evidence_source", _viewport_evidence_source)),
 		"display_rect": px.get("display_rect", {}),
 		"display_path": _display_path,
 		"display_visible": _display != null and is_instance_valid(_display) and _display.visible,
@@ -1288,9 +1332,20 @@ func _update_expression_for_state(state: String) -> void:
 func _refresh_aura_overlay() -> void:
 	if _aura_overlay == null:
 		return
-	var tier_alpha := clampf(0.08 + float(_aura_tier) * 0.12, 0.08, 0.48)
-	if _aura_level <= 0 and _aura_tier <= 0 and _form_presentation.is_empty():
+	var band := 0
+	if _aura_level >= 4:
+		band = 100
+	elif _aura_level >= 3:
+		band = 75
+	elif _aura_level >= 2:
+		band = 50
+	elif _aura_level >= 1:
+		band = 25
+	var tier_alpha := clampf(0.06 + float(band) / 100.0 * 0.42, 0.0, 0.55)
+	if band <= 0 and _aura_tier <= 0 and _form_presentation.is_empty():
 		_aura_overlay.color.a = 0.0
+		_aura_overlay.size = Vector2(70, 90)
+		_aura_overlay.position = Vector2(-35, -95)
 		return
 	var shape := str(_form_presentation.get("aura_shape", _life.get("aura_shape", "orb")))
 	var pulse := float(_life.get("aura_pulse", 1.0))
@@ -1335,6 +1390,12 @@ func _refresh_aura_overlay() -> void:
 		_:
 			_aura_overlay.size = Vector2(70, 90)
 			_aura_overlay.position = Vector2(-35, -95)
+	# Charge-band silhouette shift (presentation only). 100 gets a brief bloom.
+	var band_scale := 1.0 + float(band) / 220.0
+	if band >= 100:
+		band_scale += 0.12
+	_aura_overlay.size *= band_scale
+	_aura_overlay.position = Vector2(-_aura_overlay.size.x * 0.5, -95.0 - float(band) * 0.08)
 
 
 func _play_throw_presentation(direction: String) -> void:

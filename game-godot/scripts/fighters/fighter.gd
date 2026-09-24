@@ -20,6 +20,7 @@ const _FighterDefinition = preload("res://scripts/combat/fighter_definition.gd")
 const _FormDefinition = preload("res://scripts/combat/form_definition.gd")
 const _TransformPipeline = preload("res://scripts/combat/transform_pipeline.gd")
 const _AuraTierContract = preload("res://scripts/combat/aura_tier_contract.gd")
+const _HitReactionResolver = preload("res://scripts/combat/hit_reaction_resolver.gd")
 
 signal damaged(amount: float, total: float)
 signal koed()
@@ -114,6 +115,10 @@ var grab_mash: float = 0.0
 var _recent_move_ids: Array = []
 var last_impact_readable: bool = false
 var last_feedback_tier: String = ""
+var last_reaction_family: String = ""
+var last_reaction_clip: String = ""
+var last_impact_class: String = ""
+var last_launch_readability: float = 0.0
 var _fighter_def: Dictionary = {}
 var _forms_doc: Dictionary = {}
 var _current_form_id: String = ""
@@ -1322,9 +1327,12 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 	velocity = launch
 	_last_knockback = launch
 	hitstun_remaining = _CombatMath.hitstun_seconds(launch.length())
-	_hitstop = _CombatMath.frames_to_seconds(info.get("hitstop_frames", 3))
+	var hs_frames := int(info.get("defender_hitstop_frames", info.get("hitstop_frames", 3)))
+	var atk_frames := int(info.get("attacker_hitstop_frames", hs_frames))
+	_hitstop = _CombatMath.frames_to_seconds(hs_frames)
 	if attacker != null and attacker.has_method("configure"):
-		attacker._hitstop = _hitstop * 0.5
+		# Synchronized contact: attacker and defender share the same hitstop window.
+		attacker._hitstop = _CombatMath.frames_to_seconds(atk_frames)
 		attacker.combo_count += 1
 		if "aura" in attacker and "fighter_id" in attacker:
 			var gain: float = _AuraIdentity.on_hit_aura_gain(
@@ -1332,6 +1340,14 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 				str(attacker.data.get("combatTag", "")) if "data" in attacker else ""
 			)
 			attacker.aura = minf(100.0, float(attacker.aura) + gain)
+	var reaction: Dictionary = _HitReactionResolver.resolve(self, info, _current_move if attacker == null else (attacker._current_move if attacker != null and "_current_move" in attacker else {}), {})
+	last_reaction_family = str(reaction.get("family", ""))
+	last_reaction_clip = str(reaction.get("clip", ""))
+	last_impact_class = str(info.get("impact_class", info.get("feedback_tier", "")))
+	last_launch_readability = float(info.get("launch_readability", 0.5)) * (1.0 + clampf(damage_percent / 200.0, 0.0, 0.8))
+	info["reaction_family"] = last_reaction_family
+	info["reaction_clip"] = last_reaction_clip
+	# Gameplay states stay the existing hurt/launch set so competitive distances do not change.
 	var heavy = dmg >= 8.0 or launch.length() > 14.0
 	if launch.length() > 14.0:
 		state_machine.enter(_FighterStates.LAUNCHED)
@@ -1339,6 +1355,8 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 		state_machine.enter(_FighterStates.HURT_HEAVY)
 	else:
 		state_machine.enter(_FighterStates.HURT_LIGHT)
+	if model_3d != null and model_3d.has_method("play_clip") and last_reaction_clip != "":
+		model_3d.play_clip(last_reaction_clip)
 	hit_landed.emit(info)
 	# Hit telemetry is recorded by HitResolver.resolve (single source of truth).
 
@@ -1431,6 +1449,10 @@ func debug_combat_summary() -> Dictionary:
 		"stale_window": _recent_move_ids.duplicate(),
 		"impact_readable": last_impact_readable,
 		"feedback_tier": last_feedback_tier,
+		"impact_class": last_impact_class,
+		"reaction_family": last_reaction_family,
+		"reaction_clip": last_reaction_clip,
+		"launch_readability": last_launch_readability,
 		"grab_mash": grab_mash,
 	}
 
@@ -1531,6 +1553,13 @@ func _play_current_animation(state: String) -> void:
 		# Prefer visual_move_id (projectile tier / signature bind) when set.
 		if move_copy.has("visual_move_id") and str(move_copy.get("visual_move_id", "")) != "":
 			move_copy["move_id"] = str(move_copy.get("visual_move_id"))
+		if last_reaction_clip != "" and state in [_FighterStates.HURT_LIGHT, _FighterStates.HURT_HEAVY, _FighterStates.LAUNCHED, _FighterStates.TUMBLE, _FighterStates.HITSTUN, _FighterStates.KO]:
+			move_copy["reaction_clip"] = last_reaction_clip
+		move_copy["attacker_aura"] = aura
+		if model_3d.has_method("get_animation_controller"):
+			var ac = model_3d.get_animation_controller()
+			if ac != null and ac.has_method("set_charge_pct"):
+				ac.set_charge_pct(aura)
 		model_3d.play_for_state(state, move_copy)
 		if model_3d.has_method("set_aura_level"):
 			model_3d.set_aura_level(get_aura_level())

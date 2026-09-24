@@ -19,11 +19,16 @@ const EVENT_VICTORY := "victory_presentation"
 const EVENT_SFX := "sfx"
 const EVENT_RUMBLE := "rumble"
 const EVENT_ACCESSIBILITY := "accessibility_reduce"
+const EVENT_IMPACT_CLASS := "impact_class"
+const EVENT_CONTACT_POSE := "contact_pose"
+const EVENT_HIT_SPARK := "hit_spark"
+const EVENT_WHIFF := "whiff"
 
 var _reduce_flash: bool = false
 var _reduce_shake: bool = false
 var _reduce_particles: bool = false
 var _last_event: Dictionary = {}
+var _last_impact_class: Dictionary = {}
 
 func set_accessibility(flash: bool, shake: bool, particles: bool) -> void:
 	_reduce_flash = flash
@@ -44,10 +49,22 @@ func emit_event(event_name: String, payload: Dictionary = {}) -> void:
 		body["duration_s"] = 0.0
 	if event_name == EVENT_IMPACT_VFX and _reduce_particles:
 		body["suppressed"] = true
-	if event_name in [EVENT_SHIELD_FLASH, EVENT_GRAB_FLASH, EVENT_KO_BURST] and _reduce_flash:
+	if event_name in [EVENT_SHIELD_FLASH, EVENT_GRAB_FLASH, EVENT_KO_BURST, EVENT_HIT_SPARK] and _reduce_flash:
 		body["suppressed"] = true
+		body["screen_flash"] = false
+	if event_name == EVENT_IMPACT_CLASS:
+		_last_impact_class = body.duplicate(true)
 	_last_event = body
 	juice_event.emit(event_name, body)
 
 func get_last_event() -> Dictionary:
 	return _last_event.duplicate(true)
+
+func get_last_impact_class() -> Dictionary:
+	return _last_impact_class.duplicate(true)
+
+func can_reduce_flash() -> bool:
+	return _reduce_flash
+
+func can_reduce_shake() -> bool:
+	return _reduce_shake

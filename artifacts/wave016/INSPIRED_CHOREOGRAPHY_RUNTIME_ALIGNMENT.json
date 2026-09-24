@@ -1,657 +1,1092 @@
 {
-  "schema": "inspired_choreography_runtime_alignment_v1_from_v2",
+  "schema": "inspired_choreography_runtime_alignment_v1",
   "wave": "016",
   "fighter_id": "ember-vale",
-  "tolerance_frames": 3,
-  "aligned": true,
-  "aligned_count": 28,
-  "mismatch_count": 0,
-  "entry_count": 28,
   "entries": [
     {
       "fighter_id": "ember-vale",
       "gameplay_move_id": "jab_1",
       "clip": "jab",
-      "choreography_path": "content/choreography/ember-vale/jab.json",
-      "runtime": {
-        "startup_frames": 3,
-        "active_frames": 2,
-        "recovery_frames": 7,
-        "total_frames": 12,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 21
+      "choreography_present": true,
+      "anticipation_frames": 4,
+      "active_frames": 8,
+      "recovery_frames": 9,
+      "motion_grammar": {
+        "weight": "light",
+        "tempo": "fast",
+        "arc_type": "arc",
+        "contact_points": [
+          "hand_r"
+        ],
+        "silhouette_poses": [
+          "anticipation",
+          "extremum",
+          "recovery"
+        ],
+        "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
       },
-      "choreography": {
-        "anticipation_frames": 4,
-        "active_frames": 8,
-        "recovery_frames": 9,
-        "total_frames": 21
+      "silhouette_poses": [
+        "anticipation",
+        "extremum",
+        "recovery"
+      ],
+      "camera": {
+        "framing": "medium_tight",
+        "push_in": true,
+        "shake_tier": "light"
       },
-      "status": "INTENTIONAL_GAMEPLAY_OVERRIDE",
+      "impact": {
+        "hitstop_tier": "medium",
+        "lane_flash": true,
+        "risk_reward": "diagonal_up"
+      },
+      "vfx_cue": "juice.ember-vale.jab.vfx",
+      "sfx_cue": "juice.ember-vale.jab.sfx",
+      "hitbox_window": {
+        "window_start_frame": 4,
+        "window_end_frame": 12,
+        "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+      },
+      "root_motion_style": "arc",
       "aligned": true
     },
     {
       "fighter_id": "ember-vale",
       "gameplay_move_id": "jab_2",
       "clip": "jab_chain_2",
-      "choreography_path": "content/choreography/ember-vale/jab_chain_2.json",
-      "runtime": {
-        "startup_frames": 3,
-        "active_frames": 2,
-        "recovery_frames": 8,
-        "total_frames": 13,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 22
+      "choreography_present": true,
+      "anticipation_frames": 4,
+      "active_frames": 9,
+      "recovery_frames": 9,
+      "motion_grammar": {
+        "weight": "light",
+        "tempo": "fast",
+        "arc_type": "arc",
+        "contact_points": [
+          "hand_r"
+        ],
+        "silhouette_poses": [
+          "anticipation",
+          "extremum",
+          "recovery"
+        ],
+        "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
       },
-      "choreography": {
-        "anticipation_frames": 4,
-        "active_frames": 9,
-        "recovery_frames": 9,
-        "total_frames": 22
+      "silhouette_poses": [
+        "anticipation",
+        "extremum",
+        "recovery"
+      ],
+      "camera": {
+        "framing": "medium_tight",
+        "push_in": true,
+        "shake_tier": "light"
       },
-      "status": "INTENTIONAL_GAMEPLAY_OVERRIDE",
+      "impact": {
+        "hitstop_tier": "medium",
+        "lane_flash": true,
+        "risk_reward": "diagonal_up"
+      },
+      "vfx_cue": "juice.ember-vale.jab_chain_2.vfx",
+      "sfx_cue": "juice.ember-vale.jab_chain_2.sfx",
+      "hitbox_window": {
+        "window_start_frame": 4,
+        "window_end_frame": 13,
+        "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+      },
+      "root_motion_style": "arc",
       "aligned": true
     },
     {
       "fighter_id": "ember-vale",
       "gameplay_move_id": "jab_finisher",
       "clip": "jab_chain_3",
-      "choreography_path": "content/choreography/ember-vale/jab_chain_3.json",
-      "runtime": {
-        "startup_frames": 4,
-        "active_frames": 3,
-        "recovery_frames": 11,
-        "total_frames": 18,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 18
+      "choreography_present": true,
+      "anticipation_frames": 4,
+      "active_frames": 5,
+      "recovery_frames": 9,
+      "motion_grammar": {
+        "weight": "light",
+        "tempo": "fast",
+        "arc_type": "arc",
+        "contact_points": [
+          "hand_r"
+        ],
+        "silhouette_poses": [
+          "anticipation",
+          "extremum",
+          "recovery"
+        ],
+        "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
       },
-      "choreography": {
-        "anticipation_frames": 4,
-        "active_frames": 5,
-        "recovery_frames": 9,
-        "total_frames": 18
+      "silhouette_poses": [
+        "anticipation",
+        "extremum",
+        "recovery"
+      ],
+      "camera": {
+        "framing": "medium_tight",
+        "push_in": true,
+        "shake_tier": "light"
       },
-      "status": "WITHIN_TOLERANCE",
+      "impact": {
+        "hitstop_tier": "medium",
+        "lane_flash": true,
+        "risk_reward": "diagonal_up"
+      },
+      "vfx_cue": "juice.ember-vale.jab_chain_3.vfx",
+      "sfx_cue": "juice.ember-vale.jab_chain_3.sfx",
+      "hitbox_window": {
+        "window_start_frame": 4,
+        "window_end_frame": 9,
+        "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+      },
+      "root_motion_style": "arc",
       "aligned": true
     },
     {
       "fighter_id": "ember-vale",
       "gameplay_move_id": "forward_tilt",
       "clip": "tilt_forward",
-      "choreography_path": "content/choreography/ember-vale/tilt_forward.json",
-      "runtime": {
-        "startup_frames": 5,
-        "active_frames": 3,
-        "recovery_frames": 11,
-        "total_frames": 19,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 19
+      "choreography_present": true,
+      "anticipation_frames": 4,
+      "active_frames": 6,
+      "recovery_frames": 9,
+      "motion_grammar": {
+        "weight": "light",
+        "tempo": "fast",
+        "arc_type": "arc",
+        "contact_points": [
+          "hand_r"
+        ],
+        "silhouette_poses": [
+          "anticipation",
+          "extremum",
+          "recovery"
+        ],
+        "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
       },
-      "choreography": {
-        "anticipation_frames": 4,
-        "active_frames": 6,
-        "recovery_frames": 9,
-        "total_frames": 19
+      "silhouette_poses": [
+        "anticipation",
+        "extremum",
+        "recovery"
+      ],
+      "camera": {
+        "framing": "medium_tight",
+        "push_in": true,
+        "shake_tier": "light"
       },
-      "status": "WITHIN_TOLERANCE",
+      "impact": {
+        "hitstop_tier": "medium",
+        "lane_flash": true,
+        "risk_reward": "diagonal_up"
+      },
+      "vfx_cue": "juice.ember-vale.tilt_forward.vfx",
+      "sfx_cue": "juice.ember-vale.tilt_forward.sfx",
+      "hitbox_window": {
+        "window_start_frame": 4,
+        "window_end_frame": 10,
+        "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+      },
+      "root_motion_style": "arc",
       "aligned": true
     },
     {
       "fighter_id": "ember-vale",
       "gameplay_move_id": "up_tilt",
       "clip": "tilt_up",
-      "choreography_path": "content/choreography/ember-vale/tilt_up.json",
-      "runtime": {
-        "startup_frames": 5,
-        "active_frames": 3,
-        "recovery_frames": 11,
-        "total_frames": 19,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 20
+      "choreography_present": true,
+      "anticipation_frames": 4,
+      "active_frames": 7,
+      "recovery_frames": 9,
+      "motion_grammar": {
+        "weight": "light",
+        "tempo": "fast",
+        "arc_type": "arc",
+        "contact_points": [
+          "hand_r"
+        ],
+        "silhouette_poses": [
+          "anticipation",
+          "extremum",
+          "recovery"
+        ],
+        "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
       },
-      "choreography": {
-        "anticipation_frames": 4,
-        "active_frames": 7,
-        "recovery_frames": 9,
-        "total_frames": 20
+      "silhouette_poses": [
+        "anticipation",
+        "extremum",
+        "recovery"
+      ],
+      "camera": {
+        "framing": "medium_tight",
+        "push_in": true,
+        "shake_tier": "light"
       },
-      "status": "INTENTIONAL_GAMEPLAY_OVERRIDE",
+      "impact": {
+        "hitstop_tier": "medium",
+        "lane_flash": true,
+        "risk_reward": "diagonal_up"
+      },
+      "vfx_cue": "juice.ember-vale.tilt_up.vfx",
+      "sfx_cue": "juice.ember-vale.tilt_up.sfx",
+      "hitbox_window": {
+        "window_start_frame": 4,
+        "window_end_frame": 11,
+        "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+      },
+      "root_motion_style": "arc",
       "aligned": true
     },
     {
       "fighter_id": "ember-vale",
       "gameplay_move_id": "down_tilt",
       "clip": "tilt_down",
-      "choreography_path": "content/choreography/ember-vale/tilt_down.json",
-      "runtime": {
-        "startup_frames": 4,
-        "active_frames": 3,
-        "recovery_frames": 10,
-        "total_frames": 17,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 21
+      "choreography_present": true,
+      "anticipation_frames": 4,
+      "active_frames": 8,
+      "recovery_frames": 9,
+      "motion_grammar": {
+        "weight": "light",
+        "tempo": "fast",
+        "arc_type": "arc",
+        "contact_points": [
+          "hand_r"
+        ],
+        "silhouette_poses": [
+          "anticipation",
+          "extremum",
+          "recovery"
+        ],
+        "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
       },
-      "choreography": {
-        "anticipation_frames": 4,
-        "active_frames": 8,
-        "recovery_frames": 9,
-        "total_frames": 21
+      "silhouette_poses": [
+        "anticipation",
+        "extremum",
+        "recovery"
+      ],
+      "camera": {
+        "framing": "medium_tight",
+        "push_in": true,
+        "shake_tier": "light"
       },
-      "status": "INTENTIONAL_GAMEPLAY_OVERRIDE",
+      "impact": {
+        "hitstop_tier": "medium",
+        "lane_flash": true,
+        "risk_reward": "diagonal_up"
+      },
+      "vfx_cue": "juice.ember-vale.tilt_down.vfx",
+      "sfx_cue": "juice.ember-vale.tilt_down.sfx",
+      "hitbox_window": {
+        "window_start_frame": 4,
+        "window_end_frame": 12,
+        "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+      },
+      "root_motion_style": "arc",
       "aligned": true
     },
     {
       "fighter_id": "ember-vale",
       "gameplay_move_id": "dash_attack",
       "clip": "heavy",
-      "choreography_path": "content/choreography/ember-vale/heavy.json",
-      "runtime": {
-        "startup_frames": 5,
-        "active_frames": 4,
-        "recovery_frames": 15,
-        "total_frames": 24,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 20
+      "choreography_present": true,
+      "anticipation_frames": 4,
+      "active_frames": 7,
+      "recovery_frames": 9,
+      "motion_grammar": {
+        "weight": "light",
+        "tempo": "fast",
+        "arc_type": "arc",
+        "contact_points": [
+          "hand_r"
+        ],
+        "silhouette_poses": [
+          "anticipation",
+          "extremum",
+          "recovery"
+        ],
+        "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
       },
-      "choreography": {
-        "anticipation_frames": 4,
-        "active_frames": 7,
-        "recovery_frames": 9,
-        "total_frames": 20
+      "silhouette_poses": [
+        "anticipation",
+        "extremum",
+        "recovery"
+      ],
+      "camera": {
+        "framing": "medium_tight",
+        "push_in": true,
+        "shake_tier": "light"
       },
-      "status": "INTENTIONAL_GAMEPLAY_OVERRIDE",
+      "impact": {
+        "hitstop_tier": "medium",
+        "lane_flash": true,
+        "risk_reward": "diagonal_up"
+      },
+      "vfx_cue": "juice.ember-vale.heavy.vfx",
+      "sfx_cue": "juice.ember-vale.heavy.sfx",
+      "hitbox_window": {
+        "window_start_frame": 4,
+        "window_end_frame": 11,
+        "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+      },
+      "root_motion_style": "arc",
       "aligned": true
     },
     {
       "fighter_id": "ember-vale",
       "gameplay_move_id": "neutral_air",
       "clip": "aerial_neutral",
-      "choreography_path": "content/choreography/ember-vale/aerial_neutral.json",
-      "runtime": {
-        "startup_frames": 3,
-        "active_frames": 3,
-        "recovery_frames": 9,
-        "total_frames": 15,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 20
+      "choreography_present": true,
+      "anticipation_frames": 4,
+      "active_frames": 7,
+      "recovery_frames": 9,
+      "motion_grammar": {
+        "weight": "light",
+        "tempo": "fast",
+        "arc_type": "arc",
+        "contact_points": [
+          "hand_r"
+        ],
+        "silhouette_poses": [
+          "anticipation",
+          "extremum",
+          "recovery"
+        ],
+        "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
       },
-      "choreography": {
-        "anticipation_frames": 4,
-        "active_frames": 7,
-        "recovery_frames": 9,
-        "total_frames": 20
+      "silhouette_poses": [
+        "anticipation",
+        "extremum",
+        "recovery"
+      ],
+      "camera": {
+        "framing": "medium_tight",
+        "push_in": true,
+        "shake_tier": "light"
       },
-      "status": "INTENTIONAL_GAMEPLAY_OVERRIDE",
+      "impact": {
+        "hitstop_tier": "medium",
+        "lane_flash": true,
+        "risk_reward": "diagonal_up"
+      },
+      "vfx_cue": "juice.ember-vale.aerial_neutral.vfx",
+      "sfx_cue": "juice.ember-vale.aerial_neutral.sfx",
+      "hitbox_window": {
+        "window_start_frame": 4,
+        "window_end_frame": 11,
+        "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+      },
+      "root_motion_style": "arc",
       "aligned": true
     },
     {
       "fighter_id": "ember-vale",
       "gameplay_move_id": "forward_air",
       "clip": "aerial_forward",
-      "choreography_path": "content/choreography/ember-vale/aerial_forward.json",
-      "runtime": {
-        "startup_frames": 4,
-        "active_frames": 3,
-        "recovery_frames": 10,
-        "total_frames": 17,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 21
+      "choreography_present": true,
+      "anticipation_frames": 4,
+      "active_frames": 8,
+      "recovery_frames": 9,
+      "motion_grammar": {
+        "weight": "light",
+        "tempo": "fast",
+        "arc_type": "arc",
+        "contact_points": [
+          "hand_r"
+        ],
+        "silhouette_poses": [
+          "anticipation",
+          "extremum",
+          "recovery"
+        ],
+        "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
       },
-      "choreography": {
-        "anticipation_frames": 4,
-        "active_frames": 8,
-        "recovery_frames": 9,
-        "total_frames": 21
+      "silhouette_poses": [
+        "anticipation",
+        "extremum",
+        "recovery"
+      ],
+      "camera": {
+        "framing": "medium_tight",
+        "push_in": true,
+        "shake_tier": "light"
       },
-      "status": "INTENTIONAL_GAMEPLAY_OVERRIDE",
+      "impact": {
+        "hitstop_tier": "medium",
+        "lane_flash": true,
+        "risk_reward": "diagonal_up"
+      },
+      "vfx_cue": "juice.ember-vale.aerial_forward.vfx",
+      "sfx_cue": "juice.ember-vale.aerial_forward.sfx",
+      "hitbox_window": {
+        "window_start_frame": 4,
+        "window_end_frame": 12,
+        "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+      },
+      "root_motion_style": "arc",
       "aligned": true
     },
     {
       "fighter_id": "ember-vale",
       "gameplay_move_id": "back_air",
       "clip": "aerial_back",
-      "choreography_path": "content/choreography/ember-vale/aerial_back.json",
-      "runtime": {
-        "startup_frames": 4,
-        "active_frames": 3,
-        "recovery_frames": 10,
-        "total_frames": 17,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 22
+      "choreography_present": true,
+      "anticipation_frames": 4,
+      "active_frames": 9,
+      "recovery_frames": 9,
+      "motion_grammar": {
+        "weight": "light",
+        "tempo": "fast",
+        "arc_type": "arc",
+        "contact_points": [
+          "hand_r"
+        ],
+        "silhouette_poses": [
+          "anticipation",
+          "extremum",
+          "recovery"
+        ],
+        "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
       },
-      "choreography": {
-        "anticipation_frames": 4,
-        "active_frames": 9,
-        "recovery_frames": 9,
-        "total_frames": 22
+      "silhouette_poses": [
+        "anticipation",
+        "extremum",
+        "recovery"
+      ],
+      "camera": {
+        "framing": "medium_tight",
+        "push_in": true,
+        "shake_tier": "light"
       },
-      "status": "INTENTIONAL_GAMEPLAY_OVERRIDE",
+      "impact": {
+        "hitstop_tier": "medium",
+        "lane_flash": true,
+        "risk_reward": "diagonal_up"
+      },
+      "vfx_cue": "juice.ember-vale.aerial_back.vfx",
+      "sfx_cue": "juice.ember-vale.aerial_back.sfx",
+      "hitbox_window": {
+        "window_start_frame": 4,
+        "window_end_frame": 13,
+        "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+      },
+      "root_motion_style": "arc",
       "aligned": true
     },
     {
       "fighter_id": "ember-vale",
       "gameplay_move_id": "up_air",
       "clip": "aerial_up",
-      "choreography_path": "content/choreography/ember-vale/aerial_up.json",
-      "runtime": {
-        "startup_frames": 4,
-        "active_frames": 3,
-        "recovery_frames": 10,
-        "total_frames": 17,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 18
+      "choreography_present": true,
+      "anticipation_frames": 4,
+      "active_frames": 5,
+      "recovery_frames": 9,
+      "motion_grammar": {
+        "weight": "light",
+        "tempo": "fast",
+        "arc_type": "arc",
+        "contact_points": [
+          "hand_r"
+        ],
+        "silhouette_poses": [
+          "anticipation",
+          "extremum",
+          "recovery"
+        ],
+        "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
       },
-      "choreography": {
-        "anticipation_frames": 4,
-        "active_frames": 5,
-        "recovery_frames": 9,
-        "total_frames": 18
+      "silhouette_poses": [
+        "anticipation",
+        "extremum",
+        "recovery"
+      ],
+      "camera": {
+        "framing": "medium_tight",
+        "push_in": true,
+        "shake_tier": "light"
       },
-      "status": "WITHIN_TOLERANCE",
+      "impact": {
+        "hitstop_tier": "medium",
+        "lane_flash": true,
+        "risk_reward": "diagonal_up"
+      },
+      "vfx_cue": "juice.ember-vale.aerial_up.vfx",
+      "sfx_cue": "juice.ember-vale.aerial_up.sfx",
+      "hitbox_window": {
+        "window_start_frame": 4,
+        "window_end_frame": 9,
+        "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+      },
+      "root_motion_style": "arc",
       "aligned": true
     },
     {
       "fighter_id": "ember-vale",
       "gameplay_move_id": "down_air",
       "clip": "aerial_down",
-      "choreography_path": "content/choreography/ember-vale/aerial_down.json",
-      "runtime": {
-        "startup_frames": 4,
-        "active_frames": 3,
-        "recovery_frames": 10,
-        "total_frames": 17,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 19
+      "choreography_present": true,
+      "anticipation_frames": 4,
+      "active_frames": 6,
+      "recovery_frames": 9,
+      "motion_grammar": {
+        "weight": "light",
+        "tempo": "fast",
+        "arc_type": "arc",
+        "contact_points": [
+          "hand_r"
+        ],
+        "silhouette_poses": [
+          "anticipation",
+          "extremum",
+          "recovery"
+        ],
+        "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
       },
-      "choreography": {
-        "anticipation_frames": 4,
-        "active_frames": 6,
-        "recovery_frames": 9,
-        "total_frames": 19
+      "silhouette_poses": [
+        "anticipation",
+        "extremum",
+        "recovery"
+      ],
+      "camera": {
+        "framing": "medium_tight",
+        "push_in": true,
+        "shake_tier": "light"
       },
-      "status": "WITHIN_TOLERANCE",
+      "impact": {
+        "hitstop_tier": "medium",
+        "lane_flash": true,
+        "risk_reward": "diagonal_up"
+      },
+      "vfx_cue": "juice.ember-vale.aerial_down.vfx",
+      "sfx_cue": "juice.ember-vale.aerial_down.sfx",
+      "hitbox_window": {
+        "window_start_frame": 4,
+        "window_end_frame": 10,
+        "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+      },
+      "root_motion_style": "arc",
       "aligned": true
     },
     {
       "fighter_id": "ember-vale",
       "gameplay_move_id": "neutral_special_projectile",
       "clip": "projectile_full",
-      "choreography_path": "content/choreography/ember-vale/projectile_full.json",
-      "runtime": {
-        "startup_frames": 5,
-        "active_frames": 2,
-        "recovery_frames": 14,
-        "total_frames": 21,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 20
+      "choreography_present": true,
+      "anticipation_frames": 5,
+      "active_frames": 5,
+      "recovery_frames": 10,
+      "motion_grammar": {
+        "weight": "light",
+        "tempo": "fast",
+        "arc_type": "arc",
+        "contact_points": [
+          "hand_r"
+        ],
+        "silhouette_poses": [
+          "anticipation",
+          "extremum",
+          "recovery"
+        ],
+        "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
       },
-      "choreography": {
-        "anticipation_frames": 5,
-        "active_frames": 5,
-        "recovery_frames": 10,
-        "total_frames": 20
+      "silhouette_poses": [
+        "anticipation",
+        "extremum",
+        "recovery"
+      ],
+      "camera": {
+        "framing": "medium_tight",
+        "push_in": true,
+        "shake_tier": "light"
       },
-      "status": "INTENTIONAL_GAMEPLAY_OVERRIDE",
+      "impact": {
+        "hitstop_tier": "medium",
+        "lane_flash": true,
+        "risk_reward": "diagonal_up"
+      },
+      "vfx_cue": "juice.ember-vale.projectile_full.vfx",
+      "sfx_cue": "juice.ember-vale.projectile_full.sfx",
+      "hitbox_window": {
+        "window_start_frame": 5,
+        "window_end_frame": 10,
+        "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+      },
+      "root_motion_style": "arc",
       "aligned": true
     },
     {
       "fighter_id": "ember-vale",
       "gameplay_move_id": "side_special",
       "clip": "signature_lane_feint",
-      "choreography_path": "content/choreography/ember-vale/signature_lane_feint.json",
-      "runtime": {
-        "startup_frames": 6,
-        "active_frames": 4,
-        "recovery_frames": 16,
-        "total_frames": 26,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 14
+      "choreography_present": true,
+      "anticipation_frames": 3,
+      "active_frames": 3,
+      "recovery_frames": 5,
+      "motion_grammar": {
+        "weight": "light",
+        "tempo": "fast",
+        "arc_type": "arc",
+        "contact_points": [
+          "foot_l"
+        ],
+        "silhouette_poses": [
+          "anticipation",
+          "extremum",
+          "recovery"
+        ],
+        "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
       },
-      "choreography": {
-        "anticipation_frames": 3,
-        "active_frames": 3,
-        "recovery_frames": 5,
-        "total_frames": 14
+      "silhouette_poses": [
+        "anticipation",
+        "extremum",
+        "recovery"
+      ],
+      "camera": {
+        "framing": "medium",
+        "push_in": false,
+        "shake_tier": "medium"
       },
-      "status": "INTENTIONAL_GAMEPLAY_OVERRIDE",
+      "impact": {
+        "hitstop_tier": "medium",
+        "lane_flash": true,
+        "risk_reward": "diagonal_up"
+      },
+      "vfx_cue": "juice.ember-vale.signature_lane_feint.vfx",
+      "sfx_cue": "juice.ember-vale.signature_lane_feint.sfx",
+      "hitbox_window": {
+        "window_start_frame": 3,
+        "window_end_frame": 6,
+        "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+      },
+      "root_motion_style": "arc",
       "aligned": true
     },
     {
       "fighter_id": "ember-vale",
       "gameplay_move_id": "up_special_recovery",
       "clip": "recovery",
-      "choreography_path": "content/choreography/ember-vale/recovery.json",
-      "runtime": {
-        "startup_frames": 5,
-        "active_frames": 4,
-        "recovery_frames": 18,
-        "total_frames": 27,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 17
+      "choreography_present": true,
+      "anticipation_frames": 3,
+      "active_frames": 6,
+      "recovery_frames": 8,
+      "motion_grammar": {
+        "weight": "light",
+        "tempo": "fast",
+        "arc_type": "arc",
+        "contact_points": [
+          "root"
+        ],
+        "silhouette_poses": [
+          "anticipation",
+          "extremum",
+          "recovery"
+        ],
+        "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
       },
-      "choreography": {
-        "anticipation_frames": 3,
-        "active_frames": 6,
-        "recovery_frames": 8,
-        "total_frames": 17
+      "silhouette_poses": [
+        "anticipation",
+        "extremum",
+        "recovery"
+      ],
+      "camera": {
+        "framing": "medium_tight",
+        "push_in": false,
+        "shake_tier": "light"
       },
-      "status": "INTENTIONAL_GAMEPLAY_OVERRIDE",
+      "impact": {
+        "hitstop_tier": "medium",
+        "lane_flash": true,
+        "risk_reward": "diagonal_up"
+      },
+      "vfx_cue": "juice.ember-vale.recovery.vfx",
+      "sfx_cue": "juice.ember-vale.recovery.sfx",
+      "hitbox_window": {
+        "window_start_frame": 3,
+        "window_end_frame": 9,
+        "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+      },
+      "root_motion_style": "arc",
       "aligned": true
     },
     {
       "fighter_id": "ember-vale",
       "gameplay_move_id": "down_special",
       "clip": "signature_lane_trap",
-      "choreography_path": "content/choreography/ember-vale/signature_lane_trap.json",
-      "runtime": {
-        "startup_frames": 7,
-        "active_frames": 5,
-        "recovery_frames": 20,
-        "total_frames": 32,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 36
+      "choreography_present": true,
+      "anticipation_frames": 10,
+      "active_frames": 6,
+      "recovery_frames": 14,
+      "motion_grammar": {
+        "weight": "light",
+        "tempo": "fast",
+        "arc_type": "arc",
+        "contact_points": [
+          "root",
+          "hand_l"
+        ],
+        "silhouette_poses": [
+          "anticipation",
+          "extremum",
+          "recovery"
+        ],
+        "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
       },
-      "choreography": {
-        "anticipation_frames": 10,
-        "active_frames": 6,
-        "recovery_frames": 14,
-        "total_frames": 36
+      "silhouette_poses": [
+        "anticipation",
+        "extremum",
+        "recovery"
+      ],
+      "camera": {
+        "framing": "medium",
+        "push_in": false,
+        "shake_tier": "medium"
       },
-      "status": "INTENTIONAL_GAMEPLAY_OVERRIDE",
+      "impact": {
+        "hitstop_tier": "medium",
+        "lane_flash": true,
+        "risk_reward": "diagonal_up"
+      },
+      "vfx_cue": "juice.ember-vale.signature_lane_trap.vfx",
+      "sfx_cue": "juice.ember-vale.signature_lane_trap.sfx",
+      "hitbox_window": {
+        "window_start_frame": 10,
+        "window_end_frame": 16,
+        "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+      },
+      "root_motion_style": "arc",
       "aligned": true
     },
     {
       "fighter_id": "ember-vale",
       "gameplay_move_id": "grab",
       "clip": "grab",
-      "choreography_path": "content/choreography/ember-vale/grab.json",
-      "runtime": {
-        "startup_frames": 5,
-        "active_frames": 3,
-        "recovery_frames": 18,
-        "total_frames": 26,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 20
+      "choreography_present": true,
+      "anticipation_frames": 4,
+      "active_frames": 7,
+      "recovery_frames": 9,
+      "motion_grammar": {
+        "weight": "light",
+        "tempo": "fast",
+        "arc_type": "arc",
+        "contact_points": [
+          "hand_r"
+        ],
+        "silhouette_poses": [
+          "anticipation",
+          "extremum",
+          "recovery"
+        ],
+        "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
       },
-      "choreography": {
-        "anticipation_frames": 4,
-        "active_frames": 7,
-        "recovery_frames": 9,
-        "total_frames": 20
+      "silhouette_poses": [
+        "anticipation",
+        "extremum",
+        "recovery"
+      ],
+      "camera": {
+        "framing": "medium_tight",
+        "push_in": true,
+        "shake_tier": "light"
       },
-      "status": "INTENTIONAL_GAMEPLAY_OVERRIDE",
+      "impact": {
+        "hitstop_tier": "medium",
+        "lane_flash": true,
+        "risk_reward": "diagonal_up"
+      },
+      "vfx_cue": "juice.ember-vale.grab.vfx",
+      "sfx_cue": "juice.ember-vale.grab.sfx",
+      "hitbox_window": {
+        "window_start_frame": 4,
+        "window_end_frame": 11,
+        "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+      },
+      "root_motion_style": "arc",
       "aligned": true
     },
     {
       "fighter_id": "ember-vale",
       "gameplay_move_id": "throw_forward",
       "clip": "throw_forward",
-      "choreography_path": "content/choreography/ember-vale/throw_forward.json",
-      "runtime": {
-        "startup_frames": 4,
-        "active_frames": 2,
-        "recovery_frames": 12,
-        "total_frames": 18,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 21
+      "choreography_present": true,
+      "anticipation_frames": 4,
+      "active_frames": 8,
+      "recovery_frames": 9,
+      "motion_grammar": {
+        "weight": "light",
+        "tempo": "fast",
+        "arc_type": "arc",
+        "contact_points": [
+          "hand_r"
+        ],
+        "silhouette_poses": [
+          "anticipation",
+          "extremum",
+          "recovery"
+        ],
+        "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
       },
-      "choreography": {
-        "anticipation_frames": 4,
-        "active_frames": 8,
-        "recovery_frames": 9,
-        "total_frames": 21
+      "silhouette_poses": [
+        "anticipation",
+        "extremum",
+        "recovery"
+      ],
+      "camera": {
+        "framing": "medium_tight",
+        "push_in": true,
+        "shake_tier": "light"
       },
-      "status": "INTENTIONAL_GAMEPLAY_OVERRIDE",
+      "impact": {
+        "hitstop_tier": "medium",
+        "lane_flash": true,
+        "risk_reward": "diagonal_up"
+      },
+      "vfx_cue": "juice.ember-vale.throw_forward.vfx",
+      "sfx_cue": "juice.ember-vale.throw_forward.sfx",
+      "hitbox_window": {
+        "window_start_frame": 4,
+        "window_end_frame": 12,
+        "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+      },
+      "root_motion_style": "arc",
       "aligned": true
     },
     {
       "fighter_id": "ember-vale",
       "gameplay_move_id": "throw_back",
       "clip": "throw_back",
-      "choreography_path": "content/choreography/ember-vale/throw_back.json",
-      "runtime": {
-        "startup_frames": 5,
-        "active_frames": 2,
-        "recovery_frames": 13,
-        "total_frames": 20,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 22
+      "choreography_present": true,
+      "anticipation_frames": 4,
+      "active_frames": 9,
+      "recovery_frames": 9,
+      "motion_grammar": {
+        "weight": "light",
+        "tempo": "fast",
+        "arc_type": "arc",
+        "contact_points": [
+          "hand_r"
+        ],
+        "silhouette_poses": [
+          "anticipation",
+          "extremum",
+          "recovery"
+        ],
+        "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
       },
-      "choreography": {
-        "anticipation_frames": 4,
-        "active_frames": 9,
-        "recovery_frames": 9,
-        "total_frames": 22
+      "silhouette_poses": [
+        "anticipation",
+        "extremum",
+        "recovery"
+      ],
+      "camera": {
+        "framing": "medium_tight",
+        "push_in": true,
+        "shake_tier": "light"
       },
-      "status": "INTENTIONAL_GAMEPLAY_OVERRIDE",
+      "impact": {
+        "hitstop_tier": "medium",
+        "lane_flash": true,
+        "risk_reward": "diagonal_up"
+      },
+      "vfx_cue": "juice.ember-vale.throw_back.vfx",
+      "sfx_cue": "juice.ember-vale.throw_back.sfx",
+      "hitbox_window": {
+        "window_start_frame": 4,
+        "window_end_frame": 13,
+        "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+      },
+      "root_motion_style": "arc",
       "aligned": true
     },
     {
       "fighter_id": "ember-vale",
       "gameplay_move_id": "throw_up",
       "clip": "throw_up",
-      "choreography_path": "content/choreography/ember-vale/throw_up.json",
-      "runtime": {
-        "startup_frames": 4,
-        "active_frames": 2,
-        "recovery_frames": 12,
-        "total_frames": 18,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 18
+      "choreography_present": true,
+      "anticipation_frames": 4,
+      "active_frames": 5,
+      "recovery_frames": 9,
+      "motion_grammar": {
+        "weight": "light",
+        "tempo": "fast",
+        "arc_type": "arc",
+        "contact_points": [
+          "hand_r"
+        ],
+        "silhouette_poses": [
+          "anticipation",
+          "extremum",
+          "recovery"
+        ],
+        "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
       },
-      "choreography": {
-        "anticipation_frames": 4,
-        "active_frames": 5,
-        "recovery_frames": 9,
-        "total_frames": 18
+      "silhouette_poses": [
+        "anticipation",
+        "extremum",
+        "recovery"
+      ],
+      "camera": {
+        "framing": "medium_tight",
+        "push_in": true,
+        "shake_tier": "light"
       },
-      "status": "WITHIN_TOLERANCE",
+      "impact": {
+        "hitstop_tier": "medium",
+        "lane_flash": true,
+        "risk_reward": "diagonal_up"
+      },
+      "vfx_cue": "juice.ember-vale.throw_up.vfx",
+      "sfx_cue": "juice.ember-vale.throw_up.sfx",
+      "hitbox_window": {
+        "window_start_frame": 4,
+        "window_end_frame": 9,
+        "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+      },
+      "root_motion_style": "arc",
       "aligned": true
     },
     {
       "fighter_id": "ember-vale",
       "gameplay_move_id": "throw_down",
       "clip": "throw_down",
-      "choreography_path": "content/choreography/ember-vale/throw_down.json",
-      "runtime": {
-        "startup_frames": 5,
-        "active_frames": 3,
-        "recovery_frames": 14,
-        "total_frames": 22,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 19
+      "choreography_present": true,
+      "anticipation_frames": 4,
+      "active_frames": 6,
+      "recovery_frames": 9,
+      "motion_grammar": {
+        "weight": "light",
+        "tempo": "fast",
+        "arc_type": "arc",
+        "contact_points": [
+          "hand_r"
+        ],
+        "silhouette_poses": [
+          "anticipation",
+          "extremum",
+          "recovery"
+        ],
+        "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
       },
-      "choreography": {
-        "anticipation_frames": 4,
-        "active_frames": 6,
-        "recovery_frames": 9,
-        "total_frames": 19
+      "silhouette_poses": [
+        "anticipation",
+        "extremum",
+        "recovery"
+      ],
+      "camera": {
+        "framing": "medium_tight",
+        "push_in": true,
+        "shake_tier": "light"
       },
-      "status": "INTENTIONAL_GAMEPLAY_OVERRIDE",
+      "impact": {
+        "hitstop_tier": "medium",
+        "lane_flash": true,
+        "risk_reward": "diagonal_up"
+      },
+      "vfx_cue": "juice.ember-vale.throw_down.vfx",
+      "sfx_cue": "juice.ember-vale.throw_down.sfx",
+      "hitbox_window": {
+        "window_start_frame": 4,
+        "window_end_frame": 10,
+        "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+      },
+      "root_motion_style": "arc",
       "aligned": true
     },
     {
       "fighter_id": "ember-vale",
       "gameplay_move_id": "aura_charge",
       "clip": "aura_charge",
-      "choreography_path": "content/choreography/ember-vale/aura_charge.json",
-      "runtime": {
-        "startup_frames": 0,
-        "active_frames": 0,
-        "recovery_frames": 0,
-        "total_frames": 0,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 21
+      "choreography_present": true,
+      "anticipation_frames": 5,
+      "active_frames": 6,
+      "recovery_frames": 10,
+      "motion_grammar": {
+        "weight": "light",
+        "tempo": "fast",
+        "arc_type": "arc",
+        "contact_points": [
+          "hand_r"
+        ],
+        "silhouette_poses": [
+          "anticipation",
+          "extremum",
+          "recovery"
+        ],
+        "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
       },
-      "choreography": {
-        "anticipation_frames": 5,
-        "active_frames": 6,
-        "recovery_frames": 10,
-        "total_frames": 21
+      "silhouette_poses": [
+        "anticipation",
+        "extremum",
+        "recovery"
+      ],
+      "camera": {
+        "framing": "medium_tight",
+        "push_in": true,
+        "shake_tier": "light"
       },
-      "status": "INTENTIONAL_GAMEPLAY_OVERRIDE",
+      "impact": {
+        "hitstop_tier": "aura",
+        "lane_flash": true,
+        "risk_reward": "diagonal_up"
+      },
+      "vfx_cue": "juice.ember-vale.aura_charge.vfx",
+      "sfx_cue": "juice.ember-vale.aura_charge.sfx",
+      "hitbox_window": {
+        "window_start_frame": 5,
+        "window_end_frame": 11,
+        "notes": "aligned via runtime_alignment.hitbox_phase_sync"
+      },
+      "root_motion_style": "arc",
       "aligned": true
     },
     {
       "fighter_id": "ember-vale",
       "gameplay_move_id": "aura_burst",
       "clip": "signature_lane_burst",
-      "choreography_path": "content/choreography/ember-vale/signature_lane_burst.json",
-      "runtime": {
-        "startup_frames": 10,
-        "active_frames": 6,
-        "recovery_frames": 24,
-        "total_frames": 40,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 28
+      "choreography_present": true,
+      "anticipation_frames": 4,
+      "active_frames": 8,
+      "recovery_frames": 10,
+      "motion_grammar": {
+        "weight": "light",
+        "tempo": "fast",
+        "arc_type": "arc",
+        "contact_points": [
+          "foot_r",
+          "hand_r"
+        ],
+        "silhouette_poses": [
+          "anticipation",
+          "extremum",
+          "recovery"
+        ],
+        "fighter_motion_grammar": "acceleration bursts, forward lean, heat-trail follow-through"
       },
-      "choreography": {
-        "anticipation_frames": 4,
-        "active_frames": 8,
-        "recovery_frames": 10,
-        "total_frames": 28
+      "silhouette_poses": [
+        "anticipation",
+        "extremum",
+        "recovery"
+      ],
+      "camera": {
+        "framing": "medium_tight",
+        "push_in": true,
+        "shake_tier": "medium"
       },
-      "status": "INTENTIONAL_GAMEPLAY_OVERRIDE",
-      "aligned": true
-    },
-    {
-      "fighter_id": "ember-vale",
-      "gameplay_move_id": "signature_lane_confirm",
-      "clip": "signature_lane_confirm",
-      "choreography_path": "content/choreography/ember-vale/signature_lane_confirm.json",
-      "runtime": {
-        "startup_frames": null,
-        "active_frames": null,
-        "recovery_frames": null,
-        "total_frames": null,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 22
+      "impact": {
+        "hitstop_tier": "medium",
+        "lane_flash": true,
+        "risk_reward": "diagonal_up"
       },
-      "choreography": {
-        "anticipation_frames": 8,
-        "active_frames": 4,
-        "recovery_frames": 6,
-        "total_frames": 22
+      "vfx_cue": "juice.ember-vale.signature_lane_burst.vfx",
+      "sfx_cue": "juice.ember-vale.signature_lane_burst.sfx",
+      "hitbox_window": {
+        "window_start_frame": 4,
+        "window_end_frame": 12,
+        "notes": "aligned via runtime_alignment.hitbox_phase_sync"
       },
-      "status": "EXACT",
-      "aligned": true
-    },
-    {
-      "fighter_id": "ember-vale",
-      "gameplay_move_id": "signature_lane_control",
-      "clip": "signature_lane_control",
-      "choreography_path": "content/choreography/ember-vale/signature_lane_control.json",
-      "runtime": {
-        "startup_frames": null,
-        "active_frames": null,
-        "recovery_frames": null,
-        "total_frames": null,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 32
-      },
-      "choreography": {
-        "anticipation_frames": 6,
-        "active_frames": 12,
-        "recovery_frames": 8,
-        "total_frames": 32
-      },
-      "status": "EXACT",
-      "aligned": true
-    },
-    {
-      "fighter_id": "ember-vale",
-      "gameplay_move_id": "signature_lane_counter",
-      "clip": "signature_lane_counter",
-      "choreography_path": "content/choreography/ember-vale/signature_lane_counter.json",
-      "runtime": {
-        "startup_frames": null,
-        "active_frames": null,
-        "recovery_frames": null,
-        "total_frames": null,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 20
-      },
-      "choreography": {
-        "anticipation_frames": 2,
-        "active_frames": 6,
-        "recovery_frames": 8,
-        "total_frames": 20
-      },
-      "status": "EXACT",
-      "aligned": true
-    },
-    {
-      "fighter_id": "ember-vale",
-      "gameplay_move_id": "signature_lane_finisher",
-      "clip": "signature_lane_finisher",
-      "choreography_path": "content/choreography/ember-vale/signature_lane_finisher.json",
-      "runtime": {
-        "startup_frames": null,
-        "active_frames": null,
-        "recovery_frames": null,
-        "total_frames": null,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 48
-      },
-      "choreography": {
-        "anticipation_frames": 12,
-        "active_frames": 14,
-        "recovery_frames": 18,
-        "total_frames": 48
-      },
-      "status": "EXACT",
-      "aligned": true
-    },
-    {
-      "fighter_id": "ember-vale",
-      "gameplay_move_id": "signature_lane_launch",
-      "clip": "signature_lane_launch",
-      "choreography_path": "content/choreography/ember-vale/signature_lane_launch.json",
-      "runtime": {
-        "startup_frames": null,
-        "active_frames": null,
-        "recovery_frames": null,
-        "total_frames": null,
-        "hitbox_start": null,
-        "hitbox_end": null,
-        "clip_duration_frames": 30
-      },
-      "choreography": {
-        "anticipation_frames": 5,
-        "active_frames": 10,
-        "recovery_frames": 12,
-        "total_frames": 30
-      },
-      "status": "EXACT",
+      "root_motion_style": "arc",
       "aligned": true
     }
   ],
-  "CURSOR_MERGED_NOTHING": true
+  "aligned_count": 23,
+  "total": 23
 }

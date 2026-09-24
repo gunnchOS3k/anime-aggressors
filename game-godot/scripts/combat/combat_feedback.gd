@@ -4,6 +4,9 @@ class_name CombatFeedback
 ## Data-driven hit feedback: hitstop, camera, VFX, Path A procedural SFX.
 
 const _ProceduralAudio = preload("res://scripts/audio/procedural_audio_bank.gd")
+const _ImpactResolver = preload("res://scripts/combat/impact_profile_resolver.gd")
+const _PoseContract = preload("res://scripts/visual/animation_pose_contract.gd")
+const _Cinematic = preload("res://scripts/combat/combat_cinematic_director.gd")
 
 signal feedback_triggered(info: Dictionary)
 
@@ -19,6 +22,7 @@ const TIER_HITSTOP := {
 	"heavy": {"min": 7, "max": 10},
 	"aura": {"min": 10, "max": 13},
 	"super": {"min": 13, "max": 16},
+	"ko": {"min": 16, "max": 20},
 }
 
 const TIER_SHAKE := {
@@ -27,6 +31,7 @@ const TIER_SHAKE := {
 	"heavy": 8.0,
 	"aura": 10.0,
 	"super": 14.0,
+	"ko": 16.0,
 }
 
 func _ready() -> void:
@@ -44,26 +49,87 @@ func bind_camera(cam: Camera2D) -> void:
 
 func apply_hit(attacker: Node, defender: Node, move: Dictionary, info: Dictionary) -> Dictionary:
 	var fb: Dictionary = move.get("feedback", {})
-	var tier: String = fb.get("tier", "light")
-	var hitstop: int = int(fb.get("hitstop_frames", info.get("hitstop_frames", 3)))
+	var ctx := {
+		"blocked": bool(info.get("blocked", false)),
+		"whiff": bool(info.get("whiff", false)),
+		"is_ko": bool(info.get("is_ko", false)),
+		"attacker_aura": 0.0,
+		"aura_ready": false,
+	}
+	if attacker != null and attacker.has_method("get_aura"):
+		ctx["attacker_aura"] = float(attacker.get_aura())
+	if Engine.get_main_loop() != null:
+		var gs = Engine.get_main_loop().root.get_node_or_null("/root/GameState")
+		if gs != null and "training_aura_threshold" in gs:
+			ctx["aura_threshold"] = float(gs.training_aura_threshold)
+	var profile: Dictionary = _ImpactResolver.resolve(move, ctx)
+	var tier: String = str(profile.get("tier", fb.get("tier", "light")))
+	var hitstop: int = int(profile.get("hitstop_frames", fb.get("hitstop_frames", info.get("hitstop_frames", 3))))
 	if hitstop <= 0:
 		hitstop = _default_hitstop(tier)
+	# Synchronized hitstop: attacker and defender acknowledge the same contact.
+	var attacker_hs := int(profile.get("attacker_hitstop_frames", hitstop))
+	var defender_hs := int(profile.get("defender_hitstop_frames", hitstop))
+	if bool(profile.get("hitstop_sync", true)):
+		attacker_hs = hitstop
+		defender_hs = hitstop
 	var result := info.duplicate(true)
 	result["hitstop_frames"] = hitstop
+	result["attacker_hitstop_frames"] = attacker_hs
+	result["defender_hitstop_frames"] = defender_hs
+	result["hitstop_sync"] = attacker_hs == defender_hs
 	result["feedback_tier"] = tier
+	result["impact_profile"] = profile
+	result["impact_class"] = str(profile.get("contact_class", tier))
 	result["vfx_event"] = fb.get("vfx_event", "")
 	result["sfx_event"] = fb.get("sfx_event", "")
 	result["camera_event"] = fb.get("camera_event", "")
-	result["screen_flash"] = fb.get("screen_flash", false)
+	result["screen_flash"] = bool(profile.get("screen_flash", fb.get("screen_flash", false)))
 	result["element"] = move.get("element_effect", {}).get("type", "")
+	result["contact_socket"] = _PoseContract.socket_for_move(move)
+	result["contact_pose_clip"] = _PoseContract.contact_pose_clip(move, tier)
+	result["contact_aligned"] = _PoseContract.contact_aligned(move)
+	result["launch_readability"] = float(profile.get("launch_readability", 0.5))
+	if Engine.get_main_loop() != null:
+		var gst = Engine.get_main_loop().root.get_node_or_null("/root/GameState")
+		if gst != null:
+			gst.last_contact_class = str(result["impact_class"])
+	_play_element_palette(str(result["element"]), tier, attacker)
 	_play_procedural_sfx(result.sfx_event, tier, attacker)
-	_trigger_camera(tier, fb.get("camera_event", ""))
-	_emit_juice("hitstop", {"tier": tier, "frames": hitstop})
-	_emit_juice("impact_vfx", {
-		"socket": fb.get("vfx_socket", "chest"),
-		"element": result["element"],
+	var camera_ok := _training_allows("training_camera_enabled")
+	if camera_ok and (bool(profile.get("warranted_camera", false)) or _Cinematic.should_direct(tier, _a11y_allows_camera())):
+		_trigger_camera(tier, fb.get("camera_event", ""))
+	_emit_juice("hitstop", {
 		"tier": tier,
-		"vfx_event": result["vfx_event"],
+		"frames": hitstop,
+		"attacker_frames": attacker_hs,
+		"defender_frames": defender_hs,
+		"sync": attacker_hs == defender_hs,
+	})
+	if _training_allows("training_vfx_enabled"):
+		var attacker_id := ""
+		if attacker != null and "fighter_id" in attacker:
+			attacker_id = str(attacker.fighter_id)
+		_emit_juice("impact_vfx", {
+			"socket": result["contact_socket"],
+			"element": result["element"],
+			"tier": tier,
+			"vfx_event": result["vfx_event"],
+			"fighter_id": attacker_id,
+			"attacker_id": attacker_id,
+		})
+		_emit_juice("contact_pose", {
+			"clip": result["contact_pose_clip"],
+			"socket": result["contact_socket"],
+			"aligned": result["contact_aligned"],
+			"tier": tier,
+		})
+	_emit_juice("impact_class", {
+		"class": result["impact_class"],
+		"tier": tier,
+		"hud_hidden": true,
+		"whiff": bool(info.get("whiff", false)),
+		"shield": bool(info.get("blocked", false)),
 	})
 	_emit_juice("sfx", {"event_id": result["sfx_event"], "category": "hit", "tier": tier})
 	feedback_triggered.emit(result)
@@ -105,14 +171,54 @@ func _default_hitstop(tier: String) -> int:
 	var range: Dictionary = TIER_HITSTOP.get(tier, TIER_HITSTOP.light)
 	return int((range.min + range.max) / 2.0)
 
+func _a11y_allows_camera() -> bool:
+	var role = Engine.get_main_loop().root.get_node_or_null("/root/DeviceRoleRuntime") if Engine.get_main_loop() else null
+	if role != null and role.has_method("fx_allows_camera_shake") and not role.fx_allows_camera_shake():
+		return false
+	var bus = Engine.get_main_loop().root.get_node_or_null("/root/JuiceEventBus") if Engine.get_main_loop() else null
+	if bus != null and bus.has_method("can_reduce_shake") and bus.can_reduce_shake():
+		return false
+	return true
+
+
+func _training_allows(flag: String) -> bool:
+	var gs = Engine.get_main_loop().root.get_node_or_null("/root/GameState") if Engine.get_main_loop() else null
+	if gs == null or not (flag in gs):
+		return true
+	return bool(gs.get(flag))
+
+
+func _play_element_palette(element: String, tier: String, attacker: Node) -> void:
+	if not _training_allows("training_sfx_enabled"):
+		return
+	var path := "res://data/combat/element_sfx_palettes.json"
+	if not FileAccess.file_exists(path):
+		return
+	var f := FileAccess.open(path, FileAccess.READ)
+	if f == null:
+		return
+	var parsed: Variant = JSON.parse_string(f.get_as_text())
+	f.close()
+	if typeof(parsed) != TYPE_DICTIONARY:
+		return
+	var elements: Dictionary = parsed.get("elements", {})
+	var pal: Dictionary = elements.get(element, {})
+	var table: Dictionary = pal.get("palette", {})
+	var wav := str(table.get(tier, table.get("medium", "")))
+	if wav.is_empty():
+		return
+	_ProceduralAudio.play(wav, self)
+
+
 func _trigger_camera(tier: String, event: String) -> void:
+	if not _a11y_allows_camera():
+		return
 	var intensity_scale := 1.0
 	var role = Engine.get_main_loop().root.get_node_or_null("/root/DeviceRoleRuntime") if Engine.get_main_loop() else null
-	if role != null:
-		if role.has_method("fx_allows_camera_shake") and not role.fx_allows_camera_shake():
-			return
-		if role.has_method("fx_intensity"):
-			intensity_scale = float(role.fx_intensity())
+	if role != null and role.has_method("fx_intensity"):
+		intensity_scale = float(role.fx_intensity())
+	if intensity_scale <= 0.01:
+		return
 	_shake_intensity = TIER_SHAKE.get(tier, 2.0) * intensity_scale
 	_shake_remaining = 0.12 * intensity_scale
 	# Wave017 optional impact zoom via battle camera controller
@@ -165,26 +271,38 @@ func _process(delta: float) -> void:
 	_camera.offset = offset if _shake_remaining > 0.0 else Vector2.ZERO
 
 func spawn_hit_spark(parent: Node2D, pos: Vector2, element: String) -> void:
+	if not _training_allows("training_vfx_enabled"):
+		return
 	var role = Engine.get_main_loop().root.get_node_or_null("/root/DeviceRoleRuntime") if Engine.get_main_loop() else null
 	if role != null and role.has_method("fx_allows_hit_sparks") and not role.fx_allows_hit_sparks():
 		return
+	_emit_juice("hit_spark", {"element": element, "socket": "contact", "pos": pos, "fighter_id": fighter_id})
+	var director = parent.get_node_or_null("ImpactVfxDirector")
+	if director != null and director.has_method("spawn"):
+		director.spawn(parent, {
+			"element": element,
+			"pos": pos,
+			"fighter_id": fighter_id,
+			"tier": "medium",
+			"dir": Vector2.RIGHT,
+		})
+		return
 	var spark := ColorRect.new()
-	spark.size = Vector2(12, 12)
+	spark.size = Vector2(16, 16)
 	spark.position = pos - spark.size / 2.0
 	spark.color = _element_color(element)
 	parent.add_child(spark)
 	var tween := spark.create_tween()
-	tween.tween_property(spark, "modulate:a", 0.0, 0.15)
+	tween.tween_property(spark, "modulate:a", 0.0, 0.14)
 	tween.tween_callback(spark.queue_free)
-	# GAME-RC-003: secondary ring for heavy/aura readability.
 	var ring := ColorRect.new()
-	ring.size = Vector2(22, 22)
+	ring.size = Vector2(26, 26)
 	ring.position = pos - ring.size / 2.0
 	ring.color = Color(_element_color(element).r, _element_color(element).g, _element_color(element).b, 0.35)
 	parent.add_child(ring)
 	var rt := ring.create_tween()
-	rt.tween_property(ring, "scale", Vector2(1.8, 1.8), 0.18)
-	rt.parallel().tween_property(ring, "modulate:a", 0.0, 0.18)
+	rt.tween_property(ring, "scale", Vector2(1.9, 1.9), 0.16)
+	rt.parallel().tween_property(ring, "modulate:a", 0.0, 0.16)
 	rt.tween_callback(ring.queue_free)
 
 ## Grab release / recovery cue — short flash so throws are readable.

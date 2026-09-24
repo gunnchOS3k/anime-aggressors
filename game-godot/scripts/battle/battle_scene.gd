@@ -5,6 +5,7 @@ const _BattleHudPanel = preload("res://scripts/ui/battle_hud_panel.gd")
 const _BattleSim = preload("res://scripts/battle/battle_sim.gd")
 const _HazardItemRuntime = preload("res://scripts/battle/hazard_item_runtime.gd")
 const _BattleCamera = preload("res://scripts/battle/battle_camera_controller.gd")
+const _ImpactVfx = preload("res://scripts/combat/impact_vfx_director.gd")
 
 @onready var fighters_root: Node2D = $Fighters
 @onready var stage_root: Node2D = $Stage
@@ -59,6 +60,9 @@ func _ready() -> void:
 	_battle_sim = _BattleSim.new()
 	add_child(_battle_sim)
 	_battle_sim.bind_fighters([fighter1, fighter2])
+	var vfx := _ImpactVfx.new()
+	vfx.name = "ImpactVfxDirector"
+	add_child(vfx)
 	if GameState.mode == "hazards" or GameState.hazards_enabled or GameState.items_enabled:
 		_hazard_runtime = _HazardItemRuntime.new()
 		add_child(_hazard_runtime)

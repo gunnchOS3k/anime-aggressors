@@ -1,0 +1,48 @@
+{
+  "package": "com.gunnchos.animeaggressors",
+  "source_pr": 106,
+  "source_branch": "vxp/vxp-3-combat-impact-nix-rook",
+  "source_sha_at_export": "b9cb6ff10732a9c15daf453d0f8f8abe0f22fd1c",
+  "base_sha": "6cd1b3100a7e467c2c991394576891660deb1162",
+  "device": {
+    "redacted_id": "PIXEL_USB_DEVICE_1",
+    "model": "Pixel 6a",
+    "codename": "bluejay",
+    "android": "17"
+  },
+  "installed_before": {
+    "versionCode": 218,
+    "versionName": "0.3.7",
+    "debuggable": true,
+    "signer_dn": "C=US, O=Android, CN=Android Debug",
+    "signer_sha256": "b637ea5f982aa1d3027e346fbfe9f672fdc5dee95407b1608b50b6f1631bd59a"
+  },
+  "candidate": {
+    "apk": "builds/android/anime-aggressors-vxp3-roster-wide-owner-review.apk",
+    "apk_sha256": "d75fb71863dbc8c260f4543e3d558d389defc2d9e5b8d7461757f4ecdf12a12c",
+    "godot": "4.5.stable.official.876b29033",
+    "export": "npm run godot:export:android (GODOT_BIN=Godot-4.5.app)",
+    "versionCode": 218,
+    "versionName": "0.3.7",
+    "signer_dn": "C=US, O=Android, CN=Android Debug",
+    "signer_sha256": "b637ea5f982aa1d3027e346fbfe9f672fdc5dee95407b1608b50b6f1631bd59a"
+  },
+  "safety": {
+    "signer_match": true,
+    "installed_versionCode_gt_candidate": false,
+    "used_install_r": true,
+    "used_install_d": false,
+    "uninstall_performed": false,
+    "pm_clear_performed": false
+  },
+  "install_result": "Success",
+  "lastUpdateTime_device_local": "2026-09-23 15:31:55",
+  "launch": {
+    "intent": "com.gunnchos.animeaggressors/com.godot.game.GodotApp",
+    "foreground": true,
+    "pid_at_launch": 16550
+  },
+  "rc1_tag_untouched": true,
+  "rc1_tag_sha": "6cd1b3100a7e467c2c991394576891660deb1162",
+  "notes": "Second signer-safe install-r after Wave016 aura_burst routing fix (signature_lane_burst kept; generic charge_release no longer remaps unique burst)."
+}

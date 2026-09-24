@@ -3,10 +3,10 @@
 Wave016 canonical truth chain:
 `PLAYER INPUT -> command -> move_id -> timing/hitboxes -> choreography action_id -> visible clip -> VFX/SFX/camera -> interaction`
 
-- PROCEDURAL_CLIPS_GENERATED: **357**
+- PROCEDURAL_CLIPS_GENERATED: **735**
 - NORMAL_PLAYER_INPUT_REACHABLE_CLIPS: **189**
-- GAMEPLAY_STATE_REACHABLE_CLIPS: **287**
-- LAB_ONLY_CLIPS: **42**
+- GAMEPLAY_STATE_REACHABLE_CLIPS: **581**
+- LAB_ONLY_CLIPS: **126**
 - DESIGN_ONLY_CLIPS: **28**
 
 Full machine-readable matrix: `content/runtime/move_animation_application_matrix.json`
@@ -49,5 +49,5 @@ Full machine-readable matrix: `content/runtime/move_animation_application_matrix
 
 EXACT, ALIASED, MISSING_CLIP, MISSING_GAMEPLAY_MOVE, DESIGN_ONLY, SIGNATURE_NOT_BOUND_TO_INPUT, GENERIC_FALLBACK, BROKEN.
 
-Reachability is honest: generated ≠ reachable. 357 is LOADED/GENERATED only.
+Reachability is honest: generated ≠ reachable. Totals are derived from fighter manifests.
 

@@ -2,6 +2,9 @@ extends Node2D
 const _FrameDataTable = preload("res://scripts/combat/frame_data_table.gd")
 const _DataLoader = preload("res://scripts/data/data_loader.gd")
 const _BattleSim = preload("res://scripts/battle/battle_sim.gd")
+const _TrainingImpactDebug = preload("res://scripts/training/training_impact_debug.gd")
+const _TrainingImpactLab = preload("res://scripts/training/training_impact_lab.gd")
+const _ImpactVfx = preload("res://scripts/combat/impact_vfx_director.gd")
 
 @onready var fighters_root: Node2D = $Fighters
 @onready var stage_root: Node2D = $Stage
@@ -26,6 +29,8 @@ var _move_list_panel: Control
 var _pin_reminder: Label
 var _move_list_btn: Button
 var _pause_panel: PanelContainer
+var _impact_lab: CanvasLayer
+var _impact_vfx: Node
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -51,6 +56,7 @@ func _ready() -> void:
 	_update_help()
 	_ensure_frame_overlay()
 	_ensure_move_list_access()
+	_ensure_impact_lab()
 
 
 func _ensure_move_list_access() -> void:
@@ -168,7 +174,7 @@ func _log(msg: String) -> void:
 
 func _update_help() -> void:
 	if _hit_log:
-		_hit_log.text = "Training — F1 HUD F2 hit | Pause: Esc/Back/Touch II | Move List | F3 pos F4 dmg F5 aura F7 clear F8 dummy F9 pause F10 slow F11 freeze F12 step"
+		_hit_log.text = "Training — F1 HUD F2 hit | Pause: Esc/Back/Touch II | Move List | F3 pos F4 dmg F5 aura F7 clear F8 dummy F9 pause F10 slow F11 freeze F12 step" + _TrainingImpactDebug.help_suffix()
 
 
 func _toggle_pause() -> void:
@@ -279,6 +285,34 @@ func _unhandled_input(event: InputEvent) -> void:
 				if _freeze or _paused:
 					_battle_sim.step_frame()
 					_log("STEP 1 FRAME")
+			KEY_1:
+				_log("FORCE TIER %s" % _TrainingImpactDebug.set_tier("light"))
+			KEY_2:
+				_log("FORCE TIER %s" % _TrainingImpactDebug.set_tier("medium"))
+			KEY_3:
+				_log("FORCE TIER %s" % _TrainingImpactDebug.set_tier("heavy"))
+			KEY_4:
+				_log("FORCE TIER %s" % _TrainingImpactDebug.set_tier("aura"))
+			KEY_5:
+				_log("FORCE TIER %s" % _TrainingImpactDebug.set_tier("super"))
+			KEY_6:
+				_log("FORCE TIER %s" % _TrainingImpactDebug.set_tier("ko"))
+			KEY_R:
+				_log("REPLAY HIT" if _TrainingImpactDebug.replay_last_hit(fighter1, fighter2) else "NO LAST HIT")
+			KEY_P:
+				_log("PERCENT %.0f" % _TrainingImpactDebug.cycle_percent(fighter2))
+			KEY_A:
+				_log("AURA %.0f" % _TrainingImpactDebug.cycle_aura(fighter1))
+			KEY_V:
+				_log("REACTION %s" % _TrainingImpactDebug.cycle_reaction())
+			KEY_C:
+				_log("CAMERA %s" % str(_TrainingImpactDebug.toggle_camera()))
+			KEY_X:
+				_log("VFX %s" % str(_TrainingImpactDebug.toggle_vfx()))
+			KEY_Z:
+				_log("SFX %s" % str(_TrainingImpactDebug.toggle_sfx()))
+			KEY_H:
+				_apply_hide_hud(_TrainingImpactDebug.toggle_hide_hud())
 	if event.is_action_pressed("ui_cancel"):
 		_ensure_pause_panel()
 		_toggle_pause()
@@ -287,6 +321,29 @@ func _unhandled_input(event: InputEvent) -> void:
 	if _paused and event.is_action_pressed("ui_accept"):
 		_toggle_pause()
 		get_viewport().set_input_as_handled()
+
+func _ensure_impact_lab() -> void:
+	if _impact_lab != null:
+		return
+	_impact_lab = _TrainingImpactLab.new()
+	_impact_lab.name = "TrainingImpactLab"
+	add_child(_impact_lab)
+	_impact_lab.setup(self)
+	_impact_vfx = _ImpactVfx.new()
+	_impact_vfx.name = "ImpactVfxDirector"
+	add_child(_impact_vfx)
+
+
+func _apply_hide_hud(hidden: bool) -> void:
+	if hud:
+		hud.visible = not hidden
+	if _debug_hud:
+		_debug_hud.visible = not hidden
+		_debug_hud.visible_debug = not hidden
+	if _impact_lab:
+		_impact_lab.visible = true
+	_log("HUD HIDDEN" if hidden else "HUD VISIBLE")
+
 
 func _cycle_dummy() -> void:
 	var modes := ["idle", "shield", "jump", "attack", "cpu", "di_in", "di_out"]

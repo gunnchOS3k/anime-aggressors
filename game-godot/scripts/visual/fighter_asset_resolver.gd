@@ -7,6 +7,8 @@ class_name FighterAssetResolver
 
 const STATUS_PROCEDURAL := "PROCEDURAL_PRODUCTION_PROXY"
 const STATUS_PROCEDURAL_ANIM := "PROCEDURAL_RUNTIME_ANIMATION"
+const STATUS_GENERATED := "GENERATED_PRODUCTION_ART"
+const STATUS_GENERATED_ANIM := "GENERATED_PRODUCTION_ANIMATION"
 
 const CLASS_CURRENT := "CURRENT_PLAYER_FACING"
 const CLASS_DEV := "DEV_ONLY"
@@ -34,13 +36,22 @@ static var EMERGENCY_FALLBACK_USES: int = 0
 static var LEGACY_FALLBACK_USES: int = 0
 
 
+static func generated_glb_path(fighter_id: String) -> String:
+	return "res://content/fighters/%s/model/%s_generated_production.glb" % [fighter_id, fighter_id]
+
+
 static func canonical_glb_path(fighter_id: String) -> String:
+	var generated := generated_glb_path(fighter_id)
+	if ResourceLoader.exists(generated) or FileAccess.file_exists(generated):
+		return generated
 	return "res://content/fighters/%s/model/%s_procedural_proxy.glb" % [fighter_id, fighter_id]
 
 
 static func classify_path(path: String) -> String:
 	if path.is_empty():
 		return CLASS_DEPRECATED
+	if path.contains("/content/fighters/") and path.ends_with("_generated_production.glb"):
+		return CLASS_CURRENT
 	if path.contains("/content/fighters/") and path.ends_with("_procedural_proxy.glb"):
 		return CLASS_CURRENT
 	if path.contains("/approved/") or path.contains("/final/") or path.contains("vroid"):
@@ -127,7 +138,17 @@ static func resolve_model_path(fighter_id: String, fighter_data: Dictionary = {}
 		return {"path": explicit, "source": "FINAL_CUSTOM", "tier": "FINAL_CUSTOM", "CURRENT_MODEL_SOURCE": "FINAL_CUSTOM"}
 	if explicit.contains("vroid") or explicit.contains("/approved_vroid/"):
 		return {"path": explicit, "source": "APPROVED_VROID", "tier": "APPROVED_VROID", "CURRENT_MODEL_SOURCE": "APPROVED_VROID"}
-	var proxy := canonical_glb_path(fighter_id)
+	var generated := generated_glb_path(fighter_id)
+	if ResourceLoader.exists(generated) or FileAccess.file_exists(generated):
+		return {
+			"path": generated,
+			"source": STATUS_GENERATED,
+			"tier": STATUS_GENERATED,
+			"CURRENT_MODEL_SOURCE": STATUS_GENERATED,
+			"human_authored": false,
+			"future_human_replaceable": true,
+		}
+	var proxy := "res://content/fighters/%s/model/%s_procedural_proxy.glb" % [fighter_id, fighter_id]
 	if ResourceLoader.exists(proxy):
 		return {
 			"path": proxy,
@@ -148,13 +169,35 @@ static func resolve_model_path(fighter_id: String, fighter_data: Dictionary = {}
 	return {"path": explicit, "source": "MISSING", "tier": "MISSING", "CURRENT_MODEL_SOURCE": "MISSING"}
 
 
+static func authored_animation_glb(fighter_id: String, clip: String = "pipeline_proof") -> String:
+	return "res://assets/characters/authored/%s/%s.glb" % [fighter_id, clip]
+
+
 static func resolve_animation_root(fighter_id: String) -> Dictionary:
+	var authored := authored_animation_glb(fighter_id, "pipeline_proof")
+	var has_authored := ResourceLoader.exists(authored) or FileAccess.file_exists(authored)
+	var generated := "res://content/fighters/%s/animations/generated_production" % fighter_id
+	var generated_abs := ProjectSettings.globalize_path(generated)
+	if DirAccess.dir_exists_absolute(generated_abs):
+		return {
+			"root": generated,
+			"source": STATUS_GENERATED_ANIM,
+			"CURRENT_ANIMATION_SOURCE": STATUS_GENERATED_ANIM,
+			"AUTHORED_PROOF_PATH": authored if has_authored else "",
+			"AUTHORED_PROOF_STATUS": "AUTHORED_WIP" if has_authored else "MISSING",
+			"human_authored": false,
+			"future_human_replaceable": true,
+			"note": "Generated production library preferred. Procedural placeholders remain fallback only.",
+		}
 	var procedural := "res://content/fighters/%s/animations/procedural" % fighter_id
 	if DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(procedural)):
 		return {
 			"root": procedural,
 			"source": STATUS_PROCEDURAL_ANIM,
 			"CURRENT_ANIMATION_SOURCE": "PROCEDURAL_RUNTIME_ANIMATION",
+			"AUTHORED_PROOF_PATH": authored if has_authored else "",
+			"AUTHORED_PROOF_STATUS": "AUTHORED_WIP" if has_authored else "MISSING",
+			"note": "Procedural library is fallback. Authored proof is GLB import, not JSON keys.",
 		}
 	return {
 		"root": "res://data/fighters/%s_animations.json" % fighter_id,

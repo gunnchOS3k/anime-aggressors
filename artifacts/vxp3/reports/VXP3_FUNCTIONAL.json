@@ -1,0 +1,57 @@
+{
+  "ok": true,
+  "commands": [
+    {
+      "cmd": "python3 tools/vxp3/generate_roster_impact_clips.py",
+      "exit": 0
+    },
+    {
+      "cmd": "python3 tools/vxp3/validate_combat_impact.py",
+      "exit": 0
+    },
+    {
+      "cmd": "python3 tools/engineering_wave016/derive_clip_totals.py",
+      "exit": 0
+    },
+    {
+      "cmd": "python3 tools/engineering_wave016/test_alias_resolver.py",
+      "exit": 0
+    },
+    {
+      "cmd": "python3 tools/engineering_wave016/build_move_application_matrix.py",
+      "exit": 0
+    },
+    {
+      "cmd": "godot --headless --rendering-driver opengl3 --path game-godot -s res://tests/vxp3/vxp3_combat_impact_asserts.gd",
+      "exit": 0
+    },
+    {
+      "cmd": "Godot-4.5 --headless --path game-godot --script res://tests/engineering_wave016/Wave016GoldenSliceMoveE2E.gd",
+      "exit": 0
+    },
+    {
+      "cmd": "npm run validate:game-godot-primary",
+      "exit": 0
+    },
+    {
+      "cmd": "npm run validate:game-rc",
+      "exit": 0
+    },
+    {
+      "cmd": "npm run validate:godot-product",
+      "exit": 0
+    },
+    {
+      "cmd": "npm run validate:character-assets",
+      "exit": 0
+    },
+    {
+      "cmd": "npm run validate:anime-digital-art-audio-closure",
+      "exit": 0
+    },
+    {
+      "cmd": "npm run validate:anime-beta-content",
+      "exit": 0
+    }
+  ]
+}

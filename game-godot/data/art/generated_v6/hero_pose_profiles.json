@@ -1,0 +1,250 @@
+{
+  "schema": "aa_hero_pose_profiles_v6",
+  "generator": "aa_generated_art_v6",
+  "generator_version": "6.0.0",
+  "human_authored": false,
+  "HUMAN_AUTHORED_ANIMATION_PASS": false,
+  "notes": "Graphic combat posing. Explicit COM/spine/pelvis/chest/head/arms/feet. Not human-authored acting. No T-pose idle.",
+  "fighters": {
+    "ember-vale": {
+      "idle": {
+        "com": "forward", "spine_arc": "forward_wedge", "pelvis": [0.08, 0.16, 0.06], "chest": [-0.28, 0.26, 0.14], "head": [0.12, 0.20, 0.06],
+        "spine": [-0.16, 0.14, 0.06], "UpperArm_R": [0.55, -0.72, 0.48], "UpperArm_L": [0.32, 0.46, -0.34],
+        "LowerArm_R": [0.28, -0.18, 0.12], "LowerArm_L": [0.16, 0.12, -0.08],
+        "UpperLeg_R": [0.10, 0.08, 0.16], "UpperLeg_L": [0.18, -0.06, -0.10],
+        "front_foot": "L", "rear_foot": "R", "dominant_arm": "R", "off_arm": "L",
+        "silhouette_width": "medium_forward", "line_of_action": "forward_wedge"
+      },
+      "heavy_contact": {
+        "com": "committed_front", "spine_arc": "right_cross", "pelvis": [-0.22, 0.34, 0.10], "chest": [0.52, 0.62, 0.18], "head": [-0.16, 0.26, 0.10],
+        "spine": [0.18, 0.28, 0.08], "UpperArm_R": [0.82, -0.18, 1.05], "UpperArm_L": [0.22, 0.62, -0.48],
+        "LowerArm_R": [0.10, 0.06, 0.20], "front_foot": "L", "rear_foot": "R", "dominant_arm": "R",
+        "silhouette_width": "wide_strike", "line_of_action": "right_cross"
+      },
+      "hurt_heavy": {
+        "com": "broken_back", "spine_arc": "snap_back", "pelvis": [0.28, -0.22, 0.12], "chest": [0.72, -0.34, 0.14], "head": [0.58, -0.28, 0.12],
+        "spine": [0.36, -0.16, 0.08], "UpperArm_R": [-0.18, -0.72, 0.22], "UpperArm_L": [-0.12, 0.68, -0.20],
+        "UpperLeg_R": [0.32, 0.10, 0.18], "UpperLeg_L": [-0.16, -0.12, -0.10],
+        "front_foot": "R", "dominant_arm": "none", "silhouette_width": "broken", "line_of_action": "snap_back"
+      },
+      "charge_100": {
+        "com": "coiled", "spine_arc": "coil", "pelvis": [-0.26, 0.16, 0.0], "chest": [-0.82, 0.28, 0.14], "head": [-0.30, 0.16, 0.04],
+        "spine": [-0.40, 0.16, 0.06], "UpperArm_R": [0.72, 0.22, 0.86], "UpperArm_L": [0.68, -0.18, -0.80],
+        "front_foot": "R", "dominant_arm": "R", "silhouette_width": "compressed", "line_of_action": "coil"
+      },
+      "super": {
+        "com": "rising", "spine_arc": "rising_flame", "pelvis": [-0.36, 0.30, 0.12], "chest": [0.86, 0.56, 0.18], "head": [-0.16, 0.26, 0.10],
+        "spine": [0.22, 0.30, 0.10], "UpperArm_R": [1.15, -0.10, 0.42], "UpperArm_L": [0.40, 0.72, -0.28],
+        "front_foot": "L", "dominant_arm": "R", "silhouette_width": "rising_triangle", "line_of_action": "rising_flame"
+      },
+      "clash_lock": {
+        "com": "planted_strain", "spine_arc": "strain", "pelvis": [-0.14, 0.10, 0.0], "chest": [-0.36, 0.22, 0.0], "head": [-0.12, 0.14, 0.0],
+        "spine": [-0.28, 0.12, 0.0], "UpperArm_R": [0.52, 0.62, 0.72], "UpperArm_L": [0.52, -0.62, -0.72],
+        "UpperLeg_R": [0.28, 0.10, 0.22], "UpperLeg_L": [0.28, -0.10, -0.22],
+        "front_foot": "both", "dominant_arm": "both", "silhouette_width": "locked", "line_of_action": "strain"
+      }
+    },
+    "rook-ironside": {
+      "idle": {
+        "com": "low_planted", "spine_arc": "planted_block", "pelvis": [0.04, 0.0, 0.0], "chest": [0.12, 0.0, 0.0], "head": [-0.08, 0.0, 0.0],
+        "spine": [0.06, 0.0, 0.0], "UpperArm_R": [0.38, -0.28, 0.42], "UpperArm_L": [0.38, 0.28, -0.42],
+        "LowerArm_R": [0.42, -0.10, 0.16], "LowerArm_L": [0.42, 0.10, -0.16],
+        "UpperLeg_R": [0.16, 0.10, 0.20], "UpperLeg_L": [0.16, -0.10, -0.20],
+        "front_foot": "both", "dominant_arm": "both", "silhouette_width": "widest", "line_of_action": "planted_block"
+      },
+      "heavy_contact": {
+        "com": "crush_drop", "spine_arc": "crush_drop", "pelvis": [-0.20, 0.12, 0.0], "chest": [0.46, 0.22, 0.0], "head": [-0.12, 0.10, 0.0],
+        "spine": [0.16, 0.10, 0.0], "UpperArm_R": [0.95, -0.08, 0.88], "UpperArm_L": [0.28, 0.42, -0.30],
+        "front_foot": "both", "dominant_arm": "R", "silhouette_width": "crush", "line_of_action": "crush_drop"
+      },
+      "hurt_heavy": {
+        "com": "armor_break", "spine_arc": "armor_break", "pelvis": [0.20, 0.0, 0.0], "chest": [0.50, 0.0, 0.0], "head": [0.34, 0.0, 0.0],
+        "spine": [0.28, 0.0, 0.0], "UpperArm_R": [-0.10, -0.55, 0.16], "UpperArm_L": [-0.10, 0.55, -0.16],
+        "UpperLeg_R": [0.22, 0.08, 0.12], "front_foot": "both", "dominant_arm": "none", "silhouette_width": "broken_mass", "line_of_action": "armor_break"
+      },
+      "charge_100": {
+        "com": "load", "spine_arc": "load", "pelvis": [-0.18, 0.0, 0.0], "chest": [-0.48, 0.0, 0.0], "head": [-0.16, 0.0, 0.0],
+        "spine": [-0.28, 0.0, 0.0], "UpperArm_R": [0.62, 0.18, 0.70], "UpperArm_L": [0.62, -0.18, -0.70],
+        "front_foot": "both", "dominant_arm": "both", "silhouette_width": "loaded", "line_of_action": "load"
+      },
+      "super": {
+        "com": "meteor", "spine_arc": "meteor_fist", "pelvis": [-0.20, 0.0, 0.0], "chest": [0.44, 0.18, 0.0], "head": [-0.12, 0.10, 0.0],
+        "spine": [0.14, 0.08, 0.0], "UpperArm_R": [1.20, -0.06, 0.36], "UpperArm_L": [0.30, 0.40, -0.22],
+        "front_foot": "both", "dominant_arm": "R", "silhouette_width": "meteor", "line_of_action": "meteor_fist"
+      },
+      "clash_lock": {
+        "com": "immovable", "spine_arc": "immovable", "pelvis": [-0.10, 0.0, 0.0], "chest": [-0.28, 0.0, 0.0], "head": [-0.08, 0.0, 0.0],
+        "spine": [-0.18, 0.0, 0.0], "UpperArm_R": [0.48, 0.55, 0.68], "UpperArm_L": [0.48, -0.55, -0.68],
+        "UpperLeg_R": [0.24, 0.10, 0.20], "UpperLeg_L": [0.24, -0.10, -0.20],
+        "front_foot": "both", "dominant_arm": "both", "silhouette_width": "immovable", "line_of_action": "immovable"
+      }
+    },
+    "juno-spark": {
+      "idle": {
+        "com": "twitch", "spine_arc": "twitch", "pelvis": [0.06, 0.26, 0.0], "chest": [-0.14, 0.22, 0.10], "head": [0.20, -0.34, 0.12],
+        "spine": [-0.08, 0.18, 0.06], "UpperArm_R": [0.18, -0.82, 0.28], "UpperArm_L": [0.55, 0.70, -0.22],
+        "UpperLeg_R": [0.08, 0.16, 0.12], "UpperLeg_L": [0.22, -0.10, -0.08],
+        "front_foot": "R", "dominant_arm": "L", "silhouette_width": "narrow_offset", "line_of_action": "twitch"
+      },
+      "heavy_contact": {
+        "com": "whip", "spine_arc": "whip_lash", "pelvis": [-0.16, 0.48, 0.10], "chest": [0.34, 0.80, 0.14], "head": [0.10, 0.40, 0.10],
+        "spine": [0.12, 0.36, 0.08], "UpperArm_R": [0.88, 0.10, 1.10], "UpperArm_L": [-0.10, 0.72, -0.30],
+        "front_foot": "L", "dominant_arm": "R", "silhouette_width": "lash", "line_of_action": "whip_lash"
+      },
+      "hurt_heavy": {
+        "com": "spin_break", "spine_arc": "spin_break", "pelvis": [0.22, -0.26, 0.10], "chest": [0.62, -0.40, 0.12], "head": [0.48, -0.32, 0.14],
+        "spine": [0.32, -0.20, 0.08], "UpperArm_R": [-0.22, -0.80, 0.18], "UpperArm_L": [-0.18, 0.78, -0.16],
+        "front_foot": "L", "dominant_arm": "none", "silhouette_width": "broken_arc", "line_of_action": "spin_break"
+      },
+      "charge_100": {
+        "com": "spark_coil", "spine_arc": "spark_coil", "pelvis": [-0.10, 0.22, 0.0], "chest": [-0.70, 0.22, 0.0], "head": [-0.16, -0.20, 0.08],
+        "spine": [-0.32, 0.16, 0.0], "UpperArm_R": [0.70, 0.28, 0.90], "UpperArm_L": [0.64, -0.22, -0.86],
+        "front_foot": "R", "dominant_arm": "R", "silhouette_width": "coil", "line_of_action": "spark_coil"
+      },
+      "super": {
+        "com": "bolt", "spine_arc": "bolt_arc", "pelvis": [-0.26, 0.64, 0.10], "chest": [0.24, 1.02, 0.14], "head": [0.10, 0.48, 0.12],
+        "spine": [0.08, 0.48, 0.08], "UpperArm_R": [1.28, 0.16, 0.28], "UpperArm_L": [0.22, 0.90, -0.18],
+        "front_foot": "L", "dominant_arm": "R", "silhouette_width": "bolt", "line_of_action": "bolt_arc"
+      },
+      "clash_lock": {
+        "com": "vibrate", "spine_arc": "vibrate", "pelvis": [-0.08, 0.20, 0.0], "chest": [-0.22, 0.26, 0.0], "head": [0.12, -0.16, 0.08],
+        "spine": [-0.14, 0.18, 0.0], "UpperArm_R": [0.46, 0.58, 0.66], "UpperArm_L": [0.46, -0.58, -0.66],
+        "front_foot": "R", "dominant_arm": "both", "silhouette_width": "tense_narrow", "line_of_action": "vibrate"
+      }
+    },
+    "kaia-windrow": {
+      "idle": {
+        "com": "buoyant", "spine_arc": "drift", "pelvis": [0.06, 0.12, 0.14], "chest": [-0.22, 0.20, 0.20], "head": [0.16, 0.24, 0.08],
+        "spine": [-0.12, 0.14, 0.12], "UpperArm_R": [0.20, -0.48, 0.22], "UpperArm_L": [0.48, 0.62, -0.18],
+        "UpperLeg_R": [0.06, 0.12, 0.10], "UpperLeg_L": [0.20, -0.08, -0.08],
+        "front_foot": "R", "dominant_arm": "L", "silhouette_width": "long_flow", "line_of_action": "drift"
+      },
+      "heavy_contact": {
+        "com": "gale_kick", "spine_arc": "gale_kick", "pelvis": [-0.20, 0.20, 0.18], "chest": [0.22, 0.38, 0.32], "head": [0.12, 0.24, 0.12],
+        "spine": [0.08, 0.20, 0.16], "UpperArm_L": [0.70, 0.48, -0.22], "UpperLeg_L": [0.85, -0.16, -0.10],
+        "front_foot": "R", "dominant_arm": "L", "silhouette_width": "kick_arc", "line_of_action": "gale_kick"
+      },
+      "hurt_heavy": {
+        "com": "ribbon_snap", "spine_arc": "ribbon_snap", "pelvis": [0.24, 0.12, 0.14], "chest": [0.56, 0.22, 0.24], "head": [0.42, 0.20, 0.12],
+        "spine": [0.30, 0.12, 0.12], "UpperArm_R": [-0.16, -0.70, 0.16], "UpperArm_L": [-0.12, 0.74, -0.14],
+        "front_foot": "L", "dominant_arm": "none", "silhouette_width": "snapped", "line_of_action": "ribbon_snap"
+      },
+      "charge_100": {
+        "com": "lift", "spine_arc": "lift", "pelvis": [-0.20, 0.14, 0.12], "chest": [-0.58, 0.24, 0.24], "head": [-0.16, 0.20, 0.10],
+        "spine": [-0.30, 0.16, 0.12], "UpperArm_L": [0.72, 0.20, -0.66], "UpperArm_R": [0.60, -0.16, 0.62],
+        "front_foot": "R", "dominant_arm": "L", "silhouette_width": "lift", "line_of_action": "lift"
+      },
+      "super": {
+        "com": "spiral", "spine_arc": "spiral_ascent", "pelvis": [-0.22, 0.20, 0.22], "chest": [-0.08, 0.42, 0.44], "head": [0.16, 0.26, 0.14],
+        "spine": [-0.06, 0.24, 0.22], "UpperArm_L": [1.10, 0.36, -0.20], "UpperArm_R": [0.36, -0.58, 0.18],
+        "front_foot": "R", "dominant_arm": "L", "silhouette_width": "spiral", "line_of_action": "spiral_ascent"
+      },
+      "clash_lock": {
+        "com": "hold_current", "spine_arc": "hold_current", "pelvis": [-0.10, 0.12, 0.12], "chest": [-0.24, 0.20, 0.18], "head": [0.10, 0.16, 0.10],
+        "spine": [-0.16, 0.14, 0.12], "UpperArm_R": [0.44, 0.50, 0.60], "UpperArm_L": [0.44, -0.50, -0.60],
+        "front_foot": "R", "dominant_arm": "both", "silhouette_width": "held_arc", "line_of_action": "hold_current"
+      }
+    },
+    "nix-calder": {
+      "idle": {
+        "com": "centered", "spine_arc": "centered", "pelvis": [0.02, 0.0, 0.0], "chest": [0.08, 0.0, 0.0], "head": [0.06, 0.04, 0.0],
+        "spine": [0.04, 0.0, 0.0], "UpperArm_R": [0.42, -0.22, 0.48], "UpperArm_L": [0.42, 0.22, -0.48],
+        "LowerArm_R": [0.36, -0.08, 0.12], "LowerArm_L": [0.36, 0.08, -0.12],
+        "UpperLeg_R": [0.10, 0.06, 0.12], "UpperLeg_L": [0.10, -0.06, -0.12],
+        "front_foot": "both", "dominant_arm": "both", "silhouette_width": "compact", "line_of_action": "centered"
+      },
+      "heavy_contact": {
+        "com": "thrust", "spine_arc": "precise_thrust", "pelvis": [-0.14, 0.0, 0.0], "chest": [0.34, 0.10, 0.0], "head": [-0.06, 0.08, 0.0],
+        "spine": [0.12, 0.06, 0.0], "UpperArm_R": [0.92, -0.04, 0.96], "UpperArm_L": [0.28, 0.36, -0.28],
+        "front_foot": "both", "dominant_arm": "R", "silhouette_width": "lance", "line_of_action": "precise_thrust"
+      },
+      "hurt_heavy": {
+        "com": "shatter", "spine_arc": "shatter", "pelvis": [0.18, 0.0, 0.0], "chest": [0.54, 0.0, 0.0], "head": [0.40, 0.0, 0.0],
+        "spine": [0.30, 0.0, 0.0], "UpperArm_R": [-0.14, -0.62, 0.14], "UpperArm_L": [-0.14, 0.62, -0.14],
+        "front_foot": "both", "dominant_arm": "none", "silhouette_width": "shatter", "line_of_action": "shatter"
+      },
+      "charge_100": {
+        "com": "compress", "spine_arc": "compress", "pelvis": [-0.14, 0.0, 0.0], "chest": [-0.52, 0.0, 0.0], "head": [-0.18, 0.0, 0.0],
+        "spine": [-0.28, 0.0, 0.0], "UpperArm_R": [0.66, 0.16, 0.74], "UpperArm_L": [0.66, -0.16, -0.74],
+        "front_foot": "both", "dominant_arm": "both", "silhouette_width": "compressed", "line_of_action": "compress"
+      },
+      "super": {
+        "com": "lance", "spine_arc": "crystal_lance", "pelvis": [-0.16, 0.0, 0.0], "chest": [0.26, 0.10, 0.0], "head": [-0.06, 0.08, 0.0],
+        "spine": [0.08, 0.06, 0.0], "UpperArm_R": [1.18, -0.04, 0.32], "UpperArm_L": [0.34, 0.40, -0.22],
+        "front_foot": "both", "dominant_arm": "R", "silhouette_width": "crystal_lance", "line_of_action": "crystal_lance"
+      },
+      "clash_lock": {
+        "com": "lock_plane", "spine_arc": "lock_plane", "pelvis": [-0.08, 0.0, 0.0], "chest": [-0.20, 0.0, 0.0], "head": [-0.06, 0.0, 0.0],
+        "spine": [-0.14, 0.0, 0.0], "UpperArm_R": [0.50, 0.52, 0.68], "UpperArm_L": [0.50, -0.52, -0.68],
+        "UpperLeg_R": [0.20, 0.08, 0.16], "UpperLeg_L": [0.20, -0.08, -0.16],
+        "front_foot": "both", "dominant_arm": "both", "silhouette_width": "lock", "line_of_action": "lock_plane"
+      }
+    },
+    "orion-vell": {
+      "idle": {
+        "com": "orbital", "spine_arc": "orbit_hold", "pelvis": [0.02, 0.0, 0.0], "chest": [-0.14, 0.0, 0.0], "head": [-0.12, 0.0, 0.0],
+        "spine": [-0.08, 0.0, 0.0], "UpperArm_R": [0.28, -0.62, 0.18], "UpperArm_L": [0.22, 0.54, -0.16],
+        "LowerArm_R": [0.12, -0.28, 0.08], "front_foot": "both", "dominant_arm": "R",
+        "silhouette_width": "layered", "line_of_action": "orbit_hold"
+      },
+      "heavy_contact": {
+        "com": "push", "spine_arc": "gravity_push", "pelvis": [0.10, 0.0, 0.0], "chest": [0.28, 0.14, 0.0], "head": [-0.14, 0.0, 0.0],
+        "spine": [0.10, 0.08, 0.0], "UpperArm_R": [0.78, -0.12, 0.92], "UpperArm_L": [0.24, 0.48, -0.24],
+        "front_foot": "L", "dominant_arm": "R", "silhouette_width": "push", "line_of_action": "gravity_push"
+      },
+      "hurt_heavy": {
+        "com": "orbit_break", "spine_arc": "orbit_break", "pelvis": [0.22, 0.0, 0.0], "chest": [0.60, 0.0, 0.0], "head": [0.44, 0.0, 0.0],
+        "spine": [0.34, 0.0, 0.0], "UpperArm_R": [-0.18, -0.68, 0.14], "UpperArm_L": [-0.14, 0.70, -0.12],
+        "front_foot": "R", "dominant_arm": "none", "silhouette_width": "broken_orbit", "line_of_action": "orbit_break"
+      },
+      "charge_100": {
+        "com": "sink", "spine_arc": "sink", "pelvis": [0.16, 0.0, 0.0], "chest": [-0.76, 0.0, 0.0], "head": [-0.24, 0.0, 0.0],
+        "spine": [-0.36, 0.0, 0.0], "UpperArm_R": [0.58, 0.20, 0.70], "UpperArm_L": [0.52, -0.16, -0.64],
+        "front_foot": "both", "dominant_arm": "R", "silhouette_width": "sink", "line_of_action": "sink"
+      },
+      "super": {
+        "com": "command", "spine_arc": "halo_command", "pelvis": [0.10, 0.0, 0.0], "chest": [-0.18, 0.0, 0.0], "head": [-0.20, 0.0, 0.0],
+        "spine": [-0.12, 0.0, 0.0], "UpperArm_R": [0.92, -0.34, 0.18], "UpperArm_L": [0.86, 0.36, -0.16],
+        "front_foot": "both", "dominant_arm": "R", "silhouette_width": "halo", "line_of_action": "halo_command"
+      },
+      "clash_lock": {
+        "com": "mass_lock", "spine_arc": "mass_lock", "pelvis": [0.06, 0.0, 0.0], "chest": [-0.28, 0.0, 0.0], "head": [-0.12, 0.0, 0.0],
+        "spine": [-0.18, 0.0, 0.0], "UpperArm_R": [0.48, 0.54, 0.66], "UpperArm_L": [0.48, -0.54, -0.66],
+        "front_foot": "both", "dominant_arm": "both", "silhouette_width": "mass_lock", "line_of_action": "mass_lock"
+      }
+    },
+    "vesper-nyx": {
+      "idle": {
+        "com": "deceptive", "spine_arc": "offset", "pelvis": [0.12, 0.32, 0.14], "chest": [-0.16, -0.34, 0.16], "head": [0.12, 0.38, -0.12],
+        "spine": [-0.08, -0.16, 0.10], "UpperArm_R": [0.36, -0.70, 0.28], "UpperArm_L": [0.18, 0.48, -0.22],
+        "UpperLeg_R": [0.08, 0.14, 0.10], "UpperLeg_L": [0.22, -0.10, -0.08],
+        "front_foot": "L", "dominant_arm": "R", "silhouette_width": "offset", "line_of_action": "offset"
+      },
+      "heavy_contact": {
+        "com": "false_side", "spine_arc": "false_side", "pelvis": [-0.16, 0.40, 0.16], "chest": [0.42, -0.32, 0.20], "head": [0.10, 0.44, -0.14],
+        "spine": [0.14, -0.12, 0.12], "UpperArm_R": [0.90, 0.08, 1.00], "UpperArm_L": [0.16, 0.62, -0.24],
+        "front_foot": "L", "dominant_arm": "R", "silhouette_width": "false_side", "line_of_action": "false_side"
+      },
+      "hurt_heavy": {
+        "com": "cowl_whip", "spine_arc": "cowl_whip", "pelvis": [0.24, -0.28, 0.14], "chest": [0.58, -0.40, 0.18], "head": [0.46, 0.26, -0.16],
+        "spine": [0.32, -0.18, 0.10], "UpperArm_R": [-0.20, -0.74, 0.16], "UpperArm_L": [-0.16, 0.76, -0.14],
+        "front_foot": "R", "dominant_arm": "none", "silhouette_width": "whipped", "line_of_action": "cowl_whip"
+      },
+      "charge_100": {
+        "com": "fold", "spine_arc": "fold", "pelvis": [-0.10, 0.34, 0.16], "chest": [-0.52, -0.32, 0.18], "head": [-0.10, 0.38, -0.12],
+        "spine": [-0.26, -0.14, 0.10], "UpperArm_R": [0.68, 0.22, 0.80], "UpperArm_L": [0.58, -0.18, -0.72],
+        "front_foot": "L", "dominant_arm": "R", "silhouette_width": "fold", "line_of_action": "fold"
+      },
+      "super": {
+        "com": "void_split", "spine_arc": "void_split", "pelvis": [-0.18, 0.42, 0.18], "chest": [0.46, -0.34, 0.22], "head": [0.10, 0.46, -0.16],
+        "spine": [0.16, -0.14, 0.12], "UpperArm_R": [1.12, 0.12, 0.30], "UpperArm_L": [0.28, 0.78, -0.20],
+        "front_foot": "L", "dominant_arm": "R", "silhouette_width": "void_split", "line_of_action": "void_split"
+      },
+      "clash_lock": {
+        "com": "resist_offset", "spine_arc": "resist_offset", "pelvis": [-0.10, 0.28, 0.14], "chest": [-0.24, -0.26, 0.14], "head": [0.10, 0.32, -0.12],
+        "spine": [-0.16, -0.12, 0.08], "UpperArm_R": [0.50, 0.56, 0.68], "UpperArm_L": [0.50, -0.56, -0.68],
+        "front_foot": "L", "dominant_arm": "both", "silhouette_width": "resist_offset", "line_of_action": "resist_offset"
+      }
+    }
+  }
+}

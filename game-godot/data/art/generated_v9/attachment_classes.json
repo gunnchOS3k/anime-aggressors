@@ -1,0 +1,104 @@
+{
+  "schema": "aa_generated_art_v9_attachment_classes",
+  "generator": "aa_generated_art_v9",
+  "human_authored": false,
+  "classes": [
+    "SKINNED_COSTUME",
+    "BONE_RIGID",
+    "SECONDARY_CHAIN",
+    "VFX_ORBIT",
+    "WORLD_STATIC"
+  ],
+  "notes": "Every non-body visible object must be exactly one class. No fighter costume is WORLD_STATIC.",
+  "defaults": {
+    "head_shell": [
+      "BONE_RIGID",
+      "Head",
+      false
+    ],
+    "mask_skull": [
+      "BONE_RIGID",
+      "Head",
+      false
+    ],
+    "hand_L": [
+      "BONE_RIGID",
+      "Hand_L",
+      false
+    ],
+    "hand_R": [
+      "BONE_RIGID",
+      "Hand_R",
+      false
+    ],
+    "hand_L_open": [
+      "BONE_RIGID",
+      "Hand_L",
+      false
+    ],
+    "hand_R_open": [
+      "BONE_RIGID",
+      "Hand_R",
+      false
+    ],
+    "hand_L_guard": [
+      "BONE_RIGID",
+      "Hand_L",
+      false
+    ],
+    "hand_R_guard": [
+      "BONE_RIGID",
+      "Hand_R",
+      false
+    ],
+    "boot_L": [
+      "BONE_RIGID",
+      "Foot_L",
+      false
+    ],
+    "boot_R": [
+      "BONE_RIGID",
+      "Foot_R",
+      false
+    ],
+    "torso_shell": [
+      "SKINNED_COSTUME",
+      "Chest",
+      false
+    ],
+    "coat_layer": [
+      "SKINNED_COSTUME",
+      "Chest",
+      false
+    ],
+    "hand_L_cast": [
+      "BONE_RIGID",
+      "Hand_L",
+      false
+    ],
+    "hand_R_cast": [
+      "BONE_RIGID",
+      "Hand_R",
+      false
+    ]
+  },
+  "stress_actions": [
+    "idle",
+    "walk_extreme",
+    "run_extreme",
+    "dash",
+    "heavy_anticipation",
+    "heavy_contact",
+    "heavy_follow",
+    "hurt_heavy",
+    "launch_start",
+    "charge_100",
+    "super",
+    "clash_start",
+    "clash_lock",
+    "clash_push",
+    "clash_win",
+    "clash_lose",
+    "KO"
+  ]
+}

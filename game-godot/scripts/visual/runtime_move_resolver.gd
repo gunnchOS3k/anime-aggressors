@@ -181,10 +181,10 @@ static func _resolve_loaded_name(requested: String, loaded_clips: Dictionary) ->
 	var table: Dictionary = _map.get("move_id_to_clip", {})
 	if table.has(requested) and loaded_clips.has(str(table[requested])):
 		return str(table[requested])
+	# VXP-3: never silently remap an unknown clip onto generic `special`,
+	# and never invent a special→projectile fallback. Explicit aliases only.
 	if requested == "special":
-		for fallback in ["projectile_full", "projectile_medium", "projectile_tap", "heavy"]:
-			if loaded_clips.has(fallback):
-				return fallback
+		return requested
 	if requested == "dodge" and loaded_clips.has("dash"):
 		return "dash"
 	if requested == "aura_release" and loaded_clips.has("signature_lane_burst"):
