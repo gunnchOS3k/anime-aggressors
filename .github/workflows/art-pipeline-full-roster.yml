@@ -23,6 +23,7 @@ jobs:
           python3 tools/art_pipeline/human_art/tests/test_full_roster.py
           python3 tools/art_pipeline/human_art/tests/test_owner_quality_gates.py
           python3 tools/art_pipeline/elemental_specials/validate_select_match_parity.py
+          python3 tools/art_pipeline/build_identity/validate_build_identity.py
       - name: Upload evidence
         if: always()
         uses: actions/upload-artifact@v4
