@@ -41,8 +41,18 @@ function stampBuildIdentity() {
 }
 
 function assertApkEmbedsSha(apk, sha) {
-  const bytes = fs.readFileSync(apk);
-  if (!bytes.includes(Buffer.from(sha))) {
+  try {
+    execFileSync(
+      "python3",
+      [
+        "-c",
+        "import sys, zipfile\nsha=sys.argv[1].encode()\nwith zipfile.ZipFile(sys.argv[2]) as z:\n    for name in z.namelist():\n        if sha in z.read(name):\n            sys.exit(0)\nsys.exit(1)\n",
+        sha,
+        apk,
+      ],
+      { cwd: repoRoot },
+    );
+  } catch {
     console.error("Review APK refused: packed APK does not embed", sha);
     process.exit(1);
   }
