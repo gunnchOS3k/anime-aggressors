@@ -257,6 +257,9 @@ func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, s
 	if model_3d != null and model_3d.has_method("set_presentation_context"):
 		model_3d.set_presentation_context(_PresentationContext.battle_context_for_slot(slot, cpu_flag))
 	var model_loaded: bool = model_3d != null and model_3d.configure(data)
+	if model_3d != null and model_3d.has_method("set_presentation_context"):
+		# Fresh battle context after configure — never keep a mutated select instance.
+		model_3d.set_presentation_context(_PresentationContext.battle_context_for_slot(slot, cpu_flag))
 	if body:
 		# CP2: keep ColorRect hidden unless ensure_visible_presentation proves model failed.
 		body.visible = false

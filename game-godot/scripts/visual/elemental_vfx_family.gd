@@ -63,6 +63,16 @@ const FAMILIES := {
 	},
 }
 
+const CRITICAL_CUES := {
+	"ember-vale": "furnace_flare_rupture",
+	"rook-ironside": "tectonic_impact_fracture",
+	"juno-spark": "voltage_fork",
+	"kaia-windrow": "wind_shear_cleave",
+	"nix-calder": "crystal_break_launch",
+	"orion-vell": "gravity_rift_constellation",
+	"vesper-nyx": "phase_tear_rupture",
+}
+
 const READ_ORDER := [
 	"body_pose",
 	"contact_point",
@@ -80,7 +90,11 @@ static func family(fighter_id: String) -> Dictionary:
 
 
 static func complete() -> bool:
-	return FAMILIES.size() == 7
+	return FAMILIES.size() == 7 and CRITICAL_CUES.size() == 7
+
+
+static func critical_cue(fighter_id: String) -> String:
+	return str(CRITICAL_CUES.get(fighter_id, ""))
 
 
 static func particle_budget(fighter_id: String) -> int:

@@ -17,6 +17,10 @@ const reviewApkPath = path.join(
   repoRoot,
   "builds/android/anime-aggressors-elemental-specials-owner-review.apk",
 );
+const selectCriticalReviewApkPath = path.join(
+  repoRoot,
+  "builds/android/anime-aggressors-select-critical-launch-owner-review.apk",
+);
 
 function stampBuildIdentity() {
   execFileSync(
@@ -129,7 +133,13 @@ const digest = crypto.createHash("sha256").update(fs.readFileSync(apkPath)).dige
 fs.writeFileSync(`${apkPath}.sha256`, `${digest}  ${path.basename(apkPath)}\n`);
 fs.copyFileSync(apkPath, reviewApkPath);
 fs.writeFileSync(`${reviewApkPath}.sha256`, `${digest}  ${path.basename(reviewApkPath)}\n`);
+fs.copyFileSync(apkPath, selectCriticalReviewApkPath);
+fs.writeFileSync(
+  `${selectCriticalReviewApkPath}.sha256`,
+  `${digest}  ${path.basename(selectCriticalReviewApkPath)}\n`,
+);
 console.log("Exported Android debug APK:", apkPath);
 console.log("Owner-review APK:", reviewApkPath);
+console.log("Select/critical-launch review APK:", selectCriticalReviewApkPath);
 console.log("Embedded SHA:", stampedIdentity.git_sha);
 console.log("SHA-256:", digest);
