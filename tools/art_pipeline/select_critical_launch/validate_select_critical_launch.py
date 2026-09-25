@@ -46,8 +46,19 @@ FAMILIES = {
     "orion-vell": "indigo",
     "vesper-nyx": "violet",
 }
+SPOKEN_NAMES = {
+    "ember-vale": "Ember",
+    "rook-ironside": "Rook",
+    "juno-spark": "Juno",
+    "kaia-windrow": "Kaia",
+    "nix-calder": "Nix",
+    "orion-vell": "Orion",
+    "vesper-nyx": "Vesper",
+}
 OWNER_FALSE = {
     "OWNER_SELECT_ANNOUNCER_PASS": False,
+    "OWNER_ANNOUNCER_TRIGGER_TIMING_PASS": False,
+    "OWNER_ANNOUNCER_REVIEW_AUDIBILITY_PASS": False,
     "OWNER_ROYGBIV_OPACITY_PASS": False,
     "OWNER_FRAMING_PASS": False,
     "OWNER_LAUNCH_TRAIL_PASS": False,
@@ -102,6 +113,8 @@ def evaluate() -> dict:
     fighters = data.get("fighters", {})
     style = data.get("style", {})
     announcer = text("game-godot/scripts/audio/fighter_announcer.gd")
+    voice = text("game-godot/scripts/audio/announcer_voice_provider.gd")
+    harness = text("game-godot/tests/presentation/SelectCriticalLaunchHarness.gd")
     callout = text("game-godot/scripts/ui/lockin_name_callout.gd")
     select = text("game-godot/scripts/menus/fighter_select_scene.gd")
     contract = text("game-godot/scripts/visual/elemental_material_contract.gd")
@@ -132,10 +145,39 @@ def evaluate() -> dict:
     ) and "_announce_lock" in select and "play(" in callout
     if not announcer_event:
         failures.append("announcer_events_incomplete")
-    rights_ready = "ANNOUNCER_FINAL_VOICE_ASSETS := false" in announcer or "ANNOUNCER_FINAL_VOICE_ASSETS = false" in announcer
-    if "ANNOUNCER_FINAL_VOICE_ASSETS := true" in announcer:
+    rights_ready = (
+        "ANNOUNCER_FINAL_VOICE_ASSETS := false" in announcer
+        and "ANNOUNCER_FINAL_VOICE_ASSETS := false" in voice
+        and "SELECT_ANNOUNCER_AUDIO_RIGHTS_READY := false" in voice
+    )
+    if "ANNOUNCER_FINAL_VOICE_ASSETS := true" in announcer or "ANNOUNCER_FINAL_VOICE_ASSETS := true" in voice:
         failures.append("announcer_final_voice_claimed_without_assets")
         rights_ready = False
+    spoken_provider = all(
+        token in voice
+        for token in (
+            "AnnouncerVoiceProvider",
+            "REVIEW_ONLY",
+            "platform_tts_review_only",
+            "FINAL_VOICE_DIR",
+            "REVIEW_RENDER_DIR",
+            "speech_unavailable",
+        )
+    ) and "speak_lockin" in announcer and "_Voice.speak_lockin" in announcer
+    spoken_names_ok = all(f'"{fid}": "{name}"' in voice for fid, name in SPOKEN_NAMES.items())
+    spoken_tests = all(
+        token in harness
+        for token in (
+            "hover_spoke",
+            "confirm_did_not_speak",
+            "debounce_not_once",
+            "p1_then_p2_spoken",
+            "speech_miss_crashed_or_skipped_visual",
+        )
+    )
+    spoken_name_pass = spoken_provider and spoken_names_ok and spoken_tests and rights_ready
+    if not spoken_name_pass:
+        failures.append("review_spoken_name_incomplete")
     lockin_visual = "EMBER VALE" in announcer or "shout_label" in announcer
     if not lockin_visual or "reduce_motion" not in callout:
         failures.append("lockin_visual_incomplete")
@@ -237,8 +279,11 @@ def evaluate() -> dict:
     a11y = "reduce_motion" in cue and "high_contrast" in cue and "color_only" in cue
     labs_ok = "PredictorDebug" in labs and "gameplay_exposed" in labs and "lockin" in sel_review
     pixel_ok = (
-        "OWNER_REVIEW_SELECT_ANNOUNCER_OPACITY_FRAMING_AND_CRITICAL_LAUNCH_ON_PIXEL" in review_doc
+        "OWNER_REVIEW_EXACT_HEAD_ANNOUNCER_OPACITY_FRAMING_AND_CRITICAL_LAUNCH_ON_PIXEL" in review_doc
+        and "review placeholder" in review_doc.lower()
+        and "Does hover stay silent?" in review_doc
         and all(name in review_doc for name in NAMES.values())
+        and all(spoken in review_doc for spoken in SPOKEN_NAMES.values())
     )
     if not pixel_ok:
         failures.append("pixel_review_doc_incomplete")
@@ -249,7 +294,9 @@ def evaluate() -> dict:
 
     gates = {
         "SELECT_ANNOUNCER_EVENT_PASS": announcer_event,
+        "SELECT_ANNOUNCER_REVIEW_SPOKEN_NAME_PASS": spoken_name_pass,
         "SELECT_ANNOUNCER_AUDIO_RIGHTS_READY": False,
+        "ANNOUNCER_FINAL_VOICE_ASSETS": False,
         "SELECT_LOCKIN_VISUAL_PASS": lockin_visual and announcer_event,
         "ROSTER_ROYGBIV_SELECT_PASS": roygbiv,
         "NORMAL_BODY_OPACITY_FLOOR_PASS": opacity,
@@ -278,6 +325,8 @@ def evaluate() -> dict:
                 **identity_rows[fid],
                 "hover_announces": False,
                 "confirm_announces": True,
+                "spoken_name": SPOKEN_NAMES[fid],
+                "review_only_spoken_name": True,
                 "events": [
                     "fighter_lock_started",
                     "fighter_locked",
@@ -289,6 +338,7 @@ def evaluate() -> dict:
         },
         "gates": {
             "SELECT_ANNOUNCER_EVENT_PASS": gates["SELECT_ANNOUNCER_EVENT_PASS"],
+            "SELECT_ANNOUNCER_REVIEW_SPOKEN_NAME_PASS": gates["SELECT_ANNOUNCER_REVIEW_SPOKEN_NAME_PASS"],
             "SELECT_LOCKIN_VISUAL_PASS": gates["SELECT_LOCKIN_VISUAL_PASS"],
             "SELECT_ANNOUNCER_AUDIO_RIGHTS_READY": False,
         },
@@ -391,7 +441,7 @@ def evaluate() -> dict:
         "gates": gates,
         "hues": dict(zip(FIGHTERS, hues, strict=True)),
         "HUMAN_*": "Remain false unless a human signed.",
-        "next_action": "OWNER_REVIEW_SELECT_ANNOUNCER_OPACITY_FRAMING_AND_CRITICAL_LAUNCH_ON_PIXEL",
+        "next_action": "OWNER_REVIEW_EXACT_HEAD_ANNOUNCER_OPACITY_FRAMING_AND_CRITICAL_LAUNCH_ON_PIXEL",
     }
     write_json(ROOT / "artifacts/presentation/SELECT_CRITICAL_LAUNCH_GATES.json", payload)
     return payload
@@ -401,6 +451,7 @@ def main() -> int:
     payload = evaluate()
     structural = [
         "SELECT_ANNOUNCER_EVENT_PASS",
+        "SELECT_ANNOUNCER_REVIEW_SPOKEN_NAME_PASS",
         "SELECT_LOCKIN_VISUAL_PASS",
         "ROSTER_ROYGBIV_SELECT_PASS",
         "NORMAL_BODY_OPACITY_FLOOR_PASS",

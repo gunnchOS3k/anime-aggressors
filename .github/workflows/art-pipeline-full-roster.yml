@@ -26,6 +26,7 @@ jobs:
           python3 tools/art_pipeline/build_identity/validate_build_identity.py
           python3 tools/art_pipeline/select_critical_launch/validate_select_critical_launch.py
           python3 tools/art_pipeline/select_critical_launch/test_select_critical_launch.py
+          python3 tools/art_pipeline/select_critical_launch/test_spoken_name_provider.py
       - name: Upload evidence
         if: always()
         uses: actions/upload-artifact@v4

@@ -3,6 +3,7 @@ extends SceneTree
 ## Structural + predictor tests. Does not weaken existing suites.
 
 const _Announcer = preload("res://scripts/audio/fighter_announcer.gd")
+const _Voice = preload("res://scripts/audio/announcer_voice_provider.gd")
 const _Identity = preload("res://scripts/visual/elemental_material_contract.gd")
 const _Fit = preload("res://scripts/visual/geometry_auto_fit.gd")
 const _Predictor = preload("res://scripts/combat/critical_launch_predictor.gd")
@@ -33,6 +34,7 @@ func _fail(msg: String) -> void:
 
 func _run() -> void:
 	_test_announcer()
+	_test_spoken_name_provider()
 	_test_opacity()
 	_test_framing()
 	_test_predictor()
@@ -49,6 +51,7 @@ func _run() -> void:
 
 func _test_announcer() -> void:
 	_Announcer.reset_debounce_for_tests()
+	_Voice.use_fake_backend_for_tests()
 	var hover := _Announcer.announce_lock(1, "ember-vale", null, true)
 	if bool(hover.get("announced", true)):
 		_fail("hover_announced")
@@ -71,6 +74,54 @@ func _test_announcer() -> void:
 	for need in ["fighter_lock_started", "fighter_locked", "announcer_name_started", "announcer_name_finished"]:
 		if need not in kinds:
 			_fail("missing_event:" + need)
+
+
+func _test_spoken_name_provider() -> void:
+	if not _Voice.mapping_complete():
+		_fail("spoken_name_mapping")
+	var expected := {
+		"ember-vale": "Ember",
+		"rook-ironside": "Rook",
+		"juno-spark": "Juno",
+		"kaia-windrow": "Kaia",
+		"nix-calder": "Nix",
+		"orion-vell": "Orion",
+		"vesper-nyx": "Vesper",
+	}
+	for fid in expected.keys():
+		if _Voice.spoken_name(fid) != expected[fid]:
+			_fail("spoken_name:" + fid)
+	_Announcer.reset_debounce_for_tests()
+	_Voice.use_fake_backend_for_tests()
+	var hover := _Announcer.announce_lock(1, "juno-spark", null, true)
+	if bool(hover.get("spoken", true)) or not _Voice.speak_log().is_empty():
+		_fail("hover_spoke")
+	var p1 := _Announcer.announce_lock(1, "juno-spark", null, false)
+	if not bool(p1.get("spoken", false)) or str(p1.get("spoken_name")) != "Juno":
+		_fail("confirm_did_not_speak")
+	if _Voice.speak_log() != ["Juno"]:
+		_fail("confirm_speak_count")
+	var again := _Announcer.announce_lock(1, "juno-spark", null, false)
+	if bool(again.get("announced", false)) or bool(again.get("spoken", false)):
+		_fail("debounced_spoke_again")
+	if _Voice.speak_log().size() != 1:
+		_fail("debounce_not_once")
+	_Announcer.reset_debounce_for_tests()
+	var p2 := _Announcer.announce_lock(2, "kaia-windrow", null, false)
+	if str(p2.get("spoken_name")) != "Kaia" or not bool(p2.get("spoken", false)):
+		_fail("p2_spoken_order")
+	if _Voice.speak_log() != ["Juno", "Kaia"]:
+		_fail("p1_then_p2_spoken")
+	_Announcer.reset_debounce_for_tests()
+	_Voice.use_unavailable_backend_for_tests()
+	var silent := _Announcer.announce_lock(1, "nix-calder", null, false)
+	if not bool(silent.get("announced", false)):
+		_fail("speech_miss_crashed_or_skipped_visual")
+	if bool(silent.get("spoken", true)):
+		_fail("unavailable_backend_spoke")
+	if bool(_Voice.ANNOUNCER_FINAL_VOICE_ASSETS) or bool(_Voice.SELECT_ANNOUNCER_AUDIO_RIGHTS_READY):
+		_fail("rights_gates_not_false")
+	_Voice.reset_for_tests()
 
 
 func _test_opacity() -> void:

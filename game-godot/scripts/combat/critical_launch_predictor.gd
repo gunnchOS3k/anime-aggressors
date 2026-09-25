@@ -166,4 +166,6 @@ static func _pack(tier: String, reason: String, snapshot: Dictionary, vel: Vecto
 		"crosses_blast_passively": blast,
 		"recovery_plausible": saved or tier == TIER_CRITICAL_RECOVERABLE,
 		"inputs_snapshot": snapshot.duplicate(true),
+		"mutates_gameplay": false,
+		"snapshot_unchanged": true,
 	}

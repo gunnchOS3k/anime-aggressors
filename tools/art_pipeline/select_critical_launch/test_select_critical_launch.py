@@ -10,7 +10,9 @@ class SelectCriticalLaunchTests(unittest.TestCase):
         gates = payload["gates"]
         self.assertEqual(payload["failures"], [])
         self.assertTrue(gates["SELECT_ANNOUNCER_EVENT_PASS"])
+        self.assertTrue(gates["SELECT_ANNOUNCER_REVIEW_SPOKEN_NAME_PASS"])
         self.assertFalse(gates["SELECT_ANNOUNCER_AUDIO_RIGHTS_READY"])
+        self.assertFalse(gates["ANNOUNCER_FINAL_VOICE_ASSETS"])
         self.assertTrue(gates["ROSTER_ROYGBIV_SELECT_PASS"])
         self.assertTrue(gates["NORMAL_BODY_OPACITY_FLOOR_PASS"])
         self.assertEqual(gates["SELECT_CARD_AUTO_FIT_PASS"], "7/7")

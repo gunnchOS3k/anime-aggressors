@@ -2,12 +2,14 @@ extends RefCounted
 class_name FighterAnnouncer
 
 ## Original lock-in announcer. Announce on confirm only — never hover/focus.
-## Final licensed/owner voice is pending. Do not treat placeholders as shipping audio.
+## Spoken names use AnnouncerVoiceProvider (review-only TTS). Final voice is pending.
 
 const _Bank = preload("res://scripts/audio/procedural_audio_bank.gd")
 const _Identity = preload("res://scripts/visual/elemental_material_contract.gd")
+const _Voice = preload("res://scripts/audio/announcer_voice_provider.gd")
 
 const ANNOUNCER_FINAL_VOICE_ASSETS := false
+const SELECT_ANNOUNCER_AUDIO_RIGHTS_READY := false
 const DEBOUNCE_SEC := 0.55
 const VOICE_LOCK_SEC := 0.85
 
@@ -59,12 +61,16 @@ static func announce_lock(slot: int, fighter_id: String, host: Node = null, hove
 	var result := {
 		"ok": false,
 		"announced": false,
+		"spoken": false,
 		"hover_ignored": hover,
 		"fighter_id": fighter_id,
 		"slot": slot,
 		"display_name": display_name(fighter_id),
+		"spoken_name": _Voice.spoken_name(fighter_id),
 		"shout": shout_label(fighter_id),
 		"ANNOUNCER_FINAL_VOICE_ASSETS": ANNOUNCER_FINAL_VOICE_ASSETS,
+		"SELECT_ANNOUNCER_AUDIO_RIGHTS_READY": SELECT_ANNOUNCER_AUDIO_RIGHTS_READY,
+		"review_only": true,
 		"reason": "",
 	}
 	if hover:
@@ -85,11 +91,18 @@ static func announce_lock(slot: int, fighter_id: String, host: Node = null, hove
 	_record("announcer_name_started", result)
 	var stinger := _play_stinger(host)
 	var motif := _play_name_motif(fighter_id, host)
+	var spoken := _Voice.speak_lockin(fighter_id, host)
 	result["stinger"] = stinger
 	result["name_motif"] = motif
+	result["spoken"] = bool(spoken.get("spoken", false))
+	result["spoken_backend"] = str(spoken.get("backend", ""))
+	result["voice"] = spoken
 	result["announced"] = true
 	result["ok"] = true
-	result["reason"] = "announced_placeholder" if not ANNOUNCER_FINAL_VOICE_ASSETS else "announced_final"
+	if bool(spoken.get("spoken", false)):
+		result["reason"] = "announced_review_spoken_name"
+	else:
+		result["reason"] = "announced_visual_and_stinger_speech_unavailable"
 	_emit(host, "announcer_name_finished", [fighter_id])
 	_record("announcer_name_finished", result)
 	return result
