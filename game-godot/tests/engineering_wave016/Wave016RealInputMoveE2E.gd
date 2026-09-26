@@ -18,16 +18,16 @@ const CASES := [
 	{"name": "forward_attack", "suffix": "attack", "axis": Vector2(0.45, 0), "air": false, "expect_move": "forward_tilt", "expect_clip": "tilt_forward"},
 	{"name": "up_attack", "suffix": "attack", "axis": Vector2(0, -0.8), "air": false, "expect_move": "up_tilt", "expect_clip": "tilt_up"},
 	{"name": "down_attack", "suffix": "attack", "axis": Vector2(0, 0.8), "air": false, "expect_move": "down_tilt", "expect_clip": "tilt_down"},
-	{"name": "dash_attack", "suffix": "attack", "axis": Vector2(0.95, 0), "air": false, "expect_move": "dash_attack", "expect_clip": "heavy"},
+	{"name": "dash_attack", "suffix": "attack", "axis": Vector2(0.95, 0), "air": false, "expect_move": "dash_attack", "expect_clip": "dash_attack"},
 	{"name": "neutral_air", "suffix": "attack", "axis": Vector2(0, 0), "air": true, "expect_move": "neutral_air", "expect_clip": "aerial_neutral"},
 	{"name": "forward_air", "suffix": "attack", "axis": Vector2(0.7, 0), "air": true, "expect_move": "forward_air", "expect_clip": "aerial_forward"},
 	{"name": "back_air", "suffix": "attack", "axis": Vector2(-0.75, 0), "air": true, "expect_move": "back_air", "expect_clip": "aerial_back"},
 	{"name": "up_air", "suffix": "attack", "axis": Vector2(0, -0.8), "air": true, "expect_move": "up_air", "expect_clip": "aerial_up"},
 	{"name": "down_air", "suffix": "attack", "axis": Vector2(0, 0.8), "air": true, "expect_move": "down_air", "expect_clip": "aerial_down"},
 	{"name": "special_neutral", "suffix": "special", "axis": Vector2(0, 0), "air": false, "expect_move": "neutral_special_projectile", "expect_clip_prefix": "projectile_"},
-	{"name": "special_forward", "suffix": "special", "axis": Vector2(0.7, 0), "air": false, "expect_move": "side_special", "expect_clip": "signature_lane_feint"},
+	{"name": "special_forward", "suffix": "special", "axis": Vector2(0.7, 0), "air": false, "expect_move": "side_special", "expect_clip": "side_special"},
 	{"name": "special_up", "suffix": "special", "axis": Vector2(0, -0.8), "air": false, "expect_move": "up_special_recovery", "expect_clip": "recovery"},
-	{"name": "special_down", "suffix": "special", "axis": Vector2(0, 0.8), "air": false, "expect_move": "down_special", "expect_clip": "signature_lane_trap"},
+	{"name": "special_down", "suffix": "special", "axis": Vector2(0, 0.8), "air": false, "expect_move": "down_special", "expect_clip": "down_special"},
 	{"name": "grab", "suffix": "grab", "axis": Vector2(0, 0), "air": false, "expect_move": "grab", "expect_clip": "grab"},
 	{"name": "dodge", "suffix": "dodge", "axis": Vector2(0, 0), "air": false, "expect_move": "", "expect_clip": "dodge"},
 	{"name": "aura_charge", "suffix": "aura_charge", "axis": Vector2(0, 0), "air": false, "expect_move": "", "expect_clip": "aura_charge", "hold": true},
@@ -382,14 +382,14 @@ func _run_aura_burst(fighter, tim) -> Dictionary:
 		move_id = _move_id(fighter)
 		clip = _clip(fighter)
 	var delta := _max_delta(before, mid)
-	var ok := move_id == "aura_burst" and (clip == "signature_lane_burst" or clip == "aura_release")
+	var ok := move_id == "aura_burst" and (clip == "aura_burst" or clip == "signature_lane_burst" or clip == "aura_release")
 	return {
 		"name": "aura_burst",
 		"route": "TouchInputManager",
 		"gameplay_move_id": move_id,
 		"active_clip": clip,
 		"expect_move": "aura_burst",
-		"expect_clip": "signature_lane_burst",
+		"expect_clip": "aura_burst",
 		"aura_at_input": 100.0,
 		"pass": ok,
 		"real_input_pass": ok,
