@@ -27,7 +27,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 2,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -61,11 +61,12 @@
       },
       "feedback": {
         "tier": "light",
-        "hitstop_frames": 3,
+        "hitstop_frames": 2,
         "camera_event": "shake_light",
-        "vfx_event": "gale_spark",
-        "sfx_event": "gale_hit_light",
-        "screen_flash": false
+        "vfx_event": "kaia_windrow_jab_1_crescent_ribbon",
+        "sfx_event": "kaia-windrow.jab_1.sfx",
+        "screen_flash": false,
+        "particle_profile": "kaia-windrow.jab_1.air_streaks_crescents"
       },
       "training_display_name": "Jab 1",
       "combat_tag": "wind_drift",
@@ -87,7 +88,11 @@
           "to": "jab_2"
         }
       ],
-      "h2h_string_id": "kaia-windrow:jab_1->jab_2"
+      "h2h_string_id": "kaia-windrow:jab_1->jab_2",
+      "animation_id": "jab_1",
+      "v3_fantasy": "Short palm gust",
+      "v3_vfx_shape": "crescent_ribbon",
+      "v3_particle_library": "air_streaks_crescents"
     },
     {
       "move_id": "jab_2",
@@ -113,7 +118,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 2,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -147,11 +152,12 @@
       },
       "feedback": {
         "tier": "light",
-        "hitstop_frames": 3,
+        "hitstop_frames": 2,
         "camera_event": "shake_light",
-        "vfx_event": "gale_spark",
-        "sfx_event": "gale_hit_light",
-        "screen_flash": false
+        "vfx_event": "kaia_windrow_jab_2_crescent_ribbon",
+        "sfx_event": "kaia-windrow.jab_2.sfx",
+        "screen_flash": false,
+        "particle_profile": "kaia-windrow.jab_2.air_streaks_crescents"
       },
       "training_display_name": "Jab 2",
       "combat_tag": "wind_drift",
@@ -168,7 +174,11 @@
           "to": "up_tilt"
         }
       ],
-      "h2h_string_id": "kaia-windrow:jab_2->up_tilt"
+      "h2h_string_id": "kaia-windrow:jab_2->up_tilt",
+      "animation_id": "jab_2",
+      "v3_fantasy": "Crosswind backhand with slight push",
+      "v3_vfx_shape": "crescent_ribbon",
+      "v3_particle_library": "air_streaks_crescents"
     },
     {
       "move_id": "jab_finisher",
@@ -194,7 +204,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -236,9 +246,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "gale_jab_fin",
-        "sfx_event": "gale_jab_fin_sfx",
-        "screen_flash": false
+        "vfx_event": "kaia_windrow_jab_finisher_crescent_ribbon",
+        "sfx_event": "kaia-windrow.jab_finisher.sfx",
+        "screen_flash": false,
+        "particle_profile": "kaia-windrow.jab_finisher.air_streaks_crescents"
       },
       "training_display_name": "Jab Finisher",
       "combat_tag": "wind_drift",
@@ -246,7 +257,11 @@
         "type": "gale",
         "effect": "wind_drift",
         "strength": 1
-      }
+      },
+      "animation_id": "jab_finisher",
+      "v3_fantasy": "Compact cyclone pop resetting spacing",
+      "v3_vfx_shape": "crescent_ribbon",
+      "v3_particle_library": "air_streaks_crescents"
     },
     {
       "move_id": "forward_tilt",
@@ -272,7 +287,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -305,12 +320,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "gale_spark",
-        "sfx_event": "gale_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "kaia_windrow_forward_tilt_crescent_ribbon",
+        "sfx_event": "kaia-windrow.forward_tilt.sfx",
+        "screen_flash": false,
+        "particle_profile": "kaia-windrow.forward_tilt.air_streaks_crescents"
       },
       "training_display_name": "Forward Tilt",
       "combat_tag": "wind_drift",
@@ -318,7 +334,11 @@
         "type": "gale",
         "effect": "wind_drift",
         "strength": 1
-      }
+      },
+      "animation_id": "forward_tilt",
+      "v3_fantasy": "Wind-slash crescent",
+      "v3_vfx_shape": "crescent_ribbon",
+      "v3_particle_library": "air_streaks_crescents"
     },
     {
       "move_id": "up_tilt",
@@ -344,7 +364,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -377,12 +397,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "gale_spark",
-        "sfx_event": "gale_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "kaia_windrow_up_tilt_crescent_ribbon",
+        "sfx_event": "kaia-windrow.up_tilt.sfx",
+        "screen_flash": false,
+        "particle_profile": "kaia-windrow.up_tilt.air_streaks_crescents"
       },
       "training_display_name": "Up Tilt",
       "combat_tag": "wind_drift",
@@ -390,7 +411,11 @@
         "type": "gale",
         "effect": "wind_drift",
         "strength": 1
-      }
+      },
+      "animation_id": "up_tilt",
+      "v3_fantasy": "Vertical pressure blade / air scoop",
+      "v3_vfx_shape": "crescent_ribbon",
+      "v3_particle_library": "air_streaks_crescents"
     },
     {
       "move_id": "down_tilt",
@@ -416,7 +441,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -449,12 +474,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "gale_spark",
-        "sfx_event": "gale_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "kaia_windrow_down_tilt_crescent_ribbon",
+        "sfx_event": "kaia-windrow.down_tilt.sfx",
+        "screen_flash": false,
+        "particle_profile": "kaia-windrow.down_tilt.air_streaks_crescents"
       },
       "training_display_name": "Down Tilt",
       "combat_tag": "wind_drift",
@@ -462,7 +488,11 @@
         "type": "gale",
         "effect": "wind_drift",
         "strength": 1
-      }
+      },
+      "animation_id": "down_tilt",
+      "v3_fantasy": "Low gust sweep with reposition push",
+      "v3_vfx_shape": "crescent_ribbon",
+      "v3_particle_library": "air_streaks_crescents"
     },
     {
       "move_id": "dash_attack",
@@ -488,7 +518,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -521,12 +551,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "gale_spark",
-        "sfx_event": "gale_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "kaia_windrow_dash_attack_crescent_ribbon",
+        "sfx_event": "kaia-windrow.dash_attack.sfx",
+        "screen_flash": false,
+        "particle_profile": "kaia-windrow.dash_attack.air_streaks_crescents"
       },
       "training_display_name": "Dash Attack",
       "combat_tag": "wind_drift",
@@ -534,7 +565,11 @@
         "type": "gale",
         "effect": "wind_drift",
         "strength": 1
-      }
+      },
+      "animation_id": "dash_attack",
+      "v3_fantasy": "Slipstream dash strike",
+      "v3_vfx_shape": "crescent_ribbon",
+      "v3_particle_library": "air_streaks_crescents"
     },
     {
       "move_id": "heavy_attack",
@@ -560,7 +595,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 8,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -602,9 +637,10 @@
         "tier": "heavy",
         "hitstop_frames": 8,
         "camera_event": "shake_heavy",
-        "vfx_event": "gale_heavy",
-        "sfx_event": "gale_heavy_sfx",
-        "screen_flash": false
+        "vfx_event": "kaia_windrow_heavy_attack_crescent_ribbon",
+        "sfx_event": "kaia-windrow.heavy_attack.sfx",
+        "screen_flash": false,
+        "particle_profile": "kaia-windrow.heavy_attack.air_streaks_crescents"
       },
       "training_display_name": "Heavy Attack",
       "combat_tag": "wind_drift",
@@ -614,7 +650,11 @@
         "strength": 1
       },
       "wave016_reachability": "DESIGN_ONLY_NO_DISTINCT_CONTROL",
-      "note": "CONTROLS.md does not distinguish tilt vs smash/heavy; not bound to avoid awkward inputs."
+      "note": "CONTROLS.md does not distinguish tilt vs smash/heavy; not bound to avoid awkward inputs.",
+      "animation_id": "heavy_attack",
+      "v3_fantasy": "Compressed-air cleave with a readable wind blade",
+      "v3_vfx_shape": "crescent_ribbon",
+      "v3_particle_library": "air_streaks_crescents"
     },
     {
       "move_id": "neutral_air",
@@ -640,7 +680,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -673,12 +713,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "gale_spark",
-        "sfx_event": "gale_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "kaia_windrow_neutral_air_crescent_ribbon",
+        "sfx_event": "kaia-windrow.neutral_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "kaia-windrow.neutral_air.air_streaks_crescents"
       },
       "training_display_name": "Neutral Air",
       "combat_tag": "wind_drift",
@@ -695,7 +736,11 @@
           "to": "up_air"
         }
       ],
-      "h2h_string_id": "kaia-windrow:neutral_air->up_air"
+      "h2h_string_id": "kaia-windrow:neutral_air->up_air",
+      "animation_id": "neutral_air",
+      "v3_fantasy": "Orbiting air ring / gentle multi-hit vortex",
+      "v3_vfx_shape": "crescent_ribbon",
+      "v3_particle_library": "air_streaks_crescents"
     },
     {
       "move_id": "forward_air",
@@ -721,7 +766,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -754,12 +799,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "gale_spark",
-        "sfx_event": "gale_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "kaia_windrow_forward_air_crescent_ribbon",
+        "sfx_event": "kaia-windrow.forward_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "kaia-windrow.forward_air.air_streaks_crescents"
       },
       "training_display_name": "Forward Air",
       "combat_tag": "wind_drift",
@@ -767,7 +813,11 @@
         "type": "gale",
         "effect": "wind_drift",
         "strength": 1
-      }
+      },
+      "animation_id": "forward_air",
+      "v3_fantasy": "Forward wind-blade kick/slash",
+      "v3_vfx_shape": "crescent_ribbon",
+      "v3_particle_library": "air_streaks_crescents"
     },
     {
       "move_id": "back_air",
@@ -865,88 +915,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
-      "aura_scaling": {
-        "level_0": {
-          "damage_mult": 1
-        },
-        "level_1": {
-          "damage_mult": 1.05,
-          "element_strength": 1.2
-        },
-        "level_2": {
-          "damage_mult": 1.1,
-          "hitbox_scale": 1.15,
-          "element_strength": 1.5
-        },
-        "level_3": {
-          "damage_mult": 1.15,
-          "hitbox_scale": 1.25,
-          "extra_active_frames": 1,
-          "cancel_windows": [
-            {
-              "start": 8,
-              "end": 14
-            }
-          ],
-          "element_strength": 1.8
-        },
-        "super_ready": {
-          "damage_mult": 1.2,
-          "hitbox_scale": 1.35,
-          "feedback_tier": "aura"
-        }
-      },
-      "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "gale_spark",
-        "sfx_event": "gale_hit_light",
-        "screen_flash": false
-      },
-      "training_display_name": "Up Air",
-      "combat_tag": "wind_drift",
-      "element_effect": {
-        "type": "gale",
-        "effect": "wind_drift",
-        "strength": 1
-      },
-      "cancel_windows": [
-        {
-          "start": 7,
-          "end": 14,
-          "requires": "hit_confirm",
-          "to": "forward_air"
-        }
-      ],
-      "h2h_string_id": "kaia-windrow:up_air->forward_air"
-    },
-    {
-      "move_id": "down_air",
-      "fighter_id": "kaia-windrow",
-      "move_type": "melee",
-      "direction": "air_down",
-      "input_command": "attack_air_down",
-      "grounded_air": "air",
-      "startup_frames": 4,
-      "active_frames": 3,
-      "recovery_frames": 10,
-      "hitboxes": [
-        {
-          "offset_x": 36,
-          "offset_y": -8,
-          "width": 40,
-          "height": 32
-        }
-      ],
-      "damage": 7.68,
-      "angle_deg": 270,
-      "base_knockback": 9,
-      "knockback_growth": 1.1,
-      "shield_damage": 3,
-      "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -982,9 +951,96 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "gale_dair",
-        "sfx_event": "gale_dair_sfx",
-        "screen_flash": false
+        "vfx_event": "kaia_windrow_up_air_crescent_ribbon",
+        "sfx_event": "kaia-windrow.up_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "kaia-windrow.up_air.air_streaks_crescents"
+      },
+      "training_display_name": "Up Air",
+      "combat_tag": "wind_drift",
+      "element_effect": {
+        "type": "gale",
+        "effect": "wind_drift",
+        "strength": 1
+      },
+      "cancel_windows": [
+        {
+          "start": 7,
+          "end": 14,
+          "requires": "hit_confirm",
+          "to": "forward_air"
+        }
+      ],
+      "h2h_string_id": "kaia-windrow:up_air->forward_air",
+      "animation_id": "up_air",
+      "v3_fantasy": "Rising current fan for anti-air control",
+      "v3_vfx_shape": "crescent_ribbon",
+      "v3_particle_library": "air_streaks_crescents"
+    },
+    {
+      "move_id": "down_air",
+      "fighter_id": "kaia-windrow",
+      "move_type": "melee",
+      "direction": "air_down",
+      "input_command": "attack_air_down",
+      "grounded_air": "air",
+      "startup_frames": 4,
+      "active_frames": 3,
+      "recovery_frames": 10,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "damage": 7.68,
+      "angle_deg": 270,
+      "base_knockback": 9,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 8,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "heavy",
+        "hitstop_frames": 8,
+        "camera_event": "shake_heavy",
+        "vfx_event": "kaia_windrow_down_air_crescent_ribbon",
+        "sfx_event": "kaia-windrow.down_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "kaia-windrow.down_air.air_streaks_crescents"
       },
       "training_display_name": "Down Air",
       "combat_tag": "wind_drift",
@@ -992,7 +1048,11 @@
         "type": "gale",
         "effect": "wind_drift",
         "strength": 1
-      }
+      },
+      "animation_id": "down_air",
+      "v3_fantasy": "Descending pressure dive with a controlled gust burst",
+      "v3_vfx_shape": "crescent_ribbon",
+      "v3_particle_library": "air_streaks_crescents"
     },
     {
       "move_id": "neutral_special_projectile",
@@ -1011,7 +1071,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1053,9 +1113,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "gale_proj",
-        "sfx_event": "gale_proj_sfx",
-        "screen_flash": false
+        "vfx_event": "kaia_windrow_neutral_special_projectile_crescent_ribbon",
+        "sfx_event": "kaia-windrow.neutral_special_projectile.sfx",
+        "screen_flash": false,
+        "particle_profile": "kaia-windrow.neutral_special_projectile.air_streaks_crescents"
       },
       "training_display_name": "Gale Shot",
       "combat_tag": "wind_drift",
@@ -1097,8 +1158,8 @@
         "behavior_by_aura": [
           "curving_blade",
           "curving_blade",
-          "curving_blade",
-          "beam"
+          "boomerang",
+          "boomerang"
         ],
         "speed": 380,
         "lifetime_frames": 48,
@@ -1106,7 +1167,11 @@
         "pierce": false,
         "homing": 0.05,
         "hitbox_linger": 10
-      }
+      },
+      "animation_id": "neutral_special_projectile",
+      "v3_fantasy": "Curving wind blade; aura allows bend, return or linger",
+      "v3_vfx_shape": "crescent_ribbon",
+      "v3_particle_library": "air_streaks_crescents"
     },
     {
       "move_id": "side_special",
@@ -1132,7 +1197,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 8,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1171,12 +1236,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "gale_spark",
-        "sfx_event": "gale_hit_light",
-        "screen_flash": false
+        "tier": "heavy",
+        "hitstop_frames": 8,
+        "camera_event": "shake_heavy",
+        "vfx_event": "kaia_windrow_side_special_crescent_ribbon",
+        "sfx_event": "kaia-windrow.side_special.sfx",
+        "screen_flash": false,
+        "particle_profile": "kaia-windrow.side_special.air_streaks_crescents"
       },
       "training_display_name": "Spiral Current Side",
       "combat_tag": "wind_drift",
@@ -1189,7 +1255,11 @@
         "dx": 140,
         "dy": -40,
         "frames": 10
-      }
+      },
+      "animation_id": "side_special",
+      "v3_fantasy": "Crosswind surfing dash / wind-lane reposition",
+      "v3_vfx_shape": "crescent_ribbon",
+      "v3_particle_library": "air_streaks_crescents"
     },
     {
       "move_id": "up_special_recovery",
@@ -1215,7 +1285,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1248,12 +1318,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "gale_spark",
-        "sfx_event": "gale_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "kaia_windrow_up_special_recovery_crescent_ribbon",
+        "sfx_event": "kaia-windrow.up_special_recovery.sfx",
+        "screen_flash": false,
+        "particle_profile": "kaia-windrow.up_special_recovery.air_streaks_crescents"
       },
       "training_display_name": "Up Special / Recovery",
       "combat_tag": "wind_drift",
@@ -1274,7 +1345,11 @@
         "air_friction": 0.78,
         "landing_lag": 9,
         "air_drift_bonus": 0.22
-      }
+      },
+      "animation_id": "up_special_recovery",
+      "v3_fantasy": "Cyclone lift with strong vertical control",
+      "v3_vfx_shape": "crescent_ribbon",
+      "v3_particle_library": "air_streaks_crescents"
     },
     {
       "move_id": "down_special",
@@ -1300,7 +1375,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 8,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1339,12 +1414,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "gale_spark",
-        "sfx_event": "gale_hit_light",
-        "screen_flash": false
+        "tier": "heavy",
+        "hitstop_frames": 8,
+        "camera_event": "shake_heavy",
+        "vfx_event": "kaia_windrow_down_special_crescent_ribbon",
+        "sfx_event": "kaia-windrow.down_special.sfx",
+        "screen_flash": false,
+        "particle_profile": "kaia-windrow.down_special.air_streaks_crescents"
       },
       "training_display_name": "Down Special",
       "combat_tag": "wind_drift",
@@ -1356,7 +1432,11 @@
       "trap": {
         "linger_frames": 50,
         "wind_push": 120
-      }
+      },
+      "animation_id": "down_special",
+      "v3_fantasy": "Wind buffer/barrier that redirects or pushes",
+      "v3_vfx_shape": "crescent_ribbon",
+      "v3_particle_library": "air_streaks_crescents"
     },
     {
       "move_id": "grab",
@@ -1382,7 +1462,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 2,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1416,15 +1496,20 @@
       },
       "feedback": {
         "tier": "light",
-        "hitstop_frames": 3,
+        "hitstop_frames": 2,
         "camera_event": "shake_light",
-        "vfx_event": "gale_spark",
-        "sfx_event": "gale_hit_light",
-        "screen_flash": false
+        "vfx_event": "kaia_windrow_grab_crescent_ribbon",
+        "sfx_event": "kaia-windrow.grab.sfx",
+        "screen_flash": false,
+        "particle_profile": "kaia-windrow.grab.air_streaks_crescents"
       },
       "training_display_name": "Grab",
       "combat_tag": "wind_drift",
-      "grab_range": 36
+      "grab_range": 36,
+      "animation_id": "grab",
+      "v3_fantasy": "Pressure-current capture",
+      "v3_vfx_shape": "crescent_ribbon",
+      "v3_particle_library": "air_streaks_crescents"
     },
     {
       "move_id": "throw_forward",
@@ -1443,7 +1528,7 @@
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1481,9 +1566,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "gale_throw",
-        "sfx_event": "gale_throw_sfx",
-        "screen_flash": false
+        "vfx_event": "kaia_windrow_throw_forward_crescent_ribbon",
+        "sfx_event": "kaia-windrow.throw_forward.sfx",
+        "screen_flash": false,
+        "particle_profile": "kaia-windrow.throw_forward.air_streaks_crescents"
       },
       "training_display_name": "Gust Push",
       "combat_tag": "wind_drift",
@@ -1492,21 +1578,26 @@
         "hold_frames": 0,
         "release_frame": 2,
         "victim_offset": {
-          "x": 20,
-          "y": -8
+          "x": 28,
+          "y": -14
         },
         "damage": 4.6080000000000005,
         "angle_deg": 30,
         "base_knockback": 12,
         "knockback_growth": 1.15,
         "combo_role": "positioning",
-        "role": "edge_pressure"
+        "role": "edge_pressure",
+        "authored": true
       },
       "element_effect": {
         "type": "gale",
         "effect": "wind_drift",
         "strength": 1
-      }
+      },
+      "animation_id": "throw_forward",
+      "v3_fantasy": "Gust push",
+      "v3_vfx_shape": "crescent_ribbon",
+      "v3_particle_library": "air_streaks_crescents"
     },
     {
       "move_id": "throw_back",
@@ -1525,7 +1616,7 @@
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1563,9 +1654,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "gale_throw",
-        "sfx_event": "gale_throw_sfx",
-        "screen_flash": false
+        "vfx_event": "kaia_windrow_throw_back_crescent_ribbon",
+        "sfx_event": "kaia-windrow.throw_back.sfx",
+        "screen_flash": false,
+        "particle_profile": "kaia-windrow.throw_back.air_streaks_crescents"
       },
       "training_display_name": "Crosswind Reversal",
       "combat_tag": "wind_drift",
@@ -1574,21 +1666,26 @@
         "hold_frames": 0,
         "release_frame": 2,
         "victim_offset": {
-          "x": -20,
-          "y": -8
+          "x": -30,
+          "y": -12
         },
         "damage": 6.144,
         "angle_deg": 145,
         "base_knockback": 16,
         "knockback_growth": 1.15,
-        "combo_role": "kill",
-        "role": "reversal"
+        "combo_role": "reversal",
+        "role": "reversal",
+        "authored": true
       },
       "element_effect": {
         "type": "gale",
         "effect": "wind_drift",
         "strength": 1
-      }
+      },
+      "animation_id": "throw_back",
+      "v3_fantasy": "Crosswind reversal",
+      "v3_vfx_shape": "crescent_ribbon",
+      "v3_particle_library": "air_streaks_crescents"
     },
     {
       "move_id": "throw_up",
@@ -1607,7 +1704,7 @@
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1645,9 +1742,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "gale_throw",
-        "sfx_event": "gale_throw_sfx",
-        "screen_flash": false
+        "vfx_event": "kaia_windrow_throw_up_crescent_ribbon",
+        "sfx_event": "kaia-windrow.throw_up.sfx",
+        "screen_flash": false,
+        "particle_profile": "kaia-windrow.throw_up.air_streaks_crescents"
       },
       "training_display_name": "Cyclone Lift",
       "combat_tag": "wind_drift",
@@ -1656,21 +1754,26 @@
         "hold_frames": 0,
         "release_frame": 2,
         "victim_offset": {
-          "x": 20,
-          "y": -8
+          "x": 0,
+          "y": -38
         },
         "damage": 5.376,
         "angle_deg": 88,
         "base_knockback": 14,
         "knockback_growth": 1.15,
-        "combo_role": "starter",
-        "role": "juggle"
+        "combo_role": "juggle",
+        "role": "juggle",
+        "authored": true
       },
       "element_effect": {
         "type": "gale",
         "effect": "wind_drift",
         "strength": 1
-      }
+      },
+      "animation_id": "throw_up",
+      "v3_fantasy": "Cyclone lift",
+      "v3_vfx_shape": "crescent_ribbon",
+      "v3_particle_library": "air_streaks_crescents"
     },
     {
       "move_id": "throw_down",
@@ -1689,7 +1792,7 @@
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1727,9 +1830,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "gale_throw",
-        "sfx_event": "gale_throw_sfx",
-        "screen_flash": false
+        "vfx_event": "kaia_windrow_throw_down_crescent_ribbon",
+        "sfx_event": "kaia-windrow.throw_down.sfx",
+        "screen_flash": false,
+        "particle_profile": "kaia-windrow.throw_down.air_streaks_crescents"
       },
       "training_display_name": "Tornado Pop-Up",
       "combat_tag": "wind_drift",
@@ -1738,21 +1842,26 @@
         "hold_frames": 0,
         "release_frame": 2,
         "victim_offset": {
-          "x": 20,
-          "y": -8
+          "x": 8,
+          "y": 10
         },
         "damage": 3.84,
         "angle_deg": 272,
         "base_knockback": 10,
         "knockback_growth": 1.15,
-        "combo_role": "bounce",
-        "role": "setup"
+        "combo_role": "setup",
+        "role": "setup",
+        "authored": true
       },
       "element_effect": {
         "type": "gale",
         "effect": "wind_drift",
         "strength": 1
-      }
+      },
+      "animation_id": "throw_down",
+      "v3_fantasy": "Tornado pop-up",
+      "v3_vfx_shape": "crescent_ribbon",
+      "v3_particle_library": "air_streaks_crescents"
     },
     {
       "move_id": "aura_charge",
@@ -1771,18 +1880,23 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 11,
       "aura_scaling": {},
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "gale_spark",
-        "sfx_event": "gale_hit_light",
-        "screen_flash": false
+        "tier": "aura",
+        "hitstop_frames": 11,
+        "camera_event": "shake_aura",
+        "vfx_event": "kaia_windrow_aura_charge_crescent_ribbon",
+        "sfx_event": "kaia-windrow.aura_charge.sfx",
+        "screen_flash": true,
+        "particle_profile": "kaia-windrow.aura_charge.air_streaks_crescents"
       },
       "training_display_name": "Aura Charge",
-      "combat_tag": "wind_drift"
+      "combat_tag": "wind_drift",
+      "animation_id": "aura_charge",
+      "v3_fantasy": "Air gathers in layered spirals; movement posture lightens",
+      "v3_vfx_shape": "crescent_ribbon",
+      "v3_particle_library": "air_streaks_crescents"
     },
     {
       "move_id": "aura_burst",
@@ -1808,7 +1922,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 14,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1842,11 +1956,12 @@
       },
       "feedback": {
         "tier": "super",
-        "hitstop_frames": 15,
-        "camera_event": "pulse_super",
-        "vfx_event": "gale_burst",
-        "sfx_event": "gale_burst_sfx",
-        "screen_flash": true
+        "hitstop_frames": 14,
+        "camera_event": "shake_super",
+        "vfx_event": "kaia_windrow_aura_burst_crescent_ribbon",
+        "sfx_event": "kaia-windrow.aura_burst.sfx",
+        "screen_flash": true,
+        "particle_profile": "kaia-windrow.aura_burst.air_streaks_crescents"
       },
       "training_display_name": "Spiral Current",
       "combat_tag": "wind_drift",
@@ -1855,7 +1970,11 @@
         "effect": "wind_drift",
         "strength": 2.5
       },
-      "meter_cost": 100
+      "meter_cost": 100,
+      "animation_id": "aura_burst",
+      "v3_fantasy": "Spiral-current burst controlling a large airspace moment",
+      "v3_vfx_shape": "crescent_ribbon",
+      "v3_particle_library": "air_streaks_crescents"
     }
   ],
   "game001_identity": {

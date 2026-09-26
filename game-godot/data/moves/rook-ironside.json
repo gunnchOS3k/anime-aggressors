@@ -27,7 +27,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 2,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -61,11 +61,12 @@
       },
       "feedback": {
         "tier": "light",
-        "hitstop_frames": 3,
+        "hitstop_frames": 2,
         "camera_event": "shake_light",
-        "vfx_event": "impact_spark",
-        "sfx_event": "impact_hit_light",
-        "screen_flash": false
+        "vfx_event": "rook_ironside_jab_1_pressure_ring_fracture",
+        "sfx_event": "rook-ironside.jab_1.sfx",
+        "screen_flash": false,
+        "particle_profile": "rook-ironside.jab_1.dust_chips_fracture"
       },
       "training_display_name": "Jab 1",
       "combat_tag": "armor_quake",
@@ -87,7 +88,11 @@
           "to": "jab_2"
         }
       ],
-      "h2h_string_id": "rook-ironside:jab_1->jab_2"
+      "h2h_string_id": "rook-ironside:jab_1->jab_2",
+      "animation_id": "jab_1",
+      "v3_fantasy": "Short armored body jab with a dense thud",
+      "v3_vfx_shape": "pressure_ring_fracture",
+      "v3_particle_library": "dust_chips_fracture"
     },
     {
       "move_id": "jab_2",
@@ -113,7 +118,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 2,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -147,11 +152,12 @@
       },
       "feedback": {
         "tier": "light",
-        "hitstop_frames": 3,
+        "hitstop_frames": 2,
         "camera_event": "shake_light",
-        "vfx_event": "impact_spark",
-        "sfx_event": "impact_hit_light",
-        "screen_flash": false
+        "vfx_event": "rook_ironside_jab_2_pressure_ring_fracture",
+        "sfx_event": "rook-ironside.jab_2.sfx",
+        "screen_flash": false,
+        "particle_profile": "rook-ironside.jab_2.dust_chips_fracture"
       },
       "training_display_name": "Jab 2",
       "combat_tag": "armor_quake",
@@ -168,7 +174,11 @@
           "to": "jab_finisher"
         }
       ],
-      "h2h_string_id": "rook-ironside:jab_2->jab_finisher"
+      "h2h_string_id": "rook-ironside:jab_2->jab_finisher",
+      "animation_id": "jab_2",
+      "v3_fantasy": "Heavy cross with visible mass and limited travel",
+      "v3_vfx_shape": "pressure_ring_fracture",
+      "v3_particle_library": "dust_chips_fracture"
     },
     {
       "move_id": "jab_finisher",
@@ -194,7 +204,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -234,9 +244,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "impact_jab_fin",
-        "sfx_event": "impact_jab_fin_sfx",
-        "screen_flash": false
+        "vfx_event": "rook_ironside_jab_finisher_pressure_ring_fracture",
+        "sfx_event": "rook-ironside.jab_finisher.sfx",
+        "screen_flash": false,
+        "particle_profile": "rook-ironside.jab_finisher.dust_chips_fracture"
       },
       "training_display_name": "Jab Finisher",
       "combat_tag": "armor_quake",
@@ -245,7 +256,11 @@
         "effect": "quake",
         "strength": 1
       },
-      "armor_frames": 4
+      "armor_frames": 4,
+      "animation_id": "jab_finisher",
+      "v3_fantasy": "Two-hand/shoulder impact producing a compact quake ring",
+      "v3_vfx_shape": "pressure_ring_fracture",
+      "v3_particle_library": "dust_chips_fracture"
     },
     {
       "move_id": "forward_tilt",
@@ -271,7 +286,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -304,12 +319,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "impact_spark",
-        "sfx_event": "impact_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "rook_ironside_forward_tilt_pressure_ring_fracture",
+        "sfx_event": "rook-ironside.forward_tilt.sfx",
+        "screen_flash": false,
+        "particle_profile": "rook-ironside.forward_tilt.dust_chips_fracture"
       },
       "training_display_name": "Forward Tilt",
       "combat_tag": "armor_quake",
@@ -318,7 +334,11 @@
         "effect": "quake",
         "strength": 1
       },
-      "armor_frames": 3
+      "armor_frames": 3,
+      "animation_id": "forward_tilt",
+      "v3_fantasy": "Forearm battering ram with a brief armor window",
+      "v3_vfx_shape": "pressure_ring_fracture",
+      "v3_particle_library": "dust_chips_fracture"
     },
     {
       "move_id": "up_tilt",
@@ -344,7 +364,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -377,12 +397,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "impact_spark",
-        "sfx_event": "impact_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "rook_ironside_up_tilt_pressure_ring_fracture",
+        "sfx_event": "rook-ironside.up_tilt.sfx",
+        "screen_flash": false,
+        "particle_profile": "rook-ironside.up_tilt.dust_chips_fracture"
       },
       "training_display_name": "Up Tilt",
       "combat_tag": "armor_quake",
@@ -390,7 +411,11 @@
         "type": "impact",
         "effect": "quake",
         "strength": 1
-      }
+      },
+      "animation_id": "up_tilt",
+      "v3_fantasy": "Rising stone/iron uppercut with debris flecks",
+      "v3_vfx_shape": "pressure_ring_fracture",
+      "v3_particle_library": "dust_chips_fracture"
     },
     {
       "move_id": "down_tilt",
@@ -416,7 +441,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -449,12 +474,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "impact_spark",
-        "sfx_event": "impact_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "rook_ironside_down_tilt_pressure_ring_fracture",
+        "sfx_event": "rook-ironside.down_tilt.sfx",
+        "screen_flash": false,
+        "particle_profile": "rook-ironside.down_tilt.dust_chips_fracture"
       },
       "training_display_name": "Down Tilt",
       "combat_tag": "armor_quake",
@@ -471,7 +497,11 @@
           "to": "forward_tilt"
         }
       ],
-      "h2h_string_id": "rook-ironside:down_tilt->forward_tilt"
+      "h2h_string_id": "rook-ironside:down_tilt->forward_tilt",
+      "animation_id": "down_tilt",
+      "v3_fantasy": "Low stomp/sweep creating a tight fracture line",
+      "v3_vfx_shape": "pressure_ring_fracture",
+      "v3_particle_library": "dust_chips_fracture"
     },
     {
       "move_id": "dash_attack",
@@ -497,7 +527,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -530,12 +560,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "impact_spark",
-        "sfx_event": "impact_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "rook_ironside_dash_attack_pressure_ring_fracture",
+        "sfx_event": "rook-ironside.dash_attack.sfx",
+        "screen_flash": false,
+        "particle_profile": "rook-ironside.dash_attack.dust_chips_fracture"
       },
       "training_display_name": "Dash Attack",
       "combat_tag": "armor_quake",
@@ -544,7 +575,11 @@
         "effect": "quake",
         "strength": 1
       },
-      "armor_frames": 5
+      "armor_frames": 5,
+      "animation_id": "dash_attack",
+      "v3_fantasy": "Momentum shoulder charge with high commitment",
+      "v3_vfx_shape": "pressure_ring_fracture",
+      "v3_particle_library": "dust_chips_fracture"
     },
     {
       "move_id": "heavy_attack",
@@ -570,7 +605,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 8,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -610,9 +645,10 @@
         "tier": "heavy",
         "hitstop_frames": 8,
         "camera_event": "shake_heavy",
-        "vfx_event": "impact_heavy",
-        "sfx_event": "impact_heavy_sfx",
-        "screen_flash": false
+        "vfx_event": "rook_ironside_heavy_attack_pressure_ring_fracture",
+        "sfx_event": "rook-ironside.heavy_attack.sfx",
+        "screen_flash": false,
+        "particle_profile": "rook-ironside.heavy_attack.dust_chips_fracture"
       },
       "training_display_name": "Heavy Attack",
       "combat_tag": "armor_quake",
@@ -622,7 +658,11 @@
         "strength": 1
       },
       "wave016_reachability": "DESIGN_ONLY_NO_DISTINCT_CONTROL",
-      "note": "CONTROLS.md does not distinguish tilt vs smash/heavy; not bound to avoid awkward inputs."
+      "note": "CONTROLS.md does not distinguish tilt vs smash/heavy; not bound to avoid awkward inputs.",
+      "animation_id": "heavy_attack",
+      "v3_fantasy": "Seismic hammer strike; higher aura adds an aftershock",
+      "v3_vfx_shape": "pressure_ring_fracture",
+      "v3_particle_library": "dust_chips_fracture"
     },
     {
       "move_id": "neutral_air",
@@ -648,7 +688,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -681,12 +721,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "impact_spark",
-        "sfx_event": "impact_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "rook_ironside_neutral_air_pressure_ring_fracture",
+        "sfx_event": "rook-ironside.neutral_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "rook-ironside.neutral_air.dust_chips_fracture"
       },
       "training_display_name": "Neutral Air",
       "combat_tag": "armor_quake",
@@ -694,7 +735,11 @@
         "type": "impact",
         "effect": "quake",
         "strength": 1
-      }
+      },
+      "animation_id": "neutral_air",
+      "v3_fantasy": "Compact armored body spin using Rook's mass",
+      "v3_vfx_shape": "pressure_ring_fracture",
+      "v3_particle_library": "dust_chips_fracture"
     },
     {
       "move_id": "forward_air",
@@ -720,7 +765,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -753,12 +798,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "impact_spark",
-        "sfx_event": "impact_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "rook_ironside_forward_air_pressure_ring_fracture",
+        "sfx_event": "rook-ironside.forward_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "rook-ironside.forward_air.dust_chips_fracture"
       },
       "training_display_name": "Forward Air",
       "combat_tag": "armor_quake",
@@ -766,7 +812,11 @@
         "type": "impact",
         "effect": "quake",
         "strength": 1
-      }
+      },
+      "animation_id": "forward_air",
+      "v3_fantasy": "Forward double-fist/shoulder smash",
+      "v3_vfx_shape": "pressure_ring_fracture",
+      "v3_particle_library": "dust_chips_fracture"
     },
     {
       "move_id": "back_air",
@@ -864,79 +914,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
-      "aura_scaling": {
-        "level_0": {
-          "damage_mult": 1
-        },
-        "level_1": {
-          "damage_mult": 1.05,
-          "element_strength": 1.2
-        },
-        "level_2": {
-          "damage_mult": 1.1,
-          "hitbox_scale": 1.15,
-          "element_strength": 1.5
-        },
-        "level_3": {
-          "damage_mult": 1.15,
-          "hitbox_scale": 1.25,
-          "extra_active_frames": 1,
-          "cancel_windows": [
-            {
-              "start": 8,
-              "end": 14
-            }
-          ],
-          "element_strength": 1.8
-        },
-        "super_ready": {
-          "damage_mult": 1.2,
-          "hitbox_scale": 1.35,
-          "feedback_tier": "aura"
-        }
-      },
-      "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "impact_spark",
-        "sfx_event": "impact_hit_light",
-        "screen_flash": false
-      },
-      "training_display_name": "Up Air",
-      "combat_tag": "armor_quake",
-      "element_effect": {
-        "type": "impact",
-        "effect": "quake",
-        "strength": 1
-      }
-    },
-    {
-      "move_id": "down_air",
-      "fighter_id": "rook-ironside",
-      "move_type": "melee",
-      "direction": "air_down",
-      "input_command": "attack_air_down",
-      "grounded_air": "air",
-      "startup_frames": 4,
-      "active_frames": 3,
-      "recovery_frames": 10,
-      "hitboxes": [
-        {
-          "offset_x": 36,
-          "offset_y": -8,
-          "width": 40,
-          "height": 32
-        }
-      ],
-      "damage": 9.44,
-      "angle_deg": 270,
-      "base_knockback": 9,
-      "knockback_growth": 1.1,
-      "shield_damage": 3,
-      "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -972,9 +950,87 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "impact_dair",
-        "sfx_event": "impact_dair_sfx",
-        "screen_flash": false
+        "vfx_event": "rook_ironside_up_air_pressure_ring_fracture",
+        "sfx_event": "rook-ironside.up_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "rook-ironside.up_air.dust_chips_fracture"
+      },
+      "training_display_name": "Up Air",
+      "combat_tag": "armor_quake",
+      "element_effect": {
+        "type": "impact",
+        "effect": "quake",
+        "strength": 1
+      },
+      "animation_id": "up_air",
+      "v3_fantasy": "Upward armored head/forearm lift",
+      "v3_vfx_shape": "pressure_ring_fracture",
+      "v3_particle_library": "dust_chips_fracture"
+    },
+    {
+      "move_id": "down_air",
+      "fighter_id": "rook-ironside",
+      "move_type": "melee",
+      "direction": "air_down",
+      "input_command": "attack_air_down",
+      "grounded_air": "air",
+      "startup_frames": 4,
+      "active_frames": 3,
+      "recovery_frames": 10,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "damage": 9.44,
+      "angle_deg": 270,
+      "base_knockback": 9,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 8,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "heavy",
+        "hitstop_frames": 8,
+        "camera_event": "shake_heavy",
+        "vfx_event": "rook_ironside_down_air_pressure_ring_fracture",
+        "sfx_event": "rook-ironside.down_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "rook-ironside.down_air.dust_chips_fracture"
       },
       "training_display_name": "Down Air",
       "combat_tag": "armor_quake",
@@ -982,7 +1038,11 @@
         "type": "impact",
         "effect": "quake",
         "strength": 1
-      }
+      },
+      "animation_id": "down_air",
+      "v3_fantasy": "Crater drop with heavy landing emphasis",
+      "v3_vfx_shape": "pressure_ring_fracture",
+      "v3_particle_library": "dust_chips_fracture"
     },
     {
       "move_id": "neutral_special_projectile",
@@ -1001,7 +1061,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1041,9 +1101,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "impact_proj",
-        "sfx_event": "impact_proj_sfx",
-        "screen_flash": false
+        "vfx_event": "rook_ironside_neutral_special_projectile_pressure_ring_fracture",
+        "sfx_event": "rook-ironside.neutral_special_projectile.sfx",
+        "screen_flash": false,
+        "particle_profile": "rook-ironside.neutral_special_projectile.dust_chips_fracture"
       },
       "training_display_name": "Impact Shot",
       "combat_tag": "armor_quake",
@@ -1093,7 +1154,11 @@
         "size": 18,
         "pierce": true,
         "homing": 0.0
-      }
+      },
+      "animation_id": "neutral_special_projectile",
+      "v3_fantasy": "Short-range shockwave; never a long-range zoning bullet",
+      "v3_vfx_shape": "pressure_ring_fracture",
+      "v3_particle_library": "dust_chips_fracture"
     },
     {
       "move_id": "side_special",
@@ -1119,7 +1184,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 8,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1156,12 +1221,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "impact_spark",
-        "sfx_event": "impact_hit_light",
-        "screen_flash": false
+        "tier": "heavy",
+        "hitstop_frames": 8,
+        "camera_event": "shake_heavy",
+        "vfx_event": "rook_ironside_side_special_pressure_ring_fracture",
+        "sfx_event": "rook-ironside.side_special.sfx",
+        "screen_flash": false,
+        "particle_profile": "rook-ironside.side_special.dust_chips_fracture"
       },
       "training_display_name": "Faultline Breaker Side",
       "combat_tag": "armor_quake",
@@ -1175,7 +1241,11 @@
         "dy": 0,
         "frames": 10
       },
-      "armor_frames": 8
+      "armor_frames": 8,
+      "animation_id": "side_special",
+      "v3_fantasy": "Armored quake rush / command-impact approach",
+      "v3_vfx_shape": "pressure_ring_fracture",
+      "v3_particle_library": "dust_chips_fracture"
     },
     {
       "move_id": "up_special_recovery",
@@ -1201,7 +1271,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1234,12 +1304,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "impact_spark",
-        "sfx_event": "impact_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "rook_ironside_up_special_recovery_pressure_ring_fracture",
+        "sfx_event": "rook-ironside.up_special_recovery.sfx",
+        "screen_flash": false,
+        "particle_profile": "rook-ironside.up_special_recovery.dust_chips_fracture"
       },
       "training_display_name": "Up Special / Recovery",
       "combat_tag": "armor_quake",
@@ -1259,7 +1330,11 @@
         "snap_ledge": true,
         "air_friction": 0.98,
         "landing_lag": 16
-      }
+      },
+      "animation_id": "up_special_recovery",
+      "v3_fantasy": "Impact-assisted rising leap with limited steering",
+      "v3_vfx_shape": "pressure_ring_fracture",
+      "v3_particle_library": "dust_chips_fracture"
     },
     {
       "move_id": "down_special",
@@ -1285,7 +1360,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 8,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1322,12 +1397,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "impact_spark",
-        "sfx_event": "impact_hit_light",
-        "screen_flash": false
+        "tier": "heavy",
+        "hitstop_frames": 8,
+        "camera_event": "shake_heavy",
+        "vfx_event": "rook_ironside_down_special_pressure_ring_fracture",
+        "sfx_event": "rook-ironside.down_special.sfx",
+        "screen_flash": false,
+        "particle_profile": "rook-ironside.down_special.dust_chips_fracture"
       },
       "training_display_name": "Down Special",
       "combat_tag": "armor_quake",
@@ -1340,7 +1416,11 @@
         "linger_frames": 20,
         "quake_pulses": 2
       },
-      "armor_frames": 6
+      "armor_frames": 6,
+      "animation_id": "down_special",
+      "v3_fantasy": "Brace/fortify stance rewarding a read",
+      "v3_vfx_shape": "pressure_ring_fracture",
+      "v3_particle_library": "dust_chips_fracture"
     },
     {
       "move_id": "grab",
@@ -1366,7 +1446,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 2,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1400,15 +1480,20 @@
       },
       "feedback": {
         "tier": "light",
-        "hitstop_frames": 3,
+        "hitstop_frames": 2,
         "camera_event": "shake_light",
-        "vfx_event": "impact_spark",
-        "sfx_event": "impact_hit_light",
-        "screen_flash": false
+        "vfx_event": "rook_ironside_grab_pressure_ring_fracture",
+        "sfx_event": "rook-ironside.grab.sfx",
+        "screen_flash": false,
+        "particle_profile": "rook-ironside.grab.dust_chips_fracture"
       },
       "training_display_name": "Grab",
       "combat_tag": "armor_quake",
-      "grab_range": 38
+      "grab_range": 38,
+      "animation_id": "grab",
+      "v3_fantasy": "Command-grab style armored capture",
+      "v3_vfx_shape": "pressure_ring_fracture",
+      "v3_particle_library": "dust_chips_fracture"
     },
     {
       "move_id": "throw_forward",
@@ -1427,7 +1512,7 @@
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1465,9 +1550,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "impact_throw",
-        "sfx_event": "impact_throw_sfx",
-        "screen_flash": false
+        "vfx_event": "rook_ironside_throw_forward_pressure_ring_fracture",
+        "sfx_event": "rook-ironside.throw_forward.sfx",
+        "screen_flash": false,
+        "particle_profile": "rook-ironside.throw_forward.dust_chips_fracture"
       },
       "training_display_name": "Shoulder Carry Slam",
       "combat_tag": "armor_quake",
@@ -1476,21 +1562,26 @@
         "hold_frames": 0,
         "release_frame": 2,
         "victim_offset": {
-          "x": 20,
-          "y": -8
+          "x": 30,
+          "y": -6
         },
         "damage": 9.44,
         "angle_deg": 25,
         "base_knockback": 20,
         "knockback_growth": 1.15,
         "combo_role": "positioning",
-        "role": "edge_pressure"
+        "role": "edge_pressure",
+        "authored": true
       },
       "element_effect": {
         "type": "impact",
         "effect": "quake",
         "strength": 1
-      }
+      },
+      "animation_id": "throw_forward",
+      "v3_fantasy": "Shoulder carry slam",
+      "v3_vfx_shape": "pressure_ring_fracture",
+      "v3_particle_library": "dust_chips_fracture"
     },
     {
       "move_id": "throw_back",
@@ -1509,7 +1600,7 @@
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1547,9 +1638,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "impact_throw",
-        "sfx_event": "impact_throw_sfx",
-        "screen_flash": false
+        "vfx_event": "rook_ironside_throw_back_pressure_ring_fracture",
+        "sfx_event": "rook-ironside.throw_back.sfx",
+        "screen_flash": false,
+        "particle_profile": "rook-ironside.throw_back.dust_chips_fracture"
       },
       "training_display_name": "Suplex Reversal",
       "combat_tag": "armor_quake",
@@ -1558,21 +1650,26 @@
         "hold_frames": 0,
         "release_frame": 2,
         "victim_offset": {
-          "x": -20,
-          "y": -8
+          "x": -32,
+          "y": -4
         },
         "damage": 10.384,
         "angle_deg": 160,
         "base_knockback": 22,
         "knockback_growth": 1.15,
-        "combo_role": "kill",
-        "role": "reversal"
+        "combo_role": "reversal",
+        "role": "reversal",
+        "authored": true
       },
       "element_effect": {
         "type": "impact",
         "effect": "quake",
         "strength": 1
-      }
+      },
+      "animation_id": "throw_back",
+      "v3_fantasy": "Suplex reversal",
+      "v3_vfx_shape": "pressure_ring_fracture",
+      "v3_particle_library": "dust_chips_fracture"
     },
     {
       "move_id": "throw_up",
@@ -1591,7 +1688,7 @@
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1629,9 +1726,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "impact_throw",
-        "sfx_event": "impact_throw_sfx",
-        "screen_flash": false
+        "vfx_event": "rook_ironside_throw_up_pressure_ring_fracture",
+        "sfx_event": "rook-ironside.throw_up.sfx",
+        "screen_flash": false,
+        "particle_profile": "rook-ironside.throw_up.dust_chips_fracture"
       },
       "training_display_name": "Rising Boulder",
       "combat_tag": "armor_quake",
@@ -1640,21 +1738,26 @@
         "hold_frames": 0,
         "release_frame": 2,
         "victim_offset": {
-          "x": 20,
-          "y": -8
+          "x": 8,
+          "y": -36
         },
         "damage": 8.496,
         "angle_deg": 78,
         "base_knockback": 18,
         "knockback_growth": 1.15,
-        "combo_role": "starter",
-        "role": "juggle"
+        "combo_role": "juggle",
+        "role": "juggle",
+        "authored": true
       },
       "element_effect": {
         "type": "impact",
         "effect": "quake",
         "strength": 1
-      }
+      },
+      "animation_id": "throw_up",
+      "v3_fantasy": "Rising boulder launcher",
+      "v3_vfx_shape": "pressure_ring_fracture",
+      "v3_particle_library": "dust_chips_fracture"
     },
     {
       "move_id": "throw_down",
@@ -1673,7 +1776,7 @@
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1711,9 +1814,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "impact_throw",
-        "sfx_event": "impact_throw_sfx",
-        "screen_flash": false
+        "vfx_event": "rook_ironside_throw_down_pressure_ring_fracture",
+        "sfx_event": "rook-ironside.throw_down.sfx",
+        "screen_flash": false,
+        "particle_profile": "rook-ironside.throw_down.dust_chips_fracture"
       },
       "training_display_name": "Crater Slam",
       "combat_tag": "armor_quake",
@@ -1722,21 +1826,26 @@
         "hold_frames": 0,
         "release_frame": 2,
         "victim_offset": {
-          "x": 20,
-          "y": -8
+          "x": 12,
+          "y": 18
         },
         "damage": 7.552,
         "angle_deg": 265,
         "base_knockback": 16,
         "knockback_growth": 1.15,
-        "combo_role": "bounce",
-        "role": "setup"
+        "combo_role": "setup",
+        "role": "setup",
+        "authored": true
       },
       "element_effect": {
         "type": "impact",
         "effect": "quake",
         "strength": 1
-      }
+      },
+      "animation_id": "throw_down",
+      "v3_fantasy": "Crater slam",
+      "v3_vfx_shape": "pressure_ring_fracture",
+      "v3_particle_library": "dust_chips_fracture"
     },
     {
       "move_id": "aura_charge",
@@ -1755,18 +1864,23 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 11,
       "aura_scaling": {},
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "impact_spark",
-        "sfx_event": "impact_hit_light",
-        "screen_flash": false
+        "tier": "aura",
+        "hitstop_frames": 11,
+        "camera_event": "shake_aura",
+        "vfx_event": "rook_ironside_aura_charge_pressure_ring_fracture",
+        "sfx_event": "rook-ironside.aura_charge.sfx",
+        "screen_flash": true,
+        "particle_profile": "rook-ironside.aura_charge.dust_chips_fracture"
       },
       "training_display_name": "Aura Charge",
-      "combat_tag": "armor_quake"
+      "combat_tag": "armor_quake",
+      "animation_id": "aura_charge",
+      "v3_fantasy": "Forge-pressure charge; seams glow and Rook feels denser",
+      "v3_vfx_shape": "pressure_ring_fracture",
+      "v3_particle_library": "dust_chips_fracture"
     },
     {
       "move_id": "aura_burst",
@@ -1792,7 +1906,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 14,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1826,11 +1940,12 @@
       },
       "feedback": {
         "tier": "super",
-        "hitstop_frames": 15,
-        "camera_event": "pulse_super",
-        "vfx_event": "impact_burst",
-        "sfx_event": "impact_burst_sfx",
-        "screen_flash": true
+        "hitstop_frames": 14,
+        "camera_event": "shake_super",
+        "vfx_event": "rook_ironside_aura_burst_pressure_ring_fracture",
+        "sfx_event": "rook-ironside.aura_burst.sfx",
+        "screen_flash": true,
+        "particle_profile": "rook-ironside.aura_burst.dust_chips_fracture"
       },
       "training_display_name": "Faultline Breaker",
       "combat_tag": "armor_quake",
@@ -1839,7 +1954,11 @@
         "effect": "quake",
         "strength": 2.5
       },
-      "meter_cost": 100
+      "meter_cost": 100,
+      "animation_id": "aura_burst",
+      "v3_fantasy": "Seismic burst with pressure ring and controlled debris",
+      "v3_vfx_shape": "pressure_ring_fracture",
+      "v3_particle_library": "dust_chips_fracture"
     }
   ],
   "game001_identity": {

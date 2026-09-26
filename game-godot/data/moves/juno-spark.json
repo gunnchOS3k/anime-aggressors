@@ -27,7 +27,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 2,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -61,11 +61,12 @@
       },
       "feedback": {
         "tier": "light",
-        "hitstop_frames": 3,
+        "hitstop_frames": 2,
         "camera_event": "shake_light",
-        "vfx_event": "volt_spark",
-        "sfx_event": "volt_hit_light",
-        "screen_flash": false
+        "vfx_event": "juno_spark_jab_1_jagged_fork_arc",
+        "sfx_event": "juno-spark.jab_1.sfx",
+        "screen_flash": false,
+        "particle_profile": "juno-spark.jab_1.sparks_arcs_nodes"
       },
       "training_display_name": "Jab 1",
       "combat_tag": "speed_chain",
@@ -87,7 +88,11 @@
           "to": "jab_2"
         }
       ],
-      "h2h_string_id": "juno-spark:jab_1->jab_2"
+      "h2h_string_id": "juno-spark:jab_1->jab_2",
+      "animation_id": "jab_1",
+      "v3_fantasy": "Fast electric fingertip/palm strike",
+      "v3_vfx_shape": "jagged_fork_arc",
+      "v3_particle_library": "sparks_arcs_nodes"
     },
     {
       "move_id": "jab_2",
@@ -113,7 +118,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 2,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -147,11 +152,12 @@
       },
       "feedback": {
         "tier": "light",
-        "hitstop_frames": 3,
+        "hitstop_frames": 2,
         "camera_event": "shake_light",
-        "vfx_event": "volt_spark",
-        "sfx_event": "volt_hit_light",
-        "screen_flash": false
+        "vfx_event": "juno_spark_jab_2_jagged_fork_arc",
+        "sfx_event": "juno-spark.jab_2.sfx",
+        "screen_flash": false,
+        "particle_profile": "juno-spark.jab_2.sparks_arcs_nodes"
       },
       "training_display_name": "Jab 2",
       "combat_tag": "speed_chain",
@@ -168,7 +174,11 @@
           "to": "jab_finisher"
         }
       ],
-      "h2h_string_id": "juno-spark:jab_2->jab_finisher"
+      "h2h_string_id": "juno-spark:jab_2->jab_finisher",
+      "animation_id": "jab_2",
+      "v3_fantasy": "Rapid follow-up elbow/kick with a current bridge",
+      "v3_vfx_shape": "jagged_fork_arc",
+      "v3_particle_library": "sparks_arcs_nodes"
     },
     {
       "move_id": "jab_finisher",
@@ -194,7 +204,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -237,9 +247,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "volt_jab_fin",
-        "sfx_event": "volt_jab_fin_sfx",
-        "screen_flash": false
+        "vfx_event": "juno_spark_jab_finisher_jagged_fork_arc",
+        "sfx_event": "juno-spark.jab_finisher.sfx",
+        "screen_flash": false,
+        "particle_profile": "juno-spark.jab_finisher.sparks_arcs_nodes"
       },
       "training_display_name": "Jab Finisher",
       "combat_tag": "speed_chain",
@@ -257,7 +268,11 @@
           "action": "dash"
         }
       ],
-      "h2h_string_id": "juno-spark:jab_finisher->dash_attack"
+      "h2h_string_id": "juno-spark:jab_finisher->dash_attack",
+      "animation_id": "jab_finisher",
+      "v3_fantasy": "Short chain-lightning snap confirming the string",
+      "v3_vfx_shape": "jagged_fork_arc",
+      "v3_particle_library": "sparks_arcs_nodes"
     },
     {
       "move_id": "forward_tilt",
@@ -283,7 +298,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -316,12 +331,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "volt_spark",
-        "sfx_event": "volt_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "juno_spark_forward_tilt_jagged_fork_arc",
+        "sfx_event": "juno-spark.forward_tilt.sfx",
+        "screen_flash": false,
+        "particle_profile": "juno-spark.forward_tilt.sparks_arcs_nodes"
       },
       "training_display_name": "Forward Tilt",
       "combat_tag": "speed_chain",
@@ -329,7 +345,11 @@
         "type": "volt",
         "effect": "chain_stun",
         "strength": 1
-      }
+      },
+      "animation_id": "forward_tilt",
+      "v3_fantasy": "Linear voltage palm/thrust with quick recovery",
+      "v3_vfx_shape": "jagged_fork_arc",
+      "v3_particle_library": "sparks_arcs_nodes"
     },
     {
       "move_id": "up_tilt",
@@ -355,7 +375,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -388,12 +408,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "volt_spark",
-        "sfx_event": "volt_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "juno_spark_up_tilt_jagged_fork_arc",
+        "sfx_event": "juno-spark.up_tilt.sfx",
+        "screen_flash": false,
+        "particle_profile": "juno-spark.up_tilt.sparks_arcs_nodes"
       },
       "training_display_name": "Up Tilt",
       "combat_tag": "speed_chain",
@@ -401,7 +422,11 @@
         "type": "volt",
         "effect": "chain_stun",
         "strength": 1
-      }
+      },
+      "animation_id": "up_tilt",
+      "v3_fantasy": "Rising arc lash above Juno",
+      "v3_vfx_shape": "jagged_fork_arc",
+      "v3_particle_library": "sparks_arcs_nodes"
     },
     {
       "move_id": "down_tilt",
@@ -427,7 +452,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -460,12 +485,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "volt_spark",
-        "sfx_event": "volt_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "juno_spark_down_tilt_jagged_fork_arc",
+        "sfx_event": "juno-spark.down_tilt.sfx",
+        "screen_flash": false,
+        "particle_profile": "juno-spark.down_tilt.sparks_arcs_nodes"
       },
       "training_display_name": "Down Tilt",
       "combat_tag": "speed_chain",
@@ -473,7 +499,11 @@
         "type": "volt",
         "effect": "chain_stun",
         "strength": 1
-      }
+      },
+      "animation_id": "down_tilt",
+      "v3_fantasy": "Low current sweep creating a brief confirm window",
+      "v3_vfx_shape": "jagged_fork_arc",
+      "v3_particle_library": "sparks_arcs_nodes"
     },
     {
       "move_id": "dash_attack",
@@ -499,7 +529,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -532,12 +562,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "volt_spark",
-        "sfx_event": "volt_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "juno_spark_dash_attack_jagged_fork_arc",
+        "sfx_event": "juno-spark.dash_attack.sfx",
+        "screen_flash": false,
+        "particle_profile": "juno-spark.dash_attack.sparks_arcs_nodes"
       },
       "training_display_name": "Dash Attack",
       "combat_tag": "speed_chain",
@@ -545,7 +576,11 @@
         "type": "volt",
         "effect": "chain_stun",
         "strength": 1
-      }
+      },
+      "animation_id": "dash_attack",
+      "v3_fantasy": "Blink-speed lunge with electric afterimage",
+      "v3_vfx_shape": "jagged_fork_arc",
+      "v3_particle_library": "sparks_arcs_nodes"
     },
     {
       "move_id": "heavy_attack",
@@ -571,7 +606,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 8,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -614,9 +649,10 @@
         "tier": "heavy",
         "hitstop_frames": 8,
         "camera_event": "shake_heavy",
-        "vfx_event": "volt_heavy",
-        "sfx_event": "volt_heavy_sfx",
-        "screen_flash": false
+        "vfx_event": "juno_spark_heavy_attack_jagged_fork_arc",
+        "sfx_event": "juno-spark.heavy_attack.sfx",
+        "screen_flash": false,
+        "particle_profile": "juno-spark.heavy_attack.sparks_arcs_nodes"
       },
       "training_display_name": "Heavy Attack",
       "combat_tag": "speed_chain",
@@ -626,7 +662,11 @@
         "strength": 1
       },
       "wave016_reachability": "DESIGN_ONLY_NO_DISTINCT_CONTROL",
-      "note": "CONTROLS.md does not distinguish tilt vs smash/heavy; not bound to avoid awkward inputs."
+      "note": "CONTROLS.md does not distinguish tilt vs smash/heavy; not bound to avoid awkward inputs.",
+      "animation_id": "heavy_attack",
+      "v3_fantasy": "Charged rail-punch/heel focused on precision",
+      "v3_vfx_shape": "jagged_fork_arc",
+      "v3_particle_library": "sparks_arcs_nodes"
     },
     {
       "move_id": "neutral_air",
@@ -652,7 +692,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -685,12 +725,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "volt_spark",
-        "sfx_event": "volt_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "juno_spark_neutral_air_jagged_fork_arc",
+        "sfx_event": "juno-spark.neutral_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "juno-spark.neutral_air.sparks_arcs_nodes"
       },
       "training_display_name": "Neutral Air",
       "combat_tag": "speed_chain",
@@ -707,7 +748,11 @@
           "to": "forward_air"
         }
       ],
-      "h2h_string_id": "juno-spark:neutral_air->forward_air"
+      "h2h_string_id": "juno-spark:neutral_air->forward_air",
+      "animation_id": "neutral_air",
+      "v3_fantasy": "Radial static pulse multi-hit around the body",
+      "v3_vfx_shape": "jagged_fork_arc",
+      "v3_particle_library": "sparks_arcs_nodes"
     },
     {
       "move_id": "forward_air",
@@ -733,7 +778,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -766,12 +811,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "volt_spark",
-        "sfx_event": "volt_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "juno_spark_forward_air_jagged_fork_arc",
+        "sfx_event": "juno-spark.forward_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "juno-spark.forward_air.sparks_arcs_nodes"
       },
       "training_display_name": "Forward Air",
       "combat_tag": "speed_chain",
@@ -779,7 +825,11 @@
         "type": "volt",
         "effect": "chain_stun",
         "strength": 1
-      }
+      },
+      "animation_id": "forward_air",
+      "v3_fantasy": "Fast aerial spear-kick with electric needle trail",
+      "v3_vfx_shape": "jagged_fork_arc",
+      "v3_particle_library": "sparks_arcs_nodes"
     },
     {
       "move_id": "back_air",
@@ -877,79 +927,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
-      "aura_scaling": {
-        "level_0": {
-          "damage_mult": 1
-        },
-        "level_1": {
-          "damage_mult": 1.05,
-          "element_strength": 1.2
-        },
-        "level_2": {
-          "damage_mult": 1.1,
-          "hitbox_scale": 1.15,
-          "element_strength": 1.5
-        },
-        "level_3": {
-          "damage_mult": 1.15,
-          "hitbox_scale": 1.25,
-          "extra_active_frames": 1,
-          "cancel_windows": [
-            {
-              "start": 8,
-              "end": 14
-            }
-          ],
-          "element_strength": 1.8
-        },
-        "super_ready": {
-          "damage_mult": 1.2,
-          "hitbox_scale": 1.35,
-          "feedback_tier": "aura"
-        }
-      },
-      "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "volt_spark",
-        "sfx_event": "volt_hit_light",
-        "screen_flash": false
-      },
-      "training_display_name": "Up Air",
-      "combat_tag": "speed_chain",
-      "element_effect": {
-        "type": "volt",
-        "effect": "chain_stun",
-        "strength": 1
-      }
-    },
-    {
-      "move_id": "down_air",
-      "fighter_id": "juno-spark",
-      "move_type": "melee",
-      "direction": "air_down",
-      "input_command": "attack_air_down",
-      "grounded_air": "air",
-      "startup_frames": 4,
-      "active_frames": 3,
-      "recovery_frames": 10,
-      "hitboxes": [
-        {
-          "offset_x": 36,
-          "offset_y": -8,
-          "width": 40,
-          "height": 32
-        }
-      ],
-      "damage": 7.36,
-      "angle_deg": 270,
-      "base_knockback": 9,
-      "knockback_growth": 1.1,
-      "shield_damage": 3,
-      "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -985,9 +963,87 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "volt_dair",
-        "sfx_event": "volt_dair_sfx",
-        "screen_flash": false
+        "vfx_event": "juno_spark_up_air_jagged_fork_arc",
+        "sfx_event": "juno-spark.up_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "juno-spark.up_air.sparks_arcs_nodes"
+      },
+      "training_display_name": "Up Air",
+      "combat_tag": "speed_chain",
+      "element_effect": {
+        "type": "volt",
+        "effect": "chain_stun",
+        "strength": 1
+      },
+      "animation_id": "up_air",
+      "v3_fantasy": "Forked lightning kick/palm upward",
+      "v3_vfx_shape": "jagged_fork_arc",
+      "v3_particle_library": "sparks_arcs_nodes"
+    },
+    {
+      "move_id": "down_air",
+      "fighter_id": "juno-spark",
+      "move_type": "melee",
+      "direction": "air_down",
+      "input_command": "attack_air_down",
+      "grounded_air": "air",
+      "startup_frames": 4,
+      "active_frames": 3,
+      "recovery_frames": 10,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "damage": 7.36,
+      "angle_deg": 270,
+      "base_knockback": 9,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 8,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "heavy",
+        "hitstop_frames": 8,
+        "camera_event": "shake_heavy",
+        "vfx_event": "juno_spark_down_air_jagged_fork_arc",
+        "sfx_event": "juno-spark.down_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "juno-spark.down_air.sparks_arcs_nodes"
       },
       "training_display_name": "Down Air",
       "combat_tag": "speed_chain",
@@ -995,7 +1051,11 @@
         "type": "volt",
         "effect": "chain_stun",
         "strength": 1
-      }
+      },
+      "animation_id": "down_air",
+      "v3_fantasy": "Downward voltage spike with a narrow line",
+      "v3_vfx_shape": "jagged_fork_arc",
+      "v3_particle_library": "sparks_arcs_nodes"
     },
     {
       "move_id": "neutral_special_projectile",
@@ -1014,7 +1074,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1057,9 +1117,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "volt_proj",
-        "sfx_event": "volt_proj_sfx",
-        "screen_flash": false
+        "vfx_event": "juno_spark_neutral_special_projectile_jagged_fork_arc",
+        "sfx_event": "juno-spark.neutral_special_projectile.sfx",
+        "screen_flash": false,
+        "particle_profile": "juno-spark.neutral_special_projectile.sparks_arcs_nodes"
       },
       "training_display_name": "Volt Shot",
       "combat_tag": "speed_chain",
@@ -1110,7 +1171,11 @@
         "pierce": false,
         "homing": 0.15,
         "chain_stun_frames": 8
-      }
+      },
+      "animation_id": "neutral_special_projectile",
+      "v3_fantasy": "Fast electric needle; aura increases speed and chain",
+      "v3_vfx_shape": "jagged_fork_arc",
+      "v3_particle_library": "sparks_arcs_nodes"
     },
     {
       "move_id": "side_special",
@@ -1136,7 +1201,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 8,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1176,12 +1241,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "volt_spark",
-        "sfx_event": "volt_hit_light",
-        "screen_flash": false
+        "tier": "heavy",
+        "hitstop_frames": 8,
+        "camera_event": "shake_heavy",
+        "vfx_event": "juno_spark_side_special_jagged_fork_arc",
+        "sfx_event": "juno-spark.side_special.sfx",
+        "screen_flash": false,
+        "particle_profile": "juno-spark.side_special.sparks_arcs_nodes"
       },
       "training_display_name": "Flash Circuit Side",
       "combat_tag": "speed_chain",
@@ -1195,7 +1261,11 @@
         "dy": 0,
         "frames": 6
       },
-      "dash_cancel_enabled": true
+      "dash_cancel_enabled": true,
+      "animation_id": "side_special",
+      "v3_fantasy": "Conductive dash-cancel / electric rush",
+      "v3_vfx_shape": "jagged_fork_arc",
+      "v3_particle_library": "sparks_arcs_nodes"
     },
     {
       "move_id": "up_special_recovery",
@@ -1221,7 +1291,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1254,12 +1324,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "volt_spark",
-        "sfx_event": "volt_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "juno_spark_up_special_recovery_jagged_fork_arc",
+        "sfx_event": "juno-spark.up_special_recovery.sfx",
+        "screen_flash": false,
+        "particle_profile": "juno-spark.up_special_recovery.sparks_arcs_nodes"
       },
       "training_display_name": "Up Special / Recovery",
       "combat_tag": "speed_chain",
@@ -1279,7 +1350,11 @@
         "snap_ledge": true,
         "air_friction": 0.85,
         "landing_lag": 8
-      }
+      },
+      "animation_id": "up_special_recovery",
+      "v3_fantasy": "Lightning-step ascent with directional burst",
+      "v3_vfx_shape": "jagged_fork_arc",
+      "v3_particle_library": "sparks_arcs_nodes"
     },
     {
       "move_id": "down_special",
@@ -1305,7 +1380,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 8,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1345,12 +1420,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "volt_spark",
-        "sfx_event": "volt_hit_light",
-        "screen_flash": false
+        "tier": "heavy",
+        "hitstop_frames": 8,
+        "camera_event": "shake_heavy",
+        "vfx_event": "juno_spark_down_special_jagged_fork_arc",
+        "sfx_event": "juno-spark.down_special.sfx",
+        "screen_flash": false,
+        "particle_profile": "juno-spark.down_special.sparks_arcs_nodes"
       },
       "training_display_name": "Down Special",
       "combat_tag": "speed_chain",
@@ -1362,7 +1438,11 @@
       "trap": {
         "linger_frames": 24,
         "stun_pulses": 2
-      }
+      },
+      "animation_id": "down_special",
+      "v3_fantasy": "Magnetic pull/push pulse or brief bounded stun field",
+      "v3_vfx_shape": "jagged_fork_arc",
+      "v3_particle_library": "sparks_arcs_nodes"
     },
     {
       "move_id": "grab",
@@ -1388,7 +1468,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 2,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1422,15 +1502,20 @@
       },
       "feedback": {
         "tier": "light",
-        "hitstop_frames": 3,
+        "hitstop_frames": 2,
         "camera_event": "shake_light",
-        "vfx_event": "volt_spark",
-        "sfx_event": "volt_hit_light",
-        "screen_flash": false
+        "vfx_event": "juno_spark_grab_jagged_fork_arc",
+        "sfx_event": "juno-spark.grab.sfx",
+        "screen_flash": false,
+        "particle_profile": "juno-spark.grab.sparks_arcs_nodes"
       },
       "training_display_name": "Grab",
       "combat_tag": "speed_chain",
-      "grab_range": 30
+      "grab_range": 30,
+      "animation_id": "grab",
+      "v3_fantasy": "Electromagnetic snare/clinch",
+      "v3_vfx_shape": "jagged_fork_arc",
+      "v3_particle_library": "sparks_arcs_nodes"
     },
     {
       "move_id": "throw_forward",
@@ -1449,7 +1534,7 @@
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1487,9 +1572,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "volt_throw",
-        "sfx_event": "volt_throw_sfx",
-        "screen_flash": false
+        "vfx_event": "juno_spark_throw_forward_jagged_fork_arc",
+        "sfx_event": "juno-spark.throw_forward.sfx",
+        "screen_flash": false,
+        "particle_profile": "juno-spark.throw_forward.sparks_arcs_nodes"
       },
       "training_display_name": "Electric Palm Launch",
       "combat_tag": "speed_chain",
@@ -1498,21 +1584,26 @@
         "hold_frames": 0,
         "release_frame": 2,
         "victim_offset": {
-          "x": 20,
-          "y": -8
+          "x": 22,
+          "y": -12
         },
         "damage": 4.784000000000001,
         "angle_deg": 40,
         "base_knockback": 13,
         "knockback_growth": 1.15,
         "combo_role": "positioning",
-        "role": "edge_pressure"
+        "role": "edge_pressure",
+        "authored": true
       },
       "element_effect": {
         "type": "volt",
         "effect": "chain_stun",
         "strength": 1
-      }
+      },
+      "animation_id": "throw_forward",
+      "v3_fantasy": "Electric palm launch",
+      "v3_vfx_shape": "jagged_fork_arc",
+      "v3_particle_library": "sparks_arcs_nodes"
     },
     {
       "move_id": "throw_back",
@@ -1531,7 +1622,7 @@
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1569,9 +1660,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "volt_throw",
-        "sfx_event": "volt_throw_sfx",
-        "screen_flash": false
+        "vfx_event": "juno_spark_throw_back_jagged_fork_arc",
+        "sfx_event": "juno-spark.throw_back.sfx",
+        "screen_flash": false,
+        "particle_profile": "juno-spark.throw_back.sparks_arcs_nodes"
       },
       "training_display_name": "Blink-Behind Kick",
       "combat_tag": "speed_chain",
@@ -1580,21 +1672,26 @@
         "hold_frames": 0,
         "release_frame": 2,
         "victim_offset": {
-          "x": -20,
-          "y": -8
+          "x": -28,
+          "y": -10
         },
         "damage": 6.256000000000001,
         "angle_deg": 150,
         "base_knockback": 17,
         "knockback_growth": 1.15,
-        "combo_role": "kill",
-        "role": "reversal"
+        "combo_role": "reversal",
+        "role": "reversal",
+        "authored": true
       },
       "element_effect": {
         "type": "volt",
         "effect": "chain_stun",
         "strength": 1
-      }
+      },
+      "animation_id": "throw_back",
+      "v3_fantasy": "Blink-behind kick",
+      "v3_vfx_shape": "jagged_fork_arc",
+      "v3_particle_library": "sparks_arcs_nodes"
     },
     {
       "move_id": "throw_up",
@@ -1613,7 +1710,7 @@
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1651,9 +1748,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "volt_throw",
-        "sfx_event": "volt_throw_sfx",
-        "screen_flash": false
+        "vfx_event": "juno_spark_throw_up_jagged_fork_arc",
+        "sfx_event": "juno-spark.throw_up.sfx",
+        "screen_flash": false,
+        "particle_profile": "juno-spark.throw_up.sparks_arcs_nodes"
       },
       "training_display_name": "Lightning Launcher",
       "combat_tag": "speed_chain",
@@ -1662,21 +1760,26 @@
         "hold_frames": 0,
         "release_frame": 2,
         "victim_offset": {
-          "x": 20,
-          "y": -8
+          "x": 2,
+          "y": -34
         },
         "damage": 5.5200000000000005,
         "angle_deg": 85,
         "base_knockback": 15,
         "knockback_growth": 1.15,
-        "combo_role": "starter",
-        "role": "juggle"
+        "combo_role": "juggle",
+        "role": "juggle",
+        "authored": true
       },
       "element_effect": {
         "type": "volt",
         "effect": "chain_stun",
         "strength": 1
-      }
+      },
+      "animation_id": "throw_up",
+      "v3_fantasy": "Lightning launcher",
+      "v3_vfx_shape": "jagged_fork_arc",
+      "v3_particle_library": "sparks_arcs_nodes"
     },
     {
       "move_id": "throw_down",
@@ -1695,7 +1798,7 @@
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1733,9 +1836,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "volt_throw",
-        "sfx_event": "volt_throw_sfx",
-        "screen_flash": false
+        "vfx_event": "juno_spark_throw_down_jagged_fork_arc",
+        "sfx_event": "juno-spark.throw_down.sfx",
+        "screen_flash": false,
+        "particle_profile": "juno-spark.throw_down.sparks_arcs_nodes"
       },
       "training_display_name": "Stun Bounce",
       "combat_tag": "speed_chain",
@@ -1744,21 +1848,26 @@
         "hold_frames": 0,
         "release_frame": 2,
         "victim_offset": {
-          "x": 20,
-          "y": -8
+          "x": 6,
+          "y": 12
         },
         "damage": 4.048000000000001,
         "angle_deg": 268,
         "base_knockback": 11,
         "knockback_growth": 1.15,
-        "combo_role": "bounce",
-        "role": "setup"
+        "combo_role": "setup",
+        "role": "setup",
+        "authored": true
       },
       "element_effect": {
         "type": "volt",
         "effect": "chain_stun",
         "strength": 1
-      }
+      },
+      "animation_id": "throw_down",
+      "v3_fantasy": "Stun bounce",
+      "v3_vfx_shape": "jagged_fork_arc",
+      "v3_particle_library": "sparks_arcs_nodes"
     },
     {
       "move_id": "aura_charge",
@@ -1777,18 +1886,23 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 11,
       "aura_scaling": {},
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "volt_spark",
-        "sfx_event": "volt_hit_light",
-        "screen_flash": false
+        "tier": "aura",
+        "hitstop_frames": 11,
+        "camera_event": "shake_aura",
+        "vfx_event": "juno_spark_aura_charge_jagged_fork_arc",
+        "sfx_event": "juno-spark.aura_charge.sfx",
+        "screen_flash": true,
+        "particle_profile": "juno-spark.aura_charge.sparks_arcs_nodes"
       },
       "training_display_name": "Aura Charge",
-      "combat_tag": "speed_chain"
+      "combat_tag": "speed_chain",
+      "animation_id": "aura_charge",
+      "v3_fantasy": "Capacitor charge; current routes through the limbs",
+      "v3_vfx_shape": "jagged_fork_arc",
+      "v3_particle_library": "sparks_arcs_nodes"
     },
     {
       "move_id": "aura_burst",
@@ -1814,7 +1928,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 14,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1848,11 +1962,12 @@
       },
       "feedback": {
         "tier": "super",
-        "hitstop_frames": 15,
-        "camera_event": "pulse_super",
-        "vfx_event": "volt_burst",
-        "sfx_event": "volt_burst_sfx",
-        "screen_flash": true
+        "hitstop_frames": 14,
+        "camera_event": "shake_super",
+        "vfx_event": "juno_spark_aura_burst_jagged_fork_arc",
+        "sfx_event": "juno-spark.aura_burst.sfx",
+        "screen_flash": true,
+        "particle_profile": "juno-spark.aura_burst.sparks_arcs_nodes"
       },
       "training_display_name": "Flash Circuit",
       "combat_tag": "speed_chain",
@@ -1861,7 +1976,11 @@
         "effect": "chain_stun",
         "strength": 2.5
       },
-      "meter_cost": 100
+      "meter_cost": 100,
+      "animation_id": "aura_burst",
+      "v3_fantasy": "Flash-circuit burst enabling speed/confirm payoff",
+      "v3_vfx_shape": "jagged_fork_arc",
+      "v3_particle_library": "sparks_arcs_nodes"
     }
   ],
   "game001_identity": {

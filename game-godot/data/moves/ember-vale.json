@@ -27,7 +27,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 2,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -61,11 +61,12 @@
       },
       "feedback": {
         "tier": "light",
-        "hitstop_frames": 3,
+        "hitstop_frames": 2,
         "camera_event": "shake_light",
-        "vfx_event": "flame_spark",
-        "sfx_event": "flame_hit_light",
-        "screen_flash": false
+        "vfx_event": "ember_vale_jab_1_flame_tongue_cone",
+        "sfx_event": "ember-vale.jab_1.sfx",
+        "screen_flash": false,
+        "particle_profile": "ember-vale.jab_1.ember_flame_heat"
       },
       "training_display_name": "Jab 1",
       "combat_tag": "burn_rushdown",
@@ -87,7 +88,11 @@
           "to": "jab_2"
         }
       ],
-      "h2h_string_id": "ember-vale:jab_1->jab_2"
+      "h2h_string_id": "ember-vale:jab_1->jab_2",
+      "animation_id": "jab_1",
+      "v3_fantasy": "Quick ignition knuckle with a small ember trail",
+      "v3_vfx_shape": "flame_tongue_cone",
+      "v3_particle_library": "ember_flame_heat"
     },
     {
       "move_id": "jab_2",
@@ -113,7 +118,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 2,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -147,11 +152,12 @@
       },
       "feedback": {
         "tier": "light",
-        "hitstop_frames": 3,
+        "hitstop_frames": 2,
         "camera_event": "shake_light",
-        "vfx_event": "flame_spark",
-        "sfx_event": "flame_hit_light",
-        "screen_flash": false
+        "vfx_event": "ember_vale_jab_2_flame_tongue_cone",
+        "sfx_event": "ember-vale.jab_2.sfx",
+        "screen_flash": false,
+        "particle_profile": "ember-vale.jab_2.ember_flame_heat"
       },
       "training_display_name": "Jab 2",
       "combat_tag": "burn_rushdown",
@@ -168,7 +174,11 @@
           "to": "jab_finisher"
         }
       ],
-      "h2h_string_id": "ember-vale:jab_2->jab_finisher"
+      "h2h_string_id": "ember-vale:jab_2->jab_finisher",
+      "animation_id": "jab_2",
+      "v3_fantasy": "Cross-body flame palm with a hotter impact layer",
+      "v3_vfx_shape": "flame_tongue_cone",
+      "v3_particle_library": "ember_flame_heat"
     },
     {
       "move_id": "jab_finisher",
@@ -194,7 +204,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -230,9 +240,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "flame_jab_fin",
-        "sfx_event": "flame_jab_fin_sfx",
-        "screen_flash": false
+        "vfx_event": "ember_vale_jab_finisher_flame_tongue_cone",
+        "sfx_event": "ember-vale.jab_finisher.sfx",
+        "screen_flash": false,
+        "particle_profile": "ember-vale.jab_finisher.ember_flame_heat"
       },
       "training_display_name": "Jab Finisher",
       "combat_tag": "burn_rushdown",
@@ -249,7 +260,11 @@
           "to": "side_special"
         }
       ],
-      "h2h_string_id": "ember-vale:jab_finisher->side_special"
+      "h2h_string_id": "ember-vale:jab_finisher->side_special",
+      "animation_id": "jab_finisher",
+      "v3_fantasy": "Close-range furnace burst ending the jab string",
+      "v3_vfx_shape": "flame_tongue_cone",
+      "v3_particle_library": "ember_flame_heat"
     },
     {
       "move_id": "forward_tilt",
@@ -275,7 +290,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -308,12 +323,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "flame_spark",
-        "sfx_event": "flame_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "ember_vale_forward_tilt_flame_tongue_cone",
+        "sfx_event": "ember-vale.forward_tilt.sfx",
+        "screen_flash": false,
+        "particle_profile": "ember-vale.forward_tilt.ember_flame_heat"
       },
       "training_display_name": "Forward Tilt",
       "combat_tag": "burn_rushdown",
@@ -321,7 +337,11 @@
         "type": "flame",
         "effect": "burn",
         "strength": 1
-      }
+      },
+      "animation_id": "forward_tilt",
+      "v3_fantasy": "Flame-edge forearm sweep with a short crescent",
+      "v3_vfx_shape": "flame_tongue_cone",
+      "v3_particle_library": "ember_flame_heat"
     },
     {
       "move_id": "up_tilt",
@@ -347,7 +367,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -380,12 +400,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "flame_spark",
-        "sfx_event": "flame_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "ember_vale_up_tilt_flame_tongue_cone",
+        "sfx_event": "ember-vale.up_tilt.sfx",
+        "screen_flash": false,
+        "particle_profile": "ember-vale.up_tilt.ember_flame_heat"
       },
       "training_display_name": "Up Tilt",
       "combat_tag": "burn_rushdown",
@@ -393,7 +414,11 @@
         "type": "flame",
         "effect": "burn",
         "strength": 1
-      }
+      },
+      "animation_id": "up_tilt",
+      "v3_fantasy": "Rising flare uppercut forming a narrow anti-air column",
+      "v3_vfx_shape": "flame_tongue_cone",
+      "v3_particle_library": "ember_flame_heat"
     },
     {
       "move_id": "down_tilt",
@@ -419,7 +444,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -452,12 +477,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "flame_spark",
-        "sfx_event": "flame_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "ember_vale_down_tilt_flame_tongue_cone",
+        "sfx_event": "ember-vale.down_tilt.sfx",
+        "screen_flash": false,
+        "particle_profile": "ember-vale.down_tilt.ember_flame_heat"
       },
       "training_display_name": "Down Tilt",
       "combat_tag": "burn_rushdown",
@@ -465,7 +491,11 @@
         "type": "flame",
         "effect": "burn",
         "strength": 1
-      }
+      },
+      "animation_id": "down_tilt",
+      "v3_fantasy": "Low searing sweep leaving a brief ground flame lick",
+      "v3_vfx_shape": "flame_tongue_cone",
+      "v3_particle_library": "ember_flame_heat"
     },
     {
       "move_id": "dash_attack",
@@ -491,7 +521,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -524,12 +554,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "flame_spark",
-        "sfx_event": "flame_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "ember_vale_dash_attack_flame_tongue_cone",
+        "sfx_event": "ember-vale.dash_attack.sfx",
+        "screen_flash": false,
+        "particle_profile": "ember-vale.dash_attack.ember_flame_heat"
       },
       "training_display_name": "Dash Attack",
       "combat_tag": "burn_rushdown",
@@ -537,7 +568,11 @@
         "type": "flame",
         "effect": "burn",
         "strength": 1
-      }
+      },
+      "animation_id": "dash_attack",
+      "v3_fantasy": "Heatline shoulder/forearm rush with body flame streaming backward",
+      "v3_vfx_shape": "flame_tongue_cone",
+      "v3_particle_library": "ember_flame_heat"
     },
     {
       "move_id": "heavy_attack",
@@ -563,7 +598,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 8,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -599,9 +634,10 @@
         "tier": "heavy",
         "hitstop_frames": 8,
         "camera_event": "shake_heavy",
-        "vfx_event": "flame_heavy",
-        "sfx_event": "flame_heavy_sfx",
-        "screen_flash": false
+        "vfx_event": "ember_vale_heavy_attack_flame_tongue_cone",
+        "sfx_event": "ember-vale.heavy_attack.sfx",
+        "screen_flash": false,
+        "particle_profile": "ember-vale.heavy_attack.ember_flame_heat"
       },
       "training_display_name": "Heavy Attack",
       "combat_tag": "burn_rushdown",
@@ -611,7 +647,11 @@
         "strength": 1
       },
       "wave016_reachability": "DESIGN_ONLY_NO_DISTINCT_CONTROL",
-      "note": "CONTROLS.md does not distinguish tilt vs smash/heavy; not bound to avoid awkward inputs."
+      "note": "CONTROLS.md does not distinguish tilt vs smash/heavy; not bound to avoid awkward inputs.",
+      "animation_id": "heavy_attack",
+      "v3_fantasy": "Committed furnace hammer with a large ignition at contact",
+      "v3_vfx_shape": "flame_tongue_cone",
+      "v3_particle_library": "ember_flame_heat"
     },
     {
       "move_id": "neutral_air",
@@ -637,7 +677,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -670,12 +710,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "flame_spark",
-        "sfx_event": "flame_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "ember_vale_neutral_air_flame_tongue_cone",
+        "sfx_event": "ember-vale.neutral_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "ember-vale.neutral_air.ember_flame_heat"
       },
       "training_display_name": "Neutral Air",
       "combat_tag": "burn_rushdown",
@@ -683,7 +724,11 @@
         "type": "flame",
         "effect": "burn",
         "strength": 1
-      }
+      },
+      "animation_id": "neutral_air",
+      "v3_fantasy": "Compact corona spin wrapping the body in flame",
+      "v3_vfx_shape": "flame_tongue_cone",
+      "v3_particle_library": "ember_flame_heat"
     },
     {
       "move_id": "forward_air",
@@ -709,7 +754,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -742,12 +787,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "flame_spark",
-        "sfx_event": "flame_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "ember_vale_forward_air_flame_tongue_cone",
+        "sfx_event": "ember-vale.forward_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "ember-vale.forward_air.ember_flame_heat"
       },
       "training_display_name": "Forward Air",
       "combat_tag": "burn_rushdown",
@@ -755,7 +801,11 @@
         "type": "flame",
         "effect": "burn",
         "strength": 1
-      }
+      },
+      "animation_id": "forward_air",
+      "v3_fantasy": "Flame-propelled forward kick with a sharp contact burst",
+      "v3_vfx_shape": "flame_tongue_cone",
+      "v3_particle_library": "ember_flame_heat"
     },
     {
       "move_id": "back_air",
@@ -853,79 +903,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
-      "aura_scaling": {
-        "level_0": {
-          "damage_mult": 1
-        },
-        "level_1": {
-          "damage_mult": 1.05,
-          "element_strength": 1.2
-        },
-        "level_2": {
-          "damage_mult": 1.1,
-          "hitbox_scale": 1.15,
-          "element_strength": 1.5
-        },
-        "level_3": {
-          "damage_mult": 1.15,
-          "hitbox_scale": 1.25,
-          "extra_active_frames": 1,
-          "cancel_windows": [
-            {
-              "start": 8,
-              "end": 14
-            }
-          ],
-          "element_strength": 1.8
-        },
-        "super_ready": {
-          "damage_mult": 1.2,
-          "hitbox_scale": 1.35,
-          "feedback_tier": "aura"
-        }
-      },
-      "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "flame_spark",
-        "sfx_event": "flame_hit_light",
-        "screen_flash": false
-      },
-      "training_display_name": "Up Air",
-      "combat_tag": "burn_rushdown",
-      "element_effect": {
-        "type": "flame",
-        "effect": "burn",
-        "strength": 1
-      }
-    },
-    {
-      "move_id": "down_air",
-      "fighter_id": "ember-vale",
-      "move_type": "melee",
-      "direction": "air_down",
-      "input_command": "attack_air_down",
-      "grounded_air": "air",
-      "startup_frames": 4,
-      "active_frames": 3,
-      "recovery_frames": 10,
-      "hitboxes": [
-        {
-          "offset_x": 36,
-          "offset_y": -8,
-          "width": 40,
-          "height": 32
-        }
-      ],
-      "damage": 8,
-      "angle_deg": 270,
-      "base_knockback": 9,
-      "knockback_growth": 1.1,
-      "shield_damage": 3,
-      "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -961,9 +939,87 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "flame_dair",
-        "sfx_event": "flame_dair_sfx",
-        "screen_flash": false
+        "vfx_event": "ember_vale_up_air_flame_tongue_cone",
+        "sfx_event": "ember-vale.up_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "ember-vale.up_air.ember_flame_heat"
+      },
+      "training_display_name": "Up Air",
+      "combat_tag": "burn_rushdown",
+      "element_effect": {
+        "type": "flame",
+        "effect": "burn",
+        "strength": 1
+      },
+      "animation_id": "up_air",
+      "v3_fantasy": "Updraft flare kick/palm that pops targets above Ember",
+      "v3_vfx_shape": "flame_tongue_cone",
+      "v3_particle_library": "ember_flame_heat"
+    },
+    {
+      "move_id": "down_air",
+      "fighter_id": "ember-vale",
+      "move_type": "melee",
+      "direction": "air_down",
+      "input_command": "attack_air_down",
+      "grounded_air": "air",
+      "startup_frames": 4,
+      "active_frames": 3,
+      "recovery_frames": 10,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "damage": 8,
+      "angle_deg": 270,
+      "base_knockback": 9,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 8,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "heavy",
+        "hitstop_frames": 8,
+        "camera_event": "shake_heavy",
+        "vfx_event": "ember_vale_down_air_flame_tongue_cone",
+        "sfx_event": "ember-vale.down_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "ember-vale.down_air.ember_flame_heat"
       },
       "training_display_name": "Down Air",
       "combat_tag": "burn_rushdown",
@@ -971,7 +1027,11 @@
         "type": "flame",
         "effect": "burn",
         "strength": 1
-      }
+      },
+      "animation_id": "down_air",
+      "v3_fantasy": "Meteor ember stomp with a downward flame cone",
+      "v3_vfx_shape": "flame_tongue_cone",
+      "v3_particle_library": "ember_flame_heat"
     },
     {
       "move_id": "neutral_special_projectile",
@@ -990,7 +1050,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1026,9 +1086,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "flame_proj",
-        "sfx_event": "flame_proj_sfx",
-        "screen_flash": false
+        "vfx_event": "ember_vale_neutral_special_projectile_flame_tongue_cone",
+        "sfx_event": "ember-vale.neutral_special_projectile.sfx",
+        "screen_flash": false,
+        "particle_profile": "ember-vale.neutral_special_projectile.ember_flame_heat"
       },
       "training_display_name": "Flame Shot",
       "combat_tag": "burn_rushdown",
@@ -1078,7 +1139,11 @@
         "size": 10,
         "pierce": false,
         "homing": 0.0
-      }
+      },
+      "animation_id": "neutral_special_projectile",
+      "v3_fantasy": "Cinder shot to wider flame wave to multi-hit flame stream",
+      "v3_vfx_shape": "flame_tongue_cone",
+      "v3_particle_library": "ember_flame_heat"
     },
     {
       "move_id": "side_special",
@@ -1104,7 +1169,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 8,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1137,12 +1202,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "flame_spark",
-        "sfx_event": "flame_hit_light",
-        "screen_flash": false
+        "tier": "heavy",
+        "hitstop_frames": 8,
+        "camera_event": "shake_heavy",
+        "vfx_event": "ember_vale_side_special_flame_tongue_cone",
+        "sfx_event": "ember-vale.side_special.sfx",
+        "screen_flash": false,
+        "particle_profile": "ember-vale.side_special.ember_flame_heat"
       },
       "training_display_name": "Cinder Rush Side",
       "combat_tag": "burn_rushdown",
@@ -1156,7 +1222,11 @@
         "dy": 0,
         "frames": 8
       },
-      "armor_frames": 0
+      "armor_frames": 0,
+      "animation_id": "side_special",
+      "v3_fantasy": "Blazing rush/reposition strike built around movement and pressure",
+      "v3_vfx_shape": "flame_tongue_cone",
+      "v3_particle_library": "ember_flame_heat"
     },
     {
       "move_id": "up_special_recovery",
@@ -1182,7 +1252,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1215,12 +1285,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "flame_spark",
-        "sfx_event": "flame_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "ember_vale_up_special_recovery_flame_tongue_cone",
+        "sfx_event": "ember-vale.up_special_recovery.sfx",
+        "screen_flash": false,
+        "particle_profile": "ember-vale.up_special_recovery.ember_flame_heat"
       },
       "training_display_name": "Up Special / Recovery",
       "combat_tag": "burn_rushdown",
@@ -1240,7 +1311,11 @@
         "snap_ledge": true,
         "air_friction": 0.92,
         "landing_lag": 10
-      }
+      },
+      "animation_id": "up_special_recovery",
+      "v3_fantasy": "Jet-flare ascent with visible propulsion and vulnerable recovery",
+      "v3_vfx_shape": "flame_tongue_cone",
+      "v3_particle_library": "ember_flame_heat"
     },
     {
       "move_id": "down_special",
@@ -1266,7 +1341,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 8,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1299,12 +1374,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "flame_spark",
-        "sfx_event": "flame_hit_light",
-        "screen_flash": false
+        "tier": "heavy",
+        "hitstop_frames": 8,
+        "camera_event": "shake_heavy",
+        "vfx_event": "ember_vale_down_special_flame_tongue_cone",
+        "sfx_event": "ember-vale.down_special.sfx",
+        "screen_flash": false,
+        "particle_profile": "ember-vale.down_special.ember_flame_heat"
       },
       "training_display_name": "Down Special",
       "combat_tag": "burn_rushdown",
@@ -1316,7 +1392,11 @@
       "trap": {
         "linger_frames": 40,
         "burn_ticks": 3
-      }
+      },
+      "animation_id": "down_special",
+      "v3_fantasy": "Flashpoint guard/counter or short ignition trap",
+      "v3_vfx_shape": "flame_tongue_cone",
+      "v3_particle_library": "ember_flame_heat"
     },
     {
       "move_id": "grab",
@@ -1342,7 +1422,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 2,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1376,15 +1456,20 @@
       },
       "feedback": {
         "tier": "light",
-        "hitstop_frames": 3,
+        "hitstop_frames": 2,
         "camera_event": "shake_light",
-        "vfx_event": "flame_spark",
-        "sfx_event": "flame_hit_light",
-        "screen_flash": false
+        "vfx_event": "ember_vale_grab_flame_tongue_cone",
+        "sfx_event": "ember-vale.grab.sfx",
+        "screen_flash": false,
+        "particle_profile": "ember-vale.grab.ember_flame_heat"
       },
       "training_display_name": "Grab",
       "combat_tag": "burn_rushdown",
-      "grab_range": 34
+      "grab_range": 34,
+      "animation_id": "grab",
+      "v3_fantasy": "Heated clinch; flame wrap after confirmed grab",
+      "v3_vfx_shape": "flame_tongue_cone",
+      "v3_particle_library": "ember_flame_heat"
     },
     {
       "move_id": "throw_forward",
@@ -1403,7 +1488,7 @@
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1441,9 +1526,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "flame_throw",
-        "sfx_event": "flame_throw_sfx",
-        "screen_flash": false
+        "vfx_event": "ember_vale_throw_forward_flame_tongue_cone",
+        "sfx_event": "ember-vale.throw_forward.sfx",
+        "screen_flash": false,
+        "particle_profile": "ember-vale.throw_forward.ember_flame_heat"
       },
       "training_display_name": "Flame Spin Toss",
       "combat_tag": "burn_rushdown",
@@ -1452,21 +1538,26 @@
         "hold_frames": 0,
         "release_frame": 2,
         "victim_offset": {
-          "x": 20,
-          "y": -8
+          "x": 24,
+          "y": -10
         },
         "damage": 5.6000000000000005,
         "angle_deg": 35,
         "base_knockback": 14,
         "knockback_growth": 1.15,
         "combo_role": "positioning",
-        "role": "edge_pressure"
+        "role": "edge_pressure",
+        "authored": true
       },
       "element_effect": {
         "type": "flame",
         "effect": "burn",
         "strength": 1
-      }
+      },
+      "animation_id": "throw_forward",
+      "v3_fantasy": "Flame spin toss",
+      "v3_vfx_shape": "flame_tongue_cone",
+      "v3_particle_library": "ember_flame_heat"
     },
     {
       "move_id": "throw_back",
@@ -1485,7 +1576,7 @@
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1523,9 +1614,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "flame_throw",
-        "sfx_event": "flame_throw_sfx",
-        "screen_flash": false
+        "vfx_event": "ember_vale_throw_back_flame_tongue_cone",
+        "sfx_event": "ember-vale.throw_back.sfx",
+        "screen_flash": false,
+        "particle_profile": "ember-vale.throw_back.ember_flame_heat"
       },
       "training_display_name": "Reversal Flame Burst",
       "combat_tag": "burn_rushdown",
@@ -1534,21 +1626,26 @@
         "hold_frames": 0,
         "release_frame": 2,
         "victim_offset": {
-          "x": -20,
+          "x": -26,
           "y": -8
         },
         "damage": 7.2,
         "angle_deg": 140,
         "base_knockback": 18,
         "knockback_growth": 1.15,
-        "combo_role": "kill",
-        "role": "reversal"
+        "combo_role": "reversal",
+        "role": "reversal",
+        "authored": true
       },
       "element_effect": {
         "type": "flame",
         "effect": "burn",
         "strength": 1
-      }
+      },
+      "animation_id": "throw_back",
+      "v3_fantasy": "Reversal kick into flame burst",
+      "v3_vfx_shape": "flame_tongue_cone",
+      "v3_particle_library": "ember_flame_heat"
     },
     {
       "move_id": "throw_up",
@@ -1567,7 +1664,7 @@
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1605,9 +1702,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "flame_throw",
-        "sfx_event": "flame_throw_sfx",
-        "screen_flash": false
+        "vfx_event": "ember_vale_throw_up_flame_tongue_cone",
+        "sfx_event": "ember-vale.throw_up.sfx",
+        "screen_flash": false,
+        "particle_profile": "ember-vale.throw_up.ember_flame_heat"
       },
       "training_display_name": "Erupting Uppercut",
       "combat_tag": "burn_rushdown",
@@ -1616,21 +1714,26 @@
         "hold_frames": 0,
         "release_frame": 2,
         "victim_offset": {
-          "x": 20,
-          "y": -8
+          "x": 6,
+          "y": -30
         },
         "damage": 6.4,
         "angle_deg": 82,
         "base_knockback": 16,
         "knockback_growth": 1.15,
-        "combo_role": "starter",
-        "role": "juggle"
+        "combo_role": "juggle",
+        "role": "juggle",
+        "authored": true
       },
       "element_effect": {
         "type": "flame",
         "effect": "burn",
         "strength": 1
-      }
+      },
+      "animation_id": "throw_up",
+      "v3_fantasy": "Erupting uppercut",
+      "v3_vfx_shape": "flame_tongue_cone",
+      "v3_particle_library": "ember_flame_heat"
     },
     {
       "move_id": "throw_down",
@@ -1649,7 +1752,7 @@
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1687,9 +1790,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "flame_throw",
-        "sfx_event": "flame_throw_sfx",
-        "screen_flash": false
+        "vfx_event": "ember_vale_throw_down_flame_tongue_cone",
+        "sfx_event": "ember-vale.throw_down.sfx",
+        "screen_flash": false,
+        "particle_profile": "ember-vale.throw_down.ember_flame_heat"
       },
       "training_display_name": "Ground Ignition",
       "combat_tag": "burn_rushdown",
@@ -1698,21 +1802,26 @@
         "hold_frames": 0,
         "release_frame": 2,
         "victim_offset": {
-          "x": 20,
-          "y": -8
+          "x": 10,
+          "y": 14
         },
         "damage": 4.800000000000001,
         "angle_deg": 270,
         "base_knockback": 12,
         "knockback_growth": 1.15,
-        "combo_role": "bounce",
-        "role": "setup"
+        "combo_role": "setup",
+        "role": "setup",
+        "authored": true
       },
       "element_effect": {
         "type": "flame",
         "effect": "burn",
         "strength": 1
-      }
+      },
+      "animation_id": "throw_down",
+      "v3_fantasy": "Ground ignition bounce",
+      "v3_vfx_shape": "flame_tongue_cone",
+      "v3_particle_library": "ember_flame_heat"
     },
     {
       "move_id": "aura_charge",
@@ -1731,18 +1840,23 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 11,
       "aura_scaling": {},
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "flame_spark",
-        "sfx_event": "flame_hit_light",
-        "screen_flash": false
+        "tier": "aura",
+        "hitstop_frames": 11,
+        "camera_event": "shake_aura",
+        "vfx_event": "ember_vale_aura_charge_flame_tongue_cone",
+        "sfx_event": "ember-vale.aura_charge.sfx",
+        "screen_flash": true,
+        "particle_profile": "ember-vale.aura_charge.ember_flame_heat"
       },
       "training_display_name": "Aura Charge",
-      "combat_tag": "burn_rushdown"
+      "combat_tag": "burn_rushdown",
+      "animation_id": "aura_charge",
+      "v3_fantasy": "Furnace-heart charge; flames intensify from the body core outward",
+      "v3_vfx_shape": "flame_tongue_cone",
+      "v3_particle_library": "ember_flame_heat"
     },
     {
       "move_id": "aura_burst",
@@ -1768,7 +1882,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 14,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1802,11 +1916,12 @@
       },
       "feedback": {
         "tier": "super",
-        "hitstop_frames": 15,
-        "camera_event": "pulse_super",
-        "vfx_event": "flame_burst",
-        "sfx_event": "flame_burst_sfx",
-        "screen_flash": true
+        "hitstop_frames": 14,
+        "camera_event": "shake_super",
+        "vfx_event": "ember_vale_aura_burst_flame_tongue_cone",
+        "sfx_event": "ember-vale.aura_burst.sfx",
+        "screen_flash": true,
+        "particle_profile": "ember-vale.aura_burst.ember_flame_heat"
       },
       "training_display_name": "Cinder Rush",
       "combat_tag": "burn_rushdown",
@@ -1815,7 +1930,11 @@
         "effect": "burn",
         "strength": 2.5
       },
-      "meter_cost": 100
+      "meter_cost": 100,
+      "animation_id": "aura_burst",
+      "v3_fantasy": "Rushing eruption / explosive flame surge",
+      "v3_vfx_shape": "flame_tongue_cone",
+      "v3_particle_library": "ember_flame_heat"
     }
   ],
   "game001_identity": {

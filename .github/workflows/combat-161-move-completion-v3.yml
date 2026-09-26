@@ -1,0 +1,75 @@
+name: Combat 161 Move Completion V3
+
+on:
+  push:
+    branches: ["combat/161-move-content-completion-v3", "combat/**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  v3-completion:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Matrix honesty
+        run: python3 tools/combat_v3/validate_161_matrix.py
+
+      - name: Install Godot 4.5
+        run: |
+          set -euo pipefail
+          curl -L -o godot.zip https://github.com/godotengine/godot-builds/releases/download/4.5-stable/Godot_v4.5-stable_linux.x86_64.zip
+          unzip -o godot.zip
+          chmod +x Godot_v4.5-stable_linux.x86_64
+          echo "GODOT_BIN=$PWD/Godot_v4.5-stable_linux.x86_64" >> "$GITHUB_ENV"
+
+      - name: V3 harness
+        env:
+          GODOT_BIN: ${{ env.GODOT_BIN }}
+        run: bash tools/combat_v3/run_v3.sh
+
+      - name: Owner gates stay false
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          for rel in [
+              "artifacts/combat/v3/V3_GATES.json",
+              "artifacts/combat/v3/MOVE_EXECUTION_HARNESS.json",
+              "artifacts/legal/INSPIRATION_ORIGINALITY_REVIEW_V3.json",
+          ]:
+              p = Path(rel)
+              if not p.is_file():
+                  continue
+              d = json.loads(p.read_text())
+              for key in [
+                  "OWNER_MOVESET_COMPLETENESS_PASS",
+                  "OWNER_ANIMATION_QUALITY_PASS",
+                  "OWNER_VFX_QUALITY_PASS",
+                  "OWNER_AUDIO_QUALITY_PASS",
+                  "OWNER_COMBAT_FEEL_PASS",
+                  "HUMAN_ORIGINALITY_REVIEW_PASS",
+                  "MERGE_AUTHORIZED",
+              ]:
+                  if key in d:
+                      assert d[key] is False, key
+          print("owner/human gates remain false")
+          PY
+
+      - name: Upload V3 artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: combat-161-v3-evidence
+          path: |
+            artifacts/combat/v3/
+            artifacts/audio/COMBAT_AUDIO_PROVENANCE_V3.json
+            artifacts/legal/INSPIRATION_ORIGINALITY_REVIEW_V3.json

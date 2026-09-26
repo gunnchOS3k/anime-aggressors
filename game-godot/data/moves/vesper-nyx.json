@@ -27,7 +27,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 2,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -61,11 +61,12 @@
       },
       "feedback": {
         "tier": "light",
-        "hitstop_frames": 3,
+        "hitstop_frames": 2,
         "camera_event": "shake_light",
-        "vfx_event": "void_spark",
-        "sfx_event": "void_hit_light",
-        "screen_flash": false
+        "vfx_event": "vesper_nyx_jab_1_phase_seam_echo",
+        "sfx_event": "vesper-nyx.jab_1.sfx",
+        "screen_flash": false,
+        "particle_profile": "vesper-nyx.jab_1.phase_motes_void_wisps"
       },
       "training_display_name": "Jab 1",
       "combat_tag": "phase_mark",
@@ -82,7 +83,11 @@
           "to": "jab_2"
         }
       ],
-      "h2h_string_id": "vesper-nyx:jab_1->jab_2"
+      "h2h_string_id": "vesper-nyx:jab_1->jab_2",
+      "animation_id": "jab_1",
+      "v3_fantasy": "Quick phase-in strike",
+      "v3_vfx_shape": "phase_seam_echo",
+      "v3_particle_library": "phase_motes_void_wisps"
     },
     {
       "move_id": "jab_2",
@@ -108,7 +113,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 2,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -142,11 +147,12 @@
       },
       "feedback": {
         "tier": "light",
-        "hitstop_frames": 3,
+        "hitstop_frames": 2,
         "camera_event": "shake_light",
-        "vfx_event": "void_spark",
-        "sfx_event": "void_hit_light",
-        "screen_flash": false
+        "vfx_event": "vesper_nyx_jab_2_phase_seam_echo",
+        "sfx_event": "vesper-nyx.jab_2.sfx",
+        "screen_flash": false,
+        "particle_profile": "vesper-nyx.jab_2.phase_motes_void_wisps"
       },
       "training_display_name": "Jab 2",
       "combat_tag": "phase_mark",
@@ -163,7 +169,11 @@
           "to": "jab_finisher"
         }
       ],
-      "h2h_string_id": "vesper-nyx:jab_2->jab_finisher"
+      "h2h_string_id": "vesper-nyx:jab_2->jab_finisher",
+      "animation_id": "jab_2",
+      "v3_fantasy": "Cross-up hand/heel appearing from an offset",
+      "v3_vfx_shape": "phase_seam_echo",
+      "v3_particle_library": "phase_motes_void_wisps"
     },
     {
       "move_id": "jab_finisher",
@@ -189,7 +199,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -231,9 +241,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "void_jab_fin",
-        "sfx_event": "void_jab_fin_sfx",
-        "screen_flash": false
+        "vfx_event": "vesper_nyx_jab_finisher_phase_seam_echo",
+        "sfx_event": "vesper-nyx.jab_finisher.sfx",
+        "screen_flash": false,
+        "particle_profile": "vesper-nyx.jab_finisher.phase_motes_void_wisps"
       },
       "training_display_name": "Jab Finisher",
       "combat_tag": "phase_mark",
@@ -251,7 +262,11 @@
           "to": "down_special"
         }
       ],
-      "h2h_string_id": "vesper-nyx:jab_finisher->down_special"
+      "h2h_string_id": "vesper-nyx:jab_finisher->down_special",
+      "animation_id": "jab_finisher",
+      "v3_fantasy": "Delayed void pop after the visible strike",
+      "v3_vfx_shape": "phase_seam_echo",
+      "v3_particle_library": "phase_motes_void_wisps"
     },
     {
       "move_id": "forward_tilt",
@@ -277,7 +292,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -310,12 +325,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "void_spark",
-        "sfx_event": "void_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "vesper_nyx_forward_tilt_phase_seam_echo",
+        "sfx_event": "vesper-nyx.forward_tilt.sfx",
+        "screen_flash": false,
+        "particle_profile": "vesper-nyx.forward_tilt.phase_motes_void_wisps"
       },
       "training_display_name": "Forward Tilt",
       "combat_tag": "phase_mark",
@@ -323,7 +339,11 @@
         "type": "void",
         "effect": "void_mark",
         "strength": 1
-      }
+      },
+      "animation_id": "forward_tilt",
+      "v3_fantasy": "Phase-blade / void-edge sweep",
+      "v3_vfx_shape": "phase_seam_echo",
+      "v3_particle_library": "phase_motes_void_wisps"
     },
     {
       "move_id": "up_tilt",
@@ -349,7 +369,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -382,12 +402,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "void_spark",
-        "sfx_event": "void_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "vesper_nyx_up_tilt_phase_seam_echo",
+        "sfx_event": "vesper-nyx.up_tilt.sfx",
+        "screen_flash": false,
+        "particle_profile": "vesper-nyx.up_tilt.phase_motes_void_wisps"
       },
       "training_display_name": "Up Tilt",
       "combat_tag": "phase_mark",
@@ -395,7 +416,11 @@
         "type": "void",
         "effect": "void_mark",
         "strength": 1
-      }
+      },
+      "animation_id": "up_tilt",
+      "v3_fantasy": "Vertical shadow tear",
+      "v3_vfx_shape": "phase_seam_echo",
+      "v3_particle_library": "phase_motes_void_wisps"
     },
     {
       "move_id": "down_tilt",
@@ -421,7 +446,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -454,12 +479,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "void_spark",
-        "sfx_event": "void_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "vesper_nyx_down_tilt_phase_seam_echo",
+        "sfx_event": "vesper-nyx.down_tilt.sfx",
+        "screen_flash": false,
+        "particle_profile": "vesper-nyx.down_tilt.phase_motes_void_wisps"
       },
       "training_display_name": "Down Tilt",
       "combat_tag": "phase_mark",
@@ -467,7 +493,11 @@
         "type": "void",
         "effect": "void_mark",
         "strength": 1
-      }
+      },
+      "animation_id": "down_tilt",
+      "v3_fantasy": "Low shadow-slip strike with reposition",
+      "v3_vfx_shape": "phase_seam_echo",
+      "v3_particle_library": "phase_motes_void_wisps"
     },
     {
       "move_id": "dash_attack",
@@ -493,7 +523,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -526,12 +556,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "void_spark",
-        "sfx_event": "void_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "vesper_nyx_dash_attack_phase_seam_echo",
+        "sfx_event": "vesper-nyx.dash_attack.sfx",
+        "screen_flash": false,
+        "particle_profile": "vesper-nyx.dash_attack.phase_motes_void_wisps"
       },
       "training_display_name": "Dash Attack",
       "combat_tag": "phase_mark",
@@ -539,7 +570,11 @@
         "type": "void",
         "effect": "void_mark",
         "strength": 1
-      }
+      },
+      "animation_id": "dash_attack",
+      "v3_fantasy": "Null-step cross-through attack",
+      "v3_vfx_shape": "phase_seam_echo",
+      "v3_particle_library": "phase_motes_void_wisps"
     },
     {
       "move_id": "heavy_attack",
@@ -565,7 +600,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 8,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -607,9 +642,10 @@
         "tier": "heavy",
         "hitstop_frames": 8,
         "camera_event": "shake_heavy",
-        "vfx_event": "void_heavy",
-        "sfx_event": "void_heavy_sfx",
-        "screen_flash": false
+        "vfx_event": "vesper_nyx_heavy_attack_phase_seam_echo",
+        "sfx_event": "vesper-nyx.heavy_attack.sfx",
+        "screen_flash": false,
+        "particle_profile": "vesper-nyx.heavy_attack.phase_motes_void_wisps"
       },
       "training_display_name": "Heavy Attack",
       "combat_tag": "phase_mark",
@@ -619,7 +655,11 @@
         "strength": 1
       },
       "wave016_reachability": "DESIGN_ONLY_NO_DISTINCT_CONTROL",
-      "note": "CONTROLS.md does not distinguish tilt vs smash/heavy; not bound to avoid awkward inputs."
+      "note": "CONTROLS.md does not distinguish tilt vs smash/heavy; not bound to avoid awkward inputs.",
+      "animation_id": "heavy_attack",
+      "v3_fantasy": "Delayed rift cleave with a clear startup marker",
+      "v3_vfx_shape": "phase_seam_echo",
+      "v3_particle_library": "phase_motes_void_wisps"
     },
     {
       "move_id": "neutral_air",
@@ -645,7 +685,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -678,12 +718,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "void_spark",
-        "sfx_event": "void_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "vesper_nyx_neutral_air_phase_seam_echo",
+        "sfx_event": "vesper-nyx.neutral_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "vesper-nyx.neutral_air.phase_motes_void_wisps"
       },
       "training_display_name": "Neutral Air",
       "combat_tag": "phase_mark",
@@ -691,7 +732,11 @@
         "type": "void",
         "effect": "void_mark",
         "strength": 1
-      }
+      },
+      "animation_id": "neutral_air",
+      "v3_fantasy": "Phase halo alternating present/absent timing",
+      "v3_vfx_shape": "phase_seam_echo",
+      "v3_particle_library": "phase_motes_void_wisps"
     },
     {
       "move_id": "forward_air",
@@ -717,7 +762,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -750,12 +795,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "void_spark",
-        "sfx_event": "void_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "vesper_nyx_forward_air_phase_seam_echo",
+        "sfx_event": "vesper-nyx.forward_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "vesper-nyx.forward_air.phase_motes_void_wisps"
       },
       "training_display_name": "Forward Air",
       "combat_tag": "phase_mark",
@@ -763,7 +809,11 @@
         "type": "void",
         "effect": "void_mark",
         "strength": 1
-      }
+      },
+      "animation_id": "forward_air",
+      "v3_fantasy": "Ghosted forward strike with afterimage",
+      "v3_vfx_shape": "phase_seam_echo",
+      "v3_particle_library": "phase_motes_void_wisps"
     },
     {
       "move_id": "back_air",
@@ -861,79 +911,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
-      "aura_scaling": {
-        "level_0": {
-          "damage_mult": 1
-        },
-        "level_1": {
-          "damage_mult": 1.05,
-          "element_strength": 1.2
-        },
-        "level_2": {
-          "damage_mult": 1.1,
-          "hitbox_scale": 1.15,
-          "element_strength": 1.5
-        },
-        "level_3": {
-          "damage_mult": 1.15,
-          "hitbox_scale": 1.25,
-          "extra_active_frames": 1,
-          "cancel_windows": [
-            {
-              "start": 8,
-              "end": 14
-            }
-          ],
-          "element_strength": 1.8
-        },
-        "super_ready": {
-          "damage_mult": 1.2,
-          "hitbox_scale": 1.35,
-          "feedback_tier": "aura"
-        }
-      },
-      "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "void_spark",
-        "sfx_event": "void_hit_light",
-        "screen_flash": false
-      },
-      "training_display_name": "Up Air",
-      "combat_tag": "phase_mark",
-      "element_effect": {
-        "type": "void",
-        "effect": "void_mark",
-        "strength": 1
-      }
-    },
-    {
-      "move_id": "down_air",
-      "fighter_id": "vesper-nyx",
-      "move_type": "melee",
-      "direction": "air_down",
-      "input_command": "attack_air_down",
-      "grounded_air": "air",
-      "startup_frames": 4,
-      "active_frames": 4,
-      "recovery_frames": 14,
-      "hitboxes": [
-        {
-          "offset_x": 36,
-          "offset_y": -8,
-          "width": 40,
-          "height": 32
-        }
-      ],
-      "damage": 7.52,
-      "angle_deg": 270,
-      "base_knockback": 10,
-      "knockback_growth": 1.1,
-      "shield_damage": 3,
-      "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -969,9 +947,87 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "void_dair",
-        "sfx_event": "void_dair_sfx",
-        "screen_flash": false
+        "vfx_event": "vesper_nyx_up_air_phase_seam_echo",
+        "sfx_event": "vesper-nyx.up_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "vesper-nyx.up_air.phase_motes_void_wisps"
+      },
+      "training_display_name": "Up Air",
+      "combat_tag": "phase_mark",
+      "element_effect": {
+        "type": "void",
+        "effect": "void_mark",
+        "strength": 1
+      },
+      "animation_id": "up_air",
+      "v3_fantasy": "Portal/void lift slash",
+      "v3_vfx_shape": "phase_seam_echo",
+      "v3_particle_library": "phase_motes_void_wisps"
+    },
+    {
+      "move_id": "down_air",
+      "fighter_id": "vesper-nyx",
+      "move_type": "melee",
+      "direction": "air_down",
+      "input_command": "attack_air_down",
+      "grounded_air": "air",
+      "startup_frames": 4,
+      "active_frames": 4,
+      "recovery_frames": 14,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "damage": 7.52,
+      "angle_deg": 270,
+      "base_knockback": 10,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 8,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "heavy",
+        "hitstop_frames": 8,
+        "camera_event": "shake_heavy",
+        "vfx_event": "vesper_nyx_down_air_phase_seam_echo",
+        "sfx_event": "vesper-nyx.down_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "vesper-nyx.down_air.phase_motes_void_wisps"
       },
       "training_display_name": "Down Air",
       "combat_tag": "phase_mark",
@@ -988,7 +1044,11 @@
           "to": "neutral_special_projectile"
         }
       ],
-      "h2h_string_id": "vesper-nyx:down_air->neutral_special_projectile"
+      "h2h_string_id": "vesper-nyx:down_air->neutral_special_projectile",
+      "animation_id": "down_air",
+      "v3_fantasy": "Phase-drop spike appearing just before contact",
+      "v3_vfx_shape": "phase_seam_echo",
+      "v3_particle_library": "phase_motes_void_wisps"
     },
     {
       "move_id": "neutral_special_projectile",
@@ -1007,7 +1067,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1049,9 +1109,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "void_proj",
-        "sfx_event": "void_proj_sfx",
-        "screen_flash": false
+        "vfx_event": "vesper_nyx_neutral_special_projectile_phase_seam_echo",
+        "sfx_event": "vesper-nyx.neutral_special_projectile.sfx",
+        "screen_flash": false,
+        "particle_profile": "vesper-nyx.neutral_special_projectile.phase_motes_void_wisps"
       },
       "training_display_name": "Void Shot",
       "combat_tag": "phase_mark",
@@ -1102,7 +1163,11 @@
         "pierce": false,
         "homing": 0.25,
         "mark_duration": 90
-      }
+      },
+      "animation_id": "neutral_special_projectile",
+      "v3_fantasy": "Delayed void mark / trap orb",
+      "v3_vfx_shape": "phase_seam_echo",
+      "v3_particle_library": "phase_motes_void_wisps"
     },
     {
       "move_id": "side_special",
@@ -1128,7 +1193,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 8,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1167,12 +1232,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "void_spark",
-        "sfx_event": "void_hit_light",
-        "screen_flash": false
+        "tier": "heavy",
+        "hitstop_frames": 8,
+        "camera_event": "shake_heavy",
+        "vfx_event": "vesper_nyx_side_special_phase_seam_echo",
+        "sfx_event": "vesper-nyx.side_special.sfx",
+        "screen_flash": false,
+        "particle_profile": "vesper-nyx.side_special.phase_motes_void_wisps"
       },
       "training_display_name": "Null Step Side",
       "combat_tag": "phase_mark",
@@ -1186,7 +1252,11 @@
         "dy": 0,
         "frames": 7
       },
-      "phase_cancel_frames": 6
+      "phase_cancel_frames": 6,
+      "animation_id": "side_special",
+      "v3_fantasy": "Phase-step / cross-up teleport cancel with strict readability",
+      "v3_vfx_shape": "phase_seam_echo",
+      "v3_particle_library": "phase_motes_void_wisps"
     },
     {
       "move_id": "up_special_recovery",
@@ -1212,7 +1282,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1245,12 +1315,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "void_spark",
-        "sfx_event": "void_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "vesper_nyx_up_special_recovery_phase_seam_echo",
+        "sfx_event": "vesper-nyx.up_special_recovery.sfx",
+        "screen_flash": false,
+        "particle_profile": "vesper-nyx.up_special_recovery.phase_motes_void_wisps"
       },
       "training_display_name": "Up Special / Recovery",
       "combat_tag": "phase_mark",
@@ -1271,7 +1342,11 @@
         "air_friction": 0.86,
         "landing_lag": 9,
         "phase_iframe": 6
-      }
+      },
+      "animation_id": "up_special_recovery",
+      "v3_fantasy": "Portal/phase ascent with a visible destination tell",
+      "v3_vfx_shape": "phase_seam_echo",
+      "v3_particle_library": "phase_motes_void_wisps"
     },
     {
       "move_id": "down_special",
@@ -1297,7 +1372,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 8,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1336,12 +1411,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "void_spark",
-        "sfx_event": "void_hit_light",
-        "screen_flash": false
+        "tier": "heavy",
+        "hitstop_frames": 8,
+        "camera_event": "shake_heavy",
+        "vfx_event": "vesper_nyx_down_special_phase_seam_echo",
+        "sfx_event": "vesper-nyx.down_special.sfx",
+        "screen_flash": false,
+        "particle_profile": "vesper-nyx.down_special.phase_motes_void_wisps"
       },
       "training_display_name": "Down Special",
       "combat_tag": "phase_mark",
@@ -1354,7 +1430,11 @@
         "linger_frames": 32,
         "void_mark": true
       },
-      "phase_cancel_frames": 5
+      "phase_cancel_frames": 5,
+      "animation_id": "down_special",
+      "v3_fantasy": "Clone/afterimage or void-trap misdirection",
+      "v3_vfx_shape": "phase_seam_echo",
+      "v3_particle_library": "phase_motes_void_wisps"
     },
     {
       "move_id": "grab",
@@ -1380,7 +1460,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 2,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1414,15 +1494,20 @@
       },
       "feedback": {
         "tier": "light",
-        "hitstop_frames": 3,
+        "hitstop_frames": 2,
         "camera_event": "shake_light",
-        "vfx_event": "void_spark",
-        "sfx_event": "void_hit_light",
-        "screen_flash": false
+        "vfx_event": "vesper_nyx_grab_phase_seam_echo",
+        "sfx_event": "vesper-nyx.grab.sfx",
+        "screen_flash": false,
+        "particle_profile": "vesper-nyx.grab.phase_motes_void_wisps"
       },
       "training_display_name": "Grab",
       "combat_tag": "phase_mark",
-      "grab_range": 32
+      "grab_range": 32,
+      "animation_id": "grab",
+      "v3_fantasy": "Phase-bind capture",
+      "v3_vfx_shape": "phase_seam_echo",
+      "v3_particle_library": "phase_motes_void_wisps"
     },
     {
       "move_id": "throw_forward",
@@ -1441,7 +1526,7 @@
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1479,9 +1564,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "void_throw",
-        "sfx_event": "void_throw_sfx",
-        "screen_flash": false
+        "vfx_event": "vesper_nyx_throw_forward_phase_seam_echo",
+        "sfx_event": "vesper-nyx.throw_forward.sfx",
+        "screen_flash": false,
+        "particle_profile": "vesper-nyx.throw_forward.phase_motes_void_wisps"
       },
       "training_display_name": "Void Push",
       "combat_tag": "phase_mark",
@@ -1490,21 +1576,26 @@
         "hold_frames": 0,
         "release_frame": 2,
         "victim_offset": {
-          "x": 20,
-          "y": -8
+          "x": 18,
+          "y": -12
         },
         "damage": 4.5120000000000005,
         "angle_deg": 38,
         "base_knockback": 12,
         "knockback_growth": 1.15,
         "combo_role": "positioning",
-        "role": "edge_pressure"
+        "role": "edge_pressure",
+        "authored": true
       },
       "element_effect": {
         "type": "void",
         "effect": "void_mark",
         "strength": 1
-      }
+      },
+      "animation_id": "throw_forward",
+      "v3_fantasy": "Void push",
+      "v3_vfx_shape": "phase_seam_echo",
+      "v3_particle_library": "phase_motes_void_wisps"
     },
     {
       "move_id": "throw_back",
@@ -1523,7 +1614,7 @@
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1561,9 +1652,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "void_throw",
-        "sfx_event": "void_throw_sfx",
-        "screen_flash": false
+        "vfx_event": "vesper_nyx_throw_back_phase_seam_echo",
+        "sfx_event": "vesper-nyx.throw_back.sfx",
+        "screen_flash": false,
+        "particle_profile": "vesper-nyx.throw_back.phase_motes_void_wisps"
       },
       "training_display_name": "Phase Swap",
       "combat_tag": "phase_mark",
@@ -1572,21 +1664,26 @@
         "hold_frames": 0,
         "release_frame": 2,
         "victim_offset": {
-          "x": -20,
-          "y": -8
+          "x": -34,
+          "y": -10
         },
         "damage": 6.016,
         "angle_deg": 152,
         "base_knockback": 16,
         "knockback_growth": 1.15,
-        "combo_role": "kill",
-        "role": "reversal"
+        "combo_role": "reversal",
+        "role": "reversal",
+        "authored": true
       },
       "element_effect": {
         "type": "void",
         "effect": "void_mark",
         "strength": 1
-      }
+      },
+      "animation_id": "throw_back",
+      "v3_fantasy": "Phase swap",
+      "v3_vfx_shape": "phase_seam_echo",
+      "v3_particle_library": "phase_motes_void_wisps"
     },
     {
       "move_id": "throw_up",
@@ -1605,7 +1702,7 @@
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1643,9 +1740,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "void_throw",
-        "sfx_event": "void_throw_sfx",
-        "screen_flash": false
+        "vfx_event": "vesper_nyx_throw_up_phase_seam_echo",
+        "sfx_event": "vesper-nyx.throw_up.sfx",
+        "screen_flash": false,
+        "particle_profile": "vesper-nyx.throw_up.phase_motes_void_wisps"
       },
       "training_display_name": "Portal Launcher",
       "combat_tag": "phase_mark",
@@ -1654,21 +1752,26 @@
         "hold_frames": 0,
         "release_frame": 2,
         "victim_offset": {
-          "x": 20,
-          "y": -8
+          "x": -4,
+          "y": -36
         },
         "damage": 5.264,
         "angle_deg": 84,
         "base_knockback": 14,
         "knockback_growth": 1.15,
-        "combo_role": "starter",
-        "role": "juggle"
+        "combo_role": "juggle",
+        "role": "juggle",
+        "authored": true
       },
       "element_effect": {
         "type": "void",
         "effect": "void_mark",
         "strength": 1
-      }
+      },
+      "animation_id": "throw_up",
+      "v3_fantasy": "Portal launcher",
+      "v3_vfx_shape": "phase_seam_echo",
+      "v3_particle_library": "phase_motes_void_wisps"
     },
     {
       "move_id": "throw_down",
@@ -1687,7 +1790,7 @@
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1725,9 +1828,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "void_throw",
-        "sfx_event": "void_throw_sfx",
-        "screen_flash": false
+        "vfx_event": "vesper_nyx_throw_down_phase_seam_echo",
+        "sfx_event": "vesper-nyx.throw_down.sfx",
+        "screen_flash": false,
+        "particle_profile": "vesper-nyx.throw_down.phase_motes_void_wisps"
       },
       "training_display_name": "Void Trap Plant",
       "combat_tag": "phase_mark",
@@ -1736,21 +1840,26 @@
         "hold_frames": 0,
         "release_frame": 2,
         "victim_offset": {
-          "x": 20,
-          "y": -8
+          "x": 14,
+          "y": 12
         },
         "damage": 3.008,
         "angle_deg": 268,
         "base_knockback": 8,
         "knockback_growth": 1.15,
-        "combo_role": "trap",
-        "role": "setup"
+        "combo_role": "setup",
+        "role": "setup",
+        "authored": true
       },
       "element_effect": {
         "type": "void",
         "effect": "void_mark",
         "strength": 1
-      }
+      },
+      "animation_id": "throw_down",
+      "v3_fantasy": "Void trap plant",
+      "v3_vfx_shape": "phase_seam_echo",
+      "v3_particle_library": "phase_motes_void_wisps"
     },
     {
       "move_id": "aura_charge",
@@ -1769,18 +1878,23 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 11,
       "aura_scaling": {},
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "void_spark",
-        "sfx_event": "void_hit_light",
-        "screen_flash": false
+        "tier": "aura",
+        "hitstop_frames": 11,
+        "camera_event": "shake_aura",
+        "vfx_event": "vesper_nyx_aura_charge_phase_seam_echo",
+        "sfx_event": "vesper-nyx.aura_charge.sfx",
+        "screen_flash": true,
+        "particle_profile": "vesper-nyx.aura_charge.phase_motes_void_wisps"
       },
       "training_display_name": "Aura Charge",
-      "combat_tag": "phase_mark"
+      "combat_tag": "phase_mark",
+      "animation_id": "aura_charge",
+      "v3_fantasy": "Void haze with pale edge separation; silhouette stays readable",
+      "v3_vfx_shape": "phase_seam_echo",
+      "v3_particle_library": "phase_motes_void_wisps"
     },
     {
       "move_id": "aura_burst",
@@ -1806,7 +1920,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 14,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1840,11 +1954,12 @@
       },
       "feedback": {
         "tier": "super",
-        "hitstop_frames": 15,
-        "camera_event": "pulse_super",
-        "vfx_event": "void_burst",
-        "sfx_event": "void_burst_sfx",
-        "screen_flash": true
+        "hitstop_frames": 14,
+        "camera_event": "shake_super",
+        "vfx_event": "vesper_nyx_aura_burst_phase_seam_echo",
+        "sfx_event": "vesper-nyx.aura_burst.sfx",
+        "screen_flash": true,
+        "particle_profile": "vesper-nyx.aura_burst.phase_motes_void_wisps"
       },
       "training_display_name": "Null Step",
       "combat_tag": "phase_mark",
@@ -1853,7 +1968,11 @@
         "effect": "void_mark",
         "strength": 2.5
       },
-      "meter_cost": 100
+      "meter_cost": 100,
+      "animation_id": "aura_burst",
+      "v3_fantasy": "Null-step burst with multi-position phase echo",
+      "v3_vfx_shape": "phase_seam_echo",
+      "v3_particle_library": "phase_motes_void_wisps"
     }
   ],
   "game001_identity": {
