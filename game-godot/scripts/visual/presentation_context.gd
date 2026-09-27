@@ -5,7 +5,9 @@ class_name PresentationContext
 
 const CTX_SELECT_CARD := "SELECT_CARD"
 const CTX_SELECT_PREVIEW := "SELECT_PREVIEW"
+const CTX_SHOWCASE := "SHOWCASE"
 const CTX_VERSUS := "VERSUS"
+const CTX_MATCH_START := "MATCH_START"
 const CTX_BATTLE_P1 := "BATTLE_P1"
 const CTX_BATTLE_P2_CPU := "BATTLE_P2_CPU"
 const CTX_BATTLE := "BATTLE"
@@ -34,8 +36,12 @@ static func normalize_context(context: String) -> String:
 			return CTX_SELECT_CARD
 		"select_preview":
 			return CTX_SELECT_PREVIEW
+		"showcase":
+			return CTX_SHOWCASE
 		"versus":
 			return CTX_VERSUS
+		"match_start":
+			return CTX_MATCH_START
 		"battle":
 			return CTX_BATTLE
 		"move_preview":
@@ -71,7 +77,7 @@ static func display_contract(context: String) -> Dictionary:
 				"allow_model_root_scale": false,
 				"bake_only": true,
 			}
-		CTX_SELECT_PREVIEW, CTX_VERSUS:
+		CTX_SELECT_PREVIEW, CTX_SHOWCASE, CTX_VERSUS, CTX_MATCH_START:
 			return {
 				"context": ctx,
 				"display_scale": SELECT_PREVIEW_DISPLAY_SCALE,
@@ -82,6 +88,7 @@ static func display_contract(context: String) -> Dictionary:
 				"bake_only": false,
 				"camera": "front_3q",
 				"identity_source": "elemental_material_language",
+				"auto_fit": true,
 			}
 		CTX_MOVE_PREVIEW:
 			return {
@@ -130,9 +137,9 @@ static func resolver_context(context: String) -> String:
 	match ctx:
 		CTX_SELECT_CARD:
 			return "select_card"
-		CTX_SELECT_PREVIEW:
+		CTX_SELECT_PREVIEW, CTX_SHOWCASE:
 			return "select_preview"
-		CTX_VERSUS:
+		CTX_VERSUS, CTX_MATCH_START:
 			return "versus"
 		CTX_MOVE_PREVIEW:
 			return "move_preview"

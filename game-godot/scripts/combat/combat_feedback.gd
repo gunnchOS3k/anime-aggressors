@@ -4,6 +4,9 @@ class_name CombatFeedback
 ## Data-driven hit feedback: hitstop, camera, VFX, Path A procedural SFX.
 
 const _ProceduralAudio = preload("res://scripts/audio/procedural_audio_bank.gd")
+const _Predictor = preload("res://scripts/combat/critical_launch_predictor.gd")
+const _TrailScript = preload("res://scripts/visual/launch_trail_system.gd")
+const _CueScript = preload("res://scripts/visual/critical_launch_cue.gd")
 
 signal feedback_triggered(info: Dictionary)
 
@@ -12,6 +15,8 @@ var _camera: Camera2D = null
 var _shake_remaining: float = 0.0
 var _shake_intensity: float = 0.0
 var fighter_id: String = ""
+var _last_critical_at: Dictionary = {}
+var _last_prediction: Dictionary = {}
 
 const TIER_HITSTOP := {
 	"light": {"min": 2, "max": 3},
@@ -66,6 +71,7 @@ func apply_hit(attacker: Node, defender: Node, move: Dictionary, info: Dictionar
 		"vfx_event": result["vfx_event"],
 	})
 	_emit_juice("sfx", {"event_id": result["sfx_event"], "category": "hit", "tier": tier})
+	result = _apply_launch_presentation(attacker, defender, move, result)
 	feedback_triggered.emit(result)
 	return result
 
@@ -95,6 +101,99 @@ func emit_projectile_trail(element: String, charge: String) -> void:
 
 func emit_optional_rumble(strength: float, duration_ms: int) -> void:
 	_emit_juice("rumble", {"strength": strength, "duration_ms": duration_ms})
+
+
+func last_prediction() -> Dictionary:
+	return _last_prediction.duplicate(true)
+
+
+func _apply_launch_presentation(attacker: Node, defender: Node, move: Dictionary, result: Dictionary) -> Dictionary:
+	var launch: Vector2 = result.get("launch", Vector2.ZERO)
+	if typeof(launch) != TYPE_VECTOR2:
+		launch = Vector2.ZERO
+	var attacker_id := fighter_id
+	if attacker_id == "" and attacker != null and "fighter_id" in attacker:
+		attacker_id = str(attacker.fighter_id)
+	if bool(move.get("_from_projectile", false)) and attacker != null and "fighter_id" in attacker:
+		attacker_id = str(attacker.fighter_id)
+	if bool(move.get("reflected", false)) and attacker != null and "fighter_id" in attacker:
+		attacker_id = str(attacker.fighter_id)
+	if attacker_id == "" and str(move.get("element_effect", {}).get("type", "")) == "":
+		attacker_id = "hazard"
+	var pos := Vector2.ZERO
+	if defender is Node2D:
+		pos = (defender as Node2D).global_position
+	var already := false
+	if defender != null and "stocks" in defender and int(defender.stocks) <= 0:
+		already = true
+	var blast := _Predictor.DEFAULT_BLAST
+	var gs = Engine.get_main_loop().root.get_node_or_null("/root/GameState") if Engine.get_main_loop() else null
+	if gs != null and gs.has_method("load_stage"):
+		var stage: Dictionary = gs.load_stage(str(gs.stage_id)) if "stage_id" in gs else {}
+		if stage.has("blastZones"):
+			blast = stage.get("blastZones")
+	var jumps := 1
+	if defender != null and "air_jumps_left" in defender:
+		jumps = int(defender.air_jumps_left)
+	var pred := _Predictor.evaluate({
+		"position": pos,
+		"launch_velocity": launch,
+		"blast_zones": blast,
+		"remaining_jumps": jumps,
+		"recovery_ready": jumps > 0,
+		"hitstun_sec": float(result.get("hitstop_frames", 3)) / 60.0 + 0.18,
+		"already_past_blast": already,
+	})
+	_last_prediction = pred
+	result["launch_prediction"] = pred
+	result["launch_trail_tier"] = _Predictor.trail_tier(pred, launch.length())
+	var key := str(defender.get_instance_id()) if defender != null else "none"
+	var now := Time.get_ticks_msec() / 1000.0
+	var last := float(_last_critical_at.get(key, -99.0))
+	var danger := str(pred.get("tier", "SAFE"))
+	var spam := now - last < 0.45
+	var multi := bool(move.get("multi_hit", false)) and not bool(move.get("final_hit", true))
+	if multi or spam:
+		result["critical_suppressed"] = true
+		return result
+	if danger in ["CRITICAL_RECOVERABLE", "NEAR_CERTAIN_KO"]:
+		_last_critical_at[key] = now
+		result["hitstop_frames"] = maxi(int(result.get("hitstop_frames", 3)), 8)
+		_emit_juice("launch_critical_recoverable" if danger == "CRITICAL_RECOVERABLE" else "launch_near_certain_ko", {
+			"attacker_id": attacker_id,
+			"tier": danger,
+			"family": _CueScript.family_for(attacker_id),
+		})
+		if defender is Node2D:
+			_spawn_critical_cue(defender as Node2D, attacker_id, launch, danger)
+			_ensure_trail(defender as Node2D, attacker_id, "CRITICAL")
+		emit_optional_rumble(0.45 if danger == "CRITICAL_RECOVERABLE" else 0.7, 90)
+	elif str(result["launch_trail_tier"]) == "HIGH":
+		_emit_juice("launch_high", {"attacker_id": attacker_id, "tier": "HIGH"})
+		if defender is Node2D:
+			_ensure_trail(defender as Node2D, attacker_id, "HIGH")
+	return result
+
+
+func _ensure_trail(defender: Node2D, attacker_id: String, tier: String) -> void:
+	var existing := defender.get_node_or_null("LaunchTrail")
+	if existing == null:
+		existing = _TrailScript.new()
+		existing.name = "LaunchTrail"
+		defender.add_child(existing)
+	if existing.has_method("begin"):
+		existing.begin(defender, attacker_id, tier)
+
+
+func _spawn_critical_cue(defender: Node2D, attacker_id: String, launch: Vector2, tier: String) -> void:
+	var cue = _CueScript.new()
+	cue.name = "CriticalLaunchCue"
+	var parent: Node = defender.get_parent()
+	if parent == null:
+		parent = defender
+	parent.add_child(cue)
+	cue.play(attacker_id, defender.global_position + Vector2(0, -24), launch, tier)
+
 
 func _emit_juice(event_name: String, payload: Dictionary) -> void:
 	var bus = Engine.get_main_loop().root.get_node_or_null("/root/JuiceEventBus") if Engine.get_main_loop() else null

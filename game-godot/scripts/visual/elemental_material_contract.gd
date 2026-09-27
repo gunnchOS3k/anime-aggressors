@@ -2,16 +2,34 @@ extends RefCounted
 class_name ElementalMaterialContract
 
 ## Single elemental presentation source of truth.
-## Select tiles, showcase preview, Labs review, and in-match spawn all derive here.
+## Select tiles, showcase preview, Labs review, versus intro, battle, and victory derive here.
 
 const _DATA_PATH := "res://data/runtime/elemental_material_language.json"
 const _TOON_SHADER := "res://shaders/fighter_toon.gdshader"
 
 const CTX_SELECT_CARD := "SELECT_CARD"
 const CTX_SELECT_PREVIEW := "SELECT_PREVIEW"
+const CTX_SHOWCASE := "SHOWCASE"
 const CTX_VERSUS := "VERSUS"
 const CTX_MOVE_PREVIEW := "MOVE_PREVIEW"
 const CTX_REVIEW := "REVIEW"
+const CTX_BATTLE := "BATTLE"
+const CTX_VICTORY := "VICTORY"
+
+const BODY_ALPHA_MIN := 0.92
+const BODY_ALPHA_MAX := 0.97
+const STRUCTURE_ALPHA_MIN := 0.97
+const ARMOR_ALPHA_MIN := 0.98
+const VESPER_IDLE_FLOOR := 0.92
+const VESPER_PHASE_FLOOR := 0.55
+
+const APPROVED_PHASE_STATES := [
+	"charged",
+	"phase_strike",
+	"shadow_feint",
+	"hurt_phase",
+	"super",
+]
 
 static var _cache: Dictionary = {}
 
@@ -59,16 +77,18 @@ static func is_preview_context(context: String) -> bool:
 	return context in [
 		CTX_SELECT_CARD,
 		CTX_SELECT_PREVIEW,
+		CTX_SHOWCASE,
 		CTX_VERSUS,
 		CTX_MOVE_PREVIEW,
 		CTX_REVIEW,
+		CTX_VICTORY,
 	]
 
 
 static func identity_colors(fighter_id: String) -> Dictionary:
 	var entry := fighter_entry(fighter_id)
-	var core := color_from_arr(entry.get("core"), Color(0.18, 0.12, 0.14, 0.82))
-	var structure := color_from_arr(entry.get("structure"), Color(0.36, 0.32, 0.30, 0.94))
+	var core := color_from_arr(entry.get("core"), Color(0.18, 0.12, 0.14, 0.94))
+	var structure := color_from_arr(entry.get("structure"), Color(0.36, 0.32, 0.30, 0.98))
 	var accent := color_from_arr(entry.get("accent"), Color(0.90, 0.78, 0.40, 1.0))
 	var emission := color_from_arr(entry.get("emission"), accent)
 	var rim := color_from_arr(entry.get("rim"), accent)
@@ -87,8 +107,49 @@ static func identity_colors(fighter_id: String) -> Dictionary:
 		"family_hue_deg": float(entry.get("family_hue_deg", 0.0)),
 		"bible_detail": str(entry.get("bible_detail", "")),
 		"charge": str(entry.get("charge", "")),
+		"critical_cue": str(entry.get("critical_cue", "")),
 		"source": _DATA_PATH,
 	}
+
+
+static func is_approved_phase_state(state: String) -> bool:
+	return state in APPROVED_PHASE_STATES
+
+
+static func alpha_for_role(role: String, fighter_id: String, state: String = "idle") -> float:
+	if fighter_id == "vesper-nyx" and is_approved_phase_state(state):
+		if role == "body":
+			return VESPER_PHASE_FLOOR
+		if role == "structure":
+			return 0.78
+		return 0.88
+	match role:
+		"armor", "glove", "boot":
+			return ARMOR_ALPHA_MIN
+		"structure":
+			return STRUCTURE_ALPHA_MIN
+		"accent":
+			return 1.0
+		_:
+			return clampf(_core_alpha(fighter_id), BODY_ALPHA_MIN, BODY_ALPHA_MAX)
+
+
+static func _core_alpha(fighter_id: String) -> float:
+	var colors := identity_colors(fighter_id)
+	var core: Color = colors["core"]
+	return clampf(core.a, BODY_ALPHA_MIN, BODY_ALPHA_MAX)
+
+
+static func readability_floor(fighter_id: String, state: String = "idle") -> float:
+	if fighter_id == "vesper-nyx" and is_approved_phase_state(state):
+		return VESPER_PHASE_FLOOR
+	return BODY_ALPHA_MIN if fighter_id != "vesper-nyx" else VESPER_IDLE_FLOOR
+
+
+static func idle_select_alpha_ok(fighter_id: String, measured_body_alpha: float, state: String = "idle") -> bool:
+	if fighter_id == "vesper-nyx" and is_approved_phase_state(state):
+		return measured_body_alpha >= VESPER_PHASE_FLOOR
+	return measured_body_alpha >= BODY_ALPHA_MIN
 
 
 static func apply_to_root(
@@ -96,7 +157,8 @@ static func apply_to_root(
 	fighter_id: String,
 	charge: float = 0.0,
 	vfx_on: bool = true,
-	context: String = ""
+	context: String = "",
+	state: String = "idle"
 ) -> int:
 	var entry := fighter_entry(fighter_id)
 	if entry.is_empty() or root == null:
@@ -119,7 +181,10 @@ static func apply_to_root(
 		emission *= 0.35
 	var light := Vector3(-0.35, 0.85, 0.4)
 	if preview:
-		light = Vector3(-0.18, 0.72, 0.62)
+		light = Vector3(-0.16, 0.74, 0.58)
+	var apply_state := state
+	if apply_state == "idle" and fighter_id == "vesper-nyx" and charged > 0.4:
+		apply_state = "charged"
 	var applied := 0
 	applied += _apply_recursive(
 		root,
@@ -134,7 +199,8 @@ static func apply_to_root(
 		fighter_id,
 		rim_mul,
 		light,
-		preview
+		preview,
+		apply_state
 	)
 	return applied
 
@@ -161,36 +227,36 @@ static func _apply_recursive(
 	fighter_id: String,
 	rim_mul: float,
 	light: Vector3,
-	preview: bool
+	preview: bool,
+	state: String
 ) -> int:
 	var count := 0
 	if node is MeshInstance3D:
 		var mesh := node as MeshInstance3D
 		var source: Material = mesh.get_active_material(0)
 		var detail_tex: Texture2D = _extract_detail_texture(source)
-		var role := _mesh_role(mesh, source)
+		var role := _mesh_role(mesh)
 		var body := core
 		var struct_col := structure
 		var accent_col := accent
 		if charged > 0.35:
-			body = body.lerp(accent, charged * 0.28)
-			struct_col = struct_col.lerp(accent, charged * 0.18)
-		if role == "structure":
+			body = body.lerp(accent, charged * 0.22)
+			struct_col = struct_col.lerp(accent, charged * 0.12)
+		if role == "structure" or role == "armor":
 			body = struct_col
 		elif role == "accent":
 			body = accent_col
-		var alpha := clampf(body.a if role == "body" else struct_col.a, 0.72, 0.96)
-		if preview:
-			alpha = clampf(alpha + 0.04, 0.74, 0.94)
+		var alpha := alpha_for_role(role, fighter_id, state)
+		var floor_a := readability_floor(fighter_id, state)
 		if shader_res is Shader:
 			var mat := ShaderMaterial.new()
 			mat.resource_local_to_scene = true
 			mat.shader = shader_res as Shader
 			mat.set_shader_parameter("base_color", Color(body.r, body.g, body.b, 1.0))
-			mat.set_shader_parameter("team_tint", struct_col.lerp(Color.WHITE, 0.06))
-			mat.set_shader_parameter("core_color", body)
-			mat.set_shader_parameter("structure_color", struct_col)
-			mat.set_shader_parameter("accent_color", accent_col)
+			mat.set_shader_parameter("team_tint", struct_col.lerp(Color.WHITE, 0.04))
+			mat.set_shader_parameter("core_color", Color(core.r, core.g, core.b, 1.0))
+			mat.set_shader_parameter("structure_color", Color(struct_col.r, struct_col.g, struct_col.b, 1.0))
+			mat.set_shader_parameter("accent_color", Color(accent_col.r, accent_col.g, accent_col.b, 1.0))
 			mat.set_shader_parameter("emission_color", emission_col)
 			mat.set_shader_parameter("toon_bands", float(cel.get("toon_bands", 3.0)))
 			mat.set_shader_parameter("rim_strength", (float(cel.get("rim_strength", 0.32)) + charged * 0.18) * rim_mul)
@@ -198,6 +264,7 @@ static func _apply_recursive(
 			mat.set_shader_parameter("outline_width", float(cel.get("outline_width", 0.018)))
 			mat.set_shader_parameter("outline_color", Color(0.04, 0.04, 0.06, 1.0))
 			mat.set_shader_parameter("body_alpha", alpha)
+			mat.set_shader_parameter("body_alpha_floor", floor_a)
 			mat.set_shader_parameter("light_dir", light)
 			mat.set_shader_parameter("use_detail", detail_tex != null)
 			if detail_tex != null:
@@ -231,7 +298,8 @@ static func _apply_recursive(
 			fighter_id,
 			rim_mul,
 			light,
-			preview
+			preview,
+			state
 		)
 	return count
 
@@ -247,26 +315,18 @@ static func _extract_detail_texture(source: Material) -> Texture2D:
 	return null
 
 
-static func _mesh_role(mesh: MeshInstance3D, source: Material) -> String:
+static func _mesh_role(mesh: MeshInstance3D) -> String:
+	# Name tokens only — luma heuristics were flipping gold identity into accent cyan.
 	var token := ("%s %s" % [mesh.name, mesh.get_parent().name if mesh.get_parent() else ""]).to_lower()
 	for key in ["glove", "gauntlet", "boot", "shoe", "chest", "armor", "plate", "pauldron", "helm", "belt"]:
 		if token.contains(key):
-			return "structure"
+			return "armor"
 	for key in ["crown", "crest", "crystal", "halo", "scarf", "ribbon", "arc", "orbit"]:
 		if token.contains(key):
 			return "accent"
-	var luma := 0.45
-	if source is StandardMaterial3D:
-		var alb: Color = (source as StandardMaterial3D).albedo_color
-		luma = alb.r * 0.3 + alb.g * 0.59 + alb.b * 0.11
-	elif source is ShaderMaterial:
-		var bc: Variant = (source as ShaderMaterial).get_shader_parameter("base_color")
-		if bc is Color:
-			luma = (bc as Color).r * 0.3 + (bc as Color).g * 0.59 + (bc as Color).b * 0.11
-	if luma < 0.22:
-		return "body"
-	if luma > 0.72:
-		return "accent"
+	for key in ["plate", "support", "frame", "brace"]:
+		if token.contains(key):
+			return "structure"
 	return "body"
 
 

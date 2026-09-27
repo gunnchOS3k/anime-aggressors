@@ -81,10 +81,14 @@ def evaluate() -> dict:
     style = data.get("style", {})
     translucent_ok = (
         style.get("translucent_body") is True
-        and float(style.get("body_alpha_min", 0)) >= 0.70
-        and float(style.get("body_alpha_max", 1)) <= 0.90
+        and float(style.get("body_alpha_min", 0)) >= 0.90
+        and float(style.get("body_alpha_max", 1)) <= 0.98
+        and float(style.get("structure_alpha_min", 0)) >= 0.97
+        and style.get("flatten_to_plastic") is False
         and "body_alpha" in shader
+        and "body_alpha_floor" in shader
         and "blend_mix" in shader
+        and "0.62, 0.96" not in shader
     )
     if not translucent_ok:
         failures.append("translucent_body_style_incomplete")

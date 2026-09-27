@@ -15,7 +15,8 @@ uniform float rim_strength = 0.35;
 uniform float aura_emission = 0.0;
 uniform float hit_flash = 0.0;
 uniform float outline_width = 0.015;
-uniform float body_alpha = 0.82;
+uniform float body_alpha = 0.94;
+uniform float body_alpha_floor = 0.92;
 uniform vec3 light_dir = vec3(-0.28, 0.82, 0.48);
 uniform bool accessibility_reduce_flash = false;
 
@@ -36,5 +37,7 @@ void fragment() {
 	vec3 emissive = emission_color.rgb * aura_emission + albedo * (aura_emission * 0.22) + vec3(flash);
 	ALBEDO = toon + rim;
 	EMISSION = emissive;
-	ALPHA = clamp(body_alpha * max(detail.a, 0.82) * core_color.a, 0.62, 0.96);
+	// Readability floor: keep translucent uniform, but never wash to ghost-plastic.
+	// body_alpha already encodes role opacity; do not multiply core/detail alphas again.
+	ALPHA = clamp(body_alpha, body_alpha_floor, 1.0);
 }

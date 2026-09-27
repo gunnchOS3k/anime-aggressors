@@ -20,6 +20,7 @@ const _ArtDirection = preload("res://scripts/visual/art_direction_contract.gd")
 const _FacingContract = preload("res://scripts/combat/fighter_facing_contract.gd")
 const _ElementalMaterial = preload("res://scripts/visual/elemental_material_contract.gd")
 const _SignaturePresentation = preload("res://scripts/visual/signature_move_presentation.gd")
+const _GeometryFit = preload("res://scripts/visual/geometry_auto_fit.gd")
 
 const VIEWPORT_SIZE := Vector2i(256, 320)
 ## Battle bodies must be owner-visible on Pixel; prior 0.38 read as absent.
@@ -355,7 +356,9 @@ func set_presentation_context(context: String) -> void:
 	_presentation_context = _PresentationContext.normalize_context(context)
 	_select_mode = _presentation_context in [
 		_PresentationContext.CTX_SELECT_PREVIEW,
+		_PresentationContext.CTX_SHOWCASE,
 		_PresentationContext.CTX_VERSUS,
+		_PresentationContext.CTX_MATCH_START,
 		_PresentationContext.CTX_MOVE_PREVIEW,
 	]
 	_apply_context_display_contract()
@@ -399,6 +402,33 @@ func _apply_context_display_contract() -> void:
 
 func get_select_framing_report() -> Dictionary:
 	return _last_framing_report.duplicate(true)
+
+
+func context_isolation_snapshot() -> Dictionary:
+	var battle: Dictionary = _PresentationContext.display_contract(_PresentationContext.CTX_BATTLE)
+	var is_battle := _presentation_context in [
+		_PresentationContext.CTX_BATTLE,
+		_PresentationContext.CTX_BATTLE_P1,
+		_PresentationContext.CTX_BATTLE_P2_CPU,
+		_PresentationContext.CTX_TRAINING,
+	]
+	var scale_x := _display.scale.x if _display else 0.0
+	var battle_scale := float(battle.get("display_scale", DISPLAY_SCALE).x)
+	var cam_size := _camera.size if _camera else 0.0
+	var scale_leak := is_battle and absf(scale_x) > _PresentationContext.MAX_BATTLE_DISPLAY_SCALE + 0.001
+	var camera_leak := is_battle and cam_size > 0.0 and cam_size < 2.35
+	var identity := _ElementalMaterial.identity_colors(_fighter_id)
+	var mismatch := identity.is_empty() or str(identity.get("source", "")) != "res://data/runtime/elemental_material_language.json"
+	return {
+		"context": _presentation_context,
+		"SELECT_SCALE_LEAK_TO_BATTLE": scale_leak,
+		"SELECT_CAMERA_LEAK_TO_BATTLE": camera_leak,
+		"SELECT_MATERIAL_IDENTITY_MISMATCH": mismatch,
+		"display_scale": scale_x,
+		"battle_scale": battle_scale,
+		"camera_size": cam_size,
+		"model_root_scale": _model_root.scale if _model_root else Vector3.ONE,
+	}
 
 
 func set_facing(direction: int) -> void:
@@ -789,8 +819,8 @@ func _apply_identity_lighting() -> void:
 	if env_node != null and env_node.environment != null:
 		var env := env_node.environment
 		if preview:
-			env.ambient_light_color = Color(0.94, 0.90, 0.84)
-			env.ambient_light_energy = 0.82
+			env.ambient_light_color = Color(0.86, 0.87, 0.90)
+			env.ambient_light_energy = 0.74
 			env.tonemap_mode = Environment.TONE_MAPPER_LINEAR
 		else:
 			env.ambient_light_color = Color(0.72, 0.78, 0.92)
@@ -799,9 +829,9 @@ func _apply_identity_lighting() -> void:
 	var key := _viewport.get_node_or_null("IdentityKeyLight") as DirectionalLight3D
 	if key:
 		if preview:
-			key.rotation_degrees = Vector3(-28, -18, 0)
-			key.light_color = Color(1.0, 0.95, 0.88)
-			key.light_energy = 1.45
+			key.rotation_degrees = Vector3(-24, -16, 0)
+			key.light_color = Color(0.98, 0.97, 0.96)
+			key.light_energy = 1.22
 		else:
 			key.rotation_degrees = Vector3(-38, -28, 0)
 			key.light_color = Color(1.0, 0.87, 0.72)
@@ -880,7 +910,7 @@ func _frame_camera_for_figure() -> void:
 	var vfx_env := 0.14
 	if not _life.is_empty():
 		vfx_env = clampf(float(_life.get("aura_pulse", 1.0)) * 0.08 + 0.1, 0.1, 0.22)
-	_last_framing_report = _SelectFraming.framing_for_fighter(_fighter_id, bounds, _select_mode, vfx_env)
+	_last_framing_report = _SelectFraming.framing_for_context(_fighter_id, bounds, _presentation_context, vfx_env)
 	var cam: Dictionary = _last_framing_report.get("camera_parameters", {})
 	var ortho := float(cam.get("orthographic_size", SELECT_CAMERA_SIZE if _select_mode else 2.9))
 	var pos_arr: Array = cam.get("position", [0.0, 1.15, 4.2])
