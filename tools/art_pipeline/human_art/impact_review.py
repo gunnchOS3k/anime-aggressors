@@ -80,9 +80,15 @@ def stage_pair(socket: str = "hand_r", anchor: str = "CHEST", normal=(1.0, 0.0, 
 
 def main() -> int:
     rows = {
+        "ember-vale -> rook-ironside": stage_pair("hand_r", "CHEST"),
         "rook-ironside -> nix-calder": stage_pair("hand_r", "CHEST"),
+        "juno-spark -> orion-vell": stage_pair("hand_r", "CHEST"),
+        "kaia-windrow -> vesper-nyx": stage_pair("hand_r", "CHEST"),
+        "nix-calder -> ember-vale": stage_pair("hand_r", "CHEST"),
+        "orion-vell -> kaia-windrow": stage_pair("hand_r", "CHEST"),
+        "vesper-nyx -> juno-spark": stage_pair("hand_r", "CHEST"),
         "anchors": list(IMPACT_ANCHORS),
-        "frames": ["contact", "hurt", "follow_through"],
+        "frames": ["anticipation", "pre_contact", "contact_vfx_off", "peak_hurt_vfx_off", "follow_through", "launch_start", "contact_vfx_on"],
     }
     payload = {
         "ok": all(row.get("ok", True) for row in rows.values() if isinstance(row, dict)),

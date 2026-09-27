@@ -1,0 +1,41 @@
+name: Art pipeline full-roster staging
+
+on:
+  push:
+    branches: ["art-pipeline/**"]
+  pull_request:
+
+jobs:
+  full-roster:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Audit assets
+        run: python3 tools/art_pipeline/human_art/audit_full_roster_assets.py
+      - name: Full-roster gates
+        run: python3 tools/art_pipeline/human_art/emit_full_roster_gates.py
+      - name: Unit tests
+        run: python3 tools/art_pipeline/human_art/tests/test_full_roster.py
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: full-roster-gates
+          path: artifacts/art_pipeline/
+      - name: Honest HUMAN_* stay false
+        run: |
+          python3 - <<'PY'
+          import json
+          d=json.load(open("artifacts/art_pipeline/FULL_ROSTER_GATES.json"))
+          g=d["gates"]
+          for k,v in g.items():
+              if k.startswith("HUMAN_") or k in ("FINAL_AUTHORED_ANIMATION_PASS","MERGE_AUTHORIZED"):
+                  assert v in (False, 0), (k, v)
+          assert g["FULL_ROSTER_HUMAN_CANDIDATES_COMPLETE"] is False or g["FULL_ROSTER_HUMAN_CANDIDATE_CONTRACT_PASS"] in (True, False)
+          assert g["GENERATED_EXPERIMENT_NOT_SELECTED_PASS"] is True
+          print("honest full-roster gates ok")
+          PY

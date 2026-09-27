@@ -1,0 +1,202 @@
+{
+  "schema": "aa_cc0_full_roster_map_v1",
+  "note": "Honest CC0 source map. Identity is silhouette/gear/palette approximation, not lore-accurate original characters.",
+  "packs": {
+    "kaykit_adventurers": {
+      "title": "KayKit Character Pack : Adventurers",
+      "version": "1.0",
+      "author": "Kay Lousberg",
+      "publisher": "KayKit Game Assets",
+      "source_url": "https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0",
+      "homepage": "https://kaylousberg.itch.io/kaykit-adventurers",
+      "license": "CC0 1.0 Universal",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "attribution_required": false,
+      "attribution_appreciated": "Kay Lousberg / www.kaylousberg.com",
+      "redistribution_in_repo_allowed": true,
+      "commercial_use_safe": true,
+      "git_commit": "672074b73ba276876a19e8816ecdc5241817ab47"
+    },
+    "kaykit_skeletons": {
+      "title": "KayKit Character Pack : Skeletons",
+      "version": "1.0",
+      "author": "Kay Lousberg",
+      "publisher": "KayKit Game Assets",
+      "source_url": "https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Skeletons-1.0",
+      "homepage": "https://kaylousberg.com/",
+      "license": "CC0 1.0 Universal",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "attribution_required": false,
+      "attribution_appreciated": "Kay Lousberg / www.kaylousberg.com",
+      "redistribution_in_repo_allowed": true,
+      "commercial_use_safe": true,
+      "git_commit": "15b62b9bad122f72926c10fb14d622c73819fa54"
+    }
+  },
+  "fighters": {
+    "ember-vale": {
+      "pack": "kaykit_adventurers",
+      "source_character": "Mage",
+      "source_relpath": "addons/kaykit_character_pack_adventures/Characters/gltf/Mage.glb",
+      "identity_lane": "flame / rushdown",
+      "approximation": "KayKit Mage silhouette + warm tint. Not a custom Ember Vale model.",
+      "tint": [1.25, 0.48, 0.18, 1.0],
+      "clips": {
+        "idle": "Idle",
+        "walk": "Walking_A",
+        "run": "Running_A",
+        "charged_idle": "Spellcasting",
+        "heavy": "Spellcast_Long",
+        "hurt_heavy": "Hit_A",
+        "launch": "Death_A",
+        "super": "Spellcast_Raise",
+        "clash_lock": "Blocking"
+      }
+    },
+    "rook-ironside": {
+      "pack": "kaykit_adventurers",
+      "source_character": "Barbarian",
+      "source_relpath": "addons/kaykit_character_pack_adventures/Characters/gltf/Barbarian.glb",
+      "identity_lane": "impact / bruiser",
+      "approximation": "KayKit Barbarian mass/axe silhouette. Not custom plate-armor Rook.",
+      "tint": [0.72, 0.58, 0.42, 1.0],
+      "clips": {
+        "idle": "Idle",
+        "walk": "Walking_A",
+        "run": "Running_A",
+        "charged_idle": "2H_Melee_Idle",
+        "heavy": "2H_Melee_Attack_Chop",
+        "hurt_heavy": "Hit_A",
+        "launch": "Death_A",
+        "super": "2H_Melee_Attack_Spinning",
+        "clash_lock": "Blocking"
+      }
+    },
+    "juno-spark": {
+      "pack": "kaykit_adventurers",
+      "source_character": "Rogue",
+      "source_relpath": "addons/kaykit_character_pack_adventures/Characters/gltf/Rogue.glb",
+      "identity_lane": "fast / electric",
+      "approximation": "KayKit Rogue slim/fast silhouette + yellow tint. Not custom Juno Spark.",
+      "tint": [1.15, 1.05, 0.25, 1.0],
+      "clips": {
+        "idle": "Idle",
+        "walk": "Walking_B",
+        "run": "Running_B",
+        "charged_idle": "Unarmed_Idle",
+        "heavy": "Dualwield_Melee_Attack_Stab",
+        "hurt_heavy": "Hit_B",
+        "launch": "Death_B",
+        "super": "Throw",
+        "clash_lock": "Block"
+      }
+    },
+    "kaia-windrow": {
+      "pack": "kaykit_adventurers",
+      "source_character": "Rogue_Hooded",
+      "source_relpath": "addons/kaykit_character_pack_adventures/Characters/gltf/Rogue_Hooded.glb",
+      "identity_lane": "aerial / wind",
+      "approximation": "Hooded light traveler + teal tint. No dedicated aerial/wind model in the CC0 packs used.",
+      "tint": [0.35, 0.95, 0.72, 1.0],
+      "clips": {
+        "idle": "Idle",
+        "walk": "Walking_C",
+        "run": "Running_A",
+        "charged_idle": "Jump_Idle",
+        "heavy": "1H_Melee_Attack_Slice_Diagonal",
+        "hurt_heavy": "Hit_A",
+        "launch": "Jump_Full_Long",
+        "super": "Spellcast_Raise",
+        "clash_lock": "Blocking"
+      }
+    },
+    "nix-calder": {
+      "pack": "kaykit_skeletons",
+      "source_character": "Skeleton_Mage",
+      "source_relpath": "addons/kaykit_character_pack_skeletons/Characters/gltf/Skeleton_Mage.glb",
+      "identity_lane": "frost / precision",
+      "approximation": "Skeleton mage is a frost-caster stand-in, not an ice assassin. Ice-blue tint only.",
+      "tint": [0.55, 0.82, 1.15, 1.0],
+      "clips": {
+        "idle": "Idle",
+        "walk": "Walking_A",
+        "run": "Running_A",
+        "charged_idle": "Idle_Combat",
+        "heavy": "Spellcast_Shoot",
+        "hurt_heavy": "Hit_A",
+        "launch": "Death_A",
+        "super": "Spellcast_Summon",
+        "clash_lock": "Blocking"
+      }
+    },
+    "orion-vell": {
+      "pack": "kaykit_adventurers",
+      "source_character": "Knight",
+      "source_relpath": "addons/kaykit_character_pack_adventures/Characters/gltf/Knight.glb",
+      "identity_lane": "gravity / authority",
+      "approximation": "KayKit Knight armor/authority silhouette + purple-gold tint. Not custom Orion Vell.",
+      "tint": [0.62, 0.42, 0.95, 1.0],
+      "clips": {
+        "idle": "Idle",
+        "walk": "Walking_A",
+        "run": "Running_A",
+        "charged_idle": "2H_Melee_Idle",
+        "heavy": "2H_Melee_Attack_Spin",
+        "hurt_heavy": "Hit_A",
+        "launch": "Death_A",
+        "super": "Spellcast_Long",
+        "clash_lock": "Blocking"
+      }
+    },
+    "vesper-nyx": {
+      "pack": "kaykit_skeletons",
+      "source_character": "Skeleton_Rogue",
+      "source_relpath": "addons/kaykit_character_pack_skeletons/Characters/gltf/Skeleton_Rogue.glb",
+      "identity_lane": "void / trickster",
+      "approximation": "Hooded skeleton rogue is a void/trickster stand-in, not a custom Vesper Nyx.",
+      "tint": [0.42, 0.22, 0.62, 1.0],
+      "clips": {
+        "idle": "Idle_B",
+        "walk": "Walking_B",
+        "run": "Running_C",
+        "charged_idle": "Idle_Combat",
+        "heavy": "Dualwield_Melee_Attack_Slice",
+        "hurt_heavy": "Hit_B",
+        "launch": "Death_B",
+        "super": "Taunt",
+        "clash_lock": "Blocking"
+      }
+    }
+  },
+  "bone_rename": {
+    "root": "Root",
+    "hips": "Hips",
+    "spine": "Spine",
+    "chest": "Chest",
+    "head": "Head",
+    "upperarm.l": "UpperArm_L",
+    "lowerarm.l": "LowerArm_L",
+    "hand.l": "Hand_L",
+    "upperarm.r": "UpperArm_R",
+    "lowerarm.r": "LowerArm_R",
+    "hand.r": "Hand_R",
+    "upperleg.l": "UpperLeg_L",
+    "lowerleg.l": "LowerLeg_L",
+    "foot.l": "Foot_L",
+    "toes.l": "Toes_L",
+    "upperleg.r": "UpperLeg_R",
+    "lowerleg.r": "LowerLeg_R",
+    "foot.r": "Foot_R",
+    "toes.r": "Toes_R"
+  },
+  "added_contract_bones": ["Neck", "Shoulder_L", "Shoulder_R"],
+  "added_contract_bones_note": "KayKit has no separate neck or shoulder deform bones. Empty contract bones are inserted so the intake contract names exist. They are not authored deform bones.",
+  "modifications": [
+    "Rename KayKit deform bones to canonical contract names",
+    "Insert missing Neck / Shoulder_L / Shoulder_R bones",
+    "Add required socket empties",
+    "Keep only mapped min-review clips and rename them to contract action ids",
+    "Apply a fighter identity tint on imported materials",
+    "Leave IK/control bones from the source pack; they are not the deform contract"
+  ]
+}

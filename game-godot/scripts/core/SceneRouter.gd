@@ -28,6 +28,7 @@ const SCENES := {
 	"settings": "res://scenes/menus/SettingsScene.tscn",
 	"controls": "res://scenes/menus/ControlsScene.tscn",
 	"labs": "res://scenes/menus/LabsScene.tscn",
+	"roster_art_review": "res://scenes/labs/FullRosterArtReviewScene.tscn",
 	"mobile_playtest": "res://scenes/menus/MobilePlaytestScene.tscn",
 	"credits": "res://scenes/menus/CreditsScene.tscn",
 	"achievements": "res://scenes/menus/AchievementsScene.tscn",
@@ -71,3 +72,6 @@ func go_online_private() -> void:
 
 func go_mobile_playtest() -> void:
 	go("mobile_playtest")
+
+func go_roster_art_review() -> void:
+	go("roster_art_review")

@@ -2,7 +2,139 @@
   "ok": true,
   "ART_IMPACT_REVIEW_TOOL_PASS": true,
   "pairs": {
+    "ember-vale -> rook-ironside": {
+      "socket": "hand_r",
+      "anchor": "CHEST",
+      "attacker_socket_world": [
+        0.54,
+        0.12,
+        0.94
+      ],
+      "defender_location": [
+        0.59,
+        0.06,
+        -0.34
+      ],
+      "contact_distance": 0.05,
+      "frozen_contact": true,
+      "vfx": "OFF",
+      "camera_shake": "OFF",
+      "review_only": true,
+      "gameplay_unchanged": true,
+      "combat_math_unchanged": true,
+      "ok": true
+    },
     "rook-ironside -> nix-calder": {
+      "socket": "hand_r",
+      "anchor": "CHEST",
+      "attacker_socket_world": [
+        0.54,
+        0.12,
+        0.94
+      ],
+      "defender_location": [
+        0.59,
+        0.06,
+        -0.34
+      ],
+      "contact_distance": 0.05,
+      "frozen_contact": true,
+      "vfx": "OFF",
+      "camera_shake": "OFF",
+      "review_only": true,
+      "gameplay_unchanged": true,
+      "combat_math_unchanged": true,
+      "ok": true
+    },
+    "juno-spark -> orion-vell": {
+      "socket": "hand_r",
+      "anchor": "CHEST",
+      "attacker_socket_world": [
+        0.54,
+        0.12,
+        0.94
+      ],
+      "defender_location": [
+        0.59,
+        0.06,
+        -0.34
+      ],
+      "contact_distance": 0.05,
+      "frozen_contact": true,
+      "vfx": "OFF",
+      "camera_shake": "OFF",
+      "review_only": true,
+      "gameplay_unchanged": true,
+      "combat_math_unchanged": true,
+      "ok": true
+    },
+    "kaia-windrow -> vesper-nyx": {
+      "socket": "hand_r",
+      "anchor": "CHEST",
+      "attacker_socket_world": [
+        0.54,
+        0.12,
+        0.94
+      ],
+      "defender_location": [
+        0.59,
+        0.06,
+        -0.34
+      ],
+      "contact_distance": 0.05,
+      "frozen_contact": true,
+      "vfx": "OFF",
+      "camera_shake": "OFF",
+      "review_only": true,
+      "gameplay_unchanged": true,
+      "combat_math_unchanged": true,
+      "ok": true
+    },
+    "nix-calder -> ember-vale": {
+      "socket": "hand_r",
+      "anchor": "CHEST",
+      "attacker_socket_world": [
+        0.54,
+        0.12,
+        0.94
+      ],
+      "defender_location": [
+        0.59,
+        0.06,
+        -0.34
+      ],
+      "contact_distance": 0.05,
+      "frozen_contact": true,
+      "vfx": "OFF",
+      "camera_shake": "OFF",
+      "review_only": true,
+      "gameplay_unchanged": true,
+      "combat_math_unchanged": true,
+      "ok": true
+    },
+    "orion-vell -> kaia-windrow": {
+      "socket": "hand_r",
+      "anchor": "CHEST",
+      "attacker_socket_world": [
+        0.54,
+        0.12,
+        0.94
+      ],
+      "defender_location": [
+        0.59,
+        0.06,
+        -0.34
+      ],
+      "contact_distance": 0.05,
+      "frozen_contact": true,
+      "vfx": "OFF",
+      "camera_shake": "OFF",
+      "review_only": true,
+      "gameplay_unchanged": true,
+      "combat_math_unchanged": true,
+      "ok": true
+    },
+    "vesper-nyx -> juno-spark": {
       "socket": "hand_r",
       "anchor": "CHEST",
       "attacker_socket_world": [
@@ -34,9 +166,13 @@
       "LOWER_GUARD"
     ],
     "frames": [
-      "contact",
-      "hurt",
-      "follow_through"
+      "anticipation",
+      "pre_contact",
+      "contact_vfx_off",
+      "peak_hurt_vfx_off",
+      "follow_through",
+      "launch_start",
+      "contact_vfx_on"
     ]
   },
   "note": "Review staging only. CombatMath / hitboxes / frame data stay on main."

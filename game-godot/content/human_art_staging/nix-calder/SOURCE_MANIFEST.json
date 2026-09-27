@@ -1,0 +1,38 @@
+{
+  "fighter_id": "nix-calder",
+  "source_type": "cc0_pack",
+  "pack_title": "KayKit Character Pack : Skeletons",
+  "author": "Kay Lousberg",
+  "publisher": "KayKit Game Assets",
+  "source_url": "https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Skeletons-1.0",
+  "homepage": "https://kaylousberg.com/",
+  "source_character": "Skeleton_Mage",
+  "source_relpath": "addons/kaykit_character_pack_skeletons/Characters/gltf/Skeleton_Mage.glb",
+  "source_sha256": "e05b0f5cfa395271c9f75fd07c0a0613c56f401ece4ab644e080001a79971075",
+  "source_bytes": 4761048,
+  "license": "CC0 1.0 Universal",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "git_commit": "15b62b9bad122f72926c10fb14d622c73819fa54",
+  "identity_lane": "frost / precision",
+  "approximation": "Skeleton mage is a frost-caster stand-in, not an ice assassin. Ice-blue tint only.",
+  "clip_mapping": {
+    "idle": "Idle",
+    "walk": "Walking_A",
+    "run": "Running_A",
+    "charged_idle": "Idle_Combat",
+    "heavy": "Spellcast_Shoot",
+    "hurt_heavy": "Hit_A",
+    "launch": "Death_A",
+    "super": "Spellcast_Summon",
+    "clash_lock": "Blocking"
+  },
+  "modifications": [
+    "Rename KayKit deform bones to canonical contract names",
+    "Insert missing Neck / Shoulder_L / Shoulder_R bones",
+    "Add required socket empties",
+    "Keep only mapped min-review clips and rename them to contract action ids",
+    "Apply a fighter identity tint on imported materials",
+    "Leave IK/control bones from the source pack; they are not the deform contract"
+  ],
+  "captured_at": "2026-09-24T15:46:43.431543+00:00"
+}

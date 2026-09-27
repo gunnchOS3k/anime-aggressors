@@ -10,6 +10,8 @@ const _PresentationGates = preload("res://scripts/menus/wave020_presentation_gat
 const Vxp2BrandScript = preload("res://scripts/vxp2/vxp2_brand.gd")
 const Vxp2A11yScript = preload("res://scripts/vxp2/vxp2_accessibility_chrome.gd")
 const Vxp2GlyphScript = preload("res://scripts/vxp2/vxp2_glyph_strip.gd")
+const _ArtOverlay := preload("res://scripts/visual/art_source_review_overlay.gd")
+const _AssetResolver := preload("res://scripts/visual/fighter_asset_resolver.gd")
 
 var _roster: Array = []
 var _cursor: int = 0
@@ -37,6 +39,7 @@ var _flourish_btn: Button
 var _motion_label: Label
 var _last_accel: Vector3 = Vector3.ZERO
 var _shake_cooldown_ms: int = 0
+var _art_overlay: CanvasLayer
 const SHAKE_THRESHOLD := 2.35
 
 @onready var grid: GridContainer = %FighterGrid
@@ -71,6 +74,7 @@ func _ready() -> void:
 	Vxp2GlyphScript.attach(self, ["confirm", "back"])
 	Vxp2A11yScript.apply(self)
 	_update_start_match_cta()
+	_ensure_art_review_overlay()
 
 
 func _layout_action_bar_safe() -> void:
@@ -497,6 +501,8 @@ func _refresh() -> void:
 	if ready_label:
 		ready_label.text = _readiness_message(p1, p2, profile)
 	_update_start_match_cta()
+	if _art_overlay and _art_overlay.has_method("set_fighter") and _roster.size() > _cursor:
+		_art_overlay.set_fighter(_roster[_cursor], focus)
 
 
 func _readiness_message(p1: Dictionary, p2: Dictionary, profile) -> String:
@@ -622,6 +628,22 @@ func get_showcase_flourish_counters() -> Dictionary:
 	if _flourish == null:
 		return {}
 	return _flourish.counters()
+
+
+func _ensure_art_review_overlay() -> void:
+	if not _AssetResolver.staging_review_enabled():
+		return
+	if _art_overlay != null:
+		return
+	_art_overlay = _ArtOverlay.new()
+	_art_overlay.name = "ArtSourceReviewOverlay"
+	add_child(_art_overlay)
+	var review_btn := Button.new()
+	review_btn.name = "RosterArtReview"
+	review_btn.text = "Roster Art Review"
+	review_btn.pressed.connect(func() -> void: SceneRouter.go_roster_art_review())
+	if action_bar:
+		action_bar.add_child(review_btn)
 
 
 func on_back() -> void:

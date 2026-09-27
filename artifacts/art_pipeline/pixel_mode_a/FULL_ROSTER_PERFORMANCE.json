@@ -1,0 +1,51 @@
+{
+  "device_alias": "PIXEL_REVIEW_DEVICE",
+  "label": "FULL_ROSTER_INTEGRATION_BASELINE",
+  "no_fake_60fps_claim": true,
+  "scenarios": {
+    "character_select": "reached; 7/7 tiles visible; overlay Candidate 0/7",
+    "single_fighter_review": "reached; Ember through Vesper",
+    "movement": "virtual stick swipe moved fighters",
+    "charge": "review-route charge button exercised; in-match AU/special taps sent",
+    "heavy_impact": "review-route heavy + in-match attack taps; P2 percent moved 0% → 2%",
+    "super": "review-route super button exercised",
+    "clash": "review-route clash button exercised"
+  },
+  "launch_gfxinfo_before_reset": {
+    "total_frames": 26,
+    "janky_frames": 1,
+    "janky_percent": 3.85,
+    "p50_frame_ms": 5,
+    "p90_frame_ms": 7,
+    "p95_frame_ms": 24,
+    "p99_frame_ms": 250,
+    "p50_gpu_ms": 1,
+    "p95_gpu_ms": 2,
+    "pipeline": "Skia (Vulkan)",
+    "note": "Short sample immediately after first bring-to-front. Not a 60 FPS claim."
+  },
+  "gfxinfo_after_reset": {
+    "available": false,
+    "reason": "Godot Vulkan path reported 0 frames / 4950ms sentinel after dumpsys gfxinfo reset"
+  },
+  "memory_pss_kb": {
+    "match_start": 435937,
+    "sustained_min1": 439605,
+    "sustained_min2": 437714,
+    "sustained_min3": 437745,
+    "sustained_min4": 447989,
+    "sustained_min5": 437761,
+    "growth_note": "PSS stayed ~426–437 MiB over ~5 minutes. No runaway leak observed."
+  },
+  "thermal": {
+    "thermal_status": 0,
+    "skin_therm1_c": 35.311,
+    "skin_therm2_c": 36.981,
+    "battery_c": 34.7,
+    "obvious_throttling": false
+  },
+  "draw_calls": "unavailable",
+  "cpu_gpu_counters": "unavailable beyond gfxinfo GPU percentiles and thermal",
+  "package_start": "am start brought existing task or cold-started after force-stop; no crash",
+  "scene_transition": "boot → menu → labs → review and menu → versus → ruleset → select → stage → match all completed"
+}
