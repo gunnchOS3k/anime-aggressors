@@ -4,6 +4,8 @@ class_name CombatFeedback
 ## Data-driven hit feedback: hitstop, camera, VFX, Path A procedural SFX.
 
 const _ProceduralAudio = preload("res://scripts/audio/procedural_audio_bank.gd")
+const _SfxResolver = preload("res://scripts/audio/combat_sfx_resolver.gd")
+const _VfxDirector = preload("res://scripts/visual/move_vfx_director.gd")
 const _Predictor = preload("res://scripts/combat/critical_launch_predictor.gd")
 const _TrailScript = preload("res://scripts/visual/launch_trail_system.gd")
 const _CueScript = preload("res://scripts/visual/critical_launch_cue.gd")
@@ -62,6 +64,7 @@ func apply_hit(attacker: Node, defender: Node, move: Dictionary, info: Dictionar
 	result["screen_flash"] = fb.get("screen_flash", false)
 	result["element"] = move.get("element_effect", {}).get("type", "")
 	_play_procedural_sfx(result.sfx_event, tier, attacker)
+	_play_v3_move_content(attacker, defender, move, result)
 	_trigger_camera(tier, fb.get("camera_event", ""))
 	_emit_juice("hitstop", {"tier": tier, "frames": hitstop})
 	_emit_juice("impact_vfx", {
@@ -236,6 +239,30 @@ func _trigger_camera(tier: String, event: String) -> void:
 	if event != "" and intensity_scale > 0.01:
 		print("[CombatFeedback] camera_event: %s tier:%s" % [event, tier])
 
+func _play_v3_move_content(attacker: Node, defender: Node, move: Dictionary, result: Dictionary) -> void:
+	var fid := fighter_id
+	if fid == "" and attacker != null and "fighter_id" in attacker:
+		fid = str(attacker.fighter_id)
+	var mid := str(move.get("move_id", ""))
+	if fid == "" or mid == "":
+		return
+	var pos := Vector2.ZERO
+	if defender is Node2D:
+		pos = (defender as Node2D).global_position
+	elif attacker is Node2D:
+		pos = (attacker as Node2D).global_position
+	var facing := 1
+	if attacker != null and "facing" in attacker:
+		facing = int(attacker.facing)
+	var parent: Node2D = defender as Node2D if defender is Node2D else attacker as Node2D
+	if parent != null:
+		var played: Dictionary = _VfxDirector.play(parent, fid, mid, pos, facing)
+		result["vfx_shape"] = played.get("shape", "")
+		result["vfx_palette_only"] = bool(played.get("palette_only", false))
+	var fb: Dictionary = move.get("feedback", {})
+	result["particle_profile"] = fb.get("particle_profile", "")
+
+
 func _play_procedural_sfx(event: String, tier: String, attacker: Node) -> void:
 	if event == "":
 		return
@@ -244,14 +271,20 @@ func _play_procedural_sfx(event: String, tier: String, attacker: Node) -> void:
 		fid = str(attacker.fighter_id)
 	elif fid == "" and attacker != null and attacker.has_method("get") and attacker.get("data") is Dictionary:
 		fid = str((attacker.get("data") as Dictionary).get("id", ""))
-	var cat := _ProceduralAudio.map_sfx_event_to_category(event)
+	var mid := ""
+	if attacker != null and "_current_move" in attacker and attacker._current_move is Dictionary:
+		mid = str(attacker._current_move.get("move_id", ""))
 	var played: Dictionary
-	if fid != "":
-		played = _ProceduralAudio.play_fighter(fid, cat, self)
-	else:
-		played = _ProceduralAudio.play_shared(cat, self)
+	if fid != "" and mid != "":
+		played = _SfxResolver.play_move(fid, mid, self)
+	if played.is_empty() or not bool(played.get("ok", false)):
+		var cat := _ProceduralAudio.map_sfx_event_to_category(event)
+		if fid != "":
+			played = _ProceduralAudio.play_fighter(fid, cat, self)
+		else:
+			played = _ProceduralAudio.play_shared(cat, self)
 	if not bool(played.get("ok", false)):
-		print("[CombatFeedback] sfx_miss: %s tier:%s cat:%s" % [event, tier, cat])
+		print("[CombatFeedback] sfx_miss: %s tier:%s" % [event, tier])
 
 func _process(delta: float) -> void:
 	if _camera == null or _shake_remaining <= 0.0:

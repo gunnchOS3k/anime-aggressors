@@ -42,11 +42,23 @@
   "preview": {
     "rim_multiplier": 1.22,
     "emission_multiplier": 1.08,
-    "ambient": [0.86, 0.87, 0.90],
+    "ambient": [
+      0.86,
+      0.87,
+      0.9
+    ],
     "ambient_energy": 0.74,
-    "key_color": [0.98, 0.97, 0.96],
+    "key_color": [
+      0.98,
+      0.97,
+      0.96
+    ],
     "key_energy": 1.22,
-    "key_rotation_deg": [-24, -16, 0],
+    "key_rotation_deg": [
+      -24,
+      -16,
+      0
+    ],
     "camera": "front_3q",
     "camera_x_offset": 0.18,
     "tonemap": "linear",
@@ -70,113 +82,337 @@
       "element": "flame",
       "roygbiv_family": "red-orange",
       "family_hue_deg": 14,
-      "core": [0.93, 0.20, 0.06, 0.94],
-      "structure": [0.22, 0.08, 0.05, 0.98],
-      "accent": [1.0, 0.82, 0.18, 1.0],
-      "emission": [1.0, 0.42, 0.08],
-      "rim": [1.0, 0.54, 0.16],
-      "tile_primary": [0.94, 0.24, 0.08],
-      "tile_accent": [1.0, 0.78, 0.18],
+      "core": [
+        0.93,
+        0.2,
+        0.06,
+        0.94
+      ],
+      "structure": [
+        0.22,
+        0.08,
+        0.05,
+        0.98
+      ],
+      "accent": [
+        1.0,
+        0.82,
+        0.18,
+        1.0
+      ],
+      "emission": [
+        1.0,
+        0.42,
+        0.08
+      ],
+      "rim": [
+        1.0,
+        0.54,
+        0.16
+      ],
+      "tile_primary": [
+        0.94,
+        0.24,
+        0.08
+      ],
+      "tile_accent": [
+        1.0,
+        0.78,
+        0.18
+      ],
       "charge": "hotter_brighter_core_crown_hands",
       "avoid": "generic_fire_mage_clothing",
-      "bible_detail": "living-flame body: molten red-orange core, charcoal structure, hot yellow seams, oversized ignition hands",
-      "critical_cue": "furnace_flare_rupture"
+      "bible_detail": "humanoid flame being; red core, orange flame body, hot-yellow highlights",
+      "critical_cue": "furnace_flare_rupture",
+      "v3_elemental_being": true
     },
     "rook-ironside": {
       "element": "impact",
       "roygbiv_family": "orange-iron",
       "family_hue_deg": 34,
-      "core": [0.84, 0.46, 0.16, 0.94],
-      "structure": [0.40, 0.32, 0.24, 0.98],
-      "accent": [0.90, 0.68, 0.28, 1.0],
-      "emission": [0.68, 0.40, 0.16],
-      "rim": [0.92, 0.60, 0.24],
-      "tile_primary": [0.82, 0.44, 0.18],
-      "tile_accent": [0.90, 0.68, 0.28],
+      "core": [
+        0.84,
+        0.46,
+        0.16,
+        0.94
+      ],
+      "structure": [
+        0.4,
+        0.32,
+        0.24,
+        0.98
+      ],
+      "accent": [
+        0.9,
+        0.68,
+        0.28,
+        1.0
+      ],
+      "emission": [
+        0.68,
+        0.4,
+        0.16
+      ],
+      "rim": [
+        0.92,
+        0.6,
+        0.24
+      ],
+      "tile_primary": [
+        0.82,
+        0.44,
+        0.18
+      ],
+      "tile_accent": [
+        0.9,
+        0.68,
+        0.28
+      ],
       "charge": "lower_denser_restrained_glow",
       "avoid": "electric_looking_vfx",
-      "bible_detail": "fortress mass: amber-iron body, darker forged plates, brass impact edges, heavy boots and forearms",
-      "critical_cue": "tectonic_impact_fracture"
+      "bible_detail": "massive forged/stone humanoid; orange-amber impact seams, dark iron structure",
+      "critical_cue": "tectonic_impact_fracture",
+      "v3_elemental_being": true
     },
     "juno-spark": {
       "element": "volt",
       "roygbiv_family": "yellow-gold",
       "family_hue_deg": 52,
-      "core": [0.94, 0.80, 0.16, 0.93],
-      "structure": [0.12, 0.10, 0.26, 0.98],
-      "accent": [0.36, 0.96, 1.0, 1.0],
-      "emission": [1.0, 0.90, 0.28],
-      "rim": [1.0, 0.92, 0.32],
-      "tile_primary": [0.94, 0.80, 0.16],
-      "tile_accent": [0.36, 0.96, 1.0],
+      "core": [
+        0.94,
+        0.8,
+        0.16,
+        0.93
+      ],
+      "structure": [
+        0.12,
+        0.1,
+        0.26,
+        0.98
+      ],
+      "accent": [
+        0.36,
+        0.96,
+        1.0,
+        1.0
+      ],
+      "emission": [
+        1.0,
+        0.9,
+        0.28
+      ],
+      "rim": [
+        1.0,
+        0.92,
+        0.32
+      ],
+      "tile_primary": [
+        0.94,
+        0.8,
+        0.16
+      ],
+      "tile_accent": [
+        0.36,
+        0.96,
+        1.0
+      ],
       "charge": "tighter_flickering_current",
       "avoid": "full_body_navy_or_sepia_wash",
-      "bible_detail": "charged gold identity: yellow-gold body, dark electric support, cyan-white current channels, arc-crown",
-      "critical_cue": "voltage_fork"
+      "bible_detail": "yellow-gold electricity body with dark conductive structure and cyan-white current",
+      "critical_cue": "voltage_fork",
+      "v3_elemental_being": true
     },
     "kaia-windrow": {
       "element": "gale",
       "roygbiv_family": "green",
       "family_hue_deg": 138,
-      "core": [0.14, 0.70, 0.28, 0.93],
-      "structure": [0.18, 0.78, 0.62, 0.97],
-      "accent": [0.92, 0.98, 0.94, 1.0],
-      "emission": [0.48, 0.94, 0.72],
-      "rim": [0.62, 1.0, 0.78],
-      "tile_primary": [0.16, 0.72, 0.30],
-      "tile_accent": [0.90, 0.98, 0.94],
+      "core": [
+        0.14,
+        0.7,
+        0.28,
+        0.93
+      ],
+      "structure": [
+        0.18,
+        0.78,
+        0.62,
+        0.97
+      ],
+      "accent": [
+        0.92,
+        0.98,
+        0.94,
+        1.0
+      ],
+      "emission": [
+        0.48,
+        0.94,
+        0.72
+      ],
+      "rim": [
+        0.62,
+        1.0,
+        0.78
+      ],
+      "tile_primary": [
+        0.16,
+        0.72,
+        0.3
+      ],
+      "tile_accent": [
+        0.9,
+        0.98,
+        0.94
+      ],
       "charge": "lighter_lifted_air_panels",
       "avoid": "teal_only_or_particles_only",
-      "bible_detail": "air spirit: true-green identity, teal/mint structure, pale air ribbons, light scarf/airfoil",
-      "critical_cue": "wind_shear_cleave"
+      "bible_detail": "true-green wind body, teal/mint currents and air-white edges",
+      "critical_cue": "wind_shear_cleave",
+      "v3_elemental_being": true
     },
     "nix-calder": {
       "element": "frost",
       "roygbiv_family": "blue",
       "family_hue_deg": 210,
-      "core": [0.14, 0.40, 0.88, 0.93],
-      "structure": [0.06, 0.12, 0.32, 0.98],
-      "accent": [0.74, 0.96, 1.0, 1.0],
-      "emission": [0.42, 0.82, 1.0],
-      "rim": [0.70, 0.94, 1.0],
-      "tile_primary": [0.18, 0.46, 0.92],
-      "tile_accent": [0.78, 0.96, 1.0],
+      "core": [
+        0.14,
+        0.4,
+        0.88,
+        0.93
+      ],
+      "structure": [
+        0.06,
+        0.12,
+        0.32,
+        0.98
+      ],
+      "accent": [
+        0.74,
+        0.96,
+        1.0,
+        1.0
+      ],
+      "emission": [
+        0.42,
+        0.82,
+        1.0
+      ],
+      "rim": [
+        0.7,
+        0.94,
+        1.0
+      ],
+      "tile_primary": [
+        0.18,
+        0.46,
+        0.92
+      ],
+      "tile_accent": [
+        0.78,
+        0.96,
+        1.0
+      ],
       "charge": "more_crystalline_frost_growth",
       "avoid": "navy_collapse_or_pale_on_pale",
-      "bible_detail": "ice being: true-blue identity, dark cold core plates, pale cyan ice, frost-white edge",
-      "critical_cue": "crystal_break_launch"
+      "bible_detail": "true-blue ice body, dark cold core and frost-white/cyan crystal edges",
+      "critical_cue": "crystal_break_launch",
+      "v3_elemental_being": true
     },
     "orion-vell": {
       "element": "gravity",
       "roygbiv_family": "indigo",
       "family_hue_deg": 262,
-      "core": [0.28, 0.18, 0.70, 0.93],
-      "structure": [0.08, 0.06, 0.22, 0.98],
-      "accent": [0.90, 0.88, 1.0, 1.0],
-      "emission": [0.68, 0.56, 1.0],
-      "rim": [0.60, 0.50, 1.0],
-      "tile_primary": [0.28, 0.18, 0.68],
-      "tile_accent": [0.90, 0.86, 1.0],
+      "core": [
+        0.28,
+        0.18,
+        0.7,
+        0.93
+      ],
+      "structure": [
+        0.08,
+        0.06,
+        0.22,
+        0.98
+      ],
+      "accent": [
+        0.9,
+        0.88,
+        1.0,
+        1.0
+      ],
+      "emission": [
+        0.68,
+        0.56,
+        1.0
+      ],
+      "rim": [
+        0.6,
+        0.5,
+        1.0
+      ],
+      "tile_primary": [
+        0.28,
+        0.18,
+        0.68
+      ],
+      "tile_accent": [
+        0.9,
+        0.86,
+        1.0
+      ],
       "charge": "constellation_connected_orbit_tight",
       "avoid": "random_particles_no_nodes",
-      "bible_detail": "cosmic enforcer: indigo identity, midnight cosmic core, visible constellation lines/nodes, star-white accents",
-      "critical_cue": "gravity_rift_constellation"
+      "bible_detail": "indigo/midnight cosmic body with star-white constellation nodes",
+      "critical_cue": "gravity_rift_constellation",
+      "v3_elemental_being": true
     },
     "vesper-nyx": {
       "element": "void",
       "roygbiv_family": "violet",
       "family_hue_deg": 296,
-      "core": [0.58, 0.18, 0.74, 0.93],
-      "structure": [0.22, 0.06, 0.28, 0.97],
-      "accent": [0.92, 0.76, 0.96, 1.0],
-      "emission": [0.74, 0.32, 0.82],
-      "rim": [0.84, 0.58, 0.96],
-      "tile_primary": [0.56, 0.18, 0.72],
-      "tile_accent": [0.90, 0.76, 0.96],
+      "core": [
+        0.58,
+        0.18,
+        0.74,
+        0.93
+      ],
+      "structure": [
+        0.22,
+        0.06,
+        0.28,
+        0.97
+      ],
+      "accent": [
+        0.92,
+        0.76,
+        0.96,
+        1.0
+      ],
+      "emission": [
+        0.74,
+        0.32,
+        0.82
+      ],
+      "rim": [
+        0.84,
+        0.58,
+        0.96
+      ],
+      "tile_primary": [
+        0.56,
+        0.18,
+        0.72
+      ],
+      "tile_accent": [
+        0.9,
+        0.76,
+        0.96
+      ],
       "charge": "partial_phase_ghost_offset",
       "avoid": "permanent_invisibility",
-      "bible_detail": "void trickster: violet identity, dark void core, plum/magenta structure, pale phase edges — idle remains readable",
-      "critical_cue": "phase_tear_rupture"
+      "bible_detail": "violet/void-plum body with pale phase edges; translucency only while phasing",
+      "critical_cue": "phase_tear_rupture",
+      "v3_elemental_being": true
     }
   }
 }

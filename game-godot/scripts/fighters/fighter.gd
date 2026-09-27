@@ -673,6 +673,20 @@ func _start_move(move_id: String) -> void:
 	if not m.is_empty():
 		_start_move_dict(m)
 
+
+func training_play_move(move_id: String, aura_amount: float = -1.0, facing_override: int = 0) -> Dictionary:
+	if aura_amount >= 0.0:
+		aura = aura_amount
+	if facing_override != 0:
+		facing = facing_override
+	_start_move(move_id)
+	return {
+		"move_id": move_id,
+		"active": _current_move.get("move_id", ""),
+		"aura": aura,
+		"facing": facing,
+	}
+
 func _resolve_attack_command() -> String:
 	if not is_on_floor():
 		var axis: float = _read_axis()
@@ -795,8 +809,7 @@ func _start_move_dict(m: Dictionary) -> void:
 		_current_move["visual_move_id"] = tier_clip
 		_current_move["projectile_tier"] = tier_clip
 	elif mid0 == "aura_burst":
-		# Normal-match signature access: aura burst plays signature_lane_burst.
-		_current_move["visual_move_id"] = "signature_lane_burst"
+		_current_move["visual_move_id"] = _MoveResolver.canonical_clip_for_move_id("aura_burst")
 	var lock := _FacingContract.lock_attack_direction(
 		_FacingContract.logical_facing_from_int(facing), _current_move
 	)
