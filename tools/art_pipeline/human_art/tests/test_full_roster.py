@@ -11,8 +11,10 @@ from common import (  # noqa: E402
     FULL_ROSTER_IMPACT_PAIRS,
     HUMAN_ROSTER_GATES_FALSE,
     MIN_REVIEW_ACTIONS,
+    OWNER_QUALITY_GATES,
     STAGING_RESOLVER_CHAIN,
     candidate_manifest_path,
+    candidate_rights_ready,
     empty_candidate_manifest,
     load_json,
 )
@@ -60,6 +62,11 @@ class TestFullRoster(unittest.TestCase):
 
     def test_human_roster_gates_stay_false(self):
         self.assertTrue(all(v is False for v in HUMAN_ROSTER_GATES_FALSE.values()))
+
+    def test_candidate_rights_ready_is_documentary(self):
+        self.assertNotIn("CANDIDATE_RIGHTS_READY", OWNER_QUALITY_GATES)
+        self.assertTrue(candidate_rights_ready(load_json(candidate_manifest_path("ember-vale"))))
+        self.assertFalse(empty_candidate_manifest("ember-vale")["CANDIDATE_RIGHTS_READY"])
 
     def test_impact_matrix(self):
         self.assertEqual(impact_main(), 0)

@@ -17,6 +17,9 @@ const _PresentationGates = preload("res://scripts/menus/wave020_presentation_gat
 const _PresentationContext = preload("res://scripts/visual/presentation_context.gd")
 const _PresentationCache = preload("res://scripts/visual/fighter_presentation_cache.gd")
 const _ArtDirection = preload("res://scripts/visual/art_direction_contract.gd")
+const _FacingContract = preload("res://scripts/combat/fighter_facing_contract.gd")
+const _ElementalMaterial = preload("res://scripts/visual/elemental_material_contract.gd")
+const _SignaturePresentation = preload("res://scripts/visual/signature_move_presentation.gd")
 
 const VIEWPORT_SIZE := Vector2i(256, 320)
 ## Battle bodies must be owner-visible on Pixel; prior 0.38 read as absent.
@@ -48,6 +51,11 @@ var _face_chip: ColorRect
 var _presentation_tween: Tween
 var _throw_dir: String = "forward"
 var _expression: String = "neutral"
+var _logical_facing: String = "RIGHT"
+var _attack_lock: Dictionary = {}
+var _vfx_enabled: bool = true
+var _charge_level: float = 0.0
+var _review_freeze_phase: String = ""
 var _aura_level: int = 0
 var _aura_tier: int = 0
 var _form_id: String = ""
@@ -146,8 +154,8 @@ func configure(fighter_data: Dictionary) -> bool:
 
 	_stylized = _StylizedBuilder.create(_fighter_id, fighter_data)
 	_stylized.name = "StylizedFighter_%s" % _fighter_id
-	var lean := float(_life.get("lean", 0.0))
-	_stylized.rotation_degrees.y = -8.0 + lean * 40.0
+	# Facing contract owns yaw. Character-life lean is no longer a 3/4 camera override.
+	_stylized.rotation_degrees.y = _FacingContract.mesh_yaw_for_facing(_logical_facing)
 	_model_root.add_child(_stylized)
 
 	if _procedural_healthy and _proxy_model != null:
@@ -179,6 +187,7 @@ func configure(fighter_data: Dictionary) -> bool:
 		refresh_viewport_texture(true)
 	heal_visibility_if_needed()
 	set_expression(str(_life.get("expression_idle", "neutral")))
+	_apply_presentation_yaw()
 	_play_clip("idle")
 	_apply_playback_scale("idle")
 	if not is_visible_renderable_body():
@@ -350,6 +359,9 @@ func set_presentation_context(context: String) -> void:
 		_PresentationContext.CTX_MOVE_PREVIEW,
 	]
 	_apply_context_display_contract()
+	if _material_controller and _material_controller.has_method("set_presentation_context"):
+		_material_controller.set_presentation_context(_presentation_context)
+	_refresh_elemental_materials()
 	_PresentationCache.register_live(self, _presentation_context, _fighter_id, _configure_generation)
 
 
@@ -390,13 +402,86 @@ func get_select_framing_report() -> Dictionary:
 
 
 func set_facing(direction: int) -> void:
+	_logical_facing = _FacingContract.logical_facing_from_int(direction)
 	if _display:
-		_display.scale.x = absf(_display.scale.x) * (1.0 if direction >= 0 else -1.0)
+		# 2D sprite stays unflipped; 3D yaw is the presentation forward so attacks face the target.
+		_display.scale.x = absf(_display.scale.x)
+	_apply_presentation_yaw()
+
+
+func set_attack_facing_lock(lock: Dictionary) -> void:
+	_attack_lock = lock.duplicate(true)
+	if lock.has("logical_facing"):
+		_logical_facing = str(lock.get("logical_facing"))
+	_apply_presentation_yaw()
+
+
+func clear_attack_facing_lock() -> void:
+	_attack_lock.clear()
+	_apply_presentation_yaw()
+
+
+func set_vfx_enabled(enabled: bool) -> void:
+	_vfx_enabled = enabled
+	if _aura_overlay:
+		_aura_overlay.visible = enabled
+	_refresh_elemental_materials()
+
+
+func set_review_freeze_phase(phase: String) -> void:
+	_review_freeze_phase = phase
+	_apply_review_freeze()
+
+
+func _apply_review_freeze() -> void:
+	if _review_freeze_phase.is_empty() or _review_freeze_phase == "live":
+		return
+	var frac := 0.12
+	match _review_freeze_phase:
+		"anticipation":
+			frac = 0.10
+		"contact":
+			frac = 0.42
+		"hurt":
+			frac = 0.58
+		"follow-through":
+			frac = 0.82
+	if _animation_controller == null or not _animation_controller.has_method("get_animation_player"):
+		return
+	var player: AnimationPlayer = _animation_controller.get_animation_player()
+	if player == null or not is_instance_valid(player) or player.current_animation == "":
+		return
+	player.seek(player.current_animation_length * frac, true)
+	player.speed_scale = 0.0
+
+
+func apply_hurt_reaction(reaction: Dictionary) -> void:
+	if reaction.has("logical_facing"):
+		_logical_facing = str(reaction.get("logical_facing"))
+	_apply_presentation_yaw(float(reaction.get("mesh_yaw_deg", _FacingContract.mesh_yaw_for_facing(_logical_facing))))
+	if _material_controller and _material_controller.has_method("set_hit_flash"):
+		_material_controller.set_hit_flash(0.55)
+
+
+func _apply_presentation_yaw(override_yaw: float = INF) -> void:
+	var yaw := _FacingContract.mesh_yaw_for_facing(_logical_facing)
+	if override_yaw != INF:
+		yaw = override_yaw
+	elif not _attack_lock.is_empty() and _attack_lock.has("mesh_yaw_deg"):
+		yaw = float(_attack_lock.get("mesh_yaw_deg"))
+	if _loaded_model != null and is_instance_valid(_loaded_model):
+		_loaded_model.rotation_degrees.y = yaw
+	if _proxy_model != null and is_instance_valid(_proxy_model) and _proxy_model != _loaded_model:
+		_proxy_model.rotation_degrees.y = yaw
+	if _model_root != null and is_instance_valid(_model_root):
+		_model_root.rotation_degrees.y = 0.0
 
 
 func set_aura_level(level: int) -> void:
 	_aura_level = clampi(level, 0, 4)
+	_charge_level = clampf(float(level) / 4.0, 0.0, 1.0)
 	_refresh_aura_overlay()
+	_refresh_elemental_materials()
 	if _material_controller and _material_controller.has_method("set_charge_emission"):
 		var form_boost := float(_form_presentation.get("emission_strength", 0.0))
 		_material_controller.set_charge_emission(float(level) * 0.35 + form_boost)
@@ -467,7 +552,19 @@ func set_expression(state: String) -> void:
 
 ## Wave019 move-list preview: play the same clip family used by gameplay mapping.
 func play_clip(clip_name: String) -> void:
-	_play_clip(clip_name)
+	var resolved := clip_name
+	if clip_name in ["special_a", "special_b", "super", "heavy", "charge", "clash"]:
+		var mid := _SignaturePresentation.move_id_for_lane(_fighter_id, clip_name)
+		if not mid.is_empty():
+			resolved = mid
+		if clip_name == "charge":
+			_charge_level = 1.0
+			_refresh_elemental_materials()
+		elif clip_name == "super":
+			_charge_level = 1.0
+			_refresh_elemental_materials()
+	_play_clip(resolved)
+	_apply_review_freeze()
 
 
 func animate_preview(clip_name: String, t: float) -> void:
@@ -665,18 +762,66 @@ func _setup_procedural_runtime(fighter_data: Dictionary) -> void:
 	_material_controller = _MaterialController.new()
 	_material_controller.name = "FighterMaterialController"
 	add_child(_material_controller)
-	_material_controller.bind_model(_proxy_model)
+	if _material_controller.has_method("set_presentation_context"):
+		_material_controller.set_presentation_context(_presentation_context)
+	_material_controller.bind_model(_proxy_model, _fighter_id)
 	_apply_toon_materials(_proxy_model, fighter_data)
+	_refresh_elemental_materials()
 	if fighter_data.has("color"):
 		_material_controller.set_team_color(Color(fighter_data.get("color")))
 
 
 func _apply_toon_materials(root: Node3D, fighter_data: Dictionary) -> void:
-	# Keep sourced candidate / approved materials visible. Team-tint override is for procedural proxies.
+	# Candidate bodies keep KayKit silhouette but receive shared cel + elemental value groups.
+	# This does not promote HUMAN_APPROVED.
+	_refresh_elemental_materials()
 	if _current_model_source in ["HUMAN_CANDIDATE", "HUMAN_APPROVED"]:
 		return
 	var base_color := Color(fighter_data.get("color", Color(0.85, 0.85, 0.9)))
 	_apply_toon_recursive(root, base_color)
+
+
+func _apply_identity_lighting() -> void:
+	if _viewport == null or not is_instance_valid(_viewport):
+		return
+	var preview := _ElementalMaterial.is_preview_context(_presentation_context)
+	var env_node := _viewport.get_node_or_null("IdentityEnvironment") as WorldEnvironment
+	if env_node != null and env_node.environment != null:
+		var env := env_node.environment
+		if preview:
+			env.ambient_light_color = Color(0.94, 0.90, 0.84)
+			env.ambient_light_energy = 0.82
+			env.tonemap_mode = Environment.TONE_MAPPER_LINEAR
+		else:
+			env.ambient_light_color = Color(0.72, 0.78, 0.92)
+			env.ambient_light_energy = 1.25
+			env.tonemap_mode = Environment.TONE_MAPPER_FILMIC
+	var key := _viewport.get_node_or_null("IdentityKeyLight") as DirectionalLight3D
+	if key:
+		if preview:
+			key.rotation_degrees = Vector3(-28, -18, 0)
+			key.light_color = Color(1.0, 0.95, 0.88)
+			key.light_energy = 1.45
+		else:
+			key.rotation_degrees = Vector3(-38, -28, 0)
+			key.light_color = Color(1.0, 0.87, 0.72)
+			key.light_energy = 1.8
+	var rim := _viewport.get_node_or_null("IdentityRimLight") as DirectionalLight3D
+	if rim:
+		var colors: Dictionary = _ElementalMaterial.identity_colors(_fighter_id)
+		var rim_col: Color = colors.get("rim", Color(0.45, 0.66, 1.0))
+		rim.light_color = rim_col if preview else Color(0.45, 0.66, 1.0)
+		rim.light_energy = 1.35 if preview else 1.15
+
+
+func _refresh_elemental_materials() -> void:
+	var root := _proxy_model if _proxy_model != null else _loaded_model
+	if root == null or not is_instance_valid(root):
+		return
+	_ElementalMaterial.apply_to_root(root, _fighter_id, _charge_level, _vfx_enabled, _presentation_context)
+	_apply_identity_lighting()
+	if _material_controller and _material_controller.has_method("set_charge_emission"):
+		_material_controller.set_charge_emission(_charge_level * 1.4)
 
 
 func _apply_toon_recursive(node: Node, base_color: Color) -> void:
@@ -748,8 +893,10 @@ func _frame_camera_for_figure() -> void:
 	else:
 		_camera.look_at_from_position(_camera.position, look_target, Vector3.UP)
 	if _loaded_model != null and is_instance_valid(_loaded_model):
+		# Facing contract owns yaw. Camera lean is bounded presentation-only.
 		var lean := float(cam.get("lean_offset", 0.0))
-		_loaded_model.rotation_degrees.y = -8.0 + lean * 40.0
+		var lean_delta := clampf(lean * 12.0, -_FacingContract.MAX_ROOT_YAW_DELTA, _FacingContract.MAX_ROOT_YAW_DELTA)
+		_apply_presentation_yaw(_FacingContract.bound_root_yaw(_FacingContract.mesh_yaw_for_facing(_logical_facing), lean_delta))
 
 
 func _build_viewport() -> void:
@@ -778,15 +925,18 @@ func _build_viewport() -> void:
 	environment.ambient_light_color = Color(0.72, 0.78, 0.92)
 	environment.ambient_light_energy = 1.25
 	environment.tonemap_mode = Environment.TONE_MAPPER_FILMIC
+	environment_node.name = "IdentityEnvironment"
 	environment_node.environment = environment
 	_viewport.add_child(environment_node)
 
 	var key_light := DirectionalLight3D.new()
+	key_light.name = "IdentityKeyLight"
 	key_light.rotation_degrees = Vector3(-38, -28, 0)
 	key_light.light_color = Color(1.0, 0.87, 0.72)
 	key_light.light_energy = 1.8
 	_viewport.add_child(key_light)
 	var rim_light := DirectionalLight3D.new()
+	rim_light.name = "IdentityRimLight"
 	rim_light.rotation_degrees = Vector3(20, 150, 0)
 	rim_light.light_color = Color(0.45, 0.66, 1.0)
 	rim_light.light_energy = 1.15
@@ -1397,8 +1547,9 @@ func _play_throw_presentation(direction: String) -> void:
 			_presentation_tween.tween_property(_loaded_model, "position:y", start_pos.y - 0.2, 0.1)
 			_presentation_tween.tween_property(_loaded_model, "rotation_degrees:x", start_rot.x + 22.0, 0.1)
 		_:
-			var yaw := 25.0 if style != "pin" else 12.0
-			_presentation_tween.tween_property(_loaded_model, "rotation_degrees:y", start_rot.y - yaw, 0.1)
+			var yaw := 12.0 if style != "pin" else 8.0
+			var bound := _FacingContract.bound_root_yaw(start_rot.y, -yaw)
+			_presentation_tween.tween_property(_loaded_model, "rotation_degrees:y", bound, 0.1)
 			_presentation_tween.tween_property(_loaded_model, "position:z", start_pos.z + 0.2, 0.1)
 	_presentation_tween.tween_property(_loaded_model, "rotation_degrees", start_rot, 0.18)
 	_presentation_tween.parallel().tween_property(_loaded_model, "position", start_pos, 0.18)

@@ -10,6 +10,12 @@ func _ready() -> void:
 	review_btn.pressed.connect(func() -> void: SceneRouter.go_roster_art_review())
 	add_child(review_btn)
 	review_btn.position = Vector2(48, 120)
+	var build_btn := Button.new()
+	build_btn.name = "BuildInfo"
+	build_btn.text = "Build Info"
+	build_btn.pressed.connect(func() -> void: SceneRouter.go_build_info("labs"))
+	add_child(build_btn)
+	build_btn.position = Vector2(48, 176)
 
 func footer_hint() -> String:
 	return "Not production combat. Use Versus / Training. TypeScript web battle is legacy."

@@ -23,7 +23,11 @@ func configure(id: String, _primary_color: Color, accent_color: Color) -> void:
 func configure_for_context(id: String, _primary_color: Color, accent_color: Color, context: String) -> void:
 	fighter_id = id
 	_portrait_context = _PresentationContext.normalize_context(context)
-	_accent = accent_color
+	var identity: Dictionary = {}
+	var contract := load("res://scripts/visual/elemental_material_contract.gd")
+	if contract != null and contract.has_method("identity_colors"):
+		identity = contract.identity_colors(id)
+	_accent = identity.get("tile_accent", accent_color)
 	_bake_generation += 1
 	expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED

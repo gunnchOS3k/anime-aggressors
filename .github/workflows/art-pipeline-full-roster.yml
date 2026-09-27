@@ -19,23 +19,31 @@ jobs:
       - name: Full-roster gates
         run: python3 tools/art_pipeline/human_art/emit_full_roster_gates.py
       - name: Unit tests
-        run: python3 tools/art_pipeline/human_art/tests/test_full_roster.py
+        run: |
+          python3 tools/art_pipeline/human_art/tests/test_full_roster.py
+          python3 tools/art_pipeline/human_art/tests/test_owner_quality_gates.py
+          python3 tools/art_pipeline/elemental_specials/validate_select_match_parity.py
+          python3 tools/art_pipeline/build_identity/validate_build_identity.py
       - name: Upload evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: full-roster-gates
           path: artifacts/art_pipeline/
-      - name: Honest HUMAN_* stay false
+      - name: Honest owner-quality gates stay false
         run: |
           python3 - <<'PY'
-          import json
+          import json, sys
+          sys.path.insert(0, "tools/art_pipeline/human_art")
+          from common import OWNER_QUALITY_GATES
           d=json.load(open("artifacts/art_pipeline/FULL_ROSTER_GATES.json"))
           g=d["gates"]
-          for k,v in g.items():
-              if k.startswith("HUMAN_") or k in ("FINAL_AUTHORED_ANIMATION_PASS","MERGE_AUTHORIZED"):
-                  assert v in (False, 0), (k, v)
+          for k in OWNER_QUALITY_GATES:
+              if k in g:
+                  assert g[k] in (False, 0), (k, g[k])
+          assert "HUMAN_CANDIDATE_RIGHTS_READY" not in g
+          assert g.get("CANDIDATE_RIGHTS_READY") in (True, False)
           assert g["FULL_ROSTER_HUMAN_CANDIDATES_COMPLETE"] is False or g["FULL_ROSTER_HUMAN_CANDIDATE_CONTRACT_PASS"] in (True, False)
           assert g["GENERATED_EXPERIMENT_NOT_SELECTED_PASS"] is True
-          print("honest full-roster gates ok")
+          print("honest owner-quality gates ok; documentary CANDIDATE_RIGHTS_READY may be true")
           PY

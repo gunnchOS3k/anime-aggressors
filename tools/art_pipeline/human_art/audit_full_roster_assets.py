@@ -14,6 +14,7 @@ from common import (  # noqa: E402
     ROOT,
     STAGING,
     candidate_manifest_path,
+    candidate_rights_ready,
     empty_candidate_manifest,
     glb_stats,
     load_json,
@@ -120,7 +121,7 @@ def main() -> int:
         stats = glb_stats(staged) if staged.is_file() else {}
         anims = {str(n or "") for n in (stats.get("animation_names") or [])}
         missing_actions = [a for a in MIN_REVIEW_ACTIONS if a not in anims]
-        rights_ready = bool(manifest.get("HUMAN_CANDIDATE_RIGHTS_READY"))
+        rights_ready = candidate_rights_ready(manifest)
         lanes[fid] = {
             "fighter_id": fid,
             "display_name": FIGHTER_META[fid]["name"],
@@ -136,7 +137,7 @@ def main() -> int:
             ],
             "unknown": [r["path"] for r in rows if r["provenance"] == "UNKNOWN"],
             "animation_names": sorted(anims),
-            "HUMAN_CANDIDATE_RIGHTS_READY": rights_ready,
+            "CANDIDATE_RIGHTS_READY": rights_ready,
         }
         missing[fid] = {
             "mesh": not staged.is_file(),

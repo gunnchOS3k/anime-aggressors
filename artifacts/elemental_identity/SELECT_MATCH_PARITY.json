@@ -1,0 +1,89 @@
+{
+  "schema": "select_match_parity/v1",
+  "emitted_at": "2026-09-24T17:37:35.483555+00:00",
+  "source_of_truth": "game-godot/data/runtime/elemental_material_language.json",
+  "failures": [],
+  "fighters": {
+    "ember-vale": {
+      "element": "flame",
+      "roygbiv_family": "red-orange",
+      "family_hue_deg": 14,
+      "bible_detail": "living-flame body: molten core, charcoal structure, hot yellow seams, oversized ignition hands",
+      "select_source": "elemental_material_language.json",
+      "match_source": "elemental_material_language.json"
+    },
+    "rook-ironside": {
+      "element": "impact",
+      "roygbiv_family": "orange-iron",
+      "family_hue_deg": 34,
+      "bible_detail": "fortress mass: orange-iron body, tan-steel plates, brass impact edges, heavy boots and forearms",
+      "select_source": "elemental_material_language.json",
+      "match_source": "elemental_material_language.json"
+    },
+    "juno-spark": {
+      "element": "volt",
+      "roygbiv_family": "yellow-gold",
+      "family_hue_deg": 52,
+      "bible_detail": "charged substrate: navy-violet body, gold kinetic panels, cyan-electric current, arc-crown",
+      "select_source": "elemental_material_language.json",
+      "match_source": "elemental_material_language.json"
+    },
+    "kaia-windrow": {
+      "element": "gale",
+      "roygbiv_family": "green",
+      "family_hue_deg": 160,
+      "bible_detail": "air spirit: mint-teal body, sea-green structure, white-air ribbons, light scarf/airfoil",
+      "select_source": "elemental_material_language.json",
+      "match_source": "elemental_material_language.json"
+    },
+    "nix-calder": {
+      "element": "frost",
+      "roygbiv_family": "blue",
+      "family_hue_deg": 210,
+      "bible_detail": "ice being: navy-cold core, pale ice armor, cyan-ice edges, crystal mask and shins",
+      "select_source": "elemental_material_language.json",
+      "match_source": "elemental_material_language.json"
+    },
+    "orion-vell": {
+      "element": "gravity",
+      "roygbiv_family": "indigo",
+      "family_hue_deg": 262,
+      "bible_detail": "cosmic enforcer: midnight body, indigo structure, starlight-violet nodes, orbit halo",
+      "select_source": "elemental_material_language.json",
+      "match_source": "elemental_material_language.json"
+    },
+    "vesper-nyx": {
+      "element": "void",
+      "roygbiv_family": "violet",
+      "family_hue_deg": 296,
+      "bible_detail": "void trickster: plum-phase body, dark void cowl, pale lilac edges, split tails",
+      "select_source": "elemental_material_language.json",
+      "match_source": "elemental_material_language.json"
+    }
+  },
+  "hues": {
+    "ember-vale": 14.0,
+    "rook-ironside": 34.0,
+    "juno-spark": 52.0,
+    "kaia-windrow": 160.0,
+    "nix-calder": 210.0,
+    "orion-vell": 262.0,
+    "vesper-nyx": 296.0
+  },
+  "gates": {
+    "SELECT_PREVIEW_SOURCE_OF_TRUTH_PASS": true,
+    "SELECT_MATCH_PARITY_STRUCTURAL_PASS": true,
+    "ROSTER_ROYGBIV_SPACING_PASS": true,
+    "TRANSLUCENT_BODY_STYLE_PASS": true,
+    "FIGHTER_ART_BIBLE_DETAIL_PASS": true,
+    "PIXEL_SELECT_REVIEW_ROUTE_PASS": true,
+    "OWNER_SELECT_COLOR_APPROVAL": false,
+    "OWNER_MATCH_COLOR_APPROVAL": false,
+    "OWNER_ROSTER_ROYGBIV_APPROVAL": false,
+    "MERGE_AUTHORIZED": false,
+    "HUMAN_ART_DIRECTION_APPROVAL": false,
+    "HUMAN_PIXEL_REVIEW_PASS": false
+  },
+  "HUMAN_*": "Remain false unless a human signed.",
+  "next_action": "OWNER_REVIEW_SELECT_SCREEN_COLOR_PARITY_AND_ELEMENTAL_DETAIL"
+}
