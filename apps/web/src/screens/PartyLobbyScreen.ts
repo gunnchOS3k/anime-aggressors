@@ -297,7 +297,11 @@ export function mountPartyResultsScreen(root: HTMLElement): void {
 
 export function mountPartyControllerScreen(root: HTMLElement): void {
   const params = new URLSearchParams(location.hash.split("?")[1] ?? "");
-  const codePrefill = params.get("code") ?? loadPartyModeConfig() && ensureLocalRuntime().session.room.code;
+  const codeFromParams = params.get("code");
+  const codePrefill =
+    codeFromParams ??
+    (loadPartyModeConfig() ? ensureLocalRuntime().session.room.code : "") ??
+    "";
   root.innerHTML = `
     <div class="party-controller" data-testid="party-browser-controller">
       <h1>Phone / Browser Controller</h1>
@@ -340,7 +344,11 @@ export function mountPartyControllerScreen(root: HTMLElement): void {
     participant = join.participant;
     localStorage.setItem(
       "partylink.resume.anime-aggressors",
-      JSON.stringify({ code, token: participant.token }),
+      JSON.stringify({
+        code,
+        participantId: participant.id,
+        token: participant.token,
+      }),
     );
     root.querySelector("#pc-pad")?.classList.remove("hidden");
     status.textContent = `${participant.role} seat ${participant.seatIndex ?? "—"} connected`;
@@ -349,8 +357,12 @@ export function mountPartyControllerScreen(root: HTMLElement): void {
   root.querySelector("#pc-reconnect")?.addEventListener("click", () => {
     const raw = localStorage.getItem("partylink.resume.anime-aggressors");
     if (!raw) return;
-    const saved = JSON.parse(raw) as { code: string; token: string };
-    const join = runtime.session.reconnect({ code: saved.code, token: saved.token });
+    const saved = JSON.parse(raw) as { code: string; participantId: string; token: string };
+    const join = runtime.session.reconnect({
+      code: saved.code,
+      participantId: saved.participantId,
+      token: saved.token,
+    });
     if (join.ok) {
       participant = join.participant;
       root.querySelector("#pc-status")!.textContent = `Reconnected seat ${participant.seatIndex ?? "—"}`;

@@ -14,6 +14,7 @@ export default defineConfig({
       "@anime-aggressors/rollback": path.resolve(root, "../../packages/rollback/src/index.ts"),
       "@anime-aggressors/edgeio": path.resolve(root, "../../packages/edgeio/src/index.ts"),
       "@anime-aggressors/netplay": path.resolve(root, "../../packages/netplay/src/index.ts"),
+      "@anime-aggressors/partylink": path.resolve(root, "../../packages/partylink/src/index.ts"),
     },
   },
   build: {
