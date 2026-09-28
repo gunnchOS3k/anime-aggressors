@@ -2,16 +2,18 @@ import type { GameConfig } from "./types.js";
 import type { CreatedFighter } from "./createdFighter.js";
 import { SIM_HZ } from "./constants.js";
 
-export type MatchType = "stock" | "time" | "stamina" | "flaglineClash";
+export type MatchType = "stock" | "time" | "stamina" | "flaglineClash" | "party";
 export type ItemFrequency = "off" | "low" | "medium" | "high";
 export type ElementMode = "on" | "visualOnly" | "off";
-export type TeamMode = "off" | "2v2";
+export type TeamMode = "off" | "2v2" | "3v3" | "4v4" | "2v2v2v2";
+/** Party Mode supports 2–8 human seats; competitive presets remain 2/4. */
+export type RulesetPlayerCount = 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
 export type GameRuleset = {
   id: string;
   name: string;
   matchType: MatchType;
-  playerCount: 2 | 3 | 4;
+  playerCount: RulesetPlayerCount;
   stocks: number;
   timerSeconds: number | null;
   staminaHp: number;
@@ -23,6 +25,10 @@ export type GameRuleset = {
   elementMode: ElementMode;
   teamMode: TeamMode;
   createdFighters: "allowed" | "defaultsOnly";
+  /** Party Mode allows duplicate fighter selection with palette/outline/badge identity. */
+  allowDuplicateFighters?: boolean;
+  /** Party Mode uses HOST_AUTHORITATIVE_PARTY; competitive keeps rollback/netplay. */
+  authorityMode?: "HOST_AUTHORITATIVE_PARTY" | "DETERMINISTIC_ROLLBACK";
   flagline?: {
     enabled: boolean;
     captureToWin: number;
@@ -139,6 +145,45 @@ export const RULESET_PRESETS: GameRuleset[] = [
       botsEnabled: true,
     },
   },
+  {
+    ...DEFAULT_RULESET,
+    id: "party-ffa-8",
+    name: "Party FFA (8P)",
+    matchType: "party",
+    playerCount: 8,
+    teamMode: "off",
+    stocks: 3,
+    timerSeconds: 180,
+    stageId: "party-plaza",
+    allowDuplicateFighters: true,
+    authorityMode: "HOST_AUTHORITATIVE_PARTY",
+  },
+  {
+    ...DEFAULT_RULESET,
+    id: "party-4v4",
+    name: "Party 4v4",
+    matchType: "party",
+    playerCount: 8,
+    teamMode: "4v4",
+    stocks: 3,
+    timerSeconds: 180,
+    stageId: "party-plaza",
+    allowDuplicateFighters: true,
+    authorityMode: "HOST_AUTHORITATIVE_PARTY",
+  },
+  {
+    ...DEFAULT_RULESET,
+    id: "party-2v2v2v2",
+    name: "Party 2v2v2v2",
+    matchType: "party",
+    playerCount: 8,
+    teamMode: "2v2v2v2",
+    stocks: 3,
+    timerSeconds: 180,
+    stageId: "party-plaza",
+    allowDuplicateFighters: true,
+    authorityMode: "HOST_AUTHORITATIVE_PARTY",
+  },
 ];
 
 export function cloneRuleset(r: GameRuleset): GameRuleset {
@@ -149,7 +194,8 @@ export function validateRuleset(r: GameRuleset): boolean {
   if (r.stocks < 1 || r.stocks > 99) return false;
   if (r.damageRatio < 0.25 || r.damageRatio > 4) return false;
   if (r.launchRatio < 0.25 || r.launchRatio > 4) return false;
-  if (!["stock", "time", "stamina", "flaglineClash"].includes(r.matchType)) return false;
+  if (!["stock", "time", "stamina", "flaglineClash", "party"].includes(r.matchType)) return false;
+  if (r.playerCount < 2 || r.playerCount > 8) return false;
   return true;
 }
 
@@ -160,6 +206,10 @@ export function rulesetToMatchDurationFrames(r: GameRuleset): number {
 
 export function effectivePlayerCount(r: GameRuleset): number {
   if (r.matchType === "flaglineClash") return 4;
+  if (r.matchType === "party" || r.authorityMode === "HOST_AUTHORITATIVE_PARTY") {
+    return Math.min(Math.max(r.playerCount, 2), 8);
+  }
+  if (r.playerCount > 2 && r.teamMode !== "off") return Math.min(r.playerCount, 8);
   return Math.min(r.playerCount, 2) as 2;
 }
 
