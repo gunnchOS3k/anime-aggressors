@@ -149,13 +149,13 @@ export function mountCustomGameScreen(root: HTMLElement): void {
   const readForm = () => {
     const name = (root.querySelector("#cg-name") as HTMLInputElement).value.trim() || "Custom Rules";
     const matchType = (root.querySelector('input[name="matchType"]:checked') as HTMLInputElement)?.value as MatchType;
-    const playerCount = Number((root.querySelector('input[name="playerCount"]:checked') as HTMLInputElement)?.value) as 2 | 3 | 4;
+    const playerCount = Number((root.querySelector('input[name="playerCount"]:checked') as HTMLInputElement)?.value) as 2 | 3 | 4 | 5 | 6 | 7 | 8;
     const timerRaw = (root.querySelector("#cg-timer") as HTMLSelectElement).value;
     ruleset = {
       ...ruleset,
       name,
       matchType,
-      playerCount: playerCount > 2 ? 2 : playerCount,
+      playerCount: matchType === "party" || matchType === "flaglineClash" ? playerCount : Math.min(playerCount, 2) as 2 | 3 | 4 | 5 | 6 | 7 | 8,
       stocks: Number((root.querySelector("#cg-stocks") as HTMLSelectElement).value),
       timerSeconds: timerRaw === "off" ? null : Number(timerRaw),
       staminaHp: Number((root.querySelector("#cg-stamina") as HTMLSelectElement)?.value ?? ruleset.staminaHp),

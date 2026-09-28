@@ -10,7 +10,7 @@ import { setCustomFlow, setMatchFighters, setMatchRuleset } from "./matchSession
 
 const STORAGE_KEY = "anime-aggressors.activeMatchSetup";
 
-export type MatchSetupMode = "stock" | "time" | "stamina" | "flaglineClash";
+export type MatchSetupMode = "stock" | "time" | "stamina" | "flaglineClash" | "party";
 
 export type MatchSetupSession = {
   rulesetId?: string;
@@ -19,7 +19,7 @@ export type MatchSetupSession = {
   stageId?: string;
   stageName?: string;
 
-  playerCount: 2 | 3 | 4;
+  playerCount: 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
   fighters: {
     playerId: number;
