@@ -88,7 +88,10 @@ def main() -> int:
         "FULL_ROSTER_HUMAN_CANDIDATES_COMPLETE": False,
         "HUMAN_ART_STAGING": 0,
         "HUMAN_ART_FULL_ROSTER_REVIEW": 0,
-        "HUMAN_CANDIDATE_RIGHTS_READY": False,
+        "CANDIDATE_RIGHTS_READY": False,
+        "OWNER_SELECT_COLOR_APPROVAL": False,
+        "OWNER_MATCH_COLOR_APPROVAL": False,
+        "OWNER_ROSTER_ROYGBIV_APPROVAL": False,
         "Mode_B_eligible": False,
     }
     gates.update(HUMAN_GATES_FALSE)
@@ -100,14 +103,19 @@ def main() -> int:
         if script == "validate_human_roster.py":
             gates["FULL_ROSTER_HUMAN_CANDIDATE_CONTRACT_PASS"] = bool(row.get("complete"))
             gates["FULL_ROSTER_HUMAN_CANDIDATES_COMPLETE"] = bool(row.get("complete"))
-            gates["HUMAN_CANDIDATE_RIGHTS_READY"] = bool(row.get("HUMAN_CANDIDATE_RIGHTS_READY"))
+            gates["CANDIDATE_RIGHTS_READY"] = bool(
+                row.get("CANDIDATE_RIGHTS_READY") or row.get("HUMAN_CANDIDATE_RIGHTS_READY")
+            )
             validator_payload = load_json(ROOT / "artifacts/art_pipeline/FULL_ROSTER_VALIDATOR.json")
-            gates["HUMAN_CANDIDATE_RIGHTS_READY"] = bool(
-                row.get("HUMAN_CANDIDATE_RIGHTS_READY") or validator_payload.get("HUMAN_CANDIDATE_RIGHTS_READY")
+            gates["CANDIDATE_RIGHTS_READY"] = bool(
+                row.get("CANDIDATE_RIGHTS_READY")
+                or row.get("HUMAN_CANDIDATE_RIGHTS_READY")
+                or validator_payload.get("CANDIDATE_RIGHTS_READY")
+                or validator_payload.get("HUMAN_CANDIDATE_RIGHTS_READY")
             )
             gates["Mode_B_eligible"] = bool(
                 gates["FULL_ROSTER_HUMAN_CANDIDATES_COMPLETE"]
-                and gates["HUMAN_CANDIDATE_RIGHTS_READY"]
+                and gates["CANDIDATE_RIGHTS_READY"]
                 and gates["GENERATED_EXPERIMENT_NOT_SELECTED_PASS"]
                 and gates["FULL_ROSTER_RESOLVER_PASS"]
             )
@@ -130,6 +138,9 @@ def main() -> int:
         "FINAL_AUTHORED_ANIMATION_PASS": False,
         "MERGE_AUTHORIZED": False,
         "note": "Infrastructure only. Human quality remains false until an owner sets it after Pixel review.",
+        "deprecated_metadata": {
+            "HUMAN_CANDIDATE_RIGHTS_READY": "renamed to CANDIDATE_RIGHTS_READY; documentary only, not an owner-quality PASS",
+        },
     }
     write_json(ROOT / "artifacts/art_pipeline/FULL_ROSTER_GATES.json", payload)
     print(json.dumps(payload, indent=2))

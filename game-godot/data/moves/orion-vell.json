@@ -27,7 +27,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 2,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -61,11 +61,12 @@
       },
       "feedback": {
         "tier": "light",
-        "hitstop_frames": 3,
+        "hitstop_frames": 2,
         "camera_event": "shake_light",
-        "vfx_event": "gravity_spark",
-        "sfx_event": "gravity_hit_light",
-        "screen_flash": false
+        "vfx_event": "orion_vell_jab_1_orbit_node_collapse",
+        "sfx_event": "orion-vell.jab_1.sfx",
+        "screen_flash": false,
+        "particle_profile": "orion-vell.jab_1.constellation_orbit_nodes"
       },
       "training_display_name": "Jab 1",
       "combat_tag": "gravity_pull",
@@ -87,7 +88,11 @@
           "to": "jab_2"
         }
       ],
-      "h2h_string_id": "orion-vell:jab_1->jab_2"
+      "h2h_string_id": "orion-vell:jab_1->jab_2",
+      "animation_id": "jab_1",
+      "v3_fantasy": "Short vector tap subtly biasing target position",
+      "v3_vfx_shape": "orbit_node_collapse",
+      "v3_particle_library": "constellation_orbit_nodes"
     },
     {
       "move_id": "jab_2",
@@ -113,7 +118,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 2,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -147,11 +152,12 @@
       },
       "feedback": {
         "tier": "light",
-        "hitstop_frames": 3,
+        "hitstop_frames": 2,
         "camera_event": "shake_light",
-        "vfx_event": "gravity_spark",
-        "sfx_event": "gravity_hit_light",
-        "screen_flash": false
+        "vfx_event": "orion_vell_jab_2_orbit_node_collapse",
+        "sfx_event": "orion-vell.jab_2.sfx",
+        "screen_flash": false,
+        "particle_profile": "orion-vell.jab_2.constellation_orbit_nodes"
       },
       "training_display_name": "Jab 2",
       "combat_tag": "gravity_pull",
@@ -168,7 +174,11 @@
           "to": "jab_finisher"
         }
       ],
-      "h2h_string_id": "orion-vell:jab_2->jab_finisher"
+      "h2h_string_id": "orion-vell:jab_2->jab_finisher",
+      "animation_id": "jab_2",
+      "v3_fantasy": "Second gravity-assisted strike pulling toward Orion",
+      "v3_vfx_shape": "orbit_node_collapse",
+      "v3_particle_library": "constellation_orbit_nodes"
     },
     {
       "move_id": "jab_finisher",
@@ -194,7 +204,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -231,9 +241,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "gravity_jab_fin",
-        "sfx_event": "gravity_jab_fin_sfx",
-        "screen_flash": false
+        "vfx_event": "orion_vell_jab_finisher_orbit_node_collapse",
+        "sfx_event": "orion-vell.jab_finisher.sfx",
+        "screen_flash": false,
+        "particle_profile": "orion-vell.jab_finisher.constellation_orbit_nodes"
       },
       "training_display_name": "Jab Finisher",
       "combat_tag": "gravity_pull",
@@ -250,7 +261,11 @@
           "to": "up_tilt"
         }
       ],
-      "h2h_string_id": "orion-vell:jab_finisher->up_tilt"
+      "h2h_string_id": "orion-vell:jab_finisher->up_tilt",
+      "animation_id": "jab_finisher",
+      "v3_fantasy": "Repulsion pop sending the target along an authored combo angle",
+      "v3_vfx_shape": "orbit_node_collapse",
+      "v3_particle_library": "constellation_orbit_nodes"
     },
     {
       "move_id": "forward_tilt",
@@ -276,7 +291,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -309,12 +324,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "gravity_spark",
-        "sfx_event": "gravity_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "orion_vell_forward_tilt_orbit_node_collapse",
+        "sfx_event": "orion-vell.forward_tilt.sfx",
+        "screen_flash": false,
+        "particle_profile": "orion-vell.forward_tilt.constellation_orbit_nodes"
       },
       "training_display_name": "Forward Tilt",
       "combat_tag": "gravity_pull",
@@ -322,7 +338,11 @@
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
-      }
+      },
+      "animation_id": "forward_tilt",
+      "v3_fantasy": "Vector shove with a narrow distortion lane",
+      "v3_vfx_shape": "orbit_node_collapse",
+      "v3_particle_library": "constellation_orbit_nodes"
     },
     {
       "move_id": "up_tilt",
@@ -348,7 +368,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -381,12 +401,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "gravity_spark",
-        "sfx_event": "gravity_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "orion_vell_up_tilt_orbit_node_collapse",
+        "sfx_event": "orion-vell.up_tilt.sfx",
+        "screen_flash": false,
+        "particle_profile": "orion-vell.up_tilt.constellation_orbit_nodes"
       },
       "training_display_name": "Up Tilt",
       "combat_tag": "gravity_pull",
@@ -394,7 +415,11 @@
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
-      }
+      },
+      "animation_id": "up_tilt",
+      "v3_fantasy": "Gravity-lift palm for controlled anti-air",
+      "v3_vfx_shape": "orbit_node_collapse",
+      "v3_particle_library": "constellation_orbit_nodes"
     },
     {
       "move_id": "down_tilt",
@@ -420,7 +445,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -453,12 +478,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "gravity_spark",
-        "sfx_event": "gravity_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "orion_vell_down_tilt_orbit_node_collapse",
+        "sfx_event": "orion-vell.down_tilt.sfx",
+        "screen_flash": false,
+        "particle_profile": "orion-vell.down_tilt.constellation_orbit_nodes"
       },
       "training_display_name": "Down Tilt",
       "combat_tag": "gravity_pull",
@@ -475,7 +501,11 @@
           "to": "up_air"
         }
       ],
-      "h2h_string_id": "orion-vell:down_tilt->up_air"
+      "h2h_string_id": "orion-vell:down_tilt->up_air",
+      "animation_id": "down_tilt",
+      "v3_fantasy": "Low weight-field sweep altering footing/launch",
+      "v3_vfx_shape": "orbit_node_collapse",
+      "v3_particle_library": "constellation_orbit_nodes"
     },
     {
       "move_id": "dash_attack",
@@ -501,7 +531,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -534,12 +564,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "gravity_spark",
-        "sfx_event": "gravity_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "orion_vell_dash_attack_orbit_node_collapse",
+        "sfx_event": "orion-vell.dash_attack.sfx",
+        "screen_flash": false,
+        "particle_profile": "orion-vell.dash_attack.constellation_orbit_nodes"
       },
       "training_display_name": "Dash Attack",
       "combat_tag": "gravity_pull",
@@ -547,7 +578,11 @@
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
-      }
+      },
+      "animation_id": "dash_attack",
+      "v3_fantasy": "Gravity-assisted glide strike",
+      "v3_vfx_shape": "orbit_node_collapse",
+      "v3_particle_library": "constellation_orbit_nodes"
     },
     {
       "move_id": "heavy_attack",
@@ -573,7 +608,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 8,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -610,9 +645,10 @@
         "tier": "heavy",
         "hitstop_frames": 8,
         "camera_event": "shake_heavy",
-        "vfx_event": "gravity_heavy",
-        "sfx_event": "gravity_heavy_sfx",
-        "screen_flash": false
+        "vfx_event": "orion_vell_heavy_attack_orbit_node_collapse",
+        "sfx_event": "orion-vell.heavy_attack.sfx",
+        "screen_flash": false,
+        "particle_profile": "orion-vell.heavy_attack.constellation_orbit_nodes"
       },
       "training_display_name": "Heavy Attack",
       "combat_tag": "gravity_pull",
@@ -622,7 +658,11 @@
         "strength": 1
       },
       "wave016_reachability": "DESIGN_ONLY_NO_DISTINCT_CONTROL",
-      "note": "CONTROLS.md does not distinguish tilt vs smash/heavy; not bound to avoid awkward inputs."
+      "note": "CONTROLS.md does not distinguish tilt vs smash/heavy; not bound to avoid awkward inputs.",
+      "animation_id": "heavy_attack",
+      "v3_fantasy": "Compressed-mass blow with delayed pressure collapse",
+      "v3_vfx_shape": "orbit_node_collapse",
+      "v3_particle_library": "constellation_orbit_nodes"
     },
     {
       "move_id": "neutral_air",
@@ -648,7 +688,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -681,12 +721,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "gravity_spark",
-        "sfx_event": "gravity_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "orion_vell_neutral_air_orbit_node_collapse",
+        "sfx_event": "orion-vell.neutral_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "orion-vell.neutral_air.constellation_orbit_nodes"
       },
       "training_display_name": "Neutral Air",
       "combat_tag": "gravity_pull",
@@ -694,7 +735,11 @@
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
-      }
+      },
+      "animation_id": "neutral_air",
+      "v3_fantasy": "Orbiting gravity nodes around Orion",
+      "v3_vfx_shape": "orbit_node_collapse",
+      "v3_particle_library": "constellation_orbit_nodes"
     },
     {
       "move_id": "forward_air",
@@ -720,7 +765,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -753,12 +798,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "gravity_spark",
-        "sfx_event": "gravity_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "orion_vell_forward_air_orbit_node_collapse",
+        "sfx_event": "orion-vell.forward_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "orion-vell.forward_air.constellation_orbit_nodes"
       },
       "training_display_name": "Forward Air",
       "combat_tag": "gravity_pull",
@@ -766,7 +812,11 @@
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
-      }
+      },
+      "animation_id": "forward_air",
+      "v3_fantasy": "Repulsion palm in the air",
+      "v3_vfx_shape": "orbit_node_collapse",
+      "v3_particle_library": "constellation_orbit_nodes"
     },
     {
       "move_id": "back_air",
@@ -864,79 +914,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
-      "aura_scaling": {
-        "level_0": {
-          "damage_mult": 1
-        },
-        "level_1": {
-          "damage_mult": 1.05,
-          "element_strength": 1.2
-        },
-        "level_2": {
-          "damage_mult": 1.1,
-          "hitbox_scale": 1.15,
-          "element_strength": 1.5
-        },
-        "level_3": {
-          "damage_mult": 1.15,
-          "hitbox_scale": 1.25,
-          "extra_active_frames": 1,
-          "cancel_windows": [
-            {
-              "start": 8,
-              "end": 14
-            }
-          ],
-          "element_strength": 1.8
-        },
-        "super_ready": {
-          "damage_mult": 1.2,
-          "hitbox_scale": 1.35,
-          "feedback_tier": "aura"
-        }
-      },
-      "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "gravity_spark",
-        "sfx_event": "gravity_hit_light",
-        "screen_flash": false
-      },
-      "training_display_name": "Up Air",
-      "combat_tag": "gravity_pull",
-      "element_effect": {
-        "type": "gravity",
-        "effect": "gravity_pull",
-        "strength": 1
-      }
-    },
-    {
-      "move_id": "down_air",
-      "fighter_id": "orion-vell",
-      "move_type": "melee",
-      "direction": "air_down",
-      "input_command": "attack_air_down",
-      "grounded_air": "air",
-      "startup_frames": 4,
-      "active_frames": 3,
-      "recovery_frames": 10,
-      "hitboxes": [
-        {
-          "offset_x": 36,
-          "offset_y": -8,
-          "width": 40,
-          "height": 32
-        }
-      ],
-      "damage": 8,
-      "angle_deg": 270,
-      "base_knockback": 9,
-      "knockback_growth": 1.1,
-      "shield_damage": 3,
-      "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -972,9 +950,87 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "gravity_dair",
-        "sfx_event": "gravity_dair_sfx",
-        "screen_flash": false
+        "vfx_event": "orion_vell_up_air_orbit_node_collapse",
+        "sfx_event": "orion-vell.up_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "orion-vell.up_air.constellation_orbit_nodes"
+      },
+      "training_display_name": "Up Air",
+      "combat_tag": "gravity_pull",
+      "element_effect": {
+        "type": "gravity",
+        "effect": "gravity_pull",
+        "strength": 1
+      },
+      "animation_id": "up_air",
+      "v3_fantasy": "Suspension pulse above the body",
+      "v3_vfx_shape": "orbit_node_collapse",
+      "v3_particle_library": "constellation_orbit_nodes"
+    },
+    {
+      "move_id": "down_air",
+      "fighter_id": "orion-vell",
+      "move_type": "melee",
+      "direction": "air_down",
+      "input_command": "attack_air_down",
+      "grounded_air": "air",
+      "startup_frames": 4,
+      "active_frames": 3,
+      "recovery_frames": 10,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "damage": 8,
+      "angle_deg": 270,
+      "base_knockback": 9,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 8,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "heavy",
+        "hitstop_frames": 8,
+        "camera_event": "shake_heavy",
+        "vfx_event": "orion_vell_down_air_orbit_node_collapse",
+        "sfx_event": "orion-vell.down_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "orion-vell.down_air.constellation_orbit_nodes"
       },
       "training_display_name": "Down Air",
       "combat_tag": "gravity_pull",
@@ -982,7 +1038,11 @@
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
-      }
+      },
+      "animation_id": "down_air",
+      "v3_fantasy": "Weight-drop spike with gravity-well contact",
+      "v3_vfx_shape": "orbit_node_collapse",
+      "v3_particle_library": "constellation_orbit_nodes"
     },
     {
       "move_id": "neutral_special_projectile",
@@ -1001,7 +1061,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1038,9 +1098,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "gravity_proj",
-        "sfx_event": "gravity_proj_sfx",
-        "screen_flash": false
+        "vfx_event": "orion_vell_neutral_special_projectile_orbit_node_collapse",
+        "sfx_event": "orion-vell.neutral_special_projectile.sfx",
+        "screen_flash": false,
+        "particle_profile": "orion-vell.neutral_special_projectile.constellation_orbit_nodes"
       },
       "training_display_name": "Gravity Shot",
       "combat_tag": "gravity_pull",
@@ -1091,7 +1152,11 @@
         "pierce": false,
         "homing": 0.35,
         "pull_strength": 180
-      }
+      },
+      "animation_id": "neutral_special_projectile",
+      "v3_fantasy": "Slow gravity orb with pull field",
+      "v3_vfx_shape": "orbit_node_collapse",
+      "v3_particle_library": "constellation_orbit_nodes"
     },
     {
       "move_id": "side_special",
@@ -1117,7 +1182,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 8,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1151,12 +1216,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "gravity_spark",
-        "sfx_event": "gravity_hit_light",
-        "screen_flash": false
+        "tier": "heavy",
+        "hitstop_frames": 8,
+        "camera_event": "shake_heavy",
+        "vfx_event": "orion_vell_side_special_orbit_node_collapse",
+        "sfx_event": "orion-vell.side_special.sfx",
+        "screen_flash": false,
+        "particle_profile": "orion-vell.side_special.constellation_orbit_nodes"
       },
       "training_display_name": "Orbit Collapse Side",
       "combat_tag": "gravity_pull",
@@ -1173,7 +1239,11 @@
       "field": {
         "pull_strength": 220,
         "radius": 90
-      }
+      },
+      "animation_id": "side_special",
+      "v3_fantasy": "Attract/repel vector step for spacing and route control",
+      "v3_vfx_shape": "orbit_node_collapse",
+      "v3_particle_library": "constellation_orbit_nodes"
     },
     {
       "move_id": "up_special_recovery",
@@ -1199,7 +1269,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1232,12 +1302,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "gravity_spark",
-        "sfx_event": "gravity_hit_light",
-        "screen_flash": false
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "orion_vell_up_special_recovery_orbit_node_collapse",
+        "sfx_event": "orion-vell.up_special_recovery.sfx",
+        "screen_flash": false,
+        "particle_profile": "orion-vell.up_special_recovery.constellation_orbit_nodes"
       },
       "training_display_name": "Up Special / Recovery",
       "combat_tag": "gravity_pull",
@@ -1258,7 +1329,11 @@
         "air_friction": 0.9,
         "landing_lag": 11,
         "orbit_assist": true
-      }
+      },
+      "animation_id": "up_special_recovery",
+      "v3_fantasy": "Gravity-inversion ascent with controlled vector steering",
+      "v3_vfx_shape": "orbit_node_collapse",
+      "v3_particle_library": "constellation_orbit_nodes"
     },
     {
       "move_id": "down_special",
@@ -1284,7 +1359,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 8,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1318,12 +1393,13 @@
         }
       },
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "gravity_spark",
-        "sfx_event": "gravity_hit_light",
-        "screen_flash": false
+        "tier": "heavy",
+        "hitstop_frames": 8,
+        "camera_event": "shake_heavy",
+        "vfx_event": "orion_vell_down_special_orbit_node_collapse",
+        "sfx_event": "orion-vell.down_special.sfx",
+        "screen_flash": false,
+        "particle_profile": "orion-vell.down_special.constellation_orbit_nodes"
       },
       "training_display_name": "Down Special",
       "combat_tag": "gravity_pull",
@@ -1335,7 +1411,11 @@
       "trap": {
         "linger_frames": 36,
         "pull_pulses": 3
-      }
+      },
+      "animation_id": "down_special",
+      "v3_fantasy": "Open gravity sphere/well briefly controlling space",
+      "v3_vfx_shape": "orbit_node_collapse",
+      "v3_particle_library": "constellation_orbit_nodes"
     },
     {
       "move_id": "grab",
@@ -1361,7 +1441,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 2,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1395,15 +1475,20 @@
       },
       "feedback": {
         "tier": "light",
-        "hitstop_frames": 3,
+        "hitstop_frames": 2,
         "camera_event": "shake_light",
-        "vfx_event": "gravity_spark",
-        "sfx_event": "gravity_hit_light",
-        "screen_flash": false
+        "vfx_event": "orion_vell_grab_orbit_node_collapse",
+        "sfx_event": "orion-vell.grab.sfx",
+        "screen_flash": false,
+        "particle_profile": "orion-vell.grab.constellation_orbit_nodes"
       },
       "training_display_name": "Grab",
       "combat_tag": "gravity_pull",
-      "grab_range": 40
+      "grab_range": 40,
+      "animation_id": "grab",
+      "v3_fantasy": "Gravity-suspension capture",
+      "v3_vfx_shape": "orbit_node_collapse",
+      "v3_particle_library": "constellation_orbit_nodes"
     },
     {
       "move_id": "throw_forward",
@@ -1422,7 +1507,7 @@
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1460,9 +1545,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "gravity_throw",
-        "sfx_event": "gravity_throw_sfx",
-        "screen_flash": false
+        "vfx_event": "orion_vell_throw_forward_orbit_node_collapse",
+        "sfx_event": "orion-vell.throw_forward.sfx",
+        "screen_flash": false,
+        "particle_profile": "orion-vell.throw_forward.constellation_orbit_nodes"
       },
       "training_display_name": "Gravitational Shove",
       "combat_tag": "gravity_pull",
@@ -1472,20 +1558,25 @@
         "release_frame": 2,
         "victim_offset": {
           "x": 20,
-          "y": -8
+          "y": -16
         },
         "damage": 5.2,
         "angle_deg": 32,
         "base_knockback": 13,
         "knockback_growth": 1.15,
         "combo_role": "positioning",
-        "role": "edge_pressure"
+        "role": "edge_pressure",
+        "authored": true
       },
       "element_effect": {
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
-      }
+      },
+      "animation_id": "throw_forward",
+      "v3_fantasy": "Gravitational shove",
+      "v3_vfx_shape": "orbit_node_collapse",
+      "v3_particle_library": "constellation_orbit_nodes"
     },
     {
       "move_id": "throw_back",
@@ -1504,7 +1595,7 @@
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1542,9 +1633,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "gravity_throw",
-        "sfx_event": "gravity_throw_sfx",
-        "screen_flash": false
+        "vfx_event": "orion_vell_throw_back_orbit_node_collapse",
+        "sfx_event": "orion-vell.throw_back.sfx",
+        "screen_flash": false,
+        "particle_profile": "orion-vell.throw_back.constellation_orbit_nodes"
       },
       "training_display_name": "Orbit Reversal",
       "combat_tag": "gravity_pull",
@@ -1553,21 +1645,26 @@
         "hold_frames": 0,
         "release_frame": 2,
         "victim_offset": {
-          "x": -20,
-          "y": -8
+          "x": -22,
+          "y": -14
         },
         "damage": 6.800000000000001,
         "angle_deg": 148,
         "base_knockback": 17,
         "knockback_growth": 1.15,
-        "combo_role": "kill",
-        "role": "reversal"
+        "combo_role": "reversal",
+        "role": "reversal",
+        "authored": true
       },
       "element_effect": {
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
-      }
+      },
+      "animation_id": "throw_back",
+      "v3_fantasy": "Orbit reversal",
+      "v3_vfx_shape": "orbit_node_collapse",
+      "v3_particle_library": "constellation_orbit_nodes"
     },
     {
       "move_id": "throw_up",
@@ -1586,7 +1683,7 @@
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1624,9 +1721,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "gravity_throw",
-        "sfx_event": "gravity_throw_sfx",
-        "screen_flash": false
+        "vfx_event": "orion_vell_throw_up_orbit_node_collapse",
+        "sfx_event": "orion-vell.throw_up.sfx",
+        "screen_flash": false,
+        "particle_profile": "orion-vell.throw_up.constellation_orbit_nodes"
       },
       "training_display_name": "Suspended Juggle",
       "combat_tag": "gravity_pull",
@@ -1635,21 +1733,26 @@
         "hold_frames": 0,
         "release_frame": 2,
         "victim_offset": {
-          "x": 20,
-          "y": -8
+          "x": 0,
+          "y": -40
         },
         "damage": 4.800000000000001,
         "angle_deg": 86,
         "base_knockback": 12,
         "knockback_growth": 1.15,
-        "combo_role": "starter",
-        "role": "juggle"
+        "combo_role": "juggle",
+        "role": "juggle",
+        "authored": true
       },
       "element_effect": {
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
-      }
+      },
+      "animation_id": "throw_up",
+      "v3_fantasy": "Suspended juggle launch",
+      "v3_vfx_shape": "orbit_node_collapse",
+      "v3_particle_library": "constellation_orbit_nodes"
     },
     {
       "move_id": "throw_down",
@@ -1668,7 +1771,7 @@
       "knockback_growth": 1.15,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 5,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1706,9 +1809,10 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "gravity_throw",
-        "sfx_event": "gravity_throw_sfx",
-        "screen_flash": false
+        "vfx_event": "orion_vell_throw_down_orbit_node_collapse",
+        "sfx_event": "orion-vell.throw_down.sfx",
+        "screen_flash": false,
+        "particle_profile": "orion-vell.throw_down.constellation_orbit_nodes"
       },
       "training_display_name": "Gravity Crush",
       "combat_tag": "gravity_pull",
@@ -1717,21 +1821,26 @@
         "hold_frames": 0,
         "release_frame": 2,
         "victim_offset": {
-          "x": 20,
-          "y": -8
+          "x": 4,
+          "y": 8
         },
         "damage": 5.6000000000000005,
         "angle_deg": 270,
         "base_knockback": 14,
         "knockback_growth": 1.15,
-        "combo_role": "bounce",
-        "role": "setup"
+        "combo_role": "setup",
+        "role": "setup",
+        "authored": true
       },
       "element_effect": {
         "type": "gravity",
         "effect": "gravity_pull",
         "strength": 1
-      }
+      },
+      "animation_id": "throw_down",
+      "v3_fantasy": "Gravity-crush bounce",
+      "v3_vfx_shape": "orbit_node_collapse",
+      "v3_particle_library": "constellation_orbit_nodes"
     },
     {
       "move_id": "aura_charge",
@@ -1750,18 +1859,23 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 11,
       "aura_scaling": {},
       "feedback": {
-        "tier": "light",
-        "hitstop_frames": 3,
-        "camera_event": "shake_light",
-        "vfx_event": "gravity_spark",
-        "sfx_event": "gravity_hit_light",
-        "screen_flash": false
+        "tier": "aura",
+        "hitstop_frames": 11,
+        "camera_event": "shake_aura",
+        "vfx_event": "orion_vell_aura_charge_orbit_node_collapse",
+        "sfx_event": "orion-vell.aura_charge.sfx",
+        "screen_flash": true,
+        "particle_profile": "orion-vell.aura_charge.constellation_orbit_nodes"
       },
       "training_display_name": "Aura Charge",
-      "combat_tag": "gravity_pull"
+      "combat_tag": "gravity_pull",
+      "animation_id": "aura_charge",
+      "v3_fantasy": "Constellation nodes brighten/orbit and local distortion builds",
+      "v3_vfx_shape": "orbit_node_collapse",
+      "v3_particle_library": "constellation_orbit_nodes"
     },
     {
       "move_id": "aura_burst",
@@ -1787,7 +1901,7 @@
       "knockback_growth": 1.1,
       "shield_damage": 3,
       "shield_stun_frames": 6,
-      "hitstop_frames": 3,
+      "hitstop_frames": 14,
       "aura_scaling": {
         "level_0": {
           "damage_mult": 1
@@ -1821,11 +1935,12 @@
       },
       "feedback": {
         "tier": "super",
-        "hitstop_frames": 15,
-        "camera_event": "pulse_super",
-        "vfx_event": "gravity_burst",
-        "sfx_event": "gravity_burst_sfx",
-        "screen_flash": true
+        "hitstop_frames": 14,
+        "camera_event": "shake_super",
+        "vfx_event": "orion_vell_aura_burst_orbit_node_collapse",
+        "sfx_event": "orion-vell.aura_burst.sfx",
+        "screen_flash": true,
+        "particle_profile": "orion-vell.aura_burst.constellation_orbit_nodes"
       },
       "training_display_name": "Orbit Collapse",
       "combat_tag": "gravity_pull",
@@ -1834,7 +1949,11 @@
         "effect": "gravity_pull",
         "strength": 2.5
       },
-      "meter_cost": 100
+      "meter_cost": 100,
+      "animation_id": "aura_burst",
+      "v3_fantasy": "Orbit-collapse burst bending launch/space",
+      "v3_vfx_shape": "orbit_node_collapse",
+      "v3_particle_library": "constellation_orbit_nodes"
     }
   ],
   "game001_identity": {

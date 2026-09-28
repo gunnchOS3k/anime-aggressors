@@ -20,6 +20,7 @@ func _ready() -> void:
 	_refresh_touch_label()
 	_refresh_access_labels()
 	_ensure_feedback_button()
+	_ensure_build_info_button()
 
 func _ensure_accessibility_rows() -> void:
 	var vbox := get_node_or_null("VBox") as VBoxContainer
@@ -174,3 +175,16 @@ func _on_feedback_pressed() -> void:
 	# Canonical accepted-main hub — no combat interrupt (Settings only). Public component marker only.
 	var url := "https://github.com/gunnchOS3k/gunnchos-research-portal/blob/main/FEEDBACK.md?component=Anime%20Aggressors"
 	OS.shell_open(url)
+
+
+func _ensure_build_info_button() -> void:
+	var vbox := get_node_or_null("VBox") as VBoxContainer
+	if vbox == null:
+		return
+	if vbox.get_node_or_null("BuildInfoBtn") != null:
+		return
+	var btn := Button.new()
+	btn.name = "BuildInfoBtn"
+	btn.text = "Build Info"
+	btn.pressed.connect(func() -> void: SceneRouter.go_build_info("settings"))
+	vbox.add_child(btn)

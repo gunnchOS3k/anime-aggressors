@@ -39,6 +39,8 @@ func spawn_from_move(move: Dictionary, aura_amount: float) -> Node:
 	else:
 		owner_fighter.add_child(proj)
 	var facing: int = owner_fighter.facing if "facing" in owner_fighter else 1
+	if "attack_direction" in owner_fighter and int(owner_fighter.attack_direction) != 0:
+		facing = int(owner_fighter.attack_direction)
 	var offset := Vector2(float(proj_cfg.get("offset_x", 40)) * facing, float(proj_cfg.get("offset_y", -12)))
 	proj.global_position = owner_fighter.global_position + offset
 	var element: String = move.get("element_effect", {}).get("type", "")

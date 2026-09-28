@@ -21,8 +21,10 @@ var _frame_overlay: Label
 const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
 const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
 const MOVE_LIST_PANEL := preload("res://scripts/ui/move_list_panel.gd")
+const MOVE_BROWSER := preload("res://scripts/training/move_browser.gd")
 
 var _move_list_panel: Control
+var _move_browser: Control
 var _pin_reminder: Label
 var _move_list_btn: Button
 var _pause_panel: PanelContainer
@@ -51,6 +53,7 @@ func _ready() -> void:
 	_update_help()
 	_ensure_frame_overlay()
 	_ensure_move_list_access()
+	_ensure_move_browser()
 
 
 func _ensure_move_list_access() -> void:
@@ -70,6 +73,41 @@ func _ensure_move_list_access() -> void:
 	_pin_reminder.process_mode = Node.PROCESS_MODE_ALWAYS
 	if hud:
 		hud.add_child(_pin_reminder)
+
+
+func _ensure_move_browser() -> void:
+	if _move_browser != null:
+		return
+	_move_browser = MOVE_BROWSER.new()
+	_move_browser.name = "TrainingMoveBrowser"
+	_move_browser.process_mode = Node.PROCESS_MODE_ALWAYS
+	if hud:
+		hud.add_child(_move_browser)
+	else:
+		add_child(_move_browser)
+	if _move_browser.has_signal("play_requested"):
+		_move_browser.play_requested.connect(_on_browser_play)
+	if fighter1 != null and "fighter_id" in fighter1 and _move_browser.has_method("bind_fighter"):
+		_move_browser.bind_fighter(str(fighter1.fighter_id))
+
+
+func _on_browser_play(fid: String, move_id: String, aura_amount: float, facing: int) -> void:
+	if fighter1 == null:
+		return
+	if fighter1.has_method("training_play_move"):
+		var played: Dictionary = fighter1.training_play_move(move_id, aura_amount, facing)
+		if _move_browser != null and _move_browser.has_method("report_result"):
+			var move: Dictionary = fighter1._current_move if "_current_move" in fighter1 else {}
+			var fb: Dictionary = move.get("feedback", {})
+			_move_browser.report_result({
+				"result": played.get("active", move_id),
+				"hitstop_frames": fb.get("hitstop_frames", move.get("hitstop_frames", 0)),
+				"damage": move.get("damage", 0),
+				"base_knockback": move.get("base_knockback", 0),
+				"vfx_event": fb.get("vfx_event", ""),
+				"sfx_event": fb.get("sfx_event", ""),
+				"particle_profile": fb.get("particle_profile", ""),
+			})
 
 
 func _open_training_move_list() -> void:
