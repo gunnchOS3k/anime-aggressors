@@ -19,7 +19,15 @@ import { getStageLayout } from "./stageLayouts.js";
 import { getFighterProfile, applyCreatedFighterToPlayer } from "./fighterCreation.js";
 import { createDefaultAuraState } from "./aura/auraTypes.js";
 import { defaultMovementState } from "./movement/movementTypes.js";
-import { DEFAULT_RULESET } from "./rulesets.js";
+import { DEFAULT_RULESET, type TeamMode } from "./rulesets.js";
+
+function teamIdForSeat(mode: TeamMode, seat: number, _playerCount: number): number {
+  if (mode === "2v2") return seat < 2 ? 0 : 1;
+  if (mode === "3v3") return seat < 3 ? 0 : 1;
+  if (mode === "4v4") return seat < 4 ? 0 : 1;
+  if (mode === "2v2v2v2") return Math.floor(seat / 2) % 4;
+  return seat; // FFA — unique team ids
+}
 
 export function createInitialGameState(config: GameConfig): GameState {
   const ruleset = config.ruleset ?? DEFAULT_RULESET;
@@ -55,7 +63,7 @@ export function createInitialGameState(config: GameConfig): GameState {
       staminaHp: ruleset.matchType === "stamina" ? maxStamina : 0,
       maxStaminaHp: maxStamina,
       score: 0,
-      teamId: ruleset.teamMode === "2v2" ? (i < 2 ? 0 : 1) : i,
+      teamId: teamIdForSeat(ruleset.teamMode, i, config.playerCount),
       actionState: "idle",
       actionFrame: 0,
       hitstunFrames: 0,

@@ -11,6 +11,13 @@ import {
 } from "./constants.js";
 import { getStageLayout } from "./stageLayouts.js";
 
+
+function partySpawnPoints(): { x: number; y: number }[] {
+  // Explicit 8-seat layout for large-party stages (do not invent seats on tiny stages).
+  const xs = [1 / 9, 2 / 9, 3 / 9, 4 / 9, 5 / 9, 6 / 9, 7 / 9, 8 / 9];
+  return xs.map((t) => ({ x: STAGE_WIDTH * t, y: FLOOR_Y }));
+}
+
 export type StageDef = {
   id: string;
   name: string;
@@ -102,11 +109,21 @@ const NEON_ROOFTOPS: StageDef = {
   spawnPoints: [...SKYLINE_ARENA.spawnPoints],
 };
 
+const PARTY_PLAZA: StageDef = {
+  id: "party-plaza",
+  name: "Party Plaza",
+  layoutId: "skyline-arena",
+  vibe: "Validated 8-player party stage with explicit spawn lanes",
+  bounds: { ...SKYLINE_ARENA.bounds },
+  spawnPoints: partySpawnPoints(),
+};
+
 const STAGES: Record<string, StageDef> = {
   "skyline-arena": SKYLINE_ARENA,
   "training-grid": TRAINING_GRID,
   "neon-rooftops": NEON_ROOFTOPS,
   "impact-platform": IMPACT_PLATFORM,
+  "party-plaza": PARTY_PLAZA,
   ...Object.fromEntries(FLAGLINE_STAGES.map((s) => [s.id, s])),
 };
 

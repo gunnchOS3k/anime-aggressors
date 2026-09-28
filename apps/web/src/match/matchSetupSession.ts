@@ -10,7 +10,7 @@ import { setCustomFlow, setMatchFighters, setMatchRuleset } from "./matchSession
 
 const STORAGE_KEY = "anime-aggressors.activeMatchSetup";
 
-export type MatchSetupMode = "stock" | "time" | "stamina" | "flaglineClash";
+export type MatchSetupMode = "stock" | "time" | "stamina" | "flaglineClash" | "party";
 
 export type MatchSetupSession = {
   rulesetId?: string;
@@ -19,7 +19,7 @@ export type MatchSetupSession = {
   stageId?: string;
   stageName?: string;
 
-  playerCount: 2 | 3 | 4;
+  playerCount: 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
   fighters: {
     playerId: number;
@@ -39,24 +39,38 @@ export type MatchSetupSession = {
   mode: MatchSetupMode;
 };
 
+function isPartySetup(ruleset: GameRuleset): boolean {
+  return ruleset.matchType === "party" || ruleset.authorityMode === "HOST_AUTHORITATIVE_PARTY";
+}
+
+function buildSeatSlots(playerCount: number): MatchSetupSession["fighters"] {
+  const n = Math.min(8, Math.max(2, playerCount));
+  return Array.from({ length: n }, (_, playerId) => {
+    const fighter = getDefaultCreatedFighter(playerId % 4);
+    return { playerId, fighterId: fighter.id, fighter };
+  });
+}
+
+function buildInputProfiles(playerCount: number): MatchSetupSession["inputProfiles"] {
+  const n = Math.min(8, Math.max(2, playerCount));
+  return Array.from({ length: n }, (_, playerId) => {
+    const slot = ((playerId % 4) + 1) as 1 | 2 | 3 | 4;
+    const profile = getProfileForSlot(slot);
+    return { playerId, profileId: profile.id, profileName: profile.name };
+  });
+}
+
 export function createDefaultMatchSetup(): MatchSetupSession {
   const ruleset = getActiveRuleset();
-  const p1 = getDefaultCreatedFighter(0);
-  const p2 = getDefaultCreatedFighter(1);
+  const playerCount = isPartySetup(ruleset) ? ruleset.playerCount : Math.min(ruleset.playerCount, 2);
   return {
     rulesetId: ruleset.id,
     ruleset: { ...ruleset },
     stageId: ruleset.stageId,
     stageName: getStage(ruleset.stageId).name,
-    playerCount: ruleset.playerCount,
-    fighters: [
-      { playerId: 0, fighterId: p1.id, fighter: p1 },
-      { playerId: 1, fighterId: p2.id, fighter: p2 },
-    ],
-    inputProfiles: [
-      { playerId: 0, profileId: getProfileForSlot(1).id, profileName: getProfileForSlot(1).name },
-      { playerId: 1, profileId: getProfileForSlot(2).id, profileName: getProfileForSlot(2).name },
-    ],
+    playerCount: playerCount as MatchSetupSession["playerCount"],
+    fighters: buildSeatSlots(playerCount),
+    inputProfiles: buildInputProfiles(playerCount),
     mode: ruleset.matchType,
   };
 }
@@ -84,9 +98,11 @@ export function clearMatchSetup(): void {
 
 export function isMatchSetupReady(setup: MatchSetupSession): boolean {
   if (!setup.ruleset || !setup.stageId) return false;
-  const p1 = setup.fighters.find((f) => f.playerId === 0)?.fighter;
-  const p2 = setup.fighters.find((f) => f.playerId === 1)?.fighter;
-  return !!(p1 && p2);
+  const needed = isPartySetup(setup.ruleset) ? setup.playerCount : 2;
+  for (let i = 0; i < needed; i++) {
+    if (!setup.fighters.find((f) => f.playerId === i)?.fighter) return false;
+  }
+  return true;
 }
 
 export function buildGameConfigFromSetup(setup: MatchSetupSession): GameConfig {
@@ -118,7 +134,26 @@ export function applySetupToMatchSession(setup: MatchSetupSession): void {
   setCustomFlow(false);
   setMatchRuleset({ ...setup.ruleset, stageId: setup.stageId ?? setup.ruleset.stageId });
   setActiveRulesetId(setup.ruleset.id);
+  // Legacy web battle session is still 2-slot; Party Mode uses PartyLink Arena runtime.
+  // For party setups we still seed P1/P2 for any legacy bridge, then rely on PartyLink for 3–8.
   const p1 = setup.fighters.find((f) => f.playerId === 0)?.fighter;
   const p2 = setup.fighters.find((f) => f.playerId === 1)?.fighter;
   if (p1 && p2) setMatchFighters(p1, p2);
+}
+
+/** Expand fighter seats when Party Mode playerCount changes (2–8). */
+export function resizeMatchSetupSeats(
+  setup: MatchSetupSession,
+  playerCount: 2 | 3 | 4 | 5 | 6 | 7 | 8,
+): MatchSetupSession {
+  const fighters = buildSeatSlots(playerCount).map((slot) => {
+    const existing = setup.fighters.find((f) => f.playerId === slot.playerId);
+    return existing?.fighter ? { ...slot, fighter: existing.fighter, fighterId: existing.fighterId } : slot;
+  });
+  return {
+    ...setup,
+    playerCount,
+    fighters,
+    inputProfiles: buildInputProfiles(playerCount),
+  };
 }
