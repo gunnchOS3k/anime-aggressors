@@ -8,6 +8,7 @@ python3 tools/authored_animation/run_pipeline_proof.py
 python3 tools/authored_animation/export_action.py --fighter rook-ironside --action heavy
 python3 tools/authored_animation/validate_deform_skeleton.py
 python3 tools/authored_animation/validate_export_import.py
+python3 tools/authored_animation/audit_workflow_referenced_paths.py
 python3 tools/authored_animation/validate_provenance.py
 python3 tools/authored_animation/validate_production_infra.py
 python3 tools/authored_animation/audit_mesh_deform.py

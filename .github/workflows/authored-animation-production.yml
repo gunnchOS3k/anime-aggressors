@@ -4,6 +4,7 @@ on:
   pull_request:
   push:
     branches:
+      - main
       - vxp/vxp-3-combat-impact-nix-rook
   workflow_dispatch:
 
@@ -23,14 +24,19 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - name: Workflow referenced paths exist
+        run: python3 tools/authored_animation/audit_workflow_referenced_paths.py
       - name: Production infrastructure gates
         run: |
+          # Post-#116: do not call tools/generated_production_art/* (EXPERIMENT_ONLY,
+          # intentionally excluded by PR106 salvage). Body/geometry coverage maps to
+          # authored deform-skeleton + mesh-deform audits on current main.
           python3 tools/authored_animation/validate_provenance.py
           python3 tools/authored_animation/validate_production_infra.py
           python3 tools/authored_animation/pixel_spectacle_perf.py
           python3 tools/authored_animation/submit_check.py --fighter rook-ironside --action heavy || true
-          python3 tools/generated_production_art/tests/test_body_v2.py
-          PYTHONPATH=tools python3 -c "from generated_production_art.validate_geometry_v2 import validate; validate()"
+          python3 tools/authored_animation/validate_deform_skeleton.py
+          python3 tools/authored_animation/audit_mesh_deform.py
       - name: Truthful LFS / human-gate check
         run: |
           python3 - <<'PY'

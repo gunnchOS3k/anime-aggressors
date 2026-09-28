@@ -27,3 +27,8 @@ Source head: `8cd3e1359f11644787c79de4a6f03e17dbf1ec56`. Accepted main: `6cd1b31
 | `prefix tools/generated_* (~152)` | EXPERIMENT_ONLY | V5–V9 generators | PR #106 | excluded | none |
 
 Unlisted #106 files follow the prefix rules above. No unexplained copy.
+
+## Post-#116 authored CI note
+
+`authored-animation-production.yml` must not call `tools/generated_production_art/*`.
+See `docs/animation/POST116_AUTHORED_CI_MIGRATION.md`.
