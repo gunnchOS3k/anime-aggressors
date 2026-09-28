@@ -80,6 +80,21 @@ async function navigate(mode: AppRouteMode): Promise<void> {
     } else if (mode === "custom-game") {
       const { mountCustomGameScreen } = await import("./screens/CustomGameScreen.js");
       mountCustomGameScreen(appRoot!);
+    } else if (mode === "party-mode") {
+      const { mountPartyModeScreen } = await import("./screens/PartyModeScreen.js");
+      mountPartyModeScreen(appRoot!);
+    } else if (mode === "party-lobby") {
+      const { mountPartyLobbyScreen } = await import("./screens/PartyLobbyScreen.js");
+      mountPartyLobbyScreen(appRoot!);
+    } else if (mode === "party-arena") {
+      const { mountPartyArenaScreen } = await import("./screens/PartyLobbyScreen.js");
+      mountPartyArenaScreen(appRoot!);
+    } else if (mode === "party-results") {
+      const { mountPartyResultsScreen } = await import("./screens/PartyLobbyScreen.js");
+      mountPartyResultsScreen(appRoot!);
+    } else if (mode === "party-controller") {
+      const { mountPartyControllerScreen } = await import("./screens/PartyLobbyScreen.js");
+      mountPartyControllerScreen(appRoot!);
     } else if (mode === "rulesets") {
       const { mountRulesetSelectScreen } = await import("./screens/RulesetSelectScreen.js");
       mountRulesetSelectScreen(appRoot!);

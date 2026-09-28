@@ -238,6 +238,17 @@ export class PartyRoomSession {
     return { ok: true };
   }
 
+  setTeam(
+    participantId: string,
+    token: string,
+    team: PlayerSeat["team"],
+  ): { ok: boolean; reason?: string } {
+    const p = this.room.participants.find((x) => x.id === participantId && x.token === token);
+    if (!p || p.seatIndex == null) return { ok: false, reason: "not_seated_player" };
+    this.room.seats[p.seatIndex]!.team = team;
+    return { ok: true };
+  }
+
   setReady(participantId: string, token: string, ready: boolean): { ok: boolean; reason?: string } {
     const p = this.room.participants.find((x) => x.id === participantId && x.token === token);
     if (!p || p.seatIndex == null) return { ok: false, reason: "not_seated_player" };

@@ -10,6 +10,11 @@ export const APP_ROUTES = {
 
   createFighter: "#/create-fighter",
   customGame: "#/custom-game",
+  partyMode: "#/party-mode",
+  partyLobby: "#/party-lobby",
+  partyArena: "#/party-arena",
+  partyResults: "#/party-results",
+  partyController: "#/party-controller",
   rulesets: "#/rulesets",
   stageSelect: "#/stage-select",
   fighterSelect: "#/fighter-select",
@@ -54,6 +59,11 @@ export type AppRouteMode =
   | "battle"
   | "create-fighter"
   | "custom-game"
+  | "party-mode"
+  | "party-lobby"
+  | "party-arena"
+  | "party-results"
+  | "party-controller"
   | "rulesets"
   | "stage-select"
   | "fighter-select"
@@ -94,6 +104,11 @@ const HASH_TO_MODE: Record<string, AppRouteMode> = {
   [APP_ROUTES.battle]: "battle",
   [APP_ROUTES.createFighter]: "create-fighter",
   [APP_ROUTES.customGame]: "custom-game",
+  [APP_ROUTES.partyMode]: "party-mode",
+  [APP_ROUTES.partyLobby]: "party-lobby",
+  [APP_ROUTES.partyArena]: "party-arena",
+  [APP_ROUTES.partyResults]: "party-results",
+  [APP_ROUTES.partyController]: "party-controller",
   [APP_ROUTES.rulesets]: "rulesets",
   [APP_ROUTES.stageSelect]: "stage-select",
   [APP_ROUTES.fighterSelect]: "fighter-select",
@@ -137,6 +152,11 @@ export const MODE_TO_ROUTE: Record<AppRouteMode, string> = {
   battle: APP_ROUTES.battle,
   "create-fighter": APP_ROUTES.createFighter,
   "custom-game": APP_ROUTES.customGame,
+  "party-mode": APP_ROUTES.partyMode,
+  "party-lobby": APP_ROUTES.partyLobby,
+  "party-arena": APP_ROUTES.partyArena,
+  "party-results": APP_ROUTES.partyResults,
+  "party-controller": APP_ROUTES.partyController,
   rulesets: APP_ROUTES.rulesets,
   "stage-select": APP_ROUTES.stageSelect,
   "fighter-select": APP_ROUTES.fighterSelect,

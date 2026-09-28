@@ -24,6 +24,13 @@ export const MAIN_MENU_PRIMARY: MainMenuItem[] = [
 /** Discoverable demo modes — not labs. */
 export const MAIN_MENU_SECONDARY: MainMenuItem[] = [
   {
+    id: "btn-party-mode",
+    label: "Party Mode",
+    route: APP_ROUTES.partyMode,
+    mode: "party-mode",
+    tier: "secondary",
+  },
+  {
     id: "btn-fighter-select",
     label: "Fighter Select",
     route: APP_ROUTES.fighterSelect,
