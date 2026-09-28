@@ -30,7 +30,12 @@ func _run() -> void:
 	if resolver:
 		for fighter_id in FIGHTERS:
 			var model_info: Dictionary = resolver.resolve_model_path(fighter_id, {"id": fighter_id})
-			if str(model_info.get("CURRENT_MODEL_SOURCE", "")) == "PROCEDURAL_PRODUCTION_PROXY":
+			var model_source := str(model_info.get("CURRENT_MODEL_SOURCE", ""))
+			var model_path := str(model_info.get("path", ""))
+			# V3 promotion keeps staging HUMAN_CANDIDATE GLBs on main; those are loaded
+			# models. Do not require PROCEDURAL_PRODUCTION_PROXY exclusively, and do not
+			# treat candidate presence as FINAL_CHARACTER_ART_PASS.
+			if not model_path.is_empty() and model_source in ["PROCEDURAL_PRODUCTION_PROXY", "HUMAN_CANDIDATE"]:
 				models_loaded += 1
 			var anim_info: Dictionary = resolver.resolve_animation_root(fighter_id)
 			if str(anim_info.get("CURRENT_ANIMATION_SOURCE", "")) == "PROCEDURAL_RUNTIME_ANIMATION":
@@ -72,9 +77,10 @@ func _run() -> void:
 		"ROSTER_ARTLAB_REAL_PROCEDURAL_MODELS": visible_procedural,
 		"ANIMATION_LAB_USES_CANONICAL_RUNTIME_CONTROLLER": ok,
 		"PROCEDURAL_CHARACTER_RUNTIME_PASS": visible_procedural == 7,
-		"PROCEDURAL_RUNTIME_ANIMATION_PASS": visible_procedural == 7,
+		"PROCEDURAL_RUNTIME_ANIMATION_PASS": anim_roots == 7,
 		"FINAL_CHARACTER_ART_PASS": false,
 		"FINAL_HUMAN_AUTHORED_ANIMATION_PASS": false,
+		"HUMAN_CANDIDATE_MODELS_COUNT_AS_LOADED_NOT_FINAL": true,
 		"observed_truth": observed_truth,
 	}
 	_write_json("../artifacts/engineering_wave014/PROCEDURAL_SMOKE_RESULT.json", result)
