@@ -67,12 +67,16 @@ func _run() -> void:
 			fighter_ok = false
 			fighter_reasons.append("model_not_loaded")
 		if model != null:
-			if model.get_current_model_source() != "PROCEDURAL_PRODUCTION_PROXY":
+			var model_source := str(model.get_current_model_source())
+			if model_source not in ["PROCEDURAL_PRODUCTION_PROXY", "HUMAN_CANDIDATE"]:
 				fighter_ok = false
-				fighter_reasons.append("model_source=%s" % model.get_current_model_source())
-			if not model.is_procedural_proxy_visible():
+				fighter_reasons.append("model_source=%s" % model_source)
+			if model_source == "PROCEDURAL_PRODUCTION_PROXY" and not model.is_procedural_proxy_visible():
 				fighter_ok = false
 				fighter_reasons.append("procedural_proxy_not_visible")
+			if model_source == "HUMAN_CANDIDATE" and not model.is_model_loaded():
+				fighter_ok = false
+				fighter_reasons.append("human_candidate_not_loaded")
 			if model.is_stylized_visible():
 				fighter_ok = false
 				fighter_reasons.append("stylized_still_visible")
