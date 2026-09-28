@@ -1,0 +1,96 @@
+{
+  "schema": "aa_clash_eligibility_v1",
+  "note": "Light/ordinary moves cannot accidentally clash. Schema only — CombatMath unchanged.",
+  "default_ineligible_types": [
+    "jab",
+    "light",
+    "tilt",
+    "aerial",
+    "dash_attack",
+    "melee"
+  ],
+  "default_eligible_types": [
+    "aura",
+    "super",
+    "beam",
+    "aura_burst",
+    "burst",
+    "signature"
+  ],
+  "moves": {
+    "aura_burst": {
+      "eligible": true,
+      "class": "aura",
+      "power": 80,
+      "meter_commitment": 100,
+      "animation_start": "clash_start",
+      "animation_lock": "clash_lock",
+      "animation_push": "clash_push",
+      "animation_win": "clash_winning",
+      "animation_lose": "clash_losing",
+      "animation_neutral": "clash_break",
+      "vfx_family": "fighter_identity",
+      "audio_family": "clash_core"
+    },
+    "signature_lane_burst": {
+      "eligible": true,
+      "class": "aura",
+      "power": 80,
+      "meter_commitment": 100,
+      "animation_start": "clash_start",
+      "animation_lock": "clash_lock",
+      "animation_push": "clash_push",
+      "animation_win": "clash_winning",
+      "animation_lose": "clash_losing",
+      "animation_neutral": "clash_break",
+      "vfx_family": "fighter_identity",
+      "audio_family": "clash_core"
+    },
+    "signature_lane_finisher": {
+      "eligible": true,
+      "class": "super",
+      "power": 100,
+      "meter_commitment": 100,
+      "animation_start": "clash_start",
+      "animation_lock": "clash_lock",
+      "animation_push": "clash_push",
+      "animation_win": "clash_winning",
+      "animation_lose": "clash_losing",
+      "animation_neutral": "clash_break",
+      "vfx_family": "fighter_identity",
+      "audio_family": "clash_core"
+    }
+  },
+  "presets": [
+    {
+      "id": "rook_orion",
+      "a": "rook-ironside",
+      "b": "orion-vell",
+      "identities": ["shock-pressure barrier / dense dust", "gravity compression lens / orbital distortion"]
+    },
+    {
+      "id": "juno_kaia",
+      "a": "juno-spark",
+      "b": "kaia-windrow",
+      "identities": ["forked electricity / rapid pulses", "spiral wind vortex / ribbon turbulence"]
+    },
+    {
+      "id": "ember_nix",
+      "a": "ember-vale",
+      "b": "nix-calder",
+      "identities": ["spiraling flame pressure / heat distortion", "frost pressure plane / crystalline crack"]
+    },
+    {
+      "id": "vesper_ember",
+      "a": "vesper-nyx",
+      "b": "ember-vale",
+      "identities": ["void fold / negative-space fracture", "spiraling flame pressure / heat distortion"]
+    },
+    {
+      "id": "nix_rook",
+      "a": "nix-calder",
+      "b": "rook-ironside",
+      "identities": ["frost pressure plane / crystalline crack", "shock-pressure barrier / dense dust"]
+    }
+  ]
+}

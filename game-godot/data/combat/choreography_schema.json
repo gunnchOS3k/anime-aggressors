@@ -1,0 +1,32 @@
+{
+  "schema_id": "anime_aggressors.move_choreography.v1",
+  "schema_version": 1,
+  "status": "PHASE_1_HOOKS",
+  "description": "Optional move-level choreography metadata. Phase 1 consumes contact + impact fields for Nix/Rook. Later phases author full roster clips against this schema.",
+  "fields": {
+    "impact_profile": {
+      "type": "enum",
+      "values": ["light", "medium", "heavy", "aura", "super", "ko"]
+    },
+    "choreography": {
+      "contact_socket": "string",
+      "contact_frame": "int",
+      "contact_pose_clip": "string",
+      "victim_reaction_family": "string",
+      "charged_layer": "none|hold|release",
+      "cinematic_hook": "string"
+    },
+    "anime_timing": {
+      "anticipation_holds": "int",
+      "impact_accent_frames": "int",
+      "recovery_settle": "int",
+      "pose_to_pose": "bool"
+    }
+  },
+  "hooks": {
+    "charged_animation_layer": "game-godot/scripts/visual/charged_animation_layer.gd",
+    "combat_cinematic_director": "game-godot/scripts/combat/combat_cinematic_director.gd",
+    "animation_pose_contract": "game-godot/scripts/visual/animation_pose_contract.gd"
+  },
+  "physics_boundary": "No root motion. Contact frames must sit inside the move hitbox window. Competitive distances stay in CombatMath."
+}
