@@ -48,12 +48,13 @@
   "forward_port_pr_stats": {
     "shortstat": "288 files changed, 32049 insertions(+), 82 deletions(-)",
     "files_changed": 288,
-    "additions": 32049,
+    "additions": 32056,
     "deletions": 82,
     "binary_files": 14,
     "branch": "audit/pr106-salvage-forward-port",
     "tip_sha": "39870bdd012ab64bb8e6abe4dcdfce7d3cca530f",
-    "base_sha": "1dcbf7af4889ff52203f41cae2be0e0b93d011ca"
+    "base_sha": "1dcbf7af4889ff52203f41cae2be0e0b93d011ca",
+    "shortstat_pre_final": "288 files changed, 32056 insertions(+), 82 deletions(-)"
   },
   "evaluated_at": "2026-09-28T21:22:19.071911+00:00",
   "validation": {
@@ -62,5 +63,12 @@
     "validate_export_import": true,
     "validate_production_infra": true,
     "notes": "infra warns BLENDER_SOURCE_STORAGE_SETUP_REQUIRED / missing gitattributes LFS; not a fail"
+  },
+  "local_regression": {
+    "partylink_tests": "16/16 PASS",
+    "apps_web_build": "PASS",
+    "authored_validators": "PASS (infra warns LFS setup)",
+    "waves_gate1_combat161_etc": "NOT_RUN_IN_THIS_PASS \u2014 deferred to CI on draft PR / owner",
+    "human_gates_flipped": false
   }
 }
