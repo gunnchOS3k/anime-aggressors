@@ -28,7 +28,10 @@ const SCENES := {
 	"settings": "res://scenes/menus/SettingsScene.tscn",
 	"controls": "res://scenes/menus/ControlsScene.tscn",
 	"labs": "res://scenes/menus/LabsScene.tscn",
+	"build_info": "res://scenes/menus/BuildInfoScene.tscn",
 	"roster_art_review": "res://scenes/labs/FullRosterArtReviewScene.tscn",
+	"launch_feedback_review": "res://scenes/labs/LaunchFeedbackReviewScene.tscn",
+	"selection_review": "res://scenes/labs/SelectionReviewScene.tscn",
 	"mobile_playtest": "res://scenes/menus/MobilePlaytestScene.tscn",
 	"credits": "res://scenes/menus/CreditsScene.tscn",
 	"achievements": "res://scenes/menus/AchievementsScene.tscn",
@@ -75,3 +78,18 @@ func go_mobile_playtest() -> void:
 
 func go_roster_art_review() -> void:
 	go("roster_art_review")
+
+
+func go_launch_feedback_review() -> void:
+	go("launch_feedback_review")
+
+
+func go_selection_review() -> void:
+	go("selection_review")
+
+
+func go_build_info(return_scene: String = "settings") -> void:
+	var identity := get_node_or_null("/root/BuildIdentity")
+	if identity != null:
+		identity.return_scene = return_scene
+	go("build_info")

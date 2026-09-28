@@ -38,8 +38,7 @@ static func throw_move_id(direction: String) -> String:
 static func resolve_throw(attacker: Node, target: Node, manifest: Dictionary, direction: String) -> Dictionary:
 	var move_id: String = throw_move_id(direction)
 	var throw_move: Dictionary = _DataLoader.find_move(manifest, move_id)
-	if throw_move.is_empty():
-		throw_move = _DataLoader.find_move(manifest, "throw_forward")
+	# V3: never collapse four authored throws into one generic path.
 	var synthesized := throw_move.is_empty()
 	if synthesized:
 		throw_move = {

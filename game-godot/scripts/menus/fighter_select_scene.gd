@@ -12,6 +12,8 @@ const Vxp2A11yScript = preload("res://scripts/vxp2/vxp2_accessibility_chrome.gd"
 const Vxp2GlyphScript = preload("res://scripts/vxp2/vxp2_glyph_strip.gd")
 const _ArtOverlay := preload("res://scripts/visual/art_source_review_overlay.gd")
 const _AssetResolver := preload("res://scripts/visual/fighter_asset_resolver.gd")
+const _Announcer := preload("res://scripts/audio/fighter_announcer.gd")
+const _Callout := preload("res://scripts/ui/lockin_name_callout.gd")
 
 var _roster: Array = []
 var _cursor: int = 0
@@ -40,6 +42,7 @@ var _motion_label: Label
 var _last_accel: Vector3 = Vector3.ZERO
 var _shake_cooldown_ms: int = 0
 var _art_overlay: CanvasLayer
+var _lockin_callout: CanvasLayer
 const SHAKE_THRESHOLD := 2.35
 
 @onready var grid: GridContainer = %FighterGrid
@@ -75,6 +78,7 @@ func _ready() -> void:
 	Vxp2A11yScript.apply(self)
 	_update_start_match_cta()
 	_ensure_art_review_overlay()
+	_ensure_lockin_callout()
 
 
 func _layout_action_bar_safe() -> void:
@@ -265,11 +269,40 @@ func _build_grid() -> void:
 			arch_l.text = str(profile.select_archetype)
 		if sil and sil.has_method("configure"):
 			sil.configure(id, profile.primary_color, profile.accent_color)
+		_apply_tile_identity_chrome(tile, id, profile)
 		tile.pressed.connect(_on_tile_pressed.bind(i))
 		tile.focus_entered.connect(_on_tile_focused.bind(i))
 		tile.mouse_entered.connect(_on_tile_focused.bind(i))
 		grid.add_child(tile)
 		_tiles.append(tile)
+
+
+func _apply_tile_identity_chrome(tile: Button, fighter_id: String, profile) -> void:
+	var identity: Dictionary = {}
+	var contract := load("res://scripts/visual/elemental_material_contract.gd")
+	if contract != null and contract.has_method("identity_colors"):
+		identity = contract.identity_colors(fighter_id)
+	var primary: Color = identity.get("tile_primary", profile.primary_color)
+	var accent: Color = identity.get("tile_accent", profile.accent_color)
+	var plate := tile.get_node_or_null("IdentityPlate") as ColorRect
+	if plate == null:
+		plate = ColorRect.new()
+		plate.name = "IdentityPlate"
+		plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		plate.set_anchors_preset(Control.PRESET_FULL_RECT)
+		tile.add_child(plate)
+		tile.move_child(plate, 0)
+	plate.color = Color(primary.r, primary.g, primary.b, 0.28)
+	var rule := tile.get_node_or_null("IdentityAccent") as ColorRect
+	if rule == null:
+		rule = ColorRect.new()
+		rule.name = "IdentityAccent"
+		rule.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		rule.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+		rule.offset_top = -6.0
+		tile.add_child(rule)
+	rule.color = Color(accent.r, accent.g, accent.b, 0.92)
+	tile.add_theme_color_override("font_color", accent.lerp(Color.WHITE, 0.15))
 
 
 func _on_tile_focused(index: int) -> void:
@@ -594,6 +627,7 @@ func _on_next_player_pressed() -> void:
 		if GameState.p2_is_cpu:
 			# Auto-offer CPU lock on same confirm path clarity via label; still require Lock In CPU.
 			pass
+		_announce_lock(1, _roster[_p1_pick])
 		_refresh()
 		_update_preview(_cursor, true)
 		return
@@ -601,6 +635,7 @@ func _on_next_player_pressed() -> void:
 		_p2_pick = _cursor
 		_locked_p2 = true
 		_selecting_p2 = false
+		_announce_lock(2, _roster[_p2_pick])
 		_refresh()
 		_update_preview(_cursor, true)
 		if start_match_btn and can_start_match():
@@ -628,6 +663,21 @@ func get_showcase_flourish_counters() -> Dictionary:
 	if _flourish == null:
 		return {}
 	return _flourish.counters()
+
+
+func _ensure_lockin_callout() -> void:
+	if _lockin_callout != null:
+		return
+	_lockin_callout = _Callout.new()
+	_lockin_callout.name = "LockinNameCallout"
+	add_child(_lockin_callout)
+
+
+func _announce_lock(slot: int, fighter_id: String) -> Dictionary:
+	var announced := _Announcer.announce_lock(slot, fighter_id, self, false)
+	if _lockin_callout != null and _lockin_callout.has_method("play") and bool(announced.get("announced", false)):
+		_lockin_callout.play(fighter_id)
+	return announced
 
 
 func _ensure_art_review_overlay() -> void:

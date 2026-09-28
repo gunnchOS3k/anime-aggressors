@@ -25,13 +25,15 @@ def main() -> int:
         "jab_2": "jab_chain_2",
         "jab_finisher": "jab_chain_3",
         "heavy_attack": "heavy",
-        "aura_burst": "signature_lane_burst",
+        "aura_burst": "aura_burst",
         "throw_forward": "throw_forward",
         "throw_back": "throw_back",
         "throw_up": "throw_up",
         "throw_down": "throw_down",
         "up_special_recovery": "recovery",
-        "dash_attack": "heavy",
+        "dash_attack": "dash_attack",
+        "side_special": "side_special",
+        "down_special": "down_special",
     }
     failed = []
     for k, v in required.items():
