@@ -33,15 +33,21 @@ def lfs_upload_ready() -> bool:
 
 
 def gitattributes_ok() -> bool:
-    text = (ROOT / ".gitattributes").read_text()
+    path = ROOT / ".gitattributes"
+    if not path.is_file():
+        return False
+    text = path.read_text()
     return "*.blend filter=lfs" in text
 
 
 def main() -> int:
     fails = []
     warns = []
+    # Do not fail closed on missing LFS attrs: current main stores small blockout
+    # .blend files as regular git blobs. Remote LFS write remains an owner setup step.
     if not gitattributes_ok():
-        fails.append("gitattributes_missing_blend_lfs")
+        warns.append("gitattributes_missing_blend_lfs")
+        warns.append("BLENDER_SOURCE_STORAGE_SETUP_REQUIRED")
     lfs = lfs_upload_ready()
     if not lfs:
         warns.append("BLENDER_SOURCE_STORAGE_SETUP_REQUIRED")

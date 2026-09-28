@@ -1,0 +1,59 @@
+{
+  "PR106_TOTAL_CHANGED_FILES": 6579,
+  "PR106_UNIQUE_REUSABLE_FILES": 434,
+  "PR106_ALREADY_ON_MAIN_FILES": 134,
+  "PR106_OBSOLETE_OR_EVIDENCE_ONLY_FILES": 2876,
+  "PR106_CONFLICTING_FILES": 533,
+  "PR106_UNIQUE_BUT_STALE_FILES": 2602,
+  "PR106_SAFE_FORWARD_PORT_PATHS": 244,
+  "PR106_FORWARD_PORT_READY": true,
+  "primary_class_counts": {
+    "UNIQUE_BUT_STALE": 2602,
+    "ALREADY_ON_MAIN": 134,
+    "UNIQUE_AND_REUSABLE": 434,
+    "CONFLICTING": 533,
+    "OBSOLETE": 2772,
+    "GENERATED_REVIEW_ARTIFACT": 104
+  },
+  "main_sha": "1dcbf7af4889ff52203f41cae2be0e0b93d011ca",
+  "pr106_sha": "8cd3e1359f11644787c79de4a6f03e17dbf1ec56",
+  "pr115_state": "MERGED",
+  "pr115_merge": "1dcbf7af4889ff52203f41cae2be0e0b93d011ca",
+  "prior_salvage": {
+    "pr107": "MERGED \u2014 art-pipeline infrastructure salvage from #106",
+    "url": "https://github.com/gunnchOS3k/anime-aggressors/pull/107"
+  },
+  "blender_source_class": "BLENDER_SOURCE_AVAILABLE",
+  "blender_notes": "Seven small fighter .blend blockouts already identical on main and #106 (~230KB each). Full Wave A authored masters still require human authoring; historical BLENDER_SOURCE_STORAGE_SETUP_REQUIRED=true referred to LFS push for larger masters not present as final acting.",
+  "gates": {
+    "AUTHORED_ANIMATION_PIPELINE_FORWARD_PORT_PASS": true,
+    "AUTHORED_EXPORT_IMPORT_FORWARD_PORT_PASS": true,
+    "AUTHORED_PROVENANCE_FORWARD_PORT_PASS": true,
+    "AUTHORED_ROSTER_PRODUCTION_MANIFEST_PASS": true,
+    "AURA_CLASH_CURRENT_MAIN_COMPAT_PASS": false,
+    "CINEMATIC_COMBAT_DIRECTOR_CURRENT_MAIN_COMPAT_PASS": false,
+    "SELECTED_GENERATED_ART_FORWARD_PORT_PASS": true,
+    "HUMAN_ANIMATION_QUALITY_PASS": false,
+    "HUMAN_ORIGINALITY_PASS": false,
+    "FINAL_ART_PASS": false,
+    "MERGE_AUTHORIZED": false
+  },
+  "excluded_from_forward_port": [
+    "AuraClashDirector and related .gd wiring into hit_resolver",
+    "generated art v3\u2013v9 waves and review PNGs",
+    "historical Pixel/APK/evidence artifacts",
+    "wholesale game-godot script divergence vs #113/#114 main"
+  ],
+  "NEXT_PR106_ACTION": "OWNER_REVIEW_FORWARD_PORT_PR_THEN_CLOSE_106_AS_SUPERSEDED",
+  "forward_port_pr_stats": {
+    "shortstat": "243 files changed, 12225 insertions(+), 65 deletions(-)",
+    "files_changed": 243,
+    "additions": 12225,
+    "deletions": 65,
+    "binary_files": 7,
+    "branch": "audit/pr106-salvage-forward-port",
+    "tip_sha": "a5bae7f9f139566a32937c0458a301fd90f62e5b",
+    "base_sha": "1dcbf7af4889ff52203f41cae2be0e0b93d011ca"
+  },
+  "evaluated_at": "2026-09-28T21:22:19.071911+00:00"
+}

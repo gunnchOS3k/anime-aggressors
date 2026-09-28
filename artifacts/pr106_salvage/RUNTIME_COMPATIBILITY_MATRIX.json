@@ -1,0 +1,39 @@
+{
+  "evaluated_at": "2026-09-28T21:21:24.702380+00:00",
+  "main_sha": "1dcbf7af4889ff52203f41cae2be0e0b93d011ca",
+  "pr106_sha": "8cd3e1359f11644787c79de4a6f03e17dbf1ec56",
+  "systems": {
+    "AuraClashDirector": {
+      "unique_to_106": true,
+      "wired_via": "game-godot/scripts/combat/hit_resolver.gd",
+      "on_main": false,
+      "compat_161_move_routing": "UNKNOWN_NEEDS_ADAPTATION \u2014 main hit_resolver lacks clash hook; 106 tip predates #113 routing surface",
+      "compat_partylink_8p": "FAIL_WITHOUT_PORT \u2014 PartyLink lives in packages/partylink + web Arena View; Godot clash director is 2P-oriented and not host-authoritative aware",
+      "compat_rollback_netplay": "UNPROVEN \u2014 clash state machine is static/local; no rollback serialization evident",
+      "compat_reduced_motion": "PARTIAL \u2014 CombatCinematicDirector/spectacle_a11y gates camera but not integrated on main",
+      "decision": "DO_NOT_FORCE_WIRE \u2014 park docs+data only; runtime GD deferred",
+      "AURA_CLASH_CURRENT_MAIN_COMPAT_PASS": false,
+      "CINEMATIC_COMBAT_DIRECTOR_CURRENT_MAIN_COMPAT_PASS": false,
+      "AURA_CLASH_2P_REGRESSION_PASS": false,
+      "AURA_CLASH_PARTYLINK_8P_SAFETY_PASS": false,
+      "AURA_CLASH_ROLLBACK_SAFETY_PASS": false,
+      "AURA_CLASH_REDUCED_MOTION_PASS": false
+    },
+    "CombatCinematicDirector": {
+      "unique_to_106": true,
+      "decision": "DO_NOT_FORCE_WIRE",
+      "CINEMATIC_COMBAT_DIRECTOR_CURRENT_MAIN_COMPAT_PASS": false
+    },
+    "TrainingImpactLab": {
+      "unique_to_106": true,
+      "decision": "DO_NOT_FORCE_WIRE \u2014 training_battle_scene diverged on main"
+    }
+  },
+  "main_features_106_would_regress_if_wholesale_merged": [
+    "161-move content routing (#113)",
+    "PartyLink 8P + Arena View (#114)",
+    "web PartyLink module resolution (#115)",
+    "post-#107 art-pipeline infrastructure workflow",
+    "later elemental/VFX/announcer scripts present only on main"
+  ]
+}
