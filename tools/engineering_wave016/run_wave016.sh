@@ -53,6 +53,7 @@ run() {
 run build_matrix python3 tools/engineering_wave016/build_move_application_matrix.py
 run choreography_v2 python3 tools/engineering_wave016/build_choreography_alignment_v2.py
 run unit_resolver python3 tools/engineering_wave016/test_alias_resolver.py
+run runtime_clip_application python3 tools/combat_v3/validate_runtime_clip_application.py
 
 run taste_gate make taste-gate
 

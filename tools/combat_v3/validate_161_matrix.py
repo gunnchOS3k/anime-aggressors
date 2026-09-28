@@ -59,6 +59,11 @@ def main() -> int:
         for e in errors:
             print(" -", e)
         return 1
+    from validate_runtime_clip_application import main as clip_main  # noqa: E402
+
+    clip_rc = clip_main()
+    if clip_rc != 0:
+        return clip_rc
     print("VALIDATE OK rows=161 complete_true=%s digital_ready=%s" % (
         matrix.get("complete_true_count"),
         matrix.get("digital_ready_count"),

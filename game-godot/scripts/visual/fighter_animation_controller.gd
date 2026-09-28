@@ -37,6 +37,8 @@ func setup(fighter, model_root: Node3D) -> void:
 			_player.active = true
 			_player.process_mode = Node.PROCESS_MODE_INHERIT
 			_ingest_embedded_clips()
+			# Staging GLBs often only embed idle. Combat clips still come from V3 procedural JSON.
+			_load_procedural_clips(model_root)
 			return
 	_disable_embedded_players(model_root)
 	_player = AnimationPlayer.new()
@@ -57,14 +59,17 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 	var clip := str(resolved.get("clip", ""))
 	if clip.is_empty() or not _loaded_clips.has(clip):
 		clip = _fallback_clip(state, move_id)
-	if clip.is_empty() or not _player.has_animation(clip):
+	var play_key := _animation_play_key(clip)
+	if clip.is_empty() or play_key.is_empty() or not _player.has_animation(play_key):
 		return
 	var should_loop := clip in ["idle", "run", "walk", "fall", "shield", "aura_charge", "charged_idle"]
-	var anim := _player.get_animation(clip)
+	var anim := _player.get_animation(play_key)
 	if anim:
 		anim.loop_mode = Animation.LOOP_LINEAR if should_loop else Animation.LOOP_NONE
-	if _player.current_animation != clip or (not should_loop and not _player.is_playing()):
-		_player.play(clip, 0.08)
+	if _player.current_animation != play_key and _player.current_animation != clip:
+		_player.play(play_key, 0.08)
+	elif not should_loop and not _player.is_playing():
+		_player.play(play_key, 0.08)
 	_active_clip = clip
 
 
@@ -82,6 +87,18 @@ func get_animation_player() -> AnimationPlayer:
 
 func get_loaded_clip_names() -> Array:
 	return _loaded_clips.keys()
+
+
+func _animation_play_key(clip: String) -> String:
+	if clip.is_empty() or _player == null:
+		return ""
+	if _player.has_animation(clip):
+		return clip
+	for lib_name in ["procedural_runtime", "candidate_aliases"]:
+		var keyed := "%s/%s" % [lib_name, clip]
+		if _player.has_animation(keyed):
+			return keyed
+	return ""
 
 
 func _fallback_clip(state: String, move_id: String) -> String:
@@ -116,7 +133,10 @@ func _load_procedural_clips(model_root: Node3D) -> void:
 		file_name = dir.get_next()
 	dir.list_dir_end()
 	if lib.get_animation_list().size() > 0:
-		_player.add_animation_library("", lib)
+		var lib_name := "procedural_runtime"
+		if _player.has_animation_library(lib_name):
+			_player.remove_animation_library(lib_name)
+		_player.add_animation_library(lib_name, lib)
 
 
 func _animation_from_json(path: String) -> Animation:

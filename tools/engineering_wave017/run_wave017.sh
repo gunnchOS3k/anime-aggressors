@@ -48,6 +48,7 @@ run() {
   echo "PASS ${name}"
 }
 
+run runtime_clip_application python3 tools/combat_v3/validate_runtime_clip_application.py
 run taste_gate make taste-gate
 run emit_owner_baseline python3 tools/engineering_wave017/emit_wave017_packet.py
 run placeholder_scan python3 tools/quality/check_placeholder_visuals.py

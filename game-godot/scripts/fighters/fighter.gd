@@ -1518,7 +1518,11 @@ func _sync_attack_phase_state() -> void:
 func _sync_motion_state() -> void:
 	if not is_on_floor() and state_machine.current_state not in [
 		_FighterStates.JUMP, _FighterStates.DOUBLE_JUMP, _FighterStates.ATTACK_STARTUP,
-		_FighterStates.SPECIAL_STARTUP, _FighterStates.AURA_BURST_STARTUP, _FighterStates.LAUNCHED,
+		_FighterStates.ATTACK_ACTIVE, _FighterStates.ATTACK_RECOVERY,
+		_FighterStates.SPECIAL_STARTUP, _FighterStates.SPECIAL_ACTIVE, _FighterStates.SPECIAL_RECOVERY,
+		_FighterStates.AURA_BURST_STARTUP, _FighterStates.AURA_BURST_ACTIVE, _FighterStates.AURA_BURST_RECOVERY,
+		_FighterStates.GRAB_STARTUP, _FighterStates.THROW_STARTUP, _FighterStates.THROW_RELEASE,
+		_FighterStates.AIR_DODGE, _FighterStates.LAUNCHED,
 	]:
 		if velocity.y > 0:
 			state_machine.enter(_FighterStates.FALL if velocity.y < get_fall_speed() * 0.02 else _FighterStates.FAST_FALL)

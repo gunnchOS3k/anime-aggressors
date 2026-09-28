@@ -1467,8 +1467,14 @@ func _play_clip(requested: String, state: String = "", move: Dictionary = {}) ->
 		var move_copy := move.duplicate() if not move.is_empty() else {}
 		if state.is_empty():
 			move_copy["move_id"] = requested
+		var play_state := state
+		if play_state.is_empty():
+			if requested in ["idle", "walk", "run", "fall", "shield", "aura_charge"]:
+				play_state = _FighterStates.IDLE
+			else:
+				play_state = _FighterStates.ATTACK_STARTUP
 		if _animation_controller.has_method("play_for_state"):
-			_animation_controller.play_for_state(state if not state.is_empty() else _FighterStates.IDLE, move_copy)
+			_animation_controller.play_for_state(play_state, move_copy)
 		_last_clip = _animation_controller.get_active_clip() if _animation_controller.has_method("get_active_clip") else requested
 	elif _stylized != null and is_instance_valid(_stylized) and _stylized.has_method("animate_pose"):
 		_stylized.animate_pose(_style_clip, _style_anim_t)
