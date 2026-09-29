@@ -40,6 +40,28 @@ jobs:
         run: python3 tools/animation_authority/audit_aura_states.py
       - name: Audit authored candidates (provenance/uniqueness/168/777)
         run: python3 tools/animation_authority/audit_authored_candidates.py
+      - name: Audit semantic motion distance
+        run: python3 tools/animation_authority/audit_semantic_motion_distance.py
+      - name: Audit move animation frame sync 168
+        run: python3 tools/animation_authority/audit_move_animation_frame_sync.py
+      - name: Verify rendered review index exists
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          idx = json.loads(Path('artifacts/animation_authority_v1/RENDERED_MOTION_REVIEW_INDEX.json').read_text())
+          assert idx.get('RENDERED_REVIEW_PACKET_7_OF_7') is True
+          assert idx.get('PUPPET_RENDER_EVIDENCE_7_OF_7') is True
+          assert idx.get('ESSENCE_RENDER_EVIDENCE_0_1_2_4_6') is True
+          play = json.loads(Path('artifacts/animation_authority_v1/RUNTIME_CANDIDATE_PLAYBACK_PROOF.json').read_text())
+          assert play.get('REVIEWED_RUNTIME_CLIP_MISMATCH_COUNT') == 0
+          assert play.get('REVIEWED_RUNTIME_FALLBACK_COUNT') == 0
+          gate = json.loads(Path('artifacts/animation_authority_v1/GATE_SUMMARY.json').read_text())
+          for k in ('HUMAN_VISUAL_READABILITY_PASS','HUMAN_FEEL_PASS','FINAL_ART_APPROVED','MERGE_AUTHORIZED'):
+              assert gate.get(k) is False
+          assert Path('docs/animation_authority/OWNER_FULL_ROSTER_MOVEMENT_FEEL_REVIEW.md').is_file()
+          print('PASS rendered review + owner packet gates')
+          PY
       - name: Preserve combat 161-move contract
         run: |
           if [ -f tools/combat_v3/validate_runtime_clip_application.py ]; then

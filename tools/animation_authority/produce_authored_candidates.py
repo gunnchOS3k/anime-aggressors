@@ -116,13 +116,95 @@ def slot_family(slot_id: str, category: str) -> str:
     return "locomotion"
 
 
+
+def slot_grammar(slot_id: str, category: str) -> dict:
+    """Meaningful per-slot motion identity (not hash-escape noise)."""
+    family = slot_family(slot_id, category)
+    # Stable ordinal from slot name for spacing without microscopic deltas.
+    ordinal = sum((i + 1) * ord(c) for i, c in enumerate(slot_id)) % 97
+    lead = {
+        "attack": "UpperArm_R",
+        "air": "Spine",
+        "defense": "Chest",
+        "reaction": "Spine",
+        "aura": "Chest",
+        "presentation": "UpperArm_L",
+        "ledge": "UpperArm_L",
+        "locomotion": "UpperLeg_R",
+    }.get(family, "Spine")
+    # Directional / semantic accents
+    dir_bias = {
+        "forward": (0.22, 0.0, 0.12),
+        "back": (-0.22, 0.0, -0.10),
+        "up": (0.0, -0.18, 0.05),
+        "down": (0.0, 0.20, -0.05),
+        "neutral": (0.05, 0.0, 0.0),
+    }
+    dkey = "neutral"
+    for k in ("forward", "back", "up", "down"):
+        if k in slot_id:
+            dkey = k
+            break
+    if "neutral" in slot_id:
+        dkey = "neutral"
+    cadence = 0.75 + (ordinal % 11) * 0.05
+    antic_bias = 0.8 + (ordinal % 7) * 0.08
+    contact_bias = 1.0 + (ordinal % 5) * 0.12
+    follow_bias = 0.85 + (ordinal % 9) * 0.06
+    torso = -0.15 + (ordinal % 13) * 0.03
+    stride = 0.7 + (ordinal % 8) * 0.08
+    if family == "attack":
+        antic_bias *= 1.1 if "heavy" in slot_id or "finisher" in slot_id else 0.95
+        contact_bias *= 1.25 if "heavy" in slot_id else 1.0
+    if family == "locomotion":
+        stride *= 1.2 if "dash" in slot_id or "run" in slot_id else 1.0
+    # Hard semantic contrasts that previously near-duplicated under mass law.
+    if slot_id == "dash_loop":
+        stride *= 1.55
+        cadence *= 1.35
+        contact_bias *= 1.4
+        torso -= 0.18
+    if slot_id == "walk_loop":
+        stride *= 0.85
+        cadence *= 0.9
+        torso += 0.08
+    if slot_id == "roll_forward":
+        lead = "UpperArm_R"
+        contact_bias *= 1.5
+        antic_bias *= 0.7
+        torso += 0.25
+        dir_bias_override = (0.35, 0.15, 0.0)
+    else:
+        dir_bias_override = None
+    if slot_id == "air_dodge_forward":
+        lead = "Spine"
+        contact_bias *= 0.8
+        antic_bias *= 1.3
+        torso -= 0.22
+        stride *= 0.5
+    return {
+        "family": family,
+        "ordinal": ordinal,
+        "lead_bone": lead,
+        "dir": dir_bias_override if dir_bias_override is not None else dir_bias[dkey],
+        "cadence": cadence,
+        "antic_bias": antic_bias,
+        "contact_bias": contact_bias,
+        "follow_bias": follow_bias,
+        "torso": torso,
+        "stride": stride,
+        "duration_scale": 0.85 + (ordinal % 9) * 0.04,
+    }
+
+
 def timing_for(slot_id: str, category: str, blueprint: dict, law: str) -> dict[str, int]:
     bias = LAW_BIAS[law]
+    gram = slot_grammar(slot_id, category)
     t = blueprint.get("timing", {})
-    base_antic = int(round(float(t.get("base_anticipation", 4)) * bias["antic"]))
-    base_active = int(t.get("base_active", 5))
-    base_rec = int(round(float(t.get("base_recovery", 8)) * bias["follow"]))
-    tempo = float(t.get("tempo_scale", 1.0))
+    base_antic = int(round(float(t.get("base_anticipation", 4)) * bias["antic"] * gram["antic_bias"]))
+    base_active = int(round(t.get("base_active", 5) * gram["contact_bias"]))
+    base_rec = int(round(float(t.get("base_recovery", 8)) * bias["follow"] * gram["follow_bias"]))
+    tempo = float(t.get("tempo_scale", 1.0)) * gram["cadence"]
     family = slot_family(slot_id, category)
 
     if family == "attack":
@@ -250,6 +332,29 @@ def pose_angles(fighter_id: str, slot_id: str, bone: str, phase_name: str, law: 
         base[0] *= 0.7
     if root_style == "phase_drift" and bone == "Spine":
         base[2] += 0.09 * phase_mul
+    # Strong slot grammar accents — intentional visual uniqueness, not hash noise.
+    gram = slot_grammar(slot_id, family)
+    dx, dy, dz = gram["dir"]
+    if bone == gram["lead_bone"] or bone == "Hand_R" and gram["lead_bone"].startswith("UpperArm"):
+        base[0] += dx * phase_mul * gram["contact_bias"]
+        base[1] += dy * phase_mul * gram["contact_bias"]
+        base[2] += dz * phase_mul * gram["contact_bias"]
+    if bone == "Spine":
+        base[0] += gram["torso"] * (0.6 if phase_name in ("anticipation", "contact") else 0.3)
+    if bone.startswith("UpperLeg") or bone.startswith("LowerLeg"):
+        base[0] += gram["stride"] * 0.08 * phase_mul
+        base[2] += gram["stride"] * 0.05 * (1 if bone.endswith("_R") else -1)
+    if phase_name == "anticipation":
+        base[0] *= gram["antic_bias"]
+    if phase_name == "contact":
+        base[0] *= gram["contact_bias"]
+        base[1] *= 0.9 + 0.1 * gram["cadence"]
+    if phase_name in ("follow", "recovery"):
+        base[0] *= gram["follow_bias"]
+    # Ordinal phase offset spreads same-family slots by readable degrees (~several degrees).
+    ord_rad = (gram["ordinal"] % 17) * 0.035
+    base[0] += math.sin(ord_rad + (sum(ord(c) for c in phase_name) % 7)) * 0.04
+    base[2] += math.cos(ord_rad * 1.3) * 0.03
     return [round(v, 5) for v in base]
 
 
@@ -337,6 +442,18 @@ def write_clip(fighter_id, clip_name, clip):
 
 def make_clip(fighter_id, clip_name, category, law, blueprint, role="authority_slot"):
     timing = timing_for(clip_name, category, blueprint, law)
+    gram = slot_grammar(clip_name, category)
+    # Meaningful duration separation by slot grammar (not micro hash escape).
+    scale = float(gram["duration_scale"])
+    timing = {
+        "anticipation": max(1, int(round(timing["anticipation"] * gram["antic_bias"]))),
+        "contact": max(2, int(round(timing["contact"] * gram["contact_bias"]))),
+        "follow": max(3, int(round(timing["follow"] * gram["follow_bias"]))),
+        "total": max(8, int(round(timing["total"] * scale))),
+    }
+    # Keep phase order valid.
+    timing["contact"] = min(max(timing["contact"], timing["anticipation"] + 1), timing["total"] - 2)
+    timing["follow"] = min(max(timing["follow"], timing["contact"] + 1), timing["total"] - 1)
     poses = build_key_poses(fighter_id, clip_name, category, timing, law, blueprint)
     tracks = tracks_from_poses(poses)
     sig = curve_signature(tracks)
@@ -396,13 +513,13 @@ def produce_fighter(fighter_id, blueprints):
     for row in inventory_slots():
         slot_id = row["slot_id"]
         clip, sig, pose_count = make_clip(fighter_id, slot_id, row["category"], law, blueprint)
+        # No microscopic hash-escape perturbations. Near-duplicates are either
+        # documented as JUSTIFIED_ALIAS or regenerated with meaningful slot grammar.
         if sig in signatures:
-            for bone in BONES:
-                clip["bone_tracks"][bone][0]["rotation_rad"][0] = round(
-                    clip["bone_tracks"][bone][0]["rotation_rad"][0] + 0.00017 * (len(signatures) + 1), 5
-                )
-            sig = curve_signature(clip["bone_tracks"])
-            clip["curve_signature"] = sig
+            raise RuntimeError(
+                f"identical curve_signature for {fighter_id}/{slot_id}; "
+                "strengthen slot grammar or document an alias — do not micro-perturb"
+            )
         signatures.add(sig)
         write_clip(fighter_id, slot_id, clip)
         stub_dir = ROOT / "art_source/animation/fighters" / fighter_id / "actions" / slot_id
