@@ -82,7 +82,19 @@ def build_parser() -> argparse.ArgumentParser:
 
     an = sub.add_parser("android", help="Android/ADB helpers")
     _globals(an)
-    an.add_argument("action", choices=["doctor", "build", "install", "smoke", "evidence"])
+    an.add_argument(
+        "action",
+        choices=["doctor", "build", "install", "smoke", "evidence", "artifact"],
+    )
+    an.add_argument(
+        "artifact_action",
+        nargs="?",
+        default=None,
+        choices=["find", "download", "verify"],
+        help="Sub-action when action=artifact",
+    )
+    an.add_argument("--sha", default=None, help="Exact git SHA for artifact find/download/verify")
+    an.add_argument("--safe", action="store_true", help="Signer-safe install mode (install action)")
 
     pl = sub.add_parser("play", help="Dev play hints")
     _globals(pl)
@@ -149,7 +161,12 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "build":
         return run_build(root, args.target, exact_head=exact_head).emit(**common)
     if args.cmd == "android":
-        return run_android(root, args.action).emit(**common)
+        return run_android(
+            root,
+            args.action,
+            sha=getattr(args, "sha", None),
+            artifact_action=getattr(args, "artifact_action", None),
+        ).emit(**common)
     if args.cmd == "play":
         return run_play(root).emit(**common)
     if args.cmd == "capture":

@@ -7,4 +7,14 @@ from typing import Sequence
 
 
 def run(cmd: Sequence[str], cwd: Path, timeout: int | None = None) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(list(cmd), cwd=cwd, text=True, capture_output=True, timeout=timeout)
+    argv = list(cmd)
+    try:
+        return subprocess.run(argv, cwd=cwd, text=True, capture_output=True, timeout=timeout)
+    except FileNotFoundError as exc:
+        # Digital CI often lacks optional binaries (adb). Never crash the control plane.
+        return subprocess.CompletedProcess(
+            args=argv,
+            returncode=127,
+            stdout="",
+            stderr=f"FileNotFoundError: {exc}",
+        )

@@ -3,14 +3,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from ..process import run
+from ..adb_probe import probe_adb
 
 
 def list_devices(root: Path) -> list[str]:
-    cp = run(["adb", "devices"], cwd=root)
-    out = []
-    for ln in (cp.stdout or "").splitlines()[1:]:
-        parts = ln.split()
-        if len(parts) >= 2 and parts[1] == "device":
-            out.append(parts[0])
-    return out
+    return list(probe_adb(root).devices)

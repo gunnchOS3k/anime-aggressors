@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
@@ -35,24 +36,37 @@ def _parse_export_version(presets: Path) -> tuple[str, int]:
 
 
 def generate(repo_root: Path, flavor: str) -> dict:
-    sha = _git(repo_root, "rev-parse", "HEAD")
-    if not sha or sha.upper() == "UNKNOWN":
-        raise SystemExit("build identity refused to embed UNKNOWN SHA")
-    short = _git(repo_root, "rev-parse", "--short=12", "HEAD")
+    # Prefer GITHUB_SHA on Actions so detached/checkout SHA is exact-head.
+    env_sha = (os.environ.get("GITHUB_SHA") or "").strip()
+    if env_sha:
+        sha = env_sha
+        short = env_sha[:12]
+    else:
+        sha = _git(repo_root, "rev-parse", "HEAD")
+        if not sha or sha.upper() == "UNKNOWN":
+            raise SystemExit("build identity refused to embed UNKNOWN SHA")
+        short = _git(repo_root, "rev-parse", "--short=12", "HEAD")
     try:
         ref = _git(repo_root, "rev-parse", "--abbrev-ref", "HEAD")
     except subprocess.CalledProcessError:
         ref = "DETACHED"
+    if os.environ.get("GITHUB_REF_NAME"):
+        ref = os.environ["GITHUB_REF_NAME"]
     version_name, version_code = _parse_export_version(repo_root / "game-godot" / "export_presets.cfg")
+    build_source = "github_actions" if os.environ.get("GITHUB_ACTIONS") == "true" else "local"
+    workflow_run_id = os.environ.get("GITHUB_RUN_ID") or ""
     return {
         "repo": REPO_DEFAULT,
         "git_sha": sha,
         "git_sha_short": short,
+        "git_short_sha": short,
         "ref": ref,
         "version_name": version_name,
         "version_code": version_code,
         "build_timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "build_flavor": flavor,
+        "build_source": build_source,
+        "workflow_run_id": workflow_run_id,
         "package_id": PACKAGE_DEFAULT,
         "watermark": f"AA {short}",
     }

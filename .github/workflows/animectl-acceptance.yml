@@ -30,6 +30,8 @@ jobs:
           ./animectl verify moves --json
           ./animectl verify story --json
           ./animectl verify e2e --json
+      - name: animectl ADB-optional unit tests
+        run: PYTHONPATH=tools python3 -m unittest animectl.tests.test_adb_optional -v
       - name: acceptance quick
         run: ./animectl acceptance --exact-head --quick --json --output .acceptance/ci-quick.json
       - name: upload acceptance
@@ -52,7 +54,7 @@ jobs:
           node-version: "20"
           cache: npm
       - name: install deps
-        run: npm ci || npm install
+        run: npm ci --no-audit --no-fund
       - name: install playwright chromium
         run: npx playwright install --with-deps chromium
       - name: run e2e smoke
