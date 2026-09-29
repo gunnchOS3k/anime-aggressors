@@ -22,8 +22,15 @@ var _p2_pick: int = 1
 var _selecting_p2: bool = false
 var _locked_p1: bool = false
 var _locked_p2: bool = false
+## Dual-form presentation (male|female). Same gameplay/animation identity per fighter.
+var _pending_body_variant: String = "male"
+var _p1_body_variant: String = "male"
+var _p2_body_variant: String = "female"
 var _preview_model: Node2D
 var _tiles: Array = []
+var _variant_male_btn: Button
+var _variant_female_btn: Button
+var _variant_hint: Label
 ## Wave018: cancel superseded preview swaps (focus before previous configure resolves).
 var _preview_generation: int = 0
 var _preview_fighter_id: String = ""
@@ -65,6 +72,7 @@ func _ready() -> void:
 	_ensure_preview_host()
 	_skin_preview_frame()
 	_layout_action_bar_safe()
+	_ensure_body_variant_controls()
 	if _PresentationGates.showcase_flourish_enabled:
 		_ensure_showcase_flourish()
 	_build_grid()
@@ -79,6 +87,95 @@ func _ready() -> void:
 	_update_start_match_cta()
 	_ensure_art_review_overlay()
 	_ensure_lockin_callout()
+
+
+func _ensure_body_variant_controls() -> void:
+	## Flow: choose fighter → choose Male/Female → lock. Seven tiles only.
+	if _variant_male_btn != null:
+		return
+	var host := get_node_or_null("%PreviewHost") as Control
+	var parent: Control = host if host else self
+	var row := HBoxContainer.new()
+	row.name = "BodyVariantRow"
+	row.add_theme_constant_override("separation", 8)
+	_variant_male_btn = Button.new()
+	_variant_male_btn.name = "BodyVariantMale"
+	_variant_male_btn.text = "Male"
+	_variant_male_btn.toggle_mode = true
+	_variant_male_btn.button_pressed = _pending_body_variant == "male"
+	_variant_male_btn.pressed.connect(func() -> void: _set_pending_body_variant("male"))
+	_variant_female_btn = Button.new()
+	_variant_female_btn.name = "BodyVariantFemale"
+	_variant_female_btn.text = "Female"
+	_variant_female_btn.toggle_mode = true
+	_variant_female_btn.button_pressed = _pending_body_variant == "female"
+	_variant_female_btn.pressed.connect(func() -> void: _set_pending_body_variant("female"))
+	row.add_child(_variant_male_btn)
+	row.add_child(_variant_female_btn)
+	_variant_hint = Label.new()
+	_variant_hint.name = "BodyVariantHint"
+	_variant_hint.text = "Male / Female share kit & animation"
+	_variant_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	var col := VBoxContainer.new()
+	col.name = "BodyVariantControls"
+	col.add_child(row)
+	col.add_child(_variant_hint)
+	parent.add_child(col)
+
+
+func _set_pending_body_variant(variant: String) -> void:
+	if variant != "male" and variant != "female":
+		return
+	_pending_body_variant = variant
+	if _variant_male_btn:
+		_variant_male_btn.button_pressed = variant == "male"
+	if _variant_female_btn:
+		_variant_female_btn.button_pressed = variant == "female"
+	_refresh()
+
+
+func _allocate_body_variant_for_seat(fighter_id: String, seat: int) -> String:
+	## Prefer opposite presentation when the other seat already locked same fighter.
+	var other_id := ""
+	var other_var := ""
+	var other_locked := false
+	if seat == 1:
+		other_locked = _locked_p2
+		other_id = _roster[_p2_pick] if other_locked and _roster.size() > _p2_pick else ""
+		other_var = _p2_body_variant
+	else:
+		other_locked = _locked_p1
+		other_id = _roster[_p1_pick] if other_locked and _roster.size() > _p1_pick else ""
+		other_var = _p1_body_variant
+	if other_locked and other_id == fighter_id and other_var == _pending_body_variant:
+		return "female" if _pending_body_variant == "male" else "male"
+	return _pending_body_variant
+
+
+func _apply_dual_form_tile_preview(tile: Button, fighter_id: String) -> void:
+	## Preview both presentation icons on each of the 7 roster tiles.
+	var dual := tile.get_node_or_null("DualFormPreview") as HBoxContainer
+	if dual == null:
+		dual = HBoxContainer.new()
+		dual.name = "DualFormPreview"
+		dual.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		dual.add_theme_constant_override("separation", 4)
+		var male_l := Label.new()
+		male_l.name = "MaleIcon"
+		male_l.text = "♂"
+		male_l.tooltip_text = "%s male presentation" % fighter_id
+		var female_l := Label.new()
+		female_l.name = "FemaleIcon"
+		female_l.text = "♀"
+		female_l.tooltip_text = "%s female presentation" % fighter_id
+		dual.add_child(male_l)
+		dual.add_child(female_l)
+		tile.add_child(dual)
+		dual.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+		dual.offset_left = -48.0
+		dual.offset_top = 4.0
+		dual.offset_right = -4.0
+		dual.offset_bottom = 24.0
 
 
 func _layout_action_bar_safe() -> void:
@@ -270,6 +367,7 @@ func _build_grid() -> void:
 		if sil and sil.has_method("configure"):
 			sil.configure(id, profile.primary_color, profile.accent_color)
 		_apply_tile_identity_chrome(tile, id, profile)
+		_apply_dual_form_tile_preview(tile, id)
 		tile.pressed.connect(_on_tile_pressed.bind(i))
 		tile.focus_entered.connect(_on_tile_focused.bind(i))
 		tile.mouse_entered.connect(_on_tile_focused.bind(i))
@@ -331,10 +429,13 @@ func _flush_preview_update() -> void:
 
 func _on_tile_pressed(index: int) -> void:
 	_cursor = index
+	var id: String = _roster[index]
 	if _selecting_p2:
 		_p2_pick = index
+		_p2_body_variant = _allocate_body_variant_for_seat(id, 2)
 	else:
 		_p1_pick = index
+		_p1_body_variant = _allocate_body_variant_for_seat(id, 1)
 		_locked_p1 = true
 	_refresh()
 	_update_preview(index, true)
@@ -492,11 +593,12 @@ func _refresh() -> void:
 	var profile = _Presentation.from_life_dict(focus_id, life, focus)
 	if p1_name:
 		var lock := " ✓" if _locked_p1 else ""
-		p1_name.text = "P1: %s%s" % [p1.get("displayName", "?"), lock]
+		p1_name.text = "P1: %s [%s]%s" % [p1.get("displayName", "?"), _p1_body_variant, lock]
 	if p2_name:
 		var lock2 := " ✓" if _locked_p2 else ""
-		p2_name.text = "P2: %s%s%s" % [
+		p2_name.text = "P2: %s [%s]%s%s" % [
 			p2.get("displayName", "?"),
+			_p2_body_variant,
 			" (CPU)" if GameState.p2_is_cpu else "",
 			lock2,
 		]
@@ -622,6 +724,7 @@ func _on_lock_in_pressed() -> void:
 func _on_next_player_pressed() -> void:
 	if not _locked_p1:
 		_p1_pick = _cursor
+		_p1_body_variant = _allocate_body_variant_for_seat(_roster[_p1_pick], 1)
 		_locked_p1 = true
 		_selecting_p2 = true
 		if GameState.p2_is_cpu:
@@ -633,6 +736,7 @@ func _on_next_player_pressed() -> void:
 		return
 	if not _locked_p2:
 		_p2_pick = _cursor
+		_p2_body_variant = _allocate_body_variant_for_seat(_roster[_p2_pick], 2)
 		_locked_p2 = true
 		_selecting_p2 = false
 		_announce_lock(2, _roster[_p2_pick])
@@ -653,11 +757,22 @@ func _on_start_match_pressed() -> void:
 		return
 	GameState.p1_fighter_id = _roster[_p1_pick]
 	GameState.p2_fighter_id = _roster[_p2_pick]
+	GameState.p1_body_variant = _p1_body_variant
+	GameState.p2_body_variant = _p2_body_variant
 	GameState.p1_ready = true
 	GameState.p2_ready = true
 	_teardown_preview()
 	SceneRouter.go("stage_select")
 
+
+func match_setup_payload() -> Dictionary:
+	## Godot / PartyLink seat payload: fighter_id + body_variant + seat_id.
+	return {
+		"seats": [
+			{"fighter_id": _roster[_p1_pick] if _roster.size() else "", "body_variant": _p1_body_variant, "seat_id": 0},
+			{"fighter_id": _roster[_p2_pick] if _roster.size() else "", "body_variant": _p2_body_variant, "seat_id": 1},
+		],
+	}
 
 func get_showcase_flourish_counters() -> Dictionary:
 	if _flourish == null:

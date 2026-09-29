@@ -58,6 +58,12 @@ export type PlayerActionState =
 export type PlayerState = {
   id: number;
   characterId: string;
+  /**
+   * Presentation-only dual-form body (male|female).
+   * Combat sim, move data, frames, knockback, aura, weight, collision, ranking,
+   * and network authority MUST ignore this field.
+   */
+  bodyVariant?: import("./bodyVariant.js").FighterBodyVariant;
   fighterName: string;
   fighterSize: import("./sizeClasses.js").FighterSize;
   fighterColor: import("./elements.js").FighterColor;
@@ -136,6 +142,11 @@ export type GameConfig = {
   matchDurationFrames: number;
   stageId: string;
   characterIds: string[];
+  /**
+   * Parallel to characterIds: presentation body per seat.
+   * Ignored by combat simulation / network authority.
+   */
+  bodyVariants?: import("./bodyVariant.js").FighterBodyVariant[];
   fighterProfiles?: import("./createdFighter.js").CreatedFighter[];
   ruleset?: import("./rulesets.js").GameRuleset;
   seed: number;

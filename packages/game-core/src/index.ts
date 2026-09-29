@@ -12,6 +12,25 @@ export type {
   StageBounds,
 } from "./types.js";
 
+export type {
+  FighterBodyVariant,
+  CanonicalFighterId,
+  FighterPresentationSelection,
+} from "./bodyVariant.js";
+export {
+  FIGHTER_BODY_VARIANTS,
+  CANONICAL_FIGHTER_IDS,
+  BODY_PRESENTATION_COUNT,
+  isFighterBodyVariant,
+  normalizeBodyVariant,
+  oppositeBodyVariant,
+  allocateBodyVariantForDuplicate,
+  presentationAssetKey,
+  listAuthoredPresentations,
+} from "./bodyVariant.js";
+export type { PowerArchetypeSynthesis } from "./powerArchetypes.js";
+export { POWER_ARCHETYPE_SYNTHESIS } from "./powerArchetypes.js";
+
 export {
   SIM_HZ,
   FP_SCALE,
