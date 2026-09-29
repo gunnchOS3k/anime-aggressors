@@ -25,7 +25,7 @@ const CAPTURE_CASES := [
 	{"label": "ember_recovery", "kind": "special", "axis": Vector2(0, -0.8), "expect_move": "up_special_recovery", "expect_clip": "recovery"},
 	{"label": "ember_ash_trap_coil", "kind": "special", "axis": Vector2(0, 0.8), "expect_move": "down_special", "expect_clip": "signature_lane_trap"},
 	{"label": "ember_aura_charge", "kind": "aura_charge", "expect_move": "", "expect_clip": "aura_charge"},
-	{"label": "ember_flare_step_rush", "kind": "aura_burst", "expect_move": "aura_burst", "expect_clip": "signature_lane_burst"},
+	{"label": "ember_flare_step_rush", "kind": "aura_burst", "expect_move": "aura_burst", "expect_clip": "aura_burst"},
 	{"label": "ember_grab", "kind": "grab", "expect_move": "grab", "expect_clip": "grab"},
 	{"label": "ember_throw_forward", "kind": "throw", "axis": Vector2(0.8, 0), "expect_move": "throw_forward", "expect_clip": "throw_forward"},
 	{"label": "ember_throw_back", "kind": "throw", "axis": Vector2(-0.8, 0), "expect_move": "throw_back", "expect_clip": "throw_back"},

@@ -32,7 +32,7 @@ const CAPTURE_CASES := [
 	{"label": "ember_proj_tap", "kind": "projectile", "gameplay_state": "projectile_tap", "tier_aura": 20.0, "expect_move": "neutral_special_projectile", "expect_clip": "projectile_tap"},
 	{"label": "ember_proj_med", "kind": "projectile", "gameplay_state": "projectile_medium", "tier_aura": 55.0, "expect_move": "neutral_special_projectile", "expect_clip": "projectile_medium"},
 	{"label": "ember_proj_full", "kind": "projectile", "gameplay_state": "projectile_full", "tier_aura": 95.0, "expect_move": "neutral_special_projectile", "expect_clip": "projectile_full"},
-	{"label": "ember_flare_step_rush", "kind": "aura_burst", "gameplay_state": "flare_step_rush", "expect_move": "aura_burst", "expect_clip": "signature_lane_burst"},
+	{"label": "ember_flare_step_rush", "kind": "aura_burst", "gameplay_state": "flare_step_rush", "expect_move": "aura_burst", "expect_clip": "aura_burst"},
 	{"label": "ember_ash_trap_coil", "kind": "special", "gameplay_state": "ash_trap_coil", "axis": Vector2(0, 0.8), "expect_move": "down_special", "expect_clip": "signature_lane_trap"},
 	{"label": "ember_feint_slide", "kind": "special", "gameplay_state": "ember_feint_slide", "axis": Vector2(0.7, 0), "expect_move": "side_special", "expect_clip": "signature_lane_feint"},
 	{"label": "ember_grab", "kind": "grab", "gameplay_state": "grab", "expect_move": "grab", "expect_clip": "grab"},
