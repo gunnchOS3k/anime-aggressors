@@ -58,7 +58,7 @@ def build_parser() -> argparse.ArgumentParser:
         "topic",
         nargs="?",
         default="all",
-        choices=["animations", "moves", "models", "story", "determinism", "partylink", "all"],
+        choices=["animations", "moves", "models", "story", "determinism", "partylink", "rig", "e2e", "all"],
     )
     ver.add_argument("--all", action="store_true", dest="verify_all")
 

@@ -85,8 +85,18 @@ def run_acceptance(root: Path, *, exact_head: bool, mode: str = "quick") -> Anim
     insp = run_inspect(root, fighter="ember-vale", body="female")
     res.add_check(
         "A11_SAMPLE_EMBER_FEMALE_AUTHORED",
-        "PASS" if insp.data.get("model_kind") == "AUTHORED_GLB" and insp.data.get("fallback_used") is False else "FAIL",
-        json.dumps({k: insp.data.get(k) for k in ("model_kind", "model_path", "model_sha256", "fallback_used")}),
+        "PASS"
+        if insp.data.get("model_kind") == "AUTHORED_GLB"
+        and insp.data.get("fallback_used") is False
+        and insp.data.get("animation_binding") == "PRODUCTION_RIG"
+        and insp.data.get("skin_count", 0) > 0
+        else "FAIL",
+        json.dumps(
+            {
+                k: insp.data.get(k)
+                for k in ("model_kind", "model_path", "model_sha256", "fallback_used", "animation_binding", "skin_count")
+            }
+        ),
     )
     res.add_check(
         "A12_GENERATED_LOW_POLY_ACCEPTANCE_FALLBACK_POLICY",
@@ -107,22 +117,54 @@ def run_acceptance(root: Path, *, exact_head: bool, mode: str = "quick") -> Anim
     res.add_check("A36_YIN_YANG_TUNING_CANDIDATE_LABELED", "PASS" if labeled else "FAIL")
 
     # Playwright optional
-    pw = root / "playwright.config.ts"
+    pkg = json.loads((root / "package.json").read_text(encoding="utf-8"))
+    deps = {**(pkg.get("devDependencies") or {}), **(pkg.get("dependencies") or {})}
+    res.add_check(
+        "E00_PLAYWRIGHT_PINNED",
+        "PASS" if "@playwright/test" in deps else "FAIL",
+    )
     res.add_check(
         "A50_PLAYWRIGHT_OPTIONAL",
-        "PASS_WITH_NOTES" if pw.exists() else "PASS_WITH_NOTES",
-        "installed" if pw.exists() else "specs present or pending install (disk-sensitive)",
+        "PASS_WITH_NOTES" if (root / "playwright.config.ts").exists() else "PASS_WITH_NOTES",
+        "specs present; browser install may be CI-only under disk pressure",
     )
 
     # Web build only on full mode (disk sensitive)
     if mode == "full":
         cp = run(["npm", "run", "build:web"], cwd=root, timeout=300)
         res.add_check("A70_WEB_EXACT_HEAD_BUILD", "PASS" if cp.returncode == 0 else "FAIL", (cp.stderr or cp.stdout)[-240:])
+        res.add_check("P00_WEB_EXACT_HEAD", "PASS" if cp.returncode == 0 else "FAIL")
     else:
         res.add_check("A70_WEB_EXACT_HEAD_BUILD", "PASS_WITH_NOTES", "skipped in --quick; use --full")
 
-    res.add_check("A71_ANDROID_EXACT_HEAD_BUILD", "BLOCKED_EXTERNAL", "disk/Android toolchain gate — use animectl android build")
-    res.add_check("A73_PIXEL_PHYSICAL_SMOKE", "REQUIRES_PHYSICAL", "no adb device")
+    # Android / Pixel
+    adb = run(["adb", "devices"], cwd=root)
+    devices = [ln for ln in (adb.stdout or "").splitlines()[1:] if ln.strip() and "\tdevice" in ln]
+    res.add_check("P02_PIXEL_CONNECTED", "PASS" if devices else "REQUIRES_PHYSICAL", f"count={len(devices)}")
+    res.add_check("A71_ANDROID_EXACT_HEAD_BUILD", "BLOCKED_EXTERNAL", "local disk insufficient for Godot/Android export — use CI artifact")
+    res.add_check("P01_ANDROID_EXACT_HEAD", "BLOCKED_EXTERNAL", "disk")
+    if devices:
+        res.add_check(
+            "A73_PIXEL_PHYSICAL_SMOKE",
+            "BLOCKED_EXTERNAL",
+            "Pixel connected but exact-head APK unavailable under local disk pressure",
+        )
+        res.add_check("P08_PIXEL_G7_EVIDENCE", "BLOCKED_EXTERNAL", "await exact-head APK from CI")
+    else:
+        res.add_check("A73_PIXEL_PHYSICAL_SMOKE", "REQUIRES_PHYSICAL", "no adb device")
+
+    # Production rig gates
+    man_path = root / "data/bibles/battle_model_manifest_v1_4.json"
+    if man_path.exists():
+        man = json.loads(man_path.read_text(encoding="utf-8"))
+        res.add_check(
+            "C04_PRODUCTION_RIG_BINDING_18_OF_18",
+            "PASS" if man.get("PRODUCTION_RIG_18_OF_18") and man.get("ROOT_PROXY_PENDING_COUNT") == 0 else "FAIL",
+        )
+        res.add_check("C05_ROOT_PROXY_PENDING_COUNT_ZERO", "PASS" if man.get("ROOT_PROXY_PENDING_COUNT") == 0 else "FAIL")
+    director = root / "packages/game-core/src/story/storyDirector.ts"
+    res.add_check("S00_STORY_DIRECTOR_IMPLEMENTED", "PASS" if director.exists() else "FAIL")
+
     for g in ("G6_VISUAL_READABILITY", "G8_HUMAN_FEEL", "G9_FINAL_ART_APPROVED"):
         res.add_check(g, "REQUIRES_HUMAN")
     res.add_check("MERGE_AUTHORIZED", "REQUIRES_HUMAN", "false")

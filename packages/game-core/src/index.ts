@@ -380,6 +380,13 @@ export {
   isCosmicPlayable,
   listSelectableStoryFighterIds,
   presentationModifiers,
+  STORY_ROUTE_GRAPHS,
+  migrateStoryProgress,
+  getActiveNode,
+  startRoute,
+  advanceAfterWin,
+  recordLoss,
+  encounterConfig,
 } from "./story/index.js";
 export type {
   SpectrumStoryFighterId,
@@ -388,4 +395,8 @@ export type {
   StoryRouteId,
   StoryRouteState,
   StoryProgressState,
+  StoryNodeKind,
+  StoryNode,
+  StoryRouteGraph,
+  StoryDirectorState,
 } from "./story/index.js";

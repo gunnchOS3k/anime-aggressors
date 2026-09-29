@@ -1,48 +1,66 @@
 import {
   SPECTRUM_STORY_FIGHTER_IDS,
-  completeGrayRoute,
+  advanceAfterWin,
+  encounterConfig,
   essenceTierName,
+  getActiveNode,
   isCosmicPlayable,
   presentationModifiers,
-  setCosmicDevOverride,
-  setEssenceCount,
-  setPuppetForm,
-  type StoryProgressState,
-  type StoryPuppetForm,
+  recordLoss,
+  startRoute,
+  type StoryDirectorState,
   type StoryRouteId,
 } from "@anime-aggressors/game-core";
 import { APP_ROUTES } from "../routes.ts";
-import { loadStoryProgress, resetStoryProgress, saveStoryProgress } from "../storage/storyProgressStorage.ts";
+import {
+  isStoryDevMode,
+  loadStoryProgress,
+  resetStoryProgress,
+  saveStoryProgress,
+} from "../storage/storyProgressStorage.ts";
+import {
+  completeGrayRoute,
+  setCosmicDevOverride,
+  setEssenceCount,
+  setPuppetForm,
+  type StoryPuppetForm,
+} from "@anime-aggressors/game-core";
 
-function render(state: StoryProgressState): string {
+function render(state: StoryDirectorState, dev: boolean): string {
   const mods = presentationModifiers(state);
-  const routes = SPECTRUM_STORY_FIGHTER_IDS.map((id) => {
+  const node = getActiveNode(state);
+  const enc = encounterConfig(state);
+
+  const routeCards = SPECTRUM_STORY_FIGHTER_IDS.map((id) => {
     const route = state.routes[id];
-    return `<li class="story-route ${route.completed ? "story-route--done" : ""}" data-route="${id}">
+    return `<li class="story-route ${route.completed ? "story-route--done" : ""}" data-testid="story-route-${id}">
       <strong>${route.draftTitle}</strong>
       <p>${route.draftSummary}</p>
-      <button type="button" data-complete-route="${id}">Complete Gray Route (QA)</button>
+      <button type="button" class="btn" data-start-route="${id}" data-testid="start-route-${id}">Enter Route</button>
       ${route.isRoot ? '<span class="story-root-badge">ROOT</span>' : ""}
       ${route.completed ? '<span class="story-done-badge">GRAY COMPLETE</span>' : ""}
+      ${dev ? `<button type="button" data-complete-route="${id}">Complete Gray Route (QA)</button>` : ""}
     </li>`;
   }).join("");
 
-  return `
-    <section class="screen story-campaign-screen" data-testid="story-campaign">
-      <header class="screen-header">
-        <a href="${APP_ROUTES.home}">← Home</a>
-        <h1>Story Campaign</h1>
-        <p class="lede">Kaia / Green root → seven Gray routes → unlock Yin + Yang. Narrative copy marked DRAFT where temporary.</p>
-      </header>
-      <div class="story-status">
-        <p>Essence: <strong>${state.essenceCount}</strong> (${essenceTierName(state.essenceCount)})</p>
-        <p>Puppet form: <strong>${mods.puppetForm}</strong> — ${mods.motionNote}</p>
-        <p>Gray routes: <strong>${state.grayRoutesCompleted.length}/7</strong></p>
-        <p>Yin unlocked: <strong>${isCosmicPlayable(state, "yin") ? "YES" : "NO"}</strong>
-           · Yang unlocked: <strong>${isCosmicPlayable(state, "yang") ? "YES" : "NO"}</strong>
-           ${state.cosmicDevOverride ? " (dev override)" : ""}</p>
-      </div>
-      <div class="story-controls">
+  const nodePanel = node
+    ? `<section class="story-node" data-testid="story-active-node" data-node-kind="${node.kind}">
+        <h2>${node.title}</h2>
+        <p>${node.body}</p>
+        ${
+          enc
+            ? `<a class="btn" data-testid="story-launch-encounter" href="${APP_ROUTES.matchSetupFighters}">Launch Encounter</a>
+               <button type="button" class="btn" data-testid="story-sim-win" id="story-sim-win">Record Win (advance)</button>
+               <button type="button" class="btn" data-testid="story-sim-loss" id="story-sim-loss">Record Loss (retry)</button>`
+            : `<button type="button" class="btn" data-testid="story-advance" id="story-advance">Continue</button>`
+        }
+        ${state.pendingRetryNodeId ? `<p class="story-retry">Retry ready — prior progress preserved.</p>` : ""}
+      </section>`
+    : `<p class="lede">Select a route to begin. Kaia is the green root.</p>`;
+
+  const qa = dev
+    ? `<div class="story-controls story-controls--qa" data-testid="story-qa-drawer">
+        <p><em>QA drawer (?dev=1)</em></p>
         <label>Essence tier
           <select id="story-essence">
             ${[0, 1, 2, 4, 6].map((n) => `<option value="${n}" ${state.essenceCount === n ? "selected" : ""}>${n}</option>`).join("")}
@@ -57,52 +75,102 @@ function render(state: StoryProgressState): string {
         </label>
         <label class="story-dev-override">
           <input type="checkbox" id="story-cosmic-override" ${state.cosmicDevOverride ? "checked" : ""} />
-          Dev unlock Yin/Yang (QA — does not corrupt story completion flags when cleared)
+          Dev unlock Yin/Yang
         </label>
         <button type="button" id="story-reset">Reset story progress</button>
-        <a class="btn" href="${APP_ROUTES.fighterSelect}">Open Fighter Select</a>
-        <a class="btn" href="${APP_ROUTES.matchSetupFighters}">Match Setup Fighters</a>
+      </div>`
+    : "";
+
+  return `
+    <section class="screen story-campaign-screen" data-testid="story-campaign">
+      <header class="screen-header">
+        <a href="${APP_ROUTES.home}">← Home</a>
+        <h1>Story Campaign</h1>
+        <p class="lede">Seven routes. Real encounters. Gray unlocks Yin + Yang. Narrative: DRAFT_NARRATIVE_COPY.</p>
+      </header>
+      <div class="story-status" data-testid="story-status">
+        <p>Essence: <strong>${state.essenceCount}</strong> (${essenceTierName(state.essenceCount)})</p>
+        <p>Puppet form: <strong>${mods.puppetForm}</strong> — ${mods.motionNote}</p>
+        <p>Gray routes: <strong>${state.grayRoutesCompleted.length}/7</strong></p>
+        <p>Yin: <strong>${isCosmicPlayable(state, "yin") ? "UNLOCKED" : "LOCKED"}</strong>
+           · Yang: <strong>${isCosmicPlayable(state, "yang") ? "UNLOCKED" : "LOCKED"}</strong></p>
       </div>
-      <ol class="story-routes">${routes}</ol>
+      ${nodePanel}
+      ${qa}
+      <p><a class="btn" href="${APP_ROUTES.fighterSelect}">Fighter Select</a></p>
+      <ol class="story-routes" data-testid="story-route-list">${routeCards}</ol>
     </section>
   `;
 }
 
 export function mountStoryCampaignScreen(root: HTMLElement): void {
   let state = loadStoryProgress();
+  const dev = isStoryDevMode();
 
   const paint = () => {
-    root.innerHTML = render(state);
-    root.querySelector("#story-essence")?.addEventListener("change", (e) => {
-      const v = Number((e.target as HTMLSelectElement).value);
-      state = setEssenceCount(state, v);
-      saveStoryProgress(state);
-      paint();
-    });
-    root.querySelector("#story-puppet")?.addEventListener("change", (e) => {
-      const v = (e.target as HTMLSelectElement).value as StoryPuppetForm;
-      state = setPuppetForm(state, v);
-      saveStoryProgress(state);
-      paint();
-    });
-    root.querySelector("#story-cosmic-override")?.addEventListener("change", (e) => {
-      state = setCosmicDevOverride(state, (e.target as HTMLInputElement).checked);
-      saveStoryProgress(state);
-      paint();
-    });
-    root.querySelector("#story-reset")?.addEventListener("click", () => {
-      state = resetStoryProgress();
-      paint();
-    });
-    root.querySelectorAll<HTMLButtonElement>("[data-complete-route]").forEach((btn) => {
+    root.innerHTML = render(state, dev);
+    root.querySelectorAll<HTMLButtonElement>("[data-start-route]").forEach((btn) => {
       btn.addEventListener("click", () => {
-        const id = btn.dataset.completeRoute as StoryRouteId;
-        state = completeGrayRoute(state, id);
+        state = startRoute(state, btn.dataset.startRoute as StoryRouteId);
         saveStoryProgress(state);
         paint();
       });
     });
+    root.querySelector("#story-advance")?.addEventListener("click", () => {
+      state = advanceAfterWin(state);
+      saveStoryProgress(state);
+      paint();
+    });
+    root.querySelector("#story-sim-win")?.addEventListener("click", () => {
+      state = advanceAfterWin(state);
+      saveStoryProgress(state);
+      paint();
+    });
+    root.querySelector("#story-sim-loss")?.addEventListener("click", () => {
+      state = recordLoss(state);
+      saveStoryProgress(state);
+      paint();
+    });
+    if (dev) {
+      root.querySelector("#story-essence")?.addEventListener("change", (e) => {
+        state = { ...setEssenceCount(state, Number((e.target as HTMLSelectElement).value)), ...pickDirector(state) };
+        saveStoryProgress(state);
+        paint();
+      });
+      root.querySelector("#story-puppet")?.addEventListener("change", (e) => {
+        state = { ...setPuppetForm(state, (e.target as HTMLSelectElement).value as StoryPuppetForm), ...pickDirector(state) };
+        saveStoryProgress(state);
+        paint();
+      });
+      root.querySelector("#story-cosmic-override")?.addEventListener("change", (e) => {
+        state = { ...setCosmicDevOverride(state, (e.target as HTMLInputElement).checked), ...pickDirector(state) };
+        saveStoryProgress(state);
+        paint();
+      });
+      root.querySelector("#story-reset")?.addEventListener("click", () => {
+        state = resetStoryProgress();
+        paint();
+      });
+      root.querySelectorAll<HTMLButtonElement>("[data-complete-route]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = btn.dataset.completeRoute as StoryRouteId;
+          const next = completeGrayRoute(state, id);
+          state = { ...next, ...pickDirector(state) } as StoryDirectorState;
+          saveStoryProgress(state);
+          paint();
+        });
+      });
+    }
   };
 
   paint();
+}
+
+function pickDirector(state: StoryDirectorState): Pick<StoryDirectorState, "activeNodeId" | "completedNodeIds" | "pendingRetryNodeId" | "schema"> {
+  return {
+    schema: "story_progress_v1_5",
+    activeNodeId: state.activeNodeId,
+    completedNodeIds: state.completedNodeIds,
+    pendingRetryNodeId: state.pendingRetryNodeId,
+  };
 }

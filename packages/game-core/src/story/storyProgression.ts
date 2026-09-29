@@ -36,7 +36,7 @@ export type StoryRouteState = {
 };
 
 export type StoryProgressState = {
-  schema: "story_progress_v1_3";
+  schema: "story_progress_v1_3" | "story_progress_v1_5";
   activeRouteId: StoryRouteId | null;
   essenceCount: EssenceTier;
   puppetForm: StoryPuppetForm;

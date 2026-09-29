@@ -4,12 +4,13 @@ import { createToonMesh, addOutline } from "../materials/AnimeMaterialLibrary.ts
 
 export type LowPolyHumanoidParts = {
   root: THREE.Group;
-  torso: THREE.Mesh;
-  head: THREE.Mesh;
-  leftArm: THREE.Mesh;
-  rightArm: THREE.Mesh;
-  leftLeg: THREE.Mesh;
-  rightLeg: THREE.Mesh;
+  /** Mesh for procedural humanoid; Object3D when bound to production-rig bones. */
+  torso: THREE.Object3D;
+  head: THREE.Object3D;
+  leftArm: THREE.Object3D;
+  rightArm: THREE.Object3D;
+  leftLeg: THREE.Object3D;
+  rightLeg: THREE.Object3D;
   accessory: THREE.Object3D | null;
   extras: THREE.Object3D[];
   aura: THREE.Mesh;

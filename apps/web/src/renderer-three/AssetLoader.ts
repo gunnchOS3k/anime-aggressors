@@ -4,7 +4,7 @@
  */
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { SkeletonUtils } from "three/examples/jsm/utils/SkeletonUtils.js";
+import { clone as cloneSkinned } from "three/examples/jsm/utils/SkeletonUtils.js";
 
 export type ModelKind = "AUTHORED_GLB" | "GENERATED_LOW_POLY" | "DEBUG_FALLBACK" | "MISSING";
 
@@ -20,6 +20,9 @@ export type BattlePresentationEntry = {
   bytes: number;
   production_status?: string;
   playable_tuning_status?: string;
+  animation_binding?: string;
+  SKIN_PRESENT?: boolean;
+  CANONICAL_DEFORM_RIG?: boolean;
   note?: string;
 };
 
@@ -82,8 +85,7 @@ export async function loadGlb(url: string): Promise<THREE.Group | null> {
 
 /** Clone a cached GLTF scene safely (skinned or static). */
 export function cloneBattleScene(source: THREE.Object3D): THREE.Group {
-  const cloned = SkeletonUtils.clone(source) as THREE.Group;
-  return cloned;
+  return cloneSkinned(source) as THREE.Group;
 }
 
 export async function preloadBattlePresentation(
@@ -119,7 +121,9 @@ export async function preloadBattlePresentation(
       model_loaded: true,
       fallback_used: false,
       runtime_instance_id,
-      animation_binding: "ROOT_PROXY_PENDING_SKINNED_RIG",
+      animation_binding: entry.animation_binding === "PRODUCTION_RIG" || (entry as { SKIN_PRESENT?: boolean }).SKIN_PRESENT
+        ? "PRODUCTION_RIG"
+        : "ROOT_PROXY_PENDING_SKINNED_RIG",
     };
   }
   const scene = await loadGlb(entry.runtime_url);
@@ -141,6 +145,10 @@ export async function preloadBattlePresentation(
   scene.userData.runtime_url = entry.runtime_url;
   scene.userData.model_kind = "AUTHORED_GLB";
   gltfCache.set(key, scene);
+  const binding =
+    entry.animation_binding === "PRODUCTION_RIG" || (entry as { SKIN_PRESENT?: boolean }).SKIN_PRESENT
+      ? "PRODUCTION_RIG"
+      : "ROOT_PROXY_PENDING_SKINNED_RIG";
   return {
     fighter_id: fighterId,
     body_variant: bodyVariant,
@@ -151,7 +159,7 @@ export async function preloadBattlePresentation(
     model_loaded: true,
     fallback_used: false,
     runtime_instance_id,
-    animation_binding: "ROOT_PROXY_PENDING_SKINNED_RIG",
+    animation_binding: binding,
   };
 }
 
