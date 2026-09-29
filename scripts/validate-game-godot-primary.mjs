@@ -10,7 +10,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
 const godotRoot = path.join(root, "game-godot");
 
-const FIGHTERS = [
+const SPECTRUM_FIGHTERS = [
   "ember-vale",
   "rook-ironside",
   "juno-spark",
@@ -19,6 +19,8 @@ const FIGHTERS = [
   "orion-vell",
   "vesper-nyx",
 ];
+const COSMIC_FIGHTERS = ["yin", "yang"];
+const FIGHTERS = [...SPECTRUM_FIGHTERS, ...COSMIC_FIGHTERS];
 
 const STAGES = ["training-grid", "skyline-arena", "neon-rooftops"];
 

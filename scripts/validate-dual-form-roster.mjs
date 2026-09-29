@@ -30,11 +30,19 @@ function ok(name, pass, detail = "") {
 }
 
 const roster = JSON.parse(fs.readFileSync(path.join(ROOT, "game-godot/data/fighters/roster.json"), "utf8"));
+const COSMIC = ["yin", "yang"];
 ok(
   "SEVEN_CANONICAL_FIGHTER_IDS_UNCHANGED_PASS",
   Array.isArray(roster.fighters) &&
-    roster.fighters.length === 7 &&
+    roster.fighters.length >= 7 &&
     FIGHTERS.every((id, i) => roster.fighters[i] === id),
+  JSON.stringify(roster.fighters),
+);
+ok(
+  "NINE_PLAYABLE_ROSTER_WITH_COSMIC_PASS",
+  Array.isArray(roster.fighters) &&
+    roster.fighters.length === 9 &&
+    COSMIC.every((id) => roster.fighters.includes(id)),
   JSON.stringify(roster.fighters),
 );
 
