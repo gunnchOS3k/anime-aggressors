@@ -1,0 +1,66 @@
+{
+  "id": "yang",
+  "displayName": "Yang",
+  "archetype": "Cosmic Pillar / Playable Candidate",
+  "element": "definition",
+  "size": "medium",
+  "color": "#F5F5F5",
+  "auraColor": "#FFFFFF",
+  "weight": 100,
+  "runSpeed": 308.7,
+  "dashSpeed": 476.28000000000003,
+  "airSpeed": 224.4,
+  "jumpStrength": 620,
+  "fallSpeed": 1800,
+  "maxJumps": 2,
+  "damageTakenMult": 1,
+  "damageDealtMult": 1,
+  "shieldHealthMult": 1,
+  "signatureMove": "Cinder Rush",
+  "combatTag": "burn_rushdown",
+  "defaultSkin": "procedural_final_ember-vale",
+  "animationManifestPath": "res://data/fighters/ember-vale_animations.json",
+  "moveListPath": "res://data/moves/ember-vale.json",
+  "hitHurtProfile": {
+    "hurtboxWidth": 40,
+    "hurtboxHeight": 48,
+    "hitboxScale": 1.0
+  },
+  "shieldProfile": {
+    "maxHealth": 100,
+    "decayPerSecond": 18,
+    "stunMult": 1
+  },
+  "cpuBehaviorTags": [
+    "rushdown",
+    "approach"
+  ],
+  "productionStatus": "TUNING_CANDIDATE",
+  "modelTier": "original_rigged_procedural_final_3d",
+  "portraitPlaceholder": "res://assets/ui/placeholders/fighter_ember-vale.svg",
+  "modelPath": "res://assets/characters/procedural_final/ember-vale.glb",
+  "authorship": {
+    "status": "TUNING_CANDIDATE",
+    "note": "Numeric baselines intentionally not owner-approved; do not treat as balance canon."
+  },
+  "balancePath": "res://data/balance/ember-vale.json",
+  "game001": {
+    "identity_depth": "PASS_DATA",
+    "h2h_string_count": 3,
+    "balance_schema": "game001_fighter_balance/v1"
+  },
+  "owner_approved": false,
+  "physics_status": "TUNING_CANDIDATE",
+  "YANG_PLAYABLE_TUNING": "REQUIRES_HUMAN",
+  "gameplay_contracts": {
+    "COSMIC_BOSS_VERSION": {
+      "status": "ARCHITECTURE_ONLY",
+      "owner_approved": false
+    },
+    "PLAYABLE_BALANCED_VERSION": {
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false
+    }
+  },
+  "motion_law": "definition"
+}

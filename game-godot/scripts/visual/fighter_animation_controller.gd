@@ -62,7 +62,11 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 	var play_key := _animation_play_key(clip)
 	if clip.is_empty() or play_key.is_empty() or not _player.has_animation(play_key):
 		return
-	var should_loop := clip in ["idle", "run", "walk", "fall", "shield", "aura_charge", "charged_idle"]
+	var should_loop := clip in [
+		"idle", "idle_primary", "idle_secondary", "run", "run_loop", "walk", "walk_loop",
+		"fall", "fast_fall", "shield", "shield_hold", "aura_charge", "aura_ready", "charged_idle",
+		"ledge_hang", "crouch_hold",
+	]
 	var anim := _player.get_animation(play_key)
 	if anim:
 		anim.loop_mode = Animation.LOOP_LINEAR if should_loop else Animation.LOOP_NONE

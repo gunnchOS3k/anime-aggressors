@@ -1,0 +1,652 @@
+{
+  "schema": "roster_differentiation_matrix_v1",
+  "required_min_axes": 5,
+  "fighters": {
+    "ember-vale": {
+      "motion_law": "combustion",
+      "axes": {
+        "center_of_gravity": "anterior",
+        "stride_length": "medium",
+        "acceleration_read": "high",
+        "air_posture": "0.35",
+        "landing_style": "Aggressive momentum catch; hard landing adds heat flare, never a generic superhero kneel.",
+        "turnaround": "Hard heel plant with a short heat skid.",
+        "idle_rhythm": "Weight slightly forward; hands never fully relaxed; furnace core rises/falls with breath; small shoulder vents; impatience without jitter.",
+        "anticipation_length": "2",
+        "follow_through": "7",
+        "defense_posture": "Offensive guard posture; shoulders forward, gauntlets on centerline; combustion-assisted slip dodge.",
+        "hurt_reaction": "{\"hurt_heavy\": \"Core flickers/vents; force disrupts ignition rhythm.\", \"hurt_light\": \"Angry interruption.\", \"ko\": \"Vents fail \\u2192 core dims \\u2192 forward body tension disappears.\", \"launch\": \"Flame trail breaks into unstable heat fragments while body remains readable.\"}",
+        "smear_style": "explosive_snap",
+        "aura_growth": "{\"ASCENDANT\": \"heat crown and stronger body distortion\", \"BASE\": \"small furnace glow\", \"CHARGED\": \"thermal seams activate\", \"SUPER\": \"opened humanoid furnace\", \"SURGE\": \"gauntlets and vents open\"}",
+        "camera_response": "diagonal_up",
+        "audio_footprint": "RED"
+      },
+      "selected_differentiation_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "acceleration_read",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length"
+      ]
+    },
+    "rook-ironside": {
+      "motion_law": "mass",
+      "axes": {
+        "center_of_gravity": "grounded",
+        "stride_length": "short_dense",
+        "acceleration_read": "low",
+        "air_posture": "0.05",
+        "landing_style": "Roster's heaviest landing; two-foot plant or tectonic shock pose.",
+        "turnaround": "Visual deceleration and compression before redirecting.",
+        "idle_rhythm": "Wide stance; visible weight settling; loaded asymmetry; small armor compression instead of fidgeting.",
+        "anticipation_length": "6",
+        "follow_through": "12",
+        "defense_posture": "Receives force physically; plates lock; dodge is short armored lean/shift.",
+        "hurt_reaction": "{\"hurt_heavy\": \"Armor separates slightly; tectonic seams flare.\", \"hurt_light\": \"Mass resists; head/shoulder acknowledges.\", \"ko\": \"Building collapse: knees fail first \\u2192 torso mass follows \\u2192 armor loses alignment.\", \"launch\": \"Mass fights trajectory; body rotates as one heavy unit rather than ragdoll flailing.\"}",
+        "smear_style": "seismic_thud",
+        "aura_growth": "{\"ASCENDANT\": \"plates restack/compress\", \"BASE\": \"dark basalt/metal\", \"CHARGED\": \"seams glow\", \"SUPER\": \"living fortress silhouette\", \"SURGE\": \"joint rings activate\"}",
+        "camera_response": "horizontal_heavy",
+        "audio_footprint": "ORANGE"
+      },
+      "selected_differentiation_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "acceleration_read",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length"
+      ]
+    },
+    "juno-spark": {
+      "motion_law": "current",
+      "axes": {
+        "center_of_gravity": "central",
+        "stride_length": "short",
+        "acceleration_read": "very_high",
+        "air_posture": "0.25",
+        "landing_style": "Shortest/cleanest landing; visibly ready again immediately.",
+        "turnaround": "Electric snap-turn with narrow foot plant and immediate upper-body redirection.",
+        "idle_rhythm": "Ready to leave before idle completes; subtle micro-shifts; no slow breathing loop.",
+        "anticipation_length": "2",
+        "follow_through": "5",
+        "defense_posture": "Predictive repositioning; compact guard and minimal wasted silhouette.",
+        "hurt_reaction": "{\"hurt_heavy\": \"Momentum is forcibly interrupted; current routes briefly desynchronize.\", \"hurt_light\": \"Fast recoil and fast recovery.\", \"ko\": \"Current pathways fail out of sequence before the body loses acceleration posture.\", \"launch\": \"Arc trails stretch opposite momentum then snap away.\"}",
+        "smear_style": "volt_snap",
+        "aura_growth": "{\"ASCENDANT\": \"rail geometry energizes\", \"BASE\": \"small current paths\", \"CHARGED\": \"channels synchronize\", \"SUPER\": \"controlled lightning circuit\", \"SURGE\": \"conductor nodes align\"}",
+        "camera_response": "sharp_diagonal",
+        "audio_footprint": "YELLOW"
+      },
+      "selected_differentiation_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "acceleration_read",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length"
+      ]
+    },
+    "kaia-windrow": {
+      "motion_law": "flow",
+      "axes": {
+        "center_of_gravity": "elevated",
+        "stride_length": "long",
+        "acceleration_read": "medium",
+        "air_posture": "0.65",
+        "landing_style": "Bleeds vertical energy sideways into a spiral/step.",
+        "turnaround": "Redirects momentum through curved footwork and ribbon arc rather than stopping.",
+        "idle_rhythm": "Never fully gravity-bound; control surfaces respond subtly; calm centered breath.",
+        "anticipation_length": "3",
+        "follow_through": "8",
+        "defense_posture": "Flows around danger; guard remains calm and open.",
+        "hurt_reaction": "{\"hurt_heavy\": \"Flow breaks; control surfaces lose alignment.\", \"hurt_light\": \"Balance disturbed.\", \"ko\": \"Wind structures unravel and settle rather than exploding.\", \"launch\": \"Ribbons/control surfaces flare uncontrolled before Kaia recovers aerodynamic organization.\"}",
+        "smear_style": "pressure_wave",
+        "aura_growth": "{\"ASCENDANT\": \"larger current ribbons\", \"BASE\": \"gentle current\", \"CHARGED\": \"pressure rings\", \"SUPER\": \"eye of a controlled storm\", \"SURGE\": \"airfoils open\"}",
+        "camera_response": "upward_sweep",
+        "audio_footprint": "GREEN"
+      },
+      "selected_differentiation_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "acceleration_read",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length"
+      ]
+    },
+    "nix-calder": {
+      "motion_law": "structure",
+      "axes": {
+        "center_of_gravity": "posterior",
+        "stride_length": "long_reach",
+        "acceleration_read": "medium",
+        "air_posture": "0.2",
+        "landing_style": "Crystal/frost geometry briefly organizes beneath feet.",
+        "turnaround": "Sharp deliberate pivot.",
+        "idle_rhythm": "Extremely controlled; minimal wasted motion; hands evaluate space.",
+        "anticipation_length": "5",
+        "follow_through": "10",
+        "defense_posture": "Calculated guard; dodge uses minimum necessary displacement.",
+        "hurt_reaction": "{\"hurt_heavy\": \"Crystalline geometry fractures visibly.\", \"hurt_light\": \"Structure flexes.\", \"ko\": \"Lattice fractures from outer structures inward.\", \"launch\": \"Crystal pieces trail in ordered fragments before snapping back to body logic.\"}",
+        "smear_style": "crystalline_stop",
+        "aura_growth": "{\"ASCENDANT\": \"major crystal structures\", \"BASE\": \"small facets\", \"CHARGED\": \"lattice expands\", \"SUPER\": \"center of a geometric frozen system\", \"SURGE\": \"mantle grows\"}",
+        "camera_response": "low_freeze",
+        "audio_footprint": "BLUE"
+      },
+      "selected_differentiation_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "acceleration_read",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length"
+      ]
+    },
+    "orion-vell": {
+      "motion_law": "vectors",
+      "axes": {
+        "center_of_gravity": "variable",
+        "stride_length": "medium",
+        "acceleration_read": "medium",
+        "air_posture": "0.5",
+        "landing_style": "Gravity returns in clean controlled compression.",
+        "turnaround": "Pivots around an implied center rather than skidding.",
+        "idle_rhythm": "Centered, composed; orbit nodes continue moving while body remains calm.",
+        "anticipation_length": "4",
+        "follow_through": "9",
+        "defense_posture": "Orbit nodes become defensive geometry; dodge is local vector displacement.",
+        "hurt_reaction": "{\"hurt_heavy\": \"Nodes scatter before reforming.\", \"hurt_light\": \"Orbital order breaks briefly.\", \"ko\": \"Nodes lose orbit and fall out of coherent system before body yields.\", \"launch\": \"Orbit system tears into stretched ellipses aligned to knockback vector.\"}",
+        "smear_style": "vector_remap",
+        "aura_growth": "{\"ASCENDANT\": \"nested orbital system\", \"BASE\": \"few orbit nodes\", \"CHARGED\": \"ring appears\", \"SUPER\": \"miniature celestial machine\", \"SURGE\": \"multiple nodes\"}",
+        "camera_response": "vector_launch",
+        "audio_footprint": "INDIGO"
+      },
+      "selected_differentiation_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "acceleration_read",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length"
+      ]
+    },
+    "vesper-nyx": {
+      "motion_law": "uncertainty",
+      "axes": {
+        "center_of_gravity": "shifting",
+        "stride_length": "medium_hidden",
+        "acceleration_read": "high",
+        "air_posture": "0.4",
+        "landing_style": "Feet and ghost geometry arrive slightly out of phase.",
+        "turnaround": "Brief offset silhouette through the pivot.",
+        "idle_rhythm": "Never completely stable; occasional hand ghost, shadow delay or cowl offset.",
+        "anticipation_length": "3",
+        "follow_through": "7",
+        "defense_posture": "Minimal guard; dodge is phase slip.",
+        "hurt_reaction": "{\"hurt_heavy\": \"Phase coherence collapses into one forced position.\", \"hurt_light\": \"Body flickers but receives hit honestly.\", \"ko\": \"All offsets collapse to one silhouette, then void seams fail.\", \"launch\": \"Multiple ghost positions stretch then collapse onto actual launched body.\"}",
+        "smear_style": "phase_strike",
+        "aura_growth": "{\"ASCENDANT\": \"secondary offset fragments\", \"BASE\": \"small void seams\", \"CHARGED\": \"edge ghosts\", \"SUPER\": \"silhouette disagrees with itself\", \"SURGE\": \"negative-space cuts\"}",
+        "camera_response": "diagonal_back",
+        "audio_footprint": "VIOLET"
+      },
+      "selected_differentiation_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "acceleration_read",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length"
+      ]
+    }
+  },
+  "pairwise": {
+    "ember-vale__vs__rook-ironside": {
+      "differing_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "acceleration_read",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length",
+        "follow_through",
+        "defense_posture",
+        "hurt_reaction",
+        "smear_style",
+        "aura_growth",
+        "camera_response",
+        "audio_footprint"
+      ],
+      "count": 15,
+      "pass": true
+    },
+    "ember-vale__vs__juno-spark": {
+      "differing_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "acceleration_read",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "follow_through",
+        "defense_posture",
+        "hurt_reaction",
+        "smear_style",
+        "aura_growth",
+        "camera_response",
+        "audio_footprint"
+      ],
+      "count": 14,
+      "pass": true
+    },
+    "ember-vale__vs__kaia-windrow": {
+      "differing_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "acceleration_read",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length",
+        "follow_through",
+        "defense_posture",
+        "hurt_reaction",
+        "smear_style",
+        "aura_growth",
+        "camera_response",
+        "audio_footprint"
+      ],
+      "count": 15,
+      "pass": true
+    },
+    "ember-vale__vs__nix-calder": {
+      "differing_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "acceleration_read",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length",
+        "follow_through",
+        "defense_posture",
+        "hurt_reaction",
+        "smear_style",
+        "aura_growth",
+        "camera_response",
+        "audio_footprint"
+      ],
+      "count": 15,
+      "pass": true
+    },
+    "ember-vale__vs__orion-vell": {
+      "differing_axes": [
+        "center_of_gravity",
+        "acceleration_read",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length",
+        "follow_through",
+        "defense_posture",
+        "hurt_reaction",
+        "smear_style",
+        "aura_growth",
+        "camera_response",
+        "audio_footprint"
+      ],
+      "count": 14,
+      "pass": true
+    },
+    "ember-vale__vs__vesper-nyx": {
+      "differing_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length",
+        "defense_posture",
+        "hurt_reaction",
+        "smear_style",
+        "aura_growth",
+        "camera_response",
+        "audio_footprint"
+      ],
+      "count": 13,
+      "pass": true
+    },
+    "rook-ironside__vs__juno-spark": {
+      "differing_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "acceleration_read",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length",
+        "follow_through",
+        "defense_posture",
+        "hurt_reaction",
+        "smear_style",
+        "aura_growth",
+        "camera_response",
+        "audio_footprint"
+      ],
+      "count": 15,
+      "pass": true
+    },
+    "rook-ironside__vs__kaia-windrow": {
+      "differing_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "acceleration_read",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length",
+        "follow_through",
+        "defense_posture",
+        "hurt_reaction",
+        "smear_style",
+        "aura_growth",
+        "camera_response",
+        "audio_footprint"
+      ],
+      "count": 15,
+      "pass": true
+    },
+    "rook-ironside__vs__nix-calder": {
+      "differing_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "acceleration_read",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length",
+        "follow_through",
+        "defense_posture",
+        "hurt_reaction",
+        "smear_style",
+        "aura_growth",
+        "camera_response",
+        "audio_footprint"
+      ],
+      "count": 15,
+      "pass": true
+    },
+    "rook-ironside__vs__orion-vell": {
+      "differing_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "acceleration_read",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length",
+        "follow_through",
+        "defense_posture",
+        "hurt_reaction",
+        "smear_style",
+        "aura_growth",
+        "camera_response",
+        "audio_footprint"
+      ],
+      "count": 15,
+      "pass": true
+    },
+    "rook-ironside__vs__vesper-nyx": {
+      "differing_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "acceleration_read",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length",
+        "follow_through",
+        "defense_posture",
+        "hurt_reaction",
+        "smear_style",
+        "aura_growth",
+        "camera_response",
+        "audio_footprint"
+      ],
+      "count": 15,
+      "pass": true
+    },
+    "juno-spark__vs__kaia-windrow": {
+      "differing_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "acceleration_read",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length",
+        "follow_through",
+        "defense_posture",
+        "hurt_reaction",
+        "smear_style",
+        "aura_growth",
+        "camera_response",
+        "audio_footprint"
+      ],
+      "count": 15,
+      "pass": true
+    },
+    "juno-spark__vs__nix-calder": {
+      "differing_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "acceleration_read",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length",
+        "follow_through",
+        "defense_posture",
+        "hurt_reaction",
+        "smear_style",
+        "aura_growth",
+        "camera_response",
+        "audio_footprint"
+      ],
+      "count": 15,
+      "pass": true
+    },
+    "juno-spark__vs__orion-vell": {
+      "differing_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "acceleration_read",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length",
+        "follow_through",
+        "defense_posture",
+        "hurt_reaction",
+        "smear_style",
+        "aura_growth",
+        "camera_response",
+        "audio_footprint"
+      ],
+      "count": 15,
+      "pass": true
+    },
+    "juno-spark__vs__vesper-nyx": {
+      "differing_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "acceleration_read",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length",
+        "follow_through",
+        "defense_posture",
+        "hurt_reaction",
+        "smear_style",
+        "aura_growth",
+        "camera_response",
+        "audio_footprint"
+      ],
+      "count": 15,
+      "pass": true
+    },
+    "kaia-windrow__vs__nix-calder": {
+      "differing_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length",
+        "follow_through",
+        "defense_posture",
+        "hurt_reaction",
+        "smear_style",
+        "aura_growth",
+        "camera_response",
+        "audio_footprint"
+      ],
+      "count": 14,
+      "pass": true
+    },
+    "kaia-windrow__vs__orion-vell": {
+      "differing_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length",
+        "follow_through",
+        "defense_posture",
+        "hurt_reaction",
+        "smear_style",
+        "aura_growth",
+        "camera_response",
+        "audio_footprint"
+      ],
+      "count": 14,
+      "pass": true
+    },
+    "kaia-windrow__vs__vesper-nyx": {
+      "differing_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "acceleration_read",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "follow_through",
+        "defense_posture",
+        "hurt_reaction",
+        "smear_style",
+        "aura_growth",
+        "camera_response",
+        "audio_footprint"
+      ],
+      "count": 14,
+      "pass": true
+    },
+    "nix-calder__vs__orion-vell": {
+      "differing_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length",
+        "follow_through",
+        "defense_posture",
+        "hurt_reaction",
+        "smear_style",
+        "aura_growth",
+        "camera_response",
+        "audio_footprint"
+      ],
+      "count": 14,
+      "pass": true
+    },
+    "nix-calder__vs__vesper-nyx": {
+      "differing_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "acceleration_read",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length",
+        "follow_through",
+        "defense_posture",
+        "hurt_reaction",
+        "smear_style",
+        "aura_growth",
+        "camera_response",
+        "audio_footprint"
+      ],
+      "count": 15,
+      "pass": true
+    },
+    "orion-vell__vs__vesper-nyx": {
+      "differing_axes": [
+        "center_of_gravity",
+        "stride_length",
+        "acceleration_read",
+        "air_posture",
+        "landing_style",
+        "turnaround",
+        "idle_rhythm",
+        "anticipation_length",
+        "follow_through",
+        "defense_posture",
+        "hurt_reaction",
+        "smear_style",
+        "aura_growth",
+        "camera_response",
+        "audio_footprint"
+      ],
+      "count": 15,
+      "pass": true
+    }
+  },
+  "ROSTER_DIFFERENTIATION_5_AXES_PASS": true
+}
