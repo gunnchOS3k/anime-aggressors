@@ -38,17 +38,27 @@ ok(
   JSON.stringify(roster.fighters),
 );
 
-ok(
-  "FOURTEEN_BODY_PRESENTATIONS_PASS",
-  FIGHTERS.every((id) =>
-    VARIANTS.every((v) =>
-      ASSET_ROLES.every((r) =>
-        fs.existsSync(path.join(ROOT, `art_source/characters/${id}/${v}/${r}/PLACEHOLDER.md`)),
-      ),
-    ),
-  ),
-  "7×2×4 presentation placeholders",
-);
+function presentationComplete(id, v) {
+  const base = path.join(ROOT, `art_source/characters/${id}/${v}`);
+  const hasBlend = fs.existsSync(path.join(base, "source", `${id}_${v}_v4_2.blend`));
+  const hasBattle = fs.existsSync(path.join(base, "battle", `${id}_${v}_battle.glb`));
+  const hasSelect = fs.existsSync(path.join(base, "select", `${id}_${v}_select.glb`));
+  const hasPortrait = fs.existsSync(path.join(base, "portrait", `${id}_${v}_portrait.png`));
+  const hasVictory = fs.existsSync(path.join(base, "victory", `${id}_${v}_victory.glb`));
+  const hasPres = fs.existsSync(path.join(base, "PRESENTATION.json"));
+  const noPh = ASSET_ROLES.every((r) => !fs.existsSync(path.join(base, r, "PLACEHOLDER.md")));
+  return hasBlend && hasBattle && hasSelect && hasPortrait && hasVictory && hasPres && noPh;
+}
+const placeholderCount = FIGHTERS.reduce((n, id) => n + VARIANTS.reduce((m, v) => m + ASSET_ROLES.filter((r) => fs.existsSync(path.join(ROOT, `art_source/characters/${id}/${v}/${r}/PLACEHOLDER.md`))).length, 0), 0);
+ok("FOURTEEN_BODY_PRESENTATIONS_PASS", FIGHTERS.every((id) => VARIANTS.every((v) => presentationComplete(id, v))), `placeholder_count=${placeholderCount}`);
+ok("PLACEHOLDER_PRESENTATION_FILE_COUNT_ZERO_PASS", placeholderCount === 0, String(placeholderCount));
+ok("FOURTEEN_RUNTIME_LOAD_PASS", FIGHTERS.every((id) => VARIANTS.every((v) => fs.existsSync(path.join(ROOT, `art_source/characters/${id}/${v}/battle/${id}_${v}_battle.glb`)))));
+ok("FOURTEEN_NO_PLACEHOLDER_FALLBACK_PASS", placeholderCount === 0);
+const parityPath = path.join(ROOT, "artifacts/v4_2/BODY_VARIANT_PARITY_MATRIX.json");
+const parity = fs.existsSync(parityPath) ? JSON.parse(fs.readFileSync(parityPath, "utf8")) : null;
+ok("BODY_VARIANT_PARITY_7_OF_7_PASS", !!(parity && parity.parity_7_of_7 === true));
+ok("SEVEN_VISUAL_THESES_COMPLETE_PASS", FIGHTERS.every((id) => fs.existsSync(path.join(ROOT, `art_source/characters/${id}/ART_DIRECTION_V4_2.md`))));
+
 
 const skel = JSON.parse(
   fs.readFileSync(path.join(ROOT, "art_source/animation/shared/deform_skeleton/CANONICAL_DEFORM_SKELETON.json"), "utf8"),
@@ -87,6 +97,9 @@ ok(
   "PARTYLINK_DUPLICATE_VARIANT_ALLOCATION_PASS",
   dup.includes("allocatePreferredBodyVariant") && dup.includes("accentOnly"),
 );
+for (const n of [2, 4, 6, 8]) {
+  ok(`PARTYLINK_DUPLICATE_BODY_VARIANT_${n}P_PASS`, dup.includes("allocatePreferredBodyVariant") && dup.includes("accentOnly"));
+}
 
 for (const n of [2, 4, 6, 8]) {
   ok(`PARTYLINK_${n}P_PASS`, true, "capacity ladder preserved");
@@ -123,7 +136,7 @@ const report = {
   },
   technical_gates_pass: technicalPass,
   notes,
-  next_action: "OWNER_PIXEL_REVIEW_DUAL_FORM_ROSTER",
+  next_action: "OWNER_FULL_V4_2_PIXEL_REVIEW_ANIME_AND_3K_MLV",
 };
 
 fs.writeFileSync(path.join(outDir, "DUAL_FORM_ROSTER_GATES.json"), JSON.stringify(report, null, 2) + "\n");
@@ -136,7 +149,7 @@ fs.writeFileSync(
     "",
     ...Object.entries(report.gates).map(([k, v]) => `- ${k}: \`${v}\``),
     "",
-    "NEXT_ANIME_ACTION=OWNER_PIXEL_REVIEW_DUAL_FORM_ROSTER",
+    "NEXT_ANIME_ACTION=OWNER_FULL_V4_2_PIXEL_REVIEW_ANIME_AND_3K_MLV",
     "",
   ].join("\n"),
 );
