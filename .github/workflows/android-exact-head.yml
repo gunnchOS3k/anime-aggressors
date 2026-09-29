@@ -1,0 +1,161 @@
+name: Android Exact-Head APK
+
+# Permanent path: produce an installable debug APK for the exact checked-out SHA.
+# Consumed by: ./animectl android artifact find|download|verify --sha <sha>
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [v4/dual-form-power-roster, main]
+  workflow_dispatch:
+
+concurrency:
+  group: android-exact-head-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  android-exact-head:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      GODOT_VERSION: "4.5"
+      JAVA_VERSION_LABEL: "17"
+
+    steps:
+      - name: Checkout exact tip
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK packages
+        run: |
+          set -euo pipefail
+          sdkmanager --install \
+            "platform-tools" \
+            "platforms;android-36" \
+            "build-tools;35.0.0" \
+            "cmdline-tools;latest" \
+            "ndk;27.2.12479018" \
+            "cmake;3.22.1"
+          yes | sdkmanager --licenses >/dev/null || true
+          echo "ANDROID_HOME=${ANDROID_HOME}" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=${ANDROID_HOME}" >> "$GITHUB_ENV"
+          echo "${ANDROID_HOME}/platform-tools" >> "$GITHUB_PATH"
+          echo "${ANDROID_HOME}/build-tools/35.0.0" >> "$GITHUB_PATH"
+
+      - name: Cache Godot binary + export templates
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ runner.tool_cache }}/godot
+            ~/.local/share/godot/export_templates
+          key: godot-${{ env.GODOT_VERSION }}-android-exact-head-v1
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-android-exact-head-${{ hashFiles('game-godot/**/*.gradle*', 'game-godot/export_presets.cfg') }}
+          restore-keys: |
+            gradle-android-exact-head-
+
+      - name: Install npm deps (lock-faithful)
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Install Godot ${{ env.GODOT_VERSION }}
+        id: godot
+        run: |
+          set -euo pipefail
+          GODOT_BIN="$(GODOT_VERSION=${GODOT_VERSION} ./scripts/install-godot-ci.sh)"
+          echo "GODOT_BIN=${GODOT_BIN}" >> "$GITHUB_ENV"
+          echo "bin=${GODOT_BIN}" >> "$GITHUB_OUTPUT"
+          "${GODOT_BIN}" --version
+
+      - name: Install Godot export templates
+        run: |
+          set -euo pipefail
+          GODOT_VERSION=${GODOT_VERSION} ./scripts/install-godot-templates.sh
+          # Templates must include Android gradle build template pieces
+          TEMPLATE_DIR="${HOME}/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+          ls -la "${TEMPLATE_DIR}" | head -40
+          test -f "${TEMPLATE_DIR}/android_source.zip" || test -f "${TEMPLATE_DIR}/android_debug.apk" || true
+
+      - name: Write Godot Android editor settings
+        run: |
+          chmod +x scripts/ci/write-godot-android-editor-settings.sh
+          ./scripts/ci/write-godot-android-editor-settings.sh
+
+      - name: Stamp exact-head build identity
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_ACTIONS: "true"
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+        run: |
+          python3 tools/art_pipeline/build_identity/generate_build_identity.py \
+            --repo-root . \
+            --flavor github-actions-debug
+          python3 - <<'PY'
+          import json, os
+          d=json.load(open("game-godot/data/runtime/build_identity.json"))
+          assert d["git_sha"] == os.environ["GITHUB_SHA"], d
+          assert d.get("build_source") == "github_actions", d
+          assert d.get("workflow_run_id") == os.environ["GITHUB_RUN_ID"], d
+          print("identity ok", d["git_sha"][:12], d["build_source"])
+          PY
+
+      - name: Export Android debug APK (canonical)
+        env:
+          GODOT_BIN: ${{ env.GODOT_BIN }}
+          ANDROID_HOME: ${{ env.ANDROID_HOME }}
+          ANDROID_SDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}
+          JAVA_HOME: ${{ env.JAVA_HOME }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_ACTIONS: "true"
+          GITHUB_RUN_ID: ${{ github.run_id }}
+        run: npm run godot:export:android
+
+      - name: Verify APK + write ANDROID_BUILD_MANIFEST.json
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_ACTIONS: "true"
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          ANDROID_SDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}
+          GODOT_VERSION: ${{ env.GODOT_VERSION }}
+        run: python3 scripts/ci/verify_android_exact_head_apk.py
+
+      - name: Artifact name (short SHA)
+        id: art
+        run: echo "name=anime-aggressors-android-${GITHUB_SHA:0:12}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload exact-head Android artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.art.outputs.name }}
+          path: |
+            builds/android/anime-aggressors-debug.apk
+            builds/android/ANDROID_BUILD_MANIFEST.json
+            builds/android/anime-aggressors-debug.apk.sha256
+          if-no-files-found: error
+          retention-days: 14
