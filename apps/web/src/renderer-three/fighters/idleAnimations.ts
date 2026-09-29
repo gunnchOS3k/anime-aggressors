@@ -22,6 +22,8 @@ const IDLE_FLAVORS: Record<string, IdleAnimFlavor> = {
   "nix-calder": { bobAmp: 0.02, bobSpeed: 0.9, armL: 0.08, armR: -0.08, torsoRot: 0.04, auraPulse: 0.28, headTilt: 0.03, legSpread: 0.1 },
   "orion-vell": { bobAmp: 0.035, bobSpeed: 1.4, armL: 0.35, armR: -0.1, torsoRot: -0.05, auraPulse: 0.32, headTilt: -0.02, legSpread: 0.05 },
   "vesper-nyx": { bobAmp: 0.03, bobSpeed: 2.8, armL: 0.15, armR: -0.15, torsoRot: 0.03, auraPulse: 0.38, headTilt: 0.05, legSpread: 0.06 },
+  yin: { bobAmp: 0.015, bobSpeed: 0.7, armL: 0.04, armR: -0.04, torsoRot: -0.02, auraPulse: 0.18, headTilt: -0.03, legSpread: 0.05 },
+  yang: { bobAmp: 0.045, bobSpeed: 2.4, armL: 0.24, armR: -0.24, torsoRot: 0.06, auraPulse: 0.48, headTilt: 0.04, legSpread: 0.09 },
 };
 
 export function idleFlavorForFighter(fighterId: string): IdleAnimFlavor {

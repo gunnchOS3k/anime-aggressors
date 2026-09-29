@@ -1,10 +1,20 @@
 import type { CreatedFighter, FighterBodyVariant } from "@anime-aggressors/game-core";
-import { normalizeBodyVariant, oppositeBodyVariant } from "@anime-aggressors/game-core";
+import {
+  isCosmicFighterId,
+  isCosmicPlayable,
+  normalizeBodyVariant,
+  oppositeBodyVariant,
+} from "@anime-aggressors/game-core";
 import { getAllDefaultCreatedFighters } from "@anime-aggressors/game-core";
 import { listCreatedFighters } from "../storage/createdFightersStorage.ts";
+import { loadStoryProgress } from "../storage/storyProgressStorage.ts";
 
 export function buildSelectableRoster(): CreatedFighter[] {
-  const defaults = getAllDefaultCreatedFighters();
+  const story = loadStoryProgress();
+  const defaults = getAllDefaultCreatedFighters().filter((f) => {
+    if (!isCosmicFighterId(f.id)) return true;
+    return isCosmicPlayable(story, f.id);
+  });
   const custom = listCreatedFighters();
   const customIds = new Set(custom.map((f) => f.id));
   return [...custom, ...defaults.filter((d) => !customIds.has(d.id))];

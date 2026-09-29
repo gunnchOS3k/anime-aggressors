@@ -192,6 +192,9 @@ async function navigate(mode: AppRouteMode): Promise<void> {
     } else if (mode === "about") {
       const { mountAboutScreen } = await import("./screens/AboutScreen.ts");
       mountAboutScreen(appRoot!);
+    } else if (mode === "story-campaign") {
+      const { mountStoryCampaignScreen } = await import("./screens/StoryCampaignScreen.js");
+      mountStoryCampaignScreen(appRoot!);
     } else if (mode === "career") {
       const { mountCareerScreen } = await import("./screens/CareerScreen.js");
       await mountCareerScreen(appRoot!);

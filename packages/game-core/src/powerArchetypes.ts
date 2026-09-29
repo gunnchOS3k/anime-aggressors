@@ -82,4 +82,24 @@ export const POWER_ARCHETYPE_SYNTHESIS: Record<CanonicalFighterId, PowerArchetyp
     femaleNotes: "Same trickster personality and deceptive animation set.",
     originalityBoundary: "Principles synthesis only — no franchise mashup.",
   },
+  yin: {
+    fighter_id: "yin",
+    codename: "infinite quiet",
+    lane: "Reduction / null / control synthesis (TUNING_CANDIDATE)",
+    synthesis:
+      "Inward-collapsing silhouette, suppressed secondary motion, charcoal void body with a single retained seed-light pulse, quiet mask vocabulary reserved for puppet control of others.",
+    maleNotes: "Same reduction grammar and reach envelope.",
+    femaleNotes: "Same reduction grammar and reach envelope — presentation only.",
+    originalityBoundary: "Original cosmic identity — not a recolor of spectrum fighters.",
+  },
+  yang: {
+    fighter_id: "yang",
+    codename: "absolute radiance",
+    lane: "Definition / construct / control synthesis (TUNING_CANDIDATE)",
+    synthesis:
+      "Outward-declared silhouette, exact constructive symmetry language, radiant pale body with a single retained dark imperfection, overwrite flares and construct panels.",
+    maleNotes: "Same definition grammar and reach envelope.",
+    femaleNotes: "Same definition grammar and reach envelope — presentation only.",
+    originalityBoundary: "Original cosmic identity — not a recolor of spectrum fighters.",
+  },
 };

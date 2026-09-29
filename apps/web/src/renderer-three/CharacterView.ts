@@ -33,7 +33,7 @@ export class CharacterView {
     }
     this.fighterSize = appearance.size;
     this.group.add(this.parts.root);
-    this.appearanceKey = `${appearance.name}-${appearance.color}-${appearance.size}`;
+    this.appearanceKey = `${appearance.name}-${appearance.color}-${appearance.size}-${appearance.bodyVariant}-${appearance.storyForm}-${appearance.essenceTier}`;
     this.baseTorsoColor.setHex(appearance.primaryHex);
     this.shieldColor = appearance.vfx.shield;
 
@@ -54,7 +54,7 @@ export class CharacterView {
     let appearance;
     try {
       appearance = resolveFighterAppearanceFromPlayer(player);
-      const key = `${appearance.name}-${appearance.color}-${appearance.size}`;
+      const key = `${appearance.name}-${appearance.color}-${appearance.size}-${appearance.bodyVariant}-${appearance.storyForm}-${appearance.essenceTier}`;
       if (key !== this.appearanceKey) {
         this.group.remove(this.parts.root);
         destroyFighterModel(this.parts);

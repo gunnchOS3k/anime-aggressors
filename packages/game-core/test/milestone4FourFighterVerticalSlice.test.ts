@@ -71,10 +71,10 @@ function skipCountdown(state: ReturnType<typeof createInitialGameState>) {
 }
 
 describe("Milestone 4 — roster helpers", () => {
-  it("DEFAULT_FIGHTERS remains the 7-fighter source of truth", () => {
-    assert.equal(DEFAULT_FIGHTERS.length, 7);
-    assert.equal(getPlayableRoster().length, 7);
-    assert.equal(getPlayableCreatedFighters().length, 7);
+  it("DEFAULT_FIGHTERS remains the 9-fighter playable source of truth", () => {
+    assert.equal(DEFAULT_FIGHTERS.length, 9);
+    assert.equal(getPlayableRoster().length, 9);
+    assert.equal(getPlayableCreatedFighters().length, 9);
   });
 
   it("getProductionFighters returns exactly four validated fighters", () => {
@@ -120,14 +120,14 @@ describe("Milestone 4 — roster helpers", () => {
   });
 });
 
-describe("Milestone 4 — seven-fighter regression", () => {
+describe("Milestone 4 — nine-fighter regression", () => {
   it("getDefaultFighterPreset indexes DEFAULT_FIGHTERS", () => {
     assert.equal(getDefaultFighterPreset(0).id, "ember-vale");
     assert.equal(getDefaultFighterPreset(6).id, "vesper-nyx");
   });
 
-  it("getAllDefaultCreatedFighters returns all seven", () => {
-    assert.equal(getAllDefaultCreatedFighters().length, 7);
+  it("getAllDefaultCreatedFighters returns all nine", () => {
+    assert.equal(getAllDefaultCreatedFighters().length, 9);
   });
 
   it("getDefaultCreatedFighter preserves roster order", () => {

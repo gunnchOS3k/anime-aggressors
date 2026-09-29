@@ -25,6 +25,8 @@ INV = json.loads((ROOT / "data/bibles/animation_inventory_v1.json").read_text(en
 PUPPET = json.loads((ROOT / "data/bibles/puppet_essence_story_states_v1.json").read_text(encoding="utf-8"))
 
 SPECTRUM = list(FIGHTERS)
+COSMIC = ["yin", "yang"]
+PLAYABLE_ROSTER = SPECTRUM + COSMIC
 MOTION_LAWS = {
     "ember-vale": "combustion",
     "rook-ironside": "mass",
@@ -33,6 +35,8 @@ MOTION_LAWS = {
     "nix-calder": "structure",
     "orion-vell": "vectors",
     "vesper-nyx": "uncertainty",
+    "yin": "reduction",
+    "yang": "definition",
 }
 ELEMENTAL_ANATOMY = {
     "ember-vale": "combustion_vent_deformation",
@@ -42,6 +46,8 @@ ELEMENTAL_ANATOMY = {
     "nix-calder": "lattice_facet_growth",
     "orion-vell": "orbit_node_vector_movement",
     "vesper-nyx": "phase_offset_geometry",
+    "yin": "inward_null_collapse",
+    "yang": "radiant_construct_expand",
 }
 LAW_BIAS = {
     "combustion": {"amp": (1.20, 0.90, 1.25), "antic": 0.85, "follow": 1.20, "cog": 0.18, "stride": 1.15},
@@ -51,6 +57,8 @@ LAW_BIAS = {
     "structure": {"amp": (0.85, 1.20, 0.75), "antic": 1.25, "follow": 1.10, "cog": -0.10, "stride": 0.90},
     "vectors": {"amp": (1.10, 1.00, 1.30), "antic": 1.05, "follow": 1.00, "cog": 0.00, "stride": 1.05},
     "uncertainty": {"amp": (1.05, 0.95, 1.40), "antic": 0.90, "follow": 1.25, "cog": 0.12, "stride": 1.00},
+    "reduction": {"amp": (0.55, 0.75, 0.50), "antic": 1.55, "follow": 0.70, "cog": -0.35, "stride": 0.55},
+    "definition": {"amp": (1.35, 1.15, 1.45), "antic": 0.65, "follow": 1.40, "cog": 0.32, "stride": 1.35},
 }
 
 ATTACK_SLOTS = {
@@ -306,6 +314,29 @@ def pose_angles(fighter_id: str, slot_id: str, bone: str, phase_name: str, law: 
             base = [-b * 0.85 for b in base]
         if bone == "Chest":
             base[2] += 0.18 * math.sin(seed * 3 + phase_mul)
+    elif law == "reduction":
+        # Yin: inward collapse, delayed holds, suppressed secondary flourish.
+        base = [b * 0.72 for b in base]
+        if bone in ("Spine", "Chest"):
+            base[0] += cog * 0.55
+            base[1] -= 0.10 * abs(phase_mul)
+        if bone.startswith("UpperArm") or bone.startswith("Hand"):
+            base[0] *= 0.55
+            base[2] *= 0.60
+        if phase_name in ("anticipation", "hold"):
+            base = [b * 1.25 for b in base]
+    elif law == "definition":
+        # Yang: outward declare, constructive overshoot, mirrored limbs stay readable.
+        if bone in ("Spine", "Chest"):
+            base[1] += 0.16 * abs(phase_mul)
+            base[0] += 0.14 * phase_mul
+        if bone.startswith("UpperArm") or bone.startswith("Hand") or bone.startswith("LowerArm"):
+            base[0] *= 1.28
+            base[2] += 0.12 * phase_mul
+        if bone.endswith("_L"):
+            base[2] = -abs(base[2]) if phase_name == "contact" else base[2] * 0.92
+        if phase_name in ("contact", "apex"):
+            base = [b * 1.22 for b in base]
     if family == "attack":
         if bone in ("Hand_R", "UpperArm_R", "LowerArm_R") and "hand" in contact_socket:
             base[0] += 0.28 * phase_mul
@@ -425,6 +456,8 @@ def screen_space_rules(law, slot_id):
             "combustion": "heat_ribbon_smear", "mass": "plate_impact_streak", "current": "rail_afterimage",
             "flow": "airfoil_ribbon", "structure": "facet_shard_trail", "vectors": "orbit_node_ghost",
             "uncertainty": "phase_echo_offset",
+            "reduction": "inward_null_collapse_trail",
+            "definition": "radiant_construct_flare",
         }[law],
         "collision_unchanged": True,
         "slot_hint": slot_id,
@@ -666,34 +699,63 @@ def write_puppet_essence_artifacts():
             "essence_progression": PUPPET["essence_progression"],
             "gray_transform_clip": "aura_super_transform",
         }
+    for fid in COSMIC:
+        matrix["fighters"][fid] = {
+            "NORMAL": {"mask": False, "status": "AUTOMATION_AUTHORED_CANDIDATE", "note": "cosmic_native"},
+            "mask_native_cosmic": True,
+            "essence_progression": PUPPET["essence_progression"],
+            "gray_transform_clip": "aura_super_transform",
+            "playable_tuning_status": "TUNING_CANDIDATE",
+        }
     (OUT / "PUPPET_VARIANT_MATRIX.json").write_text(json.dumps(matrix, indent=2) + "\n", encoding="utf-8")
 
 
 def main() -> int:
+    import os
     OUT.mkdir(parents=True, exist_ok=True)
     blueprints = load_blueprints()
     per_fighter = {}
     cross_slot_sigs = {}
-    for fid in SPECTRUM:
+    cosmic_only = os.environ.get("COSMIC_ONLY") == "1"
+    roster = COSMIC if cosmic_only else PLAYABLE_ROSTER
+    for fid in roster:
         print(f"producing {fid} ...")
         stats = produce_fighter(fid, blueprints)
         extra = author_alias_targets(fid, blueprints)
         stats["alias_targets_authored"] = extra
         per_fighter[fid] = stats
+        print(f"  unique={stats['unique_authored_candidate_clips']} alias_targets={extra} law={stats['motion_law']}")
+    # Cross-fighter uniqueness always evaluated over full playable roster on disk.
+    for fid in PLAYABLE_ROSTER:
         for row in inventory_slots():
             slot = row["slot_id"]
-            clip = json.loads((ROOT / "content/fighters" / fid / "animations/procedural" / f"{slot}.anim.json").read_text())
-            cross_slot_sigs.setdefault(slot, set()).add(clip["curve_signature"])
-        print(f"  unique={stats['unique_authored_candidate_clips']} alias_targets={extra} law={stats['motion_law']}")
-    shared = {slot: sigs for slot, sigs in cross_slot_sigs.items() if len(sigs) < len(SPECTRUM)}
+            path = ROOT / "content/fighters" / fid / "animations/procedural" / f"{slot}.anim.json"
+            if not path.exists():
+                continue
+            clip = json.loads(path.read_text(encoding="utf-8"))
+            cross_slot_sigs.setdefault(slot, set()).add(clip.get("curve_signature", path.name))
+            if fid not in per_fighter:
+                per_fighter[fid] = {
+                    "unique_authored_candidate_clips": 0,
+                    "motion_law": MOTION_LAWS.get(fid, "unknown"),
+                    "preserved_from_disk": True,
+                }
+        if fid in SPECTRUM and per_fighter.get(fid, {}).get("preserved_from_disk"):
+            n = sum(1 for row in inventory_slots() if (ROOT / "content/fighters" / fid / "animations/procedural" / f"{row['slot_id']}.anim.json").exists())
+            per_fighter[fid]["unique_authored_candidate_clips"] = n
+    shared = {slot: sigs for slot, sigs in cross_slot_sigs.items() if len(sigs) < len(PLAYABLE_ROSTER)}
     report = {
         "schema": "authored_candidate_production_report_v1",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "authorship": "AUTOMATION_AUTHORED_CANDIDATE",
         "human_approved": False,
-        "spectrum_fighters": per_fighter,
+        "spectrum_fighters": {k: v for k, v in per_fighter.items() if k in SPECTRUM},
+        "cosmic_fighters": {k: v for k, v in per_fighter.items() if k in COSMIC},
+        "playable_roster": per_fighter,
         "PROCEDURAL_FALLBACK_COUNT_TARGET": 0,
         "AUTOMATION_AUTHORED_CANDIDATE_COUNT": sum(s["unique_authored_candidate_clips"] for s in per_fighter.values()),
+        "SPECTRUM_AUTHORED_CANDIDATE_COUNT": sum(s["unique_authored_candidate_clips"] for k, s in per_fighter.items() if k in SPECTRUM),
+        "COSMIC_AUTHORED_CANDIDATE_COUNT": sum(s["unique_authored_candidate_clips"] for k, s in per_fighter.items() if k in COSMIC),
         "MIN_UNIQUE_PER_FIGHTER": min(s["unique_authored_candidate_clips"] for s in per_fighter.values()),
         "CROSS_FIGHTER_IDENTICAL_CURVE_SLOTS": sorted(shared.keys()),
         "CROSS_FIGHTER_CURVE_REUSE_PASS": len(shared) == 0,

@@ -1,59 +1,106 @@
 {
   "schema_version": 1,
   "fighter_id": "yin",
+  "semantic_slot_id": "down_air",
+  "runtime_clip_id": "down_air",
   "action_id": "yin.down_air",
   "clip_name": "down_air",
-  "kind": "PROCEDURAL_RUNTIME_ANIMATION",
+  "kind": "AUTOMATION_AUTHORED_CANDIDATE_ANIMATION",
+  "authorship": "AUTOMATION_AUTHORED_CANDIDATE",
   "authority_slot": "down_air",
-  "authority_status": "PROCEDURAL_FALLBACK",
+  "authority_status": "AUTOMATION_AUTHORED_CANDIDATE",
+  "human_approved": false,
   "human_approval": false,
   "fps": 60.0,
-  "duration_frames": 19,
+  "duration_frames": 16,
+  "looping": false,
+  "interpolation_mode": "bezier_hold",
+  "key_poses": [
+    {
+      "name": "intent",
+      "frame": 0,
+      "time_s": 0.0
+    },
+    {
+      "name": "anticipation",
+      "frame": 8,
+      "time_s": 0.1333
+    },
+    {
+      "name": "acceleration",
+      "frame": 9,
+      "time_s": 0.15
+    },
+    {
+      "name": "contact",
+      "frame": 9,
+      "time_s": 0.15
+    },
+    {
+      "name": "follow",
+      "frame": 14,
+      "time_s": 0.2333
+    },
+    {
+      "name": "recovery",
+      "frame": 16,
+      "time_s": 0.2667
+    }
+  ],
   "bone_tracks": {
     "Spine": [
       {
         "frame": 0,
         "time_s": 0.0,
         "rotation_rad": [
-          0.01956,
-          -0.06901,
-          0.13906
+          -0.23103,
+          -0.00859,
+          0.03961
         ]
       },
       {
-        "frame": 4,
-        "time_s": 0.0667,
+        "frame": 8,
+        "time_s": 0.1333,
         "rotation_rad": [
-          -0.06259,
-          -0.00204,
-          -0.00144
+          -0.27896,
+          -0.10531,
+          -0.04256
         ]
       },
       {
-        "frame": 7,
-        "time_s": 0.1167,
+        "frame": 9,
+        "time_s": 0.15,
         "rotation_rad": [
-          -0.05357,
-          0.0541,
-          -0.11927
+          -0.216,
+          -0.00694,
+          0.06744
         ]
       },
       {
-        "frame": 10,
-        "time_s": 0.1667,
+        "frame": 9,
+        "time_s": 0.15,
         "rotation_rad": [
-          0.01287,
-          0.10032,
-          -0.1783
+          -0.3348,
+          -0.05553,
+          0.10049
         ]
       },
       {
-        "frame": 19,
-        "time_s": 0.3167,
+        "frame": 14,
+        "time_s": 0.2333,
         "rotation_rad": [
-          0.01956,
-          0.0949,
-          0.08018
+          -0.18024,
+          -0.00248,
+          0.0721
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
+        "rotation_rad": [
+          -0.30197,
+          -0.01611,
+          0.04283
         ]
       }
     ],
@@ -62,45 +109,54 @@
         "frame": 0,
         "time_s": 0.0,
         "rotation_rad": [
-          0.15144,
-          -0.18335,
-          0.28059
+          -0.17907,
+          -0.00051,
+          0.03878
         ]
       },
       {
-        "frame": 4,
-        "time_s": 0.0667,
+        "frame": 8,
+        "time_s": 0.1333,
         "rotation_rad": [
-          -0.17128,
-          -0.11391,
-          0.09122
+          -0.14043,
+          -0.12915,
+          -0.04537
         ]
       },
       {
-        "frame": 7,
-        "time_s": 0.1167,
+        "frame": 9,
+        "time_s": 0.15,
         "rotation_rad": [
-          -0.24277,
-          -0.02584,
-          -0.12084
+          -0.18102,
+          -0.00501,
+          0.06696
         ]
       },
       {
-        "frame": 10,
-        "time_s": 0.1667,
+        "frame": 9,
+        "time_s": 0.15,
         "rotation_rad": [
-          -0.07951,
-          0.07009,
-          -0.27015
+          -0.28191,
+          -0.06934,
+          0.09963
         ]
       },
       {
-        "frame": 19,
-        "time_s": 0.3167,
+        "frame": 14,
+        "time_s": 0.2333,
         "rotation_rad": [
-          0.15144,
-          0.19688,
-          0.07112
+          -0.23383,
+          -0.04499,
+          0.07485
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
+        "rotation_rad": [
+          -0.23043,
+          -0.00413,
+          0.04314
         ]
       }
     ],
@@ -109,45 +165,54 @@
         "frame": 0,
         "time_s": 0.0,
         "rotation_rad": [
-          0.25995,
-          -0.0257,
-          0.22097
+          0.05413,
+          0.04442,
+          0.02738
         ]
       },
       {
-        "frame": 4,
-        "time_s": 0.0667,
+        "frame": 8,
+        "time_s": 0.1333,
         "rotation_rad": [
-          0.13727,
-          -0.13179,
-          0.25971
+          -0.19433,
+          -0.21783,
+          0.02575
         ]
       },
       {
-        "frame": 7,
-        "time_s": 0.1167,
+        "frame": 9,
+        "time_s": 0.15,
         "rotation_rad": [
-          -0.09947,
-          -0.17613,
-          0.12836
+          0.14292,
+          0.15589,
+          0.02474
         ]
       },
       {
-        "frame": 10,
-        "time_s": 0.1667,
+        "frame": 9,
+        "time_s": 0.15,
         "rotation_rad": [
-          -0.22898,
-          -0.17764,
-          -0.06987
+          0.43941,
+          0.3035,
+          0.02094
         ]
       },
       {
-        "frame": 19,
-        "time_s": 0.3167,
+        "frame": 14,
+        "time_s": 0.2333,
         "rotation_rad": [
-          0.25995,
-          0.02883,
-          -0.16306
+          0.25637,
+          0.1922,
+          0.02249
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
+        "rotation_rad": [
+          0.02085,
+          0.05068,
+          0.02752
         ]
       }
     ],
@@ -156,45 +221,54 @@
         "frame": 0,
         "time_s": 0.0,
         "rotation_rad": [
-          0.31896,
-          -0.14329,
-          0.31773
+          0.03993,
+          0.00175,
+          0.03922
         ]
       },
       {
-        "frame": 4,
-        "time_s": 0.0667,
+        "frame": 8,
+        "time_s": 0.1333,
         "rotation_rad": [
-          0.03896,
-          -0.21823,
-          0.26954
+          -0.13428,
+          -0.0329,
+          -0.04625
         ]
       },
       {
-        "frame": 7,
-        "time_s": 0.1167,
+        "frame": 9,
+        "time_s": 0.15,
         "rotation_rad": [
-          -0.22582,
-          -0.21338,
-          0.06083
+          0.08255,
+          0.00552,
+          0.06665
         ]
       },
       {
-        "frame": 10,
-        "time_s": 0.1667,
+        "frame": 9,
+        "time_s": 0.15,
         "rotation_rad": [
-          -0.26955,
-          -0.15627,
-          -0.17977
+          0.49095,
+          0.10491,
+          0.09827
         ]
       },
       {
-        "frame": 19,
-        "time_s": 0.3167,
+        "frame": 14,
+        "time_s": 0.2333,
         "rotation_rad": [
-          0.31896,
-          0.15009,
-          -0.11365
+          0.21071,
+          -0.00101,
+          0.07253
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
+        "rotation_rad": [
+          0.00936,
+          0.00815,
+          0.04316
         ]
       }
     ],
@@ -203,45 +277,54 @@
         "frame": 0,
         "time_s": 0.0,
         "rotation_rad": [
-          0.08413,
-          -0.13289,
-          0.21204
+          0.0487,
+          0.03892,
+          0.02787
         ]
       },
       {
-        "frame": 4,
-        "time_s": 0.0667,
+        "frame": 8,
+        "time_s": 0.1333,
         "rotation_rad": [
-          -0.15327,
-          -0.0583,
-          0.04327
+          -0.27161,
+          -0.24966,
+          0.02574
         ]
       },
       {
-        "frame": 7,
-        "time_s": 0.1167,
+        "frame": 9,
+        "time_s": 0.15,
         "rotation_rad": [
-          -0.16722,
-          0.01559,
-          -0.11797
+          0.14171,
+          0.16132,
+          0.02394
         ]
       },
       {
-        "frame": 10,
-        "time_s": 0.1667,
+        "frame": 9,
+        "time_s": 0.15,
         "rotation_rad": [
-          -0.01179,
-          0.08532,
-          -0.2147
+          0.32565,
+          0.25469,
+          0.02186
         ]
       },
       {
-        "frame": 19,
-        "time_s": 0.3167,
+        "frame": 14,
+        "time_s": 0.2333,
         "rotation_rad": [
-          0.08413,
-          0.1296,
-          0.09316
+          0.25032,
+          0.17706,
+          0.02437
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
+        "rotation_rad": [
+          0.0176,
+          0.04878,
+          0.02747
         ]
       }
     ],
@@ -250,45 +333,54 @@
         "frame": 0,
         "time_s": 0.0,
         "rotation_rad": [
-          0.16746,
-          0.03731,
-          0.12861
+          0.00844,
+          0.00967,
+          0.03537
         ]
       },
       {
-        "frame": 4,
-        "time_s": 0.0667,
+        "frame": 8,
+        "time_s": 0.1333,
         "rotation_rad": [
-          0.15326,
-          -0.04847,
-          0.20033
+          -0.02464,
+          -0.0915,
+          -0.01595
         ]
       },
       {
-        "frame": 7,
-        "time_s": 0.1167,
+        "frame": 9,
+        "time_s": 0.15,
         "rotation_rad": [
-          -0.00643,
-          -0.10183,
-          0.13486
+          -0.00958,
+          0.05006,
+          0.05172
         ]
       },
       {
-        "frame": 10,
-        "time_s": 0.1667,
+        "frame": 9,
+        "time_s": 0.15,
         "rotation_rad": [
-          -0.14235,
-          -0.13119,
-          0.0005
+          -0.03799,
+          0.00911,
+          0.07001
         ]
       },
       {
-        "frame": 19,
-        "time_s": 0.3167,
+        "frame": 14,
+        "time_s": 0.2333,
         "rotation_rad": [
-          0.16746,
-          -0.04188,
-          -0.14827
+          0.07099,
+          0.05857,
+          0.05597
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
+        "rotation_rad": [
+          -0.0426,
+          0.00936,
+          0.03749
         ]
       }
     ],
@@ -297,45 +389,54 @@
         "frame": 0,
         "time_s": 0.0,
         "rotation_rad": [
-          0.16029,
-          0.16739,
-          0.11506
+          0.01254,
+          0.01452,
+          0.03873
         ]
       },
       {
-        "frame": 4,
-        "time_s": 0.0667,
+        "frame": 8,
+        "time_s": 0.1333,
         "rotation_rad": [
-          0.29908,
-          0.05113,
-          0.31497
+          -0.03499,
+          -0.10149,
+          -0.04238
         ]
       },
       {
-        "frame": 7,
-        "time_s": 0.1167,
+        "frame": 9,
+        "time_s": 0.15,
         "rotation_rad": [
-          0.11032,
-          -0.05394,
-          0.28061
+          -0.0404,
+          -0.00531,
+          0.06515
         ]
       },
       {
-        "frame": 10,
-        "time_s": 0.1667,
+        "frame": 9,
+        "time_s": 0.15,
         "rotation_rad": [
-          -0.16055,
-          -0.1464,
-          0.10009
+          -0.08813,
+          0.02324,
+          0.09892
         ]
       },
       {
-        "frame": 19,
-        "time_s": 0.3167,
+        "frame": 14,
+        "time_s": 0.2333,
         "rotation_rad": [
-          0.16029,
-          -0.17067,
-          -0.29476
+          0.01733,
+          0.03728,
+          0.07567
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
+        "rotation_rad": [
+          -0.02105,
+          0.01895,
+          0.04241
         ]
       }
     ],
@@ -344,45 +445,54 @@
         "frame": 0,
         "time_s": 0.0,
         "rotation_rad": [
-          0.46341,
-          -0.18216,
-          0.45685
+          0.00717,
+          0.00697,
+          0.07464
         ]
       },
       {
-        "frame": 4,
-        "time_s": 0.0667,
+        "frame": 8,
+        "time_s": 0.1333,
         "rotation_rad": [
-          0.07201,
-          -0.31049,
-          0.40779
+          0.06155,
+          -0.04704,
+          -0.01214
         ]
       },
       {
-        "frame": 7,
-        "time_s": 0.1167,
+        "frame": 9,
+        "time_s": 0.15,
         "rotation_rad": [
-          -0.33486,
-          -0.31808,
-          0.10574
+          0.03699,
+          0.05135,
+          0.10146
         ]
       },
       {
-        "frame": 10,
-        "time_s": 0.1667,
+        "frame": 9,
+        "time_s": 0.15,
         "rotation_rad": [
-          -0.42954,
-          -0.24585,
-          -0.2565
+          0.13979,
+          0.09047,
+          0.13347
         ]
       },
       {
-        "frame": 19,
-        "time_s": 0.3167,
+        "frame": 14,
+        "time_s": 0.2333,
         "rotation_rad": [
-          0.46341,
-          0.20819,
-          -0.20116
+          0.13635,
+          0.05539,
+          0.10971
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
+        "rotation_rad": [
+          -0.0039,
+          0.01757,
+          0.07789
         ]
       }
     ],
@@ -391,45 +501,54 @@
         "frame": 0,
         "time_s": 0.0,
         "rotation_rad": [
-          0.19956,
-          0.08742,
-          0.14857
+          0.02147,
+          0.01067,
+          0.07466
         ]
       },
       {
-        "frame": 4,
-        "time_s": 0.0667,
+        "frame": 8,
+        "time_s": 0.1333,
         "rotation_rad": [
-          0.21035,
-          -0.02935,
-          0.26314
+          0.02209,
+          -0.05863,
+          -0.01255
         ]
       },
       {
-        "frame": 7,
-        "time_s": 0.1167,
+        "frame": 9,
+        "time_s": 0.15,
         "rotation_rad": [
-          0.00096,
-          -0.10832,
-          0.18605
+          0.03547,
+          0.04458,
+          0.10297
         ]
       },
       {
-        "frame": 10,
-        "time_s": 0.1667,
+        "frame": 9,
+        "time_s": 0.15,
         "rotation_rad": [
-          -0.19809,
-          -0.15849,
-          0.00744
+          0.07297,
+          0.09798,
+          0.1291
         ]
       },
       {
-        "frame": 19,
-        "time_s": 0.3167,
+        "frame": 14,
+        "time_s": 0.2333,
         "rotation_rad": [
-          0.19956,
-          -0.06507,
-          -0.22653
+          0.03345,
+          0.03075,
+          0.11049
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
+        "rotation_rad": [
+          -0.01009,
+          0.01906,
+          0.07734
         ]
       }
     ],
@@ -438,45 +557,54 @@
         "frame": 0,
         "time_s": 0.0,
         "rotation_rad": [
-          0.0376,
-          -0.13752,
-          0.26434
+          0.02861,
+          0.01389,
+          0.00418
         ]
       },
       {
-        "frame": 4,
-        "time_s": 0.0667,
+        "frame": 8,
+        "time_s": 0.1333,
         "rotation_rad": [
-          -0.25069,
-          -0.01085,
-          0.00166
+          0.08324,
+          -0.02879,
+          -0.08091
         ]
       },
       {
-        "frame": 7,
-        "time_s": 0.1167,
+        "frame": 9,
+        "time_s": 0.15,
         "rotation_rad": [
-          -0.20128,
-          0.09029,
-          -0.20992
+          -0.05223,
+          0.01615,
+          0.03271
         ]
       },
       {
-        "frame": 10,
-        "time_s": 0.1667,
+        "frame": 9,
+        "time_s": 0.15,
         "rotation_rad": [
-          0.0481,
-          0.1696,
-          -0.30888
+          0.11672,
+          0.09577,
+          0.06144
         ]
       },
       {
-        "frame": 19,
-        "time_s": 0.3167,
+        "frame": 14,
+        "time_s": 0.2333,
         "rotation_rad": [
-          0.0376,
-          0.13693,
-          0.17555
+          0.03388,
+          0.00509,
+          0.03834
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
+        "rotation_rad": [
+          -0.01283,
+          0.01487,
+          0.00822
         ]
       }
     ],
@@ -485,58 +613,141 @@
         "frame": 0,
         "time_s": 0.0,
         "rotation_rad": [
-          0.26455,
-          0.04482,
-          0.21203
+          0.02185,
+          0.01449,
+          0.00378
         ]
       },
       {
-        "frame": 4,
-        "time_s": 0.0667,
+        "frame": 8,
+        "time_s": 0.1333,
         "rotation_rad": [
-          0.21926,
-          -0.09093,
-          0.31349
+          0.07628,
+          -0.03979,
+          -0.08174
         ]
       },
       {
-        "frame": 7,
-        "time_s": 0.1167,
+        "frame": 9,
+        "time_s": 0.15,
         "rotation_rad": [
-          -0.04044,
-          -0.17059,
-          0.2001
+          -0.0369,
+          0.0265,
+          0.03334
         ]
       },
       {
-        "frame": 10,
-        "time_s": 0.1667,
+        "frame": 9,
+        "time_s": 0.15,
         "rotation_rad": [
-          -0.24577,
-          -0.20936,
-          -0.01714
+          -0.03283,
+          0.03283,
+          0.06472
         ]
       },
       {
-        "frame": 19,
-        "time_s": 0.3167,
+        "frame": 14,
+        "time_s": 0.2333,
         "rotation_rad": [
-          0.26455,
-          -0.04675,
-          -0.23038
+          0.08992,
+          0.04432,
+          0.04063
+        ]
+      },
+      {
+        "frame": 16,
+        "time_s": 0.2667,
+        "rotation_rad": [
+          -0.04127,
+          0.00689,
+          0.00808
         ]
       }
     ]
   },
-  "curve_signature": "1b6ebcd64b635ac43c757cfb310872082a02e203b01dd47956602d03928db1f9",
-  "runtime_alignment": {
-    "seed_clip": "aerial_down",
-    "motion_law": "reduction",
-    "authority_package": "ANIMATION_AUTHORITY_V1"
+  "curve_signature": "8bf1bc105e04b098d16c0441e13593ab984d04b2082de6f2ca1282c1dd4b0b7c",
+  "root_motion_policy": {
+    "style": "neutral",
+    "preserve_gameplay_reach": true,
+    "motion_law": "reduction"
   },
-  "events": [],
+  "screen_space_deformation": {
+    "hand_foot_scale_allowed": true,
+    "limb_extension_allowed": true,
+    "torso_squash_allowed": false,
+    "pose_holds_allowed": true,
+    "snap_interpolation_allowed": false,
+    "perspective_cheat_allowed": true,
+    "smear_geometry": "inward_null_collapse_trail",
+    "collision_unchanged": true,
+    "slot_hint": "down_air"
+  },
+  "elemental_anatomy": "inward_null_collapse",
+  "events": [
+    {
+      "frame": 8,
+      "type": "vfx",
+      "id": "reduction.anticipation"
+    },
+    {
+      "frame": 9,
+      "type": "hit_contact",
+      "id": "reduction.contact"
+    },
+    {
+      "frame": 9,
+      "type": "sfx",
+      "id": "reduction.impact"
+    },
+    {
+      "frame": 14,
+      "type": "vfx",
+      "id": "reduction.follow_through"
+    }
+  ],
+  "vfx_event_markers": [
+    {
+      "frame": 8,
+      "type": "vfx",
+      "id": "reduction.anticipation"
+    },
+    {
+      "frame": 14,
+      "type": "vfx",
+      "id": "reduction.follow_through"
+    }
+  ],
+  "sfx_event_markers": [
+    {
+      "frame": 9,
+      "type": "sfx",
+      "id": "reduction.impact"
+    }
+  ],
+  "hit_contact_markers": [
+    {
+      "frame": 9,
+      "type": "hit_contact",
+      "id": "reduction.contact"
+    }
+  ],
+  "runtime_alignment": {
+    "motion_law": "reduction",
+    "authority_package": "ANIMATION_AUTHORITY_V1_1",
+    "body_variant_compat": true,
+    "timing": {
+      "anticipation": 8,
+      "contact": 9,
+      "follow": 14,
+      "total": 16
+    },
+    "role": "authority_slot"
+  },
   "provenance": {
-    "source": "tools/animation_authority/build_authority_layer.py",
-    "note": "Procedural continuity clip for authority slot coverage; not authored completion."
+    "source": "tools/animation_authority/produce_authored_candidates.py",
+    "method": "fighter_slot_specific_keypose_synthesis",
+    "generated_at": "2026-09-29T21:41:21.868871+00:00",
+    "note": "Automation-authored candidate with explicit key poses and fighter motion law. Not human-authored; not human-approved; not final art.",
+    "human_approved": false
   }
 }

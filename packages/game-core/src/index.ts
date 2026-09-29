@@ -20,7 +20,9 @@ export type {
 export {
   FIGHTER_BODY_VARIANTS,
   CANONICAL_FIGHTER_IDS,
+  SPECTRUM_CANONICAL_FIGHTER_IDS,
   BODY_PRESENTATION_COUNT,
+  SPECTRUM_BODY_PRESENTATION_COUNT,
   isFighterBodyVariant,
   normalizeBodyVariant,
   oppositeBodyVariant,
@@ -280,11 +282,16 @@ export {
   DEFAULT_FIGHTER_NAME,
   DEFAULT_FIGHTERS,
   DEFAULT_FIGHTER_ROSTER,
+  SPECTRUM_FIGHTER_IDS,
+  COSMIC_FIGHTER_IDS,
   getDefaultFighterPreset,
   getAllDefaultCreatedFighters,
   getDefaultFighterProfile,
   getRoygbivColors,
+  getSpectrumFighters,
   isDefaultFighterId,
+  isSpectrumFighterId,
+  isCosmicFighterId,
   normalizeDefaultFighterId,
 } from "./createdFighter.js";
 export type {
@@ -357,3 +364,28 @@ export {
   inputsToReplayFrames,
 } from "./career/replay.js";
 export { createSaveGameRecord, loadSaveGameState } from "./career/saveGame.js";
+
+
+export {
+  SPECTRUM_STORY_FIGHTER_IDS,
+  ESSENCE_TIERS,
+  createInitialStoryProgress,
+  normalizeEssenceTier,
+  essenceTierName,
+  isPrismaticGray,
+  setPuppetForm,
+  setEssenceCount,
+  completeGrayRoute,
+  setCosmicDevOverride,
+  isCosmicPlayable,
+  listSelectableStoryFighterIds,
+  presentationModifiers,
+} from "./story/index.js";
+export type {
+  SpectrumStoryFighterId,
+  StoryPuppetForm,
+  EssenceTier,
+  StoryRouteId,
+  StoryRouteState,
+  StoryProgressState,
+} from "./story/index.js";

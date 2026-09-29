@@ -76,6 +76,13 @@ export const MAIN_MENU_PLAYER: MainMenuItem[] = [
     tier: "player",
   },
   {
+    id: "btn-story",
+    label: "Story Campaign",
+    route: APP_ROUTES.storyCampaign,
+    mode: "story-campaign",
+    tier: "player",
+  },
+  {
     id: "btn-career",
     label: "Career",
     route: APP_ROUTES.career,

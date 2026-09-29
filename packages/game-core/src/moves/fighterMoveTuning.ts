@@ -62,6 +62,38 @@ const OVERRIDES: Partial<Record<DefaultFighterId, Partial<Record<string, Fighter
     },
     side_special: { damage: 9, baseKnockback: 10, hitboxOffsetX: 48 },
   },
+  /** TUNING_CANDIDATE */
+  yin: {
+    neutral_attack: { damage: 4, baseKnockback: 5, startup: 6 },
+    special_attack: {
+      damage: 8,
+      baseKnockback: 7,
+      startup: 12,
+      active: 4,
+      recovery: 18,
+      hitboxWidth: 48,
+      spawnsProjectile: true,
+      projectileDamage: 5,
+      projectileKnockback: 6,
+    },
+    side_special: { damage: 8, baseKnockback: 9, hitboxOffsetX: 40 },
+  },
+  /** TUNING_CANDIDATE */
+  yang: {
+    neutral_attack: { damage: 5, baseKnockback: 6, startup: 5 },
+    special_attack: {
+      damage: 9,
+      baseKnockback: 9,
+      startup: 9,
+      active: 3,
+      recovery: 16,
+      hitboxWidth: 52,
+      spawnsProjectile: true,
+      projectileDamage: 7,
+      projectileKnockback: 8,
+    },
+    side_special: { damage: 10, baseKnockback: 11, hitboxOffsetX: 50 },
+  },
 };
 
 function normalizeFighterId(fighterId: string): string {

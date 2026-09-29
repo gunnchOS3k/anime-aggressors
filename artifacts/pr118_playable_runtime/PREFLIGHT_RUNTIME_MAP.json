@@ -1,0 +1,21 @@
+{
+  "schema": "pr118_playable_runtime_preflight_v1_3",
+  "generated_at": "2026-09-29T21:39:15.577602+00:00",
+  "head_sha": "27be8dae078952cb6fcb23d362aeb6a6d88998cc",
+  "canonical_gameplay_runtime": "apps/web + packages/game-core",
+  "android_runtime": "game-godot export / apps/mobile",
+  "renderer": "apps/web/src/renderer-three (Three.js low-poly)",
+  "godot_status": "ACTIVE_FOR_ANDROID_AND_RC",
+  "body_variant_pre_gap": "select+session carried bodyVariant; battle mesh appearance ignored it",
+  "story_pre_gap": "career milestones only; no seven Gray-route unlock engine",
+  "yin_yang_pre_gap": "data exists TUNING_CANDIDATE; not in roster.json / DEFAULT_FIGHTERS",
+  "paths": {
+    "web_entry": "apps/web/src/main.ts",
+    "character_select": "apps/web/src/screens/CharacterSelectScreen.ts",
+    "match_setup": "apps/web/src/match/matchSetupSession.ts",
+    "model_factory": "apps/web/src/renderer-three/fighters/FighterModelFactory.ts",
+    "godot_resolver": "game-godot/scripts/visual/fighter_asset_resolver.gd",
+    "roster": "game-godot/data/fighters/roster.json",
+    "default_fighters": "packages/game-core/src/defaultFighters.ts"
+  }
+}

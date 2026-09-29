@@ -38,6 +38,7 @@ export const APP_ROUTES = {
   feedback: "#/feedback",
   about: "#/about",
   career: "#/career",
+  storyCampaign: "#/story",
   careerFighters: "#/career/fighters",
   matchHistory: "#/career/history",
   careerHistory: "#/career/history",
@@ -87,6 +88,7 @@ export type AppRouteMode =
   | "feedback"
   | "about"
   | "career"
+  | "story-campaign"
   | "career-fighters"
   | "career-history"
   | "career-replays"
@@ -132,6 +134,7 @@ const HASH_TO_MODE: Record<string, AppRouteMode> = {
   [APP_ROUTES.feedback]: "feedback",
   [APP_ROUTES.about]: "about",
   [APP_ROUTES.career]: "career",
+  [APP_ROUTES.storyCampaign]: "story-campaign",
   [APP_ROUTES.careerFighters]: "career-fighters",
   [APP_ROUTES.careerHistory]: "career-history",
   [APP_ROUTES.careerReplays]: "career-replays",
@@ -180,6 +183,7 @@ export const MODE_TO_ROUTE: Record<AppRouteMode, string> = {
   feedback: APP_ROUTES.feedback,
   about: APP_ROUTES.about,
   career: APP_ROUTES.career,
+  "story-campaign": APP_ROUTES.storyCampaign,
   "career-fighters": APP_ROUTES.careerFighters,
   "career-history": APP_ROUTES.careerHistory,
   "career-replays": APP_ROUTES.careerReplays,

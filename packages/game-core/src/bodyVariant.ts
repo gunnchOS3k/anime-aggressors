@@ -1,7 +1,7 @@
 /**
- * Dual-form body presentation (V4).
+ * Dual-form body presentation (V4 / V1.3).
  *
- * Canonical gameplay identity remains fighter_id (7 fighters).
+ * Canonical gameplay identity remains fighter_id (9 playable: 7 spectrum + yin/yang).
  * body_variant is presentation-only: male | female meshes/portraits bind to the
  * same animation set, move data, frames, knockback, aura, weight, and collision.
  */
@@ -18,12 +18,28 @@ export const CANONICAL_FIGHTER_IDS = [
   "nix-calder",
   "orion-vell",
   "vesper-nyx",
+  "yin",
+  "yang",
+] as const;
+
+export const SPECTRUM_CANONICAL_FIGHTER_IDS = [
+  "ember-vale",
+  "rook-ironside",
+  "juno-spark",
+  "kaia-windrow",
+  "nix-calder",
+  "orion-vell",
+  "vesper-nyx",
 ] as const;
 
 export type CanonicalFighterId = (typeof CANONICAL_FIGHTER_IDS)[number];
 
-/** 7 fighters × 2 presentations = 14 authored body presentations. */
+/** 9 fighters × 2 presentations = 18 authored body presentations. */
 export const BODY_PRESENTATION_COUNT = CANONICAL_FIGHTER_IDS.length * FIGHTER_BODY_VARIANTS.length;
+
+/** Legacy spectrum-only count (7 × 2). */
+export const SPECTRUM_BODY_PRESENTATION_COUNT =
+  SPECTRUM_CANONICAL_FIGHTER_IDS.length * FIGHTER_BODY_VARIANTS.length;
 
 export type FighterPresentationSelection = {
   fighter_id: string;

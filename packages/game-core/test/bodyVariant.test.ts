@@ -13,9 +13,9 @@ import { DEFAULT_RULESET } from "../src/rulesets.js";
 
 describe("bodyVariant dual-form schema", () => {
   it("keeps seven canonical ids and fourteen presentations", () => {
-    assert.equal(CANONICAL_FIGHTER_IDS.length, 7);
-    assert.equal(BODY_PRESENTATION_COUNT, 14);
-    assert.equal(listAuthoredPresentations().length, 14);
+    assert.equal(CANONICAL_FIGHTER_IDS.length, 9);
+    assert.equal(BODY_PRESENTATION_COUNT, 18);
+    assert.equal(listAuthoredPresentations().length, 18);
   });
 
   it("prefers unused body presentation for duplicates", () => {

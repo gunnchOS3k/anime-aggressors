@@ -10,7 +10,23 @@ export type DefaultFighterId =
   | "kaia-windrow"
   | "nix-calder"
   | "orion-vell"
-  | "vesper-nyx";
+  | "vesper-nyx"
+  | "yin"
+  | "yang";
+
+/** Spectrum roster (ROYGBIV) — always selectable. */
+export const SPECTRUM_FIGHTER_IDS = [
+  "ember-vale",
+  "rook-ironside",
+  "juno-spark",
+  "kaia-windrow",
+  "nix-calder",
+  "orion-vell",
+  "vesper-nyx",
+] as const satisfies readonly DefaultFighterId[];
+
+/** Cosmic endpoint fighters — TUNING_CANDIDATE; unlock via seven Gray routes or QA override. */
+export const COSMIC_FIGHTER_IDS = ["yin", "yang"] as const satisfies readonly DefaultFighterId[];
 
 export type PreviewAnimationId =
   | "flame-gauntlet-ignite"
@@ -19,7 +35,9 @@ export type PreviewAnimationId =
   | "gale-hover"
   | "frost-mantle"
   | "gravity-orbit"
-  | "void-afterimage";
+  | "void-afterimage"
+  | "null-settle"
+  | "radiant-declare";
 
 export type DefaultFighterProfile = {
   id: DefaultFighterId;
@@ -122,7 +140,43 @@ export const DEFAULT_FIGHTERS: DefaultFighterProfile[] = [
     signatureMoveName: "Null Step",
     visualStyleId: "vesper",
   },
+  {
+    id: "yin",
+    name: "Yin",
+    size: "medium",
+    color: "indigo",
+    elementName: "Reduction",
+    archetype: "Cosmic Nullifier / Control",
+    shortTagline: "Collapses options into quiet null.",
+    previewAnimation: "null-settle",
+    signatureMoveName: "Infinite Quiet",
+    visualStyleId: "yin",
+  },
+  {
+    id: "yang",
+    name: "Yang",
+    size: "medium",
+    color: "yellow",
+    elementName: "Definition",
+    archetype: "Cosmic Constructor / Control",
+    shortTagline: "Declares absolute radiant structure.",
+    previewAnimation: "radiant-declare",
+    signatureMoveName: "Absolute Radiance",
+    visualStyleId: "yang",
+  },
 ];
+
+export function isSpectrumFighterId(id: string): boolean {
+  return (SPECTRUM_FIGHTER_IDS as readonly string[]).includes(normalizeDefaultFighterId(id));
+}
+
+export function isCosmicFighterId(id: string): boolean {
+  return (COSMIC_FIGHTER_IDS as readonly string[]).includes(normalizeDefaultFighterId(id));
+}
+
+export function getSpectrumFighters(): DefaultFighterProfile[] {
+  return DEFAULT_FIGHTERS.filter((f) => isSpectrumFighterId(f.id));
+}
 
 /** @deprecated use DEFAULT_FIGHTERS */
 export const DEFAULT_FIGHTER_ROSTER: DefaultFighterPreset[] = DEFAULT_FIGHTERS.map((f) => ({
@@ -165,5 +219,5 @@ export function getAllDefaultCreatedFighters(): CreatedFighter[] {
 }
 
 export function getRoygbivColors(): FighterColor[] {
-  return DEFAULT_FIGHTERS.map((f) => f.color);
+  return getSpectrumFighters().map((f) => f.color);
 }

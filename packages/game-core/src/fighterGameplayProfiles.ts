@@ -131,6 +131,34 @@ const GAMEPLAY: Record<DefaultFighterId, Omit<FighterGameplayProfile, "fighterId
     damageMult: 94,
     knockbackTakenMult: 106,
   },
+  /** TUNING_CANDIDATE — not APPROVED_BASELINE. */
+  yin: {
+    status: "preview",
+    weight: 110,
+    runSpeedMult: 90,
+    airSpeedMult: 95,
+    fallSpeedMult: 97,
+    maxJumps: 2,
+    jumpVelocityMult: 97,
+    recoveryUpBoost: 104,
+    shieldHealthMult: 108,
+    damageMult: 96,
+    knockbackTakenMult: 98,
+  },
+  /** TUNING_CANDIDATE — not APPROVED_BASELINE. */
+  yang: {
+    status: "preview",
+    weight: 110,
+    runSpeedMult: 104,
+    airSpeedMult: 105,
+    fallSpeedMult: 99,
+    maxJumps: 2,
+    jumpVelocityMult: 103,
+    recoveryUpBoost: 106,
+    shieldHealthMult: 100,
+    damageMult: 102,
+    knockbackTakenMult: 100,
+  },
 };
 
 export function isProductionFighterId(id: string): id is ProductionFighterId {
