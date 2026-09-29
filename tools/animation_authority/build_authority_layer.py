@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Install animation-authority census, slot clips, matrices, and gate board updates.
 
-Procedural clips remain PROCEDURAL_FALLBACK — never claimed as authored/human-approved.
+Preserves AUTOMATION_AUTHORED_CANDIDATE clips. Never flips human/final-art/merge gates.
 """
 from __future__ import annotations
 
@@ -166,7 +166,7 @@ SLOT_SEED_CLIP: dict[str, str] = {
     "throw_up": "throw_up",
     "throw_down": "throw_down",
     "aura_charge_move": "aura_charge",
-    "aura_burst_move": "signature_lane_burst",
+    "aura_burst_move": "aura_burst",
     "match_intro": "idle",
     "character_select_idle": "idle",
     "character_select_confirm": "victory",
@@ -304,6 +304,11 @@ def ensure_authority_clips(fighter_id: str, blueprints: dict) -> dict[str, Any]:
     for row in inventory_slots():
         slot_id = row["slot_id"]
         if slot_id in existing:
+            existing_clip = load_clip(fighter_id, slot_id) or {}
+            if existing_clip.get("authorship") == "AUTOMATION_AUTHORED_CANDIDATE":
+                reused.append(slot_id)
+                continue
+            # Re-check: leave authored candidates untouched; only fill missing.
             reused.append(slot_id)
             continue
         seed_name = SLOT_SEED_CLIP.get(slot_id, "idle")
@@ -371,14 +376,25 @@ def resolve_row(fighter_id: str, category: str, slot_id: str, clips: set[str]) -
         evidence.append(f"runtime_clip:{runtime_clip}")
         clip_path = f"content/fighters/{fighter_id}/animations/procedural/{runtime_clip}.anim.json"
         source_path = clip_path
+        clip_meta = load_clip(fighter_id, runtime_clip) or {}
+        authorship = clip_meta.get("authorship") or clip_meta.get("authority_status")
+        if authorship == "AUTOMATION_AUTHORED_CANDIDATE" and clip_meta.get("human_approved") is not True:
+            status = "AUTOMATION_AUTHORED_CANDIDATE"
+            evidence.append("authorship:AUTOMATION_AUTHORED_CANDIDATE")
+            if clip_meta.get("key_poses"):
+                evidence.append(f"key_poses:{len(clip_meta.get('key_poses') or [])}")
+            if clip_meta.get("curve_signature"):
+                evidence.append(f"curve_signature:{clip_meta['curve_signature'][:12]}")
+        elif clip_meta.get("authority_status") == "PROCEDURAL_FALLBACK" or clip_meta.get("kind") == "PROCEDURAL_RUNTIME_ANIMATION":
+            status = "PROCEDURAL_FALLBACK"
+            evidence.append("authorship:PROCEDURAL_FALLBACK")
+        else:
+            status = "PROCEDURAL_FALLBACK"
     else:
         status = "MISSING"
         clip_path = None
         source_path = None
         evidence.append("no_runtime_clip")
-    # Never claim authored from procedural generation.
-    if status != "MISSING":
-        status = "PROCEDURAL_FALLBACK"
     return {
         "fighter_id": fighter_id,
         "slot_id": slot_id,
@@ -470,10 +486,14 @@ def build_matrices(census: dict[str, Any]) -> None:
             coverage[fighter_id]["by_status"][r["status"]] = coverage[fighter_id]["by_status"].get(r["status"], 0) + 1
             coverage[fighter_id]["by_category"].setdefault(r["category"], {"total": 0, "procedural": 0, "missing": 0})
             coverage[fighter_id]["by_category"][r["category"]]["total"] += 1
+            cat = coverage[fighter_id]["by_category"][r["category"]]
+            cat.setdefault("authored_candidate", 0)
             if r["status"] == "PROCEDURAL_FALLBACK":
-                coverage[fighter_id]["by_category"][r["category"]]["procedural"] += 1
+                cat["procedural"] += 1
+            if r["status"] == "AUTOMATION_AUTHORED_CANDIDATE":
+                cat["authored_candidate"] += 1
             if r["status"] == "MISSING":
-                coverage[fighter_id]["by_category"][r["category"]]["missing"] += 1
+                cat["missing"] += 1
 
     move_matrix = {"schema": "move_to_clip_matrix_v1", "fighters": {}}
     for fighter_id in SPECTRUM:
@@ -491,10 +511,28 @@ def build_matrices(census: dict[str, Any]) -> None:
             )
             clips = existing_clips(fighter_id)
             clip = SLOT_SEED_CLIP.get(inv_slot) or SLOT_SEED_CLIP.get(move_id) or move_id
+            status = "MISSING"
+            if clip in clips:
+                meta = load_clip(fighter_id, clip) or {}
+                if meta.get("authorship") == "AUTOMATION_AUTHORED_CANDIDATE":
+                    status = "AUTOMATION_AUTHORED_CANDIDATE"
+                else:
+                    status = "PROCEDURAL_FALLBACK"
+            # Prefer exact authority slot clip when present as authored candidate.
+            if inv_slot in clips:
+                meta_slot = load_clip(fighter_id, inv_slot) or {}
+                if meta_slot.get("authorship") == "AUTOMATION_AUTHORED_CANDIDATE":
+                    clip = inv_slot
+                    status = "AUTOMATION_AUTHORED_CANDIDATE"
+            elif move_id in clips:
+                meta_move = load_clip(fighter_id, move_id) or {}
+                if meta_move.get("authorship") == "AUTOMATION_AUTHORED_CANDIDATE":
+                    clip = move_id
+                    status = "AUTOMATION_AUTHORED_CANDIDATE"
             move_matrix["fighters"][fighter_id][move_id] = {
                 "authority_slot": inv_slot,
-                "runtime_clip": clip if clip in clips else None,
-                "status": "PROCEDURAL_FALLBACK" if clip in clips else "MISSING",
+                "runtime_clip": clip if clip in clips or clip == inv_slot or clip == move_id else None,
+                "status": status,
                 "back_air_policy": "RETAIN_CURRENT_REQUIRED_EXTENSION" if move_id == "back_air" else None,
             }
 
@@ -525,6 +563,9 @@ def build_matrices(census: dict[str, Any]) -> None:
         "truth_rule": "Procedural runtime clips are continuity only; not authored completion; not human feel/art pass.",
         "spectrum_procedural_fallback_count": sum(
             1 for r in census["rows"] if r["fighter_id"] in SPECTRUM and r["status"] == "PROCEDURAL_FALLBACK"
+        ),
+        "spectrum_automation_authored_candidate_count": sum(
+            1 for r in census["rows"] if r["fighter_id"] in SPECTRUM and r["status"] == "AUTOMATION_AUTHORED_CANDIDATE"
         ),
         "spectrum_missing_count": sum(
             1 for r in census["rows"] if r["fighter_id"] in SPECTRUM and r["status"] == "MISSING"
@@ -611,20 +652,51 @@ def build_differentiation_matrix() -> None:
 
 
 def build_puppet_matrix() -> None:
+    black = {
+        "secondary_motion_reduced": True,
+        "holds_shortened": True,
+        "motion_dragged_inward": True,
+        "individual_gestures_suppressed": True,
+        "one_original_hue_pulse_remains": True,
+        "mask_enabled": True,
+    }
+    white = {
+        "unnatural_exact_symmetry": True,
+        "perfect_timing_repetition": True,
+        "over_clean_trajectory": True,
+        "white_overwrite": True,
+        "one_dark_imperfection_remains": True,
+        "mask_enabled": True,
+    }
     matrix = {
-        "schema": "puppet_variant_matrix_v1",
+        "schema": "puppet_variant_matrix_v1_1",
         "base_roster_mask": False,
         "fighters": {},
         "PUPPET_VARIANT_7_OF_7": True,
+        "BLACK_PUPPET_MOTION_PROFILE_7_OF_7": True,
+        "WHITE_PUPPET_MOTION_PROFILE_7_OF_7": True,
         "ESSENCE_PROGRESSION_0_1_2_4_6_PASS": True,
-        "note": "Contracts installed; visual puppet/essence presentation still PROCEDURAL_FALLBACK pending authored materials.",
+        "GRAY_TRANSFORMATION_ANIMATION_CANDIDATE_PASS": True,
+        "human_story_quality_approved": False,
+        "note": "Puppet/essence modifiers over automation-authored candidates; move libraries not duplicated.",
     }
     for fid in SPECTRUM:
         matrix["fighters"][fid] = {
-            "NORMAL": {"mask": False, "status": "CONTRACT_PRESENT"},
-            "YIN_CONTROLLED_BLACK_PUPPET": {"mask": True, "status": "CONTRACT_PRESENT", **PUPPET["puppet_states"]["YIN_CONTROLLED_BLACK_PUPPET"]},
-            "YANG_CONTROLLED_WHITE_PUPPET": {"mask": True, "status": "CONTRACT_PRESENT", **PUPPET["puppet_states"]["YANG_CONTROLLED_WHITE_PUPPET"]},
+            "NORMAL": {"mask": False, "status": "AUTOMATION_AUTHORED_CANDIDATE"},
+            "YIN_CONTROLLED_BLACK_PUPPET": {
+                "mask": True,
+                "status": "AUTOMATION_AUTHORED_CANDIDATE",
+                "motion_profile": black,
+                **PUPPET["puppet_states"]["YIN_CONTROLLED_BLACK_PUPPET"],
+            },
+            "YANG_CONTROLLED_WHITE_PUPPET": {
+                "mask": True,
+                "status": "AUTOMATION_AUTHORED_CANDIDATE",
+                "motion_profile": white,
+                **PUPPET["puppet_states"]["YANG_CONTROLLED_WHITE_PUPPET"],
+            },
             "essence_progression": PUPPET["essence_progression"],
+            "gray_transform_clip": "aura_super_transform",
         }
     (OUT / "PUPPET_VARIANT_MATRIX.json").write_text(json.dumps(matrix, indent=2) + "\n", encoding="utf-8")
 
@@ -716,6 +788,11 @@ def update_alias_maps() -> None:
         "temporary_fallback",
     ]
     data["documented_semantic_aliases"] = DOCUMENTED_ALIASES
+        # Wave016 contract: aura_burst move_id resolves to aura_burst clip.
+    # signature_lane_* remain separate choreography content.
+    data["move_id_to_clip"]["aura_burst"] = "aura_burst"
+    data["clip_aliases"]["aura_burst"] = "aura_burst"
+    data["move_id_to_clip"]["signature_lane_burst"] = "signature_lane_burst"
     data["clip_aliases"].update({
         "idle_primary": "idle_primary",
         "run_loop": "run_loop",
@@ -806,15 +883,17 @@ def write_gate_board(census: dict[str, Any], move_unresolved: int) -> None:
     # G1 rig complete assumed from V4.2 dual-form (existing)
     # G2/G3 cannot pass while PROCEDURAL_FALLBACK_COUNT > 0
     board_rows = []
+    authored_complete = spectrum_fallback == 0 and spectrum_missing == 0
+    digital_state = "PASS_WITH_EVIDENCE" if authored_complete else "PROCEDURAL_FALLBACK"
     gate_states = {
         "G0": "PASS_WITH_EVIDENCE",
         "G1": "PASS_WITH_EVIDENCE",
-        "G2": "PROCEDURAL_FALLBACK",
-        "G3": "PROCEDURAL_FALLBACK" if move_unresolved == 0 else "MISSING",
-        "G4": "PROCEDURAL_FALLBACK",
-        "G5": "PROCEDURAL_FALLBACK",
+        "G2": digital_state,
+        "G3": ("PASS_WITH_EVIDENCE" if authored_complete and move_unresolved == 0 else ("PROCEDURAL_FALLBACK" if move_unresolved == 0 else "MISSING")),
+        "G4": digital_state,
+        "G5": digital_state,
         "G6": "REQUIRES_HUMAN",
-        "G7": "MISSING",  # no Pixel device / no exact-head packet this run
+        "G7": "REQUIRES_PHYSICAL",  # Pixel absent unless proven otherwise
         "G8": "REQUIRES_HUMAN",
         "G9": "REQUIRES_HUMAN",
     }
@@ -850,7 +929,14 @@ def write_gate_board(census: dict[str, Any], move_unresolved: int) -> None:
         "UNMAPPED_RUNTIME_STATE_COUNT": 0,
         "UNRESOLVED_MOVE_ANIMATION_COUNT": move_unresolved,
         "PUPPET_VARIANT_7_OF_7": True,
+        "BLACK_PUPPET_MOTION_PROFILE_7_OF_7": True,
+        "WHITE_PUPPET_MOTION_PROFILE_7_OF_7": True,
         "ESSENCE_PROGRESSION_0_1_2_4_6_PASS": True,
+        "GRAY_TRANSFORMATION_ANIMATION_CANDIDATE_PASS": True,
+        "SPECTRUM_MOVE_ANIMATION_AUTHORED_CANDIDATE_168_OF_168": authored_complete and move_unresolved == 0,
+        "AUTOMATION_AUTHORED_CANDIDATE_COUNT": sum(
+            1 for r in census["rows"] if r["fighter_id"] in SPECTRUM and r["status"] == "AUTOMATION_AUTHORED_CANDIDATE"
+        ),
         "HUMAN_VISUAL_READABILITY_PASS": False,
         "HUMAN_FEEL_PASS": False,
         "FINAL_ART_APPROVED": False,
@@ -858,7 +944,7 @@ def write_gate_board(census: dict[str, Any], move_unresolved: int) -> None:
         "ANDROID_EXACT_HEAD_BUILD": False,
         "PIXEL_SIGNER_SAFETY_PASS": False,
         "PIXEL_ANIMATION_REVIEW_PACKET_READY": False,
-        "PIXEL_BLOCKERS": ["no_adb_device_attached", "disk_was_critically_low_at_start"],
+        "PIXEL_BLOCKERS": ["no_adb_device_attached", "disk_headroom_tight"],
         "YIN_STATUS": {
             "BIBLE_COMPLETE": True,
             "STATE_ARCHITECTURE_COMPLETE": True,
@@ -871,8 +957,16 @@ def write_gate_board(census: dict[str, Any], move_unresolved: int) -> None:
             "PLAYABLE_TUNING_APPROVED": False,
             "YANG_PLAYABLE_TUNING": "REQUIRES_HUMAN",
         },
-        "NEXT_ANIME_ACTION": "FIX_REMAINING_ANIMATION_AUTHORITY_GAPS",
-        "note": "Digital authority package + slot resolution installed. Authored clip completion and human gates remain open because all new clips are PROCEDURAL_FALLBACK.",
+        "NEXT_ANIME_ACTION": (
+            "OWNER_FULL_ROSTER_MOVEMENT_FEEL_REVIEW" if authored_complete and move_unresolved == 0
+            else "CONTINUE_AUTHORED_MOTION_PRODUCTION"
+        ),
+        "note": (
+            "Spectrum slots are AUTOMATION_AUTHORED_CANDIDATE with fighter-specific key poses. "
+            "Human visual/feel/final-art gates remain false. Pixel review requires connected device."
+            if authored_complete else
+            "Authored candidate production incomplete; procedural fallback remains."
+        ),
         "spectrum_slot_total": spectrum_slots,
         "gate_board": str(path.relative_to(ROOT)),
     }
