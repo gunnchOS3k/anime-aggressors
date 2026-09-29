@@ -102,6 +102,7 @@ jobs:
         id: godot
         run: |
           set -euo pipefail
+          chmod +x scripts/install-godot-ci.sh scripts/install-godot-templates.sh
           GODOT_BIN="$(GODOT_VERSION=${GODOT_VERSION} ./scripts/install-godot-ci.sh)"
           echo "GODOT_BIN=${GODOT_BIN}" >> "$GITHUB_ENV"
           echo "bin=${GODOT_BIN}" >> "$GITHUB_OUTPUT"
