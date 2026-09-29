@@ -22,6 +22,8 @@ export type FighterVisualParts = DefaultFighterAppearance["silhouetteParts"];
 export type StoryPresentationForm = "NORMAL" | "BLACK_PUPPET" | "WHITE_PUPPET";
 
 export type FighterAppearance = {
+  /** Canonical fighter id (ember-vale, yin, …) for model provenance. */
+  fighterId: string;
   name: string;
   size: FighterSize;
   color: FighterColor;
@@ -163,6 +165,7 @@ export function resolveFighterAppearance(
   const variantScale = bodyVariant === "female" ? 0.96 : 1.0;
 
   return {
+    fighterId: normalizedId,
     name: fighter.name,
     size: fighter.size,
     color,

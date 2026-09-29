@@ -96,6 +96,10 @@ export class ThreeGameRenderer {
     return this.characterViews.length;
   }
 
+  getRuntimeModelProvenance(): Array<import("./AssetLoader.ts").ModelProvenance | null> {
+    return this.characterViews.map((cv) => cv.getModelProvenance());
+  }
+
   getCameraPositionString(): string {
     const c = this.cameraDirector.getCamera();
     const t = this.cameraDirector.getTarget();

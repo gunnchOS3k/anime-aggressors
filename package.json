@@ -74,7 +74,11 @@
     "release:check": "npm run quality && npm run build:pages",
     "audit:ci": "npm audit --audit-level=high",
     "clean": "rm -rf apps/web/dist packages/*/dist legacy/web/dist",
-    "validate:dual-form-roster": "node scripts/validate-dual-form-roster.mjs"
+    "validate:dual-form-roster": "node scripts/validate-dual-form-roster.mjs",
+    "animectl": "./animectl",
+    "acceptance:quick": "./animectl acceptance --exact-head --quick",
+    "acceptance:full": "./animectl acceptance --exact-head --full",
+    "test:e2e": "npx playwright test"
   },
   "devDependencies": {
     "typescript": "^5.3.0"

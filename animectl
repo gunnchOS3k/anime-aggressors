@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Anime Aggressors control plane launcher (POSIX).
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")" && pwd)"
+export PYTHONPATH="${ROOT}/tools${PYTHONPATH:+:$PYTHONPATH}"
+exec python3 -m animectl "$@"

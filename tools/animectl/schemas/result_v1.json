@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "anime_aggressors_animectl_result_v1",
+  "type": "object",
+  "required": ["schema", "command", "git_sha", "status", "exit_code"],
+  "properties": {
+    "schema": { "const": "anime_aggressors_animectl_result_v1" },
+    "schema_version": { "type": "integer" },
+    "command": { "type": "string" },
+    "repo": { "type": "string" },
+    "branch": { "type": "string" },
+    "git_sha": { "type": "string" },
+    "git_dirty": { "type": "boolean" },
+    "generated_at": { "type": "string" },
+    "status": {
+      "enum": [
+        "PASS",
+        "PASS_WITH_NOTES",
+        "FAIL",
+        "BLOCKED_EXTERNAL",
+        "REQUIRES_PHYSICAL",
+        "REQUIRES_HUMAN",
+        "NOT_APPLICABLE"
+      ]
+    },
+    "exit_code": { "type": "integer" },
+    "checks": { "type": "array" },
+    "artifacts": { "type": "array" },
+    "human_gates": { "type": "object" }
+  }
+}

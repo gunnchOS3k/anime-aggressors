@@ -83,18 +83,24 @@ export class CharacterView {
     this.shieldMesh.visible = player.actionState === "shielding";
     this.shieldMesh.position.set(0, scale * 1.1, scale * 0.12);
 
-    const torsoMat = this.parts.torso.material as THREE.MeshToonMaterial;
+    const torsoMat = this.parts.torso.material as THREE.MeshToonMaterial | THREE.MeshBasicMaterial;
+    const isToon = "emissive" in torsoMat;
     if (player.actionState === "hitstun") {
       torsoMat.color.set(0xff8888);
-      torsoMat.emissive.setHex(0xff3333);
-      torsoMat.emissiveIntensity = 0.35;
+      if (isToon) {
+        (torsoMat as THREE.MeshToonMaterial).emissive.setHex(0xff3333);
+        (torsoMat as THREE.MeshToonMaterial).emissiveIntensity = 0.35;
+      }
     } else if (player.actionState === "defeated") {
       this.group.visible = false;
     } else {
       this.group.visible = true;
-      torsoMat.color.copy(this.baseTorsoColor);
-      torsoMat.emissive.setHex(appearance.accentHex);
-      torsoMat.emissiveIntensity = player.actionState === "auraCharging" ? 0.18 + player.aura.level * 0.08 : 0.12;
+      if (isToon) {
+        const tm = torsoMat as THREE.MeshToonMaterial;
+        tm.color.copy(this.baseTorsoColor);
+        tm.emissive.setHex(appearance.accentHex);
+        tm.emissiveIntensity = player.actionState === "auraCharging" ? 0.18 + player.aura.level * 0.08 : 0.12;
+      }
       const auraMat = this.parts.aura.material as THREE.MeshBasicMaterial;
       auraMat.opacity = player.actionState === "auraCharging" ? 0.25 + player.aura.level * 0.2 : 0.15 + player.aura.level * 0.05;
     }
@@ -102,6 +108,10 @@ export class CharacterView {
 
   getParts(): LowPolyHumanoidParts {
     return this.parts;
+  }
+
+  getModelProvenance(): import("./AssetLoader.ts").ModelProvenance | null {
+    return (this.parts.root.userData.modelProvenance as import("./AssetLoader.ts").ModelProvenance) ?? null;
   }
 
   dispose(): void {

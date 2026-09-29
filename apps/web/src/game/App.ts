@@ -20,6 +20,8 @@ import { RollbackSession } from "@anime-aggressors/rollback";
 import { pollAllInputs } from "../input/deviceAssignment.js";
 import { createBattleScene } from "../renderer-three/createBattleScene.ts";
 import { RendererDiagnostics } from "../renderer-three/RendererDiagnostics.ts";
+import { preloadBattleRoster, listRuntimeProvenance, clearRuntimeProvenance } from "../renderer-three/AssetLoader.ts";
+import { setFighterModelMode } from "../renderer-three/fighters/FighterModelFactory.ts";
 import type { BattleSceneBootResult } from "../renderer-three/createBattleScene.ts";
 import type { RenderOptions } from "../renderer-three/RenderTypes.js";
 import { mountDebugPanel } from "./debugPanel.js";
@@ -282,6 +284,10 @@ export class PlatformFighterApp {
   }
 
   beginMatch(select: CharacterSelectResult, ruleset?: GameRuleset): void {
+    void this.beginMatchAsync(select, ruleset);
+  }
+
+  private async beginMatchAsync(select: CharacterSelectResult, ruleset?: GameRuleset): Promise<void> {
     const activeRuleset = ruleset ?? getMatchSetup().ruleset ?? DEFAULT_RULESET;
     const setup = getMatchSetup();
     const config: GameConfig = gameConfigFromRuleset(
@@ -289,6 +295,34 @@ export class PlatformFighterApp {
       [select.p1, select.p2],
       Date.now() & 0xffff,
     );
+    // Exact-head acceptance prefers authored battle GLBs. Preload before scene boot.
+    const acceptance = new URLSearchParams(location.hash.split("?")[1] ?? "").get("acceptance") === "1"
+      || (window as unknown as { __AA_ACCEPTANCE__?: boolean }).__AA_ACCEPTANCE__ === true;
+    setFighterModelMode(acceptance ? "acceptance" : "dev");
+    clearRuntimeProvenance();
+    const seats = [
+      { fighterId: select.p1.id.replace(/^created:/, ""), bodyVariant: select.p1BodyVariant ?? "male" },
+      { fighterId: select.p2.id.replace(/^created:/, ""), bodyVariant: select.p2BodyVariant ?? "female" },
+    ] as Array<{ fighterId: string; bodyVariant: "male" | "female" }>;
+    // Also ensure bodyVariants on config for simulation presentation
+    config.bodyVariants = seats.map((s) => s.bodyVariant);
+    try {
+      const provenances = await preloadBattleRoster(seats);
+      const hook = {
+        preloaded: provenances,
+        live: () => listRuntimeProvenance(),
+        renderer: () => this.renderer?.getRuntimeModelProvenance() ?? [],
+      };
+      const w = window as unknown as {
+        __AA_RUNTIME_PROVENANCE__: typeof hook;
+        __AA_MODEL_PROVENANCE__: typeof provenances;
+      };
+      w.__AA_RUNTIME_PROVENANCE__ = hook;
+      w.__AA_MODEL_PROVENANCE__ = provenances;
+    } catch (err) {
+      if (acceptance) throw err;
+      console.warn("battle GLB preload failed; continuing with labeled fallback", err);
+    }
 
     if (this.trainingMode) {
       config.training = {
