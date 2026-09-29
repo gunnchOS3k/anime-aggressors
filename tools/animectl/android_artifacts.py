@@ -40,7 +40,7 @@ def _short(sha: str) -> str:
 
 
 def find_runs(root: Path, sha: str) -> list[dict[str, Any]]:
-    """List successful android-exact-head runs for a commit SHA."""
+    """List android-exact-head runs for a commit SHA (prefer push successes)."""
     if not shutil.which("gh"):
         return []
     cp = _gh(
@@ -52,7 +52,7 @@ def find_runs(root: Path, sha: str) -> list[dict[str, Any]]:
         "--commit",
         sha,
         "--json",
-        "databaseId,headSha,status,conclusion,url,displayTitle,createdAt,workflowName",
+        "databaseId,headSha,status,conclusion,url,displayTitle,createdAt,workflowName,event",
         "--limit",
         "20",
     )
@@ -62,15 +62,16 @@ def find_runs(root: Path, sha: str) -> list[dict[str, Any]]:
         runs = json.loads(cp.stdout or "[]")
     except json.JSONDecodeError:
         return []
-    out = []
+    matched = []
     for r in runs:
         if str(r.get("headSha", "")).lower() != sha.lower():
             continue
-        if r.get("status") == "completed" and r.get("conclusion") == "success":
-            out.append(r)
-        elif r.get("status") in ("in_progress", "queued", "pending"):
-            out.append(r)
-    return out
+        matched.append(r)
+    # Prefer successful push runs (artifact named from tip SHA, not PR merge SHA).
+    success = [r for r in matched if r.get("status") == "completed" and r.get("conclusion") == "success"]
+    success.sort(key=lambda r: (0 if r.get("event") == "push" else 1, r.get("createdAt") or ""), reverse=False)
+    pending = [r for r in matched if r.get("status") in ("in_progress", "queued", "pending")]
+    return success + pending
 
 
 def artifact_dir(root: Path, sha: str) -> Path:
