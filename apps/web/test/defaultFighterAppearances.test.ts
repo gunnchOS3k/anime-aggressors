@@ -6,8 +6,8 @@ import {
 } from "../src/renderer-three/fighters/defaultFighterAppearances.ts";
 
 describe("default fighter appearances", () => {
-  it("defines seven visual configs", () => {
-    assert.equal(DEFAULT_FIGHTER_APPEARANCES.length, 7);
+  it("defines nine visual configs (7 spectrum + yin/yang)", () => {
+    assert.equal(DEFAULT_FIGHTER_APPEARANCES.length, 9);
   });
 
   it("each config has trail style and preview animation", () => {
