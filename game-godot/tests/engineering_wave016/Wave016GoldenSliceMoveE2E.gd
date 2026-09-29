@@ -99,7 +99,7 @@ func _run() -> void:
 		sig_clip = str(fighter.model_3d.get_active_animation_clip())
 	elif fighter.model_3d and fighter.model_3d.has_method("get_active_clip"):
 		sig_clip = str(fighter.model_3d.get_active_clip())
-	var sig_pass := sig_move == "aura_burst" and (sig_clip == "signature_lane_burst" or sig_clip == "aura_release")
+	var sig_pass := sig_move == "aura_burst" and (sig_clip == "aura_burst" or sig_clip == "signature_lane_burst" or sig_clip == "aura_release")
 	results.append({
 		"name": "signature_aura_burst",
 		"input_command": "aura_burst",

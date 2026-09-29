@@ -515,7 +515,7 @@ def main() -> int:
         "schema": "signature_reality_closure_v1",
         "wave": "016",
         "access_architecture": {
-            "normal_match": "aura_burst -> signature_lane_burst; side_special -> signature_lane_feint; down_special -> signature_lane_trap",
+            "normal_match": "aura_burst -> aura_burst (signature_lane_burst remains separate choreography); side_special -> signature_lane_feint; down_special -> signature_lane_trap",
             "not_bound": "Remaining 5 lanes per fighter: training/lab preview and future combo/cancel/charge — not jammed onto extra buttons",
         },
         "stats": sig_stats,
@@ -578,7 +578,7 @@ def main() -> int:
             {
                 "name": "signature_commands",
                 "distinguished": True,
-                "implementation": "aura_burst + side/down special bind 3 signature lanes; others lab-only",
+                "implementation": "aura_burst uses dedicated aura_burst clip; signature_lane_* remain choreography; side/down special still bind signature lanes; others lab-only",
             },
         ],
     }
