@@ -43,24 +43,39 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Install Android SDK packages
+      - name: Configure Android SDK (runner image + sdkmanager)
         run: |
           set -euo pipefail
+          # ubuntu-latest ships a preinstalled Android SDK; avoid android-actions/setup-android
+          # which still tries to install the obsolete `tools` package and fails.
+          SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          if [[ ! -d "${SDK_ROOT}" ]]; then
+            echo "Android SDK root missing: ${SDK_ROOT}" >&2
+            exit 1
+          fi
+          echo "ANDROID_HOME=${SDK_ROOT}" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=${SDK_ROOT}" >> "$GITHUB_ENV"
+          echo "${SDK_ROOT}/platform-tools" >> "$GITHUB_PATH"
+          echo "${SDK_ROOT}/cmdline-tools/latest/bin" >> "$GITHUB_PATH"
+          # Prefer newest cmdline-tools if present
+          if [[ -d "${SDK_ROOT}/cmdline-tools" ]]; then
+            CT="$(ls -1d "${SDK_ROOT}/cmdline-tools"/* 2>/dev/null | tail -1 || true)"
+            if [[ -n "${CT}" && -x "${CT}/bin/sdkmanager" ]]; then
+              echo "${CT}/bin" >> "$GITHUB_PATH"
+              export PATH="${CT}/bin:${PATH}"
+            fi
+          fi
+          yes | sdkmanager --licenses >/dev/null || true
           sdkmanager --install \
             "platform-tools" \
             "platforms;android-36" \
             "build-tools;35.0.0" \
-            "cmdline-tools;latest" \
             "ndk;27.2.12479018" \
             "cmake;3.22.1"
-          yes | sdkmanager --licenses >/dev/null || true
-          echo "ANDROID_HOME=${ANDROID_HOME}" >> "$GITHUB_ENV"
-          echo "ANDROID_SDK_ROOT=${ANDROID_HOME}" >> "$GITHUB_ENV"
-          echo "${ANDROID_HOME}/platform-tools" >> "$GITHUB_PATH"
-          echo "${ANDROID_HOME}/build-tools/35.0.0" >> "$GITHUB_PATH"
+          echo "${SDK_ROOT}/build-tools/35.0.0" >> "$GITHUB_PATH"
+          echo "Configured Android SDK at ${SDK_ROOT}"
+          ls "${SDK_ROOT}/platforms" | head
+          ls "${SDK_ROOT}/build-tools" | head
 
       - name: Cache Godot binary + export templates
         uses: actions/cache@v4
@@ -68,7 +83,7 @@ jobs:
           path: |
             ${{ runner.tool_cache }}/godot
             ~/.local/share/godot/export_templates
-          key: godot-${{ env.GODOT_VERSION }}-android-exact-head-v1
+          key: godot-${{ env.GODOT_VERSION }}-android-exact-head-v2
 
       - name: Cache Gradle
         uses: actions/cache@v4

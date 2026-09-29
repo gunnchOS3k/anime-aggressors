@@ -76,9 +76,15 @@ jobs:
     needs: [animectl-quick]
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: install deps
+        run: npm ci --no-audit --no-fund
       - name: acceptance full (digital subset)
         run: ./animectl acceptance --exact-head --full --json --output .acceptance/ci-full.json
       - name: upload full acceptance
