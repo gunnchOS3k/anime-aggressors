@@ -48,7 +48,7 @@ export function createInitialGameState(config: GameConfig): GameState {
       characterId: charId,
       // Presentation-only; combat never reads bodyVariant.
       bodyVariant: normalizeBodyVariant(config.bodyVariants?.[i] ?? "male"),
-      fighterName: fighter.name;
+      fighterName: fighter.name,
       fighterSize: fighter.size,
       fighterColor: fighter.color,
       elementEffect: fighter.element,

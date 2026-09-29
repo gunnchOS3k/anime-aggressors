@@ -166,14 +166,25 @@ describe("8P capacity ladder (Anime)", () => {
 
 describe("duplicate fighter identity + arena camera", () => {
   it("assigns distinct palette/outline/badge for duplicate fighters", () => {
-    const seats = [
-      { fighterId: "ember", seatIndex: 0 },
-      { fighterId: "ember", seatIndex: 1 },
-      { fighterId: "ember", seatIndex: 2 },
-    ];
-    const ids = seats.map((s) => assignDuplicateIdentity(s.fighterId, s.seatIndex, seats));
-    assert.equal(identityPass(ids), true);
-    assert.notEqual(ids[0]!.badgeLabel, ids[1]!.badgeLabel);
+    const built: ReturnType<typeof assignDuplicateIdentity>[] = [];
+    for (let i = 0; i < 3; i++) {
+      built.push(
+        assignDuplicateIdentity(
+          "ember",
+          i,
+          built.map((b, j) => ({
+            fighterId: "ember",
+            seatIndex: j,
+            bodyVariant: b.bodyVariant,
+          })),
+        ),
+      );
+    }
+    assert.equal(identityPass(built), true);
+    assert.notEqual(built[0]!.badgeLabel, built[1]!.badgeLabel);
+    assert.equal(built[0]!.bodyVariant, "male");
+    assert.equal(built[1]!.bodyVariant, "female");
+    assert.equal(built[2]!.accentOnly, true);
   });
 
   it("frames all active fighters with bounded zoom", () => {
