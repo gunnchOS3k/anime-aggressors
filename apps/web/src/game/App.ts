@@ -132,12 +132,25 @@ export class PlatformFighterApp {
     const setup = getMatchSetup();
     if (this.trainingMode) {
       const training = applyTrainingLaunchSetup();
-      this.beginMatch({ p1: training.p1, p2: training.p2 }, training.ruleset);
+      this.beginMatch(
+        {
+          p1: training.p1,
+          p2: training.p2,
+          p1BodyVariant: "male",
+          p2BodyVariant: "female",
+        },
+        training.ruleset,
+      );
       return;
     }
     if (this.options.skipSelect && setup.p1Fighter && setup.p2Fighter) {
       this.beginMatch(
-        { p1: setup.p1Fighter, p2: setup.p2Fighter },
+        {
+          p1: setup.p1Fighter,
+          p2: setup.p2Fighter,
+          p1BodyVariant: "male",
+          p2BodyVariant: "female",
+        },
         setup.ruleset,
       );
       return;
