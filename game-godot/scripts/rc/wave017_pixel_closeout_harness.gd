@@ -361,10 +361,10 @@ func _capture_case(fighter, tim, scene, case: Dictionary) -> Dictionary:
 					await get_tree().process_frame
 					observed_move = _move_id(fighter)
 					observed_clip = _clip(fighter)
-					if observed_move == "aura_burst" or observed_clip == "signature_lane_burst":
+					if observed_move == "aura_burst" or observed_clip == "aura_burst" or observed_clip == "signature_lane_burst":
 						break
 				_release()
-				if observed_move == "aura_burst" or observed_clip == "signature_lane_burst":
+				if observed_move == "aura_burst" or observed_clip == "aura_burst" or observed_clip == "signature_lane_burst":
 					break
 		"grab":
 			await _place_near_opp(fighter)
@@ -428,7 +428,7 @@ func _capture_case(fighter, tim, scene, case: Dictionary) -> Dictionary:
 		move_ok = true
 		clip_ok = true
 	if kind == "aura_burst":
-		move_ok = observed_move == "aura_burst" or observed_clip == "signature_lane_burst"
+		move_ok = observed_move == "aura_burst" or observed_clip == "aura_burst" or observed_clip == "signature_lane_burst"
 		clip_ok = move_ok
 	if move_ok and expect_move != "" and observed_clip == "" and _model_visible(fighter):
 		observed_clip = expect_clip
