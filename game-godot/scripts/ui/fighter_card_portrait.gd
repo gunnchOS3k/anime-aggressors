@@ -12,8 +12,13 @@ static var _baking: Dictionary = {} # cache_key -> generation
 var fighter_id: String = ""
 var _portrait_context: String = _PresentationContext.CTX_SELECT_CARD
 var focused: bool = false
+var _body_variant: String = "male"
 var _accent: Color = Color(1, 0.85, 0.3)
 var _bake_generation: int = 0
+
+
+func set_body_variant(variant: String) -> void:
+	_body_variant = "female" if variant == "female" else "male"
 
 
 func configure(id: String, _primary_color: Color, accent_color: Color) -> void:
@@ -42,7 +47,7 @@ func set_focused(value: bool) -> void:
 
 
 func _apply_cached_or_bake() -> void:
-	var key := _PresentationContext.cache_key(fighter_id, _portrait_context)
+	var key := _PresentationContext.cache_key(fighter_id, _portrait_context, _body_variant)
 	var cached: Texture2D = _PresentationCache.get_texture(key)
 	if cached != null:
 		texture = cached
@@ -53,7 +58,7 @@ func _apply_cached_or_bake() -> void:
 func _bake_portrait() -> void:
 	if fighter_id.is_empty():
 		return
-	var key := _PresentationContext.cache_key(fighter_id, _portrait_context)
+	var key := _PresentationContext.cache_key(fighter_id, _portrait_context, _body_variant)
 	var gen := _bake_generation
 	var cached: Texture2D = _PresentationCache.get_texture(key)
 	if cached != null:
@@ -80,9 +85,10 @@ func _bake_portrait() -> void:
 	var gs = tree.root.get_node_or_null("/root/GameState")
 	var data: Dictionary = {}
 	if gs != null and gs.has_method("load_fighter"):
-		data = gs.load_fighter(fighter_id)
+		data = gs.load_fighter(fighter_id).duplicate()
 	else:
 		data = {"id": fighter_id}
+	data["body_variant"] = _body_variant
 	if model.has_method("set_presentation_context"):
 		model.set_presentation_context(_portrait_context)
 	elif model.has_method("set_select_mode"):

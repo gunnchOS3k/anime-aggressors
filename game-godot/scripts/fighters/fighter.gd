@@ -46,6 +46,7 @@ var _attack_facing_locked: bool = false
 var _last_hurt_reaction: Dictionary = {}
 
 var data: Dictionary = {}
+var _model_presentation_data: Dictionary = {}
 var move_manifest: Dictionary = {}
 var damage_percent: float = 0.0
 var stocks: int = 3
@@ -256,7 +257,14 @@ func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, s
 		model_3d.set_form_id(_current_form_id, _FormDefinition.form_entry(_forms_doc, _current_form_id))
 	if model_3d != null and model_3d.has_method("set_presentation_context"):
 		model_3d.set_presentation_context(_PresentationContext.battle_context_for_slot(slot, cpu_flag))
-	var model_loaded: bool = model_3d != null and model_3d.configure(data)
+	var model_data := data.duplicate()
+	var gs_variant = get_node_or_null("/root/GameState")
+	var variant := "male"
+	if gs_variant != null:
+		variant = str(gs_variant.p1_body_variant if player_slot == 1 else gs_variant.p2_body_variant)
+	model_data["body_variant"] = "female" if variant == "female" else "male"
+	_model_presentation_data = model_data
+	var model_loaded: bool = model_3d != null and model_3d.configure(model_data)
 	if model_3d != null and model_3d.has_method("set_presentation_context"):
 		# Fresh battle context after configure — never keep a mutated select instance.
 		model_3d.set_presentation_context(_PresentationContext.battle_context_for_slot(slot, cpu_flag))
@@ -310,7 +318,7 @@ func ensure_visible_presentation() -> void:
 	# Retry canonical configure once before any ColorRect fallback.
 	if not model_ok and model_3d != null and not data.is_empty():
 		if model_3d.has_method("configure"):
-			model_3d.configure(data)
+			model_3d.configure(_model_presentation_data if not _model_presentation_data.is_empty() else data)
 		if model_3d.has_method("heal_visibility_if_needed"):
 			model_3d.heal_visibility_if_needed()
 		if model_3d.has_method("heal_final_screen_visibility_if_needed"):

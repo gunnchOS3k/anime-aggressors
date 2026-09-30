@@ -12,6 +12,7 @@ from .doctor import run_doctor
 from .inspect_runtime import run_inspect
 from .result import EXIT_INVALID_ARGS
 from .verify import run_verify
+from .visual_v16 import run_inspect_variant, run_trace_move, run_visual_slice
 from .wrappers import run_android, run_art, run_build, run_capture, run_play, run_story
 
 
@@ -51,6 +52,11 @@ def build_parser() -> argparse.ArgumentParser:
     ir.add_argument("--body", choices=["male", "female"], required=True)
     ir.add_argument("--story-form", default="NORMAL")
     ir.add_argument("--essence", type=int, default=0)
+    iv = insp_sub.add_parser("variant")
+    _globals(iv)
+    iv.add_argument("--fighter", required=True)
+    iv.add_argument("--male", action="store_true")
+    iv.add_argument("--female", action="store_true")
 
     ver = sub.add_parser("verify", help="Wrap validators")
     _globals(ver)
@@ -66,6 +72,9 @@ def build_parser() -> argparse.ArgumentParser:
     _globals(acc)
     acc.add_argument("--quick", action="store_true")
     acc.add_argument("--full", action="store_true")
+    acc.add_argument("mode_name", nargs="?", default=None, choices=[None, "visual-slice"])
+    acc.add_argument("--visual-slice", action="store_true")
+    acc.add_argument("--fighters", default="")
 
     st = sub.add_parser("story", help="Story QA helpers")
     _globals(st)
@@ -105,7 +114,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     cap = sub.add_parser("capture", help="Capture evidence dirs")
     _globals(cap)
-    cap.add_argument("topic", choices=["roster", "story", "fighter", "acceptance"])
+    cap.add_argument("topic", choices=["roster", "story", "fighter", "acceptance", "variant-sheet", "move-sheet"])
     cap.add_argument("fighter_id", nargs="?", default=None)
 
     art = sub.add_parser("art", help="Art/Blender wrappers")
@@ -113,6 +122,12 @@ def build_parser() -> argparse.ArgumentParser:
     art.add_argument("action", choices=["doctor", "validate", "build"])
     art.add_argument("--fighter")
     art.add_argument("--all", action="store_true", dest="art_all")
+
+    tr = sub.add_parser("trace", help="Visible move fidelity trace")
+    _globals(tr)
+    tr.add_argument("action", choices=["move"])
+    tr.add_argument("--fighter", required=True)
+    tr.add_argument("--move", required=True)
 
     return p
 
@@ -141,6 +156,8 @@ def main(argv: list[str] | None = None) -> int:
         return run_doctor(root, safe_clean_flag=bool(_flag(args, "safe_clean", False))).emit(**common)
     if args.cmd == "audit":
         return run_audit(root).emit(**common)
+    if args.cmd == "inspect" and getattr(args, "inspect_cmd", None) == "variant":
+        return run_inspect_variant(root, args.fighter).emit(**common)
     if args.cmd == "inspect" and getattr(args, "inspect_cmd", None) == "runtime":
         return run_inspect(
             root,
@@ -153,6 +170,10 @@ def main(argv: list[str] | None = None) -> int:
         topic = "all" if getattr(args, "verify_all", False) else (args.topic or "all")
         return run_verify(root, topic).emit(**common)
     if args.cmd == "acceptance":
+        if getattr(args, "visual_slice", False) or getattr(args, "mode_name", None) == "visual-slice":
+            raw = str(getattr(args, "fighters", "") or "")
+            fighters = [part.strip() for part in raw.split(",") if part.strip()] or None
+            return run_visual_slice(root, fighters).emit(**common)
         mode = "full" if getattr(args, "full", False) else "quick"
         # acceptance defaults to exact-head semantics
         return run_acceptance(root, exact_head=exact_head or True, mode=mode).emit(**common)
@@ -167,6 +188,13 @@ def main(argv: list[str] | None = None) -> int:
             sha=getattr(args, "sha", None),
             artifact_action=getattr(args, "artifact_action", None),
         ).emit(**common)
+    if args.cmd == "trace":
+        return run_trace_move(root, args.fighter, args.move).emit(**common)
+    if args.cmd == "capture" and args.topic in ("variant-sheet", "move-sheet"):
+        fighter = getattr(args, "fighter_id", None) or "kaia-windrow"
+        if args.topic == "variant-sheet":
+            return run_inspect_variant(root, fighter).emit(**common)
+        return run_trace_move(root, fighter, "heavy_attack").emit(**common)
     if args.cmd == "play":
         return run_play(root).emit(**common)
     if args.cmd == "capture":

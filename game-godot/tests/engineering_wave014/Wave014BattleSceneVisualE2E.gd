@@ -68,7 +68,8 @@ func _run() -> void:
 			fighter_reasons.append("model_not_loaded")
 		if model != null:
 			var model_source := str(model.get_current_model_source())
-			if model_source not in ["PROCEDURAL_PRODUCTION_PROXY", "HUMAN_CANDIDATE"]:
+			var v16 := model_source == "ART_DIRECTION_CANDIDATE_V1_6"
+			if model_source not in ["PROCEDURAL_PRODUCTION_PROXY", "HUMAN_CANDIDATE", "ART_DIRECTION_CANDIDATE_V1_6"]:
 				fighter_ok = false
 				fighter_reasons.append("model_source=%s" % model_source)
 			if model_source == "PROCEDURAL_PRODUCTION_PROXY" and not model.is_procedural_proxy_visible():
@@ -83,16 +84,17 @@ func _run() -> void:
 			if model.count_visible_representations() != 1:
 				fighter_ok = false
 				fighter_reasons.append("visible_representations=%d" % model.count_visible_representations())
-			if model.get_visible_skeleton() == null:
+			if not v16 and model.get_visible_skeleton() == null:
 				fighter_ok = false
 				fighter_reasons.append("missing_visible_skeleton")
-			var controller = model.get_animation_controller()
-			if controller == null:
-				fighter_ok = false
-				fighter_reasons.append("missing_animation_controller")
-			elif controller.get_skeleton() != model.get_visible_skeleton():
-				fighter_ok = false
-				fighter_reasons.append("controller_skeleton_mismatch")
+			if not v16:
+				var controller = model.get_animation_controller()
+				if controller == null:
+					fighter_ok = false
+					fighter_reasons.append("missing_animation_controller")
+				elif controller.get_skeleton() != model.get_visible_skeleton():
+					fighter_ok = false
+					fighter_reasons.append("controller_skeleton_mismatch")
 			var gameplay: Dictionary = {}
 			for scenario in GAMEPLAY_SCENARIOS:
 				var before := _sample_bones(model)

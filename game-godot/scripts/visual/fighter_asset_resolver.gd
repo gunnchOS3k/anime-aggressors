@@ -213,6 +213,11 @@ static func staging_review_enabled() -> bool:
 	return human_art_staging_enabled() or full_roster_review_enabled()
 
 
+static func player_dev_chrome_enabled() -> bool:
+	## AA_DEV_UI=1 shows ART SOURCE / candidate counts. Default player build does not.
+	return _env_flag("AA_DEV_UI")
+
+
 static func staging_glb_path(fighter_id: String) -> String:
 	return "res://content/human_art_staging/%s/%s.glb" % [fighter_id, fighter_id]
 

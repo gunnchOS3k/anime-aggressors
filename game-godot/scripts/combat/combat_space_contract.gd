@@ -5,7 +5,7 @@ class_name CombatSpaceContract
 ## Visual scale, collision capsule, platform width, jump reach, and ledge windows
 ## must stay coherent — do not enlarge stage OR shrink visuals in isolation.
 
-const BATTLE_DISPLAY_SCALE := Vector2(0.58, 0.58)
+const BATTLE_DISPLAY_SCALE := Vector2(0.68, 0.68)
 const MAX_BATTLE_DISPLAY_SCALE := 0.72
 ## Visual footprint (viewport * display scale) vs main-platform width ratio band.
 const MIN_VISUAL_TO_PLATFORM_RATIO := 0.12

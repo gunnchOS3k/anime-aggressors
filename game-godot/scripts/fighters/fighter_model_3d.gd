@@ -21,10 +21,11 @@ const _FacingContract = preload("res://scripts/combat/fighter_facing_contract.gd
 const _ElementalMaterial = preload("res://scripts/visual/elemental_material_contract.gd")
 const _SignaturePresentation = preload("res://scripts/visual/signature_move_presentation.gd")
 const _GeometryFit = preload("res://scripts/visual/geometry_auto_fit.gd")
+const _V16Body = preload("res://scripts/visual/v16_art_direction_body.gd")
 
 const VIEWPORT_SIZE := Vector2i(256, 320)
 ## Battle bodies must be owner-visible on Pixel; prior 0.38 read as absent.
-const DISPLAY_SCALE := Vector2(0.58, 0.58)
+const DISPLAY_SCALE := Vector2(0.68, 0.68)
 const SELECT_DISPLAY_SCALE := Vector2(1.35, 1.35)
 const SELECT_CAMERA_SIZE := 2.05
 const PROXY_LABEL := "PROCEDURAL PRODUCTION PROXY"
@@ -73,6 +74,9 @@ var _current_model_source: String = "MISSING"
 var _current_animation_source: String = "LEGACY_STYLIZED_POSE"
 var _procedural_healthy: bool = false
 var _using_stylized_fallback: bool = false
+var _body_variant: String = "male"
+var _v16_body: Node3D = null
+var _using_v16: bool = false
 ## Wave018: generation token cancels superseded configure/swap races.
 var _configure_generation: int = 0
 var _load_failure_logged: bool = false
@@ -122,6 +126,11 @@ func _process(delta: float) -> void:
 	elif _loaded and not _viewport_image_unreadable and not is_final_screen_visible_body():
 		if _final_screen_heal_attempts < 6:
 			heal_final_screen_visibility_if_needed()
+	if _loaded and _using_v16 and _v16_body != null and is_instance_valid(_v16_body):
+		_style_anim_t += delta * _style_speed
+		if _v16_body.has_method("animate_pose"):
+			_v16_body.animate_pose(_style_clip, _style_anim_t)
+		return
 	if not _loaded or not _using_stylized_fallback or _stylized == null:
 		return
 	_style_anim_t += delta * _style_speed
@@ -129,7 +138,7 @@ func _process(delta: float) -> void:
 		_stylized.animate_pose(_style_clip, _style_anim_t)
 
 
-func configure(fighter_data: Dictionary) -> bool:
+func configure(fighter_data: Dictionary, body_variant: String = "") -> bool:
 	_configure_generation += 1
 	var gen := _configure_generation
 	if _model_root == null:
@@ -141,6 +150,9 @@ func configure(fighter_data: Dictionary) -> bool:
 	if gen != _configure_generation:
 		return false
 	_fighter_id = str(fighter_data.get("id", ""))
+	_body_variant = _resolved_body_variant(body_variant, fighter_data)
+	_using_v16 = false
+	_v16_body = null
 	_life = _CharacterLife.for_id(_fighter_id)
 	_current_model_source = "MISSING"
 	_current_animation_source = "LEGACY_STYLIZED_POSE"
@@ -159,7 +171,15 @@ func configure(fighter_data: Dictionary) -> bool:
 	_stylized.rotation_degrees.y = _FacingContract.mesh_yaw_for_facing(_logical_facing)
 	_model_root.add_child(_stylized)
 
-	if _procedural_healthy and _proxy_model != null:
+	if _using_v16 and _v16_body != null and is_instance_valid(_v16_body):
+		_loaded_model = _v16_body
+		_v16_body.visible = true
+		_stylized.visible = false
+		_stylized.process_mode = Node.PROCESS_MODE_DISABLED
+		_using_stylized_fallback = false
+		if _proxy_model != null:
+			_proxy_model.visible = false
+	elif _procedural_healthy and _proxy_model != null:
 		_loaded_model = _proxy_model
 		_stylized.visible = false
 		_stylized.process_mode = Node.PROCESS_MODE_DISABLED
@@ -294,6 +314,8 @@ func count_visible_bodies() -> int:
 
 func count_visible_representations() -> int:
 	var count := 0
+	if _v16_body != null and is_instance_valid(_v16_body) and _v16_body.visible:
+		count += 1
 	if _proxy_model != null and is_instance_valid(_proxy_model) and _proxy_model.visible:
 		count += 1
 	if _stylized != null and is_instance_valid(_stylized) and _stylized.visible:
@@ -301,8 +323,42 @@ func count_visible_representations() -> int:
 	return count
 
 
+func get_body_variant() -> String:
+	return _body_variant
+
+
+func _resolved_body_variant(explicit: String, fighter_data: Dictionary) -> String:
+	var raw := explicit
+	if raw != "male" and raw != "female":
+		raw = str(fighter_data.get("body_variant", "male"))
+	return "female" if raw == "female" else "male"
+
+
+func _mount_v16_candidate() -> Dictionary:
+	_v16_body = _V16Body.create(_fighter_id, _body_variant)
+	_model_root.add_child(_v16_body)
+	_using_v16 = true
+	_procedural_healthy = false
+	_current_animation_source = "V16_REPRESENTATIVE_CHOREOGRAPHY"
+	return {
+		"source": "ART_DIRECTION_CANDIDATE_V1_6",
+		"loaded": true,
+		"path": _V16Body.presentation_path(_fighter_id, _body_variant),
+		"body_variant": _body_variant,
+	}
+
+
 func _enforce_exactly_one_visible_body() -> void:
-	## Invariant: exactly one of procedural proxy / stylized fallback is visible.
+	## Invariant: exactly one player-facing body is visible.
+	if _using_v16 and _v16_body != null and is_instance_valid(_v16_body):
+		_v16_body.visible = true
+		if _stylized != null and is_instance_valid(_stylized):
+			_stylized.visible = false
+		if _proxy_model != null and is_instance_valid(_proxy_model):
+			_proxy_model.visible = false
+		_loaded_model = _v16_body
+		_using_stylized_fallback = false
+		return
 	if _procedural_healthy and _proxy_model != null and is_instance_valid(_proxy_model):
 		_proxy_model.visible = true
 		if _stylized != null and is_instance_valid(_stylized):
@@ -525,6 +581,8 @@ func set_aura_tier(tier: int) -> void:
 func set_form_id(form_id: String, form_entry: Dictionary = {}) -> void:
 	_form_id = form_id
 	_form_presentation = form_entry.get("presentation", {})
+	if _using_v16 and _v16_body != null and _v16_body.has_method("apply_story_form"):
+		_v16_body.apply_story_form(form_id)
 	_apply_faceless_head_presentation()
 	_refresh_aura_overlay()
 	if _model_root != null and is_instance_valid(_model_root):
@@ -689,6 +747,10 @@ func capture_viewport_image() -> Image:
 
 func _resolve_and_load_model(fighter_data: Dictionary) -> Dictionary:
 	## Route through canonical presentation authority — reject deprecated player paths.
+	if _V16Body.is_slice(_fighter_id):
+		var v16_info := _mount_v16_candidate()
+		_last_presentation = v16_info
+		return v16_info
 	var presentation: Dictionary = _AssetResolver.resolve_presentation(
 		_fighter_id, _PresentationContext.resolver_context(_presentation_context), fighter_data
 	)
@@ -1069,6 +1131,8 @@ func _clear_model() -> void:
 	_loaded_model = null
 	_proxy_model = null
 	_stylized = null
+	_v16_body = null
+	_using_v16 = false
 	_last_clip = ""
 	_style_anim_t = 0.0
 	_style_clip = "idle"
@@ -1463,6 +1527,11 @@ func _play_clip(requested: String, state: String = "", move: Dictionary = {}) ->
 			_style_anim_t = 0.0
 			_last_clip = requested
 
+	if _using_v16 and _v16_body != null and is_instance_valid(_v16_body) and _v16_body.has_method("animate_pose"):
+		_v16_body.animate_pose(_style_clip, _style_anim_t)
+		_last_clip = requested
+		_current_animation_source = "V16_REPRESENTATIVE_CHOREOGRAPHY"
+		return
 	if _procedural_healthy and _animation_controller != null and is_instance_valid(_animation_controller):
 		var move_copy := move.duplicate() if not move.is_empty() else {}
 		if state.is_empty():

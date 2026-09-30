@@ -24,6 +24,7 @@ var _locked_p1: bool = false
 var _locked_p2: bool = false
 ## Dual-form presentation (male|female). Same gameplay/animation identity per fighter.
 var _pending_body_variant: String = "male"
+var _preview_body_variant: String = ""
 var _p1_body_variant: String = "male"
 var _p2_body_variant: String = "female"
 var _preview_model: Node2D
@@ -469,10 +470,12 @@ func _update_preview(index: int, lock_in: bool) -> void:
 			return
 		if _preview_model.has_method("refresh_viewport_texture"):
 			_preview_model.refresh_viewport_texture(true)
-	var data: Dictionary = GameState.load_fighter(id)
-	# Reuse cache when same fighter + already renderable (hold/reselect).
+	var data: Dictionary = GameState.load_fighter(id).duplicate()
+	data["body_variant"] = _pending_body_variant
+	# Reuse cache when same fighter + same form + already renderable (hold/reselect).
 	var same: bool = id == _preview_fighter_id
-	var already_ok: bool = same and _preview_model.has_method("is_visible_renderable_body") and bool(_preview_model.is_visible_renderable_body())
+	var variant_same: bool = _preview_body_variant == _pending_body_variant
+	var already_ok: bool = same and variant_same and _preview_model.has_method("is_visible_renderable_body") and bool(_preview_model.is_visible_renderable_body())
 	if not already_ok:
 		var ok := false
 		if _preview_model.has_method("configure"):
@@ -496,6 +499,7 @@ func _update_preview(index: int, lock_in: bool) -> void:
 	if gen != _preview_generation:
 		return
 	_preview_fighter_id = id
+	_preview_body_variant = _pending_body_variant
 	if _preview_model.has_method("set_presentation_context"):
 		_preview_model.set_presentation_context("SELECT_PREVIEW")
 	elif _preview_model.has_method("set_select_mode"):
@@ -796,19 +800,23 @@ func _announce_lock(slot: int, fighter_id: String) -> Dictionary:
 
 
 func _ensure_art_review_overlay() -> void:
+	## ART SOURCE counts stay behind explicit dev chrome.
+	## Roster Art Review remains the door into that surface.
 	if not _AssetResolver.staging_review_enabled():
+		return
+	if action_bar != null and action_bar.get_node_or_null("RosterArtReview") == null:
+		var review_btn := Button.new()
+		review_btn.name = "RosterArtReview"
+		review_btn.text = "Roster Art Review"
+		review_btn.pressed.connect(func() -> void: SceneRouter.go_roster_art_review())
+		action_bar.add_child(review_btn)
+	if not _AssetResolver.player_dev_chrome_enabled():
 		return
 	if _art_overlay != null:
 		return
 	_art_overlay = _ArtOverlay.new()
 	_art_overlay.name = "ArtSourceReviewOverlay"
 	add_child(_art_overlay)
-	var review_btn := Button.new()
-	review_btn.name = "RosterArtReview"
-	review_btn.text = "Roster Art Review"
-	review_btn.pressed.connect(func() -> void: SceneRouter.go_roster_art_review())
-	if action_bar:
-		action_bar.add_child(review_btn)
 
 
 func on_back() -> void:
