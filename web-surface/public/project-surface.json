@@ -1,0 +1,22 @@
+{
+  "repo": "anime-aggressors",
+  "productName": "Anime Aggressors",
+  "family": "Games",
+  "classification": "HEAVY_ASSET_EXTERNAL_RUNTIME_SURFACE",
+  "acceptedSha": "72e5dada4e557b42b6abb8c85f218f0a5b3d2e35",
+  "status": "STAGING_WORKER",
+  "summary": "PvP arena game. Accepted main does not have a Worker-compatible playable web build. The Godot web payload was above the 25 MiB Worker asset limit, and the Pages boot is not a clean playable runtime.",
+  "capabilities": [
+    "Read roster, status, and where play is not available",
+    "Open the source repository"
+  ],
+  "limitations": [
+    "No Play action is offered",
+    "Draft creative branch v4/dual-form-power-roster is not accepted main",
+    "This Worker does not host the wasm game"
+  ],
+  "sourceUrl": "https://github.com/gunnchOS3k/anime-aggressors",
+  "returnUrlEnv": "GUNNCHOS_PORTAL_URL",
+  "returnUrl": "https://gunnchos-site.gunnchos-finds.workers.dev",
+  "workerName": "anime-aggressors-web"
+}
