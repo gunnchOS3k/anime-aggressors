@@ -69,7 +69,7 @@ func _run() -> void:
 		if model != null:
 			var model_source := str(model.get_current_model_source())
 			var v16 := model_source == "ART_DIRECTION_CANDIDATE_V1_6"
-			if model_source not in ["PROCEDURAL_PRODUCTION_PROXY", "HUMAN_CANDIDATE", "ART_DIRECTION_CANDIDATE_V1_6"]:
+			if model_source not in ["PROCEDURAL_PRODUCTION_PROXY", "HUMAN_CANDIDATE", "ART_DIRECTION_CANDIDATE_V1_6", "GOLDEN_SLICE_CANDIDATE"]:
 				fighter_ok = false
 				fighter_reasons.append("model_source=%s" % model_source)
 			if model_source == "PROCEDURAL_PRODUCTION_PROXY" and not model.is_procedural_proxy_visible():
@@ -152,7 +152,8 @@ func _finish(ok: bool, reasons: Array[String], scenarios: Dictionary) -> void:
 		"fighter_scenarios": scenarios,
 		"reasons": reasons,
 		"all_seven_fighters": scenarios.size() == 7,
-		"PROCEDURAL_PROXY_VISIBLE_ALL_FIGHTERS": ok,
+		"PROCEDURAL_PROXY_VISIBLE_ALL_FIGHTERS": false,
+		"AUTHORITY_MIXED_GOLDEN_SLICE": ok,
 		"STYLIZED_FALLBACK_VISIBLE_COUNT": 0 if ok else -1,
 		"VISIBLE_RUNTIME_ANIMATION_CONTROLLERS_PER_FIGHTER": 1,
 	}

@@ -1,0 +1,74 @@
+{
+  "schema": "green_between.foundation.v1",
+  "root_story": "THE_GREEN_BETWEEN",
+  "anchor": "kaia-windrow",
+  "epithet": "The Skyflow Duelist",
+  "epithet_status": "LOCKED_FOR_THIS_PASS",
+  "implementation_complete": false,
+  "STORY_IMPLEMENTATION_COMPLETE": false,
+  "HUMAN_ART_APPROVAL": false,
+  "MERGE_AUTHORIZED": false,
+  "copy_tag": "DRAFT_NARRATIVE_COPY",
+  "recruitment": [
+    ["juno-spark", "nix-calder"],
+    ["rook-ironside", "orion-vell"],
+    ["ember-vale", "vesper-nyx"]
+  ],
+  "root_first_loss": {
+    "fighter": "rook-ironside",
+    "status": "CANONICAL"
+  },
+  "essence_progression": [0, 1, 2, 4, 6],
+  "unlock_tree": [
+    "THE_GREEN_BETWEEN",
+    "PRISMATIC_GRAY_KAIA",
+    "PRISMATIC_ROUTES",
+    "SEVEN_PRISMATIC_GRAY_COMPLETE",
+    "SEVENFOLD_CONVERGENCE",
+    "YIN_PLAYABLE",
+    "YANG_PLAYABLE"
+  ],
+  "open_canon_decisions": [
+    "first_loss_identity_for_non_kaia_prismatic_routes"
+  ],
+  "nodes": [
+    {
+      "id": "kaia_intro",
+      "title": "Prologue — A Current Between Colors",
+      "objective": "Introduce Kaia Windrow, The Skyflow Duelist. Balance is active work.",
+      "body": "DRAFT_NARRATIVE_COPY: Kaia enters. No final dialogue is authored in this foundation."
+    },
+    {
+      "id": "juno_nix_recruitment",
+      "title": "Act I — Yellow / Blue: Motion and Structure",
+      "objective": "Recruitment node for Juno Spark and Nix Calder.",
+      "recruits": ["juno-spark", "nix-calder"],
+      "body": "DRAFT_NARRATIVE_COPY: Encounter placeholder. Juno and Nix are the first symmetric pair."
+    },
+    {
+      "id": "rook_first_loss",
+      "title": "First Loss — Rook Ironside",
+      "objective": "Canonical Kaia-route First Loss. Rook carries the failure himself.",
+      "first_loss": "rook-ironside",
+      "canonical": true,
+      "essence_after": 1,
+      "body": "DRAFT_NARRATIVE_COPY: Placeholder for the First Loss. No final scene wording."
+    },
+    {
+      "id": "campaign_map",
+      "title": "Campaign map",
+      "objective": "Show the next locked nodes. Do not assign other First Losses.",
+      "next_locked": [
+        "PRISMATIC_GRAY_KAIA",
+        "PRISMATIC_ROUTES",
+        "SEVENFOLD_CONVERGENCE",
+        "YIN_PLAYABLE",
+        "YANG_PLAYABLE"
+      ],
+      "body": "DRAFT_NARRATIVE_COPY: Route skeleton only. Prismatic routes stay locked."
+    }
+  ],
+  "versus_selectable_yin_yang": true,
+  "story_unlocked_playable_yin": false,
+  "story_unlocked_playable_yang": false
+}

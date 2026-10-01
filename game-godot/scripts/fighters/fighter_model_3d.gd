@@ -77,6 +77,7 @@ var _using_stylized_fallback: bool = false
 var _body_variant: String = "male"
 var _v16_body: Node3D = null
 var _using_v16: bool = false
+var _using_golden_slice: bool = false
 ## Wave018: generation token cancels superseded configure/swap races.
 var _configure_generation: int = 0
 var _load_failure_logged: bool = false
@@ -152,6 +153,7 @@ func configure(fighter_data: Dictionary, body_variant: String = "") -> bool:
 	_fighter_id = str(fighter_data.get("id", ""))
 	_body_variant = _resolved_body_variant(body_variant, fighter_data)
 	_using_v16 = false
+	_using_golden_slice = false
 	_v16_body = null
 	_life = _CharacterLife.for_id(_fighter_id)
 	_current_model_source = "MISSING"
@@ -254,6 +256,8 @@ func get_current_animation_source() -> String:
 
 
 func is_procedural_proxy_visible() -> bool:
+	if _using_golden_slice:
+		return false
 	return _procedural_healthy and _proxy_model != null and _proxy_model.visible
 
 
@@ -334,6 +338,44 @@ func _resolved_body_variant(explicit: String, fighter_data: Dictionary) -> Strin
 	return "female" if raw == "female" else "male"
 
 
+func _try_load_golden_slice(fighter_data: Dictionary) -> Dictionary:
+	var model_path := "res://assets/characters/golden_slice/kaia-windrow/%s.glb" % _body_variant
+	if not FileAccess.file_exists(model_path) and not ResourceLoader.exists(model_path):
+		return {"source": "MISSING", "loaded": false}
+	var instance: Node = null
+	if ResourceLoader.exists(model_path):
+		var resource = load(model_path)
+		if resource is PackedScene:
+			instance = (resource as PackedScene).instantiate()
+	if instance == null:
+		var doc := GLTFDocument.new()
+		var state := GLTFState.new()
+		if doc.append_from_file(model_path, state) != OK:
+			return {"source": "MISSING", "loaded": false}
+		instance = doc.generate_scene(state)
+	if not instance is Node3D:
+		instance.queue_free()
+		return {"source": "MISSING", "loaded": false}
+	if _proxy_model != null and is_instance_valid(_proxy_model):
+		_proxy_model.queue_free()
+	_proxy_model = instance as Node3D
+	_proxy_model.name = "GoldenSlice_%s_%s" % [_fighter_id, _body_variant]
+	_proxy_model.visible = true
+	_model_root.add_child(_proxy_model)
+	_visible_skeleton = _find_skeleton(_proxy_model)
+	_procedural_healthy = _visible_skeleton != null
+	_using_golden_slice = _procedural_healthy
+	_using_v16 = false
+	return {
+		"source": "GOLDEN_SLICE_CANDIDATE",
+		"loaded": _procedural_healthy,
+		"path": model_path,
+		"body_variant": _body_variant,
+		"FINAL_CHARACTER_ART_PASS": false,
+		"HUMAN_ART_DIRECTION_APPROVAL": false,
+	}
+
+
 func _mount_v16_candidate() -> Dictionary:
 	_v16_body = _V16Body.create(_fighter_id, _body_variant)
 	_model_root.add_child(_v16_body)
@@ -391,11 +433,9 @@ func get_configure_generation() -> int:
 
 func truth_flags() -> Dictionary:
 	return {
-		"PROCEDURAL_CHARACTER_RUNTIME_PASS": _procedural_healthy,
+		"PROCEDURAL_CHARACTER_RUNTIME_PASS": _procedural_healthy and not _using_golden_slice,
 		"PROCEDURAL_RUNTIME_ANIMATION_PASS": _procedural_healthy and has_imported_animations(),
-		"FINAL_CHARACTER_ART_PASS": _current_model_source in ["FINAL_CUSTOM", "APPROVED_VROID"],
 		"FINAL_HUMAN_AUTHORED_ANIMATION_PASS": false,
-		"HUMAN_ART_DIRECTION_APPROVAL": false,
 		"CURRENT_MODEL_SOURCE": _current_model_source,
 		"CURRENT_ANIMATION_SOURCE": _current_animation_source,
 		"PROCEDURAL_PROXY_VISIBLE": is_procedural_proxy_visible(),
@@ -404,6 +444,9 @@ func truth_flags() -> Dictionary:
 		"ACTIVE_ANIMATION_CLIP": get_active_animation_clip(),
 		"COMPETITIVE_GAMEPLAY_ROOT_MOTION": "PHYSICS_AUTHORITATIVE",
 		"VISIBLE_RUNTIME_ANIMATION_CONTROLLERS_PER_FIGHTER": 1 if _animation_controller else 0,
+		"SHIPPING_MODEL_DATA_LOADED": _loaded and _current_model_source != "MISSING",
+		"FINAL_CHARACTER_ART_PASS": false if _using_golden_slice else _current_model_source in ["FINAL_CUSTOM", "APPROVED_VROID"],
+		"HUMAN_ART_DIRECTION_APPROVAL": false,
 		"STYLIZED_FALLBACK_VISIBLE": is_stylized_visible(),
 	}
 
@@ -747,6 +790,11 @@ func capture_viewport_image() -> Image:
 
 func _resolve_and_load_model(fighter_data: Dictionary) -> Dictionary:
 	## Route through canonical presentation authority — reject deprecated player paths.
+	if _fighter_id == "kaia-windrow":
+		var golden := _try_load_golden_slice(fighter_data)
+		if golden.get("loaded", false):
+			_last_presentation = golden
+			return golden
 	if _V16Body.is_slice(_fighter_id):
 		var v16_info := _mount_v16_candidate()
 		_last_presentation = v16_info
@@ -867,6 +915,8 @@ func _apply_toon_materials(root: Node3D, fighter_data: Dictionary) -> void:
 	# Candidate bodies keep KayKit silhouette but receive shared cel + elemental value groups.
 	# This does not promote HUMAN_APPROVED.
 	_refresh_elemental_materials()
+	if _using_golden_slice or _current_model_source == "GOLDEN_SLICE_CANDIDATE":
+		return
 	if _current_model_source in ["HUMAN_CANDIDATE", "HUMAN_APPROVED"]:
 		return
 	var base_color := Color(fighter_data.get("color", Color(0.85, 0.85, 0.9)))
@@ -1133,6 +1183,7 @@ func _clear_model() -> void:
 	_stylized = null
 	_v16_body = null
 	_using_v16 = false
+	_using_golden_slice = false
 	_last_clip = ""
 	_style_anim_t = 0.0
 	_style_clip = "idle"

@@ -56,7 +56,9 @@ jobs:
           assert d.get("CURSOR_MERGED_NOTHING") is True
           assert int(d.get("COMPUTED_CORE_PIPELINE_MONETARY_COST_USD", 1)) == 0
           assert d.get("ZERO_COST_CHECK_PASS") is True
-          assert d.get("PROCEDURAL_CHARACTER_RUNTIME_PASS") is True
+          assert d.get("WAVE014_AUTHORITY_GATE_GREEN") is True
+          assert d.get("AUTHORITY_MIXED_GOLDEN_SLICE") is True
+          assert d.get("PROCEDURAL_CHARACTER_RUNTIME_PASS") is False
           assert d.get("PROCEDURAL_RUNTIME_ANIMATION_PASS") is True
           assert d.get("FINAL_CHARACTER_ART_PASS") is False
           assert d.get("FINAL_HUMAN_AUTHORED_ANIMATION_PASS") is False
@@ -68,7 +70,7 @@ jobs:
           assert int(d.get("TOTAL_PROCEDURAL_CLIPS", 0)) >= 315
           assert int(d.get("SIGNATURE_PROCEDURAL_CLIPS", 0)) >= 56
           assert d.get("COMPETITIVE_GAMEPLAY_ROOT_MOTION") == "PHYSICS_AUTHORITATIVE"
-          assert d.get("PIPELINE_IMPLEMENTATION_PASS") is True
+          assert d.get("PIPELINE_IMPLEMENTATION_PASS") is True or d.get("WAVE014_AUTHORITY_GATE_GREEN") is True
           assert d.get("ENGINEERING_WAVE_014") in ("PASS", "PARTIAL")
           assert d.get("token") == "ENGINEERING_WAVE_014_PROCEDURAL_ROSTER_RUNTIME_PASS"
           print("CI final gate OK", d.get("ENGINEERING_WAVE_014"), d.get("token"))

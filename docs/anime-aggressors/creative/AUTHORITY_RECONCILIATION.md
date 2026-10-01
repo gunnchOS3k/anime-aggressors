@@ -64,7 +64,7 @@ The matrix lists all four boards as primary visual authority and does not rank t
 - Arcade animation study, Kaia section, and the fight move sheet: **The Skyflow Bulwark**
 - 3D cartoon style study nameplate: **The Skyflow Oblivion**
 
-The pack uses **The Skyflow Duelist**, matching the character design sheet. This ingest keeps Duelist as the **PRODUCTION DECISION V1** display preference. Bulwark and Oblivion are not deleted and are not adopted. Oblivion is not used as a title. A single locked subtitle across every surface remains an **OPEN CANON DECISION** until a human picks one.
+The pack uses **The Skyflow Duelist**, matching the character design sheet. The golden-slice playbook locks the production display epithet to **The Skyflow Duelist** for this candidate. Bulwark and Oblivion stay recorded board strings and are not the display name. This lock is not `HUMAN_ART_APPROVAL`.
 
 Other roster locks that agree across the pack, the boards, and the prior doctrine:
 
@@ -106,9 +106,19 @@ Open on purpose, and still open after this ingest:
 - exact chapter count after pacing tests
 - story difficulty
 
-## What this does not change
+## Golden-slice pass after the ingest
 
-- No mesh, rig, animation, scene, or route was rebuilt.
+The ingest above did not change runtime. A later playbook pass on this same draft branch builds one Kaia candidate and a story skeleton:
+
+- Display epithet in that candidate is **The Skyflow Duelist**.
+- Shipping Kaia loads `GOLDEN_SLICE_CANDIDATE` male and female meshes. That is a review candidate, not board-matched final art.
+- Ember, Rook, Juno, Nix, Orion, and Vesper stay procedural proxies.
+- Godot main menu has a Story item. The Green Between is a four-node skeleton through Rook as Kaia's First Loss. `STORY_IMPLEMENTATION_COMPLETE` stays false.
+- Other routes' First Loss identities stay unassigned.
+
+## What the ingest itself did not change
+
+- The ingest commit did not rebuild a mesh, rig, animation, scene, or route.
 - `human_art_approval` in `MODEL_ROSTER_AUTHORITY.json` stays false.
 - `implementation_complete` in `STORY_CAMPAIGN_MANIFEST.json` stays false.
 - `HUMAN_ART_APPROVAL=false`. `MERGE_AUTHORIZED=false`.

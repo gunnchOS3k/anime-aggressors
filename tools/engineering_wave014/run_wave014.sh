@@ -84,6 +84,7 @@ run game_juice python3 tools/engineering_wave014/emit_game_juice_result.py
 run runtime_renders "$GODOT" --headless --path "$ROOT/game-godot" --script res://tests/engineering_wave014/Wave014RuntimeRenders.gd
 run battle_e2e "$GODOT" --headless --path "$ROOT/game-godot" --script res://tests/engineering_wave014/Wave014BattleSceneVisualE2E.gd
 run sabotage python3 tools/engineering_wave014/run_sabotage_checks.py
+run authority_gate python3 tools/kaia_golden_slice/validate_authority_gate.py
 python3 tools/engineering_wave014/emit_wave014_result.py
 
 echo "=== Wave014 harness complete ==="

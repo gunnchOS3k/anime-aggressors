@@ -263,8 +263,9 @@ func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, s
 	if gs_variant != null:
 		variant = str(gs_variant.p1_body_variant if player_slot == 1 else gs_variant.p2_body_variant)
 	model_data["body_variant"] = "female" if variant == "female" else "male"
-	_model_presentation_data = model_data
-	var model_loaded: bool = model_3d != null and model_3d.configure(model_data)
+	data = model_data
+	_model_presentation_data = data
+	var model_loaded: bool = model_3d != null and model_3d.configure(data)
 	if model_3d != null and model_3d.has_method("set_presentation_context"):
 		# Fresh battle context after configure — never keep a mutated select instance.
 		model_3d.set_presentation_context(_PresentationContext.battle_context_for_slot(slot, cpu_flag))

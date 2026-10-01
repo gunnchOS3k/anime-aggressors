@@ -100,6 +100,12 @@ theme_override_font_sizes/font_size = 16
 text = "More"
 horizontal_alignment = 1
 
+[node name="Story" type="Button" parent="Layout/SecondaryColumn"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 52)
+layout_mode = 2
+text = "Story"
+
 [node name="Training" type="Button" parent="Layout/SecondaryColumn"]
 custom_minimum_size = Vector2(280, 52)
 layout_mode = 2
@@ -165,6 +171,7 @@ offset_top = -48.0
 horizontal_alignment = 1
 
 [connection signal="pressed" from="Layout/HeroColumn/Fight" to="." method="_on_start_battle_pressed"]
+[connection signal="pressed" from="Layout/SecondaryColumn/Story" to="." method="_on_story_pressed"]
 [connection signal="pressed" from="Layout/SecondaryColumn/Training" to="." method="_on_training_pressed"]
 [connection signal="pressed" from="Layout/SecondaryColumn/Rulesets" to="." method="_on_rulesets_pressed"]
 [connection signal="pressed" from="Layout/SecondaryColumn/FighterVault" to="." method="_on_fighter_vault_pressed"]

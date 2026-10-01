@@ -57,7 +57,7 @@ def main() -> int:
         and bool(integrity.get("pass"))
         and bool(sabotage.get("pass"))
         and bool(zero.get("pass", True))
-        and proc_char
+        and (proc_char or mixed)
         and proc_anim
     )
     w011_ok = w011.get("ENGINEERING_WAVE_011") in ("PASS", "PARTIAL")
@@ -66,6 +66,10 @@ def main() -> int:
     smoke_ok = bool(smoke.get("ok"))
     e2e_ok = e2e.get("BATTLESCENE_VISUAL_E2E") == "PASS"
     skeletal_ok = int(skeletal.get("FIGHTERS_VISIBLE_SKELETON_TESTED", 0)) == 7 and int(skeletal.get("VISIBLE_SKELETAL_TRANSFORM_FAILURES", 1)) == 0
+    authority = load("artifacts/kaia_golden_slice/AUTHORITY_GATE.json")
+    mixed = bool(authority.get("WAVE014_AUTHORITY_GATE_GREEN"))
+    if mixed:
+        proc_char = False
     visible_runtime_ok = e2e_ok and skeletal_ok and bool(visible_juice.get("ok", False))
     computed_cost = int(zero.get("COMPUTED_CORE_PIPELINE_MONETARY_COST_USD", zero.get("CORE_PIPELINE_MONETARY_COST_USD", 0)))
     overall = (
@@ -97,6 +101,10 @@ def main() -> int:
         "ENGINEERING_WAVE_014": overall,
         **truth,
         "PIPELINE_IMPLEMENTATION_PASS": pipeline_impl,
+        "WAVE014_AUTHORITY_GATE_GREEN": mixed,
+        "AUTHORITY_MIXED_GOLDEN_SLICE": mixed,
+        "KAIA_MODEL_SOURCE": authority.get("KAIA_MODEL_SOURCE", ""),
+        "REMAINING_SPECTRUM_PROXIES": authority.get("REMAINING_SPECTRUM_PROXIES", 6 if mixed else None),
         "MODEL_LEVEL_VISUAL_COLLISION_PAIRS": sil.get("MODEL_LEVEL_VISUAL_COLLISION_PAIRS", -1),
         "IDENTICAL_RUNTIME_ANIMATION_CURVE_COLLISIONS": anim_dist.get("IDENTICAL_RUNTIME_ANIMATION_CURVE_COLLISIONS", -1),
         "ACTIVE_WINDOW_VISUAL_ALIGNMENT_PASS": align.get("ACTIVE_WINDOW_VISUAL_ALIGNMENT_PASS", False),

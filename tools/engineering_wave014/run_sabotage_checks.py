@@ -45,7 +45,7 @@ CHECKS = [
     ("no_unconditional_truth_hardcode", lambda: "PROCEDURAL_CHARACTER_RUNTIME_PASS\": true" not in _resolver_text()),
     ("visible_skeletal_evidence", lambda: int(_load("artifacts/engineering_wave014/VISIBLE_SKELETAL_RUNTIME_RESULT.json").get("FIGHTERS_VISIBLE_SKELETON_TESTED", 0)) == 7),
     ("visible_skeletal_failures_zero", lambda: int(_load("artifacts/engineering_wave014/VISIBLE_SKELETAL_RUNTIME_RESULT.json").get("VISIBLE_SKELETAL_TRANSFORM_FAILURES", 1)) == 0),
-    ("battle_e2e_procedural_visible", lambda: _load("artifacts/engineering_wave014/BATTLESCENE_VISUAL_E2E.json").get("PROCEDURAL_PROXY_VISIBLE_ALL_FIGHTERS") is True),
+    ("battle_e2e_authority_or_proxy", lambda: _load("artifacts/engineering_wave014/BATTLESCENE_VISUAL_E2E.json").get("PROCEDURAL_PROXY_VISIBLE_ALL_FIGHTERS") is True or _load("artifacts/engineering_wave014/BATTLESCENE_VISUAL_E2E.json").get("AUTHORITY_MIXED_GOLDEN_SLICE") is True),
     ("canonical_runtime_render_source", lambda: _load("artifacts/engineering_wave014/runtime_renders/manifest.json").get("RUNTIME_RENDER_SOURCE") == "CANONICAL_GODOT_VISIBLE_MODEL"),
     ("placeholder_signature_names_zero", lambda: len(_load("game-godot/data/runtime/signature_move_names.json")) == 7),
 ]
