@@ -5,15 +5,15 @@
   "classification": "HEAVY_ASSET_EXTERNAL_RUNTIME_SURFACE",
   "acceptedSha": "72e5dada4e557b42b6abb8c85f218f0a5b3d2e35",
   "status": "STAGING_WORKER",
-  "summary": "PvP arena game. Accepted main does not have a Worker-compatible playable web build. The Godot web payload was above the 25 MiB Worker asset limit, and the Pages boot is not a clean playable runtime.",
+  "summary": "PvP arena game. The staging Worker loads a development Godot web export from a dedicated R2 prefix. The wasm file is not a Worker static asset. This build is not accepted main.",
   "capabilities": [
-    "Read roster, status, and where play is not available",
+    "Open the development build",
     "Open the source repository"
   ],
   "limitations": [
-    "No Play action is offered",
     "Draft creative branch v4/dual-form-power-roster is not accepted main",
-    "This Worker does not host the wasm game"
+    "This is a development build, not a release",
+    "Story is the in-product skeleton, not a finished campaign"
   ],
   "sourceUrl": "https://github.com/gunnchOS3k/anime-aggressors",
   "returnUrlEnv": "GUNNCHOS_PORTAL_URL",
