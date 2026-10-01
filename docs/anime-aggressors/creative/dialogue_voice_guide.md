@@ -1,5 +1,10 @@
 # Dialogue voice guide
 
+> **Superseded on conflict by Creative Authority Pack V1.** This file is the prior doctrine pass at `e15a343`. Where it disagrees with [authority_pack_v1/](authority_pack_v1/README.md), the pack wins. The disagreement is recorded in [AUTHORITY_RECONCILIATION.md](AUTHORITY_RECONCILIATION.md). This file is not runtime evidence and it is not art approval.
+>
+> `HUMAN_ART_APPROVAL=false`. `MERGE_AUTHORIZED=false`.
+
+
 Doctrine. These are not recorded lines and they are not in the game. Writers may change wording. They may not change the soul.
 
 Rules: one breath, no wiki talk, same diction for male and female, puppet lines belong to Yin or Yang with one leftover word from the soul.

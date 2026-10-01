@@ -1,5 +1,10 @@
 # Anime Aggressors — Full Roster Art Correction Doctrine
 
+> **Superseded on conflict by Creative Authority Pack V1.** This file is the prior doctrine pass at `e15a343`. Where it disagrees with [authority_pack_v1/](authority_pack_v1/README.md), the pack wins. The disagreement is recorded in [AUTHORITY_RECONCILIATION.md](AUTHORITY_RECONCILIATION.md). This file is not runtime evidence and it is not art approval.
+>
+> `HUMAN_ART_APPROVAL=false`. `MERGE_AUTHORIZED=false`.
+
+
 Status: **DOCTRINE**. This file tells artists and implementers what the roster is supposed to be. It is not a screenshot of the current build, and it is not owner art approval.
 
 `HUMAN_ART_APPROVAL=false`

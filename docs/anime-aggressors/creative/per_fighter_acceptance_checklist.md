@@ -1,5 +1,10 @@
 # Per-fighter acceptance checklist
 
+> **Superseded on conflict by Creative Authority Pack V1.** This file is the prior doctrine pass at `e15a343`. Where it disagrees with [authority_pack_v1/](authority_pack_v1/README.md), the pack wins. The disagreement is recorded in [AUTHORITY_RECONCILIATION.md](AUTHORITY_RECONCILIATION.md). This file is not runtime evidence and it is not art approval.
+>
+> `HUMAN_ART_APPROVAL=false`. `MERGE_AUTHORIZED=false`.
+
+
 Doctrine. Every row is open. `HUMAN_ART_APPROVAL=false`.
 
 | Fighter | Board person recognizable | Male mesh | Female mesh | Match readable | Move poses | Story form | Human review |
