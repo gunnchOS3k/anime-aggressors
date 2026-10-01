@@ -77,7 +77,9 @@ async function serveRuntime(request, env, name) {
   headers.set("accept-ranges", "bytes");
   headers.set("etag", object.httpEtag);
   isolation(headers);
-  if (object.range) {
+  const partial = Boolean(rangeHeader && object.range);
+  const status = partial ? 206 : 200;
+  if (partial) {
     const start = object.range.offset;
     const end = object.range.offset + object.range.length - 1;
     headers.set("content-range", `bytes ${start}-${end}/${object.size}`);
@@ -85,7 +87,6 @@ async function serveRuntime(request, env, name) {
   } else {
     headers.set("content-length", String(object.size));
   }
-  const status = object.range ? 206 : 200;
   if (request.method === "HEAD") {
     return new Response(null, { status, headers });
   }
