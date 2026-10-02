@@ -6,6 +6,7 @@ var skip_boot_title := false
 const SCENES := {
 	"boot": "res://scenes/boot/BootScene.tscn",
 	"main_menu": "res://scenes/menus/MainMenuScene.tscn",
+	"story": "res://scenes/menus/StoryCampaignScene.tscn",
 	"mode_select": "res://scenes/menus/ModeSelectScene.tscn",
 	"arcade": "res://scenes/menus/ArcadeScene.tscn",
 	"tutorial": "res://scenes/menus/TutorialScene.tscn",
@@ -55,6 +56,9 @@ func go(scene_key: String) -> void:
 
 func go_battle_setup() -> void:
 	go("ruleset")
+
+func go_story() -> void:
+	go("story")
 
 func go_training() -> void:
 	if GameState.has_method("begin_training"):

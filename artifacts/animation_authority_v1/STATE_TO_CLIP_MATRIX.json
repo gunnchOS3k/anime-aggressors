@@ -1,0 +1,366 @@
+{
+  "schema": "state_to_clip_matrix_v1",
+  "current_coarse": {
+    "idle": "idle",
+    "walk": "walk",
+    "run": "walk",
+    "dash": "dash",
+    "skid": "idle",
+    "turnaround": "turn",
+    "jump_squat": "jump_start",
+    "jump": "jump_rise",
+    "double_jump": "jump_rise",
+    "fall": "fall",
+    "fast_fall": "fall",
+    "land": "land",
+    "attack_startup": "jab",
+    "attack_active": "jab",
+    "attack_recovery": "jab",
+    "special_startup": "special",
+    "special_active": "special",
+    "special_recovery": "special",
+    "shield_start": "shield_start",
+    "shield_hold": "shield_hold",
+    "shield_stun": "shield_hold",
+    "shield_break": "idle",
+    "dodge_start": "dodge_forward",
+    "dodge_active": "dodge_forward",
+    "dodge_recovery": "idle",
+    "air_dodge": "air_dodge",
+    "ledge_hang": "ledge_hang",
+    "ledge_getup": "ledge_getup",
+    "grab_startup": "grab",
+    "grab_active": "grab",
+    "grab_whiff": "idle",
+    "grab_hold": "grab_hold",
+    "throw_startup": "throw",
+    "throw_release": "throw",
+    "aura_charge": "aura_charge",
+    "aura_ready": "aura_ready",
+    "aura_burst_startup": "aura_burst",
+    "aura_burst_active": "aura_burst",
+    "aura_burst_recovery": "aura_burst",
+    "hurt_light": "hurt_light",
+    "hurt_heavy": "hurt_heavy",
+    "hitstop": "idle",
+    "hitstun": "hurt_heavy",
+    "launched": "critical_launch",
+    "tumble": "tumble",
+    "edge_warning": "ledge_hang",
+    "ledge_teeter": "ledge_hang",
+    "ko": "ko",
+    "respawn": "respawn",
+    "victory": "victory",
+    "defeat": "defeat"
+  },
+  "authority_target": {
+    "idle": "idle_primary",
+    "walk": "walk_loop",
+    "run": "run_loop",
+    "dash": "dash_loop",
+    "skid": "skid",
+    "turnaround": "turnaround",
+    "jump_squat": "jump_squat",
+    "jump": "jump",
+    "double_jump": "double_jump",
+    "fall": "fall",
+    "fast_fall": "fast_fall",
+    "land": "land_soft|land_hard",
+    "attack_startup": "MOVE_SPECIFIC",
+    "attack_active": "MOVE_SPECIFIC",
+    "attack_recovery": "MOVE_SPECIFIC",
+    "special_startup": "MOVE_SPECIFIC",
+    "special_active": "MOVE_SPECIFIC",
+    "special_recovery": "MOVE_SPECIFIC",
+    "shield_start": "shield_start",
+    "shield_hold": "shield_hold",
+    "shield_stun": "shield_stun",
+    "shield_break": "shield_break",
+    "dodge_start": "DIRECTIONAL_DODGE",
+    "dodge_active": "DIRECTIONAL_DODGE",
+    "dodge_recovery": "DIRECTIONAL_DODGE_RECOVERY",
+    "air_dodge": "DIRECTIONAL_AIR_DODGE",
+    "ledge_hang": "ledge_hang",
+    "ledge_getup": "ledge_getup",
+    "grab_startup": "grab_startup",
+    "grab_active": "grab_active",
+    "grab_whiff": "grab_whiff",
+    "grab_hold": "grab_hold",
+    "throw_startup": "throw_startup",
+    "throw_release": "MOVE_SPECIFIC_THROW",
+    "aura_charge": "aura_charge",
+    "aura_ready": "aura_ready",
+    "aura_burst_startup": "aura_burst_startup",
+    "aura_burst_active": "aura_burst_active",
+    "aura_burst_recovery": "aura_burst_recovery",
+    "hurt_light": "hurt_light_front|hurt_light_back",
+    "hurt_heavy": "hurt_heavy",
+    "hitstop": "hitstop_pose",
+    "hitstun": "hitstun_ground",
+    "launched": "launch_horizontal|launch_vertical",
+    "tumble": "tumble",
+    "edge_warning": "edge_warning",
+    "ledge_teeter": "ledge_teeter",
+    "ko": "ko",
+    "respawn": "respawn",
+    "victory": "victory",
+    "defeat": "defeat"
+  },
+  "authority_runtime_mapping": {
+    "idle": {
+      "kind": "EXACT_SLOT",
+      "clip": "idle_primary",
+      "temporary_fallback": "idle"
+    },
+    "walk": {
+      "kind": "EXACT_SLOT",
+      "clip": "walk_loop",
+      "temporary_fallback": "walk"
+    },
+    "run": {
+      "kind": "EXACT_SLOT",
+      "clip": "run_loop",
+      "temporary_fallback": "walk"
+    },
+    "dash": {
+      "kind": "EXACT_SLOT",
+      "clip": "dash_loop",
+      "temporary_fallback": "dash"
+    },
+    "skid": {
+      "kind": "EXACT_SLOT",
+      "clip": "skid",
+      "temporary_fallback": "idle"
+    },
+    "turnaround": {
+      "kind": "EXACT_SLOT",
+      "clip": "turnaround",
+      "temporary_fallback": "turn"
+    },
+    "jump_squat": {
+      "kind": "EXACT_SLOT",
+      "clip": "jump_squat",
+      "temporary_fallback": "jump_start"
+    },
+    "jump": {
+      "kind": "EXACT_SLOT",
+      "clip": "jump",
+      "temporary_fallback": "jump_rise"
+    },
+    "double_jump": {
+      "kind": "EXACT_SLOT",
+      "clip": "double_jump",
+      "temporary_fallback": "jump_rise"
+    },
+    "fall": {
+      "kind": "EXACT_SLOT",
+      "clip": "fall",
+      "temporary_fallback": "fall"
+    },
+    "fast_fall": {
+      "kind": "EXACT_SLOT",
+      "clip": "fast_fall",
+      "temporary_fallback": "fall"
+    },
+    "land": {
+      "kind": "CONTEXTUAL",
+      "authority": "land_soft|land_hard",
+      "temporary_fallback": "land"
+    },
+    "attack_startup": {
+      "kind": "CONTEXTUAL",
+      "authority": "MOVE_SPECIFIC",
+      "temporary_fallback": "jab"
+    },
+    "attack_active": {
+      "kind": "CONTEXTUAL",
+      "authority": "MOVE_SPECIFIC",
+      "temporary_fallback": "jab"
+    },
+    "attack_recovery": {
+      "kind": "CONTEXTUAL",
+      "authority": "MOVE_SPECIFIC",
+      "temporary_fallback": "jab"
+    },
+    "special_startup": {
+      "kind": "CONTEXTUAL",
+      "authority": "MOVE_SPECIFIC",
+      "temporary_fallback": "special"
+    },
+    "special_active": {
+      "kind": "CONTEXTUAL",
+      "authority": "MOVE_SPECIFIC",
+      "temporary_fallback": "special"
+    },
+    "special_recovery": {
+      "kind": "CONTEXTUAL",
+      "authority": "MOVE_SPECIFIC",
+      "temporary_fallback": "special"
+    },
+    "shield_start": {
+      "kind": "EXACT_SLOT",
+      "clip": "shield_start",
+      "temporary_fallback": "shield_start"
+    },
+    "shield_hold": {
+      "kind": "EXACT_SLOT",
+      "clip": "shield_hold",
+      "temporary_fallback": "shield_hold"
+    },
+    "shield_stun": {
+      "kind": "EXACT_SLOT",
+      "clip": "shield_stun",
+      "temporary_fallback": "shield_hold"
+    },
+    "shield_break": {
+      "kind": "EXACT_SLOT",
+      "clip": "shield_break",
+      "temporary_fallback": "idle"
+    },
+    "dodge_start": {
+      "kind": "CONTEXTUAL",
+      "authority": "DIRECTIONAL_DODGE",
+      "temporary_fallback": "dodge_forward"
+    },
+    "dodge_active": {
+      "kind": "CONTEXTUAL",
+      "authority": "DIRECTIONAL_DODGE",
+      "temporary_fallback": "dodge_forward"
+    },
+    "dodge_recovery": {
+      "kind": "CONTEXTUAL",
+      "authority": "DIRECTIONAL_DODGE_RECOVERY",
+      "temporary_fallback": "idle"
+    },
+    "air_dodge": {
+      "kind": "CONTEXTUAL",
+      "authority": "DIRECTIONAL_AIR_DODGE",
+      "temporary_fallback": "air_dodge"
+    },
+    "ledge_hang": {
+      "kind": "EXACT_SLOT",
+      "clip": "ledge_hang",
+      "temporary_fallback": "ledge_hang"
+    },
+    "ledge_getup": {
+      "kind": "EXACT_SLOT",
+      "clip": "ledge_getup",
+      "temporary_fallback": "ledge_getup"
+    },
+    "grab_startup": {
+      "kind": "EXACT_SLOT",
+      "clip": "grab_startup",
+      "temporary_fallback": "grab"
+    },
+    "grab_active": {
+      "kind": "EXACT_SLOT",
+      "clip": "grab_active",
+      "temporary_fallback": "grab"
+    },
+    "grab_whiff": {
+      "kind": "EXACT_SLOT",
+      "clip": "grab_whiff",
+      "temporary_fallback": "idle"
+    },
+    "grab_hold": {
+      "kind": "EXACT_SLOT",
+      "clip": "grab_hold",
+      "temporary_fallback": "grab_hold"
+    },
+    "throw_startup": {
+      "kind": "EXACT_SLOT",
+      "clip": "throw_startup",
+      "temporary_fallback": "throw"
+    },
+    "throw_release": {
+      "kind": "CONTEXTUAL",
+      "authority": "MOVE_SPECIFIC_THROW",
+      "temporary_fallback": "throw"
+    },
+    "aura_charge": {
+      "kind": "EXACT_SLOT",
+      "clip": "aura_charge",
+      "temporary_fallback": "aura_charge"
+    },
+    "aura_ready": {
+      "kind": "EXACT_SLOT",
+      "clip": "aura_ready",
+      "temporary_fallback": "aura_ready"
+    },
+    "aura_burst_startup": {
+      "kind": "EXACT_SLOT",
+      "clip": "aura_burst_startup",
+      "temporary_fallback": "aura_burst"
+    },
+    "aura_burst_active": {
+      "kind": "EXACT_SLOT",
+      "clip": "aura_burst_active",
+      "temporary_fallback": "aura_burst"
+    },
+    "aura_burst_recovery": {
+      "kind": "EXACT_SLOT",
+      "clip": "aura_burst_recovery",
+      "temporary_fallback": "aura_burst"
+    },
+    "hurt_light": {
+      "kind": "CONTEXTUAL",
+      "authority": "hurt_light_front|hurt_light_back",
+      "temporary_fallback": "hurt_light"
+    },
+    "hurt_heavy": {
+      "kind": "EXACT_SLOT",
+      "clip": "hurt_heavy",
+      "temporary_fallback": "hurt_heavy"
+    },
+    "hitstop": {
+      "kind": "EXACT_SLOT",
+      "clip": "hitstop_pose",
+      "temporary_fallback": "idle"
+    },
+    "hitstun": {
+      "kind": "EXACT_SLOT",
+      "clip": "hitstun_ground",
+      "temporary_fallback": "hurt_heavy"
+    },
+    "launched": {
+      "kind": "CONTEXTUAL",
+      "authority": "launch_horizontal|launch_vertical",
+      "temporary_fallback": "critical_launch"
+    },
+    "tumble": {
+      "kind": "EXACT_SLOT",
+      "clip": "tumble",
+      "temporary_fallback": "tumble"
+    },
+    "edge_warning": {
+      "kind": "EXACT_SLOT",
+      "clip": "edge_warning",
+      "temporary_fallback": "ledge_hang"
+    },
+    "ledge_teeter": {
+      "kind": "EXACT_SLOT",
+      "clip": "ledge_teeter",
+      "temporary_fallback": "ledge_hang"
+    },
+    "ko": {
+      "kind": "EXACT_SLOT",
+      "clip": "ko",
+      "temporary_fallback": "ko"
+    },
+    "respawn": {
+      "kind": "EXACT_SLOT",
+      "clip": "respawn",
+      "temporary_fallback": "respawn"
+    },
+    "victory": {
+      "kind": "EXACT_SLOT",
+      "clip": "victory",
+      "temporary_fallback": "victory"
+    },
+    "defeat": {
+      "kind": "EXACT_SLOT",
+      "clip": "defeat",
+      "temporary_fallback": "defeat"
+    }
+  }
+}

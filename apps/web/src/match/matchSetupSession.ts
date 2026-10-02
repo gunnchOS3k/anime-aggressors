@@ -1,8 +1,9 @@
-import type { CreatedFighter, GameConfig, GameRuleset } from "@anime-aggressors/game-core";
+import type { CreatedFighter, FighterBodyVariant, GameConfig, GameRuleset } from "@anime-aggressors/game-core";
 import {
   gameConfigFromRuleset,
   getDefaultCreatedFighter,
   getStage,
+  normalizeBodyVariant,
 } from "@anime-aggressors/game-core";
 import { getActiveRuleset, setActiveRulesetId } from "../storage/rulesetStorage.ts";
 import { getProfileForSlot } from "../storage/inputProfileStorage.ts";
@@ -23,9 +24,12 @@ export type MatchSetupSession = {
 
   fighters: {
     playerId: number;
+    /** Seat index alias for PartyLink parity (fighter_id + body_variant + seat_id). */
+    seatId?: number;
     fighterId?: string;
     fighter?: CreatedFighter;
-    teamId?: "solar" | "lunar";
+    bodyVariant?: FighterBodyVariant;
+    teamId?: "solar" | "lunar" | number | string;
     isBot?: boolean;
     cpuLevel?: 1 | 2 | 3;
   }[];
@@ -47,7 +51,13 @@ function buildSeatSlots(playerCount: number): MatchSetupSession["fighters"] {
   const n = Math.min(8, Math.max(2, playerCount));
   return Array.from({ length: n }, (_, playerId) => {
     const fighter = getDefaultCreatedFighter(playerId % 4);
-    return { playerId, fighterId: fighter.id, fighter };
+    return {
+      playerId,
+      seatId: playerId,
+      fighterId: fighter.id,
+      fighter,
+      bodyVariant: (playerId % 2 === 0 ? "male" : "female") as FighterBodyVariant,
+    };
   });
 }
 
@@ -82,6 +92,11 @@ export function loadMatchSetup(): MatchSetupSession {
     if (!raw) return createDefaultMatchSetup();
     const parsed = JSON.parse(raw) as MatchSetupSession;
     if (!parsed.fighters?.length) return createDefaultMatchSetup();
+    parsed.fighters = parsed.fighters.map((f, i) => ({
+      ...f,
+      seatId: f.seatId ?? f.playerId ?? i,
+      bodyVariant: normalizeBodyVariant(f.bodyVariant ?? (i % 2 === 0 ? "male" : "female")),
+    }));
     return parsed;
   } catch {
     return createDefaultMatchSetup();
@@ -107,15 +122,15 @@ export function isMatchSetupReady(setup: MatchSetupSession): boolean {
 
 export function buildGameConfigFromSetup(setup: MatchSetupSession): GameConfig {
   if (!setup.ruleset) throw new Error("Match setup missing ruleset");
-  const fighters = setup.fighters
-    .slice()
-    .sort((a, b) => a.playerId - b.playerId)
-    .map((f) => f.fighter ?? getDefaultCreatedFighter(f.playerId));
+  const ordered = setup.fighters.slice().sort((a, b) => a.playerId - b.playerId);
+  const fighters = ordered.map((f) => f.fighter ?? getDefaultCreatedFighter(f.playerId));
+  const bodyVariants = ordered.map((f) => normalizeBodyVariant(f.bodyVariant ?? "male"));
   const ruleset: GameRuleset = {
     ...setup.ruleset,
     stageId: setup.stageId ?? setup.ruleset.stageId,
   };
   const config = gameConfigFromRuleset(ruleset, fighters, 42);
+  config.bodyVariants = bodyVariants;
   const bot = setup.fighters.find((f) => f.isBot);
   if (bot) {
     config.cpuOpponents = [
@@ -148,7 +163,15 @@ export function resizeMatchSetupSeats(
 ): MatchSetupSession {
   const fighters = buildSeatSlots(playerCount).map((slot) => {
     const existing = setup.fighters.find((f) => f.playerId === slot.playerId);
-    return existing?.fighter ? { ...slot, fighter: existing.fighter, fighterId: existing.fighterId } : slot;
+    return existing?.fighter
+      ? {
+          ...slot,
+          fighter: existing.fighter,
+          fighterId: existing.fighterId,
+          bodyVariant: normalizeBodyVariant(existing.bodyVariant ?? slot.bodyVariant),
+          seatId: existing.seatId ?? slot.seatId,
+        }
+      : slot;
   });
   return {
     ...setup,
@@ -156,4 +179,22 @@ export function resizeMatchSetupSeats(
     fighters,
     inputProfiles: buildInputProfiles(playerCount),
   };
+}
+
+/** PartyLink / Godot match payload seats: fighter_id + body_variant + seat_id (+ team). */
+export function matchSetupSeatPayloads(setup: MatchSetupSession): Array<{
+  fighter_id: string;
+  body_variant: FighterBodyVariant;
+  seat_id: number;
+  team_id: string | number | null;
+}> {
+  return setup.fighters
+    .slice()
+    .sort((a, b) => a.playerId - b.playerId)
+    .map((f) => ({
+      fighter_id: f.fighterId ?? f.fighter?.id ?? "ember-vale",
+      body_variant: normalizeBodyVariant(f.bodyVariant ?? "male"),
+      seat_id: f.seatId ?? f.playerId,
+      team_id: f.teamId ?? null,
+    }));
 }

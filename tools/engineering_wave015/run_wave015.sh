@@ -46,7 +46,8 @@ payload = {
         "WAVE011": "PASS",
         "WAVE012": "PASS",
         "WAVE013B": "PASS",
-        "WAVE014": "PASS",
+        "WAVE014": json.loads(Path("artifacts/engineering_wave014/WAVE014_RESULT.json").read_text(encoding="utf-8")).get("ENGINEERING_WAVE_014", "MISSING") if Path("artifacts/engineering_wave014/WAVE014_RESULT.json").exists() else "MISSING",
+        "WAVE014_AUTHORITY_GATE_GREEN": json.loads(Path("artifacts/kaia_golden_slice/AUTHORITY_GATE.json").read_text(encoding="utf-8")).get("WAVE014_AUTHORITY_GATE_GREEN", False) if Path("artifacts/kaia_golden_slice/AUTHORITY_GATE.json").exists() else False,
     },
 }
 dest = root / "artifacts/engineering_wave015/MONOLITHIC_PASS.json"

@@ -1,0 +1,6780 @@
+{
+  "schema": "cross_fighter_visual_differentiation_v1",
+  "motion_laws": {
+    "ember-vale": "combustion",
+    "rook-ironside": "mass",
+    "juno-spark": "current",
+    "kaia-windrow": "flow",
+    "nix-calder": "structure",
+    "orion-vell": "vectors",
+    "vesper-nyx": "uncertainty"
+  },
+  "axes": [
+    "center_of_gravity",
+    "stride",
+    "anticipation",
+    "cadence",
+    "torso_posture",
+    "arm_path",
+    "air_posture",
+    "landing",
+    "deformation",
+    "event_vfx_family"
+  ],
+  "slots": {
+    "idle_primary": {
+      "slot_id": "idle_primary",
+      "pairwise": {
+        "ember-vale__vs__rook-ironside": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12989,
+          "max_angular": 0.42502,
+          "laws": [
+            "combustion",
+            "mass"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "plate_strata_compression"
+          ],
+          "root": [
+            "burst_forward",
+            "planted_pivot"
+          ]
+        },
+        "ember-vale__vs__juno-spark": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12887,
+          "max_angular": 0.48332,
+          "laws": [
+            "combustion",
+            "current"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "current_rail_extension"
+          ],
+          "root": [
+            "burst_forward",
+            "snap_step"
+          ]
+        },
+        "ember-vale__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.10628,
+          "max_angular": 0.33285,
+          "laws": [
+            "combustion",
+            "flow"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "burst_forward",
+            "floating_arc"
+          ]
+        },
+        "ember-vale__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12201,
+          "max_angular": 0.47649,
+          "laws": [
+            "combustion",
+            "structure"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "burst_forward",
+            "glide_stop"
+          ]
+        },
+        "ember-vale__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12904,
+          "max_angular": 0.41913,
+          "laws": [
+            "combustion",
+            "vectors"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "burst_forward",
+            "orbit_pivot"
+          ]
+        },
+        "ember-vale__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.15031,
+          "max_angular": 0.43201,
+          "laws": [
+            "combustion",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "burst_forward",
+            "phase_drift"
+          ]
+        },
+        "rook-ironside__vs__juno-spark": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.11369,
+          "max_angular": 0.33087,
+          "laws": [
+            "mass",
+            "current"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "current_rail_extension"
+          ],
+          "root": [
+            "planted_pivot",
+            "snap_step"
+          ]
+        },
+        "rook-ironside__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.10607,
+          "max_angular": 0.27483,
+          "laws": [
+            "mass",
+            "flow"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "planted_pivot",
+            "floating_arc"
+          ]
+        },
+        "rook-ironside__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12462,
+          "max_angular": 0.38598,
+          "laws": [
+            "mass",
+            "structure"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "planted_pivot",
+            "glide_stop"
+          ]
+        },
+        "rook-ironside__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13944,
+          "max_angular": 0.43971,
+          "laws": [
+            "mass",
+            "vectors"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "planted_pivot",
+            "orbit_pivot"
+          ]
+        },
+        "rook-ironside__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13845,
+          "max_angular": 0.32661,
+          "laws": [
+            "mass",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "planted_pivot",
+            "phase_drift"
+          ]
+        },
+        "juno-spark__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.10961,
+          "max_angular": 0.36753,
+          "laws": [
+            "current",
+            "flow"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "snap_step",
+            "floating_arc"
+          ]
+        },
+        "juno-spark__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.15241,
+          "max_angular": 0.50711,
+          "laws": [
+            "current",
+            "structure"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "snap_step",
+            "glide_stop"
+          ]
+        },
+        "juno-spark__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.17065,
+          "max_angular": 0.55888,
+          "laws": [
+            "current",
+            "vectors"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "snap_step",
+            "orbit_pivot"
+          ]
+        },
+        "juno-spark__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12574,
+          "max_angular": 0.4414,
+          "laws": [
+            "current",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "snap_step",
+            "phase_drift"
+          ]
+        },
+        "kaia-windrow__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.11837,
+          "max_angular": 0.43607,
+          "laws": [
+            "flow",
+            "structure"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "floating_arc",
+            "glide_stop"
+          ]
+        },
+        "kaia-windrow__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.11089,
+          "max_angular": 0.48838,
+          "laws": [
+            "flow",
+            "vectors"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "floating_arc",
+            "orbit_pivot"
+          ]
+        },
+        "kaia-windrow__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13999,
+          "max_angular": 0.42724,
+          "laws": [
+            "flow",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "floating_arc",
+            "phase_drift"
+          ]
+        },
+        "nix-calder__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.11895,
+          "max_angular": 0.38062,
+          "laws": [
+            "structure",
+            "vectors"
+          ],
+          "anatomy": [
+            "lattice_facet_growth",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "glide_stop",
+            "orbit_pivot"
+          ]
+        },
+        "nix-calder__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.16974,
+          "max_angular": 0.46418,
+          "laws": [
+            "structure",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "lattice_facet_growth",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "glide_stop",
+            "phase_drift"
+          ]
+        },
+        "orion-vell__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.18864,
+          "max_angular": 0.54732,
+          "laws": [
+            "vectors",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "orbit_node_vector_movement",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "orbit_pivot",
+            "phase_drift"
+          ]
+        }
+      },
+      "generic_reuse_pairs": 0,
+      "axis_evidence": {
+        "ember-vale": {
+          "center_of_gravity": "burst_forward",
+          "stride": {
+            "anticipation": 7,
+            "contact": 18,
+            "follow": 20,
+            "total": 27
+          },
+          "anticipation": 0,
+          "cadence": 27,
+          "torso_posture": [
+            0.12392,
+            0.07244,
+            0.13299
+          ],
+          "arm_path": [
+            -0.08468,
+            0.00373,
+            -0.02027
+          ],
+          "air_posture": "burst_forward",
+          "landing": null,
+          "deformation": "heat_ribbon_smear",
+          "event_vfx_family": [],
+          "elemental_anatomy": "combustion_vent_deformation",
+          "motion_law": "combustion"
+        },
+        "rook-ironside": {
+          "center_of_gravity": "planted_pivot",
+          "stride": {
+            "anticipation": 7,
+            "contact": 18,
+            "follow": 20,
+            "total": 27
+          },
+          "anticipation": 0,
+          "cadence": 27,
+          "torso_posture": [
+            -0.11111,
+            0.06501,
+            0.08837
+          ],
+          "arm_path": [
+            -0.04798,
+            -0.10521,
+            -0.02283
+          ],
+          "air_posture": "planted_pivot",
+          "landing": null,
+          "deformation": "plate_impact_streak",
+          "event_vfx_family": [],
+          "elemental_anatomy": "plate_strata_compression",
+          "motion_law": "mass"
+        },
+        "juno-spark": {
+          "center_of_gravity": "snap_step",
+          "stride": {
+            "anticipation": 7,
+            "contact": 18,
+            "follow": 20,
+            "total": 27
+          },
+          "anticipation": 0,
+          "cadence": 27,
+          "torso_posture": [
+            -0.00492,
+            0.0409,
+            0.13338
+          ],
+          "arm_path": [
+            0.05045,
+            -0.03205,
+            -0.14523
+          ],
+          "air_posture": "snap_step",
+          "landing": null,
+          "deformation": "rail_afterimage",
+          "event_vfx_family": [],
+          "elemental_anatomy": "current_rail_extension",
+          "motion_law": "current"
+        },
+        "kaia-windrow": {
+          "center_of_gravity": "floating_arc",
+          "stride": {
+            "anticipation": 7,
+            "contact": 18,
+            "follow": 20,
+            "total": 27
+          },
+          "anticipation": 0,
+          "cadence": 27,
+          "torso_posture": [
+            0.0511,
+            0.06597,
+            0.24575
+          ],
+          "arm_path": [
+            0.01277,
+            -0.09746,
+            -0.07793
+          ],
+          "air_posture": "floating_arc",
+          "landing": null,
+          "deformation": "airfoil_ribbon",
+          "event_vfx_family": [],
+          "elemental_anatomy": "ribbon_airfoil_deformation",
+          "motion_law": "flow"
+        },
+        "nix-calder": {
+          "center_of_gravity": "glide_stop",
+          "stride": {
+            "anticipation": 7,
+            "contact": 18,
+            "follow": 20,
+            "total": 27
+          },
+          "anticipation": 0,
+          "cadence": 27,
+          "torso_posture": [
+            0.01297,
+            0.036,
+            0.02988
+          ],
+          "arm_path": [
+            -0.03747,
+            0.0,
+            0.02988
+          ],
+          "air_posture": "glide_stop",
+          "landing": null,
+          "deformation": "facet_shard_trail",
+          "event_vfx_family": [],
+          "elemental_anatomy": "lattice_facet_growth",
+          "motion_law": "structure"
+        },
+        "orion-vell": {
+          "center_of_gravity": "orbit_pivot",
+          "stride": {
+            "anticipation": 7,
+            "contact": 18,
+            "follow": 20,
+            "total": 27
+          },
+          "anticipation": 0,
+          "cadence": 27,
+          "torso_posture": [
+            0.08726,
+            0.07933,
+            0.13924
+          ],
+          "arm_path": [
+            -0.14915,
+            -0.06201,
+            -0.04153
+          ],
+          "air_posture": "orbit_pivot",
+          "landing": null,
+          "deformation": "orbit_node_ghost",
+          "event_vfx_family": [],
+          "elemental_anatomy": "orbit_node_vector_movement",
+          "motion_law": "vectors"
+        },
+        "vesper-nyx": {
+          "center_of_gravity": "phase_drift",
+          "stride": {
+            "anticipation": 7,
+            "contact": 18,
+            "follow": 20,
+            "total": 27
+          },
+          "anticipation": 0,
+          "cadence": 27,
+          "torso_posture": [
+            -0.03307,
+            0.04324,
+            0.19625
+          ],
+          "arm_path": [
+            -0.13821,
+            -0.07208,
+            -0.09116
+          ],
+          "air_posture": "phase_drift",
+          "landing": null,
+          "deformation": "phase_echo_offset",
+          "event_vfx_family": [],
+          "elemental_anatomy": "phase_offset_geometry",
+          "motion_law": "uncertainty"
+        }
+      }
+    },
+    "walk_loop": {
+      "slot_id": "walk_loop",
+      "pairwise": {
+        "ember-vale__vs__rook-ironside": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.11639,
+          "max_angular": 0.3567,
+          "laws": [
+            "combustion",
+            "mass"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "plate_strata_compression"
+          ],
+          "root": [
+            "burst_forward",
+            "planted_pivot"
+          ]
+        },
+        "ember-vale__vs__juno-spark": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.10724,
+          "max_angular": 0.36621,
+          "laws": [
+            "combustion",
+            "current"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "current_rail_extension"
+          ],
+          "root": [
+            "burst_forward",
+            "snap_step"
+          ]
+        },
+        "ember-vale__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.10813,
+          "max_angular": 0.34436,
+          "laws": [
+            "combustion",
+            "flow"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "burst_forward",
+            "floating_arc"
+          ]
+        },
+        "ember-vale__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12459,
+          "max_angular": 0.48532,
+          "laws": [
+            "combustion",
+            "structure"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "burst_forward",
+            "glide_stop"
+          ]
+        },
+        "ember-vale__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13189,
+          "max_angular": 0.40965,
+          "laws": [
+            "combustion",
+            "vectors"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "burst_forward",
+            "orbit_pivot"
+          ]
+        },
+        "ember-vale__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.15738,
+          "max_angular": 0.42858,
+          "laws": [
+            "combustion",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "burst_forward",
+            "phase_drift"
+          ]
+        },
+        "rook-ironside__vs__juno-spark": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12777,
+          "max_angular": 0.42654,
+          "laws": [
+            "mass",
+            "current"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "current_rail_extension"
+          ],
+          "root": [
+            "planted_pivot",
+            "snap_step"
+          ]
+        },
+        "rook-ironside__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.10497,
+          "max_angular": 0.28267,
+          "laws": [
+            "mass",
+            "flow"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "planted_pivot",
+            "floating_arc"
+          ]
+        },
+        "rook-ironside__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.10019,
+          "max_angular": 0.31718,
+          "laws": [
+            "mass",
+            "structure"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "planted_pivot",
+            "glide_stop"
+          ]
+        },
+        "rook-ironside__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.11863,
+          "max_angular": 0.37233,
+          "laws": [
+            "mass",
+            "vectors"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "planted_pivot",
+            "orbit_pivot"
+          ]
+        },
+        "rook-ironside__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13792,
+          "max_angular": 0.34938,
+          "laws": [
+            "mass",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "planted_pivot",
+            "phase_drift"
+          ]
+        },
+        "juno-spark__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.114,
+          "max_angular": 0.41591,
+          "laws": [
+            "current",
+            "flow"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "snap_step",
+            "floating_arc"
+          ]
+        },
+        "juno-spark__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13476,
+          "max_angular": 0.49371,
+          "laws": [
+            "current",
+            "structure"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "snap_step",
+            "glide_stop"
+          ]
+        },
+        "juno-spark__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.1551,
+          "max_angular": 0.46206,
+          "laws": [
+            "current",
+            "vectors"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "snap_step",
+            "orbit_pivot"
+          ]
+        },
+        "juno-spark__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.133,
+          "max_angular": 0.44353,
+          "laws": [
+            "current",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "snap_step",
+            "phase_drift"
+          ]
+        },
+        "kaia-windrow__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12024,
+          "max_angular": 0.40935,
+          "laws": [
+            "flow",
+            "structure"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "floating_arc",
+            "glide_stop"
+          ]
+        },
+        "kaia-windrow__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.11264,
+          "max_angular": 0.42828,
+          "laws": [
+            "flow",
+            "vectors"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "floating_arc",
+            "orbit_pivot"
+          ]
+        },
+        "kaia-windrow__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13792,
+          "max_angular": 0.42678,
+          "laws": [
+            "flow",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "floating_arc",
+            "phase_drift"
+          ]
+        },
+        "nix-calder__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.1179,
+          "max_angular": 0.32575,
+          "laws": [
+            "structure",
+            "vectors"
+          ],
+          "anatomy": [
+            "lattice_facet_growth",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "glide_stop",
+            "orbit_pivot"
+          ]
+        },
+        "nix-calder__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14588,
+          "max_angular": 0.46379,
+          "laws": [
+            "structure",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "lattice_facet_growth",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "glide_stop",
+            "phase_drift"
+          ]
+        },
+        "orion-vell__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.17213,
+          "max_angular": 0.55412,
+          "laws": [
+            "vectors",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "orbit_node_vector_movement",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "orbit_pivot",
+            "phase_drift"
+          ]
+        }
+      },
+      "generic_reuse_pairs": 0,
+      "axis_evidence": {
+        "ember-vale": {
+          "center_of_gravity": "burst_forward",
+          "stride": {
+            "anticipation": 3,
+            "contact": 13,
+            "follow": 20,
+            "total": 22
+          },
+          "anticipation": 0,
+          "cadence": 22,
+          "torso_posture": [
+            0.04726,
+            0.00024,
+            0.13165
+          ],
+          "arm_path": [
+            -0.227,
+            -0.06838,
+            -0.02769
+          ],
+          "air_posture": "burst_forward",
+          "landing": null,
+          "deformation": "heat_ribbon_smear",
+          "event_vfx_family": [],
+          "elemental_anatomy": "combustion_vent_deformation",
+          "motion_law": "combustion"
+        },
+        "rook-ironside": {
+          "center_of_gravity": "planted_pivot",
+          "stride": {
+            "anticipation": 3,
+            "contact": 13,
+            "follow": 20,
+            "total": 22
+          },
+          "anticipation": 0,
+          "cadence": 22,
+          "torso_posture": [
+            -0.09894,
+            -0.00127,
+            0.08092
+          ],
+          "arm_path": [
+            -0.05226,
+            -0.10494,
+            -0.02693
+          ],
+          "air_posture": "planted_pivot",
+          "landing": null,
+          "deformation": "plate_impact_streak",
+          "event_vfx_family": [],
+          "elemental_anatomy": "plate_strata_compression",
+          "motion_law": "mass"
+        },
+        "juno-spark": {
+          "center_of_gravity": "snap_step",
+          "stride": {
+            "anticipation": 3,
+            "contact": 13,
+            "follow": 20,
+            "total": 22
+          },
+          "anticipation": 0,
+          "cadence": 22,
+          "torso_posture": [
+            -0.04205,
+            0.00377,
+            0.12424
+          ],
+          "arm_path": [
+            0.09502,
+            -0.0221,
+            -0.14757
+          ],
+          "air_posture": "snap_step",
+          "landing": null,
+          "deformation": "rail_afterimage",
+          "event_vfx_family": [],
+          "elemental_anatomy": "current_rail_extension",
+          "motion_law": "current"
+        },
+        "kaia-windrow": {
+          "center_of_gravity": "floating_arc",
+          "stride": {
+            "anticipation": 3,
+            "contact": 13,
+            "follow": 20,
+            "total": 22
+          },
+          "anticipation": 0,
+          "cadence": 22,
+          "torso_posture": [
+            -0.03814,
+            0.03914,
+            0.25872
+          ],
+          "arm_path": [
+            -0.11509,
+            -0.13468,
+            -0.07642
+          ],
+          "air_posture": "floating_arc",
+          "landing": null,
+          "deformation": "airfoil_ribbon",
+          "event_vfx_family": [],
+          "elemental_anatomy": "ribbon_airfoil_deformation",
+          "motion_law": "flow"
+        },
+        "nix-calder": {
+          "center_of_gravity": "glide_stop",
+          "stride": {
+            "anticipation": 3,
+            "contact": 13,
+            "follow": 20,
+            "total": 22
+          },
+          "anticipation": 0,
+          "cadence": 22,
+          "torso_posture": [
+            0.04012,
+            0.036,
+            0.02632
+          ],
+          "arm_path": [
+            -0.03129,
+            0.0,
+            0.02632
+          ],
+          "air_posture": "glide_stop",
+          "landing": null,
+          "deformation": "facet_shard_trail",
+          "event_vfx_family": [],
+          "elemental_anatomy": "lattice_facet_growth",
+          "motion_law": "structure"
+        },
+        "orion-vell": {
+          "center_of_gravity": "orbit_pivot",
+          "stride": {
+            "anticipation": 3,
+            "contact": 13,
+            "follow": 20,
+            "total": 22
+          },
+          "anticipation": 0,
+          "cadence": 22,
+          "torso_posture": [
+            0.10271,
+            0.06276,
+            0.14263
+          ],
+          "arm_path": [
+            0.01248,
+            -0.0139,
+            -0.04146
+          ],
+          "air_posture": "orbit_pivot",
+          "landing": null,
+          "deformation": "orbit_node_ghost",
+          "event_vfx_family": [],
+          "elemental_anatomy": "orbit_node_vector_movement",
+          "motion_law": "vectors"
+        },
+        "vesper-nyx": {
+          "center_of_gravity": "phase_drift",
+          "stride": {
+            "anticipation": 3,
+            "contact": 13,
+            "follow": 20,
+            "total": 22
+          },
+          "anticipation": 0,
+          "cadence": 22,
+          "torso_posture": [
+            -0.0559,
+            0.03012,
+            0.19144
+          ],
+          "arm_path": [
+            -0.02598,
+            -0.04998,
+            -0.09967
+          ],
+          "air_posture": "phase_drift",
+          "landing": null,
+          "deformation": "phase_echo_offset",
+          "event_vfx_family": [],
+          "elemental_anatomy": "phase_offset_geometry",
+          "motion_law": "uncertainty"
+        }
+      }
+    },
+    "run_loop": {
+      "slot_id": "run_loop",
+      "pairwise": {
+        "ember-vale__vs__rook-ironside": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12308,
+          "max_angular": 0.43342,
+          "laws": [
+            "combustion",
+            "mass"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "plate_strata_compression"
+          ],
+          "root": [
+            "burst_forward",
+            "planted_pivot"
+          ]
+        },
+        "ember-vale__vs__juno-spark": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12312,
+          "max_angular": 0.57665,
+          "laws": [
+            "combustion",
+            "current"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "current_rail_extension"
+          ],
+          "root": [
+            "burst_forward",
+            "snap_step"
+          ]
+        },
+        "ember-vale__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.11085,
+          "max_angular": 0.41551,
+          "laws": [
+            "combustion",
+            "flow"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "burst_forward",
+            "floating_arc"
+          ]
+        },
+        "ember-vale__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12257,
+          "max_angular": 0.48526,
+          "laws": [
+            "combustion",
+            "structure"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "burst_forward",
+            "glide_stop"
+          ]
+        },
+        "ember-vale__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13179,
+          "max_angular": 0.49019,
+          "laws": [
+            "combustion",
+            "vectors"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "burst_forward",
+            "orbit_pivot"
+          ]
+        },
+        "ember-vale__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.15572,
+          "max_angular": 0.43126,
+          "laws": [
+            "combustion",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "burst_forward",
+            "phase_drift"
+          ]
+        },
+        "rook-ironside__vs__juno-spark": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.1282,
+          "max_angular": 0.38906,
+          "laws": [
+            "mass",
+            "current"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "current_rail_extension"
+          ],
+          "root": [
+            "planted_pivot",
+            "snap_step"
+          ]
+        },
+        "rook-ironside__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.1196,
+          "max_angular": 0.32284,
+          "laws": [
+            "mass",
+            "flow"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "planted_pivot",
+            "floating_arc"
+          ]
+        },
+        "rook-ironside__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.10906,
+          "max_angular": 0.35101,
+          "laws": [
+            "mass",
+            "structure"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "planted_pivot",
+            "glide_stop"
+          ]
+        },
+        "rook-ironside__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12532,
+          "max_angular": 0.37771,
+          "laws": [
+            "mass",
+            "vectors"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "planted_pivot",
+            "orbit_pivot"
+          ]
+        },
+        "rook-ironside__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13287,
+          "max_angular": 0.33117,
+          "laws": [
+            "mass",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "planted_pivot",
+            "phase_drift"
+          ]
+        },
+        "juno-spark__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12076,
+          "max_angular": 0.42887,
+          "laws": [
+            "current",
+            "flow"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "snap_step",
+            "floating_arc"
+          ]
+        },
+        "juno-spark__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12571,
+          "max_angular": 0.47936,
+          "laws": [
+            "current",
+            "structure"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "snap_step",
+            "glide_stop"
+          ]
+        },
+        "juno-spark__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13207,
+          "max_angular": 0.41446,
+          "laws": [
+            "current",
+            "vectors"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "snap_step",
+            "orbit_pivot"
+          ]
+        },
+        "juno-spark__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.1418,
+          "max_angular": 0.41902,
+          "laws": [
+            "current",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "snap_step",
+            "phase_drift"
+          ]
+        },
+        "kaia-windrow__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13848,
+          "max_angular": 0.42654,
+          "laws": [
+            "flow",
+            "structure"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "floating_arc",
+            "glide_stop"
+          ]
+        },
+        "kaia-windrow__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12079,
+          "max_angular": 0.4928,
+          "laws": [
+            "flow",
+            "vectors"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "floating_arc",
+            "orbit_pivot"
+          ]
+        },
+        "kaia-windrow__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14481,
+          "max_angular": 0.42606,
+          "laws": [
+            "flow",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "floating_arc",
+            "phase_drift"
+          ]
+        },
+        "nix-calder__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13326,
+          "max_angular": 0.50334,
+          "laws": [
+            "structure",
+            "vectors"
+          ],
+          "anatomy": [
+            "lattice_facet_growth",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "glide_stop",
+            "orbit_pivot"
+          ]
+        },
+        "nix-calder__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.16357,
+          "max_angular": 0.46417,
+          "laws": [
+            "structure",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "lattice_facet_growth",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "glide_stop",
+            "phase_drift"
+          ]
+        },
+        "orion-vell__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.18807,
+          "max_angular": 0.55417,
+          "laws": [
+            "vectors",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "orbit_node_vector_movement",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "orbit_pivot",
+            "phase_drift"
+          ]
+        }
+      },
+      "generic_reuse_pairs": 0,
+      "axis_evidence": {
+        "ember-vale": {
+          "center_of_gravity": "burst_forward",
+          "stride": {
+            "anticipation": 3,
+            "contact": 15,
+            "follow": 22,
+            "total": 23
+          },
+          "anticipation": 0,
+          "cadence": 23,
+          "torso_posture": [
+            0.03864,
+            0.04943,
+            0.14133
+          ],
+          "arm_path": [
+            -0.23487,
+            -0.06671,
+            -0.02608
+          ],
+          "air_posture": "burst_forward",
+          "landing": null,
+          "deformation": "heat_ribbon_smear",
+          "event_vfx_family": [],
+          "elemental_anatomy": "combustion_vent_deformation",
+          "motion_law": "combustion"
+        },
+        "rook-ironside": {
+          "center_of_gravity": "planted_pivot",
+          "stride": {
+            "anticipation": 3,
+            "contact": 15,
+            "follow": 22,
+            "total": 23
+          },
+          "anticipation": 0,
+          "cadence": 23,
+          "torso_posture": [
+            -0.07976,
+            0.09953,
+            0.08487
+          ],
+          "arm_path": [
+            0.00394,
+            -0.05581,
+            -0.02949
+          ],
+          "air_posture": "planted_pivot",
+          "landing": null,
+          "deformation": "plate_impact_streak",
+          "event_vfx_family": [],
+          "elemental_anatomy": "plate_strata_compression",
+          "motion_law": "mass"
+        },
+        "juno-spark": {
+          "center_of_gravity": "snap_step",
+          "stride": {
+            "anticipation": 3,
+            "contact": 15,
+            "follow": 22,
+            "total": 23
+          },
+          "anticipation": 0,
+          "cadence": 23,
+          "torso_posture": [
+            -0.02076,
+            0.06477,
+            0.12187
+          ],
+          "arm_path": [
+            -0.16385,
+            -0.05902,
+            -0.14351
+          ],
+          "air_posture": "snap_step",
+          "landing": null,
+          "deformation": "rail_afterimage",
+          "event_vfx_family": [],
+          "elemental_anatomy": "current_rail_extension",
+          "motion_law": "current"
+        },
+        "kaia-windrow": {
+          "center_of_gravity": "floating_arc",
+          "stride": {
+            "anticipation": 3,
+            "contact": 15,
+            "follow": 22,
+            "total": 23
+          },
+          "anticipation": 0,
+          "cadence": 23,
+          "torso_posture": [
+            0.00331,
+            0.08852,
+            0.1971
+          ],
+          "arm_path": [
+            0.04615,
+            -0.0631,
+            -0.07492
+          ],
+          "air_posture": "floating_arc",
+          "landing": null,
+          "deformation": "airfoil_ribbon",
+          "event_vfx_family": [],
+          "elemental_anatomy": "ribbon_airfoil_deformation",
+          "motion_law": "flow"
+        },
+        "nix-calder": {
+          "center_of_gravity": "glide_stop",
+          "stride": {
+            "anticipation": 3,
+            "contact": 15,
+            "follow": 22,
+            "total": 23
+          },
+          "anticipation": 0,
+          "cadence": 23,
+          "torso_posture": [
+            -0.03506,
+            0.036,
+            0.02889
+          ],
+          "arm_path": [
+            -0.03515,
+            0.0,
+            0.02889
+          ],
+          "air_posture": "glide_stop",
+          "landing": null,
+          "deformation": "facet_shard_trail",
+          "event_vfx_family": [],
+          "elemental_anatomy": "lattice_facet_growth",
+          "motion_law": "structure"
+        },
+        "orion-vell": {
+          "center_of_gravity": "orbit_pivot",
+          "stride": {
+            "anticipation": 3,
+            "contact": 15,
+            "follow": 22,
+            "total": 23
+          },
+          "anticipation": 0,
+          "cadence": 23,
+          "torso_posture": [
+            0.06359,
+            0.06934,
+            0.14393
+          ],
+          "arm_path": [
+            -0.13356,
+            -0.06001,
+            -0.04273
+          ],
+          "air_posture": "orbit_pivot",
+          "landing": null,
+          "deformation": "orbit_node_ghost",
+          "event_vfx_family": [],
+          "elemental_anatomy": "orbit_node_vector_movement",
+          "motion_law": "vectors"
+        },
+        "vesper-nyx": {
+          "center_of_gravity": "phase_drift",
+          "stride": {
+            "anticipation": 3,
+            "contact": 15,
+            "follow": 22,
+            "total": 23
+          },
+          "anticipation": 0,
+          "cadence": 23,
+          "torso_posture": [
+            0.00664,
+            0.05691,
+            0.19499
+          ],
+          "arm_path": [
+            0.06307,
+            -0.02897,
+            -0.09557
+          ],
+          "air_posture": "phase_drift",
+          "landing": null,
+          "deformation": "phase_echo_offset",
+          "event_vfx_family": [],
+          "elemental_anatomy": "phase_offset_geometry",
+          "motion_law": "uncertainty"
+        }
+      }
+    },
+    "dash_loop": {
+      "slot_id": "dash_loop",
+      "pairwise": {
+        "ember-vale__vs__rook-ironside": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13621,
+          "max_angular": 0.50531,
+          "laws": [
+            "combustion",
+            "mass"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "plate_strata_compression"
+          ],
+          "root": [
+            "burst_forward",
+            "planted_pivot"
+          ]
+        },
+        "ember-vale__vs__juno-spark": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.16874,
+          "max_angular": 0.57438,
+          "laws": [
+            "combustion",
+            "current"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "current_rail_extension"
+          ],
+          "root": [
+            "burst_forward",
+            "snap_step"
+          ]
+        },
+        "ember-vale__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13162,
+          "max_angular": 0.45318,
+          "laws": [
+            "combustion",
+            "flow"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "burst_forward",
+            "floating_arc"
+          ]
+        },
+        "ember-vale__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12901,
+          "max_angular": 0.46981,
+          "laws": [
+            "combustion",
+            "structure"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "burst_forward",
+            "glide_stop"
+          ]
+        },
+        "ember-vale__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.107,
+          "max_angular": 0.36559,
+          "laws": [
+            "combustion",
+            "vectors"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "burst_forward",
+            "orbit_pivot"
+          ]
+        },
+        "ember-vale__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.16835,
+          "max_angular": 0.56608,
+          "laws": [
+            "combustion",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "burst_forward",
+            "phase_drift"
+          ]
+        },
+        "rook-ironside__vs__juno-spark": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13715,
+          "max_angular": 0.37443,
+          "laws": [
+            "mass",
+            "current"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "current_rail_extension"
+          ],
+          "root": [
+            "planted_pivot",
+            "snap_step"
+          ]
+        },
+        "rook-ironside__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.11339,
+          "max_angular": 0.30919,
+          "laws": [
+            "mass",
+            "flow"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "planted_pivot",
+            "floating_arc"
+          ]
+        },
+        "rook-ironside__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.11806,
+          "max_angular": 0.36699,
+          "laws": [
+            "mass",
+            "structure"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "planted_pivot",
+            "glide_stop"
+          ]
+        },
+        "rook-ironside__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.10973,
+          "max_angular": 0.29254,
+          "laws": [
+            "mass",
+            "vectors"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "planted_pivot",
+            "orbit_pivot"
+          ]
+        },
+        "rook-ironside__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.15702,
+          "max_angular": 0.44254,
+          "laws": [
+            "mass",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "planted_pivot",
+            "phase_drift"
+          ]
+        },
+        "juno-spark__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14163,
+          "max_angular": 0.47148,
+          "laws": [
+            "current",
+            "flow"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "snap_step",
+            "floating_arc"
+          ]
+        },
+        "juno-spark__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14779,
+          "max_angular": 0.55774,
+          "laws": [
+            "current",
+            "structure"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "snap_step",
+            "glide_stop"
+          ]
+        },
+        "juno-spark__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14368,
+          "max_angular": 0.44711,
+          "laws": [
+            "current",
+            "vectors"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "snap_step",
+            "orbit_pivot"
+          ]
+        },
+        "juno-spark__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.15247,
+          "max_angular": 0.51161,
+          "laws": [
+            "current",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "snap_step",
+            "phase_drift"
+          ]
+        },
+        "kaia-windrow__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13362,
+          "max_angular": 0.4212,
+          "laws": [
+            "flow",
+            "structure"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "floating_arc",
+            "glide_stop"
+          ]
+        },
+        "kaia-windrow__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.10819,
+          "max_angular": 0.46539,
+          "laws": [
+            "flow",
+            "vectors"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "floating_arc",
+            "orbit_pivot"
+          ]
+        },
+        "kaia-windrow__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.1455,
+          "max_angular": 0.42475,
+          "laws": [
+            "flow",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "floating_arc",
+            "phase_drift"
+          ]
+        },
+        "nix-calder__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.10907,
+          "max_angular": 0.31692,
+          "laws": [
+            "structure",
+            "vectors"
+          ],
+          "anatomy": [
+            "lattice_facet_growth",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "glide_stop",
+            "orbit_pivot"
+          ]
+        },
+        "nix-calder__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.15629,
+          "max_angular": 0.4632,
+          "laws": [
+            "structure",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "lattice_facet_growth",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "glide_stop",
+            "phase_drift"
+          ]
+        },
+        "orion-vell__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.1826,
+          "max_angular": 0.54758,
+          "laws": [
+            "vectors",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "orbit_node_vector_movement",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "orbit_pivot",
+            "phase_drift"
+          ]
+        }
+      },
+      "generic_reuse_pairs": 0,
+      "axis_evidence": {
+        "ember-vale": {
+          "center_of_gravity": "burst_forward",
+          "stride": {
+            "anticipation": 3,
+            "contact": 19,
+            "follow": 20,
+            "total": 21
+          },
+          "anticipation": 0,
+          "cadence": 21,
+          "torso_posture": [
+            0.05962,
+            0.06531,
+            0.13958
+          ],
+          "arm_path": [
+            -0.06219,
+            -0.0004,
+            -0.0214
+          ],
+          "air_posture": "burst_forward",
+          "landing": null,
+          "deformation": "heat_ribbon_smear",
+          "event_vfx_family": [],
+          "elemental_anatomy": "combustion_vent_deformation",
+          "motion_law": "combustion"
+        },
+        "rook-ironside": {
+          "center_of_gravity": "planted_pivot",
+          "stride": {
+            "anticipation": 3,
+            "contact": 19,
+            "follow": 20,
+            "total": 21
+          },
+          "anticipation": 0,
+          "cadence": 21,
+          "torso_posture": [
+            -0.30034,
+            0.02903,
+            0.08715
+          ],
+          "arm_path": [
+            -0.01607,
+            0.00446,
+            -0.02429
+          ],
+          "air_posture": "planted_pivot",
+          "landing": null,
+          "deformation": "plate_impact_streak",
+          "event_vfx_family": [],
+          "elemental_anatomy": "plate_strata_compression",
+          "motion_law": "mass"
+        },
+        "juno-spark": {
+          "center_of_gravity": "snap_step",
+          "stride": {
+            "anticipation": 3,
+            "contact": 19,
+            "follow": 20,
+            "total": 21
+          },
+          "anticipation": 0,
+          "cadence": 21,
+          "torso_posture": [
+            -0.14269,
+            0.04097,
+            0.13347
+          ],
+          "arm_path": [
+            -0.15493,
+            -0.06323,
+            -0.13911
+          ],
+          "air_posture": "snap_step",
+          "landing": null,
+          "deformation": "rail_afterimage",
+          "event_vfx_family": [],
+          "elemental_anatomy": "current_rail_extension",
+          "motion_law": "current"
+        },
+        "kaia-windrow": {
+          "center_of_gravity": "floating_arc",
+          "stride": {
+            "anticipation": 3,
+            "contact": 19,
+            "follow": 20,
+            "total": 21
+          },
+          "anticipation": 0,
+          "cadence": 21,
+          "torso_posture": [
+            -0.10614,
+            0.06165,
+            0.24963
+          ],
+          "arm_path": [
+            -0.0365,
+            -0.10803,
+            -0.07801
+          ],
+          "air_posture": "floating_arc",
+          "landing": null,
+          "deformation": "airfoil_ribbon",
+          "event_vfx_family": [],
+          "elemental_anatomy": "ribbon_airfoil_deformation",
+          "motion_law": "flow"
+        },
+        "nix-calder": {
+          "center_of_gravity": "glide_stop",
+          "stride": {
+            "anticipation": 3,
+            "contact": 19,
+            "follow": 20,
+            "total": 21
+          },
+          "anticipation": 0,
+          "cadence": 21,
+          "torso_posture": [
+            -0.12117,
+            0.036,
+            0.02997
+          ],
+          "arm_path": [
+            -0.03794,
+            0.0,
+            0.02997
+          ],
+          "air_posture": "glide_stop",
+          "landing": null,
+          "deformation": "facet_shard_trail",
+          "event_vfx_family": [],
+          "elemental_anatomy": "lattice_facet_growth",
+          "motion_law": "structure"
+        },
+        "orion-vell": {
+          "center_of_gravity": "orbit_pivot",
+          "stride": {
+            "anticipation": 3,
+            "contact": 19,
+            "follow": 20,
+            "total": 21
+          },
+          "anticipation": 0,
+          "cadence": 21,
+          "torso_posture": [
+            -0.03119,
+            0.07821,
+            0.1406
+          ],
+          "arm_path": [
+            -0.02656,
+            -0.0421,
+            -0.04173
+          ],
+          "air_posture": "orbit_pivot",
+          "landing": null,
+          "deformation": "orbit_node_ghost",
+          "event_vfx_family": [],
+          "elemental_anatomy": "orbit_node_vector_movement",
+          "motion_law": "vectors"
+        },
+        "vesper-nyx": {
+          "center_of_gravity": "phase_drift",
+          "stride": {
+            "anticipation": 3,
+            "contact": 19,
+            "follow": 20,
+            "total": 21
+          },
+          "anticipation": 0,
+          "cadence": 21,
+          "torso_posture": [
+            -0.21437,
+            0.01315,
+            0.19191
+          ],
+          "arm_path": [
+            -0.09287,
+            -0.07608,
+            -0.08652
+          ],
+          "air_posture": "phase_drift",
+          "landing": null,
+          "deformation": "phase_echo_offset",
+          "event_vfx_family": [],
+          "elemental_anatomy": "phase_offset_geometry",
+          "motion_law": "uncertainty"
+        }
+      }
+    },
+    "jump": {
+      "slot_id": "jump",
+      "pairwise": {
+        "ember-vale__vs__rook-ironside": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14926,
+          "max_angular": 0.6591,
+          "laws": [
+            "combustion",
+            "mass"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "plate_strata_compression"
+          ],
+          "root": [
+            "burst_forward",
+            "planted_pivot"
+          ]
+        },
+        "ember-vale__vs__juno-spark": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13882,
+          "max_angular": 0.7137,
+          "laws": [
+            "combustion",
+            "current"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "current_rail_extension"
+          ],
+          "root": [
+            "burst_forward",
+            "snap_step"
+          ]
+        },
+        "ember-vale__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13431,
+          "max_angular": 0.60133,
+          "laws": [
+            "combustion",
+            "flow"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "burst_forward",
+            "floating_arc"
+          ]
+        },
+        "ember-vale__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.16489,
+          "max_angular": 0.69329,
+          "laws": [
+            "combustion",
+            "structure"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "burst_forward",
+            "glide_stop"
+          ]
+        },
+        "ember-vale__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13907,
+          "max_angular": 0.84531,
+          "laws": [
+            "combustion",
+            "vectors"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "burst_forward",
+            "orbit_pivot"
+          ]
+        },
+        "ember-vale__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.18942,
+          "max_angular": 0.75292,
+          "laws": [
+            "combustion",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "burst_forward",
+            "phase_drift"
+          ]
+        },
+        "rook-ironside__vs__juno-spark": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14672,
+          "max_angular": 0.50157,
+          "laws": [
+            "mass",
+            "current"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "current_rail_extension"
+          ],
+          "root": [
+            "planted_pivot",
+            "snap_step"
+          ]
+        },
+        "rook-ironside__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.11982,
+          "max_angular": 0.4451,
+          "laws": [
+            "mass",
+            "flow"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "planted_pivot",
+            "floating_arc"
+          ]
+        },
+        "rook-ironside__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14114,
+          "max_angular": 0.52302,
+          "laws": [
+            "mass",
+            "structure"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "planted_pivot",
+            "glide_stop"
+          ]
+        },
+        "rook-ironside__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12698,
+          "max_angular": 0.45192,
+          "laws": [
+            "mass",
+            "vectors"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "planted_pivot",
+            "orbit_pivot"
+          ]
+        },
+        "rook-ironside__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.1448,
+          "max_angular": 0.40688,
+          "laws": [
+            "mass",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "planted_pivot",
+            "phase_drift"
+          ]
+        },
+        "juno-spark__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14601,
+          "max_angular": 0.64668,
+          "laws": [
+            "current",
+            "flow"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "snap_step",
+            "floating_arc"
+          ]
+        },
+        "juno-spark__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.1608,
+          "max_angular": 0.70828,
+          "laws": [
+            "current",
+            "structure"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "snap_step",
+            "glide_stop"
+          ]
+        },
+        "juno-spark__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14928,
+          "max_angular": 0.81948,
+          "laws": [
+            "current",
+            "vectors"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "snap_step",
+            "orbit_pivot"
+          ]
+        },
+        "juno-spark__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.1824,
+          "max_angular": 0.63197,
+          "laws": [
+            "current",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "snap_step",
+            "phase_drift"
+          ]
+        },
+        "kaia-windrow__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.16909,
+          "max_angular": 0.62303,
+          "laws": [
+            "flow",
+            "structure"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "floating_arc",
+            "glide_stop"
+          ]
+        },
+        "kaia-windrow__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13313,
+          "max_angular": 0.77333,
+          "laws": [
+            "flow",
+            "vectors"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "floating_arc",
+            "orbit_pivot"
+          ]
+        },
+        "kaia-windrow__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.16644,
+          "max_angular": 0.55109,
+          "laws": [
+            "flow",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "floating_arc",
+            "phase_drift"
+          ]
+        },
+        "nix-calder__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.16205,
+          "max_angular": 0.70686,
+          "laws": [
+            "structure",
+            "vectors"
+          ],
+          "anatomy": [
+            "lattice_facet_growth",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "glide_stop",
+            "orbit_pivot"
+          ]
+        },
+        "nix-calder__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.20367,
+          "max_angular": 0.65415,
+          "laws": [
+            "structure",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "lattice_facet_growth",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "glide_stop",
+            "phase_drift"
+          ]
+        },
+        "orion-vell__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.19555,
+          "max_angular": 0.617,
+          "laws": [
+            "vectors",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "orbit_node_vector_movement",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "orbit_pivot",
+            "phase_drift"
+          ]
+        }
+      },
+      "generic_reuse_pairs": 0,
+      "axis_evidence": {
+        "ember-vale": {
+          "center_of_gravity": "burst_forward",
+          "stride": {
+            "anticipation": 4,
+            "contact": 16,
+            "follow": 21,
+            "total": 23
+          },
+          "anticipation": 4,
+          "cadence": 23,
+          "torso_posture": [
+            0.06327,
+            0.01789,
+            0.0615
+          ],
+          "arm_path": [
+            -0.01587,
+            0.07611,
+            0.39286
+          ],
+          "air_posture": "burst_forward",
+          "landing": 16,
+          "deformation": "heat_ribbon_smear",
+          "event_vfx_family": [],
+          "elemental_anatomy": "combustion_vent_deformation",
+          "motion_law": "combustion"
+        },
+        "rook-ironside": {
+          "center_of_gravity": "planted_pivot",
+          "stride": {
+            "anticipation": 4,
+            "contact": 16,
+            "follow": 21,
+            "total": 23
+          },
+          "anticipation": 4,
+          "cadence": 23,
+          "torso_posture": [
+            -0.143,
+            0.01616,
+            0.0435
+          ],
+          "arm_path": [
+            0.21155,
+            0.20538,
+            0.15123
+          ],
+          "air_posture": "planted_pivot",
+          "landing": 16,
+          "deformation": "plate_impact_streak",
+          "event_vfx_family": [],
+          "elemental_anatomy": "plate_strata_compression",
+          "motion_law": "mass"
+        },
+        "juno-spark": {
+          "center_of_gravity": "snap_step",
+          "stride": {
+            "anticipation": 4,
+            "contact": 16,
+            "follow": 21,
+            "total": 23
+          },
+          "anticipation": 4,
+          "cadence": 23,
+          "torso_posture": [
+            -0.03501,
+            5e-05,
+            0.05641
+          ],
+          "arm_path": [
+            -0.15671,
+            -0.00154,
+            0.39884
+          ],
+          "air_posture": "snap_step",
+          "landing": 16,
+          "deformation": "rail_afterimage",
+          "event_vfx_family": [],
+          "elemental_anatomy": "current_rail_extension",
+          "motion_law": "current"
+        },
+        "kaia-windrow": {
+          "center_of_gravity": "floating_arc",
+          "stride": {
+            "anticipation": 4,
+            "contact": 16,
+            "follow": 21,
+            "total": 23
+          },
+          "anticipation": 4,
+          "cadence": 23,
+          "torso_posture": [
+            -0.02522,
+            -0.00116,
+            0.18211
+          ],
+          "arm_path": [
+            -0.19636,
+            0.20449,
+            0.26305
+          ],
+          "air_posture": "floating_arc",
+          "landing": 16,
+          "deformation": "airfoil_ribbon",
+          "event_vfx_family": [],
+          "elemental_anatomy": "ribbon_airfoil_deformation",
+          "motion_law": "flow"
+        },
+        "nix-calder": {
+          "center_of_gravity": "glide_stop",
+          "stride": {
+            "anticipation": 4,
+            "contact": 16,
+            "follow": 21,
+            "total": 23
+          },
+          "anticipation": 4,
+          "cadence": 23,
+          "torso_posture": [
+            -0.01497,
+            0.012,
+            0.02412
+          ],
+          "arm_path": [
+            0.34821,
+            0.24875,
+            0.27412
+          ],
+          "air_posture": "glide_stop",
+          "landing": 16,
+          "deformation": "facet_shard_trail",
+          "event_vfx_family": [],
+          "elemental_anatomy": "lattice_facet_growth",
+          "motion_law": "structure"
+        },
+        "orion-vell": {
+          "center_of_gravity": "orbit_pivot",
+          "stride": {
+            "anticipation": 4,
+            "contact": 16,
+            "follow": 21,
+            "total": 23
+          },
+          "anticipation": 4,
+          "cadence": 23,
+          "torso_posture": [
+            -0.04803,
+            0.00485,
+            0.06175
+          ],
+          "arm_path": [
+            -0.08519,
+            0.08253,
+            0.18262
+          ],
+          "air_posture": "orbit_pivot",
+          "landing": 16,
+          "deformation": "orbit_node_ghost",
+          "event_vfx_family": [],
+          "elemental_anatomy": "orbit_node_vector_movement",
+          "motion_law": "vectors"
+        },
+        "vesper-nyx": {
+          "center_of_gravity": "phase_drift",
+          "stride": {
+            "anticipation": 4,
+            "contact": 16,
+            "follow": 21,
+            "total": 23
+          },
+          "anticipation": 4,
+          "cadence": 23,
+          "torso_posture": [
+            -0.03443,
+            0.01361,
+            0.07953
+          ],
+          "arm_path": [
+            0.28957,
+            0.16253,
+            0.29061
+          ],
+          "air_posture": "phase_drift",
+          "landing": 16,
+          "deformation": "phase_echo_offset",
+          "event_vfx_family": [],
+          "elemental_anatomy": "phase_offset_geometry",
+          "motion_law": "uncertainty"
+        }
+      }
+    },
+    "land_hard": {
+      "slot_id": "land_hard",
+      "pairwise": {
+        "ember-vale__vs__rook-ironside": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.1338,
+          "max_angular": 0.65472,
+          "laws": [
+            "combustion",
+            "mass"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "plate_strata_compression"
+          ],
+          "root": [
+            "burst_forward",
+            "planted_pivot"
+          ]
+        },
+        "ember-vale__vs__juno-spark": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13373,
+          "max_angular": 0.78416,
+          "laws": [
+            "combustion",
+            "current"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "current_rail_extension"
+          ],
+          "root": [
+            "burst_forward",
+            "snap_step"
+          ]
+        },
+        "ember-vale__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12433,
+          "max_angular": 0.70031,
+          "laws": [
+            "combustion",
+            "flow"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "burst_forward",
+            "floating_arc"
+          ]
+        },
+        "ember-vale__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14767,
+          "max_angular": 0.92068,
+          "laws": [
+            "combustion",
+            "structure"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "burst_forward",
+            "glide_stop"
+          ]
+        },
+        "ember-vale__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12199,
+          "max_angular": 0.58223,
+          "laws": [
+            "combustion",
+            "vectors"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "burst_forward",
+            "orbit_pivot"
+          ]
+        },
+        "ember-vale__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.16617,
+          "max_angular": 0.6642,
+          "laws": [
+            "combustion",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "burst_forward",
+            "phase_drift"
+          ]
+        },
+        "rook-ironside__vs__juno-spark": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13144,
+          "max_angular": 0.74134,
+          "laws": [
+            "mass",
+            "current"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "current_rail_extension"
+          ],
+          "root": [
+            "planted_pivot",
+            "snap_step"
+          ]
+        },
+        "rook-ironside__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.11828,
+          "max_angular": 0.6352,
+          "laws": [
+            "mass",
+            "flow"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "planted_pivot",
+            "floating_arc"
+          ]
+        },
+        "rook-ironside__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13639,
+          "max_angular": 0.69362,
+          "laws": [
+            "mass",
+            "structure"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "planted_pivot",
+            "glide_stop"
+          ]
+        },
+        "rook-ironside__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13687,
+          "max_angular": 0.64688,
+          "laws": [
+            "mass",
+            "vectors"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "planted_pivot",
+            "orbit_pivot"
+          ]
+        },
+        "rook-ironside__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.15309,
+          "max_angular": 0.53291,
+          "laws": [
+            "mass",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "planted_pivot",
+            "phase_drift"
+          ]
+        },
+        "juno-spark__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.10165,
+          "max_angular": 0.32142,
+          "laws": [
+            "current",
+            "flow"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "snap_step",
+            "floating_arc"
+          ]
+        },
+        "juno-spark__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.15082,
+          "max_angular": 0.69745,
+          "laws": [
+            "current",
+            "structure"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "snap_step",
+            "glide_stop"
+          ]
+        },
+        "juno-spark__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14864,
+          "max_angular": 0.63501,
+          "laws": [
+            "current",
+            "vectors"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "snap_step",
+            "orbit_pivot"
+          ]
+        },
+        "juno-spark__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.11378,
+          "max_angular": 0.35834,
+          "laws": [
+            "current",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "snap_step",
+            "phase_drift"
+          ]
+        },
+        "kaia-windrow__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14302,
+          "max_angular": 0.61676,
+          "laws": [
+            "flow",
+            "structure"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "floating_arc",
+            "glide_stop"
+          ]
+        },
+        "kaia-windrow__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13448,
+          "max_angular": 0.68722,
+          "laws": [
+            "flow",
+            "vectors"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "floating_arc",
+            "orbit_pivot"
+          ]
+        },
+        "kaia-windrow__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14161,
+          "max_angular": 0.47765,
+          "laws": [
+            "flow",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "floating_arc",
+            "phase_drift"
+          ]
+        },
+        "nix-calder__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14198,
+          "max_angular": 0.62687,
+          "laws": [
+            "structure",
+            "vectors"
+          ],
+          "anatomy": [
+            "lattice_facet_growth",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "glide_stop",
+            "orbit_pivot"
+          ]
+        },
+        "nix-calder__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.17406,
+          "max_angular": 0.64915,
+          "laws": [
+            "structure",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "lattice_facet_growth",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "glide_stop",
+            "phase_drift"
+          ]
+        },
+        "orion-vell__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.19029,
+          "max_angular": 0.69844,
+          "laws": [
+            "vectors",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "orbit_node_vector_movement",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "orbit_pivot",
+            "phase_drift"
+          ]
+        }
+      },
+      "generic_reuse_pairs": 0,
+      "axis_evidence": {
+        "ember-vale": {
+          "center_of_gravity": "burst_forward",
+          "stride": {
+            "anticipation": 2,
+            "contact": 12,
+            "follow": 13,
+            "total": 15
+          },
+          "anticipation": 2,
+          "cadence": 15,
+          "torso_posture": [
+            0.0954,
+            0.02352,
+            0.06103
+          ],
+          "arm_path": [
+            0.08972,
+            -0.00062,
+            0.37936
+          ],
+          "air_posture": "burst_forward",
+          "landing": 12,
+          "deformation": "heat_ribbon_smear",
+          "event_vfx_family": [],
+          "elemental_anatomy": "combustion_vent_deformation",
+          "motion_law": "combustion"
+        },
+        "rook-ironside": {
+          "center_of_gravity": "planted_pivot",
+          "stride": {
+            "anticipation": 2,
+            "contact": 12,
+            "follow": 13,
+            "total": 15
+          },
+          "anticipation": 2,
+          "cadence": 15,
+          "torso_posture": [
+            -0.08814,
+            0.03333,
+            0.04426
+          ],
+          "arm_path": [
+            -0.17933,
+            0.03859,
+            0.15077
+          ],
+          "air_posture": "planted_pivot",
+          "landing": 12,
+          "deformation": "plate_impact_streak",
+          "event_vfx_family": [],
+          "elemental_anatomy": "plate_strata_compression",
+          "motion_law": "mass"
+        },
+        "juno-spark": {
+          "center_of_gravity": "snap_step",
+          "stride": {
+            "anticipation": 2,
+            "contact": 12,
+            "follow": 13,
+            "total": 15
+          },
+          "anticipation": 2,
+          "cadence": 15,
+          "torso_posture": [
+            -0.02557,
+            0.00103,
+            0.05821
+          ],
+          "arm_path": [
+            -0.35199,
+            0.02705,
+            0.40777
+          ],
+          "air_posture": "snap_step",
+          "landing": 12,
+          "deformation": "rail_afterimage",
+          "event_vfx_family": [],
+          "elemental_anatomy": "current_rail_extension",
+          "motion_law": "current"
+        },
+        "kaia-windrow": {
+          "center_of_gravity": "floating_arc",
+          "stride": {
+            "anticipation": 2,
+            "contact": 12,
+            "follow": 13,
+            "total": 15
+          },
+          "anticipation": 2,
+          "cadence": 15,
+          "torso_posture": [
+            -0.03071,
+            0.00936,
+            0.16937
+          ],
+          "arm_path": [
+            -0.18411,
+            0.21208,
+            0.2648
+          ],
+          "air_posture": "floating_arc",
+          "landing": 12,
+          "deformation": "airfoil_ribbon",
+          "event_vfx_family": [],
+          "elemental_anatomy": "ribbon_airfoil_deformation",
+          "motion_law": "flow"
+        },
+        "nix-calder": {
+          "center_of_gravity": "glide_stop",
+          "stride": {
+            "anticipation": 2,
+            "contact": 12,
+            "follow": 13,
+            "total": 15
+          },
+          "anticipation": 2,
+          "cadence": 15,
+          "torso_posture": [
+            0.00051,
+            0.012,
+            0.02564
+          ],
+          "arm_path": [
+            0.34546,
+            0.25375,
+            0.27564
+          ],
+          "air_posture": "glide_stop",
+          "landing": 12,
+          "deformation": "facet_shard_trail",
+          "event_vfx_family": [],
+          "elemental_anatomy": "lattice_facet_growth",
+          "motion_law": "structure"
+        },
+        "orion-vell": {
+          "center_of_gravity": "orbit_pivot",
+          "stride": {
+            "anticipation": 2,
+            "contact": 12,
+            "follow": 13,
+            "total": 15
+          },
+          "anticipation": 2,
+          "cadence": 15,
+          "torso_posture": [
+            -0.03556,
+            0.00709,
+            0.0637
+          ],
+          "arm_path": [
+            -0.10222,
+            0.08098,
+            0.18384
+          ],
+          "air_posture": "orbit_pivot",
+          "landing": 12,
+          "deformation": "orbit_node_ghost",
+          "event_vfx_family": [],
+          "elemental_anatomy": "orbit_node_vector_movement",
+          "motion_law": "vectors"
+        },
+        "vesper-nyx": {
+          "center_of_gravity": "phase_drift",
+          "stride": {
+            "anticipation": 2,
+            "contact": 12,
+            "follow": 13,
+            "total": 15
+          },
+          "anticipation": 2,
+          "cadence": 15,
+          "torso_posture": [
+            -0.02424,
+            0.00221,
+            0.07907
+          ],
+          "arm_path": [
+            -0.21095,
+            0.08552,
+            0.30455
+          ],
+          "air_posture": "phase_drift",
+          "landing": 12,
+          "deformation": "phase_echo_offset",
+          "event_vfx_family": [],
+          "elemental_anatomy": "phase_offset_geometry",
+          "motion_law": "uncertainty"
+        }
+      }
+    },
+    "jab_1": {
+      "slot_id": "jab_1",
+      "pairwise": {
+        "ember-vale__vs__rook-ironside": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.19662,
+          "max_angular": 1.03354,
+          "laws": [
+            "combustion",
+            "mass"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "plate_strata_compression"
+          ],
+          "root": [
+            "burst_forward",
+            "planted_pivot"
+          ]
+        },
+        "ember-vale__vs__juno-spark": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13763,
+          "max_angular": 0.51154,
+          "laws": [
+            "combustion",
+            "current"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "current_rail_extension"
+          ],
+          "root": [
+            "burst_forward",
+            "snap_step"
+          ]
+        },
+        "ember-vale__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.15936,
+          "max_angular": 1.17136,
+          "laws": [
+            "combustion",
+            "flow"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "burst_forward",
+            "floating_arc"
+          ]
+        },
+        "ember-vale__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.17873,
+          "max_angular": 0.84597,
+          "laws": [
+            "combustion",
+            "structure"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "burst_forward",
+            "glide_stop"
+          ]
+        },
+        "ember-vale__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14596,
+          "max_angular": 0.5937,
+          "laws": [
+            "combustion",
+            "vectors"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "burst_forward",
+            "orbit_pivot"
+          ]
+        },
+        "ember-vale__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.16983,
+          "max_angular": 0.71902,
+          "laws": [
+            "combustion",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "burst_forward",
+            "phase_drift"
+          ]
+        },
+        "rook-ironside__vs__juno-spark": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.17926,
+          "max_angular": 0.8463,
+          "laws": [
+            "mass",
+            "current"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "current_rail_extension"
+          ],
+          "root": [
+            "planted_pivot",
+            "snap_step"
+          ]
+        },
+        "rook-ironside__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.11819,
+          "max_angular": 0.36985,
+          "laws": [
+            "mass",
+            "flow"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "planted_pivot",
+            "floating_arc"
+          ]
+        },
+        "rook-ironside__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.10962,
+          "max_angular": 0.44846,
+          "laws": [
+            "mass",
+            "structure"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "planted_pivot",
+            "glide_stop"
+          ]
+        },
+        "rook-ironside__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.15428,
+          "max_angular": 0.75894,
+          "laws": [
+            "mass",
+            "vectors"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "planted_pivot",
+            "orbit_pivot"
+          ]
+        },
+        "rook-ironside__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13323,
+          "max_angular": 0.57865,
+          "laws": [
+            "mass",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "planted_pivot",
+            "phase_drift"
+          ]
+        },
+        "juno-spark__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14849,
+          "max_angular": 0.91934,
+          "laws": [
+            "current",
+            "flow"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "snap_step",
+            "floating_arc"
+          ]
+        },
+        "juno-spark__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.17626,
+          "max_angular": 0.60924,
+          "laws": [
+            "current",
+            "structure"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "snap_step",
+            "glide_stop"
+          ]
+        },
+        "juno-spark__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.15631,
+          "max_angular": 0.54217,
+          "laws": [
+            "current",
+            "vectors"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "snap_step",
+            "orbit_pivot"
+          ]
+        },
+        "juno-spark__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.15422,
+          "max_angular": 0.66315,
+          "laws": [
+            "current",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "snap_step",
+            "phase_drift"
+          ]
+        },
+        "kaia-windrow__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.15358,
+          "max_angular": 0.51867,
+          "laws": [
+            "flow",
+            "structure"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "floating_arc",
+            "glide_stop"
+          ]
+        },
+        "kaia-windrow__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13083,
+          "max_angular": 0.63889,
+          "laws": [
+            "flow",
+            "vectors"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "floating_arc",
+            "orbit_pivot"
+          ]
+        },
+        "kaia-windrow__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.15118,
+          "max_angular": 0.45234,
+          "laws": [
+            "flow",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "floating_arc",
+            "phase_drift"
+          ]
+        },
+        "nix-calder__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.15694,
+          "max_angular": 0.62088,
+          "laws": [
+            "structure",
+            "vectors"
+          ],
+          "anatomy": [
+            "lattice_facet_growth",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "glide_stop",
+            "orbit_pivot"
+          ]
+        },
+        "nix-calder__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14085,
+          "max_angular": 0.53822,
+          "laws": [
+            "structure",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "lattice_facet_growth",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "glide_stop",
+            "phase_drift"
+          ]
+        },
+        "orion-vell__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.17481,
+          "max_angular": 0.57697,
+          "laws": [
+            "vectors",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "orbit_node_vector_movement",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "orbit_pivot",
+            "phase_drift"
+          ]
+        }
+      },
+      "generic_reuse_pairs": 0,
+      "axis_evidence": {
+        "ember-vale": {
+          "center_of_gravity": "burst_forward",
+          "stride": {
+            "anticipation": 2,
+            "contact": 3,
+            "follow": 5,
+            "total": 12
+          },
+          "anticipation": 2,
+          "cadence": 12,
+          "torso_posture": [
+            0.08609,
+            0.02073,
+            0.0664
+          ],
+          "arm_path": [
+            0.63618,
+            -0.01941,
+            0.37803
+          ],
+          "air_posture": "burst_forward",
+          "landing": 3,
+          "deformation": "heat_ribbon_smear",
+          "event_vfx_family": [
+            "combustion.anticipation",
+            "combustion.follow_through"
+          ],
+          "elemental_anatomy": "combustion_vent_deformation",
+          "motion_law": "combustion"
+        },
+        "rook-ironside": {
+          "center_of_gravity": "planted_pivot",
+          "stride": {
+            "anticipation": 4,
+            "contact": 5,
+            "follow": 8,
+            "total": 18
+          },
+          "anticipation": 4,
+          "cadence": 18,
+          "torso_posture": [
+            -0.12933,
+            -0.00165,
+            0.04757
+          ],
+          "arm_path": [
+            -0.09196,
+            0.04401,
+            0.0999
+          ],
+          "air_posture": "planted_pivot",
+          "landing": 5,
+          "deformation": "plate_impact_streak",
+          "event_vfx_family": [
+            "mass.anticipation",
+            "mass.follow_through"
+          ],
+          "elemental_anatomy": "plate_strata_compression",
+          "motion_law": "mass"
+        },
+        "juno-spark": {
+          "center_of_gravity": "snap_step",
+          "stride": {
+            "anticipation": 1,
+            "contact": 2,
+            "follow": 4,
+            "total": 9
+          },
+          "anticipation": 1,
+          "cadence": 9,
+          "torso_posture": [
+            -0.00124,
+            0.02155,
+            0.06082
+          ],
+          "arm_path": [
+            0.75434,
+            0.13594,
+            0.41622
+          ],
+          "air_posture": "snap_step",
+          "landing": 2,
+          "deformation": "rail_afterimage",
+          "event_vfx_family": [
+            "current.anticipation",
+            "current.follow_through"
+          ],
+          "elemental_anatomy": "current_rail_extension",
+          "motion_law": "current"
+        },
+        "kaia-windrow": {
+          "center_of_gravity": "floating_arc",
+          "stride": {
+            "anticipation": 3,
+            "contact": 4,
+            "follow": 7,
+            "total": 15
+          },
+          "anticipation": 3,
+          "cadence": 15,
+          "torso_posture": [
+            -0.03079,
+            0.00119,
+            0.18491
+          ],
+          "arm_path": [
+            0.21535,
+            0.29683,
+            0.26794
+          ],
+          "air_posture": "floating_arc",
+          "landing": 4,
+          "deformation": "airfoil_ribbon",
+          "event_vfx_family": [
+            "flow.anticipation",
+            "flow.follow_through"
+          ],
+          "elemental_anatomy": "ribbon_airfoil_deformation",
+          "motion_law": "flow"
+        },
+        "nix-calder": {
+          "center_of_gravity": "glide_stop",
+          "stride": {
+            "anticipation": 3,
+            "contact": 4,
+            "follow": 7,
+            "total": 16
+          },
+          "anticipation": 3,
+          "cadence": 16,
+          "torso_posture": [
+            -0.01242,
+            0.012,
+            0.0295
+          ],
+          "arm_path": [
+            0.1451,
+            0.0,
+            0.0295
+          ],
+          "air_posture": "glide_stop",
+          "landing": 4,
+          "deformation": "facet_shard_trail",
+          "event_vfx_family": [
+            "structure.anticipation",
+            "structure.follow_through"
+          ],
+          "elemental_anatomy": "lattice_facet_growth",
+          "motion_law": "structure"
+        },
+        "orion-vell": {
+          "center_of_gravity": "orbit_pivot",
+          "stride": {
+            "anticipation": 2,
+            "contact": 3,
+            "follow": 6,
+            "total": 14
+          },
+          "anticipation": 2,
+          "cadence": 14,
+          "torso_posture": [
+            -0.04174,
+            0.00337,
+            0.06683
+          ],
+          "arm_path": [
+            0.3334,
+            0.09389,
+            0.18808
+          ],
+          "air_posture": "orbit_pivot",
+          "landing": 3,
+          "deformation": "orbit_node_ghost",
+          "event_vfx_family": [
+            "vectors.anticipation",
+            "vectors.follow_through"
+          ],
+          "elemental_anatomy": "orbit_node_vector_movement",
+          "motion_law": "vectors"
+        },
+        "vesper-nyx": {
+          "center_of_gravity": "phase_drift",
+          "stride": {
+            "anticipation": 2,
+            "contact": 3,
+            "follow": 5,
+            "total": 12
+          },
+          "anticipation": 2,
+          "cadence": 12,
+          "torso_posture": [
+            0.01249,
+            0.02505,
+            0.08237
+          ],
+          "arm_path": [
+            0.22675,
+            0.07423,
+            0.18238
+          ],
+          "air_posture": "phase_drift",
+          "landing": 3,
+          "deformation": "phase_echo_offset",
+          "event_vfx_family": [
+            "uncertainty.anticipation",
+            "uncertainty.follow_through"
+          ],
+          "elemental_anatomy": "phase_offset_geometry",
+          "motion_law": "uncertainty"
+        }
+      }
+    },
+    "heavy_attack": {
+      "slot_id": "heavy_attack",
+      "pairwise": {
+        "ember-vale__vs__rook-ironside": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.17956,
+          "max_angular": 0.79269,
+          "laws": [
+            "combustion",
+            "mass"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "plate_strata_compression"
+          ],
+          "root": [
+            "burst_forward",
+            "planted_pivot"
+          ]
+        },
+        "ember-vale__vs__juno-spark": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.11234,
+          "max_angular": 0.62411,
+          "laws": [
+            "combustion",
+            "current"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "current_rail_extension"
+          ],
+          "root": [
+            "burst_forward",
+            "snap_step"
+          ]
+        },
+        "ember-vale__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13979,
+          "max_angular": 0.52639,
+          "laws": [
+            "combustion",
+            "flow"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "burst_forward",
+            "floating_arc"
+          ]
+        },
+        "ember-vale__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.16085,
+          "max_angular": 0.80082,
+          "laws": [
+            "combustion",
+            "structure"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "burst_forward",
+            "glide_stop"
+          ]
+        },
+        "ember-vale__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14585,
+          "max_angular": 0.70059,
+          "laws": [
+            "combustion",
+            "vectors"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "burst_forward",
+            "orbit_pivot"
+          ]
+        },
+        "ember-vale__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.18275,
+          "max_angular": 0.79636,
+          "laws": [
+            "combustion",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "burst_forward",
+            "phase_drift"
+          ]
+        },
+        "rook-ironside__vs__juno-spark": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.17917,
+          "max_angular": 0.74122,
+          "laws": [
+            "mass",
+            "current"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "current_rail_extension"
+          ],
+          "root": [
+            "planted_pivot",
+            "snap_step"
+          ]
+        },
+        "rook-ironside__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12768,
+          "max_angular": 0.59624,
+          "laws": [
+            "mass",
+            "flow"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "planted_pivot",
+            "floating_arc"
+          ]
+        },
+        "rook-ironside__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14975,
+          "max_angular": 0.71609,
+          "laws": [
+            "mass",
+            "structure"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "planted_pivot",
+            "glide_stop"
+          ]
+        },
+        "rook-ironside__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.1609,
+          "max_angular": 0.75103,
+          "laws": [
+            "mass",
+            "vectors"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "planted_pivot",
+            "orbit_pivot"
+          ]
+        },
+        "rook-ironside__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.18278,
+          "max_angular": 0.76109,
+          "laws": [
+            "mass",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "planted_pivot",
+            "phase_drift"
+          ]
+        },
+        "juno-spark__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14313,
+          "max_angular": 0.58446,
+          "laws": [
+            "current",
+            "flow"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "snap_step",
+            "floating_arc"
+          ]
+        },
+        "juno-spark__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.17099,
+          "max_angular": 0.72823,
+          "laws": [
+            "current",
+            "structure"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "snap_step",
+            "glide_stop"
+          ]
+        },
+        "juno-spark__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.17503,
+          "max_angular": 0.75376,
+          "laws": [
+            "current",
+            "vectors"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "snap_step",
+            "orbit_pivot"
+          ]
+        },
+        "juno-spark__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.15661,
+          "max_angular": 0.85371,
+          "laws": [
+            "current",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "snap_step",
+            "phase_drift"
+          ]
+        },
+        "kaia-windrow__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13069,
+          "max_angular": 0.55211,
+          "laws": [
+            "flow",
+            "structure"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "floating_arc",
+            "glide_stop"
+          ]
+        },
+        "kaia-windrow__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.15246,
+          "max_angular": 0.62359,
+          "laws": [
+            "flow",
+            "vectors"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "floating_arc",
+            "orbit_pivot"
+          ]
+        },
+        "kaia-windrow__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.18623,
+          "max_angular": 0.94163,
+          "laws": [
+            "flow",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "floating_arc",
+            "phase_drift"
+          ]
+        },
+        "nix-calder__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.17058,
+          "max_angular": 0.70918,
+          "laws": [
+            "structure",
+            "vectors"
+          ],
+          "anatomy": [
+            "lattice_facet_growth",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "glide_stop",
+            "orbit_pivot"
+          ]
+        },
+        "nix-calder__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.19098,
+          "max_angular": 0.59448,
+          "laws": [
+            "structure",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "lattice_facet_growth",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "glide_stop",
+            "phase_drift"
+          ]
+        },
+        "orion-vell__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.18876,
+          "max_angular": 0.62296,
+          "laws": [
+            "vectors",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "orbit_node_vector_movement",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "orbit_pivot",
+            "phase_drift"
+          ]
+        }
+      },
+      "generic_reuse_pairs": 0,
+      "axis_evidence": {
+        "ember-vale": {
+          "center_of_gravity": "burst_forward",
+          "stride": {
+            "anticipation": 7,
+            "contact": 8,
+            "follow": 12,
+            "total": 30
+          },
+          "anticipation": 7,
+          "cadence": 30,
+          "torso_posture": [
+            0.17205,
+            0.02256,
+            0.06538
+          ],
+          "arm_path": [
+            0.62185,
+            0.09984,
+            0.39883
+          ],
+          "air_posture": "burst_forward",
+          "landing": 8,
+          "deformation": "heat_ribbon_smear",
+          "event_vfx_family": [
+            "combustion.anticipation",
+            "combustion.follow_through"
+          ],
+          "elemental_anatomy": "combustion_vent_deformation",
+          "motion_law": "combustion"
+        },
+        "rook-ironside": {
+          "center_of_gravity": "planted_pivot",
+          "stride": {
+            "anticipation": 7,
+            "contact": 8,
+            "follow": 12,
+            "total": 30
+          },
+          "anticipation": 7,
+          "cadence": 30,
+          "torso_posture": [
+            -0.03408,
+            0.03501,
+            0.04692
+          ],
+          "arm_path": [
+            -0.16978,
+            0.10129,
+            0.1577
+          ],
+          "air_posture": "planted_pivot",
+          "landing": 8,
+          "deformation": "plate_impact_streak",
+          "event_vfx_family": [
+            "mass.anticipation",
+            "mass.follow_through"
+          ],
+          "elemental_anatomy": "plate_strata_compression",
+          "motion_law": "mass"
+        },
+        "juno-spark": {
+          "center_of_gravity": "snap_step",
+          "stride": {
+            "anticipation": 7,
+            "contact": 8,
+            "follow": 12,
+            "total": 30
+          },
+          "anticipation": 7,
+          "cadence": 30,
+          "torso_posture": [
+            0.11018,
+            0.01873,
+            0.06307
+          ],
+          "arm_path": [
+            0.54627,
+            -0.02101,
+            0.39837
+          ],
+          "air_posture": "snap_step",
+          "landing": 8,
+          "deformation": "rail_afterimage",
+          "event_vfx_family": [
+            "current.anticipation",
+            "current.follow_through"
+          ],
+          "elemental_anatomy": "current_rail_extension",
+          "motion_law": "current"
+        },
+        "kaia-windrow": {
+          "center_of_gravity": "floating_arc",
+          "stride": {
+            "anticipation": 7,
+            "contact": 8,
+            "follow": 12,
+            "total": 30
+          },
+          "anticipation": 7,
+          "cadence": 30,
+          "torso_posture": [
+            0.10131,
+            0.02706,
+            0.11867
+          ],
+          "arm_path": [
+            0.42646,
+            0.32858,
+            0.26213
+          ],
+          "air_posture": "floating_arc",
+          "landing": 8,
+          "deformation": "airfoil_ribbon",
+          "event_vfx_family": [
+            "flow.anticipation",
+            "flow.follow_through"
+          ],
+          "elemental_anatomy": "ribbon_airfoil_deformation",
+          "motion_law": "flow"
+        },
+        "nix-calder": {
+          "center_of_gravity": "glide_stop",
+          "stride": {
+            "anticipation": 7,
+            "contact": 8,
+            "follow": 12,
+            "total": 30
+          },
+          "anticipation": 7,
+          "cadence": 30,
+          "torso_posture": [
+            0.06996,
+            0.012,
+            0.02923
+          ],
+          "arm_path": [
+            0.54631,
+            0.28319,
+            0.27923
+          ],
+          "air_posture": "glide_stop",
+          "landing": 8,
+          "deformation": "facet_shard_trail",
+          "event_vfx_family": [
+            "structure.anticipation",
+            "structure.follow_through"
+          ],
+          "elemental_anatomy": "lattice_facet_growth",
+          "motion_law": "structure"
+        },
+        "orion-vell": {
+          "center_of_gravity": "orbit_pivot",
+          "stride": {
+            "anticipation": 7,
+            "contact": 8,
+            "follow": 12,
+            "total": 30
+          },
+          "anticipation": 7,
+          "cadence": 30,
+          "torso_posture": [
+            0.08432,
+            0.01994,
+            0.06811
+          ],
+          "arm_path": [
+            0.58125,
+            -0.00302,
+            0.17176
+          ],
+          "air_posture": "orbit_pivot",
+          "landing": 8,
+          "deformation": "orbit_node_ghost",
+          "event_vfx_family": [
+            "vectors.anticipation",
+            "vectors.follow_through"
+          ],
+          "elemental_anatomy": "orbit_node_vector_movement",
+          "motion_law": "vectors"
+        },
+        "vesper-nyx": {
+          "center_of_gravity": "phase_drift",
+          "stride": {
+            "anticipation": 7,
+            "contact": 8,
+            "follow": 12,
+            "total": 30
+          },
+          "anticipation": 7,
+          "cadence": 30,
+          "torso_posture": [
+            0.04475,
+            0.00234,
+            0.08269
+          ],
+          "arm_path": [
+            0.59131,
+            0.19361,
+            0.28084
+          ],
+          "air_posture": "phase_drift",
+          "landing": 8,
+          "deformation": "phase_echo_offset",
+          "event_vfx_family": [
+            "uncertainty.anticipation",
+            "uncertainty.follow_through"
+          ],
+          "elemental_anatomy": "phase_offset_geometry",
+          "motion_law": "uncertainty"
+        }
+      }
+    },
+    "neutral_air": {
+      "slot_id": "neutral_air",
+      "pairwise": {
+        "ember-vale__vs__rook-ironside": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.11023,
+          "max_angular": 0.37219,
+          "laws": [
+            "combustion",
+            "mass"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "plate_strata_compression"
+          ],
+          "root": [
+            "burst_forward",
+            "planted_pivot"
+          ]
+        },
+        "ember-vale__vs__juno-spark": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.10251,
+          "max_angular": 0.36462,
+          "laws": [
+            "combustion",
+            "current"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "current_rail_extension"
+          ],
+          "root": [
+            "burst_forward",
+            "snap_step"
+          ]
+        },
+        "ember-vale__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12329,
+          "max_angular": 0.55989,
+          "laws": [
+            "combustion",
+            "flow"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "burst_forward",
+            "floating_arc"
+          ]
+        },
+        "ember-vale__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14847,
+          "max_angular": 0.41318,
+          "laws": [
+            "combustion",
+            "structure"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "burst_forward",
+            "glide_stop"
+          ]
+        },
+        "ember-vale__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.10509,
+          "max_angular": 0.53972,
+          "laws": [
+            "combustion",
+            "vectors"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "burst_forward",
+            "orbit_pivot"
+          ]
+        },
+        "ember-vale__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14253,
+          "max_angular": 0.4127,
+          "laws": [
+            "combustion",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "burst_forward",
+            "phase_drift"
+          ]
+        },
+        "rook-ironside__vs__juno-spark": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.10878,
+          "max_angular": 0.33697,
+          "laws": [
+            "mass",
+            "current"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "current_rail_extension"
+          ],
+          "root": [
+            "planted_pivot",
+            "snap_step"
+          ]
+        },
+        "rook-ironside__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.08764,
+          "max_angular": 0.25273,
+          "laws": [
+            "mass",
+            "flow"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "planted_pivot",
+            "floating_arc"
+          ]
+        },
+        "rook-ironside__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14066,
+          "max_angular": 0.70936,
+          "laws": [
+            "mass",
+            "structure"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "planted_pivot",
+            "glide_stop"
+          ]
+        },
+        "rook-ironside__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14134,
+          "max_angular": 0.8359,
+          "laws": [
+            "mass",
+            "vectors"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "planted_pivot",
+            "orbit_pivot"
+          ]
+        },
+        "rook-ironside__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14922,
+          "max_angular": 0.43447,
+          "laws": [
+            "mass",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "planted_pivot",
+            "phase_drift"
+          ]
+        },
+        "juno-spark__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.11996,
+          "max_angular": 0.44235,
+          "laws": [
+            "current",
+            "flow"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "snap_step",
+            "floating_arc"
+          ]
+        },
+        "juno-spark__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.15004,
+          "max_angular": 0.54175,
+          "laws": [
+            "current",
+            "structure"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "snap_step",
+            "glide_stop"
+          ]
+        },
+        "juno-spark__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13702,
+          "max_angular": 0.66829,
+          "laws": [
+            "current",
+            "vectors"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "snap_step",
+            "orbit_pivot"
+          ]
+        },
+        "juno-spark__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12564,
+          "max_angular": 0.41278,
+          "laws": [
+            "current",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "snap_step",
+            "phase_drift"
+          ]
+        },
+        "kaia-windrow__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.15917,
+          "max_angular": 0.9551,
+          "laws": [
+            "flow",
+            "structure"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "floating_arc",
+            "glide_stop"
+          ]
+        },
+        "kaia-windrow__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14943,
+          "max_angular": 1.08164,
+          "laws": [
+            "flow",
+            "vectors"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "floating_arc",
+            "orbit_pivot"
+          ]
+        },
+        "kaia-windrow__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.16257,
+          "max_angular": 0.68021,
+          "laws": [
+            "flow",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "floating_arc",
+            "phase_drift"
+          ]
+        },
+        "nix-calder__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12651,
+          "max_angular": 0.37519,
+          "laws": [
+            "structure",
+            "vectors"
+          ],
+          "anatomy": [
+            "lattice_facet_growth",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "glide_stop",
+            "orbit_pivot"
+          ]
+        },
+        "nix-calder__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.16763,
+          "max_angular": 0.48668,
+          "laws": [
+            "structure",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "lattice_facet_growth",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "glide_stop",
+            "phase_drift"
+          ]
+        },
+        "orion-vell__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.18409,
+          "max_angular": 0.60744,
+          "laws": [
+            "vectors",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "orbit_node_vector_movement",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "orbit_pivot",
+            "phase_drift"
+          ]
+        }
+      },
+      "generic_reuse_pairs": 0,
+      "axis_evidence": {
+        "ember-vale": {
+          "center_of_gravity": "burst_forward",
+          "stride": {
+            "anticipation": 2,
+            "contact": 3,
+            "follow": 6,
+            "total": 15
+          },
+          "anticipation": 2,
+          "cadence": 15,
+          "torso_posture": [
+            0.04567,
+            0.00997,
+            0.06715
+          ],
+          "arm_path": [
+            0.34114,
+            0.08727,
+            0.22452
+          ],
+          "air_posture": "burst_forward",
+          "landing": 3,
+          "deformation": "heat_ribbon_smear",
+          "event_vfx_family": [
+            "combustion.anticipation",
+            "combustion.follow_through"
+          ],
+          "elemental_anatomy": "combustion_vent_deformation",
+          "motion_law": "combustion"
+        },
+        "rook-ironside": {
+          "center_of_gravity": "planted_pivot",
+          "stride": {
+            "anticipation": 5,
+            "contact": 6,
+            "follow": 10,
+            "total": 24
+          },
+          "anticipation": 5,
+          "cadence": 24,
+          "torso_posture": [
+            -0.09015,
+            0.03509,
+            0.04748
+          ],
+          "arm_path": [
+            0.04496,
+            0.1819,
+            0.15996
+          ],
+          "air_posture": "planted_pivot",
+          "landing": 6,
+          "deformation": "plate_impact_streak",
+          "event_vfx_family": [
+            "mass.anticipation",
+            "mass.follow_through"
+          ],
+          "elemental_anatomy": "plate_strata_compression",
+          "motion_law": "mass"
+        },
+        "juno-spark": {
+          "center_of_gravity": "snap_step",
+          "stride": {
+            "anticipation": 1,
+            "contact": 2,
+            "follow": 5,
+            "total": 12
+          },
+          "anticipation": 1,
+          "cadence": 12,
+          "torso_posture": [
+            -0.00305,
+            0.01187,
+            0.06445
+          ],
+          "arm_path": [
+            0.21257,
+            0.05921,
+            0.24403
+          ],
+          "air_posture": "snap_step",
+          "landing": 2,
+          "deformation": "rail_afterimage",
+          "event_vfx_family": [
+            "current.anticipation",
+            "current.follow_through"
+          ],
+          "elemental_anatomy": "current_rail_extension",
+          "motion_law": "current"
+        },
+        "kaia-windrow": {
+          "center_of_gravity": "floating_arc",
+          "stride": {
+            "anticipation": 2,
+            "contact": 3,
+            "follow": 8,
+            "total": 16
+          },
+          "anticipation": 2,
+          "cadence": 16,
+          "torso_posture": [
+            0.0059,
+            0.0171,
+            0.15756
+          ],
+          "arm_path": [
+            -0.20078,
+            0.22816,
+            0.26814
+          ],
+          "air_posture": "floating_arc",
+          "landing": 3,
+          "deformation": "airfoil_ribbon",
+          "event_vfx_family": [
+            "flow.anticipation",
+            "flow.follow_through"
+          ],
+          "elemental_anatomy": "ribbon_airfoil_deformation",
+          "motion_law": "flow"
+        },
+        "nix-calder": {
+          "center_of_gravity": "glide_stop",
+          "stride": {
+            "anticipation": 4,
+            "contact": 5,
+            "follow": 9,
+            "total": 21
+          },
+          "anticipation": 4,
+          "cadence": 21,
+          "torso_posture": [
+            0.018,
+            0.012,
+            0.03
+          ],
+          "arm_path": [
+            0.75432,
+            0.29181,
+            0.28
+          ],
+          "air_posture": "glide_stop",
+          "landing": 5,
+          "deformation": "facet_shard_trail",
+          "event_vfx_family": [
+            "structure.anticipation",
+            "structure.follow_through"
+          ],
+          "elemental_anatomy": "lattice_facet_growth",
+          "motion_law": "structure"
+        },
+        "orion-vell": {
+          "center_of_gravity": "orbit_pivot",
+          "stride": {
+            "anticipation": 3,
+            "contact": 4,
+            "follow": 8,
+            "total": 18
+          },
+          "anticipation": 3,
+          "cadence": 18,
+          "torso_posture": [
+            -0.01647,
+            0.01007,
+            0.06851
+          ],
+          "arm_path": [
+            0.88086,
+            0.18119,
+            0.18533
+          ],
+          "air_posture": "orbit_pivot",
+          "landing": 4,
+          "deformation": "orbit_node_ghost",
+          "event_vfx_family": [
+            "vectors.anticipation",
+            "vectors.follow_through"
+          ],
+          "elemental_anatomy": "orbit_node_vector_movement",
+          "motion_law": "vectors"
+        },
+        "vesper-nyx": {
+          "center_of_gravity": "phase_drift",
+          "stride": {
+            "anticipation": 2,
+            "contact": 3,
+            "follow": 6,
+            "total": 14
+          },
+          "anticipation": 2,
+          "cadence": 14,
+          "torso_posture": [
+            0.04757,
+            0.02155,
+            0.08491
+          ],
+          "arm_path": [
+            0.47943,
+            0.13973,
+            0.30965
+          ],
+          "air_posture": "phase_drift",
+          "landing": 3,
+          "deformation": "phase_echo_offset",
+          "event_vfx_family": [
+            "uncertainty.anticipation",
+            "uncertainty.follow_through"
+          ],
+          "elemental_anatomy": "phase_offset_geometry",
+          "motion_law": "uncertainty"
+        }
+      }
+    },
+    "back_air": {
+      "slot_id": "back_air",
+      "pairwise": {
+        "ember-vale__vs__rook-ironside": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12484,
+          "max_angular": 0.53099,
+          "laws": [
+            "combustion",
+            "mass"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "plate_strata_compression"
+          ],
+          "root": [
+            "burst_forward",
+            "planted_pivot"
+          ]
+        },
+        "ember-vale__vs__juno-spark": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.0976,
+          "max_angular": 0.42522,
+          "laws": [
+            "combustion",
+            "current"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "current_rail_extension"
+          ],
+          "root": [
+            "burst_forward",
+            "snap_step"
+          ]
+        },
+        "ember-vale__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.10992,
+          "max_angular": 0.46493,
+          "laws": [
+            "combustion",
+            "flow"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "burst_forward",
+            "floating_arc"
+          ]
+        },
+        "ember-vale__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13184,
+          "max_angular": 0.40848,
+          "laws": [
+            "combustion",
+            "structure"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "burst_forward",
+            "glide_stop"
+          ]
+        },
+        "ember-vale__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12375,
+          "max_angular": 0.72908,
+          "laws": [
+            "combustion",
+            "vectors"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "burst_forward",
+            "orbit_pivot"
+          ]
+        },
+        "ember-vale__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14037,
+          "max_angular": 0.42396,
+          "laws": [
+            "combustion",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "burst_forward",
+            "phase_drift"
+          ]
+        },
+        "rook-ironside__vs__juno-spark": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.11289,
+          "max_angular": 0.35014,
+          "laws": [
+            "mass",
+            "current"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "current_rail_extension"
+          ],
+          "root": [
+            "planted_pivot",
+            "snap_step"
+          ]
+        },
+        "rook-ironside__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.11141,
+          "max_angular": 0.44794,
+          "laws": [
+            "mass",
+            "flow"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "planted_pivot",
+            "floating_arc"
+          ]
+        },
+        "rook-ironside__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13219,
+          "max_angular": 0.56113,
+          "laws": [
+            "mass",
+            "structure"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "planted_pivot",
+            "glide_stop"
+          ]
+        },
+        "rook-ironside__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13905,
+          "max_angular": 0.64079,
+          "laws": [
+            "mass",
+            "vectors"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "planted_pivot",
+            "orbit_pivot"
+          ]
+        },
+        "rook-ironside__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.16034,
+          "max_angular": 0.55061,
+          "laws": [
+            "mass",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "planted_pivot",
+            "phase_drift"
+          ]
+        },
+        "juno-spark__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.11877,
+          "max_angular": 0.45367,
+          "laws": [
+            "current",
+            "flow"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "snap_step",
+            "floating_arc"
+          ]
+        },
+        "juno-spark__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13918,
+          "max_angular": 0.43353,
+          "laws": [
+            "current",
+            "structure"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "snap_step",
+            "glide_stop"
+          ]
+        },
+        "juno-spark__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13747,
+          "max_angular": 0.57978,
+          "laws": [
+            "current",
+            "vectors"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "snap_step",
+            "orbit_pivot"
+          ]
+        },
+        "juno-spark__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12513,
+          "max_angular": 0.3519,
+          "laws": [
+            "current",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "snap_step",
+            "phase_drift"
+          ]
+        },
+        "kaia-windrow__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14572,
+          "max_angular": 0.45866,
+          "laws": [
+            "flow",
+            "structure"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "floating_arc",
+            "glide_stop"
+          ]
+        },
+        "kaia-windrow__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12783,
+          "max_angular": 0.74989,
+          "laws": [
+            "flow",
+            "vectors"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "floating_arc",
+            "orbit_pivot"
+          ]
+        },
+        "kaia-windrow__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.16893,
+          "max_angular": 0.56382,
+          "laws": [
+            "flow",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "floating_arc",
+            "phase_drift"
+          ]
+        },
+        "nix-calder__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12699,
+          "max_angular": 0.46844,
+          "laws": [
+            "structure",
+            "vectors"
+          ],
+          "anatomy": [
+            "lattice_facet_growth",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "glide_stop",
+            "orbit_pivot"
+          ]
+        },
+        "nix-calder__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.15048,
+          "max_angular": 0.48799,
+          "laws": [
+            "structure",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "lattice_facet_growth",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "glide_stop",
+            "phase_drift"
+          ]
+        },
+        "orion-vell__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.18459,
+          "max_angular": 0.71275,
+          "laws": [
+            "vectors",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "orbit_node_vector_movement",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "orbit_pivot",
+            "phase_drift"
+          ]
+        }
+      },
+      "generic_reuse_pairs": 0,
+      "axis_evidence": {
+        "ember-vale": {
+          "center_of_gravity": "burst_forward",
+          "stride": {
+            "anticipation": 3,
+            "contact": 4,
+            "follow": 7,
+            "total": 17
+          },
+          "anticipation": 3,
+          "cadence": 17,
+          "torso_posture": [
+            0.10089,
+            0.0243,
+            0.06342
+          ],
+          "arm_path": [
+            -0.04922,
+            0.0222,
+            0.17493
+          ],
+          "air_posture": "burst_forward",
+          "landing": 4,
+          "deformation": "heat_ribbon_smear",
+          "event_vfx_family": [
+            "combustion.anticipation",
+            "combustion.follow_through"
+          ],
+          "elemental_anatomy": "combustion_vent_deformation",
+          "motion_law": "combustion"
+        },
+        "rook-ironside": {
+          "center_of_gravity": "planted_pivot",
+          "stride": {
+            "anticipation": 6,
+            "contact": 7,
+            "follow": 11,
+            "total": 26
+          },
+          "anticipation": 6,
+          "cadence": 26,
+          "torso_posture": [
+            -0.0652,
+            0.03496,
+            0.04774
+          ],
+          "arm_path": [
+            -0.41296,
+            0.11031,
+            0.05881
+          ],
+          "air_posture": "planted_pivot",
+          "landing": 7,
+          "deformation": "plate_impact_streak",
+          "event_vfx_family": [
+            "mass.anticipation",
+            "mass.follow_through"
+          ],
+          "elemental_anatomy": "plate_strata_compression",
+          "motion_law": "mass"
+        },
+        "juno-spark": {
+          "center_of_gravity": "snap_step",
+          "stride": {
+            "anticipation": 2,
+            "contact": 3,
+            "follow": 5,
+            "total": 13
+          },
+          "anticipation": 2,
+          "cadence": 13,
+          "torso_posture": [
+            0.00166,
+            0.00295,
+            0.06305
+          ],
+          "arm_path": [
+            -0.11933,
+            0.038,
+            0.18889
+          ],
+          "air_posture": "snap_step",
+          "landing": 3,
+          "deformation": "rail_afterimage",
+          "event_vfx_family": [
+            "current.anticipation",
+            "current.follow_through"
+          ],
+          "elemental_anatomy": "current_rail_extension",
+          "motion_law": "current"
+        },
+        "kaia-windrow": {
+          "center_of_gravity": "floating_arc",
+          "stride": {
+            "anticipation": 3,
+            "contact": 4,
+            "follow": 8,
+            "total": 17
+          },
+          "anticipation": 3,
+          "cadence": 17,
+          "torso_posture": [
+            0.01168,
+            0.0132,
+            0.16646
+          ],
+          "arm_path": [
+            0.03498,
+            0.33681,
+            0.15951
+          ],
+          "air_posture": "floating_arc",
+          "landing": 4,
+          "deformation": "airfoil_ribbon",
+          "event_vfx_family": [
+            "flow.anticipation",
+            "flow.follow_through"
+          ],
+          "elemental_anatomy": "ribbon_airfoil_deformation",
+          "motion_law": "flow"
+        },
+        "nix-calder": {
+          "center_of_gravity": "glide_stop",
+          "stride": {
+            "anticipation": 5,
+            "contact": 6,
+            "follow": 9,
+            "total": 22
+          },
+          "anticipation": 5,
+          "cadence": 22,
+          "torso_posture": [
+            0.0374,
+            0.012,
+            0.02997
+          ],
+          "arm_path": [
+            0.14817,
+            0.28319,
+            0.17997
+          ],
+          "air_posture": "glide_stop",
+          "landing": 6,
+          "deformation": "facet_shard_trail",
+          "event_vfx_family": [
+            "structure.anticipation",
+            "structure.follow_through"
+          ],
+          "elemental_anatomy": "lattice_facet_growth",
+          "motion_law": "structure"
+        },
+        "orion-vell": {
+          "center_of_gravity": "orbit_pivot",
+          "stride": {
+            "anticipation": 4,
+            "contact": 5,
+            "follow": 8,
+            "total": 19
+          },
+          "anticipation": 4,
+          "cadence": 19,
+          "torso_posture": [
+            0.06525,
+            0.02208,
+            0.06855
+          ],
+          "arm_path": [
+            0.12364,
+            0.10768,
+            0.0894
+          ],
+          "air_posture": "orbit_pivot",
+          "landing": 5,
+          "deformation": "orbit_node_ghost",
+          "event_vfx_family": [
+            "vectors.anticipation",
+            "vectors.follow_through"
+          ],
+          "elemental_anatomy": "orbit_node_vector_movement",
+          "motion_law": "vectors"
+        },
+        "vesper-nyx": {
+          "center_of_gravity": "phase_drift",
+          "stride": {
+            "anticipation": 3,
+            "contact": 4,
+            "follow": 7,
+            "total": 16
+          },
+          "anticipation": 3,
+          "cadence": 16,
+          "torso_posture": [
+            0.02987,
+            -0.00179,
+            0.08219
+          ],
+          "arm_path": [
+            0.03113,
+            -0.00486,
+            0.1906
+          ],
+          "air_posture": "phase_drift",
+          "landing": 4,
+          "deformation": "phase_echo_offset",
+          "event_vfx_family": [
+            "uncertainty.anticipation",
+            "uncertainty.follow_through"
+          ],
+          "elemental_anatomy": "phase_offset_geometry",
+          "motion_law": "uncertainty"
+        }
+      }
+    },
+    "aura_burst": {
+      "slot_id": "aura_burst",
+      "pairwise": {
+        "ember-vale__vs__rook-ironside": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.15296,
+          "max_angular": 1.06019,
+          "laws": [
+            "combustion",
+            "mass"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "plate_strata_compression"
+          ],
+          "root": [
+            "burst_forward",
+            "planted_pivot"
+          ]
+        },
+        "ember-vale__vs__juno-spark": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13136,
+          "max_angular": 0.69235,
+          "laws": [
+            "combustion",
+            "current"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "current_rail_extension"
+          ],
+          "root": [
+            "burst_forward",
+            "snap_step"
+          ]
+        },
+        "ember-vale__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12265,
+          "max_angular": 0.68542,
+          "laws": [
+            "combustion",
+            "flow"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "burst_forward",
+            "floating_arc"
+          ]
+        },
+        "ember-vale__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13248,
+          "max_angular": 0.82774,
+          "laws": [
+            "combustion",
+            "structure"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "burst_forward",
+            "glide_stop"
+          ]
+        },
+        "ember-vale__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12254,
+          "max_angular": 0.54097,
+          "laws": [
+            "combustion",
+            "vectors"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "burst_forward",
+            "orbit_pivot"
+          ]
+        },
+        "ember-vale__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14909,
+          "max_angular": 0.61332,
+          "laws": [
+            "combustion",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "burst_forward",
+            "phase_drift"
+          ]
+        },
+        "rook-ironside__vs__juno-spark": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.10912,
+          "max_angular": 0.36784,
+          "laws": [
+            "mass",
+            "current"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "current_rail_extension"
+          ],
+          "root": [
+            "planted_pivot",
+            "snap_step"
+          ]
+        },
+        "rook-ironside__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.11023,
+          "max_angular": 0.41041,
+          "laws": [
+            "mass",
+            "flow"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "planted_pivot",
+            "floating_arc"
+          ]
+        },
+        "rook-ironside__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13307,
+          "max_angular": 0.58037,
+          "laws": [
+            "mass",
+            "structure"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "planted_pivot",
+            "glide_stop"
+          ]
+        },
+        "rook-ironside__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.176,
+          "max_angular": 1.03922,
+          "laws": [
+            "mass",
+            "vectors"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "planted_pivot",
+            "orbit_pivot"
+          ]
+        },
+        "rook-ironside__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.16087,
+          "max_angular": 0.59564,
+          "laws": [
+            "mass",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "planted_pivot",
+            "phase_drift"
+          ]
+        },
+        "juno-spark__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12594,
+          "max_angular": 0.47382,
+          "laws": [
+            "current",
+            "flow"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "snap_step",
+            "floating_arc"
+          ]
+        },
+        "juno-spark__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13526,
+          "max_angular": 0.38699,
+          "laws": [
+            "current",
+            "structure"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "snap_step",
+            "glide_stop"
+          ]
+        },
+        "juno-spark__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.15749,
+          "max_angular": 0.83258,
+          "laws": [
+            "current",
+            "vectors"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "snap_step",
+            "orbit_pivot"
+          ]
+        },
+        "juno-spark__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.1283,
+          "max_angular": 0.45182,
+          "laws": [
+            "current",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "snap_step",
+            "phase_drift"
+          ]
+        },
+        "kaia-windrow__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13709,
+          "max_angular": 0.45329,
+          "laws": [
+            "flow",
+            "structure"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "floating_arc",
+            "glide_stop"
+          ]
+        },
+        "kaia-windrow__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.16357,
+          "max_angular": 0.63342,
+          "laws": [
+            "flow",
+            "vectors"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "floating_arc",
+            "orbit_pivot"
+          ]
+        },
+        "kaia-windrow__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.16693,
+          "max_angular": 0.47422,
+          "laws": [
+            "flow",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "floating_arc",
+            "phase_drift"
+          ]
+        },
+        "nix-calder__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13757,
+          "max_angular": 0.60626,
+          "laws": [
+            "structure",
+            "vectors"
+          ],
+          "anatomy": [
+            "lattice_facet_growth",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "glide_stop",
+            "orbit_pivot"
+          ]
+        },
+        "nix-calder__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.16199,
+          "max_angular": 0.48637,
+          "laws": [
+            "structure",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "lattice_facet_growth",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "glide_stop",
+            "phase_drift"
+          ]
+        },
+        "orion-vell__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.18327,
+          "max_angular": 0.60659,
+          "laws": [
+            "vectors",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "orbit_node_vector_movement",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "orbit_pivot",
+            "phase_drift"
+          ]
+        }
+      },
+      "generic_reuse_pairs": 0,
+      "axis_evidence": {
+        "ember-vale": {
+          "center_of_gravity": "burst_forward",
+          "stride": {
+            "anticipation": 9,
+            "contact": 10,
+            "follow": 16,
+            "total": 40
+          },
+          "anticipation": 9,
+          "cadence": 40,
+          "torso_posture": [
+            0.10113,
+            0.02134,
+            0.0367
+          ],
+          "arm_path": [
+            0.86824,
+            0.14914,
+            0.36787
+          ],
+          "air_posture": "burst_forward",
+          "landing": 10,
+          "deformation": "heat_ribbon_smear",
+          "event_vfx_family": [
+            "combustion.anticipation",
+            "combustion.follow_through"
+          ],
+          "elemental_anatomy": "combustion_vent_deformation",
+          "motion_law": "combustion"
+        },
+        "rook-ironside": {
+          "center_of_gravity": "planted_pivot",
+          "stride": {
+            "anticipation": 9,
+            "contact": 10,
+            "follow": 16,
+            "total": 40
+          },
+          "anticipation": 9,
+          "cadence": 40,
+          "torso_posture": [
+            -0.08702,
+            0.03237,
+            0.01884
+          ],
+          "arm_path": [
+            -0.19195,
+            0.10541,
+            0.12858
+          ],
+          "air_posture": "planted_pivot",
+          "landing": 10,
+          "deformation": "plate_impact_streak",
+          "event_vfx_family": [
+            "mass.anticipation",
+            "mass.follow_through"
+          ],
+          "elemental_anatomy": "plate_strata_compression",
+          "motion_law": "mass"
+        },
+        "juno-spark": {
+          "center_of_gravity": "snap_step",
+          "stride": {
+            "anticipation": 9,
+            "contact": 10,
+            "follow": 16,
+            "total": 40
+          },
+          "anticipation": 9,
+          "cadence": 40,
+          "torso_posture": [
+            0.02433,
+            0.0167,
+            0.0343
+          ],
+          "arm_path": [
+            0.17589,
+            0.07914,
+            0.20186
+          ],
+          "air_posture": "snap_step",
+          "landing": 10,
+          "deformation": "rail_afterimage",
+          "event_vfx_family": [
+            "current.anticipation",
+            "current.follow_through"
+          ],
+          "elemental_anatomy": "current_rail_extension",
+          "motion_law": "current"
+        },
+        "kaia-windrow": {
+          "center_of_gravity": "floating_arc",
+          "stride": {
+            "anticipation": 9,
+            "contact": 10,
+            "follow": 16,
+            "total": 40
+          },
+          "anticipation": 9,
+          "cadence": 40,
+          "torso_posture": [
+            0.0111,
+            0.02169,
+            0.11408
+          ],
+          "arm_path": [
+            0.18282,
+            0.35007,
+            0.22377
+          ],
+          "air_posture": "floating_arc",
+          "landing": 10,
+          "deformation": "airfoil_ribbon",
+          "event_vfx_family": [
+            "flow.anticipation",
+            "flow.follow_through"
+          ],
+          "elemental_anatomy": "ribbon_airfoil_deformation",
+          "motion_law": "flow"
+        },
+        "nix-calder": {
+          "center_of_gravity": "glide_stop",
+          "stride": {
+            "anticipation": 9,
+            "contact": 10,
+            "follow": 16,
+            "total": 40
+          },
+          "anticipation": 9,
+          "cadence": 40,
+          "torso_posture": [
+            0.0,
+            0.012,
+            0.0
+          ],
+          "arm_path": [
+            0.0405,
+            0.0,
+            0.25
+          ],
+          "air_posture": "glide_stop",
+          "landing": 10,
+          "deformation": "facet_shard_trail",
+          "event_vfx_family": [
+            "structure.anticipation",
+            "structure.follow_through"
+          ],
+          "elemental_anatomy": "lattice_facet_growth",
+          "motion_law": "structure"
+        },
+        "orion-vell": {
+          "center_of_gravity": "orbit_pivot",
+          "stride": {
+            "anticipation": 9,
+            "contact": 10,
+            "follow": 16,
+            "total": 40
+          },
+          "anticipation": 9,
+          "cadence": 40,
+          "torso_posture": [
+            0.03529,
+            0.02384,
+            0.03813
+          ],
+          "arm_path": [
+            0.60882,
+            0.20666,
+            0.13519
+          ],
+          "air_posture": "orbit_pivot",
+          "landing": 10,
+          "deformation": "orbit_node_ghost",
+          "event_vfx_family": [
+            "vectors.anticipation",
+            "vectors.follow_through"
+          ],
+          "elemental_anatomy": "orbit_node_vector_movement",
+          "motion_law": "vectors"
+        },
+        "vesper-nyx": {
+          "center_of_gravity": "phase_drift",
+          "stride": {
+            "anticipation": 9,
+            "contact": 10,
+            "follow": 16,
+            "total": 40
+          },
+          "anticipation": 9,
+          "cadence": 40,
+          "torso_posture": [
+            0.03436,
+            0.02372,
+            0.05404
+          ],
+          "arm_path": [
+            0.25492,
+            0.11282,
+            0.27981
+          ],
+          "air_posture": "phase_drift",
+          "landing": 10,
+          "deformation": "phase_echo_offset",
+          "event_vfx_family": [
+            "uncertainty.anticipation",
+            "uncertainty.follow_through"
+          ],
+          "elemental_anatomy": "phase_offset_geometry",
+          "motion_law": "uncertainty"
+        }
+      }
+    },
+    "hurt_heavy": {
+      "slot_id": "hurt_heavy",
+      "pairwise": {
+        "ember-vale__vs__rook-ironside": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12401,
+          "max_angular": 0.52463,
+          "laws": [
+            "combustion",
+            "mass"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "plate_strata_compression"
+          ],
+          "root": [
+            "burst_forward",
+            "planted_pivot"
+          ]
+        },
+        "ember-vale__vs__juno-spark": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14921,
+          "max_angular": 0.76541,
+          "laws": [
+            "combustion",
+            "current"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "current_rail_extension"
+          ],
+          "root": [
+            "burst_forward",
+            "snap_step"
+          ]
+        },
+        "ember-vale__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.11057,
+          "max_angular": 0.54203,
+          "laws": [
+            "combustion",
+            "flow"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "burst_forward",
+            "floating_arc"
+          ]
+        },
+        "ember-vale__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14149,
+          "max_angular": 0.56157,
+          "laws": [
+            "combustion",
+            "structure"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "burst_forward",
+            "glide_stop"
+          ]
+        },
+        "ember-vale__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12656,
+          "max_angular": 0.56626,
+          "laws": [
+            "combustion",
+            "vectors"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "burst_forward",
+            "orbit_pivot"
+          ]
+        },
+        "ember-vale__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.18129,
+          "max_angular": 0.72044,
+          "laws": [
+            "combustion",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "combustion_vent_deformation",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "burst_forward",
+            "phase_drift"
+          ]
+        },
+        "rook-ironside__vs__juno-spark": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.1203,
+          "max_angular": 0.36196,
+          "laws": [
+            "mass",
+            "current"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "current_rail_extension"
+          ],
+          "root": [
+            "planted_pivot",
+            "snap_step"
+          ]
+        },
+        "rook-ironside__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.10016,
+          "max_angular": 0.36233,
+          "laws": [
+            "mass",
+            "flow"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "planted_pivot",
+            "floating_arc"
+          ]
+        },
+        "rook-ironside__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12275,
+          "max_angular": 0.4251,
+          "laws": [
+            "mass",
+            "structure"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "planted_pivot",
+            "glide_stop"
+          ]
+        },
+        "rook-ironside__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.10961,
+          "max_angular": 0.37807,
+          "laws": [
+            "mass",
+            "vectors"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "planted_pivot",
+            "orbit_pivot"
+          ]
+        },
+        "rook-ironside__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14163,
+          "max_angular": 0.36471,
+          "laws": [
+            "mass",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "plate_strata_compression",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "planted_pivot",
+            "phase_drift"
+          ]
+        },
+        "juno-spark__vs__kaia-windrow": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.11055,
+          "max_angular": 0.45283,
+          "laws": [
+            "current",
+            "flow"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "ribbon_airfoil_deformation"
+          ],
+          "root": [
+            "snap_step",
+            "floating_arc"
+          ]
+        },
+        "juno-spark__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.14623,
+          "max_angular": 0.5695,
+          "laws": [
+            "current",
+            "structure"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "snap_step",
+            "glide_stop"
+          ]
+        },
+        "juno-spark__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.1481,
+          "max_angular": 0.45606,
+          "laws": [
+            "current",
+            "vectors"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "snap_step",
+            "orbit_pivot"
+          ]
+        },
+        "juno-spark__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.12642,
+          "max_angular": 0.4287,
+          "laws": [
+            "current",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "current_rail_extension",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "snap_step",
+            "phase_drift"
+          ]
+        },
+        "kaia-windrow__vs__nix-calder": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13086,
+          "max_angular": 0.48801,
+          "laws": [
+            "flow",
+            "structure"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "lattice_facet_growth"
+          ],
+          "root": [
+            "floating_arc",
+            "glide_stop"
+          ]
+        },
+        "kaia-windrow__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.10416,
+          "max_angular": 0.40629,
+          "laws": [
+            "flow",
+            "vectors"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "floating_arc",
+            "orbit_pivot"
+          ]
+        },
+        "kaia-windrow__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.16258,
+          "max_angular": 0.464,
+          "laws": [
+            "flow",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "ribbon_airfoil_deformation",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "floating_arc",
+            "phase_drift"
+          ]
+        },
+        "nix-calder__vs__orion-vell": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.13975,
+          "max_angular": 0.50883,
+          "laws": [
+            "structure",
+            "vectors"
+          ],
+          "anatomy": [
+            "lattice_facet_growth",
+            "orbit_node_vector_movement"
+          ],
+          "root": [
+            "glide_stop",
+            "orbit_pivot"
+          ]
+        },
+        "nix-calder__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.16518,
+          "max_angular": 0.52453,
+          "laws": [
+            "structure",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "lattice_facet_growth",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "glide_stop",
+            "phase_drift"
+          ]
+        },
+        "orion-vell__vs__vesper-nyx": {
+          "status": "DIFFERENTIATED",
+          "rms": 0.18519,
+          "max_angular": 0.60514,
+          "laws": [
+            "vectors",
+            "uncertainty"
+          ],
+          "anatomy": [
+            "orbit_node_vector_movement",
+            "phase_offset_geometry"
+          ],
+          "root": [
+            "orbit_pivot",
+            "phase_drift"
+          ]
+        }
+      },
+      "generic_reuse_pairs": 0,
+      "axis_evidence": {
+        "ember-vale": {
+          "center_of_gravity": "burst_forward",
+          "stride": {
+            "anticipation": 1,
+            "contact": 4,
+            "follow": 12,
+            "total": 15
+          },
+          "anticipation": 1,
+          "cadence": 15,
+          "torso_posture": [
+            0.2159,
+            0.01911,
+            0.06214
+          ],
+          "arm_path": [
+            0.30195,
+            0.14794,
+            0.38684
+          ],
+          "air_posture": "burst_forward",
+          "landing": 4,
+          "deformation": "heat_ribbon_smear",
+          "event_vfx_family": [],
+          "elemental_anatomy": "combustion_vent_deformation",
+          "motion_law": "combustion"
+        },
+        "rook-ironside": {
+          "center_of_gravity": "planted_pivot",
+          "stride": {
+            "anticipation": 1,
+            "contact": 4,
+            "follow": 12,
+            "total": 15
+          },
+          "anticipation": 1,
+          "cadence": 15,
+          "torso_posture": [
+            0.0247,
+            0.0252,
+            0.04436
+          ],
+          "arm_path": [
+            -0.10946,
+            0.23055,
+            0.14481
+          ],
+          "air_posture": "planted_pivot",
+          "landing": 4,
+          "deformation": "plate_impact_streak",
+          "event_vfx_family": [],
+          "elemental_anatomy": "plate_strata_compression",
+          "motion_law": "mass"
+        },
+        "juno-spark": {
+          "center_of_gravity": "snap_step",
+          "stride": {
+            "anticipation": 1,
+            "contact": 4,
+            "follow": 12,
+            "total": 15
+          },
+          "anticipation": 1,
+          "cadence": 15,
+          "torso_posture": [
+            0.09281,
+            0.00282,
+            0.05795
+          ],
+          "arm_path": [
+            -0.03909,
+            0.14193,
+            0.39692
+          ],
+          "air_posture": "snap_step",
+          "landing": 4,
+          "deformation": "rail_afterimage",
+          "event_vfx_family": [],
+          "elemental_anatomy": "current_rail_extension",
+          "motion_law": "current"
+        },
+        "kaia-windrow": {
+          "center_of_gravity": "floating_arc",
+          "stride": {
+            "anticipation": 1,
+            "contact": 4,
+            "follow": 12,
+            "total": 15
+          },
+          "anticipation": 1,
+          "cadence": 15,
+          "torso_posture": [
+            0.15931,
+            0.02717,
+            0.11361
+          ],
+          "arm_path": [
+            -0.12088,
+            0.30572,
+            0.24357
+          ],
+          "air_posture": "floating_arc",
+          "landing": 4,
+          "deformation": "airfoil_ribbon",
+          "event_vfx_family": [],
+          "elemental_anatomy": "ribbon_airfoil_deformation",
+          "motion_law": "flow"
+        },
+        "nix-calder": {
+          "center_of_gravity": "glide_stop",
+          "stride": {
+            "anticipation": 1,
+            "contact": 4,
+            "follow": 12,
+            "total": 15
+          },
+          "anticipation": 1,
+          "cadence": 15,
+          "torso_posture": [
+            0.12798,
+            0.012,
+            0.0249
+          ],
+          "arm_path": [
+            0.08524,
+            0.24875,
+            0.2749
+          ],
+          "air_posture": "glide_stop",
+          "landing": 4,
+          "deformation": "facet_shard_trail",
+          "event_vfx_family": [],
+          "elemental_anatomy": "lattice_facet_growth",
+          "motion_law": "structure"
+        },
+        "orion-vell": {
+          "center_of_gravity": "orbit_pivot",
+          "stride": {
+            "anticipation": 1,
+            "contact": 4,
+            "follow": 12,
+            "total": 15
+          },
+          "anticipation": 1,
+          "cadence": 15,
+          "torso_posture": [
+            0.15075,
+            0.02122,
+            0.06363
+          ],
+          "arm_path": [
+            -0.26431,
+            0.08434,
+            0.18357
+          ],
+          "air_posture": "orbit_pivot",
+          "landing": 4,
+          "deformation": "orbit_node_ghost",
+          "event_vfx_family": [],
+          "elemental_anatomy": "orbit_node_vector_movement",
+          "motion_law": "vectors"
+        },
+        "vesper-nyx": {
+          "center_of_gravity": "phase_drift",
+          "stride": {
+            "anticipation": 1,
+            "contact": 4,
+            "follow": 12,
+            "total": 15
+          },
+          "anticipation": 1,
+          "cadence": 15,
+          "torso_posture": [
+            0.11114,
+            0.01413,
+            0.08035
+          ],
+          "arm_path": [
+            -9e-05,
+            0.13852,
+            0.30205
+          ],
+          "air_posture": "phase_drift",
+          "landing": 4,
+          "deformation": "phase_echo_offset",
+          "event_vfx_family": [],
+          "elemental_anatomy": "phase_offset_geometry",
+          "motion_law": "uncertainty"
+        }
+      }
+    }
+  },
+  "CROSS_FIGHTER_GENERIC_TEMPLATE_REUSE_COUNT": 0
+}

@@ -1,0 +1,325 @@
+{
+  "schema": "anime_aggressors_movement_profiles_v1",
+  "simulation_hz": 60,
+  "fighters": {
+    "ember-vale": {
+      "name": "Ember Vale",
+      "title": "The Living Furnace",
+      "identity": "RED",
+      "primary_hex": "#EF2B1F",
+      "physics": {
+        "weight": 100,
+        "run": 294,
+        "dash": 441,
+        "air": 224.4,
+        "jump": 620,
+        "fall": 1800
+      },
+      "physics_status": "APPROVED_BASELINE",
+      "archetype": "Rushdown Striker",
+      "movement_verbs": [
+        "ignite",
+        "lunge",
+        "drive",
+        "burst",
+        "chase",
+        "plant",
+        "re-ignite"
+      ],
+      "movement_read": {
+        "idle": "Weight slightly forward; hands never fully relaxed; furnace core rises/falls with breath; small shoulder vents; impatience without jitter.",
+        "walk": "Aggressive stalking step; decisive foot contact; upper body already aimed at opponent.",
+        "run": "Torso pitched forward; arms remain combat-ready; rear-foot heat impulse reinforces acceleration.",
+        "dash": "Compress \u2192 furnace flash \u2192 violent forward wedge \u2192 controlled catch step. Never just 'run faster.'",
+        "turnaround": "Hard heel plant with a short heat skid.",
+        "jump": "Self-propelled takeoff; double jump uses directional combustion pulse with knee compression.",
+        "air": "Aerial motion remains driven by visible propulsion rather than float.",
+        "fast_fall": "Vents cut and body knifes downward with a short heat wake.",
+        "land": "Aggressive momentum catch; hard landing adds heat flare, never a generic superhero kneel.",
+        "defense": "Offensive guard posture; shoulders forward, gauntlets on centerline; combustion-assisted slip dodge."
+      }
+    },
+    "rook-ironside": {
+      "name": "Rook Ironside",
+      "title": "The Walking Bastion",
+      "identity": "ORANGE",
+      "primary_hex": "#F47A20",
+      "physics": {
+        "weight": 125,
+        "run": 238,
+        "dash": 357,
+        "air": 193.6,
+        "jump": 570.4,
+        "fall": 1944
+      },
+      "physics_status": "APPROVED_BASELINE",
+      "archetype": "Armored Bruiser",
+      "movement_verbs": [
+        "brace",
+        "plant",
+        "compress",
+        "carry",
+        "crush",
+        "anchor",
+        "advance"
+      ],
+      "movement_read": {
+        "idle": "Wide stance; visible weight settling; loaded asymmetry; small armor compression instead of fidgeting.",
+        "walk": "Every step shows weight transfer; no foot sliding; obvious hip/shoulder counter-rotation.",
+        "run": "Step 1 commitment \u2192 step 2 mass moving \u2192 step 3 unstoppable.",
+        "dash": "Short armored charge, never an athletic sprint.",
+        "turnaround": "Visual deceleration and compression before redirecting.",
+        "jump": "Deep compression; takeoff looks expensive; no graceful floating.",
+        "air": "Limited correction; limbs prepare for impact rather than agility.",
+        "fast_fall": "Mass reasserts itself; limbs tuck into a descending bastion shape.",
+        "land": "Roster's heaviest landing; two-foot plant or tectonic shock pose.",
+        "defense": "Receives force physically; plates lock; dodge is short armored lean/shift."
+      }
+    },
+    "juno-spark": {
+      "name": "Juno Spark",
+      "title": "The Arc Courier",
+      "identity": "YELLOW",
+      "primary_hex": "#FFD229",
+      "physics": {
+        "weight": 82,
+        "run": 330.4,
+        "dash": 495.6,
+        "air": 268.4,
+        "jump": 669.6,
+        "fall": 1836
+      },
+      "physics_status": "APPROVED_BASELINE",
+      "archetype": "Speed Confirm",
+      "movement_verbs": [
+        "snap",
+        "route",
+        "redirect",
+        "chain",
+        "skip",
+        "accelerate",
+        "rebound"
+      ],
+      "movement_read": {
+        "idle": "Ready to leave before idle completes; subtle micro-shifts; no slow breathing loop.",
+        "walk": "Quick foot placement with light contacts.",
+        "run": "Short ground-contact time; limbs form alternating diagonals.",
+        "dash": "1-frame-like intent \u2192 elongated acceleration pose \u2192 arc ghost; never unreadable blur.",
+        "turnaround": "Electric snap-turn with narrow foot plant and immediate upper-body redirection.",
+        "jump": "Quick spring; double jump uses electromagnetic polarity kick.",
+        "air": "Precise route changes with conductor nodes aligning to intended vector.",
+        "fast_fall": "Polarity flips; body snaps into a tight downward line.",
+        "land": "Shortest/cleanest landing; visibly ready again immediately.",
+        "defense": "Predictive repositioning; compact guard and minimal wasted silhouette."
+      }
+    },
+    "kaia-windrow": {
+      "name": "Kaia Windrow",
+      "title": "The Skyflow Duelist",
+      "identity": "GREEN",
+      "primary_hex": "#2FCB88",
+      "physics": {
+        "weight": 96,
+        "run": 274.4,
+        "dash": 411.6,
+        "air": 246.4,
+        "jump": 644.8,
+        "fall": 1728
+      },
+      "physics_status": "APPROVED_BASELINE",
+      "archetype": "Aerial Spacer",
+      "movement_verbs": [
+        "flow",
+        "curve",
+        "float",
+        "redirect",
+        "spiral",
+        "glide",
+        "balance"
+      ],
+      "movement_read": {
+        "idle": "Never fully gravity-bound; control surfaces respond subtly; calm centered breath.",
+        "walk": "Smooth transfer with less vertical bounce than Ember/Juno.",
+        "run": "Long flowing stride; upper body composed.",
+        "dash": "Lean \u2192 airfoil alignment \u2192 low pressure-driven horizontal sweep.",
+        "turnaround": "Redirects momentum through curved footwork and ribbon arc rather than stopping.",
+        "jump": "Most elegant takeoff; double jump uses pressure ring/wind step.",
+        "air": "Banks visibly into horizontal drift; limbs/ribbons function as control surfaces.",
+        "fast_fall": "Airfoils collapse; body streamlines downward.",
+        "land": "Bleeds vertical energy sideways into a spiral/step.",
+        "defense": "Flows around danger; guard remains calm and open."
+      }
+    },
+    "nix-calder": {
+      "name": "Nix Calder",
+      "title": "The Cryolattice Architect",
+      "identity": "BLUE",
+      "primary_hex": "#3F86F7",
+      "physics": {
+        "weight": 118,
+        "run": 252,
+        "dash": 378,
+        "air": 198,
+        "jump": 589,
+        "fall": 1890
+      },
+      "physics_status": "APPROVED_BASELINE",
+      "archetype": "Control Tank",
+      "movement_verbs": [
+        "measure",
+        "place",
+        "lock",
+        "brace",
+        "construct",
+        "contain",
+        "advance"
+      ],
+      "movement_read": {
+        "idle": "Extremely controlled; minimal wasted motion; hands evaluate space.",
+        "walk": "Measured chosen steps.",
+        "run": "Organized stride even at speed.",
+        "dash": "Controlled frost slide with explicit stop point.",
+        "turnaround": "Sharp deliberate pivot.",
+        "jump": "Compact takeoff; structured air pose.",
+        "air": "Movement is deliberate and geometry-oriented rather than floaty.",
+        "fast_fall": "Crystal facets align into a downward spear/column profile.",
+        "land": "Crystal/frost geometry briefly organizes beneath feet.",
+        "defense": "Calculated guard; dodge uses minimum necessary displacement."
+      }
+    },
+    "orion-vell": {
+      "name": "Orion Vell",
+      "title": "The Orbital Marshal",
+      "identity": "INDIGO",
+      "primary_hex": "#5140C8",
+      "physics": {
+        "weight": 100,
+        "run": 280,
+        "dash": 420,
+        "air": 220,
+        "jump": 620,
+        "fall": 1800
+      },
+      "physics_status": "APPROVED_BASELINE",
+      "archetype": "Combo Control",
+      "movement_verbs": [
+        "orbit",
+        "pull",
+        "repel",
+        "suspend",
+        "redirect",
+        "compress",
+        "release"
+      ],
+      "movement_read": {
+        "idle": "Centered, composed; orbit nodes continue moving while body remains calm.",
+        "walk": "Deliberate but not heavy; hands imply space is already managed.",
+        "run": "Space appears to assist movement; less visible exertion than Ember/Rook.",
+        "dash": "Nodes contract \u2192 body advances \u2192 nodes restore orbit.",
+        "turnaround": "Pivots around an implied center rather than skidding.",
+        "jump": "Gravity releases rather than legs simply overpowering ground.",
+        "air": "Slight suspension without stealing Kaia's aerial identity.",
+        "fast_fall": "Orbit plane rotates and gravity vector visibly intensifies downward.",
+        "land": "Gravity returns in clean controlled compression.",
+        "defense": "Orbit nodes become defensive geometry; dodge is local vector displacement."
+      }
+    },
+    "vesper-nyx": {
+      "name": "Vesper Nyx",
+      "title": "The Phase Weaver",
+      "identity": "VIOLET",
+      "primary_hex": "#B73CFF",
+      "physics": {
+        "weight": 88,
+        "run": 266,
+        "dash": 399,
+        "air": 215.6,
+        "jump": 607.6,
+        "fall": 1728
+      },
+      "physics_status": "APPROVED_BASELINE",
+      "archetype": "Phase Trickster",
+      "movement_verbs": [
+        "misdirect",
+        "offset",
+        "vanish",
+        "reappear",
+        "delay",
+        "slip",
+        "fracture"
+      ],
+      "movement_read": {
+        "idle": "Never completely stable; occasional hand ghost, shadow delay or cowl offset.",
+        "walk": "Quiet and predatory; unexpected shoulder/foot leads.",
+        "run": "Path remains readable while exact location feels uncertain.",
+        "dash": "Short phase displacement with competitively readable start/end.",
+        "turnaround": "Brief offset silhouette through the pivot.",
+        "jump": "Low visual effort; double jump is local phase correction.",
+        "air": "Trajectory is honest but secondary geometry suggests adjacent positions.",
+        "fast_fall": "Ghost positions collapse into the lowest trajectory and body follows.",
+        "land": "Feet and ghost geometry arrive slightly out of phase.",
+        "defense": "Minimal guard; dodge is phase slip."
+      }
+    },
+    "yin": {
+      "name": "Yin",
+      "title": "The Infinite Quiet",
+      "identity": "BLACK",
+      "primary_hex": "#0A0A0D",
+      "physics": null,
+      "physics_status": "DESIGN_AUTHORITY_NO_APPROVED_NUMERIC_BASELINE",
+      "archetype": "Cosmic Nullifier / Control",
+      "movement_verbs": [
+        "absorb",
+        "settle",
+        "fold",
+        "collapse",
+        "still",
+        "erase",
+        "draw inward"
+      ],
+      "movement_read": {
+        "idle": "Uses less effort than anyone; unnervingly quiet with almost no secondary motion.",
+        "walk": "Silent and economical.",
+        "run": "Not athletic running; space shortens around Yin.",
+        "dash": "Destination darkens \u2192 distance collapses \u2192 Yin is there. Distinct from Vesper deception.",
+        "turnaround": "Space folds around the pivot; body seems to arrive at the new facing rather than spin.",
+        "jump": "Gravity seems to stop insisting.",
+        "air": "Controlled motion by collapsing path length.",
+        "fast_fall": "Space below compresses and Yin settles into it.",
+        "land": "Almost no impact sound; nearby ambience briefly disappears.",
+        "defense": "Attacks are reduced/absorbed rather than met with brute guard."
+      }
+    },
+    "yang": {
+      "name": "Yang",
+      "title": "The Absolute Radiance",
+      "identity": "WHITE",
+      "primary_hex": "#F7F3E8",
+      "physics": null,
+      "physics_status": "DESIGN_AUTHORITY_NO_APPROVED_NUMERIC_BASELINE",
+      "archetype": "Cosmic Constructor / Control",
+      "movement_verbs": [
+        "emit",
+        "expand",
+        "declare",
+        "construct",
+        "align",
+        "project",
+        "overwrite"
+      ],
+      "movement_read": {
+        "idle": "Exact and intentional; secondary geometry aligns to a perfect internal rhythm.",
+        "walk": "Every step is precise and declared.",
+        "run": "Clean accelerating geometry accompanies motion.",
+        "dash": "Hard-light path manifests before/with motion.",
+        "turnaround": "Body and surrounding construct lines snap into exact new alignment.",
+        "jump": "Light constructs or exact force vector create lift.",
+        "air": "Trajectory is imposed through hard-light geometry.",
+        "fast_fall": "Constructs define a clean downward vector and body follows.",
+        "land": "Space organizes itself into clean geometry.",
+        "defense": "Constructs impose a protective rule/shape rather than simply absorb."
+      }
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "schema": "anime_aggressors_production_gate_matrix_v1",
+  "gates": [
+    {
+      "id": "G0",
+      "name": "DATA COMPLETE",
+      "automation_may_pass": true
+    },
+    {
+      "id": "G1",
+      "name": "RIG COMPLETE",
+      "automation_may_pass": true
+    },
+    {
+      "id": "G2",
+      "name": "STATE COVERAGE COMPLETE",
+      "automation_may_pass": true
+    },
+    {
+      "id": "G3",
+      "name": "MOVE ANIMATION COMPLETE",
+      "automation_may_pass": true
+    },
+    {
+      "id": "G4",
+      "name": "HITBOX / FRAME SYNC COMPLETE",
+      "automation_may_pass": true
+    },
+    {
+      "id": "G5",
+      "name": "VFX / SFX COMPLETE",
+      "automation_may_pass": true
+    },
+    {
+      "id": "G6",
+      "name": "VISUAL READABILITY COMPLETE",
+      "automation_may_pass": false,
+      "requires": "owner/human visual review"
+    },
+    {
+      "id": "G7",
+      "name": "PIXEL PHYSICAL PASS",
+      "automation_may_pass": true,
+      "requires": "connected physical device evidence"
+    },
+    {
+      "id": "G8",
+      "name": "HUMAN FEEL PASS",
+      "automation_may_pass": false
+    },
+    {
+      "id": "G9",
+      "name": "FINAL ART APPROVED",
+      "automation_may_pass": false
+    }
+  ],
+  "truth_rule": "No lower gate implies a higher gate."
+}

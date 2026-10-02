@@ -31,7 +31,7 @@ CAPTURE_SPEC = [
     {"label": "ember_throw_forward", "gameplay_move_id": "throw_forward", "active_clip": "throw_forward"},
     {"label": "ember_throw_back", "gameplay_move_id": "throw_back", "active_clip": "throw_back"},
     {"label": "ember_aura_charge", "gameplay_move_id": "aura_charge", "active_clip": "aura_charge"},
-    {"label": "ember_flare_step_rush", "gameplay_move_id": "aura_burst", "active_clip": "signature_lane_burst"},
+    {"label": "ember_flare_step_rush", "gameplay_move_id": "aura_burst", "active_clip": "aura_burst"},
     {"label": "ember_feint_slide", "gameplay_move_id": "side_special", "active_clip": "signature_lane_feint"},
     {"label": "ember_ash_trap_coil", "gameplay_move_id": "down_special", "active_clip": "signature_lane_trap"},
     {"label": "ember_recovery", "gameplay_move_id": "up_special_recovery", "active_clip": "recovery"},

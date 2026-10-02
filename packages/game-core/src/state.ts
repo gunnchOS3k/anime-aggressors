@@ -20,6 +20,7 @@ import { getFighterProfile, applyCreatedFighterToPlayer } from "./fighterCreatio
 import { createDefaultAuraState } from "./aura/auraTypes.js";
 import { defaultMovementState } from "./movement/movementTypes.js";
 import { DEFAULT_RULESET, type TeamMode } from "./rulesets.js";
+import { normalizeBodyVariant } from "./bodyVariant.js";
 
 function teamIdForSeat(mode: TeamMode, seat: number, _playerCount: number): number {
   if (mode === "2v2") return seat < 2 ? 0 : 1;
@@ -45,6 +46,8 @@ export function createInitialGameState(config: GameConfig): GameState {
     const player: PlayerState = {
       id: i,
       characterId: charId,
+      // Presentation-only; combat never reads bodyVariant.
+      bodyVariant: normalizeBodyVariant(config.bodyVariants?.[i] ?? "male"),
       fighterName: fighter.name,
       fighterSize: fighter.size,
       fighterColor: fighter.color,

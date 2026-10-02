@@ -4,7 +4,7 @@ import { DEFAULT_FIGHTERS } from "@anime-aggressors/game-core";
 
 describe("default fighters web contract", () => {
   it("exports seven fighters with ROYGBIV colors once each", () => {
-    assert.equal(DEFAULT_FIGHTERS.length, 7);
+    assert.equal(DEFAULT_FIGHTERS.length, 9);
     const colors = DEFAULT_FIGHTERS.map((f) => f.color);
     assert.equal(new Set(colors).size, 7);
   });

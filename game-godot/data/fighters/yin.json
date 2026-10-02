@@ -1,0 +1,74 @@
+{
+  "id": "yin",
+  "displayName": "Yin",
+  "archetype": "Cosmic Nullifier / Control",
+  "element": "reduction",
+  "size": "medium",
+  "color": "#0A0A0D",
+  "auraColor": "#F7F3E8",
+  "weight": 110,
+  "runSpeed": 250,
+  "dashSpeed": 380,
+  "airSpeed": 210,
+  "jumpStrength": 600,
+  "fallSpeed": 1750,
+  "maxJumps": 2,
+  "damageTakenMult": 1,
+  "damageDealtMult": 1,
+  "shieldHealthMult": 1,
+  "signatureMove": "Cinder Rush",
+  "combatTag": "burn_rushdown",
+  "defaultSkin": "procedural_final_ember-vale",
+  "animationManifestPath": "res://data/fighters/ember-vale_animations.json",
+  "moveListPath": "res://data/moves/ember-vale.json",
+  "hitHurtProfile": {
+    "hurtboxWidth": 40,
+    "hurtboxHeight": 48,
+    "hitboxScale": 1.0
+  },
+  "shieldProfile": {
+    "maxHealth": 100,
+    "decayPerSecond": 18,
+    "stunMult": 1
+  },
+  "cpuBehaviorTags": [
+    "rushdown",
+    "approach"
+  ],
+  "productionStatus": "TUNING_CANDIDATE",
+  "modelTier": "original_rigged_procedural_final_3d",
+  "portraitPlaceholder": "res://assets/ui/placeholders/fighter_ember-vale.svg",
+  "modelPath": "res://assets/characters/procedural_final/ember-vale.glb",
+  "authorship": {
+    "status": "TUNING_CANDIDATE",
+    "note": "Numeric baselines intentionally not owner-approved; do not treat as balance canon."
+  },
+  "balancePath": "res://data/balance/ember-vale.json",
+  "game001": {
+    "identity_depth": "PASS_DATA",
+    "h2h_string_count": 3,
+    "balance_schema": "game001_fighter_balance/v1"
+  },
+  "owner_approved": false,
+  "physics_status": "TUNING_CANDIDATE",
+  "YIN_PLAYABLE_TUNING": "REQUIRES_HUMAN",
+  "gameplay_contracts": {
+    "COSMIC_BOSS_VERSION": {
+      "status": "ARCHITECTURE_ONLY",
+      "owner_approved": false
+    },
+    "PLAYABLE_BALANCED_VERSION": {
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false
+    }
+  },
+  "motion_law": "reduction",
+  "title": "The Infinite Quiet",
+  "playable_tuning_status": "TUNING_CANDIDATE",
+  "seed_color": "#F7F3E8",
+  "body_variants": [
+    "male",
+    "female"
+  ],
+  "unlock_rule": "seven_gray_routes_or_dev_override"
+}

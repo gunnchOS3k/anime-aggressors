@@ -21,6 +21,9 @@ export type RoomPhase =
 
 export type AuthorityMode = "HOST_AUTHORITATIVE_PARTY" | "DETERMINISTIC_ROLLBACK";
 
+/** Presentation-only; combat authority ignores body_variant. */
+export type FighterBodyVariant = "male" | "female";
+
 export type TeamAssignment =
   | { mode: "FFA" }
   | { mode: "2v2"; teamId: 0 | 1 }
@@ -33,16 +36,23 @@ export type PlayerSeat = {
   state: SeatState;
   participantId: string | null;
   fighterId: string | null;
+  /** Presentation-only dual-form body. Combat sim ignores this. */
+  bodyVariant: FighterBodyVariant | null;
   displayName: string | null;
   team: TeamAssignment | null;
   identity: DuplicateFighterIdentity | null;
 };
 
 export type DuplicateFighterIdentity = {
+  bodyVariant: FighterBodyVariant;
   paletteIndex: number;
   outlineColor: string;
   badgeLabel: string;
   hudColor: string;
+  /** Small aura-ring / trim accent — not a full mesh palette swap. */
+  auraRingColor: string;
+  /** True when >2 seats share the same fighter_id (accent-only differentiation). */
+  accentOnly: boolean;
   nameSuffix: string;
 };
 
@@ -139,6 +149,7 @@ export type PublicGameState = {
     seatIndex: number;
     displayName: string;
     fighterId: string | null;
+    bodyVariant?: FighterBodyVariant | null;
     stocks?: number;
     damage?: number;
     place?: number;
@@ -172,6 +183,7 @@ export type PublicRoomView = {
     state: SeatState;
     displayName: string | null;
     fighterId: string | null;
+    bodyVariant: FighterBodyVariant | null;
   }>;
   spectatorCount: number;
   maxPlayerSeats: number;

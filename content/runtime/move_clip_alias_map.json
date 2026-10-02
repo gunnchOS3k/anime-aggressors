@@ -1,7 +1,7 @@
 {
-  "schema": "move_clip_alias_map_v1",
-  "wave": "v3",
-  "notes": "V3 dedicated clips for dash_attack/side_special/down_special/aura_burst. Wave016 shared-proxy shares removed.",
+  "schema": "move_clip_alias_map_v1_authority",
+  "wave": "animation_authority_v1",
+  "notes": "Animation Authority V1: state_to_clip prefers exact authority slots. back_air retained. Procedural clips are continuity only.",
   "move_id_to_clip": {
     "jab_1": "jab",
     "jab_2": "jab_chain_2",
@@ -57,7 +57,22 @@
     "throw": "throw_forward",
     "dash_attack": "dash_attack",
     "side_special": "side_special",
-    "down_special": "down_special"
+    "down_special": "down_special",
+    "idle_primary": "idle_primary",
+    "run_loop": "run_loop",
+    "double_jump": "double_jump",
+    "fast_fall": "fast_fall",
+    "hurt_light_front": "hurt_light_front",
+    "hitstun_ground": "hitstun_ground",
+    "land_soft": "land_soft",
+    "land_hard": "land_hard",
+    "skid": "skid",
+    "turnaround": "turnaround",
+    "edge_warning": "edge_warning",
+    "ledge_teeter": "ledge_teeter",
+    "shield_break": "shield_break",
+    "shield_stun": "shield_stun",
+    "hitstop_pose": "hitstop_pose"
   },
   "deliberate_shares": [],
   "design_only_clips": [
@@ -75,40 +90,101 @@
     "4": "projectile_full"
   },
   "state_to_clip": {
-    "walk": "walk",
-    "run": "run",
-    "dash": "dash",
-    "jump": "jump_rise",
-    "jump_squat": "jump_start",
-    "double_jump": "jump",
+    "idle": "idle_primary",
+    "walk": "walk_loop",
+    "run": "run_loop",
+    "dash": "dash_loop",
+    "skid": "skid",
+    "turnaround": "turnaround",
+    "jump_squat": "jump_squat",
+    "jump": "jump",
+    "double_jump": "double_jump",
     "fall": "fall",
-    "fast_fall": "fall",
-    "tumble": "tumble",
-    "land": "land",
+    "fast_fall": "fast_fall",
+    "land": "land_soft",
     "shield_start": "shield_start",
     "shield_hold": "shield_hold",
-    "shield_stun": "shield",
-    "grab_startup": "grab",
-    "grab_active": "grab",
-    "grab_hold": "grab_hold",
-    "dodge_start": "dodge_forward",
-    "dodge_active": "dodge",
-    "dodge_recovery": "dodge",
-    "air_dodge": "air_dodge",
+    "shield_stun": "shield_stun",
+    "shield_break": "shield_break",
+    "dodge_start": "spot_dodge",
+    "dodge_active": "spot_dodge",
+    "dodge_recovery": "spot_dodge",
+    "air_dodge": "air_dodge_neutral",
     "aura_charge": "aura_charge",
     "aura_ready": "aura_ready",
-    "hurt_light": "hurt_light",
+    "aura_burst_startup": "aura_burst_startup",
+    "aura_burst_active": "aura_burst_active",
+    "aura_burst_recovery": "aura_burst_recovery",
+    "aura_burst": "aura_burst_active",
+    "hurt_light": "hurt_light_front",
     "hurt_heavy": "hurt_heavy",
-    "hitstun": "hurt",
-    "launched": "critical_launch",
+    "hitstop": "hitstop_pose",
+    "hitstun": "hitstun_ground",
+    "launched": "launch_horizontal",
+    "tumble": "tumble",
     "ko": "ko",
     "victory": "victory",
     "defeat": "defeat",
-    "idle": "idle",
-    "turnaround": "turn",
     "ledge_hang": "ledge_hang",
     "ledge_getup": "ledge_getup",
+    "edge_warning": "edge_warning",
+    "ledge_teeter": "ledge_teeter",
     "respawn": "respawn",
-    "aura_burst": "aura_burst"
+    "grab_startup": "grab_startup",
+    "grab_active": "grab_active",
+    "grab_whiff": "grab_whiff",
+    "grab_hold": "grab_hold"
+  },
+  "authority_resolution_order": [
+    "exact_move_clip",
+    "exact_state_clip",
+    "documented_semantic_alias",
+    "temporary_fallback"
+  ],
+  "documented_semantic_aliases": {
+    "short_hop_visual": {
+      "alias_of": "jump",
+      "justification": "Inventory may_alias=true; short hop is jump with reduced visual amplitude."
+    },
+    "edge_warning": {
+      "alias_of": "ledge_teeter",
+      "justification": "Shared teeter warning pose; inventory-adjacent ledge warning family."
+    },
+    "air_dodge_forward": {
+      "alias_of": "air_dodge_neutral",
+      "justification": "Inventory may_alias=true; directional air dodge parameterized from neutral with forward bias."
+    },
+    "air_dodge_back": {
+      "alias_of": "air_dodge_neutral",
+      "justification": "Inventory may_alias=true; directional air dodge parameterized from neutral with back bias."
+    },
+    "air_dodge_up": {
+      "alias_of": "air_dodge_neutral",
+      "justification": "Inventory may_alias=true; directional air dodge parameterized from neutral with up bias."
+    },
+    "air_dodge_down": {
+      "alias_of": "air_dodge_neutral",
+      "justification": "Inventory may_alias=true; directional air dodge parameterized from neutral with down bias."
+    },
+    "hurt_light_back": {
+      "alias_of": "hurt_light_front",
+      "justification": "Inventory may_alias=true; rear hurt is mirrored front light-hurt presentation."
+    },
+    "throw_startup": {
+      "alias_of": "grab_hold",
+      "justification": "Inventory may_alias=true; throw startup reuses grab-hold commit before release branch."
+    },
+    "throw_release": {
+      "alias_of": "throw_forward",
+      "justification": "Inventory may_alias=true; generic release aliases to forward throw release unless direction specified."
+    },
+    "story_dialogue_neutral": {
+      "alias_of": "idle_primary",
+      "justification": "Inventory may_alias=true; dialogue neutral reuses idle_primary presentation hold."
+    },
+    "story_dialogue_intense": {
+      "alias_of": "aura_ready",
+      "justification": "Inventory may_alias=true; intense dialogue reuses aura_ready tension posture."
+    }
   }
 }

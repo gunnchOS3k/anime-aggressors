@@ -12,8 +12,9 @@ import {
 
 describe("default fighter roster", () => {
   it("includes seven original ROYGBIV fighters", () => {
-    assert.equal(DEFAULT_FIGHTERS.length, 7);
-    assert.equal(DEFAULT_FIGHTER_ROSTER.length, 7);
+    assert.equal(DEFAULT_FIGHTERS.length, 9);
+    assert.equal(DEFAULT_FIGHTERS.filter((f) => !["yin","yang"].includes(f.id)).length, 7);
+    assert.equal(DEFAULT_FIGHTER_ROSTER.length, 9);
   });
 
   it("represents each ROYGBIV color once", () => {
@@ -28,7 +29,7 @@ describe("default fighter roster", () => {
     assert.ok(sizes.includes("medium"));
     assert.ok(sizes.includes("large"));
     assert.equal(sizes.filter((s) => s === "small").length, 2);
-    assert.equal(sizes.filter((s) => s === "medium").length, 3);
+    assert.equal(sizes.filter((s) => s === "medium").length, 5);
     assert.equal(sizes.filter((s) => s === "large").length, 2);
   });
 
@@ -47,10 +48,12 @@ describe("default fighter roster", () => {
     assert.equal(getDefaultCreatedFighter(1).name, "Rook Ironside");
     assert.equal(getDefaultCreatedFighter(6).name, "Vesper Nyx");
     assert.equal(getDefaultCreatedFighter(6).size, "small");
+    assert.equal(getDefaultCreatedFighter(7).name, "Yin");
+    assert.equal(getDefaultCreatedFighter(8).name, "Yang");
   });
 
   it("getAllDefaultCreatedFighters returns full roster", () => {
-    assert.equal(getAllDefaultCreatedFighters().length, 7);
+    assert.equal(getAllDefaultCreatedFighters().length, 9);
   });
 
   it("maps legacy default ids to new roster ids", () => {

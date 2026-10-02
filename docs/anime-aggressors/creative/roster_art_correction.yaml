@@ -1,0 +1,85 @@
+# SUPERSEDED ON CONFLICT by authority_pack_v1/MODEL_ROSTER_AUTHORITY.json
+# and authority_pack_v1/01_FULL_ROSTER_ART_CORRECTION_DIRECTION.md.
+# Do not implement mesh lists from this file. See AUTHORITY_RECONCILIATION.md.
+# Prior doctrine only. HUMAN_ART_APPROVAL=false. MERGE_AUTHORIZED=false.
+# Doctrine spec. Not runtime evidence.
+# HUMAN_ART_APPROVAL: false
+# Source boards: V4.5 cartoon study, arcade animation study, spectrum sheets, fight move sheet.
+# Runtime observed: d94bc095 block candidates and older chibi cards. Unacceptable as the endpoint.
+
+status: doctrine
+human_art_approval: false
+merge_authorized: false
+
+quality_bands:
+  unacceptable: current player-facing meshes
+  prototype: color-only or routing-only
+  near_ship: board-faithful mesh at match camera
+  none_are_near_ship: true
+
+retire_from_player_facing:
+  - kaykit_hat_chibi
+  - vesper_purple_skull_as_base
+  - yang_white_mannequin
+  - v16_box_bodies
+  - speck_match_scale
+
+fighters:
+  - id: ember-vale
+    title: The Living Flame
+    element: combustion
+    archetype: rushdown
+    current: unacceptable_hat_chibi
+    forms: [base_male, base_female, black_puppet, white_puppet]
+  - id: rook-ironside
+    title: The Walking Bastion
+    element: mass
+    archetype: grappler
+    current: unacceptable_toy
+    forms: [base_male, base_female, black_puppet, white_puppet]
+  - id: juno-spark
+    title: The Arc Courier
+    element: lightning
+    archetype: speed
+    current: unacceptable_toy
+    forms: [base_male, base_female, black_puppet, white_puppet]
+  - id: kaia-windrow
+    title: The Skyflow Duelist
+    element: wind
+    archetype: aerial
+    current: prototype_green_blocks
+    priority: true
+    forms: [base_male, base_female, essence_1, essence_2, essence_4, prismatic_gray, black_puppet, white_puppet]
+  - id: nix-calder
+    title: The Crystal Tactician
+    element: ice
+    archetype: control
+    current: unacceptable_toy
+    forms: [base_male, base_female, black_puppet, white_puppet]
+  - id: orion-vell
+    title: The Orbital Marshal
+    element: gravity
+    archetype: setup
+    current: unacceptable_orb_toy
+    forms: [base_male, base_female, black_puppet, white_puppet]
+  - id: vesper-nyx
+    title: The Phase Weaver
+    element: phase
+    archetype: trickster
+    current: unacceptable_purple_skull
+    priority: true
+    forms: [base_male, base_female, black_puppet, white_puppet]
+  - id: yin
+    title: The Inward Collapse
+    element: reduction
+    archetype: null
+    current: prototype_gray_blocks
+    priority: true
+    forms: [base_male, base_female, deeper_quiet]
+  - id: yang
+    title: The Outward Expansion
+    element: definition
+    archetype: radiance
+    current: prototype_white_gold_blocks
+    priority: true
+    forms: [base_male, base_female, deeper_order]

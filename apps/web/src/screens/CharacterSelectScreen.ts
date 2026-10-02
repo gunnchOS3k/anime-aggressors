@@ -1,4 +1,4 @@
-import type { CreatedFighter } from "@anime-aggressors/game-core";
+import type { CreatedFighter, FighterBodyVariant } from "@anime-aggressors/game-core";
 import { SIZE_STATS, getDefaultFighterProfile, normalizeDefaultFighterId } from "@anime-aggressors/game-core";
 import { APP_ROUTES, navigateToHash } from "../routes.js";
 import { loadMatchSetup, saveMatchSetup } from "../match/matchSetupSession.js";
@@ -10,6 +10,7 @@ import {
   selectFighterForActivePlayer,
   setActivePlayer,
   setFocusedFighter,
+  setPendingBodyVariant,
 } from "../characterSelect/characterSelectState.js";
 import { renderCharacterGrid, navigateGrid } from "../ui/CharacterGrid.js";
 import { renderPlayerSelectionPanel } from "../ui/PlayerSelectionPanel.js";
@@ -22,6 +23,8 @@ import { saveDerbySetup } from "../modes/impactDummyDerbySetup.ts";
 export type CharacterSelectResult = {
   p1: CreatedFighter;
   p2: CreatedFighter;
+  p1BodyVariant: FighterBodyVariant;
+  p2BodyVariant: FighterBodyVariant;
 };
 
 export type CharacterSelectOptions = {
@@ -67,12 +70,24 @@ function disposePreview(): void {
   previewRenderer = null;
 }
 
+function renderBodyVariantToggle(active: FighterBodyVariant): string {
+  return `
+    <div class="cs-body-variant" role="group" aria-label="Body presentation">
+      <button type="button" id="cs-variant-male" class="cs-variant-btn ${active === "male" ? "cs-variant-btn--active" : ""}" data-body-variant="male">Male</button>
+      <button type="button" id="cs-variant-female" class="cs-variant-btn ${active === "female" ? "cs-variant-btn--active" : ""}" data-body-variant="female">Female</button>
+    </div>
+    <p class="cs-variant-hint">Choose fighter → choose Male / Female → lock in. Same kit &amp; animation for both.</p>
+  `;
+}
+
 export function mountCharacterSelectScreen(root: HTMLElement, options: CharacterSelectOptions): void {
   const setup = loadMatchSetup();
   const roster = buildSelectableRoster();
   const initialP1 = setup.fighters.find((f) => f.playerId === 0)?.fighter ?? null;
   const initialP2 = setup.fighters.find((f) => f.playerId === 1)?.fighter ?? null;
-  let state = createCharacterSelectState(roster, initialP1, initialP2);
+  const initialP1Variant = setup.fighters.find((f) => f.playerId === 0)?.bodyVariant ?? "male";
+  const initialP2Variant = setup.fighters.find((f) => f.playerId === 1)?.bodyVariant ?? "female";
+  let state = createCharacterSelectState(roster, initialP1, initialP2, initialP1Variant, initialP2Variant);
 
   const variant = options.variant ?? "match";
   const isDerby = variant === "derby";
@@ -92,13 +107,14 @@ export function mountCharacterSelectScreen(root: HTMLElement, options: Character
       body: `
         <div class="${ARENA_CLASSES.characterSelectLayout} cs-layout character-select-layout ${isDerby ? "cs-layout--derby" : ""}">
           <aside class="cs-side cs-side--left">
-            ${renderPlayerSelectionPanel(0, state.p1, state.activePlayer === 0)}
+            ${renderPlayerSelectionPanel(0, state.p1.fighter, state.activePlayer === 0, state.p1.bodyVariant)}
           </aside>
           <main class="cs-main">
             ${renderFighterPreviewPanel(focused)}
+            ${renderBodyVariantToggle(state.pendingBodyVariant)}
             ${renderCharacterGrid({ roster, state })}
           </main>
-          ${isDerby ? `<aside class="cs-side cs-side--right cs-side--derby-hint"><p class="cs-derby-hint">Single fighter · No P2 required</p></aside>` : `<aside class="cs-side cs-side--right">${renderPlayerSelectionPanel(1, state.p2, state.activePlayer === 1)}</aside>`}
+          ${isDerby ? `<aside class="cs-side cs-side--right cs-side--derby-hint"><p class="cs-derby-hint">Single fighter · No P2 required</p></aside>` : `<aside class="cs-side cs-side--right">${renderPlayerSelectionPanel(1, state.p2.fighter, state.activePlayer === 1, state.p2.bodyVariant)}</aside>`}
         </div>
       `,
       footer: {
@@ -114,6 +130,15 @@ export function mountCharacterSelectScreen(root: HTMLElement, options: Character
     const canvas = root.querySelector("#cs-preview-canvas") as HTMLCanvasElement | null;
     syncPreview(canvas, focused, "hover");
 
+    root.querySelectorAll("[data-body-variant]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const v = (btn as HTMLElement).dataset.bodyVariant as FighterBodyVariant;
+        state = setPendingBodyVariant(state, v);
+        playMenuBlip("hover");
+        render();
+      });
+    });
+
     root.querySelectorAll(".cs-tile").forEach((tile) => {
       const id = (tile as HTMLElement).dataset.fighterId!;
       const fighter = roster.find((f) => f.id === id)!;
@@ -125,18 +150,18 @@ export function mountCharacterSelectScreen(root: HTMLElement, options: Character
         syncPreview(liveCanvas, fighter, "hover");
         root.querySelectorAll(".cs-tile").forEach((t) => t.classList.remove("cs-tile--focus"));
         tile.classList.add("cs-tile--focus");
-        updatePreviewInfo(root, fighter);
+        updatePreviewInfo(root, fighter, state.pendingBodyVariant);
       });
 
       tile.addEventListener("focus", () => {
         state = setFocusedFighter(state, id);
         const liveCanvas = root.querySelector("#cs-preview-canvas") as HTMLCanvasElement | null;
         syncPreview(liveCanvas, fighter, "hover");
-        updatePreviewInfo(root, fighter);
+        updatePreviewInfo(root, fighter, state.pendingBodyVariant);
       });
 
       tile.addEventListener("click", () => {
-        state = selectFighterForActivePlayer(state, fighter);
+        state = selectFighterForActivePlayer(state, fighter, state.pendingBodyVariant);
         playMenuBlip("select");
         const liveCanvas = root.querySelector("#cs-preview-canvas") as HTMLCanvasElement | null;
         syncPreview(liveCanvas, fighter, "select");
@@ -168,24 +193,47 @@ export function mountCharacterSelectScreen(root: HTMLElement, options: Character
     });
 
     root.querySelector("#cs-continue")?.addEventListener("click", () => {
-      if (!isCharacterSelectReady(state, variant) || !state.p1) return;
-      if (!isDerby && !state.p2) return;
+      if (!isCharacterSelectReady(state, variant) || !state.p1.fighter) return;
+      if (!isDerby && !state.p2.fighter) return;
       playMenuBlip("confirm");
       if (isDerby) {
         disposePreview();
-        options.onContinue({ p1: state.p1, p2: state.p2 ?? state.p1 });
+        options.onContinue({
+          p1: state.p1.fighter,
+          p2: state.p2.fighter ?? state.p1.fighter,
+          p1BodyVariant: state.p1.bodyVariant,
+          p2BodyVariant: state.p2.bodyVariant,
+        });
         return;
       }
-      const p2 = state.p2!;
+      const p1 = state.p1.fighter!;
+      const p2 = state.p2.fighter!;
       saveMatchSetup({
         ...setup,
         fighters: [
-          { playerId: 0, fighterId: state.p1.id, fighter: state.p1 },
-          { playerId: 1, fighterId: p2.id, fighter: p2 },
+          {
+            playerId: 0,
+            fighterId: p1.id,
+            fighter: p1,
+            bodyVariant: state.p1.bodyVariant,
+            seatId: 0,
+          },
+          {
+            playerId: 1,
+            fighterId: p2.id,
+            fighter: p2,
+            bodyVariant: state.p2.bodyVariant,
+            seatId: 1,
+          },
         ],
       });
       disposePreview();
-      options.onContinue({ p1: state.p1, p2 });
+      options.onContinue({
+        p1,
+        p2,
+        p1BodyVariant: state.p1.bodyVariant,
+        p2BodyVariant: state.p2.bodyVariant,
+      });
     });
   };
 
@@ -197,11 +245,21 @@ export function mountCharacterSelectScreen(root: HTMLElement, options: Character
     else if (e.key === "ArrowLeft" || e.key === "a") nextId = navigateGrid(roster, focusedId, -1, 0);
     else if (e.key === "ArrowDown" || e.key === "s") nextId = navigateGrid(roster, focusedId, 0, 1);
     else if (e.key === "ArrowUp" || e.key === "w") nextId = navigateGrid(roster, focusedId, 0, -1);
-    else if (e.key === "Enter" || e.key === " ") {
+    else if (e.key === "m" || e.key === "M") {
+      state = setPendingBodyVariant(state, "male");
+      playMenuBlip("hover");
+      render();
+      return;
+    } else if (e.key === "f" || e.key === "F") {
+      state = setPendingBodyVariant(state, "female");
+      playMenuBlip("hover");
+      render();
+      return;
+    } else if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       const fighter = roster.find((f) => f.id === focusedId);
       if (fighter) {
-        state = selectFighterForActivePlayer(state, fighter);
+        state = selectFighterForActivePlayer(state, fighter, state.pendingBodyVariant);
         playMenuBlip("select");
         render();
       }
@@ -221,7 +279,7 @@ export function mountCharacterSelectScreen(root: HTMLElement, options: Character
     const fighter = roster.find((f) => f.id === nextId)!;
     const canvas = root.querySelector("#cs-preview-canvas") as HTMLCanvasElement | null;
     syncPreview(canvas, fighter, "hover");
-    updatePreviewInfo(root, fighter);
+    updatePreviewInfo(root, fighter, state.pendingBodyVariant);
     root.querySelectorAll(".cs-tile").forEach((t) => {
       t.classList.toggle("cs-tile--focus", (t as HTMLElement).dataset.fighterId === nextId);
     });
@@ -230,7 +288,7 @@ export function mountCharacterSelectScreen(root: HTMLElement, options: Character
   render();
 }
 
-function updatePreviewInfo(root: HTMLElement, fighter: CreatedFighter): void {
+function updatePreviewInfo(root: HTMLElement, fighter: CreatedFighter, bodyVariant: FighterBodyVariant): void {
   const info = root.querySelector(".cs-preview-info");
   if (!info) return;
   const profile = getDefaultFighterProfile(normalizeDefaultFighterId(fighter.id));
@@ -238,7 +296,7 @@ function updatePreviewInfo(root: HTMLElement, fighter: CreatedFighter): void {
   info.classList.remove("cs-preview-info--empty");
   info.innerHTML = `
     <h3 class="cs-preview-name">${fighter.name.toUpperCase()}</h3>
-    <p class="cs-preview-element">${profile ? `${profile.elementName} / ${sizeLabel}` : `${fighter.color} / ${sizeLabel}`}</p>
+    <p class="cs-preview-element">${profile ? `${profile.elementName} / ${sizeLabel}` : `${fighter.color} / ${sizeLabel}`} · ${bodyVariant}</p>
     <p class="cs-preview-archetype">${profile?.archetype ?? "Custom Fighter"}</p>
     <p class="cs-preview-signature">Signature: ${profile?.signatureMoveName ?? "Custom Combo"}</p>
     <p class="cs-preview-tagline">"${profile?.shortTagline ?? "Ready for battle."}"</p>`;

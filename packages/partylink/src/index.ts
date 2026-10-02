@@ -21,7 +21,7 @@ export {
   createSessionId,
 } from "./identity.js";
 
-export { assignDuplicateIdentity, identityPass } from "./duplicateIdentity.js";
+export { assignDuplicateIdentity, identityPass, allocatePreferredBodyVariant, partyDuplicateAllocationSafe } from "./duplicateIdentity.js";
 export { frameAllFighters, arenaViewHudSlots } from "./arenaCamera.js";
 export type { FighterPos, ArenaCameraFrame, ArenaCameraConfig } from "./arenaCamera.js";
 

@@ -31,7 +31,7 @@ GOLDEN = [
     ("up_special_recovery", "recovery"),
     ("down_special", "down_special"),
     ("grab", "grab"),
-    ("aura_burst", "signature_lane_burst"),
+    ("aura_burst", "aura_burst"),
 ]
 
 
@@ -58,8 +58,14 @@ def main() -> int:
         "orion-vell",
         "vesper-nyx",
     ]
-    if table.get("aura_burst") != "signature_lane_burst":
-        errors.append("aura_burst must route to signature_lane_burst (not idle/generic jab)")
+    if table.get("aura_burst") != "aura_burst":
+        errors.append("aura_burst must route to dedicated aura_burst clip (Wave016 / Animation Authority V1.1)")
+    # signature_lane_burst remains separate choreography content, not the aura_burst move binding.
+    if table.get("signature_lane_burst") not in (None, "signature_lane_burst") and table.get("signature_lane_burst") == "aura_burst":
+        errors.append("signature_lane_burst must remain a distinct choreography identity")
+    if "signature_lane_burst" not in table:
+        # Accept either explicit identity or absence as long as aura_burst is dedicated.
+        pass
     for move_id, expect in GOLDEN:
         mapped = str(table.get(move_id, ""))
         if expect.endswith("_"):

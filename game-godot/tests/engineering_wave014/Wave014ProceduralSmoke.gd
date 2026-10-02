@@ -25,6 +25,7 @@ func _run() -> void:
 	var models_loaded := 0
 	var anim_roots := 0
 	var visible_procedural := 0
+	var golden_slice := 0
 	var observed_truth: Dictionary = {}
 
 	if resolver:
@@ -45,10 +46,13 @@ func _run() -> void:
 			root.add_child(model)
 			var data := _DataLoader.load_fighter(fighter_id)
 			if model.configure(data):
-				if model.is_procedural_proxy_visible():
+				var flags: Dictionary = model.truth_flags() if model.has_method("truth_flags") else {}
+				observed_truth[fighter_id] = flags
+				if str(flags.get("CURRENT_MODEL_SOURCE", "")) == "GOLDEN_SLICE_CANDIDATE":
+					if bool(flags.get("VISIBLE_SKELETON_PRESENT", false)) and int(flags.get("VISIBLE_RUNTIME_ANIMATION_CONTROLLERS_PER_FIGHTER", 0)) == 1 and bool(flags.get("FINAL_CHARACTER_ART_PASS", true)) == false:
+						golden_slice += 1
+				elif model.is_procedural_proxy_visible():
 					visible_procedural += 1
-				if model.has_method("truth_flags"):
-					observed_truth[fighter_id] = model.truth_flags()
 			model.queue_free()
 			await process_frame
 
@@ -58,9 +62,10 @@ func _run() -> void:
 	if anim_roots < 7:
 		ok = false
 		reasons.append("anim_roots=%d" % anim_roots)
-	if visible_procedural < 7:
+	# Authority mixed state: Kaia golden slice, the other six stay procedural proxies.
+	if visible_procedural != 6 or golden_slice != 1:
 		ok = false
-		reasons.append("visible_procedural=%d" % visible_procedural)
+		reasons.append("mixed_state procedural=%d golden=%d" % [visible_procedural, golden_slice])
 
 	for lab in [
 		"res://scenes/labs/RosterArtLab.tscn",
@@ -75,8 +80,10 @@ func _run() -> void:
 		"ok": ok,
 		"reasons": reasons,
 		"ROSTER_ARTLAB_REAL_PROCEDURAL_MODELS": visible_procedural,
+		"KAIA_GOLDEN_SLICE_COUNT": golden_slice,
+		"AUTHORITY_MIXED_GOLDEN_SLICE": visible_procedural == 6 and golden_slice == 1,
 		"ANIMATION_LAB_USES_CANONICAL_RUNTIME_CONTROLLER": ok,
-		"PROCEDURAL_CHARACTER_RUNTIME_PASS": visible_procedural == 7,
+		"PROCEDURAL_CHARACTER_RUNTIME_PASS": false,
 		"PROCEDURAL_RUNTIME_ANIMATION_PASS": anim_roots == 7,
 		"FINAL_CHARACTER_ART_PASS": false,
 		"FINAL_HUMAN_AUTHORED_ANIMATION_PASS": false,

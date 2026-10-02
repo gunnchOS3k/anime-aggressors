@@ -17,7 +17,7 @@ const CTX_TRAINING := "TRAINING"
 
 ## VXP-2.2 human feedback: battle bodies must fit platform spacing / ledge recovery.
 ## Select/preview stay larger for readability; battle is deliberately smaller.
-const BATTLE_DISPLAY_SCALE := Vector2(0.58, 0.58)
+const BATTLE_DISPLAY_SCALE := Vector2(0.68, 0.68)
 const SELECT_PREVIEW_DISPLAY_SCALE := Vector2(1.35, 1.35)
 const MOVE_PREVIEW_DISPLAY_SCALE := Vector2(1.05, 1.05)
 const VICTORY_DISPLAY_SCALE := Vector2(1.2, 1.2)
@@ -60,8 +60,11 @@ static func battle_context_for_slot(slot: int, is_cpu: bool) -> String:
 	return CTX_BATTLE_P1 if slot == 1 else CTX_BATTLE_P2_CPU
 
 
-static func cache_key(fighter_id: String, context: String) -> String:
-	return "%s::%s" % [fighter_id, normalize_context(context)]
+static func cache_key(fighter_id: String, context: String, body_variant: String = "") -> String:
+	var ctx := normalize_context(context)
+	if body_variant == "male" or body_variant == "female":
+		return "%s::%s::%s" % [fighter_id, body_variant, ctx]
+	return "%s::%s" % [fighter_id, ctx]
 
 
 static func display_contract(context: String) -> Dictionary:

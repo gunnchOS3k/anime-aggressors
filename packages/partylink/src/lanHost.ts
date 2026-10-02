@@ -178,7 +178,7 @@ export async function startLanPartyHost(opts: LanHostOptions): Promise<LanHostHa
         sendJson(
           res,
           200,
-          session.setFighter(String(body.participantId), String(body.token), String(body.fighterId ?? "ember")),
+          session.setFighter(String(body.participantId), String(body.token), String(body.fighterId ?? "ember"), body.bodyVariant === "female" || body.bodyVariant === "male" ? body.bodyVariant : null),
         );
         return;
       }

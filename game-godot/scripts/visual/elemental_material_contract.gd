@@ -237,6 +237,8 @@ static func _apply_recursive(
 		var detail_tex: Texture2D = _extract_detail_texture(source)
 		var role := _mesh_role(mesh)
 		var body := core
+		if role == "face" and source is StandardMaterial3D:
+			body = (source as StandardMaterial3D).albedo_color
 		var struct_col := structure
 		var accent_col := accent
 		if charged > 0.35:
@@ -321,6 +323,9 @@ static func _mesh_role(mesh: MeshInstance3D) -> String:
 	for key in ["glove", "gauntlet", "boot", "shoe", "chest", "armor", "plate", "pauldron", "helm", "belt"]:
 		if token.contains(key):
 			return "armor"
+	for key in ["eye", "pupil", "mouth", "brow", "nose", "face"]:
+		if token.contains(key):
+			return "face"
 	for key in ["crown", "crest", "crystal", "halo", "scarf", "ribbon", "arc", "orbit"]:
 		if token.contains(key):
 			return "accent"

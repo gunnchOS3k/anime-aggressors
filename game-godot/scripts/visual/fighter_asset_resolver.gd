@@ -24,6 +24,17 @@ const CLASS_RESEARCH := "RESEARCH_ONLY"
 ## Salvage invariant: PR #106 generated roster never ships from this branch.
 const PR106_GENERATED_ROSTER_NOT_SHIPPING := true
 
+## V4 dual-form presentation binding. Collision/hitboxes stay on canonical fighter_id.
+## Animation actions remain under art_source/animation/fighters/<id>/ — not duplicated per variant.
+static func body_variant_presentation_path(fighter_id: String, body_variant: String, role: String = "battle") -> String:
+	var v := body_variant if body_variant == "male" or body_variant == "female" else "male"
+	return "res://../art_source/characters/%s/%s/%s/" % [fighter_id, v, role]
+
+
+static func normalize_body_variant(value: String) -> String:
+	return "female" if value == "female" else "male"
+
+
 const CTX_SELECT_CARD := "select_card"
 const CTX_SELECT_PREVIEW := "select_preview"
 const CTX_VERSUS := "versus"
@@ -200,6 +211,11 @@ static func full_roster_review_enabled() -> bool:
 
 static func staging_review_enabled() -> bool:
 	return human_art_staging_enabled() or full_roster_review_enabled()
+
+
+static func player_dev_chrome_enabled() -> bool:
+	## AA_DEV_UI=1 shows ART SOURCE / candidate counts. Default player build does not.
+	return _env_flag("AA_DEV_UI")
 
 
 static func staging_glb_path(fighter_id: String) -> String:

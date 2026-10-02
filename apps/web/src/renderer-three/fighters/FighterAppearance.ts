@@ -1,4 +1,5 @@
-import type { CreatedFighter, FighterColor, FighterSize } from "@anime-aggressors/game-core";
+import type { CreatedFighter, FighterBodyVariant, FighterColor, FighterSize } from "@anime-aggressors/game-core";
+import { normalizeBodyVariant } from "@anime-aggressors/game-core";
 import {
   DEFAULT_FIGHTERS,
   ELEMENTS,
@@ -18,7 +19,11 @@ export type SilhouetteKind = "angular" | "sleek" | "lean" | "heavy";
 
 export type FighterVisualParts = DefaultFighterAppearance["silhouetteParts"];
 
+export type StoryPresentationForm = "NORMAL" | "BLACK_PUPPET" | "WHITE_PUPPET";
+
 export type FighterAppearance = {
+  /** Canonical fighter id (ember-vale, yin, …) for model provenance. */
+  fighterId: string;
   name: string;
   size: FighterSize;
   color: FighterColor;
@@ -27,6 +32,11 @@ export type FighterAppearance = {
   darkHex: number;
   silhouette: SilhouetteKind;
   bodyShape: BodyShape;
+  /** Presentation-only; must reach battle mesh (male/female proportions). */
+  bodyVariant: FighterBodyVariant;
+  storyForm: StoryPresentationForm;
+  essenceTier: 0 | 1 | 2 | 4 | 6;
+  prismaticGray: boolean;
   vfx: ElementVfxStyle;
   scale: number;
   accessory: "blade" | "scarf" | "wings" | "cape" | "none";
@@ -48,6 +58,8 @@ const LEGACY_SILHOUETTE: Record<string, SilhouetteKind> = {
   "nix-calder": "heavy",
   "orion-vell": "sleek",
   "vesper-nyx": "lean",
+  yin: "sleek",
+  yang: "angular",
 };
 
 const SIZE_SCALE: Record<FighterSize, number> = {
@@ -79,35 +91,95 @@ export function silhouetteForFighterId(id: string): SilhouetteKind {
   return LEGACY_SILHOUETTE[normalized] ?? "angular";
 }
 
+export type AppearanceResolveOptions = {
+  bodyVariant?: FighterBodyVariant;
+  storyForm?: StoryPresentationForm;
+  essenceTier?: 0 | 1 | 2 | 4 | 6;
+  prismaticGray?: boolean;
+};
+
 export function resolveFighterAppearanceFromPlayer(player: PlayerState): FighterAppearance {
-  return resolveFighterAppearance({
-    id: player.characterId.replace("created:", ""),
-    name: player.fighterName,
-    size: player.fighterSize ?? "medium",
-    color: player.fighterColor ?? "red",
+  const story = (player as PlayerState & {
+    storyForm?: StoryPresentationForm;
+    essenceTier?: 0 | 1 | 2 | 4 | 6;
+    prismaticGray?: boolean;
   });
+  return resolveFighterAppearance(
+    {
+      id: player.characterId.replace("created:", ""),
+      name: player.fighterName,
+      size: player.fighterSize ?? "medium",
+      color: player.fighterColor ?? "red",
+    },
+    {
+      bodyVariant: normalizeBodyVariant(player.bodyVariant ?? "male"),
+      storyForm: story.storyForm ?? "NORMAL",
+      essenceTier: story.essenceTier ?? 0,
+      prismaticGray: story.prismaticGray ?? false,
+    },
+  );
 }
 
-export function resolveFighterAppearance(fighter: Pick<CreatedFighter, "id" | "name" | "size" | "color">): FighterAppearance {
+export function resolveFighterAppearance(
+  fighter: Pick<CreatedFighter, "id" | "name" | "size" | "color">,
+  options: AppearanceResolveOptions = {},
+): FighterAppearance {
   const normalizedId = normalizeDefaultFighterId(fighter.id);
   const profile = getDefaultFighterProfile(normalizedId);
   const visual = getDefaultFighterAppearance(normalizedId);
   const color = fighter.color;
-  const primary = visual ? parseHex(visual.secondaryColor) : hexForElement(color);
+  let primary = visual ? parseHex(visual.secondaryColor) : hexForElement(color);
+  let accent = visual ? parseHex(visual.accentColor) : accentize(primary);
+  let dark = visual ? parseHex(visual.primaryColor) : darken(primary, 0.45);
+  const bodyVariant = normalizeBodyVariant(options.bodyVariant ?? "male");
+  const storyForm = options.storyForm ?? "NORMAL";
+  const essenceTier = options.essenceTier ?? 0;
+  const prismaticGray = options.prismaticGray ?? false;
   const sizeStats = getSizeStats(fighter.size);
   const bodyShape = visual?.bodyShape ?? sizeBodyShape(fighter.size);
 
+  if (storyForm === "BLACK_PUPPET") {
+    primary = 0x0a0a0d;
+    accent = 0x3a3a44;
+    dark = 0x050508;
+  } else if (storyForm === "WHITE_PUPPET") {
+    primary = 0xf7f3e8;
+    accent = 0xffffff;
+    dark = 0x1a1a1a;
+  }
+  if (prismaticGray || essenceTier === 6) {
+    // Graphite/silver body + ROYGBIV accent bias — competitive silhouette preserved.
+    primary = 0x6e6e78;
+    accent = 0xc0c4d0;
+    dark = 0x2a2a32;
+  }
+
+  // Female presentation: slightly narrower torso scale via silhouette bias (mesh only).
+  let silhouette: SilhouetteKind = visual
+    ? BODY_SHAPE_SILHOUETTE[visual.bodyShape]
+    : sizeSilhouette(fighter.size);
+  if (bodyVariant === "female" && silhouette === "heavy") silhouette = "angular";
+  if (bodyVariant === "female" && silhouette === "angular") silhouette = "sleek";
+  if (bodyVariant === "male" && silhouette === "lean") silhouette = "angular";
+
+  const variantScale = bodyVariant === "female" ? 0.96 : 1.0;
+
   return {
+    fighterId: normalizedId,
     name: fighter.name,
     size: fighter.size,
     color,
     primaryHex: primary,
-    accentHex: visual ? parseHex(visual.accentColor) : accentize(primary),
-    darkHex: visual ? parseHex(visual.primaryColor) : darken(primary, 0.45),
-    silhouette: visual ? BODY_SHAPE_SILHOUETTE[visual.bodyShape] : sizeSilhouette(fighter.size),
+    accentHex: accent,
+    darkHex: dark,
+    silhouette,
     bodyShape,
+    bodyVariant,
+    storyForm,
+    essenceTier,
+    prismaticGray: prismaticGray || essenceTier === 6,
     vfx: getElementVfxStyle(color),
-    scale: SIZE_SCALE[fighter.size] * sizeStats.hurtboxScale,
+    scale: SIZE_SCALE[fighter.size] * sizeStats.hurtboxScale * variantScale,
     accessory: visual ? accessoryFromParts(visual.silhouetteParts) : accessoryForColor(color),
     parts: visual?.silhouetteParts ?? partsForColor(color),
     visualStyleId: profile?.visualStyleId,

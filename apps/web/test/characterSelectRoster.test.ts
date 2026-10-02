@@ -3,8 +3,8 @@ import assert from "node:assert/strict";
 import { DEFAULT_FIGHTERS, getRoygbivColors } from "@anime-aggressors/game-core";
 
 describe("character select roster", () => {
-  it("has exactly seven ROYGBIV default fighters", () => {
-    assert.equal(DEFAULT_FIGHTERS.length, 7);
+  it("has nine playable defaults with seven ROYGBIV colors", () => {
+    assert.equal(DEFAULT_FIGHTERS.length, 9);
     assert.equal(getRoygbivColors().length, 7);
   });
 

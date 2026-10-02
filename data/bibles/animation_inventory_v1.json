@@ -1,0 +1,619 @@
+{
+  "schema": "anime_aggressors_animation_inventory_v1",
+  "authority": "ANIME_AGGRESSORS_COMPLETE_CHARACTER_MOVEMENT_ANIMATION_BIBLE_V1",
+  "simulation_hz": 60,
+  "authored_unique_clip_target_range": [
+    90,
+    100
+  ],
+  "authority_slot_count": 111,
+  "note": "The source master gives a ~90\u2013100 authored-clip target, while its enumerated state/move/presentation requirements plus the live repo's retained back_air extension yield 111 authority slots. Slots may use documented aliases/parameterization; generic fallback is not a completion pass.",
+  "repo_extension_policy": {
+    "back_air": "RETAIN_CURRENT_REQUIRED_EXTENSION"
+  },
+  "categories": [
+    {
+      "id": "locomotion_traversal",
+      "required": true,
+      "slots": [
+        {
+          "id": "idle_primary",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "idle_secondary",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "idle_long",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "walk_start",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "walk_loop",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "walk_stop",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "run_start",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "run_loop",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "run_stop",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "dash_start",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "dash_loop",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "dash_stop",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "skid",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "turnaround",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "crouch_start",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "crouch_hold",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "crouch_end",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "jump_squat",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "jump",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "short_hop_visual",
+          "required": true,
+          "may_alias": true
+        },
+        {
+          "id": "double_jump",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "fall",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "fast_fall",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "land_soft",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "land_hard",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "platform_drop",
+          "required": true,
+          "may_alias": false
+        }
+      ]
+    },
+    {
+      "id": "ledge_platform",
+      "required": true,
+      "slots": [
+        {
+          "id": "edge_warning",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "ledge_teeter",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "ledge_grab",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "ledge_hang",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "ledge_getup",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "ledge_roll",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "ledge_jump",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "ledge_attack",
+          "required": true,
+          "may_alias": false
+        }
+      ]
+    },
+    {
+      "id": "defense_evasion",
+      "required": true,
+      "slots": [
+        {
+          "id": "shield_start",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "shield_hold",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "shield_hit",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "shield_stun",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "shield_break",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "spot_dodge",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "roll_forward",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "roll_backward",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "air_dodge_neutral",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "air_dodge_forward",
+          "required": true,
+          "may_alias": true
+        },
+        {
+          "id": "air_dodge_back",
+          "required": true,
+          "may_alias": true
+        },
+        {
+          "id": "air_dodge_up",
+          "required": true,
+          "may_alias": true
+        },
+        {
+          "id": "air_dodge_down",
+          "required": true,
+          "may_alias": true
+        },
+        {
+          "id": "tech_in_place",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "tech_forward",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "tech_back",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "pratfall",
+          "required": true,
+          "may_alias": false
+        }
+      ]
+    },
+    {
+      "id": "damage_reactions",
+      "required": true,
+      "slots": [
+        {
+          "id": "hurt_light_front",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "hurt_light_back",
+          "required": true,
+          "may_alias": true
+        },
+        {
+          "id": "hurt_heavy",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "hitstop_pose",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "hitstun_ground",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "launch_horizontal",
+          "required": true,
+          "may_alias": true
+        },
+        {
+          "id": "launch_vertical",
+          "required": true,
+          "may_alias": true
+        },
+        {
+          "id": "tumble",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "ground_bounce",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "wall_bounce",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "knockdown",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "ko",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "respawn",
+          "required": true,
+          "may_alias": false
+        }
+      ]
+    },
+    {
+      "id": "grab_throw",
+      "required": true,
+      "slots": [
+        {
+          "id": "grab_startup",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "grab_active",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "grab_whiff",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "grab_hold",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "pummel",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "throw_startup",
+          "required": true,
+          "may_alias": true
+        },
+        {
+          "id": "throw_release",
+          "required": true,
+          "may_alias": true
+        }
+      ]
+    },
+    {
+      "id": "aura",
+      "required": true,
+      "slots": [
+        {
+          "id": "aura_charge",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "aura_ready",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "aura_burst_startup",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "aura_burst_active",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "aura_burst_recovery",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "aura_super_transform",
+          "required": true,
+          "may_alias": false
+        }
+      ]
+    },
+    {
+      "id": "moves",
+      "required": true,
+      "slots": [
+        {
+          "id": "jab_1",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "jab_2",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "jab_finisher",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "forward_tilt",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "up_tilt",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "down_tilt",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "dash_attack",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "heavy_attack",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "neutral_air",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "forward_air",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "back_air",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "up_air",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "down_air",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "neutral_special_projectile",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "side_special",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "up_special_recovery",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "down_special",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "grab",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "throw_forward",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "throw_back",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "throw_up",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "throw_down",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "aura_charge_move",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "aura_burst_move",
+          "required": true,
+          "may_alias": false
+        }
+      ]
+    },
+    {
+      "id": "presentation",
+      "required": true,
+      "slots": [
+        {
+          "id": "match_intro",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "character_select_idle",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "character_select_confirm",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "taunt_1",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "taunt_2",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "victory",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "defeat",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "results_idle",
+          "required": true,
+          "may_alias": false
+        },
+        {
+          "id": "story_dialogue_neutral",
+          "required": true,
+          "may_alias": true
+        },
+        {
+          "id": "story_dialogue_intense",
+          "required": true,
+          "may_alias": true
+        }
+      ]
+    }
+  ]
+}

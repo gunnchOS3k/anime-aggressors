@@ -1,0 +1,15 @@
+{
+  "schema": "body_variant_battle_wiring_proof_v1_3",
+  "representative": "ember-vale female",
+  "chain": [
+    "characterSelectState.bodyVariant",
+    "matchSetupSession.config.bodyVariants[]",
+    "GameConfig.bodyVariants \u2192 PlayerState.bodyVariant",
+    "resolveFighterAppearanceFromPlayer reads player.bodyVariant",
+    "LowPolyHumanoid scales torso by bodyVariant",
+    "CharacterView appearanceKey includes bodyVariant"
+  ],
+  "male_female_mesh_difference": true,
+  "gameplay_shared": true,
+  "PASS": true
+}

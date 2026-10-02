@@ -76,26 +76,50 @@ static func canonical_clip_for_move_id(move_id: String) -> String:
 
 
 static func resolve_clip(state: String, move_id: String, loaded_clips: Dictionary) -> Dictionary:
+	## Preference order (Animation Authority V1):
+	## exact move clip > exact state clip > documented semantic alias > temporary fallback
 	_ensure_map()
 	var requested := _requested_clip(state, move_id)
 	var clip := _resolve_loaded_name(requested, loaded_clips)
 	var design_only := design_only_clips().has(requested) and not _is_gameplay_bound_clip(requested)
 	var reachable := loaded_clips.has(clip) and not design_only
 	var mapping := "EXACT"
+	var procedural_fallback := false
 	if clip != requested and loaded_clips.has(clip):
-		mapping = "ALIASED"
+		mapping = "DOCUMENTED_SEMANTIC_ALIAS" if _is_documented_alias(requested, clip) else "ALIASED"
+		procedural_fallback = mapping == "ALIASED"
 	elif not loaded_clips.has(clip):
-		mapping = "MISSING_CLIP"
+		mapping = "TEMPORARY_FALLBACK" if loaded_clips.has(str(_map.get("clip_aliases", {}).get(requested, ""))) else "MISSING_CLIP"
+		procedural_fallback = true
+		var aliased := str(_map.get("clip_aliases", {}).get(requested, ""))
+		if aliased != "" and loaded_clips.has(aliased):
+			clip = aliased
+			mapping = "TEMPORARY_FALLBACK"
 	elif design_only:
 		mapping = "DESIGN_ONLY"
+	# Authority clips are procedural continuity until authored; count as fallback for gates.
+	if mapping == "EXACT" and loaded_clips.has(clip):
+		procedural_fallback = true
 	return {
 		"requested": requested,
 		"clip": clip,
 		"reachable": reachable,
 		"design_only": design_only,
 		"mapping_status": mapping,
+		"procedural_fallback": procedural_fallback,
 		"playability": "DESIGN_ONLY_NOT_CURRENTLY_PLAYABLE" if design_only else "RUNTIME_REACHABLE",
 	}
+
+
+static func _is_documented_alias(requested: String, clip: String) -> bool:
+	_ensure_map()
+	var aliases: Dictionary = _map.get("documented_semantic_aliases", {})
+	if not aliases.has(requested):
+		return false
+	var entry: Variant = aliases[requested]
+	if typeof(entry) != TYPE_DICTIONARY:
+		return false
+	return str(entry.get("alias_of", "")) == clip
 
 
 static func signature_display_name(fighter_id: String, move_id: String) -> String:
@@ -161,14 +185,14 @@ static func _clip_for_state(state: String) -> String:
 	# Attack/special/throw states without a move_id must not invent jab_1 as a silent fallback
 	# when a current move id should have been supplied by Fighter.play path.
 	if state in [_FighterStates.ATTACK_STARTUP, _FighterStates.ATTACK_ACTIVE, _FighterStates.ATTACK_RECOVERY]:
-		return "jab"
+		return "jab_1"
 	if state in [_FighterStates.SPECIAL_STARTUP, _FighterStates.SPECIAL_ACTIVE, _FighterStates.SPECIAL_RECOVERY]:
-		return "projectile_full"
+		return "neutral_special_projectile"
 	if state in [_FighterStates.THROW_STARTUP, _FighterStates.THROW_RELEASE]:
-		return "throw_forward"
+		return "throw_startup"
 	if state in [_FighterStates.AURA_BURST_STARTUP, _FighterStates.AURA_BURST_ACTIVE, _FighterStates.AURA_BURST_RECOVERY]:
-		return "signature_lane_burst"
-	return "idle"
+		return "aura_burst_active"
+	return "idle_primary"
 
 
 static func _resolve_loaded_name(requested: String, loaded_clips: Dictionary) -> String:

@@ -6,6 +6,9 @@ const _InputPersistence = preload("res://scripts/input/InputPersistenceService.g
 
 var p1_fighter_id: String = "ember-vale"
 var p2_fighter_id: String = "rook-ironside"
+## Presentation-only dual-form body (male|female). Combat sim ignores these.
+var p1_body_variant: String = "male"
+var p2_body_variant: String = "female"
 var p1_is_cpu: bool = false
 var p2_is_cpu: bool = true
 var cpu_level: int = 2

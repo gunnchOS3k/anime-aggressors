@@ -32,17 +32,20 @@ func _ready_display() -> void:
 	var winner := GameState.last_winner_slot
 	var name := "P%d" % winner
 	var fid := ""
+	var variant := "male"
 	if winner == 1:
 		fid = str(GameState.p1_fighter_id)
+		variant = str(GameState.p1_body_variant)
 		name = GameState.load_fighter(fid).get("displayName", name)
 	elif winner == 2:
 		fid = str(GameState.p2_fighter_id)
+		variant = str(GameState.p2_body_variant)
 		name = GameState.load_fighter(fid).get("displayName", name)
 	elif not str(GameState.p1_fighter_id).is_empty():
 		# Fallback when slot unset — still show P1 canonical art for harness paths.
 		fid = str(GameState.p1_fighter_id)
 		name = GameState.load_fighter(fid).get("displayName", name)
-	_configure_victory_portrait(fid)
+	_configure_victory_portrait(fid, variant)
 	if GameState.arcade_active or GameState.mode == "arcade":
 		var bout := GameState.arcade_index + 1
 		var total := GameState.ARCADE_LADDER.size()
@@ -80,7 +83,7 @@ func _ready_display() -> void:
 	_play_results_celebration()
 
 
-func _configure_victory_portrait(fighter_id: String) -> void:
+func _configure_victory_portrait(fighter_id: String, body_variant: String = "male") -> void:
 	_victory_fighter_id = fighter_id
 	_victory_canonical = false
 	if victory_portrait == null or fighter_id.is_empty():
@@ -94,6 +97,8 @@ func _configure_victory_portrait(fighter_id: String) -> void:
 	var accent := Color(1.0, 0.85, 0.3)
 	var data: Dictionary = GameState.load_fighter(fighter_id)
 	accent = Color(data.get("color", accent))
+	if victory_portrait.has_method("set_body_variant"):
+		victory_portrait.set_body_variant(body_variant)
 	if victory_portrait.has_method("configure_for_context"):
 		victory_portrait.configure_for_context(fighter_id, Color(data.get("color", accent)), accent, _PresentationContext.CTX_VICTORY)
 	elif victory_portrait.has_method("configure"):

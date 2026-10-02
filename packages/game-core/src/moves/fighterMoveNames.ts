@@ -150,6 +150,48 @@ export const FIGHTER_MOVE_NAMES: Record<DefaultFighterId, Record<MoveSlot, strin
     throwDown: "Null Slam",
     super: "Midnight Divide",
   },
+  yin: {
+    neutralAttack: "Quiet Tap",
+    sideAttack: "Fold Cut",
+    upAttack: "Settle Rise",
+    downAttack: "Sink Pulse",
+    neutralAir: "Null Orbit",
+    forwardAir: "Draw Needle",
+    backAir: "Erase Kick",
+    upAir: "Collapse Flick",
+    downAir: "Still Drop",
+    neutralSpecial: "Reduction Seed",
+    sideSpecial: "Inward Step",
+    upSpecial: "Quiet Rise",
+    downSpecial: "Null Field",
+    grab: "Quiet Grab",
+    throwForward: "Fold Toss",
+    throwBack: "Erase Back",
+    throwUp: "Settle Toss",
+    throwDown: "Collapse Slam",
+    super: "Infinite Quiet",
+  },
+  yang: {
+    neutralAttack: "Declare Tap",
+    sideAttack: "Construct Cut",
+    upAttack: "Radiant Upper",
+    downAttack: "Align Pulse",
+    neutralAir: "Definition Spin",
+    forwardAir: "Project Needle",
+    backAir: "Overwrite Kick",
+    upAir: "Flare Flick",
+    downAir: "Pillar Drop",
+    neutralSpecial: "Definition Seed",
+    sideSpecial: "Emit Step",
+    upSpecial: "Radiant Rise",
+    downSpecial: "Construct Field",
+    grab: "Declare Grab",
+    throwForward: "Project Toss",
+    throwBack: "Align Back",
+    throwUp: "Radiant Toss",
+    throwDown: "Overwrite Slam",
+    super: "Absolute Radiance",
+  },
 };
 
 export const FIGHTER_SKILL_PROFILE: Record<
@@ -163,6 +205,8 @@ export const FIGHTER_SKILL_PROFILE: Record<
   "orion-vell": { floor: "intermediate", ceiling: "high" },
   "juno-spark": { floor: "advanced", ceiling: "high" },
   "vesper-nyx": { floor: "advanced", ceiling: "high" },
+  yin: { floor: "advanced", ceiling: "high" },
+  yang: { floor: "advanced", ceiling: "high" },
 };
 
 export const BEAM_SUPER_FIGHTERS: DefaultFighterId[] = [
@@ -173,6 +217,8 @@ export const BEAM_SUPER_FIGHTERS: DefaultFighterId[] = [
   "nix-calder",
   "orion-vell",
   "vesper-nyx",
+  "yin",
+  "yang",
 ];
 
 export const SUPER_ENERGY_KIND: Partial<Record<DefaultFighterId, "beam" | "orb" | "wave" | "shockwave">> = {
@@ -183,4 +229,6 @@ export const SUPER_ENERGY_KIND: Partial<Record<DefaultFighterId, "beam" | "orb" 
   "nix-calder": "beam",
   "orion-vell": "orb",
   "vesper-nyx": "beam",
+  yin: "orb",
+  yang: "wave",
 };

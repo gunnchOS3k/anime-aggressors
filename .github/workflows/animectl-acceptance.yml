@@ -1,0 +1,96 @@
+name: Anime Aggressors Animectl Acceptance
+on:
+  push:
+    branches: [v4/dual-form-power-roster, main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: animectl-acceptance-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  animectl-quick:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: animectl doctor
+        run: ./animectl doctor --json
+      - name: animectl audit
+        run: ./animectl audit --json
+      - name: animectl verify models/animations/moves/story
+        run: |
+          ./animectl verify models --json
+          ./animectl verify rig --json
+          ./animectl verify animations --json
+          ./animectl verify moves --json
+          ./animectl verify story --json
+          ./animectl verify e2e --json
+      - name: animectl ADB-optional unit tests
+        run: PYTHONPATH=tools python3 -m unittest animectl.tests.test_adb_optional -v
+      - name: acceptance quick
+        run: ./animectl acceptance --exact-head --quick --json --output .acceptance/ci-quick.json
+      - name: upload acceptance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: animectl-quick-${{ github.sha }}
+          path: |
+            .acceptance/
+            artifacts/acceptance/
+          if-no-files-found: warn
+
+  playwright-runtime:
+    runs-on: ubuntu-latest
+    needs: animectl-quick
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - name: install deps
+        run: npm ci --no-audit --no-fund
+      - name: install playwright chromium
+        run: npx playwright install --with-deps chromium
+      - name: run e2e smoke
+        run: npx playwright test --project=chromium
+        env:
+          CI: "1"
+      - name: upload playwright
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-runtime-${{ github.sha }}
+          path: |
+            .acceptance/playwright-report/
+            test-results/
+          if-no-files-found: warn
+
+  acceptance-digital:
+    runs-on: ubuntu-latest
+    needs: [animectl-quick]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: install deps
+        run: npm ci --no-audit --no-fund
+      - name: acceptance full (digital subset)
+        run: ./animectl acceptance --exact-head --full --json --output .acceptance/ci-full.json
+      - name: upload full acceptance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: animectl-full-${{ github.sha }}
+          path: .acceptance/
+          if-no-files-found: warn

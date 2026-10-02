@@ -58,11 +58,16 @@ export function getDefaultCreatedFighter(playerIndex: number): CreatedFighter {
 export {
   DEFAULT_FIGHTERS,
   DEFAULT_FIGHTER_ROSTER,
+  SPECTRUM_FIGHTER_IDS,
+  COSMIC_FIGHTER_IDS,
   getDefaultFighterPreset,
   getAllDefaultCreatedFighters,
   getDefaultFighterProfile,
   getRoygbivColors,
+  getSpectrumFighters,
   isDefaultFighterId,
+  isSpectrumFighterId,
+  isCosmicFighterId,
   normalizeDefaultFighterId,
 } from "./defaultFighters.js";
 export type {

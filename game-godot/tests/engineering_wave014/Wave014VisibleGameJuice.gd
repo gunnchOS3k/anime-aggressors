@@ -30,8 +30,11 @@ func _run() -> void:
 			for _i in range(8):
 				await process_frame
 		var truth: Dictionary = model.truth_flags() if model.has_method("truth_flags") else {}
+		var source := str(truth.get("CURRENT_MODEL_SOURCE", ""))
+		var golden_ok := source == "GOLDEN_SLICE_CANDIDATE" and bool(truth.get("VISIBLE_SKELETON_PRESENT", false)) and int(truth.get("VISIBLE_RUNTIME_ANIMATION_CONTROLLERS_PER_FIGHTER", 0)) == 1 and bool(truth.get("FINAL_CHARACTER_ART_PASS", true)) == false
+		var visible_ok := bool(truth.get("PROCEDURAL_PROXY_VISIBLE", false)) or golden_ok
 		fighters[fighter_id] = {
-			"ok": fighter_ok and truth.get("PROCEDURAL_PROXY_VISIBLE", false),
+			"ok": fighter_ok and visible_ok,
 			"hit_flash": fighter_ok,
 			"aura_charge": fighter_ok,
 			"team_tint": fighter_ok,

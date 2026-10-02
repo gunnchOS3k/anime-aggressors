@@ -1,4 +1,4 @@
-import type { CreatedFighter } from "@anime-aggressors/game-core";
+import type { CreatedFighter, FighterBodyVariant } from "@anime-aggressors/game-core";
 import { ELEMENTS, SIZE_STATS, getDefaultFighterProfile, getFighterGameplayProfile, normalizeDefaultFighterId } from "@anime-aggressors/game-core";
 import type { TileState } from "../characterSelect/characterSelectState.js";
 import { renderFighterPortraitHtml } from "../renderer-three/portraits/FighterPortraitFactory.ts";
@@ -8,6 +8,15 @@ export type CharacterTileOptions = {
   state: TileState;
   tabIndex?: number;
 };
+
+/** Dual presentation icons on each of the 7 roster tiles (not 14 top-level tiles). */
+function dualFormPreview(fighterId: string): string {
+  return `
+    <span class="cs-tile-dual" aria-hidden="true">
+      <span class="cs-tile-dual-icon cs-tile-dual-icon--male" title="Male presentation">${renderFighterPortraitHtml(fighterId, 28)}</span>
+      <span class="cs-tile-dual-icon cs-tile-dual-icon--female" title="Female presentation">${renderFighterPortraitHtml(fighterId, 28)}</span>
+    </span>`;
+}
 
 export function renderCharacterTile({ fighter, state, tabIndex = 0 }: CharacterTileOptions): string {
   const profile = getDefaultFighterProfile(normalizeDefaultFighterId(fighter.id));
@@ -27,10 +36,11 @@ export function renderCharacterTile({ fighter, state, tabIndex = 0 }: CharacterT
 
   return `
     <button type="button" class="character-portrait-tile cs-tile cs-tile--${state}" data-fighter-id="${fighter.id}"
-      style="--tile-accent:${el.hexColor}" tabindex="${tabIndex}" aria-label="${fighter.name}, ${el.name}, ${sizeLabel}">
+      style="--tile-accent:${el.hexColor}" tabindex="${tabIndex}" aria-label="${fighter.name}, ${el.name}, ${sizeLabel}, male and female presentations">
       <span class="cs-tile-portrait character-portrait-frame">
         ${renderFighterPortraitHtml(fighter.id, 64)}
       </span>
+      ${dualFormPreview(fighter.id)}
       <span class="cs-tile-name">${fighter.name}</span>
       ${rosterBadge}
       <span class="cs-tile-meta">
@@ -39,4 +49,8 @@ export function renderCharacterTile({ fighter, state, tabIndex = 0 }: CharacterT
       </span>
       ${marker}
     </button>`;
+}
+
+export function bodyVariantLabel(variant: FighterBodyVariant): string {
+  return variant === "female" ? "Female" : "Male";
 }

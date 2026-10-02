@@ -113,6 +113,28 @@ export const DEFAULT_FIGHTER_APPEARANCES: DefaultFighterAppearance[] = [
     silhouetteParts: { hood: "collar", cape: "asymmetric" },
     previewAnimation: "void-afterimage",
   },
+  {
+    fighterId: "yin",
+    bodyShape: "athletic",
+    primaryColor: "#0a0a0d",
+    secondaryColor: "#1a1a22",
+    accentColor: "#f7f3e8",
+    auraColor: "#2a2a33",
+    trailStyle: "void",
+    silhouetteParts: { hood: "full", mantle: "void", gauntlets: "heavy" },
+    previewAnimation: "null-settle",
+  },
+  {
+    fighterId: "yang",
+    bodyShape: "athletic",
+    primaryColor: "#f7f3e8",
+    secondaryColor: "#fff8e7",
+    accentColor: "#0a0a0d",
+    auraColor: "#ffe566",
+    trailStyle: "volt",
+    silhouetteParts: { jacket: "long-coat", floatingBits: "shards", gauntlets: "block" },
+    previewAnimation: "radiant-declare",
+  },
 ];
 
 export function getDefaultFighterAppearance(fighterId: string): DefaultFighterAppearance | undefined {

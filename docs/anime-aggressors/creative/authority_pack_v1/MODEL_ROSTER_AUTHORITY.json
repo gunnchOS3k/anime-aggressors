@@ -1,0 +1,169 @@
+{
+  "schema": "anime_aggressors.model_roster_authority.v1",
+  "status": "owner_approval_candidate",
+  "global_style": {
+    "visual": "stylized_3d_chibi_cel_shaded_anime",
+    "human_facial_structure": true,
+    "ordinary_human_skin_completion": false,
+    "male_female_shared_gameplay_authority": true,
+    "base_masks": false,
+    "puppet_masks": true,
+    "essence_progression": [
+      0,
+      1,
+      2,
+      4,
+      6
+    ],
+    "gray_meaning": "all seven colors held without one dominating"
+  },
+  "fighters": [
+    {
+      "id": "ember-vale",
+      "color": "#EF2B1F",
+      "identity": "combustion",
+      "shape": [
+        "wedges",
+        "forward diagonals",
+        "gauntlet circles",
+        "vent slits"
+      ],
+      "acceptance": "controlled combustion"
+    },
+    {
+      "id": "rook-ironside",
+      "color": "#F47A20",
+      "identity": "mass",
+      "shape": [
+        "columns",
+        "strata",
+        "heavy circles",
+        "broad triangles"
+      ],
+      "acceptance": "mass before attack"
+    },
+    {
+      "id": "juno-spark",
+      "color": "#FFD229",
+      "identity": "current",
+      "shape": [
+        "forward diagonals",
+        "rails",
+        "forks",
+        "conductor nodes"
+      ],
+      "acceptance": "fast but readable"
+    },
+    {
+      "id": "kaia-windrow",
+      "color": "#2FCB88",
+      "identity": "flow",
+      "shape": [
+        "arcs",
+        "ribbons",
+        "crescents",
+        "airfoils"
+      ],
+      "acceptance": "aerial flow without passivity"
+    },
+    {
+      "id": "nix-calder",
+      "color": "#3F86F7",
+      "identity": "structure",
+      "shape": [
+        "facets",
+        "grids",
+        "lattices",
+        "vertical crystal"
+      ],
+      "acceptance": "architect/controller not generic ice"
+    },
+    {
+      "id": "orion-vell",
+      "color": "#5140C8",
+      "identity": "vectors",
+      "shape": [
+        "circles",
+        "ellipses",
+        "nodes",
+        "vector lines"
+      ],
+      "acceptance": "vector manipulation not purple spheres"
+    },
+    {
+      "id": "vesper-nyx",
+      "color": "#B73CFF",
+      "identity": "uncertainty",
+      "shape": [
+        "asymmetry",
+        "broken diagonals",
+        "negative space",
+        "offset doubles"
+      ],
+      "acceptance": "deceptive but fair/readable"
+    },
+    {
+      "id": "yin",
+      "color": "#0A0A0D",
+      "identity": "reduction",
+      "shape": [
+        "inward spirals",
+        "negative space",
+        "collapsed circles"
+      ],
+      "seed": "white",
+      "acceptance": "remove information, not dark VFX"
+    },
+    {
+      "id": "yang",
+      "color": "#F7F3E8",
+      "identity": "definition",
+      "shape": [
+        "radiating lines",
+        "perfect circles",
+        "hard-light grids",
+        "halos"
+      ],
+      "seed": "black",
+      "acceptance": "construct/define, not white VFX"
+    }
+  ],
+  "canonical_deform_bones": [
+    "Root",
+    "Hips",
+    "Spine",
+    "Chest",
+    "Neck",
+    "Head",
+    "Shoulder_L",
+    "UpperArm_L",
+    "LowerArm_L",
+    "Hand_L",
+    "Shoulder_R",
+    "UpperArm_R",
+    "LowerArm_R",
+    "Hand_R",
+    "UpperLeg_L",
+    "LowerLeg_L",
+    "Foot_L",
+    "Toes_L",
+    "UpperLeg_R",
+    "LowerLeg_R",
+    "Foot_R",
+    "Toes_R"
+  ],
+  "sockets": [
+    "hand_l",
+    "hand_r",
+    "foot_l",
+    "foot_r",
+    "chest",
+    "head",
+    "back",
+    "projectile_origin",
+    "aura_root"
+  ],
+  "semantic_animation_slots_per_identity": 111,
+  "back_air_policy": "RETAIN_CURRENT_REQUIRED_EXTENSION",
+  "human_art_approval": false
+}

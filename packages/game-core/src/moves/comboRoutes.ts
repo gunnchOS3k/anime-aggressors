@@ -46,6 +46,18 @@ const ROUTES: ComboRoute[] = [
   { id: "vesper-i2", fighterId: "vesper-nyx", name: "Seed Cross", difficulty: "intermediate", route: ["neutralSpecial", "sideSpecial", "backAir"], description: "Seed phase cross-up.", teachingHint: "Special, Side + Special, Back Air." },
   { id: "vesper-i3", fighterId: "vesper-nyx", name: "Shadow Pop", difficulty: "intermediate", route: ["downAttack", "upAttack"], description: "Slip into phase upper.", teachingHint: "Down + Attack, Up + Attack." },
   { id: "vesper-a1", fighterId: "vesper-nyx", name: "Midnight Divide", difficulty: "advanced", route: ["downSpecial", "forwardAir", "super"], description: "Trap needle super.", teachingHint: "Down + Special, Forward Air, Super." },
+  // Yin (TUNING_CANDIDATE)
+  { id: "yin-b1", fighterId: "yin", name: "Quiet Chain", difficulty: "beginner", route: ["neutralAttack", "sideAttack"], description: "Reduction opener.", teachingHint: "Attack, Side + Attack." },
+  { id: "yin-b2", fighterId: "yin", name: "Settle Tap", difficulty: "beginner", route: ["neutralAttack", "forwardAir"], description: "Tap into draw needle.", teachingHint: "Attack, Forward Air." },
+  { id: "yin-i1", fighterId: "yin", name: "Fold Confirm", difficulty: "intermediate", route: ["neutralSpecial", "sideAttack"], description: "Seed into fold cut.", teachingHint: "Special, Side + Attack." },
+  { id: "yin-i2", fighterId: "yin", name: "Inward Pop", difficulty: "intermediate", route: ["downAttack", "upAttack"], description: "Sink into settle rise.", teachingHint: "Down + Attack, Up + Attack." },
+  { id: "yin-a1", fighterId: "yin", name: "Infinite Quiet", difficulty: "advanced", route: ["downSpecial", "forwardAir", "super"], description: "Null field into quiet super.", teachingHint: "Down + Special, Forward Air, Super." },
+  // Yang (TUNING_CANDIDATE)
+  { id: "yang-b1", fighterId: "yang", name: "Declare Chain", difficulty: "beginner", route: ["neutralAttack", "sideAttack"], description: "Definition opener.", teachingHint: "Attack, Side + Attack." },
+  { id: "yang-b2", fighterId: "yang", name: "Radiant Tap", difficulty: "beginner", route: ["neutralAttack", "forwardAir"], description: "Tap into project needle.", teachingHint: "Attack, Forward Air." },
+  { id: "yang-i1", fighterId: "yang", name: "Construct Confirm", difficulty: "intermediate", route: ["neutralSpecial", "sideAttack"], description: "Seed into construct cut.", teachingHint: "Special, Side + Attack." },
+  { id: "yang-i2", fighterId: "yang", name: "Align Pop", difficulty: "intermediate", route: ["downAttack", "upAttack"], description: "Align into radiant upper.", teachingHint: "Down + Attack, Up + Attack." },
+  { id: "yang-a1", fighterId: "yang", name: "Absolute Radiance", difficulty: "advanced", route: ["downSpecial", "forwardAir", "super"], description: "Construct field into radiant super.", teachingHint: "Down + Special, Forward Air, Super." },
 ];
 
 export const COMBO_ROUTES: ComboRoute[] = ROUTES;

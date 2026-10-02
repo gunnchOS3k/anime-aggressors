@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "anime-aggressors-animation-authority-v1",
+  "title": "Anime Aggressors animation authority row",
+  "type": "object",
+  "required": [
+    "fighter_id",
+    "slot_id",
+    "category",
+    "status",
+    "evidence"
+  ],
+  "properties": {
+    "fighter_id": {
+      "type": "string"
+    },
+    "slot_id": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "MISSING",
+        "PROCEDURAL_FALLBACK",
+        "AUTHORED_WIP",
+        "AUTHORED_CANDIDATE",
+        "PASS_WITH_EVIDENCE",
+        "REQUIRES_HUMAN",
+        "NOT_APPLICABLE"
+      ]
+    },
+    "runtime_clip": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_path": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

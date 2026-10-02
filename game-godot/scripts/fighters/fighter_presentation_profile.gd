@@ -3,6 +3,7 @@ extends Resource
 ## Runtime consumers: title, select, battle model, HUD, results.
 
 @export var fighter_id: String = ""
+@export var body_variant: String = "male" ## male|female presentation; gameplay unchanged
 @export var display_name: String = ""
 @export var personality_traits: PackedStringArray = PackedStringArray()
 @export var combat_fantasy: String = ""

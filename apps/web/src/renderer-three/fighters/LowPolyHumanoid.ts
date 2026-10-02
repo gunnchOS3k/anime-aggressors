@@ -4,12 +4,13 @@ import { createToonMesh, addOutline } from "../materials/AnimeMaterialLibrary.ts
 
 export type LowPolyHumanoidParts = {
   root: THREE.Group;
-  torso: THREE.Mesh;
-  head: THREE.Mesh;
-  leftArm: THREE.Mesh;
-  rightArm: THREE.Mesh;
-  leftLeg: THREE.Mesh;
-  rightLeg: THREE.Mesh;
+  /** Mesh for procedural humanoid; Object3D when bound to production-rig bones. */
+  torso: THREE.Object3D;
+  head: THREE.Object3D;
+  leftArm: THREE.Object3D;
+  rightArm: THREE.Object3D;
+  leftLeg: THREE.Object3D;
+  rightLeg: THREE.Object3D;
   accessory: THREE.Object3D | null;
   extras: THREE.Object3D[];
   aura: THREE.Mesh;
@@ -21,8 +22,21 @@ export function buildLowPolyHumanoid(appearance: FighterAppearance): LowPolyHuma
   const accent = appearance.accentHex;
   const dark = appearance.darkHex;
   const extras: THREE.Object3D[] = [];
+  root.userData.bodyVariant = appearance.bodyVariant;
+  root.userData.storyForm = appearance.storyForm;
+  root.userData.essenceTier = appearance.essenceTier;
+  root.userData.prismaticGray = appearance.prismaticGray;
+  root.userData.presentationKey = `${appearance.visualStyleId ?? appearance.name}:${appearance.bodyVariant}:${appearance.storyForm}:${appearance.essenceTier}`;
 
   const torsoScale = silhouetteTorso(appearance.silhouette);
+  // Male/female presentation: shared rig, distinct body proportions (presentation-only).
+  if (appearance.bodyVariant === "female") {
+    torsoScale.w *= 0.88;
+    torsoScale.d *= 0.92;
+  } else {
+    torsoScale.w *= 1.06;
+    torsoScale.d *= 1.04;
+  }
   const torsoDepth = 0.58 * torsoScale.d;
   const torso = createToonMesh(
     new THREE.BoxGeometry(0.92 * torsoScale.w, 1.08, torsoDepth),
@@ -36,6 +50,26 @@ export function buildLowPolyHumanoid(appearance: FighterAppearance): LowPolyHuma
   const head = createToonMesh(new THREE.SphereGeometry(headSize, 10, 10), accent);
   head.position.y = 1.78;
   addOutline(head);
+
+  if (appearance.storyForm === "BLACK_PUPPET" || appearance.storyForm === "WHITE_PUPPET") {
+    const maskMat = appearance.storyForm === "BLACK_PUPPET" ? 0x0a0a0d : 0xf7f3e8;
+    const mask = createToonMesh(
+      new THREE.BoxGeometry(headSize * 1.15, headSize * 0.85, headSize * 0.55),
+      maskMat,
+      accent,
+    );
+    mask.position.set(0, 1.78, headSize * 0.55);
+    mask.name = "story_puppet_mask";
+    extras.push(mask);
+    root.add(mask);
+  }
+  if (appearance.prismaticGray) {
+    const prism = createToonMesh(new THREE.BoxGeometry(0.18, 0.18, 0.18), 0xc0c4d0, 0xff3355);
+    prism.position.set(0.42, 1.55, 0.2);
+    prism.name = "prismatic_gray_marker";
+    extras.push(prism);
+    root.add(prism);
+  }
 
   if (appearance.parts.hair === "angular" || appearance.parts.hair === "tufts") {
     const spike = createToonMesh(new THREE.BoxGeometry(0.14, 0.38, 0.12), accent);

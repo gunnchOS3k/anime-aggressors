@@ -45,6 +45,7 @@ function emptySeats(n: number): PlayerSeat[] {
     state: "EMPTY" as const,
     participantId: null,
     fighterId: null,
+    bodyVariant: null,
     displayName: null,
     team: null,
     identity: null,
@@ -66,6 +67,7 @@ function publicView(room: PartyRoom): PublicRoomView {
       state: s.state,
       displayName: s.displayName,
       fighterId: s.fighterId,
+      bodyVariant: s.bodyVariant,
     })),
     spectatorCount: room.spectators.length,
     maxPlayerSeats: room.capabilities.maxPlayerSeats,
@@ -225,7 +227,12 @@ export class PartyRoomSession {
     );
   }
 
-  setFighter(participantId: string, token: string, fighterId: string): { ok: boolean; reason?: string } {
+  setFighter(
+    participantId: string,
+    token: string,
+    fighterId: string,
+    preferredBodyVariant?: import("./types.js").FighterBodyVariant | null,
+  ): { ok: boolean; reason?: string } {
     const p = this.room.participants.find((x) => x.id === participantId && x.token === token);
     if (!p || p.seatIndex == null) return { ok: false, reason: "not_seated_player" };
     const seat = this.room.seats[p.seatIndex]!;
@@ -233,8 +240,14 @@ export class PartyRoomSession {
     seat.identity = assignDuplicateIdentity(
       fighterId,
       seat.seatIndex,
-      this.room.seats.map((s) => ({ fighterId: s.fighterId, seatIndex: s.seatIndex })),
+      this.room.seats.map((s) => ({
+        fighterId: s.fighterId,
+        seatIndex: s.seatIndex,
+        bodyVariant: s.bodyVariant,
+      })),
+      preferredBodyVariant,
     );
+    seat.bodyVariant = seat.identity.bodyVariant;
     return { ok: true };
   }
 

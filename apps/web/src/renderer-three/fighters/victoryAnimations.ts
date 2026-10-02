@@ -76,6 +76,24 @@ const VICTORY_FLAVORS: Record<string, (t: number) => VictoryAnimFlavor> = {
     auraOpacity: 0.5 + Math.abs(Math.sin(t * 6)) * 0.25,
     legSpread: 0.06,
   }),
+  yin: (t) => ({
+    torsoRot: -0.08,
+    armR: -0.45,
+    armL: 0.2,
+    bob: -0.02 + Math.sin(t * 1.2) * 0.01,
+    headTilt: -0.06,
+    auraOpacity: 0.35 + Math.sin(t * 2) * 0.08,
+    legSpread: 0.04,
+  }),
+  yang: (t) => ({
+    torsoRot: 0.12,
+    armR: -1.4 - Math.sin(t * 3) * 0.1,
+    armL: 0.55,
+    bob: 0.1 + Math.sin(t * 4) * 0.05,
+    headTilt: 0.08,
+    auraOpacity: 0.85 + Math.sin(t * 6) * 0.1,
+    legSpread: 0.14,
+  }),
 };
 
 export function victoryFlavorForFighter(fighterId: string, frame: number): VictoryAnimFlavor {
@@ -113,6 +131,8 @@ export function victorySubtitleForFighter(fighterId: string): string {
     "nix-calder": "Frost Victory",
     "orion-vell": "Gravity Victory",
     "vesper-nyx": "Void Victory",
+    yin: "Quiet Dominion",
+    yang: "Radiant Decree",
   };
   return subtitles[id] ?? "Victory";
 }

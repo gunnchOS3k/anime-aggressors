@@ -34,6 +34,7 @@ const LEGACY_WEB_MODES = new Set<AppRouteMode>([
   "moves",
   "combos",
   "career",
+  "story-campaign",
   "career-fighters",
   "career-history",
   "career-replays",

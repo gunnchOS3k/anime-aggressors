@@ -72,6 +72,10 @@ func _on_start_battle_pressed() -> void:
 	_press_feedback()
 	SceneRouter.go("mode_select")
 
+func _on_story_pressed() -> void:
+	_press_feedback()
+	SceneRouter.go_story()
+
 func _on_training_pressed() -> void:
 	_press_feedback()
 	SceneRouter.go_training()

@@ -1,0 +1,194 @@
+{
+  "schema": "aa_dual_form_roster/v4",
+  "contract": {
+    "gameplay_identities": 7,
+    "body_presentations": 14,
+    "body_variant_field": "body_variant",
+    "allowed_variants": [
+      "male",
+      "female"
+    ],
+    "gameplay_unaffected_by_variant": [
+      "move_data",
+      "frame_data",
+      "knockback",
+      "aura",
+      "weight",
+      "collision",
+      "ranking",
+      "network_authority"
+    ],
+    "shared_per_fighter": [
+      "bone_names",
+      "animation_clip_set",
+      "action_ids",
+      "root_motion",
+      "hitbox_sockets",
+      "vfx_sockets",
+      "weapon_anchors"
+    ]
+  },
+  "fighters": [
+    {
+      "fighter_id": "ember-vale",
+      "display_name": "Ember Vale",
+      "power_archetype_lane": "Flame combat synthesis",
+      "design_synthesis": "living kiln / ignition martial artist",
+      "visual_grammar": "charred structural panels, furnace-heart core, heat seams, ignition gauntlets, flame crown",
+      "body_variants": {
+        "male": {
+          "presentation_id": "ember-vale:male",
+          "notes": "same gameplay envelope"
+        },
+        "female": {
+          "presentation_id": "ember-vale:female",
+          "notes": "same gameplay envelope; athletic parity; no armor reduction cosplay"
+        }
+      },
+      "assets_required": [
+        "portrait",
+        "select_preview",
+        "battle_mesh",
+        "victory_preview"
+      ]
+    },
+    {
+      "fighter_id": "rook-ironside",
+      "display_name": "Rook Ironside",
+      "power_archetype_lane": "Impact / earth / armor synthesis",
+      "design_synthesis": "living bastion",
+      "visual_grammar": "layered geologic + forged plates, massive forearms, low CoG, shock-ring joints",
+      "body_variants": {
+        "male": {
+          "presentation_id": "rook-ironside:male",
+          "notes": "same gameplay envelope"
+        },
+        "female": {
+          "presentation_id": "rook-ironside:female",
+          "notes": "same gameplay envelope; athletic parity; no armor reduction cosplay"
+        }
+      },
+      "assets_required": [
+        "portrait",
+        "select_preview",
+        "battle_mesh",
+        "victory_preview"
+      ]
+    },
+    {
+      "fighter_id": "juno-spark",
+      "display_name": "Juno Spark",
+      "power_archetype_lane": "Electricity / speed / magnetism",
+      "design_synthesis": "arc courier / polarity striker",
+      "visual_grammar": "dark conductive substrate, current channels, rail fins, arc crown, charged core",
+      "body_variants": {
+        "male": {
+          "presentation_id": "juno-spark:male",
+          "notes": "same gameplay envelope"
+        },
+        "female": {
+          "presentation_id": "juno-spark:female",
+          "notes": "same gameplay envelope; athletic parity; no armor reduction cosplay"
+        }
+      },
+      "assets_required": [
+        "portrait",
+        "select_preview",
+        "battle_mesh",
+        "victory_preview"
+      ]
+    },
+    {
+      "fighter_id": "kaia-windrow",
+      "display_name": "Kaia Windrow",
+      "power_archetype_lane": "Air / pressure / flight",
+      "design_synthesis": "skyfoil duelist",
+      "visual_grammar": "airfoil sleeves, ribbon control surfaces, crescent edges, pressure-ring anchors",
+      "body_variants": {
+        "male": {
+          "presentation_id": "kaia-windrow:male",
+          "notes": "same gameplay envelope"
+        },
+        "female": {
+          "presentation_id": "kaia-windrow:female",
+          "notes": "same gameplay envelope; athletic parity; no armor reduction cosplay"
+        }
+      },
+      "assets_required": [
+        "portrait",
+        "select_preview",
+        "battle_mesh",
+        "victory_preview"
+      ]
+    },
+    {
+      "fighter_id": "nix-calder",
+      "display_name": "Nix Calder",
+      "power_archetype_lane": "Ice / construct / stage-control",
+      "design_synthesis": "cryolattice architect",
+      "visual_grammar": "dark cold core, faceted ice armor, crystal crown, lattice seams",
+      "body_variants": {
+        "male": {
+          "presentation_id": "nix-calder:male",
+          "notes": "same gameplay envelope"
+        },
+        "female": {
+          "presentation_id": "nix-calder:female",
+          "notes": "same gameplay envelope; athletic parity; no armor reduction cosplay"
+        }
+      },
+      "assets_required": [
+        "portrait",
+        "select_preview",
+        "battle_mesh",
+        "victory_preview"
+      ]
+    },
+    {
+      "fighter_id": "orion-vell",
+      "display_name": "Orion Vell",
+      "power_archetype_lane": "Gravity / vector / cosmic",
+      "design_synthesis": "orbital marshal",
+      "visual_grammar": "deep-space panels, constellation nodes, orbit rings, floating gravity stones",
+      "body_variants": {
+        "male": {
+          "presentation_id": "orion-vell:male",
+          "notes": "same gameplay envelope"
+        },
+        "female": {
+          "presentation_id": "orion-vell:female",
+          "notes": "same gameplay envelope; athletic parity; no armor reduction cosplay"
+        }
+      },
+      "assets_required": [
+        "portrait",
+        "select_preview",
+        "battle_mesh",
+        "victory_preview"
+      ]
+    },
+    {
+      "fighter_id": "vesper-nyx",
+      "display_name": "Vesper Nyx",
+      "power_archetype_lane": "Phase / void / shadow / spatial",
+      "design_synthesis": "phase weaver",
+      "visual_grammar": "asymmetric cowl, split tails, broken silhouette edges, void seams, ghost-offset",
+      "body_variants": {
+        "male": {
+          "presentation_id": "vesper-nyx:male",
+          "notes": "same gameplay envelope"
+        },
+        "female": {
+          "presentation_id": "vesper-nyx:female",
+          "notes": "same gameplay envelope; athletic parity; no armor reduction cosplay"
+        }
+      },
+      "assets_required": [
+        "portrait",
+        "select_preview",
+        "battle_mesh",
+        "victory_preview"
+      ]
+    }
+  ]
+}
