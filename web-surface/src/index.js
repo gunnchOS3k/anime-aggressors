@@ -1,4 +1,4 @@
-const SHA = "11eb8a420c1f9777fe2555d64bdaf718c3955299";
+const SHA = "0188ea458dce77ba322e7e1fede841f216c004f0";
 const PREFIX = `anime/${SHA}/`;
 
 const FILES = {
@@ -24,11 +24,16 @@ const MIME = {
 export function runtimeManifest() {
   return {
     channel: "DEVELOPMENT",
+    release_channel: "DEVELOPMENT",
     label: "DEVELOPMENT_BUILD",
     repo: "gunnchOS3k/anime-aggressors",
-    ref: "v4/dual-form-power-roster",
+    ref: "main",
+    source_ref: "main",
     sha: SHA,
-    acceptedMain: false,
+    source_sha: SHA,
+    acceptedMain: true,
+    FINAL_CHARACTER_ART_PASS: false,
+    HUMAN_ART_APPROVAL: false,
     godot: "4.5.2.stable.official",
     exportPreset: "Web",
     threads: true,
