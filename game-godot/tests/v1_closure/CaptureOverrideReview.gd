@@ -55,6 +55,8 @@ func _run() -> void:
 		video_frame = i
 		if watch._battle != null:
 			for actor in watch._battle.fighters_root.get_children():
+				if not actor.has_method("training_play_move"):
+					continue
 				if not actor.has_meta("capture_sfx"):
 					actor.set_meta("capture_sfx", true)
 					actor.move_runner.move_started.connect(func(mid: String):
