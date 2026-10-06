@@ -31,7 +31,7 @@ func _run() -> void:
 			var camera = model.get("_camera")
 			camera.size = 0.82
 			camera.position = Vector3(0, 1.15, 5)
-			camera.look_at(Vector3(0, 1.15, 0))
+			camera.look_at_from_position(camera.position, Vector3(0, 1.15, 0))
 			for expression in ["neutral"] + Acting.EXPRESSIONS:
 				model.set_cinematic_expression(expression)
 				model.get("_expression_controller").set_expression(expression, true)
