@@ -206,6 +206,8 @@ func configure(fighter_data: Dictionary, body_variant: String = "") -> bool:
 	_enforce_exactly_one_visible_body()
 	_reset_model_root_transform()
 	_frame_camera_for_figure()
+	if _face_chip != null:
+		_face_chip.visible = not _using_collectible
 	_set_loaded(_loaded_model != null)
 	_configure_swap_count += 1
 	if _configure_swap_count % VIEWPORT_REFRESH_EVERY_SWAPS == 0:
@@ -1683,6 +1685,11 @@ func _update_expression_for_state(state: String) -> void:
 
 
 func _refresh_aura_overlay() -> void:
+	if _using_collectible and _aura_overlay != null:
+		_aura_overlay.visible = false # Elemental gameplay VFX replace the old rectangular body overlay.
+		return
+	if _aura_overlay != null:
+		_aura_overlay.visible = true
 	if _aura_overlay == null:
 		return
 	var tier_alpha := clampf(0.08 + float(_aura_tier) * 0.12, 0.08, 0.48)
