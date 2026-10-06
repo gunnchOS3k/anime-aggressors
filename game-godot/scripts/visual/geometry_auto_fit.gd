@@ -18,7 +18,7 @@ const OCCUPANCY := {
 	"SHOWCASE": {"min": 0.72, "max": 0.88, "target": 0.80},
 	"VERSUS": {"min": 0.68, "max": 0.84, "target": 0.76},
 	"MATCH_START": {"min": 0.68, "max": 0.84, "target": 0.76},
-	"BATTLE": {"min": 0.0, "max": 1.0, "target": 0.0},
+	"BATTLE": {"min": 0.0, "max": 1.0, "target": 0.36},
 	"VICTORY": {"min": 0.70, "max": 0.88, "target": 0.78},
 }
 

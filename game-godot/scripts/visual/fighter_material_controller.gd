@@ -8,6 +8,8 @@ const _ElementalMaterial = preload("res://scripts/visual/elemental_material_cont
 @export var team_color: Color = Color.WHITE
 @export var accessibility_reduce_flash: bool = false
 
+var preserve_imported_materials := false
+
 var _mesh_instances: Array[MeshInstance3D] = []
 var _base_colors: Dictionary = {}
 var _bound_root: Node3D
@@ -23,13 +25,13 @@ func bind_model(root: Node3D, fighter_id: String = "") -> void:
 	_localize_materials(root)
 	_collect_meshes(root)
 	_apply_team_tint()
-	if not fighter_id.is_empty():
+	if not preserve_imported_materials and not fighter_id.is_empty():
 		_ElementalMaterial.apply_to_root(root, fighter_id, 0.0, true, _presentation_context)
 
 
 func set_presentation_context(context: String) -> void:
 	_presentation_context = context
-	if _bound_root != null and not _fighter_id.is_empty():
+	if not preserve_imported_materials and _bound_root != null and not _fighter_id.is_empty():
 		_ElementalMaterial.apply_to_root(_bound_root, _fighter_id, 0.0, true, _presentation_context)
 
 
@@ -60,7 +62,7 @@ func set_hit_flash(intensity: float = 1.0) -> void:
 
 func set_charge_emission(level: float) -> void:
 	var charged := clampf(level, 0.0, 2.0)
-	if _bound_root != null and not _fighter_id.is_empty():
+	if not preserve_imported_materials and _bound_root != null and not _fighter_id.is_empty():
 		_ElementalMaterial.apply_to_root(_bound_root, _fighter_id, clampf(charged / 2.0, 0.0, 1.0), true, _presentation_context)
 	for mesh in _mesh_instances:
 		if mesh == null:

@@ -93,7 +93,7 @@ export class PlatformFighterApp {
   private showControlsOverlay = false;
   private disposeOnboarding: (() => void) | null = null;
   private prevStocks: number[] = [3, 3];
-  private prevShielding: boolean[] = [false, false];
+  private prevShieldStun: number[] = [0, 0];
 
   private trainingDummyBehavior: import("@anime-aggressors/game-core").TrainingDummyBehavior = "idle";
 
@@ -548,11 +548,11 @@ export class PlatformFighterApp {
           this.comboHits += 1;
         }
       }
-      const shielding = p.actionState === "shielding";
-      if (shielding && !this.prevShielding[p.id]) {
+      const blockConfirmed = p.actionState === "shieldStun" || p.actionState === "shieldBreak";
+      if (blockConfirmed && p.shieldStunFrames > this.prevShieldStun[p.id]) {
         globalAudio.play("shield_hit", 0.6);
       }
-      this.prevShielding[p.id] = shielding;
+      this.prevShieldStun[p.id] = p.shieldStunFrames;
       if (p.stocks < this.prevStocks[p.id]) {
         globalAudio.play("ko");
       }

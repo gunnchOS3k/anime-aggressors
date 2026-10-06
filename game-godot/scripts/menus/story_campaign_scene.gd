@@ -1,33 +1,51 @@
 extends "res://scripts/ui/console_menu_base.gd"
 
-const _Campaign = preload("res://scripts/story/green_between_campaign.gd")
-
-var _progress: Dictionary = {}
 var _status: Label
 var _body: Label
+var _route_picker: OptionButton
+var _replay_picker: OptionButton
+var _action: Button
 
 
 func _ready() -> void:
 	super._ready()
-	if title_label:
-		title_label.text = "The Green Between"
-	_progress = _Campaign.load_progress()
+	GameState.mode = "versus"
 	_build_ui()
 	_refresh()
+	_action.grab_focus()
 
 
 func _build_ui() -> void:
 	var host := VBoxContainer.new()
 	host.set_anchors_preset(Control.PRESET_FULL_RECT)
 	host.offset_left = 48
-	host.offset_top = 36
+	host.offset_top = 64
 	host.offset_right = -48
-	host.offset_bottom = -36
+	host.offset_bottom = -48
 	host.add_theme_constant_override("separation", 12)
 	add_child(host)
-	var epithet := Label.new()
-	epithet.text = "Kaia Windrow — The Skyflow Duelist"
-	host.add_child(epithet)
+	_route_picker = OptionButton.new()
+	_route_picker.name = "RoutePicker"
+	for route in CampaignRuntime.campaign.get("routes", []):
+		_route_picker.add_item(str(route["title"]))
+		var index := _route_picker.item_count - 1
+		_route_picker.set_item_metadata(index, str(route["id"]))
+		_route_picker.set_item_disabled(index, not CampaignRuntime.route_available(str(route["id"])))
+	_route_picker.item_selected.connect(func(index: int):
+		CampaignRuntime.select_route(str(_route_picker.get_item_metadata(index)))
+		_refresh())
+	host.add_child(_route_picker)
+	var presentation := OptionButton.new()
+	presentation.add_item("Female presentation")
+	presentation.add_item("Male presentation")
+	presentation.select(1 if CampaignRuntime.progress["presentation"] == "male" else 0)
+	presentation.item_selected.connect(func(index: int):
+		var previous: String = CampaignRuntime.progress["presentation"]
+		CampaignRuntime.progress["presentation"] = "male" if index == 1 else "female"
+		if not CampaignRuntime.save_progress():
+			CampaignRuntime.progress["presentation"] = previous
+		_refresh())
+	host.add_child(presentation)
 	_status = Label.new()
 	_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	host.add_child(_status)
@@ -37,50 +55,91 @@ func _build_ui() -> void:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 12)
 	host.add_child(row)
-	_button(row, "New Game", _on_new_game)
-	_button(row, "Continue", _on_continue)
-	_button(row, "Advance", _on_advance)
-	_button(row, "Back", _on_back_pressed)
+	_action = _button(row, "Play Encounter", _on_action)
+	_button(row, "Resume Save", _on_continue)
+	_button(row, "New Campaign", _on_new_game)
+	_button(row, "Back", on_back)
+	_replay_picker = OptionButton.new()
+	_replay_picker.name = "ChapterReplayPicker"
+	host.add_child(_replay_picker)
+	_button(host, "Replay Selected Encounter", _on_replay)
+	var notice := Label.new()
+	notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	notice.text = "V1 candidate · Draft adaptation · Story and art await owner review."
+	if CampaignRuntime.route_review_enabled():
+		notice.text += "\nOpening routes are accessible for review; Gray and cosmic unlocks require completed campaigns."
+	host.add_child(notice)
 
 
-func _button(row: Node, label: String, handler: Callable) -> void:
+func _button(row: Node, text: String, handler: Callable) -> Button:
 	var button := Button.new()
-	button.text = label
+	button.text = text
 	button.custom_minimum_size = Vector2(160, 48)
 	button.pressed.connect(handler)
 	row.add_child(button)
+	return button
 
 
 func _refresh() -> void:
-	var list: Array = _Campaign.nodes()
-	var index := clampi(int(_progress.get("node_index", 0)), 0, maxi(list.size() - 1, 0))
-	var node: Dictionary = list[index] if not list.is_empty() else {}
-	_status.text = "Node %d/%d — %s\nEssence %s · Rook First Loss %s · Story Yin/Yang locked" % [
-		index + 1,
-		list.size(),
-		str(node.get("title", "")),
-		str(_progress.get("essence", 0)),
-		"canonical" if bool(_progress.get("rook_first_loss_canonical", false)) else "not yet",
-	]
-	_body.text = str(node.get("body", "DRAFT_NARRATIVE_COPY"))
+	var id: String = CampaignRuntime.progress["selected_route"]
+	var route: Dictionary = CampaignRuntime.route_data(id)
+	var node: Dictionary = CampaignRuntime.current_node()
+	if title_label:
+		title_label.text = route.get("title", "Story")
+	for index in range(_route_picker.item_count):
+		var route_id := str(_route_picker.get_item_metadata(index))
+		_route_picker.set_item_disabled(index, not CampaignRuntime.route_available(route_id))
+		if route_id == id:
+			_route_picker.select(index)
+	var entry: Dictionary = CampaignRuntime.progress["routes"][id]
+	_status.text = "%s\nChapters completed: %d · Allies recruited: %d · Essences: %d" % [
+		node.get("title", ""), entry["completed"].size(), entry["recruited"].size(), entry["essence"]]
+	_body.text = str(node.get("body", node.get("block_reason", "")))
+	if not CampaignRuntime.last_error.is_empty():
+		_body.text += "\n" + CampaignRuntime.last_error
+	_action.disabled = not bool(node.get("implemented", false))
+	_action.text = "Continue Scene" if node.get("kind") == "INTERACTIVE_DIALOGUE" else "Play Encounter"
+	_replay_picker.clear()
+	for chapter in route.get("nodes", []):
+		if str(chapter["id"]) in entry["completed"] and chapter.get("kind") == "STORY_BATTLE":
+			_replay_picker.add_item(str(chapter["title"]))
+			_replay_picker.set_item_metadata(_replay_picker.item_count - 1, str(chapter["id"]))
+	_replay_picker.disabled = _replay_picker.item_count == 0
 
 
 func _on_new_game() -> void:
-	_progress = _Campaign.new_progress()
-	_Campaign.save_progress(_progress)
-	_refresh()
+	var confirm := ConfirmationDialog.new()
+	confirm.dialog_text = "Start a new campaign? This replaces saved Story progress."
+	confirm.confirmed.connect(func():
+		CampaignRuntime.reset_campaign()
+		_refresh())
+	confirm.visibility_changed.connect(func():
+		if not confirm.visible:
+			confirm.queue_free())
+	add_child(confirm)
+	confirm.popup_centered()
 
 
 func _on_continue() -> void:
-	_progress = _Campaign.load_progress()
+	CampaignRuntime.load_progress()
 	_refresh()
 
 
-func _on_advance() -> void:
-	_progress = _Campaign.advance(_progress)
-	_Campaign.save_progress(_progress)
-	_refresh()
+func _on_action() -> void:
+	if CampaignRuntime.current_node().get("kind") == "INTERACTIVE_DIALOGUE":
+		CampaignRuntime.acknowledge_scene()
+		_refresh()
+	elif CampaignRuntime.begin_encounter():
+		SceneRouter.go("battle")
+	else:
+		_refresh()
 
 
-func _on_back_pressed() -> void:
+func _on_replay() -> void:
+	if _replay_picker.item_count > 0 and CampaignRuntime.begin_encounter(str(_replay_picker.get_item_metadata(_replay_picker.selected))):
+		SceneRouter.go("battle")
+
+
+func on_back() -> void:
+	CampaignRuntime.abandon_encounter()
 	SceneRouter.go("main_menu")

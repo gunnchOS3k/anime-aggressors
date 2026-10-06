@@ -4,6 +4,7 @@ class_name CombatFeedback
 ## Data-driven hit feedback: hitstop, camera, VFX, Path A procedural SFX.
 
 const _ProceduralAudio = preload("res://scripts/audio/procedural_audio_bank.gd")
+const _V1Sfx = preload("res://scripts/audio/v1_candidate_sfx.gd")
 const _SfxResolver = preload("res://scripts/audio/combat_sfx_resolver.gd")
 const _VfxDirector = preload("res://scripts/visual/move_vfx_director.gd")
 const _Predictor = preload("res://scripts/combat/critical_launch_predictor.gd")
@@ -63,7 +64,21 @@ func apply_hit(attacker: Node, defender: Node, move: Dictionary, info: Dictionar
 	result["camera_event"] = fb.get("camera_event", "")
 	result["screen_flash"] = fb.get("screen_flash", false)
 	result["element"] = move.get("element_effect", {}).get("type", "")
-	_play_procedural_sfx(result.sfx_event, tier, attacker)
+	if bool(result.get("blocked", false)):
+		result["hitstop_frames"] = clampi(hitstop, 2, 4)
+		result["sfx_event"] = "block"
+		result["vfx_event"] = "shield_flash"
+		result["camera_event"] = ""
+		result["screen_flash"] = false
+		var defender_id := str(defender.fighter_id) if defender != null and "fighter_id" in defender else ""
+		_V1Sfx.play_event(defender_id, "block", self)
+		emit_shield_flash(defender_id)
+		feedback_triggered.emit(result)
+		return result
+	var fid := str(attacker.fighter_id) if attacker != null and "fighter_id" in attacker else fighter_id
+	var played := _V1Sfx.play_event(fid, _V1Sfx.impact_event(move), self)
+	if not bool(played.get("ok", false)):
+		_play_procedural_sfx(result.sfx_event, tier, attacker, str(move.get("move_id", "")))
 	_play_v3_move_content(attacker, defender, move, result)
 	_trigger_camera(tier, fb.get("camera_event", ""))
 	_emit_juice("hitstop", {"tier": tier, "frames": hitstop})
@@ -263,7 +278,7 @@ func _play_v3_move_content(attacker: Node, defender: Node, move: Dictionary, res
 	result["particle_profile"] = fb.get("particle_profile", "")
 
 
-func _play_procedural_sfx(event: String, tier: String, attacker: Node) -> void:
+func _play_procedural_sfx(event: String, tier: String, attacker: Node, move_id: String = "") -> void:
 	if event == "":
 		return
 	var fid := fighter_id
@@ -271,9 +286,7 @@ func _play_procedural_sfx(event: String, tier: String, attacker: Node) -> void:
 		fid = str(attacker.fighter_id)
 	elif fid == "" and attacker != null and attacker.has_method("get") and attacker.get("data") is Dictionary:
 		fid = str((attacker.get("data") as Dictionary).get("id", ""))
-	var mid := ""
-	if attacker != null and "_current_move" in attacker and attacker._current_move is Dictionary:
-		mid = str(attacker._current_move.get("move_id", ""))
+	var mid := move_id
 	var played: Dictionary
 	if fid != "" and mid != "":
 		played = _SfxResolver.play_move(fid, mid, self)

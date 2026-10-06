@@ -14,6 +14,8 @@ var combat_feedback: Node
 func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_pct: float) -> void:
 	if attacker == null or defender == null:
 		return
+	if ("invincible" in defender and defender.invincible) or ("grabbed_by" in defender and defender.grabbed_by != null):
+		return
 	var from_projectile := bool(move.get("_from_projectile", false))
 	var move_id := str(move.get("move_id", ""))
 	var is_direct_throw := move_id.begins_with("throw_") or str(move.get("move_type", "")) == "throw"
@@ -99,9 +101,13 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 			attacker.stamp_runtime_hook(str(hook))
 	dealt = float(info.get("damage", dealt))
 	kb = info.get("launch", kb)
+	# Classify contact before presenting it; receive_hit used to mark block too late.
+	if ("shielding" in defender and defender.shielding) or ("state_machine" in defender and defender.state_machine.current_state == "shield_hold"):
+		info["blocked"] = true
+		info["launch"] = Vector2.ZERO
 	if combat_feedback:
 		info = combat_feedback.apply_hit(attacker, defender, scaled, info)
-		if combat_feedback.has_method("spawn_hit_spark") and defender is Node2D:
+		if not bool(info.get("blocked", false)) and combat_feedback.has_method("spawn_hit_spark") and defender is Node2D:
 			combat_feedback.spawn_hit_spark(defender, defender.global_position + Vector2(0, -24), str(info.get("element", "")))
 		if attacker != null and "last_impact_readable" in attacker:
 			attacker.last_impact_readable = true

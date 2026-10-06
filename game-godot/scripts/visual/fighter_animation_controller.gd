@@ -190,6 +190,8 @@ func _disable_embedded_players(node: Node) -> void:
 
 
 func _should_use_embedded_candidate(_model_root: Node3D) -> bool:
+	if str(_model_root.name).begins_with("CollectibleV1_"):
+		return true
 	if not _AssetResolver.staging_review_enabled():
 		return false
 	var info: Dictionary = _AssetResolver.resolve_model_path(_fighter_id)

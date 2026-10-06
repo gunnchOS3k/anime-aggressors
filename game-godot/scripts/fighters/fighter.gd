@@ -219,6 +219,7 @@ func apply_form(form_id: String) -> void:
 
 
 func on_transform_sequence_start(_from: String, _to: String) -> void:
+	preload("res://scripts/audio/v1_candidate_sfx.gd").play_event(fighter_id, "transform", self)
 	_transform_sequence_active = true
 	state_machine.enter(_FighterStates.AURA_BURST_STARTUP)
 	if model_3d != null and model_3d.has_method("play_clip"):
@@ -668,13 +669,18 @@ func _handle_actions() -> void:
 		_start_dodge()
 	if _read_grab_pressed():
 		_start_move("grab")
-	if _read_attack_pressed():
+	var attack_pressed := _read_attack_pressed()
+	var special_pressed := _read_special_pressed()
+	if attack_pressed and special_pressed and is_on_floor() and not is_aura_input_held() and aura < 100.0:
+		_start_move_by_command("attack_heavy")
+		return
+	if attack_pressed:
 		if aura >= 100.0:
 			_start_move_by_command("aura_burst")
 			return
 		var cmd: String = _resolve_attack_command()
 		_start_move_by_command(cmd)
-	if _read_special_pressed() and not is_aura_input_held():
+	if special_pressed and not is_aura_input_held():
 		_start_move_by_command(_resolve_special_command())
 
 func _start_move(move_id: String) -> void:
@@ -717,7 +723,7 @@ func _resolve_attack_command() -> String:
 	if up: return "attack_up"
 	if down: return "attack_down"
 	if absf(axis) > 0.3: return "attack_forward"
-	# heavy_attack / smash remain DESIGN_ONLY: CONTROLS do not distinguish tilt vs smash/heavy.
+	# Grounded simultaneous Attack + Special resolves heavy before these tilt inputs.
 	if _jab_chain == 0: return "attack_neutral"
 	if _jab_chain == 1: return "attack_neutral"
 	return "attack_neutral"
@@ -803,6 +809,8 @@ func _start_move_by_command(cmd: String) -> void:
 	_start_move_dict(m)
 
 func _start_move_dict(m: Dictionary) -> void:
+	var startup_event := "super_startup" if str(m.get("move_id", "")) == "aura_burst" else "whiff"
+	preload("res://scripts/audio/v1_candidate_sfx.gd").play_event(fighter_id, startup_event, self)
 	var base_move := m
 	if not _current_form_id.is_empty() and not _forms_doc.is_empty():
 		var form_entry: Dictionary = _FormDefinition.form_entry(_forms_doc, _current_form_id)
@@ -1049,11 +1057,12 @@ func _on_move_active(move: Dictionary) -> void:
 	if mt == "throw" or mid.begins_with("throw_"):
 		state_machine.enter(_FighterStates.THROW_RELEASE)
 	if mt == "projectile" or move.has("projectile"):
-		projectile_spawner.spawn_from_move(_current_move, aura)
+		if move_runner.frame_in_phase == 1:
+			projectile_spawner.spawn_from_move(_current_move, aura)
 		state_machine.enter(_FighterStates.SPECIAL_ACTIVE)
 		return
 	var sm: Dictionary = move.get("self_movement", {})
-	if sm is Dictionary and (sm.get("x", 0) != 0 or sm.get("y", 0) != 0):
+	if move_runner.frame_in_phase == 1 and sm is Dictionary and (sm.get("x", 0) != 0 or sm.get("y", 0) != 0):
 		velocity += Vector2(float(sm.get("x", 0)) * facing, float(sm.get("y", 0)))
 	hitbox.monitoring = true
 	_update_hitbox_from_move(move)
@@ -1337,6 +1346,9 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 		var sdmg: float = info.get("shield_damage", info.get("damage", 0.0) * 0.8)
 		shield_health -= sdmg
 		info["blocked"] = true
+		_hitstop = _CombatMath.frames_to_seconds(info.get("hitstop_frames", 3))
+		if attacker != null and "_hitstop" in attacker:
+			attacker._hitstop = _hitstop * 0.5
 		hit_landed.emit(info)
 		if shield_health <= 0.0:
 			shielding = false
@@ -1404,6 +1416,7 @@ func reset_fighter() -> void:
 	, CONNECT_ONE_SHOT)
 
 func lose_stock() -> void:
+	preload("res://scripts/audio/v1_candidate_sfx.gd").play_event(fighter_id, "ko", self)
 	stocks -= 1
 	state_machine.enter(_FighterStates.KO)
 	ensure_visible_presentation()

@@ -92,7 +92,9 @@ func _spawn_portrait(fighter_data: Dictionary, left: bool) -> void:
 	elif portrait.has_method("set_select_mode"):
 		portrait.set_select_mode(true)
 	if portrait.has_method("configure"):
-		portrait.configure(fighter_data)
+		var presentation_data := fighter_data.duplicate()
+		presentation_data["body_variant"] = GameState.p1_body_variant if left else GameState.p2_body_variant
+		portrait.configure(presentation_data)
 	if portrait.has_method("set_select_mode") and not portrait.has_method("set_presentation_context"):
 		portrait.set_select_mode(true)
 	if portrait.has_method("play_lock_in"):

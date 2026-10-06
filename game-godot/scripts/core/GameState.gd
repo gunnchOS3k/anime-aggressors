@@ -609,3 +609,16 @@ func competitive_stage_ids() -> Array:
 			continue
 		out.append(id)
 	return out
+
+
+func selectable_roster_ids() -> Array:
+	var ids := roster_ids()
+	var campaign_runtime := get_node_or_null("/root/CampaignRuntime")
+	var review := OS.is_debug_build() and OS.get_environment("AA_V1_ROUTE_REVIEW") == "1"
+	if review:
+		return ids
+	var selected := []
+	for id in ids:
+		if id not in ["yin", "yang"] or (campaign_runtime != null and bool(campaign_runtime.progress.get(str(id) + "_unlocked", false))):
+			selected.append(id)
+	return selected

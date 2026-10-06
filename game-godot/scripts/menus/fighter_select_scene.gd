@@ -65,7 +65,7 @@ const SHAKE_THRESHOLD := 2.35
 
 
 func _ready() -> void:
-	_roster = GameState.roster_ids()
+	_roster = GameState.selectable_roster_ids()
 	super._ready()
 	Vxp2BrandScript.apply_surface_chrome(self)
 	if title_label:
@@ -793,6 +793,7 @@ func _ensure_lockin_callout() -> void:
 
 
 func _announce_lock(slot: int, fighter_id: String) -> Dictionary:
+	preload("res://scripts/audio/v1_candidate_sfx.gd").play_event(fighter_id, "select", self)
 	var announced := _Announcer.announce_lock(slot, fighter_id, self, false)
 	if _lockin_callout != null and _lockin_callout.has_method("play") and bool(announced.get("announced", false)):
 		_lockin_callout.play(fighter_id)

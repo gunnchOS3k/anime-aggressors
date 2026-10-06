@@ -40,6 +40,7 @@ var _battle_camera
 var _stage_camera_profile: Dictionary = {}
 var _wave018_vis_accum: float = 0.0
 var _wave018_last_telemetry_ids: Array = []
+var _story_attempt_token: String = ""
 
 const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
 const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
@@ -50,6 +51,8 @@ var _training_pin_label: Label
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	if GameState.mode == "story":
+		_story_attempt_token = str(CampaignRuntime.active_encounter.get("token", ""))
 	_build_stage()
 	_spawn_fighters()
 	_setup_hud_panels()
@@ -552,6 +555,10 @@ func _on_pause_rematch() -> void:
 
 func _on_pause_return_menu() -> void:
 	_clear_pause_for_nav()
+	if GameState.mode == "story":
+		CampaignRuntime.abandon_encounter()
+		SceneRouter.go("story")
+		return
 	SceneRouter.go("main_menu")
 
 
@@ -559,6 +566,12 @@ func _finish_match(winner: int) -> void:
 	_active = false
 	GameState.last_winner_slot = winner
 	MatchTelemetry.record_match_end(winner)
+	if GameState.mode == "story" and not _story_attempt_token.is_empty():
+		CampaignRuntime.record_battle_result(winner, _story_attempt_token)
+		fighter1.controls_enabled = false
+		fighter2.controls_enabled = false
+		get_tree().create_timer(0.5).timeout.connect(func(): SceneRouter.go("results"), CONNECT_ONE_SHOT)
+		return
 	if _eval_mode:
 		_complete_eval(winner, "stocks_or_time")
 		return

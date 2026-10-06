@@ -46,7 +46,19 @@ func _ready_display() -> void:
 		fid = str(GameState.p1_fighter_id)
 		name = GameState.load_fighter(fid).get("displayName", name)
 	_configure_victory_portrait(fid, variant)
-	if GameState.arcade_active or GameState.mode == "arcade":
+	if GameState.mode == "story":
+		var receipt: Dictionary = CampaignRuntime.last_result
+		if title_label:
+			title_label.text = "Encounter Complete" if winner == 1 else "Encounter Lost — Try Again"
+		if rematch_btn:
+			rematch_btn.text = "Return to Story" if winner == 1 else "Retry Encounter"
+		if change_fighters_btn:
+			change_fighters_btn.visible = false
+		if change_stage_btn:
+			change_stage_btn.visible = false
+		if not bool(receipt.get("advanced", false)) and winner == 1 and not bool(receipt.get("replay", false)) and title_label:
+			title_label.text = "Progress could not be saved — Return to Story"
+	elif GameState.arcade_active or GameState.mode == "arcade":
 		var bout := GameState.arcade_index + 1
 		var total := GameState.ARCADE_LADDER.size()
 		if GameState.arcade_complete:
@@ -168,6 +180,15 @@ func _play_results_celebration() -> void:
 
 
 func _on_rematch_pressed() -> void:
+	if GameState.mode == "story":
+		if GameState.last_winner_slot != 1:
+			var replay_id := str(CampaignRuntime.last_result.get("node_id", "")) if bool(CampaignRuntime.last_result.get("replay", false)) else ""
+			if CampaignRuntime.begin_encounter(replay_id):
+				SceneRouter.go("battle")
+				return
+		CampaignRuntime.abandon_encounter()
+		SceneRouter.go("story")
+		return
 	if GameState.mode == "arcade" or GameState.arcade_active or GameState.arcade_complete or GameState.arcade_failed:
 		var next := GameState.advance_arcade_after_result()
 		match next:
@@ -203,6 +224,10 @@ func _on_change_stage_pressed() -> void:
 
 
 func _on_home_pressed() -> void:
+	if GameState.mode == "story":
+		CampaignRuntime.abandon_encounter()
+		SceneRouter.go("story")
+		return
 	GameState.arcade_active = false
 	GameState.arcade_complete = false
 	GameState.arcade_failed = false
