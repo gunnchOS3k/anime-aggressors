@@ -3,6 +3,7 @@
   "authority": "docs/anime-aggressors/creative/authority_pack_v1",
   "copy_status": "DRAFT_ADAPTATION",
   "implementation_complete": false,
+  "watch_authority": "SHARED_ROUTE_GRAPH",
   "root_route": "kaia-windrow",
   "spectral_order": [
     "ember-vale",
@@ -24,6 +25,8 @@
     {
       "id": "ember-vale",
       "title": "Ember Vale \u2014 Prismatic Route",
+      "watch_title": "Ember Route Variation",
+      "watch_role": "CAMPAIGN_VARIATION",
       "anchor": "ember-vale",
       "lesson": "conviction_without_domination",
       "recruitment_pairs": [
@@ -54,7 +57,9 @@
           "stage": "skyline-arena",
           "objective": "Win the opening encounter.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Explore the Anchor's movement and power. Conviction without domination."
+          "body": "Explore the Anchor's movement and power. Conviction without domination.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "ember-vale:recruit:vesper-nyx",
@@ -67,7 +72,9 @@
           "pair_index": 0,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 1: Vesper Nyx and Rook Ironside."
+          "body": "Balanced pair 1: Vesper Nyx and Rook Ironside.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "ember-vale:recruit:rook-ironside",
@@ -80,7 +87,9 @@
           "pair_index": 0,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 1: Vesper Nyx and Rook Ironside."
+          "body": "Balanced pair 1: Vesper Nyx and Rook Ironside.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "ember-vale:recruit:orion-vell",
@@ -93,7 +102,9 @@
           "pair_index": 1,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 2: Orion Vell and Juno Spark."
+          "body": "Balanced pair 2: Orion Vell and Juno Spark.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "ember-vale:recruit:juno-spark",
@@ -106,7 +117,9 @@
           "pair_index": 1,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 2: Orion Vell and Juno Spark."
+          "body": "Balanced pair 2: Orion Vell and Juno Spark.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "ember-vale:recruit:nix-calder",
@@ -119,7 +132,9 @@
           "pair_index": 2,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 3: Nix Calder and Kaia Windrow."
+          "body": "Balanced pair 3: Nix Calder and Kaia Windrow.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "ember-vale:recruit:kaia-windrow",
@@ -132,7 +147,9 @@
           "pair_index": 2,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 3: Nix Calder and Kaia Windrow."
+          "body": "Balanced pair 3: Nix Calder and Kaia Windrow.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "ember-vale:accord",
@@ -140,23 +157,35 @@
           "kind": "INTERACTIVE_DIALOGUE",
           "implemented": true,
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "The seven stand together. Their differences remain. The Accord is imperfect but real."
+          "body": "The seven stand together. Their differences remain. The Accord is imperfect but real.",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "ember-vale:catastrophe",
           "title": "The Catastrophe",
-          "kind": "AFTERMATH",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "kind": "INTERACTIVE_DIALOGUE",
+          "implemented": true,
+          "copy_status": "DRAFT_ADAPTATION",
+          "body": "Yin sees seven differences capable of conflict. Yang sees seven identities to reconcile through imposed definition. The Seven attack; ordinary damage cannot resolve the cosmic contract.",
+          "expression": "shock",
+          "watch_seconds": 10
         },
         {
           "id": "ember-vale:impossible_battle_1",
           "title": "Impossible Yin/Yang Battle I",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_ADAPTATION",
+          "opponent": "yin",
+          "additional_opponent": "yang",
+          "stage": "void-pier",
+          "objective_contract": "COSMIC_SURVIVAL",
+          "survive_seconds": 24,
+          "objective": "Survive the Yin/Yang encounter. Ordinary damage cannot defeat these story manifestations.",
+          "body": "Survive, evade and recover. The team itself is becoming the battleground. The outcome leads to the First Loss, not victory over Yin or Yang.",
+          "expression": "battle_intent",
+          "watch_seconds": 14
         },
         {
           "id": "ember-vale:first_loss",
@@ -166,7 +195,9 @@
           "block_reason": "The owner must approve this Anchor's First Loss.",
           "copy_status": "DRAFT_ADAPTATION",
           "first_loss": null,
-          "canon_status": "OPEN_CANON"
+          "canon_status": "OPEN_CANON",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "ember-vale:puppet_imbalance",
@@ -174,7 +205,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "ember-vale:first_release",
@@ -182,7 +215,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "ember-vale:equilibrium",
@@ -190,7 +225,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "ember-vale:dual_release_1",
@@ -198,7 +235,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "ember-vale:dual_release_2",
@@ -206,7 +245,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "ember-vale:prismatic_gray",
@@ -214,7 +255,9 @@
           "kind": "TRANSFORMATION",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "ember-vale:impossible_battle_2",
@@ -222,7 +265,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "ember-vale:epilogue",
@@ -230,7 +275,9 @@
           "kind": "AFTERMATH",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "ember-vale:unlock",
@@ -238,13 +285,17 @@
           "kind": "UNLOCK",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         }
       ]
     },
     {
       "id": "rook-ironside",
       "title": "Rook Ironside \u2014 Prismatic Route",
+      "watch_title": "Rook Route Variation",
+      "watch_role": "CAMPAIGN_VARIATION",
       "anchor": "rook-ironside",
       "lesson": "strength_without_control",
       "recruitment_pairs": [
@@ -275,7 +326,9 @@
           "stage": "skyline-arena",
           "objective": "Win the opening encounter.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Explore the Anchor's movement and power. Strength without control."
+          "body": "Explore the Anchor's movement and power. Strength without control.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "rook-ironside:recruit:ember-vale",
@@ -288,7 +341,9 @@
           "pair_index": 0,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 1: Ember Vale and Juno Spark."
+          "body": "Balanced pair 1: Ember Vale and Juno Spark.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "rook-ironside:recruit:juno-spark",
@@ -301,7 +356,9 @@
           "pair_index": 0,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 1: Ember Vale and Juno Spark."
+          "body": "Balanced pair 1: Ember Vale and Juno Spark.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "rook-ironside:recruit:vesper-nyx",
@@ -314,7 +371,9 @@
           "pair_index": 1,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 2: Vesper Nyx and Kaia Windrow."
+          "body": "Balanced pair 2: Vesper Nyx and Kaia Windrow.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "rook-ironside:recruit:kaia-windrow",
@@ -327,7 +386,9 @@
           "pair_index": 1,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 2: Vesper Nyx and Kaia Windrow."
+          "body": "Balanced pair 2: Vesper Nyx and Kaia Windrow.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "rook-ironside:recruit:orion-vell",
@@ -340,7 +401,9 @@
           "pair_index": 2,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 3: Orion Vell and Nix Calder."
+          "body": "Balanced pair 3: Orion Vell and Nix Calder.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "rook-ironside:recruit:nix-calder",
@@ -353,7 +416,9 @@
           "pair_index": 2,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 3: Orion Vell and Nix Calder."
+          "body": "Balanced pair 3: Orion Vell and Nix Calder.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "rook-ironside:accord",
@@ -361,23 +426,35 @@
           "kind": "INTERACTIVE_DIALOGUE",
           "implemented": true,
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "The seven stand together. Their differences remain. The Accord is imperfect but real."
+          "body": "The seven stand together. Their differences remain. The Accord is imperfect but real.",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "rook-ironside:catastrophe",
           "title": "The Catastrophe",
-          "kind": "AFTERMATH",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "kind": "INTERACTIVE_DIALOGUE",
+          "implemented": true,
+          "copy_status": "DRAFT_ADAPTATION",
+          "body": "Yin sees seven differences capable of conflict. Yang sees seven identities to reconcile through imposed definition. The Seven attack; ordinary damage cannot resolve the cosmic contract.",
+          "expression": "shock",
+          "watch_seconds": 10
         },
         {
           "id": "rook-ironside:impossible_battle_1",
           "title": "Impossible Yin/Yang Battle I",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_ADAPTATION",
+          "opponent": "yin",
+          "additional_opponent": "yang",
+          "stage": "void-pier",
+          "objective_contract": "COSMIC_SURVIVAL",
+          "survive_seconds": 24,
+          "objective": "Survive the Yin/Yang encounter. Ordinary damage cannot defeat these story manifestations.",
+          "body": "Survive, evade and recover. The team itself is becoming the battleground. The outcome leads to the First Loss, not victory over Yin or Yang.",
+          "expression": "battle_intent",
+          "watch_seconds": 14
         },
         {
           "id": "rook-ironside:first_loss",
@@ -387,7 +464,9 @@
           "block_reason": "The owner must approve this Anchor's First Loss.",
           "copy_status": "DRAFT_ADAPTATION",
           "first_loss": null,
-          "canon_status": "OPEN_CANON"
+          "canon_status": "OPEN_CANON",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "rook-ironside:puppet_imbalance",
@@ -395,7 +474,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "rook-ironside:first_release",
@@ -403,7 +484,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "rook-ironside:equilibrium",
@@ -411,7 +494,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "rook-ironside:dual_release_1",
@@ -419,7 +504,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "rook-ironside:dual_release_2",
@@ -427,7 +514,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "rook-ironside:prismatic_gray",
@@ -435,7 +524,9 @@
           "kind": "TRANSFORMATION",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "rook-ironside:impossible_battle_2",
@@ -443,7 +534,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "rook-ironside:epilogue",
@@ -451,7 +544,9 @@
           "kind": "AFTERMATH",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "rook-ironside:unlock",
@@ -459,13 +554,17 @@
           "kind": "UNLOCK",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         }
       ]
     },
     {
       "id": "juno-spark",
       "title": "Juno Spark \u2014 Prismatic Route",
+      "watch_title": "Juno Route Variation",
+      "watch_role": "CAMPAIGN_VARIATION",
       "anchor": "juno-spark",
       "lesson": "action_with_purpose",
       "recruitment_pairs": [
@@ -496,7 +595,9 @@
           "stage": "skyline-arena",
           "objective": "Win the opening encounter.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Explore the Anchor's movement and power. Action with purpose."
+          "body": "Explore the Anchor's movement and power. Action with purpose.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "juno-spark:recruit:rook-ironside",
@@ -509,7 +610,9 @@
           "pair_index": 0,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 1: Rook Ironside and Kaia Windrow."
+          "body": "Balanced pair 1: Rook Ironside and Kaia Windrow.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "juno-spark:recruit:kaia-windrow",
@@ -522,7 +625,9 @@
           "pair_index": 0,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 1: Rook Ironside and Kaia Windrow."
+          "body": "Balanced pair 1: Rook Ironside and Kaia Windrow.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "juno-spark:recruit:ember-vale",
@@ -535,7 +640,9 @@
           "pair_index": 1,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 2: Ember Vale and Nix Calder."
+          "body": "Balanced pair 2: Ember Vale and Nix Calder.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "juno-spark:recruit:nix-calder",
@@ -548,7 +655,9 @@
           "pair_index": 1,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 2: Ember Vale and Nix Calder."
+          "body": "Balanced pair 2: Ember Vale and Nix Calder.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "juno-spark:recruit:vesper-nyx",
@@ -561,7 +670,9 @@
           "pair_index": 2,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 3: Vesper Nyx and Orion Vell."
+          "body": "Balanced pair 3: Vesper Nyx and Orion Vell.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "juno-spark:recruit:orion-vell",
@@ -574,7 +685,9 @@
           "pair_index": 2,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 3: Vesper Nyx and Orion Vell."
+          "body": "Balanced pair 3: Vesper Nyx and Orion Vell.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "juno-spark:accord",
@@ -582,23 +695,35 @@
           "kind": "INTERACTIVE_DIALOGUE",
           "implemented": true,
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "The seven stand together. Their differences remain. The Accord is imperfect but real."
+          "body": "The seven stand together. Their differences remain. The Accord is imperfect but real.",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "juno-spark:catastrophe",
           "title": "The Catastrophe",
-          "kind": "AFTERMATH",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "kind": "INTERACTIVE_DIALOGUE",
+          "implemented": true,
+          "copy_status": "DRAFT_ADAPTATION",
+          "body": "Yin sees seven differences capable of conflict. Yang sees seven identities to reconcile through imposed definition. The Seven attack; ordinary damage cannot resolve the cosmic contract.",
+          "expression": "shock",
+          "watch_seconds": 10
         },
         {
           "id": "juno-spark:impossible_battle_1",
           "title": "Impossible Yin/Yang Battle I",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_ADAPTATION",
+          "opponent": "yin",
+          "additional_opponent": "yang",
+          "stage": "void-pier",
+          "objective_contract": "COSMIC_SURVIVAL",
+          "survive_seconds": 24,
+          "objective": "Survive the Yin/Yang encounter. Ordinary damage cannot defeat these story manifestations.",
+          "body": "Survive, evade and recover. The team itself is becoming the battleground. The outcome leads to the First Loss, not victory over Yin or Yang.",
+          "expression": "battle_intent",
+          "watch_seconds": 14
         },
         {
           "id": "juno-spark:first_loss",
@@ -608,7 +733,9 @@
           "block_reason": "The owner must approve this Anchor's First Loss.",
           "copy_status": "DRAFT_ADAPTATION",
           "first_loss": null,
-          "canon_status": "OPEN_CANON"
+          "canon_status": "OPEN_CANON",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "juno-spark:puppet_imbalance",
@@ -616,7 +743,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "juno-spark:first_release",
@@ -624,7 +753,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "juno-spark:equilibrium",
@@ -632,7 +763,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "juno-spark:dual_release_1",
@@ -640,7 +773,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "juno-spark:dual_release_2",
@@ -648,7 +783,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "juno-spark:prismatic_gray",
@@ -656,7 +793,9 @@
           "kind": "TRANSFORMATION",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "juno-spark:impossible_battle_2",
@@ -664,7 +803,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "juno-spark:epilogue",
@@ -672,7 +813,9 @@
           "kind": "AFTERMATH",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "juno-spark:unlock",
@@ -680,13 +823,17 @@
           "kind": "UNLOCK",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         }
       ]
     },
     {
       "id": "kaia-windrow",
       "title": "The Green Between",
+      "watch_title": "Anime Aggressors OVA \u2014 Kaia Route",
+      "watch_role": "PRIMARY_OVA",
       "anchor": "kaia-windrow",
       "lesson": "balance_without_passivity",
       "recruitment_pairs": [
@@ -717,7 +864,9 @@
           "stage": "skyline-arena",
           "objective": "Win the opening encounter.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Explore the Anchor's movement and power. Balance without passivity."
+          "body": "Explore the Anchor's movement and power. Balance without passivity.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "kaia-windrow:recruit:juno-spark",
@@ -730,7 +879,9 @@
           "pair_index": 0,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 1: Juno Spark and Nix Calder."
+          "body": "Balanced pair 1: Juno Spark and Nix Calder.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "kaia-windrow:recruit:nix-calder",
@@ -743,7 +894,9 @@
           "pair_index": 0,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 1: Juno Spark and Nix Calder."
+          "body": "Balanced pair 1: Juno Spark and Nix Calder.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "kaia-windrow:recruit:rook-ironside",
@@ -756,7 +909,9 @@
           "pair_index": 1,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 2: Rook Ironside and Orion Vell."
+          "body": "Balanced pair 2: Rook Ironside and Orion Vell.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "kaia-windrow:recruit:orion-vell",
@@ -769,7 +924,9 @@
           "pair_index": 1,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 2: Rook Ironside and Orion Vell."
+          "body": "Balanced pair 2: Rook Ironside and Orion Vell.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "kaia-windrow:recruit:ember-vale",
@@ -782,7 +939,9 @@
           "pair_index": 2,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 3: Ember Vale and Vesper Nyx."
+          "body": "Balanced pair 3: Ember Vale and Vesper Nyx.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "kaia-windrow:recruit:vesper-nyx",
@@ -795,7 +954,9 @@
           "pair_index": 2,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 3: Ember Vale and Vesper Nyx."
+          "body": "Balanced pair 3: Ember Vale and Vesper Nyx.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "kaia-windrow:accord",
@@ -803,33 +964,48 @@
           "kind": "INTERACTIVE_DIALOGUE",
           "implemented": true,
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "The seven stand together. Their differences remain. The Accord is imperfect but real."
+          "body": "The seven stand together. Their differences remain. The Accord is imperfect but real.",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "kaia-windrow:catastrophe",
           "title": "The Catastrophe",
-          "kind": "AFTERMATH",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "kind": "INTERACTIVE_DIALOGUE",
+          "implemented": true,
+          "copy_status": "DRAFT_ADAPTATION",
+          "body": "Yin sees seven differences capable of conflict. Yang sees seven identities to reconcile through imposed definition. The Seven attack; ordinary damage cannot resolve the cosmic contract.",
+          "expression": "shock",
+          "watch_seconds": 10
         },
         {
           "id": "kaia-windrow:impossible_battle_1",
           "title": "Impossible Yin/Yang Battle I",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_ADAPTATION",
+          "opponent": "yin",
+          "additional_opponent": "yang",
+          "stage": "void-pier",
+          "objective_contract": "COSMIC_SURVIVAL",
+          "survive_seconds": 24,
+          "objective": "Survive the Yin/Yang encounter. Ordinary damage cannot defeat these story manifestations.",
+          "body": "Survive, evade and recover. The team itself is becoming the battleground. The outcome leads to the First Loss, not victory over Yin or Yang.",
+          "expression": "battle_intent",
+          "watch_seconds": 14
         },
         {
           "id": "kaia-windrow:first_loss",
           "title": "First Loss \u2014 Rook Ironside",
-          "kind": "AFTERMATH",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
+          "kind": "INTERACTIVE_DIALOGUE",
+          "implemented": true,
           "copy_status": "DRAFT_ADAPTATION",
           "first_loss": "rook-ironside",
-          "canon_status": "CANONICAL"
+          "canon_status": "CANONICAL",
+          "essence_after": 1,
+          "body": "Rook tries to carry the failure himself. His sacrifice is the tragic extreme of his protective virtue. He leaves the first Essence. Kaia remains Kaia, now carrying one other perspective.",
+          "expression": "grief",
+          "watch_seconds": 10
         },
         {
           "id": "kaia-windrow:puppet_imbalance",
@@ -837,7 +1013,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "kaia-windrow:first_release",
@@ -845,7 +1023,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "kaia-windrow:equilibrium",
@@ -853,7 +1033,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "kaia-windrow:dual_release_1",
@@ -861,7 +1043,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "kaia-windrow:dual_release_2",
@@ -869,7 +1053,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "kaia-windrow:prismatic_gray",
@@ -877,7 +1063,9 @@
           "kind": "TRANSFORMATION",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "kaia-windrow:impossible_battle_2",
@@ -885,7 +1073,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "kaia-windrow:epilogue",
@@ -893,7 +1083,9 @@
           "kind": "AFTERMATH",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "kaia-windrow:unlock",
@@ -901,13 +1093,17 @@
           "kind": "UNLOCK",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         }
       ]
     },
     {
       "id": "nix-calder",
       "title": "Nix Calder \u2014 Prismatic Route",
+      "watch_title": "Nix Route Variation",
+      "watch_role": "CAMPAIGN_VARIATION",
       "anchor": "nix-calder",
       "lesson": "order_without_imprisonment",
       "recruitment_pairs": [
@@ -938,7 +1134,9 @@
           "stage": "skyline-arena",
           "objective": "Win the opening encounter.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Explore the Anchor's movement and power. Order without imprisonment."
+          "body": "Explore the Anchor's movement and power. Order without imprisonment.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "nix-calder:recruit:kaia-windrow",
@@ -951,7 +1149,9 @@
           "pair_index": 0,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 1: Kaia Windrow and Orion Vell."
+          "body": "Balanced pair 1: Kaia Windrow and Orion Vell.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "nix-calder:recruit:orion-vell",
@@ -964,7 +1164,9 @@
           "pair_index": 0,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 1: Kaia Windrow and Orion Vell."
+          "body": "Balanced pair 1: Kaia Windrow and Orion Vell.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "nix-calder:recruit:juno-spark",
@@ -977,7 +1179,9 @@
           "pair_index": 1,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 2: Juno Spark and Vesper Nyx."
+          "body": "Balanced pair 2: Juno Spark and Vesper Nyx.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "nix-calder:recruit:vesper-nyx",
@@ -990,7 +1194,9 @@
           "pair_index": 1,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 2: Juno Spark and Vesper Nyx."
+          "body": "Balanced pair 2: Juno Spark and Vesper Nyx.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "nix-calder:recruit:rook-ironside",
@@ -1003,7 +1209,9 @@
           "pair_index": 2,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 3: Rook Ironside and Ember Vale."
+          "body": "Balanced pair 3: Rook Ironside and Ember Vale.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "nix-calder:recruit:ember-vale",
@@ -1016,7 +1224,9 @@
           "pair_index": 2,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 3: Rook Ironside and Ember Vale."
+          "body": "Balanced pair 3: Rook Ironside and Ember Vale.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "nix-calder:accord",
@@ -1024,23 +1234,35 @@
           "kind": "INTERACTIVE_DIALOGUE",
           "implemented": true,
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "The seven stand together. Their differences remain. The Accord is imperfect but real."
+          "body": "The seven stand together. Their differences remain. The Accord is imperfect but real.",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "nix-calder:catastrophe",
           "title": "The Catastrophe",
-          "kind": "AFTERMATH",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "kind": "INTERACTIVE_DIALOGUE",
+          "implemented": true,
+          "copy_status": "DRAFT_ADAPTATION",
+          "body": "Yin sees seven differences capable of conflict. Yang sees seven identities to reconcile through imposed definition. The Seven attack; ordinary damage cannot resolve the cosmic contract.",
+          "expression": "shock",
+          "watch_seconds": 10
         },
         {
           "id": "nix-calder:impossible_battle_1",
           "title": "Impossible Yin/Yang Battle I",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_ADAPTATION",
+          "opponent": "yin",
+          "additional_opponent": "yang",
+          "stage": "void-pier",
+          "objective_contract": "COSMIC_SURVIVAL",
+          "survive_seconds": 24,
+          "objective": "Survive the Yin/Yang encounter. Ordinary damage cannot defeat these story manifestations.",
+          "body": "Survive, evade and recover. The team itself is becoming the battleground. The outcome leads to the First Loss, not victory over Yin or Yang.",
+          "expression": "battle_intent",
+          "watch_seconds": 14
         },
         {
           "id": "nix-calder:first_loss",
@@ -1050,7 +1272,9 @@
           "block_reason": "The owner must approve this Anchor's First Loss.",
           "copy_status": "DRAFT_ADAPTATION",
           "first_loss": null,
-          "canon_status": "OPEN_CANON"
+          "canon_status": "OPEN_CANON",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "nix-calder:puppet_imbalance",
@@ -1058,7 +1282,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "nix-calder:first_release",
@@ -1066,7 +1292,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "nix-calder:equilibrium",
@@ -1074,7 +1302,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "nix-calder:dual_release_1",
@@ -1082,7 +1312,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "nix-calder:dual_release_2",
@@ -1090,7 +1322,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "nix-calder:prismatic_gray",
@@ -1098,7 +1332,9 @@
           "kind": "TRANSFORMATION",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "nix-calder:impossible_battle_2",
@@ -1106,7 +1342,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "nix-calder:epilogue",
@@ -1114,7 +1352,9 @@
           "kind": "AFTERMATH",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "nix-calder:unlock",
@@ -1122,13 +1362,17 @@
           "kind": "UNLOCK",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         }
       ]
     },
     {
       "id": "orion-vell",
       "title": "Orion Vell \u2014 Prismatic Route",
+      "watch_title": "Orion Route Variation",
+      "watch_role": "CAMPAIGN_VARIATION",
       "anchor": "orion-vell",
       "lesson": "understanding_without_detachment",
       "recruitment_pairs": [
@@ -1159,7 +1403,9 @@
           "stage": "skyline-arena",
           "objective": "Win the opening encounter.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Explore the Anchor's movement and power. Understanding without detachment."
+          "body": "Explore the Anchor's movement and power. Understanding without detachment.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "orion-vell:recruit:nix-calder",
@@ -1172,7 +1418,9 @@
           "pair_index": 0,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 1: Nix Calder and Vesper Nyx."
+          "body": "Balanced pair 1: Nix Calder and Vesper Nyx.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "orion-vell:recruit:vesper-nyx",
@@ -1185,7 +1433,9 @@
           "pair_index": 0,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 1: Nix Calder and Vesper Nyx."
+          "body": "Balanced pair 1: Nix Calder and Vesper Nyx.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "orion-vell:recruit:kaia-windrow",
@@ -1198,7 +1448,9 @@
           "pair_index": 1,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 2: Kaia Windrow and Ember Vale."
+          "body": "Balanced pair 2: Kaia Windrow and Ember Vale.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "orion-vell:recruit:ember-vale",
@@ -1211,7 +1463,9 @@
           "pair_index": 1,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 2: Kaia Windrow and Ember Vale."
+          "body": "Balanced pair 2: Kaia Windrow and Ember Vale.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "orion-vell:recruit:juno-spark",
@@ -1224,7 +1478,9 @@
           "pair_index": 2,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 3: Juno Spark and Rook Ironside."
+          "body": "Balanced pair 3: Juno Spark and Rook Ironside.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "orion-vell:recruit:rook-ironside",
@@ -1237,7 +1493,9 @@
           "pair_index": 2,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 3: Juno Spark and Rook Ironside."
+          "body": "Balanced pair 3: Juno Spark and Rook Ironside.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "orion-vell:accord",
@@ -1245,23 +1503,35 @@
           "kind": "INTERACTIVE_DIALOGUE",
           "implemented": true,
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "The seven stand together. Their differences remain. The Accord is imperfect but real."
+          "body": "The seven stand together. Their differences remain. The Accord is imperfect but real.",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "orion-vell:catastrophe",
           "title": "The Catastrophe",
-          "kind": "AFTERMATH",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "kind": "INTERACTIVE_DIALOGUE",
+          "implemented": true,
+          "copy_status": "DRAFT_ADAPTATION",
+          "body": "Yin sees seven differences capable of conflict. Yang sees seven identities to reconcile through imposed definition. The Seven attack; ordinary damage cannot resolve the cosmic contract.",
+          "expression": "shock",
+          "watch_seconds": 10
         },
         {
           "id": "orion-vell:impossible_battle_1",
           "title": "Impossible Yin/Yang Battle I",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_ADAPTATION",
+          "opponent": "yin",
+          "additional_opponent": "yang",
+          "stage": "void-pier",
+          "objective_contract": "COSMIC_SURVIVAL",
+          "survive_seconds": 24,
+          "objective": "Survive the Yin/Yang encounter. Ordinary damage cannot defeat these story manifestations.",
+          "body": "Survive, evade and recover. The team itself is becoming the battleground. The outcome leads to the First Loss, not victory over Yin or Yang.",
+          "expression": "battle_intent",
+          "watch_seconds": 14
         },
         {
           "id": "orion-vell:first_loss",
@@ -1271,7 +1541,9 @@
           "block_reason": "The owner must approve this Anchor's First Loss.",
           "copy_status": "DRAFT_ADAPTATION",
           "first_loss": null,
-          "canon_status": "OPEN_CANON"
+          "canon_status": "OPEN_CANON",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "orion-vell:puppet_imbalance",
@@ -1279,7 +1551,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "orion-vell:first_release",
@@ -1287,7 +1561,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "orion-vell:equilibrium",
@@ -1295,7 +1571,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "orion-vell:dual_release_1",
@@ -1303,7 +1581,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "orion-vell:dual_release_2",
@@ -1311,7 +1591,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "orion-vell:prismatic_gray",
@@ -1319,7 +1601,9 @@
           "kind": "TRANSFORMATION",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "orion-vell:impossible_battle_2",
@@ -1327,7 +1611,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "orion-vell:epilogue",
@@ -1335,7 +1621,9 @@
           "kind": "AFTERMATH",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "orion-vell:unlock",
@@ -1343,13 +1631,17 @@
           "kind": "UNLOCK",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         }
       ]
     },
     {
       "id": "vesper-nyx",
       "title": "Vesper Nyx \u2014 Prismatic Route",
+      "watch_title": "Vesper Route Variation",
+      "watch_role": "CAMPAIGN_VARIATION",
       "anchor": "vesper-nyx",
       "lesson": "uncertainty_without_deception",
       "recruitment_pairs": [
@@ -1380,7 +1672,9 @@
           "stage": "skyline-arena",
           "objective": "Win the opening encounter.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Explore the Anchor's movement and power. Uncertainty without deception."
+          "body": "Explore the Anchor's movement and power. Uncertainty without deception.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "vesper-nyx:recruit:orion-vell",
@@ -1393,7 +1687,9 @@
           "pair_index": 0,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 1: Orion Vell and Ember Vale."
+          "body": "Balanced pair 1: Orion Vell and Ember Vale.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "vesper-nyx:recruit:ember-vale",
@@ -1406,7 +1702,9 @@
           "pair_index": 0,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 1: Orion Vell and Ember Vale."
+          "body": "Balanced pair 1: Orion Vell and Ember Vale.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "vesper-nyx:recruit:nix-calder",
@@ -1419,7 +1717,9 @@
           "pair_index": 1,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 2: Nix Calder and Rook Ironside."
+          "body": "Balanced pair 2: Nix Calder and Rook Ironside.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "vesper-nyx:recruit:rook-ironside",
@@ -1432,7 +1732,9 @@
           "pair_index": 1,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 2: Nix Calder and Rook Ironside."
+          "body": "Balanced pair 2: Nix Calder and Rook Ironside.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "vesper-nyx:recruit:kaia-windrow",
@@ -1445,7 +1747,9 @@
           "pair_index": 2,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 3: Kaia Windrow and Juno Spark."
+          "body": "Balanced pair 3: Kaia Windrow and Juno Spark.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "vesper-nyx:recruit:juno-spark",
@@ -1458,7 +1762,9 @@
           "pair_index": 2,
           "objective": "Win this encounter to continue the recruitment pair.",
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "Balanced pair 3: Kaia Windrow and Juno Spark."
+          "body": "Balanced pair 3: Kaia Windrow and Juno Spark.",
+          "watch_seconds": 14,
+          "expression": "determination"
         },
         {
           "id": "vesper-nyx:accord",
@@ -1466,23 +1772,35 @@
           "kind": "INTERACTIVE_DIALOGUE",
           "implemented": true,
           "copy_status": "DRAFT_ADAPTATION",
-          "body": "The seven stand together. Their differences remain. The Accord is imperfect but real."
+          "body": "The seven stand together. Their differences remain. The Accord is imperfect but real.",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "vesper-nyx:catastrophe",
           "title": "The Catastrophe",
-          "kind": "AFTERMATH",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "kind": "INTERACTIVE_DIALOGUE",
+          "implemented": true,
+          "copy_status": "DRAFT_ADAPTATION",
+          "body": "Yin sees seven differences capable of conflict. Yang sees seven identities to reconcile through imposed definition. The Seven attack; ordinary damage cannot resolve the cosmic contract.",
+          "expression": "shock",
+          "watch_seconds": 10
         },
         {
           "id": "vesper-nyx:impossible_battle_1",
           "title": "Impossible Yin/Yang Battle I",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_ADAPTATION",
+          "opponent": "yin",
+          "additional_opponent": "yang",
+          "stage": "void-pier",
+          "objective_contract": "COSMIC_SURVIVAL",
+          "survive_seconds": 24,
+          "objective": "Survive the Yin/Yang encounter. Ordinary damage cannot defeat these story manifestations.",
+          "body": "Survive, evade and recover. The team itself is becoming the battleground. The outcome leads to the First Loss, not victory over Yin or Yang.",
+          "expression": "battle_intent",
+          "watch_seconds": 14
         },
         {
           "id": "vesper-nyx:first_loss",
@@ -1492,7 +1810,9 @@
           "block_reason": "The owner must approve this Anchor's First Loss.",
           "copy_status": "DRAFT_ADAPTATION",
           "first_loss": null,
-          "canon_status": "OPEN_CANON"
+          "canon_status": "OPEN_CANON",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "vesper-nyx:puppet_imbalance",
@@ -1500,7 +1820,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "vesper-nyx:first_release",
@@ -1508,7 +1830,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "vesper-nyx:equilibrium",
@@ -1516,7 +1840,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "vesper-nyx:dual_release_1",
@@ -1524,7 +1850,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "vesper-nyx:dual_release_2",
@@ -1532,7 +1860,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "vesper-nyx:prismatic_gray",
@@ -1540,7 +1870,9 @@
           "kind": "TRANSFORMATION",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "vesper-nyx:impossible_battle_2",
@@ -1548,7 +1880,9 @@
           "kind": "OBJECTIVE_BATTLE",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "vesper-nyx:epilogue",
@@ -1556,7 +1890,9 @@
           "kind": "AFTERMATH",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         },
         {
           "id": "vesper-nyx:unlock",
@@ -1564,7 +1900,9 @@
           "kind": "UNLOCK",
           "implemented": false,
           "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION"
+          "copy_status": "DRAFT_ADAPTATION",
+          "watch_seconds": 10,
+          "expression": "cinematic_closeup"
         }
       ]
     },

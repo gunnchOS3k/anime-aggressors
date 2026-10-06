@@ -16,6 +16,9 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 		return
 	if ("invincible" in defender and defender.invincible) or ("grabbed_by" in defender and defender.grabbed_by != null):
 		return
+	if bool(defender.get_meta("story_cosmic_contract", false)):
+		# Story manifestations reject ordinary combat damage; competitive Yin/Yang have no such metadata.
+		return
 	var from_projectile := bool(move.get("_from_projectile", false))
 	var move_id := str(move.get("move_id", ""))
 	var is_direct_throw := move_id.begins_with("throw_") or str(move.get("move_type", "")) == "throw"

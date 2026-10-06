@@ -14,6 +14,8 @@ var last_result: Dictionary = {}
 var last_error: String = ""
 var _attempt_serial: int = 0
 var save_path: String = SAVE_PATH
+var watch_route_id := "kaia-windrow"
+var watch_presentation := "female"
 
 
 func _ready() -> void:
@@ -143,16 +145,18 @@ func current_node() -> Dictionary:
 func _rebuild_cursor(id: String) -> void:
 	var entry: Dictionary = progress["routes"][id]
 	var recruits := []
+	var essence := 0
 	for node in route_data(id).get("nodes", []):
 		if str(node["id"]) not in entry["completed"]:
 			entry["cursor"] = str(node["id"])
 			break
+		essence = int(node.get("essence_after", essence))
 		if node.has("recruit"):
 			recruits.append(node["recruit"])
 	entry["recruited"] = recruits
 	# Completion/unlocks remain false until later implemented route encounters pass.
 	entry["complete"] = false
-	entry["essence"] = 0
+	entry["essence"] = essence
 
 
 func acknowledge_scene() -> bool:
@@ -193,7 +197,9 @@ func begin_encounter(replay_id: String = "") -> bool:
 		return false
 	_attempt_serial += 1
 	active_encounter = {"route_id": route_id, "node_id": str(node["id"]), "replay": replay,
-		"token": "%s:%d:%d" % [node["id"], Time.get_ticks_usec(), _attempt_serial]}
+		"token": "%s:%d:%d" % [node["id"], Time.get_ticks_usec(), _attempt_serial],
+		"objective_contract":node.get("objective_contract", "STOCK_WIN"), "survive_seconds":node.get("survive_seconds", 0),
+		"additional_opponent":node.get("additional_opponent", "")}
 	last_result.clear()
 	GameState.mode = "story"
 	GameState.arcade_active = false
@@ -209,7 +215,7 @@ func begin_encounter(replay_id: String = "") -> bool:
 	GameState.p2_is_cpu = true
 	GameState.cpu_level = 2
 	GameState.stocks = 2
-	GameState.match_timer_seconds = 180
+	GameState.match_timer_seconds = int(node.get("survive_seconds", 180))
 	GameState.match_type = "stock"
 	GameState.ruleset_id = "stock-3"
 	GameState.stage_id = str(node["stage"])
@@ -217,10 +223,14 @@ func begin_encounter(replay_id: String = "") -> bool:
 	return true
 
 
-func record_battle_result(winner: int, token: String) -> bool:
+func record_battle_result(winner: int, token: String, objective_evidence: Dictionary = {}) -> bool:
 	if active_encounter.is_empty() or str(active_encounter["token"]) != token:
 		return false
+	if winner == 1 and active_encounter.get("objective_contract") == "COSMIC_SURVIVAL":
+		if not bool(objective_evidence.get("survived", false)) or float(objective_evidence.get("elapsed", 0)) + 0.001 < float(active_encounter["survive_seconds"]):
+			return false
 	var receipt := active_encounter.duplicate(true)
+	receipt["objective_evidence"] = objective_evidence.duplicate(true)
 	receipt["winner"] = winner
 	receipt["advanced"] = false
 	if winner == 1 and not bool(receipt["replay"]):

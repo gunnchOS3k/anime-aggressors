@@ -63,6 +63,22 @@ func _build_ui() -> void:
 	_replay_picker.name = "ChapterReplayPicker"
 	host.add_child(_replay_picker)
 	_button(host, "Replay Selected Encounter", _on_replay)
+	var watch_row := HBoxContainer.new()
+	host.add_child(watch_row)
+	var watch_picker := OptionButton.new()
+	watch_picker.name = "CampaignVariationPicker"
+	for route in CampaignRuntime.campaign.get("routes", []):
+		if route.get("id") == "sevenfold-convergence":
+			continue
+		watch_picker.add_item(str(route["watch_title"]))
+		watch_picker.set_item_metadata(watch_picker.item_count - 1, str(route["id"]))
+		if route.get("id") == "kaia-windrow":
+			watch_picker.select(watch_picker.item_count - 1)
+	watch_row.add_child(watch_picker)
+	_button(watch_row, "Watch Campaign Preview", func():
+		CampaignRuntime.watch_route_id = str(watch_picker.get_item_metadata(watch_picker.selected))
+		CampaignRuntime.watch_presentation = str(CampaignRuntime.progress["presentation"])
+		SceneRouter.go("ova"))
 	var notice := Label.new()
 	notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	notice.text = "V1 candidate · Draft adaptation · Story and art await owner review."

@@ -239,6 +239,8 @@ func _on_transform_completed(_fid: String, _form_id: String) -> void:
 	aura = maxf(0.0, aura - 25.0)
 
 func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, spawn: Vector2) -> void:
+	if has_meta("story_cosmic_contract"):
+		remove_meta("story_cosmic_contract")
 	fighter_id = id
 	slot = player_slot
 	is_cpu = cpu_flag
@@ -738,6 +740,8 @@ func _resolve_special_command() -> String:
 	return "special_neutral"
 
 func is_aura_input_held() -> bool:
+	if not InputMap.has_action("p%d_special" % slot) or not InputMap.has_action("p%d_shield" % slot):
+		return false # Cinematic/story actors can exist beyond the two human input channels.
 	var tim = get_node_or_null("/root/TouchInputManager")
 	if tim != null and tim.has_method("is_aura_charge_touch") and tim.is_aura_charge_touch(slot):
 		return true
@@ -1107,7 +1111,7 @@ func _try_grab_connect() -> void:
 		state_machine.enter(_FighterStates.GRAB_WHIFF)
 		grab_event.emit({"result": "whiff"})
 		return
-	if opp.invincible or opp.grabbed_by != null:
+	if opp.invincible or opp.grabbed_by != null or bool(opp.get_meta("story_cosmic_contract", false)):
 		state_machine.enter(_FighterStates.GRAB_WHIFF)
 		grab_event.emit({"result": "whiff", "reason": "invuln"})
 		return

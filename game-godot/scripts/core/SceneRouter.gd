@@ -7,6 +7,7 @@ const SCENES := {
 	"boot": "res://scenes/boot/BootScene.tscn",
 	"main_menu": "res://scenes/menus/MainMenuScene.tscn",
 	"story": "res://scenes/menus/StoryCampaignScene.tscn",
+	"ova": "res://scenes/story/OVAWatchScene.tscn",
 	"mode_select": "res://scenes/menus/ModeSelectScene.tscn",
 	"arcade": "res://scenes/menus/ArcadeScene.tscn",
 	"tutorial": "res://scenes/menus/TutorialScene.tscn",

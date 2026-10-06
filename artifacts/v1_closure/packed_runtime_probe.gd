@@ -38,7 +38,7 @@ func _run() -> void:
 		check(str(fighter._current_move.get("move_id",""))!="","packed_attack_input:"+str(fid))
 		rows.append({"fighter_id":fid,"model_source":fighter.model_3d.get_current_model_source(),"active_move":str(fighter._current_move.get("move_id","")),"fighter_state":fighter.state_machine.current_state,"controls_enabled":fighter.controls_enabled})
 	var identity=JSON.parse_string(FileAccess.get_file_as_string("res://data/runtime/build_identity.json"))
-	check(identity is Dictionary and identity.get("git_sha","")=="cd70c9277d215997c1893133b68d29410cd44eb4","packed_exact_source_sha")
+	check(identity is Dictionary and identity.get("git_sha","")==OS.get_environment("AA_EXPECTED_BUILD_SHA"),"packed_exact_source_sha")
 	var out=FileAccess.open("/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure/artifacts/v1_closure/packed_runtime_evidence.json",FileAccess.WRITE)
 	out.store_string(JSON.stringify({"ok":failures.is_empty(),"failures":failures,"rows":rows,"source_sha":identity.get("git_sha","") if identity is Dictionary else "","scope":"Actual exported PCK: JSON data, exact build identity, nine BASE fighter BattleScene model/move loads and attack input. Does not prove full exported Story, every form lifecycle, Web or Android."},"  ")+"\n");out.close()
 	print("PACKED_RUNTIME ","PASS" if failures.is_empty() else "FAIL"," failures=",failures)

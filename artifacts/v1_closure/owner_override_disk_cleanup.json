@@ -1,0 +1,44 @@
+{
+  "scope": "Additional historical dependency cleanup for new owner override; previous cleanup ledger retained.",
+  "before_free_gib": 13.21871566772461,
+  "after_free_gib": 19.260417938232422,
+  "removed": [
+    {
+      "path": "/Users/gunnchos/Downloads/scaly-wings/node_modules",
+      "category": "historical_node_modules",
+      "bytes": 5574504448,
+      "tracked_entries": 0,
+      "ignore_rule": ".gitignore:4:node_modules/\tnode_modules",
+      "regeneration": "npm ci using tracked package-lock.json",
+      "active_processes": 0,
+      "protected_descendants": 0
+    },
+    {
+      "category": "historical_android_native_intermediates",
+      "path": "/Users/gunnchos/Downloads/scaly-wings/android/app/build/intermediates/merged_native_libs",
+      "bytes": 1515757568,
+      "tracked_entries": 0,
+      "ignore_rule": ".gitignore:41:/android\tandroid/app/build/intermediates/merged_native_libs",
+      "regeneration": "Gradle native library merge and strip tasks",
+      "active_build_processes": 0,
+      "protected_descendants": 0
+    },
+    {
+      "category": "historical_android_native_intermediates",
+      "path": "/Users/gunnchos/Downloads/scaly-wings/android/app/build/intermediates/stripped_native_libs",
+      "bytes": 194650112,
+      "tracked_entries": 0,
+      "ignore_rule": ".gitignore:41:/android\tandroid/app/build/intermediates/stripped_native_libs",
+      "regeneration": "Gradle native library merge and strip tasks",
+      "active_build_processes": 0,
+      "protected_descendants": 0
+    }
+  ],
+  "preservation_intact": true,
+  "preserved_file_states": 3287,
+  "verified_objects": 795,
+  "skipped": [
+    "gunnchAI3k/node_modules: protected env/certificate/key fixtures",
+    "finds_-shark-hotspot-forecaster/node_modules: protected signing fixtures"
+  ]
+}

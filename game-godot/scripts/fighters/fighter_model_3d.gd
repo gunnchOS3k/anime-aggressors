@@ -35,6 +35,8 @@ const FINAL_SCREEN_LUMA_THRESHOLD := 0.12
 
 var _viewport: SubViewport
 var _camera: Camera3D
+var _cinematic_expression := ""
+var _expression_controller: Node
 var _model_root: Node3D
 var _display: Sprite2D
 var _loaded_model: Node3D
@@ -148,6 +150,8 @@ func configure(fighter_data: Dictionary, body_variant: String = "") -> bool:
 	# Keep display texture alive during swap so preview never blanks mid-cycle.
 	if _display != null and is_instance_valid(_display):
 		_display.visible = true
+	_cinematic_expression = ""
+	_expression_controller = null
 	_clear_model()
 	if gen != _configure_generation:
 		return false
@@ -213,7 +217,11 @@ func configure(fighter_data: Dictionary, body_variant: String = "") -> bool:
 	if _configure_swap_count % VIEWPORT_REFRESH_EVERY_SWAPS == 0:
 		refresh_viewport_texture(true)
 	heal_visibility_if_needed()
-	set_expression(str(_life.get("expression_idle", "neutral")))
+	if _using_collectible and _loaded_model != null:
+		_expression_controller = load("res://scripts/visual/collectible_expression_controller.gd").new()
+		_loaded_model.add_child(_expression_controller)
+		_expression_controller.configure(_loaded_model, _fighter_id, str(fighter_data.get("collectible_review_form", "BASE")))
+	set_expression("neutral" if _using_collectible else str(_life.get("expression_idle", "neutral")))
 	_apply_presentation_yaw()
 	_play_clip("idle")
 	_apply_playback_scale("idle")
@@ -707,8 +715,15 @@ func _apply_faceless_head_presentation() -> void:
 		_expression_label.modulate.a = 0.0
 
 
+func set_cinematic_expression(state: String) -> void:
+	_cinematic_expression = state
+	set_expression(state if not state.is_empty() else "neutral")
+
+
 func set_expression(state: String) -> void:
 	_expression = state
+	if _expression_controller != null and is_instance_valid(_expression_controller):
+		_expression_controller.set_expression(state)
 	if _expression_label:
 		_expression_label.text = _expression_glyph(state)
 	if _face_chip:
@@ -1672,6 +1687,9 @@ func _apply_playback_scale(clip: String) -> void:
 
 
 func _update_expression_for_state(state: String) -> void:
+	if not _cinematic_expression.is_empty():
+		set_expression(_cinematic_expression)
+		return
 	if state in [_FighterStates.AURA_CHARGE, _FighterStates.AURA_READY]:
 		set_expression(str(_life.get("expression_charge", "charging")))
 	elif state in [_FighterStates.HURT_LIGHT, _FighterStates.HURT_HEAVY, _FighterStates.HITSTUN, _FighterStates.LAUNCHED]:
@@ -1679,9 +1697,11 @@ func _update_expression_for_state(state: String) -> void:
 	elif state == _FighterStates.KO:
 		set_expression("defeat")
 	elif state in [_FighterStates.ATTACK_STARTUP, _FighterStates.SPECIAL_STARTUP, _FighterStates.THROW_STARTUP]:
-		set_expression("focused")
+		set_expression("battle_intent")
+	elif state in [_FighterStates.ATTACK_ACTIVE, _FighterStates.SPECIAL_ACTIVE, _FighterStates.THROW_RELEASE]:
+		set_expression("attack_effort")
 	elif state in [_FighterStates.IDLE, _FighterStates.WALK]:
-		set_expression(str(_life.get("expression_idle", "neutral")))
+		set_expression("neutral" if _using_collectible else str(_life.get("expression_idle", "neutral")))
 
 
 func _refresh_aura_overlay() -> void:

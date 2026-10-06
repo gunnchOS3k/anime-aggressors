@@ -41,6 +41,10 @@ var _stage_camera_profile: Dictionary = {}
 var _wave018_vis_accum: float = 0.0
 var _wave018_last_telemetry_ids: Array = []
 var _story_attempt_token: String = ""
+var _story_cosmic_actor
+var _story_survival := false
+var _story_elapsed := 0.0
+var _story_cosmic_cadence := 0.0
 
 const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
 const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
@@ -62,6 +66,8 @@ func _ready() -> void:
 	_battle_sim = _BattleSim.new()
 	add_child(_battle_sim)
 	_battle_sim.bind_fighters([fighter1, fighter2])
+	if not _story_attempt_token.is_empty() and CampaignRuntime.active_encounter.get("objective_contract") == "COSMIC_SURVIVAL":
+		_setup_story_cosmic_encounter(CampaignRuntime.active_encounter)
 	if GameState.mode == "hazards" or GameState.hazards_enabled or GameState.items_enabled:
 		_hazard_runtime = _HazardItemRuntime.new()
 		add_child(_hazard_runtime)
@@ -294,6 +300,8 @@ func _physics_process(delta: float) -> void:
 		if _eval_frames >= _eval_max_frames:
 			_finish_eval_timeout()
 			return
+	if _story_survival:
+		_tick_story_cosmic_encounter(delta)
 	if _hazard_runtime:
 		_hazard_runtime.tick(delta)
 	if _time_enabled:
@@ -334,6 +342,9 @@ func _update_timer_label() -> void:
 	_timer_label.text = "%d:%02d" % [secs / 60, secs % 60]
 
 func _end_match_on_time() -> void:
+	if _story_survival:
+		_finish_match(1 if fighter1.stocks > 0 else 2)
+		return
 	# Higher stocks wins; tie-break lower percent.
 	var winner := 1
 	if fighter2.stocks > fighter1.stocks:
@@ -567,9 +578,11 @@ func _finish_match(winner: int) -> void:
 	GameState.last_winner_slot = winner
 	MatchTelemetry.record_match_end(winner)
 	if GameState.mode == "story" and not _story_attempt_token.is_empty():
-		CampaignRuntime.record_battle_result(winner, _story_attempt_token)
+		CampaignRuntime.record_battle_result(winner, _story_attempt_token, {"survived":_story_survival and fighter1.stocks > 0 and _time_remaining <= 0, "elapsed":_story_elapsed})
 		fighter1.controls_enabled = false
 		fighter2.controls_enabled = false
+		if _story_cosmic_actor != null:
+			_story_cosmic_actor.controls_enabled = false
 		get_tree().create_timer(0.5).timeout.connect(func(): SceneRouter.go("results"), CONNECT_ONE_SHOT)
 		return
 	if _eval_mode:
@@ -615,3 +628,39 @@ func _finish_eval_timeout() -> void:
 			winner = 1 if fighter1.damage_percent <= fighter2.damage_percent else 2
 	GameState.last_winner_slot = winner
 	_complete_eval(winner, "frame_cap")
+
+
+func _setup_story_cosmic_encounter(contract: Dictionary) -> void:
+	_story_survival = true
+	fighter2.set_meta("story_cosmic_contract", true)
+	var data: Dictionary = fighter2.data.duplicate(true)
+	data["collectible_review_form"] = "COSMIC_BOSS"
+	fighter2.model_3d.configure(data)
+	_story_cosmic_actor = FIGHTER_SCENE.instantiate()
+	_story_cosmic_actor.name = "YangStoryManifestation"
+	fighters_root.add_child(_story_cosmic_actor)
+	_story_cosmic_actor.configure(str(contract["additional_opponent"]), 3, false, 99, Vector2(80, 160))
+	_story_cosmic_actor.controls_enabled = false
+	_story_cosmic_actor.set_meta("story_cosmic_contract", true)
+	data = _story_cosmic_actor.data.duplicate(true)
+	data["collectible_review_form"] = "COSMIC_BOSS"
+	_story_cosmic_actor.model_3d.configure(data)
+	var stage: Dictionary = GameState.load_stage(GameState.stage_id)
+	_story_cosmic_actor.configure_stage_geometry(stage.get("mainPlatform", {}), stage.get("ledgeAnchors", []), bool(stage.get("ledges", true)))
+	_connect_hitboxes(_story_cosmic_actor, fighter1)
+	_connect_hitboxes(fighter1, _story_cosmic_actor)
+	_battle_sim.bind_fighters([fighter1, fighter2, _story_cosmic_actor])
+	_timer_label.tooltip_text = "Survive Yin and Yang. Ordinary damage cannot defeat their story manifestations."
+
+
+func _tick_story_cosmic_encounter(delta: float) -> void:
+	_story_elapsed += delta
+	_story_cosmic_cadence += delta
+	if _story_cosmic_cadence >= 2.4:
+		_story_cosmic_cadence = 0.0
+		if _story_cosmic_actor.move_runner.active:
+			return
+		var dx: float = fighter1.position.x - _story_cosmic_actor.position.x
+		_story_cosmic_actor.velocity.x = signf(dx) * 90.0 if absf(dx) > 100 else 0.0
+		_story_cosmic_actor.training_play_move("side_special" if absf(dx) > 100 else "heavy_attack", 0.0, 1 if dx >= 0 else -1)
+	_check_blast(_story_cosmic_actor)

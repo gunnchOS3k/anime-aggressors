@@ -9,6 +9,9 @@ import hashlib
 import shutil
 from pathlib import Path
 from mathutils import Vector
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parent))
+from collectible_owner_override import female_hair, elemental_refinement, facial_morphs, PERSONALITY, EXPRESSIONS
 
 ROOT = Path(__file__).resolve().parents[2]
 PACK = ROOT / 'docs/anime-aggressors/creative/authority_pack_v1'
@@ -141,23 +144,24 @@ def build_body(fid,variant,row):
        'face':material('Elemental face',bright),'accent':material('Power inlay',color,.35,.25),
        'eye':material('Eye outline',(.025,.03,.06)),'white':material('Eye light',(.96,.98,1)),
        'gold':material('Metal trim',(.82,.54,.14),.7)}
- waist=.145*mass; shoulder=.215*mass*(.96 if female else 1.04)
- ellipsoid('Articulated compact torso',(0,0,.64),(shoulder,.125,.185),mats['dark'])
- ellipsoid('Hip costume',(0,.012,.445),(waist,.122,.105),mats['dark'],'Hips')
- ellipsoid('Chest power plate',(0,-.098,.65),(shoulder*.84,.055,.14),mats['body'])
+ waist=.145*mass*(.94 if female else 1); shoulder=.215*mass*(.89 if female else 1.04)
+ limb=.90 if female else 1; hand=.88 if female else 1; foot=.90 if female else 1
+ ellipsoid('Articulated compact torso',(0,0,.64),(shoulder,.116 if female else .125,.178 if female else .185),mats['dark'])
+ ellipsoid('Hip costume',(0,.012,.445),(waist,.119,.102),mats['dark'],'Hips')
+ ellipsoid('Chest power plate',(0,-.098,.65),(shoulder*.84,.049 if female else .055,.145),mats['body'])
  for side,sgn in [('L',-1),('R',1)]:
   x=sgn*.20*mass
-  capsule('Upper arm '+side,(x,0,.73),(x+sgn*.09,0,.56),.065*mass,mats['body'],'UpperArm_'+side)
-  capsule('Forearm '+side,(x+sgn*.09,0,.56),(x+sgn*.12,-.04,.43),.072*mass,mats['dark'],'LowerArm_'+side)
-  ellipsoid('Palm '+side,(x+sgn*.12,-.055,.4),(.09*mass,.078,.082),mats['body'],'Hand_'+side)
-  for i in range(3): ellipsoid('Finger %s %d'%(side,i),(x+sgn*.12+(i-1)*.035,-.105,.375),(.019,.032,.034),mats['face'],'Hand_'+side)
-  capsule('Thigh '+side,(sgn*.1,0,.43),(sgn*.13,0,.27),.082*mass,mats['body'],'UpperLeg_'+side)
-  capsule('Shin '+side,(sgn*.13,0,.27),(sgn*.14,0,.10),.075*mass,mats['dark'],'LowerLeg_'+side)
-  ellipsoid('Boot '+side,(sgn*.14,-.067,.087),(.108*mass,.165,.085),mats['dark'],'Foot_'+side)
-  ellipsoid('Boot toe '+side,(sgn*.14,-.172,.08),(.085*mass,.053,.051),mats['accent'],'Toes_'+side)
+  capsule('Upper arm '+side,(x,0,.73),(x+sgn*.09,0,.56),.065*mass*limb,mats['body'],'UpperArm_'+side)
+  capsule('Forearm '+side,(x+sgn*.09,0,.56),(x+sgn*.12,-.04,.43),.072*mass*limb,mats['dark'],'LowerArm_'+side)
+  ellipsoid('Palm '+side,(x+sgn*.12,-.055,.4),(.09*mass*hand,.078*hand,.082*hand),mats['body'],'Hand_'+side)
+  for i in range(3): ellipsoid('Finger %s %d'%(side,i),(x+sgn*.12+(i-1)*.035,-.105,.375),(.019*hand,.032*hand,.034*hand),mats['face'],'Hand_'+side)
+  capsule('Thigh '+side,(sgn*.1,0,.43),(sgn*.13,0,.27),.082*mass*limb,mats['body'],'UpperLeg_'+side)
+  capsule('Shin '+side,(sgn*.13,0,.27),(sgn*.14,0,.10),.075*mass*limb,mats['dark'],'LowerLeg_'+side)
+  ellipsoid('Boot '+side,(sgn*.14,-.067,.087),(.108*mass*foot,.165*foot,.085),mats['dark'],'Foot_'+side)
+  ellipsoid('Boot toe '+side,(sgn*.14,-.172,.08),(.085*mass*foot,.053*foot,.051),mats['accent'],'Toes_'+side)
  # Original sculpted face: almond eyes + layered iris, eyelids, brows, nose and mouth.
  headwidth=.282*style['head']*(.97 if female else 1.02)
- ellipsoid('Face',(0,-.012,1.115),(headwidth,.24,.30),mats['face'],'Head')
+ ellipsoid('Face',(0,-.012,1.115),(headwidth,.227 if female else .24,.291 if female else .30),mats['face'],'Head')
  ellipsoid('Hair cap',(0,.043,1.20),(headwidth*1.05,.245,.245),mats['dark'],'Head')
  for sgn in [-1,1]:
   eye=ellipsoid('Eye almond',(sgn*.112,-.231,1.135),(.080*style['eye'],.026,.053),mats['eye'],'Head')
@@ -170,9 +174,10 @@ def build_body(fid,variant,row):
  ellipsoid('Nose plane',(0,-.257,1.076),(.025,.043,.026),mats['face'],'Head')
  mouth=[(-.049,-.225,1.007),(0,-.241,.999),(.048,-.225,1.015 if fid in ['juno-spark','vesper-nyx'] else 1.007)]
  tube('Mouth',mouth,.008,mats['dark'],'Head')
- # Hair modules and costume masses follow fighter geometry, not hue swaps.
+ # The owner’s hairstyles are female-only. This male geometry is the prior checkpoint.
  kind=style['hair']
- for i in range(5):
+ if female: female_hair(globals(),fid,mats)
+ for i in range(0 if female else 5):
   t=(i-2)*.095; z=1.33+.025*(2-abs(i-2))
   if kind in ['flame','fork','crystal','strata','radiant']:
    tip=(t+(.045 if kind in ['flame','fork'] else 0),.01,1.49+(.10 if kind=='fork' else .04)*((i+1)%2))
@@ -181,10 +186,7 @@ def build_body(fid,variant,row):
   else:
    sweep=(-.15 if kind in ['phase','collapse'] else .12)
    tube('Hair sweep '+str(i),[(t,-.20,1.29),(t+sweep,-.17,1.43),(t+sweep*1.7,.06,1.39)],.047,mats['dark'],'Head')
- if female:
-  for sgn in [-1,1]:
-   tube('Long hair silhouette',[(sgn*.24,.02,1.26),(sgn*.29,.12,1.0),(sgn*(.30 if kind!='strata' else .24),.11,.78)],.055,mats['dark'],'Head')
- else:
+ if not female:
   cone('Back crest',(.06,.14,1.25),(.20,.28,1.36),.10,mats['dark'])
  body=style['body']
  if body=='furnace':
@@ -229,6 +231,12 @@ def build_body(fid,variant,row):
    tube('Radiance costume',[(0,-.155,.55),(sgn*.18,-.13,.70),(sgn*.23,.03,.85)],.020,mats['gold'])
    cone('Radiating shoulder',(sgn*.19,0,.73),(sgn*.34,.03,.85),.045,mats['body'],'Shoulder_L' if sgn<0 else 'Shoulder_R')
   ellipsoid('Black seed',(0,-.175,.63),(.027,.015,.032),mats['eye'])
+ if female:
+  for sgn in [-1,1]:
+   tube('Tailored armor panel',[(sgn*shoulder*.75,-.139,.75),(sgn*waist*.72,-.155,.61),(sgn*waist*.8,-.135,.49)],.008,mats['gold'])
+ ellipsoid('Mouth cavity',(0,-.238,1.004),(.032,.014,.001),mats['eye'],'Head')
+ elemental_refinement(globals(),fid,mats)
+ facial_morphs(PARTS,fid)
  ARM['fighter_id']=fid; ARM['presentation']=variant; ARM['art_status']='COLLECTIBLE_V1_CANDIDATE'
  return mats
 
@@ -239,6 +247,7 @@ def animations(fid):
  names=set(SLOTS)|set(ALIAS['move_id_to_clip'].values())|{'idle','walk','run','dash','jump','fall','shield','hurt_light','hurt_heavy','launched','ko','victory','defeat','transform','select_confirm'}
  reverse={v:k for k,v in ALIAS['move_id_to_clip'].items()}
  style=SHAPE[fid]
+ female=ARM.get('presentation')=='female'
  for name in sorted(names):
   action=bpy.data.actions.new(name); ARM.animation_data_create(); ARM.animation_data.action=action
   mid=name if name in timing else reverse.get(name,'')
@@ -280,6 +289,10 @@ def animations(fid):
    else:
     chest.rotation_euler[0]=math.sin(index*math.pi/2)*(.01 if fid=='yin' else .025)
     head.rotation_euler[2]=math.sin(index*math.pi/2)*(.06 if fid in ['juno-spark','vesper-nyx'] else .02)
+   if female:
+    # Balanced, fully armored presentation; no pin-up stance or camera.
+    hips.rotation_euler[2]+=amount*(.018 if fid in ['rook-ironside','yin'] else .045)
+    head.rotation_euler[0]-=abs(amount)*(.025 if 'select' in name or 'victory' in name else .012)
    for bone in ARM.pose.bones:
     bone.keyframe_insert('rotation_euler',frame=frame); bone.keyframe_insert('scale',frame=frame)
   for curve in action.fcurves:
@@ -328,14 +341,21 @@ def main():
  elif shutil.disk_usage(ROOT).free/2**30<18: raise RuntimeError('18 GiB free is required before Blender generation')
  ART.mkdir(parents=True,exist_ok=True); SRC.mkdir(parents=True,exist_ok=True)
  manifest={'schema':'anime_v1.collectible_candidates.v1','originality':'Original parametric geometry; no third-party meshes, faces, logos or packaging.',
-           'art_status':'OWNER_REVIEW_CANDIDATE','authored_animation_complete':False,'FINAL_CHARACTER_ART_PASS':False,'assets':[]}
+           'art_status':'OWNER_REVIEW_CANDIDATE','authored_animation_complete':False,'FINAL_CHARACTER_ART_PASS':False,'owner_override':'female_variants_hair_ova_2026_10_06','assets':[]}
+ if (ART/'asset_manifest.json').exists():
+  manifest['assets']=json.loads((ART/'asset_manifest.json').read_text())['assets']
  for row in AUTH['fighters']:
   fid=row['id']
   if os.environ.get('AA_COLLECTIBLE_FIGHTER') and fid != os.environ['AA_COLLECTIBLE_FIGHTER']: continue
   for variant in ['male','female']:
    if os.environ.get('AA_COLLECTIBLE_VARIANT') and variant != os.environ['AA_COLLECTIBLE_VARIANT']: continue
+   expected_forms=['BASE','COSMIC_BOSS'] if fid in ['yin','yang'] else ['BASE','PRISMATIC_GRAY','BLACK_PUPPET','WHITE_PUPPET']
+   current_rows=[a for a in manifest['assets'] if a['fighter_id']==fid and a['presentation']==variant]
+   if os.environ.get('AA_COLLECTIBLE_SKIP_DONE')=='1' and len(current_rows)==len(expected_forms) and all(a.get('facial_morph_candidates')==EXPRESSIONS for a in current_rows):
+    print('PRESERVE_COMPLETED_OVERRIDE',fid,variant,flush=True); continue
    source=SRC/fid/variant; source.mkdir(parents=True,exist_ok=True)
-   if os.environ.get('AA_COLLECTIBLE_REPAIR_EXISTING') == '1':
+   preserve_male=os.environ.get('AA_COLLECTIBLE_OWNER_OVERRIDE')=='1' and variant=='male'
+   if os.environ.get('AA_COLLECTIBLE_REPAIR_EXISTING') == '1' or preserve_male:
     bpy.ops.wm.open_mainfile(filepath=str(source/'candidate.blend'))
     global ARM, PARTS
     ARM=next(ob for ob in bpy.data.objects if ob.type=='ARMATURE')
@@ -346,6 +366,18 @@ def main():
       mod=ob.modifiers.new('Canonical deformation','ARMATURE'); mod.object=ARM
     mats={key:(bpy.data.materials.get(name) or material(name,(.82,.54,.14))) for key,name in {'body':'Elemental porcelain','dark':'Structural costume','face':'Elemental face','accent':'Power inlay','eye':'Eye outline','white':'Eye light','gold':'Metal trim'}.items()}
     clips=len(ARM.animation_data.nla_tracks)
+    male_hair_before={}
+    if preserve_male:
+     male_hair_before={ob.name:hashlib.sha256(json.dumps({'vertices':[list(v.co) for v in ob.data.vertices],'matrix':[list(v) for v in ob.matrix_local]},sort_keys=True).encode()).hexdigest() for ob in PARTS if ob.name.startswith(('Hair','Back crest'))}
+     ellipsoid('Mouth cavity',(0,-.238,1.004),(.032,.014,.001),mats['eye'],'Head')
+     facial_morphs(PARTS,fid)
+     elemental_refinement(globals(),fid,mats)
+     male_hair_after={ob.name:hashlib.sha256(json.dumps({'vertices':[list(v.co) for v in ob.data.vertices],'matrix':[list(v) for v in ob.matrix_local]},sort_keys=True).encode()).hexdigest() for ob in PARTS if ob.name.startswith(('Hair','Back crest'))}
+     assert male_hair_before==male_hair_after and male_hair_before, 'Male hair geometry changed'
+     ledger_path=ART/'owner_override/male_hair_preservation.json'
+     ledger=json.loads(ledger_path.read_text()) if ledger_path.exists() else {}
+     ledger[fid]={'before':male_hair_before,'after':male_hair_after,'preserved':True,'basis':'Checkpoint source .blend loaded, hair meshes/transforms retained; facial morphs and elemental armor accents added.'}
+     ledger_path.write_text(json.dumps(ledger,indent=2)+'\n')
    else:
     mats=build_body(fid,variant,row); clips=animations(fid)
    bpy.context.scene.render.fps=60
@@ -354,6 +386,7 @@ def main():
    original={key:tuple(mat.diffuse_color) for key,mat in mats.items()}
    variant_parts=[]
    for form in forms:
+    if os.environ.get('AA_COLLECTIBLE_FORMS') and form not in os.environ['AA_COLLECTIBLE_FORMS'].split(','): continue
     for ob in variant_parts:
      if ob in PARTS: PARTS.remove(ob)
      bpy.data.objects.remove(ob,do_unlink=True)
@@ -368,6 +401,14 @@ def main():
      if 'PUPPET' in form:
       ellipsoid('Control mask',(0,-.252,1.15),(.232,.028,.135),mats['dark'],'Head')
       ellipsoid('Identity signal',(.16,-.29,1.16),(.017,.009,.025),mats['accent'],'Head')
+      for sgn in [-1,1]:
+       force_eye=mats['white'] if form=='BLACK_PUPPET' else mats['eye']
+       ellipsoid('Eye almond Puppet rewrite',(sgn*.09,-.292,1.16),(.035,.009,.014),force_eye,'Head')
+       if form=='BLACK_PUPPET':
+        tube('Inward control seam',[(sgn*.17,-.164,.73),(sgn*.11,-.178,.65),(0,-.18,.61)],.008,mats['dark'])
+       else:
+        tube('Outward definition seam',[(0,-.18,.61),(sgn*.11,-.178,.65),(sgn*.17,-.164,.73)],.009,mats['white'])
+      facial_morphs(PARTS[before:],fid)
      else:
       for i,c in enumerate(AUTH['fighters'][:7]):
        spec=material('Essence '+c['id'],rgb(c['color']),.25,.12)
@@ -377,10 +418,11 @@ def main():
     variant_parts=PARTS[before:]
     dest=OUT/fid/variant; dest.mkdir(parents=True,exist_ok=True); path=dest/(form+'.glb')
     select_export(path); render(fid,variant,form)
+    manifest['assets']=[a for a in manifest['assets'] if (a['fighter_id'],a['presentation'],a['form'])!=(fid,variant,form)]
     manifest['assets'].append({'fighter_id':fid,'presentation':variant,'form':form,'path':str(path.relative_to(ROOT)),
                               'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'source_blend':str((source/'candidate.blend').relative_to(ROOT)),
                               'canonical_bone_count':len(AUTH['canonical_deform_bones']),'clip_candidates':clips,'rig_binding':'rigid module skin weights',
-                              'animation_status':'PROCEDURAL_KEYPOSE_CANDIDATE','owner_approved':False})
+                              'animation_status':'PROCEDURAL_KEYPOSE_CANDIDATE','facial_morph_candidates':EXPRESSIONS,'female_hair_authority':'OWNER_OVERRIDE' if variant=='female' else 'PRESERVED_CHECKPOINT','owner_approved':False})
     (ART/'asset_manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
     print('COLLECTIBLE_DONE',fid,variant,form,flush=True)
  print('COLLECTIBLES_COMPLETE',len(manifest['assets']),flush=True)
