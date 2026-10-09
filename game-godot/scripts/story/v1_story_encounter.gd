@@ -90,7 +90,10 @@ func setup(host, contract: Dictionary) -> void:
 		battle.fighter2.set_meta("story_cosmic_contract", true)
 		battle.fighter2.model_3d.set_cinematic_expression("grief" if kind == "FIRST_LOSS" else "determination")
 		if kind == "FIRST_LOSS":
-			battle.fighter2.model_3d.play_clip("aura_charge")
+			var interaction: String = node["consequence"]["interaction"]
+			var lost_x: float = {"DECISIVE_INTERVENTION":0.0,"RESTRAINED_PROTECTION":-40.0,"SHARED_DEFENSE":250.0,"LAST_VECTOR_ESCORT":-170.0,"OPEN_BOUNDARY":220.0,"PERSONAL_VECTOR":100.0,"HONEST_SIGNAL":260.0}[interaction]
+			battle.fighter2.position = Vector2(lost_x, ground_y - 2)
+			battle.fighter2.model_3d.play_clip("shield_hold" if interaction == "DECISIVE_INTERVENTION" else "aura_charge")
 			# The lost ally holds space while cosmic actors make traversal playable under pressure.
 			for i in range(2):
 				var boss = _spawn("yin" if i == 0 else "yang", i + 3, Vector2(-280 if i == 0 else 280, 160), 99, true)
@@ -223,7 +226,9 @@ func tick(delta: float) -> void:
 	guarded = guarded or p.shielding
 	traversed = traversed or absf(p.position.x - _origin.x) > 180
 	match kind:
-		"FIRST_LOSS": _tick_loss(delta)
+		"FIRST_LOSS":
+			_tick_loss_framing(delta)
+			_tick_loss(delta)
 		"PUPPET_IMBALANCE":
 			_marker.position = Vector2(0, ground_y)
 			if player_hits > 0 and absf(p.position.x) < 100 and p.shielding: guard_seconds += delta
@@ -359,3 +364,29 @@ func activate_controls() -> void:
 	for actor in actors:
 		var passive: bool = actor in escorts or (kind in ["FIRST_LOSS", "PRISMATIC_TRANSFORMATION", "SEVENFOLD_REUNION"] and actor == battle.fighter2) or (kind == "SEVENFOLD_REUNION" and actor != battle.fighter1)
 		actor.controls_enabled = not passive
+
+
+func _tick_loss_framing(delta: float) -> void:
+	# Brief route-specific candidate staging; player physics and control remain live.
+	var controller = battle._battle_camera
+	var camera := battle.get_node("Camera2D") as Camera2D
+	if elapsed >= 1.5:
+		if controller != null: controller.set_process(true)
+		return
+	if controller != null: controller.set_process(false)
+	var p: Vector2 = battle.fighter1.position
+	var lost: Vector2 = battle.fighter2.position
+	var interaction: String = node["consequence"]["interaction"]
+	var target := (p + lost) * 0.5
+	var zoom := 1.0
+	match interaction:
+		"DECISIVE_INTERVENTION": target = lost.lerp(p, clampf(elapsed / 1.5, 0, 1)); zoom = 1.0
+		"RESTRAINED_PROTECTION": target = p + Vector2(60, -20); zoom = 1.16
+		"SHARED_DEFENSE": target = (p + lost) * 0.5; zoom = 0.94
+		"LAST_VECTOR_ESCORT": target = lost if elapsed < 0.65 else p + Vector2(80, 0); zoom = 1.08
+		"OPEN_BOUNDARY": target = lost + Vector2(-70, 0); zoom = 1.03
+		"PERSONAL_VECTOR": target = lost.lerp(p, 0.35); zoom = 1.12
+		"HONEST_SIGNAL": target = p; zoom = 1.20
+	camera.position = camera.position.lerp(target + Vector2(0, -45), 1.0 - exp(-delta * 6.0))
+	camera.zoom = Vector2.ONE * zoom
+	battle.set_meta("first_loss_framing", interaction)
