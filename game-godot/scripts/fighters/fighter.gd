@@ -266,6 +266,11 @@ func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, s
 	if gs_variant != null:
 		variant = str(gs_variant.p1_body_variant if player_slot == 1 else gs_variant.p2_body_variant)
 	model_data["body_variant"] = "female" if variant == "female" else "male"
+	var campaign_runtime = get_node_or_null("/root/CampaignRuntime")
+	if gs_variant != null and gs_variant.mode != "story" and gs_variant.mode != "ova" and campaign_runtime != null:
+		var skin: String = gs_variant.p1_story_skin if player_slot == 1 else gs_variant.p2_story_skin
+		if skin == "PRISMATIC_GRAY" and id in campaign_runtime.progress.get("gray_routes", []):
+			model_data["collectible_review_form"] = "PRISMATIC_GRAY"
 	data = model_data
 	_model_presentation_data = data
 	var model_loaded: bool = model_3d != null and model_3d.configure(data)
@@ -1768,10 +1773,12 @@ func _find_opponent() -> Node2D:
 	var parent = get_parent()
 	if parent == null:
 		return null
+	var nearest: Node2D = null
 	for c in parent.get_children():
-		if c != self and c != null and c.has_method("configure"):
-			return c
-	return null
+		if c == self or c == null or not c.has_method("receive_hit") or c.stocks <= 0 or c.get_meta("story_released", false): continue
+		if has_meta("story_team") and get_meta("story_team") == c.get_meta("story_team", ""): continue
+		if nearest == null or position.distance_squared_to(c.position) < position.distance_squared_to(nearest.position): nearest = c
+	return nearest
 
 func input_display() -> String:
 	var parts: PackedStringArray = []

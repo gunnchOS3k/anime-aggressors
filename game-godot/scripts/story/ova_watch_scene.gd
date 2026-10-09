@@ -142,6 +142,16 @@ func _present_node() -> void:
 	await get_tree().process_frame
 	_battle.hud.visible = false
 	_battle.set_process_unhandled_input(false)
+	var form := "PRISMATIC_GRAY" if node_index >= 16 else "BASE"
+	var presenter = preload("res://scripts/story/v1_story_encounter.gd").new()
+	presenter.set_form(_battle.fighter1, form)
+	if chapter.has("first_loss"):
+		_battle.fighter2.model_3d.set_cinematic_expression("grief")
+		_battle.fighter2.model_3d.play_clip("aura_charge")
+	if chapter.get("objective_contract") == "PRISMATIC_TRANSFORMATION":
+		_battle.fighter1.model_3d.play_clip("aura_charge")
+		_battle.fighter1.model_3d.set_cinematic_expression("determination")
+
 	if chapter.get("objective_contract") == "COSMIC_SURVIVAL":
 		_battle._setup_story_cosmic_encounter(chapter)
 	if chapter["kind"] != "STORY_BATTLE":
@@ -152,7 +162,7 @@ func _present_node() -> void:
 		_battle.fighter1.position = Vector2(-70, 180)
 		_battle.fighter2.position = Vector2(100, 180)
 		_battle.fighter1.model_3d.play_clip("idle")
-		_battle.fighter1.model_3d.set_cinematic_expression(str(chapter["expression"]))
+		_battle.fighter1.model_3d.set_cinematic_expression(str(chapter.get("expression", "determination")))
 	_swap_busy = false
 
 func _process(delta: float) -> void:

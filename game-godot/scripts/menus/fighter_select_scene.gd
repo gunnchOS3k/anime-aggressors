@@ -32,6 +32,10 @@ var _tiles: Array = []
 var _variant_male_btn: Button
 var _variant_female_btn: Button
 var _variant_hint: Label
+var _gray_btn: Button
+var _pending_story_skin := "BASE"
+var _p1_story_skin := "BASE"
+var _p2_story_skin := "BASE"
 ## Wave018: cancel superseded preview swaps (focus before previous configure resolves).
 var _preview_generation: int = 0
 var _preview_fighter_id: String = ""
@@ -113,6 +117,17 @@ func _ensure_body_variant_controls() -> void:
 	_variant_female_btn.pressed.connect(func() -> void: _set_pending_body_variant("female"))
 	row.add_child(_variant_male_btn)
 	row.add_child(_variant_female_btn)
+	_gray_btn = Button.new()
+	_gray_btn.name = "PrismaticGraySkin"
+	_gray_btn.text = "Prismatic Gray"
+	_gray_btn.toggle_mode = true
+	_gray_btn.pressed.connect(func():
+		if _roster[_cursor] not in CampaignRuntime.progress.get("gray_routes", []): return
+		_pending_story_skin = "BASE" if _pending_story_skin == "PRISMATIC_GRAY" else "PRISMATIC_GRAY"
+		_preview_fighter_id = ""
+		_refresh()
+		_update_preview(_cursor, false))
+	row.add_child(_gray_btn)
 	_variant_hint = Label.new()
 	_variant_hint.name = "BodyVariantHint"
 	_variant_hint.text = "Male / Female share kit & animation"
@@ -472,6 +487,7 @@ func _update_preview(index: int, lock_in: bool) -> void:
 			_preview_model.refresh_viewport_texture(true)
 	var data: Dictionary = GameState.load_fighter(id).duplicate()
 	data["body_variant"] = _pending_body_variant
+	data["collectible_review_form"] = _pending_story_skin if id in CampaignRuntime.progress.get("gray_routes", []) else "BASE"
 	# Reuse cache when same fighter + same form + already renderable (hold/reselect).
 	var same: bool = id == _preview_fighter_id
 	var variant_same: bool = _preview_body_variant == _pending_body_variant
@@ -589,6 +605,10 @@ func assert_preview_visibility_invariant() -> Dictionary:
 
 
 func _refresh() -> void:
+	if _gray_btn != null and not _roster.is_empty():
+		_gray_btn.disabled = _roster[_cursor] not in CampaignRuntime.progress.get("gray_routes", [])
+		if _gray_btn.disabled: _pending_story_skin = "BASE"
+		_gray_btn.button_pressed = _pending_story_skin == "PRISMATIC_GRAY"
 	var p1: Dictionary = GameState.load_fighter(_roster[_p1_pick])
 	var p2: Dictionary = GameState.load_fighter(_roster[_p2_pick])
 	var focus_id: String = _roster[_cursor]
@@ -728,6 +748,7 @@ func _on_lock_in_pressed() -> void:
 func _on_next_player_pressed() -> void:
 	if not _locked_p1:
 		_p1_pick = _cursor
+		_p1_story_skin = _pending_story_skin
 		_p1_body_variant = _allocate_body_variant_for_seat(_roster[_p1_pick], 1)
 		_locked_p1 = true
 		_selecting_p2 = true
@@ -740,6 +761,7 @@ func _on_next_player_pressed() -> void:
 		return
 	if not _locked_p2:
 		_p2_pick = _cursor
+		_p2_story_skin = _pending_story_skin
 		_p2_body_variant = _allocate_body_variant_for_seat(_roster[_p2_pick], 2)
 		_locked_p2 = true
 		_selecting_p2 = false
@@ -761,6 +783,8 @@ func _on_start_match_pressed() -> void:
 		return
 	GameState.p1_fighter_id = _roster[_p1_pick]
 	GameState.p2_fighter_id = _roster[_p2_pick]
+	GameState.p1_story_skin = _p1_story_skin
+	GameState.p2_story_skin = _p2_story_skin
 	GameState.p1_body_variant = _p1_body_variant
 	GameState.p2_body_variant = _p2_body_variant
 	GameState.p1_ready = true

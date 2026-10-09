@@ -70,9 +70,31 @@ def build():
                 node.update(kind="INTERACTIVE_DIALOGUE", implemented=True, essence_after=1, body="Rook tries to carry the failure himself. His sacrifice is the tragic extreme of his protective virtue. He leaves the first Essence. Kaia remains Kaia, now carrying one other perspective.", expression="grief")
                 node.pop("block_reason", None)
             nodes.append(node)
+        profile = authority["route_consequences"][anchor]
+        lost = authority["first_loss_selected"][anchor]
+        puppets = [f for f in opponents if f != lost]
         for node in nodes:
+            key = node["id"].split(":")[-1]
             node["watch_seconds"] = 14 if node["kind"] == "STORY_BATTLE" else 10
             node["expression"] = node.get("expression", "determination" if node["kind"] == "STORY_BATTLE" else "cinematic_closeup")
+            if key in {"first_loss", "puppet_imbalance", "first_release", "equilibrium", "dual_release_1", "dual_release_2", "prismatic_gray", "impossible_battle_2"}:
+                node.update(kind="STORY_BATTLE", implemented=True, stage="void-pier", opponent=lost if key == "first_loss" else puppets[0],
+                            objective_contract={"first_loss":"FIRST_LOSS", "puppet_imbalance":"PUPPET_IMBALANCE", "first_release":"FIRST_RELEASE", "equilibrium":"PUPPET_EQUILIBRIUM", "dual_release_1":"PAIRED_RELEASE", "dual_release_2":"PAIRED_RELEASE", "prismatic_gray":"PRISMATIC_TRANSFORMATION", "impossible_battle_2":"GRAY_DEMONSTRATION"}[key],
+                            puppets={"yin":puppets[:3], "yang":puppets[3:]}, consequence=profile,
+                            objective=profile["objective"] if key == "first_loss" else {"puppet_imbalance":"Disrupt the dominant Yin side: land a hit, then guard the center. Five puppets remain divided 3 against 2.", "first_release":"Choose a weakened Yin puppet (40% damage), approach and press Special to release. A player-earned KO also releases it. Restore 2 against 2.", "equilibrium":"Guard the center for eight seconds while both Puppet sides remain represented.", "dual_release_1":"Release one Yin and one Yang puppet: weaken then Special nearby, or earn their KOs.", "dual_release_2":"Release the final opposite-force pair. Six distinct perspectives remain.", "prismatic_gray":"Carry six perspectives through the marked spectrum nodes, then hold Shield to integrate your own identity.", "impossible_battle_2":"Evade the cosmic pair and demonstrate attack, guard and purposeful traversal. Greater damage cannot settle the conflict."}[key],
+                            body=profile["circumstance"] if key == "first_loss" else profile["essence"] if key.startswith("dual") or key == "first_release" else profile["gray"] if key == "prismatic_gray" else profile["consequence"],
+                            copy_status="DRAFT_OWNER_REVIEW", cinematic_framing=profile["camera"], presentation_status="CANDIDATE_ANI_03_04_PENDING")
+                node.pop("block_reason", None)
+                if key == "first_loss": node["essence_after"] = 1
+                if key == "first_release": node["essence_after"] = 2
+                if key == "dual_release_1": node["essence_after"] = 4
+                if key == "dual_release_2": node["essence_after"] = 6
+                if key == "prismatic_gray": node["form_after"] = "PRISMATIC_GRAY"
+                if key == "impossible_battle_2": node.update(opponent="yin", additional_opponent="yang", survive_seconds=18)
+            if key in {"epilogue", "unlock"}:
+                node.update(kind="INTERACTIVE_DIALOGUE", implemented=True, body=profile["aftermath"] + " " + profile["growth"], copy_status="DRAFT_OWNER_REVIEW", expression="determination")
+                node.pop("block_reason", None)
+                if key == "unlock": node["route_complete"] = True
         routes.append({"id": anchor, "title": "The Green Between" if anchor == "kaia-windrow" else names[anchor] + " — Prismatic Route",
                        "watch_title": "Anime Aggressors OVA — Kaia Route" if anchor == "kaia-windrow" else names[anchor].split()[0] + " Route Variation",
                        "watch_role": "PRIMARY_OVA" if anchor == "kaia-windrow" else "CAMPAIGN_VARIATION",
@@ -82,20 +104,18 @@ def build():
                        "nodes": nodes})
     routes.append({"id": "sevenfold-convergence", "title": "Sevenfold Convergence", "anchor": "kaia-windrow",
                    "requires": authority["spectral_order"], "nodes": [
-                       {"id": "sevenfold:" + key, "title": title, "kind": kind, "implemented": False,
-                        "block_reason": "Seven completed Gray routes and the Convergence encounter are required."}
-                       for key, title, kind in [("reunion", "Seven Gray Fighters Reunite", "CINEMATIC"),
-                                                ("trial", "Sevenfold Trial", "OBJECTIVE_BATTLE"),
-                                                ("equilibrium", "Yin/Yang Equilibrium", "OBJECTIVE_BATTLE"),
-                                                ("conversation", "A Society of Mediators", "INTERACTIVE_DIALOGUE"),
-                                                ("unlock", "Yin + Yang Playable Unlock", "UNLOCK")]]})
+                       {"id":"sevenfold:reunion", "title":"Seven Gray Fighters Reunite", "kind":"STORY_BATTLE", "implemented":True, "objective_contract":"SEVENFOLD_REUNION", "opponent":"ember-vale", "stage":"skyline-arena", "objective":"Reach each of the six Gray allies; demonstrate a society of distinct mediators.", "copy_status":"DRAFT_OWNER_REVIEW"},
+                       {"id":"sevenfold:trial", "title":"Sevenfold Trial", "kind":"STORY_BATTLE", "implemented":True, "objective_contract":"SEVENFOLD_TRIAL", "opponent":"ember-vale", "stage":"skyline-arena", "objective":"Control each Gray identity in sequence; win a real exchange before passing leadership.", "copy_status":"DRAFT_OWNER_REVIEW"},
+                       {"id":"sevenfold:equilibrium", "title":"Yin/Yang Equilibrium", "kind":"STORY_BATTLE", "implemented":True, "objective_contract":"SEVENFOLD_EQUILIBRIUM", "opponent":"yin", "additional_opponent":"yang", "stage":"void-pier", "survive_seconds":21, "objective":"Alternate guarded visits to Yin and Yang three times; survive without erasing either principle.", "copy_status":"DRAFT_OWNER_REVIEW"},
+                       {"id":"sevenfold:conversation", "title":"A Society of Mediators", "kind":"INTERACTIVE_DIALOGUE", "implemented":True, "body":"Seven distinct perspectives remain. Rest can protect boundaries; creation can support expression. Neither principle must consume the people it supports.", "copy_status":"DRAFT_OWNER_REVIEW"},
+                       {"id":"sevenfold:unlock", "title":"Yin + Yang Playable Unlock", "kind":"INTERACTIVE_DIALOGUE", "implemented":True, "cosmic_unlock":True, "body":"Yin and Yang join as separate competitive identities under normalized rules. Their cosmic Story contracts remain separate.", "copy_status":"DRAFT_OWNER_REVIEW"}]})
     return {"schema": "anime_v1.campaign.v1", "authority": str(PACK.relative_to(ROOT)),
             "canon_decision": decisions["decision_id"], "first_loss_selected": decisions["selected"],
-            "copy_status": "DRAFT_OWNER_REVIEW", "implementation_complete": False, "watch_authority": "SHARED_ROUTE_GRAPH",
+            "copy_status": "DRAFT_OWNER_REVIEW", "implementation_complete": False, "gameplay_graph_integrated": True, "presentation_status": "CANDIDATE_ANI_03_04_PENDING", "watch_authority": "SHARED_ROUTE_GRAPH",
             "root_route": "kaia-windrow", "spectral_order": authority["spectral_order"],
             "essence_progression": authority["essence_progression"], "routes": routes}
 
 
 if __name__ == "__main__":
     OUT.write_text(json.dumps(build(), indent=2) + "\n")
-    print("Compiled 7 routes + Convergence; 49 opening battles plus 7 two-boss survival encounters; Kaia canonical First Loss is playable. Later Puppet chapters remain unfinished.")
+    print("Compiled 145 campaign nodes with objective contracts; runtime validation is required before completion claims.")

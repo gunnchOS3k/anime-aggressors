@@ -58,6 +58,7 @@ func _build_ui() -> void:
 	_action = _button(row, "Play Encounter", _on_action)
 	_button(row, "Resume Save", _on_continue)
 	_button(row, "New Campaign", _on_new_game)
+	_button(row, "Next Route", _on_next_route)
 	_button(row, "Back", on_back)
 	_replay_picker = OptionButton.new()
 	_replay_picker.name = "ChapterReplayPicker"
@@ -113,7 +114,11 @@ func _refresh() -> void:
 	_body.text = str(node.get("body", node.get("block_reason", "")))
 	if not CampaignRuntime.last_error.is_empty():
 		_body.text += "\n" + CampaignRuntime.last_error
-	_action.disabled = not bool(node.get("implemented", false))
+	_action.disabled = node.is_empty() or not bool(node.get("implemented", false))
+	if entry["complete"]:
+		_status.text = "Route complete · Six perspectives integrated"
+		_body.text = "Choose another Prismatic Route." if id != "sevenfold-convergence" else "Sevenfold Convergence complete. Yin and Yang are playable."
+		if not entry.get("earned", false): _body.text = "Review run complete. Earned Story unlocks require ordinary playable encounters."
 	_action.text = "Continue Scene" if node.get("kind") == "INTERACTIVE_DIALOGUE" else "Play Encounter"
 	_replay_picker.clear()
 	for chapter in route.get("nodes", []):
@@ -159,3 +164,12 @@ func _on_replay() -> void:
 func on_back() -> void:
 	CampaignRuntime.abandon_encounter()
 	SceneRouter.go("main_menu")
+
+
+func _on_next_route() -> void:
+	for route in CampaignRuntime.campaign["routes"]:
+		var id: String = route["id"]
+		if CampaignRuntime.route_available(id) and not CampaignRuntime.progress["routes"][id]["complete"]:
+			CampaignRuntime.select_route(id)
+			_refresh()
+			return
