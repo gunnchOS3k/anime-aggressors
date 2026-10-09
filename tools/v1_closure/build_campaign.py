@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compile source-derived route geometry; draft adaptation never settles open canon."""
+"""Compile source-derived routes with explicit, versioned owner First Loss authority."""
 import json
 from pathlib import Path
 
@@ -10,6 +10,9 @@ OUT = ROOT / "game-godot/data/story/v1_campaign.json"
 
 def build():
     authority = json.loads((PACK / "STORY_CAMPAIGN_MANIFEST.json").read_text())
+    decisions = json.loads((ROOT / authority["first_loss_decision"]).read_text())
+    if decisions["selected"] != authority["first_loss_selected"]:
+        raise ValueError("Story authority disagrees with selected owner canon")
     fighters = json.loads((ROOT / "data/bibles/FIGHTER_BIBLE_INDEX.json").read_text())["fighters"]
     names = {f["id"]: f["name"] for f in fighters}
     stages = ["skyline-arena", "neon-rooftops", "cascade-foundry", "void-pier", "ember-courtyard", "skyline-arena"]
@@ -51,10 +54,12 @@ def build():
                     "block_reason": "This chapter's encounter and presentation are still being built.",
                     "copy_status": "DRAFT_ADAPTATION"}
             if key == "first_loss":
-                node["first_loss"] = "rook-ironside" if anchor == "kaia-windrow" else None
-                node["canon_status"] = "CANONICAL" if anchor == "kaia-windrow" else "OPEN_CANON"
-                if anchor != "kaia-windrow":
-                    node["block_reason"] = "The owner must approve this Anchor's First Loss."
+                node["first_loss"] = authority["first_loss_selected"][anchor]
+                node["canon_status"] = decisions["status"]
+                node["title"] = "First Loss — " + names[node["first_loss"]]
+                node["consequence"] = authority["route_consequences"][anchor]
+                node["copy_status"] = "DRAFT_OWNER_REVIEW"
+                node["body"] = node["consequence"]["circumstance"]
             if key == "catastrophe":
                 node.update(kind="INTERACTIVE_DIALOGUE", implemented=True, body="Yin sees seven differences capable of conflict. Yang sees seven identities to reconcile through imposed definition. The Seven attack; ordinary damage cannot resolve the cosmic contract.", expression="shock")
                 node.pop("block_reason", None)
@@ -72,7 +77,8 @@ def build():
                        "watch_title": "Anime Aggressors OVA — Kaia Route" if anchor == "kaia-windrow" else names[anchor].split()[0] + " Route Variation",
                        "watch_role": "PRIMARY_OVA" if anchor == "kaia-windrow" else "CAMPAIGN_VARIATION",
                        "anchor": anchor, "lesson": authority["route_lessons"][anchor], "recruitment_pairs": pairs,
-                       "first_loss": authority["root_first_loss"] if anchor == "kaia-windrow" else {"fighter": None, "status": "OPEN_CANON"},
+                       "first_loss": {"fighter": authority["first_loss_selected"][anchor], "status": decisions["status"], "decision_id": decisions["decision_id"]},
+                       "consequence": authority["route_consequences"][anchor],
                        "nodes": nodes})
     routes.append({"id": "sevenfold-convergence", "title": "Sevenfold Convergence", "anchor": "kaia-windrow",
                    "requires": authority["spectral_order"], "nodes": [
@@ -84,7 +90,8 @@ def build():
                                                 ("conversation", "A Society of Mediators", "INTERACTIVE_DIALOGUE"),
                                                 ("unlock", "Yin + Yang Playable Unlock", "UNLOCK")]]})
     return {"schema": "anime_v1.campaign.v1", "authority": str(PACK.relative_to(ROOT)),
-            "copy_status": "DRAFT_ADAPTATION", "implementation_complete": False, "watch_authority": "SHARED_ROUTE_GRAPH",
+            "canon_decision": decisions["decision_id"], "first_loss_selected": decisions["selected"],
+            "copy_status": "DRAFT_OWNER_REVIEW", "implementation_complete": False, "watch_authority": "SHARED_ROUTE_GRAPH",
             "root_route": "kaia-windrow", "spectral_order": authority["spectral_order"],
             "essence_progression": authority["essence_progression"], "routes": routes}
 

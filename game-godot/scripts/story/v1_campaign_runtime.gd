@@ -7,6 +7,8 @@ const DATA_PATH := "res://data/story/v1_campaign.json"
 const SAVE_PATH := "user://anime_v1_campaign.json"
 const SCHEMA := "anime_v1.progress.v1"
 
+const APPROVED_FIRST_LOSS := {"kaia-windrow":"rook-ironside", "ember-vale":"nix-calder", "rook-ironside":"juno-spark", "juno-spark":"orion-vell", "nix-calder":"vesper-nyx", "orion-vell":"kaia-windrow", "vesper-nyx":"ember-vale"}
+
 var campaign: Dictionary = {}
 var progress: Dictionary = {}
 var active_encounter: Dictionary = {}
@@ -20,6 +22,9 @@ var watch_presentation := "female"
 
 func _ready() -> void:
 	campaign = _read_json(DATA_PATH)
+	if not validate_canon():
+		last_error = "Campaign First Loss authority mismatch."
+		campaign.clear()
 	load_progress()
 
 
@@ -246,3 +251,24 @@ func abandon_encounter() -> void:
 	active_encounter.clear()
 	last_result.clear()
 	GameState.mode = "versus"
+
+
+func validate_canon() -> bool:
+	if campaign.get("first_loss_selected", {}) != APPROVED_FIRST_LOSS:
+		return false
+	var seen := []
+	for id in APPROVED_FIRST_LOSS:
+		var route := route_data(id)
+		var loss: String = APPROVED_FIRST_LOSS[id]
+		if route.get("first_loss", {}).get("fighter") != loss or loss in seen:
+			return false
+		seen.append(loss)
+		var count := 0
+		for node in route.get("nodes", []):
+			if node.has("first_loss"):
+				count += 1
+				if node["first_loss"] != loss:
+					return false
+		if count != 1:
+			return false
+	return seen.size() == 7
