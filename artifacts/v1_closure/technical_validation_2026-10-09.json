@@ -1,0 +1,134 @@
+{
+  "schema": "anime_v1.technical_validation.v1",
+  "date": "2026-10-09",
+  "starting_branch": "codex/anime-v1-closure-2026-10-06",
+  "starting_sha": "e063b13bcb293ad3ac7b8673c82d8830f8e0b24d",
+  "branch": "release/anime-v1-canon-and-campaign",
+  "tested_gameplay_source_sha": "30ea37f5e653357bc4ca2b6867d05cc221429b19",
+  "ani02_checkpoint": "ab8230f4",
+  "draft_pr": "https://github.com/gunnchOS3k/anime-aggressors/pull/122",
+  "godot": "4.7.1.stable.official.a13da4feb",
+  "evidence_type": "SOURCE_SCENE_STAGED_AUTOMATION",
+  "tests": [
+    {
+      "evidence": "full_campaign_runtime_evidence.json",
+      "pass": true,
+      "source_sha": "30ea37f5e653357bc4ca2b6867d05cc221429b19",
+      "scope": "145 nodes; 115 BattleScene-issued objective receipts; seven Gray and five Convergence; both cosmic unlocks"
+    },
+    {
+      "evidence": "campaign_restart_evidence.json",
+      "pass": true,
+      "source_sha": "30ea37f5e653357bc4ca2b6867d05cc221429b19",
+      "scope": "Separate-process signed save reload; seven watch paths isolation; earned Gray competitive skin preserves move data"
+    },
+    {
+      "evidence": "first_loss_framing_evidence.json",
+      "pass": true,
+      "source_sha": "30ea37f5e653357bc4ca2b6867d05cc221429b19",
+      "scope": "Seven distinct candidate First Loss actor/camera/control paths, no rendered footage"
+    },
+    {
+      "evidence": "campaign_runtime_evidence.json",
+      "pass": true,
+      "source_sha": "c2bdf2888288dd568b0da6e0718db58faa975db2",
+      "scope": "49 opening paths, real replay/loss/idempotence/malformed save"
+    },
+    {
+      "evidence": "owner_override_runtime_evidence.json",
+      "pass": true,
+      "source_sha": "c2bdf2888288dd568b0da6e0718db58faa975db2",
+      "scope": "Seven two-cosmic survival and seven watch regression paths"
+    },
+    {
+      "evidence": "combat_activation_evidence.json",
+      "pass": true,
+      "source_sha": "c2bdf2888288dd568b0da6e0718db58faa975db2",
+      "scope": "Real hit/block/recovery activation regression"
+    },
+    {
+      "evidence": "shipping_roster_evidence.json",
+      "pass": true,
+      "source_sha": "c2bdf2888288dd568b0da6e0718db58faa975db2",
+      "scope": "18 BASE selection/combat/results/rematch lifecycles"
+    },
+    {
+      "test": "Godot editor import",
+      "pass": true,
+      "source_sha": "30ea37f5e653357bc4ca2b6867d05cc221429b19",
+      "log": "godot_import_test_2026-10-09.log",
+      "scope": "No script/parse errors; sandbox warnings recorded"
+    },
+    {
+      "test": "validate_canon.py + validate_campaign.py",
+      "pass": true,
+      "source_sha": "30ea37f5e653357bc4ca2b6867d05cc221429b19",
+      "scope": "Seven unique approved identities and all 145 executable contracts; reproducible compilation"
+    },
+    {
+      "test": "validate_assets.py",
+      "pass": true,
+      "scope": "64 unchanged model structural/hash records, no new art generation"
+    }
+  ],
+  "source_file_sha256": {
+    "game-godot/data/story/v1_campaign.json": "ec6ace007d9b4ed6e440a14a77a8fa5c8ee0b2adbdf4bfe13e6e776808f74c2e",
+    "game-godot/scripts/story/v1_campaign_runtime.gd": "8a763d76e98b611a800d349160a3514cfca56fc76f72662cdaace6c069313752",
+    "game-godot/scripts/story/v1_story_encounter.gd": "996a5b5eaa9c16ada49337d823908d1bae421b7c3dac61be9241f8eedc59de86",
+    "game-godot/scripts/battle/battle_scene.gd": "d9d6c5209aa92b8c832eb0d04d5c523b6676d6140d7720d1bc5970dad017da28",
+    "game-godot/scripts/menus/story_campaign_scene.gd": "81101d9d7da90df459be6c8e6cc527ac7a9ebe73b23a68e6e0cf768a1ed9bfc0",
+    "game-godot/scripts/story/ova_watch_scene.gd": "e3d39378155a78f00258686169c9ff2845be76d1d3b93e194da10889a93bd050",
+    "game-godot/tests/v1_closure/FullCampaign.gd": "0d9bc25d3a8a2e028bc4c1be2660a930f10ce8cd6f2153e2b0f2b519f50e17ce",
+    "game-godot/tests/v1_closure/CampaignRestart.gd": "e89079c8f74a3cd08d7980f19be3dd7b5ccc9fc55999db81b4223ff59bca2115",
+    "game-godot/tests/v1_closure/FirstLossFraming.gd": "05ecd6664f8b6c520772b5db6dde4ef115a38898aecc9b8106b0a9432ec90f97",
+    "tools/v1_closure/build_campaign.py": "83801c7d5d6d3e8e44319054fd04fd2dfc40daef1b4219f939c3403900d74b77",
+    "tools/v1_closure/validate_canon.py": "f033f3a89fb5294e27233172884e63a9f6fec473c5ac41f1c0999c26cf6babad",
+    "tools/v1_closure/validate_campaign.py": "8259cf732fc1749094c3f0dfb4a9c9071783d8df481fe0cc9d19be1611ef27a2"
+  },
+  "historical_export": {
+    "source_sha": "ce2775f1fddc725c4cad639ef03d87666ec6d003",
+    "artifact_path": "build/v1-owner-review/anime-v1-owner-override-review.pck",
+    "artifact_sha256": "a62f4458506dc66d5fcd7eaf088148a1e8edc9e57d696e83e2e123a14c3435dc",
+    "artifact_bytes": 93426580,
+    "export_preset": "Web export-pack, owner-review PCK",
+    "scope": "Godot PCK with JSON/model/morph/audio resources; actual limited roster + new campaign/watch runtime probes. Full Web/Android lifecycles unproved.",
+    "owner_approved": false,
+    "historical": true,
+    "current_campaign_evidence": false,
+    "hash_reverified": true
+  },
+  "new_export_produced": false,
+  "not_run": [
+    "Current packed full campaign",
+    "Current exported Web runtime",
+    "Android device full campaign",
+    "PartyLink cross-device regression",
+    "Ordinary human full campaign playthrough",
+    "Current real-renderer First Loss/Gray/Convergence cinematic capture",
+    "Final authored animation/VFX/SFX/OVA acceptance"
+  ],
+  "known_limitations": [
+    "Protected automated players, positioned real collision contacts and staged blast-zone KOs; no human playability/difficulty acceptance.",
+    "Shutdown ObjectDB/resource warnings remain in headless logs; macOS CA and sandbox settings/achievement persistence warnings recorded.",
+    "Local save HMAC protects edited data, not a stolen signing key or modified executable.",
+    "Unsigned legacy saves preserved as .legacy before overwrite; authenticated replay required to recover earned unlocks.",
+    "Existing procedural clips, models and SFX remain candidates; no final presentation approval."
+  ],
+  "preservation": {
+    "worktrees_retained": 33,
+    "backup_manifest_sha256": "1d0cf84125d2dbcb82ef9ba79aeb6852829415e20c5dba2951f886c98880147d",
+    "backup_hash_reverified": true,
+    "free_disk_gib_approx": 7.3,
+    "heavy_export_guard_gib": 18
+  },
+  "gates": {
+    "FINAL_CHARACTER_ART_PASS": false,
+    "ANIMATION_TASTE_HUMAN_PASS": false,
+    "GAME_FEEL_HUMAN_PASS": false,
+    "VFX_TASTE_HUMAN_PASS": false,
+    "SFX_MIX_HUMAN_PASS": false,
+    "STORY_HUMAN_PASS": false,
+    "V1_ANIME_HUMAN_PASS": false,
+    "V1_AUTOMATED_READY": false
+  }
+}

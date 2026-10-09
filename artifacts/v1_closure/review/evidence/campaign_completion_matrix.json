@@ -1,23 +1,27 @@
 {
-  "schema": "anime_v1.campaign_completion_matrix.v2",
-  "source_sha": "ce2775f1fddc725c4cad639ef03d87666ec6d003",
+  "schema": "anime_v1.campaign_completion_matrix.v3",
+  "source_sha": "30ea37f5e653357bc4ca2b6867d05cc221429b19",
+  "watch_source_sha": "30ea37f5e653357bc4ca2b6867d05cc221429b19",
+  "declared_nodes": 145,
+  "implemented_and_exercised_source_nodes": 145,
   "rows": [
     {
       "route_id": "ember-vale",
-      "title": "Ember Vale \u2014 Prismatic Route",
-      "watch_title": "Ember Route Variation",
       "declared_nodes": 20,
-      "implemented_nodes": 10,
-      "first_block": "ember-vale:first_loss",
-      "block_reason": "The owner must approve this Anchor's First Loss.",
-      "complete": false,
-      "gray_unlocked": false,
-      "canon_first_loss": {
-        "fighter": null,
-        "status": "OPEN_CANON"
-      },
-      "implemented_essence_max": 0,
-      "remaining_nodes": [
+      "implemented_nodes": 20,
+      "exercised_transitions": 20,
+      "authentic_scene_receipts": 16,
+      "completed_nodes": [
+        "ember-vale:prologue",
+        "ember-vale:recruit:vesper-nyx",
+        "ember-vale:recruit:rook-ironside",
+        "ember-vale:recruit:orion-vell",
+        "ember-vale:recruit:juno-spark",
+        "ember-vale:recruit:nix-calder",
+        "ember-vale:recruit:kaia-windrow",
+        "ember-vale:accord",
+        "ember-vale:catastrophe",
+        "ember-vale:impossible_battle_1",
         "ember-vale:first_loss",
         "ember-vale:puppet_imbalance",
         "ember-vale:first_release",
@@ -29,24 +33,51 @@
         "ember-vale:epilogue",
         "ember-vale:unlock"
       ],
-      "full_watch_complete": false
+      "canon_first_loss": {
+        "fighter": "nix-calder",
+        "status": "APPROVED_WORKING_V1_NARRATIVE_CANON",
+        "decision_id": "ANI-02-2026-10-09"
+      },
+      "essence_fighters": [
+        "nix-calder",
+        "rook-ironside",
+        "vesper-nyx",
+        "juno-spark",
+        "orion-vell",
+        "kaia-windrow"
+      ],
+      "essence": 6,
+      "complete": true,
+      "gray_unlocked": true,
+      "source_sha": "30ea37f5e653357bc4ca2b6867d05cc221429b19",
+      "evidence_type": "SOURCE_SCENE_STAGED_AUTOMATION",
+      "staged_fixture_includes": [
+        "protected automated player",
+        "positioned collision contacts",
+        "staged blast-zone KOs"
+      ],
+      "unresolved_runtime_failures": [],
+      "full_watch_complete": false,
+      "human_playthrough": false,
+      "final_presentation_complete": false
     },
     {
       "route_id": "rook-ironside",
-      "title": "Rook Ironside \u2014 Prismatic Route",
-      "watch_title": "Rook Route Variation",
       "declared_nodes": 20,
-      "implemented_nodes": 10,
-      "first_block": "rook-ironside:first_loss",
-      "block_reason": "The owner must approve this Anchor's First Loss.",
-      "complete": false,
-      "gray_unlocked": false,
-      "canon_first_loss": {
-        "fighter": null,
-        "status": "OPEN_CANON"
-      },
-      "implemented_essence_max": 0,
-      "remaining_nodes": [
+      "implemented_nodes": 20,
+      "exercised_transitions": 20,
+      "authentic_scene_receipts": 16,
+      "completed_nodes": [
+        "rook-ironside:prologue",
+        "rook-ironside:recruit:ember-vale",
+        "rook-ironside:recruit:juno-spark",
+        "rook-ironside:recruit:vesper-nyx",
+        "rook-ironside:recruit:kaia-windrow",
+        "rook-ironside:recruit:orion-vell",
+        "rook-ironside:recruit:nix-calder",
+        "rook-ironside:accord",
+        "rook-ironside:catastrophe",
+        "rook-ironside:impossible_battle_1",
         "rook-ironside:first_loss",
         "rook-ironside:puppet_imbalance",
         "rook-ironside:first_release",
@@ -58,24 +89,51 @@
         "rook-ironside:epilogue",
         "rook-ironside:unlock"
       ],
-      "full_watch_complete": false
+      "canon_first_loss": {
+        "fighter": "juno-spark",
+        "status": "APPROVED_WORKING_V1_NARRATIVE_CANON",
+        "decision_id": "ANI-02-2026-10-09"
+      },
+      "essence_fighters": [
+        "juno-spark",
+        "vesper-nyx",
+        "ember-vale",
+        "orion-vell",
+        "kaia-windrow",
+        "nix-calder"
+      ],
+      "essence": 6,
+      "complete": true,
+      "gray_unlocked": true,
+      "source_sha": "30ea37f5e653357bc4ca2b6867d05cc221429b19",
+      "evidence_type": "SOURCE_SCENE_STAGED_AUTOMATION",
+      "staged_fixture_includes": [
+        "protected automated player",
+        "positioned collision contacts",
+        "staged blast-zone KOs"
+      ],
+      "unresolved_runtime_failures": [],
+      "full_watch_complete": false,
+      "human_playthrough": false,
+      "final_presentation_complete": false
     },
     {
       "route_id": "juno-spark",
-      "title": "Juno Spark \u2014 Prismatic Route",
-      "watch_title": "Juno Route Variation",
       "declared_nodes": 20,
-      "implemented_nodes": 10,
-      "first_block": "juno-spark:first_loss",
-      "block_reason": "The owner must approve this Anchor's First Loss.",
-      "complete": false,
-      "gray_unlocked": false,
-      "canon_first_loss": {
-        "fighter": null,
-        "status": "OPEN_CANON"
-      },
-      "implemented_essence_max": 0,
-      "remaining_nodes": [
+      "implemented_nodes": 20,
+      "exercised_transitions": 20,
+      "authentic_scene_receipts": 16,
+      "completed_nodes": [
+        "juno-spark:prologue",
+        "juno-spark:recruit:rook-ironside",
+        "juno-spark:recruit:kaia-windrow",
+        "juno-spark:recruit:ember-vale",
+        "juno-spark:recruit:nix-calder",
+        "juno-spark:recruit:vesper-nyx",
+        "juno-spark:recruit:orion-vell",
+        "juno-spark:accord",
+        "juno-spark:catastrophe",
+        "juno-spark:impossible_battle_1",
         "juno-spark:first_loss",
         "juno-spark:puppet_imbalance",
         "juno-spark:first_release",
@@ -87,24 +145,52 @@
         "juno-spark:epilogue",
         "juno-spark:unlock"
       ],
-      "full_watch_complete": false
+      "canon_first_loss": {
+        "fighter": "orion-vell",
+        "status": "APPROVED_WORKING_V1_NARRATIVE_CANON",
+        "decision_id": "ANI-02-2026-10-09"
+      },
+      "essence_fighters": [
+        "orion-vell",
+        "kaia-windrow",
+        "rook-ironside",
+        "nix-calder",
+        "ember-vale",
+        "vesper-nyx"
+      ],
+      "essence": 6,
+      "complete": true,
+      "gray_unlocked": true,
+      "source_sha": "30ea37f5e653357bc4ca2b6867d05cc221429b19",
+      "evidence_type": "SOURCE_SCENE_STAGED_AUTOMATION",
+      "staged_fixture_includes": [
+        "protected automated player",
+        "positioned collision contacts",
+        "staged blast-zone KOs"
+      ],
+      "unresolved_runtime_failures": [],
+      "full_watch_complete": false,
+      "human_playthrough": false,
+      "final_presentation_complete": false
     },
     {
       "route_id": "kaia-windrow",
-      "title": "The Green Between",
-      "watch_title": "Anime Aggressors OVA \u2014 Kaia Route",
       "declared_nodes": 20,
-      "implemented_nodes": 11,
-      "first_block": "kaia-windrow:puppet_imbalance",
-      "block_reason": "This chapter's encounter and presentation are still being built.",
-      "complete": false,
-      "gray_unlocked": false,
-      "canon_first_loss": {
-        "fighter": "rook-ironside",
-        "status": "CANONICAL"
-      },
-      "implemented_essence_max": 1,
-      "remaining_nodes": [
+      "implemented_nodes": 20,
+      "exercised_transitions": 20,
+      "authentic_scene_receipts": 16,
+      "completed_nodes": [
+        "kaia-windrow:prologue",
+        "kaia-windrow:recruit:juno-spark",
+        "kaia-windrow:recruit:nix-calder",
+        "kaia-windrow:recruit:rook-ironside",
+        "kaia-windrow:recruit:orion-vell",
+        "kaia-windrow:recruit:ember-vale",
+        "kaia-windrow:recruit:vesper-nyx",
+        "kaia-windrow:accord",
+        "kaia-windrow:catastrophe",
+        "kaia-windrow:impossible_battle_1",
+        "kaia-windrow:first_loss",
         "kaia-windrow:puppet_imbalance",
         "kaia-windrow:first_release",
         "kaia-windrow:equilibrium",
@@ -115,24 +201,51 @@
         "kaia-windrow:epilogue",
         "kaia-windrow:unlock"
       ],
-      "full_watch_complete": false
+      "canon_first_loss": {
+        "fighter": "rook-ironside",
+        "status": "APPROVED_WORKING_V1_NARRATIVE_CANON",
+        "decision_id": "ANI-02-2026-10-09"
+      },
+      "essence_fighters": [
+        "rook-ironside",
+        "nix-calder",
+        "juno-spark",
+        "ember-vale",
+        "orion-vell",
+        "vesper-nyx"
+      ],
+      "essence": 6,
+      "complete": true,
+      "gray_unlocked": true,
+      "source_sha": "30ea37f5e653357bc4ca2b6867d05cc221429b19",
+      "evidence_type": "SOURCE_SCENE_STAGED_AUTOMATION",
+      "staged_fixture_includes": [
+        "protected automated player",
+        "positioned collision contacts",
+        "staged blast-zone KOs"
+      ],
+      "unresolved_runtime_failures": [],
+      "full_watch_complete": false,
+      "human_playthrough": false,
+      "final_presentation_complete": false
     },
     {
       "route_id": "nix-calder",
-      "title": "Nix Calder \u2014 Prismatic Route",
-      "watch_title": "Nix Route Variation",
       "declared_nodes": 20,
-      "implemented_nodes": 10,
-      "first_block": "nix-calder:first_loss",
-      "block_reason": "The owner must approve this Anchor's First Loss.",
-      "complete": false,
-      "gray_unlocked": false,
-      "canon_first_loss": {
-        "fighter": null,
-        "status": "OPEN_CANON"
-      },
-      "implemented_essence_max": 0,
-      "remaining_nodes": [
+      "implemented_nodes": 20,
+      "exercised_transitions": 20,
+      "authentic_scene_receipts": 16,
+      "completed_nodes": [
+        "nix-calder:prologue",
+        "nix-calder:recruit:kaia-windrow",
+        "nix-calder:recruit:orion-vell",
+        "nix-calder:recruit:juno-spark",
+        "nix-calder:recruit:vesper-nyx",
+        "nix-calder:recruit:rook-ironside",
+        "nix-calder:recruit:ember-vale",
+        "nix-calder:accord",
+        "nix-calder:catastrophe",
+        "nix-calder:impossible_battle_1",
         "nix-calder:first_loss",
         "nix-calder:puppet_imbalance",
         "nix-calder:first_release",
@@ -144,24 +257,51 @@
         "nix-calder:epilogue",
         "nix-calder:unlock"
       ],
-      "full_watch_complete": false
+      "canon_first_loss": {
+        "fighter": "vesper-nyx",
+        "status": "APPROVED_WORKING_V1_NARRATIVE_CANON",
+        "decision_id": "ANI-02-2026-10-09"
+      },
+      "essence_fighters": [
+        "vesper-nyx",
+        "orion-vell",
+        "kaia-windrow",
+        "rook-ironside",
+        "juno-spark",
+        "ember-vale"
+      ],
+      "essence": 6,
+      "complete": true,
+      "gray_unlocked": true,
+      "source_sha": "30ea37f5e653357bc4ca2b6867d05cc221429b19",
+      "evidence_type": "SOURCE_SCENE_STAGED_AUTOMATION",
+      "staged_fixture_includes": [
+        "protected automated player",
+        "positioned collision contacts",
+        "staged blast-zone KOs"
+      ],
+      "unresolved_runtime_failures": [],
+      "full_watch_complete": false,
+      "human_playthrough": false,
+      "final_presentation_complete": false
     },
     {
       "route_id": "orion-vell",
-      "title": "Orion Vell \u2014 Prismatic Route",
-      "watch_title": "Orion Route Variation",
       "declared_nodes": 20,
-      "implemented_nodes": 10,
-      "first_block": "orion-vell:first_loss",
-      "block_reason": "The owner must approve this Anchor's First Loss.",
-      "complete": false,
-      "gray_unlocked": false,
-      "canon_first_loss": {
-        "fighter": null,
-        "status": "OPEN_CANON"
-      },
-      "implemented_essence_max": 0,
-      "remaining_nodes": [
+      "implemented_nodes": 20,
+      "exercised_transitions": 20,
+      "authentic_scene_receipts": 16,
+      "completed_nodes": [
+        "orion-vell:prologue",
+        "orion-vell:recruit:nix-calder",
+        "orion-vell:recruit:vesper-nyx",
+        "orion-vell:recruit:kaia-windrow",
+        "orion-vell:recruit:ember-vale",
+        "orion-vell:recruit:juno-spark",
+        "orion-vell:recruit:rook-ironside",
+        "orion-vell:accord",
+        "orion-vell:catastrophe",
+        "orion-vell:impossible_battle_1",
         "orion-vell:first_loss",
         "orion-vell:puppet_imbalance",
         "orion-vell:first_release",
@@ -173,24 +313,51 @@
         "orion-vell:epilogue",
         "orion-vell:unlock"
       ],
-      "full_watch_complete": false
+      "canon_first_loss": {
+        "fighter": "kaia-windrow",
+        "status": "APPROVED_WORKING_V1_NARRATIVE_CANON",
+        "decision_id": "ANI-02-2026-10-09"
+      },
+      "essence_fighters": [
+        "kaia-windrow",
+        "vesper-nyx",
+        "nix-calder",
+        "juno-spark",
+        "ember-vale",
+        "rook-ironside"
+      ],
+      "essence": 6,
+      "complete": true,
+      "gray_unlocked": true,
+      "source_sha": "30ea37f5e653357bc4ca2b6867d05cc221429b19",
+      "evidence_type": "SOURCE_SCENE_STAGED_AUTOMATION",
+      "staged_fixture_includes": [
+        "protected automated player",
+        "positioned collision contacts",
+        "staged blast-zone KOs"
+      ],
+      "unresolved_runtime_failures": [],
+      "full_watch_complete": false,
+      "human_playthrough": false,
+      "final_presentation_complete": false
     },
     {
       "route_id": "vesper-nyx",
-      "title": "Vesper Nyx \u2014 Prismatic Route",
-      "watch_title": "Vesper Route Variation",
       "declared_nodes": 20,
-      "implemented_nodes": 10,
-      "first_block": "vesper-nyx:first_loss",
-      "block_reason": "The owner must approve this Anchor's First Loss.",
-      "complete": false,
-      "gray_unlocked": false,
-      "canon_first_loss": {
-        "fighter": null,
-        "status": "OPEN_CANON"
-      },
-      "implemented_essence_max": 0,
-      "remaining_nodes": [
+      "implemented_nodes": 20,
+      "exercised_transitions": 20,
+      "authentic_scene_receipts": 16,
+      "completed_nodes": [
+        "vesper-nyx:prologue",
+        "vesper-nyx:recruit:orion-vell",
+        "vesper-nyx:recruit:ember-vale",
+        "vesper-nyx:recruit:nix-calder",
+        "vesper-nyx:recruit:rook-ironside",
+        "vesper-nyx:recruit:kaia-windrow",
+        "vesper-nyx:recruit:juno-spark",
+        "vesper-nyx:accord",
+        "vesper-nyx:catastrophe",
+        "vesper-nyx:impossible_battle_1",
         "vesper-nyx:first_loss",
         "vesper-nyx:puppet_imbalance",
         "vesper-nyx:first_release",
@@ -202,34 +369,73 @@
         "vesper-nyx:epilogue",
         "vesper-nyx:unlock"
       ],
-      "full_watch_complete": false
+      "canon_first_loss": {
+        "fighter": "ember-vale",
+        "status": "APPROVED_WORKING_V1_NARRATIVE_CANON",
+        "decision_id": "ANI-02-2026-10-09"
+      },
+      "essence_fighters": [
+        "ember-vale",
+        "nix-calder",
+        "orion-vell",
+        "kaia-windrow",
+        "rook-ironside",
+        "juno-spark"
+      ],
+      "essence": 6,
+      "complete": true,
+      "gray_unlocked": true,
+      "source_sha": "30ea37f5e653357bc4ca2b6867d05cc221429b19",
+      "evidence_type": "SOURCE_SCENE_STAGED_AUTOMATION",
+      "staged_fixture_includes": [
+        "protected automated player",
+        "positioned collision contacts",
+        "staged blast-zone KOs"
+      ],
+      "unresolved_runtime_failures": [],
+      "full_watch_complete": false,
+      "human_playthrough": false,
+      "final_presentation_complete": false
     },
     {
       "route_id": "sevenfold-convergence",
-      "title": "Sevenfold Convergence",
-      "watch_title": null,
       "declared_nodes": 5,
-      "implemented_nodes": 0,
-      "first_block": "sevenfold:reunion",
-      "block_reason": "Seven completed Gray routes and the Convergence encounter are required.",
-      "complete": false,
-      "gray_unlocked": false,
-      "canon_first_loss": null,
-      "implemented_essence_max": 0,
-      "remaining_nodes": [
+      "implemented_nodes": 5,
+      "exercised_transitions": 5,
+      "authentic_scene_receipts": 3,
+      "completed_nodes": [
         "sevenfold:reunion",
         "sevenfold:trial",
         "sevenfold:equilibrium",
         "sevenfold:conversation",
         "sevenfold:unlock"
       ],
-      "full_watch_complete": false
+      "canon_first_loss": null,
+      "essence_fighters": [],
+      "essence": 0,
+      "complete": true,
+      "gray_unlocked": false,
+      "source_sha": "30ea37f5e653357bc4ca2b6867d05cc221429b19",
+      "evidence_type": "SOURCE_SCENE_STAGED_AUTOMATION",
+      "staged_fixture_includes": [
+        "protected automated player",
+        "positioned collision contacts",
+        "staged blast-zone KOs"
+      ],
+      "unresolved_runtime_failures": [],
+      "full_watch_complete": false,
+      "human_playthrough": false,
+      "final_presentation_complete": false
     }
   ],
-  "gray_routes_completed": 0,
-  "convergence_complete": false,
-  "yin_unlocked": false,
-  "yang_unlocked": false,
+  "gray_routes_completed": 7,
+  "convergence_nodes_completed": 5,
+  "convergence_complete": true,
+  "yin_unlocked": true,
+  "yang_unlocked": true,
+  "unlock_evidence_scope": "Isolated normal-mode source test save; engine receipt qualification does not mean human acceptance.",
   "STORY_HUMAN_PASS": false,
-  "V1_AUTOMATED_READY": false
+  "V1_AUTOMATED_READY": false,
+  "exported_runtime_validated": false,
+  "full_story_presentation_complete": false
 }
