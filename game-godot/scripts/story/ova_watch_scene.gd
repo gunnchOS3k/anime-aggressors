@@ -8,6 +8,7 @@ var node_index := 0
 var playing := true
 var elapsed := 0.0
 var _battle
+var _watch_presenter
 var _viewport: SubViewport
 var _title: Label
 var _subtitle: Label
@@ -99,6 +100,9 @@ func _present_node() -> void:
 	_swap_busy = true
 	elapsed = 0
 	_shot = -1
+	if _watch_presenter != null:
+		_watch_presenter.battle = null
+		_watch_presenter = null
 	if _battle != null:
 		_battle.queue_free()
 		_battle = null
@@ -143,8 +147,25 @@ func _present_node() -> void:
 	_battle.hud.visible = false
 	_battle.set_process_unhandled_input(false)
 	var form := "PRISMATIC_GRAY" if node_index >= 16 else "BASE"
-	var presenter = preload("res://scripts/story/v1_story_encounter.gd").new()
-	presenter.set_form(_battle.fighter1, form)
+	_watch_presenter = preload("res://scripts/story/v1_story_encounter.gd").new()
+	var objective: String = chapter.get("objective_contract", "STOCK_WIN")
+	if objective not in ["STOCK_WIN", "COSMIC_SURVIVAL"]:
+		var released := []
+		var essence := 0
+		if chapter.has("puppets"):
+			if node_index >= 13: released.append(chapter["puppets"]["yin"][0])
+			if node_index >= 15:
+				released.append(chapter["puppets"]["yin"][1])
+				released.append(chapter["puppets"]["yang"][0])
+			if node_index >= 16: released = chapter["puppets"]["yin"] + chapter["puppets"]["yang"]
+			if node_index >= 11: essence = 1 + released.size()
+		_watch_presenter.setup(_battle, {"node":chapter, "route_state":{"released":released, "essence":essence, "form":form}})
+		_watch_presenter._label.visible = false
+		_watch_presenter._marker.visible = false
+		# Visual staging only: the watch clock never calls objective tick or issues a result.
+		for actor in _watch_presenter.actors:
+			actor.set_meta("watch_only_actor", true)
+	_watch_presenter.set_form(_battle.fighter1, form)
 	if chapter.has("first_loss"):
 		_battle.fighter2.model_3d.set_cinematic_expression("grief")
 		_battle.fighter2.model_3d.play_clip("aura_charge")
@@ -194,10 +215,13 @@ func _process(delta: float) -> void:
 			playing = false
 
 func _exit_tree() -> void:
+	if _watch_presenter != null:
+		_watch_presenter.battle = null
+		_watch_presenter = null
 	for key in _session_before:
 		GameState.set(key, _session_before[key])
 	# CPU synthesis uses global actions; clear them on exit to leave human gameplay clean.
-	for slot in [1, 2, 3]:
+	for slot in range(1, 10):
 		for action in ["left", "right", "jump", "attack", "special", "shield", "grab"]:
 			var name := "p%d_%s" % [slot, action]
 			if InputMap.has_action(name):
