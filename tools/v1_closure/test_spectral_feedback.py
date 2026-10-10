@@ -5,12 +5,12 @@ ROOT=Path(__file__).resolve().parents[2];OUT=ROOT/'artifacts/v1_closure/spectral
 rows=json.loads((DEST/"results.json").read_text())["rows"] if (DEST/"results.json").exists() else []
 sha=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
 diff=hashlib.sha256(subprocess.check_output(['git','diff'],cwd=ROOT)).hexdigest()
-for name in sys.argv[1:] or ['SpectralFeedback','InterruptedMove','CombatActivation','ElementalPerformance','OwnerOverrideFaces','DialogueProduction','FullCampaign','ShippingRosterPath','CampaignRestart']:
+for name in sys.argv[1:] or ['SpectralFeedback','InterruptedMove','CombatActivation','ElementalPerformance','OwnerOverrideFaces','DialogueProduction','FullCampaign','ShippingRosterPath','CampaignRestart','CollectibleRuntime','SelectCriticalLaunchHarness']:
  dest=DEST/name;dest.mkdir(exist_ok=True)
  # Older tests have fixed output paths. Preserve all tracked evidence, then copy new evidence under this package.
- tracked=subprocess.check_output(['git','ls-files','artifacts/v1_closure'],cwd=ROOT,text=True).splitlines()
+ tracked=subprocess.check_output(['git','ls-files','artifacts/v1_closure','artifacts/presentation'],cwd=ROOT,text=True).splitlines()
  saved={s:(ROOT/s).read_bytes() for s in tracked if (ROOT/s).exists() and not s.startswith('artifacts/v1_closure/spectral_feedback/')}
- args=['python3',str(ROOT/'tools/v1_closure/launch_ordinary_review.py'),'--profile','spectral_regression_'+name.lower()+'_20261010','--headless','--test-script','res://tests/v1_closure/'+name+'.gd','--output',str(dest)]
+ args=['python3',str(ROOT/'tools/v1_closure/launch_ordinary_review.py'),'--profile','spectral_regression_'+name.lower()+'_20261010','--headless','--test-script','res://tests/'+('presentation/' if name=='SelectCriticalLaunchHarness' else 'v1_closure/')+name+'.gd','--output',str(dest)]
  if name=='ShippingRosterPath':args+=['--driver-arg=--roster-staged-unlocks=/private/tmp/anime-full-campaign-v2.json']
  print('TEST '+name,flush=True);start=time.monotonic()
  try:
@@ -19,7 +19,7 @@ for name in sys.argv[1:] or ['SpectralFeedback','InterruptedMove','CombatActivat
   for path,data in saved.items():
    current=ROOT/path
    if current.read_bytes()!=data:
-    new=dest/'legacy_report_outputs'/Path(path).relative_to('artifacts/v1_closure');new.parent.mkdir(parents=True,exist_ok=True);new.write_bytes(current.read_bytes());changed.append(path)
+    new=dest/'legacy_report_outputs'/Path(path).relative_to('artifacts');new.parent.mkdir(parents=True,exist_ok=True);new.write_bytes(current.read_bytes());changed.append(path)
   log=(dest/'stdout.log').read_text();errors=[x for x in log.splitlines() if 'SCRIPT ERROR' in x]
   rows=[r for r in rows if r['test']!=name]
   rows.append({'test':name,'passed':p.returncode==0 and not errors,'exit_code':p.returncode,'script_errors':errors,'seconds':round(time.monotonic()-start,2),'source_sha':sha,'source_diff_sha256':diff,'scope':'source fixture regression; does not grant human/platform/Story approval','new_reports':changed})
