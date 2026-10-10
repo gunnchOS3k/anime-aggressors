@@ -200,3 +200,12 @@ seven approved losses,1025 unique cues. Its embedded integration instructions we
 not independently invoked; full screenplay/TTS production is outside this request.
 No voice generation or new screenplay approval. All human/V1_AUTOMATED_READY gates
 remain false. No merge/deploy/tag/publish/new exports; disk remains below18GiB guard.
+
+
+## Completed ordinary playability / rendered review — October 10, 2026
+
+This supersedes the preceding in-progress ordinary section. Current tested gameplay/render source `83bab0825230154761b39e1a7ff63eeacf66de8d` completed all 20 Kaia nodes / 16 battles from a fresh isolated ordinary-input profile, genuine loss/retry and fresh-process resume, Essences 1→2→4→6, Gray, final confrontation, ending and Next Route. No protected/frozen/positioned/injected ordinary fixtures. Kaia alone leaves Convergence and Yin/Yang locked.
+
+Actual current Godot renderer screenshots and silent bounded MP4 chapter samples cover Kaia/Rook, Juno/Orion's earned Last Vector escort, five Puppets/releases, Essence progression, Gray, final confrontation/endings and separately labeled seeded Convergence. See `artifacts/v1_closure/ordinary_review/OWNER_REVIEW.md`, `CAPTURE_INDEX.md`, objective/technical/media manifests and `artifacts/v1_closure/CONTINUATION_ORDINARY_2026-10-10.md` for exact proof classes and safe launch procedure.
+
+Scoped staged regressions pass assertions, separately from normal inputs; headless audio/speech diagnostics remain. Windows Pilot 0 Windows 2025 evidence is pending in source snapshot, not passed. Disk remains below18GiB export guard; all33 worktrees, owner saves/backups/art/history/evidence retained, nothing deleted. No new exports/merge/deploy/tag/publication. All human gates and V1_AUTOMATED_READY remain false. Requested package ends this task; ANI-03/04/05 and human acceptance remain open.
