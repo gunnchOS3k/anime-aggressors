@@ -35,7 +35,7 @@ func write_evidence() -> void:
 	if output.is_empty() or battle == null or not is_instance_valid(battle):return
 	var renderer=battle.get_node_or_null("SpectralFeedback")
 	var file=FileAccess.open(output.path_join("combat_capture.json"),FileAccess.WRITE)
-	file.store_string(JSON.stringify({"source_sha":source_sha,"movie_fps":60,"fixture":"versus; seeded public-input driver; explicit starting damage band "+band,
+	file.store_string(JSON.stringify({"source_sha":source_sha,"movie_fps":60,"stage":"training-grid","match_seed":431017,"fixture":"versus on existing flat Training Grid stage; seeded public-input driver; explicit starting damage band "+band,
 		"starting_opponent_damage":50 if band=="medium" else 110 if band=="high" else 0,"opponent_cpu":battle.fighter2.is_cpu,"controls_enabled":battle.fighter2.controls_enabled,
 		"forced_moves":false,"forced_ko":false,"frozen_opponent":false,"story_receipts":false,"human_playthrough":false,
 		"idle_fixture_not_combo_evidence":idle_opponent,"moves":events,"contacts":contacts,"samples":samples,"ko_events":ko_events,
@@ -51,6 +51,7 @@ func _run() -> void:
 		if arg.begins_with("--damage-band="):band=arg.get_slice("=",1)
 		if arg.begins_with("--capture-frames="):max_frames=int(arg.get_slice("=",1))
 	var state=root.get_node("GameState")
+	state.stage_id="training-grid";state.match_seed=431017
 	state.mode="versus";state.p1_is_cpu=false;state.cpu_level=3;state.battle_eval_mode=false;state.p1_fighter_id=fid;state.p2_fighter_id="ember-vale" if fid=="juno-spark" else "juno-spark"
 	state.p1_body_variant="female";state.p2_body_variant="female";state.p2_is_cpu=not idle_opponent;state.stocks=9;state.match_timer_seconds=180
 	root.get_node("SceneRouter").go("battle")

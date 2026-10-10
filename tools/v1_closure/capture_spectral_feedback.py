@@ -15,7 +15,7 @@ for fid,mode,band in plan:
  dest=OUT/'captures'/label;dest.mkdir(parents=True,exist_ok=True)
  raw=MEDIA/(label+'.avi');target=OUT/'rendered'/(label+'.mp4');target.parent.mkdir(exist_ok=True)
  if raw.exists() or target.exists():raise SystemExit('Existing evidence preserved; use a new label instead of overwriting '+label)
- assert shutil.disk_usage(ROOT).free>2*1024**3,'Bounded recording reserve exhausted; platform exports require 18 GiB'
+ assert shutil.disk_usage(ROOT).free>2*1024**3+1550*262144,'Bounded recording reserve exhausted; platform exports require 18 GiB'
  # Charge has room for public full-charge projectile release and signature; active captures cover an entire input cycle.
  frames=1150 if mode=='charge' else 1550
  args=['python3',str(ROOT/'tools/v1_closure/launch_ordinary_review.py'),'--profile','spectral_'+label.replace('-','_')+'_20261010','--test-script','res://tests/v1_closure/SpectralCapture.gd','--movie',str(raw),'--movie-fps','60','--movie-frames',str(frames),'--output',str(dest),'--driver-arg=--performance-fighter='+fid,'--driver-arg=--damage-band='+band]
