@@ -54,13 +54,14 @@ func _run() -> void:
 	player.state_machine.enter("shield_start")
 	check(feedback.is_empty(),"raising_shield_emits_no_hit_feedback")
 	player._hitstop=0
+	player.controls_enabled=true
 	player.state_machine.enter("shield_hold")
 	Input.action_release("p1_shield")
 	player._handle_actions()
 	check(not player.shielding,"shield_release_respected_while_action_locked")
 	player.move_runner.cancel()
 	player.state_machine.enter("hitstun")
-	player.queue_attack_command("heavy_attack")
+	player.queue_attack_command("attack_heavy")
 	player._handle_actions()
 	check(not player.move_runner.active,"queued_cpu_attack_cannot_bypass_hitstun")
 	player.state_machine.enter("idle")
@@ -69,4 +70,11 @@ func _run() -> void:
 	var file := FileAccess.open("res://../artifacts/v1_closure/combat_activation_evidence.json",FileAccess.WRITE)
 	file.store_string(JSON.stringify({"ok":failures.is_empty(),"failures":failures,"scope":"Real Fighter active callbacks over every active frame; HitResolver confirmed block and feedback. Regression coverage for repeated impulses/casts and shield contact classification."},"  ")+"\n");file.close()
 	print("COMBAT_ACTIVATION ","PASS" if failures.is_empty() else "FAIL"," failures=",failures)
+	resolver.queue_free()
+	current_scene.queue_free()
+	call_deferred("_finish")
+
+func _finish() -> void:
+	# Release scene-local references and allow legitimate recovery timers to drain.
+	for i in range(180): await physics_frame
 	quit(0 if failures.is_empty() else 1)

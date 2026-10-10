@@ -385,7 +385,7 @@ func _update_prompt() -> void:
 		_label.text += "\nElapsed: %.1fs · Attack: %s · Guard: %s · Traversal: %s" % [elapsed, attacked, guarded, traversed]
 		if kind == "SEVENFOLD_EQUILIBRIUM":
 			_label.text += "\nGround signals: guard %s for 0.6s · Alternations: %d/6 · Survive at least 21s" % ["LEFT" if alternations%2==0 else "RIGHT",alternations]
-	_label.text += "\nA/D Move · W Jump · J Attack · J+K Heavy · K Special/release · L Shield · I Grab"
+	_label.text += "\nA/D Move · W Jump · J Attack · J+K Heavy · K Special/release · L Shield · U Grab · I Dodge"
 	_label.text += "\nEssences: %d · Steps: %d · Released: %d · Guard: %.1fs" % [route_state.get("essence", 0), steps, released.size(), guard_seconds]
 
 

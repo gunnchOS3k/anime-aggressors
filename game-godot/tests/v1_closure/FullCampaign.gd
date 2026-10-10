@@ -110,6 +110,11 @@ func _hold_at(pos: Vector2, n: int, shield: bool = true) -> void:
 	if shield: Input.action_release("p1_shield")
 func _pulse(action: String, pos: Vector2) -> void:
 	_position(pos)
+	# Teleporting the staged fixture does not immediately update floor/action
+	# state. Wait for genuine landing before issuing the short input pulse.
+	for i in range(45):
+		if battle.fighter1.is_on_floor() and battle.fighter1.state_machine.can_attack(): break
+		await physics_frame
 	Input.action_press(action)
 	await frames(2)
 	Input.action_release(action)
