@@ -67,6 +67,12 @@ func _run() -> void:
 	player.state_machine.enter("idle")
 	player._handle_actions()
 	check(player.move_runner.active,"queued_cpu_attack_runs_after_recovery")
+	player.is_cpu=true
+	other.set_meta("story_cosmic_contract",true)
+	check(player._find_opponent()==null,"cpu_ignores_immune_story_actor")
+	other.remove_meta("story_cosmic_contract")
+	check(player._find_opponent()==other,"cpu_keeps_ordinary_competitive_target")
+	player.is_cpu=false
 	var file := FileAccess.open("res://../artifacts/v1_closure/combat_activation_evidence.json",FileAccess.WRITE)
 	file.store_string(JSON.stringify({"ok":failures.is_empty(),"failures":failures,"scope":"Real Fighter active callbacks over every active frame; HitResolver confirmed block and feedback. Regression coverage for repeated impulses/casts and shield contact classification."},"  ")+"\n");file.close()
 	print("COMBAT_ACTIVATION ","PASS" if failures.is_empty() else "FAIL"," failures=",failures)

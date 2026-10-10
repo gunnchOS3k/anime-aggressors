@@ -68,7 +68,7 @@ func _physics_process(_delta: float) -> void:
 		print("ORDINARY_SCENE ",scene.scene_file_path)
 		if scene.scene_file_path.ends_with("BattleScene.tscn"):
 			node_id = str(CampaignRuntime.active_encounter.get("node_id", ""))
-			attempt = {"node":node_id,"player_hits":0,"enemy_hits":0,"blocks":0,"enemy_moves":0,"max_player_damage":0.0,"start_stocks":GameState.stocks,"normal_rules":true}
+			attempt = {"node":node_id,"player_hits":0,"enemy_hits":0,"enemy_hits_by_fighter":{},"blocks":0,"enemy_moves":0,"max_player_damage":0.0,"start_stocks":GameState.stocks,"normal_rules":true}
 			for actor in scene.fighters_root.get_children():
 				if not actor.has_method("training_play_move"): continue
 				actor.hit_resolver.hit_confirmed.connect(_hit)
@@ -157,7 +157,9 @@ func _ko_observed(actor) -> void:
 func _hit(attacker, defender, info: Dictionary) -> void:
 	if info.get("blocked",false): attempt["blocks"] += 1
 	elif attacker.slot == 1: attempt["player_hits"] += 1
-	elif defender.slot == 1: attempt["enemy_hits"] += 1
+	elif defender.slot == 1:
+		attempt["enemy_hits"] += 1
+		attempt["enemy_hits_by_fighter"][attacker.fighter_id]=attempt["enemy_hits_by_fighter"].get(attacker.fighter_id,0)+1
 
 func _press_button(scene: Node, text: String) -> void:
 	if action_delay > 0: return

@@ -1794,6 +1794,9 @@ func _find_opponent() -> Node2D:
 	var nearest: Node2D = null
 	for c in parent.get_children():
 		if c == self or c == null or not c.has_method("receive_hit") or c.stocks <= 0 or c.get_meta("story_released", false): continue
+		# Hostile CPUs must not duel immune Story manifestations or passive
+		# sacrifice/escort actors while ignoring the ordinarily vulnerable player.
+		if is_cpu and bool(c.get_meta("story_cosmic_contract", false)): continue
 		if has_meta("story_team") and get_meta("story_team") == c.get_meta("story_team", ""): continue
 		if nearest == null or position.distance_squared_to(c.position) < position.distance_squared_to(nearest.position): nearest = c
 	return nearest
