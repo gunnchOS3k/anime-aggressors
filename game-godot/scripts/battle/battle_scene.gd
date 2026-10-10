@@ -122,6 +122,11 @@ func _ready() -> void:
 		StoryDialogue.fire("encounter_intro")
 		if StoryDialogue.is_busy(): await StoryDialogue.sequence_finished
 		if _battle_camera != null: _battle_camera.set_physics_process(true)
+	if not _story_attempt_token.is_empty():
+		for actor in fighters_root.get_children():
+			if _story_objective != null and _story_objective.kind in ["FIRST_LOSS","PRISMATIC_TRANSFORMATION"] and actor == fighter2:
+				actor.model_3d.set_cinematic_expression("grief" if _story_objective.kind == "FIRST_LOSS" else "determination")
+			else: actor.model_3d.set_cinematic_expression("")
 	await _run_countdown()
 	fighter1.controls_enabled = true
 	fighter2.controls_enabled = true
@@ -728,6 +733,8 @@ func _setup_story_dialogue() -> void:
 			StoryDialogue.fire("combat_contact",{"attacker":attacker.fighter_id,"defender":defender.fighter_id,"blocked":info.get("blocked",false)}))
 
 func _on_story_cue(cue: Dictionary) -> void:
+	# Combat facial reactions retain authority; dialogue staging only before live controls.
+	if _active: return
 	if cue.get("representation") == "memory_echo": return
 	if StoryDialogue.context != "battle" or StoryDialogue.node_id != str(CampaignRuntime.active_encounter.get("node_id","")): return
 	for actor in fighters_root.get_children():
