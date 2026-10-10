@@ -94,7 +94,7 @@ if a.movie:
     cmd += ['--write-movie',str(a.movie.resolve()),'--fixed-fps','30','--quit-after',str(a.movie_frames)]
 cmd += ['--', '--ordinary-output='+str(a.output.resolve())]
 cmd += a.driver_arg
-cmd += ["--source-sha="+subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip()]
+cmd += ["--source-sha="+subprocess.check_output(["git","rev-parse",a.baseline_ref or "HEAD"],cwd=ROOT,text=True).strip()]
 if a.test_script:
     cmd[cmd.index('--'):cmd.index('--')] = ['--script',a.test_script]
 cmd += ['--ordinary-max-nodes='+str(a.max_nodes)]
@@ -104,6 +104,6 @@ if a.video_frames: cmd += ['--ordinary-video-frames']
 if a.seed_convergence_from or a.seeded_prerequisites: cmd += ['--ordinary-seeded-prerequisites']
 if a.resume: cmd += ['--ordinary-resume']
 print(json.dumps({'project':str(project), 'profile':a.profile, 'isolated_project_name':'Anime Aggressors Review '+a.profile, 'command':cmd}), flush=True)
-(a.output/'launch_manifest.json').write_text(json.dumps({'project':str(project),'profile':a.profile,'command':cmd,'git_sha':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),'source_changes':subprocess.check_output(['git','diff','--name-only'],cwd=ROOT,text=True).splitlines(),'source_diff_sha256':hashlib.sha256(subprocess.check_output(['git','diff'],cwd=ROOT)).hexdigest(),'human_playthrough':False,'baseline_ref':a.baseline_ref,'seeded_prerequisites':bool(a.seed_convergence_from or a.seeded_prerequisites)},indent=2)+'\n')
+(a.output/'launch_manifest.json').write_text(json.dumps({'project':str(project),'profile':a.profile,'command':cmd,'git_sha':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),'source_changes':subprocess.check_output(['git','diff','--name-only'],cwd=ROOT,text=True).splitlines(),'source_diff_sha256':hashlib.sha256(subprocess.check_output(['git','diff'],cwd=ROOT)).hexdigest(),'human_playthrough':False,'baseline_ref':a.baseline_ref,'runtime_source_sha':subprocess.check_output(['git','rev-parse',a.baseline_ref or 'HEAD'],cwd=ROOT,text=True).strip(),'seeded_prerequisites':bool(a.seed_convergence_from or a.seeded_prerequisites)},indent=2)+'\n')
 if not a.prepare_only:
     raise SystemExit(subprocess.call(cmd))
