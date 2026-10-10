@@ -21,7 +21,7 @@ def write(path, data):
  path.write_text(json.dumps(data, ensure_ascii=False, indent=2)+'\n')
 
 def main():
- ap=argparse.ArgumentParser(); ap.add_argument('--pack', type=Path, default=Path('/Users/gunnchos/Downloads/ANIME_AGGRESSORS_V1_STORY_DIALOGUE_TTS_PRODUCTION_PACK')); args=ap.parse_args()
+ ap=argparse.ArgumentParser(); ap.add_argument('--pack', type=Path, default=ROOT/'docs/anime-aggressors/v1_closure/dialogue_production/source'); args=ap.parse_args()
  pack=args.pack; script=json.loads((pack/'ANIME_V1_DIALOGUE_PRODUCTION_DRAFT.json').read_text())
  graph=json.loads((ROOT/'game-godot/data/story/v1_campaign.json').read_text())
  nodes={n['id']:(r,n) for r in graph['routes'] for n in r['nodes']}
@@ -33,7 +33,7 @@ def main():
  hashes={}
  for file in sorted(pack.iterdir()):
   if file.is_file():
-   data=file.read_bytes(); hashes[file.name]=hashlib.sha256(data).hexdigest(); shutil.copyfile(file,source/file.name)
+   data=file.read_bytes(); hashes[file.name]=hashlib.sha256(data).hexdigest(); shutil.copyfile(file,source/file.name) if file.resolve() != (source/file.name).resolve() else None
  cues={}; runtime_nodes={}; coverage=[]
  for node in script['nodes']:
   route,game=nodes[node['node_id']]; contract=game.get('objective_contract','STOCK_WIN' if game['kind']=='STORY_BATTLE' else 'UI_ACKNOWLEDGMENT')

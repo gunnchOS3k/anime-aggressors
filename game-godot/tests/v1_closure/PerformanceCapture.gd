@@ -6,6 +6,7 @@ var events: Array=[]
 var output := ""
 var fid := "ember-vale"
 var source_sha := ""
+var idle_opponent := false
 func _init() -> void:call_deferred("_run")
 func inputs(actions: Array) -> void:
 	for action in held:
@@ -19,9 +20,10 @@ func _run() -> void:
 		if arg.begins_with("--performance-fighter="):fid=arg.get_slice("=",1)
 		if arg.begins_with("--source-sha="):source_sha=arg.get_slice("=",1)
 		if arg.begins_with("--ordinary-output="):output=arg.get_slice("=",1)
+		if arg == "--performance-opponent=idle":idle_opponent=true
 	var state=root.get_node("GameState")
 	state.mode="versus";state.p1_is_cpu=false;state.cpu_level=3;state.battle_eval_mode=false;state.p1_fighter_id=fid;state.p2_fighter_id="ember-vale" if fid=="juno-spark" else "juno-spark"
-	state.p1_body_variant="female";state.p2_body_variant="female";state.p2_is_cpu=true;state.stocks=9;state.match_timer_seconds=180
+	state.p1_body_variant="female";state.p2_body_variant="female";state.p2_is_cpu=not idle_opponent;state.stocks=9;state.match_timer_seconds=180
 	root.get_node("SceneRouter").go("battle")
 	for i in range(220):await physics_frame
 	var battle=current_scene
@@ -29,13 +31,17 @@ func _run() -> void:
 	var p=battle.fighter1
 	p.move_runner.move_started.connect(func(mid):events.append({"fighter":fid,"move":mid,"physics_frame":Engine.get_physics_frames()}))
 	battle.fighter2.move_runner.move_started.connect(func(mid):events.append({"fighter":battle.fighter2.fighter_id,"move":mid,"opponent":true,"physics_frame":Engine.get_physics_frames()}))
-	var label:=Label.new();label.text="AUTOMATED NORMAL INPUT · active CPU · pose/sound candidates · "+source_sha.left(12);label.position=Vector2(30,90);battle.hud.add_child(label)
+	var label:=Label.new();label.text="AUTOMATED NORMAL INPUT · "+("idle P2 signature fixture" if idle_opponent else "active CPU")+" · candidates · "+source_sha.left(12);label.position=Vector2(30,90);battle.hud.add_child(label)
 	for frame in range(3000):
 		if current_scene!=battle:break
 		var phase:=frame%1200
 		var dx:float=battle.fighter2.position.x-p.position.x
 		var actions: Array=[]
-		if phase<260:
+		if idle_opponent:
+			# Charge through the public controls; no aura assignment or move calls.
+			if phase<650:actions.append_array(["special","shield"])
+			elif phase<670:actions.append("attack")
+		elif phase<260:
 			if absf(dx)>55:actions.append("right" if dx>0 else "left")
 			if frame%30<4:actions.append("attack")
 		elif phase<440:

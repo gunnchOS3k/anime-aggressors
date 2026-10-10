@@ -32,6 +32,7 @@ func _ready() -> void:
 	if cfg.load("user://story_presentation.cfg") == OK:
 		for key in settings: settings[key] = cfg.get_value("presentation",key,settings[key])
 	_build_panel()
+	get_viewport().size_changed.connect(_fit_panel)
 	_voice = AudioStreamPlayer.new()
 	_voice.name = "TemporaryDialogueVoice"
 	_voice.bus = "Dialogue" if AudioServer.get_bus_index("Dialogue") >= 0 else "Master"

@@ -5,7 +5,7 @@ import numpy as np
 ROOT=Path(__file__).resolve().parents[2]; SR=22050
 OUT=ROOT/'game-godot/assets/audio/elemental_v1'; STEM=ROOT/'art_source/audio/elemental_v1'; REPORT=ROOT/'artifacts/v1_closure/dialogue_performance'
 FAMILIES={'ember-vale':'combustion','juno-spark':'electricity','rook-ironside':'stone','kaia-windrow':'wind','nix-calder':'crystal','orion-vell':'gravity','vesper-nyx':'phase','yin':'subtraction','yang':'construction'}
-EVENTS={'charge_start':.6,'charge_loop':2.0,'charge_ready':.8,'charge_release':.5,'charge_cancel':.3,'projectile_launch':.55,'projectile_travel':1.4,'projectile_impact':.8,'projectile_dissipate':.45,'heavy':.9,'signature':1.5,'block':.28}
+EVENTS={'charge_start':.6,'charge_loop':2.0,'charge_ready':.8,'charge_release':.5,'charge_cancel':.3,'projectile_launch':.55,'projectile_travel':1.4,'projectile_impact':.8,'projectile_dissipate':.45,'heavy':.9,'signature':1.5,'signature_release':1.2,'block':.28}
 def low(x,width): return np.convolve(x,np.ones(width)/width,mode='same')
 def save(p,x):
  p.parent.mkdir(parents=True,exist_ok=True)
@@ -45,6 +45,11 @@ def build(fid,event,duration):
   body=smooth*1.5+.14*np.sin(2*np.pi*110*t);texture=sum(.06*np.sin(2*np.pi*f*t) for f in [220,330,440,660]);transient=mid*.3*np.exp(-t*40)
  if event in ('heavy','signature','projectile_impact'):
   body*=1.3; transient+=mid*.7*np.exp(-t*45)
+ if event=='signature_release':
+  # A pressure onset, second release and textured tail, distinct from contact.
+  body*=1.4
+  texture*=.65+np.exp(-((t-.18)/.07)**2)*1.3
+  transient+=mid*.8*(np.exp(-t*55)+.6*np.exp(-((t-.13)/.035)**2))
  if event=='charge_ready':texture*=1.4
  if event=='block':body*=.45
  if loop:

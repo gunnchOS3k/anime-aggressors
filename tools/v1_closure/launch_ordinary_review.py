@@ -11,6 +11,7 @@ import tempfile
 import hashlib
 import hmac
 import shutil
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -58,6 +59,18 @@ else:
 config = config.replace('config/name="Anime Aggressors"', 'config/name="Anime Aggressors Review '+a.profile+'"')
 if a.automate:
     config = config.replace('[autoload]\n', '[autoload]\nOrdinaryInputReview="*res://tests/v1_closure/OrdinaryInputReview.gd"\n')
+# Source-review watermark is isolated from the preserved owner/export identity.
+(project/'data').unlink()
+(project/'data').mkdir()
+for child in (source/'data').iterdir():
+    if child.name != 'runtime': (project/'data'/child.name).symlink_to(child,target_is_directory=child.is_dir())
+(project/'data/runtime').mkdir()
+for child in (source/'data/runtime').iterdir():
+    if child.name != 'build_identity.json': (project/'data/runtime'/child.name).symlink_to(child,target_is_directory=child.is_dir())
+review_sha=subprocess.check_output(['git','rev-parse',a.baseline_ref or 'HEAD'],cwd=ROOT,text=True).strip()
+identity=json.loads((source/'data/runtime/build_identity.json').read_text()) if (source/'data/runtime/build_identity.json').exists() else {}
+identity.update(git_sha=review_sha,git_sha_short=review_sha[:12],git_short_sha=review_sha[:12],watermark='AA '+review_sha[:12],build_flavor='source-review-not-release',build_timestamp=datetime.now(timezone.utc).isoformat())
+(project/'data/runtime/build_identity.json').write_text(json.dumps(identity,indent=2)+'\n')
 (project/'project.godot').write_text(config)
 a.output.mkdir(parents=True, exist_ok=True)
 if a.seed_convergence_from:

@@ -26,6 +26,11 @@ func _run() -> void:
 		if seen.size()==d.nodes[id].ordered_cues.size() and not d.is_busy():break
 		if watch.node_index!=10:break
 		await physics_frame
+	# Stop chapter advancement before switching away from the watch scene.
+	watch.playing=false
+	watch.set_process(false)
+	var final_file=FileAccess.open(output.path_join("dialogue_capture_events.json"),FileAccess.WRITE)
+	final_file.store_string(JSON.stringify({"node_id":id,"events":seen,"expected_cues":d.nodes[id].ordered_cues.size(),"progress_unchanged":JSON.stringify(c.progress)==before,"presentation":"read-only current renderer, candidate facial/camera staging, local synthetic voices; no final OVA acting","story_unlocks_earned":false},"  ")+"\n");final_file.close()
 	root.get_node("SceneRouter").go("story")
 	for i in range(6):await physics_frame
 	print("DIALOGUE_CAPTURE node=",id," cues=",seen.size()," unchanged=",JSON.stringify(c.progress)==before)

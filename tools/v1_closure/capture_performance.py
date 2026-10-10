@@ -4,15 +4,21 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2];OUT=ROOT/'artifacts/v1_closure/dialogue_performance';MEDIA=OUT/'local_media';MEDIA.mkdir(exist_ok=True)
 SOURCE=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
 BASE='c5f3be23bf7376f2a0b71a8aabc1396415ef8186'
-plan=[('ember-vale',False),('juno-spark',False),('ember-vale',True),('juno-spark',True)]+[(f,False) for f in ['rook-ironside','kaia-windrow','nix-calder','orion-vell','vesper-nyx','yin','yang']]+[('dialogue_kaia-windrow',False),('dialogue_juno-spark',False)]
+plan=[('ember-vale',False),('juno-spark',False),('ember-vale',True),('juno-spark',True)]+[(f,False) for f in ['rook-ironside','kaia-windrow','nix-calder','orion-vell','vesper-nyx','yin','yang']]+[('signature_ember-vale',False),('signature_juno-spark',False),('dialogue_kaia-windrow',False),('dialogue_juno-spark',False)]
 if sys.argv[1:]:plan=[x for x in plan if ('before_' if x[1] else '')+x[0] in sys.argv[1:]]
-index=[]
+index=json.loads((OUT/'capture_index.json').read_text())['movies'] if (OUT/'capture_index.json').exists() else []
 for fid,before in plan:
  label=('before_' if before else '')+fid;dest=OUT/('capture_'+label);dest.mkdir(exist_ok=True)
- story=fid.startswith('dialogue_');route=fid.removeprefix('dialogue_')
+ story=fid.startswith('dialogue_');idle=fid.startswith('signature_');route=fid.removeprefix('dialogue_').removeprefix('signature_')
  native=MEDIA/(label+'.ogv')
+ # Retain every prior recording locally when refreshing a checkpoint.
+ archive=MEDIA/'previous_recordings'/label/str(time.time_ns())
+ old_target=MEDIA/(label+'.mp4') if story else OUT/'rendered'/(label+'.mp4')
+ for old in [native,old_target]:
+  if old.exists():archive.mkdir(parents=True,exist_ok=True);shutil.copy2(old,archive/old.name)
  args=['python3',str(ROOT/'tools/v1_closure/launch_ordinary_review.py'),'--profile','review_'+label.replace('-','_')+'_20261010','--test-script','res://tests/v1_closure/'+('DialogueCapture' if story else 'PerformanceCapture')+'.gd','--driver-arg='+('--dialogue-route=' if story else '--performance-fighter=')+route,'--movie',str(native),'--movie-frames',str(5400 if story else 900),'--output',str(dest)]
  if before:args+=['--baseline-ref',BASE]
+ if idle:args+=['--driver-arg=--performance-opponent=idle']
  # These are bounded source recordings, not heavy platform exports.
  assert shutil.disk_usage(ROOT).free>2*1024**3,'Safety reserve for bounded recording exhausted; heavy exports require 18 GiB'
  print('CAPTURE '+label,flush=True);start=time.monotonic()
@@ -27,5 +33,11 @@ for fid,before in plan:
  assert 'mean_volume: -inf' not in volume,'Silent movie'
  poster=OUT/'rendered'/(label+'.png');poster.parent.mkdir(exist_ok=True)
  subprocess.run(['ffmpeg','-y','-hide_banner','-loglevel','error','-ss','8','-i',str(target),'-frames:v','1',str(poster)],check=True)
- row={'label':label,'path':str(target.relative_to(ROOT)),'source_sha':BASE if before else SOURCE,'native_audio':True,'streams':probe['streams'],'sha256':hashlib.sha256(target.read_bytes()).hexdigest(),'scope':'read-only staged dialogue' if story else 'automated normal input in explicit versus fixture against active CPU','local_only_audio':story,'seconds_to_record':round(time.monotonic()-start,2),'volume_evidence':volume[volume.find('mean_volume:'):]}
- index.append(row);(OUT/'capture_index.json').write_text(json.dumps({'source_sha':SOURCE,'movies':index,'human_playthrough':False,'final_authored_cinematics':False},indent=2)+'\n');print(json.dumps(row),flush=True)
+ if story:
+  events=json.loads((dest/'dialogue_capture_events.json').read_text())
+  assert len(events['events'])==events['expected_cues'] and events['progress_unchanged'],events
+ if idle:
+  events=json.loads((dest/'normal_input_capture_events.json').read_text())
+  assert not events['opponent_cpu'] and any(r['move']=='aura_burst' and not r.get('opponent') for r in events['events']),events
+ row={'label':label,'path':str(target.relative_to(ROOT)),'source_sha':BASE if before else SOURCE,'native_audio':True,'streams':probe['streams'],'sha256':hashlib.sha256(target.read_bytes()).hexdigest(),'scope':'read-only staged dialogue' if story else 'automated public charge/signature inputs; explicit idle-P2 fixture' if idle else 'automated normal input in explicit versus fixture against active CPU','local_only_audio':story,'seconds_to_record':round(time.monotonic()-start,2),'volume_evidence':volume[volume.find('mean_volume'):]}
+ index=[r for r in index if r['label']!=label];index.append(row);(OUT/'capture_index.json').write_text(json.dumps({'source_sha':SOURCE,'movies':index,'human_playthrough':False,'final_authored_cinematics':False},indent=2)+'\n');print(json.dumps(row),flush=True)

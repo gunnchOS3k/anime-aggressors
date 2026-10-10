@@ -15,8 +15,8 @@ voice=json.loads((OUT/'temporary_voice_manifest.json').read_text());checks['1025
 checks['no_paid_api_or_imitation']=voice['paid_api_cost']==0 and not voice['recognizable_performance_imitation']
 worktrees=subprocess.check_output(['git','worktree','list','--porcelain'],cwd=ROOT,text=True).count('worktree ');checks['all_33_worktrees_preserved']=worktrees==identity['worktrees']==33
 backup=ROOT.parents[1]/'owner_backups/anime_v1_closure_2026-10-06/manifest.json';checks['owner_backup_unchanged']=hashlib.sha256(backup.read_bytes()).hexdigest()==identity['backup_manifest_sha256']
-sound=json.loads((OUT/'elemental_sound_catalog.json').read_text())['assets'];checks['108_live_sfx_assets']=all(hashlib.sha256((ROOT/'game-godot'/r['path'].replace('res://','')).read_bytes()).hexdigest()==r['sha256'] for r in sound) and len(sound)==108
-checks['nine_distinct_sound_banks']=len({r['sha256'] for r in sound})==108
+sound=json.loads((OUT/'elemental_sound_catalog.json').read_text())['assets'];checks['117_live_sfx_assets']=all(hashlib.sha256((ROOT/'game-godot'/r['path'].replace('res://','')).read_bytes()).hexdigest()==r['sha256'] for r in sound) and len(sound)==117
+checks['nine_distinct_sound_banks']=len({r['sha256'] for r in sound})==117
 checks['headroom_in_new_sound_assets']=all(r['peak_dbfs']<=-3 for r in sound)
 checks['all_original_hit_audio_preserved']=not subprocess.check_output(['git','diff',identity['base_sha'],'--','game-godot/assets/audio/collectible_v1'],cwd=ROOT)
 result={'ok':all(checks.values()),'checks':checks,'worktrees':worktrees,'human_pass':False,'heavy_exports_run':False}

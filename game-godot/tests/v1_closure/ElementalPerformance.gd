@@ -16,7 +16,7 @@ func _run() -> void:
 	for i in range(10):await physics_frame
 	var p=current_scene.fighter1;p.controls_enabled=false;current_scene.fighter2.controls_enabled=false
 	for fid in ["ember-vale","juno-spark","rook-ironside","kaia-windrow","nix-calder","orion-vell","vesper-nyx","yin","yang"]:
-		for event in ["charge_start","charge_loop","charge_ready","charge_release","charge_cancel","projectile_launch","projectile_travel","projectile_impact","projectile_dissipate","heavy","signature","block"]:
+		for event in ["charge_start","charge_loop","charge_ready","charge_release","charge_cancel","projectile_launch","projectile_travel","projectile_impact","projectile_dissipate","heavy","signature","signature_release","block"]:
 			var result = Sound.one_shot(fid,event,root,.2)
 			check(result.get("playing",false) and result.path.contains(fid),"required_event_live:"+fid+":"+event)
 		p.configure(fid,1,false,9,Vector2(-100,180))
@@ -41,6 +41,11 @@ func _run() -> void:
 				found=true;check(node._elemental_audio.travel!=null and node._elemental_audio.travel.playing,"travel_plays:"+fid)
 		check(found,"real_launch:"+fid)
 		p.projectile_spawner.clear_all();p.move_runner.cancel()
+		p.state_machine.enter("idle")
+		p.training_play_move("aura_burst")
+		for i in range(60):await physics_frame
+		check(sound.events.filter(func(row):return row.event=="signature_release" and row.playing).size()==1,"real_signature_release_once:"+fid)
+		p.move_runner.cancel()
 		for presentation in ["male","female"]:
 			var model=Model.new();root.add_child(model);model.configure(Data.load_fighter(fid),presentation)
 			await process_frame

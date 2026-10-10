@@ -18,6 +18,7 @@ var _session_before: Dictionary = {}
 var _shot := -1
 var _saved_progress := ""
 var _swap_busy := false
+var _closing := false
 var _dialogue_speaker: Node2D
 const SESSION_KEYS := ["mode", "arcade_active", "battle_eval_mode", "battle_eval_max_frames", "p1_fighter_id", "p2_fighter_id", "p1_body_variant", "p2_body_variant", "p1_is_cpu", "p2_is_cpu", "stocks", "match_type", "match_timer_seconds", "stage_id", "hazards_enabled", "items_enabled", "cpu_level", "team_mode", "battle_eval_finished", "battle_eval_frames", "battle_eval_result", "last_winner_slot"]
 
@@ -100,6 +101,8 @@ func seek(index: int) -> void:
 	await _present_node()
 
 func _present_node() -> void:
+	var tree := get_tree()
+	if _closing or tree == null: return
 	_swap_busy = true
 	StoryDialogue.cancel()
 	_dialogue_speaker = null
@@ -111,7 +114,8 @@ func _present_node() -> void:
 	if _battle != null:
 		_battle.queue_free()
 		_battle = null
-		await get_tree().process_frame
+		await tree.process_frame
+		if _closing or not is_inside_tree(): return
 	var nodes: Array = route.get("nodes", [])
 	if nodes.is_empty():
 		_swap_busy = false
@@ -148,7 +152,8 @@ func _present_node() -> void:
 	GameState.stage_id = str(chapter.get("stage", "skyline-arena"))
 	_battle = BATTLE.instantiate()
 	_viewport.add_child(_battle)
-	await get_tree().process_frame
+	await tree.process_frame
+	if _closing or not is_inside_tree(): return
 	_battle.hud.visible = false
 	_battle.set_process_unhandled_input(false)
 	var form := "PRISMATIC_GRAY" if node_index >= 16 else "BASE"
@@ -224,6 +229,7 @@ func _process(delta: float) -> void:
 			playing = false
 
 func _exit_tree() -> void:
+	_closing = true
 	StoryDialogue.cancel()
 	if _watch_presenter != null:
 		_watch_presenter.battle = null

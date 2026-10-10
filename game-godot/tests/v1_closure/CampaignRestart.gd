@@ -44,10 +44,12 @@ func _run() -> void:
 		check(watch._battle.fighter1.get_meta("story_form","")=="PRISMATIC_GRAY","watch_shared_gray_"+fid)
 		await watch.seek(19)
 		check(watch.node_index==19,"watch_ending_reachable_"+fid)
+		# Exit while seek is suspended on freeing the previous BattleScene.
+		watch.seek(0)
 		router.go("story")
 		for i in range(6): await physics_frame
 		check(JSON.stringify(c.progress)==saved,"watch_never_writes_story_"+fid)
-		watch_rows.append({"route":fid,"pause_seek_return":true,"shared_loss_and_gray_models":true,"progress_unchanged":true,"full_ova_complete":false})
+		watch_rows.append({"route":fid,"pause_seek_return":true,"exit_during_async_seek":true,"shared_loss_and_gray_models":true,"progress_unchanged":true,"full_ova_complete":false})
 	state.mode="versus"
 	state.battle_eval_mode=true
 	state.battle_eval_max_frames=100000
