@@ -103,7 +103,8 @@ func _next() -> void:
 			_voice.stream = stream
 			_voice.volume_db = linear_to_db(maxf(0.0001,float(settings["voice_volume"])))
 			_voice.play(); remaining = maxf(remaining,stream.get_length()+0.35); voice_ok = true
-	_name.text = str(current["speaker"]) + (" · memory" if current.get("representation") == "memory_echo" else "") + " · Draft dialogue" + (" · Temporary synthetic voice" if voice_ok else "")
+	var voice_label := " · Cleared voice asset" if bool(replacement.get("distribution_cleared",false)) else " · Temporary synthetic voice"
+	_name.text = str(current["speaker"]) + (" · memory" if current.get("representation") == "memory_echo" else "") + " · Draft dialogue" + (voice_label if voice_ok else "")
 	_text.text = str(current["subtitle"])
 	_text.add_theme_font_size_override("font_size",clampi(int(settings["font_size"]),18,34))
 	_text.visible = bool(settings["subtitles"])
@@ -180,9 +181,11 @@ func show_transcript() -> void:
 	label.custom_minimum_size.x = 840; label.add_theme_font_size_override("font_size",23)
 	scroll.add_child(label); dialog.add_child(scroll); add_child(dialog)
 	var previously_paused := _manual_pause
+	var previous_tree_pause := get_tree().paused
 	set_paused(true)
-	dialog.confirmed.connect(func(): set_paused(previously_paused); dialog.queue_free())
-	dialog.canceled.connect(func(): set_paused(previously_paused); dialog.queue_free())
+	get_tree().paused = true
+	dialog.confirmed.connect(func(): get_tree().paused=previous_tree_pause; set_paused(previously_paused); dialog.queue_free())
+	dialog.canceled.connect(func(): get_tree().paused=previous_tree_pause; set_paused(previously_paused); dialog.queue_free())
 	dialog.popup_centered(Vector2i(920,430))
 
 func watch_phase(phase: String) -> void:

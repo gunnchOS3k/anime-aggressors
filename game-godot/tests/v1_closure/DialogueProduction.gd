@@ -61,6 +61,16 @@ func _run() -> void:
 	var cfg:=ConfigFile.new()
 	check(cfg.load("user://story_presentation.cfg")==OK and cfg.get_value("presentation","reduced_flash",false) and cfg.get_value("presentation","reduced_shake",false),"accessibility_settings_persist")
 	for key in saved_settings:d.set_option(key,saved_settings[key])
+	d.show_transcript()
+	check(paused and d._manual_pause,"transcript_pauses_game_and_voice")
+	for child in d.get_children():
+		if child is AcceptDialog:child.confirmed.emit()
+	check(not paused and not d._manual_pause,"transcript_restores_running_game")
+	paused=true;d.set_paused(true);d.show_transcript()
+	for child in d.get_children():
+		if child is AcceptDialog and not child.is_queued_for_deletion():child.canceled.emit()
+	check(paused and d._manual_pause,"transcript_preserves_existing_pause")
+	paused=false;d.set_paused(false)
 	d.cancel()
 	check(JSON.stringify(campaign.progress)==before,"presentation_watch_cannot_mutate_progress")
 	var file := FileAccess.open("res://../artifacts/v1_closure/dialogue_performance/dialogue_runtime_test.json",FileAccess.WRITE)

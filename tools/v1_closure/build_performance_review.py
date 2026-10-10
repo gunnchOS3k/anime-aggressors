@@ -59,6 +59,7 @@ for fid in ['kaia-windrow','juno-spark']:
  path=OUT/('capture_dialogue_'+fid)/'dialogue_capture_events.json'
  if path.exists():
   data=json.loads(path.read_text());report['dialogue_demonstrations'][fid]={'cue_count':len(data['events']),'expected_cues':data['expected_cues'],'voices_playing':sum(r['voice_playing'] for r in data['events'].values()),'progress_unchanged':data['progress_unchanged']}
+if (OUT/'dialogue_audio_sync_test.json').exists():report['native_dialogue_audio_sync']=read('dialogue_audio_sync_test.json')
 if (OUT/'CI_SOURCE_CHECKPOINT.json').exists():report['source_ci']=read('CI_SOURCE_CHECKPOINT.json')
 write('FINAL_IMPLEMENTATION_REPORT.json',report)
 print(json.dumps({'nodes':145,'cues':1025,'movies':len(captures),'fighter_rows':len(fighters),'move_rows':len(matrix['rows']),'free_gib':round(free,3)}))

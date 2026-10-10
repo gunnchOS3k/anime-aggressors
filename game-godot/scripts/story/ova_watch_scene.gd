@@ -208,6 +208,7 @@ func _present_node() -> void:
 		_battle.fighter2.position = Vector2(100, 180)
 		_battle.fighter1.model_3d.play_clip("idle")
 		_battle.fighter1.model_3d.set_cinematic_expression(str(chapter.get("expression", "determination")))
+	for actor in _battle.fighters_root.get_children(): actor.set_meta("watch_base_z",actor.z_index)
 	StoryDialogue.begin(str(chapter["id"]),"watch")
 	StoryDialogue.watch_phase("pre")
 	_swap_busy = false
