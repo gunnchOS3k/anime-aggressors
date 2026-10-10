@@ -62,6 +62,10 @@ func _physics_process(_delta: float) -> void:
 	action_delay -= 1
 	var scene = get_tree().current_scene
 	if scene == null: return
+	# Public presentation control; ordinary automation intentionally skips draft dialogue.
+	if StoryDialogue.is_busy():
+		_press_button(StoryDialogue, "Skip dialogue · F6")
+		return
 	if scene_id != scene.get_instance_id():
 		scene_id = scene.get_instance_id(); local_frame = 0; action_delay = 50
 		_inputs([])

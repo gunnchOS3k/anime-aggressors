@@ -116,6 +116,12 @@ func _ready() -> void:
 		if _story_cosmic_actor != null: _story_cosmic_actor.controls_enabled = true
 		_active = true
 		return
+	if not _story_attempt_token.is_empty():
+		_setup_story_dialogue()
+		for actor in fighters_root.get_children(): actor.controls_enabled = false
+		StoryDialogue.fire("encounter_intro")
+		if StoryDialogue.is_busy(): await StoryDialogue.sequence_finished
+		if _battle_camera != null: _battle_camera.set_physics_process(true)
 	await _run_countdown()
 	fighter1.controls_enabled = true
 	fighter2.controls_enabled = true
@@ -593,6 +599,7 @@ func _on_pause_rematch() -> void:
 
 
 func _on_pause_return_menu() -> void:
+	StoryDialogue.cancel()
 	_clear_pause_for_nav()
 	if GameState.mode == "story":
 		CampaignRuntime.abandon_encounter()
@@ -608,6 +615,11 @@ func _finish_match(winner: int) -> void:
 	if GameState.mode == "story" and not _story_attempt_token.is_empty():
 		var evidence: Dictionary = _story_objective.evidence() if _story_objective != null else {"stock_win":fighter2.stocks <= 0 and fighter1.stocks > 0, "survived":_story_survival and fighter1.stocks > 0 and _time_remaining <= 0, "elapsed":_story_elapsed}
 		_story_receipt_failed = not CampaignRuntime.record_battle_result(winner, _story_attempt_token, evidence, self)
+		if not _story_receipt_failed and winner == 1:
+			StoryDialogue.fire("encounter_success",evidence)
+			StoryDialogue.fire("first_loss_resolved",evidence)
+			StoryDialogue.fire("essence_earned",evidence)
+		else: StoryDialogue.cancel()
 		if _story_receipt_failed:
 			CampaignRuntime.last_error = "Story outcome could not be saved or verified. Retry this encounter."
 			CampaignRuntime.active_encounter.clear()
@@ -701,3 +713,30 @@ func _exit_tree() -> void:
 			if is_instance_valid(actor): actor.cpu.clear_simulated_inputs()
 		_story_objective.battle = null
 		_story_objective = null
+
+
+func _setup_story_dialogue() -> void:
+	StoryDialogue.begin(str(CampaignRuntime.active_encounter.get("node_id","")),"battle")
+	StoryDialogue.cue_started.connect(_on_story_cue)
+	for actor in fighters_root.get_children():
+		actor.move_runner.move_started.connect(func(_id):
+			if not _active or StoryDialogue.context != "battle": return
+			StoryDialogue.fire("cosmic_engaged",{"fighter":actor.fighter_id,"move":_id})
+			if actor == fighter1: StoryDialogue.fire("gray_combat_action",{"move":_id}))
+		actor.hit_resolver.hit_confirmed.connect(func(attacker,defender,info):
+			if not _active or StoryDialogue.context != "battle": return
+			StoryDialogue.fire("combat_contact",{"attacker":attacker.fighter_id,"defender":defender.fighter_id,"blocked":info.get("blocked",false)}))
+
+func _on_story_cue(cue: Dictionary) -> void:
+	if StoryDialogue.context != "battle" or StoryDialogue.node_id != str(CampaignRuntime.active_encounter.get("node_id","")): return
+	for actor in fighters_root.get_children():
+		if actor.fighter_id != cue["speaker_id"]: continue
+		var expression := str({"strained":"shock","grief":"grief","soft":"calm","formal":"determination","clear":"determination"}.get(cue["performance"],"determination"))
+		actor.model_3d.set_cinematic_expression(expression)
+		if not _active:
+			actor.model_3d.play_clip("story_dialogue_intense" if cue["performance"] in ["strained","grief"] else "story_dialogue_neutral")
+			var camera := get_node_or_null("Camera2D") as Camera2D
+			if camera != null:
+				if _battle_camera != null: _battle_camera.set_physics_process(false)
+				camera.position = actor.position + Vector2(0,-70)
+				camera.zoom = Vector2.ONE * 1.25

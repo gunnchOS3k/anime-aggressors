@@ -148,6 +148,10 @@ func _on_continue() -> void:
 
 func _on_action() -> void:
 	if CampaignRuntime.current_node().get("kind") == "INTERACTIVE_DIALOGUE":
+		_action.disabled = true
+		StoryDialogue.begin(str(CampaignRuntime.current_node()["id"]),"scene")
+		for event in ["scene_start","scene_turn","scene_resolution"]: StoryDialogue.fire(event)
+		if StoryDialogue.is_busy(): await StoryDialogue.sequence_finished
 		CampaignRuntime.acknowledge_scene()
 		_refresh()
 	elif CampaignRuntime.begin_encounter():
@@ -164,9 +168,12 @@ func _on_replay() -> void:
 			var review := AcceptDialog.new()
 			review.name = "StorySceneReplay"
 			review.title = str(chapter["title"]) + " · Draft Story replay"
-			review.dialog_text = str(chapter.get("body", ""))
-			review.confirmed.connect(review.queue_free)
-			review.canceled.connect(review.queue_free)
+			review.dialog_text = StoryDialogue.transcript(selected)
+			review.get_label().autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			StoryDialogue.begin(selected,"replay")
+			for event in ["scene_start","scene_turn","scene_resolution"]: StoryDialogue.fire(event)
+			review.confirmed.connect(func(): StoryDialogue.cancel(); review.queue_free())
+			review.canceled.connect(func(): StoryDialogue.cancel(); review.queue_free())
 			add_child(review)
 			review.popup_centered(Vector2i(960, 340))
 			return # Presentation only: no acknowledgment, receipt or save write.
@@ -175,6 +182,7 @@ func _on_replay() -> void:
 
 
 func on_back() -> void:
+	StoryDialogue.cancel()
 	CampaignRuntime.abandon_encounter()
 	SceneRouter.go("main_menu")
 

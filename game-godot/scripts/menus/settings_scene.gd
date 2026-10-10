@@ -21,6 +21,13 @@ func _ready() -> void:
 	_refresh_access_labels()
 	_ensure_feedback_button()
 	_ensure_build_info_button()
+	var dialogue := Button.new()
+	dialogue.text = "Dialogue and elemental audio"
+	dialogue.pressed.connect(StoryDialogue.show_settings)
+	var parent := get_node_or_null("VBox")
+	if parent != null:
+		parent.add_child(dialogue)
+		parent.move_child(dialogue,2)
 
 func _ensure_accessibility_rows() -> void:
 	var vbox := get_node_or_null("VBox") as VBoxContainer

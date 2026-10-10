@@ -78,6 +78,7 @@ func _button(parent: Node, text: String, action: Callable) -> Button:
 
 func _toggle_pause() -> void:
 	playing = not playing
+	StoryDialogue.set_paused(not playing)
 	_pause.text = "Pause" if playing else "Resume"
 	if _battle != null:
 		_battle.process_mode = Node.PROCESS_MODE_INHERIT if playing else Node.PROCESS_MODE_DISABLED
@@ -98,6 +99,7 @@ func seek(index: int) -> void:
 
 func _present_node() -> void:
 	_swap_busy = true
+	StoryDialogue.cancel()
 	elapsed = 0
 	_shot = -1
 	if _watch_presenter != null:
@@ -184,6 +186,8 @@ func _present_node() -> void:
 		_battle.fighter2.position = Vector2(100, 180)
 		_battle.fighter1.model_3d.play_clip("idle")
 		_battle.fighter1.model_3d.set_cinematic_expression(str(chapter.get("expression", "determination")))
+	StoryDialogue.begin(str(chapter["id"]),"watch")
+	StoryDialogue.watch_phase("pre")
 	_swap_busy = false
 
 func _process(delta: float) -> void:
@@ -191,10 +195,12 @@ func _process(delta: float) -> void:
 		return
 	elapsed += delta
 	var chapter: Dictionary = route["nodes"][node_index]
-	var duration := float(chapter.get("watch_seconds", 14))
+	var duration := maxf(float(chapter.get("watch_seconds",14)),StoryDialogue.watch_duration(str(chapter["id"])) + 2.0)
 	var shot := int(elapsed / (duration / 3.0))
 	if shot != _shot:
 		_shot = shot
+		if shot == 1: StoryDialogue.watch_phase("mid")
+		if shot >= 2: StoryDialogue.watch_phase("post")
 		var battle_camera = _battle.get("_battle_camera")
 		if battle_camera != null:
 			battle_camera.set_process(false)
@@ -208,13 +214,14 @@ func _process(delta: float) -> void:
 		var closeup: bool = chapter["kind"] != "STORY_BATTLE"
 		var target: Vector2 = (_battle.fighter1.position if closeup else (_battle.fighter1.position + _battle.fighter2.position) * 0.5) + Vector2(0, -60 if closeup else -45)
 		camera.position = camera.position.lerp(target, 1.0 - exp(-delta * 4.0))
-	if elapsed >= duration:
+	if elapsed >= duration and not StoryDialogue.is_busy():
 		if node_index + 1 < route["nodes"].size():
 			await seek(node_index + 1)
 		else:
 			playing = false
 
 func _exit_tree() -> void:
+	StoryDialogue.cancel()
 	if _watch_presenter != null:
 		_watch_presenter.battle = null
 		_watch_presenter = null
