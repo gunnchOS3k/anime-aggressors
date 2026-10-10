@@ -40,7 +40,8 @@ func _run() -> void:
 	d.cancel();check(not d.is_busy() and not d._voice.playing,"cancel_stops_voice")
 	d.settings.voice=previous_voice
 	d.begin("kaia-windrow:prologue","battle");d.fire("encounter_intro")
-	check(d._voice.stream!=null and d.history.back().voice_playing,"local_voice_loads")
+	var locally_generated: bool = FileAccess.file_exists(str(d.current.voice_asset))
+	check(d.history.back().voice_playing==locally_generated,"voice_or_missing_asset_fallback")
 	d.set_paused(true);check(d._voice.stream_paused,"voice_pauses")
 	d.cancel();d.set_paused(false)
 	check(JSON.stringify(campaign.progress)==before,"presentation_watch_cannot_mutate_progress")

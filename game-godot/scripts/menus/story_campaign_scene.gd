@@ -168,14 +168,18 @@ func _on_replay() -> void:
 			var review := AcceptDialog.new()
 			review.name = "StorySceneReplay"
 			review.title = str(chapter["title"]) + " · Draft Story replay"
-			review.dialog_text = StoryDialogue.transcript(selected)
-			review.get_label().autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			review.dialog_text = "Read-only draft transcript. Dialogue plays with the subtitle controls."
+			var scroll := ScrollContainer.new(); scroll.custom_minimum_size=Vector2(880,360)
+			var transcript := Label.new(); transcript.text=StoryDialogue.transcript(selected)
+			transcript.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;transcript.custom_minimum_size.x=840
+			transcript.add_theme_font_size_override("font_size",23)
+			scroll.add_child(transcript);review.add_child(scroll)
 			StoryDialogue.begin(selected,"replay")
 			for event in ["scene_start","scene_turn","scene_resolution"]: StoryDialogue.fire(event)
 			review.confirmed.connect(func(): StoryDialogue.cancel(); review.queue_free())
 			review.canceled.connect(func(): StoryDialogue.cancel(); review.queue_free())
 			add_child(review)
-			review.popup_centered(Vector2i(960, 340))
+			review.popup_centered(Vector2i(960, 450))
 			return # Presentation only: no acknowledgment, receipt or save write.
 	if CampaignRuntime.begin_encounter(selected):
 		SceneRouter.go("battle")

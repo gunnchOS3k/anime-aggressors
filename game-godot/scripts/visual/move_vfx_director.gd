@@ -51,6 +51,8 @@ static func play(parent: Node2D, fighter_id: String, move_id: String, pos: Vecto
 	node.scale.x = 1.0 if facing >= 0 else -1.0
 	parent.add_child(node)
 	_draw_shape(node, fighter_id, shape, str(ev.get("tier", "light")))
+	var presentation = parent.get_node_or_null("/root/StoryDialogue")
+	if presentation != null and bool(presentation.settings.reduced_flash): node.modulate.a=.25
 	_Particles.spawn(parent, fighter_id, move_id, pos)
 	var tw := node.create_tween()
 	tw.tween_interval(0.2)

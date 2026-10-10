@@ -17,6 +17,7 @@ var _fighter_id: String = ""
 var _active_clip: String = ""
 var _throw_dir: String = "forward"
 var _move_synchronized := false
+var presentation_frozen := false
 
 
 func setup(fighter, model_root: Node3D) -> void:
@@ -254,7 +255,7 @@ func _load_authored_studies() -> void:
 	_player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
 
 func _process(delta: float) -> void:
-	if _player != null and is_instance_valid(_player) and _player.has_animation_library("authored_studies") and not _move_synchronized:
+	if _player != null and is_instance_valid(_player) and _player.has_animation_library("authored_studies") and not _move_synchronized and not presentation_frozen:
 		_player.advance(delta)
 
 func synchronize_move(frame: int,move: Dictionary) -> void:

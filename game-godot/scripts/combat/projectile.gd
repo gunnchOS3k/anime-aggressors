@@ -145,6 +145,8 @@ func _build_intentional_visual(base_col: Color, size: Vector2) -> void:
 	var ring := Polygon2D.new()
 	ring.name = "SpawnFlash"
 	ring.color = Color(1.0, 0.85, 0.45, 0.65 if projectile_tier != "projectile_full" else 0.85)
+	var presentation = get_node_or_null("/root/StoryDialogue")
+	if presentation != null and bool(presentation.settings.reduced_flash): ring.visible=false
 	ring.polygon = _ring_poly(size.x * (0.8 if projectile_tier != "projectile_full" else 1.15) * scale_m)
 	_visual.add_child(ring)
 	var tw := create_tween()
@@ -355,6 +357,8 @@ func _deliver_hit(target: Node) -> void:
 func _spawn_impact() -> void:
 	if _visual == null:
 		return
+	var presentation = get_node_or_null("/root/StoryDialogue")
+	if presentation != null and bool(presentation.settings.reduced_flash): return
 	var burst := Polygon2D.new()
 	burst.color = Color(1.0, 0.7, 0.25, 0.85)
 	var scale_i := 1.0

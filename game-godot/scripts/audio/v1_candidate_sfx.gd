@@ -4,7 +4,7 @@ const Bank = preload("res://scripts/audio/procedural_audio_bank.gd")
 
 static func play_event(fighter_id: String, event: String, host: Node) -> Dictionary:
 	var original := Bank.play("res://assets/audio/collectible_v1/%s/%s.wav" % [fighter_id, event], host, -6.0)
-	var layer_event: String = {"heavy":"heavy","super_impact":"signature","special":"projectile_impact","block":"block"}.get(event,"")
+	var layer_event: String = {"heavy":"heavy","super_impact":"signature","special":"projectile_impact"}.get(event,"")
 	if not str(layer_event).is_empty():
 		original["elemental_layer"] = preload("res://scripts/audio/elemental_performance.gd").one_shot(fighter_id,layer_event,host)
 	return original

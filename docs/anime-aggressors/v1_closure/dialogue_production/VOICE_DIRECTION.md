@@ -59,3 +59,7 @@ Generic formant en-us+m4; 154 wpm, pitch 52, gap 3. Grief/soft slows 14%; strain
 Pronunciations: {"Kaia": "Kai ah", "Juno": "Joo no", "Nix": "Nicks", "Orion": "Oh rye un", "Vesper": "Ves per", "Yin": "Yin", "Yang": "Yang"}.
 
 License: eSpeak NG GPL-3.0-or-later, unmodified local execution. Generated audio remains local and is excluded from public distribution pending explicit output clearance. See the per-cue provenance manifest. Cost: zero.
+
+## Replacement pipeline
+
+`import_actor_voices.py --manifest <owner-provided manifest.json>` validates every cue before copying any file. Each asset row requires cue_id, file, exact subtitle, distribution_cleared=true, owner_asset_authorized=true, license_provenance, performer_consent and rights_holder. PCM16 WAV mono/stereo replaces the stable cue binding through voice_assets.json. Subtitle, emotion and speaker metadata remain attached; campaign logic is unchanged. Missing or uncleared replacements retain the local preview or text fallback. These asset permissions do not pass final dialogue, acting, Story or release gates.

@@ -6,6 +6,7 @@ signal sequence_finished
 const DATA := "res://data/story/dialogue/v1/"
 var cues: Dictionary = {}
 var nodes: Dictionary = {}
+var voice_assets: Dictionary = {}
 var settings := {"subtitles":true,"voice":true,"font_size":23,"reading_rate":3.0,"voice_volume":0.75,"element_volume":0.65,"music_volume":0.65,"reduced_flash":false,"reduced_shake":false}
 var node_id := ""
 var context := ""
@@ -26,6 +27,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	cues = _read_json(DATA+"cues.json").get("cues",{})
 	nodes = _read_json(DATA+"nodes.json").get("nodes",{})
+	voice_assets = _read_json(DATA+"voice_assets.json").get("assets",{})
 	var cfg := ConfigFile.new()
 	if cfg.load("user://story_presentation.cfg") == OK:
 		for key in settings: settings[key] = cfg.get_value("presentation",key,settings[key])
@@ -34,6 +36,7 @@ func _ready() -> void:
 	_voice.name = "TemporaryDialogueVoice"
 	_voice.bus = "Dialogue" if AudioServer.get_bus_index("Dialogue") >= 0 else "Master"
 	add_child(_voice)
+	call_deferred("_apply_accessibility")
 
 func _read_json(path: String) -> Dictionary:
 	var file := FileAccess.open(path,FileAccess.READ)
@@ -88,6 +91,8 @@ func _next() -> void:
 	current = _queue.pop_front()
 	remaining = reading_seconds(current)
 	var asset := str(current.get("voice_asset",""))
+	var replacement: Dictionary = voice_assets.get(str(current.cue_id),{})
+	if bool(replacement.get("distribution_cleared",false)): asset=str(replacement.get("path",asset))
 	var voice_ok := false
 	if bool(settings["voice"]) and FileAccess.file_exists(asset):
 		var stream := AudioStreamWAV.load_from_file(asset)
@@ -100,6 +105,7 @@ func _next() -> void:
 	_text.add_theme_font_size_override("font_size",clampi(int(settings["font_size"]),18,34))
 	_text.visible = bool(settings["subtitles"])
 	_name.visible = bool(settings["subtitles"])
+	_fit_panel()
 	_panel.show()
 	history.append({"cue_id":current["cue_id"],"node_id":node_id,"event":current["event"],"context":context,"voice_playing":voice_ok,"duration":remaining,"generation":_generation,"trigger_detail":current["trigger_detail"]})
 	cue_started.emit(current)
@@ -145,6 +151,12 @@ func set_option(key: String, value: Variant) -> void:
 	if not settings.has(key): return
 	settings[key] = value
 	if key == "voice" and not bool(value): _voice.stop()
+	if key == "voice_volume": _voice.volume_db=linear_to_db(maxf(.0001,float(value)))
+	if _text != null:
+		_text.visible=bool(settings.subtitles);_name.visible=bool(settings.subtitles)
+		_text.add_theme_font_size_override("font_size",clampi(int(settings.font_size),18,34))
+	_fit_panel()
+	_apply_accessibility()
 	var cfg := ConfigFile.new()
 	for k in settings: cfg.set_value("presentation",k,settings[k])
 	cfg.save("user://story_presentation.cfg")
@@ -163,9 +175,10 @@ func show_transcript() -> void:
 	var label := Label.new(); label.text = transcript(); label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.custom_minimum_size.x = 840; label.add_theme_font_size_override("font_size",23)
 	scroll.add_child(label); dialog.add_child(scroll); add_child(dialog)
+	var previously_paused := _manual_pause
 	set_paused(true)
-	dialog.confirmed.connect(func(): set_paused(false); dialog.queue_free())
-	dialog.canceled.connect(func(): set_paused(false); dialog.queue_free())
+	dialog.confirmed.connect(func(): set_paused(previously_paused); dialog.queue_free())
+	dialog.canceled.connect(func(): set_paused(previously_paused); dialog.queue_free())
 	dialog.popup_centered(Vector2i(920,430))
 
 func watch_phase(phase: String) -> void:
@@ -196,3 +209,15 @@ func show_settings() -> void:
 			set_option(key,value); button.text = str(value))
 	add_child(dialog); dialog.confirmed.connect(dialog.queue_free); dialog.canceled.connect(dialog.queue_free)
 	dialog.popup_centered(Vector2i(710,500))
+
+func _fit_panel() -> void:
+	if _text == null or _panel == null: return
+	var size := clampi(int(settings.font_size),18,34)
+	var font := _text.get_theme_font("font")
+	var width := maxf(320,get_viewport().get_visible_rect().size.x-110)
+	var text_height := font.get_multiline_string_size(_text.text,HORIZONTAL_ALIGNMENT_LEFT,width,size).y
+	_panel.offset_top = _panel.offset_bottom-maxf(158,text_height+90)
+
+func _apply_accessibility() -> void:
+	var bus = get_node_or_null("/root/JuiceEventBus")
+	if bus != null: bus.set_accessibility(bool(settings.reduced_flash),bool(settings.reduced_shake),false)

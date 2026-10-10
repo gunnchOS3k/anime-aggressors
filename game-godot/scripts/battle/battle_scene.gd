@@ -728,6 +728,7 @@ func _setup_story_dialogue() -> void:
 			StoryDialogue.fire("combat_contact",{"attacker":attacker.fighter_id,"defender":defender.fighter_id,"blocked":info.get("blocked",false)}))
 
 func _on_story_cue(cue: Dictionary) -> void:
+	if cue.get("representation") == "memory_echo": return
 	if StoryDialogue.context != "battle" or StoryDialogue.node_id != str(CampaignRuntime.active_encounter.get("node_id","")): return
 	for actor in fighters_root.get_children():
 		if actor.fighter_id != cue["speaker_id"]: continue

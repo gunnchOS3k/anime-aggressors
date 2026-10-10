@@ -494,6 +494,8 @@ func get_fall_speed() -> float:
 	return float(data.get("fallSpeed", 1800))
 
 func tick_combat_frame() -> void:
+	if model_3d != null and model_3d.get_animation_controller() != null:
+		model_3d.get_animation_controller().presentation_frozen = _hitstop > 0.0
 	if _hitstop > 0.0:
 		return
 	move_runner.tick_sim_frame()

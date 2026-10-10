@@ -72,11 +72,14 @@ func apply_hit(attacker: Node, defender: Node, move: Dictionary, info: Dictionar
 		result["screen_flash"] = false
 		var defender_id := str(defender.fighter_id) if defender != null and "fighter_id" in defender else ""
 		_V1Sfx.play_event(defender_id, "block", self)
+		var attacking_element_id := str(attacker.fighter_id) if attacker != null and "fighter_id" in attacker else ""
+		if not attacking_element_id.is_empty(): result["elemental_block"] = preload("res://scripts/audio/elemental_performance.gd").one_shot(attacking_element_id,"block",self)
 		emit_shield_flash(defender_id)
 		feedback_triggered.emit(result)
 		return result
 	var fid := str(attacker.fighter_id) if attacker != null and "fighter_id" in attacker else fighter_id
 	var played := _V1Sfx.play_event(fid, _V1Sfx.impact_event(move), self)
+	result["played_audio"] = played
 	if not bool(played.get("ok", false)):
 		_play_procedural_sfx(result.sfx_event, tier, attacker, str(move.get("move_id", "")))
 	_play_v3_move_content(attacker, defender, move, result)
