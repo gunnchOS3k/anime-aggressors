@@ -14,11 +14,15 @@ for row in index['movies']:
  target=ROOT/row['path'];streams=probe(target)
  video=float(next(s['duration'] for s in streams if s['codec_type']=='video'))
  audio=float(next(s['duration'] for s in streams if s['codec_type']=='audio'))
+ original_video=float(next(s['duration'] for s in row['streams'] if s['codec_type']=='video'))
+ if audio-original_video>.05 and 'encoding_note' not in row:
+  row['encoding_note']=f'Retained {audio-original_video:.3f}s native static/repeated-frame tail; no invented motion; native AAC audio copied unchanged.'
  if audio-video>.05:
   archive=OUT/'local_media'/'previous_recordings'/row['label']/str(time.time_ns())
   archive.mkdir(parents=True);shutil.copy2(target,archive/target.name)
   temp=target.with_name('normalized_'+target.name)
-  subprocess.run(['ffmpeg','-y','-hide_banner','-loglevel','error','-i',str(target),'-map','0:v:0','-map','0:a:0','-vf',f'tpad=stop_mode=clone:stop_duration={audio-video+1:.6f}','-t',str(audio),'-c:v','libx264','-preset','fast','-crf','21','-pix_fmt','yuv420p','-c:a','copy','-movflags','+faststart',str(temp)],check=True)
+  native=OUT/'local_media'/(row['label']+'.ogv')
+  subprocess.run(['ffmpeg','-y','-hide_banner','-loglevel','error','-i',str(native),'-i',str(target),'-map','0:v:0','-map','1:a:0','-vf',f'fps=30,tpad=stop_mode=clone:stop_duration={audio:.6f}','-t',str(audio),'-c:v','libx264','-preset','fast','-crf','21','-pix_fmt','yuv420p','-c:a','copy','-movflags','+faststart',str(temp)],check=True)
   temp.replace(target)
   row['encoding_note']=f'Retained {audio-video:.3f}s native static/repeated-frame tail; no invented motion; native AAC audio copied unchanged.'
  row['streams']=probe(target);row['sha256']=hashlib.sha256(target.read_bytes()).hexdigest()

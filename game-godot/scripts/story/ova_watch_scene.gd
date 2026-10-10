@@ -185,6 +185,19 @@ func _present_node() -> void:
 
 	if chapter.get("objective_contract") == "COSMIC_SURVIVAL":
 		_battle._setup_story_cosmic_encounter(chapter)
+	if objective == "FIRST_LOSS":
+		# Read-only dialogue blocking: gameplay CPU jumps must not displace faces.
+		# This staging is confined to watch mode and never ticks Story objectives.
+		for actor in _battle.fighters_root.get_children():
+			actor.cpu.clear_simulated_inputs()
+			actor.controls_enabled = false
+			actor.is_cpu = false
+			actor.dummy_mode = "idle"
+			actor.move_runner.cancel()
+			actor.velocity = Vector2.ZERO
+			actor.position.y = _watch_presenter.ground_y - 2
+			actor.set_physics_process(false)
+			actor.model_3d.play_clip("story_dialogue_neutral")
 	if chapter["kind"] != "STORY_BATTLE":
 		_battle.fighter1.controls_enabled = false
 		_battle.fighter2.controls_enabled = false
@@ -216,7 +229,7 @@ func _process(delta: float) -> void:
 		var camera := _battle.get_node_or_null("Camera2D") as Camera2D
 		if camera != null:
 			var closeup: bool = chapter["kind"] != "STORY_BATTLE"
-			camera.zoom = Vector2.ONE * (2.8 if closeup else 1.15 + 0.12 * shot)
+			camera.zoom = Vector2.ONE * (1.5 if chapter.get("objective_contract") == "FIRST_LOSS" else 2.8 if closeup else 1.15 + 0.12 * shot)
 	var camera := _battle.get_node_or_null("Camera2D") as Camera2D
 	if camera != null:
 		var closeup: bool = chapter["kind"] != "STORY_BATTLE"

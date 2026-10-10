@@ -33,6 +33,12 @@ func _run() -> void:
 		check(watch.elapsed==elapsed,"watch_pause_"+fid)
 		await watch.seek(10)
 		check(watch._battle.fighter2.fighter_id==c.APPROVED_FIRST_LOSS[fid],"watch_shared_first_loss_"+fid)
+		var blocked_positions: Array=[]
+		for actor in watch._battle.fighters_root.get_children():
+			check(not actor.is_physics_processing() and not actor.controls_enabled,"watch_loss_dialogue_blocking_"+fid+":"+actor.fighter_id)
+			blocked_positions.append(actor.position)
+		for i in range(8):await physics_frame
+		for i in range(blocked_positions.size()):check(watch._battle.fighters_root.get_child(i).position==blocked_positions[i],"watch_faces_stay_in_blocking_"+fid)
 		await watch.seek(11)
 		check(watch._watch_presenter.puppets.size()==5,"watch_five_puppets_"+fid)
 		check(watch._watch_presenter.puppets[0].get_meta("story_form")=="BLACK_PUPPET","watch_puppet_forms_"+fid)
