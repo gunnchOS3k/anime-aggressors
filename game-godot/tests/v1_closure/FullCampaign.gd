@@ -48,6 +48,8 @@ func _run() -> void:
 					check(not campaign.progress["routes"][fid]["receipts"][completed_id].is_empty(), "receipt_survives_next_encounter_"+completed_id)
 				check(not campaign.record_battle_result(1,str(campaign.active_encounter["token"]),{"stock_win":true}), "token_alone_cannot_mint_receipt")
 				router.go("battle")
+				await frames(5)
+				root.get_node("StoryDialogue").skip_all() # public subtitle skip, staged regression
 				await frames(230)
 				battle = current_scene
 				if battle == null or not battle.has_method("_check_match_end"):
@@ -236,6 +238,8 @@ func _negative_and_replay() -> void:
 	campaign.abandon_encounter()
 	check(campaign.begin_encounter("kaia-windrow:prologue"),"replay_entry")
 	router.go("battle")
+	await frames(5)
+	root.get_node("StoryDialogue").skip_all()
 	await frames(230)
 	battle=current_scene
 	await _stage_ko(battle.fighter1)

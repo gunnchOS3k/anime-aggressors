@@ -10,6 +10,8 @@ import subprocess
 import tempfile
 import hashlib
 import hmac
+import shutil
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -27,6 +29,11 @@ p.add_argument('--seed-convergence-from', type=Path, help='EXPLICIT seeded-prere
 p.add_argument('--seeded-prerequisites', action='store_true', help='Keep seeded evidence labeled on subsequent resumes/replays')
 p.add_argument('--prepare-only', action='store_true')
 p.add_argument('--test-script', help='Run a targeted source regression with the same isolated user:// identity')
+p.add_argument("--baseline-ref",help="Read-only source overlay for before/after capture; creates no worktree")
+p.add_argument("--movie",type=Path,help="Bounded native Godot MovieWriter with real mixed audio")
+p.add_argument("--movie-fps",type=int,choices=[30,60],default=30)
+p.add_argument("--movie-frames",type=int,default=1800)
+p.add_argument("--driver-arg",action="append",default=[])
 a = p.parse_args()
 if not re.fullmatch(r'[a-zA-Z0-9_-]{1,64}', a.profile):
     p.error('Profile must be 1–64 letters, numbers, underscores or hyphens')
@@ -38,10 +45,33 @@ source = ROOT/'game-godot'
 for child in source.iterdir():
     if child.name not in ('project.godot', 'override.cfg'):
         (project/child.name).symlink_to(child, target_is_directory=child.is_dir())
-config = (source/'project.godot').read_text()
+if a.baseline_ref:
+    # Copy small script files; preserve every real checkout and historical worktree.
+    (project/'scripts').unlink()
+    shutil.copytree(source/'scripts',project/'scripts')
+    tracked=subprocess.check_output(['git','ls-tree','-r','--name-only',a.baseline_ref,'game-godot/scripts'],cwd=ROOT,text=True).splitlines()
+    for path in tracked:
+        target=project/Path(path).relative_to('game-godot')
+        target.parent.mkdir(parents=True,exist_ok=True)
+        target.write_bytes(subprocess.check_output(['git','show',a.baseline_ref+':'+path],cwd=ROOT))
+    config=subprocess.check_output(['git','show',a.baseline_ref+':game-godot/project.godot'],cwd=ROOT,text=True)
+else:
+    config = (source/'project.godot').read_text()
 config = config.replace('config/name="Anime Aggressors"', 'config/name="Anime Aggressors Review '+a.profile+'"')
 if a.automate:
     config = config.replace('[autoload]\n', '[autoload]\nOrdinaryInputReview="*res://tests/v1_closure/OrdinaryInputReview.gd"\n')
+# Source-review watermark is isolated from the preserved owner/export identity.
+(project/'data').unlink()
+(project/'data').mkdir()
+for child in (source/'data').iterdir():
+    if child.name != 'runtime': (project/'data'/child.name).symlink_to(child,target_is_directory=child.is_dir())
+(project/'data/runtime').mkdir()
+for child in (source/'data/runtime').iterdir():
+    if child.name != 'build_identity.json': (project/'data/runtime'/child.name).symlink_to(child,target_is_directory=child.is_dir())
+review_sha=subprocess.check_output(['git','rev-parse',a.baseline_ref or 'HEAD'],cwd=ROOT,text=True).strip()
+identity=json.loads((source/'data/runtime/build_identity.json').read_text()) if (source/'data/runtime/build_identity.json').exists() else {}
+identity.update(git_sha=review_sha,git_sha_short=review_sha[:12],git_short_sha=review_sha[:12],watermark='AA '+review_sha[:12],build_flavor='source-review-not-release',build_timestamp=datetime.now(timezone.utc).isoformat())
+(project/'data/runtime/build_identity.json').write_text(json.dumps(identity,indent=2)+'\n')
 (project/'project.godot').write_text(config)
 a.output.mkdir(parents=True, exist_ok=True)
 if a.seed_convergence_from:
@@ -73,7 +103,12 @@ if a.headless:
 else:
     cmd += ['--rendering-method', 'gl_compatibility', '--windowed', '--resolution', '1280x720']
     if a.automate: cmd += ['--fixed-fps', '60', '--disable-vsync']
+if a.movie:
+    a.movie.parent.mkdir(parents=True,exist_ok=True)
+    cmd += ['--write-movie',str(a.movie.resolve()),'--fixed-fps',str(a.movie_fps),'--quit-after',str(a.movie_frames)]
 cmd += ['--', '--ordinary-output='+str(a.output.resolve())]
+cmd += a.driver_arg
+cmd += ["--source-sha="+subprocess.check_output(["git","rev-parse",a.baseline_ref or "HEAD"],cwd=ROOT,text=True).strip()]
 if a.test_script:
     cmd[cmd.index('--'):cmd.index('--')] = ['--script',a.test_script]
 cmd += ['--ordinary-max-nodes='+str(a.max_nodes)]
@@ -83,6 +118,6 @@ if a.video_frames: cmd += ['--ordinary-video-frames']
 if a.seed_convergence_from or a.seeded_prerequisites: cmd += ['--ordinary-seeded-prerequisites']
 if a.resume: cmd += ['--ordinary-resume']
 print(json.dumps({'project':str(project), 'profile':a.profile, 'isolated_project_name':'Anime Aggressors Review '+a.profile, 'command':cmd}), flush=True)
-(a.output/'launch_manifest.json').write_text(json.dumps({'project':str(project),'profile':a.profile,'command':cmd,'git_sha':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),'source_changes':subprocess.check_output(['git','diff','--name-only'],cwd=ROOT,text=True).splitlines(),'source_diff_sha256':hashlib.sha256(subprocess.check_output(['git','diff'],cwd=ROOT)).hexdigest(),'human_playthrough':False,'seeded_prerequisites':bool(a.seed_convergence_from or a.seeded_prerequisites)},indent=2)+'\n')
+(a.output/'launch_manifest.json').write_text(json.dumps({'project':str(project),'profile':a.profile,'command':cmd,'git_sha':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),'source_changes':subprocess.check_output(['git','diff','--name-only'],cwd=ROOT,text=True).splitlines(),'source_diff_sha256':hashlib.sha256(subprocess.check_output(['git','diff'],cwd=ROOT)).hexdigest(),'human_playthrough':False,'baseline_ref':a.baseline_ref,'runtime_source_sha':subprocess.check_output(['git','rev-parse',a.baseline_ref or 'HEAD'],cwd=ROOT,text=True).strip(),'seeded_prerequisites':bool(a.seed_convergence_from or a.seeded_prerequisites)},indent=2)+'\n')
 if not a.prepare_only:
     raise SystemExit(subprocess.call(cmd))

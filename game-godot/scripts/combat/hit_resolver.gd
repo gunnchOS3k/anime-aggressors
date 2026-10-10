@@ -10,25 +10,26 @@ signal hit_confirmed(attacker: Node, defender: Node, info: Dictionary)
 
 var _logs: Array = []
 var combat_feedback: Node
+var _contact_sequence := 0
 
-func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_pct: float) -> void:
+func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_pct: float) -> Dictionary:
 	if attacker == null or defender == null:
-		return
+		return {}
 	if ("invincible" in defender and defender.invincible) or ("grabbed_by" in defender and defender.grabbed_by != null):
-		return
+		return {}
 	if bool(defender.get_meta("story_cosmic_contract", false)):
 		# Story manifestations reject ordinary combat damage; competitive Yin/Yang have no such metadata.
-		return
+		return {}
 	if bool(attacker.get_meta("story_released", false)) or bool(defender.get_meta("story_released", false)):
-		return
+		return {}
 	if attacker.has_meta("story_team") and attacker.get_meta("story_team") == defender.get_meta("story_team", ""):
-		return
+		return {}
 	var from_projectile := bool(move.get("_from_projectile", false))
 	var move_id := str(move.get("move_id", ""))
 	var is_direct_throw := move_id.begins_with("throw_") or str(move.get("move_type", "")) == "throw"
 	if not from_projectile and not is_direct_throw:
 		if attacker.move_runner == null or not attacker.move_runner.can_hit_target(defender):
-			return
+			return {}
 	# Active armor frames (Rook heavies / Nix ice window) fully gate the hit.
 	if "armor_frames_remaining" in defender and float(defender.armor_frames_remaining) > 0.0:
 		var armor_info := {
@@ -42,6 +43,9 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 			"element": "",
 			"element_effect": "",
 		}
+		armor_info = _contact_contract(attacker,defender,move,armor_info)
+		if combat_feedback:
+			armor_info = combat_feedback.apply_hit(attacker,defender,move,armor_info)
 		if defender.has_method("receive_hit"):
 			defender.receive_hit(attacker, armor_info)
 		if defender.has_method("stamp_runtime_hook"):
@@ -49,7 +53,7 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 		hit_confirmed.emit(attacker, defender, armor_info)
 		log_hit("ARMOR %s -> %s" % [move.get("move_id", ""), defender.name if defender else "?"])
 		_record_hit_telemetry(armor_info)
-		return
+		return armor_info
 	var scaled := move
 	var aura_amt := 0.0
 	var fid := ""
@@ -112,10 +116,9 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 	if ("shielding" in defender and defender.shielding) or ("state_machine" in defender and defender.state_machine.current_state == "shield_hold"):
 		info["blocked"] = true
 		info["launch"] = Vector2.ZERO
+	info = _contact_contract(attacker,defender,scaled,info)
 	if combat_feedback:
 		info = combat_feedback.apply_hit(attacker, defender, scaled, info)
-		if not bool(info.get("blocked", false)) and combat_feedback.has_method("spawn_hit_spark") and defender is Node2D:
-			combat_feedback.spawn_hit_spark(defender, defender.global_position + Vector2(0, -24), str(info.get("element", "")))
 		if attacker != null and "last_impact_readable" in attacker:
 			attacker.last_impact_readable = true
 			attacker.last_feedback_tier = str(info.get("feedback_tier", ""))
@@ -124,10 +127,13 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 		info = fb.apply_hit(attacker, defender, scaled, info)
 	if defender.has_method("receive_hit"):
 		defender.receive_hit(attacker, info)
+	info["actual_launch"] = Vector2.ZERO if info.get("blocked",false) else defender.velocity if "velocity" in defender else info.get("launch",Vector2.ZERO)
+	info["actual_defender_state"] = str(defender.state_machine.current_state) if "state_machine" in defender else "unknown"
 	hit_confirmed.emit(attacker, defender, info)
 	var hit_tag := "BLOCK" if info.get("blocked", false) else "HIT"
 	log_hit("%s %s -> %s dmg:%.1f kb:%.1f" % [hit_tag, scaled.get("move_id", ""), defender.name if defender else "?", dealt, kb.length()])
 	_record_hit_telemetry(info)
+	return info
 
 
 func _record_hit_telemetry(info: Dictionary) -> void:
@@ -146,3 +152,40 @@ func log_hit(text: String) -> void:
 
 func recent_logs() -> Array:
 	return _logs.duplicate()
+
+func _contact_contract(attacker: Node, defender: Node, move: Dictionary, info: Dictionary) -> Dictionary:
+	_contact_sequence += 1
+	var point: Vector2 = defender.global_position+Vector2(0,-24) if defender is Node2D else Vector2.ZERO
+	# World-space center of the real intersecting shape bounds; never a socket guess.
+	var hurt = defender.get_node_or_null("Hurtbox/HurtShape") as CollisionShape2D
+	var attack = attacker.get_node_or_null("Hitbox/HitShape") as CollisionShape2D
+	if move.has("_contact_world"):
+		point = move._contact_world
+	elif hurt != null and attack != null and hurt.shape != null and attack.shape != null:
+		var hr := _world_bounds(hurt)
+		var ar := _world_bounds(attack)
+		var overlap := hr.intersection(ar)
+		point = overlap.get_center() if overlap.has_area() else hr.get_center()
+	var launch: Vector2 = info.get("launch",Vector2.ZERO)
+	var direction := launch.normalized() if launch.length()>0.01 else Vector2(float(attacker.facing) if "facing" in attacker else 1.0,0)
+	info.merge({"combat_event_id":"%s:%s:%s" % [get_instance_id(),Engine.get_physics_frames(),_contact_sequence],
+		"confirmed_contact":true,"attacker_id":str(attacker.fighter_id) if "fighter_id" in attacker else str(attacker.name),
+		"defender_id":str(defender.fighter_id) if "fighter_id" in defender else str(defender.name),
+		"gameplay_frame":Engine.get_physics_frames(),"timestamp_usec":Time.get_ticks_usec(),"move_frame":attacker.move_runner.total_frame if "move_runner" in attacker and attacker.move_runner != null else -1,
+		"contact_world":point,"contact_direction":direction,"contact_result":"armor" if info.get("armor_block",false) else "shield" if info.get("blocked",false) else "hit",
+		"launch_strength":launch.length(),"defender_damage_before":float(defender.damage_percent) if "damage_percent" in defender else 0.0,
+		"defender_airborne":not defender.is_on_floor() if defender is CharacterBody2D else false,
+		"combo_count_before":int(attacker.combo_count) if "combo_count" in attacker else 0,
+		"counterhit":bool(defender.move_runner.active) if "move_runner" in defender and defender.move_runner != null else false,
+		"defender_state_before":str(defender.state_machine.current_state) if "state_machine" in defender else "unknown",
+		"defender_in_hitstun_before":defender.state_machine.current_state in ["hitstun","launched","tumble","hurt_light","hurt_heavy"] if "state_machine" in defender else false,
+		"parry_supported":false,"clash_supported":false},true)
+	return info
+
+func _world_bounds(shape: CollisionShape2D) -> Rect2:
+	var rect := shape.shape.get_rect()
+	var first := shape.to_global(rect.position)
+	var bounds := Rect2(first,Vector2.ZERO)
+	for corner in [rect.position+Vector2(rect.size.x,0),rect.end,rect.position+Vector2(0,rect.size.y)]:
+		bounds = bounds.expand(shape.to_global(corner))
+	return bounds

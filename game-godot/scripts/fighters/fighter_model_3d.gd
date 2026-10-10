@@ -264,6 +264,9 @@ func get_current_model_source() -> String:
 
 
 func get_current_animation_source() -> String:
+	if _animation_controller != null and is_instance_valid(_animation_controller):
+		var player = _animation_controller.get_animation_player()
+		if player != null and str(player.current_animation).begins_with("authored_studies/"): return "ORIGINAL_EXPLICIT_KEYPOSE_STUDY_NOT_FINAL"
 	return _current_animation_source
 
 
@@ -487,7 +490,7 @@ func truth_flags() -> Dictionary:
 		"PROCEDURAL_RUNTIME_ANIMATION_PASS": _procedural_healthy and has_imported_animations(),
 		"FINAL_HUMAN_AUTHORED_ANIMATION_PASS": false,
 		"CURRENT_MODEL_SOURCE": _current_model_source,
-		"CURRENT_ANIMATION_SOURCE": _current_animation_source,
+		"CURRENT_ANIMATION_SOURCE": get_current_animation_source(),
 		"PROCEDURAL_PROXY_VISIBLE": is_procedural_proxy_visible(),
 		"VISIBLE_MODEL_NODE": _loaded_model.name if _loaded_model else "",
 		"VISIBLE_SKELETON_PRESENT": _visible_skeleton != null,

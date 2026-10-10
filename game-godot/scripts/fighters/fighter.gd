@@ -88,16 +88,20 @@ var animator
 @onready var grab_range_debug: ColorRect = $GrabRangeDebug
 
 var _hitstop: float = 0.0
+var _spectral_charge_slot := -1
+var _spectral_renderer: Node2D
 var _current_move: Dictionary = {}
 var _pending_attack_cmd: String = ""
 var _last_state: String = ""
 var _aura_sfx_hook: bool = false
+var _elemental_audio: Node
 var _last_hit_result: Dictionary = {}
 var _last_knockback: Vector2 = Vector2.ZERO
 var _last_shield_damage: float = 0.0
 var _cpu_telegraph_remaining: float = 0.0
 var _cpu_telegraph_cmd: String = ""
-var _telegraph_pulse: ColorRect = null
+var _telegraph_pulse: Node2D = null
+var _spectral_telegraph_slot := -1
 var _base_modulate: Color = Color.WHITE
 var _last_element_effect: String = ""
 var _throw_direction: String = ""
@@ -493,11 +497,16 @@ func get_fall_speed() -> float:
 	return float(data.get("fallSpeed", 1800))
 
 func tick_combat_frame() -> void:
+	if model_3d != null and model_3d.get_animation_controller() != null:
+		model_3d.get_animation_controller().presentation_frozen = _hitstop > 0.0
 	if _hitstop > 0.0:
 		return
 	move_runner.tick_sim_frame()
 	projectile_spawner.tick_all()
 	_sync_attack_phase_state()
+	if model_3d != null and move_runner.active:
+		var controller = model_3d.get_animation_controller()
+		if controller != null: controller.synchronize_move(move_runner.total_frame,move_runner.move_data)
 	if move_runner != null and move_runner.is_active_phase():
 		_poll_hitbox_overlaps()
 
@@ -669,6 +678,7 @@ func _handle_actions() -> void:
 			_set_aura_vfx(true)
 		# Jump cancels charge (platform-fighter interrupt, not locked).
 		if _read_jump_pressed() and is_on_floor() and state_machine.current_state != _FighterStates.JUMP_SQUAT:
+			if _elemental_audio != null: _elemental_audio.cancel_charge()
 			_set_aura_vfx(false)
 			_jump_short_hop = false
 			state_machine.enter(_FighterStates.JUMP_SQUAT)
@@ -781,35 +791,31 @@ func begin_cpu_telegraph(cmd: String, duration: float = 0.2) -> void:
 	_ensure_telegraph_pulse()
 	if _telegraph_pulse != null:
 		_telegraph_pulse.visible = true
-		_telegraph_pulse.modulate = Color(1.0, 0.85, 0.2, 0.85)
+		var renderer = preload("res://scripts/visual/spectral_feedback_renderer.gd").obtain(self)
+		if renderer != null and _spectral_telegraph_slot < 0:
+			_spectral_renderer=renderer
+			_spectral_telegraph_slot=renderer.emit_effect(fighter_id,12,global_position+Vector2(0,-24),Vector2(facing,0),84,-1.0,"",self)
 
 func _ensure_telegraph_pulse() -> void:
 	if _telegraph_pulse != null:
 		return
-	_telegraph_pulse = ColorRect.new()
+	_telegraph_pulse = Node2D.new()
 	_telegraph_pulse.name = "CpuTelegraphPulse"
-	_telegraph_pulse.size = Vector2(40, 56)
-	_telegraph_pulse.position = Vector2(-20, -60)
-	_telegraph_pulse.color = Color(1.0, 0.8, 0.15, 0.55)
-	_telegraph_pulse.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_telegraph_pulse.visible = false
 	add_child(_telegraph_pulse)
+
 
 func _tick_cpu_telegraph(delta: float) -> void:
 	if _cpu_telegraph_remaining <= 0.0:
 		if _telegraph_pulse != null:
 			_telegraph_pulse.visible = false
+		if is_instance_valid(_spectral_renderer) and _spectral_telegraph_slot>=0:
+			_spectral_renderer.stop_slot(_spectral_telegraph_slot);_spectral_telegraph_slot=-1
 		return
 	_cpu_telegraph_remaining = maxf(0.0, _cpu_telegraph_remaining - delta)
-	if _telegraph_pulse != null:
-		var pulse := 0.45 + 0.4 * absf(sin(Time.get_ticks_msec() * 0.02))
-		_telegraph_pulse.modulate.a = pulse
-		_telegraph_pulse.visible = _cpu_telegraph_remaining > 0.0
-	# Soft body flash while telegraphing (a11y: still visible with reduce_motion via alpha only).
-	if body != null and _cpu_telegraph_remaining > 0.0:
-		body.modulate = Color(1.25, 1.1, 0.7, 1.0)
-	elif body != null:
-		body.modulate = _base_modulate
+	if _telegraph_pulse != null: _telegraph_pulse.visible=_cpu_telegraph_remaining>0.0
+	if is_instance_valid(_spectral_renderer) and _spectral_telegraph_slot>=0:
+		_spectral_renderer.update_slot(_spectral_telegraph_slot,global_position+Vector2(0,-24),Vector2(facing,0),84,clampf(1.0-_cpu_telegraph_remaining/.2,0,1))
 
 func _start_move_by_command(cmd: String) -> void:
 	var m: Dictionary = {}
@@ -1077,6 +1083,12 @@ func stage_center_x() -> float:
 func _on_move_active(move: Dictionary) -> void:
 	var mid = str(move.get("move_id", ""))
 	var mt = str(move.get("move_type", "melee"))
+	if move_runner.frame_in_phase == 1 and mt not in ["projectile","grab","throw"] and not move.has("projectile"):
+		var renderer = preload("res://scripts/visual/spectral_feedback_renderer.gd").obtain(self)
+		if renderer != null: renderer.emit_effect(fighter_id,6,hitbox.global_position,Vector2(facing,0),58,.13)
+	# Release and contact are separate: a legitimate missed burst still sounds.
+	if move_runner.frame_in_phase == 1 and (mid == "aura_burst" or mt == "burst"):
+		if _elemental_audio != null: _elemental_audio.play("signature_release")
 	if mid == "grab" or mt == "grab":
 		state_machine.enter(_FighterStates.GRAB_ACTIVE)
 		_try_grab_connect()
@@ -1384,6 +1396,10 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 		else:
 			state_machine.enter(_FighterStates.SHIELD_STUN)
 		return
+	# Confirmed body impact interrupts the prior move; its later callbacks must not
+	# overwrite hurt/hitstun or activate another hitbox during victim recovery.
+	if move_runner != null: move_runner.cancel()
+	hitbox.monitoring = false
 	var dmg: float = info.get("damage", 0.0)
 	if state_machine.current_state == _FighterStates.AURA_CHARGE:
 		aura = maxf(0.0, aura - _CombatMath.AURA_HIT_INTERRUPT_LOSS)
@@ -1424,6 +1440,8 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 	# Hit telemetry is recorded by HitResolver.resolve (single source of truth).
 
 func reset_fighter() -> void:
+	var trail = get_node_or_null("LaunchTrail")
+	if trail != null: trail.clear()
 	damage_percent = 0.0
 	aura = 0.0
 	combo_count = 0
@@ -1443,6 +1461,15 @@ func reset_fighter() -> void:
 	, CONNECT_ONE_SHOT)
 
 func lose_stock() -> void:
+	# Called only by authentic battle stock loss; danger predictions are never a final result.
+	var renderer = preload("res://scripts/visual/spectral_feedback_renderer.gd").obtain(self)
+	if renderer != null:
+		var canvas_to_world := get_viewport().get_canvas_transform().affine_inverse()
+		var screen := get_viewport().get_canvas_transform()*global_position
+		screen=screen.clamp(Vector2(60,120),get_viewport_rect().size-Vector2(60,80))
+		renderer.emit_effect(str(_last_hit_result.get("attacker_id",fighter_id)),7,canvas_to_world*screen,velocity.normalized(),160,.35,"ko:"+str(get_instance_id())+":"+str(stocks))
+	var trail = get_node_or_null("LaunchTrail")
+	if trail != null: trail.clear()
 	preload("res://scripts/audio/v1_candidate_sfx.gd").play_event(fighter_id, "ko", self)
 	stocks -= 1
 	state_machine.enter(_FighterStates.KO)
@@ -1587,21 +1614,35 @@ func _check_edge() -> void:
 		state_machine.enter(_FighterStates.IDLE if absf(_read_axis()) < 0.1 else _FighterStates.WALK)
 
 func _set_aura_vfx(on: bool) -> void:
-	if aura_vfx:
-		aura_vfx.visible = on
-		if on and data.has("auraColor"):
-			var c := Color(data.get("auraColor"))
-			c.a = clampf(0.2 + aura / 200.0, 0.2, 0.55)
-			aura_vfx.color = c
+	if aura_vfx: aura_vfx.visible=false
+	if _spectral_renderer == null or not is_instance_valid(_spectral_renderer):
+		_spectral_renderer = preload("res://scripts/visual/spectral_feedback_renderer.gd").obtain(self)
+	var charging: bool = on and state_machine.current_state in [_FighterStates.AURA_CHARGE,_FighterStates.AURA_READY]
+	if _spectral_renderer != null:
+		if charging:
+			if _spectral_charge_slot < 0: _spectral_charge_slot=_spectral_renderer.emit_effect(fighter_id,2,global_position+Vector2(0,-24),Vector2.RIGHT,84,-1.0,"",self)
+			_spectral_renderer.update_slot(_spectral_charge_slot,global_position+Vector2(0,-24),Vector2.RIGHT,72+aura*.45,aura/100.0)
+		elif _spectral_charge_slot>=0:
+			_spectral_renderer.stop_slot(_spectral_charge_slot);_spectral_charge_slot=-1
+			_spectral_renderer.emit_effect(fighter_id,5,global_position+Vector2(0,-24),Vector2.RIGHT,90,.18)
 	if model_3d and model_3d.has_method("set_aura_level"):
 		model_3d.set_aura_level(get_aura_level() if on or aura > 1.0 else 0)
 	if model_3d and model_3d.has_method("set_aura_tier"):
 		model_3d.set_aura_tier(get_aura_tier() if on or aura > 1.0 else 0)
-	if on and not _aura_sfx_hook:
-		_aura_sfx_hook = true
+	if _elemental_audio == null:
+		_elemental_audio = preload("res://scripts/audio/elemental_performance.gd").new()
+		_elemental_audio.name = "ElementalPerformance"
+		_elemental_audio.fighter_id = fighter_id
+		add_child(_elemental_audio)
+	_elemental_audio.fighter_id = fighter_id
+	_elemental_audio.update_charge(on and state_machine.current_state in [_FighterStates.AURA_CHARGE,_FighterStates.AURA_READY],aura/100.0)
 
 
 func _on_state_changed(_from: String, to: String) -> void:
+	if _elemental_audio != null and _from in [_FighterStates.AURA_CHARGE,_FighterStates.AURA_READY] and to not in [_FighterStates.AURA_CHARGE,_FighterStates.AURA_READY]:
+		if to in [_FighterStates.IDLE,_FighterStates.AURA_BURST_STARTUP]: _elemental_audio.update_charge(false,aura/100.0)
+		else: _elemental_audio.cancel_charge()
+	if _from in [_FighterStates.AURA_CHARGE,_FighterStates.AURA_READY] and to not in [_FighterStates.AURA_CHARGE,_FighterStates.AURA_READY]: _set_aura_vfx(false)
 	_play_current_animation(to)
 	if to in [_FighterStates.AURA_CHARGE, _FighterStates.AURA_READY, _FighterStates.AURA_BURST_STARTUP, _FighterStates.AURA_BURST_ACTIVE]:
 		_set_aura_vfx(true)

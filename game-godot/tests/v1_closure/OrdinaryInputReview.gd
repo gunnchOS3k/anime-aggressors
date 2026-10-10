@@ -62,6 +62,10 @@ func _physics_process(_delta: float) -> void:
 	action_delay -= 1
 	var scene = get_tree().current_scene
 	if scene == null: return
+	# Public presentation control; ordinary automation intentionally skips draft dialogue.
+	if StoryDialogue.is_busy():
+		_press_button(StoryDialogue, "Skip dialogue · F6")
+		return
 	if scene_id != scene.get_instance_id():
 		scene_id = scene.get_instance_id(); local_frame = 0; action_delay = 50
 		_inputs([])
@@ -194,7 +198,8 @@ func _combat(scene, target) -> Array:
 		return ["right" if p.facing==1 else "left", "attack"]
 	if absf(target.position.x-p.position.x)<100:
 		if signf(target.position.x-p.position.x) != p.facing and absf(target.position.x-p.position.x)>5: return _walk_to(p,target.position.x,0)
-		if target.shielding and absf(target.position.x-p.position.x)<65 and local_frame%45<2: return ["grab"]
+		# Throw high-percent armored opponents using the same public grab input.
+		if (target.shielding or target.damage_percent>100) and absf(target.position.x-p.position.x)<65 and local_frame%25<3: return ["grab"]
 		if (local_frame+retries*13)%41<2:
 			if (local_frame/41)%3==0:
 				actions = _walk_to(p,target.position.x,0); actions.append("special")
