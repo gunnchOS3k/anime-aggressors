@@ -44,7 +44,7 @@ func contact(info: Dictionary, defender: Node2D) -> bool:
 	var origin: Vector2 = info.get("contact_world",defender.global_position+Vector2(0,-24))
 	var direction: Vector2 = info.get("contact_direction",Vector2.RIGHT)
 	var heavy := str(info.get("feedback_tier","light")) in ["heavy","aura","super"]
-	emit_effect(fid,10 if result == "armor" else 1 if result in ["shield","parry","clash"] else 0,origin,direction,88 if heavy else 62,.26 if heavy else .18,event_id)
+	emit_effect(fid,10 if result == "armor" else 1 if result in ["shield","parry","clash"] else 0,origin,direction,190 if heavy else 140,.26 if heavy else .18,event_id)
 	if result == "hit":
 		emit_effect(fid,8,defender.global_position+Vector2(0,-24),direction,74,.2,event_id+":hurt",defender)
 	return true
@@ -54,7 +54,7 @@ func emit_effect(fid: String, kind: int, world: Vector2, direction := Vector2.RI
 	if active_count() >= max_slots:
 		# Preserve confirmation and owned emitters ahead of smoke/whiff decoration.
 		var victim := -1
-		if kind in [0,1,2,7,8,10]:
+		if kind in [0,1,2,7,8,10,12]:
 			for i in slots.size():
 				if slots[i].active and slots[i].kind in [4,5,6]: victim=i;break
 		if victim>=0: stop_slot(victim)

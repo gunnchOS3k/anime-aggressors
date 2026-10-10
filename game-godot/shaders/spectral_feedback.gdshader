@@ -23,7 +23,7 @@ void fragment() {
  vec2 p=(UV-0.5)*2.0; float r=length(p), a=atan(p.y,p.x);
  float n=noise(p*6.0+vec2(-clock_s*2.0,clock_s));
  float t=phase; float f=pow(max(0.0,1.0-t),1.5);
- float core=exp(-r*r*100.0)*max(0.0,1.0-t*4.0)*flash;
+ float core=exp(-r*r*85.0)*max(0.0,1.0-t*4.0)*flash;
  float shape=0.0; float bits=0.0;
  // Nine different motion and distance-field grammars, not nine recolored discs.
  if (family==0) { // combustion: turbulent advancing tongues and pressure corona
@@ -74,10 +74,12 @@ void fragment() {
  else if(kind==4) { // irregular volumetric-looking smoke wisps, never straight launch lines
   float cloud=(1.0-smoothstep(0.26+noise(p*4.0+clock_s)*0.3,0.75,r)); shape=cloud*(0.18+0.28*n); bits=0.0; core=0.0;
  } else if(kind==5) { core=0.0; shape*=0.5; bits*=0.7; }
+ else if(kind==12) { shape*=0.42; core=0.0; bits=0.0; }
  else if(kind==6) { shape=crescent*0.55; core=0.0; bits=0.0; }
  else if(kind==7) { shape+=ring(p,0.2+t*0.7,0.025); core*=0.5; }
  else if(kind==8) { shape*=0.45; core=0.0; bits=0.0; }
  float alpha=clamp((shape*f+bits*f+core)*accent.a,0.0,0.88);
  vec3 ink=mix(accent.rgb,vec3(1.0,0.97,0.88),clamp(core,0.0,1.0)*0.8);
+ if(family==0 && kind!=4 && kind!=6) { float thermal=clamp((1.0-r)*n*f,0.0,1.0); ink=mix(ink,vec3(1.0,0.75,0.17),thermal*0.65); }
  COLOR=vec4(ink,alpha);
 }

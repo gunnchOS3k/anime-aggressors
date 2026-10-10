@@ -14,6 +14,7 @@ var max_frames := 1800
 var battle: Node
 var started_frame := 0
 var final_written := false
+var turn_latch := 0
 func _init() -> void: call_deferred("_run")
 func inputs(actions: Array) -> void:
 	for action in held:
@@ -75,10 +76,10 @@ func _run() -> void:
 		else:
 			if phase<200:
 				if absf(dx)>50:actions.append("right" if dx>0 else "left")
-				if frame%25<4:actions.append("attack")
+				if frame%4==0 and p.state_machine.can_attack():actions.append("attack")
 			elif phase<360:
 				if absf(dx)>50:actions.append("right" if dx>0 else "left")
-				if frame%60<5:actions.append_array(["attack","special"])
+				if frame%4==0 and p.state_machine.can_attack():actions.append_array(["attack","special"])
 			elif phase<520:
 				if frame%55<5:actions.append("special")
 			elif phase<800:actions.append_array(["special","shield"])
@@ -89,9 +90,15 @@ func _run() -> void:
 				if absf(dx)>55:actions.append("right" if dx>0 else "left")
 				if frame%80<4:actions.append("jump")
 				if frame%30<4:actions.append("attack")
+		# Correct facing through movement input; never assign transform/facing/velocity.
+		if not idle_opponent and p.state_machine.can_move() and phase not in range(520,970):
+			if absf(dx)<12:
+				actions=["left" if dx>=0 else "right"];turn_latch=2
+			elif turn_latch>0 or (absf(dx)>8 and signf(dx)!=float(p.facing)):
+				actions=["right" if dx>0 else "left"];turn_latch=maxi(0,turn_latch-1)
 		inputs(actions)
 		if frame%6==0:
-			samples.append({"movie_frame":Engine.get_process_frames()-1,"p1_state":p.state_machine.current_state,"p2_state":battle.fighter2.state_machine.current_state,"p2_velocity":[battle.fighter2.velocity.x,battle.fighter2.velocity.y],"p1_damage":p.damage_percent,"p2_damage":battle.fighter2.damage_percent,"process_time_s":Performance.get_monitor(Performance.TIME_PROCESS),"physics_time_s":Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS)})
+			samples.append({"movie_frame":Engine.get_process_frames()-1,"p1_state":p.state_machine.current_state,"p2_state":battle.fighter2.state_machine.current_state,"p1_position":[p.position.x,p.position.y],"p2_position":[battle.fighter2.position.x,battle.fighter2.position.y],"p1_facing":p.facing,"p2_facing":battle.fighter2.facing,"p2_velocity":[battle.fighter2.velocity.x,battle.fighter2.velocity.y],"p1_damage":p.damage_percent,"p2_damage":battle.fighter2.damage_percent,"process_time_s":Performance.get_monitor(Performance.TIME_PROCESS),"physics_time_s":Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS)})
 		if frame%30==0:write_evidence()
 		await physics_frame
 	inputs([]);write_evidence();final_written=true;quit()

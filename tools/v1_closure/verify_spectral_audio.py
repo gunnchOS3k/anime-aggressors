@@ -21,7 +21,7 @@ for movie in json.loads((OUT/'capture_index.json').read_text())['movies']:
   subprocess.run(['ffmpeg','-y','-hide_banner','-loglevel','error','-i',str(source),'-ac','1','-ar',str(sr),'-c:a','pcm_s16le',str(template_file)],check=True)
   template,_=samples(template_file);template=template[:min(len(template),int(.16*sr))];template-=template.mean()
   expected=c['movie_frame']/60
-  start=max(0,int((expected-.25)*sr));stop=min(len(audio),int((expected+.5)*sr)+len(template));window=audio[start:stop]
+  start=max(0,int((expected-.10)*sr));stop=min(len(audio),int((expected+.12)*sr)+len(template));window=audio[start:stop]
   n=len(window)+len(template)-1;size=1<<(n-1).bit_length()
   corr=np.fft.irfft(np.fft.rfft(window,size)*np.fft.rfft(template[::-1],size),size)[len(template)-1:len(window)]
   running=np.concatenate(([0.0],np.cumsum(window*window)))
