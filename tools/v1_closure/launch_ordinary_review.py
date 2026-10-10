@@ -18,6 +18,9 @@ p.add_argument('--headless', action='store_true')
 p.add_argument('--output', type=Path, default=ROOT/'artifacts/v1_closure/ordinary_review')
 p.add_argument('--resume', action='store_true')
 p.add_argument('--max-nodes', type=int, default=20)
+p.add_argument('--route', default='kaia-windrow')
+p.add_argument('--replay', default='', help='Comma-separated already earned chapter IDs')
+p.add_argument('--video-frames', action='store_true', help='Capture a bounded 12-second renderer sequence per chapter')
 p.add_argument('--prepare-only', action='store_true')
 a = p.parse_args()
 if not re.fullmatch(r'[a-zA-Z0-9_-]{1,64}', a.profile):
@@ -41,6 +44,9 @@ else:
     if a.automate: cmd += ['--fixed-fps', '60', '--disable-vsync']
 cmd += ['--', '--ordinary-output='+str(a.output.resolve())]
 cmd += ['--ordinary-max-nodes='+str(a.max_nodes)]
+cmd += ['--ordinary-route='+a.route]
+if a.replay: cmd += ['--ordinary-replay='+a.replay]
+if a.video_frames: cmd += ['--ordinary-video-frames']
 if a.resume: cmd += ['--ordinary-resume']
 print(json.dumps({'project':str(project), 'profile':a.profile, 'isolated_project_name':'Anime Aggressors Review '+a.profile, 'command':cmd}), flush=True)
 if not a.prepare_only:

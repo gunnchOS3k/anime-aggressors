@@ -43,6 +43,9 @@ func _run() -> void:
 				rows.append({"node":node["id"], "kind":"scene", "shipping_ui_acknowledgment":true})
 			else:
 				check(campaign.begin_encounter(), "begin_" + node["id"])
+				# Starting another encounter must not erase stored receipt dictionaries.
+				for completed_id in campaign.progress["routes"][fid]["receipts"]:
+					check(not campaign.progress["routes"][fid]["receipts"][completed_id].is_empty(), "receipt_survives_next_encounter_"+completed_id)
 				check(not campaign.record_battle_result(1,str(campaign.active_encounter["token"]),{"stock_win":true}), "token_alone_cannot_mint_receipt")
 				router.go("battle")
 				await frames(230)
@@ -168,6 +171,7 @@ func _exercise(node: Dictionary) -> void:
 				"DECISIVE_INTERVENTION":
 					await _pulse("p1_attack",Vector2(0,ground_y-2))
 					await _hold_at(Vector2(240,ground_y-2),8,false)
+			await frames(100) # Allow the visible First Loss aftermath beat to finish.
 		"PUPPET_IMBALANCE":
 			check(o.puppets.size()==5,"five_actual_puppets")
 			check(o.evidence()["yin_count"]==3 and o.evidence()["yang_count"]==2,"actual_3v2")

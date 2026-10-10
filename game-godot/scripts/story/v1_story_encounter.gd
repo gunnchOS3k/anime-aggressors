@@ -380,7 +380,7 @@ func _update_prompt() -> void:
 			targets.append("%s %s: %s" % [actor.get_meta("story_team", "").to_upper(), actor.data.get("displayName",actor.fighter_id), status])
 		_label.text += "\n" + " · ".join(targets)
 	elif kind == "PRISMATIC_TRANSFORMATION":
-		_label.text += "\nSignals: %d/6 · Integration: %.1f/4s · %s" % [steps, _hold, "Gray manifested" if transformed else "collect each ground signal, then guard"]
+		_label.text += "\nSignals: %d/6 · Integration: %.1f/4s · %s" % [steps, _hold, "Gray manifested" if transformed else "walk off the upper platform; collect each ground signal, then guard"]
 	elif kind in ["GRAY_DEMONSTRATION", "SEVENFOLD_EQUILIBRIUM"]:
 		_label.text += "\nElapsed: %.1fs · Attack: %s · Guard: %s · Traversal: %s" % [elapsed, attacked, guarded, traversed]
 	_label.text += "\nA/D Move · W Jump · J Attack · J+K Heavy · K Special/release · L Shield · I Grab"

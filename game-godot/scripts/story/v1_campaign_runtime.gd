@@ -249,7 +249,9 @@ func _complete_node(node_id: String, receipt: Dictionary = {}) -> bool:
 	var id := str(progress["selected_route"])
 	var entry: Dictionary = progress["routes"][id]
 	entry["completed"].append(node_id)
-	if not receipt.is_empty(): entry["receipts"][node_id] = receipt
+	# The transient Results receipt is cleared when the next encounter begins.
+	# Persist an independent value so clearing that UI state cannot erase proof.
+	if not receipt.is_empty(): entry["receipts"][node_id] = receipt.duplicate(true)
 	_rebuild_cursor(id)
 	if not save_progress():
 		progress = previous
@@ -324,7 +326,7 @@ func record_battle_result(winner: int, token: String, objective_evidence: Dictio
 	if winner == 1 and not bool(receipt["replay"]):
 		if not _complete_node(str(receipt["node_id"]), receipt): return false
 		receipt["advanced"] = true
-	last_result = receipt
+	last_result = receipt.duplicate(true)
 	active_encounter.clear()
 	_battle_producer = null
 	return true

@@ -111,6 +111,7 @@ var _fast_falling: bool = false
 var _air_dodge_used: bool = false
 var _dodge_cooldown: float = 0.0
 var _ledge_side: int = 0
+var _ledge_regrab_cooldown := 0.0
 var _di_strength: String = "medium"
 var _pending_landing_from_attack: bool = false
 var armor_frames_remaining: float = 0.0
@@ -243,6 +244,11 @@ func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, s
 		remove_meta("story_cosmic_contract")
 	fighter_id = id
 	slot = player_slot
+	# Story and team encounters may have more actors than the two local defaults.
+	# CPU control uses the same action names as human slots.
+	for suffix in ["left", "right", "up", "down", "jump", "attack", "special", "shield", "grab", "dodge", "taunt"]:
+		var action := "p%d_%s" % [slot, suffix]
+		if not InputMap.has_action(action): InputMap.add_action(action)
 	is_cpu = cpu_flag
 	# Human-controlled slots must not inherit the training "cpu" dummy default,
 	# or CpuController keeps synthesizing pN_shield/attack on top of real input
@@ -504,6 +510,7 @@ func _physics_process(delta: float) -> void:
 			_wave017_ghost_events += 1
 			ensure_visible_presentation()
 
+	_ledge_regrab_cooldown = maxf(0.0, _ledge_regrab_cooldown - delta)
 	_tick_cpu_telegraph(delta)
 	if _hitstop > 0.0:
 		_hitstop -= delta
@@ -522,6 +529,9 @@ func _physics_process(delta: float) -> void:
 		_FighterStates.GRAB_HOLD, _FighterStates.THROW_STARTUP, _FighterStates.THROW_RELEASE,
 	]:
 		state_machine.enter(_FighterStates.GRAB_HOLD)
+	# A hanging CPU must produce recovery input before the ledge state reads it.
+	if state_machine.current_state == _FighterStates.LEDGE_HANG and is_cpu and controls_enabled:
+		cpu.tick(delta, _find_opponent())
 	state_machine.update(delta)
 	if grabbed_by != null:
 		global_position = grabbed_by.global_position + Vector2(24 * grabbed_by.facing, -8)
@@ -947,6 +957,7 @@ func _track_landing() -> void:
 	_was_airborne = airborne
 
 func _check_ledge_grab() -> void:
+	if _ledge_regrab_cooldown > 0.0: return
 	if not ledges_enabled:
 		return
 	if is_on_floor() or invincible:
@@ -1019,6 +1030,7 @@ func tick_ledge_hang(_delta: float) -> void:
 		state_machine.enter(_FighterStates.LEDGE_GETUP)
 		return
 	if _read_down() or state_machine.state_time > 2.5:
+		_ledge_regrab_cooldown = 0.4
 		invincible = false
 		global_position.y += 6.0
 		state_machine.enter(_FighterStates.FALL)
