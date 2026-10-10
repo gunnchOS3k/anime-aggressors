@@ -31,6 +31,8 @@ var _trail: Line2D = null
 var _core: Polygon2D = null
 var _glow: Polygon2D = null
 var _impact_flash: float = 0.0
+var _elemental_audio: Node
+var _environment_sounded := false
 
 @onready var debug_rect: ColorRect = $DebugRect
 @onready var collision: CollisionShape2D = $CollisionShape2D
@@ -70,6 +72,12 @@ func configure(cfg: Dictionary, owner_node: Node) -> void:
 		debug_rect.visible = false
 		debug_rect.modulate.a = 0.0
 	_build_intentional_visual(cfg.get("color", Color(1.0, 0.45, 0.12, 0.95)), size)
+	_elemental_audio = preload("res://scripts/audio/elemental_performance.gd").new()
+	_elemental_audio.name = "ElementalProjectileAudio"
+	_elemental_audio.fighter_id = fighter_id
+	add_child(_elemental_audio)
+	_elemental_audio.play("projectile_launch",.65 if projectile_tier == "projectile_tap" else 1.0)
+	_elemental_audio.start_travel()
 	monitoring = true
 	collision_layer = 8
 	collision_mask = 6
@@ -367,6 +375,9 @@ func _spawn_impact() -> void:
 
 
 func _on_body_entered(body: Node) -> void:
+	if body != owner_fighter and not body.has_method("receive_hit") and not _environment_sounded:
+		_environment_sounded = true
+		preload("res://scripts/audio/elemental_performance.gd").one_shot(fighter_id,"projectile_impact",get_parent())
 	_deliver_hit(body)
 
 
@@ -414,6 +425,8 @@ func tick_sim_frame() -> void:
 		_expire()
 
 func _expire() -> void:
+	if not active: return
+	preload("res://scripts/audio/elemental_performance.gd").one_shot(fighter_id,"projectile_dissipate",get_parent(),.5)
 	active = false
 	set_deferred("monitoring", false)
 	projectile_expired.emit()

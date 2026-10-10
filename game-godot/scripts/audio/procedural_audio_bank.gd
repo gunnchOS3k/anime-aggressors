@@ -77,6 +77,8 @@ static func play(path: String, host: Node = null, volume_db: float = 0.0) -> Dic
 		return {"ok": true, "path": path, "playing": false, "loaded": true, "deferred": true}
 	var player := AudioStreamPlayer.new()
 	player.stream = stream
+	player.set_meta("audio_category","music" if path.contains("/stages/") else "sfx")
+	if path.contains("/stages/"): volume_db += linear_to_db(maxf(.0001,float(root.get_tree().root.get_node("StoryDialogue").settings.music_volume)))
 	player.volume_db = volume_db
 	root.add_child(player)
 	if not player.is_inside_tree():

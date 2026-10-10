@@ -62,7 +62,7 @@ func apply_hit(attacker: Node, defender: Node, move: Dictionary, info: Dictionar
 	result["vfx_event"] = fb.get("vfx_event", "")
 	result["sfx_event"] = fb.get("sfx_event", "")
 	result["camera_event"] = fb.get("camera_event", "")
-	result["screen_flash"] = fb.get("screen_flash", false)
+	result["screen_flash"] = fb.get("screen_flash", false) and not _presentation_option("reduced_flash")
 	result["element"] = move.get("element_effect", {}).get("type", "")
 	if bool(result.get("blocked", false)):
 		result["hitstop_frames"] = clampi(hitstop, 2, 4)
@@ -223,6 +223,7 @@ func _default_hitstop(tier: String) -> int:
 	return int((range.min + range.max) / 2.0)
 
 func _trigger_camera(tier: String, event: String) -> void:
+	if _presentation_option("reduced_shake"): return
 	var intensity_scale := 1.0
 	var role = Engine.get_main_loop().root.get_node_or_null("/root/DeviceRoleRuntime") if Engine.get_main_loop() else null
 	if role != null:
@@ -310,6 +311,7 @@ func _process(delta: float) -> void:
 	_camera.offset = offset if _shake_remaining > 0.0 else Vector2.ZERO
 
 func spawn_hit_spark(parent: Node2D, pos: Vector2, element: String) -> void:
+	if _presentation_option("reduced_flash"): return
 	var role = Engine.get_main_loop().root.get_node_or_null("/root/DeviceRoleRuntime") if Engine.get_main_loop() else null
 	if role != null and role.has_method("fx_allows_hit_sparks") and not role.fx_allows_hit_sparks():
 		return
@@ -364,3 +366,7 @@ func _element_color(element: String) -> Color:
 		"gravity": return Color(0.5, 0.4, 0.8)
 		"void": return Color(0.6, 0.2, 0.8)
 		_: return Color(1.0, 1.0, 1.0)
+
+func _presentation_option(key: String) -> bool:
+	var node = get_node_or_null("/root/StoryDialogue")
+	return bool(node.settings.get(key,false)) if node != null else false

@@ -16,6 +16,7 @@ var _loaded_clips: Dictionary = {}
 var _fighter_id: String = ""
 var _active_clip: String = ""
 var _throw_dir: String = "forward"
+var _move_synchronized := false
 
 
 func setup(fighter, model_root: Node3D) -> void:
@@ -39,6 +40,7 @@ func setup(fighter, model_root: Node3D) -> void:
 			_ingest_embedded_clips()
 			# Staging GLBs often only embed idle. Combat clips still come from V3 procedural JSON.
 			_load_procedural_clips(model_root)
+			_load_authored_studies()
 			return
 	_disable_embedded_players(model_root)
 	_player = AnimationPlayer.new()
@@ -48,6 +50,7 @@ func setup(fighter, model_root: Node3D) -> void:
 
 
 func play_for_state(state: String, move: Dictionary = {}) -> void:
+	_move_synchronized = state.begins_with("attack") or state.begins_with("special") or state.begins_with("aura_burst") or state.begins_with("throw")
 	if _player == null or not is_instance_valid(_player):
 		return
 	if _skeleton == null or not is_instance_valid(_skeleton):
@@ -94,6 +97,7 @@ func get_loaded_clip_names() -> Array:
 
 
 func _animation_play_key(clip: String) -> String:
+	if _player != null and _player.has_animation("authored_studies/"+clip): return "authored_studies/"+clip
 	if clip.is_empty() or _player == null:
 		return ""
 	if _player.has_animation(clip):
@@ -151,7 +155,9 @@ func _animation_from_json(path: String) -> Animation:
 	f.close()
 	if typeof(parsed) != TYPE_DICTIONARY:
 		return null
-	var data: Dictionary = parsed
+	return _animation_from_data(parsed)
+
+func _animation_from_data(data: Dictionary) -> Animation:
 	var anim := Animation.new()
 	anim.length = maxf(float(data.get("duration_frames", 24)) / 60.0, 0.05)
 	var tracks: Dictionary = data.get("bone_tracks", {})
@@ -167,6 +173,8 @@ func _animation_from_json(path: String) -> Animation:
 		for key in keys:
 			var rot: Array = key.get("rotation_rad", [0.0, 0.0, 0.0])
 			var quat := Quaternion.from_euler(Vector3(float(rot[0]), float(rot[1]), float(rot[2])))
+			if bool(data.get("relative_to_rest",false)):
+				quat = _skeleton.get_bone_rest(_skeleton.find_bone(glb_bone)).basis.get_rotation_quaternion() * quat
 			anim.track_insert_key(track_idx, float(key.get("time_s", 0.0)), quat)
 	return anim
 
@@ -232,3 +240,27 @@ func _ingest_embedded_clips() -> void:
 			_loaded_clips[alias] = true
 	if extra.get_animation_list().size() > 0:
 		_player.add_animation_library("candidate_aliases", extra)
+
+func _load_authored_studies() -> void:
+	var path := "res://data/animation/authored_studies/%s.json" % _fighter_id
+	if not FileAccess.file_exists(path): return
+	var doc: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(path))
+	var library := AnimationLibrary.new()
+	for clip in doc.clips:
+		var anim := _animation_from_data(doc.clips[clip])
+		anim.loop_mode = Animation.LOOP_LINEAR if doc.clips[clip].get("loop",false) else Animation.LOOP_NONE
+		library.add_animation(clip,anim);_loaded_clips[clip]=true
+	_player.add_animation_library("authored_studies",library)
+	_player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
+
+func _process(delta: float) -> void:
+	if _player != null and is_instance_valid(_player) and _player.has_animation_library("authored_studies") and not _move_synchronized:
+		_player.advance(delta)
+
+func synchronize_move(frame: int,move: Dictionary) -> void:
+	if _player == null or not is_instance_valid(_player): return
+	var key := "authored_studies/"+str(move.get("move_id",""))
+	if not _player.has_animation(key): return
+	_move_synchronized = true
+	if _player.current_animation != key: _player.play(key,0)
+	_player.seek(float(frame)/60.0,true)

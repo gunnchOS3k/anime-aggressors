@@ -92,6 +92,7 @@ var _current_move: Dictionary = {}
 var _pending_attack_cmd: String = ""
 var _last_state: String = ""
 var _aura_sfx_hook: bool = false
+var _elemental_audio: Node
 var _last_hit_result: Dictionary = {}
 var _last_knockback: Vector2 = Vector2.ZERO
 var _last_shield_damage: float = 0.0
@@ -498,6 +499,9 @@ func tick_combat_frame() -> void:
 	move_runner.tick_sim_frame()
 	projectile_spawner.tick_all()
 	_sync_attack_phase_state()
+	if model_3d != null and move_runner.active:
+		var controller = model_3d.get_animation_controller()
+		if controller != null: controller.synchronize_move(move_runner.total_frame,move_runner.move_data)
 	if move_runner != null and move_runner.is_active_phase():
 		_poll_hitbox_overlaps()
 
@@ -669,6 +673,7 @@ func _handle_actions() -> void:
 			_set_aura_vfx(true)
 		# Jump cancels charge (platform-fighter interrupt, not locked).
 		if _read_jump_pressed() and is_on_floor() and state_machine.current_state != _FighterStates.JUMP_SQUAT:
+			if _elemental_audio != null: _elemental_audio.cancel_charge()
 			_set_aura_vfx(false)
 			_jump_short_hop = false
 			state_machine.enter(_FighterStates.JUMP_SQUAT)
@@ -1597,11 +1602,19 @@ func _set_aura_vfx(on: bool) -> void:
 		model_3d.set_aura_level(get_aura_level() if on or aura > 1.0 else 0)
 	if model_3d and model_3d.has_method("set_aura_tier"):
 		model_3d.set_aura_tier(get_aura_tier() if on or aura > 1.0 else 0)
-	if on and not _aura_sfx_hook:
-		_aura_sfx_hook = true
+	if _elemental_audio == null:
+		_elemental_audio = preload("res://scripts/audio/elemental_performance.gd").new()
+		_elemental_audio.name = "ElementalPerformance"
+		_elemental_audio.fighter_id = fighter_id
+		add_child(_elemental_audio)
+	_elemental_audio.fighter_id = fighter_id
+	_elemental_audio.update_charge(on and state_machine.current_state in [_FighterStates.AURA_CHARGE,_FighterStates.AURA_READY],aura/100.0)
 
 
 func _on_state_changed(_from: String, to: String) -> void:
+	if _elemental_audio != null and _from in [_FighterStates.AURA_CHARGE,_FighterStates.AURA_READY] and to not in [_FighterStates.AURA_CHARGE,_FighterStates.AURA_READY]:
+		if to in [_FighterStates.IDLE,_FighterStates.AURA_BURST_STARTUP]: _elemental_audio.update_charge(false,aura/100.0)
+		else: _elemental_audio.cancel_charge()
 	_play_current_animation(to)
 	if to in [_FighterStates.AURA_CHARGE, _FighterStates.AURA_READY, _FighterStates.AURA_BURST_STARTUP, _FighterStates.AURA_BURST_ACTIVE]:
 		_set_aura_vfx(true)
