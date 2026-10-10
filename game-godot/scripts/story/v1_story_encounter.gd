@@ -312,7 +312,7 @@ func _tick_loss(delta: float) -> void:
 				if p.position.distance_to(Vector2(-80, ground_y - 2)) < 90 and p.shielding and not p.move_runner.active: _hold += delta
 				else: _hold = 0
 				if _hold >= 2: steps = 1
-			else: _visit_marker(Vector2(220, ground_y))
+			elif steps == 1: _visit_marker(Vector2(220, ground_y))
 		"SHARED_DEFENSE":
 			_marker.position = Vector2(180, ground_y)
 			if p.position.distance_to(Vector2(180, ground_y - 2)) < 80 and p.shielding: _hold += delta
@@ -336,7 +336,7 @@ func _tick_loss(delta: float) -> void:
 			if steps == 0:
 				_marker.position = Vector2(0, ground_y)
 				if absf(p.position.x) < 80 and p.move_runner.active: steps = 1
-			else: _visit_marker(Vector2(240, ground_y))
+			elif steps == 1: _visit_marker(Vector2(240, ground_y))
 	if steps >= 2:
 		_hold += delta
 		if _hold >= 1.5:

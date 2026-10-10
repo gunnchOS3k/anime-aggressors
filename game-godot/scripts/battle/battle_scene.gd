@@ -66,6 +66,7 @@ func _ready() -> void:
 	_apply_device_role()
 	_time_remaining = float(GameState.match_timer_seconds)
 	_time_enabled = GameState.match_timer_seconds > 0 and GameState.match_type != "stock_untimed"
+	_update_timer_label()
 	_battle_sim = _BattleSim.new()
 	add_child(_battle_sim)
 	_battle_sim.bind_fighters([fighter1, fighter2])
@@ -349,7 +350,8 @@ func _update_timer_label() -> void:
 	if _timer_label == null:
 		return
 	if not _time_enabled:
-		_timer_label.text = "?"
+		_timer_label.text = "—"
+		_timer_label.tooltip_text = "Untimed objective. Follow the prompts and preserve your stocks."
 		return
 	var secs := int(ceil(_time_remaining))
 	_timer_label.text = "%d:%02d" % [secs / 60, secs % 60]
