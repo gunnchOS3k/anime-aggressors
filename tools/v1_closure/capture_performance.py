@@ -10,7 +10,7 @@ index=json.loads((OUT/'capture_index.json').read_text())['movies'] if (OUT/'capt
 for fid,before in plan:
  label=('before_' if before else '')+fid;dest=OUT/('capture_'+label);dest.mkdir(exist_ok=True)
  story=fid.startswith('dialogue_');idle=fid.startswith('signature_');route=fid.removeprefix('dialogue_').removeprefix('signature_')
- native=MEDIA/(label+'.ogv')
+ native=MEDIA/(label+'.avi')
  # Retain every prior recording locally when refreshing a checkpoint.
  archive=MEDIA/'previous_recordings'/label/str(time.time_ns())
  old_target=MEDIA/(label+'.mp4') if story else OUT/'rendered'/(label+'.mp4')
@@ -29,6 +29,7 @@ for fid,before in plan:
  subprocess.run(['ffmpeg','-y','-hide_banner','-loglevel','error','-i',str(native),'-c:v','libx264','-preset','fast','-crf','21','-pix_fmt','yuv420p','-c:a','aac','-b:a','160k','-movflags','+faststart',str(target)],check=True)
  probe=json.loads(subprocess.check_output(['ffprobe','-v','error','-show_entries','stream=codec_name,codec_type,duration','-of','json',str(target)],text=True))
  assert {s['codec_type'] for s in probe['streams']}=={'video','audio'},'Missing native audio stream'
+ assert abs(float(probe['streams'][0]['duration'])-float(probe['streams'][1]['duration']))<.05,'Native AVI A/V duration mismatch'
  volume=subprocess.run(['ffmpeg','-hide_banner','-i',str(target),'-af','volumedetect','-vn','-f','null','-'],capture_output=True,text=True).stderr
  assert 'mean_volume: -inf' not in volume,'Silent movie'
  poster=OUT/'rendered'/(label+'.png');poster.parent.mkdir(exist_ok=True)
@@ -39,5 +40,5 @@ for fid,before in plan:
  if idle:
   events=json.loads((dest/'normal_input_capture_events.json').read_text())
   assert not events['opponent_cpu'] and any(r['move']=='aura_burst' and not r.get('opponent') for r in events['events']),events
- row={'label':label,'path':str(target.relative_to(ROOT)),'source_sha':BASE if before else SOURCE,'native_audio':True,'streams':probe['streams'],'sha256':hashlib.sha256(target.read_bytes()).hexdigest(),'scope':'read-only staged dialogue' if story else 'automated public charge/signature inputs; explicit idle-P2 fixture' if idle else 'automated normal input in explicit versus fixture against active CPU','local_only_audio':story,'seconds_to_record':round(time.monotonic()-start,2),'volume_evidence':volume[volume.find('mean_volume'):]}
+ row={'label':label,'path':str(target.relative_to(ROOT)),'source_sha':BASE if before else SOURCE,'native_audio':True,'native_capture_format':'AVI MJPEG+PCM; direct Godot mixed audio, no dubbing','streams':probe['streams'],'sha256':hashlib.sha256(target.read_bytes()).hexdigest(),'scope':'read-only staged dialogue' if story else 'automated public charge/signature inputs; explicit idle-P2 fixture' if idle else 'automated normal input in explicit versus fixture against active CPU','local_only_audio':story,'seconds_to_record':round(time.monotonic()-start,2),'volume_evidence':volume[volume.find('mean_volume'):]}
  index=[r for r in index if r['label']!=label];index.append(row);(OUT/'capture_index.json').write_text(json.dumps({'source_sha':SOURCE,'movies':index,'human_playthrough':False,'final_authored_cinematics':False},indent=2)+'\n');print(json.dumps(row),flush=True)

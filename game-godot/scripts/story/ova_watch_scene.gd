@@ -189,6 +189,7 @@ func _present_node() -> void:
 		# Read-only dialogue blocking: gameplay CPU jumps must not displace faces.
 		# This staging is confined to watch mode and never ticks Story objectives.
 		for actor in _battle.fighters_root.get_children():
+			actor.set_meta("watch_base_z",actor.z_index)
 			actor.cpu.clear_simulated_inputs()
 			actor.controls_enabled = false
 			actor.is_cpu = false
@@ -260,10 +261,12 @@ func _on_dialogue_cue(cue: Dictionary) -> void:
 	if StoryDialogue.context != "watch" or _battle == null: return
 	if str(cue.node_id) != str(route.nodes[node_index].id): return
 	_dialogue_speaker = null
+	for actor in _battle.fighters_root.get_children(): actor.z_index=int(actor.get_meta("watch_base_z",actor.z_index))
 	if cue.get("representation") == "memory_echo": return
 	for actor in _battle.fighters_root.get_children():
 		if actor.fighter_id != cue.speaker_id: continue
 		_dialogue_speaker = actor
+		actor.z_index=int(actor.get_meta("watch_base_z",actor.z_index))+20
 		var expression: String = {"grief":"grief","strained":"shock","soft":"calm"}.get(cue.performance,"determination")
 		actor.model_3d.set_cinematic_expression(expression)
 		if route.nodes[node_index].get("objective_contract","") == "FIRST_LOSS": actor.model_3d.play_clip("story_dialogue_intense" if cue.performance in ["grief","strained"] else "story_dialogue_neutral")

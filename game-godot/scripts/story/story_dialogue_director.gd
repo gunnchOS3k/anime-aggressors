@@ -15,6 +15,7 @@ var _queue: Array = []
 var _seen: Dictionary = {}
 var current: Dictionary = {}
 var remaining := 0.0
+var presentation_elapsed := 0.0
 var _manual_pause := false
 var _panel: PanelContainer
 var _name: Label
@@ -69,6 +70,7 @@ func _build_panel() -> void:
 func begin(id: String, mode: String = "battle") -> void:
 	cancel()
 	node_id = id; context = mode; _seen.clear(); _manual_pause = false
+	presentation_elapsed = 0.0
 	_panel.offset_top = -350 if mode == "watch" else -200
 	_panel.offset_bottom = -192 if mode == "watch" else -42
 
@@ -108,7 +110,7 @@ func _next() -> void:
 	_name.visible = bool(settings["subtitles"])
 	_fit_panel()
 	_panel.show()
-	history.append({"cue_id":current["cue_id"],"node_id":node_id,"event":current["event"],"context":context,"voice_playing":voice_ok,"duration":remaining,"generation":_generation,"trigger_detail":current["trigger_detail"]})
+	history.append({"cue_id":current["cue_id"],"node_id":node_id,"event":current["event"],"context":context,"voice_playing":voice_ok,"duration":remaining,"shown_at_s":presentation_elapsed,"generation":_generation,"trigger_detail":current["trigger_detail"]})
 	cue_started.emit(current)
 
 func reading_seconds(cue: Dictionary) -> float:
@@ -118,6 +120,7 @@ func _process(delta: float) -> void:
 	if _voice == null: return
 	var paused := get_tree().paused or _manual_pause
 	_voice.stream_paused = paused
+	if not paused: presentation_elapsed += delta
 	if current.is_empty() or paused: return
 	remaining -= delta
 	if remaining <= 0: advance()
