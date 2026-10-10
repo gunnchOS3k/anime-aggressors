@@ -5,7 +5,7 @@ ROOT=Path(__file__).resolve().parents[2];OUT=ROOT/'artifacts/v1_closure/spectral
 rows=[]
 sha=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
 diff=hashlib.sha256(subprocess.check_output(['git','diff'],cwd=ROOT)).hexdigest()
-for name in sys.argv[1:] or ['SpectralFeedback','CombatActivation','ElementalPerformance','OwnerOverrideFaces','DialogueProduction','FullCampaign','ShippingRosterPath','CampaignRestart']:
+for name in sys.argv[1:] or ['SpectralFeedback','InterruptedMove','CombatActivation','ElementalPerformance','OwnerOverrideFaces','DialogueProduction','FullCampaign','ShippingRosterPath','CampaignRestart']:
  dest=DEST/name;dest.mkdir(exist_ok=True)
  # Older tests have fixed output paths. Preserve all tracked evidence, then copy new evidence under this package.
  tracked=subprocess.check_output(['git','ls-files','artifacts/v1_closure'],cwd=ROOT,text=True).splitlines()

@@ -192,4 +192,6 @@ func set_debug_visible(v: bool) -> void:
 		debug_rect.visible = v
 
 func _exit_tree() -> void:
-	if is_instance_valid(_renderer): _renderer.stop_slot(_flight_slot)
+	if is_instance_valid(_renderer):
+		_renderer.stop_slot(_flight_slot)
+		if active and _renderer.is_inside_tree(): _renderer.emit_effect(fighter_id,5,global_position,direction,_visual_extent,.18)

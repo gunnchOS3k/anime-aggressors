@@ -1399,6 +1399,10 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 		else:
 			state_machine.enter(_FighterStates.SHIELD_STUN)
 		return
+	# Confirmed body impact interrupts the prior move; its later callbacks must not
+	# overwrite hurt/hitstun or activate another hitbox during victim recovery.
+	if move_runner != null: move_runner.cancel()
+	hitbox.monitoring = false
 	var dmg: float = info.get("damage", 0.0)
 	if state_machine.current_state == _FighterStates.AURA_CHARGE:
 		aura = maxf(0.0, aura - _CombatMath.AURA_HIT_INTERRUPT_LOSS)

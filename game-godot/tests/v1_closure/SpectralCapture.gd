@@ -28,7 +28,7 @@ func observe_contact(attacker: Node, defender: Node, info: Dictionary) -> void:
 		"frame":Engine.get_physics_frames(),"movie_frame":Engine.get_process_frames()-1,"result":info.get("contact_result","legacy"),"damage":info.damage,"damage_before":info.get("defender_damage_before",defender.damage_percent-info.damage),
 		"contact_world":[point.x,point.y],"launch":[launch.x,launch.y],"actual_velocity":[defender.velocity.x,defender.velocity.y],"hitstop_frames":info.hitstop_frames,
 		"hitstun_seconds":defender.hitstun_remaining,"defender_state_before":info.get("defender_state_before","unknown"),"follow_up_before_control":info.get("defender_in_hitstun_before",false),
-		"attacker_move_frame":info.get("move_frame",-1)})
+		"audio_path":info.get("played_audio",{}).get("path",""),"elemental_audio_path":info.get("played_audio",{}).get("elemental_layer",{}).get("path",""),"attacker_move_frame":info.get("move_frame",-1)})
 func write_evidence() -> void:
 	if output.is_empty() or battle == null or not is_instance_valid(battle):return
 	var renderer=battle.get_node_or_null("SpectralFeedback")

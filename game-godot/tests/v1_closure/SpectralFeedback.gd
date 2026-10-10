@@ -116,4 +116,6 @@ func _run() -> void:
 	var file=FileAccess.open(output.path_join("spectral_runtime.json"),FileAccess.WRITE)
 	file.store_string(JSON.stringify({"ok":failures.is_empty(),"failures":failures,"fixtures":"source contact fixtures; natural public-input whiff; no combo-success claim","rows":rows,"pool":renderer.stats(),"parry_clash":"not supported by current collision rules; no fabricated outcomes"},"  ")+"\n");file.close()
 	print("SPECTRAL_FEEDBACK ","PASS" if failures.is_empty() else "FAIL"," ",failures)
+	current_scene.queue_free()
+	for i in range(180):await physics_frame
 	quit(0 if failures.is_empty() else 1)
