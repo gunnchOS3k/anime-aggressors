@@ -6,7 +6,7 @@ class_name CombatFeedback
 const _ProceduralAudio = preload("res://scripts/audio/procedural_audio_bank.gd")
 const _V1Sfx = preload("res://scripts/audio/v1_candidate_sfx.gd")
 const _SfxResolver = preload("res://scripts/audio/combat_sfx_resolver.gd")
-const _VfxDirector = preload("res://scripts/visual/move_vfx_director.gd")
+const _Spectral = preload("res://scripts/visual/spectral_feedback_renderer.gd")
 const _Predictor = preload("res://scripts/combat/critical_launch_predictor.gd")
 const _TrailScript = preload("res://scripts/visual/launch_trail_system.gd")
 const _CueScript = preload("res://scripts/visual/critical_launch_cue.gd")
@@ -65,7 +65,7 @@ func apply_hit(attacker: Node, defender: Node, move: Dictionary, info: Dictionar
 	result["screen_flash"] = fb.get("screen_flash", false) and not _presentation_option("reduced_flash")
 	result["element"] = move.get("element_effect", {}).get("type", "")
 	if bool(result.get("blocked", false)):
-		result["hitstop_frames"] = clampi(hitstop, 2, 4)
+		result["hitstop_frames"] = 2 if bool(result.get("armor_block",false)) else clampi(hitstop, 2, 4)
 		result["sfx_event"] = "block"
 		result["vfx_event"] = "shield_flash"
 		result["camera_event"] = ""
@@ -74,7 +74,7 @@ func apply_hit(attacker: Node, defender: Node, move: Dictionary, info: Dictionar
 		_V1Sfx.play_event(defender_id, "block", self)
 		var attacking_element_id := str(attacker.fighter_id) if attacker != null and "fighter_id" in attacker else ""
 		if not attacking_element_id.is_empty(): result["elemental_block"] = preload("res://scripts/audio/elemental_performance.gd").one_shot(attacking_element_id,"block",self)
-		emit_shield_flash(defender_id)
+		_present_contact(defender,result)
 		feedback_triggered.emit(result)
 		return result
 	var fid := str(attacker.fighter_id) if attacker != null and "fighter_id" in attacker else fighter_id
@@ -82,17 +82,12 @@ func apply_hit(attacker: Node, defender: Node, move: Dictionary, info: Dictionar
 	result["played_audio"] = played
 	if not bool(played.get("ok", false)):
 		_play_procedural_sfx(result.sfx_event, tier, attacker, str(move.get("move_id", "")))
-	_play_v3_move_content(attacker, defender, move, result)
-	_trigger_camera(tier, fb.get("camera_event", ""))
-	_emit_juice("hitstop", {"tier": tier, "frames": hitstop})
-	_emit_juice("impact_vfx", {
-		"socket": fb.get("vfx_socket", "chest"),
-		"element": result["element"],
-		"tier": tier,
-		"vfx_event": result["vfx_event"],
-	})
-	_emit_juice("sfx", {"event_id": result["sfx_event"], "category": "hit", "tier": tier})
 	result = _apply_launch_presentation(attacker, defender, move, result)
+	_present_contact(defender,result)
+	_trigger_camera(tier, fb.get("camera_event", ""))
+	_emit_juice("hitstop", {"tier": tier, "frames": result.hitstop_frames, "combat_event_id":result.get("combat_event_id","")})
+	_emit_juice("impact_vfx", result)
+	_emit_juice("sfx", {"event_id": result["sfx_event"], "category": "hit", "tier": tier})
 	feedback_triggered.emit(result)
 	return result
 
@@ -186,13 +181,12 @@ func _apply_launch_presentation(attacker: Node, defender: Node, move: Dictionary
 			"family": _CueScript.family_for(attacker_id),
 		})
 		if defender is Node2D:
-			_spawn_critical_cue(defender as Node2D, attacker_id, launch, danger)
 			_ensure_trail(defender as Node2D, attacker_id, "CRITICAL")
 		emit_optional_rumble(0.45 if danger == "CRITICAL_RECOVERABLE" else 0.7, 90)
-	elif str(result["launch_trail_tier"]) == "HIGH":
+	elif launch.length() >= 6.0:
 		_emit_juice("launch_high", {"attacker_id": attacker_id, "tier": "HIGH"})
 		if defender is Node2D:
-			_ensure_trail(defender as Node2D, attacker_id, "HIGH")
+			_ensure_trail(defender as Node2D, attacker_id, "HIGH" if launch.length() >= 14.0 else "MEDIUM")
 	return result
 
 
@@ -258,28 +252,10 @@ func _trigger_camera(tier: String, event: String) -> void:
 	if event != "" and intensity_scale > 0.01:
 		print("[CombatFeedback] camera_event: %s tier:%s" % [event, tier])
 
-func _play_v3_move_content(attacker: Node, defender: Node, move: Dictionary, result: Dictionary) -> void:
-	var fid := fighter_id
-	if fid == "" and attacker != null and "fighter_id" in attacker:
-		fid = str(attacker.fighter_id)
-	var mid := str(move.get("move_id", ""))
-	if fid == "" or mid == "":
-		return
-	var pos := Vector2.ZERO
+func _present_contact(defender: Node, info: Dictionary) -> void:
 	if defender is Node2D:
-		pos = (defender as Node2D).global_position
-	elif attacker is Node2D:
-		pos = (attacker as Node2D).global_position
-	var facing := 1
-	if attacker != null and "facing" in attacker:
-		facing = int(attacker.facing)
-	var parent: Node2D = defender as Node2D if defender is Node2D else attacker as Node2D
-	if parent != null:
-		var played: Dictionary = _VfxDirector.play(parent, fid, mid, pos, facing)
-		result["vfx_shape"] = played.get("shape", "")
-		result["vfx_palette_only"] = bool(played.get("palette_only", false))
-	var fb: Dictionary = move.get("feedback", {})
-	result["particle_profile"] = fb.get("particle_profile", "")
+		var renderer = _Spectral.obtain(defender)
+		if renderer != null: renderer.contact(info,defender)
 
 
 func _play_procedural_sfx(event: String, tier: String, attacker: Node, move_id: String = "") -> void:
@@ -304,6 +280,9 @@ func _play_procedural_sfx(event: String, tier: String, attacker: Node, move_id: 
 		print("[CombatFeedback] sfx_miss: %s tier:%s" % [event, tier])
 
 func _process(delta: float) -> void:
+	if _presentation_option("reduced_shake"):
+		_shake_remaining=0
+		if _camera != null: _camera.offset=Vector2.ZERO
 	if _camera == null or _shake_remaining <= 0.0:
 		return
 	_shake_remaining -= delta
@@ -313,51 +292,14 @@ func _process(delta: float) -> void:
 	)
 	_camera.offset = offset if _shake_remaining > 0.0 else Vector2.ZERO
 
-func spawn_hit_spark(parent: Node2D, pos: Vector2, element: String) -> void:
-	if _presentation_option("reduced_flash"): return
-	var role = Engine.get_main_loop().root.get_node_or_null("/root/DeviceRoleRuntime") if Engine.get_main_loop() else null
-	if role != null and role.has_method("fx_allows_hit_sparks") and not role.fx_allows_hit_sparks():
-		return
-	var spark := ColorRect.new()
-	spark.size = Vector2(12, 12)
-	spark.position = pos - spark.size / 2.0
-	spark.color = _element_color(element)
-	parent.add_child(spark)
-	var tween := spark.create_tween()
-	tween.tween_property(spark, "modulate:a", 0.0, 0.15)
-	tween.tween_callback(spark.queue_free)
-	# GAME-RC-003: secondary ring for heavy/aura readability.
-	var ring := ColorRect.new()
-	ring.size = Vector2(22, 22)
-	ring.position = pos - ring.size / 2.0
-	ring.color = Color(_element_color(element).r, _element_color(element).g, _element_color(element).b, 0.35)
-	parent.add_child(ring)
-	var rt := ring.create_tween()
-	rt.tween_property(ring, "scale", Vector2(1.8, 1.8), 0.18)
-	rt.parallel().tween_property(ring, "modulate:a", 0.0, 0.18)
-	rt.tween_callback(ring.queue_free)
+## Legacy direct calls cannot manufacture confirmed contact. HitResolver owns that contract.
+func spawn_hit_spark(_parent: Node2D, _pos: Vector2, _element: String) -> void:
+	pass
 
-## Grab release / recovery cue — short flash so throws are readable.
 func spawn_grab_recovery_flash(parent: Node2D, pos: Vector2, direction: String) -> void:
-	var role = Engine.get_main_loop().root.get_node_or_null("/root/DeviceRoleRuntime") if Engine.get_main_loop() else null
-	if role != null and role.has_method("fx_allows_hit_sparks") and not role.fx_allows_hit_sparks():
-		return
-	var flash := ColorRect.new()
-	flash.size = Vector2(28, 18)
-	flash.position = pos - flash.size / 2.0
-	match direction:
-		"up":
-			flash.color = Color(0.95, 0.95, 1.0, 0.8)
-		"down":
-			flash.color = Color(0.9, 0.55, 0.2, 0.8)
-		"back":
-			flash.color = Color(0.6, 0.8, 1.0, 0.8)
-		_:
-			flash.color = Color(1.0, 0.75, 0.35, 0.8)
-	parent.add_child(flash)
-	var tw := flash.create_tween()
-	tw.tween_property(flash, "modulate:a", 0.0, 0.22)
-	tw.tween_callback(flash.queue_free)
+	var renderer = _Spectral.obtain(parent)
+	if renderer != null:
+		renderer.emit_effect(str(parent.fighter_id),6,pos,Vector2.UP if direction == "up" else Vector2.RIGHT,48,.12)
 
 func _element_color(element: String) -> Color:
 	match element:

@@ -31,6 +31,7 @@ p.add_argument('--prepare-only', action='store_true')
 p.add_argument('--test-script', help='Run a targeted source regression with the same isolated user:// identity')
 p.add_argument("--baseline-ref",help="Read-only source overlay for before/after capture; creates no worktree")
 p.add_argument("--movie",type=Path,help="Bounded native Godot MovieWriter with real mixed audio")
+p.add_argument("--movie-fps",type=int,choices=[30,60],default=30)
 p.add_argument("--movie-frames",type=int,default=1800)
 p.add_argument("--driver-arg",action="append",default=[])
 a = p.parse_args()
@@ -104,7 +105,7 @@ else:
     if a.automate: cmd += ['--fixed-fps', '60', '--disable-vsync']
 if a.movie:
     a.movie.parent.mkdir(parents=True,exist_ok=True)
-    cmd += ['--write-movie',str(a.movie.resolve()),'--fixed-fps','30','--quit-after',str(a.movie_frames)]
+    cmd += ['--write-movie',str(a.movie.resolve()),'--fixed-fps',str(a.movie_fps),'--quit-after',str(a.movie_frames)]
 cmd += ['--', '--ordinary-output='+str(a.output.resolve())]
 cmd += a.driver_arg
 cmd += ["--source-sha="+subprocess.check_output(["git","rev-parse",a.baseline_ref or "HEAD"],cwd=ROOT,text=True).strip()]

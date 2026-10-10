@@ -7,7 +7,7 @@ const DATA := "res://data/story/dialogue/v1/"
 var cues: Dictionary = {}
 var nodes: Dictionary = {}
 var voice_assets: Dictionary = {}
-var settings := {"subtitles":true,"voice":true,"font_size":23,"reading_rate":3.0,"voice_volume":0.75,"element_volume":0.65,"music_volume":0.65,"reduced_flash":false,"reduced_shake":false}
+var settings := {"subtitles":true,"voice":true,"font_size":23,"reading_rate":3.0,"voice_volume":0.75,"element_volume":0.65,"music_volume":0.65,"reduced_flash":false,"reduced_shake":false,"reduced_particles":false,"high_contrast_vfx":false}
 var node_id := ""
 var context := ""
 var history: Array = []
@@ -201,7 +201,7 @@ func show_settings() -> void:
 	var dialog := AcceptDialog.new(); dialog.title = "Dialogue and combat presentation"
 	var column := VBoxContainer.new(); column.custom_minimum_size = Vector2(670,430)
 	dialog.add_child(column)
-	for item in [["Subtitles","subtitles"],["Temporary voices","voice"],["Subtitle size","font_size"],["Reading speed","reading_rate"],["Voice volume","voice_volume"],["Element effects volume","element_volume"],["Music volume","music_volume"],["Reduced flashes","reduced_flash"],["Reduced camera shake","reduced_shake"]]:
+	for item in [["Subtitles","subtitles"],["Temporary voices","voice"],["Subtitle size","font_size"],["Reading speed","reading_rate"],["Voice volume","voice_volume"],["Element effects volume","element_volume"],["Music volume","music_volume"],["Reduced flashes","reduced_flash"],["Reduced camera shake","reduced_shake"],["Reduced particle density","reduced_particles"],["High contrast effects","high_contrast_vfx"]]:
 		var row := HBoxContainer.new(); column.add_child(row)
 		var label := Label.new(); label.text = item[0]; label.size_flags_horizontal = Control.SIZE_EXPAND_FILL; row.add_child(label)
 		var button := Button.new(); row.add_child(button)
@@ -227,4 +227,4 @@ func _fit_panel() -> void:
 
 func _apply_accessibility() -> void:
 	var bus = get_node_or_null("/root/JuiceEventBus")
-	if bus != null: bus.set_accessibility(bool(settings.reduced_flash),bool(settings.reduced_shake),false)
+	if bus != null: bus.set_accessibility(bool(settings.reduced_flash),bool(settings.reduced_shake),bool(settings.reduced_particles))

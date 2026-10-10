@@ -50,52 +50,9 @@ static func library(fighter_id: String) -> Dictionary:
 
 
 static func spawn(parent: Node2D, fighter_id: String, move_id: String, pos: Vector2) -> Node2D:
-	var lib: Dictionary = library(fighter_id)
-	var prof := profile(fighter_id, move_id)
-	if parent == null:
-		return null
-	var amount := int(prof.get("amount", 8))
-	var root := Node2D.new()
-	root.name = "V3Particles_%s_%s" % [fighter_id, move_id]
-	root.global_position = pos
-	parent.add_child(root)
-	var col: Color = lib.get("color", Color(1, 1, 1, 0.6))
-	var grav: Vector2 = lib.get("gravity", Vector2.ZERO)
-	var spread := float(lib.get("spread", 24.0))
-	for i in range(amount):
-		var mote := Polygon2D.new()
-		mote.color = Color(col.r, col.g, col.b, col.a)
-		mote.polygon = _shape_for(fighter_id)
-		var ang := deg_to_rad((-spread * 0.5) + spread * (float(i) / max(1, amount - 1)))
-		mote.position = Vector2.ZERO
-		root.add_child(mote)
-		var dest := Vector2(cos(ang), sin(ang)) * (18.0 + float(i) * 1.6) + grav * 0.08
-		var tw := mote.create_tween()
-		tw.tween_property(mote, "position", dest, 0.18)
-		tw.parallel().tween_property(mote, "modulate:a", 0.0, 0.18)
-		tw.tween_callback(mote.queue_free)
-	var life := root.create_tween()
-	life.tween_interval(0.22)
-	life.tween_callback(root.queue_free)
-	return root
-
-
-static func _shape_for(fighter_id: String) -> PackedVector2Array:
-	match fighter_id:
-		"ember-vale":
-			return PackedVector2Array([Vector2(0, -5), Vector2(3, 4), Vector2(-3, 4)])
-		"rook-ironside":
-			return PackedVector2Array([Vector2(-3, -3), Vector2(3, -3), Vector2(3, 3), Vector2(-3, 3)])
-		"juno-spark":
-			return PackedVector2Array([Vector2(0, -6), Vector2(1.5, 0), Vector2(0, 6), Vector2(-1.5, 0)])
-		"kaia-windrow":
-			return PackedVector2Array([Vector2(-6, 0), Vector2(0, -2), Vector2(6, 0), Vector2(0, 2)])
-		"nix-calder":
-			return PackedVector2Array([Vector2(0, -5), Vector2(3, 0), Vector2(0, 5), Vector2(-3, 0)])
-		"orion-vell":
-			return PackedVector2Array([Vector2(0, -2), Vector2(2, 0), Vector2(0, 2), Vector2(-2, 0)])
-		_:
-			return PackedVector2Array([Vector2(-2, -3), Vector2(3, 0), Vector2(-2, 3)])
+	var renderer = preload("res://scripts/visual/spectral_feedback_renderer.gd").obtain(parent)
+	if renderer != null: renderer.emit_effect(fighter_id,5,pos,Vector2.RIGHT,40,.2)
+	return renderer
 
 
 static func nonplaceholder_count() -> int:

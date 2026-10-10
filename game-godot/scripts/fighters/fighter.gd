@@ -88,6 +88,8 @@ var animator
 @onready var grab_range_debug: ColorRect = $GrabRangeDebug
 
 var _hitstop: float = 0.0
+var _spectral_charge_slot := -1
+var _spectral_renderer: Node2D
 var _current_move: Dictionary = {}
 var _pending_attack_cmd: String = ""
 var _last_state: String = ""
@@ -1084,6 +1086,9 @@ func stage_center_x() -> float:
 func _on_move_active(move: Dictionary) -> void:
 	var mid = str(move.get("move_id", ""))
 	var mt = str(move.get("move_type", "melee"))
+	if move_runner.frame_in_phase == 1 and mt not in ["projectile","grab","throw"] and not move.has("projectile"):
+		var renderer = preload("res://scripts/visual/spectral_feedback_renderer.gd").obtain(self)
+		if renderer != null: renderer.emit_effect(fighter_id,6,hitbox.global_position,Vector2(facing,0),58,.13)
 	# Release and contact are separate: a legitimate missed burst still sounds.
 	if move_runner.frame_in_phase == 1 and (mid == "aura_burst" or mt == "burst"):
 		if _elemental_audio != null: _elemental_audio.play("signature_release")
@@ -1434,6 +1439,8 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 	# Hit telemetry is recorded by HitResolver.resolve (single source of truth).
 
 func reset_fighter() -> void:
+	var trail = get_node_or_null("LaunchTrail")
+	if trail != null: trail.clear()
 	damage_percent = 0.0
 	aura = 0.0
 	combo_count = 0
@@ -1453,6 +1460,15 @@ func reset_fighter() -> void:
 	, CONNECT_ONE_SHOT)
 
 func lose_stock() -> void:
+	# Called only by authentic battle stock loss; danger predictions are never a final result.
+	var renderer = preload("res://scripts/visual/spectral_feedback_renderer.gd").obtain(self)
+	if renderer != null:
+		var canvas_to_world := get_viewport().get_canvas_transform().affine_inverse()
+		var screen := get_viewport().get_canvas_transform()*global_position
+		screen=screen.clamp(Vector2(60,120),get_viewport_rect().size-Vector2(60,80))
+		renderer.emit_effect(str(_last_hit_result.get("attacker_id",fighter_id)),7,canvas_to_world*screen,velocity.normalized(),160,.35,"ko:"+str(get_instance_id())+":"+str(stocks))
+	var trail = get_node_or_null("LaunchTrail")
+	if trail != null: trail.clear()
 	preload("res://scripts/audio/v1_candidate_sfx.gd").play_event(fighter_id, "ko", self)
 	stocks -= 1
 	state_machine.enter(_FighterStates.KO)
@@ -1597,12 +1613,17 @@ func _check_edge() -> void:
 		state_machine.enter(_FighterStates.IDLE if absf(_read_axis()) < 0.1 else _FighterStates.WALK)
 
 func _set_aura_vfx(on: bool) -> void:
-	if aura_vfx:
-		aura_vfx.visible = on
-		if on and data.has("auraColor"):
-			var c := Color(data.get("auraColor"))
-			c.a = clampf(0.2 + aura / 200.0, 0.2, 0.55)
-			aura_vfx.color = c
+	if aura_vfx: aura_vfx.visible=false
+	if _spectral_renderer == null or not is_instance_valid(_spectral_renderer):
+		_spectral_renderer = preload("res://scripts/visual/spectral_feedback_renderer.gd").obtain(self)
+	var charging: bool = on and state_machine.current_state in [_FighterStates.AURA_CHARGE,_FighterStates.AURA_READY]
+	if _spectral_renderer != null:
+		if charging:
+			if _spectral_charge_slot < 0: _spectral_charge_slot=_spectral_renderer.emit_effect(fighter_id,2,global_position+Vector2(0,-24),Vector2.RIGHT,84,-1.0,"",self)
+			_spectral_renderer.update_slot(_spectral_charge_slot,global_position+Vector2(0,-24),Vector2.RIGHT,72+aura*.45,aura/100.0)
+		elif _spectral_charge_slot>=0:
+			_spectral_renderer.stop_slot(_spectral_charge_slot);_spectral_charge_slot=-1
+			_spectral_renderer.emit_effect(fighter_id,5,global_position+Vector2(0,-24),Vector2.RIGHT,90,.18)
 	if model_3d and model_3d.has_method("set_aura_level"):
 		model_3d.set_aura_level(get_aura_level() if on or aura > 1.0 else 0)
 	if model_3d and model_3d.has_method("set_aura_tier"):
@@ -1620,6 +1641,7 @@ func _on_state_changed(_from: String, to: String) -> void:
 	if _elemental_audio != null and _from in [_FighterStates.AURA_CHARGE,_FighterStates.AURA_READY] and to not in [_FighterStates.AURA_CHARGE,_FighterStates.AURA_READY]:
 		if to in [_FighterStates.IDLE,_FighterStates.AURA_BURST_STARTUP]: _elemental_audio.update_charge(false,aura/100.0)
 		else: _elemental_audio.cancel_charge()
+	if _from in [_FighterStates.AURA_CHARGE,_FighterStates.AURA_READY] and to not in [_FighterStates.AURA_CHARGE,_FighterStates.AURA_READY]: _set_aura_vfx(false)
 	_play_current_animation(to)
 	if to in [_FighterStates.AURA_CHARGE, _FighterStates.AURA_READY, _FighterStates.AURA_BURST_STARTUP, _FighterStates.AURA_BURST_ACTIVE]:
 		_set_aura_vfx(true)
