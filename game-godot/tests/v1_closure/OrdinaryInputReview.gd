@@ -26,6 +26,8 @@ var video_counts := {}
 var start_progress := {}
 var navigation := {}
 var seeded_prerequisites := false
+var dialogue_review := ""
+var dialogue_snapshot := ""
 
 func _ready() -> void:
 	process_physics_priority = -100
@@ -89,8 +91,16 @@ func _physics_process(_delta: float) -> void:
 		if not replay_nodes.is_empty():
 			if replay_index >= replay_nodes.size(): _finish(); return
 			if action_delay > 0: return
+			var dialog = scene.get_node_or_null("StorySceneReplay")
+			if dialog != null:
+				action_delay=30
+				if DisplayServer.get_name() != "headless" and not capture_busy: await _capture(dialogue_review.replace(":","_")+"_ending.png")
+				if JSON.stringify(CampaignRuntime.progress) != dialogue_snapshot: failures.append("Dialogue replay mutated Story progress")
+				rows.append({"node":dialogue_review,"kind":"dialogue_replay","progress_unchanged":JSON.stringify(CampaignRuntime.progress)==dialogue_snapshot,"ui_acknowledgment":false})
+				dialog.get_ok_button().pressed.emit(); replay_index+=1; action_delay=55; return
 			for i in range(scene._replay_picker.item_count):
 				if scene._replay_picker.get_item_metadata(i) == replay_nodes[replay_index]:
+					dialogue_review=str(replay_nodes[replay_index]); dialogue_snapshot=JSON.stringify(CampaignRuntime.progress)
 					scene._replay_picker.select(i); _press_button(scene,"Replay Selected Encounter"); return
 			failures.append("Replay chapter was not earned: "+str(replay_nodes[replay_index])); _finish(); return
 		if CampaignRuntime.progress["routes"][route_id]["completed"].size() >= max_nodes:
