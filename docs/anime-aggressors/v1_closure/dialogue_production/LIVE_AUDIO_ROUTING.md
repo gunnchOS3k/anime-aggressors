@@ -15,6 +15,7 @@ Current runtime:
 | Environment contact | existing body_entered observation | attacker projectile_impact.wav; collision authority unchanged |
 | Block | unchanged HitResolver → CombatFeedback | original defender shield sound plus attacking fighter block.wav |
 | Expire / hit completion | Projectile._expire | stop owned travel through node lifetime, projectile_dissipate.wav |
+| Signature first active frame | Fighter._on_move_active | fighter signature_release.wav once; plays on hit or miss |
 | Heavy / super impact | CombatFeedback → V1CandidateSfx | preserved original punch/impact plus heavy.wav / signature.wav |
 | Missing required layers | returned playback result / regression | no silently invented element assignment; surfaced missing_stream |
 

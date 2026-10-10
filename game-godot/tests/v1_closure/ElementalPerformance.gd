@@ -4,6 +4,7 @@ const Model = preload("res://scripts/fighters/fighter_model_3d.gd")
 const Data = preload("res://scripts/data/data_loader.gd")
 var failures: Array=[]
 var rows: Array=[]
+var confirmed_audio: Array=[]
 func _init() -> void:call_deferred("_run")
 func check(ok: bool,label: String) -> void:
 	if not ok:failures.append(label);push_error(label)
@@ -46,6 +47,26 @@ func _run() -> void:
 		for i in range(60):await physics_frame
 		check(sound.events.filter(func(row):return row.event=="signature_release" and row.playing).size()==1,"real_signature_release_once:"+fid)
 		p.move_runner.cancel()
+		var target=current_scene.fighter2
+		var feedback: Array=[]
+		var observer=func(info: Dictionary):feedback.append(info)
+		p.combat_feedback.feedback_triggered.connect(observer)
+		# Declared contact fixtures exercise the live HitResolver -> feedback -> bank.
+		# These are not natural-input gameplay or qualifying Story evidence.
+		for spec in [{"move":"heavy_attack","event":"heavy","blocked":false},{"move":"aura_burst","event":"signature","blocked":false},{"move":"heavy_attack","event":"block","blocked":true}]:
+			target.configure("ember-vale" if fid=="juno-spark" else "juno-spark",2,false,9,Vector2(100,180))
+			target.controls_enabled=false;target.invincible=false;target.shielding=spec.blocked
+			if spec.blocked:target.state_machine.enter("shield_hold")
+			p.move_runner.cancel();p.state_machine.enter("idle");p.training_play_move(spec.move)
+			feedback.clear();p.hit_resolver.resolve(p,target,p._current_move,0.0)
+			check(feedback.size()==1,"confirmed_contact:"+fid+":"+spec.event)
+			if feedback.size()==1:
+				var layer: Dictionary=feedback[0].get("elemental_block",{}) if spec.blocked else feedback[0].get("played_audio",{}).get("elemental_layer",{})
+				check(layer.get("playing",false) and layer.get("event","")==spec.event and layer.get("fighter_id","")==fid,"confirmed_elemental_playback:"+fid+":"+spec.event)
+				if not spec.blocked:check(feedback[0].played_audio.get("playing",false),"original_impact_still_plays:"+fid+":"+spec.event)
+				confirmed_audio.append({"fighter_id":fid,"event":spec.event,"playback":layer,"scope":"declared versus contact fixture through live HitResolver"})
+		p.combat_feedback.feedback_triggered.disconnect(observer)
+		p.move_runner.cancel()
 		for presentation in ["male","female"]:
 			var model=Model.new();root.add_child(model);model.configure(Data.load_fighter(fid),presentation)
 			await process_frame
@@ -66,6 +87,6 @@ func _run() -> void:
 			rows.append({"fighter_id":fid,"presentation":presentation,"contact_frame":frame,"hand_travel":initial.distance_to(contact),"contact_pose":str(contact),"loop_events":sound.events.duplicate(true),"geometry_to_hitbox_review":"PENDING_RENDERED_OWNER_REVIEW"})
 			model.queue_free();await process_frame
 	var file=FileAccess.open("res://../artifacts/v1_closure/dialogue_performance/elemental_runtime_test.json",FileAccess.WRITE)
-	file.store_string(JSON.stringify({"ok":failures.is_empty(),"failures":failures,"rows":rows,"scope":"Real Fighter state interruptions and projectile creation; real GLB bone deformation and timeline seek. Not human acoustic/taste acceptance."},"  ")+"\n");file.close()
+	file.store_string(JSON.stringify({"ok":failures.is_empty(),"failures":failures,"rows":rows,"confirmed_audio":confirmed_audio,"scope":"Real Fighter state interruptions and projectile creation; declared HitResolver contact fixtures; real GLB bone deformation and timeline seek. Not natural Story or human acoustic/taste acceptance."},"  ")+"\n");file.close()
 	print("ELEMENTAL_PERFORMANCE ",failures.is_empty()," failures=",failures)
 	quit(0 if failures.is_empty() else 1)
