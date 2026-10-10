@@ -25,6 +25,8 @@ func _run() -> void:
 	var bridge=load("res://scripts/visual/animation_event_bridge.gd").new();current_scene.add_child(bridge)
 	bridge.emit_from_anim_event("active_start")
 	check(events.size()==1 and events[0].event=="attack_swing","animation_activation_is_not_contact_or_hitstop")
+	var rejected: Dictionary=p.combat_feedback.apply_hit(p,d,{"feedback":{"tier":"heavy"}},{"damage":9,"launch":Vector2(30,-30),"hitstop_frames":8})
+	check(rejected.get("presentation_rejected","")=="unconfirmed_contact" and renderer.history.is_empty(),"unconfirmed_feedback_cannot_emit_contact_or_audio")
 	# Ordinary input/physics whiff, with neither fighter frozen.
 	p.invincible=false;d.invincible=false;p.global_position=Vector2(-220,260);d.global_position=Vector2(220,260)
 	p.controls_enabled=true;Input.action_press("p1_attack")

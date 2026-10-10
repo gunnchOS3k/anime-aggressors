@@ -64,6 +64,9 @@ func apply_hit(attacker: Node, defender: Node, move: Dictionary, info: Dictionar
 	result["camera_event"] = fb.get("camera_event", "")
 	result["screen_flash"] = fb.get("screen_flash", false) and not _presentation_option("reduced_flash")
 	result["element"] = move.get("element_effect", {}).get("type", "")
+	if not bool(info.get("confirmed_contact",false)) or str(info.get("combat_event_id","")).is_empty():
+		result["presentation_rejected"]="unconfirmed_contact"
+		return result
 	if bool(result.get("blocked", false)):
 		result["hitstop_frames"] = 2 if bool(result.get("armor_block",false)) else clampi(hitstop, 2, 4)
 		result["sfx_event"] = "block"

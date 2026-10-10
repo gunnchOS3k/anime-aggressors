@@ -15,6 +15,7 @@ var battle: Node
 var started_frame := 0
 var final_written := false
 var turn_latch := 0
+var retreating := false
 func _init() -> void: call_deferred("_run")
 func inputs(actions: Array) -> void:
 	for action in held:
@@ -91,10 +92,12 @@ func _run() -> void:
 				if frame%80<4:actions.append("jump")
 				if frame%30<4:actions.append("attack")
 		# Correct facing through movement input; never assign transform/facing/velocity.
-		if not idle_opponent and p.state_machine.can_move() and phase not in range(520,970):
-			if absf(dx)<12:
-				actions=["left" if dx>=0 else "right"];turn_latch=2
+		if not idle_opponent and p.state_machine.can_move() and not (phase>=520 and phase<970):
+			if absf(dx)<12:retreating=true
+			if retreating and absf(dx)<28:
+				actions=["left" if dx>=0 else "right"];turn_latch=1
 			elif turn_latch>0 or (absf(dx)>8 and signf(dx)!=float(p.facing)):
+				retreating=false
 				actions=["right" if dx>0 else "left"];turn_latch=maxi(0,turn_latch-1)
 		inputs(actions)
 		if frame%6==0:

@@ -252,6 +252,8 @@ func _test_feedback_no_math_mutation() -> void:
 	var defender := Node2D.new()
 	defender.position = Vector2(0, 200)
 	root.add_child(defender)
+	info["confirmed_contact"] = true # Declared predictor fixture, not natural collision evidence.
+	info["combat_event_id"] = "critical-predictor-fixture"
 	var out: Dictionary = fb.apply_hit(attacker, defender, {"feedback": {"tier": "light"}, "multi_hit": true, "final_hit": false}, info)
 	if out.get("launch") != launch:
 		_fail("feedback_changed_launch")
