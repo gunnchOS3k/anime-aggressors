@@ -45,6 +45,8 @@ var _story_cosmic_actor
 var _story_survival := false
 var _story_elapsed := 0.0
 var _story_cosmic_cadence := 0.0
+var _story_objective
+var _story_receipt_failed := false
 
 const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
 const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
@@ -57,17 +59,22 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	if GameState.mode == "story":
 		_story_attempt_token = str(CampaignRuntime.active_encounter.get("token", ""))
+		CampaignRuntime.bind_battle_scene(self, _story_attempt_token)
 	_build_stage()
 	_spawn_fighters()
 	_setup_hud_panels()
 	_apply_device_role()
 	_time_remaining = float(GameState.match_timer_seconds)
 	_time_enabled = GameState.match_timer_seconds > 0 and GameState.match_type != "stock_untimed"
+	_update_timer_label()
 	_battle_sim = _BattleSim.new()
 	add_child(_battle_sim)
 	_battle_sim.bind_fighters([fighter1, fighter2])
 	if not _story_attempt_token.is_empty() and CampaignRuntime.active_encounter.get("objective_contract") == "COSMIC_SURVIVAL":
 		_setup_story_cosmic_encounter(CampaignRuntime.active_encounter)
+	elif not _story_attempt_token.is_empty() and CampaignRuntime.active_encounter.get("objective_contract", "STOCK_WIN") != "STOCK_WIN":
+		_story_objective = preload("res://scripts/story/v1_story_encounter.gd").new()
+		_story_objective.setup(self, CampaignRuntime.active_encounter)
 	if GameState.mode == "hazards" or GameState.hazards_enabled or GameState.items_enabled:
 		_hazard_runtime = _HazardItemRuntime.new()
 		add_child(_hazard_runtime)
@@ -105,11 +112,15 @@ func _ready() -> void:
 			countdown_label.visible = false
 		fighter1.controls_enabled = true
 		fighter2.controls_enabled = true
+		if _story_objective != null: _story_objective.activate_controls()
+		if _story_cosmic_actor != null: _story_cosmic_actor.controls_enabled = true
 		_active = true
 		return
 	await _run_countdown()
 	fighter1.controls_enabled = true
 	fighter2.controls_enabled = true
+	if _story_objective != null: _story_objective.activate_controls()
+	if _story_cosmic_actor != null: _story_cosmic_actor.controls_enabled = true
 	_active = true
 
 func _apply_device_role() -> void:
@@ -302,6 +313,9 @@ func _physics_process(delta: float) -> void:
 			return
 	if _story_survival:
 		_tick_story_cosmic_encounter(delta)
+	if _story_objective != null:
+		_story_objective.tick(delta)
+		if not _active: return
 	if _hazard_runtime:
 		_hazard_runtime.tick(delta)
 	if _time_enabled:
@@ -336,12 +350,17 @@ func _update_timer_label() -> void:
 	if _timer_label == null:
 		return
 	if not _time_enabled:
-		_timer_label.text = "?"
+		_timer_label.text = "—"
+		_timer_label.tooltip_text = "Untimed objective. Follow the prompts and preserve your stocks."
 		return
 	var secs := int(ceil(_time_remaining))
 	_timer_label.text = "%d:%02d" % [secs / 60, secs % 60]
 
 func _end_match_on_time() -> void:
+	if _story_objective != null or (GameState.mode == "story" and not _story_survival):
+		# Story stock victories require actual KOs. A percent tie-break cannot issue that receipt.
+		_finish_match(2)
+		return
 	if _story_survival:
 		_finish_match(1 if fighter1.stocks > 0 else 2)
 		return
@@ -373,6 +392,9 @@ func _on_ko(_f) -> void:
 	pass
 
 func _check_match_end() -> void:
+	if _story_objective != null:
+		if fighter1.stocks <= 0: _finish_match(2)
+		return
 	if fighter1.stocks <= 0 or fighter2.stocks <= 0:
 		var winner := 2 if fighter1.stocks <= 0 else 1
 		_finish_match(winner)
@@ -560,6 +582,12 @@ func _clear_pause_for_nav() -> void:
 
 func _on_pause_rematch() -> void:
 	_clear_pause_for_nav()
+	if GameState.mode == "story":
+		var replay_id := str(CampaignRuntime.active_encounter.get("node_id", "")) if CampaignRuntime.active_encounter.get("replay", false) else ""
+		CampaignRuntime.abandon_encounter()
+		if not CampaignRuntime.begin_encounter(replay_id):
+			SceneRouter.go("story")
+			return
 	GameState.reset_match()
 	SceneRouter.go("battle")
 
@@ -578,7 +606,15 @@ func _finish_match(winner: int) -> void:
 	GameState.last_winner_slot = winner
 	MatchTelemetry.record_match_end(winner)
 	if GameState.mode == "story" and not _story_attempt_token.is_empty():
-		CampaignRuntime.record_battle_result(winner, _story_attempt_token, {"survived":_story_survival and fighter1.stocks > 0 and _time_remaining <= 0, "elapsed":_story_elapsed})
+		var evidence: Dictionary = _story_objective.evidence() if _story_objective != null else {"stock_win":fighter2.stocks <= 0 and fighter1.stocks > 0, "survived":_story_survival and fighter1.stocks > 0 and _time_remaining <= 0, "elapsed":_story_elapsed}
+		_story_receipt_failed = not CampaignRuntime.record_battle_result(winner, _story_attempt_token, evidence, self)
+		if _story_receipt_failed:
+			CampaignRuntime.last_error = "Story outcome could not be saved or verified. Retry this encounter."
+			CampaignRuntime.active_encounter.clear()
+		if _story_objective != null:
+			for actor in _story_objective.actors:
+				actor.controls_enabled = false
+				actor.cpu.clear_simulated_inputs()
 		fighter1.controls_enabled = false
 		fighter2.controls_enabled = false
 		if _story_cosmic_actor != null:
@@ -639,8 +675,8 @@ func _setup_story_cosmic_encounter(contract: Dictionary) -> void:
 	_story_cosmic_actor = FIGHTER_SCENE.instantiate()
 	_story_cosmic_actor.name = "YangStoryManifestation"
 	fighters_root.add_child(_story_cosmic_actor)
-	_story_cosmic_actor.configure(str(contract["additional_opponent"]), 3, false, 99, Vector2(80, 160))
-	_story_cosmic_actor.controls_enabled = false
+	_story_cosmic_actor.configure(str(contract["additional_opponent"]), 3, true, 99, Vector2(80, 160))
+	_story_cosmic_actor.controls_enabled = false # Activated with the ordinary countdown below.
 	_story_cosmic_actor.set_meta("story_cosmic_contract", true)
 	data = _story_cosmic_actor.data.duplicate(true)
 	data["collectible_review_form"] = "COSMIC_BOSS"
@@ -655,12 +691,13 @@ func _setup_story_cosmic_encounter(contract: Dictionary) -> void:
 
 func _tick_story_cosmic_encounter(delta: float) -> void:
 	_story_elapsed += delta
-	_story_cosmic_cadence += delta
-	if _story_cosmic_cadence >= 2.4:
-		_story_cosmic_cadence = 0.0
-		if _story_cosmic_actor.move_runner.active:
-			return
-		var dx: float = fighter1.position.x - _story_cosmic_actor.position.x
-		_story_cosmic_actor.velocity.x = signf(dx) * 90.0 if absf(dx) > 100 else 0.0
-		_story_cosmic_actor.training_play_move("side_special" if absf(dx) > 100 else "heavy_attack", 0.0, 1 if dx >= 0 else -1)
+	# Both manifestations use the same active observation/input CPU as normal fighters.
 	_check_blast(_story_cosmic_actor)
+
+
+func _exit_tree() -> void:
+	if _story_objective != null:
+		for actor in _story_objective.actors:
+			if is_instance_valid(actor): actor.cpu.clear_simulated_inputs()
+		_story_objective.battle = null
+		_story_objective = null

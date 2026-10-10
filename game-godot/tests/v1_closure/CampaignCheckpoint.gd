@@ -70,11 +70,22 @@ func _run() -> void:
 		check(not campaign.progress["routes"][route_id]["complete"], "incomplete_route_truth")
 		var completed: Array = campaign.progress["routes"][route_id]["completed"].duplicate()
 		check(campaign.begin_encounter(str(completed[0])), "chapter_replay")
-		var token := str(campaign.active_encounter["token"])
-		check(campaign.record_battle_result(2, token), "loss_receipt")
+		root.get_node("SceneRouter").go("battle")
+		for _frame in range(10): await physics_frame
+		var replay_battle = current_scene
+		replay_battle.fighter1.stocks = 1
+		replay_battle.fighter1.position.x = float(replay_battle.blast.get("right", 2000)) + 100
+		for _frame in range(90): await physics_frame
+		check(campaign.last_result.get("winner") == 2, "loss_receipt")
 		check(campaign.progress["routes"][route_id]["completed"] == completed, "loss_does_not_advance")
 		check(campaign.begin_encounter(str(completed[0])), "replay_retry")
-		check(campaign.record_battle_result(1, str(campaign.active_encounter["token"])), "replay_win")
+		root.get_node("SceneRouter").go("battle")
+		for _frame in range(10): await physics_frame
+		replay_battle = current_scene
+		replay_battle.fighter2.stocks = 1
+		replay_battle.fighter2.position.x = float(replay_battle.blast.get("right", 2000)) + 100
+		for _frame in range(90): await physics_frame
+		check(campaign.last_result.get("winner") == 1, "replay_win")
 		check(campaign.progress["routes"][route_id]["completed"] == completed, "replay_does_not_advance")
 		campaign.abandon_encounter()
 	check(not campaign.progress["yin_unlocked"] and not campaign.progress["yang_unlocked"], "cosmic_unlocks_remain_locked")
@@ -86,7 +97,7 @@ func _run() -> void:
 	check(campaign.progress["gray_routes"].is_empty() and not campaign.progress["yin_unlocked"], "reject_forged_save")
 	var out := FileAccess.open("res://../artifacts/v1_closure/campaign_runtime_evidence.json", FileAccess.WRITE)
 	out.store_string(JSON.stringify({"ok": failures.is_empty(), "failures": failures, "encounters": rows,
-		"scope": "Shipping BattleScene movement + scripted blast-zone KO + Results/Story save flow; later story objectives remain unimplemented.",
+		"scope": "Shipping BattleScene movement + scripted blast-zone KO + Results/Story save flow; opening regression scope only; downstream chapters are tested separately.",
 		"automated_ready": false, "STORY_HUMAN_PASS": false}, "\t"))
 	out.close()
 	print("CAMPAIGN_CHECKPOINT ", "PASS" if failures.is_empty() else "FAIL", " encounters=", rows.size(), " failures=", failures)

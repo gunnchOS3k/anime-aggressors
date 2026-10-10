@@ -1,7 +1,8 @@
 {
   "baseline_sha": "887e100114c9741ebc7a449b46116bcb6eef5072",
-  "owner_instruction_date": "2026-10-06",
+  "owner_instruction_date": "2026-10-09",
   "precedence": [
+    "owner_first_loss_canon_2026_10_09_scoped_pairings_and_last_vector_only",
     "owner_override_female_variants_hair_ova_2026_10_06_scoped_conflicts_only",
     "explicit_owner_instructions_and_supplied_V1_tasks",
     "creative_authority_pack_and_source_derived_fighter_movement_story_authorities",
@@ -12,9 +13,9 @@
     "proportion": "V1 collectible target supersedes older 3.0\u20133.5-head production suggestion; 2.0\u20132.6 heads is an adjustable candidate range, not immutable canon.",
     "roster": "9 identities; male/female; spectrum base/Black Puppet/White Puppet/Gray; Yin/Yang separate cosmic-boss and competitive contracts.",
     "ascension": "Existing Awakened/Ascended states are not Prismatic Gray completion.",
-    "first_loss": "Kaia -> Rook canonical. Other six unresolved.",
+    "first_loss": "Seven approved unique route-specific losses; Juno -> Orion supersedes Juno -> Rook; Kaia -> Rook preserved.",
     "historic_status": "Existing completion statements and PR baselines are historical evidence, not V1 acceptance.",
-    "canon": "Open final screenplay, music/casting, chapter pacing, six First Losses remain open. Candidate implementation text is labeled draft.",
+    "canon": "Final screenplay, music/casting, presentation and human gates remain open; dialogue DRAFT_OWNER_REVIEW.",
     "runtime": "Godot shipping path; web/Android proof requires exact candidate exports, not historical manifests.",
     "female_owner_override": "Female-only hair authority and tasteful female body/face differentiation; preserve male hair and armored collectible foundation. Personality expressions for all forms. One continuous Kaia OVA plus six Campaign Variations from the shared Story graph. Puppet/Gray direction approved, human gates remain false. Six First Loss identities remain open."
   },
@@ -89,7 +90,7 @@
     },
     {
       "path": "docs/anime-aggressors/creative/authority_pack_v1/03_COMPLETE_STORY_MODE_CAMPAIGN_BIBLE.md",
-      "sha256": "5eff19166b95da44a084afd74dc03947c0c70a2a1020a9430e81513838f36e65"
+      "sha256": "82a689d763efc8102357046faeba2531e120ec10d635b022829f2b613fe253c3"
     },
     {
       "path": "docs/anime-aggressors/creative/authority_pack_v1/04_SOURCE_AUTHORITY_MATRIX.md",
@@ -105,7 +106,7 @@
     },
     {
       "path": "docs/anime-aggressors/creative/authority_pack_v1/STORY_CAMPAIGN_MANIFEST.json",
-      "sha256": "8b1d190b19f03d4cdd1855613f64be43475b564df700bc0bd84c16ab443aa029"
+      "sha256": "f0f619b919a5168e5b913d25ed55172d229cd84d49160b5a655a1fe5a34efc98"
     },
     {
       "path": "docs/anime-aggressors/creative/authority_pack_v1/references/V45_01_3D_CARTOON_STYLE_STUDY.png",
@@ -210,6 +211,14 @@
     {
       "path": "docs/anime-aggressors/v1_closure/owner_tasks/CODEX_ANIME_OWNER_OVERRIDE_FEMALE_VARIANTS_HAIR_OVA.md",
       "sha256": "c7c28327bbb0ba2b42074b1ab4a7576a75cc24f23be881e7ae8ffc686103ce25"
+    },
+    {
+      "path": "docs/anime-aggressors/v1_closure/owner_tasks/CODEX_ANIME_CANON_CAMPAIGN_2026-10-09.md",
+      "sha256": "f9034a75a82d88dbdcae213a23f499752976bfaf918c47372850a34fe62cb65a"
+    },
+    {
+      "path": "artifacts/v1_closure/first_loss_owner_decision_2026-10-09.json",
+      "sha256": "17e2c314c5f6e211e17f312e4f2ed11ba4aee0efc102cd50cdcc934fd5192f27"
     }
   ],
   "disk": {
@@ -223,5 +232,217 @@
     "heavy_generation_minimum_gib": 18,
     "heavy_generation_permitted": true,
     "ledger": "artifacts/v1_closure/disk_cleanup.json"
+  },
+  "revision_history": [
+    {
+      "source_sha": "e063b13bcb293ad3ac7b8673c82d8830f8e0b24d",
+      "first_loss": "Kaia -> Rook canonical. Other six unresolved.",
+      "files": [
+        {
+          "path": "data/bibles/FIGHTER_BIBLE_INDEX.json",
+          "sha256": "8939577a1ceac83045645d9cd7223dde373a9c3e90641afe59249451211f247b"
+        },
+        {
+          "path": "data/bibles/animation_audit_row.schema.json",
+          "sha256": "140f805535b14ac3a6bd9b8478ddff55bed77b2a8ae83ef9c6719858abb5a752"
+        },
+        {
+          "path": "data/bibles/animation_inventory_v1.json",
+          "sha256": "038a790c786fefc6abde2613adb736fd268ced421acaff1a40bd51d53c325f81"
+        },
+        {
+          "path": "data/bibles/aura_profiles_v1.json",
+          "sha256": "1acde28914b621db271e200a607b923b48a2189144b43936cc294de22c041046"
+        },
+        {
+          "path": "data/bibles/battle_model_manifest_v1_4.json",
+          "sha256": "71ddd3a3dd2fecf4158175fae4863a932b4fe0e64d0c01962626512cb9a1d4f7"
+        },
+        {
+          "path": "data/bibles/movement_profiles_v1.json",
+          "sha256": "6abab8744cf61723b6223ea8797ec858223415259ea4b952d29b2468d2d0d72d"
+        },
+        {
+          "path": "data/bibles/presentation_profiles_v1.json",
+          "sha256": "aac6c5dbe811ad636747198e552c2555817a8f5fab2181027652d141323c41f4"
+        },
+        {
+          "path": "data/bibles/production_gate_matrix_v1.json",
+          "sha256": "52e3c7a1bf98c27f9af8d9c8d750d20171140e90283b45466e1b637f5a1b91d8"
+        },
+        {
+          "path": "data/bibles/puppet_essence_story_states_v1.json",
+          "sha256": "e07a7a11fbf17ccf4a4ced0488071fa4728f610b1fdc00d5b5499d40f2c72526"
+        },
+        {
+          "path": "data/bibles/reaction_profiles_v1.json",
+          "sha256": "28f763692da1e2623a192a2a207681a4516bde73d28946e75ba80f6a093192b6"
+        },
+        {
+          "path": "data/bibles/roster_runtime_authority_v1_3.json",
+          "sha256": "7d6bb438738ddbd279a0a3b6628665d674dddcd77f0c6486a019ea25fce16ab3"
+        },
+        {
+          "path": "data/bibles/state_to_animation_contract_v1.json",
+          "sha256": "9d68fe527e55e13750c9781a3280512ff336907b93c47808df9a28488a2a0e5f"
+        },
+        {
+          "path": "docs/KNOWN_ISSUES.md",
+          "sha256": "7a25cac5908599f72fecb9debd207f37ef3e00ca31a7cac20fafdc2d8dd678a4"
+        },
+        {
+          "path": "docs/PRODUCTION_BLOCKERS.md",
+          "sha256": "7942a1288d35dc25e965dc50eaa96852ebfdfbaceb0d2b2cde0f7e2d2efe820d"
+        },
+        {
+          "path": "docs/VFX_AND_CAMERA_PIPELINE.md",
+          "sha256": "9cbbafa821f5a34e897f0fd74bf7ea0305d58fc57c90c2a382d7051bb52eb37e"
+        },
+        {
+          "path": "docs/anime-aggressors/creative/authority_pack_v1/01_FULL_ROSTER_ART_CORRECTION_DIRECTION.md",
+          "sha256": "e04faf121982d246c076f6648a2e7ab10a45cead5915dd9cc95f22dcc95e75b2"
+        },
+        {
+          "path": "docs/anime-aggressors/creative/authority_pack_v1/02_CANONICAL_3D_CHIBI_MODEL_BIBLE.md",
+          "sha256": "0448c3fa2063752295f92036b1a2402782edc944d2a921bb6d192233b4fba85f"
+        },
+        {
+          "path": "docs/anime-aggressors/creative/authority_pack_v1/03_COMPLETE_STORY_MODE_CAMPAIGN_BIBLE.md",
+          "sha256": "82a689d763efc8102357046faeba2531e120ec10d635b022829f2b613fe253c3"
+        },
+        {
+          "path": "docs/anime-aggressors/creative/authority_pack_v1/04_SOURCE_AUTHORITY_MATRIX.md",
+          "sha256": "893ca71d4ce7087d20afd8fddb2a60bf77e30b6e59d600778d40d26dc25c4c9e"
+        },
+        {
+          "path": "docs/anime-aggressors/creative/authority_pack_v1/MODEL_ROSTER_AUTHORITY.json",
+          "sha256": "363302b5a508b17468f6da86ac9be4d538997d093970db10023b8ef5555df2cc"
+        },
+        {
+          "path": "docs/anime-aggressors/creative/authority_pack_v1/README.md",
+          "sha256": "e6a2f51f01021292e3ac5dd3dc7b2c6bdbd5b9467b6c414d2d6d412b3ba7a84c"
+        },
+        {
+          "path": "docs/anime-aggressors/creative/authority_pack_v1/STORY_CAMPAIGN_MANIFEST.json",
+          "sha256": "f0f619b919a5168e5b913d25ed55172d229cd84d49160b5a655a1fe5a34efc98"
+        },
+        {
+          "path": "docs/anime-aggressors/creative/authority_pack_v1/references/V45_01_3D_CARTOON_STYLE_STUDY.png",
+          "sha256": "29e91d1cecc383fdf6067cd8626a5a079645c663875b221cd58fa2d95b7c0b2d"
+        },
+        {
+          "path": "docs/anime-aggressors/creative/authority_pack_v1/references/V45_02_ARCADE_ANIMATION_STUDY.png",
+          "sha256": "96c1d71de065f89b7ef84e9bdd78c69dd85211ceebd117a297805d16d4c7ee4f"
+        },
+        {
+          "path": "docs/anime-aggressors/creative/authority_pack_v1/references/V45_03_FIGHT_MOVE_SHEET.png",
+          "sha256": "f7731a515e0fd10d444bb00e0525692f2c73f573341ef96af5cb67cd15600156"
+        },
+        {
+          "path": "docs/anime-aggressors/creative/authority_pack_v1/references/V45_04_CHARACTER_DESIGN_SHEETS.png",
+          "sha256": "7ac24f93607df1a85e2b76768213c30bcf10c6b80afa3be490c28517d4f9be90"
+        },
+        {
+          "path": "docs/anime-aggressors/v1_closure/owner_tasks/CODEX_ANIME_AGGRESSORS_CHIBI_FIGURINE_V1_ART_DIRECTION.md",
+          "sha256": "27a97a09c14a563cf4a3d4e68afa8e9fc5a75a910d8add43875940280418483e"
+        },
+        {
+          "path": "docs/anime-aggressors/v1_closure/owner_tasks/CODEX_ANIME_AGGRESSORS_V1_FULL_CAMPAIGN_GAME_FEEL_ADDENDUM.md",
+          "sha256": "0593b1279226390b944d40d771e4669535f1b45961060db62a38cf4f587e86a2"
+        },
+        {
+          "path": "docs/bibles/README_START_HERE.md",
+          "sha256": "6682d8bf05ba7af40ba11c121993f3f865994d7edd9ded07ffc8ff3c5ba1f654"
+        },
+        {
+          "path": "docs/bibles/fighters/ember-vale.md",
+          "sha256": "86c5d9dc75602cf78aea8cfaf30b49bb9457f7cbddfb121c4af169cbb86bb148"
+        },
+        {
+          "path": "docs/bibles/fighters/juno-spark.md",
+          "sha256": "f483d91930a7ab68c9b1d8702ceac634d32585f1233727349d6906ecf988ea7c"
+        },
+        {
+          "path": "docs/bibles/fighters/kaia-windrow.md",
+          "sha256": "bd932f2515aa18a8b061242bab1f513fca071ad9fc1e8b55c4173707bb64d544"
+        },
+        {
+          "path": "docs/bibles/fighters/nix-calder.md",
+          "sha256": "bf9e066cbf37e0d80a079294d0c7e091ba38a9864fcdacd8b2b7aec043c4c4f9"
+        },
+        {
+          "path": "docs/bibles/fighters/orion-vell.md",
+          "sha256": "1773aa1a60b84b6591f9d4e2981616d370a9931805523274b93b58dde9b45e8e"
+        },
+        {
+          "path": "docs/bibles/fighters/rook-ironside.md",
+          "sha256": "2a6926ca52bc78cec899a4fc4615446997201fdefa3a2150ab5fe2c35389de2f"
+        },
+        {
+          "path": "docs/bibles/fighters/vesper-nyx.md",
+          "sha256": "8e601499a82de438fef745a0ec5cd1ea095a2c021f45a964324a2022d38504b8"
+        },
+        {
+          "path": "docs/bibles/fighters/yang.md",
+          "sha256": "0cc3fb54cebb578e46f31a23af7a8ff7a88936066f6ab9aa50b1b44d64cd3dd5"
+        },
+        {
+          "path": "docs/bibles/fighters/yin.md",
+          "sha256": "3db2eb14c3d277712e644de215512856a99af501a22f05f9d19f398a67d241a8"
+        },
+        {
+          "path": "docs/design/CHARACTER_COMBAT_INSPIRATION_BIBLE.md",
+          "sha256": "efb68ebfda127bac28b47358b508a67e36ec1842861f7b8f7b75dc4a5579adef"
+        },
+        {
+          "path": "docs/design/FIGHTER_SIGNATURE_MOVE_BIBLE.md",
+          "sha256": "7eb93533fe078af70c35ee8aea838ba6b8adbb5bf5e70ea49bc07c380bf4df8e"
+        },
+        {
+          "path": "docs/design/ROSTER_MOTION_IDENTITY_BIBLE.md",
+          "sha256": "3c1853b54ded4497adf282918f4f875a5a40e98952fa4bb06bcfce12042b236d"
+        },
+        {
+          "path": "docs/production/VFX_DIRECTOR_NOTES.md",
+          "sha256": "382d1c19dfee2d19c030393f118724fedbc2a9871ec5db1054231c4f9a9f5723"
+        },
+        {
+          "path": "docs/quality/ANIMATION_TASTE_RUBRIC.md",
+          "sha256": "517788f5bf63c14e22811facfc76043ccf1c963555484503f0b9a13b96fbeac7"
+        },
+        {
+          "path": "docs/vfx/ELEMENTAL_VFX_LANGUAGE_V1.md",
+          "sha256": "5ad1e488d36de5382f491bd7029f6c8dd8b40642bd9c32ebc199f1ebd6f7b711"
+        },
+        {
+          "path": "game-godot/data/combat/v3_sfx_events.json",
+          "sha256": "d11f9b671470979a7e647a85d2fb999eed6ae5e9efa370958bd8f7b7ab076c9f"
+        },
+        {
+          "path": "game-godot/data/combat/v3_vfx_events.json",
+          "sha256": "949c0e7a52dbbc6e5d36085aca898fabf7ab077a9dfbf3e476393794f6b558c5"
+        },
+        {
+          "path": "source/ANIME_AGGRESSORS_COMPLETE_CHARACTER_MOVEMENT_ANIMATION_BIBLE_V1.md",
+          "sha256": "9238a86b6db3bb1fc6434c9227682e8dc6c0b79b73c442a39be3b865399a0e3e"
+        },
+        {
+          "path": "docs/anime-aggressors/v1_closure/owner_tasks/CODEX_ANIME_OWNER_OVERRIDE_FEMALE_VARIANTS_HAIR_OVA.md",
+          "sha256": "c7c28327bbb0ba2b42074b1ab4a7576a75cc24f23be881e7ae8ffc686103ce25"
+        },
+        {
+          "path": "docs/anime-aggressors/v1_closure/owner_tasks/CODEX_ANIME_CANON_CAMPAIGN_2026-10-09.md",
+          "sha256": "f9034a75a82d88dbdcae213a23f499752976bfaf918c47372850a34fe62cb65a"
+        },
+        {
+          "path": "artifacts/v1_closure/first_loss_owner_decision_2026-10-09.json",
+          "sha256": "17e2c314c5f6e211e17f312e4f2ed11ba4aee0efc102cd50cdcc934fd5192f27"
+        }
+      ]
+    }
+  ],
+  "current_disk_guard": {
+    "free_gib": 6.905,
+    "heavy_generation_permitted": false
   }
 }

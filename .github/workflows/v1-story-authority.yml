@@ -1,0 +1,28 @@
+name: V1 Story authority
+on:
+  pull_request:
+    paths:
+      - 'game-godot/data/story/**'
+      - 'game-godot/scripts/story/**'
+      - 'tools/v1_closure/**'
+      - 'artifacts/v1_closure/authority_lock.json'
+      - 'artifacts/v1_closure/first_loss_owner*.json'
+      - 'docs/anime-aggressors/**'
+      - '.github/workflows/v1-story-authority.yml'
+  push:
+    branches: [release/anime-v1-canon-and-campaign]
+permissions:
+  contents: read
+jobs:
+  canon-and-graph:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Approved unique canon, authority hashes and reproducible graph
+        run: python3 tools/v1_closure/validate_canon.py
+      - name: Route membership, Essence states and runtime objective bindings
+        run: python3 tools/v1_closure/validate_campaign.py

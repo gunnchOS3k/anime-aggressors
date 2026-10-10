@@ -19,6 +19,10 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 	if bool(defender.get_meta("story_cosmic_contract", false)):
 		# Story manifestations reject ordinary combat damage; competitive Yin/Yang have no such metadata.
 		return
+	if bool(attacker.get_meta("story_released", false)) or bool(defender.get_meta("story_released", false)):
+		return
+	if attacker.has_meta("story_team") and attacker.get_meta("story_team") == defender.get_meta("story_team", ""):
+		return
 	var from_projectile := bool(move.get("_from_projectile", false))
 	var move_id := str(move.get("move_id", ""))
 	var is_direct_throw := move_id.begins_with("throw_") or str(move.get("move_type", "")) == "throw"

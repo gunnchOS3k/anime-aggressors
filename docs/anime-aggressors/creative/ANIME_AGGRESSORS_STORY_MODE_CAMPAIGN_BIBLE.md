@@ -213,3 +213,8 @@ The campaign ends on mixed sky, not on a killed god. A later season may follow o
 | Dialogue audio | Absent |
 
 `HUMAN_ART_APPROVAL=false`
+
+
+## October 9, 2026 — ANI-02 owner canon amendment
+
+The historical OPEN First Loss statements above are superseded only for the seven identities by `first_loss_owner_decision_2026-10-09.json`. Working V1 selection: Kaia → Rook; Ember → Nix; Rook → Juno; Juno → Orion; Nix → Vesper; Orion → Kaia; Vesper → Ember. There are seven unique lost identities. Juno → Rook is superseded. The Last Vector follows the owner scene contract in `CODEX_ANIME_CANON_CAMPAIGN_2026-10-09.md`; Orion’s ultimate fate remains unresolved. All losses are route-specific. New dialogue is DRAFT_OWNER_REVIEW; final Story/presentation gates remain false.

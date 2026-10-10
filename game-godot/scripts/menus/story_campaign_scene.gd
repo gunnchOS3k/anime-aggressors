@@ -58,6 +58,7 @@ func _build_ui() -> void:
 	_action = _button(row, "Play Encounter", _on_action)
 	_button(row, "Resume Save", _on_continue)
 	_button(row, "New Campaign", _on_new_game)
+	_button(row, "Next Route", _on_next_route)
 	_button(row, "Back", on_back)
 	_replay_picker = OptionButton.new()
 	_replay_picker.name = "ChapterReplayPicker"
@@ -113,11 +114,15 @@ func _refresh() -> void:
 	_body.text = str(node.get("body", node.get("block_reason", "")))
 	if not CampaignRuntime.last_error.is_empty():
 		_body.text += "\n" + CampaignRuntime.last_error
-	_action.disabled = not bool(node.get("implemented", false))
+	_action.disabled = node.is_empty() or not bool(node.get("implemented", false))
+	if entry["complete"]:
+		_status.text = "Route complete · Six perspectives integrated"
+		_body.text = "Choose another Prismatic Route." if id != "sevenfold-convergence" else "Sevenfold Convergence complete. Yin and Yang are playable."
+		if not entry.get("earned", false): _body.text = "Review run complete. Earned Story unlocks require ordinary playable encounters."
 	_action.text = "Continue Scene" if node.get("kind") == "INTERACTIVE_DIALOGUE" else "Play Encounter"
 	_replay_picker.clear()
 	for chapter in route.get("nodes", []):
-		if str(chapter["id"]) in entry["completed"] and chapter.get("kind") == "STORY_BATTLE":
+		if str(chapter["id"]) in entry["completed"]:
 			_replay_picker.add_item(str(chapter["title"]))
 			_replay_picker.set_item_metadata(_replay_picker.item_count - 1, str(chapter["id"]))
 	_replay_picker.disabled = _replay_picker.item_count == 0
@@ -152,10 +157,32 @@ func _on_action() -> void:
 
 
 func _on_replay() -> void:
-	if _replay_picker.item_count > 0 and CampaignRuntime.begin_encounter(str(_replay_picker.get_item_metadata(_replay_picker.selected))):
+	if _replay_picker.item_count == 0: return
+	var selected := str(_replay_picker.get_item_metadata(_replay_picker.selected))
+	for chapter in CampaignRuntime.route_data(str(CampaignRuntime.progress["selected_route"]))["nodes"]:
+		if chapter["id"] == selected and chapter["kind"] == "INTERACTIVE_DIALOGUE":
+			var review := AcceptDialog.new()
+			review.name = "StorySceneReplay"
+			review.title = str(chapter["title"]) + " · Draft Story replay"
+			review.dialog_text = str(chapter.get("body", ""))
+			review.confirmed.connect(review.queue_free)
+			review.canceled.connect(review.queue_free)
+			add_child(review)
+			review.popup_centered(Vector2i(960, 340))
+			return # Presentation only: no acknowledgment, receipt or save write.
+	if CampaignRuntime.begin_encounter(selected):
 		SceneRouter.go("battle")
 
 
 func on_back() -> void:
 	CampaignRuntime.abandon_encounter()
 	SceneRouter.go("main_menu")
+
+
+func _on_next_route() -> void:
+	for route in CampaignRuntime.campaign["routes"]:
+		var id: String = route["id"]
+		if CampaignRuntime.route_available(id) and not CampaignRuntime.progress["routes"][id]["complete"]:
+			CampaignRuntime.select_route(id)
+			_refresh()
+			return

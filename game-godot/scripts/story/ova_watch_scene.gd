@@ -8,6 +8,7 @@ var node_index := 0
 var playing := true
 var elapsed := 0.0
 var _battle
+var _watch_presenter
 var _viewport: SubViewport
 var _title: Label
 var _subtitle: Label
@@ -99,6 +100,9 @@ func _present_node() -> void:
 	_swap_busy = true
 	elapsed = 0
 	_shot = -1
+	if _watch_presenter != null:
+		_watch_presenter.battle = null
+		_watch_presenter = null
 	if _battle != null:
 		_battle.queue_free()
 		_battle = null
@@ -142,6 +146,33 @@ func _present_node() -> void:
 	await get_tree().process_frame
 	_battle.hud.visible = false
 	_battle.set_process_unhandled_input(false)
+	var form := "PRISMATIC_GRAY" if node_index >= 16 else "BASE"
+	_watch_presenter = preload("res://scripts/story/v1_story_encounter.gd").new()
+	var objective: String = chapter.get("objective_contract", "STOCK_WIN")
+	if objective not in ["STOCK_WIN", "COSMIC_SURVIVAL"]:
+		var released := []
+		var essence := 0
+		if chapter.has("puppets"):
+			if node_index >= 13: released.append(chapter["puppets"]["yin"][0])
+			if node_index >= 15:
+				released.append(chapter["puppets"]["yin"][1])
+				released.append(chapter["puppets"]["yang"][0])
+			if node_index >= 16: released = chapter["puppets"]["yin"] + chapter["puppets"]["yang"]
+			if node_index >= 11: essence = 1 + released.size()
+		_watch_presenter.setup(_battle, {"node":chapter, "route_state":{"released":released, "essence":essence, "form":form}})
+		_watch_presenter._label.visible = false
+		_watch_presenter._marker.visible = false
+		# Visual staging only: the watch clock never calls objective tick or issues a result.
+		for actor in _watch_presenter.actors:
+			actor.set_meta("watch_only_actor", true)
+	_watch_presenter.set_form(_battle.fighter1, form)
+	if chapter.has("first_loss"):
+		_battle.fighter2.model_3d.set_cinematic_expression("grief")
+		_battle.fighter2.model_3d.play_clip("aura_charge")
+	if chapter.get("objective_contract") == "PRISMATIC_TRANSFORMATION":
+		_battle.fighter1.model_3d.play_clip("aura_charge")
+		_battle.fighter1.model_3d.set_cinematic_expression("determination")
+
 	if chapter.get("objective_contract") == "COSMIC_SURVIVAL":
 		_battle._setup_story_cosmic_encounter(chapter)
 	if chapter["kind"] != "STORY_BATTLE":
@@ -152,7 +183,7 @@ func _present_node() -> void:
 		_battle.fighter1.position = Vector2(-70, 180)
 		_battle.fighter2.position = Vector2(100, 180)
 		_battle.fighter1.model_3d.play_clip("idle")
-		_battle.fighter1.model_3d.set_cinematic_expression(str(chapter["expression"]))
+		_battle.fighter1.model_3d.set_cinematic_expression(str(chapter.get("expression", "determination")))
 	_swap_busy = false
 
 func _process(delta: float) -> void:
@@ -184,10 +215,13 @@ func _process(delta: float) -> void:
 			playing = false
 
 func _exit_tree() -> void:
+	if _watch_presenter != null:
+		_watch_presenter.battle = null
+		_watch_presenter = null
 	for key in _session_before:
 		GameState.set(key, _session_before[key])
 	# CPU synthesis uses global actions; clear them on exit to leave human gameplay clean.
-	for slot in [1, 2, 3]:
+	for slot in range(1, 10):
 		for action in ["left", "right", "jump", "attack", "special", "shield", "grab"]:
 			var name := "p%d_%s" % [slot, action]
 			if InputMap.has_action(name):

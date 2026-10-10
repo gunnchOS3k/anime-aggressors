@@ -48,6 +48,17 @@ func _ready_display() -> void:
 	_configure_victory_portrait(fid, variant)
 	if GameState.mode == "story":
 		var receipt: Dictionary = CampaignRuntime.last_result
+		if winner == 1 and receipt.get("objective_contract") == "FIRST_LOSS":
+			for chapter in CampaignRuntime.route_data(str(receipt.get("route_id",""))).get("nodes", []):
+				if chapter["id"] == receipt.get("node_id"):
+					var aftermath := Label.new()
+					aftermath.name = "FirstLossAftermath"
+					aftermath.position = Vector2(80, 570)
+					aftermath.size = Vector2(1120, 95)
+					aftermath.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+					aftermath.text = "Draft Story · " + str(chapter.get("consequence",{}).get("aftermath","")) + "\nRoute-local loss. Ultimate fate remains under owner review."
+					add_child(aftermath)
+
 		if title_label:
 			title_label.text = "Encounter Complete" if winner == 1 else "Encounter Lost — Try Again"
 		if rematch_btn:

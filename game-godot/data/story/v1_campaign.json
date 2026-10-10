@@ -1,8 +1,20 @@
 {
   "schema": "anime_v1.campaign.v1",
   "authority": "docs/anime-aggressors/creative/authority_pack_v1",
-  "copy_status": "DRAFT_ADAPTATION",
+  "canon_decision": "ANI-02-2026-10-09",
+  "first_loss_selected": {
+    "kaia-windrow": "rook-ironside",
+    "ember-vale": "nix-calder",
+    "rook-ironside": "juno-spark",
+    "juno-spark": "orion-vell",
+    "nix-calder": "vesper-nyx",
+    "orion-vell": "kaia-windrow",
+    "vesper-nyx": "ember-vale"
+  },
+  "copy_status": "DRAFT_OWNER_REVIEW",
   "implementation_complete": false,
+  "gameplay_graph_integrated": true,
+  "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
   "watch_authority": "SHARED_ROUTE_GRAPH",
   "root_route": "kaia-windrow",
   "spectral_order": [
@@ -44,8 +56,26 @@
         ]
       ],
       "first_loss": {
-        "fighter": null,
-        "status": "OPEN_CANON"
+        "fighter": "nix-calder",
+        "status": "APPROVED_WORKING_V1_NARRATIVE_CANON",
+        "decision_id": "ANI-02-2026-10-09"
+      },
+      "consequence": {
+        "relationship": "Forceful conviction meets Nix\u2019s need for restraint and listening.",
+        "disagreement": "Ember presses forward while Nix asks her to hold space.",
+        "circumstance": "Overwhelming force cannot preserve a fragile escape corridor.",
+        "consequence": "Ember must listen without losing conviction.",
+        "objective": "Hold the safe interval without attacking, then open room for Nix.",
+        "interaction": "RESTRAINED_PROTECTION",
+        "camera": "Close on the stopped fist, then widen to the space Nix needed.",
+        "aftermath": "I heard an obstacle when you were asking for room.",
+        "essence": "Containment tempers combustion; borrowed perspective is restraint.",
+        "gray": "Combustion carries other colors without consuming them.",
+        "growth": "Conviction without domination.",
+        "lost_fighter": "nix-calder",
+        "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+        "dialogue_status": "DRAFT_OWNER_REVIEW",
+        "implementation_status": "DRAFT_ADAPTATION"
       },
       "nodes": [
         {
@@ -189,105 +219,385 @@
         },
         {
           "id": "ember-vale:first_loss",
-          "title": "First Loss",
-          "kind": "AFTERMATH",
-          "implemented": false,
-          "block_reason": "The owner must approve this Anchor's First Loss.",
-          "copy_status": "DRAFT_ADAPTATION",
-          "first_loss": null,
-          "canon_status": "OPEN_CANON",
+          "title": "First Loss \u2014 Nix Calder",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
+          "first_loss": "nix-calder",
+          "canon_status": "APPROVED_WORKING_V1_NARRATIVE_CANON",
+          "consequence": {
+            "relationship": "Forceful conviction meets Nix\u2019s need for restraint and listening.",
+            "disagreement": "Ember presses forward while Nix asks her to hold space.",
+            "circumstance": "Overwhelming force cannot preserve a fragile escape corridor.",
+            "consequence": "Ember must listen without losing conviction.",
+            "objective": "Hold the safe interval without attacking, then open room for Nix.",
+            "interaction": "RESTRAINED_PROTECTION",
+            "camera": "Close on the stopped fist, then widen to the space Nix needed.",
+            "aftermath": "I heard an obstacle when you were asking for room.",
+            "essence": "Containment tempers combustion; borrowed perspective is restraint.",
+            "gray": "Combustion carries other colors without consuming them.",
+            "growth": "Conviction without domination.",
+            "lost_fighter": "nix-calder",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "body": "Overwhelming force cannot preserve a fragile escape corridor.",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "nix-calder",
+          "objective_contract": "FIRST_LOSS",
+          "puppets": {
+            "yin": [
+              "vesper-nyx",
+              "rook-ironside",
+              "orion-vell"
+            ],
+            "yang": [
+              "juno-spark",
+              "kaia-windrow"
+            ]
+          },
+          "objective": "Hold the safe interval without attacking, then open room for Nix.",
+          "cinematic_framing": "Close on the stopped fist, then widen to the space Nix needed.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 1
         },
         {
           "id": "ember-vale:puppet_imbalance",
           "title": "Five Puppets \u2014 3 against 2",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "vesper-nyx",
+          "objective_contract": "PUPPET_IMBALANCE",
+          "puppets": {
+            "yin": [
+              "vesper-nyx",
+              "rook-ironside",
+              "orion-vell"
+            ],
+            "yang": [
+              "juno-spark",
+              "kaia-windrow"
+            ]
+          },
+          "consequence": {
+            "relationship": "Forceful conviction meets Nix\u2019s need for restraint and listening.",
+            "disagreement": "Ember presses forward while Nix asks her to hold space.",
+            "circumstance": "Overwhelming force cannot preserve a fragile escape corridor.",
+            "consequence": "Ember must listen without losing conviction.",
+            "objective": "Hold the safe interval without attacking, then open room for Nix.",
+            "interaction": "RESTRAINED_PROTECTION",
+            "camera": "Close on the stopped fist, then widen to the space Nix needed.",
+            "aftermath": "I heard an obstacle when you were asking for room.",
+            "essence": "Containment tempers combustion; borrowed perspective is restraint.",
+            "gray": "Combustion carries other colors without consuming them.",
+            "growth": "Conviction without domination.",
+            "lost_fighter": "nix-calder",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Disrupt the dominant Yin side: land a hit, then guard the center. Five puppets remain divided 3 against 2.",
+          "body": "Ember must listen without losing conviction.",
+          "cinematic_framing": "Close on the stopped fist, then widen to the space Nix needed.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING"
         },
         {
           "id": "ember-vale:first_release",
           "title": "First Release",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "vesper-nyx",
+          "objective_contract": "FIRST_RELEASE",
+          "puppets": {
+            "yin": [
+              "vesper-nyx",
+              "rook-ironside",
+              "orion-vell"
+            ],
+            "yang": [
+              "juno-spark",
+              "kaia-windrow"
+            ]
+          },
+          "consequence": {
+            "relationship": "Forceful conviction meets Nix\u2019s need for restraint and listening.",
+            "disagreement": "Ember presses forward while Nix asks her to hold space.",
+            "circumstance": "Overwhelming force cannot preserve a fragile escape corridor.",
+            "consequence": "Ember must listen without losing conviction.",
+            "objective": "Hold the safe interval without attacking, then open room for Nix.",
+            "interaction": "RESTRAINED_PROTECTION",
+            "camera": "Close on the stopped fist, then widen to the space Nix needed.",
+            "aftermath": "I heard an obstacle when you were asking for room.",
+            "essence": "Containment tempers combustion; borrowed perspective is restraint.",
+            "gray": "Combustion carries other colors without consuming them.",
+            "growth": "Conviction without domination.",
+            "lost_fighter": "nix-calder",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Choose a weakened Yin puppet (40% damage), approach and press Special to release. A player-earned KO also releases it. Restore 2 against 2.",
+          "body": "Containment tempers combustion; borrowed perspective is restraint.",
+          "cinematic_framing": "Close on the stopped fist, then widen to the space Nix needed.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 2
         },
         {
           "id": "ember-vale:equilibrium",
           "title": "Restored 2v2 Equilibrium",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "vesper-nyx",
+          "objective_contract": "PUPPET_EQUILIBRIUM",
+          "puppets": {
+            "yin": [
+              "vesper-nyx",
+              "rook-ironside",
+              "orion-vell"
+            ],
+            "yang": [
+              "juno-spark",
+              "kaia-windrow"
+            ]
+          },
+          "consequence": {
+            "relationship": "Forceful conviction meets Nix\u2019s need for restraint and listening.",
+            "disagreement": "Ember presses forward while Nix asks her to hold space.",
+            "circumstance": "Overwhelming force cannot preserve a fragile escape corridor.",
+            "consequence": "Ember must listen without losing conviction.",
+            "objective": "Hold the safe interval without attacking, then open room for Nix.",
+            "interaction": "RESTRAINED_PROTECTION",
+            "camera": "Close on the stopped fist, then widen to the space Nix needed.",
+            "aftermath": "I heard an obstacle when you were asking for room.",
+            "essence": "Containment tempers combustion; borrowed perspective is restraint.",
+            "gray": "Combustion carries other colors without consuming them.",
+            "growth": "Conviction without domination.",
+            "lost_fighter": "nix-calder",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Guard the center for eight seconds while both Puppet sides remain represented.",
+          "body": "Ember must listen without losing conviction.",
+          "cinematic_framing": "Close on the stopped fist, then widen to the space Nix needed.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING"
         },
         {
           "id": "ember-vale:dual_release_1",
           "title": "Dual Release I",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "vesper-nyx",
+          "objective_contract": "PAIRED_RELEASE",
+          "puppets": {
+            "yin": [
+              "vesper-nyx",
+              "rook-ironside",
+              "orion-vell"
+            ],
+            "yang": [
+              "juno-spark",
+              "kaia-windrow"
+            ]
+          },
+          "consequence": {
+            "relationship": "Forceful conviction meets Nix\u2019s need for restraint and listening.",
+            "disagreement": "Ember presses forward while Nix asks her to hold space.",
+            "circumstance": "Overwhelming force cannot preserve a fragile escape corridor.",
+            "consequence": "Ember must listen without losing conviction.",
+            "objective": "Hold the safe interval without attacking, then open room for Nix.",
+            "interaction": "RESTRAINED_PROTECTION",
+            "camera": "Close on the stopped fist, then widen to the space Nix needed.",
+            "aftermath": "I heard an obstacle when you were asking for room.",
+            "essence": "Containment tempers combustion; borrowed perspective is restraint.",
+            "gray": "Combustion carries other colors without consuming them.",
+            "growth": "Conviction without domination.",
+            "lost_fighter": "nix-calder",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Release one Yin and one Yang puppet: weaken then Special nearby, or earn their KOs.",
+          "body": "Containment tempers combustion; borrowed perspective is restraint.",
+          "cinematic_framing": "Close on the stopped fist, then widen to the space Nix needed.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 4
         },
         {
           "id": "ember-vale:dual_release_2",
           "title": "Dual Release II \u2014 Six Essences",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "vesper-nyx",
+          "objective_contract": "PAIRED_RELEASE",
+          "puppets": {
+            "yin": [
+              "vesper-nyx",
+              "rook-ironside",
+              "orion-vell"
+            ],
+            "yang": [
+              "juno-spark",
+              "kaia-windrow"
+            ]
+          },
+          "consequence": {
+            "relationship": "Forceful conviction meets Nix\u2019s need for restraint and listening.",
+            "disagreement": "Ember presses forward while Nix asks her to hold space.",
+            "circumstance": "Overwhelming force cannot preserve a fragile escape corridor.",
+            "consequence": "Ember must listen without losing conviction.",
+            "objective": "Hold the safe interval without attacking, then open room for Nix.",
+            "interaction": "RESTRAINED_PROTECTION",
+            "camera": "Close on the stopped fist, then widen to the space Nix needed.",
+            "aftermath": "I heard an obstacle when you were asking for room.",
+            "essence": "Containment tempers combustion; borrowed perspective is restraint.",
+            "gray": "Combustion carries other colors without consuming them.",
+            "growth": "Conviction without domination.",
+            "lost_fighter": "nix-calder",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Release the final opposite-force pair. Six distinct perspectives remain.",
+          "body": "Containment tempers combustion; borrowed perspective is restraint.",
+          "cinematic_framing": "Close on the stopped fist, then widen to the space Nix needed.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 6
         },
         {
           "id": "ember-vale:prismatic_gray",
           "title": "Prismatic Gray \u2014 Ember Vale",
-          "kind": "TRANSFORMATION",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "vesper-nyx",
+          "objective_contract": "PRISMATIC_TRANSFORMATION",
+          "puppets": {
+            "yin": [
+              "vesper-nyx",
+              "rook-ironside",
+              "orion-vell"
+            ],
+            "yang": [
+              "juno-spark",
+              "kaia-windrow"
+            ]
+          },
+          "consequence": {
+            "relationship": "Forceful conviction meets Nix\u2019s need for restraint and listening.",
+            "disagreement": "Ember presses forward while Nix asks her to hold space.",
+            "circumstance": "Overwhelming force cannot preserve a fragile escape corridor.",
+            "consequence": "Ember must listen without losing conviction.",
+            "objective": "Hold the safe interval without attacking, then open room for Nix.",
+            "interaction": "RESTRAINED_PROTECTION",
+            "camera": "Close on the stopped fist, then widen to the space Nix needed.",
+            "aftermath": "I heard an obstacle when you were asking for room.",
+            "essence": "Containment tempers combustion; borrowed perspective is restraint.",
+            "gray": "Combustion carries other colors without consuming them.",
+            "growth": "Conviction without domination.",
+            "lost_fighter": "nix-calder",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Carry six perspectives through the marked spectrum nodes, then hold Shield to integrate your own identity.",
+          "body": "Combustion carries other colors without consuming them.",
+          "cinematic_framing": "Close on the stopped fist, then widen to the space Nix needed.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "form_after": "PRISMATIC_GRAY"
         },
         {
           "id": "ember-vale:impossible_battle_2",
           "title": "Impossible Yin/Yang Battle II",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "yin",
+          "objective_contract": "GRAY_DEMONSTRATION",
+          "puppets": {
+            "yin": [
+              "vesper-nyx",
+              "rook-ironside",
+              "orion-vell"
+            ],
+            "yang": [
+              "juno-spark",
+              "kaia-windrow"
+            ]
+          },
+          "consequence": {
+            "relationship": "Forceful conviction meets Nix\u2019s need for restraint and listening.",
+            "disagreement": "Ember presses forward while Nix asks her to hold space.",
+            "circumstance": "Overwhelming force cannot preserve a fragile escape corridor.",
+            "consequence": "Ember must listen without losing conviction.",
+            "objective": "Hold the safe interval without attacking, then open room for Nix.",
+            "interaction": "RESTRAINED_PROTECTION",
+            "camera": "Close on the stopped fist, then widen to the space Nix needed.",
+            "aftermath": "I heard an obstacle when you were asking for room.",
+            "essence": "Containment tempers combustion; borrowed perspective is restraint.",
+            "gray": "Combustion carries other colors without consuming them.",
+            "growth": "Conviction without domination.",
+            "lost_fighter": "nix-calder",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Evade the cosmic pair and demonstrate attack, guard and purposeful traversal. Greater damage cannot settle the conflict.",
+          "body": "Ember must listen without losing conviction.",
+          "cinematic_framing": "Close on the stopped fist, then widen to the space Nix needed.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "additional_opponent": "yang",
+          "survive_seconds": 18
         },
         {
           "id": "ember-vale:epilogue",
           "title": "Equilibrium \u2014 Route Resolution",
-          "kind": "AFTERMATH",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "INTERACTIVE_DIALOGUE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "determination",
+          "body": "I heard an obstacle when you were asking for room. Conviction without domination."
         },
         {
           "id": "ember-vale:unlock",
           "title": "Prismatic Gray Unlock",
-          "kind": "UNLOCK",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "INTERACTIVE_DIALOGUE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "determination",
+          "body": "I heard an obstacle when you were asking for room. Conviction without domination.",
+          "route_complete": true
         }
       ]
     },
@@ -313,8 +623,26 @@
         ]
       ],
       "first_loss": {
-        "fighter": null,
-        "status": "OPEN_CANON"
+        "fighter": "juno-spark",
+        "status": "APPROVED_WORKING_V1_NARRATIVE_CANON",
+        "decision_id": "ANI-02-2026-10-09"
+      },
+      "consequence": {
+        "relationship": "A protective guardian and a courier who needs agency.",
+        "disagreement": "Rook directs Juno to stay behind him; Juno chooses her own route.",
+        "circumstance": "Juno is lost from the immediate conflict while taking a route Rook cannot control.",
+        "consequence": "Protection must leave others room to choose.",
+        "objective": "Leave the exit open; defend alongside Juno instead of occupying her path.",
+        "interaction": "SHARED_DEFENSE",
+        "camera": "Two parallel positions replace the single shield silhouette.",
+        "aftermath": "You chose. I should have stood beside you.",
+        "essence": "Juno\u2019s speed loosens the urge to carry every choice.",
+        "gray": "Armor supports other perspectives rather than enclosing them.",
+        "growth": "Strength without control.",
+        "lost_fighter": "juno-spark",
+        "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+        "dialogue_status": "DRAFT_OWNER_REVIEW",
+        "implementation_status": "DRAFT_ADAPTATION"
       },
       "nodes": [
         {
@@ -458,105 +786,385 @@
         },
         {
           "id": "rook-ironside:first_loss",
-          "title": "First Loss",
-          "kind": "AFTERMATH",
-          "implemented": false,
-          "block_reason": "The owner must approve this Anchor's First Loss.",
-          "copy_status": "DRAFT_ADAPTATION",
-          "first_loss": null,
-          "canon_status": "OPEN_CANON",
+          "title": "First Loss \u2014 Juno Spark",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
+          "first_loss": "juno-spark",
+          "canon_status": "APPROVED_WORKING_V1_NARRATIVE_CANON",
+          "consequence": {
+            "relationship": "A protective guardian and a courier who needs agency.",
+            "disagreement": "Rook directs Juno to stay behind him; Juno chooses her own route.",
+            "circumstance": "Juno is lost from the immediate conflict while taking a route Rook cannot control.",
+            "consequence": "Protection must leave others room to choose.",
+            "objective": "Leave the exit open; defend alongside Juno instead of occupying her path.",
+            "interaction": "SHARED_DEFENSE",
+            "camera": "Two parallel positions replace the single shield silhouette.",
+            "aftermath": "You chose. I should have stood beside you.",
+            "essence": "Juno\u2019s speed loosens the urge to carry every choice.",
+            "gray": "Armor supports other perspectives rather than enclosing them.",
+            "growth": "Strength without control.",
+            "lost_fighter": "juno-spark",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "body": "Juno is lost from the immediate conflict while taking a route Rook cannot control.",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "juno-spark",
+          "objective_contract": "FIRST_LOSS",
+          "puppets": {
+            "yin": [
+              "ember-vale",
+              "vesper-nyx",
+              "kaia-windrow"
+            ],
+            "yang": [
+              "orion-vell",
+              "nix-calder"
+            ]
+          },
+          "objective": "Leave the exit open; defend alongside Juno instead of occupying her path.",
+          "cinematic_framing": "Two parallel positions replace the single shield silhouette.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 1
         },
         {
           "id": "rook-ironside:puppet_imbalance",
           "title": "Five Puppets \u2014 3 against 2",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "ember-vale",
+          "objective_contract": "PUPPET_IMBALANCE",
+          "puppets": {
+            "yin": [
+              "ember-vale",
+              "vesper-nyx",
+              "kaia-windrow"
+            ],
+            "yang": [
+              "orion-vell",
+              "nix-calder"
+            ]
+          },
+          "consequence": {
+            "relationship": "A protective guardian and a courier who needs agency.",
+            "disagreement": "Rook directs Juno to stay behind him; Juno chooses her own route.",
+            "circumstance": "Juno is lost from the immediate conflict while taking a route Rook cannot control.",
+            "consequence": "Protection must leave others room to choose.",
+            "objective": "Leave the exit open; defend alongside Juno instead of occupying her path.",
+            "interaction": "SHARED_DEFENSE",
+            "camera": "Two parallel positions replace the single shield silhouette.",
+            "aftermath": "You chose. I should have stood beside you.",
+            "essence": "Juno\u2019s speed loosens the urge to carry every choice.",
+            "gray": "Armor supports other perspectives rather than enclosing them.",
+            "growth": "Strength without control.",
+            "lost_fighter": "juno-spark",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Disrupt the dominant Yin side: land a hit, then guard the center. Five puppets remain divided 3 against 2.",
+          "body": "Protection must leave others room to choose.",
+          "cinematic_framing": "Two parallel positions replace the single shield silhouette.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING"
         },
         {
           "id": "rook-ironside:first_release",
           "title": "First Release",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "ember-vale",
+          "objective_contract": "FIRST_RELEASE",
+          "puppets": {
+            "yin": [
+              "ember-vale",
+              "vesper-nyx",
+              "kaia-windrow"
+            ],
+            "yang": [
+              "orion-vell",
+              "nix-calder"
+            ]
+          },
+          "consequence": {
+            "relationship": "A protective guardian and a courier who needs agency.",
+            "disagreement": "Rook directs Juno to stay behind him; Juno chooses her own route.",
+            "circumstance": "Juno is lost from the immediate conflict while taking a route Rook cannot control.",
+            "consequence": "Protection must leave others room to choose.",
+            "objective": "Leave the exit open; defend alongside Juno instead of occupying her path.",
+            "interaction": "SHARED_DEFENSE",
+            "camera": "Two parallel positions replace the single shield silhouette.",
+            "aftermath": "You chose. I should have stood beside you.",
+            "essence": "Juno\u2019s speed loosens the urge to carry every choice.",
+            "gray": "Armor supports other perspectives rather than enclosing them.",
+            "growth": "Strength without control.",
+            "lost_fighter": "juno-spark",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Choose a weakened Yin puppet (40% damage), approach and press Special to release. A player-earned KO also releases it. Restore 2 against 2.",
+          "body": "Juno\u2019s speed loosens the urge to carry every choice.",
+          "cinematic_framing": "Two parallel positions replace the single shield silhouette.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 2
         },
         {
           "id": "rook-ironside:equilibrium",
           "title": "Restored 2v2 Equilibrium",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "ember-vale",
+          "objective_contract": "PUPPET_EQUILIBRIUM",
+          "puppets": {
+            "yin": [
+              "ember-vale",
+              "vesper-nyx",
+              "kaia-windrow"
+            ],
+            "yang": [
+              "orion-vell",
+              "nix-calder"
+            ]
+          },
+          "consequence": {
+            "relationship": "A protective guardian and a courier who needs agency.",
+            "disagreement": "Rook directs Juno to stay behind him; Juno chooses her own route.",
+            "circumstance": "Juno is lost from the immediate conflict while taking a route Rook cannot control.",
+            "consequence": "Protection must leave others room to choose.",
+            "objective": "Leave the exit open; defend alongside Juno instead of occupying her path.",
+            "interaction": "SHARED_DEFENSE",
+            "camera": "Two parallel positions replace the single shield silhouette.",
+            "aftermath": "You chose. I should have stood beside you.",
+            "essence": "Juno\u2019s speed loosens the urge to carry every choice.",
+            "gray": "Armor supports other perspectives rather than enclosing them.",
+            "growth": "Strength without control.",
+            "lost_fighter": "juno-spark",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Guard the center for eight seconds while both Puppet sides remain represented.",
+          "body": "Protection must leave others room to choose.",
+          "cinematic_framing": "Two parallel positions replace the single shield silhouette.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING"
         },
         {
           "id": "rook-ironside:dual_release_1",
           "title": "Dual Release I",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "ember-vale",
+          "objective_contract": "PAIRED_RELEASE",
+          "puppets": {
+            "yin": [
+              "ember-vale",
+              "vesper-nyx",
+              "kaia-windrow"
+            ],
+            "yang": [
+              "orion-vell",
+              "nix-calder"
+            ]
+          },
+          "consequence": {
+            "relationship": "A protective guardian and a courier who needs agency.",
+            "disagreement": "Rook directs Juno to stay behind him; Juno chooses her own route.",
+            "circumstance": "Juno is lost from the immediate conflict while taking a route Rook cannot control.",
+            "consequence": "Protection must leave others room to choose.",
+            "objective": "Leave the exit open; defend alongside Juno instead of occupying her path.",
+            "interaction": "SHARED_DEFENSE",
+            "camera": "Two parallel positions replace the single shield silhouette.",
+            "aftermath": "You chose. I should have stood beside you.",
+            "essence": "Juno\u2019s speed loosens the urge to carry every choice.",
+            "gray": "Armor supports other perspectives rather than enclosing them.",
+            "growth": "Strength without control.",
+            "lost_fighter": "juno-spark",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Release one Yin and one Yang puppet: weaken then Special nearby, or earn their KOs.",
+          "body": "Juno\u2019s speed loosens the urge to carry every choice.",
+          "cinematic_framing": "Two parallel positions replace the single shield silhouette.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 4
         },
         {
           "id": "rook-ironside:dual_release_2",
           "title": "Dual Release II \u2014 Six Essences",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "ember-vale",
+          "objective_contract": "PAIRED_RELEASE",
+          "puppets": {
+            "yin": [
+              "ember-vale",
+              "vesper-nyx",
+              "kaia-windrow"
+            ],
+            "yang": [
+              "orion-vell",
+              "nix-calder"
+            ]
+          },
+          "consequence": {
+            "relationship": "A protective guardian and a courier who needs agency.",
+            "disagreement": "Rook directs Juno to stay behind him; Juno chooses her own route.",
+            "circumstance": "Juno is lost from the immediate conflict while taking a route Rook cannot control.",
+            "consequence": "Protection must leave others room to choose.",
+            "objective": "Leave the exit open; defend alongside Juno instead of occupying her path.",
+            "interaction": "SHARED_DEFENSE",
+            "camera": "Two parallel positions replace the single shield silhouette.",
+            "aftermath": "You chose. I should have stood beside you.",
+            "essence": "Juno\u2019s speed loosens the urge to carry every choice.",
+            "gray": "Armor supports other perspectives rather than enclosing them.",
+            "growth": "Strength without control.",
+            "lost_fighter": "juno-spark",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Release the final opposite-force pair. Six distinct perspectives remain.",
+          "body": "Juno\u2019s speed loosens the urge to carry every choice.",
+          "cinematic_framing": "Two parallel positions replace the single shield silhouette.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 6
         },
         {
           "id": "rook-ironside:prismatic_gray",
           "title": "Prismatic Gray \u2014 Rook Ironside",
-          "kind": "TRANSFORMATION",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "ember-vale",
+          "objective_contract": "PRISMATIC_TRANSFORMATION",
+          "puppets": {
+            "yin": [
+              "ember-vale",
+              "vesper-nyx",
+              "kaia-windrow"
+            ],
+            "yang": [
+              "orion-vell",
+              "nix-calder"
+            ]
+          },
+          "consequence": {
+            "relationship": "A protective guardian and a courier who needs agency.",
+            "disagreement": "Rook directs Juno to stay behind him; Juno chooses her own route.",
+            "circumstance": "Juno is lost from the immediate conflict while taking a route Rook cannot control.",
+            "consequence": "Protection must leave others room to choose.",
+            "objective": "Leave the exit open; defend alongside Juno instead of occupying her path.",
+            "interaction": "SHARED_DEFENSE",
+            "camera": "Two parallel positions replace the single shield silhouette.",
+            "aftermath": "You chose. I should have stood beside you.",
+            "essence": "Juno\u2019s speed loosens the urge to carry every choice.",
+            "gray": "Armor supports other perspectives rather than enclosing them.",
+            "growth": "Strength without control.",
+            "lost_fighter": "juno-spark",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Carry six perspectives through the marked spectrum nodes, then hold Shield to integrate your own identity.",
+          "body": "Armor supports other perspectives rather than enclosing them.",
+          "cinematic_framing": "Two parallel positions replace the single shield silhouette.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "form_after": "PRISMATIC_GRAY"
         },
         {
           "id": "rook-ironside:impossible_battle_2",
           "title": "Impossible Yin/Yang Battle II",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "yin",
+          "objective_contract": "GRAY_DEMONSTRATION",
+          "puppets": {
+            "yin": [
+              "ember-vale",
+              "vesper-nyx",
+              "kaia-windrow"
+            ],
+            "yang": [
+              "orion-vell",
+              "nix-calder"
+            ]
+          },
+          "consequence": {
+            "relationship": "A protective guardian and a courier who needs agency.",
+            "disagreement": "Rook directs Juno to stay behind him; Juno chooses her own route.",
+            "circumstance": "Juno is lost from the immediate conflict while taking a route Rook cannot control.",
+            "consequence": "Protection must leave others room to choose.",
+            "objective": "Leave the exit open; defend alongside Juno instead of occupying her path.",
+            "interaction": "SHARED_DEFENSE",
+            "camera": "Two parallel positions replace the single shield silhouette.",
+            "aftermath": "You chose. I should have stood beside you.",
+            "essence": "Juno\u2019s speed loosens the urge to carry every choice.",
+            "gray": "Armor supports other perspectives rather than enclosing them.",
+            "growth": "Strength without control.",
+            "lost_fighter": "juno-spark",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Evade the cosmic pair and demonstrate attack, guard and purposeful traversal. Greater damage cannot settle the conflict.",
+          "body": "Protection must leave others room to choose.",
+          "cinematic_framing": "Two parallel positions replace the single shield silhouette.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "additional_opponent": "yang",
+          "survive_seconds": 18
         },
         {
           "id": "rook-ironside:epilogue",
           "title": "Equilibrium \u2014 Route Resolution",
-          "kind": "AFTERMATH",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "INTERACTIVE_DIALOGUE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "determination",
+          "body": "You chose. I should have stood beside you. Strength without control."
         },
         {
           "id": "rook-ironside:unlock",
           "title": "Prismatic Gray Unlock",
-          "kind": "UNLOCK",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "INTERACTIVE_DIALOGUE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "determination",
+          "body": "You chose. I should have stood beside you. Strength without control.",
+          "route_complete": true
         }
       ]
     },
@@ -582,8 +1190,28 @@
         ]
       ],
       "first_loss": {
-        "fighter": null,
-        "status": "OPEN_CANON"
+        "fighter": "orion-vell",
+        "status": "APPROVED_WORKING_V1_NARRATIVE_CANON",
+        "decision_id": "ANI-02-2026-10-09"
+      },
+      "consequence": {
+        "relationship": "Instinct and speed meet trajectories and deliberate planning.",
+        "disagreement": "Juno mistakes hesitation for weakness; Orion discounts uncertainty and emotion.",
+        "circumstance": "The Last Vector: Orion evaluates collapsing paths and emotionally chooses to hold the passage for Juno and the team.",
+        "consequence": "Turning back would squander Orion\u2019s sacrifice and endanger those still within reach.",
+        "objective": "Choose to escort the remaining team, then traverse the stabilized passage. Turning back cannot complete the objective.",
+        "interaction": "LAST_VECTOR_ESCORT",
+        "camera": "Track Orion holding the vector, pause on Juno\u2019s turn back, then follow the chosen forward line.",
+        "aftermath": "You gave us a direction. I will use it for the people still here.",
+        "essence": "Orion\u2019s deliberate connection grounds acceleration; speed serves a chosen purpose.",
+        "gray": "Juno pauses, chooses her vector, then accelerates; electricity remains her own.",
+        "growth": "Action with purpose.",
+        "orion_lesson": "Understanding without detachment.",
+        "ultimate_fate": "UNRESOLVED_OWNER_REVIEW",
+        "lost_fighter": "orion-vell",
+        "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+        "dialogue_status": "DRAFT_OWNER_REVIEW",
+        "implementation_status": "DRAFT_ADAPTATION"
       },
       "nodes": [
         {
@@ -727,105 +1355,401 @@
         },
         {
           "id": "juno-spark:first_loss",
-          "title": "First Loss",
-          "kind": "AFTERMATH",
-          "implemented": false,
-          "block_reason": "The owner must approve this Anchor's First Loss.",
-          "copy_status": "DRAFT_ADAPTATION",
-          "first_loss": null,
-          "canon_status": "OPEN_CANON",
+          "title": "First Loss \u2014 Orion Vell",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
+          "first_loss": "orion-vell",
+          "canon_status": "APPROVED_WORKING_V1_NARRATIVE_CANON",
+          "consequence": {
+            "relationship": "Instinct and speed meet trajectories and deliberate planning.",
+            "disagreement": "Juno mistakes hesitation for weakness; Orion discounts uncertainty and emotion.",
+            "circumstance": "The Last Vector: Orion evaluates collapsing paths and emotionally chooses to hold the passage for Juno and the team.",
+            "consequence": "Turning back would squander Orion\u2019s sacrifice and endanger those still within reach.",
+            "objective": "Choose to escort the remaining team, then traverse the stabilized passage. Turning back cannot complete the objective.",
+            "interaction": "LAST_VECTOR_ESCORT",
+            "camera": "Track Orion holding the vector, pause on Juno\u2019s turn back, then follow the chosen forward line.",
+            "aftermath": "You gave us a direction. I will use it for the people still here.",
+            "essence": "Orion\u2019s deliberate connection grounds acceleration; speed serves a chosen purpose.",
+            "gray": "Juno pauses, chooses her vector, then accelerates; electricity remains her own.",
+            "growth": "Action with purpose.",
+            "orion_lesson": "Understanding without detachment.",
+            "ultimate_fate": "UNRESOLVED_OWNER_REVIEW",
+            "lost_fighter": "orion-vell",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "body": "The Last Vector: Orion evaluates collapsing paths and emotionally chooses to hold the passage for Juno and the team.",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "orion-vell",
+          "objective_contract": "FIRST_LOSS",
+          "puppets": {
+            "yin": [
+              "rook-ironside",
+              "kaia-windrow",
+              "ember-vale"
+            ],
+            "yang": [
+              "nix-calder",
+              "vesper-nyx"
+            ]
+          },
+          "objective": "Choose to escort the remaining team, then traverse the stabilized passage. Turning back cannot complete the objective.",
+          "cinematic_framing": "Track Orion holding the vector, pause on Juno\u2019s turn back, then follow the chosen forward line.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 1
         },
         {
           "id": "juno-spark:puppet_imbalance",
           "title": "Five Puppets \u2014 3 against 2",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "rook-ironside",
+          "objective_contract": "PUPPET_IMBALANCE",
+          "puppets": {
+            "yin": [
+              "rook-ironside",
+              "kaia-windrow",
+              "ember-vale"
+            ],
+            "yang": [
+              "nix-calder",
+              "vesper-nyx"
+            ]
+          },
+          "consequence": {
+            "relationship": "Instinct and speed meet trajectories and deliberate planning.",
+            "disagreement": "Juno mistakes hesitation for weakness; Orion discounts uncertainty and emotion.",
+            "circumstance": "The Last Vector: Orion evaluates collapsing paths and emotionally chooses to hold the passage for Juno and the team.",
+            "consequence": "Turning back would squander Orion\u2019s sacrifice and endanger those still within reach.",
+            "objective": "Choose to escort the remaining team, then traverse the stabilized passage. Turning back cannot complete the objective.",
+            "interaction": "LAST_VECTOR_ESCORT",
+            "camera": "Track Orion holding the vector, pause on Juno\u2019s turn back, then follow the chosen forward line.",
+            "aftermath": "You gave us a direction. I will use it for the people still here.",
+            "essence": "Orion\u2019s deliberate connection grounds acceleration; speed serves a chosen purpose.",
+            "gray": "Juno pauses, chooses her vector, then accelerates; electricity remains her own.",
+            "growth": "Action with purpose.",
+            "orion_lesson": "Understanding without detachment.",
+            "ultimate_fate": "UNRESOLVED_OWNER_REVIEW",
+            "lost_fighter": "orion-vell",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Disrupt the dominant Yin side: land a hit, then guard the center. Five puppets remain divided 3 against 2.",
+          "body": "Turning back would squander Orion\u2019s sacrifice and endanger those still within reach.",
+          "cinematic_framing": "Track Orion holding the vector, pause on Juno\u2019s turn back, then follow the chosen forward line.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING"
         },
         {
           "id": "juno-spark:first_release",
           "title": "First Release",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "rook-ironside",
+          "objective_contract": "FIRST_RELEASE",
+          "puppets": {
+            "yin": [
+              "rook-ironside",
+              "kaia-windrow",
+              "ember-vale"
+            ],
+            "yang": [
+              "nix-calder",
+              "vesper-nyx"
+            ]
+          },
+          "consequence": {
+            "relationship": "Instinct and speed meet trajectories and deliberate planning.",
+            "disagreement": "Juno mistakes hesitation for weakness; Orion discounts uncertainty and emotion.",
+            "circumstance": "The Last Vector: Orion evaluates collapsing paths and emotionally chooses to hold the passage for Juno and the team.",
+            "consequence": "Turning back would squander Orion\u2019s sacrifice and endanger those still within reach.",
+            "objective": "Choose to escort the remaining team, then traverse the stabilized passage. Turning back cannot complete the objective.",
+            "interaction": "LAST_VECTOR_ESCORT",
+            "camera": "Track Orion holding the vector, pause on Juno\u2019s turn back, then follow the chosen forward line.",
+            "aftermath": "You gave us a direction. I will use it for the people still here.",
+            "essence": "Orion\u2019s deliberate connection grounds acceleration; speed serves a chosen purpose.",
+            "gray": "Juno pauses, chooses her vector, then accelerates; electricity remains her own.",
+            "growth": "Action with purpose.",
+            "orion_lesson": "Understanding without detachment.",
+            "ultimate_fate": "UNRESOLVED_OWNER_REVIEW",
+            "lost_fighter": "orion-vell",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Choose a weakened Yin puppet (40% damage), approach and press Special to release. A player-earned KO also releases it. Restore 2 against 2.",
+          "body": "Orion\u2019s deliberate connection grounds acceleration; speed serves a chosen purpose.",
+          "cinematic_framing": "Track Orion holding the vector, pause on Juno\u2019s turn back, then follow the chosen forward line.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 2
         },
         {
           "id": "juno-spark:equilibrium",
           "title": "Restored 2v2 Equilibrium",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "rook-ironside",
+          "objective_contract": "PUPPET_EQUILIBRIUM",
+          "puppets": {
+            "yin": [
+              "rook-ironside",
+              "kaia-windrow",
+              "ember-vale"
+            ],
+            "yang": [
+              "nix-calder",
+              "vesper-nyx"
+            ]
+          },
+          "consequence": {
+            "relationship": "Instinct and speed meet trajectories and deliberate planning.",
+            "disagreement": "Juno mistakes hesitation for weakness; Orion discounts uncertainty and emotion.",
+            "circumstance": "The Last Vector: Orion evaluates collapsing paths and emotionally chooses to hold the passage for Juno and the team.",
+            "consequence": "Turning back would squander Orion\u2019s sacrifice and endanger those still within reach.",
+            "objective": "Choose to escort the remaining team, then traverse the stabilized passage. Turning back cannot complete the objective.",
+            "interaction": "LAST_VECTOR_ESCORT",
+            "camera": "Track Orion holding the vector, pause on Juno\u2019s turn back, then follow the chosen forward line.",
+            "aftermath": "You gave us a direction. I will use it for the people still here.",
+            "essence": "Orion\u2019s deliberate connection grounds acceleration; speed serves a chosen purpose.",
+            "gray": "Juno pauses, chooses her vector, then accelerates; electricity remains her own.",
+            "growth": "Action with purpose.",
+            "orion_lesson": "Understanding without detachment.",
+            "ultimate_fate": "UNRESOLVED_OWNER_REVIEW",
+            "lost_fighter": "orion-vell",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Guard the center for eight seconds while both Puppet sides remain represented.",
+          "body": "Turning back would squander Orion\u2019s sacrifice and endanger those still within reach.",
+          "cinematic_framing": "Track Orion holding the vector, pause on Juno\u2019s turn back, then follow the chosen forward line.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING"
         },
         {
           "id": "juno-spark:dual_release_1",
           "title": "Dual Release I",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "rook-ironside",
+          "objective_contract": "PAIRED_RELEASE",
+          "puppets": {
+            "yin": [
+              "rook-ironside",
+              "kaia-windrow",
+              "ember-vale"
+            ],
+            "yang": [
+              "nix-calder",
+              "vesper-nyx"
+            ]
+          },
+          "consequence": {
+            "relationship": "Instinct and speed meet trajectories and deliberate planning.",
+            "disagreement": "Juno mistakes hesitation for weakness; Orion discounts uncertainty and emotion.",
+            "circumstance": "The Last Vector: Orion evaluates collapsing paths and emotionally chooses to hold the passage for Juno and the team.",
+            "consequence": "Turning back would squander Orion\u2019s sacrifice and endanger those still within reach.",
+            "objective": "Choose to escort the remaining team, then traverse the stabilized passage. Turning back cannot complete the objective.",
+            "interaction": "LAST_VECTOR_ESCORT",
+            "camera": "Track Orion holding the vector, pause on Juno\u2019s turn back, then follow the chosen forward line.",
+            "aftermath": "You gave us a direction. I will use it for the people still here.",
+            "essence": "Orion\u2019s deliberate connection grounds acceleration; speed serves a chosen purpose.",
+            "gray": "Juno pauses, chooses her vector, then accelerates; electricity remains her own.",
+            "growth": "Action with purpose.",
+            "orion_lesson": "Understanding without detachment.",
+            "ultimate_fate": "UNRESOLVED_OWNER_REVIEW",
+            "lost_fighter": "orion-vell",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Release one Yin and one Yang puppet: weaken then Special nearby, or earn their KOs.",
+          "body": "Orion\u2019s deliberate connection grounds acceleration; speed serves a chosen purpose.",
+          "cinematic_framing": "Track Orion holding the vector, pause on Juno\u2019s turn back, then follow the chosen forward line.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 4
         },
         {
           "id": "juno-spark:dual_release_2",
           "title": "Dual Release II \u2014 Six Essences",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "rook-ironside",
+          "objective_contract": "PAIRED_RELEASE",
+          "puppets": {
+            "yin": [
+              "rook-ironside",
+              "kaia-windrow",
+              "ember-vale"
+            ],
+            "yang": [
+              "nix-calder",
+              "vesper-nyx"
+            ]
+          },
+          "consequence": {
+            "relationship": "Instinct and speed meet trajectories and deliberate planning.",
+            "disagreement": "Juno mistakes hesitation for weakness; Orion discounts uncertainty and emotion.",
+            "circumstance": "The Last Vector: Orion evaluates collapsing paths and emotionally chooses to hold the passage for Juno and the team.",
+            "consequence": "Turning back would squander Orion\u2019s sacrifice and endanger those still within reach.",
+            "objective": "Choose to escort the remaining team, then traverse the stabilized passage. Turning back cannot complete the objective.",
+            "interaction": "LAST_VECTOR_ESCORT",
+            "camera": "Track Orion holding the vector, pause on Juno\u2019s turn back, then follow the chosen forward line.",
+            "aftermath": "You gave us a direction. I will use it for the people still here.",
+            "essence": "Orion\u2019s deliberate connection grounds acceleration; speed serves a chosen purpose.",
+            "gray": "Juno pauses, chooses her vector, then accelerates; electricity remains her own.",
+            "growth": "Action with purpose.",
+            "orion_lesson": "Understanding without detachment.",
+            "ultimate_fate": "UNRESOLVED_OWNER_REVIEW",
+            "lost_fighter": "orion-vell",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Release the final opposite-force pair. Six distinct perspectives remain.",
+          "body": "Orion\u2019s deliberate connection grounds acceleration; speed serves a chosen purpose.",
+          "cinematic_framing": "Track Orion holding the vector, pause on Juno\u2019s turn back, then follow the chosen forward line.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 6
         },
         {
           "id": "juno-spark:prismatic_gray",
           "title": "Prismatic Gray \u2014 Juno Spark",
-          "kind": "TRANSFORMATION",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "rook-ironside",
+          "objective_contract": "PRISMATIC_TRANSFORMATION",
+          "puppets": {
+            "yin": [
+              "rook-ironside",
+              "kaia-windrow",
+              "ember-vale"
+            ],
+            "yang": [
+              "nix-calder",
+              "vesper-nyx"
+            ]
+          },
+          "consequence": {
+            "relationship": "Instinct and speed meet trajectories and deliberate planning.",
+            "disagreement": "Juno mistakes hesitation for weakness; Orion discounts uncertainty and emotion.",
+            "circumstance": "The Last Vector: Orion evaluates collapsing paths and emotionally chooses to hold the passage for Juno and the team.",
+            "consequence": "Turning back would squander Orion\u2019s sacrifice and endanger those still within reach.",
+            "objective": "Choose to escort the remaining team, then traverse the stabilized passage. Turning back cannot complete the objective.",
+            "interaction": "LAST_VECTOR_ESCORT",
+            "camera": "Track Orion holding the vector, pause on Juno\u2019s turn back, then follow the chosen forward line.",
+            "aftermath": "You gave us a direction. I will use it for the people still here.",
+            "essence": "Orion\u2019s deliberate connection grounds acceleration; speed serves a chosen purpose.",
+            "gray": "Juno pauses, chooses her vector, then accelerates; electricity remains her own.",
+            "growth": "Action with purpose.",
+            "orion_lesson": "Understanding without detachment.",
+            "ultimate_fate": "UNRESOLVED_OWNER_REVIEW",
+            "lost_fighter": "orion-vell",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Carry six perspectives through the marked spectrum nodes, then hold Shield to integrate your own identity.",
+          "body": "Juno pauses, chooses her vector, then accelerates; electricity remains her own.",
+          "cinematic_framing": "Track Orion holding the vector, pause on Juno\u2019s turn back, then follow the chosen forward line.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "form_after": "PRISMATIC_GRAY"
         },
         {
           "id": "juno-spark:impossible_battle_2",
           "title": "Impossible Yin/Yang Battle II",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "yin",
+          "objective_contract": "GRAY_DEMONSTRATION",
+          "puppets": {
+            "yin": [
+              "rook-ironside",
+              "kaia-windrow",
+              "ember-vale"
+            ],
+            "yang": [
+              "nix-calder",
+              "vesper-nyx"
+            ]
+          },
+          "consequence": {
+            "relationship": "Instinct and speed meet trajectories and deliberate planning.",
+            "disagreement": "Juno mistakes hesitation for weakness; Orion discounts uncertainty and emotion.",
+            "circumstance": "The Last Vector: Orion evaluates collapsing paths and emotionally chooses to hold the passage for Juno and the team.",
+            "consequence": "Turning back would squander Orion\u2019s sacrifice and endanger those still within reach.",
+            "objective": "Choose to escort the remaining team, then traverse the stabilized passage. Turning back cannot complete the objective.",
+            "interaction": "LAST_VECTOR_ESCORT",
+            "camera": "Track Orion holding the vector, pause on Juno\u2019s turn back, then follow the chosen forward line.",
+            "aftermath": "You gave us a direction. I will use it for the people still here.",
+            "essence": "Orion\u2019s deliberate connection grounds acceleration; speed serves a chosen purpose.",
+            "gray": "Juno pauses, chooses her vector, then accelerates; electricity remains her own.",
+            "growth": "Action with purpose.",
+            "orion_lesson": "Understanding without detachment.",
+            "ultimate_fate": "UNRESOLVED_OWNER_REVIEW",
+            "lost_fighter": "orion-vell",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Evade the cosmic pair and demonstrate attack, guard and purposeful traversal. Greater damage cannot settle the conflict.",
+          "body": "Turning back would squander Orion\u2019s sacrifice and endanger those still within reach.",
+          "cinematic_framing": "Track Orion holding the vector, pause on Juno\u2019s turn back, then follow the chosen forward line.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "additional_opponent": "yang",
+          "survive_seconds": 18
         },
         {
           "id": "juno-spark:epilogue",
           "title": "Equilibrium \u2014 Route Resolution",
-          "kind": "AFTERMATH",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "INTERACTIVE_DIALOGUE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "determination",
+          "body": "You gave us a direction. I will use it for the people still here. Action with purpose."
         },
         {
           "id": "juno-spark:unlock",
           "title": "Prismatic Gray Unlock",
-          "kind": "UNLOCK",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "INTERACTIVE_DIALOGUE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "determination",
+          "body": "You gave us a direction. I will use it for the people still here. Action with purpose.",
+          "route_complete": true
         }
       ]
     },
@@ -852,7 +1776,25 @@
       ],
       "first_loss": {
         "fighter": "rook-ironside",
-        "status": "CANONICAL"
+        "status": "APPROVED_WORKING_V1_NARRATIVE_CANON",
+        "decision_id": "ANI-02-2026-10-09"
+      },
+      "consequence": {
+        "relationship": "A mediator and the protector who carries every burden.",
+        "disagreement": "Kaia waits for another way while Rook takes the failure onto himself.",
+        "circumstance": "Rook carries the catastrophic failure so the others can act.",
+        "consequence": "Passive balance has a cost; Kaia must intervene.",
+        "objective": "Cross the contested center and commit to intervention before the window closes.",
+        "interaction": "DECISIVE_INTERVENTION",
+        "camera": "Hold the empty protective space, then follow Kaia stepping into it.",
+        "aftermath": "Waiting did not keep Rook safe. I will choose where to stand.",
+        "essence": "Rook\u2019s burden becomes a reminder to act.",
+        "gray": "Wind binds six perspectives while Kaia deliberately enters the conflict.",
+        "growth": "Balance without passivity.",
+        "lost_fighter": "rook-ironside",
+        "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+        "dialogue_status": "DRAFT_OWNER_REVIEW",
+        "implementation_status": "DRAFT_ADAPTATION"
       },
       "nodes": [
         {
@@ -997,105 +1939,384 @@
         {
           "id": "kaia-windrow:first_loss",
           "title": "First Loss \u2014 Rook Ironside",
-          "kind": "INTERACTIVE_DIALOGUE",
+          "kind": "STORY_BATTLE",
           "implemented": true,
-          "copy_status": "DRAFT_ADAPTATION",
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "first_loss": "rook-ironside",
-          "canon_status": "CANONICAL",
+          "canon_status": "APPROVED_WORKING_V1_NARRATIVE_CANON",
+          "consequence": {
+            "relationship": "A mediator and the protector who carries every burden.",
+            "disagreement": "Kaia waits for another way while Rook takes the failure onto himself.",
+            "circumstance": "Rook carries the catastrophic failure so the others can act.",
+            "consequence": "Passive balance has a cost; Kaia must intervene.",
+            "objective": "Cross the contested center and commit to intervention before the window closes.",
+            "interaction": "DECISIVE_INTERVENTION",
+            "camera": "Hold the empty protective space, then follow Kaia stepping into it.",
+            "aftermath": "Waiting did not keep Rook safe. I will choose where to stand.",
+            "essence": "Rook\u2019s burden becomes a reminder to act.",
+            "gray": "Wind binds six perspectives while Kaia deliberately enters the conflict.",
+            "growth": "Balance without passivity.",
+            "lost_fighter": "rook-ironside",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "body": "Rook carries the catastrophic failure so the others can act.",
           "essence_after": 1,
-          "body": "Rook tries to carry the failure himself. His sacrifice is the tragic extreme of his protective virtue. He leaves the first Essence. Kaia remains Kaia, now carrying one other perspective.",
           "expression": "grief",
-          "watch_seconds": 10
+          "watch_seconds": 10,
+          "stage": "void-pier",
+          "opponent": "rook-ironside",
+          "objective_contract": "FIRST_LOSS",
+          "puppets": {
+            "yin": [
+              "juno-spark",
+              "nix-calder",
+              "orion-vell"
+            ],
+            "yang": [
+              "ember-vale",
+              "vesper-nyx"
+            ]
+          },
+          "objective": "Cross the contested center and commit to intervention before the window closes.",
+          "cinematic_framing": "Hold the empty protective space, then follow Kaia stepping into it.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING"
         },
         {
           "id": "kaia-windrow:puppet_imbalance",
           "title": "Five Puppets \u2014 3 against 2",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "juno-spark",
+          "objective_contract": "PUPPET_IMBALANCE",
+          "puppets": {
+            "yin": [
+              "juno-spark",
+              "nix-calder",
+              "orion-vell"
+            ],
+            "yang": [
+              "ember-vale",
+              "vesper-nyx"
+            ]
+          },
+          "consequence": {
+            "relationship": "A mediator and the protector who carries every burden.",
+            "disagreement": "Kaia waits for another way while Rook takes the failure onto himself.",
+            "circumstance": "Rook carries the catastrophic failure so the others can act.",
+            "consequence": "Passive balance has a cost; Kaia must intervene.",
+            "objective": "Cross the contested center and commit to intervention before the window closes.",
+            "interaction": "DECISIVE_INTERVENTION",
+            "camera": "Hold the empty protective space, then follow Kaia stepping into it.",
+            "aftermath": "Waiting did not keep Rook safe. I will choose where to stand.",
+            "essence": "Rook\u2019s burden becomes a reminder to act.",
+            "gray": "Wind binds six perspectives while Kaia deliberately enters the conflict.",
+            "growth": "Balance without passivity.",
+            "lost_fighter": "rook-ironside",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Disrupt the dominant Yin side: land a hit, then guard the center. Five puppets remain divided 3 against 2.",
+          "body": "Passive balance has a cost; Kaia must intervene.",
+          "cinematic_framing": "Hold the empty protective space, then follow Kaia stepping into it.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING"
         },
         {
           "id": "kaia-windrow:first_release",
           "title": "First Release",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "juno-spark",
+          "objective_contract": "FIRST_RELEASE",
+          "puppets": {
+            "yin": [
+              "juno-spark",
+              "nix-calder",
+              "orion-vell"
+            ],
+            "yang": [
+              "ember-vale",
+              "vesper-nyx"
+            ]
+          },
+          "consequence": {
+            "relationship": "A mediator and the protector who carries every burden.",
+            "disagreement": "Kaia waits for another way while Rook takes the failure onto himself.",
+            "circumstance": "Rook carries the catastrophic failure so the others can act.",
+            "consequence": "Passive balance has a cost; Kaia must intervene.",
+            "objective": "Cross the contested center and commit to intervention before the window closes.",
+            "interaction": "DECISIVE_INTERVENTION",
+            "camera": "Hold the empty protective space, then follow Kaia stepping into it.",
+            "aftermath": "Waiting did not keep Rook safe. I will choose where to stand.",
+            "essence": "Rook\u2019s burden becomes a reminder to act.",
+            "gray": "Wind binds six perspectives while Kaia deliberately enters the conflict.",
+            "growth": "Balance without passivity.",
+            "lost_fighter": "rook-ironside",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Choose a weakened Yin puppet (40% damage), approach and press Special to release. A player-earned KO also releases it. Restore 2 against 2.",
+          "body": "Rook\u2019s burden becomes a reminder to act.",
+          "cinematic_framing": "Hold the empty protective space, then follow Kaia stepping into it.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 2
         },
         {
           "id": "kaia-windrow:equilibrium",
           "title": "Restored 2v2 Equilibrium",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "juno-spark",
+          "objective_contract": "PUPPET_EQUILIBRIUM",
+          "puppets": {
+            "yin": [
+              "juno-spark",
+              "nix-calder",
+              "orion-vell"
+            ],
+            "yang": [
+              "ember-vale",
+              "vesper-nyx"
+            ]
+          },
+          "consequence": {
+            "relationship": "A mediator and the protector who carries every burden.",
+            "disagreement": "Kaia waits for another way while Rook takes the failure onto himself.",
+            "circumstance": "Rook carries the catastrophic failure so the others can act.",
+            "consequence": "Passive balance has a cost; Kaia must intervene.",
+            "objective": "Cross the contested center and commit to intervention before the window closes.",
+            "interaction": "DECISIVE_INTERVENTION",
+            "camera": "Hold the empty protective space, then follow Kaia stepping into it.",
+            "aftermath": "Waiting did not keep Rook safe. I will choose where to stand.",
+            "essence": "Rook\u2019s burden becomes a reminder to act.",
+            "gray": "Wind binds six perspectives while Kaia deliberately enters the conflict.",
+            "growth": "Balance without passivity.",
+            "lost_fighter": "rook-ironside",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Guard the center for eight seconds while both Puppet sides remain represented.",
+          "body": "Passive balance has a cost; Kaia must intervene.",
+          "cinematic_framing": "Hold the empty protective space, then follow Kaia stepping into it.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING"
         },
         {
           "id": "kaia-windrow:dual_release_1",
           "title": "Dual Release I",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "juno-spark",
+          "objective_contract": "PAIRED_RELEASE",
+          "puppets": {
+            "yin": [
+              "juno-spark",
+              "nix-calder",
+              "orion-vell"
+            ],
+            "yang": [
+              "ember-vale",
+              "vesper-nyx"
+            ]
+          },
+          "consequence": {
+            "relationship": "A mediator and the protector who carries every burden.",
+            "disagreement": "Kaia waits for another way while Rook takes the failure onto himself.",
+            "circumstance": "Rook carries the catastrophic failure so the others can act.",
+            "consequence": "Passive balance has a cost; Kaia must intervene.",
+            "objective": "Cross the contested center and commit to intervention before the window closes.",
+            "interaction": "DECISIVE_INTERVENTION",
+            "camera": "Hold the empty protective space, then follow Kaia stepping into it.",
+            "aftermath": "Waiting did not keep Rook safe. I will choose where to stand.",
+            "essence": "Rook\u2019s burden becomes a reminder to act.",
+            "gray": "Wind binds six perspectives while Kaia deliberately enters the conflict.",
+            "growth": "Balance without passivity.",
+            "lost_fighter": "rook-ironside",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Release one Yin and one Yang puppet: weaken then Special nearby, or earn their KOs.",
+          "body": "Rook\u2019s burden becomes a reminder to act.",
+          "cinematic_framing": "Hold the empty protective space, then follow Kaia stepping into it.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 4
         },
         {
           "id": "kaia-windrow:dual_release_2",
           "title": "Dual Release II \u2014 Six Essences",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "juno-spark",
+          "objective_contract": "PAIRED_RELEASE",
+          "puppets": {
+            "yin": [
+              "juno-spark",
+              "nix-calder",
+              "orion-vell"
+            ],
+            "yang": [
+              "ember-vale",
+              "vesper-nyx"
+            ]
+          },
+          "consequence": {
+            "relationship": "A mediator and the protector who carries every burden.",
+            "disagreement": "Kaia waits for another way while Rook takes the failure onto himself.",
+            "circumstance": "Rook carries the catastrophic failure so the others can act.",
+            "consequence": "Passive balance has a cost; Kaia must intervene.",
+            "objective": "Cross the contested center and commit to intervention before the window closes.",
+            "interaction": "DECISIVE_INTERVENTION",
+            "camera": "Hold the empty protective space, then follow Kaia stepping into it.",
+            "aftermath": "Waiting did not keep Rook safe. I will choose where to stand.",
+            "essence": "Rook\u2019s burden becomes a reminder to act.",
+            "gray": "Wind binds six perspectives while Kaia deliberately enters the conflict.",
+            "growth": "Balance without passivity.",
+            "lost_fighter": "rook-ironside",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Release the final opposite-force pair. Six distinct perspectives remain.",
+          "body": "Rook\u2019s burden becomes a reminder to act.",
+          "cinematic_framing": "Hold the empty protective space, then follow Kaia stepping into it.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 6
         },
         {
           "id": "kaia-windrow:prismatic_gray",
           "title": "Prismatic Gray \u2014 Kaia Windrow",
-          "kind": "TRANSFORMATION",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "juno-spark",
+          "objective_contract": "PRISMATIC_TRANSFORMATION",
+          "puppets": {
+            "yin": [
+              "juno-spark",
+              "nix-calder",
+              "orion-vell"
+            ],
+            "yang": [
+              "ember-vale",
+              "vesper-nyx"
+            ]
+          },
+          "consequence": {
+            "relationship": "A mediator and the protector who carries every burden.",
+            "disagreement": "Kaia waits for another way while Rook takes the failure onto himself.",
+            "circumstance": "Rook carries the catastrophic failure so the others can act.",
+            "consequence": "Passive balance has a cost; Kaia must intervene.",
+            "objective": "Cross the contested center and commit to intervention before the window closes.",
+            "interaction": "DECISIVE_INTERVENTION",
+            "camera": "Hold the empty protective space, then follow Kaia stepping into it.",
+            "aftermath": "Waiting did not keep Rook safe. I will choose where to stand.",
+            "essence": "Rook\u2019s burden becomes a reminder to act.",
+            "gray": "Wind binds six perspectives while Kaia deliberately enters the conflict.",
+            "growth": "Balance without passivity.",
+            "lost_fighter": "rook-ironside",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Carry six perspectives through the marked spectrum nodes, then hold Shield to integrate your own identity.",
+          "body": "Wind binds six perspectives while Kaia deliberately enters the conflict.",
+          "cinematic_framing": "Hold the empty protective space, then follow Kaia stepping into it.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "form_after": "PRISMATIC_GRAY"
         },
         {
           "id": "kaia-windrow:impossible_battle_2",
           "title": "Impossible Yin/Yang Battle II",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "yin",
+          "objective_contract": "GRAY_DEMONSTRATION",
+          "puppets": {
+            "yin": [
+              "juno-spark",
+              "nix-calder",
+              "orion-vell"
+            ],
+            "yang": [
+              "ember-vale",
+              "vesper-nyx"
+            ]
+          },
+          "consequence": {
+            "relationship": "A mediator and the protector who carries every burden.",
+            "disagreement": "Kaia waits for another way while Rook takes the failure onto himself.",
+            "circumstance": "Rook carries the catastrophic failure so the others can act.",
+            "consequence": "Passive balance has a cost; Kaia must intervene.",
+            "objective": "Cross the contested center and commit to intervention before the window closes.",
+            "interaction": "DECISIVE_INTERVENTION",
+            "camera": "Hold the empty protective space, then follow Kaia stepping into it.",
+            "aftermath": "Waiting did not keep Rook safe. I will choose where to stand.",
+            "essence": "Rook\u2019s burden becomes a reminder to act.",
+            "gray": "Wind binds six perspectives while Kaia deliberately enters the conflict.",
+            "growth": "Balance without passivity.",
+            "lost_fighter": "rook-ironside",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Evade the cosmic pair and demonstrate attack, guard and purposeful traversal. Greater damage cannot settle the conflict.",
+          "body": "Passive balance has a cost; Kaia must intervene.",
+          "cinematic_framing": "Hold the empty protective space, then follow Kaia stepping into it.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "additional_opponent": "yang",
+          "survive_seconds": 18
         },
         {
           "id": "kaia-windrow:epilogue",
           "title": "Equilibrium \u2014 Route Resolution",
-          "kind": "AFTERMATH",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "INTERACTIVE_DIALOGUE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "determination",
+          "body": "Waiting did not keep Rook safe. I will choose where to stand. Balance without passivity."
         },
         {
           "id": "kaia-windrow:unlock",
           "title": "Prismatic Gray Unlock",
-          "kind": "UNLOCK",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "INTERACTIVE_DIALOGUE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "determination",
+          "body": "Waiting did not keep Rook safe. I will choose where to stand. Balance without passivity.",
+          "route_complete": true
         }
       ]
     },
@@ -1121,8 +2342,26 @@
         ]
       ],
       "first_loss": {
-        "fighter": null,
-        "status": "OPEN_CANON"
+        "fighter": "vesper-nyx",
+        "status": "APPROVED_WORKING_V1_NARRATIVE_CANON",
+        "decision_id": "ANI-02-2026-10-09"
+      },
+      "consequence": {
+        "relationship": "A planner seeks certainty from someone whose trust cannot be contained.",
+        "disagreement": "Nix equates confinement with safety; Vesper needs an honest opening.",
+        "circumstance": "A perfectly bounded plan cannot guarantee that Vesper remains reachable.",
+        "consequence": "Order must support freedom rather than imprison it.",
+        "objective": "Open the containment boundary before traversing to the ally\u2019s chosen position.",
+        "interaction": "OPEN_BOUNDARY",
+        "camera": "A symmetrical frame breaks open toward an absent phase echo.",
+        "aftermath": "The boundary was intact. The trust was not.",
+        "essence": "Phase uncertainty becomes a permitted opening in structure.",
+        "gray": "Construction supports spaces with deliberate exits.",
+        "growth": "Order without imprisonment.",
+        "lost_fighter": "vesper-nyx",
+        "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+        "dialogue_status": "DRAFT_OWNER_REVIEW",
+        "implementation_status": "DRAFT_ADAPTATION"
       },
       "nodes": [
         {
@@ -1266,105 +2505,385 @@
         },
         {
           "id": "nix-calder:first_loss",
-          "title": "First Loss",
-          "kind": "AFTERMATH",
-          "implemented": false,
-          "block_reason": "The owner must approve this Anchor's First Loss.",
-          "copy_status": "DRAFT_ADAPTATION",
-          "first_loss": null,
-          "canon_status": "OPEN_CANON",
+          "title": "First Loss \u2014 Vesper Nyx",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
+          "first_loss": "vesper-nyx",
+          "canon_status": "APPROVED_WORKING_V1_NARRATIVE_CANON",
+          "consequence": {
+            "relationship": "A planner seeks certainty from someone whose trust cannot be contained.",
+            "disagreement": "Nix equates confinement with safety; Vesper needs an honest opening.",
+            "circumstance": "A perfectly bounded plan cannot guarantee that Vesper remains reachable.",
+            "consequence": "Order must support freedom rather than imprison it.",
+            "objective": "Open the containment boundary before traversing to the ally\u2019s chosen position.",
+            "interaction": "OPEN_BOUNDARY",
+            "camera": "A symmetrical frame breaks open toward an absent phase echo.",
+            "aftermath": "The boundary was intact. The trust was not.",
+            "essence": "Phase uncertainty becomes a permitted opening in structure.",
+            "gray": "Construction supports spaces with deliberate exits.",
+            "growth": "Order without imprisonment.",
+            "lost_fighter": "vesper-nyx",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "body": "A perfectly bounded plan cannot guarantee that Vesper remains reachable.",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "vesper-nyx",
+          "objective_contract": "FIRST_LOSS",
+          "puppets": {
+            "yin": [
+              "kaia-windrow",
+              "orion-vell",
+              "juno-spark"
+            ],
+            "yang": [
+              "rook-ironside",
+              "ember-vale"
+            ]
+          },
+          "objective": "Open the containment boundary before traversing to the ally\u2019s chosen position.",
+          "cinematic_framing": "A symmetrical frame breaks open toward an absent phase echo.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 1
         },
         {
           "id": "nix-calder:puppet_imbalance",
           "title": "Five Puppets \u2014 3 against 2",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "kaia-windrow",
+          "objective_contract": "PUPPET_IMBALANCE",
+          "puppets": {
+            "yin": [
+              "kaia-windrow",
+              "orion-vell",
+              "juno-spark"
+            ],
+            "yang": [
+              "rook-ironside",
+              "ember-vale"
+            ]
+          },
+          "consequence": {
+            "relationship": "A planner seeks certainty from someone whose trust cannot be contained.",
+            "disagreement": "Nix equates confinement with safety; Vesper needs an honest opening.",
+            "circumstance": "A perfectly bounded plan cannot guarantee that Vesper remains reachable.",
+            "consequence": "Order must support freedom rather than imprison it.",
+            "objective": "Open the containment boundary before traversing to the ally\u2019s chosen position.",
+            "interaction": "OPEN_BOUNDARY",
+            "camera": "A symmetrical frame breaks open toward an absent phase echo.",
+            "aftermath": "The boundary was intact. The trust was not.",
+            "essence": "Phase uncertainty becomes a permitted opening in structure.",
+            "gray": "Construction supports spaces with deliberate exits.",
+            "growth": "Order without imprisonment.",
+            "lost_fighter": "vesper-nyx",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Disrupt the dominant Yin side: land a hit, then guard the center. Five puppets remain divided 3 against 2.",
+          "body": "Order must support freedom rather than imprison it.",
+          "cinematic_framing": "A symmetrical frame breaks open toward an absent phase echo.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING"
         },
         {
           "id": "nix-calder:first_release",
           "title": "First Release",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "kaia-windrow",
+          "objective_contract": "FIRST_RELEASE",
+          "puppets": {
+            "yin": [
+              "kaia-windrow",
+              "orion-vell",
+              "juno-spark"
+            ],
+            "yang": [
+              "rook-ironside",
+              "ember-vale"
+            ]
+          },
+          "consequence": {
+            "relationship": "A planner seeks certainty from someone whose trust cannot be contained.",
+            "disagreement": "Nix equates confinement with safety; Vesper needs an honest opening.",
+            "circumstance": "A perfectly bounded plan cannot guarantee that Vesper remains reachable.",
+            "consequence": "Order must support freedom rather than imprison it.",
+            "objective": "Open the containment boundary before traversing to the ally\u2019s chosen position.",
+            "interaction": "OPEN_BOUNDARY",
+            "camera": "A symmetrical frame breaks open toward an absent phase echo.",
+            "aftermath": "The boundary was intact. The trust was not.",
+            "essence": "Phase uncertainty becomes a permitted opening in structure.",
+            "gray": "Construction supports spaces with deliberate exits.",
+            "growth": "Order without imprisonment.",
+            "lost_fighter": "vesper-nyx",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Choose a weakened Yin puppet (40% damage), approach and press Special to release. A player-earned KO also releases it. Restore 2 against 2.",
+          "body": "Phase uncertainty becomes a permitted opening in structure.",
+          "cinematic_framing": "A symmetrical frame breaks open toward an absent phase echo.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 2
         },
         {
           "id": "nix-calder:equilibrium",
           "title": "Restored 2v2 Equilibrium",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "kaia-windrow",
+          "objective_contract": "PUPPET_EQUILIBRIUM",
+          "puppets": {
+            "yin": [
+              "kaia-windrow",
+              "orion-vell",
+              "juno-spark"
+            ],
+            "yang": [
+              "rook-ironside",
+              "ember-vale"
+            ]
+          },
+          "consequence": {
+            "relationship": "A planner seeks certainty from someone whose trust cannot be contained.",
+            "disagreement": "Nix equates confinement with safety; Vesper needs an honest opening.",
+            "circumstance": "A perfectly bounded plan cannot guarantee that Vesper remains reachable.",
+            "consequence": "Order must support freedom rather than imprison it.",
+            "objective": "Open the containment boundary before traversing to the ally\u2019s chosen position.",
+            "interaction": "OPEN_BOUNDARY",
+            "camera": "A symmetrical frame breaks open toward an absent phase echo.",
+            "aftermath": "The boundary was intact. The trust was not.",
+            "essence": "Phase uncertainty becomes a permitted opening in structure.",
+            "gray": "Construction supports spaces with deliberate exits.",
+            "growth": "Order without imprisonment.",
+            "lost_fighter": "vesper-nyx",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Guard the center for eight seconds while both Puppet sides remain represented.",
+          "body": "Order must support freedom rather than imprison it.",
+          "cinematic_framing": "A symmetrical frame breaks open toward an absent phase echo.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING"
         },
         {
           "id": "nix-calder:dual_release_1",
           "title": "Dual Release I",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "kaia-windrow",
+          "objective_contract": "PAIRED_RELEASE",
+          "puppets": {
+            "yin": [
+              "kaia-windrow",
+              "orion-vell",
+              "juno-spark"
+            ],
+            "yang": [
+              "rook-ironside",
+              "ember-vale"
+            ]
+          },
+          "consequence": {
+            "relationship": "A planner seeks certainty from someone whose trust cannot be contained.",
+            "disagreement": "Nix equates confinement with safety; Vesper needs an honest opening.",
+            "circumstance": "A perfectly bounded plan cannot guarantee that Vesper remains reachable.",
+            "consequence": "Order must support freedom rather than imprison it.",
+            "objective": "Open the containment boundary before traversing to the ally\u2019s chosen position.",
+            "interaction": "OPEN_BOUNDARY",
+            "camera": "A symmetrical frame breaks open toward an absent phase echo.",
+            "aftermath": "The boundary was intact. The trust was not.",
+            "essence": "Phase uncertainty becomes a permitted opening in structure.",
+            "gray": "Construction supports spaces with deliberate exits.",
+            "growth": "Order without imprisonment.",
+            "lost_fighter": "vesper-nyx",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Release one Yin and one Yang puppet: weaken then Special nearby, or earn their KOs.",
+          "body": "Phase uncertainty becomes a permitted opening in structure.",
+          "cinematic_framing": "A symmetrical frame breaks open toward an absent phase echo.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 4
         },
         {
           "id": "nix-calder:dual_release_2",
           "title": "Dual Release II \u2014 Six Essences",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "kaia-windrow",
+          "objective_contract": "PAIRED_RELEASE",
+          "puppets": {
+            "yin": [
+              "kaia-windrow",
+              "orion-vell",
+              "juno-spark"
+            ],
+            "yang": [
+              "rook-ironside",
+              "ember-vale"
+            ]
+          },
+          "consequence": {
+            "relationship": "A planner seeks certainty from someone whose trust cannot be contained.",
+            "disagreement": "Nix equates confinement with safety; Vesper needs an honest opening.",
+            "circumstance": "A perfectly bounded plan cannot guarantee that Vesper remains reachable.",
+            "consequence": "Order must support freedom rather than imprison it.",
+            "objective": "Open the containment boundary before traversing to the ally\u2019s chosen position.",
+            "interaction": "OPEN_BOUNDARY",
+            "camera": "A symmetrical frame breaks open toward an absent phase echo.",
+            "aftermath": "The boundary was intact. The trust was not.",
+            "essence": "Phase uncertainty becomes a permitted opening in structure.",
+            "gray": "Construction supports spaces with deliberate exits.",
+            "growth": "Order without imprisonment.",
+            "lost_fighter": "vesper-nyx",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Release the final opposite-force pair. Six distinct perspectives remain.",
+          "body": "Phase uncertainty becomes a permitted opening in structure.",
+          "cinematic_framing": "A symmetrical frame breaks open toward an absent phase echo.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 6
         },
         {
           "id": "nix-calder:prismatic_gray",
           "title": "Prismatic Gray \u2014 Nix Calder",
-          "kind": "TRANSFORMATION",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "kaia-windrow",
+          "objective_contract": "PRISMATIC_TRANSFORMATION",
+          "puppets": {
+            "yin": [
+              "kaia-windrow",
+              "orion-vell",
+              "juno-spark"
+            ],
+            "yang": [
+              "rook-ironside",
+              "ember-vale"
+            ]
+          },
+          "consequence": {
+            "relationship": "A planner seeks certainty from someone whose trust cannot be contained.",
+            "disagreement": "Nix equates confinement with safety; Vesper needs an honest opening.",
+            "circumstance": "A perfectly bounded plan cannot guarantee that Vesper remains reachable.",
+            "consequence": "Order must support freedom rather than imprison it.",
+            "objective": "Open the containment boundary before traversing to the ally\u2019s chosen position.",
+            "interaction": "OPEN_BOUNDARY",
+            "camera": "A symmetrical frame breaks open toward an absent phase echo.",
+            "aftermath": "The boundary was intact. The trust was not.",
+            "essence": "Phase uncertainty becomes a permitted opening in structure.",
+            "gray": "Construction supports spaces with deliberate exits.",
+            "growth": "Order without imprisonment.",
+            "lost_fighter": "vesper-nyx",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Carry six perspectives through the marked spectrum nodes, then hold Shield to integrate your own identity.",
+          "body": "Construction supports spaces with deliberate exits.",
+          "cinematic_framing": "A symmetrical frame breaks open toward an absent phase echo.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "form_after": "PRISMATIC_GRAY"
         },
         {
           "id": "nix-calder:impossible_battle_2",
           "title": "Impossible Yin/Yang Battle II",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "yin",
+          "objective_contract": "GRAY_DEMONSTRATION",
+          "puppets": {
+            "yin": [
+              "kaia-windrow",
+              "orion-vell",
+              "juno-spark"
+            ],
+            "yang": [
+              "rook-ironside",
+              "ember-vale"
+            ]
+          },
+          "consequence": {
+            "relationship": "A planner seeks certainty from someone whose trust cannot be contained.",
+            "disagreement": "Nix equates confinement with safety; Vesper needs an honest opening.",
+            "circumstance": "A perfectly bounded plan cannot guarantee that Vesper remains reachable.",
+            "consequence": "Order must support freedom rather than imprison it.",
+            "objective": "Open the containment boundary before traversing to the ally\u2019s chosen position.",
+            "interaction": "OPEN_BOUNDARY",
+            "camera": "A symmetrical frame breaks open toward an absent phase echo.",
+            "aftermath": "The boundary was intact. The trust was not.",
+            "essence": "Phase uncertainty becomes a permitted opening in structure.",
+            "gray": "Construction supports spaces with deliberate exits.",
+            "growth": "Order without imprisonment.",
+            "lost_fighter": "vesper-nyx",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Evade the cosmic pair and demonstrate attack, guard and purposeful traversal. Greater damage cannot settle the conflict.",
+          "body": "Order must support freedom rather than imprison it.",
+          "cinematic_framing": "A symmetrical frame breaks open toward an absent phase echo.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "additional_opponent": "yang",
+          "survive_seconds": 18
         },
         {
           "id": "nix-calder:epilogue",
           "title": "Equilibrium \u2014 Route Resolution",
-          "kind": "AFTERMATH",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "INTERACTIVE_DIALOGUE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "determination",
+          "body": "The boundary was intact. The trust was not. Order without imprisonment."
         },
         {
           "id": "nix-calder:unlock",
           "title": "Prismatic Gray Unlock",
-          "kind": "UNLOCK",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "INTERACTIVE_DIALOGUE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "determination",
+          "body": "The boundary was intact. The trust was not. Order without imprisonment.",
+          "route_complete": true
         }
       ]
     },
@@ -1390,8 +2909,26 @@
         ]
       ],
       "first_loss": {
-        "fighter": null,
-        "status": "OPEN_CANON"
+        "fighter": "kaia-windrow",
+        "status": "APPROVED_WORKING_V1_NARRATIVE_CANON",
+        "decision_id": "ANI-02-2026-10-09"
+      },
+      "consequence": {
+        "relationship": "A systems thinker and the mediator whose agency exceeds prediction.",
+        "disagreement": "Orion predicts Kaia\u2019s choices instead of asking what she needs.",
+        "circumstance": "Kaia chooses an intervention outside Orion\u2019s detached model.",
+        "consequence": "Understanding requires a personal response, not prediction alone.",
+        "objective": "Approach Kaia\u2019s signal before using the marked vector; listen, then act.",
+        "interaction": "PERSONAL_VECTOR",
+        "camera": "Leave the orbital overview for an eye-level shared frame.",
+        "aftermath": "I knew the field. I did not ask what you needed.",
+        "essence": "Wind makes orbital understanding responsive to a person.",
+        "gray": "Six nodes retain independent paths while Orion responds to their needs.",
+        "growth": "Understanding without detachment.",
+        "lost_fighter": "kaia-windrow",
+        "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+        "dialogue_status": "DRAFT_OWNER_REVIEW",
+        "implementation_status": "DRAFT_ADAPTATION"
       },
       "nodes": [
         {
@@ -1535,105 +3072,385 @@
         },
         {
           "id": "orion-vell:first_loss",
-          "title": "First Loss",
-          "kind": "AFTERMATH",
-          "implemented": false,
-          "block_reason": "The owner must approve this Anchor's First Loss.",
-          "copy_status": "DRAFT_ADAPTATION",
-          "first_loss": null,
-          "canon_status": "OPEN_CANON",
+          "title": "First Loss \u2014 Kaia Windrow",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
+          "first_loss": "kaia-windrow",
+          "canon_status": "APPROVED_WORKING_V1_NARRATIVE_CANON",
+          "consequence": {
+            "relationship": "A systems thinker and the mediator whose agency exceeds prediction.",
+            "disagreement": "Orion predicts Kaia\u2019s choices instead of asking what she needs.",
+            "circumstance": "Kaia chooses an intervention outside Orion\u2019s detached model.",
+            "consequence": "Understanding requires a personal response, not prediction alone.",
+            "objective": "Approach Kaia\u2019s signal before using the marked vector; listen, then act.",
+            "interaction": "PERSONAL_VECTOR",
+            "camera": "Leave the orbital overview for an eye-level shared frame.",
+            "aftermath": "I knew the field. I did not ask what you needed.",
+            "essence": "Wind makes orbital understanding responsive to a person.",
+            "gray": "Six nodes retain independent paths while Orion responds to their needs.",
+            "growth": "Understanding without detachment.",
+            "lost_fighter": "kaia-windrow",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "body": "Kaia chooses an intervention outside Orion\u2019s detached model.",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "kaia-windrow",
+          "objective_contract": "FIRST_LOSS",
+          "puppets": {
+            "yin": [
+              "nix-calder",
+              "vesper-nyx",
+              "ember-vale"
+            ],
+            "yang": [
+              "juno-spark",
+              "rook-ironside"
+            ]
+          },
+          "objective": "Approach Kaia\u2019s signal before using the marked vector; listen, then act.",
+          "cinematic_framing": "Leave the orbital overview for an eye-level shared frame.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 1
         },
         {
           "id": "orion-vell:puppet_imbalance",
           "title": "Five Puppets \u2014 3 against 2",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "nix-calder",
+          "objective_contract": "PUPPET_IMBALANCE",
+          "puppets": {
+            "yin": [
+              "nix-calder",
+              "vesper-nyx",
+              "ember-vale"
+            ],
+            "yang": [
+              "juno-spark",
+              "rook-ironside"
+            ]
+          },
+          "consequence": {
+            "relationship": "A systems thinker and the mediator whose agency exceeds prediction.",
+            "disagreement": "Orion predicts Kaia\u2019s choices instead of asking what she needs.",
+            "circumstance": "Kaia chooses an intervention outside Orion\u2019s detached model.",
+            "consequence": "Understanding requires a personal response, not prediction alone.",
+            "objective": "Approach Kaia\u2019s signal before using the marked vector; listen, then act.",
+            "interaction": "PERSONAL_VECTOR",
+            "camera": "Leave the orbital overview for an eye-level shared frame.",
+            "aftermath": "I knew the field. I did not ask what you needed.",
+            "essence": "Wind makes orbital understanding responsive to a person.",
+            "gray": "Six nodes retain independent paths while Orion responds to their needs.",
+            "growth": "Understanding without detachment.",
+            "lost_fighter": "kaia-windrow",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Disrupt the dominant Yin side: land a hit, then guard the center. Five puppets remain divided 3 against 2.",
+          "body": "Understanding requires a personal response, not prediction alone.",
+          "cinematic_framing": "Leave the orbital overview for an eye-level shared frame.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING"
         },
         {
           "id": "orion-vell:first_release",
           "title": "First Release",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "nix-calder",
+          "objective_contract": "FIRST_RELEASE",
+          "puppets": {
+            "yin": [
+              "nix-calder",
+              "vesper-nyx",
+              "ember-vale"
+            ],
+            "yang": [
+              "juno-spark",
+              "rook-ironside"
+            ]
+          },
+          "consequence": {
+            "relationship": "A systems thinker and the mediator whose agency exceeds prediction.",
+            "disagreement": "Orion predicts Kaia\u2019s choices instead of asking what she needs.",
+            "circumstance": "Kaia chooses an intervention outside Orion\u2019s detached model.",
+            "consequence": "Understanding requires a personal response, not prediction alone.",
+            "objective": "Approach Kaia\u2019s signal before using the marked vector; listen, then act.",
+            "interaction": "PERSONAL_VECTOR",
+            "camera": "Leave the orbital overview for an eye-level shared frame.",
+            "aftermath": "I knew the field. I did not ask what you needed.",
+            "essence": "Wind makes orbital understanding responsive to a person.",
+            "gray": "Six nodes retain independent paths while Orion responds to their needs.",
+            "growth": "Understanding without detachment.",
+            "lost_fighter": "kaia-windrow",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Choose a weakened Yin puppet (40% damage), approach and press Special to release. A player-earned KO also releases it. Restore 2 against 2.",
+          "body": "Wind makes orbital understanding responsive to a person.",
+          "cinematic_framing": "Leave the orbital overview for an eye-level shared frame.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 2
         },
         {
           "id": "orion-vell:equilibrium",
           "title": "Restored 2v2 Equilibrium",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "nix-calder",
+          "objective_contract": "PUPPET_EQUILIBRIUM",
+          "puppets": {
+            "yin": [
+              "nix-calder",
+              "vesper-nyx",
+              "ember-vale"
+            ],
+            "yang": [
+              "juno-spark",
+              "rook-ironside"
+            ]
+          },
+          "consequence": {
+            "relationship": "A systems thinker and the mediator whose agency exceeds prediction.",
+            "disagreement": "Orion predicts Kaia\u2019s choices instead of asking what she needs.",
+            "circumstance": "Kaia chooses an intervention outside Orion\u2019s detached model.",
+            "consequence": "Understanding requires a personal response, not prediction alone.",
+            "objective": "Approach Kaia\u2019s signal before using the marked vector; listen, then act.",
+            "interaction": "PERSONAL_VECTOR",
+            "camera": "Leave the orbital overview for an eye-level shared frame.",
+            "aftermath": "I knew the field. I did not ask what you needed.",
+            "essence": "Wind makes orbital understanding responsive to a person.",
+            "gray": "Six nodes retain independent paths while Orion responds to their needs.",
+            "growth": "Understanding without detachment.",
+            "lost_fighter": "kaia-windrow",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Guard the center for eight seconds while both Puppet sides remain represented.",
+          "body": "Understanding requires a personal response, not prediction alone.",
+          "cinematic_framing": "Leave the orbital overview for an eye-level shared frame.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING"
         },
         {
           "id": "orion-vell:dual_release_1",
           "title": "Dual Release I",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "nix-calder",
+          "objective_contract": "PAIRED_RELEASE",
+          "puppets": {
+            "yin": [
+              "nix-calder",
+              "vesper-nyx",
+              "ember-vale"
+            ],
+            "yang": [
+              "juno-spark",
+              "rook-ironside"
+            ]
+          },
+          "consequence": {
+            "relationship": "A systems thinker and the mediator whose agency exceeds prediction.",
+            "disagreement": "Orion predicts Kaia\u2019s choices instead of asking what she needs.",
+            "circumstance": "Kaia chooses an intervention outside Orion\u2019s detached model.",
+            "consequence": "Understanding requires a personal response, not prediction alone.",
+            "objective": "Approach Kaia\u2019s signal before using the marked vector; listen, then act.",
+            "interaction": "PERSONAL_VECTOR",
+            "camera": "Leave the orbital overview for an eye-level shared frame.",
+            "aftermath": "I knew the field. I did not ask what you needed.",
+            "essence": "Wind makes orbital understanding responsive to a person.",
+            "gray": "Six nodes retain independent paths while Orion responds to their needs.",
+            "growth": "Understanding without detachment.",
+            "lost_fighter": "kaia-windrow",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Release one Yin and one Yang puppet: weaken then Special nearby, or earn their KOs.",
+          "body": "Wind makes orbital understanding responsive to a person.",
+          "cinematic_framing": "Leave the orbital overview for an eye-level shared frame.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 4
         },
         {
           "id": "orion-vell:dual_release_2",
           "title": "Dual Release II \u2014 Six Essences",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "nix-calder",
+          "objective_contract": "PAIRED_RELEASE",
+          "puppets": {
+            "yin": [
+              "nix-calder",
+              "vesper-nyx",
+              "ember-vale"
+            ],
+            "yang": [
+              "juno-spark",
+              "rook-ironside"
+            ]
+          },
+          "consequence": {
+            "relationship": "A systems thinker and the mediator whose agency exceeds prediction.",
+            "disagreement": "Orion predicts Kaia\u2019s choices instead of asking what she needs.",
+            "circumstance": "Kaia chooses an intervention outside Orion\u2019s detached model.",
+            "consequence": "Understanding requires a personal response, not prediction alone.",
+            "objective": "Approach Kaia\u2019s signal before using the marked vector; listen, then act.",
+            "interaction": "PERSONAL_VECTOR",
+            "camera": "Leave the orbital overview for an eye-level shared frame.",
+            "aftermath": "I knew the field. I did not ask what you needed.",
+            "essence": "Wind makes orbital understanding responsive to a person.",
+            "gray": "Six nodes retain independent paths while Orion responds to their needs.",
+            "growth": "Understanding without detachment.",
+            "lost_fighter": "kaia-windrow",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Release the final opposite-force pair. Six distinct perspectives remain.",
+          "body": "Wind makes orbital understanding responsive to a person.",
+          "cinematic_framing": "Leave the orbital overview for an eye-level shared frame.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 6
         },
         {
           "id": "orion-vell:prismatic_gray",
           "title": "Prismatic Gray \u2014 Orion Vell",
-          "kind": "TRANSFORMATION",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "nix-calder",
+          "objective_contract": "PRISMATIC_TRANSFORMATION",
+          "puppets": {
+            "yin": [
+              "nix-calder",
+              "vesper-nyx",
+              "ember-vale"
+            ],
+            "yang": [
+              "juno-spark",
+              "rook-ironside"
+            ]
+          },
+          "consequence": {
+            "relationship": "A systems thinker and the mediator whose agency exceeds prediction.",
+            "disagreement": "Orion predicts Kaia\u2019s choices instead of asking what she needs.",
+            "circumstance": "Kaia chooses an intervention outside Orion\u2019s detached model.",
+            "consequence": "Understanding requires a personal response, not prediction alone.",
+            "objective": "Approach Kaia\u2019s signal before using the marked vector; listen, then act.",
+            "interaction": "PERSONAL_VECTOR",
+            "camera": "Leave the orbital overview for an eye-level shared frame.",
+            "aftermath": "I knew the field. I did not ask what you needed.",
+            "essence": "Wind makes orbital understanding responsive to a person.",
+            "gray": "Six nodes retain independent paths while Orion responds to their needs.",
+            "growth": "Understanding without detachment.",
+            "lost_fighter": "kaia-windrow",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Carry six perspectives through the marked spectrum nodes, then hold Shield to integrate your own identity.",
+          "body": "Six nodes retain independent paths while Orion responds to their needs.",
+          "cinematic_framing": "Leave the orbital overview for an eye-level shared frame.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "form_after": "PRISMATIC_GRAY"
         },
         {
           "id": "orion-vell:impossible_battle_2",
           "title": "Impossible Yin/Yang Battle II",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "yin",
+          "objective_contract": "GRAY_DEMONSTRATION",
+          "puppets": {
+            "yin": [
+              "nix-calder",
+              "vesper-nyx",
+              "ember-vale"
+            ],
+            "yang": [
+              "juno-spark",
+              "rook-ironside"
+            ]
+          },
+          "consequence": {
+            "relationship": "A systems thinker and the mediator whose agency exceeds prediction.",
+            "disagreement": "Orion predicts Kaia\u2019s choices instead of asking what she needs.",
+            "circumstance": "Kaia chooses an intervention outside Orion\u2019s detached model.",
+            "consequence": "Understanding requires a personal response, not prediction alone.",
+            "objective": "Approach Kaia\u2019s signal before using the marked vector; listen, then act.",
+            "interaction": "PERSONAL_VECTOR",
+            "camera": "Leave the orbital overview for an eye-level shared frame.",
+            "aftermath": "I knew the field. I did not ask what you needed.",
+            "essence": "Wind makes orbital understanding responsive to a person.",
+            "gray": "Six nodes retain independent paths while Orion responds to their needs.",
+            "growth": "Understanding without detachment.",
+            "lost_fighter": "kaia-windrow",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Evade the cosmic pair and demonstrate attack, guard and purposeful traversal. Greater damage cannot settle the conflict.",
+          "body": "Understanding requires a personal response, not prediction alone.",
+          "cinematic_framing": "Leave the orbital overview for an eye-level shared frame.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "additional_opponent": "yang",
+          "survive_seconds": 18
         },
         {
           "id": "orion-vell:epilogue",
           "title": "Equilibrium \u2014 Route Resolution",
-          "kind": "AFTERMATH",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "INTERACTIVE_DIALOGUE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "determination",
+          "body": "I knew the field. I did not ask what you needed. Understanding without detachment."
         },
         {
           "id": "orion-vell:unlock",
           "title": "Prismatic Gray Unlock",
-          "kind": "UNLOCK",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "INTERACTIVE_DIALOGUE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "determination",
+          "body": "I knew the field. I did not ask what you needed. Understanding without detachment.",
+          "route_complete": true
         }
       ]
     },
@@ -1659,8 +3476,26 @@
         ]
       ],
       "first_loss": {
-        "fighter": null,
-        "status": "OPEN_CANON"
+        "fighter": "ember-vale",
+        "status": "APPROVED_WORKING_V1_NARRATIVE_CANON",
+        "decision_id": "ANI-02-2026-10-09"
+      },
+      "consequence": {
+        "relationship": "Concealment meets Ember\u2019s need for an honest declaration.",
+        "disagreement": "Vesper withholds intent when Ember needs the truth to act.",
+        "circumstance": "A concealed safe path fails to create connection when the escape depends on truth.",
+        "consequence": "Uncertainty can remain without deception.",
+        "objective": "Reveal the true escape signal, then follow its single visible path.",
+        "interaction": "HONEST_SIGNAL",
+        "camera": "Discard misleading phase echoes and hold one exposed face.",
+        "aftermath": "I was afraid. I should have told you.",
+        "essence": "Ember\u2019s directness illuminates honest uncertainty.",
+        "gray": "Phase echoes carry perspectives while the chosen path remains truthful.",
+        "growth": "Uncertainty without deception.",
+        "lost_fighter": "ember-vale",
+        "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+        "dialogue_status": "DRAFT_OWNER_REVIEW",
+        "implementation_status": "DRAFT_ADAPTATION"
       },
       "nodes": [
         {
@@ -1804,105 +3639,385 @@
         },
         {
           "id": "vesper-nyx:first_loss",
-          "title": "First Loss",
-          "kind": "AFTERMATH",
-          "implemented": false,
-          "block_reason": "The owner must approve this Anchor's First Loss.",
-          "copy_status": "DRAFT_ADAPTATION",
-          "first_loss": null,
-          "canon_status": "OPEN_CANON",
+          "title": "First Loss \u2014 Ember Vale",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
+          "first_loss": "ember-vale",
+          "canon_status": "APPROVED_WORKING_V1_NARRATIVE_CANON",
+          "consequence": {
+            "relationship": "Concealment meets Ember\u2019s need for an honest declaration.",
+            "disagreement": "Vesper withholds intent when Ember needs the truth to act.",
+            "circumstance": "A concealed safe path fails to create connection when the escape depends on truth.",
+            "consequence": "Uncertainty can remain without deception.",
+            "objective": "Reveal the true escape signal, then follow its single visible path.",
+            "interaction": "HONEST_SIGNAL",
+            "camera": "Discard misleading phase echoes and hold one exposed face.",
+            "aftermath": "I was afraid. I should have told you.",
+            "essence": "Ember\u2019s directness illuminates honest uncertainty.",
+            "gray": "Phase echoes carry perspectives while the chosen path remains truthful.",
+            "growth": "Uncertainty without deception.",
+            "lost_fighter": "ember-vale",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "body": "A concealed safe path fails to create connection when the escape depends on truth.",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "ember-vale",
+          "objective_contract": "FIRST_LOSS",
+          "puppets": {
+            "yin": [
+              "orion-vell",
+              "nix-calder",
+              "rook-ironside"
+            ],
+            "yang": [
+              "kaia-windrow",
+              "juno-spark"
+            ]
+          },
+          "objective": "Reveal the true escape signal, then follow its single visible path.",
+          "cinematic_framing": "Discard misleading phase echoes and hold one exposed face.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 1
         },
         {
           "id": "vesper-nyx:puppet_imbalance",
           "title": "Five Puppets \u2014 3 against 2",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "orion-vell",
+          "objective_contract": "PUPPET_IMBALANCE",
+          "puppets": {
+            "yin": [
+              "orion-vell",
+              "nix-calder",
+              "rook-ironside"
+            ],
+            "yang": [
+              "kaia-windrow",
+              "juno-spark"
+            ]
+          },
+          "consequence": {
+            "relationship": "Concealment meets Ember\u2019s need for an honest declaration.",
+            "disagreement": "Vesper withholds intent when Ember needs the truth to act.",
+            "circumstance": "A concealed safe path fails to create connection when the escape depends on truth.",
+            "consequence": "Uncertainty can remain without deception.",
+            "objective": "Reveal the true escape signal, then follow its single visible path.",
+            "interaction": "HONEST_SIGNAL",
+            "camera": "Discard misleading phase echoes and hold one exposed face.",
+            "aftermath": "I was afraid. I should have told you.",
+            "essence": "Ember\u2019s directness illuminates honest uncertainty.",
+            "gray": "Phase echoes carry perspectives while the chosen path remains truthful.",
+            "growth": "Uncertainty without deception.",
+            "lost_fighter": "ember-vale",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Disrupt the dominant Yin side: land a hit, then guard the center. Five puppets remain divided 3 against 2.",
+          "body": "Uncertainty can remain without deception.",
+          "cinematic_framing": "Discard misleading phase echoes and hold one exposed face.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING"
         },
         {
           "id": "vesper-nyx:first_release",
           "title": "First Release",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "orion-vell",
+          "objective_contract": "FIRST_RELEASE",
+          "puppets": {
+            "yin": [
+              "orion-vell",
+              "nix-calder",
+              "rook-ironside"
+            ],
+            "yang": [
+              "kaia-windrow",
+              "juno-spark"
+            ]
+          },
+          "consequence": {
+            "relationship": "Concealment meets Ember\u2019s need for an honest declaration.",
+            "disagreement": "Vesper withholds intent when Ember needs the truth to act.",
+            "circumstance": "A concealed safe path fails to create connection when the escape depends on truth.",
+            "consequence": "Uncertainty can remain without deception.",
+            "objective": "Reveal the true escape signal, then follow its single visible path.",
+            "interaction": "HONEST_SIGNAL",
+            "camera": "Discard misleading phase echoes and hold one exposed face.",
+            "aftermath": "I was afraid. I should have told you.",
+            "essence": "Ember\u2019s directness illuminates honest uncertainty.",
+            "gray": "Phase echoes carry perspectives while the chosen path remains truthful.",
+            "growth": "Uncertainty without deception.",
+            "lost_fighter": "ember-vale",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Choose a weakened Yin puppet (40% damage), approach and press Special to release. A player-earned KO also releases it. Restore 2 against 2.",
+          "body": "Ember\u2019s directness illuminates honest uncertainty.",
+          "cinematic_framing": "Discard misleading phase echoes and hold one exposed face.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 2
         },
         {
           "id": "vesper-nyx:equilibrium",
           "title": "Restored 2v2 Equilibrium",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "orion-vell",
+          "objective_contract": "PUPPET_EQUILIBRIUM",
+          "puppets": {
+            "yin": [
+              "orion-vell",
+              "nix-calder",
+              "rook-ironside"
+            ],
+            "yang": [
+              "kaia-windrow",
+              "juno-spark"
+            ]
+          },
+          "consequence": {
+            "relationship": "Concealment meets Ember\u2019s need for an honest declaration.",
+            "disagreement": "Vesper withholds intent when Ember needs the truth to act.",
+            "circumstance": "A concealed safe path fails to create connection when the escape depends on truth.",
+            "consequence": "Uncertainty can remain without deception.",
+            "objective": "Reveal the true escape signal, then follow its single visible path.",
+            "interaction": "HONEST_SIGNAL",
+            "camera": "Discard misleading phase echoes and hold one exposed face.",
+            "aftermath": "I was afraid. I should have told you.",
+            "essence": "Ember\u2019s directness illuminates honest uncertainty.",
+            "gray": "Phase echoes carry perspectives while the chosen path remains truthful.",
+            "growth": "Uncertainty without deception.",
+            "lost_fighter": "ember-vale",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Guard the center for eight seconds while both Puppet sides remain represented.",
+          "body": "Uncertainty can remain without deception.",
+          "cinematic_framing": "Discard misleading phase echoes and hold one exposed face.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING"
         },
         {
           "id": "vesper-nyx:dual_release_1",
           "title": "Dual Release I",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "orion-vell",
+          "objective_contract": "PAIRED_RELEASE",
+          "puppets": {
+            "yin": [
+              "orion-vell",
+              "nix-calder",
+              "rook-ironside"
+            ],
+            "yang": [
+              "kaia-windrow",
+              "juno-spark"
+            ]
+          },
+          "consequence": {
+            "relationship": "Concealment meets Ember\u2019s need for an honest declaration.",
+            "disagreement": "Vesper withholds intent when Ember needs the truth to act.",
+            "circumstance": "A concealed safe path fails to create connection when the escape depends on truth.",
+            "consequence": "Uncertainty can remain without deception.",
+            "objective": "Reveal the true escape signal, then follow its single visible path.",
+            "interaction": "HONEST_SIGNAL",
+            "camera": "Discard misleading phase echoes and hold one exposed face.",
+            "aftermath": "I was afraid. I should have told you.",
+            "essence": "Ember\u2019s directness illuminates honest uncertainty.",
+            "gray": "Phase echoes carry perspectives while the chosen path remains truthful.",
+            "growth": "Uncertainty without deception.",
+            "lost_fighter": "ember-vale",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Release one Yin and one Yang puppet: weaken then Special nearby, or earn their KOs.",
+          "body": "Ember\u2019s directness illuminates honest uncertainty.",
+          "cinematic_framing": "Discard misleading phase echoes and hold one exposed face.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 4
         },
         {
           "id": "vesper-nyx:dual_release_2",
           "title": "Dual Release II \u2014 Six Essences",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "orion-vell",
+          "objective_contract": "PAIRED_RELEASE",
+          "puppets": {
+            "yin": [
+              "orion-vell",
+              "nix-calder",
+              "rook-ironside"
+            ],
+            "yang": [
+              "kaia-windrow",
+              "juno-spark"
+            ]
+          },
+          "consequence": {
+            "relationship": "Concealment meets Ember\u2019s need for an honest declaration.",
+            "disagreement": "Vesper withholds intent when Ember needs the truth to act.",
+            "circumstance": "A concealed safe path fails to create connection when the escape depends on truth.",
+            "consequence": "Uncertainty can remain without deception.",
+            "objective": "Reveal the true escape signal, then follow its single visible path.",
+            "interaction": "HONEST_SIGNAL",
+            "camera": "Discard misleading phase echoes and hold one exposed face.",
+            "aftermath": "I was afraid. I should have told you.",
+            "essence": "Ember\u2019s directness illuminates honest uncertainty.",
+            "gray": "Phase echoes carry perspectives while the chosen path remains truthful.",
+            "growth": "Uncertainty without deception.",
+            "lost_fighter": "ember-vale",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Release the final opposite-force pair. Six distinct perspectives remain.",
+          "body": "Ember\u2019s directness illuminates honest uncertainty.",
+          "cinematic_framing": "Discard misleading phase echoes and hold one exposed face.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "essence_after": 6
         },
         {
           "id": "vesper-nyx:prismatic_gray",
           "title": "Prismatic Gray \u2014 Vesper Nyx",
-          "kind": "TRANSFORMATION",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "orion-vell",
+          "objective_contract": "PRISMATIC_TRANSFORMATION",
+          "puppets": {
+            "yin": [
+              "orion-vell",
+              "nix-calder",
+              "rook-ironside"
+            ],
+            "yang": [
+              "kaia-windrow",
+              "juno-spark"
+            ]
+          },
+          "consequence": {
+            "relationship": "Concealment meets Ember\u2019s need for an honest declaration.",
+            "disagreement": "Vesper withholds intent when Ember needs the truth to act.",
+            "circumstance": "A concealed safe path fails to create connection when the escape depends on truth.",
+            "consequence": "Uncertainty can remain without deception.",
+            "objective": "Reveal the true escape signal, then follow its single visible path.",
+            "interaction": "HONEST_SIGNAL",
+            "camera": "Discard misleading phase echoes and hold one exposed face.",
+            "aftermath": "I was afraid. I should have told you.",
+            "essence": "Ember\u2019s directness illuminates honest uncertainty.",
+            "gray": "Phase echoes carry perspectives while the chosen path remains truthful.",
+            "growth": "Uncertainty without deception.",
+            "lost_fighter": "ember-vale",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Carry six perspectives through the marked spectrum nodes, then hold Shield to integrate your own identity.",
+          "body": "Phase echoes carry perspectives while the chosen path remains truthful.",
+          "cinematic_framing": "Discard misleading phase echoes and hold one exposed face.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "form_after": "PRISMATIC_GRAY"
         },
         {
           "id": "vesper-nyx:impossible_battle_2",
           "title": "Impossible Yin/Yang Battle II",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "cinematic_closeup",
+          "stage": "void-pier",
+          "opponent": "yin",
+          "objective_contract": "GRAY_DEMONSTRATION",
+          "puppets": {
+            "yin": [
+              "orion-vell",
+              "nix-calder",
+              "rook-ironside"
+            ],
+            "yang": [
+              "kaia-windrow",
+              "juno-spark"
+            ]
+          },
+          "consequence": {
+            "relationship": "Concealment meets Ember\u2019s need for an honest declaration.",
+            "disagreement": "Vesper withholds intent when Ember needs the truth to act.",
+            "circumstance": "A concealed safe path fails to create connection when the escape depends on truth.",
+            "consequence": "Uncertainty can remain without deception.",
+            "objective": "Reveal the true escape signal, then follow its single visible path.",
+            "interaction": "HONEST_SIGNAL",
+            "camera": "Discard misleading phase echoes and hold one exposed face.",
+            "aftermath": "I was afraid. I should have told you.",
+            "essence": "Ember\u2019s directness illuminates honest uncertainty.",
+            "gray": "Phase echoes carry perspectives while the chosen path remains truthful.",
+            "growth": "Uncertainty without deception.",
+            "lost_fighter": "ember-vale",
+            "continuity": "ROUTE_SPECIFIC_IMMEDIATE_LOSS",
+            "dialogue_status": "DRAFT_OWNER_REVIEW",
+            "implementation_status": "DRAFT_ADAPTATION"
+          },
+          "objective": "Evade the cosmic pair and demonstrate attack, guard and purposeful traversal. Greater damage cannot settle the conflict.",
+          "body": "Uncertainty can remain without deception.",
+          "cinematic_framing": "Discard misleading phase echoes and hold one exposed face.",
+          "presentation_status": "CANDIDATE_ANI_03_04_PENDING",
+          "additional_opponent": "yang",
+          "survive_seconds": 18
         },
         {
           "id": "vesper-nyx:epilogue",
           "title": "Equilibrium \u2014 Route Resolution",
-          "kind": "AFTERMATH",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "INTERACTIVE_DIALOGUE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "determination",
+          "body": "I was afraid. I should have told you. Uncertainty without deception."
         },
         {
           "id": "vesper-nyx:unlock",
           "title": "Prismatic Gray Unlock",
-          "kind": "UNLOCK",
-          "implemented": false,
-          "block_reason": "This chapter's encounter and presentation are still being built.",
-          "copy_status": "DRAFT_ADAPTATION",
+          "kind": "INTERACTIVE_DIALOGUE",
+          "implemented": true,
+          "copy_status": "DRAFT_OWNER_REVIEW",
           "watch_seconds": 10,
-          "expression": "cinematic_closeup"
+          "expression": "determination",
+          "body": "I was afraid. I should have told you. Uncertainty without deception.",
+          "route_complete": true
         }
       ]
     },
@@ -1923,37 +4038,54 @@
         {
           "id": "sevenfold:reunion",
           "title": "Seven Gray Fighters Reunite",
-          "kind": "CINEMATIC",
-          "implemented": false,
-          "block_reason": "Seven completed Gray routes and the Convergence encounter are required."
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "objective_contract": "SEVENFOLD_REUNION",
+          "opponent": "ember-vale",
+          "stage": "skyline-arena",
+          "objective": "Reach each of the six Gray allies; demonstrate a society of distinct mediators.",
+          "copy_status": "DRAFT_OWNER_REVIEW"
         },
         {
           "id": "sevenfold:trial",
           "title": "Sevenfold Trial",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "Seven completed Gray routes and the Convergence encounter are required."
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "objective_contract": "SEVENFOLD_TRIAL",
+          "opponent": "ember-vale",
+          "stage": "skyline-arena",
+          "objective": "Control each Gray identity in sequence; win a real exchange before passing leadership.",
+          "copy_status": "DRAFT_OWNER_REVIEW"
         },
         {
           "id": "sevenfold:equilibrium",
           "title": "Yin/Yang Equilibrium",
-          "kind": "OBJECTIVE_BATTLE",
-          "implemented": false,
-          "block_reason": "Seven completed Gray routes and the Convergence encounter are required."
+          "kind": "STORY_BATTLE",
+          "implemented": true,
+          "objective_contract": "SEVENFOLD_EQUILIBRIUM",
+          "opponent": "yin",
+          "additional_opponent": "yang",
+          "stage": "void-pier",
+          "survive_seconds": 21,
+          "objective": "Alternate guarded visits to Yin and Yang three times; survive without erasing either principle.",
+          "copy_status": "DRAFT_OWNER_REVIEW"
         },
         {
           "id": "sevenfold:conversation",
           "title": "A Society of Mediators",
           "kind": "INTERACTIVE_DIALOGUE",
-          "implemented": false,
-          "block_reason": "Seven completed Gray routes and the Convergence encounter are required."
+          "implemented": true,
+          "body": "Seven distinct perspectives remain. Rest can protect boundaries; creation can support expression. Neither principle must consume the people it supports.",
+          "copy_status": "DRAFT_OWNER_REVIEW"
         },
         {
           "id": "sevenfold:unlock",
           "title": "Yin + Yang Playable Unlock",
-          "kind": "UNLOCK",
-          "implemented": false,
-          "block_reason": "Seven completed Gray routes and the Convergence encounter are required."
+          "kind": "INTERACTIVE_DIALOGUE",
+          "implemented": true,
+          "cosmic_unlock": true,
+          "body": "Yin and Yang join as separate competitive identities under normalized rules. Their cosmic Story contracts remain separate.",
+          "copy_status": "DRAFT_OWNER_REVIEW"
         }
       ]
     }

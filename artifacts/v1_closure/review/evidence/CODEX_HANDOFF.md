@@ -113,3 +113,57 @@ Commit/push this branch at each safe logical checkpoint before the usage window 
 - Cosmic survival is an initial objective candidate, not the full declared boss kit: Yin/Yang offense still inherits the existing competitive move candidates and requires distinct inward absorption/outward creation moves, VFX and tuning. Full non-base form battle lifecycles, secondary hair/cloth/phase motion, bespoke authored locomotion/combat/reactions/acting and final synchronized VFX/SFX remain. Full Web/Android shipping proof is still absent.
 - Preservation reverified after generation: manifest SHA unchanged; all 3,287 states and 795 objects intact. Free space after process exit measured 17.2806 GiB; recheck/recover ≥18 GiB before a new large generation phase. Do not restart preservation/audit or delete source/registrations/unknowns to regain capacity.
 - All seven owner gates and V1_AUTOMATED_READY remain false. Review folder/index is the single owner package; serve only this generated folder on loopback, never the checkout or backups.
+
+## ANI-02 checkpoint — October 9, 2026
+
+Continued clean remote `codex/anime-v1-closure-2026-10-06` at `e063b13bcb293ad3ac7b8673c82d8830f8e0b24d`; fetched before edits, no divergence. Focused branch `release/anime-v1-canon-and-campaign`. Inspected all 33 registered worktrees; left every checkout and existing owner backup intact (including dirty Cursor work). See `worktree_preservation_2026-10-09.json`. Free capacity approximately 6.9 GiB; no heavy generation or exports authorized by that guard.
+
+ANI-02 explicit working V1 owner canon is integrated: Kaia→Rook, Ember→Nix, Rook→Juno, Juno→Orion, Nix→Vesper, Orion→Kaia, Vesper→Ember. Seven unique loss identities, zero duplicates. Historical proposals and authority hashes retained. `first_loss_owner_decision_2026-10-09.json` records approval scope/date/source, route-specific consequences and The Last Vector direction; Juno→Rook superseded. All new lines DRAFT_OWNER_REVIEW. Orion's ultimate fate unresolved; no global deaths/roster changes. Compiler consistency/provenance checks PASS; runtime fails closed on mapping disagreement. Full campaign engineering follows this checkpoint; ANI-01/03/04/05 and all human/automated release gates remain unearned/false.
+
+## ANI-01 engineering checkpoint — October 9, 2026
+
+The full 145-node graph now binds to shipping BattleScene objectives: seven distinct playable First Loss interactions, 3v2 Puppet sides, player-influenced dominant-side release, restored 2v2, opposite-force paired releases, six unique Essence identities, Gray model/acting candidate integration, second cosmic demonstration, route endings/next-route, seven-actor reunion, seven-identity trial, cosmic equilibrium and earned Yin/Yang unlock. Juno's Last Vector has Orion holding the passage, five team actors, an escort commitment and forward traversal. These scenes use existing candidate clips/SFX; final authored cinematic/taste completion remains ANI-03/04.
+
+Save v2 uses a separate local HMAC key, verifies contiguous prefixes and objective receipts, and derives every Essence/form/unlock. Unsigned legacy checkpoint is copied to `.legacy` before replacement and requires authenticated replay; arbitrary old completion arrays cannot mint Gray/cosmic unlocks. Debug/eval/review receipts are nonqualifying. Only the bound BattleScene issues results; menu navigation and a token alone cannot complete battles. Watch previews use the same loss/Gray graph, and never issue gameplay receipts.
+
+Two development source-scene sweeps exercised 145 nodes. The first exposed post-close helper errors (retained in `history/2026-10-09`); the next passed assertions without those errors. Additional changes to Juno team staging, control activation and the seven-identity trial require a final exact-commit rerun; do not treat earlier sweeps as evidence for those changes. `validate_campaign.py` and 64 GLB structural checks pass. FullCampaign, CampaignRestart, opening checkpoint, combat/roster regressions and fresh-process/debug/forged-save checks are the pending final validation set.
+
+No new PCK/Web/Android artifact generated: 7.4 GiB free is below documented generation/export headroom. Historical exported source/PCK above remain historical. All owner/human and V1_AUTOMATED_READY gates remain false.
+
+## Final ANI-01 source evidence checkpoint — October 9, 2026
+
+This milestone supersedes the pending validation and earlier 71-node/open-canon
+statements above for current source. Tested gameplay SHA:
+`30ea37f5e653357bc4ca2b6867d05cc221429b19`, focused branch
+`release/anime-v1-canon-and-campaign`; ANI-02 committed first at `ab8230f4`.
+Draft PR https://github.com/gunnchOS3k/anime-aggressors/pull/122 targets the preserved
+development branch, isolating this task from historical unmerged work.
+
+Final FullCampaign source sweep PASS 145/145 with 115 actual BattleScene-issued
+receipts, 7/7 Gray routes and 5/5 Convergence nodes; both Yin/Yang selectable in the
+isolated normal-mode staged test save. Separate-process restart and all seven
+watch paths PASS at that same source; watch progress unchanged. Seven distinct
+First Loss actor/camera/control checks PASS, including Juno's five team actors.
+Opening 49 encounters, seven two-cosmic/ seven watch, combat activation and 18 BASE
+roster regressions PASS at `c2bdf2888288dd568b0da6e0718db58faa975db2`. Source30ea's
+scoped authority CI passed; final evidence-only head checks are separate.
+
+Canon/graph validators, Godot editor import and 64 GLB structural checks PASS.
+Final sweep contains no script/parse errors; known shutdown resources/ObjectDB,
+CA and sandbox persistence warnings remain in logs. Tests stage protected players,
+collision positions and blast-zone KOs; they do not prove ordinary player difficulty
+or human acceptance. Source-scene proofs are not exported runtime proofs.
+
+Current per-route results: `artifacts/v1_closure/campaign_completion_matrix.json`.
+Exact test SHAs/file hashes/log scopes:
+`artifacts/v1_closure/technical_validation_2026-10-09.json` and companion Markdown.
+Exact next task and unfinished ANI-03/04/05/owner work:
+`artifacts/v1_closure/CONTINUATION_2026-10-09.md`. Final authored cinematics, dialogue,
+ordinary playthrough tuning, unique cosmic kits and platform proof remain. Do not
+claim the full Story presentation or V1 finished.
+
+No new exports; the retained October 6 PCK/movie/captures are historical. Original
+backup manifest SHA reverified unchanged, all 33 worktrees retained; approximately
+7.3 GiB free, below the 18 GiB guard. No merge/deploy/tag/publication. All seven human
+gates and V1_AUTOMATED_READY remain false. Runtime local source stamp is generated
+and ignored as designed; tracked source identity records it independently.
