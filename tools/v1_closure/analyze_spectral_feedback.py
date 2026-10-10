@@ -33,7 +33,7 @@ with (OUT/'COMBO_MATRIX.csv').open('w') as f:
 matrix=[]
 for fid,family in zip(IDS,FAMILIES):
  records=[(r,d) for r,d in captures if r['fighter']==fid and r['mode']!='before']
- kinds={e['kind'] for _,d in records for e in d['presentation_events']}
+ kinds={e['kind'] for _,d in records for e in d['presentation_events'] if e.get('fighter',e.get('fid'))==fid}
  contacts=[c for _,d in records for c in d['contacts'] if c['attacker']==fid]
  for effect,kind in [('contact',0),('shield',1),('armor',10),('charge',2),('release',9),('flight',3),('dissipation',5),('hurt',8),('launch_smoke',4),('confirmed_stock_loss',7)]:
   matrix.append({'fighter':fid,'grammar':family,'effect':effect,'runtime':'IMPLEMENTED','source_fixture':'PASS' if effect!='confirmed_stock_loss' else 'AUTHENTIC_STOCK_LOSS_HOOK','current_renderer':'OBSERVED' if kind in kinds else 'NOT_CAPTURED','human_approved':False})
