@@ -221,7 +221,10 @@ func _exercise(node: Dictionary) -> void:
 				await _stage_ko(battle.fighter2)
 				if i < 6: await frames(80)
 		"SEVENFOLD_EQUILIBRIUM":
-			for i in range(6): await _hold_at(Vector2(-180 if i%2==0 else 180,ground_y-2),45)
+			for i in range(12):
+				if o.alternations >= 6: break
+				await _hold_at(Vector2(-180 if o.alternations%2==0 else 180,ground_y-2),90)
+			check(o.alternations>=6,"six_actual_guard_alternations")
 			await _hold_at(Vector2(0,ground_y-2),1250,false)
 
 func _negative_and_replay() -> void:
