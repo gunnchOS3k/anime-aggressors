@@ -45,10 +45,10 @@ func setup(host, contract: Dictionary) -> void:
 	battle.fighter1.dummy_mode = "idle"
 	battle.fighter1.cpu.clear_simulated_inputs()
 	_label = Label.new()
-	_label.position = Vector2(30, 110)
-	_label.size = Vector2(1150, 100)
+	_label.position = Vector2(30, 140)
+	_label.size = Vector2(1220, 135)
 	_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_label.add_theme_font_size_override("font_size", 18)
+	_label.add_theme_font_size_override("font_size", 16)
 	battle.hud.add_child(_label)
 	_marker = Polygon2D.new()
 	_marker.polygon = PackedVector2Array([Vector2(-25, -6), Vector2(25, -6), Vector2(25, 6), Vector2(-25, 6)])
@@ -161,7 +161,7 @@ func _setup_puppets() -> void:
 
 func _on_hit(attacker, defender, info: Dictionary) -> void:
 	if attacker == battle.fighter1 and not info.get("blocked", false) and float(info.get("damage", 0)) > 0:
-		player_hits += 1
+		if kind != "PUPPET_IMBALANCE" or defender.get_meta("story_team", "") == "yin": player_hits += 1
 		if defender in puppets:
 			player_damage[defender.fighter_id] = float(player_damage.get(defender.fighter_id, 0)) + float(info["damage"])
 
@@ -186,12 +186,17 @@ func _on_ko(actor) -> void:
 			set_form(battle.fighter2, "PRISMATIC_GRAY")
 
 
-func _release(actor) -> void:
-	if kind not in ["FIRST_RELEASE", "PAIRED_RELEASE"] or actor.fighter_id in released: return
-	var side: String = actor.get_meta("story_team")
-	if kind == "FIRST_RELEASE" and side != "yin": return
+func _can_release(actor) -> bool:
+	if kind not in ["FIRST_RELEASE", "PAIRED_RELEASE"] or actor.fighter_id in released: return false
+	var side: String = actor.get_meta("story_team", "")
+	if kind == "FIRST_RELEASE" and side != "yin": return false
 	for fid in released:
-		if fid in node["puppets"][side]: return
+		if fid in node["puppets"][side]: return false
+	return true
+
+
+func _release(actor) -> void:
+	if not _can_release(actor): return
 	released.append(actor.fighter_id)
 	actor.cpu.clear_simulated_inputs()
 	actor.is_cpu = false
@@ -238,7 +243,7 @@ func tick(delta: float) -> void:
 			if Input.is_action_just_pressed("p1_special"):
 				var nearest = null
 				for actor in puppets:
-					if actor.fighter_id in released or float(player_damage.get(actor.fighter_id, 0)) < 40: continue
+					if not _can_release(actor) or float(player_damage.get(actor.fighter_id, 0)) < 40: continue
 					if p.position.distance_to(actor.position) < 110 and (nearest == null or p.position.distance_to(actor.position) < p.position.distance_to(nearest.position)):
 						nearest = actor
 				if nearest != null: _release(nearest)
@@ -291,11 +296,14 @@ func _tick_loss(delta: float) -> void:
 				_marker.position = Vector2(-140, ground_y)
 				if Input.is_action_just_pressed("p1_shield"): decision = "ESCORT_TEAM"
 				return
+			for escort in escorts:
+				if escort.has_meta("escort_target_x"):
+					escort.position.x = move_toward(escort.position.x, float(escort.get_meta("escort_target_x")), 220.0 * delta)
 			var previous_steps := steps
 			if steps < 2: _visit_marker(Vector2(80 if steps == 0 else 280, ground_y))
 			if steps > previous_steps:
 				for i in range(escorts.size()):
-					escorts[i].position = Vector2(80 if steps == 1 else 280, ground_y - 2) + Vector2(-i * 18, 0)
+					escorts[i].set_meta("escort_target_x", (80 if steps == 1 else 280) - i * 18)
 					escorts[i].model_3d.play_clip("run")
 					escorts[i].model_3d.set_cinematic_expression("determination")
 		"RESTRAINED_PROTECTION":
@@ -329,7 +337,11 @@ func _tick_loss(delta: float) -> void:
 				_marker.position = Vector2(0, ground_y)
 				if absf(p.position.x) < 80 and p.move_runner.active: steps = 1
 			else: _visit_marker(Vector2(240, ground_y))
-	if steps >= 2: _finish()
+	if steps >= 2:
+		_hold += delta
+		if _hold >= 1.5:
+			battle.fighter2.model_3d.set_cinematic_expression("grief")
+			_finish()
 
 
 func evidence() -> Dictionary:
@@ -357,6 +369,21 @@ func _update_prompt() -> void:
 	_label.text = str(node.get("objective", ""))
 	if kind == "FIRST_LOSS":
 		_label.text += "\n" + {"LAST_VECTOR_ESCORT":"Orion holds the passage. Shield chooses to escort the team; then reach the two forward signals.", "RESTRAINED_PROTECTION":"Guard at the left signal for two seconds without attacking, then reach the right signal.", "SHARED_DEFENSE":"Guard beside the right signal, then leave a path to the left signal.", "OPEN_BOUNDARY":"Special opens the left boundary. Then follow Vesper's signal to the right.", "PERSONAL_VECTOR":"Listen with Shield at Kaia's signal on the right, then follow the left vector.", "HONEST_SIGNAL":"Special at the center reveals the path; follow the right signal.", "DECISIVE_INTERVENTION":"Attack at the center to intervene, then reach the right signal."}[node["consequence"]["interaction"]]
+	if kind == "PUPPET_IMBALANCE":
+		_label.text += "\nYin hit: %s · Center guard: %.1f / 2s" % ["confirmed" if player_hits > 0 else "needed", guard_seconds]
+	elif kind == "PUPPET_EQUILIBRIUM":
+		_label.text += "\nCenter guard: %.1f / 8s. Release Shield to move; guard may be interrupted by hits." % guard_seconds
+	elif kind in ["FIRST_RELEASE", "PAIRED_RELEASE"]:
+		var targets := PackedStringArray()
+		for actor in puppets:
+			var status := "RELEASED" if actor.fighter_id in released else "READY: K nearby" if _can_release(actor) and float(player_damage.get(actor.fighter_id,0)) >= 40 else "%d/40 earned" % int(player_damage.get(actor.fighter_id,0))
+			targets.append("%s %s: %s" % [actor.get_meta("story_team", "").to_upper(), actor.data.get("displayName",actor.fighter_id), status])
+		_label.text += "\n" + " · ".join(targets)
+	elif kind == "PRISMATIC_TRANSFORMATION":
+		_label.text += "\nSignals: %d/6 · Integration: %.1f/4s · %s" % [steps, _hold, "Gray manifested" if transformed else "collect each ground signal, then guard"]
+	elif kind in ["GRAY_DEMONSTRATION", "SEVENFOLD_EQUILIBRIUM"]:
+		_label.text += "\nElapsed: %.1fs · Attack: %s · Guard: %s · Traversal: %s" % [elapsed, attacked, guarded, traversed]
+	_label.text += "\nA/D Move · W Jump · J Attack · J+K Heavy · K Special/release · L Shield · I Grab"
 	_label.text += "\nEssences: %d · Steps: %d · Released: %d · Guard: %.1fs" % [route_state.get("essence", 0), steps, released.size(), guard_seconds]
 
 

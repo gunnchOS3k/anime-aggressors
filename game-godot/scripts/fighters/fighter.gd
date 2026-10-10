@@ -627,9 +627,6 @@ func _apply_movement(delta: float) -> void:
 			state_machine.enter(_FighterStates.DOUBLE_JUMP)
 
 func _handle_actions() -> void:
-	if _pending_attack_cmd != "":
-		_start_move_by_command(_pending_attack_cmd)
-		_pending_attack_cmd = ""
 	# Vesper phase cancel / Juno dash cancel — interrupt recovery when windows are live.
 	if _try_identity_cancel():
 		return
@@ -638,7 +635,16 @@ func _handle_actions() -> void:
 		if grab_range_debug:
 			grab_range_debug.visible = _show_grab_range
 		return
+	# Releasing guard must be handled before its action-lock gate; otherwise it
+	# remains latched until shield break even after the physical button is released.
+	if state_machine.current_state in [_FighterStates.SHIELD_HOLD, _FighterStates.SHIELD_START] and not _read_shield():
+		shielding = false
+		state_machine.enter(_FighterStates.IDLE)
 	if not state_machine.can_attack():
+		return
+	if _pending_attack_cmd != "":
+		_start_move_by_command(_pending_attack_cmd)
+		_pending_attack_cmd = ""
 		return
 	if _read_transform_input() and _transform_pipeline != null and _transform_pipeline.can_attempt_transform():
 		if _transform_pipeline.attempt_transform():

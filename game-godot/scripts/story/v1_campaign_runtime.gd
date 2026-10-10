@@ -293,7 +293,7 @@ func begin_encounter(replay_id: String = "") -> bool:
 	GameState.p2_body_variant = "male" if progress["presentation"] == "female" else "female"
 	GameState.p1_is_cpu = false
 	GameState.p2_is_cpu = true
-	GameState.cpu_level = 2
+	GameState.cpu_level = 3
 	GameState.stocks = 2
 	GameState.match_timer_seconds = int(node.get("survive_seconds", 180 if node.get("objective_contract", "STOCK_WIN") == "STOCK_WIN" else 0))
 	GameState.match_type = "stock"

@@ -41,6 +41,8 @@ func can_attack() -> bool:
 func _on_enter(state: String) -> void:
 	if _fighter == null:
 		return
+	if state not in [_FighterStates.SHIELD_START, _FighterStates.SHIELD_HOLD, _FighterStates.SHIELD_STUN]:
+		_fighter.shielding = false
 	match state:
 		_FighterStates.SHIELD_START, _FighterStates.SHIELD_HOLD:
 			_fighter.shielding = true

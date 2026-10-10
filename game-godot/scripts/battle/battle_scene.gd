@@ -112,12 +112,14 @@ func _ready() -> void:
 		fighter1.controls_enabled = true
 		fighter2.controls_enabled = true
 		if _story_objective != null: _story_objective.activate_controls()
+		if _story_cosmic_actor != null: _story_cosmic_actor.controls_enabled = true
 		_active = true
 		return
 	await _run_countdown()
 	fighter1.controls_enabled = true
 	fighter2.controls_enabled = true
 	if _story_objective != null: _story_objective.activate_controls()
+	if _story_cosmic_actor != null: _story_cosmic_actor.controls_enabled = true
 	_active = true
 
 func _apply_device_role() -> void:
@@ -353,7 +355,8 @@ func _update_timer_label() -> void:
 	_timer_label.text = "%d:%02d" % [secs / 60, secs % 60]
 
 func _end_match_on_time() -> void:
-	if _story_objective != null:
+	if _story_objective != null or (GameState.mode == "story" and not _story_survival):
+		# Story stock victories require actual KOs. A percent tie-break cannot issue that receipt.
 		_finish_match(2)
 		return
 	if _story_survival:
@@ -670,8 +673,8 @@ func _setup_story_cosmic_encounter(contract: Dictionary) -> void:
 	_story_cosmic_actor = FIGHTER_SCENE.instantiate()
 	_story_cosmic_actor.name = "YangStoryManifestation"
 	fighters_root.add_child(_story_cosmic_actor)
-	_story_cosmic_actor.configure(str(contract["additional_opponent"]), 3, false, 99, Vector2(80, 160))
-	_story_cosmic_actor.controls_enabled = false
+	_story_cosmic_actor.configure(str(contract["additional_opponent"]), 3, true, 99, Vector2(80, 160))
+	_story_cosmic_actor.controls_enabled = false # Activated with the ordinary countdown below.
 	_story_cosmic_actor.set_meta("story_cosmic_contract", true)
 	data = _story_cosmic_actor.data.duplicate(true)
 	data["collectible_review_form"] = "COSMIC_BOSS"
@@ -686,14 +689,7 @@ func _setup_story_cosmic_encounter(contract: Dictionary) -> void:
 
 func _tick_story_cosmic_encounter(delta: float) -> void:
 	_story_elapsed += delta
-	_story_cosmic_cadence += delta
-	if _story_cosmic_cadence >= 2.4:
-		_story_cosmic_cadence = 0.0
-		if _story_cosmic_actor.move_runner.active:
-			return
-		var dx: float = fighter1.position.x - _story_cosmic_actor.position.x
-		_story_cosmic_actor.velocity.x = signf(dx) * 90.0 if absf(dx) > 100 else 0.0
-		_story_cosmic_actor.training_play_move("side_special" if absf(dx) > 100 else "heavy_attack", 0.0, 1 if dx >= 0 else -1)
+	# Both manifestations use the same active observation/input CPU as normal fighters.
 	_check_blast(_story_cosmic_actor)
 
 

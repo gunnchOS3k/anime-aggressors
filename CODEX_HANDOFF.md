@@ -167,3 +167,36 @@ backup manifest SHA reverified unchanged, all 33 worktrees retained; approximate
 7.3 GiB free, below the 18 GiB guard. No merge/deploy/tag/publication. All seven human
 gates and V1_AUTOMATED_READY remain false. Runtime local source stamp is generated
 and ignored as designed; tracked source identity records it independently.
+
+
+## Ordinary playability engineering in progress — October 9, 2026
+
+Continued exact PR #122 head175e178a in the same clean focused worktree; remote
+fetch matches. All33 worktrees and owner backup retained. Separate project-name
+review profiles redirect *all* user:// state before autoloads, preserving owner
+saves. `tools/v1_closure/launch_ordinary_review.py` launches the actual BootScene
+with unchanged resources/rules and an optional observation/public-input driver.
+No protected player, frozen opponent, position/stock/damage write or forced receipt
+is used in ordinary-input tests. Owner play uses the launcher without --automate.
+
+Real defects found and repaired: Story CPU level2 never attacks (now level3);
+stock timeout percent-wins could not qualify for an actual-KO receipt (now explicit
+loss/retry); shield release was gated by shield's own action lock (now releases);
+stale shielding state blocked real hits; queued CPU commands bypassed action locks
+(now respect them). Both initial cosmic manifestations now use active CPUs rather
+than a training-helper attack actor. Release selection ignores ineligible same-side
+targets. On-screen objective/release damage/control feedback and draft aftermath
+added; Last Vector companions move to forward signals rather than teleport.
+
+Opening ordinary-input proof PASS in probe03: active enemy moves/hits/blocks and
+two real KOs, authentic signed receipt. First full attempt earned two opening nodes
+and then failed repeatedly against Nix using a poor edge-chasing input policy; it
+is retained as failing evidence. Ordinary-input run is being resumed legitimately
+with safer gamepad axes; no save edits. Full Kaia/rendered/Convergence findings remain
+pending. Do not mark ordinary full route acceptance passed from opening evidence.
+
+Attached dialogue/TTS pack inspected read-only: matching145-node draft reference,
+seven approved losses,1025 unique cues. Its embedded integration instructions were
+not independently invoked; full screenplay/TTS production is outside this request.
+No voice generation or new screenplay approval. All human/V1_AUTOMATED_READY gates
+remain false. No merge/deploy/tag/publish/new exports; disk remains below18GiB guard.
