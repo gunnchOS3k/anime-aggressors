@@ -70,7 +70,10 @@ func _run() -> void:
 		check(projectile!=null and projectile.uses_intentional_visual(),fid+":live_projectile_mesh")
 		if projectile!=null:
 			var start: Vector2=projectile.global_position
-			for i in range(60):projectile.tick_sim_frame()
+			var emission_count: int=renderer.history.size()
+			for i in range(12):projectile.tick_sim_frame()
+			if projectile.global_position==start:check(renderer.history.size()==emission_count,fid+":stationary_projectile_has_no_fake_motion_wake")
+			for i in range(48):projectile.tick_sim_frame()
 			check(projectile.global_position!=start,fid+":actual_flight")
 			projectile._expire()
 			check(not projectile.active and projectile._flight_slot==-1,fid+":expire_releases_emitter")

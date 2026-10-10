@@ -2,7 +2,7 @@
 import json,subprocess,time,hashlib,sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2];OUT=ROOT/'artifacts/v1_closure/spectral_feedback';DEST=OUT/'regressions';DEST.mkdir(exist_ok=True)
-rows=[]
+rows=json.loads((DEST/"results.json").read_text())["rows"] if (DEST/"results.json").exists() else []
 sha=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
 diff=hashlib.sha256(subprocess.check_output(['git','diff'],cwd=ROOT)).hexdigest()
 for name in sys.argv[1:] or ['SpectralFeedback','InterruptedMove','CombatActivation','ElementalPerformance','OwnerOverrideFaces','DialogueProduction','FullCampaign','ShippingRosterPath','CampaignRestart']:
@@ -21,6 +21,7 @@ for name in sys.argv[1:] or ['SpectralFeedback','InterruptedMove','CombatActivat
    if current.read_bytes()!=data:
     new=dest/'legacy_report_outputs'/Path(path).relative_to('artifacts/v1_closure');new.parent.mkdir(parents=True,exist_ok=True);new.write_bytes(current.read_bytes());changed.append(path)
   log=(dest/'stdout.log').read_text();errors=[x for x in log.splitlines() if 'SCRIPT ERROR' in x]
+  rows=[r for r in rows if r['test']!=name]
   rows.append({'test':name,'passed':p.returncode==0 and not errors,'exit_code':p.returncode,'script_errors':errors,'seconds':round(time.monotonic()-start,2),'source_sha':sha,'source_diff_sha256':diff,'scope':'source fixture regression; does not grant human/platform/Story approval','new_reports':changed})
  finally:
   for path,data in saved.items():

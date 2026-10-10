@@ -139,6 +139,7 @@ func _on_area_entered(area: Area2D) -> void:
 func tick_sim_frame() -> void:
 	if not active:
 		return
+	var previous_world := global_position
 	frame_count += 1
 	match behavior:
 		"straight", "beam":
@@ -165,7 +166,7 @@ func tick_sim_frame() -> void:
 			direction = direction.rotated(0.04 * (1 if aura_level_at_spawn >= 2 else -1))
 	if _renderer != null:
 		_renderer.update_slot(_flight_slot,global_position,direction,_visual_extent)
-		_emission_distance += speed/SIM_FPS
+		_emission_distance += (global_position-previous_world).length()
 		var spacing := 18.0 if _renderer.option("reduced_particles") else 7.0
 		if _emission_distance >= spacing:
 			_emission_distance=0
