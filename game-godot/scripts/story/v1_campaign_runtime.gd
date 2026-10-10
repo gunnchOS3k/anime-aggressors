@@ -297,7 +297,10 @@ func begin_encounter(replay_id: String = "") -> bool:
 	GameState.p2_is_cpu = true
 	GameState.cpu_level = 3
 	GameState.stocks = 2
-	GameState.match_timer_seconds = int(node.get("survive_seconds", 180 if node.get("objective_contract", "STOCK_WIN") == "STOCK_WIN" else 0))
+	var objective: String = node.get("objective_contract", "STOCK_WIN")
+	# A survival duration is a minimum for movement/guard objectives, not a
+	# simultaneous deadline that defeats the player before their final step.
+	GameState.match_timer_seconds = int(node["survive_seconds"]) if objective == "COSMIC_SURVIVAL" else 180 if objective == "STOCK_WIN" else 0
 	GameState.match_type = "stock"
 	GameState.ruleset_id = "stock-3"
 	GameState.stage_id = str(node["stage"])

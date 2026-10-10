@@ -25,6 +25,7 @@ var video_frames := false
 var video_counts := {}
 var start_progress := {}
 var navigation := {}
+var seeded_prerequisites := false
 
 func _ready() -> void:
 	process_physics_priority = -100
@@ -35,6 +36,7 @@ func _ready() -> void:
 		if arg.begins_with("--ordinary-route="): route_id=arg.trim_prefix("--ordinary-route=")
 		if arg.begins_with("--ordinary-replay="): replay_nodes=Array(arg.trim_prefix("--ordinary-replay=").split(","))
 		if arg == "--ordinary-video-frames": video_frames=true
+		if arg == "--ordinary-seeded-prerequisites": seeded_prerequisites=true
 	if output.is_empty(): set_physics_process(false); return
 	DirAccess.make_dir_recursive_absolute(output)
 	print("ORDINARY_PROFILE ", OS.get_user_data_dir())
@@ -119,7 +121,8 @@ func _physics_process(_delta: float) -> void:
 				if retries > 4: failures.append("Ordinary-input driver lost repeatedly at "+node_id); _finish(); return
 			scene.rematch_btn.pressed.emit(); action_delay = 55
 	elif scene.scene_file_path.ends_with("BattleScene.tscn"):
-		if local_frame > 60*220: failures.append("Objective timeout: "+node_id); _finish(); return
+		var timeout := 1400 if scene._story_objective != null and scene._story_objective.kind == "SEVENFOLD_TRIAL" else 220
+		if local_frame > 60*timeout: failures.append("Objective timeout: "+node_id); _finish(); return
 		if not scene._active or not scene.fighter1.controls_enabled: return
 		attempt["max_player_damage"] = maxf(attempt["max_player_damage"],scene.fighter1.damage_percent)
 		_drive(scene)
@@ -244,6 +247,7 @@ func _drive(scene) -> void:
 		"SEVENFOLD_TRIAL":
 			_inputs(_combat(scene,scene.fighter2))
 		"SEVENFOLD_EQUILIBRIUM":
+			if p.position.y < o.ground_y-70: _inputs(_walk_to(p,0)); return
 			var actions := _walk_to(p,-180 if o.alternations%2==0 else 180,40)
 			if actions.is_empty(): actions=["shield"]
 			_inputs(actions)
@@ -264,6 +268,9 @@ func _finish() -> void:
 	set_physics_process(false); _inputs([])
 	var report := {"evidence_type":"ORDINARY_INPUT_AUTOMATION","human_playthrough":false,"new_profile":not resume,"route":route_id,"replay_nodes":replay_nodes,"profile_path":OS.get_user_data_dir(),"gameplay_overrides":[],"rows":rows,"trace":trace,"failures":failures,"ok":failures.is_empty(),"start_progress":start_progress,"progress":CampaignRuntime.progress,"navigation":navigation,"captures":captured,"video_frames":video_counts,"V1_AUTOMATED_READY":false}
 	var f := FileAccess.open(output.path_join("ordinary_input_evidence.json"),FileAccess.WRITE)
+	if seeded_prerequisites:
+		report["evidence_type"]="SEEDED_PREREQUISITES_ORDINARY_INPUT"
+		report["ordinary_earned_campaign"]=false
 	f.store_string(JSON.stringify(report,"  ")+"\n");f.close()
 	print("ORDINARY_COMPLETE ",failures)
 	var scene = get_tree().current_scene

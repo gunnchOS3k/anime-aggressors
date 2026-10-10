@@ -82,6 +82,8 @@ func _run() -> void:
 				rows.append({"node":node["id"], "kind":"battle", "receipt":campaign.last_result.duplicate(true), "real_player_control":true, "staged_automation":true,"human_playthrough":false})
 				if current_scene.has_method("_on_rematch_pressed"): current_scene._on_rematch_pressed()
 				await frames(5)
+				campaign.last_result.clear()
+				check(campaign.save_progress(), "save_after_results_clear_"+node["id"])
 			campaign.load_progress()
 			check(node["id"] in campaign.progress["routes"][fid]["completed"],"signed_resume_" + node["id"])
 			if not failures.is_empty(): _output(); quit(1); return
