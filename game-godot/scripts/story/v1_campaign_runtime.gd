@@ -259,6 +259,23 @@ func _complete_node(node_id: String, receipt: Dictionary = {}) -> bool:
 	return true
 
 
+func _chapter_state(route_id: String, node_id: String) -> Dictionary:
+	# Replays reconstruct the chapter's earned past, not the completed route's
+	# future. Otherwise released Puppets disappear and earlier Gray appears early.
+	var state: Dictionary = new_progress()["routes"][route_id]
+	for prior in route_data(route_id)["nodes"]:
+		if prior["id"] == node_id: break
+		if prior.has("recruit"): state["recruited"].append(prior["recruit"])
+		if prior.has("first_loss"): state["essence_fighters"].append(prior["first_loss"])
+		var receipt: Dictionary = progress["routes"][route_id]["receipts"].get(prior["id"], {})
+		for fid in receipt.get("objective_evidence", {}).get("released", []):
+			if fid not in state["released"]: state["released"].append(fid)
+			if fid not in state["essence_fighters"]: state["essence_fighters"].append(fid)
+		state["form"] = prior.get("form_after", state["form"])
+	state["essence"] = state["essence_fighters"].size()
+	return state
+
+
 func begin_encounter(replay_id: String = "") -> bool:
 	if not active_encounter.is_empty():
 		return false
@@ -280,7 +297,7 @@ func begin_encounter(replay_id: String = "") -> bool:
 		"token": "%s:%d:%d" % [node["id"], Time.get_ticks_usec(), _attempt_serial],
 		"objective_contract":node.get("objective_contract", "STOCK_WIN"), "survive_seconds":node.get("survive_seconds", 0),
 		"additional_opponent":node.get("additional_opponent", ""), "node":node.duplicate(true),
-		"route_state":progress["routes"][route_id].duplicate(true),
+		"route_state":_chapter_state(route_id, str(node["id"])) if replay else progress["routes"][route_id].duplicate(true),
 		"qualifying":not GameState.battle_eval_mode and not route_review_enabled()}
 	last_result.clear()
 	GameState.mode = "story"
