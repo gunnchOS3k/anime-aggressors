@@ -8,6 +8,9 @@ SOURCE=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).st
 IDS=['ember-vale','juno-spark','rook-ironside','kaia-windrow','nix-calder','orion-vell','vesper-nyx','yin','yang']
 plan=[(f,'active','low') for f in IDS]+[(f,'charge','low') for f in IDS]+[(f,'active',b) for f in IDS[:2] for b in ['medium','high']]+[(f,'before','low') for f in IDS[:2]]
 plan += [(f,'charge_continuous','low') for f in IDS[:2]]
+# Explicit new golden-comparison labels; previous roster recordings are preserved.
+if any('_choreography_' in label for label in sys.argv[1:]):
+ plan += [(f,'choreography','low') for f in IDS[:2]]
 selected=sys.argv[1:]
 index=json.loads((OUT/'capture_index.json').read_text()) if (OUT/'capture_index.json').exists() else {'movies':[]}
 for fid,mode,band in plan:

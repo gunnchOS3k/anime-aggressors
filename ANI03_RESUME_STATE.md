@@ -1,3 +1,12 @@
+# Runtime choreography milestone — October 11, 2026
+
+Native repaired competitive KO counterpart complete at 82cbd084: 60 fps/1121 frames, native mixed audio, nine public throws/nine contacts, active CPU, Juno stocks9→8 at frame900 and kind7 at901. Match win not claimed; initial110% fixture labeled. Native file rendered/ember-vale_edgeguard-throw_high_movie.mp4, raw local_media/ ignored. Old duplicate trace preserved.
+
+New original combat library now wired on existing male/female rigs. 432 move/body frame checks PASS in animation_frame_fixed (82cbd084 + recorded source diff); absolute quaternion/position tracks, rig-specific support, original hand paths, coordinated pelvis/chest and stance/gait/land/hurt blocking. Bounded accessory follow-through added with reduced-shake option. Initial fixture loop-property error was terminated/preserved and corrected; no shipping parse error. Human animation approval false; moving-world foot lock, authored turns/stops, complete mocap-quality choreography and secondary cloth production remain open.
+
+Next serial command: `python3 tools/v1_closure/validate_continuous_combat.py --label animation_checkpoint CombatChoreography ElementalPerformance ChargeContinuity ShippingRosterPath CampaignRestart`. Checkpoint this runtime before those validations and two new golden native clips; do not repeat the old nine-fighter movie campaign. After checks capture only ember-vale_choreography_low/juno-spark_choreography_low, inspect real normal-speed frames, refine any reproduced defect, then bounded missing medium/high category probes. Free disk~5.5GiB, all33worktrees intact, human/release gates false. No isolated Godot remains.
+
+---
 # Post-throw acceptance milestone — October 11, 2026
 
 Throw source `4bdb1a88` verified by 36 directions + policies, combat/interruption/spectral/charge, all 145 staged nodes, 18 roster variants and restart. Missing unlock setup failure preserved, corrected fixture passes. Ordinary Kaia fresh + real restart passed 20 nodes/16 receipts, Gray, no overrides, Yin/Yang locked. Evidence: continuous_1011/regressions and ordinary_kaia.

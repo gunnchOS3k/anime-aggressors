@@ -962,7 +962,7 @@ func _setup_procedural_runtime(fighter_data: Dictionary) -> void:
 	_animation_controller = _AnimationController.new()
 	_animation_controller.name = "FighterAnimationController"
 	add_child(_animation_controller)
-	_animation_controller.setup({"fighter_id": _fighter_id}, _proxy_model)
+	_animation_controller.setup({"fighter_id": _fighter_id, "body_variant": _body_variant}, _proxy_model)
 	_visible_skeleton = _animation_controller.get_skeleton() if _animation_controller.has_method("get_skeleton") else _visible_skeleton
 	_material_controller = _MaterialController.new()
 	_material_controller.name = "FighterMaterialController"

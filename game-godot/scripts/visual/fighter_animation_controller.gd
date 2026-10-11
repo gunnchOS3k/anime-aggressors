@@ -18,6 +18,8 @@ var _active_clip: String = ""
 var _throw_dir: String = "forward"
 var _move_synchronized := false
 var presentation_frozen := false
+var _body_variant := "male"
+var secondary_follow: Node
 
 
 func setup(fighter, model_root: Node3D) -> void:
@@ -28,6 +30,7 @@ func setup(fighter, model_root: Node3D) -> void:
 			_fighter_id = str(fighter.fighter_id)
 		elif fighter.has_method("get"):
 			_fighter_id = str(fighter.get("fighter_id"))
+	if fighter != null and "body_variant" in fighter: _body_variant = str(fighter.body_variant)
 	_skeleton = _find_skeleton(model_root)
 	if _skeleton == null:
 		return
@@ -42,6 +45,7 @@ func setup(fighter, model_root: Node3D) -> void:
 			# Staging GLBs often only embed idle. Combat clips still come from V3 procedural JSON.
 			_load_procedural_clips(model_root)
 			_load_authored_studies()
+			_load_combat_choreography(model_root)
 			return
 	_disable_embedded_players(model_root)
 	_player = AnimationPlayer.new()
@@ -98,6 +102,7 @@ func get_loaded_clip_names() -> Array:
 
 
 func _animation_play_key(clip: String) -> String:
+	if _player != null and _player.has_animation("combat_choreography/"+clip): return "combat_choreography/"+clip
 	if _player != null and _player.has_animation("authored_studies/"+clip): return "authored_studies/"+clip
 	if clip.is_empty() or _player == null:
 		return ""
@@ -174,9 +179,27 @@ func _animation_from_data(data: Dictionary) -> Animation:
 		for key in keys:
 			var rot: Array = key.get("rotation_rad", [0.0, 0.0, 0.0])
 			var quat := Quaternion.from_euler(Vector3(float(rot[0]), float(rot[1]), float(rot[2])))
+			if key.has("rotation_quat"):
+				var q: Array = key.rotation_quat
+				quat = Quaternion(float(q[0]),float(q[1]),float(q[2]),float(q[3])).normalized()
 			if bool(data.get("relative_to_rest",false)):
 				quat = _skeleton.get_bone_rest(_skeleton.find_bone(glb_bone)).basis.get_rotation_quaternion() * quat
 			anim.track_insert_key(track_idx, float(key.get("time_s", 0.0)), quat)
+
+		if keys[0].has("position_m"):
+			var position_idx := anim.add_track(Animation.TYPE_POSITION_3D)
+			anim.track_set_path(position_idx, NodePath("%s:%s" % [_skeleton_path, glb_bone]))
+			for key in keys:
+				var v: Array = key.position_m
+				anim.track_insert_key(position_idx,float(key.time_s),Vector3(float(v[0]),float(v[1]),float(v[2])))
+	# Older clips must restore the pelvis when interrupting a translated authored pose.
+	if tracks.has("Hips") and not tracks.Hips[0].has("position_m"):
+		var hips := _BoneMap.resolve_on_skeleton(_skeleton,"Hips")
+		var index := _skeleton.find_bone(hips)
+		var reset := anim.add_track(Animation.TYPE_POSITION_3D)
+		anim.track_set_path(reset,NodePath("%s:%s" % [_skeleton_path,hips]))
+		anim.track_insert_key(reset,0.0,_skeleton.get_bone_rest(index).origin)
+		anim.track_insert_key(reset,anim.length,_skeleton.get_bone_rest(index).origin)
 	return anim
 
 
@@ -260,8 +283,30 @@ func _process(delta: float) -> void:
 
 func synchronize_move(frame: int,move: Dictionary) -> void:
 	if _player == null or not is_instance_valid(_player): return
-	var key := "authored_studies/"+str(move.get("move_id",""))
+	var key := "combat_choreography/"+str(move.get("move_id",""))
+	if not _player.has_animation(key): key = "authored_studies/"+str(move.get("move_id",""))
 	if not _player.has_animation(key): return
 	_move_synchronized = true
 	if _player.current_animation != key: _player.play(key,0)
 	_player.seek(float(frame)/60.0,true)
+
+func _load_combat_choreography(model_root: Node3D) -> void:
+	var path := "res://data/animation/combat_choreography/%s_%s.json" % [_fighter_id,_body_variant]
+	if not FileAccess.file_exists(path): return
+	var doc: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(path))
+	var library := AnimationLibrary.new()
+	for clip in doc.clips:
+		var anim := _animation_from_data(doc.clips[clip])
+		anim.loop_mode = Animation.LOOP_LINEAR if doc.clips[clip].get("loop",false) else Animation.LOOP_NONE
+		library.add_animation(clip,anim); _loaded_clips[clip]=true
+	for mid in _MoveResolver.move_id_to_clip_table():
+		var alias: String = str(_MoveResolver.move_id_to_clip_table()[mid])
+		if library.has_animation(mid) and not library.has_animation(alias): library.add_animation(alias,library.get_animation(mid)); _loaded_clips[alias]=true
+	for alias in {"hurt_light_front":"hurt_light","hurt_light_back":"hurt_light","launch_horizontal":"launched","launch_vertical":"launched"}:
+		var source: String = str({"hurt_light_front":"hurt_light","hurt_light_back":"hurt_light","launch_horizontal":"launched","launch_vertical":"launched"}[alias])
+		if not library.has_animation(alias): library.add_animation(alias,library.get_animation(source)); _loaded_clips[alias]=true
+	if library.has_animation("neutral_special_projectile"):
+		for alias in ["projectile_tap","projectile_medium","projectile_full"]: library.add_animation(alias,library.get_animation("neutral_special_projectile")); _loaded_clips[alias]=true
+	_player.add_animation_library("combat_choreography",library)
+	secondary_follow=preload("res://scripts/visual/combat_secondary_follow.gd").new()
+	add_child(secondary_follow); secondary_follow.setup(model_root,self)
