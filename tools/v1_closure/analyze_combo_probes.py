@@ -24,8 +24,9 @@ for row in index['attempts']:
   control_transition=next((s for s in state_changes if s['movie_frame']>f and s['to'] in ['idle','walk','run','dash','fall','jump','fast_fall','aura_ready']),None)
   activation=next((s for s in d['move_phases'] if s['fighter']==fid and s['phase']=='active' and s['movie_frame']>f),None)
   next_start=next((m for m in d['moves'] if m['fighter']==fid and m['movie_frame']>f),None)
-  genuine=bool(next_c and next_c['result']=='hit' and next_c['follow_up_before_control'])
-  status='TRUE_COMBO_CONFIRMED' if genuine else 'DEFENDER_BLOCKED' if next_c and next_c['result']=='shield' else 'RECOVERY_BEFORE_NEXT_CONTACT' if next_c else 'NO_SUBSEQUENT_CONTACT'
+  excluded=row.get('acceptance_status','').startswith('DEFECT_AFFECTED') or first['move'].startswith('throw_') or bool(next_c and next_c['move'].startswith('throw_'))
+  genuine=bool(not excluded and next_c and next_c['result']=='hit' and next_c['follow_up_before_control'])
+  status='DEFECT_AFFECTED_THROW_NOT_COMBO_ACCEPTANCE' if excluded else 'TRUE_COMBO_CONFIRMED' if genuine else 'DEFENDER_BLOCKED' if next_c and next_c['result']=='shield' else 'RECOVERY_BEFORE_NEXT_CONTACT' if next_c else 'NO_SUBSEQUENT_CONTACT'
   case={'capture':row['label'],'source_sha':row['source_sha'],'native_movie':row['native_movie'],'fighter':fid,'input_recipe':row['pattern'],
         'first_contact_frame':f,'first_move':first['move'],'first_move_class':category(first['move']),'actual_damage_band':band(first['damage_before']),
         'first_contact':first,'observed_hitstop_frames':[s['movie_frame'] for s in samples if s['p2_hitstop']>0],
@@ -37,7 +38,7 @@ for row in index['attempts']:
  matrix.append({**row,'genuine_pairs':sum(c['true_followup_before_control'] for c in cases),'blocked_pairs':sum(c['status']=='DEFENDER_BLOCKED' for c in cases),
                 'recovery_before_next_pairs':sum(c['status']=='RECOVERY_BEFORE_NEXT_CONTACT' for c in cases),'unverified_no_next_contact':sum(c['status']=='NO_SUBSEQUENT_CONTACT' for c in cases),
                 'actual_first_move_classes':sorted({c['first_move_class'] for c in cases}),
-                'status':'TRUE_COMBO_OBSERVED_WITH_DEFENSIVE_ESCAPES' if any(c['true_followup_before_control'] for c in cases) else 'NO_TRUE_COMBO_OBSERVED' if cases else 'NO_BODY_CONTACT_OBSERVED'})
+                'status':'DEFECT_AFFECTED_NOT_ACCEPTANCE' if row.get('acceptance_status','').startswith('DEFECT_AFFECTED') else 'TRUE_COMBO_OBSERVED_WITH_DEFENSIVE_ESCAPES' if any(c['true_followup_before_control'] for c in cases) else 'NO_TRUE_COMBO_OBSERVED' if cases else 'NO_BODY_CONTACT_OBSERVED'})
 (OUT/'COMBO_INTERACTIONS.json').write_text(json.dumps({'interactions':interactions,'rules_changed':False,'tuning_configuration':'none','AI_disabled':False},indent=2)+'\n')
 (OUT/'COMBO_PROBE_MATRIX.json').write_text(json.dumps(matrix,indent=2)+'\n')
 keys=['label','fighter','band','pattern','native_movie','hits','shield_contacts','genuine_pairs','blocked_pairs','recovery_before_next_pairs','unverified_no_next_contact','status','source_sha']

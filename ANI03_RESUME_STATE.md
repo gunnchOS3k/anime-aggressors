@@ -1,3 +1,22 @@
+# Final reconciliation state — October 11, 2026
+
+Branch: `release/anime-v1-dialogue-and-elemental-performance`. Reconciliation package pushed at `55e37fb4393ca13677a7322e401971808eb4ed2a`; bounded observer source `967414087b74191fde411b95da5281c85b2c9c72` is included in the next report checkpoint. Resolve its current pushed metadata HEAD with `git rev-parse HEAD` and `gh pr view 123 --repo gunnchOS3k/anime-aggressors --json headRefOid`. These records cannot embed their own future commit hash. Shipping gameplay code still equals tested `f858246970a129565473fb00f447bd931bb12350`. #122 remains c5f3be23, both draft.
+
+Twelve final source suites completed and are verified against logs. Nine executed at f8582469, three at b7a562a0 with identical Godot tree ID. Eight GitHub jobs across seven runs succeeded at exact b7a562a0. New report checkpoints trigger fresh CI; inspect it before claiming exact-new-head green. No successful long test was repeated.
+
+EVIDENCE_MANIFEST.json verifies 19 video files (including two failed charge clips, one superseded slow excerpt and the local-only Story movie), 61 contact sheet/crop files and two galleries, with source SHA, hash, valid frames and restrictions. Summary now reflects 15 normal versus movies, not four. DELIVERY_CHECKPOINT.json is present. Failed Ember slow A/V tail remains preserved; corrected derivative is indexed. Recovered local reports archived in local_media/reconciliation_recovery_20261011/.
+
+One additional 900-frame headless public-control Juno edgeguard/grab/throw attempt finished in 3.34 seconds. It produced real Ember CPU stock loss at frame 567, stocks 9→8, and Juno kind-7 event at process 568. It also independently reproduced duplicate throw contacts (500/507/509 for one throw). This is defect affected, not accepted competitive KO/combo proof. All 45 raw throw hitstun snapshot flags are excluded from combo acceptance. No new native campaign or shipping gameplay fix was started. Exact original trace and COMPETITIVE_KO_ATTEMPT.json are committed next.
+
+Current technical blocker: ANI03-T01 direct-throw contact ownership. Next bounded task: fix it with targeted all-direction/all-roster tests, then affected ordinary Story receipt/save validation and one new-label KO attempt. Read ENGINEERING_BACKLOG.md and NEXT_INCREMENT_PROMPT.md. Broader native combo matrix remains 37 observed/71 missing cells. Original thirty core probes still 552 contacts/11 genuine pairs/102 blocked pairs. Authored choreography, terrain/parry/clash rule design, ANI04 acting/OVA and ANI05 device/human gates remain open.
+
+Running processes: no isolated Godot capture or test remains from this increment. Free disk about 6 GiB (still below 18 GiB). All 33 worktrees and protected assets/data plus backup hash preserved. No merge/force-push/reset/export/deploy/tag/publish. All human gates false.
+
+Exact next read-only command: `sed -n '1085,1140p' game-godot/scripts/fighters/fighter.gd`. Exact next prompt is in `artifacts/v1_closure/spectral_feedback/NEXT_INCREMENT_PROMPT.md`. Never rerun the old completed label juno-spark_edgeguard-throw_high; a future post-fix attempt needs a new label.
+
+---
+Historical checkpoint entries follow; their running-process statements are stale.
+
 # Bounded KO attempt checkpoint — October 11, 2026
 
 Evidence reconciliation is committed at `55e37fb4` and pushed to existing draft #123. Source gameplay remains f8582469; all twelve final suites and eight exact-b7 GitHub checks are verified. A test-driver-only `edgeguard-throw` recipe is checkpointed next. It walks via public controls toward x470, then uses ordinary grab/throw against an active CPU, with the already declared 110% initial-damage fixture. No state/velocity/results writes occur after initial fixture setup.

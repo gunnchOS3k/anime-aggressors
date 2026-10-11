@@ -477,6 +477,23 @@
       "shield_contacts": 5,
       "true_followups": 0,
       "scope": "adaptive public controls versus active CPU; 0/50/110 starting opponent percent fixture only; no balance overrides or forced results"
+    },
+    {
+      "label": "juno-spark_edgeguard-throw_high",
+      "fighter": "juno-spark",
+      "band": "high",
+      "pattern": "edgeguard-throw",
+      "source_sha": "967414087b74191fde411b95da5281c85b2c9c72",
+      "seconds": 3.34,
+      "native_movie": false,
+      "hits": 45,
+      "shield_contacts": 0,
+      "true_followups": 0,
+      "scope": "adaptive public controls versus active CPU; 0/50/110 starting opponent percent fixture only; no balance overrides or forced results; raw hit/follow-up counts include duplicate throw contacts and are not accepted combos",
+      "acceptance_status": "DEFECT_AFFECTED; NOT_COMBO_OR_COMPETITIVE_KO_ACCEPTANCE",
+      "reason": "Throw resolves immediately and again through active stale hitbox; throw release sets defender HITSTUN before the contact snapshot.",
+      "raw_follow_up_snapshot_flags": 45,
+      "accepted_competitive_ko": false
     }
   ]
 }
