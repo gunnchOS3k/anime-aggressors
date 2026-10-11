@@ -80,6 +80,14 @@ func _run() -> void:
 			projectile._expire()
 			check(not projectile.active and projectile._flight_slot==-1,fid+":expire_releases_emitter")
 		p.projectile_spawner.clear_all()
+		# Declared missed-signature fixture: release is authored energy, not contact authority.
+		p.global_position=Vector2(-220,260);d.global_position=Vector2(220,260);d.invincible=true;p._hitstop=0
+		var release_before: int=renderer.history.filter(func(h):return h.kind==9 and h.fid==fid).size()
+		var contact_before: int=renderer.history.filter(func(h):return h.kind==0).size()
+		p.training_play_move("aura_burst")
+		for i in range(40):await physics_frame
+		check(renderer.history.filter(func(h):return h.kind==9 and h.fid==fid).size()==release_before+1,fid+":one_signature_release_at_active_frame")
+		check(renderer.history.filter(func(h):return h.kind==0).size()==contact_before,fid+":missed_signature_has_no_confirmed_burst")
 		p.move_runner.cancel();p.state_machine.enter("aura_charge");p.aura=50;p._set_aura_vfx(true)
 		var charge: int=p._spectral_charge_slot
 		p._set_aura_vfx(true)

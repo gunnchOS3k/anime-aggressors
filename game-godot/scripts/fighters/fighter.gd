@@ -1089,6 +1089,8 @@ func _on_move_active(move: Dictionary) -> void:
 	# Release and contact are separate: a legitimate missed burst still sounds.
 	if move_runner.frame_in_phase == 1 and (mid == "aura_burst" or mt == "burst"):
 		if _elemental_audio != null: _elemental_audio.play("signature_release")
+		var release_renderer = preload("res://scripts/visual/spectral_feedback_renderer.gd").obtain(self)
+		if release_renderer != null: release_renderer.emit_effect(fighter_id,9,global_position+Vector2(0,-24),Vector2(facing,0),160,.24)
 	if mid == "grab" or mt == "grab":
 		state_machine.enter(_FighterStates.GRAB_ACTIVE)
 		_try_grab_connect()

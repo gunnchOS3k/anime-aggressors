@@ -84,10 +84,13 @@ func _run() -> void:
 		if not probe.is_empty():
 			actions=_probe_inputs(frame,p,dx)
 		elif idle_opponent:
-			if phase<650:actions.append_array(["special","shield"])
-			elif phase<690:
-				if phase%20<4:actions.append("special")
-			elif phase<720:actions.append("attack")
+			if phase<400:actions.append_array(["special","shield"])
+			elif phase<430:actions.append("attack")
+			elif phase<720:
+				if phase%55<4:actions.append("special")
+			elif phase<850:
+				actions.append_array(["special","shield"])
+				if phase==800:actions.append("jump")
 		else:
 			if phase<200:
 				if absf(dx)>50:actions.append("right" if dx>0 else "left")
