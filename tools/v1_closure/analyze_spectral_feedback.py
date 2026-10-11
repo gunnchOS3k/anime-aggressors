@@ -56,12 +56,14 @@ for row,data in captures:
 # Frame sheets use actual movie frame numbers from resolution; no re-created effects.
 sheets=[];(OUT/'contact_sheets').mkdir(exist_ok=True)
 for row,data in captures:
- if row['fighter'] not in ['ember-vale','juno-spark'] or row['mode'] not in ['active','combo']:continue
+ if row['mode'] not in ['active','combo']:continue
  chosen=[]
  for result in ['hit','shield']:
   item=next((c for c in data['contacts'] if c['attacker']==row['fighter'] and c['result']==result),None)
   if item:chosen.append(item)
  item=next((c for c in data['contacts'] if c['attacker']==row['fighter'] and c['follow_up_before_control'] and c['result']=='hit'),None)
+ if item and item not in chosen:chosen.append(item)
+ item=next((c for c in data['contacts'] if c['attacker']==row['fighter'] and move_class(c['move'])=='heavy' and c['result']=='hit'),None)
  if item and item not in chosen:chosen.append(item)
  for n,c in enumerate(chosen):
   frame=c['movie_frame'];frames=[max(0,frame+x) for x in [-3,-1,0,2,6,18]]
@@ -81,5 +83,6 @@ for row,data in captures:
    detail.save(zoom)
   sheets.append({'path':str(output.relative_to(ROOT)),'source_sha':row['source_sha'],'source_movie':row['path'],'contact':c,'frames_left_to_right_then_down':frames,'times_s':[round(x/60,4) for x in frames],'cadence':60,'note':'actual renderer frames; trace frame may precede displayed mesh by one process frame; inspect before/at/after directly'})
 (OUT/'CONTACT_SHEETS.json').write_text(json.dumps(sheets,indent=2)+'\n')
-summary={'capture_source_shas':sorted({m['source_sha'] for m in movies if m['mode']!='before'}),'movies':len(captures),'full_nine_roster':all(any(m['fighter']==fid and m['mode']=='active' for m in movies) for fid in IDS),'active_cpu_followups':sum(r['followups_before_control'] for r in combo),'combo_cells_with_contact':sum(r['status']=='OBSERVED' for r in combo),'combo_cells_without_contact':sum(r['status']!='OBSERVED' for r in combo),'ko_captures':sum(r['ko_count'] for r,d in captures if r['mode']!='before'),'renderer_effect_rows_observed':sum(r['current_renderer']=='OBSERVED' for r in matrix),'all_human_gates_false':True,'heavy_exports_run':False}
+stock=json.loads((OUT/'NATIVE_STOCK_LOSS.json').read_text()) if (OUT/'NATIVE_STOCK_LOSS.json').exists() else None
+summary={'capture_source_shas':sorted({r['source_sha'] for r,d in captures if r['mode']!='before'}),'movies':len(captures),'full_nine_roster':all(any(m['fighter']==fid and m['mode']=='active' for m in movies) for fid in IDS),'active_cpu_followups':sum(r['followups_before_control'] for r in combo),'combo_cells_with_contact':sum(r['status']=='OBSERVED' for r in combo),'combo_cells_without_contact':sum(r['status']!='OBSERVED' for r in combo),'versus_ko_captures':sum(r['ko_count'] for r,d in captures if r['mode']!='before'),'story_stock_loss_capture':{'source_sha':stock['source_sha'],'scope':stock['scope'],'events':len(stock['ko_events']),'local_only':stock['local_only']} if stock else None,'renderer_effect_rows_observed':sum(r['current_renderer']=='OBSERVED' for r in matrix),'all_human_gates_false':True,'heavy_exports_run':False}
 (OUT/'IMPLEMENTATION_SUMMARY.json').write_text(json.dumps(summary,indent=2)+'\n');print(json.dumps(summary))

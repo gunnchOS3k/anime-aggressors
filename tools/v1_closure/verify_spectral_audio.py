@@ -12,7 +12,7 @@ rows=[]
 movies=[{**m,'folder':'captures'} for m in json.loads((OUT/'capture_index.json').read_text())['movies']]
 if (OUT/'combo_probe_index.json').exists():movies.extend({**m,'mode':'active','folder':'combo_probes'} for m in json.loads((OUT/'combo_probe_index.json').read_text())['attempts'] if m['native_movie'])
 for movie in movies:
- if movie['mode']!='active' or movie['fighter'] not in ['ember-vale','juno-spark']:continue
+ if movie['mode'] not in ['active','charge_continuous'] or movie['fighter'] not in ['ember-vale','juno-spark']:continue
  data=json.loads((OUT/movie['folder']/movie['label']/'combat_capture.json').read_text())
  decoded=MEDIA/(movie['label']+'_analysis.wav')
  subprocess.run(['ffmpeg','-y','-hide_banner','-loglevel','error','-i',str(ROOT/movie['path']),'-vn','-ac','1','-ar','48000','-c:a','pcm_s16le',str(decoded)],check=True)
