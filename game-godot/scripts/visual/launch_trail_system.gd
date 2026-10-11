@@ -2,7 +2,7 @@ extends Node2D
 class_name LaunchTrailSystem
 ## Discrete original smoke volumes follow real victim displacement during hitstun.
 const _Renderer = preload("res://scripts/visual/spectral_feedback_renderer.gd")
-const SMOKE_TIERS := ["HIGH", "CRITICAL"]
+const SMOKE_TIERS := ["MEDIUM", "HIGH", "CRITICAL"]
 var _active := false
 var _target: WeakRef
 var _fid := ""
