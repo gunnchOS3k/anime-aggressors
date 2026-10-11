@@ -597,6 +597,9 @@ func _apply_movement(delta: float) -> void:
 			velocity.x = move_toward(velocity.x, 0.0, get_run_speed() * delta * 8.0)
 		return
 	var axis: float = _read_axis()
+	# Held charge owns its presentation state. Locomotion still applies, but
+	# entering idle/walk/fall each frame would stop and restart its audio/emitter.
+	var charging: bool = state_machine.current_state in [_FighterStates.AURA_CHARGE, _FighterStates.AURA_READY]
 	if not is_on_floor():
 		_fast_falling = velocity.y > 80 and not _read_jump_held() and _read_down()
 		var ff: float = FAST_FALL_MULT if _fast_falling else 1.0
@@ -615,9 +618,9 @@ func _apply_movement(delta: float) -> void:
 		var spd: float = get_run_speed()
 		if absf(axis) > 0.75 and is_on_floor():
 			spd = get_dash_speed()
-			state_machine.enter(_FighterStates.DASH)
+			if not charging: state_machine.enter(_FighterStates.DASH)
 		else:
-			if is_on_floor():
+			if is_on_floor() and not charging:
 				state_machine.enter(_FighterStates.RUN if absf(velocity.x) > spd * 0.5 else _FighterStates.WALK)
 		if state_machine.current_state == _FighterStates.AURA_CHARGE:
 			spd *= get_charge_move_mult()
@@ -633,7 +636,7 @@ func _apply_movement(delta: float) -> void:
 	else:
 		var stop: float = get_traction() if is_on_floor() else get_air_accel() * 0.45
 		velocity.x = move_toward(velocity.x, 0.0, stop * delta)
-		if is_on_floor() and not _FighterStates.is_attack_state(state_machine.current_state):
+		if is_on_floor() and not charging and not _FighterStates.is_attack_state(state_machine.current_state):
 			if absf(velocity.x) < 10.0:
 				state_machine.enter(_FighterStates.IDLE)
 	if _read_jump_pressed():
@@ -1599,6 +1602,7 @@ func _sync_motion_state() -> void:
 		_FighterStates.ATTACK_ACTIVE, _FighterStates.ATTACK_RECOVERY,
 		_FighterStates.SPECIAL_STARTUP, _FighterStates.SPECIAL_ACTIVE, _FighterStates.SPECIAL_RECOVERY,
 		_FighterStates.AURA_BURST_STARTUP, _FighterStates.AURA_BURST_ACTIVE, _FighterStates.AURA_BURST_RECOVERY,
+		_FighterStates.AURA_CHARGE, _FighterStates.AURA_READY,
 		_FighterStates.GRAB_STARTUP, _FighterStates.THROW_STARTUP, _FighterStates.THROW_RELEASE,
 		_FighterStates.AIR_DODGE, _FighterStates.LAUNCHED,
 	]:
