@@ -1,3 +1,12 @@
+# Full-roster movement/source checkpoint — October 11, 2026
+
+Last pushed shared direction/phase correction: be0d02697d89d4cb3e1f022c7487f9a8a7811613. The commit containing this entry adds state-owned neutral/reaction selection, pre-dispatch pose synchronization, and9fighter-specific stance/swing gaits with camera-calibrated displacement clocks for both body presentations. Combat values unchanged. Focused CombatChoreography and InterruptedMove PASS in full_roster_pose_clock with recorded source diff. New RosterFootwork fixture is prepared but not yet verified.
+
+RosterContactAlignment observer failures are preserved: v1 parse, v2 premature autoload preload (owned process terminated), v3 too-short match/floating setup (terminated), v4 airborne fixture, grounded216rows contact/whiff/interruption passed but deferred clock72failures. That observer is now synchronous and correctly grounded; definitive rerun pending. Initial grounded wrists outside actual overlap by several pixels; NOT accepted anatomy/contact closure. All nine fighters have same outstanding measurement requirement, not only Ember/Juno.
+
+Next serial command: python3 tools/v1_closure/validate_continuous_combat.py --label roster_geometry_and_footwork RosterContactAlignment RosterFootwork. Requires original baseline pose files in /private/tmp/ani03_alignment_baseline_0ab, reconstructed with git show0ab if absent. After measurements refine actual full-roster reach/footwork, keep source and human quality distinct, checkpoint, then9bounded current-animation gameplay clips and roster-wide medium/high probes. No isolated Godot running. Disk~6.8GiB;18GiB export guard. Preserve prior throw/KO/Story/audio/VFX and all33worktrees. Every human/release gate false.
+
+---
 # Full-roster direction/timing checkpoint — October 11, 2026
 
 Owner override: all nine fighters and both body presentations are the production target. Earlier golden-slice next steps below are historical and superseded. Current branch release/anime-v1-dialogue-and-elemental-performance, worktree /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure. Last pushed 0ab1d6532f7fe233603fff581f6dcfd426b0057d; resolve the commit containing this entry for the new checkpoint.

@@ -3,7 +3,7 @@ import argparse,json,subprocess,time
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 p=argparse.ArgumentParser();p.add_argument('--label',required=True);p.add_argument('suites',nargs='+');a=p.parse_args()
-allowed=['ThrowOwnership','CombatChoreography','CombatActivation','InterruptedMove','SpectralFeedback','ChargeContinuity','FullCampaign','ShippingRosterPath','CampaignRestart','ElementalPerformance','DialogueProduction','OwnerOverrideFaces']
+allowed=['RosterContactAlignment','RosterFootwork','ThrowOwnership','CombatChoreography','CombatActivation','InterruptedMove','SpectralFeedback','ChargeContinuity','FullCampaign','ShippingRosterPath','CampaignRestart','ElementalPerformance','DialogueProduction','OwnerOverrideFaces']
 assert all(x in allowed for x in a.suites)
 out=ROOT/'artifacts/v1_closure/spectral_feedback/continuous_1011'/a.label
 assert not out.exists(),'Preserve previous evidence; use a new run label'
@@ -11,6 +11,7 @@ out.mkdir();rows=[]
 for suite in a.suites:
  dest=out/suite;dest.mkdir();sha=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
  args=['python3','tools/v1_closure/launch_ordinary_review.py','--profile',('ani03_'+a.label+'_'+suite.lower())[:64],'--headless','--test-script','res://tests/v1_closure/'+suite+'.gd','--output',str(dest)]
+ if suite=='RosterContactAlignment':args+=['--driver-arg=--geometry-baseline=/private/tmp/ani03_alignment_baseline_0ab']
  if suite=='ShippingRosterPath':args+=['--driver-arg=--roster-staged-unlocks=/private/tmp/anime-full-campaign-v2.json']
  candidates=[ROOT/'artifacts/v1_closure'/n for n in ['full_campaign_runtime_evidence.json','shipping_roster_evidence.json','campaign_restart_evidence.json','dialogue_performance/elemental_runtime_test.json']]
  prior={x:x.read_bytes() for x in candidates if x.exists()}

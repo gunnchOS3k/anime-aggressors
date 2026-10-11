@@ -18,6 +18,19 @@ DIRECTION={
 'yin':(-.24,-.52,.035,1.0,.66,-.075,-.025,.82,'fold inward / absorbent palm / subtractive settle'),
 'yang':(.24,.58,.018,.70,.75,.035,.035,.52,'constructed open guard / symmetric extension / definition')}
 
+# Per-fighter footwork, in rig metres: stride/lift, lean, lateral balance,
+# hand counter-swing and stance width. These are visual values only.
+GAIT={
+'ember-vale':(.12,.032,.18,.012,.075,1.02),
+'rook-ironside':(.082,.017,.11,.020,.045,1.30),
+'juno-spark':(.135,.040,.13,.008,.105,.90),
+'kaia-windrow':(.13,.048,.08,.017,.10,.94),
+'nix-calder':(.095,.024,.07,.004,.05,.96),
+'orion-vell':(.115,.032,.04,.022,.07,1.08),
+'vesper-nyx':(.12,.035,.12,.024,.085,.88),
+'yin':(.065,.008,.015,.002,.015,1.04),
+'yang':(.11,.028,.035,.003,.06,1.06)}
+
 def unit(x):
  n=np.linalg.norm(x); return x/max(n,1e-10)
 def matrix(q):
@@ -127,20 +140,21 @@ def make_clip(r,fid,move):
 def make_state(r,fid,name):
  spec=DIRECTION[fid];hip,chest,compression,follow,guard,arc,step,settle,_=spec
  rest=fk(r,{},{});scale=rest['Head'][1][1]/.85
- length=32 if name in ['run','run_loop'] else 48 if name in ['walk','walk_loop'] else 24 if name.startswith('land') else 60
- loop=name in ['idle','idle_primary','idle_secondary','walk','walk_loop','run','run_loop','shield','shield_hold','fall','aura_charge','aura_ready','charged_idle']
+ stride,lift,run_lean,sway,arm_swing,width=GAIT[fid]
+ length=32 if name in ['run','run_loop','dash_loop'] else 48 if name in ['walk','walk_loop'] else 24 if name.startswith('land') else 60
+ loop=name in ['idle','idle_primary','idle_secondary','walk','walk_loop','run','run_loop','dash_loop','shield','shield_hold','fall','aura_charge','aura_ready','charged_idle']
  tracks={n:[] for n in r if n not in ['Root','Toes_L','Toes_R']}
  for f in range(length+1):
-  t=f/length;wave=math.sin(2*math.pi*t);pulse=math.sin(math.pi*t);travel=name in ['walk','walk_loop','run','run_loop'];hurt=name in ['hurt_light','hurt_heavy','hitstun_ground','launch','launched','tumble','defeat']
+  t=f/length;wave=math.sin(2*math.pi*t);pulse=math.sin(math.pi*t);travel=name in ['walk','walk_loop','run','run_loop','dash_loop'];hurt=name in ['hurt_light','hurt_heavy','hitstun_ground','launch','launched','tumble','defeat']
   rots={};pos={}
   turn=.05*wave if travel else -.18*pulse if hurt else .012*wave
-  lean=-.18 if name.startswith('run') else -.32*pulse if hurt else .06*pulse if name.startswith('land') else -.02
+  lean=run_lean*(1.18 if name=='dash_loop' else 1.0) if name in ['run','run_loop','dash_loop'] else -.32*pulse if hurt else .06*pulse if name.startswith('land') else -.02
   for n,angles in {'Hips':(0,hip*turn,0),'Spine':(lean*.25,0,0),'Chest':(lean,chest*turn,0),'Neck':(lean*.15,0,0),'Head':(-lean*.22,0,0)}.items():rots[n]=r[n]['r']@euler(*angles)
   lower=compression+(.012*abs(wave) if travel else .045*pulse if name.startswith('land') else .035*pulse if hurt else .003*wave)
-  pos['Hips']=r['Hips']['p']+np.array([0,-lower,-.012 if travel else 0])*scale
+  pos['Hips']=r['Hips']['p']+np.array([sway*wave if travel else 0,-lower,.012 if travel else 0])*scale
   for hand in ['L','R']:
    sign=-1 if hand=='L' else 1;target=np.array([sign*.14,guard,-.15])*scale
-   if travel:target+=np.array([0,-.08,(.075 if hand=='L' else -.075)*wave])*scale
+   if travel:target+=np.array([0,-.08,(arm_swing if hand=='L' else -arm_swing)*wave])*scale
    if name in ['shield','shield_hold']:target=np.array([sign*.11,guard+.02,-.20])*scale
    if name in ['aura_charge','aura_ready','charged_idle']:target=np.array([sign*(.13+.012*wave),guard-.10,-.17])*scale
    if hurt:target+=np.array([sign*.045*pulse,-.06*pulse,.08*pulse])*scale
@@ -149,11 +163,19 @@ def make_state(r,fid,name):
    g=solve(r,rots,pos,'UpperArm_'+hand,'LowerArm_'+hand,'Hand_'+hand,target,np.array([sign*.7,-.5,-.12]));rots['Hand_'+hand]=g[r['Hand_'+hand]['parent']][0].T@rest['Hand_'+hand][0]
   for leg in ['L','R']:
    goal=rest['Foot_'+leg][1].copy();phase=t+(0 if leg=='L' else .5);v=math.sin(2*math.pi*phase)
-   if travel:goal+=np.array([0,max(0,v)*(.045 if name.startswith('run') else .026),(.115 if name.startswith('run') else .07)*math.cos(2*math.pi*phase)])*scale
+   if travel:
+    phase%=1.0
+    # Linear backward support travel cancels actual body displacement during
+    # stance; original curved swing returns the foot with measured clearance.
+    reach=stride*(.72 if name.startswith('walk') else 1.0)*scale
+    if phase<.5:goal[2]+=reach*(1-4*phase)
+    else:
+     swing=(phase-.5)*2;goal[2]+=reach*(-1+2*smooth(swing));goal[1]+=lift*math.sin(math.pi*swing)*scale
+    goal[0]*=width
    if name in ['jump','fall','launch','launched','tumble']:goal+=np.array([0,.06*pulse,(.07 if leg=='L' else -.09)*pulse])*scale
    g=solve(r,rots,pos,'UpperLeg_'+leg,'LowerLeg_'+leg,'Foot_'+leg,goal,np.array([0,0,-1.]));rots['Foot_'+leg]=g[r['Foot_'+leg]['parent']][0].T@rest['Foot_'+leg][0]
   for n in tracks:tracks[n].append({'time_s':round(f/60,6),'rotation_quat':[round(float(x),7) for x in quat(rots.get(n,r[n]['r']))],**({'position_m':[round(float(x),7) for x in pos[n]]} if n in pos else {})})
- return {'duration_frames':length,'loop':loop,'relative_to_rest':False,'bone_tracks':tracks,'technique':'authored_'+name,'authoring':'original locomotion/reaction blocking; no root motion authority'}
+ return {'gait_half_stride_m':stride*(.72 if name.startswith('walk') else 1.0)*scale if name in ['walk','walk_loop','run','run_loop','dash_loop'] else 0,'duration_frames':length,'loop':loop,'relative_to_rest':False,'bone_tracks':tracks,'technique':'authored_'+name,'authoring':'original locomotion/reaction blocking; no root motion authority'}
 
 rows=[]
 for fid in DIRECTION:
@@ -162,8 +184,8 @@ for fid in DIRECTION:
   r,h=rig(fid,variant);clips={}
   for move in moves:
    clip=make_clip(r,fid,move);clips[move['move_id']]=clip;rows.append({'fighter':fid,'body':variant,'move':move['move_id'],'technique':clip['technique'],'contact_frame':clip['contact_frame'],'support_slip_m':clip['max_baked_support_slip_m'],'status':'AUTHORED_RUNTIME_BLOCKING_NOT_HUMAN_APPROVED'})
-  for name in ['idle','idle_primary','idle_secondary','walk','walk_loop','run','run_loop','jump','fall','land_soft','land_hard','shield','shield_hold','aura_charge','aura_ready','charged_idle','hurt_light','hurt_heavy','hitstun_ground','launch','launched','tumble','victory','defeat']:
+  for name in ['idle','idle_primary','idle_secondary','walk','walk_loop','run','run_loop','dash_loop','jump','fall','land_soft','land_hard','shield','shield_hold','aura_charge','aura_ready','charged_idle','hurt_light','hurt_heavy','hitstun_ground','launch','launched','tumble','victory','defeat']:
    clips[name]=make_state(r,fid,name)
   dest=ROOT/f'game-godot/data/animation/combat_choreography/{fid}_{variant}.json';dest.parent.mkdir(exist_ok=True);dest.write_text(json.dumps({'schema':'original_combat_blocking/v1','fighter':fid,'body':variant,'rig_sha256':h,'direction':DIRECTION[fid][-1],'mesh_forward_axis':'+Z (live FighterFacingContract)','clips':clips},separators=(',',':'))+'\n')
-report=ROOT/'artifacts/v1_closure/spectral_feedback/continuous_1011/CHOREOGRAPHY_MATRIX.json';report.parent.mkdir(parents=True,exist_ok=True);report.write_text(json.dumps({'rows':rows,'human_pass':False,'root_motion_authoritative':False,'foot_scope':'baked local rig-space support during stationary strikes; moving-world foot lock not claimed','locomotion':'original gait/stance/jump/land/reaction blocking; speed matching and authored turn/stop pending','secondary':'bounded runtime follow-through layer pending','provenance':'Independently authored original hand/body paths; no external clips; existing rig/model retained'},indent=2)+'\n')
+report=ROOT/'artifacts/v1_closure/spectral_feedback/continuous_1011/CHOREOGRAPHY_MATRIX.json';report.parent.mkdir(parents=True,exist_ok=True);report.write_text(json.dumps({'rows':rows,'human_pass':False,'root_motion_authoritative':False,'foot_scope':'baked local rig-space support during stationary strikes; moving-world foot lock not claimed','locomotion':'original fighter-specific linear support/curved swing gait; runtime distance matching; authored turn/stop and complete world foot constraints pending','secondary':'bounded runtime follow-through layer pending','provenance':'Independently authored original hand/body paths; no external clips; existing rig/model retained'},indent=2)+'\n')
 print(json.dumps({'clips':len(rows),'max_baked_slip_m':max(x['support_slip_m'] for x in rows)}))

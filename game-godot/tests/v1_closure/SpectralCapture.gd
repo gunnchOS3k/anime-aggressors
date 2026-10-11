@@ -39,7 +39,7 @@ func observe_contact(attacker: Node, defender: Node, info: Dictionary) -> void:
 		"contact_world":[point.x,point.y],"contact_screen":[screen.x,screen.y],"launch":[launch.x,launch.y],"actual_velocity":[defender.velocity.x,defender.velocity.y],"hitstop_frames":info.hitstop_frames,
 		"hitstun_seconds":defender.hitstun_remaining,"defender_state_before":info.get("defender_state_before","unknown"),"follow_up_before_control":info.get("defender_in_hitstun_before",false),
 		"audio_path":info.get("played_audio",{}).get("path",""),"elemental_audio_path":info.get("played_audio",{}).get("elemental_layer",{}).get("path",""),"attacker_move_frame":info.get("move_frame",-1)})
-	call_deferred("observe_visual_contact",attacker,defender,info.duplicate(true),Engine.get_process_frames()-1)
+	observe_visual_contact(attacker,defender,info.duplicate(true),Engine.get_process_frames()-1)
 func observe_visual_contact(attacker: Node,defender: Node,info: Dictionary,frame: int) -> void:
 	if not is_instance_valid(attacker) or not is_instance_valid(defender): return
 	var model=attacker.model_3d
@@ -61,7 +61,7 @@ func observe_visual_contact(attacker: Node,defender: Node,info: Dictionary,frame
 	var minimum:=INF
 	for name in ["Hand_L","Hand_R"]:
 		if points.has(name):minimum=minf(minimum,Vector2(points[name][0],points[name][1]).distance_to(target))
-	visual_contacts.append({"event_id":info.combat_event_id,"movie_frame":frame,"attacker":attacker.fighter_id,"move":info.move_id,"result":info.get("contact_result",""),"animation":controller.get_animation_player().current_animation,"animation_time_s":controller.get_animation_player().current_animation_position,"move_frame":attacker.move_runner.total_frame,"move_phase":attacker.move_runner.phase,"phase_frame":attacker.move_runner.frame_in_phase,"runtime_timing":{"startup":attacker.move_runner.move_data.get("startup_frames",-1),"active":attacker.move_runner.move_data.get("active_frames",-1),"recovery":attacker.move_runner.move_data.get("recovery_frames",-1)},"authored_timing":controller._choreography_timing.get(str(info.move_id),{}).get("contact_frame",-1),"limbs_world":points,"contact_world":[target.x,target.y],"nearest_hand_to_contact_px":minimum,"scope":"post-tick projected live rig joints; geometry diagnostic, projectile/throw contact need not equal hand"})
+	visual_contacts.append({"event_id":info.combat_event_id,"movie_frame":frame,"attacker":attacker.fighter_id,"move":info.move_id,"result":info.get("contact_result",""),"animation":controller.get_animation_player().current_animation,"animation_time_s":controller.get_animation_player().current_animation_position,"move_frame":attacker.move_runner.total_frame,"move_phase":attacker.move_runner.phase,"phase_frame":attacker.move_runner.frame_in_phase,"runtime_timing":{"startup":attacker.move_runner.move_data.get("startup_frames",-1),"active":attacker.move_runner.move_data.get("active_frames",-1),"recovery":attacker.move_runner.move_data.get("recovery_frames",-1)},"authored_timing":controller._choreography_timing.get(str(info.move_id),{}).get("contact_frame",-1),"limbs_world":points,"contact_world":[target.x,target.y],"nearest_hand_to_contact_px":minimum,"scope":"synchronous contact projected live rig joints; geometry diagnostic, projectile/throw contact need not equal hand"})
 func write_evidence() -> void:
 	if output.is_empty() or battle == null or not is_instance_valid(battle):return
 	var renderer=battle.get_node_or_null("SpectralFeedback")

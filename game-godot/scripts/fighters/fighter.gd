@@ -501,6 +501,10 @@ func tick_combat_frame() -> void:
 		model_3d.get_animation_controller().presentation_frozen = _hitstop > 0.0
 	if _hitstop > 0.0:
 		return
+	# Present the next authoritative move frame before its collision callbacks.
+	if model_3d != null and move_runner.active:
+		var before_controller = model_3d.get_animation_controller()
+		if before_controller != null: before_controller.synchronize_move(move_runner.total_frame+1,move_runner.move_data)
 	move_runner.tick_sim_frame()
 	projectile_spawner.tick_all()
 	_sync_attack_phase_state()
@@ -579,6 +583,8 @@ func _physics_process(delta: float) -> void:
 	_check_edge()
 	_track_landing()
 	_play_current_animation(state_machine.current_state)
+	if model_3d != null and model_3d.get_animation_controller() != null:
+		model_3d.get_animation_controller().synchronize_locomotion(global_position,model_3d,is_on_floor())
 
 func _apply_movement(delta: float) -> void:
 	if state_machine.current_state == _FighterStates.JUMP_SQUAT:

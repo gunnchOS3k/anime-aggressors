@@ -21,6 +21,12 @@ var presentation_frozen := false
 var _body_variant := "male"
 var secondary_follow: Node
 var _choreography_timing: Dictionary = {}
+var _gait_half_stride: Dictionary = {}
+var _locomotion_synchronized := false
+var _last_world_position := Vector2.ZERO
+var _world_position_valid := false
+var _gait_phase := 0.0
+var gait_period_px := 0.0
 
 
 func setup(fighter, model_root: Node3D) -> void:
@@ -63,16 +69,18 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 		return
 	if move.has("throw_direction"):
 		_throw_dir = str(move.get("throw_direction", "forward"))
-	var move_id := str(move.get("move_id", ""))
+	var action_state := _move_synchronized or state in ["grab_startup","grab_active"]
+	var move_id := str(move.get("move_id", "")) if action_state else ""
 	var resolved: Dictionary = _MoveResolver.resolve_clip(state, move_id, _loaded_clips)
 	var clip := str(resolved.get("clip", ""))
+	if action_state and _player.has_animation("combat_choreography/"+move_id): clip=move_id
 	if clip.is_empty() or not _loaded_clips.has(clip):
 		clip = _fallback_clip(state, move_id)
 	var play_key := _animation_play_key(clip)
 	if clip.is_empty() or play_key.is_empty() or not _player.has_animation(play_key):
 		return
 	var should_loop := clip in [
-		"idle", "idle_primary", "idle_secondary", "run", "run_loop", "walk", "walk_loop",
+		"idle", "idle_primary", "idle_secondary", "run", "run_loop", "dash_loop", "walk", "walk_loop",
 		"fall", "fast_fall", "shield", "shield_hold", "aura_charge", "aura_ready", "charged_idle",
 		"ledge_hang", "crouch_hold",
 	]
@@ -279,7 +287,7 @@ func _load_authored_studies() -> void:
 	_player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
 
 func _process(delta: float) -> void:
-	if _player != null and is_instance_valid(_player) and _player.has_animation_library("authored_studies") and not _move_synchronized and not presentation_frozen:
+	if _player != null and is_instance_valid(_player) and _player.has_animation_library("authored_studies") and not _move_synchronized and not _locomotion_synchronized and not presentation_frozen:
 		_player.advance(delta)
 
 func synchronize_move(frame: int,move: Dictionary) -> void:
@@ -313,6 +321,7 @@ func _load_combat_choreography(model_root: Node3D) -> void:
 	var library := AnimationLibrary.new()
 	for clip in doc.clips:
 		if doc.clips[clip].has("startup_frames"): _choreography_timing[clip]=doc.clips[clip]
+		if float(doc.clips[clip].get("gait_half_stride_m",0))>0: _gait_half_stride[clip]=float(doc.clips[clip].gait_half_stride_m)
 		var anim := _animation_from_data(doc.clips[clip])
 		anim.loop_mode = Animation.LOOP_LINEAR if doc.clips[clip].get("loop",false) else Animation.LOOP_NONE
 		library.add_animation(clip,anim); _loaded_clips[clip]=true
@@ -327,3 +336,22 @@ func _load_combat_choreography(model_root: Node3D) -> void:
 	_player.add_animation_library("combat_choreography",library)
 	secondary_follow=preload("res://scripts/visual/combat_secondary_follow.gd").new()
 	add_child(secondary_follow); secondary_follow.setup(model_root,self)
+
+func synchronize_locomotion(world_position: Vector2, model, grounded: bool) -> void:
+	var displacement := 0.0
+	if _world_position_valid: displacement = absf(world_position.x-_last_world_position.x)
+	_last_world_position = world_position; _world_position_valid = true
+	_locomotion_synchronized = false
+	if _player == null or model._camera == null or _skeleton == null: return
+	var clip := str(_player.current_animation).get_slice("/",1)
+	if not grounded or not _gait_half_stride.has(clip) or _move_synchronized: return
+	_locomotion_synchronized = true
+	# Use the actual camera, rig orientation and Sprite2D scale. Root displacement
+	# remains gameplay-owned; only the visible gait phase follows distance.
+	var a: Vector2 = model._camera.unproject_position(_skeleton.to_global(Vector3.ZERO))
+	var b: Vector2 = model._camera.unproject_position(_skeleton.to_global(Vector3(0,0,float(_gait_half_stride[clip]))))
+	gait_period_px = 4*absf(b.x-a.x)*absf(model._display.scale.x)
+	if gait_period_px<.01 or presentation_frozen: return
+	if displacement>128: _gait_phase=0 # respawn/profile fixture, never foot stretching
+	else: _gait_phase=fposmod(_gait_phase+displacement/gait_period_px,1.0)
+	_player.seek(_gait_phase*_player.current_animation_length,true)
