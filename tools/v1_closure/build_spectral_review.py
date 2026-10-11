@@ -47,8 +47,9 @@ for r in probes:
     second=next(c for c in d['contacts'] if c['attacker']==r['fighter'] and c['result']=='hit' and c['follow_up_before_control'])
     first=max((c for c in d['contacts'] if c['attacker']==r['fighter'] and c['result']=='hit' and c['movie_frame']<second['movie_frame']),key=lambda c:c['movie_frame'])
     start=max(0,first['movie_frame']/60-.25);end=second['movie_frame']/60+.65
-    target=OUT/'rendered'/(r['label']+'_true_combo_slow3x.mp4')
-    subprocess.run(['ffmpeg','-y','-hide_banner','-loglevel','error','-ss',str(start),'-t',str(end-start),'-i',str(ROOT/r['path']),'-vf','setpts=3*PTS','-af','atempo=0.5,atempo=0.666666667','-r','60','-c:v','libx264','-crf','21','-pix_fmt','yuv420p','-c:a','aac','-movflags','+faststart',str(target)],check=True)
+    target=OUT/'rendered'/(r['label']+'_true_combo_slow3x_av_verified.mp4')
+    if target.exists():raise SystemExit('Existing derived evidence preserved: '+str(target))
+    subprocess.run(['ffmpeg','-hide_banner','-loglevel','error','-ss',str(start),'-t',str(end-start),'-i',str(ROOT/r['path']),'-vf','setpts=3*PTS','-af','atempo=0.5,atempo=0.666666667,apad','-t',str(round((end-start)*3,6)),'-r','60','-c:v','libx264','-crf','21','-pix_fmt','yuv420p','-c:a','aac','-movflags','+faststart',str(target)],check=True)
     slow.append({'path':str(target.relative_to(ROOT)),'source_movie':r['path'],'source_sha':r['source_sha'],'original_start_s':start,'original_end_s':end,'first_contact':first['movie_frame'],'second_contact':second['movie_frame'],'sha256':hashlib.sha256(target.read_bytes()).hexdigest(),'scope':'3x slowed actual footage; original mixed audio time-stretched for review; normal movie alone establishes original timing/audio'})
 (OUT/'LIFECYCLE_AND_SLOW_REVIEW.json').write_text(json.dumps({'sheets':records,'slowed_clips':slow},indent=2)+'\n')
 print(json.dumps({'lifecycle_sheets':len(records),'slowed_clips':len(slow)}))

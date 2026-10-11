@@ -1,3 +1,16 @@
+# Current continuation — October 11, 2026
+
+Recovered branch `release/anime-v1-dialogue-and-elemental-performance`, local/remote HEAD `b7a562a08d0906a427a35f8a720c99d570a198de`. Shipping source checkpoint `f858246970a129565473fb00f447bd931bb12350`. All twelve final regression suites completed PASS; eight GitHub jobs succeeded at exactly b7a562a0. Late three suites launched at b7a562a0, whose Godot source tree equals f8582469. No prior isolated test/capture process is running.
+
+Phase B reconciliation is complete locally: corrected 15-movie summary, available DELIVERY_CHECKPOINT.json, complete ledger and EVIDENCE_MANIFEST.json (19 videos including preserved failures/local Story, 61 sheets, two galleries). All files/lineage/frame ranges verified. The old Ember slow excerpt has an 85 ms short audio tail and stays preserved; a new bounded A/V replacement is verified. Native game recordings were untouched. Prior modified local reports are archived under `local_media/reconciliation_recovery_20261011/`. No long successful test or nine-fighter capture was repeated. Current reports are local until this reconciliation commit/push finishes.
+
+Next bounded work: audit existing medium/high combo evidence, document production/rule tickets, optionally make one short ordinary-control edgeguard/throw attempt against active CPU after saving this checkpoint. No balance adjustments, forced results or AI disabling. Do not begin another large capture campaign. Free disk about 5.1 GiB, below the 18 GiB export guard. All 33 worktrees/backups preserved. Human/ANI03/04/05/release gates remain false.
+
+Exact next read-only command: `python3 -c "import json; d=json.load(open('artifacts/v1_closure/spectral_feedback/EVIDENCE_MANIFEST.json')); print(d['errors'],len(d['regressions']))"`. Resolve current metadata identity with `git rev-parse HEAD`; its self SHA cannot be embedded inside the commit.
+
+---
+Previous checkpoint history follows; its running-process statements are historical.
+
 # ANI-03 resume state — recovered October 10, 2026
 
 Worktree: `/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure`
