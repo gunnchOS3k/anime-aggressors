@@ -21,3 +21,11 @@ Exact next read-only command:
 No captures/processes are currently running. Work serially. Preserve old evidence, use new labels. After each substantial milestone update this file, commit recoverable changes and push normally. Use `git rev-parse HEAD` for the commit containing this document; the recovered runtime HEAD above intentionally identifies source before this documentation commit.
 
 GAME_FEEL_HUMAN_PASS=false; VFX_TASTE_HUMAN_PASS=false; ANIMATION_TASTE_HUMAN_PASS=false; SFX_MIX_HUMAN_PASS=false; V1_ANIME_HUMAN_PASS=false. ANI-04 acting/OVA and ANI-05 platform/human/release closure remain open. No merge, deploy, tag or publication.
+
+## Combo milestone — 2026-10-10T21:04:42.749384-05:00
+
+Source/probe HEAD: `e479abe237fe74e1342fd01759f9b788e7629ff6`. Thirty short exact-frame active-CPU probes completed: 552 body contacts, 11 genuine follow-up pairs, 102 blocked pairs. Six input recipes had at least one genuine pair; recipe success does not imply every requested move class linked. Actual successful pairs include Ember forward-tilt → forward-tilt; Juno jab chains and low-damage projectile → jab. No balance parameters changed. See COMBO_PROBE_MATRIX.csv and COMBO_INTERACTIONS.json.
+
+Two new native combo movies are currently recording serially under `combo_probes/*_light-light_low_movie/`; log `/private/tmp/ani03_combo_movies.log`. Preserve/reuse the earlier two 60 fps clips. Do not start another Godot run until this serial job finishes. Short probes/raster/first clips are source proof, not human approval. Current free disk 7.37 GiB.
+
+Exact next command after the two native movies finish: `python3 tools/v1_closure/analyze_combo_probes.py`. Then run the still-pending ordinary Kaia fresh-half/restart commands in new profile `spectral_kaia_earned_20261010`. Missing seven-fighter native representatives and Ember/Juno full charge evidence remain. No actual KO has yet occurred in these probes. Renderer finishing hook is implemented, but do not claim captured finishing-hit acceptance.
