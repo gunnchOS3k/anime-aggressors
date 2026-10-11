@@ -23,5 +23,6 @@ for suite in a.suites:
   if path.exists() and path.read_bytes()!=old:
    target=dest/('report_'+path.name);target.write_bytes(path.read_bytes());changed.append(str(target.relative_to(ROOT)))
  row=dict(suite=suite,source_sha=sha,passed=passed,exit_code=r.returncode,seconds=round(time.monotonic()-start,2),reports=changed,stdout=str((dest/'stdout.log').relative_to(ROOT)),scope='isolated source fixture; no human/device/competitive acceptance')
+ launch=json.loads((dest/'launch_manifest.json').read_text());row.update(source_diff_sha256=launch['source_diff_sha256'],source_changes=launch['source_changes'])
  rows.append(row);(out/'results.json').write_text(json.dumps(rows,indent=2)+'\n');print(json.dumps(row),flush=True)
  if not passed:raise SystemExit(1)

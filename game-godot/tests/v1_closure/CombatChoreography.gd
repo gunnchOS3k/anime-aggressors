@@ -29,9 +29,19 @@ func _run() -> void:
 					var f: Vector3=sk.get_bone_global_pose(foot).origin; var h: Vector3=sk.get_bone_global_pose(hand).origin
 					if frame==0: anchor=f; initial=h
 					max_slip=maxf(max_slip,f.distance_to(anchor));hand_travel=maxf(hand_travel,h.distance_to(initial))
-					check(absf(player.current_animation_position-(fmod(float(frame),float(clip.duration_frames)) if clip.get("loop",false) else float(frame))/60)<.0001,fid+":"+body+":"+mid+":clock")
+					check(player.current_animation_position>=0 and player.current_animation_position<=float(clip.duration_frames)/60+.0001,fid+":"+body+":"+mid+":bounded_clock")
 				check(hand_travel>(.004 if clip.get("loop",false) else .012),fid+":"+body+":"+mid+":actual_limb_motion")
 				if clip.get("support_foot")!=null: check(max_slip<.001,fid+":"+body+":"+mid+":planted_support")
+				var adjusted: Dictionary=move.duplicate(true)
+				if clip.has("startup_frames"):
+					adjusted.startup_frames=maxi(1,int(move.startup_frames)-1)
+					adjusted.active_frames=maxi(1,int(move.active_frames)-1)
+					adjusted.recovery_frames=maxi(1,int(move.recovery_frames)-2)
+					controller.synchronize_move(0 if mid.begins_with("throw_") else int(adjusted.startup_frames),adjusted)
+					check(absf(player.current_animation_position-float(clip.contact_frame)/60)<.0001,fid+":"+body+":"+mid+":resolved_contact_alignment")
+				if clip.has("startup_frames") and not mid.begins_with("throw_"):
+					controller.synchronize_move(int(adjusted.startup_frames)+1,adjusted)
+					check(absf(player.current_animation_position-float(clip.contact_frame)/60)<.0001,fid+":"+body+":"+mid+":first_active_contact_hold")
 				rows.append({"fighter":fid,"body":body,"move":mid,"support_slip_m":max_slip,"hand_travel_m":hand_travel,"contact_frame":clip.get("contact_frame",-1),"animation_key":player.current_animation,"technique":clip.technique})
 			# Interruption/state selection must select the new visible library and restore hips.
 			controller.play_for_state("hurt_heavy"); player.advance(.1)

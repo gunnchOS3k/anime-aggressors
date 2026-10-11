@@ -3,6 +3,7 @@ extends SceneTree
 var held: Array=[]
 var events: Array=[]
 var contacts: Array=[]
+var visual_contacts: Array=[]
 var samples: Array=[]
 var ko_events: Array=[]
 var output := ""
@@ -38,6 +39,29 @@ func observe_contact(attacker: Node, defender: Node, info: Dictionary) -> void:
 		"contact_world":[point.x,point.y],"contact_screen":[screen.x,screen.y],"launch":[launch.x,launch.y],"actual_velocity":[defender.velocity.x,defender.velocity.y],"hitstop_frames":info.hitstop_frames,
 		"hitstun_seconds":defender.hitstun_remaining,"defender_state_before":info.get("defender_state_before","unknown"),"follow_up_before_control":info.get("defender_in_hitstun_before",false),
 		"audio_path":info.get("played_audio",{}).get("path",""),"elemental_audio_path":info.get("played_audio",{}).get("elemental_layer",{}).get("path",""),"attacker_move_frame":info.get("move_frame",-1)})
+	call_deferred("observe_visual_contact",attacker,defender,info.duplicate(true),Engine.get_process_frames()-1)
+func observe_visual_contact(attacker: Node,defender: Node,info: Dictionary,frame: int) -> void:
+	if not is_instance_valid(attacker) or not is_instance_valid(defender): return
+	var model=attacker.model_3d
+	var controller=model.get_animation_controller()
+	if controller==null or model._camera==null or model._display==null:return
+	var sk=controller.get_skeleton()
+	sk.force_update_all_bone_transforms()
+	var points: Dictionary={}
+	for name in ["Hand_L","Hand_R","Foot_L","Foot_R"]:
+		var bone: int=sk.find_bone(name)
+		if bone<0: continue
+		var pixel: Vector2=model._camera.unproject_position(sk.to_global(sk.get_bone_global_pose(bone).origin))
+		var size: Vector2=Vector2(model._viewport.size)
+		if model._display.flip_h:pixel.x=size.x-pixel.x
+		if model._display.flip_v:pixel.y=size.y-pixel.y
+		var world: Vector2=model._display.to_global(pixel-size*.5+model._display.offset)
+		points[name]=[world.x,world.y]
+	var target: Vector2=info.get("contact_world",Vector2.ZERO)
+	var minimum:=INF
+	for name in ["Hand_L","Hand_R"]:
+		if points.has(name):minimum=minf(minimum,Vector2(points[name][0],points[name][1]).distance_to(target))
+	visual_contacts.append({"event_id":info.combat_event_id,"movie_frame":frame,"attacker":attacker.fighter_id,"move":info.move_id,"result":info.get("contact_result",""),"animation":controller.get_animation_player().current_animation,"animation_time_s":controller.get_animation_player().current_animation_position,"move_frame":attacker.move_runner.total_frame,"move_phase":attacker.move_runner.phase,"phase_frame":attacker.move_runner.frame_in_phase,"runtime_timing":{"startup":attacker.move_runner.move_data.get("startup_frames",-1),"active":attacker.move_runner.move_data.get("active_frames",-1),"recovery":attacker.move_runner.move_data.get("recovery_frames",-1)},"authored_timing":controller._choreography_timing.get(str(info.move_id),{}).get("contact_frame",-1),"limbs_world":points,"contact_world":[target.x,target.y],"nearest_hand_to_contact_px":minimum,"scope":"post-tick projected live rig joints; geometry diagnostic, projectile/throw contact need not equal hand"})
 func write_evidence() -> void:
 	if output.is_empty() or battle == null or not is_instance_valid(battle):return
 	var renderer=battle.get_node_or_null("SpectralFeedback")
@@ -45,7 +69,7 @@ func write_evidence() -> void:
 	file.store_string(JSON.stringify({"source_sha":source_sha,"movie_fps":60,"stage":"training-grid","match_seed":431017,"fixture":"versus on existing flat Training Grid stage; seeded public-input driver; explicit starting damage band "+band,
 		"starting_opponent_damage":50 if band=="medium" else 110 if band=="high" else 0,"opponent_cpu":battle.fighter2.is_cpu,"controls_enabled":battle.fighter2.controls_enabled,
 		"forced_moves":false,"forced_ko":false,"frozen_opponent":false,"story_receipts":false,"human_playthrough":false,
-		"idle_fixture_not_combo_evidence":idle_opponent,"probe":probe,"exact_trace":exact_trace,"state_transitions":transitions,"move_phases":phases,"public_inputs":input_events,"moves":events,"contacts":contacts,"samples":samples,"ko_events":ko_events,
+		"idle_fixture_not_combo_evidence":idle_opponent,"probe":probe,"exact_trace":exact_trace,"state_transitions":transitions,"move_phases":phases,"public_inputs":input_events,"moves":events,"contacts":contacts,"visual_contacts":visual_contacts,"samples":samples,"ko_events":ko_events,
 		"presentation_events":renderer.history if renderer != null else [],"pool":renderer.stats() if renderer != null else {},"player_damage":battle.fighter1.damage_percent,"opponent_damage":battle.fighter2.damage_percent},"  ")+"\n");file.close()
 func _run() -> void:
 	await process_frame

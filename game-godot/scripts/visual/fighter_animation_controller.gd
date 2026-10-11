@@ -20,6 +20,7 @@ var _move_synchronized := false
 var presentation_frozen := false
 var _body_variant := "male"
 var secondary_follow: Node
+var _choreography_timing: Dictionary = {}
 
 
 func setup(fighter, model_root: Node3D) -> void:
@@ -288,7 +289,22 @@ func synchronize_move(frame: int,move: Dictionary) -> void:
 	if not _player.has_animation(key): return
 	_move_synchronized = true
 	if _player.current_animation != key: _player.play(key,0)
-	_player.seek(float(frame)/60.0,true)
+	var visual_frame := float(frame)
+	var mid := str(move.get("move_id",""))
+	if key.begins_with("combat_choreography/") and _choreography_timing.has(mid):
+		var clip: Dictionary = _choreography_timing[mid]
+		var actual_start := maxi(1,int(move.get("startup_frames",clip.startup_frames)))
+		var actual_active := maxi(1,int(move.get("active_frames",clip.active_frames)))
+		var actual_recovery := maxi(1,int(move.get("recovery_frames",clip.recovery_frames)))
+		if frame < actual_start:
+			visual_frame = float(frame)*float(maxi(0,int(clip.startup_frames)-1))/float(maxi(1,actual_start-1))
+		elif frame <= actual_start+actual_active:
+			# Live overlap may confirm at active-phase entry (phase frame zero).
+			# Sustain contact through the first active callback without changing combat.
+			visual_frame = float(clip.startup_frames)+1.0+float(maxi(0,frame-actual_start-1))*float(maxi(0,int(clip.active_frames)-1))/float(maxi(1,actual_active-1))
+		else:
+			visual_frame = float(clip.startup_frames+clip.active_frames)+float(frame-actual_start-actual_active)*float(clip.recovery_frames)/float(actual_recovery)
+	_player.seek(visual_frame/60.0,true)
 
 func _load_combat_choreography(model_root: Node3D) -> void:
 	var path := "res://data/animation/combat_choreography/%s_%s.json" % [_fighter_id,_body_variant]
@@ -296,6 +312,7 @@ func _load_combat_choreography(model_root: Node3D) -> void:
 	var doc: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(path))
 	var library := AnimationLibrary.new()
 	for clip in doc.clips:
+		if doc.clips[clip].has("startup_frames"): _choreography_timing[clip]=doc.clips[clip]
 		var anim := _animation_from_data(doc.clips[clip])
 		anim.loop_mode = Animation.LOOP_LINEAR if doc.clips[clip].get("loop",false) else Animation.LOOP_NONE
 		library.add_animation(clip,anim); _loaded_clips[clip]=true

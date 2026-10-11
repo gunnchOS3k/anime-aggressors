@@ -67,7 +67,7 @@ def blend(points,t):
  return points[-1][1]
 def make_clip(r,fid,move):
  spec=DIRECTION[fid];hip,chest,compression,follow,guard,arc,step,settle,_=spec
- mid=move['move_id'];startup=move['startup_frames'];active=move['active_frames'];total=startup+active+move['recovery_frames'];contact=startup+1
+ mid=move['move_id'];startup=move['startup_frames'];active=move['active_frames'];total=startup+active+move['recovery_frames'];contact=0 if move.get('move_type')=='throw' else startup+1
  rest=fk(r,{},{});scale=rest['Head'][1][1]/.85
  foot={side:rest['Foot_'+side][1].copy() for side in ['L','R']}
  # Each move is blocked as a different technique, with original cartesian limb paths.
@@ -82,13 +82,17 @@ def make_clip(r,fid,move):
  elif move.get('move_type') in ['throw','grab']:technique='throw_'+move.get('direction',mid.removeprefix('throw_')) if mid.startswith('throw_') else 'grab'
  load=max(1,startup*.65);followframe=min(total-2,contact+max(2,active));settleframe=min(total-1,followframe+(total-followframe)*settle)
  timing=[(0,0.),(load,-.65),(max(load+.1,startup-1),-.85),(contact,1.),(followframe,follow),(settleframe,.18),(total,0.)]
+ if move.get('move_type')=='throw':
+  # Existing gameplay releases at frame zero; preparation belongs to grab hold.
+  timing=[(0,1.),(max(2,startup),follow),(followframe,.65),(settleframe,.18),(total,0.)]
  tracks={n:[] for n in r if n not in ['Root','Toes_L','Toes_R']}
  slip=0.;clamps=0
  for frame in range(total+1):
   drive=blend(timing,frame);extension=blend([(0,0.),(load,0.),(max(load+.1,startup-1),.06),(contact,1.),(followframe,.94),(settleframe,.28),(total,0.)],frame)
+  if move.get('move_type')=='throw':extension=blend([(0,1.),(followframe,.9),(settleframe,.28),(total,0.)],frame)
   rots={};pos={}
-  for n,angles in {'Hips':(0,hip*drive,.035*drive),'Spine':(-.07*drive,.12*drive,0),'Chest':(-.09*drive,chest*drive,0),'Neck':(0,-chest*drive*.25,0),'Head':(.03,-hip*drive*.25,0)}.items():rots[n]=r[n]['r']@euler(*angles)
-  pos['Hips']=r['Hips']['p']+np.array([step*drive*.28,-compression*(.5+.5*abs(drive)), -step*drive*.30])*scale
+  for n,angles in {'Hips':(0,hip*drive,.035*drive),'Spine':(.07*drive,.12*drive,0),'Chest':(.09*drive,chest*drive,0),'Neck':(0,-chest*drive*.25,0),'Head':(.03,-hip*drive*.25,0)}.items():rots[n]=r[n]['r']@euler(*angles)
+  pos['Hips']=r['Hips']['p']+np.array([step*drive*.28,-compression*(.5+.5*abs(drive)), step*drive*.30])*scale
   # Guard and strike targets live in rig space; elbows are deliberately outside ribs.
   for hand in ['L','R']:
    sign=-1 if hand=='L' else 1
@@ -109,16 +113,17 @@ def make_clip(r,fid,move):
     if technique.endswith('up'):target[1]+=.18*extension*scale
     elif technique.endswith('down'):target[1]-=.23*extension*scale
     elif technique.endswith('back'):target[2]+=.40*extension*scale
-   g=solve(r,rots,pos,'UpperArm_'+hand,'LowerArm_'+hand,'Hand_'+hand,target,np.array([sign*.7,-.5,.12]));rots['Hand_'+hand]=g[r['Hand_'+hand]['parent']][0].T@rest['Hand_'+hand][0]
+   target[2]*=-1 # Live FighterFacingContract models face +Z.
+   g=solve(r,rots,pos,'UpperArm_'+hand,'LowerArm_'+hand,'Hand_'+hand,target,np.array([sign*.7,-.5,-.12]));rots['Hand_'+hand]=g[r['Hand_'+hand]['parent']][0].T@rest['Hand_'+hand][0]
   for leg in ['L','R']:
    goal=foot[leg].copy()
    if aerial:goal+=np.array([0,.045*extension,(-.08 if leg=='R' else .08)*extension])*scale
-   elif leg=='R' and technique in ['drive','charged_palm']:goal[2]-=.055*extension*scale;goal[1]+=.012*math.sin(extension*math.pi)*scale
+   elif leg=='R' and technique in ['drive','charged_palm']:goal[2]+=.055*extension*scale;goal[1]+=.012*math.sin(extension*math.pi)*scale
    g=solve(r,rots,pos,'UpperLeg_'+leg,'LowerLeg_'+leg,'Foot_'+leg,goal,np.array([0,0,-1.]));rots['Foot_'+leg]=g[r['Foot_'+leg]['parent']][0].T@rest['Foot_'+leg][0]
    if not aerial and leg=='L':slip=max(slip,float(np.linalg.norm(g['Foot_'+leg][1]-goal)))
   for n in tracks:
    tracks[n].append({'time_s':round(frame/60,6),'rotation_quat':[round(float(x),7) for x in quat(rots.get(n,r[n]['r']))],**({'position_m':[round(float(x),7) for x in pos[n]]} if n in pos else {})})
- return {'duration_frames':total,'contact_frame':contact,'loop':False,'relative_to_rest':False,'bone_tracks':tracks,'technique':technique,'support_foot':'L' if not aerial else None,'max_baked_support_slip_m':slip,'authoring':'original authored blocking + baked analytic two-bone constraints; owner quality approval pending'}
+ return {'startup_frames':startup,'active_frames':active,'recovery_frames':move['recovery_frames'],'duration_frames':total,'contact_frame':contact,'loop':False,'relative_to_rest':False,'bone_tracks':tracks,'technique':technique,'support_foot':'L' if not aerial else None,'max_baked_support_slip_m':slip,'authoring':'original authored blocking + baked analytic two-bone constraints; owner quality approval pending'}
 def make_state(r,fid,name):
  spec=DIRECTION[fid];hip,chest,compression,follow,guard,arc,step,settle,_=spec
  rest=fk(r,{},{});scale=rest['Head'][1][1]/.85
@@ -140,7 +145,8 @@ def make_state(r,fid,name):
    if name in ['aura_charge','aura_ready','charged_idle']:target=np.array([sign*(.13+.012*wave),guard-.10,-.17])*scale
    if hurt:target+=np.array([sign*.045*pulse,-.06*pulse,.08*pulse])*scale
    if name=='victory':target+=np.array([sign*.09*pulse,.16*pulse,-.04*pulse])*scale
-   g=solve(r,rots,pos,'UpperArm_'+hand,'LowerArm_'+hand,'Hand_'+hand,target,np.array([sign*.7,-.5,.12]));rots['Hand_'+hand]=g[r['Hand_'+hand]['parent']][0].T@rest['Hand_'+hand][0]
+   target[2]*=-1 # Live FighterFacingContract models face +Z.
+   g=solve(r,rots,pos,'UpperArm_'+hand,'LowerArm_'+hand,'Hand_'+hand,target,np.array([sign*.7,-.5,-.12]));rots['Hand_'+hand]=g[r['Hand_'+hand]['parent']][0].T@rest['Hand_'+hand][0]
   for leg in ['L','R']:
    goal=rest['Foot_'+leg][1].copy();phase=t+(0 if leg=='L' else .5);v=math.sin(2*math.pi*phase)
    if travel:goal+=np.array([0,max(0,v)*(.045 if name.startswith('run') else .026),(.115 if name.startswith('run') else .07)*math.cos(2*math.pi*phase)])*scale
@@ -158,6 +164,6 @@ for fid in DIRECTION:
    clip=make_clip(r,fid,move);clips[move['move_id']]=clip;rows.append({'fighter':fid,'body':variant,'move':move['move_id'],'technique':clip['technique'],'contact_frame':clip['contact_frame'],'support_slip_m':clip['max_baked_support_slip_m'],'status':'AUTHORED_RUNTIME_BLOCKING_NOT_HUMAN_APPROVED'})
   for name in ['idle','idle_primary','idle_secondary','walk','walk_loop','run','run_loop','jump','fall','land_soft','land_hard','shield','shield_hold','aura_charge','aura_ready','charged_idle','hurt_light','hurt_heavy','hitstun_ground','launch','launched','tumble','victory','defeat']:
    clips[name]=make_state(r,fid,name)
-  dest=ROOT/f'game-godot/data/animation/combat_choreography/{fid}_{variant}.json';dest.parent.mkdir(exist_ok=True);dest.write_text(json.dumps({'schema':'original_combat_blocking/v1','fighter':fid,'body':variant,'rig_sha256':h,'direction':DIRECTION[fid][-1],'clips':clips},separators=(',',':'))+'\n')
+  dest=ROOT/f'game-godot/data/animation/combat_choreography/{fid}_{variant}.json';dest.parent.mkdir(exist_ok=True);dest.write_text(json.dumps({'schema':'original_combat_blocking/v1','fighter':fid,'body':variant,'rig_sha256':h,'direction':DIRECTION[fid][-1],'mesh_forward_axis':'+Z (live FighterFacingContract)','clips':clips},separators=(',',':'))+'\n')
 report=ROOT/'artifacts/v1_closure/spectral_feedback/continuous_1011/CHOREOGRAPHY_MATRIX.json';report.parent.mkdir(parents=True,exist_ok=True);report.write_text(json.dumps({'rows':rows,'human_pass':False,'root_motion_authoritative':False,'foot_scope':'baked local rig-space support during stationary strikes; moving-world foot lock not claimed','locomotion':'original gait/stance/jump/land/reaction blocking; speed matching and authored turn/stop pending','secondary':'bounded runtime follow-through layer pending','provenance':'Independently authored original hand/body paths; no external clips; existing rig/model retained'},indent=2)+'\n')
 print(json.dumps({'clips':len(rows),'max_baked_slip_m':max(x['support_slip_m'] for x in rows)}))

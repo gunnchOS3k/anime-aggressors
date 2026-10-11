@@ -1,3 +1,12 @@
+# Full-roster direction/timing checkpoint — October 11, 2026
+
+Owner override: all nine fighters and both body presentations are the production target. Earlier golden-slice next steps below are historical and superseded. Current branch release/anime-v1-dialogue-and-elemental-performance, worktree /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure. Last pushed 0ab1d6532f7fe233603fff581f6dcfd426b0057d; resolve the commit containing this entry for the new checkpoint.
+
++Z hand/body direction applied to all 18 original rig-specific libraries. Visual clock maps authored phases to resolved runtime startup/active/recovery; live phase-zero contacts require holding the contact pose on active entry and first callback. Combat values/collision rules unchanged. Initial live Ember diagnostic reduced wrist-to-overlap-center gaps from42/48px to18/26px before phase-zero hold; residual reach is NOT accepted. Evidence geometry_pilot, geometry_corrected, geometry_clock retains original and corrected traces. facing_and_timing passed432move/body fixture checks and ThrowOwnership; animation_checkpoint passed choreography, elemental, charge,18variant roster and restart, with recorded source diffs. All previous throw, ordinary Kaia and authentic stock-loss assets preserved.
+
+Next: run focused CombatChoreography after phase-zero hold, then build/run RosterContactAlignment in actual BattleScene for9×2bodies×2facings×light/heavy/signature, contact/shield/whiff/interruption. Report limb-to-contact and actual overlap bounds without arbitrary pass thresholds. Continue full-roster movement/footwork category, bounded gameplay probes and new-animation evidence. Do not repeat old nine-fighter VFX capture campaign. No isolated Godot running. Free disk~6.8GiB,18GiB heavy-export guard, all33worktrees/backups preserved, human/release gates false. All new source/evidence becomes remote only after normal push.
+
+---
 # Runtime choreography milestone — October 11, 2026
 
 Native repaired competitive KO counterpart complete at 82cbd084: 60 fps/1121 frames, native mixed audio, nine public throws/nine contacts, active CPU, Juno stocks9→8 at frame900 and kind7 at901. Match win not claimed; initial110% fixture labeled. Native file rendered/ember-vale_edgeguard-throw_high_movie.mp4, raw local_media/ ignored. Old duplicate trace preserved.
