@@ -1,5 +1,5 @@
 """Serial public-input combo attempts; fixed combat rules, active CPUs, exact traces."""
-import argparse,json,subprocess,time
+import argparse,json,subprocess,time,shutil
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'artifacts/v1_closure/spectral_feedback'
@@ -13,11 +13,16 @@ for fid in ['ember-vale','juno-spark']:
    label=f'{fid}_{pattern}_{band}'+('_movie' if a.movie else '')
    if a.labels and label not in a.labels:continue
    dest=OUT/'combo_probes'/label
-   if dest.exists():raise SystemExit('Existing evidence preserved; choose a missing label: '+label)
+   if dest.exists():
+    if not a.labels and any(r['label']==label for r in index['attempts']):continue
+    raise SystemExit('Existing evidence preserved; choose a missing label: '+label)
    dest.mkdir(parents=True)
    args=['python3',str(ROOT/'tools/v1_closure/launch_ordinary_review.py'),'--profile','combo_'+label.replace('-','_')+'_1010','--test-script','res://tests/v1_closure/SpectralCapture.gd','--output',str(dest),
          '--driver-arg=--capture-frames=900','--driver-arg=--exact-trace','--driver-arg=--combo-probe='+pattern,'--driver-arg=--damage-band='+band,'--driver-arg=--performance-fighter='+fid]
    raw=OUT/'local_media'/(label+'.avi')
+   if a.movie:
+    assert not raw.exists() and not (OUT/'rendered'/(label+'.mp4')).exists(),'Refusing to overwrite native evidence'
+    assert shutil.disk_usage(ROOT).free>2*1024**3+1200*262144,'Bounded capture reserve exhausted; heavy exports require 18 GiB'
    if a.movie:args+=['--movie',str(raw),'--movie-fps','60','--movie-frames','1200']
    else:args.append('--headless')
    print('PROBE '+label,flush=True);start=time.monotonic()
