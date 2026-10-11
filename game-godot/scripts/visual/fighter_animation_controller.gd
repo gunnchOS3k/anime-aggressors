@@ -19,6 +19,7 @@ var _throw_dir: String = "forward"
 var _move_synchronized := false
 var presentation_frozen := false
 var _body_variant := "male"
+var _visual_facing := 1
 var secondary_follow: Node
 var _choreography_timing: Dictionary = {}
 var _gait_half_stride: Dictionary = {}
@@ -73,7 +74,8 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 	var move_id := str(move.get("move_id", "")) if action_state else ""
 	var resolved: Dictionary = _MoveResolver.resolve_clip(state, move_id, _loaded_clips)
 	var clip := str(resolved.get("clip", ""))
-	if action_state and _player.has_animation("combat_choreography/"+move_id): clip=move_id
+	var directional_id := move_id+("_left" if _visual_facing==-1 else "")
+	if action_state and _player.has_animation("combat_choreography/"+directional_id): clip=directional_id
 	if clip.is_empty() or not _loaded_clips.has(clip):
 		clip = _fallback_clip(state, move_id)
 	var play_key := _animation_play_key(clip)
@@ -88,9 +90,9 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 	if anim:
 		anim.loop_mode = Animation.LOOP_LINEAR if should_loop else Animation.LOOP_NONE
 	if _player.current_animation != play_key and _player.current_animation != clip:
-		_player.play(play_key, 0.08)
+		_player.play(play_key, 0.0 if play_key.begins_with("combat_choreography/") else 0.08)
 	elif not should_loop and not _player.is_playing():
-		_player.play(play_key, 0.08)
+		_player.play(play_key, 0.0 if play_key.begins_with("combat_choreography/") else 0.08)
 	_active_clip = clip
 
 
@@ -292,13 +294,14 @@ func _process(delta: float) -> void:
 
 func synchronize_move(frame: int,move: Dictionary) -> void:
 	if _player == null or not is_instance_valid(_player): return
-	var key := "combat_choreography/"+str(move.get("move_id",""))
+	var directional_id := str(move.get("move_id",""))+("_left" if _visual_facing==-1 else "")
+	var key := "combat_choreography/"+directional_id
 	if not _player.has_animation(key): key = "authored_studies/"+str(move.get("move_id",""))
 	if not _player.has_animation(key): return
 	_move_synchronized = true
 	if _player.current_animation != key: _player.play(key,0)
 	var visual_frame := float(frame)
-	var mid := str(move.get("move_id",""))
+	var mid := directional_id
 	if key.begins_with("combat_choreography/") and _choreography_timing.has(mid):
 		var clip: Dictionary = _choreography_timing[mid]
 		var actual_start := maxi(1,int(move.get("startup_frames",clip.startup_frames)))
@@ -355,3 +358,6 @@ func synchronize_locomotion(world_position: Vector2, model, grounded: bool) -> v
 	if displacement>128: _gait_phase=0 # respawn/profile fixture, never foot stretching
 	else: _gait_phase=fposmod(_gait_phase+displacement/gait_period_px,1.0)
 	_player.seek(_gait_phase*_player.current_animation_length,true)
+
+func set_visual_facing(direction: int) -> void:
+	_visual_facing = 1 if direction>=0 else -1

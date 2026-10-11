@@ -10,7 +10,7 @@ func check(ok: bool,label: String) -> void:
 func feet(model) -> Dictionary:
 	var sk=model.get_animation_controller().get_skeleton();sk.force_update_all_bone_transforms();var out: Dictionary={}
 	for side in ["L","R"]:
-		var pixel: Vector2=model._camera.unproject_position(sk.to_global(sk.get_bone_global_pose(sk.find_bone("Foot_"+side)).origin)))
+		var pixel: Vector2=model._camera.unproject_position(sk.to_global(sk.get_bone_global_pose(sk.find_bone("Foot_"+side)).origin))
 		out[side]=model._display.to_global(pixel-Vector2(model._viewport.size)*.5+model._display.offset)
 	return out
 func _run() -> void:
@@ -30,7 +30,7 @@ func _run() -> void:
 					p.global_position=Vector2(-100,240);p.velocity=Vector2.ZERO;p.state_machine.enter("idle");p.controls_enabled=true;p.invincible=false
 					for i in range(35):await physics_frame
 					var controller=p.model_3d.get_animation_controller();var player=controller.get_animation_player()
-					var previous: Dictionary={};var previous_phase: float=-1;var slips: Array=[];var moved:=0.0;var start_x:float=p.position.x;var phases: Array=[]
+					var previous: Dictionary={};var previous_phase: float=-1;var slips: Array=[];var moved:=0.0;var start_x:float=p.position.x;var phases: Array=[];var debug: Array=[]
 					Input.action_press("p1_right" if facing==1 else "p1_left",strength)
 					for frame in range(30):
 						await physics_frame
@@ -41,15 +41,16 @@ func _run() -> void:
 								var old: float=fposmod(previous_phase+(0 if side=="L" else .5),1)
 								var cur: float=fposmod(phase+(0 if side=="L" else .5),1)
 								if old>.02 and cur<.48 and cur>=old:slips.append(now[side].distance_to(previous[side]))
+						if fid=="ember-vale" and body=="male" and facing==1 and strength==1.0:debug.append({"frame":frame,"x":p.position.x,"phase":phase,"feet":[[now.L.x,now.L.y],[now.R.x,now.R.y]],"animation":player.current_animation})
 						previous=now;previous_phase=phase
 					moved=absf(p.position.x-start_x)
-					var label:=fid+":"+body+":"+str(facing)+":"+str(strength)
+					var label: String=fid+":"+body+":"+str(facing)+":"+str(strength)
 					check(moved>5,label+":public_movement")
 					check(player.current_animation.begins_with("combat_choreography/"),label+":authored_gait")
 					check(controller.gait_period_px>0 and controller._locomotion_synchronized,label+":distance_clock")
 					var sum:=0.0;var maximum:=0.0
 					for value in slips:sum+=float(value);maximum=maxf(maximum,float(value))
-					rows.append({"fighter":fid,"body":body,"facing":facing,"input_strength":strength,"model_path":p.model_3d._proxy_model.scene_file_path,"animation":player.current_animation,"distance_px":moved,"gait_period_px":controller.gait_period_px,"measured_stance_frames":slips.size(),"mean_projected_foot_slip_px_per_frame":sum/maxi(1,slips.size()),"max_projected_foot_slip_px_per_frame":maximum,"quality_status":"MEASURED_NOT_OWNER_APPROVED"})
+					rows.append({"fighter":fid,"body":body,"facing":facing,"input_strength":strength,"model_path":p.model_3d._proxy_model.scene_file_path,"animation":player.current_animation,"distance_px":moved,"gait_period_px":controller.gait_period_px,"measured_stance_frames":slips.size(),"mean_projected_foot_slip_px_per_frame":sum/maxi(1,slips.size()),"max_projected_foot_slip_px_per_frame":maximum,"quality_status":"MEASURED_NOT_OWNER_APPROVED","debug":debug})
 					Input.action_release("p1_right" if facing==1 else "p1_left")
 					for i in range(60):await physics_frame
 					check(player.current_animation=="combat_choreography/idle_primary",label+":neutral_after_stop")

@@ -1,3 +1,12 @@
+# Full-roster live motion checkpoint — October 11, 2026
+
+Last pushed db890e81d90be83d5bc29064b68881a358a298c8. Resolve the commit containing this entry for the new source checkpoint. Reproduced root cause: manual AnimationPlayer.seek retained an unadvanced80ms blend, leaving live attack and gait poses near idle. New simulation-clocked library uses its baked pose transitions with zero stalled mixer blend. Bilateral rig-specific strike paths, coordinated body drive and lower contact regions now cover9fighters×2bodies×2facings. No accepted combat data or controls changed.
+
+manual_blend_fix PASS:864move/body/facing frame checks,216real BattleScene geometry/whiff/shield/interruption cases,108public walk/run/dash/jump/stop checks, ElementalPerformance and ChargeContinuity. Earlier bilateral ElementalPerformance failure and invalid-foot observer errors retained; corrected864fixture has no bone-index errors. Per-fighter mean stance slip now .008–.024px/frame versus prior2.4–3.6; transition maxima .7–2.0px remain for polish. Intended wrists7.7–23.3px from overlap centers and0–4.0px from real surfaces; surface/anatomy final acceptance NOT claimed. Fist mesh/outer-range/aerial reach remains open.
+
+Next serial execution: nine explicit *_roster_choreography_low native60fps mirror matches with active CPUs (P1female/P2male),1200public-control frames plus setup, original audio. Source checkpoint must be committed/pushed before capture. Preserve old9VFXmovies. Then new-label roster-wide medium/high public probes; affected Story/roster/save regressions once at integration, contact sheets/gallery/manifest and owner matrix. No isolated Godot running. Free~6.8GiB;2GiB native reserve and18GiB heavy-export guard. All33worktrees/backups, repaired throw and competitive stock-loss video preserved. Human/release gates false.
+
+---
 # Full-roster movement/source checkpoint — October 11, 2026
 
 Last pushed shared direction/phase correction: be0d02697d89d4cb3e1f022c7487f9a8a7811613. The commit containing this entry adds state-owned neutral/reaction selection, pre-dispatch pose synchronization, and9fighter-specific stance/swing gaits with camera-calibrated displacement clocks for both body presentations. Combat values unchanged. Focused CombatChoreography and InterruptedMove PASS in full_roster_pose_clock with recorded source diff. New RosterFootwork fixture is prepared but not yet verified.

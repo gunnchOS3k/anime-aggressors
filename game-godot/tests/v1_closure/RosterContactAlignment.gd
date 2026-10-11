@@ -55,10 +55,12 @@ func measure(info: Dictionary,context: Dictionary) -> void:
 	for name in ["Hand_L","Hand_R"]:
 		var h:=Vector2(after[name][0],after[name][1]);after_gap=minf(after_gap,h.distance_to(target));surface_gap=minf(surface_gap,distance_to_rect(h,overlap))
 		if before.has(name): before_gap=minf(before_gap,Vector2(before[name][0],before[name][1]).distance_to(target))
-	var clip: Dictionary=controller._choreography_timing.get(mid,{})
+	var clip: Dictionary=controller._choreography_timing.get(mid+("_left" if int(context.facing)==-1 else ""),{})
 	var first_entry: bool=int(info.runtime_frame) in [int(info.runtime_timing.startup),int(info.runtime_timing.startup)+1]
 	if first_entry and not clip.is_empty(): check(absf(time-float(clip.contact_frame)/60)<.0001,str(context)+":contact_clock")
-	context.merge({"event_id":info.combat_event_id,"move":mid,"result":info.contact_result,"runtime_frame":info.runtime_frame,"runtime_timing":info.runtime_timing,"animation_time_s":time,"authored_contact_frame":clip.get("contact_frame",-1),"contact_world":[target.x,target.y],"attack_bounds":rect_json(info.attack_bounds),"hurt_bounds":rect_json(info.hurt_bounds),"overlap_bounds":rect_json(overlap),"limbs_world":after,"baseline_limbs_world":before,"wrist_to_overlap_center_px":after_gap,"baseline_wrist_to_overlap_center_px":before_gap if before_gap<INF else -1,"wrist_to_overlap_surface_px":surface_gap,"wrist_in_real_overlap":surface_gap<.0001,"reach_status":"GEOMETRY_DIAGNOSTIC_NO_ARTISTIC_PASS_THRESHOLD","model_path":model._proxy_model.scene_file_path,"mesh_yaw":model._proxy_model.rotation_degrees.y})
+	var limb: String=str(clip.get("striking_limb","Hand_R"))
+	var intended: Vector2=Vector2(after[limb][0],after[limb][1])
+	context.merge({"intended_wrist_to_contact_px":intended.distance_to(target),"intended_wrist_to_overlap_px":distance_to_rect(intended,overlap),"event_id":info.combat_event_id,"move":mid,"result":info.contact_result,"runtime_frame":info.runtime_frame,"runtime_timing":info.runtime_timing,"animation_time_s":time,"authored_contact_frame":clip.get("contact_frame",-1),"contact_world":[target.x,target.y],"attack_bounds":rect_json(info.attack_bounds),"hurt_bounds":rect_json(info.hurt_bounds),"overlap_bounds":rect_json(overlap),"intended_striking_limb":clip.get("striking_limb","unknown"),"limbs_world":after,"baseline_limbs_world":before,"wrist_to_overlap_center_px":after_gap,"baseline_wrist_to_overlap_center_px":before_gap if before_gap<INF else -1,"wrist_to_overlap_surface_px":surface_gap,"wrist_in_real_overlap":surface_gap<.0001,"reach_status":"GEOMETRY_DIAGNOSTIC_NO_ARTISTIC_PASS_THRESHOLD","model_path":model._proxy_model.scene_file_path,"mesh_yaw":model._proxy_model.rotation_degrees.y})
 	rows.append(context)
 func reset_case(facing: int,kind: String) -> void:
 	release_inputs();p.move_runner.cancel();d.move_runner.cancel();p.projectile_spawner.clear_all();d.projectile_spawner.clear_all()

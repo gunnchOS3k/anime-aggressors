@@ -651,6 +651,7 @@ func _apply_presentation_yaw(override_yaw: float = INF) -> void:
 		yaw = override_yaw
 	elif not _attack_lock.is_empty() and _attack_lock.has("mesh_yaw_deg"):
 		yaw = float(_attack_lock.get("mesh_yaw_deg"))
+	if _animation_controller != null and is_instance_valid(_animation_controller): _animation_controller.set_visual_facing(-1 if yaw<0 else 1)
 	if _loaded_model != null and is_instance_valid(_loaded_model):
 		_loaded_model.rotation_degrees.y = yaw
 	if _proxy_model != null and is_instance_valid(_proxy_model) and _proxy_model != _loaded_model:

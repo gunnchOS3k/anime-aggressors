@@ -78,7 +78,7 @@ def blend(points,t):
  for (a,x),(b,y) in zip(points,points[1:]):
   if t<=b:return x+(y-x)*smooth((t-a)/max(b-a,1e-8))
  return points[-1][1]
-def make_clip(r,fid,move):
+def make_clip(r,fid,move,facing=1):
  spec=DIRECTION[fid];hip,chest,compression,follow,guard,arc,step,settle,_=spec
  mid=move['move_id'];startup=move['startup_frames'];active=move['active_frames'];total=startup+active+move['recovery_frames'];contact=0 if move.get('move_type')=='throw' else startup+1
  rest=fk(r,{},{});scale=rest['Head'][1][1]/.85
@@ -93,6 +93,7 @@ def make_clip(r,fid,move):
  elif mid in ['heavy_attack','aura_burst']:technique='hammer' if fid in ['ember-vale','rook-ironside','yin'] else 'charged_palm'
  elif move.get('move_type')=='projectile':technique='projectile'
  elif move.get('move_type') in ['throw','grab']:technique='throw_'+move.get('direction',mid.removeprefix('throw_')) if mid.startswith('throw_') else 'grab'
+ side=side if facing==1 else ('L' if side=='R' else 'R')
  load=max(1,startup*.65);followframe=min(total-2,contact+max(2,active));settleframe=min(total-1,followframe+(total-followframe)*settle)
  timing=[(0,0.),(load,-.65),(max(load+.1,startup-1),-.85),(contact,1.),(followframe,follow),(settleframe,.18),(total,0.)]
  if move.get('move_type')=='throw':
@@ -104,8 +105,8 @@ def make_clip(r,fid,move):
   drive=blend(timing,frame);extension=blend([(0,0.),(load,0.),(max(load+.1,startup-1),.06),(contact,1.),(followframe,.94),(settleframe,.28),(total,0.)],frame)
   if move.get('move_type')=='throw':extension=blend([(0,1.),(followframe,.9),(settleframe,.28),(total,0.)],frame)
   rots={};pos={}
-  for n,angles in {'Hips':(0,hip*drive,.035*drive),'Spine':(.07*drive,.12*drive,0),'Chest':(.09*drive,chest*drive,0),'Neck':(0,-chest*drive*.25,0),'Head':(.03,-hip*drive*.25,0)}.items():rots[n]=r[n]['r']@euler(*angles)
-  pos['Hips']=r['Hips']['p']+np.array([step*drive*.28,-compression*(.5+.5*abs(drive)), step*drive*.30])*scale
+  for n,angles in {'Hips':(0,hip*drive*facing,.035*drive*facing),'Spine':(.07*drive+.20*max(0,drive),.12*drive*facing,0),'Chest':(.09*drive+.12*max(0,drive),chest*drive*facing,0),'Neck':(0,-chest*drive*.25*facing,0),'Head':(.03,-hip*drive*.25*facing,0)}.items():rots[n]=r[n]['r']@euler(*angles)
+  pos['Hips']=r['Hips']['p']+np.array([step*drive*.28*facing,-compression*(.5+.5*abs(drive)), step*drive*.30+GAIT[fid][0]*.30*max(0,drive)])*scale
   # Guard and strike targets live in rig space; elbows are deliberately outside ribs.
   for hand in ['L','R']:
    sign=-1 if hand=='L' else 1
@@ -113,7 +114,7 @@ def make_clip(r,fid,move):
    if hand==side:
     wind=np.array([sign*.19,guard-.035,-.07])*scale
     target=wind+(np.array([sign*.08,guard-.025,-.405])*scale-wind)*extension
-    target[0]+=arc*math.sin(extension*math.pi)*scale
+    target[0]+=arc*facing*math.sin(extension*math.pi)*scale
     if technique=='hook':target=np.array([sign*(.21-.20*extension),guard,-.10-.30*extension])*scale
     elif technique=='uppercut':target=np.array([sign*.09,guard-.15+.28*extension,-.13-.13*extension])*scale
     elif technique=='low_sweep':target=np.array([sign*.17,guard-.18*extension,-.12-.25*extension])*scale
@@ -126,17 +127,18 @@ def make_clip(r,fid,move):
     if technique.endswith('up'):target[1]+=.18*extension*scale
     elif technique.endswith('down'):target[1]-=.23*extension*scale
     elif technique.endswith('back'):target[2]+=.40*extension*scale
+   if technique in ['cross','hook','drive','hammer','charged_palm']:target[1]-=.22*extension*scale
    target[2]*=-1 # Live FighterFacingContract models face +Z.
    g=solve(r,rots,pos,'UpperArm_'+hand,'LowerArm_'+hand,'Hand_'+hand,target,np.array([sign*.7,-.5,-.12]));rots['Hand_'+hand]=g[r['Hand_'+hand]['parent']][0].T@rest['Hand_'+hand][0]
   for leg in ['L','R']:
    goal=foot[leg].copy()
    if aerial:goal+=np.array([0,.045*extension,(-.08 if leg=='R' else .08)*extension])*scale
-   elif leg=='R' and technique in ['drive','charged_palm']:goal[2]+=.055*extension*scale;goal[1]+=.012*math.sin(extension*math.pi)*scale
+   elif leg==('R' if facing==1 else 'L') and technique in ['drive','charged_palm']:goal[2]+=.055*extension*scale;goal[1]+=.012*math.sin(extension*math.pi)*scale
    g=solve(r,rots,pos,'UpperLeg_'+leg,'LowerLeg_'+leg,'Foot_'+leg,goal,np.array([0,0,-1.]));rots['Foot_'+leg]=g[r['Foot_'+leg]['parent']][0].T@rest['Foot_'+leg][0]
-   if not aerial and leg=='L':slip=max(slip,float(np.linalg.norm(g['Foot_'+leg][1]-goal)))
+   if not aerial and leg==('L' if facing==1 else 'R'):slip=max(slip,float(np.linalg.norm(g['Foot_'+leg][1]-goal)))
   for n in tracks:
    tracks[n].append({'time_s':round(frame/60,6),'rotation_quat':[round(float(x),7) for x in quat(rots.get(n,r[n]['r']))],**({'position_m':[round(float(x),7) for x in pos[n]]} if n in pos else {})})
- return {'startup_frames':startup,'active_frames':active,'recovery_frames':move['recovery_frames'],'duration_frames':total,'contact_frame':contact,'loop':False,'relative_to_rest':False,'bone_tracks':tracks,'technique':technique,'support_foot':'L' if not aerial else None,'max_baked_support_slip_m':slip,'authoring':'original authored blocking + baked analytic two-bone constraints; owner quality approval pending'}
+ return {'startup_frames':startup,'active_frames':active,'recovery_frames':move['recovery_frames'],'duration_frames':total,'contact_frame':contact,'loop':False,'relative_to_rest':False,'bone_tracks':tracks,'technique':technique,'striking_limb':'Hand_'+side,'support_foot':('L' if facing==1 else 'R') if not aerial else None,'max_baked_support_slip_m':slip,'authoring':'original authored blocking + baked analytic two-bone constraints; owner quality approval pending'}
 def make_state(r,fid,name):
  spec=DIRECTION[fid];hip,chest,compression,follow,guard,arc,step,settle,_=spec
  rest=fk(r,{},{});scale=rest['Head'][1][1]/.85
@@ -183,9 +185,14 @@ for fid in DIRECTION:
  for variant in ['male','female']:
   r,h=rig(fid,variant);clips={}
   for move in moves:
-   clip=make_clip(r,fid,move);clips[move['move_id']]=clip;rows.append({'fighter':fid,'body':variant,'move':move['move_id'],'technique':clip['technique'],'contact_frame':clip['contact_frame'],'support_slip_m':clip['max_baked_support_slip_m'],'status':'AUTHORED_RUNTIME_BLOCKING_NOT_HUMAN_APPROVED'})
+   for facing in [1,-1]:clips[move['move_id']+('_left' if facing==-1 else '')]=make_clip(r,fid,move,facing)
   for name in ['idle','idle_primary','idle_secondary','walk','walk_loop','run','run_loop','dash_loop','jump','fall','land_soft','land_hard','shield','shield_hold','aura_charge','aura_ready','charged_idle','hurt_light','hurt_heavy','hitstun_ground','launch','launched','tumble','victory','defeat']:
    clips[name]=make_state(r,fid,name)
+  clips['aura_charge_left']=clips['aura_charge']
+  for move in moves:
+   for facing in [1,-1]:
+    clip=clips[move['move_id']+('_left' if facing==-1 else '')]
+    rows.append({'fighter':fid,'body':variant,'facing':facing,'move':move['move_id'],'technique':clip['technique'],'contact_frame':clip.get('contact_frame',-1),'support_slip_m':clip.get('max_baked_support_slip_m',0),'status':'AUTHORED_RUNTIME_BLOCKING_NOT_HUMAN_APPROVED'})
   dest=ROOT/f'game-godot/data/animation/combat_choreography/{fid}_{variant}.json';dest.parent.mkdir(exist_ok=True);dest.write_text(json.dumps({'schema':'original_combat_blocking/v1','fighter':fid,'body':variant,'rig_sha256':h,'direction':DIRECTION[fid][-1],'mesh_forward_axis':'+Z (live FighterFacingContract)','clips':clips},separators=(',',':'))+'\n')
-report=ROOT/'artifacts/v1_closure/spectral_feedback/continuous_1011/CHOREOGRAPHY_MATRIX.json';report.parent.mkdir(parents=True,exist_ok=True);report.write_text(json.dumps({'rows':rows,'human_pass':False,'root_motion_authoritative':False,'foot_scope':'baked local rig-space support during stationary strikes; moving-world foot lock not claimed','locomotion':'original fighter-specific linear support/curved swing gait; runtime distance matching; authored turn/stop and complete world foot constraints pending','secondary':'bounded runtime follow-through layer pending','provenance':'Independently authored original hand/body paths; no external clips; existing rig/model retained'},indent=2)+'\n')
+report=ROOT/'artifacts/v1_closure/spectral_feedback/continuous_1011/CHOREOGRAPHY_MATRIX.json';report.parent.mkdir(parents=True,exist_ok=True);report.write_text(json.dumps({'rows':rows,'human_pass':False,'root_motion_authoritative':False,'foot_scope':'baked rig-space support during stationary strikes; moving-world gait distance matching, complete world foot lock not claimed','locomotion':'original fighter-specific support/swing gaits; authored turn/stop and cosmic non-athletic variants remain unfinished','secondary':'bounded original accessory-follow layer implemented; authored cloth/armor production unfinished','provenance':'Independently authored hand/body paths and bilateral rig-specific retargeting; no external clips; existing models retained'},indent=2)+'\n')
 print(json.dumps({'clips':len(rows),'max_baked_slip_m':max(x['support_slip_m'] for x in rows)}))

@@ -3,7 +3,8 @@ import argparse,json,subprocess,time,shutil,hashlib
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'artifacts/v1_closure/spectral_feedback'
-p=argparse.ArgumentParser();p.add_argument('labels',nargs='*');p.add_argument('--movie',action='store_true');a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('labels',nargs='*');p.add_argument('--movie',action='store_true');p.add_argument('--suffix',default='');a=p.parse_args()
+assert not a.suffix or a.suffix.replace('_','').isalnum(), 'Safe unique suffix required'
 patterns=['light-light','light-heavy','heavy-light','aerial-light','projectile-light','edgeguard']
 # The bounded KO attempt is explicit-only; a default resume cannot start a new campaign.
 if any('edgeguard-throw' in label for label in a.labels):patterns.append('edgeguard-throw')
@@ -14,7 +15,7 @@ selected_roster=[fid for fid in roster if any(label.startswith(fid+'_') for labe
 for fid in selected_roster:
  for band in ['low','medium','high']:
   for pattern in patterns:
-   label=f'{fid}_{pattern}_{band}'+('_movie' if a.movie else '')
+   label=f'{fid}_{pattern}_{band}'+('_movie' if a.movie else '')+('_'+a.suffix if a.suffix else '')
    if a.labels and label not in a.labels:continue
    dest=OUT/'combo_probes'/label
    if dest.exists():

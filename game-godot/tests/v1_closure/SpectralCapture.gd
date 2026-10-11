@@ -20,6 +20,7 @@ var phases: Array=[]
 var input_events: Array=[]
 var exact_trace := false
 var probe := ""
+var same_fighter_comparison := false
 var turn_latch := 0
 var retreating := false
 func _init() -> void: call_deferred("_run")
@@ -34,7 +35,7 @@ func observe_contact(attacker: Node, defender: Node, info: Dictionary) -> void:
 	var point: Vector2=info.get("contact_world",Vector2.ZERO)
 	var launch: Vector2=info.get("launch",Vector2.ZERO)
 	var screen: Vector2=defender.get_canvas_transform()*point
-	contacts.append({"event_id":info.get("combat_event_id",""),"attacker":attacker.fighter_id,"defender":defender.fighter_id,"move":info.move_id,
+	contacts.append({"event_id":info.get("combat_event_id",""),"attacker":attacker.fighter_id,"attacker_slot":attacker.slot,"defender_slot":defender.slot,"defender":defender.fighter_id,"move":info.move_id,
 		"frame":Engine.get_physics_frames(),"movie_frame":Engine.get_process_frames()-1,"result":info.get("contact_result","legacy"),"damage":info.damage,"damage_before":info.get("defender_damage_before",defender.damage_percent-info.damage),
 		"contact_world":[point.x,point.y],"contact_screen":[screen.x,screen.y],"launch":[launch.x,launch.y],"actual_velocity":[defender.velocity.x,defender.velocity.y],"hitstop_frames":info.hitstop_frames,
 		"hitstun_seconds":defender.hitstun_remaining,"defender_state_before":info.get("defender_state_before","unknown"),"follow_up_before_control":info.get("defender_in_hitstun_before",false),
@@ -67,7 +68,7 @@ func write_evidence() -> void:
 	var renderer=battle.get_node_or_null("SpectralFeedback")
 	var file=FileAccess.open(output.path_join("combat_capture.json"),FileAccess.WRITE)
 	file.store_string(JSON.stringify({"source_sha":source_sha,"movie_fps":60,"stage":"training-grid","match_seed":431017,"fixture":"versus on existing flat Training Grid stage; seeded public-input driver; explicit starting damage band "+band,
-		"starting_opponent_damage":50 if band=="medium" else 110 if band=="high" else 0,"opponent_cpu":battle.fighter2.is_cpu,"controls_enabled":battle.fighter2.controls_enabled,
+		"starting_opponent_damage":50 if band=="medium" else 110 if band=="high" else 0,"body_presentations":[battle.fighter1.data.body_variant,battle.fighter2.data.body_variant],"same_fighter_comparison":same_fighter_comparison,"opponent_cpu":battle.fighter2.is_cpu,"controls_enabled":battle.fighter2.controls_enabled,
 		"forced_moves":false,"forced_ko":false,"frozen_opponent":false,"story_receipts":false,"human_playthrough":false,
 		"idle_fixture_not_combo_evidence":idle_opponent,"probe":probe,"exact_trace":exact_trace,"state_transitions":transitions,"move_phases":phases,"public_inputs":input_events,"moves":events,"contacts":contacts,"visual_contacts":visual_contacts,"samples":samples,"ko_events":ko_events,
 		"presentation_events":renderer.history if renderer != null else [],"pool":renderer.stats() if renderer != null else {},"player_damage":battle.fighter1.damage_percent,"opponent_damage":battle.fighter2.damage_percent},"  ")+"\n");file.close()
@@ -81,12 +82,14 @@ func _run() -> void:
 		if arg=="--performance-opponent=idle":idle_opponent=true
 		if arg.begins_with("--damage-band="):band=arg.get_slice("=",1)
 		if arg=="--exact-trace":exact_trace=true
+		if arg=="--same-fighter-comparison":same_fighter_comparison=true
 		if arg.begins_with("--combo-probe="):probe=arg.get_slice("=",1)
 		if arg.begins_with("--capture-frames="):max_frames=int(arg.get_slice("=",1))
 	var state=root.get_node("GameState")
 	state.stage_id="training-grid";state.match_seed=431017
 	state.mode="versus";state.p1_is_cpu=false;state.cpu_level=3;state.battle_eval_mode=false;state.p1_fighter_id=fid;state.p2_fighter_id="ember-vale" if fid=="juno-spark" else "juno-spark"
-	state.p1_body_variant="female";state.p2_body_variant="female";state.p2_is_cpu=not idle_opponent;state.stocks=9;state.match_timer_seconds=180
+	if same_fighter_comparison:state.p2_fighter_id=fid
+	state.p1_body_variant="female";state.p2_body_variant="male" if same_fighter_comparison else "female";state.p2_is_cpu=not idle_opponent;state.stocks=9;state.match_timer_seconds=180
 	root.get_node("SceneRouter").go("battle")
 	for i in range(220):await physics_frame
 	battle=current_scene
@@ -94,7 +97,7 @@ func _run() -> void:
 	var p=battle.fighter1
 	for actor in [p,battle.fighter2]:
 		actor.hit_resolver.hit_confirmed.connect(observe_contact)
-		actor.move_runner.move_started.connect(func(mid):events.append({"fighter":actor.fighter_id,"move":mid,"frame":Engine.get_physics_frames(),"movie_frame":Engine.get_process_frames()-1}))
+		actor.move_runner.move_started.connect(func(mid):events.append({"fighter":actor.fighter_id,"slot":actor.slot,"move":mid,"frame":Engine.get_physics_frames(),"movie_frame":Engine.get_process_frames()-1}))
 		actor.state_machine.state_changed.connect(func(from_state,to_state):transitions.append({"fighter":actor.fighter_id,"movie_frame":Engine.get_process_frames()-1,"from":from_state,"to":to_state,"velocity":[actor.velocity.x,actor.velocity.y],"position":[actor.position.x,actor.position.y],"hitstun_duration":actor.hitstun_remaining,"landing_lag":actor.state_machine.landing_lag}))
 		actor.move_runner.phase_changed.connect(func(move_phase):phases.append({"fighter":actor.fighter_id,"movie_frame":Engine.get_process_frames()-1,"move":actor.move_runner.current_move_id(),"phase":move_phase,"move_frame":actor.move_runner.total_frame}))
 		actor.koed.connect(func():ko_events.append({"fighter":actor.fighter_id,"movie_frame":Engine.get_process_frames()-1,"stocks":actor.stocks}))
