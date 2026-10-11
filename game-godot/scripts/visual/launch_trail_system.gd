@@ -2,6 +2,7 @@ extends Node2D
 class_name LaunchTrailSystem
 ## Discrete original smoke volumes follow real victim displacement during hitstun.
 const _Renderer = preload("res://scripts/visual/spectral_feedback_renderer.gd")
+const SMOKE_TIERS := ["HIGH", "CRITICAL"]
 var _active := false
 var _target: WeakRef
 var _fid := ""
@@ -10,7 +11,7 @@ var _last := Vector2.ZERO
 var _distance := 0.0
 var emitted := 0
 func begin(defender: Node2D, attacker_id: String, tier: String) -> void:
-	_target=weakref(defender);_fid=attacker_id;_tier=tier;_active=tier!="LOW";_last=defender.global_position;_distance=0;emitted=0
+	_target=weakref(defender);_fid=attacker_id;_tier=tier;_active=tier in SMOKE_TIERS;_last=defender.global_position;_distance=0;emitted=0
 func follow(defender: Node2D, velocity: Vector2) -> void:
 	if not _active or defender == null: return
 	var displacement := defender.global_position-_last

@@ -124,6 +124,9 @@ func _run() -> void:
 	check(comparison.slots.size()==allocated and comparison.reused>0,"pool_reuse_without_node_growth")
 	settings_node.set_option("reduced_particles",false);settings_node.set_option("reduced_flash",false);settings_node.set_option("high_contrast_vfx",false)
 	var trail=load("res://scripts/visual/launch_trail_system.gd").new();d.add_child(trail)
+	trail.begin(d,"juno-spark","LOW");check(not trail._active,"low_launch_has_no_high_smoke")
+	trail.begin(d,"juno-spark","UNKNOWN");check(not trail._active,"unknown_launch_tier_cannot_enable_smoke")
+	trail.begin(d,"juno-spark","CRITICAL");check(trail._active,"critical_launch_tier_supported")
 	d._hitstop=0;d.state_machine.enter("launched");d.hitstun_remaining=.3
 	trail.begin(d,"juno-spark","HIGH");d.global_position+=Vector2(20,-5);trail.follow(d,Vector2(90,-20))
 	check(trail.emitted==1,"smoke_requires_real_displacement")
