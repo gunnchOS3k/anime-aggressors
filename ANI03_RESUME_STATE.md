@@ -1,3 +1,10 @@
+# Bounded KO attempt checkpoint — October 11, 2026
+
+Evidence reconciliation is committed at `55e37fb4` and pushed to existing draft #123. Source gameplay remains f8582469; all twelve final suites and eight exact-b7 GitHub checks are verified. A test-driver-only `edgeguard-throw` recipe is checkpointed next. It walks via public controls toward x470, then uses ordinary grab/throw against an active CPU, with the already declared 110% initial-damage fixture. No state/velocity/results writes occur after initial fixture setup.
+
+Exact next command: `python3 tools/v1_closure/probe_spectral_combos.py juno-spark_edgeguard-throw_high`. This is one 900-frame headless attempt, not another nine-fighter or native recording campaign. Preserve any failure as evidence. No Godot jobs are currently running. Do not repeat successful long tests. After the attempt, audit coverage and create production/rule tickets, then commit/push and stop with a bounded consolidated report. All human gates false; disk about 5.1 GiB.
+
+---
 # Current continuation — October 11, 2026
 
 Recovered branch `release/anime-v1-dialogue-and-elemental-performance`, local/remote HEAD `b7a562a08d0906a427a35f8a720c99d570a198de`. Shipping source checkpoint `f858246970a129565473fb00f447bd931bb12350`. All twelve final regression suites completed PASS; eight GitHub jobs succeeded at exactly b7a562a0. Late three suites launched at b7a562a0, whose Godot source tree equals f8582469. No prior isolated test/capture process is running.

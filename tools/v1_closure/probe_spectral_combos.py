@@ -5,6 +5,8 @@ ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'artifacts/v1_closure/spectral_feedback'
 p=argparse.ArgumentParser();p.add_argument('labels',nargs='*');p.add_argument('--movie',action='store_true');a=p.parse_args()
 patterns=['light-light','light-heavy','heavy-light','aerial-light','projectile-light','edgeguard']
+# The bounded KO attempt is explicit-only; a default resume cannot start a new campaign.
+if any('edgeguard-throw' in label for label in a.labels):patterns.append('edgeguard-throw')
 index_path=OUT/'combo_probe_index.json'
 index=json.loads(index_path.read_text()) if index_path.exists() else {'attempts':[]}
 for fid in ['ember-vale','juno-spark']:

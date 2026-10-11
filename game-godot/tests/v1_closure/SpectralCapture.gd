@@ -109,7 +109,7 @@ func _run() -> void:
 				if frame%80<4:actions.append("jump")
 				if frame%30<4:actions.append("attack")
 		# Correct facing through movement input; never assign transform/facing/velocity.
-		if not idle_opponent and p.state_machine.can_move() and (not probe.is_empty() or not (phase>=520 and phase<970)) and not (probe=="edgeguard" and frame%600<260):
+		if not idle_opponent and p.state_machine.can_move() and (not probe.is_empty() or not (phase>=520 and phase<970)) and not ((probe=="edgeguard" and frame%600<260) or (probe=="edgeguard-throw" and frame<260)):
 			if absf(dx)<12:retreating=true
 			if retreating and absf(dx)<28:
 				actions=["left" if dx>=0 else "right"];turn_latch=1
@@ -126,6 +126,16 @@ func _run() -> void:
 func _probe_inputs(frame: int,p: Node,dx: float) -> Array:
 	# Adaptive observation selects public controls only. No game state/result writes.
 	var actions: Array=[]
+	if probe=="edgeguard-throw":
+		# One bounded missing-evidence attempt: approach the existing edge, then
+		# grab/throw using ordinary controls. CPU can attack, escape and recover.
+		if p.state_machine.current_state=="grab_hold":
+			return ["right" if p.position.x>=0 else "left","attack"]
+		if frame<260:
+			return ["right"] if p.position.x<470 else []
+		if absf(dx)>25:actions.append("right" if dx>0 else "left")
+		elif frame%4==0 and p.state_machine.can_attack():actions.append("grab")
+		return actions
 	if probe=="edgeguard":
 		var stage_phase:=frame%600
 		if stage_phase<180:
