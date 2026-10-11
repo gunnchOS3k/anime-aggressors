@@ -9,7 +9,9 @@ patterns=['light-light','light-heavy','heavy-light','aerial-light','projectile-l
 if any('edgeguard-throw' in label for label in a.labels):patterns.append('edgeguard-throw')
 index_path=OUT/'combo_probe_index.json'
 index=json.loads(index_path.read_text()) if index_path.exists() else {'attempts':[]}
-for fid in ['ember-vale','juno-spark']:
+roster=['ember-vale','juno-spark','rook-ironside','kaia-windrow','nix-calder','orion-vell','vesper-nyx','yin','yang']
+selected_roster=[fid for fid in roster if any(label.startswith(fid+'_') for label in a.labels)] if a.labels else roster[:2]
+for fid in selected_roster:
  for band in ['low','medium','high']:
   for pattern in patterns:
    label=f'{fid}_{pattern}_{band}'+('_movie' if a.movie else '')
@@ -37,7 +39,8 @@ for fid in ['ember-vale','juno-spark']:
    row={'label':label,'fighter':fid,'band':band,'pattern':pattern,'source_sha':data['source_sha'],'seconds':round(time.monotonic()-start,2),'native_movie':a.movie,
         'hits':sum(c['attacker']==fid and c['result']=='hit' for c in data['contacts']),
         'shield_contacts':sum(c['attacker']==fid and c['result']=='shield' for c in data['contacts']),
-        'true_followups':sum(c['attacker']==fid and c['result']=='hit' and c['follow_up_before_control'] for c in data['contacts']),
+        'true_followups':sum(c['attacker']==fid and c['result']=='hit' and not c['move'].startswith('throw_') and c['follow_up_before_control'] for c in data['contacts']),
+        'throw_release_hitstun_flags_excluded':sum(c['attacker']==fid and c['move'].startswith('throw_') and c['follow_up_before_control'] for c in data['contacts']),
         'scope':'adaptive public controls versus active CPU; 0/50/110 starting opponent percent fixture only; no balance overrides or forced results'}
    if a.movie:
     target=OUT/'rendered'/(label+'.mp4')

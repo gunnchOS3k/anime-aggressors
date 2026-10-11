@@ -1,3 +1,12 @@
+# Post-throw acceptance milestone — October 11, 2026
+
+Throw source `4bdb1a88` verified by 36 directions + policies, combat/interruption/spectral/charge, all 145 staged nodes, 18 roster variants and restart. Missing unlock setup failure preserved, corrected fixture passes. Ordinary Kaia fresh + real restart passed 20 nodes/16 receipts, Gray, no overrides, Yin/Yang locked. Evidence: continuous_1011/regressions and ordinary_kaia.
+
+One repaired competitive public-input probe at `778d5fdafea275a6e9864e7fc573ebbf9fe4ada2` caused authentic Juno stock loss at frame 900, stocks9→8, original kind7 at901, nine throw moves/nine contacts, active CPU13 moves. Initial110% fixture, no later damage or result writes. No match win claimed. Old duplicate Juno evidence remains excluded. Headless proof; native counterpart next.
+
+Next command: `python3 tools/v1_closure/probe_spectral_combos.py ember-vale_edgeguard-throw_high_movie --movie`. No isolated Godot running. Source models unchanged; prepared combat data not yet loaded. After native outcome, apply `/private/tmp/ani03_choreo_patch.py`, run CombatChoreography live rig/frame test, checkpoint then two golden movies and bounded missing combos. Disk~5.7GiB;18GiB export guard; all human gates false.
+
+---
 # Continuous checkpoint — authored data prepared, October 11, 2026
 
 Throw ownership fix pushed at `4bdb1a8811c1b31b96b1a18bdc2c77ff3d1af8e2`. Targeted throw/combat/interruption/VFX/charge and staged 145-node FullCampaign PASS. ShippingRosterPath initially omitted staged-unlock argument (failure preserved); corrected fixture PASS for all 18 variants. CampaignRestart PASS. New ordinary Kaia fresh-half/restart is currently running serially: `/private/tmp/ani03_remaining_validation.log`, isolated profile `ani03_throw_kaia_1011`. Do not start another Godot or apply animation runtime loader edits until it exits.
