@@ -116,6 +116,9 @@ func _run() -> void:
 	d._hitstop=0;d.state_machine.enter("launched");d.hitstun_remaining=.3
 	trail.begin(d,"juno-spark","HIGH");d.global_position+=Vector2(20,-5);trail.follow(d,Vector2(90,-20))
 	check(trail.emitted==1,"smoke_requires_real_displacement")
+	# Presentation must follow the real recovery state even for flights longer than one second.
+	d.global_position+=Vector2(20,-5);trail._physics_process(1.05)
+	check(trail._active and trail.emitted==2,"smoke_does_not_end_before_actual_recovery")
 	d.state_machine.enter("idle");trail._physics_process(.016)
 	check(not trail._active,"smoke_stops_when_control_returns")
 	var file=FileAccess.open(output.path_join("spectral_runtime.json"),FileAccess.WRITE)

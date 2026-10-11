@@ -8,10 +8,9 @@ var _fid := ""
 var _tier := "LOW"
 var _last := Vector2.ZERO
 var _distance := 0.0
-var _elapsed := 0.0
 var emitted := 0
 func begin(defender: Node2D, attacker_id: String, tier: String) -> void:
-	_target=weakref(defender);_fid=attacker_id;_tier=tier;_active=tier!="LOW";_last=defender.global_position;_distance=0;_elapsed=0;emitted=0
+	_target=weakref(defender);_fid=attacker_id;_tier=tier;_active=tier!="LOW";_last=defender.global_position;_distance=0;emitted=0
 func follow(defender: Node2D, velocity: Vector2) -> void:
 	if not _active or defender == null: return
 	var displacement := defender.global_position-_last
@@ -36,7 +35,6 @@ func _physics_process(delta: float) -> void:
 	if "_hitstop" in target and target._hitstop>0:return
 	if "state_machine" in target and target.state_machine.current_state not in ["hitstun","launched","tumble","hurt_light","hurt_heavy"]:
 		end();return
-	_elapsed+=delta
-	if ("hitstun_remaining" in target and target.hitstun_remaining<=0) or _elapsed>1.0:
+	if ("hitstun_remaining" in target and target.hitstun_remaining<=0):
 		end();return
 	follow(target,target.velocity if "velocity" in target else Vector2.ZERO)
