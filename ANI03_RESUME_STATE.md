@@ -1,3 +1,12 @@
+# Continuous checkpoint — authored data prepared, October 11, 2026
+
+Throw ownership fix pushed at `4bdb1a8811c1b31b96b1a18bdc2c77ff3d1af8e2`. Targeted throw/combat/interruption/VFX/charge and staged 145-node FullCampaign PASS. ShippingRosterPath initially omitted staged-unlock argument (failure preserved); corrected fixture PASS for all 18 variants. CampaignRestart PASS. New ordinary Kaia fresh-half/restart is currently running serially: `/private/tmp/ani03_remaining_validation.log`, isolated profile `ani03_throw_kaia_1011`. Do not start another Godot or apply animation runtime loader edits until it exits.
+
+New original 432 move/body clips plus stance, gait, jump/land, defensive/hurt and victory/defeat blocking prepared in combat_choreography/ on existing rigs, with baked 60 Hz support-foot constraints (max offline slip <4e-9 m). Not runtime loaded yet and not owner approved. Pending loader patch in `/private/tmp/ani03_choreo_patch.py`; pending live-rig test CombatChoreography.gd and accessory layer are local/unverified. Models/accepted move values unchanged; all 33 worktrees preserved. Free disk about 5.7 GiB, no heavy exports.
+
+Next: wait for ordinary Kaia fresh/restart, record its actual receipt results, then one new-label Ember edgeguard-throw_high public-input headless attempt. Preserve failure or capture only missing qualified native KO. Then apply pending animation loader, test live deformation/foot support/body variants, checkpoint, and capture two new Ember/Juno golden clips. Continue bounded missing combo categories. Human/release gates false.
+
+---
 # Continuous engineering — throw correction checkpoint, October 11, 2026
 
 Worktree: `/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure`.
