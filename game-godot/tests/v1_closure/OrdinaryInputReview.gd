@@ -156,7 +156,15 @@ func _physics_process(_delta: float) -> void:
 
 func _ko_observed(actor) -> void:
 	if not attempt.has("kos"): attempt["kos"] = []
-	attempt["kos"].append({"fighter":actor.fighter_id,"slot":actor.slot,"position":[actor.position.x,actor.position.y],"damage":actor.damage_percent,"remaining_stocks":actor.stocks})
+	attempt["kos"].append({"fighter":actor.fighter_id,"slot":actor.slot,"position":[actor.position.x,actor.position.y],"damage":actor.damage_percent,"remaining_stocks":actor.stocks,"movie_frame":Engine.get_process_frames()-1,"spectral_stock_loss":_stock_loss_effect(actor)})
+
+func _stock_loss_effect(actor: Node) -> Dictionary:
+	var renderer=get_tree().current_scene.get_node_or_null("SpectralFeedback")
+	if renderer == null:return {}
+	for i in range(renderer.history.size()-1,-1,-1):
+		var event: Dictionary=renderer.history[i]
+		if event.kind==7 and str(event.event_id).begins_with("ko:"+str(actor.get_instance_id())+":"):return event.duplicate(true)
+	return {}
 
 func _hit(attacker, defender, info: Dictionary) -> void:
 	if info.get("blocked",false): attempt["blocks"] += 1

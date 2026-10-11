@@ -16,12 +16,12 @@ for row in index['attempts']:
  for first in body:
   f=first['movie_frame'];next_c=next((c for c in d['contacts'] if c['attacker']==fid and c['movie_frame']>f),None)
   end=min(f+120,next_c['movie_frame'] if next_c else f+120)
-  samples=[s for s in d['samples'] if f<s['movie_frame']<=end]
+  samples=[s for s in d['samples'] if f<=s['movie_frame']<end]
   locked=next((s for s in samples if not s['p2_can_attack']),None)
   recovery=next((s for s in samples if locked and s['movie_frame']>locked['movie_frame'] and s['p2_can_attack']),None)
   state_changes=[s for s in d['state_transitions'] if s['fighter']==first['defender'] and f<=s['movie_frame']<=end]
   land=next((s for s in state_changes if s['to']=='land'),None)
-  control_transition=next((s for s in state_changes if s['to'] in ['idle','walk','run','dash','fall','jump','fast_fall','aura_ready']),None)
+  control_transition=next((s for s in state_changes if s['movie_frame']>f and s['to'] in ['idle','walk','run','dash','fall','jump','fast_fall','aura_ready']),None)
   activation=next((s for s in d['move_phases'] if s['fighter']==fid and s['phase']=='active' and s['movie_frame']>f),None)
   next_start=next((m for m in d['moves'] if m['fighter']==fid and m['movie_frame']>f),None)
   genuine=bool(next_c and next_c['result']=='hit' and next_c['follow_up_before_control'])
