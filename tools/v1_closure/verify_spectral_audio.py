@@ -9,9 +9,11 @@ def samples(path):
   data=np.frombuffer(w.readframes(w.getnframes()),dtype=np.int16).astype(np.float64).reshape(-1,w.getnchannels()).mean(axis=1)
   return data,w.getframerate()
 rows=[]
-for movie in json.loads((OUT/'capture_index.json').read_text())['movies']:
+movies=[{**m,'folder':'captures'} for m in json.loads((OUT/'capture_index.json').read_text())['movies']]
+if (OUT/'combo_probe_index.json').exists():movies.extend({**m,'mode':'active','folder':'combo_probes'} for m in json.loads((OUT/'combo_probe_index.json').read_text())['attempts'] if m['native_movie'])
+for movie in movies:
  if movie['mode']!='active' or movie['fighter'] not in ['ember-vale','juno-spark']:continue
- data=json.loads((OUT/'captures'/movie['label']/'combat_capture.json').read_text())
+ data=json.loads((OUT/movie['folder']/movie['label']/'combat_capture.json').read_text())
  decoded=MEDIA/(movie['label']+'_analysis.wav')
  subprocess.run(['ffmpeg','-y','-hide_banner','-loglevel','error','-i',str(ROOT/movie['path']),'-vn','-ac','1','-ar','48000','-c:a','pcm_s16le',str(decoded)],check=True)
  audio,sr=samples(decoded);matches=[]

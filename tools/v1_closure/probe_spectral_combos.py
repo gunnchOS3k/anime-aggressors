@@ -1,10 +1,10 @@
 """Serial public-input combo attempts; fixed combat rules, active CPUs, exact traces."""
-import argparse,json,subprocess,time,shutil
+import argparse,json,subprocess,time,shutil,hashlib
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'artifacts/v1_closure/spectral_feedback'
 p=argparse.ArgumentParser();p.add_argument('labels',nargs='*');p.add_argument('--movie',action='store_true');a=p.parse_args()
-patterns=['light-light','light-heavy','heavy-light','aerial-light','projectile-light']
+patterns=['light-light','light-heavy','heavy-light','aerial-light','projectile-light','edgeguard']
 index_path=OUT/'combo_probe_index.json'
 index=json.loads(index_path.read_text()) if index_path.exists() else {'attempts':[]}
 for fid in ['ember-vale','juno-spark']:
@@ -41,4 +41,7 @@ for fid in ['ember-vale','juno-spark']:
     target=OUT/'rendered'/(label+'.mp4')
     subprocess.run(['ffmpeg','-y','-hide_banner','-loglevel','error','-i',str(raw),'-c:v','libx264','-preset','fast','-crf','21','-pix_fmt','yuv420p','-c:a','aac','-b:a','160k','-movflags','+faststart',str(target)],check=True)
     row['path']=str(target.relative_to(ROOT))
+    metadata=json.loads(subprocess.check_output(['ffprobe','-v','error','-show_entries','stream=codec_type,codec_name,duration,r_frame_rate,nb_frames','-of','json',str(target)],text=True))
+    assert {s['codec_type'] for s in metadata['streams']}=={'video','audio'} and metadata['streams'][0]['r_frame_rate']=='60/1'
+    row['streams']=metadata['streams'];row['sha256']=hashlib.sha256(target.read_bytes()).hexdigest()
    index['attempts'].append(row);index_path.write_text(json.dumps(index,indent=2)+'\n');print(json.dumps(row),flush=True)

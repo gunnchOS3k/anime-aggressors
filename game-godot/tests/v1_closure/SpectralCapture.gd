@@ -106,7 +106,7 @@ func _run() -> void:
 				if frame%80<4:actions.append("jump")
 				if frame%30<4:actions.append("attack")
 		# Correct facing through movement input; never assign transform/facing/velocity.
-		if not idle_opponent and p.state_machine.can_move() and (not probe.is_empty() or not (phase>=520 and phase<970)):
+		if not idle_opponent and p.state_machine.can_move() and (not probe.is_empty() or not (phase>=520 and phase<970)) and not (probe=="edgeguard" and frame%600<260):
 			if absf(dx)<12:retreating=true
 			if retreating and absf(dx)<28:
 				actions=["left" if dx>=0 else "right"];turn_latch=1
@@ -123,6 +123,17 @@ func _run() -> void:
 func _probe_inputs(frame: int,p: Node,dx: float) -> Array:
 	# Adaptive observation selects public controls only. No game state/result writes.
 	var actions: Array=[]
+	if probe=="edgeguard":
+		var stage_phase:=frame%600
+		if stage_phase<180:
+			return ["right"] if p.position.x<480 else ["shield"]
+		if stage_phase<260:
+			if frame%40<2:actions.append("jump")
+			if p.position.x>battle.fighter2.position.x-28:actions.append("left")
+			return actions
+		if absf(dx)>28:actions.append("right" if dx>0 else "left")
+		if frame%4==0 and p.state_machine.can_attack():actions.append_array(["attack","special"])
+		return actions
 	var hits:=0
 	for c in contacts:
 		if c.attacker==fid and c.result=="hit":hits+=1
