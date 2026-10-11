@@ -27,7 +27,12 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 	var from_projectile := bool(move.get("_from_projectile", false))
 	var move_id := str(move.get("move_id", ""))
 	var is_direct_throw := move_id.begins_with("throw_") or str(move.get("move_type", "")) == "throw"
-	if not from_projectile and not is_direct_throw:
+	if is_direct_throw:
+		# Direct release happens at the existing frame zero, outside active
+		# overlap polling, but still consumes this move's target ledger once.
+		if attacker.move_runner == null or not attacker.move_runner.active or attacker.move_runner.current_move_id() != move_id or not attacker.move_runner.can_hit_target(defender):
+			return {}
+	elif not from_projectile:
 		if attacker.move_runner == null or not attacker.move_runner.can_hit_target(defender):
 			return {}
 	# Active armor frames (Rook heavies / Nix ice window) fully gate the hit.

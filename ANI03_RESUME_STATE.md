@@ -1,3 +1,17 @@
+# Continuous engineering — throw correction checkpoint, October 11, 2026
+
+Worktree: `/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure`.
+Branch: `release/anime-v1-dialogue-and-elemental-performance`; recovered local/remote `6a97f706340e65f971abd638e291b8089f2067aa`. Resolve this checkpoint SHA with git. All 33 worktrees preserved; no owner saves used.
+
+ANI03-T01 corrected: execute_throw still resolves at existing frame zero; direct throws consume the MoveRunner target ledger; active callbacks return before generic melee and overlap polling rejects throw/grab moves. No move manifests, damage/frame/launch values changed.
+
+ThrowOwnership source fixture PASS: 36 public grabbed-target directional throws, plus shield bypass, active armor and interruption (39 rows), invincible grab rejection, exactly one contact/damage/feedback/mesh, no later damage. Reconfigured idle defender fixtures are not competitive combo proof. Correct setup baseline has 154 failures; original fixture-position failure preserved separately. Evidence: spectral_feedback/throw_ownership/{baseline,baseline_public,fixed}. Fixed launch manifest records tracked uncommitted diff against recovered HEAD.
+
+Next serial commands: affected combat/Spectral/charge/roster + FullCampaign/CampaignRestart, then a fresh ordinary Kaia profile fresh/restart, then one unused Ember edgeguard-throw_high attempt; if qualified record only missing native finishing evidence. No isolated process running. Disk ~6 GiB, no heavy exports below 18 GiB. After KO result continue authored Ember/Juno runtime animation, then roster and bounded missing combo coverage. All human/release gates false.
+
+---
+Historical state follows.
+
 # Final reconciliation state — October 11, 2026
 
 Branch: `release/anime-v1-dialogue-and-elemental-performance`. Reconciliation package pushed at `55e37fb4393ca13677a7322e401971808eb4ed2a`; bounded observer source `967414087b74191fde411b95da5281c85b2c9c72` is included in the next report checkpoint. Resolve its current pushed metadata HEAD with `git rev-parse HEAD` and `gh pr view 123 --repo gunnchOS3k/anime-aggressors --json headRefOid`. These records cannot embed their own future commit hash. Shipping gameplay code still equals tested `f858246970a129565473fb00f447bd931bb12350`. #122 remains c5f3be23, both draft.

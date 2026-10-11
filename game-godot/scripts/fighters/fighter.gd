@@ -1100,6 +1100,10 @@ func _on_move_active(move: Dictionary) -> void:
 		return
 	if mt == "throw" or mid.begins_with("throw_"):
 		state_machine.enter(_FighterStates.THROW_RELEASE)
+		# execute_throw owns the grabbed-target release. A throw has no melee
+		# overlap owner and must never reactivate the previous grab shape.
+		hitbox.monitoring = false
+		return
 	if mt == "projectile" or move.has("projectile"):
 		if move_runner.frame_in_phase == 1:
 			projectile_spawner.spawn_from_move(_current_move, aura)
@@ -1130,7 +1134,7 @@ func _poll_hitbox_overlaps() -> void:
 	var move: Dictionary = _current_move
 	if move.is_empty():
 		move = _DataLoader.find_move(move_manifest, move_runner.current_move_id())
-	if move.is_empty() or str(move.get("move_id", "")) == "grab":
+	if move.is_empty() or str(move.get("move_type", "")) in ["grab", "throw"] or str(move.get("move_id", "")) == "grab" or str(move.get("move_id", "")).begins_with("throw_"):
 		return
 	for area in hitbox.get_overlapping_areas():
 		if area == null or area == hurtbox:
@@ -1184,6 +1188,7 @@ func execute_throw() -> void:
 	var throw_move: Dictionary = _ThrowResolver.resolve_throw(self, target, move_manifest, direction)
 	_ThrowResolver.apply_victim_offset(self, target, throw_move)
 	_start_move_dict(throw_move)
+	hitbox.monitoring = false
 	target.state_machine.enter(_FighterStates.HITSTUN)
 	hit_resolver.resolve(self, target, throw_move, damage_percent)
 	grab_event.emit({"result": "throw", "target": target.fighter_id, "direction": direction})
