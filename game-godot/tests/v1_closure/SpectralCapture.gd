@@ -14,21 +14,28 @@ var max_frames := 1800
 var battle: Node
 var started_frame := 0
 var final_written := false
+var transitions: Array=[]
+var phases: Array=[]
+var input_events: Array=[]
+var exact_trace := false
+var probe := ""
 var turn_latch := 0
 var retreating := false
 func _init() -> void: call_deferred("_run")
 func inputs(actions: Array) -> void:
+	if actions != held:input_events.append({"movie_frame":Engine.get_process_frames()-1,"actions":actions.duplicate(),"axis_strength":.55 if not probe.is_empty() else 1.0})
 	for action in held:
 		if action not in actions:Input.action_release("p1_"+action)
 	for action in actions:
-		if action not in held:Input.action_press("p1_"+action)
+		if action not in held:Input.action_press("p1_"+action,.55 if not probe.is_empty() and action in ["left","right"] else 1.0)
 	held=actions
 func observe_contact(attacker: Node, defender: Node, info: Dictionary) -> void:
 	var point: Vector2=info.get("contact_world",Vector2.ZERO)
 	var launch: Vector2=info.get("launch",Vector2.ZERO)
+	var screen: Vector2=defender.get_canvas_transform()*point
 	contacts.append({"event_id":info.get("combat_event_id",""),"attacker":attacker.fighter_id,"defender":defender.fighter_id,"move":info.move_id,
 		"frame":Engine.get_physics_frames(),"movie_frame":Engine.get_process_frames()-1,"result":info.get("contact_result","legacy"),"damage":info.damage,"damage_before":info.get("defender_damage_before",defender.damage_percent-info.damage),
-		"contact_world":[point.x,point.y],"launch":[launch.x,launch.y],"actual_velocity":[defender.velocity.x,defender.velocity.y],"hitstop_frames":info.hitstop_frames,
+		"contact_world":[point.x,point.y],"contact_screen":[screen.x,screen.y],"launch":[launch.x,launch.y],"actual_velocity":[defender.velocity.x,defender.velocity.y],"hitstop_frames":info.hitstop_frames,
 		"hitstun_seconds":defender.hitstun_remaining,"defender_state_before":info.get("defender_state_before","unknown"),"follow_up_before_control":info.get("defender_in_hitstun_before",false),
 		"audio_path":info.get("played_audio",{}).get("path",""),"elemental_audio_path":info.get("played_audio",{}).get("elemental_layer",{}).get("path",""),"attacker_move_frame":info.get("move_frame",-1)})
 func write_evidence() -> void:
@@ -38,7 +45,7 @@ func write_evidence() -> void:
 	file.store_string(JSON.stringify({"source_sha":source_sha,"movie_fps":60,"stage":"training-grid","match_seed":431017,"fixture":"versus on existing flat Training Grid stage; seeded public-input driver; explicit starting damage band "+band,
 		"starting_opponent_damage":50 if band=="medium" else 110 if band=="high" else 0,"opponent_cpu":battle.fighter2.is_cpu,"controls_enabled":battle.fighter2.controls_enabled,
 		"forced_moves":false,"forced_ko":false,"frozen_opponent":false,"story_receipts":false,"human_playthrough":false,
-		"idle_fixture_not_combo_evidence":idle_opponent,"moves":events,"contacts":contacts,"samples":samples,"ko_events":ko_events,
+		"idle_fixture_not_combo_evidence":idle_opponent,"probe":probe,"exact_trace":exact_trace,"state_transitions":transitions,"move_phases":phases,"public_inputs":input_events,"moves":events,"contacts":contacts,"samples":samples,"ko_events":ko_events,
 		"presentation_events":renderer.history if renderer != null else [],"pool":renderer.stats() if renderer != null else {},"player_damage":battle.fighter1.damage_percent,"opponent_damage":battle.fighter2.damage_percent},"  ")+"\n");file.close()
 func _run() -> void:
 	await process_frame
@@ -49,6 +56,8 @@ func _run() -> void:
 		if arg.begins_with("--ordinary-output="):output=arg.get_slice("=",1)
 		if arg=="--performance-opponent=idle":idle_opponent=true
 		if arg.begins_with("--damage-band="):band=arg.get_slice("=",1)
+		if arg=="--exact-trace":exact_trace=true
+		if arg.begins_with("--combo-probe="):probe=arg.get_slice("=",1)
 		if arg.begins_with("--capture-frames="):max_frames=int(arg.get_slice("=",1))
 	var state=root.get_node("GameState")
 	state.stage_id="training-grid";state.match_seed=431017
@@ -62,6 +71,8 @@ func _run() -> void:
 	for actor in [p,battle.fighter2]:
 		actor.hit_resolver.hit_confirmed.connect(observe_contact)
 		actor.move_runner.move_started.connect(func(mid):events.append({"fighter":actor.fighter_id,"move":mid,"frame":Engine.get_physics_frames(),"movie_frame":Engine.get_process_frames()-1}))
+		actor.state_machine.state_changed.connect(func(from_state,to_state):transitions.append({"fighter":actor.fighter_id,"movie_frame":Engine.get_process_frames()-1,"from":from_state,"to":to_state,"velocity":[actor.velocity.x,actor.velocity.y],"position":[actor.position.x,actor.position.y],"hitstun_duration":actor.hitstun_remaining,"landing_lag":actor.state_machine.landing_lag}))
+		actor.move_runner.phase_changed.connect(func(move_phase):phases.append({"fighter":actor.fighter_id,"movie_frame":Engine.get_process_frames()-1,"move":actor.move_runner.current_move_id(),"phase":move_phase,"move_frame":actor.move_runner.total_frame}))
 		actor.koed.connect(func():ko_events.append({"fighter":actor.fighter_id,"movie_frame":Engine.get_process_frames()-1,"stocks":actor.stocks}))
 	var label:=Label.new();label.text="AUTOMATED INPUT · "+("idle charge fixture" if idle_opponent else "active CPU · "+band+" initial damage")+" · "+source_sha.left(12);label.position=Vector2(30,90);battle.hud.add_child(label)
 	started_frame=Engine.get_physics_frames()
@@ -70,7 +81,9 @@ func _run() -> void:
 		var phase:=frame%1200
 		var dx:float=battle.fighter2.position.x-p.position.x
 		var actions: Array=[]
-		if idle_opponent:
+		if not probe.is_empty():
+			actions=_probe_inputs(frame,p,dx)
+		elif idle_opponent:
 			if phase<650:actions.append_array(["special","shield"])
 			elif phase<690:
 				if phase%20<4:actions.append("special")
@@ -93,7 +106,7 @@ func _run() -> void:
 				if frame%80<4:actions.append("jump")
 				if frame%30<4:actions.append("attack")
 		# Correct facing through movement input; never assign transform/facing/velocity.
-		if not idle_opponent and p.state_machine.can_move() and not (phase>=520 and phase<970):
+		if not idle_opponent and p.state_machine.can_move() and (not probe.is_empty() or not (phase>=520 and phase<970)):
 			if absf(dx)<12:retreating=true
 			if retreating and absf(dx)<28:
 				actions=["left" if dx>=0 else "right"];turn_latch=1
@@ -101,8 +114,24 @@ func _run() -> void:
 				retreating=false
 				actions=["right" if dx>0 else "left"];turn_latch=maxi(0,turn_latch-1)
 		inputs(actions)
-		if frame%6==0:
-			samples.append({"movie_frame":Engine.get_process_frames()-1,"p1_state":p.state_machine.current_state,"p2_state":battle.fighter2.state_machine.current_state,"p1_position":[p.position.x,p.position.y],"p2_position":[battle.fighter2.position.x,battle.fighter2.position.y],"p1_facing":p.facing,"p2_facing":battle.fighter2.facing,"p2_velocity":[battle.fighter2.velocity.x,battle.fighter2.velocity.y],"p1_damage":p.damage_percent,"p2_damage":battle.fighter2.damage_percent,"process_time_s":Performance.get_monitor(Performance.TIME_PROCESS),"physics_time_s":Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS)})
+		if exact_trace or frame%6==0:
+			samples.append({"movie_frame":Engine.get_process_frames()-1,"p1_state":p.state_machine.current_state,"p1_hitstop":p._hitstop,"p2_hitstop":battle.fighter2._hitstop,"p1_can_attack":p.state_machine.can_attack(),"p2_can_attack":battle.fighter2.state_machine.can_attack(),"p2_state_time":battle.fighter2.state_machine.state_time,"p2_hitstun_duration":battle.fighter2.hitstun_remaining,"p1_move":p.move_runner.current_move_id(),"p1_move_frame":p.move_runner.total_frame,"p1_phase":p.move_runner.phase,"p1_cancel_window":p.move_runner.in_cancel_window,"p2_state":battle.fighter2.state_machine.current_state,"p1_position":[p.position.x,p.position.y],"p2_position":[battle.fighter2.position.x,battle.fighter2.position.y],"p1_facing":p.facing,"p2_facing":battle.fighter2.facing,"p2_velocity":[battle.fighter2.velocity.x,battle.fighter2.velocity.y],"p1_damage":p.damage_percent,"p2_damage":battle.fighter2.damage_percent,"process_time_s":Performance.get_monitor(Performance.TIME_PROCESS),"physics_time_s":Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS)})
 		if frame%30==0:write_evidence()
 		await physics_frame
 	inputs([]);write_evidence();final_written=true;quit()
+
+func _probe_inputs(frame: int,p: Node,dx: float) -> Array:
+	# Adaptive observation selects public controls only. No game state/result writes.
+	var actions: Array=[]
+	var hits:=0
+	for c in contacts:
+		if c.attacker==fid and c.result=="hit":hits+=1
+	var radius:=120.0 if probe=="projectile-light" and hits==0 else 25.0
+	if absf(dx)>radius:actions.append("right" if dx>0 else "left")
+	if frame%2==0 and p.state_machine.can_attack():
+		if probe=="heavy-light" and hits==0:actions.append_array(["attack","special"])
+		elif probe=="light-heavy" and hits==1:actions.append_array(["attack","special"])
+		elif probe=="projectile-light" and hits==0:actions.append("special")
+		elif probe=="aerial-light" and hits==0 and p.is_on_floor():actions.append("jump")
+		else:actions.append("attack")
+	return actions
