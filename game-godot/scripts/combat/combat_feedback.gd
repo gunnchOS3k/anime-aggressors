@@ -20,6 +20,7 @@ var _shake_intensity: float = 0.0
 var fighter_id: String = ""
 var _last_critical_at: Dictionary = {}
 var _last_prediction: Dictionary = {}
+var _presented_events: Dictionary = {}
 
 const TIER_HITSTOP := {
 	"light": {"min": 2, "max": 3},
@@ -67,6 +68,12 @@ func apply_hit(attacker: Node, defender: Node, move: Dictionary, info: Dictionar
 	if not bool(info.get("confirmed_contact",false)) or str(info.get("combat_event_id","")).is_empty():
 		result["presentation_rejected"]="unconfirmed_contact"
 		return result
+	var confirmed_id := str(info.combat_event_id)
+	if _presented_events.has(confirmed_id):
+		result["presentation_rejected"]="duplicate_contact"
+		return result
+	_presented_events[confirmed_id]=true
+	if _presented_events.size()>256:_presented_events.erase(_presented_events.keys()[0])
 	if bool(result.get("blocked", false)):
 		result["hitstop_frames"] = 2 if bool(result.get("armor_block",false)) else clampi(hitstop, 2, 4)
 		result["sfx_event"] = "block"

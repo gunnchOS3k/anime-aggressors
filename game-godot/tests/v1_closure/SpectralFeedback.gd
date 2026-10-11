@@ -53,6 +53,9 @@ func _run() -> void:
 		var count: int=renderer.history.size()
 		check(p.hit_resolver.resolve(p,d,move,0).is_empty() and renderer.history.size()==count,fid+":move_target_deduplicated")
 		check(not renderer.contact(info,d),fid+":renderer_event_deduplicated")
+		var bus_before: int=events.size()
+		var duplicate_feedback: Dictionary=p.combat_feedback.apply_hit(p,d,move,info)
+		check(duplicate_feedback.get("presentation_rejected","")=="duplicate_contact" and events.size()==bus_before and renderer.history.size()==count,fid+":audio_camera_bus_and_mesh_deduplicated")
 		var hit_rows: Array=[]
 		for h in renderer.history:
 			if h.event_id==info.combat_event_id:hit_rows.append(h)
