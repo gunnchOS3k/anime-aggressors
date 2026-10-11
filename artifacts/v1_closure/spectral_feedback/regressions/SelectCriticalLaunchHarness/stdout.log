@@ -1,0 +1,16 @@
+{"project": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/aa-ordinary-review-rq495_2o/game-godot", "profile": "spectral_regression_selectcriticallaunchharness_20261010", "isolated_project_name": "Anime Aggressors Review spectral_regression_selectcriticallaunchharness_20261010", "command": ["/opt/homebrew/bin/godot", "--path", "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/aa-ordinary-review-rq495_2o/game-godot", "--log-file", "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure/artifacts/v1_closure/spectral_feedback/regressions/SelectCriticalLaunchHarness/godot.log", "--headless", "--fixed-fps", "60", "--script", "res://tests/presentation/SelectCriticalLaunchHarness.gd", "--", "--ordinary-output=/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure/artifacts/v1_closure/spectral_feedback/regressions/SelectCriticalLaunchHarness", "--source-sha=92c30369b40055d587b22de8b23de10692a7f5ec", "--ordinary-max-nodes=20", "--ordinary-route=kaia-windrow"]}
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+WARNING: REVIEW_ONLY announcer spoken-name unavailable: fighter=nix-calder reason=speech_unavailable
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unavailable (res://scripts/audio/announcer_voice_provider.gd:180)
+         [1] speak_lockin (res://scripts/audio/announcer_voice_provider.gd:87)
+         [2] announce_lock (res://scripts/audio/fighter_announcer.gd:94)
+         [3] _test_spoken_name_provider (res://tests/presentation/SelectCriticalLaunchHarness.gd:117)
+         [4] _run (res://tests/presentation/SelectCriticalLaunchHarness.gd:37)
+{"emitted_at":"2026-10-10T21:32:33","failures":[],"ok":true}
+WARNING: 16 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 6 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
