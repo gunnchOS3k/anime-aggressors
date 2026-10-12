@@ -853,6 +853,9 @@ func _start_move_by_command(cmd: String) -> void:
 	_start_move_dict(m)
 
 func _start_move_dict(m: Dictionary) -> void:
+	# Recovery may permit a new public command before the old runner ends.
+	# Retire that activation's melee shape before the next owner takes over.
+	hitbox.monitoring = false
 	var startup_event := "super_startup" if str(m.get("move_id", "")) == "aura_burst" else "whiff"
 	preload("res://scripts/audio/v1_candidate_sfx.gd").play_event(fighter_id, startup_event, self)
 	var base_move := m
@@ -1144,7 +1147,7 @@ func _poll_hitbox_overlaps() -> void:
 	var move: Dictionary = _current_move
 	if move.is_empty():
 		move = _DataLoader.find_move(move_manifest, move_runner.current_move_id())
-	if move.is_empty() or str(move.get("move_type", "")) in ["grab", "throw"] or str(move.get("move_id", "")) == "grab" or str(move.get("move_id", "")).begins_with("throw_"):
+	if move.is_empty() or move.has("projectile") or str(move.get("move_type", "")) in ["projectile", "grab", "throw"] or str(move.get("move_id", "")) == "grab" or str(move.get("move_id", "")).begins_with("throw_"):
 		return
 	for area in hitbox.get_overlapping_areas():
 		if area == null or area == hurtbox:

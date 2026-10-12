@@ -111,6 +111,7 @@ func _deliver_hit(target: Node) -> void:
 	var hit_move := move_data.duplicate(true)
 	hit_move["damage"] = damage
 	hit_move["_from_projectile"] = true
+	hit_move["_projectile_instance_id"] = get_instance_id()
 	hit_move["_contact_world"] = global_position
 	var resolver = null
 	if owner_fighter != null and "hit_resolver" in owner_fighter:

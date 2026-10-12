@@ -25,6 +25,10 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 	if attacker.has_meta("story_team") and attacker.get_meta("story_team") == defender.get_meta("story_team", ""):
 		return {}
 	var from_projectile := bool(move.get("_from_projectile", false))
+	# Projectile damage is owned by the emitting Area2D's target ledger.
+	# A lingering fighter hitbox cannot claim a cast's damage/contact feedback.
+	if not from_projectile and (move.has("projectile") or str(move.get("move_type", "")) == "projectile"):
+		return {}
 	var move_id := str(move.get("move_id", ""))
 	var is_direct_throw := move_id.begins_with("throw_") or str(move.get("move_type", "")) == "throw"
 	if is_direct_throw:
@@ -174,7 +178,9 @@ func _contact_contract(attacker: Node, defender: Node, move: Dictionary, info: D
 	var launch: Vector2 = info.get("launch",Vector2.ZERO)
 	var direction := launch.normalized() if launch.length()>0.01 else Vector2(float(attacker.facing) if "facing" in attacker else 1.0,0)
 	info.merge({"combat_event_id":"%s:%s:%s" % [get_instance_id(),Engine.get_physics_frames(),_contact_sequence],
-		"confirmed_contact":true,"attacker_id":str(attacker.fighter_id) if "fighter_id" in attacker else str(attacker.name),
+		"confirmed_contact":true,"contact_owner":"projectile" if bool(move.get("_from_projectile",false)) else "direct_throw" if str(move.get("move_id","")).begins_with("throw_") else "melee",
+		"attack_activation_id":int(move.get("_attack_activation_id",attacker.move_runner.activation_id if "move_runner" in attacker and attacker.move_runner!=null else -1)),
+		"projectile_instance_id":int(move.get("_projectile_instance_id",-1)),"attacker_id":str(attacker.fighter_id) if "fighter_id" in attacker else str(attacker.name),
 		"defender_id":str(defender.fighter_id) if "fighter_id" in defender else str(defender.name),
 		"gameplay_frame":Engine.get_physics_frames(),"timestamp_usec":Time.get_ticks_usec(),"move_frame":attacker.move_runner.total_frame if "move_runner" in attacker and attacker.move_runner != null else -1,
 		"contact_world":point,"contact_direction":direction,"contact_result":"armor" if info.get("armor_block",false) else "shield" if info.get("blocked",false) else "hit",

@@ -24,16 +24,22 @@ for row in index['attempts']:
   control_transition=next((s for s in state_changes if s['movie_frame']>f and s['to'] in ['idle','walk','run','dash','fall','jump','fast_fall','aura_ready']),None)
   activation=next((s for s in d['move_phases'] if s['fighter']==fid and s['phase']=='active' and s['movie_frame']>f),None)
   next_start=next((m for m in d['moves'] if m['fighter']==fid and m['movie_frame']>f),None)
+  # A second damage event is not proof of a second player attack. Prefer the
+  # emitting activation ledger, including projectiles from an earlier cast.
+  # Legacy captures need a separately observed start before the second contact.
+  first_owner=first.get('attack_activation_id',-1)
+  next_owner=next_c.get('attack_activation_id',-1) if next_c else -1
+  distinct_attack=bool(next_c and (first_owner>=0 and next_owner>=0 and first_owner!=next_owner or next_start and next_start['movie_frame']<=next_c['movie_frame']))
   excluded=row.get('acceptance_status','').startswith('DEFECT_AFFECTED') or first['move'].startswith('throw_') or bool(next_c and next_c['move'].startswith('throw_'))
   recovered_before_next=bool(next_c and any(x and x['movie_frame']<next_c['movie_frame'] for x in [recovery,control_transition]))
-  genuine=bool(not excluded and not recovered_before_next and next_c and next_c['result']=='hit' and next_c['follow_up_before_control'])
-  status='DEFECT_AFFECTED_NOT_COMBO_ACCEPTANCE' if excluded else 'TRUE_COMBO_CONFIRMED' if genuine else 'DEFENDER_BLOCKED' if next_c and next_c['result']=='shield' else 'RECOVERY_BEFORE_NEXT_CONTACT' if next_c else 'NO_SUBSEQUENT_CONTACT'
+  genuine=bool(not excluded and distinct_attack and not recovered_before_next and next_c and next_c['result']=='hit' and next_c['follow_up_before_control'])
+  status='DEFECT_AFFECTED_NOT_COMBO_ACCEPTANCE' if excluded else 'TRUE_COMBO_CONFIRMED' if genuine else 'SAME_ATTACK_OR_UNVERIFIED_OWNERSHIP' if next_c and not distinct_attack and not recovered_before_next else 'DEFENDER_BLOCKED' if next_c and next_c['result']=='shield' else 'RECOVERY_BEFORE_NEXT_CONTACT' if next_c else 'NO_SUBSEQUENT_CONTACT'
   case={'capture':row['label'],'source_sha':row['source_sha'],'native_movie':row['native_movie'],'fighter':fid,'input_recipe':row['pattern'],
         'first_contact_frame':f,'first_move':first['move'],'first_move_class':category(first['move']),'actual_damage_band':band(first['damage_before']),
         'first_contact':first,'observed_hitstop_frames':[s['movie_frame'] for s in samples if s['p2_hitstop']>0],
         'landing_frame':land['movie_frame'] if land else None,'defender_first_actionable_frame':min([x['movie_frame'] for x in [recovery,control_transition] if x]) if recovery or control_transition else None,
         'next_move_start':next_start,'next_move_active':activation,'next_contact':next_c,'next_move_class':category(next_c['move']) if next_c else None,
-        'true_followup_before_control':genuine,'exclusion_reason':row.get('exclusion_reason','throw contacts excluded') if excluded else None,'recovered_before_next':recovered_before_next,'status':status,'defender_state_changes':state_changes,
+        'true_followup_before_control':genuine,'distinct_attack_verified':distinct_attack,'exclusion_reason':row.get('exclusion_reason','throw contacts excluded') if excluded else None,'recovered_before_next':recovered_before_next,'status':status,'defender_state_changes':state_changes,
         'scope':'observed physics/process frame trace; active CPU and unchanged game rules; a repeated hit after recovery is not a true combo'}
   cases.append(case);interactions.append(case)
  matrix.append({**row,'genuine_pairs':sum(c['true_followup_before_control'] for c in cases),'blocked_pairs':sum(c['status']=='DEFENDER_BLOCKED' for c in cases),
