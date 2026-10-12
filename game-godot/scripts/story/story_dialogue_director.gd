@@ -22,6 +22,7 @@ var _name: Label
 var _text: Label
 var _voice: AudioStreamPlayer
 var _generation := 0
+var _presentation_dialog: AcceptDialog
 
 func _ready() -> void:
 	layer = 80
@@ -175,7 +176,9 @@ func transcript(id: String = "") -> String:
 	return "\n\n".join(lines)
 
 func show_transcript() -> void:
+	if is_instance_valid(_presentation_dialog): return
 	var dialog := AcceptDialog.new(); dialog.title = "Draft Story transcript"
+	_presentation_dialog = dialog
 	var scroll := ScrollContainer.new(); scroll.custom_minimum_size = Vector2(880,360)
 	var label := Label.new(); label.text = transcript(); label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.custom_minimum_size.x = 840; label.add_theme_font_size_override("font_size",23)
@@ -184,9 +187,19 @@ func show_transcript() -> void:
 	var previous_tree_pause := get_tree().paused
 	set_paused(true)
 	get_tree().paused = true
-	dialog.confirmed.connect(func(): get_tree().paused=previous_tree_pause; set_paused(previously_paused); dialog.queue_free())
-	dialog.canceled.connect(func(): get_tree().paused=previous_tree_pause; set_paused(previously_paused); dialog.queue_free())
+	var restore_pause := func(): get_tree().paused=previous_tree_pause; set_paused(previously_paused)
+	dialog.confirmed.connect(func(): _close_presentation_dialog(dialog,restore_pause))
+	dialog.canceled.connect(func(): _close_presentation_dialog(dialog,restore_pause))
 	dialog.popup_centered(Vector2i(920,430))
+
+func _close_presentation_dialog(dialog: AcceptDialog, restore_pause: Callable = Callable()) -> void:
+	if _presentation_dialog != dialog: return
+	# Release the exclusive child immediately. Deferred deletion alone leaves
+	# the old popup owning the window during a same-frame reopen.
+	dialog.hide()
+	_presentation_dialog = null
+	if restore_pause.is_valid(): restore_pause.call()
+	dialog.queue_free()
 
 func watch_phase(phase: String) -> void:
 	for id in nodes.get(node_id,{}).get("ordered_cues",[]):
@@ -198,7 +211,9 @@ func watch_duration(id: String) -> float:
 	return seconds
 
 func show_settings() -> void:
+	if is_instance_valid(_presentation_dialog): return
 	var dialog := AcceptDialog.new(); dialog.title = "Dialogue and combat presentation"
+	_presentation_dialog = dialog
 	var column := VBoxContainer.new(); column.custom_minimum_size = Vector2(670,430)
 	dialog.add_child(column)
 	for item in [["Subtitles","subtitles"],["Temporary voices","voice"],["Subtitle size","font_size"],["Reading speed","reading_rate"],["Voice volume","voice_volume"],["Element effects volume","element_volume"],["Music volume","music_volume"],["Reduced flashes","reduced_flash"],["Reduced camera shake","reduced_shake"],["Reduced particle density","reduced_particles"],["High contrast effects","high_contrast_vfx"]]:
@@ -214,7 +229,9 @@ func show_settings() -> void:
 			elif key == "reading_rate": value = 1.5 if float(value) >= 5 else float(value)+0.5
 			else: value = 0.0 if float(value) >= 0.99 else minf(1.0,float(value)+0.25)
 			set_option(key,value); button.text = str(value))
-	add_child(dialog); dialog.confirmed.connect(dialog.queue_free); dialog.canceled.connect(dialog.queue_free)
+	add_child(dialog)
+	dialog.confirmed.connect(func(): _close_presentation_dialog(dialog))
+	dialog.canceled.connect(func(): _close_presentation_dialog(dialog))
 	dialog.popup_centered(Vector2i(710,500))
 
 func _fit_panel() -> void:

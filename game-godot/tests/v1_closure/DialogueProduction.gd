@@ -63,6 +63,15 @@ func _run() -> void:
 	for key in saved_settings:d.set_option(key,saved_settings[key])
 	d.show_transcript()
 	check(paused and d._manual_pause,"transcript_pauses_game_and_voice")
+	var first_dialog: AcceptDialog
+	for child in d.get_children():
+		if child is AcceptDialog and not child.is_queued_for_deletion():first_dialog=child
+	d.show_transcript();d.show_settings()
+	var visible_dialogs:=0
+	for child in d.get_children():
+		if child is AcceptDialog and child.visible:visible_dialogs+=1
+	check(visible_dialogs==1,"one_owned_presentation_modal")
+	check(first_dialog!=null and first_dialog.visible,"duplicate_request_preserves_transcript")
 	for child in d.get_children():
 		if child is AcceptDialog:child.confirmed.emit()
 	check(not paused and not d._manual_pause,"transcript_restores_running_game")
@@ -71,6 +80,18 @@ func _run() -> void:
 		if child is AcceptDialog and not child.is_queued_for_deletion():child.canceled.emit()
 	check(paused and d._manual_pause,"transcript_preserves_existing_pause")
 	paused=false;d.set_paused(false)
+	d.show_settings();d.show_settings();d.show_transcript()
+	visible_dialogs=0
+	for child in d.get_children():
+		if child is AcceptDialog and child.visible:visible_dialogs+=1
+	check(visible_dialogs==1 and not paused and not d._manual_pause,"settings_owned_without_new_pause")
+	for child in d.get_children():
+		if child is AcceptDialog and not child.is_queued_for_deletion():child.canceled.emit()
+	d.show_transcript()
+	check(paused and d._manual_pause,"immediate_modal_reopen_pauses")
+	for child in d.get_children():
+		if child is AcceptDialog and not child.is_queued_for_deletion():child.confirmed.emit()
+	check(not paused and not d._manual_pause,"immediate_modal_reopen_restores_pause")
 	d.cancel()
 	check(JSON.stringify(campaign.progress)==before,"presentation_watch_cannot_mutate_progress")
 	var file := FileAccess.open("res://../artifacts/v1_closure/dialogue_performance/dialogue_runtime_test.json",FileAccess.WRITE)
