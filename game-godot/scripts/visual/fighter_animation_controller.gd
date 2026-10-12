@@ -91,6 +91,11 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 		anim.loop_mode = Animation.LOOP_LINEAR if should_loop else Animation.LOOP_NONE
 	if _player.current_animation != play_key and _player.current_animation != clip:
 		_player.play(play_key, 0.0 if play_key.begins_with("combat_choreography/") else 0.08)
+		if play_key.begins_with("combat_choreography/"):
+			# State callbacks must show the authored first pose in this frame,
+			# including a real victim reaction before hitstop freezes playback.
+			_player.seek(0.0,true)
+			_locomotion_synchronized = false
 	elif not should_loop and not _player.is_playing():
 		_player.play(play_key, 0.0 if play_key.begins_with("combat_choreography/") else 0.08)
 	_active_clip = clip

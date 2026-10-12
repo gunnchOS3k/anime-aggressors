@@ -31,6 +31,19 @@ GAIT={
 'yin':(.065,.008,.015,.002,.015,1.04),
 'yang':(.11,.028,.035,.003,.06,1.06)}
 
+# Original airborne body grammar: pitch, roll, left/right tuck, leg separation.
+# These are constrained visible poses, never additional jump/launch authority.
+AIR={
+'ember-vale':(.22,.06,.055,.085,.070),
+'rook-ironside':(.18,-.03,.070,.070,.035),
+'juno-spark':(.08,.18,.100,.035,.110),
+'kaia-windrow':(-.12,-.14,.030,.090,.130),
+'nix-calder':(.06,0,.045,.045,.025),
+'orion-vell':(-.08,.14,.060,.060,.120),
+'vesper-nyx':(.15,-.18,.095,.025,.100),
+'yin':(.20,.02,.050,.050,.020),
+'yang':(-.12,.02,.035,.035,.055)}
+
 def unit(x):
  n=np.linalg.norm(x); return x/max(n,1e-10)
 def matrix(q):
@@ -106,7 +119,13 @@ def make_clip(r,fid,move,facing=1):
   if move.get('move_type')=='throw':extension=blend([(0,1.),(followframe,.9),(settleframe,.28),(total,0.)],frame)
   rots={};pos={}
   for n,angles in {'Hips':(0,hip*drive*facing,.035*drive*facing),'Spine':(.07*drive+.20*max(0,drive),.12*drive*facing,0),'Chest':(.09*drive+.12*max(0,drive),chest*drive*facing,0),'Neck':(0,-chest*drive*.25*facing,0),'Head':(.03,-hip*drive*.25*facing,0)}.items():rots[n]=r[n]['r']@euler(*angles)
-  pos['Hips']=r['Hips']['p']+np.array([step*drive*.28*facing,-compression*(.5+.5*abs(drive)), step*drive*.30+GAIT[fid][0]*.30*max(0,drive)])*scale
+  heavy=mid in ['heavy_attack','aura_burst']
+  added_drive=GAIT[fid][0]*.30*max(0,drive) if heavy else 0
+  pos['Hips']=r['Hips']['p']+np.array([step*drive*.28*facing,-compression*(.5+.5*abs(drive))-(.035*extension if heavy else 0), step*drive*.30+GAIT[fid][0]*.30*max(0,drive)+added_drive])*scale
+  if aerial:
+   pitch,roll,_,_,_=AIR[fid]
+   rots['Hips']=rots['Hips']@euler(pitch*extension*.45,0,roll*extension*facing)
+   rots['Chest']=rots['Chest']@euler(pitch*extension,0,-roll*extension*.35*facing)
   # Guard and strike targets live in rig space; elbows are deliberately outside ribs.
   for hand in ['L','R']:
    sign=-1 if hand=='L' else 1
@@ -129,11 +148,16 @@ def make_clip(r,fid,move,facing=1):
     elif technique.endswith('back'):target[2]+=.40*extension*scale
    if technique in ['cross','hook','drive','hammer','charged_palm']:target[1]-=.22*extension*scale
    target[2]*=-1 # Live FighterFacingContract models face +Z.
+   target[2]+=added_drive*scale
    g=solve(r,rots,pos,'UpperArm_'+hand,'LowerArm_'+hand,'Hand_'+hand,target,np.array([sign*.7,-.5,-.12]));rots['Hand_'+hand]=g[r['Hand_'+hand]['parent']][0].T@rest['Hand_'+hand][0]
   for leg in ['L','R']:
    goal=foot[leg].copy()
-   if aerial:goal+=np.array([0,.045*extension,(-.08 if leg=='R' else .08)*extension])*scale
+   if aerial:
+    _,_,tuck_l,tuck_r,separation=AIR[fid]
+    goal+=np.array([0,(tuck_l if leg=='L' else tuck_r)*extension,(-separation if leg=='R' else separation)*extension])*scale
    elif leg==('R' if facing==1 else 'L') and technique in ['drive','charged_palm']:goal[2]+=.055*extension*scale;goal[1]+=.012*math.sin(extension*math.pi)*scale
+   if heavy and not aerial and leg==('R' if facing==1 else 'L'):
+    goal[2]+=.045*extension*scale;goal[1]+=.012*math.sin(extension*math.pi)*scale
    g=solve(r,rots,pos,'UpperLeg_'+leg,'LowerLeg_'+leg,'Foot_'+leg,goal,np.array([0,0,-1.]));rots['Foot_'+leg]=g[r['Foot_'+leg]['parent']][0].T@rest['Foot_'+leg][0]
    if not aerial and leg==('L' if facing==1 else 'R'):slip=max(slip,float(np.linalg.norm(g['Foot_'+leg][1]-goal)))
   for n in tracks:
@@ -148,6 +172,7 @@ def make_state(r,fid,name):
  tracks={n:[] for n in r if n not in ['Root','Toes_L','Toes_R']}
  for f in range(length+1):
   t=f/length;wave=math.sin(2*math.pi*t);pulse=math.sin(math.pi*t);travel=name in ['walk','walk_loop','run','run_loop','dash_loop'];hurt=name in ['hurt_light','hurt_heavy','hitstun_ground','launch','launched','tumble','defeat']
+  if hurt and name!='defeat':pulse=blend([(0,1.),(.18,.85),(.65,.30),(1,0.)],t)*(.60 if name=='hurt_light' else 1.)
   rots={};pos={}
   turn=.05*wave if travel else -.18*pulse if hurt else .012*wave
   lean=run_lean*(1.18 if name=='dash_loop' else 1.0) if name in ['run','run_loop','dash_loop'] else -.32*pulse if hurt else .06*pulse if name.startswith('land') else -.02
@@ -174,7 +199,9 @@ def make_state(r,fid,name):
     else:
      swing=(phase-.5)*2;goal[2]+=reach*(-1+2*smooth(swing));goal[1]+=lift*math.sin(math.pi*swing)*scale
     goal[0]*=width
-   if name in ['jump','fall','launch','launched','tumble']:goal+=np.array([0,.06*pulse,(.07 if leg=='L' else -.09)*pulse])*scale
+   if name in ['jump','fall','launch','launched','tumble']:
+    _,_,tuck_l,tuck_r,separation=AIR[fid]
+    goal+=np.array([0,(tuck_l if leg=='L' else tuck_r)*pulse,(separation if leg=='L' else -separation)*pulse])*scale
    g=solve(r,rots,pos,'UpperLeg_'+leg,'LowerLeg_'+leg,'Foot_'+leg,goal,np.array([0,0,-1.]));rots['Foot_'+leg]=g[r['Foot_'+leg]['parent']][0].T@rest['Foot_'+leg][0]
   for n in tracks:tracks[n].append({'time_s':round(f/60,6),'rotation_quat':[round(float(x),7) for x in quat(rots.get(n,r[n]['r']))],**({'position_m':[round(float(x),7) for x in pos[n]]} if n in pos else {})})
  return {'gait_half_stride_m':stride*(.72 if name.startswith('walk') else 1.0)*scale if name in ['walk','walk_loop','run','run_loop','dash_loop'] else 0,'duration_frames':length,'loop':loop,'relative_to_rest':False,'bone_tracks':tracks,'technique':'authored_'+name,'authoring':'original locomotion/reaction blocking; no root motion authority'}

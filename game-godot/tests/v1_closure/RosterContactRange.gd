@@ -3,6 +3,11 @@ extends "res://tests/v1_closure/RosterContactAlignment.gd"
 ## CPU skin projection uses actual bind matrices/weights, without GPU readback.
 var pilot := false
 var mesh_cache: Dictionary={}
+var pre_reaction_body: Dictionary={}
+func observe_before_reaction(info: Dictionary) -> void:
+	# Feedback is emitted after authoritative contact, before receive_hit changes
+	# the victim pose. A recoil pose must not falsify pre-impact surface reach.
+	pre_reaction_body[str(info.combat_event_id)]=projected_surface(d.model_3d,"",true)
 func release_inputs() -> void:
 	for slot in [1,2]:
 		for key in ["attack","special","left","right","up","down","shield","jump","grab","dodge"]:Input.action_release("p%d_%s"%[slot,key])
@@ -61,10 +66,22 @@ func measure(info: Dictionary,context: Dictionary) -> void:
 	check(effect_frame_valid(info),"contact_effect_frame:"+str(context))
 	var row: Dictionary=rows[-1]
 	var hand: PackedVector2Array=projected_surface(p.model_3d,row.intended_striking_limb)
-	var torso: PackedVector2Array=projected_surface(d.model_3d,"",true)
+	var torso: PackedVector2Array=pre_reaction_body.get(str(info.combat_event_id),projected_surface(d.model_3d,"",true))
+	var recoil_torso: PackedVector2Array=projected_surface(d.model_3d,"",true)
 	var overlap: Rect2=info.attack_bounds.intersection(info.hurt_bounds)
 	var renderer=current_scene.get_node("SpectralFeedback")
 	var effect=renderer.history.filter(func(e):return str(e.get("event_id",""))==str(info.combat_event_id))
+	var defender_player=d.model_3d.get_animation_controller().get_animation_player()
+	check(defender_player.current_animation.contains("launch") or defender_player.current_animation.contains("hurt"),"immediate_victim_clip:"+str(context))
+	check(defender_player.current_animation_position==0,"immediate_victim_clock:"+str(context))
+	var defender_sk=d.model_3d.get_animation_controller().get_skeleton()
+	var animation: Animation=defender_player.get_animation(defender_player.current_animation)
+	for track in range(animation.get_track_count()):
+		if animation.track_get_type(track)==Animation.TYPE_ROTATION_3D and str(animation.track_get_path(track)).ends_with(":Chest"):
+			var expected: Quaternion=animation.track_get_key_value(track,0)
+			var actual: Quaternion=defender_sk.get_bone_pose_rotation(defender_sk.find_bone("Chest"))
+			check(absf(expected.dot(actual))>.999999,"synchronous_victim_pose:"+str(context))
+	row.merge({"defender_animation_at_contact":defender_player.current_animation,"defender_animation_time_s":defender_player.current_animation_position,"hand_to_post_recoil_body_hull_px":polygon_gap(hand,recoil_torso)})
 	row.merge({"projected_hand_hull":points_json(hand),"projected_defender_torso_head_hip_hull":points_json(torso),"hand_mesh_to_overlap_px":polygon_gap(hand,rect_polygon(overlap)),"hand_mesh_to_visible_body_hull_px":polygon_gap(hand,torso),"defender_model_path":d.model_3d._proxy_model.scene_file_path,"attacker_airborne":not p.is_on_floor(),"attacker_velocity":[p.velocity.x,p.velocity.y],"defender_airborne":not d.is_on_floor(),"defender_state_at_contact":d.state_machine.current_state,"defender_velocity":[d.velocity.x,d.velocity.y],"defender_hitstun_s":d.hitstun_remaining,"contact_frame":Engine.get_physics_frames(),"vfx_matching_events":effect.size(),"vfx_event_frame":effect[0].get("physics_frame",-1) if not effect.is_empty() else -1,"played_audio_path":info.get("played_audio",{}).get("path",""),"measurement_scope":"CPU weighted skin at synchronous contact; projected convex silhouette of hand-bound vertices and torso/head/hip; no occlusion/3D surface or artistic acceptance"})
 	rows[-1]=row
 func effect_frame_valid(info: Dictionary) -> bool:
@@ -79,6 +96,7 @@ func _run() -> void:
 	root.get_node("SceneRouter").go("battle")
 	for i in range(220):await physics_frame
 	p=current_scene.fighter1;d=current_scene.fighter2;p.hit_resolver.hit_confirmed.connect(observe)
+	p.combat_feedback.feedback_triggered.connect(observe_before_reaction)
 	for fid in Renderer.IDS:
 		for body in (["male"] if pilot else ["male","female"]):
 			gs.p1_body_variant=body;gs.p2_body_variant="female" if body=="male" else "male"
