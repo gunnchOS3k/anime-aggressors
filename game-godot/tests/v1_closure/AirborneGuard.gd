@@ -16,17 +16,27 @@ func _run() -> void:
 	var gs=root.get_node("GameState")
 	gs.mode="versus";gs.stage_id="training-grid";gs.stocks=9;gs.p1_is_cpu=false;gs.p2_is_cpu=true;gs.cpu_level=3;gs.match_seed=431017
 	gs.p1_fighter_id="ember-vale";gs.p2_fighter_id="juno-spark"
-	root.get_node("SceneRouter").go("battle")
-	for i in range(220):await physics_frame
-	var p=current_scene.fighter1;var d=current_scene.fighter2
+	var p: Node
+	var d: Node
 	for fid in Renderer.IDS:
 		for body in ["male","female"]:
 			gs.p1_body_variant=body
 			for facing in [1,-1]:
 				clear_player()
+				# configure() preserves live velocity/state; each fixture therefore starts
+				# with fresh actors, never fabricated velocity or a forced neutral state.
+				gs.p1_fighter_id=fid
+				root.get_node("SceneRouter").go("battle")
+				for i in range(220):await physics_frame
+				p=current_scene.fighter1;d=current_scene.fighter2
 				p.configure(fid,1,false,9,Vector2(-460*facing,240));d.configure("juno-spark",2,true,9,Vector2(460*facing,240))
 				p.controls_enabled=true;d.controls_enabled=true
 				for i in range(35):await physics_frame
+				Input.action_press("p1_right" if facing==1 else "p1_left",.4)
+				for i in range(2):await physics_frame
+				clear_player()
+				for i in range(5):await physics_frame
+				check(p.facing==facing,fid+body+str(facing)+":public_facing")
 				check(p.is_on_floor(),fid+body+str(facing)+":starts_grounded")
 				var start_y: float=p.position.y;var start_stocks: int=p.stocks
 				Input.action_press("p1_jump");Input.action_press("p1_shield")

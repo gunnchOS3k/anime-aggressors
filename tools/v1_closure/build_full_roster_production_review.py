@@ -1,7 +1,8 @@
 """Build current production statuses from immutable roster/geometry/gameplay receipts."""
-import csv,json,statistics,subprocess
+import csv,json,statistics,subprocess,argparse
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2];OUT=ROOT/'artifacts/v1_closure/spectral_feedback';INC=OUT/'continuous_1011'
+parser=argparse.ArgumentParser();parser.add_argument('--runtime-source',required=True);args=parser.parse_args()
 def read(path):return json.loads(path.read_text())
 def write(path,data):path.write_text(json.dumps(data,indent=2)+'\n')
 roster=read(INC/'owner_roster_review/EVIDENCE_MANIFEST.json')
@@ -29,7 +30,7 @@ for native in roster['rows']:
  q=[r for r in probes['rows'] if r['fighter']==fid];assert len(q)==4
  missing=[name for name,observed in native['qualifying_categories'].items() if not observed]
  if not native['signature_observed']:missing.append('signature')
- rows.append({'fighter':fid,'runtime_source':'b5f2af11a61f912c78dfb198a33b872e351fd4ae',
+ rows.append({'fighter':fid,'runtime_source':args.runtime_source,'animation_data_source':'b5f2af11a61f912c78dfb198a33b872e351fd4ae',
  'IMPLEMENTED':'ORIGINAL_RUNTIME_CHOREOGRAPHY_CANDIDATE; production incomplete',
  'AUTOMATED_VERIFIED':'864 roster configurations; per-fighter44 geometry contacts,4 active-CPU attempts; scope-limited',
  'RUNTIME_VERIFIED':'native mirror femaleP1/maleCPU at67ae; refined geometry maleP1/femaleP2 atb5f2',
