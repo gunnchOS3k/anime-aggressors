@@ -45,3 +45,10 @@ with tempfile.TemporaryDirectory(prefix='aa-aura-sheet-') as scratch:
 log=(out/'native_console.log').read_text();timing={k:float(v) for k,v in re.findall(r'(CPU render time|Encoding time):.*?average: ([0-9.]+) ms/frame',log)}
 report=dict(path=rel(movie),sha256=sha(movie),source_sha=source,streams=streams,sheets=sheets,verification_status='VERIFIED_NATIVE_FRAME_BARCODES_AND_NINE_PAIRED_IDENTITIES',native_audio_volume_db=volume,recording_measurements=timing,material_null_errors=log.count('Parameter "material" is null'),script_errors=log.count('SCRIPT ERROR'),professional_quality_approved=False,GPU_measurement_available=False,scope='All18model energy/movement/jump at native60fps with original sound. No active CPU, combo, contact or device-FPS acceptance.',redistribution='Original procedural/project assets; owner development review, no public release authorization')
 (out/'NATIVE_MOVIE.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps({k:v for k,v in report.items() if k!='sheets'}))
+state_path=out/'RECORDING_STATE.json'
+if state_path.exists():
+ state=read(state_path)
+ assert state['status']=='PROCESS_COMPLETED_PENDING_MEDIA_VERIFICATION'
+ assert report['script_errors']==0 and report['material_null_errors']==0
+ state.update(status='VERIFIED_NATIVE_FRAME_IDENTITY_AUDIO_AND_SOURCE',verification=rel(out/'NATIVE_MOVIE.json'),source_sha=source)
+ state_path.write_text(json.dumps(state,indent=2)+'\n')

@@ -38,11 +38,14 @@ a = p.parse_args()
 if not re.fullmatch(r'[a-zA-Z0-9_-]{1,64}', a.profile):
     p.error('Profile must be 1–64 letters, numbers, underscores or hyphens')
 if a.movie:
-    # Native review only: existing1280x720MJPEGcapturesmeasure48–58KiB/frame.
-    # Reserve256KiB/frame conservatively plusowner's2GiBnativefloor.
-    required=2*1024**3+a.movie_frames*262144
-    if shutil.disk_usage(ROOT).free<required:
+    from native_recording_guard import budget, run_owned_recording, active_media_jobs
+    recording_budget=budget(ROOT,a.movie,a.movie_frames,a.movie_fps)
+    if not recording_budget['PASS']:
         raise SystemExit('Native recording reserve exhausted; no capture started. Heavy platform exports require18GiB.')
+    if active_media_jobs():
+        raise SystemExit('Existing Godot/FFmpeg job preserved; wait before native recording.')
+    if (a.output/'RECORDING_STATE.json').exists() or (a.output/'launch_manifest.json').exists():
+        raise SystemExit('Existing native output preserved; use a unique label.')
 wrapper = Path(tempfile.mkdtemp(prefix='aa-ordinary-review-'))
 project = wrapper/'game-godot'
 project.mkdir()
@@ -126,4 +129,9 @@ if a.resume: cmd += ['--ordinary-resume']
 print(json.dumps({'project':str(project), 'profile':a.profile, 'isolated_project_name':'Anime Aggressors Review '+a.profile, 'command':cmd}), flush=True)
 (a.output/'launch_manifest.json').write_text(json.dumps({'project':str(project),'profile':a.profile,'command':cmd,'git_sha':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),'source_changes':subprocess.check_output(['git','diff','--name-only'],cwd=ROOT,text=True).splitlines(),'source_diff_sha256':hashlib.sha256(subprocess.check_output(['git','diff'],cwd=ROOT)).hexdigest(),'human_playthrough':False,'baseline_ref':a.baseline_ref,'runtime_source_sha':subprocess.check_output(['git','rev-parse',a.baseline_ref or 'HEAD'],cwd=ROOT,text=True).strip(),'seeded_prerequisites':bool(a.seed_convergence_from or a.seeded_prerequisites)},indent=2)+'\n')
 if not a.prepare_only:
+    if a.movie:
+        manifest=json.loads((a.output/'launch_manifest.json').read_text())
+        manifest['storage_budget']=recording_budget
+        (a.output/'launch_manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+        raise SystemExit(run_owned_recording(cmd,ROOT,a.movie,a.output,recording_budget))
     raise SystemExit(subprocess.call(cmd))

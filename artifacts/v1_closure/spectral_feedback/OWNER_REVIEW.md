@@ -1,4 +1,4 @@
-# ANI-03 all-roster owner review — October12,2026
+# ANI-03 all-roster owner review — October 12, 2026
 
 Current shipping source `9e0d13ae3bfd257e46c314fd2e601bdeceb6a84b` on `release/anime-v1-dialogue-and-elemental-performance`. [Draft PR123](https://github.com/gunnchOS3k/anime-aggressors/pull/123) remains stacked on draft122. Resolve package HEAD with `git rev-parse HEAD`; later report commits do not change shipping source. This is an implemented development candidate, with professional choreography and human acceptance unfinished.
 
@@ -20,15 +20,15 @@ The full roster advances together. The following counts are per fighter and incl
 
 | Fighter | Original body aura grammar | Aura / action-line cases | Recent CPU hits / blocks | Current native aura review | Owner approved |
 |---|---|---|---|---|---|
-| ember-vale | rising_combustion | 4 / 2 | 11 / 17 | Pending | False |
-| rook-ironside | seismic_fragments | 4 / 2 | 16 / 11 | Pending | False |
-| juno-spark | branching_current | 4 / 2 | 30 / 8 | Pending | False |
-| kaia-windrow | helical_wind | 4 / 2 | 12 / 29 | Pending | False |
-| nix-calder | faceted_growth | 4 / 2 | 7 / 24 | Pending | False |
-| orion-vell | tilted_orbits | 4 / 2 | 10 / 14 | Pending | False |
-| vesper-nyx | phase_seams | 4 / 2 | 10 / 13 | Pending | False |
-| yin | inward_absorption | 4 / 2 | 16 / 18 | Pending | False |
-| yang | ordered_construction | 4 / 2 | 4 / 26 | Pending | False |
+| ember-vale | rising_combustion | 4 / 2 | 11 / 20 | Pending | False |
+| rook-ironside | seismic_fragments | 4 / 2 | 0 / 2 | Pending | False |
+| juno-spark | branching_current | 4 / 2 | 21 / 7 | Pending | False |
+| kaia-windrow | helical_wind | 4 / 2 | 15 / 20 | Pending | False |
+| nix-calder | faceted_growth | 4 / 2 | 9 / 22 | Pending | False |
+| orion-vell | tilted_orbits | 4 / 2 | 10 / 24 | Pending | False |
+| vesper-nyx | phase_seams | 4 / 2 | 3 / 8 | Pending | False |
+| yin | inward_absorption | 4 / 2 | 7 / 20 | Pending | False |
+| yang | ordered_construction | 4 / 2 | 14 / 23 | Pending | False |
 
 [Motion, range, floor and body matrix](/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure/artifacts/v1_closure/spectral_feedback/continuous_1011/FULL_ROSTER_PRODUCTION_MATRIX.json) · [Current aura/expression matrix](/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure/artifacts/v1_closure/spectral_feedback/continuous_1011/FULL_ROSTER_EMPOWERMENT_MATRIX.json).
 
@@ -36,11 +36,11 @@ The full roster advances together. The following counts are per fighter and incl
 
 Final affected serial integration: **15/15 PASS**. Logs bind exact source or parent+diff; engine/resource-exit diagnostics remain visible and are separate from fixture pass. The staged 145-node test does not claim a human ordinary playthrough of all 145 nodes. Preserved ordinary Kaia 20 nodes/16 qualifying receipts, save/restart and the 1,025 dialogue structure retain their original evidence.
 
-Nine fresh public-control activeCPU attempts at `d637b7d4e0b108a66a7ccc77d85e7c8f5ef9993b` recorded 116 hits and 160 blocks, with persistent aura observed for every fighter. This pass produced **zero true combos**. Historical strict analysis retains 16 qualifying pairs; emitter identity and actual defender control/recovery are required. 84/108 actual-damage contact cells are observed;24 remain unverified. Missing cells are not automatically defects. Current-tier post-fix probes, when available, are reported separately; older results are not relabeled as the latest source.
+Nine fresh public-control activeCPU attempts at `a1b8deb605fcbd655c2dd0d4d6c214f5da8bbf18` recorded 90 hits and 146 blocks, with active CPU behavior for every fighter. This pass produced **1 true pair**: Kaia forward_tilt→forward_tilt at native-process trace frames 510→530, separate activations11→12 and no defender recovery between. The aerial recipe name does not make this an aerial combo. Rook recorded0body hits/2blocks; no hit is invented. There were40blocked follow-ups and43contacts after recovery. Historical strict analysis retains16prior qualifying pairs; emitter identity and actual defender control/recovery are required. 94/108 actual-damage contact cells are observed;14 remain unverified. Missing cells are not automatically defects. The prior d637 nine-probe pass (116hits/160blocks/0true pairs) remains separately source-bound. These newer corrected-tier probes use a1b8 package/9e shipping source.
 
 Qualified native stock-loss footage and corrected headless replication remain preserved: one actual stock loss against an activeCPU, not a match win or all-roster KO approval. Guard-affected 19 headless/11 native attempts and projectile-ownership-affected 5 headless/1 native attempts remain conservatively excluded; overlap is not counted as extra tests.
 
-CI snapshot binds `e3a30f08e3530f5b295228c659fb4e8c81de21da`: 7 successful jobs, 1 pending. Later commits trigger separate jobs; this does not establish current HEAD completion. Local Mac source fixtures do not establish Android/Pixel/Windows/Web device acceptance.
+CI snapshot binds `a1b8deb605fcbd655c2dd0d4d6c214f5da8bbf18`: 7 successful jobs, 1 pending. Later commits trigger separate jobs; this does not establish current HEAD completion. Local Mac source fixtures do not establish Android/Pixel/Windows/Web device acceptance.
 
 ## Owner assets and instructions
 
