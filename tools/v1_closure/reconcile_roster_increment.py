@@ -30,6 +30,9 @@ new_assets=[geo,*geo.get('sheets',[])]
 landing_native=INC/'landing_native_1012/NATIVE_MOVIE.json'
 if landing_native.exists():
  landing_asset=read(landing_native);new_assets.extend([landing_asset,*landing_asset.get('sheets',[])])
+transition_native=INC/'transitions_native_1012/NATIVE_MOVIE.json'
+if transition_native.exists():
+ transition_asset=read(transition_native);new_assets.extend([transition_asset,*transition_asset.get('sheets',[])])
 for r in new_assets:
  if r['path'] in seen:continue
  path=ROOT/r['path'];assert path.is_file(),path

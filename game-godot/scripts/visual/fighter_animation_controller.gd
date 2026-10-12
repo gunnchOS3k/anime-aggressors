@@ -389,16 +389,18 @@ func synchronize_locomotion(world_position: Vector2, model, grounded: bool) -> v
 		_weight_transfer.clear(); _motion_moving=false; _previous_motion_speed=0;_previous_motion_facing=_visual_facing
 		return
 	if presentation_frozen:return
-	var moving := speed>.5
+	# Reversal braking is still requested locomotion. Do not replace its
+	# authored pivot with a stop when velocity crosses zero under held input.
+	var commanded := absf(_runtime_fighter._read_axis())>.001
 	if displacement>128:
 		_gait_phase=0;_weight_transfer.clear();_motion_moving=false
-	elif moving and _visual_facing!=_previous_motion_facing and _motion_moving:
+	elif commanded and _visual_facing!=_previous_motion_facing and _motion_moving:
 		_weight_transfer.begin("pivot")
-	elif moving and not _motion_moving:
+	elif commanded and not _motion_moving:
 		_weight_transfer.begin("start")
-	elif _motion_moving and (not moving or (_weight_transfer.kind!="stop" and speed<_previous_motion_speed*.75)):
+	elif _motion_moving and not commanded:
 		_weight_transfer.begin("stop")
-	_motion_moving=moving;_previous_motion_speed=speed;_previous_motion_facing=_visual_facing
+	_motion_moving=commanded;_previous_motion_speed=speed;_previous_motion_facing=_visual_facing
 	var clip := str(_player.current_animation).get_slice("/",1)
 	if _gait_half_stride.has(clip):
 		_locomotion_synchronized = true

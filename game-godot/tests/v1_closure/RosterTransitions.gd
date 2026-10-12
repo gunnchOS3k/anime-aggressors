@@ -35,6 +35,7 @@ Movement fixture · idle target · no competitive acceptance"%[fid,body]
 					await physics_frame
 					var e: Dictionary=c.get_locomotion_transition_evidence() if c.has_method("get_locomotion_transition_evidence") else {}
 					if not str(e.get("kind","")).is_empty():seen[e.kind]=true
+					if frame<56:check(e.get("kind","")!="stop",fid+":"+body+":"+str(facing)+":held_input_never_owns_stop:"+str(frame))
 					samples.append({"frame":frame,"movie_frame":Engine.get_process_frames()-1,"world_position":[p.position.x,p.position.y],"velocity":[p.velocity.x,p.velocity.y],"facing":p.facing,"state":p.state_machine.current_state,"pose":e})
 				var label: String=fid+":"+body+":"+str(facing)
 				for kind in ["start","pivot","stop"]:check(seen.has(kind),label+":authored_"+kind)

@@ -25,6 +25,9 @@ styles={
 'vesper-nyx':('Skewed withdrawal and oblique phase paths','Feint/pivot and grounded phase return remain generic in transitions'),
 'yin':('Inward fold and economical reduction','Cosmic gait and absorption acting still use shared locomotion/recovery structure'),
 'yang':('Ordered outward extension and structured release','Construction cadence and landing stabilization need distinct acting')}
+transition=read(INC/'LOCOMOTION_TRANSITION_CORRECTION.json')
+cleanup=read(INC/'MODEL_SWAP_CORRECTION.json')
+movement_native=read(INC/'transitions_native_1012/NATIVE_MOVIE.json') if (INC/'transitions_native_1012/NATIVE_MOVIE.json').exists() else None
 rows=[]
 for native in roster['rows']:
  fid=native['fighter'];g=[r for r in geometry['rows'] if r['fighter']==fid];f=floor_by[fid]
@@ -36,15 +39,25 @@ for native in roster['rows']:
  legacy_guard=next(r for r in guard['rows'] if r['label']==fid+'_roster_choreography_low')
  missing=[name for name,observed in native['qualifying_categories'].items() if not observed]
  if not native['signature_observed']:missing.append('signature')
- rows.append({'fighter':fid,'runtime_source':args.runtime_source,'offensive_heavy_aerial_source':'b5f2af11a61f912c78dfb198a33b872e351fd4ae','landing_data_source':args.runtime_source,
+ rows.append({'fighter':fid,'runtime_source':args.runtime_source,'offensive_heavy_aerial_source':'b5f2af11a61f912c78dfb198a33b872e351fd4ae','landing_data_source':'26cf7c8153affdde6bebc0bac9185ce1af8591f7',
  'IMPLEMENTED':'ORIGINAL_RUNTIME_CHOREOGRAPHY_CANDIDATE; production incomplete',
  'AUTOMATED_VERIFIED':'864 roster configurations; per-fighter44 geometry contacts,8 public landing cases,4 guard cases; scope-limited',
  'RUNTIME_VERIFIED':'native mirror femaleP1/maleCPU at67ae (guard limitations audited); refined geometry maleP1/femaleP2 atb5f2; landing refinement separately verified on latest source',
  'OWNER_REVIEW_READY':False,'OWNER_APPROVED':False,
  'BLOCKED':['shared floor/contact origin discrepancy','outer-range visible reach remains outside collision surface'],
  'candidate_review_material_available':True,'professional_quality_claimed':False,
+ 'start_stop_pivot_implementation':'9distinct authored body-chain/load/rhythm profiles; existing gait support preserved; complete corrective steps/professional acting still open',
+ 'start_stop_pivot_source':'9ce9e15272813266a693f3474b074342c9d89412',
+ 'start_stop_pivot_public_cases':4,
+ 'start_stop_pivot_physics_identical':all(x['public_physics_state_identical_to_baseline'] for x in transition['rows'] if x['fighter']==fid),
+ 'start_stop_pivot_support_solver_error_max_m':max(x['maximum_support_error_m'] for x in transition['rows'] if x['fighter']==fid),
+ 'native_model_swap_errors_corrected':0,
+ 'native_model_swap_cases':6,
+ 'native_warmed_resource_growth':0,
+ 'movement_native_movie':movement_native['path'] if movement_native else None,
+ 'movement_native_source':movement_native['source_sha'] if movement_native else None,
  'body_presentations':['male','female'],'facings':[-1,1],
- 'native_body_presentation_visibility_verified':True,'latest_landing_movie':'artifacts/v1_closure/spectral_feedback/rendered/roster_landings_26cf7c81.mp4','native_landing_source':args.runtime_source,
+ 'native_body_presentation_visibility_verified':True,'latest_landing_movie':'artifacts/v1_closure/spectral_feedback/rendered/roster_landings_26cf7c81.mp4','native_landing_source':'26cf7c8153affdde6bebc0bac9185ce1af8591f7',
  'close_typical_hand_mesh_to_overlap_max_px':regular,'neutral_air_ascending_descending_hand_mesh_to_overlap_max_px':air,
  'outer_hand_mesh_gap_px':outer,'boot_below_physical_floor_max_px':f['baseline_boot_below_physical_floor_max_px'],
  'isolated_floor_candidate_hand_gap_px':f['candidate_typical_hand_gap_max_px'],'floor_candidate_shipped':False,
