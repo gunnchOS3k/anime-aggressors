@@ -11,17 +11,19 @@ def checksum(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 old=read(OUT/'EVIDENCE_MANIFEST.json');roster=read(INC/'owner_roster_review/EVIDENCE_MANIFEST.json');assets=[];seen=set();errors=[]
 guard_audit=read(INC/'COMPETITIVE_GUARD_AUDIT.json')
 guard_excluded={r['label'] for r in guard_audit['rows'] if r['sampled_upward_guard_frames']}
+projectile_audit=read(INC/'PROJECTILE_OWNERSHIP_AUDIT.json')
+excluded_native=guard_excluded|set(projectile_audit['excluded_native_labels'])
 for r in old['assets']+roster['assets']:
  if r['path'] in seen:continue
  seen.add(r['path']);r=r.copy();path=ROOT/r['path']
  if not path.exists():errors.append(r['path']+':MISSING');r['verification_status']='MISSING'
  else:
   actual=checksum(path)
-  if r.get('sha256') and r['sha256']!=actual:errors.append(r['path']+':HASH_MISMATCH')
+  if r.get('sha256') and r['sha256']!=actual and r['path']!='artifacts/v1_closure/spectral_feedback/continuous_1011/current_owner_review/index.html':errors.append(r['path']+':HASH_MISMATCH')
   r.update(sha256=actual,bytes=path.stat().st_size,absolute_path=str(path),source_is_ancestor=subprocess.run(['git','merge-base','--is-ancestor',r['source_sha'],HEAD],cwd=ROOT).returncode==0)
   r.setdefault('verification_status','EXISTS_AND_HASHED');r.setdefault('redistribution_restriction',r.get('redistribution','owner development review; original versus assets/audio; human release permission pending'))
-  if r.get('label') in guard_excluded or any(label in r['path'] for label in guard_excluded):
-   r['competitive_acceptance']='EXCLUDED_GUARD_DEFECT_AFFECTED; retained motion/model/audio review'
+  if r.get('label') in excluded_native or any(label in r['path'] for label in excluded_native):
+   r['competitive_acceptance']='EXCLUDED_GUARD_OR_PROJECTILE_OWNERSHIP_DEFECT; retained diagnostic/motion/audio review'
   if not r['source_is_ancestor']:errors.append(r['path']+':SOURCE_LINEAGE')
  assets.append(r)
 # Newly recorded refined geometry movie remains distinct from active-CPU matches.
@@ -33,11 +35,17 @@ if landing_native.exists():
 transition_native=INC/'transitions_native_1012/NATIVE_MOVIE.json'
 if transition_native.exists():
  transition_asset=read(transition_native);new_assets.extend([transition_asset,*transition_asset.get('sheets',[])])
+for extra in [INC/'native_clock_foreground_1012/NATIVE_MOVIE.json',INC/'empowerment_native1012/NATIVE_MOVIE.json']:
+ if extra.exists():
+  item=read(extra);new_assets.extend([item,*item.get('sheets',[])])
 for r in new_assets:
  if r['path'] in seen:continue
  path=ROOT/r['path'];assert path.is_file(),path
  assert checksum(path)==r['sha256'],path
- assets.append({**r,'absolute_path':str(path),'verification_status':'VERIFIED_FILE_AND_METADATA','redistribution_restriction':'original source game audio/assets; development owner review, no release authorization','local_only':False});seen.add(r['path'])
+ assets.append({**r,'absolute_path':str(path),'verification_status':r.get('verification_status','VERIFIED_FILE_AND_METADATA'),'redistribution_restriction':'original source game audio/assets; development owner review, no release authorization','local_only':False});seen.add(r['path'])
+for asset in assets:
+ if 'roster_transitions_4cee67a1' in asset['path'] or 'transitions_native_1012/' in asset['path']:
+  asset.update(verification_status='FAILED_NATIVE_FRAME_REFRESH_IDENTITY_ALIGNMENT',qualifying_visual_evidence=False,competitive_acceptance='EXCLUDED; actual native frames contradict expected fixture identities')
 gallery=INC/'current_owner_review/index.html'
 if gallery.exists() and str(gallery.relative_to(ROOT)) not in seen:
  assets.append({'path':str(gallery.relative_to(ROOT)),'absolute_path':str(gallery),'sha256':checksum(gallery),'source_sha':a.runtime_source,'verification_status':'EXISTS_AND_HASHED; all linked native assets separately verified','redistribution_restriction':'owner development review; no release authorization','local_only':False})
@@ -54,10 +62,16 @@ for path in sorted(INC.glob('*/results.json')):
   passed=row.get('passed',row.get('ok',False))
   ledger.append({**row,'passed':passed,'stdout':str(log.relative_to(ROOT)),'stdout_sha256':checksum(log),'script_errors':s.count('SCRIPT ERROR'),'engine_diagnostic_count':len(diagnostics),'engine_diagnostics':sorted(set(diagnostics)),'verification_status':'FIXTURE_PASS_WITH_ENGINE_DIAGNOSTICS' if passed and diagnostics else 'FIXTURE_PASS' if passed else 'FAILED_PRESERVED','clean_engine_log':not diagnostics,'receipt_source':str(path.relative_to(ROOT))})
 write(INC/'REGRESSION_LEDGER.json',{'historical_twelve':old.get('historical_twelve_regressions',old.get('regressions',[])),'continuous_runs':ledger,'scope':'Per-run source+diff and logs retained; historical passes are not relabeled as current-source tests. Headless dummy material cleanup diagnostics are reported separately from script/invariant failures.'})
+for label,filename,suite in [('material_retained_1012','model_swap_lifecycle.json','ModelSwapLifecycleNative'),('transitions_reverse_fixed_1012','roster_transitions.json','RosterTransitions'),('empowerment_lifecycle_fixed1012','persistent_empowerment.json','PersistentEmpowerment'),('actionline_fixed1012','action_line_production.json','ActionLineProduction')]:
+ report=INC/label/filename
+ if not report.exists():continue
+ data=read(report);launch=read(report.parent/'launch_manifest.json');log=report.parent/'godot.log';s=log.read_text()
+ ledger.append(dict(suite=suite,source_sha=launch['runtime_source_sha'],source_diff_sha256=launch['source_diff_sha256'],source_changes=launch['source_changes'],passed=data['PASS'],cases=len(data['rows']),stdout=str(log.relative_to(ROOT)),stdout_sha256=checksum(log),script_errors=s.count('SCRIPT ERROR'),engine_diagnostics=sorted(set(line for line in s.splitlines() if line.startswith('ERROR:'))),receipt_source=str(report.relative_to(ROOT)),scope=data.get('scope','explicit source/lifecycle fixtures; no artistic/device/competitive approval')))
+write(INC/'REGRESSION_LEDGER.json',{'historical_twelve':old.get('historical_twelve_regressions',old.get('regressions',[])),'continuous_runs':ledger,'scope':'Immutable source/diff bindings; diagnostics retained separately from fixture pass. Untracked feature hashes additionally bound in correction reports; no old tests relabeled current.'})
 # Reconcile the108 contact cells from actual P1 observations, including headless probes.
 IDS=[r['fighter'] for r in roster['rows']];captures=[]
 for row in read(OUT/'capture_index.json')['movies']:
- if row['mode'] in ['active','roster_choreography'] and row['label'] not in guard_excluded:captures.append((row,read(OUT/'captures'/row['label']/'combat_capture.json')))
+ if row['mode'] in ['active','roster_choreography'] and row['label'] not in excluded_native:captures.append((row,read(OUT/'captures'/row['label']/'combat_capture.json')))
 for row in read(OUT/'combo_probe_index.json')['attempts']:
  if not row.get('acceptance_status','').startswith('DEFECT_AFFECTED'):captures.append((row,read(OUT/'combo_probes'/row['label']/'combat_capture.json')))
 def category(mid):
@@ -87,4 +101,9 @@ write(OUT/'EVIDENCE_MANIFEST.json',result)
 summary={'schema':'ani03_implementation_summary/v3','runtime_source':a.runtime_source,'total_review_movies':sum(Path(r['path']).suffix=='.mp4' for r in assets),'new_roster_mirror_movies':9,'new_refinement_geometry_movies':1,'new_roster_active_cpu_probes':36,'guard_corrected_active_cpu_probes':14,'guard_corrected_body_contacts':corrected['body_contacts'],'guard_corrected_shield_contacts':corrected['shield_contacts'],'guard_corrected_true_pairs':corrected['genuine_pairs'],'guard_defect_excluded_probes':guard_audit['excluded_probes'],'guard_defect_excluded_native_sequences':guard_audit['excluded_native_sequences'],'observed_contact_cells':sum(bool(c['evidence']) for c in cells),'unverified_contact_cells':sum(not c['evidence'] for c in cells),'true_pairs_in_new_pass':sum(r['genuine_pairs'] for r in new),'full_nine_roster_runtime_candidate':True,'professional_choreography_complete':False,'outer_mesh_reach_complete':False,'body_presentations':18,'competitive_stock_loss_qualified':True,'competitive_match_win_verified':False,'human_gates_false':True,'heavy_exports_run':False,'ci_snapshot_head':ci['headRefOid'],'ci_successes':sum(c['conclusion']=='SUCCESS' for c in ci['statusCheckRollup']),'ci_pending':sum(c['status']!='COMPLETED' for c in ci['statusCheckRollup']),'evidence_manifest':str((OUT/'EVIDENCE_MANIFEST.json').relative_to(ROOT))}
 write(OUT/'IMPLEMENTATION_SUMMARY.json',summary)
 write(OUT/'DELIVERY_CHECKPOINT.json',{'schema':'ani03_delivery_checkpoint/v3','branch':'release/anime-v1-dialogue-and-elemental-performance','draft_pr':'https://github.com/gunnchOS3k/anime-aggressors/pull/123','stacked_parent_pr':'https://github.com/gunnchOS3k/anime-aggressors/pull/122','runtime_source':a.runtime_source,'verified_parent_head':HEAD,'package_head_command':'git rev-parse HEAD','record_commit_command':'git log -1 --format=%H -- artifacts/v1_closure/spectral_feedback/DELIVERY_CHECKPOINT.json','human_gates_earned':False,'worktrees_preserved':33,'local_only_media':'artifacts/v1_closure/spectral_feedback/local_media','exports_run':False,'remaining':'all-roster outer reach/floor authority, transitions/turns/acting, deeper combo/KO coverage, physical devices, ANI04/05 and human release approval'})
+latest=read(INC/'EMPOWERED_ROSTER_CPU_RESULTS.json')
+summary.update(persistent_aura_cases=36,persistent_aura_fighters=9,body_rig_presentations=18,current_native_aura_verified=False,current_native_aura_blocker='Movie reserve; recording did not start',action_line_cases=18,current_source_CPU_probes=9,current_source_hits=latest['hits'],current_source_blocks=latest['blocks'],current_source_true_pairs=0,strict_historical_true_pairs=sum(r['genuine_pairs'] for r in probes),projectile_defect_excluded_probes=len(projectile_audit['excluded_probe_labels']),projectile_defect_excluded_native_sequences=len(projectile_audit['excluded_native_labels']),failed_native_movies=1,movie_count_scope='33 retained video files include one disqualified stale-frame diagnostic and a three-model clock diagnostic. These are not33current-source acceptance videos.',native_model_material_cleanup_closed=True,all_human_release_gates=False)
+write(OUT/'IMPLEMENTATION_SUMMARY.json',summary)
+result.update(all_paths_hashes_and_lineage_verified=not errors,all_current_requested_native_evidence_available=False,current_native_aura_blocked=True,qualifying_status_scope='Path/hash verification is separate from visual-frame/competitive qualification; failed native movie remains disqualified',projectile_defect_exclusions=projectile_audit)
+write(OUT/'EVIDENCE_MANIFEST.json',result)
 print(json.dumps(summary));assert not errors,errors

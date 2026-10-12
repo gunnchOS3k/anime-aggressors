@@ -28,6 +28,8 @@ styles={
 transition=read(INC/'LOCOMOTION_TRANSITION_CORRECTION.json')
 cleanup=read(INC/'MODEL_SWAP_CORRECTION.json')
 movement_native=read(INC/'transitions_native_1012/NATIVE_MOVIE.json') if (INC/'transitions_native_1012/NATIVE_MOVIE.json').exists() else None
+empowerment=read(INC/'empowerment_lifecycle_fixed1012/persistent_empowerment.json')
+expression=read(INC/'actionline_fixed1012/action_line_production.json')
 rows=[]
 for native in roster['rows']:
  fid=native['fighter'];g=[r for r in geometry['rows'] if r['fighter']==fid];f=floor_by[fid]
@@ -56,6 +58,13 @@ for native in roster['rows']:
  'native_warmed_resource_growth':0,
  'movement_native_movie':movement_native['path'] if movement_native else None,
  'movement_native_source':movement_native['source_sha'] if movement_native else None,
+ 'movement_native_qualifying':False,
+ 'movement_native_failure':'FAILED_NATIVE_FRAME_REFRESH_IDENTITY_ALIGNMENT; retained diagnostic only',
+ 'persistent_aura_implemented':True,'persistent_aura_cases':4,
+ 'persistent_aura_grammar':next(r['full']['grammar'] for r in empowerment['rows'] if r['fighter']==fid),
+ 'persistent_aura_native_verified':False,'persistent_aura_review_blocker':'Disk capture reserve; no all18native aura movie started',
+ 'action_line_cases':2,'action_lines_implemented':['velocity movement','resolved anticipation','actual striking-limb paths','confirmed heavy accent','full meter arrival'],
+ 'new_expression_source':args.runtime_source,
  'body_presentations':['male','female'],'facings':[-1,1],
  'native_body_presentation_visibility_verified':True,'latest_landing_movie':'artifacts/v1_closure/spectral_feedback/rendered/roster_landings_26cf7c81.mp4','native_landing_source':'26cf7c8153affdde6bebc0bac9185ce1af8591f7',
  'close_typical_hand_mesh_to_overlap_max_px':regular,'neutral_air_ascending_descending_hand_mesh_to_overlap_max_px':air,
@@ -76,7 +85,7 @@ for native in roster['rows']:
  'landing_lag_unchanged':True,'new_landing_profiles':'first-impact absorption, pelvis/chest counterbalance, grounded catches, fast-fall hard landing and authoritative recovery clock',
  'capsule_framing_candidate': [r for r in capsule['rows'] if r['fighter']==fid],
  'motion_authority':styles[fid][0],'next_authored_work':styles[fid][1],
- 'remaining_categories':['authored starts/stops/pivots','directional aerial contact beyond neutral_air','move-specific anticipation/follow-through/recovery','grab/throw/defense acting','hair/cloth/armor/ribbon production','broader combo and competitive KO acceptance','owner normal-speed play review'],
+ 'remaining_categories':['visible polish of implemented starts/stops/pivots','native aura/expression review','directional aerial contact beyond neutral_air','move-specific anticipation/follow-through/recovery','grab/throw/defense acting','hair/cloth/armor/ribbon production','broader combo and competitive KO acceptance','owner normal-speed play review'],
  'per_category_production_status':{'shared_timing_orientation':'TECHNICALLY_VERIFIED','movement_footwork':'PARTIAL; floor origin unresolved','offensive_choreography':'BLOCKING_AND_WEIGHT_TRANSFER_IMPLEMENTED; outer reach unresolved','defensive_reactive':'IMMEDIATE_CONTACT_POSE_VERIFIED; acting incomplete','elemental_secondary':'NINE_ORIGINAL_IDENTITIES_IMPLEMENTED; production accessories incomplete','competitive_acceptance':'PARTIAL_ACTIVE_CPU_EVIDENCE; no all-roster KO/match-win claim'}})
 write(INC/'FULL_ROSTER_PRODUCTION_MATRIX.json',{'runtime_source':args.runtime_source,'source_scope':'Each asset/test retains exact source or parent+diff. Offensive/heavy/air data b5f2, latest guard/modal/landing refinements separately source-bound; no final visual approval. Native mirroring proves model selection/visibility, not complete variant art quality. Convex projected skin hull intersection is not a3D anatomy/occlusion judgment.','rows':rows,'human_gates':roster['human_gates']})
 keys=['fighter','IMPLEMENTED','AUTOMATED_VERIFIED','RUNTIME_VERIFIED','OWNER_REVIEW_READY','OWNER_APPROVED','BLOCKED','close_typical_hand_mesh_to_overlap_max_px','neutral_air_ascending_descending_hand_mesh_to_overlap_max_px','outer_hand_mesh_gap_px','boot_below_physical_floor_max_px','new_true_pairs','new_blocked_pairs','new_recovery_before_next_pairs','native_unobserved_categories','motion_authority','next_authored_work']

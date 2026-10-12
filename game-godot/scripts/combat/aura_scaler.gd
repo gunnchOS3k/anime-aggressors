@@ -14,14 +14,18 @@ const LEVELS := [
 ]
 
 static func aura_level(aura_amount: float) -> int:
+	# The meter is continuous, while these approved ranges are integer bins.
+	# Fractional values between max and the next min must stay in that bin.
+	var tier_amount := floorf(aura_amount)
 	for entry in LEVELS:
-		if aura_amount >= entry.min and aura_amount <= entry.max:
+		if tier_amount >= entry.min and tier_amount <= entry.max:
 			return entry.level
 	return 0
 
 static func aura_level_name(aura_amount: float) -> String:
+	var tier_amount := floorf(aura_amount)
 	for entry in LEVELS:
-		if aura_amount >= entry.min and aura_amount <= entry.max:
+		if tier_amount >= entry.min and tier_amount <= entry.max:
 			return entry.name
 	return "base"
 
