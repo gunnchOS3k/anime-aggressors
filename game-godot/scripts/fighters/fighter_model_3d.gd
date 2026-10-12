@@ -1241,7 +1241,26 @@ func _exit_tree() -> void:
 		_viewport = null
 
 
+func _retain_render_materials(node: Node, retained: Array[Material]) -> void:
+	# Geometry destruction updates renderer dependencies. Keep every instance
+	# material alive until the entire retiring model has released its render RIDs.
+	# Mixed surface/whole-mesh overrides otherwise lose their last reference
+	# while another retiring instance still refers to that RID (Godot #85817).
+	if node is MeshInstance3D:
+		var mesh := node as MeshInstance3D
+		for material in [mesh.material_override, mesh.material_overlay]:
+			if material != null: retained.append(material)
+		for surface in range(mesh.get_surface_override_material_count()):
+			var material := mesh.get_surface_override_material(surface)
+			if material != null: retained.append(material)
+	for child in node.get_children():
+		_retain_render_materials(child, retained)
+
+
 func _clear_model() -> void:
+	var retiring_materials: Array[Material] = []
+	if _model_root != null and is_instance_valid(_model_root):
+		_retain_render_materials(_model_root, retiring_materials)
 	# Free controllers immediately so reuse cannot bind stale skeleton/materials.
 	if _animation_controller != null and is_instance_valid(_animation_controller):
 		_animation_controller.free()
@@ -1264,6 +1283,8 @@ func _clear_model() -> void:
 		for child in _model_root.get_children():
 			if is_instance_valid(child):
 				child.free()
+	# All retired mesh instances are gone before local material refs are released.
+	retiring_materials.clear()
 
 
 func _set_loaded(value: bool) -> void:

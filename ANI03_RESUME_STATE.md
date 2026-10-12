@@ -1,3 +1,10 @@
+# Verified native model-swap correction — October12,2026
+
+Recovered/pushed2a8106ca00e73ce8d188b9a72661e7c71eb6730a final landing validation. New source correction retains retiring mesh/overlay/surface Material references until all retiring renderer instances have been freed. Native exact same54swap fixture: baseline material diagnostics present, corrected0; all18visible pixel/material identities and oldbody/controller retirement verified, warmed node counts bounded. Separate18swap scene-owner disposal pilot0errors. SeeMODEL_SWAP_CORRECTION.json and immutable native logs/screenshots. No model/rig/material identity/data/geometry/gameplay values changed; no suppression. This source checkpoint must be resolved with gitrev-parseHEAD after commit.
+
+NoGodot/capture running. All33worktrees/backups retained,free~6.9GiB,18GiBheavy/2GiBnativeguards. Human/releasegatesfalse. Next: all9starts/stops/pivots, coupled floor/contact proposal andbounded missingcells. Inspect authored transition infrastructure and current floor/capsule findings; unsafe anchor/shrink stayisolated. Exactnextcommand: sed -n '365,393p' game-godot/scripts/visual/fighter_animation_controller.gd. ShippingRoster/native lifecycle affected integration stillneeded atnextcheckpoint;145Story unchanged so noFullCampaignrepeat.
+
+---
 # Native cleanup increment recovery — October 12, 2026
 
 Recovered local/remote02c91b0a427a2839237a9a548959ad995ffb4042 on release/anime-v1-dialogue-and-elemental-performance; runtime26cf7c8153affdde6bebc0bac9185ce1af8591f7. Five final affected presentation suites PASS, logs preserved; exact02c91GitHub checks now all8SUCCESS. This metadata checkpoint preserves final results and all18body visibility sheet before new source work. All33worktrees and backups unchanged; no Godot/test active; free~6.9GiB. No heavy exports below18GiB; native reserve2GiB. Human/releasegatesfalse.
