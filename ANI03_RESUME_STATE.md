@@ -1,3 +1,10 @@
+# Running final aura integrity integration — October12,2026
+
+Current local/lastpushed9e0d13ae3bfd257e46c314fd2e601bdeceb6a84b. Shipping aura fractional tier correction committed beforelongsuite. One serialGodot testlauncher active: execsession17746, tools/v1_closure/validate_continuous_combat.py --label aura_integrity_final1012. Progress/results in continuous_1011/aura_integrity_final1012/results.json; console/private/tmp/ani03_aura_integrity_final.log. Do notstart duplicateGodot/capture. Fifteensuites include realmeterboundary,36aura lifecycle,18actionlines,throw/projectile/contact/interruption/footwork/choreography/Spectral/charge/guard/full145stagedcampaign/18roster/restart. Verify actualresults beforeclaiming finalPASS. Diskvolatile~1–2GiB, native3400guardblocked; noownerdata/worktreedeletion/export.
+
+Next independentwork: finishsource-bound owner9matrix/reviewmanifest/CItruth andreproduciblebacklog. Afterserialsuitefinishes, fresh nineCPU probes at9e (uniqueaurafinal1012labels) tocovercurrenttierfix; neverfreeze/forcecombos. Ifstorage remainsbelow2GiB+nativebudget, keepcapturependingwith exactcommand. All33worktrees andallhuman/releasegatesfalse. Previousprogressbelow.
+
+---
 # Fractional tier integrity checkpoint — October12,2026
 
 Branch release/anime-v1-dialogue-and-elemental-performance; lastpushed d637b7d4e0b108a66a7ccc77d85e7c8f5ef9993b. Independently reproduced live99.2meter resolvingbase0 inall36aura cases, then162failure boundary fixture153samples/216moves. Corrected integer-bin selection floor only; all21816integer-scaled move dictionary hashes exactlyunchanged, thresholds/rates/scaling data unchanged. BoundaryfixedPASS153. Save/push actualsource beforelong integration.
