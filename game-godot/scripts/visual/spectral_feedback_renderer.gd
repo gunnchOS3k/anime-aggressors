@@ -31,7 +31,25 @@ func _ready() -> void: z_index = 25
 
 func option(key: String) -> bool:
 	var settings_node = get_node_or_null("/root/StoryDialogue")
+	if key == "reduced_particles" and intensity_mode() == "Reduced": return true
 	return bool(settings_node.settings.get(key,false)) if settings_node != null else false
+
+func intensity_mode() -> String:
+	var settings_node = get_node_or_null("/root/StoryDialogue")
+	return str(settings_node.settings.get("vfx_intensity","Balanced")) if settings_node != null else "Balanced"
+
+func density_multiplier() -> float:
+	return .2 if option("reduced_particles") else .6 if intensity_mode() == "Balanced" else 1.0
+
+func trim_decoration_budget(max_slots: int) -> void:
+	# A live accessibility change retires transient decoration first. Charge,
+	# projectile, confirmation and reaction owners keep their natural lifecycle.
+	var remaining := active_count()-max_slots
+	if remaining <= 0:return
+	for i in slots.size():
+		if slots[i].active and slots[i].kind in [4,5,6,13,14,15,16,17]:
+			stop_slot(i);remaining-=1
+			if remaining<=0:return
 
 func contact(info: Dictionary, defender: Node2D) -> bool:
 	var event_id := str(info.get("combat_event_id",""))
@@ -86,8 +104,8 @@ func emit_effect(fid: String, kind: int, world: Vector2, direction := Vector2.RI
 	slot.base_ink=ink
 	if option("high_contrast_vfx"): ink=Color(1,.95,.76) if kind != 4 else Color(.8,.83,.86)
 	if option("reduced_flash"): ink.a*=.55
-	for key in {"family":family,"kind":kind,"phase":0.0,"clock_s":0.0,"seed":seed_value,"accent":ink,"density":.2 if option("reduced_particles") else 1.0,"flash":0.0 if option("reduced_flash") else 1.0}:
-		mesh.material.set_shader_parameter(key,{"family":family,"kind":kind,"phase":0.0,"clock_s":0.0,"seed":seed_value,"accent":ink,"density":.2 if option("reduced_particles") else 1.0,"flash":0.0 if option("reduced_flash") else 1.0}[key])
+	var parameters := {"family":family,"kind":kind,"phase":0.0,"clock_s":0.0,"seed":seed_value,"accent":ink,"density":density_multiplier(),"flash":0.0 if option("reduced_flash") else 1.0}
+	for key in parameters:mesh.material.set_shader_parameter(key,parameters[key])
 	history.append({"kind":kind,"fid":fid,"family":FAMILIES[family],"world":[world.x,world.y],"direction":[direction.x,direction.y],"event_id":event_id,"seed":seed_value,"physics_frame":Engine.get_physics_frames(),"process_frame":Engine.get_process_frames(),"life":life,"extent":extent})
 	if history.size()>2048: history.pop_front()
 	peak_active=maxi(peak_active,active_count())
@@ -109,9 +127,11 @@ func _process(delta: float) -> void:
 	var reduced := option("reduced_particles")
 	var dimmed := option("reduced_flash")
 	var contrast := option("high_contrast_vfx")
+	trim_decoration_budget(32 if reduced else LIMIT)
+	var density := density_multiplier()
 	for slot in slots:
 		if not slot.active: continue
-		slot.mesh.material.set_shader_parameter("density",.2 if reduced else 1.0)
+		slot.mesh.material.set_shader_parameter("density",density)
 		slot.mesh.material.set_shader_parameter("flash",0.0 if dimmed else 1.0)
 		var ink: Color=slot.base_ink
 		if contrast:ink=Color(1,.95,.76) if slot.kind != 4 else Color(.8,.83,.86)
@@ -136,4 +156,4 @@ func active_count() -> int:
 	return n
 
 func stats() -> Dictionary:
-	return {"allocated_meshes":slots.size(),"active_meshes":active_count(),"peak_active_meshes":peak_active,"reused":reused,"dropped":dropped,"max_meshes":LIMIT,"analytic_secondary_motes_per_mesh":2 if option("reduced_particles") else 10,"cpu_update_us":cpu_update_us.duplicate(),"render_target":"gl_compatibility","gpu_particle_nodes":0}
+	return {"allocated_meshes":slots.size(),"active_meshes":active_count(),"peak_active_meshes":peak_active,"reused":reused,"dropped":dropped,"max_meshes":LIMIT,"presentation_budget":32 if option("reduced_particles") else LIMIT,"intensity_mode":intensity_mode(),"density_multiplier":density_multiplier(),"analytic_secondary_motes_per_mesh":int(10*density_multiplier()),"cpu_update_us":cpu_update_us.duplicate(),"render_target":"gl_compatibility","gpu_particle_nodes":0}

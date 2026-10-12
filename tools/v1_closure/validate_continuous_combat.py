@@ -3,7 +3,7 @@ import argparse,json,subprocess,time
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 p=argparse.ArgumentParser();p.add_argument('--label',required=True);p.add_argument('suites',nargs='+');p.add_argument('--driver-arg',action='append',default=[]);a=p.parse_args()
-allowed=['ActionLineProduction','AuraFractionalBoundary','PersistentEmpowerment','ProjectileOwnership','RosterTransitions','RosterLanding','AirborneGuard','RosterContactRange','RosterContactAlignment','RosterFootwork','ThrowOwnership','CombatChoreography','CombatActivation','InterruptedMove','SpectralFeedback','ChargeContinuity','FullCampaign','ShippingRosterPath','CampaignRestart','ElementalPerformance','DialogueProduction','OwnerOverrideFaces']
+allowed=['SpectralIntensity','ExpressionPoolPriority','AuraRibbonProjection','ActionLineProduction','AuraFractionalBoundary','PersistentEmpowerment','ProjectileOwnership','RosterTransitions','RosterLanding','AirborneGuard','RosterContactRange','RosterContactAlignment','RosterFootwork','ThrowOwnership','CombatChoreography','CombatActivation','InterruptedMove','SpectralFeedback','ChargeContinuity','FullCampaign','ShippingRosterPath','CampaignRestart','ElementalPerformance','DialogueProduction','OwnerOverrideFaces']
 assert all(x in allowed for x in a.suites)
 out=ROOT/'artifacts/v1_closure/spectral_feedback/continuous_1011'/a.label
 assert not out.exists(),'Preserve previous evidence; use a new run label'
