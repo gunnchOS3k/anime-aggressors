@@ -1,3 +1,14 @@
+# Full-roster native review checkpoint — October 11, 2026
+
+Branch release/anime-v1-dialogue-and-elemental-performance; worktree /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure. Last pushed implementation 67ae813a9aaa71bbc2e5bed5d5896a02107744a0. Resolve the commit containing this entry for the media/report checkpoint.
+
+All nine serial current-animation native clips finished successfully at exact source67ae813a. No duplicate captures. Female P1/male P2 mirror matches, active CPUs, public controls, 60fps H264/AAC with original mixed audio, 1421frames each. Hits and shields observed across every fighter; individual light/projectile/signature omissions are recorded, not claimed passed. Review package continuous_1011/owner_roster_review/index.html and EVIDENCE_MANIFEST.json verifies49video/trace/sheet assets. Waveform checks matched49hit samples; median audio minus pre-render trace22.1–26.1ms, max residual6.7ms. All8GitHub checks at67ae813a succeeded; snapshot preserved. Native MovieWriter output does not prove sustained deviceFPS.
+
+Existing all-roster864move/body/facing,216grounded interactions,108footwork checks retained. The stalled80ms AnimationPlayer blend was fixed. Grounded wrists0–4px outside tested overlap surfaces; deformed fist/weapon mesh, outer-range and airborne reach NOT yet verified. Human quality and release gates remain false. Repaired throws, native authentic stock loss, Story145/1025 and all33worktrees/backups preserved. No heavy exports below18GiB; native reserve2GiB.
+
+No owned Godot capture process running. Local rawAVI/WAV under ignored local_media remain preserved. Next: commit/push this package, then implement RosterContactRange fixture for ALL9×2bodies×2facings, close/typical/outer light/heavy/signature and ascending/descending public aerials. Inspect skinned visible surfaces, actual overlap, contact pose/event timing and hurt/launch/recovery. Do not retune hitboxes or anatomy to pass. Follow with bounded new-label medium/high public combo probes across all9, then affected integrated Story/roster/save checks. Exact first command: python3 tools/v1_closure/validate_continuous_combat.py --label contact_range_1011 RosterContactRange (fixture must be authored and runner allowlist updated first). Preserve baseline/failed fixtures. Main historical summary/manifest reconciliation still pending.
+
+---
 # Full-roster live motion checkpoint — October 11, 2026
 
 Last pushed db890e81d90be83d5bc29064b68881a358a298c8. Resolve the commit containing this entry for the new source checkpoint. Reproduced root cause: manual AnimationPlayer.seek retained an unadvanced80ms blend, leaving live attack and gait poses near idle. New simulation-clocked library uses its baked pose transitions with zero stalled mixer blend. Bilateral rig-specific strike paths, coordinated body drive and lower contact regions now cover9fighters×2bodies×2facings. No accepted combat data or controls changed.
