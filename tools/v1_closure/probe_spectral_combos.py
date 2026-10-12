@@ -3,7 +3,7 @@ import argparse,json,subprocess,time,shutil,hashlib
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'artifacts/v1_closure/spectral_feedback'
-p=argparse.ArgumentParser();p.add_argument('labels',nargs='*');p.add_argument('--movie',action='store_true');p.add_argument('--suffix',default='');a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('labels',nargs='+',help='Explicit bounded probe labels; rotate the full roster, no implicit two-fighter slice');p.add_argument('--movie',action='store_true');p.add_argument('--suffix',default='');a=p.parse_args()
 assert not a.suffix or a.suffix.replace('_','').isalnum(), 'Safe unique suffix required'
 patterns=['light-light','light-heavy','heavy-light','aerial-light','projectile-light','edgeguard']
 # The bounded KO attempt is explicit-only; a default resume cannot start a new campaign.
@@ -11,7 +11,7 @@ if any('edgeguard-throw' in label for label in a.labels):patterns.append('edgegu
 index_path=OUT/'combo_probe_index.json'
 index=json.loads(index_path.read_text()) if index_path.exists() else {'attempts':[]}
 roster=['ember-vale','juno-spark','rook-ironside','kaia-windrow','nix-calder','orion-vell','vesper-nyx','yin','yang']
-selected_roster=[fid for fid in roster if any(label.startswith(fid+'_') for label in a.labels)] if a.labels else roster[:2]
+selected_roster=[fid for fid in roster if any(label.startswith(fid+'_') for label in a.labels)]
 for fid in selected_roster:
  for band in ['low','medium','high']:
   for pattern in patterns:

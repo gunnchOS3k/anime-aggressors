@@ -1,5 +1,5 @@
 {
-  "status": "REPRODUCED_EXISTING_AUTHORITY_DEFECT; UNCHANGED",
+  "status": "HISTORICAL_REPRODUCED_BEFORE_CORRECTION",
   "rows": [
     {
       "fighter": "ember-vale",
@@ -292,5 +292,7 @@
   ],
   "root": "AuraScaler integer-inclusive max endpoints leave continuous floats in (24,25),(49,50),(74,75),(99,100) unmatched. Live release99.2 resolves level0 despite intended level3 interval.",
   "scope": "Presentation observes real meter and separately reports actual combat level. No damage/frame/hitbox/meter changes made.",
-  "next": "Explicit isolated boundary/scaling baseline and proposed half-open threshold fix, preserving integer thresholds/multipliers; evaluate combat balance impact before promotion"
+  "next": "Explicit isolated boundary/scaling baseline and proposed half-open threshold fix, preserving integer thresholds/multipliers; evaluate combat balance impact before promotion",
+  "source_sha": "d637b7d4e0b108a66a7ccc77d85e7c8f5ef9993b",
+  "superseded_by": "AURA_FRACTIONAL_BOUNDARY_CORRECTION.json"
 }

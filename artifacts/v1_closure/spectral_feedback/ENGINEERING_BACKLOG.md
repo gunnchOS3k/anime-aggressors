@@ -1,6 +1,6 @@
 # ANI-03 full-roster production backlog — October12,2026
 
-Current runtime d5eb2f140cc69377389dadedf222d263b58efd5a; landing source26cf7c8153affdde6bebc0bac9185ce1af8591f7; offensive/heavy/air data b5f2af11; guard source5d66a8f1 and modal source7ae4447d verified. Historical capture source67ae813a (resolve full SHA with git). Existing draft123 stacked on122. All owner/release gates false. Original evidence/backlog retained in git and continuous_1011/ENGINEERING_BACKLOG_RECOVERED.md. No golden-slice prerequisite; every pass targets all9fighters and both body presentations.
+Current runtime9e0d13ae3bfd257e46c314fd2e601bdeceb6a84b; landing source26cf7c8153affdde6bebc0bac9185ce1af8591f7; offensive/heavy/air data b5f2af11; guard source5d66a8f1 and modal source7ae4447d verified. Historical capture source67ae813a (resolve full SHA with git). Existing draft123 stacked on122. All owner/release gates false. Original evidence/backlog retained in git and continuous_1011/ENGINEERING_BACKLOG_RECOVERED.md. No golden-slice prerequisite; every pass targets all9fighters and both body presentations.
 
 | Ticket | Current status | Reproduction and next implementation |
 |---|---|---|
@@ -24,9 +24,12 @@ Current runtime d5eb2f140cc69377389dadedf222d263b58efd5a; landing source26cf7c81
 | ANI04 acting/OVA | Production dependency |145nodes/1025cue infrastructure preserved. One continuous Kaia OVA +6variations, authored acting/lip-sync/camera/animation and professional voice rights remain unfinished. Restricted temporary voiced Story assets stay local. |
 | ANI05 platforms/release | Device/human dependency |Physical Windows/Web/Android/Pixel validation, safe exact-source exports and owner release approval remain open.18GiB guard; no platform exports below reserve, no worktree/backups deletion. |
 
-| Fighter | Specific next production refinement (same priority across roster) |
+| Ticket | Current status | Reproduction and next implementation |
+|---|---|---|
+| T06 projectile ownership | Corrected and independently verified all18; all12affected integration passed; latest fractional-tier integration pending | Recovery accepts a new public command before the previous runner ends. A cast retained old melee monitoring and polled cast damage before its emitter released. Valid18 baseline54failures/36contacts; fixed18PASS/18projectile-owned contacts/0phantoms, one damage/feedback/impact each. Retire melee at move start; forbid cast-as-melee polling/resolution; record cast activation/projectile instance IDs. No damage/startup/recovery/hitboxes/terrain policy changed. PROJECTILE_OWNERSHIP_CORRECTION.json. Prior5probes/1native sequence conservatively quarantined; one repeated cast is not a player follow-up. Rerun bounded public CPU recipes before promoting repaired-source acceptance. |
+
+| Fighter | Specific next production refinement |
 |---|---|
-| T06 projectile ownership | Corrected and independently verified all18; affected integration running | Recovery accepts a new public command before the previous runner ends. A cast retained old melee monitoring and polled cast damage before its emitter released. Valid18 baseline54failures/36contacts; fixed18PASS/18projectile-owned contacts/0phantoms, one damage/feedback/impact each. Retire melee at move start; forbid cast-as-melee polling/resolution; record cast activation/projectile instance IDs. No damage/startup/recovery/hitboxes/terrain policy changed. PROJECTILE_OWNERSHIP_CORRECTION.json. Prior5probes/1native sequence conservatively quarantined; one repeated cast is not a player follow-up. Rerun bounded public CPU recipes before promoting repaired-source acceptance. |
 | Ember |Grounded thermal shoulder/hip drive, decisive hammer follow-through, full recoil/settle and outer-range fist/fire silhouette. |
 | Rook |Wide support, armor compression, deliberate recovery, measured mass and planted pivot. |
 | Juno |Compact snap, quick weight switches, planted charged pivots and distinct aerial snap recovery. |
@@ -38,3 +41,18 @@ Current runtime d5eb2f140cc69377389dadedf222d263b58efd5a; landing source26cf7c81
 | Yang |Ordered outward releases, geometric cadence, defined landing and cosmic construction grammar. |
 
 These are independently original designs. Nintendo footage remains design-reference context only. No imported Nintendo media/code. No human quality rating assigned. Current technical tests do not imply a finished fighting game.
+
+
+## Current full-roster energy/expression increment
+
+| Ticket | Status and reproducible acceptance | Next action |
+|---|---|---|
+| P03-E persistent aura | Implementedall9/bothbodies/bothfacings;36lifecyclecasesPASS. Meter100maximum,75ascension; original3Dbodyanchors/meshgrammar andquietownedambience; pause/KO/depletion/modelswap/intensity verified | Native all18paired fixtures/foregroundbarcodes pendingstorage; compare actual normal-speed silhouettes, depth and individual shape/motion. Full/Balanced/Reduced settings and originalaudio needownerreview. |
+| P03-X action lines |18bodycasesPASS; originalactual-displacement speedlines, resolvedstartup convergence, authoredlimb-path smears, confirmedheavy accent, full-meterarrival.5short-startup boundaryfails retained/corrected.8focused suitesPASS | Native per-fighter contact/whiff/shield timing and foregroundframes; actualphysics/activation trace mustmatch. No unsupportedtunnel/true-deformation claim. |
+| T07 fractional aura selection | Reproduced162boundary failures/153samples across216moves, plus live99.2→base in36cases. Integer-bin selectioncorrected;21816approved integer-scaled dictionaries hashidentical | Final15suite sourceintegrationrunning. Validate current-source CPU defense/projectiles afterfix. No threshold/rate/multiplier/input/collision data changed. |
+| P03-G ground energy contact | Intentionally unshipped: visible boots33–38px belowphysicalfloor; floor-only/capsule candidates unsafe | Resolve coupled body/camera/strike/floor contract. Gate anyfootfall accents on actual visible support, never invent ground contact or hidepenetration. |
+| P03-N current native energy review | BLOCKED_STORAGE.3400frame attempt neverstarted becausevolatilefreecapacity below2GiB+256KiB/frameguard. Existingfailedmovementmontage disqualified, three-modelclock240samplesverified | No deletion of33worktrees/backups/evidence. Whenreserve stable above3GiB, runNativeEmpowerment once; verifierrefuses sheets onframe/identity mismatch. |
+
+All9have one freshd637900-frame activeCPU attempt:116hits160blocks,0newtruepairs. Beforetierfix sourcebinding retained; recentpostfixpass willbe separatelylabeled. Qualified108cellcoverage84observed/24unverified afterguard+projectile exclusions. Data gap isnotautomaticfailure. Existing36directions throwfix/stockloss/145nodes/1025cues unchanged; no newowner/device/release gateearned.
+
+Next authored work stays roster-wide: eachfighter's original motionlanguage, meaningful pelvis/torso/limbkineticchain and actual supportingfeet. Starts/stops/pivots are implemented candidates; corrective steps, move-specificfollow-through, shield/throw acting, directionalair contact andsecondarymotion requireproduction work. Native readability/normal-speed quality isunverified until storage andrendered evidence permitassessment.
