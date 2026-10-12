@@ -44,6 +44,20 @@ AIR={
 'yin':(.20,.02,.050,.050,.020),
 'yang':(-.12,.02,.035,.035,.055)}
 
+
+# Original grounded landing mechanics: depth, pitch, pelvis/chest counterturn,
+# lateral balance, settle cadence, hand opening and forward catch. Visual only.
+LAND={
+'ember-vale':(.060,.18,.11,.13,.006,.72,.025,.015),
+'rook-ironside':(.065,.09,.07,-.03,.012,.88,.010,-.005),
+'juno-spark':(.032,.12,-.13,.18,-.007,.45,-.015,.025),
+'kaia-windrow':(.038,-.05,-.16,.12,.018,.67,.055,.045),
+'nix-calder':(.024,.06,.035,.015,.002,.40,-.020,.008),
+'orion-vell':(.045,-.08,.20,-.19,.010,.76,.035,-.025),
+'vesper-nyx':(.034,.09,-.19,-.09,-.014,.57,.010,-.040),
+'yin':(.044,.16,-.10,-.17,0.,.85,-.035,-.015),
+'yang':(.028,-.06,.10,.18,.002,.52,.045,.035)}
+
 def unit(x):
  n=np.linalg.norm(x); return x/max(n,1e-10)
 def matrix(q):
@@ -170,21 +184,34 @@ def make_state(r,fid,name):
  length=32 if name in ['run','run_loop','dash_loop'] else 48 if name in ['walk','walk_loop'] else 24 if name.startswith('land') else 60
  loop=name in ['idle','idle_primary','idle_secondary','walk','walk_loop','run','run_loop','dash_loop','shield','shield_hold','fall','aura_charge','aura_ready','charged_idle']
  tracks={n:[] for n in r if n not in ['Root','Toes_L','Toes_R']}
+ landing=name.startswith('land');support_error=0.
  for f in range(length+1):
   t=f/length;wave=math.sin(2*math.pi*t);pulse=math.sin(math.pi*t);travel=name in ['walk','walk_loop','run','run_loop','dash_loop'];hurt=name in ['hurt_light','hurt_heavy','hitstun_ground','launch','launched','tumble','defeat']
   if hurt and name!='defeat':pulse=blend([(0,1.),(.18,.85),(.65,.30),(1,0.)],t)*(.60 if name=='hurt_light' else 1.)
   rots={};pos={}
+  land_pulse=0.
+  if landing:
+   depth,pitch,pelvis_turn,chest_turn,balance,settle,opening,catch=LAND[fid]
+   land_pulse=blend([(0,1.),(.14,.88),(settle,.18),(1,0.)],t)*(1. if name=='land_hard' else .60)
   turn=.05*wave if travel else -.18*pulse if hurt else .012*wave
   lean=run_lean*(1.18 if name=='dash_loop' else 1.0) if name in ['run','run_loop','dash_loop'] else -.32*pulse if hurt else .06*pulse if name.startswith('land') else -.02
   for n,angles in {'Hips':(0,hip*turn,0),'Spine':(lean*.25,0,0),'Chest':(lean,chest*turn,0),'Neck':(lean*.15,0,0),'Head':(-lean*.22,0,0)}.items():rots[n]=r[n]['r']@euler(*angles)
+  if landing:
+   rots['Hips']=r['Hips']['r']@euler(pitch*land_pulse*.25,pelvis_turn*land_pulse,balance*land_pulse*2)
+   rots['Spine']=r['Spine']['r']@euler(-.02*.25+pitch*land_pulse*.25,0,0)
+   rots['Chest']=r['Chest']['r']@euler(-.02+pitch*land_pulse,chest_turn*land_pulse,-balance*land_pulse)
+   rots['Neck']=r['Neck']['r']@euler((-.02+pitch*land_pulse)*.15,0,0)
+   rots['Head']=r['Head']['r']@euler(-(-.02+pitch*land_pulse)*.22,0,0)
   lower=compression+(.012*abs(wave) if travel else .045*pulse if name.startswith('land') else .035*pulse if hurt else .003*wave)
-  pos['Hips']=r['Hips']['p']+np.array([sway*wave if travel else 0,-lower,.012 if travel else 0])*scale
+  if landing:lower=compression+depth*land_pulse
+  pos['Hips']=r['Hips']['p']+np.array([sway*wave if travel else balance*land_pulse if landing else 0,-lower,.012 if travel else catch*land_pulse if landing else 0])*scale
   for hand in ['L','R']:
    sign=-1 if hand=='L' else 1;target=np.array([sign*.14,guard,-.15])*scale
    if travel:target+=np.array([0,-.08,(arm_swing if hand=='L' else -arm_swing)*wave])*scale
    if name in ['shield','shield_hold']:target=np.array([sign*.11,guard+.02,-.20])*scale
    if name in ['aura_charge','aura_ready','charged_idle']:target=np.array([sign*(.13+.012*wave),guard-.10,-.17])*scale
    if hurt:target+=np.array([sign*.045*pulse,-.06*pulse,.08*pulse])*scale
+   if landing:target+=np.array([sign*opening*land_pulse,-.045*land_pulse,-catch*land_pulse])*scale
    if name=='victory':target+=np.array([sign*.09*pulse,.16*pulse,-.04*pulse])*scale
    target[2]*=-1 # Live FighterFacingContract models face +Z.
    g=solve(r,rots,pos,'UpperArm_'+hand,'LowerArm_'+hand,'Hand_'+hand,target,np.array([sign*.7,-.5,-.12]));rots['Hand_'+hand]=g[r['Hand_'+hand]['parent']][0].T@rest['Hand_'+hand][0]
@@ -203,23 +230,27 @@ def make_state(r,fid,name):
     _,_,tuck_l,tuck_r,separation=AIR[fid]
     goal+=np.array([0,(tuck_l if leg=='L' else tuck_r)*pulse,(separation if leg=='L' else -separation)*pulse])*scale
    g=solve(r,rots,pos,'UpperLeg_'+leg,'LowerLeg_'+leg,'Foot_'+leg,goal,np.array([0,0,-1.]));rots['Foot_'+leg]=g[r['Foot_'+leg]['parent']][0].T@rest['Foot_'+leg][0]
+   if landing:support_error=max(support_error,float(np.linalg.norm(g['Foot_'+leg][1]-goal)))
   for n in tracks:tracks[n].append({'time_s':round(f/60,6),'rotation_quat':[round(float(x),7) for x in quat(rots.get(n,r[n]['r']))],**({'position_m':[round(float(x),7) for x in pos[n]]} if n in pos else {})})
- return {'gait_half_stride_m':stride*(.72 if name.startswith('walk') else 1.0)*scale if name in ['walk','walk_loop','run','run_loop','dash_loop'] else 0,'duration_frames':length,'loop':loop,'relative_to_rest':False,'bone_tracks':tracks,'technique':'authored_'+name,'authoring':'original locomotion/reaction blocking; no root motion authority'}
+ return {'gait_half_stride_m':stride*(.72 if name.startswith('walk') else 1.0)*scale if name in ['walk','walk_loop','run','run_loop','dash_loop'] else 0,'duration_frames':length,'loop':loop,'relative_to_rest':False,'bone_tracks':tracks,'technique':'authored_'+name,'max_baked_support_error_m':support_error,'landing_direction':LAND[fid] if landing else None,'authoring':'original locomotion/reaction blocking; no root motion authority'}
 
-rows=[]
-for fid in DIRECTION:
- moves=json.loads((ROOT/f'game-godot/data/moves/{fid}.json').read_text())['moves']
- for variant in ['male','female']:
-  r,h=rig(fid,variant);clips={}
-  for move in moves:
-   for facing in [1,-1]:clips[move['move_id']+('_left' if facing==-1 else '')]=make_clip(r,fid,move,facing)
-  for name in ['idle','idle_primary','idle_secondary','walk','walk_loop','run','run_loop','dash_loop','jump','fall','land_soft','land_hard','shield','shield_hold','aura_charge','aura_ready','charged_idle','hurt_light','hurt_heavy','hitstun_ground','launch','launched','tumble','victory','defeat']:
-   clips[name]=make_state(r,fid,name)
-  clips['aura_charge_left']=clips['aura_charge']
-  for move in moves:
-   for facing in [1,-1]:
-    clip=clips[move['move_id']+('_left' if facing==-1 else '')]
-    rows.append({'fighter':fid,'body':variant,'facing':facing,'move':move['move_id'],'technique':clip['technique'],'contact_frame':clip.get('contact_frame',-1),'support_slip_m':clip.get('max_baked_support_slip_m',0),'status':'AUTHORED_RUNTIME_BLOCKING_NOT_HUMAN_APPROVED'})
-  dest=ROOT/f'game-godot/data/animation/combat_choreography/{fid}_{variant}.json';dest.parent.mkdir(exist_ok=True);dest.write_text(json.dumps({'schema':'original_combat_blocking/v1','fighter':fid,'body':variant,'rig_sha256':h,'direction':DIRECTION[fid][-1],'mesh_forward_axis':'+Z (live FighterFacingContract)','clips':clips},separators=(',',':'))+'\n')
-report=ROOT/'artifacts/v1_closure/spectral_feedback/continuous_1011/CHOREOGRAPHY_MATRIX.json';report.parent.mkdir(parents=True,exist_ok=True);report.write_text(json.dumps({'rows':rows,'human_pass':False,'root_motion_authoritative':False,'foot_scope':'baked rig-space support during stationary strikes; moving-world gait distance matching, complete world foot lock not claimed','locomotion':'original fighter-specific support/swing gaits; authored turn/stop and cosmic non-athletic variants remain unfinished','secondary':'bounded original accessory-follow layer implemented; authored cloth/armor production unfinished','provenance':'Independently authored hand/body paths and bilateral rig-specific retargeting; no external clips; existing models retained'},indent=2)+'\n')
-print(json.dumps({'clips':len(rows),'max_baked_slip_m':max(x['support_slip_m'] for x in rows)}))
+def build_all():
+ rows=[]
+ for fid in DIRECTION:
+  moves=json.loads((ROOT/f'game-godot/data/moves/{fid}.json').read_text())['moves']
+  for variant in ['male','female']:
+   r,h=rig(fid,variant);clips={}
+   for move in moves:
+    for facing in [1,-1]:clips[move['move_id']+('_left' if facing==-1 else '')]=make_clip(r,fid,move,facing)
+   for name in ['idle','idle_primary','idle_secondary','walk','walk_loop','run','run_loop','dash_loop','jump','fall','land_soft','land_hard','shield','shield_hold','aura_charge','aura_ready','charged_idle','hurt_light','hurt_heavy','hitstun_ground','launch','launched','tumble','victory','defeat']:
+    clips[name]=make_state(r,fid,name)
+   clips['aura_charge_left']=clips['aura_charge']
+   for move in moves:
+    for facing in [1,-1]:
+     clip=clips[move['move_id']+('_left' if facing==-1 else '')]
+     rows.append({'fighter':fid,'body':variant,'facing':facing,'move':move['move_id'],'technique':clip['technique'],'contact_frame':clip.get('contact_frame',-1),'support_slip_m':clip.get('max_baked_support_slip_m',0),'status':'AUTHORED_RUNTIME_BLOCKING_NOT_HUMAN_APPROVED'})
+   dest=ROOT/f'game-godot/data/animation/combat_choreography/{fid}_{variant}.json';dest.parent.mkdir(exist_ok=True);dest.write_text(json.dumps({'schema':'original_combat_blocking/v1','fighter':fid,'body':variant,'rig_sha256':h,'direction':DIRECTION[fid][-1],'mesh_forward_axis':'+Z (live FighterFacingContract)','clips':clips},separators=(',',':'))+'\n')
+ report=ROOT/'artifacts/v1_closure/spectral_feedback/continuous_1011/CHOREOGRAPHY_MATRIX.json';report.parent.mkdir(parents=True,exist_ok=True);report.write_text(json.dumps({'rows':rows,'human_pass':False,'root_motion_authoritative':False,'foot_scope':'baked rig-space support during stationary strikes; moving-world gait distance matching, complete world foot lock not claimed','locomotion':'original fighter-specific support/swing gaits; authored turn/stop and cosmic non-athletic variants remain unfinished','secondary':'bounded original accessory-follow layer implemented; authored cloth/armor production unfinished','provenance':'Independently authored hand/body paths and bilateral rig-specific retargeting; no external clips; existing models retained'},indent=2)+'\n')
+ print(json.dumps({'clips':len(rows),'max_baked_slip_m':max(x['support_slip_m'] for x in rows)}))
+
+if __name__=="__main__":build_all()

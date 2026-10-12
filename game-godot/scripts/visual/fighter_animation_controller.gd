@@ -9,6 +9,7 @@ const _BoneMap = preload("res://scripts/visual/procedural_bone_map.gd")
 const _MoveResolver = preload("res://scripts/visual/runtime_move_resolver.gd")
 
 var _fighter
+var _runtime_fighter: Node
 var _player: AnimationPlayer
 var _skeleton: Skeleton3D
 var _skeleton_path: NodePath = NodePath()
@@ -62,6 +63,9 @@ func setup(fighter, model_root: Node3D) -> void:
 	_load_procedural_clips(model_root)
 
 
+func bind_runtime_fighter(fighter: Node) -> void:
+	_runtime_fighter = fighter
+
 func play_for_state(state: String, move: Dictionary = {}) -> void:
 	_move_synchronized = state.begins_with("attack") or state.begins_with("special") or state.begins_with("aura_burst") or state.begins_with("throw")
 	if _player == null or not is_instance_valid(_player):
@@ -74,6 +78,8 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 	var move_id := str(move.get("move_id", "")) if action_state else ""
 	var resolved: Dictionary = _MoveResolver.resolve_clip(state, move_id, _loaded_clips)
 	var clip := str(resolved.get("clip", ""))
+	if state == _FighterStates.LAND and is_instance_valid(_runtime_fighter) and _runtime_fighter._fast_falling and _loaded_clips.has("land_hard"):
+		clip = "land_hard"
 	var directional_id := move_id+("_left" if _visual_facing==-1 else "")
 	if action_state and _player.has_animation("combat_choreography/"+directional_id): clip=directional_id
 	if clip.is_empty() or not _loaded_clips.has(clip):
@@ -294,8 +300,19 @@ func _load_authored_studies() -> void:
 	_player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
 
 func _process(delta: float) -> void:
+	if _synchronize_landing(): return
 	if _player != null and is_instance_valid(_player) and _player.has_animation_library("authored_studies") and not _move_synchronized and not _locomotion_synchronized and not presentation_frozen:
 		_player.advance(delta)
+
+func _synchronize_landing() -> bool:
+	if not is_instance_valid(_runtime_fighter) or _player == null or not is_instance_valid(_player): return false
+	if _runtime_fighter.state_machine.current_state != _FighterStates.LAND or not _player.current_animation.begins_with("combat_choreography/land_"): return false
+	if not presentation_frozen:
+		# Recovery remains gameplay-owned. Complete absorption and stabilization
+		# within its resolved duration, including fast-fall/aerial overrides.
+		var phase := clampf(_runtime_fighter.state_machine.state_time / maxf(.001,_runtime_fighter.state_machine.landing_lag),0,1)
+		_player.seek(phase * _player.current_animation_length,true)
+	return true
 
 func synchronize_move(frame: int,move: Dictionary) -> void:
 	if _player == null or not is_instance_valid(_player): return
@@ -351,6 +368,9 @@ func synchronize_locomotion(world_position: Vector2, model, grounded: bool) -> v
 	_last_world_position = world_position; _world_position_valid = true
 	_locomotion_synchronized = false
 	if _player == null or model._camera == null or _skeleton == null: return
+	if _synchronize_landing():
+		_locomotion_synchronized = true
+		return
 	var clip := str(_player.current_animation).get_slice("/",1)
 	if not grounded or not _gait_half_stride.has(clip) or _move_synchronized: return
 	_locomotion_synchronized = true

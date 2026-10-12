@@ -2,6 +2,8 @@ extends "res://tests/v1_closure/RosterFootwork.gd"
 ## Actual public jump/fast-fall landings. Idle target: not combo/match evidence.
 var actor
 var landing_contact: Dictionary={}
+var movie_pilot := false
+var review_label: Label
 func first_hips_y(animation: Animation) -> float:
 	for track in range(animation.get_track_count()):
 		if animation.track_get_type(track)==Animation.TYPE_POSITION_3D and str(animation.track_get_path(track)).ends_with(":Hips"):
@@ -13,21 +15,27 @@ func observe_landing(_from: String,to: String) -> void:
 	sk.force_update_all_bone_transforms()
 	var hip: int=sk.find_bone("Hips")
 	var neutral: float=first_hips_y(player.get_animation("combat_choreography/idle_primary"))
-	landing_contact={"physics_frame":Engine.get_physics_frames(),"animation":player.current_animation,"clip_time_s":player.current_animation_position,"initial_hip_y_m":sk.get_bone_pose_position(hip).y,"neutral_hip_y_m":neutral,"resolved_landing_lag_s":actor.state_machine.landing_lag,"fast_fall":actor._fast_falling,"world_feet":feet(actor.model_3d),"model_path":actor.model_3d._proxy_model.scene_file_path}
+	landing_contact={"physics_frame":Engine.get_physics_frames(),"movie_frame":Engine.get_process_frames()-1,"animation":player.current_animation,"clip_time_s":player.current_animation_position,"initial_hip_y_m":sk.get_bone_pose_position(hip).y,"neutral_hip_y_m":neutral,"resolved_landing_lag_s":actor.state_machine.landing_lag,"fast_fall":actor._fast_falling,"world_feet":feet(actor.model_3d),"model_path":actor.model_3d._proxy_model.scene_file_path}
 func _run() -> void:
 	await process_frame
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--ordinary-output="):output=arg.get_slice("=",1)
+		if arg=="--landing-movie-pilot":movie_pilot=true
 	var gs=root.get_node("GameState");gs.mode="versus";gs.stage_id="training-grid";gs.p1_fighter_id="ember-vale";gs.p2_is_cpu=false;gs.stocks=9;gs.match_timer_seconds=1800
 	root.get_node("SceneRouter").go("battle")
 	for i in range(220):await physics_frame
 	actor=current_scene.fighter1;var d=current_scene.fighter2;d.controls_enabled=false;d.position.x=440
+	if movie_pilot:
+		var layer:=CanvasLayer.new();layer.layer=95;current_scene.add_child(layer)
+		review_label=Label.new();review_label.position=Vector2(20,112);review_label.add_theme_font_size_override("font_size",19);layer.add_child(review_label)
 	actor.state_machine.state_changed.connect(observe_landing)
 	for fid in Renderer.IDS:
 		for body in ["male","female"]:
-			gs.p1_body_variant=body;actor.configure(fid,1,false,9,Vector2(-100,240))
-			for facing in [1,-1]:
+			gs.p1_fighter_id=fid;gs.p1_body_variant=body;actor.configure(fid,1,false,9,Vector2(-100,240))
+			if movie_pilot:current_scene._p1_panel.configure(actor.data.get("displayName",fid),Color(actor.data.get("color",Color.WHITE)),9,false)
+			for facing in ([1] if movie_pilot else [1,-1]):
 				for fast in [false,true]:
+					if movie_pilot:review_label.text="%s · %s · public %s\nMovement fixture · idle target · no combo/competitive acceptance"%[fid,body,"jump + fast-fall" if fast else "jump + landing"]
 					for key in ["left","right","jump","down","attack"]:Input.action_release("p1_"+key)
 					# Initial isolated geometry placement only; subsequent motion uses inputs.
 					actor.position=Vector2(-100,240)
