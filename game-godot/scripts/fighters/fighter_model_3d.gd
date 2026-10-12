@@ -682,6 +682,14 @@ func set_empowerment_state(snapshot: Dictionary) -> void:
 func get_empowerment_evidence() -> Dictionary:
 	return _body_aura.evidence() if is_instance_valid(_body_aura) else {"active":false,"super_ready":false,"vertices":0}
 
+func project_bone_to_combat_world(canonical: String) -> Vector2:
+	if _visible_skeleton==null or _camera==null or _display==null:return Vector2.INF
+	var index:=_visible_skeleton.find_bone(_BoneMap.resolve_on_skeleton(_visible_skeleton,canonical))
+	if index<0:return Vector2.INF
+	_visible_skeleton.force_update_all_bone_transforms()
+	var projected:=_camera.unproject_position(_visible_skeleton.to_global(_visible_skeleton.get_bone_global_pose(index).origin))
+	return _display.to_global(projected-Vector2(_viewport.size)*.5+_display.offset)
+
 
 func set_aura_tier(tier: int) -> void:
 	_aura_tier = clampi(tier, 0, 3)

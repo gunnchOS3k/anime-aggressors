@@ -23,6 +23,7 @@ var probe := ""
 var same_fighter_comparison := false
 var turn_latch := 0
 var retreating := false
+var empowerment_observations: Array=[]
 func _init() -> void: call_deferred("_run")
 func inputs(actions: Array) -> void:
 	if actions != held:input_events.append({"movie_frame":Engine.get_process_frames()-1,"actions":actions.duplicate(),"axis_strength":.55 if not probe.is_empty() else 1.0})
@@ -71,7 +72,7 @@ func write_evidence() -> void:
 		"starting_opponent_damage":50 if band=="medium" else 110 if band=="high" else 0,"body_presentations":[battle.fighter1.data.body_variant,battle.fighter2.data.body_variant],"same_fighter_comparison":same_fighter_comparison,"opponent_cpu":battle.fighter2.is_cpu,"controls_enabled":battle.fighter2.controls_enabled,
 		"forced_moves":false,"forced_ko":false,"frozen_opponent":false,"story_receipts":false,"human_playthrough":false,
 		"idle_fixture_not_combo_evidence":idle_opponent,"probe":probe,"exact_trace":exact_trace,"state_transitions":transitions,"move_phases":phases,"public_inputs":input_events,"moves":events,"contacts":contacts,"visual_contacts":visual_contacts,"samples":samples,"ko_events":ko_events,
-		"presentation_events":renderer.history if renderer != null else [],"pool":renderer.stats() if renderer != null else {},"player_damage":battle.fighter1.damage_percent,"opponent_damage":battle.fighter2.damage_percent},"  ")+"\n");file.close()
+		"presentation_events":renderer.history if renderer != null else [],"empowerment_observations":empowerment_observations,"expression":battle.fighter1.get_node("CombatExpressionDirector").action_lines.evidence(),"pool":renderer.stats() if renderer != null else {},"player_damage":battle.fighter1.damage_percent,"opponent_damage":battle.fighter2.damage_percent},"  ")+"\n");file.close()
 func _run() -> void:
 	await process_frame
 	seed(431017)
@@ -144,6 +145,9 @@ func _run() -> void:
 				retreating=false
 				actions=["right" if dx>0 else "left"];turn_latch=maxi(0,turn_latch-1)
 		inputs(actions)
+		if frame%30==0:
+			var body_aura: Dictionary=p.model_3d.get_empowerment_evidence()
+			empowerment_observations.append({"frame":Engine.get_process_frames()-1,"meter":p.aura,"active":body_aura.get("active",false),"super_ready":body_aura.get("super_ready",false),"grammar":body_aura.get("grammar","calm"),"vertices":body_aura.get("vertices",0),"draw_cpu_us":body_aura.get("draw_cpu_us",0),"ambience_playing":p._elemental_audio!=null and p._elemental_audio.ambience!=null and p._elemental_audio.ambience.playing})
 		if exact_trace or frame%6==0:
 			samples.append({"movie_frame":Engine.get_process_frames()-1,"p1_state":p.state_machine.current_state,"p1_hitstop":p._hitstop,"p2_hitstop":battle.fighter2._hitstop,"p1_can_attack":p.state_machine.can_attack(),"p2_can_attack":battle.fighter2.state_machine.can_attack(),"p2_state_time":battle.fighter2.state_machine.state_time,"p2_hitstun_duration":battle.fighter2.hitstun_remaining,"p1_move":p.move_runner.current_move_id(),"p1_move_frame":p.move_runner.total_frame,"p1_phase":p.move_runner.phase,"p1_cancel_window":p.move_runner.in_cancel_window,"p2_state":battle.fighter2.state_machine.current_state,"p1_position":[p.position.x,p.position.y],"p2_position":[battle.fighter2.position.x,battle.fighter2.position.y],"p1_facing":p.facing,"p2_facing":battle.fighter2.facing,"p2_velocity":[battle.fighter2.velocity.x,battle.fighter2.velocity.y],"p1_damage":p.damage_percent,"p2_damage":battle.fighter2.damage_percent,"process_time_s":Performance.get_monitor(Performance.TIME_PROCESS),"physics_time_s":Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS)})
 		if frame%30==0:write_evidence()

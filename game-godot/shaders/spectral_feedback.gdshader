@@ -78,6 +78,32 @@ void fragment() {
  else if(kind==6) { shape=crescent*0.55; core=0.0; bits=0.0; }
  else if(kind==7) { shape+=ring(p,0.2+t*0.7,0.025); core*=0.5; }
  else if(kind==8) { shape*=0.45; core=0.0; bits=0.0; }
+ // Original comic action grammar. Whiff/anticipation/motion never uses a core.
+ if(kind>=13) {
+  core=0.0;bits=0.0;shape=0.0;
+  if(kind==13 || kind==15) {
+   for(int i=0;i<6;i++) {
+    float j=float(i), y=(j-2.5)*0.105;
+    float bend=(family==3 || family==5)?sin(p.x*3.0+j)*0.10:0.0;
+    if(family==2) bend=sin(p.x*22.0+j)*0.035;
+    if(family==6) bend=step(0.0,p.x)*0.06;
+    float segment=family==1?step(0.3,hash(vec2(floor(p.x*5.0),j))):1.0;
+    float stroke=line(vec2(p.x,p.y-bend),vec2(-.8,y),vec2(.55,y*.25),0.005+(family==0?0.012:0.0));
+    shape+=stroke*smoothstep(-.9,-.5,p.x)*(1.0-smoothstep(.2,.8,p.x))*segment*step(j,5.0*density)*.52;
+   }
+   if(family==4)shape*=step(0.1,abs(p.x));
+   if(family==7)shape*=1.0-smoothstep(.15,.75,abs(p.x));
+   if(family==8)shape*=.65+.35*step(.5,fract(p.x*4.0));
+  } else if(kind==14) {
+   for(int i=0;i<6;i++){float q=float(i)*1.047;vec2 d=vec2(cos(q),sin(q));shape+=line(p,d*(.78-t*.25),d*(.5-t*.2),.008)*step(float(i),5.0*density)*.5;}
+  } else if(kind==16) {
+   for(int i=0;i<8;i++){float q=float(i)*.785+float(family)*.17;vec2 d=vec2(cos(q),sin(q));shape+=line(p,d*.1,d*(.55+t*.2),.013)*step(float(i),7.0*density)*.6;}
+   shape+=ring(p,.18+t*.18,.015)*.35;
+  } else if(kind==17) {
+   float facet=max(abs(p.x)*.866+abs(p.y)*.5,abs(p.y));
+   shape=(family==8)?(1.0-smoothstep(.014,.035,abs(facet-(.2+t*.4))))*.5:ring(p,.2+t*.48,.018)*.42;
+  }
+ }
  float alpha=clamp((shape*f+bits*f+core)*accent.a,0.0,0.88);
  vec3 ink=mix(accent.rgb,vec3(1.0,0.97,0.88),clamp(core,0.0,1.0)*0.8);
  if(family==0 && kind!=4 && kind!=6) { float thermal=clamp((1.0-r)*n*f,0.0,1.0); ink=mix(ink,vec3(1.0,0.75,0.17),thermal*0.65); }

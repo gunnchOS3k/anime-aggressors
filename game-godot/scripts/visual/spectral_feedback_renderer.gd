@@ -46,6 +46,7 @@ func contact(info: Dictionary, defender: Node2D) -> bool:
 	var heavy := str(info.get("feedback_tier","light")) in ["heavy","aura","super"]
 	emit_effect(fid,10 if result == "armor" else 1 if result in ["shield","parry","clash"] else 0,origin,direction,190 if heavy else 140,.26 if heavy else .18,event_id)
 	if result == "hit":
+		if heavy:emit_effect(fid,16,origin,direction,128,.10,event_id+":confirmed_expression")
 		emit_effect(fid,8,defender.global_position+Vector2(0,-24),direction,74,.2,event_id+":hurt",defender)
 	return true
 
