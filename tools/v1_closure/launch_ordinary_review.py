@@ -37,6 +37,12 @@ p.add_argument("--driver-arg",action="append",default=[])
 a = p.parse_args()
 if not re.fullmatch(r'[a-zA-Z0-9_-]{1,64}', a.profile):
     p.error('Profile must be 1–64 letters, numbers, underscores or hyphens')
+if a.movie:
+    # Native review only: existing1280x720MJPEGcapturesmeasure48–58KiB/frame.
+    # Reserve256KiB/frame conservatively plusowner's2GiBnativefloor.
+    required=2*1024**3+a.movie_frames*262144
+    if shutil.disk_usage(ROOT).free<required:
+        raise SystemExit('Native recording reserve exhausted; no capture started. Heavy platform exports require18GiB.')
 wrapper = Path(tempfile.mkdtemp(prefix='aa-ordinary-review-'))
 project = wrapper/'game-godot'
 project.mkdir()
