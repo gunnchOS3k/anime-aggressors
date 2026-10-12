@@ -4,6 +4,7 @@ extends "res://tests/v1_closure/RosterContactAlignment.gd"
 var pilot := false
 var floor_only := false
 var experimental_floor_anchor := false
+var experimental_capsule_framing := false
 var mesh_cache: Dictionary={}
 var pre_reaction_body: Dictionary={}
 func observe_before_reaction(info: Dictionary) -> void:
@@ -59,6 +60,19 @@ func polygon_gap(a: PackedVector2Array,b: PackedVector2Array) -> float:
 		for i in range(a.size()):minimum=minf(minimum,v.distance_to(Geometry2D.get_closest_point_to_segment(v,a[i],a[(i+1)%a.size()])))
 	return minimum
 func rect_polygon(rect: Rect2) -> PackedVector2Array:return PackedVector2Array([rect.position,Vector2(rect.end.x,rect.position.y),rect.end,Vector2(rect.position.x,rect.end.y)])
+func frame_capsule_fixture(actor) -> Dictionary:
+	# Isolated coordinate proposal: fit the core visible body height to the
+	# existing hurt height via uniform orthographic framing, then anchor soles.
+	# Never mutates rigs, bones, source meshes or competitive shapes/values.
+	var top_y: float=INF;var sole_y: float=-INF
+	for point in projected_surface(actor.model_3d,"",true):top_y=minf(top_y,point.y)
+	for side in ["L","R"]:
+		for point in projected_surface(actor.model_3d,"Foot_"+side):sole_y=maxf(sole_y,point.y)
+	var hurt_bounds: Rect2=actor.hit_resolver._world_bounds(actor.get_node("Hurtbox/HurtShape"))
+	var visible_height: float=sole_y-top_y
+	var old_size: float=actor.model_3d._camera.size
+	actor.model_3d._camera.size*=visible_height/hurt_bounds.size.y
+	return {"reference_stance_height_px":visible_height,"target_hurt_height_px":hurt_bounds.size.y,"camera_before":old_size,"camera_after":actor.model_3d._camera.size,"scope":"UNSHIPPED core-capsule-framing proposal; art/readability unapproved"}
 func anchor_floor_fixture(actor) -> void:
 	# Explicit visual-only experiment. Never changes shipping anchors, shapes,
 	# model assets, movement or combat authority.
@@ -112,6 +126,7 @@ func _run() -> void:
 		if arg=="--range-pilot":pilot=true
 		if arg=="--floor-only":floor_only=true
 		if arg=="--experimental-floor-anchor":experimental_floor_anchor=true
+		if arg=="--experimental-capsule-framing":experimental_capsule_framing=true
 	var gs=root.get_node("GameState");gs.mode="versus";gs.stage_id="training-grid";gs.p1_fighter_id="ember-vale";gs.p2_fighter_id="juno-spark";gs.p2_is_cpu=false;gs.stocks=9;gs.match_timer_seconds=1800
 	root.get_node("SceneRouter").go("battle")
 	for i in range(220):await physics_frame
@@ -131,9 +146,11 @@ func _run() -> void:
 						var distance: float=32.0 if spacing=="close" else outer_distance if spacing=="outer" else 42.0
 						d.position.x=p.position.x+facing*distance
 						for i in range(30):await physics_frame
-						if experimental_floor_anchor:anchor_floor_fixture(p);anchor_floor_fixture(d)
+						var candidate_parameters: Dictionary={}
+						if experimental_capsule_framing:candidate_parameters={"attacker":frame_capsule_fixture(p),"defender":frame_capsule_fixture(d)}
+						if experimental_floor_anchor or experimental_capsule_framing:anchor_floor_fixture(p);anchor_floor_fixture(d)
 						p.controls_enabled=true;d.controls_enabled=true
-						active_case={"fighter":fid,"body":body,"facing":facing,"case":kind,"range":spacing,"initial_spacing_px":distance,"experimental_floor_anchor":experimental_floor_anchor}
+						active_case={"fighter":fid,"body":body,"facing":facing,"case":kind,"range":spacing,"initial_spacing_px":distance,"experimental_floor_anchor":experimental_floor_anchor,"experimental_capsule_framing":experimental_capsule_framing,"candidate_parameters":candidate_parameters}
 						if kind=="signature":p.aura=100
 						Input.action_press("p1_attack")
 						if kind=="heavy":Input.action_press("p1_special")
