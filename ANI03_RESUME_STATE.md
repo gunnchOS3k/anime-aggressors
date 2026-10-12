@@ -1,3 +1,23 @@
+# Native cleanup increment recovery — October 12, 2026
+
+Recovered local/remote02c91b0a427a2839237a9a548959ad995ffb4042 on release/anime-v1-dialogue-and-elemental-performance; runtime26cf7c8153affdde6bebc0bac9185ce1af8591f7. Five final affected presentation suites PASS, logs preserved; exact02c91GitHub checks now all8SUCCESS. This metadata checkpoint preserves final results and all18body visibility sheet before new source work. All33worktrees and backups unchanged; no Godot/test active; free~6.9GiB. No heavy exports below18GiB; native reserve2GiB. Human/releasegatesfalse.
+
+Read newest owner directive attachment e132faa0: next P01-G02 native material cleanup reproduction all18models, then coupled floor/contact proposal, all9starts/stops/pivots and32missing gameplaycells. Keep unsafe floor-only/capsule experiments unshipped, no balance/geometry changes, no golden slice or repeated capturecampaign. Exact next command: sed -n '1244,1298p' game-godot/scripts/fighters/fighter_model_3d.gd. Preserve source via normal commit/push before long work. No owned process running.
+
+---
+# Final affected validation and continuation — October 12, 2026
+
+Branch: release/anime-v1-dialogue-and-elemental-performance. Last pushed package02c91b0a427a2839237a9a548959ad995ffb4042; shipping runtime26cf7c8153affdde6bebc0bac9185ce1af8591f7 unchanged. Resolve commit containing this final entry for next metadata HEAD. All5landing_presentation_integration_1012 suites PASS at02c91b0a:ShippingRosterPath18variants101s,ElementalPerformance14.49s,DialogueProduction1025cues1.91s,OwnerOverrideFaces14.02s,SpectralFeedback6.92s;0script errors, existingresource/materialdiagnosticsretained. Guard+modalFull145staged/18roster/restart previouslyPASS7ae; gameplayauthority unchanged bylandingvisuals. Native all18bodyoverviewvisuallychecked, variants visiblydifferent; no artapproval. NoownedGodot/test/capture remains.
+
+Review: OWNER_REVIEW.md andcontinuous_1011/current_owner_review/index.html (opened/queued inCodexpanel). Mainmanifest31videos pluscontact/body sheets/trace assets,source/hash/restrictions/guard exclusionsverified; everyhuman/releasegatefalse. Source26cf original18landingprofiles resolvedtoexistinglag; protectedrig/modelSHA andnonlandingcliphashesunchanged.76/108actualdamagecontactcells observed,32unverified;14newguardcorrectedCPUprobes123hits145blocks0newtrue25blocked83recovery; stricthistorical15truepairsretain. Genuinehorizontalstocklossreplicated5d66, oldnativeKOsource82preserved; noall9KO/fullmatchwinclaim.19headless/11nativeguardaffectedattemptsexcluded.
+
+CI exact02c91b0a snapshot7SUCCESS/1Windows2025IN_PROGRESS; currentruntime26cf also7/1atitslastsnapshot. Lastfullygreen historical8f10104d8success. Newreportcommittriggersnewjobs:inspectexacthead,neverclaimfinalSHAallgreenwithoutproof. All33worktrees/backups preserved,free~6.5GiB,18GiBheavyguard/2GiBnativefloor. Raw235MiBAVI andoriginalfailedplainlogsarelocalignored,losslessfailuregziptracked; allnewlegalcombatmovie/sheets/sourcearebeingpushed. RestrictedStoryvoicemedia remainslocalonly.
+
+Open sharedtechnicalblockers: floor/contactauthority (boot33–38pxbelowfloor,outerheavy/signature5–35pxgaps); standaloneanchor/capsulecandidatesunsafeandunshipped; nativeCompatibilityhotswapnullmaterialcleanup. Independentproductionwork: all9authoredstarts/stops/pivots,move-specificfollow-through,defense/throws/directionalair/secondarymotion,32unverifiedgameplaycells andmoreall-rosterKO/counterplay. Body/animationhumanapproval,ANI04acting/OVA/provoices/rights andANI05devices/releaseunfinished.
+
+Exactnext read-onlycommand: sed -n '1244,1298p' game-godot/scripts/fighters/fighter_model_3d.gd. Nextunblockedengineering: isolated2body nativeP01-G02cleanupreproduction,then safeownershipfix ifproved,all18visibility/resource regression; proceedall9starts/stops/pivotsandmeasuredfloor/contactproposal. Do notrepeatoldcapturecampaign or altergeometry/parry/clash/terrainbalance. Read NEXT_INCREMENT_PROMPT.md. Noreset/rebase/forcepush/merge/export/deploy/tag/publish.
+
+---
 # Native all-body review and reconciled package — October 12, 2026
 
 Runtime and last pushed source:26cf7c8153affdde6bebc0bac9185ce1af8591f7. Resolve report commit containing this entry for new pushed metadata HEAD. Branch release/anime-v1-dialogue-and-elemental-performance, draft123 stacked122. Guard/modal/all18 landing refinements saved; no source changes since26cf except recording/reconciliation tools and reports.

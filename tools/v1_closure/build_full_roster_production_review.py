@@ -36,7 +36,7 @@ for native in roster['rows']:
  legacy_guard=next(r for r in guard['rows'] if r['label']==fid+'_roster_choreography_low')
  missing=[name for name,observed in native['qualifying_categories'].items() if not observed]
  if not native['signature_observed']:missing.append('signature')
- rows.append({'fighter':fid,'runtime_source':args.runtime_source,'animation_data_source':'b5f2af11a61f912c78dfb198a33b872e351fd4ae',
+ rows.append({'fighter':fid,'runtime_source':args.runtime_source,'offensive_heavy_aerial_source':'b5f2af11a61f912c78dfb198a33b872e351fd4ae','landing_data_source':args.runtime_source,
  'IMPLEMENTED':'ORIGINAL_RUNTIME_CHOREOGRAPHY_CANDIDATE; production incomplete',
  'AUTOMATED_VERIFIED':'864 roster configurations; per-fighter44 geometry contacts,8 public landing cases,4 guard cases; scope-limited',
  'RUNTIME_VERIFIED':'native mirror femaleP1/maleCPU at67ae (guard limitations audited); refined geometry maleP1/femaleP2 atb5f2; landing refinement separately verified on latest source',
@@ -44,6 +44,7 @@ for native in roster['rows']:
  'BLOCKED':['shared floor/contact origin discrepancy','outer-range visible reach remains outside collision surface'],
  'candidate_review_material_available':True,'professional_quality_claimed':False,
  'body_presentations':['male','female'],'facings':[-1,1],
+ 'native_body_presentation_visibility_verified':True,'latest_landing_movie':'artifacts/v1_closure/spectral_feedback/rendered/roster_landings_26cf7c81.mp4','native_landing_source':args.runtime_source,
  'close_typical_hand_mesh_to_overlap_max_px':regular,'neutral_air_ascending_descending_hand_mesh_to_overlap_max_px':air,
  'outer_hand_mesh_gap_px':outer,'boot_below_physical_floor_max_px':f['baseline_boot_below_physical_floor_max_px'],
  'isolated_floor_candidate_hand_gap_px':f['candidate_typical_hand_gap_max_px'],'floor_candidate_shipped':False,
