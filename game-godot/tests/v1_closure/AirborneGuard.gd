@@ -53,6 +53,8 @@ func _run() -> void:
 				check(illegal_guard_frames.is_empty(),fid+body+str(facing)+":no_airborne_guard_lock")
 				check(returned_to_floor,fid+body+str(facing)+":authentic_gravity_and_landing")
 				check(p.stocks==start_stocks,fid+body+str(facing)+":no_spurious_stock_loss")
+				if returned_to_floor and p.stocks==start_stocks:
+					check(p.state_machine.current_state=="shield_hold" and p.shielding,fid+body+str(facing)+":grounded_guard_still_works")
 				check(d.is_cpu and d.controls_enabled,fid+body+str(facing)+":CPU_remains_active")
 				clear_player()
 				for i in range(3):await physics_frame

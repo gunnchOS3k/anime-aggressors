@@ -663,11 +663,15 @@ func _handle_actions() -> void:
 		if grab_range_debug:
 			grab_range_debug.visible = _show_grab_range
 		return
-	# Releasing guard must be handled before its action-lock gate; otherwise it
-	# remains latched until shield break even after the physical button is released.
-	if state_machine.current_state in [_FighterStates.SHIELD_HOLD, _FighterStates.SHIELD_START] and not _read_shield():
+	# is_on_floor() still describes the previous slide on the jump-impulse
+	# frame. Ground guard cannot replace an ascending jump, or its movement
+	# lock would preserve that impulse indefinitely instead of applying gravity.
+	var grounded_guard := is_on_floor() and velocity.y >= 0.0
+	# Release an invalid guard before its action-lock gate. Air dodge remains
+	# separate; the existing guard policy only permits shielding on the ground.
+	if state_machine.current_state in [_FighterStates.SHIELD_HOLD, _FighterStates.SHIELD_START] and (not _read_shield() or not grounded_guard):
 		shielding = false
-		state_machine.enter(_FighterStates.IDLE)
+		state_machine.enter(_FighterStates.IDLE if grounded_guard else _FighterStates.FALL)
 	if not state_machine.can_attack():
 		return
 	if _pending_attack_cmd != "":
@@ -698,7 +702,7 @@ func _handle_actions() -> void:
 	if _read_aura_burst() and aura >= 100.0:
 		_start_move_by_command("aura_burst")
 		return
-	if _read_shield() and is_on_floor() and not is_aura_input_held():
+	if _read_shield() and grounded_guard and not is_aura_input_held():
 		if state_machine.current_state != _FighterStates.SHIELD_HOLD:
 			state_machine.enter(_FighterStates.SHIELD_START)
 		state_machine.enter(_FighterStates.SHIELD_HOLD)
