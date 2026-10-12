@@ -186,7 +186,11 @@ func _probe_inputs(frame: int,p: Node,dx: float) -> Array:
 	if frame%2==0 and p.state_machine.can_attack():
 		if probe=="heavy-light" and hits==0:actions.append_array(["attack","special"])
 		elif probe=="light-heavy" and hits==1:actions.append_array(["attack","special"])
-		elif probe=="projectile-light" and hits==0:actions.append("special")
+		elif probe=="projectile-light" and hits==0:
+			# Horizontal movement + Special selects side_special. Release the
+			# public movement input on the cast frame so this recipe actually
+			# requests neutral Special; facing is still corrected by movement.
+			actions=["special"]
 		elif probe=="aerial-light" and hits==0 and p.is_on_floor():actions.append("jump")
 		else:actions.append("attack")
 	return actions

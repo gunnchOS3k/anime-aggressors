@@ -57,7 +57,9 @@ func emit_effect(fid: String, kind: int, world: Vector2, direction := Vector2.RI
 		var victim := -1
 		if kind in [0,1,2,7,8,10,12]:
 			for i in slots.size():
-				if slots[i].active and slots[i].kind in [4,5,6]: victim=i;break
+				# Short expression decorations have no persistent emitter owner.
+				# They must yield to the primary collision/defense/KO result.
+				if slots[i].active and slots[i].kind in [4,5,6,13,14,15,16,17]: victim=i;break
 		if victim>=0: stop_slot(victim)
 		else: dropped+=1;return -1
 	var index := -1

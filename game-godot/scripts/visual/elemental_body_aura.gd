@@ -89,7 +89,10 @@ func _rebuild() -> void:
 	var count:=3 if reduced else (8 if mode=="Full" else 5)
 	var color: Color=COLORS[family]
 	if bool(snapshot.get("high_contrast",false)):color=color.lerp(Color.WHITE,.45)
-	color.a=(.16+.29*strength)*(0.65 if reduced else 1.0)
+	# Keep the authored power outside the opaque body silhouette at camera scale.
+	# Same bounded meshes/segments, with a visible calm→charged gradient.
+	color.a=(.16+.42*strength)*(0.65 if reduced else 1.0)
+	if family==7:color=color.lerp(Color(.48,.46,.66,color.a),.45*strength)
 	var t:=elapsed
 	var scale_power:=.75+.25*strength
 	if arrival>0 and not bool(snapshot.get("reduced_flash",false)):scale_power+=.1*arrival/.32
@@ -104,49 +107,50 @@ func _rebuild() -> void:
 			0: # Broad-base, narrowing organic tongues move upward, not a ring.
 				for j in range(9):
 					var u:=float(j)/8
-					pts.append(hip+Vector3(cos(phase)*(.28+.07*sin(t*2+u*4)),height*(u-.2),sin(phase)*.22)+Vector3(.07*sin(t*3+u*9+phase)*u,0,0))
-				_ribbon(pts,.065*scale_power,color)
+					var radius: float=(.31+.12*strength)*(1.0-.18*u)+.055*sin(t*2-u*4)
+					pts.append(hip+Vector3(cos(phase)*radius,height*(u-.14),sin(phase)*radius*.8)+Vector3(.085*sin(t*3-u*9+phase)*u,0,0))
+				_ribbon(pts,(.065+.035*strength)*scale_power,color)
 			1:
-				var center:=chest+Vector3(cos(phase)*.33,sin(phase)*height*.48,sin(phase+t*.35)*.16)
-				_diamond(center,.065+.025*strength,color,phase*.5)
-				_ribbon([hip+Vector3(-.28,.03*i,0),hip+Vector3(0,-.06+.03*i,.08),hip+Vector3(.28,.03*i,0)],.018,color,false)
+				var center:=chest+Vector3(cos(phase)*(.33+.10*strength),sin(phase)*height*.48,sin(phase+t*.35)*.20)
+				_diamond(center,.065+.045*strength,color,phase*.5)
+				_ribbon([hip+Vector3(-.34,.03*i,0),hip+Vector3(0,-.06+.03*i,.12),hip+Vector3(.34,.03*i,0)],.022,color,false)
 			2: # Deterministic moving branches, anchored at actual hands/body.
 				var anchor: Vector3=_anchors.Hand_L if i%2==0 else _anchors.Hand_R
 				for j in range(7):
 					var u:=float(j)/6
-					pts.append(anchor.lerp(chest+Vector3(cos(phase)*.38,sin(phase)*.6,.05),u)+Vector3(sin(j*4+phase+t*3)*.055,sin(j*8+phase)*.035,.06*sin(j+phase)))
-				_ribbon(pts,.013 if reduced else .021,color,false)
+					pts.append(anchor.lerp(chest+Vector3(cos(phase)*(.38+.12*strength),sin(phase)*.65,.10),u)+Vector3(sin(j*4+phase+t*3)*.065,sin(j*8+phase)*.045,.09*sin(j+phase)))
+				_ribbon(pts,.018 if reduced else .025+.008*strength,color,false)
 				_ribbon([pts[2],pts[2]+Vector3(.12*cos(phase),.11,.08),pts[2]+Vector3(.19*cos(phase),.14,0)],.01,color)
 			3:
 				for j in range(15):
 					var u:=float(j)/14;var a:=phase+u*3.5+t*.8
-					pts.append(hip+Vector3(cos(a)*.34,height*(u-.18),sin(a)*.26))
-				_ribbon(pts,.035*scale_power,color)
+					pts.append(hip+Vector3(cos(a)*(.34+.10*strength),height*(u-.18),sin(a)*.34))
+				_ribbon(pts,(.035+.012*strength)*scale_power,color)
 			4:
-				_diamond(chest+Vector3(cos(phase)*.30,sin(phase)*height*.55,.12*sin(phase)),(.05+.035*strength)*scale_power,color,PI/2)
+				_diamond(chest+Vector3(cos(phase)*(.30+.12*strength),sin(phase)*height*.55,.18*sin(phase)),(.05+.050*strength)*scale_power,color,PI/2)
 				var hand: Vector3=_anchors.Hand_L if i%2==0 else _anchors.Hand_R
 				_ribbon([hand,hand+Vector3(.06*cos(phase),.1,.07),hand+Vector3(.13*cos(phase),.19,0)],.016,color)
 			5:
 				for j in range(19):
 					var a:=phase+float(j)/18*TAU+t*.4
-					pts.append(chest+Vector3(cos(a)*.4,sin(a)*.26*cos(phase),sin(a)*.3*sin(phase)))
-				_ribbon(pts,.013,color,false)
+					pts.append(chest+Vector3(cos(a)*(.4+.12*strength),sin(a)*.33*cos(phase),sin(a)*.4*sin(phase)))
+				_ribbon(pts,.018,color,false)
 				_diamond(pts[i%pts.size()],.035,color)
 			6:
 				var shift:=.06*sin(t*1.2+phase)
-				_ribbon([hip+Vector3(.28+shift,.05,0),chest+Vector3(.22+shift,.02,.15),head+Vector3(.10+shift,.08,0)],.023,color)
-				_ribbon([hip+Vector3(-.28-shift,.12,.1),chest+Vector3(-.22-shift,.09,0)],.012,color)
+				_ribbon([hip+Vector3(.36+shift,.05,0),chest+Vector3(.34+shift,.02,.15),head+Vector3(.24+shift,.08,0)],.032,color)
+				_ribbon([hip+Vector3(-.36-shift,.12,.1),chest+Vector3(-.34-shift,.09,0)],.020,color)
 			7:
 				for j in range(13):
-					var u:=float(j)/12;var r: float=.44*(1-u)
+					var u:=float(j)/12;var r: float=(.44+.12*strength)*(1-u)
 					var a:=phase+u*3.1-t*.5
 					pts.append(chest+Vector3(cos(a)*r,sin(a)*r,.08*sin(a)))
-				_ribbon(pts,.027,color)
+				_ribbon(pts,.036,color)
 			8:
 				for j in range(7):
 					var a:=phase+float(j)/6*TAU
-					pts.append(chest+Vector3(cos(a)*(.26+.035*i),sin(a)*(.26+.035*i),.025*i))
-				_ribbon(pts,.014,color,false)
+					pts.append(chest+Vector3(cos(a)*(.30+.055*strength+.035*i),sin(a)*(.30+.055*strength+.035*i),.025*i))
+				_ribbon(pts,.021,color,false)
 				_ribbon([pts[0],pts[0]+Vector3(cos(phase),sin(phase),0)*.16],.021,color)
 	mesh.surface_end();instance.visible=vertex_count>0;generation+=1
 
