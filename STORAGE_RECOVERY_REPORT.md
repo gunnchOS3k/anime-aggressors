@@ -41,4 +41,10 @@ Native 60 fps capture can resume only if a new atomic preflight accepts: 2 GiB p
 
 Heavy exports remain blocked below 18 GiB. No platform export or cache-wide prune ran. No native original, screenshot, failure, source, dependency installation or worktree was deleted. There is no safe verified 5–10 GiB cleanup opportunity in this audited scope. Further recovery requires an owner-selected off-volume archive or explicit browser-cache decision; neither is required to start a short capture while the existing reserve is satisfied.
 
-Next: checkpoint the corrected-tier nine-probe results, then one all-18-body NativeEmpowerment foreground/frame-barcode pilot under the new guard. Use a unique label; preserve and investigate failures. Continue full-roster expressive production after real renderer inspection. All human/release gates remain false.
+## Subsequent guarded execution
+
+Both bounded all18 native energy jobs completed without crossing the reserve: energy_native_guard1012 (b3before) and energy_envelope_native1012 (c7after). Each produced2,747frames60fps45.783s, original native audio and2,566 verified frame/model samples. Before minimum monitoredfree3.424GiB; after minimum is recorded in its immutable RECORDING_STATE.json. Native originals are retained local-only; derived MP4/sheets are source-bound ownerdevelopment evidence. No automatic media deletion or lowered fidelity. These are energy/movement fixtures, not activeCPU/combo proof or sustainedhardwareFPS.
+
+The initial32-original inventory is an immutable before snapshot; two new owned native masters were added after it. No prior original was replaced. Recovered9CPU traces and later neutral-cast/currentheavy counterplay probes are preserved source-bound. Current source uses sharedglobalVFXintensity toreduce shader density; the prior15suite gameplay/Story/save evidence remains preserved. All33historicalworktree paths/branches and owner backups remain intact.
+
+Next storage action is a fresh guard preflight for any genuinely missing shortcapture. Do not repeat completed videos or remove native originals. Heavy18GiB exports remain blocked. Further multiGiB recovery needs path-specific owner-authorized off-volume archiving or a closed-browser cache decision; no such cleanup was executed. Allhuman/releasegates remainfalse.

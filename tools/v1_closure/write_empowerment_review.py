@@ -7,7 +7,7 @@ def read(path):return json.loads(path.read_text())
 def link(path,label):return f'[{label}]({ROOT/path})'
 matrix=read(INC/'FULL_ROSTER_PRODUCTION_MATRIX.json');cells=read(INC/'FULL_ROSTER_CONTACT_CELLS.json');manifest=read(OUT/'EVIDENCE_MANIFEST.json');cpu=read(INC/'NEUTRAL_CAST_ROSTER_CPU_RESULTS.json');ci=read(INC/'GITHUB_CHECKS.json')
 energy=read(INC/'energy_envelope_native1012/NATIVE_MOVIE.json');before=read(INC/'energy_native_guard1012/NATIVE_MOVIE.json');refinement=read(INC/'AURA_ENVELOPE_REFINEMENT.json')
-all_probes=read(OUT/'COMBO_PROBE_MATRIX.json');integration=read(INC/'intensity_integration1012/results.json');prior=read(INC/'aura_integrity_final1012/results.json')
+all_probes=read(OUT/'COMBO_PROBE_MATRIX.json');heavy=read(INC/'HEAVY_COUNTER_ROSTER_CPU_RESULTS.json') if (INC/'HEAVY_COUNTER_ROSTER_CPU_RESULTS.json').exists() else None;integration=read(INC/'intensity_integration1012/results.json');prior=read(INC/'aura_integrity_final1012/results.json')
 assert len(matrix['rows'])==9 and len(integration)==5 and all(r['passed'] for r in integration)
 grammars=json.loads((ROOT/'game-godot/scripts/visual/elemental_body_aura.gd').read_text().split('const GRAMMARS = ',1)[1].split('\n',1)[0])
 rows=[];table=[];cards=[]
@@ -20,7 +20,7 @@ for i,row in enumerate(matrix['rows']):
  'RUNTIME_VERIFIED':'Bothmodel identities and energy/movement/jump native frames verified atc7; activeCPU neutral casts atc7+testdiff. Latest globaldensity fix source-tested, native visual review pending.',
  'OWNER_REVIEW_READY':False,'candidate_visual_review_ready':True,'OWNER_APPROVED':False,
  'BLOCKED':['Visible sole/floor coordinate contract','Outer heavy/signature reach and directional aerial quality','Production acting and secondary motion','Latest global-density normal-speed native review'],
- 'latest_CPU_probe':observed,'persistent_aura_native_verified':True,'new_shader_native_verified':False,'native_energy_sheet':sheet}
+ 'latest_CPU_probe':observed,'latest_heavy_probe':next((r for r in heavy['rows'] if r['fighter']==fid),None) if heavy else None,'persistent_aura_native_verified':True,'new_shader_native_verified':False,'native_energy_sheet':sheet}
  rows.append(entry)
  table.append(f'| {fid} | {grammars[i]} | {observed["projectile_hits"]} / {observed["projectile_blocks"]} | {observed["genuine_pairs"]} | Both visible; candidate | False |')
  rel=os.path.relpath(ROOT/sheet['path'],gallery.parent);oldmovie=os.path.relpath(ROOT/row['movie'],gallery.parent)
@@ -67,9 +67,11 @@ Nine fresh900-frame public-input neutral-cast probes, active CPU for every fight
 
 **Two new strict pairs**:Orion projectile→forward_tilt at trace437→444; Vesper forward_tilt→an earlier projectile arriving at375→380. Distinct attack owners and absence of defender control before second contact establish these observations. Neither is a blanket guaranteed-combo/balance promise.36other follow-ups were shielded and84arrived after recovery. The preceding nine aura probes retain90hits/146blocks and one Kaia forward_tilt→forward_tilt pair510→530; its aerial recipe label does not make it an aerial combo.
 
-Across all123 retained probes, strict analysis records**{true_total} qualifying pairs/{blocked_total} blocked follow-ups**; defect-affected throws/guards/projectiles remain excluded. Actual contact coverage is**{cells['observed']}/108**, with**{cells['unverified']} unverified cells**. Missing evidence does not imply a broken mechanic. Actual damage bands and move classes determine coverage, not recipe names. {link('artifacts/v1_closure/spectral_feedback/continuous_1011/NEUTRAL_CAST_ROSTER_CPU_RESULTS.json','Newest roster CPU receipts')} · {link('artifacts/v1_closure/spectral_feedback/COMBO_INTERACTIONS.json','Exact contact/recovery/ownership traces')}.
+Across all{len(all_probes)} retained probes, strict analysis records**{true_total} qualifying pairs/{blocked_total} blocked follow-ups**; defect-affected throws/guards/projectiles remain excluded. Actual contact coverage is**{cells['observed']}/108**, with**{cells['unverified']} unverified cells**. Missing evidence does not imply a broken mechanic. Actual damage bands and move classes determine coverage, not recipe names. {link('artifacts/v1_closure/spectral_feedback/continuous_1011/NEUTRAL_CAST_ROSTER_CPU_RESULTS.json','Newest roster CPU receipts')} · {link('artifacts/v1_closure/spectral_feedback/COMBO_INTERACTIONS.json','Exact contact/recovery/ownership traces')}.
 
 Current presentation integration:**5/5 PASS** (SpectralIntensity54,ExpressionPoolPriority54,SpectralFeedback,ActionLineProduction18,PersistentEmpowerment36), parent+diff bindings retained. The prior**15/15 integration PASS** at9e0d13ae remains exact-source historical evidence, reused for unchanged combat/Story/save dependencies; it is not relabeled as a new full-suite run. It includes145 staged campaign nodes,18 shipping roster presentations and CampaignRestart. Ordinary Kaia20nodes/16qualifying receipts across restart and1,025cue structure retain their separate receipts. Logs preserve resource-exit diagnostics separately from fixture pass.
+
+A subsequent allnine low-heavy publicCPU pass at`{heavy['source_sha']}` recorded{heavy['hits']}body hits/{heavy['blocks']}blocks, includingone heavybodyhit per fighter and{heavy['heavy_blocks']}heavyblocks. It adds{heavy['true_pairs']}strictpairs (Juno jab1→jab2→forward_tilt, two links, not heavy→light),{heavy['blocked_pairs']}blocked and{heavy['recovery_before_next_pairs']}after-recovery follow-ups. Actualheavycontact atlowdamage is verified for allnine; this doesnotdeclare everyheavy acombo starter.
 
 Qualified competitive native stock-loss footage and repaired headless replication remain preserved:one authentic stock loss against an activeCPU, not a match win or all-roster KO proof. Guard-affected19headless/11native attempts and projectile-ownership-affected5headless/1native attempts remain conservatively excluded; overlapping exclusions are not summed as extra tests.
 
