@@ -1,3 +1,10 @@
+# Full-roster outer-range result — October11,2026
+
+Native package pushed a86a541450d360b7dafe0ceacb9b2819ef405dae; probe source d8242ab0b41d31337a100a97de37f7aeb12c4df1. Full396geometry contacts complete:9×2bodies×2facings, light/heavy/signature close/typical/outer plus ascending/descending neutral aerial. All contact-clock/VFX ownership invariants passed; all defenders recovered. Close/typical and tested neutral aerial projected hand hulls intersect. Outer gaps18–38px across roster remain a reproduced presentation defect. CONTACT_RANGE_SUMMARY.json records each move/fighter; no arbitrary geometry threshold, no balance change, no anatomy stretch.17existing headless dummy null-material cleanup errors on model swaps are recorded separately; no SCRIPT ERROR. No native/device quality pass inferred.
+
+Next independent implementation: full-roster heavy weight transfer and differentiated aerial body/leg choreography on protected rigs; constrain supporting feet and retain contact timing. Re-run focused864rig/pose checks and396range measurements with unused labels. Do not claim remaining outer reach fixed by cosmetic effects. After source checkpoint,36new-label medium/high active-CPU probes across9fighters, then affected integrated Story/roster/save checks. Historical main summaries still require reconciliation. No Godot process running; current body/audio videos retain source67ae813a and all previous evidence. All33worktrees/backups and human gates preserved; no export below18GiB.
+
+---
 # Outer-range/aerial fixture checkpoint — October11,2026
 
 Nine current-animation native mirror clips and unified review package pushed at a86a541450d360b7dafe0ceacb9b2819ef405dae; recordings retain exact gameplay source67ae813a. No capture process remains. All8CIchecks at67ae813a succeeded.
