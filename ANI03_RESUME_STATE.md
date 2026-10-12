@@ -1,3 +1,12 @@
+# Outer-range/aerial fixture checkpoint — October11,2026
+
+Nine current-animation native mirror clips and unified review package pushed at a86a541450d360b7dafe0ceacb9b2819ef405dae; recordings retain exact gameplay source67ae813a. No capture process remains. All8CIchecks at67ae813a succeeded.
+
+New RosterContactRange pilot PASS27real public-input contacts: all9male/right typical light and ascending/descending neutral aerials. Actual rigid-module skin weights/bind matrices projected synchronously; hand-bound palm/finger hull and defender torso/head/hip hull measured. No GPUreadback, hitbox changes or manufactured results. This is idle-target geometry evidence, never CPU combo acceptance. Pilot observed0px overlap/body-hull gaps at typical42px spacing, not a general outer-range or 3D anatomy pass. Original simple wrist report retained.
+
+Next command after this fixture checkpoint: python3 tools/v1_closure/validate_continuous_combat.py --label contact_range_1011 RosterContactRange.396cases across9×2bodies×2facings,3grounded moves×3ranges plus ascending/descending neutral aerials. Reports include live pose timing, skin hulls, real AABBs, exact effect/audio dispatch, hurt/launch and recovery. No other Godot running. Free~6.8GiB; native2GiB reserve/heavy18GiB guard. Preserve all33worktrees/backups and human gates false. After results reproduce any material geometry defect, refine all-roster original motion/force silhouettes without changing balance, then bounded36medium/high active-CPU probes and affected integrated tests. Main historical summary reconciliation remains pending.
+
+---
 # Full-roster native review checkpoint — October 11, 2026
 
 Branch release/anime-v1-dialogue-and-elemental-performance; worktree /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure. Last pushed implementation 67ae813a9aaa71bbc2e5bed5d5896a02107744a0. Resolve the commit containing this entry for the media/report checkpoint.
