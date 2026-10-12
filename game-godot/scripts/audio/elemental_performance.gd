@@ -4,8 +4,20 @@ const Bank = preload("res://scripts/audio/procedural_audio_bank.gd")
 var fighter_id := ""
 var charge: AudioStreamPlayer
 var travel: AudioStreamPlayer
+var ambience: AudioStreamPlayer
 var _charge_ready := false
 var events: Array = []
+func set_fighter_identity(fid: String) -> void:
+	if fid==fighter_id:return
+	for player in [charge,travel,ambience]:
+		if is_instance_valid(player):player.stop();player.queue_free()
+	charge=null;travel=null;ambience=null;_charge_ready=false;fighter_id=fid
+func update_empowerment(on: bool,pct: float) -> void:
+	if on:
+		if ambience==null:ambience=_loop("charged_ambience")
+		if ambience!=null:ambience.volume_db=linear_to_db(maxf(.0001,mix_option("element_volume",.65)*(.035+.055*clampf(pct,0,1))))-8
+	elif ambience!=null:
+		ambience.stop();ambience.queue_free();ambience=null
 static func mix_option(key: String,fallback: float) -> float:
 	var tree := Engine.get_main_loop() as SceneTree
 	var dialogue = tree.root.get_node_or_null("StoryDialogue") if tree != null else null

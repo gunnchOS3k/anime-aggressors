@@ -22,6 +22,8 @@ const _ElementalMaterial = preload("res://scripts/visual/elemental_material_cont
 const _SignaturePresentation = preload("res://scripts/visual/signature_move_presentation.gd")
 const _GeometryFit = preload("res://scripts/visual/geometry_auto_fit.gd")
 const _V16Body = preload("res://scripts/visual/v16_art_direction_body.gd")
+const _BodyAura = preload("res://scripts/visual/elemental_body_aura.gd")
+var _body_aura: Node3D
 
 const VIEWPORT_SIZE := Vector2i(256, 320)
 ## Battle bodies must be owner-visible on Pixel; prior 0.38 read as absent.
@@ -669,6 +671,17 @@ func set_aura_level(level: int) -> void:
 		var form_boost := float(_form_presentation.get("emission_strength", 0.0))
 		_material_controller.set_charge_emission(float(level) * 0.35 + form_boost)
 
+func set_empowerment_state(snapshot: Dictionary) -> void:
+	if not _loaded or _visible_skeleton==null:return
+	if not is_instance_valid(_body_aura):
+		if not bool(snapshot.get("active",false)):return
+		_body_aura=_BodyAura.new();_body_aura.name="PersistentElementalBodyAura"
+		_model_root.add_child(_body_aura);_body_aura.setup(_visible_skeleton)
+	_body_aura.observe(snapshot)
+
+func get_empowerment_evidence() -> Dictionary:
+	return _body_aura.evidence() if is_instance_valid(_body_aura) else {"active":false,"super_ready":false,"vertices":0}
+
 
 func set_aura_tier(tier: int) -> void:
 	_aura_tier = clampi(tier, 0, 3)
@@ -1258,6 +1271,7 @@ func _retain_render_materials(node: Node, retained: Array[Material]) -> void:
 
 
 func _clear_model() -> void:
+	_body_aura=null
 	var retiring_materials: Array[Material] = []
 	if _model_root != null and is_instance_valid(_model_root):
 		_retain_render_materials(_model_root, retiring_materials)

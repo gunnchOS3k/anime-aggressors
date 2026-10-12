@@ -174,6 +174,8 @@ func _ready() -> void:
 		grab_range_debug.visible = false
 		grab_range_debug.size = Vector2(_CombatMath.GRAB_RANGE_PX, 36)
 		grab_range_debug.color = Color(0.2, 0.8, 1.0, 0.25)
+	var expression=preload("res://scripts/visual/combat_expression_director.gd").new()
+	expression.name="CombatExpressionDirector";add_child(expression);expression.setup(self)
 
 func get_aura() -> float:
 	return aura
@@ -1658,7 +1660,7 @@ func _set_aura_vfx(on: bool) -> void:
 		_elemental_audio.name = "ElementalPerformance"
 		_elemental_audio.fighter_id = fighter_id
 		add_child(_elemental_audio)
-	_elemental_audio.fighter_id = fighter_id
+	_elemental_audio.set_fighter_identity(fighter_id)
 	_elemental_audio.update_charge(on and state_machine.current_state in [_FighterStates.AURA_CHARGE,_FighterStates.AURA_READY],aura/100.0)
 
 

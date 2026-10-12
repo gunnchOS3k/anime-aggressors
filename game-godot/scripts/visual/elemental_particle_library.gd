@@ -6,6 +6,8 @@ class_name ElementalParticleLibrary
 const PROFILE_PATH := "res://data/combat/v3_particle_profiles.json"
 
 const LIBRARIES := {
+	"yin": {"texture_hint":"aperture","spread":16.0,"gravity":Vector2.ZERO,"color":Color(.31,.30,.47,.6)},
+	"yang": {"texture_hint":"hex_ray","spread":32.0,"gravity":Vector2.ZERO,"color":Color(1,.86,.4,.6)},
 	"ember-vale": {"texture_hint": "ember", "spread": 28.0, "gravity": Vector2(0, -40), "color": Color(1.0, 0.42, 0.08, 0.7)},
 	"rook-ironside": {"texture_hint": "chip", "spread": 18.0, "gravity": Vector2(0, 90), "color": Color(0.72, 0.48, 0.22, 0.7)},
 	"juno-spark": {"texture_hint": "spark", "spread": 40.0, "gravity": Vector2(0, 0), "color": Color(1.0, 0.92, 0.28, 0.75)},

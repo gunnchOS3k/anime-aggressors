@@ -7,6 +7,8 @@ const _Particles = preload("res://scripts/visual/elemental_particle_library.gd")
 const EVENT_PATH := "res://data/combat/v3_vfx_events.json"
 
 const SHAPES := {
+	"subtractive_aperture": "inward_spiral",
+	"constructed_hex_radiance": "ordered_rays",
 	"flame_tongue_cone": "triangle_burst",
 	"pressure_ring_fracture": "ring_burst",
 	"jagged_fork_arc": "fork_burst",

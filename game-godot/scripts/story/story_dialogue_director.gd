@@ -7,7 +7,7 @@ const DATA := "res://data/story/dialogue/v1/"
 var cues: Dictionary = {}
 var nodes: Dictionary = {}
 var voice_assets: Dictionary = {}
-var settings := {"subtitles":true,"voice":true,"font_size":23,"reading_rate":3.0,"voice_volume":0.75,"element_volume":0.65,"music_volume":0.65,"reduced_flash":false,"reduced_shake":false,"reduced_particles":false,"high_contrast_vfx":false}
+var settings := {"subtitles":true,"voice":true,"font_size":23,"reading_rate":3.0,"voice_volume":0.75,"element_volume":0.65,"music_volume":0.65,"reduced_flash":false,"reduced_shake":false,"reduced_particles":false,"high_contrast_vfx":false,"vfx_intensity":"Balanced"}
 var node_id := ""
 var context := ""
 var history: Array = []
@@ -216,7 +216,7 @@ func show_settings() -> void:
 	_presentation_dialog = dialog
 	var column := VBoxContainer.new(); column.custom_minimum_size = Vector2(670,430)
 	dialog.add_child(column)
-	for item in [["Subtitles","subtitles"],["Temporary voices","voice"],["Subtitle size","font_size"],["Reading speed","reading_rate"],["Voice volume","voice_volume"],["Element effects volume","element_volume"],["Music volume","music_volume"],["Reduced flashes","reduced_flash"],["Reduced camera shake","reduced_shake"],["Reduced particle density","reduced_particles"],["High contrast effects","high_contrast_vfx"]]:
+	for item in [["Subtitles","subtitles"],["Temporary voices","voice"],["Subtitle size","font_size"],["Reading speed","reading_rate"],["Voice volume","voice_volume"],["Element effects volume","element_volume"],["Music volume","music_volume"],["Reduced flashes","reduced_flash"],["Reduced camera shake","reduced_shake"],["Reduced particle density","reduced_particles"],["High contrast effects","high_contrast_vfx"],["Element effect intensity","vfx_intensity"]]:
 		var row := HBoxContainer.new(); column.add_child(row)
 		var label := Label.new(); label.text = item[0]; label.size_flags_horizontal = Control.SIZE_EXPAND_FILL; row.add_child(label)
 		var button := Button.new(); row.add_child(button)
@@ -225,6 +225,7 @@ func show_settings() -> void:
 		button.pressed.connect(func():
 			var value: Variant = settings[key]
 			if value is bool: value = not value
+			elif key == "vfx_intensity": value = ["Full","Balanced","Reduced"][(["Full","Balanced","Reduced"].find(str(value))+1)%3]
 			elif key == "font_size": value = 18 if int(value) >= 32 else int(value)+4
 			elif key == "reading_rate": value = 1.5 if float(value) >= 5 else float(value)+0.5
 			else: value = 0.0 if float(value) >= 0.99 else minf(1.0,float(value)+0.25)
