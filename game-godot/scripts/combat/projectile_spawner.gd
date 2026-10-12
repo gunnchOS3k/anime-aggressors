@@ -53,6 +53,8 @@ func spawn_from_move(move: Dictionary, aura_amount: float) -> Node:
 				tier = "projectile_medium"
 			_:
 				tier = "projectile_full"
+	var projectile_move := move.duplicate(true)
+	projectile_move["_attack_activation_id"] = owner_fighter.move_runner.activation_id
 	var cfg := {
 		"fighter_id": owner_fighter.fighter_id if "fighter_id" in owner_fighter else "",
 		"move_id": move.get("move_id", ""),
@@ -63,7 +65,7 @@ func spawn_from_move(move: Dictionary, aura_amount: float) -> Node:
 		"speed": speed,
 		"behavior": behavior,
 		"damage": dmg,
-		"move_data": move,
+		"move_data": projectile_move,
 		"angle_deg": float(proj_cfg.get("angle_deg", 0)),
 		"size": Vector2(sz, sz),
 		"color": _element_color(element),

@@ -162,8 +162,10 @@ func _setup_puppets() -> void:
 func _on_hit(attacker, defender, info: Dictionary) -> void:
 	if attacker == battle.fighter1 and not info.get("blocked", false) and float(info.get("damage", 0)) > 0:
 		if kind != "PUPPET_IMBALANCE" or defender.get_meta("story_team", "") == "yin": player_hits += 1
+		StoryDialogue.fire("puppet_contact",{"target":defender.fighter_id})
 		if defender in puppets:
 			player_damage[defender.fighter_id] = float(player_damage.get(defender.fighter_id, 0)) + float(info["damage"])
+			if float(player_damage[defender.fighter_id]) >= 40: StoryDialogue.fire("release_ready",{"target":defender.fighter_id,"earned_damage":player_damage[defender.fighter_id]})
 
 
 func _on_ko(actor) -> void:
@@ -178,6 +180,7 @@ func _on_ko(actor) -> void:
 			var stocks: int = battle.fighter1.stocks
 			battle.fighter1.configure(order[identities_exercised], 1, false, stocks, Vector2(-140, ground_y - 2))
 			GameState.p1_fighter_id = order[identities_exercised]
+			StoryDialogue.fire("trial_identity:"+str(order[identities_exercised]),{"identity":identities_exercised})
 			battle.fighter1.move_runner.cancel()
 			battle.fighter1.reset_fighter()
 			battle.fighter1.controls_enabled = true
@@ -198,6 +201,7 @@ func _can_release(actor) -> bool:
 func _release(actor) -> void:
 	if not _can_release(actor): return
 	released.append(actor.fighter_id)
+	StoryDialogue.fire("puppet_released",{"fighter":actor.fighter_id,"side":actor.get_meta("story_team","")})
 	actor.cpu.clear_simulated_inputs()
 	actor.is_cpu = false
 	actor.dummy_mode = "idle"
@@ -249,20 +253,25 @@ func tick(delta: float) -> void:
 				if nearest != null: _release(nearest)
 		"PUPPET_EQUILIBRIUM":
 			_marker.position = Vector2(0, ground_y)
-			if absf(p.position.x) < 120 and p.shielding: guard_seconds += delta
+			if absf(p.position.x) < 120 and p.shielding:
+				guard_seconds += delta
+				StoryDialogue.fire("center_guard")
 			if guard_seconds >= 8: _finish()
 		"PRISMATIC_TRANSFORMATION":
 			if route_state.get("essence", 0) != 6: return
 			if steps < 6:
 				_visit_marker(Vector2(-250 + steps * 100, ground_y))
 			elif p.shielding:
+				StoryDialogue.fire("gray_signals_collected",{"signals":steps})
 				_hold += delta
 				if _hold >= 2 and not transformed:
+					StoryDialogue.fire("transformation_started")
 					set_form(p, "PRISMATIC_GRAY")
 					p.model_3d.play_clip("aura_charge")
 					p.model_3d.set_cinematic_expression("determination")
 					preload("res://scripts/audio/v1_candidate_sfx.gd").play_event(p.fighter_id, "transform", p)
 					transformed = true
+					StoryDialogue.fire("gray_manifested",{"form":"PRISMATIC_GRAY"})
 				if _hold >= 4: _finish()
 		"GRAY_DEMONSTRATION":
 			_marker.position = Vector2(250, ground_y)
@@ -277,6 +286,7 @@ func tick(delta: float) -> void:
 				_hold += delta
 				if _hold >= 0.6:
 					alternations += 1
+					StoryDialogue.fire("equilibrium_signal",{"alternation":alternations})
 					_hold = 0
 			if elapsed >= 21 and alternations >= 6: _finish()
 	_update_prompt()
@@ -284,7 +294,10 @@ func tick(delta: float) -> void:
 
 func _visit_marker(target: Vector2) -> void:
 	_marker.position = target
-	if battle.fighter1.position.distance_to(target + Vector2(0, -2)) < 65: steps += 1
+	if battle.fighter1.position.distance_to(target + Vector2(0, -2)) < 65:
+		steps += 1
+		StoryDialogue.fire("first_loss_signal",{"step":steps})
+		StoryDialogue.fire("reunion_signal",{"step":steps})
 
 
 func _tick_loss(delta: float) -> void:
@@ -294,7 +307,9 @@ func _tick_loss(delta: float) -> void:
 		"LAST_VECTOR_ESCORT":
 			if decision.is_empty():
 				_marker.position = Vector2(-140, ground_y)
-				if Input.is_action_just_pressed("p1_shield"): decision = "ESCORT_TEAM"
+				if Input.is_action_just_pressed("p1_shield"):
+					decision = "ESCORT_TEAM"
+					StoryDialogue.fire("decision_made",{"choice":decision})
 				return
 			for escort in escorts:
 				if escort.has_meta("escort_target_x"):
@@ -337,6 +352,7 @@ func _tick_loss(delta: float) -> void:
 				_marker.position = Vector2(0, ground_y)
 				if absf(p.position.x) < 80 and p.move_runner.active: steps = 1
 			elif steps == 1: _visit_marker(Vector2(240, ground_y))
+	if steps > 0: StoryDialogue.fire("decision_made",{"interaction":interaction})
 	if steps >= 2:
 		_hold += delta
 		if _hold >= 1.5:
@@ -390,6 +406,7 @@ func _update_prompt() -> void:
 
 
 func activate_controls() -> void:
+	if kind == "SEVENFOLD_TRIAL": StoryDialogue.fire("trial_identity:"+battle.fighter1.fighter_id,{"identity":0})
 	for actor in actors:
 		var passive: bool = actor in escorts or (kind in ["FIRST_LOSS", "PRISMATIC_TRANSFORMATION", "SEVENFOLD_REUNION"] and actor == battle.fighter2) or (kind == "SEVENFOLD_REUNION" and actor != battle.fighter1)
 		actor.controls_enabled = not passive

@@ -22,6 +22,8 @@ const _ElementalMaterial = preload("res://scripts/visual/elemental_material_cont
 const _SignaturePresentation = preload("res://scripts/visual/signature_move_presentation.gd")
 const _GeometryFit = preload("res://scripts/visual/geometry_auto_fit.gd")
 const _V16Body = preload("res://scripts/visual/v16_art_direction_body.gd")
+const _BodyAura = preload("res://scripts/visual/elemental_body_aura.gd")
+var _body_aura: Node3D
 
 const VIEWPORT_SIZE := Vector2i(256, 320)
 ## Battle bodies must be owner-visible on Pixel; prior 0.38 read as absent.
@@ -264,6 +266,9 @@ func get_current_model_source() -> String:
 
 
 func get_current_animation_source() -> String:
+	if _animation_controller != null and is_instance_valid(_animation_controller):
+		var player = _animation_controller.get_animation_player()
+		if player != null and str(player.current_animation).begins_with("authored_studies/"): return "ORIGINAL_EXPLICIT_KEYPOSE_STUDY_NOT_FINAL"
 	return _current_animation_source
 
 
@@ -487,7 +492,7 @@ func truth_flags() -> Dictionary:
 		"PROCEDURAL_RUNTIME_ANIMATION_PASS": _procedural_healthy and has_imported_animations(),
 		"FINAL_HUMAN_AUTHORED_ANIMATION_PASS": false,
 		"CURRENT_MODEL_SOURCE": _current_model_source,
-		"CURRENT_ANIMATION_SOURCE": _current_animation_source,
+		"CURRENT_ANIMATION_SOURCE": get_current_animation_source(),
 		"PROCEDURAL_PROXY_VISIBLE": is_procedural_proxy_visible(),
 		"VISIBLE_MODEL_NODE": _loaded_model.name if _loaded_model else "",
 		"VISIBLE_SKELETON_PRESENT": _visible_skeleton != null,
@@ -648,6 +653,7 @@ func _apply_presentation_yaw(override_yaw: float = INF) -> void:
 		yaw = override_yaw
 	elif not _attack_lock.is_empty() and _attack_lock.has("mesh_yaw_deg"):
 		yaw = float(_attack_lock.get("mesh_yaw_deg"))
+	if _animation_controller != null and is_instance_valid(_animation_controller): _animation_controller.set_visual_facing(-1 if yaw<0 else 1)
 	if _loaded_model != null and is_instance_valid(_loaded_model):
 		_loaded_model.rotation_degrees.y = yaw
 	if _proxy_model != null and is_instance_valid(_proxy_model) and _proxy_model != _loaded_model:
@@ -664,6 +670,25 @@ func set_aura_level(level: int) -> void:
 	if _material_controller and _material_controller.has_method("set_charge_emission"):
 		var form_boost := float(_form_presentation.get("emission_strength", 0.0))
 		_material_controller.set_charge_emission(float(level) * 0.35 + form_boost)
+
+func set_empowerment_state(snapshot: Dictionary) -> void:
+	if not _loaded or _visible_skeleton==null:return
+	if not is_instance_valid(_body_aura):
+		if not bool(snapshot.get("active",false)):return
+		_body_aura=_BodyAura.new();_body_aura.name="PersistentElementalBodyAura"
+		_model_root.add_child(_body_aura);_body_aura.setup(_visible_skeleton)
+	_body_aura.observe(snapshot)
+
+func get_empowerment_evidence() -> Dictionary:
+	return _body_aura.evidence() if is_instance_valid(_body_aura) else {"active":false,"super_ready":false,"vertices":0}
+
+func project_bone_to_combat_world(canonical: String) -> Vector2:
+	if _visible_skeleton==null or _camera==null or _display==null:return Vector2.INF
+	var index:=_visible_skeleton.find_bone(_BoneMap.resolve_on_skeleton(_visible_skeleton,canonical))
+	if index<0:return Vector2.INF
+	_visible_skeleton.force_update_all_bone_transforms()
+	var projected:=_camera.unproject_position(_visible_skeleton.to_global(_visible_skeleton.get_bone_global_pose(index).origin))
+	return _display.to_global(projected-Vector2(_viewport.size)*.5+_display.offset)
 
 
 func set_aura_tier(tier: int) -> void:
@@ -959,7 +984,10 @@ func _setup_procedural_runtime(fighter_data: Dictionary) -> void:
 	_animation_controller = _AnimationController.new()
 	_animation_controller.name = "FighterAnimationController"
 	add_child(_animation_controller)
-	_animation_controller.setup({"fighter_id": _fighter_id}, _proxy_model)
+	_animation_controller.setup({"fighter_id": _fighter_id, "body_variant": _body_variant}, _proxy_model)
+	var live_owner := get_parent()
+	if live_owner != null and "state_machine" in live_owner:
+		_animation_controller.bind_runtime_fighter(live_owner)
 	_visible_skeleton = _animation_controller.get_skeleton() if _animation_controller.has_method("get_skeleton") else _visible_skeleton
 	_material_controller = _MaterialController.new()
 	_material_controller.name = "FighterMaterialController"
@@ -1234,7 +1262,27 @@ func _exit_tree() -> void:
 		_viewport = null
 
 
+func _retain_render_materials(node: Node, retained: Array[Material]) -> void:
+	# Geometry destruction updates renderer dependencies. Keep every instance
+	# material alive until the entire retiring model has released its render RIDs.
+	# Mixed surface/whole-mesh overrides otherwise lose their last reference
+	# while another retiring instance still refers to that RID (Godot #85817).
+	if node is MeshInstance3D:
+		var mesh := node as MeshInstance3D
+		for material in [mesh.material_override, mesh.material_overlay]:
+			if material != null: retained.append(material)
+		for surface in range(mesh.get_surface_override_material_count()):
+			var material := mesh.get_surface_override_material(surface)
+			if material != null: retained.append(material)
+	for child in node.get_children():
+		_retain_render_materials(child, retained)
+
+
 func _clear_model() -> void:
+	_body_aura=null
+	var retiring_materials: Array[Material] = []
+	if _model_root != null and is_instance_valid(_model_root):
+		_retain_render_materials(_model_root, retiring_materials)
 	# Free controllers immediately so reuse cannot bind stale skeleton/materials.
 	if _animation_controller != null and is_instance_valid(_animation_controller):
 		_animation_controller.free()
@@ -1257,6 +1305,8 @@ func _clear_model() -> void:
 		for child in _model_root.get_children():
 			if is_instance_valid(child):
 				child.free()
+	# All retired mesh instances are gone before local material refs are released.
+	retiring_materials.clear()
 
 
 func _set_loaded(value: bool) -> void:

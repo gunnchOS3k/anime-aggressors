@@ -15,12 +15,14 @@ var frame_in_phase := 0
 var total_frame := 0
 var _fighter_body: Node2D
 var hit_targets: Dictionary = {}
+var activation_id := 0
 var in_cancel_window := false
 
 func start_move(move: Dictionary, fighter: Node2D) -> void:
 	if move.is_empty():
 		return
 	_fighter_body = fighter
+	activation_id += 1
 	move_data = move.duplicate(true)
 	active = true
 	phase = "startup"

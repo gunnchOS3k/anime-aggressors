@@ -1,0 +1,3642 @@
+{
+  "PASS": false,
+  "failures": [
+    "ember-vale:male:cast_retires_previous_melee_hitbox",
+    "ember-vale:male:no_melee_contact_owned_by_projectile_cast",
+    "ember-vale:male:at_most_one_contact_per_single_cast_target",
+    "ember-vale:female:cast_retires_previous_melee_hitbox",
+    "ember-vale:female:no_melee_contact_owned_by_projectile_cast",
+    "ember-vale:female:at_most_one_contact_per_single_cast_target",
+    "rook-ironside:male:cast_retires_previous_melee_hitbox",
+    "rook-ironside:male:no_melee_contact_owned_by_projectile_cast",
+    "rook-ironside:male:at_most_one_contact_per_single_cast_target",
+    "rook-ironside:female:cast_retires_previous_melee_hitbox",
+    "rook-ironside:female:no_melee_contact_owned_by_projectile_cast",
+    "rook-ironside:female:at_most_one_contact_per_single_cast_target",
+    "juno-spark:male:cast_retires_previous_melee_hitbox",
+    "juno-spark:male:no_melee_contact_owned_by_projectile_cast",
+    "juno-spark:male:at_most_one_contact_per_single_cast_target",
+    "juno-spark:female:cast_retires_previous_melee_hitbox",
+    "juno-spark:female:no_melee_contact_owned_by_projectile_cast",
+    "juno-spark:female:at_most_one_contact_per_single_cast_target",
+    "kaia-windrow:male:cast_retires_previous_melee_hitbox",
+    "kaia-windrow:male:no_melee_contact_owned_by_projectile_cast",
+    "kaia-windrow:male:at_most_one_contact_per_single_cast_target",
+    "kaia-windrow:female:cast_retires_previous_melee_hitbox",
+    "kaia-windrow:female:no_melee_contact_owned_by_projectile_cast",
+    "kaia-windrow:female:at_most_one_contact_per_single_cast_target",
+    "nix-calder:male:cast_retires_previous_melee_hitbox",
+    "nix-calder:male:no_melee_contact_owned_by_projectile_cast",
+    "nix-calder:male:at_most_one_contact_per_single_cast_target",
+    "nix-calder:female:cast_retires_previous_melee_hitbox",
+    "nix-calder:female:no_melee_contact_owned_by_projectile_cast",
+    "nix-calder:female:at_most_one_contact_per_single_cast_target",
+    "orion-vell:male:cast_retires_previous_melee_hitbox",
+    "orion-vell:male:no_melee_contact_owned_by_projectile_cast",
+    "orion-vell:male:at_most_one_contact_per_single_cast_target",
+    "orion-vell:female:cast_retires_previous_melee_hitbox",
+    "orion-vell:female:no_melee_contact_owned_by_projectile_cast",
+    "orion-vell:female:at_most_one_contact_per_single_cast_target",
+    "vesper-nyx:male:cast_retires_previous_melee_hitbox",
+    "vesper-nyx:male:no_melee_contact_owned_by_projectile_cast",
+    "vesper-nyx:male:at_most_one_contact_per_single_cast_target",
+    "vesper-nyx:female:cast_retires_previous_melee_hitbox",
+    "vesper-nyx:female:no_melee_contact_owned_by_projectile_cast",
+    "vesper-nyx:female:at_most_one_contact_per_single_cast_target",
+    "yin:male:cast_retires_previous_melee_hitbox",
+    "yin:male:no_melee_contact_owned_by_projectile_cast",
+    "yin:male:at_most_one_contact_per_single_cast_target",
+    "yin:female:cast_retires_previous_melee_hitbox",
+    "yin:female:no_melee_contact_owned_by_projectile_cast",
+    "yin:female:at_most_one_contact_per_single_cast_target",
+    "yang:male:cast_retires_previous_melee_hitbox",
+    "yang:male:no_melee_contact_owned_by_projectile_cast",
+    "yang:male:at_most_one_contact_per_single_cast_target",
+    "yang:female:cast_retires_previous_melee_hitbox",
+    "yang:female:no_melee_contact_owned_by_projectile_cast",
+    "yang:female:at_most_one_contact_per_single_cast_target"
+  ],
+  "rows": [
+    {
+      "body": "male",
+      "contacts": [
+        {
+          "info": {
+            "actual_defender_state": "hurt_heavy",
+            "actual_launch": "(7.006504, -5.879155)",
+            "attacker_id": "ember-vale",
+            "aura_identity_tag": "burn_rushdown",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:285:1",
+            "combo_count_before": 0,
+            "confirmed_contact": true,
+            "contact_direction": "(0.766044, -0.642788)",
+            "contact_result": "hit",
+            "contact_world": "(-162.5, 268.1929)",
+            "counterhit": false,
+            "damage": 8.0,
+            "defender_airborne": true,
+            "defender_damage_before": 0.0,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": false,
+            "defender_state_before": "idle",
+            "element": "flame",
+            "element_effect": "burn",
+            "feedback_tier": "medium",
+            "gameplay_frame": 285,
+            "hitstop_frames": 5,
+            "launch": "(7.006504, -5.879155)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(7.006504, -5.879155)",
+                "position": "(-162.0, 281.1929)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 9.14634132385254,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -160.131591796875,
+                  "y": 347.625
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -160.131591796875,
+                  "y": 347.625
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 9.14634132385254,
+            "launch_trail_tier": "MEDIUM",
+            "move_frame": 5,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "ember-vale",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/ember-vale/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/ember-vale/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "ember-vale.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 6580673,
+            "vfx_event": "ember_vale_neutral_special_projectile_flame_tongue_cone"
+          },
+          "move_frame": 5,
+          "move_phase": "active",
+          "projectile_count": 0
+        },
+        {
+          "info": {
+            "actual_defender_state": "launched",
+            "actual_launch": "(15.22747, -12.77736)",
+            "attacker_id": "ember-vale",
+            "aura_identity_tag": "burn_rushdown",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:289:2",
+            "combo_count_before": 1,
+            "confirmed_contact": true,
+            "contact_direction": "(0.766044, -0.642788)",
+            "contact_result": "hit",
+            "contact_world": "(-151.2859, 279.1929)",
+            "counterhit": false,
+            "damage": 8.0,
+            "defender_airborne": true,
+            "defender_damage_before": 8.0,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": true,
+            "defender_state_before": "hurt_heavy",
+            "element": "flame",
+            "element_effect": "burn",
+            "feedback_tier": "medium",
+            "gameplay_frame": 289,
+            "hitstop_frames": 5,
+            "launch": "(15.22747, -12.77736)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(15.22747, -12.77736)",
+                "position": "(-162.0, 281.1929)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 19.8780498504639,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -157.939453125,
+                  "y": 345.78564453125
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -157.939453125,
+                  "y": 345.78564453125
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 19.8780498504639,
+            "launch_trail_tier": "HIGH",
+            "move_frame": 6,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "ember-vale",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/ember-vale/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/ember-vale/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "ember-vale.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 6586403,
+            "vfx_event": "ember_vale_neutral_special_projectile_flame_tongue_cone"
+          },
+          "move_frame": 6,
+          "move_phase": "active",
+          "projectile_count": 1
+        }
+      ],
+      "damage_applications": [
+        8.0,
+        8.0
+      ],
+      "fighter": "ember-vale",
+      "monitoring_after_cast_start": true,
+      "phantom_contacts": 1,
+      "previous_melee_monitoring": true,
+      "prior_move_active": true
+    },
+    {
+      "body": "female",
+      "contacts": [
+        {
+          "info": {
+            "actual_defender_state": "launched",
+            "actual_launch": "(17.20708, -14.43845)",
+            "attacker_id": "ember-vale",
+            "aura_identity_tag": "burn_rushdown",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:462:4",
+            "combo_count_before": 3,
+            "confirmed_contact": true,
+            "contact_direction": "(0.766044, -0.642788)",
+            "contact_result": "hit",
+            "contact_world": "(-162.5, 268.1929)",
+            "counterhit": false,
+            "damage": 6.1952,
+            "defender_airborne": true,
+            "defender_damage_before": 9.9264,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": false,
+            "defender_state_before": "idle",
+            "element": "flame",
+            "element_effect": "burn",
+            "feedback_tier": "medium",
+            "gameplay_frame": 462,
+            "hitstop_frames": 5,
+            "launch": "(17.20708, -14.43845)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(17.20708, -14.43845)",
+                "position": "(-162.0, 281.1929)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 22.4622440338135,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -157.411376953125,
+                  "y": 345.3427734375
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -157.411376953125,
+                  "y": 345.3427734375
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 22.4622440338135,
+            "launch_trail_tier": "HIGH",
+            "move_frame": 5,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "ember-vale",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/ember-vale/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/ember-vale/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "ember-vale.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 7138138,
+            "vfx_event": "ember_vale_neutral_special_projectile_flame_tongue_cone"
+          },
+          "move_frame": 5,
+          "move_phase": "active",
+          "projectile_count": 0
+        },
+        {
+          "info": {
+            "actual_defender_state": "launched",
+            "actual_launch": "(23.57339, -19.78042)",
+            "attacker_id": "ember-vale",
+            "aura_identity_tag": "burn_rushdown",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:466:5",
+            "combo_count_before": 4,
+            "confirmed_contact": true,
+            "contact_direction": "(0.766044, -0.642788)",
+            "contact_result": "hit",
+            "contact_world": "(-151.2859, 279.1929)",
+            "counterhit": false,
+            "damage": 5.7728,
+            "defender_airborne": true,
+            "defender_damage_before": 16.1216,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": true,
+            "defender_state_before": "launched",
+            "element": "flame",
+            "element_effect": "burn",
+            "feedback_tier": "medium",
+            "gameplay_frame": 466,
+            "hitstop_frames": 5,
+            "launch": "(23.57339, -19.78042)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(23.57339, -19.78042)",
+                "position": "(-162.0, 281.1929)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 30.772876739502,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -155.7138671875,
+                  "y": 343.91796875
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -155.7138671875,
+                  "y": 343.91796875
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 30.772876739502,
+            "launch_trail_tier": "HIGH",
+            "move_frame": 6,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "ember-vale",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/ember-vale/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/ember-vale/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "ember-vale.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 7141135,
+            "vfx_event": "ember_vale_neutral_special_projectile_flame_tongue_cone"
+          },
+          "move_frame": 6,
+          "move_phase": "active",
+          "projectile_count": 1
+        }
+      ],
+      "damage_applications": [
+        6.1952,
+        5.7728
+      ],
+      "fighter": "ember-vale",
+      "monitoring_after_cast_start": true,
+      "phantom_contacts": 1,
+      "previous_melee_monitoring": true,
+      "prior_move_active": true
+    },
+    {
+      "body": "male",
+      "contacts": [
+        {
+          "info": {
+            "actual_defender_state": "launched",
+            "actual_launch": "(24.99652, -11.65607)",
+            "attacker_id": "rook-ironside",
+            "aura_identity_tag": "armor_quake",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:643:7",
+            "combo_count_before": 6,
+            "confirmed_contact": true,
+            "contact_direction": "(0.906308, -0.422618)",
+            "contact_result": "hit",
+            "contact_world": "(-162.5, 264.389)",
+            "counterhit": false,
+            "damage": 5.9260544,
+            "defender_airborne": true,
+            "defender_damage_before": 9.65100288,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": false,
+            "defender_state_before": "idle",
+            "element": "impact",
+            "element_effect": "quake",
+            "feedback_tier": "medium",
+            "gameplay_frame": 643,
+            "hitstop_frames": 5,
+            "launch": "(24.99652, -11.65607)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(24.99652, -11.65607)",
+                "position": "(-162.0, 277.389)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 27.5806121826172,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -155.334228515625,
+                  "y": 342.280578613281
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -155.334228515625,
+                  "y": 342.280578613281
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 27.5806121826172,
+            "launch_trail_tier": "HIGH",
+            "move_frame": 9,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "rook-ironside",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/rook-ironside/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/rook-ironside/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "rook-ironside.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 7706994,
+            "vfx_event": "rook_ironside_neutral_special_projectile_pressure_ring_fracture"
+          },
+          "move_frame": 9,
+          "move_phase": "active",
+          "projectile_count": 0
+        },
+        {
+          "info": {
+            "actual_defender_state": "launched",
+            "actual_launch": "(32.20129, -15.01571)",
+            "attacker_id": "rook-ironside",
+            "aura_identity_tag": "armor_quake",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:647:8",
+            "combo_count_before": 7,
+            "confirmed_contact": true,
+            "contact_direction": "(0.906308, -0.422618)",
+            "contact_result": "hit",
+            "contact_world": "(-161.5757, 281.389)",
+            "counterhit": false,
+            "damage": 5.41810688,
+            "defender_airborne": true,
+            "defender_damage_before": 15.57705728,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": true,
+            "defender_state_before": "launched",
+            "element": "impact",
+            "element_effect": "quake",
+            "feedback_tier": "medium",
+            "gameplay_frame": 647,
+            "hitstop_frames": 5,
+            "launch": "(32.20129, -15.01571)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(32.20129, -15.01571)",
+                "position": "(-162.0, 277.389)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 35.5301971435547,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -153.4130859375,
+                  "y": 341.384582519531
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -153.4130859375,
+                  "y": 341.384582519531
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 35.5301971435547,
+            "launch_trail_tier": "HIGH",
+            "move_frame": 10,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "rook-ironside",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/rook-ironside/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/rook-ironside/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "rook-ironside.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 7713249,
+            "vfx_event": "rook_ironside_neutral_special_projectile_pressure_ring_fracture"
+          },
+          "move_frame": 10,
+          "move_phase": "active",
+          "projectile_count": 1
+        }
+      ],
+      "damage_applications": [
+        5.9260544,
+        5.41810688
+      ],
+      "fighter": "rook-ironside",
+      "monitoring_after_cast_start": true,
+      "phantom_contacts": 1,
+      "previous_melee_monitoring": true,
+      "prior_move_active": true
+    },
+    {
+      "body": "female",
+      "contacts": [
+        {
+          "info": {
+            "actual_defender_state": "launched",
+            "actual_launch": "(21.32372, -9.943413)",
+            "attacker_id": "rook-ironside",
+            "aura_identity_tag": "armor_quake",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:820:10",
+            "combo_count_before": 9,
+            "confirmed_contact": true,
+            "contact_direction": "(0.906308, -0.422618)",
+            "contact_result": "hit",
+            "contact_world": "(-162.5, 264.389)",
+            "counterhit": false,
+            "damage": 4.42003456,
+            "defender_airborne": true,
+            "defender_damage_before": 6.63005184,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": false,
+            "defender_state_before": "idle",
+            "element": "impact",
+            "element_effect": "quake",
+            "feedback_tier": "medium",
+            "gameplay_frame": 820,
+            "hitstop_frames": 5,
+            "launch": "(21.32372, -9.943413)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(21.32372, -9.943413)",
+                "position": "(-162.0, 277.389)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 23.5281181335449,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -156.313720703125,
+                  "y": 342.737609863281
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -156.313720703125,
+                  "y": 342.737609863281
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 23.5281181335449,
+            "launch_trail_tier": "HIGH",
+            "move_frame": 9,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "rook-ironside",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/rook-ironside/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/rook-ironside/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "rook-ironside.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 8276547,
+            "vfx_event": "rook_ironside_neutral_special_projectile_pressure_ring_fracture"
+          },
+          "move_frame": 9,
+          "move_phase": "active",
+          "projectile_count": 0
+        },
+        {
+          "info": {
+            "actual_defender_state": "launched",
+            "actual_launch": "(26.6975, -12.44925)",
+            "attacker_id": "rook-ironside",
+            "aura_identity_tag": "armor_quake",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:824:11",
+            "combo_count_before": 10,
+            "confirmed_contact": true,
+            "contact_direction": "(0.906308, -0.422618)",
+            "contact_result": "hit",
+            "contact_world": "(-161.5757, 281.389)",
+            "counterhit": false,
+            "damage": 4.42003456,
+            "defender_airborne": true,
+            "defender_damage_before": 11.0500864,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": true,
+            "defender_state_before": "launched",
+            "element": "impact",
+            "element_effect": "quake",
+            "feedback_tier": "medium",
+            "gameplay_frame": 824,
+            "hitstop_frames": 5,
+            "launch": "(26.6975, -12.44925)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(26.6975, -12.44925)",
+                "position": "(-162.0, 277.389)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 29.4574337005615,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -154.880615234375,
+                  "y": 342.069152832031
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -154.880615234375,
+                  "y": 342.069152832031
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 29.4574337005615,
+            "launch_trail_tier": "HIGH",
+            "move_frame": 10,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "rook-ironside",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/rook-ironside/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/rook-ironside/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "rook-ironside.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 8279419,
+            "vfx_event": "rook_ironside_neutral_special_projectile_pressure_ring_fracture"
+          },
+          "move_frame": 10,
+          "move_phase": "active",
+          "projectile_count": 1
+        }
+      ],
+      "damage_applications": [
+        4.42003456,
+        4.42003456
+      ],
+      "fighter": "rook-ironside",
+      "monitoring_after_cast_start": true,
+      "phantom_contacts": 1,
+      "previous_melee_monitoring": true,
+      "prior_move_active": true
+    },
+    {
+      "body": "male",
+      "contacts": [
+        {
+          "info": {
+            "actual_defender_state": "hurt_light",
+            "actual_launch": "(7.377415, -7.377415)",
+            "attacker_id": "juno-spark",
+            "aura_identity_tag": "speed_chain",
+            "aura_runtime_hooks": [
+              "chain_aura_gain"
+            ],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:992:13",
+            "combo_count_before": 12,
+            "confirmed_contact": true,
+            "contact_direction": "(0.707107, -0.707107)",
+            "contact_result": "hit",
+            "contact_world": "(-164.0, 270.1469)",
+            "counterhit": false,
+            "damage": 2.68681216,
+            "defender_airborne": false,
+            "defender_damage_before": 4.03021824,
+            "defender_id": "ember-vale",
+            "defender_in_hitstun_before": true,
+            "defender_state_before": "hitstun",
+            "element": "volt",
+            "element_effect": "chain_stun",
+            "feedback_tier": "medium",
+            "gameplay_frame": 992,
+            "hitstop_frames": 5,
+            "launch": "(7.377415, -7.377415)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(7.377415, -7.377415)",
+                "position": "(-162.0, 281.1972)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 10.4332399368286,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -160.03271484375,
+                  "y": 347.229919433594
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -160.03271484375,
+                  "y": 347.229919433594
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 10.4332399368286,
+            "launch_trail_tier": "MEDIUM",
+            "move_frame": 4,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "juno-spark",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/juno-spark/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/juno-spark/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "juno-spark.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 8828508,
+            "vfx_event": "juno_spark_neutral_special_projectile_jagged_fork_arc"
+          },
+          "move_frame": 4,
+          "move_phase": "active",
+          "projectile_count": 0
+        },
+        {
+          "info": {
+            "actual_defender_state": "hurt_light",
+            "actual_launch": "(9.467264, -9.467264)",
+            "attacker_id": "juno-spark",
+            "aura_identity_tag": "speed_chain",
+            "aura_runtime_hooks": [
+              "chain_aura_gain"
+            ],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:996:14",
+            "combo_count_before": 13,
+            "confirmed_contact": true,
+            "contact_direction": "(0.707107, -0.707107)",
+            "contact_result": "hit",
+            "contact_world": "(-147.8717, 277.0966)",
+            "counterhit": false,
+            "damage": 2.68681216,
+            "defender_airborne": false,
+            "defender_damage_before": 6.7170304,
+            "defender_id": "ember-vale",
+            "defender_in_hitstun_before": true,
+            "defender_state_before": "hurt_light",
+            "element": "volt",
+            "element_effect": "chain_stun",
+            "feedback_tier": "medium",
+            "gameplay_frame": 996,
+            "hitstop_frames": 5,
+            "launch": "(9.467264, -9.467264)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(9.467264, -9.467264)",
+                "position": "(-162.0, 281.1972)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 13.3887329101562,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -159.475341796875,
+                  "y": 346.672790527344
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -159.475341796875,
+                  "y": 346.672790527344
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 13.3887329101562,
+            "launch_trail_tier": "MEDIUM",
+            "move_frame": 5,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "juno-spark",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/juno-spark/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/juno-spark/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "juno-spark.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 8834015,
+            "vfx_event": "juno_spark_neutral_special_projectile_jagged_fork_arc"
+          },
+          "move_frame": 5,
+          "move_phase": "active",
+          "projectile_count": 1
+        }
+      ],
+      "damage_applications": [
+        2.68681216,
+        2.68681216
+      ],
+      "fighter": "juno-spark",
+      "monitoring_after_cast_start": true,
+      "phantom_contacts": 1,
+      "previous_melee_monitoring": true,
+      "prior_move_active": true
+    },
+    {
+      "body": "female",
+      "contacts": [
+        {
+          "info": {
+            "actual_defender_state": "hurt_light",
+            "actual_launch": "(7.377415, -7.377415)",
+            "attacker_id": "juno-spark",
+            "aura_identity_tag": "speed_chain",
+            "aura_runtime_hooks": [
+              "chain_aura_gain"
+            ],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:1169:16",
+            "combo_count_before": 15,
+            "confirmed_contact": true,
+            "contact_direction": "(0.707107, -0.707107)",
+            "contact_result": "hit",
+            "contact_world": "(-164.0, 270.1469)",
+            "counterhit": false,
+            "damage": 2.68681216,
+            "defender_airborne": false,
+            "defender_damage_before": 4.03021824,
+            "defender_id": "ember-vale",
+            "defender_in_hitstun_before": true,
+            "defender_state_before": "hitstun",
+            "element": "volt",
+            "element_effect": "chain_stun",
+            "feedback_tier": "medium",
+            "gameplay_frame": 1169,
+            "hitstop_frames": 5,
+            "launch": "(7.377415, -7.377415)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(7.377415, -7.377415)",
+                "position": "(-162.0, 281.1972)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 10.4332399368286,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -160.03271484375,
+                  "y": 347.229919433594
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -160.03271484375,
+                  "y": 347.229919433594
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 10.4332399368286,
+            "launch_trail_tier": "MEDIUM",
+            "move_frame": 4,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "juno-spark",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/juno-spark/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/juno-spark/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "juno-spark.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 9347826,
+            "vfx_event": "juno_spark_neutral_special_projectile_jagged_fork_arc"
+          },
+          "move_frame": 4,
+          "move_phase": "active",
+          "projectile_count": 0
+        },
+        {
+          "info": {
+            "actual_defender_state": "hurt_light",
+            "actual_launch": "(9.467264, -9.467264)",
+            "attacker_id": "juno-spark",
+            "aura_identity_tag": "speed_chain",
+            "aura_runtime_hooks": [
+              "chain_aura_gain"
+            ],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:1173:17",
+            "combo_count_before": 16,
+            "confirmed_contact": true,
+            "contact_direction": "(0.707107, -0.707107)",
+            "contact_result": "hit",
+            "contact_world": "(-147.8717, 277.0966)",
+            "counterhit": false,
+            "damage": 2.68681216,
+            "defender_airborne": false,
+            "defender_damage_before": 6.7170304,
+            "defender_id": "ember-vale",
+            "defender_in_hitstun_before": true,
+            "defender_state_before": "hurt_light",
+            "element": "volt",
+            "element_effect": "chain_stun",
+            "feedback_tier": "medium",
+            "gameplay_frame": 1173,
+            "hitstop_frames": 5,
+            "launch": "(9.467264, -9.467264)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(9.467264, -9.467264)",
+                "position": "(-162.0, 281.1972)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 13.3887329101562,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -159.475341796875,
+                  "y": 346.672790527344
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -159.475341796875,
+                  "y": 346.672790527344
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 13.3887329101562,
+            "launch_trail_tier": "MEDIUM",
+            "move_frame": 5,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "juno-spark",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/juno-spark/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/juno-spark/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "juno-spark.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 9350533,
+            "vfx_event": "juno_spark_neutral_special_projectile_jagged_fork_arc"
+          },
+          "move_frame": 5,
+          "move_phase": "active",
+          "projectile_count": 1
+        }
+      ],
+      "damage_applications": [
+        2.68681216,
+        2.68681216
+      ],
+      "fighter": "juno-spark",
+      "monitoring_after_cast_start": true,
+      "phantom_contacts": 1,
+      "previous_melee_monitoring": true,
+      "prior_move_active": true
+    },
+    {
+      "body": "male",
+      "contacts": [
+        {
+          "info": {
+            "actual_defender_state": "hurt_light",
+            "actual_launch": "(8.879186, -10.5818)",
+            "attacker_id": "kaia-windrow",
+            "aura_identity_tag": "wind_drift",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:1348:19",
+            "combo_count_before": 18,
+            "confirmed_contact": true,
+            "contact_direction": "(0.642788, -0.766044)",
+            "contact_result": "hit",
+            "contact_world": "(-162.5, 267.2231)",
+            "counterhit": false,
+            "damage": 2.92552704,
+            "defender_airborne": true,
+            "defender_damage_before": 4.38829056,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": false,
+            "defender_state_before": "idle",
+            "element": "gale",
+            "element_effect": "wind_drift",
+            "feedback_tier": "medium",
+            "gameplay_frame": 1348,
+            "hitstop_frames": 5,
+            "launch": "(8.879186, -10.5818)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(8.879186, -10.5818)",
+                "position": "(-162.0, 280.2231)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 13.8135604858398,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -159.63232421875,
+                  "y": 345.401306152344
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -159.63232421875,
+                  "y": 345.401306152344
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 13.8135604858398,
+            "launch_trail_tier": "MEDIUM",
+            "move_frame": 6,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "kaia-windrow",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/kaia-windrow/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/kaia-windrow/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "kaia-windrow.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 9928701,
+            "vfx_event": "kaia_windrow_neutral_special_projectile_crescent_ribbon"
+          },
+          "move_frame": 6,
+          "move_phase": "active",
+          "projectile_count": 0
+        },
+        {
+          "info": {
+            "actual_defender_state": "launched",
+            "actual_launch": "(11.4018, -13.58813)",
+            "attacker_id": "kaia-windrow",
+            "aura_identity_tag": "wind_drift",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:1352:20",
+            "combo_count_before": 19,
+            "confirmed_contact": true,
+            "contact_direction": "(0.642788, -0.766044)",
+            "contact_result": "hit",
+            "contact_world": "(-155.9931, 272.2231)",
+            "counterhit": false,
+            "damage": 2.92552704,
+            "defender_airborne": true,
+            "defender_damage_before": 7.3138176,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": true,
+            "defender_state_before": "hurt_light",
+            "element": "gale",
+            "element_effect": "wind_drift",
+            "feedback_tier": "medium",
+            "gameplay_frame": 1352,
+            "hitstop_frames": 5,
+            "launch": "(11.4018, -13.58813)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(11.4018, -13.58813)",
+                "position": "(-162.0, 280.2231)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 17.7380485534668,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -158.95947265625,
+                  "y": 344.599548339844
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -158.95947265625,
+                  "y": 344.599548339844
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 17.7380485534668,
+            "launch_trail_tier": "HIGH",
+            "move_frame": 7,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "kaia-windrow",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/kaia-windrow/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/kaia-windrow/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "kaia-windrow.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 9934414,
+            "vfx_event": "kaia_windrow_neutral_special_projectile_crescent_ribbon"
+          },
+          "move_frame": 7,
+          "move_phase": "active",
+          "projectile_count": 1
+        }
+      ],
+      "damage_applications": [
+        2.92552704,
+        2.92552704
+      ],
+      "fighter": "kaia-windrow",
+      "monitoring_after_cast_start": true,
+      "phantom_contacts": 1,
+      "previous_melee_monitoring": true,
+      "prior_move_active": true
+    },
+    {
+      "body": "female",
+      "contacts": [
+        {
+          "info": {
+            "actual_defender_state": "hurt_light",
+            "actual_launch": "(8.879186, -10.5818)",
+            "attacker_id": "kaia-windrow",
+            "aura_identity_tag": "wind_drift",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:1525:22",
+            "combo_count_before": 21,
+            "confirmed_contact": true,
+            "contact_direction": "(0.642788, -0.766044)",
+            "contact_result": "hit",
+            "contact_world": "(-162.5, 267.2231)",
+            "counterhit": false,
+            "damage": 2.92552704,
+            "defender_airborne": true,
+            "defender_damage_before": 4.38829056,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": false,
+            "defender_state_before": "idle",
+            "element": "gale",
+            "element_effect": "wind_drift",
+            "feedback_tier": "medium",
+            "gameplay_frame": 1525,
+            "hitstop_frames": 5,
+            "launch": "(8.879186, -10.5818)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(8.879186, -10.5818)",
+                "position": "(-162.0, 280.2231)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 13.8135604858398,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -159.63232421875,
+                  "y": 345.401306152344
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -159.63232421875,
+                  "y": 345.401306152344
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 13.8135604858398,
+            "launch_trail_tier": "MEDIUM",
+            "move_frame": 6,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "kaia-windrow",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/kaia-windrow/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/kaia-windrow/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "kaia-windrow.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 10470849,
+            "vfx_event": "kaia_windrow_neutral_special_projectile_crescent_ribbon"
+          },
+          "move_frame": 6,
+          "move_phase": "active",
+          "projectile_count": 0
+        },
+        {
+          "info": {
+            "actual_defender_state": "launched",
+            "actual_launch": "(11.4018, -13.58813)",
+            "attacker_id": "kaia-windrow",
+            "aura_identity_tag": "wind_drift",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:1529:23",
+            "combo_count_before": 22,
+            "confirmed_contact": true,
+            "contact_direction": "(0.642788, -0.766044)",
+            "contact_result": "hit",
+            "contact_world": "(-155.9931, 272.2231)",
+            "counterhit": false,
+            "damage": 2.92552704,
+            "defender_airborne": true,
+            "defender_damage_before": 7.3138176,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": true,
+            "defender_state_before": "hurt_light",
+            "element": "gale",
+            "element_effect": "wind_drift",
+            "feedback_tier": "medium",
+            "gameplay_frame": 1529,
+            "hitstop_frames": 5,
+            "launch": "(11.4018, -13.58813)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(11.4018, -13.58813)",
+                "position": "(-162.0, 280.2231)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 17.7380485534668,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -158.95947265625,
+                  "y": 344.599548339844
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -158.95947265625,
+                  "y": 344.599548339844
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 17.7380485534668,
+            "launch_trail_tier": "HIGH",
+            "move_frame": 7,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "kaia-windrow",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/kaia-windrow/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/kaia-windrow/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "kaia-windrow.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 10473616,
+            "vfx_event": "kaia_windrow_neutral_special_projectile_crescent_ribbon"
+          },
+          "move_frame": 7,
+          "move_phase": "active",
+          "projectile_count": 1
+        }
+      ],
+      "damage_applications": [
+        2.92552704,
+        2.92552704
+      ],
+      "fighter": "kaia-windrow",
+      "monitoring_after_cast_start": true,
+      "phantom_contacts": 1,
+      "previous_melee_monitoring": true,
+      "prior_move_active": true
+    },
+    {
+      "body": "male",
+      "contacts": [
+        {
+          "info": {
+            "actual_defender_state": "hurt_light",
+            "actual_launch": "(12.34737, -4.494074)",
+            "attacker_id": "nix-calder",
+            "aura_identity_tag": "freeze_control",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:1704:25",
+            "combo_count_before": 24,
+            "confirmed_contact": true,
+            "contact_direction": "(0.939693, -0.34202)",
+            "contact_result": "hit",
+            "contact_world": "(-162.5, 266.2408)",
+            "counterhit": false,
+            "damage": 3.499776,
+            "defender_airborne": true,
+            "defender_damage_before": 5.249664,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": false,
+            "defender_state_before": "idle",
+            "element": "frost",
+            "element_effect": "chill_freeze",
+            "feedback_tier": "medium",
+            "gameplay_frame": 1704,
+            "hitstop_frames": 5,
+            "launch": "(12.34737, -4.494074)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(12.34737, -4.494074)",
+                "position": "(-162.0, 279.2408)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 13.1397933959961,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -158.707275390625,
+                  "y": 346.042541503906
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -158.707275390625,
+                  "y": 346.042541503906
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 13.1397933959961,
+            "launch_trail_tier": "MEDIUM",
+            "move_frame": 8,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "nix-calder",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/nix-calder/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/nix-calder/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "nix-calder.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 11042527,
+            "vfx_event": "nix_calder_neutral_special_projectile_crystal_shard_fan"
+          },
+          "move_frame": 8,
+          "move_phase": "active",
+          "projectile_count": 0
+        },
+        {
+          "info": {
+            "actual_defender_state": "launched",
+            "actual_launch": "(16.75906, -6.099797)",
+            "attacker_id": "nix-calder",
+            "aura_identity_tag": "freeze_control",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:1708:26",
+            "combo_count_before": 25,
+            "confirmed_contact": true,
+            "contact_direction": "(0.939693, -0.34202)",
+            "contact_result": "hit",
+            "contact_world": "(-158.7002, 275.2408)",
+            "counterhit": false,
+            "damage": 3.499776,
+            "defender_airborne": true,
+            "defender_damage_before": 8.74944,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": true,
+            "defender_state_before": "hurt_light",
+            "element": "frost",
+            "element_effect": "chill_freeze",
+            "feedback_tier": "medium",
+            "gameplay_frame": 1708,
+            "hitstop_frames": 5,
+            "launch": "(16.75906, -6.099797)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(16.75906, -6.099797)",
+                "position": "(-162.0, 279.2408)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 17.8346157073975,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -157.531005859375,
+                  "y": 345.614318847656
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -157.531005859375,
+                  "y": 345.614318847656
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 17.8346157073975,
+            "launch_trail_tier": "HIGH",
+            "move_frame": 9,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "nix-calder",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/nix-calder/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/nix-calder/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "nix-calder.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 11048270,
+            "vfx_event": "nix_calder_neutral_special_projectile_crystal_shard_fan"
+          },
+          "move_frame": 9,
+          "move_phase": "active",
+          "projectile_count": 1
+        }
+      ],
+      "damage_applications": [
+        3.499776,
+        3.499776
+      ],
+      "fighter": "nix-calder",
+      "monitoring_after_cast_start": true,
+      "phantom_contacts": 1,
+      "previous_melee_monitoring": true,
+      "prior_move_active": true
+    },
+    {
+      "body": "female",
+      "contacts": [
+        {
+          "info": {
+            "actual_defender_state": "hurt_light",
+            "actual_launch": "(12.34737, -4.494074)",
+            "attacker_id": "nix-calder",
+            "aura_identity_tag": "freeze_control",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:1881:28",
+            "combo_count_before": 27,
+            "confirmed_contact": true,
+            "contact_direction": "(0.939693, -0.34202)",
+            "contact_result": "hit",
+            "contact_world": "(-162.5, 266.2408)",
+            "counterhit": false,
+            "damage": 3.499776,
+            "defender_airborne": true,
+            "defender_damage_before": 5.249664,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": false,
+            "defender_state_before": "idle",
+            "element": "frost",
+            "element_effect": "chill_freeze",
+            "feedback_tier": "medium",
+            "gameplay_frame": 1881,
+            "hitstop_frames": 5,
+            "launch": "(12.34737, -4.494074)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(12.34737, -4.494074)",
+                "position": "(-162.0, 279.2408)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 13.1397933959961,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -158.707275390625,
+                  "y": 346.042541503906
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -158.707275390625,
+                  "y": 346.042541503906
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 13.1397933959961,
+            "launch_trail_tier": "MEDIUM",
+            "move_frame": 8,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "nix-calder",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/nix-calder/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/nix-calder/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "nix-calder.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 11804713,
+            "vfx_event": "nix_calder_neutral_special_projectile_crystal_shard_fan"
+          },
+          "move_frame": 8,
+          "move_phase": "active",
+          "projectile_count": 0
+        },
+        {
+          "info": {
+            "actual_defender_state": "launched",
+            "actual_launch": "(16.75906, -6.099797)",
+            "attacker_id": "nix-calder",
+            "aura_identity_tag": "freeze_control",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:1885:29",
+            "combo_count_before": 28,
+            "confirmed_contact": true,
+            "contact_direction": "(0.939693, -0.34202)",
+            "contact_result": "hit",
+            "contact_world": "(-158.7002, 275.2408)",
+            "counterhit": false,
+            "damage": 3.499776,
+            "defender_airborne": true,
+            "defender_damage_before": 8.74944,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": true,
+            "defender_state_before": "hurt_light",
+            "element": "frost",
+            "element_effect": "chill_freeze",
+            "feedback_tier": "medium",
+            "gameplay_frame": 1885,
+            "hitstop_frames": 5,
+            "launch": "(16.75906, -6.099797)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(16.75906, -6.099797)",
+                "position": "(-162.0, 279.2408)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 17.8346157073975,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -157.531005859375,
+                  "y": 345.614318847656
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -157.531005859375,
+                  "y": 345.614318847656
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 17.8346157073975,
+            "launch_trail_tier": "HIGH",
+            "move_frame": 9,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "nix-calder",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/nix-calder/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/nix-calder/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "nix-calder.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 11807736,
+            "vfx_event": "nix_calder_neutral_special_projectile_crystal_shard_fan"
+          },
+          "move_frame": 9,
+          "move_phase": "active",
+          "projectile_count": 1
+        }
+      ],
+      "damage_applications": [
+        3.499776,
+        3.499776
+      ],
+      "fighter": "nix-calder",
+      "monitoring_after_cast_start": true,
+      "phantom_contacts": 1,
+      "previous_melee_monitoring": true,
+      "prior_move_active": true
+    },
+    {
+      "body": "male",
+      "contacts": [
+        {
+          "info": {
+            "actual_defender_state": "launched",
+            "actual_launch": "(7.462049, -12.92465)",
+            "attacker_id": "orion-vell",
+            "aura_identity_tag": "gravity_pull",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:2057:31",
+            "combo_count_before": 30,
+            "confirmed_contact": true,
+            "contact_direction": "(0.5, -0.866025)",
+            "contact_result": "hit",
+            "contact_world": "(-162.5, 268.1978)",
+            "counterhit": false,
+            "damage": 3.1744,
+            "defender_airborne": true,
+            "defender_damage_before": 4.7616,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": false,
+            "defender_state_before": "idle",
+            "element": "gravity",
+            "element_effect": "gravity_pull",
+            "feedback_tier": "medium",
+            "gameplay_frame": 2057,
+            "hitstop_frames": 5,
+            "launch": "(7.462049, -12.92465)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(7.462049, -12.92465)",
+                "position": "(-162.0, 281.1978)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 14.9240970611572,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -160.010009765625,
+                  "y": 345.751037597656
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -160.010009765625,
+                  "y": 345.751037597656
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 14.9240970611572,
+            "launch_trail_tier": "HIGH",
+            "move_frame": 7,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "orion-vell",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/orion-vell/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/orion-vell/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "orion-vell.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 12374814,
+            "vfx_event": "orion_vell_neutral_special_projectile_orbit_node_collapse"
+          },
+          "move_frame": 7,
+          "move_phase": "active",
+          "projectile_count": 0
+        },
+        {
+          "info": {
+            "actual_defender_state": "launched",
+            "actual_launch": "(9.59122, -16.61248)",
+            "attacker_id": "orion-vell",
+            "aura_identity_tag": "gravity_pull",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:2061:32",
+            "combo_count_before": 31,
+            "confirmed_contact": true,
+            "contact_direction": "(0.5, -0.866025)",
+            "contact_result": "hit",
+            "contact_world": "(-163.4343, 271.1978)",
+            "counterhit": false,
+            "damage": 3.1744,
+            "defender_airborne": true,
+            "defender_damage_before": 7.936,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": true,
+            "defender_state_before": "launched",
+            "element": "gravity",
+            "element_effect": "gravity_pull",
+            "feedback_tier": "medium",
+            "gameplay_frame": 2061,
+            "hitstop_frames": 5,
+            "launch": "(9.59122, -16.61248)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(9.59122, -16.61248)",
+                "position": "(-162.0, 281.1978)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 19.1824398040771,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -159.4423828125,
+                  "y": 344.767639160156
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -159.4423828125,
+                  "y": 344.767639160156
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 19.1824398040771,
+            "launch_trail_tier": "HIGH",
+            "move_frame": 8,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "orion-vell",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/orion-vell/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/orion-vell/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "orion-vell.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 12381105,
+            "vfx_event": "orion_vell_neutral_special_projectile_orbit_node_collapse"
+          },
+          "move_frame": 8,
+          "move_phase": "active",
+          "projectile_count": 1
+        }
+      ],
+      "damage_applications": [
+        3.1744,
+        3.1744
+      ],
+      "fighter": "orion-vell",
+      "monitoring_after_cast_start": true,
+      "phantom_contacts": 1,
+      "previous_melee_monitoring": true,
+      "prior_move_active": true
+    },
+    {
+      "body": "female",
+      "contacts": [
+        {
+          "info": {
+            "actual_defender_state": "launched",
+            "actual_launch": "(7.462049, -12.92465)",
+            "attacker_id": "orion-vell",
+            "aura_identity_tag": "gravity_pull",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:2234:34",
+            "combo_count_before": 33,
+            "confirmed_contact": true,
+            "contact_direction": "(0.5, -0.866025)",
+            "contact_result": "hit",
+            "contact_world": "(-162.5, 268.1978)",
+            "counterhit": false,
+            "damage": 3.1744,
+            "defender_airborne": true,
+            "defender_damage_before": 4.7616,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": false,
+            "defender_state_before": "idle",
+            "element": "gravity",
+            "element_effect": "gravity_pull",
+            "feedback_tier": "medium",
+            "gameplay_frame": 2234,
+            "hitstop_frames": 5,
+            "launch": "(7.462049, -12.92465)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(7.462049, -12.92465)",
+                "position": "(-162.0, 281.1978)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 14.9240970611572,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -160.010009765625,
+                  "y": 345.751037597656
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -160.010009765625,
+                  "y": 345.751037597656
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 14.9240970611572,
+            "launch_trail_tier": "HIGH",
+            "move_frame": 7,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "orion-vell",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/orion-vell/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/orion-vell/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "orion-vell.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 12925572,
+            "vfx_event": "orion_vell_neutral_special_projectile_orbit_node_collapse"
+          },
+          "move_frame": 7,
+          "move_phase": "active",
+          "projectile_count": 0
+        },
+        {
+          "info": {
+            "actual_defender_state": "launched",
+            "actual_launch": "(9.59122, -16.61248)",
+            "attacker_id": "orion-vell",
+            "aura_identity_tag": "gravity_pull",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:2238:35",
+            "combo_count_before": 34,
+            "confirmed_contact": true,
+            "contact_direction": "(0.5, -0.866025)",
+            "contact_result": "hit",
+            "contact_world": "(-163.4343, 271.1978)",
+            "counterhit": false,
+            "damage": 3.1744,
+            "defender_airborne": true,
+            "defender_damage_before": 7.936,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": true,
+            "defender_state_before": "launched",
+            "element": "gravity",
+            "element_effect": "gravity_pull",
+            "feedback_tier": "medium",
+            "gameplay_frame": 2238,
+            "hitstop_frames": 5,
+            "launch": "(9.59122, -16.61248)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(9.59122, -16.61248)",
+                "position": "(-162.0, 281.1978)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 19.1824398040771,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -159.4423828125,
+                  "y": 344.767639160156
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -159.4423828125,
+                  "y": 344.767639160156
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 19.1824398040771,
+            "launch_trail_tier": "HIGH",
+            "move_frame": 8,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "orion-vell",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/orion-vell/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/orion-vell/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "orion-vell.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 12928418,
+            "vfx_event": "orion_vell_neutral_special_projectile_orbit_node_collapse"
+          },
+          "move_frame": 8,
+          "move_phase": "active",
+          "projectile_count": 1
+        }
+      ],
+      "damage_applications": [
+        3.1744,
+        3.1744
+      ],
+      "fighter": "orion-vell",
+      "monitoring_after_cast_start": true,
+      "phantom_contacts": 1,
+      "previous_melee_monitoring": true,
+      "prior_move_active": true
+    },
+    {
+      "body": "male",
+      "contacts": [
+        {
+          "info": {
+            "actual_defender_state": "hurt_light",
+            "actual_launch": "(10.39586, -8.723165)",
+            "attacker_id": "vesper-nyx",
+            "aura_identity_tag": "phase_mark",
+            "aura_runtime_hooks": [
+              "mark_aura_gain"
+            ],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:2409:37",
+            "combo_count_before": 36,
+            "confirmed_contact": true,
+            "contact_direction": "(0.766044, -0.642788)",
+            "contact_result": "hit",
+            "contact_world": "(-162.5, 269.6246)",
+            "counterhit": false,
+            "damage": 2.80489984,
+            "defender_airborne": false,
+            "defender_damage_before": 4.20734976,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": false,
+            "defender_state_before": "idle",
+            "element": "void",
+            "element_effect": "void_mark",
+            "feedback_tier": "medium",
+            "gameplay_frame": 2409,
+            "hitstop_frames": 5,
+            "launch": "(10.39586, -8.723165)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(10.39586, -8.723165)",
+                "position": "(-162.0, 283.0992)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 13.5708351135254,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -159.227783203125,
+                  "y": 348.773010253906
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -153.163558959961,
+                  "y": 283.918365478516
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.850000000000001
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 13.5708351135254,
+            "launch_trail_tier": "MEDIUM",
+            "move_frame": 5,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "vesper-nyx",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/vesper-nyx/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/vesper-nyx/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "vesper-nyx.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 13712253,
+            "vfx_event": "vesper_nyx_neutral_special_projectile_phase_seam_echo"
+          },
+          "move_frame": 5,
+          "move_phase": "active",
+          "projectile_count": 0
+        },
+        {
+          "info": {
+            "actual_defender_state": "launched",
+            "actual_launch": "(13.27824, -11.14176)",
+            "attacker_id": "vesper-nyx",
+            "aura_identity_tag": "phase_mark",
+            "aura_runtime_hooks": [
+              "mark_aura_gain"
+            ],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:2413:38",
+            "combo_count_before": 37,
+            "confirmed_contact": true,
+            "contact_direction": "(0.766044, -0.642788)",
+            "contact_result": "hit",
+            "contact_world": "(-158.0, 276.15)",
+            "counterhit": false,
+            "damage": 2.80489984,
+            "defender_airborne": false,
+            "defender_damage_before": 7.0122496,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": true,
+            "defender_state_before": "hurt_light",
+            "element": "void",
+            "element_effect": "void_mark",
+            "feedback_tier": "medium",
+            "gameplay_frame": 2413,
+            "hitstop_frames": 5,
+            "launch": "(13.27824, -11.14176)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(13.27824, -11.14176)",
+                "position": "(-162.0, 283.0992)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 17.3335056304932,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -158.459228515625,
+                  "y": 348.127990722656
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -150.713790893555,
+                  "y": 283.313659667969
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.850000000000001
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 17.3335056304932,
+            "launch_trail_tier": "HIGH",
+            "move_frame": 6,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "vesper-nyx",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/vesper-nyx/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/vesper-nyx/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "vesper-nyx.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 13721080,
+            "vfx_event": "vesper_nyx_neutral_special_projectile_phase_seam_echo"
+          },
+          "move_frame": 6,
+          "move_phase": "active",
+          "projectile_count": 1
+        }
+      ],
+      "damage_applications": [
+        2.80489984,
+        2.80489984
+      ],
+      "fighter": "vesper-nyx",
+      "monitoring_after_cast_start": true,
+      "phantom_contacts": 1,
+      "previous_melee_monitoring": true,
+      "prior_move_active": true
+    },
+    {
+      "body": "female",
+      "contacts": [
+        {
+          "info": {
+            "actual_defender_state": "hurt_light",
+            "actual_launch": "(10.39586, -8.723165)",
+            "attacker_id": "vesper-nyx",
+            "aura_identity_tag": "phase_mark",
+            "aura_runtime_hooks": [
+              "mark_aura_gain"
+            ],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:2586:40",
+            "combo_count_before": 39,
+            "confirmed_contact": true,
+            "contact_direction": "(0.766044, -0.642788)",
+            "contact_result": "hit",
+            "contact_world": "(-162.5, 269.6246)",
+            "counterhit": false,
+            "damage": 2.80489984,
+            "defender_airborne": false,
+            "defender_damage_before": 4.20734976,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": false,
+            "defender_state_before": "idle",
+            "element": "void",
+            "element_effect": "void_mark",
+            "feedback_tier": "medium",
+            "gameplay_frame": 2586,
+            "hitstop_frames": 5,
+            "launch": "(10.39586, -8.723165)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(10.39586, -8.723165)",
+                "position": "(-162.0, 283.0992)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 13.5708351135254,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -159.227783203125,
+                  "y": 348.773010253906
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -153.163558959961,
+                  "y": 283.918365478516
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.850000000000001
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 13.5708351135254,
+            "launch_trail_tier": "MEDIUM",
+            "move_frame": 5,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "vesper-nyx",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/vesper-nyx/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/vesper-nyx/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "vesper-nyx.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 14401220,
+            "vfx_event": "vesper_nyx_neutral_special_projectile_phase_seam_echo"
+          },
+          "move_frame": 5,
+          "move_phase": "active",
+          "projectile_count": 0
+        },
+        {
+          "info": {
+            "actual_defender_state": "launched",
+            "actual_launch": "(13.27824, -11.14176)",
+            "attacker_id": "vesper-nyx",
+            "aura_identity_tag": "phase_mark",
+            "aura_runtime_hooks": [
+              "mark_aura_gain"
+            ],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:2590:41",
+            "combo_count_before": 40,
+            "confirmed_contact": true,
+            "contact_direction": "(0.766044, -0.642788)",
+            "contact_result": "hit",
+            "contact_world": "(-158.0, 276.15)",
+            "counterhit": false,
+            "damage": 2.80489984,
+            "defender_airborne": false,
+            "defender_damage_before": 7.0122496,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": true,
+            "defender_state_before": "hurt_light",
+            "element": "void",
+            "element_effect": "void_mark",
+            "feedback_tier": "medium",
+            "gameplay_frame": 2590,
+            "hitstop_frames": 5,
+            "launch": "(13.27824, -11.14176)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(13.27824, -11.14176)",
+                "position": "(-162.0, 283.0992)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 17.3335056304932,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -158.459228515625,
+                  "y": 348.127990722656
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -150.713790893555,
+                  "y": 283.313659667969
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.850000000000001
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 17.3335056304932,
+            "launch_trail_tier": "HIGH",
+            "move_frame": 6,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "vesper-nyx",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/vesper-nyx/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/vesper-nyx/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "vesper-nyx.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 14403821,
+            "vfx_event": "vesper_nyx_neutral_special_projectile_phase_seam_echo"
+          },
+          "move_frame": 6,
+          "move_phase": "active",
+          "projectile_count": 1
+        }
+      ],
+      "damage_applications": [
+        2.80489984,
+        2.80489984
+      ],
+      "fighter": "vesper-nyx",
+      "monitoring_after_cast_start": true,
+      "phantom_contacts": 1,
+      "previous_melee_monitoring": true,
+      "prior_move_active": true
+    },
+    {
+      "body": "male",
+      "contacts": [
+        {
+          "info": {
+            "actual_defender_state": "launched",
+            "actual_launch": "(11.89962, -9.984969)",
+            "attacker_id": "yin",
+            "aura_identity_tag": "burn_rushdown",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:2763:43",
+            "combo_count_before": 42,
+            "confirmed_contact": true,
+            "contact_direction": "(0.766044, -0.642788)",
+            "contact_result": "hit",
+            "contact_world": "(-162.5, 268.1413)",
+            "counterhit": false,
+            "damage": 3.1744,
+            "defender_airborne": true,
+            "defender_damage_before": 4.7616,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": false,
+            "defender_state_before": "idle",
+            "element": "flame",
+            "element_effect": "burn",
+            "feedback_tier": "medium",
+            "gameplay_frame": 2763,
+            "hitstop_frames": 5,
+            "launch": "(11.89962, -9.984969)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(11.89962, -9.984969)",
+                "position": "(-162.0, 281.1413)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 15.5338535308838,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -158.82666015625,
+                  "y": 346.478668212891
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -158.82666015625,
+                  "y": 346.478668212891
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 15.5338535308838,
+            "launch_trail_tier": "HIGH",
+            "move_frame": 5,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "yin",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/yin/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/yin/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "ember-vale.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 14977331,
+            "vfx_event": "ember_vale_neutral_special_projectile_flame_tongue_cone"
+          },
+          "move_frame": 5,
+          "move_phase": "active",
+          "projectile_count": 0
+        },
+        {
+          "info": {
+            "actual_defender_state": "launched",
+            "actual_launch": "(15.1617, -12.72218)",
+            "attacker_id": "yin",
+            "aura_identity_tag": "burn_rushdown",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:2767:44",
+            "combo_count_before": 43,
+            "confirmed_contact": true,
+            "contact_direction": "(0.766044, -0.642788)",
+            "contact_result": "hit",
+            "contact_world": "(-151.2859, 279.1413)",
+            "counterhit": false,
+            "damage": 3.1744,
+            "defender_airborne": true,
+            "defender_damage_before": 7.936,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": true,
+            "defender_state_before": "launched",
+            "element": "flame",
+            "element_effect": "burn",
+            "feedback_tier": "medium",
+            "gameplay_frame": 2767,
+            "hitstop_frames": 5,
+            "launch": "(15.1617, -12.72218)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(15.1617, -12.72218)",
+                "position": "(-162.0, 281.1413)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 19.7921943664551,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -157.956787109375,
+                  "y": 345.748687744141
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -157.956787109375,
+                  "y": 345.748687744141
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 19.7921943664551,
+            "launch_trail_tier": "HIGH",
+            "move_frame": 6,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "yin",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/yin/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/yin/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "ember-vale.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 14983000,
+            "vfx_event": "ember_vale_neutral_special_projectile_flame_tongue_cone"
+          },
+          "move_frame": 6,
+          "move_phase": "active",
+          "projectile_count": 1
+        }
+      ],
+      "damage_applications": [
+        3.1744,
+        3.1744
+      ],
+      "fighter": "yin",
+      "monitoring_after_cast_start": true,
+      "phantom_contacts": 1,
+      "previous_melee_monitoring": true,
+      "prior_move_active": true
+    },
+    {
+      "body": "female",
+      "contacts": [
+        {
+          "info": {
+            "actual_defender_state": "launched",
+            "actual_launch": "(11.89962, -9.984969)",
+            "attacker_id": "yin",
+            "aura_identity_tag": "burn_rushdown",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:2940:46",
+            "combo_count_before": 45,
+            "confirmed_contact": true,
+            "contact_direction": "(0.766044, -0.642788)",
+            "contact_result": "hit",
+            "contact_world": "(-162.5, 268.1413)",
+            "counterhit": false,
+            "damage": 3.1744,
+            "defender_airborne": true,
+            "defender_damage_before": 4.7616,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": false,
+            "defender_state_before": "idle",
+            "element": "flame",
+            "element_effect": "burn",
+            "feedback_tier": "medium",
+            "gameplay_frame": 2940,
+            "hitstop_frames": 5,
+            "launch": "(11.89962, -9.984969)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(11.89962, -9.984969)",
+                "position": "(-162.0, 281.1413)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 15.5338535308838,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -158.82666015625,
+                  "y": 346.478668212891
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -158.82666015625,
+                  "y": 346.478668212891
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 15.5338535308838,
+            "launch_trail_tier": "HIGH",
+            "move_frame": 5,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "yin",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/yin/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/yin/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "ember-vale.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 15496393,
+            "vfx_event": "ember_vale_neutral_special_projectile_flame_tongue_cone"
+          },
+          "move_frame": 5,
+          "move_phase": "active",
+          "projectile_count": 0
+        },
+        {
+          "info": {
+            "actual_defender_state": "launched",
+            "actual_launch": "(15.1617, -12.72218)",
+            "attacker_id": "yin",
+            "aura_identity_tag": "burn_rushdown",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:2944:47",
+            "combo_count_before": 46,
+            "confirmed_contact": true,
+            "contact_direction": "(0.766044, -0.642788)",
+            "contact_result": "hit",
+            "contact_world": "(-151.2859, 279.1413)",
+            "counterhit": false,
+            "damage": 3.1744,
+            "defender_airborne": true,
+            "defender_damage_before": 7.936,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": true,
+            "defender_state_before": "launched",
+            "element": "flame",
+            "element_effect": "burn",
+            "feedback_tier": "medium",
+            "gameplay_frame": 2944,
+            "hitstop_frames": 5,
+            "launch": "(15.1617, -12.72218)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(15.1617, -12.72218)",
+                "position": "(-162.0, 281.1413)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 19.7921943664551,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -157.956787109375,
+                  "y": 345.748687744141
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -157.956787109375,
+                  "y": 345.748687744141
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 19.7921943664551,
+            "launch_trail_tier": "HIGH",
+            "move_frame": 6,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "yin",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/yin/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/yin/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "ember-vale.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 15499239,
+            "vfx_event": "ember_vale_neutral_special_projectile_flame_tongue_cone"
+          },
+          "move_frame": 6,
+          "move_phase": "active",
+          "projectile_count": 1
+        }
+      ],
+      "damage_applications": [
+        3.1744,
+        3.1744
+      ],
+      "fighter": "yin",
+      "monitoring_after_cast_start": true,
+      "phantom_contacts": 1,
+      "previous_melee_monitoring": true,
+      "prior_move_active": true
+    },
+    {
+      "body": "male",
+      "contacts": [
+        {
+          "info": {
+            "actual_defender_state": "launched",
+            "actual_launch": "(11.89962, -9.984969)",
+            "attacker_id": "yang",
+            "aura_identity_tag": "burn_rushdown",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:3117:49",
+            "combo_count_before": 48,
+            "confirmed_contact": true,
+            "contact_direction": "(0.766044, -0.642788)",
+            "contact_result": "hit",
+            "contact_world": "(-162.5, 268.1413)",
+            "counterhit": false,
+            "damage": 3.1744,
+            "defender_airborne": true,
+            "defender_damage_before": 4.7616,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": false,
+            "defender_state_before": "idle",
+            "element": "flame",
+            "element_effect": "burn",
+            "feedback_tier": "medium",
+            "gameplay_frame": 3117,
+            "hitstop_frames": 5,
+            "launch": "(11.89962, -9.984969)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(11.89962, -9.984969)",
+                "position": "(-162.0, 281.1413)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 15.5338535308838,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -158.82666015625,
+                  "y": 346.478668212891
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -158.82666015625,
+                  "y": 346.478668212891
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 15.5338535308838,
+            "launch_trail_tier": "HIGH",
+            "move_frame": 5,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "yang",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/yang/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/yang/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "ember-vale.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 16023553,
+            "vfx_event": "ember_vale_neutral_special_projectile_flame_tongue_cone"
+          },
+          "move_frame": 5,
+          "move_phase": "active",
+          "projectile_count": 0
+        },
+        {
+          "info": {
+            "actual_defender_state": "launched",
+            "actual_launch": "(15.1617, -12.72218)",
+            "attacker_id": "yang",
+            "aura_identity_tag": "burn_rushdown",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:3121:50",
+            "combo_count_before": 49,
+            "confirmed_contact": true,
+            "contact_direction": "(0.766044, -0.642788)",
+            "contact_result": "hit",
+            "contact_world": "(-151.2859, 279.1413)",
+            "counterhit": false,
+            "damage": 3.1744,
+            "defender_airborne": true,
+            "defender_damage_before": 7.936,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": true,
+            "defender_state_before": "launched",
+            "element": "flame",
+            "element_effect": "burn",
+            "feedback_tier": "medium",
+            "gameplay_frame": 3121,
+            "hitstop_frames": 5,
+            "launch": "(15.1617, -12.72218)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(15.1617, -12.72218)",
+                "position": "(-162.0, 281.1413)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 19.7921943664551,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -157.956787109375,
+                  "y": 345.748687744141
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -157.956787109375,
+                  "y": 345.748687744141
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 19.7921943664551,
+            "launch_trail_tier": "HIGH",
+            "move_frame": 6,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "yang",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/yang/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/yang/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "ember-vale.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 16028808,
+            "vfx_event": "ember_vale_neutral_special_projectile_flame_tongue_cone"
+          },
+          "move_frame": 6,
+          "move_phase": "active",
+          "projectile_count": 1
+        }
+      ],
+      "damage_applications": [
+        3.1744,
+        3.1744
+      ],
+      "fighter": "yang",
+      "monitoring_after_cast_start": true,
+      "phantom_contacts": 1,
+      "previous_melee_monitoring": true,
+      "prior_move_active": true
+    },
+    {
+      "body": "female",
+      "contacts": [
+        {
+          "info": {
+            "actual_defender_state": "launched",
+            "actual_launch": "(11.89962, -9.984969)",
+            "attacker_id": "yang",
+            "aura_identity_tag": "burn_rushdown",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:3294:52",
+            "combo_count_before": 51,
+            "confirmed_contact": true,
+            "contact_direction": "(0.766044, -0.642788)",
+            "contact_result": "hit",
+            "contact_world": "(-162.5, 268.1413)",
+            "counterhit": false,
+            "damage": 3.1744,
+            "defender_airborne": true,
+            "defender_damage_before": 4.7616,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": false,
+            "defender_state_before": "idle",
+            "element": "flame",
+            "element_effect": "burn",
+            "feedback_tier": "medium",
+            "gameplay_frame": 3294,
+            "hitstop_frames": 5,
+            "launch": "(11.89962, -9.984969)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(11.89962, -9.984969)",
+                "position": "(-162.0, 281.1413)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 15.5338535308838,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -158.82666015625,
+                  "y": 346.478668212891
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -158.82666015625,
+                  "y": 346.478668212891
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 15.5338535308838,
+            "launch_trail_tier": "HIGH",
+            "move_frame": 5,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "yang",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/yang/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/yang/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "ember-vale.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 16564637,
+            "vfx_event": "ember_vale_neutral_special_projectile_flame_tongue_cone"
+          },
+          "move_frame": 5,
+          "move_phase": "active",
+          "projectile_count": 0
+        },
+        {
+          "info": {
+            "actual_defender_state": "launched",
+            "actual_launch": "(15.1617, -12.72218)",
+            "attacker_id": "yang",
+            "aura_identity_tag": "burn_rushdown",
+            "aura_runtime_hooks": [],
+            "blocked": false,
+            "camera_event": "shake_medium",
+            "clash_supported": false,
+            "combat_event_id": "93834970900:3298:53",
+            "combo_count_before": 52,
+            "confirmed_contact": true,
+            "contact_direction": "(0.766044, -0.642788)",
+            "contact_result": "hit",
+            "contact_world": "(-151.2859, 279.1413)",
+            "counterhit": false,
+            "damage": 3.1744,
+            "defender_airborne": true,
+            "defender_damage_before": 7.936,
+            "defender_id": "juno-spark",
+            "defender_in_hitstun_before": true,
+            "defender_state_before": "launched",
+            "element": "flame",
+            "element_effect": "burn",
+            "feedback_tier": "medium",
+            "gameplay_frame": 3298,
+            "hitstop_frames": 5,
+            "launch": "(15.1617, -12.72218)",
+            "launch_prediction": {
+              "crosses_blast_passively": false,
+              "inputs_snapshot": {
+                "hitstun_sec": 0.263333333333333,
+                "launch_velocity": "(15.1617, -12.72218)",
+                "position": "(-162.0, 281.1413)",
+                "recovery_ready": true,
+                "remaining_jumps": 1
+              },
+              "kb": 19.7921943664551,
+              "mutates_gameplay": false,
+              "passive": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -157.956787109375,
+                  "y": 345.748687744141
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "reason": "passive_stays_in",
+              "recovered": {
+                "crosses_blast": false,
+                "end": {
+                  "x": -157.956787109375,
+                  "y": 345.748687744141
+                },
+                "near_blast": false,
+                "saved": true,
+                "seconds": 0.266666666666667
+              },
+              "recovery_plausible": true,
+              "snapshot_unchanged": true,
+              "tier": "SAFE"
+            },
+            "launch_strength": 19.7921943664551,
+            "launch_trail_tier": "HIGH",
+            "move_frame": 6,
+            "move_id": "neutral_special_projectile",
+            "parry_supported": false,
+            "played_audio": {
+              "elemental_layer": {
+                "event": "projectile_impact",
+                "fighter_id": "yang",
+                "ok": true,
+                "path": "res://assets/audio/elemental_v1/yang/projectile_impact.wav",
+                "playing": true
+              },
+              "ok": true,
+              "path": "res://assets/audio/collectible_v1/yang/special.wav",
+              "playing": true
+            },
+            "screen_flash": false,
+            "sfx_event": "ember-vale.neutral_special_projectile.sfx",
+            "shield_damage": 3.0,
+            "timestamp_usec": 16567319,
+            "vfx_event": "ember_vale_neutral_special_projectile_flame_tongue_cone"
+          },
+          "move_frame": 6,
+          "move_phase": "active",
+          "projectile_count": 1
+        }
+      ],
+      "damage_applications": [
+        3.1744,
+        3.1744
+      ],
+      "fighter": "yang",
+      "monitoring_after_cast_start": true,
+      "phantom_contacts": 1,
+      "previous_melee_monitoring": true,
+      "prior_move_active": true
+    }
+  ],
+  "scope": "public heavy whiff and projectile cast, reconfigured idle defender; ownership regression only. No balance, frame data, AI or accepted terrain rules changed."
+}

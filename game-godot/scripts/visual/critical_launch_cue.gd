@@ -16,6 +16,8 @@ const CUES := {
 	"nix-calder": "crystal_break_launch",
 	"orion-vell": "gravity_rift_constellation",
 	"vesper-nyx": "phase_tear_rupture",
+	"yin": "subtractive_aperture",
+	"yang": "constructed_hex_radiance",
 	"hazard": "neutral_hazard_fracture",
 }
 
@@ -41,8 +43,8 @@ func play(attacker_id: String, origin: Vector2, launch_dir: Vector2, tier: Strin
 	_tier = tier
 	global_position = origin
 	_life = 0.16 if _reduce else (0.28 if tier != "NEAR_CERTAIN_KO" else 0.34)
-	_play_sound()
-	queue_redraw()
+	var renderer = preload("res://scripts/visual/spectral_feedback_renderer.gd").obtain(self)
+	if renderer != null: renderer.emit_effect(attacker_id,6,origin,_dir,96,.22)
 	return describe()
 
 
@@ -86,47 +88,4 @@ func _process(delta: float) -> void:
 
 
 func _draw() -> void:
-	if _life <= 0.0:
-		return
-	var colors := _Identity.identity_colors(_attacker_id if _attacker_id != "hazard" else "ember-vale")
-	var core: Color = colors.get("core", Color(1, 1, 1))
-	var accent: Color = colors.get("accent", Color(1, 1, 1))
-	if _hc:
-		core = Color(1, 1, 1)
-		accent = Color(1, 1, 0.7)
-	var fade := clampf(_life * 4.0, 0.0, 1.0)
-	var along := _dir * (48.0 if _reduce else 86.0)
-	# Shared grammar: directional streak + high-contrast rift. Family changes geometry.
-	match _family:
-		"furnace_flare_rupture":
-			draw_circle(Vector2.ZERO, 18.0 * fade, Color(core.r, core.g, core.b, 0.45 * fade))
-			draw_line(-along * 0.15, along, Color(accent.r, accent.g, accent.b, 0.9 * fade), 7.0)
-			draw_arc(Vector2.ZERO, 26.0 * fade, 0.0, TAU, 18, Color(1.0, 0.7, 0.2, 0.55 * fade), 3.0)
-		"tectonic_impact_fracture":
-			draw_rect(Rect2(-14, -14, 28, 28), Color(core.r, core.g, core.b, 0.5 * fade), false, 3.0)
-			draw_arc(Vector2.ZERO, 22.0, 0.0, TAU, 12, Color(accent.r, accent.g, accent.b, 0.7 * fade), 4.0)
-			draw_line(Vector2.ZERO, along, Color(0.7, 0.55, 0.3, 0.7 * fade), 8.0)
-		"voltage_fork":
-			draw_line(Vector2.ZERO, along, Color(accent.r, accent.g, 0.2, 0.95 * fade), 3.0)
-			draw_line(Vector2.ZERO, along.rotated(0.28) * 0.75, Color(0.4, 0.95, 1.0, 0.85 * fade), 2.0)
-			draw_line(Vector2.ZERO, along.rotated(-0.28) * 0.75, Color(0.4, 0.95, 1.0, 0.85 * fade), 2.0)
-		"wind_shear_cleave":
-			draw_arc(Vector2.ZERO, 20.0, _dir.angle() - 1.2, _dir.angle() + 1.2, 12, Color(0.85, 1.0, 0.9, 0.7 * fade), 3.0)
-			draw_line(Vector2.ZERO, along, Color(core.r, core.g, core.b, 0.8 * fade), 4.0)
-		"crystal_break_launch":
-			for i in 5:
-				var ang := _dir.angle() + (-0.5 + 0.25 * i)
-				draw_line(Vector2.ZERO, Vector2.from_angle(ang) * 34.0, Color(0.7, 0.95, 1.0, 0.8 * fade), 2.0)
-			draw_circle(Vector2.ZERO, 8.0, Color(0.9, 0.98, 1.0, 0.7 * fade))
-		"gravity_rift_constellation":
-			draw_line(-along * 0.2, along, Color(core.r, core.g, core.b, 0.85 * fade), 3.0)
-			for i in 4:
-				var p := along * (0.2 + 0.2 * i)
-				draw_circle(p, 3.5, Color(1, 1, 1, 0.9 * fade))
-		"phase_tear_rupture":
-			draw_line(Vector2(-6, -8), along + Vector2(6, 8), Color(accent.r, accent.g, accent.b, 0.55 * fade), 5.0)
-			draw_line(Vector2(6, 8), along, Color(core.r, core.g, core.b, 0.8 * fade), 3.0)
-		_:
-			draw_line(Vector2.ZERO, along, Color(1, 1, 1, 0.8 * fade), 4.0)
-	if _hc:
-		draw_rect(Rect2(-3, -22, 6, 44), Color(1, 1, 1, 0.8 * fade))
+	pass # Prediction review is a directional cue, never a confirmed hit or finishing result.
