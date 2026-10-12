@@ -1079,7 +1079,12 @@
         "render_target": "gl_compatibility",
         "reused": 291
       },
-      "scope": "automated public inputs vs active CPU; explicit starting damage band; no forced moves, damage after start or KOs"
+      "scope": "automated public inputs vs active CPU; explicit starting damage band; no forced moves, damage after start or KOs",
+      "prior_acceptance_status_before_projectile_audit": "",
+      "prior_exclusion_reason_before_projectile_audit": "",
+      "projectile_ownership_acceptance": "EXCLUDED_LEGACY_PRE_RELEASE_OWNERSHIP; rerun on repaired source",
+      "acceptance_status": "DEFECT_AFFECTED_PROJECTILE_OWNERSHIP_NOT_ACCEPTANCE",
+      "exclusion_reason": "Legacy contact at cast active-phase zero, before current emitter release; independently reproduced stale-melee defect. Whole attempt conservatively excluded, including ambiguous older projectiles; raw audiovisual/contact evidence retained."
     }
   ]
 }

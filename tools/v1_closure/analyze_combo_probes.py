@@ -29,7 +29,7 @@ for row in index['attempts']:
   # Legacy captures need a separately observed start before the second contact.
   first_owner=first.get('attack_activation_id',-1)
   next_owner=next_c.get('attack_activation_id',-1) if next_c else -1
-  distinct_attack=bool(next_c and (first_owner>=0 and next_owner>=0 and first_owner!=next_owner or next_start and next_start['movie_frame']<=next_c['movie_frame']))
+  distinct_attack=bool(next_c and (first_owner!=next_owner if first_owner>=0 and next_owner>=0 else next_start and next_start['movie_frame']<=next_c['movie_frame']))
   excluded=row.get('acceptance_status','').startswith('DEFECT_AFFECTED') or first['move'].startswith('throw_') or bool(next_c and next_c['move'].startswith('throw_'))
   recovered_before_next=bool(next_c and any(x and x['movie_frame']<next_c['movie_frame'] for x in [recovery,control_transition]))
   genuine=bool(not excluded and distinct_attack and not recovered_before_next and next_c and next_c['result']=='hit' and next_c['follow_up_before_control'])
