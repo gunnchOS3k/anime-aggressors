@@ -29,6 +29,10 @@ var _last_world_position := Vector2.ZERO
 var _world_position_valid := false
 var _gait_phase := 0.0
 var gait_period_px := 0.0
+var _weight_transfer = preload("res://scripts/visual/locomotion_weight_transfer.gd").new()
+var _previous_motion_facing := 1
+var _previous_motion_speed := 0.0
+var _motion_moving := false
 
 
 func setup(fighter, model_root: Node3D) -> void:
@@ -40,6 +44,7 @@ func setup(fighter, model_root: Node3D) -> void:
 		elif fighter.has_method("get"):
 			_fighter_id = str(fighter.get("fighter_id"))
 	if fighter != null and "body_variant" in fighter: _body_variant = str(fighter.body_variant)
+	_weight_transfer.setup(_fighter_id)
 	_skeleton = _find_skeleton(model_root)
 	if _skeleton == null:
 		return
@@ -67,6 +72,8 @@ func bind_runtime_fighter(fighter: Node) -> void:
 	_runtime_fighter = fighter
 
 func play_for_state(state: String, move: Dictionary = {}) -> void:
+	if state not in [_FighterStates.IDLE,_FighterStates.WALK,_FighterStates.RUN,_FighterStates.DASH]:
+		_weight_transfer.clear()
 	_move_synchronized = state.begins_with("attack") or state.begins_with("special") or state.begins_with("aura_burst") or state.begins_with("throw")
 	if _player == null or not is_instance_valid(_player):
 		return
@@ -362,6 +369,9 @@ func _load_combat_choreography(model_root: Node3D) -> void:
 	secondary_follow=preload("res://scripts/visual/combat_secondary_follow.gd").new()
 	add_child(secondary_follow); secondary_follow.setup(model_root,self)
 
+func get_locomotion_transition_evidence() -> Dictionary:
+	return _weight_transfer.evidence()
+
 func synchronize_locomotion(world_position: Vector2, model, grounded: bool) -> void:
 	var displacement := 0.0
 	if _world_position_valid: displacement = absf(world_position.x-_last_world_position.x)
@@ -371,18 +381,40 @@ func synchronize_locomotion(world_position: Vector2, model, grounded: bool) -> v
 	if _synchronize_landing():
 		_locomotion_synchronized = true
 		return
+	var state := str(_runtime_fighter.state_machine.current_state) if is_instance_valid(_runtime_fighter) else ""
+	var neutral_motion := grounded and state in [_FighterStates.IDLE,_FighterStates.WALK,_FighterStates.RUN,_FighterStates.DASH] and not _move_synchronized
+	var delta := get_physics_process_delta_time()
+	var speed := displacement/maxf(delta,.001)
+	if not neutral_motion:
+		_weight_transfer.clear(); _motion_moving=false; _previous_motion_speed=0;_previous_motion_facing=_visual_facing
+		return
+	if presentation_frozen:return
+	var moving := speed>.5
+	if displacement>128:
+		_gait_phase=0;_weight_transfer.clear();_motion_moving=false
+	elif moving and _visual_facing!=_previous_motion_facing and _motion_moving:
+		_weight_transfer.begin("pivot")
+	elif moving and not _motion_moving:
+		_weight_transfer.begin("start")
+	elif _motion_moving and (not moving or (_weight_transfer.kind!="stop" and speed<_previous_motion_speed*.75)):
+		_weight_transfer.begin("stop")
+	_motion_moving=moving;_previous_motion_speed=speed;_previous_motion_facing=_visual_facing
 	var clip := str(_player.current_animation).get_slice("/",1)
-	if not grounded or not _gait_half_stride.has(clip) or _move_synchronized: return
-	_locomotion_synchronized = true
-	# Use the actual camera, rig orientation and Sprite2D scale. Root displacement
-	# remains gameplay-owned; only the visible gait phase follows distance.
-	var a: Vector2 = model._camera.unproject_position(_skeleton.to_global(Vector3.ZERO))
-	var b: Vector2 = model._camera.unproject_position(_skeleton.to_global(Vector3(0,0,float(_gait_half_stride[clip]))))
-	gait_period_px = 4*absf(b.x-a.x)*absf(model._display.scale.x)
-	if gait_period_px<.01 or presentation_frozen: return
-	if displacement>128: _gait_phase=0 # respawn/profile fixture, never foot stretching
-	else: _gait_phase=fposmod(_gait_phase+displacement/gait_period_px,1.0)
-	_player.seek(_gait_phase*_player.current_animation_length,true)
+	if _gait_half_stride.has(clip):
+		_locomotion_synchronized = true
+		# Gameplay root displacement remains authoritative; preserve distance gait.
+		var a: Vector2 = model._camera.unproject_position(_skeleton.to_global(Vector3.ZERO))
+		var b: Vector2 = model._camera.unproject_position(_skeleton.to_global(Vector3(0,0,float(_gait_half_stride[clip]))))
+		gait_period_px = 4*absf(b.x-a.x)*absf(model._display.scale.x)
+		if gait_period_px>.01:
+			_gait_phase=fposmod(_gait_phase+displacement/gait_period_px,1.0)
+			_player.seek(_gait_phase*_player.current_animation_length,true)
+	elif not _weight_transfer.kind.is_empty():
+		# Reset the base pose each physics tick; never compound additive transforms.
+		_locomotion_synchronized=true
+		_player.advance(delta)
+		_player.seek(_player.current_animation_position,true)
+	if not _weight_transfer.kind.is_empty():_weight_transfer.apply(_skeleton,delta,_visual_facing)
 
 func set_visual_facing(direction: int) -> void:
 	_visual_facing = 1 if direction>=0 else -1
