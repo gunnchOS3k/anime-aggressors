@@ -25,9 +25,13 @@ func setup(sk: Skeleton3D) -> void:
 	var shader := Shader.new()
 	shader.code="""shader_type spatial;
 render_mode unshaded, cull_disabled, depth_draw_never, blend_mix;
+uniform bool void_rim = false;
 void fragment() {
  float edge = smoothstep(0.0,0.22,UV.x)*smoothstep(0.0,0.22,1.0-UV.x);
- ALBEDO = COLOR.rgb; ALPHA = COLOR.a*edge;
+ // A local negative-space core with a readable edge, never a screen overlay.
+ float rim = smoothstep(0.3,0.75,abs(UV.x*2.0-1.0));
+ ALBEDO = void_rim ? mix(vec3(0.018,0.02,0.035),COLOR.rgb,rim) : COLOR.rgb;
+ ALPHA = COLOR.a*edge;
 }
 """
 	material.shader=shader
@@ -76,6 +80,17 @@ func _diamond(center: Vector3,radius: float,color: Color,angle: float=0.0) -> vo
 		points.append(center+Vector3(cos(a)*radius*.65,sin(a)*radius,0))
 	_ribbon(points,radius*.22,color,false)
 
+func _stone_fragment(center: Vector3,radius: float,color: Color,angle: float) -> void:
+	# Four shaded solid faces replace the thin gold outline. Twelve vertices
+	# instead of twenty-four; the existing fragment count remains unchanged.
+	var corners: Array[Vector3]=[]
+	for i in range(4):
+		var a:=angle+i*PI/2
+		corners.append(center+Vector3(cos(a)*radius*.7,sin(a)*radius,0))
+	var shades: Array[Color]=[color.lightened(.35),color.darkened(.45),color.darkened(.18),color]
+	for i in range(4):
+		_triangle(center,corners[i],corners[(i+1)%4],shades[i],Vector2(.5,0),Vector2(.05,1),Vector2(.95,1))
+
 func _rebuild() -> void:
 	mesh.clear_surfaces();vertex_count=0
 	skeleton.force_update_all_bone_transforms()
@@ -88,11 +103,13 @@ func _rebuild() -> void:
 	var reduced:=mode=="Reduced" or bool(snapshot.get("reduced_particles",false))
 	var count:=3 if reduced else (8 if mode=="Full" else 5)
 	var color: Color=COLORS[family]
+	if family==1:color=color.lerp(Color(.82,.78,.67),.65*strength)
+	if family==7:color=color.lerp(Color(.78,.76,.94),.75*strength)
 	if bool(snapshot.get("high_contrast",false)):color=color.lerp(Color.WHITE,.45)
 	# Keep the authored power outside the opaque body silhouette at camera scale.
 	# Same bounded meshes/segments, with a visible calm→charged gradient.
 	color.a=(.16+.42*strength)*(0.65 if reduced else 1.0)
-	if family==7:color=color.lerp(Color(.48,.46,.66,color.a),.45*strength)
+	material.set_shader_parameter("void_rim",family==7)
 	var t:=elapsed
 	var scale_power:=.75+.25*strength
 	if arrival>0 and not bool(snapshot.get("reduced_flash",false)):scale_power+=.1*arrival/.32
@@ -111,8 +128,8 @@ func _rebuild() -> void:
 					pts.append(hip+Vector3(cos(phase)*radius,height*(u-.14),sin(phase)*radius*.8)+Vector3(.085*sin(t*3-u*9+phase)*u,0,0))
 				_ribbon(pts,(.065+.035*strength)*scale_power,color)
 			1:
-				var center:=chest+Vector3(cos(phase)*(.33+.10*strength),sin(phase)*height*.48,sin(phase+t*.35)*.20)
-				_diamond(center,.065+.045*strength,color,phase*.5)
+				var center:=chest+Vector3(cos(phase)*(.40+.16*strength),sin(phase)*height*.48,sin(phase+t*.35)*.20)
+				_stone_fragment(center,.09+.05*strength,color,phase*.5)
 				_ribbon([hip+Vector3(-.34,.03*i,0),hip+Vector3(0,-.06+.03*i,.12),hip+Vector3(.34,.03*i,0)],.022,color,false)
 			2: # Deterministic moving branches, anchored at actual hands/body.
 				var anchor: Vector3=_anchors.Hand_L if i%2==0 else _anchors.Hand_R
@@ -142,10 +159,12 @@ func _rebuild() -> void:
 				_ribbon([hip+Vector3(-.36-shift,.12,.1),chest+Vector3(-.34-shift,.09,0)],.020,color)
 			7:
 				for j in range(13):
-					var u:=float(j)/12;var r: float=(.44+.12*strength)*(1-u)
+					# Keep the inward curl at the visible body boundary instead of
+					# burying most of each spiral inside the opaque torso.
+					var u:=float(j)/12;var r: float=(.44+.12*strength)*(1-u*.35)
 					var a:=phase+u*3.1-t*.5
 					pts.append(chest+Vector3(cos(a)*r,sin(a)*r,.08*sin(a)))
-				_ribbon(pts,.036,color)
+				_ribbon(pts,(.035+.02*strength)*scale_power,color)
 			8:
 				for j in range(7):
 					var a:=phase+float(j)/6*TAU

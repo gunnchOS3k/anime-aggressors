@@ -1,4 +1,4 @@
-"""Verify every visible native frame marker before labeling all18 aura images."""
+"""Verify visible native frame markers before labeling paired aura images; subset scope stays explicit."""
 import argparse,hashlib,json,subprocess,re,tempfile
 from pathlib import Path
 from collections import Counter
@@ -29,9 +29,10 @@ streams=json.loads(subprocess.check_output(['ffprobe','-v','error','-count_frame
 assert {s['codec_type'] for s in streams}=={'video','audio'} and streams[0]['r_frame_rate']=='60/1'
 audio=subprocess.run(['ffmpeg','-hide_banner','-i',str(movie),'-af','volumedetect','-f','null','-'],capture_output=True,text=True,check=True).stderr
 (out/'audio_verification.log').write_text(audio);volume={k:float(v) for k,v in re.findall(r'(mean_volume|max_volume):\s*(-?\d+(?:\.\d+)?) dB',audio)};assert volume.get('max_volume',-100)>-80
+fighter_ids=list(dict.fromkeys(c['fighter'] for c in checks));assert 1<=len(fighter_ids)<=9
 sheets=[]
 with tempfile.TemporaryDirectory(prefix='aa-aura-sheet-') as scratch:
- for fid in dict.fromkeys(c['fighter'] for c in checks):
+ for fid in fighter_ids:
   selected=[]
   for phase in ['maximum','released_idle','airborne']:
    matches=[c for c in checks if c['fighter']==fid and c['phase']==phase];selected.append(matches[len(matches)//2])
@@ -43,7 +44,7 @@ with tempfile.TemporaryDirectory(prefix='aa-aura-sheet-') as scratch:
   target=out/(fid+'_aura.png');assert not target.exists();sheet.save(target)
   sheets.append(dict(path=rel(target),sha256=sha(target),source_sha=source,verification_status='VERIFIED_NATIVE_FRAME_AND_PAIRED_IDENTITY',frames=[c['native_frame'] for c in selected],redistribution='Original development owner review; no public release authorization'))
 log=(out/'native_console.log').read_text();timing={k:float(v) for k,v in re.findall(r'(CPU render time|Encoding time):.*?average: ([0-9.]+) ms/frame',log)}
-report=dict(path=rel(movie),sha256=sha(movie),source_sha=source,streams=streams,sheets=sheets,verification_status='VERIFIED_NATIVE_FRAME_BARCODES_AND_NINE_PAIRED_IDENTITIES',native_audio_volume_db=volume,recording_measurements=timing,material_null_errors=log.count('Parameter "material" is null'),script_errors=log.count('SCRIPT ERROR'),professional_quality_approved=False,GPU_measurement_available=False,scope='All18model energy/movement/jump at native60fps with original sound. No active CPU, combo, contact or device-FPS acceptance.',redistribution='Original procedural/project assets; owner development review, no public release authorization')
+report=dict(path=rel(movie),sha256=sha(movie),source_sha=source,streams=streams,sheets=sheets,verification_status='VERIFIED_NATIVE_FRAME_BARCODES_AND_NINE_PAIRED_IDENTITIES' if len(fighter_ids)==9 else 'VERIFIED_NATIVE_FRAME_BARCODES_AND_PAIRED_IDENTITIES',fighters=fighter_ids,visible_body_models=len(fighter_ids)*2,native_audio_volume_db=volume,recording_measurements=timing,material_null_errors=log.count('Parameter "material" is null'),script_errors=log.count('SCRIPT ERROR'),professional_quality_approved=False,GPU_measurement_available=False,scope=f'{len(fighter_ids)*2} visible model energy/movement/jump at native60fps with original sound. No active CPU, combo, contact or device-FPS acceptance.',redistribution='Original procedural/project assets; owner development review, no public release authorization')
 (out/'NATIVE_MOVIE.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps({k:v for k,v in report.items() if k!='sheets'}))
 state_path=out/'RECORDING_STATE.json'
 if state_path.exists():

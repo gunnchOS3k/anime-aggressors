@@ -10,6 +10,7 @@ var annotation: Label
 var identity := 0
 var p1: Node
 var p2: Node
+var fighters: Array=BodyAura.IDS.duplicate()
 func _init() -> void:call_deferred("_run")
 func release_inputs() -> void:
 	for slot in [1,2]:
@@ -26,6 +27,9 @@ func _run() -> void:
 	await process_frame
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--ordinary-output="):output=arg.get_slice("=",1)
+		if arg.begins_with("--energy-fighters="):fighters=Array(arg.get_slice("=",1).split(",",false))
+	for fid in fighters:
+		if fid not in BodyAura.IDS:push_error("Unknown energy review fighter: "+str(fid));quit(1);return
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP,true);DisplayServer.window_move_to_foreground()
 	var gs=root.get_node("GameState");gs.mode="versus";gs.stage_id="training-grid";gs.p1_fighter_id="ember-vale";gs.p2_is_cpu=false;gs.stocks=9;gs.match_timer_seconds=1800
 	root.get_node("SceneRouter").go("battle")
@@ -35,7 +39,7 @@ func _run() -> void:
 	annotation=Label.new();annotation.position=Vector2(20,120);annotation.add_theme_font_size_override("font_size",20);layer.add_child(annotation)
 	for bit in range(20):
 		var rect:=ColorRect.new();rect.position=Vector2(20+bit*12,190);rect.size=Vector2(10,24);layer.add_child(rect);bars.append(rect)
-	for fid in BodyAura.IDS:
+	for fid in fighters:
 		release_inputs();gs.p1_body_variant="male";gs.p2_body_variant="female"
 		for p in [p1,p2]:
 			p.configure(fid,p.slot,false,9,Vector2(-125 if p==p1 else 125,240));p.move_runner.cancel();p.state_machine.enter("idle");p.controls_enabled=true;p.invincible=false;p.clear_aura();p.velocity=Vector2.ZERO;p._hitstop=0
@@ -56,5 +60,5 @@ func _run() -> void:
 		p1.clear_aura();p2.clear_aura();await frames(5,"depleted")
 		identity+=1
 	release_inputs()
-	var f=FileAccess.open(output.path_join("native_empowerment.json"),FileAccess.WRITE);f.store_string(JSON.stringify({"PASS":failures.is_empty(),"failures":failures,"rows":rows,"scope":"Nine fighter pairs/all18models; public charging/release/movement/jump, no CPU contact or combo acceptance"},"  "));f.close()
+	var f=FileAccess.open(output.path_join("native_empowerment.json"),FileAccess.WRITE);f.store_string(JSON.stringify({"PASS":failures.is_empty(),"failures":failures,"rows":rows,"fighters":fighters,"scope":"%d fighter pairs/%dmodels; public charging/release/movement/jump, no CPU contact or combo acceptance"%[fighters.size(),fighters.size()*2]},"  "));f.close()
 	print("NATIVE_EMPOWERMENT ","PASS" if failures.is_empty() else "FAIL"," rows=",rows.size());quit(0 if failures.is_empty() else 1)

@@ -1,0 +1,186 @@
+{
+  "root_cause": "Rook thin warm outlines blend with armor; Yin low-value spirals converge inside opaque torso, obscuring charged silhouette.",
+  "implementation": "Rook solid four-face stone fragments with pale/dark facet contrast and outside-body placement; Yin inward curl kept at visible torso boundary with local dark-core/pale-rim shading. Existing rig anchors, object count and alpha/a11y controls retained.",
+  "source_files": {
+    "game-godot/scripts/visual/elemental_body_aura.gd": "44d312b83838bdb83f4bcbed4d0e86049fd42b120b4c73d6e6ac59ba5c597e36"
+  },
+  "rows": [
+    {
+      "fighter": "rook-ironside",
+      "body": "male",
+      "facing": 1,
+      "before_vertices": [
+        288,
+        180,
+        108
+      ],
+      "after_vertices": [
+        192,
+        120,
+        72
+      ],
+      "owned_meshes": 1,
+      "owned_materials": 1
+    },
+    {
+      "fighter": "rook-ironside",
+      "body": "male",
+      "facing": -1,
+      "before_vertices": [
+        288,
+        180,
+        108
+      ],
+      "after_vertices": [
+        192,
+        120,
+        72
+      ],
+      "owned_meshes": 1,
+      "owned_materials": 1
+    },
+    {
+      "fighter": "rook-ironside",
+      "body": "female",
+      "facing": 1,
+      "before_vertices": [
+        288,
+        180,
+        108
+      ],
+      "after_vertices": [
+        192,
+        120,
+        72
+      ],
+      "owned_meshes": 1,
+      "owned_materials": 1
+    },
+    {
+      "fighter": "rook-ironside",
+      "body": "female",
+      "facing": -1,
+      "before_vertices": [
+        288,
+        180,
+        108
+      ],
+      "after_vertices": [
+        192,
+        120,
+        72
+      ],
+      "owned_meshes": 1,
+      "owned_materials": 1
+    },
+    {
+      "fighter": "yin",
+      "body": "male",
+      "facing": 1,
+      "before_vertices": [
+        576,
+        360,
+        216
+      ],
+      "after_vertices": [
+        576,
+        360,
+        216
+      ],
+      "owned_meshes": 1,
+      "owned_materials": 1
+    },
+    {
+      "fighter": "yin",
+      "body": "male",
+      "facing": -1,
+      "before_vertices": [
+        576,
+        360,
+        216
+      ],
+      "after_vertices": [
+        576,
+        360,
+        216
+      ],
+      "owned_meshes": 1,
+      "owned_materials": 1
+    },
+    {
+      "fighter": "yin",
+      "body": "female",
+      "facing": 1,
+      "before_vertices": [
+        576,
+        360,
+        216
+      ],
+      "after_vertices": [
+        576,
+        360,
+        216
+      ],
+      "owned_meshes": 1,
+      "owned_materials": 1
+    },
+    {
+      "fighter": "yin",
+      "body": "female",
+      "facing": -1,
+      "before_vertices": [
+        576,
+        360,
+        216
+      ],
+      "after_vertices": [
+        576,
+        360,
+        216
+      ],
+      "owned_meshes": 1,
+      "owned_materials": 1
+    }
+  ],
+  "other_seven_geometry_counts_unchanged": true,
+  "new_particles": 0,
+  "new_mesh_instances": 0,
+  "new_materials": 0,
+  "full_meter_threshold_changed": false,
+  "gameplay_parameters_changed": false,
+  "regressions": [
+    {
+      "suite": "PersistentEmpowerment",
+      "source_sha": "8dec382fb4fba0e168035a1e4add6ee896c8a5de",
+      "passed": true,
+      "exit_code": 0,
+      "seconds": 32.5,
+      "reports": [],
+      "stdout": "artifacts/v1_closure/spectral_feedback/continuous_1011/rook_yin_readability1019/PersistentEmpowerment/stdout.log",
+      "scope": "isolated source fixture; no human/device/competitive acceptance",
+      "source_diff_sha256": "2d8eea1e820ac677f489f8f53b6537ca3cdaa8c3a420542cf78854bb17d8c3c5",
+      "source_changes": [
+        "game-godot/scripts/visual/elemental_body_aura.gd",
+        "game-godot/tests/v1_closure/NativeEmpowerment.gd"
+      ]
+    },
+    {
+      "suite": "SpectralIntensity",
+      "source_sha": "8dec382fb4fba0e168035a1e4add6ee896c8a5de",
+      "passed": true,
+      "exit_code": 0,
+      "seconds": 5.75,
+      "reports": [],
+      "stdout": "artifacts/v1_closure/spectral_feedback/continuous_1011/rook_yin_readability1019/SpectralIntensity/stdout.log",
+      "scope": "isolated source fixture; no human/device/competitive acceptance",
+      "source_diff_sha256": "8f4ce129794c0d78bdde76d29888e05def1818e21dc03c0079e9e118da485aff",
+      "source_changes": [
+        "game-godot/scripts/visual/elemental_body_aura.gd",
+        "game-godot/tests/v1_closure/NativeEmpowerment.gd",
+        "tools/v1_closure/verify_empowerment_movie.py"
+      ]
+    }
+  ],
+  "native_review": "PENDING focusedRook/Yin capture; oldc7before reused",
+  "owner_approved": false
+}
