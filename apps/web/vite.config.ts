@@ -2,12 +2,13 @@ import { defineConfig } from "vite";
 import path from "node:path";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
+import { pagesBase } from "./pagesBase.mjs";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   root,
-  base: "/anime-aggressors/",
+  base: pagesBase(process.env.VITE_BASE_PATH),
   resolve: {
     alias: {
       "@anime-aggressors/game-core": path.resolve(root, "../../packages/game-core/src/index.ts"),
