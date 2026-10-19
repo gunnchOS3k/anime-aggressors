@@ -31,6 +31,7 @@ var dialogue_snapshot := ""
 var stop_scene_and_exit := false
 var edge_pressure := false
 var retry_limit := 4
+var pressure_inputs := false
 
 func _ready() -> void:
 	process_physics_priority = -100
@@ -44,6 +45,7 @@ func _ready() -> void:
 		if arg == "--ordinary-seeded-prerequisites": seeded_prerequisites=true
 		if arg == "--ordinary-stop-scene-and-exit": stop_scene_and_exit=true
 		if arg == "--ordinary-edge-pressure": edge_pressure=true
+		if arg == "--ordinary-pressure-inputs": pressure_inputs=true
 		if arg.begins_with("--ordinary-retry-limit="): retry_limit=clampi(int(arg.get_slice("=",1)),0,4)
 	if output.is_empty(): set_physics_process(false); return
 	DirAccess.make_dir_recursive_absolute(output)
@@ -220,11 +222,22 @@ func _combat(scene, target) -> Array:
 		if not p.is_on_floor() and local_frame%40<2: actions.append("jump")
 		if not p.is_on_floor() and p.position.y > p.platform_surface_y-30 and local_frame%45<2: actions.append("up"); actions.append("special")
 		return actions
-	if target.state_machine.current_state == "ledge_hang": return _walk_to(p,0)
+	if target.state_machine.current_state == "ledge_hang":
+		if pressure_inputs:return _walk_to(p,p.platform_center_x+(-1 if target.position.x<p.platform_center_x else 1)*(p.platform_half_width-65),20)
+		return _walk_to(p,0)
 	if absf(target.position.y-p.position.y)>75 and p.is_on_floor() and local_frame%50<2: actions.append("jump")
 	if p.grabbed_target != null:
-		if edge_pressure:return ["right" if p.position.x>=p.platform_center_x else "left", "attack"]
+		if edge_pressure or pressure_inputs:return ["right" if p.position.x>=p.platform_center_x else "left", "attack"]
 		return ["right" if p.facing==1 else "left", "attack"]
+	if pressure_inputs:
+		if absf(target.position.x-p.position.x)>150 and p.is_on_floor() and p.aura<100:
+			return ["special","shield"] # Ordinary charge; the CPU may approach or interrupt.
+		if absf(target.position.x-p.position.x)<75 and absf(target.position.y-p.position.y)<50:
+			if signf(target.position.x-p.position.x)!=p.facing and absf(target.position.x-p.position.x)>5:return _walk_to(p,target.position.x,0)
+			if p.state_machine.can_attack() and local_frame%4<2:
+				if target.shielding or target.damage_percent>70:return ["grab"]
+				return ["attack","special"] if local_frame%12<2 else ["attack"]
+		return actions
 	# Optional driver tactic only: invite a damaged active opponent toward a
 	# safe stage edge before engaging. No transform/facing/AI/result writes.
 	if edge_pressure and target.damage_percent>70 and local_frame%900<360:
@@ -321,7 +334,7 @@ func _capture(name: String) -> void:
 
 func _finish() -> void:
 	set_physics_process(false); _inputs([])
-	var report := {"evidence_type":"ORDINARY_INPUT_AUTOMATION","human_playthrough":false,"new_profile":not resume,"route":route_id,"replay_nodes":replay_nodes,"profile_path":OS.get_user_data_dir(),"gameplay_overrides":[],"driver_tactic":"public_input_edge_pressure" if edge_pressure else "original_public_input","retry_limit":retry_limit,"rows":rows,"trace":trace,"failures":failures,"ok":failures.is_empty(),"start_progress":start_progress,"progress":CampaignRuntime.progress,"navigation":navigation,"captures":captured,"video_frames":video_counts,"V1_AUTOMATED_READY":false}
+	var report := {"evidence_type":"ORDINARY_INPUT_AUTOMATION","human_playthrough":false,"new_profile":not resume,"route":route_id,"replay_nodes":replay_nodes,"profile_path":OS.get_user_data_dir(),"gameplay_overrides":[],"driver_tactic":"public_charge_light_grab_pressure" if pressure_inputs else "public_input_edge_pressure" if edge_pressure else "original_public_input","retry_limit":retry_limit,"rows":rows,"trace":trace,"failures":failures,"ok":failures.is_empty(),"start_progress":start_progress,"progress":CampaignRuntime.progress,"navigation":navigation,"captures":captured,"video_frames":video_counts,"V1_AUTOMATED_READY":false}
 	var f := FileAccess.open(output.path_join("ordinary_input_evidence.json"),FileAccess.WRITE)
 	if seeded_prerequisites:
 		report["evidence_type"]="SEEDED_PREREQUISITES_ORDINARY_INPUT"
