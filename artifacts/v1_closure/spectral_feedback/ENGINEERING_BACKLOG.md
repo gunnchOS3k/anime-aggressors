@@ -1,3 +1,7 @@
+# October19 completed Story correction
+
+Scene-owned narrative acknowledgment and StopScene implemented at9b7ad976;8routeUI/16staleguard/1025cue testsPASS. Freshordinary4earnednodes acrossrestart; boundeddriver failure atOrion, narrativeStop/FirstLoss ordinaryproof pending. Detailscontinuous_1019/PLAYABLE_STORY_REVIEW.md. Projectilecontactcoverage108/108combinedsourcebound, no newcapturecampaign. The older backlog below is historical context.
+
 # ANI-03 full-roster production backlog — October12,2026
 
 Current runtime0e33ee436b78ebf67079ef044cd73845df9070d3; landing source26cf7c8153affdde6bebc0bac9185ce1af8591f7; offensive/heavy/air data b5f2af11; guard source5d66a8f1 and modal source7ae4447d verified. Historical capture source67ae813a (resolve full SHA with git). Existing draft123 stacked on122. All owner/release gates false. Original evidence/backlog retained in git and continuous_1011/ENGINEERING_BACKLOG_RECOVERED.md. No golden-slice prerequisite; every pass targets all9fighters and both body presentations.

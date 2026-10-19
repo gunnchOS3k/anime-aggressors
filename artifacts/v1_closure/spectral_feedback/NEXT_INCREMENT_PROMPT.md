@@ -1,3 +1,9 @@
+# October19 next action
+
+Read ANI03_RESUME_STATE.md andcontinuous_1019/PLAYABLE_STORY_REVIEW.md first. Narrativeownership/StopScene source9b7ad976 isimplemented/tested; do notredo it. Current ordinarysave has4earnedKaianodes andisblocked onlyby boundeddriver timeouts atOrion, notexternalpermission. Next: improvepublic-input combat tactics or independently reproduce adefect, continue throughVesper/Ember toaccord/catastrophe/FirstLoss, useactualsavedreceipts. NoAI/damage/balance override or syntheticchapteradvance. Existing108/108cells and18projectileextremes arecomplete. Do notrepeat oldtests/capturecampaign. Allhuman/releasegatesfalse.
+
+---
+
 # Continue ANI-03 expressive combat across the complete roster
 
 Resume `release/anime-v1-dialogue-and-elemental-performance`, draftPR123 stacked on122, repositorygunnchOS3k/anime-aggressors. Recover actualGit/local/remote state first. Shipping scripts lastchanged at0e33ee436b78ebf67079ef044cd73845df9070d3; package/probe/report commits may be newer. Read ANI03_RESUME_STATE.md, OWNER_REVIEW.md, FULL_ROSTER_PRODUCTION_MATRIX.json, EXPRESSIVE_COMBAT_GAP_MATRIX.json, EVIDENCE_MANIFEST.json and latestCPU reports. Work serially. Allninefighters andbothbodypresentations are the unit; no golden slice.

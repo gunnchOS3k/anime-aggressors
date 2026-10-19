@@ -1,0 +1,202 @@
+{
+  "story_runtime_source": "9b7ad97683777dbc1d07aca7ea01ca02399f0dd9",
+  "rows": [
+    {
+      "test": "story_ownership_cleanup",
+      "passed": true,
+      "failures": [],
+      "source_sha": "b2f91f9b16decf2c61f925cd76174af9571aa2c6",
+      "source_diff_sha256": "674f7501ceeb9127a43b28c1195f08747f02f6137de2152d0579640ceedd571d",
+      "path": "artifacts/v1_closure/spectral_feedback/continuous_1019/story_ownership_cleanup/story_scene_ownership.json",
+      "sha256": "9df7654bba4d42648c27eba9ac7c2e03c5191f450865db99334f2e686837a84d",
+      "script_errors": 0,
+      "scope": "Eight route UI ownership/stop/restart fixtures with explicit cursor setup. Not earned campaign progression.",
+      "fixture_file": "game-godot/tests/v1_closure/StorySceneOwnership.gd",
+      "fixture_sha256_at_execution": "fb9eeb8fb279736b708a9b7a311d70aad6ee7a3ba1e0a3c1794fced6f23fbd0e"
+    },
+    {
+      "test": "story_authority",
+      "passed": true,
+      "failures": [],
+      "source_sha": "9b7ad97683777dbc1d07aca7ea01ca02399f0dd9",
+      "source_diff_sha256": "ae45ce24a182046a1093df79ee16e37357cf00c5d5a291a7c5e8c03034662c76",
+      "path": "artifacts/v1_closure/spectral_feedback/continuous_1019/story_authority/story_scene_authority.json",
+      "sha256": "d2d34896fc39cc7b0d175d221be94c34cfe58b27295033e6a7552d5c9ac4eed2",
+      "script_errors": 0,
+      "scope": "16 stale asynchronous scene acknowledgments across8 declared chapter fixtures; no battle receipts or earned play claim.",
+      "fixture_file": "game-godot/tests/v1_closure/StorySceneAuthority.gd",
+      "fixture_sha256_at_execution": "84965a99487237617f5e413bdc7769aeaf7d4ebc56d84d330899b1d92a7f67b5"
+    },
+    {
+      "test": "dialogue_regression",
+      "passed": true,
+      "failures": [],
+      "source_sha": "9b7ad97683777dbc1d07aca7ea01ca02399f0dd9",
+      "source_diff_sha256": "b68039fb5752780b6e87be3ada27e0d497c71e2425171534ceea20c127d5c6e9",
+      "path": "artifacts/v1_closure/spectral_feedback/continuous_1019/dialogue_regression/dialogue_runtime_test.json",
+      "sha256": "eae3739e116d5b8ee0b273cf97dcf7cdaea0e71a413554a39e3c4289c9d23331",
+      "script_errors": 0,
+      "scope": "Isolated presentation events, not 145 human/ordinary playthroughs; voice sample locally loaded.",
+      "fixture_file": "game-godot/tests/v1_closure/DialogueProduction.gd",
+      "fixture_sha256_at_execution": "cd170e6028e17a6222d39d4fa4276294b01d9da3818bc3aa5772723b4ad96759"
+    },
+    {
+      "test": "ordinary_scene_stop",
+      "passed": false,
+      "failures": [
+        "Ordinary-input driver lost repeatedly at kaia-windrow:recruit:rook-ironside"
+      ],
+      "source_sha": "9b7ad97683777dbc1d07aca7ea01ca02399f0dd9",
+      "source_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "path": "artifacts/v1_closure/spectral_feedback/continuous_1019/ordinary_scene_stop/ordinary_input_evidence.json",
+      "sha256": "d023a59836d8132be810087efbf42fefa8cadbaf0685c3ea2018e24ee4c3e99e",
+      "script_errors": 0,
+      "scope": "ORDINARY_INPUT_AUTOMATION",
+      "earned_nodes": 3,
+      "start_earned_nodes": 0,
+      "gameplay_overrides": [],
+      "battle_results": [
+        {
+          "node": "kaia-windrow:prologue",
+          "winner": 1,
+          "qualifying": true,
+          "advanced": true,
+          "cpu_moves": 93
+        },
+        {
+          "node": "kaia-windrow:recruit:juno-spark",
+          "winner": 1,
+          "qualifying": true,
+          "advanced": true,
+          "cpu_moves": 93
+        },
+        {
+          "node": "kaia-windrow:recruit:nix-calder",
+          "winner": 1,
+          "qualifying": true,
+          "advanced": true,
+          "cpu_moves": 140
+        },
+        {
+          "node": "kaia-windrow:recruit:rook-ironside",
+          "winner": 2,
+          "qualifying": true,
+          "advanced": false,
+          "cpu_moves": 248
+        },
+        {
+          "node": "kaia-windrow:recruit:rook-ironside",
+          "winner": 2,
+          "qualifying": true,
+          "advanced": false,
+          "cpu_moves": 259
+        },
+        {
+          "node": "kaia-windrow:recruit:rook-ironside",
+          "winner": 2,
+          "qualifying": true,
+          "advanced": false,
+          "cpu_moves": 239
+        },
+        {
+          "node": "kaia-windrow:recruit:rook-ironside",
+          "winner": 2,
+          "qualifying": true,
+          "advanced": false,
+          "cpu_moves": 247
+        },
+        {
+          "node": "kaia-windrow:recruit:rook-ironside",
+          "winner": 2,
+          "qualifying": true,
+          "advanced": false,
+          "cpu_moves": 267
+        }
+      ],
+      "fixture_file": "game-godot/tests/v1_closure/OrdinaryInputReview.gd",
+      "fixture_sha256_at_execution": "22184663401bc3478d45a444c8f372f43c7fd12bcb1a5f06a72d49d4dab9f593"
+    },
+    {
+      "test": "ordinary_scene_edge_retry",
+      "passed": false,
+      "failures": [
+        "Ordinary-input driver lost repeatedly at kaia-windrow:recruit:orion-vell"
+      ],
+      "source_sha": "9b7ad97683777dbc1d07aca7ea01ca02399f0dd9",
+      "source_diff_sha256": "ae45ce24a182046a1093df79ee16e37357cf00c5d5a291a7c5e8c03034662c76",
+      "path": "artifacts/v1_closure/spectral_feedback/continuous_1019/ordinary_scene_edge_retry/ordinary_input_evidence.json",
+      "sha256": "c661cb9db508aa64f805f4ab5fa76aa1eaf6e0a07cb30a5a59095c97ecae6928",
+      "script_errors": 0,
+      "scope": "ORDINARY_INPUT_AUTOMATION",
+      "earned_nodes": 4,
+      "start_earned_nodes": 3,
+      "gameplay_overrides": [],
+      "battle_results": [
+        {
+          "node": "kaia-windrow:recruit:rook-ironside",
+          "winner": 1,
+          "qualifying": true,
+          "advanced": true,
+          "cpu_moves": 186
+        },
+        {
+          "node": "kaia-windrow:recruit:orion-vell",
+          "winner": 2,
+          "qualifying": true,
+          "advanced": false,
+          "cpu_moves": 256
+        },
+        {
+          "node": "kaia-windrow:recruit:orion-vell",
+          "winner": 2,
+          "qualifying": true,
+          "advanced": false,
+          "cpu_moves": 213
+        }
+      ],
+      "fixture_file": "game-godot/tests/v1_closure/OrdinaryInputReview.gd",
+      "fixture_sha256_at_execution": "a2e44056d7255fb04e6d53290701a134952567db2b5ff754dbc48aaf20d9e00c"
+    },
+    {
+      "test": "ordinary_saved_progress_check",
+      "passed": true,
+      "failures": [],
+      "source_sha": "9b7ad97683777dbc1d07aca7ea01ca02399f0dd9",
+      "source_diff_sha256": "ae45ce24a182046a1093df79ee16e37357cf00c5d5a291a7c5e8c03034662c76",
+      "path": "artifacts/v1_closure/spectral_feedback/continuous_1019/ordinary_saved_progress_check/ordinary_input_evidence.json",
+      "sha256": "0622af2b3f4f91487124b9602b7cdb89187a9d5c026d0bccbcf8e7264b2511a5",
+      "script_errors": 0,
+      "scope": "ORDINARY_INPUT_AUTOMATION",
+      "earned_nodes": 4,
+      "start_earned_nodes": 4,
+      "gameplay_overrides": [],
+      "battle_results": [],
+      "fixture_file": "game-godot/tests/v1_closure/OrdinaryInputReview.gd",
+      "fixture_sha256_at_execution": "a2e44056d7255fb04e6d53290701a134952567db2b5ff754dbc48aaf20d9e00c"
+    },
+    {
+      "test": "story_ui_native",
+      "passed": true,
+      "cases": 8,
+      "source_sha": "9b7ad97683777dbc1d07aca7ea01ca02399f0dd9",
+      "source_diff_sha256": "db532d4d6cfa80e4165347ed1cc492249c58aa0bf922e97303a78d9c6b9ea6cc",
+      "path": "artifacts/v1_closure/spectral_feedback/continuous_1019/story_ui_native/story_scene_ownership.json",
+      "sha256": "9df7654bba4d42648c27eba9ac7c2e03c5191f450865db99334f2e686837a84d",
+      "script_errors": 0,
+      "engine_warnings": [
+        "Godot4.7 move_to_foreground deprecated; native fixture only"
+      ],
+      "scope": "Eight Compatibility-renderer UI fixtures; one inspected1280x720Kaia narrative-position screenshot. Explicit cursor/review setup; not ordinary progression.",
+      "fixture_file": "game-godot/tests/v1_closure/StorySceneOwnership.gd",
+      "fixture_sha256_at_execution": "8a4284af3b5c095adb8fc9cb4fcfd638956a51fca98e1fcd5faefa5924d66cce"
+    }
+  ],
+  "human_approved": false,
+  "limits": "Narrative stop/route isolation verified in8declared chapter-position UIfixtures, staleack guard16cases,1025cue regression. Freshordinaryplay earned4nodes acrossrestart, but boundeddrivers lost/timedout before narrativegate; no ordinary StopScene/FirstLoss orcomplete7route claim. Earlier full-route receipts remain exactsource historical.",
+  "current_fixture_file_hashes": {
+    "game-godot/tests/v1_closure/StorySceneOwnership.gd": "8a4284af3b5c095adb8fc9cb4fcfd638956a51fca98e1fcd5faefa5924d66cce",
+    "game-godot/tests/v1_closure/StorySceneAuthority.gd": "84965a99487237617f5e413bdc7769aeaf7d4ebc56d84d330899b1d92a7f67b5",
+    "game-godot/tests/v1_closure/OrdinaryInputReview.gd": "a2e44056d7255fb04e6d53290701a134952567db2b5ff754dbc48aaf20d9e00c",
+    "game-godot/tests/v1_closure/DialogueProduction.gd": "cd170e6028e17a6222d39d4fa4276294b01d9da3818bc3aa5772723b4ad96759"
+  }
+}

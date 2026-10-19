@@ -6,6 +6,9 @@ func check(ok: bool, name: String) -> void:
 	if not ok: failures.append(name); push_error(name)
 func _run() -> void:
 	await process_frame
+	var report_path := "res://../artifacts/v1_closure/dialogue_performance/dialogue_runtime_test.json"
+	for arg in OS.get_cmdline_user_args():
+		if arg.begins_with("--ordinary-output="):report_path=arg.get_slice("=",1).path_join("dialogue_runtime_test.json")
 	var d = root.get_node("StoryDialogue")
 	var campaign = root.get_node("CampaignRuntime")
 	var before := JSON.stringify(campaign.progress)
@@ -94,7 +97,7 @@ func _run() -> void:
 	check(not paused and not d._manual_pause,"immediate_modal_reopen_restores_pause")
 	d.cancel()
 	check(JSON.stringify(campaign.progress)==before,"presentation_watch_cannot_mutate_progress")
-	var file := FileAccess.open("res://../artifacts/v1_closure/dialogue_performance/dialogue_runtime_test.json",FileAccess.WRITE)
+	var file := FileAccess.open(report_path,FileAccess.WRITE)
 	file.store_string(JSON.stringify({"ok":failures.is_empty(),"failures":failures,"nodes":145,"cues":played,"scope":"Isolated presentation events, not 145 human/ordinary playthroughs; voice sample locally loaded."},"  ")+"\n");file.close()
 	print("DIALOGUE_PRODUCTION ","PASS" if failures.is_empty() else "FAIL", " cues=",played.size())
 	quit(0 if failures.is_empty() else 1)

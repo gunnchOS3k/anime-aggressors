@@ -3,6 +3,7 @@ extends SceneTree
 var output := ""
 var failures: Array=[]
 var rows: Array=[]
+var capture_ui := false
 func _init() -> void:call_deferred("_run")
 func check(ok: bool,label: String) -> void:
 	if not ok:failures.append(label)
@@ -16,6 +17,7 @@ func _run() -> void:
 	await process_frame
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--ordinary-output="):output=arg.get_slice("=",1)
+		if arg=="--story-ui-screenshot":capture_ui=true
 	var c=root.get_node("CampaignRuntime");var router=root.get_node("SceneRouter");var dialogue=root.get_node("StoryDialogue")
 	c.save_path="user://scene_ownership_fixture.json"
 	OS.set_environment("AA_V1_ROUTE_REVIEW","1")
@@ -32,6 +34,10 @@ func _run() -> void:
 		router.go("story");await frames(6)
 		var menu=current_scene
 		menu._action.pressed.emit();await frames(1)
+		if capture_ui and fid=="kaia-windrow" and DisplayServer.get_name()!="headless":
+			root.always_on_top=true;root.move_to_foreground()
+			await process_frame;await RenderingServer.frame_post_draw
+			root.get_texture().get_image().save_png(output.path_join("kaia_story_stop_ui.png"))
 		check(dialogue.is_busy(),fid+":actual_scene_cues")
 		check(menu._route_picker.disabled,fid+":route_locked_while_reading")
 		var resume=button(menu,"Resume Save")
