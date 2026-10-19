@@ -235,8 +235,12 @@ func _rebuild_unlocks() -> void:
 	progress["yang_unlocked"] = cosmic
 
 
-func acknowledge_scene() -> bool:
+func acknowledge_scene(expected_node_id: String = "", expected_route_id: String = "") -> bool:
 	var node := current_node()
+	# A suspended scene callback may only finish the chapter it actually played.
+	if (not expected_node_id.is_empty() and node.get("id", "") != expected_node_id) or (not expected_route_id.is_empty() and progress["selected_route"] != expected_route_id):
+		last_error = "Story chapter changed. Restart the current scene before continuing."
+		return false
 	if not active_encounter.is_empty() or node.get("kind") != "INTERACTIVE_DIALOGUE" or not bool(node.get("implemented", false)):
 		return false
 	return _complete_node(str(node["id"]))

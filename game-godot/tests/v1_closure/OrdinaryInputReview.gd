@@ -28,6 +28,7 @@ var navigation := {}
 var seeded_prerequisites := false
 var dialogue_review := ""
 var dialogue_snapshot := ""
+var stop_scene_and_exit := false
 
 func _ready() -> void:
 	process_physics_priority = -100
@@ -39,6 +40,7 @@ func _ready() -> void:
 		if arg.begins_with("--ordinary-replay="): replay_nodes=Array(arg.trim_prefix("--ordinary-replay=").split(","))
 		if arg == "--ordinary-video-frames": video_frames=true
 		if arg == "--ordinary-seeded-prerequisites": seeded_prerequisites=true
+		if arg == "--ordinary-stop-scene-and-exit": stop_scene_and_exit=true
 	if output.is_empty(): set_physics_process(false); return
 	DirAccess.make_dir_recursive_absolute(output)
 	print("ORDINARY_PROFILE ", OS.get_user_data_dir())
@@ -64,6 +66,20 @@ func _physics_process(_delta: float) -> void:
 	if scene == null: return
 	# Public presentation control; ordinary automation intentionally skips draft dialogue.
 	if StoryDialogue.is_busy():
+		if stop_scene_and_exit and scene.scene_file_path.ends_with("StoryCampaignScene.tscn"):
+			if action_delay > 0: return
+			var before := JSON.stringify(CampaignRuntime.progress)
+			var saved := FileAccess.get_file_as_bytes(CampaignRuntime.save_path)
+			var stopped_node: String = StoryDialogue.node_id
+			var shown_cue: String = str(StoryDialogue.current.get("cue_id", ""))
+			_press_button(scene, "Stop Scene")
+			var unchanged: bool = before == JSON.stringify(CampaignRuntime.progress)
+			var disk_unchanged: bool = saved == FileAccess.get_file_as_bytes(CampaignRuntime.save_path)
+			if StoryDialogue.is_busy() or not unchanged or not disk_unchanged:
+				failures.append("Stopping the ordinary Story scene failed or changed progress")
+			rows.append({"node":stopped_node,"kind":"scene_stopped_without_progress","shown_cue":shown_cue,"public_stop_button":true,"progress_unchanged":unchanged,"signed_save_unchanged":disk_unchanged})
+			_finish()
+			return
 		_press_button(StoryDialogue, "Skip dialogue · F6")
 		return
 	if scene_id != scene.get_instance_id():
