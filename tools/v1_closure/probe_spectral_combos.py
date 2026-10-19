@@ -22,7 +22,9 @@ for fid in selected_roster:
     if not a.labels and any(r['label']==label for r in index['attempts']):continue
     raise SystemExit('Existing evidence preserved; choose a missing label: '+label)
    dest.mkdir(parents=True)
-   args=['python3',str(ROOT/'tools/v1_closure/launch_ordinary_review.py'),'--profile','combo_'+label.replace('-','_')+'_1010','--test-script','res://tests/v1_closure/SpectralCapture.gd','--output',str(dest),
+   profile='combo_'+label.replace('-','_')+'_1010'
+   if len(profile)>64:profile=profile[:55]+'_'+hashlib.sha256(label.encode()).hexdigest()[:8]
+   args=['python3',str(ROOT/'tools/v1_closure/launch_ordinary_review.py'),'--profile',profile,'--test-script','res://tests/v1_closure/SpectralCapture.gd','--output',str(dest),
          '--driver-arg=--capture-frames=900','--driver-arg=--exact-trace','--driver-arg=--combo-probe='+pattern,'--driver-arg=--damage-band='+band,'--driver-arg=--performance-fighter='+fid]
    raw=OUT/'local_media'/(label+'.avi')
    if a.movie:
