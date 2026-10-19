@@ -189,14 +189,208 @@
       "scope": "Eight Compatibility-renderer UI fixtures; one inspected1280x720Kaia narrative-position screenshot. Explicit cursor/review setup; not ordinary progression.",
       "fixture_file": "game-godot/tests/v1_closure/StorySceneOwnership.gd",
       "fixture_sha256_at_execution": "8a4284af3b5c095adb8fc9cb4fcfd638956a51fca98e1fcd5faefa5924d66cce"
+    },
+    {
+      "test": "owner_story_bounded",
+      "passed": true,
+      "failures": [],
+      "source_sha": "864a0e5026639c160b760026a78d49b87c3625ce",
+      "source_diff_sha256": "3dc7eac2781206822c07c790bb5113a23808a05f8629ee7f0049d212be0fe734",
+      "path": "artifacts/v1_closure/spectral_feedback/continuous_1019/owner_story_bounded/ordinary_input_evidence.json",
+      "sha256": "84dec699d304ca4be947d64356e736e9162149b33f1971812449ca128e61bd01",
+      "script_errors": 0,
+      "engine_exit_diagnostics": [],
+      "earned_nodes": 7,
+      "qualifying_receipts": 7,
+      "gameplay_overrides": [],
+      "stop_events": [
+        {
+          "kind": "scene_stopped_without_progress",
+          "node": "kaia-windrow:accord",
+          "progress_unchanged": true,
+          "public_stop_button": true,
+          "shown_cue": "kaia_windrow_accord_001",
+          "signed_save_unchanged": true
+        }
+      ],
+      "battle_results": [
+        {
+          "node": "kaia-windrow:recruit:orion-vell",
+          "winner": 1,
+          "receipt": {
+            "additional_opponent": "",
+            "advanced": true,
+            "node_id": "kaia-windrow:recruit:orion-vell",
+            "objective_contract": "STOCK_WIN",
+            "objective_evidence": {
+              "elapsed": 0.0,
+              "stock_win": true,
+              "survived": false
+            },
+            "qualifying": true,
+            "replay": false,
+            "route_id": "kaia-windrow",
+            "survive_seconds": 0,
+            "token": "kaia-windrow:recruit:orion-vell:1300663:1",
+            "winner": 1
+          },
+          "cpu_moves": 90
+        },
+        {
+          "node": "kaia-windrow:recruit:ember-vale",
+          "winner": 1,
+          "receipt": {
+            "additional_opponent": "",
+            "advanced": true,
+            "node_id": "kaia-windrow:recruit:ember-vale",
+            "objective_contract": "STOCK_WIN",
+            "objective_evidence": {
+              "elapsed": 0.0,
+              "stock_win": true,
+              "survived": false
+            },
+            "qualifying": true,
+            "replay": false,
+            "route_id": "kaia-windrow",
+            "survive_seconds": 0,
+            "token": "kaia-windrow:recruit:ember-vale:11061178:2",
+            "winner": 1
+          },
+          "cpu_moves": 190
+        },
+        {
+          "node": "kaia-windrow:recruit:vesper-nyx",
+          "winner": 1,
+          "receipt": {
+            "additional_opponent": "",
+            "advanced": true,
+            "node_id": "kaia-windrow:recruit:vesper-nyx",
+            "objective_contract": "STOCK_WIN",
+            "objective_evidence": {
+              "elapsed": 0.0,
+              "stock_win": true,
+              "survived": false
+            },
+            "qualifying": true,
+            "replay": false,
+            "route_id": "kaia-windrow",
+            "survive_seconds": 0,
+            "token": "kaia-windrow:recruit:vesper-nyx:26685561:3",
+            "winner": 1
+          },
+          "cpu_moves": 85
+        }
+      ],
+      "scope": "Ordinary public controls, active opponents, authentic signed receipts. Exact save clone provenance retained; no staged prerequisites."
+    },
+    {
+      "test": "story_resume_first_loss",
+      "passed": true,
+      "failures": [],
+      "source_sha": "864a0e5026639c160b760026a78d49b87c3625ce",
+      "source_diff_sha256": "c35cb39628da8fb41b2f26eea1d92e27eeb17f3124f4d7c3bdcb4e080aef4c7d",
+      "path": "artifacts/v1_closure/spectral_feedback/continuous_1019/story_resume_first_loss/ordinary_input_evidence.json",
+      "sha256": "ffe98e079161934ea3863bcd9467a8ae38492a269355f0ddef9a2168f941efe2",
+      "script_errors": 0,
+      "engine_exit_diagnostics": [],
+      "earned_nodes": 10,
+      "qualifying_receipts": 8,
+      "gameplay_overrides": [],
+      "stop_events": [],
+      "battle_results": [
+        {
+          "node": "kaia-windrow:impossible_battle_1",
+          "winner": 1,
+          "receipt": {
+            "additional_opponent": "yang",
+            "advanced": true,
+            "node_id": "kaia-windrow:impossible_battle_1",
+            "objective_contract": "COSMIC_SURVIVAL",
+            "objective_evidence": {
+              "elapsed": 24.0166666666666,
+              "stock_win": false,
+              "survived": true
+            },
+            "qualifying": true,
+            "replay": false,
+            "route_id": "kaia-windrow",
+            "survive_seconds": 24.0,
+            "token": "kaia-windrow:impossible_battle_1:1329068:1",
+            "winner": 1
+          },
+          "cpu_moves": 40
+        }
+      ],
+      "scope": "Ordinary public controls, active opponents, authentic signed receipts. Exact save clone provenance retained; no staged prerequisites."
+    },
+    {
+      "test": "ordinary_first_loss_reached",
+      "passed": true,
+      "failures": [],
+      "source_sha": "8dec382fb4fba0e168035a1e4add6ee896c8a5de",
+      "source_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "path": "artifacts/v1_closure/spectral_feedback/continuous_1019/ordinary_first_loss_reached/ordinary_input_evidence.json",
+      "sha256": "bcb7061f8c04ccb87d3d05e4c837dfcdfde1e2ba43e175cc9b157c848f627bd9",
+      "script_errors": 0,
+      "engine_exit_diagnostics": [],
+      "earned_nodes": 11,
+      "qualifying_receipts": 9,
+      "gameplay_overrides": [],
+      "stop_events": [],
+      "battle_results": [
+        {
+          "node": "kaia-windrow:first_loss",
+          "winner": 1,
+          "receipt": {
+            "additional_opponent": "",
+            "advanced": true,
+            "node_id": "kaia-windrow:first_loss",
+            "objective_contract": "FIRST_LOSS",
+            "objective_evidence": {
+              "alternations": 0,
+              "attack": true,
+              "decision": "",
+              "elapsed": 4.74999999999999,
+              "escorted_fighters": [],
+              "form": "BASE",
+              "guard": false,
+              "guard_seconds": 0.0,
+              "identities_exercised": 0,
+              "interaction": "DECISIVE_INTERVENTION",
+              "objective_complete": true,
+              "perspectives": 0,
+              "player_damage": {},
+              "player_hits": 0,
+              "released": [],
+              "steps": 2,
+              "traversal": true,
+              "yang_count": 2,
+              "yin_count": 3
+            },
+            "qualifying": true,
+            "replay": false,
+            "route_id": "kaia-windrow",
+            "survive_seconds": 0,
+            "token": "kaia-windrow:first_loss:1248678:1",
+            "winner": 1
+          },
+          "cpu_moves": 7
+        }
+      ],
+      "scope": "Ordinary public controls, active opponents, authentic signed receipts. Exact save clone provenance retained; no staged prerequisites."
     }
   ],
   "human_approved": false,
-  "limits": "Narrative stop/route isolation verified in8declared chapter-position UIfixtures, staleack guard16cases,1025cue regression. Freshordinaryplay earned4nodes acrossrestart, but boundeddrivers lost/timedout before narrativegate; no ordinary StopScene/FirstLoss orcomplete7route claim. Earlier full-route receipts remain exactsource historical.",
+  "limits": "One Kaia partial route,11nodes and9genuine qualifying battle receipts; seven-route/complete campaign and human quality acceptance remain unfinished. Earlier failed tactics and resource-exit diagnostics retained; no new Storycode change after9b7ad976.",
   "current_fixture_file_hashes": {
     "game-godot/tests/v1_closure/StorySceneOwnership.gd": "8a4284af3b5c095adb8fc9cb4fcfd638956a51fca98e1fcd5faefa5924d66cce",
     "game-godot/tests/v1_closure/StorySceneAuthority.gd": "84965a99487237617f5e413bdc7769aeaf7d4ebc56d84d330899b1d92a7f67b5",
     "game-godot/tests/v1_closure/OrdinaryInputReview.gd": "a2e44056d7255fb04e6d53290701a134952567db2b5ff754dbc48aaf20d9e00c",
     "game-godot/tests/v1_closure/DialogueProduction.gd": "cd170e6028e17a6222d39d4fa4276294b01d9da3818bc3aa5772723b4ad96759"
-  }
+  },
+  "latest_ordinary_complete_nodes": 11,
+  "ordinary_narrative_stop_verified": true,
+  "ordinary_restart_and_first_loss_verified": true,
+  "owner_review_checkpoint_nodes": 7,
+  "previous_orion_block_classification": "Input-driver tactical limitation: same game/AI rules passed using ordinary charge/light/grab pressure. No game balance change."
 }
