@@ -183,9 +183,12 @@ void fragment() {
    float pull=1.0-smoothstep(0.0,.44,t);
    float left=element_contour(family,p+vec2(.26*pull,0),t)*(1.0-smoothstep(-.02,.1,p.x));
    float right=element_contour(secondary_family,-p+vec2(.26*pull,0),t)*smoothstep(-.1,.02,p.x);
-   shape=(left+right)*pull*.68;
-   shape+=line(p,vec2(-.12,-.18),vec2(.12,.18),.021)*.85+line(p,vec2(-.12,.18),vec2(.12,-.18),.021)*.85;
-   outline=line(p,vec2(-.12,-.18),vec2(.12,.18),.048)+line(p,vec2(-.12,.18),vec2(.12,-.18),.048);
+   float left_curl=ring(p+vec2(.26,.06),.42-t*.10,.022)*smoothstep(-.10,.12,p.x);
+   float right_curl=ring(p-vec2(.26,-.06),.42-t*.10,.022)*(1.0-smoothstep(-.12,.10,p.x));
+   shape=(left+right)*(.24+pull*.55)+(left_curl+right_curl)*.75;
+   shape+=line(p,vec2(-.10,-.40),vec2(.04,-.08),.023)*.8+line(p,vec2(.04,-.08),vec2(-.06,.22),.019)*.8;
+   outline=ring(p+vec2(.26,.06),.42-t*.10,.046)*smoothstep(-.10,.12,p.x)+ring(p-vec2(.26,-.06),.42-t*.10,.046)*(1.0-smoothstep(-.12,.10,p.x));
+   outline+=line(p,vec2(-.10,-.40),vec2(.04,-.08),.048)+line(p,vec2(.04,-.08),vec2(-.06,.22),.045);
    mix_weight=smoothstep(-.08,.08,p.x);
   } else if(kind==21) { // winner travels forward; weak elemental pieces peel behind
    float sweep=ring(p+vec2(.27,0),.5+t*.13,.026)*smoothstep(-.02,.4,p.x);
@@ -207,6 +210,7 @@ void fragment() {
  float alpha=clamp((max(shape,outline*.74)*f+bits*f+core)*accent.a,0.0,(kind==18 || kind==19)?0.46:0.88);
  vec3 ink=mix(accent.rgb,vec3(1.0,0.97,0.88),clamp(core,0.0,1.0)*0.8);
  if(kind>=20) {ink=mix(vec3(.025,.04,.06),mix(accent.rgb,secondary_accent.rgb,mix_weight),smoothstep(.05,.35,shape));}
+ if(kind==20) {ink=mix(ink,vec3(.96,1.0,.94),(1.0-smoothstep(.05,.13,abs(p.x)))*smoothstep(.1,.6,shape)*.48);}
  if(family==0 && kind!=4 && kind!=6) { float thermal=clamp((1.0-r)*n*f,0.0,1.0); ink=mix(ink,vec3(1.0,0.75,0.17),thermal*0.65); }
  COLOR=vec4(ink,alpha);
 }

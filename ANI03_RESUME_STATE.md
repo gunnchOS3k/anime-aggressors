@@ -1,3 +1,22 @@
+# October20 native readability refinement
+
+Pushed2f5aed2bd55acafde1e6d29b7d54223129761f90. Before6105809 and
+intermediateafter2f5aed both679nativeframes/60fps/nativeaudio;458barcodes
+verifiedeach. Physicsframes/positions/integrity/results/damage match exactly.
+The intermediatecancelcue lookedlikeasmallXatgameplayscale, so thischeckpoint
+replacesitwithopposingmixed-elementcrescents andoutlinedivorycontactseam.
+No physicschange. Preserveintermediatevideo asdiagnostic, notfinalownerart.
+
+ProjectileReadability15cases+3stressmodesPASS andnativeCompatibility
+ProjectileInteractions35PASS beforethispureanalyticcancellation-shaperefine.
+Next: guard800framefinalaftermovie undernewlabel, noexistingfileoverwrite;
+verifyandinspect; then ordinaryquick/medium/fullmajor/breakthroughinall3modes,
+strict outcomecomparison, focusedregressions andoneboundedactiveCPUattempt.
+Protectednative2GiBreserve/18GiBheavyguardunchanged. Full1700capturewas
+refusedbeforelaunch; short800passed. No storagecleanup orsource/artregen.
+Allgatesfalse, sourcecheckpointno merge/release.
+
+---
 # October20 clash readability implementation checkpoint
 
 Recovered clean610580933ce7c09c8e70e0fc07c0bf266de07678, draft123/base122.

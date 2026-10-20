@@ -41,11 +41,22 @@ func shoot(label: String) -> void:
 	keys(1, ["special"]); keys(2, ["special"]); await wait(1)
 	keys(1, []); keys(2, []); await wait(130)
 	cases.append({"case": label, "public_input_frame": shot_frame, "aura_at_input": aura, "damage_before": damage_before, "damage_after": [p.damage_percent, d.damage_percent], "interceptions": battle._battle_sim.projectile_interactions.history.slice(begin)})
+func charge_both(target: float) -> void:
+	var ready := [false, false]
+	for i in range(240):
+		ready[0] = ready[0] or p.aura >= target
+		ready[1] = ready[1] or d.aura >= target
+		keys(1, [] if ready[0] else ["special", "shield"])
+		keys(2, [] if ready[1] else ["special", "shield"])
+		await wait(1)
+		if ready[0] and ready[1]: break
+	keys(1, []); keys(2, []); await wait(4)
 func run() -> void:
 	create_timer(60).timeout.connect(func(): push_error("public projectile watchdog"); quit(2))
 	await process_frame
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--ordinary-output="): output = arg.get_slice("=", 1)
+		if arg.begins_with("--review-vfx-mode="): root.get_node("StoryDialogue").set_option("vfx_intensity", arg.get_slice("=", 1))
 	var gs = root.get_node("GameState")
 	gs.mode = "versus"; gs.stage_id = "training-grid"; gs.p1_fighter_id = "kaia-windrow"; gs.p2_fighter_id = "juno-spark"; gs.p1_is_cpu = false; gs.p2_is_cpu = false; gs.stocks = 9; gs.match_timer_seconds = 180
 	root.get_node("SceneRouter").go("battle")
@@ -64,17 +75,11 @@ func run() -> void:
 	keys(1, []); keys(2, []); await wait(8)
 	await shoot("equal_quick")
 	if not "--clash-quick-breakthrough" in OS.get_cmdline_user_args():
-		var ready := [false, false]
-		for i in range(200):
-			# Latch completion; threshold chatter creates unintended press edges.
-			ready[0] = ready[0] or p.aura >= 66
-			ready[1] = ready[1] or d.aura >= 66
-			keys(1, [] if ready[0] else ["special", "shield"])
-			keys(2, [] if ready[1] else ["special", "shield"])
-			await wait(1)
-			if ready[0] and ready[1]: break
-		keys(1, []); keys(2, []); await wait(4)
+		await charge_both(66)
 		await shoot("equal_medium")
+		if "--clash-major-exchange" in OS.get_cmdline_user_args():
+			await charge_both(88)
+			await shoot("equal_full_major")
 		# Genuine passive decay; the short movie recipe omits this exchange.
 		for i in range(1000):
 			if p.aura < 15 and d.aura < 15: break
