@@ -57,7 +57,7 @@ static func apply_to_move(move: Dictionary, aura_amount: float) -> Dictionary:
 	if tier.has("armor_frames"):
 		scaled["armor_frames"] = int(tier.armor_frames)
 	if tier.has("cancel_windows"):
-		scaled["cancel_windows"] = tier.cancel_windows
+		scaled["cancel_windows"] = resolve_cancel_windows(move.get("cancel_windows", []), tier.cancel_windows)
 	if tier.has("element_strength"):
 		var elem: Dictionary = scaled.get("element_effect", {}).duplicate(true)
 		elem["strength"] = float(tier.element_strength)
@@ -72,6 +72,23 @@ static func apply_to_move(move: Dictionary, aura_amount: float) -> Dictionary:
 			proj[k] = tier.projectile_overrides[k]
 		scaled["projectile"] = proj
 	return scaled
+
+static func resolve_cancel_windows(authored: Array, tier_windows: Array) -> Array:
+	# Legacy aura entries override frame bounds but omit route identity. Carry
+	# only explicit, hit-confirmed authored targets into those bounds. Never
+	# interpret an untargeted window as permission for arbitrary attacks.
+	var resolved: Array = []
+	for window in tier_windows:
+		resolved.append(window.duplicate(true))
+		if window.has("to") or window.has("action"): continue
+		for route in authored:
+			if str(route.get("to", "")).is_empty() or str(route.get("requires", "")) != "hit_confirm": continue
+			var inherited: Dictionary = route.duplicate(true)
+			for key in window: inherited[key] = window[key]
+			# A legacy override may narrow permission, never remove hit confirm.
+			inherited["requires"] = "hit_confirm"
+			if not resolved.has(inherited): resolved.append(inherited)
+	return resolved
 
 static func projectile_value_by_aura(arr: Array, aura_amount: float) -> float:
 	if arr.is_empty():

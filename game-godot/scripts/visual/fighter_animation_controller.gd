@@ -39,17 +39,27 @@ var _reaction_fresh := false
 var _neutral_return_pose:Array=[]
 var _neutral_return_age:=0.0
 const NEUTRAL_RETURN_SECONDS:=.075
+var _grounded_return = preload("res://scripts/visual/grounded_recovery_blend.gd").new()
 
-func _begin_neutral_return() -> void:
+func _begin_neutral_return(state: String) -> void:
 	_neutral_return_pose.clear();_neutral_return_age=0.0
-	# Upper-body continuity only. Pelvis/feet remain with the existing planted
-	# gait/landing contract, and the next attack immediately owns all its keys.
+	_grounded_return.clear()
+	# Settle only stationary grounded neutral. Distance gait, landing and a new
+	# command retain their own foot mechanics without any input delay.
+	if state == _FighterStates.IDLE and is_instance_valid(_runtime_fighter) and _runtime_fighter.is_on_floor() and absf(_runtime_fighter._read_axis()) < .001:
+		_grounded_return.begin(_skeleton)
 	for name in ["Spine","Chest","Neck","Head","UpperArm_L","LowerArm_L","Hand_L","UpperArm_R","LowerArm_R","Hand_R"]:
 		var index:=_skeleton.find_bone(name)
 		if index>=0:_neutral_return_pose.append({"bone":index,"rotation":_skeleton.get_bone_pose_rotation(index)})
 
 func _blend_neutral_return(delta:float) -> void:
-	if _neutral_return_pose.is_empty() or presentation_frozen or not is_instance_valid(_skeleton):return
+	if presentation_frozen or not is_instance_valid(_skeleton):return
+	if _grounded_return.active:
+		if not is_instance_valid(_runtime_fighter) or not _runtime_fighter.is_on_floor() or absf(_runtime_fighter._read_axis()) > .001:
+			_grounded_return.clear()
+		else:
+			_grounded_return.apply(_skeleton, delta)
+	if _neutral_return_pose.is_empty():return
 	_neutral_return_age+=delta
 	var weight:=smoothstep(0.0,NEUTRAL_RETURN_SECONDS,_neutral_return_age)
 	for pose in _neutral_return_pose:
@@ -106,6 +116,7 @@ func bind_runtime_fighter(fighter: Node) -> void:
 func play_for_state(state: String, move: Dictionary = {}) -> void:
 	var neutral_state:=state in [_FighterStates.IDLE,_FighterStates.WALK,_FighterStates.RUN,_FighterStates.DASH,_FighterStates.FALL,_FighterStates.FAST_FALL]
 	if not neutral_state:_neutral_return_pose.clear()
+	if state != _FighterStates.IDLE: _grounded_return.clear()
 	if state not in [_FighterStates.IDLE,_FighterStates.WALK,_FighterStates.RUN,_FighterStates.DASH]:
 		_weight_transfer.clear()
 	_move_synchronized = state.begins_with("attack") or state.begins_with("special") or state.begins_with("aura_burst") or state.begins_with("throw")
@@ -144,7 +155,9 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 	if anim:
 		anim.loop_mode = Animation.LOOP_LINEAR if should_loop else Animation.LOOP_NONE
 	if (_player.current_animation != play_key and _player.current_animation != clip) or (reacting and _reaction_fresh):
-		if neutral_state and not _player.current_animation.is_empty():_begin_neutral_return()
+		# A finished non-looping clip clears current_animation but leaves its
+		# final skeleton pose visible. That pose still needs a recovery blend.
+		if neutral_state and not _active_clip.is_empty():_begin_neutral_return(state)
 		_player.play(play_key, 0.0 if play_key.begins_with("combat_choreography/") else 0.08)
 		if play_key.begins_with("combat_choreography/"):
 			# State callbacks must show the authored first pose in this frame,

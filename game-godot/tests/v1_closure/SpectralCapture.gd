@@ -29,6 +29,7 @@ var frame_bars:Array=[]
 var frame_stamps:Array=[]
 var stamp_frames:=false
 var review_vfx_mode:=""
+var charged_link_started := false
 func _init() -> void: call_deferred("_run")
 func inputs(actions: Array) -> void:
 	if actions != held:input_events.append({"movie_frame":Engine.get_process_frames()-1,"actions":actions.duplicate(),"axis_strength":.55 if not probe.is_empty() else 1.0})
@@ -45,7 +46,7 @@ func observe_contact(attacker: Node, defender: Node, info: Dictionary) -> void:
 		"frame":Engine.get_physics_frames(),"movie_frame":Engine.get_process_frames()-1,"result":info.get("contact_result","legacy"),"damage":info.damage,"damage_before":info.get("defender_damage_before",defender.damage_percent-info.damage),
 		"contact_world":[point.x,point.y],"contact_screen":[screen.x,screen.y],"launch":[launch.x,launch.y],"actual_velocity":[defender.velocity.x,defender.velocity.y],"hitstop_frames":info.hitstop_frames,
 		"hitstun_seconds":defender.hitstun_remaining,"defender_state_before":info.get("defender_state_before","unknown"),"follow_up_before_control":info.get("defender_in_hitstun_before",false),
-		"audio_path":info.get("played_audio",{}).get("path",""),"elemental_audio_path":info.get("played_audio",{}).get("elemental_layer",{}).get("path",""),"attacker_move_frame":info.get("move_frame",-1),"contact_owner":info.get("contact_owner","legacy_unrecorded"),"attack_activation_id":info.get("attack_activation_id",-1),"projectile_instance_id":info.get("projectile_instance_id",-1)})
+		"audio_path":info.get("played_audio",{}).get("path",""),"elemental_audio_path":info.get("played_audio",{}).get("elemental_layer",{}).get("path",""),"attacker_move_frame":info.get("move_frame",-1),"attacker_aura":attacker.aura,"contact_owner":info.get("contact_owner","legacy_unrecorded"),"attack_activation_id":info.get("attack_activation_id",-1),"projectile_instance_id":info.get("projectile_instance_id",-1)})
 	observe_visual_contact(attacker,defender,info.duplicate(true),Engine.get_process_frames()-1)
 func observe_visual_contact(attacker: Node,defender: Node,info: Dictionary,frame: int) -> void:
 	if not is_instance_valid(attacker) or not is_instance_valid(defender): return
@@ -177,9 +178,15 @@ func _run() -> void:
 func _probe_inputs(frame: int,p: Node,dx: float) -> Array:
 	# Adaptive observation selects public controls only. No game state/result writes.
 	var actions: Array=[]
-	if probe=="authored-review":
+	if probe=="charged-authored" and not charged_link_started:
+		# Earn aura with public charging. Active CPU may interrupt or punish;
+		# failure to reach the tier is retained, never seeded or forced.
+		if p.aura < 90.0: return ["special", "shield"]
+		charged_link_started = true
+		return []
+	if probe in ["authored-review", "charged-authored"]:
 		var dy:float=battle.fighter2.position.y-p.position.y
-		var section:=frame%1300
+		var section:=frame%1300 if probe=="authored-review" else 0
 		if section>=1000:
 			return ["special","shield"] if section<1220 else ["special"] if frame%45==0 else []
 		var radius:=110.0 if section>=800 else 25.0

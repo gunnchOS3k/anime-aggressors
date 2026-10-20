@@ -1,3 +1,37 @@
+# October20 recovery and high-aura checkpoint
+
+Branch `release/anime-v1-dialogue-and-elemental-performance`, worktree unchanged.
+Starting pushed HEAD4bb46fd7; resolve this source checkpoint with `git rev-parse HEAD`.
+Draft123 remains stacked on122. No release/human gates changed.
+
+New source: finished non-looping clips clear AnimationPlayer.current_animation,
+which bypassed neutral continuity. Preserve the last visible pose using the
+controller-owned active clip, then settle grounded pelvis/legs over120ms with
+existing length-preserving support IK. Movement, attack, shield and airborne
+states cancel this visual-only settling immediately. Models/camera/collision,
+move data, physics and damage unchanged. Grounded36case baseline has36 pelvis
+snaps; corrected36case passes with zero first-frame pelvis discontinuity.
+Two initial diagnostic runs were not grounded; retained as harness failures,
+not floor or combat evidence. Clean grounded before/after evidence retained.
+
+Aura level3 legacy frame-only overrides erased explicit authored targets.
+Compose only existing hit-confirm targets into the existing tier bounds. No
+blanket permission or new catalog route. Baseline66 assertions fail; corrected
+192resolved route/tier cases pass, including shield/armor/ownership/expiry.
+Public75-aura acceptance and focused integration regressions NEXT, not yet passed.
+The100-aura Attack button retains its existing super mapping.
+
+Evidence: `artifacts/v1_closure/spectral_feedback/continuous_1020/`.
+No new movie/export. Available disk4.7GiB; preserve18GiB heavy-export guard.
+Owner review PID29620 remains open on old4bb46source; do not terminate it or
+alter its signed save. No owned capture/test remains after this checkpoint.
+Next: run focused GroundedRecovery/NeutralReturn/ContactReactionClock, then
+bounded SpectralCapture --combo-probe=charged-authored --capture-frames=700
+forKaia andJuno using new isolated profiles and labels. ActiveCPU/publicinputs
+only; retain bounded failures. Then roster shared policies and affected combat
+regressions. Keep floor/outer reach/overlap decisions and final acting unapproved.
+
+---
 # October 19 production checkpoint
 
 - Worktree: `/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure`
