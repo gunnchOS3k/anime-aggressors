@@ -72,7 +72,7 @@ func contact(info: Dictionary, defender: Node2D) -> bool:
 func stage_contact(info: Dictionary, context: Node2D) -> bool:
 	# The stage surface is queried, never inferred from the model's soles.
 	# An airborne hit over empty space cannot paint an imaginary ground plane.
-	if not bool(info.get("confirmed_contact",false)) or context==null:return false
+	if not bool(info.get("confirmed_contact",false)) or str(info.get("combat_event_id","")).is_empty() or context==null:return false
 	var origin: Vector2=info.get("contact_world",Vector2.INF)
 	if not origin.is_finite():return false
 	var query:=PhysicsRayQueryParameters2D.create(origin+Vector2.UP*4,origin+Vector2.DOWN*180,1)
@@ -82,6 +82,7 @@ func stage_contact(info: Dictionary, context: Node2D) -> bool:
 	var event_id:=str(info.get("combat_event_id",""))+":stage"
 	if _seen.has(event_id):return false
 	_seen[event_id]=true
+	if _seen.size()>256:_seen.erase(_seen.keys()[0])
 	var result:=str(info.get("contact_result","hit"))
 	var tier:=str(info.get("feedback_tier","light"))
 	var special:=str(info.get("move_id","")).contains("special")
