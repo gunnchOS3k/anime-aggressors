@@ -1,3 +1,10 @@
+# October19 Kaia/Juno public cancel attempts complete
+
+Source0815d2ca753c0426b353c129c82b4e20513479ae. Kaia1300frame publiccontrols vs activeJuno produced real jab1→jab2 at344→350 and9authoredcancels, plus shielded/after-recovery results. Juno reciprocal1300frame vs activeKaia produced jab1→jab2→finisher338→342→347 and12authoredcancels, activeCPU33moves. These are raw observations pending full strict control/activation analysis; do not certify everylaterhit. Both traces contain realstage responses, noforcedmoves/KO/AI/damagewrites beyonddeclared0initialtestfixture. ExitObjectDB/resourcesdiagnostics retained,noScriptErrors. Test-onlyframe-barcode option added for focusednative exact-rootverification; no nine-fighter capturecampaign.
+
+Next: sourcecheckpoint, run meaningfulaffectedintegration suites once at this runtime; then nativeKaia/Juno two bounded1600framecap60fps clips with framebarcodes andexisting2GiBreserve. Inspect actual footage. Allnine/body performance implemented,18models/72reactions/864choreography/27stage/9cancelpolicy fixturePASS; no visualapproval. Heavy18GiBguard/all33worktrees/backups/humangatesfalse.
+
+---
 # October19 reaction fixture correction verified
 
 Shipping source30b78bc35676969557142985bd9c258cfa0e0662 pushed. Previous checkpoint prematurely said72reactioncasesPASS despite newtest parse failure; failure log retained. Typed test corrected, performance_reactions_typed nowactual72PASS0failures0ScriptErrors. 864choreography/27stage/9cancelpolicy PASS remain valid. Stage dedupe cache bounded including surface IDs. Native/public next, no current capture running.

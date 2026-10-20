@@ -25,6 +25,9 @@ var opponent_id := ""
 var turn_latch := 0
 var retreating := false
 var empowerment_observations: Array=[]
+var frame_bars:Array=[]
+var frame_stamps:Array=[]
+var stamp_frames:=false
 func _init() -> void: call_deferred("_run")
 func inputs(actions: Array) -> void:
 	if actions != held:input_events.append({"movie_frame":Engine.get_process_frames()-1,"actions":actions.duplicate(),"axis_strength":.55 if not probe.is_empty() else 1.0})
@@ -73,7 +76,7 @@ func write_evidence() -> void:
 		"starting_opponent_damage":50 if band=="medium" else 110 if band=="high" else 0,"body_presentations":[battle.fighter1.data.body_variant,battle.fighter2.data.body_variant],"same_fighter_comparison":same_fighter_comparison,"opponent_cpu":battle.fighter2.is_cpu,"controls_enabled":battle.fighter2.controls_enabled,
 		"forced_moves":false,"forced_ko":false,"frozen_opponent":false,"story_receipts":false,"human_playthrough":false,
 		"idle_fixture_not_combo_evidence":idle_opponent,"probe":probe,"exact_trace":exact_trace,"state_transitions":transitions,"move_phases":phases,"public_inputs":input_events,"moves":events,"contacts":contacts,"visual_contacts":visual_contacts,"samples":samples,"ko_events":ko_events,
-		"authored_cancels":battle.fighter1.authored_cancel_history,"presentation_events":renderer.history if renderer != null else [],"empowerment_observations":empowerment_observations,"expression":battle.fighter1.get_node("CombatExpressionDirector").action_lines.evidence(),"pool":renderer.stats() if renderer != null else {},"player_damage":battle.fighter1.damage_percent,"opponent_damage":battle.fighter2.damage_percent},"  ")+"\n");file.close()
+		"frame_stamps":frame_stamps,"authored_cancels":battle.fighter1.authored_cancel_history,"presentation_events":renderer.history if renderer != null else [],"empowerment_observations":empowerment_observations,"expression":battle.fighter1.get_node("CombatExpressionDirector").action_lines.evidence(),"pool":renderer.stats() if renderer != null else {},"player_damage":battle.fighter1.damage_percent,"opponent_damage":battle.fighter2.damage_percent},"  ")+"\n");file.close()
 func _run() -> void:
 	await process_frame
 	seed(431017)
@@ -85,6 +88,7 @@ func _run() -> void:
 		elif arg.begins_with("--performance-opponent="):opponent_id=arg.get_slice("=",1)
 		if arg.begins_with("--damage-band="):band=arg.get_slice("=",1)
 		if arg=="--exact-trace":exact_trace=true
+		if arg=="--frame-barcode":stamp_frames=true
 		if arg=="--same-fighter-comparison":same_fighter_comparison=true
 		if arg.begins_with("--combo-probe="):probe=arg.get_slice("=",1)
 		if arg.begins_with("--capture-frames="):max_frames=int(arg.get_slice("=",1))
@@ -106,9 +110,19 @@ func _run() -> void:
 		actor.move_runner.phase_changed.connect(func(move_phase):phases.append({"fighter":actor.fighter_id,"movie_frame":Engine.get_process_frames()-1,"move":actor.move_runner.current_move_id(),"phase":move_phase,"move_frame":actor.move_runner.total_frame}))
 		actor.koed.connect(func():ko_events.append({"fighter":actor.fighter_id,"movie_frame":Engine.get_process_frames()-1,"stocks":actor.stocks}))
 	var label:=Label.new();label.text="AUTOMATED INPUT · "+("idle charge fixture" if idle_opponent else "active CPU · "+band+" initial damage")+" · "+source_sha.left(12);label.position=Vector2(30,90);battle.hud.add_child(label)
+	if stamp_frames:
+		var layer:=CanvasLayer.new();layer.layer=100;battle.add_child(layer)
+		for bit in range(20):
+			var rect:=ColorRect.new();rect.position=Vector2(20+bit*12,190);rect.size=Vector2(10,24);layer.add_child(rect);frame_bars.append(rect)
 	started_frame=Engine.get_physics_frames()
 	for frame in range(max_frames):
 		if current_scene!=battle:break
+		if stamp_frames:
+			var observed:=Engine.get_process_frames()-1
+			var identity:int=preload("res://scripts/visual/spectral_feedback_renderer.gd").IDS.find(fid)
+			var code:int=(observed & 65535)|(identity<<16)
+			for bit in range(20):frame_bars[bit].color=Color.WHITE if code & (1<<bit) else Color.BLACK
+			frame_stamps.append({"expected_process_frame":observed,"identity":identity,"physics_frame":Engine.get_physics_frames()})
 		var phase:=frame%1200
 		var dx:float=battle.fighter2.position.x-p.position.x
 		var actions: Array=[]
@@ -168,7 +182,7 @@ func _probe_inputs(frame: int,p: Node,dx: float) -> Array:
 		var radius:=110.0 if section>=800 else 25.0
 		if absf(dx)>radius:actions.append("right" if dx>0 else "left")
 		if dy< -55 and p.is_on_floor():actions.append("jump")
-		if p.move_runner.active and frame%2==0:
+		if p.move_runner.active and frame%2==0 and p.move_runner.has_method("can_cancel_to"):
 			if p.move_runner.can_cancel_to("jab_2") or p.move_runner.can_cancel_to("jab_finisher"):return ["attack"]
 			if p.move_runner.can_cancel_to("up_tilt"):return ["up","attack"]
 		if p.state_machine.can_attack() and frame%4==0 and absf(dx)<=radius and absf(dy)<65:
