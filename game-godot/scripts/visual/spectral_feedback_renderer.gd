@@ -140,7 +140,8 @@ func emit_effect(fid: String, kind: int, world: Vector2, direction := Vector2.RI
 	var slot: Dictionary = slots[index]
 	slot.merge({"active":true,"age":0.0,"life":life,"fid":fid,"kind":kind,"extent":extent,"world":world,"dir":direction,"seed":seed_value,"follow":weakref(follow) if follow != null else null,"event_id":event_id,"aspect":Vector2.ONE},true)
 	var mesh: MeshInstance2D = slot.mesh
-	mesh.z_index=-26 if kind in [18,19] else 0
+	# Canvas contract: platform0 < surface1 < fighter display2 < contact25.
+	mesh.z_index=-24 if kind in [18,19] else 0
 	mesh.show();mesh.global_position=world;mesh.rotation=direction.angle();mesh.scale=Vector2.ONE*extent
 	var ink: Color = COLORS[family]
 	if kind == 4: ink=Color(.79,.82,.85,.65).lerp(Color(ink.r,ink.g,ink.b,.6),.23)

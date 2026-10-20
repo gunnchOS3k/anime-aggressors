@@ -44,3 +44,7 @@ with tempfile.TemporaryDirectory(prefix='aa-combat-review-') as scratch:
 log=(out/'native_console.log').read_text();timing={k:float(v) for k,v in re.findall(r'(CPU render time|Encoding time):.*?average: ([0-9.]+) ms/frame',log)}
 report=dict(path=rel(movie),source_sha=launch['runtime_source_sha'],sha256=sha(movie),streams=streams,native_audio_volume_db=volume,frame_checks=receipt['samples'],frame_checks_passed=receipt['matched'],body_presentations=d['body_presentations'],opponent_active=True,script_errors=log.count('SCRIPT ERROR'),shader_errors=log.count('SHADER ERROR'),recording_measurements=timing,GPU_or_sustained_device_FPS_verified=False,sheets=[dict(path=rel(target),sha256=sha(target),source_sha=launch['runtime_source_sha'],native_frames=exact,verification_status='VERIFIED_ROOT_FRAME_BARCODES_AND_TRACE')],verification_status='VERIFIED_NATIVE60_AUDIO_FRAME_SOURCE',redistribution='Original project/synthesized combat assets; owner development review only, no public release authorization',owner_approved=False)
 (out/'NATIVE_MOVIE.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))
+
+state_path=out/"RECORDING_STATE.json"
+if state_path.exists():
+ state=json.loads(state_path.read_text());state["process_status_at_verification"]=state["status"];state.update(status=report["verification_status"],native_verification=report["verification_status"],verification_report=rel(out/"NATIVE_MOVIE.json"));state_path.write_text(json.dumps(state,indent=2)+"\n")
