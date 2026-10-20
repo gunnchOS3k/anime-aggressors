@@ -1,3 +1,8 @@
+# October19 integration follow-up — primary feedback ordering corrected
+
+Checkpoint e920534dacd0062e52d0bb62c58142cb00b6dbff pushed. Existing ThrowOwnership39, CombatActivation, InterruptedMove, ProjectileOwnership, AirborneGuard PASS. SpectralFeedback failed9shield-last-primary assertions because new stage decoration was dispatched after shield confirmation. Existing test unchanged: runtime now admits low-priority stage decoration first, then authoritative confirmation; assigns stage below fighter/contact layer and resets z-index on pool reuse. This both restores primary ordering and prevents stage overpainting bodies. Failed run retained, corrected focused tests next before native capture. Remaining integration suites not yet run; no allgreen claim. Native source checkpoint first. Public Kaia1/Juno4 strictpairs analyzed against defender-control/activation trace;23/23bodyhits22/11blocks,9/12authoredcancels. No full70/48route certification.
+
+---
 # October19 Kaia/Juno public cancel attempts complete
 
 Source0815d2ca753c0426b353c129c82b4e20513479ae. Kaia1300frame publiccontrols vs activeJuno produced real jab1→jab2 at344→350 and9authoredcancels, plus shielded/after-recovery results. Juno reciprocal1300frame vs activeKaia produced jab1→jab2→finisher338→342→347 and12authoredcancels, activeCPU33moves. These are raw observations pending full strict control/activation analysis; do not certify everylaterhit. Both traces contain realstage responses, noforcedmoves/KO/AI/damagewrites beyonddeclared0initialtestfixture. ExitObjectDB/resourcesdiagnostics retained,noScriptErrors. Test-onlyframe-barcode option added for focusednative exact-rootverification; no nine-fighter capturecampaign.

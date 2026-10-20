@@ -62,11 +62,13 @@ func contact(info: Dictionary, defender: Node2D) -> bool:
 	var origin: Vector2 = info.get("contact_world",defender.global_position+Vector2(0,-24))
 	var direction: Vector2 = info.get("contact_direction",Vector2.RIGHT)
 	var heavy := str(info.get("feedback_tier","light")) in ["heavy","aura","super"]
+	# Decoration is admitted first; the authoritative collision remains the last
+	# primary confirmation and can evict it when the shared pool is saturated.
+	stage_contact(info,defender)
 	emit_effect(fid,10 if result == "armor" else 1 if result in ["shield","parry","clash"] else 0,origin,direction,190 if heavy else 140,.26 if heavy else .18,event_id)
 	if result == "hit":
 		if heavy:emit_effect(fid,16,origin,direction,128,.10,event_id+":confirmed_expression")
 		emit_effect(fid,8,defender.global_position+Vector2(0,-24),direction,74,.2,event_id+":hurt",defender)
-	stage_contact(info,defender)
 	return true
 
 func stage_contact(info: Dictionary, context: Node2D) -> bool:
@@ -135,6 +137,7 @@ func emit_effect(fid: String, kind: int, world: Vector2, direction := Vector2.RI
 	var slot: Dictionary = slots[index]
 	slot.merge({"active":true,"age":0.0,"life":life,"fid":fid,"kind":kind,"extent":extent,"world":world,"dir":direction,"seed":seed_value,"follow":weakref(follow) if follow != null else null,"event_id":event_id,"aspect":Vector2.ONE},true)
 	var mesh: MeshInstance2D = slot.mesh
+	mesh.z_index=-26 if kind in [18,19] else 0
 	mesh.show();mesh.global_position=world;mesh.rotation=direction.angle();mesh.scale=Vector2.ONE*extent
 	var ink: Color = COLORS[family]
 	if kind == 4: ink=Color(.79,.82,.85,.65).lerp(Color(ink.r,ink.g,ink.b,.6),.23)
