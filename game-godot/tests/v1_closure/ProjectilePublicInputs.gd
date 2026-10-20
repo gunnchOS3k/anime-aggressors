@@ -10,6 +10,34 @@ var cases: Array = []
 var hits: Array = []
 var bars: Array = []
 var stamps: Array = []
+var observed_shots: Dictionary = {}
+var fighter_impacts: Array = []
+var flight_samples: Array = []
+var physical_samples: Array = []
+func observe_impact_review() -> void:
+	if battle == null or not "--fighter-impact-review" in OS.get_cmdline_user_args(): return
+	for actor in [p,d]:
+		for shot in actor.projectile_spawner.active_projectiles:
+			var id:int=shot.get_instance_id()
+			if observed_shots.has(id):continue
+			observed_shots[id]=weakref(shot)
+			shot.projectile_hit.connect(func(target,info):
+				fighter_impacts.append({"event_id":info.combat_event_id,"physics_frame":Engine.get_physics_frames(),"process_frame":Engine.get_process_frames(),"owner_slot":shot.team_slot,"target_slot":target.slot,"behavior":shot.behavior,"integrity":shot.integrity,"damage":info.damage,"world":[info.contact_world.x,info.contact_world.y],"active_after_contact":shot.active,"flight_slot_after_contact":shot._flight_slot,"travel_after_contact":shot._elemental_audio.travel.playing,"position_after_contact":[shot.global_position.x,shot.global_position.y]})
+			)
+		var c=actor.model_3d.get_animation_controller();var sk:Skeleton3D=c.get_skeleton()
+		sk.force_update_all_bone_transforms()
+		var directions:Array=[]
+		for side in ["L","R"]:
+			var a:Vector3=sk.get_bone_global_pose(sk.find_bone("UpperLeg_"+side)).origin
+			var b:Vector3=sk.get_bone_global_pose(sk.find_bone("LowerLeg_"+side)).origin
+			var f:Vector3=sk.get_bone_global_pose(sk.find_bone("Foot_"+side)).origin
+			var axis:Vector3=(f-a).normalized()
+			directions.append((b-a-axis*(b-a).dot(axis)).dot((Vector3.BACK-axis*Vector3.BACK.dot(axis)).normalized()))
+		physical_samples.append({"process_frame":Engine.get_process_frames(),"slot":actor.slot,"grounded":actor.is_on_floor(),"state":actor.state_machine.current_state,"knee_forward_m":directions,"clip":c.get_animation_player().current_animation,"damage":actor.damage_percent})
+	for id in observed_shots:
+		var shot=observed_shots[id].get_ref()
+		if not is_instance_valid(shot):continue
+		flight_samples.append({"process_frame":Engine.get_process_frames(),"id":id,"slot":shot.team_slot,"position":[shot.global_position.x,shot.global_position.y],"active":shot.active,"flight_slot":shot._flight_slot,"travel":shot._elemental_audio.travel.playing})
 func _init() -> void: call_deferred("run")
 func keys(slot: int, actions: Array) -> void:
 	if held[slot - 1] == actions: return
@@ -21,6 +49,7 @@ func keys(slot: int, actions: Array) -> void:
 	held[slot - 1] = actions.duplicate()
 func wait(count: int) -> void:
 	for i in range(count):
+		observe_impact_review()
 		if not bars.is_empty():
 			var observed := Engine.get_process_frames() - 1
 			for bit in range(20): bars[bit].color = Color.WHITE if observed & (1 << bit) else Color.BLACK
@@ -32,7 +61,37 @@ func write_evidence() -> void:
 	var f = FileAccess.open(output.path_join("projectile_public_inputs.json"), FileAccess.WRITE)
 	var renderer = preload("res://scripts/visual/spectral_feedback_renderer.gd").obtain(p)
 	var presentation: Dictionary = renderer.clash_presentation.evidence() if "clash_presentation" in renderer else {}
-	f.store_string(JSON.stringify({"scope": "two normal public-input players in native BattleScene; neither CPU nor human owner acceptance; no seeded aura/damage/position or forced outcomes", "frames": frames, "cases": cases, "hits": hits, "inputs": inputs, "frame_stamps": stamps, "presentation_history": renderer.history, "clash_presentation": presentation, "controls_enabled": [p.controls_enabled, d.controls_enabled], "unmodified_aura_requirements": true, "history": battle._battle_sim.projectile_interactions.history}, "  ")); f.close()
+	f.store_string(JSON.stringify({"scope": "two normal public-input players in native BattleScene; neither CPU nor human owner acceptance; no seeded aura/damage/position or forced outcomes", "frames": frames, "cases": cases, "hits": hits, "inputs": inputs, "frame_stamps": stamps, "fighter_impacts":fighter_impacts,"flight_samples":flight_samples,"physical_samples":physical_samples,"presentation_history": renderer.history, "clash_presentation": presentation, "controls_enabled": [p.controls_enabled, d.controls_enabled], "unmodified_aura_requirements": true, "history": battle._battle_sim.projectile_interactions.history}, "  ")); f.close()
+func shoot_one(label:String,slot:int)->void:
+	var start:int=fighter_impacts.size()
+	keys(slot,["special"]);await wait(1);keys(slot,[]);await wait(49)
+	cases.append({"case":label,"impacts":fighter_impacts.slice(start),"damage_after":[p.damage_percent,d.damage_percent]})
+func charge_juno()->void:
+	for i in range(240):
+		if d.aura>=88:break
+		keys(2,["special","shield"]);await wait(1)
+	keys(2,[]);await wait(4)
+func impact_and_motion_review()->void:
+	await shoot_one("kaia_quick_fighter",1)
+	await shoot_one("juno_quick_fighter",2)
+	await charge_juno();await shoot_one("juno_charged_fighter",2)
+	await charge_juno();await shoot("breakthrough_then_fighter",50)
+	# Normal approach, shield, light/heavy exchanges and return to neutral.
+	# Both public controllers stay enabled. No forced pose, damage or result.
+	for i in range(90):
+		if d.position.x-p.position.x<=60:break
+		keys(1,["right"]);keys(2,["left"]);await wait(1)
+	keys(1,[]);keys(2,[]);await wait(10)
+	for i in range(180):
+		var first:Array=[];var second:Array=[]
+		if i<30:second=["shield"]
+		if i in [1,40,80,120]:first=["attack"]
+		if i in [60,140]:second=["attack","special"]
+		if i==100:first=["jump"]
+		keys(1,first);keys(2,second);await wait(1)
+	keys(1,[]);keys(2,[]);await wait(30)
+	write_evidence()
+	print("FIGHTER_IMPACT_PUBLIC_COMPLETE cases=",cases.size()," fighter_impacts=",fighter_impacts.size()," contacts=",hits.size())
 func shoot(label: String, settle_frames: int = 130) -> void:
 	var begin: int = battle._battle_sim.projectile_interactions.history.size()
 	var damage_before := [p.damage_percent, d.damage_percent]
@@ -73,6 +132,8 @@ func run() -> void:
 		if d.position.x - p.position.x <= 155: break
 		keys(1, ["right"]); keys(2, ["left"]); await wait(1)
 	keys(1, []); keys(2, []); await wait(8)
+	if "--fighter-impact-review" in OS.get_cmdline_user_args():
+		await impact_and_motion_review();quit();return
 	await shoot("equal_quick")
 	if "--clash-repeat-exchanges" in OS.get_cmdline_user_args():
 		# Bounded ordinary inputs at 25-frame intervals; no position/aura edits,

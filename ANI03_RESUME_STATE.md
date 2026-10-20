@@ -1,3 +1,67 @@
+# October20 verified implementation — bounded native capture next
+
+Pushed projectile correction e1347d57f64264ecc385daab8325914d612bd893.
+The commit containing this entry also checkpoints grounded knee-plane runtime,
+source fixtures and all10focused integration suites PASS. Signed grounded knee
+probe144/144 backward before→144/144 corrected, all18bodies/bothfacings; hip,
+hand/foot anchors and bone lengths unchanged within numerical precision.
+No whole-model translation, floor/collision/attack/balance change. Body overlap,
+outer mesh/contact fit and complete authored acting remain unfinished.
+
+All3VFX modes ordinary public-input recipe859frames have identical authoritative
+hits/clashes/timings.4fighter impacts each, all retire at exact confirmed point
+with no active core/travel afterward. Quick Kaia/Juno, full Juno and charged
+breakthrough4→3 then impact; residual damage6.258315456 follows actual aura/
+stale/combination scaling. Melee includes genuine shield and heavy/light hits.
+Two normal controllers, no CPU proof, no position/aura/damage/progression edits.
+
+Integration10PASS:35ProjectileInteractions,18archetype,18ownership,charge,
+36GroundedRecovery,18ContactReactionClock,864CombatChoreography,
+54SpectralIntensity,21ClashReadability,39ThrowOwnership. Actualfighter impact
+fixture63PASS with defense/team/Story/late callbacks; old cc3 overlay fails190.
+Resource/ObjectDB exit diagnostics persist; all logs preserved.
+
+Next exact command (only if no Godot active and native reserve permits):
+python3 tools/v1_closure/launch_ordinary_review.py --profile ani03_impact_support_native1020 --test-script res://tests/v1_closure/ProjectilePublicInputs.gd --output artifacts/v1_closure/spectral_feedback/continuous_1020/fighter_impact/native_review --movie artifacts/v1_closure/spectral_feedback/local_media/impact_support_native1020.avi --movie-fps 60 --movie-frames 1100 --driver-arg=--fighter-impact-review --driver-arg=--frame-barcode --driver-arg=--review-vfx-mode=Balanced
+
+Then verify with tools/v1_closure/verify_clash_readability_movie.py
+--fighter-impact-review, inspect current contact sheet, update concise owner
+review/PR and push normally. Never overwrite older movie/evidence. No Story or
+owner save writes; all33worktrees,18GiBheavy guard and human gates preserved.
+No owned Godot process remains at this checkpoint. Native capture has not yet
+run; do not infer visual/audio acceptance from headless fixtures.
+
+---
+# October20 physical support correction — native review next
+
+Projectile-impact source e1347d57f64264ecc385daab8325914d612bd893 is pushed.
+New shared visual correction reflects backward support-knee bend across the
+rig +Z forward plane while retaining authored lateral turnout, pelvis/hand/
+foot anchors, ankle orientation and leg lengths. Grounded only; no model
+translation, proportions, root motion, collision, balance or timing changes.
+Live before144/144 backward knees; after144PASS across18bodies/bothfacings,
+max anchor drift1.14e-6m, max segment-length drift8.95e-8m. This is a specific
+anatomical correction, not full floor/overlap/reach/production approval.
+
+Ordinary Kaia/Juno two-controller public recipe859frames confirms4 projectile
+fighter impacts (quick each, charged Juno, 4→3 breakthrough then fighter).
+All4 authority/core/travel retire at exact confirmed point, with melee shield
+and real hit/heavy/hurt/recovery afterward. Controls remain true; no aura,
+positions, damage, AI or progression overrides. First Balanced trace under
+fighter_impact/public_first; no native pixel/audio claim from headless run.
+Grounded public samples all forward knees; min signed bend0.0061m.
+
+Focused integration is running/finishing serially: inspect
+continuous_1020/impact_support_integration/results.json and owned session4070.
+Current6 passed incl35clash,18archetype,18ownership,charge,36grounded recovery,
+18contact reaction. Remaining choreography/accessibility/clash/throw checks.
+Next: finish these, public same recipe Full/Reduced, commit valid source,
+then ONE guard-approved native1100max-frame movie for combined impact/motion
+review with original audio and frame barcode; verify --fighter-impact-review.
+Do not duplicate old clips or claim sustained60fps/device/human acceptance.
+No owner saves/33worktrees altered; all human/release gates false.
+
+---
 # October20 fighter-impact correction checkpoint — physical correction next
 
 Recovered clean cc3ee777a826b3a357781bc593f6158f4e58a771, same draft123/base122.

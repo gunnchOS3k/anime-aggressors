@@ -40,6 +40,31 @@ var _neutral_return_pose:Array=[]
 var _neutral_return_age:=0.0
 const NEUTRAL_RETURN_SECONDS:=.075
 var _grounded_return = preload("res://scripts/visual/grounded_recovery_blend.gd").new()
+var _support_solver = preload("res://scripts/visual/locomotion_weight_transfer.gd").new()
+var support_knee_corrections := 0
+var support_knee_anchor_error_m := 0.0
+
+func _correct_support_knees() -> void:
+	if not is_instance_valid(_runtime_fighter) or not _runtime_fighter.is_on_floor() or not is_instance_valid(_skeleton): return
+	# Existing authored tracks used a -Z knee pole while these rigs face +Z.
+	# Reflect only the backward bend component, retaining authored lateral
+	# turnout, hip/ankle anchors, foot orientation and both segment lengths.
+	_skeleton.force_update_all_bone_transforms()
+	for side in ["L","R"]:
+		var hip := _skeleton.find_bone("UpperLeg_"+side)
+		var knee := _skeleton.find_bone("LowerLeg_"+side)
+		var foot := _skeleton.find_bone("Foot_"+side)
+		if mini(hip,mini(knee,foot))<0: continue
+		var a := _skeleton.get_bone_global_pose(hip).origin
+		var b := _skeleton.get_bone_global_pose(knee).origin
+		var c := _skeleton.get_bone_global_pose(foot).origin
+		var axis := (c-a).normalized()
+		var forward := (Vector3.BACK-axis*Vector3.BACK.dot(axis)).normalized()
+		var bend := b-a-axis*(b-a).dot(axis)
+		if bend.dot(forward)>=-.000001: continue
+		var corrected := bend-2.0*bend.dot(forward)*forward
+		support_knee_anchor_error_m=maxf(support_knee_anchor_error_m,_support_solver.hold_foot(_skeleton,side,c,corrected))
+		support_knee_corrections+=1
 
 func _begin_neutral_return(state: String) -> void:
 	_neutral_return_pose.clear();_neutral_return_age=0.0
@@ -164,6 +189,7 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 			# including a real victim reaction before hitstop freezes playback.
 			_player.seek(0.0,true)
 			_blend_neutral_return(0.0)
+			_correct_support_knees()
 			_locomotion_synchronized = false
 		_reaction_fresh=false
 	elif not should_loop and not _player.is_playing():
@@ -369,6 +395,7 @@ func _process(delta: float) -> void:
 	if _player != null and is_instance_valid(_player) and _player.has_animation_library("authored_studies") and not _move_synchronized and not _locomotion_synchronized and not presentation_frozen:
 		_player.advance(delta)
 	_blend_neutral_return(delta)
+	_correct_support_knees()
 
 func _synchronize_landing() -> bool:
 	if not is_instance_valid(_runtime_fighter) or _player == null or not is_instance_valid(_player): return false
@@ -378,6 +405,7 @@ func _synchronize_landing() -> bool:
 		# within its resolved duration, including fast-fall/aerial overrides.
 		var phase := clampf(_runtime_fighter.state_machine.state_time / maxf(.001,_runtime_fighter.state_machine.landing_lag),0,1)
 		_player.seek(phase * _player.current_animation_length,true)
+		_correct_support_knees()
 	return true
 
 func synchronize_move(frame: int,move: Dictionary) -> void:
@@ -404,6 +432,7 @@ func synchronize_move(frame: int,move: Dictionary) -> void:
 		else:
 			visual_frame = float(clip.startup_frames+clip.active_frames)+float(frame-actual_start-actual_active)*float(clip.recovery_frames)/float(actual_recovery)
 	_player.seek(visual_frame/60.0,true)
+	_correct_support_knees()
 
 func _load_combat_choreography(model_root: Node3D) -> void:
 	var path := "res://data/animation/combat_choreography/%s_%s.json" % [_fighter_id,_body_variant]
@@ -493,6 +522,7 @@ func synchronize_locomotion(world_position: Vector2, model, grounded: bool) -> v
 		_player.advance(delta)
 		_player.seek(_player.current_animation_position,true)
 	if not _weight_transfer.kind.is_empty():_weight_transfer.apply(_skeleton,delta,_visual_facing)
+	_correct_support_knees()
 
 func set_visual_facing(direction: int) -> void:
 	_visual_facing = 1 if direction>=0 else -1

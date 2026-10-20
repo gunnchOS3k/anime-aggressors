@@ -32,13 +32,14 @@ func turn_world(sk: Skeleton3D,index: int,delta: Basis) -> void:
 	var desired:=delta*sk.get_bone_global_pose(index).basis
 	sk.set_bone_pose_rotation(index,(parent_basis.inverse()*desired).orthonormalized().get_rotation_quaternion())
 	sk.force_update_all_bone_transforms()
-func hold_foot(sk: Skeleton3D,side: String,target: Vector3) -> float:
+func hold_foot(sk: Skeleton3D,side: String,target: Vector3,bend_hint := Vector3.ZERO) -> float:
 	var a:=sk.find_bone("UpperLeg_"+side);var b:=sk.find_bone("LowerLeg_"+side);var c:=sk.find_bone("Foot_"+side)
 	var ap:=sk.get_bone_global_pose(a).origin;var bp:=sk.get_bone_global_pose(b).origin;var cp:=sk.get_bone_global_pose(c).origin
 	var foot_basis:=sk.get_bone_global_pose(c).basis
 	var l1:=ap.distance_to(bp);var l2:=bp.distance_to(cp);var v:=target-ap
 	var distance:=clampf(v.length(),absf(l1-l2)+.000001,l1+l2-.000001);var axis:=v.normalized()
 	var bend:=bp-ap-axis*(bp-ap).dot(axis)
+	if bend_hint.length_squared()>.000001:bend=bend_hint-axis*bend_hint.dot(axis)
 	if bend.length_squared()<.000001:bend=Vector3.FORWARD-axis*Vector3.FORWARD.dot(axis)
 	bend=bend.normalized()
 	var along: float=(l1*l1-l2*l2+distance*distance)/(2*distance)
