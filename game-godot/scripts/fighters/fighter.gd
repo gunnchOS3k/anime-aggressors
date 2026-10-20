@@ -121,6 +121,7 @@ var _di_strength: String = "medium"
 var _pending_landing_from_attack: bool = false
 var armor_frames_remaining: float = 0.0
 var phase_cancel_remaining: float = 0.0
+var _batch_locomotion := false
 var dash_cancel_remaining: float = 0.0
 var _runtime_hooks_seen: Dictionary = {}
 var grab_mash: float = 0.0
@@ -586,6 +587,11 @@ func _physics_process(delta: float) -> void:
 	_check_edge()
 	_track_landing()
 	_play_current_animation(state_machine.current_state)
+	if not _batch_locomotion:sync_locomotion_presentation()
+
+func sync_locomotion_presentation() -> void:
+	# Bound battles sample gait/support after shared body spacing, so blocked
+	# approach motion does not advance the feet as if the root walked through.
 	if model_3d != null and model_3d.get_animation_controller() != null:
 		model_3d.get_animation_controller().synchronize_locomotion(global_position,model_3d,is_on_floor())
 

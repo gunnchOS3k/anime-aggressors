@@ -1,3 +1,43 @@
+# October20 fighter body spacing — source validation in progress
+
+Recovered clean local/remote b264ee5578f9ea7ffe7ba6d830608e38c017e252,
+existing release/anime-v1-dialogue-and-elemental-performance, draft123 stacked122.
+Owner explicitly authorizes narrow body-collision correction. Stage-only body
+mask2/1 confirmed; actual body shapes are profile-sized RECTANGLES, not capsules.
+Ordinary root stacking reproduced at1.53px separation, settling12.43px despite
+32.4px combined body half-widths. This is separate from compact torso work.
+
+NEW grounded fighter_body_spacing.gd resolves body shapes after all fighters'
+stage movement and before combat tick. Horizontal-only symmetric corrections,
+deterministic slot/path order, preserved order only on consecutive eligible
+ticks; run-speed-bounded overlap recovery, stage-wall sweeps and floor support
+checks. No body mask enabling, vertical movement, model shifts/scaling, added
+velocity, hit/hurtbox or move-value changes. Skip airborne/dodge/phase/grab/
+throw/hurt/launch/ledge/respawn/invulnerability/cosmic/passive allied staging;
+authored self_movement.x attacks retain crossing. Same Story team can cross.
+Locomotion sampling now occurs after spacing under BattleSim binding; standalone
+Fighter fallback remains. This prevents raw blocked movement advancing gait.
+
+public_before vs public_candidate_valid:867frames using equivalent ordinary
+two-controller inputs, no transforms/damage/results seeded. Neutral corrected
+root separation32.4000px, spread0.000006px; baseline settled12.4333px. Before1hit
+(throw); after6contacts (shield/hook/lights/heavies/throw), ordinary dodge and
+jump both switch sides. Full roster/boundary/Story fixture in progress under
+body_spacing/roster_first; first candidate parse error retained/excluded.
+No raw native capture started. Focused affectedsuites and native before/after
+comparison still pending. No completed Story/particle/projectile reruns needed.
+
+Next: inspect roster_first/fighter_body_spacing.json; fix reproduced failures,
+then checkpoint source and run ThrowOwnership, ContactReactionClock,
+GroundedRecovery, RosterFootwork, AuthoredCancel and bounded CPU probe. Native
+comparison uses FighterSpacingReview.gd, unique output/raw labels with60fps and
+existing recording guard. Baseline sourceb264ee55 via read-only overlay. Respect
+18GiBheavy guard/2GiBnative reserve; latestfree6.3GiB, no cleanup. Preserve33
+worktrees/owner saves/raw evidence. All broad human/release gates remain false.
+No merge/rebase/reset/force/deploy/tag/release. Projectile accepted specific
+behavior, knee-plane and terminal acting remain untouched.
+
+---
 # October20 compact melee posture — native review complete
 
 Recovered7c2035253dff671c82756b49e49e4a2c4388f5e3. Verified implementation
