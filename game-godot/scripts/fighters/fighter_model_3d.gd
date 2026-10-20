@@ -1707,7 +1707,11 @@ func _play_clip(requested: String, state: String = "", move: Dictionary = {}) ->
 			move_copy["move_id"] = requested
 		var play_state := state
 		if play_state.is_empty():
-			if requested in ["idle", "walk", "run", "fall", "shield", "aura_charge"]:
+			if requested in [_FighterStates.VICTORY, _FighterStates.DEFEAT]:
+				# These existing body performances have no MoveRunner clock.
+				# Routing them as attacks froze manual playback at frame zero.
+				play_state = requested
+			elif requested in ["idle", "walk", "run", "fall", "shield", "aura_charge"]:
 				play_state = _FighterStates.IDLE
 			else:
 				play_state = _FighterStates.ATTACK_STARTUP

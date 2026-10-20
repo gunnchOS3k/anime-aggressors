@@ -1,3 +1,49 @@
+# October20 resumed closure — native review verified; terminal acting fixed
+
+Recovered local/remote e1347d57f64264ecc385daab8325914d612bd893. The prior
+approval-service usage failure executed no git command. Normal approval now
+works; recovered knee source/tests pushed as
+b2e27e48f26d802e99cc8322fe5eeef0f765cb30 on existing draft123/base122.
+No discarded work, rewritten history, worktree/saves cleanup or export.
+
+ONE native public-controller impact/motion review completed on exactb2e27e48:
+860frames/60fps/14.333s, original game audio,639/639 gameplay barcode checks,
+4confirmed nonpiercing fighter impacts retire core/travel at actual contact;
+normal melee shield/light/heavy/jump/recovery included.1191 grounded knee
+samples positive(min0.0061m). Recorded offline41s, CPUrender0.45ms/encode6.33ms;
+GPU0unavailable, not sustaineddeviceFPS proof. Raw protected local_media/
+impact_support_native1020.avi; derived rendered/impact_support_native1020.mp4;
+contact sheet and NATIVE_MOVIE.json in fighter_impact/native_review.
+First verification stopped on missing native_console.log AFTER creating valid
+derivatives; fallback to actual godot.log plus --verify-existing completed
+checks without replacing movie or sheet. Desktop normal-speed inspection via
+ComputerUse could not complete (Accessibility/ScreenRecording permissions
+pending, then timeout). Frame sheets inspected; human art/animation approval
+remains false. Close-body overlap remains visible; no floor/reach claim.
+
+Additional bounded ANI03 correction: model._play_clip mapped victory/defeat to
+attack startup, leaving manually driven authored body tracks atframe0. Preserve
+existing character-specific tracks and route those requests to their own state
+clock. Before36cases72failures; after_resumed36PASS/clock0.3s after18ticks,
+actual hand/body motion, final pose holds and next idle selection immediate.
+All9fighters/bothbodyvariants. Uses real presentation methods; no earnedKO or
+match result claimed. Partial firstafter run interrupted; preserved/excluded.
+
+Focused10integration suites and144 knee fixtures remain valid unchanged;
+no repeated long suites/captures. New terminal mapping affects only victory/
+defeat requests, not combat clocks/inputs/authority. Projectile correction63
+cases and ordinaryFull/Balanced/Reduced4impacts each retained. No Story save
+or progression code/data changed. Rook quake_slab explicit pierce:true retains
+one-hit/target and existing lifetime; no invented beam sustain/piercing.
+
+Next: finish concise owner review + source/evidence pointers, update PR123
+body and normally push. Movie source staysb2e27e48 even after terminal-only
+fix. No current owned Godot/capture process. All33worktrees protected; all
+human/release gates remain false. Next actual production blocker is coupled
+floor/outer-reach/body-overlap integration and full-roster authored acting;
+Yin/Yang kit and seven-route/OVA/multiplayer/device requirements stay pending.
+
+---
 # October20 verified implementation — bounded native capture next
 
 Pushed projectile correction e1347d57f64264ecc385daab8325914d612bd893.

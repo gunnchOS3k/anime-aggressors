@@ -10,6 +10,7 @@ p.add_argument('--output', type=Path, required=True)
 p.add_argument('--raw', type=Path, required=True)
 p.add_argument('--movie', type=Path, required=True)
 p.add_argument('--fighter-impact-review', action='store_true', help='Verify fighter termination and the bounded physical-interaction sequence')
+p.add_argument('--verify-existing', action='store_true', help='Resume checks against existing derivatives without replacing any media')
 a = p.parse_args()
 out, raw, movie = a.output.resolve(), a.raw.resolve(), a.movie.resolve()
 def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -20,7 +21,7 @@ assert len(d['history']) >= (1 if a.fighter_impact_review else 2)
 if a.fighter_impact_review:
     assert len(d['fighter_impacts']) == 4
     assert all(not e['active_after_contact'] and e['flight_slot_after_contact'] == -1 and not e['travel_after_contact'] and e['position_after_contact'] == e['world'] for e in d['fighter_impacts'])
-assert not movie.exists(), 'Existing evidence preserved'
+assert not movie.exists() or a.verify_existing, 'Existing evidence preserved; use --verify-existing for read-only media verification'
 pixels = np.frombuffer(subprocess.check_output(['ffmpeg','-v','error','-i',str(raw),'-vf','crop=240:24:20:190,format=gray','-f','rawvideo','-']), dtype=np.uint8).reshape(-1,24,240)
 bits = np.array([pixels[:,8:16,i*12+2:i*12+8].mean(axis=(1,2)) > 127 for i in range(20)]).T
 codes = (bits * 2**np.arange(20)).sum(axis=1)
@@ -33,13 +34,18 @@ for stamp in d['frame_stamps']:
     checks.append({'trace_frame':observed,'native_frame':native,'PASS':native is not None})
     if native is not None: mapping[observed] = native
 assert checks and all(c['PASS'] for c in checks), 'Preserve failed frame verification'
-subprocess.run(['ffmpeg','-v','error','-n','-i',str(raw),'-c:v','libx264','-preset','fast','-crf','21','-pix_fmt','yuv420p','-c:a','aac','-b:a','160k','-movflags','+faststart',str(movie)], check=True)
+if not movie.exists():
+    subprocess.run(['ffmpeg','-v','error','-n','-i',str(raw),'-c:v','libx264','-preset','fast','-crf','21','-pix_fmt','yuv420p','-c:a','aac','-b:a','160k','-movflags','+faststart',str(movie)], check=True)
 streams = json.loads(subprocess.check_output(['ffprobe','-v','error','-show_entries','stream=codec_type,r_frame_rate,duration','-of','json',str(movie)], text=True))['streams']
 assert {s['codec_type'] for s in streams} == {'video','audio'} and streams[0]['r_frame_rate'] == '60/1'
 audio = subprocess.run(['ffmpeg','-hide_banner','-i',str(movie),'-af','volumedetect','-f','null','-'], capture_output=True, text=True, check=True).stderr
 volume = {k:float(v) for k,v in re.findall(r'(mean_volume|max_volume):\s*(-?\d+(?:\.\d+)?) dB',audio)}
 assert volume.get('max_volume',-100) > -80
-(out/'AUDIO_VERIFICATION.log').write_text(audio)
+audio_log = out/'AUDIO_VERIFICATION.log'
+if audio_log.exists():
+    previous_volume = {k:float(v) for k,v in re.findall(r'(mean_volume|max_volume):\s*(-?\d+(?:\.\d+)?) dB',audio_log.read_text())}
+    assert a.verify_existing and previous_volume == volume
+else: audio_log.write_text(audio)
 events = d['history'][:2]
 if a.fighter_impact_review:
     events = [{**d['fighter_impacts'][i], 'result': ['quick fighter impact','charged fighter impact','breakthrough then fighter impact'][row]} for row,i in enumerate([0,2,3])]
@@ -60,8 +66,13 @@ with tempfile.TemporaryDirectory(prefix='aa-clash-frames-') as scratch:
             draw.text((x+8,y+364),f"{event['result']} | native {frame} | contact physics {event['physics_frame']}",fill='white')
             draw.text((x+8,y+382),launch['runtime_source_sha'][:12]+' | ordinary two-player inputs / native audio',fill='white')
             selected.append({'event_id':event['event_id'],'native_frame':frame,'physics_frame':event['physics_frame'],'emission_process_frame':emission['process_frame']})
-target = out/'CONTACT_SHEET.png'; assert not target.exists(); sheet.save(target)
-log = (out/'native_console.log').read_text()
+target = out/'CONTACT_SHEET.png'
+if target.exists():
+    assert a.verify_existing and Image.open(target).convert('RGB').tobytes() == sheet.tobytes(), 'Existing sheet pixels must match exactly'
+else: sheet.save(target)
+console = out/'native_console.log'
+if not console.exists(): console = out/'godot.log'
+log = console.read_text()
 assert 'SCRIPT ERROR' not in log and 'SHADER ERROR' not in log
 report = {'verification_status':'VERIFIED_NATIVE60_AUDIO_FRAME_SOURCE','source_sha':launch['runtime_source_sha'],'movie':str(movie.relative_to(ROOT)),'raw_local_only':str(raw.relative_to(ROOT)),'raw_sha256':sha(raw),'movie_sha256':sha(movie),'trace_sha256':sha(out/'projectile_public_inputs.json'),'matched_frames':len(checks),'container_frames':len(pixels),'checks':checks,'audio_volume_db':volume,'streams':streams,'contact_sheet':str(target.relative_to(ROOT)),'contact_sheet_sha256':sha(target),'selected_frames':selected,'scope':'two automated public-input controllers; earned aura, real native collisions; no CPU/human visual acceptance or sustained-device FPS claim','redistribution':'Original project assets/audio, owner development review only; no release authorization'}
 if a.fighter_impact_review:
