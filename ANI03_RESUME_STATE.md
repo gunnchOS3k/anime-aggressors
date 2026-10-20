@@ -1,3 +1,33 @@
+# October20 affected regression checkpoint
+
+Runtime/pushed source b0cd5b903c66ed13852b06800ff718d4e2e22f5b.
+All7focused checks passed (36grounded recovery,36neutral,18contact-clock,
+192aura-route cases,9basecancel,trainingtruth,fractional tier). All8affected
+suites passed: ThrowOwnership39, CombatActivation, InterruptedMove,
+AirborneGuard, ChargeContinuity, RosterTransitions36, RosterLanding72,
+SpectralFeedback. No unfinished owned validation process. Exit resource
+diagnostics retained; no failed functional check. Source-bound logs in
+continuous_1020/focused and continuous_1011/recovery_aura1020.
+
+Bounded active-CPU public charge/attack attempts700frames each atb0cd:
+Kaia14hits16blocks7cancels,2strict pairs (jab1→jab2→upTilt81–83aura);
+Juno21hits20blocks11cancels,1natural strict finisher→jab1 pair~92aura.
+Juno authored-cancel guaranteed follow-ups not proven. Blocks and escapes
+retained. Raw traces ignored/local underlocal_media/charged_authored1020;
+compact source/hash/results continuous_1020/CHARGED_LINK_RESULTS.json.
+No new movie or export; historical recordings/saves untouched.
+
+New owner directives now authorize native automatic projectile interception:
+equal integrity cancels, stronger survives with integrity/residual-damage loss,
+authored eligibility, deterministic ordering before fighter damage. Preserve
+existing aura clash, no terrain/reflection/parry/new hitboxes. Next inspect
+projectile.gd, projectile_spawner.gd, BattleSim and projectile behavior data.
+Visual contact/outer-reach/complete acting and high-aura aerial routes remain
+unfinished; do not reapply failed whole-model floor translation. Human gatesfalse.
+Owner PID29620 remains open; no duplicate capture. Heavy-exportguard18GiB,
+latest disk4.6GiB. No owner save modifications.
+
+---
 # October20 recovery and high-aura checkpoint
 
 Branch `release/anime-v1-dialogue-and-elemental-performance`, worktree unchanged.
