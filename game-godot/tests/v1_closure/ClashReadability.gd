@@ -52,6 +52,9 @@ func run() -> void:
 			check(float(slot.mesh.material.get_shader_parameter("flash")) == 0, mode + ":nonflashing_primary")
 			check(cue.primary_life >= .26 and cue.primary_life <= .36, mode + ":bounded_recognition_beat")
 			check(renderer.history.slice(start).filter(func(e): return e.kind == 5).is_empty(), mode + ":no_two_extra_dissipations")
+			if major and mode == "Full":
+				var surfaces: Array = renderer.history.slice(start).filter(func(e): return e.kind == 18)
+				check(surfaces.size() == 2 and surfaces[0].fid != surfaces[1].fid, "major_full_mixed_environment")
 			if event.result == "breakthrough":
 				var winner = result.a if result.a.active else result.b
 				check(cue.direction == [winner.direction.x, winner.direction.y], mode + ":winner_direction")
@@ -62,6 +65,9 @@ func run() -> void:
 			renderer.projectile_contact(p.fighter_id, d.fighter_id, Vector2(0, 268), Vector2.RIGHT, event.result, event.event_id, p, event)
 			check(renderer.clash_presentation.confirmed_count == before_count, "presentation_dedup")
 			rows.append({"mode": mode, "case": amounts, "event": event, "cue": cue.duplicate(true), "scope": "authoritative collision fixture, not ordinary input"})
+			if major and "--clash-stress-png" in OS.get_cmdline_user_args() and DisplayServer.get_name() != "headless":
+				await process_frame; await RenderingServer.frame_post_draw
+				root.get_texture().get_image().save_png(output.path_join("clash_major_" + mode + "_" + str(amounts[1]) + ".png"))
 		clear()
 		for i in range(40): await physics_frame
 		var count: int = renderer.clash_presentation.confirmed_count
@@ -72,11 +78,16 @@ func run() -> void:
 		check(renderer.clash_presentation.decoration_suppressed >= suppressed + 9, mode + ":repetition_reduces_decoration")
 		check(renderer.clash_presentation.voices.size() <= (2 if mode == "Reduced" else 3 if mode == "Balanced" else 4), mode + ":bounded_audio_concurrency")
 		check(renderer.active_count() <= (32 if mode == "Reduced" else 96), mode + ":bounded_pool")
+		var simplified: Array = renderer.slots.filter(func(s): return s.active and s.kind in [20,21] and float(s.clash_ornament) <= .12)
+		check(simplified.size() >= 12, mode + ":crowded_primary_ornament_reduced_without_hiding_result")
 		var stress := {"mode": mode, "scenario": "12 nearby confirmed quick collisions in one fixed frame; explicit stress prerequisites", "events": 12, "primary_cues": renderer.clash_presentation.primary_count - primaries, "secondary_suppressed": renderer.clash_presentation.decoration_suppressed - suppressed, "audio_voices": renderer.clash_presentation.voices.size(), "active_meshes": renderer.active_count(), "camera_impulses": 0, "source": "real native resolver/spawner, not forced fighter damage"}
 		rows.append(stress)
 		if "--clash-stress-png" in OS.get_cmdline_user_args() and DisplayServer.get_name() != "headless":
 			await process_frame; await RenderingServer.frame_post_draw
 			root.get_texture().get_image().save_png(output.path_join("clash_stress_" + mode + ".png"))
+		var major_busy := pair([75, 75], Vector2(0, 268))
+		check(renderer.clash_presentation.history[-1].audio_admitted and renderer.clash_presentation.history[-1].primary_kind == 22, mode + ":major_cue_preempts_minor_sound_window")
+		rows.append({"mode": mode, "scenario": "major immediately after quick-shot burst", "event": major_busy.event, "cue": renderer.clash_presentation.history[-1].duplicate(true)})
 		clear()
 		check(renderer.clash_presentation.voices.is_empty(), mode + ":audio_envelopes_cleaned_up")
 	clear()

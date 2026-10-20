@@ -151,7 +151,7 @@ func emit_effect(fid: String, kind: int, world: Vector2, direction := Vector2.RI
 	_sequence+=1
 	var seed_value := float((fid+":"+str(kind)+":"+str(_sequence)).hash() & 65535)/997.0
 	var slot: Dictionary = slots[index]
-	slot.merge({"active":true,"age":0.0,"life":life,"fid":fid,"kind":kind,"extent":extent,"world":world,"dir":direction,"seed":seed_value,"follow":weakref(follow) if follow != null else null,"event_id":event_id,"aspect":Vector2.ONE,"strength":1.0},true)
+	slot.merge({"active":true,"age":0.0,"life":life,"fid":fid,"kind":kind,"extent":extent,"clash_base_extent":extent,"world":world,"dir":direction,"seed":seed_value,"follow":weakref(follow) if follow != null else null,"event_id":event_id,"aspect":Vector2.ONE,"strength":1.0,"clash_ornament":1.0},true)
 	var mesh: MeshInstance2D = slot.mesh
 	# Canvas contract: platform0 < surface1 < fighter display2 < contact25.
 	mesh.z_index=-24 if kind in [18,19] else 0
@@ -161,7 +161,7 @@ func emit_effect(fid: String, kind: int, world: Vector2, direction := Vector2.RI
 	slot.base_ink=ink
 	if option("high_contrast_vfx"): ink=Color(1,.95,.76) if kind != 4 else Color(.8,.83,.86)
 	if option("reduced_flash"): ink.a*=.55
-	var parameters := {"family":family,"kind":kind,"phase":0.0,"clock_s":0.0,"seed":seed_value,"accent":ink,"density":density_multiplier(),"flash":0.0 if option("reduced_flash") or kind >= 20 else 1.0,"secondary_family":family,"secondary_accent":ink,"integrity_layers":0.0,"initial_integrity":0.0,"breakthrough":0.0}
+	var parameters := {"family":family,"kind":kind,"phase":0.0,"clock_s":0.0,"seed":seed_value,"accent":ink,"density":density_multiplier(),"flash":0.0 if option("reduced_flash") or kind >= 20 else 1.0,"secondary_family":family,"secondary_accent":ink,"integrity_layers":0.0,"initial_integrity":0.0,"breakthrough":0.0,"clash_ornament":1.0}
 	for key in parameters:mesh.material.set_shader_parameter(key,parameters[key])
 	history.append({"kind":kind,"fid":fid,"family":FAMILIES[family],"world":[world.x,world.y],"direction":[direction.x,direction.y],"event_id":event_id,"seed":seed_value,"physics_frame":Engine.get_physics_frames(),"process_frame":Engine.get_process_frames(),"life":life,"extent":extent})
 	if history.size()>2048: history.pop_front()
@@ -191,6 +191,19 @@ func set_clash_parameters(index: int, other: String, survived: bool) -> void:
 	slots[index].mesh.material.set_shader_parameter("secondary_family", family)
 	slots[index].mesh.material.set_shader_parameter("secondary_accent", COLORS[family])
 	slots[index].mesh.material.set_shader_parameter("breakthrough", 1.0 if survived else 0.0)
+
+func simplify_nearby_clashes(world: Vector2) -> int:
+	var changed := 0
+	for slot in slots:
+		if not slot.active or slot.kind not in [20,21,22] or slot.world.distance_to(world) > 140: continue
+		if float(slot.clash_ornament) <= .12: continue
+		slot.clash_ornament = .12
+		slot.mesh.material.set_shader_parameter("clash_ornament", .12)
+		if slot.kind != 22:
+			slot.extent = float(slot.clash_base_extent) * .72
+			slot.mesh.scale = Vector2.ONE * slot.extent
+		changed += 1
+	return changed
 
 func projectile_contact(first: String, second: String, world: Vector2, direction: Vector2, result: String, event_id: String, context: Node2D, detail: Dictionary = {}) -> void:
 	clash_presentation.present(first, second, world, direction, result, event_id, context, detail)

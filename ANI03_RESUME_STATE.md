@@ -1,3 +1,34 @@
+# October20 adaptive clash presentation checkpoint
+
+Lastpushedf566d4f9fdebb5244436ce027665c429e62f6a9e. This checkpoint
+adds intramesh ornament reduction/compact nearby routine cues under crowding,
+major-sound priority over minor onsets, and dual-element Full-major surface
+responses. Physics/integrity/defense/order unchanged. Clashes are not merged.
+ClashReadability21rowsPASS:54confirmed events→54primary cues;39crowd
+simplifications; all3modes12nearby quick collisions preserve12cue admissions.
+At12sameframe contacts, oldscript mesh/audio-nodecounts versuscurrent:
+Full84→36meshes, Balanced84→36, Reduced32→29; one-shotnodecount72→25
+permode (measurednodes, not loudness). Legacycountfixture uses oldscripts and
+currentShader only; notlegacy renderproof. Existing beforemovie truly610shader.
+
+Three679frame60fpsnativeclips recorded withoriginalmixedaudio and458/458
+publicframebarcodes each: before610, intermediate2f5aed, finalnormal-cuef566.
+Same ordinary quick/full-breakthrough recipe, collisionframes/positions,
+integrity anddamage match exactly. IntermediateXcue preserved asdiagnostic;
+f566 refinedmixedcrescents/seam is ordinaryaftervideo. Latestcrowdonly changes
+and Full-majorenvironment are not relabeledonto earliermovie source.
+Nativefull3mode stress PNGs exist atstress_native_final butprecompactshader,
+explicit fixtures notordinary-play proof. Needcurrentcompactnative PNG review.
+
+All3ordinaryinput modes verifiedquick/medium/full-majorcancel andbreakthrough
+(12totalcollisions), real aura/nooutcomeseeding, sourcef566. No newCPUattempt
+yetthisincrement. Next: currentnativeClashReadability --clash-stress-png
+--clash-indicators, then9affectedprojectile/audio/spectral regressions andone
+bounded850frameactiveCPUprojectile-exchange. Preservealllabels/media.
+NoGodotcapturecurrentlyrunning; noexports/ownerStorywrites. Final moviesraw
+ignoredlocal_media, derivativesrendered. Allhuman/releasegatesfalse.
+
+---
 # October20 native readability refinement
 
 Pushed2f5aed2bd55acafde1e6d29b7d54223129761f90. Before6105809 and

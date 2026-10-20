@@ -14,6 +14,7 @@ uniform vec4 secondary_accent : source_color = vec4(1.0);
 uniform float integrity_layers = 0.0;
 uniform float initial_integrity = 0.0;
 uniform float breakthrough = 0.0;
+uniform float clash_ornament = 1.0;
 float hash(vec2 p) { return fract(sin(dot(p,vec2(127.1,311.7))+seed)*43758.5453); }
 float noise(vec2 p) {
  vec2 i=floor(p), f=fract(p); f=f*f*(3.0-2.0*f);
@@ -185,19 +186,19 @@ void fragment() {
    float right=element_contour(secondary_family,-p+vec2(.26*pull,0),t)*smoothstep(-.1,.02,p.x);
    float left_curl=ring(p+vec2(.26,.06),.42-t*.10,.022)*smoothstep(-.10,.12,p.x);
    float right_curl=ring(p-vec2(.26,-.06),.42-t*.10,.022)*(1.0-smoothstep(-.12,.10,p.x));
-   shape=(left+right)*(.24+pull*.55)+(left_curl+right_curl)*.75;
+   shape=(left+right)*(.24+pull*.55)*clash_ornament+(left_curl+right_curl)*.75;
    shape+=line(p,vec2(-.10,-.40),vec2(.04,-.08),.023)*.8+line(p,vec2(.04,-.08),vec2(-.06,.22),.019)*.8;
    outline=ring(p+vec2(.26,.06),.42-t*.10,.046)*smoothstep(-.10,.12,p.x)+ring(p-vec2(.26,-.06),.42-t*.10,.046)*(1.0-smoothstep(-.12,.10,p.x));
    outline+=line(p,vec2(-.10,-.40),vec2(.04,-.08),.048)+line(p,vec2(.04,-.08),vec2(-.06,.22),.045);
    mix_weight=smoothstep(-.08,.08,p.x);
   } else if(kind==21) { // winner travels forward; weak elemental pieces peel behind
    float sweep=ring(p+vec2(.27,0),.5+t*.13,.026)*smoothstep(-.02,.4,p.x);
-   shape=sweep*.85+element_contour(family,p-vec2(.08+t*.12,0),t)*.45;
+   shape=sweep*.85+element_contour(family,p-vec2(.08+t*.12,0),t)*.45*clash_ornament;
    outline=ring(p+vec2(.27,0),.5+t*.13,.05)*smoothstep(-.02,.4,p.x);
-   for(int i=0;i<3;i++){float j=float(i);vec2 c=vec2(-.18-t*(.25+j*.06),(j-1.0)*(.17+t*.2));shape+=element_contour(secondary_family,(p-c)*3.5,t)*.45;}
+   for(int i=0;i<3;i++){float j=float(i);vec2 c=vec2(-.18-t*(.25+j*.06),(j-1.0)*(.17+t*.2));shape+=element_contour(secondary_family,(p-c)*3.5,t)*.45*clash_ornament;}
    mix_weight=1.0-smoothstep(-.3,.04,p.x);
   } else if(kind==22) { // high commitment only: one mixed pressure pulse
-   shape=element_contour(family,p,t)*.65+element_contour(secondary_family,-p,t)*.65;
+   shape=(element_contour(family,p,t)*.65+element_contour(secondary_family,-p,t)*.65)*clash_ornament;
    float pulse=.2+sin(min(1.0,t*1.4)*1.5708)*.48;
    shape+=ring(p*vec2(1.0,1.15),pulse,.026)*.65;
    outline=ring(p*vec2(1.0,1.15),pulse,.052);

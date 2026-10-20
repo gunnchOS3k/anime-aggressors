@@ -13,8 +13,10 @@ var primary_count := 0
 var decoration_suppressed := 0
 var audio_suppressed := 0
 var peak_voices := 0
+var crowd_simplifications := 0
 var last_stage := -100.0
 var last_audio := -100.0
+var last_audio_major := false
 var indicator_age := 0.0
 
 func setup(host: Node2D) -> void:
@@ -72,17 +74,21 @@ func present(first: String, second: String, world: Vector2, direction: Vector2, 
 		if now - last_stage >= (.28 if mode == "Full" else .45) and (major or result == "breakthrough"):
 			last_stage = now
 			renderer.stage_contact({"confirmed_contact": true, "combat_event_id": event_id, "contact_world": world, "attacker_id": fid, "contact_result": "projectile_clash", "feedback_tier": "heavy" if major else "light", "projectile_stage_power": 2 if major else 1}, context)
+			if major and mode == "Full" and other != fid:
+				renderer.stage_contact({"confirmed_contact": true, "combat_event_id": event_id + ":mixed_surface", "contact_world": world, "attacker_id": other, "contact_result": "projectile_clash", "projectile_stage_power": 2}, context)
 	else: decoration_suppressed += 1
 	var primary: int = renderer.emit_effect(fid, kind, world, dir, extent, life, event_id + ":outcome")
 	if primary >= 0:
 		primary_count += 1
 		renderer.set_clash_parameters(primary, other, result == "breakthrough")
+	if recent.size() > (3 if mode == "Full" else 2): crowd_simplifications += renderer.simplify_nearby_clashes(world)
 	# A short transient, a directional tear, and a deeper layered charged cue
 	# use existing original samples with bounded envelopes and concurrency.
 	var sound := "projectile_impact" if major else "charge_release" if result == "breakthrough" else "block"
-	var audio_admitted := now - last_audio >= (.10 if reduced else .065)
+	var audio_admitted := now - last_audio >= (.10 if reduced else .065) or (major and not last_audio_major)
 	if audio_admitted:
 		last_audio = now
+		last_audio_major = major
 		var cap := 2 if reduced else 3 if mode == "Balanced" else 4
 		play_sound(fid, sound, .34 if major else .24 if result == "breakthrough" else .12, .86 if major else 1.08 if result == "breakthrough" else 1.1, .48 if major else .38, cap)
 		if secondary and major: play_sound(other, "projectile_impact", .26, 1.08, .24, cap)
@@ -106,4 +112,4 @@ func advance(delta: float) -> void:
 		indicator.modulate.a = 1.0 if indicator_age < 1.5 else .65
 
 func evidence() -> Dictionary:
-	return {"confirmed": confirmed_count, "primary_cues": primary_count, "secondary_suppressed": decoration_suppressed, "audio_suppressed": audio_suppressed, "active_audio_voices": voices.size(), "peak_audio_voices": peak_voices, "developer_indicator_enabled": is_instance_valid(indicator), "history": history.duplicate(true), "camera_impulses": 0}
+	return {"confirmed": confirmed_count, "primary_cues": primary_count, "secondary_suppressed": decoration_suppressed, "crowd_simplifications": crowd_simplifications, "audio_suppressed": audio_suppressed, "active_audio_voices": voices.size(), "peak_audio_voices": peak_voices, "developer_indicator_enabled": is_instance_valid(indicator), "history": history.duplicate(true), "camera_impulses": 0}
