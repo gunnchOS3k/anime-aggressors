@@ -33,6 +33,16 @@ var _emission_distance := 0.0
 var _visual_extent := 40.0
 var _elemental_audio: Node
 var _environment_sounded := false
+var order_id := 0
+var team_key := ""
+var clash_eligible := false
+var integrity := 1
+var initial_integrity := 1
+var initial_damage := 0.0
+var residual_damage_exponent := 1.0
+var intercepted_ids: Dictionary = {}
+var pending_targets: Dictionary = {}
+var spawn_bounds := Rect2()
 
 @onready var debug_rect: ColorRect = $DebugRect
 @onready var collision: CollisionShape2D = $CollisionShape2D
@@ -43,12 +53,19 @@ func configure(cfg: Dictionary, owner_node: Node) -> void:
 	move_id = cfg.get("move_id", "")
 	aura_level_at_spawn = cfg.get("aura_level", 0)
 	team_slot = cfg.get("team_slot", 1)
+	order_id = int(cfg.get("order_id", 0))
+	team_key = str(cfg.get("team_key", "slot:" + str(team_slot)))
+	clash_eligible = bool(cfg.get("clash_eligible", false))
+	initial_integrity = clampi(int(cfg.get("integrity", 1)), 1, 16)
+	integrity = initial_integrity
+	residual_damage_exponent = maxf(0.0, float(cfg.get("residual_damage_exponent", 1.0)))
 	lifetime_frames = cfg.get("lifetime_frames", 120)
 	speed = cfg.get("speed", 400.0)
 	behavior = cfg.get("behavior", "straight")
 	move_data = cfg.get("move_data", {})
 	projectile_tier = str(cfg.get("projectile_tier", move_data.get("projectile_tier", "projectile_tap")))
 	damage = float(cfg.get("damage", move_data.get("damage", 8.0)))
+	initial_damage = damage
 	var angle_deg: float = cfg.get("angle_deg", 0.0)
 	var facing: int = owner_node.facing if owner_node and "facing" in owner_node else 1
 	if owner_node and "attack_direction" in owner_node and int(owner_node.attack_direction) != 0:
@@ -67,6 +84,7 @@ func configure(cfg: Dictionary, owner_node: Node) -> void:
 		collision.shape = rect
 	elif collision and collision.shape is RectangleShape2D:
 		(collision.shape as RectangleShape2D).size = size
+	spawn_bounds = world_bounds()
 	# Never present ColorRect as primary art (closes TASTE-001 / Wave016 Golden Slice).
 	if debug_rect:
 		debug_rect.visible = false
@@ -99,9 +117,11 @@ func _build_intentional_visual(_base_col: Color, size: Vector2) -> void:
 		_flight_slot=_renderer.emit_effect(fighter_id,3,global_position,direction,_visual_extent,-1.0)
 		_renderer.emit_effect(fighter_id,9,global_position,direction,_visual_extent*1.3,.18)
 
-func _deliver_hit(target: Node) -> void:
-	if not active or target == null or target == owner_fighter:
+func _deliver_hit(target: Node, contact := Vector2.INF) -> void:
+	if not active or not is_instance_valid(target) or target == owner_fighter or not is_instance_valid(owner_fighter):
 		return
+	var target_team := "story:" + str(target.get_meta("story_team")) if target.has_meta("story_team") else "slot:" + str(target.slot) if "slot" in target else ""
+	if target_team == team_key: return
 	if not target.has_method("receive_hit"):
 		return
 	var id := str(target.get_instance_id())
@@ -112,7 +132,7 @@ func _deliver_hit(target: Node) -> void:
 	hit_move["damage"] = damage
 	hit_move["_from_projectile"] = true
 	hit_move["_projectile_instance_id"] = get_instance_id()
-	hit_move["_contact_world"] = global_position
+	hit_move["_contact_world"] = contact if contact.is_finite() else global_position
 	var resolver = null
 	if owner_fighter != null and "hit_resolver" in owner_fighter:
 		resolver = owner_fighter.hit_resolver
@@ -126,16 +146,40 @@ func _deliver_hit(target: Node) -> void:
 
 
 func _on_body_entered(body: Node) -> void:
+	if not active: return
 	if body != owner_fighter and not body.has_method("receive_hit") and not _environment_sounded:
 		_environment_sounded = true
 		if _renderer != null: _renderer.emit_effect(fighter_id,0,global_position,direction,_visual_extent*1.4,.25,"environment:"+str(get_instance_id()))
-	_deliver_hit(body)
+	_queue_target(body)
 
 
 func _on_area_entered(area: Area2D) -> void:
 	if area == null:
 		return
-	_deliver_hit(area.get_parent())
+	_queue_target(area.get_parent())
+
+func _queue_target(target: Node) -> void:
+	if active and is_instance_valid(target) and target != owner_fighter and target.has_method("receive_hit"):
+		pending_targets[target.get_instance_id()] = true
+
+func world_bounds() -> Rect2:
+	if collision == null or collision.shape == null: return Rect2(global_position, Vector2.ZERO)
+	var local := collision.shape.get_rect()
+	var first := collision.to_global(local.position)
+	var bounds := Rect2(first, Vector2.ZERO)
+	for point in [local.end, Vector2(local.position.x, local.end.y), Vector2(local.end.x, local.position.y)]: bounds = bounds.expand(collision.to_global(point))
+	return bounds
+
+func intercept(cost: int) -> void:
+	if not active: return
+	integrity = maxi(0, integrity - cost)
+	if integrity == 0:
+		_expire(); return
+	var ratio := float(integrity) / initial_integrity
+	damage = initial_damage * pow(ratio, residual_damage_exponent)
+	if is_instance_valid(_renderer):
+		_renderer.set_slot_strength(_flight_slot, .35 + .65 * ratio)
+		_renderer.update_slot(_flight_slot, global_position, direction, _visual_extent * (.65 + .35 * ratio))
 
 func tick_sim_frame() -> void:
 	if not active:
@@ -166,12 +210,14 @@ func tick_sim_frame() -> void:
 			position += direction * speed / SIM_FPS
 			direction = direction.rotated(0.04 * (1 if aura_level_at_spawn >= 2 else -1))
 	if _renderer != null:
-		_renderer.update_slot(_flight_slot,global_position,direction,_visual_extent)
+		var ratio := float(integrity) / initial_integrity
+		_renderer.update_slot(_flight_slot,global_position,direction,_visual_extent * (.65 + .35 * ratio))
 		_emission_distance += (global_position-previous_world).length()
 		var spacing := 18.0 if _renderer.option("reduced_particles") else 7.0
 		if _emission_distance >= spacing:
 			_emission_distance=0
-			_renderer.emit_effect(fighter_id,3 if fighter_id == "juno-spark" else 4,global_position-direction.normalized()*10.0,direction,_visual_extent*.65,.20)
+			var trail_slot: int = _renderer.emit_effect(fighter_id,3 if fighter_id == "juno-spark" else 4,global_position-direction.normalized()*10.0,direction,_visual_extent*.65*(.65+.35*ratio),.20)
+			_renderer.set_slot_strength(trail_slot,.35+.65*ratio)
 	if frame_count >= lifetime_frames:
 		_expire()
 
@@ -183,6 +229,7 @@ func _expire() -> void:
 		_flight_slot=-1
 		_renderer.emit_effect(fighter_id,5,global_position,direction,_visual_extent,.22)
 	active = false
+	pending_targets.clear()
 	set_deferred("monitoring", false)
 	projectile_expired.emit()
 	queue_free()

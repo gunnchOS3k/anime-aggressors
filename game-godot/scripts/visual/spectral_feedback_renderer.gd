@@ -138,7 +138,7 @@ func emit_effect(fid: String, kind: int, world: Vector2, direction := Vector2.RI
 	_sequence+=1
 	var seed_value := float((fid+":"+str(kind)+":"+str(_sequence)).hash() & 65535)/997.0
 	var slot: Dictionary = slots[index]
-	slot.merge({"active":true,"age":0.0,"life":life,"fid":fid,"kind":kind,"extent":extent,"world":world,"dir":direction,"seed":seed_value,"follow":weakref(follow) if follow != null else null,"event_id":event_id,"aspect":Vector2.ONE},true)
+	slot.merge({"active":true,"age":0.0,"life":life,"fid":fid,"kind":kind,"extent":extent,"world":world,"dir":direction,"seed":seed_value,"follow":weakref(follow) if follow != null else null,"event_id":event_id,"aspect":Vector2.ONE,"strength":1.0},true)
 	var mesh: MeshInstance2D = slot.mesh
 	# Canvas contract: platform0 < surface1 < fighter display2 < contact25.
 	mesh.z_index=-24 if kind in [18,19] else 0
@@ -162,6 +162,18 @@ func update_slot(index: int, world: Vector2, direction: Vector2, extent: float, 
 	slot.mesh.global_position=world;slot.mesh.rotation=direction.angle();slot.mesh.scale=Vector2.ONE*extent
 	slot.mesh.material.set_shader_parameter("phase",phase)
 
+func set_slot_strength(index: int, strength: float) -> void:
+	if index < 0 or index >= slots.size() or not slots[index].active: return
+	slots[index]["strength"] = clampf(strength, 0.0, 1.0)
+
+func projectile_contact(first: String, second: String, world: Vector2, direction: Vector2, result: String, event_id: String, context: Node2D) -> void:
+	# Two original elemental silhouettes, no fighter-hit signal or receipt.
+	# Interception itself is confirmed by the fixed-tick projectile resolver.
+	var size := 132.0 if result == "mutual_cancel" else 104.0
+	emit_effect(first, 1 if result == "mutual_cancel" else 9, world, direction, size, .22, event_id + ":a")
+	emit_effect(second, 1 if result == "mutual_cancel" else 0, world, -direction, size * .85, .18, event_id + ":b")
+	stage_contact({"confirmed_contact": true, "combat_event_id": event_id, "contact_world": world, "attacker_id": first, "contact_result": "clash", "feedback_tier": "heavy", "damage": 0}, context)
+
 func stop_slot(index: int) -> void:
 	if index < 0 or index >= slots.size():return
 	slots[index].active=false;slots[index].mesh.hide()
@@ -180,6 +192,7 @@ func _process(delta: float) -> void:
 		var ink: Color=slot.base_ink
 		if contrast:ink=Color(1,.95,.76) if slot.kind != 4 else Color(.8,.83,.86)
 		if dimmed:ink.a*=.55
+		ink.a *= float(slot.get("strength", 1.0))
 		slot.mesh.material.set_shader_parameter("accent",ink)
 		slot.age+=delta
 		if slot.follow != null:

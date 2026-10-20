@@ -1,3 +1,31 @@
+# October20 native projectile interception implementation checkpoint
+
+Prior pushed07b53e1a preserves all recovery/high-aura validation.
+This commit adds authorized native projectile interception inBattleSim afterall
+projectile movement and beforefighter delivery. Stable owner/shot ordering,
+swept existing rectangle geometry, stable team snapshots, exact contact face,
+equal mutual cancellation, authored aura integrity1/1/2/4/4, linear residual
+damage, weakened core/trail, original mixed-element pooled feedback/audio.
+No terrain/reflection/parry/newhitboxes; existing aura clash untouched.
+Data explicit per9fighters' neutral projectile behaviors. Unlistedineligible.
+
+ProjectileInteractions35row fixture PASS including equal0/50/75, fullshot
+threequick interceptions then fourthcancel, survivor damage/shield/invulnerability,
+sameteam, fastsweeps, sameframe-nearfighter cancel priority, deterministicorder,
+27roster aura/archetype configurations, lifetime and3accessibility modes.
+Fixtures use explicit aura/position prerequisites, not ordinary player proof.
+Firstfixturehaltedon nonexistenttest-onlymax_slotsAPI; ownedPID34911 stopped,
+correctedtest+watchdogPASS. Rawlogs retained; resource-exit diagnostics remain.
+
+No current ownedGodot test/capture. OwnerreviewPID29620 preserved.
+Next: bounded publictwo-controller Kaia/Juno quick/medium/full-vs-quick
+encounters, then ProjectileOwnership/ElementalPerformance/SpectralFeedback/
+ChargeContinuity affected regressions. Must label twohumaninputdriver separately
+fromactiveCPUacceptance. Addordinary playable isolated launcher, no autooutcomes.
+No heavyexports/captures with4.6GiBfree; protectedStorysaves/worktrees untouched.
+Allhuman/releasegatesfalse. Floor/outerreach/completechoreography remainpending.
+
+---
 # October20 affected regression checkpoint
 
 Runtime/pushed source b0cd5b903c66ed13852b06800ff718d4e2e22f5b.

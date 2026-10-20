@@ -9,9 +9,12 @@ const PROJECTILE_SCENE := preload("res://scenes/combat/Projectile2D.tscn")
 
 var owner_fighter: Node = null
 var active_projectiles: Array = []
+var _spawn_sequence := 0
+var _interaction_data: Dictionary = {}
 
 func setup(fighter: Node) -> void:
 	owner_fighter = fighter
+	_interaction_data = JSON.parse_string(FileAccess.get_file_as_string("res://data/combat/projectile_interactions.json"))
 
 func spawn_from_move(move: Dictionary, aura_amount: float) -> Node:
 	var proj_cfg: Dictionary = move.get("projectile", {})
@@ -55,12 +58,22 @@ func spawn_from_move(move: Dictionary, aura_amount: float) -> Node:
 				tier = "projectile_full"
 	var projectile_move := move.duplicate(true)
 	projectile_move["_attack_activation_id"] = owner_fighter.move_runner.activation_id
+	_spawn_sequence += 1
+	var fighter_id: String = owner_fighter.fighter_id if "fighter_id" in owner_fighter else ""
+	var interaction: Dictionary = _interaction_data.get("fighters", {}).get(fighter_id, {}).get(str(move.get("move_id", "")), {})
+	var integrity_values: Array = interaction.get("integrity_by_aura", [1])
+	var team := "story:" + str(owner_fighter.get_meta("story_team")) if owner_fighter.has_meta("story_team") else "slot:" + str(owner_fighter.slot)
 	var cfg := {
 		"fighter_id": owner_fighter.fighter_id if "fighter_id" in owner_fighter else "",
 		"move_id": move.get("move_id", ""),
 		"aura_level": level,
 		"projectile_tier": tier,
 		"team_slot": owner_fighter.slot if "slot" in owner_fighter else 1,
+		"team_key": team,
+		"order_id": owner_fighter.slot * 1000000 + _spawn_sequence,
+		"clash_eligible": behavior in interaction.get("eligible_behaviors", []),
+		"integrity": int(integrity_values[mini(level, integrity_values.size() - 1)]),
+		"residual_damage_exponent": float(interaction.get("residual_damage_exponent", 1.0)),
 		"lifetime_frames": life,
 		"speed": speed,
 		"behavior": behavior,

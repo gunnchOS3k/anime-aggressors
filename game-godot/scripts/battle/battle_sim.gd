@@ -11,6 +11,7 @@ var paused := false
 var freeze := false
 var _accum := 0.0
 var _step_once := false
+var projectile_interactions = preload("res://scripts/combat/projectile_interactions.gd").new()
 
 func bind_fighters(list: Array) -> void:
 	fighters = list
@@ -39,8 +40,10 @@ func _physics_process(delta: float) -> void:
 			break
 
 func _tick_sim_frame() -> void:
+	projectile_interactions.begin_frame(fighters)
 	for f in fighters:
 		if f == null or not is_instance_valid(f):
 			continue
 		if f.has_method("tick_combat_frame"):
 			f.tick_combat_frame()
+	projectile_interactions.resolve_frame(fighters)
