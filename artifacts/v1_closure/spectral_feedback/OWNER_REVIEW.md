@@ -1,4 +1,4 @@
-> October20: Native automatic projectile interception is now implemented. See [the short playable review](continuous_1020/PROJECTILE_PLAYABLE_REVIEW.md). Two-player public inputs verified equal cancellation and charged breakthrough; active-CPU clash acceptance and human visual approval remain pending. Existing videos below retain their historical source identities.
+> October20 readability increment: [Play and compare projectile clashes](continuous_1020/clash_readability/OWNER_REVIEW.md). Confirmed cancellation, directional breakthrough and major charged pulses now have distinct cues, counted survivor energy layers and adaptive decoration/audio limits. Nine focused suites pass at runtime369b3d34; before/refined60fps movies retain exact610/f566 sources. The bounded activeCPU run had zero interceptions. Human approval remains pending; historical assets below retain their original source identities.
 
 # October19 playable production increment
 

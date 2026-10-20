@@ -10,6 +10,22 @@ var p; var d; var renderer
 func _init() -> void: call_deferred("run")
 func check(ok: bool, label: String) -> void:
 	if not ok: failures.append(label); push_error(label)
+func phase(label: String) -> void:
+	print("CLASH_FIXTURE_PHASE ", label)
+	if output.is_empty(): return
+	var path := output.path_join("fixture_phases.jsonl")
+	var f = FileAccess.open(path, FileAccess.READ_WRITE if FileAccess.file_exists(path) else FileAccess.WRITE)
+	if f:
+		f.seek_end(); f.store_line(JSON.stringify({"phase": label, "milliseconds": Time.get_ticks_msec()})); f.close()
+func snapshot(name: String) -> void:
+	phase("render:" + name)
+	# Flush deferred CanvasItem transforms before forcing this diagnostic draw.
+	# A background native window need not emit frame_post_draw; do not wait on it.
+	await process_frame
+	RenderingServer.force_sync()
+	RenderingServer.force_draw(false, 0.0)
+	var picture := root.get_texture().get_image()
+	check(not picture.is_empty() and picture.save_png(output.path_join(name)) == OK, "native_snapshot:" + name)
 func pair(amounts: Array, point: Vector2) -> Dictionary:
 	var shots: Array = []
 	for i in range(2):
@@ -25,10 +41,11 @@ func clear() -> void:
 	p.projectile_spawner.clear_all(); d.projectile_spawner.clear_all()
 	renderer._process(.7)
 func run() -> void:
-	create_timer(60).timeout.connect(func(): quit(2))
+	create_timer(60).timeout.connect(func(): phase("WATCHDOG"); quit(2))
 	await process_frame
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--ordinary-output="): output = arg.get_slice("=", 1)
+	phase("scene_setup")
 	var gs = root.get_node("GameState"); gs.mode = "versus"; gs.stage_id = "training-grid"; gs.p1_fighter_id = "kaia-windrow"; gs.p2_fighter_id = "juno-spark"; gs.p2_is_cpu = false; gs.stocks = 9
 	root.get_node("SceneRouter").go("battle")
 	for i in range(220): await physics_frame
@@ -39,6 +56,7 @@ func run() -> void:
 	for mode in ["Full", "Balanced", "Reduced"]:
 		root.get_node("StoryDialogue").set_option("vfx_intensity", mode)
 		for amounts in [[0, 0], [50, 50], [0, 75], [75, 75], [75, 50]]:
+			phase(mode + ":" + str(amounts))
 			clear()
 			for i in range(40): await physics_frame
 			var start: int = renderer.history.size()
@@ -66,8 +84,7 @@ func run() -> void:
 			check(renderer.clash_presentation.confirmed_count == before_count, "presentation_dedup")
 			rows.append({"mode": mode, "case": amounts, "event": event, "cue": cue.duplicate(true), "scope": "authoritative collision fixture, not ordinary input"})
 			if major and "--clash-stress-png" in OS.get_cmdline_user_args() and DisplayServer.get_name() != "headless":
-				await process_frame; await RenderingServer.frame_post_draw
-				root.get_texture().get_image().save_png(output.path_join("clash_major_" + mode + "_" + str(amounts[1]) + ".png"))
+				await snapshot("clash_major_" + mode + "_" + str(amounts[1]) + ".png")
 		clear()
 		for i in range(40): await physics_frame
 		var count: int = renderer.clash_presentation.confirmed_count
@@ -83,8 +100,7 @@ func run() -> void:
 		var stress := {"mode": mode, "scenario": "12 nearby confirmed quick collisions in one fixed frame; explicit stress prerequisites", "events": 12, "primary_cues": renderer.clash_presentation.primary_count - primaries, "secondary_suppressed": renderer.clash_presentation.decoration_suppressed - suppressed, "audio_voices": renderer.clash_presentation.voices.size(), "active_meshes": renderer.active_count(), "camera_impulses": 0, "source": "real native resolver/spawner, not forced fighter damage"}
 		rows.append(stress)
 		if "--clash-stress-png" in OS.get_cmdline_user_args() and DisplayServer.get_name() != "headless":
-			await process_frame; await RenderingServer.frame_post_draw
-			root.get_texture().get_image().save_png(output.path_join("clash_stress_" + mode + ".png"))
+			await snapshot("clash_stress_" + mode + ".png")
 		var major_busy := pair([75, 75], Vector2(0, 268))
 		check(renderer.clash_presentation.history[-1].audio_admitted and renderer.clash_presentation.history[-1].primary_kind == 22, mode + ":major_cue_preempts_minor_sound_window")
 		rows.append({"mode": mode, "scenario": "major immediately after quick-shot burst", "event": major_busy.event, "cue": renderer.clash_presentation.history[-1].duplicate(true)})

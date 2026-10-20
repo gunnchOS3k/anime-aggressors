@@ -1,3 +1,56 @@
+# October 20 — completed focused clash-readability increment
+
+Branch `release/anime-v1-dialogue-and-elemental-performance`, draft123 stacked
+on122. Last pushed runtime checkpoint `369b3d34d1a2ad57ef17e230b163507816774604`.
+The commit containing this entry adds test-only screenshot flushing/phase logs
+and the reconciled review package. Resolve its exact SHA with `git log -1
+--format=%H -- ANI03_RESUME_STATE.md`; runtime source is still exact369b3d34.
+
+Additional bounded ordinary repetition:9 quick cancellations per mode,27total,
+all27 primary cues and zero fighter hits. Balanced7/9 decorations suppressed,
+Reduced9/9; peak clash-owned voices1. Public controls remain enabled; fixture
+positions/aura are never assigned. See public_repetition/results.json.
+
+Nine affected suites PASS at369b3d34: ProjectileInteractions,
+ProjectileArchetypeContinuity, SpectralFeedback, SpectralIntensity,
+ExpressionPoolPriority, ChargeContinuity, ElementalPerformance,
+ProjectileOwnership and ClashReadability. No campaign or old capture reruns.
+Native Compatibility fixture21rows PASS;54 real fixture interceptions→54
+primary admissions. One process-frame CanvasItem flush plus forced draw fixes
+the screenshot-only wait/stale viewport problem. Preserve failed watchdog
+`stress_native_compact` and excluded stale pixels `stress_native_synced`.
+Current verified pixels are `stress_native_flushed`, explicitly positioned/aura
+fixture evidence, never ordinary play or artistic approval.
+
+One bounded active-CPU850frame observation:15 player casts,11 CPU moves,
+18 contacts, zero interceptions. Negative result retained in
+`continuous_1020/clash_readability/ACTIVE_CPU_OBSERVATION.json`; raw trace and
+hash under protected local_media/clash_readability_cpu1020. Do not rerun or
+change AI to manufacture a collision. Manual two-local-controller launcher
+smoke with --clash-indicators passed; owner save identities untouched.
+
+Three ordinary two-player mode runs each verified quick/medium/full-major
+cancel and full-vs-quick breakthrough with identical authority. Short native
+before610/finalf566 clips preserve679frames/60fps/original audio and458 checked
+barcodes each; same physics frames, positions, integrity and damage7.7090112.
+Latest crowd/Full-major surface changes369 are not relabeled ontof566 movie.
+Protected rawAVIs stay local-only; MP4s/sheets/source receipts are committed.
+
+Review: `artifacts/v1_closure/spectral_feedback/continuous_1020/clash_readability/OWNER_REVIEW.md`.
+Results, source hashes, diagnostics and scopes: adjacent `RESULTS.json`.
+No owned Godot/capture process remains. No cleanup, heavy export, save editing,
+gameplay rebalance or merge/release performed. All33 worktrees and human gates
+preserved. Original audio/shader provenance retained; exit resource diagnostics
+remain. Native60fps output is not sustained device60fps acceptance.
+
+Next owner action: `tools/v1_closure/play_projectile_review.command --local
+--clash-indicators`. Next unblocked engineering action, if continuing after
+owner review: one bounded ordinary Rook/Nix projectile matchup using a new
+evidence label, then remaining matchup-specific presentation corrections.
+Do not repeat this Kaia/Juno campaign or old108/Story/roster audits. Physical
+contact/floor/choreography and advanced moves remain separate unfinished work.
+
+---
 # October20 adaptive clash presentation checkpoint
 
 Lastpushedf566d4f9fdebb5244436ce027665c429e62f6a9e. This checkpoint
