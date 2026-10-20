@@ -1,3 +1,12 @@
+# October19 native/public review checkpoint — runtime4416c85e
+
+Pushedsource4416c85eebd6806283b561e4bdba4d2da5d6a241. All7remaining450-frameactiveCPUpublic probes complete under local_media/production1019_roster (originaltraceslocalonly,preserved). TogetherpriorKaia/Juno givesall9 realhits/blocks/authoredcancels;13strictpair observations across6fighters;Rook/Nix/Yin0strictinboundedattempts, notbrokenmechanicsclaim. NINE_FIGHTER_AUTHORED_RESULTS.json source/hashbound; historical108matrixunchanged.
+
+Two native25.35s60fps originalaudio movies complete: rendered/production1019_kaia-windrow.mp4 andrendered/productionjuno1019_juno-spark.mp4. Both1300/1300rootframecodesPASS,0script/shadererrors,female/femaleactiveCPU. RawAVIsprotectedlocalonly. KaiaCPUrender.68ms/encode5.54ms;Juno.45/5.35ms offline36%realtime; noGPU/deviceFPSclaim. Images actually inspected: closebodyoverlap/floorcontractstillpoor; stagewavespartlyhiddenbehindplatform (stageglobalz-1 vsplatform0,fighterdisplay2). Nextspecificfixstageglobalz1betweenplatform0/body2, currentclipsremainhonestsource4416beforethiscorrection. Do notrecaptureoldmovies. Addtargeteddrawlayerfixture/renderpreviewonly. Junoinitialsamejoblabelrefusedbeforeengine; uniqueproductionjuno1019succeeded,norepeatKaia. BothJOB_STATEfilesCOMPLETE,nocurrentmediajobs.
+
+Nextindependentplayer-facingfix: TrainingBattleScene currentlyincrementscombocounteronunrelatedrecoveredhits. Reproducefromactualpublictrace thenresetondefenderrecovery/block/armor; teachexistingexplicitmanifestlinkwithoutaddingnewcatalog orbalancechanges. Allhuman/releasegatesfalse. Ownerstorylauncher13earnednodes/11receipts; originalownerprofile7unchanged. All33worktrees/backups/originalspreserved.
+
+---
 # October19 final production source ready for native/public roster review
 
 Localbranch release/anime-v1-dialogue-and-elemental-performance; lastpushed8fa450efdae352c33ab62d04f864714a244fb607; resolve nextsourcecheckpoint commit withgit. All14affectedexisting regression suites PASS across retainedruns (initialSpectralFeedback9orderfailures fixed withouttestchange). FullCampaign145 stagedPASS, ShippingRoster18PASS, CampaignRestartPASS; notordinary145acceptance. ActualStorytest13/11qualifyingreceipts nextEquilibrium, owner7Accordunchanged. Kaia1/Juno4strictpair observations/9+12legalcancels retainedseparately fromhistorical108matrix. CurrentTS catalog46 versusreported48; legacy70, neitherdirectlyconsumedshippingGodot.
