@@ -1,3 +1,67 @@
+# October20 fighter body spacing — engineering verified, native review blocked
+
+Recovered b264ee5578f9ea7ffe7ba6d830608e38c017e252. Source checkpoints pushed:
+ad394fd2ff222e60727f0c929a30eb7a45c381f9 (groundedbody separation),
+380de325d65483d3236010174c79eda347bb748d (signedstage sweep safeguard).
+Existing release/anime-v1-dialogue-and-elemental-performance / draft123 still
+stacked122. No source/hitbox/hurtbox/data/model proportions/frame/damage/
+knockback changes beyond authorized horizontal body-spacing mechanics.
+
+Confirmed root cause: Fighter main layer2/mask1 collided with stage only;
+actual body shapes profile-sized rectangles, no body separation. Ordinary
+Kaia/Juno roots reached1.53px, settled12.43px despite32.4combined halfwidth.
+Same867frame public controls now hold32.4px with0.000006px gap variation,
+produce shield/hook/lights/heavies and one directthrow (beforeonlythrow hit).
+Ground dodge and jump both switch sides. No transforms/damage/results seeded.
+
+Shared resolver runs after every fighter's stage movement and before combat;
+canonical slot/path pair order, previous-side retention only across eligible
+ticks. Existing body dimensions, symmetric run-speed-capped correction, signed
+wall-sweep and floor-support bounds, horizontal only, no velocity addition.
+Air/dodge/phase/grab/throw/hurt/launch/ledge/respawn/invulnerability, authored
+self_movement.x attacks, cosmic/passive/allied Story interactions remain free.
+No opponent-platform physics or visual whole-model translation. Gait sampled
+after final root spacing; standalone Fighter fallback retained. Boot/floor/
+head/hair/limb/outer-reach art fit and complete choreography remain unfinished.
+
+ALL8affected suites PASS: RosterMale andFemale (36fighter/body/direction public
+walk/shield cases;18actual models), ThrowOwnership39, GroundedRecovery36,
+RosterFootwork, ContactReactionClock18, AuthoredCancel9, CampaignRestart (66s,
+separate staged save/watch isolation). Bounded actual six-actor puppet Story
+setup/5activeCPUs and reverse-array solver checks PASS, no earned receipt.
+Short activeCPU current380source:340frames/9contacts/4CPU moves, no freeze,
+forced move or KO. Ledger: body_spacing/affected/RESULTS.json. Root/bounds and
+public-input comparison: PUBLIC_COMPARISON.json; scope/CI/limits: RESULTS.json.
+First harness failures and signed-wall defect retained, explicitly excluded;
+full generated failure logs moved intact into protected ignored local_media/
+body_spacing_failed1020; ATTEMPT_LEDGER.json records original and currentpaths.
+No owner/historical evidence or worktree was moved/deleted.
+
+CAPTURE BLOCKER: owner-opened manual review Godot PID56232 / sourceb264ee55,
+parent56221. Confirmed command uses ani03_melee_manual1020 isolated profile.
+This is NOT an abandoned owned test. Do not terminate it. Existing guard refused
+new native capture; user asked asynchronously to close game or keepvideospending.
+All owned tests finished. No new native footage exists; do not relabel old clips.
+Latestfree6.2GiB,18GiBheavy/2GiBnative guards preserved. No heavyexports/cleanup.
+Owner can close/relaunch tools/v1_closure/play_melee_review.command to play the
+newsource (defaultactiveCPU, optional--local/--male), no owner Story saves touched.
+
+NEXT EXACT ACTION once oldgameclosed: run
+python3 tools/v1_closure/launch_ordinary_review.py --profile spacing_native_after1020 --test-script res://tests/v1_closure/FighterSpacingReview.gd --output artifacts/v1_closure/spectral_feedback/continuous_1020/body_spacing/native_after --movie artifacts/v1_closure/spectral_feedback/local_media/body_spacing_after1020.avi --movie-fps 60 --movie-frames 1000 --driver-arg=--frame-barcode
+Then verify with bundledPython tools/v1_closure/verify_clash_readability_movie.py
+--fighter-spacing-review (output/native_after,rawpathabove,movie rendered/
+body_spacing_after1020.mp4). Capture native_before with uniquebefore labels and
+--baseline-ref b264ee5578f9ea7ffe7ba6d830608e38c017e252; source overlay creates
+no worktree/reset. Preserve all rawfiles and use--verify-existing on interruption.
+Update pendingnative status only after source/audio/frame verification.
+
+All33worktrees/backups/evidence/progress retained, acceptedprojectile/knee/torso/
+terminal acting unchanged. All broadhuman/release gates false. No merge/tag/
+deploy/release/force/reset. Original V1 Story/Convergence/OVA/LAN/devices and
+individual kits/acting remain unfinished separate work, not accepted here.
+Delivery SHA resolves via git log -1 --format=%H -- ANI03_RESUME_STATE.md.
+
+---
 # Body-spacing checkpoint follow-up — signed stage sweeps
 
 Source ad394fd2ff222e60727f0c929a30eb7a45c381f9 pushed to existing draft123.

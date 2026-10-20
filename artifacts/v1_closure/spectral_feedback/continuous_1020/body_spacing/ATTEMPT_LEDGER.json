@@ -1,0 +1,70 @@
+{
+  "accepted_source": "380de325d65483d3236010174c79eda347bb748d",
+  "accepted_regressions": "affected/RESULTS.json",
+  "earlier_attempts": [
+    {
+      "path": "public_candidate",
+      "status": "RETAINED_EXCLUDED",
+      "reason": "prototype compile error, invalid; not acceptance"
+    },
+    {
+      "path": "roster_first",
+      "status": "RETAINED_EXCLUDED",
+      "reason": "fixture preloaded autoload-dependent resources too early; timeout, invalid"
+    },
+    {
+      "path": "roster_valid",
+      "status": "RETAINED_EXCLUDED",
+      "reason": "fixture omitted explicit reconfiguration positions and exact local-size comparison; timeout, invalid"
+    },
+    {
+      "path": "roster_male",
+      "status": "RETAINED_EXCLUDED",
+      "reason": "9world-AABB floating comparison failures +1reproduced signed stage recovery defect; corrected in final source"
+    },
+    {
+      "path": "boundary_probe",
+      "status": "RETAINED_EXCLUDED",
+      "reason": "reproduced signed stage recovery defect; fixed in boundary_signed"
+    }
+  ],
+  "full_failed_diagnostics": "protected local_media/body_spacing_failed1020, intentionally local-only generated logs; no evidence deleted",
+  "retention_moves": [
+    {
+      "original_path": "artifacts/v1_closure/spectral_feedback/continuous_1020/body_spacing/public_candidate",
+      "preserved_path": "artifacts/v1_closure/spectral_feedback/local_media/body_spacing_failed1020/public_candidate"
+    },
+    {
+      "original_path": "artifacts/v1_closure/spectral_feedback/continuous_1020/body_spacing/roster_first",
+      "preserved_path": "artifacts/v1_closure/spectral_feedback/local_media/body_spacing_failed1020/roster_first"
+    },
+    {
+      "original_path": "artifacts/v1_closure/spectral_feedback/continuous_1020/body_spacing/roster_first_console.log",
+      "preserved_path": "artifacts/v1_closure/spectral_feedback/local_media/body_spacing_failed1020/roster_first_console.log"
+    },
+    {
+      "original_path": "artifacts/v1_closure/spectral_feedback/continuous_1020/body_spacing/roster_valid",
+      "preserved_path": "artifacts/v1_closure/spectral_feedback/local_media/body_spacing_failed1020/roster_valid"
+    },
+    {
+      "original_path": "artifacts/v1_closure/spectral_feedback/continuous_1020/body_spacing/roster_valid_console.log",
+      "preserved_path": "artifacts/v1_closure/spectral_feedback/local_media/body_spacing_failed1020/roster_valid_console.log"
+    },
+    {
+      "original_path": "artifacts/v1_closure/spectral_feedback/continuous_1020/body_spacing/roster_male",
+      "preserved_path": "artifacts/v1_closure/spectral_feedback/local_media/body_spacing_failed1020/roster_male"
+    },
+    {
+      "original_path": "artifacts/v1_closure/spectral_feedback/continuous_1020/body_spacing/roster_male_console.log",
+      "preserved_path": "artifacts/v1_closure/spectral_feedback/local_media/body_spacing_failed1020/roster_male_console.log"
+    },
+    {
+      "original_path": "artifacts/v1_closure/spectral_feedback/continuous_1020/body_spacing/boundary_probe",
+      "preserved_path": "artifacts/v1_closure/spectral_feedback/local_media/body_spacing_failed1020/boundary_probe"
+    },
+    {
+      "original_path": "artifacts/v1_closure/spectral_feedback/continuous_1020/body_spacing/boundary_probe_console.log",
+      "preserved_path": "artifacts/v1_closure/spectral_feedback/local_media/body_spacing_failed1020/boundary_probe_console.log"
+    }
+  ]
+}
