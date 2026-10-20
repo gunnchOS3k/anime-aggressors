@@ -78,7 +78,7 @@ func write_evidence() -> void:
 		"starting_opponent_damage":50 if band=="medium" else 110 if band=="high" else 0,"body_presentations":[battle.fighter1.data.body_variant,battle.fighter2.data.body_variant],"same_fighter_comparison":same_fighter_comparison,"opponent_cpu":battle.fighter2.is_cpu,"controls_enabled":battle.fighter2.controls_enabled,
 		"forced_moves":false,"forced_ko":false,"frozen_opponent":false,"story_receipts":false,"human_playthrough":false,
 		"idle_fixture_not_combo_evidence":idle_opponent,"probe":probe,"exact_trace":exact_trace,"state_transitions":transitions,"move_phases":phases,"public_inputs":input_events,"moves":events,"contacts":contacts,"visual_contacts":visual_contacts,"samples":samples,"ko_events":ko_events,
-		"frame_stamps":frame_stamps,"authored_cancels":battle.fighter1.authored_cancel_history,"presentation_events":renderer.history if renderer != null else [],"empowerment_observations":empowerment_observations,"expression":battle.fighter1.get_node("CombatExpressionDirector").action_lines.evidence(),"pool":renderer.stats() if renderer != null else {},"player_damage":battle.fighter1.damage_percent,"opponent_damage":battle.fighter2.damage_percent},"  ")+"\n");file.close()
+		"frame_stamps":frame_stamps,"authored_cancels":battle.fighter1.authored_cancel_history,"projectile_interceptions":battle._battle_sim.projectile_interactions.history,"presentation_events":renderer.history if renderer != null else [],"empowerment_observations":empowerment_observations,"expression":battle.fighter1.get_node("CombatExpressionDirector").action_lines.evidence(),"pool":renderer.stats() if renderer != null else {},"player_damage":battle.fighter1.damage_percent,"opponent_damage":battle.fighter2.damage_percent},"  ")+"\n");file.close()
 func _run() -> void:
 	await process_frame
 	seed(431017)
@@ -178,6 +178,12 @@ func _run() -> void:
 func _probe_inputs(frame: int,p: Node,dx: float) -> Array:
 	# Adaptive observation selects public controls only. No game state/result writes.
 	var actions: Array=[]
+	if probe=="projectile-exchange":
+		if frame % 500 < 155: return ["special", "shield"]
+		if absf(dx) > 210: actions.append("right" if dx > 0 else "left")
+		elif absf(dx) < 100: actions.append("left" if dx > 0 else "right")
+		if p.state_machine.can_attack() and frame % 30 == 0: return ["special"]
+		return actions
 	if probe=="charged-authored" and not charged_link_started:
 		# Earn aura with public charging. Active CPU may interrupt or punish;
 		# failure to reach the tier is retained, never seeded or forced.

@@ -94,9 +94,9 @@ func tick_all() -> void:
 			p.tick_sim_frame()
 
 func clear_all() -> void:
-	for p in active_projectiles:
+	for p in active_projectiles.duplicate():
 		if is_instance_valid(p):
-			p.queue_free()
+			p.cancel_immediate()
 	active_projectiles.clear()
 
 func count() -> int:

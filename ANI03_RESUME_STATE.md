@@ -1,3 +1,34 @@
+# October20 ordinary projectile review checkpoint
+
+Runtime feature pushed d1950652a0e71e2b5c643027fbc84ab0387b4b8a.
+This checkpoint also immediately retires authority on spawner clear_all(),
+preserving no-late-damage and stopping pooled flight visuals beforequeue_free.
+Final35row projectile fixture PASS, including scene-clear late callback guard.
+Manuallauncher smoke PASS(activeCPU/female), no automatedownerinput.
+
+Publictwo-controller (notCPU) inputs1534frames genuinely charged and moved:
+quick0vs0 canceled1vs1; medium~65aura canceled2vs2; Juno~88aura full
+shot interceptedKaiaquick7.6aura, survived4→3 and damagedKaia6.6577824.
+Bothplayers controls enabled, no aura/damage/position editing. Originalfailed
+mediumattempt retained: threshold-chatterdriver generated unintendedpressedges;
+latchedchargecompletion correctsdriver only. Results undercontinuous_1020/
+projectile_public_latched. No nativeaudio/video claim fromheadless simulation.
+
+Ownerlauncher tools/v1_closure/play_projectile_review.command defaultsactiveCPU;
+--local normal2player controls; --male existingmale models. Uniqueperlaunchlogs
+underlocal_media/projectile_owner_review, isolatedprofile, noStorysaveediting.
+No newcapture whileownerPID29620open. Noheavyexports.
+
+Next: run affected ProjectileOwnership, ElementalPerformance, SpectralFeedback,
+SpectralIntensity, ChargeContinuity, CombatActivation, GroundedRecovery and
+AuthoredCancel serially on this checkpoint; retain only affectedreportbackups.
+Then one boundedactiveCPU projectile-exchange observation iffeasible. Shared
+27roster configurations are policy/eligibility fixtures, notwhole-roster match
+certification. Beam/orb/wave/trap/boomerang movement/lifetime tuning stillneeds
+ordinary fullroster review; unsupportedunlisted behaviors optout. Allhuman and
+releasegatesfalse. Exact floor/outerreach/completeacting remainsunfinished.
+
+---
 # October20 native projectile interception implementation checkpoint
 
 Prior pushed07b53e1a preserves all recovery/high-aura validation.

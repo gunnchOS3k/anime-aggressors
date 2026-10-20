@@ -121,6 +121,11 @@ func run() -> void:
 		check(renderer.active_count() <= (32 if mode == "Reduced" else 96) and renderer.slots.size() <= 96, "bounded_effects:" + mode)
 		check(a.integrity == 3 and not b.active, "accessibility_preserves_rules:" + mode)
 	clear()
+	a = spawn(p, 75); a._queue_target(d)
+	p.projectile_spawner.clear_all(); a._deliver_hit(d)
+	check(not a.active and a.pending_targets.is_empty() and d.damage_percent == 0, "scene_clear_retires_authority_immediately")
+	for i in range(2): await physics_frame
+	check(p.projectile_spawner.count() == 0 and d.projectile_spawner.count() == 0, "no_owned_emitters_after_cleanup")
 	var f = FileAccess.open(output.path_join("projectile_interactions.json"), FileAccess.WRITE)
 	f.store_string(JSON.stringify({"PASS": failures.is_empty(), "failures": failures, "rows": rows, "scope": "native BattleScene prerequisites/geometry fixtures; no earned aura, public combo, native video or full roster artistic acceptance", "max_integrity": 16}, "  ")); f.close()
 	print("PROJECTILE_INTERACTIONS ", "PASS" if failures.is_empty() else "FAIL", " rows=", rows.size(), " failures=", failures.size())

@@ -240,6 +240,18 @@ func set_debug_visible(v: bool) -> void:
 	if debug_rect:
 		debug_rect.visible = v
 
+func cancel_immediate() -> void:
+	# Scene/stock cleanup retires authority now, not at queue_free's end of
+	# frame. No pending callback may deliver damage during that interval.
+	if not active: return
+	active = false; pending_targets.clear()
+	if is_instance_valid(_renderer):
+		_renderer.stop_slot(_flight_slot); _flight_slot = -1
+		if _renderer.is_inside_tree(): _renderer.emit_effect(fighter_id, 5, global_position, direction, _visual_extent, .18)
+	set_deferred("monitoring", false)
+	projectile_expired.emit()
+	queue_free()
+
 func _exit_tree() -> void:
 	if is_instance_valid(_renderer):
 		_renderer.stop_slot(_flight_slot)
