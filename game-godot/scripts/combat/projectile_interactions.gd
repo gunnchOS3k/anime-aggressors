@@ -1,4 +1,5 @@
 extends RefCounted
+signal interception_confirmed(info: Dictionary)
 ## One deterministic post-movement pass. Existing projectile rectangles are
 ## swept in relative motion; every interception precedes fighter delivery.
 var starts: Dictionary = {}
@@ -70,12 +71,13 @@ func resolve_frame(fighters: Array) -> void:
 		var event_id := "projectile:%d:%d:%d" % [frame, a.order_id, b.order_id]
 		var result := "mutual_cancel" if ai == bi else "breakthrough"
 		var renderer = a._renderer if is_instance_valid(a._renderer) else b._renderer
-		if is_instance_valid(renderer): renderer.projectile_contact(a.fighter_id, b.fighter_id, pair.point, a.direction, result, event_id, a)
-		preload("res://scripts/audio/elemental_performance.gd").one_shot(a.fighter_id, "projectile_impact", a.get_parent(), .6)
-		preload("res://scripts/audio/elemental_performance.gd").one_shot(b.fighter_id, "projectile_impact", b.get_parent(), .6)
 		a.intercept(bi); b.intercept(ai)
-		history.append({"event_id": event_id, "sim_frame": frame, "physics_frame": Engine.get_physics_frames(), "a": a.order_id, "b": b.order_id, "fighters": [a.fighter_id, b.fighter_id], "before": [ai, bi], "after": [a.integrity, b.integrity], "result": result, "world": [pair.point.x, pair.point.y], "time_of_impact": pair.time})
+		var winner_direction: Vector2 = a.direction if ai > bi else b.direction
+		var event := {"event_id": event_id, "confirmed_interception": true, "sim_frame": frame, "physics_frame": Engine.get_physics_frames(), "a": a.order_id, "b": b.order_id, "fighters": [a.fighter_id, b.fighter_id], "before": [ai, bi], "after": [a.integrity, b.integrity], "result": result, "world": [pair.point.x, pair.point.y], "time_of_impact": pair.time, "winner_direction": [winner_direction.x, winner_direction.y]}
+		history.append(event)
 		if history.size() > 256: history.pop_front()
+		interception_confirmed.emit(event.duplicate(true))
+		if is_instance_valid(renderer): renderer.projectile_contact(a.fighter_id, b.fighter_id, pair.point, a.direction, result, event_id, a, event)
 	# All projectile interceptions have resolved. A canceled shot can never
 	# consume a pending overlap or a swept hurtbox contact later in this frame.
 	for shot in live:

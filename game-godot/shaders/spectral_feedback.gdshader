@@ -9,6 +9,11 @@ uniform float seed = 0.0;
 uniform float density = 1.0;
 uniform float flash = 1.0;
 uniform vec4 accent : source_color = vec4(1.0, 0.3, 0.05, 1.0);
+uniform int secondary_family = 0;
+uniform vec4 secondary_accent : source_color = vec4(1.0);
+uniform float integrity_layers = 0.0;
+uniform float initial_integrity = 0.0;
+uniform float breakthrough = 0.0;
 float hash(vec2 p) { return fract(sin(dot(p,vec2(127.1,311.7))+seed)*43758.5453); }
 float noise(vec2 p) {
  vec2 i=floor(p), f=fract(p); f=f*f*(3.0-2.0*f);
@@ -19,12 +24,32 @@ float line(vec2 p, vec2 a, vec2 b, float w) {
  return 1.0-smoothstep(w,w+0.018,length(p-a-ab*h));
 }
 float ring(vec2 p,float r,float w) { return 1.0-smoothstep(w,w+0.018,abs(length(p)-r)); }
+// Compact original elemental contours for a single mixed-contact mesh.
+float element_contour(int f, vec2 p, float t) {
+ float s=0.0;
+ if(f==3) { // wind curls and leaf-like slips
+  s=ring(p+vec2(.12,0),.34+t*.08,.016)*smoothstep(-.24,.3,p.x);
+  s+=ring(p-vec2(.12,.04),.5,.012)*smoothstep(.1,.45,p.y);
+ } else if(f==2) { // static seeded branches, never a flashing sine
+  for(int i=0;i<4;i++){float j=float(i);vec2 d=vec2(cos(j*1.57+seed),sin(j*1.57+seed));vec2 b=d*.25+vec2(-d.y,d.x)*.09;
+   s+=line(p,d*.08,b,.011)+line(p,b,d*.59,.008);s+=line(p,b,b+vec2(d.y,-d.x)*.16,.007);}
+ } else if(f==0) {s=ring(p,.37+noise(p*5.0)*.12,.038)*(.55+.35*noise(p*7.0));}
+ else if(f==1) {float d=max(abs(p.x)*.8+abs(p.y)*.6,abs(p.y));s=1.0-smoothstep(.018,.04,abs(d-.43));}
+ else if(f==4) {for(int i=0;i<6;i++){float a=float(i)*1.047;vec2 d=vec2(cos(a),sin(a));s+=line(p,d*.2,d*.57,.013);s+=line(p,d*.4,d*.4+vec2(-d.y,d.x)*.1,.008);}}
+ else if(f==5) {s=ring(p*vec2(.7,1.25),.41,.018)+ring(p*vec2(1.15,.8),.3,.01)*.5;}
+ else if(f==6) {s=line(p,vec2(-.25,-.4),vec2(.05,.43),.014)+line(p,vec2(.02,-.43),vec2(.32,.4),.009);}
+ else if(f==7) {s=ring(p,.48-t*.18,.025)*(1.0-smoothstep(.35,.6,p.x));}
+ else {float h=max(abs(p.x)*.866+abs(p.y)*.5,abs(p.y));s=1.0-smoothstep(.014,.035,abs(h-.4));s+=line(p,vec2(-.2,0),vec2(.2,0),.012);}
+ return s;
+}
 void fragment() {
  vec2 p=(UV-0.5)*2.0; float r=length(p), a=atan(p.y,p.x);
  float n=noise(p*6.0+vec2(-clock_s*2.0,clock_s));
  float t=phase; float f=pow(max(0.0,1.0-t),1.5);
  float core=exp(-r*r*85.0)*max(0.0,1.0-t*4.0)*flash;
  float shape=0.0; float bits=0.0;
+ float outline=0.0; float mix_weight=0.0;
+ if(kind<20) {
  // Nine different motion and distance-field grammars, not nine recolored discs.
  if (family==0) { // combustion: turbulent advancing tongues and pressure corona
   float edge=0.36+0.20*n+0.13*sin(a*5.0-clock_s*4.0);
@@ -70,7 +95,19 @@ void fragment() {
   core=0.0; shape=shape*0.15+ring(p*vec2(1.0,0.8),0.35+t*0.28,0.027)*(0.4+0.6*smoothstep(-0.3,0.3,p.x)); bits*=0.25;
  } else if(kind==10) { core=0.0; shape*=0.65; bits*=0.2; } else if(kind==2) { // charge evolves continuously; no contact arc
   core=0.0; shape*=0.65; bits*=0.3; f=1.0;
- } else if(kind==3) { core=exp(-r*r*65.0)*0.6*flash; shape*=0.75; f=1.0; }
+ } else if(kind==3) { core=exp(-r*r*65.0)*0.6*flash; shape*=0.75; f=1.0;
+  if(initial_integrity>0.0) {
+   // Readable constant core plus countable energy shells. Losing integrity
+   // removes shells instead of making the survivor almost invisible.
+   shape+=exp(-dot(p-vec2(.12,0),p-vec2(.12,0))*55.0)*.38;
+   for(int i=0;i<4;i++){float j=float(i);float rr=.25+j*.13;float live=step(j+.5,ceil(integrity_layers*4.0/max(4.0,initial_integrity)));
+    if(family==2) {shape+=ring(p*vec2(.85,1.1),rr,.014)*(step(.3,abs(sin(a*3.0+j)))+.15)*live*.55;}
+    else if(family==3) {shape+=ring(p+vec2(j*.035,0),rr,.016)*smoothstep(-.2,.3,p.x)*live*.65;}
+    else if(family==1 || family==8) {float h=max(abs(p.x)*.866+abs(p.y)*.5,abs(p.y));shape+=(1.0-smoothstep(.012,.03,abs(h-rr)))*live*.48;}
+    else {shape+=ring(p,rr,.013)*(0.4+0.6*smoothstep(-.15,.2,p.x))*live*.5;}
+   }
+  }
+ }
  else if(kind==4) { // irregular volumetric-looking smoke wisps, never straight launch lines
   float cloud=(1.0-smoothstep(0.26+noise(p*4.0+clock_s)*0.3,0.75,r)); shape=cloud*(0.18+0.28*n); bits=0.0; core=0.0;
  } else if(kind==5) { core=0.0; shape*=0.5; bits*=0.7; }
@@ -137,8 +174,39 @@ void fragment() {
   }
   shape*=residue*mix(.30,1.0,density);f=sin(min(1.0,t*6.0)*1.5708)*pow(max(0.0,1.0-t),1.3);
  }
- float alpha=clamp((shape*f+bits*f+core)*accent.a,0.0,(kind>=18)?0.46:0.88);
+ }
+ if(kind>=20) {
+  core=0.0;bits=0.0;shape=0.0;
+  // One clear held beat, then a single fade; density never erases the result.
+  f=1.0-smoothstep(.48,1.0,t);
+  if(kind==20) { // mutual cancellation: two inward curls close onto one seam
+   float pull=1.0-smoothstep(0.0,.44,t);
+   float left=element_contour(family,p+vec2(.26*pull,0),t)*(1.0-smoothstep(-.02,.1,p.x));
+   float right=element_contour(secondary_family,-p+vec2(.26*pull,0),t)*smoothstep(-.1,.02,p.x);
+   shape=(left+right)*pull*.68;
+   shape+=line(p,vec2(-.12,-.18),vec2(.12,.18),.021)*.85+line(p,vec2(-.12,.18),vec2(.12,-.18),.021)*.85;
+   outline=line(p,vec2(-.12,-.18),vec2(.12,.18),.048)+line(p,vec2(-.12,.18),vec2(.12,-.18),.048);
+   mix_weight=smoothstep(-.08,.08,p.x);
+  } else if(kind==21) { // winner travels forward; weak elemental pieces peel behind
+   float sweep=ring(p+vec2(.27,0),.5+t*.13,.026)*smoothstep(-.02,.4,p.x);
+   shape=sweep*.85+element_contour(family,p-vec2(.08+t*.12,0),t)*.45;
+   outline=ring(p+vec2(.27,0),.5+t*.13,.05)*smoothstep(-.02,.4,p.x);
+   for(int i=0;i<3;i++){float j=float(i);vec2 c=vec2(-.18-t*(.25+j*.06),(j-1.0)*(.17+t*.2));shape+=element_contour(secondary_family,(p-c)*3.5,t)*.45;}
+   mix_weight=1.0-smoothstep(-.3,.04,p.x);
+  } else if(kind==22) { // high commitment only: one mixed pressure pulse
+   shape=element_contour(family,p,t)*.65+element_contour(secondary_family,-p,t)*.65;
+   float pulse=.2+sin(min(1.0,t*1.4)*1.5708)*.48;
+   shape+=ring(p*vec2(1.0,1.15),pulse,.026)*.65;
+   outline=ring(p*vec2(1.0,1.15),pulse,.052);
+   if(breakthrough>.5)shape+=ring(p+vec2(.28,0),.5+t*.12,.022)*smoothstep(.0,.4,p.x)*.65;
+   mix_weight=smoothstep(-.2,.2,p.y);
+  } else { // expendable fragments; no central explosion or lingering core
+   for(int i=0;i<3;i++){float j=float(i);vec2 c=vec2(-.22-t*.35,(j-1.0)*(.16+t*.28));shape+=element_contour(family,(p-c)*3.2,t)*.48;}
+  }
+ }
+ float alpha=clamp((max(shape,outline*.74)*f+bits*f+core)*accent.a,0.0,(kind==18 || kind==19)?0.46:0.88);
  vec3 ink=mix(accent.rgb,vec3(1.0,0.97,0.88),clamp(core,0.0,1.0)*0.8);
+ if(kind>=20) {ink=mix(vec3(.025,.04,.06),mix(accent.rgb,secondary_accent.rgb,mix_weight),smoothstep(.05,.35,shape));}
  if(family==0 && kind!=4 && kind!=6) { float thermal=clamp((1.0-r)*n*f,0.0,1.0); ink=mix(ink,vec3(1.0,0.75,0.17),thermal*0.65); }
  COLOR=vec4(ink,alpha);
 }

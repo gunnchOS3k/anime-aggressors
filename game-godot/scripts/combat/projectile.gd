@@ -115,6 +115,7 @@ func _build_intentional_visual(_base_col: Color, size: Vector2) -> void:
 	_visual_extent=maxf(36.0,size.length()*1.5)*(1.5 if projectile_tier == "projectile_full" else 1.2 if projectile_tier == "projectile_medium" else 1.0)
 	if _renderer != null:
 		_flight_slot=_renderer.emit_effect(fighter_id,3,global_position,direction,_visual_extent,-1.0)
+		_renderer.set_projectile_integrity(_flight_slot, integrity, initial_integrity)
 		_renderer.emit_effect(fighter_id,9,global_position,direction,_visual_extent*1.3,.18)
 
 func _deliver_hit(target: Node, contact := Vector2.INF) -> void:
@@ -174,11 +175,14 @@ func intercept(cost: int) -> void:
 	if not active: return
 	integrity = maxi(0, integrity - cost)
 	if integrity == 0:
-		_expire(); return
+		# The confirmed contact owns the sole mixed-element outcome. Do not
+		# add two unrelated dissipations/sounds at the shots' swept endpoints.
+		_expire(false); return
 	var ratio := float(integrity) / initial_integrity
 	damage = initial_damage * pow(ratio, residual_damage_exponent)
 	if is_instance_valid(_renderer):
-		_renderer.set_slot_strength(_flight_slot, .35 + .65 * ratio)
+		_renderer.set_slot_strength(_flight_slot, .7 + .3 * ratio)
+		_renderer.set_projectile_integrity(_flight_slot, integrity, initial_integrity)
 		_renderer.update_slot(_flight_slot, global_position, direction, _visual_extent * (.65 + .35 * ratio))
 
 func tick_sim_frame() -> void:
@@ -221,13 +225,14 @@ func tick_sim_frame() -> void:
 	if frame_count >= lifetime_frames:
 		_expire()
 
-func _expire() -> void:
+func _expire(present_dissipation := true) -> void:
 	if not active: return
-	preload("res://scripts/audio/elemental_performance.gd").one_shot(fighter_id,"projectile_dissipate",get_parent(),.5)
+	if present_dissipation: preload("res://scripts/audio/elemental_performance.gd").one_shot(fighter_id,"projectile_dissipate",get_parent(),.5)
+	if is_instance_valid(_elemental_audio) and is_instance_valid(_elemental_audio.travel): _elemental_audio.travel.stop()
 	if _renderer != null:
 		_renderer.stop_slot(_flight_slot)
 		_flight_slot=-1
-		_renderer.emit_effect(fighter_id,5,global_position,direction,_visual_extent,.22)
+		if present_dissipation: _renderer.emit_effect(fighter_id,5,global_position,direction,_visual_extent,.22)
 	active = false
 	pending_targets.clear()
 	set_deferred("monitoring", false)

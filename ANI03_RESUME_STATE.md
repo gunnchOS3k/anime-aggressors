@@ -1,3 +1,37 @@
+# October20 clash readability implementation checkpoint
+
+Recovered clean610580933ce7c09c8e70e0fc07c0bf266de07678, draft123/base122.
+New focused presentation: confirmed interception signal/history; one mixed
+inward-cancel/directional-breakthrough/major-charged glyph; counted survivor
+energy shells with readable core; suppress per-shot extra dissipations at
+interception; same original physics/damage/integrity/priority/defenses.
+Secondary/stage decoration suppressed under repeated events, six shared-pool
+slots reserved for primary outcomes, oldest prior clash can retire only at
+extreme saturation. Scene-owned audio uses original samples, short envelopes,
+per-mode2/3/4voice cap and onset spacing. No camera impulse/flash/slowdown.
+Optional --clash-indicators displays only confirmed event count/results; absent
+bydefault. Newhelper is presentation over existing spectral pool, no minigame.
+
+ExistingProjectileInteractions35row fixturePASS headless+nativeCompatibility;
+newClashReadability18rowsPASS:15outcome/mode cases and12nearby same-frame
+collisions ineachmode, all primary cues admitted; secondary/audio reduced,
+cleanup/dedupe/layers/winnerdirection verified. Resource-exit diagnostics
+retained. OriginalactiveCPUtrace hadzero collisions; no visual claim forit.
+
+Native before clip recorded source6105809 with ordinary two-player inputs
+and earned aura: quickcancel/fullbreakthrough. Full1700frame capture was
+refused byexistingreserve; shortened800frame guardpassed, actual679frames,
+60fps/mixedaudio. RawAVI protectedlocal_media/clash_readability_before_short1020.avi.
+Framecode/audio verification is running/completing inbefore_short; check its
+NATIVE_MOVIE.json beforeclaiming. No deletion/export/storagecleaning.
+Next aftercommit: record same800frame after recipe ifguardstillpermits,
+verify/inspect contact sheets; run all3ordinary-input cases ineachVFXmode,
+oneboundedCPUobservation and affected spectral/projectile regressions.
+No capture job currentlyactive; beforedecoder/encoder may stillfinish.
+Ownerlauncher play_projectile_review.command --local --clash-indicators.
+AllStorysaves/worktrees preserved, human/releasegatesfalse.
+
+---
 # October20 final native projectile checkpoint
 
 Branch release/anime-v1-dialogue-and-elemental-performance; worktree unchanged.

@@ -8,6 +8,8 @@ var frames := 0
 var inputs: Array = []
 var cases: Array = []
 var hits: Array = []
+var bars: Array = []
+var stamps: Array = []
 func _init() -> void: call_deferred("run")
 func keys(slot: int, actions: Array) -> void:
 	if held[slot - 1] == actions: return
@@ -18,7 +20,19 @@ func keys(slot: int, actions: Array) -> void:
 		if key not in held[slot - 1]: Input.action_press("p%d_%s" % [slot, key], .55 if key in ["left", "right"] else 1.0)
 	held[slot - 1] = actions.duplicate()
 func wait(count: int) -> void:
-	for i in range(count): frames += 1; await physics_frame
+	for i in range(count):
+		if not bars.is_empty():
+			var observed := Engine.get_process_frames() - 1
+			for bit in range(20): bars[bit].color = Color.WHITE if observed & (1 << bit) else Color.BLACK
+			stamps.append({"trace_frame": observed, "physics_frame": Engine.get_physics_frames()})
+		frames += 1
+		if battle != null and frames % 30 == 0: write_evidence()
+		await physics_frame
+func write_evidence() -> void:
+	var f = FileAccess.open(output.path_join("projectile_public_inputs.json"), FileAccess.WRITE)
+	var renderer = preload("res://scripts/visual/spectral_feedback_renderer.gd").obtain(p)
+	var presentation: Dictionary = renderer.clash_presentation.evidence() if "clash_presentation" in renderer else {}
+	f.store_string(JSON.stringify({"scope": "two normal public-input players in native BattleScene; neither CPU nor human owner acceptance; no seeded aura/damage/position or forced outcomes", "frames": frames, "cases": cases, "hits": hits, "inputs": inputs, "frame_stamps": stamps, "presentation_history": renderer.history, "clash_presentation": presentation, "controls_enabled": [p.controls_enabled, d.controls_enabled], "unmodified_aura_requirements": true, "history": battle._battle_sim.projectile_interactions.history}, "  ")); f.close()
 func shoot(label: String) -> void:
 	var begin: int = battle._battle_sim.projectile_interactions.history.size()
 	var damage_before := [p.damage_percent, d.damage_percent]
@@ -37,6 +51,10 @@ func run() -> void:
 	root.get_node("SceneRouter").go("battle")
 	await wait(220)
 	battle = current_scene; p = battle.fighter1; d = battle.fighter2
+	if "--frame-barcode" in OS.get_cmdline_user_args():
+		var layer := CanvasLayer.new(); layer.layer = 100; battle.add_child(layer)
+		for bit in range(20):
+			var rect := ColorRect.new(); rect.position = Vector2(20 + bit * 12, 190); rect.size = Vector2(10, 24); layer.add_child(rect); bars.append(rect)
 	for actor in [p, d]:
 		actor.hit_resolver.hit_confirmed.connect(func(a, b, info): hits.append({"frame": Engine.get_physics_frames(), "attacker_slot": a.slot, "defender_slot": b.slot, "result": info.contact_result, "damage": info.damage, "owner": info.contact_owner}))
 	# Reach the exchange with movement inputs; never assign positions/facing.
@@ -45,29 +63,28 @@ func run() -> void:
 		keys(1, ["right"]); keys(2, ["left"]); await wait(1)
 	keys(1, []); keys(2, []); await wait(8)
 	await shoot("equal_quick")
-	var ready := [false, false]
-	for i in range(200):
-		# Latch completion; threshold chatter would generate unintended new
-		# Special press edges while the other player finishes charging.
-		ready[0] = ready[0] or p.aura >= 66
-		ready[1] = ready[1] or d.aura >= 66
-		keys(1, [] if ready[0] else ["special", "shield"])
-		keys(2, [] if ready[1] else ["special", "shield"])
-		await wait(1)
-		if ready[0] and ready[1]: break
-	keys(1, []); keys(2, []); await wait(4)
-	await shoot("equal_medium")
-	# Genuine passive decay, then charge only Juno with ordinary controls.
-	for i in range(1000):
-		if p.aura < 15 and d.aura < 15: break
-		await wait(1)
+	if not "--clash-quick-breakthrough" in OS.get_cmdline_user_args():
+		var ready := [false, false]
+		for i in range(200):
+			# Latch completion; threshold chatter creates unintended press edges.
+			ready[0] = ready[0] or p.aura >= 66
+			ready[1] = ready[1] or d.aura >= 66
+			keys(1, [] if ready[0] else ["special", "shield"])
+			keys(2, [] if ready[1] else ["special", "shield"])
+			await wait(1)
+			if ready[0] and ready[1]: break
+		keys(1, []); keys(2, []); await wait(4)
+		await shoot("equal_medium")
+		# Genuine passive decay; the short movie recipe omits this exchange.
+		for i in range(1000):
+			if p.aura < 15 and d.aura < 15: break
+			await wait(1)
 	for i in range(240):
 		if d.aura >= 88: break
 		keys(2, ["special", "shield"]); await wait(1)
 	keys(2, []); await wait(4)
 	await shoot("juno_full_vs_kaia_quick")
 	keys(1, []); keys(2, [])
-	var f = FileAccess.open(output.path_join("projectile_public_inputs.json"), FileAccess.WRITE)
-	f.store_string(JSON.stringify({"scope": "two normal public-input players in native BattleScene; neither CPU nor human owner acceptance; no seeded aura/damage/position or forced outcomes", "frames": frames, "cases": cases, "hits": hits, "inputs": inputs, "controls_enabled": [p.controls_enabled, d.controls_enabled], "unmodified_aura_requirements": true, "history": battle._battle_sim.projectile_interactions.history}, "  ")); f.close()
+	write_evidence()
 	print("PROJECTILE_PUBLIC_INPUTS_COMPLETE cases=", cases.size(), " interceptions=", battle._battle_sim.projectile_interactions.history.size())
 	quit()

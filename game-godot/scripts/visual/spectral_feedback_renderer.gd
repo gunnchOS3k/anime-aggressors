@@ -13,6 +13,7 @@ var peak_active := 0
 var dropped := 0
 var reused := 0
 var cpu_update_us: Array = []
+var clash_presentation = preload("res://scripts/visual/projectile_clash_presentation.gd").new()
 
 static func obtain(context: Node) -> Node2D:
 	if context == null or not context.is_inside_tree(): return null
@@ -27,7 +28,9 @@ static func obtain(context: Node) -> Node2D:
 		host.add_child(renderer)
 	return renderer
 
-func _ready() -> void: z_index = 25
+func _ready() -> void:
+	z_index = 25
+	clash_presentation.setup(self)
 
 func option(key: String) -> bool:
 	var settings_node = get_node_or_null("/root/StoryDialogue")
@@ -47,7 +50,7 @@ func trim_decoration_budget(max_slots: int) -> void:
 	var remaining := active_count()-max_slots
 	if remaining <= 0:return
 	for i in slots.size():
-		if slots[i].active and slots[i].kind in [4,5,6,13,14,15,16,17,18,19]:
+		if slots[i].active and (slots[i].kind in [4,5,6,9,13,14,15,16,17,18,19,23] or (slots[i].kind == 3 and slots[i].life > 0)):
 			stop_slot(i);remaining-=1
 			if remaining<=0:return
 
@@ -90,6 +93,7 @@ func stage_contact(info: Dictionary, context: Node2D) -> bool:
 	var special:=str(info.get("move_id","")).contains("special")
 	var power:=3 if tier=="super" else 2 if tier in ["heavy","aura"] or special else 1
 	if result!="hit":power=1
+	if result == "projectile_clash": power = clampi(int(info.get("projectile_stage_power", 1)), 1, 2)
 	var mode:=intensity_mode()
 	var mode_scale:=.65 if option("reduced_particles") else 1.2 if mode=="Full" else 1.0
 	var extent:=float([0,140,300,420][power])*mode_scale
@@ -112,14 +116,23 @@ func stage_contact(info: Dictionary, context: Node2D) -> bool:
 
 func emit_effect(fid: String, kind: int, world: Vector2, direction := Vector2.RIGHT, extent := 64.0, life := .22, event_id := "", follow: Node2D = null) -> int:
 	var max_slots := 32 if option("reduced_particles") else LIMIT
+	var primary := kind in [0,1,2,7,8,10,12,20,21,22] or (kind == 3 and life < 0)
+	# Reserve headroom for actual outcomes; repeated unowned trails/fragments
+	# cannot fill the last six slots and conceal a new confirmed interception.
+	if not primary and active_count() >= max_slots - 6: dropped += 1; return -1
 	if active_count() >= max_slots:
 		# Preserve confirmation and owned emitters ahead of smoke/whiff decoration.
 		var victim := -1
-		if kind in [0,1,2,7,8,10,12]:
+		if primary:
 			for i in slots.size():
 				# Short expression decorations have no persistent emitter owner.
 				# They must yield to the primary collision/defense/KO result.
-				if slots[i].active and slots[i].kind in [4,5,6,13,14,15,16,17,18,19]: victim=i;break
+				if slots[i].active and (slots[i].kind in [4,5,6,9,13,14,15,16,17,18,19,23] or (slots[i].kind == 3 and slots[i].life > 0)): victim=i;break
+			if victim < 0 and kind in [20,21,22]:
+				# Extreme cue-only saturation retires the oldest prior outcome,
+				# never an owned projectile core or the new collision result.
+				for i in slots.size():
+					if slots[i].active and slots[i].kind in [20,21,22] and (victim < 0 or slots[i].age > slots[victim].age): victim = i
 		if victim>=0: stop_slot(victim)
 		else: dropped+=1;return -1
 	var index := -1
@@ -148,7 +161,7 @@ func emit_effect(fid: String, kind: int, world: Vector2, direction := Vector2.RI
 	slot.base_ink=ink
 	if option("high_contrast_vfx"): ink=Color(1,.95,.76) if kind != 4 else Color(.8,.83,.86)
 	if option("reduced_flash"): ink.a*=.55
-	var parameters := {"family":family,"kind":kind,"phase":0.0,"clock_s":0.0,"seed":seed_value,"accent":ink,"density":density_multiplier(),"flash":0.0 if option("reduced_flash") else 1.0}
+	var parameters := {"family":family,"kind":kind,"phase":0.0,"clock_s":0.0,"seed":seed_value,"accent":ink,"density":density_multiplier(),"flash":0.0 if option("reduced_flash") or kind >= 20 else 1.0,"secondary_family":family,"secondary_accent":ink,"integrity_layers":0.0,"initial_integrity":0.0,"breakthrough":0.0}
 	for key in parameters:mesh.material.set_shader_parameter(key,parameters[key])
 	history.append({"kind":kind,"fid":fid,"family":FAMILIES[family],"world":[world.x,world.y],"direction":[direction.x,direction.y],"event_id":event_id,"seed":seed_value,"physics_frame":Engine.get_physics_frames(),"process_frame":Engine.get_process_frames(),"life":life,"extent":extent})
 	if history.size()>2048: history.pop_front()
@@ -166,13 +179,21 @@ func set_slot_strength(index: int, strength: float) -> void:
 	if index < 0 or index >= slots.size() or not slots[index].active: return
 	slots[index]["strength"] = clampf(strength, 0.0, 1.0)
 
-func projectile_contact(first: String, second: String, world: Vector2, direction: Vector2, result: String, event_id: String, context: Node2D) -> void:
-	# Two original elemental silhouettes, no fighter-hit signal or receipt.
-	# Interception itself is confirmed by the fixed-tick projectile resolver.
-	var size := 132.0 if result == "mutual_cancel" else 104.0
-	emit_effect(first, 1 if result == "mutual_cancel" else 9, world, direction, size, .22, event_id + ":a")
-	emit_effect(second, 1 if result == "mutual_cancel" else 0, world, -direction, size * .85, .18, event_id + ":b")
-	stage_contact({"confirmed_contact": true, "combat_event_id": event_id, "contact_world": world, "attacker_id": first, "contact_result": "clash", "feedback_tier": "heavy", "damage": 0}, context)
+func set_projectile_integrity(index: int, remaining: int, initial: int) -> void:
+	if index < 0 or index >= slots.size() or not slots[index].active: return
+	slots[index]["integrity_layers"] = remaining; slots[index]["initial_integrity"] = initial
+	slots[index].mesh.material.set_shader_parameter("integrity_layers", float(remaining))
+	slots[index].mesh.material.set_shader_parameter("initial_integrity", float(initial))
+
+func set_clash_parameters(index: int, other: String, survived: bool) -> void:
+	if index < 0 or index >= slots.size() or not slots[index].active: return
+	var family := maxi(0, IDS.find(other))
+	slots[index].mesh.material.set_shader_parameter("secondary_family", family)
+	slots[index].mesh.material.set_shader_parameter("secondary_accent", COLORS[family])
+	slots[index].mesh.material.set_shader_parameter("breakthrough", 1.0 if survived else 0.0)
+
+func projectile_contact(first: String, second: String, world: Vector2, direction: Vector2, result: String, event_id: String, context: Node2D, detail: Dictionary = {}) -> void:
+	clash_presentation.present(first, second, world, direction, result, event_id, context, detail)
 
 func stop_slot(index: int) -> void:
 	if index < 0 or index >= slots.size():return
@@ -180,6 +201,7 @@ func stop_slot(index: int) -> void:
 
 func _process(delta: float) -> void:
 	var start := Time.get_ticks_usec()
+	clash_presentation.advance(delta)
 	var reduced := option("reduced_particles")
 	var dimmed := option("reduced_flash")
 	var contrast := option("high_contrast_vfx")
@@ -188,7 +210,7 @@ func _process(delta: float) -> void:
 	for slot in slots:
 		if not slot.active: continue
 		slot.mesh.material.set_shader_parameter("density",density)
-		slot.mesh.material.set_shader_parameter("flash",0.0 if dimmed or slot.kind in [18,19] else 1.0)
+		slot.mesh.material.set_shader_parameter("flash",0.0 if dimmed or slot.kind >= 18 else 1.0)
 		var ink: Color=slot.base_ink
 		if contrast:ink=Color(1,.95,.76) if slot.kind != 4 else Color(.8,.83,.86)
 		if dimmed:ink.a*=.55
