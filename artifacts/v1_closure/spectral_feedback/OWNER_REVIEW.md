@@ -1,3 +1,5 @@
+> October20: Native automatic projectile interception is now implemented. See [the short playable review](continuous_1020/PROJECTILE_PLAYABLE_REVIEW.md). Two-player public inputs verified equal cancellation and charged breakthrough; active-CPU clash acceptance and human visual approval remain pending. Existing videos below retain their historical source identities.
+
 # October19 playable production increment
 
 Two native Kaia/Juno comparisons, all-nine public hit/cancel/defense observations,

@@ -11,9 +11,10 @@ func run() -> void:
 	root.get_node("SceneRouter").go("battle")
 	for i in range(220): await physics_frame
 	var help := Label.new()
-	help.text = "PROJECTILE DEVELOPMENT REVIEW · " + ("local two-player" if local else "active CPU") + " · " + body + "\nSpecial: quick shot · Special + Shield: charge · 50 aura: medium · 75 aura: full\nEqual integrity cancels; stronger survives with reduced integrity/damage. Story saves untouched."
+	help.text = "PROJECTILE DEVELOPMENT REVIEW · " + ("local two-player" if local else "active CPU") + " · " + body + "\nKaia: A/D move · J attack · K special · L shield. Juno: arrows · M attack · comma special · period shield.\nSpecial: shot · Special + Shield: charge · 50 aura: medium · 75 aura: full\nEqual integrity cancels; stronger survives with reduced integrity/damage. Story saves untouched."
 	help.position = Vector2(30, 110)
 	current_scene.hud.add_child(help)
 	if "--projectile-review-smoke" in OS.get_cmdline_user_args():
 		print("PROJECTILE_PLAYABLE_REVIEW_READY controls=", current_scene.fighter1.controls_enabled, " CPU=", current_scene.fighter2.is_cpu, " body=", body)
+		print("REVIEW_MODEL_PATHS ", current_scene.fighter1.model_3d._proxy_model.scene_file_path, " ", current_scene.fighter2.model_3d._proxy_model.scene_file_path)
 		quit()

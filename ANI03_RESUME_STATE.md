@@ -1,3 +1,54 @@
+# October20 final native projectile checkpoint
+
+Branch release/anime-v1-dialogue-and-elemental-performance; worktree unchanged.
+Last pushed core runtime cf46897045611a46b5c4d9b6c55a83f276e37c4d.
+Package commit contains this entry; `git rev-parse HEAD` resolves it. Draft123
+remains stacked on122;33worktrees preserved. No merge/deploy/tag/release.
+
+New projectile milestone completed: stable team/owner/sequence, authored aura
+integrity1/1/2/4/4, fixed-tick swept interception before fighter damage, equal
+cancel, breakthrough/integrity/residualdamage loss, weakened core/trail, mixed
+original elemental/SFX/stage feedback, immediate cancel authority and bounded
+cleanup. Eligibility explicit for9native move/archetype sets. No terrain,
+reflection, parry, additional hitboxes or web clash minigame; aura clash untouched.
+
+Exactcf468970:9affected suitesPASS incl35row projectile acceptance,18ownership
+cases, originalelementalaudio/animation, spectralfeedback/accessibility,charge,
+activation,36grounded recovery,9basecancel. Additional18medium/full emitter
+comparisons preserve exact native trajectories/return/delay/lifetime versus
+untouched controls. Historical145Story/108contact suites not repeated.
+Previous b0cd36pelvis/192aura cases and8affected suites retained.
+
+Ordinarytwo-player public inputs earned charge naturally: quick1vs1cancel;
+medium2vs2cancel at~65aura; Juno88aura full4vsKaiaquick1→3vs0, then normal
+survivor damage6.6577824. Originalmediumdriverchatterattempt preserved; driver
+latch corrected only. These are two local controllers, not activeCPU proof.
+Separate bounded activeCPU850frames produced15player casts/11CPU moves/
+18contacts/zero projectile interceptions: retain negative observation, no retry.
+RawCPUtrace local_media/projectile_cpu1020 (ignored/local). Public2player
+results source d195; no relabeling ascf. No new native movie/audio capture.
+
+Owner manualreview: tools/v1_closure/play_projectile_review.command, default
+activeJunoCPU; --local twohumanplayers; --male actualmale models. Both male/
+female paths smoke-verified; actualpixels/art acceptance not granted. Profile
+ani03_projectile_manual1020; logs unique/local_media/projectile_owner_review.
+Original Storyprofile/signedsaves untouched; owner4bb46reviewPID29620 leftopen.
+No ownedtest/capture running. Disk~4.4GiB;18GiBheavy-export guard preserved.
+
+Current concise review: continuous_1020/PROJECTILE_PLAYABLE_REVIEW.md and
+PROJECTILE_IMPLEMENTATION_RESULTS.json. Current CI source snapshot retained;
+new package CI may still run. Resource-exit ObjectDB/resource warnings remain,
+no functional assertion/script/shader failures in final validation.
+
+Next unblocked: manual native Kaia/Juno contact/interception visual review via
+launcher; then one bounded ordinary Rook/Nix projectile matchup if accepted
+for nextincrement. Broader public matchup/beam boundaries and owner tuning
+remain unverified. Exact physical model/floor/outerreach decision and complete
+choreography/secondaryacting stillpending; no whole-model raise workaround.
+Higher-aura aerial routes remain unverified. No human/release gate earned.
+Do not rerun completed campaigns/captures or bypass current storage guard.
+
+---
 # October20 ordinary projectile review checkpoint
 
 Runtime feature pushed d1950652a0e71e2b5c643027fbc84ab0387b4b8a.
