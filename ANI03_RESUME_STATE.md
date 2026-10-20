@@ -1,3 +1,16 @@
+# Native comparison retry checkpoint
+
+First ac1728bd native attempt completed but rejected:125missing framecodes /
+stale rendered segment despite intact867frame ordinary authority trace.
+Preserved native_after/NATIVE_VERIFICATION_FAILED.json and protected raw
+local_media/contact_integration_after1020.avi. No MP4 delivered as qualified.
+ContactIntegrationReview now accepts explicit --native-foreground using the
+existing window foreground diagnostic method; observer only, no gameplay edits.
+NEXT one serial retry with unique native_after_foreground/raw*_foreground1020
+labels and --driver-arg=--native-foreground, then exactbarcode/audio verification.
+No active owned jobs. All prior source/tests valid. No repeated physics fixes.
+
+---
 # October20 final contact — gameplay validation complete, native pending
 
 Authored source0b36d69fdcaa79e3ad328d6685f5b9198e67568d pushed to draft123.

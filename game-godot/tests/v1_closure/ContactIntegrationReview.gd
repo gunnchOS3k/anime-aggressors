@@ -2,7 +2,13 @@ extends "res://tests/v1_closure/FighterSpacingReview.gd"
 ## Same ordinary input recipe as the retained spacing movie. Observers only.
 var pose_samples: Array = []
 var surface_contacts: Array = []
+var foreground_requested := false
 func wait(count: int) -> void:
+	if not foreground_requested and "--native-foreground" in OS.get_cmdline_user_args() and DisplayServer.get_name() != "headless":
+		# Existing native clock diagnostic method; capture-only, never gameplay.
+		foreground_requested = true
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, true)
+		DisplayServer.window_move_to_foreground()
 	for i in range(count):
 		if battle != null:
 			var actors: Array = []
