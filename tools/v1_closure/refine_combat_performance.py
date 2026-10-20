@@ -1,7 +1,7 @@
 """Original keyed performance refinements, retargeted onto the preserved 18 rigs.
 No external motion, root motion, combat frame-data or model changes.
 """
-import json, math
+import argparse, json, math
 import numpy as np
 from build_combat_choreography import ROOT, DIRECTION, AIR, rig, fk, solve, matrix, quat, euler, blend
 
@@ -32,6 +32,47 @@ def key(frame,rotation,position=None):
  d={'time_s':round(frame/60,6),'rotation_quat':[round(float(x),7) for x in quat(rotation)]}
  if position is not None:d['position_m']=[round(float(x),7) for x in position]
  return d
+
+def guard_transition(r, clip, neutral):
+ """Bake a guard-to-load and recoil-to-guard transition, not a runtime solver.
+
+ The full collision interval and the hook are immutable. Existing pelvis lead,
+ ribcage delay and limb arcs remain the authored performance between boundaries.
+ Both support feet follow their original targets; no root/scale/length edits.
+ """
+ result=json.loads(json.dumps(clip));tracks=result['bone_tracks']
+ start=clip['startup_frames'];active_end=start+clip['active_frames'];total=clip['duration_frames']
+ arrival=max(1,round(start*.6));settle=active_end+max(2,round((total-active_end)*.45))
+ for f in range(total+1):
+  if start<=f<=active_end:continue
+  weight=1-blend([(0,0.),(arrival,1.)],f) if f<start else blend([(settle,0.),(total,1.)],f)
+  if weight<=0:continue
+  rots={};pos={};source_rots={};source_pos={}
+  for n,keys in tracks.items():
+   old=clip['bone_tracks'][n][f];target=neutral['bone_tracks'][n][0]
+   a=np.array(old['rotation_quat']);b=np.array(target['rotation_quat'])
+   if np.dot(a,b)<0:b=-b
+   dot=np.clip(np.dot(a,b),-1.,1.)
+   if dot>.9995:q=a+(b-a)*weight;q/=np.linalg.norm(q)
+   else:
+    angle=math.acos(dot);q=(math.sin((1-weight)*angle)*a+math.sin(weight*angle)*b)/math.sin(angle)
+   source_rots[n]=matrix(a);rots[n]=matrix(q)
+   if 'position_m' in old:
+    source_pos[n]=np.array(old['position_m'])
+    pos[n]=source_pos[n]*(1-weight)+np.array(target['position_m'])*weight
+  original=fk(r,source_rots,source_pos)
+  for side in ['L','R']:
+   foot='Foot_'+side;target=original[foot]
+   g=solve(r,rots,pos,'UpperLeg_'+side,'LowerLeg_'+side,foot,target[1],np.array([0,0,-1.]))
+   rots[foot]=g[r[foot]['parent']][0].T@target[0]
+  for n in tracks:tracks[n][f]=key(f,rots[n],pos.get(n))
+ # Boundary keys are the actual authored neutral, not an approximate new stance.
+ # All existing strike support targets already equal neutral at those endpoints.
+ for n in tracks:
+  for f in [0,total]:
+   tracks[n][f]=json.loads(json.dumps(neutral['bone_tracks'][n][0]));tracks[n][f]['time_s']=round(f/60,6)
+ result['guard_transition']={'entry_complete_frame':arrival,'settle_start_frame':settle,'neutral_source':'combat_choreography/idle_primary:0','contact_interval_unchanged':True,'hook_unchanged':True,'runtime_solver_added':False}
+ return result
 
 def refine(r,fid,clip):
  result=json.loads(json.dumps(clip));tracks=clip['bone_tracks'];out={n:[] for n in tracks}
@@ -100,16 +141,22 @@ def reaction(r,fid,heavy=False,elemental=False):
  return {'duration_frames':duration,'loop':False,'relative_to_rest':False,'bone_tracks':tracks,'authoring':'original signed chest break, counter-pelvis, delayed head, opened guard and constrained knees; no root motion'}
 
 def main():
+ parser=argparse.ArgumentParser();parser.add_argument('--guard-only',action='store_true',help='Amend only jab_1/heavy entry and recovery; preserve all other shipped performance clips')
+ args=parser.parse_args()
  for fid in DIRECTION:
   for body in ['male','female']:
    r,h=rig(fid,body);source=ROOT/f'game-godot/data/animation/combat_choreography/{fid}_{body}.json';d=json.loads(source.read_text());clips={}
-   for mid in ['jab_1','jab_2','heavy_attack','side_special']:
+   dest=ROOT/f'game-godot/data/animation/combat_performance/{fid}_{body}.json'
+   if args.guard_only:clips=json.loads(dest.read_text())['clips']
+   for mid in (['jab_1','heavy_attack'] if args.guard_only else ['jab_1','jab_2','heavy_attack','side_special']):
     for suffix in ['', '_left']:
      name=mid+suffix;clips[name]=refine(r,fid,d['clips'][name])
-   clips['reaction_light']=reaction(r,fid)
-   clips['reaction_heavy']=reaction(r,fid,True)
-   clips['reaction_elemental']=reaction(r,fid,True,True)
-   dest=ROOT/f'game-godot/data/animation/combat_performance/{fid}_{body}.json';dest.parent.mkdir(exist_ok=True)
+     if mid in ['jab_1','heavy_attack']:clips[name]=guard_transition(r,clips[name],d['clips']['idle_primary'])
+   if not args.guard_only:
+    clips['reaction_light']=reaction(r,fid)
+    clips['reaction_heavy']=reaction(r,fid,True)
+    clips['reaction_elemental']=reaction(r,fid,True,True)
+   dest.parent.mkdir(exist_ok=True)
    dest.write_text(json.dumps({'schema':'original_performance_refinement/v1','fighter':fid,'body':body,'rig_sha256':h,'human_approved':False,'clips':clips},separators=(',',':'))+'\n')
  print('Authored performance refinements written for nine fighters and both existing rigs')
 if __name__=='__main__':main()

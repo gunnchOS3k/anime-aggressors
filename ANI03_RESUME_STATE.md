@@ -1,3 +1,35 @@
+# October20 final contact — authored guard checkpoint
+
+Recovered clean b45a7a36d58b425aa34b0391b898ff8fcbd55bde / existing draft123
+stacked122. No body-spacing/projectile changes. ActiveCPU precheck340frames,
+9contacts/4CPU attacks, min sampled rootdx39.24px; no stacking reproduced.
+
+New authored jab_1/heavy guard entry and late recoil-to-guard keys baked into
+all18preserved rigs/bothfacings (72clips). Original active interval byte-equal;
+whole hooks, reactions and all other clips unchanged. No new runtime solver,
+root/scale/model/gameplay/timing changes. Generator --guard-only preserves other
+shipping clips. GuardContinuity PASS72live model/move/facing cases. Key validation
+PASS72: exact neutral endpoints, unchanged active interval. Pre-change Kaia/Juno
+wrist boundary jump8.25–10.06cm. This is guard continuity, not complete acting.
+
+Evidence: continuous_1020/final_contact/{cpu_before,GuardContinuity,
+AUTHORED_KEY_VALIDATION.json}. Source has new ContactIntegrationReview observer
+on the same ordinary867frame input recipe, not yet run/captured. Next: run this
+headless, then relevant GroundedRecovery/CombatChoreography/ContactReactionClock/
+AuthoredCancel/ThrowOwnership suites serially; native one AFTER comparison with
+--frame-barcode, reuse valid e426 body_spacing_after1020 as BEFORE (same olddata).
+Capture after committing source and confirm process/storage guard. Lastfree6.1GiB,
+18GiBheavy guard/2GiBnative reserve; no heavyexport/cleanup. All33worktrees/saves
+preserved. No owned active jobs at checkpoint. All human/release gates false.
+
+Absolute boot-floor fit and head/hair projection remain art/projection blockers:
+sole33–38px below collider, core body~139–142px vs48px hurt height; standalone
+anchor experiment worsened reach13–27px and was rejected. Do not repeat it.
+Native visual benefit and close/outer acceptance still pending. Need original
+full-body keyframed clips coordinated with canonical framing/sole/contact planes,
+without altering hitboxes/proportions. No broad V1 completion claimed.
+
+---
 # October20 body-spacing native review — complete and verified
 
 Owner closed the prior b264 review game and explicitly requested comparison.
