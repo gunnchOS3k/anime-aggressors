@@ -1,3 +1,13 @@
+# October19 playable production increment
+
+Two native Kaia/Juno comparisons, all-nine public hit/cancel/defense observations,
+13 genuinely earned Story nodes, and corrected training feedback are available in
+[the current concise review](continuous_1019/PRODUCTION_PLAYABLE_REVIEW.md).
+Runtime source `6ed18e61d7324e38a292b909fc3c07894d2af51a`; movies source `4416c85e`.
+All human/release gates remain false. Floor/outer-reach and complete authored
+acting remain unresolved; these are development comparisons.
+
+---
 # Current owner checkpoint — October19
 
 [Play and inspect the current Story/Rook/Yin candidate](/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure/artifacts/v1_closure/spectral_feedback/continuous_1019/PLAYABLE_STORY_REVIEW.md). RealStop/restart/FirstLoss nowverified; ownerprofileatAccord7, testcopyat11. Runtime5a2472b9. Older reports below retain their exactsource and historical limitations.

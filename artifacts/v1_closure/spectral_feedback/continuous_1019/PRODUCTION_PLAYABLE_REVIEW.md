@@ -44,3 +44,27 @@ move-by-move acting, lower-body transition polish, secondary motion, high-damage
 certification, unsupported parry/clash and projectile/terrain design, full
 seven-route ordinary acceptance, ANI-04 and ANI-05 remain open. All human,
 art/audio/game-feel and final release gates remain false.
+
+Review videos (normal speed, original audio, active CPUs, female models):
+
+- [Kaia versus Juno](../rendered/production1019_kaia-windrow.mp4)
+- [Juno versus Kaia](../rendered/productionjuno1019_juno-spark.mp4)
+
+Both are source `4416c85e`, 25.35 seconds at 60 fps, with all 1,300 visible
+frame stamps matched per movie. The later surface-layer correction and truthful
+training counter are source `6ed18e61d7324e38a292b909fc3c07894d2af51a`. The two
+`stage_native_preview/*surface_preview.png` images are declared renderer fixtures,
+with no CPU/damage/combo claim. They verify the corrected floor layer. Existing
+movies remain preserved and are not relabeled as the later source.
+
+Training now ends a displayed combo when the defender recovers, rejects duplicate,
+shield/armor and unconfirmed packets, and shows the existing manifest link. The
+live training check landed isolated jabs at frames 296 and 400; both correctly
+displayed combo 1 and the Attack hint. This is a training UI check, not CPU combo
+certification. See `CURRENT_ROSTER_PRODUCTION_MATRIX.json` and
+`LATEST_INCREMENT_VALIDATION.json` for exact source scopes.
+
+The inspected gameplay frames still show close-body overlap and the shared
+model/floor/reach mismatch. Full fighter visual readiness remains false in the
+matrix. The floor-layer previews demonstrate rendering order only; their staged
+actors are not animation or gameplay acceptance evidence.

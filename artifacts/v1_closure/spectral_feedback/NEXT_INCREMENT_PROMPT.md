@@ -1,3 +1,21 @@
+# Next production increment after October19
+
+Recover the current branch and ANI03_RESUME_STATE.md. Runtime source is
+`6ed18e61d7324e38a292b909fc3c07894d2af51a`; resolve package HEAD locally/remotely.
+Do not repeat the 108-cell work, earned Puppet Imbalance/First Release, two native
+clips, completed all-nine public probes or staged regression campaign.
+
+Next concrete task: verify higher-aura cancel-window overrides against the
+existing explicit target links, then implement legitimate missing input/hint
+connections with bounded public charge→jab attempts across all nine fighters.
+Begin: `sed -n 1,105p game-godot/scripts/combat/aura_scaler.gd`.
+Preserve accepted damage/frame/hitstun/AI/collision authority. Treat missing
+explicit targets as authoring/design questions, not permission to invent routes.
+Keep the shared floor/reach proposal separate pending coordinated art/gameplay
+authority. Continue actual authored movement after this functional checkpoint.
+All human/release gates stay false; preserve all worktrees, saves and media.
+
+---
 # October19 next action
 
 Read ANI03_RESUME_STATE.md andcontinuous_1019/PLAYABLE_STORY_REVIEW.md first. Narrativeownership/StopScene source9b7ad976 isimplemented/tested; do notredo it. Current ordinarysave has4earnedKaianodes andisblocked onlyby boundeddriver timeouts atOrion, notexternalpermission. Next: improvepublic-input combat tactics or independently reproduce adefect, continue throughVesper/Ember toaccord/catastrophe/FirstLoss, useactualsavedreceipts. NoAI/damage/balance override or syntheticchapteradvance. Existing108/108cells and18projectileextremes arecomplete. Do notrepeat oldtests/capturecampaign. Allhuman/releasegatesfalse.

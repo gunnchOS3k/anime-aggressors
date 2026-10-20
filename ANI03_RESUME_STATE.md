@@ -1,3 +1,67 @@
+# October 19 production checkpoint
+
+- Worktree: `/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure`
+- Branch: `release/anime-v1-dialogue-and-elemental-performance`
+- Last pushed shipping source: `6ed18e61d7324e38a292b909fc3c07894d2af51a`
+- Draft PR: #123, stacked on #122. No merge, deployment, tag or release.
+- Package HEAD: commit containing this entry; resolve with `git rev-parse HEAD` and `gh pr view 123 --repo gunnchOS3k/anime-aggressors --json headRefOid`.
+- Owned Godot/FFmpeg processes: none after validation. Recording job states are COMPLETE.
+- All 33 worktrees, owner backups, original media and saves remain preserved.
+
+The isolated `ani03_story_resume1019` profile authentically completed 13 nodes
+with 11 qualifying encounter receipts, including Puppet Imbalance and First
+Release. Orion was released; Equilibrium is next. The separate owner Accord
+profile remains at seven receipts. Both signed saves were authenticated after
+all jobs. Use `tools/v1_closure/play_story_continuation.command` for the13-node
+profile or the original `play_story_review.command` for Stop Scene at Accord.
+
+Implemented across all nine fighters and both existing rigs:144 attack-phase
+amendments preserving every active pose and frame value;54 distinct authored
+hurt clips; same-callback hitstop freeze;75ms upper-body neutral continuity that
+never delays the next attack; smaller timing metadata; explicit authored
+hit-confirm attack cancels; nine pooled surface grammars and finite residue.
+Surface draw order is platform0 < surface1 < fighter2 < confirmation25.
+Training now rejects false/duplicate/non-damaging combo feedback, ends a string
+when defender control returns, and teaches existing on-hit input links.
+
+Fourteen affected existing regression suites passed. The145-node campaign test
+is staged evidence, not an ordinary playthrough. Roster18, save/restart and watch
+isolation passed. Focused checks:864 rig/move/facing configurations,72 reactions,
+36 neutral transitions,18 immediate-hitstop cases,27 surface modes and nine
+cancel policies. The live training scene landed separated public-input hits at
+frames296/400; both correctly displayed combo1 and the Attack hint. Baseline
+failures and corrected test-harness errors are retained. Resource-exit
+diagnostics remain in raw logs. Exact-source CI at6ed18e61: six successful checks,
+one Windows2025 check running at the stored snapshot. Package CI is separate.
+
+All-nine bounded public observations share source4416c85e:13 strict pair
+observations across six fighters, with real hits, shields and authored cancels
+for all nine. Rook, Nix and Yin had no strict pair in the bounded attempt.
+Two25.35-second native60fps movies have original audio and1300/1300 root-frame
+stamps verified each. Movies are `rendered/production1019_kaia-windrow.mp4` and
+`rendered/productionjuno1019_juno-spark.mp4`. They precede the final layer-only
+correction. Native6ed stage PNGs explicitly show renderer fixtures, not CPU or
+combo proof. Raw AVIs and seven probe traces remain protected locally under
+`artifacts/v1_closure/spectral_feedback/local_media/`; they were not pushed.
+Keys remain local. No native/movie capture needs repeating.
+
+Read `continuous_1019/PRODUCTION_PLAYABLE_REVIEW.md`,
+`CURRENT_ROSTER_PRODUCTION_MATRIX.json`, and `LATEST_INCREMENT_VALIDATION.json`
+under `artifacts/v1_closure/spectral_feedback/`. Every full-fighter visual-ready
+and owner-approved flag remains false. Close-body overlap, model/floor/outer
+reach, complete acting, higher-aura/air routes, full catalog certification,
+physical devices and ANI-04/ANI-05 remain unfinished. Do not silently apply the
+floor/capsule proposals or change accepted damage, hitstun, collision or AI.
+
+Next unblocked implementation: verify higher-aura cancel-window overrides, then
+add a bounded public charge→jab probe rotating all nine fighters. Separate
+missing explicit authored targets from driver limitations and valid counterplay.
+Begin with `sed -n '1,105p' game-godot/scripts/combat/aura_scaler.gd`.
+Do not repeat108 coverage, completed Story objectives, old captures or long
+regressions unless a changed dependency warrants it. Preserve the18GiB heavy
+export guard and all six human/release gates as false.
+
+---
 # October19 stage draw order and honest training feedback corrected
 
 Latestpushed2aae9b847c97b67e6487e101fd32598ff6e98a6e preservesboth25.35s60fpsnativeclips/source4416/1300codesandoriginalaudio, all9publicresults. Newactualsourcefixes: stageglobal1betweenplatform0andfighterdisplay2 (nativeinspectionrevealedpartialocclusionat-1). Cleanbaseline27draw-layerfailures→27PASS, realgeometry/priority/expiryunchanged. Initialancestor-typefixtureerrorretainedseparately. TrainingUI falselycountedunrelatedrecoveredhits/duplicates/armor/unconfirmedevents: baseline5packetfailures; fixedpolicyplusdefender-controlresetandall9existingmanifestlinkhintsPASS. Failed test preloadbeforeTouchInputManagerautoloadwasstoppedPID27874andfixedusingdeferredload+watchdog, failurelogretained; no sourcegameglobaldefect.
