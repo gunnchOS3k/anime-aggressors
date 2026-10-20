@@ -1,3 +1,28 @@
+# October20 final contact — gameplay validation complete, native pending
+
+Authored source0b36d69fdcaa79e3ad328d6685f5b9198e67568d pushed to draft123.
+All5focused suites PASS: CombatChoreography864, GroundedRecovery36,
+ContactReactionClock18, ThrowOwnership39, AuthoredCancel9. No script errors;
+legacy ObjectDB/resource-at-exit warnings remain in some fixtures.
+Ordinary close867frame sequence preserves all6contacts at identical frames,
+world positions and damage versus retained e426 clip;32.4px neutral roots,
+dodge/jump crossings, shield, one throw, whiff. No seeded gameplay outcomes.
+Outer604frame ordinary controllers:3real contacts at~70.7–71.2px roots,
+hand-surface gaps17.63px Kaia light shield,12.49px Juno heavy,14.86px Kaia heavy.
+Soles35.27pxKaia/38.12pxJuno below collider. This is an unresolved authored/
+projection limitation, NOT a newly fixed contact/floor result. No added solver,
+whole-model translation, proportion or hitbox changes permitted to mask it.
+
+New ActiveContactIntegration/OuterMeleeReview scripts are observers/public input
+recipes only. CPUafter repeats340frames and records actual bounds; inspect its
+JSON for exact contacts before final summary. No broad historical reruns.
+Next: single native AFTER ContactIntegrationReview (1000frame cap/60fps/barcode),
+reuse protected existing body_spacing_after1020 as BEFORE. Commit source/tests
+before capture. Recording guard,18GiBheavy/2GiBnative guards remain. No owned
+Godot/FFmpeg jobs once CPUafter finishes. Full authored contact/floor art, all
+original Story/OVA/multiplayer/device requirements and all human gates pending.
+
+---
 # October20 final contact — authored guard checkpoint
 
 Recovered clean b45a7a36d58b425aa34b0391b898ff8fcbd55bde / existing draft123
