@@ -79,7 +79,7 @@ void fragment() {
  else if(kind==7) { shape+=ring(p,0.2+t*0.7,0.025); core*=0.5; }
  else if(kind==8) { shape*=0.45; core=0.0; bits=0.0; }
  // Original comic action grammar. Whiff/anticipation/motion never uses a core.
- if(kind>=13) {
+ if(kind>=13 && kind<18) {
   core=0.0;bits=0.0;shape=0.0;
   if(kind==13 || kind==15) {
    for(int i=0;i<6;i++) {
@@ -104,7 +104,40 @@ void fragment() {
    shape=(family==8)?(1.0-smoothstep(.014,.035,abs(facet-(.2+t*.4))))*.5:ring(p,.2+t*.48,.018)*.42;
   }
  }
- float alpha=clamp((shape*f+bits*f+core)*accent.a,0.0,0.88);
+ // Surface reactions share the bounded pool, with their own low, open grammar.
+ // UV is flattened onto the queried platform; no screen flash or collision.
+ if(kind==18 || kind==19) {
+  core=0.0;bits=0.0;shape=0.0;
+  float spread=0.12+0.64*t;
+  float residue=(kind==19)?0.48:1.0;
+  if(family==3) { // wind pressure: open spirals and carried leaf silhouettes
+   for(int i=0;i<3;i++) {float j=float(i);vec2 q=p+vec2(sin(t*3.0+j)*.15,0.0);shape+=ring(q,spread+j*.09,.014)*smoothstep(-.2,.45,q.x)*.42;}
+   for(int i=0;i<7;i++){float j=float(i),q=j*2.4+t*2.8;vec2 c=vec2(cos(q),sin(q))*(.2+t*.53);vec2 v=p-c;float leaf=abs(v.x+v.y*.45)+abs(v.y)*1.7;shape+=(1.0-smoothstep(.018,.045,leaf))*step(j,6.0*density)*.65;}
+  } else if(family==2) { // voltage branches travel along the surface, no strobe
+   for(int i=0;i<5;i++){float j=float(i),q=j*1.256+seed;vec2 d=vec2(cos(q),sin(q));vec2 s=vec2(-d.y,d.x);vec2 last=vec2(0.0);
+    for(int k=1;k<5;k++){float h=float(k);vec2 next=d*(h*.17)+s*(hash(vec2(j,h))-.5)*.18;shape+=line(p,last,next,.006)*smoothstep(h*.10,h*.10+.2,t)*.52;last=next;}}
+  } else if(family==0) { // heat crown, embers and cooling scalloped scorch
+   shape=ring(p,spread+n*.06,.035)*(.3+.4*n);
+   shape+=(1.0-smoothstep(.2,.6,r))*(.12+.18*n)*residue;
+  } else if(family==1) { // angular seismic fractures, separate flying stone chips
+   for(int i=0;i<6;i++){float j=float(i),q=j*1.047+seed;vec2 d=vec2(cos(q),sin(q));vec2 bend=d*.3+vec2(-d.y,d.x)*.08;shape+=(line(p,d*.1,bend,.008)+line(p,bend,d*spread,.007))*.55;vec2 v=p-d*(spread+.04);shape+=(1.0-smoothstep(.02,.05,abs(v.x)+abs(v.y)*1.2))*density*.5;}
+  } else if(family==4) { // crystalline frost grows in six structured branches
+   for(int i=0;i<6;i++){float q=float(i)*1.047;vec2 d=vec2(cos(q),sin(q)),s=vec2(-d.y,d.x);shape+=line(p,d*.12,d*spread,.009)*.6;for(int j=1;j<3;j++){vec2 c=d*(float(j)*.18);shape+=(line(p,c,c+(d+s)*.1,.006)+line(p,c,c+(d-s)*.1,.006))*.45;}}
+  } else if(family==5) { // orbital nodes are pulled inward, elliptical gravity field
+   shape=ring(p*vec2(.8,1.25),.62-t*.24,.015)*.5;
+   for(int i=0;i<5;i++){float q=float(i)*1.256+t*2.0;vec2 c=vec2(cos(q),sin(q))*(.75-t*.55);shape+=exp(-dot(p-c,p-c)*1700.0)*density*.8;}
+  } else if(family==6) { // phase: offset seam pairs with separated negative space
+   for(int i=0;i<3;i++){float x=(float(i)-1.0)*.25;shape+=line(p,vec2(x-.12,-spread),vec2(x+.12,spread),.009)*.4;shape+=line(p,vec2(x-.05,-spread),vec2(x+.19,spread),.004)*.25;}
+  } else if(family==7) { // Yin: inward subtraction with a pale enclosing rim
+   shape=ring(p,.72-t*.56,.018)*.6;
+   for(int i=0;i<6;i++){float q=float(i)*1.047+t;vec2 d=vec2(cos(q),sin(q));shape+=line(p,d*(.8-t*.58),d*(.63-t*.48),.012)*.45;}
+  } else { // Yang: outward construction, ordered hexagons and radial braces
+   float hex=max(abs(p.x)*.866+abs(p.y)*.5,abs(p.y));shape=(1.0-smoothstep(.012,.028,abs(hex-spread)))*.55;
+   for(int i=0;i<6;i++){float q=float(i)*1.047;vec2 d=vec2(cos(q),sin(q));shape+=line(p,d*.18,d*spread,.008)*.45;}
+  }
+  shape*=residue;f=sin(min(1.0,t*6.0)*1.5708)*pow(max(0.0,1.0-t),1.3);
+ }
+ float alpha=clamp((shape*f+bits*f+core)*accent.a,0.0,(kind>=18)?0.46:0.88);
  vec3 ink=mix(accent.rgb,vec3(1.0,0.97,0.88),clamp(core,0.0,1.0)*0.8);
  if(family==0 && kind!=4 && kind!=6) { float thermal=clamp((1.0-r)*n*f,0.0,1.0); ink=mix(ink,vec3(1.0,0.75,0.17),thermal*0.65); }
  COLOR=vec4(ink,alpha);

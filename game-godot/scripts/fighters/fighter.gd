@@ -59,6 +59,7 @@ var controls_enabled: bool = true
 var _input_edge_held: Dictionary = {}
 var spawn_point: Vector2 = Vector2.ZERO
 var combo_count: int = 0
+var authored_cancel_history: Array=[]
 var hitstun_remaining: float = 0.0
 var grabbed_target = null
 var grabbed_by = null
@@ -675,6 +676,7 @@ func _handle_actions() -> void:
 		shielding = false
 		state_machine.enter(_FighterStates.IDLE if grounded_guard else _FighterStates.FALL)
 	if not state_machine.can_attack():
+		_try_authored_attack_cancel()
 		return
 	if _pending_attack_cmd != "":
 		_start_move_by_command(_pending_attack_cmd)
@@ -735,6 +737,24 @@ func _start_move(move_id: String) -> void:
 	var m: Dictionary = _DataLoader.find_move(move_manifest, move_id)
 	if not m.is_empty():
 		_start_move_dict(m)
+
+func _try_authored_attack_cancel() -> bool:
+	# Existing explicit manifest links only; no new frame windows or hitstun.
+	# Public press edges remain required. Shield/whiff/stale projectiles cannot
+	# grant a body-hit cancel, and controls/hurt/landing retain their authority.
+	if not controls_enabled or not _FighterStates.is_attack_state(state_machine.current_state) or _hitstop>0 or move_runner==null or not move_runner.active:return false
+	if not _read_attack_pressed() or _read_special_pressed() or aura>=100:return false
+	var command:=_resolve_attack_command()
+	var target: Dictionary={}
+	if command=="attack_neutral" and is_on_floor():
+		target=_DataLoader.find_move(move_manifest,"jab_2" if _jab_chain==1 else "jab_finisher" if _jab_chain==2 else "jab_1")
+	else:
+		target=_DataLoader.find_move_by_input(move_manifest,command,not is_on_floor())
+	if target.is_empty() or not move_runner.can_cancel_to(str(target.get("move_id",""))):return false
+	authored_cancel_history.append({"from":move_runner.current_move_id(),"to":str(target.move_id),"activation":move_runner.activation_id,"move_frame":move_runner.total_frame,"gameplay_frame":Engine.get_physics_frames(),"input_command":command,"confirmed_body_hit":move_runner.confirmed_body_hit})
+	if authored_cancel_history.size()>64:authored_cancel_history.pop_front()
+	_start_move_by_command(command)
+	return true
 
 
 func training_play_move(move_id: String, aura_amount: float = -1.0, facing_override: int = 0) -> Dictionary:

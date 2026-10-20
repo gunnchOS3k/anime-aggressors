@@ -21,6 +21,7 @@ var input_events: Array=[]
 var exact_trace := false
 var probe := ""
 var same_fighter_comparison := false
+var opponent_id := ""
 var turn_latch := 0
 var retreating := false
 var empowerment_observations: Array=[]
@@ -72,7 +73,7 @@ func write_evidence() -> void:
 		"starting_opponent_damage":50 if band=="medium" else 110 if band=="high" else 0,"body_presentations":[battle.fighter1.data.body_variant,battle.fighter2.data.body_variant],"same_fighter_comparison":same_fighter_comparison,"opponent_cpu":battle.fighter2.is_cpu,"controls_enabled":battle.fighter2.controls_enabled,
 		"forced_moves":false,"forced_ko":false,"frozen_opponent":false,"story_receipts":false,"human_playthrough":false,
 		"idle_fixture_not_combo_evidence":idle_opponent,"probe":probe,"exact_trace":exact_trace,"state_transitions":transitions,"move_phases":phases,"public_inputs":input_events,"moves":events,"contacts":contacts,"visual_contacts":visual_contacts,"samples":samples,"ko_events":ko_events,
-		"presentation_events":renderer.history if renderer != null else [],"empowerment_observations":empowerment_observations,"expression":battle.fighter1.get_node("CombatExpressionDirector").action_lines.evidence(),"pool":renderer.stats() if renderer != null else {},"player_damage":battle.fighter1.damage_percent,"opponent_damage":battle.fighter2.damage_percent},"  ")+"\n");file.close()
+		"authored_cancels":battle.fighter1.authored_cancel_history,"presentation_events":renderer.history if renderer != null else [],"empowerment_observations":empowerment_observations,"expression":battle.fighter1.get_node("CombatExpressionDirector").action_lines.evidence(),"pool":renderer.stats() if renderer != null else {},"player_damage":battle.fighter1.damage_percent,"opponent_damage":battle.fighter2.damage_percent},"  ")+"\n");file.close()
 func _run() -> void:
 	await process_frame
 	seed(431017)
@@ -81,6 +82,7 @@ func _run() -> void:
 		if arg.begins_with("--source-sha="):source_sha=arg.get_slice("=",1)
 		if arg.begins_with("--ordinary-output="):output=arg.get_slice("=",1)
 		if arg=="--performance-opponent=idle":idle_opponent=true
+		elif arg.begins_with("--performance-opponent="):opponent_id=arg.get_slice("=",1)
 		if arg.begins_with("--damage-band="):band=arg.get_slice("=",1)
 		if arg=="--exact-trace":exact_trace=true
 		if arg=="--same-fighter-comparison":same_fighter_comparison=true
@@ -89,6 +91,7 @@ func _run() -> void:
 	var state=root.get_node("GameState")
 	state.stage_id="training-grid";state.match_seed=431017
 	state.mode="versus";state.p1_is_cpu=false;state.cpu_level=3;state.battle_eval_mode=false;state.p1_fighter_id=fid;state.p2_fighter_id="ember-vale" if fid=="juno-spark" else "juno-spark"
+	if opponent_id in preload("res://scripts/visual/spectral_feedback_renderer.gd").IDS:state.p2_fighter_id=opponent_id
 	if same_fighter_comparison:state.p2_fighter_id=fid
 	state.p1_body_variant="female";state.p2_body_variant="male" if same_fighter_comparison else "female";state.p2_is_cpu=not idle_opponent;state.stocks=9;state.match_timer_seconds=180
 	root.get_node("SceneRouter").go("battle")
@@ -157,6 +160,24 @@ func _run() -> void:
 func _probe_inputs(frame: int,p: Node,dx: float) -> Array:
 	# Adaptive observation selects public controls only. No game state/result writes.
 	var actions: Array=[]
+	if probe=="authored-review":
+		var dy:float=battle.fighter2.position.y-p.position.y
+		var section:=frame%1300
+		if section>=1000:
+			return ["special","shield"] if section<1220 else ["special"] if frame%45==0 else []
+		var radius:=110.0 if section>=800 else 25.0
+		if absf(dx)>radius:actions.append("right" if dx>0 else "left")
+		if dy< -55 and p.is_on_floor():actions.append("jump")
+		if p.move_runner.active and frame%2==0:
+			if p.move_runner.can_cancel_to("jab_2") or p.move_runner.can_cancel_to("jab_finisher"):return ["attack"]
+			if p.move_runner.can_cancel_to("up_tilt"):return ["up","attack"]
+		if p.state_machine.can_attack() and frame%4==0 and absf(dx)<=radius and absf(dy)<65:
+			# Neutral press explicitly releases movement; directional locomotion
+			# otherwise selects a tilt instead of the authored jab chain.
+			if section<550:return ["attack"]
+			if section<800:return ["attack","special"]
+			return ["special"]
+		return actions
 	if probe=="edgeguard-throw":
 		# One bounded missing-evidence attempt: approach the existing edge, then
 		# grab/throw using ordinary controls. CPU can attack, escape and recover.

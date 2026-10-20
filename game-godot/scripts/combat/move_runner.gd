@@ -17,6 +17,7 @@ var _fighter_body: Node2D
 var hit_targets: Dictionary = {}
 var activation_id := 0
 var in_cancel_window := false
+var confirmed_body_hit := false
 
 func start_move(move: Dictionary, fighter: Node2D) -> void:
 	if move.is_empty():
@@ -30,6 +31,7 @@ func start_move(move: Dictionary, fighter: Node2D) -> void:
 	total_frame = 0
 	hit_targets.clear()
 	in_cancel_window = false
+	confirmed_body_hit = false
 	move_started.emit(move.get("move_id", ""))
 	phase_changed.emit(phase)
 
@@ -40,6 +42,22 @@ func cancel() -> void:
 	move_data = {}
 	phase = ""
 	hit_targets.clear()
+	confirmed_body_hit = false
+	in_cancel_window = false
+
+func record_confirmed_contact(info: Dictionary) -> void:
+	if active and bool(info.get("confirmed_contact",false)) and str(info.get("contact_result",""))=="hit" and str(info.get("contact_owner",""))=="melee" and int(info.get("attack_activation_id",-1))==activation_id:
+		confirmed_body_hit=true
+
+func can_cancel_to(target_move: String) -> bool:
+	if not active:return false
+	for window in move_data.get("cancel_windows",[]):
+		# Untargeted taxonomy windows are not blanket permission to cancel.
+		if str(window.get("to",""))!=target_move:continue
+		if total_frame<int(window.get("start",0)) or total_frame>int(window.get("end",-1)):continue
+		if str(window.get("requires",""))!="hit_confirm" or not confirmed_body_hit:continue
+		return true
+	return false
 
 func tick_sim_frame() -> void:
 	if not active:

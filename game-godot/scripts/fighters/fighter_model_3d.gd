@@ -640,6 +640,8 @@ func _apply_review_freeze() -> void:
 
 
 func apply_hurt_reaction(reaction: Dictionary) -> void:
+	if _animation_controller!=null and is_instance_valid(_animation_controller):
+		_animation_controller.begin_hit_reaction(reaction)
 	if reaction.has("logical_facing"):
 		_logical_facing = str(reaction.get("logical_facing"))
 	_apply_presentation_yaw(float(reaction.get("mesh_yaw_deg", _FacingContract.mesh_yaw_for_facing(_logical_facing))))

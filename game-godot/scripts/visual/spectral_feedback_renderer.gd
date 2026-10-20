@@ -47,7 +47,7 @@ func trim_decoration_budget(max_slots: int) -> void:
 	var remaining := active_count()-max_slots
 	if remaining <= 0:return
 	for i in slots.size():
-		if slots[i].active and slots[i].kind in [4,5,6,13,14,15,16,17]:
+		if slots[i].active and slots[i].kind in [4,5,6,13,14,15,16,17,18,19]:
 			stop_slot(i);remaining-=1
 			if remaining<=0:return
 
@@ -66,7 +66,43 @@ func contact(info: Dictionary, defender: Node2D) -> bool:
 	if result == "hit":
 		if heavy:emit_effect(fid,16,origin,direction,128,.10,event_id+":confirmed_expression")
 		emit_effect(fid,8,defender.global_position+Vector2(0,-24),direction,74,.2,event_id+":hurt",defender)
+	stage_contact(info,defender)
 	return true
+
+func stage_contact(info: Dictionary, context: Node2D) -> bool:
+	# The stage surface is queried, never inferred from the model's soles.
+	# An airborne hit over empty space cannot paint an imaginary ground plane.
+	if not bool(info.get("confirmed_contact",false)) or context==null:return false
+	var origin: Vector2=info.get("contact_world",Vector2.INF)
+	if not origin.is_finite():return false
+	var query:=PhysicsRayQueryParameters2D.create(origin+Vector2.UP*4,origin+Vector2.DOWN*180,1)
+	query.collide_with_areas=false
+	var surface:=context.get_world_2d().direct_space_state.intersect_ray(query)
+	if surface.is_empty() or not surface.collider is StaticBody2D or surface.normal.y>-.6:return false
+	var event_id:=str(info.get("combat_event_id",""))+":stage"
+	if _seen.has(event_id):return false
+	_seen[event_id]=true
+	var result:=str(info.get("contact_result","hit"))
+	var tier:=str(info.get("feedback_tier","light"))
+	var special:=str(info.get("move_id","")).contains("special")
+	var power:=3 if tier=="super" else 2 if tier in ["heavy","aura"] or special else 1
+	if result!="hit":power=1
+	var extent:=float([0,140,250,380][power])
+	var life:=float([0,.32,.58,.8][power])
+	var fid:=str(info.get("attacker_id",""))
+	var position: Vector2=surface.position+Vector2.UP*2
+	var slot:=emit_effect(fid,18,position,Vector2.RIGHT,extent,life,event_id)
+	if slot>=0:
+		slots[slot].aspect=Vector2(1,.30)
+		slots[slot].mesh.scale=Vector2(extent,extent*.30)
+		slots[slot].mesh.material.set_shader_parameter("flash",0.0)
+	# Residue is a bounded decoration, never a projectile or damage owner.
+	if power>1 and result=="hit" and intensity_mode()!="Reduced" and not option("reduced_particles"):
+		var residue:=emit_effect(fid,19,position,Vector2.RIGHT,extent*.75,.85 if power==2 else 1.15,event_id+":residue")
+		if residue>=0:
+			slots[residue].aspect=Vector2(1,.17)
+			slots[residue].mesh.scale=Vector2(extent*.75,extent*.75*.17)
+	return slot>=0
 
 func emit_effect(fid: String, kind: int, world: Vector2, direction := Vector2.RIGHT, extent := 64.0, life := .22, event_id := "", follow: Node2D = null) -> int:
 	var max_slots := 32 if option("reduced_particles") else LIMIT
@@ -77,7 +113,7 @@ func emit_effect(fid: String, kind: int, world: Vector2, direction := Vector2.RI
 			for i in slots.size():
 				# Short expression decorations have no persistent emitter owner.
 				# They must yield to the primary collision/defense/KO result.
-				if slots[i].active and slots[i].kind in [4,5,6,13,14,15,16,17]: victim=i;break
+				if slots[i].active and slots[i].kind in [4,5,6,13,14,15,16,17,18,19]: victim=i;break
 		if victim>=0: stop_slot(victim)
 		else: dropped+=1;return -1
 	var index := -1
@@ -96,7 +132,7 @@ func emit_effect(fid: String, kind: int, world: Vector2, direction := Vector2.RI
 	_sequence+=1
 	var seed_value := float((fid+":"+str(kind)+":"+str(_sequence)).hash() & 65535)/997.0
 	var slot: Dictionary = slots[index]
-	slot.merge({"active":true,"age":0.0,"life":life,"fid":fid,"kind":kind,"extent":extent,"world":world,"dir":direction,"seed":seed_value,"follow":weakref(follow) if follow != null else null,"event_id":event_id},true)
+	slot.merge({"active":true,"age":0.0,"life":life,"fid":fid,"kind":kind,"extent":extent,"world":world,"dir":direction,"seed":seed_value,"follow":weakref(follow) if follow != null else null,"event_id":event_id,"aspect":Vector2.ONE},true)
 	var mesh: MeshInstance2D = slot.mesh
 	mesh.show();mesh.global_position=world;mesh.rotation=direction.angle();mesh.scale=Vector2.ONE*extent
 	var ink: Color = COLORS[family]
@@ -132,7 +168,7 @@ func _process(delta: float) -> void:
 	for slot in slots:
 		if not slot.active: continue
 		slot.mesh.material.set_shader_parameter("density",density)
-		slot.mesh.material.set_shader_parameter("flash",0.0 if dimmed else 1.0)
+		slot.mesh.material.set_shader_parameter("flash",0.0 if dimmed or slot.kind in [18,19] else 1.0)
 		var ink: Color=slot.base_ink
 		if contrast:ink=Color(1,.95,.76) if slot.kind != 4 else Color(.8,.83,.86)
 		if dimmed:ink.a*=.55

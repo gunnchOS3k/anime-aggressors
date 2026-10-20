@@ -33,6 +33,14 @@ var _weight_transfer = preload("res://scripts/visual/locomotion_weight_transfer.
 var _previous_motion_facing := 1
 var _previous_motion_speed := 0.0
 var _motion_moving := false
+var _reaction_clip := ""
+var _reaction_age := 0.0
+var _reaction_fresh := false
+
+func begin_hit_reaction(reaction: Dictionary) -> void:
+	_reaction_clip=str(reaction.get("performance_clip","reaction_light"))
+	_reaction_age=0.0
+	_reaction_fresh=true
 
 
 func setup(fighter, model_root: Node3D) -> void:
@@ -85,6 +93,13 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 	var move_id := str(move.get("move_id", "")) if action_state else ""
 	var resolved: Dictionary = _MoveResolver.resolve_clip(state, move_id, _loaded_clips)
 	var clip := str(resolved.get("clip", ""))
+	var reacting:=state in [_FighterStates.HURT_LIGHT,_FighterStates.HURT_HEAVY,_FighterStates.HITSTUN,_FighterStates.LAUNCHED,_FighterStates.TUMBLE]
+	if reacting and not _reaction_clip.is_empty() and _player.has_animation("combat_choreography/"+_reaction_clip):
+		var reaction_length:=_player.get_animation("combat_choreography/"+_reaction_clip).length
+		if _reaction_age<reaction_length:clip=_reaction_clip
+	elif not reacting:
+		_reaction_clip=""
+		_reaction_fresh=false
 	if state == _FighterStates.LAND and is_instance_valid(_runtime_fighter) and _runtime_fighter._fast_falling and _loaded_clips.has("land_hard"):
 		clip = "land_hard"
 	var directional_id := move_id+("_left" if _visual_facing==-1 else "")
@@ -102,13 +117,14 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 	var anim := _player.get_animation(play_key)
 	if anim:
 		anim.loop_mode = Animation.LOOP_LINEAR if should_loop else Animation.LOOP_NONE
-	if _player.current_animation != play_key and _player.current_animation != clip:
+	if (_player.current_animation != play_key and _player.current_animation != clip) or (reacting and _reaction_fresh):
 		_player.play(play_key, 0.0 if play_key.begins_with("combat_choreography/") else 0.08)
 		if play_key.begins_with("combat_choreography/"):
 			# State callbacks must show the authored first pose in this frame,
 			# including a real victim reaction before hitstop freezes playback.
 			_player.seek(0.0,true)
 			_locomotion_synchronized = false
+		_reaction_fresh=false
 	elif not should_loop and not _player.is_playing():
 		_player.play(play_key, 0.0 if play_key.begins_with("combat_choreography/") else 0.08)
 	_active_clip = clip
@@ -307,6 +323,7 @@ func _load_authored_studies() -> void:
 	_player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
 
 func _process(delta: float) -> void:
+	if not presentation_frozen:_reaction_age+=delta
 	if _synchronize_landing(): return
 	if _player != null and is_instance_valid(_player) and _player.has_animation_library("authored_studies") and not _move_synchronized and not _locomotion_synchronized and not presentation_frozen:
 		_player.advance(delta)
@@ -357,6 +374,16 @@ func _load_combat_choreography(model_root: Node3D) -> void:
 		var anim := _animation_from_data(doc.clips[clip])
 		anim.loop_mode = Animation.LOOP_LINEAR if doc.clips[clip].get("loop",false) else Animation.LOOP_NONE
 		library.add_animation(clip,anim); _loaded_clips[clip]=true
+	# Small original performance amendments preserve the previous blocking data
+	# and all gameplay frame authority. Both presentations use their actual rig.
+	var performance_path:="res://data/animation/combat_performance/%s_%s.json" % [_fighter_id,_body_variant]
+	if FileAccess.file_exists(performance_path):
+		var performance: Dictionary=JSON.parse_string(FileAccess.get_file_as_string(performance_path))
+		for clip in performance.clips:
+			var authored: Dictionary=performance.clips[clip]
+			if authored.has("startup_frames"):_choreography_timing[clip]=authored
+			if library.has_animation(clip):library.remove_animation(clip)
+			library.add_animation(clip,_animation_from_data(authored));_loaded_clips[clip]=true
 	for mid in _MoveResolver.move_id_to_clip_table():
 		var alias: String = str(_MoveResolver.move_id_to_clip_table()[mid])
 		if library.has_animation(mid) and not library.has_animation(alias): library.add_animation(alias,library.get_animation(mid)); _loaded_clips[alias]=true

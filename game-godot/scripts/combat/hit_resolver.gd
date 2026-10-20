@@ -138,6 +138,8 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 		defender.receive_hit(attacker, info)
 	info["actual_launch"] = Vector2.ZERO if info.get("blocked",false) else defender.velocity if "velocity" in defender else info.get("launch",Vector2.ZERO)
 	info["actual_defender_state"] = str(defender.state_machine.current_state) if "state_machine" in defender else "unknown"
+	if "move_runner" in attacker and attacker.move_runner!=null:
+		attacker.move_runner.record_confirmed_contact(info)
 	hit_confirmed.emit(attacker, defender, info)
 	var hit_tag := "BLOCK" if info.get("blocked", false) else "HIT"
 	log_hit("%s %s -> %s dmg:%.1f kb:%.1f" % [hit_tag, scaled.get("move_id", ""), defender.name if defender else "?", dealt, kb.length()])
