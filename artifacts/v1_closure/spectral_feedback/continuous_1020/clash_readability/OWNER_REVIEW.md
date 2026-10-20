@@ -1,5 +1,7 @@
 # Projectile clash readability — October 20
 
+> Historical clash review only. Its charged beam could continue through fighters; this footage does not qualify fighter-impact acceptance. [Corrected impact/grounded-body review](../fighter_impact/OWNER_REVIEW.md) retains the same clash authority and fixes fighter termination. Original movies/source IDs remain preserved.
+
 The prior CPU observation contained **zero projectile interceptions**. Controlled two-player collisions did occur, but faint shield rings, duplicate endpoint dissipations and overlapping sounds obscured the outcome. Breakthrough feedback could point along the losing shot. Physics, integrity, damage and defense rules remain unchanged.
 
 Cancellation now draws inward mixed-element crescents and a short contact seam; both flight silhouettes retire immediately. Breakthrough fragments the weak side, points along the survivor and removes counted energy shells while keeping its core visible. Major charged collisions get a larger brief mixed-element pulse and bounded surface response. Ordinary shots add no camera impulse, fullscreen flash or hitstop.

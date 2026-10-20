@@ -1,4 +1,4 @@
-> October20 readability increment: [Play and compare projectile clashes](continuous_1020/clash_readability/OWNER_REVIEW.md). Confirmed cancellation, directional breakthrough and major charged pulses now have distinct cues, counted survivor energy layers and adaptive decoration/audio limits. Nine focused suites pass at runtime369b3d34; before/refined60fps movies retain exact610/f566 sources. The bounded activeCPU run had zero interceptions. Human approval remains pending; historical assets below retain their original source identities.
+> October20 recovered production increment: [Play the corrected fighter-impact and grounded-motion review](continuous_1020/fighter_impact/OWNER_REVIEW.md). Non-piercing fighter impacts retire at real contact; all18models retain support/strike anchors with corrected forward knee bends. Existing victory/defeat body tracks now advance. Native movie sourceb2e27e48; later terminal source08d46000. Close-body overlap/floor/reach and human approval remain open. Historical clash movies retain their sources and are excluded from fighter-impact acceptance.
 
 # October19 playable production increment
 

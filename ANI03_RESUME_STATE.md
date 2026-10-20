@@ -1,3 +1,47 @@
+# October20 interrupted choreography closure — review package complete
+
+Recovered HEAD e1347d57f64264ecc385daab8325914d612bd893. Preserved local
+knee source/evidence pushedb2e27e48f26d802e99cc8322fe5eeef0f765cb30.
+Additional verified terminal-body acting fix pushed
+08d46000fa8314f4fc862728d37aa7ed8f5e7729. This package commit adds the
+verified native review and source pointers; `git log -1 --format=%H --
+ANI03_RESUME_STATE.md` resolves its exact SHA. Draft123 remains stacked on122.
+Earlier usage-limit automatic-review failure executed no mutation; normal
+approval succeeded on resumption. No bypass, force-push, merge/tag/release.
+
+Current review: continuous_1020/fighter_impact/OWNER_REVIEW.md, adjacent
+CLOSURE_RESULTS.json and CI_08d46000.json. Native exactb2e27e48 MP4/source
+checks completed:860frames60fps14.333s, originalaudio,639barcodes,1191grounded
+knee samples,4real fighter impacts retired at contact, actual melee shield/hits/
+jump/recovery. Terminal fix is later and not relabeled onto the movie. RawAVI
+protected local_media/impact_support_native1020.avi. All evidence preserved.
+Native UI normal-speed inspection remains pending ComputerUse Accessibility/
+ScreenRecording permissions; frame sheets inspected, no human approval claimed.
+
+144support-plane cases PASS across18models/bothfacings; max anchorchange
+1.14e-6m, leglengthchange8.95e-8m.63impact fixtures PASS;10affected integration
+suites PASS retained, not rerun on unrelated terminal-only change. All3VFX modes
+ordinary two-controller quick/charged/breakthrough impacts identical. Existing
+Rook pierce:true exception only; no new beam sustain/piercing. Existing original
+character/audio assets, Story code/data and owner profiles unchanged.
+
+Additional closure: victory/defeat real presentation methods previously froze
+manual body playback at0s. Before36cases72failures; corrected36PASS, clock0.3s
+at18ticks, body motion/hold/next idle checked onall18models. First after attempt
+was intentionally interrupted and remains excluded; after_resumed completed.
+No match result/KO/Story unlocks granted. No current owned Godot/capture job.
+Resource-exit diagnostics persist. No heavy export or storage cleanup; all33
+worktrees/backups/saves retained. Allhuman/release gates false.
+
+Owner: tools/v1_closure/play_projectile_review.command --local (optional--male),
+normal Kaia/Juno control; existing select/versus lock-in reveals restored
+celebration body playback. Next implementation is coupled physical model/floor,
+close-body overlap and outer-reach fit/full-roster authored acting. Do not reuse
+whole-model translation workaround, retune collision, restart projectile
+features, rerun old campaigns or regenerate rigs. Unique Yin/Yang kit, seven
+ordinary routes/Gray/Convergence, OVAs, LAN and devices remain unfinished.
+
+---
 # October20 resumed closure — native review verified; terminal acting fixed
 
 Recovered local/remote e1347d57f64264ecc385daab8325914d612bd893. The prior

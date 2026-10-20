@@ -1,3 +1,7 @@
+# October20 bounded production corrections
+
+Recovered knee correction pushedb2e27e48:144grounded pose cases on18bodies/bothfacings; hip/hand/foot anchors and proportions retained. Fighter-impact expiry at e1347d57 and terminal victory/defeat body-clock correction08d46000 preserve combat/Story authority. [Current playable review](continuous_1020/fighter_impact/OWNER_REVIEW.md). Native14.33s sourceb2e27e48; no human art/game-feel approval. Coupled model/floor, close-body overlap, outer-reach and full-roster authored acting remain the next production work; do not repeat completed projectile features or historical capture campaigns.
+
 # October19 completed Story correction
 
 Scene-owned narrative acknowledgment and StopScene implemented at9b7ad976;8routeUI/16staleguard/1025cue testsPASS. Freshordinary4earnednodes acrossrestart; boundeddriver failure atOrion, narrativeStop/FirstLoss ordinaryproof pending. Detailscontinuous_1019/PLAYABLE_STORY_REVIEW.md. Projectilecontactcoverage108/108combinedsourcebound, no newcapturecampaign. The older backlog below is historical context.
