@@ -16,6 +16,8 @@ func run():
   for body in ["male","female"]:
    var model=Model.new();root.add_child(model);model.configure(Data.load_fighter(fid),body);await process_frame
    var controller=model.get_animation_controller();var player=controller.get_animation_player();var sk=controller.get_skeleton()
+   for metadata in controller._choreography_timing.values():
+    check(not metadata.has("bone_tracks") and metadata.has("contact_frame"),fid+body+":timing_keeps_authority_without_duplicate_pose_arrays")
    for damage in [3.,12.]:
     for direction in [Vector2(110,-60),Vector2(-110,-60)]:
      var reaction:=Reaction.resolve(fid,direction,{"damage":damage,"feedback_tier":"light" if damage<8 else "heavy","combat_event_id":fid+str(damage)+str(direction)})

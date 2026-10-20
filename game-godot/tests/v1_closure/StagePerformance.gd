@@ -19,6 +19,7 @@ func run():
  var renderer=Renderer.obtain(p)
  var settings=root.get_node("StoryDialogue").settings
  for fid in Renderer.IDS:
+  var previous_extent:=INF
   for mode in ["Full","Balanced","Reduced"]:
    settings.vfx_intensity=mode;settings.reduced_particles=false;settings.reduced_flash=mode=="Reduced"
    for i in renderer.slots.size():renderer.stop_slot(i)
@@ -28,6 +29,8 @@ func run():
    check(count(renderer,18)==before+1,fid+mode+":actual_surface_response")
    check(count(renderer,19)==residue+(0 if mode=="Reduced" else 1),fid+mode+":bounded_residue_mode")
    var stage:Dictionary=renderer.history.filter(func(row):return row.kind==18).back()
+   check(float(stage.extent)<previous_extent,fid+mode+":mode_reduces_surface_coverage")
+   previous_extent=float(stage.extent)
    check(absf(stage.world[1]-(float(gs.load_stage(gs.stage_id).mainPlatform.y)-2.0))<.1,fid+mode+":actual_platform_surface_position")
    renderer.contact(event,d);check(count(renderer,18)==before+1,fid+mode+":dedup")
    var miss:=event.duplicate();miss.combat_event_id+="miss";miss.confirmed_contact=false
@@ -43,6 +46,9 @@ func run():
  for i in renderer.slots.size():renderer.stop_slot(i)
  for i in range(96):renderer.emit_effect("kaia-windrow",18,Vector2.ZERO,Vector2.RIGHT,180,.3)
  check(renderer.emit_effect("juno-spark",0,Vector2.ZERO,Vector2.RIGHT,100,.2)>=0,"contact_evicts_stage_decoration")
+ renderer._process(2)
+ var recycled:int=renderer.emit_effect("juno-spark",0,Vector2.ZERO,Vector2.RIGHT,100,.2)
+ check(renderer.slots[recycled].mesh.z_index==0,"pool_reuse_restores_primary_draw_layer")
  renderer._process(2)
  check(renderer.active_count()==0,"all_surface_decorations_expire")
  check(renderer.slots.size()<=96,"bounded_shared_pool")

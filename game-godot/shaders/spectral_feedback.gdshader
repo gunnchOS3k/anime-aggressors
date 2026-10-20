@@ -135,7 +135,7 @@ void fragment() {
    float hex=max(abs(p.x)*.866+abs(p.y)*.5,abs(p.y));shape=(1.0-smoothstep(.012,.028,abs(hex-spread)))*.55;
    for(int i=0;i<6;i++){float q=float(i)*1.047;vec2 d=vec2(cos(q),sin(q));shape+=line(p,d*.18,d*spread,.008)*.45;}
   }
-  shape*=residue;f=sin(min(1.0,t*6.0)*1.5708)*pow(max(0.0,1.0-t),1.3);
+  shape*=residue*mix(.30,1.0,density);f=sin(min(1.0,t*6.0)*1.5708)*pow(max(0.0,1.0-t),1.3);
  }
  float alpha=clamp((shape*f+bits*f+core)*accent.a,0.0,(kind>=18)?0.46:0.88);
  vec3 ink=mix(accent.rgb,vec3(1.0,0.97,0.88),clamp(core,0.0,1.0)*0.8);

@@ -28,6 +28,7 @@ var empowerment_observations: Array=[]
 var frame_bars:Array=[]
 var frame_stamps:Array=[]
 var stamp_frames:=false
+var review_vfx_mode:=""
 func _init() -> void: call_deferred("_run")
 func inputs(actions: Array) -> void:
 	if actions != held:input_events.append({"movie_frame":Engine.get_process_frames()-1,"actions":actions.duplicate(),"axis_strength":.55 if not probe.is_empty() else 1.0})
@@ -89,10 +90,12 @@ func _run() -> void:
 		if arg.begins_with("--damage-band="):band=arg.get_slice("=",1)
 		if arg=="--exact-trace":exact_trace=true
 		if arg=="--frame-barcode":stamp_frames=true
+		if arg.begins_with("--review-vfx-mode="):review_vfx_mode=arg.get_slice("=",1)
 		if arg=="--same-fighter-comparison":same_fighter_comparison=true
 		if arg.begins_with("--combo-probe="):probe=arg.get_slice("=",1)
 		if arg.begins_with("--capture-frames="):max_frames=int(arg.get_slice("=",1))
 	var state=root.get_node("GameState")
+	if review_vfx_mode in ["Full","Balanced","Reduced"]:root.get_node("StoryDialogue").set_option("vfx_intensity",review_vfx_mode)
 	state.stage_id="training-grid";state.match_seed=431017
 	state.mode="versus";state.p1_is_cpu=false;state.cpu_level=3;state.battle_eval_mode=false;state.p1_fighter_id=fid;state.p2_fighter_id="ember-vale" if fid=="juno-spark" else "juno-spark"
 	if opponent_id in preload("res://scripts/visual/spectral_feedback_renderer.gd").IDS:state.p2_fighter_id=opponent_id

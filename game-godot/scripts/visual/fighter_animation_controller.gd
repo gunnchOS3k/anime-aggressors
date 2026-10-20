@@ -36,11 +36,35 @@ var _motion_moving := false
 var _reaction_clip := ""
 var _reaction_age := 0.0
 var _reaction_fresh := false
+var _neutral_return_pose:Array=[]
+var _neutral_return_age:=0.0
+const NEUTRAL_RETURN_SECONDS:=.075
+
+func _begin_neutral_return() -> void:
+	_neutral_return_pose.clear();_neutral_return_age=0.0
+	# Upper-body continuity only. Pelvis/feet remain with the existing planted
+	# gait/landing contract, and the next attack immediately owns all its keys.
+	for name in ["Spine","Chest","Neck","Head","UpperArm_L","LowerArm_L","Hand_L","UpperArm_R","LowerArm_R","Hand_R"]:
+		var index:=_skeleton.find_bone(name)
+		if index>=0:_neutral_return_pose.append({"bone":index,"rotation":_skeleton.get_bone_pose_rotation(index)})
+
+func _blend_neutral_return(delta:float) -> void:
+	if _neutral_return_pose.is_empty() or presentation_frozen or not is_instance_valid(_skeleton):return
+	_neutral_return_age+=delta
+	var weight:=smoothstep(0.0,NEUTRAL_RETURN_SECONDS,_neutral_return_age)
+	for pose in _neutral_return_pose:
+		var target:=_skeleton.get_bone_pose_rotation(int(pose.bone))
+		var initial:Quaternion=pose.rotation
+		_skeleton.set_bone_pose_rotation(int(pose.bone),initial.slerp(target,weight))
+	if _neutral_return_age>=NEUTRAL_RETURN_SECONDS:_neutral_return_pose.clear()
 
 func begin_hit_reaction(reaction: Dictionary) -> void:
 	_reaction_clip=str(reaction.get("performance_clip","reaction_light"))
 	_reaction_age=0.0
 	_reaction_fresh=true
+	# receive_hit has already assigned real hitstop. Freeze now, before this
+	# frame's render callback; waiting for the next combat tick slipped a frame.
+	if is_instance_valid(_runtime_fighter):presentation_frozen=_runtime_fighter._hitstop>0.0
 
 
 func setup(fighter, model_root: Node3D) -> void:
@@ -80,6 +104,8 @@ func bind_runtime_fighter(fighter: Node) -> void:
 	_runtime_fighter = fighter
 
 func play_for_state(state: String, move: Dictionary = {}) -> void:
+	var neutral_state:=state in [_FighterStates.IDLE,_FighterStates.WALK,_FighterStates.RUN,_FighterStates.DASH,_FighterStates.FALL,_FighterStates.FAST_FALL]
+	if not neutral_state:_neutral_return_pose.clear()
 	if state not in [_FighterStates.IDLE,_FighterStates.WALK,_FighterStates.RUN,_FighterStates.DASH]:
 		_weight_transfer.clear()
 	_move_synchronized = state.begins_with("attack") or state.begins_with("special") or state.begins_with("aura_burst") or state.begins_with("throw")
@@ -118,11 +144,13 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 	if anim:
 		anim.loop_mode = Animation.LOOP_LINEAR if should_loop else Animation.LOOP_NONE
 	if (_player.current_animation != play_key and _player.current_animation != clip) or (reacting and _reaction_fresh):
+		if neutral_state and not _player.current_animation.is_empty():_begin_neutral_return()
 		_player.play(play_key, 0.0 if play_key.begins_with("combat_choreography/") else 0.08)
 		if play_key.begins_with("combat_choreography/"):
 			# State callbacks must show the authored first pose in this frame,
 			# including a real victim reaction before hitstop freezes playback.
 			_player.seek(0.0,true)
+			_blend_neutral_return(0.0)
 			_locomotion_synchronized = false
 		_reaction_fresh=false
 	elif not should_loop and not _player.is_playing():
@@ -327,6 +355,7 @@ func _process(delta: float) -> void:
 	if _synchronize_landing(): return
 	if _player != null and is_instance_valid(_player) and _player.has_animation_library("authored_studies") and not _move_synchronized and not _locomotion_synchronized and not presentation_frozen:
 		_player.advance(delta)
+	_blend_neutral_return(delta)
 
 func _synchronize_landing() -> bool:
 	if not is_instance_valid(_runtime_fighter) or _player == null or not is_instance_valid(_player): return false
@@ -369,7 +398,7 @@ func _load_combat_choreography(model_root: Node3D) -> void:
 	var doc: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(path))
 	var library := AnimationLibrary.new()
 	for clip in doc.clips:
-		if doc.clips[clip].has("startup_frames"): _choreography_timing[clip]=doc.clips[clip]
+		if doc.clips[clip].has("startup_frames"): _choreography_timing[clip]=_timing_metadata(doc.clips[clip])
 		if float(doc.clips[clip].get("gait_half_stride_m",0))>0: _gait_half_stride[clip]=float(doc.clips[clip].gait_half_stride_m)
 		var anim := _animation_from_data(doc.clips[clip])
 		anim.loop_mode = Animation.LOOP_LINEAR if doc.clips[clip].get("loop",false) else Animation.LOOP_NONE
@@ -381,7 +410,7 @@ func _load_combat_choreography(model_root: Node3D) -> void:
 		var performance: Dictionary=JSON.parse_string(FileAccess.get_file_as_string(performance_path))
 		for clip in performance.clips:
 			var authored: Dictionary=performance.clips[clip]
-			if authored.has("startup_frames"):_choreography_timing[clip]=authored
+			if authored.has("startup_frames"):_choreography_timing[clip]=_timing_metadata(authored)
 			if library.has_animation(clip):library.remove_animation(clip)
 			library.add_animation(clip,_animation_from_data(authored));_loaded_clips[clip]=true
 	for mid in _MoveResolver.move_id_to_clip_table():
@@ -395,6 +424,13 @@ func _load_combat_choreography(model_root: Node3D) -> void:
 	_player.add_animation_library("combat_choreography",library)
 	secondary_follow=preload("res://scripts/visual/combat_secondary_follow.gd").new()
 	add_child(secondary_follow); secondary_follow.setup(model_root,self)
+
+func _timing_metadata(clip: Dictionary) -> Dictionary:
+	# Animation tracks already own converted keys. Timing/limb observers need
+	# metadata only; retaining the parsed pose arrays duplicates the whole bake.
+	var metadata:=clip.duplicate(false)
+	metadata.erase("bone_tracks")
+	return metadata
 
 func get_locomotion_transition_evidence() -> Dictionary:
 	return _weight_transfer.evidence()

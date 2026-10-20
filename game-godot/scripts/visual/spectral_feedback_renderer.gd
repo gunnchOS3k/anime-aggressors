@@ -90,8 +90,11 @@ func stage_contact(info: Dictionary, context: Node2D) -> bool:
 	var special:=str(info.get("move_id","")).contains("special")
 	var power:=3 if tier=="super" else 2 if tier in ["heavy","aura"] or special else 1
 	if result!="hit":power=1
-	var extent:=float([0,140,250,380][power])
+	var mode:=intensity_mode()
+	var mode_scale:=.65 if option("reduced_particles") else 1.2 if mode=="Full" else 1.0
+	var extent:=float([0,140,300,420][power])*mode_scale
 	var life:=float([0,.32,.58,.8][power])
+	if mode=="Reduced" or option("reduced_particles"):life*=.65
 	var fid:=str(info.get("attacker_id",""))
 	var position: Vector2=surface.position+Vector2.UP*2
 	var slot:=emit_effect(fid,18,position,Vector2.RIGHT,extent,life,event_id)
