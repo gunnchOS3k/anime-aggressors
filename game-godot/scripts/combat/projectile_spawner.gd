@@ -77,6 +77,8 @@ func spawn_from_move(move: Dictionary, aura_amount: float) -> Node:
 		"lifetime_frames": life,
 		"speed": speed,
 		"behavior": behavior,
+		# Motion classification (including beam) grants no fighter piercing.
+		"pierces_fighters": bool(proj_cfg.get("pierce", false)),
 		"damage": dmg,
 		"move_data": projectile_move,
 		"angle_deg": float(proj_cfg.get("angle_deg", 0)),

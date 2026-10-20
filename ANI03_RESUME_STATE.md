@@ -1,3 +1,31 @@
+# October20 fighter-impact correction checkpoint — physical correction next
+
+Recovered clean cc3ee777a826b3a357781bc593f6158f4e58a771, same draft123/base122.
+Beam motion improperly exempted every shot from fighter-impact expiration even
+when the actual move projectile.pierce was false. Core/trail ownership cleanup
+was incomplete, and visuals expired at the post-sweep endpoint. Corrected
+source uses explicit authored pierce, consumes only confirmed impact, preserves
+Rook quake_slab pierce:true with existing one-hit/target/lifetime limits and
+shield/armor stopping, and retires nonpiercing authority/core/owned flight
+trails/travel sound at exact confirmed point. No native explicit sustained
+contact contract found; beam motion itself grants none. No new abilities.
+
+New actual-fighter fixture63cases: old cc3 script overlay FAIL190assertions;
+corrected PASS63/0. First test parse failure and same-frame54-contact pool
+fixture failure retained; independently isolate cases before asserting effect.
+Existing projectile clash numeric data, damage/timing/geometry unchanged.
+No owner/Story save changes; no deleted evidence or exports.
+
+Uncommitted geometry probe SupportKneePlane.gd running/finishing as this
+checkpoint is recorded; inspect continuous_1020/support_knee_plane/before.
+Suspect authored solver still uses -Z knee pole although live rig faces+Z.
+Do not claim reproduced or fixed until live signed knee geometry is inspected.
+Next: read that probe, correct only grounded bend plane while preserving hip,
+feet, hands and bone lengths if reproduced; then ordinary Kaia/Juno public
+quick/charged/breakthrough fighter-impact and short choreography review.
+Keep all human/release gates false and all33worktrees protected.
+
+---
 # October 20 — completed focused clash-readability increment
 
 Branch `release/anime-v1-dialogue-and-elemental-performance`, draft123 stacked

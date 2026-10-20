@@ -43,6 +43,10 @@ var residual_damage_exponent := 1.0
 var intercepted_ids: Dictionary = {}
 var pending_targets: Dictionary = {}
 var spawn_bounds := Rect2()
+var pierces_fighters := false
+var _resolving_contact := false
+var _owned_flight_decorations: Array = []
+var fighter_impacts: Array = []
 
 @onready var debug_rect: ColorRect = $DebugRect
 @onready var collision: CollisionShape2D = $CollisionShape2D
@@ -62,6 +66,7 @@ func configure(cfg: Dictionary, owner_node: Node) -> void:
 	lifetime_frames = cfg.get("lifetime_frames", 120)
 	speed = cfg.get("speed", 400.0)
 	behavior = cfg.get("behavior", "straight")
+	pierces_fighters = bool(cfg.get("pierces_fighters", false))
 	move_data = cfg.get("move_data", {})
 	projectile_tier = str(cfg.get("projectile_tier", move_data.get("projectile_tier", "projectile_tap")))
 	damage = float(cfg.get("damage", move_data.get("damage", 8.0)))
@@ -116,10 +121,30 @@ func _build_intentional_visual(_base_col: Color, size: Vector2) -> void:
 	if _renderer != null:
 		_flight_slot=_renderer.emit_effect(fighter_id,3,global_position,direction,_visual_extent,-1.0)
 		_renderer.set_projectile_integrity(_flight_slot, integrity, initial_integrity)
-		_renderer.emit_effect(fighter_id,9,global_position,direction,_visual_extent*1.3,.18)
+		_track_flight_decoration(9,global_position,_visual_extent*1.3,.18)
+
+func _track_flight_decoration(kind: int, point: Vector2, extent: float, life: float) -> int:
+	var token := "projectile-flight:%d:%d:%d" % [get_instance_id(), frame_count, kind]
+	var index: int = _renderer.emit_effect(fighter_id,kind,point,direction,extent,life,token)
+	if index >= 0: _owned_flight_decorations.append({"slot":index,"token":token})
+	# Decorations live at most .20s. Discard obsolete ownership records, not
+	# someone else's reused slot; cancellation still clears all live records.
+	if _owned_flight_decorations.size() > 32: _owned_flight_decorations.pop_front()
+	return index
+
+func _retire_flight() -> void:
+	if is_instance_valid(_visual): _visual.hide()
+	if is_instance_valid(_elemental_audio) and is_instance_valid(_elemental_audio.travel): _elemental_audio.travel.stop()
+	if is_instance_valid(_renderer):
+		_renderer.stop_slot(_flight_slot)
+		for owned in _owned_flight_decorations:
+			if owned.slot < _renderer.slots.size() and _renderer.slots[owned.slot].event_id == owned.token:
+				_renderer.stop_slot(owned.slot)
+	_flight_slot = -1
+	_owned_flight_decorations.clear()
 
 func _deliver_hit(target: Node, contact := Vector2.INF) -> void:
-	if not active or not is_instance_valid(target) or target == owner_fighter or not is_instance_valid(owner_fighter):
+	if not active or _resolving_contact or not is_instance_valid(target) or target == owner_fighter or not is_instance_valid(owner_fighter):
 		return
 	var target_team := "story:" + str(target.get_meta("story_team")) if target.has_meta("story_team") else "slot:" + str(target.slot) if "slot" in target else ""
 	if target_team == team_key: return
@@ -128,7 +153,6 @@ func _deliver_hit(target: Node, contact := Vector2.INF) -> void:
 	var id := str(target.get_instance_id())
 	if hit_targets.has(id):
 		return
-	hit_targets[id] = true
 	var hit_move := move_data.duplicate(true)
 	hit_move["damage"] = damage
 	hit_move["_from_projectile"] = true
@@ -138,12 +162,25 @@ func _deliver_hit(target: Node, contact := Vector2.INF) -> void:
 	if owner_fighter != null and "hit_resolver" in owner_fighter:
 		resolver = owner_fighter.hit_resolver
 	var confirmed: Dictionary = {}
+	_resolving_contact = true
 	if resolver != null and resolver.has_method("resolve"):
 		confirmed = resolver.resolve(owner_fighter, target, hit_move, owner_fighter.damage_percent if "damage_percent" in owner_fighter else 0.0)
-	if not confirmed.is_empty():
-		projectile_hit.emit(target, confirmed)
-	if behavior != "beam":
-		_expire()
+	if confirmed.is_empty():
+		_resolving_contact = false
+		return # invulnerability/Story rejection is not a confirmed impact.
+	hit_targets[id] = true
+	var point: Vector2 = confirmed.get("contact_world", global_position)
+	# Only the existing authored quake slab may pass an unblocked target.
+	# Shield/armor keep their existing stopping policy, regardless of motion.
+	var continues := pierces_fighters and not bool(confirmed.get("blocked", false))
+	fighter_impacts.append({"event_id":confirmed.get("combat_event_id",""),"world":[point.x,point.y],"frame":Engine.get_physics_frames(),"target":target.get_instance_id(),"continued":continues,"integrity":integrity,"damage":confirmed.get("damage",0.0)})
+	if not continues:
+		global_position = point
+		# HitResolver already owns the one elemental contact result and sound.
+		# Retire authority and all owned flight before any external callback.
+		_expire(false)
+	_resolving_contact = false
+	projectile_hit.emit(target, confirmed)
 
 
 func _on_body_entered(body: Node) -> void:
@@ -220,21 +257,19 @@ func tick_sim_frame() -> void:
 		var spacing := 18.0 if _renderer.option("reduced_particles") else 7.0
 		if _emission_distance >= spacing:
 			_emission_distance=0
-			var trail_slot: int = _renderer.emit_effect(fighter_id,3 if fighter_id == "juno-spark" else 4,global_position-direction.normalized()*10.0,direction,_visual_extent*.65*(.65+.35*ratio),.20)
+			var trail_slot: int = _track_flight_decoration(3 if fighter_id == "juno-spark" else 4,global_position-direction.normalized()*10.0,_visual_extent*.65*(.65+.35*ratio),.20)
 			_renderer.set_slot_strength(trail_slot,.35+.65*ratio)
 	if frame_count >= lifetime_frames:
 		_expire()
 
 func _expire(present_dissipation := true) -> void:
 	if not active: return
-	if present_dissipation: preload("res://scripts/audio/elemental_performance.gd").one_shot(fighter_id,"projectile_dissipate",get_parent(),.5)
-	if is_instance_valid(_elemental_audio) and is_instance_valid(_elemental_audio.travel): _elemental_audio.travel.stop()
-	if _renderer != null:
-		_renderer.stop_slot(_flight_slot)
-		_flight_slot=-1
-		if present_dissipation: _renderer.emit_effect(fighter_id,5,global_position,direction,_visual_extent,.22)
 	active = false
 	pending_targets.clear()
+	if present_dissipation: preload("res://scripts/audio/elemental_performance.gd").one_shot(fighter_id,"projectile_dissipate",get_parent(),.5)
+	_retire_flight()
+	if _renderer != null:
+		if present_dissipation: _renderer.emit_effect(fighter_id,5,global_position,direction,_visual_extent,.22)
 	set_deferred("monitoring", false)
 	projectile_expired.emit()
 	queue_free()
@@ -250,14 +285,14 @@ func cancel_immediate() -> void:
 	# frame. No pending callback may deliver damage during that interval.
 	if not active: return
 	active = false; pending_targets.clear()
+	_retire_flight()
 	if is_instance_valid(_renderer):
-		_renderer.stop_slot(_flight_slot); _flight_slot = -1
 		if _renderer.is_inside_tree(): _renderer.emit_effect(fighter_id, 5, global_position, direction, _visual_extent, .18)
 	set_deferred("monitoring", false)
 	projectile_expired.emit()
 	queue_free()
 
 func _exit_tree() -> void:
+	_retire_flight()
 	if is_instance_valid(_renderer):
-		_renderer.stop_slot(_flight_slot)
 		if active and _renderer.is_inside_tree(): _renderer.emit_effect(fighter_id,5,global_position,direction,_visual_extent,.18)
