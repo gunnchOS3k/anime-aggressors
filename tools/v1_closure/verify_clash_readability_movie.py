@@ -10,14 +10,19 @@ p.add_argument('--output', type=Path, required=True)
 p.add_argument('--raw', type=Path, required=True)
 p.add_argument('--movie', type=Path, required=True)
 p.add_argument('--fighter-impact-review', action='store_true', help='Verify fighter termination and the bounded physical-interaction sequence')
+p.add_argument('--melee-review', action='store_true', help='Verify the focused ordinary melee movie instead of projectile evidence')
 p.add_argument('--verify-existing', action='store_true', help='Resume checks against existing derivatives without replacing any media')
 a = p.parse_args()
 out, raw, movie = a.output.resolve(), a.raw.resolve(), a.movie.resolve()
 def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
-d = json.loads((out/'projectile_public_inputs.json').read_text())
+trace_path = out/('ordinary_melee.json' if a.melee_review else 'projectile_public_inputs.json')
+d = json.loads(trace_path.read_text())
 launch = json.loads((out/'launch_manifest.json').read_text())
 assert d['controls_enabled'] == [True, True]
-assert len(d['history']) >= (1 if a.fighter_impact_review else 2)
+if a.melee_review:
+    assert d['complete'] and any(h['result']=='shield' for h in d['hits']) and any(h['result']=='hit' for h in d['hits'])
+    assert not any(h['case']=='Kaia deliberate whiff' for h in d['hits'])
+else: assert len(d['history']) >= (1 if a.fighter_impact_review else 2)
 if a.fighter_impact_review:
     assert len(d['fighter_impacts']) == 4
     assert all(not e['active_after_contact'] and e['flight_slot_after_contact'] == -1 and not e['travel_after_contact'] and e['position_after_contact'] == e['world'] for e in d['fighter_impacts'])
@@ -46,7 +51,9 @@ if audio_log.exists():
     previous_volume = {k:float(v) for k,v in re.findall(r'(mean_volume|max_volume):\s*(-?\d+(?:\.\d+)?) dB',audio_log.read_text())}
     assert a.verify_existing and previous_volume == volume
 else: audio_log.write_text(audio)
-events = d['history'][:2]
+events = [] if a.melee_review else d['history'][:2]
+if a.melee_review:
+    events = [{**h,'result':h['case']+' / '+h['result']} for h in d['hits']]
 if a.fighter_impact_review:
     events = [{**d['fighter_impacts'][i], 'result': ['quick fighter impact','charged fighter impact','breakthrough then fighter impact'][row]} for row,i in enumerate([0,2,3])]
     melee = next(h for h in d['hits'] if h['owner'] == 'melee' and h['result'] == 'hit')
@@ -74,7 +81,7 @@ console = out/'native_console.log'
 if not console.exists(): console = out/'godot.log'
 log = console.read_text()
 assert 'SCRIPT ERROR' not in log and 'SHADER ERROR' not in log
-report = {'verification_status':'VERIFIED_NATIVE60_AUDIO_FRAME_SOURCE','source_sha':launch['runtime_source_sha'],'movie':str(movie.relative_to(ROOT)),'raw_local_only':str(raw.relative_to(ROOT)),'raw_sha256':sha(raw),'movie_sha256':sha(movie),'trace_sha256':sha(out/'projectile_public_inputs.json'),'matched_frames':len(checks),'container_frames':len(pixels),'checks':checks,'audio_volume_db':volume,'streams':streams,'contact_sheet':str(target.relative_to(ROOT)),'contact_sheet_sha256':sha(target),'selected_frames':selected,'scope':'two automated public-input controllers; earned aura, real native collisions; no CPU/human visual acceptance or sustained-device FPS claim','redistribution':'Original project assets/audio, owner development review only; no release authorization'}
+report = {'verification_status':'VERIFIED_NATIVE60_AUDIO_FRAME_SOURCE','source_sha':launch['runtime_source_sha'],'movie':str(movie.relative_to(ROOT)),'raw_local_only':str(raw.relative_to(ROOT)),'raw_sha256':sha(raw),'movie_sha256':sha(movie),'trace_sha256':sha(trace_path),'matched_frames':len(checks),'container_frames':len(pixels),'checks':checks,'audio_volume_db':volume,'streams':streams,'contact_sheet':str(target.relative_to(ROOT)),'contact_sheet_sha256':sha(target),'selected_frames':selected,'scope':'two automated public-input controllers; real native combat; no CPU/human visual acceptance or sustained-device FPS claim','redistribution':'Original project assets/audio, owner development review only; no release authorization'}
 if a.fighter_impact_review:
     report['verified_fighter_impacts'] = d['fighter_impacts']
     grounded = [s for s in d['physical_samples'] if s['grounded']]

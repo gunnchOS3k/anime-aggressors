@@ -1,3 +1,51 @@
+# October20 compact melee posture — verified source checkpoint
+
+Recovered local/remote7c2035253dff671c82756b49e49e4a2c4388f5e3, existing
+release/anime-v1-dialogue-and-elemental-performance, draft123 stacked122.
+Owner specifically accepts reviewed Kaia/Juno fighter-impact behavior as
+corrected (melee_posture/OWNER_ACCEPTANCE.json); do not reopen projectile
+termination/clash readability without a new defect. All broader human and
+release gates remain false. No campaign, owner-save, model/root, collision,
+move-value, timing, knockback, audio/VFX authority or asset changes.
+
+NEW: grounded_strike_posture.gd after resolved move sampling compacts forward
+spinal overcommitment for jab1/forwardtilt/heavy across9fighter profiles,18bodies,
+bothfacings. Original hip/yaw/weight transfer, head gaze, hand combat-plane
+projection and limb lengths retained. Arm IK targets are restricted to existing
+anatomical reach and forearm-bounded camera depth. No whole-model translation.
+Hooks remain fully authored: prototype reach constraints varied by phase and
+Kaia hook was unreachable. Preserving the entire arc avoids pose snapping.
+First failed universal-hook fixture is retained, not counted as a current pass.
+This is a partial head/body-overlap improvement, NOT completed physical spacing,
+floor alignment, outer-range fit or professional authored choreography.
+
+Final constraints_straight:144configurations/864samples PASS;108straight/heavy
+contact corrections,36preserved hooks. All18rig/facing combinations checked;
+hips/feet/root/gameplay parameters unchanged, projected wrist drift<=3.1e-5px,
+arm-length drift<=1.1e-7m. Initial sandboxed constraint run passed geometry but
+had isolated userdata-directory warnings; escalated affected/final runs clean
+of those warnings. Five affected suites all exit0: constraints, GroundedRecovery,
+ContactReactionClock, AuthoredCancel, CombatChoreography. Earlier versions
+retained under affected; final hook policy tested under constraints_straight.
+
+Ordinary public_before/public_candidate:741frames,5contacts (shield,lights,
+heavies), deliberatewhiff and neutral return; identical public inputs, complete
+physics/control-state traces, damage and outcomes. At4admitted contacts head
+convex-silhouette overlap reduced22.8–43.9%; hook unchanged. Source7c+workingdiff
+candidate is pre-checkpoint prototype evidence, not mislabeled exact-commit.
+PUBLIC_COMPARISON.json records it. These are two automated controllers, not CPU
+or human acceptance. No saves seeded, positions assigned or combat states forced.
+
+NEXT: capture at most one short ordinary before/after native60fps/audio pair,
+using OrdinaryMeleeReview.gd and unique labels. Existing launcher enforces2GiB
+recordingreserve;18GiBheavy-export guard remains. Latestfree7.4GiB. No owned
+Godot/FFmpeg job running. All33worktrees/evidence/backups untouched.
+Command: python3 tools/v1_closure/launch_ordinary_review.py --profile posture_native_after1020 --test-script res://tests/v1_closure/OrdinaryMeleeReview.gd --output artifacts/v1_closure/spectral_feedback/continuous_1020/melee_posture/native_after --movie artifacts/v1_closure/spectral_feedback/local_media/melee_posture_after1020.avi --movie-fps60 --movie-frames850 --driver-arg=--frame-barcode
+Then verify_clash_readability_movie.py --melee-review with exact paths; compare
+native_before using --baseline-ref7c203525..., preserve allraw/local evidence.
+Commit SHA of this checkpoint is `git log -1 --format=%H -- game-godot/scripts/visual/grounded_strike_posture.gd`.
+
+---
 # October20 interrupted choreography closure — review package complete
 
 Recovered HEAD e1347d57f64264ecc385daab8325914d612bd893. Preserved local

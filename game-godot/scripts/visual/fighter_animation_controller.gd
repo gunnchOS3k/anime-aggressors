@@ -43,6 +43,7 @@ var _grounded_return = preload("res://scripts/visual/grounded_recovery_blend.gd"
 var _support_solver = preload("res://scripts/visual/locomotion_weight_transfer.gd").new()
 var support_knee_corrections := 0
 var support_knee_anchor_error_m := 0.0
+var _strike_posture = preload("res://scripts/visual/grounded_strike_posture.gd").new()
 
 func _correct_support_knees() -> void:
 	if not is_instance_valid(_runtime_fighter) or not _runtime_fighter.is_on_floor() or not is_instance_valid(_skeleton): return
@@ -145,6 +146,7 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 	if state not in [_FighterStates.IDLE,_FighterStates.WALK,_FighterStates.RUN,_FighterStates.DASH]:
 		_weight_transfer.clear()
 	_move_synchronized = state.begins_with("attack") or state.begins_with("special") or state.begins_with("aura_burst") or state.begins_with("throw")
+	if not _move_synchronized: _strike_posture.last.clear()
 	if _player == null or not is_instance_valid(_player):
 		return
 	if _skeleton == null or not is_instance_valid(_skeleton):
@@ -433,6 +435,7 @@ func synchronize_move(frame: int,move: Dictionary) -> void:
 			visual_frame = float(clip.startup_frames+clip.active_frames)+float(frame-actual_start-actual_active)*float(clip.recovery_frames)/float(actual_recovery)
 	_player.seek(visual_frame/60.0,true)
 	_correct_support_knees()
+	_strike_posture.apply(_runtime_fighter,_skeleton,frame,move)
 
 func _load_combat_choreography(model_root: Node3D) -> void:
 	var path := "res://data/animation/combat_choreography/%s_%s.json" % [_fighter_id,_body_variant]
