@@ -1,49 +1,60 @@
-# October20 compact melee posture — verified source checkpoint
+# October20 compact melee posture — native review complete
 
-Recovered local/remote7c2035253dff671c82756b49e49e4a2c4388f5e3, existing
-release/anime-v1-dialogue-and-elemental-performance, draft123 stacked122.
-Owner specifically accepts reviewed Kaia/Juno fighter-impact behavior as
-corrected (melee_posture/OWNER_ACCEPTANCE.json); do not reopen projectile
-termination/clash readability without a new defect. All broader human and
-release gates remain false. No campaign, owner-save, model/root, collision,
-move-value, timing, knockback, audio/VFX authority or asset changes.
+Recovered7c2035253dff671c82756b49e49e4a2c4388f5e3. Verified implementation
+checkpoint4d5bb494d4bb4eccad213ef32797e78cb43db2dd pushed normally to existing
+release/anime-v1-dialogue-and-elemental-performance / draft123, still stacked122.
+This delivery commit adds verified media/manual review hints; gameplay source
+in the AFTER movie is exact4d5bb494. No rewritten history or changed approvals.
 
-NEW: grounded_strike_posture.gd after resolved move sampling compacts forward
-spinal overcommitment for jab1/forwardtilt/heavy across9fighter profiles,18bodies,
-bothfacings. Original hip/yaw/weight transfer, head gaze, hand combat-plane
-projection and limb lengths retained. Arm IK targets are restricted to existing
-anatomical reach and forearm-bounded camera depth. No whole-model translation.
-Hooks remain fully authored: prototype reach constraints varied by phase and
-Kaia hook was unreachable. Preserving the entire arc avoids pose snapping.
-First failed universal-hook fixture is retained, not counted as a current pass.
-This is a partial head/body-overlap improvement, NOT completed physical spacing,
-floor alignment, outer-range fit or professional authored choreography.
+New grounded_strike_posture.gd compacts excessive spinal overcommitment on
+jab1/forwardtilt/heavy across9fighter profiles/18BASEmodels/bothfacings. Hip,
+feet, original yaw/rhythm, hand combat-plane projection and natural bone lengths
+preserved; camera-depth arm targets bounded by actual forearm length. No model
+root translation, collision/frame/damage/knockback/proportion changes. Hooks
+remain authored for their WHOLE arc, avoiding phase-dependent reach corrections.
+This is PARTIAL head interpenetration reduction, NOT completed spacing/floor/
+outer-reach/full choreography. No new particles or projectile changes.
 
-Final constraints_straight:144configurations/864samples PASS;108straight/heavy
-contact corrections,36preserved hooks. All18rig/facing combinations checked;
-hips/feet/root/gameplay parameters unchanged, projected wrist drift<=3.1e-5px,
-arm-length drift<=1.1e-7m. Initial sandboxed constraint run passed geometry but
-had isolated userdata-directory warnings; escalated affected/final runs clean
-of those warnings. Five affected suites all exit0: constraints, GroundedRecovery,
-ContactReactionClock, AuthoredCancel, CombatChoreography. Earlier versions
-retained under affected; final hook policy tested under constraints_straight.
+Focused final constraints:144configurations/864samples PASS,108corrected
+contacts/36preserved hooks; hip/foot drift0, wristprojection<=3.1e-5px, armlength
+<=1.1e-7m. GroundedRecovery36, ContactReactionClock18, AuthoredCancel9 and
+CombatChoreography864 PASS. First universal-hook fixture had4Kaia reach failures;
+retained as failed prototype. The final policy preserves all hooks. Earlier
+sandboxed fixture had userdata warnings; approved isolated runs completed.
 
-Ordinary public_before/public_candidate:741frames,5contacts (shield,lights,
-heavies), deliberatewhiff and neutral return; identical public inputs, complete
-physics/control-state traces, damage and outcomes. At4admitted contacts head
-convex-silhouette overlap reduced22.8–43.9%; hook unchanged. Source7c+workingdiff
-candidate is pre-checkpoint prototype evidence, not mislabeled exact-commit.
-PUBLIC_COMPARISON.json records it. These are two automated controllers, not CPU
-or human acceptance. No saves seeded, positions assigned or combat states forced.
+Native before7c/after4d:742frames60fps each, original audio,521matched barcodes,
+identical741frame input/physics/control/damage traces and5contacts. At4admitted
+contacts head-hull overlap reduced22.8–43.9%, head retreat5.1–5.5gamepx; hook
+unchanged. Full videos under rendered/melee_posture_{before,after}1020.mp4;
+source/hash/contact sheets/comparison in continuous_1020/melee_posture/.
+RawAVIs protected under local_media/. Offline recording34–35sec, renderCPU
+0.40–0.42ms/encode5.32–5.42ms;GPU0unavailable, NOT device60fps acceptance.
+Frame sheets/crops inspected; human normal-speed art/animation approval pending.
 
-NEXT: capture at most one short ordinary before/after native60fps/audio pair,
-using OrdinaryMeleeReview.gd and unique labels. Existing launcher enforces2GiB
-recordingreserve;18GiBheavy-export guard remains. Latestfree7.4GiB. No owned
-Godot/FFmpeg job running. All33worktrees/evidence/backups untouched.
-Command: python3 tools/v1_closure/launch_ordinary_review.py --profile posture_native_after1020 --test-script res://tests/v1_closure/OrdinaryMeleeReview.gd --output artifacts/v1_closure/spectral_feedback/continuous_1020/melee_posture/native_after --movie artifacts/v1_closure/spectral_feedback/local_media/melee_posture_after1020.avi --movie-fps60 --movie-frames850 --driver-arg=--frame-barcode
-Then verify_clash_readability_movie.py --melee-review with exact paths; compare
-native_before using --baseline-ref7c203525..., preserve allraw/local evidence.
-Commit SHA of this checkpoint is `git log -1 --format=%H -- game-godot/scripts/visual/grounded_strike_posture.gd`.
+One bounded480frame activeCPU probe:17contacts/9CPU moves, player0damage/
+opponent13.4989%; activecontrols, nofreeze/forcedmove/result. No new combo/KO
+claim. Manual melee launcher smoke passed both actual model presentation paths:
+tools/v1_closure/play_melee_review.command (activeCPU); optional--local/--male.
+Distinct isolated profiles, no owner Story save writes or progression changes.
+Owner accepts ONLY prior reviewed projectile fighter-impact behavior; scoped
+OWNER_ACCEPTANCE.json. Do not reopen termination/clash without a new defect.
+All broader human/release gates false; existing completed knee/terminal fixes,
+Story13earnednodes/11receipts, all33worktrees/backups/evidence preserved.
+
+Review: continuous_1020/melee_posture/OWNER_REVIEW.md and RESULTS.json.
+CI_4d5bb494.json records exact source checks; current PR CI must be read against
+its actual head. No owned test/capture/FFmpeg process running;6.3GiBavailable at
+last check.18GiBheavy-export guard and2GiBnative reserve respected; no cleanup.
+
+NEXT implementation: coupled support-leg/stage-floor coordinate fit while
+preserving strike projection/root/gameplay, then remaining melee overlap and
+outer-reach/individual acting. Do not repeat whole-model translation, old
+projectile/knee/campaign investigations, or nine-fighter capture campaigns.
+Start by reading existing coordinate evidence in RosterContactRange.gd and
+continuous_1020/fighter_impact; implement only a defensible new rig-level
+correction. Unique Yin/Yang kits, seven earned routes/Convergence, OVA/LAN/
+physical devices remain unfinished independent work, not accepted by this task.
+Exact delivery SHA: git log -1 --format=%H -- ANI03_RESUME_STATE.md.
 
 ---
 # October20 interrupted choreography closure — review package complete

@@ -12,6 +12,8 @@ func run() -> void:
 	for i in range(220): await physics_frame
 	var help := Label.new()
 	help.text = "PROJECTILE DEVELOPMENT REVIEW · " + ("local two-player" if local else "active CPU") + " · " + body + "\nKaia: A/D move · J attack · K special · L shield. Juno: arrows · M attack · comma special · period shield.\nSpecial: shot · Special + Shield: charge · 50 aura: medium · 75 aura: full\nEqual integrity cancels; stronger survives with reduced integrity/damage. Story saves untouched."
+	if "--melee-owner-review" in OS.get_cmdline_user_args():
+		help.text = "MELEE POSTURE REVIEW · " + ("local two-player" if local else "active CPU") + " · " + body + "\nKaia: A/D move · J light · J+K heavy · L shield. Juno: arrows · M light · M+comma heavy · period shield.\nCompare straight/light and heavy torso posture, planted feet and strike reach. Hook arcs remain authored.\nPartial overlap improvement; floor/reach and full choreography still need work. Story saves untouched."
 	help.position = Vector2(30, 110)
 	current_scene.hud.add_child(help)
 	if "--projectile-review-smoke" in OS.get_cmdline_user_args():
