@@ -11,15 +11,20 @@ p.add_argument('--raw', type=Path, required=True)
 p.add_argument('--movie', type=Path, required=True)
 p.add_argument('--fighter-impact-review', action='store_true', help='Verify fighter termination and the bounded physical-interaction sequence')
 p.add_argument('--melee-review', action='store_true', help='Verify the focused ordinary melee movie instead of projectile evidence')
+p.add_argument('--fighter-spacing-review', action='store_true', help='Verify body-spacing observations and actual melee contacts, including failed baseline contact attempts')
 p.add_argument('--verify-existing', action='store_true', help='Resume checks against existing derivatives without replacing any media')
 a = p.parse_args()
 out, raw, movie = a.output.resolve(), a.raw.resolve(), a.movie.resolve()
 def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
-trace_path = out/('ordinary_melee.json' if a.melee_review else 'projectile_public_inputs.json')
+trace_path = out/('ordinary_melee.json' if a.melee_review or a.fighter_spacing_review else 'projectile_public_inputs.json')
 d = json.loads(trace_path.read_text())
 launch = json.loads((out/'launch_manifest.json').read_text())
 assert d['controls_enabled'] == [True, True]
-if a.melee_review:
+if a.fighter_spacing_review:
+    assert d['complete']
+    spacing = json.loads((out/'fighter_spacing.json').read_text())
+    assert spacing['complete'] and spacing['samples']
+elif a.melee_review:
     assert d['complete'] and any(h['result']=='shield' for h in d['hits']) and any(h['result']=='hit' for h in d['hits'])
     assert not any(h['case']=='Kaia deliberate whiff' for h in d['hits'])
 else: assert len(d['history']) >= (1 if a.fighter_impact_review else 2)
@@ -51,8 +56,14 @@ if audio_log.exists():
     previous_volume = {k:float(v) for k,v in re.findall(r'(mean_volume|max_volume):\s*(-?\d+(?:\.\d+)?) dB',audio_log.read_text())}
     assert a.verify_existing and previous_volume == volume
 else: audio_log.write_text(audio)
-events = [] if a.melee_review else d['history'][:2]
-if a.melee_review:
+events = [] if a.melee_review or a.fighter_spacing_review else d['history'][:2]
+if a.fighter_spacing_review:
+    for case in ['grounded close neutral','public dodge crossing','public jump crossing']:
+        samples = [s for s in spacing['samples'] if s['case']==case]
+        sample = samples[-3]
+        events.append({'event_id':'observation:'+case,'physics_frame':sample['physics_frame'],'observation_frame':sample['process_frame'],'result':case+' (observation, not a hit)'})
+    events += [{**h,'result':h['case']+' / '+h['result']} for h in d['hits'] if h['result']=='shield' or h['move']=='heavy_attack' or h['owner']=='throw']
+elif a.melee_review:
     events = [{**h,'result':h['case']+' / '+h['result']} for h in d['hits']]
 if a.fighter_impact_review:
     events = [{**d['fighter_impacts'][i], 'result': ['quick fighter impact','charged fighter impact','breakthrough then fighter impact'][row]} for row,i in enumerate([0,2,3])]
@@ -63,7 +74,7 @@ sheet = Image.new('RGB',(1920,400*len(events)),(16,20,29)); draw = ImageDraw.Dra
 selected = []
 with tempfile.TemporaryDirectory(prefix='aa-clash-frames-') as scratch:
     for row, event in enumerate(events):
-        emission = next(e for e in d['presentation_history'] if e['event_id'].startswith(event['event_id']) and e['kind'] not in [18,19])
+        emission = {'process_frame':event['observation_frame']} if 'observation_frame' in event else next(e for e in d['presentation_history'] if e['event_id'].startswith(event['event_id']) and e['kind'] not in [18,19])
         trace = emission['process_frame'] - 1
         nearest = min(mapping, key=lambda x:abs(x-trace)); center = mapping[nearest]
         for col, delta in enumerate([-2,1,7]):

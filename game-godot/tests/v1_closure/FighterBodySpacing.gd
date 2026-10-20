@@ -10,6 +10,7 @@ var d
 var battle
 var contacts:Array=[]
 var body_filter:=""
+var boundary_only:=false
 func _init()->void:call_deferred("run")
 func check(ok:bool,label:String)->void:
 	if not ok:failures.append(label);push_error(label)
@@ -32,11 +33,12 @@ func run()->void:
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--ordinary-output="):output=arg.get_slice("=",1)
 		if arg.begins_with("--spacing-body="):body_filter=arg.get_slice("=",1)
+		if arg=="--spacing-boundary-only":boundary_only=true
 	var gs=root.get_node("GameState");gs.mode="versus";gs.stage_id="training-grid";gs.p2_is_cpu=false;gs.stocks=9;gs.match_timer_seconds=1800
 	root.get_node("SceneRouter").go("battle");await frames(220)
 	battle=current_scene;p=battle.fighter1;d=battle.fighter2
 	p.hit_resolver.hit_confirmed.connect(func(a,b,info):contacts.append(info.duplicate(true)))
-	for fid in preload("res://scripts/visual/spectral_feedback_renderer.gd").IDS:
+	for fid in ([] if boundary_only else preload("res://scripts/visual/spectral_feedback_renderer.gd").IDS):
 		for body in ([body_filter] if body_filter in ["male","female"] else ["male","female"]):
 			for direction in [1,-1]:
 				release();gs.p1_body_variant=body;gs.p2_body_variant=body
@@ -46,7 +48,7 @@ func run()->void:
 				reset_pair();p.position=Vector2(-80*direction,240);d.position=Vector2(80*direction,240)
 				battle._battle_sim.body_spacing.previous_order.clear()
 				await frames(35)
-				var dimensions:Vector2=rect(p).size;var hurt:Vector2=p.get_node("Hurtbox/HurtShape").shape.size
+				var dimensions:Vector2=p.get_node("CollisionShape2D").shape.size;var hurt:Vector2=p.get_node("Hurtbox/HurtShape").shape.size
 				var floor_y:Vector2=Vector2(p.position.y,d.position.y);var manifest:=JSON.stringify(p.move_manifest)
 				Input.action_press("p1_"+("right" if direction==1 else "left"),.55);Input.action_press("p2_"+("left" if direction==1 else "right"),.55)
 				var gaps:Array=[]
@@ -59,7 +61,7 @@ func run()->void:
 				release();await frames(12)
 				check(gaps.max()-gaps.min()<.001 and absf(gaps.max())<.001,fid+body+str(direction)+":stable_exact_shape_contact")
 				check(absf(p.position.y-floor_y.x)<.001 and absf(d.position.y-floor_y.y)<.001,fid+":no_vertical_displacement")
-				check(rect(p).size==dimensions and p.get_node("Hurtbox/HurtShape").shape.size==hurt and JSON.stringify(p.move_manifest)==manifest,fid+":geometry_and_move_values_preserved")
+				check(p.get_node("CollisionShape2D").shape.size==dimensions and p.get_node("Hurtbox/HurtShape").shape.size==hurt and JSON.stringify(p.move_manifest)==manifest,fid+":geometry_and_move_values_preserved")
 				check(p.collision_layer==2 and p.collision_mask==1,fid+":stage_only_physics_mask")
 				contacts.clear();Input.action_press("p2_shield");await frames(3);Input.action_press("p1_attack");await frames(1);Input.action_release("p1_attack");await frames(35)
 				check(contacts.size()==1 and contacts[0].contact_result in ["shield","armor"],fid+body+str(direction)+":one_real_defensive_contact")
@@ -95,8 +97,10 @@ func boundary_and_exceptions()->void:
 	check(d.position.x<=edge+.0001 and gap(p,d)>=-.001,"push_does_not_force_stage_edge_exit")
 	var wall:=StaticBody2D.new();wall.collision_layer=1;wall.collision_mask=2
 	var cs:=CollisionShape2D.new();var shape:=RectangleShape2D.new();shape.size=Vector2(20,120);cs.shape=shape;wall.add_child(cs);battle.stage_root.add_child(wall);wall.position=Vector2(160,rect(d).end.y-60)
-	await frames(1);reset_pair();d.position.x=150-rect(d).size.x*.5;p.position.x=d.position.x-10;solver=Solver.new()
+	await frames(3);reset_pair();d.position.x=150-rect(d).size.x*.5;p.position.x=d.position.x-10;solver=Solver.new()
+	var safe:float=solver.allowed_motion(d,4)
 	for i in range(12):solver.resolve([d,p])
+	rows.append({"case":"wall","wall_global":wall.global_position,"defender_bounds":rect(d),"gap":gap(p,d),"allowed_motion_from_wall":safe,"eligible":[solver.eligible(p),solver.eligible(d)],"floor_ends":[rect(p).end.y,rect(d).end.y]})
 	check(rect(d).end.x<=150+.001 and gap(p,d)>=-.001,"stage_wall_clips_push")
 	wall.queue_free();reset_pair();await frames(10)
 

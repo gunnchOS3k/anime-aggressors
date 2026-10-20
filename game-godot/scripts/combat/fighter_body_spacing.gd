@@ -41,7 +41,9 @@ func allowed_motion(actor,dx:float)->float:
 	if absf(dx)<.00001:return 0.0
 	var collision:=KinematicCollision2D.new()
 	if actor.test_move(actor.global_transform,Vector2(dx,0),collision,actor.safe_margin):
-		dx=signf(dx)*minf(absf(dx),absf(collision.get_travel().x))
+		# Recovery can report travel opposite to the requested push. Its
+		# magnitude is not permission to advance into a wall on the next pass.
+		dx=signf(dx)*clampf(collision.get_travel().x*signf(dx),0,absf(dx))
 	# A push may not force a grounded center off its supporting stage surface.
 	# This does not restrict the player's own movement/launch/dodge off an edge.
 	if supported(actor,dx):return dx

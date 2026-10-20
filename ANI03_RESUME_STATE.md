@@ -1,3 +1,22 @@
+# Body-spacing checkpoint follow-up — signed stage sweeps
+
+Source ad394fd2ff222e60727f0c929a30eb7a45c381f9 pushed to existing draft123.
+Additional narrow correction honors SIGNED test_move travel: opposite-direction
+stage recovery cannot grant forward push through a wall. Boundary_signed PASS,
+including actual six-actor PUPPET_IMBALANCE setup with5activeCPUs, no receipts.
+First roster harness failures were setup/float comparisons (configure does not
+reposition/reset existing actors; world-AABB subtraction is not exact local
+shape-size authority). Fixtures now use explicit staged reset and exact local
+shapes; ordinary public review never stages transforms. Failed runs retained.
+
+affected/RESULTS.json is the serial current roster/throw/recovery/footwork/
+reaction/cancel/save suite ledger. Male and female passes each cover9fighters
+and2approach directions. Inspect final statuses; do not assume background jobs
+passed. Session18400 owns only this serial suite runner. No native capture yet.
+Next checkpoint then native beforeb264/aftercurrent60fps with FighterSpacingReview,
+verification --fighter-spacing-review, unique labels, existing storage guard.
+
+---
 # October20 fighter body spacing — source validation in progress
 
 Recovered clean local/remote b264ee5578f9ea7ffe7ba6d830608e38c017e252,
