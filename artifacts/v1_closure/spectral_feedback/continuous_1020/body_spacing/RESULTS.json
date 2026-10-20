@@ -99,7 +99,26 @@
       "windows-pilot0-windows-2025"
     ]
   },
-  "native_video": "PENDING owner-opened prior review process PID56232/sourceb264 prevents new Godot capture under existing guard. Never terminate owner game or relabel historical footage.",
+  "native_video": {
+    "status": "VERIFIED_NATIVE60_AUDIO_FRAME_SOURCE",
+    "source_ids": {
+      "before": "b264ee5578f9ea7ffe7ba6d830608e38c017e252",
+      "after": "e42655d5657ecbf1a4a8750e7c9be89ea35d29db"
+    },
+    "movies": {
+      "before": "artifacts/v1_closure/spectral_feedback/rendered/body_spacing_before1020.mp4",
+      "after": "artifacts/v1_closure/spectral_feedback/rendered/body_spacing_after1020.mp4"
+    },
+    "frames_per_movie": 868,
+    "fps": 60,
+    "verified_gameplay_frame_codes_per_movie": 647,
+    "identical_public_inputs": true,
+    "comparison": "NATIVE_COMPARISON.json",
+    "contact_crops": "NATIVE_COMPARISON.png",
+    "owner_closed_previous_game": true,
+    "human_visual_approved": false,
+    "runtime_vs_recording": "868fixed60fps movie frames/14.467s each, recorded40\u201341s offline. CPUrender0.44ms/frame, GPU0unavailable; not sustained-deviceFPS evidence."
+  },
   "owner_play": "tools/v1_closure/play_melee_review.command, optional --local / --male; quit old review first to load new source; separate isolated profile, Story saves untouched",
   "remaining": "model/boot-floor fit, projected head/hair/limb contact and outer reach, full individual choreography/human art acceptance",
   "gates": {
@@ -110,5 +129,12 @@
     "V1_ANIME_HUMAN_PASS": false,
     "FINAL_RELEASE_AUTHORIZED": false
   },
-  "preservation": "33worktrees/backups/evidence/owner saves untouched; accepted projectile, knee-plane, torso and terminal acting source retained; no heavy export/cleanup/merge/tag/deploy/release"
+  "preservation": "33worktrees/backups/evidence/owner saves untouched; accepted projectile, knee-plane, torso and terminal acting source retained; no heavy export/cleanup/merge/tag/deploy/release",
+  "native_source_ci": {
+    "source_sha": "e42655d5657ecbf1a4a8750e7c9be89ea35d29db",
+    "passed": 6,
+    "pending": [
+      "windows-pilot0-windows-2025"
+    ]
+  }
 }

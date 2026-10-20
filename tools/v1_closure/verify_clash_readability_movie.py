@@ -62,7 +62,7 @@ if a.fighter_spacing_review:
         samples = [s for s in spacing['samples'] if s['case']==case]
         sample = samples[-3]
         events.append({'event_id':'observation:'+case,'physics_frame':sample['physics_frame'],'observation_frame':sample['process_frame'],'result':case+' (observation, not a hit)'})
-    events += [{**h,'result':h['case']+' / '+h['result']} for h in d['hits'] if h['result']=='shield' or h['move']=='heavy_attack' or h['owner']=='throw']
+    events += [{**h,'result':h['case']+' / '+h['result']} for h in d['hits']]
 elif a.melee_review:
     events = [{**h,'result':h['case']+' / '+h['result']} for h in d['hits']]
 if a.fighter_impact_review:
@@ -81,7 +81,8 @@ with tempfile.TemporaryDirectory(prefix='aa-clash-frames-') as scratch:
             frame = max(0,min(len(pixels)-1,center+delta)); png = Path(scratch)/f'{row}_{col}.png'
             subprocess.run(['ffmpeg','-v','error','-n','-i',str(movie),'-vf',f'select=eq(n\\,{frame}),scale=640:360','-frames:v','1',str(png)], check=True)
             x,y = col*640,row*400; sheet.paste(Image.open(png),(x,y))
-            draw.text((x+8,y+364),f"{event['result']} | native {frame} | contact physics {event['physics_frame']}",fill='white')
+            frame_label = 'physics' if a.fighter_spacing_review else 'contact physics'
+            draw.text((x+8,y+364),f"{event['result']} | native {frame} | {frame_label} {event['physics_frame']}",fill='white')
             draw.text((x+8,y+382),launch['runtime_source_sha'][:12]+' | ordinary two-player inputs / native audio',fill='white')
             selected.append({'event_id':event['event_id'],'native_frame':frame,'physics_frame':event['physics_frame'],'emission_process_frame':emission['process_frame']})
 target = out/'CONTACT_SHEET.png'

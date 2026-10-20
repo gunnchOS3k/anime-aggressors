@@ -1,3 +1,40 @@
+# October20 body-spacing native review — complete and verified
+
+Owner closed the prior b264 review game and explicitly requested comparison.
+Both bounded native captures completed serially under existing storage/process
+guards. BEFORE b264ee5578f9ea7ffe7ba6d830608e38c017e252; AFTER exact
+ e42655d5657ecbf1a4a8750e7c9be89ea35d29db (same gameplay code380de325).
+868frames/14.467s60fps each, originalaudio,647matched framecodes each;31public
+input transitions identical. Native neutral roots settled12.43px before,
+32.40px after. Six corrected contacts including shield/hook/lights/heavies/one
+throw; baselineone throw. Grounddodge and jump both switch sides. No damage,
+positions, invulnerability, frozen targets or results seeded. Two automated
+ordinary local controllers, not CPU or human acceptance footage.
+
+Videos: rendered/body_spacing_before1020.mp4 and body_spacing_after1020.mp4.
+Comparison/traces/source/audio/stream/hash checks: continuous_1020/body_spacing/
+NATIVE_COMPARISON.json, NATIVE_COMPARISON.png and native_{before,after}/.
+RawAVIs protected local_media/body_spacing_{before,after}1020.avi. Recording
+40–41s offline, CPUrender0.44ms/encode5.48–5.61ms, GPU0unavailable; encoded60fps
+is NOT sustained physical-device acceptance. Matched frame crops/sheets inspected,
+projected heads/hair still overlap; human art/game-feel approval remains pending.
+
+No new gameplay changes or rerun of the8passing affected suites. Auxiliary
+movie verifier now includes ALL actual contacts (including direct_throw) and
+labels non-contact observations accurately. Sourcee426 CI6passed/Windows2025
+pending at snapshot; future head must be checked separately. All owned media
+jobs have completed; owner-opened game was never terminated by the agent.
+No merge/deploy/tag/release/force/reset or cleanup;33worktrees/saves/protected
+evidence retained. Same18GiBheavy/2GiBnative guard. Broad human gates false.
+
+Owner: play_melee_review.command, optional--local/--male; OWNER_REVIEW.md has
+normal-speed media and controls. NEXT remains boot/floor/projected contact and
+full individual choreography, not another projectile or body-spacing rewrite
+without a new defect. Original Story/Convergence/OVA/LAN/device requirements
+remain independent unfinished work. Delivery SHA resolves via git log -1
+--format=%H -- ANI03_RESUME_STATE.md. No required capture work remains.
+
+---
 # October20 fighter body spacing — engineering verified, native review blocked
 
 Recovered b264ee5578f9ea7ffe7ba6d830608e38c017e252. Source checkpoints pushed:

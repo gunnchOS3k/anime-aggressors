@@ -1,7 +1,7 @@
 # Fighter body spacing — owner review
 
 Quit the earlier review game, then run `tools/v1_closure/play_melee_review.command`.
-The new source is380de325d654; an already-open b264ee55 game keeps its old scripts.
+The native AFTER source is e42655d5657e (body code380de325d654). Relaunch to load new scripts.
 Default: Kaia versus active Juno CPU. Optional `--local` for two players and
 `--male` for both existing male models. The separate profile preserves owner
 Story saves and all earned campaign progress.
@@ -40,11 +40,26 @@ authored-cancel and separate save/restart/watch checks pass. Bounded activeCPU
 melee:340frames,9contacts/4CPU moves, no frozen opponent or forced results.
 See RESULTS.json, PUBLIC_COMPARISON.json and affected/RESULTS.json.
 
-NEW native before/after videos remain pending: the recording guard found the
-owner-opened older review game (PID56232). It has been preserved and closure
-requested. No historical movie is relabeled as current collision evidence.
-After that window closes, run the exact bounded capture steps in ANI03_RESUME_STATE.md.
-Diagnostic root/pushbox traces are saved; no permanent debug geometry is shown.
+Native comparison is now complete after the owner closed the older game:
+- BEFORE b264ee5578f9: `artifacts/v1_closure/spectral_feedback/rendered/body_spacing_before1020.mp4`
+- AFTER e42655d5657e: `artifacts/v1_closure/spectral_feedback/rendered/body_spacing_after1020.mp4`
+- `NATIVE_COMPARISON.png` gives unretouched2x crops at matched physics frames;
+  full before/contact/after sheets are in `native_before/` and `native_after/`.
+
+Each full-stage clip is868frames/14.467seconds at60fps, with original game audio
+and647matched gameplay frame codes. All31public-input transitions are identical.
+Native traces confirm baseline settled12.43px versus32.40px corrected spacing,
+with six actual corrected contacts (shield/hook/light/heavies/singlethrow),
+compared with one baseline throw contact. Dodge and jump cross sides. No target
+was frozen or state/damage/outcome seeded; both local controllers remain active.
+These are automated public controllers, not CPU footage or human acceptance.
+
+RawAVIs remain protected local-only under `local_media/body_spacing_*1020.avi`.
+Source/frame/audio hashes and diagnostic root/pushbox traces are beside each
+movie's NATIVE_MOVIE.json. The2x crops supplement the full-stage normal-speed
+movies, without changing the game camera or models. Owner development review
+only; original project assets/audio, no distribution/release authorization.
+Offline recording took40–41seconds; fixed60fps output is not deviceFPS proof.
 
 Physical root stacking is corrected for eligible grounded interactions. Boot/
 stage-floor fit, projected head/hair/limb overlap, outer reach and full authored
