@@ -11,8 +11,10 @@ var _solver=preload("res://scripts/visual/locomotion_weight_transfer.gd").new()
 func register(name:String,clip:Dictionary)->void:
 	if clip.has("transition_kind"):clips[name]=clip
 func enabled()->bool:return not clips.is_empty()
-func begin(action:String)->void:
-	kind=action;elapsed=0;support_error_m=0;source_action=""
+func begin(action:String,facing:int=1)->void:
+	kind=action;elapsed=0;support_error_m=0
+	var name:="transition_"+action+("_left" if facing==-1 else "")
+	source_action=str(clips.get(name,{}).get("source_action",""))
 func clear()->void:kind="";elapsed=0;support_error_m=0;source_action=""
 func vector(a:Array)->Vector3:return Vector3(a[0],a[1],a[2])
 func rotation(a:Array)->Quaternion:return Quaternion(a[0],a[1],a[2],a[3]).normalized()

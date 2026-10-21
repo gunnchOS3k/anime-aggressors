@@ -6,6 +6,7 @@ var output:=""
 var failures:Array=[]
 var rows:Array=[]
 var references:Dictionary={}
+var expect_authored:=false
 func _init()->void:call_deferred("run")
 func check(ok:bool,label:String)->void:
 	if not ok:failures.append(label);push_error(label)
@@ -30,6 +31,7 @@ func run()->void:
 	await process_frame
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--ordinary-output="):output=arg.get_slice("=",1)
+		if arg=="--expect-authored-transitions":expect_authored=true
 	var gs=root.get_node("GameState");gs.mode="versus";gs.stage_id="training-grid";gs.p2_is_cpu=false;gs.stocks=9
 	root.get_node("SceneRouter").go("battle")
 	for i in range(180):await physics_frame
@@ -48,7 +50,7 @@ func run()->void:
 					var trace:Array=[observe(p,-1)]
 					match kind:
 						"start":Input.action_press(direction,.45)
-						"accelerate":Input.action_press(direction,.8)
+						"accelerate":Input.action_press(direction,.7)
 						"dash":Input.action_press(direction,1.0)
 						"stop","guard":Input.action_release(direction)
 						"pivot","reverse":
@@ -63,6 +65,13 @@ func run()->void:
 						if kind=="guard" and frame==3:Input.action_release("p1_attack")
 					check(p.is_on_floor(),fid+body+kind+str(facing)+":grounded")
 					for observed in trace:check(observed.has("soles") and observed.has("transition"),fid+body+kind+":complete_trace")
+					if expect_authored:
+						var found:=false
+						for observed in trace:
+							if observed.get("transition",{}).get("kind","")==kind:
+								found=true
+								check(str(observed.transition.get("source_action","")).begins_with("ANI06_WIP_"),fid+body+kind+":saved_source_action")
+						check(found,fid+body+str(facing)+kind+":runtime_transition_observed")
 					rows.append({"fighter":fid,"body":body,"initial_facing":facing,"kind":kind,"trace":trace})
 	release()
 	var f=FileAccess.open(output.path_join("authored_transitions.json"),FileAccess.WRITE)

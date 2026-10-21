@@ -1,3 +1,16 @@
+# ANI-06 — source freeze for final affected validation
+
+Nine transition kinds now observed from actual public inputs on72body/facing
+cases (after_verified PASS, noSCRIPTERROR). Finalguard firstcallback metadata
+fixedatbegin ratherthanweakeningtest. Walk-to-run probe nowuses.7inputstrength
+(RUN), not.8(DASH); matching before_final uses old292fd24d scriptsoverlay with
+unchanged old32clipdata plusunused18newresources, not a fullhistoricalmodelbuild.
+Alloldperformanceclips byte-equivalent semantically; other7fighterdata preserved.
+Source checkpoint below records art/phase details. Next run serial final affected
+suites on this committed source, bothownerlaunchsmokes, finalmeasurements/report.
+No ownedtest/Blender process running. No native capture/heavy export. Keep guards.
+
+---
 # ANI-06 — authored transition source checkpoint (in progress)
 
 Existing worktree/branch unchanged, entry292fd24d. All33worktrees/owner saves kept.

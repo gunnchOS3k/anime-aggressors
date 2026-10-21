@@ -187,9 +187,9 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 	if (_player.current_animation != play_key and _player.current_animation != clip) or (reacting and _reaction_fresh):
 		if _authored_transition.enabled():
 			if action_state and _motion_moving and move_id in ["jab_1","forward_tilt","dash_attack","heavy_attack"]:
-				_authored_transition.begin("move_heavy" if move_id=="heavy_attack" else "move_light")
+				_authored_transition.begin("move_heavy" if move_id=="heavy_attack" else "move_light",_visual_facing)
 			elif state==_FighterStates.IDLE and not _active_clip.is_empty() and _move_synchronized==false and not _motion_moving:
-				_authored_transition.begin("guard")
+				_authored_transition.begin("guard",_visual_facing)
 			elif not neutral_state and not action_state:
 				_authored_transition.clear()
 		# A finished non-looping clip clears current_animation but leaves its
@@ -548,7 +548,7 @@ func synchronize_locomotion(world_position: Vector2, model, grounded: bool) -> v
 	elif commanded and strength>.55 and _previous_motion_strength<=.55:
 		transition="accelerate"
 	if not transition.is_empty():
-		if _authored_transition.enabled():_weight_transfer.clear();_authored_transition.begin(transition)
+		if _authored_transition.enabled():_weight_transfer.clear();_authored_transition.begin(transition,_visual_facing)
 		elif transition=="reverse":_weight_transfer.begin("pivot")
 		elif transition in ["start","dash","pivot"]:_weight_transfer.begin("start")
 		elif transition=="stop":_weight_transfer.begin("stop")
