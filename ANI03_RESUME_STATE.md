@@ -1,3 +1,21 @@
+# Spectrum Ascended lifecycle: all28 configurations pass
+
+Shared correction sourcec76f284b069fd966fe3e1317bb20d49a6a531dfb pushed.
+Seven fighters x both bodies x both facings completed exact BASE→AWAKENED_BUILD→
+ASCENDED with actual charge/chord/tilt and opponent jab inputs. Completion cost
+25 once plus at most one idle tick; literal override composition unchanged.
+Real damage cancels pending ownership; no late transform; completed and pending
+forms clear at reset/stock-loss entry. Direct stock/reset fixtures are NOT an
+earned competitive KO. Initial timed matrix ended via Results; preserved and
+replaced by existing stock_untimed fixture. All28 pass; headless, not visual.
+artifacts/v1_closure/ascended_lifecycle/ROSTER_VERIFICATION.json. No test running.
+Next: distinct Yin/Yang cosmic Surge/Ascendant candidate ladders, same pipeline,
+finite original absorption/panel contracts and 24 BASE IDs preserved; no Story
+Gray/Essence/Puppet inheritance. Party items/ultimates and controllers/Perfect
+Guard/elemental throw presentation remain unfinished. Archive unchanged; no deletion.
+Internal free9.69GiB; no heavy capture/export. All human gates false.
+
+---
 # Ascended lifecycle repair — bounded verification checkpoint
 
 Parent source7c40462e; inspect current HEAD for correction commit. Existing generic

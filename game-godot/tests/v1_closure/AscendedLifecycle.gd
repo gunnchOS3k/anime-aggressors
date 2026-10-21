@@ -48,6 +48,9 @@ func _run() -> void:
 		if arg=="--single": single=true
 	var gs=root.get_node("GameState")
 	gs.mode="versus"; gs.stage_id="training-grid"; gs.p1_fighter_id="ember-vale"; gs.p2_fighter_id="juno-spark"; gs.p2_is_cpu=false; gs.stocks=9
+	# One scene hosts many reset lifecycle fixtures; use the existing untimed
+	# stock rules so a real match timer cannot route this test to Results midway.
+	gs.match_timer_seconds=0; gs.match_type="stock_untimed"
 	root.get_node("SceneRouter").go("battle"); await frames(220)
 	var p=current_scene.fighter1; var d=current_scene.fighter2
 	var fighters: Array=SPECTRUM.slice(0,1) if single else SPECTRUM
@@ -106,9 +109,12 @@ func _run() -> void:
 				p.lose_stock(); await frames(100)
 				check(p.get_current_form_id()==ladder[0] and not p._transform_sequence_active,prefix+":stock_during_startup_cleanup")
 				rows.append({"fighter":fid,"body":body,"facing":direction,"chain":chain,"aura_spent_at_completion":costs,"interrupt_damage":damage,"post_hit_form":post_hit_form,"post_stock_form":p.get_current_form_id(),"scope":"public input, reconfigured idle P2; direct respawn/stock-loss lifecycle fixtures, not competitive stock loss"})
+				write_result(false)
 	release_inputs()
-	if output!="":
-		var f=FileAccess.open(output.path_join("ascended_lifecycle.json"),FileAccess.WRITE)
-		f.store_string(JSON.stringify({"PASS":failures.is_empty(),"rows":rows,"failures":failures,"human_approved":false},"\t")); f.close()
+	write_result(true)
 	print("ASCENDED_LIFECYCLE rows=",rows.size()," failures=",failures.size())
 	quit(0 if failures.is_empty() else 1)
+func write_result(complete: bool) -> void:
+	if output!="":
+		var f=FileAccess.open(output.path_join("ascended_lifecycle.json"),FileAccess.WRITE)
+		f.store_string(JSON.stringify({"PASS":complete and failures.is_empty(),"complete":complete,"rows":rows,"failures":failures,"human_approved":false},"\t")); f.close()
