@@ -26,12 +26,12 @@ For isolated cosmic review: python3 tools/v1_closure/play_cosmic_review.py yin
 --opponent juno-spark --body female (or yang / male / --local). No regular owner
 save or earned-unlock modification. Review launchers are source review, not exports.
 
-28 spectrum +8 cosmic public lifecycle configurations pass before final integration.
+28 spectrum +8 cosmic public lifecycle configurations pass at committed source09e7be63.
 They are reset fixtures with idle P2; explicit reset/stock-loss calls are not earned
 KOs. Existing native movies predate this source. Current native visual, physical
 input-device, human art/gameplay/balance approval remain pending. Storage blocks
 new captures and binary art production; no new movies/GLBs/Blend files generated.
-Final exact-source 81-pair numeric checks and affected regressions are next.
+Final exact-source81-pair numeric checks and all10 affected suites PASS. See VALIDATION_REPORT.json and ROSTER_MATRIX.md. Six CI checks passed; Windows2025 remains pending in CI_09e7be63.json.
 
 Remaining authorized source work: Prism Heart, Puppet Seal, nine unique ultimates,
 elemental grab/throw presentation and controller/PartyLink/Perfect Guard foundations.

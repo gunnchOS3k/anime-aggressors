@@ -91,3 +91,13 @@ acceptance are not completed by this foundation.
 `VISUAL_VERIFICATION_PENDING=true`. No new native footage or owner visual approval
 is claimed. Existing source-bound movies retain their original limitations and
 restrictions. No Prism Heart, Puppet Seal or other ANI-07 implementation.
+
+## Follow-on playable advancement candidate
+
+Source09e7be63 adds distinct Yin/Yang cosmic Surge/Ascendant ladders in the existing
+transform pipeline; these are separate from ordinary Story progression and bosses.
+All nine have public-input two-stage lifecycle coverage across both bodies/facings.
+Resolved form-melee scaling occurs once; BASE/projectile behavior remains unchanged.
+New form values are tuning candidates. No additional rig binaries or final form
+acting are claimed. See artifacts/v1_closure/ascended_lifecycle/OWNER_REVIEW.md.
+Original external audit and P1 source-bound evidence remain historical and unchanged.

@@ -1,3 +1,48 @@
+# Current delivery — verified archival and nine-fighter advancement candidates
+
+Runtime/source09e7be63334831b75fa796672192635f45ea79b4 PUSHED to existing draft123
+stacked on122. Inspect HEAD/remote for subsequent report-only delivery SHA.
+All33 worktrees, owner saves, old captures, original audit and failed fixtures kept.
+No owned Godot/Blender/archive/export process remains; no source local-only.
+
+Final10/10 suites PASS at09e7: lifecycle36 (7spectrum28 +2cosmic8), ordered
+matchups81 (45hit/36shield, numerical once-only form melee), domains90,
+throw39, charge9, cosmic public8, Story scene8, guard72, projectile impact63.
+Existing teardown resource warnings retained; no script/shader errors. Evidence:
+artifacts/v1_closure/ascended_lifecycle/VALIDATION_REPORT.json, final/,ROSTER_MATRIX.md.
+Six CI checks PASS at09e7; Windows2025 pending in CI_09e7be63.json. Do not assume
+later report-head CI is complete. No native/device/human acceptance claimed.
+
+Implemented: interruption/stock/respawn/reconfigure/match-end ownership cleanup;
+original7 exact two-stage Ascended activation; distinct Yin/Yang cosmic ladders
+with inward/outward control and recovery drawbacks. Values TUNING_CANDIDATE.
+Finite absorption/panel and216BASE moves preserved. Story/cosmic domains separate.
+Literal form-melee duplicate scaling reproduced18.845vs14.5 and corrected only
+for resolved form overlays. BASE/projectile paths preserved.154 original protected
+identities unchanged,18Blends/64GLBs unchanged; no final binary art production.
+
+Archive:21 historical raw movies2072430414bytes copied and SHA256/size verified;
+285521420bytes existing copies reverified without duplicate copy. All originals
+retained. APFS UUID9C4EB36E-2864-42F8-BD0B-A4F67EBC7852. Receipts/review in
+artifacts/v1_closure/archive_support/. Only duplicate installer(5) is nominated
+for separate removal approval (279493837bytes,~.2603GiB). Protected movies remain
+protected. Actual reclaimed0. Latest Data9.04083GiB, margin-8.95917GiB BEFORE
+allocations; remeasure. No heavy recording/export/Blender binary work below guard.
+
+Next unblocked implementation: isolate BASE aura/identity resolution comparison
+using public melee fixtures across9; do not silently change accepted BASE defaults.
+Then continue authorized all-nine Party item/ultimate execution and elemental
+throw/controller/Perfect Guard work. Those features remain NOT IMPLEMENTED,
+not falsely blocked by storage. Final acting/rig baking/native review,7earned
+Story routes/Convergence, fullOVA,realLAN and physical-device acceptance remain open.
+
+Exact recovery command: git status --short; git rev-parse HEAD; read this file and
+artifacts/v1_closure/ascended_lifecycle/VALIDATION_REPORT.json. Do not rerun the10
+passing source suites without a changed dependency. Existing isolated playable
+launchers retained; owner saves untouched. All human/roster/release gates FALSE.
+No merge, tag, deployment or publication.
+
+---
 # Nine-fighter advancement candidate checkpoint
 
 Inspect HEAD for source commit. Seven spectrum lifecycle28 cases and distinct
