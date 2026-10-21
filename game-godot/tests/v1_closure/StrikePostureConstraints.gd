@@ -57,7 +57,12 @@ func run()->void:
 						if frame==start:
 							# Hook arcs are deliberately preserved throughout this pass.
 							var preserved_hook:bool=mid=="jab_2" and evidence.get("reason","")=="authored_hook_preserved"
-							check(evidence.get("admitted",false) or preserved_hook,label+":reachable_or_preserved_hook")
+							var authored_key:String=mid+("_left" if facing==-1 else "")
+							var source_owned:bool=c._choreography_timing.get(authored_key,{}).get("posture_authority","")=="source_clip"
+							if source_owned:
+								check(evidence.get("reason","")=="directed_source_clip" and not evidence.get("admitted",true),label+":authored_source_owns_body")
+								for name in adjusted:check(adjusted[name].distance_to(original[name])<.00001,label+":source_pose_unmodified:"+name)
+							else:check(evidence.get("admitted",false) or preserved_hook,label+":reachable_or_preserved_hook")
 							if preserved_hook:check(adjusted.Head.distance_to(original.Head)<.00001,label+":unreachable_hook_unchanged")
 							c.presentation_frozen=true;c._process(.1)
 							check(points(sk).Head.distance_to(adjusted.Head)<.00001,label+":hitstop_pose_held")

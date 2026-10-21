@@ -435,7 +435,12 @@ func synchronize_move(frame: int,move: Dictionary) -> void:
 			visual_frame = float(clip.startup_frames+clip.active_frames)+float(frame-actual_start-actual_active)*float(clip.recovery_frames)/float(actual_recovery)
 	_player.seek(visual_frame/60.0,true)
 	_correct_support_knees()
-	_strike_posture.apply(_runtime_fighter,_skeleton,frame,move)
+	# Directed clips own their complete keyed body chain. Applying the older
+	# projection-preserving posture pass would overwrite that authored acting.
+	if _choreography_timing.get(mid,{}).get("posture_authority","") == "source_clip":
+		_strike_posture.last = {"admitted":false,"reason":"directed_source_clip"}
+	else:
+		_strike_posture.apply(_runtime_fighter,_skeleton,frame,move)
 
 func _load_combat_choreography(model_root: Node3D) -> void:
 	var path := "res://data/animation/combat_choreography/%s_%s.json" % [_fighter_id,_body_variant]
@@ -457,7 +462,9 @@ func _load_combat_choreography(model_root: Node3D) -> void:
 			var authored: Dictionary=performance.clips[clip]
 			if authored.has("startup_frames"):_choreography_timing[clip]=_timing_metadata(authored)
 			if library.has_animation(clip):library.remove_animation(clip)
-			library.add_animation(clip,_animation_from_data(authored));_loaded_clips[clip]=true
+			var animation := _animation_from_data(authored)
+			animation.loop_mode = Animation.LOOP_LINEAR if authored.get("loop",false) else Animation.LOOP_NONE
+			library.add_animation(clip,animation);_loaded_clips[clip]=true
 	for mid in _MoveResolver.move_id_to_clip_table():
 		var alias: String = str(_MoveResolver.move_id_to_clip_table()[mid])
 		if library.has_animation(mid) and not library.has_animation(alias): library.add_animation(alias,library.get_animation(mid)); _loaded_clips[alias]=true

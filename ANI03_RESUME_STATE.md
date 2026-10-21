@@ -1,3 +1,39 @@
+# ANI-05 directed source action checkpoint — IN PROGRESS
+
+Source parent03aa3357b065fcb67d3ee83c8f8c8779c9a30e2d; same existing branch/draft123
+stacked122. All33worktrees preserved. Four original Kaia/Juno male/female
+candidate.blend files now contain17new ANI05_WIP actions and non-deforming
+SoleContact markers. Geometry/weights/rest bones and147original actions perfile
+hash-protected. GLBs unchanged. Source scores +rig-specific baked JSON update
+actual runtime stance/shield/jump/land/charge,light/heavy/side/projectile and
+reaction keys. Hooks,grabs/throws,gait,KO andremainingroster acting stillpending.
+Newbodychains bypass only oldruntimepostureoverride; alllegacy clips retainit.
+No new runtimeIK,scale,roottranslation,frame/balance/pushbox changes.
+
+All4Blender evaluated source/action matrices PASS against runtimekeys. Initial
+parent-dependency conversion failure retained/fixed; no source human approval.
+DirectedSourceAssets pilotPASS but isolateduserdata write denied in sandbox;
+repeat correctpermissions before qualifying runtime/regression validation.
+No Godot/Blender process currentlyowned/running. Next execute serial focused
+DirectedSourceAssets,MeleeGuardContinuity,StrikePostureConstraints,SupportKneePlane,
+GroundedRecovery,ContactReactionClock,CombatChoreography,ThrowOwnership,Charge,
+AuthoredCancel,CosmicKits public-only. Stoponfailure; preserveoutputs/newlabels.
+Then one bounded Kaia/Juno activeCPU input trace, HEAD/diffsourcebound; NO movie.
+
+Evidence continuous_1021/directed_acting/SOURCE_CHECKPOINT.json and logs.
+No recordings/exports. Native VISUAL_VERIFICATION_PENDING; source sole plant is
+not native stage-floor closure. Existing35–38pxfloor,12.5–17.6pxouterreach,
+head/hair overlap remainopenpendingactualnewassetvisualreview. Originalmedia
+retained underoldsource,neverpresentasnew. CurrentfreeGiB 14.267 below18+allocationguard.
+Boundedgrowthcheck found~3.1MBpriornewtestevidence/15KBreview manifests,no recent
+projectcache growth. Newsourceactions add~20MB total; remainder of external disk
+free-space decline is unattributed, no broadscan/deletion authorized/performed.
+
+After focusedpass,verify saved Blenderfileswith --verify-only,finish ownerreview/
+sourcehashmanifest,commit/push checkpoints. Allhuman/visual/balance/release gates
+false. Campaigns/Convergence,finalOVA+6variants,LAN/devices remainunfinished.
+
+---
 # October 21 — ANI-04 cosmic kits and authored-art checkpoint
 
 Worktree: `/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure`
