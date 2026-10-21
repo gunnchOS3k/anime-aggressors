@@ -120,6 +120,8 @@ def make_clip(r,fid,move,facing=1):
  elif mid in ['heavy_attack','aura_burst']:technique='hammer' if fid in ['ember-vale','rook-ironside','yin'] else 'charged_palm'
  elif move.get('move_type')=='projectile':technique='projectile'
  elif move.get('move_type') in ['throw','grab']:technique='throw_'+move.get('direction',mid.removeprefix('throw_')) if mid.startswith('throw_') else 'grab'
+ if move.get('cosmic_counter'):technique='absorption_guard'
+ elif move.get('projectile',{}).get('type')=='definition_panel':technique='construct_panel'
  side=side if facing==1 else ('L' if side=='R' else 'R')
  load=max(1,startup*.65);followframe=min(total-2,contact+max(2,active));settleframe=min(total-1,followframe+(total-followframe)*settle)
  timing=[(0,0.),(load,-.65),(max(load+.1,startup-1),-.85),(contact,1.),(followframe,follow),(settleframe,.18),(total,0.)]
@@ -155,6 +157,8 @@ def make_clip(r,fid,move,facing=1):
     elif technique=='hammer':target=np.array([sign*.07,guard+.18*(1-extension),-.1-.28*extension])*scale
     elif technique=='charged_palm':target=np.array([sign*.06,guard,-.13-.31*extension])*scale
    if technique=='projectile':target=np.array([sign*.10,guard-.02,-.16-.26*extension])*scale
+   if technique=='absorption_guard':target=np.array([sign*(.14-.055*extension),guard+.01+.04*extension,-.13+.05*extension])*scale
+   if technique=='construct_panel':target=np.array([sign*(.09+.06*extension),guard-.02,-.12-.18*extension])*scale
    if technique.startswith('throw_'):
     target=np.array([sign*.12,guard-.08,-.14-.22*extension])*scale
     if technique.endswith('up'):target[1]+=.18*extension*scale

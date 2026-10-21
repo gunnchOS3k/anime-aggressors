@@ -1,18 +1,18 @@
 {
   "fighter_id": "yin",
   "schema_version": 2,
-  "combat_tag": "burn_rushdown",
+  "combat_tag": "cosmic_reduction",
   "moves": [
     {
       "move_id": "jab_1",
-      "fighter_id": "ember-vale",
+      "fighter_id": "yin",
       "move_type": "melee",
       "direction": "neutral",
       "input_command": "attack_neutral",
       "grounded_air": "grounded",
-      "startup_frames": 3,
+      "startup_frames": 5,
       "active_frames": 2,
-      "recovery_frames": 7,
+      "recovery_frames": 10,
       "hitboxes": [
         {
           "offset_x": 38,
@@ -21,8 +21,8 @@
           "height": 30
         }
       ],
-      "damage": 2.5,
-      "angle_deg": 42,
+      "damage": 2.1,
+      "angle_deg": 100,
       "base_knockback": 3.2,
       "knockback_growth": 1.1,
       "shield_damage": 3,
@@ -63,49 +63,44 @@
         "tier": "light",
         "hitstop_frames": 2,
         "camera_event": "shake_light",
-        "vfx_event": "ember_vale_jab_1_flame_tongue_cone",
-        "sfx_event": "ember-vale.jab_1.sfx",
+        "vfx_event": "yin.jab_1.subtractive_aperture",
+        "sfx_event": "yin.jab_1.sfx",
         "screen_flash": false,
-        "particle_profile": "ember-vale.jab_1.ember_flame_heat"
+        "particle_profile": "yin.subtractive_aperture"
       },
-      "training_display_name": "Jab 1",
-      "combat_tag": "burn_rushdown",
+      "training_display_name": "Still Palm",
+      "combat_tag": "cosmic_reduction",
       "element_effect": {
-        "type": "flame",
-        "effect": "burn",
+        "type": "void",
+        "effect": "reduction",
         "strength": 1
       },
       "cancel_windows": [
         {
-          "start": 5,
-          "end": 10,
-          "requires": "hit_confirm"
-        },
-        {
-          "start": 5,
-          "end": 11,
+          "start": 7,
+          "end": 16,
           "requires": "hit_confirm",
           "to": "jab_2"
         }
       ],
-      "h2h_string_id": "ember-vale:jab_1->jab_2",
+      "h2h_string_id": "yin:jab_1->jab_2",
       "animation_id": "jab_1",
-      "v3_fantasy": "Quick ignition knuckle with a small ember trail",
-      "v3_vfx_shape": "flame_tongue_cone",
-      "v3_particle_library": "ember_flame_heat",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
       "owner_approved": false
     },
     {
       "move_id": "jab_2",
-      "fighter_id": "ember-vale",
+      "fighter_id": "yin",
       "move_type": "melee",
       "direction": "neutral",
       "input_command": "attack_neutral",
       "grounded_air": "grounded",
-      "startup_frames": 3,
+      "startup_frames": 4,
       "active_frames": 2,
-      "recovery_frames": 8,
+      "recovery_frames": 11,
       "hitboxes": [
         {
           "offset_x": 40,
@@ -114,8 +109,8 @@
           "height": 30
         }
       ],
-      "damage": 3,
-      "angle_deg": 40,
+      "damage": 2.8,
+      "angle_deg": 110,
       "base_knockback": 4.1,
       "knockback_growth": 1.1,
       "shield_damage": 3,
@@ -156,44 +151,44 @@
         "tier": "light",
         "hitstop_frames": 2,
         "camera_event": "shake_light",
-        "vfx_event": "ember_vale_jab_2_flame_tongue_cone",
-        "sfx_event": "ember-vale.jab_2.sfx",
+        "vfx_event": "yin.jab_2.subtractive_aperture",
+        "sfx_event": "yin.jab_2.sfx",
         "screen_flash": false,
-        "particle_profile": "ember-vale.jab_2.ember_flame_heat"
+        "particle_profile": "yin.subtractive_aperture"
       },
-      "training_display_name": "Jab 2",
-      "combat_tag": "burn_rushdown",
+      "training_display_name": "Folded Return",
+      "combat_tag": "cosmic_reduction",
       "element_effect": {
-        "type": "flame",
-        "effect": "burn",
+        "type": "void",
+        "effect": "reduction",
         "strength": 1
       },
       "cancel_windows": [
         {
-          "start": 5,
-          "end": 12,
+          "start": 6,
+          "end": 16,
           "requires": "hit_confirm",
           "to": "jab_finisher"
         }
       ],
-      "h2h_string_id": "ember-vale:jab_2->jab_finisher",
+      "h2h_string_id": "yin:jab_2->jab_finisher",
       "animation_id": "jab_2",
-      "v3_fantasy": "Cross-body flame palm with a hotter impact layer",
-      "v3_vfx_shape": "flame_tongue_cone",
-      "v3_particle_library": "ember_flame_heat",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
       "owner_approved": false
     },
     {
       "move_id": "jab_finisher",
-      "fighter_id": "ember-vale",
+      "fighter_id": "yin",
       "move_type": "melee",
       "direction": "neutral",
       "input_command": "attack_neutral",
       "grounded_air": "grounded",
-      "startup_frames": 4,
+      "startup_frames": 6,
       "active_frames": 3,
-      "recovery_frames": 11,
+      "recovery_frames": 14,
       "hitboxes": [
         {
           "offset_x": 42,
@@ -202,8 +197,8 @@
           "height": 34
         }
       ],
-      "damage": 5,
-      "angle_deg": 48,
+      "damage": 4.6,
+      "angle_deg": 125,
       "base_knockback": 7.5,
       "knockback_growth": 1.1,
       "shield_damage": 3,
@@ -244,16 +239,16 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "ember_vale_jab_finisher_flame_tongue_cone",
-        "sfx_event": "ember-vale.jab_finisher.sfx",
+        "vfx_event": "yin.jab_finisher.subtractive_aperture",
+        "sfx_event": "yin.jab_finisher.sfx",
         "screen_flash": false,
-        "particle_profile": "ember-vale.jab_finisher.ember_flame_heat"
+        "particle_profile": "yin.subtractive_aperture"
       },
-      "training_display_name": "Jab Finisher",
-      "combat_tag": "burn_rushdown",
+      "training_display_name": "Closing Spiral",
+      "combat_tag": "cosmic_reduction",
       "element_effect": {
-        "type": "flame",
-        "effect": "burn",
+        "type": "void",
+        "effect": "reduction",
         "strength": 1
       },
       "cancel_windows": [
@@ -264,24 +259,24 @@
           "to": "side_special"
         }
       ],
-      "h2h_string_id": "ember-vale:jab_finisher->side_special",
+      "h2h_string_id": "yin:jab_finisher->side_special",
       "animation_id": "jab_finisher",
-      "v3_fantasy": "Close-range furnace burst ending the jab string",
-      "v3_vfx_shape": "flame_tongue_cone",
-      "v3_particle_library": "ember_flame_heat",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
       "owner_approved": false
     },
     {
       "move_id": "forward_tilt",
-      "fighter_id": "ember-vale",
+      "fighter_id": "yin",
       "move_type": "melee",
       "direction": "forward",
       "input_command": "attack_forward",
       "grounded_air": "grounded",
-      "startup_frames": 5,
+      "startup_frames": 7,
       "active_frames": 3,
-      "recovery_frames": 11,
+      "recovery_frames": 15,
       "hitboxes": [
         {
           "offset_x": 44,
@@ -290,8 +285,8 @@
           "height": 28
         }
       ],
-      "damage": 7,
-      "angle_deg": 38,
+      "damage": 6.1,
+      "angle_deg": 115,
       "base_knockback": 8.5,
       "knockback_growth": 1.1,
       "shield_damage": 3,
@@ -332,35 +327,35 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "ember_vale_forward_tilt_flame_tongue_cone",
-        "sfx_event": "ember-vale.forward_tilt.sfx",
+        "vfx_event": "yin.forward_tilt.subtractive_aperture",
+        "sfx_event": "yin.forward_tilt.sfx",
         "screen_flash": false,
-        "particle_profile": "ember-vale.forward_tilt.ember_flame_heat"
+        "particle_profile": "yin.subtractive_aperture"
       },
-      "training_display_name": "Forward Tilt",
-      "combat_tag": "burn_rushdown",
+      "training_display_name": "Inward Fold",
+      "combat_tag": "cosmic_reduction",
       "element_effect": {
-        "type": "flame",
-        "effect": "burn",
+        "type": "void",
+        "effect": "reduction",
         "strength": 1
       },
       "animation_id": "forward_tilt",
-      "v3_fantasy": "Flame-edge forearm sweep with a short crescent",
-      "v3_vfx_shape": "flame_tongue_cone",
-      "v3_particle_library": "ember_flame_heat",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
       "owner_approved": false
     },
     {
       "move_id": "up_tilt",
-      "fighter_id": "ember-vale",
+      "fighter_id": "yin",
       "move_type": "melee",
       "direction": "up",
       "input_command": "attack_up",
       "grounded_air": "grounded",
-      "startup_frames": 5,
+      "startup_frames": 6,
       "active_frames": 3,
-      "recovery_frames": 11,
+      "recovery_frames": 14,
       "hitboxes": [
         {
           "offset_x": 36,
@@ -369,8 +364,8 @@
           "height": 32
         }
       ],
-      "damage": 6,
-      "angle_deg": 75,
+      "damage": 5.4,
+      "angle_deg": 88,
       "base_knockback": 7,
       "knockback_growth": 1.1,
       "shield_damage": 3,
@@ -411,35 +406,35 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "ember_vale_up_tilt_flame_tongue_cone",
-        "sfx_event": "ember-vale.up_tilt.sfx",
+        "vfx_event": "yin.up_tilt.subtractive_aperture",
+        "sfx_event": "yin.up_tilt.sfx",
         "screen_flash": false,
-        "particle_profile": "ember-vale.up_tilt.ember_flame_heat"
+        "particle_profile": "yin.subtractive_aperture"
       },
-      "training_display_name": "Up Tilt",
-      "combat_tag": "burn_rushdown",
+      "training_display_name": "Quiet Rise",
+      "combat_tag": "cosmic_reduction",
       "element_effect": {
-        "type": "flame",
-        "effect": "burn",
+        "type": "void",
+        "effect": "reduction",
         "strength": 1
       },
       "animation_id": "up_tilt",
-      "v3_fantasy": "Rising flare uppercut forming a narrow anti-air column",
-      "v3_vfx_shape": "flame_tongue_cone",
-      "v3_particle_library": "ember_flame_heat",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
       "owner_approved": false
     },
     {
       "move_id": "down_tilt",
-      "fighter_id": "ember-vale",
+      "fighter_id": "yin",
       "move_type": "melee",
       "direction": "down",
       "input_command": "attack_down",
       "grounded_air": "grounded",
-      "startup_frames": 4,
+      "startup_frames": 6,
       "active_frames": 3,
-      "recovery_frames": 10,
+      "recovery_frames": 13,
       "hitboxes": [
         {
           "offset_x": 36,
@@ -448,8 +443,8 @@
           "height": 32
         }
       ],
-      "damage": 5,
-      "angle_deg": 280,
+      "damage": 4.3,
+      "angle_deg": 260,
       "base_knockback": 6,
       "knockback_growth": 1.1,
       "shield_damage": 3,
@@ -490,35 +485,35 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "ember_vale_down_tilt_flame_tongue_cone",
-        "sfx_event": "ember-vale.down_tilt.sfx",
+        "vfx_event": "yin.down_tilt.subtractive_aperture",
+        "sfx_event": "yin.down_tilt.sfx",
         "screen_flash": false,
-        "particle_profile": "ember-vale.down_tilt.ember_flame_heat"
+        "particle_profile": "yin.subtractive_aperture"
       },
-      "training_display_name": "Down Tilt",
-      "combat_tag": "burn_rushdown",
+      "training_display_name": "Low Collapse",
+      "combat_tag": "cosmic_reduction",
       "element_effect": {
-        "type": "flame",
-        "effect": "burn",
+        "type": "void",
+        "effect": "reduction",
         "strength": 1
       },
       "animation_id": "down_tilt",
-      "v3_fantasy": "Low searing sweep leaving a brief ground flame lick",
-      "v3_vfx_shape": "flame_tongue_cone",
-      "v3_particle_library": "ember_flame_heat",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
       "owner_approved": false
     },
     {
       "move_id": "dash_attack",
-      "fighter_id": "ember-vale",
+      "fighter_id": "yin",
       "move_type": "melee",
       "direction": "forward",
       "input_command": "attack_dash",
       "grounded_air": "grounded",
-      "startup_frames": 5,
+      "startup_frames": 7,
       "active_frames": 4,
-      "recovery_frames": 15,
+      "recovery_frames": 18,
       "hitboxes": [
         {
           "offset_x": 36,
@@ -527,8 +522,8 @@
           "height": 32
         }
       ],
-      "damage": 8,
-      "angle_deg": 35,
+      "damage": 6.8,
+      "angle_deg": 110,
       "base_knockback": 9.5,
       "knockback_growth": 1.1,
       "shield_damage": 3,
@@ -569,35 +564,35 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "ember_vale_dash_attack_flame_tongue_cone",
-        "sfx_event": "ember-vale.dash_attack.sfx",
+        "vfx_event": "yin.dash_attack.subtractive_aperture",
+        "sfx_event": "yin.dash_attack.sfx",
         "screen_flash": false,
-        "particle_profile": "ember-vale.dash_attack.ember_flame_heat"
+        "particle_profile": "yin.subtractive_aperture"
       },
-      "training_display_name": "Dash Attack",
-      "combat_tag": "burn_rushdown",
+      "training_display_name": "Shortened Path",
+      "combat_tag": "cosmic_reduction",
       "element_effect": {
-        "type": "flame",
-        "effect": "burn",
+        "type": "void",
+        "effect": "reduction",
         "strength": 1
       },
       "animation_id": "dash_attack",
-      "v3_fantasy": "Heatline shoulder/forearm rush with body flame streaming backward",
-      "v3_vfx_shape": "flame_tongue_cone",
-      "v3_particle_library": "ember_flame_heat",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
       "owner_approved": false
     },
     {
       "move_id": "heavy_attack",
-      "fighter_id": "ember-vale",
+      "fighter_id": "yin",
       "move_type": "melee",
       "direction": "forward",
       "input_command": "attack_heavy",
       "grounded_air": "grounded",
-      "startup_frames": 8,
+      "startup_frames": 11,
       "active_frames": 4,
-      "recovery_frames": 18,
+      "recovery_frames": 22,
       "hitboxes": [
         {
           "offset_x": 36,
@@ -606,8 +601,8 @@
           "height": 32
         }
       ],
-      "damage": 12,
-      "angle_deg": 30,
+      "damage": 10.5,
+      "angle_deg": 130,
       "base_knockback": 14,
       "knockback_growth": 1.1,
       "shield_damage": 3,
@@ -648,37 +643,37 @@
         "tier": "heavy",
         "hitstop_frames": 8,
         "camera_event": "shake_heavy",
-        "vfx_event": "ember_vale_heavy_attack_flame_tongue_cone",
-        "sfx_event": "ember-vale.heavy_attack.sfx",
+        "vfx_event": "yin.heavy_attack.subtractive_aperture",
+        "sfx_event": "yin.heavy_attack.sfx",
         "screen_flash": false,
-        "particle_profile": "ember-vale.heavy_attack.ember_flame_heat"
+        "particle_profile": "yin.subtractive_aperture"
       },
-      "training_display_name": "Heavy Attack",
-      "combat_tag": "burn_rushdown",
+      "training_display_name": "Event Horizon",
+      "combat_tag": "cosmic_reduction",
       "element_effect": {
-        "type": "flame",
-        "effect": "burn",
+        "type": "void",
+        "effect": "reduction",
         "strength": 1
       },
       "wave016_reachability": "DESIGN_ONLY_NO_DISTINCT_CONTROL",
       "note": "CONTROLS.md does not distinguish tilt vs smash/heavy; not bound to avoid awkward inputs.",
       "animation_id": "heavy_attack",
-      "v3_fantasy": "Committed furnace hammer with a large ignition at contact",
-      "v3_vfx_shape": "flame_tongue_cone",
-      "v3_particle_library": "ember_flame_heat",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
       "owner_approved": false
     },
     {
       "move_id": "neutral_air",
-      "fighter_id": "ember-vale",
+      "fighter_id": "yin",
       "move_type": "melee",
       "direction": "air_neutral",
       "input_command": "attack_air_neutral",
       "grounded_air": "air",
-      "startup_frames": 3,
+      "startup_frames": 5,
       "active_frames": 3,
-      "recovery_frames": 9,
+      "recovery_frames": 11,
       "hitboxes": [
         {
           "offset_x": 36,
@@ -687,8 +682,8 @@
           "height": 32
         }
       ],
-      "damage": 6,
-      "angle_deg": 50,
+      "damage": 4.8,
+      "angle_deg": 100,
       "base_knockback": 6.5,
       "knockback_growth": 1.1,
       "shield_damage": 3,
@@ -729,35 +724,35 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "ember_vale_neutral_air_flame_tongue_cone",
-        "sfx_event": "ember-vale.neutral_air.sfx",
+        "vfx_event": "yin.neutral_air.subtractive_aperture",
+        "sfx_event": "yin.neutral_air.sfx",
         "screen_flash": false,
-        "particle_profile": "ember-vale.neutral_air.ember_flame_heat"
+        "particle_profile": "yin.subtractive_aperture"
       },
-      "training_display_name": "Neutral Air",
-      "combat_tag": "burn_rushdown",
+      "training_display_name": "Quiet Orbit",
+      "combat_tag": "cosmic_reduction",
       "element_effect": {
-        "type": "flame",
-        "effect": "burn",
+        "type": "void",
+        "effect": "reduction",
         "strength": 1
       },
       "animation_id": "neutral_air",
-      "v3_fantasy": "Compact corona spin wrapping the body in flame",
-      "v3_vfx_shape": "flame_tongue_cone",
-      "v3_particle_library": "ember_flame_heat",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
       "owner_approved": false
     },
     {
       "move_id": "forward_air",
-      "fighter_id": "ember-vale",
+      "fighter_id": "yin",
       "move_type": "melee",
       "direction": "air_forward",
       "input_command": "attack_air_forward",
       "grounded_air": "air",
-      "startup_frames": 4,
+      "startup_frames": 6,
       "active_frames": 3,
-      "recovery_frames": 10,
+      "recovery_frames": 13,
       "hitboxes": [
         {
           "offset_x": 36,
@@ -766,8 +761,8 @@
           "height": 32
         }
       ],
-      "damage": 7,
-      "angle_deg": 28,
+      "damage": 6.1,
+      "angle_deg": 115,
       "base_knockback": 8.2,
       "knockback_growth": 1.1,
       "shield_damage": 3,
@@ -808,35 +803,35 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "ember_vale_forward_air_flame_tongue_cone",
-        "sfx_event": "ember-vale.forward_air.sfx",
+        "vfx_event": "yin.forward_air.subtractive_aperture",
+        "sfx_event": "yin.forward_air.sfx",
         "screen_flash": false,
-        "particle_profile": "ember-vale.forward_air.ember_flame_heat"
+        "particle_profile": "yin.subtractive_aperture"
       },
-      "training_display_name": "Forward Air",
-      "combat_tag": "burn_rushdown",
+      "training_display_name": "Returning Palm",
+      "combat_tag": "cosmic_reduction",
       "element_effect": {
-        "type": "flame",
-        "effect": "burn",
+        "type": "void",
+        "effect": "reduction",
         "strength": 1
       },
       "animation_id": "forward_air",
-      "v3_fantasy": "Flame-propelled forward kick with a sharp contact burst",
-      "v3_vfx_shape": "flame_tongue_cone",
-      "v3_particle_library": "ember_flame_heat",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
       "owner_approved": false
     },
     {
       "move_id": "back_air",
-      "fighter_id": "ember-vale",
+      "fighter_id": "yin",
       "move_type": "melee",
       "direction": "back",
       "input_command": "attack_air_back",
       "grounded_air": "air",
-      "startup_frames": 4,
+      "startup_frames": 6,
       "active_frames": 3,
-      "recovery_frames": 10,
+      "recovery_frames": 13,
       "hitboxes": [
         {
           "offset_x": 36,
@@ -845,8 +840,8 @@
           "height": 32
         }
       ],
-      "damage": 7,
-      "angle_deg": 152.0,
+      "damage": 6.1,
+      "angle_deg": 145,
       "base_knockback": 8.2,
       "knockback_growth": 1.1,
       "shield_damage": 3,
@@ -887,30 +882,34 @@
         "tier": "light",
         "hitstop_frames": 3,
         "camera_event": "shake_light",
-        "vfx_event": "flame_spark",
-        "sfx_event": "flame_hit_light",
-        "screen_flash": false
+        "vfx_event": "yin.back_air.subtractive_aperture",
+        "sfx_event": "yin.back_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "yin.subtractive_aperture"
       },
-      "training_display_name": "Back Air",
-      "combat_tag": "burn_rushdown",
+      "training_display_name": "Rear Aperture",
+      "combat_tag": "cosmic_reduction",
       "element_effect": {
-        "type": "flame",
-        "effect": "burn",
+        "type": "void",
+        "effect": "reduction",
         "strength": 1
       },
       "status": "TUNING_CANDIDATE",
-      "owner_approved": false
+      "owner_approved": false,
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
+      "v3_fantasy": "Original inward reduction and economical palm chain"
     },
     {
       "move_id": "up_air",
-      "fighter_id": "ember-vale",
+      "fighter_id": "yin",
       "move_type": "melee",
       "direction": "air_up",
       "input_command": "attack_air_up",
       "grounded_air": "air",
-      "startup_frames": 4,
+      "startup_frames": 6,
       "active_frames": 3,
-      "recovery_frames": 10,
+      "recovery_frames": 12,
       "hitboxes": [
         {
           "offset_x": 36,
@@ -919,8 +918,8 @@
           "height": 32
         }
       ],
-      "damage": 6,
-      "angle_deg": 80,
+      "damage": 5.1,
+      "angle_deg": 90,
       "base_knockback": 7,
       "knockback_growth": 1.1,
       "shield_damage": 3,
@@ -961,35 +960,35 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "ember_vale_up_air_flame_tongue_cone",
-        "sfx_event": "ember-vale.up_air.sfx",
+        "vfx_event": "yin.up_air.subtractive_aperture",
+        "sfx_event": "yin.up_air.sfx",
         "screen_flash": false,
-        "particle_profile": "ember-vale.up_air.ember_flame_heat"
+        "particle_profile": "yin.subtractive_aperture"
       },
-      "training_display_name": "Up Air",
-      "combat_tag": "burn_rushdown",
+      "training_display_name": "Suspended Fold",
+      "combat_tag": "cosmic_reduction",
       "element_effect": {
-        "type": "flame",
-        "effect": "burn",
+        "type": "void",
+        "effect": "reduction",
         "strength": 1
       },
       "animation_id": "up_air",
-      "v3_fantasy": "Updraft flare kick/palm that pops targets above Ember",
-      "v3_vfx_shape": "flame_tongue_cone",
-      "v3_particle_library": "ember_flame_heat",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
       "owner_approved": false
     },
     {
       "move_id": "down_air",
-      "fighter_id": "ember-vale",
+      "fighter_id": "yin",
       "move_type": "melee",
       "direction": "air_down",
       "input_command": "attack_air_down",
       "grounded_air": "air",
-      "startup_frames": 4,
+      "startup_frames": 7,
       "active_frames": 3,
-      "recovery_frames": 10,
+      "recovery_frames": 14,
       "hitboxes": [
         {
           "offset_x": 36,
@@ -998,7 +997,7 @@
           "height": 32
         }
       ],
-      "damage": 8,
+      "damage": 6.8,
       "angle_deg": 270,
       "base_knockback": 9,
       "knockback_growth": 1.1,
@@ -1040,38 +1039,38 @@
         "tier": "heavy",
         "hitstop_frames": 8,
         "camera_event": "shake_heavy",
-        "vfx_event": "ember_vale_down_air_flame_tongue_cone",
-        "sfx_event": "ember-vale.down_air.sfx",
+        "vfx_event": "yin.down_air.subtractive_aperture",
+        "sfx_event": "yin.down_air.sfx",
         "screen_flash": false,
-        "particle_profile": "ember-vale.down_air.ember_flame_heat"
+        "particle_profile": "yin.subtractive_aperture"
       },
-      "training_display_name": "Down Air",
-      "combat_tag": "burn_rushdown",
+      "training_display_name": "Settling Void",
+      "combat_tag": "cosmic_reduction",
       "element_effect": {
-        "type": "flame",
-        "effect": "burn",
+        "type": "void",
+        "effect": "reduction",
         "strength": 1
       },
       "animation_id": "down_air",
-      "v3_fantasy": "Meteor ember stomp with a downward flame cone",
-      "v3_vfx_shape": "flame_tongue_cone",
-      "v3_particle_library": "ember_flame_heat",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
       "owner_approved": false
     },
     {
       "move_id": "neutral_special_projectile",
-      "fighter_id": "ember-vale",
+      "fighter_id": "yin",
       "move_type": "projectile",
       "direction": "neutral",
       "input_command": "special_neutral",
       "grounded_air": "both",
-      "startup_frames": 5,
+      "startup_frames": 8,
       "active_frames": 2,
-      "recovery_frames": 14,
+      "recovery_frames": 18,
       "hitboxes": [],
-      "damage": 8,
-      "angle_deg": 40,
+      "damage": 6,
+      "angle_deg": 120,
       "base_knockback": 7.5,
       "knockback_growth": 1.1,
       "shield_damage": 3,
@@ -1112,35 +1111,35 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "ember_vale_neutral_special_projectile_flame_tongue_cone",
-        "sfx_event": "ember-vale.neutral_special_projectile.sfx",
+        "vfx_event": "yin.neutral_special_projectile.subtractive_aperture",
+        "sfx_event": "yin.neutral_special_projectile.sfx",
         "screen_flash": false,
-        "particle_profile": "ember-vale.neutral_special_projectile.ember_flame_heat"
+        "particle_profile": "yin.subtractive_aperture"
       },
-      "training_display_name": "Flame Shot",
-      "combat_tag": "burn_rushdown",
+      "training_display_name": "Aperture Pulse",
+      "combat_tag": "cosmic_reduction",
       "element_effect": {
-        "type": "flame",
-        "effect": "burn",
+        "type": "void",
+        "effect": "reduction",
         "strength": 1
       },
       "projectile": {
-        "spawn_frame": 5,
-        "type": "flame_shot",
+        "spawn_frame": 8,
+        "type": "null_aperture",
         "offset_x": 46,
         "offset_y": -2,
         "angle_deg": 0,
         "speed_by_aura": [
-          400,
-          440,
-          480,
-          520
+          270,
+          300,
+          330,
+          360
         ],
         "damage_by_aura": [
+          6,
+          7,
           8,
-          9,
-          10,
-          12
+          9
         ],
         "size_by_aura": [
           14,
@@ -1149,40 +1148,40 @@
           24
         ],
         "lifetime_frames_by_aura": [
-          72,
-          84,
-          96,
-          108
+          40,
+          44,
+          48,
+          52
         ],
         "behavior_by_aura": [
           "straight",
           "straight",
-          "beam",
-          "beam"
+          "straight",
+          "straight"
         ],
-        "speed": 520,
-        "lifetime_frames": 36,
+        "speed": 270,
+        "lifetime_frames": 40,
         "size": 10,
         "pierce": false,
         "homing": 0.0
       },
       "animation_id": "neutral_special_projectile",
-      "v3_fantasy": "Cinder shot to wider flame wave to multi-hit flame stream",
-      "v3_vfx_shape": "flame_tongue_cone",
-      "v3_particle_library": "ember_flame_heat",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
       "owner_approved": false
     },
     {
       "move_id": "side_special",
-      "fighter_id": "ember-vale",
+      "fighter_id": "yin",
       "move_type": "field",
       "direction": "forward",
       "input_command": "special_forward",
       "grounded_air": "grounded",
-      "startup_frames": 6,
+      "startup_frames": 9,
       "active_frames": 4,
-      "recovery_frames": 16,
+      "recovery_frames": 20,
       "hitboxes": [
         {
           "offset_x": 48,
@@ -1191,8 +1190,8 @@
           "height": 30
         }
       ],
-      "damage": 9,
-      "angle_deg": 32,
+      "damage": 7.5,
+      "angle_deg": 120,
       "base_knockback": 11,
       "knockback_growth": 1.1,
       "shield_damage": 3,
@@ -1233,41 +1232,40 @@
         "tier": "heavy",
         "hitstop_frames": 8,
         "camera_event": "shake_heavy",
-        "vfx_event": "ember_vale_side_special_flame_tongue_cone",
-        "sfx_event": "ember-vale.side_special.sfx",
+        "vfx_event": "yin.side_special.subtractive_aperture",
+        "sfx_event": "yin.side_special.sfx",
         "screen_flash": false,
-        "particle_profile": "ember-vale.side_special.ember_flame_heat"
+        "particle_profile": "yin.subtractive_aperture"
       },
-      "training_display_name": "Cinder Rush Side",
-      "combat_tag": "burn_rushdown",
+      "training_display_name": "Distance Fold",
+      "combat_tag": "cosmic_reduction",
       "element_effect": {
-        "type": "flame",
-        "effect": "burn",
+        "type": "void",
+        "effect": "reduction",
         "strength": 1
       },
       "self_movement": {
-        "dx": 180,
-        "dy": 0,
-        "frames": 8
+        "x": 100,
+        "y": 0
       },
       "armor_frames": 0,
       "animation_id": "side_special",
-      "v3_fantasy": "Blazing rush/reposition strike built around movement and pressure",
-      "v3_vfx_shape": "flame_tongue_cone",
-      "v3_particle_library": "ember_flame_heat",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
       "owner_approved": false
     },
     {
       "move_id": "up_special_recovery",
-      "fighter_id": "ember-vale",
+      "fighter_id": "yin",
       "move_type": "movement",
       "direction": "up",
       "input_command": "special_up",
       "grounded_air": "both",
-      "startup_frames": 5,
+      "startup_frames": 7,
       "active_frames": 4,
-      "recovery_frames": 18,
+      "recovery_frames": 20,
       "hitboxes": [
         {
           "offset_x": 20,
@@ -1276,8 +1274,8 @@
           "height": 48
         }
       ],
-      "damage": 8,
-      "angle_deg": 78,
+      "damage": 6.0,
+      "angle_deg": 90,
       "base_knockback": 11,
       "knockback_growth": 1.1,
       "shield_damage": 3,
@@ -1318,24 +1316,21 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "ember_vale_up_special_recovery_flame_tongue_cone",
-        "sfx_event": "ember-vale.up_special_recovery.sfx",
+        "vfx_event": "yin.up_special_recovery.subtractive_aperture",
+        "sfx_event": "yin.up_special_recovery.sfx",
         "screen_flash": false,
-        "particle_profile": "ember-vale.up_special_recovery.ember_flame_heat"
+        "particle_profile": "yin.subtractive_aperture"
       },
-      "training_display_name": "Up Special / Recovery",
-      "combat_tag": "burn_rushdown",
+      "training_display_name": "Quiet Ascent",
+      "combat_tag": "cosmic_reduction",
       "element_effect": {
-        "type": "flame",
-        "effect": "burn",
+        "type": "void",
+        "effect": "reduction",
         "strength": 1
       },
       "self_movement": {
         "x": 0,
-        "y": -320,
-        "dx": 40,
-        "dy": -420,
-        "frames": 12
+        "y": -320
       },
       "recovery_profile": {
         "snap_ledge": true,
@@ -1343,22 +1338,22 @@
         "landing_lag": 10
       },
       "animation_id": "up_special_recovery",
-      "v3_fantasy": "Jet-flare ascent with visible propulsion and vulnerable recovery",
-      "v3_vfx_shape": "flame_tongue_cone",
-      "v3_particle_library": "ember_flame_heat",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
       "owner_approved": false
     },
     {
       "move_id": "down_special",
-      "fighter_id": "ember-vale",
-      "move_type": "trap",
+      "fighter_id": "yin",
+      "move_type": "counter",
       "direction": "down",
       "input_command": "special_down",
       "grounded_air": "grounded",
-      "startup_frames": 7,
-      "active_frames": 5,
-      "recovery_frames": 20,
+      "startup_frames": 9,
+      "active_frames": 6,
+      "recovery_frames": 24,
       "hitboxes": [
         {
           "offset_x": 12,
@@ -1367,7 +1362,7 @@
           "height": 24
         }
       ],
-      "damage": 9,
+      "damage": 0,
       "angle_deg": 265,
       "base_knockback": 8.5,
       "knockback_growth": 1.1,
@@ -1409,16 +1404,16 @@
         "tier": "heavy",
         "hitstop_frames": 8,
         "camera_event": "shake_heavy",
-        "vfx_event": "ember_vale_down_special_flame_tongue_cone",
-        "sfx_event": "ember-vale.down_special.sfx",
+        "vfx_event": "yin.down_special.subtractive_aperture",
+        "sfx_event": "yin.down_special.sfx",
         "screen_flash": false,
-        "particle_profile": "ember-vale.down_special.ember_flame_heat"
+        "particle_profile": "yin.subtractive_aperture"
       },
-      "training_display_name": "Down Special",
-      "combat_tag": "burn_rushdown",
+      "training_display_name": "Absorption Window",
+      "combat_tag": "cosmic_reduction",
       "element_effect": {
-        "type": "flame",
-        "effect": "burn",
+        "type": "void",
+        "effect": "reduction",
         "strength": 1
       },
       "trap": {
@@ -1426,15 +1421,20 @@
         "burn_ticks": 3
       },
       "animation_id": "down_special",
-      "v3_fantasy": "Flashpoint guard/counter or short ignition trap",
-      "v3_vfx_shape": "flame_tongue_cone",
-      "v3_particle_library": "ember_flame_heat",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
-      "owner_approved": false
+      "owner_approved": false,
+      "cosmic_counter": {
+        "max_integrity": 1,
+        "aura_cost": 25.0,
+        "max_per_activation": 1
+      }
     },
     {
       "move_id": "grab",
-      "fighter_id": "ember-vale",
+      "fighter_id": "yin",
       "move_type": "grab",
       "direction": "neutral",
       "input_command": "grab",
@@ -1492,24 +1492,29 @@
         "tier": "light",
         "hitstop_frames": 2,
         "camera_event": "shake_light",
-        "vfx_event": "ember_vale_grab_flame_tongue_cone",
-        "sfx_event": "ember-vale.grab.sfx",
+        "vfx_event": "yin.grab.subtractive_aperture",
+        "sfx_event": "yin.grab.sfx",
         "screen_flash": false,
-        "particle_profile": "ember-vale.grab.ember_flame_heat"
+        "particle_profile": "yin.subtractive_aperture"
       },
       "training_display_name": "Grab",
-      "combat_tag": "burn_rushdown",
+      "combat_tag": "cosmic_reduction",
       "grab_range": 34,
       "animation_id": "grab",
-      "v3_fantasy": "Heated clinch; flame wrap after confirmed grab",
-      "v3_vfx_shape": "flame_tongue_cone",
-      "v3_particle_library": "ember_flame_heat",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
-      "owner_approved": false
+      "owner_approved": false,
+      "element_effect": {
+        "type": "void",
+        "effect": "reduction",
+        "strength": 1
+      }
     },
     {
       "move_id": "throw_forward",
-      "fighter_id": "ember-vale",
+      "fighter_id": "yin",
       "move_type": "throw",
       "direction": "forward",
       "input_command": "throw_forward",
@@ -1562,13 +1567,13 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "ember_vale_throw_forward_flame_tongue_cone",
-        "sfx_event": "ember-vale.throw_forward.sfx",
+        "vfx_event": "yin.throw_forward.subtractive_aperture",
+        "sfx_event": "yin.throw_forward.sfx",
         "screen_flash": false,
-        "particle_profile": "ember-vale.throw_forward.ember_flame_heat"
+        "particle_profile": "yin.subtractive_aperture"
       },
       "training_display_name": "Flame Spin Toss",
-      "combat_tag": "burn_rushdown",
+      "combat_tag": "cosmic_reduction",
       "throw": {
         "direction": "forward",
         "hold_frames": 0,
@@ -1586,20 +1591,20 @@
         "authored": true
       },
       "element_effect": {
-        "type": "flame",
-        "effect": "burn",
+        "type": "void",
+        "effect": "reduction",
         "strength": 1
       },
       "animation_id": "throw_forward",
-      "v3_fantasy": "Flame spin toss",
-      "v3_vfx_shape": "flame_tongue_cone",
-      "v3_particle_library": "ember_flame_heat",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
       "owner_approved": false
     },
     {
       "move_id": "throw_back",
-      "fighter_id": "ember-vale",
+      "fighter_id": "yin",
       "move_type": "throw",
       "direction": "back",
       "input_command": "throw_back",
@@ -1652,13 +1657,13 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "ember_vale_throw_back_flame_tongue_cone",
-        "sfx_event": "ember-vale.throw_back.sfx",
+        "vfx_event": "yin.throw_back.subtractive_aperture",
+        "sfx_event": "yin.throw_back.sfx",
         "screen_flash": false,
-        "particle_profile": "ember-vale.throw_back.ember_flame_heat"
+        "particle_profile": "yin.subtractive_aperture"
       },
       "training_display_name": "Reversal Flame Burst",
-      "combat_tag": "burn_rushdown",
+      "combat_tag": "cosmic_reduction",
       "throw": {
         "direction": "back",
         "hold_frames": 0,
@@ -1676,20 +1681,20 @@
         "authored": true
       },
       "element_effect": {
-        "type": "flame",
-        "effect": "burn",
+        "type": "void",
+        "effect": "reduction",
         "strength": 1
       },
       "animation_id": "throw_back",
-      "v3_fantasy": "Reversal kick into flame burst",
-      "v3_vfx_shape": "flame_tongue_cone",
-      "v3_particle_library": "ember_flame_heat",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
       "owner_approved": false
     },
     {
       "move_id": "throw_up",
-      "fighter_id": "ember-vale",
+      "fighter_id": "yin",
       "move_type": "throw",
       "direction": "up",
       "input_command": "throw_up",
@@ -1742,13 +1747,13 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "ember_vale_throw_up_flame_tongue_cone",
-        "sfx_event": "ember-vale.throw_up.sfx",
+        "vfx_event": "yin.throw_up.subtractive_aperture",
+        "sfx_event": "yin.throw_up.sfx",
         "screen_flash": false,
-        "particle_profile": "ember-vale.throw_up.ember_flame_heat"
+        "particle_profile": "yin.subtractive_aperture"
       },
       "training_display_name": "Erupting Uppercut",
-      "combat_tag": "burn_rushdown",
+      "combat_tag": "cosmic_reduction",
       "throw": {
         "direction": "up",
         "hold_frames": 0,
@@ -1766,20 +1771,20 @@
         "authored": true
       },
       "element_effect": {
-        "type": "flame",
-        "effect": "burn",
+        "type": "void",
+        "effect": "reduction",
         "strength": 1
       },
       "animation_id": "throw_up",
-      "v3_fantasy": "Erupting uppercut",
-      "v3_vfx_shape": "flame_tongue_cone",
-      "v3_particle_library": "ember_flame_heat",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
       "owner_approved": false
     },
     {
       "move_id": "throw_down",
-      "fighter_id": "ember-vale",
+      "fighter_id": "yin",
       "move_type": "throw",
       "direction": "down",
       "input_command": "throw_down",
@@ -1832,13 +1837,13 @@
         "tier": "medium",
         "hitstop_frames": 5,
         "camera_event": "shake_medium",
-        "vfx_event": "ember_vale_throw_down_flame_tongue_cone",
-        "sfx_event": "ember-vale.throw_down.sfx",
+        "vfx_event": "yin.throw_down.subtractive_aperture",
+        "sfx_event": "yin.throw_down.sfx",
         "screen_flash": false,
-        "particle_profile": "ember-vale.throw_down.ember_flame_heat"
+        "particle_profile": "yin.subtractive_aperture"
       },
       "training_display_name": "Ground Ignition",
-      "combat_tag": "burn_rushdown",
+      "combat_tag": "cosmic_reduction",
       "throw": {
         "direction": "down",
         "hold_frames": 0,
@@ -1856,20 +1861,20 @@
         "authored": true
       },
       "element_effect": {
-        "type": "flame",
-        "effect": "burn",
+        "type": "void",
+        "effect": "reduction",
         "strength": 1
       },
       "animation_id": "throw_down",
-      "v3_fantasy": "Ground ignition bounce",
-      "v3_vfx_shape": "flame_tongue_cone",
-      "v3_particle_library": "ember_flame_heat",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
       "owner_approved": false
     },
     {
       "move_id": "aura_charge",
-      "fighter_id": "ember-vale",
+      "fighter_id": "yin",
       "move_type": "charge",
       "direction": "none",
       "input_command": "aura_charge",
@@ -1890,30 +1895,35 @@
         "tier": "aura",
         "hitstop_frames": 11,
         "camera_event": "shake_aura",
-        "vfx_event": "ember_vale_aura_charge_flame_tongue_cone",
-        "sfx_event": "ember-vale.aura_charge.sfx",
-        "screen_flash": true,
-        "particle_profile": "ember-vale.aura_charge.ember_flame_heat"
+        "vfx_event": "yin.aura_charge.subtractive_aperture",
+        "sfx_event": "yin.aura_charge.sfx",
+        "screen_flash": false,
+        "particle_profile": "yin.subtractive_aperture"
       },
       "training_display_name": "Aura Charge",
-      "combat_tag": "burn_rushdown",
+      "combat_tag": "cosmic_reduction",
       "animation_id": "aura_charge",
-      "v3_fantasy": "Furnace-heart charge; flames intensify from the body core outward",
-      "v3_vfx_shape": "flame_tongue_cone",
-      "v3_particle_library": "ember_flame_heat",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
-      "owner_approved": false
+      "owner_approved": false,
+      "element_effect": {
+        "type": "void",
+        "effect": "reduction",
+        "strength": 1
+      }
     },
     {
       "move_id": "aura_burst",
-      "fighter_id": "ember-vale",
+      "fighter_id": "yin",
       "move_type": "burst",
       "direction": "neutral",
       "input_command": "aura_burst",
       "grounded_air": "both",
-      "startup_frames": 10,
+      "startup_frames": 14,
       "active_frames": 6,
-      "recovery_frames": 24,
+      "recovery_frames": 28,
       "hitboxes": [
         {
           "offset_x": 36,
@@ -1922,8 +1932,8 @@
           "height": 32
         }
       ],
-      "damage": 18,
-      "angle_deg": 45,
+      "damage": 15,
+      "angle_deg": 125,
       "base_knockback": 22,
       "knockback_growth": 1.1,
       "shield_damage": 3,
@@ -1964,23 +1974,23 @@
         "tier": "super",
         "hitstop_frames": 14,
         "camera_event": "shake_super",
-        "vfx_event": "ember_vale_aura_burst_flame_tongue_cone",
-        "sfx_event": "ember-vale.aura_burst.sfx",
-        "screen_flash": true,
-        "particle_profile": "ember-vale.aura_burst.ember_flame_heat"
+        "vfx_event": "yin.aura_burst.subtractive_aperture",
+        "sfx_event": "yin.aura_burst.sfx",
+        "screen_flash": false,
+        "particle_profile": "yin.subtractive_aperture"
       },
-      "training_display_name": "Cinder Rush",
-      "combat_tag": "burn_rushdown",
+      "training_display_name": "Toward Zero",
+      "combat_tag": "cosmic_reduction",
       "element_effect": {
-        "type": "flame",
-        "effect": "burn",
-        "strength": 2.5
+        "type": "void",
+        "effect": "reduction",
+        "strength": 1
       },
       "meter_cost": 100,
       "animation_id": "aura_burst",
-      "v3_fantasy": "Rushing eruption / explosive flame surge",
-      "v3_vfx_shape": "flame_tongue_cone",
-      "v3_particle_library": "ember_flame_heat",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
       "owner_approved": false
     }
@@ -1992,5 +2002,7 @@
     "special_frame_fingerprint": true
   },
   "status": "TUNING_CANDIDATE",
-  "owner_approved": false
+  "owner_approved": false,
+  "kit_authority": "source/ANIME_AGGRESSORS_COMPLETE_CHARACTER_MOVEMENT_ANIMATION_BIBLE_V1.md sections16\u201318",
+  "candidate_mechanics": "bounded reduction"
 }

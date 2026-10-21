@@ -35,6 +35,12 @@ func spawn_from_move(move: Dictionary, aura_amount: float) -> Node:
 	var spawn_frame: int = int(proj_cfg.get("spawn_frame", 0))
 	if owner_fighter == null:
 		return null
+	var limit := int(proj_cfg.get("max_active_per_move", 0))
+	if limit > 0:
+		var same: Array = active_projectiles.filter(func(p): return is_instance_valid(p) and p.active and p.move_id == str(move.get("move_id", "")))
+		while same.size() >= limit:
+			same.pop_front().cancel_immediate()
+		owner_fighter.stamp_runtime_hook("construct_limit")
 	var proj = PROJECTILE_SCENE.instantiate()
 	var battle_root := owner_fighter.get_parent()
 	if battle_root:
@@ -86,6 +92,7 @@ func spawn_from_move(move: Dictionary, aura_amount: float) -> Node:
 		"color": _element_color(element),
 	}
 	proj.configure(cfg, owner_fighter)
+	if str(proj_cfg.get("type", "")) == "definition_panel": owner_fighter.stamp_runtime_hook("definition_construct")
 	active_projectiles.append(proj)
 	proj.projectile_expired.connect(func(): active_projectiles.erase(proj))
 	return proj

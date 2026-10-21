@@ -1,3 +1,43 @@
+# October21 ANI04 cosmic kits — candidate pilot checkpoint
+
+Recovered clean13fcf1c1 / existing draft123 stacked122; no worktree rebuild.
+Actual Data18,513,920,000bytes≈17.24GiBfree, below18GiBreserve. No new capture,
+export,largebuild,archive/cleanup; all33worktrees/saves/raw evidence retained.
+Latest13fc CI6SUCCESS/Windows2025running at initial snapshot; verify final later.
+ANI03bounded comparison remains complete868frames/647codes; VISUAL_ACCEPTANCE=false.
+
+New OWNER_AUTHORIZED TUNING_CANDIDATE Yin/Yang24move manifests now own ids,
+elements, resource paths, normal rhythms/launch directions/specials/signatures.
+Seven accepted fighters/data/authored clips byte-identical (preservationJSON).
+Yin inward normals / AperturePulse / DistanceFold /25aura single weak-projectile
+absorption window / TowardZero. Yang outward ordered normals / DefinedRay /
+DeclaredVector / single stationary0.6second DefinitionPanel / PerfectDefinition.
+No boss immunity,new parry/reflection/terrain rule,forced placement or physics
+rewrite. Existing projectile clashes resolve first; Yin consumes only integrity1
+at an actual swept fighter contact, once/activation; stronger shots still threaten.
+Yang panel uses existing nonpiercing/clash/expiry authority with max1ownedinstance.
+Independent cosmic aura profiles stop accidental Ember burn/extension inheritance.
+Both existing rigs use newly baked original move clips; charge/gait/landing state
+tracks preserved. Counter folds inward; panel gesture opens outward; Yin subdued
+hurt and Yang fractured brace keys are candidates. No original models changed.
+
+CosmicKits pilot_fixed PASS6rows (public light/heavy each +counter+construct);
+firstpilot exit2 was fixture freed-reference bug after legitimate retirement,
+retained/excluded. No scriptparse/runtime gameplay failure in correctedpilot.
+Full72matchup/body/facing matrix and negative counter/construct tests pending.
+New source is unaccepted candidate gameplay; human balance/art/feel gates false.
+
+NEXT: extend CosmicKits negative/resource/team/strongshot and panel interception
+cases; runfull serial --test-script res://tests/v1_closure/CosmicKits.gd with new
+profile/output labels. Then choreography/guard/reaction/throw/charge/projectile/
+cancel/roster/save affected suites; bounded publicCPU probes Yin/Juno,Yang/Rook.
+No new movie while below18GiB+allocation reserve. Existing ANI03 footage is not
+new cosmic-kit visual proof. Implement owner candidate launcher without unlock
+or save grants. Asset-by-asset floor/reach/silhouette closure plan still needed,
+no whole-model shift/limbscale/hitbox retune or numerical solver loop permitted.
+All7earned routes/Convergence,OVA+6variants,LAN/devices remain unfinished.
+
+---
 # October21 post-storage recovery — completed native review and reserve enforcement
 
 Recovered9d291e7b599271b54eafe1a32d1d6084716f1608, clean tracked source;

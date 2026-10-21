@@ -153,6 +153,8 @@ func _deliver_hit(target: Node, contact := Vector2.INF) -> void:
 	var id := str(target.get_instance_id())
 	if hit_targets.has(id):
 		return
+	if target.has_method("try_absorb_projectile") and target.try_absorb_projectile(self, contact if contact.is_finite() else global_position):
+		return # Explicit Yin counter consumed this shot; no damage/contact is forged.
 	var hit_move := move_data.duplicate(true)
 	hit_move["damage"] = damage
 	hit_move["_from_projectile"] = true

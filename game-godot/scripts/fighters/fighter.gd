@@ -22,6 +22,12 @@ const _TransformPipeline = preload("res://scripts/combat/transform_pipeline.gd")
 const _AuraTierContract = preload("res://scripts/combat/aura_tier_contract.gd")
 const _FacingContract = preload("res://scripts/combat/fighter_facing_contract.gd")
 const _HitReaction = preload("res://scripts/combat/directional_hit_reaction.gd")
+const _CosmicKit = preload("res://scripts/combat/cosmic_kit_runtime.gd")
+var _cosmic_counter_activation := -1
+var cosmic_kit_history: Array = []
+
+func try_absorb_projectile(shot, point: Vector2) -> bool:
+	return _CosmicKit.absorb(self, shot, point)
 const _SignaturePresentation = preload("res://scripts/visual/signature_move_presentation.gd")
 
 signal damaged(amount: float, total: float)
@@ -248,6 +254,8 @@ func _on_transform_completed(_fid: String, _form_id: String) -> void:
 	aura = maxf(0.0, aura - 25.0)
 
 func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, spawn: Vector2) -> void:
+	_cosmic_counter_activation = -1
+	cosmic_kit_history.clear()
 	if has_meta("story_cosmic_contract"):
 		remove_meta("story_cosmic_contract")
 	fighter_id = id
@@ -1127,6 +1135,7 @@ func stage_center_x() -> float:
 func _on_move_active(move: Dictionary) -> void:
 	var mid = str(move.get("move_id", ""))
 	var mt = str(move.get("move_type", "melee"))
+	if _CosmicKit.on_active(self, move): return
 	if move_runner.frame_in_phase == 1 and mt not in ["projectile","grab","throw"] and not move.has("projectile"):
 		var renderer = preload("res://scripts/visual/spectral_feedback_renderer.gd").obtain(self)
 		if renderer != null: renderer.emit_effect(fighter_id,6,hitbox.global_position,Vector2(facing,0),58,.13)

@@ -129,7 +129,13 @@ const PROFILES := {
 }
 
 
+const COSMIC_PROFILES := {
+	"yin": {"tag":"cosmic_reduction", "charge_rate_mult":.86, "on_hit_aura_gain":1.2, "air_accel":1400.0, "ground_traction":1800.0, "charge_move_mult":.36},
+	"yang": {"tag":"cosmic_definition", "charge_rate_mult":1.03, "on_hit_aura_gain":1.6, "air_accel":1400.0, "ground_traction":1800.0, "charge_move_mult":.44},
+}
+
 static func profile_for(fighter_id: String, combat_tag: String = "") -> Dictionary:
+	if COSMIC_PROFILES.has(fighter_id): return COSMIC_PROFILES[fighter_id].duplicate(true)
 	if PROFILES.has(fighter_id):
 		return PROFILES[fighter_id].duplicate(true)
 	for id in PROFILES:
