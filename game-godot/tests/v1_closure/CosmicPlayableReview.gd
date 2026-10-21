@@ -16,8 +16,11 @@ func run() -> void:
 	gs.p1_body_variant=body;gs.p2_body_variant=body
 	root.get_node("SceneRouter").go("battle")
 	for i in range(220):await physics_frame
-	var label:=Label.new();label.position=Vector2(30,100)
-	label.text="COSMIC KIT TUNING CANDIDATE · "+fighter+" / "+opponent+" · "+body+" · "+("local players" if local else "active CPU")+"\nA/D move · J light · J+K heavy · K shot · W jump · L shield · U grab · I dodge.\nK+L charge normally. Down+K: "+("absorb one weak shot during active window; costs25earned aura" if fighter=="yin" else "stationary0.6s panel; one at a time; vulnerable to stronger shots")+"\nReview-only selection. No Story unlocks or owner-save changes. Balance/art/feel approval pending."
+	var label := Label.new()
+	label.position = Vector2(30,100)
+	label.size = Vector2(1000,160)
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.text = "COSMIC KIT TUNING CANDIDATE · "+fighter+" / "+opponent+" · "+body+" · "+("local players" if local else "active CPU")+"\nA/D move · J light · J+K heavy · K shot · W jump · L shield · U grab · I dodge.\nK+L charge normally. S+K: "+("absorb one weak shot during the active window; costs 25 aura" if fighter=="yin" else "stationary 0.6s panel; one at a time; vulnerable to stronger shots")+"\nReview selection only. Balance, art and feel approval pending."
 	current_scene.hud.add_child(label)
 	if "--cosmic-smoke" in OS.get_cmdline_user_args():
 		print("COSMIC_PLAYABLE_READY ",fighter," ",opponent," ",body," CPU=",current_scene.fighter2.is_cpu," paths=",current_scene.fighter1.model_3d._proxy_model.scene_file_path," ",current_scene.fighter2.model_3d._proxy_model.scene_file_path);quit()

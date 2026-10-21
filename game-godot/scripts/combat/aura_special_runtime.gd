@@ -16,6 +16,8 @@ const REQUIRED_RUNTIME_HOOKS := {
 	"nix-calder": ["ice_armor", "chill_element", "passive_armor"],
 	"orion-vell": ["gravity_pull", "launch_bias", "pull_on_hit"],
 	"vesper-nyx": ["phase_cancel", "phase_invuln", "mark_aura_gain"],
+	"yin": ["element_identity", "charge_rate"],
+	"yang": ["element_identity", "charge_rate"],
 }
 
 
@@ -215,6 +217,10 @@ static func audit_roster_runtime() -> Dictionary:
 					hooks_proven.append("phase_invuln")
 				if _AuraIdentity.on_hit_aura_gain(fid) >= 2.0:
 					hooks_proven.append("mark_aura_gain")
+			"cosmic_reduction", "cosmic_definition":
+				if scaled_s.get("element_effect", {}).get("type", "") == ("void" if fid == "yin" else "radiance"):
+					hooks_proven.append("element_identity")
+				if _AuraIdentity.charge_rate_mult(fid) != 1.0: hooks_proven.append("charge_rate")
 		for req in required:
 			if not hooks_proven.has(req):
 				missing.append("%s:unproven_hook:%s" % [fid, req])
@@ -231,6 +237,7 @@ static func audit_roster_runtime() -> Dictionary:
 		"missing": missing,
 		"reports": reports,
 		"alpha_claim": "NOT_ALPHA_EXIT — runtime audit only",
+		"cosmic_mechanics_scope": "Element/profile routing only; absorption and finite constructs require CosmicKits live fixtures. No human balance approval.",
 	}
 
 
