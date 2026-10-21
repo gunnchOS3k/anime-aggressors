@@ -1,3 +1,37 @@
+# Cosmic candidate continuation checkpoint — roster mechanics and public timing
+
+Gameplay source276cf091e8692266adc495418117de9414ec576f pushed normally.
+Full roster fixture records144PASS light/heavy contacts (2cosmics×9opponents×
+2bodies×2facings×2attacks),9weakabsorptions,5counterplay,1constructlifecycle,
+9constructclashes PASS.4public timing cases were late: shot reached221oneframe
+AFTER counter closed. Preserved all172rows/failure; no window/balance change.
+Focused public_verified PASS4 with opposing input2frames earlier, bothbodies/
+facings. First150simwatchdog too short, retained108partialrows; then360simcap.
+Ledger records every attempt. No completed footage repeated.
+
+New isolated playable launcher play_cosmic_review.command (yin/yang,--opponent,
+--body,--local), no unlock/saves/aura grants. NewCosmicCapture only observes existing
+publicCPUdriver; not yetrun. ART_CLOSURE_PLAN.md maps exact Blender/GLB/rig/boot/
+projection/hand/headhair assets and open corrective work. New original Yin
+absorption-guard/Yang panel bakes +different recoilkeys are implementedcandidates;
+existing ANI03floor/reach/head defects remain unclosed. Allhuman gatesfalse.
+
+RUNNING serial affected suite runner toolsession57001; inspect affected/RESULTS
+and consolelogs before starting any new Godot. Do NOT duplicate active processes.
+Next after runner completes: targeted CosmicKits --cosmic-public-only (now adds4
+public panel-body/facing cases), then two bounded headless900frame CosmicCapture
+Yin/Juno andYang/Rook, then four male/female launcher smokechecks serially.
+No native recording/export below18GiB+allocationreserve; actualfree~17.24GiB
+at start. No archive/deletion/cleanup,33worktrees/ownerStory retained.
+
+CI snapshots exact13fc/276source storedcosmic_kits/CI_*.json; inspect actual
+Windows2025 conclusion, never infer from otherWindowsjob. Independent original
+Story/Convergence/OVA/LAN/device requirements remain unfinished. Kit candidates
+are not canonically approved balance; seven acceptedfighters remainbyte-identical.
+No merge/tag/deploy/release/force/reset/rebase. Sourcecheckpoint is valid; later
+new tests/HUD/art-plan changes are recoverable here. No new gameplay change since276.
+
+---
 # October21 ANI04 cosmic kits — candidate pilot checkpoint
 
 Recovered clean13fcf1c1 / existing draft123 stacked122; no worktree rebuild.
