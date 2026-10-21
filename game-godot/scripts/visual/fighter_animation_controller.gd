@@ -43,6 +43,7 @@ var _neutral_return_pose:Array=[]
 var _neutral_return_age:=0.0
 const NEUTRAL_RETURN_SECONDS:=.075
 var _grounded_return = preload("res://scripts/visual/grounded_recovery_blend.gd").new()
+var _attack_support_exchange = preload("res://scripts/visual/grounded_recovery_blend.gd").new()
 var _support_solver = preload("res://scripts/visual/locomotion_weight_transfer.gd").new()
 var support_knee_corrections := 0
 var support_knee_anchor_error_m := 0.0
@@ -76,7 +77,7 @@ func _begin_neutral_return(state: String) -> void:
 	# Settle only stationary grounded neutral. Distance gait, landing and a new
 	# command retain their own foot mechanics without any input delay.
 	if state == _FighterStates.IDLE and is_instance_valid(_runtime_fighter) and _runtime_fighter.is_on_floor() and absf(_runtime_fighter._read_axis()) < .001:
-		_grounded_return.begin(_skeleton)
+		_grounded_return.begin(_skeleton,_gait_phase,0,_active_clip in ["walk_loop","run_loop","dash_loop"])
 	for name in ["Spine","Chest","Neck","Head","UpperArm_L","LowerArm_L","Hand_L","UpperArm_R","LowerArm_R","Hand_R"]:
 		var index:=_skeleton.find_bone(name)
 		if index>=0:_neutral_return_pose.append({"bone":index,"rotation":_skeleton.get_bone_pose_rotation(index)})
@@ -116,6 +117,8 @@ func setup(fighter, model_root: Node3D) -> void:
 			_fighter_id = str(fighter.get("fighter_id"))
 	if fighter != null and "body_variant" in fighter: _body_variant = str(fighter.body_variant)
 	_weight_transfer.setup(_fighter_id)
+	_grounded_return.configure(_fighter_id)
+	_attack_support_exchange.configure(_fighter_id)
 	_skeleton = _find_skeleton(model_root)
 	if _skeleton == null:
 		return
@@ -144,6 +147,7 @@ func bind_runtime_fighter(fighter: Node) -> void:
 
 func play_for_state(state: String, move: Dictionary = {}) -> void:
 	var neutral_state:=state in [_FighterStates.IDLE,_FighterStates.WALK,_FighterStates.RUN,_FighterStates.DASH,_FighterStates.FALL,_FighterStates.FAST_FALL]
+	if not state.begins_with("attack"):_attack_support_exchange.clear()
 	if not neutral_state:_neutral_return_pose.clear()
 	if state != _FighterStates.IDLE: _grounded_return.clear()
 	if state not in [_FighterStates.IDLE,_FighterStates.WALK,_FighterStates.RUN,_FighterStates.DASH]:
@@ -185,6 +189,10 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 	if anim:
 		anim.loop_mode = Animation.LOOP_LINEAR if should_loop else Animation.LOOP_NONE
 	if (_player.current_animation != play_key and _player.current_animation != clip) or (reacting and _reaction_fresh):
+		# Authored per-fighter sole exchange from the actual last gait pose.
+		# Lower-body only, and fully retired BEFORE the authoritative active pose.
+		if action_state and _motion_moving and move_id in ["jab_1","forward_tilt","dash_attack","heavy_attack"] and is_instance_valid(_runtime_fighter) and _runtime_fighter.is_on_floor():
+			_attack_support_exchange.begin(_skeleton,_gait_phase,maxi(1,int(move.get("startup_frames",1))-1),true)
 		if _authored_transition.enabled():
 			if action_state and _motion_moving and move_id in ["jab_1","forward_tilt","dash_attack","heavy_attack"]:
 				_authored_transition.begin("move_heavy" if move_id=="heavy_attack" else "move_light",_visual_facing)
@@ -444,6 +452,13 @@ func synchronize_move(frame: int,move: Dictionary) -> void:
 		else:
 			visual_frame = float(clip.startup_frames+clip.active_frames)+float(frame-actual_start-actual_active)*float(clip.recovery_frames)/float(actual_recovery)
 	_player.seek(visual_frame/60.0,true)
+	var support_end:=maxi(1,int(move.get("startup_frames",1))-1)
+	if _attack_support_exchange.active:
+		if frame>=support_end:_attack_support_exchange.clear()
+		else:
+			# Use the resolved move clock once, not render/animation callback count.
+			_attack_support_exchange.elapsed=0
+			_attack_support_exchange.apply(_skeleton,float(frame)/60.0)
 	_correct_support_knees()
 	# Directed clips own their complete keyed body chain. Applying the older
 	# projection-preserving posture pass would overwrite that authored acting.
@@ -528,6 +543,11 @@ func synchronize_locomotion(world_position: Vector2, model, grounded: bool) -> v
 		if not (_move_synchronized and _authored_transition.kind in ["move_light","move_heavy"]):_authored_transition.clear()
 		_weight_transfer.clear(); _motion_moving=false; _previous_motion_speed=0;_previous_motion_facing=_visual_facing
 		_previous_motion_strength=0
+		# These light routes return to the authored neutral guard. Their next
+		# walk cannot inherit the pre-attack run stride. Heavy/airborne travel
+		# needs separate phase-specific source handoffs; retain that behavior.
+		if is_instance_valid(_runtime_fighter) and str(_runtime_fighter._current_move.get("move_id","")) in ["jab_1","forward_tilt","dash_attack"]:
+			_previous_gait_clip=""
 		return
 	if presentation_frozen:return
 	# Reversal braking is still requested locomotion. Do not replace its
@@ -557,19 +577,20 @@ func synchronize_locomotion(world_position: Vector2, model, grounded: bool) -> v
 	var clip := str(_player.current_animation).get_slice("/",1)
 	if _gait_half_stride.has(clip):
 		_locomotion_synchronized = true
-		if _authored_transition.enabled():
-			if transition in ["start","dash","pivot"] and not _gait_half_stride.has(_previous_gait_clip):
-				# Neutral soles begin at zero fore/aft offset. Quarter-cycle places
-				# the first support sole there instead of teleporting it a stride.
-				_gait_phase=.25
-			elif clip!=_previous_gait_clip and _gait_half_stride.has(_previous_gait_clip):
-				# Preserve planted sole distance across walk/run stride changes.
-				# A cycle fraction is not a shared physical position.
-				var left_support:=_gait_phase<.5
-				var old_stride:float=_gait_half_stride[_previous_gait_clip]
-				var old_sole_z:=old_stride*((1-4*_gait_phase) if left_support else (3-4*_gait_phase))
-				var new_stride:float=_gait_half_stride[clip]
-				_gait_phase=clampf(((1 if left_support else 3)-old_sole_z/new_stride)/4,.0 if left_support else .5,.5 if left_support else 1.0)
+		# Physical stride coordinates are shared by all nine distance gaits;
+		# they do not depend on having Kaia/Juno's newer source overlay.
+		if not _gait_half_stride.has(_previous_gait_clip):
+			# Neutral soles begin at zero fore/aft offset. Quarter-cycle places
+			# the first support sole there instead of teleporting it a stride.
+			_gait_phase=.25
+		elif clip!=_previous_gait_clip and _gait_half_stride.has(_previous_gait_clip):
+			# Preserve planted sole distance across walk/run stride changes.
+			# A cycle fraction is not a shared physical position.
+			var left_support:=_gait_phase<.5
+			var old_stride:float=_gait_half_stride[_previous_gait_clip]
+			var old_sole_z:=old_stride*((1-4*_gait_phase) if left_support else (3-4*_gait_phase))
+			var new_stride:float=_gait_half_stride[clip]
+			_gait_phase=clampf(((1 if left_support else 3)-old_sole_z/new_stride)/4,.0 if left_support else .5,.5 if left_support else 1.0)
 		_previous_gait_clip=clip
 		# Gameplay root displacement remains authoritative; preserve distance gait.
 		var a: Vector2 = model._camera.unproject_position(_skeleton.to_global(Vector3.ZERO))
@@ -578,7 +599,7 @@ func synchronize_locomotion(world_position: Vector2, model, grounded: bool) -> v
 		if gait_period_px>.01:
 			# Reversal braking can move opposite the new facing. Follow real
 			# signed displacement; never invent forward steps while sliding back.
-			var phase_distance:float=signed_displacement*signf(b.x-a.x) if _authored_transition.enabled() else displacement
+			var phase_distance:float=signed_displacement*signf(b.x-a.x)
 			_gait_phase=fposmod(_gait_phase+phase_distance/gait_period_px,1.0)
 			_player.seek(_gait_phase*_player.current_animation_length,true)
 	elif not _weight_transfer.kind.is_empty() or not _authored_transition.kind.is_empty():

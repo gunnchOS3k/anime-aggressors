@@ -1,3 +1,38 @@
+# ANI-P1 — verified bounded foundation; affected final checks next
+
+Worktree `/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure`; branch `release/anime-v1-dialogue-and-elemental-performance`.
+Entry `1cee7169470edccb398fe8840f68a9fe77bfabec`; inspect HEAD for source checkpoint.
+Original external roster audit retained with SHA-256 references in
+`artifacts/v1_closure/parity_foundation/ROSTER_PARITY_ACCEPTANCE.json`.
+All33 worktrees and owner saves preserved. New formal roster gate false.
+
+Implemented: literal Ember ASCENDED override key aura_burst with unchanged existing
+14-damage payload; read-only state-domain descriptor +90 cases. All18 original
+Blender rigs exercised in memory with measured sole/heel/ball, load/replant/roll
+and independent rigid accessory offset tools. ZERO .blend/GLB/mesh/weight/rest or
+saved-action changes; persistent control install and final hair weights remain
+open.9 original finite support scores now used by existing support constraint,
+startup exchange retires before contact, ordinary attack settle deadline intact.
+Light-route gait owner reset; broad reset rejected because heavy recovery worsened.
+Earlier failed traces retained, intermediate raws local-only with SHA receipts.
+
+Passing before commit: state90, controls18, grounded recovery36, all-roster public
+support108 and matched transitions72. Kaia stop peak1.4765→.8126px but mean slightly
+worse; Juno light neutral-stance peak4.2366→1.2930px, startup peak7.238→4.302px;
+heavy matched peaks remain baseline. Not native visual/art/device acceptance.
+Final affected regressions on committed source still pending; next run existing
+CombatChoreography, MeleeGuardContinuity, GroundedRecovery, RosterFootwork,
+RosterLanding, ThrowOwnership, ChargeContinuity, cosmic-public and StorySceneOwnership.
+Do NOT run CampaignRestart directly: it overwrites the preserved root artifact;
+reuse exact unchanged signed-save source/history, or use a separately isolated copy.
+
+Current Data free15.0299GiB, margin-2.9701GiB. NO heavy render/export/recording
+or binary roster production. VISUAL_VERIFICATION_PENDING=true. All art/gameplay/
+balance/audio/release gates false. ANI07 untouched. No merge/tag/deploy/publication.
+Exact next action: inspect final support log, commit verified source, run bounded
+serial affected suites with launch_ordinary_review.py and unique parity profiles.
+
+---
 # ANI-06 — tested transition increment delivered; visual acceptance pending
 
 Worktree `/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure`.
