@@ -1,3 +1,78 @@
+# October 21 — ANI-04 cosmic kits and authored-art checkpoint
+
+Worktree: `/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure`
+Branch: `release/anime-v1-dialogue-and-elemental-performance`.
+Recovered clean entry `13fcf1c1ca50534862cc85a960b4882c7b778ac0`.
+Latest tested runtime/source checkpoint: `e6ead8f9bbf2331032975e5d28e58c3b25dbbdc7`, pushed normally to draft
+PR123, still stacked on draft122 (`c5f3be23bf7376f2a0b71a8aabc1396415ef8186`).
+This subsequent delivery commit adds reports only; use `git rev-parse HEAD` and
+PR123 head to identify it. No code remains only local. All 33 worktrees, owner
+saves and protected evidence retained; no reset/rebase/stash/cleanup or exports.
+All owned Godot/test/capture processes finished; process check found none.
+
+Implemented candidate24-move kits for Yin/Yang with their own IDs, paths, normals,
+charged-shot parameters, movement specials, signatures and aura profiles. Yin
+spends25aura on one weak enemy projectile during six active counter frames at
+real swept contact; stronger/late/second shots remain dangerous. Yang creates
+one stationary36-frame Definition Panel through existing projectile authority.
+Original inward/outward gestures and distinct recoil keys baked on both rigs.
+No boss immunity/reflection/parry/terrain redesign. Seven accepted fighter move,
+fighter and authored clip files remain byte-identical; no collider/proportion
+change. Numeric changes are unaccepted TUNING_CANDIDATE values for cosmic kits.
+
+Verified:144real light/heavy contacts across9opponents,2bodies,2facings;9weak
+absorptions,5counterplay,1construct lifecycle,9construct interceptions.8focused
+public counter/panel cases pass.10affected suites PASS (choreography864,guard72,
+recovery36,reaction18,throw39,charge,projectile interactions/fighter impact/
+ownership,cancel9), plus nine-profile identity and CampaignRestart. All18 base
+shipping model paths exercised:14seven-fighter rows on first run;4cosmic rows
+on verified signed STAGED unlock copy. Four isolated owner-launch smokes pass.
+Staged keys/saves remain ignored locally; never treat them as earned progression.
+Two bounded900frame activeCPU public-input probes:24+31contacts, realCPU attacks,
+no forcedmoves/KO/freeze; no new counter/KO/strict-route acceptance. Headless only.
+Original failing tests retained: freed-reference fixture, short watchdog, late
+public counter recipe, fresh locked shipping fixture. Corrected harness/input
+prerequisites without weakening gameplay or passing over failed rows. Some
+resource-at-exit warnings remain recorded; no leak-free certification.
+
+Evidence: `artifacts/v1_closure/spectral_feedback/continuous_1021/cosmic_kits/`
+Read OWNER_REVIEW.md,VALIDATION_REPORT.json,ROSTER_MATRIX.json,ART_CLOSURE_PLAN.md.
+Per-run source manifests retain HEAD+dirty diff hash. Runtime-source hash map and
+attempt ledger preserve actual source binding. Entry and latest runtime CI both
+six checks SUCCESS; Windows2025 still IN_PROGRESS at recorded snapshot. Never
+infer that platform from windows-latest. Query latest delivery head separately.
+
+Existing ANI03native comparison COMPLETE868frames/647matchedcodes/originalaudio,
+VISUAL_ACCEPTANCE=false. Old media sources preserved; not new cosmic footage.
+No new geometry loops. Boot/floor35–38px,outerhand12.5–17.6px,head/hair projection
+remain exact authored asset/projection blockers. Plan names Blender/GLB, sole
+references/support keys, kinetic-chain clips and independent hair controls.
+No whole-model translation, limb stretch, masks or hitbox retune used as closure.
+
+Last live Data free: 16.136169GiB; margin -1.863831GiB vs18GiB.
+Recheck actual capacity before allocating. No native recording/APK/export below
+18GiB AFTER raw/temp/derivative allocations, even with external movie output.
+No archive/deletion was performed. External volume not needed or initialized.
+
+Next highest-impact task: original coordinated support/strike/recovery asset
+production with weighted-sole references on preserved rigs; validate floor and
+outer contact together in unchanged battle camera. Start with existing art plan
+and prior media, not more numerical pose patches. Parallel independent human
+review is the new isolated manual cosmic kit; balance/art/feel gates remain open.
+Seven earned campaigns,Gray/Convergence,finalKaiaOVA+sixvariations,LAN and device
+acceptance remain unfinished. No V1, ANI04 acting or ANI05 closure claimed.
+
+Exact next review commands (one game at a time):
+`tools/v1_closure/play_cosmic_review.command yin --opponent juno-spark --body female`
+`tools/v1_closure/play_cosmic_review.command yang --opponent rook-ironside --body male`
+Both use isolated profiles/actual public controls; aura earned normally, no
+campaign unlock grants. Other body/opponent and --local supported.
+
+All false: VISUAL_ACCEPTANCE,GAME_FEEL_HUMAN_PASS,VFX_TASTE_HUMAN_PASS,
+ANIMATION_TASTE_HUMAN_PASS,SFX_MIX_HUMAN_PASS,BALANCE_HUMAN_PASS,
+V1_ANIME_HUMAN_PASS,FINAL_RELEASE_AUTHORIZED. No merge/tag/deploy/release.
+
+---
 # Cosmic candidate continuation checkpoint — roster mechanics and public timing
 
 Gameplay source276cf091e8692266adc495418117de9414ec576f pushed normally.

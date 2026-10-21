@@ -27,5 +27,21 @@
     "PASS": true,
     "rows": 4,
     "reason": "earlier opposing public input; same gameplay window, both bodies/facings; declaredresourcefixture"
+  },
+  "affected": {
+    "passed": 10,
+    "shipping_initial_failure": "Fresh fixture correctly left cosmic fighters locked; 14 seven-fighter body cases passed, four cosmic cases failed. Preserved original ledger. No unlock rules changed.",
+    "evidence": "affected/RESULTS.json"
+  },
+  "final_checks": {
+    "PASS": true,
+    "public_cases": 8,
+    "shipping_cosmic_cases": 4,
+    "signed_staged_fixture": true,
+    "campaign_restart": true,
+    "headless_cpu_probes": 2,
+    "launcher_body_smokes": 4,
+    "evidence": "final_checks/RESULTS.json",
+    "scope": "New fixtures use declared resources and setup; none establishes earned Story or human visual/balance approval."
   }
 }

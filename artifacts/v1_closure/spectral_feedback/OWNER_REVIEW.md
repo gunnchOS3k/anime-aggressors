@@ -1,3 +1,5 @@
+> October 21: [Play the distinct Yin/Yang tuning candidates](continuous_1021/cosmic_kits/OWNER_REVIEW.md). Separate absorption and finite-construction mechanics, both body rigs and nine-opponent fixtures are implemented. Balance/art/feel approval remains pending. The completed ANI-03 native comparison is preserved; boot/floor, outer reach and head/hair authored asset work remains open.
+
 > October20 recovered production increment: [Play the corrected fighter-impact and grounded-motion review](continuous_1020/fighter_impact/OWNER_REVIEW.md). Non-piercing fighter impacts retire at real contact; all18models retain support/strike anchors with corrected forward knee bends. Existing victory/defeat body tracks now advance. Native movie sourceb2e27e48; later terminal source08d46000. Close-body overlap/floor/reach and human approval remain open. Historical clash movies retain their sources and are excluded from fighter-impact acceptance.
 
 # October19 playable production increment
