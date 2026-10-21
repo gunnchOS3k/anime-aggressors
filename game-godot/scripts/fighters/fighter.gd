@@ -214,6 +214,10 @@ func attempt_transform() -> bool:
 	return _transform_pipeline.attempt_transform()
 
 
+func can_start_transform_sequence() -> bool:
+	return controls_enabled and stocks > 0 and grabbed_by == null and grabbed_target == null and state_machine != null and state_machine.can_attack() and not move_runner.active
+
+
 func tick_transform_pipeline(delta: float, game_paused: bool = false) -> void:
 	if _transform_pipeline != null:
 		_transform_pipeline.tick(delta, game_paused)
@@ -253,7 +257,26 @@ func _on_transform_completed(_fid: String, _form_id: String) -> void:
 	state_machine.enter(_FighterStates.IDLE)
 	aura = maxf(0.0, aura - 25.0)
 
+
+func on_transform_sequence_cancelled(_reason: String) -> void:
+	_transform_sequence_active = false
+	if model_3d != null and model_3d.has_method("set_transform_progress"):
+		model_3d.set_transform_progress(0.0)
+	# The interrupting hurt/grab/KO state retains authority. No idle transition,
+	# aura refund or successful-transformation cost may be issued by cancellation.
+	_set_aura_vfx(false)
+
+
+func reset_legacy_transformation(reason: String) -> void:
+	if _transform_pipeline != null: _transform_pipeline.cancel(reason)
+	_transform_sequence_active = false
+	var base_form := _FormDefinition.default_form_id(_forms_doc)
+	if not base_form.is_empty() and _current_form_id != base_form: apply_form(base_form)
+	if model_3d != null and model_3d.has_method("set_transform_progress"):
+		model_3d.set_transform_progress(0.0)
+
 func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, spawn: Vector2) -> void:
+	if _transform_pipeline != null: _transform_pipeline.cancel("fighter_reconfigured")
 	_cosmic_counter_activation = -1
 	cosmic_kit_history.clear()
 	if has_meta("story_cosmic_contract"):
@@ -1458,6 +1481,7 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 		return
 	# Confirmed body impact interrupts the prior move; its later callbacks must not
 	# overwrite hurt/hitstun or activate another hitbox during victim recovery.
+	if _transform_pipeline != null: _transform_pipeline.cancel("body_hit")
 	if move_runner != null: move_runner.cancel()
 	hitbox.monitoring = false
 	var dmg: float = info.get("damage", 0.0)
@@ -1500,6 +1524,7 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 	# Hit telemetry is recorded by HitResolver.resolve (single source of truth).
 
 func reset_fighter() -> void:
+	reset_legacy_transformation("respawn")
 	var trail = get_node_or_null("LaunchTrail")
 	if trail != null: trail.clear()
 	damage_percent = 0.0
@@ -1522,6 +1547,7 @@ func reset_fighter() -> void:
 
 func lose_stock() -> void:
 	# Called only by authentic battle stock loss; danger predictions are never a final result.
+	reset_legacy_transformation("stock_loss")
 	var renderer = preload("res://scripts/visual/spectral_feedback_renderer.gd").obtain(self)
 	if renderer != null:
 		var canvas_to_world := get_viewport().get_canvas_transform().affine_inverse()
@@ -1700,6 +1726,8 @@ func _set_aura_vfx(on: bool) -> void:
 
 
 func _on_state_changed(_from: String, to: String) -> void:
+	if _transform_sequence_active and to != _FighterStates.AURA_BURST_STARTUP:
+		_transform_pipeline.cancel("state_interrupted:" + to)
 	if _elemental_audio != null and _from in [_FighterStates.AURA_CHARGE,_FighterStates.AURA_READY] and to not in [_FighterStates.AURA_CHARGE,_FighterStates.AURA_READY]:
 		if to in [_FighterStates.IDLE,_FighterStates.AURA_BURST_STARTUP]: _elemental_audio.update_charge(false,aura/100.0)
 		else: _elemental_audio.cancel_charge()

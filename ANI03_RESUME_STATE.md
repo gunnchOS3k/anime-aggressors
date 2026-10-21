@@ -1,3 +1,19 @@
+# Ascended lifecycle repair — bounded verification checkpoint
+
+Parent source7c40462e; inspect current HEAD for correction commit. Existing generic
+BASE→AWAKENED_BUILD→ASCENDED chain works with public charge/chord. New correction:
+real body hits cancel pending transformation without replacing hurt state;
+configure/stock loss/respawn retire pending ownership and clear legacy form.
+Move values, 25-aura completion cost, timing and base kits unchanged. One retained
+baseline case failed four lifecycle checks; repaired single case passes. Earlier
+fixture cost/parse failures retained separately. artifacts/v1_closure/ascended_lifecycle.
+Next command: launch_ordinary_review.py --profile ascended_roster_1021a --headless
+--test-script res://tests/v1_closure/AscendedLifecycle.gd --output
+artifacts/v1_closure/ascended_lifecycle/roster (28 configurations). Then affected
+cosmic/Story/charge tests. No owned long process. Latest archive receipt remains
+valid; internal free9.69GiB, no heavy exports/captures. All human gates false.
+
+---
 # Verified external archive checkpoint
 
 P1 source4a684 and final evidence598e2068 pushed; all10 affected suites passed.
