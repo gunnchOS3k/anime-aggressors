@@ -55,7 +55,7 @@ def original_actions_digest():
     curves = {a.name: [(f.data_path, f.array_index,
                        [(list(k.co), k.interpolation) for k in f.keyframe_points])
                       for f in a.fcurves]
-              for a in bpy.data.actions if not a.name.startswith("ANI05_WIP_")}
+              for a in bpy.data.actions if not a.name.startswith(("ANI05_WIP_", "ANI06_WIP_"))}
     return hashlib.sha256(json.dumps(curves, sort_keys=True).encode()).hexdigest()
 
 
@@ -81,7 +81,7 @@ def verify_actions(arm, fid, body, doc):
     for name, clip in doc["clips"].items():
         if not clip.get("directed_source"):
             continue
-        action = bpy.data.actions["ANI05_WIP_"+name]
+        action = bpy.data.actions[clip.get("source_action", "ANI05_WIP_"+name)]
         arm.animation_data.action = action
         for frame in range(clip["duration_frames"]+1):
             bpy.context.scene.frame_set(frame)
@@ -112,7 +112,9 @@ def export_runtime(arm, fid, body, doc):
     for track in arm.animation_data.nla_tracks: track.mute = True
     for name, clip in doc["clips"].items():
         if not clip.get("directed_source"): continue
-        arm.animation_data.action = bpy.data.actions["ANI05_WIP_"+name]
+        if "--only-transitions" in sys.argv and not clip.get("transition_kind"): continue
+        action_name=clip.get("source_action", "ANI05_WIP_"+name)
+        arm.animation_data.action = bpy.data.actions[action_name]
         tracks = {n: [] for n in clip["bone_tracks"]}
         previous = {}
         for frame in range(clip["duration_frames"]+1):
@@ -131,7 +133,7 @@ def export_runtime(arm, fid, body, doc):
                 if n == "Hips": key["position_m"] = [round(v,7) for v in loc]
                 tracks[n].append(key)
         clip["bone_tracks"] = tracks
-        clip["source_action"] = "ANI05_WIP_"+name
+        clip["source_action"] = action_name
         clip["source_blend"] = f"art_source/collectible_v1/{fid}/{body}/candidate.blend"
         clip["resource_export"] = "evaluated saved Blender action -> canonical runtime JSON; no GLB/model export"
     return doc
@@ -156,7 +158,8 @@ def write_actions(arm, fid, body, doc):
     for clip_name, clip in doc["clips"].items():
         if not clip.get("directed_source"):
             continue
-        name = "ANI05_WIP_" + clip_name
+        if "--only-transitions" in sys.argv and not clip.get("transition_kind"): continue
+        name = clip.get("source_action", "ANI05_WIP_" + clip_name)
         action = bpy.data.actions.get(name)
         if action is not None:
             assert "--refresh-owned" in sys.argv and action.get("source_score") == clip["directed_source"], "Preserve existing action; use a new version: " + name
@@ -212,6 +215,7 @@ def main():
     inspect = "--inspect-only" in sys.argv
     verify = "--verify-only" in sys.argv
     export = "--export-runtime-json" in sys.argv
+    suffix = "_transition" if "--only-transitions" in sys.argv else ""
     for fid in FIGHTERS:
         for body in ("male", "female"):
             source = ROOT / f"art_source/collectible_v1/{fid}/{body}/candidate.blend"
@@ -219,6 +223,8 @@ def main():
             arm = next(o for o in bpy.data.objects if o.type == "ARMATURE")
             before = digest_source(arm)
             old_actions = original_actions_digest()
+            preserved_directed = {a.name: [(f.data_path,f.array_index,[(list(k.co),k.interpolation) for k in f.keyframe_points]) for f in a.fcurves]
+                                  for a in bpy.data.actions if a.name.startswith("ANI05_WIP_")} if suffix else {}
             ref = reference(arm, fid, body)
             target = ROOT / f"art_source/animation/fighters/{fid}/directed_performance/{body}_sole_reference.json"
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -232,7 +238,7 @@ def main():
                     if clip.get("directed_source") and name in base["clips"]: base["clips"][name] = clip
                 base_path.write_text(json.dumps(base,separators=(",",":"))+"\n")
                 result = verify_actions(arm,fid,body,doc)
-                (target.parent/(body+"_runtime_export.json")).write_text(json.dumps(result,indent=2)+"\n")
+                (target.parent/(body+suffix+"_runtime_export.json")).write_text(json.dumps(result,indent=2)+"\n")
                 assert result["PASS"], result
                 print("BLENDER_RUNTIME_EXPORT",fid,body,result,flush=True)
                 continue
@@ -243,7 +249,7 @@ def main():
             if verify:
                 doc = json.loads((ROOT / f"game-godot/data/animation/combat_performance/{fid}_{body}.json").read_text())
                 result = verify_actions(arm, fid, body, doc)
-                (target.parent / (body+"_evaluated_actions.json")).write_text(json.dumps(result, indent=2)+"\n")
+                (target.parent / (body+suffix+"_evaluated_actions.json")).write_text(json.dumps(result, indent=2)+"\n")
                 print("DIRECTED_VERIFY", fid, body, result, flush=True)
                 assert result["PASS"], "Source action differs from runtime keys"
                 continue
@@ -260,7 +266,7 @@ def main():
             actions = write_actions(arm, fid, body, doc)
             verified = verify_actions(arm, fid, body, doc)
             assert verified["PASS"], verified
-            (target.parent / (body+"_evaluated_actions.json")).write_text(json.dumps(verified, indent=2)+"\n")
+            (target.parent / (body+suffix+"_evaluated_actions.json")).write_text(json.dumps(verified, indent=2)+"\n")
             arm.animation_data.action = original_action
             for track, value in zip(arm.animation_data.nla_tracks, muted):
                 track.mute = value
@@ -295,6 +301,10 @@ def main():
                 marker.matrix_world.translation = C.inverted() @ Vector(point)
             assert digest_source(arm) == before, "Geometry/rest/weights changed"
             assert original_actions_digest() == old_actions, "Original action changed"
+            if suffix:
+                after_directed = {a.name: [(f.data_path,f.array_index,[(list(k.co),k.interpolation) for k in f.keyframe_points]) for f in a.fcurves]
+                                  for a in bpy.data.actions if a.name.startswith("ANI05_WIP_")}
+                assert after_directed == preserved_directed, "Completed ANI05 action changed"
             # Git already preserves the original binary. Avoid automatic .blend1
             # duplication without deleting or touching any existing backups.
             bpy.context.preferences.filepaths.save_version = 0
@@ -305,7 +315,8 @@ def main():
                       "original_actions_preserved": True, "original_actions_sha256": old_actions,
                       "source_sole_controls": 2, "deduplicated_own_source_controls": removed_controls,
                       "VISUAL_VERIFICATION_PENDING": True, "human_approved": False}
-            (target.parent / (body + "_source_actions.json")).write_text(json.dumps(report, indent=2) + "\n")
+            report["completed_ANI05_actions_preserved"] = bool(preserved_directed) if suffix else None
+            (target.parent / (body + suffix + "_source_actions.json")).write_text(json.dumps(report, indent=2) + "\n")
             print("DIRECTED_SOURCE_SAVED", fid, body, len(actions), flush=True)
 
 

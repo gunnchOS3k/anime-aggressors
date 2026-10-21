@@ -1,3 +1,45 @@
+# ANI-06 — authored transition source checkpoint (in progress)
+
+Existing worktree/branch unchanged, entry292fd24d. All33worktrees/owner saves kept.
+New18 ANI06_WIP transition actions per Kaia/Juno body rig; original147actions,
+completed32ANI05actions, meshes/weights/rest preserved. Saved source export
+read/evaluated4512frames across4files PASS. No GLB/camera/gameplay changes.
+New source pelvis/torso/arm deltas compose with distance gait using existing
+support constraint; other7fighters retain legacy transition behavior. Corrected
+walk/run stride handoff preserves sole distance; reversal uses signed actual
+root displacement. New9transition categories, bodies/facings implemented as WIP.
+No new procedural body generator/root authority. Physical/visual quality pending.
+
+Evidence continuous_1021/authored_transitions/. Baseline72publicpose cases before2.
+Source-only attemptafter2 did not reduce foot spikes; retained. after1 compile
+failure and initial baseline missing-property failure retained/excluded despite
+misleading initialfixturePASS. Fixture now rejects incomplete traces. after3
+72rowsPASS and fivefocused suitesPASS, noSCRIPTERROR. Improved start peaks Kaia
+5.39972->.003359/Juno1.31982->.004919px/frame in this broader trace; not interchangeable
+with oldANI05strengthfixture. Stops mixed:Kaia1.336->1.47653/Juno.85369->.37980;
+reversal Kaia5.517->1.2105/Juno6.457->.04135. No artistic passingthreshold.
+Last source change extends movement-to-light to actualforward_tilt and restores
+unchanged legacy start selection. Needs final affected tests on committedsource.
+
+One bounded publiccounterplay run activeCPUJuno:15CPUhits+2blocks,23Kaiahits+
+17blocks,43CPUmoveattempts,0KO. Actual1800frames/300periodicsamples (initialCLI
+used unsupported performance-frames/exact-combat-trace flags; no claim exact
+per-frame samples). Authoritative contacts retained. Earlier900framezeroCPUhits
+is driver-specific evidence, no identifiedAIdefect/noAIchange. No source capture.
+
+No Godot/Blender owned processes currently running. Next: exact-source final
+AuthoredTransitions with strong nine-kind assertions, RosterFootwork24case trace,
+and affected shared animation/combat/spacing/throw/projectile/cosmic suites
+serially. Then both owner-launchsmokes,sourcehash/checkunchangedgameplay,ownerreview,
+normalpush/checkCI. Do not rerun long campaigns or oldmoviecampaign.
+
+Datafree at entry~14.5GiB below18+allocations. No nativecapture/APK/heavyexport/
+GLB/cachecleanup/archival/deletion. VISUAL_VERIFICATION_PENDING: floor35-38px,
+outercontact12.5-17.6px/headhair unresolved. HairHeadbound, solemarkers not finished
+IK/footrollrig. Allhuman/balance/release gatesfalse. OVA+6,earned7campaigns/Gray/
+Convergence,fullrosteracting,LAN/physicalAndroidWindows remainopen.
+
+---
 # ANI-05-R — final authored source validation COMPLETE; human review pending
 
 Worktree: `/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure`

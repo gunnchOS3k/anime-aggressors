@@ -25,14 +25,19 @@ func run() -> void:
 			if fid in ["kaia-windrow","juno-spark"]:
 				var doc: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/animation/combat_performance/%s_%s.json"%[fid,body]))
 				var directed_count:=0
+				var transition_count:=0
 				for name in doc.clips:
 					var clip:Dictionary=doc.clips[name]
 					if not clip.has("directed_source"):continue
-					directed_count+=1
+					if clip.has("transition_kind"):
+						transition_count+=1
+						check(str(clip.source_action).begins_with("ANI06_WIP_"),fid+body+name+":new_source_action")
+					else:directed_count+=1
 					check(player.has_animation("combat_choreography/"+name),fid+body+name+":source_clip_loaded")
 					check(not clip.bone_tracks.has("Root"),fid+body+name+":no_root_animation")
 					check(not clip.get("human_approved",true),fid+body+name+":approval_false")
 				check(directed_count==32,fid+body+":all_directed_clips_loaded")
+				check(transition_count==18,fid+body+":nine_mirrored_transition_actions")
 				for required in ["walk_loop","run_loop","dash_loop","grab","throw_forward","throw_back","throw_up","throw_down","ko","defeat"]:
 					check(doc.clips.get(required,{}).has("directed_source"),fid+body+":directed_category:"+required)
 				for gait in ["walk_loop","run_loop","dash_loop"]:

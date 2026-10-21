@@ -30,6 +30,9 @@ var _world_position_valid := false
 var _gait_phase := 0.0
 var gait_period_px := 0.0
 var _weight_transfer = preload("res://scripts/visual/locomotion_weight_transfer.gd").new()
+var _authored_transition = preload("res://scripts/visual/authored_locomotion_transition.gd").new()
+var _previous_motion_strength:=0.0
+var _previous_gait_clip:=""
 var _previous_motion_facing := 1
 var _previous_motion_speed := 0.0
 var _motion_moving := false
@@ -182,6 +185,13 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 	if anim:
 		anim.loop_mode = Animation.LOOP_LINEAR if should_loop else Animation.LOOP_NONE
 	if (_player.current_animation != play_key and _player.current_animation != clip) or (reacting and _reaction_fresh):
+		if _authored_transition.enabled():
+			if action_state and _motion_moving and move_id in ["jab_1","forward_tilt","dash_attack","heavy_attack"]:
+				_authored_transition.begin("move_heavy" if move_id=="heavy_attack" else "move_light")
+			elif state==_FighterStates.IDLE and not _active_clip.is_empty() and _move_synchronized==false and not _motion_moving:
+				_authored_transition.begin("guard")
+			elif not neutral_state and not action_state:
+				_authored_transition.clear()
 		# A finished non-looping clip clears current_animation but leaves its
 		# final skeleton pose visible. That pose still needs a recovery blend.
 		if neutral_state and not _active_clip.is_empty():_begin_neutral_return(state)
@@ -441,6 +451,15 @@ func synchronize_move(frame: int,move: Dictionary) -> void:
 		_strike_posture.last = {"admitted":false,"reason":"directed_source_clip"}
 	else:
 		_strike_posture.apply(_runtime_fighter,_skeleton,frame,move)
+	# Movement anticipation may blend only inside existing startup. Its source
+	# duration is fitted before activation; the authored contact is unchanged.
+	if _authored_transition.kind in ["move_light","move_heavy"]:
+		var startup:=maxi(1,int(move.get("startup_frames",1)))
+		if frame>=startup-1:_authored_transition.clear()
+		else:
+			var source_name:String="transition_"+str(_authored_transition.kind)+("_left" if _visual_facing==-1 else "")
+			var duration:float=float(_authored_transition.clips[source_name].duration_frames)/60.0
+			_authored_transition.sample(_skeleton,float(frame)/maxi(1,startup-1)*duration,_visual_facing)
 
 func _load_combat_choreography(model_root: Node3D) -> void:
 	var path := "res://data/animation/combat_choreography/%s_%s.json" % [_fighter_id,_body_variant]
@@ -460,6 +479,7 @@ func _load_combat_choreography(model_root: Node3D) -> void:
 		var performance: Dictionary=JSON.parse_string(FileAccess.get_file_as_string(performance_path))
 		for clip in performance.clips:
 			var authored: Dictionary=performance.clips[clip]
+			_authored_transition.register(str(clip),authored)
 			if authored.has("startup_frames"):_choreography_timing[clip]=_timing_metadata(authored)
 			if library.has_animation(clip):library.remove_animation(clip)
 			var animation := _animation_from_data(authored)
@@ -485,11 +505,15 @@ func _timing_metadata(clip: Dictionary) -> Dictionary:
 	return metadata
 
 func get_locomotion_transition_evidence() -> Dictionary:
+	if _authored_transition.enabled():return _authored_transition.evidence()
 	return _weight_transfer.evidence()
 
 func synchronize_locomotion(world_position: Vector2, model, grounded: bool) -> void:
 	var displacement := 0.0
-	if _world_position_valid: displacement = absf(world_position.x-_last_world_position.x)
+	var signed_displacement:=0.0
+	if _world_position_valid:
+		signed_displacement=world_position.x-_last_world_position.x
+		displacement=absf(signed_displacement)
 	_last_world_position = world_position; _world_position_valid = true
 	_locomotion_synchronized = false
 	if _player == null or model._camera == null or _skeleton == null: return
@@ -501,37 +525,70 @@ func synchronize_locomotion(world_position: Vector2, model, grounded: bool) -> v
 	var delta := get_physics_process_delta_time()
 	var speed := displacement/maxf(delta,.001)
 	if not neutral_motion:
+		if not (_move_synchronized and _authored_transition.kind in ["move_light","move_heavy"]):_authored_transition.clear()
 		_weight_transfer.clear(); _motion_moving=false; _previous_motion_speed=0;_previous_motion_facing=_visual_facing
+		_previous_motion_strength=0
 		return
 	if presentation_frozen:return
 	# Reversal braking is still requested locomotion. Do not replace its
 	# authored pivot with a stop when velocity crosses zero under held input.
-	var commanded := absf(_runtime_fighter._read_axis())>.001
+	var strength:=absf(_runtime_fighter._read_axis())
+	var commanded := strength>.001
+	var transition:=""
 	if displacement>128:
-		_gait_phase=0;_weight_transfer.clear();_motion_moving=false
+		_gait_phase=0;_weight_transfer.clear();_authored_transition.clear();_motion_moving=false
 	elif commanded and _visual_facing!=_previous_motion_facing and _motion_moving:
-		_weight_transfer.begin("pivot")
+		transition="reverse"
 	elif commanded and not _motion_moving:
-		_weight_transfer.begin("start")
+		transition="pivot" if _visual_facing!=_previous_motion_facing else "dash" if strength>.85 else "start"
 	elif _motion_moving and not commanded:
-		_weight_transfer.begin("stop")
+		transition="stop"
+	elif commanded and strength>.85 and _previous_motion_strength<=.85:
+		transition="dash"
+	elif commanded and strength>.55 and _previous_motion_strength<=.55:
+		transition="accelerate"
+	if not transition.is_empty():
+		if _authored_transition.enabled():_weight_transfer.clear();_authored_transition.begin(transition)
+		elif transition=="reverse":_weight_transfer.begin("pivot")
+		elif transition in ["start","dash","pivot"]:_weight_transfer.begin("start")
+		elif transition=="stop":_weight_transfer.begin("stop")
+	_previous_motion_strength=strength
 	_motion_moving=commanded;_previous_motion_speed=speed;_previous_motion_facing=_visual_facing
 	var clip := str(_player.current_animation).get_slice("/",1)
 	if _gait_half_stride.has(clip):
 		_locomotion_synchronized = true
+		if _authored_transition.enabled():
+			if transition in ["start","dash","pivot"] and not _gait_half_stride.has(_previous_gait_clip):
+				# Neutral soles begin at zero fore/aft offset. Quarter-cycle places
+				# the first support sole there instead of teleporting it a stride.
+				_gait_phase=.25
+			elif clip!=_previous_gait_clip and _gait_half_stride.has(_previous_gait_clip):
+				# Preserve planted sole distance across walk/run stride changes.
+				# A cycle fraction is not a shared physical position.
+				var left_support:=_gait_phase<.5
+				var old_stride:float=_gait_half_stride[_previous_gait_clip]
+				var old_sole_z:=old_stride*((1-4*_gait_phase) if left_support else (3-4*_gait_phase))
+				var new_stride:float=_gait_half_stride[clip]
+				_gait_phase=clampf(((1 if left_support else 3)-old_sole_z/new_stride)/4,.0 if left_support else .5,.5 if left_support else 1.0)
+		_previous_gait_clip=clip
 		# Gameplay root displacement remains authoritative; preserve distance gait.
 		var a: Vector2 = model._camera.unproject_position(_skeleton.to_global(Vector3.ZERO))
 		var b: Vector2 = model._camera.unproject_position(_skeleton.to_global(Vector3(0,0,float(_gait_half_stride[clip]))))
 		gait_period_px = 4*absf(b.x-a.x)*absf(model._display.scale.x)
 		if gait_period_px>.01:
-			_gait_phase=fposmod(_gait_phase+displacement/gait_period_px,1.0)
+			# Reversal braking can move opposite the new facing. Follow real
+			# signed displacement; never invent forward steps while sliding back.
+			var phase_distance:float=signed_displacement*signf(b.x-a.x) if _authored_transition.enabled() else displacement
+			_gait_phase=fposmod(_gait_phase+phase_distance/gait_period_px,1.0)
 			_player.seek(_gait_phase*_player.current_animation_length,true)
-	elif not _weight_transfer.kind.is_empty():
+	elif not _weight_transfer.kind.is_empty() or not _authored_transition.kind.is_empty():
+		_previous_gait_clip=""
 		# Reset the base pose each physics tick; never compound additive transforms.
 		_locomotion_synchronized=true
 		_player.advance(delta)
 		_player.seek(_player.current_animation_position,true)
 	if not _weight_transfer.kind.is_empty():_weight_transfer.apply(_skeleton,delta,_visual_facing)
+	if not _authored_transition.kind.is_empty():_authored_transition.apply(_skeleton,delta,_visual_facing)
 	_correct_support_knees()
 
 func set_visual_facing(direction: int) -> void:
