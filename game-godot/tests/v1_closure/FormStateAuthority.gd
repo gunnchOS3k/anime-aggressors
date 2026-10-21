@@ -29,11 +29,12 @@ func run() -> void:
 			rows.append({"fighter":fid,"state":state,"descriptor":descriptor})
 		check(not Forms.describe_state(fid,"ESSENCE_3").applicable,fid+":no_unapproved_essence3")
 		if fid in Authority.COSMIC:
-			check(doc.is_empty(),fid+":no_inherited_legacy_ladder")
-			continue
+			check(doc.get("state_domain","")=="cosmic_playable_advancement",fid+":separate_playable_cosmic_ladder")
+			check(doc.get("tuning_status","")=="TUNING_CANDIDATE",fid+":not_final_balance")
+			check(not doc.canon_policy.grants_story_progress and not doc.canon_policy.boss_immunity,fid+":no_boss_or_story_grant")
 		check(doc.form_ladder.size()==3,fid+":preserved_ladder")
 		for state in doc.form_ladder:
-			check(Forms.describe_state(fid,state).domain=="legacy_aura_ladder",fid+state+":not_story_alias")
+			check(Forms.describe_state(fid,state).domain==("legacy_aura_ladder" if fid in Authority.SPECTRUM else "cosmic_playable_advancement"),fid+state+":not_story_alias")
 			var entry: Dictionary=Forms.form_entry(doc,state)
 			check(is_equal_approx(Forms.body_scale(entry),1.0),fid+state+":canonical_scale")
 			for mid in Forms.move_overrides(entry):

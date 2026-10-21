@@ -8,6 +8,7 @@ const Identity = preload("res://scripts/combat/aura_identity.gd")
 const Loader = preload("res://scripts/data/data_loader.gd")
 var output := ""
 var single := false
+var cosmic_only := false
 var failures: Array = []
 var rows: Array = []
 func _init() -> void: call_deferred("_run")
@@ -46,6 +47,7 @@ func _run() -> void:
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--ordinary-output="): output=arg.get_slice("=",1)
 		if arg=="--single": single=true
+		if arg=="--cosmic-only": cosmic_only=true
 	var gs=root.get_node("GameState")
 	gs.mode="versus"; gs.stage_id="training-grid"; gs.p1_fighter_id="ember-vale"; gs.p2_fighter_id="juno-spark"; gs.p2_is_cpu=false; gs.stocks=9
 	# One scene hosts many reset lifecycle fixtures; use the existing untimed
@@ -54,12 +56,17 @@ func _run() -> void:
 	root.get_node("SceneRouter").go("battle"); await frames(220)
 	var p=current_scene.fighter1; var d=current_scene.fighter2
 	var fighters: Array=SPECTRUM.slice(0,1) if single else SPECTRUM
+	if cosmic_only: fighters=["yin","yang"]
 	for fid in fighters:
 		for body in (["male"] if single else ["male","female"]):
 			for direction in ([1] if single else [1,-1]):
 				await fixture(p,d,fid,body,direction)
 				var prefix: String=fid+":"+body+":"+str(direction)
 				var ladder: Array=p.get_forms_doc().form_ladder
+				if fid in ["yin","yang"]:
+					p.set_meta("story_cosmic_contract",true)
+					check(not p.can_start_transform_sequence(),prefix+":boss_context_excluded")
+					p.remove_meta("story_cosmic_contract")
 				await chord(); await frames(6)
 				check(not p._transform_sequence_active and p.get_current_form_id()==ladder[0],prefix+":low_aura_rejected")
 				# Clear the ordinary low-meter charge/attack with its natural recovery.

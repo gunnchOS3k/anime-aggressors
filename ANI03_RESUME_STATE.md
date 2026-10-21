@@ -1,3 +1,29 @@
+# Nine-fighter advancement candidate checkpoint
+
+Inspect HEAD for source commit. Seven spectrum lifecycle28 cases and distinct
+Yin/Yang cosmic lifecycle8 pass with public controls, both bodies/facings. Base
+216 move records unchanged. Yin inward / Yang outward overlays with longer
+recovery are TUNING_CANDIDATE. Finite original counter/panel untouched; no ordinary
+Story Gray/Puppet/Essence inheritance or unlock grants. No new final art assets.
+Resolved form-melee double aura/identity scaling reproduced numerically (18.845
+vs14.5) and fixed only for resolved transformation overlays; BASE/projectile
+paths intentionally unchanged. Match end retires pending and new transformations.
+Three-case damage/guard and real match-end pilot PASS; final exact-source81
+ordered pairs and affected source regressions are NEXT. All failure fixtures kept.
+Evidence artifacts/v1_closure/ascended_lifecycle/OWNER_REVIEW.md and ATTEMPT_LEDGER.
+
+Exact next command: launch_ordinary_review.py --profile advancement_final_1021a
+--headless --test-script res://tests/v1_closure/AdvancementMatchups.gd --output
+artifacts/v1_closure/ascended_lifecycle/final_matchups. Then FormStateAuthority,
+ThrowOwnership, ChargeContinuity, CosmicKits --cosmic-public-only,
+StorySceneOwnership, MeleeGuardContinuity, ProjectileFighterImpact (serial).
+No owned long process. Internal below18GiB guard; no capture/export/cleanup.
+Archive receipts remain valid, all originals retained. All human/release gates false.
+Party items/ultimates/controller/parry/elemental throws remain authorized but NOT
+implemented; BASE aura resolution needs separate controlled comparison before
+accepted balance changes. Full original art/native/device acceptance still pending.
+
+---
 # Spectrum Ascended lifecycle: all28 configurations pass
 
 Shared correction sourcec76f284b069fd966fe3e1317bb20d49a6a531dfb pushed.

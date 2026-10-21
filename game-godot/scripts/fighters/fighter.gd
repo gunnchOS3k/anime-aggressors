@@ -140,6 +140,7 @@ var _current_form_id: String = ""
 var _transform_pipeline
 var _transform_activations: int = 0
 var _transform_sequence_active: bool = false
+var _transform_match_closed: bool = false
 
 func _ready() -> void:
 	add_to_group("fighters")
@@ -215,6 +216,9 @@ func attempt_transform() -> bool:
 
 
 func can_start_transform_sequence() -> bool:
+	if _transform_match_closed: return false
+	# Playable cosmic advancement is separate from authored Story boss context.
+	if fighter_id in ["yin", "yang"] and get_meta("story_cosmic_contract", false): return false
 	return controls_enabled and stocks > 0 and grabbed_by == null and grabbed_target == null and state_machine != null and state_machine.can_attack() and not move_runner.active
 
 
@@ -275,8 +279,14 @@ func reset_legacy_transformation(reason: String) -> void:
 	if model_3d != null and model_3d.has_method("set_transform_progress"):
 		model_3d.set_transform_progress(0.0)
 
+
+func close_transformation_for_match_end() -> void:
+	_transform_match_closed = true
+	if _transform_pipeline != null: _transform_pipeline.cancel("match_end")
+
 func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, spawn: Vector2) -> void:
 	if _transform_pipeline != null: _transform_pipeline.cancel("fighter_reconfigured")
+	_transform_match_closed = false
 	_cosmic_counter_activation = -1
 	cosmic_kit_history.clear()
 	if has_meta("story_cosmic_contract"):
@@ -925,6 +935,11 @@ func _start_move_dict(m: Dictionary) -> void:
 	_current_move = _AuraIdentity.apply_to_scaled_move(
 		_current_move, fighter_id, aura, str(data.get("combatTag", ""))
 	)
+	# Only literal form overlays opt into resolved-melee ownership. BASE and
+	# projectile resolution retain their existing accepted behavior. The resolver
+	# must not apply aura/identity a second time to these already resolved moves.
+	if bool(_current_move.get("form_override_applied", false)):
+		_current_move["_resolved_form_melee_scaling"] = true
 	# Neutral special cast clip follows aura tier (tap/medium/full) — no new buttons.
 	var mid0 := str(_current_move.get("move_id", m.get("move_id", "")))
 	if mid0 == "neutral_special_projectile" or str(m.get("move_type", "")) == "projectile":

@@ -12,8 +12,8 @@ static func describe(fighter_id: String, state: String, legacy: Dictionary = {})
 	if not spectrum and not cosmic: return result
 	if state == "BASE":
 		result.merge({"applicable":true,"domain":"playable_base","asset_form":"BASE"},true)
-	elif spectrum and legacy.get("forms",{}).has(state):
-		result.merge({"applicable":true,"domain":"legacy_aura_ladder","asset_form":"BASE","gameplay_owner":"TransformPipeline + literal move_overrides","story_alias":false},true)
+	elif legacy.get("forms",{}).has(state) and (spectrum or (cosmic and legacy.get("state_domain","")=="cosmic_playable_advancement")):
+		result.merge({"applicable":true,"domain":"legacy_aura_ladder" if spectrum else "cosmic_playable_advancement","asset_form":"BASE","gameplay_owner":"TransformPipeline + literal move_overrides","story_alias":false},true)
 	elif spectrum and state in ["BLACK_PUPPET","WHITE_PUPPET","PRISMATIC_GRAY"]:
 		result.merge({"applicable":true,"domain":"story_visual_variant","asset_form":state,"gameplay_owner":"signed CampaignRuntime / Story encounter","dedicated_combat_acting_verified":false},true)
 	elif spectrum and state.begins_with("ESSENCE_"):

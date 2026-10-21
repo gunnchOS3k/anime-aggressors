@@ -67,14 +67,15 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 	var aura_amt := 0.0
 	var fid := ""
 	var tag := ""
+	var resolved_form_melee := not from_projectile and bool(move.get("_resolved_form_melee_scaling", false))
 	if attacker.has_method("get_aura"):
 		aura_amt = float(attacker.get_aura())
-		scaled = _AuraScaler.apply_to_move(move, aura_amt)
+		if not resolved_form_melee: scaled = _AuraScaler.apply_to_move(move, aura_amt)
 	if "fighter_id" in attacker:
 		fid = str(attacker.fighter_id)
 	if "data" in attacker and attacker.data is Dictionary:
 		tag = str(attacker.data.get("combatTag", ""))
-	if fid != "":
+	if fid != "" and not resolved_form_melee:
 		scaled = _AuraIdentity.apply_to_scaled_move(scaled, fid, aura_amt, tag)
 	var weight: float = 100.0
 	if defender.has_method("get_weight"):

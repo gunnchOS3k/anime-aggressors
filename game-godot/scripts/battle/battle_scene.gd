@@ -615,6 +615,11 @@ func _on_pause_return_menu() -> void:
 
 func _finish_match(winner: int) -> void:
 	_active = false
+	# The result-delay frames cannot complete or begin another transformation.
+	# Completed forms may retain their victory presentation until scene exit.
+	for actor in fighters_root.get_children():
+		if actor.has_method("close_transformation_for_match_end"):
+			actor.close_transformation_for_match_end()
 	GameState.last_winner_slot = winner
 	MatchTelemetry.record_match_end(winner)
 	if GameState.mode == "story" and not _story_attempt_token.is_empty():
