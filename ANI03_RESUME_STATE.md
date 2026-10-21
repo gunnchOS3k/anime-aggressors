@@ -1,3 +1,70 @@
+# ANI-06 — tested transition increment delivered; visual acceptance pending
+
+Worktree `/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure`.
+Branch `release/anime-v1-dialogue-and-elemental-performance`.
+Runtime/source `125c18b07baea90d19efad63cc23e9de5f1aa998` PUSHED normally to draft123
+stacked on122. Next delivery commit contains reports only; inspect Git/PR for
+its exact SHA. All33worktrees, owner saves, backups and failed artifacts kept.
+No owned Godot/Blender/test/capture process is running. No source remains local-only.
+
+Four preserved Kaia/Juno rigs gain18ANI06WIP actions each:9transition categories
+withleft/right bakes. Original147actions+32ANI05actions/rig,mesh/weights/rest,
+shippingGLBs, all old34performanceclips and other7fighters'28animationfiles are
+unchanged. Actualsaved Blender→runtimeJSON readback4512frames PASS. Runtime uses
+source pelvis/torso/arm deltas over unchanged distancegait/existing footconstraint.
+No newIK/bodygenerator/rootauthority. Corrected stride-change phase mapping and
+signed reversal clock. Source anticipation retiresbeforeactualactivecontact.
+No movementvalues,damage/timing/hitboxes,Story/projectile/cosmic/spacing change.
+
+Final17/17affected suites PASS exact125csource;72public transition cases verify
+all9source kinds/both bodies/facings;18modelpaths/shared9roster tests. Both manual
+owner launch smokes PASS. Same24case ANI05footwork peak Kaia1.71305→.01980,
+Juno1.24848→.04585px/frame. Broader72case matched inputs preserve rootposition/
+velocity exactly. Mixed results retained: Kaia stop .92392→1.47653px; Juno
+light handoff3.166→4.237px. Do NOT mark stops/attack handoffs artisticallyclosed.
+Facingflips/swing/attackposes separately excludedfromstance metric, rawtraceskept.
+
+One1800frame public initiative/defense activeCPUrun:15Juno hits+2blocks,23Kaia
+hits+17blocks,43CPUattempts,0KO.300periodicsamples (unsupportedCLIflags retained,
+not900frame/exacttrace). EarlierzeroCPUhit sample doesnotshowgeneralAIfailure;
+noAIchange. No guaranteedcombo/humanplaythrough/device/nativeaudio claim.
+Initialproperty/compile/metadata failures and source-only non-improvement are
+preserved in ATTEMPT_LEDGER; finalsourceerrors0. Existingteardownwarningsremain.
+
+Evidence `artifacts/v1_closure/spectral_feedback/continuous_1021/authored_transitions/`:
+OWNER_REVIEW.md,VALIDATION_REPORT.json,COMPARISON.json,FINAL_MEASUREMENTS.json,
+PRESERVED_AUTHORITY.json,ATTEMPT_LEDGER.json,COUNTERPLAY_ANALYSIS.json,final/RESULTS.
+CI_125c18b0.json records timestamped exact-source statuses; query
+latestdeliveryhead independently, including Windows2025. GreenCI is notphysicaldevice/humanacceptance.
+
+Recorded Datafree12.931824GiB, margin-5.068176GiB
+against18PLUSallocations. No newnativecapture/APK/GLB/heavyexport/productionrender/
+archive/cleanup/deletion/relocation. FourBlendgrowth11.3MB; no recentGodotcache
+writes; remainingAPFSfluctuationunattributed. Avoidstoragewide rescans.
+
+VISUAL_VERIFICATION_PENDING: original floor35–38px,outercontact12.5–17.6px,
+head/hair overlapunclosed. Source soles are references, notfinalfootrollIKrig;
+Haircap/sweep remainHead-bound. ExistingANI03media predatesANI06, retainsownIDs.
+No wholemodeloffset/scale/collision/camera concealment orqualitythreshold changes.
+
+Next highest-impact task: author phase-dependent stopping/replant and movement-
+to-attack support exchanges (Kaia stop/Juno light first) on preserved rigs;
+complete animator-facing footroll/support and independent hair controls/weights.
+Then coordinated floor/hip/hand review inshippingcamera when storagepermits.
+Fullnineacting/elementalart,earned7Story/Gray/Convergence,KaiaOVA+6variants,realLAN,
+physicalAndroidWindows andfinalhumanart/sound/gameplay approval remainunfinished.
+AllVISUAL/HUMAN_GAMEPLAY/GAME_FEEL/ANIMATION/VFX/SFX/BALANCE/V1/RELEASE gatesfalse.
+
+Owner manualreview (onewindow/no recording,isolatedprofile,noownerStorywrites):
+`tools/v1_closure/play_melee_review.command` female; append`--male`/`--local`.
+Exactfirstcontinuation: `git status --short`, readthis topcheckpoint and
+newOWNER_REVIEW.md, query PR123actualhead/CI. Do NOT redo ANI05 or oldmovies,
+reopenacceptedprojectiles, rebuildmodels or recreateworktrees. Finaltestscomplete;
+no processneedsresumption. No merge/tag/deploy/release/publication.
+
+---
+# Historical checkpoints retained below
+
 # ANI-06 — source freeze for final affected validation
 
 Nine transition kinds now observed from actual public inputs on72body/facing
