@@ -83,6 +83,18 @@ def bake(r, fid, body, ref, neutral, template, beats, name, score_path, facing=1
                 a, b = left, right; break
         u = smooth(max(0, min(1, (frame-a[0])/max(1, b[0]-a[0]))))
         p = interpolate(a[1], b[1], u)
+        if name in ("walk_loop","run_loop","dash_loop"):
+            # Preserve the established distance-driven linear stance curve.
+            # Only the keyed swing has easing; easing a planted foot would
+            # visibly skate against the unchanged simulation displacement.
+            phase = frame/max(1,total)
+            stride = float(template["gait_half_stride_m"])
+            if phase <= .5:
+                p["back"][1] = 0
+                p["back"][2] = stride*(1-4*phase)
+            else:
+                p["front"][1] = 0
+                p["front"][2] = stride*(3-4*phase)
         if facing == -1: p = mirrored(p)
         rots = {}
         pos = {"Hips": r["Hips"]["p"] + p["pelvis"]}
@@ -130,6 +142,10 @@ def bake(r, fid, body, ref, neutral, template, beats, name, score_path, facing=1
                 sole_reference=f"art_source/animation/fighters/{fid}/directed_performance/{body}_sole_reference.json",
                 root_motion_authoritative=False, human_approved=False,
                 posture_authority="source_clip")
+    if "support_foot" in clip:
+        clip["support_foot"] = "L" if facing == 1 else "R"
+    if "striking_limb" in clip:
+        clip["striking_limb"] = "Hand_R" if facing == 1 else "Hand_L"
     return clip
 
 
@@ -152,7 +168,7 @@ def main():
                             clip["bone_tracks"][toe] = [{"time_s": round(f/60,6), "rotation_quat": [float(x) for x in quat(r[toe]["r"])]} for f in range(clip["duration_frames"]+1)]
             neutral = neutral_pose(r, base["clips"]["idle_primary"])
             guard = pose_fields(r, neutral, ref)
-            poses = {n: directed(spec, n, guard) for n in ("load", "contact", "follow", "return", "hurt", "land", "jump", "charge", "heavy_anticipation", "heavy_contact", "heavy_follow", "poised", "shield", "projectile_contact")}
+            poses = {n: directed(spec, n, guard) for n in ("load", "contact", "follow", "return", "hurt", "land", "jump", "charge", "heavy_anticipation", "heavy_contact", "heavy_follow", "poised", "shield", "projectile_contact", "grip", "throw_forward", "throw_back", "throw_up", "throw_down", "defeated", "gait_contact", "gait_pass")}
             new = {}
             for mid in ("jab_1", "heavy_attack", "side_special", "neutral_special_projectile"):
                 template = base["clips"][mid]
@@ -169,6 +185,19 @@ def main():
                     # The blocking and selected runtime overlay share source,
                     # active poses and unchanged frame metadata.
                     base["clips"][name] = copy.deepcopy(new[name])
+            for mid in ("grab", "throw_forward", "throw_back", "throw_up", "throw_down"):
+                template = base["clips"][mid]; total = template["duration_frames"]
+                if mid == "grab":
+                    contact = int(template["contact_frame"])
+                    beats = [(0, guard, "guard"), (max(1,contact//2), poses["load"], "reach"), (contact, poses["grip"], "grip"), (total, guard, "guard")]
+                else:
+                    # Throw damage/release is already authoritative at frame0.
+                    # Its preparation is the preceding real grabbed hold.
+                    beats = [(0, poses["grip"], "release"), (max(2,int(template["startup_frames"])), poses[mid], "follow_through"), (total-3, poses["return"], "replant"), (total, guard, "guard")]
+                for facing in (1,-1):
+                    name=mid+("_left" if facing==-1 else "")
+                    new[name]=bake(r,fid,body,ref,neutral,template,beats,name,score_path,facing)
+                    base["clips"][name]=copy.deepcopy(new[name])
             states = {
                 "idle_primary": [(0, guard, "guard"), (16 if fid == "juno-spark" else 30, poses["poised"], "ready_shift"), (36 if fid == "juno-spark" else 45, guard, "reset"), (60, guard, "guard")],
                 "shield_hold": [(0, poses["shield"], "brace"), (20, poses["shield"], "hold"), (40, poses["shield"], "brace")],
@@ -179,7 +208,22 @@ def main():
                 "reaction_light": [(0, poses["hurt"], "impact"), (3, poses["hurt"], "recoil"), (10, poses["return"], "catch_balance"), (18, guard, "guard")],
                 "reaction_heavy": [(0, poses["hurt"], "impact"), (5, poses["hurt"], "recoil"), (19, poses["land"], "catch_balance"), (30, guard, "guard")],
                 "reaction_elemental": [(0, poses["hurt"], "impact"), (5, poses["hurt"], "recoil"), (19, poses["land"], "catch_balance"), (30, guard, "guard")],
+                "ko": [(0,poses["hurt"],"loss_of_balance"),(12,poses["land"],"fold"),(36,poses["defeated"],"terminal_hold")],
+                "defeat": [(0,poses["hurt"],"loss_of_balance"),(16,poses["land"],"fold"),(48,poses["defeated"],"terminal_hold")],
             }
+            for gait in ("walk_loop","run_loop","dash_loop"):
+                template=base["clips"][gait];total=template["duration_frames"]
+                contact=copy.deepcopy(poses["gait_contact"]);passing=copy.deepcopy(poses["gait_pass"])
+                # Retain established phase ownership: left support first,
+                # then right support. The swing/stance audit stays unchanged.
+                # Retain the existing distance-driven cycle length/stride.
+                stride=float(template["gait_half_stride_m"])
+                contact["front"][2]=-stride;contact["back"][2]=stride
+                opposite=copy.deepcopy(contact);opposite["front"],opposite["back"]=opposite["back"],opposite["front"]
+                other_pass=copy.deepcopy(passing);other_pass["front"],other_pass["back"]=other_pass["back"],other_pass["front"]
+                beats=[(0,contact,"left_contact"),(total//4,passing,"right_swing"),(total//2,opposite,"right_contact"),(total*3//4,other_pass,"left_swing"),(total,contact,"loop_seam")]
+                new[gait]=bake(r,fid,body,ref,neutral,template,beats,gait,score_path)
+                base["clips"][gait]=copy.deepcopy(new[gait])
             for name, beats in states.items():
                 template = copy.deepcopy(base["clips"].get(name, performance["clips"].get(name, {})))
                 template.update(duration_frames=beats[-1][0], loop=name in ("idle_primary", "shield_hold", "aura_charge"), relative_to_rest=False)

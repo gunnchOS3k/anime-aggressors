@@ -100,6 +100,43 @@ def verify_actions(arm, fid, body, doc):
             "frames_evaluated": samples, "scope": "saved Blender evaluated pose versus rig-specific runtime keys, not visual quality"}
 
 
+def export_runtime(arm, fid, body, doc):
+    """Export evaluated saved actions to the existing lightweight JSON format.
+
+    This is the Blender-to-runtime boundary; no mesh/GLB/native export. Human
+    edits to an action can follow this path without running the score baker.
+    """
+    sys.path.insert(0, str(ROOT / "tools/v1_closure"))
+    from build_combat_choreography import rig
+    skeleton, _ = rig(fid, body)
+    for track in arm.animation_data.nla_tracks: track.mute = True
+    for name, clip in doc["clips"].items():
+        if not clip.get("directed_source"): continue
+        arm.animation_data.action = bpy.data.actions["ANI05_WIP_"+name]
+        tracks = {n: [] for n in clip["bone_tracks"]}
+        previous = {}
+        for frame in range(clip["duration_frames"]+1):
+            bpy.context.scene.frame_set(frame); bpy.context.view_layer.update()
+            for n in tracks:
+                pose = arm.pose.bones[n]
+                world = C @ pose.matrix
+                local = (C @ pose.parent.matrix).inverted() @ world if pose.parent else world
+                loc, q, scale = local.decompose()
+                assert max(abs(s-1) for s in scale) < .0001, (name,n,"scale")
+                if n != "Hips":
+                    assert max(abs(loc[i]-skeleton[n]["p"][i]) for i in range(3)) < .00002, (name,n,"joint translation")
+                if n in previous and q.dot(previous[n]) < 0: q.negate()
+                previous[n] = q.copy()
+                key = {"time_s": round(frame/60,6),"rotation_quat":[round(q.x,7),round(q.y,7),round(q.z,7),round(q.w,7)]}
+                if n == "Hips": key["position_m"] = [round(v,7) for v in loc]
+                tracks[n].append(key)
+        clip["bone_tracks"] = tracks
+        clip["source_action"] = "ANI05_WIP_"+name
+        clip["source_blend"] = f"art_source/collectible_v1/{fid}/{body}/candidate.blend"
+        clip["resource_export"] = "evaluated saved Blender action -> canonical runtime JSON; no GLB/model export"
+    return doc
+
+
 def write_actions(arm, fid, body, doc):
     # Import only our source clips. All original actions and NLA strips survive.
     sys.path.insert(0, str(ROOT / "tools/v1_closure"))
@@ -174,6 +211,7 @@ def write_actions(arm, fid, body, doc):
 def main():
     inspect = "--inspect-only" in sys.argv
     verify = "--verify-only" in sys.argv
+    export = "--export-runtime-json" in sys.argv
     for fid in FIGHTERS:
         for body in ("male", "female"):
             source = ROOT / f"art_source/collectible_v1/{fid}/{body}/candidate.blend"
@@ -184,6 +222,20 @@ def main():
             ref = reference(arm, fid, body)
             target = ROOT / f"art_source/animation/fighters/{fid}/directed_performance/{body}_sole_reference.json"
             target.parent.mkdir(parents=True, exist_ok=True)
+            if export:
+                performance_path = ROOT / f"game-godot/data/animation/combat_performance/{fid}_{body}.json"
+                doc = export_runtime(arm,fid,body,json.loads(performance_path.read_text()))
+                performance_path.write_text(json.dumps(doc,separators=(",",":"))+"\n")
+                base_path = ROOT / f"game-godot/data/animation/combat_choreography/{fid}_{body}.json"
+                base = json.loads(base_path.read_text())
+                for name, clip in doc["clips"].items():
+                    if clip.get("directed_source") and name in base["clips"]: base["clips"][name] = clip
+                base_path.write_text(json.dumps(base,separators=(",",":"))+"\n")
+                result = verify_actions(arm,fid,body,doc)
+                (target.parent/(body+"_runtime_export.json")).write_text(json.dumps(result,indent=2)+"\n")
+                assert result["PASS"], result
+                print("BLENDER_RUNTIME_EXPORT",fid,body,result,flush=True)
+                continue
             if inspect:
                 target.write_text(json.dumps(ref, indent=2) + "\n")
                 print("SOLE_REFERENCE", fid, body, flush=True)
@@ -199,6 +251,11 @@ def main():
             muted = [t.mute for t in arm.animation_data.nla_tracks]
             original_action = arm.animation_data.action
             original_frame = bpy.context.scene.frame_current
+            if original_action is not None and original_action.get("status") == "AUTHORED_WIP_NOT_HUMAN_APPROVED":
+                # Evaluation must not make its temporary last action the
+                # source file's permanent active strip over the original NLA.
+                original_action = None
+                original_frame = 0
             doc = json.loads((ROOT / f"game-godot/data/animation/combat_performance/{fid}_{body}.json").read_text())
             actions = write_actions(arm, fid, body, doc)
             verified = verify_actions(arm, fid, body, doc)
@@ -211,12 +268,24 @@ def main():
             # Restore rest/edit view; do not save a visibly deformed model.
             for bone in arm.pose.bones:
                 bone.matrix_basis = Matrix.Identity(4)
+            removed_controls = []
             for side in ("L", "R"):
-                marker = bpy.data.objects.new("SoleContact_" + side, None)
+                name = "SoleContact_" + side
+                # Refresh our own source controls without accumulating copies.
+                # No original mesh, bone, action, backup or file is removed.
+                for duplicate in list(bpy.data.objects):
+                    if duplicate.name.startswith(name+".") and duplicate.get("non_deforming_source_control",False):
+                        removed_controls.append(duplicate.name)
+                        bpy.data.objects.remove(duplicate,do_unlink=True)
+                marker = bpy.data.objects.get(name)
+                if marker is None:
+                    marker = bpy.data.objects.new(name, None)
+                    bpy.context.collection.objects.link(marker)
+                else:
+                    assert marker.get("non_deforming_source_control",False)
                 marker.empty_display_type = "PLAIN_AXES"
                 marker.empty_display_size = .025
                 marker["non_deforming_source_control"] = True
-                bpy.context.collection.objects.link(marker)
                 marker.parent = arm
                 marker.parent_type = "BONE"
                 marker.parent_bone = "Foot_" + side
@@ -234,6 +303,7 @@ def main():
                       "source_digest_after": digest_source(arm), "actions": actions,
                       "meshes_rest_weights_unchanged": True, "GLB_exported": False,
                       "original_actions_preserved": True, "original_actions_sha256": old_actions,
+                      "source_sole_controls": 2, "deduplicated_own_source_controls": removed_controls,
                       "VISUAL_VERIFICATION_PENDING": True, "human_approved": False}
             (target.parent / (body + "_source_actions.json")).write_text(json.dumps(report, indent=2) + "\n")
             print("DIRECTED_SOURCE_SAVED", fid, body, len(actions), flush=True)

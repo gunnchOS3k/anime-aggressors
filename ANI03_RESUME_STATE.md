@@ -1,3 +1,44 @@
+# ANI-05-R — final category validation pending
+
+Current branch/worktree unchanged; remote milestone b37ad62bd3129986be81202d6d128c085d46471c
+is pushed draft123 on122, all7CI checks SUCCESS including Windows2025. Preserve
+all33worktrees and newer WIP. Source now32ANI05_WIP actions per original Kaia/Juno
+male/female rig (128baked actions,2shared directed scores). Source meshes/weights/
+rest bones/original147actions remain hash-equal. Two non-deforming sole reference
+markers perrig; NOT a finished animator-facing IK/independent hair rig. Hair
+remains Head-bound. GLBs/camera/physics/move values/pushboxes/cosmic kits untouched.
+
+Completed11focused suites before final category extension; retained verified2/
+RESULTS. Category checks source32/footwork108/terminal/throw passed, but phase
+measurement of footwork was reversed and NOT accepted. Restored existing left
+support firsthalf/right second. stance_final:24public body/facing/strength rows
+PASS. Source stance errors max4.54e-7m. Public mean slips rangeKaia.00094–.08469,
+Juno.00205–.07073px/frame; maxtransient1.713/1.248px/frame still needs trace review.
+Keep firstbadmeasurement category_checks; no testthreshold weakened.
+
+Saved Blender actions now export directly to existing runtime JSON via:
+Blender --background --factory-startup --python-exit-code1 --python
+ tools/authored_animation/blender/aa_directed_performance.py -- --export-runtime-json
+(no model/GLB/native export). Actual saved source read/evaluated:3584frames total,
+maxmatrixcomponenterror3.76e-6. Original-source/score authoring is retained; DO NOT
+rebake17actions or regenerate designs. Runtime clips own their complete body chain;
+legacy clip posture remains unchanged. Newlight/heavy/side/shot,stance/shield,
+jump/land/charge,reactions,walk/run/dash,grab/4throws,KO/defeat are WIPacting.
+Other normals/aerials/up/down specials,pivots/secondary motion andhumanqualityopen.
+
+No owned Blender/Godot process running at checkpoint. Next: final exact-source
+serial targeted regression set, including explicit stance trace and terminal/
+throw/projectile checks, one900frame headless Kaia/Juno public CPU observation,
+and male/female review launcher smokes. No video. Stoponfailure preserveuniquelabel.
+Afterpasses: sourcehash/evidence ledger +ownerreview, normalcommit/push, verifyCI.
+Unpublished full-category assets are saved in this local WIP commit, no release
+claim. Native VISUAL_VERIFICATION_PENDING; existing35–38pxfloor,12.5–17.6pxreach
+andhead/hair defects remain unclosed. Originalmedia retainsoldsource labels.
+Latest observedDatafree15.526GiB <18plusallocationguard. No newcapture/APK/native
+export/deletion/archival. CompleteV1Story/Convergence,OVA+6,LAN/devices remainopen.
+Allvisual/human/gameplay/balance/release gatesfalse.
+
+---
 # ANI-05 directed source action checkpoint — IN PROGRESS
 
 Source parent03aa3357b065fcb67d3ee83c8f8c8779c9a30e2d; same existing branch/draft123
