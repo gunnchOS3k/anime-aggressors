@@ -1,3 +1,70 @@
+# ANI-05-R — final authored source validation COMPLETE; human review pending
+
+Worktree: `/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure`
+Branch: `release/anime-v1-dialogue-and-elemental-performance`.
+Tested runtime/source: `52872c4fa05d85361d285b0155ed20e42623674b`, PUSHED normally
+on draft PR123 stacked on draft122. The following delivery commit adds reports
+only; inspect `git rev-parse HEAD` / PR123 for its exact SHA. All33 worktrees,
+owner saves, Blender backups and failed fixtures preserved. No source-only WIP
+remains unpublished. No Godot/Blender/capture/test process is running.
+
+Recovered17WIP actions completed to32per original Kaia/Juno body rig (4files).
+Meshes/weights/rest skeletons/original147actions perrig hash-preserved. Two sole
+reference empties perrig, NOT a final animator-facing IK/footroll/secondary rig.
+Hair remains Head-bound. Runtime now reads direct saved-Blender-action exports
+in existing bone-local JSON. 3584evaluatedframes agree, maximum matrix-component
+error3.76e-6. New directed clips own source body poses and bypass only legacy
+posture correction; legacy clips retain behavior. Four gait/body/facing rigs use
+established LEFT stance firsthalf/RIGHT secondhalf. No gameplay/camera/GLB changes.
+
+Final14/14focused suites PASS on52872c4f; see directed_acting/final/RESULTS.json.
+Source sole stance error<=5.77e-7m. 24public gait cases: steady mean slip Kaia
+.00103-.01030/Juno.00220-.01299px/frame. Start-transition peaks1.71305/1.24848
+remain recorded; generic movement PASS is NOT perfect footwork. Initial wrong
+phase, mirroredmetadata and Blender matrix failures remain in ATTEMPT_LEDGER.
+
+One bounded900frame headless public-input Kaia/CPUJuno observation:52input
+transitions,8Kaiahits+6shieldcontacts,20CPUmoveattempts,0CPUhits,0KO. No frozen
+opponent/forcedmoves/damagegrant. Both body owner-launch smokes PASS. This is not
+new native footage, audio approval, full combo proof or sustained deviceFPS.
+Some existing fixture teardown-resource warnings remain; no script errors.
+No long unchanged campaign replay was repeated; source Story/save authority and
+original exact-source evidence retained. All18models load, shared roster suites
+and Yin/Yang public counter/panel cases PASS. Other7fighters' acting preserved.
+
+Evidence: `artifacts/v1_closure/spectral_feedback/continuous_1021/directed_acting/`
+Read OWNER_REVIEW.md,VALIDATION_REPORT.json,STANCE_ANALYSIS.json,ATTEMPT_LEDGER.json,
+CI_52872c4f.json,STORAGE.json. CI snapshot:6SUCCESS/Windows2025 IN_PROGRESS;
+query exact latest PRhead separately. No inference from windows-latest.
+
+Latest recorded Datafree15.089405GiB, margin-2.910595GiB
+against18plusanticipatedallocations. NO nativecapture/APK/GLB/platformexport/
+productionrender/archival/deletion. Lightweight source animationJSON only.
+Existing868frame/647match ANI03native comparison preservedwitholdsource labels;
+never label it newANI05 evidence. VISUAL_VERIFICATION_PENDING. Floor35-38px,
+outerreach12.5-17.6px andhead/hair overlaps still visually unclosed.
+
+Next unblocked production task: authored start/stop/pivot continuity across the
+four changed rigs using retained start-transition trace; then coordinated
+sole/hip/strike and independent hair/cloth asset work. Do NOT rebake completed
+32actions, redo source-phase tests, resetworktrees or reopen projectile fixes
+without a new reproduced defect. New native review only after18GiB PLUS
+anticipated allocations. Owner may manually inspect current gameplay with no
+recording subjecttoexistingruntimepreflight, one window at a time:
+`tools/v1_closure/play_melee_review.command` (female), append `--male` for male,
+`--local` for twohumans. Isolated profiles, no regular saves/unlocks modified.
+
+Exact first continuation command:
+`git status --short` then read this top checkpoint and directed_acting/OWNER_REVIEW.md;
+check PR123 head/CI before editing. No running process to resume.
+Full roster production, earned7campaigns/Gray/Convergence, finalKaiaOVA+6variants,
+LAN,Android/Windowsphysicaldevices andhumanart/sound/gameplay approval remainopen.
+All VISUAL/HUMAN_GAMEPLAY/GAME_FEEL/ANIMATION/VFX/SFX/BALANCE/V1/RELEASE gatesfalse.
+No merge/tag/deploy/release/publication. No final production approval claimed.
+
+---
+# Historical checkpoints below — retain original test/source scope
+
 # ANI-05-R — final category validation pending
 
 Current branch/worktree unchanged; remote milestone b37ad62bd3129986be81202d6d128c085d46471c
