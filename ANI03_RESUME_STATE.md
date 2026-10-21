@@ -1,36 +1,41 @@
-# ANI-P1 — verified bounded foundation; affected final checks next
+# ANI-P1 — source and final affected validation preserved
 
-Worktree `/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure`; branch `release/anime-v1-dialogue-and-elemental-performance`.
-Entry `1cee7169470edccb398fe8840f68a9fe77bfabec`; inspect HEAD for source checkpoint.
-Original external roster audit retained with SHA-256 references in
-`artifacts/v1_closure/parity_foundation/ROSTER_PARITY_ACCEPTANCE.json`.
-All33 worktrees and owner saves preserved. New formal roster gate false.
+Worktree `/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure`.
+Branch `release/anime-v1-dialogue-and-elemental-performance`; source/pushed checkpoint
+`4a684fa499d744b545f6e92efe67dd0f623b8cef`. PR123 remains draft stacked on PR122.
+All 10 final affected checks PASS at that source: FormStateAuthority90,
+CombatChoreography864, MeleeGuardContinuity72, GroundedRecovery36, RosterFootwork108,
+RosterLanding72, ThrowOwnership39, ChargeContinuity9, CosmicKits8, StorySceneOwnership8.
+Separate matched AuthoredTransitions72 and AllRosterSupport108 also pass with
+source hashes. Charge test teardown warning retained. No owned test process running.
+CI7/7 SUCCESS including Windows2025 at source4a684; do not assume later report-head CI.
+Reports `artifacts/v1_closure/parity_foundation/VALIDATION_REPORT.json` and final/.
 
-Implemented: literal Ember ASCENDED override key aura_burst with unchanged existing
-14-damage payload; read-only state-domain descriptor +90 cases. All18 original
-Blender rigs exercised in memory with measured sole/heel/ball, load/replant/roll
-and independent rigid accessory offset tools. ZERO .blend/GLB/mesh/weight/rest or
-saved-action changes; persistent control install and final hair weights remain
-open.9 original finite support scores now used by existing support constraint,
-startup exchange retires before contact, ordinary attack settle deadline intact.
-Light-route gait owner reset; broad reset rejected because heavy recovery worsened.
-Earlier failed traces retained, intermediate raws local-only with SHA receipts.
+Implemented Ember legacy aura_burst key correction (existing payload unchanged),
+read-only state domains, original measured controls tested in memory on18 rigs,
+nine finite support scores and bounded support handoffs. ZERO Blender/GLB binary
+changes. Kaia stop peak1.477→.813px; Juno light neutral-stance peak4.237→1.293px;
+Kaia mean slightly worse, heavy matched peaks unchanged. Rejected broad reset and
+other failures retained. These are engineering measurements, not artistic approval.
+Original external parity audit and156 source identities retained. All33 worktrees
+and saves preserved. All human, roster, art, gameplay, balance and release gates false.
 
-Passing before commit: state90, controls18, grounded recovery36, all-roster public
-support108 and matched transitions72. Kaia stop peak1.4765→.8126px but mean slightly
-worse; Juno light neutral-stance peak4.2366→1.2930px, startup peak7.238→4.302px;
-heavy matched peaks remain baseline. Not native visual/art/device acceptance.
-Final affected regressions on committed source still pending; next run existing
-CombatChoreography, MeleeGuardContinuity, GroundedRecovery, RosterFootwork,
-RosterLanding, ThrowOwnership, ChargeContinuity, cosmic-public and StorySceneOwnership.
-Do NOT run CampaignRestart directly: it overwrites the preserved root artifact;
-reuse exact unchanged signed-save source/history, or use a separately isolated copy.
+Latest owner adds archival support and explicitly authorizes roster-wide Ascended/
+cosmic advancement, Party Prism Heart/Puppet Seal and ultimate implementation,
+elemental grab/throw presentation, Perfect Guard/controller foundations. They are
+NEXT work, not implemented by ANI-P1. Earlier ANI07 prohibition is superseded for
+those authorized candidates, not release or balance acceptance.
 
-Current Data free15.0299GiB, margin-2.9701GiB. NO heavy render/export/recording
-or binary roster production. VISUAL_VERIFICATION_PENDING=true. All art/gameplay/
-balance/audio/release gates false. ANI07 untouched. No merge/tag/deploy/publication.
-Exact next action: inspect final support log, commit verified source, run bounded
-serial affected suites with launch_ordinary_review.py and unique parity profiles.
+Latest measured Data free7.43866GiB; margin-10.56134GiB before allocations. External
+APFS UUID9C4EB36E-2864-42F8-BD0B-A4F67EBC7852 at /Volumes/gunnchOS-Archives,
+366.21GiB available. No heavy captures/exports/binary roster production. Next:
+verify existing archive receipts; copy suitable completed immutable media by streaming
+and verify size+SHA256, record source identities and eligible removal candidates.
+NO original deletion/move; active worktrees/rigs/caches/saves remain internal.
+Then implement/test the actual two-step Ascended chain across7 spectrum fighters
+using existing systems before cosmic/Party features. No duplicated long regressions.
+Do not run CampaignRestart directly (overwrites protected root artifact); unchanged
+save source/history retained. VISUAL_VERIFICATION_PENDING=true.
 
 ---
 # ANI-06 — tested transition increment delivered; visual acceptance pending
