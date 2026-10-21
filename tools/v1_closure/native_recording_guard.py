@@ -6,8 +6,11 @@ import subprocess
 import time
 from pathlib import Path
 
-NATIVE_RESERVE = 2 * 1024**3
 HEAVY_EXPORT_RESERVE = 18 * 1024**3
+# October 21 owner storage policy: recording temporary allocations must also
+# leave 18 GiB on the internal source volume. External movie destinations do not
+# waive this reserve. Historical receipts retain their original policy values.
+NATIVE_RESERVE = HEAVY_EXPORT_RESERVE
 FRAME_BUDGET = 256 * 1024  # Recorded historical MJPEG costs: approximately 48–58 KiB/frame.
 DERIVATION_RESERVE = 100 * 1024**2  # Encoding and small sheets remain inside this budget.
 
@@ -38,7 +41,8 @@ def budget(root, movie, frames, fps):
             "budget_bytes_per_frame": FRAME_BUDGET, "derivation_reserve_bytes": DERIVATION_RESERVE,
             "native_reserve_bytes": NATIVE_RESERVE, "heavy_export_reserve_bytes": HEAVY_EXPORT_RESERVE,
             "required_free_bytes": required, "PASS": free >= required,
-            "quality": "Original native MJPEG/PCM; no resolution, frame-rate or fidelity reduction"}
+            "quality": "Original native MJPEG/PCM; no resolution, frame-rate or fidelity reduction",
+            "reserve_policy": "owner_2026_10_21_internal_18GiB_after_allocations"}
 
 
 def write_state(path, state):

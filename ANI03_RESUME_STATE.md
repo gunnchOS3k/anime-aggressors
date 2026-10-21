@@ -1,3 +1,61 @@
+# October21 post-storage recovery — completed native review and reserve enforcement
+
+Recovered9d291e7b599271b54eafe1a32d1d6084716f1608, clean tracked source;
+found uncommitted VERIFIED foreground native movie, two matched-frame sheets,
+comparison/owner/PR documents. No recording remained active. All33worktrees,
+backups/saves/raw evidence preserved. Draft123 still stacked122.
+
+Completed review package now preserved under continuous_1020/final_contact/.
+BEFOREe42655d5, AFTER9d291e7b:868frames/14.467s60fps,originalaudio,
+647matchedframecodes,31identicalinputs,6identical contacts/frames/damage/world
+positions/launch. Original AVI/hash/report verified read-only October21.
+GUARD_COMPARISON and JUNO_GUARD_COMPARISON show small guard/recovery benefit,
+not production contact closure. First stale125frame attempt remains excluded.
+Do NOT rerun this native comparison or historical nine-fighter campaign.
+
+Authored keys source0b36d69f:72light/heavy clips on18rigs/bothfacings, exact
+neutral endpoints, byte-equal activeintervals; whole hooks/reactions unchanged.
+Preserved Guard72 and5affected suites PASS:choreography864,recovery36,reaction18,
+throw39,cancel9. CPUbefore/after9contacts/4CPU attacks,identicalauthorityresults.
+All7GitHubchecks SUCCESS exact9d291e7b; newer deliveryCI must be read separately.
+Evidence:continuous_1021/{REVIEW_RECOVERY,CI_9d291e7b,STORAGE_PREFLIGHT}.json.
+
+LIVE INTERNAL Data preflight:18,432,000,000bytes=17.166137695GiBfree,
+margin−0.833862305GiB vs18GiB initially; later snapshot16.899166107GiB,
+margin−1.100833893GiB. Free space is dynamic; use latest JSON/preflight.
+Do not trust StorageSettings screenshot estimate.
+No new captures/heavybuilds/platformexports permitted below reserve+temporary
+allocation margin. New native_recording_guard enforces18GiB AFTER raw/derivative
+allocations on sourcevolume even if movie destinationexternal. 10stdlib tests PASS (7 new boundary cases,3original ownership/partial-file
+protections). This supersedes previous2GiBnative policy prospectively;
+prior native receipt policy values stay intact. No storage initialization,
+simulator/cache cleanup, archive mount check/copy/deletion was needed or done.
+DeviceOSQEMU remains outside this task and requires its separate25GiBreserve.
+
+Remaining current native defects:35.27pxKaia/38.12pxJuno sole below physical
+floor;12.49–17.63pxouter hand gaps at~71pxrootspacing;head/hair/torso overlap.
+No new runtime stacking/contact authority defect. Existing source-art files,
+rig/projection limits and exact clip work are in final_contact/OWNER_REVIEW.md.
+Do not add another whole-model shift, scale,hitbox change or proceduralpatch.
+Need coordinated original full-body keys and approved floor/contact projection;
+no owner visual acceptance assigned. Guard improvement is modest/partlyoccluded.
+
+Next independent V1 engineering increment: implement distinct authored Yin/Yang
+competitive kits from their existing bibles as explicitly labeled tuning
+candidates, with approved mechanic/frame specifications before default balance
+changes. Current move files still copyEmber; do not claim unique kits complete.
+All7earned routes/Convergence,KaiaOVA+6variations,genuineLAN,Android physical
+acceptance remain unfinished. Do not begin allworkstreams atonce.
+
+Owner playable:tools/v1_closure/play_melee_review.command (--local/--male optional).
+Separate useridentity; no owner Storysave touches. Normal game launch is not an
+export/capture. No owned Godot/FFmpeg jobs remain. All human/release gates false.
+No merge,tag,deploy,release,force,reset,rebase,stash or worktree deletion.
+Package SHA:git log -1 --format=%H -- ANI03_RESUME_STATE.md.
+Next exact lightweight verification:python3 tools/v1_closure/test_native_recording_guard.py -v
+Before any future capture:liveDatafree must cover18GiB+fullanticipatedallocations.
+
+---
 # Native comparison retry checkpoint
 
 First ac1728bd native attempt completed but rejected:125missing framecodes /

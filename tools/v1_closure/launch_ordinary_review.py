@@ -41,7 +41,7 @@ if a.movie:
     from native_recording_guard import budget, run_owned_recording, active_media_jobs
     recording_budget=budget(ROOT,a.movie,a.movie_frames,a.movie_fps)
     if not recording_budget['PASS']:
-        raise SystemExit('Native recording reserve exhausted; no capture started. Heavy platform exports require18GiB.')
+        raise SystemExit('Native recording refused: internal 18 GiB reserve plus anticipated raw/derivative allocations required. No capture started.')
     if active_media_jobs():
         raise SystemExit('Existing Godot/FFmpeg job preserved; wait before native recording.')
     if (a.output/'RECORDING_STATE.json').exists() or (a.output/'launch_manifest.json').exists():
