@@ -1,3 +1,19 @@
+# Verified external archive checkpoint
+
+P1 source4a684 and final evidence598e2068 pushed; all10 affected suites passed.
+21 completed historical native recordings now copied and SHA256/size verified on
+APFS UUID9C4EB36E-2864-42F8-BD0B-A4F67EBC7852. See
+artifacts/v1_closure/archive_support/ARCHIVE_REPORT.md and ARCHIVE_RECEIPT.json.
+New2072430414bytes, reused285521420bytes. No originals deleted/moved.
+Only still-present numbered duplicate installer(5) nominated for separate removal
+approval:279493837bytes (~.2603GiB). Protected raw originals remain protected.
+Internal free after copy9.734177GiB (fluctuating; remeasure); 18GiB guard unmet.
+Next bounded roster task: reproduce Ascended transform lifecycle (two-stage public
+input, interruptions and stock cleanup), then correct only demonstrated defects.
+Cosmic advancement/items/ultimates/controllers/parry/elemental throws remain pending.
+No owned capture/export/archive process running. All human/release gates false.
+
+---
 # ANI-P1 — source and final affected validation preserved
 
 Worktree `/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure`.
