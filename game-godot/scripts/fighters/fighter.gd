@@ -25,6 +25,8 @@ const _HitReaction = preload("res://scripts/combat/directional_hit_reaction.gd")
 const _CosmicKit = preload("res://scripts/combat/cosmic_kit_runtime.gd")
 var party_overdrive = preload("res://scripts/combat/party_overdrive.gd").new()
 var perfect_guard = preload("res://scripts/combat/perfect_guard.gd").new()
+var shield_break_8c = preload("res://scripts/combat/shield_break_8c.gd").new()
+var _guard_presentation
 var _cosmic_counter_activation := -1
 var cosmic_kit_history: Array = []
 
@@ -37,6 +39,7 @@ signal koed()
 signal respawned()
 signal hit_landed(info: Dictionary)
 signal grab_event(info: Dictionary)
+signal shield_event(info: Dictionary)
 signal state_changed(state: String)
 
 const GRAVITY := 1800.0
@@ -150,6 +153,7 @@ var _transform_match_closed: bool = false
 
 func _ready() -> void:
 	perfect_guard.setup(self)
+	shield_break_8c.setup(self)
 	party_overdrive.setup(self)
 	add_to_group("fighters")
 	state_machine = _FighterStateMachine.new()
@@ -195,6 +199,8 @@ func _ready() -> void:
 	expression.name="CombatExpressionDirector";add_child(expression);expression.setup(self)
 	_grab_presentation=preload("res://scripts/visual/elemental_grab_throw_presentation.gd").new()
 	_grab_presentation.name="ElementalGrabThrow";add_child(_grab_presentation);_grab_presentation.setup(self)
+	_guard_presentation=preload("res://scripts/visual/elemental_guard_8c.gd").new()
+	_guard_presentation.setup(self)
 
 func get_effective_combat_aura() -> float:
 	return 0.0 if party_overdrive.active() else aura
@@ -297,6 +303,8 @@ func reset_legacy_transformation(reason: String) -> void:
 
 
 func close_transformation_for_match_end() -> void:
+	shield_break_8c.reset("match_end")
+	if _guard_presentation != null:_guard_presentation.clear("match_end")
 	_cancel_grab_acting_presentation("match_end")
 	_release_grab_links("match_end")
 	if _grab_presentation!=null:_grab_presentation.clear("match_end")
@@ -306,6 +314,8 @@ func close_transformation_for_match_end() -> void:
 	if _transform_pipeline != null: _transform_pipeline.cancel("match_end")
 
 func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, spawn: Vector2) -> void:
+	shield_break_8c.reset("character_change")
+	if _guard_presentation != null:_guard_presentation.clear("character_change")
 	_release_grab_links("character_change")
 	if _grab_presentation!=null:_grab_presentation.clear("character_change")
 	party_overdrive.reset("character_change")
@@ -587,6 +597,8 @@ func tick_combat_frame() -> void:
 		_poll_hitbox_overlaps()
 
 func _physics_process(delta: float) -> void:
+	shield_break_8c.observe_guard(_read_shield())
+	if _guard_presentation != null:_guard_presentation.tick(delta)
 	_wave017_vis_accum += delta
 	if _wave017_vis_accum >= 0.25:
 		_wave017_vis_accum = 0.0
@@ -787,9 +799,9 @@ func _handle_actions() -> void:
 	if _read_aura_burst() and aura >= 100.0 and not party_overdrive.active():
 		_start_move_by_command("aura_burst")
 		return
-	if _read_shield() and grounded_guard and not is_aura_input_held():
+	if _read_shield() and grounded_guard and not is_aura_input_held() and shield_break_8c.guard_allowed():
 		if state_machine.current_state != _FighterStates.SHIELD_HOLD:
-			if guard_pressed:perfect_guard.begin()
+		if guard_pressed:perfect_guard.begin()
 			state_machine.enter(_FighterStates.SHIELD_START)
 		state_machine.enter(_FighterStates.SHIELD_HOLD)
 		shielding = true
@@ -1653,6 +1665,8 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 	# Hit telemetry is recorded by HitResolver.resolve (single source of truth).
 
 func reset_fighter() -> void:
+	shield_break_8c.reset("respawn")
+	if _guard_presentation != null:_guard_presentation.clear("respawn")
 	_release_grab_links("respawn")
 	if _grab_presentation!=null:_grab_presentation.clear("respawn")
 	party_overdrive.reset("respawn")
@@ -1712,6 +1726,8 @@ func reset_damage() -> void:
 	combo_count = 0
 
 func reset_position() -> void:
+	shield_break_8c.reset("position_reset")
+	if _guard_presentation != null:_guard_presentation.clear("position_reset")
 	_cancel_grab_acting_presentation("position_reset")
 	_release_grab_links("position_reset")
 	if _grab_presentation!=null:_grab_presentation.clear("position_reset")
@@ -1822,6 +1838,7 @@ func _sync_attack_phase_state() -> void:
 				pass
 
 func _sync_motion_state() -> void:
+	if shield_break_8c.holds_lock():return # Opt-in candidate keeps its existing state during platform loss.
 	if party_overdrive.owns_motion():return
 	if not is_on_floor() and state_machine.current_state not in [
 		_FighterStates.JUMP, _FighterStates.DOUBLE_JUMP, _FighterStates.ATTACK_STARTUP,
@@ -1836,6 +1853,7 @@ func _sync_motion_state() -> void:
 			state_machine.enter(_FighterStates.FALL if velocity.y < get_fall_speed() * 0.02 else _FighterStates.FAST_FALL)
 
 func _check_edge() -> void:
+	if shield_break_8c.holds_lock():return
 	if party_overdrive.owns_motion():return
 	if not is_on_floor():
 		return
@@ -1872,6 +1890,10 @@ func _set_aura_vfx(on: bool) -> void:
 
 
 func _on_state_changed(_from: String, to: String) -> void:
+	shield_break_8c.state_changed(to)
+	if to in [_FighterStates.KO, _FighterStates.RESPAWN]:
+		shield_break_8c.reset(to)
+		if _guard_presentation != null:_guard_presentation.clear(to)
 	if to==_FighterStates.GRAB_STARTUP:grab_event.emit({"result":"attempt"})
 	if to not in [_FighterStates.GRAB_HOLD,_FighterStates.THROW_STARTUP,_FighterStates.THROW_RELEASE] and (grabbed_by != null or grabbed_target != null):
 		_release_grab_links("state_interrupted:"+to)

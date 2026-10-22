@@ -81,7 +81,9 @@ func apply_hit(attacker: Node, defender: Node, move: Dictionary, info: Dictionar
 		result["camera_event"] = ""
 		result["sfx_event"] = "charge_ready"
 		result["vfx_event"] = "perfect_guard_seal"
-		result["played_audio"] = preload("res://scripts/audio/elemental_performance.gd").one_shot(str(defender.fighter_id),"charge_ready",self)
+		var guard_audio := _guard_contact(defender,result)
+		result["elemental_guard_owned_cue"] = bool(guard_audio.get("pool_cue",false))
+		result["played_audio"] = guard_audio if bool(guard_audio.get("ok",false)) else preload("res://scripts/audio/elemental_performance.gd").one_shot(str(defender.fighter_id),"charge_ready",self)
 		_present_contact(defender, result)
 		feedback_triggered.emit(result)
 		return result
@@ -92,9 +94,11 @@ func apply_hit(attacker: Node, defender: Node, move: Dictionary, info: Dictionar
 		result["camera_event"] = ""
 		result["screen_flash"] = false
 		var defender_id := str(defender.fighter_id) if defender != null and "fighter_id" in defender else ""
-		_V1Sfx.play_event(defender_id, "block", self)
+		var guard_audio := _guard_contact(defender,result)
+		result["elemental_guard_owned_cue"] = bool(guard_audio.get("pool_cue",false))
+		result["played_audio"] = guard_audio if bool(guard_audio.get("ok",false)) else _V1Sfx.play_event(defender_id, "block", self)
 		var attacking_element_id := str(attacker.fighter_id) if attacker != null and "fighter_id" in attacker else ""
-		if not attacking_element_id.is_empty(): result["elemental_block"] = preload("res://scripts/audio/elemental_performance.gd").one_shot(attacking_element_id,"block",self)
+		if not attacking_element_id.is_empty() and not bool(guard_audio.get("ok",false)): result["elemental_block"] = preload("res://scripts/audio/elemental_performance.gd").one_shot(attacking_element_id,"block",self)
 		_present_contact(defender,result)
 		feedback_triggered.emit(result)
 		return result
@@ -142,6 +146,11 @@ func emit_optional_rumble(strength: float, duration_ms: int) -> void:
 
 func last_prediction() -> Dictionary:
 	return _last_prediction.duplicate(true)
+
+func _guard_contact(defender: Node, info: Dictionary) -> Dictionary:
+	if defender != null and "_guard_presentation" in defender and defender._guard_presentation != null:
+		return defender._guard_presentation.confirmed_contact(info)
+	return {}
 
 
 func _apply_launch_presentation(attacker: Node, defender: Node, move: Dictionary, result: Dictionary) -> Dictionary:

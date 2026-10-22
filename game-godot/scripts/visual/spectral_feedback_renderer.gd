@@ -68,6 +68,7 @@ func contact(info: Dictionary, defender: Node2D) -> bool:
 	# Decoration is admitted first; the authoritative collision remains the last
 	# primary confirmation and can evict it when the shared pool is saturated.
 	stage_contact(info,defender)
+	if result in ["shield","parry"] and bool(info.get("elemental_guard_owned_cue",false)):return true
 	emit_effect(str(defender.fighter_id) if result == "parry" else fid,24 if result == "parry" else 10 if result == "armor" else 1 if result in ["shield","parry","clash"] else 0,origin,direction,190 if heavy else 140,.26 if heavy else .18,event_id)
 	if result == "hit":
 		if heavy:emit_effect(fid,16,origin,direction,128,.10,event_id+":confirmed_expression")
@@ -151,8 +152,12 @@ func emit_effect(fid: String, kind: int, world: Vector2, direction := Vector2.RI
 	_sequence+=1
 	var seed_value := float((fid+":"+str(kind)+":"+str(_sequence)).hash() & 65535)/997.0
 	var slot: Dictionary = slots[index]
+	slot.erase("guard8c_owner")
 	slot.merge({"active":true,"age":0.0,"life":life,"fid":fid,"kind":kind,"extent":extent,"clash_base_extent":extent,"world":world,"dir":direction,"seed":seed_value,"follow":weakref(follow) if follow != null else null,"event_id":event_id,"aspect":Vector2.ONE,"strength":1.0,"clash_ornament":1.0},true)
 	var mesh: MeshInstance2D = slot.mesh
+	# Specialised owned guards return these same pooled meshes. Every new
+	# ordinary effect restores its shader before assigning its own uniforms.
+	mesh.material.shader = SHADER
 	# Canvas contract: platform0 < surface1 < fighter display2 < contact25.
 	mesh.z_index=-24 if kind in [18,19,28] else 0
 	mesh.show();mesh.global_position=world;mesh.rotation=direction.angle();mesh.scale=Vector2.ONE*extent

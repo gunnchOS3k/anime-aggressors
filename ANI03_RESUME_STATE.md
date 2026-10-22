@@ -1,3 +1,17 @@
+# 8C checkpoint — durable 8B archive and source integration in progress
+
+Recovered HEAD `4d1975803eafb34b4a9f1662cae33e14b01c30a9`; branch `release/anime-v1-dialogue-and-elemental-performance`, PR123 draft on122. Actual latest SHA is `git rev-parse HEAD`. Original18 rig/model assets,540 saved8B actions,216BASE moves,33worktrees and owner saves preserved.
+
+FIRST requirement completed: all18 editable8B candidate Blenders durably copied and SHA256/size verified on APFS archive UUID9C4EB36E-2864-42F8-BD0B-A4F67EBC7852. See production_8c/DURABLE_8B_SOURCE_RECEIPT.json. External snapshot preserves original production/source bindings and reproduction scripts; no internal source binary staging/deletion/move. Source artifact expiry no longer removes the only editable candidates.
+
+New source only: individually directed144 transformation/empowered-idle candidate clips across18rigs plus36original additive stage attachment exports; NOT saved/exported/runtime-verified yet. Remote producer protects original anatomy/weights and old actions, saves new8C copies, reopens before export. New nine-element guard contours/warnings/contact/rupture and bounded two-voice original synthesis integrated with existing collision/pool authority. Baseline shield break .4s/full restore unchanged; finite66frame/45% candidate requires explicit actor metadata and isolated review mode. No balance acceptance.
+
+Source bake and45/45 arithmetic audio checks passed (receipts retained). Godot parse check passed. BattleScene guard/pool/candidate tests and remote form production/runtime import still pending. No native8C visual approval. Internal below18GiB guard (latest12.055GiB before allocations); no local Blender production, binary export or recording. No owned Godot/capture process at checkpoint.
+
+NEXT: finish reviewed opt-in form_acting_8c job in existing authored-animation-production.yml; push normally and dispatch exactSHA. Integrate actual saved form tracks/attachment resources after verified output; run focused ElementalGuard8C and form runtime checks with isolated profiles. All human/art/gameplay/balance/native/device/release gates false. Party/ultimate acting, paired grip refinement, deforming hair/cloth, full form locomotion/combat and final art remain incomplete. No merge/tag/release/deploy/publication.
+
+---
+
 # 8B delivery checkpoint — saved source/runtime support verified; art approval open
 
 Worktree `/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure`; branch `release/anime-v1-dialogue-and-elemental-performance`; draft123 on122. Engineering runtime `c7429fa0d9cb3274dad0ac12690b7029a9a4646b`; delivery commit adds tests/evidence/docs only. Use `git rev-parse HEAD` for the actual latest delivery SHA.
