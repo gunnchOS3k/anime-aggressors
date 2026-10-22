@@ -25,6 +25,7 @@ const _HitReaction = preload("res://scripts/combat/directional_hit_reaction.gd")
 const _CosmicKit = preload("res://scripts/combat/cosmic_kit_runtime.gd")
 var party_overdrive = preload("res://scripts/combat/party_overdrive.gd").new()
 var perfect_guard = preload("res://scripts/combat/perfect_guard.gd").new()
+var _form_audio_8c
 var shield_break_8c = preload("res://scripts/combat/shield_break_8c.gd").new()
 var _guard_presentation
 var _cosmic_counter_activation := -1
@@ -154,6 +155,8 @@ var _transform_match_closed: bool = false
 func _ready() -> void:
 	perfect_guard.setup(self)
 	shield_break_8c.setup(self)
+	_form_audio_8c=preload("res://scripts/audio/transformation_audio_8c.gd").new()
+	add_child(_form_audio_8c);_form_audio_8c.setup(self)
 	party_overdrive.setup(self)
 	add_to_group("fighters")
 	state_machine = _FighterStateMachine.new()
@@ -264,21 +267,25 @@ func apply_form(form_id: String) -> void:
 
 
 func on_transform_sequence_start(_from: String, _to: String) -> void:
-	preload("res://scripts/audio/v1_candidate_sfx.gd").play_event(fighter_id, "transform", self)
 	_transform_sequence_active = true
 	state_machine.enter(_FighterStates.AURA_BURST_STARTUP)
-	if model_3d != null and model_3d.has_method("begin_form_sequence") and model_3d.begin_form_sequence(_to):return
+	if model_3d != null and model_3d.has_method("begin_form_sequence") and model_3d.begin_form_sequence(_to):
+		_form_audio_8c.begin(_to,1 if _FormDefinition.form_entry(_forms_doc,_to).ladder_step in ["AWAKENED_BUILD","COSMIC_SURGE"] else 2)
+		return
+	preload("res://scripts/audio/v1_candidate_sfx.gd").play_event(fighter_id,"transform",self)
 	if model_3d != null and model_3d.has_method("play_clip"):
 		var target: Dictionary = _FormDefinition.form_entry(_forms_doc, _to)
 		model_3d.play_clip(str(target.get("transform_in_clip", "aura_charge")))
 
 
 func on_transform_sequence_tick(progress: float) -> void:
+	_form_audio_8c.sample(progress)
 	if model_3d != null and model_3d.has_method("set_transform_progress"):
 		model_3d.set_transform_progress(progress)
 
 
 func _on_transform_completed(_fid: String, _form_id: String) -> void:
+	_form_audio_8c.complete()
 	if model_3d != null:model_3d.end_form_sequence()
 	_transform_sequence_active = false
 	_transform_activations += 1
@@ -287,6 +294,7 @@ func _on_transform_completed(_fid: String, _form_id: String) -> void:
 
 
 func on_transform_sequence_cancelled(_reason: String) -> void:
+	_form_audio_8c.cancel()
 	if model_3d != null:model_3d.end_form_sequence()
 	_transform_sequence_active = false
 	if model_3d != null and model_3d.has_method("set_transform_progress"):
@@ -306,6 +314,7 @@ func reset_legacy_transformation(reason: String) -> void:
 
 
 func close_transformation_for_match_end() -> void:
+	if is_instance_valid(_form_audio_8c):_form_audio_8c.clear()
 	shield_break_8c.reset("match_end")
 	if _guard_presentation != null:_guard_presentation.clear("match_end")
 	_cancel_grab_acting_presentation("match_end")
@@ -317,6 +326,7 @@ func close_transformation_for_match_end() -> void:
 	if _transform_pipeline != null: _transform_pipeline.cancel("match_end")
 
 func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, spawn: Vector2) -> void:
+	if is_instance_valid(_form_audio_8c):_form_audio_8c.clear()
 	shield_break_8c.reset("character_change")
 	if _guard_presentation != null:_guard_presentation.clear("character_change")
 	_release_grab_links("character_change")
@@ -1668,6 +1678,7 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 	# Hit telemetry is recorded by HitResolver.resolve (single source of truth).
 
 func reset_fighter() -> void:
+	if is_instance_valid(_form_audio_8c):_form_audio_8c.clear()
 	shield_break_8c.reset("respawn")
 	if _guard_presentation != null:_guard_presentation.clear("respawn")
 	_release_grab_links("respawn")
@@ -1729,6 +1740,7 @@ func reset_damage() -> void:
 	combo_count = 0
 
 func reset_position() -> void:
+	if is_instance_valid(_form_audio_8c):_form_audio_8c.clear()
 	shield_break_8c.reset("position_reset")
 	if _guard_presentation != null:_guard_presentation.clear("position_reset")
 	_cancel_grab_acting_presentation("position_reset")
@@ -1895,6 +1907,7 @@ func _set_aura_vfx(on: bool) -> void:
 func _on_state_changed(_from: String, to: String) -> void:
 	shield_break_8c.state_changed(to)
 	if to in [_FighterStates.KO, _FighterStates.RESPAWN]:
+		if is_instance_valid(_form_audio_8c):_form_audio_8c.clear()
 		shield_break_8c.reset(to)
 		if _guard_presentation != null:_guard_presentation.clear(to)
 	if to==_FighterStates.GRAB_STARTUP:grab_event.emit({"result":"attempt"})

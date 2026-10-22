@@ -1,3 +1,13 @@
+# 8C shield domains and audio checkpoint
+
+All63additionalrealenginecases PASS:54ninefighter x permanent/Party guard + sustained natural breaks,9public quickprojectile guard and no late contact. Explicit form/durability fixtures, actualPartyitem/taunt; not earnedStory/CPU/native acceptance.109priorroster guardrows retainedPASS. NewCompatibilityshader actuallycompiled/rendered onAppleM2OpenGL4.1Metal; twoPNGanalyticalrasters in production_8c/shader_review1022 (NOTgameplayfootage).117originalPCMcuechecksPASS,18compact WAVlisteningsamples,total2636064bytes; sourcepeaks/RMS/endpoints/uniquehashesmeasured, mixunreviewed. Newownedtwo-voicetransformationaudio followsrealpipeline gather/climax/reveal/cancel; noacceptedtimingchanges.
+
+Remote39790037341 stillrunningdependencyinstallation exact1e06532c. Source/action/resourceproductionnotyetclaimed. Lastinternal11.675GiB beforeallocations; noheavyMacproduction. No localGodotcurrentlyrunning afteraudioverification. Currentdraftbranchremotefcbf8fbc; localcheckpointaddsactualevidence/audio only, checkgitHEAD.
+
+NEXT: readactualremoteproductionstep/result, preservefailureifany; strictvalidateactual18rig/144actions/36GLBs aftersuccess,archive18editablecopiesdirectexternalwithreceipt,installboundedruntimeexports, runFormActingRuntime8Cpilot/full. Preserve8Barchiveunchanged. Theninterrupt/pause/control/nativecompactformreview. Partyultimateacting/secondarydeformation/pairedgripremainunfinished. Allhumanandreleasegatesfalse.
+
+---
+
 # 8C guard roster checkpoint — exact controlled engine PASS
 
 Runtime integration source ff405acd; subsequent98d10c26 retained passing pilot and concise failure evidence. Nine-fighterguard test completed109rows PASS:36body/facing/mode normalshield+36PG,9durability hysteresis,18baseline/candidate recovery,9publicpunishes,1poolcleanup. Sourcehashes in production_8c/GUARD_SOURCE_BINDINGS.json. Baseline .4s/fullhealth preserved;66frame45%candidateopt-in. NoCPU/native/device/art approval. Raw46MB failedparse loop remains unchanged locally; FAILURE_RECEIPT.json hashes it, conciseexcerpttracked; no originaldeletion/historyrewrite.
