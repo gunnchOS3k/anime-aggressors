@@ -1,3 +1,19 @@
+# 8B checkpoint — remote upload approval required, no saved actions (October22)
+
+Latest production-code checkpoint `0895437b`; same branch/worktree/draft123 on122. New delivery checkpoint adds roster routing fixtures and precise blocked-state records. No8A mechanics reopened. Engine support implemented, not final character acting.
+
+Passed12routing/lifecycle fixtures +36nine-fighter/body/facing routing configurations; explicit empty in-memory clips prove only selection/looping/interruption. Existing8A regressions15lifecycle,39throw,9Partygrabinterrupt passed. All18 source rigs unchanged; nine original finite pose scores +540unsaved rig-specific clip candidates exist. Actual new saved Blender actions=0, new8Bsource/runtime correspondence/import=NOT_RUN, allhuman/native/art/devicegatesfalse. Desired hand-target constraint residuals retained; no proportions/hitboxes altered.
+
+Storage latest12.156GiB below18GiB+allocations. ArchiveUUID9C4EB36E-2864-42F8-BD0B-A4F67EBC7852confirmedAPFS, existingreceipt reused; no source copies/downloadedBlends, exports, movies, deletes or worktree moves. No running Godot jobs at completed checkpoint.
+
+Prepared existing CI workflow opt-in18-rig Blender job: sourcecopies, reopen/evaluate, original-action preservation, strict exact18manifest, Python-exit-code1. Dispatch attempt was REJECTED by automatic approval review: uploading newly saved Blender source copies and runtime artifacts from public-repository CI exposes an exact payload not explicitly authorized. NO JOB DISPATCHED. Do not retry via another tool or bypass this rejection.
+
+Owner-facing concrete payload: `artifacts/v1_closure/elemental_grab_throw_8b/ARTIFACT_APPROVAL_PLAN.json` (18inputhashes, saved-copy paths,540plannedactionIDs, two90day GitHub artifacts, production-code hashes). Public repo artifactreaders can download; new source copies contain originalgeometry/actions plusWIPacting. Existing owner regular saves/all33worktrees preserved.
+
+NEXT: obtain explicit owner approval for this exact public-repository artifactupload, then verify productioncode hashes and dispatch. Command AFTER approval only: `gh workflow run authored-animation-production.yml --repo gunnchOS3k/anime-aggressors --ref release/anime-v1-dialogue-and-elemental-performance -f grab_acting_8b=true`. Record exacthead/runIDs and require18complete saved/reopenedverification. Download only bounded runtimeJSON/receipts cap32MiB, not sourceBlends internally. Runtime overlaygates reject unsaved/unverifieddata. Existing `OWNER_REVIEW.md` and `ROSTER_18_MATRIX.json` distinguish each incomplete requirement. Do not count any fixture/score as completed acting.
+
+---
+
 # 8B checkpoint — original acting source and routing foundation (October22)
 
 Recovered clean f5342a8017880fb9300c9bbeb27b68edac4e4d3d; same worktree/branch/draft123 on122. New support selects reciprocal holder/victim roles, loops dedicated holds, yields real escape acting to new inputs/hurt/KO/reset/match, and maps actual throw vector/landing timing. No8A ownership, frame data, damage, hitboxes, input or Party rules replaced.

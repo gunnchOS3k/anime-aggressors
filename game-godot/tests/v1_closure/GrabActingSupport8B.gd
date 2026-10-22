@@ -2,11 +2,13 @@ extends "res://tests/v1_closure/PerfectGuardRuntime.gd"
 ## Animation routing fixtures only. Empty in-memory animations explicitly prove
 ## selection/lifecycle support, never saved source acting or visual quality.
 var grab_events: Array = []
+var full_roster := false
 
 func run() -> void:
 	await process_frame
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--ordinary-output="):output = arg.get_slice("=", 1)
+		if arg=="--full-roster":full_roster=true
 	var gs = root.get_node("GameState")
 	gs.mode = "versus";gs.stage_id = "training-grid";gs.p2_is_cpu = false;gs.stocks = 9;gs.match_timer_seconds = 0;gs.match_type = "stock_untimed"
 	root.get_node("SceneRouter").go("battle");await frames(220)
@@ -14,9 +16,14 @@ func run() -> void:
 	p.grab_event.connect(func(info):grab_events.append(info.duplicate(true)))
 	p.hit_resolver.hit_confirmed.connect(func(_a, _b, info):contacts.append(info.duplicate(true)))
 	d.hit_resolver.hit_confirmed.connect(func(_a, _b, info):contacts.append(info.duplicate(true)))
-	for face in [1, -1]:
-		for ending in ["complete", "attack", "movement", "hurt", "ko", "reset"]:
-			await acting_case(p, d, face, ending)
+	if full_roster:
+		for fid in IDs:
+			for body in ["male","female"]:
+				for face in [1,-1]:await acting_case(p,d,face,"complete",fid,body)
+	else:
+		for face in [1, -1]:
+			for ending in ["complete", "attack", "movement", "hurt", "ko", "reset"]:
+				await acting_case(p, d, face, ending)
 	release();Input.action_release("p2_jump")
 	write(true);quit(0 if failures.is_empty() else 1)
 
@@ -31,8 +38,13 @@ func fixture_clips(controller) -> void:
 			library.add_animation(name, animation);controller._loaded_clips[name] = true
 			controller._grab_acting_sources[name] = {"fixture_only":true, "source_action":"IN_MEMORY_ROUTING_FIXTURE", "source_blend":""}
 
-func acting_case(p, d, face: int, ending: String) -> void:
-	await prepare(p, d, "juno-spark", "male", face)
+func acting_case(p, d, face: int, ending: String, fid: String="kaia-windrow", body: String="male") -> void:
+	var other: String=IDs[(IDs.find(fid)+1)%IDs.size()]
+	await prepare(p, d, other, body, face)
+	p.configure(fid,1,false,9,p.global_position);p.facing=face;d.facing=-face
+	for ready in range(100):
+		await physics_frame
+		if p.is_on_floor() and p.state_machine.can_attack():break
 	p.model_3d.set_facing(face);d.model_3d.set_facing(-face)
 	var owner = p.model_3d.get_animation_controller();var victim = d.model_3d.get_animation_controller()
 	# Explicitly simulate a missing/unverified export without modifying assets.
@@ -43,7 +55,8 @@ func acting_case(p, d, face: int, ending: String) -> void:
 		await physics_frame
 		if p.grabbed_target == d:break
 	Input.action_release("p1_grab")
-	var label := str(face)+":"+ending
+	var label := fid+":"+body+":"+str(face)+":"+ending
+	check(p.data.body_variant==body and d.data.body_variant==body and p.is_model_loaded() and d.is_model_loaded(),label+":actual_body_models_loaded")
 	check(p.grabbed_target == d and d.grabbed_by == p, label+":genuine_public_acquisition")
 	if p.grabbed_target != d:return
 	var fallback_owner: Dictionary = owner.get_grab_acting_report()
@@ -88,7 +101,7 @@ func acting_case(p, d, face: int, ending: String) -> void:
 	else:await frames(28)
 	check(not victim.get_grab_acting_report().get("escape_active", false), label+":escape_finishes_or_yields")
 	check(p.grabbed_target == null and d.grabbed_by == null, label+":no_reacquisition")
-	rows.append({"case":label, "fallback_owner":fallback_owner, "fallback_victim":fallback_victim, "holder_clip":hold_owner, "victim_clip":hold_victim, "actual_escape_callback":actual_escape, "rearmed_presentation_fixture":rearmed_fixture, "escape":victim.get_grab_acting_report(), "events":grab_events.duplicate(true), "fixture_only":true})
+	rows.append({"case":label,"fighter":fid,"opponent":other,"body":body,"facing":face,"saved_source_actions":false,"fallback_owner":fallback_owner, "fallback_victim":fallback_victim, "holder_clip":hold_owner, "victim_clip":hold_victim, "actual_escape_callback":actual_escape, "rearmed_presentation_fixture":rearmed_fixture, "escape":victim.get_grab_acting_report(), "events":grab_events.duplicate(true), "fixture_only":true})
 	# Declared reaction/landing routing fixture uses the existing hurt clock.
 	if ending == "complete":
 		for direction in ["forward", "back", "up", "down"]:
