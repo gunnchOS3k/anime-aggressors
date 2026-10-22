@@ -1315,7 +1315,8 @@ func _try_grab_connect() -> void:
 	_throw_direction = ""
 	_grab_acquisition_activation = move_runner.activation_id
 	_input_edge_held["attack"] = false
-	_input_edge_held["grab"] = false
+	# Preserve the acquisition press until a real release. Clearing its edge here
+	# would reacquire automatically after the timed throw while Grab stays held.
 	state_machine.enter(_FighterStates.GRAB_HOLD)
 	opp.state_machine.enter(_FighterStates.GRAB_HOLD)
 	# Enter hold before cancellation so normal/ultimate move-ended callbacks

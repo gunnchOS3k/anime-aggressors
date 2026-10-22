@@ -1,3 +1,13 @@
+# 8A checkpoint — all-nine held-input and form validation
+
+Branch/worktree unchanged. Last pushed checkpoint `155005e2ec6118cfe262c5a63775b03253d969bf`. This commit fixes a reproduced all-nine held-input reacquisition: acquisition no longer erases the still-held grab press. Original two-second auto-release and every move/balance value remain unchanged. Nine baseline cases each acquired twice; corrected nine cases acquire once and throw once. See `HELD_INPUT_SOURCE_BINDING.json`, `held_before1021/`, `held_fixed1021/`.
+
+54 form-context public grab/throw cases passed at155005e2: three existing legacy/cosmic ladders plus three Party states across all nine; normal grabs bypass fresh guard. This is staged context testing, not earned Story or boss/Gray visual acceptance. Original216BASE moves,18 source rigs,18BASE models and5 combat authority modules match protected63e68d6d exactly (`PRESERVATION.json`). No new source art/audio binary assets or exports.
+
+Next: serial targeted ThrowOwnership, PartyGrabInterruption, PerfectGuardExceptions, PartyLifecycle, ProjectileOwnership, ChargeContinuity, StorySceneOwnership, StorySceneAuthority. Unique isolated outputs under `artifacts/v1_closure/elemental_grab_throw/regressions1021`. Do not run simultaneous Godot instances. No active Godot jobs now. Current storage ~11.90 GiB: heavy captures/exports prohibited. All human/release gates false. Preserve previous failed/parser/driver fixtures and shutdown warnings.
+
+---
+
 # 8A checkpoint — nine-fighter elemental lifecycle (2026-10-21)
 
 Current worktree/branch unchanged. Ownership fix `e69db6cc8b655b08e71f51d4e1d7488cf70ed903` pushed to draft PR123 on PR122. This next commit records the integrated source candidate and tests.
