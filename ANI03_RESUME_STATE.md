@@ -1,3 +1,28 @@
+# 8D eighteen-rig source-control delivery
+
+Branch: `release/anime-v1-dialogue-and-elemental-performance`, draft PR123 on122. Get `git rev-parse HEAD` for the delivery commit after these source/evidence changes. All35 current worktrees (including historical33), original archives, owner saves and Cursor's isolated work are preserved. Unrelated untracked `artifacts/vxp3/reports/WORKFLOW_REFERENCED_PATHS.json` remains untouched.
+
+Source producer `3ab7667ca0b22e50bb7acfe0b509ff6b4513daf5`, run39852459469 SUCCESS:18 editable Blender candidates,18 GLBs,72 new WIP actions,635757536 source bytes externally verified. Input8C hashes match. Original geometry/materials/morphs/action curves preserved, including5408B+1448C and older Kaia/Juno work. Canonical22 derived rest matches the untouched edit-mode control exactly; original float round-trip differences are explicitly recorded.
+
+Runtime implementation `b09aec61`; final observer/runtime `e8d4ab80c380ae21c77dae3b56656d9c3e1eaddc`, run39854634363 SUCCESS.36 actual saved-model body/facing configurations, original body ownership, actual finger/secondary rotations, public attack starts, Story unchanged.18 staged right-facing native details, Linux Compatibility/Mesa llvmpipe. No active CPU/contact/grab/combo/earned/device/FPS acceptance. Final sheets were inspected; earlier cropped/coupled comparisons are retained, not promoted as isolated evidence. See OWNER_REVIEW.md and PRODUCTION_MATRIX.json.
+
+Source archive: `/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d_controls_3ab7667c_39852459469`. Final native files in `engine_review_39854634363/evidence/`. Receipts under `artifacts/v1_closure/production_8d/controls_remote_39852459469` and `controls_engine_39854634363`. No local candidate binaries installed. No owned source/Godot/capture jobs remain running. Manual production and review runs are terminal.
+
+Art is unfinished: rounded source palms/gauntlets obscure the closed-digit silhouette, especially Rook. Next original production task: refine `Palm L/R`, six original `Finger` meshes and new thumb/little-digit topology, curl weights and cuff clearance across all18 versioned source copies; verify actual victim-mesh grip. Do not hide this with scaling or runtime offsets. Four auxiliary clips with character-directed parameters are not nine complete performances. Foot support, full form/guard-break/KO/ultimate acting, final silhouettes/materials remain open. All human gates false.
+
+Storage: latest17.32GiB, below18GiB AFTER800MiB forecast. No local import, Blender, render, recording or export. No deletion. Archive is immutable storage, not an active build disk. Continue compatible REMOTE Blender source work, preserving old candidates/actions. Installed Mac Blender3.3 must not resave these v400 copies.
+
+Only AFTER live reserve passes, this installs the existing versioned candidate exports (not a final art approval):
+
+```sh
+python3 tools/authored_animation/recover_controls_8d.py --run 39852459469 --source-sha 3ab7667ca0b22e50bb7acfe0b509ff6b4513daf5 --install
+tools/v1_closure/play_party_review.command kaia-windrow --body female --opponent juno-spark --source-controls-8d
+```
+
+Without installed exports the flag correctly refuses launch; ordinary baseline review remains unchanged. Recheck exact delivery CI; snapshots preserve actual pending results. No merge, release, tag, deploy or publication.
+
+---
+
 # 8D final native observer isolation correction
 
 Firstsource/native proof remainsPASS36 atb09; firstdetailrun39854158500/d4d89732 inprogress. ObserverreviewfounditvariedhandANDhairbothduringeachpicturepair, so independenthairvisualclaimwasnotestablished. FinalobservernowvariesONLYthenamedlayer and explicitlychecksactualsecondaryjointrotation too; canonical22remainexact. Thisisnotart/sourcechange. Retainallpriorartifacts, doNOTregenerate18sourcecopies.
