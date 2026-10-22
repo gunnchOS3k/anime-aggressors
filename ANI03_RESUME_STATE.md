@@ -1,3 +1,25 @@
+# Combat completion — current all-nine candidate gameplay checkpoint
+
+InspectHEADfornewsourcecommit; previous65c5e065. Party forms108configurations
+covered:104passing8375 + Yin4current resolved-recovery retest PASS.9ultimates
+actual controlled contacts; bothbodies/facings resource loading. All9 grabbed
+ultimates correctly interrupted; victim grabstate and throwrelease preserved.
+Guard108timingcases historical + current27timings/20negativecases PASS.
+Current affected:Throw39,Charge9,Cosmicpublic8,Storyscene8,ProjectileImpact63PASS.
+Lifecycle8fighters + natural600tickexpiry passed, Rookdriver input sentduring
+LAND proven; corrected Rook-only lifecycle PASS, preserve failedreceipts.
+AI public observer initiallyfailedall9newultimate names. One-line public-state
+classification correction now9/9PASS, no strategy/difficulty tuning.
+Nextserialcommands: PartyMatchups81orderedpairs; rerun9boundedCPUobservations
+with actualconfiguredlevel3 and observedAIstates; play_party_review.py --smoke.
+No native/video/device/humanacceptance, no Blends/GLBs changed. Storagebelow18.
+NewPartyMatchups/ownerreviewlauncher/CPUdiagnostics fileslocalWIPuntested; preserve.
+No Godot processnow. Allart/gameplay/balance/roster/releasegatesfalse.
+Evidence combat_completion/final, party_roster_b, lifecycle_rook_before/after,
+party_AI_before/after. Original fullbatchledger retains lifecycle failure; do not
+rewrite it as10/10. Derive reconciled ledger with separate Rook passingretake.
+
+---
 # Perfect Guard counterplay checkpoint
 
 Current source adds fresh-press-only shield windows after independently reproducing

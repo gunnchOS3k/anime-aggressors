@@ -76,7 +76,7 @@ func observe(opponent: Node2D) -> Dictionary:
 		opp_shielding = bool(opponent.shielding)
 	if "state_machine" in opponent and opponent.state_machine != null:
 		var st: String = str(opponent.state_machine.current_state)
-		opp_attacking = st.contains("attack") or st.contains("special") or st.contains("throw") or st.contains("aura_burst")
+		opp_attacking = st.contains("attack") or st.contains("special") or st.contains("throw") or st.contains("aura_burst") or st.begins_with("ultimate_")
 		opp_hitstun = st.contains("hitstun") or st.contains("hurt") or st.contains("launch") or st.contains("tumble")
 	var opp_pct: float = float(opponent.damage_percent) if "damage_percent" in opponent else 0.0
 	var opp_stocks: int = int(opponent.stocks) if "stocks" in opponent else 1

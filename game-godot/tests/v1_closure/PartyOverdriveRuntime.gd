@@ -2,11 +2,15 @@ extends "res://tests/v1_closure/PerfectGuardRuntime.gd"
 ## Explicit pickup/spacing fixtures, public taunt/special/attack inputs and real
 ## collision authority. Not an active CPU match, earned Story or native review.
 var pickup_events:Array=[]
+var selected_fighter:=""
+var prism_only:=false
 func run() -> void:
 	await process_frame
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--ordinary-output="):output=arg.get_slice("=",1)
 		if arg=="--pilot":pilot=true
+		if arg.begins_with("--fighter="):selected_fighter=arg.get_slice("=",1)
+		if arg=="--prism-only":prism_only=true
 	var gs=root.get_node("GameState")
 	gs.mode="versus";gs.items_enabled=true;gs.hazards_enabled=false;gs.stage_id="training-grid";gs.p2_is_cpu=false;gs.stocks=9;gs.match_timer_seconds=0;gs.match_type="stock_untimed"
 	root.get_node("SceneRouter").go("battle");await frames(220)
@@ -14,15 +18,18 @@ func run() -> void:
 	items._spawn_timer=100000
 	items.item_collected.connect(func(slot,id):pickup_events.append({"slot":slot,"id":id}))
 	p.hit_resolver.hit_confirmed.connect(func(a,b,info):if a==p and b==d:contacts.append(info.duplicate(true)))
-	for fid in (IDs.slice(0,2) if pilot else IDs):
+	for fid in ([selected_fighter] if not selected_fighter.is_empty() else IDs.slice(0,2) if pilot else IDs):
 		for body in (["male"] if pilot else ["male","female"]):
 			for face in ([1] if pilot else [1,-1]):
-				for kind in (["prism_heart"] if pilot else ["prism_heart","BLACK","WHITE"]):
+				for kind in (["prism_heart"] if pilot or prism_only else ["prism_heart","BLACK","WHITE"]):
 					await prepare(p,d,fid,body,face)
 					# Inherited setup uses Kaia as attacker; set actual owner under test.
 					p.configure(fid,1,false,9,p.global_position);p.facing=face;p.invincible=false;p.controls_enabled=true
 					d.configure("kaia-windrow",2,false,9,d.global_position);d.facing=-face;d.invincible=false;d.controls_enabled=true
-					p.aura=90;d.aura=0;await frames(4)
+					p.aura=90;d.aura=0
+					for ready_frame in range(90):
+						await physics_frame
+						if p.is_on_floor() and d.is_on_floor() and p.state_machine.can_attack() and d.state_machine.can_attack():break
 					var original_form:String=p.get_current_form_id()
 					var original_look:Dictionary=p._model_presentation_data.duplicate(true)
 					var item_id:="prism_heart" if kind=="prism_heart" else "puppet_seal"
@@ -49,7 +56,12 @@ func run() -> void:
 								await physics_frame
 							Input.action_press("p2_left" if face==1 else "p2_right",.5);Input.action_press("p2_attack");await frames(2)
 							Input.action_release("p2_attack");Input.action_release("p2_left");Input.action_release("p2_right")
-						await frames(110)
+						# Authored duration plus bounded hitstop; no arbitrary110-frame
+						# assumption for Yin's longer recovery.
+						var budget:int=int(p._current_move.get("startup_frames",0))+int(p._current_move.get("active_frames",0))+int(p._current_move.get("recovery_frames",0))+64
+						for wait_frame in range(budget):
+							await physics_frame
+							if p.party_overdrive.state=="BASE":break
 						check(contacts.size()>0 and d.damage_percent>0,label+":ultimate_actual_contact")
 						var unique:Dictionary={}
 						for info in contacts:

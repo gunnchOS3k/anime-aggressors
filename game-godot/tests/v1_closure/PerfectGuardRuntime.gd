@@ -2,6 +2,7 @@ extends SceneTree
 const IDs=preload("res://scripts/visual/spectral_feedback_renderer.gd").IDS
 var output:=""
 var pilot:=false
+var timing_smoke:=false
 var rows:Array=[]
 var failures:Array=[]
 var contacts:Array=[]
@@ -34,13 +35,14 @@ func run() -> void:
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--ordinary-output="):output=arg.get_slice("=",1)
 		if arg=="--pilot":pilot=true
+		if arg=="--timing-smoke":timing_smoke=true
 	var gs=root.get_node("GameState");gs.mode="versus";gs.stage_id="training-grid";gs.p2_is_cpu=false;gs.stocks=9;gs.match_timer_seconds=0;gs.match_type="stock_untimed"
 	root.get_node("SceneRouter").go("battle");await frames(220)
 	var p=current_scene.fighter1;var d=current_scene.fighter2
 	p.hit_resolver.hit_confirmed.connect(func(a,b,info):if a==p and b==d:var record:Dictionary=info.duplicate(true);record["shield_at_contact"]=d.shield_health;contacts.append(record))
 	for fid in (IDs.slice(0,1) if pilot else IDs):
-		for body in (["male"] if pilot else ["male","female"]):
-			for face in ([1] if pilot else [1,-1]):
+		for body in (["male"] if pilot or timing_smoke else ["male","female"]):
+			for face in ([1] if pilot or timing_smoke else [1,-1]):
 				for timing in (["success"] if pilot else ["success","early","late"]):
 					await prepare(p,d,fid,body,face)
 					if timing=="early":Input.action_press("p2_shield");await frames(12)
