@@ -1,3 +1,9 @@
+# 2026-10-22 Codex-to-Cursor durable handoff checkpoint
+
+Recovered/pushed runtime delivery33ed6394, tested runtimef230b734 unchanged. Read docs/handoff/2026-10-22/CODEX_TO_CURSOR.md and AGENTS.md FIRST for current ownership, exact commands, source/archive hashes, all33worktree states and negative findings. Both remote snapshots saved;33ed CI allnon-skippedSUCCESS includingWindows2025. New8D directive received: premium original18rig production, not another rigid-prop pass; no8D completion claimed yet. Codex retains creative/source-art lead; Cursor independent engineering only, separate writable branches. NoactiveGodot/Blender/captureproduction at recovery. Freshinternalfree~25.52GiB,18GiB reserve AFTER allocations stillmandatory; noheavyjob started. Handoff≤2MiB. Allhuman/releasegatesfalse. Unrelateduntrackedartifacts/vxp3/reports/WORKFLOW_REFERENCED_PATHS.json preserved. ExactdeliverycommitgetgitHEAD; remotecheckafterpush. NEXT: checkpoint/pushbothhandoffs, thenboundedoriginalsource-controlimprovementusingverified8Ccopies; full8Dacting/artnotcomplete.
+
+---
+
 # 8C final recoverable checkpoint — saved roster production integrated
 
 Runtime source `f230b734bc8bd3c9b515f0d53bea87143444e116`; branch release/anime-v1-dialogue-and-elemental-performance, worktree /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure. Finaldeliverycommitcontainsreview/evidence, getgitrev-parseHEAD. Draft123on122 retained. All33worktrees and original18rig/BASEmodel/move/form assetsunchanged; ownerregularsavesuntouched.
