@@ -1,0 +1,73 @@
+{
+  "agent": "B",
+  "date": "2026-10-22",
+  "v1": "NOT READY",
+  "rc2": "NOT READY",
+  "authorized": false,
+  "merged": false,
+  "deployed": false,
+  "public_server": false,
+  "b02": "CRITICAL",
+  "b04": "OPEN",
+  "b05": "OPEN",
+  "issues_127_and_128": "open and not updated",
+  "beatlink_server": "not_deployed",
+  "beatlink_two_process_test": {
+    "ran": false,
+    "missing_prerequisite": "node_modules providing vitest, socket.io-client, and playwright, plus a BeatLink server on port 3001 and the web app on port 5173. Root node_modules and apps/server/node_modules are absent. scripts/browser-two-client-evidence.mjs and tests/game_rc_002_session.test.ts were not run."
+  },
+  "pr_tip_note": "On anime-aggressors the commit that adds this JSON is the pull request tip. Its parent is anime.adapter_sha.",
+  "pull_requests": [
+    {
+      "repo": "gunnchos-research-portal",
+      "number": 56,
+      "url": "https://github.com/gunnchOS3k/gunnchos-research-portal/pull/56",
+      "branch": "eng/cursor-v1-release-coord",
+      "sha": "8707314e0bee73a7dec7f2625518f0067f555b67",
+      "ledger_edited": false
+    },
+    {
+      "repo": "anime-aggressors",
+      "number": 131,
+      "url": "https://github.com/gunnchOS3k/anime-aggressors/pull/131",
+      "branch": "eng/cursor-v1-agent-b-partylink-grab-and-post",
+      "base": "7c25c2996f8adcee97ec2187a14bfc578d8681bf",
+      "prior_tip_sha": "86f011d78bac9e3a64008b924c8b44a9bfb6aca8",
+      "posted_frame_sha": "a0e6b660f23d66addb2b412d4c6cee36f7f057f7",
+      "invite_contract_sha": "d8f0cb18600c69f1e544c25388eaf38786710e58",
+      "adapter_sha": "4b954671d91e20d54a5a187fef1ae5e94c92d295",
+      "mode": "anime match",
+      "tests": "partyLinkAdapter.test.ts 5 passed; inviteContract.test.ts 4 passed"
+    },
+    {
+      "repo": "pedestrian-pursuit",
+      "number": 43,
+      "url": "https://github.com/gunnchOS3k/pedestrian-pursuit/pull/43",
+      "branch": "eng/cursor-v1-agent-b-pp-invite",
+      "sha": "980d20ae448afaa480757de7131f281804d86ab8",
+      "draft": true,
+      "mode": "pedestrian race",
+      "tests": "node --test invite-adapter/sessionInvite.test.mjs: 4 passed, 0 failed"
+    },
+    {
+      "repo": "beatlink-party",
+      "number": 33,
+      "url": "https://github.com/gunnchOS3k/beatlink-party/pull/33",
+      "branch": "eng/cursor-v1-agent-b-beatlink-invite",
+      "sha": "b534d50acb46af8b4a875d213075384ce55bdbaf",
+      "draft": true,
+      "mode": "beatlink room",
+      "tests": "node --test invite-adapter/sessionInvite.test.mjs: 4 passed, 0 failed"
+    },
+    {
+      "repo": "archive-of-life-artifact-world",
+      "number": 44,
+      "url": "https://github.com/gunnchOS3k/archive-of-life-artifact-world/pull/44",
+      "branch": "eng/cursor-v1-agent-b-archive-invite",
+      "sha": "5f8489f1b759337a2bbb559ce4b4f0d661356654",
+      "draft": true,
+      "mode": "archive expedition",
+      "tests": "node --test invite-adapter/sessionInvite.test.mjs: 4 passed, 0 failed"
+    }
+  ]
+}
