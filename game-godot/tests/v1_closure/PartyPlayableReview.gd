@@ -34,7 +34,7 @@ func run() -> void:
 	var label:=Label.new();label.position=Vector2(30,100);label.size=Vector2(1050,155)
 	label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	label.text="PARTY TUNING CANDIDATES · "+fighter+" / "+opponent+" · "+body+" · "+("local players" if local else "active CPU")+"\nA/D move · J light · J+K heavy · K special · W jump · L shield · U grab · I dodge.\nPick up the placed item. T activates; press T again after Prism activation for one ultimate. Seals alter side special for10s. P2 Taunt: F8.\nPerfect Guard: tap grounded shield within4frames of contact; grabs still work. No reflection. Original3D ultimate acting, cosmic kaiju art and final balance pending."
-	label.text+="\nPermanent advancements: build aura with shield+special, then press attack while both held. Each fighter has two separate stages. Original saved acting and stage structures are WIP, not human approved."
+	label.text+="\n8C saved form exports: "+str(p.model_3d.get_animation_controller().get_form_acting_report().status)+". Missing exports retain baseline acting; no new source art is claimed.\nPermanent advancements: build aura with shield+special, then press attack while both held. Each fighter has two separate stages. Original saved acting and stage structures are WIP, not human approved."
 	if break_candidate:label.text+="\nOPT-IN SHIELD BREAK CANDIDATE:66-frame recovery,45% guard restore; release guard before re-entry. Balance unapproved."
 	current_scene.hud.add_child(label)
 	if smoke:

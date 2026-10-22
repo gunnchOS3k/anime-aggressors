@@ -270,6 +270,7 @@ func get_current_model_source() -> String:
 func get_current_animation_source() -> String:
 	if _animation_controller != null and is_instance_valid(_animation_controller):
 		var player = _animation_controller.get_animation_player()
+		if player != null and str(player.current_animation).begins_with("form_acting_8c/"):return "SAVED_ORIGINAL_FORM_8C_WIP_NOT_HUMAN_APPROVED"
 		if player != null and str(player.current_animation).begins_with("authored_studies/"): return "ORIGINAL_EXPLICIT_KEYPOSE_STUDY_NOT_FINAL"
 	return _current_animation_source
 

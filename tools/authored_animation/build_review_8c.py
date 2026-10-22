@@ -21,7 +21,7 @@ def main():
                     actual_stage_attachment=doc.get('attachments',{}).get(stage,{}),
                     engine_verified=bool(runtime.get('PASS'))and len(observed)==2,
                     observed_facings=sorted({r.get('facing')for r in observed}),native_form_visual_review=False,character_sheet_fidelity='Original bible-derived candidate intent; final native comparison and owner judgment pending',
-                    accessibility_guard_verified=True,form_accessibility_verified=False,target_device_performance=False,human_art_approved=False,human_gameplay_approved=False,balance_approved=False,
+                    accessibility_guard_shared_verified=True,exact_form_body_facing_accessibility_verified=False,form_accessibility_verified=False,target_device_performance=False,human_art_approved=False,human_gameplay_approved=False,balance_approved=False,
                     remaining=['native form/body/facing visual review','form-specific locomotion and combat beyond empowered idle','original deforming hair/cloth/secondary controls','paired mesh grip/refined original acting','temporary Party and ultimate original full-body production','controller/device/LAN acceptance']))
     receipts={}
     for label,path in {'guard_roster':'guard_roster1022/elemental_guard_8c.json','guard_domains':'guard_domains1022/guard_domains_8c.json','throw_ownership':'throw_regression1022/throw_ownership.json','original_audio':'audio1022/audio_production_8c.json','native_guard':'guard_native_projected1022/native_guard_8c.json','form_runtime':'form_roster1022/form_acting_runtime_8c.json'}.items():
