@@ -3,6 +3,8 @@ extends "res://tests/v1_closure/PerfectGuardRuntime.gd"
 ## Declared idle/spacing setup is not active-CPU or native artistic acceptance.
 var grab_events: Array = []
 var damage_events: Array = []
+var escape_handoff: Dictionary = {}
+var counter_contacts: Array = []
 
 func release() -> void:
 	super.release()
@@ -21,7 +23,11 @@ func run() -> void:
 	p.hit_resolver.hit_confirmed.connect(func(a, b, info):
 		if a == p and b == d:contacts.append(info.duplicate(true)))
 	d.damaged.connect(func(amount, _total):damage_events.append(amount))
-	p.grab_event.connect(func(info):grab_events.append(info.duplicate(true)))
+	d.hit_resolver.hit_confirmed.connect(func(a, b, info):
+		if a == d and b == p:counter_contacts.append(info.duplicate(true)))
+	p.grab_event.connect(func(info):
+		grab_events.append(info.duplicate(true))
+		if info.get("result") == "mash_escape":escape_handoff = pose(p))
 	for fid in (IDs.slice(0, 1) if pilot else IDs):
 		for body in ["male", "female"]:
 			for face in [1, -1]:
@@ -34,6 +40,9 @@ func setup_pair(p, d, fid: String, body: String, face: int, mixed_bodies: bool =
 	var gs = root.get_node("GameState");gs.p1_body_variant = body;gs.p2_body_variant = ("female" if body == "male" else "male") if mixed_bodies else body
 	var other: String = IDs[(IDs.find(fid) + 1) % IDs.size()]
 	p.configure(fid, 1, false, 9, Vector2(-40, 240));d.configure(other, 2, false, 9, Vector2(-40 + 32 * face, 240))
+	# configure stores respawn authority; it does not reposition a live actor.
+	# Explicit geometry is part of this controlled fixture, not an earned match.
+	p.global_position = Vector2(-40, 240);d.global_position = Vector2(-40 + 32 * face, 240)
 	for actor in [p, d]:
 		actor.move_runner.cancel();actor.projectile_spawner.clear_all();actor.state_machine.enter("idle")
 		actor.velocity = Vector2.ZERO;actor.controls_enabled = true;actor.invincible = false;actor.shielding = false
@@ -44,7 +53,7 @@ func setup_pair(p, d, fid: String, body: String, face: int, mixed_bodies: bool =
 		await physics_frame
 		if p.is_on_floor() and d.is_on_floor() and p.state_machine.can_attack() and d.state_machine.can_attack():break
 	p.model_3d.set_facing(face);d.model_3d.set_facing(-face)
-	contacts.clear();damage_events.clear();grab_events.clear()
+	contacts.clear();damage_events.clear();grab_events.clear();escape_handoff.clear();counter_contacts.clear()
 	for actor in [p, d]:
 		var controller = actor.model_3d.get_animation_controller()
 		var expected_body: String = gs.p1_body_variant if actor == p else gs.p2_body_variant
@@ -77,7 +86,7 @@ func pose(actor) -> Dictionary:
 		var point: Vector2 = model._display.to_global(pixel - Vector2(model._viewport.size) * .5 + model._display.offset)
 		points[name] = [point.x, point.y]
 		var q := sk.get_bone_pose_rotation(index);rotations[name] = [q.x, q.y, q.z, q.w]
-	return {"fighter":actor.fighter_id, "body":actor.data.body_variant, "facing":actor.facing,
+	return {"fighter":actor.fighter_id, "body":actor.data.body_variant, "facing":actor.facing, "damage_percent":actor.damage_percent,
 		"state":actor.state_machine.current_state, "clip":c.get_active_clip(),
 		"animation":c.get_animation_player().current_animation, "animation_time":c.get_animation_player().current_animation_position,
 		"points_gameplay_px":points, "local_rotations":rotations, "source":c.get_grab_acting_report()}
@@ -141,10 +150,13 @@ func escape_case(p, d, fid: String, body: String, face: int) -> void:
 	var owner := pose(p);var victim := pose(d)
 	check(victim.source.get("selected", "").begins_with("grab_escape"), label + ":real_escape_selected")
 	# This checks a real hold-to-recovery handoff, not a fixture-injected pose.
-	check(owner.clip == "grab_recovery" + ("_left" if face == -1 else ""), label + ":holder_supported_recovery")
+	# The final mash attack can legitimately hit the old holder immediately.
+	# Sample the real release callback before that counterattack, never delay it.
+	check(escape_handoff.get("clip", "") == "grab_recovery" + ("_left" if face == -1 else ""), label + ":holder_supported_recovery")
 	check(contacts.is_empty() and damage_events.is_empty(), label + ":no_throw_damage_on_escape")
 	rows.append({"case":label, "kind":"public_mash_escape", "fighter":fid, "body":body, "facing":face,
-		"before":before, "holder_after":owner, "victim_after":victim, "events":grab_events.duplicate(true)})
+		"before":before, "holder_at_release":escape_handoff.duplicate(true), "holder_after":owner, "victim_after":victim,
+		"ordinary_counter_contacts":counter_contacts.duplicate(true), "events":grab_events.duplicate(true)})
 	write(false)
 
 func write(done: bool) -> void:

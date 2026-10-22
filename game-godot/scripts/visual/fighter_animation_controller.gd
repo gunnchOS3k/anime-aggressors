@@ -45,6 +45,7 @@ var _grab_overlay_status := "missing"
 var _grab_escape_clip := ""
 var _grab_escape_age := 0.0
 var _grab_escape_buttons: Dictionary = {}
+var _grab_recovery_active := false
 var _throw_reaction_pending := false
 var _throw_landing_active := false
 const GRAB_ACTING_CLIPS := ["grab", "grab_whiff", "grab_hold_attacker", "grab_hold_victim", "grab_escape", "throw_forward", "throw_back", "throw_up", "throw_down", "throw_reaction_forward", "throw_reaction_back", "throw_reaction_up", "throw_reaction_down", "throw_landing", "grab_recovery", "grab_interrupted"]
@@ -109,6 +110,7 @@ func _blend_neutral_return(delta:float) -> void:
 
 func begin_hit_reaction(reaction: Dictionary) -> void:
 	_clear_grab_escape("body_hit")
+	_grab_recovery_active = false
 	_reaction_clip=str(reaction.get("performance_clip","reaction_light"))
 	_throw_reaction_pending = false
 	if str(reaction.get("move_id", "")).begins_with("throw_"):
@@ -213,6 +215,7 @@ func cancel_grab_acting(reason: String) -> void:
 	var was_escape := not _grab_escape_clip.is_empty()
 	_clear_grab_escape(reason)
 	_throw_reaction_pending = false;_throw_landing_active = false
+	_grab_recovery_active = false
 	_grab_acting_report["active"] = false
 	if was_escape and is_instance_valid(_runtime_fighter):play_for_state(str(_runtime_fighter.state_machine.current_state))
 
@@ -234,6 +237,9 @@ func begin_grab_escape() -> void:
 
 
 func play_for_state(state: String, move: Dictionary = {}) -> void:
+	# The unchanged mash-release rule uses GRAB_WHIFF for holder recovery.
+	# A released grip needs its authored support exchange, not a fresh reach.
+	_grab_recovery_active = state == _FighterStates.GRAB_WHIFF and (_grab_recovery_active or (bool(_grab_acting_report.get("active", false)) and _grab_acting_report.get("role", "") == "attacker"))
 	var neutral_state:=state in [_FighterStates.IDLE,_FighterStates.WALK,_FighterStates.RUN,_FighterStates.DASH,_FighterStates.FALL,_FighterStates.FAST_FALL]
 	if not state.begins_with("attack"):_attack_support_exchange.clear()
 	if not neutral_state:_neutral_return_pose.clear()
@@ -264,6 +270,11 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 		grab_presentation = true
 		_grab_acting_report = {"role":role, "metadata_role":str(move.get("grab_role", "")), "requested":requested, "selected":clip, "status":"fallback" if authored.is_empty() else "fixture_only" if bool(_grab_acting_sources[authored].get("fixture_only", false)) else "authored", "active":true}
 	elif _grab_acting_report.get("role", "") != "escape":_grab_acting_report["active"] = false
+	if _grab_recovery_active:
+		var recovery := _grab_acting_clip("grab_recovery")
+		if not recovery.is_empty():
+			clip = recovery;grab_presentation = true
+			_grab_acting_report = {"role":"holder_recovery", "requested":recovery, "selected":recovery, "status":"fixture_only" if bool(_grab_acting_sources[recovery].get("fixture_only", false)) else "authored", "active":true}
 	if grab_presentation:
 		_neutral_return_pose.clear();_grounded_return.clear();_authored_transition.clear();_weight_transfer.clear()
 		_locomotion_synchronized = false

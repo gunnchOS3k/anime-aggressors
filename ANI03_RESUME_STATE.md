@@ -1,3 +1,11 @@
+# 8B checkpoint — actual saved-action pilot passes; roster pass next
+
+18 remote-saved rigs/540WIPactions remain verified and installed as text only. Actual saved-animation pilot:16public throws +4mixed-body/facing mash escapes PASS at current recovery source. Exact pre-fix baseline e5dec6bc reproducibly selected grab_whiff at4real holder release callbacks. Corrected controller selects grab_recovery(_left); final mash remains allowed to counterattack immediately (4observed contacts), and hurt still interrupts recovery. No gameplay state/timer/input/damage changes. Evidence `elemental_grab_throw_8b/RECOVERY_CORRECTION.json`, `handoff_baseline1022/`, `handoff_fixed1022/`; initial driver/observer false starts retained.
+
+No local Godot or capture running. Original18source/model hashes unchanged. All human/native/art/device gates false. Next: full `GrabActingRuntime8B.gd` without --pilot, new profile/output `aa8b_roster_saved1022` / `elemental_grab_throw_8b/roster_saved1022`. Then focused form/8A cleanup regressions; no historical campaign/capture repeat. Keep source artifact12406037776 remote (expires2027-01-20); below18GiB reserve no local Blender/large binary/media export.
+
+---
+
 # 8B checkpoint — 18 saved rigs verified remotely; actual-engine pilot next
 
 Successful approved run39733087497 at `cc2b3a5a555aeb22fc8eb7510bd7702a28975aad`, Blender4.0.2, all18new source copies/540WIPactions saved/reopened and evaluated. Source artifact12406037776 (remote only,90day expiry2027-01-20); runtime artifact12406187575 verified SHA256,4.48MiB download/24.91MiB text. All18original Blender hashes unchanged and all18existingBASE GLB hashes match exports. Strict validation passed after correcting the validator's mistaken22-keyed-bone assumption: the established22-bone rig keys21pose bones with Root static. Full remote manifest/log/receipt retained under `elemental_grab_throw_8b/`.
