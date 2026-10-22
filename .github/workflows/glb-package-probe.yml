@@ -1,0 +1,67 @@
+name: GLB package probe
+
+# Remote evidence only. Does not deploy Pages, does not build an APK,
+# and does not change the shipping export presets.
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - eng/cursor-v1-glb-package
+    paths:
+      - .github/workflows/glb-package-probe.yml
+      - tools/packaging/**
+      - game-godot/export_presets.cfg
+      - game-godot/assets/characters/form_acting_8c/**
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        godot: ["4.5", "4.3"]
+    steps:
+      - name: Checkout probe inputs
+        uses: actions/checkout@v6
+        with:
+          sparse-checkout: |
+            game-godot/export_presets.cfg
+            game-godot/assets/characters/form_acting_8c/ember-vale/female/EMBER_ASCENDED.glb
+            game-godot/assets/characters/authored/ember-vale/pipeline_proof.glb
+            game-godot/assets/characters/authored/ember-vale/pipeline_proof.glb.import
+            scripts/install-godot-ci.sh
+            scripts/install-godot-templates.sh
+            tools/packaging/probe_glb_package.py
+          sparse-checkout-cone-mode: false
+
+      - name: Install Godot ${{ matrix.godot }} and templates
+        env:
+          GODOT_VERSION: ${{ matrix.godot }}
+        run: |
+          chmod +x scripts/install-godot-ci.sh scripts/install-godot-templates.sh
+          GODOT_BIN="$(GODOT_VERSION="${GODOT_VERSION}" ./scripts/install-godot-ci.sh)"
+          test -x "$GODOT_BIN"
+          printf 'GODOT_BIN=%s\n' "$GODOT_BIN" >> "$GITHUB_ENV"
+          "$GODOT_BIN" --version
+          GODOT_VERSION="${GODOT_VERSION}" ./scripts/install-godot-templates.sh
+
+      - name: Export probe packs and load them
+        env:
+          GODOT_VERSION: ${{ matrix.godot }}
+        run: |
+          python3 tools/packaging/probe_glb_package.py \
+            --godot "$GODOT_BIN" \
+            --version "$GODOT_VERSION" \
+            --repo "$GITHUB_WORKSPACE" \
+            --out "artifacts/glb_package_probe/${GODOT_VERSION}"
+
+      - name: Upload probe report
+        uses: actions/upload-artifact@v4
+        with:
+          name: glb-package-probe-${{ matrix.godot }}
+          path: artifacts/glb_package_probe/${{ matrix.godot }}
+          if-no-files-found: error
