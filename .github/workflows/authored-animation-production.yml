@@ -26,6 +26,17 @@ on:
         default: false
         type: boolean
 
+      controls_verify_run:
+        description: 'Validate/render an already successful8D runtime artifact; no Blender regeneration'
+        required: false
+        default: ''
+        type: string
+      controls_verify_sha:
+        description: 'Exact successful controls producer commit'
+        required: false
+        default: ''
+        type: string
+
 permissions:
   contents: read
 
@@ -146,6 +157,65 @@ jobs:
         with:
           name: controls-8d-runtime-${{ github.sha }}
           path: ${{ runner.temp }}/controls-8d/runtime/
+          retention-days: 90
+          if-no-files-found: warn
+  controls-8d-engine-review:
+    if: github.event_name == 'workflow_dispatch' && inputs.controls_verify_run != ''
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v6
+      - name: Verify exact successful source production
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_RUN: ${{ inputs.controls_verify_run }}
+          SOURCE_SHA: ${{ inputs.controls_verify_sha }}
+        run: |
+          python3 - <<'PYCODE'
+          import os,json,subprocess
+          d=json.loads(subprocess.check_output(['gh','api','repos/gunnchOS3k/anime-aggressors/actions/runs/'+os.environ['SOURCE_RUN']]))
+          assert d['status']=='completed'and d['conclusion']=='success'and d['event']=='workflow_dispatch'and d['head_sha']==os.environ['SOURCE_SHA']
+          PYCODE
+      - uses: actions/download-artifact@v4
+        with:
+          name: controls-8d-runtime-${{ inputs.controls_verify_sha }}
+          repository: gunnchOS3k/anime-aggressors
+          run-id: ${{ inputs.controls_verify_run }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/controls-verify/runtime/
+      - name: Validate and install isolated remote candidates
+        run: |
+          python3 tools/authored_animation/validate_controls_8d.py "$RUNNER_TEMP/controls-verify" --runtime-only
+          cp -R "$RUNNER_TEMP/controls-verify/runtime/game-godot/"* game-godot/
+      - name: Install existing Godot compatibility verifier
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb libgl1-mesa-dri libxkbcommon0 libpulse0 unzip
+          curl --fail -L -o "$RUNNER_TEMP/godot.zip" https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip
+          unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP/godot"
+          chmod +x "$RUNNER_TEMP/godot/Godot_v4.7.1-stable_linux.x86_64"
+          echo "GODOT_BIN=$RUNNER_TEMP/godot/Godot_v4.7.1-stable_linux.x86_64" >> "$GITHUB_ENV"
+      - name: Actual saved-mesh BattleScene and bounded native sheets
+        run: |
+          mkdir -p "$RUNNER_TEMP/controls-engine-review"
+          "$GODOT_BIN" --headless --path game-godot --editor --import --quit --log-file "$RUNNER_TEMP/controls-engine-review/import.log"
+          xvfb-run -a timeout 480 "$GODOT_BIN" --path game-godot --audio-driver Dummy --rendering-method gl_compatibility --log-file "$RUNNER_TEMP/controls-engine-review/godot.log" --script res://tests/v1_closure/SourceControlsRuntime8D.gd -- --ordinary-output="$RUNNER_TEMP/controls-engine-review" --source-sha="$GITHUB_SHA"
+          python3 - <<'PYCODE'
+          import os,json,pathlib
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'controls-engine-review'
+          d=json.loads((p/'source_controls_runtime_8d.json').read_text())
+          assert d['PASS']and len(d['rows'])==36 and d['native_rendered']and not d['human_approved']
+          assert 'SCRIPT ERROR:'not in (p/'godot.log').read_text()
+          PYCODE
+      - name: Preserve native source-control review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: controls-8d-engine-review-${{ github.sha }}
+          path: ${{ runner.temp }}/controls-engine-review/
           retention-days: 90
           if-no-files-found: warn
   infra:

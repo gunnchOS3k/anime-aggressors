@@ -1,3 +1,13 @@
+# 8D exact source producer / isolated runtime checkpoint
+
+Sole manual producer39852459469 at3ab7667ca0b22e50bb7acfe0b509ff6b4513daf5 currently generating saved sources/exports; do NOT duplicate. No-op edit-mode control preserves exact derived rest relative to untouched control, original geometry/actions exact. Source mesh-deformation checks added. Opt-in runtime D8-only layers synthetic unit PASS; source reader/test scripts parsePASS. Missing-export owner launch correctly refuses silent fallback. Default model paths unchanged. Saved-source actual engine/native validation NOT YET RUN.
+
+Existing art workflow now has bounded verification-only input controls_verify_run/controls_verify_sha; uses produced runtime artifact, no source regeneration, same officialGodot4.7.1+LinuxCompatibility as existinggate1. Run ONLY after sourceproducer SUCCESS. Actual36-body/facing BattleScene checks and18staged native hand/hair comparisons, not CPU/Story/owner acceptance. Internal16.55GiB means no local binaries/import/render. Recoverytool archive-only supports verified external source+runtime copies; --install strictly requires18GiB AFTER800MiB forecast. Keep archives immutable.
+
+NEXT: terminalcheck39852459469, strictarchive-only recovery, then single verification-only dispatch atnewcommittedruntimehead. No competing localprocess. Humanallfalse.
+
+---
+
 # 8D source preservation diagnosis — bounded correction
 
 39852062150 FAILED before save: actual original geometry/actions EXACT, only derived rest matrices changed by max3.5763e-7 due to Blender4.0 edit-mode float recomputation. No canonical edit was authored. New no-op cloned-rig edit-mode control derives exact rest reference; candidate must match this control bit-for-bit, without broad tolerance. Actual evaluated finger/hair mesh displacement added. Failed run/log retained. Synthetic8D layer owner unit PASS; source runtime/native verification pending. New controls loader still local, original default models unaffected.

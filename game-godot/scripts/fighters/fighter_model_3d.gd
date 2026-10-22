@@ -39,6 +39,8 @@ var _viewport: SubViewport
 var _camera: Camera3D
 var _cinematic_expression := ""
 var _expression_controller: Node
+var _source_controls_8d: Node
+var _controls_document_8d: Dictionary = {}
 var _model_root: Node3D
 var _display: Sprite2D
 var _loaded_model: Node3D
@@ -398,6 +400,14 @@ func _try_load_golden_slice(fighter_data: Dictionary) -> Dictionary:
 
 func _try_load_collectible(fighter_data: Dictionary) -> Dictionary:
 	var model_path := "res://assets/characters/collectible_v1/%s/%s/%s.glb" % [_fighter_id, _body_variant, str(fighter_data.get("collectible_review_form", "BASE"))]
+	_controls_document_8d.clear()
+	var review_state:=get_node_or_null("/root/GameState")
+	if review_state!=null and review_state.get_meta("source_controls_8d",false):
+		_controls_document_8d=preload("res://scripts/visual/source_controls_8d.gd").candidate_document(_fighter_id,_body_variant)
+		if _controls_document_8d.is_empty():
+			push_error("Requested8D source candidate missing/unverified: "+_fighter_id+"/"+_body_variant)
+			return {"source":"MISSING","loaded":false}
+		model_path=str(_controls_document_8d.resource)
 	if not FileAccess.file_exists(model_path) and not ResourceLoader.exists(model_path):
 		return {"source": "MISSING", "loaded": false}
 	var instance: Node = null
@@ -1012,6 +1022,11 @@ func _setup_procedural_runtime(fighter_data: Dictionary) -> void:
 	_visible_skeleton = _animation_controller.get_skeleton() if _animation_controller.has_method("get_skeleton") else _visible_skeleton
 	_form_presentation_8c.setup(live_owner,_proxy_model,_visible_skeleton)
 	_form_presentation_8c.set_form(_form_id)
+	if not _controls_document_8d.is_empty():
+		_source_controls_8d=preload("res://scripts/visual/source_controls_8d.gd").new()
+		_source_controls_8d.name="OriginalSourceControls8D"
+		add_child(_source_controls_8d)
+		_source_controls_8d.setup(live_owner,_proxy_model,_visible_skeleton,_animation_controller.get_animation_player(),_controls_document_8d)
 	_material_controller = _MaterialController.new()
 	_material_controller.name = "FighterMaterialController"
 	add_child(_material_controller)
@@ -1302,6 +1317,9 @@ func _retain_render_materials(node: Node, retained: Array[Material]) -> void:
 
 
 func _clear_model() -> void:
+	if is_instance_valid(_source_controls_8d):_source_controls_8d.free()
+	_source_controls_8d=null
+	_controls_document_8d.clear()
 	_form_presentation_8c.reset("model_clear")
 	_transform_target_8c = ""
 	_body_aura=null
