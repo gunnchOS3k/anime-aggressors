@@ -39,6 +39,15 @@ var _motion_moving := false
 var _reaction_clip := ""
 var _reaction_age := 0.0
 var _reaction_fresh := false
+var _grab_acting_sources: Dictionary = {}
+var _grab_acting_report: Dictionary = {}
+var _grab_overlay_status := "missing"
+var _grab_escape_clip := ""
+var _grab_escape_age := 0.0
+var _grab_escape_buttons: Dictionary = {}
+var _throw_reaction_pending := false
+var _throw_landing_active := false
+const GRAB_ACTING_CLIPS := ["grab", "grab_whiff", "grab_hold_attacker", "grab_hold_victim", "grab_escape", "throw_forward", "throw_back", "throw_up", "throw_down", "throw_reaction_forward", "throw_reaction_back", "throw_reaction_up", "throw_reaction_down", "throw_landing", "grab_recovery", "grab_interrupted"]
 var _neutral_return_pose:Array=[]
 var _neutral_return_age:=0.0
 const NEUTRAL_RETURN_SECONDS:=.075
@@ -99,7 +108,15 @@ func _blend_neutral_return(delta:float) -> void:
 	if _neutral_return_age>=NEUTRAL_RETURN_SECONDS:_neutral_return_pose.clear()
 
 func begin_hit_reaction(reaction: Dictionary) -> void:
+	_clear_grab_escape("body_hit")
 	_reaction_clip=str(reaction.get("performance_clip","reaction_light"))
+	_throw_reaction_pending = false
+	if str(reaction.get("move_id", "")).begins_with("throw_"):
+		var launch: Vector2 = reaction.get("incoming", Vector2.ZERO)
+		var direction := "up" if launch.y < 0 else "down"
+		if absf(launch.x) >= absf(launch.y):direction = "forward" if launch.x * _visual_facing >= 0 else "back"
+		var authored := _grab_acting_clip("throw_reaction_"+direction)
+		if not authored.is_empty():_reaction_clip = authored;_throw_reaction_pending = true
 	_reaction_age=0.0
 	_reaction_fresh=true
 	# receive_hit has already assigned real hitstop. Freeze now, before this
@@ -145,6 +162,77 @@ func setup(fighter, model_root: Node3D) -> void:
 func bind_runtime_fighter(fighter: Node) -> void:
 	_runtime_fighter = fighter
 
+
+func _reciprocal_grab_role() -> String:
+	if not is_instance_valid(_runtime_fighter):return ""
+	var target = _runtime_fighter.grabbed_target
+	var owner = _runtime_fighter.grabbed_by
+	if is_instance_valid(target) and target.grabbed_by == _runtime_fighter:return "attacker"
+	if is_instance_valid(owner) and owner.grabbed_target == _runtime_fighter:return "victim"
+	return ""
+
+
+func _grab_acting_clip(base: String) -> String:
+	var name := base + ("_left" if _visual_facing == -1 else "")
+	if _grab_acting_sources.has(name) and is_instance_valid(_player) and _player.has_animation("combat_choreography/"+name):return name
+	return ""
+
+
+func get_grab_acting_report() -> Dictionary:
+	var result := _grab_acting_report.duplicate(true)
+	result["escape_active"] = not _grab_escape_clip.is_empty()
+	result["overlay_status"] = _grab_overlay_status
+	result["source"] = _grab_acting_sources.get(str(result.get("selected", "")), {}).duplicate(true)
+	result["human_approved"] = false
+	result["throw_reaction_clip"] = _reaction_clip if _throw_reaction_pending else ""
+	result["throw_landing_active"] = _throw_landing_active
+	return result
+
+
+func _grab_escape_allowed(state: String) -> bool:
+	if not is_instance_valid(_runtime_fighter) or state not in [_FighterStates.IDLE, _FighterStates.FALL]:return false
+	if _runtime_fighter._transform_match_closed or not _reciprocal_grab_role().is_empty() or absf(_runtime_fighter._read_axis()) > .001:return false
+	for suffix in ["attack", "special", "jump", "grab", "shield", "dodge", "taunt"]:
+		var held := Input.is_action_pressed("p%d_%s" % [_runtime_fighter.slot, suffix]) or TouchInputManager.is_touch_pressed(_runtime_fighter.slot, suffix)
+		var was := bool(_grab_escape_buttons.get(suffix, false))
+		_grab_escape_buttons[suffix] = held
+		if held and not was:return false
+	return true
+
+
+func _clear_grab_escape(reason: String) -> void:
+	_grab_escape_clip = ""
+	_grab_escape_age = 0.0
+	_grab_escape_buttons.clear()
+	if _grab_acting_report.get("role", "") == "escape":
+		_grab_acting_report["active"] = false
+		_grab_acting_report["ended_by"] = reason
+
+
+func cancel_grab_acting(reason: String) -> void:
+	var was_escape := not _grab_escape_clip.is_empty()
+	_clear_grab_escape(reason)
+	_throw_reaction_pending = false;_throw_landing_active = false
+	_grab_acting_report["active"] = false
+	if was_escape and is_instance_valid(_runtime_fighter):play_for_state(str(_runtime_fighter.state_machine.current_state))
+
+
+func begin_grab_escape() -> void:
+	_clear_grab_escape("replaced")
+	var clip := _grab_acting_clip("grab_escape")
+	_grab_acting_report = {"role":"escape", "requested":"grab_escape"+("_left" if _visual_facing == -1 else ""), "selected":clip, "status":"fallback" if clip.is_empty() else "fixture_only" if bool(_grab_acting_sources[clip].get("fixture_only", false)) else "authored", "active":false}
+	if clip.is_empty() or not is_instance_valid(_runtime_fighter):return
+	# Snapshot the final mash press without consuming its input edge. Only a new
+	# action interrupts the presentation; the existing escape impulse is retained.
+	for suffix in ["attack", "special", "jump", "grab", "shield", "dodge", "taunt"]:
+		_grab_escape_buttons[suffix] = Input.is_action_pressed("p%d_%s" % [_runtime_fighter.slot, suffix]) or TouchInputManager.is_touch_pressed(_runtime_fighter.slot, suffix)
+	var state := str(_runtime_fighter.state_machine.current_state)
+	if not _grab_escape_allowed(state):_clear_grab_escape("new_action_or_movement");return
+	_grab_escape_clip = clip
+	_grab_acting_report["active"] = true
+	play_for_state(state)
+
+
 func play_for_state(state: String, move: Dictionary = {}) -> void:
 	var neutral_state:=state in [_FighterStates.IDLE,_FighterStates.WALK,_FighterStates.RUN,_FighterStates.DASH,_FighterStates.FALL,_FighterStates.FAST_FALL]
 	if not state.begins_with("attack"):_attack_support_exchange.clear()
@@ -164,6 +252,21 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 	var move_id := str(move.get("move_id", "")) if action_state else ""
 	var resolved: Dictionary = _MoveResolver.resolve_clip(state, move_id, _loaded_clips)
 	var clip := str(resolved.get("clip", ""))
+	var grab_presentation := false
+	if not _grab_escape_clip.is_empty():
+		if _grab_escape_allowed(state):clip = _grab_escape_clip;grab_presentation = true
+		else:_clear_grab_escape("new_action_or_movement")
+	if state == _FighterStates.GRAB_HOLD:
+		var role := _reciprocal_grab_role()
+		var requested := "grab_hold_"+role+("_left" if _visual_facing == -1 else "")
+		var authored := _grab_acting_clip("grab_hold_"+role) if not role.is_empty() else ""
+		if not authored.is_empty():clip = authored
+		grab_presentation = true
+		_grab_acting_report = {"role":role, "metadata_role":str(move.get("grab_role", "")), "requested":requested, "selected":clip, "status":"fallback" if authored.is_empty() else "fixture_only" if bool(_grab_acting_sources[authored].get("fixture_only", false)) else "authored", "active":true}
+	elif _grab_acting_report.get("role", "") != "escape":_grab_acting_report["active"] = false
+	if grab_presentation:
+		_neutral_return_pose.clear();_grounded_return.clear();_authored_transition.clear();_weight_transfer.clear()
+		_locomotion_synchronized = false
 	var reacting:=state in [_FighterStates.HURT_LIGHT,_FighterStates.HURT_HEAVY,_FighterStates.HITSTUN,_FighterStates.LAUNCHED,_FighterStates.TUMBLE]
 	if reacting and not _reaction_clip.is_empty() and _player.has_animation("combat_choreography/"+_reaction_clip):
 		var reaction_length:=_player.get_animation("combat_choreography/"+_reaction_clip).length
@@ -173,6 +276,11 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 		_reaction_fresh=false
 	if state == _FighterStates.LAND and is_instance_valid(_runtime_fighter) and _runtime_fighter._fast_falling and _loaded_clips.has("land_hard"):
 		clip = "land_hard"
+	_throw_landing_active = false
+	if state == _FighterStates.LAND and _throw_reaction_pending:
+		var landing := _grab_acting_clip("throw_landing")
+		if not landing.is_empty():clip = landing;_throw_landing_active = true
+	elif not reacting and state not in [_FighterStates.FALL, _FighterStates.FAST_FALL]:_throw_reaction_pending = false
 	var directional_id := move_id+("_left" if _visual_facing==-1 else "")
 	if action_state and _player.has_animation("combat_choreography/"+directional_id): clip=directional_id
 	if clip.is_empty() or not _loaded_clips.has(clip):
@@ -183,7 +291,7 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 	var should_loop := clip in [
 		"idle", "idle_primary", "idle_secondary", "run", "run_loop", "dash_loop", "walk", "walk_loop",
 		"fall", "fast_fall", "shield", "shield_hold", "aura_charge", "aura_ready", "charged_idle",
-		"ledge_hang", "crouch_hold",
+		"ledge_hang", "crouch_hold", "grab_hold", "grab_hold_attacker", "grab_hold_attacker_left", "grab_hold_victim", "grab_hold_victim_left",
 	]
 	var anim := _player.get_animation(play_key)
 	if anim:
@@ -193,7 +301,7 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 		# Lower-body only, and fully retired BEFORE the authoritative active pose.
 		if action_state and _motion_moving and move_id in ["jab_1","forward_tilt","dash_attack","heavy_attack"] and is_instance_valid(_runtime_fighter) and _runtime_fighter.is_on_floor():
 			_attack_support_exchange.begin(_skeleton,_gait_phase,maxi(1,int(move.get("startup_frames",1))-1),true)
-		if _authored_transition.enabled():
+		if not grab_presentation and _authored_transition.enabled():
 			if action_state and _motion_moving and move_id in ["jab_1","forward_tilt","dash_attack","heavy_attack"]:
 				_authored_transition.begin("move_heavy" if move_id=="heavy_attack" else "move_light",_visual_facing)
 			elif state==_FighterStates.IDLE and not _active_clip.is_empty() and _move_synchronized==false and not _motion_moving:
@@ -202,7 +310,7 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 				_authored_transition.clear()
 		# A finished non-looping clip clears current_animation but leaves its
 		# final skeleton pose visible. That pose still needs a recovery blend.
-		if neutral_state and not _active_clip.is_empty():_begin_neutral_return(state)
+		if not grab_presentation and neutral_state and not _active_clip.is_empty():_begin_neutral_return(state)
 		_player.play(play_key, 0.0 if play_key.begins_with("combat_choreography/") else 0.08)
 		if play_key.begins_with("combat_choreography/"):
 			# State callbacks must show the authored first pose in this frame,
@@ -411,6 +519,13 @@ func _load_authored_studies() -> void:
 
 func _process(delta: float) -> void:
 	if not presentation_frozen:_reaction_age+=delta
+	if not _grab_escape_clip.is_empty():
+		var state := str(_runtime_fighter.state_machine.current_state) if is_instance_valid(_runtime_fighter) else ""
+		if not presentation_frozen:_grab_escape_age+=delta
+		var key := "combat_choreography/"+_grab_escape_clip
+		if not _grab_escape_allowed(state) or not is_instance_valid(_player) or not _player.has_animation(key) or _grab_escape_age >= _player.get_animation(key).length:
+			_clear_grab_escape("completed_or_interrupted")
+			if not state.is_empty():play_for_state(state)
 	if _synchronize_landing(): return
 	if _player != null and is_instance_valid(_player) and _player.has_animation_library("authored_studies") and not _move_synchronized and not _locomotion_synchronized and not presentation_frozen:
 		_player.advance(delta)
@@ -419,7 +534,7 @@ func _process(delta: float) -> void:
 
 func _synchronize_landing() -> bool:
 	if not is_instance_valid(_runtime_fighter) or _player == null or not is_instance_valid(_player): return false
-	if _runtime_fighter.state_machine.current_state != _FighterStates.LAND or not _player.current_animation.begins_with("combat_choreography/land_"): return false
+	if _runtime_fighter.state_machine.current_state != _FighterStates.LAND or (not _player.current_animation.begins_with("combat_choreography/land_") and not _throw_landing_active): return false
 	if not presentation_frozen:
 		# Recovery remains gameplay-owned. Complete absorption and stabilization
 		# within its resolved duration, including fast-fall/aerial overrides.
@@ -430,6 +545,10 @@ func _synchronize_landing() -> bool:
 
 func synchronize_move(frame: int,move: Dictionary) -> void:
 	if _player == null or not is_instance_valid(_player): return
+	# The successful grab's runner may finish its existing recovery, while hold
+	# presentation belongs to the reciprocal pair rather than that old action.
+	if is_instance_valid(_runtime_fighter) and _runtime_fighter.state_machine.current_state == _FighterStates.GRAB_HOLD and not _reciprocal_grab_role().is_empty():return
+	if is_instance_valid(_runtime_fighter) and _runtime_fighter.state_machine.current_state == _FighterStates.GRAB_WHIFF and str(move.get("move_id", "")) == "grab":return
 	var directional_id := str(move.get("move_id",""))+("_left" if _visual_facing==-1 else "")
 	var key := "combat_choreography/"+directional_id
 	if not _player.has_animation(key): key = "authored_studies/"+str(move.get("move_id",""))
@@ -500,6 +619,7 @@ func _load_combat_choreography(model_root: Node3D) -> void:
 			var animation := _animation_from_data(authored)
 			animation.loop_mode = Animation.LOOP_LINEAR if authored.get("loop",false) else Animation.LOOP_NONE
 			library.add_animation(clip,animation);_loaded_clips[clip]=true
+	_load_grab_acting_overlay(library)
 	for mid in _MoveResolver.move_id_to_clip_table():
 		var alias: String = str(_MoveResolver.move_id_to_clip_table()[mid])
 		if library.has_animation(mid) and not library.has_animation(alias): library.add_animation(alias,library.get_animation(mid)); _loaded_clips[alias]=true
@@ -511,6 +631,31 @@ func _load_combat_choreography(model_root: Node3D) -> void:
 	_player.add_animation_library("combat_choreography",library)
 	secondary_follow=preload("res://scripts/visual/combat_secondary_follow.gd").new()
 	add_child(secondary_follow); secondary_follow.setup(model_root,self)
+
+
+func _load_grab_acting_overlay(library: AnimationLibrary) -> void:
+	var path := "res://data/animation/grab_acting_8b/%s_%s.json" % [_fighter_id, _body_variant]
+	if not FileAccess.file_exists(path):return
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	_grab_overlay_status = "unverified"
+	if not parsed is Dictionary:return
+	var doc: Dictionary = parsed
+	if doc.get("source_actions_saved", false) != true or doc.get("source_runtime_verified", false) != true:return
+	if str(doc.get("schema",""))!="original_grab_acting_8b.v1":return
+	if str(doc.get("source_base_blend_sha256","")).length()!=64 or str(doc.get("source_saved_blend_sha256","")).length()!=64:return
+	if str(doc.get("fighter_id", _fighter_id)) != _fighter_id or str(doc.get("body_variant", _body_variant)) != _body_variant:return
+	_grab_overlay_status = "verified_source_export"
+	for name in doc.get("clips", {}):
+		var base := str(name).trim_suffix("_left")
+		if base not in GRAB_ACTING_CLIPS:continue
+		var clip: Dictionary = doc.clips[name]
+		if clip.get("bone_tracks", {}).is_empty():continue
+		if not str(clip.get("source_action","")).begins_with("ANI08B_WIP_") or str(clip.get("source_blend","")).is_empty():continue
+		var animation := _animation_from_data(clip)
+		if clip.has("startup_frames"):_choreography_timing[name] = _timing_metadata(clip)
+		if library.has_animation(name):library.remove_animation(name)
+		library.add_animation(name, animation);_loaded_clips[name]=true
+		_grab_acting_sources[name] = {"source_action":clip.get("source_action", ""), "source_blend":clip.get("source_blend", doc.get("source_blend", "")), "fixture_only":bool(doc.get("fixture_only", false))}
 
 func _timing_metadata(clip: Dictionary) -> Dictionary:
 	# Animation tracks already own converted keys. Timing/limb observers need

@@ -8,6 +8,12 @@ on:
       - vxp/vxp-3-combat-impact-nix-rook
       - v4/dual-form-power-roster
   workflow_dispatch:
+    inputs:
+      grab_acting_8b:
+        description: 'Save and verify original 8B actions on all 18 preserved rigs (remote only)'
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -17,6 +23,36 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  grab-acting-8b:
+    if: github.event_name == 'workflow_dispatch' && inputs.grab_acting_8b
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install existing Blender production dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender python3-numpy
+      - name: Produce saved actions and verified lightweight runtime keys
+        run: |
+          blender --background --factory-startup --python-exit-code 1 --python tools/authored_animation/blender/aa_grab_acting_8b.py -- --output "$RUNNER_TEMP/grab-acting-8b"
+          python3 tools/authored_animation/validate_grab_acting_8b.py "$RUNNER_TEMP/grab-acting-8b"
+      - name: Preserve original-rig source copies
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: grab-acting-8b-saved-sources-${{ github.sha }}
+          path: ${{ runner.temp }}/grab-acting-8b/saved_sources/
+          retention-days: 90
+          if-no-files-found: warn
+      - name: Preserve bounded runtime data and source receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: grab-acting-8b-runtime-${{ github.sha }}
+          path: ${{ runner.temp }}/grab-acting-8b/runtime/
+          retention-days: 90
+          if-no-files-found: warn
   infra:
     runs-on: ubuntu-latest
     timeout-minutes: 15

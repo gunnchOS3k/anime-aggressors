@@ -297,6 +297,7 @@ func reset_legacy_transformation(reason: String) -> void:
 
 
 func close_transformation_for_match_end() -> void:
+	_cancel_grab_acting_presentation("match_end")
 	_release_grab_links("match_end")
 	if _grab_presentation!=null:_grab_presentation.clear("match_end")
 	party_overdrive.reset("match_end")
@@ -1457,6 +1458,11 @@ func _break_grab_mash() -> void:
 	if not is_instance_valid(grabbed_by):return
 	_release_grab_links("mash_escape")
 	velocity.x = -float(facing) * 180.0
+	# Acting observes the real victim escape after ownership cleanup. It never
+	# adds a state, control lock, timer or damage owner.
+	if model_3d != null:
+		var controller = model_3d.get_animation_controller()
+		if controller != null and controller.has_method("begin_grab_escape"):controller.begin_grab_escape()
 
 
 func _release_grab_links(reason: String) -> void:
@@ -1629,6 +1635,7 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 			attacker.aura = minf(100.0, float(attacker.aura) + gain)
 	# Presentation-only: readable hurt pose family before launch clip. CombatMath velocity already applied.
 	_last_hurt_reaction = _HitReaction.resolve(fighter_id, launch, info)
+	_last_hurt_reaction["move_id"] = str(info.get("move_id", ""))
 	if model_3d and model_3d.has_method("apply_hurt_reaction"):
 		model_3d.apply_hurt_reaction(_last_hurt_reaction)
 	var heavy = dmg >= 8.0 or launch.length() > 14.0
@@ -1701,6 +1708,7 @@ func reset_damage() -> void:
 	combo_count = 0
 
 func reset_position() -> void:
+	_cancel_grab_acting_presentation("position_reset")
 	_release_grab_links("position_reset")
 	if _grab_presentation!=null:_grab_presentation.clear("position_reset")
 	global_position = spawn_point
@@ -1879,6 +1887,12 @@ func _on_state_changed(_from: String, to: String) -> void:
 	state_changed.emit(to)
 
 
+func _cancel_grab_acting_presentation(reason: String) -> void:
+	if model_3d == null:return
+	var controller = model_3d.get_animation_controller()
+	if controller != null and controller.has_method("cancel_grab_acting"):controller.cancel_grab_acting(reason)
+
+
 func _play_current_animation(state: String) -> void:
 	# Existing per-character signature candidates, not newly authored ultimate acting.
 	if state=="party_transform":state="aura_charge"
@@ -1889,6 +1903,7 @@ func _play_current_animation(state: String) -> void:
 	if model_3d and model_3d.is_model_loaded():
 		var move_copy: Dictionary = _current_move.duplicate()
 		move_copy["throw_direction"] = _throw_direction
+		move_copy["grab_role"] = "attacker" if is_instance_valid(grabbed_target) and grabbed_target.grabbed_by == self else "victim" if is_instance_valid(grabbed_by) and grabbed_by.grabbed_target == self else ""
 		# Prefer visual_move_id (projectile tier / signature bind) when set.
 		if move_copy.has("visual_move_id") and str(move_copy.get("visual_move_id", "")) != "":
 			move_copy["move_id"] = str(move_copy.get("visual_move_id"))

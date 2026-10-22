@@ -1,3 +1,17 @@
+# 8B checkpoint — original acting source and routing foundation (October22)
+
+Recovered clean f5342a8017880fb9300c9bbeb27b68edac4e4d3d; same worktree/branch/draft123 on122. New support selects reciprocal holder/victim roles, loops dedicated holds, yields real escape acting to new inputs/hurt/KO/reset/match, and maps actual throw vector/landing timing. No8A ownership, frame data, damage, hitboxes, input or Party rules replaced.
+
+Twelve passing engine routing/lifecycle fixtures under `artifacts/v1_closure/elemental_grab_throw_8b/support_strict1022/`. Empty fixture clips are explicitly NOT saved acting. All18 rigs produce30finite new pose candidates each in a read-only CPU bake; `UNSAVED_POSE_INSPECTION.json` source_saved=false throughout. Score: `art_source/animation/grab_acting_8b/score_v1.json` (nine individually directed18-pose identities). Current original Blender/GLBs unchanged.
+
+Actual internal free~12GiB, below18GiB+allocations. No local Blender saves/exports/media. Existing APFS archiveUUID9C4EB36E-2864-42F8-BD0B-A4F67EBC7852 confirmed; original verified receipt reused, no new archive/delete. Public GitHub existing Authored Animation Production workflow extended with opt-in remote-only Ubuntu24.04 Blender save/reopen/export/verify job. Read-onlytoken, no release/publication. New actions are saved to remote new source copies, not over original rigs. Exact18 completeness/hash validator and Blender python-exit-code1 required. No job dispatched at this checkpoint; no saved source action claimed yet.
+
+Next exact command after pushing: `gh workflow run authored-animation-production.yml --repo gunnchOS3k/anime-aggressors --ref release/anime-v1-dialogue-and-elemental-performance -f grab_acting_8b=true`. Save the resulting exact-SHA run ID. Inspect remote failure first; never assume a green infrastructurejob means18sourcepasses. Download only bounded runtime/receipt artifact after full18 completeness+hash validation (cap32MiB); do NOT download sourceBlends internally below reserve. Sourceartifact contains new preservedrig copies and mustretainURI/expiry. Then install verified text overlays and run paired, both-body/facing, four-direction engine checks. Native visuals/art/device/secondary-motion/KO acting remain pending; all human/release gates false.
+
+No Godot job running at checkpoint. Preserve pre8Bsource/tests/owner saves/all33worktrees. Latest8ACI:f5342a80sixsuccess,Windows2025pending at recovery; read latesthead later.
+
+---
+
 # 8A complete source increment — owner/art review remains open
 
 Runtime `d9b4ddc4bb70e62e58cabe11fcfd012a8799343c`, branch `release/anime-v1-dialogue-and-elemental-performance`, worktree `/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure`. PR123 draft stacked on122. Delivery commit adds evidence/docs and `GrabCpu8A.gd`; runtime source hashes are in `artifacts/v1_closure/elemental_grab_throw/FINAL_SOURCE_BINDINGS.json`.
