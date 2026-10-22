@@ -1,3 +1,22 @@
+# Party interruption checkpoint — retained failure and verified correction
+
+Base pushed8375c174.108 Party configurations ran;104passed,4Yin cleanup
+checks sampled during authored long recovery. No gameplay tuning changed.
+Next retest Yin only with resolved-duration/hitstop budget; keep all originalfailures.
+Reproduced ultimate continuing through valid opposing grab. Corrected external
+state ownership and held-victim tick (victim no longer executes grab-owner
+return-to-idle). Afterpilot PASS; all9grabinterruption matrix next.
+PerfectGuardExceptions running serially profilepg_exceptions_before1021,
+process/session45920. Reads original current source; check console/JSON before
+any further test. It includes projectile/grab/form negatives and held-shield
+rearm probe. New PartyLifecycle/CPUObservation/review launcher files are WIP,
+not yet runtime verified. Check git status, preserve all WIP.
+Next: guardheld negative result->fix if demonstrated, checkpoint; then Yin4,
+PartyLifecycle,PartyGrabInterruption(all9),ThrowOwnership,CosmicKits public-only,
+PartyCPUObservation,ownerreview smoke. No parallelGodot, no heavyexport/capture.
+All human/roster/release gatesfalse; storagebelow18GiB. No owner saves touched.
+
+---
 # Combat completion — Party runtime candidate checkpoint
 
 Inspect HEAD for new commit; previous pushed5efd837d guard108timingcases PASS.

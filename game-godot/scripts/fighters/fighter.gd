@@ -1391,6 +1391,7 @@ func _tick_shield_regen(delta: float) -> void:
 
 
 func tick_grab_hold(_delta: float) -> void:
+	if grabbed_by != null:return # Held victim is not a grab owner and cannot return itself to neutral.
 	if grabbed_target == null:
 		state_machine.enter(_FighterStates.IDLE)
 		return
@@ -1686,11 +1687,13 @@ func debug_combat_summary() -> Dictionary:
 	}
 
 func _on_move_ended(_move_id: String) -> void:
+	var party_state_owned:bool=party_overdrive._resetting and _move_id.begins_with("party_ultimate:")
 	party_overdrive.move_ended(_move_id)
 	_attack_facing_locked = false
 	if model_3d and model_3d.has_method("clear_attack_facing_lock"):
 		model_3d.clear_attack_facing_lock()
 	hitbox.monitoring = false
+	if party_state_owned:return # External grab/hurt/KO owns its state; cancellation cannot overwrite it.
 	var s: String = str(state_machine.current_state) if state_machine else ""
 	if s == _FighterStates.GRAB_HOLD:
 		return
@@ -1786,6 +1789,8 @@ func _set_aura_vfx(on: bool) -> void:
 
 
 func _on_state_changed(_from: String, to: String) -> void:
+	if party_overdrive.owns_motion() and to not in ["party_transform","ultimate_startup","ultimate_active","ultimate_recovery"]:
+		party_overdrive.reset("state_interrupted:"+to,true,false)
 	if _transform_sequence_active and to != _FighterStates.AURA_BURST_STARTUP:
 		_transform_pipeline.cancel("state_interrupted:" + to)
 	if _elemental_audio != null and _from in [_FighterStates.AURA_CHARGE,_FighterStates.AURA_READY] and to not in [_FighterStates.AURA_CHARGE,_FighterStates.AURA_READY]:

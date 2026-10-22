@@ -141,7 +141,7 @@ func move_ended(mid: String) -> bool:
 	return true
 func interrupt() -> void:
 	if state=="TRANSFORMATION_STARTUP" or state.begins_with("ULTIMATE_"):reset("body_hit")
-func reset(reason: String, cancel_move: bool=true) -> void:
+func reset(reason: String, cancel_move: bool=true, restore_motion: bool=true) -> void:
 	if _resetting or state=="BASE":return
 	_resetting=true
 	var owned_motion:=owns_motion()
@@ -157,8 +157,8 @@ func reset(reason: String, cancel_move: bool=true) -> void:
 		fighter.model_3d.configure(_previous_presentation)
 		fighter.apply_form(fighter.get_current_form_id())
 	_previous_presentation.clear()
-	if owned_motion:
-		fighter.armor_frames_remaining=0
+	if owned_motion:fighter.armor_frames_remaining=0
+	if owned_motion and restore_motion:
 		fighter.state_machine.enter("idle" if fighter.is_on_floor() else "fall")
 	transition("RESET",reason)
 	item="";variant="";remaining=0;startup_left=0;pulses_fired.clear();counter_armed=false
