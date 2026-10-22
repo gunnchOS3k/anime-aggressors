@@ -1,3 +1,13 @@
+# 8B checkpoint — owner-approved remote source production running
+
+Owner explicitly answered “Approve this exact artifact upload” for the two public-repository 90-day artifacts described in `elemental_grab_throw_8b/ARTIFACT_APPROVAL_PLAN.json`. The prior approval-review block is resolved for that exact operation. Reviewed production hashes and all18 source hashes matched before dispatch. Existing workflow run39733087497 at exact `cc2b3a5a555aeb22fc8eb7510bd7702a28975aad`: https://github.com/gunnchOS3k/anime-aggressors/actions/runs/39733087497 . No local binary production; original rigs preserved. Source saves/runtime imports remain unverified until complete receipts arrive.
+
+New actual-export engine test `GrabActingRuntime8B.gd` covers reciprocal hold, all four public-input throws, actual reaction/landing observations, real mash release and projected hand/surface diagnostics. Do not run it against missing overlays or count old empty fixtures as saved acting. A read-only independent review identified unused `grab_recovery`; reproduce actual holder mash handoff before a presentation-only fix. Validator tightened provenance equality, full22-bone tracks, finite normalized keys and positive evaluated-frame coverage.
+
+NEXT: inspect run39733087497 status/logs. If complete, retain job/artifact IDs and download ONLY runtime text artifact after size preflight (cap32MiB); no `.blend` download on Mac. Validate saved-source receipt and install verified text overlays, then run one pilot with a new isolated profile before all18/both-facing public inputs. If job fails, retain original logs and diagnose that exact error before retry. All human/native/art gates false; internal free ~12GiB below18GiB+allocations. No active local Godot test/capture at this checkpoint.
+
+---
+
 # 8B checkpoint — remote upload approval required, no saved actions (October22)
 
 Latest production-code checkpoint `0895437b`; same branch/worktree/draft123 on122. New delivery checkpoint adds roster routing fixtures and precise blocked-state records. No8A mechanics reopened. Engine support implemented, not final character acting.
