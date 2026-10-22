@@ -2,7 +2,7 @@ extends Node
 
 ## Skinned facial morphs share the combat and Story clocks. Candidate acting, owner gate false.
 const EXPRESSIONS := ["battle_intent", "attack_effort", "pain", "shock", "fear", "grief", "determination", "victory", "defeat", "cinematic_closeup"]
-const ALIASES := {"focused":"battle_intent", "confident":"determination", "charging":"attack_effort", "hurt":"pain", "angry":"battle_intent", "smirk":"victory", "calm":"neutral"}
+const ALIASES := {"focused":"battle_intent", "confident":"determination", "charging":"attack_effort", "hurt":"pain", "strained":"pain", "surprised":"shock", "angry":"battle_intent", "smirk":"victory", "calm":"neutral"}
 var meshes: Array[MeshInstance3D] = []
 var expression := "neutral"
 var form := "BASE"

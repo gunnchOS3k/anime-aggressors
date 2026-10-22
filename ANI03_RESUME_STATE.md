@@ -1,3 +1,13 @@
+# 8D actual facial performance and hurt defect correction checkpoint
+
+Source9character/twostageoriginalmorphscores implemented; saved8C18rig/144actions/36GLBsunchanged. Actual72publictransformconfigsPASS,18actualsourceGLBkeychecksPASS. Nativeinitialcomparisonfailedexactbodyposechecks; idlecallbackskeptchangingmanuallystagedbody. Observernowfreezesallstagedcallbacks(no gameplay acceptanceclaim),exact18bodypose/cameramatchesandvisiblemorphchangesPASS atface_native_frozen1022. Earlierfailednative/sourceparseevidencepreserved.
+
+Actualpublicopposinghitverificationfound8/18failures: Ember/Rook/Kaia/Orioncharacter-lifenamesstrained/surprisedwereunmappedandfellbacktoneutral. Addedcanonicalpain/shockaliases; all18actualpublichurtinterruptcasesPASS atface_interrupt_fixed1022. Exit4objects/2resourceswarningretained. Nooriginalgeometry/actions/weights/balance/Storysavemutations. NewCPUobserverSecondAdvancementCPU8D.gdcheck-onlyPASS; hasNOTRUNyet. NoownedGodotnow. Beforelongtestcheckpointsourceandpush; nextbounded9fighter720frameobservationusesdeclaredinitialaura100,actualchargeinputs/activeCPU,no subsequentstat/state/resultoverrides. Notall36body/facingCPUconfigs. Allhuman/releasegatesfalse; premium8Dstillincomplete.
+
+NEXT exact: python3 tools/v1_closure/launch_ordinary_review.py --profile aa8d_second_cpu1022 --headless --test-script res://tests/v1_closure/SecondAdvancementCPU8D.gd --output artifacts/v1_closure/production_8d/second_cpu1022 ; theninspectactualoutcomes(noautomaticgameplayPASS),finalreview/sourcebindings/handoffupdate. Internal~20.5GiBbeforetextonlyprobe; noheavyexports/recordings/Blenderdowngrade. Codexcreativelead/Cursorsafeindependentbranches unchanged.
+
+---
+
 # 8D bounded source-morph performance checkpoint — October22
 
 Durable handoffs PUSHED: Anime6d571eeab6d616b4dc45ed91a5e5473d70bbeee9; portalb5116094b4f0acfe0ec740e9ba84a55ca15dd53e. Existing8C/runtime/archiveunchanged. New original nine-character facial scores useactual source blendshapes andsameTransformPipeline phase; no secondarytimer, bones/modelchanges, balanceorStorychanges. Actualformtracking andshieldbreakshock added. Source18GLB/morph/scorevalidatorPASS. Realengine2stageEmbermalepilotPASS; shutdown10objects/1resource retained. Nativeobserverinitialparsefailure(staticHashingContext.hashunsupported)preservednative_parse_failure.log; helpercorrected, nativevalidationpending.
