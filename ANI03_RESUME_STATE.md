@@ -1,3 +1,11 @@
+# 8D saved controls actual-engine PASS; detail framing correction
+
+Source3ab7667c/run39852459469 archiveverified18rigs/72actions. Runtimeb09aec61/run39853154985 SUCCESS:36realBattleScene sourcebody/facing imports/publicattacks, originalboneownership, Storyunchanged;18nativeopengrip/hairsamplesproduced LinuxCompatibility/MesaCPUrenderer. Bothsheetsviewed: fingerclosurevisible, reviewneck-pivotcroptruncateshairtop andhanddetailsmall. No premium/CPU/deviceacceptanceclaim. Firstsheets/receiptretainedproduction_8d/controls_engine_39853154985 andimmutablearchive engine_review_39853154985.
+
+Observeronlycorrectedtofullviewportdetailcamera(restoreoriginalgameplaycamera beforeinput), noart/source/exportregeneration. NEXT:commit/pushobserver+receipts, ONEverification-onlyrerun sameproducedsource39852459469 atnewruntimehead, inspectactual18detailviews. Allsource/canonicalbody/gameplaybytesunchanged. Internal15.54GiB: noMacinstall/render. Defaultbaselineplayunchanged;candidateflagrefusesmissingexports. Newhelperrecover_controls_review_8d archivesreviewexternalonly. Allhumanfalse.
+
+---
+
 # 8D source candidates VERIFIED / remote engine review active
 
 Producer39852459469 SUCCESS at3ab7667c:18savedBlenders/18GLBs/72newWIPactions;540B+144C+allolderactions exact; originalmeshgeometry/materials/morphsexact.22derivedrestmatchesuntouchededit-modecontrol EXACT (naturalfloatroundingfromsource retained). Verifiedsourcebytes635757536. Archived immutable /Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d_controls_3ab7667c_39852459469;receipt inproduction_8d/controls_remote_39852459469. No internalbinaryinstall.

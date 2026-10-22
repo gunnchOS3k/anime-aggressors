@@ -63,21 +63,31 @@ func native_sheet(p,sheet: Image,row: int) -> Dictionary:
 	var modes: Array=[];paused=true;freeze(p,modes)
 	var fixed:=canonical_pose(rig,model._controls_document_8d.canonical_bones)
 	var samples: Array=[]
+	var original_camera: Transform3D=model._camera.global_transform
+	var original_size: float=model._camera.size
 	for kind in ["hand","hair"]:
 		var bone: String="Hand_R" if kind=="hand" else "Head"
-		var center: Vector2=model._camera.unproject_position(rig.to_global(rig.get_bone_global_pose(rig.find_bone(bone)).origin))
-		var size: Vector2i=model._viewport.size
-		var crop:=Rect2i(Vector2i(clampi(int(center.x)-64,0,size.x-128),clampi(int(center.y)-64,0,size.y-128)),Vector2i(128,128))
+		# Review camera only: full viewport details rather than a crop around
+		# Head's neck pivot (which clipped the source hairstyle in first sheets).
+		# Original gameplay camera is restored before any public input resumes.
+		var focus: Vector3=rig.to_global(rig.get_bone_global_pose(rig.find_bone(bone)).origin)
+		if kind=="hair":focus+=Vector3.UP*.20
+		model._camera.global_transform=original_camera
+		model._camera.global_position=focus+original_camera.basis.z*3.0
+		model._camera.size=.28 if kind=="hand" else 1.25
+		var camera_record: String=str(model._camera.global_transform)+str(model._camera.size)
 		var hashes: Array=[]
 		for phase in [0.0,1.0]:
 			control.sample("fist",phase);control.sample("idle",phase*.25,false)
 			rig.force_update_all_bone_transforms()
 			for settle in range(2):await process_frame;await RenderingServer.frame_post_draw
-			var image: Image=model._viewport.get_texture().get_image().get_region(crop)
+			var image: Image=model._viewport.get_texture().get_image()
+			image.resize(192,192,Image.INTERPOLATE_LANCZOS)
 			var column:=int(phase)+(0 if kind=="hand" else 2)
-			sheet.blit_rect(image,Rect2i(0,0,128,128),Vector2i(column*128,row*128))
+			sheet.blit_rect(image,Rect2i(0,0,192,192),Vector2i(column*192,row*192))
 			hashes.append(pixels(image));check(canonical_pose(rig,model._controls_document_8d.canonical_bones)==fixed,p.fighter_id+":native_canonical_pose_fixed")
-		samples.append({"crop":crop,"kind":kind,"pixels":hashes,"changed":hashes[0]!=hashes[1]})
+		samples.append({"kind":kind,"pixels":hashes,"changed":hashes[0]!=hashes[1],"review_camera":camera_record})
+	model._camera.global_transform=original_camera;model._camera.size=original_size
 	for mode in modes:
 		if is_instance_valid(mode[0]):mode[0].process_mode=mode[1]
 	paused=false
@@ -92,7 +102,7 @@ func run() -> void:
 	root.get_node("SceneRouter").go("battle");await frames(200)
 	var p=current_scene.fighter1;var d=current_scene.fighter2
 	for body in ["male","female"]:
-		var sheet:=Image.create(512,1152,false,Image.FORMAT_RGBA8)if native else null
+		var sheet:=Image.create(768,1728,false,Image.FORMAT_RGBA8)if native else null
 		for fid in IDs:
 			for face in [1,-1]:
 				await configure(p,d,fid,body,face)
