@@ -298,7 +298,7 @@ export async function startLanPartyHost(opts: LanHostOptions): Promise<LanHostHa
               special: Boolean(i.semantic.special),
               shield: Boolean(i.semantic.shield),
               dodge: Boolean(i.semantic.dodge),
-              grab: false,
+              grab: Boolean(i.semantic.grab),
             },
           })),
           batch.map(() => 5),
