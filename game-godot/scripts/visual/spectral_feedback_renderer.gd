@@ -68,7 +68,7 @@ func contact(info: Dictionary, defender: Node2D) -> bool:
 	# Decoration is admitted first; the authoritative collision remains the last
 	# primary confirmation and can evict it when the shared pool is saturated.
 	stage_contact(info,defender)
-	emit_effect(fid,10 if result == "armor" else 1 if result in ["shield","parry","clash"] else 0,origin,direction,190 if heavy else 140,.26 if heavy else .18,event_id)
+	emit_effect(str(defender.fighter_id) if result == "parry" else fid,24 if result == "parry" else 10 if result == "armor" else 1 if result in ["shield","parry","clash"] else 0,origin,direction,190 if heavy else 140,.26 if heavy else .18,event_id)
 	if result == "hit":
 		if heavy:emit_effect(fid,16,origin,direction,128,.10,event_id+":confirmed_expression")
 		emit_effect(fid,8,defender.global_position+Vector2(0,-24),direction,74,.2,event_id+":hurt",defender)
@@ -116,7 +116,7 @@ func stage_contact(info: Dictionary, context: Node2D) -> bool:
 
 func emit_effect(fid: String, kind: int, world: Vector2, direction := Vector2.RIGHT, extent := 64.0, life := .22, event_id := "", follow: Node2D = null) -> int:
 	var max_slots := 32 if option("reduced_particles") else LIMIT
-	var primary := kind in [0,1,2,7,8,10,12,20,21,22] or (kind == 3 and life < 0)
+	var primary := kind in [0,1,2,7,8,10,12,20,21,22,24] or (kind == 3 and life < 0)
 	# Reserve headroom for actual outcomes; repeated unowned trails/fragments
 	# cannot fill the last six slots and conceal a new confirmed interception.
 	if not primary and active_count() >= max_slots - 6: dropped += 1; return -1

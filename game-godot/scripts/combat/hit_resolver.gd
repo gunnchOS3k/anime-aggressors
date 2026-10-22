@@ -39,6 +39,15 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 	elif not from_projectile:
 		if attacker.move_runner == null or not attacker.move_runner.can_hit_target(defender):
 			return {}
+	if "perfect_guard" in defender:
+		var parry: Dictionary = defender.perfect_guard.try_contact(attacker, move)
+		if not parry.is_empty():
+			parry = _contact_contract(attacker, defender, move, parry)
+			if combat_feedback: parry = combat_feedback.apply_hit(attacker, defender, move, parry)
+			defender.hit_landed.emit(parry)
+			hit_confirmed.emit(attacker, defender, parry)
+			_record_hit_telemetry(parry)
+			return parry
 	# Active armor frames (Rook heavies / Nix ice window) fully gate the hit.
 	if "armor_frames_remaining" in defender and float(defender.armor_frames_remaining) > 0.0:
 		var armor_info := {
@@ -186,14 +195,14 @@ func _contact_contract(attacker: Node, defender: Node, move: Dictionary, info: D
 		"projectile_instance_id":int(move.get("_projectile_instance_id",-1)),"attacker_id":str(attacker.fighter_id) if "fighter_id" in attacker else str(attacker.name),
 		"defender_id":str(defender.fighter_id) if "fighter_id" in defender else str(defender.name),
 		"gameplay_frame":Engine.get_physics_frames(),"timestamp_usec":Time.get_ticks_usec(),"move_frame":attacker.move_runner.total_frame if "move_runner" in attacker and attacker.move_runner != null else -1,
-		"contact_world":point,"contact_direction":direction,"contact_result":"armor" if info.get("armor_block",false) else "shield" if info.get("blocked",false) else "hit",
+		"contact_world":point,"contact_direction":direction,"contact_result":"parry" if info.get("perfect_guard",false) else "armor" if info.get("armor_block",false) else "shield" if info.get("blocked",false) else "hit",
 		"launch_strength":launch.length(),"defender_damage_before":float(defender.damage_percent) if "damage_percent" in defender else 0.0,
 		"defender_airborne":not defender.is_on_floor() if defender is CharacterBody2D else false,
 		"combo_count_before":int(attacker.combo_count) if "combo_count" in attacker else 0,
 		"counterhit":bool(defender.move_runner.active) if "move_runner" in defender and defender.move_runner != null else false,
 		"defender_state_before":str(defender.state_machine.current_state) if "state_machine" in defender else "unknown",
 		"defender_in_hitstun_before":defender.state_machine.current_state in ["hitstun","launched","tumble","hurt_light","hurt_heavy"] if "state_machine" in defender else false,
-		"parry_supported":false,"clash_supported":false},true)
+		"parry_supported":true,"clash_supported":false},true)
 	return info
 
 func _world_bounds(shape: CollisionShape2D) -> Rect2:

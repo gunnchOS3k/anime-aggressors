@@ -23,6 +23,7 @@ const _AuraTierContract = preload("res://scripts/combat/aura_tier_contract.gd")
 const _FacingContract = preload("res://scripts/combat/fighter_facing_contract.gd")
 const _HitReaction = preload("res://scripts/combat/directional_hit_reaction.gd")
 const _CosmicKit = preload("res://scripts/combat/cosmic_kit_runtime.gd")
+var perfect_guard = preload("res://scripts/combat/perfect_guard.gd").new()
 var _cosmic_counter_activation := -1
 var cosmic_kit_history: Array = []
 
@@ -143,6 +144,7 @@ var _transform_sequence_active: bool = false
 var _transform_match_closed: bool = false
 
 func _ready() -> void:
+	perfect_guard.setup(self)
 	add_to_group("fighters")
 	state_machine = _FighterStateMachine.new()
 	add_child(state_machine)
@@ -281,10 +283,12 @@ func reset_legacy_transformation(reason: String) -> void:
 
 
 func close_transformation_for_match_end() -> void:
+	perfect_guard.reset()
 	_transform_match_closed = true
 	if _transform_pipeline != null: _transform_pipeline.cancel("match_end")
 
 func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, spawn: Vector2) -> void:
+	perfect_guard.reset()
 	if _transform_pipeline != null: _transform_pipeline.cancel("fighter_reconfigured")
 	_transform_match_closed = false
 	_cosmic_counter_activation = -1
@@ -542,6 +546,7 @@ func get_fall_speed() -> float:
 	return float(data.get("fallSpeed", 1800))
 
 func tick_combat_frame() -> void:
+	perfect_guard.tick()
 	if model_3d != null and model_3d.get_animation_controller() != null:
 		model_3d.get_animation_controller().presentation_frozen = _hitstop > 0.0
 	if _hitstop > 0.0:
@@ -755,6 +760,7 @@ func _handle_actions() -> void:
 		return
 	if _read_shield() and grounded_guard and not is_aura_input_held():
 		if state_machine.current_state != _FighterStates.SHIELD_HOLD:
+			perfect_guard.begin()
 			state_machine.enter(_FighterStates.SHIELD_START)
 		state_machine.enter(_FighterStates.SHIELD_HOLD)
 		shielding = true
@@ -1542,6 +1548,7 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 	# Hit telemetry is recorded by HitResolver.resolve (single source of truth).
 
 func reset_fighter() -> void:
+	perfect_guard.reset()
 	reset_legacy_transformation("respawn")
 	var trail = get_node_or_null("LaunchTrail")
 	if trail != null: trail.clear()
@@ -1564,6 +1571,7 @@ func reset_fighter() -> void:
 	, CONNECT_ONE_SHOT)
 
 func lose_stock() -> void:
+	perfect_guard.reset()
 	# Called only by authentic battle stock loss; danger predictions are never a final result.
 	reset_legacy_transformation("stock_loss")
 	var renderer = preload("res://scripts/visual/spectral_feedback_renderer.gd").obtain(self)

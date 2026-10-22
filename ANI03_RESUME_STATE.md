@@ -1,3 +1,21 @@
+# Combat completion — Perfect Guard timing checkpoint
+
+Branch release/anime-v1-dialogue-and-elemental-performance. Inspect HEAD for
+commit. BASE comparison pushed0f838f7e; default accepted BASE unchanged.
+Perfect Guard actual public shield/tilt contacts:108/108 PASS (9x2bodiesx2facings,
+success/early/late), exact four-frame resolver boundary and24-frame rearm tests.
+Per-character shield capacities respected; initial failed fixture retained.
+Distinct pooled original bracket cue/elemental charge-ready SFX; no reflection,
+invulnerability, damage, fullscreen flash or form-window buffs.
+Evidence combat_completion/PERFECT_GUARD_CHECKPOINT.json,pg_roster_b/.
+Next: implement PartyOverdrive integration; new Party data/runtime/glyph files are
+local unintegrated WIP, not yet committed or runtime verified. Existing shared
+fighter/item/input/MoveRunner authorities will be reused. Add guard grab/projectile
+and form negatives after Party integration. No test/capture process remains.
+Storage11.71GiB initial; no heavy work. All33worktrees and owner saves preserved.
+All human/gameplay/balance/roster/release gates false. No merge/release.
+
+---
 # Combat completion increment — BASE aura comparison checkpoint
 
 Existing branch, inspect HEAD for new commit. Starting b3c69930 exact-headCI7/7

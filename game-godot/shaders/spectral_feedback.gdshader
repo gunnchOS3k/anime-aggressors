@@ -180,7 +180,13 @@ void fragment() {
   core=0.0;bits=0.0;shape=0.0;
   // One clear held beat, then a single fade; density never erases the result.
   f=1.0-smoothstep(.48,1.0,t);
-  if(kind==20) { // mutual cancellation: two inward curls close onto one seam
+  if(kind==24) { // original guard brackets: inward closure, open center
+   float settle=smoothstep(0.0,.35,t);
+   float x=.55-.18*settle;
+   shape=(line(p,vec2(-x,-.42),vec2(-x,.42),.018)+line(p,vec2(x,-.42),vec2(x,.42),.018))*.85;
+   shape+=line(p,vec2(-x,-.42),vec2(-x+.16,-.42),.018)+line(p,vec2(x,.42),vec2(x-.16,.42),.018);
+   shape+=element_contour(family,p*1.6,t)*.2;
+  } else if(kind==20) { // mutual cancellation: two inward curls close onto one seam
    float pull=1.0-smoothstep(0.0,.44,t);
    float left=element_contour(family,p+vec2(.26*pull,0),t)*(1.0-smoothstep(-.02,.1,p.x));
    float right=element_contour(secondary_family,-p+vec2(.26*pull,0),t)*smoothstep(-.1,.02,p.x);

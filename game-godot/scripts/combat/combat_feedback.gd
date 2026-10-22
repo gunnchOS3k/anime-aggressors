@@ -74,6 +74,17 @@ func apply_hit(attacker: Node, defender: Node, move: Dictionary, info: Dictionar
 		return result
 	_presented_events[confirmed_id]=true
 	if _presented_events.size()>256:_presented_events.erase(_presented_events.keys()[0])
+	if bool(result.get("perfect_guard", false)):
+		result["hitstop_frames"] = 2
+		result["feedback_tier"] = "perfect_guard"
+		result["screen_flash"] = false
+		result["camera_event"] = ""
+		result["sfx_event"] = "charge_ready"
+		result["vfx_event"] = "perfect_guard_seal"
+		result["played_audio"] = preload("res://scripts/audio/elemental_performance.gd").one_shot(str(defender.fighter_id),"charge_ready",self)
+		_present_contact(defender, result)
+		feedback_triggered.emit(result)
+		return result
 	if bool(result.get("blocked", false)):
 		result["hitstop_frames"] = 2 if bool(result.get("armor_block",false)) else clampi(hitstop, 2, 4)
 		result["sfx_event"] = "block"
