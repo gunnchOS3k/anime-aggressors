@@ -1,3 +1,17 @@
+# 8A checkpoint — nine-fighter elemental lifecycle (2026-10-21)
+
+Current worktree/branch unchanged. Ownership fix `e69db6cc8b655b08e71f51d4e1d7488cf70ed903` pushed to draft PR123 on PR122. This next commit records the integrated source candidate and tests.
+
+Passed: 144 nine-fighter/body/facing/directional releases (`roster_clean1021`); expanded 15 lifecycle cases plus freed-actor fixture (`lifecycle_exit1021`); 27 nine-fighter Full/Balanced/Reduced current-presentation contacts and real `_finish_match` cleanup (`presentation1021`). Exact source hashes in `PRESENTATION_SOURCE_BINDING.json`. Primary impact/damage/hitstop/punch SFX remain single-owner HitResolver/CombatFeedback. New observer adds nine-family open hold, true-vector release, actual-displacement wake and queried real landing. Two phase audio voices per actor reuse original elemental source bank; no new licensing dependency or loops.
+
+Retain all negative fixtures: first direction-matrix driver omitted up/down release; startup input probe initially attacked before acquisition; original source lifecycle failures; parser type failure; model-exit animation error corrected with scene-safe cleanup. Passing JSON alone is insufficient: inspect logs for SCRIPT/SHADER errors. Known shutdown ObjectDB/resource warnings remain, not visual approval.
+
+Storage 11.90 GiB free, below 18 GiB plus allocations; no Blender/GLB production, movies or platform exports. All 18 original source rigs, original 216 move records and Party/PerfectGuard/balance defaults preserved. Dedicated hold/victim/secondary acting and native/art/device/earned Story acceptance remain pending. All human/release gates false.
+
+No Godot job running at this checkpoint. Exact next command: `python3 tools/v1_closure/launch_ordinary_review.py --profile aa8a_forms1021 --headless --test-script res://tests/v1_closure/GrabForms8A.gd --output artifacts/v1_closure/elemental_grab_throw/forms1021`. Then serially run affected PartyGrabInterruption, PerfectGuardExceptions, ThrowOwnership, Story scene ownership and ProjectileOwnership regressions. Do not duplicate movies or old full-roster campaigns. Update source-bound nine-fighter matrix and draft PR description after results.
+
+---
+
 # 8A checkpoint — reciprocal grab ownership (2026-10-21)
 
 Worktree: `/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure`.

@@ -51,6 +51,8 @@ func run() -> void:
 	for i in range(4):
 		Input.action_press("p2_attack");await frames(2);Input.action_release("p2_attack");await frames(2)
 	check(p.grabbed_target==null and d.grabbed_by==null,"mash:reciprocal_escape")
+	await frames(30)
+	check(p.grabbed_target==null and d.grabbed_by==null,"mash:no_stale_reacquisition")
 	record("mash",p,d)
 	await prepare(p,d)
 	# Stagger public presses so the grab acquires during the defender's startup.
@@ -84,6 +86,31 @@ func run() -> void:
 			else:actor.reset_position()
 			check(p.grabbed_target==null and d.grabbed_by==null,operation+":"+side+":reciprocal_release")
 			record(operation+":"+side,p,d)
+	for external_state in ["hitstun","ko"]:
+		await prepare(p,d);check(await acquire(p,d),external_state+":genuine_grab")
+		p.state_machine.enter(external_state)
+		check(p.grabbed_target==null and d.grabbed_by==null and not p.move_runner.active,external_state+":direct_state_pair_cleanup")
+		check(p.state_machine.current_state==external_state,external_state+":interrupt_retains_state")
+		record("external_state:"+external_state,p,d)
+	await prepare(p,d)
+	p.global_position.y-=90;d.global_position.y-=90;p.velocity=Vector2(0,60);d.velocity=Vector2(0,60)
+	await frames(2)
+	check(await acquire(p,d),"air:genuine_descending_grab")
+	await frames(10)
+	check(p.grabbed_target==d and d.grabbed_by==p,"air:locomotion_preserves_hold")
+	record("descending_air",p,d)
+	for side in ["owner","victim"]:
+		await prepare(p,d);check(await acquire(p,d),"stock:"+side+":genuine_grab")
+		var actor=p if side=="owner" else d;actor.stocks=2;actor.lose_stock()
+		check(p.grabbed_target==null and d.grabbed_by==null and actor.state_machine.current_state=="respawn","stock:"+side+":cleanup_retains_respawn")
+		record("stock:"+side,p,d)
+		await frames(85)
+	await prepare(p,d);check(await acquire(p,d),"free:genuine_grab")
+	# This fixture removes a primary actor; stop only the scene's stock polling,
+	# whose permanent fighter2 pointer assumes primary actors live until teardown.
+	current_scene.set_physics_process(false)
+	d.queue_free();await frames(2)
+	check(p.grabbed_target==null and not p.move_runner.active,"free:owner_released")
 	release()
 	var f=FileAccess.open(output.path_join("grab_lifecycle.json"),FileAccess.WRITE)
 	f.store_string(JSON.stringify({"PASS":failures.is_empty(),"failures":failures,"rows":rows,"scope":"Declared positioning/receive-hit fixtures; genuine public grab/mash controls; not CPU or visual acceptance"},"\t"));f.close()

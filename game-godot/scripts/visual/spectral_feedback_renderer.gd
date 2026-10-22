@@ -50,7 +50,7 @@ func trim_decoration_budget(max_slots: int) -> void:
 	var remaining := active_count()-max_slots
 	if remaining <= 0:return
 	for i in slots.size():
-		if slots[i].active and (slots[i].kind in [4,5,6,9,13,14,15,16,17,18,19,23] or (slots[i].kind == 3 and slots[i].life > 0)):
+		if slots[i].active and (slots[i].kind in [4,5,6,9,13,14,15,16,17,18,19,23,26,27,28,29] or (slots[i].kind == 3 and slots[i].life > 0)):
 			stop_slot(i);remaining-=1
 			if remaining<=0:return
 
@@ -116,7 +116,7 @@ func stage_contact(info: Dictionary, context: Node2D) -> bool:
 
 func emit_effect(fid: String, kind: int, world: Vector2, direction := Vector2.RIGHT, extent := 64.0, life := .22, event_id := "", follow: Node2D = null) -> int:
 	var max_slots := 32 if option("reduced_particles") else LIMIT
-	var primary := kind in [0,1,2,7,8,10,12,20,21,22,24] or (kind == 3 and life < 0)
+	var primary := kind in [0,1,2,7,8,10,12,20,21,22,24,25] or (kind == 3 and life < 0)
 	# Reserve headroom for actual outcomes; repeated unowned trails/fragments
 	# cannot fill the last six slots and conceal a new confirmed interception.
 	if not primary and active_count() >= max_slots - 6: dropped += 1; return -1
@@ -127,7 +127,7 @@ func emit_effect(fid: String, kind: int, world: Vector2, direction := Vector2.RI
 			for i in slots.size():
 				# Short expression decorations have no persistent emitter owner.
 				# They must yield to the primary collision/defense/KO result.
-				if slots[i].active and (slots[i].kind in [4,5,6,9,13,14,15,16,17,18,19,23] or (slots[i].kind == 3 and slots[i].life > 0)): victim=i;break
+				if slots[i].active and (slots[i].kind in [4,5,6,9,13,14,15,16,17,18,19,23,26,27,28,29] or (slots[i].kind == 3 and slots[i].life > 0)): victim=i;break
 			if victim < 0 and kind in [20,21,22]:
 				# Extreme cue-only saturation retires the oldest prior outcome,
 				# never an owned projectile core or the new collision result.
@@ -154,7 +154,7 @@ func emit_effect(fid: String, kind: int, world: Vector2, direction := Vector2.RI
 	slot.merge({"active":true,"age":0.0,"life":life,"fid":fid,"kind":kind,"extent":extent,"clash_base_extent":extent,"world":world,"dir":direction,"seed":seed_value,"follow":weakref(follow) if follow != null else null,"event_id":event_id,"aspect":Vector2.ONE,"strength":1.0,"clash_ornament":1.0},true)
 	var mesh: MeshInstance2D = slot.mesh
 	# Canvas contract: platform0 < surface1 < fighter display2 < contact25.
-	mesh.z_index=-24 if kind in [18,19] else 0
+	mesh.z_index=-24 if kind in [18,19,28] else 0
 	mesh.show();mesh.global_position=world;mesh.rotation=direction.angle();mesh.scale=Vector2.ONE*extent
 	var ink: Color = COLORS[family]
 	if kind == 4: ink=Color(.79,.82,.85,.65).lerp(Color(ink.r,ink.g,ink.b,.6),.23)

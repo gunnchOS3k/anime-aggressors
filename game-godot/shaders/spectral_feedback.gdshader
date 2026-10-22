@@ -50,7 +50,7 @@ void fragment() {
  float core=exp(-r*r*85.0)*max(0.0,1.0-t*4.0)*flash;
  float shape=0.0; float bits=0.0;
  float outline=0.0; float mix_weight=0.0;
- if(kind<20) {
+ if(kind<20 || kind==28) {
  // Nine different motion and distance-field grammars, not nine recolored discs.
  if (family==0) { // combustion: turbulent advancing tongues and pressure corona
   float edge=0.36+0.20*n+0.13*sin(a*5.0-clock_s*4.0);
@@ -144,7 +144,7 @@ void fragment() {
  }
  // Surface reactions share the bounded pool, with their own low, open grammar.
  // UV is flattened onto the queried platform; no screen flash or collision.
- if(kind==18 || kind==19) {
+ if(kind==18 || kind==19 || kind==28) {
   core=0.0;bits=0.0;shape=0.0;
   float spread=0.12+0.64*t;
   float residue=(kind==19)?0.48:1.0;
@@ -176,11 +176,31 @@ void fragment() {
   shape*=residue*mix(.30,1.0,density);f=sin(min(1.0,t*6.0)*1.5708)*pow(max(0.0,1.0-t),1.3);
  }
  }
- if(kind>=20) {
+ if(kind>=20 && kind!=28) {
   core=0.0;bits=0.0;shape=0.0;
   // One clear held beat, then a single fade; density never erases the result.
   f=1.0-smoothstep(.48,1.0,t);
-  if(kind==24) { // original guard brackets: inward closure, open center
+  if(kind==25) { // owned elemental clinch: open center, no hit flash or damage cue
+   float breathe=.97+.025*sin(clock_s*2.0);
+   shape=element_contour(family,p*1.25/breathe,0.0)*.58;
+   shape+=element_contour(secondary_family,-p*1.7,0.0)*.13;
+   shape*=smoothstep(.18,.28,r);f=1.0;mix_weight=.12;
+  } else if(kind==26) { // directional release smear; primary hit already has its own owner
+   vec2 q=vec2((p.x+.18-t*.22)*.9,p.y*1.5);
+   shape=element_contour(family,q,t)*smoothstep(-.7,.1,p.x)*.75;
+   float bend=(family==3 || family==5)?sin(p.x*4.0)*.08:0.0;
+   if(family==2)bend=sin(p.x*24.0+seed)*.035;
+   if(family==6)bend=step(.0,p.x)*.08;
+   for(int i=0;i<3;i++){float j=float(i);float y=(j-1.0)*.12;
+    shape+=line(vec2(p.x,p.y-bend),vec2(-.65,y),vec2(.6,y*.25),.008)*(.6-j*.1)*step(j,2.0*density);}
+   f=pow(max(0.0,1.0-t),1.3);
+  } else if(kind==27) { // sparse identity wake follows measured victim displacement
+   shape=element_contour(family,vec2(p.x*.9+.15,p.y*1.8),t)*.38;
+   shape*=1.0-smoothstep(.0,.65,p.x);f*=.65;
+  } else if(kind==29) { // attempted catch / escape: split contour, never a contact core
+   shape=element_contour(family,p*1.55,t)*smoothstep(.24,.4,abs(p.y))*.45;
+   f=pow(max(0.0,1.0-t),1.5);
+  } else if(kind==24) { // original guard brackets: inward closure, open center
    float settle=smoothstep(0.0,.35,t);
    float x=.55-.18*settle;
    shape=(line(p,vec2(-x,-.42),vec2(-x,.42),.018)+line(p,vec2(x,-.42),vec2(x,.42),.018))*.85;
@@ -214,7 +234,7 @@ void fragment() {
    for(int i=0;i<3;i++){float j=float(i);vec2 c=vec2(-.22-t*.35,(j-1.0)*(.16+t*.28));shape+=element_contour(family,(p-c)*3.2,t)*.48;}
   }
  }
- float alpha=clamp((max(shape,outline*.74)*f+bits*f+core)*accent.a,0.0,(kind==18 || kind==19)?0.46:0.88);
+ float alpha=clamp((max(shape,outline*.74)*f+bits*f+core)*accent.a,0.0,(kind==18 || kind==19 || kind==28)?0.46:0.88);
  vec3 ink=mix(accent.rgb,vec3(1.0,0.97,0.88),clamp(core,0.0,1.0)*0.8);
  if(kind>=20) {ink=mix(vec3(.025,.04,.06),mix(accent.rgb,secondary_accent.rgb,mix_weight),smoothstep(.05,.35,shape));}
  if(kind==20) {ink=mix(ink,vec3(.96,1.0,.94),(1.0-smoothstep(.05,.13,abs(p.x)))*smoothstep(.1,.6,shape)*.48);}

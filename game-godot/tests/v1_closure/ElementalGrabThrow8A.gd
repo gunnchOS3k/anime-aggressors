@@ -3,6 +3,10 @@ extends "res://tests/v1_closure/PerfectGuardRuntime.gd"
 var feedback: Array=[]
 var damages: Array=[]
 var grab_events: Array=[]
+func release() -> void:
+	super.release()
+	for slot in [1,2]:
+		for key in ["up","down","jump","taunt"]:Input.action_release("p%d_%s" % [slot,key])
 func run() -> void:
 	await process_frame
 	for arg in OS.get_cmdline_user_args():
