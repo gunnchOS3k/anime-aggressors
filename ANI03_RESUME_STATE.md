@@ -1,3 +1,15 @@
+# 8C actual saved production and durable install checkpoint
+
+Remote39790037341 dedicatedproductionstep/validator/uploadallPASS, actual144newactions on18saved/reopened8Bpreservedrigs and36newstageGLBs verified. FinalGitHubjob/runconclusionstillreportedpendingdespiteCompleteJobstepsuccess; receiptpreservesdistinction, not finalworkflowPASS. Runtimeartifact12433391219 (3098967bytes,SHAf1fb51b7f02850f97e5625ea7ddcd586423a148219858b84b19b6d50ab113f37), sources12431779789 (83965145bytes,SHAf50c1b332fcaba9384e849593f21f9e85e341e391151deccf5ce9998f5b0bc3a).54verifiedboundedruntimefiles installed; no oldsource/modeloverwrite.
+
+Actual18editable8CcopiesdurablySHA/sizeverifieddirectexternal: /Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8c_1e06532c_39790037341 . Includes144newactions +540preserved8Bactions, originalgeometry/rest/weights/alloldactionspreserved. PRODUCTION_MANIFEST,completejoblog,RECOVERY_RECEIPT in production_8c/remote_39790037341 . Existing8Barchiveunchanged. NoBlenderbinaryinternal/noheavyMacexport.
+
+NewownedParty/ultimateaudiohooks useexistingexacttransitionevents andsame2voicepool; no competingtimer,mechanicsorframevalues.2fighterpilotPASS; full36body/facingPrismcases+audio189PCMchecks stillpending. Originalnewobserverrowkeyfailurepreservedinparty_audio1022. Latestsource/data changescheckpointedbeforeformpilot; getgitHEADactual.
+
+NEXT exact: `python3 tools/v1_closure/launch_ordinary_review.py --profile aa8c_form_pilot1022 --headless --test-script res://tests/v1_closure/FormActingRuntime8C.gd --driver-arg=--pilot --output artifacts/v1_closure/production_8c/form_pilot1022`. Actualsaved144import notyetGodotverified. Inspectfailurethenfix; full90transition/interruptrows onlyafterpilotPASS. Allhuman/nativeform/characterfidelity/device/mix/balance/releasegatesfalse. No ownedGodotrunning; read-onlyGHwatchsession50245mayremainactive.
+
+---
+
 # 8C recovery tooling and focused regression checkpoint
 
 LocalHEAD b394df4a beforethiscommit; draft123on122, remote b394df4a. Completed109guard+63domains+54PGforms+39throws+15grabcleanup+9Partyinterrupt+90stateauthorityallPASS; original117PCMchecks/18listeningsamples retained. Actualnativeguardobservations18body/configs,40beforeand42projectedcontacts. Analyticalshader/nativegameplay/fixturemetrics/humanapprovalremainseparate. Partyshutdown10objects/5resources warning reproduces identicallyonpre8C4d197580, notnew8Cregression. Grab15alsohas4/2shutdownwarning, retainednotmasked.

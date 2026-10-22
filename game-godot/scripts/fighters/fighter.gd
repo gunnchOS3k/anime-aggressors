@@ -986,7 +986,8 @@ func _start_move_dict(m: Dictionary) -> void:
 	# Retire that activation's melee shape before the next owner takes over.
 	hitbox.monitoring = false
 	var startup_event := "super_startup" if str(m.get("move_id", "")) == "aura_burst" else "whiff"
-	preload("res://scripts/audio/v1_candidate_sfx.gd").play_event(fighter_id, startup_event, self)
+	if not bool(m.get("_party_ultimate",false)):
+		preload("res://scripts/audio/v1_candidate_sfx.gd").play_event(fighter_id, startup_event, self)
 	var base_move := m
 	if party_overdrive.active():
 		base_move = party_overdrive.overlay(m)

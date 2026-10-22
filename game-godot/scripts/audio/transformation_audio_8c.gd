@@ -12,6 +12,8 @@ var step := 0
 var target := ""
 var edges: Dictionary = {}
 var history: Array = []
+var _party_edges: Dictionary = {}
+const PARTY_EVENTS := ["party_pickup","party_activate","party_reveal","ultimate_prepare","ultimate_release","ultimate_recover","party_expire","party_interrupt"]
 func setup(owner_actor) -> void:
 	actor=owner_actor
 	for i in range(2):
@@ -20,12 +22,13 @@ static func synthesize(fid: String,stage: int,event: String) -> AudioStreamWAV:
 	var key:=fid+":"+str(stage)+":"+event
 	if _cache.has(key):return _cache[key]
 	var family:=maxi(0,IDs.find(fid));var duration:=.48 if event=="gather" else .38 if event=="climax" else .24 if event=="reveal" else .16
+	if event in PARTY_EVENTS:duration=float([.10,.36,.26,.46,.40,.25,.29,.17][PARTY_EVENTS.find(event)])
 	var count:=int(RATE*duration);var pcm:=PackedByteArray();pcm.resize(count*2)
 	var peak:=0.0;var squares:=0.0
 	for i in count:
 		var t:=float(i)/RATE;var u:=float(i)/maxi(1,count-1)
 		var grain:=sin(float(i*137+family*233))*sin(float(i*71+family*17))
-		var rise:=pow(u,.6) if event=="gather" else exp(-u*4.0)
+		var rise:=pow(u,.6) if event in ["gather","party_activate","ultimate_prepare"] else exp(-u*4.0)
 		var envelope:=sin(PI*u)*rise
 		var body:=0.0
 		match family:
@@ -44,6 +47,14 @@ static func synthesize(fid: String,stage: int,event: String) -> AudioStreamWAV:
 		if event=="climax":body+=.22*grain*exp(-u*9)
 		elif event=="reveal":body+=.18*sin(TAU*(396+family*37)*t)*sin(PI*u)
 		elif event=="cancel":body=body*(1-u)+.13*grain*exp(-u*10)
+		if event in PARTY_EVENTS:
+			var role:=float(PARTY_EVENTS.find(event)+1)
+			# Each original identity keeps its physical texture; an authored
+			# envelope/rhythmic response distinguishes pickup, buildup,
+			# execution, return and expiry without extra global voices.
+			body=body*(.62+.38*pow(sin(PI*u*role),2))+.13*grain*exp(-u*(3+role))
+			if event=="ultimate_release":body+=.22*sin(TAU*(55+family*7)*t)*exp(-u*5)
+			if event=="party_expire":body*=1-u
 		var value:=clampf(body*envelope*.40,-.58,.58)
 		if family==7:value*=.65
 		peak=maxf(peak,absf(value));squares+=value*value;pcm.encode_s16(i*2,int(value*32767))
@@ -78,3 +89,20 @@ func snapshot() -> Dictionary:
 	for voice in voices:
 		if voice.playing:playing+=1
 	return {"active":active,"voices":voices.size(),"playing":playing,"history":history.duplicate(true),"licensed_inputs":"none_original_arithmetic_only","human_mix_approved":false}
+
+
+func party_event(state: String,reason: String,activation: int) -> void:
+	if active and state=="ITEM_ACQUIRED":return # Pickup never steals an ongoing permanent sequence.
+	var closed:=reason in ["match_end","character_change","respawn","stock_loss","mode_or_match_closed","no_stock"] or reason in ["state_interrupted:ko","state_interrupted:respawn","state_interrupted:victory","state_interrupted:defeat"]
+	if closed:clear();return
+	var events: Dictionary={"ITEM_ACQUIRED":"party_pickup","TRANSFORMATION_STARTUP":"party_activate","OVERDRIVE_ACTIVE":"party_reveal","ULTIMATE_STARTUP":"ultimate_prepare","ULTIMATE_ACTIVE":"ultimate_release","ULTIMATE_RECOVERY":"ultimate_recover","TRANSFORMATION_EXPIRE":"party_expire"}
+	if not events.has(state):return
+	var key:=str(activation)+":"+state
+	if _party_edges.has(key):return
+	_party_edges[key]=true
+	if _party_edges.size()>64:_party_edges.erase(_party_edges.keys()[0])
+	var event: String=events[state]
+	if state=="TRANSFORMATION_EXPIRE" and (reason=="body_hit" or reason.begins_with("state_interrupted:")):event="party_interrupt"
+	if state in ["ITEM_ACQUIRED","TRANSFORMATION_EXPIRE"]:clear()
+	step=3;target="PARTY:"+str(activation)
+	_play(event,0 if event in ["party_pickup","party_activate","ultimate_prepare"] else 1)

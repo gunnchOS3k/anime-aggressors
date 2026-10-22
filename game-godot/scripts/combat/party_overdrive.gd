@@ -35,6 +35,7 @@ func definition() -> Dictionary:
 	return entry.get("prism_heart",{}) if item=="prism_heart" else entry.get("puppet_seal",{}).get(variant,{})
 func transition(next: String, reason: String) -> void:
 	state=next
+	if is_instance_valid(fighter._form_audio_8c):fighter._form_audio_8c.party_event(next,reason,activation)
 	history.append({"clock":clock,"state":state,"reason":reason,"activation":activation,"slot":fighter.slot,"fighter":fighter.fighter_id})
 	if history.size()>64:history.pop_front()
 func acquire(id: String, seal_variant: String, token: int) -> bool:
@@ -50,7 +51,7 @@ func action() -> bool:
 		fighter.velocity=Vector2.ZERO
 		fighter.state_machine.enter("party_transform")
 		transition("TRANSFORMATION_STARTUP","public_taunt")
-		Audio.one_shot(fighter.fighter_id,"charge_start",fighter)
+		if not is_instance_valid(fighter._form_audio_8c):Audio.one_shot(fighter.fighter_id,"charge_start",fighter)
 		show_cue(2,100,.35)
 		return true
 	if state=="OVERDRIVE_ACTIVE" and item=="prism_heart" and not ultimate_used:
@@ -64,7 +65,7 @@ func action() -> bool:
 		transition("ULTIMATE_STARTUP","public_taunt")
 		fighter._start_move_dict(u)
 		show_cue(12,150,float(u.startup_frames)/60.0)
-		Audio.one_shot(fighter.fighter_id,"charge_ready",fighter)
+		if not is_instance_valid(fighter._form_audio_8c):Audio.one_shot(fighter.fighter_id,"charge_ready",fighter)
 		return true
 	return false
 func tick() -> void:
@@ -87,7 +88,7 @@ func tick() -> void:
 			fighter.add_child(_glyph);_glyph.configure(fighter,item,str(definition().get("state_id","")))
 			transition("OVERDRIVE_ACTIVE","startup_complete")
 			fighter.state_machine.enter("idle")
-			Audio.one_shot(fighter.fighter_id,"charge_release",fighter)
+			if not is_instance_valid(fighter._form_audio_8c):Audio.one_shot(fighter.fighter_id,"charge_release",fighter)
 	elif active():
 		remaining-=1
 		if remaining<=0:reset("expired")
@@ -110,7 +111,7 @@ func on_active(move: Dictionary) -> bool:
 	if not active() or int(move.get("party_activation",-1))!=activation:return true
 	var frame:int=fighter.move_runner.frame_in_phase
 	if frame==1:
-		Audio.one_shot(fighter.fighter_id,"signature_release",fighter)
+		if not is_instance_valid(fighter._form_audio_8c):Audio.one_shot(fighter.fighter_id,"signature_release",fighter)
 		show_cue(9,150,.24)
 		var impulse:Dictionary=move.get("impulse",{})
 		fighter.velocity+=Vector2(float(impulse.get("x",0))*fighter.attack_direction,float(impulse.get("y",0)))

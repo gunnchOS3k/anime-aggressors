@@ -11,10 +11,10 @@ func run() -> void:
 	var rows: Array=[];var failures: Array=[];var unique: Dictionary={};var files: Array=[]
 	var directory:=output.path_join("listening");DirAccess.make_dir_recursive_absolute(directory)
 	for fid in Guard.IDS:
-		for category in ["guard","transformation"]:
+		for category in ["guard","transformation","party"]:
 			var listening:=PackedByteArray()
-			var events: Array=Guard.EVENTS if category=="guard" else ["gather","climax","reveal","cancel"]
-			for stage in ([0] if category=="guard" else [1,2]):
+			var events: Array=Guard.EVENTS if category=="guard" else Form.PARTY_EVENTS if category=="party" else ["gather","climax","reveal","cancel"]
+			for stage in ([0] if category=="guard" else [3] if category=="party" else [1,2]):
 				for event in events:
 					var stream: AudioStreamWAV=Guard._synthesize(fid,event) if category=="guard" else Form.synthesize(fid,stage,event)
 					var pcm:=stream.data;var hash:=HashingContext.new();hash.start(HashingContext.HASH_SHA256);hash.update(pcm);var digest:=hash.finish().hex_encode()
@@ -29,6 +29,6 @@ func run() -> void:
 			var sample:=AudioStreamWAV.new();sample.format=AudioStreamWAV.FORMAT_16_BITS;sample.mix_rate=22050;sample.data=listening
 			var path:=directory.path_join(fid+"_"+category+".wav");var err:=sample.save_to_wav(path)
 			if err!=OK:failures.append(path+":write")
-			files.append({"path":path,"sha256":FileAccess.get_sha256(path),"bytes":FileAccess.get_file_as_bytes(path).size(),"ordered_events":events,"stages":[0] if category=="guard" else [1,2]})
+			files.append({"path":path,"sha256":FileAccess.get_sha256(path),"bytes":FileAccess.get_file_as_bytes(path).size(),"ordered_events":events,"stages":[0] if category=="guard" else [3] if category=="party" else [1,2]})
 	var f=FileAccess.open(output.path_join("audio_production_8c.json"),FileAccess.WRITE)
 	f.store_string(JSON.stringify({"PASS":failures.is_empty(),"rows":rows,"failures":failures,"files":files,"source":"Original arithmetic only; no external recordings/models/actors/samples","listening_status":"UNREVIEWED_HUMAN_MIX_PENDING","scope":"Measured standalone PCM. Not integrated mix loudness/device/hearing-safety acceptance."},"\t"));f.close();quit(0 if failures.is_empty() else 1)

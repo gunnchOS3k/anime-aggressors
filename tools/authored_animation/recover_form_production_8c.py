@@ -46,7 +46,19 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('--run',type=int,required=True);p.add_argument('--source-sha',required=True);p.add_argument('--install',action='store_true');a=p.parse_args()
     run=api(f'actions/runs/{a.run}')
     assert run['head_sha']==a.source_sha,'Unexpected production source'
-    assert run['event']=='workflow_dispatch'and run['status']=='completed'and run['conclusion']=='success',f'Production not accepted: {run["status"]}/{run["conclusion"]}'
+    assert run['event']=='workflow_dispatch','Not an authorized manual production'
+    jobs=api(f'actions/runs/{a.run}/jobs')['jobs']
+    production=next(j for j in jobs if j['name']=='form-acting-8c')
+    terminal_success=production['status']=='completed'and production['conclusion']=='success'
+    steps=production.get('steps',[])
+    completed_steps=bool(steps)and all(s['status']=='completed'and s['conclusion']=='success'for s in steps)and any(s['name']=='Complete job'for s in steps)
+    assert terminal_success or (production['status']=='in_progress'and production['conclusion']is None and completed_steps),'Dedicated production has unfinished/failed steps'
+    assert all(j['id']==production['id']or(j['status']=='completed'and j['conclusion']in ['success','skipped'])for j in jobs),'Another workflow job remains unfinished or failed'
+    production_acceptance='TERMINAL_JOB_SUCCESS'if terminal_success else'ALL_PRODUCTION_STEPS_SUCCESS_FINAL_JOB_CONCLUSION_PENDING'
+    # GitHub can delay the aggregate run conclusion after every actual job is
+    # terminal. Preserve that distinction; never treat a running source job,
+    # a failed step or a skipped source job as produced/accepted assets.
+    assert run['conclusion']in [None,'success'],'Aggregate workflow failed'
     artifacts=api(f'actions/runs/{a.run}/artifacts')['artifacts'];named={r['name']:r for r in artifacts if not r['expired']}
     runtime=named[f'form-acting-8c-runtime-{a.source_sha}'];source=named[f'form-acting-8c-saved-sources-{a.source_sha}']
     assert runtime['size_in_bytes']<=32*1024**2,'Not a bounded runtime artifact'
@@ -94,7 +106,7 @@ def main():
             else:dest.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(path,dest)
             installed.append({'path':str(rel),'bytes':dest.stat().st_size,'sha256':sha(dest)})
         assert len(installed)==54
-    receipt={'schema':'durable_8c_source_recovery.v1','verified_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'production_run':run['html_url'],'production_source_sha':a.source_sha,'archive_volume_uuid':UUID,'archive_root':str(snapshot),'source_artifact_id':source['id'],'source_archive_bytes':source['size_in_bytes'],'source_archive_sha256':source_hash,'runtime_artifact_id':runtime['id'],'runtime_archive_bytes':runtime['size_in_bytes'],'runtime_archive_sha256':runtime_hash,'runtime_temporary_root':str(temp),'source_rows':rows,'validation':validation,'installed_files':installed,'internal_free_before_bytes':internal_before,'internal_free_after_bytes':shutil.disk_usage(ROOT).free,'owner_internal_source_binary_bytes':0,'originals_deleted':False,'human_approved':False}
+    receipt={'schema':'durable_8c_source_recovery.v1','verified_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'production_run':run['html_url'],'production_source_sha':a.source_sha,'production_job_id':production['id'],'production_job_conclusion':production['conclusion'],'production_step_acceptance':production_acceptance,'final_workflow_success_claimed':run['conclusion']=='success','aggregate_workflow_status':run['status'],'aggregate_workflow_conclusion':run['conclusion'],'archive_volume_uuid':UUID,'archive_root':str(snapshot),'source_artifact_id':source['id'],'source_archive_bytes':source['size_in_bytes'],'source_archive_sha256':source_hash,'runtime_artifact_id':runtime['id'],'runtime_archive_bytes':runtime['size_in_bytes'],'runtime_archive_sha256':runtime_hash,'runtime_temporary_root':str(temp),'source_rows':rows,'validation':validation,'installed_files':installed,'internal_free_before_bytes':internal_before,'internal_free_after_bytes':shutil.disk_usage(ROOT).free,'owner_internal_source_binary_bytes':0,'originals_deleted':False,'human_approved':False}
     text=json.dumps(receipt,indent=2)+'\n';(out/'RECOVERY_RECEIPT.json').write_text(text);(snapshot/'DURABLE_SOURCE_RECEIPT.json').write_text(text)
     catalog=VOLUME/f'00-Catalog/manifests/anime-8c-source-{a.run}.json';assert not catalog.exists();catalog.write_text(text)
     print(json.dumps({'PASS':True,'archive':str(snapshot),'new_saved_actions':144,'preserved_8b_actions':540,'rigs':18,'attachments':36,'installed':len(installed),'receipt':str(out/'RECOVERY_RECEIPT.json')}))
