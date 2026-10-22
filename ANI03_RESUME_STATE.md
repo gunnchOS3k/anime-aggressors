@@ -1,3 +1,21 @@
+# Combat completion increment — BASE aura comparison checkpoint
+
+Existing branch, inspect HEAD for new commit. Starting b3c69930 exact-headCI7/7
+SUCCESS including Windows2025, stacked draft123/122 unchanged. Data11.71GiB,
+no heavy exports/recordings. All33worktrees/evidence/archives/saves preserved.
+BASE aura double processing reproduced across9 fighters x2bodies x2facings x2
+levels:72paired/144public-input fixture samples PASS, unchanged live geometry.
+Single-pass remains explicit metadata experiment; historical accepted BASE default
+unchanged because damage differs (Ember20.5075vs14.125 at75.5aura). Forms retain
+previous once-only resolution; projectile/direct-throw paths unchanged.
+artifacts/v1_closure/combat_completion/BASE_AURA_DECISION.json and base_comparison/.
+Next: implement shared PartyOverdrive for Prism Heart and Puppet Seal across9,
+using existing item/pickup, move, projectile, presentation and input contracts.
+This stream owns form/ultimate/parry rules; separate streams own elemental throw
+visual production and physical input/PartyLink adapters. Do not overwrite them.
+No owned test running. All art/gameplay/balance/roster/release gates false.
+
+---
 # Current delivery — verified archival and nine-fighter advancement candidates
 
 Runtime/source09e7be63334831b75fa796672192635f45ea79b4 PUSHED to existing draft123

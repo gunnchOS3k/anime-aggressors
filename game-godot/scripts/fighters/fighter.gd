@@ -940,6 +940,9 @@ func _start_move_dict(m: Dictionary) -> void:
 	# must not apply aura/identity a second time to these already resolved moves.
 	if bool(_current_move.get("form_override_applied", false)):
 		_current_move["_resolved_form_melee_scaling"] = true
+	# Explicit per-battle experiment; never a saved setting or implicit BASE retune.
+	if bool(get_meta("base_aura_single_pass_candidate", false)):
+		_current_move["_resolved_melee_scaling"] = true
 	# Neutral special cast clip follows aura tier (tap/medium/full) — no new buttons.
 	var mid0 := str(_current_move.get("move_id", m.get("move_id", "")))
 	if mid0 == "neutral_special_projectile" or str(m.get("move_type", "")) == "projectile":

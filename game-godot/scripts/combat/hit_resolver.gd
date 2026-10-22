@@ -67,7 +67,7 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 	var aura_amt := 0.0
 	var fid := ""
 	var tag := ""
-	var resolved_form_melee := not from_projectile and bool(move.get("_resolved_form_melee_scaling", false))
+	var resolved_form_melee := not from_projectile and (bool(move.get("_resolved_form_melee_scaling", false)) or bool(move.get("_resolved_melee_scaling", false)))
 	if attacker.has_method("get_aura"):
 		aura_amt = float(attacker.get_aura())
 		if not resolved_form_melee: scaled = _AuraScaler.apply_to_move(move, aura_amt)
