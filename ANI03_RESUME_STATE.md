@@ -1,3 +1,15 @@
+# 8D-2 connected anatomy producer / controlled review checkpoint
+
+Branch release/anime-v1-dialogue-and-elemental-performance; source producer2d762eef5584255b099a597d206d4a1473c48a87 pushed. ONLY manual Blender job39858757532 running (last install stage); do not dispatch a competing manual workflow with this same ref: concurrency cancels it. Check its terminal result and preserve failures before retry. No local Blender/export/import/capture jobs.35 worktrees protected; unrelated untracked WORKFLOW_REFERENCED_PATHS.json untouched.
+
+Opt-in hands_8d2 review lane now prepared, default normal game/old8D unchanged. Source-layer unit PASS Godot4.7.1: disjoint canonical/auxiliary ownership and optionalrelease. First direct invocation crashed opening sandbox-inaccessible user log; rerun with explicit /private/tmp log passed. Runtime helper now uses existing startup_frames/recovery_frames and MoveRunner total_frame for throw release, no gameplay timer/state changes. Remote verification supports same saved-source hand artifact and36 body/facing checks, with open/half/fist both hands staged detail sheets. New recovery_hands helper streams immutable outputs to external APFS; no Mac installation belowguard.
+
+Internal live15.79GiB (df16,560,000KiB), below18GiB AFTER800MiB forecast: no new source/GLB binaries, local native screenshots, Blender or heavy exports. Existing external349GiB. Original18 saved8D hashes verified. All old8B/8C/8D actions preserved by proposed producer assertions, not yet proven on completed new output. No art approval.
+
+NEXT: inspect39858757532. If success, archive exactsource/runtime with recover_hands_8d2.py --run39858757532 --source-sha2d762eef... (space-separated actualargs). If failure, retain log and fixactual source defect. Only after producer terminal dispatch verification-only sameartifact using controls_verify_kind=hands-8d2. Then inspect actual36connected hands/rookcuffs, implement actual paired victim mesh grip and directional release source acting. Do not stop after anatomy metadata; paired contact, foot/floor, normal gameplay visual and transformed/ultimate art stillpending.
+
+---
+
 # 8D-2 original anatomy production started
 
 Recovered bda5b5a5, remote same, only unrelated WORKFLOW_REFERENCED_PATHS.json untracked. Original18 saved8D hashes reverified against mounted APFS UUID9C4EB36E-2864-42F8-BD0B-A4F67EBC7852; archive free349.47GiB, source635757536 bytes exact. Current internal16.31GiB: no local install/import/Blender/native recordings. CI bda authority/full-roster/web/infra/Windows-latest successful; Windows2025 still in progress, not claimed passed.

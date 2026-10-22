@@ -6,6 +6,7 @@ var output:=""
 var rows: Array=[]
 var failures: Array=[]
 var native:=false
+var lane:="controls_8d"
 func _init() -> void:call_deferred("run")
 func frames(n: int) -> void:
 	for i in range(n):await physics_frame
@@ -45,7 +46,7 @@ func examine(p,label: String) -> Dictionary:
 			check(rig.find_bone(name)>=0,label+":new_source_joint:"+name)
 			if chain.kind=="finger":fingers.append(name)
 			else:secondary_bones.append(name)
-	check(fingers.size()==20 and secondary_bones.size()>0,label+":real_articulation_counts")
+	check(fingers.size()==int(doc.get("expected_finger_joints",20)) and secondary_bones.size()>0,label+":real_articulation_counts")
 	var signature:=canonical_pose(rig,doc.canonical_bones)
 	control.sample("fist",0);control.sample("idle",0,false)
 	var before:=rig.get_bone_pose_rotation(rig.find_bone(fingers[0]))
@@ -67,8 +68,9 @@ func native_sheet(p,sheet: Image,row: int) -> Dictionary:
 	var samples: Array=[]
 	var original_camera: Transform3D=model._camera.global_transform
 	var original_size: float=model._camera.size
-	for kind in ["hand","hair"]:
-		var bone: String="Hand_R" if kind=="hand" else "Head"
+	var kinds: Array=["right","left"] if lane=="hands_8d2" else ["hand","hair"]
+	for kind in kinds:
+		var bone: String="Head" if kind=="hair" else "Hand_L" if kind=="left" else "Hand_R"
 		# Review camera only: full viewport details rather than a crop around
 		# Head's neck pivot (which clipped the source hairstyle in first sheets).
 		# Original gameplay camera is restored before any public input resumes.
@@ -76,20 +78,21 @@ func native_sheet(p,sheet: Image,row: int) -> Dictionary:
 		if kind=="hair":focus+=Vector3.UP*.20
 		model._camera.global_transform=original_camera
 		model._camera.global_position=focus+original_camera.basis.z*3.0
-		model._camera.size=.28 if kind=="hand" else 1.25
+		model._camera.size=1.25 if kind=="hair" else .40
 		var camera_record: String=str(model._camera.global_transform)+str(model._camera.size)
 		var hashes: Array=[]
-		for phase in [0.0,1.0]:
-			control.sample("fist",phase if kind=="hand" else 0.0)
+		var phases: Array=[0.0,.5,1.0] if lane=="hands_8d2" else [0.0,1.0]
+		for phase in phases:
+			control.sample("fist",0.0 if kind=="hair" else phase)
 			control.sample("idle",phase*.25 if kind=="hair" else 0.0,false)
 			rig.force_update_all_bone_transforms()
 			for settle in range(2):await process_frame;await RenderingServer.frame_post_draw
 			var image: Image=model._viewport.get_texture().get_image()
 			image.resize(192,192,Image.INTERPOLATE_LANCZOS)
-			var column:=int(phase)+(0 if kind=="hand" else 2)
+			var column:=phases.find(phase)+kinds.find(kind)*phases.size()
 			sheet.blit_rect(image,Rect2i(0,0,192,192),Vector2i(column*192,row*192))
 			hashes.append(pixels(image));check(canonical_pose(rig,model._controls_document_8d.canonical_bones)==fixed,p.fighter_id+":native_canonical_pose_fixed")
-		samples.append({"kind":kind,"pixels":hashes,"changed":hashes[0]!=hashes[1],"review_camera":camera_record,"isolation":"only the named auxiliary layer changes; other layer remains at phase0"})
+		samples.append({"kind":kind,"pixels":hashes,"changed":hashes[0]!=hashes[-1],"review_camera":camera_record,"isolation":"only the named auxiliary layer changes; other layer remains at phase0"})
 	model._camera.global_transform=original_camera;model._camera.size=original_size
 	for mode in modes:
 		if is_instance_valid(mode[0]):mode[0].process_mode=mode[1]
@@ -99,13 +102,14 @@ func run() -> void:
 	await process_frame
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--ordinary-output="):output=arg.get_slice("=",1)
+		if arg=="--source-hands-8d2":lane="hands_8d2"
 	native=DisplayServer.get_name()!="headless"
-	var gs=root.get_node("GameState");gs.set_meta("source_controls_8d",true);gs.mode="versus";gs.stage_id="training-grid";gs.items_enabled=false;gs.hazards_enabled=false;gs.p2_is_cpu=false;gs.stocks=9;gs.match_timer_seconds=0;gs.match_type="stock_untimed"
+	var gs=root.get_node("GameState");gs.set_meta("source_controls_8d",lane=="controls_8d");gs.set_meta("source_hands_8d2",lane=="hands_8d2");gs.mode="versus";gs.stage_id="training-grid";gs.items_enabled=false;gs.hazards_enabled=false;gs.p2_is_cpu=false;gs.stocks=9;gs.match_timer_seconds=0;gs.match_type="stock_untimed"
 	var campaign=root.get_node("CampaignRuntime");var saved_before:=JSON.stringify(campaign.progress)
 	root.get_node("SceneRouter").go("battle");await frames(200)
 	var p=current_scene.fighter1;var d=current_scene.fighter2
 	for body in ["male","female"]:
-		var sheet:=Image.create(768,1728,false,Image.FORMAT_RGBA8)if native else null
+		var sheet:=Image.create(1152 if lane=="hands_8d2" else 768,1728,false,Image.FORMAT_RGBA8)if native else null
 		for fid in IDs:
 			for face in [1,-1]:
 				await configure(p,d,fid,body,face)
@@ -120,4 +124,4 @@ func run() -> void:
 	check(saved_before==JSON.stringify(campaign.progress),"Story state unchanged")
 	release()
 	var f:=FileAccess.open(output.path_join("source_controls_runtime_8d.json"),FileAccess.WRITE)
-	f.store_string(JSON.stringify({"PASS":failures.is_empty(),"rows":rows,"failures":failures,"native_rendered":native,"renderer":RenderingServer.get_current_rendering_method(),"human_approved":false},"\t"));f.close();quit(0 if failures.is_empty() else 1)
+	f.store_string(JSON.stringify({"PASS":failures.is_empty(),"lane":lane,"observer_sha":OS.get_environment("GITHUB_SHA"),"rows":rows,"failures":failures,"native_rendered":native,"renderer":RenderingServer.get_current_rendering_method(),"human_approved":false},"\t"));f.close();quit(0 if failures.is_empty() else 1)

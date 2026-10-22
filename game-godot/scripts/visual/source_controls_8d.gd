@@ -7,13 +7,15 @@ var secondary: AnimationPlayer
 var document: Dictionary = {}
 var status := "missing"
 
-static func candidate_document(fid: String, body: String) -> Dictionary:
-	var path:="res://data/animation/controls_8d/%s_%s.json"%[fid,body]
+static func candidate_document(fid: String, body: String, lane: String = "controls_8d") -> Dictionary:
+	if lane not in ["controls_8d","hands_8d2"]:return {}
+	var schema:="saved_original_hands_8d2.v1" if lane=="hands_8d2" else "saved_original_controls_8d.v1"
+	var path:="res://data/animation/%s/%s_%s.json"%[lane,fid,body]
 	if not FileAccess.file_exists(path):return {}
 	var doc: Variant=JSON.parse_string(FileAccess.get_file_as_string(path))
-	if not doc is Dictionary or doc.get("schema","")!="saved_original_controls_8d.v1" or doc.get("fighter","")!=fid or doc.get("body","")!=body or doc.get("human_approved",true):return {}
+	if not doc is Dictionary or doc.get("schema","")!=schema or doc.get("fighter","")!=fid or doc.get("body","")!=body or doc.get("human_approved",true):return {}
 	var resource:=str(doc.get("resource",""))
-	if not resource.begins_with("res://assets/characters/controls_8d/") or not FileAccess.file_exists(resource) or FileAccess.get_sha256(resource)!=str(doc.get("resource_sha256","")):return {}
+	if not resource.begins_with("res://assets/characters/"+lane+"/") or not FileAccess.file_exists(resource) or FileAccess.get_sha256(resource)!=str(doc.get("resource_sha256","")):return {}
 	return doc
 
 func setup(owner_actor, model: Node3D, skeleton: Skeleton3D, primary: AnimationPlayer, doc: Dictionary) -> void:
@@ -22,7 +24,7 @@ func setup(owner_actor, model: Node3D, skeleton: Skeleton3D, primary: AnimationP
 	for kind in ["hands","secondary"]:
 		var library:=AnimationLibrary.new()
 		for name in primary.get_animation_list():
-			for category in ["grip","fist","idle","recoil"]:
+			for category in doc.get("clips",{}):
 				if not str(name).ends_with(str(doc.clips[category].source_action)):continue
 				var clip:=primary.get_animation(name).duplicate(true) as Animation
 				for index in range(clip.get_track_count()-1,-1,-1):
@@ -54,12 +56,15 @@ func _process(_delta: float) -> void:
 	var state:=str(actor.state_machine.current_state)
 	var frame:=int(actor.state_machine.state_frame)
 	if is_instance_valid(actor.grabbed_target):sample("grip",1)
+	elif is_instance_valid(actor.move_runner) and actor.move_runner.active and str(actor.move_runner.current_move_id).begins_with("throw_") and hands.has_animation("saved8d/release"):
+		var length:=maxf(.001,hands.get_animation("saved8d/release").length)
+		sample("release",float(actor.move_runner.total_frame)/60.0/length)
 	elif state.contains("startup") and not actor._current_move.is_empty():
-		var frames:=maxf(1,float(actor._current_move.get("startup",6)))
+		var frames:=maxf(1,float(actor._current_move.get("startup_frames",6)))
 		sample("fist",float(frame)/frames)
 	elif state.contains("active") or state.begins_with("shield"):sample("fist",1)
 	elif state.contains("recovery"):
-		sample("fist",1.0-float(frame)/maxf(1,float(actor._current_move.get("recovery",18))))
+		sample("fist",1.0-float(frame)/maxf(1,float(actor._current_move.get("recovery_frames",18))))
 	else:sample("fist",0)
 	var time:=float(actor.state_machine.state_time)
 	if state.begins_with("hurt") or state in ["hitstun","launched","land"]:sample("recoil",time/.8,false)

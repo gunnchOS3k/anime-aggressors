@@ -10,7 +10,7 @@ func run() -> void:
 	for name in ["Head","D8_Finger_L_0_0","D8_hair_0_0"]:rig.add_bone(name)
 	var primary:=AnimationPlayer.new();model.add_child(primary)
 	var library:=AnimationLibrary.new();var clips: Dictionary={}
-	for category in ["grip","fist","recoil","idle"]:
+	for category in ["grip","fist","release","recoil","idle"]:
 		var anim:=Animation.new();anim.length=1.0
 		for name in ["Head","D8_Finger_L_0_0","D8_hair_0_0"]:
 			var index:=anim.add_track(Animation.TYPE_ROTATION_3D)
@@ -35,6 +35,9 @@ func run() -> void:
 	check(rig.get_bone_pose_rotation(head).is_equal_approx(original),"canonical pose retained")
 	check(rig.get_bone_pose_rotation(1).angle_to(Quaternion.IDENTITY)>.3,"finger actually posed")
 	check(rig.get_bone_pose_rotation(2).angle_to(Quaternion.IDENTITY)>.3,"hair actually posed")
+	check(control.hands.has_animation("saved8d/release"),"new optional release source loaded")
+	control.sample("release",1.0)
+	check(rig.get_bone_pose_rotation(1).angle_to(Quaternion.IDENTITY)>.3,"release source actually sampled")
 	control.sample("fist",0.0)
 	check(rig.get_bone_pose_rotation(1).is_equal_approx(Quaternion.IDENTITY),"neutral hand resets")
 	var f:=FileAccess.open("/private/tmp/aa8d_layer_result.json",FileAccess.WRITE)
