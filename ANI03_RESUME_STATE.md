@@ -1,3 +1,13 @@
+# 8C guard roster checkpoint — exact controlled engine PASS
+
+Runtime integration source ff405acd; subsequent98d10c26 retained passing pilot and concise failure evidence. Nine-fighterguard test completed109rows PASS:36body/facing/mode normalshield+36PG,9durability hysteresis,18baseline/candidate recovery,9publicpunishes,1poolcleanup. Sourcehashes in production_8c/GUARD_SOURCE_BINDINGS.json. Baseline .4s/fullhealth preserved;66frame45%candidateopt-in. NoCPU/native/device/art approval. Raw46MB failedparse loop remains unchanged locally; FAILURE_RECEIPT.json hashes it, conciseexcerpttracked; no originaldeletion/historyrewrite.
+
+Remote run39790037341 remains running exact1e06532c, currentlydependencyinstallation. Do notduplicate. New directGodotformresource loader and ownedsequence/idle integration checkpointed; actual144savedactions/36resourceimportpendingoutput. New FormActingRuntime8C check-onlyPASS. GuardDomains8C running serially in isolatedprofileaa8c_guard_domains1022 (textonly;63plannedform/Party/sustained/projectilecases); latestpartial19rowsnofailures. No otherownedGodot.
+
+NEXT: inspect run39790037341result/log; download boundedruntimeonly aftersuccess, strictvalidate18rig144actions36GLBs,archiveeditable18copiesdirectexternalwithhashes. Thenactual FormActingRuntime8C pilot/fullrun, interrupt/pause checks, Compatibilityshader/nativecompactreviewwhenfeasible. Keep 18GiB+allocationguard; noheavyMacproduction. Allhuman/balance/releasegatesfalse. Fullformcombat/Partyultimate/pairedmeshgrip/deformingsecondary remainsunfinished.
+
+---
+
 # 8C live integration checkpoint — remote run dispatched
 
 Remote production run39790037341 at exact1e06532c4775129f81aed13b1ff9eab940683220 is running: https://github.com/gunnchOS3k/anime-aggressors/actions/runs/39790037341 . It must produce saved18rig/144actions/36attachments before installation. Never dispatch a duplicate without diagnosing this run. Ordinary exact-head CI passed (includingWindows2025), opt-injob was previouslyskipped, not production proof.

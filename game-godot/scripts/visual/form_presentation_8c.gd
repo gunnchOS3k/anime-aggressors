@@ -52,7 +52,7 @@ func _install(form_id: String) -> void:
 	if scene==null:_failures.append("gltf_scene:"+form_id);return
 	var staged: Array = []
 	for part in info.get("parts",[]):
-		var group := scene.find_child(str(part.node),true,false) as Node3D
+		var group := scene.find_child(str(part.node).validate_node_name(),true,false) as Node3D
 		var bone := _BoneMap.resolve_on_skeleton(skeleton,str(part.canonical_bone))
 		if group==null or bone.is_empty():
 			_failures.append("socket_mapping:"+str(part.node));scene.free();return
