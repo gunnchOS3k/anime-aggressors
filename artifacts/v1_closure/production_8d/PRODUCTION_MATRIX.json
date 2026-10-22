@@ -1,5 +1,5 @@
 {
-  "schema": "bounded_8d_facial_production.v1",
+  "schema": "bounded_8d_facial_and_saved_source_controls.v2",
   "rows": [
     {
       "fighter": "ember-vale",
@@ -14,7 +14,7 @@
       ],
       "IMPLEMENTED": {
         "original_facial_controls_driven": true,
-        "new_finger_or_secondary_rig_controls": false,
+        "new_finger_or_secondary_rig_controls": true,
         "new_transformed_geometry": false
       },
       "AUTOMATED_VERIFIED": {
@@ -37,10 +37,92 @@
       },
       "OWNER_APPROVED": false,
       "BLOCKED": [
-        "Full premium original18rig finger/face deformation and weighted hair/cloth/armor still unfinished",
+        "Final premium hand/face deformation and remaining accessory surfaces/acting unfinished; new source articulation is WIP",
         "Paired grip/floor/outer reach and full form/ultimate/KO/break body acting unfinished"
       ],
-      "original_glb_sha256": "9babf95db543f767390b644dac11ee23fe8cec3b298e276081f72b36347e0d29"
+      "original_glb_sha256": "9babf95db543f767390b644dac11ee23fe8cec3b298e276081f72b36347e0d29",
+      "SAVED_SOURCE_CONTROLS_8D": {
+        "status": "EDITABLE_WIP_CANDIDATE",
+        "intent": "Loaded fist, compact combustion recoil; cropped flame locks flick and settle.",
+        "saved_source": "/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d_controls_3ab7667c_39852459469/saved_sources/ember-vale/male/candidate_controls_8d.blend",
+        "saved_source_sha256": "906f457ef2d302b2850a051479262f0459d334a541a3828370c16b9993341a7e",
+        "input_8c_sha256": "27da4fba0af22e33076c2980d1cefdeb78d3719634c8f62ab43275fc23b3a71b",
+        "runtime_artifact_path": "game-godot/assets/characters/controls_8d/ember-vale/male/BASE.glb",
+        "runtime_sha256": "96051f5846fb6520a29d7ffe2c5c0f6c1f6452895d3da1501ac2922fcbba661d",
+        "new_deform_bones": 30,
+        "new_digit_meshes": [
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "D8_Little_R",
+          "D8_Thumb_R"
+        ],
+        "weighted_original_meshes": [
+          "Finger L 0",
+          "Finger L 1",
+          "Finger L 2",
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "Finger R 0",
+          "Finger R 1",
+          "Finger R 2",
+          "D8_Little_R",
+          "D8_Thumb_R",
+          "Hair flame0",
+          "Hair flame1",
+          "Hair flame2",
+          "Back crest",
+          "Hair flame3",
+          "Hair flame4",
+          "Ignition gauntlet",
+          "Ignition gauntlet.001"
+        ],
+        "source_actions": [
+          "ANI08D_WIP_grip",
+          "ANI08D_WIP_fist",
+          "ANI08D_WIP_recoil",
+          "ANI08D_WIP_idle"
+        ],
+        "original_8b_actions_preserved": 30,
+        "original_8c_actions_preserved": 8,
+        "all_original_actions_preserved": 185,
+        "geometry_and_actions_exact": true,
+        "derived_rest_equals_untouched_edit_roundtrip": true,
+        "derived_rest_original_bytes_exact": false,
+        "actual_source_deformation": {
+          "grip": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.06626240691463395,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "fist": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.07753998274821595,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "idle": {
+            "sampled_vertices": 84,
+            "max_actual_mesh_displacement_m": 0.004340079260367029,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "recoil": {
+            "sampled_vertices": 84,
+            "max_actual_mesh_displacement_m": 0.00877331997747693,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          }
+        },
+        "AUTOMATED_BLENDER_VERIFIED": true,
+        "GODOT_VERIFIED": false,
+        "NATIVE_VERIFIED": false,
+        "OWNER_REVIEW_READY": false,
+        "OWNER_APPROVED": false,
+        "local_installed": false,
+        "remaining": [
+          "Refined anatomical hand sculpt/weights and mesh-to-mesh paired grip",
+          "Remaining accessory surfaces and body-specific secondary choreography",
+          "Foot/floor support and outer-range full-body contact",
+          "Final form, guard-break, KO and nine ultimate acting/silhouettes/materials"
+        ]
+      }
     },
     {
       "fighter": "ember-vale",
@@ -55,7 +137,7 @@
       ],
       "IMPLEMENTED": {
         "original_facial_controls_driven": true,
-        "new_finger_or_secondary_rig_controls": false,
+        "new_finger_or_secondary_rig_controls": true,
         "new_transformed_geometry": false
       },
       "AUTOMATED_VERIFIED": {
@@ -78,10 +160,100 @@
       },
       "OWNER_APPROVED": false,
       "BLOCKED": [
-        "Full premium original18rig finger/face deformation and weighted hair/cloth/armor still unfinished",
+        "Final premium hand/face deformation and remaining accessory surfaces/acting unfinished; new source articulation is WIP",
         "Paired grip/floor/outer reach and full form/ultimate/KO/break body acting unfinished"
       ],
-      "original_glb_sha256": "f8b843ca9fc7d8a4692d60c4ac3d77269ccb2b6152d7c1594610fb1816a23efb"
+      "original_glb_sha256": "f8b843ca9fc7d8a4692d60c4ac3d77269ccb2b6152d7c1594610fb1816a23efb",
+      "SAVED_SOURCE_CONTROLS_8D": {
+        "status": "EDITABLE_WIP_CANDIDATE",
+        "intent": "Loaded fist, compact combustion recoil; cropped flame locks flick and settle.",
+        "saved_source": "/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d_controls_3ab7667c_39852459469/saved_sources/ember-vale/female/candidate_controls_8d.blend",
+        "saved_source_sha256": "8c2fbb9539fcfc99fa8e83eba5b786282aa56f9609927e18f84f5e2240ad85fd",
+        "input_8c_sha256": "b8213aff79b9e8084f0ec10d1cebd1a6bcd58a8e6d113887e5df92755d442377",
+        "runtime_artifact_path": "game-godot/assets/characters/controls_8d/ember-vale/female/BASE.glb",
+        "runtime_sha256": "2b1dba5ea0765883265685527c6960992a54b289162f12062ae20012c73b3ac4",
+        "new_deform_bones": 30,
+        "new_digit_meshes": [
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "D8_Little_R",
+          "D8_Thumb_R"
+        ],
+        "weighted_original_meshes": [
+          "Finger L 0",
+          "Finger L 1",
+          "Finger L 2",
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "Finger R 0",
+          "Finger R 1",
+          "Finger R 2",
+          "D8_Little_R",
+          "D8_Thumb_R",
+          "Female pixie flame swirl 0",
+          "Living heat in pixie 0",
+          "Living heat in pixie 1",
+          "Female pixie flame swirl 1",
+          "Female pixie flame swirl 2",
+          "Female pixie flame swirl 3",
+          "Living heat in pixie 2",
+          "Living heat in pixie 3",
+          "Female pixie flame swirl 4",
+          "Female pixie flame swirl 5",
+          "Female pixie flame swirl 6",
+          "Living heat in pixie 4",
+          "Living heat in pixie 5",
+          "Living heat in pixie 6",
+          "Ignition gauntlet",
+          "Ignition gauntlet.001"
+        ],
+        "source_actions": [
+          "ANI08D_WIP_grip",
+          "ANI08D_WIP_fist",
+          "ANI08D_WIP_recoil",
+          "ANI08D_WIP_idle"
+        ],
+        "original_8b_actions_preserved": 30,
+        "original_8c_actions_preserved": 8,
+        "all_original_actions_preserved": 185,
+        "geometry_and_actions_exact": true,
+        "derived_rest_equals_untouched_edit_roundtrip": true,
+        "derived_rest_original_bytes_exact": false,
+        "actual_source_deformation": {
+          "grip": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.05831095982005525,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "fist": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.06823522788965582,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "idle": {
+            "sampled_vertices": 952,
+            "max_actual_mesh_displacement_m": 0.004280363737444315,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "recoil": {
+            "sampled_vertices": 952,
+            "max_actual_mesh_displacement_m": 0.008654568511851285,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          }
+        },
+        "AUTOMATED_BLENDER_VERIFIED": true,
+        "GODOT_VERIFIED": false,
+        "NATIVE_VERIFIED": false,
+        "OWNER_REVIEW_READY": false,
+        "OWNER_APPROVED": false,
+        "local_installed": false,
+        "remaining": [
+          "Refined anatomical hand sculpt/weights and mesh-to-mesh paired grip",
+          "Remaining accessory surfaces and body-specific secondary choreography",
+          "Foot/floor support and outer-range full-body contact",
+          "Final form, guard-break, KO and nine ultimate acting/silhouettes/materials"
+        ]
+      }
     },
     {
       "fighter": "rook-ironside",
@@ -96,7 +268,7 @@
       ],
       "IMPLEMENTED": {
         "original_facial_controls_driven": true,
-        "new_finger_or_secondary_rig_controls": false,
+        "new_finger_or_secondary_rig_controls": true,
         "new_transformed_geometry": false
       },
       "AUTOMATED_VERIFIED": {
@@ -119,10 +291,96 @@
       },
       "OWNER_APPROVED": false,
       "BLOCKED": [
-        "Full premium original18rig finger/face deformation and weighted hair/cloth/armor still unfinished",
+        "Final premium hand/face deformation and remaining accessory surfaces/acting unfinished; new source articulation is WIP",
         "Paired grip/floor/outer reach and full form/ultimate/KO/break body acting unfinished"
       ],
-      "original_glb_sha256": "52b5a752c0b0f1ba05544ddfebcadff46cae45ae2574001597e6b6db0dc879ae"
+      "original_glb_sha256": "52b5a752c0b0f1ba05544ddfebcadff46cae45ae2574001597e6b6db0dc879ae",
+      "SAVED_SOURCE_CONTROLS_8D": {
+        "status": "EDITABLE_WIP_CANDIDATE",
+        "intent": "Heavy braced grip; braid mass and armor plates settle with restrained lag.",
+        "saved_source": "/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d_controls_3ab7667c_39852459469/saved_sources/rook-ironside/male/candidate_controls_8d.blend",
+        "saved_source_sha256": "5fcb5081bf0a63c2f9804c295e4568c6b21d602bd8de74d6c3a9d546dc11556c",
+        "input_8c_sha256": "e80f049f6fbfd3ed33b6a49d0d0c29ca953b76893338d808c05cece5e7a9ef48",
+        "runtime_artifact_path": "game-godot/assets/characters/controls_8d/rook-ironside/male/BASE.glb",
+        "runtime_sha256": "7a620272a8fb1a8b6594d289d67909d8ffb0ce175b2fff875ab50d53a708139f",
+        "new_deform_bones": 30,
+        "new_digit_meshes": [
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "D8_Little_R",
+          "D8_Thumb_R"
+        ],
+        "weighted_original_meshes": [
+          "Finger L 0",
+          "Finger L 1",
+          "Finger L 2",
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "Finger R 0",
+          "Finger R 1",
+          "Finger R 2",
+          "D8_Little_R",
+          "D8_Thumb_R",
+          "Hair strata0",
+          "Hair strata1",
+          "Hair strata2",
+          "Back crest",
+          "Hair strata3",
+          "Hair strata4",
+          "Layered shoulder plate",
+          "Layered shoulder plate.001",
+          "Layered shoulder plate.002",
+          "Layered shoulder plate.003",
+          "Layered shoulder plate.004",
+          "Layered shoulder plate.005"
+        ],
+        "source_actions": [
+          "ANI08D_WIP_grip",
+          "ANI08D_WIP_fist",
+          "ANI08D_WIP_recoil",
+          "ANI08D_WIP_idle"
+        ],
+        "original_8b_actions_preserved": 30,
+        "original_8c_actions_preserved": 8,
+        "all_original_actions_preserved": 185,
+        "geometry_and_actions_exact": true,
+        "derived_rest_equals_untouched_edit_roundtrip": true,
+        "derived_rest_original_bytes_exact": false,
+        "actual_source_deformation": {
+          "grip": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.07238031190058568,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "fist": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.08402601351021852,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "idle": {
+            "sampled_vertices": 84,
+            "max_actual_mesh_displacement_m": 0.005325516217804435,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "recoil": {
+            "sampled_vertices": 84,
+            "max_actual_mesh_displacement_m": 0.010750580390649698,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          }
+        },
+        "AUTOMATED_BLENDER_VERIFIED": true,
+        "GODOT_VERIFIED": false,
+        "NATIVE_VERIFIED": false,
+        "OWNER_REVIEW_READY": false,
+        "OWNER_APPROVED": false,
+        "local_installed": false,
+        "remaining": [
+          "Refined anatomical hand sculpt/weights and mesh-to-mesh paired grip",
+          "Remaining accessory surfaces and body-specific secondary choreography",
+          "Foot/floor support and outer-range full-body contact",
+          "Final form, guard-break, KO and nine ultimate acting/silhouettes/materials"
+        ]
+      }
     },
     {
       "fighter": "rook-ironside",
@@ -137,7 +395,7 @@
       ],
       "IMPLEMENTED": {
         "original_facial_controls_driven": true,
-        "new_finger_or_secondary_rig_controls": false,
+        "new_finger_or_secondary_rig_controls": true,
         "new_transformed_geometry": false
       },
       "AUTOMATED_VERIFIED": {
@@ -160,10 +418,230 @@
       },
       "OWNER_APPROVED": false,
       "BLOCKED": [
-        "Full premium original18rig finger/face deformation and weighted hair/cloth/armor still unfinished",
+        "Final premium hand/face deformation and remaining accessory surfaces/acting unfinished; new source articulation is WIP",
         "Paired grip/floor/outer reach and full form/ultimate/KO/break body acting unfinished"
       ],
-      "original_glb_sha256": "209fa6a21b20214e9fd9fb41d1ab7527c78839cdf2b329697de109335f511d2f"
+      "original_glb_sha256": "209fa6a21b20214e9fd9fb41d1ab7527c78839cdf2b329697de109335f511d2f",
+      "SAVED_SOURCE_CONTROLS_8D": {
+        "status": "EDITABLE_WIP_CANDIDATE",
+        "intent": "Heavy braced grip; braid mass and armor plates settle with restrained lag.",
+        "saved_source": "/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d_controls_3ab7667c_39852459469/saved_sources/rook-ironside/female/candidate_controls_8d.blend",
+        "saved_source_sha256": "d9084f92c708f415d78c265efd52079060134f41d5c7ed9fd1219282b35f8c3a",
+        "input_8c_sha256": "73beb516e4f62afc89e6558a5626ec8c054631b9b7961bd47b7401e0defa0ff3",
+        "runtime_artifact_path": "game-godot/assets/characters/controls_8d/rook-ironside/female/BASE.glb",
+        "runtime_sha256": "88ac73a01a306b79919b3fd4893509546e4eb87edcd298643c1f6b609674d170",
+        "new_deform_bones": 30,
+        "new_digit_meshes": [
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "D8_Little_R",
+          "D8_Thumb_R"
+        ],
+        "weighted_original_meshes": [
+          "Finger L 0",
+          "Finger L 1",
+          "Finger L 2",
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "Finger R 0",
+          "Finger R 1",
+          "Finger R 2",
+          "D8_Little_R",
+          "D8_Thumb_R",
+          "Braid binding 0",
+          "Braid binding 1",
+          "Braid binding 2",
+          "Braid binding 3",
+          "Braid binding 4",
+          "Braid woven segment 0 0",
+          "Braid woven segment 0 1",
+          "Braid woven segment 0 2",
+          "Braid woven segment 0 3",
+          "Braid woven segment 0 4",
+          "Braid woven segment 0 5",
+          "Braid woven segment 0 6",
+          "Braid woven segment 0 7",
+          "Braid woven segment 1 0",
+          "Braid woven segment 1 1",
+          "Braid woven segment 1 2",
+          "Braid woven segment 1 3",
+          "Braid woven segment 1 4",
+          "Braid woven segment 1 5",
+          "Braid woven segment 1 6",
+          "Braid woven segment 1 7",
+          "Braid woven segment 2 0",
+          "Braid woven segment 2 1",
+          "Braid woven segment 2 2",
+          "Braid woven segment 2 3",
+          "Braid woven segment 2 4",
+          "Braid woven segment 2 5",
+          "Braid woven segment 2 6",
+          "Braid woven segment 2 7",
+          "Braid woven segment 3 0",
+          "Braid woven segment 3 1",
+          "Braid woven segment 3 2",
+          "Braid woven segment 3 3",
+          "Braid woven segment 3 4",
+          "Braid woven segment 3 5",
+          "Braid woven segment 3 6",
+          "Braid woven segment 3 7",
+          "Braid woven segment 4 0",
+          "Braid woven segment 4 1",
+          "Braid woven segment 4 2",
+          "Braid woven segment 4 3",
+          "Braid woven segment 4 4",
+          "Braid woven segment 4 5",
+          "Braid woven segment 4 6",
+          "Braid woven segment 4 7",
+          "Face framing box braid",
+          "Female box braid 00",
+          "Female box braid 01",
+          "Female box braid 02",
+          "Female box braid 03",
+          "Female box braid 04",
+          "Visible woven braid",
+          "Visible woven braid.001",
+          "Visible woven braid.002",
+          "Visible woven braid.003",
+          "Visible woven braid.004",
+          "Visible woven braid.005",
+          "Visible woven braid.006",
+          "Visible woven braid.007",
+          "Visible woven braid.008",
+          "Braid binding 5",
+          "Braid binding 6",
+          "Braid woven segment 5 0",
+          "Braid woven segment 5 1",
+          "Braid woven segment 5 2",
+          "Braid woven segment 5 3",
+          "Braid woven segment 5 4",
+          "Braid woven segment 5 5",
+          "Braid woven segment 5 6",
+          "Braid woven segment 5 7",
+          "Braid woven segment 6 0",
+          "Braid woven segment 6 1",
+          "Braid woven segment 6 2",
+          "Braid woven segment 6 3",
+          "Braid woven segment 6 4",
+          "Braid woven segment 6 5",
+          "Braid woven segment 6 6",
+          "Braid woven segment 6 7",
+          "Female box braid 05",
+          "Female box braid 06",
+          "Braid binding 10",
+          "Braid binding 11",
+          "Braid binding 7",
+          "Braid binding 8",
+          "Braid binding 9",
+          "Braid woven segment 10 0",
+          "Braid woven segment 10 1",
+          "Braid woven segment 10 2",
+          "Braid woven segment 10 3",
+          "Braid woven segment 10 4",
+          "Braid woven segment 10 5",
+          "Braid woven segment 10 6",
+          "Braid woven segment 10 7",
+          "Braid woven segment 11 0",
+          "Braid woven segment 11 1",
+          "Braid woven segment 11 2",
+          "Braid woven segment 11 3",
+          "Braid woven segment 11 4",
+          "Braid woven segment 11 5",
+          "Braid woven segment 11 6",
+          "Braid woven segment 11 7",
+          "Braid woven segment 7 0",
+          "Braid woven segment 7 1",
+          "Braid woven segment 7 2",
+          "Braid woven segment 7 3",
+          "Braid woven segment 7 4",
+          "Braid woven segment 7 5",
+          "Braid woven segment 7 6",
+          "Braid woven segment 7 7",
+          "Braid woven segment 8 0",
+          "Braid woven segment 8 1",
+          "Braid woven segment 8 2",
+          "Braid woven segment 8 3",
+          "Braid woven segment 8 4",
+          "Braid woven segment 8 5",
+          "Braid woven segment 8 6",
+          "Braid woven segment 8 7",
+          "Braid woven segment 9 0",
+          "Braid woven segment 9 1",
+          "Braid woven segment 9 2",
+          "Braid woven segment 9 3",
+          "Braid woven segment 9 4",
+          "Braid woven segment 9 5",
+          "Braid woven segment 9 6",
+          "Braid woven segment 9 7",
+          "Face framing box braid.001",
+          "Female box braid 07",
+          "Female box braid 08",
+          "Female box braid 09",
+          "Female box braid 10",
+          "Female box braid 11",
+          "Visible woven braid.009",
+          "Visible woven braid.010",
+          "Visible woven braid.011",
+          "Visible woven braid.012",
+          "Visible woven braid.013",
+          "Visible woven braid.014",
+          "Visible woven braid.015",
+          "Visible woven braid.016",
+          "Visible woven braid.017",
+          "Layered shoulder plate",
+          "Layered shoulder plate.001",
+          "Layered shoulder plate.002",
+          "Layered shoulder plate.003",
+          "Layered shoulder plate.004",
+          "Layered shoulder plate.005"
+        ],
+        "source_actions": [
+          "ANI08D_WIP_grip",
+          "ANI08D_WIP_fist",
+          "ANI08D_WIP_recoil",
+          "ANI08D_WIP_idle"
+        ],
+        "original_8b_actions_preserved": 30,
+        "original_8c_actions_preserved": 8,
+        "all_original_actions_preserved": 185,
+        "geometry_and_actions_exact": true,
+        "derived_rest_equals_untouched_edit_roundtrip": true,
+        "derived_rest_original_bytes_exact": false,
+        "actual_source_deformation": {
+          "grip": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.06369471922267209,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "fist": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.07394294672940188,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "idle": {
+            "sampled_vertices": 29092,
+            "max_actual_mesh_displacement_m": 0.01679252971417361,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "recoil": {
+            "sampled_vertices": 29092,
+            "max_actual_mesh_displacement_m": 0.03395468721810686,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          }
+        },
+        "AUTOMATED_BLENDER_VERIFIED": true,
+        "GODOT_VERIFIED": false,
+        "NATIVE_VERIFIED": false,
+        "OWNER_REVIEW_READY": false,
+        "OWNER_APPROVED": false,
+        "local_installed": false,
+        "remaining": [
+          "Refined anatomical hand sculpt/weights and mesh-to-mesh paired grip",
+          "Remaining accessory surfaces and body-specific secondary choreography",
+          "Foot/floor support and outer-range full-body contact",
+          "Final form, guard-break, KO and nine ultimate acting/silhouettes/materials"
+        ]
+      }
     },
     {
       "fighter": "juno-spark",
@@ -178,7 +656,7 @@
       ],
       "IMPLEMENTED": {
         "original_facial_controls_driven": true,
-        "new_finger_or_secondary_rig_controls": false,
+        "new_finger_or_secondary_rig_controls": true,
         "new_transformed_geometry": false
       },
       "AUTOMATED_VERIFIED": {
@@ -201,10 +679,92 @@
       },
       "OWNER_APPROVED": false,
       "BLOCKED": [
-        "Full premium original18rig finger/face deformation and weighted hair/cloth/armor still unfinished",
+        "Final premium hand/face deformation and remaining accessory surfaces/acting unfinished; new source articulation is WIP",
         "Paired grip/floor/outer reach and full form/ultimate/KO/break body acting unfinished"
       ],
-      "original_glb_sha256": "6deb174ca550de0e33de623d243cd532594f1d138b49086bfd56c28308555f62"
+      "original_glb_sha256": "6deb174ca550de0e33de623d243cd532594f1d138b49086bfd56c28308555f62",
+      "SAVED_SOURCE_CONTROLS_8D": {
+        "status": "EDITABLE_WIP_CANDIDATE",
+        "intent": "Quick precise grip with a sharp electrical tail return.",
+        "saved_source": "/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d_controls_3ab7667c_39852459469/saved_sources/juno-spark/male/candidate_controls_8d.blend",
+        "saved_source_sha256": "c299fb63b0ae8a83b16d7600419d07bc78f1e6b9b5d9e0ce0d5b5c12b5408cc3",
+        "input_8c_sha256": "e505fed59e42080b2fddd93f4360749d9981d1b3b82b53ba88e647606acd1696",
+        "runtime_artifact_path": "game-godot/assets/characters/controls_8d/juno-spark/male/BASE.glb",
+        "runtime_sha256": "bb96632c80d25d717d7f7d5346d6a1b8c99293cd168b2ab3ad74ec638250b10b",
+        "new_deform_bones": 30,
+        "new_digit_meshes": [
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "D8_Little_R",
+          "D8_Thumb_R"
+        ],
+        "weighted_original_meshes": [
+          "Finger L 0",
+          "Finger L 1",
+          "Finger L 2",
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "Finger R 0",
+          "Finger R 1",
+          "Finger R 2",
+          "D8_Little_R",
+          "D8_Thumb_R",
+          "Hair fork0",
+          "Hair fork1",
+          "Hair fork2",
+          "Back crest",
+          "Hair fork3",
+          "Hair fork4",
+          "Polarity fin",
+          "Polarity fin.001"
+        ],
+        "source_actions": [
+          "ANI08D_WIP_grip",
+          "ANI08D_WIP_fist",
+          "ANI08D_WIP_recoil",
+          "ANI08D_WIP_idle"
+        ],
+        "original_8b_actions_preserved": 30,
+        "original_8c_actions_preserved": 8,
+        "all_original_actions_preserved": 235,
+        "geometry_and_actions_exact": true,
+        "derived_rest_equals_untouched_edit_roundtrip": true,
+        "derived_rest_original_bytes_exact": false,
+        "actual_source_deformation": {
+          "grip": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.06188406133732549,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "fist": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.07289544221757688,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "idle": {
+            "sampled_vertices": 84,
+            "max_actual_mesh_displacement_m": 0.010412824247525524,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "recoil": {
+            "sampled_vertices": 84,
+            "max_actual_mesh_displacement_m": 0.021052052570139194,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          }
+        },
+        "AUTOMATED_BLENDER_VERIFIED": true,
+        "GODOT_VERIFIED": false,
+        "NATIVE_VERIFIED": false,
+        "OWNER_REVIEW_READY": false,
+        "OWNER_APPROVED": false,
+        "local_installed": false,
+        "remaining": [
+          "Refined anatomical hand sculpt/weights and mesh-to-mesh paired grip",
+          "Remaining accessory surfaces and body-specific secondary choreography",
+          "Foot/floor support and outer-range full-body contact",
+          "Final form, guard-break, KO and nine ultimate acting/silhouettes/materials"
+        ]
+      }
     },
     {
       "fighter": "juno-spark",
@@ -219,7 +779,7 @@
       ],
       "IMPLEMENTED": {
         "original_facial_controls_driven": true,
-        "new_finger_or_secondary_rig_controls": false,
+        "new_finger_or_secondary_rig_controls": true,
         "new_transformed_geometry": false
       },
       "AUTOMATED_VERIFIED": {
@@ -242,10 +802,89 @@
       },
       "OWNER_APPROVED": false,
       "BLOCKED": [
-        "Full premium original18rig finger/face deformation and weighted hair/cloth/armor still unfinished",
+        "Final premium hand/face deformation and remaining accessory surfaces/acting unfinished; new source articulation is WIP",
         "Paired grip/floor/outer reach and full form/ultimate/KO/break body acting unfinished"
       ],
-      "original_glb_sha256": "52e1324cf378780bb0ca02395614d26bdfc1c1e1d75984449dc22e3c12a55b1a"
+      "original_glb_sha256": "52e1324cf378780bb0ca02395614d26bdfc1c1e1d75984449dc22e3c12a55b1a",
+      "SAVED_SOURCE_CONTROLS_8D": {
+        "status": "EDITABLE_WIP_CANDIDATE",
+        "intent": "Quick precise grip with a sharp electrical tail return.",
+        "saved_source": "/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d_controls_3ab7667c_39852459469/saved_sources/juno-spark/female/candidate_controls_8d.blend",
+        "saved_source_sha256": "eb9615177dc320321658d0390d0ddac7f6953b0a59582f52f5d554a6fe23c246",
+        "input_8c_sha256": "ad4acb77fe36dc8ebdf71b96655bb3075797cfe77885f53dcbd31cb75d503067",
+        "runtime_artifact_path": "game-godot/assets/characters/controls_8d/juno-spark/female/BASE.glb",
+        "runtime_sha256": "2e9a93e485c5794e04d88e8afc077f34459afd16ed14567b1eb248dc6db2ff33",
+        "new_deform_bones": 28,
+        "new_digit_meshes": [
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "D8_Little_R",
+          "D8_Thumb_R"
+        ],
+        "weighted_original_meshes": [
+          "Finger L 0",
+          "Finger L 1",
+          "Finger L 2",
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "Finger R 0",
+          "Finger R 1",
+          "Finger R 2",
+          "D8_Little_R",
+          "D8_Thumb_R",
+          "Female gathered electric knot",
+          "Female lightning bolt ponytail",
+          "Lightning tail core",
+          "Polarity fin",
+          "Polarity fin.001"
+        ],
+        "source_actions": [
+          "ANI08D_WIP_grip",
+          "ANI08D_WIP_fist",
+          "ANI08D_WIP_recoil",
+          "ANI08D_WIP_idle"
+        ],
+        "original_8b_actions_preserved": 30,
+        "original_8c_actions_preserved": 8,
+        "all_original_actions_preserved": 235,
+        "geometry_and_actions_exact": true,
+        "derived_rest_equals_untouched_edit_roundtrip": true,
+        "derived_rest_original_bytes_exact": false,
+        "actual_source_deformation": {
+          "grip": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.05445802891159423,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "fist": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.06414802555348276,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "idle": {
+            "sampled_vertices": 430,
+            "max_actual_mesh_displacement_m": 0.016734466376927548,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "recoil": {
+            "sampled_vertices": 430,
+            "max_actual_mesh_displacement_m": 0.0338108685569839,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          }
+        },
+        "AUTOMATED_BLENDER_VERIFIED": true,
+        "GODOT_VERIFIED": false,
+        "NATIVE_VERIFIED": false,
+        "OWNER_REVIEW_READY": false,
+        "OWNER_APPROVED": false,
+        "local_installed": false,
+        "remaining": [
+          "Refined anatomical hand sculpt/weights and mesh-to-mesh paired grip",
+          "Remaining accessory surfaces and body-specific secondary choreography",
+          "Foot/floor support and outer-range full-body contact",
+          "Final form, guard-break, KO and nine ultimate acting/silhouettes/materials"
+        ]
+      }
     },
     {
       "fighter": "kaia-windrow",
@@ -260,7 +899,7 @@
       ],
       "IMPLEMENTED": {
         "original_facial_controls_driven": true,
-        "new_finger_or_secondary_rig_controls": false,
+        "new_finger_or_secondary_rig_controls": true,
         "new_transformed_geometry": false
       },
       "AUTOMATED_VERIFIED": {
@@ -283,10 +922,94 @@
       },
       "OWNER_APPROVED": false,
       "BLOCKED": [
-        "Full premium original18rig finger/face deformation and weighted hair/cloth/armor still unfinished",
+        "Final premium hand/face deformation and remaining accessory surfaces/acting unfinished; new source articulation is WIP",
         "Paired grip/floor/outer reach and full form/ultimate/KO/break body acting unfinished"
       ],
-      "original_glb_sha256": "5514359761d6658cae2b269d2c886e02d38bb4baba939fc2a09d22534c92761c"
+      "original_glb_sha256": "5514359761d6658cae2b269d2c886e02d38bb4baba939fc2a09d22534c92761c",
+      "SAVED_SOURCE_CONTROLS_8D": {
+        "status": "EDITABLE_WIP_CANDIDATE",
+        "intent": "Open wind hand into a rounded restraint; curls and airfoils flow after the body.",
+        "saved_source": "/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d_controls_3ab7667c_39852459469/saved_sources/kaia-windrow/male/candidate_controls_8d.blend",
+        "saved_source_sha256": "192eff3ac5992f3fc1f018d0db98b32880fe93f9c73a49a8bdd5b9926ec43b8f",
+        "input_8c_sha256": "5a90459172429281629f679815de97d996f9ac8ba3f25db85490e55826666add",
+        "runtime_artifact_path": "game-godot/assets/characters/controls_8d/kaia-windrow/male/BASE.glb",
+        "runtime_sha256": "9c69f38f37e9c74c032233aaaf298bd2097bb29e2326053b3c05f4f4460ca5f9",
+        "new_deform_bones": 30,
+        "new_digit_meshes": [
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "D8_Little_R",
+          "D8_Thumb_R"
+        ],
+        "weighted_original_meshes": [
+          "Finger L 0",
+          "Finger L 1",
+          "Finger L 2",
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "Finger R 0",
+          "Finger R 1",
+          "Finger R 2",
+          "D8_Little_R",
+          "D8_Thumb_R",
+          "Hair sweep 0",
+          "Hair sweep 1",
+          "Back crest",
+          "Hair sweep 2",
+          "Hair sweep 3",
+          "Hair sweep 4",
+          "Airfoil ribbon",
+          "Gale sash",
+          "Airfoil ribbon.001",
+          "Gale sash.001"
+        ],
+        "source_actions": [
+          "ANI08D_WIP_grip",
+          "ANI08D_WIP_fist",
+          "ANI08D_WIP_recoil",
+          "ANI08D_WIP_idle"
+        ],
+        "original_8b_actions_preserved": 30,
+        "original_8c_actions_preserved": 8,
+        "all_original_actions_preserved": 235,
+        "geometry_and_actions_exact": true,
+        "derived_rest_equals_untouched_edit_roundtrip": true,
+        "derived_rest_original_bytes_exact": false,
+        "actual_source_deformation": {
+          "grip": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.056100447694170594,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "fist": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.0665725658486869,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "idle": {
+            "sampled_vertices": 294,
+            "max_actual_mesh_displacement_m": 0.010147782263014275,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "recoil": {
+            "sampled_vertices": 294,
+            "max_actual_mesh_displacement_m": 0.02052479084426335,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          }
+        },
+        "AUTOMATED_BLENDER_VERIFIED": true,
+        "GODOT_VERIFIED": false,
+        "NATIVE_VERIFIED": false,
+        "OWNER_REVIEW_READY": false,
+        "OWNER_APPROVED": false,
+        "local_installed": false,
+        "remaining": [
+          "Refined anatomical hand sculpt/weights and mesh-to-mesh paired grip",
+          "Remaining accessory surfaces and body-specific secondary choreography",
+          "Foot/floor support and outer-range full-body contact",
+          "Final form, guard-break, KO and nine ultimate acting/silhouettes/materials"
+        ]
+      }
     },
     {
       "fighter": "kaia-windrow",
@@ -301,7 +1024,7 @@
       ],
       "IMPLEMENTED": {
         "original_facial_controls_driven": true,
-        "new_finger_or_secondary_rig_controls": false,
+        "new_finger_or_secondary_rig_controls": true,
         "new_transformed_geometry": false
       },
       "AUTOMATED_VERIFIED": {
@@ -324,10 +1047,105 @@
       },
       "OWNER_APPROVED": false,
       "BLOCKED": [
-        "Full premium original18rig finger/face deformation and weighted hair/cloth/armor still unfinished",
+        "Final premium hand/face deformation and remaining accessory surfaces/acting unfinished; new source articulation is WIP",
         "Paired grip/floor/outer reach and full form/ultimate/KO/break body acting unfinished"
       ],
-      "original_glb_sha256": "8b75401bced8638ea811f8848f5e11246ad105e94ef918d794e47431b15ec5d7"
+      "original_glb_sha256": "8b75401bced8638ea811f8848f5e11246ad105e94ef918d794e47431b15ec5d7",
+      "SAVED_SOURCE_CONTROLS_8D": {
+        "status": "EDITABLE_WIP_CANDIDATE",
+        "intent": "Open wind hand into a rounded restraint; curls and airfoils flow after the body.",
+        "saved_source": "/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d_controls_3ab7667c_39852459469/saved_sources/kaia-windrow/female/candidate_controls_8d.blend",
+        "saved_source_sha256": "0fed75c674cb49481e4fffa0a93eaa79d7be60fcf90d6a7c33e8d0e015a31ca0",
+        "input_8c_sha256": "c31b325667144232cb5214c695ce08fe96699058fa049e7db3d20c2c16d664a8",
+        "runtime_artifact_path": "game-godot/assets/characters/controls_8d/kaia-windrow/female/BASE.glb",
+        "runtime_sha256": "edbc0a07c5e46ac67da5a9cb3076c5b20c18ece8b720441a9886f5304b5d12f7",
+        "new_deform_bones": 30,
+        "new_digit_meshes": [
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "D8_Little_R",
+          "D8_Thumb_R"
+        ],
+        "weighted_original_meshes": [
+          "Finger L 0",
+          "Finger L 1",
+          "Finger L 2",
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "Finger R 0",
+          "Finger R 1",
+          "Finger R 2",
+          "D8_Little_R",
+          "D8_Thumb_R",
+          "Female storm curl 04",
+          "Female storm curl 05",
+          "Female storm curl 06",
+          "Female storm curl 07",
+          "Female storm curl 08",
+          "Female storm curl 09",
+          "Storm hair lifted stream",
+          "Storm silver flow",
+          "Female storm curl 03",
+          "Female storm curl 10",
+          "Female storm curl 00",
+          "Female storm curl 01",
+          "Female storm curl 02",
+          "Female storm curl 11",
+          "Female storm curl 12",
+          "Storm hair lifted stream.001",
+          "Storm silver flow.001",
+          "Airfoil ribbon",
+          "Gale sash",
+          "Airfoil ribbon.001",
+          "Gale sash.001"
+        ],
+        "source_actions": [
+          "ANI08D_WIP_grip",
+          "ANI08D_WIP_fist",
+          "ANI08D_WIP_recoil",
+          "ANI08D_WIP_idle"
+        ],
+        "original_8b_actions_preserved": 30,
+        "original_8c_actions_preserved": 8,
+        "all_original_actions_preserved": 235,
+        "geometry_and_actions_exact": true,
+        "derived_rest_equals_untouched_edit_roundtrip": true,
+        "derived_rest_original_bytes_exact": false,
+        "actual_source_deformation": {
+          "grip": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.049368373420199535,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "fist": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.058583839517152944,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "idle": {
+            "sampled_vertices": 5056,
+            "max_actual_mesh_displacement_m": 0.04307740185934871,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "recoil": {
+            "sampled_vertices": 5056,
+            "max_actual_mesh_displacement_m": 0.08710517275113645,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          }
+        },
+        "AUTOMATED_BLENDER_VERIFIED": true,
+        "GODOT_VERIFIED": false,
+        "NATIVE_VERIFIED": false,
+        "OWNER_REVIEW_READY": false,
+        "OWNER_APPROVED": false,
+        "local_installed": false,
+        "remaining": [
+          "Refined anatomical hand sculpt/weights and mesh-to-mesh paired grip",
+          "Remaining accessory surfaces and body-specific secondary choreography",
+          "Foot/floor support and outer-range full-body contact",
+          "Final form, guard-break, KO and nine ultimate acting/silhouettes/materials"
+        ]
+      }
     },
     {
       "fighter": "nix-calder",
@@ -342,7 +1160,7 @@
       ],
       "IMPLEMENTED": {
         "original_facial_controls_driven": true,
-        "new_finger_or_secondary_rig_controls": false,
+        "new_finger_or_secondary_rig_controls": true,
         "new_transformed_geometry": false
       },
       "AUTOMATED_VERIFIED": {
@@ -365,10 +1183,92 @@
       },
       "OWNER_APPROVED": false,
       "BLOCKED": [
-        "Full premium original18rig finger/face deformation and weighted hair/cloth/armor still unfinished",
+        "Final premium hand/face deformation and remaining accessory surfaces/acting unfinished; new source articulation is WIP",
         "Paired grip/floor/outer reach and full form/ultimate/KO/break body acting unfinished"
       ],
-      "original_glb_sha256": "f2c71de147964a59b3214fe006ac736d8567dd993036731c10906fa92438179e"
+      "original_glb_sha256": "f2c71de147964a59b3214fe006ac736d8567dd993036731c10906fa92438179e",
+      "SAVED_SOURCE_CONTROLS_8D": {
+        "status": "EDITABLE_WIP_CANDIDATE",
+        "intent": "Measured closing grip and small precise crystalline follow-through.",
+        "saved_source": "/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d_controls_3ab7667c_39852459469/saved_sources/nix-calder/male/candidate_controls_8d.blend",
+        "saved_source_sha256": "1e522d16c9ebe909a7c3215eacdb344b071803bbf8daa9425230c1400057349b",
+        "input_8c_sha256": "46973de949b8993bb7a135a61fcf1b70737da31957947894e207afc2b7675e82",
+        "runtime_artifact_path": "game-godot/assets/characters/controls_8d/nix-calder/male/BASE.glb",
+        "runtime_sha256": "713258f01b4d6965797b289af84b5a6034546c6cf8ee5bd4de065c8317f8557c",
+        "new_deform_bones": 30,
+        "new_digit_meshes": [
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "D8_Little_R",
+          "D8_Thumb_R"
+        ],
+        "weighted_original_meshes": [
+          "Finger L 0",
+          "Finger L 1",
+          "Finger L 2",
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "Finger R 0",
+          "Finger R 1",
+          "Finger R 2",
+          "D8_Little_R",
+          "D8_Thumb_R",
+          "Hair crystal0",
+          "Hair crystal1",
+          "Hair crystal2",
+          "Back crest",
+          "Hair crystal3",
+          "Hair crystal4",
+          "Crystal mantle",
+          "Crystal mantle.001"
+        ],
+        "source_actions": [
+          "ANI08D_WIP_grip",
+          "ANI08D_WIP_fist",
+          "ANI08D_WIP_recoil",
+          "ANI08D_WIP_idle"
+        ],
+        "original_8b_actions_preserved": 30,
+        "original_8c_actions_preserved": 8,
+        "all_original_actions_preserved": 185,
+        "geometry_and_actions_exact": true,
+        "derived_rest_equals_untouched_edit_roundtrip": true,
+        "derived_rest_original_bytes_exact": false,
+        "actual_source_deformation": {
+          "grip": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.06410202075384269,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "fist": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.07526540392351122,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "idle": {
+            "sampled_vertices": 84,
+            "max_actual_mesh_displacement_m": 0.003658130963294975,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "recoil": {
+            "sampled_vertices": 84,
+            "max_actual_mesh_displacement_m": 0.007394082554764008,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          }
+        },
+        "AUTOMATED_BLENDER_VERIFIED": true,
+        "GODOT_VERIFIED": false,
+        "NATIVE_VERIFIED": false,
+        "OWNER_REVIEW_READY": false,
+        "OWNER_APPROVED": false,
+        "local_installed": false,
+        "remaining": [
+          "Refined anatomical hand sculpt/weights and mesh-to-mesh paired grip",
+          "Remaining accessory surfaces and body-specific secondary choreography",
+          "Foot/floor support and outer-range full-body contact",
+          "Final form, guard-break, KO and nine ultimate acting/silhouettes/materials"
+        ]
+      }
     },
     {
       "fighter": "nix-calder",
@@ -383,7 +1283,7 @@
       ],
       "IMPLEMENTED": {
         "original_facial_controls_driven": true,
-        "new_finger_or_secondary_rig_controls": false,
+        "new_finger_or_secondary_rig_controls": true,
         "new_transformed_geometry": false
       },
       "AUTOMATED_VERIFIED": {
@@ -406,10 +1306,109 @@
       },
       "OWNER_APPROVED": false,
       "BLOCKED": [
-        "Full premium original18rig finger/face deformation and weighted hair/cloth/armor still unfinished",
+        "Final premium hand/face deformation and remaining accessory surfaces/acting unfinished; new source articulation is WIP",
         "Paired grip/floor/outer reach and full form/ultimate/KO/break body acting unfinished"
       ],
-      "original_glb_sha256": "1385d26b9cc4b98b6780972ebccfe3eba5be0bcc8ca153cb2dc090f5becb86d4"
+      "original_glb_sha256": "1385d26b9cc4b98b6780972ebccfe3eba5be0bcc8ca153cb2dc090f5becb86d4",
+      "SAVED_SOURCE_CONTROLS_8D": {
+        "status": "EDITABLE_WIP_CANDIDATE",
+        "intent": "Measured closing grip and small precise crystalline follow-through.",
+        "saved_source": "/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d_controls_3ab7667c_39852459469/saved_sources/nix-calder/female/candidate_controls_8d.blend",
+        "saved_source_sha256": "1d931b392569d98f9aaca313ae4a1f6284545fa72b1b24393f16aa44cdcc2c93",
+        "input_8c_sha256": "ab35d1f979a10f25900a2193d523004b86cf98ced1fa284aeba8a3dda8fe78db",
+        "runtime_artifact_path": "game-godot/assets/characters/controls_8d/nix-calder/female/BASE.glb",
+        "runtime_sha256": "e2c35b8b43b181670b03f0cadf0421beda7a9e3d3baf96ba798fcf61bc71ef75",
+        "new_deform_bones": 30,
+        "new_digit_meshes": [
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "D8_Little_R",
+          "D8_Thumb_R"
+        ],
+        "weighted_original_meshes": [
+          "Finger L 0",
+          "Finger L 1",
+          "Finger L 2",
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "Finger R 0",
+          "Finger R 1",
+          "Finger R 2",
+          "D8_Little_R",
+          "D8_Thumb_R",
+          "Female polished straight panel 00",
+          "Female polished straight panel 01",
+          "Female polished straight panel 02",
+          "Female polished straight panel 03",
+          "Silk press specular line 00",
+          "Silk press specular line 01",
+          "Silk press specular line 02",
+          "Silk press specular line 03",
+          "Female polished straight panel 04",
+          "Female polished straight panel 05",
+          "Female polished straight panel 06",
+          "Silk press specular line 04",
+          "Silk press specular line 05",
+          "Silk press specular line 06",
+          "Female polished straight panel 07",
+          "Female polished straight panel 08",
+          "Female polished straight panel 09",
+          "Female polished straight panel 10",
+          "Precise side part",
+          "Silk press specular line 07",
+          "Silk press specular line 08",
+          "Silk press specular line 09",
+          "Silk press specular line 10",
+          "Crystal mantle",
+          "Crystal mantle.001"
+        ],
+        "source_actions": [
+          "ANI08D_WIP_grip",
+          "ANI08D_WIP_fist",
+          "ANI08D_WIP_recoil",
+          "ANI08D_WIP_idle"
+        ],
+        "original_8b_actions_preserved": 30,
+        "original_8c_actions_preserved": 8,
+        "all_original_actions_preserved": 185,
+        "geometry_and_actions_exact": true,
+        "derived_rest_equals_untouched_edit_roundtrip": true,
+        "derived_rest_original_bytes_exact": false,
+        "actual_source_deformation": {
+          "grip": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.05640981266282446,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "fist": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.06623357292986728,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "idle": {
+            "sampled_vertices": 1552,
+            "max_actual_mesh_displacement_m": 0.011428393683692483,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "recoil": {
+            "sampled_vertices": 1552,
+            "max_actual_mesh_displacement_m": 0.023079563321018386,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          }
+        },
+        "AUTOMATED_BLENDER_VERIFIED": true,
+        "GODOT_VERIFIED": false,
+        "NATIVE_VERIFIED": false,
+        "OWNER_REVIEW_READY": false,
+        "OWNER_APPROVED": false,
+        "local_installed": false,
+        "remaining": [
+          "Refined anatomical hand sculpt/weights and mesh-to-mesh paired grip",
+          "Remaining accessory surfaces and body-specific secondary choreography",
+          "Foot/floor support and outer-range full-body contact",
+          "Final form, guard-break, KO and nine ultimate acting/silhouettes/materials"
+        ]
+      }
     },
     {
       "fighter": "orion-vell",
@@ -424,7 +1423,7 @@
       ],
       "IMPLEMENTED": {
         "original_facial_controls_driven": true,
-        "new_finger_or_secondary_rig_controls": false,
+        "new_finger_or_secondary_rig_controls": true,
         "new_transformed_geometry": false
       },
       "AUTOMATED_VERIFIED": {
@@ -447,10 +1446,91 @@
       },
       "OWNER_APPROVED": false,
       "BLOCKED": [
-        "Full premium original18rig finger/face deformation and weighted hair/cloth/armor still unfinished",
+        "Final premium hand/face deformation and remaining accessory surfaces/acting unfinished; new source articulation is WIP",
         "Paired grip/floor/outer reach and full form/ultimate/KO/break body acting unfinished"
       ],
-      "original_glb_sha256": "bd3b00bfdeb99631f633693d3907b71bf7f563a224eb8a6327d735de778c4137"
+      "original_glb_sha256": "bd3b00bfdeb99631f633693d3907b71bf7f563a224eb8a6327d735de778c4137",
+      "SAVED_SOURCE_CONTROLS_8D": {
+        "status": "EDITABLE_WIP_CANDIDATE",
+        "intent": "Orbital grip opposing the torso; puff and orbit ornaments have short restrained travel.",
+        "saved_source": "/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d_controls_3ab7667c_39852459469/saved_sources/orion-vell/male/candidate_controls_8d.blend",
+        "saved_source_sha256": "0d991a1aad1616c4ffd27e6580956a6ee12365c187d34d579b515689b88a7322",
+        "input_8c_sha256": "14ae38a99c88cb51c9710c48f38203f5586c28f5209d14d37a559ebe08a2e681",
+        "runtime_artifact_path": "game-godot/assets/characters/controls_8d/orion-vell/male/BASE.glb",
+        "runtime_sha256": "03a9e5940d688022b6a3f30a4b285bd83757e990f669ba3ec45071d4584739dc",
+        "new_deform_bones": 28,
+        "new_digit_meshes": [
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "D8_Little_R",
+          "D8_Thumb_R"
+        ],
+        "weighted_original_meshes": [
+          "Finger L 0",
+          "Finger L 1",
+          "Finger L 2",
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "Finger R 0",
+          "Finger R 1",
+          "Finger R 2",
+          "D8_Little_R",
+          "D8_Thumb_R",
+          "Hair sweep 0",
+          "Hair sweep 1",
+          "Back crest",
+          "Hair sweep 2",
+          "Hair sweep 3",
+          "Hair sweep 4",
+          "Secondary inclined gravity orbit"
+        ],
+        "source_actions": [
+          "ANI08D_WIP_grip",
+          "ANI08D_WIP_fist",
+          "ANI08D_WIP_recoil",
+          "ANI08D_WIP_idle"
+        ],
+        "original_8b_actions_preserved": 30,
+        "original_8c_actions_preserved": 8,
+        "all_original_actions_preserved": 185,
+        "geometry_and_actions_exact": true,
+        "derived_rest_equals_untouched_edit_roundtrip": true,
+        "derived_rest_original_bytes_exact": false,
+        "actual_source_deformation": {
+          "grip": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.05845365150006579,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "fist": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.06916814357428198,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "idle": {
+            "sampled_vertices": 294,
+            "max_actual_mesh_displacement_m": 0.0026445382775444615,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "recoil": {
+            "sampled_vertices": 294,
+            "max_actual_mesh_displacement_m": 0.005344845861675659,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          }
+        },
+        "AUTOMATED_BLENDER_VERIFIED": true,
+        "GODOT_VERIFIED": false,
+        "NATIVE_VERIFIED": false,
+        "OWNER_REVIEW_READY": false,
+        "OWNER_APPROVED": false,
+        "local_installed": false,
+        "remaining": [
+          "Refined anatomical hand sculpt/weights and mesh-to-mesh paired grip",
+          "Remaining accessory surfaces and body-specific secondary choreography",
+          "Foot/floor support and outer-range full-body contact",
+          "Final form, guard-break, KO and nine ultimate acting/silhouettes/materials"
+        ]
+      }
     },
     {
       "fighter": "orion-vell",
@@ -465,7 +1545,7 @@
       ],
       "IMPLEMENTED": {
         "original_facial_controls_driven": true,
-        "new_finger_or_secondary_rig_controls": false,
+        "new_finger_or_secondary_rig_controls": true,
         "new_transformed_geometry": false
       },
       "AUTOMATED_VERIFIED": {
@@ -488,10 +1568,123 @@
       },
       "OWNER_APPROVED": false,
       "BLOCKED": [
-        "Full premium original18rig finger/face deformation and weighted hair/cloth/armor still unfinished",
+        "Final premium hand/face deformation and remaining accessory surfaces/acting unfinished; new source articulation is WIP",
         "Paired grip/floor/outer reach and full form/ultimate/KO/break body acting unfinished"
       ],
-      "original_glb_sha256": "da2688da50f4c71e987a84cc9f3270d51edd8bac2fed30fa22802c17257803b4"
+      "original_glb_sha256": "da2688da50f4c71e987a84cc9f3270d51edd8bac2fed30fa22802c17257803b4",
+      "SAVED_SOURCE_CONTROLS_8D": {
+        "status": "EDITABLE_WIP_CANDIDATE",
+        "intent": "Orbital grip opposing the torso; puff and orbit ornaments have short restrained travel.",
+        "saved_source": "/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d_controls_3ab7667c_39852459469/saved_sources/orion-vell/female/candidate_controls_8d.blend",
+        "saved_source_sha256": "344ee714f44393f05a3e1c7da40f74a591210ee4ae51bfb7dd1176c0b0608e7b",
+        "input_8c_sha256": "32b1fe53c184485047a727f277daf7dcdc9aa764e4f6abf310a73571b6289500",
+        "runtime_artifact_path": "game-godot/assets/characters/controls_8d/orion-vell/female/BASE.glb",
+        "runtime_sha256": "8ce341f57d35b4be9f99e9f23c758bedfbf03250d6bd15ee5dc6e321ace12740",
+        "new_deform_bones": 28,
+        "new_digit_meshes": [
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "D8_Little_R",
+          "D8_Thumb_R"
+        ],
+        "weighted_original_meshes": [
+          "Finger L 0",
+          "Finger L 1",
+          "Finger L 2",
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "Finger R 0",
+          "Finger R 1",
+          "Finger R 2",
+          "D8_Little_R",
+          "D8_Thumb_R",
+          "Afro curl cluster 01",
+          "Afro curl cluster 04",
+          "Afro curl cluster 07",
+          "Afro curl cluster 09",
+          "Afro curl cluster 12",
+          "Afro curl cluster 14",
+          "Afro curl cluster 17",
+          "Afro curl cluster 20",
+          "Afro curl cluster 22",
+          "Afro curl cluster 25",
+          "Afro curl cluster 27",
+          "Afro curl cluster 28",
+          "Afro curl cluster 30",
+          "Afro curl cluster 33",
+          "Afro curl cluster 00",
+          "Afro curl cluster 02",
+          "Afro curl cluster 06",
+          "Afro curl cluster 15",
+          "Afro curl cluster 19",
+          "Afro curl cluster 23",
+          "Afro curl cluster 32",
+          "Afro curl cluster 35",
+          "Female orbital afro puff",
+          "Gravity puff binding",
+          "Afro curl cluster 03",
+          "Afro curl cluster 05",
+          "Afro curl cluster 08",
+          "Afro curl cluster 10",
+          "Afro curl cluster 11",
+          "Afro curl cluster 13",
+          "Afro curl cluster 16",
+          "Afro curl cluster 18",
+          "Afro curl cluster 21",
+          "Afro curl cluster 24",
+          "Afro curl cluster 26",
+          "Afro curl cluster 29",
+          "Afro curl cluster 31",
+          "Afro curl cluster 34",
+          "Secondary inclined gravity orbit"
+        ],
+        "source_actions": [
+          "ANI08D_WIP_grip",
+          "ANI08D_WIP_fist",
+          "ANI08D_WIP_recoil",
+          "ANI08D_WIP_idle"
+        ],
+        "original_8b_actions_preserved": 30,
+        "original_8c_actions_preserved": 8,
+        "all_original_actions_preserved": 185,
+        "geometry_and_actions_exact": true,
+        "derived_rest_equals_untouched_edit_roundtrip": true,
+        "derived_rest_original_bytes_exact": false,
+        "actual_source_deformation": {
+          "grip": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.05143920963038077,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "fist": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.06086794616670423,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "idle": {
+            "sampled_vertices": 8990,
+            "max_actual_mesh_displacement_m": 0.0070250293869414315,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "recoil": {
+            "sampled_vertices": 8990,
+            "max_actual_mesh_displacement_m": 0.014192402966982955,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          }
+        },
+        "AUTOMATED_BLENDER_VERIFIED": true,
+        "GODOT_VERIFIED": false,
+        "NATIVE_VERIFIED": false,
+        "OWNER_REVIEW_READY": false,
+        "OWNER_APPROVED": false,
+        "local_installed": false,
+        "remaining": [
+          "Refined anatomical hand sculpt/weights and mesh-to-mesh paired grip",
+          "Remaining accessory surfaces and body-specific secondary choreography",
+          "Foot/floor support and outer-range full-body contact",
+          "Final form, guard-break, KO and nine ultimate acting/silhouettes/materials"
+        ]
+      }
     },
     {
       "fighter": "vesper-nyx",
@@ -506,7 +1699,7 @@
       ],
       "IMPLEMENTED": {
         "original_facial_controls_driven": true,
-        "new_finger_or_secondary_rig_controls": false,
+        "new_finger_or_secondary_rig_controls": true,
         "new_transformed_geometry": false
       },
       "AUTOMATED_VERIFIED": {
@@ -529,10 +1722,91 @@
       },
       "OWNER_APPROVED": false,
       "BLOCKED": [
-        "Full premium original18rig finger/face deformation and weighted hair/cloth/armor still unfinished",
+        "Final premium hand/face deformation and remaining accessory surfaces/acting unfinished; new source articulation is WIP",
         "Paired grip/floor/outer reach and full form/ultimate/KO/break body acting unfinished"
       ],
-      "original_glb_sha256": "fa79377a4df576be8182e05d3e0935fec334f48fb0e403a0ad1f424e7982ecfc"
+      "original_glb_sha256": "fa79377a4df576be8182e05d3e0935fec334f48fb0e403a0ad1f424e7982ecfc",
+      "SAVED_SOURCE_CONTROLS_8D": {
+        "status": "EDITABLE_WIP_CANDIDATE",
+        "intent": "Oblique finger closure, delayed phase-loc recovery, no random bone offsets.",
+        "saved_source": "/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d_controls_3ab7667c_39852459469/saved_sources/vesper-nyx/male/candidate_controls_8d.blend",
+        "saved_source_sha256": "6a06d21d88199ba7b17b306887218bf7130d2e1fa010444aaafa19fd3307b3cc",
+        "input_8c_sha256": "99e690cb087274513c23de492b69653ea469f0649e9283b7cfefe55effec25ea",
+        "runtime_artifact_path": "game-godot/assets/characters/controls_8d/vesper-nyx/male/BASE.glb",
+        "runtime_sha256": "e0cd6f23d44a00a9ff4d539c7d1d6942823e64fc60fd4e498678a99bd6c276fe",
+        "new_deform_bones": 28,
+        "new_digit_meshes": [
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "D8_Little_R",
+          "D8_Thumb_R"
+        ],
+        "weighted_original_meshes": [
+          "Finger L 0",
+          "Finger L 1",
+          "Finger L 2",
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "Finger R 0",
+          "Finger R 1",
+          "Finger R 2",
+          "D8_Little_R",
+          "D8_Thumb_R",
+          "Hair sweep 0",
+          "Hair sweep 1",
+          "Hair sweep 2",
+          "Hair sweep 3",
+          "Hair sweep 4",
+          "Back crest",
+          "Displaced phase armor edge"
+        ],
+        "source_actions": [
+          "ANI08D_WIP_grip",
+          "ANI08D_WIP_fist",
+          "ANI08D_WIP_recoil",
+          "ANI08D_WIP_idle"
+        ],
+        "original_8b_actions_preserved": 30,
+        "original_8c_actions_preserved": 8,
+        "all_original_actions_preserved": 185,
+        "geometry_and_actions_exact": true,
+        "derived_rest_equals_untouched_edit_roundtrip": true,
+        "derived_rest_original_bytes_exact": false,
+        "actual_source_deformation": {
+          "grip": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.05728354972965368,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "fist": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.06788117026065907,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "idle": {
+            "sampled_vertices": 294,
+            "max_actual_mesh_displacement_m": 0.006275115440379743,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "recoil": {
+            "sampled_vertices": 294,
+            "max_actual_mesh_displacement_m": 0.012688080296289199,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          }
+        },
+        "AUTOMATED_BLENDER_VERIFIED": true,
+        "GODOT_VERIFIED": false,
+        "NATIVE_VERIFIED": false,
+        "OWNER_REVIEW_READY": false,
+        "OWNER_APPROVED": false,
+        "local_installed": false,
+        "remaining": [
+          "Refined anatomical hand sculpt/weights and mesh-to-mesh paired grip",
+          "Remaining accessory surfaces and body-specific secondary choreography",
+          "Foot/floor support and outer-range full-body contact",
+          "Final form, guard-break, KO and nine ultimate acting/silhouettes/materials"
+        ]
+      }
     },
     {
       "fighter": "vesper-nyx",
@@ -547,7 +1821,7 @@
       ],
       "IMPLEMENTED": {
         "original_facial_controls_driven": true,
-        "new_finger_or_secondary_rig_controls": false,
+        "new_finger_or_secondary_rig_controls": true,
         "new_transformed_geometry": false
       },
       "AUTOMATED_VERIFIED": {
@@ -570,10 +1844,111 @@
       },
       "OWNER_APPROVED": false,
       "BLOCKED": [
-        "Full premium original18rig finger/face deformation and weighted hair/cloth/armor still unfinished",
+        "Final premium hand/face deformation and remaining accessory surfaces/acting unfinished; new source articulation is WIP",
         "Paired grip/floor/outer reach and full form/ultimate/KO/break body acting unfinished"
       ],
-      "original_glb_sha256": "a22d1f53c8494f3528e9af17db3e273e4769366458d0a8d7f90c92d1ac997731"
+      "original_glb_sha256": "a22d1f53c8494f3528e9af17db3e273e4769366458d0a8d7f90c92d1ac997731",
+      "SAVED_SOURCE_CONTROLS_8D": {
+        "status": "EDITABLE_WIP_CANDIDATE",
+        "intent": "Oblique finger closure, delayed phase-loc recovery, no random bone offsets.",
+        "saved_source": "/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d_controls_3ab7667c_39852459469/saved_sources/vesper-nyx/female/candidate_controls_8d.blend",
+        "saved_source_sha256": "1355041830da2b66f462c3b06262b0510cac6e7ab606190fd197fba893246a4c",
+        "input_8c_sha256": "da9dc1ffd854007d9dfbaec871b80725c553361c5a5a03c0a2ce3adc632747b9",
+        "runtime_artifact_path": "game-godot/assets/characters/controls_8d/vesper-nyx/female/BASE.glb",
+        "runtime_sha256": "f21236beb37de63bd24d56ba6cb9a6e54bd2f3ba8a185cf205154925fc255dda",
+        "new_deform_bones": 28,
+        "new_digit_meshes": [
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "D8_Little_R",
+          "D8_Thumb_R"
+        ],
+        "weighted_original_meshes": [
+          "Finger L 0",
+          "Finger L 1",
+          "Finger L 2",
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "Finger R 0",
+          "Finger R 1",
+          "Finger R 2",
+          "D8_Little_R",
+          "D8_Thumb_R",
+          "Female phase dreadlock 00",
+          "Female phase dreadlock 01",
+          "Female phase dreadlock 02",
+          "Female phase dreadlock 03",
+          "Offset translucent dread echo 00",
+          "Phase loc tie 0",
+          "Phase loc tie 1",
+          "Phase loc tie 2",
+          "Phase loc tie 3",
+          "Female phase dreadlock 04",
+          "Female phase dreadlock 05",
+          "Offset translucent dread echo 03",
+          "Phase loc tie 4",
+          "Phase loc tie 5",
+          "Female phase dreadlock 06",
+          "Female phase dreadlock 07",
+          "Female phase dreadlock 08",
+          "Female phase dreadlock 09",
+          "Female phase dreadlock 10",
+          "Offset translucent dread echo 06",
+          "Offset translucent dread echo 09",
+          "Phase loc tie 10",
+          "Phase loc tie 6",
+          "Phase loc tie 7",
+          "Phase loc tie 8",
+          "Phase loc tie 9",
+          "Displaced phase armor edge"
+        ],
+        "source_actions": [
+          "ANI08D_WIP_grip",
+          "ANI08D_WIP_fist",
+          "ANI08D_WIP_recoil",
+          "ANI08D_WIP_idle"
+        ],
+        "original_8b_actions_preserved": 30,
+        "original_8c_actions_preserved": 8,
+        "all_original_actions_preserved": 185,
+        "geometry_and_actions_exact": true,
+        "derived_rest_equals_untouched_edit_roundtrip": true,
+        "derived_rest_original_bytes_exact": false,
+        "actual_source_deformation": {
+          "grip": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.05040951132051302,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "fist": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.059735439319006226,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "idle": {
+            "sampled_vertices": 3642,
+            "max_actual_mesh_displacement_m": 0.020013071508471474,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "recoil": {
+            "sampled_vertices": 3642,
+            "max_actual_mesh_displacement_m": 0.04040862488929006,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          }
+        },
+        "AUTOMATED_BLENDER_VERIFIED": true,
+        "GODOT_VERIFIED": false,
+        "NATIVE_VERIFIED": false,
+        "OWNER_REVIEW_READY": false,
+        "OWNER_APPROVED": false,
+        "local_installed": false,
+        "remaining": [
+          "Refined anatomical hand sculpt/weights and mesh-to-mesh paired grip",
+          "Remaining accessory surfaces and body-specific secondary choreography",
+          "Foot/floor support and outer-range full-body contact",
+          "Final form, guard-break, KO and nine ultimate acting/silhouettes/materials"
+        ]
+      }
     },
     {
       "fighter": "yin",
@@ -588,7 +1963,7 @@
       ],
       "IMPLEMENTED": {
         "original_facial_controls_driven": true,
-        "new_finger_or_secondary_rig_controls": false,
+        "new_finger_or_secondary_rig_controls": true,
         "new_transformed_geometry": false
       },
       "AUTOMATED_VERIFIED": {
@@ -611,10 +1986,90 @@
       },
       "OWNER_APPROVED": false,
       "BLOCKED": [
-        "Full premium original18rig finger/face deformation and weighted hair/cloth/armor still unfinished",
+        "Final premium hand/face deformation and remaining accessory surfaces/acting unfinished; new source articulation is WIP",
         "Paired grip/floor/outer reach and full form/ultimate/KO/break body acting unfinished"
       ],
-      "original_glb_sha256": "47e96ad46a2854d94888f28e66ab55c0bc30cbe6897c488a81ae9dc36dbbed79"
+      "original_glb_sha256": "47e96ad46a2854d94888f28e66ab55c0bc30cbe6897c488a81ae9dc36dbbed79",
+      "SAVED_SOURCE_CONTROLS_8D": {
+        "status": "EDITABLE_WIP_CANDIDATE",
+        "intent": "Inward restrained grip and low-motion descending hair; no spectrum progression.",
+        "saved_source": "/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d_controls_3ab7667c_39852459469/saved_sources/yin/male/candidate_controls_8d.blend",
+        "saved_source_sha256": "05040dacba2cd87b01f9b49f3f38eb17d352a29f183fb8d6cf32c820add30ee9",
+        "input_8c_sha256": "0cdca80f2fcd895e45247584255460f1217a44cf68f004bf053e4e7fe9c341c4",
+        "runtime_artifact_path": "game-godot/assets/characters/controls_8d/yin/male/BASE.glb",
+        "runtime_sha256": "ff1dc7dde94248600e9bc72eba786a5f5394c73d0097f01547aaf26e15a4b20d",
+        "new_deform_bones": 26,
+        "new_digit_meshes": [
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "D8_Little_R",
+          "D8_Thumb_R"
+        ],
+        "weighted_original_meshes": [
+          "Finger L 0",
+          "Finger L 1",
+          "Finger L 2",
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "Finger R 0",
+          "Finger R 1",
+          "Finger R 2",
+          "D8_Little_R",
+          "D8_Thumb_R",
+          "Hair sweep 0",
+          "Hair sweep 1",
+          "Hair sweep 2",
+          "Hair sweep 3",
+          "Hair sweep 4",
+          "Back crest"
+        ],
+        "source_actions": [
+          "ANI08D_WIP_grip",
+          "ANI08D_WIP_fist",
+          "ANI08D_WIP_recoil",
+          "ANI08D_WIP_idle"
+        ],
+        "original_8b_actions_preserved": 30,
+        "original_8c_actions_preserved": 8,
+        "all_original_actions_preserved": 185,
+        "geometry_and_actions_exact": true,
+        "derived_rest_equals_untouched_edit_roundtrip": true,
+        "derived_rest_original_bytes_exact": false,
+        "actual_source_deformation": {
+          "grip": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.06244392003337992,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "fist": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.0734968249215933,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "idle": {
+            "sampled_vertices": 294,
+            "max_actual_mesh_displacement_m": 0.0035844448950335802,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "recoil": {
+            "sampled_vertices": 294,
+            "max_actual_mesh_displacement_m": 0.007245371393861683,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          }
+        },
+        "AUTOMATED_BLENDER_VERIFIED": true,
+        "GODOT_VERIFIED": false,
+        "NATIVE_VERIFIED": false,
+        "OWNER_REVIEW_READY": false,
+        "OWNER_APPROVED": false,
+        "local_installed": false,
+        "remaining": [
+          "Refined anatomical hand sculpt/weights and mesh-to-mesh paired grip",
+          "Remaining accessory surfaces and body-specific secondary choreography",
+          "Foot/floor support and outer-range full-body contact",
+          "Final form, guard-break, KO and nine ultimate acting/silhouettes/materials"
+        ]
+      }
     },
     {
       "fighter": "yin",
@@ -629,7 +2084,7 @@
       ],
       "IMPLEMENTED": {
         "original_facial_controls_driven": true,
-        "new_finger_or_secondary_rig_controls": false,
+        "new_finger_or_secondary_rig_controls": true,
         "new_transformed_geometry": false
       },
       "AUTOMATED_VERIFIED": {
@@ -652,10 +2107,99 @@
       },
       "OWNER_APPROVED": false,
       "BLOCKED": [
-        "Full premium original18rig finger/face deformation and weighted hair/cloth/armor still unfinished",
+        "Final premium hand/face deformation and remaining accessory surfaces/acting unfinished; new source articulation is WIP",
         "Paired grip/floor/outer reach and full form/ultimate/KO/break body acting unfinished"
       ],
-      "original_glb_sha256": "ba7d2515eb581669989886fa5fc524e9570fb7d9a7ba0926512afc08b485a393"
+      "original_glb_sha256": "ba7d2515eb581669989886fa5fc524e9570fb7d9a7ba0926512afc08b485a393",
+      "SAVED_SOURCE_CONTROLS_8D": {
+        "status": "EDITABLE_WIP_CANDIDATE",
+        "intent": "Inward restrained grip and low-motion descending hair; no spectrum progression.",
+        "saved_source": "/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d_controls_3ab7667c_39852459469/saved_sources/yin/female/candidate_controls_8d.blend",
+        "saved_source_sha256": "e274830a10f3741866a231b5b8dc9eaa2ac64088e4b9a2c979cfcfa73f39b60b",
+        "input_8c_sha256": "9b58226a3983c79507579a563309ab418999511341a8b7aba95d19c8cdd10496",
+        "runtime_artifact_path": "game-godot/assets/characters/controls_8d/yin/female/BASE.glb",
+        "runtime_sha256": "71f305bfc7336a4e3730b8aae23369b54a8ad29bb5b87bd79266a2082a9356b9",
+        "new_deform_bones": 26,
+        "new_digit_meshes": [
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "D8_Little_R",
+          "D8_Thumb_R"
+        ],
+        "weighted_original_meshes": [
+          "Finger L 0",
+          "Finger L 1",
+          "Finger L 2",
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "Finger R 0",
+          "Finger R 1",
+          "Finger R 2",
+          "D8_Little_R",
+          "D8_Thumb_R",
+          "Controlled face framing cascade",
+          "Female divine descending wave",
+          "Female divine descending wave.001",
+          "Female divine descending wave.002",
+          "Female divine descending wave.003",
+          "Female divine descending wave.004",
+          "Female divine descending wave.005",
+          "Female divine descending wave.006",
+          "Female divine descending wave.007",
+          "Controlled face framing cascade.001",
+          "Female divine descending wave.008",
+          "Female divine descending wave.009",
+          "Female divine descending wave.010",
+          "Female divine descending wave.011",
+          "Female divine descending wave.012"
+        ],
+        "source_actions": [
+          "ANI08D_WIP_grip",
+          "ANI08D_WIP_fist",
+          "ANI08D_WIP_recoil",
+          "ANI08D_WIP_idle"
+        ],
+        "original_8b_actions_preserved": 30,
+        "original_8c_actions_preserved": 8,
+        "all_original_actions_preserved": 185,
+        "geometry_and_actions_exact": true,
+        "derived_rest_equals_untouched_edit_roundtrip": true,
+        "derived_rest_original_bytes_exact": false,
+        "actual_source_deformation": {
+          "grip": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.05495058708149753,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "fist": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.06467715245375616,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "idle": {
+            "sampled_vertices": 3384,
+            "max_actual_mesh_displacement_m": 0.014642882038702799,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "recoil": {
+            "sampled_vertices": 3384,
+            "max_actual_mesh_displacement_m": 0.02957103138803948,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          }
+        },
+        "AUTOMATED_BLENDER_VERIFIED": true,
+        "GODOT_VERIFIED": false,
+        "NATIVE_VERIFIED": false,
+        "OWNER_REVIEW_READY": false,
+        "OWNER_APPROVED": false,
+        "local_installed": false,
+        "remaining": [
+          "Refined anatomical hand sculpt/weights and mesh-to-mesh paired grip",
+          "Remaining accessory surfaces and body-specific secondary choreography",
+          "Foot/floor support and outer-range full-body contact",
+          "Final form, guard-break, KO and nine ultimate acting/silhouettes/materials"
+        ]
+      }
     },
     {
       "fighter": "yang",
@@ -670,7 +2214,7 @@
       ],
       "IMPLEMENTED": {
         "original_facial_controls_driven": true,
-        "new_finger_or_secondary_rig_controls": false,
+        "new_finger_or_secondary_rig_controls": true,
         "new_transformed_geometry": false
       },
       "AUTOMATED_VERIFIED": {
@@ -693,10 +2237,90 @@
       },
       "OWNER_APPROVED": false,
       "BLOCKED": [
-        "Full premium original18rig finger/face deformation and weighted hair/cloth/armor still unfinished",
+        "Final premium hand/face deformation and remaining accessory surfaces/acting unfinished; new source articulation is WIP",
         "Paired grip/floor/outer reach and full form/ultimate/KO/break body acting unfinished"
       ],
-      "original_glb_sha256": "1af53ae470585b414ebe850147af1407e7522ea273cf23be5f1e94093a98fae7"
+      "original_glb_sha256": "1af53ae470585b414ebe850147af1407e7522ea273cf23be5f1e94093a98fae7",
+      "SAVED_SOURCE_CONTROLS_8D": {
+        "status": "EDITABLE_WIP_CANDIDATE",
+        "intent": "Ordered outward hand preparation into a firm construction grip and radiant hair settle.",
+        "saved_source": "/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d_controls_3ab7667c_39852459469/saved_sources/yang/male/candidate_controls_8d.blend",
+        "saved_source_sha256": "bf684dcf086f0fd6e58ead8ad160256e1fc9206c3c6354e2ae17e7709b35ae23",
+        "input_8c_sha256": "e338573af716a195f7cd24948b55d25ca9a0b175cecef9e04af020269f987c51",
+        "runtime_artifact_path": "game-godot/assets/characters/controls_8d/yang/male/BASE.glb",
+        "runtime_sha256": "7acce4a9ae36528ec99fe51a96d00593a76824ee2073f89ee5ca1bc6dcfc595e",
+        "new_deform_bones": 26,
+        "new_digit_meshes": [
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "D8_Little_R",
+          "D8_Thumb_R"
+        ],
+        "weighted_original_meshes": [
+          "Finger L 0",
+          "Finger L 1",
+          "Finger L 2",
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "Finger R 0",
+          "Finger R 1",
+          "Finger R 2",
+          "D8_Little_R",
+          "D8_Thumb_R",
+          "Hair radiant0",
+          "Hair radiant1",
+          "Hair radiant2",
+          "Back crest",
+          "Hair radiant3",
+          "Hair radiant4"
+        ],
+        "source_actions": [
+          "ANI08D_WIP_grip",
+          "ANI08D_WIP_fist",
+          "ANI08D_WIP_recoil",
+          "ANI08D_WIP_idle"
+        ],
+        "original_8b_actions_preserved": 30,
+        "original_8c_actions_preserved": 8,
+        "all_original_actions_preserved": 185,
+        "geometry_and_actions_exact": true,
+        "derived_rest_equals_untouched_edit_roundtrip": true,
+        "derived_rest_original_bytes_exact": false,
+        "actual_source_deformation": {
+          "grip": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.06075423112305361,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "fist": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.0716757113620078,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "idle": {
+            "sampled_vertices": 84,
+            "max_actual_mesh_displacement_m": 0.0062594822592906526,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "recoil": {
+            "sampled_vertices": 84,
+            "max_actual_mesh_displacement_m": 0.012655712657089608,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          }
+        },
+        "AUTOMATED_BLENDER_VERIFIED": true,
+        "GODOT_VERIFIED": false,
+        "NATIVE_VERIFIED": false,
+        "OWNER_REVIEW_READY": false,
+        "OWNER_APPROVED": false,
+        "local_installed": false,
+        "remaining": [
+          "Refined anatomical hand sculpt/weights and mesh-to-mesh paired grip",
+          "Remaining accessory surfaces and body-specific secondary choreography",
+          "Foot/floor support and outer-range full-body contact",
+          "Final form, guard-break, KO and nine ultimate acting/silhouettes/materials"
+        ]
+      }
     },
     {
       "fighter": "yang",
@@ -711,7 +2335,7 @@
       ],
       "IMPLEMENTED": {
         "original_facial_controls_driven": true,
-        "new_finger_or_secondary_rig_controls": false,
+        "new_finger_or_secondary_rig_controls": true,
         "new_transformed_geometry": false
       },
       "AUTOMATED_VERIFIED": {
@@ -734,15 +2358,107 @@
       },
       "OWNER_APPROVED": false,
       "BLOCKED": [
-        "Full premium original18rig finger/face deformation and weighted hair/cloth/armor still unfinished",
+        "Final premium hand/face deformation and remaining accessory surfaces/acting unfinished; new source articulation is WIP",
         "Paired grip/floor/outer reach and full form/ultimate/KO/break body acting unfinished"
       ],
-      "original_glb_sha256": "be1915a827ad7dd6be69c8fa11570c52402516642ac06992fa5256ac930e696f"
+      "original_glb_sha256": "be1915a827ad7dd6be69c8fa11570c52402516642ac06992fa5256ac930e696f",
+      "SAVED_SOURCE_CONTROLS_8D": {
+        "status": "EDITABLE_WIP_CANDIDATE",
+        "intent": "Ordered outward hand preparation into a firm construction grip and radiant hair settle.",
+        "saved_source": "/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d_controls_3ab7667c_39852459469/saved_sources/yang/female/candidate_controls_8d.blend",
+        "saved_source_sha256": "6cbb6f2535dcc185ead6bdfc753f4919bdbee0f9bf0081843742b42222536dac",
+        "input_8c_sha256": "cc792415aef22ff30d915db4899a3f7c804b65e470b19dcdb480198db4078afe",
+        "runtime_artifact_path": "game-godot/assets/characters/controls_8d/yang/female/BASE.glb",
+        "runtime_sha256": "f4160476e3a95f4966f39c4fc442500e013832ff70efc850d6672fc533a9edca",
+        "new_deform_bones": 26,
+        "new_digit_meshes": [
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "D8_Little_R",
+          "D8_Thumb_R"
+        ],
+        "weighted_original_meshes": [
+          "Finger L 0",
+          "Finger L 1",
+          "Finger L 2",
+          "D8_Little_L",
+          "D8_Thumb_L",
+          "Finger R 0",
+          "Finger R 1",
+          "Finger R 2",
+          "D8_Little_R",
+          "D8_Thumb_R",
+          "Female divine radiant wave",
+          "Female divine radiant wave.001",
+          "Female divine radiant wave.002",
+          "Female divine radiant wave.003",
+          "Female divine radiant wave.004",
+          "Radiant lifted hair",
+          "Female divine radiant wave.005",
+          "Female divine radiant wave.006",
+          "Female divine radiant wave.007",
+          "Female divine radiant wave.008",
+          "Female divine radiant wave.009",
+          "Female divine radiant wave.010",
+          "Female divine radiant wave.011",
+          "Female divine radiant wave.012",
+          "Radiant lifted hair.001"
+        ],
+        "source_actions": [
+          "ANI08D_WIP_grip",
+          "ANI08D_WIP_fist",
+          "ANI08D_WIP_recoil",
+          "ANI08D_WIP_idle"
+        ],
+        "original_8b_actions_preserved": 30,
+        "original_8c_actions_preserved": 8,
+        "all_original_actions_preserved": 185,
+        "geometry_and_actions_exact": true,
+        "derived_rest_equals_untouched_edit_roundtrip": true,
+        "derived_rest_original_bytes_exact": false,
+        "actual_source_deformation": {
+          "grip": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.0534637274198548,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "fist": {
+            "sampled_vertices": 1852,
+            "max_actual_mesh_displacement_m": 0.06307464813827686,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "idle": {
+            "sampled_vertices": 3384,
+            "max_actual_mesh_displacement_m": 0.024030112259629442,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          },
+          "recoil": {
+            "sampled_vertices": 3384,
+            "max_actual_mesh_displacement_m": 0.04851858716227538,
+            "method": "evaluated Blender armature skin before/after, same canonical body action"
+          }
+        },
+        "AUTOMATED_BLENDER_VERIFIED": true,
+        "GODOT_VERIFIED": false,
+        "NATIVE_VERIFIED": false,
+        "OWNER_REVIEW_READY": false,
+        "OWNER_APPROVED": false,
+        "local_installed": false,
+        "remaining": [
+          "Refined anatomical hand sculpt/weights and mesh-to-mesh paired grip",
+          "Remaining accessory surfaces and body-specific secondary choreography",
+          "Foot/floor support and outer-range full-body contact",
+          "Final form, guard-break, KO and nine ultimate acting/silhouettes/materials"
+        ]
+      }
     }
   ],
   "human_approved": false,
   "scope": "Facial performance lane only; no new Blender/GLB/source-rig production or premium-character completion",
   "final_automated_runtime": "3faa2f2cbfc5d0af57af06655f900784a97886ba",
   "native_comparison_runtime": "f45f33afaf24d8b8ab923ec7229fb6765d2fe7e1",
-  "CPU_observation_runtime": "f45f33afaf24d8b8ab923ec7229fb6765d2fe7e1"
+  "CPU_observation_runtime": "f45f33afaf24d8b8ab923ec7229fb6765d2fe7e1",
+  "previous_increment_schema": "bounded_8d_facial_production.v1",
+  "source_controls_producer_sha": "3ab7667ca0b22e50bb7acfe0b509ff6b4513daf5",
+  "source_controls_producer_run": 39852459469
 }

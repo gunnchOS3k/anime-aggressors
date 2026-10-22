@@ -1,3 +1,13 @@
+# 8D source candidates VERIFIED / remote engine review active
+
+Producer39852459469 SUCCESS at3ab7667c:18savedBlenders/18GLBs/72newWIPactions;540B+144C+allolderactions exact; originalmeshgeometry/materials/morphsexact.22derivedrestmatchesuntouchededit-modecontrol EXACT (naturalfloatroundingfromsource retained). Verifiedsourcebytes635757536. Archived immutable /Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d_controls_3ab7667c_39852459469;receipt inproduction_8d/controls_remote_39852459469. No internalbinaryinstall.
+
+Runtimeb09aec61, sole verification-only run39853154985 ACTIVE; sourceproducerended, doNOTregenerate. Verify actual36body/facing public-attack imports and18nativehand/hair stagedcomparisons. NewloaderD8onlytracks unitPASS; originaldefault models unchanged; missing-export flag correctlyrefuseslaunch. Native/runtimeactual PASS pending. Localinternal15.54GiBbelow18+forecast: noimport/capture/export. All33worktrees/ownersaves/originalsources preserved; unrelated WORKFLOW_REFERENCED_PATHS.json unstaged.
+
+NEXT: inspect39853154985 terminalresult. Ifsuccessstream native reviewartifactdirectly toexistingimmutablearchive undernewreceipt; inspectactualPNGs, update18rows/reviewtruthfully, checkpoint/push. Ifdefectretainfailureandfixonlyreproducedsource/runtimeissue without regeningcompletedsource. No forced quality/humanapproval.
+
+---
+
 # 8D exact source producer / isolated runtime checkpoint
 
 Sole manual producer39852459469 at3ab7667ca0b22e50bb7acfe0b509ff6b4513daf5 currently generating saved sources/exports; do NOT duplicate. No-op edit-mode control preserves exact derived rest relative to untouched control, original geometry/actions exact. Source mesh-deformation checks added. Opt-in runtime D8-only layers synthetic unit PASS; source reader/test scripts parsePASS. Missing-export owner launch correctly refuses silent fallback. Default model paths unchanged. Saved-source actual engine/native validation NOT YET RUN.

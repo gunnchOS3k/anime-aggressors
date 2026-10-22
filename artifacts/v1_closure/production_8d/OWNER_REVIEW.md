@@ -1,3 +1,19 @@
+# 8D original eighteen-rig controls — actual source increment
+
+New source producer `3ab7667ca0b22e50bb7acfe0b509ff6b4513daf5`, successful run [39852459469](https://github.com/gunnchOS3k/anime-aggressors/actions/runs/39852459469). Runtime opt-in implementation `b09aec61a99b3c204ba5dcab7a95e60908a3af68`; separate verification-only run39853154985 is pending. Previous facial work below remains completed and preserved.
+
+Actual editable changes across **all nine / both bodies**: two-joint articulation of the original three digit meshes plus an additive original thumb/little finger per hand; independently weighted original hairstyle sections; selected cloth/accessory chains and rigid armor articulations where applicable. Character-directed grip/fist/recoil/idle WIP actions:72. New deform bones per rig:26–30. No character model is replaced, rescaled or translated. This is a source-control foundation, not final premium anatomy, acting or owner approval.
+
+Source validation passed18: original mesh geometry/materials/morphs and original action curves exact, including5408B+1448C actions and earlier Kaia/Juno work. Canonical22 derived matrices differ at float precision after Blender edit mode; each candidate matches an independently untouched edit-mode control **exactly**, rather than hiding this with a looser threshold. Actual evaluated source mesh motion is checked for every grip/fist/hair idle/recoil. GLBs retain the original22 joints/morphs plus the new weighted joints and four bounded source animations.
+
+Editable files, exports and SHA-256 provenance are durably archived at `/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d_controls_3ab7667c_39852459469`. See [source receipt](controls_remote_39852459469/RECOVERY_RECEIPT.json) and [matrix](PRODUCTION_MATRIX.json).635,757,536 saved-source bytes verified. Original archives/saves/worktrees are untouched. Use Blender4.0-compatible tooling; installed3.3 must not resave these copies.
+
+Local internal free fell below18GiB; **no candidate binaries were installed locally**, no new local recordings/exports. The new review flag refuses missing/unverified exports rather than displaying a silent baseline substitute. Baseline owner play below is still available. After live capacity meets18GiB **after800MiB forecast**, the recorded recovery tool's `--install` mode permits the versioned candidate namespace; normal play still uses the original models unless explicitly opted in. Remote native verification is pending, not a visual pass.
+
+Still required: refined hand anatomy/skin and paired victim-mesh grip, remaining weighted surfaces, support-foot/floor and full-body acting, final transformed silhouettes/materials, original guard-break/KO and nine full ultimate performances. All art/feel/balance/release gates remain false. No new earned Story, CPU, device or release acceptance is claimed.
+
+---
+
 # 8D bounded facial-performance increment and handoff
 
 PR #123 remains draft on122. Final facial runtime: `3faa2f2cbfc5d0af57af06655f900784a97886ba`. Native comparison was captured at `f45f33afaf24d8b8ab923ec7229fb6765d2fe7e1`; the final change only folds identical score math/data into the existing controller. All 72 configurations were reverified at the final runtime; original mesh and score bytes remain unchanged. This is a completed facial-performance increment, **not completed premium 8D art or V1 acceptance**.
