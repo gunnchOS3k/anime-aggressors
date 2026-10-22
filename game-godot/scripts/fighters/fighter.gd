@@ -722,6 +722,9 @@ func _apply_movement(delta: float) -> void:
 			state_machine.enter(_FighterStates.DOUBLE_JUMP)
 
 func _handle_actions() -> void:
+	var guard_held:bool=_read_shield()
+	var guard_pressed:bool=guard_held and not bool(_input_edge_held.get("guard_button",false))
+	_input_edge_held["guard_button"]=guard_held
 	# Existing normalized taunt edge. Hardware/PartyLink mapping belongs elsewhere.
 	if _input_edge("taunt") and party_overdrive.action():return
 	# Vesper phase cancel / Juno dash cancel — interrupt recovery when windows are live.
@@ -774,7 +777,7 @@ func _handle_actions() -> void:
 		return
 	if _read_shield() and grounded_guard and not is_aura_input_held():
 		if state_machine.current_state != _FighterStates.SHIELD_HOLD:
-			perfect_guard.begin()
+			if guard_pressed:perfect_guard.begin()
 			state_machine.enter(_FighterStates.SHIELD_START)
 		state_machine.enter(_FighterStates.SHIELD_HOLD)
 		shielding = true

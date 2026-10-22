@@ -1,3 +1,20 @@
+# Perfect Guard counterplay checkpoint
+
+Current source adds fresh-press-only shield windows after independently reproducing
+held shield auto-rearm after stun. Exceptions20rows PASS:9publicgrab/throw,
+9publicJuno projectile guards,held-buttonnegative,Rookpiercingguard overlap.
+All existing advancement form windows remain4frames (policy fixture).
+Evidence combat_completion/pg_exceptions_before and pg_exceptions_after.
+Party108fixture complete:104pass; Yin4 sampled during recovery. Retest onlyYin4
+using corrected authored-duration budget in WIPPartyOverdriveRuntime.gd.
+Next serial: Yin4, PartyGrabInterruption9,PartyLifecycle9+natural600frameexpiry,
+ThrowOwnership,ChargeContinuity,CosmicKits public-only,StorySceneOwnership,
+public owner launcher smoke, bounded PartyCPUObservation9. New tests WIP notyetrun.
+Last pushedc61e7916 corrected ultimate externalgrabownership and held-victimstate;
+pilotPASS. CheckgitHEADforfreshguardcommit. AllCI6green+Windows2025pending8375.
+No activeGodot/capture; internalbelow18GiB, no heavyexports. Allgatesfalse.
+
+---
 # Party interruption checkpoint — retained failure and verified correction
 
 Base pushed8375c174.108 Party configurations ran;104passed,4Yin cleanup
