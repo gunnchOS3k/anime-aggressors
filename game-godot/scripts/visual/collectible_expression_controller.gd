@@ -9,6 +9,10 @@ var form := "BASE"
 var fighter_id := ""
 var _targets: Dictionary = {}
 var _stone_texture: NoiseTexture2D
+var _performance_owned := false
+var _performance_phase := 0.0
+var _performance_form := ""
+const _FacialPerformance8D = preload("res://scripts/visual/facial_performance_8d.gd")
 
 func configure(body: Node3D, id: String, state_form: String) -> void:
 	fighter_id = id
@@ -26,6 +30,7 @@ func _collect(node: Node) -> void:
 		_collect(child)
 
 func set_expression(value: String, immediate: bool = false) -> void:
+	_performance_owned = false
 	expression = str(ALIASES.get(value, value))
 	if expression != "neutral" and expression not in EXPRESSIONS:
 		expression = "neutral"
@@ -41,7 +46,31 @@ func set_expression(value: String, immediate: bool = false) -> void:
 			if immediate:
 				mesh.set_blend_shape_value(index, weight)
 
+func set_form(value: String) -> void:
+	form = value
+	if not _performance_owned:set_expression(expression)
+
+func sample_form_performance(target: String, phase: float) -> void:
+	var weights := _FacialPerformance8D.sample(fighter_id,target,phase)
+	if weights.is_empty():return
+	_performance_owned = true
+	_performance_phase = clampf(phase,0,1)
+	_performance_form = target
+	_targets = weights
+	# Exact morph sampling shares the already paused gameplay phase. A second
+	# render-delta fade would continue changing the face while gameplay is paused.
+	for mesh in meshes:
+		if not is_instance_valid(mesh):continue
+		for index in range(mesh.mesh.get_blend_shape_count()):
+			mesh.set_blend_shape_value(index,float(weights.get(str(mesh.mesh.get_blend_shape_name(index)),0)))
+
+func end_form_performance() -> void:
+	_performance_form = ""
+	_performance_phase = 0.0
+	set_expression(expression)
+
 func _process(delta: float) -> void:
+	if _performance_owned:return
 	for mesh in meshes:
 		if not is_instance_valid(mesh):
 			continue
@@ -50,7 +79,7 @@ func _process(delta: float) -> void:
 			mesh.set_blend_shape_value(index, move_toward(mesh.get_blend_shape_value(index), target, delta * 9.0))
 
 func evidence() -> Dictionary:
-	return {"fighter_id":fighter_id, "form":form, "expression":expression, "morph_meshes":meshes.size(), "owner_approved":false}
+	return {"fighter_id":fighter_id, "form":form, "expression":expression, "morph_meshes":meshes.size(), "performance_owned":_performance_owned,"performance_phase":_performance_phase,"performance_form":_performance_form,"targets":_targets.duplicate(),"owner_approved":false}
 
 
 func _apply_stone_surface(body: Node) -> void:

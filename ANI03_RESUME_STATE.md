@@ -1,3 +1,13 @@
+# 8D bounded source-morph performance checkpoint — October22
+
+Durable handoffs PUSHED: Anime6d571eeab6d616b4dc45ed91a5e5473d70bbeee9; portalb5116094b4f0acfe0ec740e9ba84a55ca15dd53e. Existing8C/runtime/archiveunchanged. New original nine-character facial scores useactual source blendshapes andsameTransformPipeline phase; no secondarytimer, bones/modelchanges, balanceorStorychanges. Actualformtracking andshieldbreakshock added. Source18GLB/morph/scorevalidatorPASS. Realengine2stageEmbermalepilotPASS; shutdown10objects/1resource retained. Nativeobserverinitialparsefailure(staticHashingContext.hashunsupported)preservednative_parse_failure.log; helpercorrected, nativevalidationpending.
+
+All72fighter/body/facing/stagepublictransformchecks nowrunningSERIALsession30178 in isolatedprofileaa8d_face_roster1022, outputartifacts/v1_closure/production_8d/face_roster1022. DoNOTstartduplicateGodot. AftercompletioninspectPASS/rows/failures; thenrunFacialNative8D.gd correctednativeobserverwithfreshisolatedlabel,reviewactual18bodycloseups. ForecastboundedPNG/evidence<=20MiB; lastinternalfree~20.98GiB,remeasurebeforemedia. NoheavyBlender/export/campaign/cleanup. Original8Csourcev400versusinstalledBlender3.3.1: doNOTdowngrade/resaveprotectedcopies. Further18rigfinger/weightedhaircloth/pairedacting/formultimateworkstillunfinished. Human/allreleasegatesfalse.
+
+NEXT exact: inspectartifacts/v1_closure/production_8d/face_roster1022/facial_performance_8d.json; waitexistingprocessifincomplete; thennativeobserveronlyafterengineexits. Commitcheckpointcontainsvalidpilot/sourcecode, allnewnativeacceptancepending.
+
+---
+
 # 2026-10-22 Codex-to-Cursor durable handoff checkpoint
 
 Recovered/pushed runtime delivery33ed6394, tested runtimef230b734 unchanged. Read docs/handoff/2026-10-22/CODEX_TO_CURSOR.md and AGENTS.md FIRST for current ownership, exact commands, source/archive hashes, all33worktree states and negative findings. Both remote snapshots saved;33ed CI allnon-skippedSUCCESS includingWindows2025. New8D directive received: premium original18rig production, not another rigid-prop pass; no8D completion claimed yet. Codex retains creative/source-art lead; Cursor independent engineering only, separate writable branches. NoactiveGodot/Blender/captureproduction at recovery. Freshinternalfree~25.52GiB,18GiB reserve AFTER allocations stillmandatory; noheavyjob started. Handoff≤2MiB. Allhuman/releasegatesfalse. Unrelateduntrackedartifacts/vxp3/reports/WORKFLOW_REFERENCED_PATHS.json preserved. ExactdeliverycommitgetgitHEAD; remotecheckafterpush. NEXT: checkpoint/pushbothhandoffs, thenboundedoriginalsource-controlimprovementusingverified8Ccopies; full8Dacting/artnotcomplete.

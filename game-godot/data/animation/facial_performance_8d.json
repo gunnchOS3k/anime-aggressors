@@ -1,0 +1,908 @@
+{
+  "schema": "original_facial_performance_8d.v1",
+  "status": "ORIGINAL_ACTING_CANDIDATE_NOT_HUMAN_APPROVED",
+  "source_morphs": "Existing saved original collectible .blend facial keys; no new rig/mesh/Blender production claimed",
+  "authority_clock": "existing TransformPipeline progress; no local phase timer",
+  "channels": [
+    "battle_intent",
+    "attack_effort",
+    "determination",
+    "victory"
+  ],
+  "fighters": {
+    "ember-vale": {
+      "intent": "restrained pressure to fierce release",
+      "source_bible": "docs/bibles/fighters/ember-vale.md",
+      "stages": [
+        {
+          "ladder_step": "AWAKENED_BUILD",
+          "keys": [
+            {
+              "phase": 0,
+              "weights": {}
+            },
+            {
+              "phase": 0.18,
+              "weights": {
+                "battle_intent": 0.8
+              }
+            },
+            {
+              "phase": 0.44,
+              "weights": {
+                "battle_intent": 0.18,
+                "attack_effort": 0.78
+              }
+            },
+            {
+              "phase": 0.7,
+              "weights": {
+                "attack_effort": 0.88,
+                "victory": 0.1
+              }
+            },
+            {
+              "phase": 0.88,
+              "weights": {
+                "battle_intent": 0.1,
+                "attack_effort": 0.15,
+                "determination": 0.72
+              }
+            },
+            {
+              "phase": 1.0,
+              "weights": {
+                "battle_intent": 0.18,
+                "determination": 0.72
+              }
+            }
+          ]
+        },
+        {
+          "ladder_step": "ASCENDED",
+          "keys": [
+            {
+              "phase": 0,
+              "weights": {}
+            },
+            {
+              "phase": 0.18,
+              "weights": {
+                "battle_intent": 0.6,
+                "determination": 0.18
+              }
+            },
+            {
+              "phase": 0.44,
+              "weights": {
+                "battle_intent": 0.05,
+                "attack_effort": 0.9
+              }
+            },
+            {
+              "phase": 0.7,
+              "weights": {
+                "attack_effort": 0.7,
+                "determination": 0.2
+              }
+            },
+            {
+              "phase": 0.88,
+              "weights": {
+                "attack_effort": 0.08,
+                "determination": 0.88
+              }
+            },
+            {
+              "phase": 1.0,
+              "weights": {
+                "battle_intent": 0.06,
+                "determination": 0.9
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "rook-ironside": {
+      "intent": "compressed resolve, brief load, rooted composure",
+      "source_bible": "docs/bibles/fighters/rook-ironside.md",
+      "stages": [
+        {
+          "ladder_step": "AWAKENED_BUILD",
+          "keys": [
+            {
+              "phase": 0,
+              "weights": {}
+            },
+            {
+              "phase": 0.18,
+              "weights": {
+                "battle_intent": 0.68,
+                "determination": 0.22
+              }
+            },
+            {
+              "phase": 0.44,
+              "weights": {
+                "battle_intent": 0.42,
+                "attack_effort": 0.35,
+                "determination": 0.15
+              }
+            },
+            {
+              "phase": 0.7,
+              "weights": {
+                "battle_intent": 0.22,
+                "attack_effort": 0.54,
+                "determination": 0.2
+              }
+            },
+            {
+              "phase": 0.88,
+              "weights": {
+                "battle_intent": 0.38,
+                "determination": 0.55
+              }
+            },
+            {
+              "phase": 1.0,
+              "weights": {
+                "battle_intent": 0.35,
+                "determination": 0.45
+              }
+            }
+          ]
+        },
+        {
+          "ladder_step": "ASCENDED",
+          "keys": [
+            {
+              "phase": 0,
+              "weights": {}
+            },
+            {
+              "phase": 0.18,
+              "weights": {
+                "battle_intent": 0.48,
+                "determination": 0.42
+              }
+            },
+            {
+              "phase": 0.44,
+              "weights": {
+                "battle_intent": 0.2,
+                "attack_effort": 0.45,
+                "determination": 0.3
+              }
+            },
+            {
+              "phase": 0.7,
+              "weights": {
+                "attack_effort": 0.64,
+                "determination": 0.3
+              }
+            },
+            {
+              "phase": 0.88,
+              "weights": {
+                "battle_intent": 0.16,
+                "determination": 0.78
+              }
+            },
+            {
+              "phase": 1.0,
+              "weights": {
+                "battle_intent": 0.18,
+                "determination": 0.68
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "juno-spark": {
+      "intent": "focused routing, sharp discharge, confident reset",
+      "source_bible": "docs/bibles/fighters/juno-spark.md",
+      "stages": [
+        {
+          "ladder_step": "AWAKENED_BUILD",
+          "keys": [
+            {
+              "phase": 0,
+              "weights": {}
+            },
+            {
+              "phase": 0.18,
+              "weights": {
+                "battle_intent": 0.84
+              }
+            },
+            {
+              "phase": 0.44,
+              "weights": {
+                "battle_intent": 0.12,
+                "attack_effort": 0.6,
+                "determination": 0.18
+              }
+            },
+            {
+              "phase": 0.7,
+              "weights": {
+                "attack_effort": 0.8,
+                "victory": 0.18
+              }
+            },
+            {
+              "phase": 0.88,
+              "weights": {
+                "battle_intent": 0.05,
+                "determination": 0.55,
+                "victory": 0.25
+              }
+            },
+            {
+              "phase": 1.0,
+              "weights": {
+                "battle_intent": 0.2,
+                "determination": 0.38,
+                "victory": 0.28
+              }
+            }
+          ]
+        },
+        {
+          "ladder_step": "ASCENDED",
+          "keys": [
+            {
+              "phase": 0,
+              "weights": {}
+            },
+            {
+              "phase": 0.18,
+              "weights": {
+                "battle_intent": 0.62,
+                "determination": 0.18
+              }
+            },
+            {
+              "phase": 0.44,
+              "weights": {
+                "battle_intent": 0.08,
+                "attack_effort": 0.72,
+                "determination": 0.12
+              }
+            },
+            {
+              "phase": 0.7,
+              "weights": {
+                "attack_effort": 0.64,
+                "determination": 0.1,
+                "victory": 0.22
+              }
+            },
+            {
+              "phase": 0.88,
+              "weights": {
+                "determination": 0.48,
+                "victory": 0.42
+              }
+            },
+            {
+              "phase": 1.0,
+              "weights": {
+                "battle_intent": 0.1,
+                "determination": 0.52,
+                "victory": 0.3
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "kaia-windrow": {
+      "intent": "contained breath opens into composed resolve",
+      "source_bible": "docs/bibles/fighters/kaia-windrow.md",
+      "stages": [
+        {
+          "ladder_step": "AWAKENED_BUILD",
+          "keys": [
+            {
+              "phase": 0,
+              "weights": {}
+            },
+            {
+              "phase": 0.18,
+              "weights": {
+                "battle_intent": 0.55,
+                "determination": 0.15
+              }
+            },
+            {
+              "phase": 0.44,
+              "weights": {
+                "battle_intent": 0.3,
+                "attack_effort": 0.38,
+                "determination": 0.12
+              }
+            },
+            {
+              "phase": 0.7,
+              "weights": {
+                "attack_effort": 0.68,
+                "determination": 0.2
+              }
+            },
+            {
+              "phase": 0.88,
+              "weights": {
+                "battle_intent": 0.1,
+                "attack_effort": 0.05,
+                "determination": 0.65,
+                "victory": 0.08
+              }
+            },
+            {
+              "phase": 1.0,
+              "weights": {
+                "battle_intent": 0.2,
+                "determination": 0.55,
+                "victory": 0.1
+              }
+            }
+          ]
+        },
+        {
+          "ladder_step": "ASCENDED",
+          "keys": [
+            {
+              "phase": 0,
+              "weights": {}
+            },
+            {
+              "phase": 0.18,
+              "weights": {
+                "battle_intent": 0.38,
+                "determination": 0.35
+              }
+            },
+            {
+              "phase": 0.44,
+              "weights": {
+                "battle_intent": 0.16,
+                "attack_effort": 0.45,
+                "determination": 0.26
+              }
+            },
+            {
+              "phase": 0.7,
+              "weights": {
+                "attack_effort": 0.6,
+                "determination": 0.3
+              }
+            },
+            {
+              "phase": 0.88,
+              "weights": {
+                "determination": 0.78,
+                "victory": 0.14
+              }
+            },
+            {
+              "phase": 1.0,
+              "weights": {
+                "battle_intent": 0.08,
+                "determination": 0.7,
+                "victory": 0.14
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "nix-calder": {
+      "intent": "narrow precision, crystalline lock, quiet certainty",
+      "source_bible": "docs/bibles/fighters/nix-calder.md",
+      "stages": [
+        {
+          "ladder_step": "AWAKENED_BUILD",
+          "keys": [
+            {
+              "phase": 0,
+              "weights": {}
+            },
+            {
+              "phase": 0.18,
+              "weights": {
+                "battle_intent": 0.85,
+                "determination": 0.1
+              }
+            },
+            {
+              "phase": 0.44,
+              "weights": {
+                "battle_intent": 0.55,
+                "attack_effort": 0.22,
+                "determination": 0.18
+              }
+            },
+            {
+              "phase": 0.7,
+              "weights": {
+                "battle_intent": 0.32,
+                "attack_effort": 0.43,
+                "determination": 0.2
+              }
+            },
+            {
+              "phase": 0.88,
+              "weights": {
+                "battle_intent": 0.48,
+                "determination": 0.48
+              }
+            },
+            {
+              "phase": 1.0,
+              "weights": {
+                "battle_intent": 0.55,
+                "determination": 0.35
+              }
+            }
+          ]
+        },
+        {
+          "ladder_step": "ASCENDED",
+          "keys": [
+            {
+              "phase": 0,
+              "weights": {}
+            },
+            {
+              "phase": 0.18,
+              "weights": {
+                "battle_intent": 0.66,
+                "determination": 0.28
+              }
+            },
+            {
+              "phase": 0.44,
+              "weights": {
+                "battle_intent": 0.38,
+                "attack_effort": 0.25,
+                "determination": 0.32
+              }
+            },
+            {
+              "phase": 0.7,
+              "weights": {
+                "battle_intent": 0.12,
+                "attack_effort": 0.48,
+                "determination": 0.35
+              }
+            },
+            {
+              "phase": 0.88,
+              "weights": {
+                "battle_intent": 0.28,
+                "determination": 0.67
+              }
+            },
+            {
+              "phase": 1.0,
+              "weights": {
+                "battle_intent": 0.32,
+                "determination": 0.58
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "orion-vell": {
+      "intent": "deliberate gathering and gravitational concentration",
+      "source_bible": "docs/bibles/fighters/orion-vell.md",
+      "stages": [
+        {
+          "ladder_step": "AWAKENED_BUILD",
+          "keys": [
+            {
+              "phase": 0,
+              "weights": {}
+            },
+            {
+              "phase": 0.18,
+              "weights": {
+                "battle_intent": 0.48,
+                "determination": 0.32
+              }
+            },
+            {
+              "phase": 0.44,
+              "weights": {
+                "battle_intent": 0.28,
+                "attack_effort": 0.28,
+                "determination": 0.32
+              }
+            },
+            {
+              "phase": 0.7,
+              "weights": {
+                "battle_intent": 0.08,
+                "attack_effort": 0.56,
+                "determination": 0.32
+              }
+            },
+            {
+              "phase": 0.88,
+              "weights": {
+                "battle_intent": 0.16,
+                "determination": 0.74
+              }
+            },
+            {
+              "phase": 1.0,
+              "weights": {
+                "battle_intent": 0.24,
+                "determination": 0.64
+              }
+            }
+          ]
+        },
+        {
+          "ladder_step": "ASCENDED",
+          "keys": [
+            {
+              "phase": 0,
+              "weights": {}
+            },
+            {
+              "phase": 0.18,
+              "weights": {
+                "battle_intent": 0.32,
+                "determination": 0.5
+              }
+            },
+            {
+              "phase": 0.44,
+              "weights": {
+                "battle_intent": 0.12,
+                "attack_effort": 0.32,
+                "determination": 0.44
+              }
+            },
+            {
+              "phase": 0.7,
+              "weights": {
+                "attack_effort": 0.48,
+                "determination": 0.46
+              }
+            },
+            {
+              "phase": 0.88,
+              "weights": {
+                "battle_intent": 0.04,
+                "determination": 0.9
+              }
+            },
+            {
+              "phase": 1.0,
+              "weights": {
+                "battle_intent": 0.12,
+                "determination": 0.8
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "vesper-nyx": {
+      "intent": "oblique intent, fleeting strain, knowing return",
+      "source_bible": "docs/bibles/fighters/vesper-nyx.md",
+      "stages": [
+        {
+          "ladder_step": "AWAKENED_BUILD",
+          "keys": [
+            {
+              "phase": 0,
+              "weights": {}
+            },
+            {
+              "phase": 0.24,
+              "weights": {
+                "battle_intent": 0.54,
+                "determination": 0.1,
+                "victory": 0.24
+              }
+            },
+            {
+              "phase": 0.62,
+              "weights": {
+                "battle_intent": 0.35,
+                "attack_effort": 0.36,
+                "determination": 0.05,
+                "victory": 0.16
+              }
+            },
+            {
+              "phase": 0.76,
+              "weights": {
+                "battle_intent": 0.08,
+                "attack_effort": 0.6,
+                "determination": 0.08,
+                "victory": 0.2
+              }
+            },
+            {
+              "phase": 0.89,
+              "weights": {
+                "battle_intent": 0.12,
+                "determination": 0.36,
+                "victory": 0.4
+              }
+            },
+            {
+              "phase": 1.0,
+              "weights": {
+                "battle_intent": 0.2,
+                "determination": 0.22,
+                "victory": 0.44
+              }
+            }
+          ]
+        },
+        {
+          "ladder_step": "ASCENDED",
+          "keys": [
+            {
+              "phase": 0,
+              "weights": {}
+            },
+            {
+              "phase": 0.24,
+              "weights": {
+                "battle_intent": 0.4,
+                "determination": 0.2,
+                "victory": 0.26
+              }
+            },
+            {
+              "phase": 0.62,
+              "weights": {
+                "battle_intent": 0.24,
+                "attack_effort": 0.4,
+                "determination": 0.12,
+                "victory": 0.18
+              }
+            },
+            {
+              "phase": 0.76,
+              "weights": {
+                "attack_effort": 0.58,
+                "determination": 0.18,
+                "victory": 0.22
+              }
+            },
+            {
+              "phase": 0.89,
+              "weights": {
+                "battle_intent": 0.04,
+                "determination": 0.44,
+                "victory": 0.48
+              }
+            },
+            {
+              "phase": 1.0,
+              "weights": {
+                "battle_intent": 0.12,
+                "determination": 0.34,
+                "victory": 0.48
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "yin": {
+      "intent": "inward reduction; effort stays controlled and spare",
+      "source_bible": "docs/bibles/fighters/yin.md",
+      "stages": [
+        {
+          "ladder_step": "COSMIC_SURGE",
+          "keys": [
+            {
+              "phase": 0,
+              "weights": {}
+            },
+            {
+              "phase": 0.18,
+              "weights": {
+                "battle_intent": 0.45,
+                "determination": 0.3
+              }
+            },
+            {
+              "phase": 0.44,
+              "weights": {
+                "battle_intent": 0.3,
+                "attack_effort": 0.12,
+                "determination": 0.32
+              }
+            },
+            {
+              "phase": 0.7,
+              "weights": {
+                "battle_intent": 0.16,
+                "attack_effort": 0.28,
+                "determination": 0.34
+              }
+            },
+            {
+              "phase": 0.88,
+              "weights": {
+                "battle_intent": 0.16,
+                "determination": 0.52
+              }
+            },
+            {
+              "phase": 1.0,
+              "weights": {
+                "battle_intent": 0.22,
+                "determination": 0.4
+              }
+            }
+          ]
+        },
+        {
+          "ladder_step": "COSMIC_ASCENDANT",
+          "keys": [
+            {
+              "phase": 0,
+              "weights": {}
+            },
+            {
+              "phase": 0.18,
+              "weights": {
+                "battle_intent": 0.28,
+                "determination": 0.48
+              }
+            },
+            {
+              "phase": 0.44,
+              "weights": {
+                "battle_intent": 0.14,
+                "attack_effort": 0.16,
+                "determination": 0.48
+              }
+            },
+            {
+              "phase": 0.7,
+              "weights": {
+                "attack_effort": 0.24,
+                "determination": 0.62
+              }
+            },
+            {
+              "phase": 0.88,
+              "weights": {
+                "battle_intent": 0.04,
+                "determination": 0.78
+              }
+            },
+            {
+              "phase": 1.0,
+              "weights": {
+                "battle_intent": 0.1,
+                "determination": 0.65
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "yang": {
+      "intent": "ordered focus becomes open radiant assurance",
+      "source_bible": "docs/bibles/fighters/yang.md",
+      "stages": [
+        {
+          "ladder_step": "COSMIC_SURGE",
+          "keys": [
+            {
+              "phase": 0,
+              "weights": {}
+            },
+            {
+              "phase": 0.18,
+              "weights": {
+                "battle_intent": 0.36,
+                "determination": 0.28,
+                "victory": 0.12
+              }
+            },
+            {
+              "phase": 0.44,
+              "weights": {
+                "battle_intent": 0.12,
+                "attack_effort": 0.25,
+                "determination": 0.32,
+                "victory": 0.14
+              }
+            },
+            {
+              "phase": 0.7,
+              "weights": {
+                "attack_effort": 0.46,
+                "determination": 0.34,
+                "victory": 0.14
+              }
+            },
+            {
+              "phase": 0.88,
+              "weights": {
+                "battle_intent": 0.04,
+                "determination": 0.48,
+                "victory": 0.32
+              }
+            },
+            {
+              "phase": 1.0,
+              "weights": {
+                "battle_intent": 0.08,
+                "determination": 0.42,
+                "victory": 0.32
+              }
+            }
+          ]
+        },
+        {
+          "ladder_step": "COSMIC_ASCENDANT",
+          "keys": [
+            {
+              "phase": 0,
+              "weights": {}
+            },
+            {
+              "phase": 0.18,
+              "weights": {
+                "battle_intent": 0.18,
+                "determination": 0.45,
+                "victory": 0.16
+              }
+            },
+            {
+              "phase": 0.44,
+              "weights": {
+                "attack_effort": 0.3,
+                "determination": 0.46,
+                "victory": 0.14
+              }
+            },
+            {
+              "phase": 0.7,
+              "weights": {
+                "attack_effort": 0.38,
+                "determination": 0.44,
+                "victory": 0.16
+              }
+            },
+            {
+              "phase": 0.88,
+              "weights": {
+                "determination": 0.52,
+                "victory": 0.42
+              }
+            },
+            {
+              "phase": 1.0,
+              "weights": {
+                "battle_intent": 0.04,
+                "determination": 0.48,
+                "victory": 0.38
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "human_approved": false
+}

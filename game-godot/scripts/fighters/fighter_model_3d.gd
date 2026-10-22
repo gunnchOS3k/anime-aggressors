@@ -703,6 +703,7 @@ func set_aura_tier(tier: int) -> void:
 
 func set_form_id(form_id: String, form_entry: Dictionary = {}) -> void:
 	_form_id = form_id
+	if is_instance_valid(_expression_controller):_expression_controller.set_form(form_id)
 	_form_presentation_8c.set_form(form_id)
 	_form_presentation = form_entry.get("presentation", {})
 	if _using_v16 and _v16_body != null and _v16_body.has_method("apply_story_form"):
@@ -720,11 +721,14 @@ func begin_form_sequence(target_id: String) -> bool:
 
 func end_form_sequence() -> void:
 	_transform_target_8c = ""
+	if is_instance_valid(_expression_controller):_expression_controller.end_form_performance()
 	_form_presentation_8c.clear_preview()
 	if _animation_controller != null:_animation_controller.end_form_sequence()
 
 func set_transform_progress(progress: float) -> void:
 	if _animation_controller != null:_animation_controller.sample_form_sequence(progress)
+	if not _transform_target_8c.is_empty() and _cinematic_expression.is_empty() and is_instance_valid(_expression_controller):
+		_expression_controller.sample_form_performance(_transform_target_8c,progress)
 	if not _transform_target_8c.is_empty():_form_presentation_8c.preview_form(_transform_target_8c,progress)
 	_transform_progress = clampf(progress, 0.0, 1.0)
 	if _material_controller and _material_controller.has_method("set_charge_emission"):
@@ -1771,6 +1775,8 @@ func _update_expression_for_state(state: String) -> void:
 		set_expression(str(_life.get("expression_hurt", "hurt")))
 	elif state == _FighterStates.KO:
 		set_expression("defeat")
+	elif state == _FighterStates.SHIELD_BREAK:
+		set_expression("shock")
 	elif state in [_FighterStates.ATTACK_STARTUP, _FighterStates.SPECIAL_STARTUP, _FighterStates.THROW_STARTUP]:
 		set_expression("battle_intent")
 	elif state in [_FighterStates.ATTACK_ACTIVE, _FighterStates.SPECIAL_ACTIVE, _FighterStates.THROW_RELEASE]:
