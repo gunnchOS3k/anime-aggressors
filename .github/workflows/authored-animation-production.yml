@@ -14,6 +14,11 @@ on:
         required: false
         default: false
         type: boolean
+      form_acting_8c:
+        description: 'Save 144 original form actions and 36 additive stage resources on preserved 8B source copies'
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -51,6 +56,49 @@ jobs:
         with:
           name: grab-acting-8b-runtime-${{ github.sha }}
           path: ${{ runner.temp }}/grab-acting-8b/runtime/
+          retention-days: 90
+          if-no-files-found: warn
+  form-acting-8c:
+    if: github.event_name == 'workflow_dispatch' && inputs.form_acting_8c
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install existing Blender production dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender python3-numpy
+      - name: Download exact preserved 8B original-rig candidates
+        uses: actions/download-artifact@v4
+        with:
+          name: grab-acting-8b-saved-sources-cc2b3a5a555aeb22fc8eb7510bd7702a28975aad
+          repository: gunnchOS3k/anime-aggressors
+          run-id: 39733087497
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/form-acting-8c-input/saved_sources/
+      - name: Produce original stage actions and bounded additive model resources
+        run: |
+          # The producer verifies every downloaded .blend against the retained
+          # exact 8B manifest before any new source/action/model work begins.
+          blender --background --factory-startup --python-exit-code 1 --python tools/authored_animation/blender/aa_form_acting_8c.py -- --input-8b "$RUNNER_TEMP/form-acting-8c-input" --output "$RUNNER_TEMP/form-acting-8c"
+          python3 tools/authored_animation/validate_form_acting_8c.py "$RUNNER_TEMP/form-acting-8c"
+      - name: Preserve new source copies with original and 8B actions intact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: form-acting-8c-saved-sources-${{ github.sha }}
+          path: ${{ runner.temp }}/form-acting-8c/saved_sources/
+          retention-days: 90
+          if-no-files-found: warn
+      - name: Preserve verified runtime actions, stage attachments and receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: form-acting-8c-runtime-${{ github.sha }}
+          path: ${{ runner.temp }}/form-acting-8c/runtime/
           retention-days: 90
           if-no-files-found: warn
   infra:
