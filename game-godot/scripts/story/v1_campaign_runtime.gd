@@ -174,6 +174,28 @@ func route_available(id: String) -> bool:
 	return "kaia-windrow" in progress.get("gray_routes", []) or route_review_enabled()
 
 
+## Story menu "Next Route". The old scan always returned the earliest incomplete
+## route, so a player already on Rook was sent back to Ember and could not
+## advance. This walks forward through incomplete available routes.
+func next_incomplete_route_id() -> String:
+	var ids: Array[String] = []
+	for route in campaign.get("routes", []):
+		var id := str(route.get("id", ""))
+		if id.is_empty() or not route_available(id):
+			continue
+		var entry: Variant = progress.get("routes", {}).get(id, {})
+		if not entry is Dictionary or bool(entry.get("complete", false)):
+			continue
+		ids.append(id)
+	if ids.is_empty():
+		return ""
+	var selected := str(progress.get("selected_route", ""))
+	var index := ids.find(selected)
+	if index < 0:
+		return ids[0]
+	return ids[(index + 1) % ids.size()]
+
+
 func select_route(id: String) -> bool:
 	if not route_available(id) or not active_encounter.is_empty():
 		return false
