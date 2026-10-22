@@ -1,3 +1,15 @@
+# 8A checkpoint — reciprocal grab ownership (2026-10-21)
+
+Worktree: `/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure`.
+Branch: `release/anime-v1-dialogue-and-elemental-performance`, PR123 draft stacked on PR122.
+Recovered HEAD `63e68d6df5c6fa4dded9d1975a72a6caaebcc7c2`; next commit records the ownership correction.
+
+Reproduced original-runtime failures with finalized public-input timing in `artifacts/v1_closure/elemental_grab_throw/lifecycle_baseline_timed1021/` (12 failed assertions, retained). Corrected candidate passes all ten lifecycle cases in `lifecycle_fix_timed1021/`: mash, held normal-move cancellation, simultaneous-grab cycle prevention, holder body-hit interruption, reciprocal owner/victim reset/reconfigure/match-end cleanup. Startup-driver false starts retained separately. Tests use explicit spacing and receive-hit fixtures; no earned/CPU/art claims. Source hashes in `OWNERSHIP_SOURCE_BINDING.json`.
+
+No accepted move values, aura defaults, PG windows, Party forms or source rigs changed. 11.99 GiB internal free at preflight: no heavy exports/recordings. All human/release gates remain false. No Godot capture active. Next: run `ElementalGrabThrow8A.gd` through `launch_ordinary_review.py` with a new isolated profile/output, verify 144 nine-fighter/body/facing/direction rows; then add original elemental lifecycle presentation and rerun affected regressions. Agent owns only `elemental_grab_throw.json` and `docs/art/ELEMENTAL_GRAB_THROW_8A.md`; preserve those when they appear.
+
+---
+
 # Current delivery — all-nine Party/ultimate/Perfect Guard candidates
 
 Branch release/anime-v1-dialogue-and-elemental-performance, draft123 stacked122.

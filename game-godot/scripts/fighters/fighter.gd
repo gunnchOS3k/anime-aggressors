@@ -115,6 +115,7 @@ var _base_modulate: Color = Color.WHITE
 var _last_element_effect: String = ""
 var _throw_direction: String = ""
 var _grab_throw_latch: bool = false
+var _grab_acquisition_activation := -1
 var _jab_chain: int = 0
 var _show_grab_range: bool = false
 var _show_projectile_boxes: bool = false
@@ -291,12 +292,14 @@ func reset_legacy_transformation(reason: String) -> void:
 
 
 func close_transformation_for_match_end() -> void:
+	_release_grab_links("match_end")
 	party_overdrive.reset("match_end")
 	perfect_guard.reset()
 	_transform_match_closed = true
 	if _transform_pipeline != null: _transform_pipeline.cancel("match_end")
 
 func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, spawn: Vector2) -> void:
+	_release_grab_links("character_change")
 	party_overdrive.reset("character_change")
 	perfect_guard.reset()
 	if _transform_pipeline != null: _transform_pipeline.cancel("fighter_reconfigured")
@@ -599,10 +602,11 @@ func _physics_process(delta: float) -> void:
 	# Kaia air-drift stamp (runtime, not data-only).
 	if not is_on_floor() and _AuraIdentity.air_drift_bonus(fighter_id, get_effective_combat_aura(), str(data.get("combatTag", ""))) > 0.0:
 		stamp_runtime_hook("air_drift")
-	if grabbed_target != null and state_machine.current_state not in [
-		_FighterStates.GRAB_HOLD, _FighterStates.THROW_STARTUP, _FighterStates.THROW_RELEASE,
-	]:
-		state_machine.enter(_FighterStates.GRAB_HOLD)
+	# A stale pair must never restore a hold over the interrupting hurt/KO state.
+	if grabbed_target != null and (not is_instance_valid(grabbed_target) or grabbed_target.grabbed_by != self):
+		_release_grab_links("invalid_target")
+	if grabbed_by != null and (not is_instance_valid(grabbed_by) or grabbed_by.grabbed_target != self):
+		_release_grab_links("invalid_owner")
 	# A hanging CPU must produce recovery input before the ledge state reads it.
 	if state_machine.current_state == _FighterStates.LEDGE_HANG and is_cpu and controls_enabled:
 		cpu.tick(delta, _find_opponent())
@@ -1221,6 +1225,8 @@ func _on_move_active(move: Dictionary) -> void:
 		var release_renderer = preload("res://scripts/visual/spectral_feedback_renderer.gd").obtain(self)
 		if release_renderer != null: release_renderer.emit_effect(fighter_id,9,global_position+Vector2(0,-24),Vector2(facing,0),160,.24)
 	if mid == "grab" or mt == "grab":
+		# A successful acquisition consumes this activation, not just this frame.
+		if grabbed_by != null or _grab_acquisition_activation == move_runner.activation_id:return
 		state_machine.enter(_FighterStates.GRAB_ACTIVE)
 		_try_grab_connect()
 		return
@@ -1276,8 +1282,10 @@ func _poll_hitbox_overlaps() -> void:
 
 
 func _try_grab_connect() -> void:
+	if grabbed_by != null or _transform_match_closed or bool(get_meta("story_released",false)):return
+	if is_instance_valid(grabbed_target):return
 	var opp = _find_opponent()
-	if opp == null or not opp != null and opp.has_method("configure"):
+	if not is_instance_valid(opp) or not opp.has_method("configure"):
 		state_machine.enter(_FighterStates.GRAB_WHIFF)
 		grab_event.emit({"result": "whiff"})
 		return
@@ -1290,20 +1298,28 @@ func _try_grab_connect() -> void:
 		state_machine.enter(_FighterStates.GRAB_WHIFF)
 		grab_event.emit({"result": "whiff", "reason": "range"})
 		return
+	# Acquiring a holder releases its previous victim first; a pair cannot cycle.
+	opp._release_grab_links("grabbed")
 	grabbed_target = opp
 	opp.grabbed_by = self
 	opp.grab_mash = 0.0
 	grab_mash = 0.0
 	_grab_throw_latch = false
 	_throw_direction = ""
+	_grab_acquisition_activation = move_runner.activation_id
 	_input_edge_held["attack"] = false
 	_input_edge_held["grab"] = false
 	state_machine.enter(_FighterStates.GRAB_HOLD)
 	opp.state_machine.enter(_FighterStates.GRAB_HOLD)
+	# Enter hold before cancellation so normal/ultimate move-ended callbacks
+	# cannot return the victim to idle or later emit its old hitbox/projectile.
+	opp.move_runner.cancel()
+	opp.hitbox.monitoring = false
 	grab_event.emit({"result": "success", "target": opp.fighter_id})
 
 func execute_throw() -> void:
-	if grabbed_target == null:
+	if not is_instance_valid(grabbed_target) or grabbed_target.grabbed_by != self or _transform_match_closed:
+		_release_grab_links("invalid_release")
 		return
 	var target = grabbed_target
 	grabbed_target = null
@@ -1395,7 +1411,8 @@ func _tick_shield_regen(delta: float) -> void:
 
 func tick_grab_hold(_delta: float) -> void:
 	if grabbed_by != null:return # Held victim is not a grab owner and cannot return itself to neutral.
-	if grabbed_target == null:
+	if not is_instance_valid(grabbed_target) or _transform_match_closed:
+		_release_grab_links("hold_closed")
 		state_machine.enter(_FighterStates.IDLE)
 		return
 	_throw_direction = _ThrowResolver.read_throw_direction(self)
@@ -1412,7 +1429,7 @@ func tick_grab_hold(_delta: float) -> void:
 	if grabbed_target.has_method("tick_grab_mash"):
 		grabbed_target.tick_grab_mash(_delta)
 	if float(grabbed_target.grab_mash) >= _CombatMath.GRAB_MASH_ESCAPE:
-		_break_grab_mash()
+		grabbed_target._break_grab_mash()
 		return
 	if state_machine.state_time > 2.0:
 		execute_throw()
@@ -1426,16 +1443,42 @@ func tick_grab_mash(_delta: float) -> void:
 
 
 func _break_grab_mash() -> void:
-	var attacker = grabbed_by
+	if not is_instance_valid(grabbed_by):return
+	_release_grab_links("mash_escape")
+	velocity.x = -float(facing) * 180.0
+
+
+func _release_grab_links(reason: String) -> void:
+	# Existing pair ownership, torn down once and reciprocally. No hit, damage,
+	# invulnerability or throw-release may be synthesized by interruption.
+	var victim = grabbed_target
+	var owner = grabbed_by
+	grabbed_target = null
 	grabbed_by = null
 	grab_mash = 0.0
-	if attacker != null:
-		attacker.grabbed_target = null
-		if attacker.state_machine:
-			attacker.state_machine.enter(_FighterStates.GRAB_WHIFF)
-	state_machine.enter(_FighterStates.IDLE)
-	velocity.x = -float(facing) * 180.0
-	grab_event.emit({"result": "mash_escape"})
+	_grab_throw_latch = false
+	if is_instance_valid(victim) and victim.grabbed_by == self:
+		victim.grabbed_by = null
+		victim.grab_mash = 0.0
+		if victim.state_machine.current_state == _FighterStates.GRAB_HOLD:
+			victim.state_machine.enter(_FighterStates.IDLE if victim.is_on_floor() else _FighterStates.FALL)
+		grab_event.emit({"result":"mash_escape" if reason=="mash_escape" else "released","reason":reason,"target":victim.fighter_id})
+	if is_instance_valid(owner) and owner.grabbed_target == self:
+		owner.grabbed_target = null
+		owner._grab_throw_latch = false
+		if owner.move_runner != null and owner.move_runner.current_move_id()=="grab":owner.move_runner.cancel()
+		if owner.hitbox != null:owner.hitbox.monitoring=false
+		if owner.state_machine.current_state == _FighterStates.GRAB_HOLD:owner.state_machine.enter(_FighterStates.GRAB_WHIFF)
+		owner.grab_event.emit({"result":"mash_escape" if reason=="mash_escape" else "released","reason":reason,"target":fighter_id})
+	if is_instance_valid(victim) or is_instance_valid(owner):
+		if move_runner != null and move_runner.current_move_id()=="grab":move_runner.cancel()
+		if hitbox != null:hitbox.monitoring=false
+		if state_machine != null and state_machine.current_state==_FighterStates.GRAB_HOLD:
+			state_machine.enter(_FighterStates.IDLE if is_on_floor() else _FighterStates.FALL)
+
+
+func _exit_tree() -> void:
+	_release_grab_links("scene_exit")
 
 
 func try_tech() -> bool:
@@ -1536,6 +1579,7 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 		return
 	# Confirmed body impact interrupts the prior move; its later callbacks must not
 	# overwrite hurt/hitstun or activate another hitbox during victim recovery.
+	_release_grab_links("body_hit")
 	party_overdrive.interrupt()
 	if _transform_pipeline != null: _transform_pipeline.cancel("body_hit")
 	if move_runner != null: move_runner.cancel()
@@ -1580,6 +1624,7 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 	# Hit telemetry is recorded by HitResolver.resolve (single source of truth).
 
 func reset_fighter() -> void:
+	_release_grab_links("respawn")
 	party_overdrive.reset("respawn")
 	perfect_guard.reset()
 	reset_legacy_transformation("respawn")
@@ -1604,6 +1649,7 @@ func reset_fighter() -> void:
 	, CONNECT_ONE_SHOT)
 
 func lose_stock() -> void:
+	_release_grab_links("stock_loss")
 	party_overdrive.reset("stock_loss")
 	perfect_guard.reset()
 	# Called only by authentic battle stock loss; danger predictions are never a final result.
@@ -1635,6 +1681,7 @@ func reset_damage() -> void:
 	combo_count = 0
 
 func reset_position() -> void:
+	_release_grab_links("position_reset")
 	global_position = spawn_point
 	velocity = Vector2.ZERO
 	grabbed_target = null
@@ -1792,6 +1839,8 @@ func _set_aura_vfx(on: bool) -> void:
 
 
 func _on_state_changed(_from: String, to: String) -> void:
+	if to not in [_FighterStates.GRAB_HOLD,_FighterStates.THROW_STARTUP,_FighterStates.THROW_RELEASE] and (grabbed_by != null or grabbed_target != null):
+		_release_grab_links("state_interrupted:"+to)
 	if party_overdrive.owns_motion() and to not in ["party_transform","ultimate_startup","ultimate_active","ultimate_recovery"]:
 		party_overdrive.reset("state_interrupted:"+to,true,false)
 	if _transform_sequence_active and to != _FighterStates.AURA_BURST_STARTUP:
