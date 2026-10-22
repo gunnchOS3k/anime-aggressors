@@ -12,7 +12,9 @@ var _stone_texture: NoiseTexture2D
 var _performance_owned := false
 var _performance_phase := 0.0
 var _performance_form := ""
-const _FacialPerformance8D = preload("res://scripts/visual/facial_performance_8d.gd")
+# Actor-owned cache dies with this original mesh controller. A process-global
+# static cache unnecessarily retained scripts after all actors were released.
+var _facial_performance_8d = preload("res://scripts/visual/facial_performance_8d.gd").new()
 
 func configure(body: Node3D, id: String, state_form: String) -> void:
 	fighter_id = id
@@ -51,7 +53,7 @@ func set_form(value: String) -> void:
 	if not _performance_owned:set_expression(expression)
 
 func sample_form_performance(target: String, phase: float) -> void:
-	var weights := _FacialPerformance8D.sample(fighter_id,target,phase)
+	var weights: Dictionary = _facial_performance_8d.sample(fighter_id,target,phase)
 	if weights.is_empty():return
 	_performance_owned = true
 	_performance_phase = clampf(phase,0,1)

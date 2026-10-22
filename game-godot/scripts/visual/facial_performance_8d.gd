@@ -1,9 +1,9 @@
 extends RefCounted
 ## Original source-morph direction, sampled by the existing gameplay sequence.
 ## No anatomy, skeletal timing, gameplay state or independent phase timer.
-static var _score: Dictionary = {}
+var _score: Dictionary = {}
 
-static func sample(fighter: String, target_form: String, phase: float) -> Dictionary:
+func sample(fighter: String, target_form: String, phase: float) -> Dictionary:
 	if _score.is_empty():
 		var doc: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/animation/facial_performance_8d.json"))
 		if doc is Dictionary:_score = doc
