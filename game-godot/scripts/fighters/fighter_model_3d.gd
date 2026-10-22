@@ -64,6 +64,8 @@ var _charge_level: float = 0.0
 var _review_freeze_phase: String = ""
 var _aura_level: int = 0
 var _aura_tier: int = 0
+var _form_presentation_8c = preload("res://scripts/visual/form_presentation_8c.gd").new()
+var _transform_target_8c := ""
 var _form_id: String = ""
 var _form_presentation: Dictionary = {}
 var _transform_progress: float = 0.0
@@ -700,6 +702,7 @@ func set_aura_tier(tier: int) -> void:
 
 func set_form_id(form_id: String, form_entry: Dictionary = {}) -> void:
 	_form_id = form_id
+	_form_presentation_8c.set_form(form_id)
 	_form_presentation = form_entry.get("presentation", {})
 	if _using_v16 and _v16_body != null and _v16_body.has_method("apply_story_form"):
 		_v16_body.apply_story_form(form_id)
@@ -710,7 +713,18 @@ func set_form_id(form_id: String, form_entry: Dictionary = {}) -> void:
 		_model_root.scale = Vector3.ONE * body_scale
 
 
+func begin_form_sequence(target_id: String) -> bool:
+	_transform_target_8c = target_id
+	return _animation_controller != null and _animation_controller.begin_form_sequence(target_id)
+
+func end_form_sequence() -> void:
+	_transform_target_8c = ""
+	_form_presentation_8c.clear_preview()
+	if _animation_controller != null:_animation_controller.end_form_sequence()
+
 func set_transform_progress(progress: float) -> void:
+	if _animation_controller != null:_animation_controller.sample_form_sequence(progress)
+	if not _transform_target_8c.is_empty():_form_presentation_8c.preview_form(_transform_target_8c,progress)
 	_transform_progress = clampf(progress, 0.0, 1.0)
 	if _material_controller and _material_controller.has_method("set_charge_emission"):
 		var base := float(_form_presentation.get("emission_strength", 0.15))
@@ -991,6 +1005,8 @@ func _setup_procedural_runtime(fighter_data: Dictionary) -> void:
 	if live_owner != null and "state_machine" in live_owner:
 		_animation_controller.bind_runtime_fighter(live_owner)
 	_visible_skeleton = _animation_controller.get_skeleton() if _animation_controller.has_method("get_skeleton") else _visible_skeleton
+	_form_presentation_8c.setup(live_owner,_proxy_model,_visible_skeleton)
+	_form_presentation_8c.set_form(_form_id)
 	_material_controller = _MaterialController.new()
 	_material_controller.name = "FighterMaterialController"
 	add_child(_material_controller)
@@ -1281,6 +1297,8 @@ func _retain_render_materials(node: Node, retained: Array[Material]) -> void:
 
 
 func _clear_model() -> void:
+	_form_presentation_8c.reset("model_clear")
+	_transform_target_8c = ""
 	_body_aura=null
 	var retiring_materials: Array[Material] = []
 	if _model_root != null and is_instance_valid(_model_root):

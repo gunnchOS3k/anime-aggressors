@@ -1,3 +1,15 @@
+# 8C live integration checkpoint — remote run dispatched
+
+Remote production run39790037341 at exact1e06532c4775129f81aed13b1ff9eab940683220 is running: https://github.com/gunnchOS3k/anime-aggressors/actions/runs/39790037341 . It must produce saved18rig/144actions/36attachments before installation. Never dispatch a duplicate without diagnosing this run. Ordinary exact-head CI passed (includingWindows2025), opt-injob was previouslyskipped, not production proof.
+
+Local form controller now loads only verified saved exports, samples original transform actions from existing authoritative pipeline progress, chooses actual-form empowered idle, and retires oninterrupt. New model helper imports actual boundedGLBs throughGodotGLTFDocument, attaches canonical sockets once, keeps original anatomy/root unchanged. Remote artifacts not installed yet, no source-save/native/art completion claimed. Existing8Bdurablearchive retained, notrecopied.
+
+Actual engine pilot exposed committed fighterguard indentation error; corrected. New helper nativeclassname conflict and uncommittedtest Array.reversed API typo corrected. Original failed pilotlogs preserved. Pilot1022c reached real contacts, warnings, breaks, punish and pool checks; four recoveryobserver failures arose from test API, no other assertionfailure. Need corrected pilot thenfull9body/facing test. No acceptedshieldbreak/balancevalues changed. Allhuman/native/devicegatesfalse. Internal12.19GiB, below18GiB+allocations; no heavybinaryworklocal.
+
+NEXT: rerun ElementalGuard8C with --pilot newisolatedlabel, inspect remote39790037341actualresult; install+archive verified outputonly afterfullmanifestPASS. Build real144form/body/facing/pause/interruption test; preserve sourcebindings/ownerreview. NoownedGodotrunning atcheckpoint.
+
+---
+
 # 8C checkpoint — durable 8B archive and source integration in progress
 
 Recovered HEAD `4d1975803eafb34b4a9f1662cae33e14b01c30a9`; branch `release/anime-v1-dialogue-and-elemental-performance`, PR123 draft on122. Actual latest SHA is `git rev-parse HEAD`. Original18 rig/model assets,540 saved8B actions,216BASE moves,33worktrees and owner saves preserved.

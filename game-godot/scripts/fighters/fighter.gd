@@ -267,6 +267,7 @@ func on_transform_sequence_start(_from: String, _to: String) -> void:
 	preload("res://scripts/audio/v1_candidate_sfx.gd").play_event(fighter_id, "transform", self)
 	_transform_sequence_active = true
 	state_machine.enter(_FighterStates.AURA_BURST_STARTUP)
+	if model_3d != null and model_3d.has_method("begin_form_sequence") and model_3d.begin_form_sequence(_to):return
 	if model_3d != null and model_3d.has_method("play_clip"):
 		var target: Dictionary = _FormDefinition.form_entry(_forms_doc, _to)
 		model_3d.play_clip(str(target.get("transform_in_clip", "aura_charge")))
@@ -278,6 +279,7 @@ func on_transform_sequence_tick(progress: float) -> void:
 
 
 func _on_transform_completed(_fid: String, _form_id: String) -> void:
+	if model_3d != null:model_3d.end_form_sequence()
 	_transform_sequence_active = false
 	_transform_activations += 1
 	state_machine.enter(_FighterStates.IDLE)
@@ -285,6 +287,7 @@ func _on_transform_completed(_fid: String, _form_id: String) -> void:
 
 
 func on_transform_sequence_cancelled(_reason: String) -> void:
+	if model_3d != null:model_3d.end_form_sequence()
 	_transform_sequence_active = false
 	if model_3d != null and model_3d.has_method("set_transform_progress"):
 		model_3d.set_transform_progress(0.0)
@@ -801,7 +804,7 @@ func _handle_actions() -> void:
 		return
 	if _read_shield() and grounded_guard and not is_aura_input_held() and shield_break_8c.guard_allowed():
 		if state_machine.current_state != _FighterStates.SHIELD_HOLD:
-		if guard_pressed:perfect_guard.begin()
+			if guard_pressed:perfect_guard.begin()
 			state_machine.enter(_FighterStates.SHIELD_START)
 		state_machine.enter(_FighterStates.SHIELD_HOLD)
 		shielding = true

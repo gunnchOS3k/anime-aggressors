@@ -39,6 +39,10 @@ var _motion_moving := false
 var _reaction_clip := ""
 var _reaction_age := 0.0
 var _reaction_fresh := false
+var _form_sources: Dictionary = {}
+var _form_sequence := ""
+var _form_progress := 0.0
+var _form_overlay_status := "missing"
 var _grab_acting_sources: Dictionary = {}
 var _grab_acting_report: Dictionary = {}
 var _grab_overlay_status := "missing"
@@ -163,6 +167,7 @@ func setup(fighter, model_root: Node3D) -> void:
 
 func bind_runtime_fighter(fighter: Node) -> void:
 	_runtime_fighter = fighter
+	_load_form_acting_overlay()
 
 
 func _reciprocal_grab_role() -> String:
@@ -237,6 +242,9 @@ func begin_grab_escape() -> void:
 
 
 func play_for_state(state: String, move: Dictionary = {}) -> void:
+	if not _form_sequence.is_empty():
+		if state == _FighterStates.AURA_BURST_STARTUP:return
+		end_form_sequence()
 	# The unchanged mash-release rule uses GRAB_WHIFF for holder recovery.
 	# A released grip needs its authored support exchange, not a fresh reach.
 	_grab_recovery_active = state == _FighterStates.GRAB_WHIFF and (_grab_recovery_active or (bool(_grab_acting_report.get("active", false)) and _grab_acting_report.get("role", "") == "attacker"))
@@ -258,6 +266,9 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 	var move_id := str(move.get("move_id", "")) if action_state else ""
 	var resolved: Dictionary = _MoveResolver.resolve_clip(state, move_id, _loaded_clips)
 	var clip := str(resolved.get("clip", ""))
+	if state == _FighterStates.IDLE and is_instance_valid(_runtime_fighter):
+		var form_idle := _form_clip(str(_runtime_fighter.get_current_form_id()), "idle_clip")
+		if not form_idle.is_empty():clip = form_idle
 	var grab_presentation := false
 	if not _grab_escape_clip.is_empty():
 		if _grab_escape_allowed(state):clip = _grab_escape_clip;grab_presentation = true
@@ -304,6 +315,7 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 		"fall", "fast_fall", "shield", "shield_hold", "aura_charge", "aura_ready", "charged_idle",
 		"ledge_hang", "crouch_hold", "grab_hold", "grab_hold_attacker", "grab_hold_attacker_left", "grab_hold_victim", "grab_hold_victim_left",
 	]
+	should_loop = should_loop or clip.begins_with("form_idle_")
 	var anim := _player.get_animation(play_key)
 	if anim:
 		anim.loop_mode = Animation.LOOP_LINEAR if should_loop else Animation.LOOP_NONE
@@ -353,6 +365,7 @@ func get_loaded_clip_names() -> Array:
 
 
 func _animation_play_key(clip: String) -> String:
+	if _player != null and _player.has_animation("form_acting_8c/"+clip):return "form_acting_8c/"+clip
 	if _player != null and _player.has_animation("combat_choreography/"+clip): return "combat_choreography/"+clip
 	if _player != null and _player.has_animation("authored_studies/"+clip): return "authored_studies/"+clip
 	if clip.is_empty() or _player == null:
@@ -529,6 +542,7 @@ func _load_authored_studies() -> void:
 	_player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
 
 func _process(delta: float) -> void:
+	if not _form_sequence.is_empty():return # Owned progress is sampled by the existing transform pipeline.
 	if not presentation_frozen:_reaction_age+=delta
 	if not _grab_escape_clip.is_empty():
 		var state := str(_runtime_fighter.state_machine.current_state) if is_instance_valid(_runtime_fighter) else ""
@@ -770,3 +784,59 @@ func synchronize_locomotion(world_position: Vector2, model, grounded: bool) -> v
 
 func set_visual_facing(direction: int) -> void:
 	_visual_facing = 1 if direction>=0 else -1
+
+
+func _load_form_acting_overlay() -> void:
+	if not is_instance_valid(_player) or not is_instance_valid(_skeleton):return
+	var path := "res://data/animation/form_acting_8c/%s_%s.json" % [_fighter_id,_body_variant]
+	if not FileAccess.file_exists(path):return
+	_form_overlay_status = "unverified"
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if not parsed is Dictionary:return
+	var doc: Dictionary = parsed
+	if doc.get("schema", "") != "original_form_acting_8c.v1" or not doc.get("source_actions_saved",false) or not doc.get("source_runtime_verified",false):return
+	if doc.get("fighter_id", "") != _fighter_id or doc.get("body_variant", "") != _body_variant:return
+	if str(doc.get("source_saved_blend_sha256", "")).length()!=64 or doc.get("human_approved",true):return
+	var library := AnimationLibrary.new()
+	for name in doc.get("clips",{}):
+		var clip: Dictionary = doc.clips[name]
+		if not str(clip.get("source_action", "")).begins_with("ANI08C_WIP_") or str(clip.get("source_blend_sha256","")) != doc.source_saved_blend_sha256:return
+		for bone in clip.get("bone_tracks",{}):
+			if _BoneMap.resolve_on_skeleton(_skeleton,str(bone)).is_empty():return
+		var animation := _animation_from_data(clip)
+		animation.loop_mode = Animation.LOOP_LINEAR if clip.get("loop",false) else Animation.LOOP_NONE
+		library.add_animation(str(name),animation)
+	if library.get_animation_list().size()!=8:return
+	if _player.has_animation_library("form_acting_8c"):_player.remove_animation_library("form_acting_8c")
+	_player.add_animation_library("form_acting_8c",library)
+	for name in library.get_animation_list():_loaded_clips[name]=true
+	_form_sources = {"stages":doc.stages,"source_saved_blend_sha256":doc.source_saved_blend_sha256,"remote_run_id":doc.get("remote_run_id","")}
+	_form_overlay_status = "verified_saved_export"
+
+func _form_clip(form_id: String, kind: String) -> String:
+	var stage: Dictionary = _form_sources.get("stages",{}).get(form_id,{})
+	var name := str(stage.get(kind,""))
+	if name.is_empty():return ""
+	if _visual_facing < 0:name += "_left"
+	return name if _loaded_clips.has(name) else ""
+
+func begin_form_sequence(target_id: String) -> bool:
+	var clip := _form_clip(target_id,"transition_clip")
+	if clip.is_empty():return false
+	_form_sequence = clip;_form_progress = 0.0
+	_neutral_return_pose.clear();_grounded_return.clear();_authored_transition.clear();_weight_transfer.clear()
+	_move_synchronized = false;_locomotion_synchronized = false
+	_player.play("form_acting_8c/"+clip,0.0);_player.seek(0.0,true)
+	_active_clip = clip
+	return true
+
+func sample_form_sequence(progress: float) -> void:
+	if _form_sequence.is_empty() or not is_instance_valid(_player):return
+	_form_progress = clampf(progress,0,1)
+	_player.seek(_player.current_animation_length*_form_progress,true)
+
+func end_form_sequence() -> void:
+	_form_sequence = "";_form_progress = 0.0
+
+func get_form_acting_report() -> Dictionary:
+	return {"status":_form_overlay_status,"source":_form_sources.duplicate(true),"sequence":_form_sequence,"progress":_form_progress,"active_clip":_active_clip,"human_approved":false}
