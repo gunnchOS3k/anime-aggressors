@@ -134,4 +134,13 @@ if not a.prepare_only:
         manifest['storage_budget']=recording_budget
         (a.output/'launch_manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
         raise SystemExit(run_owned_recording(cmd,ROOT,a.movie,a.output,recording_budget))
-    raise SystemExit(subprocess.call(cmd))
+    returncode = subprocess.call(cmd)
+    # Godot may return0 after a top-level --script parse/runtime error. Such a
+    # run is not valid evidence merely because the process exited normally.
+    log_path = a.output/'godot.log'
+    script_errors = [line for line in log_path.read_text(errors='replace').splitlines() if 'SCRIPT ERROR:' in line or 'ERROR: Failed to load script' in line] if log_path.exists() else []
+    if a.test_script and script_errors:
+        (a.output/'SCRIPT_FAILURE.json').write_text(json.dumps({'PASS':False,'process_exit':returncode,'unhandled_script_errors':script_errors,'scope':'Launcher rejects unhandled Godot errors; no approval or gameplay result changed'},indent=2)+'\n')
+        print('Source test failed: Godot reported an unhandled script error.',flush=True)
+        returncode = returncode or 1
+    raise SystemExit(returncode)

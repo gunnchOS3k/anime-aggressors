@@ -17,10 +17,11 @@ func run() -> void:
 		resolver.hit_confirmed.connect(func(a,b,info):observed_contacts.append({"attacker":a.fighter_id,"defender":b.fighter_id,"frame":Engine.get_physics_frames(),"info":info.duplicate(true)}))
 	for index in range(9):
 		var fid: String=IDs[index];await configure(p,d,fid,"female" if index%2==0 else "male",1)
+		var prior_activations: int=p.get_transform_activations()
 		observed_contacts.clear();d.is_cpu=true;d.dummy_mode="cpu";d.cpu.setup(d,3,8200+index)
 		var samples: Array=[];var attempts:=0
 		for frame in range(240):
-			var transform:=frame in [0,90] and p._transform_pipeline.can_attempt_transform()
+			var transform:bool=frame in [0,90] and p._transform_pipeline.can_attempt_transform()
 			if transform:attempts+=1
 			var phase:=frame%40
 			var delta_x: float=d.global_position.x-p.global_position.x
@@ -30,7 +31,7 @@ func run() -> void:
 			_button("right",delta_x>68,.6);_button("left",delta_x< -68,.6);_button("jump",phase==25 and not p._transform_sequence_active)
 			await physics_frame
 			if frame%30==0:samples.append({"frame":frame,"form":p.get_current_form_id(),"sequence":p._transform_sequence_active,"state":p.state_machine.current_state,"opponent_state":d.state_machine.current_state,"p_damage":p.damage_percent,"cpu_damage":d.damage_percent,"presentation":p.model_3d._form_presentation_8c.snapshot()})
-		rows.append({"fighter":fid,"body":p.data.body_variant,"opponent":d.fighter_id,"cpu_level":3,"cpu_active":d.is_cpu and d.controls_enabled,"initial_aura_fixture":{"player":100,"cpu":100},"frames":240,"public_transform_attempts":attempts,"completed_advancements":p.get_transform_activations(),"final_form":p.get_current_form_id(),"p_damage":p.damage_percent,"cpu_damage":d.damage_percent,"p_stocks":p.stocks,"cpu_stocks":d.stocks,"contacts":observed_contacts.duplicate(true),"samples":samples,"scope":"Bounded driver observation, not human play, guaranteed combo, win or earnedStory acceptance"})
+		rows.append({"fighter":fid,"body":p.data.body_variant,"opponent":d.fighter_id,"cpu_level":3,"cpu_active":d.is_cpu and d.controls_enabled,"initial_aura_fixture":{"player":100,"cpu":100},"frames":240,"public_transform_attempts":attempts,"completed_advancements":p.get_transform_activations()-prior_activations,"cumulative_advancement_counter":p.get_transform_activations(),"final_form":p.get_current_form_id(),"p_damage":p.damage_percent,"cpu_damage":d.damage_percent,"p_stocks":p.stocks,"cpu_stocks":d.stocks,"contacts":observed_contacts.duplicate(true),"samples":samples,"scope":"Bounded driver observation, not human play, guaranteed combo, win or earnedStory acceptance"})
 		release();d.is_cpu=false;d.dummy_mode="idle";d.cpu.clear_simulated_inputs()
 		var f=FileAccess.open(output.path_join("form_cpu_observation_8c.json"),FileAccess.WRITE);f.store_string(JSON.stringify({"complete":index==8,"rows":rows,"scope":"ActiveCPU/publicnormalizedinput, initialaura/spacingreviewfixture only. Misses, interruptions and damage retained; no sourcebalance or laterresult overrides.","human_approved":false},"\t"));f.close()
 	quit()
