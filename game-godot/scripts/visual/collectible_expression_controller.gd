@@ -12,9 +12,9 @@ var _stone_texture: NoiseTexture2D
 var _performance_owned := false
 var _performance_phase := 0.0
 var _performance_form := ""
-# Actor-owned cache dies with this original mesh controller. A process-global
-# static cache unnecessarily retained scripts after all actors were released.
-var _facial_performance_8d = preload("res://scripts/visual/facial_performance_8d.gd").new()
+# Plain actor-owned data; no persistent static script or additional RefCounted
+# helper is retained by the existing body-controller lifetime.
+var _facial_score_8d: Dictionary = {}
 
 func configure(body: Node3D, id: String, state_form: String) -> void:
 	fighter_id = id
@@ -53,7 +53,7 @@ func set_form(value: String) -> void:
 	if not _performance_owned:set_expression(expression)
 
 func sample_form_performance(target: String, phase: float) -> void:
-	var weights: Dictionary = _facial_performance_8d.sample(fighter_id,target,phase)
+	var weights := _sample_form_weights(target,phase)
 	if weights.is_empty():return
 	_performance_owned = true
 	_performance_phase = clampf(phase,0,1)
@@ -65,6 +65,30 @@ func sample_form_performance(target: String, phase: float) -> void:
 		if not is_instance_valid(mesh):continue
 		for index in range(mesh.mesh.get_blend_shape_count()):
 			mesh.set_blend_shape_value(index,float(weights.get(str(mesh.mesh.get_blend_shape_name(index)),0)))
+
+func _sample_form_weights(target_form: String, phase: float) -> Dictionary:
+	if _facial_score_8d.is_empty():
+		var doc: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/animation/facial_performance_8d.json"))
+		if doc is Dictionary:_facial_score_8d = doc
+	var profile: Dictionary = _facial_score_8d.get("fighters", {}).get(fighter_id, {})
+	var step := ""
+	for candidate in ["AWAKENED_BUILD", "ASCENDED", "COSMIC_SURGE", "COSMIC_ASCENDANT"]:
+		if target_form.ends_with(candidate):step = candidate;break
+	for stage in profile.get("stages", []):
+		if stage.ladder_step != step:continue
+		var keys: Array = stage["keys"]
+		var t := clampf(phase, 0.0, 1.0)
+		for index in range(1, keys.size()):
+			var left: Dictionary = keys[index-1]
+			var right: Dictionary = keys[index]
+			if t > float(right.phase):continue
+			var u := clampf((t-float(left.phase))/maxf(float(right.phase)-float(left.phase),.00001),0,1)
+			u = u*u*(3.0-2.0*u)
+			var weights: Dictionary = {}
+			for channel in _facial_score_8d.get("channels", []):
+				weights[channel] = lerpf(float(left.weights.get(channel,0)),float(right.weights.get(channel,0)),u)
+			return weights
+	return {}
 
 func end_form_performance() -> void:
 	_performance_form = ""
