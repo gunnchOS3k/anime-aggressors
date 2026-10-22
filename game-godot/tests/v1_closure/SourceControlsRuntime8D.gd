@@ -49,8 +49,10 @@ func examine(p,label: String) -> Dictionary:
 	var signature:=canonical_pose(rig,doc.canonical_bones)
 	control.sample("fist",0);control.sample("idle",0,false)
 	var before:=rig.get_bone_pose_rotation(rig.find_bone(fingers[0]))
+	var hair_before:=rig.get_bone_pose_rotation(rig.find_bone(secondary_bones[0]))
 	control.sample("fist",1);control.sample("idle",.25,false)
 	check(rig.get_bone_pose_rotation(rig.find_bone(fingers[0])).angle_to(before)>.1,label+":actual_imported_finger_rotation")
+	check(rig.get_bone_pose_rotation(rig.find_bone(secondary_bones[0])).angle_to(hair_before)>.001,label+":actual_imported_secondary_rotation")
 	check(canonical_pose(rig,doc.canonical_bones)==signature,label+":original_body_tracks_untouched")
 	for player in [control.hands,control.secondary]:
 		for name in player.get_animation_list():
@@ -78,7 +80,8 @@ func native_sheet(p,sheet: Image,row: int) -> Dictionary:
 		var camera_record: String=str(model._camera.global_transform)+str(model._camera.size)
 		var hashes: Array=[]
 		for phase in [0.0,1.0]:
-			control.sample("fist",phase);control.sample("idle",phase*.25,false)
+			control.sample("fist",phase if kind=="hand" else 0.0)
+			control.sample("idle",phase*.25 if kind=="hair" else 0.0,false)
 			rig.force_update_all_bone_transforms()
 			for settle in range(2):await process_frame;await RenderingServer.frame_post_draw
 			var image: Image=model._viewport.get_texture().get_image()
@@ -86,7 +89,7 @@ func native_sheet(p,sheet: Image,row: int) -> Dictionary:
 			var column:=int(phase)+(0 if kind=="hand" else 2)
 			sheet.blit_rect(image,Rect2i(0,0,192,192),Vector2i(column*192,row*192))
 			hashes.append(pixels(image));check(canonical_pose(rig,model._controls_document_8d.canonical_bones)==fixed,p.fighter_id+":native_canonical_pose_fixed")
-		samples.append({"kind":kind,"pixels":hashes,"changed":hashes[0]!=hashes[1],"review_camera":camera_record})
+		samples.append({"kind":kind,"pixels":hashes,"changed":hashes[0]!=hashes[1],"review_camera":camera_record,"isolation":"only the named auxiliary layer changes; other layer remains at phase0"})
 	model._camera.global_transform=original_camera;model._camera.size=original_size
 	for mode in modes:
 		if is_instance_valid(mode[0]):mode[0].process_mode=mode[1]

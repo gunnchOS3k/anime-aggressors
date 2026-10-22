@@ -1,3 +1,11 @@
+# 8D final native observer isolation correction
+
+Firstsource/native proof remainsPASS36 atb09; firstdetailrun39854158500/d4d89732 inprogress. ObserverreviewfounditvariedhandANDhairbothduringeachpicturepair, so independenthairvisualclaimwasnotestablished. FinalobservernowvariesONLYthenamedlayer and explicitlychecksactualsecondaryjointrotation too; canonical22remainexact. Thisisnotart/sourcechange. Retainallpriorartifacts, doNOTregenerate18sourcecopies.
+
+NEXT:finish/cancelowned39854158500beforeONEfinalverification-onlydispatch atnewobserverhead. Correctedcamera fullviewportdetails, originalcamera restoredbeforepublicinputs; actualsourceartifact39852459469unchanged. Internalbelowreserve noMacmedia/import. Archiveonlysourcesalreadyverified. Allhumanfalse.
+
+---
+
 # 8D saved controls actual-engine PASS; detail framing correction
 
 Source3ab7667c/run39852459469 archiveverified18rigs/72actions. Runtimeb09aec61/run39853154985 SUCCESS:36realBattleScene sourcebody/facing imports/publicattacks, originalboneownership, Storyunchanged;18nativeopengrip/hairsamplesproduced LinuxCompatibility/MesaCPUrenderer. Bothsheetsviewed: fingerclosurevisible, reviewneck-pivotcroptruncateshairtop andhanddetailsmall. No premium/CPU/deviceacceptanceclaim. Firstsheets/receiptretainedproduction_8d/controls_engine_39853154985 andimmutablearchive engine_review_39853154985.
