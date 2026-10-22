@@ -46,7 +46,10 @@ def validate(folder, require_sources=True):
             assert clip["source_blend_sha256"]==row["saved_source_sha256"]
             assert clip["source_action"]=="ANI08B_WIP_"+name
             assert clip["source_blend"]==row["saved_source"]
-            assert set(clip["bone_tracks"])==set(row["rig_bones"])
+            # The established bake intentionally keeps Root static: 21 keyed
+            # pose bones + the preserved unanimated Root make the 22-bone rig.
+            assert "Root" in row["rig_bones"]
+            assert set(clip["bone_tracks"])==set(row["rig_bones"])-{"Root"}
             assert clip["duration_frames"]>0
             if name.startswith("throw_") and not name.startswith(("throw_reaction_","throw_landing")):
                 assert clip["contact_frame"]==0

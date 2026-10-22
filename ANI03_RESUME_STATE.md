@@ -1,3 +1,13 @@
+# 8B checkpoint — 18 saved rigs verified remotely; actual-engine pilot next
+
+Successful approved run39733087497 at `cc2b3a5a555aeb22fc8eb7510bd7702a28975aad`, Blender4.0.2, all18new source copies/540WIPactions saved/reopened and evaluated. Source artifact12406037776 (remote only,90day expiry2027-01-20); runtime artifact12406187575 verified SHA256,4.48MiB download/24.91MiB text. All18original Blender hashes unchanged and all18existingBASE GLB hashes match exports. Strict validation passed after correcting the validator's mistaken22-keyed-bone assumption: the established22-bone rig keys21pose bones with Root static. Full remote manifest/log/receipt retained under `elemental_grab_throw_8b/`.
+
+Installed only18verified JSON overlays, no source binaries/model replacement. Engine/source-art/native approval NOT inferred. Actual holder recovery from real mash still needs reproduction; independent review found grab_recovery unwired. No local capture/test running. Internal free~12.1GiB, no heavy export.
+
+NEXT: `python3 tools/v1_closure/launch_ordinary_review.py --profile aa8b_saved_pilot1022 --headless --test-script res://tests/v1_closure/GrabActingRuntime8B.gd --driver-arg=--pilot --output artifacts/v1_closure/elemental_grab_throw_8b/saved_pilot1022`. Inspect logs and retained failure first; this uses actual saved tracks, no injected clips. Fix only reproduced presentation defects, then all18/both facings/four directions. Preserve original8A authority; allhuman/native/device/artgatesfalse.
+
+---
+
 # 8B checkpoint — owner-approved remote source production running
 
 Owner explicitly answered “Approve this exact artifact upload” for the two public-repository 90-day artifacts described in `elemental_grab_throw_8b/ARTIFACT_APPROVAL_PLAN.json`. The prior approval-review block is resolved for that exact operation. Reviewed production hashes and all18 source hashes matched before dispatch. Existing workflow run39733087497 at exact `cc2b3a5a555aeb22fc8eb7510bd7702a28975aad`: https://github.com/gunnchOS3k/anime-aggressors/actions/runs/39733087497 . No local binary production; original rigs preserved. Source saves/runtime imports remain unverified until complete receipts arrive.

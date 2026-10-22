@@ -29,9 +29,9 @@ func run() -> void:
 				await escape_case(p, d, fid, body, face)
 	release();write(true);quit(0 if failures.is_empty() else 1)
 
-func setup_pair(p, d, fid: String, body: String, face: int) -> void:
+func setup_pair(p, d, fid: String, body: String, face: int, mixed_bodies: bool = false) -> void:
 	release()
-	var gs = root.get_node("GameState");gs.p1_body_variant = body;gs.p2_body_variant = body
+	var gs = root.get_node("GameState");gs.p1_body_variant = body;gs.p2_body_variant = ("female" if body == "male" else "male") if mixed_bodies else body
 	var other: String = IDs[(IDs.find(fid) + 1) % IDs.size()]
 	p.configure(fid, 1, false, 9, Vector2(-40, 240));d.configure(other, 2, false, 9, Vector2(-40 + 32 * face, 240))
 	for actor in [p, d]:
@@ -47,13 +47,14 @@ func setup_pair(p, d, fid: String, body: String, face: int) -> void:
 	contacts.clear();damage_events.clear();grab_events.clear()
 	for actor in [p, d]:
 		var controller = actor.model_3d.get_animation_controller()
-		var label: String = actor.fighter_id + ":" + body + ":" + str(actor.facing)
-		check(actor.is_model_loaded() and actor.data.body_variant == body, label + ":real_body_loaded")
+		var expected_body: String = gs.p1_body_variant if actor == p else gs.p2_body_variant
+		var label: String = actor.fighter_id + ":" + expected_body + ":" + str(actor.facing)
+		check(actor.is_model_loaded() and actor.data.body_variant == expected_body, label + ":real_body_loaded")
 		check(controller.get_grab_acting_report().get("overlay_status") == "verified_source_export", label + ":saved_export_loaded")
 		check(controller._grab_acting_sources.size() == 30, label + ":all_thirty_source_clips")
 		for name in controller._grab_acting_sources:
 			var clip: Animation = controller.get_animation_player().get_animation("combat_choreography/" + name)
-			check(clip.get_track_count() == 23, label + ":twenty_two_bones_plus_pelvis:" + name)
+			check(clip.get_track_count() == 22, label + ":twenty_one_pose_bones_plus_pelvis_static_root:" + name)
 			check(not controller._grab_acting_sources[name].get("fixture_only", false), label + ":not_fixture:" + name)
 
 func acquire(p, d, label: String) -> bool:
@@ -103,6 +104,10 @@ func throw_case(p, d, fid: String, body: String, face: int, direction: String) -
 		var expected := "grab_hold_" + role + ("_left" if actor.facing == -1 else "")
 		check(c.get_active_clip() == expected and c.get_grab_acting_report().get("status") == "authored", label + ":saved_" + role + "_hold")
 		check(c.get_animation_player().get_animation("combat_choreography/" + expected).loop_mode == Animation.LOOP_LINEAR, label + ":loop_" + role)
+	await frames(8);await process_frame
+	var sustained := paired_measure(p, d)
+	for role in ["holder", "victim"]:
+		check(float(sustained[role].animation_time) > float(hold[role].animation_time), label + ":advancing_" + role + "_hold")
 	var axis := face if direction == "forward" else -face
 	var command := direction if direction in ["up", "down"] else "right" if axis == 1 else "left"
 	Input.action_press("p1_" + command);Input.action_press("p1_attack");await frames(2);release();await process_frame
@@ -121,12 +126,12 @@ func throw_case(p, d, fid: String, body: String, face: int, direction: String) -
 	check(contacts.size() == 1 and is_equal_approx(d.damage_percent, damage_before), label + ":no_late_damage")
 	check(p.grabbed_target == null and d.grabbed_by == null and not p.hitbox.monitoring, label + ":release_cleanup")
 	rows.append({"case":label, "kind":"public_throw", "fighter":fid, "body":body, "facing":face, "direction":direction,
-		"hold":hold, "release":release_pose, "reaction":reaction, "landing":landing, "control_return_observed":recovered,
+		"hold":hold, "sustained_hold":sustained, "release":release_pose, "reaction":reaction, "landing":landing, "control_return_observed":recovered,
 		"contacts":contacts.duplicate(true), "damage_applications":damage_events.size(), "events":grab_events.duplicate(true)})
 	write(false)
 
 func escape_case(p, d, fid: String, body: String, face: int) -> void:
-	await setup_pair(p, d, fid, body, face)
+	await setup_pair(p, d, fid, body, face, true)
 	var label := fid + ":" + body + ":" + str(face) + ":escape"
 	if not await acquire(p, d, label):return
 	var before := paired_measure(p, d)
