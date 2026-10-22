@@ -1,3 +1,15 @@
+# 8C native guard correction checkpoint
+
+Currentlocal94d4587a; remotefcbf8fbc beforelatestpush. All109guard+63form/Party/projectile rowsPASS; existing39ThrowOwnershipPASS. Actualnative18body/activeCPUguardmontages completed (43contacts, no fabricatedoutcomes). Initialrasterrevealedguardpoorlyreadable: oldboundsusedhurtboxcenter/height, unrelatedtolivevisualrig. NewguardfitsprojectedHead/supportfeet, preservesactor/hitboxes/modelroot; pooledfollowoffset carriesactualcenter. Contoursbroadenedslightly/contrasted, Yinpaleboundaryretainsnegativeidentity. EngineeringpilotPASS, actualnewmontagesretained; finalclosevisibilitydiagnosticrastercompleted, sourceartifactnotfinalquality. Newexit_treeownedcleanup.
+
+Remoteproduction39790037341 stillINSTALLINGDEPENDENCIES exact1e06532c (~20min); no newBlenderproductionclaimed. DoNOTduplicatejoborrearchive8B.144form/idle/36attachmentproducer remainsunexecuteduntilthisstepcompletes. Actualexisting8Bsourcearchiveverified. Currentinternalbelow18GiBguard, noheavyMacexports.
+
+Localchangesincludeformpause/interrupttestpreparation and nativevisibilitydiagnostics; checkpointthem. Latestprobeusescontrolledfrozenpresentation, notCPU/comboacceptance. All18nativeactiveCPUobservationsareseparatein guard_native1022 and guard_native_projected1022. Currenthuman/art/mix/balance/device/releasegatesfalse.
+
+NEXT: inspectactualjobresult; boundedruntimeartifactdownloadandstrict18/144/36validatorafterPASS; archiveeditable18copiesdirectexternal,installverifiedruntime; runFormActingRuntime8Cpilot/full. Formidle+transitiononlynotallformcombat/ultimateproduction. Ifjobtimesout,retainloganddiagnoseexactapt/sourcefailure, no blindretry. UpdateFORM_MATRIXvia tools/authored_animation/build_review_8c.py afteractualimports.
+
+---
+
 # 8C shield domains and audio checkpoint
 
 All63additionalrealenginecases PASS:54ninefighter x permanent/Party guard + sustained natural breaks,9public quickprojectile guard and no late contact. Explicit form/durability fixtures, actualPartyitem/taunt; not earnedStory/CPU/native acceptance.109priorroster guardrows retainedPASS. NewCompatibilityshader actuallycompiled/rendered onAppleM2OpenGL4.1Metal; twoPNGanalyticalrasters in production_8c/shader_review1022 (NOTgameplayfootage).117originalPCMcuechecksPASS,18compact WAVlisteningsamples,total2636064bytes; sourcepeaks/RMS/endpoints/uniquehashesmeasured, mixunreviewed. Newownedtwo-voicetransformationaudio followsrealpipeline gather/climax/reveal/cancel; noacceptedtimingchanges.

@@ -21,6 +21,7 @@ var _history: Array = []
 var _fallback_evictions := 0
 var _allocation_failures := 0
 var _clear_reason := ""
+var _guard_bounds: Dictionary = {}
 
 func setup(actor) -> void:
 	fighter=actor
@@ -65,7 +66,8 @@ func _allocate(kind: int, life: float, event_id: String) -> int:
 	item.mesh.material.shader=GuardShader
 	var family:=maxi(0,Spectral.IDS.find(str(fighter.fighter_id)))
 	item.mesh.material.set_shader_parameter("family",family)
-	var ink: Color=Spectral.COLORS[family]
+	var ink: Color=Color(.70,.71,.84) if family==7 else Spectral.COLORS[family]
+	item["base_ink"]=ink
 	if renderer.option("high_contrast_vfx"):ink=Color(1,.95,.76)
 	if renderer.option("reduced_flash"):ink.a*=.55
 	item.mesh.material.set_shader_parameter("accent",ink)
@@ -122,7 +124,23 @@ func tick(_delta: float) -> void:
 		var dimensions: Vector2=shape.shape.get_rect().size if shape!=null and shape.shape!=null else Vector2(38,50)
 		var height:=maxf(86,(dimensions.y+22)*1.45)
 		var width:=maxf(76,(dimensions.x+24)*1.4)
-		renderer.update_slot(_guard_slot,fighter.global_position+Vector2(0,-24),Vector2(float(fighter.facing),0),height,0)
+		var center: Vector2=fighter.global_position+Vector2(0,-24)
+		var model=fighter.model_3d
+		if model!=null and model.has_method("project_bone_to_combat_world"):
+			var head: Vector2=model.project_bone_to_combat_world("Head")
+			var left: Vector2=model.project_bone_to_combat_world("Foot_L")
+			var right: Vector2=model.project_bone_to_combat_world("Foot_R")
+			if head.is_finite() and left.is_finite() and right.is_finite():
+				var feet: Vector2=(left+right)*.5
+				var visible_height:=absf(feet.y-head.y)+18.0
+				# The analytical rim lies at .64 of quad height. Enclose the
+				# projected rig, rather than an unrelated gameplay hurtbox.
+				center=(head+feet)*.5+Vector2(0,-4)
+				height=maxf(height,visible_height/.64)
+				width=maxf(width,visible_height*.72/.64)
+				_guard_bounds={"source":"live_projected_head_and_support_feet","head":head,"feet":feet,"center":center,"quad_size":Vector2(width,height)}
+		renderer.update_slot(_guard_slot,center,Vector2(float(fighter.facing),0),height,0)
+		item["follow_offset"]=center-fighter.global_position
 		item.mesh.scale=Vector2(width,height)
 		item.mesh.material.set_shader_parameter("strain",1.0-_ratio)
 		item.mesh.material.set_shader_parameter("warning_tier",float(_tier))
@@ -178,4 +196,4 @@ func clear(reason: String) -> void:
 	if is_instance_valid(audio):audio.clear()
 
 func snapshot() -> Dictionary:
-	return {"schema":"elemental_guard_8c.v1","fighter":str(fighter.fighter_id) if is_instance_valid(fighter) else "","guarding":_guarding,"normalized_durability":_ratio,"stage":STAGES[_tier],"owned_guard_active":_owns(_guard_slot),"guard_slot":_guard_slot,"guard_visible":_owns(_guard_slot) and renderer.slots[_guard_slot].mesh.visible,"owned_pulse_active":_owns(_pulse_slot),"pulse_slot":_pulse_slot,"max_owned_meshes":2,"fallback_transient_evictions":_fallback_evictions,"allocation_failures":_allocation_failures,"clear_reason":_clear_reason,"history":_history.duplicate(true),"audio":audio.snapshot() if is_instance_valid(audio) else {},"gameplay_writes":false,"human_visual_approved":false,"native_visual_verified":false}
+	return {"schema":"elemental_guard_8c.v1","fighter":str(fighter.fighter_id) if is_instance_valid(fighter) else "","guarding":_guarding,"normalized_durability":_ratio,"stage":STAGES[_tier],"owned_guard_active":_owns(_guard_slot),"guard_slot":_guard_slot,"projected_bounds":_guard_bounds.duplicate(true),"guard_visible":_owns(_guard_slot) and renderer.slots[_guard_slot].mesh.visible,"owned_pulse_active":_owns(_pulse_slot),"pulse_slot":_pulse_slot,"max_owned_meshes":2,"fallback_transient_evictions":_fallback_evictions,"allocation_failures":_allocation_failures,"clear_reason":_clear_reason,"history":_history.duplicate(true),"audio":audio.snapshot() if is_instance_valid(audio) else {},"gameplay_writes":false,"human_visual_approved":false,"native_visual_verified":false}

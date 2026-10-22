@@ -1531,6 +1531,8 @@ func _cancel_grab_runner() -> void:
 
 
 func _exit_tree() -> void:
+	if _guard_presentation!=null:_guard_presentation.clear("actor_exit")
+	if is_instance_valid(_form_audio_8c):_form_audio_8c.clear()
 	_release_grab_links("scene_exit")
 
 

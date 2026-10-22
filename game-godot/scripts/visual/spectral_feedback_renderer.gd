@@ -153,7 +153,7 @@ func emit_effect(fid: String, kind: int, world: Vector2, direction := Vector2.RI
 	var seed_value := float((fid+":"+str(kind)+":"+str(_sequence)).hash() & 65535)/997.0
 	var slot: Dictionary = slots[index]
 	slot.erase("guard8c_owner")
-	slot.merge({"active":true,"age":0.0,"life":life,"fid":fid,"kind":kind,"extent":extent,"clash_base_extent":extent,"world":world,"dir":direction,"seed":seed_value,"follow":weakref(follow) if follow != null else null,"event_id":event_id,"aspect":Vector2.ONE,"strength":1.0,"clash_ornament":1.0},true)
+	slot.merge({"active":true,"age":0.0,"life":life,"fid":fid,"kind":kind,"extent":extent,"clash_base_extent":extent,"world":world,"dir":direction,"seed":seed_value,"follow":weakref(follow) if follow != null else null,"event_id":event_id,"aspect":Vector2.ONE,"follow_offset":Vector2(0,-24),"strength":1.0,"clash_ornament":1.0},true)
 	var mesh: MeshInstance2D = slot.mesh
 	# Specialised owned guards return these same pooled meshes. Every new
 	# ordinary effect restores its shader before assigning its own uniforms.
@@ -238,7 +238,7 @@ func _process(delta: float) -> void:
 		if slot.follow != null:
 			var target = slot.follow.get_ref()
 			if target == null: slot.active=false;slot.mesh.hide();continue
-			slot.mesh.global_position=target.global_position+Vector2(0,-24)
+			slot.mesh.global_position=target.global_position+Vector2(slot.get("follow_offset",Vector2(0,-24)))
 		if slot.life > 0 and slot.age >= slot.life:
 			slot.active=false;slot.mesh.hide();continue
 		slot.mesh.material.set_shader_parameter("clock_s",slot.age)

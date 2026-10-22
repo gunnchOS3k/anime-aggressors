@@ -22,9 +22,9 @@ uniform float cue = 0.0; // 0 owned guard, 1 contact, 2 rupture, 3 Perfect Guard
 
 float stroke(vec2 p,vec2 a,vec2 b,float width) {
  vec2 d=b-a;float h=clamp(dot(p-a,d)/max(.0001,dot(d,d)),0.0,1.0);
- return 1.0-smoothstep(width,width+.012,length(p-a-d*h));
+ return 1.0-smoothstep(width*1.55,width*1.55+.014,length(p-a-d*h));
 }
-float rim(vec2 p,float r,float w) {return 1.0-smoothstep(w,w+.012,abs(length(p)-r));}
+float rim(vec2 p,float r,float w) {return 1.0-smoothstep(w*1.45,w*1.45+.014,abs(length(p)-r));}
 float grammar(int f,vec2 p,float time,float damage) {
  float r=length(p),a=atan(p.y,p.x),s=0.0;
  if(f==0) { // open furnace lobes: contained heat, never a filled explosion
@@ -33,7 +33,7 @@ float grammar(int f,vec2 p,float time,float damage) {
   s+=rim(p,.51,.009)*smoothstep(-.1,.55,p.x)*.35;
  } else if(f==1) { // overlapping armor buttresses and compression joints
   float facet=max(abs(p.x)*.9+abs(p.y)*.35,abs(p.y));
-  s=(1.0-smoothstep(.015,.031,abs(facet-.59)))*.85;
+  s=(1.0-smoothstep(.022,.043,abs(facet-.59)))*.85;
   for(int i=0;i<4;i++){float y=(float(i)-1.5)*.23;s+=stroke(p,vec2(.46-abs(y)*.2,y),vec2(.66-abs(y)*.2,y),.013)*.6;}
  } else if(f==2) { // stable routed current and branching electrical joints
   for(int i=0;i<6;i++){float q=float(i)*1.047;vec2 d=vec2(cos(q),sin(q));vec2 b=d*.58+vec2(-d.y,d.x)*.055;
@@ -56,7 +56,7 @@ float grammar(int f,vec2 p,float time,float damage) {
   s=rim(p,.64,.014)*.6+rim(p,.49,.007)*.3;
   for(int i=0;i<5;i++){float q=float(i)*1.257;vec2 d=vec2(cos(q),sin(q));s+=stroke(p,d*.68,d*.53,.01)*.6;}
  } else { // outward ordered construction, aligned hard-light braces
-  float h=max(abs(p.x)*.866+abs(p.y)*.5,abs(p.y));s=(1.0-smoothstep(.01,.025,abs(h-.59)))*.75;
+  float h=max(abs(p.x)*.866+abs(p.y)*.5,abs(p.y));s=(1.0-smoothstep(.016,.035,abs(h-.59)))*.75;
   for(int i=0;i<6;i++){float q=float(i)*1.047;vec2 d=vec2(cos(q),sin(q));s+=stroke(p,d*.51,d*.7,.009)*.5;}
  }
  return s;
@@ -77,7 +77,7 @@ void fragment() {
   vec2 bend=d*.52+side*.055;
   crack+=(stroke(q,d*.38,bend,.009)+stroke(q,bend,d*.72,.007))*enabled;
  }
- float silhouette=primary*(.64+.12*damage)+crack*.48;
+ float silhouette=primary*(.88+.10*damage)+crack*.48;
  vec3 ink=accent.rgb;
  if(cue>.5 && cue<1.5) {
   float attacker=grammar(secondary_family,p*.9,clock_s,0.0);
@@ -94,5 +94,8 @@ void fragment() {
  // The central character stays unobscured in every intensity mode.
  silhouette*=smoothstep(.24,.38,length(p));
  float alpha=clamp(silhouette*accent.a,0.0,.76);
- COLOR=vec4(ink,alpha);
+ // Narrow pale edge improves separation from like-colored costumes. No fill,
+ // extra particle, flash, screen input, camera or gameplay change.
+ vec3 edge_ink=mix(ink,vec3(.94,.96,1.0),clamp(silhouette-.55,0.0,.22));
+ COLOR=vec4(edge_ink,alpha);
 }
