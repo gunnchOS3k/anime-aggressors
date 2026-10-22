@@ -1,3 +1,29 @@
+# Final 8D / Cursor continuation — verified bounded increment
+
+Runtime: 3faa2f2cbfc5d0af57af06655f900784a97886ba. Get actual git HEAD for the later documentation delivery commit. PR #123 remains draft on #122; parent c5f3be23 verified. Portal handoff b5116094 was pushed and its CI passed; later additive handoff update must be requeried. Read docs/handoff/2026-10-22/CODEX_TO_CURSOR.md and AGENTS.md first.
+
+Completed: nine original facial directions, both advancement stages, actual existing source morphs; corrected four fighters' neutral-on-hurt alias defect. Final 72 public form configurations PASS. Real public attack interruptions PASS18, exact matched native body comparisons PASS18 at f45f33af. CPU second-stage observations: eight fighters, Kaia first only with real interruptions and one stock loss. All109 contacts/damage/advancement frames/stock outcomes match pre8D baseline in the same bounded recipe (only wall time/projectile process IDs excluded). Full 36 body/facing CPU matrix is not complete.
+
+Final cache is plain data in the existing mesh controller. Static/helper candidates retained historically, not asserted cleanup closure. Final verbose72 run retains ten actual audio stream/playback objects; raw9CPU counts35/38/41 are not causal proof. No warnings suppressed. See production_8d/CLEANUP_OBSERVATIONS.json and COMBAT_EQUIVALENCE.json. All original18Blenders/5408B+1448Cactions/36GLBs and33worktrees/saves preserved. New8D Blender/rig/GLB edits: ZERO. No heavy export, new remote source job or deletion of protected assets. Removed only this increment's own unused helper script by folding unchanged math into existing controller; all prior commits preserved.
+
+No owned Godot/Blender/capture/watch process remains. One unrelated untracked WORKFLOW_REFERENCED_PATHS.json remains preserved. Final source/evidence/handoff commits must be pushed normally before stopping; get exact local/remote heads afterward. Owner gates all false. Current internal space and 18GiB plus forecast-allocation rule in production_8d/STORAGE.json.
+
+Next Codex art task: compatible versioned18rig weighted secondary controls and real paired grip/support acting from verified8C source copies, preserving canonical proportions/actions/balance. Installed Blender3.3.1 must not downgrade v400 sources. Next Cursor task: separate-branch audio-lifetime diagnostics or packagedGLB/controller/save/PartyLink verification; do not replace source art. No more guard/projectile reimplementation or repeated historical campaigns. Full character/transform/ultimate art, seven earned routes/Convergence, final OVA/variants, real LAN/device and human approval remain open.
+
+---
+
+# 8D final bounded increment and Cursor continuation checkpoint
+
+Exact tested committedruntimef45f33afaf24d8b8ab923ec7229fb6765d2fe7e1; draft123on122, getgitHEADforlaterdocumentationdelivery. DurableCodex→Cursorhandoffatdocs/handoff/2026-10-22/CODEX_TO_CURSOR.md, sharedAGENTS.md; portalhandoffb5116094b4f0acfe0ec740e9ba84a55ca15dd53ehasbothCISUCCESS. Codexownscreative/sourceart; Cursorindependentengineeringonseparatebranchonly. All33worktrees/ownersaves/sourcearchivespreserved. Oneunrelateduntrackedartifacts/vxp3/reports/WORKFLOW_REFERENCED_PATHS.jsonpreserved.
+
+Implementedbounded8D original9character2stagefacialscore, existingactualsourceblendshapes/sameTransformPipelineclock; pauseandcinematic/hurtpriority, actualformtrackingandbreakshock. Actualhitfailureexposedunknownstrained/surprisedmapping4fighters; fixedexistingpain/shockaliaseswithoutnewanatomy/timing/balancechanges. Source18GLB/morphchecksPASS;72publicformconfigsPASS;18realpublichitinterruptsPASS;final18matchednativebodypose/cameracomparisonsPASSatface_native_final1022, exactruntimef45f33af. Earlierparse/posecompare/hurtfailuresretainednotpromoted. Newsourcebone/mesh/BlenderproductionZERO; premium8Dunfinished.
+
+BoundedSecondAdvancementCPU8D nine720framecasesCOMPLETE,109realcontacts,8fighterssecondadvancement. Kaiafirstonly;realinterruptions/launches andstock9->8/BASEresetframe644; driver/difficultyseparationpending,noverifiedmechanicdefectorbalancechange. Onebody/facingperfighteronly,initialaura100bothdeclared,no laterstat/state/resultoverrides. CPUshutdown38objects/12resourcesretained, baselineattributionunknown. Actualhurtfixed18exit4objects/2resourceswarningretained. NoownedGodot/Blender/capture/watchjobremains. Allnewsource/evidencecommittedwiththisdeliverythenpushednormally;getactualHEAD/CIafterpush. Noheavyproduction/export/cleanup;lateststorageinproduction_8d/STORAGE.json,18GiB+allocationsmandatory.
+
+READ: artifacts/v1_closure/production_8d/OWNER_REVIEW.md,PRODUCTION_MATRIX.json,SOURCE_BINDINGS.json,CPU_RESULTS.json,EVIDENCE_MANIFEST.json. Exact8C18editablearchiveidentityremainsinproduction_8c,notduplicated. InstalledBlender3.3.1versusv400sourceprecludesdowngradingprotectedcopies. NEXTCodexproduction: compatibleversioned18rig independentlyweightedsecondarycontrolsandpairedgrip/supportacting,preserve5408B+1448Cactions/canonical22bones; noanotherguard/projectilepass. NEXTCursorindependent: reproducedshutdownwarningsorpackagedrawGLBloading/controller/save/PartyLinkdiagnostics,separatebranch,noartreplacement. CPUunverified27otherbody/facingconfigsplusKaiaremainopen. Sevenearnedroutes/Convergence,finalOVA/6variants,LAN/deviceandallhumanart/feel/mix/balance/releasegatesstillopen/false.
+
+---
+
 # 8D actual facial performance and hurt defect correction checkpoint
 
 Source9character/twostageoriginalmorphscores implemented; saved8C18rig/144actions/36GLBsunchanged. Actual72publictransformconfigsPASS,18actualsourceGLBkeychecksPASS. Nativeinitialcomparisonfailedexactbodyposechecks; idlecallbackskeptchangingmanuallystagedbody. Observernowfreezesallstagedcallbacks(no gameplay acceptanceclaim),exact18bodypose/cameramatchesandvisiblemorphchangesPASS atface_native_frozen1022. Earlierfailednative/sourceparseevidencepreserved.
