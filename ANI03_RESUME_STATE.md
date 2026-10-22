@@ -1,3 +1,11 @@
+# 8D original controls — remote failure retained / safe recovery
+
+Producer306e02cd remote39851476989 FAILED at pre-save original geometry/rest/action preservation; no source binary was produced. Do not promote this as art delivery. Retain exact job log. New diagnostics compare original action/frame and report changed meshes/bone components without weakening preservation assertions. Runtime opt-in source is local/in progress, unverified. All original archives/actions preserved.
+
+Live internal free16.56GiB, BELOW18GiB reserve. No local asset recovery/import, Blender export or recordings until live free minus forecast exceeds18GiB. Remote producer permitted; immutable new source archive can stream externally after success. Do not delete data. NEXT: push preservation diagnostic correction, dispatch ONE new controls-only job, record source/run; inspect actual result before further retries.
+
+---
+
 # 8D source-control production — new bounded18-rig pass
 
 Recovered delivery9516770d, all exact-headCIpassed, archiveAPFSUUIDverified, no competing localcapture/Blenderjob. New originalcontrols producer and existing workflow controls_8d flag authored; source syntaxPASS, Ruby YAMLparsePASS. DefaultPython lacksPyYAML; no dependencies installed or validation weakened. Actual source output NOTYETPRODUCED. All33worktrees, source archives and facial work preserved; unrelated untrackedWORKFLOW_REFERENCED_PATHS.json untouched.

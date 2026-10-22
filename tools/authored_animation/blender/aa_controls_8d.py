@@ -224,11 +224,21 @@ def run():
         old_objects={o.name for o in bpy.data.objects};old_actions={a.name for a in bpy.data.actions}
         assert sum(n.startswith('ANI08B_WIP_')for n in old_actions)==30 and sum(n.startswith('ANI08C_WIP_')for n in old_actions)==8
         old_geo=geometry(old_objects);old_rest=rest(arm,canonical);old_curve=actions(old_actions)
+        old_object_hashes={n:geometry([n])for n in old_objects if bpy.data.objects[n].type=='MESH'}
+        old_bone_matrices={n:[list(r)for r in arm.data.bones[n].matrix_local]for n in canonical}
         before_weights={n:weights([n])for n in old_objects if bpy.data.objects[n].type=='MESH'}
         nla=[t.mute for t in arm.animation_data.nla_tracks];previous=arm.animation_data.action;previous_frame=bpy.context.scene.frame_current
         for t in arm.animation_data.nla_tracks:t.mute=True
         chains,modified,new_objects=prepare(arm,fid,body,score['fighters'][fid]);clips=author(arm,score['fighters'][fid],chains)
-        assert geometry(old_objects)==old_geo and rest(arm,canonical)==old_rest and actions(old_actions)==old_curve
+        # Compare at the ORIGINAL action/frame: authoring sampled a different
+        # action, which can change evaluated object-local transforms.
+        arm.animation_data.action=previous
+        for t,value in zip(arm.animation_data.nla_tracks,nla):t.mute=value
+        bpy.context.scene.frame_set(previous_frame);bpy.context.view_layer.update()
+        preservation={'fighter':fid,'body':body,'geometry_exact':geometry(old_objects)==old_geo,'rest_exact':rest(arm,canonical)==old_rest,'actions_exact':actions(old_actions)==old_curve,'changed_meshes':[n for n,h in old_object_hashes.items()if geometry([n])!=h],'rest_component_differences':{n:max(abs(arm.data.bones[n].matrix_local[i][j]-old_bone_matrices[n][i][j])for i in range(4)for j in range(4))for n in canonical if rest(arm,[n])!=digest({n:{'rest':old_bone_matrices[n],'parent':arm.data.bones[n].parent.name if arm.data.bones[n].parent else None}})}}
+        (out/'runtime').mkdir(exist_ok=True)
+        (out/'runtime/PRESERVATION_DIAGNOSTIC.json').write_text(json.dumps(preservation,indent=2)+'\n')
+        assert preservation['geometry_exact']and preservation['rest_exact']and preservation['actions_exact'],preservation
         assert all(weights([n])==w for n,w in before_weights.items()if n not in modified)
         # Save the complete editable library FIRST. Export from a reopened
         # disposable in-memory copy, never save the action-filtered export view.
