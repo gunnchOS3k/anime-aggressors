@@ -60,6 +60,7 @@ func perform(p,form_id: String,label: String) -> void:
 	await frames(4)
 	var final: Dictionary=p.model_3d._form_presentation_8c.snapshot()
 	check(preview_seen and final.installed_form==form_id and int(final.sockets)>0 and final.failures.is_empty(),label+":actual_GLTF_sockets_and_persistent_reveal")
+	for socket in final.get("socket_correspondence",[]):check(float(socket.rest_max_component_error)<.00001,label+":source_to_imported_rest_correspondence")
 	check(control.get_active_clip().begins_with("form_idle_"),label+":powered_idle_selected")
 	var player: AnimationPlayer=control.get_animation_player();var time0:=player.current_animation_position
 	await frames(6)
