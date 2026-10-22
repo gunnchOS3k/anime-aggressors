@@ -8,6 +8,9 @@
   "cause": "THROW_STARTUP entered with old grab _current_move; _start_move_dict enters same state so no new animation callback before authoritative frame-zero contact. End-of-frame update selected correct throw too late.",
   "correction": "Refresh existing _play_current_animation after resolved throw move start, before contact. Presentation only; no new resolver/timer/damage.",
   "fighter_source_sha256": "271bc40d59bd4be73f2c8e9357c08da9c3a7418cf4b330f67b159458ba64ae9b",
-  "validation": "Pending source-corrected form/roster pass",
-  "human_approved": false
+  "validation": "PASS within explicit engine fixture scope; native/human/art approval false",
+  "human_approved": false,
+  "validated_runtime_source_sha": "c7429fa0d9cb3274dad0ac12690b7029a9a4646b",
+  "current_roster_pass": "roster_aligned1022/grab_acting_runtime_8b.json",
+  "current_form_pass": "forms_aligned1022/grab_acting_forms_8b.json"
 }

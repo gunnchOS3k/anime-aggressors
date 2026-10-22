@@ -96,6 +96,7 @@ func pose(actor) -> Dictionary:
 		points[name] = [point.x, point.y]
 		var q := sk.get_bone_pose_rotation(index);rotations[name] = [q.x, q.y, q.z, q.w]
 	return {"fighter":actor.fighter_id, "body":actor.data.body_variant, "facing":actor.facing, "damage_percent":actor.damage_percent,
+		"global_position":[actor.global_position.x, actor.global_position.y], "velocity":[actor.velocity.x, actor.velocity.y], "on_floor":actor.is_on_floor(),
 		"state":actor.state_machine.current_state, "clip":c.get_active_clip(),
 		"animation":c.get_animation_player().current_animation, "animation_time":c.get_animation_player().current_animation_position,
 		"points_gameplay_px":points, "local_rotations":rotations, "source":c.get_grab_acting_report()}
@@ -138,20 +139,29 @@ func throw_case(p, d, fid: String, body: String, face: int, direction: String) -
 	check(str(reaction.source.get("throw_reaction_clip", "")).begins_with("throw_reaction_"), label + ":actual_launch_reaction")
 	var damage_before: float = d.damage_percent
 	var landing := {};var recovered := false
+	var airborne_observed: bool = not d.is_on_floor()
+	var state_path: Array = []
 	for i in range(120):
 		await physics_frame
+		airborne_observed = airborne_observed or not d.is_on_floor()
+		if state_path.is_empty() or state_path[-1].state != d.state_machine.current_state:
+			state_path.append({"frame":i, "state":d.state_machine.current_state, "on_floor":d.is_on_floor(), "position":[d.global_position.x, d.global_position.y], "velocity":[d.velocity.x, d.velocity.y]})
 		if d.state_machine.current_state == "land" and landing.is_empty():
 			landing = pose(d)
 		if d.state_machine.can_attack() and p.state_machine.can_attack():
 			recovered = true
 			if landing_gaps.is_empty() or not landing.is_empty():break
 	if not landing_gaps.is_empty():
-		check(not landing.is_empty(), label + ":natural_landing_observed")
+		# Accepted low-knockback grounded throws use HURT_LIGHT/HITSTUN, not
+		# LAUNCHED -> LAND. Never increase launch to satisfy an animation test.
+		var ground_recovery: bool = not airborne_observed and d.is_on_floor() and d.state_machine.can_attack() and str(reaction.state) in ["hurt_light", "hurt_heavy", "hitstun"]
+		check(not landing.is_empty() or ground_recovery, label + ":real_landing_or_authorized_ground_recovery")
 		if not landing.is_empty():check(landing.source.get("throw_landing_active", false), label + ":real_saved_landing")
 	check(contacts.size() == 1 and is_equal_approx(d.damage_percent, damage_before), label + ":no_late_damage")
 	check(p.grabbed_target == null and d.grabbed_by == null and not p.hitbox.monitoring, label + ":release_cleanup")
 	rows.append({"case":label, "kind":"public_throw", "fighter":fid, "body":body, "facing":face, "direction":direction,
 		"hold":hold, "sustained_hold":sustained, "release_at_contact":throw_handoff.duplicate(true), "release":release_pose, "reaction":reaction, "landing":landing, "control_return_observed":recovered,
+		"terminal":pose(d), "airborne_observed":airborne_observed, "state_path":state_path,
 		"contacts":contacts.duplicate(true), "damage_applications":damage_events.size(), "events":grab_events.duplicate(true)})
 	write(false)
 

@@ -1,7 +1,8 @@
 # 8B — saved original action candidates; visual acceptance pending
 
 Draft PR123 remains stacked on122, branch
-`release/anime-v1-dialogue-and-elemental-performance`.
+`release/anime-v1-dialogue-and-elemental-performance`. Engineering runtime
+`c7429fa0d9cb3274dad0ac12690b7029a9a4646b`; later delivery changes are evidence/docs only.
 This is a working source/runtime increment, **not completed production acting**.
 All human art, gameplay, balance, device and release gates remain false.
 
@@ -63,6 +64,11 @@ counterattacks still landed and interrupted the holder's recovery normally.
 [RECOVERY_CORRECTION.json](RECOVERY_CORRECTION.json) retains the exact baseline,
 failed observer/setup attempts, corrected result and source hashes.
 
+The form callback test also reproduced54cases displaying the old grab pose at
+the exact throw event. Refreshing the existing animation selection after resolving
+the throw now shows its frame-zero pose before HitResolver feedback. Damage,
+startup, launch and hitstop remain unchanged. See [FRAME_ZERO_CORRECTION.json](FRAME_ZERO_CORRECTION.json).
+
 ## Verification scope
 
 The earlier12routing fixtures and36roster/body/facing fixtures used empty
@@ -70,10 +76,22 @@ in-memory clips and remain labelled fixtures. They are not saved acting evidence
 The actual-export pilot passed16public directional throws plus4mixed-body
 escapes using real saved tracks, real model resources and no animation injection.
 
-The full180interaction saved-export run and affected form/cleanup results are
-recorded separately in [VALIDATION_SUMMARY.json](VALIDATION_SUMMARY.json) when
-complete. Read its exact source IDs and completion flags; a partial run is not a
-pass. Explicit position/idle fixtures are not active-CPU matches, earned Story,
+At the corrected runtime, all180interactions passed (144directional throws and
+36mixed-body escapes), including exact frame-zero clip/time checks.54existing
+form/Party/fresh-guard cases passed. GrabLifecycle8A15, ThrowOwnership39,
+PartyGrabInterruption9 and StorySceneOwnership8 passed without script/shader errors.
+
+116natural LAND transitions used the saved landing clips. A strict universal
+LAND requirement failed28downward cases; those were independently traced as
+accepted low-knockback grounded HURT_LIGHT/HITSTUN -> IDLE recovery. All28retained
+floor contact, returned control and had zero terminal vertical velocity. No
+launch/balance change was made. Original failed source/observer/assumption tests
+remain available; [LANDING_RECONCILIATION.json](LANDING_RECONCILIATION.json) explains
+the exact distinction. These were downward cases; an earlier progress note
+incorrectly described them as upward.
+
+[VALIDATION_SUMMARY.json](VALIDATION_SUMMARY.json) binds these results and their
+limits. Explicit position/idle fixtures are not active-CPU matches, earned Story,
 KO, native visual or human acceptance. Shutdown resource warnings are retained.
 
 [PRODUCTION_MANIFEST_39733087497.json](PRODUCTION_MANIFEST_39733087497.json)
@@ -133,7 +151,7 @@ when storage permits; it is not a permanent source backup. Original source
 rigs and all33worktrees remain in place.
 
 Only4.48MiB of runtime archive was downloaded, expanding to24.91MiB of text;
-no .blend, GLB or native export was generated locally. Internal free remains
-about12GiB, below18GiB plus allocations: no local binary art production,
+no .blend, GLB or native export was generated locally. Latest internal free is
+13.31GiB, below18GiB plus allocations: no local binary art production,
 large recording, platform export, deletion or worktree relocation. Existing
 verified external-archive receipts were reused without new copies/deletion.
