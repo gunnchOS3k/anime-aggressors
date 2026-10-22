@@ -60,6 +60,7 @@ jobs:
             --out "artifacts/glb_package_probe/${GODOT_VERSION}"
 
       - name: Upload probe report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: glb-package-probe-${{ matrix.godot }}

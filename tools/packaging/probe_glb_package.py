@@ -257,10 +257,18 @@ def pck_paths(pck: Path) -> list[str]:
 
 
 def export_case(godot: str, root: Path, out_dir: Path, case: str, preset: str) -> dict:
+    root = root.resolve()
+    out_dir = out_dir.resolve()
     out_dir.mkdir(parents=True, exist_ok=True)
     pck = out_dir / f"{case}-{preset.lower()}.pck"
     log_path = out_dir / f"{case}-{preset.lower()}.export.log"
-    export = run([godot, "--headless", "--path", str(root), "--export-pack", preset, str(pck)], root, 180)
+    if not (root / "project.godot").is_file():
+        raise SystemExit(f"probe project missing: {root}")
+    export = run(
+        [godot, "--headless", "--path", str(root), "--export-pack", preset, str(pck)],
+        root,
+        180,
+    )
     log_path.write_text(export.stdout + "\n" + export.stderr, encoding="utf-8")
     record: dict = {
         "case": case,
