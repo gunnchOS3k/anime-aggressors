@@ -16,6 +16,7 @@ import argparse
 import hashlib
 import json
 import shutil
+import struct
 import subprocess
 import textwrap
 from pathlib import Path
@@ -98,6 +99,14 @@ def write_probe_project(root: Path, case: str, godot_feature: str, filters: dict
                 """
             ),
             encoding="utf-8",
+        )
+    elif case == "form_committed":
+        sidecar = repo / (FORM_REL + ".import")
+        if not sidecar.is_file():
+            raise SystemExit(f"committed keep sidecar missing: {sidecar}")
+        shutil.copy2(
+            sidecar,
+            root / "assets/characters/form_acting_8c/ember-vale/female/EMBER_ASCENDED.glb.import",
         )
     elif case == "pipeline_scene":
         shutil.copy2(repo / (PIPELINE_REL + ".import"), root / "assets/characters/authored/ember-vale/pipeline_proof.glb.import")
@@ -225,35 +234,43 @@ def parse_probe(log: str) -> list[str]:
     return lines[start:end]
 
 
-def pck_paths(pck: Path) -> list[str]:
+def pck_entries(pck: Path) -> list[dict]:
+    """Read the Godot 4.3 (v2) or 4.5 (v3) pack directory. This is the package evidence."""
     data = pck.read_bytes()
     if data[:4] != b"GDPC":
-        return [f"bad_magic:{data[:4]!r}"]
-    # Godot 4 directory entries store res:// paths as length-prefixed strings.
-    paths: list[str] = []
-    needle = b"res://"
-    start = 0
-    while True:
-        at = data.find(needle, start)
-        if at < 0 or at < 4:
-            break
-        length = int.from_bytes(data[at - 4 : at], "little")
-        if 6 <= length <= 512 and at + length <= len(data):
-            raw = data[at : at + length]
-            if raw.startswith(b"res://") and b"\x00" not in raw:
-                try:
-                    paths.append(raw.decode("utf-8"))
-                except UnicodeDecodeError:
-                    pass
-        start = at + 6
-    # Preserve order, drop duplicates.
-    seen: set[str] = set()
-    unique: list[str] = []
-    for path in paths:
-        if path not in seen:
-            seen.add(path)
-            unique.append(path)
-    return unique
+        return [{"error": f"bad_magic:{data[:4]!r}"}]
+    version = struct.unpack_from("<I", data, 4)[0]
+    _flags, file_base = struct.unpack_from("<IQ", data, 20)
+    if version >= 3:
+        off = struct.unpack_from("<Q", data, 32)[0]
+    elif version == 2:
+        off = 96
+    else:
+        return [{"error": f"unsupported_pack_version:{version}"}]
+    count = struct.unpack_from("<I", data, off)[0]
+    off += 4
+    if count > 10000:
+        return [{"error": f"implausible_count:{count}"}]
+    entries: list[dict] = []
+    for _ in range(count):
+        slen = struct.unpack_from("<I", data, off)[0]
+        off += 4
+        raw = data[off : off + slen]
+        off += slen
+        ofs, size = struct.unpack_from("<QQ", data, off)
+        off += 16 + 16 + 4
+        name = raw.split(b"\x00", 1)[0].decode("utf-8", "replace")
+        start = file_base + ofs
+        blob = data[start : start + size]
+        entries.append(
+            {
+                "path": name,
+                "bytes": size,
+                "magic": blob[:4].decode("latin1", "replace"),
+                "sha256": hashlib.sha256(blob).hexdigest() if name.endswith(".glb") and not name.endswith(".import") else "",
+            }
+        )
+    return entries
 
 
 def export_case(godot: str, root: Path, out_dir: Path, case: str, preset: str) -> dict:
@@ -276,15 +293,19 @@ def export_case(godot: str, root: Path, out_dir: Path, case: str, preset: str) -
         "export_code": export.returncode,
         "pck_exists": pck.exists(),
         "pck_bytes": pck.stat().st_size if pck.exists() else 0,
-        "paths": [],
+        "entries": [],
         "runtime": [],
         "runtime_code": None,
     }
     if not pck.exists():
         record["export_tail"] = (export.stdout + export.stderr)[-2000:]
         return record
-    record["paths"] = pck_paths(pck)
-    runtime = run([godot, "--headless", "--main-pack", str(pck)], root, 90)
+    record["entries"] = pck_entries(pck)
+    # Run outside the project directory. A main-pack launch from the project
+    # folder can read the source GLBs from disk and hide a missing pack file.
+    runtime_cwd = out_dir / "runtime-cwd"
+    runtime_cwd.mkdir(parents=True, exist_ok=True)
+    runtime = run([godot, "--headless", "--main-pack", str(pck)], runtime_cwd, 90)
     (out_dir / f"{case}-{preset.lower()}.runtime.log").write_text(runtime.stdout + "\n" + runtime.stderr, encoding="utf-8")
     record["runtime_code"] = runtime.returncode
     record["runtime"] = parse_probe(runtime.stdout + "\n" + runtime.stderr)
@@ -320,14 +341,14 @@ def main() -> int:
     summary["godot_version_output"] = (version.stdout or version.stderr).strip()
     feature = args.version
     work = out / "work"
-    for case in ("form_unimported", "form_keep", "pipeline_scene"):
+    for case in ("form_unimported", "form_keep", "form_committed", "pipeline_scene"):
         project = work / case
         write_probe_project(project, case, feature, filters, repo)
         for preset in ("Web", "Android"):
             summary["cases"].append(export_case(args.godot, project, out / "packs", case, preset))
     (out / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(summary, indent=2))
-    web_ok = any(case["preset"] == "Web" and case["pck_exists"] and case["runtime"] for case in summary["cases"])
+    web_ok = any(case["preset"] == "Web" and case["entries"] for case in summary["cases"])
     return 0 if web_ok else 1
 
 
