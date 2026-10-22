@@ -1,117 +1,139 @@
-# 8B — source foundation; saved acting remains blocked
+# 8B — saved original action candidates; visual acceptance pending
 
-Prepared source checkpoint `0895437b` on
-`release/anime-v1-dialogue-and-elemental-performance`, draft PR123 stacked on122.
-This increment does **not** claim completed original character acting.
-There are **zero newly saved Blender actions** and no installed8B runtime exports.
+Draft PR123 remains stacked on122, branch
+`release/anime-v1-dialogue-and-elemental-performance`.
+This is a working source/runtime increment, **not completed production acting**.
+All human art, gameplay, balance, device and release gates remain false.
 
-## Implemented support
+## Saved source and runtime correspondence
 
-- Reciprocal holder/victim animation selection and mirrored clip names, with
-  explicit fallback/fixture/authored provenance diagnostics.
-- Correct looping for hold presentation. The old grab runner can no longer
-  replace an ongoing hold with its earlier acquisition pose.
-- Real mash-escape presentation selection that yields immediately to movement,
-  new attacks, hurt, KO, reset and match end. No new control lock or gameplay timer.
-- Conditional directional throw-victim reactions and real landing presentation
-  using the existing hurt/hitstop/landing clocks.
-- Optional rig-specific overlays are admitted only after saved-action and
-  source/runtime verification, matching identity/body and source identifiers.
-  Unverified pose files cannot masquerade as saved acting.
+The owner explicitly approved the exact two public-repository artifacts.
+[Run39733087497](https://github.com/gunnchOS3k/anime-aggressors/actions/runs/39733087497)
+passed at `cc2b3a5a555aeb22fc8eb7510bd7702a28975aad`, using Blender4.0.2.
+It saved **18 new preserved-rig copies with540WIPactions**, reopened each,
+and evaluated15340source frames against the runtime keys. Maximum matrix
+component error was0.000003994. Original meshes, rest bones, weights and
+existing action curves were checked unchanged. All18 original Blender files
+remain unchanged; all18 original BASE GLB hashes match the exports.
 
-The original8A ownership, damage, hitboxes, throws, Perfect Guard, Party forms,
-aura defaults and inputs remain authoritative. No character model, scale,
-geometry, weight or original source action was replaced.
+Each rig has30new actions (15categories × two facings): acquire, whiff,
+holder hold, victim restraint, victim escape, holder recovery, landing,
+four throw releases and four directional victim reactions. Source identifiers
+are `ANI08B_WIP_<clip>`; these are individually directed regional pose scores
+baked onto the actual rig, **not final artist-approved performances**.
+No Kaia/Juno curve was copied as the roster's acting.
 
-## Original source prepared
+The established22-bone boundary keys21pose bones plus pelvis position;
+Root remains static. Throw release remains at gameplay frame zero, with
+anticipation in hold and existing runtime clocks controlling playback.
+No original model, geometry, proportions, skin weights, source library,
+GLB, damage, frame data, collision, launch, Perfect Guard or Party rule changed.
 
-`art_source/animation/grab_acting_8b/score_v1.json` contains nine individually
-directed regional pose scores: holder restraint/preparation, victim resistance,
-escape, acquisition/whiff, four directional releases, four airborne reactions,
-and supported landing/recovery. Each fighter has its own pose values and intent;
-this is not a Kaia/Juno curve copied across the roster.
+[ROSTER_18_MATRIX.json](ROSTER_18_MATRIX.json) lists every exact original path,
+original/saved hash,30saved action IDs and runtime mapping. The saved copy for
+each entry is `saved_sources/<fighter>/<body>/candidate_8b.blend` in the source
+artifact. Corresponding text is installed at
+`game-godot/data/animation/grab_acting_8b/<fighter>_<body>.json`.
 
-The existing offline rig/sole boundary bakes30candidate clips per actual rig
-(15actions × two facings), across all18 rigs. These540pose candidates are
-**not540saved actions**. Desired hand targets are clipped by anatomical reach in
-some Ember/Kaia/Nix/Orion/Vesper samples; exact residuals are retained per body.
-No limb was stretched or moved to conceal that limitation. Physical contact,
-acting quality and supporting-foot appearance still need actual source/native review.
+| Fighter | Male saved actions | Female saved actions | Visual/fidelity approval |
+|---|---:|---:|---|
+| Ember |30|30|Pending|
+| Rook |30|30|Pending|
+| Juno |30|30|Pending|
+| Kaia |30|30|Pending|
+| Nix |30|30|Pending|
+| Orion |30|30|Pending|
+| Vesper |30|30|Pending|
+| Yin |30|30|Pending|
+| Yang |30|30|Pending|
 
-[ROSTER_18_MATRIX.json](ROSTER_18_MATRIX.json) contains all18 exact source paths,
-original hashes, planned action identifiers and runtime files. Every row currently
-has source-save, new acting import, paired authored contact, character-sheet
-fidelity, native evidence and human approval incomplete/false.
+## Runtime changes
 
-| Fighter | Male rig | Female rig | New saved acting |
-|---|---|---|---|
-| Ember | Score + routing support | Score + routing support | 0; blocked |
-| Rook | Score + routing support | Score + routing support | 0; blocked |
-| Juno | Score + routing support | Score + routing support | 0; blocked |
-| Kaia | Score + routing support | Score + routing support | 0; blocked |
-| Nix | Score + routing support | Score + routing support | 0; blocked |
-| Orion | Score + routing support | Score + routing support | 0; blocked |
-| Vesper | Score + routing support | Score + routing support | 0; blocked |
-| Yin | Score + routing support | Score + routing support | 0; blocked |
-| Yang | Score + routing support | Score + routing support | 0; blocked |
+Reciprocal ownership selects distinct holder/victim loops and mirrored actions.
+An old acquisition runner cannot overwrite an ongoing hold. Actual mash escape
+selects victim acting while preserving immediate movement/attack control.
+Throw reactions follow the real launch vector; landing uses actual floor/state
+and the existing landing clock. Missing/unverified exports retain honest fallback
+status rather than claiming authored source.
 
-## Actual validation
+A real release-callback comparison found holders selecting `grab_whiff` after
+mash escape. The correction selects saved `grab_recovery(_left)` within the
+unchanged GRAB_WHIFF state. In the pilot, all four legal immediate victim
+counterattacks still landed and interrupted the holder's recovery normally.
+[RECOVERY_CORRECTION.json](RECOVERY_CORRECTION.json) retains the exact baseline,
+failed observer/setup attempts, corrected result and source hashes.
 
--12lifecycle/routing fixtures passed, then36roster/body/facing configurations
-  passed. The body models are real existing GLBs; the injected test animations
-  are empty in-memory fixtures. They prove routing/looping/interruption only.
-- Existing GrabLifecycle8A15, ThrowOwnership39 and PartyGrabInterruption9 passed.
-- All18 original Blender files retain their protected Git identity. The pure
-  source bake and Python syntax checks passed without running local Blender.
-- No new Blender save/reopen, new runtime export/import, native visual/device
-  test or sustained frame-performance acceptance occurred. Existing evidence
-  keeps its original source IDs. Shutdown resource warnings remain in the logs.
+## Verification scope
 
-Character-sheet fidelity, meaningful secondary hair/cloth motion, original KO
-acting, full form retargeting, paired hand/body contact and floor appearance
-remain production work. No fixture result or pose count closes those gates.
+The earlier12routing fixtures and36roster/body/facing fixtures used empty
+in-memory clips and remain labelled fixtures. They are not saved acting evidence.
+The actual-export pilot passed16public directional throws plus4mixed-body
+escapes using real saved tracks, real model resources and no animation injection.
 
-## Concrete remote production operation awaiting approval
+The full180interaction saved-export run and affected form/cleanup results are
+recorded separately in [VALIDATION_SUMMARY.json](VALIDATION_SUMMARY.json) when
+complete. Read its exact source IDs and completion flags; a partial run is not a
+pass. Explicit position/idle fixtures are not active-CPU matches, earned Story,
+KO, native visual or human acceptance. Shutdown resource warnings are retained.
 
-The existing Authored Animation Production workflow now has an opt-in
-`grab_acting_8b` job on Ubuntu24.04. It uses the established Blender-action→JSON
-boundary, saves **new copies** of all18 original rigs, reopens every saved file,
-and checks original geometry/rest/weights/action preservation and evaluated
-source/runtime correspondence. Blender exceptions fail the job, and a separate
-validator requires the exact complete18-rig manifest.
+[PRODUCTION_MANIFEST_39733087497.json](PRODUCTION_MANIFEST_39733087497.json)
+records saved/reopened source correspondence; local validation also matches
+original/saved provenance, complete21-bone pose tracks, static Root contract,
+finite normalized keys, action IDs, frame-zero releases and all18 GLB hashes.
+Source binary hashes were checked remotely. No source binary was downloaded
+or rehashed on the Mac.
 
-[ARTIFACT_APPROVAL_PLAN.json](ARTIFACT_APPROVAL_PLAN.json) lists the exact18 input
-files/hashes, all proposed saved-copy paths and540action identifiers. Proposed
-outputs are two GitHub Actions artifacts, retained90days:
+## Owner playable review
 
-1. `grab-acting-8b-saved-sources-<SHA>`:18new `.blend` copies containing original
-   meshes/materials/weights/actions plus the proposed acting actions.
-2. `grab-acting-8b-runtime-<SHA>`:18text animation exports and a hash/verification
-   manifest. Only this bounded text artifact would be downloaded internally,
-   with a32MiB cap. Source binaries would remain remote until storage permits.
+From the current worktree run:
 
-The repository is public. GitHub says signed-in users with repository read
-access can download artifacts:
-https://docs.github.com/en/actions/how-tos/manage-workflow-runs/download-workflow-artifacts
-No credentials/secrets, source replacement, merge, release, tag or deployment
-is part of this operation. It is nevertheless additional external exposure of
-the new source copies and acting candidates.
+```sh
+tools/v1_closure/play_party_review.command kaia-windrow --body female --opponent juno-spark
+```
 
-**Automatic approval review rejected workflow dispatch** because that exact
-artifact payload/exposure was not explicitly authorized. No job was dispatched,
-no new source binaries were uploaded, and no alternate tool or workaround was
-used. Remote production requires the owner's explicit artifact-upload approval.
+Use any canonical fighter ID and either body; append `--local` for two players.
+The existing launcher isolates review saves. A/D move, W jumps, J attacks,
+K specials, L shields, U grabs, I dodges. While holding, direction + J throws;
+without a direction the existing default throw applies. Mash ordinary attack,
+jump or grab as the victim. Review the hold/grip, four releases, victim reaction,
+landing and interruption at normal speed. Repeat with both bodies and facings.
+Use the existing Full/Balanced/Reduced options to assess readability. A native
+VFX-disabled paired art comparison remains pending; effects do not establish
+physical contact quality. No new native recording is supplied below
+the storage reserve. Existing movies retain their original source IDs.
 
-Internal free is about12GiB, below18GiB plus allocations. Local Blender saves,
-large renders, movies and native exports remain blocked. The APFS archive UUID
-was confirmed and existing receipts reused; no originals were deleted or moved.
+## Production work still required
 
-## Next execution
+- All18 rigs need paired mesh/hand/wrist contact authoring at the actual held
+  offsets, with real gameplay-scale visual review. Projected wrists versus a
+  hurt rectangle are diagnostics, not proof of skin contact or visual approval.
+- Ember/Kaia/Nix/Orion/Vesper contain clipped desired hand targets; the retained
+  maximum residual is up to0.02805m. No anatomy was stretched to conceal this.
+  Resolve the exact pose/paired staging through original source edits.
+- Independent deforming hair/cloth/armor follow-through remains unavailable on
+  the existing Head-bound accessory setup. Add justified source controls,
+  weighting and corresponding export support on each original body, preserving
+  the character sheets; head/neck keys alone are not secondary-motion closure.
+- Boots/weighted soles, support exchanges, visible silhouette, anticipation,
+  force and natural recovery still need representative native art review.
+  Existing floor/projection defects are not declared repaired by this increment.
+- New dedicated8B KO/interrupted body acting and form-specific original acting
+  remain incomplete. Existing hurt/KO/interrupt gameplay cleanup is preserved.
+  Shared BASE export compatibility is not authored boss/form acceptance.
+- No native-device, sustained frame-performance, physical-controller, LAN,
+  earned campaign/Convergence or final OVA acceptance is inferred here.
 
-After explicit approval, verify the reviewed production-code hashes, dispatch
-the prepared18-rig job, retain its exact SHA/run/artifact IDs, and require all18
-saved/reopened passes. Then validate/install only the bounded text overlays and
-run real paired contact/throw/body/facing tests. Do not promote the current
-pose candidates or routing fixtures to authored acting in the meantime.
+## Artifact preservation and storage
 
-All art, gameplay, balance, native/device and release approval gates remain false.
+[REMOTE_ARTIFACT_RECEIPT.json](REMOTE_ARTIFACT_RECEIPT.json) records approved
+payload hashes, IDs and retention. Source artifact12406037776 contains the18new
+saved Blender copies; runtime artifact12406187575 contains text/receipts.
+Both expire **January20,2027**. Retain the saved source artifact before expiry
+when storage permits; it is not a permanent source backup. Original source
+rigs and all33worktrees remain in place.
+
+Only4.48MiB of runtime archive was downloaded, expanding to24.91MiB of text;
+no .blend, GLB or native export was generated locally. Internal free remains
+about12GiB, below18GiB plus allocations: no local binary art production,
+large recording, platform export, deletion or worktree relocation. Existing
+verified external-archive receipts were reused without new copies/deletion.

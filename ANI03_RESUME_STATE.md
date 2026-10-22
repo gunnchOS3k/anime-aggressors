@@ -1,3 +1,11 @@
+# 8B checkpoint — all18 saved-action imports and180paired interactions PASS
+
+Exact runtime cf3b656a:144public directional throws +36mixed-body escapes PASS in `elemental_grab_throw_8b/roster_saved1022`. All9fighters/bothbodies/bothfacings, real saved clips/loops, one damage/contact, no late damage, ownership cleanup and36legal immediate defender counterattacks observed.116/144natural landings sampled with correct saved landing clips;28upward cases returned control before the observer stopped, not failed mechanics. New --landing-gaps-from option reruns ONLY those28fixtures through real floor contact. No fixture injection/native/art approval. Saved source540actions/18copies remain remote plus18installed verified text exports.
+
+NEXT after source checkpoint: run `GrabActingForms8B.gd` with new profile/output `aa8b_forms_saved1022` / `elemental_grab_throw_8b/forms_saved1022`, then only missing28landing observations using `GrabActingRuntime8B.gd --landing-gaps-from=<absolute roster_saved1022/grab_acting_runtime_8b.json>`. Run affected cleanup/throw regressions serially. No current local Godot/capture running. Internal free~12GiB; no binary source download/large local export. Owner review reconciled; full18matrix confirms source/import, not final acting. All human/native/art gatesfalse.
+
+---
+
 # 8B checkpoint — actual saved-action pilot passes; roster pass next
 
 18 remote-saved rigs/540WIPactions remain verified and installed as text only. Actual saved-animation pilot:16public throws +4mixed-body/facing mash escapes PASS at current recovery source. Exact pre-fix baseline e5dec6bc reproducibly selected grab_whiff at4real holder release callbacks. Corrected controller selects grab_recovery(_left); final mash remains allowed to counterattack immediately (4observed contacts), and hurt still interrupts recovery. No gameplay state/timer/input/damage changes. Evidence `elemental_grab_throw_8b/RECOVERY_CORRECTION.json`, `handoff_baseline1022/`, `handoff_fixed1022/`; initial driver/observer false starts retained.

@@ -5,6 +5,7 @@ var grab_events: Array = []
 var damage_events: Array = []
 var escape_handoff: Dictionary = {}
 var counter_contacts: Array = []
+var landing_gaps: Dictionary = {}
 
 func release() -> void:
 	super.release()
@@ -16,6 +17,10 @@ func run() -> void:
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--ordinary-output="):output = arg.get_slice("=", 1)
 		if arg == "--pilot":pilot = true
+		if arg.begins_with("--landing-gaps-from="):
+			var previous: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(arg.trim_prefix("--landing-gaps-from=")))
+			for row in previous.rows:
+				if row.get("kind") == "public_throw" and row.get("landing", {}).is_empty():landing_gaps[row.case] = true
 	var gs = root.get_node("GameState")
 	gs.mode = "versus";gs.stage_id = "training-grid";gs.p2_is_cpu = false;gs.stocks = 9;gs.match_timer_seconds = 0;gs.match_type = "stock_untimed"
 	root.get_node("SceneRouter").go("battle");await frames(220)
@@ -31,8 +36,10 @@ func run() -> void:
 	for fid in (IDs.slice(0, 1) if pilot else IDs):
 		for body in ["male", "female"]:
 			for face in [1, -1]:
-				for direction in ["forward", "back", "up", "down"]:await throw_case(p, d, fid, body, face, direction)
-				await escape_case(p, d, fid, body, face)
+				for direction in ["forward", "back", "up", "down"]:
+					var label: String = fid + ":" + body + ":" + str(face) + ":" + direction
+					if landing_gaps.is_empty() or landing_gaps.has(label):await throw_case(p, d, fid, body, face, direction)
+				if landing_gaps.is_empty():await escape_case(p, d, fid, body, face)
 	release();write(true);quit(0 if failures.is_empty() else 1)
 
 func setup_pair(p, d, fid: String, body: String, face: int, mixed_bodies: bool = false) -> void:
@@ -131,7 +138,12 @@ func throw_case(p, d, fid: String, body: String, face: int, direction: String) -
 		await physics_frame
 		if d.state_machine.current_state == "land" and landing.is_empty():
 			landing = pose(d)
-		if d.state_machine.can_attack() and p.state_machine.can_attack():recovered = true;break
+		if d.state_machine.can_attack() and p.state_machine.can_attack():
+			recovered = true
+			if landing_gaps.is_empty() or not landing.is_empty():break
+	if not landing_gaps.is_empty():
+		check(not landing.is_empty(), label + ":natural_landing_observed")
+		if not landing.is_empty():check(landing.source.get("throw_landing_active", false), label + ":real_saved_landing")
 	check(contacts.size() == 1 and is_equal_approx(d.damage_percent, damage_before), label + ":no_late_damage")
 	check(p.grabbed_target == null and d.grabbed_by == null and not p.hitbox.monitoring, label + ":release_cleanup")
 	rows.append({"case":label, "kind":"public_throw", "fighter":fid, "body":body, "facing":face, "direction":direction,
