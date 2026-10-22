@@ -1,3 +1,57 @@
+# Current delivery — all-nine Party/ultimate/Perfect Guard candidates
+
+Branch release/anime-v1-dialogue-and-elemental-performance, draft123 stacked122.
+Gameplay runtime fec5156d5c4c544902f17bd793f394888e4b6da0 PUSHED; inspectHEADfor
+subsequent evidence/review-only commit. FINAL_SOURCE_BINDINGS.json pins all
+changed runtime hashes. No binaryart/Blender/GLB changes; all33worktrees retained.
+
+Implemented9Prism states,9Seal behaviors withBLACK/WHITE echoes and separate
+Yin/YangTrueAspect/Conductor,9distinctultimate schedules, one-use/600tick expiry,
+mode/Storyisolation and sharedownershipcleanup. Four-frame fresh-press Perfect
+Guard,24frame rearm, no reflection/invulnerability, grabs preserved. Actual grabbed
+ultimate persistence and held-victim neutral-return corrected. Held shield can
+no longer automatically rearm after stun. CPU public observer recognizesULTstates
+without strategy/probability changes. BASE comparison72pairsPASS, candidate opt-in;
+accepted BASE default preserved. All216originalmove data files/IDs preserved.
+
+Evidence combat_completion/OWNER_REVIEW.md, ROSTER_MATRIX.json,
+VALIDATION_SUMMARY.json.108Party config composite104+4Yinrecovery retakes;81current
+orderedpairs PASS(44body/37shield). Guard54transformed contacts,27accessibility,
+20exceptions,27currenttimings+108historical.9grabinterrupts. Lifecycle8+corrected
+Rook PASS, natural600tick expiry, unchangedStorysave/memory. Throws39,charge9,
+cosmicpublic8+finiteexceptions14,Storyscene8,projectileimpact63PASS. Failed original
+fixtures retained; original final ledger lifecycle failure NOT overwritten.
+
+Nine actual level3CPU observations retained: Juno/Kaia/Vesper ultimate contacts;
+Ember/Rook/Nix/Orion no ultimate contact in boundedattempt; Yin/Yangstartup
+interrupted. CPU actual moveIDs observed for all9. No forcedresult/combo/KOclaim.
+Two ownerlauncher smoke testsPASS, current-source nativevisual reviewPENDING.
+Gameplay launch: tools/v1_closure/play_party_review.command [fighter] --body
+female --item prism_heart [--local]. Tactivates/freshTagainultimate;seals10seconds.
+Review-only bindings use existingnormalizedTaunt; shippingphysical/touch adapters
+and PartyLink owned by separate stream. Owner regular saves untouched.
+
+Latest measuredData11.59668GiB, margin-6.40332GiB BEFORE allocations. No heavy
+capture/export/APK/bulkmodelwork,cleanup,deletion or archive duplication. Prior21
+verified archivalcopies retained. CI exactFEC6SUCCESS,Windows2025IN_PROGRESS;
+check latestPRhead beforeassuming complete. No owned runningtest/captureprocess.
+Allart/gameplay/balance/roster/release/humangatesFALSE. No merge/tag/deploy/release.
+
+First unfinished production task: dedicated original ultimate/form acting onall18
+art_source/collectible_v1/<fighter>/<body>/candidate.blend rigs; native current-
+source review requires18GiB+allocationreserve. Existing signature acting reused;
+Yin/Yangscaleglyph does NOT meet finalkaiju art. Current snapshots do not establish
+LAN/replay restoration acceptance. Preserve source/interface ownership with
+UniversalInput and ElementalThrow streams. Original sevenearnedStory routes,
+Convergence,KaiaOVA+6variants and physicaldevice acceptance remain open.
+
+Exact recovery: git status --short; git rev-parse HEAD; read
+artifacts/v1_closure/combat_completion/OWNER_REVIEW.md and FINAL_SOURCE_BINDINGS.json.
+Do not rerun the passing suites or duplicate footage without a changed dependency.
+For ownerreview run the launcher normally, without recording/export. Before binary
+art production, measure live Datafree and preserve18GiB after temporaryallocations.
+
+---
 # Combat completion — current all-nine candidate gameplay checkpoint
 
 InspectHEADfornewsourcecommit; previous65c5e065. Party forms108configurations
