@@ -1,0 +1,120 @@
+{
+  "agent": "B",
+  "lane": "Universal Controllers / PartyLink / Beatlink",
+  "date": "2026-10-22",
+  "v1": "NOT READY",
+  "rc2": "NOT READY",
+  "authorized": false,
+  "merged": false,
+  "deployed": false,
+  "base": "7c25c2996f8adcee97ec2187a14bfc578d8681bf",
+  "base_branch": "release/anime-v1-dialogue-and-elemental-performance",
+  "head": "d8f0cb18600c69f1e544c25388eaf38786710e58",
+  "head_note": "Product head is the invitation-contract commit. The commit that adds this handoff is the pull request tip and its parent is head.",
+  "partylink_reconcile": "a0e6b660f23d66addb2b412d4c6cee36f7f057f7",
+  "worktree": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/cursor-v1-agent-b-partylink",
+  "branch": "eng/cursor-v1-agent-b-partylink-grab-and-post",
+  "codex_tip_rechecked": "7c25c2996f8adcee97ec2187a14bfc578d8681bf",
+  "codex_tip_moved": false,
+  "reused_prs": {
+    "126": {
+      "number": 126,
+      "branch": "eng/cursor-v1-p1-joypad",
+      "sha": "46cf7ffeecd4950eb16d6cb731b41ab99dd66976",
+      "duplicated": false,
+      "merged": false,
+      "note": "Player-1 joypad parity. Not redone and not committed onto."
+    },
+    "127": {
+      "number": 127,
+      "branch": "eng/cursor-v1-partylink-grab",
+      "sha": "9dd5e3e8be8fe82f98c9d5e00c660952d7cbc4de",
+      "url": "https://github.com/gunnchOS3k/anime-aggressors/pull/127",
+      "duplicated": false,
+      "merged": false,
+      "remains_open": true,
+      "note": "Historical draft. Grab mapping was ported by hand. This branch is not a merge of the PR."
+    },
+    "128": {
+      "number": 128,
+      "branch": "eng/cursor-v1-two-client-input",
+      "sha": "efd26b2394febf78bc2ce287c73ed5e774a7812e",
+      "url": "https://github.com/gunnchOS3k/anime-aggressors/pull/128",
+      "duplicated": false,
+      "merged": false,
+      "remains_open": true,
+      "note": "Historical draft. Posted-frame queue was ported by hand. Landing it alone still forces grab false."
+    }
+  },
+  "files_written": [
+    "packages/partylink/src/postedPartyFrames.ts",
+    "packages/partylink/src/lanHost.ts",
+    "packages/partylink/src/partyRoom.ts",
+    "packages/partylink/src/index.ts",
+    "packages/partylink/src/browserController.ts",
+    "packages/partylink/test/postedGrabFrame.test.ts",
+    "apps/web/src/screens/PartyLobbyScreen.ts",
+    "packages/invite-contract/package.json",
+    "packages/invite-contract/INVITE_CONTRACT.md",
+    "packages/invite-contract/src/index.ts",
+    "packages/invite-contract/test/inviteContract.test.ts",
+    "docs/handoff/2026-10-22/CURSOR_AGENT_B_PARTYLINK_HANDOFF.md",
+    "docs/handoff/2026-10-22/CURSOR_AGENT_B_PARTYLINK_HANDOFF.json"
+  ],
+  "grab_bit_survives_posted_frame": {
+    "proof": "partySimInputsFromControllerInputs sets grab to Boolean(i.semantic.grab). consumePostedPartyFrames records that batch. lanHost tick serves the same batch on world.inputs. postedGrabFrame.test.ts posts {grab:true, attack:true, right:true} from the second client and requires the served frame and GET /state to keep all three true. A silent seat gets no served frame.",
+    "before": {
+      "command": "node --experimental-transform-types --import /tmp/party-ts-register.mjs --test packages/partylink/test/postedGrabFrame.test.ts",
+      "exit": 1,
+      "pass": 0,
+      "fail": 1,
+      "assertion": "session did not serve the posted frame; tip world had players, arena, and hudSlots only"
+    },
+    "after": {
+      "exit": 0,
+      "pass": 1,
+      "fail": 0
+    },
+    "existing_partylink_tests": {
+      "files": [
+        "packages/partylink/test/partylink8p.test.ts",
+        "packages/partylink/test/partylinkProductization.test.ts",
+        "packages/partylink/test/dualFormDuplicate.test.ts"
+      ],
+      "runner": "node --experimental-transform-types",
+      "pass": 20,
+      "fail": 0,
+      "npm_run_test_claimed": false,
+      "node_modules_present": false
+    },
+    "stepState": "unchanged; attack and grab stored on the served frame are not combat resolution, hitstun, or throws"
+  },
+  "invite_contract": {
+    "implemented": true,
+    "path": "packages/invite-contract",
+    "document": "packages/invite-contract/INVITE_CONTRACT.md",
+    "url_format": "https://gunnchos.com/i/<opaque-token>",
+    "tests_passed": 4,
+    "deployed": false,
+    "dns_changed": false,
+    "website_edited": false,
+    "b04": "open",
+    "b05": "open",
+    "next_if_this_had_been_skipped": "Would have been named as the next task. It was implemented instead."
+  },
+  "non_ownership": {
+    "story_and_campaign_scripts": true,
+    "game_state_save_rules": true,
+    "replay_store": true,
+    "private_netplay": true,
+    "mlv": true,
+    "waike": true,
+    "gunnchAI": true,
+    "portal_ledger": true,
+    "production_website": true,
+    "codex_art": true,
+    "note": "Agent B does not own story, save, replay, MLV, WAIKE, gunnchAI, the portal ledger, the production website, or Codex art. None of those trees were edited."
+  },
+  "coordinator_note": "#127 and #128 should stay open until this new pull request is reviewed. This pull request is the reconciliation candidate, not an automatic replacement.",
+  "blockers_left_open": ["B02", "B04", "B05", "B14"]
+}
