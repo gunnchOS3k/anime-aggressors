@@ -1,5 +1,7 @@
 # Cursor Agent A — Story route advance
 
+Runtime fix commit: `68780162c5a9a8a11157d8e28eb8e836ef41a3d5`. The branch tip is `git rev-parse HEAD` on `eng/cursor-v1-agent-a-story`.
+
 V1.0.0 and RC2 remain **NOT READY** and **NOT AUTHORIZED**. This draft does not merge, deploy, tag, or approve.
 
 ## What changed
