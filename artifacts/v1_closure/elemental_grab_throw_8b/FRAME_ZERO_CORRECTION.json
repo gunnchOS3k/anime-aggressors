@@ -1,0 +1,13 @@
+{
+  "before_source": "f9f5569e59653e296020288f251d3459f3845988",
+  "reproduced_cases": 54,
+  "before_real_release_clips": [
+    "grab",
+    "grab_left"
+  ],
+  "cause": "THROW_STARTUP entered with old grab _current_move; _start_move_dict enters same state so no new animation callback before authoritative frame-zero contact. End-of-frame update selected correct throw too late.",
+  "correction": "Refresh existing _play_current_animation after resolved throw move start, before contact. Presentation only; no new resolver/timer/damage.",
+  "fighter_source_sha256": "271bc40d59bd4be73f2c8e9357c08da9c3a7418cf4b330f67b159458ba64ae9b",
+  "validation": "Pending source-corrected form/roster pass",
+  "human_approved": false
+}

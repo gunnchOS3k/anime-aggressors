@@ -4,6 +4,7 @@ extends "res://tests/v1_closure/PerfectGuardRuntime.gd"
 var grab_events: Array = []
 var damage_events: Array = []
 var escape_handoff: Dictionary = {}
+var throw_handoff: Dictionary = {}
 var counter_contacts: Array = []
 var landing_gaps: Dictionary = {}
 
@@ -32,7 +33,8 @@ func run() -> void:
 		if a == d and b == p:counter_contacts.append(info.duplicate(true)))
 	p.grab_event.connect(func(info):
 		grab_events.append(info.duplicate(true))
-		if info.get("result") == "mash_escape":escape_handoff = pose(p))
+		if info.get("result") == "mash_escape":escape_handoff = pose(p)
+		if info.get("result") == "throw":throw_handoff = pose(p))
 	for fid in (IDs.slice(0, 1) if pilot else IDs):
 		for body in ["male", "female"]:
 			for face in [1, -1]:
@@ -60,7 +62,7 @@ func setup_pair(p, d, fid: String, body: String, face: int, mixed_bodies: bool =
 		await physics_frame
 		if p.is_on_floor() and d.is_on_floor() and p.state_machine.can_attack() and d.state_machine.can_attack():break
 	p.model_3d.set_facing(face);d.model_3d.set_facing(-face)
-	contacts.clear();damage_events.clear();grab_events.clear();escape_handoff.clear();counter_contacts.clear()
+	contacts.clear();damage_events.clear();grab_events.clear();escape_handoff.clear();throw_handoff.clear();counter_contacts.clear()
 	for actor in [p, d]:
 		var controller = actor.model_3d.get_animation_controller()
 		var expected_body: String = gs.p1_body_variant if actor == p else gs.p2_body_variant
@@ -130,6 +132,8 @@ func throw_case(p, d, fid: String, body: String, face: int, direction: String) -
 	check(contacts.size() == 1 and damage_events.size() == 1, label + ":single_damage_contact")
 	var reaction := pose(d);var release_pose := pose(p)
 	var expected_throw := "throw_" + direction + ("_left" if face == -1 else "")
+	check(throw_handoff.get("clip", "") == expected_throw, label + ":source_release_at_real_contact")
+	check(absf(float(throw_handoff.get("animation_time", -1))) < .00001, label + ":frame_zero_pose_clock")
 	check(release_pose.clip == expected_throw, label + ":real_saved_release")
 	check(str(reaction.source.get("throw_reaction_clip", "")).begins_with("throw_reaction_"), label + ":actual_launch_reaction")
 	var damage_before: float = d.damage_percent
@@ -147,7 +151,7 @@ func throw_case(p, d, fid: String, body: String, face: int, direction: String) -
 	check(contacts.size() == 1 and is_equal_approx(d.damage_percent, damage_before), label + ":no_late_damage")
 	check(p.grabbed_target == null and d.grabbed_by == null and not p.hitbox.monitoring, label + ":release_cleanup")
 	rows.append({"case":label, "kind":"public_throw", "fighter":fid, "body":body, "facing":face, "direction":direction,
-		"hold":hold, "sustained_hold":sustained, "release":release_pose, "reaction":reaction, "landing":landing, "control_return_observed":recovered,
+		"hold":hold, "sustained_hold":sustained, "release_at_contact":throw_handoff.duplicate(true), "release":release_pose, "reaction":reaction, "landing":landing, "control_return_observed":recovered,
 		"contacts":contacts.duplicate(true), "damage_applications":damage_events.size(), "events":grab_events.duplicate(true)})
 	write(false)
 

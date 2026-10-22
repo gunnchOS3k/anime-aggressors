@@ -1,3 +1,11 @@
+# 8B checkpoint — real frame-zero presentation defect reproduced and corrected
+
+Source f9f5569e form callback observer reproduced54actual throw contacts showing old grab(_left) before end-of-frame refresh, despite the144two-frame samples passing earlier. Cause: enterTHROW_STARTUP occurs before new _current_move, then same-state entry emits no animation callback. Minimal correction refreshes existing model animation after `_start_move_dict(throw_move)` and before frame-zero HitResolver. No timing/damage/state/collision changes. Original failing54cases retained in forms_event1022; first late-observer false start forms_saved1022 retained separately. Actual throw event observer added to roster test.
+
+NEXT: source-corrected54form pass (`aa8b_forms_aligned1022`, forms_aligned1022), then source-corrected180roster pass (`aa8b_roster_aligned1022`, roster_aligned1022) requiring correct clip/time at authoritative callback, then28missing landing observations and affected cleanup regressions. Current source saves/540WIPactions unchanged. No local Godot/capture running. Allhuman/native/artgatesfalse; internal below18GiB guard.
+
+---
+
 # 8B checkpoint — all18 saved-action imports and180paired interactions PASS
 
 Exact runtime cf3b656a:144public directional throws +36mixed-body escapes PASS in `elemental_grab_throw_8b/roster_saved1022`. All9fighters/bothbodies/bothfacings, real saved clips/loops, one damage/contact, no late damage, ownership cleanup and36legal immediate defender counterattacks observed.116/144natural landings sampled with correct saved landing clips;28upward cases returned control before the observer stopped, not failed mechanics. New --landing-gaps-from option reruns ONLY those28fixtures through real floor contact. No fixture injection/native/art approval. Saved source540actions/18copies remain remote plus18installed verified text exports.

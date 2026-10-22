@@ -1340,6 +1340,10 @@ func execute_throw() -> void:
 	_ThrowResolver.apply_victim_offset(self, target, throw_move)
 	if party_overdrive.active():throw_move=party_overdrive.overlay(throw_move)
 	_start_move_dict(throw_move)
+	# THROW_STARTUP was entered while _current_move still described the grab.
+	# Re-entering the same state emits no callback. Show the resolved release
+	# pose now, before frame-zero contact/hitstop, not at the end-of-frame update.
+	_play_current_animation(state_machine.current_state)
 	hitbox.monitoring = false
 	target.state_machine.enter(_FighterStates.HITSTUN)
 	var contact: Dictionary=hit_resolver.resolve(self, target, throw_move, damage_percent)
