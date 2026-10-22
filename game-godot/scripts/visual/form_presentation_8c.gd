@@ -29,6 +29,10 @@ func setup(owner_actor, _model_root: Node3D, rig: Skeleton3D) -> void:
 	if str(parsed.get("source_saved_blend_sha256","")).length()!=64:return
 	document = parsed;_status = "verified_saved_export"
 
+func _release_scene_owner(node: Node) -> void:
+	node.owner=null
+	for child in node.get_children():_release_scene_owner(child)
+
 func _clear_sockets() -> void:
 	for socket in _sockets:
 		if is_instance_valid(socket):socket.free()
@@ -61,6 +65,7 @@ func _install(form_id: String) -> void:
 		var socket := BoneAttachment3D.new();socket.name="Form8C_"+str(part.bone);socket.bone_name=str(part.bone)
 		skeleton.add_child(socket)
 		var group: Node3D = part.group
+		_release_scene_owner(group)
 		group.get_parent().remove_child(group);socket.add_child(group)
 		# Group held source rest transform; mesh children already bone-local.
 		# BoneAttachment supplies live bone transform exactly once.

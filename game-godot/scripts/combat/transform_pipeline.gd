@@ -82,7 +82,9 @@ func tick(delta: float, game_paused: bool) -> void:
 	if not is_instance_valid(_fighter) or _fighter.get_current_form_id() != _from_form:
 		cancel("owner_changed")
 		return
-	if game_paused and not _pause_safe:
+	if game_paused:
+		# A pause-safe sequence preserves its phase. It must not complete
+		# or grant a form while the gameplay clock is paused.
 		return
 	_sequence_t += delta
 	var progress := clampf(_sequence_t / maxf(_sequence_duration, 0.01), 0.0, 1.0)
