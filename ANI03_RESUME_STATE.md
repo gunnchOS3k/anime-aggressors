@@ -1,3 +1,25 @@
+# 8A complete source increment — owner/art review remains open
+
+Runtime `d9b4ddc4bb70e62e58cabe11fcfd012a8799343c`, branch `release/anime-v1-dialogue-and-elemental-performance`, worktree `/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure`. PR123 draft stacked on122. Delivery commit adds evidence/docs and `GrabCpu8A.gd`; runtime source hashes are in `artifacts/v1_closure/elemental_grab_throw/FINAL_SOURCE_BINDINGS.json`.
+
+Completed: reciprocal grab release; victim normal-move cancellation; single activation acquisition; preserved external hurt/KO state; air-hold locomotion; reset/reconfigure/stock/scene/match cleanup; correct victim mash escape; fresh grab press after timed release. No move values, throw frame-zero ownership,2second timeout, PG4/24 policy, Party kits, aura tuning defaults or original rigs changed.
+
+All9 elemental observers use actual hold/throw/velocity/floor events, nine original shape families, actual launch direction, at most2 phase audio voices per actor, existing hit/punch authority and accessibility/pool budgets. Dedicated hold/victim/secondary acting is NOT complete.
+
+Passed:144 ownership candidate configs (both bodies/facings/four directions),15 lifecycle rows plus actor removal,27current effect/accessibility contacts,54 legacy/cosmic/Party contexts,9fresh-press timeout cases. Current runtime54shared renderer pressure cases and8affected suites ALLPASS: ThrowOwnership39,PartyGrabInterruption9,PerfectGuardExceptions20,PartyLifecycle10,ProjectileOwnership18,ChargeContinuity9,StorySceneOwnership8,StorySceneAuthority8routes/16stale checks. ActiveCPU9×300frames:64genuine public throw contacts, all9CPUmove observations, no duplicate event IDs. No combo,earned Story/KO,native/device/human acceptance inferred. Shutdown resource warnings retained.
+
+Evidence: `artifacts/v1_closure/elemental_grab_throw/{OWNER_REVIEW.md,ROSTER_MATRIX.json,VALIDATION_SUMMARY.json,FINAL_SOURCE_BINDINGS.json,PRESERVATION.json}`. Original failures and fixture/parser false starts retained with source IDs. No test/capture process active at completed checkpoint. All33worktrees preserved.
+
+Internal free latest 11.864GiB;18GiB+anticipated allocation guard unmet. No Blender/GLB builds, movies, platform exports, cleanup or new archive copies. Native review and all18rig dedicated acting/secondary control production remain pending. Source art dependencies: `docs/art/ELEMENTAL_GRAB_THROW_8A.md`.
+
+Owner can use `tools/v1_closure/play_party_review.command kaia-windrow --body female --opponent juno-spark` (ordinary controls/activeCPU), or `--local`; any canonical fighter/body allowed. Regular owner saves remain isolated. All human/release gates false.
+
+Next executable safe task: review the new source candidate with that existing launcher without recording; record precise pose/hold/reaction changes against the18-rig contract. Next art implementation category is distinct attacker `grab_hold` + victim held/escape acting on all18original rigs via existing directed-performance JSON boundary, preserving frame-zero throw release. Binary author/export/native recording must wait until18GiB plus estimated temporary allocations is available. Universal Input/PartyLink hardware/transport, full earned Story/Convergence, final OVA and physical-device acceptance remain independent; do not start another projectile feature pass.
+
+Re-run only on a relevant new source change: `python3 tools/v1_closure/launch_ordinary_review.py --profile aa8a_next_unique --headless --test-script res://tests/v1_closure/GrabLifecycle8A.gd --output artifacts/v1_closure/elemental_grab_throw/next_unique`. Do not overwrite existing outputs or repeat the144matrix/capture campaign without cause.
+
+---
+
 # 8A checkpoint — all-nine held-input and form validation
 
 Branch/worktree unchanged. Last pushed checkpoint `155005e2ec6118cfe262c5a63775b03253d969bf`. This commit fixes a reproduced all-nine held-input reacquisition: acquisition no longer erases the still-held grab press. Original two-second auto-release and every move/balance value remain unchanged. Nine baseline cases each acquired twice; corrected nine cases acquire once and throw once. See `HELD_INPUT_SOURCE_BINDING.json`, `held_before1021/`, `held_fixed1021/`.
