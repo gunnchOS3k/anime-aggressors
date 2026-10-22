@@ -103,6 +103,44 @@ def digit_mesh(arm,name,start,end,radius,material,parent):
     return ob
 
 
+def edit_roundtrip_reference(arm,canonical):
+    # A no-op control isolates Blender's own single-precision edit-mode
+    # orthonormalisation. The actual canonical rest must match this EXACTLY;
+    # no tolerance is enlarged to conceal an authored skeleton change.
+    data=arm.data.copy();control=bpy.data.objects.new('D8_noop_rest_control',data)
+    bpy.context.collection.objects.link(control)
+    bpy.ops.object.select_all(action='DESELECT');control.select_set(True)
+    bpy.context.view_layer.objects.active=control
+    bpy.ops.object.mode_set(mode='EDIT');bpy.ops.object.mode_set(mode='OBJECT')
+    result=rest(control,canonical)
+    bpy.data.objects.remove(control,do_unlink=True);bpy.data.armatures.remove(data)
+    return result
+
+
+def deformed_points(arm,meshes):
+    graph=bpy.context.evaluated_depsgraph_get();result=[]
+    for name in meshes:
+        ob=bpy.data.objects[name];evaluated=ob.evaluated_get(graph)
+        mesh=evaluated.to_mesh()
+        result.extend(tuple(evaluated.matrix_world@v.co)for v in mesh.vertices)
+        evaluated.to_mesh_clear()
+    return result
+
+
+def verify_deformation(arm,chains):
+    results={}
+    for category,kind,phase in [('grip','finger',24),('fist','finger',20),('idle','hair',None),('recoil','hair',12)]:
+        action=bpy.data.actions['ANI08D_WIP_'+category];arm.animation_data.action=action
+        meshes=[c['mesh']for c in chains if c['kind']==kind]if kind=='finger'else[n for c in chains if c['kind']==kind for n in c['meshes']]
+        bpy.context.scene.frame_set(0);bpy.context.view_layer.update();before=deformed_points(arm,meshes)
+        bpy.context.scene.frame_set(phase if phase is not None else int(action.frame_range[1]/4));bpy.context.view_layer.update();after=deformed_points(arm,meshes)
+        assert len(before)==len(after)>0
+        delta=max((Vector(a)-Vector(b)).length for a,b in zip(before,after))
+        assert delta>.00001,(category,'actual source mesh did not deform',delta)
+        results[category]={'sampled_vertices':len(before),'max_actual_mesh_displacement_m':delta,'method':'evaluated Blender armature skin before/after, same canonical body action'}
+    return results
+
+
 def prepare(arm,fid,body,spec):
     bpy.ops.object.select_all(action='DESELECT');arm.select_set(True);bpy.context.view_layer.objects.active=arm
     bpy.ops.object.mode_set(mode='EDIT')
@@ -227,18 +265,20 @@ def run():
         old_object_hashes={n:geometry([n])for n in old_objects if bpy.data.objects[n].type=='MESH'}
         old_bone_matrices={n:[list(r)for r in arm.data.bones[n].matrix_local]for n in canonical}
         before_weights={n:weights([n])for n in old_objects if bpy.data.objects[n].type=='MESH'}
+        roundtrip_rest=edit_roundtrip_reference(arm,canonical)
         nla=[t.mute for t in arm.animation_data.nla_tracks];previous=arm.animation_data.action;previous_frame=bpy.context.scene.frame_current
         for t in arm.animation_data.nla_tracks:t.mute=True
         chains,modified,new_objects=prepare(arm,fid,body,score['fighters'][fid]);clips=author(arm,score['fighters'][fid],chains)
+        deformation=verify_deformation(arm,chains)
         # Compare at the ORIGINAL action/frame: authoring sampled a different
         # action, which can change evaluated object-local transforms.
         arm.animation_data.action=previous
         for t,value in zip(arm.animation_data.nla_tracks,nla):t.mute=value
         bpy.context.scene.frame_set(previous_frame);bpy.context.view_layer.update()
-        preservation={'fighter':fid,'body':body,'geometry_exact':geometry(old_objects)==old_geo,'rest_exact':rest(arm,canonical)==old_rest,'actions_exact':actions(old_actions)==old_curve,'changed_meshes':[n for n,h in old_object_hashes.items()if geometry([n])!=h],'rest_component_differences':{n:max(abs(arm.data.bones[n].matrix_local[i][j]-old_bone_matrices[n][i][j])for i in range(4)for j in range(4))for n in canonical if rest(arm,[n])!=digest({n:{'rest':old_bone_matrices[n],'parent':arm.data.bones[n].parent.name if arm.data.bones[n].parent else None}})}}
+        preservation={'fighter':fid,'body':body,'geometry_exact':geometry(old_objects)==old_geo,'rest_exact':rest(arm,canonical)==old_rest,'rest_matches_noop_control':rest(arm,canonical)==roundtrip_rest,'actions_exact':actions(old_actions)==old_curve,'changed_meshes':[n for n,h in old_object_hashes.items()if geometry([n])!=h],'rest_component_differences':{n:max(abs(arm.data.bones[n].matrix_local[i][j]-old_bone_matrices[n][i][j])for i in range(4)for j in range(4))for n in canonical if rest(arm,[n])!=digest({n:{'rest':old_bone_matrices[n],'parent':arm.data.bones[n].parent.name if arm.data.bones[n].parent else None}})}}
         (out/'runtime').mkdir(exist_ok=True)
         (out/'runtime/PRESERVATION_DIAGNOSTIC.json').write_text(json.dumps(preservation,indent=2)+'\n')
-        assert preservation['geometry_exact']and preservation['rest_exact']and preservation['actions_exact'],preservation
+        assert preservation['geometry_exact']and preservation['rest_matches_noop_control']and preservation['actions_exact'],preservation
         assert all(weights([n])==w for n,w in before_weights.items()if n not in modified)
         # Save the complete editable library FIRST. Export from a reopened
         # disposable in-memory copy, never save the action-filtered export view.
@@ -247,7 +287,7 @@ def run():
         bpy.context.scene.frame_set(previous_frame)
         saved=out/f'saved_sources/{fid}/{body}/candidate_controls_8d.blend';saved.parent.mkdir(parents=True,exist_ok=True)
         bpy.ops.wm.save_as_mainfile(filepath=str(saved));bpy.ops.wm.open_mainfile(filepath=str(saved));arm=next(o for o in bpy.data.objects if o.type=='ARMATURE')
-        assert geometry(old_objects)==old_geo and rest(arm,canonical)==old_rest and actions(old_actions)==old_curve
+        assert geometry(old_objects)==old_geo and rest(arm,canonical)==roundtrip_rest and actions(old_actions)==old_curve
         new_names={v['source_action']for v in clips.values()}
         for track in list(arm.animation_data.nla_tracks):arm.animation_data.nla_tracks.remove(track)
         arm.animation_data.action=None
@@ -266,7 +306,7 @@ def run():
         assert resource.stat().st_size<8*1024**2
         doc={'schema':'saved_original_controls_8d.v1','fighter':fid,'body':body,'source_sha256':sha(saved),'input_8c_sha256':row['saved_source_sha256'],'resource':'res://'+str(resource.relative_to(out/'runtime/game-godot')),'resource_sha256':sha(resource),'canonical_bones':canonical,'chains':chains,'clips':clips,'human_approved':False}
         data=out/f'runtime/game-godot/data/animation/controls_8d/{fid}_{body}.json';data.parent.mkdir(parents=True,exist_ok=True);data.write_text(json.dumps(doc,separators=(',',':'))+'\n')
-        record={'fighter':fid,'body':body,'saved_source':str(saved.relative_to(out)),'saved_source_sha256':sha(saved),'input_8c_sha256':row['saved_source_sha256'],'resource':str(resource.relative_to(out/'runtime')),'resource_sha256':sha(resource),'runtime':str(data.relative_to(out/'runtime')),'runtime_sha256':sha(data),'original_geometry_sha256':old_geo,'original_rest_sha256':old_rest,'original_actions_sha256':old_curve,'preserved_actions':len(old_actions),'preserved_8b':30,'preserved_8c':8,'new_actions':list(clips),'new_bones':len(arm.data.bones)-22,'modified_weight_meshes':modified,'new_digit_meshes':new_objects,'canonical_bones_preserved':True,'original_geometry_materials_morphs_preserved':True,'unmodified_weights_preserved':True,'human_approved':False}
+        record={'fighter':fid,'body':body,'saved_source':str(saved.relative_to(out)),'saved_source_sha256':sha(saved),'input_8c_sha256':row['saved_source_sha256'],'resource':str(resource.relative_to(out/'runtime')),'resource_sha256':sha(resource),'runtime':str(data.relative_to(out/'runtime')),'runtime_sha256':sha(data),'original_geometry_sha256':old_geo,'original_rest_sha256':old_rest,'edit_roundtrip_rest_sha256':roundtrip_rest,'rest_preservation':preservation,'source_deformation':deformation,'original_actions_sha256':old_curve,'preserved_actions':len(old_actions),'preserved_8b':30,'preserved_8c':8,'new_actions':list(clips),'new_bones':len(arm.data.bones)-22,'modified_weight_meshes':modified,'new_digit_meshes':new_objects,'canonical_bones_preserved':True,'original_geometry_materials_morphs_preserved':True,'unmodified_weights_preserved':True,'human_approved':False}
         manifest['rows'].append(record);(out/'runtime/PRODUCTION_MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n');print('CONTROLS_8D_SAVED',fid,body,flush=True)
     manifest['complete']=True;(out/'runtime/PRODUCTION_MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n')
 

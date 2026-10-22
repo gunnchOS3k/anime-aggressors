@@ -26,6 +26,8 @@ def validate(folder, sources=True):
         prior=expected[r['fighter'],r['body']]
         assert r['input_8c_sha256']==prior['saved_source_sha256']
         assert r['preserved_8b']==30 and r['preserved_8c']==8 and r['preserved_actions']>=185
+        assert r['rest_preservation']['rest_matches_noop_control']
+        assert all(v['max_actual_mesh_displacement_m']>.00001 for v in r['source_deformation'].values())
         assert r['canonical_bones_preserved']and r['original_geometry_materials_morphs_preserved']and r['unmodified_weights_preserved']
         assert len(r['new_digit_meshes'])==4 and 20<r['new_bones']<=64
         if sources:assert sha(folder/r['saved_source'])==r['saved_source_sha256']

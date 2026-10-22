@@ -1,3 +1,17 @@
+# 8D source preservation diagnosis — bounded correction
+
+39852062150 FAILED before save: actual original geometry/actions EXACT, only derived rest matrices changed by max3.5763e-7 due to Blender4.0 edit-mode float recomputation. No canonical edit was authored. New no-op cloned-rig edit-mode control derives exact rest reference; candidate must match this control bit-for-bit, without broad tolerance. Actual evaluated finger/hair mesh displacement added. Failed run/log retained. Synthetic8D layer owner unit PASS; source runtime/native verification pending. New controls loader still local, original default models unaffected.
+
+NEXT: checkpoint/push only corrected producer+validator then ONE new source run after prior failedrun. Internal16.57GiB belowreserve: no local binary recovery/import/nativecaptures. Archive-only external verified copies after success. All human gatesfalse.
+
+---
+
+# 8D production in progress — exact remote identity
+
+Corrected producer b5c9015156483260552daf51918a4e3c828a11cc, sole manual source run39852062150 (normal PR run39852078518 is infrastructure only). No duplicate source job. Previous39851476989 failure retained inproduction_8d/controls_first_failure.log. Do not dispatch again before terminal result. Source-preservation diagnostics now exact per-category plus original action/frame restoration. Runtime source opt-in and strict archive/install tool are local, uncommitted, parse checks pending/full-assets notavailable. InternalData16.57GiB: NO local recovery/import/render until18GiB AFTER forecast. Archive-only verified copies may stream directlyexternal; never delete originals. All18 sources/actions/defaults/human gates preserved.
+
+---
+
 # 8D original controls — remote failure retained / safe recovery
 
 Producer306e02cd remote39851476989 FAILED at pre-save original geometry/rest/action preservation; no source binary was produced. Do not promote this as art delivery. Retain exact job log. New diagnostics compare original action/frame and report changed meshes/bone components without weakening preservation assertions. Runtime opt-in source is local/in progress, unverified. All original archives/actions preserved.
