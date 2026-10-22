@@ -1,3 +1,13 @@
+# 8D-2 original anatomy production started
+
+Recovered bda5b5a5, remote same, only unrelated WORKFLOW_REFERENCED_PATHS.json untracked. Original18 saved8D hashes reverified against mounted APFS UUID9C4EB36E-2864-42F8-BD0B-A4F67EBC7852; archive free349.47GiB, source635757536 bytes exact. Current internal16.31GiB: no local install/import/Blender/native recordings. CI bda authority/full-roster/web/infra/Windows-latest successful; Windows2025 still in progress, not claimed passed.
+
+New anatomy source producer uses exact saved8D artifact39852459469, never originalBASE regeneration. Original Palm objects rebuilt into connected wrist/web/4three-phalange fingers+opposedthumb, source palette/materials/wrist/envelope; all old hand parts copied hidden within editable candidate. Rook forearm armor receives real open wrist boundary. Original22/secondary rest compares to untouched edit-mode control; original5408B+1448C+728D curves preserved. New5aux actions perrig (90total), including explicit grip release; D8 finger rest corrections and8 new DIP joints are documented changes. Source scripts syntax PASS; real Blender production NOT YET RUN. No art approval.
+
+NEXT: commit/push scoped producer/score/validator/workflow, dispatch ONLY hands_8d2=true, record exact source/run, inspect real outputs before retry. Then native hand/cuff before/after and actual paired victim-mesh source acting; do not stop after anatomy counts. No old source worktree or Cursor changes, no gameplay edits. Existing source/node controls remain opt-in; new namespace hands_8d2. Paired/throw/contact/floor art not yet corrected by this initial producer.
+
+---
+
 # 8D eighteen-rig source-control delivery
 
 Branch: `release/anime-v1-dialogue-and-elemental-performance`, draft PR123 on122. Get `git rev-parse HEAD` for the delivery commit after these source/evidence changes. All35 current worktrees (including historical33), original archives, owner saves and Cursor's isolated work are preserved. Unrelated untracked `artifacts/vxp3/reports/WORKFLOW_REFERENCED_PATHS.json` remains untouched.

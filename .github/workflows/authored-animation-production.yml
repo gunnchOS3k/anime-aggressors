@@ -26,6 +26,11 @@ on:
         default: false
         type: boolean
 
+      hands_8d2:
+        description: 'Correct original connected hand anatomy on exact18 saved8D candidates (remote only)'
+        required: false
+        default: false
+        type: boolean
       controls_verify_run:
         description: 'Validate/render an already successful8D runtime artifact; no Blender regeneration'
         required: false
@@ -157,6 +162,47 @@ jobs:
         with:
           name: controls-8d-runtime-${{ github.sha }}
           path: ${{ runner.temp }}/controls-8d/runtime/
+          retention-days: 90
+          if-no-files-found: warn
+  hands-8d2:
+    if: github.event_name == 'workflow_dispatch' && inputs.hands_8d2
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install existing compatible Blender producer
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender python3-numpy
+      - name: Download exact saved8D candidates, never regenerate BASE
+        uses: actions/download-artifact@v4
+        with:
+          name: controls-8d-saved-sources-3ab7667ca0b22e50bb7acfe0b509ff6b4513daf5
+          repository: gunnchOS3k/anime-aggressors
+          run-id: 39852459469
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/hands-8d2-input/saved_sources/
+      - name: Correct actual connected hand meshes and skin
+        run: |
+          blender --background --factory-startup --python-exit-code 1 --python tools/authored_animation/blender/aa_hands_8d2.py -- --input "$RUNNER_TEMP/hands-8d2-input" --output "$RUNNER_TEMP/hands-8d2"
+          python3 tools/authored_animation/validate_hands_8d2.py "$RUNNER_TEMP/hands-8d2"
+      - name: Preserve edited original source candidates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hands-8d2-saved-sources-${{ github.sha }}
+          path: ${{ runner.temp }}/hands-8d2/saved_sources/
+          retention-days: 90
+          if-no-files-found: warn
+      - name: Preserve anatomy exports and correspondence receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hands-8d2-runtime-${{ github.sha }}
+          path: ${{ runner.temp }}/hands-8d2/runtime/
           retention-days: 90
           if-no-files-found: warn
   controls-8d-engine-review:
