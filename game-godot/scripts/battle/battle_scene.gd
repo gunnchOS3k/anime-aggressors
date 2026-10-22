@@ -614,6 +614,7 @@ func _on_pause_return_menu() -> void:
 
 
 func _finish_match(winner: int) -> void:
+	if _hazard_runtime!=null:_hazard_runtime.clear_items()
 	_active = false
 	# The result-delay frames cannot complete or begin another transformation.
 	# Completed forms may retain their victory presentation until scene exit.
@@ -718,6 +719,7 @@ func _tick_story_cosmic_encounter(delta: float) -> void:
 
 
 func _exit_tree() -> void:
+	if _hazard_runtime!=null:_hazard_runtime.clear_items()
 	if _story_objective != null:
 		for actor in _story_objective.actors:
 			if is_instance_valid(actor): actor.cpu.clear_simulated_inputs()

@@ -67,6 +67,8 @@ func spawn_from_move(move: Dictionary, aura_amount: float) -> Node:
 	_spawn_sequence += 1
 	var fighter_id: String = owner_fighter.fighter_id if "fighter_id" in owner_fighter else ""
 	var interaction: Dictionary = _interaction_data.get("fighters", {}).get(fighter_id, {}).get(str(move.get("move_id", "")), {})
+	if bool(move.get("_party_move",false)) and interaction.is_empty():
+		interaction={"eligible_behaviors":["straight"],"integrity_by_aura":[1],"residual_damage_exponent":1.0}
 	var integrity_values: Array = interaction.get("integrity_by_aura", [1])
 	var team := "story:" + str(owner_fighter.get_meta("story_team")) if owner_fighter.has_meta("story_team") else "slot:" + str(owner_fighter.slot)
 	var cfg := {

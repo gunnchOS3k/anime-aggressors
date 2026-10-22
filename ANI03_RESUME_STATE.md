@@ -1,3 +1,24 @@
+# Combat completion — Party runtime candidate checkpoint
+
+Inspect HEAD for new commit; previous pushed5efd837d guard108timingcases PASS.
+PartyOverdrive source now integrated with existing HazardItemRuntime, normalized
+Taunt, MoveRunner, projectile and temporary model presentation.9distinct ultimate
+schedules,7Prismatic/Puppet Echoes,2cosmicTrueAspect/Conductor definitions.
+Two pilot public pickup/taunt ultimates PASS: Ember3ownedcontacts, Rook1armed
+retaliation. Early incoming Rook startup interruption retained as counterplay.
+This is NOT full-roster acceptance. Exact next command:
+python3 tools/v1_closure/launch_ordinary_review.py --profile party_roster1021
+--headless --test-script res://tests/v1_closure/PartyOverdriveRuntime.gd --output
+artifacts/v1_closure/combat_completion/party_roster
+Then fix actual roster failures; add cleanup/natural600frameexpiry/Story isolation,
+guard projectile/grab/forms negatives, affected source regressions. No live test.
+Partydata is candidate, existing signature acting reused, dedicated3Dultimate
+acting and cosmic kaiju art missing. No Blends/GLBs/sourceart changed.
+Internal11.8256GiB latest df; no recordings,exports or binaryassetproduction.
+Party disabled inStory/OVA/online/ranked; defaultitemsOFF. No progression writes.
+All33worktrees/saves/evidence retained. All human/balance/roster/release gatesfalse.
+
+---
 # Combat completion — Perfect Guard timing checkpoint
 
 Branch release/anime-v1-dialogue-and-elemental-performance. Inspect HEAD for

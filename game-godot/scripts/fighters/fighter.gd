@@ -23,6 +23,7 @@ const _AuraTierContract = preload("res://scripts/combat/aura_tier_contract.gd")
 const _FacingContract = preload("res://scripts/combat/fighter_facing_contract.gd")
 const _HitReaction = preload("res://scripts/combat/directional_hit_reaction.gd")
 const _CosmicKit = preload("res://scripts/combat/cosmic_kit_runtime.gd")
+var party_overdrive = preload("res://scripts/combat/party_overdrive.gd").new()
 var perfect_guard = preload("res://scripts/combat/perfect_guard.gd").new()
 var _cosmic_counter_activation := -1
 var cosmic_kit_history: Array = []
@@ -145,6 +146,7 @@ var _transform_match_closed: bool = false
 
 func _ready() -> void:
 	perfect_guard.setup(self)
+	party_overdrive.setup(self)
 	add_to_group("fighters")
 	state_machine = _FighterStateMachine.new()
 	add_child(state_machine)
@@ -188,6 +190,12 @@ func _ready() -> void:
 	var expression=preload("res://scripts/visual/combat_expression_director.gd").new()
 	expression.name="CombatExpressionDirector";add_child(expression);expression.setup(self)
 
+func get_effective_combat_aura() -> float:
+	return 0.0 if party_overdrive.active() else aura
+
+func _party_element() -> Dictionary:
+	return _DataLoader.find_move(move_manifest,"aura_burst").get("element_effect",{}).duplicate(true)
+
 func get_aura() -> float:
 	return aura
 
@@ -218,7 +226,7 @@ func attempt_transform() -> bool:
 
 
 func can_start_transform_sequence() -> bool:
-	if _transform_match_closed: return false
+	if _transform_match_closed or party_overdrive.state != "BASE": return false
 	# Playable cosmic advancement is separate from authored Story boss context.
 	if fighter_id in ["yin", "yang"] and get_meta("story_cosmic_contract", false): return false
 	return controls_enabled and stocks > 0 and grabbed_by == null and grabbed_target == null and state_machine != null and state_machine.can_attack() and not move_runner.active
@@ -283,11 +291,13 @@ func reset_legacy_transformation(reason: String) -> void:
 
 
 func close_transformation_for_match_end() -> void:
+	party_overdrive.reset("match_end")
 	perfect_guard.reset()
 	_transform_match_closed = true
 	if _transform_pipeline != null: _transform_pipeline.cancel("match_end")
 
 func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, spawn: Vector2) -> void:
+	party_overdrive.reset("character_change")
 	perfect_guard.reset()
 	if _transform_pipeline != null: _transform_pipeline.cancel("fighter_reconfigured")
 	_transform_match_closed = false
@@ -521,7 +531,7 @@ func get_dash_speed() -> float:
 
 func get_air_speed() -> float:
 	var base := float(data.get("airSpeed", 220))
-	var bonus: float = _AuraIdentity.air_drift_bonus(fighter_id, aura, str(data.get("combatTag", "")))
+	var bonus: float = _AuraIdentity.air_drift_bonus(fighter_id, get_effective_combat_aura(), str(data.get("combatTag", "")))
 	return base * (1.0 + bonus)
 
 func get_air_accel() -> float:
@@ -547,6 +557,7 @@ func get_fall_speed() -> float:
 
 func tick_combat_frame() -> void:
 	perfect_guard.tick()
+	party_overdrive.tick()
 	if model_3d != null and model_3d.get_animation_controller() != null:
 		model_3d.get_animation_controller().presentation_frozen = _hitstop > 0.0
 	if _hitstop > 0.0:
@@ -586,7 +597,7 @@ func _physics_process(delta: float) -> void:
 		_transform_pipeline.tick(delta, paused)
 	_tick_shield_regen(delta)
 	# Kaia air-drift stamp (runtime, not data-only).
-	if not is_on_floor() and _AuraIdentity.air_drift_bonus(fighter_id, aura, str(data.get("combatTag", ""))) > 0.0:
+	if not is_on_floor() and _AuraIdentity.air_drift_bonus(fighter_id, get_effective_combat_aura(), str(data.get("combatTag", ""))) > 0.0:
 		stamp_runtime_hook("air_drift")
 	if grabbed_target != null and state_machine.current_state not in [
 		_FighterStates.GRAB_HOLD, _FighterStates.THROW_STARTUP, _FighterStates.THROW_RELEASE,
@@ -654,6 +665,7 @@ func _apply_movement(delta: float) -> void:
 			velocity.x = move_toward(velocity.x, 0.0, get_run_speed() * delta * 6.0)
 		return
 	if not state_machine.can_move():
+		if party_overdrive.owns_motion() and not is_on_floor():velocity.y += get_fall_speed() * delta
 		if is_on_floor():
 			velocity.x = move_toward(velocity.x, 0.0, get_run_speed() * delta * 8.0)
 		return
@@ -710,6 +722,8 @@ func _apply_movement(delta: float) -> void:
 			state_machine.enter(_FighterStates.DOUBLE_JUMP)
 
 func _handle_actions() -> void:
+	# Existing normalized taunt edge. Hardware/PartyLink mapping belongs elsewhere.
+	if _input_edge("taunt") and party_overdrive.action():return
 	# Vesper phase cancel / Juno dash cancel — interrupt recovery when windows are live.
 	if _try_identity_cancel():
 		return
@@ -737,7 +751,7 @@ func _handle_actions() -> void:
 	if _read_transform_input() and _transform_pipeline != null and _transform_pipeline.can_attempt_transform():
 		if _transform_pipeline.attempt_transform():
 			return
-	if is_aura_input_held():
+	if is_aura_input_held() and not party_overdrive.active():
 		tick_aura_charge(get_physics_process_delta_time())
 		if aura < 100.0:
 			state_machine.enter(_FighterStates.AURA_CHARGE)
@@ -755,7 +769,7 @@ func _handle_actions() -> void:
 	elif state_machine.current_state in [_FighterStates.AURA_CHARGE, _FighterStates.AURA_READY]:
 		state_machine.enter(_FighterStates.IDLE)
 		_set_aura_vfx(false)
-	if _read_aura_burst() and aura >= 100.0:
+	if _read_aura_burst() and aura >= 100.0 and not party_overdrive.active():
 		_start_move_by_command("aura_burst")
 		return
 	if _read_shield() and grounded_guard and not is_aura_input_held():
@@ -778,7 +792,7 @@ func _handle_actions() -> void:
 		_start_move_by_command("attack_heavy")
 		return
 	if attack_pressed:
-		if aura >= 100.0:
+		if aura >= 100.0 and not party_overdrive.active():
 			_start_move_by_command("aura_burst")
 			return
 		var cmd: String = _resolve_attack_command()
@@ -934,13 +948,18 @@ func _start_move_dict(m: Dictionary) -> void:
 	var startup_event := "super_startup" if str(m.get("move_id", "")) == "aura_burst" else "whiff"
 	preload("res://scripts/audio/v1_candidate_sfx.gd").play_event(fighter_id, startup_event, self)
 	var base_move := m
-	if not _current_form_id.is_empty() and not _forms_doc.is_empty():
+	if party_overdrive.active():
+		base_move = party_overdrive.overlay(m)
+	elif not _current_form_id.is_empty() and not _forms_doc.is_empty():
 		var form_entry: Dictionary = _FormDefinition.form_entry(_forms_doc, _current_form_id)
 		base_move = _FormDefinition.apply_move_override(m, form_entry, str(m.get("move_id", "")))
-	_current_move = _AuraScaler.apply_to_move(base_move, aura)
-	_current_move = _AuraIdentity.apply_to_scaled_move(
-		_current_move, fighter_id, aura, str(data.get("combatTag", ""))
-	)
+	if party_overdrive.active():
+		_current_move = base_move.duplicate(true)
+	else:
+		_current_move = _AuraScaler.apply_to_move(base_move, aura)
+		_current_move = _AuraIdentity.apply_to_scaled_move(
+			_current_move, fighter_id, aura, str(data.get("combatTag", ""))
+		)
 	# Only literal form overlays opt into resolved-melee ownership. BASE and
 	# projectile resolution retain their existing accepted behavior. The resolver
 	# must not apply aura/identity a second time to these already resolved moves.
@@ -980,7 +999,9 @@ func _start_move_dict(m: Dictionary) -> void:
 	move_runner.start_move(_current_move, self)
 	var mid = str(m.get("move_id", ""))
 	var mt = str(m.get("move_type", "melee"))
-	if mid == "grab" or mt == "grab":
+	if bool(m.get("_party_ultimate",false)):
+		state_machine.enter("ultimate_startup")
+	elif mid == "grab" or mt == "grab":
 		state_machine.enter(_FighterStates.GRAB_STARTUP)
 	elif mt == "throw" or mid.begins_with("throw_"):
 		state_machine.enter(_FighterStates.THROW_STARTUP)
@@ -1053,6 +1074,9 @@ func begin_landing(from_aerial: bool, from_fast_fall: bool = false) -> void:
 	state_machine.enter(_FighterStates.LAND)
 
 func _track_landing() -> void:
+	if party_overdrive.owns_motion():
+		_was_airborne=not is_on_floor()
+		return
 	var airborne := not is_on_floor()
 	if _was_airborne and not airborne:
 		var from_attack := _FighterStates.is_attack_state(state_machine.previous_state) or _pending_landing_from_attack
@@ -1062,6 +1086,7 @@ func _track_landing() -> void:
 	_was_airborne = airborne
 
 func _check_ledge_grab() -> void:
+	if party_overdrive.owns_motion():return
 	if _ledge_regrab_cooldown > 0.0: return
 	if not ledges_enabled:
 		return
@@ -1180,6 +1205,7 @@ func stage_center_x() -> float:
 	return platform_center_x
 
 func _on_move_active(move: Dictionary) -> void:
+	if party_overdrive.on_active(move):return
 	var mid = str(move.get("move_id", ""))
 	var mt = str(move.get("move_type", "melee"))
 	if _CosmicKit.on_active(self, move): return
@@ -1203,7 +1229,7 @@ func _on_move_active(move: Dictionary) -> void:
 		return
 	if mt == "projectile" or move.has("projectile"):
 		if move_runner.frame_in_phase == 1:
-			projectile_spawner.spawn_from_move(_current_move, aura)
+			projectile_spawner.spawn_from_move(_current_move, get_effective_combat_aura())
 		state_machine.enter(_FighterStates.SPECIAL_ACTIVE)
 		return
 	var sm: Dictionary = move.get("self_movement", {})
@@ -1284,6 +1310,7 @@ func execute_throw() -> void:
 	state_machine.enter(_FighterStates.THROW_STARTUP)
 	var throw_move: Dictionary = _ThrowResolver.resolve_throw(self, target, move_manifest, direction)
 	_ThrowResolver.apply_victim_offset(self, target, throw_move)
+	if party_overdrive.active():throw_move=party_overdrive.overlay(throw_move)
 	_start_move_dict(throw_move)
 	hitbox.monitoring = false
 	target.state_machine.enter(_FighterStates.HITSTUN)
@@ -1505,6 +1532,7 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 		return
 	# Confirmed body impact interrupts the prior move; its later callbacks must not
 	# overwrite hurt/hitstun or activate another hitbox during victim recovery.
+	party_overdrive.interrupt()
 	if _transform_pipeline != null: _transform_pipeline.cancel("body_hit")
 	if move_runner != null: move_runner.cancel()
 	hitbox.monitoring = false
@@ -1548,6 +1576,7 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 	# Hit telemetry is recorded by HitResolver.resolve (single source of truth).
 
 func reset_fighter() -> void:
+	party_overdrive.reset("respawn")
 	perfect_guard.reset()
 	reset_legacy_transformation("respawn")
 	var trail = get_node_or_null("LaunchTrail")
@@ -1571,6 +1600,7 @@ func reset_fighter() -> void:
 	, CONNECT_ONE_SHOT)
 
 func lose_stock() -> void:
+	party_overdrive.reset("stock_loss")
 	perfect_guard.reset()
 	# Called only by authentic battle stock loss; danger predictions are never a final result.
 	reset_legacy_transformation("stock_loss")
@@ -1656,6 +1686,7 @@ func debug_combat_summary() -> Dictionary:
 	}
 
 func _on_move_ended(_move_id: String) -> void:
+	party_overdrive.move_ended(_move_id)
 	_attack_facing_locked = false
 	if model_3d and model_3d.has_method("clear_attack_facing_lock"):
 		model_3d.clear_attack_facing_lock()
@@ -1679,6 +1710,7 @@ func _on_move_ended(_move_id: String) -> void:
 		state_machine.enter(_FighterStates.IDLE)
 
 func _on_phase_changed(phase: String) -> void:
+	if party_overdrive.on_phase(phase):return
 	match phase:
 		"startup":
 			pass
@@ -1704,6 +1736,7 @@ func _sync_attack_phase_state() -> void:
 				pass
 
 func _sync_motion_state() -> void:
+	if party_overdrive.owns_motion():return
 	if not is_on_floor() and state_machine.current_state not in [
 		_FighterStates.JUMP, _FighterStates.DOUBLE_JUMP, _FighterStates.ATTACK_STARTUP,
 		_FighterStates.ATTACK_ACTIVE, _FighterStates.ATTACK_RECOVERY,
@@ -1717,6 +1750,7 @@ func _sync_motion_state() -> void:
 			state_machine.enter(_FighterStates.FALL if velocity.y < get_fall_speed() * 0.02 else _FighterStates.FAST_FALL)
 
 func _check_edge() -> void:
+	if party_overdrive.owns_motion():return
 	if not is_on_floor():
 		return
 	var edge_dist = platform_half_width - absf(global_position.x - platform_center_x)
@@ -1767,6 +1801,9 @@ func _on_state_changed(_from: String, to: String) -> void:
 
 
 func _play_current_animation(state: String) -> void:
+	# Existing per-character signature candidates, not newly authored ultimate acting.
+	if state=="party_transform":state="aura_charge"
+	elif state.begins_with("ultimate_"):state="aura_burst_"+state.trim_prefix("ultimate_")
 	if not animator:
 		return
 	ensure_visible_presentation()

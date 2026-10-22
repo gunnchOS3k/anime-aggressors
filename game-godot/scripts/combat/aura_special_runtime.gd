@@ -93,7 +93,7 @@ static func should_block_hit_with_armor(defender: Node) -> bool:
 	if defender == null or not ("fighter_id" in defender):
 		return false
 	var fid: String = str(defender.fighter_id)
-	var aura_amt: float = float(defender.aura) if "aura" in defender else 0.0
+	var aura_amt: float = defender.get_effective_combat_aura() if defender.has_method("get_effective_combat_aura") else float(defender.aura) if "aura" in defender else 0.0
 	var tag: String = ""
 	if "data" in defender and defender.data is Dictionary:
 		tag = str(defender.data.get("combatTag", ""))

@@ -50,6 +50,7 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 			return parry
 	# Active armor frames (Rook heavies / Nix ice window) fully gate the hit.
 	if "armor_frames_remaining" in defender and float(defender.armor_frames_remaining) > 0.0:
+		if "party_overdrive" in defender:defender.party_overdrive.armor_contact()
 		var armor_info := {
 			"damage": 0.0,
 			"launch": Vector2.ZERO,
@@ -76,7 +77,7 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 	var aura_amt := 0.0
 	var fid := ""
 	var tag := ""
-	var resolved_form_melee := not from_projectile and (bool(move.get("_resolved_form_melee_scaling", false)) or bool(move.get("_resolved_melee_scaling", false)))
+	var resolved_form_melee := bool(move.get("_party_move",false)) or (not from_projectile and (bool(move.get("_resolved_form_melee_scaling", false)) or bool(move.get("_resolved_melee_scaling", false))))
 	if attacker.has_method("get_aura"):
 		aura_amt = float(attacker.get_aura())
 		if not resolved_form_melee: scaled = _AuraScaler.apply_to_move(move, aura_amt)
@@ -111,7 +112,7 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 		weight,
 		attacker.facing if "facing" in attacker else 1
 	)
-	if fid != "":
+	if fid != "" and not bool(move.get("_party_move",false)):
 		kb = _AuraIdentity.modify_knockback(kb, fid, aura_amt, tag)
 	if _AuraSpecialRuntime.should_block_hit_with_armor(defender):
 		kb *= 0.65
@@ -125,7 +126,7 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 		"element": scaled.get("element_effect", {}).get("type", ""),
 		"element_effect": scaled.get("element_effect", {}).get("effect", ""),
 	}
-	info = _AuraSpecialRuntime.apply_attacker_on_confirm(attacker, defender, scaled, info)
+	if not bool(move.get("_party_move",false)):info = _AuraSpecialRuntime.apply_attacker_on_confirm(attacker, defender, scaled, info)
 	for hook in info.get("aura_runtime_hooks", []):
 		if attacker != null and attacker.has_method("stamp_runtime_hook"):
 			attacker.stamp_runtime_hook(str(hook))
