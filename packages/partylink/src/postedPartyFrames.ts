@@ -4,7 +4,7 @@ import type { ControllerInput } from "./types.js";
 
 /**
  * Map a posted controller payload into the host frame.
- * grab stays false: release tip forces it, and unmerged #127 owns semantic.grab.
+ * grab is the posted semantic bit. stepState does not resolve combat from it.
  */
 export function partySimInputsFromControllerInputs(
   batch: ControllerInput[],
@@ -25,7 +25,7 @@ export function partySimInputsFromControllerInputs(
       special: Boolean(i.semantic.special),
       shield: Boolean(i.semantic.shield),
       dodge: Boolean(i.semantic.dodge),
-      grab: false,
+      grab: Boolean(i.semantic.grab),
     },
   }));
 }
