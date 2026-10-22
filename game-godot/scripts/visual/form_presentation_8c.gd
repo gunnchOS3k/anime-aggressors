@@ -29,7 +29,9 @@ func setup(owner_actor, _model_root: Node3D, rig: Skeleton3D) -> void:
 	if parsed.get("schema","")!="original_form_acting_8c.v1" or parsed.get("fighter_id","")!=actor.fighter_id or parsed.get("body_variant","")!=body:return
 	if not parsed.get("source_actions_saved",false) or not parsed.get("source_runtime_verified",false) or parsed.get("human_approved",true):return
 	if str(parsed.get("source_saved_blend_sha256","")).length()!=64:return
-	document = parsed;_status = "verified_saved_export"
+	document = parsed.duplicate(false)
+	document.erase("clips") # AnimationPlayer owns converted tracks; do not retain another full pose bake.
+	_status = "verified_saved_export"
 
 func _release_scene_owner(node: Node) -> void:
 	node.owner=null
