@@ -5,6 +5,8 @@ class_name ReplayStore
 
 const _AntiTamper = preload("res://scripts/net/anti_tamper.gd")
 const REPLAY_VERSION := 1
+## One private-match record. write_json already stores JSON.stringify(record).
+const DEFAULT_PATH := "user://aa_private_match_replay.json"
 
 
 static func create_record(match_meta: Dictionary, frames: Array) -> Dictionary:
@@ -86,6 +88,64 @@ static func write_json(rec: Dictionary, path: String) -> bool:
 	f.store_string(JSON.stringify(rec, "\t"))
 	f.close()
 	return true
+
+
+static func read_json(path: String) -> Dictionary:
+	## Load the JSON write_json stored and check verify_record plus the frame checksum chain.
+	var f := FileAccess.open(path, FileAccess.READ)
+	if f == null:
+		return {
+			"ok": false,
+			"error": "open_failed",
+			"path": path,
+			"record": {},
+			"verify": {"ok": false, "errors": ["open_failed"]},
+			"chain": {"ok": false, "checked": 0, "mismatches": 0},
+		}
+	var text := f.get_as_text()
+	f.close()
+	var parsed: Variant = JSON.parse_string(text)
+	if typeof(parsed) != TYPE_DICTIONARY:
+		return {
+			"ok": false,
+			"error": "not_record",
+			"path": path,
+			"record": {},
+			"verify": {"ok": false, "errors": ["not_record"]},
+			"chain": {"ok": false, "checked": 0, "mismatches": 0},
+		}
+	var rec: Dictionary = _restore_record_types(parsed)
+	var verify: Dictionary = verify_record(rec)
+	var chain: Dictionary = replay_checksum_chain(rec)
+	return {
+		"ok": bool(verify.get("ok", false)) and bool(chain.get("ok", false)),
+		"path": path,
+		"record": rec,
+		"verify": verify,
+		"chain": chain,
+	}
+
+
+static func _restore_record_types(rec: Dictionary) -> Dictionary:
+	## JSON.parse_string returns numbers as floats. create_record hashed the integer seed.
+	var out: Dictionary = rec.duplicate(true)
+	out["replay_version"] = int(out.get("replay_version", -1))
+	out["frame_count"] = int(out.get("frame_count", 0))
+	var meta_v: Variant = out.get("meta", {})
+	if typeof(meta_v) == TYPE_DICTIONARY:
+		var meta: Dictionary = meta_v
+		if meta.has("seed"):
+			meta["seed"] = int(meta.get("seed", 0))
+		out["meta"] = meta
+	var frames_v: Variant = out.get("frames", [])
+	if typeof(frames_v) == TYPE_ARRAY:
+		var frames: Array = frames_v
+		for item in frames:
+			if typeof(item) != TYPE_DICTIONARY:
+				continue
+			item["frame"] = int(item.get("frame", -1))
+		out["frames"] = frames
+	return out
 
 
 static func self_test() -> Dictionary:
