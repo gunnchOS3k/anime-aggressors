@@ -20,6 +20,12 @@ on:
         default: false
         type: boolean
 
+      controls_8d:
+        description: 'Produce versioned original hand and weighted secondary controls on all18 preserved8C rigs'
+        required: false
+        default: false
+        type: boolean
+
 permissions:
   contents: read
 
@@ -99,6 +105,47 @@ jobs:
         with:
           name: form-acting-8c-runtime-${{ github.sha }}
           path: ${{ runner.temp }}/form-acting-8c/runtime/
+          retention-days: 90
+          if-no-files-found: warn
+  controls-8d:
+    if: github.event_name == 'workflow_dispatch' && inputs.controls_8d
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install existing compatible Blender producer
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender python3-numpy
+      - name: Download exact preserved8C source copies
+        uses: actions/download-artifact@v4
+        with:
+          name: form-acting-8c-saved-sources-1e06532c4775129f81aed13b1ff9eab940683220
+          repository: gunnchOS3k/anime-aggressors
+          run-id: 39790037341
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/controls-8d-input/saved_sources/
+      - name: Save source controls and verify importable candidates
+        run: |
+          blender --background --factory-startup --python-exit-code 1 --python tools/authored_animation/blender/aa_controls_8d.py -- --input "$RUNNER_TEMP/controls-8d-input" --output "$RUNNER_TEMP/controls-8d"
+          python3 tools/authored_animation/validate_controls_8d.py "$RUNNER_TEMP/controls-8d"
+      - name: Preserve editable original control candidates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: controls-8d-saved-sources-${{ github.sha }}
+          path: ${{ runner.temp }}/controls-8d/saved_sources/
+          retention-days: 90
+          if-no-files-found: warn
+      - name: Preserve bounded exports and verification receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: controls-8d-runtime-${{ github.sha }}
+          path: ${{ runner.temp }}/controls-8d/runtime/
           retention-days: 90
           if-no-files-found: warn
   infra:

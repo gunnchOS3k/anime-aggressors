@@ -1,3 +1,13 @@
+# 8D source-control production — new bounded18-rig pass
+
+Recovered delivery9516770d, all exact-headCIpassed, archiveAPFSUUIDverified, no competing localcapture/Blenderjob. New originalcontrols producer and existing workflow controls_8d flag authored; source syntaxPASS, Ruby YAMLparsePASS. DefaultPython lacksPyYAML; no dependencies installed or validation weakened. Actual source output NOTYETPRODUCED. All33worktrees, source archives and facial work preserved; unrelated untrackedWORKFLOW_REFERENCED_PATHS.json untouched.
+
+Scope: actual5digit candidate hands using original3finger meshes plus newthumb/littlefinger, two-joint controls; actualindependent weightedexistinghair/cloth andrigidarmor articulations; four originalper-fighterWIPactions perrig. Inputexactverified8C18Blenders; originalgeometry/rest/oldactions preservation asserted;30B/8Cactions perrig kept; newversionedsource/exportpaths. OfficialglTFanimation transport avoids guessed bone-basis conversion. Allhuman/sourceartacceptancefalse; no premiumcompletionclaim.
+
+NEXT: commitproducer/score/validator/workflow, pushnormal existingdraftbranch, dispatchONLYcontrols_8d=true onpinnedhead. Recordrun/sourceSHAimmediately; neverduplicateactiveproduction. Runtimecandidate loader/recovery/actualnativevalidation followoutputs; noheavyMacBlender. Internal~20.45GiB; plannedboundedruntimeinstall/temp/import<=0.8GiB, preserve18GiB+allocations. Sourcebinaries streamed toverifiedexternalarchive aftersuccess, no originaldeletion. Remoteproductionjob outputshashchecked beforeuse.
+
+---
+
 # Final 8D / Cursor continuation — verified bounded increment
 
 Runtime: 3faa2f2cbfc5d0af57af06655f900784a97886ba. Get actual git HEAD for the later documentation delivery commit. PR #123 remains draft on #122; parent c5f3be23 verified. Portal handoff b5116094 was pushed and its CI passed; later additive handoff update must be requeried. Read docs/handoff/2026-10-22/CODEX_TO_CURSOR.md and AGENTS.md first.
