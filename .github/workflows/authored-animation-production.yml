@@ -308,6 +308,17 @@ jobs:
           assert d['PASS']and len(d['rows'])==18 and all(len(r['versions'])==2 for r in d['rows'])and not d['human_approved']
           assert 'SCRIPT ERROR:'not in (p/'comparison.log').read_text()
           PYCODE
+      - name: Real public grab throw escape and mesh projection on all18 new hand rigs
+        if: inputs.controls_verify_kind == 'hands-8d2'
+        run: |
+          timeout 480 "$GODOT_BIN" --headless --fixed-fps 60 --path game-godot --log-file "$RUNNER_TEMP/controls-engine-review/grab.log" --script res://tests/v1_closure/PairedHandsRuntime8D2.gd -- --ordinary-output="$RUNNER_TEMP/controls-engine-review"
+          python3 - <<'PYCODE'
+          import os,json,pathlib
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'controls-engine-review'
+          d=json.loads((p/'grab_acting_runtime_8b.json').read_text())
+          assert d['PASS']and d['complete']and len(d['rows'])==180 and not d['failures']
+          assert 'SCRIPT ERROR:'not in (p/'grab.log').read_text()
+          PYCODE
       - name: Preserve native source-control review
         if: always()
         uses: actions/upload-artifact@v4

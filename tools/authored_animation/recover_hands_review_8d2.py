@@ -37,13 +37,14 @@ def main():
             assert len(row['versions'])==2
             assert row['versions'][0]['source']['source_sha256']==before[row['fighter'],row['body']]['saved_source_sha256']
             assert row['versions'][1]['source']['source_sha256']==sources[row['fighter'],row['body']]['saved_source_sha256']
-        for name in ['godot.log','comparison.log']:assert 'SCRIPT ERROR:'not in (dest/'evidence'/name).read_text()
+        grab=json.loads((dest/'evidence/grab_acting_runtime_8b.json').read_text());assert grab['PASS']and grab['complete']and len(grab['rows'])==180 and not grab['failures']
+        for name in ['godot.log','comparison.log','grab.log']:assert 'SCRIPT ERROR:'not in (dest/'evidence'/name).read_text()
     images=[]
     for image in sorted((dest/'evidence').glob('*.png')):
         images.append({'path':str(image),'bytes':image.stat().st_size,'sha256':sha(image),'scope':'Actual Linux Compatibility staged saved-mesh hand comparison; no ordinary play/CPU/mesh-pair/device/art approval'})
     if passed:assert len(images)==4
     out=ROOT/f'artifacts/v1_closure/production_8d/hands_engine_{a.run}';out.mkdir(exist_ok=False)
-    for name in ['source_controls_runtime_8d.json','hands_comparison_8d2.json','godot.log','comparison.log']:
+    for name in ['source_controls_runtime_8d.json','hands_comparison_8d2.json','grab_acting_runtime_8b.json','godot.log','comparison.log','grab.log']:
         f=dest/'evidence'/name
         if f.exists():shutil.copy2(f,out/name)
     receipt={'PASS':bool(passed),'workflow_conclusion':run['conclusion'],'run_id':a.run,'run_url':run['html_url'],'runtime_source_sha':a.runtime_sha,'blender_producer_sha':manifest['source_sha'],'blender_producer_run':a.source_run,'artifact_id':artifact['id'],'archive_bytes':artifact['size_in_bytes'],'archive_sha256':digest,'archive':str(dest),'images':images,'renderer':result.get('renderer'),'native_rows':len(result.get('rows',[])),'comparison_rows':len(comparison.get('rows',[])),'source_installed_on_owner_mac':False,'ordinary_gameplay':False,'human_approved':False,'originals_deleted':False}
