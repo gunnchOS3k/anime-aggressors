@@ -328,9 +328,12 @@ def static_snapshot(actors,path):
 
 def run():
     execution=current_context(ROOT) # Fail before source loads, scene creation or any art output.
-    assert os.environ.get('GITHUB_ACTIONS')=='true' and sys.platform=='linux' and (4,0)<=bpy.app.version[:2]<(4,4)
+    assert (4,0)<=bpy.app.version[:2]<(4,4),'Preserved Blender4 sources require a compatible4.0–4.3 producer'
+    local=execution.get('execution_environment')=='OWNER_LOCAL_OFFLINE'
+    if not local:assert os.environ.get('GITHUB_ACTIONS')=='true' and sys.platform=='linux'
     args=sys.argv[sys.argv.index('--')+1:];inputs=Path(args[args.index('--input')+1]);out=Path(args[args.index('--output')+1])
     assert not out.exists() and shutil.disk_usage(out.parent).free>8*1024**3
+    if local:assert out.resolve()==Path(execution['output_path']).resolve(),'Offline output escaped its private workspace'
     pack=json.loads((ROOT/'art_source/staging/metric_8d4/inputs_v1.json').read_text())
     prior=json.loads((inputs/'runtime/PRODUCTION_MANIFEST.json').read_text())
     retained=json.loads((ROOT/'artifacts/v1_closure/production_8d/hand_integration_remote_39910149332/PRODUCTION_MANIFEST.json').read_text())
@@ -349,7 +352,7 @@ def run():
     shutil.copy2(ROOT/'art_source/staging/metric_8d4/inputs_v1.json',out/'runtime/STAGE_INPUTS.json')
     shutil.copy2(selection,out/'runtime/OWNER_CALIBRATION_SELECTION.json')
     manifest={'schema':'metric_pair_reference_sources_8d4.v1','producer_sha':execution['producer_sha'],'private_execution':execution,
-              'run_id':os.environ['GITHUB_RUN_ID'],'input_run':39910149332,'blender_version':bpy.app.version_string,
+              'run_id':None if local else os.environ['GITHUB_RUN_ID'],'input_run':39910149332,'blender_version':bpy.app.version_string,
               'reference_camera_size_m':pack['policy']['reference_observation']['projection']['camera_size'],
               'all_18_native_camera_scales':pack['measured_body_scales'],'owner_selection_sha256':sha(selection),
               'scope':'Eight offline reference scenes; not18-rig production or native shipping contact authority',

@@ -6,11 +6,16 @@ billing, token or artistic approval. No secrets are read or returned.
 import json
 import os
 import re
+import shutil
+import stat
 import subprocess
 from pathlib import Path
 
 PUBLIC_REPOSITORY='gunnchOS3k/anime-aggressors'
 SPENDING_CLEARANCE='OWNER_CONFIRMED_INCLUDED_USAGE_AND_ZERO_OVERAGE'
+LOCAL_SCOPE='OWNER_AUTHORIZED_ZERO_COST_LOCAL_ONLY'
+LOCAL_RESERVE_BYTES=18*1024**3
+LOCAL_PEAK_ALLOCATION_BYTES=4*1024**3
 
 
 def verify_context(event, live_repository, *, execution_repository, source_sha,
@@ -41,7 +46,51 @@ def verify_context(event, live_repository, *, execution_repository, source_sha,
             'RUNTIME_PAIRED_CONTACT_VERIFIED':False,'human_approved':False}
 
 
+def verify_local_context(record, *, checkout_sha, workspace, directory_mode,
+                         directory_owned, internal_free_bytes, github_actions):
+    """Local source execution is not a GitHub run or a spending attestation."""
+    if github_actions:
+        raise ValueError('Local offline context cannot authorize a GitHub runner')
+    if record.get('scope')!=LOCAL_SCOPE or record.get('execution_environment')!='OWNER_LOCAL_OFFLINE':
+        raise ValueError('Explicit owner-authorized local-only scope required')
+    if record.get('paid_usage_authorized')is not False or record.get('network_artifact_uploads')is not False:
+        raise ValueError('Local production may not enable paid services or network uploads')
+    if not re.fullmatch('[0-9a-f]{40}',checkout_sha or '')or record.get('producer_sha')!=checkout_sha or record.get('execution_recipe_sha')!=checkout_sha:
+        raise ValueError('Exact local producer and recipe checkout SHA required')
+    if record.get('private_workspace')!=str(workspace) or not directory_owned or directory_mode&0o077:
+        raise ValueError('Owner-only private local workspace required')
+    forecast=record.get('peak_internal_allocation_bytes')
+    if type(forecast)is not int or forecast<LOCAL_PEAK_ALLOCATION_BYTES or internal_free_bytes<LOCAL_RESERVE_BYTES+forecast:
+        raise ValueError('Local production requires18GiB AFTER at least4GiB forecast allocation')
+    output=Path(record.get('output_path',''))
+    if output.parent!=workspace or output.name!='metric-stage-8d4':
+        raise ValueError('Local output must be bound to its private workspace')
+    return {'schema':'private_art_execution_8d4.v2','execution_environment':'OWNER_LOCAL_OFFLINE',
+            'producer_sha':checkout_sha,'execution_recipe_sha':checkout_sha,
+            'execution_repository':None,'execution_workflow_sha':None,'artifact_retention_days':None,
+            'local_filesystem_private_verified':True,'network_artifact_uploads':False,
+            'paid_usage_authorized':False,'internal_reserve_bytes':LOCAL_RESERVE_BYTES,
+            'peak_internal_allocation_bytes':forecast,'private_workspace':str(workspace),
+            'output_path':str(output),'RUNTIME_PAIRED_CONTACT_VERIFIED':False,'human_approved':False}
+
+
 def current_context(root):
+    local=os.environ.get('AA_8D4_LOCAL_CONTEXT')
+    if local:
+        path=Path(local)
+        if path.is_symlink()or stat.S_IMODE(path.stat().st_mode)&0o077 or path.stat().st_uid!=os.geteuid():
+            raise ValueError('Local context receipt must be owner-only, not a symlink')
+        record=json.loads(path.read_text());workspace=Path(record['private_workspace']).resolve()
+        if path.resolve().parent!=workspace or workspace.is_relative_to(Path(root).resolve())or workspace.is_relative_to(Path('/Volumes')):
+            raise ValueError('Local production must be outside source checkout and immutable archives')
+        if subprocess.run(['git','-C',str(workspace),'rev-parse','--show-toplevel'],capture_output=True).returncode==0:
+            raise ValueError('Private production output cannot be inside a Git checkout')
+        info=workspace.stat()
+        checkout=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()
+        volume=Path('/System/Volumes/Data')if Path('/System/Volumes/Data').is_dir()else workspace
+        return verify_local_context(record,checkout_sha=checkout,workspace=workspace,
+            directory_mode=stat.S_IMODE(info.st_mode),directory_owned=info.st_uid==os.geteuid(),
+            internal_free_bytes=shutil.disk_usage(volume).free,github_actions=os.environ.get('GITHUB_ACTIONS')=='true')
     if os.environ.get('GITHUB_ACTIONS')!='true'or os.environ.get('GITHUB_EVENT_NAME')!='workflow_dispatch':
         raise ValueError('Explicit private manual production only')
     event=json.loads(Path(os.environ['GITHUB_EVENT_PATH']).read_text())
@@ -61,8 +110,19 @@ def validate_manifest_context(manifest):
     production and recovery perform those checks separately.
     """
     context=manifest.get('private_execution',{})
+    if context.get('execution_environment')=='OWNER_LOCAL_OFFLINE':
+        source=context.get('producer_sha','')
+        if not re.fullmatch('[0-9a-f]{40}',source)or source!=manifest.get('producer_sha')or context.get('execution_recipe_sha')!=source:
+            raise ValueError('Local source/recipe SHA mismatch')
+        if context.get('execution_repository')is not None or context.get('execution_workflow_sha')is not None or context.get('artifact_retention_days')is not None:
+            raise ValueError('Offline execution cannot claim GitHub provenance or artifact retention')
+        if context.get('local_filesystem_private_verified')is not True or context.get('network_artifact_uploads')is not False or context.get('paid_usage_authorized')is not False:
+            raise ValueError('Missing private zero-cost offline provenance')
+        if context.get('internal_reserve_bytes',0)<LOCAL_RESERVE_BYTES or context.get('peak_internal_allocation_bytes',0)<LOCAL_PEAK_ALLOCATION_BYTES:
+            raise ValueError('Offline storage guard provenance missing')
+        return context
     repo=context.get('execution_repository','')
-    if repo==PUBLIC_REPOSITORY or not repo.startswith('gunnchOS3k/')or context.get('repository_private_verified')is not True:
+    if not isinstance(repo,str)or repo==PUBLIC_REPOSITORY or not repo.startswith('gunnchOS3k/')or context.get('repository_private_verified')is not True:
         raise ValueError('Missing verified private execution provenance')
     if context.get('producer_sha')!=manifest.get('producer_sha')or not re.fullmatch(r'[0-9a-f]{40}',manifest.get('producer_sha','')):
         raise ValueError('Source producer SHA is not bound to private execution')

@@ -1,3 +1,15 @@
+# Current owner direction — zero-cost local path; Actions stays disabled
+
+The latest owner reply explicitly prohibits the private Actions production job and all paid usage. Keep the installed workflow and both false gates disabled. Do not request upgrades, budgets, payment methods, a source-read secret or paid overage as a prerequisite to continuing. The older setup/dispatch instructions below are historical preparation, not current execution authorization.
+
+A zero-service-cost local recipe now reuses the prepared producer and immutable archived8D3 inputs: `tools/authored_animation/run_metric_stage_8d4_local.py`. Default mode is read-only preflight; `--execute` is refused unless every check passes. It makes no Actions/API call, install, download, upload, archive write or deletion. Local provenance records the real local recipe/producer SHA with no invented GitHub repository/run/workflow or artifact retention. Existing private-remote context validation remains intact, and the GitHub job stays disabled.
+
+Local requirements: NEW owner-only internal workspace outside all Git checkouts/archives; exact archived input manifest; existing Blender4.0–4.3 and Godot4.7.1; no competing Blender/Godot process; clean checkpointed producer sources; **22GiB internal free (18GiB reserve plus4GiB peak allocation forecast)**. Output stays private and versioned. Inputs are read directly from the archive, never relocated or downgraded. No images, rigs or geometry measurements enter public Git. Failed real production is retained without automatic retry or acceptance.
+
+Actual preflight: expected APFS archive and exact input manifest verified; Godot4.7.1 available; Blender3.3.1 incompatible; internal free about12.73GiB. No registered self-hosted runner was found in either Anime repository. No production workspace/job or new infrastructure was created. Existing verified archive receipts are reusable; protected originals remain protected, and the previously nominated0.26GiB installer alone cannot close the storage gap.
+
+---
+
 # Private 8D-4 reference production — setup installed; production disabled
 
 The owner declined public artifact disclosure for both `de32787d` and `821045e2`, while authorizing continued private art production. Those commits and all completed preparation remain preserved. Do not dispatch either historical public producer.

@@ -251,7 +251,7 @@ func _process(delta: float) -> void:
 	if camera != null:
 		var closeup: bool = chapter["kind"] != "STORY_BATTLE"
 		var target: Vector2 = (_dialogue_speaker.position if _dialogue_speaker != null and is_instance_valid(_dialogue_speaker) and StoryDialogue.is_busy() else _battle.fighter1.position if closeup else (_battle.fighter1.position + _battle.fighter2.position) * 0.5) + Vector2(0, -60 if closeup else -45)
-		if _private_camera_active and StoryDialogue.is_busy():
+		if _private_camera_active:
 			var framing: Dictionary = _private_camera_take.sample(StoryDialogue.remaining)
 			if not framing.is_empty():
 				target = _battle.fighter1.position.lerp(_battle.fighter2.position, float(framing.focus_mix)) + framing.offset

@@ -4,6 +4,7 @@ import re
 import unittest
 from pathlib import Path
 from private_production_8d4 import verify_context, validate_manifest_context, sanitized_summary, SPENDING_CLEARANCE
+from private_production_8d4 import verify_local_context, LOCAL_SCOPE, LOCAL_RESERVE_BYTES, LOCAL_PEAK_ALLOCATION_BYTES
 
 
 def fixture():
@@ -135,6 +136,57 @@ class PreparedWorkflowBoundary(unittest.TestCase):
         self.assertIn("info['visibility']=='private'",text)
         self.assertIn('sanitized_summary(validation,result)',text)
         self.assertNotIn('shutil.copy2',text)
+
+
+class LocalOfflineBoundary(unittest.TestCase):
+    def fixture(self):
+        workspace=Path('/SYNTHETIC_PRIVATE_FIXTURE')
+        record={'scope':LOCAL_SCOPE,'execution_environment':'OWNER_LOCAL_OFFLINE','producer_sha':'a'*40,
+                'execution_recipe_sha':'a'*40,'private_workspace':str(workspace),
+                'output_path':str(workspace/'metric-stage-8d4'),
+                'peak_internal_allocation_bytes':LOCAL_PEAK_ALLOCATION_BYTES,
+                'paid_usage_authorized':False,'network_artifact_uploads':False}
+        args={'checkout_sha':'a'*40,'workspace':workspace,'directory_mode':0o700,
+              'directory_owned':True,'internal_free_bytes':LOCAL_RESERVE_BYTES+LOCAL_PEAK_ALLOCATION_BYTES,
+              'github_actions':False}
+        return record,args
+
+    def test_local_source_has_no_forged_github_run_or_spending_attestation(self):
+        record,args=self.fixture();context=verify_local_context(record,**args)
+        self.assertIsNone(context['execution_repository'])
+        self.assertIsNone(context['execution_workflow_sha'])
+        self.assertIsNone(context['artifact_retention_days'])
+        self.assertFalse(context['paid_usage_authorized'])
+        self.assertFalse(context['network_artifact_uploads'])
+        self.assertEqual(validate_manifest_context({'producer_sha':'a'*40,'private_execution':context}),context)
+
+    def test_local_storage_guard_cannot_use_bare18gib_or_lower_forecast(self):
+        for free in [LOCAL_RESERVE_BYTES,LOCAL_RESERVE_BYTES+LOCAL_PEAK_ALLOCATION_BYTES-1]:
+            record,args=self.fixture();args['internal_free_bytes']=free
+            with self.assertRaisesRegex(ValueError,'18GiB AFTER'):verify_local_context(record,**args)
+        record,args=self.fixture();record['peak_internal_allocation_bytes']=1024
+        with self.assertRaisesRegex(ValueError,'18GiB AFTER'):verify_local_context(record,**args)
+
+    def test_local_context_cannot_enable_github_runner(self):
+        record,args=self.fixture();args['github_actions']=True
+        with self.assertRaisesRegex(ValueError,'GitHub runner'):verify_local_context(record,**args)
+
+    def test_nonprivate_workspace_or_escaped_output_fails_closed(self):
+        for change in [{'directory_mode':0o755},{'directory_owned':False}]:
+            record,args=self.fixture();args.update(change)
+            with self.assertRaisesRegex(ValueError,'Owner-only'):verify_local_context(record,**args)
+        record,args=self.fixture();record['output_path']='/ELSEWHERE/metric-stage-8d4'
+        with self.assertRaisesRegex(ValueError,'bound'):verify_local_context(record,**args)
+
+    def test_local_context_rejects_stale_source_or_paid_uploads(self):
+        for field,value in [('producer_sha','b'*40),('execution_recipe_sha','b'*40),('paid_usage_authorized',True),('network_artifact_uploads',True)]:
+            record,args=self.fixture();record[field]=value
+            with self.assertRaises(ValueError):verify_local_context(record,**args)
+
+    def test_offline_manifest_cannot_claim_cloud_artifact_provenance(self):
+        record,args=self.fixture();context=verify_local_context(record,**args)
+        context['execution_workflow_sha']='b'*40
+        with self.assertRaisesRegex(ValueError,'GitHub provenance'):validate_manifest_context({'producer_sha':'a'*40,'private_execution':context})
 
 
 if __name__=='__main__':unittest.main()
