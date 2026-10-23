@@ -180,9 +180,19 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Install existing compatible Blender producer
+        timeout-minutes: 8
         run: |
-          sudo apt-get update
-          sudo apt-get install -y blender python3-numpy
+          # The previous Azure mirror streamed dependencies until the45-minute
+          # job timeout, before Blender ever ran. Keep signed Ubuntu packages,
+          # bound network waits and avoid optional GUI/media recommendations.
+          sudo python3 - <<'PYCODE'
+          from pathlib import Path
+          for p in [Path('/etc/apt/sources.list'),*Path('/etc/apt/sources.list.d').glob('*.sources')]:
+              if p.is_file():p.write_text(p.read_text().replace('http://azure.archive.ubuntu.com/ubuntu','https://archive.ubuntu.com/ubuntu'))
+          PYCODE
+          sudo apt-get -o Acquire::ForceIPv4=true -o Acquire::Retries=2 -o Acquire::https::Timeout=20 -o Acquire::http::Timeout=20 update
+          sudo apt-get -o Acquire::ForceIPv4=true -o Acquire::Retries=2 -o Acquire::https::Timeout=20 -o Acquire::http::Timeout=20 install --no-install-recommends -y blender python3-numpy
+          blender --version
       - name: Download exact saved8D candidates, never regenerate BASE
         uses: actions/download-artifact@v4
         with:

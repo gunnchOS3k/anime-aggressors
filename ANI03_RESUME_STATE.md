@@ -1,3 +1,15 @@
+# 8D-2 original producer terminal; dependency mirror corrected
+
+39858757532 is conclusively CANCELLED at45-minute timeout. Compatible Blender install remained downloading from azure.archive.ubuntu.com; source download/sculpt/export never began; artifacts0. Full log/run/jobs/artifact API preserved atproduction_8d/hands_failed_39858757532. Infra success is NOT anatomy output. Source scripts2d762eef unchanged. Remote branch/local7c25c299 matches; allfive workflows exacthead SUCCESS, includingWindows2025. Current unrelated WORKFLOW_REFERENCED_PATHS.json preserved; three new paired-source scripts untracked WIP preserved, syntax only, not yet executed. Do not lose them.
+
+Bounded replacement corrects only the demonstrated dependency environment: same signed Ubuntu Blender4 packages via official archive mirror, no optional recommendations,8-minute install timeout/retry bounds. No duplicate active Blender job. Commit/push then dispatch hands_8d2=true once. Record newsource SHA/run. Do not repeat54 historicalsourceactions/captures. Reuse exact18 saved8D input, all originalactions andgeometry assertions remain.
+
+Internal14.50GiB (15,200,000KiB), below18GiB AFTERforecast; no Maccandidateinstall/export/import/newrecording. External identity previouslyverified, remeasurebefore archival. Latest handoffread; Cursor isolatedbranches are untouched. Allhumanfalse.
+
+NEXT: finish newdependencycorrectioncheckpoint, one replacementmanual sourcejob. Inspect real Blender failures before paired export. Paired actualsurface bake currently WIP source only (aa_paired_surface_8d2.py,aa_paired_hands_8d2.py,validate_paired_hands_8d2.py); no paired candidate produced yet. Preserve failed/source/nativenegatives. Need actualhandshape native inspection, sourcepair save/reopen and realruntimeprojection, directionalthrows/escape/forms/recovery; do not claimthosepassed.
+
+---
+
 # 8D-2 connected anatomy producer / controlled review checkpoint
 
 Branch release/anime-v1-dialogue-and-elemental-performance; source producer2d762eef5584255b099a597d206d4a1473c48a87 pushed. ONLY manual Blender job39858757532 running (last install stage); do not dispatch a competing manual workflow with this same ref: concurrency cancels it. Check its terminal result and preserve failures before retry. No local Blender/export/import/capture jobs.35 worktrees protected; unrelated untracked WORKFLOW_REFERENCED_PATHS.json untouched.
