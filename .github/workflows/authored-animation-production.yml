@@ -31,6 +31,11 @@ on:
         required: false
         default: false
         type: boolean
+      hands_repair_8d2:
+        description: 'Repair folded hand surfaces on exact18 saved8D2 candidates; preserve every existing bone and action'
+        required: false
+        default: false
+        type: boolean
       controls_verify_run:
         description: 'Validate/render an already successful8D runtime artifact; no Blender regeneration'
         required: false
@@ -171,7 +176,7 @@ jobs:
           retention-days: 90
           if-no-files-found: warn
   hands-8d2:
-    if: github.event_name == 'workflow_dispatch' && inputs.hands_8d2
+    if: github.event_name == 'workflow_dispatch' && (inputs.hands_8d2 || inputs.hands_repair_8d2)
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     permissions:
@@ -194,6 +199,7 @@ jobs:
           sudo apt-get -o Acquire::ForceIPv4=true -o Acquire::Retries=2 -o Acquire::https::Timeout=20 -o Acquire::http::Timeout=20 install --no-install-recommends -y blender python3-numpy
           blender --version
       - name: Download exact saved8D candidates, never regenerate BASE
+        if: inputs.hands_8d2 && !inputs.hands_repair_8d2
         uses: actions/download-artifact@v4
         with:
           name: controls-8d-saved-sources-3ab7667ca0b22e50bb7acfe0b509ff6b4513daf5
@@ -201,9 +207,31 @@ jobs:
           run-id: 39852459469
           github-token: ${{ github.token }}
           path: ${{ runner.temp }}/hands-8d2-input/saved_sources/
+      - name: Recover actual saved18-rig first hand candidates for a surface-only correction
+        if: inputs.hands_repair_8d2
+        uses: actions/download-artifact@v4
+        with:
+          name: hands-8d2-saved-sources-195194c70cdd70f3930eb5d5082e1cfc159730e5
+          repository: gunnchOS3k/anime-aggressors
+          run-id: 39882654215
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/hands-8d2-input/saved_sources/
+      - name: Recover corresponding measured dimensions and exact source hashes
+        if: inputs.hands_repair_8d2
+        uses: actions/download-artifact@v4
+        with:
+          name: hands-8d2-runtime-195194c70cdd70f3930eb5d5082e1cfc159730e5
+          repository: gunnchOS3k/anime-aggressors
+          run-id: 39882654215
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/hands-8d2-input/runtime/
       - name: Correct actual connected hand meshes and skin
         run: |
-          blender --background --factory-startup --python-exit-code 1 --python tools/authored_animation/blender/aa_hands_8d2.py -- --input "$RUNNER_TEMP/hands-8d2-input" --output "$RUNNER_TEMP/hands-8d2"
+          if [ "${{ inputs.hands_repair_8d2 }}" = true ]; then
+            blender --background --factory-startup --python-exit-code 1 --python tools/authored_animation/blender/aa_repair_hand_surface_8d2.py -- --input "$RUNNER_TEMP/hands-8d2-input" --output "$RUNNER_TEMP/hands-8d2"
+          else
+            blender --background --factory-startup --python-exit-code 1 --python tools/authored_animation/blender/aa_hands_8d2.py -- --input "$RUNNER_TEMP/hands-8d2-input" --output "$RUNNER_TEMP/hands-8d2"
+          fi
           python3 tools/authored_animation/validate_hands_8d2.py "$RUNNER_TEMP/hands-8d2"
       - name: Preserve edited original source candidates
         if: always()

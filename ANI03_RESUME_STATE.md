@@ -1,3 +1,24 @@
+# 8D-2 exact native approval active; first source archived; root repair prepared
+
+Local/remote starting HEADfae1550e1822f14536234d9e0ed4045e224ecae0, release/anime-v1-dialogue-and-elemental-performance, draft123 on122. This source/evidence checkpoint followsfae; use git rev-parse HEAD for actual delivery. User approved the exact fae native artifact upload (fourPNGs/logs/JSON, public90days). Sole manual review39883829338 active:36model/facing and18staged comparison stages succeeded;180public grab/throw/escape stage running. Do NOT dispatch a competing manual producer/review before this run is terminal.
+
+Actual first hand source195194c7/run39882654215 SUCCESS and archive complete.18 sources692892488bytes SHAverified,18GLBs/90auxclips; original5408B+1448C+728D protected. Archive path/UUID and individual hashes in hands_remote_39882654215/RECOVERY_RECEIPT.json. No install on owner Mac. Source integrity is not art acceptance: read-only exportedmesh audit reproduced root folds on right hands and inconsistent leftthumb root. Original outputs preserved; HAND_CAGE_NEGATIVE_FINDING.json and SURFACE_REPAIR_TRIALS.json retain failures.
+
+Prepared source-only repair: aa_repair_hand_surface_8d2.py consumes exact saved195sources, preserves all bone rest/actions/nonpalm geometry/weights/morphs/materials/cuffs, changes only PalmL/R topology using original dimensions. Root-owned frames and proximal-contour blend PASS7488numericquads/36hands; actual Blender execution/export/native repair stillpending. Updated validator requires positive quad orientation/outward volume, no weakening. No old source regeneration,0newactions. hands_repair_8d2 workflow flag prepared. Only after previous native review terminal, dispatch this bounded repair and preserve exact run. All original artifacts remain.
+
+NEXT inspect the sole manual review, then archive without installing:
+
+```sh
+gh run view 39883829338 --repo gunnchOS3k/anime-aggressors --json status,conclusion,jobs
+python3 tools/authored_animation/recover_hands_review_8d2.py --run 39883829338 --runtime-sha fae1550e1822f14536234d9e0ed4045e224ecae0 --source-run 39882654215
+```
+
+Use `--allow-failed` only for a failed diagnostic review. Inspect actual images and mesh/floor findings before paired production. The prepared paired source baker has NOT executed or been wired to the workflow; actual runtime projection must replace assumed common-camera staging.
+
+Internal live11.63GiB below18GiB AFTER forecast; no localbinaryimport/Blender/export/capture. External APFS UUID9C4EB36E-2864-42F8-BD0B-A4F67EBC7852 verified349GiB class. No local production/capture running, ownerdata/worktrees/Cursorisolatedchanges preserved, no merges. Unrelated untracked WORKFLOW_REFERENCED_PATHS.json intentionallyunstaged. fae authority/full-roster/infra/web CIpassed; Windowsworkflowpending lastquery. Allhumanfalse; no release/deploy/tag.
+
+---
+
 # 8D-2 actual18-rig original hand source production SUCCESS
 
 Producer195194c70cdd70f3930eb5d5082e1cfc159730e5/run39882654215 terminalSUCCESS. Ownerapprovedsamehandproductionartifactscope, original18saved8Dsourceinput39852459469. Blender4.0.2 saved/reopened18editedcandidates, exported18GLBs, producer/strictvalidatorPASS all18/36connectedhands/28fingerjointsperrig/90newauxactions. Protectedoriginal5408B+1448C+728Dactions retained, canonical22/no-oprest andnonhandgeometry/weights preserved. Sourceproof is NOTpremiumvisualacceptance orpairedcontactclosure.

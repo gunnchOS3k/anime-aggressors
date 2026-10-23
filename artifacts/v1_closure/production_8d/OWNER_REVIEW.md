@@ -1,3 +1,15 @@
+# 8D-2 hand-source production and native review in progress
+
+Original hand producer `195194c70cdd70f3930eb5d5082e1cfc159730e5`, run39882654215, saved/reopened18 candidates and exported18 GLBs. All prior actions, canonical rest and non-hand source geometry/weights passed preservation checks. Ninety new auxiliary hand/secondary clips are WIP. Rook received actual open wrist cuffs in both bodies. The692,892,488 source bytes are durably archived with SHA-256 receipts under `hands_remote_39882654215/RECOVERY_RECEIPT.json`; no candidates were installed on this Mac.
+
+**Known source defect, retained:** exported right-hand surfaces have folded roots. Closed/manifold checks alone missed this. `HAND_CAGE_NEGATIVE_FINDING.json` contains actual export witnesses. The bounded repair derives the section frame from each real root opening and eases the oblique thumb/web contour through its first phalanx. All7,488 numeric bridge checks pass; this is source math, not yet a new saved Blender or native visual pass. The repair reuses the exact18 first candidates, all existing bones/actions/cuffs/materials, and produces no new acting library.
+
+Owner-approved native review39883829338 at `fae1550e1822f14536234d9e0ed4045e224ecae0` is running against the first candidate. Model checks and staged comparison sheets completed;180 public grab/throw/escape cases remain running. Those fixtures use ordinary public controls with declared idle targets; they are not active-CPU, earned Story or human art acceptance. Actual projected palm/victim surfaces are measured without forcing a passing gap. Do not infer paired grip or foot support closure from successful imports.
+
+Internal free storage11.63GiB is below18GiB plus forecast. No local Blender, binary install/import or new recording. Original sources, prior media and owner saves remain untouched. Full-body forms/KO/guard-break/ultimate acting and final art approval remain open across all18 bodies.
+
+---
+
 # 8D original eighteen-rig controls — actual source increment
 
 New source producer `3ab7667ca0b22e50bb7acfe0b509ff6b4513daf5`, successful run [39852459469](https://github.com/gunnchOS3k/anime-aggressors/actions/runs/39852459469). Runtime opt-in implementation `b09aec61a99b3c204ba5dcab7a95e60908a3af68`; final verification-only run [39854634363](https://github.com/gunnchOS3k/anime-aggressors/actions/runs/39854634363) passed at `e8d4ab80c380ae21c77dae3b56656d9c3e1eaddc` (only observer framing/isolation changed after runtime implementation). Previous facial work below remains completed and preserved.

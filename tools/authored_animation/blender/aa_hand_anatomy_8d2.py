@@ -21,23 +21,23 @@ def preserve_part(ob,collection):
     return {'original':ob.name,'backup':copy.name,'before_sha256':old,'original_vertices':len(ob.data.vertices)}
 
 
-def build_hand(arm,side,spec,archive):
+def build_hand(arm,side,spec,archive,source_dimensions=None):
     sign=-1 if side=='L'else 1
     palm=bpy.data.objects['Palm '+side]
     names=['Palm '+side]+['Finger %s %d'%(side,i)for i in range(3)]+['D8_Thumb_'+side,'D8_Little_'+side]
     before=[preserve_part(bpy.data.objects[n],archive)for n in names]
     for name in names[1:]:
         ob=bpy.data.objects[name];ob.hide_render=True;ob.hide_set(True);ob['8d2_legacy_only']=True
-    old=points(arm,palm);w=(max(v.x for v in old)-min(v.x for v in old))*.72
+    old=points(arm,palm);w=float(source_dimensions['width_m'])if source_dimensions else(max(v.x for v in old)-min(v.x for v in old))*.72
     wrist=arm.data.bones['Hand_'+side].head_local.copy()
     forward=(arm.data.bones['Hand_'+side].tail_local-wrist).normalized()
     across=Vector((-sign,0,0));normal=Vector((0,forward.z,-forward.y)).normalized()
     # One source-derived envelope; no whole-character or arm scaling.
     old_digits=[p for n in names for p in points(arm,bpy.data.objects[n])]
     limit=max((p-wrist).dot(forward)for p in old_digits)
-    end=max(.095,min(.16,limit*.98));base=end*.52;thick=end*.25
+    end=float(source_dimensions['distal_envelope_m'])if source_dimensions else max(.095,min(.16,limit*.98));base=end*.52;thick=float(source_dimensions['depth_m'])if source_dimensions else end*.25
     frows=[-.014,base*.22,base*.62,base]
-    verts=[];faces=[];materials=[];weights=[];grid={};chains=[]
+    verts=[];faces=[];materials=[];weights=[];grid={};chains=[];bridge_cosines=[]
     def vertex(p,wgt):
         verts.append(tuple(p));weights.append(wgt);return len(verts)-1
     def face(indices,mat=0):faces.append(tuple(indices));materials.append(mat)
@@ -62,11 +62,25 @@ def build_hand(arm,side,spec,archive):
     def bridge(a,b):
         # Both loops have4 corners. Subdivision supplies rounded phalanges,
         # with explicit additional rings at each joint/crease.
-        for i in range(4):face([a[i],a[(i+1)%4],b[(i+1)%4],b[i]])
+        for i in range(4):
+            indices=[a[i],a[(i+1)%4],b[(i+1)%4],b[i]]
+            p,q,r,t=[Vector(verts[n])for n in indices]
+            n1=(q-p).cross(r-p);n2=(r-p).cross(t-p)
+            assert n1.length>0 and n2.length>0,('Degenerate hand bridge',side,i)
+            cosine=n1.normalized().dot(n2.normalized());bridge_cosines.append(cosine)
+            assert cosine>0,('Folded hand bridge',side,i,cosine)
+            face(indices)
     def tube(root,origin,direction,width,depth,length,bones,stops,thumb=False):
         last=root
         rings=[.025,.08,stops[1]-.035,stops[1],stops[1]+.035,stops[-2]-.035,stops[-2],stops[-2]+.035,.94,.985,1.0]if not thumb else[.025,.10,.46,.50,.54,.90,.97,1.0]
-        cross=normal.cross(direction).normalized()
+        # The root polygon owns its handedness. A universal normal cross axis
+        # twisted every right finger and the left thumb in the first export.
+        # Derive both cross-section axes from the actual ordered opening.
+        edge=Vector(verts[root[1]])-Vector(verts[root[0]])
+        cross=(edge-direction*edge.dot(direction)).normalized()
+        edge=Vector(verts[root[3]])-Vector(verts[root[0]])
+        section_normal=(edge-direction*edge.dot(direction)-cross*edge.dot(cross)).normalized()
+        assert cross.length>.99 and section_normal.length>.99
         for t in sorted(set(rings)):
             t=max(.01,min(1,t));taper=(1-.20*t)*(max(.18,1-(max(0,t-.93)/.07)*.65))
             knuckle=1.10 if min(abs(t-s)for s in stops[1:-1])<.01 else 1.
@@ -78,8 +92,14 @@ def build_hand(arm,side,spec,archive):
                 if abs(t-s)<.10:
                     u=(t-s+.10)/.20;wg={bones[j]:1-u,bones[j+1]:u};break
             current=[]
-            for a,b in [(-1,-1),(1,-1),(1,1),(-1,1)]:
-                current.append(vertex(center+cross*(a*width*.5*taper*knuckle)+normal*(b*depth*.5*taper*knuckle),wg))
+            blend=min(1.,t/stops[1]);blend=blend*blend*(3-2*blend)
+            for corner,(a,b) in enumerate([(-1,-1),(1,-1),(1,1),(-1,1)]):
+                wanted=center+cross*(a*width*.5*taper*knuckle)+section_normal*(b*depth*.5*taper*knuckle)
+                # A web/thenar opening is oblique to the digit shaft. Ease its
+                # actual contour into the rounded section rather than pinching
+                # the first ring through a large, tilted thumb-root polygon.
+                neck=Vector(verts[root[corner]])+direction*length*t
+                current.append(vertex(neck.lerp(wanted,blend),wg))
             bridge(last,current);last=current
         face(last)
     for digit,cell in enumerate([3,2,1,0]):
@@ -105,7 +125,10 @@ def build_hand(arm,side,spec,archive):
     for index,wg in enumerate(weights):
         total=sum(wg.values())
         for name,value in wg.items():groups[name].add([index],value/total,'REPLACE')
-    bm=bmesh.new();bm.from_mesh(data);bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces));bm.to_mesh(data);bm.free()
+    bm=bmesh.new();bm.from_mesh(data);bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces))
+    normals_reversed=bm.calc_volume(signed=True)<0
+    if normals_reversed:bmesh.ops.reverse_faces(bm,faces=list(bm.faces))
+    bm.to_mesh(data);bm.free()
     bpy.ops.object.select_all(action='DESELECT');palm.select_set(True);bpy.context.view_layer.objects.active=palm
     sub=palm.modifiers.new('Authored anatomy surface','SUBSURF');sub.levels=2;sub.render_levels=2
     # Put subdivision before the skin, apply it once into editable dense quads.
@@ -122,10 +145,11 @@ def build_hand(arm,side,spec,archive):
             for edge in v.link_edges:
                 other=edge.other_vert(v)
                 if other in pending:pending.remove(other);stack.append(other)
-    boundary=sum(e.is_boundary for e in bm.edges);bm.free()
+    boundary=sum(e.is_boundary for e in bm.edges);volume=bm.calc_volume(signed=True);bm.free()
+    assert volume>0,("Closed hand must have outward winding",side,volume)
     assert components==1 and boundary==0,('hand cage must be continuous and closed',side,components,boundary)
     assert all(abs(sum(g.weight for g in v.groups)-1)<.00001 for v in palm.data.vertices)
-    return {'connected_components':components,'boundary_edges':boundary,'side':side,'wrist':list(wrist),'width_m':w,'distal_envelope_m':end,'depth_m':thick,'chains':chains,'source_parts':before,'mesh':palm.name,'vertices':len(palm.data.vertices),'polygons':len(palm.data.polygons),'palm_contact_rest':list(wrist+forward*base*.55+normal*thick*.52)}
+    return {'minimum_bridge_normal_cosine':min(bridge_cosines),'outward_closed_volume_m3':volume,'outward_normals_corrected':normals_reversed,'connected_components':components,'boundary_edges':boundary,'side':side,'wrist':list(wrist),'width_m':w,'distal_envelope_m':end,'depth_m':thick,'chains':chains,'source_parts':before,'mesh':palm.name,'vertices':len(palm.data.vertices),'polygons':len(palm.data.polygons),'palm_contact_rest':list(wrist+forward*base*.55+normal*thick*.52)}
 
 
 def fit_controls(arm,hands):

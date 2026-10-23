@@ -59,7 +59,9 @@ def main():
         assert shutil.disk_usage(ROOT).free>=18*GIB
     shutil.copy2(snapshot/'runtime/PRODUCTION_MANIFEST.json',out/'PRODUCTION_MANIFEST.json')
     reproduction=snapshot/'reproduction_source'
-    for rel in ['tools/authored_animation/blender/aa_hands_8d2.py','tools/authored_animation/blender/aa_hand_anatomy_8d2.py','tools/authored_animation/validate_hands_8d2.py','art_source/animation/hands_8d2/score_v1.json','.github/workflows/authored-animation-production.yml']:
+    reproduction_files=['tools/authored_animation/blender/aa_hands_8d2.py','tools/authored_animation/blender/aa_hand_anatomy_8d2.py','tools/authored_animation/validate_hands_8d2.py','art_source/animation/hands_8d2/score_v1.json','.github/workflows/authored-animation-production.yml']
+    if m.get('surface_input_run'):reproduction_files.append('tools/authored_animation/blender/aa_repair_hand_surface_8d2.py')
+    for rel in reproduction_files:
         target=reproduction/rel;target.parent.mkdir(parents=True,exist_ok=True)
         content=subprocess.check_output(['git','show',a.source_sha+':'+rel],cwd=ROOT)
         if target.exists():assert target.read_bytes()==content
@@ -75,5 +77,5 @@ def main():
         (snapshot/'DURABLE_SOURCE_RECEIPT.json').write_text(text)
         (VOLUME/f'00-Catalog/manifests/anime-8d2-hands-{a.run}.json').write_text(text)
     (out/filename).write_text(text)
-    print(json.dumps({'PASS':True,'archive':str(snapshot),'source_rigs':18,'new_actions':90,'installed':len(installed),'source_bytes':receipt['source_bytes'],'internal_free_GiB':receipt['internal_after_bytes']/GIB}))
+    print(json.dumps({'PASS':True,'archive':str(snapshot),'source_rigs':18,'new_actions':m.get('created_actions_this_run',90),'installed':len(installed),'source_bytes':receipt['source_bytes'],'internal_free_GiB':receipt['internal_after_bytes']/GIB}))
 if __name__=='__main__':main()
