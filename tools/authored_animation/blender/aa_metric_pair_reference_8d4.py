@@ -372,9 +372,10 @@ def animated_reference(actors,path):
 
 
 def run():
-    execution=current_context(ROOT) # Fail before source loads, scene creation or any art output.
+    execution=current_context(ROOT,producer_binary=bpy.app.binary_path) # Fail before source loads or output.
     assert (4,0)<=bpy.app.version[:2]<(4,4),'Preserved Blender4 sources require a compatible4.0–4.3 producer'
     local=execution.get('execution_environment')=='OWNER_LOCAL_OFFLINE'
+    if local:assert bpy.app.version[:3]==(4,0,2),'Exact audited4.0.2 source producer required locally'
     if not local:assert os.environ.get('GITHUB_ACTIONS')=='true' and sys.platform=='linux'
     args=sys.argv[sys.argv.index('--')+1:];inputs=Path(args[args.index('--input')+1]);out=Path(args[args.index('--output')+1])
     assert not out.exists() and shutil.disk_usage(out.parent).free>8*1024**3

@@ -1,3 +1,15 @@
+# Official producer audit is now mandatory; no package or source run yet
+
+New readonly audit_blender_402.py validates the complete officialmanifest/DMGSHA, readonlymountedsource-to-installedapptree equality, ARM64, macOScodesign/Gatekeeper and exact4.0.2. A permitted browserdownload path requires actualmacOSWhereFromsmetadata for exactofficialchecksumANDpackageURLs if automatedGETreturns403; metadata is explicitlynotcryptographicoriginsignature. It downloads/mounts/installs NOTHING. Outputprivate0600receipt required by localrecipeANDactualBlenderentrypoint before source loading; directlocalcontext/version-only bypass rejected.3.3.1app untouched. Nine syntheticboundary testsPASS;21privacy/sevenpilotscopePASS. Initialfixture unresolvedsymlinkpath failure retained as testdiagnostic, correctedbyresolvingitsnewtemporarypath, not weakeningguard. ActualmacOSpackageaudit/signature/footprint remainsUNVERIFIED.
+
+Prior animated-path checkpointce8f4491 is safelypushed; newexport/nativepipeline still has0originalartoutputs. Unitninebinarychecks/native100syntheticjoint samples+intentionaldrift failure are checker evidence only. Release/recovery/locomotion, skin/floor/contact/character-sheet nativevisual acceptance remainunfinished; all batch/human/shippingcontactgatesFALSE. Currentheadidentifiedbygitrev-parseHEAD. Original147camera/15watch controls/53sequence inventory unchanged andnotrerun.
+
+Storage/officialreadbacks remain genuinelyblocked:19.755GiB observed earlier,22GiBminimum AFTER toolinstallation, compressed/expanded/installpeak notmeasured due403. Targeted42worktree generatedbuild/tmp/importcache review found no disposablemultiGiBset; no alternativeowned scratchvolume apartfromprotectedarchive (Recoverysharesinternalcontainer).20previousinstallerremovals CLOSED;0newdeletions/requests. Cursor131/132unchanged; privateActionsdisabled/no paid/newinfrastructure/publicart.
+
+NEXT: saveactual privateprovenance/capacity/native receipts, verify cleanexactremotecheckpoint. Ownerbrowsermay retrieve the tinyofficialchecksum using normalTLS; do not download/mount/installtheDMG until actualfootprint forecast preservesreserve anddo not run producerbelow22GiB. Then usemandatoryauditandONEcasepreflight. Do not claimfullpilotorfullroster frompreparedcode/syntheticGLB. All42worktrees/original18rigs/sourceactions/saves/privateart/archives preserved; unrelatedWORKFLOW_REFERENCED_PATHS.json retained.
+
+---
+
 # 8D-4 production-unblocking: animated pilot path prepared, original art still blocked
 
 Recovered0a98ea45fb41f5c770f643ea10d859159dd73423/local=remote.20installerremovals are CLOSED; no new deletion authorized/performed. PR123draft on122; Cursor131PartyLink/132Story remain untouched. PrivateActionsdisabled. Current source/code checkpoint is this commit'sgitrev-parseHEAD.

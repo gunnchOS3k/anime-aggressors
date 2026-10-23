@@ -38,6 +38,8 @@ def validate(folder, case_id=None):
     assert manifest['schema']=='metric_pair_reference_sources_8d4.v1'and manifest['complete']
     assert manifest['input_run']==39910149332 and not manifest['shipping_alignment_verified']and not manifest['human_approved']
     expected=validate_scope(manifest,inputs,case_id)
+    if case_id is not None:
+        assert manifest['private_execution'].get('official_blender_package_verified')is True
     blocked=[];max_gap=0.;crossings=0;references=0
     for row in manifest['rows']:
         assert not row['grip_accepted']and not row['shipping_alignment_verified']and not row['human_approved']

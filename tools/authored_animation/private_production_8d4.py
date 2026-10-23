@@ -74,7 +74,7 @@ def verify_local_context(record, *, checkout_sha, workspace, directory_mode,
             'output_path':str(output),'RUNTIME_PAIRED_CONTACT_VERIFIED':False,'human_approved':False}
 
 
-def current_context(root):
+def current_context(root, *, producer_binary=None):
     local=os.environ.get('AA_8D4_LOCAL_CONTEXT')
     if local:
         path=Path(local)
@@ -88,9 +88,16 @@ def current_context(root):
         info=workspace.stat()
         checkout=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()
         volume=Path('/System/Volumes/Data')if Path('/System/Volumes/Data').is_dir()else workspace
-        return verify_local_context(record,checkout_sha=checkout,workspace=workspace,
+        context=verify_local_context(record,checkout_sha=checkout,workspace=workspace,
             directory_mode=stat.S_IMODE(info.st_mode),directory_owned=info.st_uid==os.geteuid(),
             internal_free_bytes=shutil.disk_usage(volume).free,github_actions=os.environ.get('GITHUB_ACTIONS')=='true')
+        if not producer_binary or Path(record.get('blender_binary','')).resolve()!=Path(producer_binary).resolve():
+            raise ValueError('Actual Blender executable must match the official producer audit')
+        from audit_blender_402 import verify_audit
+        audit=verify_audit(Path(record['blender_audit_path']),Path(producer_binary),probe_version=False)
+        context.update(official_blender_package_verified=True,official_package_sha256=audit['package_sha256'],
+                       blender_binary_sha256=audit['binary_sha256'])
+        return context
     if os.environ.get('GITHUB_ACTIONS')!='true'or os.environ.get('GITHUB_EVENT_NAME')!='workflow_dispatch':
         raise ValueError('Explicit private manual production only')
     event=json.loads(Path(os.environ['GITHUB_EVENT_PATH']).read_text())

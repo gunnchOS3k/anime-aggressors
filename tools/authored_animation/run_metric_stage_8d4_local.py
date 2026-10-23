@@ -17,6 +17,7 @@ import sys
 from pathlib import Path
 from private_production_8d4 import LOCAL_SCOPE, LOCAL_RESERVE_BYTES, LOCAL_PEAK_ALLOCATION_BYTES
 from metric_reference_scope_8d4 import select_cases
+from audit_blender_402 import verify_audit
 
 ROOT = Path(__file__).resolve().parents[2]
 ARCHIVE_VOLUME = Path('/Volumes/gunnchOS-Archives')
@@ -31,7 +32,7 @@ def version(binary):
     return result.stdout.splitlines()[0] if result.returncode == 0 and result.stdout else None
 
 
-def preflight(archive, workspace, blender, godot, case_id):
+def preflight(archive, workspace, blender, godot, case_id, blender_audit=None):
     reasons = []
     inputs=json.loads((ROOT/'art_source/staging/metric_8d4/inputs_v1.json').read_text())
     selected=select_cases(inputs,case_id)
@@ -62,7 +63,15 @@ def preflight(archive, workspace, blender, godot, case_id):
     input_matches = input_matches and retained['source_sha'] == INPUT_SOURCE_SHA and retained['complete'] is True
     if not input_matches:
         reasons.append('Archived completed8D3 manifest is missing or differs from the retained exact source')
-    bv = version(blender)
+    producer_audit=None
+    if blender_audit:
+        try:producer_audit=verify_audit(blender_audit,blender)
+        except (ValueError,OSError,KeyError)as error:reasons.append('Official Blender package/app audit failed: '+str(error))
+    else:
+        reasons.append('Official Blender package/app audit required: full manifest, DMG SHA, app identity/signature and ARM64')
+    # Never execute an unaudited new producer. The existing3.3.1 version probe
+    # is retained for diagnostics only; it cannot authorize production.
+    bv=producer_audit['exact_version']if producer_audit else version(blender)if blender.resolve()==Path('/Applications/Blender.app/Contents/MacOS/Blender').resolve()else None
     if not re.match(r'^Blender 4\.0\.2(?:\s|$)', bv or ''):
         reasons.append('Blender4.0.2 required: exact version in the preserved8D3 source manifest;3.3 must remain untouched')
     gv = version(godot)
@@ -99,6 +108,8 @@ def preflight(archive, workspace, blender, godot, case_id):
             'required_reserve_bytes': LOCAL_RESERVE_BYTES, 'peak_internal_allocation_bytes': LOCAL_PEAK_ALLOCATION_BYTES,
             'additional_free_bytes_required': max(0, LOCAL_RESERVE_BYTES + LOCAL_PEAK_ALLOCATION_BYTES - free),
             'blender_version': bv, 'godot_version': gv, 'active_media_processes': active,
+            'official_blender_package_verified':producer_audit is not None,
+            'blender_audit_path':str(blender_audit.resolve())if blender_audit else None,
             'network_services_used': False, 'paid_usage_authorized': False,
             'github_dispatch_authorized': False, 'public_upload_authorized': False}
 
@@ -113,6 +124,7 @@ def execute(report, archive, workspace, blender, godot):
                'producer_sha': report['source_sha'], 'execution_recipe_sha': report['source_sha'],
                'private_workspace': str(workspace), 'output_path': str(output),
                'peak_internal_allocation_bytes': LOCAL_PEAK_ALLOCATION_BYTES,
+               'blender_audit_path':report['blender_audit_path'],'blender_binary':str(blender.resolve()),
                'paid_usage_authorized': False, 'network_artifact_uploads': False}
     context_path = workspace / 'LOCAL_EXECUTION_CONTEXT.json'
     context_path.write_text(json.dumps(receipt, indent=2) + '\n')
@@ -207,11 +219,12 @@ def main():
     parser.add_argument('--blender', type=Path, default=Path('/Applications/Blender.app/Contents/MacOS/Blender'))
     parser.add_argument('--godot', type=Path, default=Path('/Applications/Godot.app/Contents/MacOS/Godot'))
     parser.add_argument('--execute', action='store_true')
+    parser.add_argument('--blender-audit',type=Path,help='Private verified official4.0.2package/app audit; no self-attestation switch')
     parser.add_argument('--case-id',default='ember-vale__juno-spark__male__1',
                         help='Exactly one existing pilot; no local full-batch mode before real reference acceptance')
     args = parser.parse_args()
     archive, workspace = args.archive.resolve(), args.workspace.resolve()
-    report = preflight(archive, workspace, args.blender, args.godot,args.case_id)
+    report = preflight(archive, workspace, args.blender, args.godot,args.case_id,args.blender_audit)
     print(json.dumps(report, indent=2))
     if args.execute:
         if not report['PASS']:
