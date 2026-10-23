@@ -67,7 +67,8 @@ def require_3d_stage(measurement, holder_hash, victim_hash):
             if matrix[3] != [0, 0, 0, 1]:
                 raise ValueError('Invalid affine transform')
             a, b, c = [row[:3] for row in matrix[:3]]
-            if abs(dot(a, cross(b, c))-1) > 1e-4:
+            axes = (a, b, c)
+            if abs(dot(a, cross(b, c))-1) > 1e-4 or any(abs(dot(axes[i], axes[j])-int(i == j)) > 1e-4 for i in range(3) for j in range(3)):
                 raise ValueError('Transform scales/distorts source anatomy')
     stage = measurement.get('shared_physical_stage')
     if not stage or stage.get('authority') != 'measured_common_metric_space':

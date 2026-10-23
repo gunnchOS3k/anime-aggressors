@@ -1,3 +1,17 @@
+# 8D-3 actual18 sources/native technical checkpoint COMPLETE; physical paired acting BLOCKED
+
+Branch release/anime-v1-dialogue-and-elemental-performance, draftPR123 on122. Actualproducer42baaab8cc5167798aea7f3aebb22edae9f21007 / approvedrun39910149332 SUCCESS. Currentdelivery follows8c8e7f03; getactualHEAD.18 saved/reopened sources746472584bytes /18GLB /54hand-onlyactions, all194/244oldactions/rest/material/topology/transforms and non-scoped source exact. Sourcearchive /Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-23_8d3_hands_42baaab8_39910149332 SHAverified; noMacinstall. FourPNGs inspected.
+
+ActualGodot:36imports/bodyfacings,18matched108pose comparisons,144onecontact/damage/controlreturn publicthrows,36escapes. All180cases samecontact/damage/launch/timing/element/SFX/VFX as prior8D2raw. These are idle-target public-input fixtures, notactiveCPU/earned/nativeaudio/humanart/device acceptance. V3exactcamera/rig/right/up/depth324measurements bindnewsources. All324lackcommonmetric3Dstage; no3Dpairedgrip ornewbodyrestraintactionproduced.
+
+Read production_8d/hand_integration_8d3/{OWNER_REVIEW,SOURCE_NATIVE_MATRIX,COMBAT_EQUIVALENCE,CURRENT_PROJECTION_GATE}.json/md and hand_integration_remote_39910149332/DURABLE_SOURCE_RECEIPT.json. Humanvisualclosure NOTpassed: nativechangesmodest, roundforearmcapsstilldominate, Rookcuff/thenar/fist designunfinished; holderfloorresidual32.60–38.45px. No additional generic solver pass justified without sharedmetric/floor authority.
+
+NEXT original-art task: define source-matched sharedmetric paired stage/floor anchor using actualv3 transforms (currentprivate3Droots both0, 2Drootsseparate andbodycamerascalesdiffer). Preservebody/root/scale/gameplay; coordinate anyprojectioncontractproposal withengineering lane, donotmergeCursorbranches. Then original18body attacker/victim hold/grab/resistance/escape/4throw sourceacting with actual3Dskin/armorBVH and source/GLBFK equivalence, notscreenoverlap. New sourceuploads beyondcompletedexact42scope needconcretefreshapproval. No new sourcejobactive.
+
+Focused8projectiontests+trackclockunit PASS; actualremoteimportsresolve standalonecheck-onlyTouchInputManagerdependencyfailure. No preservedtestweakened. Internal latest11.14GiBbelow18+forecast, externalarchiveverified; nolocalheavyproduction/deletion/source movement. OlduntrackedWORKFLOW_REFERENCED_PATHS.json untouched. Fullforms/Cosmic/KO/ultimates/support/secondaryart andallhuman/releasegates false. Source/nativejobterminal, requerylatestdeliveryCI (Windows2025maystillrun), no release/merge/tag/deploy.
+
+---
+
 # 8D-3 EXACT APPROVED source/native job39910149332 executing
 
 Owner explicitly approved exact42baaab8cc5167798aea7f3aebb22edae9f21007 public90day threeartifactclasses. Verified remotePRhead/existingdraftbase/noactive manualproducer before one dispatch. Run39910149332 IN_PROGRESS. Do NOT launch competing workflow or change this run input. Fresh approval receipt: production_8d/hand_integration_8d3/APPROVED_DISPATCH.json. Subsequent localcheckpoint may be newer; run producer remains EXACT42baaab8.

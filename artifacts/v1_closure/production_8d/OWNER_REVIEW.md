@@ -1,3 +1,11 @@
+## 8D-3 actual18-source technical checkpoint, run39910149332
+
+Successful owner-approved producer42baaab8:18 saved/reopened original Blender candidates (746472584bytes),18GLBs,36hand interfaces,54new hand-only actions. Allold194/244actions/rest/unaffectedgeometry/materials preserved.36body/facing nativeimports,18matched nativecomparisons,144singlecontact/damage publicthrows and36escapes PASS;180samecontact/balance/audioidentity cases as8D2. FourPNGs inspected: changes modest, forearm/palm/fist/Rookcuff art stillWIP. No newnormal-speedCPU/nativeaudio/device orhuman acceptance.
+
+Read [8D3 actual ownerreview](hand_integration_8d3/OWNER_REVIEW.md), exact18-source/GLB matrix and archive receipts. Newv3 camera/depth data is real, but324observations lack common metric3Dactor space. Pairedsourcegrips/fullbodyrestraint NOTproduced/verified. Old75px/m prototype refusesexecution. Physicalfloor/form/KO/ultimate/secondaryart remainopen. NoMacbinaryinstall/exportbelow18GiBreserve, allCursorlanes untouched.
+
+---
+
 ## 8D-3 source preparation — not yet produced
 
 New versioned18-body hand/wrist/forearm/cuff source edits and54 hand actions are prepared in the existing compatible remote producer. No new Blender files, exports or images have yet been generated. Prior corrected8D2 source and review remain the current actual art. Fresh owner approval is required for the exact new public90-day source/runtime/four-PNG artifact classes; see hand_integration_8d3/PREPARED_JOB.json.

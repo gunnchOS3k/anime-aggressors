@@ -98,6 +98,16 @@ def main():
                'validation': validation, 'native': native, 'artifacts': copies, 'files': files,
                'installed_on_owner_Mac': False, 'originals_deleted': False, 'human_approved': False}
     receipt_path.write_text(json.dumps(receipt, indent=2)+'\n')
+    catalog = VOLUME/f'00-Catalog/manifests/anime-8d3-hand-integration-{args.run}.json'
+    catalog_record = {'run_id': args.run, 'producer_sha': args.source_sha, 'PASS': success,
+                      'receipt': str(receipt_path), 'receipt_sha256': sha(receipt_path),
+                      'source_bytes': sum(r['bytes'] for r in files if r['path'].endswith('.blend')),
+                      'artifacts': copies, 'human_approved': False, 'originals_deleted': False}
+    if catalog.exists():
+        assert json.loads(catalog.read_text()) == catalog_record, 'Do not overwrite different archive catalog entry'
+    else:
+        catalog.parent.mkdir(parents=True, exist_ok=True)
+        catalog.write_text(json.dumps(catalog_record, indent=2)+'\n')
     out = ROOT/f'artifacts/v1_closure/production_8d/hand_integration_remote_{args.run}'
     out.mkdir(exist_ok=True)
     # Only bounded text evidence internally. Full raw poses/media/binaries stay

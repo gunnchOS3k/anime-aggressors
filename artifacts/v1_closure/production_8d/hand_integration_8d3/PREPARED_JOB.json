@@ -1,12 +1,12 @@
 {
-  "status": "PREPARED_NOT_DISPATCHED_REQUIRES_FRESH_OWNER_APPROVAL",
+  "status": "EXECUTED_WITH_FRESH_OWNER_APPROVAL_SUCCESS_ARCHIVED",
   "repository": "gunnchOS3k/anime-aggressors",
   "repository_visibility": "public",
   "workflow": ".github/workflows/authored-animation-production.yml",
   "branch": "release/anime-v1-dialogue-and-elemental-performance",
   "job": "hand-integration-8d3",
   "input": "hand_integration_8d3=true; all old producer booleans false; controls_verify_run empty",
-  "exact_prepared_commit": "Use git log -1 --format=%H -- tools/authored_animation/blender/aa_produce_hand_integration_8d3.py; approval question binds the actual committed SHA",
+  "exact_prepared_commit": "42baaab8cc5167798aea7f3aebb22edae9f21007",
   "input_source_sha": "ced4b78a141b5bf2bac05d4fc06488340c9aef2a",
   "input_source_run": 39886629245,
   "public_artifacts": [
@@ -32,5 +32,7 @@
   "remote_job_timeout_minutes": 45,
   "remote_free_required_bytes": 8589934592,
   "archive_only_recovery": true,
-  "human_approved": false
+  "human_approved": false,
+  "run_id": 39910149332,
+  "paired_3d_verified": false
 }

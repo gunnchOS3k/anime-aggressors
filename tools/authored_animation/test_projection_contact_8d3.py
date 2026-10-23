@@ -73,6 +73,9 @@ class ContactObservations(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'shared physical stage'): require_3d_stage(m, *args)
         m['holder_projection']['rig_world_transform'] = [[2,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]
         with self.assertRaisesRegex(ValueError, 'distorts'): require_3d_stage(m, *args)
+        # Determinant-one shear must not masquerade as a rigid source stage.
+        m['holder_projection']['rig_world_transform'] = [[1,.2,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]
+        with self.assertRaisesRegex(ValueError, 'distorts'): require_3d_stage(m, *args)
 
 
 if __name__ == '__main__': unittest.main()
