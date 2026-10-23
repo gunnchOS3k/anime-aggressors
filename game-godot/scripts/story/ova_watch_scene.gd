@@ -90,7 +90,10 @@ func _button(parent: Node, text: String, action: Callable) -> Button:
 	return button
 
 func _toggle_pause() -> void:
-	playing = not playing
+	_set_playing(not playing)
+
+func _set_playing(enabled: bool) -> void:
+	playing = enabled
 	StoryDialogue.set_paused(not playing)
 	_pause.text = "Pause" if playing else "Resume"
 	if _battle != null:
@@ -108,9 +111,9 @@ func seek(index: int) -> void:
 			limit = i
 			break
 	node_index = clampi(index, 0, limit)
-	await _present_node()
+	await _present_node(not playing)
 
-func _present_node() -> void:
+func _present_node(stay_paused := false) -> void:
 	var tree := get_tree()
 	if _closing or tree == null: return
 	_swap_busy = true
@@ -145,8 +148,8 @@ func _present_node() -> void:
 		_swap_busy = false
 		return
 	_pause.disabled = false
-	playing = true
-	_pause.text = "Pause"
+	playing = not stay_paused
+	_pause.text = "Pause" if playing else "Resume"
 	GameState.mode = "ova"
 	GameState.arcade_active = false
 	GameState.team_mode = false
@@ -225,6 +228,9 @@ func _present_node() -> void:
 		_battle.fighter1.model_3d.set_cinematic_expression(str(chapter.get("expression", "determination")))
 	for actor in _battle.fighters_root.get_children(): actor.set_meta("watch_base_z",actor.z_index)
 	StoryDialogue.begin(str(chapter["id"]),"watch")
+	# begin() resets the dialogue pause state. Reapply the viewer's intent to
+	# the NEW chapter and its new model viewports before queuing its first cue.
+	_set_playing(not stay_paused)
 	StoryDialogue.watch_phase("pre")
 	_swap_busy = false
 
@@ -252,7 +258,7 @@ func _process(delta: float) -> void:
 		var closeup: bool = chapter["kind"] != "STORY_BATTLE"
 		var target: Vector2 = (_dialogue_speaker.position if _dialogue_speaker != null and is_instance_valid(_dialogue_speaker) and StoryDialogue.is_busy() else _battle.fighter1.position if closeup else (_battle.fighter1.position + _battle.fighter2.position) * 0.5) + Vector2(0, -60 if closeup else -45)
 		if _private_camera_active:
-			var framing: Dictionary = _private_camera_take.sample(StoryDialogue.remaining)
+			var framing: Dictionary = _private_camera_take.presentation_sample(StoryDialogue.remaining, bool(StoryDialogue.settings.get("reduced_shake", false)))
 			if not framing.is_empty():
 				target = _battle.fighter1.position.lerp(_battle.fighter2.position, float(framing.focus_mix)) + framing.offset
 				camera.zoom = Vector2.ONE * float(framing.zoom)

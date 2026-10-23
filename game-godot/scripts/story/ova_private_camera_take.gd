@@ -13,6 +13,9 @@ var _animation: Animation
 var _bindings: Dictionary = {}
 var _cue := ""
 var _cue_seconds := 1.0
+var _presentation_from: Dictionary = {}
+var _last_presentation: Dictionary = {}
+const CUE_TRANSITION_SECONDS := 0.3
 
 func load_library(path: String, cues_sha256: String, canonical_nodes: Dictionary) -> bool:
 	_entries.clear()
@@ -89,8 +92,12 @@ func select_node(node_id: String) -> bool:
 	return true
 
 func begin_cue(cue_id: String, duration_seconds: float) -> void:
+	_presentation_from = _last_presentation.duplicate()
 	_cue = cue_id if _bindings.has(cue_id) else ""
 	_cue_seconds = maxf(duration_seconds, 0.001)
+	if _cue.is_empty():
+		_presentation_from.clear()
+		_last_presentation.clear()
 
 func sample(remaining_seconds: float) -> Dictionary:
 	if _animation == null or _cue.is_empty():
@@ -108,10 +115,27 @@ func sample(remaining_seconds: float) -> Dictionary:
 		result[property.trim_prefix("Camera:")] = value
 	return result
 
+func presentation_sample(remaining_seconds: float, reduced_motion := false) -> Dictionary:
+	# Preserve the editable native curve. Only the presentation at a cue change
+	# eases from its last displayed framing, so advance cannot snap the zoom.
+	# Use dialogue time, not a wall clock: pause/long reading holds are stable.
+	var target := sample(_cue_seconds if reduced_motion else remaining_seconds)
+	if target.is_empty():
+		return {}
+	if not _presentation_from.is_empty():
+		var t := clampf((_cue_seconds - remaining_seconds) / CUE_TRANSITION_SECONDS, 0.0, 1.0)
+		var weight := t * t * (3.0 - 2.0 * t)
+		for key in ["focus_mix", "zoom", "offset"]:
+			target[key] = lerp(_presentation_from[key], target[key], weight)
+	_last_presentation = target.duplicate()
+	return target
+
 func clear_node() -> void:
 	_animation = null
 	_bindings.clear()
 	_cue = ""
+	_presentation_from.clear()
+	_last_presentation.clear()
 
 func _valid_value(property: String, value: Variant) -> bool:
 	match property:

@@ -104,6 +104,9 @@ func _next() -> void:
 			_voice.stream = stream
 			_voice.volume_db = linear_to_db(maxf(0.0001,float(settings["voice_volume"])))
 			_voice.play(); remaining = maxf(remaining,stream.get_length()+0.35); voice_ok = true
+	# A paused chapter can queue its first line during navigation. Apply pause
+	# before cue_started observers, rather than waiting for the next process tick.
+	_voice.stream_paused = get_tree().paused or _manual_pause
 	var voice_label := " · Cleared voice asset" if bool(replacement.get("distribution_cleared",false)) else " · Temporary synthetic voice"
 	_name.text = str(current["speaker"]) + (" · memory" if current.get("representation") == "memory_echo" else "") + " · Draft dialogue" + (voice_label if voice_ok else "")
 	_text.text = str(current["subtitle"])
