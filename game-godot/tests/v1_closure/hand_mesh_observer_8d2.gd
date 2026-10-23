@@ -4,6 +4,15 @@ extends RefCounted
 var cache: Dictionary={}
 var issues: Array=[]
 
+func transform_rows(value: Transform3D) -> Array:
+	return [[value.basis.x.x,value.basis.y.x,value.basis.z.x,value.origin.x],[value.basis.x.y,value.basis.y.y,value.basis.z.y,value.origin.y],[value.basis.x.z,value.basis.y.z,value.basis.z.z,value.origin.z],[0,0,0,1]]
+
+func projection_3d_observation(model) -> Dictionary:
+	var result:=projection(model)
+	var rig: Skeleton3D=model.get_animation_controller().get_skeleton()
+	result.merge({"projection_version":3,"rig_world_transform":transform_rows(rig.global_transform),"camera_world_transform":transform_rows(model._camera.global_transform),"rig_to_camera_transform":transform_rows(model._camera.global_transform.affine_inverse()*rig.global_transform),"view_right_world":[model._camera.global_basis.x.x,model._camera.global_basis.x.y,model._camera.global_basis.x.z],"view_up_world":[model._camera.global_basis.y.x,model._camera.global_basis.y.y,model._camera.global_basis.y.z],"view_forward_world":[-model._camera.global_basis.z.x,-model._camera.global_basis.z.y,-model._camera.global_basis.z.z],"viewport_size":[model._viewport.size.x,model._viewport.size.y],"display_world_transform":str(model._display.global_transform),"shared_physical_stage":false,"scope":"Measured private viewport camera/rig transforms in metres. Separate viewport origins do NOT establish common metric contact space. No 3D grip claim."},true)
+	return result
+
 func meshes(model) -> Array:
 	var rig: Skeleton3D=model.get_animation_controller().get_skeleton()
 	var key:=rig.get_instance_id()

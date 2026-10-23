@@ -1,3 +1,17 @@
+# 8D-3 source integration PREPARED; fresh public-art approval required
+
+Branch release/anime-v1-dialogue-and-elemental-performance, draft123 on122. Recovered actual local/remote f3753775df43592b0c29a06d0b8329abfc35164e; all exact-headCI including Windows2025 SUCCESS. New delivery follows it; getactualHEAD. No newer Cursor changes integrated, all existing worktrees retained.
+
+Prepared new18-body palm/forearm/wrist/cuff source sculpt,54 hand-only grip/fist/release actions, immutable before meshes and exact all-old-action/rest/material/topology/transform preservation. Compatible existing remote workflow hand_integration_8d3 input, three public90day artifact groups:18sources;18GLB/JSON+receipts;fourPNG/logJSON. NOT DISPATCHED. No saved new source/GLB/native output exists yet. Prior ced4b78a/run39886629245 +native39887494881 remain actualcurrentart. Read production_8d/hand_integration_8d3/PREPARED_JOB.json. Obtain fresh exactcommit approval per owner8D3Section10 BEFORE dispatch; no prior approval extends.
+
+Projection contract PASS8tests;36actualbody/facing/324v2measurements hashbound, mixed-bodyescapes accounted. Full3Dsourcepairedacting BLOCKED: v2screenbasis has no depthorigin/sharedphysicalstage. Retained aa_paired_hands_8d2 nowrefuses stale75px/m invocation. Native3dobserver prepared, still explicitlyno commonmetricstage/no3Dgripproof. Do notfake pairedcontact withscreenoverlap or scale. Newhandnamespaceopt-in only, defaults/gameplay unchanged. Godot4.7.1 check-only3scripts PASS; standalone fighter_model_3d dependency check reports TouchInputManager identifier unavailable from unchanged controller203 despite exit0, native/editor import remainsPENDING; Pythonparse/YAML/referencedpaths PASS. Sourcepreservation/realnewimports/nativeappearance PENDINGREMOTE, notgreenfrompreparation.
+
+Storage12.13GiBinternal, externalAPFSUUID9C4EB36E-2864-42F8-BD0B-A4F67EBC7852verified344.992GiBfree. Safe code/logforecast<=20MiB; no heavyMacBlender/import/export/capture. Archive-only recovery after approved successfulproduction; no data deleted/moved. OlduntrackedWORKFLOW_REFERENCED_PATHS.json deliberatelyuntouched. No ownedGodot/Blender job shouldremain; recheckbeforedispatch. No remoteproducer started.
+
+NEXT: verify exactpreparedremotecommit and noactivemanualworkflow; once owner explicitlyapproves the three new publicartifactgroups, dispatch existing authored-animation-production.yml exactlyonce with hand_integration_8d3=true (alloldproducersfalse/verifyinputempty). Preserveactual failure first; noindefiniteretries. Onsuccess validate/archive18sources and inspectnewfourPNGs before anyqualityclaim. Then author measuredsourcephysicalstage/pairedholdsolves, not old75px/m. Rookcuff/physicalfeet/pairedrestraint/fullforms/KO/ultimates and humanapproval remainopen. No merge/tag/release/deploy.
+
+---
+
 # 8D-2 repaired source and corrected native review COMPLETE as a bounded foundation
 
 Branch release/anime-v1-dialogue-and-elemental-performance, draft123 on122. Current source/evidence delivery commit follows e4a021be; obtain exactHEAD with git rev-parse HEAD. Producer ced4b78a141b5bf2bac05d4fc06488340c9aef2a / run39886629245 SUCCESS:18 saved/reopened rigs,18GLBs,36 outward hands,194–244 prior actions perrig/allrest/nonpalm exact,0newactions. Archive716480264sourcebytes at /Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d2_hands_ced4b78a_39886629245; all oldsources/failedcases preserved.

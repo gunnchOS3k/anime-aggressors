@@ -8,14 +8,15 @@ var document: Dictionary = {}
 var status := "missing"
 
 static func candidate_document(fid: String, body: String, lane: String = "controls_8d") -> Dictionary:
-	if lane not in ["controls_8d","hands_8d2"]:return {}
-	var schema:="saved_original_hands_8d2.v1" if lane=="hands_8d2" else "saved_original_controls_8d.v1"
+	if lane not in ["controls_8d","hands_8d2","hands_8d3"]:return {}
+	var schema:="saved_original_%s.v1"%lane
 	var path:="res://data/animation/%s/%s_%s.json"%[lane,fid,body]
 	if not FileAccess.file_exists(path):return {}
 	var doc: Variant=JSON.parse_string(FileAccess.get_file_as_string(path))
 	if not doc is Dictionary or doc.get("schema","")!=schema or doc.get("fighter","")!=fid or doc.get("body","")!=body or doc.get("human_approved",true):return {}
 	var resource:=str(doc.get("resource",""))
 	if not resource.begins_with("res://assets/characters/"+lane+"/") or not FileAccess.file_exists(resource) or FileAccess.get_sha256(resource)!=str(doc.get("resource_sha256","")):return {}
+	if lane=="hands_8d3" and (doc.get("paired_3d_verified",true) or doc.get("input_8d2_sha256","").length()!=64):return {}
 	return doc
 
 func setup(owner_actor, model: Node3D, skeleton: Skeleton3D, primary: AnimationPlayer, doc: Dictionary) -> void:

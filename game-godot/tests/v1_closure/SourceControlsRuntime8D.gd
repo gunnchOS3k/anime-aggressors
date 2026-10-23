@@ -68,7 +68,7 @@ func native_sheet(p,sheet: Image,row: int) -> Dictionary:
 	var samples: Array=[]
 	var original_camera: Transform3D=model._camera.global_transform
 	var original_size: float=model._camera.size
-	var kinds: Array=["right","left"] if lane=="hands_8d2" else ["hand","hair"]
+	var kinds: Array=["right","left"] if lane in ["hands_8d2","hands_8d3"] else ["hand","hair"]
 	for kind in kinds:
 		var bone: String="Head" if kind=="hair" else "Hand_L" if kind=="left" else "Hand_R"
 		# Review camera only: full viewport details rather than a crop around
@@ -81,7 +81,7 @@ func native_sheet(p,sheet: Image,row: int) -> Dictionary:
 		model._camera.size=1.25 if kind=="hair" else .40
 		var camera_record: String=str(model._camera.global_transform)+str(model._camera.size)
 		var hashes: Array=[]
-		var phases: Array=[0.0,.5,1.0] if lane=="hands_8d2" else [0.0,1.0]
+		var phases: Array=[0.0,.5,1.0] if lane in ["hands_8d2","hands_8d3"] else [0.0,1.0]
 		for phase in phases:
 			control.sample("fist",0.0 if kind=="hair" else phase)
 			control.sample("idle",phase*.25 if kind=="hair" else 0.0,false)
@@ -103,13 +103,14 @@ func run() -> void:
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--ordinary-output="):output=arg.get_slice("=",1)
 		if arg=="--source-hands-8d2":lane="hands_8d2"
+		if arg=="--source-hands-8d3":lane="hands_8d3"
 	native=DisplayServer.get_name()!="headless"
-	var gs=root.get_node("GameState");gs.set_meta("source_controls_8d",lane=="controls_8d");gs.set_meta("source_hands_8d2",lane=="hands_8d2");gs.mode="versus";gs.stage_id="training-grid";gs.items_enabled=false;gs.hazards_enabled=false;gs.p2_is_cpu=false;gs.stocks=9;gs.match_timer_seconds=0;gs.match_type="stock_untimed"
+	var gs=root.get_node("GameState");gs.set_meta("source_controls_8d",lane=="controls_8d");gs.set_meta("source_hands_8d2",lane=="hands_8d2");gs.set_meta("source_hands_8d3",lane=="hands_8d3");gs.mode="versus";gs.stage_id="training-grid";gs.items_enabled=false;gs.hazards_enabled=false;gs.p2_is_cpu=false;gs.stocks=9;gs.match_timer_seconds=0;gs.match_type="stock_untimed"
 	var campaign=root.get_node("CampaignRuntime");var saved_before:=JSON.stringify(campaign.progress)
 	root.get_node("SceneRouter").go("battle");await frames(200)
 	var p=current_scene.fighter1;var d=current_scene.fighter2
 	for body in ["male","female"]:
-		var sheet:=Image.create(1152 if lane=="hands_8d2" else 768,1728,false,Image.FORMAT_RGBA8)if native else null
+		var sheet:=Image.create(1152 if lane in ["hands_8d2","hands_8d3"] else 768,1728,false,Image.FORMAT_RGBA8)if native else null
 		for fid in IDs:
 			for face in [1,-1]:
 				await configure(p,d,fid,body,face)

@@ -1,0 +1,36 @@
+{
+  "status": "PREPARED_NOT_DISPATCHED_REQUIRES_FRESH_OWNER_APPROVAL",
+  "repository": "gunnchOS3k/anime-aggressors",
+  "repository_visibility": "public",
+  "workflow": ".github/workflows/authored-animation-production.yml",
+  "branch": "release/anime-v1-dialogue-and-elemental-performance",
+  "job": "hand-integration-8d3",
+  "input": "hand_integration_8d3=true; all old producer booleans false; controls_verify_run empty",
+  "exact_prepared_commit": "Use git log -1 --format=%H -- tools/authored_animation/blender/aa_produce_hand_integration_8d3.py; approval question binds the actual committed SHA",
+  "input_source_sha": "ced4b78a141b5bf2bac05d4fc06488340c9aef2a",
+  "input_source_run": 39886629245,
+  "public_artifacts": [
+    {
+      "name": "hand-integration-8d3-saved-sources-${github.sha}",
+      "content": "18 newly edited editable .blend candidates with all old actions and protected before meshes plus54 new hand closure actions"
+    },
+    {
+      "name": "hand-integration-8d3-runtime-${github.sha}",
+      "content": "18 corresponding GLBs/JSONs, source preservation and projection readiness receipts"
+    },
+    {
+      "name": "hand-integration-8d3-engine-review-${github.sha}",
+      "content": "Four staged native comparison PNGs plus import/public-input logs/JSON and per-camera depth observations; not normal-speed movie or native-audio acceptance"
+    }
+  ],
+  "retention_days": 90,
+  "downloadable_by_repository_readers": true,
+  "delta_from_8d2": "New localized palm/forearm/cuff geometry and weights,54 versioned grip/fist/release actions. No completed8D2 regeneration or facial/body/simulation rewrite. Paired source baking blocked until shared metric depth is measured.",
+  "no_new_3d_grip_claim": true,
+  "local_heavy_work_allowed": false,
+  "forecast_local_safe_source_and_checks_bytes_max": 20971520,
+  "remote_job_timeout_minutes": 45,
+  "remote_free_required_bytes": 8589934592,
+  "archive_only_recovery": true,
+  "human_approved": false
+}

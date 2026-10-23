@@ -1,3 +1,13 @@
+## 8D-3 source preparation — not yet produced
+
+New versioned18-body hand/wrist/forearm/cuff source edits and54 hand actions are prepared in the existing compatible remote producer. No new Blender files, exports or images have yet been generated. Prior corrected8D2 source and review remain the current actual art. Fresh owner approval is required for the exact new public90-day source/runtime/four-PNG artifact classes; see hand_integration_8d3/PREPARED_JOB.json.
+
+All324 prior v2 measurements bind exact sources across36body/facing configurations, including mixed-body escapes. They establish screen-space projection only. Depth along the camera nullspace is unobserved; the old common75px/m paired prototype now refuses execution. New native observations are prepared to capture exact camera/rig transforms, but independent viewports still require a measured common metric stage before any3D grip bake. No root translation, scale, reach or gameplay change is authorized by this preparation.
+
+Current baseline f3753775 CI including Windows2025 passed. Local internal free12.13GiB remains below18GiB; no binary install/import/export/recording. All art/feel/gameplay/device/release gates false. Cursor lanes untouched.
+
+---
+
 # 8D-2 hand source and native review delivery
 
 The bounded hand-surface repair is implemented across all nine fighters and both bodies. It is **not final hand, paired-contact or full-body art approval**. The first candidate's folded roots are corrected in the saved meshes and exports. Native finger silhouettes are more connected and articulated than the original bead-like digits; the change from the first candidate is subtle in these views.

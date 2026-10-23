@@ -158,6 +158,11 @@ def export_glb(arm,objects,doc,out):
 
 
 def run():
+    # This prepared prototype used an unmeasured common75px/m stage. It has
+    # never produced accepted paired source. Retain it as historical code,
+    # but never let an accidental invocation manufacture 3D contact evidence.
+    raise RuntimeError('8D2 paired prototype is not production validated: projection-v2 lacks shared metric depth. Use the source-matched 8D3 readiness contract before any paired bake.')
+    # Historical implementation below is deliberately unreachable.
     assert os.environ.get('GITHUB_ACTIONS')=='true'and sys.platform=='linux'and (4,0)<=bpy.app.version[:2]<(4,4)
     args=sys.argv[sys.argv.index('--')+1:];inputs=Path(args[args.index('--input')+1]);out=Path(args[args.index('--output')+1]);out.mkdir(parents=True,exist_ok=False)
     assert shutil.disk_usage(out).free>8*1024**3
