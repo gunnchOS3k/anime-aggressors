@@ -1,3 +1,15 @@
+# 8D-2 corrected18 sources SUCCESS / exact new native approval pending
+
+Producerced4b78a141b5bf2bac05d4fc06488340c9aef2a, run39886629245 SUCCESS. Strictsaved/reopened/actualGLB validationPASS all18/36hands;194–244prioractions perrig, allbonerest andnonpalm sourceexact,0newactions. BackupsIDs preserved; original36rootfolds corrected. Archive716480264verifiedsourcebytes at /Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d2_hands_ced4b78a_39886629245. Receipt/manifest/log now localhands_remote_39886629245; no Macinstall. Allpreviousfailed/source/nativeevidencepreserved.
+
+Remote PRhead6008f67dc43a6101eb98dd1f58b21ee772dee7a8; keepitthereuntil exactapproval-gatednative dispatch is started. Localnewreceipt/matrix changes may be newer/uncommitted; preserve them. AutomaticreviewREJECTED correctednativepublic4PNG/log/JSONupload; userquestionpendingforexact6008/source39886629245. Priorfae/195native approval is notthisnewpayload. DO NOT retrybeforeexplicitanswer. Concretecommand in8d2_recovery_1022/CORRECTED_NATIVE_REVIEW_REQUEST.json. Afterapprovalverifyremote6008/noactive manualjob, dispatchoncecontrols_verify_run=39886629245 controls_verify_sha=ced4b78a... kindhands-8d2,allproducerbooleansfalse. Recordactualrun, thennormalpushlocalcheckpoint. Newobserverv2parsedPASS butnotnativelyexecuted.
+
+Firstnative39883829338SUCCESS atfae/195 remains36imports/144singlecontactthrows/36escapes, sourceartfoldeddiagnostic only. Correctednativeactualappearance/pairedgrip/floor/CPU NOTyetverified. Positive sourcechecks cannotpromotehumanart. Sourceproducerterminal,nomanualjobactive. Internal12.57GiBbelow18+800MiBforecast; noMacbinaryimport/recording. Externalarchiveverified, noownerdata/worktree/Cursorchanges. UnrelatedWORKFLOW_REFERENCED_PATHS.json remainsunstaged. Allhumanfalse; no release/merge/deploy.
+
+NEXT finishsource evidence checkpointlocally WITHOUT movingremote6008 untilexactapprovednative dispatch starts, then inspect/archivecorrectedreview andadvancepreparedpairedsourceusingactualviewportprojection. No handregeneration. No newpairedsourcepublicupload coveredbyhandrepairapproval.
+
+---
+
 # 8D-2 saved-surface correction39886629245 currently executing
 
 Branch release/anime-v1-dialogue-and-elemental-performance. Source producer and last pushed implementation `ced4b78a141b5bf2bac05d4fc06488340c9aef2a`; this resume/evidence commit follows it. Sole manual run39886629245 is IN_PROGRESS in actual surface edit/save/export since2026-10-23T01:56:04Z. Do not dispatch a competing manual job. User already approved this same18-source surface-only repair/public90dayartifacts. No new paired/source/fullbody upload is authorized by that scope.
