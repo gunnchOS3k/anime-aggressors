@@ -77,7 +77,8 @@ class BinaryPairedAnimation(unittest.TestCase):
     def probe(self,change=None):
         doc,binary,entry=fixture()
         if change:change(doc,binary,entry)
-        path=self.folder/(self.id().split('.')[-1]+'.glb');write_glb(path,doc,binary)
+        path=self.folder/(self.id().split('.')[-1]+'_'+str(len(list(self.folder.glob('*.glb'))))+'.glb')
+        write_glb(path,doc,binary)
         return inspect_paired_export(path,entry['actors'])
 
     def test_real_binary_has_two_weighted_skeletons_and_one_moving_clip(self):

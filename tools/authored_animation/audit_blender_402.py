@@ -142,6 +142,11 @@ def verify_audit(path,binary,probe_version=True):
         raise ValueError('Missing/current official producer audit required')
     if Path(record['installed_binary']).resolve()!=Path(binary).resolve():raise ValueError('Producer binary differs from audited app')
     manifest=Path(record['manifest_path']);package=Path(record['package_path']);app=Path(record['installed_app'])
+    origin=record.get('official_download_origin_evidence',{})
+    if origin.get('method')=='OFFICIAL_BROWSER_DOWNLOAD_METADATA':
+        browser_origin(manifest,MANIFEST_URL);browser_origin(package,PACKAGE_URL)
+    elif origin.get('method')!='LIVE_OFFICIAL_HTTPS' or origin.get('status')!=200:
+        raise ValueError('Official download-origin evidence missing')
     if sha(manifest)!=record['manifest_sha256']or parse_manifest(manifest.read_text())[PACKAGE]!=record['package_sha256']or sha(package)!=record['package_sha256']:
         raise ValueError('Official package/manifest provenance changed')
     if sha(binary)!=record['binary_sha256']or tree_digest(app)[0]!=record['application_tree_sha256']:
