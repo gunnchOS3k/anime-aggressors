@@ -1,3 +1,21 @@
+# Current 8D-4 continuation — existing preview clock fixed; original art blocked
+
+Recovered5410dd2256ed1f2bb9651ad1ea9b1cb1333fcd84. Current source is this checkpoint's `git rev-parse HEAD`. PR123 remains draft on122;42worktrees preserved. Cursor131/132, owner saves, original18rigs/actions and immutable archives are untouched. Only unrelated untracked WORKFLOW_REFERENCED_PATHS.json existed at recovery.
+
+Reproduced explicit-model-preview defect: charge selected idle; existing grab recovery/throw release stayed at time0. Corrected neutral-state selection and standalone presentation-clock ownership, preserving actual gameplay clock and canonical idle/form/terminal paths. Lightweight headless actual model API/controller plus existing action keys PASS (fixture skeleton, no meshes). Same read-only5410source overlay FAILS as expected. Freeze/neutral/terminal/gameplay-clock checks PASS. Full-model ExistingClipPlayback8D4.gd parses but model-loading run BLOCKED by storage, not passed. Detailed scope: metric_stage_8d4/EXISTING_ACTION_PLAYBACK.md. No new original animation or source GLB produced.
+
+Private review: outputs/anime-aggressors/private-cinematic-production-20261023/character_comparison_20261023/OWNER_REVIEW.md and HTML, outside public Git. Original V4.5 sheet hash matches authority lock; collectible and female-hair overrides take precedence. Existing c0db89d0 native watch stills are PRE-fix, not animated paired acceptance. Soles are obscured/below the visible platform, and grip/release/recovery are not shown. Do not treat proxy turnarounds as original sheets or call authorized large heads a defect. Private clock regression receipts: production_unblocking/existing_clip_clock_v1.
+
+Capacity varied19.379→17.319GiB; no causal peak attributed. Planned full-model run stopped at reserve preflight. Controller-only no-art fixture uses kilobytes, no model imports/captures. Official manifestGET/packageHEAD403challenge; no owner manifest/package found in Downloads, no4.0.2install.3.3.1 preserved. Actual compressed/expanded/install peak unknown;22GiB AFTER compatible installation remains required. No new deletions, large downloads, installs, captures, paid jobs or public art. Private workflow still disabled/undispatched. Exact-head CI not run; all human/paired/roster/release gatesFALSE.
+
+NEXT: owner supplies only the tiny complete official checksum via normal browser; leave DMG undownloaded until a genuine install/production capacity forecast passes. Minimum pre-install free is max(22GiB + retained DMG bytes + installed app allocation,18GiB + retained DMG bytes + installed app allocation + install/mount temporary peak); package/app/temp sizes remain UNKNOWN, so22GiB alone before installation is insufficient. Preserve3.3.1 and use a separately named verified4.0.2app. Then read-only official audit and ONE-case producer preflight; no execute until every gate passes. Genuine paired release/recovery artwork is still required.
+
+Before the next full-model check, verify at least18GiB+1280MiB forecast and no active media process. Exact blocked command from this worktree:
+`python3 tools/v1_closure/launch_ordinary_review.py --headless --profile private_8d4_existing_actions --test-script res://tests/v1_closure/ExistingClipPlayback8D4.gd --output /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/outputs/anime-aggressors/private-cinematic-production-20261023/production_unblocking/existing_models_after_clock_fix`
+Do not run that command below its reserve. Preserve earlier fixture failures and receipts; no duplicate watch or roster recording campaign. No owned test/Blender/Godot job remains after the bounded check. No merge/tag/release/deployment.
+
+---
+
 # Delivery: native private watch now checked; original-art job remains blocked
 
 Sourcecheckpointsce8f4491animatedpath/a4744429audit/90bb9411strictorigin/c0db89d03e61f6e229cbb169a068b36fce0c5fe0nativewatch are pushed. This finalsource/doccheckpoint adds a moreconservative1280MiBwatchimportforecast(+16MiBstills); unchanged22GiBBlenderproducer minimum. Getgitrev-parseHEADforcurrentdeliverySHA. Only unrelateduntrackedWORKFLOW_REFERENCED_PATHS.json remains.

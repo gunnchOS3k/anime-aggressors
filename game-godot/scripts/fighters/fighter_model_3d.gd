@@ -1748,17 +1748,25 @@ func _play_clip(requested: String, state: String = "", move: Dictionary = {}) ->
 		if state.is_empty():
 			move_copy["move_id"] = requested
 		var play_state := state
+		var standalone_preview := false
 		if play_state.is_empty():
 			if requested in [_FighterStates.VICTORY, _FighterStates.DEFEAT]:
 				# These existing body performances have no MoveRunner clock.
 				# Routing them as attacks froze manual playback at frame zero.
 				play_state = requested
 			elif requested in ["idle", "walk", "run", "fall", "shield", "aura_charge"]:
-				play_state = _FighterStates.IDLE
+				# Keep the existing state-to-clip authority, including idle guard
+				# and form selection. These states already use the visual clock.
+				play_state = _FighterStates.SHIELD_HOLD if requested == "shield" else requested
 			else:
 				play_state = _FighterStates.ATTACK_STARTUP
+				standalone_preview = true
 		if _animation_controller.has_method("play_for_state"):
-			_animation_controller.play_for_state(play_state, move_copy)
+			# An explicit clip request is presentation-owned. Routing it as a
+			# gameplay attack stalled its manual player without a MoveRunner;
+			# routing charge/walk as IDLE discarded the requested body action.
+			# Real Fighter state calls keep their resolved gameplay clock.
+			_animation_controller.play_for_state(play_state, move_copy, standalone_preview)
 		_last_clip = _animation_controller.get_active_clip() if _animation_controller.has_method("get_active_clip") else requested
 	elif _stylized != null and is_instance_valid(_stylized) and _stylized.has_method("animate_pose"):
 		_stylized.animate_pose(_style_clip, _style_anim_t)

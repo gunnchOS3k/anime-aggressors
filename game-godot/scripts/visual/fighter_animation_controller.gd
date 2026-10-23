@@ -241,20 +241,26 @@ func begin_grab_escape() -> void:
 	play_for_state(state)
 
 
-func play_for_state(state: String, move: Dictionary = {}) -> void:
+func play_for_state(state: String, move: Dictionary = {}, standalone_preview := false) -> void:
 	if not _form_sequence.is_empty():
 		if state == _FighterStates.AURA_BURST_STARTUP:return
 		end_form_sequence()
 	# The unchanged mash-release rule uses GRAB_WHIFF for holder recovery.
 	# A released grip needs its authored support exchange, not a fresh reach.
 	_grab_recovery_active = state == _FighterStates.GRAB_WHIFF and (_grab_recovery_active or (bool(_grab_acting_report.get("active", false)) and _grab_acting_report.get("role", "") == "attacker"))
-	var neutral_state:=state in [_FighterStates.IDLE,_FighterStates.WALK,_FighterStates.RUN,_FighterStates.DASH,_FighterStates.FALL,_FighterStates.FAST_FALL]
+	var neutral_state:=not standalone_preview and state in [_FighterStates.IDLE,_FighterStates.WALK,_FighterStates.RUN,_FighterStates.DASH,_FighterStates.FALL,_FighterStates.FAST_FALL]
+	if standalone_preview:
+		# Watch/move-list clips have no MoveRunner. Their saved body actions use
+		# the presentation clock, without inheriting an old gameplay handoff.
+		_locomotion_synchronized = false
+		_authored_transition.clear(); _neutral_return_pose.clear(); _grounded_return.clear()
+		_attack_support_exchange.clear(); _weight_transfer.clear()
 	if not state.begins_with("attack"):_attack_support_exchange.clear()
 	if not neutral_state:_neutral_return_pose.clear()
 	if state != _FighterStates.IDLE: _grounded_return.clear()
 	if state not in [_FighterStates.IDLE,_FighterStates.WALK,_FighterStates.RUN,_FighterStates.DASH]:
 		_weight_transfer.clear()
-	_move_synchronized = state.begins_with("attack") or state.begins_with("special") or state.begins_with("aura_burst") or state.begins_with("throw")
+	_move_synchronized = not standalone_preview and (state.begins_with("attack") or state.begins_with("special") or state.begins_with("aura_burst") or state.begins_with("throw"))
 	if not _move_synchronized: _strike_posture.last.clear()
 	if _player == null or not is_instance_valid(_player):
 		return
@@ -262,11 +268,11 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 		return
 	if move.has("throw_direction"):
 		_throw_dir = str(move.get("throw_direction", "forward"))
-	var action_state := _move_synchronized or state in ["grab_startup","grab_active"]
+	var action_state := standalone_preview or _move_synchronized or state in ["grab_startup","grab_active"]
 	var move_id := str(move.get("move_id", "")) if action_state else ""
 	var resolved: Dictionary = _MoveResolver.resolve_clip(state, move_id, _loaded_clips)
 	var clip := str(resolved.get("clip", ""))
-	if state == _FighterStates.IDLE and is_instance_valid(_runtime_fighter):
+	if not standalone_preview and state == _FighterStates.IDLE and is_instance_valid(_runtime_fighter):
 		var form_idle := _form_clip(str(_runtime_fighter.get_current_form_id()), "idle_clip")
 		if not form_idle.is_empty():clip = form_idle
 	var grab_presentation := false
@@ -322,9 +328,9 @@ func play_for_state(state: String, move: Dictionary = {}) -> void:
 	if (_player.current_animation != play_key and _player.current_animation != clip) or (reacting and _reaction_fresh):
 		# Authored per-fighter sole exchange from the actual last gait pose.
 		# Lower-body only, and fully retired BEFORE the authoritative active pose.
-		if action_state and _motion_moving and move_id in ["jab_1","forward_tilt","dash_attack","heavy_attack"] and is_instance_valid(_runtime_fighter) and _runtime_fighter.is_on_floor():
+		if not standalone_preview and action_state and _motion_moving and move_id in ["jab_1","forward_tilt","dash_attack","heavy_attack"] and is_instance_valid(_runtime_fighter) and _runtime_fighter.is_on_floor():
 			_attack_support_exchange.begin(_skeleton,_gait_phase,maxi(1,int(move.get("startup_frames",1))-1),true)
-		if not grab_presentation and _authored_transition.enabled():
+		if not standalone_preview and not grab_presentation and _authored_transition.enabled():
 			if action_state and _motion_moving and move_id in ["jab_1","forward_tilt","dash_attack","heavy_attack"]:
 				_authored_transition.begin("move_heavy" if move_id=="heavy_attack" else "move_light",_visual_facing)
 			elif state==_FighterStates.IDLE and not _active_clip.is_empty() and _move_synchronized==false and not _motion_moving:
