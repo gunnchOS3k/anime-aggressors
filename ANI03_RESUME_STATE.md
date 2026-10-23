@@ -1,3 +1,13 @@
+# 8D-3 EXACT APPROVED source/native job39910149332 executing
+
+Owner explicitly approved exact42baaab8cc5167798aea7f3aebb22edae9f21007 public90day threeartifactclasses. Verified remotePRhead/existingdraftbase/noactive manualproducer before one dispatch. Run39910149332 IN_PROGRESS. Do NOT launch competing workflow or change this run input. Fresh approval receipt: production_8d/hand_integration_8d3/APPROVED_DISPATCH.json. Subsequent localcheckpoint may be newer; run producer remains EXACT42baaab8.
+
+NEXT inspect39910149332 terminal status/jobs once usefulprogress expected; source18save/reopen/GLB +native36imports/18comparison/180publicfixtures stillpending. On success archive-only: python3 tools/authored_animation/recover_hand_integration_8d3.py --run 39910149332 --source-sha 42baaab8cc5167798aea7f3aebb22edae9f21007 . On failure same with --allow-failed to preserveactualdiagnostic before correction, no automaticretry or acceptance. Keepnewbinaries/fullrawproof external, noMacimport/installbelow18GiBreserve.
+
+Current3Dpairedsourcecontact remainsblockedbyunmeasuredcommonmetricstage; onlyhands/wrist/forearmcuff source andhand-onlyacting prepared inthisjob. Allold540/144/72/90actions/rest preserved; original8Bbodyacting retained. Sourcejobsuccess mustnotpromote3Dgrip/floor/humanacceptance. AllCursorworktrees untouched; noGameplay/saves/PartyLinkedits. No owned localBlender/Godotprocess shouldremain. OlduntrackedWORKFLOW_REFERENCED_PATHS.json preserved.
+
+---
+
 # 8D-3 source integration PREPARED; fresh public-art approval required
 
 Branch release/anime-v1-dialogue-and-elemental-performance, draft123 on122. Recovered actual local/remote f3753775df43592b0c29a06d0b8329abfc35164e; all exact-headCI including Windows2025 SUCCESS. New delivery follows it; getactualHEAD. No newer Cursor changes integrated, all existing worktrees retained.
