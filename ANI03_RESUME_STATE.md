@@ -1,3 +1,22 @@
+# 8D-2 saved-surface correction39886629245 currently executing
+
+Branch release/anime-v1-dialogue-and-elemental-performance. Source producer and last pushed implementation `ced4b78a141b5bf2bac05d4fc06488340c9aef2a`; this resume/evidence commit follows it. Sole manual run39886629245 is IN_PROGRESS in actual surface edit/save/export since2026-10-23T01:56:04Z. Do not dispatch a competing manual job. User already approved this same18-source surface-only repair/public90dayartifacts. No new paired/source/fullbody upload is authorized by that scope.
+
+Actual root corrections: finger root frame/contour orientation, outward hand winding, and explicitly unique backup names preserving old ORIGINAL_8D_Palm IDs. Previous actual diagnosis39886245997 retained: geometry/weights changed only under displaced old backup names; all bone rest/actioncurves TRUE. No preservation criteria weakened, no saved outputs fromfailed attempts. Ubuntu mirrorlist fix is now effective; Blender4.0.2 setup took57s. Every new repairedcandidate must stillpass exact geometry/weights/rest/actions before and aftersave/reopen and actualGLB winding check.
+
+Firstsource195/run39882654215 and firstnativefae/run39883829338 remain fullyarchived,36imports+144singlecontactthrows+36escapes PASS. Imagesstaged/idlefixtures, not activeCPU/artapproval. Rootfolds retained as negatives, femaleOriongrip/floor gaps remainopen. Correctedsource/native result stillpending. Latestinternal14.23GiB BELOW18GiB AFTERforecast: noMacbinaryinstall/import/export/recording. Original18sources,actionlibraries,Cursorbranches,worktrees,saves intact. Only unrelated untracked WORKFLOW_REFERENCED_PATHS.json remainsintentionallyunstaged.
+
+Next commands, after confirming terminalSUCCESS:
+
+```sh
+gh run view 39886629245 --repo gunnchOS3k/anime-aggressors --json status,conclusion,jobs
+python3 tools/authored_animation/recover_hands_8d2.py --run 39886629245 --source-sha ced4b78a141b5bf2bac05d4fc06488340c9aef2a
+```
+
+Use archive-only, no--install. If failed preserve actual failure first. Onsuccessinspectmanifest/positivevolumes andprepare verification-only native review ofexact repairedoutput; priornativeapprovalwasexactfae/195, obtain anyrequirednewuploadapprovalbeforedispatch. Projectionv2 observerparsedPASS butnot yetexecuted. Pairedsourceacting remainsprepared/notproduced; replaceold75px/mcommonstagewithactualperviewportprojectionbeforeclaimingpairedgrip. Allhumanfalse; no release/merge/deploy/tag.
+
+---
+
 # 8D-2 actual source preservation defect diagnosed and corrected
 
 Source5585005b/run39886245997 terminalFAILURE beforefirstsave, butactualmirrorlistfixPASS: Blender4.0.2 ran after57secondsetup. Strictdiagnostic identifiedONLY originalbackupPalmL/Rname-boundgeometryandweights changed; allbone rest/actioncurves TRUE. Newbackupcreation reused protected ORIGINAL_8D_Palm names fromfirstsavedinput. ExplicitunusedsnapshotnamesnowpreserveoriginalIDs; additionalidentityassertion, no exclusions/toleranceweakening. Fullnegative log/API/DIAGNOSISretained,0savedoutputs.
