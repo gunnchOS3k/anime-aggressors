@@ -1,3 +1,15 @@
+# Final storage reply handled — ONLY20 approved historical installers removed
+
+Owner separately approved the19listedhistoricalinstalleroriginals after the earlieroneCursorDMG. All19were classified as standalone installerZIP/UDIFfiles, rehashed against intact archives, confirmed unmounted/notopen and then deleted; all archive hashes verified AGAIN afterward. InstalledCursor executable unchanged. No installedapp/settings/conversations/extensions/tool/source/art/save/cache/worktree/project/footage deleted or modified.20total authorized installerfiles only;0additionaldeletions. Detailed immutable private receipts: resource_recovery_continuation/AUTHORIZED_19_INSTALLER_REMOVAL.json and FINAL_STORAGE_AND_RECOVERY.json. Earlierpendingstatus records below are superseded; original approvedlist remains retained provenance, not a new removal request.
+
+Combined logical2252061070bytes removed; summed immediateAPFSfree increases2235412480bytes. Free immediately after19batch18.144GiB; concurrent activity causes fluctuations.22GiBproduction minimum remains; compatible4.0.2tool/installfootprint and officialSHA still unverified. No safe additionalmultiGiBremovalset established. Do not remove personalprojectarchives/developmenttools/protectedfootage/caches. No newproduction/workspace/export/render/modelimport/Actionsjob. All18originalrigs/actions/archives and historicalworktrees retained.
+
+Source implementations remain6492fec4 (singlepilot) andef1f35ec7d8323875cb85cf2be6fd99b4979233a (147camera/15watchpausechecks). This sanitized deliverydoc checkpoint will be normal-pushed withskipCI; prior7030head6CIrunsSUCCESS, currentexactheadCI intentionallyNOTRUN. Readgitrev-parseHEADforlatest delivery identity. PrivateActions remainsdisabled;0productiondispatches/publicart/paidusage.
+
+NEXT: no pending deletion permission remains. Wait for genuine22GiBpluscompatibleinstallationcapacity and official4.0.2packageprovenance, then run the documented read-only ONE-case preflight; no--execute until every hardgate passes. Firstpilot still requires real sourcecontact/floor/anatomy/animation/export/nativeplayback validation; no automatic eightcasebatchpromotion. Native ownerwatchreview remains separatelyguarded18GiB+800MiB. Originalsevenprivatecameratakes/114bindings/53sequenceinventory/3technicalmovies preserved; no finalOVA accepted. All human/shippingcontact gatesFALSE. No activeownedmedia/testprocess; unrelatedWORKFLOW_REFERENCED_PATHS.json retained.
+
+---
+
 # Delivery checkpoint — single-case pilot, cinematic controls and verified archival
 
 Implementation sourceef1f35ec7d8323875cb85cf2be6fd99b4979233a and pilot6492fec4 are pushed normally. This follow-up is sanitized resume/validation only; getgitrev-parseHEADfor deliverySHA. Scoped source is clean except this checkpoint; unrelated untracked WORKFLOW_REFERENCED_PATHS.json remains untouched. PR123draft/122dependency preserved; all historical worktrees retained.
