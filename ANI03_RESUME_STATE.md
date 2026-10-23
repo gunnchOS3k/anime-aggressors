@@ -1,3 +1,21 @@
+# 8D-4 checkpoint: calibration selection pending
+
+Branch: `release/anime-v1-dialogue-and-elemental-performance`, draft PR #123 stacked on #122. Recovered local and remote source: `1683c821c66617f950181de62cb6b4850fa2bfeb`. All exact-head workflows, including Windows 2025, passed. This checkpoint follows that source; use `git rev-parse HEAD` for its exact commit.
+
+Completed in this increment: SHA-bound recovery of the 8D-3 projection evidence; verification of 576 actual camera/rig/source chains; ten passing stage-algebra tests; eight preserved projection tests. The proposed eight reference compositions and source producer are prepared but **not baked or natively verified**. No Blender sources, GLBs, stage images or paired performances have been generated.
+
+**Required owner answer remains pending:** select the measured Ember male camera as an explicitly offline art calibration, or require shared runtime calibration first. Native Ember/Juno camera scales differ by 3.7% for male bodies and 7.6% for female bodies. No global runtime metre/pixel/depth authority exists. `make_stage` rejects an unselected policy; do not invent a selection receipt or infer approval from elapsed time.
+
+Read `art_source/staging/metric_8d4/README.md` and `artifacts/v1_closure/production_8d/metric_stage_8d4/PREPARATION.json`. Prepared producer: `tools/authored_animation/blender/aa_metric_pair_reference_8d4.py`. Exact retained inputs: `art_source/staging/metric_8d4/inputs_v1.json`.
+
+Next independent work: finish the reference producer's source-unit, evaluated-surface and save/reopen diagnostics, then prepare its bounded native snapshot validator. No 18-rig bulk paired acting until the reference stage is actually verified. After a calibration selection, record the answer, validate that exact policy and prepare a concrete remote job. Obtain fresh explicit approval for its new public source/static-snapshot/review artifact classes before dispatch. If runtime calibration is required first, retain the prepared code and provide the exact interface request to Cursor; do not alter its branches.
+
+Storage: 14.42 GiB internal free at preflight, below the 18 GiB plus allocation reserve. External APFS UUID `9C4EB36E-2864-42F8-BD0B-A4F67EBC7852` verified, approximately 344.09 GiB free. This source/test work forecasts at most 10 MiB. No local heavy tooling, imports, exports, recordings, cleanup or owner-save changes. No new remote production job started. Existing archives, worktrees, Cursor PRs and the unrelated untracked `artifacts/vxp3/reports/WORKFLOW_REFERENCED_PATHS.json` remain untouched.
+
+All human and release gates remain false. Shipping paired alignment, anatomical quality, floor correction and full-roster paired acting remain open.
+
+---
+
 # 8D-3 actual18 sources/native technical checkpoint COMPLETE; physical paired acting BLOCKED
 
 Branch release/anime-v1-dialogue-and-elemental-performance, draftPR123 on122. Actualproducer42baaab8cc5167798aea7f3aebb22edae9f21007 / approvedrun39910149332 SUCCESS. Currentdelivery follows8c8e7f03; getactualHEAD.18 saved/reopened sources746472584bytes /18GLB /54hand-onlyactions, all194/244oldactions/rest/material/topology/transforms and non-scoped source exact. Sourcearchive /Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-23_8d3_hands_42baaab8_39910149332 SHAverified; noMacinstall. FourPNGs inspected.
