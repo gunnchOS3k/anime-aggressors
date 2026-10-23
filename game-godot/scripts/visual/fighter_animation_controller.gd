@@ -659,23 +659,37 @@ func _load_combat_choreography(model_root: Node3D) -> void:
 
 
 func _load_grab_acting_overlay(library: AnimationLibrary) -> void:
-	var path := "res://data/animation/grab_acting_8b/%s_%s.json" % [_fighter_id, _body_variant]
-	if not FileAccess.file_exists(path):return
+	_load_saved_grab_overlay(library,"grab_acting_8b","original_grab_acting_8b.v1","ANI08B_WIP_")
+	var review:=get_node_or_null("/root/GameState")
+	if review!=null and review.get_meta("source_paired_8d2",false):
+		_load_saved_grab_overlay(library,"paired_grip_8d2","paired_mesh_grab_acting_8d2.v1","ANI08D2_PAIRED_")
+
+
+func _load_saved_grab_overlay(library: AnimationLibrary, lane: String, schema: String, prefix: String) -> void:
+	var path := "res://data/animation/%s/%s_%s.json" % [lane,_fighter_id,_body_variant]
+	if not FileAccess.file_exists(path):
+		if lane=="paired_grip_8d2":push_error("Requested paired source acting missing: "+path)
+		return
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
 	_grab_overlay_status = "unverified"
 	if not parsed is Dictionary:return
 	var doc: Dictionary = parsed
 	if doc.get("source_actions_saved", false) != true or doc.get("source_runtime_verified", false) != true:return
-	if str(doc.get("schema",""))!="original_grab_acting_8b.v1":return
+	if str(doc.get("schema",""))!=schema:return
 	if str(doc.get("source_base_blend_sha256","")).length()!=64 or str(doc.get("source_saved_blend_sha256","")).length()!=64:return
 	if str(doc.get("fighter_id", _fighter_id)) != _fighter_id or str(doc.get("body_variant", _body_variant)) != _body_variant:return
+	if lane=="paired_grip_8d2":
+		var candidate: Dictionary=preload("res://scripts/visual/source_controls_8d.gd").candidate_document(_fighter_id,_body_variant,"hands_8d2")
+		if candidate.is_empty() or candidate.get("source_sha256","")!=doc.get("source_saved_blend_sha256",""):
+			push_error("Paired source and hand mesh hashes differ: "+_fighter_id+"/"+_body_variant)
+			return
 	_grab_overlay_status = "verified_source_export"
 	for name in doc.get("clips", {}):
 		var base := str(name).trim_suffix("_left")
 		if base not in GRAB_ACTING_CLIPS:continue
 		var clip: Dictionary = doc.clips[name]
 		if clip.get("bone_tracks", {}).is_empty():continue
-		if not str(clip.get("source_action","")).begins_with("ANI08B_WIP_") or str(clip.get("source_blend","")).is_empty():continue
+		if not str(clip.get("source_action","")).begins_with(prefix) or str(clip.get("source_blend","")).is_empty():continue
 		var animation := _animation_from_data(clip)
 		if clip.has("startup_frames"):_choreography_timing[name] = _timing_metadata(clip)
 		if library.has_animation(name):library.remove_animation(name)

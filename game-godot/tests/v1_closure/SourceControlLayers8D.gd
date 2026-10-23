@@ -1,6 +1,16 @@
 extends SceneTree
 ## Lightweight unit contract, NOT saved-source/native art acceptance.
 var failures: Array=[]
+class ClockRunner extends RefCounted:
+	var active:=true
+	var total_frame:=2
+	var current_move_id:="throw_forward"
+class ClockActor extends Node:
+	var _hitstop:=0
+	var grabbed_target: Node
+	var state_machine:={"current_state":"attack_startup","state_frame":2,"state_time":.03}
+	var move_runner:=ClockRunner.new()
+	var _current_move:={"startup_frames":12,"recovery_frames":24}
 func _init() -> void:call_deferred("run")
 func check(ok: bool,label: String) -> void:
 	if not ok:failures.append(label);push_error(label)
@@ -40,6 +50,19 @@ func run() -> void:
 	check(rig.get_bone_pose_rotation(1).angle_to(Quaternion.IDENTITY)>.3,"release source actually sampled")
 	control.sample("fist",0.0)
 	check(rig.get_bone_pose_rotation(1).is_equal_approx(Quaternion.IDENTITY),"neutral hand resets")
+	var actor:=ClockActor.new();model.add_child(actor);control.actor=actor
+	control._process(0.0)
+	check(control.hands.current_animation=="saved8d/release" and absf(control.hands.current_animation_position-2.0/60)<.00001,"throw release reads existing total clock")
+	actor.state_machine.current_state="attack_active";actor.state_machine.state_frame=0;actor.move_runner.total_frame=8
+	control._process(0.0)
+	check(absf(control.hands.current_animation_position-8.0/60)<.00001,"phase transition does not restart release")
+	check(actor.move_runner.total_frame==8,"presentation does not advance move clock")
+	actor.move_runner.active=false;actor.state_machine.current_state="attack_startup";actor.state_machine.state_frame=6
+	control._process(0.0)
+	check(control.hands.current_animation=="saved8d/fist" and absf(control.hands.current_animation_position-.5)<.00001,"resolved startup_frames controls fingers")
+	actor.state_machine.current_state="attack_recovery";actor.state_machine.state_frame=6
+	control._process(0.0)
+	check(absf(control.hands.current_animation_position-.75)<.00001,"resolved recovery_frames controls fingers")
 	var f:=FileAccess.open("/private/tmp/aa8d_layer_result.json",FileAccess.WRITE)
 	f.store_string(JSON.stringify({"PASS":failures.is_empty(),"failures":failures,"scope":"synthetic track ownership unit only; no real-source/native acceptance"},"\t"));f.close()
 	model.free();quit(0 if failures.is_empty() else 1)

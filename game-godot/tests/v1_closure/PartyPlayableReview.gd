@@ -5,7 +5,7 @@ func _init() -> void:call_deferred("run")
 func run() -> void:
 	await process_frame
 	var fighter:="kaia-windrow";var opponent:="juno-spark";var body:="female";var item:="prism_heart"
-	var local:=false;var smoke:=false;var break_candidate:=false;var source_controls:=false;var source_hands:=false
+	var local:=false;var smoke:=false;var break_candidate:=false;var source_controls:=false;var source_hands:=false;var source_paired:=false
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--party-fighter="):fighter=arg.get_slice("=",1)
 		if arg.begins_with("--party-opponent="):opponent=arg.get_slice("=",1)
@@ -16,11 +16,13 @@ func run() -> void:
 		if arg=="--party-smoke":smoke=true
 		if arg=="--source-controls-8d":source_controls=true
 		if arg=="--source-hands-8d2":source_hands=true
+		if arg=="--source-paired-8d2":source_hands=true;source_paired=true
 	var ids=preload("res://scripts/visual/spectral_feedback_renderer.gd").IDS
 	if fighter not in ids or opponent not in ids or body not in ["male","female"] or item not in ["prism_heart","black_seal","white_seal"]:quit(2);return
 	var gs=root.get_node("GameState")
 	gs.set_meta("source_controls_8d",source_controls)
 	gs.set_meta("source_hands_8d2",source_hands)
+	gs.set_meta("source_paired_8d2",source_paired)
 	gs.mode="versus";gs.items_enabled=true;gs.hazards_enabled=false;gs.stage_id="training-grid"
 	gs.p1_fighter_id=fighter;gs.p2_fighter_id=opponent;gs.p1_is_cpu=false;gs.p2_is_cpu=not local;gs.cpu_level=3
 	gs.p1_body_variant=body;gs.p2_body_variant=body;gs.stocks=3;gs.match_timer_seconds=180
