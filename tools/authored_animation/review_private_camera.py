@@ -2,7 +2,8 @@
 """Review private camera source using the existing isolated watch launcher.
 
 Default is validation/command inspection only. --launch still requires the
-18 GiB reserve AFTER an 800 MiB import forecast; no recording/export option.
+18 GiB reserve AFTER a 1280 MiB import forecast (+16MiB for bounded stills).
+No movie/export option. The22GiB Blender producer guard is separate/unchanged.
 """
 import argparse
 import hashlib
@@ -41,7 +42,7 @@ def main():
         parser.error('Camera resource path/hash/cue order mismatch')
     volume = '/System/Volumes/Data' if Path('/System/Volumes/Data').is_dir() else ROOT
     free = shutil.disk_usage(volume).free
-    forecast = (800+16*int(args.smoke)) * 1024 ** 2
+    forecast = (1280+16*int(args.smoke)) * 1024 ** 2
     allowed = free >= 18 * GIB + forecast
     suffix=('_smoke_'+subprocess.check_output(['git','rev-parse','--short=8','HEAD'],cwd=ROOT,text=True).strip())if args.smoke else ''
     output = path.parent / 'owner_play_sessions' / (args.route + '_' + args.body+suffix)
@@ -57,7 +58,7 @@ def main():
                       'import_forecast_bytes': forecast, 'launch_allowed': allowed, 'command': command}))
     if args.launch:
         if not allowed:
-            raise SystemExit('Review not launched: 18 GiB plus 800 MiB import forecast required. No files or saves changed.')
+            raise SystemExit('Review not launched: 18 GiB plus the full1280MiB import/still forecast required. No files or saves changed.')
         if args.smoke and output.exists():raise SystemExit('Existing native review preserved; use a new source checkpoint rather than overwriting it')
         listing=subprocess.run(['ps','-axo','comm='],capture_output=True,text=True)
         if listing.returncode or any(Path(name.strip()).name.lower().startswith(('godot','blender','ffmpeg'))for name in listing.stdout.splitlines()):
