@@ -20,6 +20,8 @@ var _saved_progress := ""
 var _swap_busy := false
 var _closing := false
 var _dialogue_speaker: Node2D
+var _private_camera_take
+var _private_camera_active := false
 const SESSION_KEYS := ["mode", "arcade_active", "battle_eval_mode", "battle_eval_max_frames", "p1_fighter_id", "p2_fighter_id", "p1_body_variant", "p2_body_variant", "p1_is_cpu", "p2_is_cpu", "stocks", "match_type", "match_timer_seconds", "stage_id", "hazards_enabled", "items_enabled", "cpu_level", "team_mode", "battle_eval_finished", "battle_eval_frames", "battle_eval_result", "last_winner_slot"]
 
 func _ready() -> void:
@@ -28,6 +30,14 @@ func _ready() -> void:
 	for key in SESSION_KEYS:
 		_session_before[key] = GameState.get(key)
 	_build_ui()
+	# Explicit developer-only external source; no new art enters packaged assets.
+	# Missing/invalid private takes leave the established preview untouched.
+	for argument in OS.get_cmdline_user_args():
+		if argument.begins_with("--private-cinematic-camera=") and not OS.has_feature("web"):
+			_private_camera_take = preload("res://scripts/story/ova_private_camera_take.gd").new()
+			if not _private_camera_take.load_library(argument.split("=", true, 1)[1], FileAccess.get_sha256("res://data/story/dialogue/v1/cues.json"), StoryDialogue.nodes):
+				push_warning("Private cinematic camera source rejected: " + _private_camera_take.error)
+				_private_camera_take = null
 	StoryDialogue.cue_started.connect(_on_dialogue_cue)
 	await _present_node()
 
@@ -106,6 +116,8 @@ func _present_node() -> void:
 	_swap_busy = true
 	StoryDialogue.cancel()
 	_dialogue_speaker = null
+	_private_camera_active = false
+	if _private_camera_take != null: _private_camera_take.clear_node()
 	elapsed = 0
 	_shot = -1
 	if _watch_presenter != null:
@@ -121,7 +133,10 @@ func _present_node() -> void:
 		_swap_busy = false
 		return
 	var chapter: Dictionary = nodes[node_index]
+	if _private_camera_take != null:
+		_private_camera_active = _private_camera_take.select_node(str(chapter["id"]))
 	_subtitle.text = "%s · Draft adaptation · Preview" % chapter["title"]
+	if _private_camera_active: _subtitle.text += " · Private camera-source candidate"
 	_copy.text = str(chapter.get("body", chapter.get("block_reason", "")))
 	if not bool(chapter.get("implemented", false)):
 		playing = false
@@ -236,6 +251,11 @@ func _process(delta: float) -> void:
 	if camera != null:
 		var closeup: bool = chapter["kind"] != "STORY_BATTLE"
 		var target: Vector2 = (_dialogue_speaker.position if _dialogue_speaker != null and is_instance_valid(_dialogue_speaker) and StoryDialogue.is_busy() else _battle.fighter1.position if closeup else (_battle.fighter1.position + _battle.fighter2.position) * 0.5) + Vector2(0, -60 if closeup else -45)
+		if _private_camera_active and StoryDialogue.is_busy():
+			var framing: Dictionary = _private_camera_take.sample(StoryDialogue.remaining)
+			if not framing.is_empty():
+				target = _battle.fighter1.position.lerp(_battle.fighter2.position, float(framing.focus_mix)) + framing.offset
+				camera.zoom = Vector2.ONE * float(framing.zoom)
 		camera.position = camera.position.lerp(target, 1.0 - exp(-delta * 4.0))
 	if elapsed >= duration and not StoryDialogue.is_busy():
 		if node_index + 1 < route["nodes"].size():
@@ -245,6 +265,7 @@ func _process(delta: float) -> void:
 
 func _exit_tree() -> void:
 	_closing = true
+	if _private_camera_take != null: _private_camera_take.clear_node()
 	StoryDialogue.cancel()
 	if _watch_presenter != null:
 		_watch_presenter.battle = null
@@ -261,6 +282,8 @@ func _exit_tree() -> void:
 func _on_dialogue_cue(cue: Dictionary) -> void:
 	if StoryDialogue.context != "watch" or _battle == null: return
 	if str(cue.node_id) != str(route.nodes[node_index].id): return
+	if _private_camera_active:
+		_private_camera_take.begin_cue(str(cue.cue_id), StoryDialogue.remaining)
 	_dialogue_speaker = null
 	for actor in _battle.fighters_root.get_children(): actor.z_index=int(actor.get_meta("watch_base_z",actor.z_index))
 	if cue.get("representation") == "memory_echo": return

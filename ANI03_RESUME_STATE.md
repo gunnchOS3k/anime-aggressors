@@ -1,3 +1,17 @@
+# Public game-art/Story-media continuation — camera-source increment
+
+Recovered public/local HEAD5da5bf2cb179d78f8b7d98bb0362e3c4840308d0; all exact-head checks including Windows2025 SUCCESS. Private8D4 wrapper remains manually DISABLED, source-read secret absent, both App-review/dispatch gates FALSE, no production dispatch. The sole prior runner-free invalid-workflow record remains preserved. New owner prompt explicitly does NOT authorize dispatch or public client-model/source-art disclosure. Exact prerequisite question is pending in this conversation; do not enable gates by inference or reuse setup-only approval for a job.
+
+Actual lightweight source work: authored seven separate editable native camera Animation resources privately for the seven canonical First Losses,114 canonical cue bindings. Native headless import/sample checks PASS136; actual private source/receipts remain outside the public checkout. No source rig/GLB/body animation/audio changed; no new film render or paired-body production. New opt-in watch reader accepts only externally stored hash-bound camera-value resources matching canonical cue order; cue-local sampling respects actual subtitle/voice duration, advance, pause and cancel. No method/audio/gameplay tracks execute. No private take is embedded or auto-selected. Default watch camera and all Story authority stay unchanged.
+
+Watch source compiles in a tiny isolated project with placeholder dependencies; initial check-only invocation could not resolve autoload globals and is retained as diagnostic, then initialized placeholder-autoload compile passed. This is not shipping BattleScene or model-import proof. Native136-check scope: seven actual camera-text imports plus114 actual cue samples and synthetic negative/clock tests; no native visual approval, earned Story, device or paired-contact acceptance.
+
+Known actual media: original Kaia preview131.6s at7.5fps, sourcece2775f1; private staged Kaia/Rook and Juno/Orion dialogue clips at09f2a651. These are technical previews, not finished scenes or the proposed38–52minute Kaia OVA. No final variation/Convergence film is accepted. Canonical one-main/six-variation/separate-finale structure remains. Next: reconcile canonical sequence/media coverage, private review/source provenance and exact Cursor content boundary; preserve missing shots and temp-voice restrictions.
+
+Private camera-source review is opt-in only via --private-cinematic-camera=ABSOLUTE_PRIVATE_MANIFEST. Do not launch locally below18GiB+allocation reserve. Current focused source-test allocation forecast<1MiB, no models/assets imported. Internal latest about12.60GiB; no heavy local tools, deletes, archive/worktree/save movement. No public art upload, merge, release or deployment. All human and RUNTIME_PAIRED_CONTACT_VERIFIED gates FALSE. Preserve unrelated untracked WORKFLOW_REFERENCED_PATHS.json. This source checkpoint uses git rev-parse HEAD for its exact identity.
+
+---
+
 # 8D-4 private SETUP complete; production explicitly NOT authorized
 
 Latest owner reply authorized only creation of the dedicated private repository and installation/validation of the manual wrapper from837cb6af. Private configuration is complete; its exact identity, access readbacks, source hashes, receipts, secret/billing steps and future command are retained only in that private repository. Do not put private metadata or art into the public worktree. No private producer was dispatched, no runner job executed, no secret configured/read, and no new proprietary art produced/downloaded/uploaded.
