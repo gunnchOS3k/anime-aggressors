@@ -1,5 +1,6 @@
 """Validate saved offline references without promoting them to runtime grips."""
 import hashlib
+import argparse
 import json
 import math
 import struct
@@ -7,6 +8,7 @@ import sys
 from pathlib import Path
 from metric_art_stage_8d4 import rigid, make_stage
 from private_production_8d4 import validate_manifest_context
+from metric_reference_scope_8d4 import validate_scope
 
 ROOT=Path(__file__).resolve().parents[2]
 
@@ -26,7 +28,7 @@ def finite_tree(value):
         for v in value:finite_tree(v)
 
 
-def validate(folder):
+def validate(folder, case_id=None):
     folder=Path(folder);runtime=folder/'runtime'
     inputs=json.loads((runtime/'STAGE_INPUTS.json').read_text())
     assert inputs==json.loads((ROOT/'art_source/staging/metric_8d4/inputs_v1.json').read_text())
@@ -34,8 +36,7 @@ def validate(folder):
     validate_manifest_context(manifest)
     assert manifest['schema']=='metric_pair_reference_sources_8d4.v1'and manifest['complete']
     assert manifest['input_run']==39910149332 and not manifest['shipping_alignment_verified']and not manifest['human_approved']
-    expected={c['case']:c for c in inputs['reference_cases']}
-    assert len(manifest['rows'])==8 and {r['case']for r in manifest['rows']}==set(expected)
+    expected=validate_scope(manifest,inputs,case_id)
     blocked=[];max_gap=0.;crossings=0;references=0
     for row in manifest['rows']:
         assert not row['grip_accepted']and not row['shipping_alignment_verified']and not row['human_approved']
@@ -66,11 +67,19 @@ def validate(folder):
             doc=json.loads(raw[20:20+struct.unpack_from('<I',raw,12)[0]])
             assert not doc.get('animations')and not doc.get('skins'),'Snapshots must not claim animated-source equivalence'
             assert snapshot['bounds']and all(b['samples_m']for b in snapshot['bounds']);references+=1
-    return {'PASS':True,'saved_reference_scenes':8,'static_snapshots':references,
+    return {'PASS':True,'saved_reference_scenes':len(expected),'static_snapshots':references,
+            'reference_scope':'SINGLE_CASE_PILOT' if case_id else 'FULL_REFERENCE_BATCH',
+            'full_reference_batch_complete':case_id is None,
             'source_preservation_scope':'Save/reopen hashes of original actions, geometry, skin weights and rest; actual producer required',
             'unreachable_restraints':blocked,'max_measured_pad_gap_m':max_gap,'total_triangle_surface_crossings':crossings,
             'scope':'Artifact/provenance validation, not accepted grip quality, animation equivalence or gameplay',
+            'animated_export_verified':False,'release_acting_verified':False,'reference_art_accepted':False,
             'RUNTIME_PAIRED_CONTACT_VERIFIED':False,'human_approved':False}
 
 
-if __name__=='__main__':print(json.dumps(validate(Path(sys.argv[1])),indent=2))
+if __name__=='__main__':
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('folder',type=Path)
+    parser.add_argument('--case-id')
+    args=parser.parse_args()
+    print(json.dumps(validate(args.folder,args.case_id),indent=2))

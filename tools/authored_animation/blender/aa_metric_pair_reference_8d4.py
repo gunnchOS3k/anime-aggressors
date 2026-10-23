@@ -23,6 +23,7 @@ ROOT=Path(__file__).resolve().parents[3]
 sys.path.insert(0,str(ROOT/'tools/authored_animation'))
 from metric_art_stage_8d4 import make_stage,feasibility,art_rotation
 from private_production_8d4 import current_context
+from metric_reference_scope_8d4 import select_cases
 C=Matrix(((1,0,0,0),(0,0,1,0),(0,-1,0,0),(0,0,0,1)))
 
 
@@ -335,6 +336,9 @@ def run():
     assert not out.exists() and shutil.disk_usage(out.parent).free>8*1024**3
     if local:assert out.resolve()==Path(execution['output_path']).resolve(),'Offline output escaped its private workspace'
     pack=json.loads((ROOT/'art_source/staging/metric_8d4/inputs_v1.json').read_text())
+    case_id=args[args.index('--case-id')+1] if '--case-id' in args else None
+    cases=select_cases(pack,case_id)
+    if local:assert case_id is not None,'Local production requires one explicit pilot before any batch'
     prior=json.loads((inputs/'runtime/PRODUCTION_MANIFEST.json').read_text())
     retained=json.loads((ROOT/'artifacts/v1_closure/production_8d/hand_integration_remote_39910149332/PRODUCTION_MANIFEST.json').read_text())
     assert prior==retained and prior['source_sha']=='42baaab8cc5167798aea7f3aebb22edae9f21007' and prior['complete']
@@ -355,9 +359,11 @@ def run():
               'run_id':None if local else os.environ['GITHUB_RUN_ID'],'input_run':39910149332,'blender_version':bpy.app.version_string,
               'reference_camera_size_m':pack['policy']['reference_observation']['projection']['camera_size'],
               'all_18_native_camera_scales':pack['measured_body_scales'],'owner_selection_sha256':sha(selection),
-              'scope':'Eight offline reference scenes; not18-rig production or native shipping contact authority',
+              'scope':'Offline reference source; not18-rig production or native shipping contact authority',
+              'reference_scope':'SINGLE_CASE_PILOT' if case_id else 'FULL_REFERENCE_BATCH',
+              'selected_cases':[case['case']for case in cases],'full_reference_batch_complete':False,
               'rows':[],'complete':False,'shipping_alignment_verified':False,'RUNTIME_PAIRED_CONTACT_VERIFIED':False,'human_approved':False}
-    for case in pack['reference_cases']:
+    for case in cases:
         bpy.ops.wm.read_factory_settings(use_empty=True)
         scene=bpy.context.scene;scene.unit_settings.system='METRIC';scene.unit_settings.scale_length=1.;scene.render.fps=60
         actors=[];docs=[]
@@ -435,7 +441,8 @@ def run():
         manifest['rows'].append(record)
         (out/'runtime/PRODUCTION_MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n')
         print('SAVED_8D4_REFERENCE_STAGE',case['case'],flush=True)
-    manifest['complete']=True;(out/'runtime/PRODUCTION_MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n')
+    manifest['complete']=True;manifest['full_reference_batch_complete']=case_id is None
+    (out/'runtime/PRODUCTION_MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n')
 
 
 if __name__=='__main__':run()

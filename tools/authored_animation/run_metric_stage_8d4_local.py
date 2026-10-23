@@ -16,6 +16,7 @@ import subprocess
 import sys
 from pathlib import Path
 from private_production_8d4 import LOCAL_SCOPE, LOCAL_RESERVE_BYTES, LOCAL_PEAK_ALLOCATION_BYTES
+from metric_reference_scope_8d4 import select_cases
 
 ROOT = Path(__file__).resolve().parents[2]
 ARCHIVE_VOLUME = Path('/Volumes/gunnchOS-Archives')
@@ -30,8 +31,10 @@ def version(binary):
     return result.stdout.splitlines()[0] if result.returncode == 0 and result.stdout else None
 
 
-def preflight(archive, workspace, blender, godot):
+def preflight(archive, workspace, blender, godot, case_id):
     reasons = []
+    inputs=json.loads((ROOT/'art_source/staging/metric_8d4/inputs_v1.json').read_text())
+    selected=select_cases(inputs,case_id)
     archive = archive.resolve()
     workspace = workspace.resolve()
     volume = Path('/System/Volumes/Data') if Path('/System/Volumes/Data').is_dir() else ROOT
@@ -60,9 +63,8 @@ def preflight(archive, workspace, blender, godot):
     if not input_matches:
         reasons.append('Archived completed8D3 manifest is missing or differs from the retained exact source')
     bv = version(blender)
-    match = re.search(r'Blender (\d+)\.(\d+)', bv or '')
-    if not match or not (4, 0) <= tuple(map(int, match.groups())) < (4, 4):
-        reasons.append('Existing compatible Blender4.0–4.3 required; never open/downgrade preserved sources in3.3')
+    if not re.match(r'^Blender 4\.0\.2(?:\s|$)', bv or ''):
+        reasons.append('Blender4.0.2 required: exact version in the preserved8D3 source manifest;3.3 must remain untouched')
     gv = version(godot)
     if not gv or not gv.startswith('4.7.1.'):
         reasons.append('Existing verified Godot4.7.1 required for the native reference viewer')
@@ -87,6 +89,8 @@ def preflight(archive, workspace, blender, godot):
             reasons.append('Existing Blender/Godot process preserved; no competing local production')
     return {'schema': 'zero_cost_local_8d4_preflight.v1', 'PASS': not reasons, 'reasons': reasons,
             'source_sha': head, 'execution_environment': 'OWNER_LOCAL_OFFLINE',
+            'reference_scope':'SINGLE_CASE_PILOT','selected_cases':[c['case']for c in selected],
+            'full_reference_batch_complete':False,
             'private_workspace': str(workspace), 'immutable_input_archive': str(archive),
             'archive_volume_identity_verified': archive_verified, 'archived_input_manifest_matches': input_matches,
             'internal_free_bytes': free, 'internal_free_GiB': round(free / 1024**3, 3),
@@ -119,12 +123,17 @@ def execute(report, archive, workspace, blender, godot):
     stages = [
         ('source', [str(blender), '--background', '--factory-startup', '--python-exit-code', '1', '--python',
                     str(ROOT / 'tools/authored_animation/blender/aa_metric_pair_reference_8d4.py'),
-                    '--', '--input', str(archive), '--output', str(output)], 22 * 60),
-        ('source_validation', [sys.executable, str(ROOT / 'tools/authored_animation/validate_metric_stage_8d4.py'), str(output)], 180),
+                    '--', '--input', str(archive), '--output', str(output), '--case-id',report['selected_cases'][0]], 22 * 60),
+        ('source_validation', [sys.executable, str(ROOT / 'tools/authored_animation/validate_metric_stage_8d4.py'), str(output),
+                               '--case-id',report['selected_cases'][0]], 180),
     ]
     # Every command is serial, locally installed and bounded; no download,
     # package install, runner registration, repository sharing or art upload.
     status = {'source_sha': report['source_sha'], 'stages': [], 'PASS': False,
+              'reference_scope':'SINGLE_CASE_PILOT','selected_cases':report['selected_cases'],
+              'full_reference_batch_complete':False,'reference_art_accepted':False,
+              'animated_export_verified':False,'release_acting_verified':False,
+              'remaining_batch_ready':False,
               'started_UTC': datetime.datetime.now(datetime.timezone.utc).isoformat(),
               'RUNTIME_PAIRED_CONTACT_VERIFIED': False, 'human_approved': False}
     try:
@@ -148,16 +157,19 @@ def execute(report, archive, workspace, blender, godot):
         with (workspace / 'native_review.log').open('w') as log:
             result = subprocess.run([str(godot), '--path', str(viewer), '--rendering-method', 'gl_compatibility',
                                      '--audio-driver', 'Dummy', '--log-file', str(review / 'godot.log'), '--script', 'res://review.gd',
-                                     '--', '--stage-runtime=' + str(output / 'runtime'), '--ordinary-output=' + str(review)],
+                                     '--', '--stage-runtime=' + str(output / 'runtime'), '--ordinary-output=' + str(review),
+                                     '--reference-case=' + report['selected_cases'][0]],
                                     cwd=ROOT, env=env, stdout=log, stderr=subprocess.STDOUT, timeout=10 * 60)
         status['stages'].append({'stage': 'native_review', 'exit_code': result.returncode})
         if result.returncode:
             raise RuntimeError('Native viewer failed; retain actual source and logs')
         native = json.loads((review / 'metric_stage_native_8d4.json').read_text())
-        if not native['PASS'] or len(native['rows']) != 8 or len(list(review.glob('*.png'))) != 8:
+        if not native['PASS'] or [r['case']for r in native['rows']] != report['selected_cases'] or len(list(review.glob('*.png'))) != 1:
             raise RuntimeError('Incomplete actual native reference evidence')
         if 'SCRIPT ERROR:' in (review / 'godot.log').read_text(errors='replace'):
             raise RuntimeError('Native viewer reported script errors despite process exit')
+        if shutil.disk_usage('/System/Volumes/Data').free < LOCAL_RESERVE_BYTES:
+            raise RuntimeError('Stop after native review: protected internal reserve breached; retain evidence')
         status['PASS'] = True
     except (Exception, KeyboardInterrupt) as error:
         status['error'] = str(error)
@@ -174,9 +186,11 @@ def main():
     parser.add_argument('--blender', type=Path, default=Path('/Applications/Blender.app/Contents/MacOS/Blender'))
     parser.add_argument('--godot', type=Path, default=Path('/Applications/Godot.app/Contents/MacOS/Godot'))
     parser.add_argument('--execute', action='store_true')
+    parser.add_argument('--case-id',default='ember-vale__juno-spark__male__1',
+                        help='Exactly one existing pilot; no local full-batch mode before real reference acceptance')
     args = parser.parse_args()
     archive, workspace = args.archive.resolve(), args.workspace.resolve()
-    report = preflight(archive, workspace, args.blender, args.godot)
+    report = preflight(archive, workspace, args.blender, args.godot,args.case_id)
     print(json.dumps(report, indent=2))
     if args.execute:
         if not report['PASS']:

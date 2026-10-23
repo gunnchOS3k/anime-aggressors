@@ -149,16 +149,26 @@ func capture(snapshot: Dictionary, quarter: bool, size_m: float) -> Dictionary:
 
 func run() -> void:
 	await process_frame
+	var pilot_case := ""
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--stage-runtime="):
 			source_folder = arg.get_slice("=",1)
 		if arg.begins_with("--ordinary-output="):
 			output = arg.get_slice("=",1)
+		if arg.begins_with("--reference-case="):
+			pilot_case = arg.get_slice("=",1)
 	check(not source_folder.is_empty() and not output.is_empty(), "explicit_artifact_paths")
 	check(DisplayServer.get_name() != "headless", "actual_compatibility_render_required")
 	DirAccess.make_dir_recursive_absolute(output)
 	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(source_folder.path_join("PRODUCTION_MANIFEST.json")))
 	check(manifest.get("complete",false), "completed_source_producer")
+	if not pilot_case.is_empty():
+		check(manifest.get("reference_scope","") == "SINGLE_CASE_PILOT" and manifest.get("selected_cases",[]) == [pilot_case] and manifest.rows.size() == 1 and manifest.rows[0].case == pilot_case and not manifest.get("full_reference_batch_complete",true), "explicit_single_case_scope")
+	else:
+		check(manifest.rows.size() == 8, "complete_eight_case_scope")
+	if not failures.is_empty():
+		quit(1)
+		return
 	for entry: Dictionary in manifest.rows:
 		var sheet := Image.create(TILE.x*3,TILE.y*2,false,Image.FORMAT_RGBA8)
 		var observations: Array = []
@@ -175,6 +185,6 @@ func run() -> void:
 		rows.append({"case":entry.case, "sheet":name, "panels":observations, "source_sha256":entry.saved_source_sha256})
 	var file := FileAccess.open(output.path_join("metric_stage_native_8d4.json"),FileAccess.WRITE)
 	var execution: Dictionary = manifest.get("private_execution", {})
-	file.store_string(JSON.stringify({"PASS":failures.is_empty(),"rows":rows,"failures":failures,"observer_sha":OS.get_environment("AA_8D4_SOURCE_SHA"),"execution_environment":execution.get("execution_environment","PRIVATE_GITHUB_ACTIONS"),"execution_workflow_sha":execution.get("execution_workflow_sha"),"execution_recipe_sha":execution.get("execution_recipe_sha"),"renderer":RenderingServer.get_current_rendering_method(),"scope":"Eight offline art scenes, static imported GLB surface checks and side/three-quarter views. No BattleScene, public-input, audio or shipping paired-contact evidence.","RUNTIME_PAIRED_CONTACT_VERIFIED":false,"human_approved":false},"\t"))
+	file.store_string(JSON.stringify({"PASS":failures.is_empty(),"rows":rows,"failures":failures,"observer_sha":OS.get_environment("AA_8D4_SOURCE_SHA"),"execution_environment":execution.get("execution_environment","PRIVATE_GITHUB_ACTIONS"),"execution_workflow_sha":execution.get("execution_workflow_sha"),"execution_recipe_sha":execution.get("execution_recipe_sha"),"renderer":RenderingServer.get_current_rendering_method(),"reference_scope":manifest.get("reference_scope","FULL_REFERENCE_BATCH"),"scope":"Offline art scenes, static imported GLB surface checks and side/three-quarter views. No animated export, BattleScene, public-input, audio or shipping paired-contact evidence.","RUNTIME_PAIRED_CONTACT_VERIFIED":false,"human_approved":false},"\t"))
 	file.close()
 	quit(0 if failures.is_empty() else 1)
