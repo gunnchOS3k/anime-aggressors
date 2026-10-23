@@ -1,3 +1,15 @@
+# 8D-2 baseline ordinary-control regression PASS20; exact upload approval still pending
+
+Latest LOCAL sourcecheckpointfd58f87013bb1de7e802806ccee04e52d30d6e87; normal remote remains60835ce34558ba6af722f5a2d8fa558498c72c1e for the exact prepared/approval-gated job. This evidence/finalguard commit followsfd58. No publicartreplacementdispatch started. Automaticapprovalrejectreason andquestion persist:18 new originalBlenderfiles exposed through public90-dayActionsartifacts. Do NOT retry beforeexplicitownerapproval; do not reinterpret prior8Bapproval as8D2permission.
+
+Independent20-case baselineGrabActingRuntime8B --pilot passed onfd58: bothbodies/facings,4throwdirections,mashescape,actualexistingBattleScene/publiccontrols/idlefixturetargets. Result/launch/hash scope in8d2_recovery_1022/BASELINE_PILOT_RECEIPT.json andbaseline_pilot/. New8D2models NOT used, noCPU/meshcontact/nativevisual/earnedacceptance. Teardownstderr12ObjectDB/5resources retained asopenfinding. Clock/layerunit alsoPASS. No new8D2sources/GLBs/nativegrip produced; producer39858757532CANCELLED beforeBlender, artifacts0. Pairedbakeprepared NOT Blenderverified/workflowwired. Sourcehashguardnowforbids usingalready-pairedinputs toaccidentallyduplicateactions.
+
+Sourcefiles/tests/checkpointdurablelocalcommits, original18saved8Dexternalarchiveuntouched. Internal11.40GiB latestlive, external349.47GiB withAPFSUUIDmatched.18GiBAFTERforecastunmet. NoownedGodot/Blender/capture/manualproductionrunning. Unrelated untrackedWORKFLOW_REFERENCED_PATHS.json untouched, allCursorisolatedworktrees/handoffsreadandpreserved. Noautomerge. Allhumanfalse.
+
+NEXT sameexactapproval-gatedcommand in8d2_recovery_1022/NEXT_ACTION.md; afterapprovalverifyremote60835andnoactivejob, dispatchonce, recordrunandnormallypushLOCALsourcecheckpoint. Thenactualproducerdiagnosis/recovery/sourcehashes/nativeanatomy/realpairedsurfaceart. Laterfullbody/forms/KO/ultimatesremainunfinished. No newauditcampaign required.
+
+---
+
 # 8D-2 blocked public artifact dispatch; recoverable paired source preparation
 
 Remote branch HEAD60835ce34558ba6af722f5a2d8fa558498c72c1e on draft123/122. Last actual source producer39858757532 CANCELLED after45min in Ubuntu Azure dependency download; source download/sculpt/export skipped, artifacts0. Negative logs/API receipts retained. Same4.0-compatible package install now bounded8min, canonical signed mirror/no optional recommendations. No replacement run launched: automatic approval review BLOCKED dispatch because it exposes new18 original Blender sources as public90-day Actions artifacts. Explicit user question pending. Do not retry/bypass before approval. Keep remote60835ce3 until approved exactjob dispatch starts; local source checkpoint may be newer and is LOCAL ONLY until normally pushed afterdispatch.
