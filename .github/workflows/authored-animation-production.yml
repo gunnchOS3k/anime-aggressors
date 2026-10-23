@@ -379,7 +379,9 @@ jobs:
           retention-days: 90
           if-no-files-found: warn
   metric-stage-8d4:
-    if: github.event_name == 'workflow_dispatch' && inputs.metric_stage_8d4
+    # Owner decision2026-10-23: no public8D4 proprietary-art production.
+    # Historical de32787d/821045e2 remain preserved, never dispatched.
+    if: github.event_name == 'workflow_dispatch' && inputs.metric_stage_8d4 && github.event.repository.private == true
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     permissions:
@@ -477,7 +479,7 @@ jobs:
         with:
           name: metric-stage-8d4-saved-scenes-${{ github.sha }}
           path: ${{ runner.temp }}/metric-stage-8d4/saved_stages/
-          retention-days: 90
+          retention-days: 3
           if-no-files-found: warn
       - name: Preserve static GLBs and source measurement receipts
         if: always()
@@ -485,7 +487,7 @@ jobs:
         with:
           name: metric-stage-8d4-static-runtime-${{ github.sha }}
           path: ${{ runner.temp }}/metric-stage-8d4/runtime/
-          retention-days: 90
+          retention-days: 3
           if-no-files-found: warn
       - name: Preserve eight native reference sheets and logs
         if: always()
@@ -493,7 +495,7 @@ jobs:
         with:
           name: metric-stage-8d4-engine-review-${{ github.sha }}
           path: ${{ runner.temp }}/metric-stage-8d4/engine_review/
-          retention-days: 90
+          retention-days: 3
           if-no-files-found: warn
   controls-8d-engine-review:
     if: github.event_name == 'workflow_dispatch' && inputs.controls_verify_run != ''
@@ -617,6 +619,8 @@ jobs:
         run: python3 tools/authored_animation/audit_workflow_referenced_paths.py
       - name: Source matched hand projection contract
         run: python3 tools/authored_animation/test_projection_contact_8d3.py -v
+      - name: Private8D4 disclosure boundary
+        run: python3 tools/authored_animation/test_private_production_8d4.py -v
       - name: Offline stage algebra and authority boundaries
         run: python3 tools/authored_animation/test_metric_art_stage_8d4.py -v
       - name: Production infrastructure gates

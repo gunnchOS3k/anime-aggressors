@@ -174,6 +174,6 @@ func run() -> void:
 		check(sheet.save_png(output.path_join(name)) == OK,"native_sheet_saved:"+name)
 		rows.append({"case":entry.case, "sheet":name, "panels":observations, "source_sha256":entry.saved_source_sha256})
 	var file := FileAccess.open(output.path_join("metric_stage_native_8d4.json"),FileAccess.WRITE)
-	file.store_string(JSON.stringify({"PASS":failures.is_empty(),"rows":rows,"failures":failures,"observer_sha":OS.get_environment("GITHUB_SHA"),"renderer":RenderingServer.get_current_rendering_method(),"scope":"Eight offline art scenes, static imported GLB surface checks and side/three-quarter views. No BattleScene, public-input, audio or shipping paired-contact evidence.","RUNTIME_PAIRED_CONTACT_VERIFIED":false,"human_approved":false},"\t"))
+	file.store_string(JSON.stringify({"PASS":failures.is_empty(),"rows":rows,"failures":failures,"observer_sha":OS.get_environment("AA_8D4_SOURCE_SHA"),"execution_workflow_sha":OS.get_environment("GITHUB_SHA"),"renderer":RenderingServer.get_current_rendering_method(),"scope":"Eight offline art scenes, static imported GLB surface checks and side/three-quarter views. No BattleScene, public-input, audio or shipping paired-contact evidence.","RUNTIME_PAIRED_CONTACT_VERIFIED":false,"human_approved":false},"\t"))
 	file.close()
 	quit(0 if failures.is_empty() else 1)

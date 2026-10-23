@@ -1,6 +1,6 @@
 # 8D-4 metric stage — preparation, not produced art
 
-The owner selected the measured Ember male camera for **provisional offline framing only**. This is not gameplay pixel-to-metre or shipping alignment authority. The prepared reference job needs separate public-artifact approval. No shared-stage Blender file, new GLB, native stage image or paired performance has been produced yet.
+The owner selected the measured Ember male camera for **provisional offline framing only**. This is not gameplay pixel-to-metre or shipping alignment authority. The owner declined public-artifact disclosure and authorized private production. The public job must remain undispatched; the private template requires an owner-approved environment and no-paid-spending clearance. No shared-stage Blender file, new GLB, native stage image or paired performance has been produced yet.
 
 ## Recovered authority
 
@@ -39,6 +39,6 @@ The thirteen stage tests use labelled synthetic fixtures for rigid transforms, i
 
 ## Execution boundaries
 
-Internal free capacity was 14.42 GiB at preflight and 12.86 GiB at the later check, below 18 GiB plus allocations. No local heavy production, installation, import or rendering is allowed. The archive is immutable storage, not scratch space. A prepared remote reference job also needs fresh scoped public-artifact approval; the completed 8D-3 approval does not authorize new paired-scene uploads.
+Internal free capacity was 14.42 GiB at preflight and 12.86 GiB at the later check, below 18 GiB plus allocations. No local heavy production, installation, import or rendering is allowed. The archive is immutable storage, not scratch space. The new private workflow template is `tools/authored_animation/private/metric-stage-8d4.yml`. It is not installed or dispatched. No suitable existing project-specific private art environment was found; new setup, billing and credential permissions require the owner action documented alongside that template. Do not revert to public uploads.
 
 All human art, gameplay and release gates remain false. Cursor branches and runtime authority are unchanged.

@@ -22,6 +22,7 @@ from aa_paired_surface_8d2 import contact_vertex,sample_vertex,solve_arm
 ROOT=Path(__file__).resolve().parents[3]
 sys.path.insert(0,str(ROOT/'tools/authored_animation'))
 from metric_art_stage_8d4 import make_stage,feasibility,art_rotation
+from private_production_8d4 import current_context
 C=Matrix(((1,0,0,0),(0,0,1,0),(0,-1,0,0),(0,0,0,1)))
 
 
@@ -326,6 +327,7 @@ def static_snapshot(actors,path):
 
 
 def run():
+    execution=current_context(ROOT) # Fail before source loads, scene creation or any art output.
     assert os.environ.get('GITHUB_ACTIONS')=='true' and sys.platform=='linux' and (4,0)<=bpy.app.version[:2]<(4,4)
     args=sys.argv[sys.argv.index('--')+1:];inputs=Path(args[args.index('--input')+1]);out=Path(args[args.index('--output')+1])
     assert not out.exists() and shutil.disk_usage(out.parent).free>8*1024**3
@@ -346,7 +348,7 @@ def run():
     out.mkdir();(out/'runtime').mkdir()
     shutil.copy2(ROOT/'art_source/staging/metric_8d4/inputs_v1.json',out/'runtime/STAGE_INPUTS.json')
     shutil.copy2(selection,out/'runtime/OWNER_CALIBRATION_SELECTION.json')
-    manifest={'schema':'metric_pair_reference_sources_8d4.v1','producer_sha':os.environ['GITHUB_SHA'],
+    manifest={'schema':'metric_pair_reference_sources_8d4.v1','producer_sha':execution['producer_sha'],'private_execution':execution,
               'run_id':os.environ['GITHUB_RUN_ID'],'input_run':39910149332,'blender_version':bpy.app.version_string,
               'reference_camera_size_m':pack['policy']['reference_observation']['projection']['camera_size'],
               'all_18_native_camera_scales':pack['measured_body_scales'],'owner_selection_sha256':sha(selection),
