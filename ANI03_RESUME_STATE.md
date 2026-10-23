@@ -1,3 +1,21 @@
+# 8D-2 approved repair39884895556 running; first native review recovered
+
+Starting producer/remote HEADbf67e8ce9bc0295272d2584b622dedd77364cf9a. User explicitly approved this exact repaired18-source/GLB/JSON public90day upload after automatic review requested separate permission. Sole manual source run39884895556 nowIN_PROGRESS with hands_repair_8d2=true, allotherproducersfalse, verificationinputempty. Do NOT dispatch a competing manual workflow whileactive. No local binaryproduction.
+
+First approved native review39883829338 atfae1550e SUCCESS and durablyarchived.36 actualmodel/body/facing checks,18 stagedbeforeaftercomparisons,144 publicfourdirectionthrows eachsinglecontact/damage and36mashescapes PASS. Raw results include actualmeshconvexsilhouettes/projections; four nativeimages inspected. Candidate fingersarticulate, but firstsurfacefolds/cuffobstruction/unconvincingfistacting remainWIP. FemaleOrion gap9.47–14.17px in tested holds; many other convexsilhouettesoverlap (NOT3Dgripproof). Holderboot/collision residual32.60–38.34px remains. No source root/limblength/gameplaychange; noCPU/earnedStory/floor/throwvisualapproval. See hands_engine_39883829338/{REVIEW_RECEIPT,NATIVE_SUMMARY}. ArchivedPNGsunderfirst195sourcearchive/engine_review_39883829338/evidence/.
+
+Actual repair onlychangesPalmL/Rsurfaces from exactsaved195candidates, all194+actions/rest/morphs/materials/cuffs preserved;0newactions. RootcagemathPASS7488quads/36hands, independentactualexportcheckrejectsall18originalfoldedoutputs. New Blender/save/reopen/export/native repair verification PENDING actualjob. Latestinternal11.63GiB below18GiBAFTERforecast; no localinstall/import/recording. ExternalverifiedAPFS, originalarchives/worktrees/saves/Cursorlanesintact. OnlyunrelatedWORKFLOW_REFERENCED_PATHS.json remainsunstaged.
+
+NEXT inspectghrun39884895556; onSUCCESS archive-only:
+
+```sh
+python3 tools/authored_animation/recover_hands_8d2.py --run 39884895556 --source-sha bf67e8ce9bc0295272d2584b622dedd77364cf9a
+```
+
+Then prepare a verification-only review of correctedsource. Prior native approval was exactfae/195output; do notclaimnewnativeuntilactualreview/anyrequiredapproval. Allhumanfalse, no merges/releases. Pairedsourcebaker remainsnotexecuted; its oldcommon-camera75px/m assumption disagrees with actual85–109px/m perrig. Use real permodelprojection and separateviewportstaging, not roottranslation or arbitraryscale.
+
+---
+
 # 8D-2 exact native approval active; first source archived; root repair prepared
 
 Local/remote starting HEADfae1550e1822f14536234d9e0ed4045e224ecae0, release/anime-v1-dialogue-and-elemental-performance, draft123 on122. This source/evidence checkpoint followsfae; use git rev-parse HEAD for actual delivery. User approved the exact fae native artifact upload (fourPNGs/logs/JSON, public90days). Sole manual review39883829338 active:36model/facing and18staged comparison stages succeeded;180public grab/throw/escape stage running. Do NOT dispatch a competing manual producer/review before this run is terminal.
