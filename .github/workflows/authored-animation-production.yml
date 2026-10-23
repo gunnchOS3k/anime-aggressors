@@ -452,8 +452,16 @@ jobs:
       - name: Import static paired surfaces and render side three-quarter sheets
         timeout-minutes: 10
         run: |
-          mkdir -p "$RUNNER_TEMP/metric-stage-8d4/engine_review"
-          xvfb-run -a timeout 480 "$GODOT_BIN" --path game-godot --audio-driver Dummy --rendering-method gl_compatibility --log-file "$RUNNER_TEMP/metric-stage-8d4/engine_review/godot.log" --script res://tests/v1_closure/MetricArtStage8D4.gd -- --stage-runtime="$RUNNER_TEMP/metric-stage-8d4/runtime" --ordinary-output="$RUNNER_TEMP/metric-stage-8d4/engine_review"
+          mkdir -p "$RUNNER_TEMP/metric-stage-8d4/engine_review" "$RUNNER_TEMP/metric-stage-viewer"
+          # Static source review has no gameplay/autoload dependency. Do not
+          # bulk-import the shipping game merely to inspect external snapshots.
+          cp game-godot/tests/v1_closure/MetricArtStage8D4.gd "$RUNNER_TEMP/metric-stage-viewer/review.gd"
+          python3 - <<'PYCODE'
+          import os
+          from pathlib import Path
+          (Path(os.environ['RUNNER_TEMP'])/'metric-stage-viewer/project.godot').write_text('config_version=5\n[application]\nconfig/name="Offline metric art reference"\n[rendering]\nrenderer/rendering_method="gl_compatibility"\n')
+          PYCODE
+          xvfb-run -a timeout 480 "$GODOT_BIN" --path "$RUNNER_TEMP/metric-stage-viewer" --audio-driver Dummy --rendering-method gl_compatibility --log-file "$RUNNER_TEMP/metric-stage-8d4/engine_review/godot.log" --script res://review.gd -- --stage-runtime="$RUNNER_TEMP/metric-stage-8d4/runtime" --ordinary-output="$RUNNER_TEMP/metric-stage-8d4/engine_review"
           python3 - <<'PYCODE'
           import json,os
           from pathlib import Path
