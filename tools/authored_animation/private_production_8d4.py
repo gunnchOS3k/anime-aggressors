@@ -54,6 +54,23 @@ def current_context(root):
         approved_repository=os.environ.get('AA_8D4_APPROVED_PRIVATE_REPOSITORY'))
 
 
+def validate_manifest_context(manifest):
+    """Require the recorded private boundary on saved/exported art evidence.
+
+    This is provenance validation, not an independent live-API privacy check;
+    production and recovery perform those checks separately.
+    """
+    context=manifest.get('private_execution',{})
+    repo=context.get('execution_repository','')
+    if repo==PUBLIC_REPOSITORY or not repo.startswith('gunnchOS3k/')or context.get('repository_private_verified')is not True:
+        raise ValueError('Missing verified private execution provenance')
+    if context.get('producer_sha')!=manifest.get('producer_sha')or not re.fullmatch(r'[0-9a-f]{40}',manifest.get('producer_sha','')):
+        raise ValueError('Source producer SHA is not bound to private execution')
+    if not re.fullmatch(r'[0-9a-f]{40}',context.get('execution_workflow_sha',''))or context.get('artifact_retention_days')!=3:
+        raise ValueError('Private workflow or retention provenance mismatch')
+    return context
+
+
 def sanitized_summary(source_result, native_result):
     """Only counts/booleans may leave restricted source/native evidence.
 

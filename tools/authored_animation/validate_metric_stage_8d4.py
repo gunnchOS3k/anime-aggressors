@@ -6,6 +6,7 @@ import struct
 import sys
 from pathlib import Path
 from metric_art_stage_8d4 import rigid, make_stage
+from private_production_8d4 import validate_manifest_context
 
 ROOT=Path(__file__).resolve().parents[2]
 
@@ -30,6 +31,7 @@ def validate(folder):
     inputs=json.loads((runtime/'STAGE_INPUTS.json').read_text())
     assert inputs==json.loads((ROOT/'art_source/staging/metric_8d4/inputs_v1.json').read_text())
     manifest=json.loads((runtime/'PRODUCTION_MANIFEST.json').read_text());finite_tree(manifest)
+    validate_manifest_context(manifest)
     assert manifest['schema']=='metric_pair_reference_sources_8d4.v1'and manifest['complete']
     assert manifest['input_run']==39910149332 and not manifest['shipping_alignment_verified']and not manifest['human_approved']
     expected={c['case']:c for c in inputs['reference_cases']}

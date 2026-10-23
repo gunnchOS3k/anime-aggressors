@@ -2,7 +2,7 @@
 import copy
 import unittest
 from pathlib import Path
-from private_production_8d4 import verify_context, sanitized_summary, SPENDING_CLEARANCE
+from private_production_8d4 import verify_context, validate_manifest_context, sanitized_summary, SPENDING_CLEARANCE
 
 
 def fixture():
@@ -69,6 +69,19 @@ class PrivateBoundary(unittest.TestCase):
         text=str(summary)
         for value in ['CONFIDENTIAL','PRIVATE_URI','SECRET','contact','private_hash']:self.assertNotIn(value,text)
         self.assertFalse(summary['RUNTIME_PAIRED_CONTACT_VERIFIED'])
+
+    def test_artifact_manifest_binds_producer_and_private_execution(self):
+        event,repo,kw=fixture();context=verify_context(event,repo,**kw)
+        manifest={'producer_sha':'a'*40,'private_execution':context}
+        self.assertEqual(validate_manifest_context(manifest),context)
+        manifest['producer_sha']='c'*40
+        with self.assertRaisesRegex(ValueError,'producer SHA'):validate_manifest_context(manifest)
+
+    def test_old_public_evidence_cannot_be_relabelled_private(self):
+        for field,value in [('execution_repository','gunnchOS3k/anime-aggressors'),('repository_private_verified',False),('artifact_retention_days',90)]:
+            event,repo,kw=fixture();context=verify_context(event,repo,**kw)
+            context[field]=value
+            with self.assertRaises(ValueError):validate_manifest_context({'producer_sha':'a'*40,'private_execution':context})
 
 
 class PreparedWorkflowBoundary(unittest.TestCase):
