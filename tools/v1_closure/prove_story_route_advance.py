@@ -23,6 +23,8 @@ ROOT = Path(__file__).resolve().parents[2]
 CAMPAIGN = ROOT / "game-godot/data/story/v1_campaign.json"
 RUNTIME = ROOT / "game-godot/scripts/story/v1_campaign_runtime.gd"
 SCENE = ROOT / "game-godot/scripts/menus/story_campaign_scene.gd"
+WEB = ROOT / "apps/web/src/screens/StoryCampaignScreen.ts"
+BATTLE = ROOT / "game-godot/scripts/battle/battle_scene.gd"
 
 APPROVED_FIRST_LOSS = {
     "kaia-windrow": "rook-ironside",
@@ -176,6 +178,23 @@ def main() -> int:
     check(node_total == 145, "145_nodes", failures)
     check(campaign.get("first_loss_selected") == APPROVED_FIRST_LOSS, "approved_first_loss_map", failures)
 
+    web = WEB.read_text()
+    public, qa = web.split("const qa", 1)
+    check("story-sim-win" not in public and "story-sim-loss" not in public, "public_story_has_no_simulated_result", failures)
+    check("story-sim-win" in qa and "story-sim-loss" in qa, "qa_drawer_keeps_simulated_result", failures)
+    check("story-launch-encounter" in public, "public_story_launches_encounter_setup", failures)
+    check("advanceAfterWin" not in public.split("story-launch-encounter")[1].split("const qa")[0], "public_encounter_does_not_call_advance", failures)
+    battle = BATTLE.read_text()
+    check("record_battle_result" in battle, "battle_scene_records_result", failures)
+    check('SceneRouter.go("battle")' in scene or 'go("battle")' in scene, "story_menu_enters_battle", failures)
+    check("begin_encounter" in runtime, "runtime_begins_encounter", failures)
+    print("WEB_MATCH_RESULT not_wired")
+    print("GODOT_BATTLE source_only")
+    for route in campaign["routes"]:
+        if route["id"] == "sevenfold-convergence":
+            print(f"ROUTE {route['id']} DATA=present PLAY=not_run")
+            continue
+        print(f"ROUTE {route['id']} DATA=present FIRST_LOSS={route.get('first_loss', {}).get('fighter', '')} PLAY=not_run")
     print("HUMAN_PLAYTHROUGH false")
     print("GODOT_IMPORT false")
     print("SEVEN_EARNED_ROUTES false")
