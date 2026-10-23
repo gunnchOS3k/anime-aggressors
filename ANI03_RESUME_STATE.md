@@ -1,3 +1,11 @@
+# 8D-2 actual source preservation defect diagnosed and corrected
+
+Source5585005b/run39886245997 terminalFAILURE beforefirstsave, butactualmirrorlistfixPASS: Blender4.0.2 ran after57secondsetup. Strictdiagnostic identifiedONLY originalbackupPalmL/Rname-boundgeometryandweights changed; allbone rest/actioncurves TRUE. Newbackupcreation reused protected ORIGINAL_8D_Palm names fromfirstsavedinput. ExplicitunusedsnapshotnamesnowpreserveoriginalIDs; additionalidentityassertion, no exclusions/toleranceweakening. Fullnegative log/API/DIAGNOSISretained,0savedoutputs.
+
+NEXTcommit/pushuniquebackupfix thenONE sameapprovedhands_repair_8d2 dispatch. Sourceproducerbodyotherwiseunchanged; exact18saved195inputs,allactions/cuffs/bonesrest preserved,0newacting. Onsuccessarchiveonlyrecovery andactualcorrectednativeinspection. Firstnativefae/39883829338 remainsSUCCESS/archived, stagednotCPU/artacceptance. Currentinternal14.23GiBbelow18+forecast: noMacbinaryinstall/export/capture. Nomanualjobactive atcheckpoint. Allownerdata/Cursorbranches intact, allhumanfalse, unrelatedWORKFLOW_REFERENCED_PATHS.json untouched.
+
+---
+
 # 8D-2 setup timeout diagnosed; actual mirrorlist correction ready
 
 39885233045 terminalFAILURE beforeBlender: oldinstallerpatched.sourcesbutrunner usesmirror+file:/etc/apt/apt-mirrors.txt, stillAzure. Logretained shows35.9MBblender-data consumed7m36sbefore8min guard.0sources/0artifacts, preservationdiagnostic NOTexecuted. Newboundedcorrection pinsactualmirrorlist toofficialHTTPSarchive/security, keep signedaptverification/Blender4.0.2/timeouts. Sameexplicitlyapprovedhandrepairtask, nooriginalregeneration.

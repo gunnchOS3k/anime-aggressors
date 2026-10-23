@@ -15,8 +15,14 @@ def fingerprint(ob):
 
 
 def preserve_part(ob,collection):
-    old=fingerprint(ob);copy=ob.copy();copy.data=ob.data.copy();copy.name='ORIGINAL_8D_'+ob.name
+    old=fingerprint(ob);base='ORIGINAL_8D_'+ob.name;name=base;index=1
+    protected=bpy.data.objects.get(base)
+    # These candidates already contain the first hand pass's original backups.
+    # Never give a new copy an existing ID name and let Blender displace it.
+    while name in bpy.data.objects:name=base+'_snapshot_%03d'%index;index+=1
+    copy=ob.copy();copy.data=ob.data.copy();copy.name=name
     collection.objects.link(copy);copy.hide_render=True;copy.hide_set(True)
+    assert protected is None or bpy.data.objects.get(base)==protected,'Existing source backup identity changed'
     assert fingerprint(copy)==old
     return {'original':ob.name,'backup':copy.name,'before_sha256':old,'original_vertices':len(ob.data.vertices)}
 
