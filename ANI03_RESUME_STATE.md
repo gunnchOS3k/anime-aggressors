@@ -1,3 +1,17 @@
+# 8D-2 corrected source archived / approved native39887494881 active
+
+Repairedsourceced4b78a/run39886629245 SUCCESS,716480264sourcebytes archived/verified,18rigs/36hands,all194–244prioractions perrig/rest/nonpalm exact,0newactions. Newnative review39887494881 at EXACT6008f67dc43a6101eb98dd1f58b21ee772dee7a8 IN_PROGRESS, approvedbyowner forfourPNG/log/JSONpublic90dayartifacts. Uses repairedsource39886629245, noBlenderregeneration. Onlymanualjobactive; do notdispatchcompetingmanualjob. Earlierautomaticrejection resolvedbyexplicitapproval. Currentlocalreceiptcheckpoint9830ef1d maynowbenormallypushed afterthisapproveddispatchstarted.
+
+NEXT inspect39887494881; onterminalSUCCESSarchive-only:
+
+```sh
+python3 tools/authored_animation/recover_hands_review_8d2.py --run 39887494881 --runtime-sha 6008f67dc43a6101eb98dd1f58b21ee772dee7a8 --source-run 39886629245
+```
+
+Iffailedretain--allow-faileddiagnosticwithoutpromoting. InspectactualfourPNGs/all18rows andnewprojectionv2/sourcehashes beforepairedsourceacting. No newhandregeneration. Sourcepairedbaker stillnotexecuted; common75px/mstage needsactualperviewportbasis. Allgrip/floor/fullbody/forms/KO/ultimates/humanquality pending. Nativepriorfae/195 is firstsurfacebaselineonly. Internal latest13.28GiBbelow18+forecast, noMacbinaryinstall/import/render. Allsourcearchives/Cursorworktrees/ownersaves intact; unrelatedWORKFLOW_REFERENCED_PATHS.json untouched. No merge/release/deploy/tag.
+
+---
+
 # 8D-2 corrected18 sources SUCCESS / exact new native approval pending
 
 Producerced4b78a141b5bf2bac05d4fc06488340c9aef2a, run39886629245 SUCCESS. Strictsaved/reopened/actualGLB validationPASS all18/36hands;194–244prioractions perrig, allbonerest andnonpalm sourceexact,0newactions. BackupsIDs preserved; original36rootfolds corrected. Archive716480264verifiedsourcebytes at /Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d2_hands_ced4b78a_39886629245. Receipt/manifest/log now localhands_remote_39886629245; no Macinstall. Allpreviousfailed/source/nativeevidencepreserved.
