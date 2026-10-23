@@ -1,8 +1,8 @@
 {
-  "status": "SUPERSEDED_BY_ISOLATED_VIEWER_CORRECTION_REQUIRES_REFRESH",
-  "producer_sha": "de32787daf982c4ffb914313e18a7e14fd0c5d36",
+  "status": "AWAITING_DIRECT_HUMAN_PUBLIC_ARTIFACT_APPROVAL",
+  "producer_sha": "821045e2417ba5edf4ef37a71b2f3644cd3e7fcf",
   "remote_branch": "release/anime-v1-dialogue-and-elemental-performance",
-  "question_tool_call": "request_user_input_async; exact question shown in this conversation",
+  "question_tool_call": "Replacement request_user_input_async question in this conversation; supersedes de32787d request",
   "required_by": "Owner 8D-4 Section11, plus subsequent calibration reply requirement10",
   "job_description": "PREPARED_JOB.json",
   "dispatch_command": [
@@ -23,11 +23,12 @@
     "No active manual production job on same workflow/ref",
     "Input run39910149332 still SUCCESS with expected source sha"
   ],
-  "after_success": "python3 tools/authored_animation/recover_metric_stage_8d4.py --run ACTUAL_RUN_ID --source-sha de32787daf982c4ffb914313e18a7e14fd0c5d36",
+  "after_success": "python3 tools/authored_animation/recover_metric_stage_8d4.py --run ACTUAL_RUN_ID --source-sha 821045e2417ba5edf4ef37a71b2f3644cd3e7fcf",
   "on_failure": "Recover with --allow-failed; do not mark source/native/contact passed",
   "source_art_generated": false,
   "remote_job_started": false,
   "RUNTIME_PAIRED_CONTACT_VERIFIED": false,
   "human_approved": false,
-  "not_authorized_to_dispatch": true
+  "not_authorized_to_dispatch": true,
+  "superseded_producer_sha": "de32787daf982c4ffb914313e18a7e14fd0c5d36"
 }
