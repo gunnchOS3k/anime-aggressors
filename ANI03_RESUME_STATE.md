@@ -1,3 +1,13 @@
+# 8D-2 exact approved repair diagnostic run39885233045 active
+
+Solemanualrun39885233045 atf1eefe88e7fa0e49e0270ea3bcd4b62d81578563 IN_PROGRESS, last installingcompatibleBlender. Prior39884895556 failedbeforefirstsave (0artifacts); fullfailurepreserved, no inputchanges. Sameexplicitlyapproved18handrepair/public90dayartifactscope. Newchecksreportwhichimmutablecategory/meshchanged andrestoreoriginalposeafterfistmeasurement. Allpreservationrequirementsremainexact; no tolerance relaxation.
+
+Localnewobserveraddsactualright/up/forward affineviewportbasis andhandmodelsourcehashes forfuturepairedproduction; Godot4.7.1 check-onlyPASS withoutbinaryimport orrender. Historicalfae approvednativeoutput remainsimmutable, notretroactivelyupgraded tonewobserver. Preparedpairedsourceproducer nowrefusesfirstknownfoldedsurfaces. Itscommon75px/m stagingstillneedsactualperviewportcorrection beforeclaimingruntimegrip; notexecuted.
+
+NEXT inspect39885233045terminal; iffailedpreservefullcategorylog/runtimeSOURCE_PRESERVATION_FAILURE.json beforecorrecting. Ifsuccessarchive-only recovery exactrun/source thennewmatchednativeverificationonactualrepairedoutput (anyrequirednewpublicreviewapprovalmustbeexplicit). Do notdispatchanothermanualjobwhileactive. Internal11.52GiBbelow18+forecast; noMacbinaryinstall/production/capture. Allsourcearchives/saves/worktrees/Cursorlanesintact; humanallfalse.
+
+---
+
 # 8D-2 approved repair failed before save; exact preservation diagnostic prepared
 
 Run39884895556 terminalFAILURE atbf67e8ce before saving firstcandidate; all sourceinputs unchanged,0savedoutputs. Full log/API retained under hands_failed_39884895556. Closed/winding bridge assertions had already passed; combined immutable geometry/weights/rest/curves assertion failed without namingcategory. New diagnostic now identifies exactcategory/changedmeshes at afteredit/presample, postsample restoration and reopen. Exactpose restored after disposable fist test because oldaction may not own allauxchannels. No preservationtolerance lowered. Current sourcechange stillrequires actualremoteexecution. Sameapproved18surface-onlyrepair task/artifactscope, no paired/fullbodyproduction.

@@ -64,7 +64,7 @@ func points(values: PackedVector2Array) -> Array:
 func projection(model) -> Dictionary:
 	var rig: Skeleton3D=model.get_animation_controller().get_skeleton()
 	var screen: Array=[]
-	for local in [Vector3.ZERO,Vector3.BACK,Vector3.UP]:
+	for local in [Vector3.ZERO,Vector3.BACK,Vector3.UP,Vector3.RIGHT]:
 		var pixel: Vector2=model._camera.unproject_position(rig.to_global(local))
 		screen.append(model._display.to_global(pixel-Vector2(model._viewport.size)*.5+model._display.offset))
-	return {"origin":[screen[0].x,screen[0].y],"source_forward_delta_px":[screen[1].x-screen[0].x,screen[1].y-screen[0].y],"source_up_delta_px":[screen[2].x-screen[0].x,screen[2].y-screen[0].y],"camera_size":model._camera.size,"display_scale":str(model._display.scale),"model_basis":str(model._proxy_model.global_basis)}
+	return {"projection_version":2,"origin":[screen[0].x,screen[0].y],"source_forward_delta_px":[screen[1].x-screen[0].x,screen[1].y-screen[0].y],"source_up_delta_px":[screen[2].x-screen[0].x,screen[2].y-screen[0].y],"source_right_delta_px":[screen[3].x-screen[0].x,screen[3].y-screen[0].y],"camera_projection":model._camera.projection,"camera_size":model._camera.size,"display_scale":str(model._display.scale),"model_basis":str(model._proxy_model.global_basis),"scope":"Actual affine basis sampled in each rig's independent viewport. Blender axes map x,y,z to Godot x,z,-y. Do not substitute one shared pixels-per-metre scale."}

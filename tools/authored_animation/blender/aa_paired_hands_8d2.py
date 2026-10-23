@@ -162,6 +162,8 @@ def run():
     args=sys.argv[sys.argv.index('--')+1:];inputs=Path(args[args.index('--input')+1]);out=Path(args[args.index('--output')+1]);out.mkdir(parents=True,exist_ok=False)
     assert shutil.disk_usage(out).free>8*1024**3
     prior=json.loads((inputs/'runtime/PRODUCTION_MANIFEST.json').read_text());assert prior['schema']=='original_hand_anatomy_production_8d2.v1'and prior['complete']and not prior['human_approved']
+    assert len(prior['rows'])==18
+    assert all(h.get('minimum_bridge_normal_cosine',-1)>0 and h.get('outward_closed_volume_m3',-1)>0 for r in prior['rows']for h in r['hands']),'Do not bake paired acting onto the known folded first hand surfaces'
     manifest=copy.deepcopy(prior);manifest.update(source_sha=os.environ['GITHUB_SHA'],run_id=os.environ['GITHUB_RUN_ID'],hand_anatomy_input_run=prior['run_id'],schema='paired_hand_production_8d2.v1',rows=[],complete=False)
     ids=list(dict.fromkeys(r['fighter']for r in prior['rows']));lookup={(r['fighter'],r['body']):r for r in prior['rows']}
     for row in prior['rows']:
