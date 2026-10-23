@@ -1,3 +1,17 @@
+# Delivery checkpoint — single-case pilot, cinematic controls and verified archival
+
+Implementation sourceef1f35ec7d8323875cb85cf2be6fd99b4979233a and pilot6492fec4 are pushed normally. This follow-up is sanitized resume/validation only; getgitrev-parseHEADfor deliverySHA. Scoped source is clean except this checkpoint; unrelated untracked WORKFLOW_REFERENCED_PATHS.json remains untouched. PR123draft/122dependency preserved; all historical worktrees retained.
+
+Private resources: seven original camera takes unchanged;147native camera/resource checks and15synthetic watch-control checks PASS. Seven pilot-scope/21privacy tests PASS. Current code checkpoints intentionally skipCI under zero-cost policy; six prior workflow runs at7030fdb4 are verifiedSUCCESS, not current-source CI. Last private workflow readbackdisabled_manually/no production dispatch; no new infrastructure/art upload.
+
+Owner-authorized oneCursorinstaller removal completed after bothSHA checks and independent installed-app verification; APFS observed279642112bytes recovery. No other deletion.19additional completed installer originals now have1781616002unique archivebytes verified;1972567233originalbytes/1.837GiB remain internal pending a NEW explicit owner reply. Exact private list/receipt lives in private-cinematic-production-20261023/resource_recovery_continuation/REMOVAL_CANDIDATES.md and INSTALLER_ARCHIVE_RECEIPT.json. Existing archive/source inputs unchanged. If the reply arrives, reverify exact source/archive sizes/hashes and app independence before deleting ONLY the approved paths; no general cleanup permission.
+
+Latest actual pilot preflight at sourceef1f35ec reports16.970GiB free,5.030GiB short of22GiB, installedBlender3.3.1, matching archive identity/input manifest, no active media process. No production workspace exists. Even optional19installer removals do not reach22GiB. Exact official4.0.2package SHA/expanded footprint/install peak remain unverified (checksum403). Do not install/run models/exports or lowerguard.22GiB minimum applies AFTER compatible tool installation.
+
+NEXT executable: handle the pending precise installer-only reply if received; otherwise keep all19 originals. Continue only light source/cinematic work until real capacity and official4.0.2provenance permit onecasepilot. No newBlender/GLB/artreviewfilm; static hold snapshots still do NOT cover animated export/release/locomotion acceptance. Actual firstpilot is mandatory before remaining8D4referencebatch; full18rig quality/shipping pairedcontact, finalKaiaOVA/sixvariants/finale, earnedroutes, LAN/device/human acceptance remain open. No activeownedtest/Blender/Godotprocess. All gatesFALSE. No merge/release/deploy/tag.
+
+---
+
 # Latest zero-cost continuation — private camera transitions and watch pause
 
 Recovered/preserved dad11b33, then safely pushed pilot scope checkpoint6492fec4. New source: private camera cue transitions ease over actual dialogue time; existing reduced-shake setting holds intra-line framing, without modifying any of the seven editable takes.147 native text-resource/timing checks PASS (seven actual take imports/114cue bindings). No body/render/gameplay acceptance.
