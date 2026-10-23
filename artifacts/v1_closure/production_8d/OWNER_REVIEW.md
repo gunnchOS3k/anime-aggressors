@@ -1,24 +1,49 @@
-# 8D-2 corrected source anatomy delivered; corrected native review pending
+# 8D-2 hand source and native review delivery
 
-Actual producer [ced4b78a / run39886629245](https://github.com/gunnchOS3k/anime-aggressors/actions/runs/39886629245) completed successfully on Blender4.0.2. All18 editable candidates were saved/reopened and exported. All194–244 prior actions per rig, every bone rest pose, non-palm geometry/weights/morphs/materials and existing cuffs remained exact. The repair added0 actions.716,480,264 source bytes are SHA-256 verified in the immutable archive; no binaries were installed on this Mac. See `hands_remote_39886629245/RECOVERY_RECEIPT.json` for every source/GLB identity.
+The bounded hand-surface repair is implemented across all nine fighters and both bodies. It is **not final hand, paired-contact or full-body art approval**. The first candidate's folded roots are corrected in the saved meshes and exports. Native finger silhouettes are more connected and articulated than the original bead-like digits; the change from the first candidate is subtle in these views.
 
-Actual correction: right-finger roots and the left-thumb contour used an inconsistent section orientation. The cage now derives its frame from the real ordered opening and eases its oblique web into the first phalanx. All36 closed hands have outward source and actual GLB triangle winding. Existing older palm backups are preserved under their original identities; newly generated backups receive unique names. Full failure logs and negative regression results remain protected. No bone, gameplay, frame data, damage, collision, body root or character scale changed.
+Source producer: `ced4b78a141b5bf2bac05d4fc06488340c9aef2a`, [run 39886629245](https://github.com/gunnchOS3k/anime-aggressors/actions/runs/39886629245). All 18 edited Blender files were saved, reopened and exported. Every prior action (194–244 per rig), every bone rest pose, and non-palm geometry, weights, morphs, materials and cuffs remained exact. The repair added zero actions. The existing 90 hand/secondary WIP clips and earlier 540 8B / 144 8C / 72 8D actions remain. All 36 exported hands have outward winding. The 716,480,264 source bytes and runtime files are SHA-256 verified in the immutable archive; no binaries were installed on this Mac.
 
-This completes the bounded **source repair**, not premium hand approval or paired acting. Staged native comparison of the corrected meshes is prepared at `6008f67dc43a6101eb98dd1f58b21ee772dee7a8`. Automatic approval review rejected its new public fourPNG/log/JSON upload; explicit owner approval is pending. Do not claim the corrected source has passed native appearance yet.
+Native reviewer: `6008f67dc43a6101eb98dd1f58b21ee772dee7a8`, [run 39887494881](https://github.com/gunnchOS3k/anime-aggressors/actions/runs/39887494881). Both uploads received explicit owner authorization for their scoped public 90-day artifacts. All original archives and failed findings remain preserved.
 
-## Existing native evidence, honestly scoped
+## Review the actual corrected meshes
 
-Earlier approved [run39883829338](https://github.com/gunnchOS3k/anime-aggressors/actions/runs/39883829338) atfae1550e used the **first**, still-folded195194c7 candidates.36 body/facing imports,144 public directional throws with one damage/contact each, and36 mash escapes passed. All144 returned control;116 showed landing acting and28 stayed grounded in hurt_light then recovered. These are explicit spacing/idle-target BattleScene fixtures, not activeCPU or earned acceptance.
+[Female before/after](/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d2_hands_ced4b78a_39886629245/engine_review_39887494881/evidence/hands_before_after_female.png) · [Male before/after](/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d2_hands_ced4b78a_39886629245/engine_review_39887494881/evidence/hands_before_after_male.png).
 
-[Female first-candidate comparison](/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d2_hands_195194c7_39882654215/engine_review_39883829338/evidence/hands_before_after_female.png) · [Male first-candidate comparison](/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d2_hands_195194c7_39882654215/engine_review_39883829338/evidence/hands_before_after_male.png). Allfour images were inspected and archived with hashes. RowsEmber/Rook/Juno/Kaia/Nix/Orion/Vesper/Yin/Yang; columns1–3oldright open/half/fist,4–6firstcandidate right,7–9oldleft,10–12firstcandidate left. Fixed original8B pose/camera/aspect. These are staged stills and show **pre-repair** surfaces.
+[Female open/half/fist](/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d2_hands_ced4b78a_39886629245/engine_review_39887494881/evidence/controls_female_open_closed.png) · [Male open/half/fist](/Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d2_hands_ced4b78a_39886629245/engine_review_39887494881/evidence/controls_male_open_closed.png).
 
-The source fingers articulate, but gauntlets still dominate many silhouettes, and small narrow fingers/curl acting remain WIP. Rook's genuine open cuffs from the first source pass remain. Shared source-envelope topology is not nine bespoke final hands. No normal-speed throw/body acting visual pass is inferred.
+Rows are Ember, Rook, Juno, Kaia, Nix, Orion, Vesper, Yin and Yang. Before/after columns 1–3: original8D right hand open/half/fist; 4–6: corrected candidate right; 7–9: original left; 10–12: corrected left. The source body pose, wrist transforms and cameras match exactly in all 18 comparisons (108 hand-camera samples). All four PNGs were inspected. These are Linux Compatibility / Mesa staged stills, not normal-speed active-CPU fighting or device-performance evidence.
 
-## Exact next art work
+## What is still visibly unfinished
 
-First inspect corrected native anatomy, then bake real opponent-surface grip into the existing individual8B body actions. The prepared paired source baker has not run. Replace its common75px/m staging assumption with actual per-model projection; the new observer records allthree affine axes and source identities. First native measurements span85–109px/m vertically; femaleOrion hold silhouettes have9.47–14.17px gaps, while many other silhouettes overlap without proving pressure/occlusion. Holder boots still project32.60–38.34px below collision bottoms. Victims'24,-8px offset is existing authority. No root translation/scaling/hitbox change is authorized as a workaround.
+| Fighter, both bodies | Observed source-art limitation |
+|---|---|
+| Ember Vale | Connected curled digits are visible against the preserved glove palette; rounded Forearm caps dominate the hand and hide palm/wrist structure. |
+| Rook Ironside | Real open Bastion cuffs remain, but armor still obscures the palm and thumb. Needs authored wrist/gauntlet interface, not another bone offset. |
+| Juno Spark | Separated fingers and curl are visible; palm mass and convincing knuckle/fist compression remain weak against the large forearm. |
+| Kaia Windrow | Open-to-curled digit change is visible; the rounded distal forearm hides much of the palm and wrist transition. |
+| Nix Calder | Finger outlines are more continuous; glossy forearm/cuff surfaces dominate the joint silhouette and fist mass is unfinished. |
+| Orion Vell | Curled fingers are visible but small against the forearm; female held-contact gap remains a separate paired-acting problem. |
+| Vesper Nyx | Digit chain articulation is visible; palm-to-forearm continuity and stronger character-specific grip acting remain unfinished. |
+| Yin | Articulated digits are visible on the dark source material; palm/knuckle volume and contrast still need source-art work. |
+| Yang | Articulation is visible; bright preserved materials wash out some joint detail, and palm/fist volume remains unfinished. |
 
-Original18 sources,5408B+1448C+728D and90 first-hand WIP actions, previous media, all worktrees and owner saves remain intact. Paired grips/supports, full-body form/KO/guard-break/ultimate performances, final silhouettes/materials, device and human approval remain open. Internal reserve is still unmet; no local install/import/render/capture. All human gates remain false; no merge/release/deploy/tag.
+The exact affected editable objects are `Palm L/R` and `Forearm L/R` in every saved source; Rook also has `Bastion forearm` / `.001`. Source file paths and hashes are in `hands_remote_39886629245/RECOVERY_RECEIPT.json`; detailed 18-body findings are in `hands_engine_39887494881/VISUAL_FINDINGS.json`. Further quality work needs authored palm/knuckle/thenar volume and distal forearm/cuff integration against the approved sheets, followed by individual grip/release acting. Do not mask this with root movement, character scaling or more effects.
+
+## Technical evidence and its limits
+
+- 36 real saved-model body/facing imports and public attack starts passed.
+- 144 public four-direction throws each produced one damage/contact and returned control; 36 public mash escapes passed. All source identities and projection version2 records match the repaired candidates. There were no script errors in the saved logs.
+- 116 throws showed landing acting; 28 remained grounded in hurt_light and recovered to idle. No artificial launch was introduced.
+- Targets and initial spacing are declared fixtures. No active-CPU, earned Story/KO, normal-speed throw animation, native audio or final art acceptance is inferred.
+- Full raw JSON/logs/PNGs are immutable externally. The compact `PUBLIC_CASE_LEDGER.json` binds every case to the raw SHA-256; no original evidence was deleted.
+- Convex hand/arm silhouette overlap is not 3D pressure or occlusion. The measured source projection varies by model; the prepared paired source baker's common75px/m staging assumption must be replaced with actual per-model axes. It has not produced paired assets. Boot/floor residuals and true paired support remain open.
+
+## Owner play and next source production
+
+Baseline isolated play remains available with `tools/v1_closure/play_party_review.command kaia-windrow --body female --opponent juno-spark`. New hands are an opt-in candidate, and the launcher refuses missing exports. Internal space remains below 18 GiB after the 800 MiB install/import forecast, so **do not install or capture locally now**. After a fresh passing reserve preflight, the existing recovery command with `--install` can install this exact version, then the same launcher with `--source-hands-8d2` selects it. Regular owner saves and default models stay unchanged.
+
+Next source task: author the wrist/palm/forearm interface and paired holds/releases on all 18 preserved rigs, using the newly measured real projection basis and existing character-specific8B body curves. Preserve anatomy, all old actions, frame-zero throw release and gameplay authority. The earlier paired baker remains prepared, unexecuted and not yet camera-correct. Foot support, full transformed acting, final silhouettes/materials, guard-break/KO and nine complete ultimate performances remain unfinished. Human art/gameplay/balance/feel/mix/device/release gates stay false. No merge, release, tag or deployment.
 
 ---
 

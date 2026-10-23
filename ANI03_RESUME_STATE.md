@@ -1,3 +1,17 @@
+# 8D-2 repaired source and corrected native review COMPLETE as a bounded foundation
+
+Branch release/anime-v1-dialogue-and-elemental-performance, draft123 on122. Current source/evidence delivery commit follows e4a021be; obtain exactHEAD with git rev-parse HEAD. Producer ced4b78a141b5bf2bac05d4fc06488340c9aef2a / run39886629245 SUCCESS:18 saved/reopened rigs,18GLBs,36 outward hands,194–244 prior actions perrig/allrest/nonpalm exact,0newactions. Archive716480264sourcebytes at /Volumes/gunnchOS-Archives/10-Anime-Aggressors/art-source-snapshots/2026-10-22_8d2_hands_ced4b78a_39886629245; all oldsources/failedcases preserved.
+
+Owner-approved corrected native run39887494881 at6008f67dc43a6101eb98dd1f58b21ee772dee7a8 SUCCESS.36 realbody/facing imports,144 one-contact/damage publicthrows with controlreturn,36mashescapes.18 exact canonicalpose/camera/wrist before-after comparisons,4PNGs inspected. ArtWIP: original Forearm caps dominate/occlude palms, RookBastion cuff interface and all18 fist mass/individual grip acting remainunfinished. Not activeCPU/earned/normal-speed throw/audio/device/human acceptance. No candidate install onMac.
+
+Full native rawfiles/PNGs in archive/engine_review_39887494881/evidence; SHA-bound compactcase ledger/summary/findings/receipt in hands_engine_39887494881. Previousfirstsurface195/fae artifacts remainhistoricalnegative, notlatestreview. Current new compact recoveryhelper ranPASS, avoids duplicating17.6MBrawposeJSON internally, no originalsdeleted. All manualsource/reviewjobs terminal. OrdinaryPRCI maystillbe running, requery exactdeliverySHA; do notinferWindows/device approval.
+
+NEXT executable original-art task: fix prepared aa_paired_hands_8d2.py staging to use actual projection_version2 axes/sourcehashes from the completed nativeledger, replacing old75px/m commoncamera guess. Author wrist/palm/Forearm interface and individual paired hold/grab/release sourceacting across18rigs; preserve old8Btorso/leg curves, canonicalroot/proportions/balance/frame0release. The pairedsource producer is NOT executed/workflowwired, and no new pairedsource publicupload is authorized by the completed handrepair/native scopes. Prepare concreteversionedjob/validationbeforeanynecessaryapproval. Do notregeneratecompletedhandrepair/nativecampaign.
+
+Internalreserve remainsunmet (latest13.23GiB, needs18GiB AFTER800MiBforecast). No localBlender/binaryinstall/import/export/recording, no cleanup orowner-save changes. ExternalAPFSidentityverified, allworktrees/Cursorlanes intact. OnlyunrelatedWORKFLOW_REFERENCED_PATHS.json intentionallyunstaged. Fullbody/forms/KO/ultimate/foot art and human approval remainopen. No merge/release/deploy/tag. Allhumanfalse.
+
+---
+
 # 8D-2 corrected source archived / approved native39887494881 active
 
 Repairedsourceced4b78a/run39886629245 SUCCESS,716480264sourcebytes archived/verified,18rigs/36hands,all194–244prioractions perrig/rest/nonpalm exact,0newactions. Newnative review39887494881 at EXACT6008f67dc43a6101eb98dd1f58b21ee772dee7a8 IN_PROGRESS, approvedbyowner forfourPNG/log/JSONpublic90dayartifacts. Uses repairedsource39886629245, noBlenderregeneration. Onlymanualjobactive; do notdispatchcompetingmanualjob. Earlierautomaticrejection resolvedbyexplicitapproval. Currentlocalreceiptcheckpoint9830ef1d maynowbenormallypushed afterthisapproveddispatchstarted.
