@@ -9,6 +9,7 @@ from pathlib import Path
 from metric_art_stage_8d4 import rigid, make_stage
 from private_production_8d4 import validate_manifest_context
 from metric_reference_scope_8d4 import validate_scope
+from paired_animation_8d4 import FRAME_COUNT, FPS, inspect_paired_export
 
 ROOT=Path(__file__).resolve().parents[2]
 
@@ -60,6 +61,19 @@ def validate(folder, case_id=None):
         probes=row['surface_sensitivity'];assert not probes['impossible_reach']['reachable']
         assert len(probes['probes'])==2 and all(p['distance_changed']for p in probes['probes'])
         assert len(row['floor_observations'])==4
+        if case_id is not None:
+            animated=row['animated_reference'];asset=runtime/animated['resource']
+            assert asset.resolve().is_relative_to(runtime.resolve())and sha(asset)==animated['sha256']
+            assert animated['source_frame_count']==FRAME_COUNT and animated['FPS']==FPS
+            assert not animated['gameplay_movement_authority']and not animated['native_playback_verified']
+            assert len(animated['actors'])==2 and len(animated['pose_frames'])==FRAME_COUNT
+            assert [f['frame']for f in animated['pose_frames']]==list(range(FRAME_COUNT))
+            for frame in animated['pose_frames']:
+                assert [a['role']for a in frame['actors']]==[a['role']for a in animated['actors']]
+                for actor,definition in zip(frame['actors'],animated['actors']):
+                    rigid(actor['anchor_transform_stage_m'])
+                    assert set(actor['bones_stage_m'])==set(definition['bone_names'])
+            assert inspect_paired_export(asset,animated['actors'])==animated['binary_inspection']
         assert {s['state']for s in row['snapshots']}=={'open','closed','held'}
         for snapshot in row['snapshots']:
             path=runtime/snapshot['resource'];assert sha(path)==snapshot['sha256']

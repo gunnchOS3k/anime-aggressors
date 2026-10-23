@@ -24,6 +24,7 @@ sys.path.insert(0,str(ROOT/'tools/authored_animation'))
 from metric_art_stage_8d4 import make_stage,feasibility,art_rotation
 from private_production_8d4 import current_context
 from metric_reference_scope_8d4 import select_cases
+from paired_animation_8d4 import CLIP, FRAME_COUNT, FPS, inspect_paired_export
 C=Matrix(((1,0,0,0),(0,0,1,0),(0,-1,0,0),(0,0,0,1)))
 
 
@@ -327,6 +328,49 @@ def static_snapshot(actors,path):
     return bounds
 
 
+def animated_reference(actors,path):
+    """Export the two REAL active hold actions, never static copies or all old actions.
+
+    ACTIVE_ACTIONS and export_anim_single_armature=False are explicit4.0 API
+    options for a synchronized multi-armature clip. No new release acting is
+    invented by this export. Original input rigs/actions remain unchanged.
+    """
+    scene=bpy.context.scene
+    assert scene.render.fps==FPS and scene.frame_start==0 and scene.frame_end==FRAME_COUNT-1
+    records=[{'role':a['role'],'anchor':a['anchor'].name,'bone_names':list(a['bone_names']),
+              'source_action':a['arm'].animation_data.action.name}for a in actors]
+    frames=[]
+    for frame in range(FRAME_COUNT):
+        scene.frame_set(frame);bpy.context.view_layer.update()
+        samples=[]
+        for actor in actors:
+            assert_preserved(actor)
+            matrix=C@actor['anchor'].matrix_world@C.inverted()
+            samples.append({'role':actor['role'],
+                            'anchor_transform_stage_m':[[matrix[i][j]for j in range(4)]for i in range(4)],
+                            'bones_stage_m':{b.name:list(C@actor['arm'].matrix_world@b.matrix.translation)for b in actor['arm'].pose.bones}})
+        frames.append({'frame':frame,'actors':samples})
+    bpy.ops.object.select_all(action='DESELECT')
+    for actor in actors:
+        for ob in [actor['anchor'],actor['arm'],*actor['visible']]:ob.select_set(True)
+    path.parent.mkdir(parents=True,exist_ok=True)
+    bpy.ops.export_scene.gltf(filepath=str(path),export_format='GLB',use_selection=True,
+                              export_yup=True,export_apply=False,export_skins=True,
+                              export_animations=True,export_animation_mode='ACTIVE_ACTIONS',
+                              export_anim_single_armature=False,
+                              export_nla_strips_merged_animation_name=CLIP,
+                              export_frame_range=True,export_frame_step=1,
+                              export_force_sampling=True,export_optimize_animation_size=False,
+                              export_def_bones=False)
+    for actor in actors:assert_preserved(actor)
+    inspection=inspect_paired_export(path,records)
+    return {'resource':str(path.relative_to(path.parents[1])), 'sha256':sha(path),
+            'clip':CLIP,'FPS':FPS,'source_frame_count':FRAME_COUNT,
+            'actors':records,'pose_frames':frames,'binary_inspection':inspection,
+            'scope':'Original two-actor25-frame hold/restraint source only; release/locomotion/recovery acting still required',
+            'gameplay_movement_authority':False,'native_playback_verified':False,'human_approved':False}
+
+
 def run():
     execution=current_context(ROOT) # Fail before source loads, scene creation or any art output.
     assert (4,0)<=bpy.app.version[:2]<(4,4),'Preserved Blender4 sources require a compatible4.0–4.3 producer'
@@ -438,6 +482,8 @@ def run():
                 'input_sources':[{'fighter':a['fighter'],'body':a['body'],'sha256':a['source_sha256']}for a in case['actors']],
                 'source_actions':[a['new_action']for a in actor_names],'source_preservation':actor_names,
                 'contact_frames':contact,'saved_reopened_pose_samples':reopened,'surface_sensitivity':sensitivity,'snapshots':snapshots,'floor_observations':feet,'grip_accepted':False,'shipping_alignment_verified':False,'RUNTIME_PAIRED_CONTACT_VERIFIED':False,'human_approved':False}
+        if local:
+            record['animated_reference']=animated_reference(actors,out/'runtime/paired_animation'/(case['case']+'.glb'))
         manifest['rows'].append(record)
         (out/'runtime/PRODUCTION_MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n')
         print('SAVED_8D4_REFERENCE_STAGE',case['case'],flush=True)

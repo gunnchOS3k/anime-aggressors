@@ -71,7 +71,9 @@ def preflight(archive, workspace, blender, godot, case_id):
     if os.environ.get('GITHUB_ACTIONS') == 'true':
         reasons.append('This recipe cannot run on a GitHub Actions runner')
     head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
-    scoped = ['tools/authored_animation', 'art_source/staging/metric_8d4', 'game-godot/tests/v1_closure/MetricArtStage8D4.gd']
+    scoped = ['tools/authored_animation', 'art_source/staging/metric_8d4',
+              'game-godot/tests/v1_closure/MetricArtStage8D4.gd',
+              'game-godot/tests/v1_closure/PairedAnimationPlayback8D4.gd']
     changed = subprocess.check_output(['git', 'diff', 'HEAD', '--name-only', '--', *scoped], cwd=ROOT, text=True).splitlines()
     untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *scoped], cwd=ROOT, text=True).splitlines()
     if changed or untracked:
@@ -151,6 +153,7 @@ def execute(report, archive, workspace, blender, godot):
         viewer = workspace / 'native_viewer'
         viewer.mkdir()
         shutil.copyfile(ROOT / 'game-godot/tests/v1_closure/MetricArtStage8D4.gd', viewer / 'review.gd')
+        shutil.copyfile(ROOT / 'game-godot/tests/v1_closure/PairedAnimationPlayback8D4.gd', viewer / 'paired_animation.gd')
         (viewer / 'project.godot').write_text('config_version=5\n[application]\nconfig/name="Private offline metric reference"\n[rendering]\nrenderer/rendering_method="gl_compatibility"\n')
         review = output / 'engine_review'
         review.mkdir()
@@ -168,6 +171,24 @@ def execute(report, archive, workspace, blender, godot):
             raise RuntimeError('Incomplete actual native reference evidence')
         if 'SCRIPT ERROR:' in (review / 'godot.log').read_text(errors='replace'):
             raise RuntimeError('Native viewer reported script errors despite process exit')
+        with (workspace/'native_animation.log').open('w')as log:
+            result=subprocess.run([str(godot),'--headless','--path',str(viewer),'--audio-driver','Dummy',
+                                   '--script','res://paired_animation.gd','--',
+                                   '--animation-manifest='+str(output/'runtime/PRODUCTION_MANIFEST.json'),
+                                   '--test-output='+str(review)],
+                                  cwd=ROOT,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=180)
+        status['stages'].append({'stage':'native_skeletal_animation','exit_code':result.returncode})
+        if result.returncode or 'SCRIPT ERROR:'in(workspace/'native_animation.log').read_text(errors='replace'):
+            raise RuntimeError('Actual paired skeletal import/playback failed; retain all outputs')
+        animation=json.loads((review/'paired_animation_playback.json').read_text())
+        source=json.loads((output/'runtime/PRODUCTION_MANIFEST.json').read_text())['rows'][0]['animated_reference']
+        if not animation['PASS']or animation['synthetic_fixture']is not False or animation['actors']!=2 or animation['source_frames']!=25 or animation['joint_samples']<=0 or animation['source_export_sha256']!=source['sha256']:
+            raise RuntimeError('Incomplete or mismatched real-source skeletal equivalence evidence')
+        status['animated_export_verified']=True
+        status['skeletal_pose_equivalence_verified']=True
+        status['skinned_surface_equivalence_verified']=False
+        # These export/import checks cannot approve release/locomotion acting,
+        # sole contact, penetration, silhouettes or the remaining batch.
         if shutil.disk_usage('/System/Volumes/Data').free < LOCAL_RESERVE_BYTES:
             raise RuntimeError('Stop after native review: protected internal reserve breached; retain evidence')
         status['PASS'] = True

@@ -1,3 +1,17 @@
+# 8D-4 production-unblocking: animated pilot path prepared, original art still blocked
+
+Recovered0a98ea45fb41f5c770f643ea10d859159dd73423/local=remote.20installerremovals are CLOSED; no new deletion authorized/performed. PR123draft on122; Cursor131PartyLink/132Story remain untouched. PrivateActionsdisabled. Current source/code checkpoint is this commit'sgitrev-parseHEAD.
+
+New functional code: explicit two-active-armature GLB export (Blender4.0officialAPI reviewed), binary skins/weights/bone/channel/clock validation, source-frame joint witnesses and real GodotAnimationPlayer/source-FK comparison. Local one-case recipe now requires animated export/native receipt, exact assetSHA and non-synthetic evidence. Original input/source rigs/actions untouched; no source producer executed. Release/locomotion/recovery acting, skin-surface equivalence, floor/character-sheet/nativevisual acceptance remain unfinished; remaining_batch_ready=false.
+
+Nine new binary contract tests PASS. Native headless synthetic two-rig GLB matches100joint samples; deliberate source-pose drift FAILS as expected. This proves checker behavior only, NOT original character art. Seven scope/21privacy tests PASS; PythonAST/source formatting PASS. Existing147camera/15watch checks/inventory not repeated. Detailed sanitizedscope: production_8d/metric_stage_8d4/PILOT_ANIMATION_CONTRACT.md. Private fixture/negative logs under private-cinematic-production-20261023/production_unblocking/native_animation_api_v1.
+
+Official checksumGET and packageHEAD reattempt: TLS-validHTTP403Cloudflarechallenge on both. No package downloaded/installed, SHA/codesign/ARM/footprint not verified. Installed3.3.1preserved; exactsource4.0.2required. Actualstorage19.755GiB at preflight, about2.245shortof22before installation. Only externalwritablemount isprotectedarchive; RecoverysharesinternalAPFScontainer, no alternativeowned scratch verified. Bounded42worktree build/tmp/importcache review found no safe multiGiBreclaim; largesttmpretainsoriginaldependency/sourceassets andbuildreviewfilesremainprotected. No cleanup/newinfrastructure/paid/publicart.
+
+NEXT: finish enforceable official-producer audit/preflight and source-bound private receipts. Do not executeBlender until actual22GiBpost-tool-install allocation and official package/signature/architecture provenance pass. Then exactlyonecase; retain real failures and do not promote static/joint-only results to art approval. Original-arthold/release/locomotion and nativevisual work remain genuinely blocked. Preserve all42worktrees/saves/privatecamera/source archives and unrelateduntrackedWORKFLOW_REFERENCED_PATHS.json. All human/shippingcontact gatesFALSE. No merge/deploy/tag/release.
+
+---
+
 # Final storage reply handled — ONLY20 approved historical installers removed
 
 Owner separately approved the19listedhistoricalinstalleroriginals after the earlieroneCursorDMG. All19were classified as standalone installerZIP/UDIFfiles, rehashed against intact archives, confirmed unmounted/notopen and then deleted; all archive hashes verified AGAIN afterward. InstalledCursor executable unchanged. No installedapp/settings/conversations/extensions/tool/source/art/save/cache/worktree/project/footage deleted or modified.20total authorized installerfiles only;0additionaldeletions. Detailed immutable private receipts: resource_recovery_continuation/AUTHORIZED_19_INSTALLER_REMOVAL.json and FINAL_STORAGE_AND_RECOVERY.json. Earlierpendingstatus records below are superseded; original approvedlist remains retained provenance, not a new removal request.
