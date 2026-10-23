@@ -1,3 +1,15 @@
+# 8D-2 approved replacement producer active
+
+Explicit owner approval received for exact60835ce3 hand-production upload (18 edited Blender candidates plusGLB/JSON verification, public90dayActions, no release). Dispatch39882355608 nowIN_PROGRESS at60835ce34558ba6af722f5a2d8fa558498c72c1e. Prior39858757532terminalcancelled with0artifacts; failure retained. No duplicateproducer. Do not dispatch another manual workflow on same branch while active: concurrency cancelsolderjob. Approvalreceipt8d2_recovery_1022/APPROVED_PRODUCTION.json.
+
+Localpreservedsourcefd58f870+baseline20-case6df3306dnowready for normalpush after exactapproveddispatchconfirmed. NewheadincludesactualvictimBVHsourcebaker and strictsourcebinding, NOT yet Blenderexecuted; no pairedproduction/nativeacceptance. Do not assumesourceartifacts exist beforeproducer completes. Only unrelated untrackedWORKFLOW_REFERENCED_PATHS.json.
+
+Internal latestdf8,200,000KiB≈7.82GiB, below18GiBAFTERforecast. NO localcandidateinstall/import/Blender/export/render/capture. ExternalAPFSprevious349.47GiB; reverifybeforestreamingarchive. Allownerdata/worktrees/Cursorisolatedbranches preserved. Allhumanfalse.
+
+NEXT: inspect39882355608progress/result. Ifsuccessrecoverexact18newsource/GLBhashes toversionedexternalarchive usingrecover_hands_8d2.py --run39882355608 --source-sha60835ce34558ba6af722f5a2d8fa558498c72c1e (archiveonly), thennativeverification-only sameartifact. IfactualBlenderassertionfailsretainlogandcorrectonlyprovenissue. Preserveinput18saved8D/alloldactions. Afteranatomyinspectionadvancepreparedpairedsourceacting withseparateactualsourcevalidation, nottopologycountclaims. No merge/release/tag.
+
+---
+
 # 8D-2 baseline ordinary-control regression PASS20; exact upload approval still pending
 
 Latest LOCAL sourcecheckpointfd58f87013bb1de7e802806ccee04e52d30d6e87; normal remote remains60835ce34558ba6af722f5a2d8fa558498c72c1e for the exact prepared/approval-gated job. This evidence/finalguard commit followsfd58. No publicartreplacementdispatch started. Automaticapprovalrejectreason andquestion persist:18 new originalBlenderfiles exposed through public90-dayActionsartifacts. Do NOT retry beforeexplicitownerapproval; do not reinterpret prior8Bapproval as8D2permission.
