@@ -248,6 +248,15 @@ jobs:
           run-id: ${{ inputs.controls_verify_run }}
           github-token: ${{ github.token }}
           path: ${{ runner.temp }}/controls-verify/runtime/
+      - name: Recover exact8D baseline only for matched anatomy comparison
+        if: inputs.controls_verify_kind == 'hands-8d2'
+        uses: actions/download-artifact@v4
+        with:
+          name: controls-8d-runtime-3ab7667ca0b22e50bb7acfe0b509ff6b4513daf5
+          repository: gunnchOS3k/anime-aggressors
+          run-id: 39852459469
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/controls-baseline/runtime/
       - name: Validate and install isolated remote candidates
         run: |
           if [ "${{ inputs.controls_verify_kind }}" = hands-8d2 ]; then
@@ -256,10 +265,20 @@ jobs:
             python3 tools/authored_animation/validate_controls_8d.py "$RUNNER_TEMP/controls-verify" --runtime-only
           fi
           cp -R "$RUNNER_TEMP/controls-verify/runtime/game-godot/"* game-godot/
+          if [ "${{ inputs.controls_verify_kind }}" = hands-8d2 ]; then
+            python3 tools/authored_animation/validate_controls_8d.py "$RUNNER_TEMP/controls-baseline" --runtime-only
+            cp -R "$RUNNER_TEMP/controls-baseline/runtime/game-godot/"* game-godot/
+          fi
       - name: Install existing Godot compatibility verifier
+        timeout-minutes: 6
         run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb libgl1-mesa-dri libxkbcommon0 libpulse0 unzip
+          sudo python3 - <<'PYCODE'
+          from pathlib import Path
+          for p in [Path('/etc/apt/sources.list'),*Path('/etc/apt/sources.list.d').glob('*.sources')]:
+              if p.is_file():p.write_text(p.read_text().replace('http://azure.archive.ubuntu.com/ubuntu','https://archive.ubuntu.com/ubuntu'))
+          PYCODE
+          sudo apt-get -o Acquire::ForceIPv4=true -o Acquire::Retries=2 -o Acquire::https::Timeout=20 -o Acquire::http::Timeout=20 update
+          sudo apt-get -o Acquire::ForceIPv4=true -o Acquire::Retries=2 -o Acquire::https::Timeout=20 -o Acquire::http::Timeout=20 install --no-install-recommends -y xvfb libgl1-mesa-dri libxkbcommon0 libpulse0 unzip
           curl --fail -L -o "$RUNNER_TEMP/godot.zip" https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip
           unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP/godot"
           chmod +x "$RUNNER_TEMP/godot/Godot_v4.7.1-stable_linux.x86_64"
@@ -277,6 +296,17 @@ jobs:
           d=json.loads((p/'source_controls_runtime_8d.json').read_text())
           assert d['PASS']and len(d['rows'])==36 and d['native_rendered']and not d['human_approved']
           assert 'SCRIPT ERROR:'not in (p/'godot.log').read_text()
+          PYCODE
+      - name: Matched18-rig original8D and connected-hand source comparison
+        if: inputs.controls_verify_kind == 'hands-8d2'
+        run: |
+          xvfb-run -a timeout 480 "$GODOT_BIN" --path game-godot --audio-driver Dummy --rendering-method gl_compatibility --log-file "$RUNNER_TEMP/controls-engine-review/comparison.log" --script res://tests/v1_closure/SourceHandsComparison8D2.gd -- --ordinary-output="$RUNNER_TEMP/controls-engine-review"
+          python3 - <<'PYCODE'
+          import os,json,pathlib
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'controls-engine-review'
+          d=json.loads((p/'hands_comparison_8d2.json').read_text())
+          assert d['PASS']and len(d['rows'])==18 and all(len(r['versions'])==2 for r in d['rows'])and not d['human_approved']
+          assert 'SCRIPT ERROR:'not in (p/'comparison.log').read_text()
           PYCODE
       - name: Preserve native source-control review
         if: always()

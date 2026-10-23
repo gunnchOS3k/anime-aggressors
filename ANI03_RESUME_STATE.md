@@ -1,3 +1,13 @@
+# 8D-2 corrected hand producer39882654215 active / native observer ready
+
+Currentapprovedhandtask retry39882654215 IN_PROGRESS source195194c70cdd70f3930eb5d5082e1cfc159730e5. Exactowner-approved60835run39882355608 reachedBlender4.0.2 thenfailed onlymissing siblingmodulepath;0outputs. Negativefull logsretained;195addsentrysys.pathfix only, same18saved8Dinput/anatomyscore/90daysource+GLBJSONdestination/validation. No competingproducer. Allpreviousoriginalsprotected. Owner approvalrecordAPPROVED_PRODUCTION.json scopedhandtask, notseparatepairedsourceupload.
+
+NativeobserverSourceHandsComparison8D2.gd parsePASS Godot4.7.1; staged18bodybeforeexactold8Dversusnew8D2, original8Bcanonicalholdphasefixed, open/partial/fist bothhands, viewportaspectpreserved. Nativeworkflowverificationonly recoversbothsuccessfulexistingartifacts; noBlenderregeneration. Newarchive-onlyrecover_hands_review_8d2.py preservesoriginalexternalAPFS/lowinternalreserve; failuresremainlabeled. Observation/runtimeNOTexecutedonnewmodelsuntilsourcejobpasses. Unit+20baselinepublicinputpilot remainpriorpasses; notnewmeshartapproval.
+
+NEXT inspect39882654215; success=>recover_hands_8d2.py --run39882654215 --source-sha195194c70cdd70f3930eb5d5082e1cfc159730e5 (no--install). ThenONEverification-onlydispatch atcurrentobserverhead with controls_verify_run/source_sha andcontrols_verify_kind=hands-8d2 afterproducerterminal. DoNOTdispatchmanualreviewwhileproduceractive(concurrency). Inspectactualhand/cuffimages beforepreparedpairedsourcebake. Allhumanfalse. Internal7.82GiBnomedia/install/import/export. NoCursorchanges/merge/deploy/release.
+
+---
+
 # 8D-2 approved hand producer reached Blender; entry import corrected
 
 Owner explicitlyapproved60835ce3handtaskpublic90day source/runtime upload. Replacement39882355608 completedFAILURE: dependencyinstall and exact18saved8Ddownload succeeded; Blender4.0.2 stopped at ModuleNotFoundError aa_controls_8d beforeediting. Artifacts0. Fullnegativeevidencehands_failed_39882355608. Fixonlyentrymodulepath: Blender --python omits scriptdirectory fromsys.path; addexplicitentryparent before siblingimports (also samepreparedpairedentry). Art/weights/oldactionassertionsunchanged; no BASEregeneration. Originalpermission coverssamehandproduction task; no newpairedsourceupload.
