@@ -1,18 +1,26 @@
-# Private 8D-4 reference production — prepared, not installed
+# Private 8D-4 reference production — setup installed; production disabled
 
 The owner declined public artifact disclosure for both `de32787d` and `821045e2`, while authorizing continued private art production. Those commits and all completed preparation remain preserved. Do not dispatch either historical public producer.
 
 No new paired scenes, restraint actions, GLBs or review images exist yet. The prepared output scope remains eight reference scenes, 16 editable reference actions, 24 static snapshots and eight review sheets. Source-space contact still needs actual Blender production; shipping paired contact and all human gates remain false.
 
-## Existing environment findings
+## Setup-only authorization and completed configuration
+
+The owner explicitly approved creation of a dedicated private repository and reviewed manual workflow installation, while prohibiting production dispatch. That setup is installed. Detailed access readbacks, exact private workflow commit and hashes, secret instructions, billing checklist and the future command remain in the private repository only. No proprietary art was generated, downloaded or uploaded.
+
+The installed wrapper is manually disabled, requires two false-by-default dispatch/App-review gates, uses only three exact commit-pinned official actions and requests `contents: read` only. Repository settings verify read-only tokens, no PR-approval permission, no cross-repository access and three-day artifact/log retention. No new collaborators, teams, deploy keys or webhooks were added. Account-level App access remains unverified and requires owner review. Personal-account private repositories do not support the organization-only disable-forks toggle; do not claim that control is enforced.
+
+Source review corrected an unavailable `runner.temp` expression in job-level configuration. The first runner step now exports its metadata path using `RUNNER_TEMP` and `GITHUB_ENV`. The initial invalid-workflow installation record remains preserved privately with zero jobs/artifacts; it was not a production dispatch. Corrected actionlint, shell/Python syntax and fifteen privacy-boundary/provenance/workflow tests pass. No runner execution was used for validation.
+
+## Historical environment findings (before approved setup)
 
 Read-only inspection found one accessible private repository serving a different product, with website workflows and no registered self-hosted runner. No project-specific private art environment was established by the inspected repository metadata or project configuration. The unrelated repository was not modified or used. Current credentials could not establish billing allowance or overage controls; no permission refresh or billing change was performed.
 
 ## Minimum owner-authorized setup
 
-Before any installation or private dispatch, the owner must authorize a dedicated **private** repository or explicitly identify an existing private environment approved for this art. The prepared template is `metric-stage-8d4.yml`; it belongs in that private repository's `.github/workflows/`, not the public source repository's workflow directory.
+Private setup was separately authorized and completed. A production dispatch still requires separate owner authorization after access, secret and allowance checks. The prepared template is `metric-stage-8d4.yml`; it belongs in that private repository's `.github/workflows/`, not the public source repository's workflow directory.
 
-Required setup, not yet performed:
+Configuration and remaining prerequisites:
 
 1. Private owner-controlled execution repository, with access limited to the owner and explicitly approved reviewers. No art binaries enter any Git history.
 2. Repository variable `ART_PRODUCTION_APPROVED_REPOSITORY` set to that exact `owner/name`. The guard rejects other repositories, even private ones.
@@ -20,7 +28,7 @@ Required setup, not yet performed:
 4. Owner confirmation of included runner/storage allocation and blocked paid overage. This confirmation is required separately from repository creation. Current API credentials cannot verify it; the template does not claim that a manual checkbox measures billing.
 5. One standard Ubuntu 24.04 job, maximum45 minutes, with up to3 GiB of private outputs and three-day retention. No cache, release, deployment or new paid runner. These are execution caps, not a promise of zero charges; dispatch remains blocked until the owner confirms the no-paid-use boundary.
 
-GitHub documents [private Actions billing](https://docs.github.com/en/billing/concepts/product-billing/github-actions) and the [cross-repository artifact read token](https://github.com/actions/download-artifact#download-artifacts-from-other-workflow-runs-or-repositories). No new account, repository, token, runner or spending permission has been created in this increment.
+GitHub documents [private Actions billing](https://docs.github.com/en/billing/concepts/product-billing/github-actions) and the [cross-repository artifact read token](https://github.com/actions/download-artifact#download-artifacts-from-other-workflow-runs-or-repositories). Only the explicitly approved private repository and manual wrapper were created/configured. No secret, runner job or spending permission was created.
 
 ## Execution boundaries
 
@@ -45,4 +53,4 @@ python3 tools/authored_animation/recover_metric_stage_8d4.py \
 
 `--allow-failed` preserves failed output without acceptance. Optional `--write-sanitized-summary` emits a fixed whitelist of counts/booleans only. Private source hashes, coordinates, action curves, paths, repository identities, artifact URLs and images are never copied into the public worktree by this helper.
 
-Internal free space remains below18 GiB plus allocations. No heavy local execution is an authorized fallback. Next action is owner authorization for the minimum private setup and billing/access prerequisites, followed by one bounded private reference run.
+Internal free space remains below18 GiB plus allocations. No heavy local execution is an authorized fallback. Next action is owner completion of the App/secret/billing checks and separate production authorization. Keep the workflow and both repository gates disabled until then.
