@@ -1,5 +1,6 @@
 """Disclosure-boundary tests; no real private repository or art is created."""
 import copy
+import re
 import unittest
 from pathlib import Path
 from private_production_8d4 import verify_context, validate_manifest_context, sanitized_summary, SPENDING_CLEARANCE
@@ -108,6 +109,24 @@ class PreparedWorkflowBoundary(unittest.TestCase):
         self.assertIn('included_usage_and_zero_overage_confirmed == true',text)
         self.assertIn('persist-credentials: false',text)
         self.assertNotIn('actions/cache',text)
+
+    def test_private_job_configuration_uses_available_contexts_and_separate_gates(self):
+        text=(self.root/'tools/authored_animation/private/metric-stage-8d4.yml').read_text()
+        job=text.split('  metric-stage-8d4:',1)[1]
+        job_env=job.split('    env:\n',1)[1].split('    steps:',1)[0]
+        # GitHub resolves job configuration before a runner exists. An invalid
+        # context fails workflow validation even when the job would be gated off.
+        allowed={'github','needs','strategy','matrix','vars','secrets','inputs'}
+        for expression in re.findall(r'\$\{\{(.*?)\}\}',job_env):
+            roots=set(re.findall(r'\b([a-zA-Z_][a-zA-Z0-9_]*)\.',expression))
+            self.assertTrue(roots <= allowed,expression)
+        condition=next(line.strip()for line in job.splitlines()if line.strip().startswith('if:'))
+        for gate in ['ART_PRODUCTION_DISPATCH_AUTHORIZED','ART_PRODUCTION_APP_ACCESS_REVIEWED']:
+            self.assertIn("vars."+gate+" == 'true'",condition)
+        permissions=job.split('    permissions:\n',1)[1].split('    defaults:',1)[0]
+        self.assertEqual(permissions.strip(),'contents: read')
+        for action in re.findall(r'uses: (\S+)',text):
+            self.assertRegex(action,r'^actions/(checkout|download-artifact|upload-artifact)@[0-9a-f]{40}$')
 
     def test_recovery_does_not_use_public_download_or_copy_private_evidence_to_repo(self):
         text=(self.root/'tools/authored_animation/recover_metric_stage_8d4.py').read_text()

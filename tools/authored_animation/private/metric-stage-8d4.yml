@@ -1,5 +1,5 @@
 # TEMPLATE ONLY. Not a workflow in the public repository.
-# Install in an OWNER-AUTHORIZED PRIVATE repository after access/billing setup.
+# Installation requires owner authorization; production requires separate approval.
 name: Private 8D-4 Reference Art
 on:
   workflow_dispatch:
@@ -22,12 +22,11 @@ jobs:
   metric-stage-8d4:
     # Owner decision2026-10-23: no public8D4 proprietary-art production.
     # Historical de32787d/821045e2 remain preserved, never dispatched.
-    if: github.event_name == 'workflow_dispatch' && github.event.repository.private == true && inputs.included_usage_and_zero_overage_confirmed == true
+    if: github.event_name == 'workflow_dispatch' && github.event.repository.private == true && inputs.included_usage_and_zero_overage_confirmed == true && vars.ART_PRODUCTION_DISPATCH_AUTHORIZED == 'true' && vars.ART_PRODUCTION_APP_ACCESS_REVIEWED == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     permissions:
       contents: read
-      actions: read
     defaults:
       run:
         working-directory: production-code
@@ -35,7 +34,6 @@ jobs:
       AA_8D4_APPROVED_PRIVATE_REPOSITORY: ${{ vars.ART_PRODUCTION_APPROVED_REPOSITORY }}
       AA_8D4_SOURCE_SHA: ${{ inputs.source_sha }}
       AA_8D4_SPENDING_CLEARANCE: OWNER_CONFIRMED_INCLUDED_USAGE_AND_ZERO_OVERAGE
-      AA_8D4_PRIVATE_REPOSITORY_METADATA: ${{ runner.temp }}/private-repository.json
     steps:
       - name: Verify restricted execution repository before any production
         working-directory: ${{ github.workspace }}
@@ -56,10 +54,13 @@ jobs:
           assert re.fullmatch('[0-9a-f]{40}',os.environ['INPUT_SOURCE_SHA'])
           live=json.loads(subprocess.check_output(['gh','api','repos/'+repo['full_name']]))
           assert live['private'] is True and live['visibility']=='private' and not live['archived']
-          Path(os.environ['AA_8D4_PRIVATE_REPOSITORY_METADATA']).write_text(json.dumps(live))
+          metadata=Path(os.environ['RUNNER_TEMP'])/'private-repository.json'
+          metadata.write_text(json.dumps(live))
+          with open(os.environ['GITHUB_ENV'],'a') as exported:
+              exported.write('AA_8D4_PRIVATE_REPOSITORY_METADATA='+str(metadata)+'\n')
           PYCODE
       - name: Checkout exact non-sensitive producer code only
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           repository: gunnchOS3k/anime-aggressors
           ref: ${{ inputs.source_sha }}
@@ -97,7 +98,7 @@ jobs:
           assert not p['runtime_equivalence_claim']
           PYCODE
       - name: Read saved8D3 sources without regenerating earlier phases
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           name: hand-integration-8d3-saved-sources-42baaab8cc5167798aea7f3aebb22edae9f21007
           repository: gunnchOS3k/anime-aggressors
@@ -105,7 +106,7 @@ jobs:
           github-token: ${{ secrets.ANIME_SOURCE_ARTIFACTS_READ }}
           path: ${{ runner.temp }}/metric-stage-input/saved_sources/
       - name: Read exact associated runtime metadata
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           name: hand-integration-8d3-runtime-42baaab8cc5167798aea7f3aebb22edae9f21007
           repository: gunnchOS3k/anime-aggressors
@@ -170,7 +171,7 @@ jobs:
           PYCODE
       - name: Preserve editable sources in restricted private artifacts only
         if: always() && steps.private_upload.outcome == 'success'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: metric-stage-8d4-saved-scenes-${{ inputs.source_sha }}
           path: ${{ runner.temp }}/metric-stage-8d4/saved_stages/
@@ -178,7 +179,7 @@ jobs:
           if-no-files-found: warn
       - name: Preserve static GLBs and source measurement receipts
         if: always() && steps.private_upload.outcome == 'success'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: metric-stage-8d4-static-runtime-${{ inputs.source_sha }}
           path: ${{ runner.temp }}/metric-stage-8d4/runtime/
@@ -186,7 +187,7 @@ jobs:
           if-no-files-found: warn
       - name: Preserve eight native reference sheets and logs
         if: always() && steps.private_upload.outcome == 'success'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: metric-stage-8d4-engine-review-${{ inputs.source_sha }}
           path: ${{ runner.temp }}/metric-stage-8d4/engine_review/
