@@ -17,18 +17,44 @@ import bpy
 from mathutils import Matrix, Vector
 from mathutils.bvhtree import BVHTree
 from mathutils.geometry import intersect_ray_tri
-from aa_controls_8d import sha,geometry,weights,rest,actions
+from aa_controls_8d import sha,digest,geometry,weights,rest,actions
 from aa_paired_surface_8d2 import contact_vertex,sample_vertex,solve_arm
 ROOT=Path(__file__).resolve().parents[3]
 sys.path.insert(0,str(ROOT/'tools/authored_animation'))
-from metric_art_stage_8d4 import make_stage,feasibility
+from metric_art_stage_8d4 import make_stage,feasibility,art_rotation
 C=Matrix(((1,0,0,0),(0,0,1,0),(0,-1,0,0),(0,0,0,1)))
+
+
+def material_signature(objects):
+    values={}
+    for ob in objects:
+        if ob.type!='MESH':continue
+        for mat in ob.data.materials:
+            if mat is None or mat.name in values:continue
+            nodes=[]
+            if mat.node_tree:
+                for n in mat.node_tree.nodes:
+                    sockets=[]
+                    for socket in n.inputs:
+                        if not hasattr(socket,'default_value'):continue
+                        value=socket.default_value
+                        if isinstance(value,(int,float,bool,str)):encoded=value
+                        elif hasattr(value,'__iter__'):encoded=list(value)
+                        elif value is None:encoded=None
+                        else:encoded=getattr(value,'name',str(type(value)))
+                        sockets.append([socket.identifier,encoded])
+                    nodes.append([n.name,n.bl_idname,sockets])
+            values[mat.name]={'diffuse':list(mat.diffuse_color),'roughness':mat.roughness,'metallic':mat.metallic,'nodes':nodes,
+                              'links':[(l.from_node.name,l.from_socket.identifier,l.to_node.name,l.to_socket.identifier)for l in mat.node_tree.links]if mat.node_tree else []}
+    return digest(values)
 
 
 def import_actor(source,role,observation,stage_actor):
     with bpy.data.libraries.load(str(source),link=False) as (available,loaded):
         source_names=list(available.objects);action_names=list(available.actions)
-        loaded.objects=source_names;loaded.actions=action_names
+        loaded.objects=source_names;loaded.actions=action_names;loaded.scenes=list(available.scenes)
+    units=[{'scene':s.name,'system':s.unit_settings.system,'scale_length':s.unit_settings.scale_length}for s in loaded.scenes]
+    assert units and all(abs(u['scale_length']-1.)<1e-8 for u in units),'Source scene metre scale changed'
     collection=bpy.data.collections.new(role+'_SOURCE_ACTOR');bpy.context.scene.collection.children.link(collection)
     objects={name:ob for name,ob in zip(source_names,loaded.objects) if ob is not None}
     curves={name:action for name,action in zip(action_names,loaded.actions) if action is not None}
@@ -37,7 +63,7 @@ def import_actor(source,role,observation,stage_actor):
         collection.objects.link(ob);ob.name=role+'__'+name
     for name,action in curves.items():action.name=role+'__'+name
     arm=next(o for o in objects.values() if o.type=='ARMATURE')
-    assert max(abs(s-1) for s in arm.matrix_world.to_scale())<1e-6
+    assert max(abs(arm.matrix_world[i][j]-float(i==j))for i in range(4)for j in range(4))<1e-6,'Uncalibrated original armature object transform'
     assert not any(b.name.startswith('CTRL_') for b in arm.data.bones),'Do not substitute a different source skeleton'
     anchor=bpy.data.objects.new(role+'_MEASURED_STAGE_PLACEMENT',None);collection.objects.link(anchor)
     placement=C.inverted()@Matrix(stage_actor['rig_godot_metres_to_stage'])@C
@@ -50,19 +76,22 @@ def import_actor(source,role,observation,stage_actor):
     # is chosen from a contact residual.
     actual_placement=anchor.matrix_world.copy()
     assert max(abs(actual_placement[i][j]-placement[i][j])for i in range(4)for j in range(4))<1e-6
+    assert arm.animation_data is not None
     for track in arm.animation_data.nla_tracks:track.mute=True
+    for old_scene in loaded.scenes:bpy.data.scenes.remove(old_scene)
     mutable_names={o.name for o in objects.values()}
     visible=[o for n,o in objects.items() if o.type=='MESH' and not n.startswith(('ORIGINAL_8D_','ANI08C_')) and not o.get('8d2_legacy_only',False)]
     return {'role':role,'arm':arm,'anchor':anchor,'placement':actual_placement,'objects':objects,'visible':visible,'actions':curves,
-            'names':mutable_names,'geometry_hash':geometry(mutable_names),'weights_hash':weights(mutable_names),
+            'names':mutable_names,'geometry_hash':geometry(mutable_names),'weights_hash':weights(mutable_names),'material_hash':material_signature(objects.values()),
             'bone_names':[b.name for b in arm.data.bones],'rest_hash':rest(arm,[b.name for b in arm.data.bones]),
             'action_names':{a.name for a in curves.values()},'action_hash':actions({a.name for a in curves.values()}),
-            'observation':observation}
+            'observation':observation,'original_units':units}
 
 
 def assert_preserved(actor):
     arm=actor['arm'];names=actor['names']
     assert geometry(names)==actor['geometry_hash'] and weights(names)==actor['weights_hash']
+    assert material_signature([bpy.data.objects[n]for n in names])==actor['material_hash']
     assert rest(arm,actor['bone_names'])==actor['rest_hash'] and actions(actor['action_names'])==actor['action_hash']
     assert actor['anchor'].matrix_world==actor['placement'],'A contact solve moved a stage actor root'
 
@@ -108,7 +137,7 @@ def triangle_crossings(hand_objects,target_tree,target_triangles):
                 if da*db>=0:continue # Tangency is not penetrating crossing.
                 direction=b-a;extent=direction.length
                 if extent<1e-8:continue
-                hit=intersect_ray_tri(*face,a,direction.normalized(),True)
+                hit=intersect_ray_tri(*face,direction.normalized(),a,True)
                 if hit is not None and 1e-7<(hit-a).length<extent-1e-7:crossed=True;break
             if crossed:break
         crossings+=int(crossed)
@@ -116,7 +145,17 @@ def triangle_crossings(hand_objects,target_tree,target_triangles):
             'scope':'Actual evaluated triangle segment/face crossings. Tangency excluded; not penetration volume or pressure.'}
 
 
-def grip(actor,victim,hand,side):
+def barycentric(p,tri):
+    a,b,c=tri;v0=b-a;v1=c-a;v2=p-a
+    d00=v0.dot(v0);d01=v0.dot(v1);d11=v1.dot(v1);d20=v2.dot(v0);d21=v2.dot(v1)
+    denominator=d00*d11-d01*d01
+    assert abs(denominator)>1e-16,'Degenerate contact material triangle'
+    v=(d11*d20-d01*d21)/denominator;w=(d00*d21-d01*d20)/denominator
+    weights=[1-v-w,v,w];assert min(weights)>-1e-4 and max(weights)<1.0001
+    return weights
+
+
+def grip(actor,victim,hand,side,bindings):
     # Source indices/bones are preserved; use the actual edited palm pad.
     h=copy.deepcopy(hand);h['mesh']=actor['objects'][hand['mesh']].name
     witness=contact_vertex(actor['arm'],h)
@@ -126,8 +165,15 @@ def grip(actor,victim,hand,side):
         target += [o for n,o in victim['objects'].items() if n.startswith('Bastion forearm') and any(g.name=='LowerArm_'+other for g in o.vertex_groups)]
     tree,parts,triangles=evaluated_tree(target)
     pad=sample_vertex(bpy.data.objects[witness['mesh']],witness['index'])
-    surface,normal,index,distance=tree.find_nearest(pad)
-    assert surface is not None and normal.length>.99
+    nearest_start,normal,index,distance=tree.find_nearest(pad)
+    assert nearest_start is not None and normal.length>.99
+    if side not in bindings:
+        bindings[side]={'triangle_index':index,'barycentric':barycentric(nearest_start,triangles[index]),
+                        'target_meshes':[p['mesh']for p in parts],'scope':'Fixed evaluated victim material triangle across the held reference'}
+    binding=bindings[side];assert binding['target_meshes']==[p['mesh']for p in parts]
+    tri=triangles[binding['triangle_index']]
+    surface=sum((p*w for p,w in zip(tri,binding['barycentric'])),Vector())
+    normal=(tri[1]-tri[0]).cross(tri[2]-tri[0]).normalized()
     arm=actor['arm'];inv=arm.matrix_world.inverted();hand_bone=arm.pose.bones['Hand_'+side]
     n=arm.matrix_world.to_3x3().transposed()@normal;n.normalize()
     q=hand_bone.matrix.to_quaternion();palmar=q@Vector(witness['normal_hand_local'])
@@ -138,8 +184,11 @@ def grip(actor,victim,hand,side):
     axis=wrist-poses[0];pole=poses[1]-poses[0]
     pole= pole-axis.normalized()*pole.dot(axis.normalized()) if axis.length else Vector()
     if reach['reachable'] and pole.length<1e-6:reach.update(reachable=False,reason='Preferred source elbow pole degenerate; no arbitrary fallback')
-    before_q=hand_bone.matrix.to_quaternion()
+    before_q=hand_bone.matrix.to_quaternion();before_pole=pole.normalized() if pole.length else None
     if reach['reachable']:reach.update(solve_arm(arm,side,wrist,desired))
+    after_u,after_e,after_w=[arm.pose.bones[n].matrix.translation for n in ['UpperArm_'+side,'LowerArm_'+side,'Hand_'+side]]
+    after_axis=(after_w-after_u).normalized();after_pole=after_e-after_u;after_pole-=after_axis*after_pole.dot(after_axis)
+    pole_cosine=before_pole.dot(after_pole.normalized())if before_pole is not None and after_pole.length else None
     actual=sample_vertex(bpy.data.objects[witness['mesh']],witness['index'])
     nearest,norm,triangle,gap=tree.find_nearest(actual)
     # Signed nearest-normal samples are reported honestly. They are not a
@@ -157,9 +206,12 @@ def grip(actor,victim,hand,side):
         own_cuff={'meshes':cuff_parts,'pad_to_armor_m':cuff_tree.find_nearest(actual)[3],
                   'surface_intersections':triangle_crossings([bpy.data.objects[witness['mesh']]],cuff_tree,cuff_triangles)}
     reach.update(side=side,pad_vertex=witness['index'],hand_mesh=witness['mesh'],target_meshes=parts,
-                 before_pad_gap_m=distance,after_pad_gap_m=gap,world_pad=list(C@actual),world_surface=list(C@nearest),
+                 before_pad_gap_m=distance,after_pad_gap_m=gap,material_binding=copy.deepcopy(binding),
+                 pad_to_bound_material_point_m=(actual-surface).length,bound_material_point_stage_m=list(C@surface),
+                 local_wrist_euler_rad=list(hand_bone.rotation_euler),world_pad=list(C@actual),world_surface=list(C@nearest),
                  minimum_signed_nearest_normal_m=min(signed),negative_signed_samples=sum(v<0 for v in signed),
                  signed_method='Per-triangle nearest outward normal, not validated penetration volume',
+                 preferred_elbow_half_plane_cosine=pole_cosine,
                  wrist_orientation_change_rad=before_q.rotation_difference(hand_bone.matrix.to_quaternion()).angle,
                  surface_intersections=intersections,
                  own_cuff_diagnostics=own_cuff,
@@ -173,8 +225,59 @@ def apply_body(actor,frame):
     duration=max(1.,float(action.frame_range[1]));sample_action(actor,action,(offset+frame)%duration)
 
 
+def source_placement(actors):
+    """Authored art spacing from actual source surfaces, never native pixels.
+
+    Torso support planes meet along the chosen offline fight axis. This is an
+    editable initial art composition, not inferred gameplay/collision spacing.
+    Its roots are frozen before the subsequent paired hand constraints.
+    """
+    for actor in actors:apply_body(actor,12)
+    bpy.context.view_layer.update()
+    extents=[];evidence=[]
+    for actor in actors:
+        names=['Articulated compact torso','Chest power plate','Hip costume']
+        meshes=[actor['objects'][name]for name in names]
+        _,parts,triangles=evaluated_tree(meshes)
+        pts=[C@p for tri in triangles for p in tri]
+        extents.append([min(p.x for p in pts),max(p.x for p in pts)])
+        evidence.append({'role':actor['role'],'meshes':parts,'source_units':actor['original_units'],
+                         'pose_frame':12,'basis':'Original per-character8B hold/restraint; evaluated original torso surfaces before paired solve'})
+    return {'method':'authored_opposed_axes_evaluated_torso_support_planes',
+            'scope':'Offline authored composition only; NOT authoritative gameplay spacing',
+            'source_hashes':[a['observation']['source_sha256']for a in actors],
+            'torso_axis_extents_m':extents,'source_geometry_evidence':evidence,
+            'native_px_offsets_used_for_physical_placement':False,'solver_may_change_roots':False}
+
+
+def surface_sensitivity(actors,hand):
+    """Actual evaluated source surfaces, measured without moving saved actors."""
+    a,b=actors;h=copy.deepcopy(hand);h['mesh']=a['objects'][hand['mesh']].name
+    witness=contact_vertex(a['arm'],h);pad=sample_vertex(bpy.data.objects[witness['mesh']],witness['index'])
+    side='R' if hand['side']=='L' else 'L'
+    tree,parts,triangles=evaluated_tree([b['objects'][n]for n in ['Upper arm '+side,'Forearm '+side]])
+    points=[p for t in triangles for p in t];span=max(max(p[i]for p in points)-min(p[i]for p in points)for i in range(3))
+    # Twice the evaluated target's maximum span is a source-derived diagnostic
+    # displacement, not an authored gameplay or rig offset.
+    extent=2*span;depth=C.inverted()@Vector((0,0,extent));horizontal=C.inverted()@Vector((extent,0,0))
+    base=tree.find_nearest(pad)[3]
+    tests=[]
+    for name,shift in [('depth_same_projection',depth),('opponent_translation',horizontal)]:
+        near,normal,tri,distance=tree.find_nearest(pad-shift)
+        tests.append({'probe':name,'target_translation_stage_m':list(C@shift),'baseline_surface_gap_m':base,
+                      'displaced_surface_gap_m':distance,'distance_changed':abs(distance-base)>1e-6,
+                      'projected_target_delta_reference_px':[0.,0.]if name=='depth_same_projection'else None})
+    poses=[a['arm'].pose.bones[n].matrix.translation for n in ['UpperArm_'+hand['side'],'LowerArm_'+hand['side'],'Hand_'+hand['side']]]
+    lengths=[(poses[1]-poses[0]).length,(poses[2]-poses[1]).length]
+    impossible=poses[0]+Vector((sum(lengths)+max(lengths),0,0))
+    rejection=feasibility(*[list(p)for p in poses],list(impossible))
+    assert not rejection['reachable'] and all(t['distance_changed']for t in tests)
+    return {'scope':'Actual evaluated held surfaces, diagnostic translations only; saved roots untouched',
+            'target_meshes':parts,'probes':tests,'impossible_reach':rejection}
+
+
 def source_reference_performance(actors,docs,hands):
-    actions_out=[];reports=[]
+    actions_out=[];reports=[];bindings={}
     for actor in actors:
         name='ANI08D4_REFERENCE_HOLD_'+actor['role']
         assert name not in bpy.data.actions
@@ -183,7 +286,7 @@ def source_reference_performance(actors,docs,hands):
         for actor,doc in zip(actors,docs):apply_body(actor,frame);fingers(actor,doc,'grip',1.)
         bpy.context.view_layer.update()
         before={a['role']:a['anchor'].matrix_world.copy() for a in actors}
-        measured=[grip(actors[0],actors[1],hand,hand['side']) for hand in hands]
+        measured=[grip(actors[0],actors[1],hand,hand['side'],bindings) for hand in hands]
         for actor,action in zip(actors,actions_out):
             # Both actual actor performances are editable. Original individual
             #8B torso/legs/restraint, plus the attacker's measured arm contact.
@@ -235,29 +338,46 @@ def run():
     hand_lookup={(r['fighter'],r['body']):r['hands']for r in hand_manifest['rows']}
     # Crucially fail BEFORE creating a stage or saving any scene if calibration
     # authority has not actually been selected by the owner.
-    stages=[make_stage(pack['policy'],case['actors'],pack['source_hashes'])for case in pack['reference_cases']]
+    assert pack['policy']['status']=='OWNER_SELECTED_OFFLINE_REFERENCE'
+    assert pack['policy']['camera_role']=='OFFLINE_FRAMING_ONLY_NEVER_METRIC_SPACING'
+    selection=ROOT/pack['policy']['owner_selection_receipt'];assert selection.is_file()
+    owner_selection=json.loads(selection.read_text())
+    assert not owner_selection['gameplay_px_to_metre_authority_granted'] and not owner_selection['public_modified_art_upload_authorized']
     out.mkdir();(out/'runtime').mkdir()
+    shutil.copy2(ROOT/'art_source/staging/metric_8d4/inputs_v1.json',out/'runtime/STAGE_INPUTS.json')
+    shutil.copy2(selection,out/'runtime/OWNER_CALIBRATION_SELECTION.json')
     manifest={'schema':'metric_pair_reference_sources_8d4.v1','producer_sha':os.environ['GITHUB_SHA'],
               'run_id':os.environ['GITHUB_RUN_ID'],'input_run':39910149332,'blender_version':bpy.app.version_string,
+              'reference_camera_size_m':pack['policy']['reference_observation']['projection']['camera_size'],
+              'all_18_native_camera_scales':pack['measured_body_scales'],'owner_selection_sha256':sha(selection),
               'scope':'Eight offline reference scenes; not18-rig production or native shipping contact authority',
-              'rows':[],'complete':False,'shipping_alignment_verified':False,'human_approved':False}
-    for case,stage in zip(pack['reference_cases'],stages):
+              'rows':[],'complete':False,'shipping_alignment_verified':False,'RUNTIME_PAIRED_CONTACT_VERIFIED':False,'human_approved':False}
+    for case in pack['reference_cases']:
         bpy.ops.wm.read_factory_settings(use_empty=True)
         scene=bpy.context.scene;scene.unit_settings.system='METRIC';scene.unit_settings.scale_length=1.;scene.render.fps=60
         actors=[];docs=[]
-        for role,observation,binding in zip(['A','B'],case['actors'],stage['actors']):
+        for role,observation in zip(['A','B'],case['actors']):
+            binding={'rig_godot_metres_to_stage':art_rotation(observation['facing'])}
             row=lookup[observation['fighter'],observation['body']];source=inputs/row['saved_source'];assert sha(source)==row['saved_source_sha256']
             actors.append(import_actor(source,role,observation,binding))
             path=inputs/'runtime'/row['runtime'];assert sha(path)==row['runtime_sha256'];docs.append(json.loads(path.read_text()))
         bpy.context.view_layer.update()
+        placement=source_placement(actors)
+        stage=make_stage(pack['policy'],case['actors'],pack['source_hashes'],placement)
+        for actor,binding in zip(actors,stage['actors']):
+            actor['anchor'].matrix_world=C.inverted()@Matrix(binding['rig_godot_metres_to_stage'])@C
+            bpy.context.view_layer.update();actor['placement']=actor['anchor'].matrix_world.copy()
+            requested=C.inverted()@Matrix(binding['rig_godot_metres_to_stage'])@C
+            assert max(abs(actor['placement'][i][j]-requested[i][j])for i in range(4)for j in range(4))<1e-6
         action_pair,contact=source_reference_performance(actors,docs,hand_lookup[case['actors'][0]['fighter'],case['actors'][0]['body']])
         for actor in actors:assert_preserved(actor)
         scene.frame_start=0;scene.frame_end=24;scene.frame_set(12);bpy.context.view_layer.update()
+        sensitivity=surface_sensitivity(actors,hand_lookup[case['actors'][0]['fighter'],case['actors'][0]['body']][0])
         saved=out/'saved_stages'/(case['case']+'.blend');saved.parent.mkdir(exist_ok=True)
         scene['8D4_stage_contract']=json.dumps(stage,separators=(',',':'))
         scene['8D4_limit']='Offline owner-calibrated art stage; static GLB snapshots are not installable animated fighter exports or shipping alignment proof'
         bpy.context.preferences.filepaths.save_version=0;bpy.ops.wm.save_as_mainfile(filepath=str(saved))
-        actor_names=[{'arm':a['arm'].name,'anchor':a['anchor'].name,'visible_names':[o.name for o in a['visible']],'new_action':action.name,'geometry':a['geometry_hash'],'weights':a['weights_hash'],'rest':a['rest_hash'],'old_actions':a['action_hash']}for a,action in zip(actors,action_pair)]
+        actor_names=[{'arm':a['arm'].name,'anchor':a['anchor'].name,'visible_names':[o.name for o in a['visible']],'new_action':action.name,'geometry':a['geometry_hash'],'weights':a['weights_hash'],'rest':a['rest_hash'],'materials':a['material_hash'],'old_actions':a['action_hash']}for a,action in zip(actors,action_pair)]
         # Reopen actual saved paired source. This does not regenerate either
         # input rig or rewrite the completed8D3 files.
         bpy.ops.wm.open_mainfile(filepath=str(saved))
@@ -265,8 +385,36 @@ def run():
             actor['arm']=bpy.data.objects[names['arm']];actor['anchor']=bpy.data.objects[names['anchor']]
             actor['visible']=[bpy.data.objects[name]for name in names['visible_names']]
             assert_preserved(actor)
+        # Verify actual saved/reopened animation, not only pre-save solver
+        # coordinates. Tolerance is float32 FK serialization, not art approval.
+        reopened=[]
+        input_hands=hand_lookup[case['actors'][0]['fighter'],case['actors'][0]['body']]
+        for frame_record in contact:
+            bpy.context.scene.frame_set(frame_record['frame']);bpy.context.view_layer.update()
+            samples=[]
+            for h,expected in zip(input_hands,frame_record['hands']):
+                copy_hand=copy.deepcopy(h)
+                # Old object handles were invalidated by reopen; use names.
+                copy_hand['mesh']=actors[0]['role']+'__'+h['mesh']
+                witness=contact_vertex(actors[0]['arm'],copy_hand)
+                actual=C@sample_vertex(bpy.data.objects[witness['mesh']],witness['index'])
+                error=(actual-Vector(expected['world_pad'])).length
+                assert error<.00005,('Saved source paired FK differs',case['case'],frame_record['frame'],h['side'],error)
+                samples.append({'side':h['side'],'saved_pad_stage_m':list(actual),'pre_save_pad_error_m':error})
+            reopened.append({'frame':frame_record['frame'],'hands':samples})
         bpy.context.scene.frame_set(12);bpy.context.view_layer.update()
-        asset=out/'runtime/stage_snapshots'/(case['case']+'_held.glb');bounds=static_snapshot(actors,asset)
+        snapshots=[]
+        for state in ['open','closed','held']:
+            for actor,doc,names in zip(actors,docs,actor_names):
+                action=bpy.data.actions[names['new_action']];sample_action(actor,action,12)
+                fingers(actor,doc,'fist' if state=='closed' else 'grip',0. if state=='open' else 1.)
+            bpy.context.view_layer.update()
+            asset=out/'runtime/stage_snapshots'/(case['case']+'_'+state+'.glb');bounds=static_snapshot(actors,asset)
+            snapshots.append({'state':state,'resource':str(asset.relative_to(out/'runtime')),
+                              'sha256':sha(asset),'bounds':bounds,'scope':'Static actual evaluated source surfaces; NOT an animated fighter export'})
+        # Restore the saved paired held action for floor/source diagnostics.
+        for actor,names in zip(actors,actor_names):actor['arm'].animation_data.action=bpy.data.actions[names['new_action']]
+        bpy.context.scene.frame_set(12);bpy.context.view_layer.update()
         # Preserve source-floor and runtime-collision planes as distinct data.
         feet=[]
         for actor in actors:
@@ -274,12 +422,11 @@ def run():
             for side in ['L','R']:
                 ob=bpy.data.objects[actor['role']+'__Boot '+side];ev=ob.evaluated_get(graph);mesh=ev.to_mesh()
                 bottom=min((C@ev.matrix_world@v.co).y for v in mesh.vertices);ev.to_mesh_clear()
-                feet.append({'actor':actor['role'],'side':side,'evaluated_sole_stage_y_m':bottom,'source_floor_y_m':0.,'scope':'Actual skin surface, no root shift/foot-lock correction; source and runtime floor differ'})
+                feet.append({'actor':actor['role'],'side':side,'evaluated_sole_stage_y_m':bottom,'common_art_floor_y_m':0.,'local_source_floor_stage_y_m':float((C@actor['anchor'].matrix_world@Vector((0,0,0,1))).y),'native_floor_observations':actor['observation']['floor_observations'],'scope':'Actual skin surface, no root shift/foot-lock correction; source and runtime floor differ'})
         record={'case':case['case'],'saved_source':str(saved.relative_to(out)),'saved_source_sha256':sha(saved),'stage':stage,
                 'input_sources':[{'fighter':a['fighter'],'body':a['body'],'sha256':a['source_sha256']}for a in case['actors']],
                 'source_actions':[a['new_action']for a in actor_names],'source_preservation':actor_names,
-                'contact_frames':contact,'static_snapshot':str(asset.relative_to(out/'runtime')),'snapshot_sha256':sha(asset),
-                'snapshot_bounds':bounds,'floor_observations':feet,'grip_accepted':False,'shipping_alignment_verified':False,'human_approved':False}
+                'contact_frames':contact,'saved_reopened_pose_samples':reopened,'surface_sensitivity':sensitivity,'snapshots':snapshots,'floor_observations':feet,'grip_accepted':False,'shipping_alignment_verified':False,'RUNTIME_PAIRED_CONTACT_VERIFIED':False,'human_approved':False}
         manifest['rows'].append(record)
         (out/'runtime/PRODUCTION_MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n')
         print('SAVED_8D4_REFERENCE_STAGE',case['case'],flush=True)

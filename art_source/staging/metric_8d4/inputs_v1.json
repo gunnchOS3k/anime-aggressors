@@ -28,11 +28,11 @@
   },
   "policy": {
     "schema": "offline_metric_stage_authority_8d4.v1",
-    "status": "PROPOSED_REQUIRES_OWNER_SELECTION",
-    "owner_selection_receipt": null,
+    "status": "OWNER_SELECTED_OFFLINE_REFERENCE",
+    "owner_selection_receipt": "art_source/staging/metric_8d4/OWNER_CALIBRATION_SELECTION.json",
     "source_unit_metres": 1,
     "source_unit_authority": "art_source/animation/CONTRACT.md; actual glTF source export; Blender scene unit/rest check required before source bake",
-    "depth_policy": "declared_2d_simulation_plane_zero",
+    "depth_policy": "authored_offline_scene_not_recovered_runtime_depth",
     "runtime_equivalence_claim": false,
     "reference_observation": {
       "fighter": "ember-vale",
@@ -195,9 +195,14 @@
     "spacing_authority": {
       "path": "game-godot/scripts/fighters/fighter.gd",
       "sha256": "01503979f822829c5b6614792d634721f1f4f26af30b5f28760822013e734915",
-      "rule": "Held target root = owner root + (24*facing,-8) in gameplay pixels; validated against all retained throw holds"
+      "rule": "Held target root = owner root + (24*facing,-8) in gameplay pixels; validated against all retained throw holds",
+      "scope": "Native 2D comparison only. This pixel rule MUST NOT be converted to offline art metres."
     },
-    "floor_policy": "Source Blender z=0 is the art ground. Runtime collision floor is a separate measured overlay; neither actor root is moved to erase its residual."
+    "floor_policy": "Original source z=0 defines common art floor; per-actor local floor and native collision projection stay distinct. No root translation to erase sole residuals.",
+    "camera_role": "OFFLINE_FRAMING_ONLY_NEVER_METRIC_SPACING",
+    "source_placement_policy": "authored_opposed_axes_evaluated_torso_support_planes",
+    "native_gameplay_roots_are_comparison_only": true,
+    "authoring_axis_rule": "Actor A forward points along stage X by its facing sign; B forward opposes it. These are editable offline art orientations, not native camera yaw or gameplay calibration."
   },
   "reference_cases": [
     {

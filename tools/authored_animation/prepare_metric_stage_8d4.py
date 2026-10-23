@@ -43,8 +43,12 @@ def prepare(archive):
     ref=copy.deepcopy(samples['ember-vale','male',1,'holder'])
     policy={'schema':'offline_metric_stage_authority_8d4.v1','status':'PROPOSED_REQUIRES_OWNER_SELECTION',
             'owner_selection_receipt':None,'source_unit_metres':1,'source_unit_authority':'art_source/animation/CONTRACT.md; actual glTF source export; Blender scene unit/rest check required before source bake',
-            'depth_policy':'declared_2d_simulation_plane_zero','runtime_equivalence_claim':False,'reference_observation':ref,
+            'depth_policy':'authored_offline_scene_not_recovered_runtime_depth','runtime_equivalence_claim':False,
+            'camera_role':'OFFLINE_FRAMING_ONLY_NEVER_METRIC_SPACING',
+            'source_placement_policy':'authored_opposed_axes_evaluated_torso_support_planes',
+            'native_gameplay_roots_are_comparison_only':True,'reference_observation':ref,
             'spacing_authority':{'path':'game-godot/scripts/fighters/fighter.gd','sha256':sha(ROOT/'game-godot/scripts/fighters/fighter.gd'),
+                                 'scope':'Native 2D comparison only; never convert this offset to art metres',
                                  'rule':'Held target root = owner root + (24*facing,-8) in gameplay pixels; validated against all retained throw holds'},
             'floor_policy':'Source Blender z=0 is the art ground. Runtime collision floor is a separate measured overlay; neither actor root is moved to erase its residual.'}
     cases=[]
