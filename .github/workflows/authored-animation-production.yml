@@ -192,6 +192,10 @@ jobs:
           # bound network waits and avoid optional GUI/media recommendations.
           sudo python3 - <<'PYCODE'
           from pathlib import Path
+          # mirror+file runners read these lists before the sources files.
+          for name,url in [('apt-mirrors.txt','https://archive.ubuntu.com/ubuntu'),('apt-mirrors-security.txt','https://security.ubuntu.com/ubuntu')]:
+              p=Path('/etc/apt')/name
+              if p.is_file():p.write_text(url+'\n')
           for p in [Path('/etc/apt/sources.list'),*Path('/etc/apt/sources.list.d').glob('*.sources')]:
               if p.is_file():p.write_text(p.read_text().replace('http://azure.archive.ubuntu.com/ubuntu','https://archive.ubuntu.com/ubuntu'))
           PYCODE
@@ -302,6 +306,10 @@ jobs:
         run: |
           sudo python3 - <<'PYCODE'
           from pathlib import Path
+          # mirror+file runners read these lists before the sources files.
+          for name,url in [('apt-mirrors.txt','https://archive.ubuntu.com/ubuntu'),('apt-mirrors-security.txt','https://security.ubuntu.com/ubuntu')]:
+              p=Path('/etc/apt')/name
+              if p.is_file():p.write_text(url+'\n')
           for p in [Path('/etc/apt/sources.list'),*Path('/etc/apt/sources.list.d').glob('*.sources')]:
               if p.is_file():p.write_text(p.read_text().replace('http://azure.archive.ubuntu.com/ubuntu','https://archive.ubuntu.com/ubuntu'))
           PYCODE

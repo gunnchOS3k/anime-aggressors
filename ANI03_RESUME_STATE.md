@@ -1,3 +1,11 @@
+# 8D-2 setup timeout diagnosed; actual mirrorlist correction ready
+
+39885233045 terminalFAILURE beforeBlender: oldinstallerpatched.sourcesbutrunner usesmirror+file:/etc/apt/apt-mirrors.txt, stillAzure. Logretained shows35.9MBblender-data consumed7m36sbefore8min guard.0sources/0artifacts, preservationdiagnostic NOTexecuted. Newboundedcorrection pinsactualmirrorlist toofficialHTTPSarchive/security, keep signedaptverification/Blender4.0.2/timeouts. Sameexplicitlyapprovedhandrepairtask, nooriginalregeneration.
+
+NEXTcommit/pushinstallerfix thenONE hands_repair_8d2 dispatch afterterminalprevious. Inspectactualpreservationchecks fromf1eefe88samebodycode; iffailedretaincategorylog. Noactiveproducer atthischeckpoint. Latestinternal14.23GiBstillbelow18+forecast; nolocalheavyproduction. Firstapprovednativefae/39883829338 remainsSUCCESS/archived, allhumanfalse. UnrelatedWORKFLOW_REFERENCED_PATHS.json preservedunstaged; noCursorchanges.
+
+---
+
 # 8D-2 exact approved repair diagnostic run39885233045 active
 
 Solemanualrun39885233045 atf1eefe88e7fa0e49e0270ea3bcd4b62d81578563 IN_PROGRESS, last installingcompatibleBlender. Prior39884895556 failedbeforefirstsave (0artifacts); fullfailurepreserved, no inputchanges. Sameexplicitlyapproved18handrepair/public90dayartifactscope. Newchecksreportwhichimmutablecategory/meshchanged andrestoreoriginalposeafterfistmeasurement. Allpreservationrequirementsremainexact; no tolerance relaxation.
