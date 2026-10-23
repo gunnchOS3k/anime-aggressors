@@ -5,6 +5,8 @@ Bake arm/hand surface contact into new, separately named editable actions.
 """
 import copy,json,math,os,sys,shutil
 from pathlib import Path
+# Blender --python does not add the entry file directory to sys.path.
+sys.path.insert(0,str(Path(__file__).resolve().parent))
 import bpy
 from mathutils import Vector,Matrix
 from aa_controls_8d import sha,geometry,weights,rest,actions

@@ -1,3 +1,13 @@
+# 8D-2 approved hand producer reached Blender; entry import corrected
+
+Owner explicitlyapproved60835ce3handtaskpublic90day source/runtime upload. Replacement39882355608 completedFAILURE: dependencyinstall and exact18saved8Ddownload succeeded; Blender4.0.2 stopped at ModuleNotFoundError aa_controls_8d beforeediting. Artifacts0. Fullnegativeevidencehands_failed_39882355608. Fixonlyentrymodulepath: Blender --python omits scriptdirectory fromsys.path; addexplicitentryparent before siblingimports (also samepreparedpairedentry). Art/weights/oldactionassertionsunchanged; no BASEregeneration. Originalpermission coverssamehandproduction task; no newpairedsourceupload.
+
+Localfd58/6df330 preservedsourcecheckpoint normallypushed as2e20d0b9 afterapprovedrunstarted. Currentnewmatched18bodyhandcomparison fixture prepareduncommitted, nativeonlynotexecuted; nohumanartpass. Internal7.82GiB noheavyproduction. NoactiveBlender/manualjob now. OnlyunrelateduntrackedWORKFLOW_REFERENCED_PATHS.jsonprotected.
+
+NEXT commit/pushentryimportfix+failureevidence; dispatchONE correctedsameapprovedhandsjob afterprevious terminal. Inspectactualsourceassertions. Onsuccessarchiveonlyrecover_hands_8d2.py exactrun/sha; matched8D/native8D2comparison next. Do not conflate infra/source/native/artquality. Allhumanfalse; noCursorbranchchanges/merge/release.
+
+---
+
 # 8D-2 approved replacement producer active
 
 Explicit owner approval received for exact60835ce3 hand-production upload (18 edited Blender candidates plusGLB/JSON verification, public90dayActions, no release). Dispatch39882355608 nowIN_PROGRESS at60835ce34558ba6af722f5a2d8fa558498c72c1e. Prior39858757532terminalcancelled with0artifacts; failure retained. No duplicateproducer. Do not dispatch another manual workflow on same branch while active: concurrency cancelsolderjob. Approvalreceipt8d2_recovery_1022/APPROVED_PRODUCTION.json.

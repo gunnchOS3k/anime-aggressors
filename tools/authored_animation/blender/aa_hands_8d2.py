@@ -1,6 +1,8 @@
 """Remote original anatomy pass on exact saved8D candidates, never BASE rebuild."""
 import json,os,sys,shutil
 from pathlib import Path
+# Blender --python does not add the entry file directory to sys.path.
+sys.path.insert(0,str(Path(__file__).resolve().parent))
 import bpy
 from mathutils import Matrix
 from aa_controls_8d import sha,geometry,weights,rest,actions,edit_roundtrip_reference,deformed_points
