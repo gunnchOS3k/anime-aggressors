@@ -1,3 +1,11 @@
+# 8D-2 approved repair failed before save; exact preservation diagnostic prepared
+
+Run39884895556 terminalFAILURE atbf67e8ce before saving firstcandidate; all sourceinputs unchanged,0savedoutputs. Full log/API retained under hands_failed_39884895556. Closed/winding bridge assertions had already passed; combined immutable geometry/weights/rest/curves assertion failed without namingcategory. New diagnostic now identifies exactcategory/changedmeshes at afteredit/presample, postsample restoration and reopen. Exactpose restored after disposable fist test because oldaction may not own allauxchannels. No preservationtolerance lowered. Current sourcechange stillrequires actualremoteexecution. Sameapproved18surface-onlyrepair task/artifactscope, no paired/fullbodyproduction.
+
+First native39883829338 is SUCCESS andarchived,144singlecontactthrows+36escapes/36imports. Rootfoldknown, allartgatesfalse. No active manualjob atthischeckpoint. NEXTcommit/pushscopeddiagnostic and ONE samehands_repair_8d2 replacement afterconfirmingterminal; inspectSOURCE_PRESERVATION_FAILURE.json/log before additionalchanges. Do notregenerateBASE/8D or runlocalbinaryproduction belowreserve. Originalarchives/Cursorlanes/saves/worktrees intact.
+
+---
+
 # 8D-2 approved repair39884895556 running; first native review recovered
 
 Starting producer/remote HEADbf67e8ce9bc0295272d2584b622dedd77364cf9a. User explicitly approved this exact repaired18-source/GLB/JSON public90day upload after automatic review requested separate permission. Sole manual source run39884895556 nowIN_PROGRESS with hands_repair_8d2=true, allotherproducersfalse, verificationinputempty. Do NOT dispatch a competing manual workflow whileactive. No local binaryproduction.

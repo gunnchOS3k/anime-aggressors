@@ -26,15 +26,25 @@ def run():
         hd=inputs/'runtime'/row['runtime'];assert sha(hd)==row['runtime_sha256'];doc=json.loads(hd.read_text());assert sha(inputs/'runtime'/row['resource'])==row['resource_sha256']
         bpy.ops.wm.open_mainfile(filepath=str(src));arm=next(o for o in bpy.data.objects if o.type=='ARMATURE')
         original_objects={o.name for o in bpy.data.objects};immutable=original_objects-{'Palm L','Palm R'};geom=geometry(immutable);skin=weights(immutable);bone_names=[b.name for b in arm.data.bones];bones=rest(arm,bone_names);old_names={a.name for a in bpy.data.actions};curves=actions(old_names)
+        object_geometry={n:geometry({n})for n in immutable if bpy.data.objects[n].type=='MESH'}
+        object_matrices={n:[list(v)for v in bpy.data.objects[n].matrix_local]for n in object_geometry}
+        def preserved(stage):
+            checks={'geometry':geometry(immutable)==geom,'weights':weights(immutable)==skin,'all_bone_rest':rest(arm,bone_names)==bones,'all_action_curves':actions(old_names)==curves}
+            if not all(checks.values()):
+                failure={'fighter':fid,'body':body,'stage':stage,'checks':checks,'changed_geometry':[{'mesh':n,'matrix_before':object_matrices[n],'matrix_now':[list(v)for v in bpy.data.objects[n].matrix_local]}for n,h in object_geometry.items()if geometry({n})!=h]}
+                diagnostic=out/'runtime/SOURCE_PRESERVATION_FAILURE.json';diagnostic.parent.mkdir(parents=True,exist_ok=True);diagnostic.write_text(json.dumps(failure,indent=2)+'\n')
+                raise AssertionError(('Exact source preservation failed',failure))
         assert len([n for n in old_names if n.startswith('ANI08D2_')])==5
         old_action=arm.animation_data.action;frame=bpy.context.scene.frame_current;muted=[t.mute for t in arm.animation_data.nla_tracks]
         for t in arm.animation_data.nla_tracks:t.mute=True
         archive=bpy.data.collections.new('8D2_Protected_First_Surface');bpy.context.scene.collection.children.link(archive);archive.hide_render=True
         dimensions={h['side']:h for h in row['hands']}
         hands=[build_hand(arm,s,score['fighters'][fid],archive,dimensions[s])for s in ['L','R']]
+        preserved('after_surface_edit_before_deformation_sample')
         # No edit mode/rest fitting, no cuff cut and no new action generation.
         for h in hands:
             for key in ['width_m','distal_envelope_m','depth_m']:assert h[key]==dimensions[h['side']][key]
+        pose_before={p.name:p.matrix_basis.copy()for p in arm.pose.bones}
         arm.animation_data.action=bpy.data.actions[doc['clips']['fist']['source_action']]
         bpy.context.scene.frame_set(0);bpy.context.view_layer.update();before=deformed_points(arm,['Palm L','Palm R'])
         bpy.context.scene.frame_set(doc['clips']['fist']['frames']);bpy.context.view_layer.update();after=deformed_points(arm,['Palm L','Palm R'])
@@ -42,12 +52,15 @@ def run():
         arm.animation_data.action=old_action
         for t,value in zip(arm.animation_data.nla_tracks,muted):t.mute=value
         bpy.context.scene.frame_set(frame);bpy.context.view_layer.update()
-        assert geometry(immutable)==geom and weights(immutable)==skin and rest(arm,bone_names)==bones and actions(old_names)==curves
+        # An old action need not key every new finger/secondary channel. Restore
+        # the exact original pose after the disposable deformation measurement.
+        for name,value in pose_before.items():arm.pose.bones[name].matrix_basis=value
+        bpy.context.view_layer.update();preserved('after_deformation_sample_restored')
         for h in hands:
             for part in h['source_parts']:assert fingerprint(bpy.data.objects[part['backup']])==part['before_sha256']
         saved=out/row['saved_source'];saved.parent.mkdir(parents=True,exist_ok=True);bpy.context.preferences.filepaths.save_version=0
         bpy.ops.wm.save_as_mainfile(filepath=str(saved));bpy.ops.wm.open_mainfile(filepath=str(saved));arm=next(o for o in bpy.data.objects if o.type=='ARMATURE')
-        assert geometry(immutable)==geom and weights(immutable)==skin and rest(arm,bone_names)==bones and actions(old_names)==curves
+        preserved('saved_and_reopened')
         keep={c['source_action']for c in doc['clips'].values()}
         for t in list(arm.animation_data.nla_tracks):arm.animation_data.nla_tracks.remove(t)
         arm.animation_data.action=None
