@@ -39,10 +39,14 @@ func run() -> void:
 	var manifest_path := ""
 	var output := ""
 	var synthetic := false
+	var expected_frames := 25
+	var expected_clip := CLIP
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--animation-manifest="): manifest_path = arg.trim_prefix("--animation-manifest=")
 		if arg.begins_with("--test-output="): output = arg.trim_prefix("--test-output=")
 		if arg == "--synthetic-fixture": synthetic = true
+		if arg.begins_with("--expected-frames="): expected_frames = int(arg.trim_prefix("--expected-frames="))
+		if arg.begins_with("--expected-clip="): expected_clip = arg.trim_prefix("--expected-clip=")
 	if not manifest_path.is_absolute_path() or not output.is_absolute_path():
 		push_error("Explicit private manifest/output paths required")
 		quit(2)
@@ -57,12 +61,15 @@ func run() -> void:
 	var asset := manifest_path.get_base_dir().path_join(str(entry.get("resource",""))).simplify_path()
 	check(asset.begins_with(manifest_path.get_base_dir().simplify_path()+"/"), "private_export_path")
 	check(FileAccess.get_sha256(asset) == entry.get("sha256",""), "actual_export_hash")
-	check(entry.get("source_frame_count") == 25 and entry.get("FPS") == 60, "source_clock_unchanged")
-	check(entry.get("actors",[]).size() == 2 and entry.get("pose_frames",[]).size() == 25, "two_actors_25_source_frames")
+	check(expected_frames > 1 and entry.get("clip") == expected_clip, "explicit_source_clip")
+	check(entry.get("source_frame_count") == expected_frames and entry.get("FPS") == 60, "source_clock_unchanged")
+	check(entry.get("actors",[]).size() == 2 and entry.get("pose_frames",[]).size() == expected_frames, "two_actors_source_frames")
 	var document := GLTFDocument.new()
 	var state := GLTFState.new()
 	check(document.append_from_file(asset,state) == OK, "actual_binary_GLTF_import")
-	var scene := document.generate_scene(state)
+	# Source actions contain authored60Hz keys. The importer's default30Hz
+	# bake drops their odd-frame poses; do not relax source equivalence instead.
+	var scene := document.generate_scene(state, 60.0)
 	check(scene is Node3D, "actual_animated_scene")
 	if not failures.is_empty():
 		if scene != null: scene.free()
@@ -78,7 +85,7 @@ func run() -> void:
 	var clip := ""
 	if player != null:
 		for name in player.get_animation_list():
-			if String(name).get_file() == CLIP: clip = name
+			if String(name).get_file() == expected_clip: clip = name
 	check(not clip.is_empty(), "original_combined_clip_imported")
 	var rigs := {}
 	var anchors := {}
@@ -98,7 +105,7 @@ func run() -> void:
 			check(rig.find_bone(str(bone)) >= 0, "original_bone_id:"+str(definition.role)+":"+str(bone))
 	if failures.is_empty():
 		var animation := player.get_animation(clip)
-		check(absf(animation.length-0.4) <= 0.000001, "native_clip_duration")
+		check(absf(animation.length-float(expected_frames-1)/60.0) <= 0.000001, "native_clip_duration")
 		for track in range(animation.get_track_count()):
 			check(animation.track_get_type(track) in [Animation.TYPE_POSITION_3D,Animation.TYPE_ROTATION_3D,Animation.TYPE_SCALE_3D,Animation.TYPE_BLEND_SHAPE], "no_gameplay_method_audio_or_callback_tracks")
 	var maximum_error := 0.0
@@ -125,7 +132,7 @@ func run() -> void:
 					maximum_error = maxf(maximum_error,error)
 					joint_samples += 1
 					check(error <= SERIALIZATION_EPSILON_M, "native_source_joint:"+str(actor.role)+":"+str(bone)+":"+str(frame.frame))
-	var report := {"PASS":failures.is_empty(),"checks":checks,"failures":failures,"source_export_sha256":entry.get("sha256"),"joint_samples":joint_samples,"max_source_joint_error_m":maximum_error,"source_frames":25,"actors":rigs.size(),"synthetic_fixture":synthetic,"skeletal_pose_equivalence_verified":failures.is_empty(),"skinned_surface_equivalence_verified":false,"release_acting_verified":false,"visual_review_verified":false,"RUNTIME_PAIRED_CONTACT_VERIFIED":false,"human_approved":false,"scope":"Native imported skeletal AnimationPlayer sampling only; not skin-surface contact, release acting, shipping gameplay, visual taste or device acceptance"}
+	var report := {"PASS":failures.is_empty(),"checks":checks,"failures":failures,"source_export_sha256":entry.get("sha256"),"joint_samples":joint_samples,"max_source_joint_error_m":maximum_error,"source_frames":expected_frames,"actors":rigs.size(),"synthetic_fixture":synthetic,"skeletal_pose_equivalence_verified":failures.is_empty(),"skinned_surface_equivalence_verified":false,"release_acting_verified":false,"visual_review_verified":false,"RUNTIME_PAIRED_CONTACT_VERIFIED":false,"human_approved":false,"scope":"Native imported skeletal AnimationPlayer sampling only; not skin-surface contact, release acting, shipping gameplay, visual taste or device acceptance"}
 	DirAccess.make_dir_recursive_absolute(output)
 	var file := FileAccess.open(output.path_join("paired_animation_playback.json"),FileAccess.WRITE)
 	file.store_string(JSON.stringify(report,"\t"))

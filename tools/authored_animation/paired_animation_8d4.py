@@ -49,11 +49,11 @@ def float_accessor(doc,binary,index):
     return values
 
 
-def inspect_paired_export(path,actors):
+def inspect_paired_export(path,actors,*,clip_name=CLIP,frame_count=FRAME_COUNT):
     doc,binary=read_glb(path);nodes=doc.get('nodes',[]);skins=doc.get('skins',[])
     animations=doc.get('animations',[])
     if len(actors)!=2 or len(skins)!=2:raise ValueError('Paired playback requires two real skeletal skins')
-    if len(animations)!=1 or animations[0].get('name')!=CLIP:
+    if len(animations)!=1 or animations[0].get('name')!=clip_name:
         raise ValueError('One synchronized, explicitly named paired action required')
     animation=animations[0];parents={}
     for i,node in enumerate(nodes):
@@ -84,7 +84,7 @@ def inspect_paired_export(path,actors):
         # A moving transform is evidence of data, not good acting or contact.
         if any(abs(a-b)>1e-7 for v in values[1:]for a,b in zip(values[0],v)):
             driven.setdefault(node,set()).add(path)
-    if abs(duration-(FRAME_COUNT-1)/FPS)>1e-6:raise ValueError('Paired clip must preserve the25-frame60Hz source clock')
+    if abs(duration-(frame_count-1)/FPS)>1e-6:raise ValueError('Paired clip must preserve its explicit60Hz source clock')
     if set(driven)-{j for skin in skins for j in skin.get('joints',[])}:
         raise ValueError('Animated object/actor roots cannot acquire movement authority')
     reports=[];used=set()
@@ -108,6 +108,6 @@ def inspect_paired_export(path,actors):
         if len(moving)<2:raise ValueError('Paired actor lacks nonconstant skeletal performance')
         reports.append({'role':actor['role'],'anchor':actor['anchor'],'source_bones':len(names),
                         'owned_skinned_meshes':len(meshes),'moving_joint_names':moving})
-    return {'PASS':True,'clip':CLIP,'duration_seconds':duration,'actors':reports,
+    return {'PASS':True,'clip':clip_name,'duration_seconds':duration,'actors':reports,
             'scope':'Binary skeletal/action structure only; not Blender equivalence, native playback or art quality',
             'native_playback_verified':False,'release_acting_verified':False,'human_approved':False}

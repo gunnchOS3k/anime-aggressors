@@ -354,7 +354,7 @@ def static_snapshot(actors,path):
     return bounds
 
 
-def animated_reference(actors,path):
+def animated_reference(actors,path,*,clip_name=CLIP,frame_count=FRAME_COUNT):
     """Export the two REAL active hold actions, never static copies or all old actions.
 
     ACTIVE_ACTIONS and export_anim_single_armature=False are explicit4.0 API
@@ -362,11 +362,11 @@ def animated_reference(actors,path):
     invented by this export. Original input rigs/actions remain unchanged.
     """
     scene=bpy.context.scene
-    assert scene.render.fps==FPS and scene.frame_start==0 and scene.frame_end==FRAME_COUNT-1
+    assert scene.render.fps==FPS and scene.frame_start==0 and scene.frame_end==frame_count-1
     records=[{'role':a['role'],'anchor':a['anchor'].name,'bone_names':list(a['bone_names']),
               'source_action':a['arm'].animation_data.action.name}for a in actors]
     frames=[]
-    for frame in range(FRAME_COUNT):
+    for frame in range(frame_count):
         scene.frame_set(frame);bpy.context.view_layer.update()
         samples=[]
         for actor in actors:
@@ -384,16 +384,16 @@ def animated_reference(actors,path):
                               export_yup=True,export_apply=False,export_skins=True,
                               export_animations=True,export_animation_mode='ACTIVE_ACTIONS',
                               export_anim_single_armature=False,
-                              export_nla_strips_merged_animation_name=CLIP,
+                              export_nla_strips_merged_animation_name=clip_name,
                               export_frame_range=True,export_frame_step=1,
                               export_force_sampling=True,export_optimize_animation_size=False,
                               export_def_bones=False)
     for actor in actors:assert_preserved(actor)
-    inspection=inspect_paired_export(path,records)
+    inspection=inspect_paired_export(path,records,clip_name=clip_name,frame_count=frame_count)
     return {'resource':str(path.relative_to(path.parents[1])), 'sha256':sha(path),
-            'clip':CLIP,'FPS':FPS,'source_frame_count':FRAME_COUNT,
+            'clip':clip_name,'FPS':FPS,'source_frame_count':frame_count,
             'actors':records,'pose_frames':frames,'binary_inspection':inspection,
-            'scope':'Original two-actor25-frame hold/restraint source only; release/locomotion/recovery acting still required',
+            'scope':'Original two-actor skeletal export; acting/contact quality requires separate visual validation',
             'gameplay_movement_authority':False,'native_playback_verified':False,'human_approved':False}
 
 

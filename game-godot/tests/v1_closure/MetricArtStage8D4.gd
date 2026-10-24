@@ -20,7 +20,7 @@ func xyz(a: Array) -> Vector3:
 
 func collect_meshes(node: Node, result: Dictionary) -> void:
 	if node is MeshInstance3D:
-		result[String(node.name)] = node
+		result[String(node.get_meta("source_gltf_node_name", node.name))] = node
 	for child in node.get_children():
 		collect_meshes(child, result)
 
@@ -78,6 +78,15 @@ func load_snapshot(path: String) -> Node3D:
 		return Node3D.new()
 	var scene := document.generate_scene(state)
 	check(scene is Node3D, "actual_static_scene:" + path)
+	# Node names containing punctuation are sanitized by Godot. Bind through
+	# the importer's actual node index, never guess or conflate renamed meshes.
+	var raw := FileAccess.get_file_as_bytes(path)
+	var json_length := raw.decode_u32(12)
+	var source: Dictionary = JSON.parse_string(raw.slice(20,20+json_length).get_string_from_utf8())
+	for index in source.get("nodes",[]).size():
+		var imported := state.get_scene_node(index)
+		if imported is MeshInstance3D:
+			imported.set_meta("source_gltf_node_name",str(source.nodes[index].get("name",imported.name)))
 	return scene as Node3D
 
 func capture(snapshot: Dictionary, quarter: bool, size_m: float) -> Dictionary:

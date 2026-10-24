@@ -1,3 +1,17 @@
+# 2026-10-24 — ONE original private pilot in progress, not artistic acceptance
+
+Active branch release/anime-v1-dialogue-and-elemental-performance retains db309e1b and PR122 ancestry. Current recoverable source: git rev-parse HEAD. No gala/deployed assets used. Cursor124–132 remain separate, preserved, unmerged; see production_8d/metric_stage_8d4/FEATURE_PRESERVATION_20261024.md.42worktrees retained. Unrelated WORKFLOW_REFERENCED_PATHS.json untouched.
+
+Actual ONE-case original Ember/Juno source now saved on encrypted volume: /Volumes/gunnchos-private-art/output/ember-vale__juno-spark__male__1_reopenfix/metric-stage-8d4. Editable two-original-rig .blend, preserved original geometry/weights/rest/materials/actions; two new25-frame reference hold actions. Animated GLB SHA256 7b34328c3e263b51c354fd0885cb4f8a948996e14caf3c2d91eab4ea7e687881. Source producer07d7d94b4cca5f251369b1dd3e06b154214e952f; immutable8D3 inputs42baaab8/run39910149332 unchanged. Official4.0.2 audit and encrypted APFS/ownership/private directories verified.3.3.1 preserved. No remote job/public art/paid service.
+
+Actual Godot AnimationPlayer proof engine_review_60hz/paired_animation_playback.json PASS:3000 real original-rig joint samples, maximum error3.11145385012424e-7m. Explicit60Hz GLTF scene generation fixes lost odd-frame poses from importer's30Hz default; earlier real failure retained.9binary+9external guard tests PASS (volume test requires mounted-volume permissions; sandbox-only run error retained). Static source/native surface review remains FAIL (punctuation mesh identity and >1e-5m import precision); no tolerance weakening. Native PNG inspected: substantial head/body overlap and11633 strict hand/target triangle crossings across25frames. A tiny pad gap does NOT establish acceptable grip. All logs/failed attempts retained privately. Original-art source/export produced; convincing contact/release/recovery and footage NOT complete.
+
+Latest current free18.523GiB internal,63.464GiB encrypted external.19GiB required at new production start;18GiB ongoing protected reserve. No active owned Blender/Godot process. NO new producer/capture below start guard. No deletion or source relocation. Public helpers now accept explicit clip/frame count for the same pilot's future longer acting; default25-frame behavior retained. Scope is ONE Ember/Juno male/facing1 case only; no batch expansion.
+
+NEXT: remeasure capacity. At >=19GiB with full existing preflight PASS, reuse saved original .blend (do not regenerate inputs), author distinct anticipation/grip/resistance/release/recovery for this same pair, measure head envelope/reach/skin/floor, export extended original actions and compare via native60Hz AnimationPlayer. Prepare private normal-speed footage and character-sheet comparison. Until then safe source preparation only. Do not present25-frame hold as completed pilot. Keep RUNTIME_PAIRED_CONTACT_VERIFIED=false, all human gates false, V1_0_0_RELEASE_AUTHORIZED=false, RC2_READY=false. PR123 remains draft on122; no merge/tag/deploy.
+
+---
+
 # Current 8D-4 continuation — existing preview clock fixed; original art blocked
 
 Recovered5410dd2256ed1f2bb9651ad1ea9b1cb1333fcd84. Current source is this checkpoint's `git rev-parse HEAD`. PR123 remains draft on122;42worktrees preserved. Cursor131/132, owner saves, original18rigs/actions and immutable archives are untouched. Only unrelated untracked WORKFLOW_REFERENCED_PATHS.json existed at recovery.
