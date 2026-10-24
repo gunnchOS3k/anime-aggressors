@@ -18,6 +18,9 @@ import json
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from story_checkpoint import restore_story_checkpoint, story_checkpoint  # noqa: E402
+
 
 ROOT = Path(__file__).resolve().parents[2]
 CAMPAIGN = ROOT / "game-godot/data/story/v1_campaign.json"
@@ -188,6 +191,32 @@ def main() -> int:
     check("record_battle_result" in battle, "battle_scene_records_result", failures)
     check('SceneRouter.go("battle")' in scene or 'go("battle")' in scene, "story_menu_enters_battle", failures)
     check("begin_encounter" in runtime, "runtime_begins_encounter", failures)
+    check("static func checkpoint_cursor" in runtime, "runtime_exports_checkpoint_cursor", failures)
+    check("static func restore_story_checkpoint" in runtime, "runtime_exports_checkpoint_restore", failures)
+    check('entry["cursor"] = checkpoint_cursor(node_ids, entry.get("completed", []))' in runtime, "cursor_follows_checkpoint_prefix", failures)
+    check("_write_checkpoint(id)" in runtime.split("func _complete_node")[1].split("func ")[0], "completing_a_node_writes_checkpoint", failures)
+    check("restore_story_checkpoint(document" in runtime, "load_restores_checkpoint_document", failures)
+
+    kaia = next(route for route in campaign["routes"] if route["id"] == "kaia-windrow")
+    node_ids = [node["id"] for node in kaia["nodes"]]
+    check(len(node_ids) >= 3, "kaia_has_three_nodes_for_checkpoint", failures)
+    first_save = story_checkpoint("kaia-windrow", node_ids, [node_ids[0]])
+    first_restored = restore_story_checkpoint(json.loads(json.dumps(first_save)), node_ids)
+    check(first_restored["cursor"] == node_ids[1] and first_restored["completed"] == [node_ids[0]], "checkpoint_after_first_node_restores_second", failures)
+    second_save = story_checkpoint("kaia-windrow", node_ids, list(first_restored["completed"]) + [node_ids[1]])
+    second_restored = restore_story_checkpoint(json.loads(json.dumps(second_save)), node_ids)
+    check(
+        second_restored["completed"] == [node_ids[0], node_ids[1]] and second_restored["cursor"] == node_ids[2],
+        "checkpoint_after_two_nodes_restores_third",
+        failures,
+    )
+    forged = dict(second_save)
+    forged["cursor"] = node_ids[0]
+    forged_restored = restore_story_checkpoint(forged, node_ids)
+    check(forged_restored["cursor"] == node_ids[2], "forged_cursor_does_not_rewind", failures)
+    skipped = restore_story_checkpoint({"route_id": "kaia-windrow", "completed": [node_ids[1]], "cursor": node_ids[2]}, node_ids)
+    check(skipped["cursor"] == node_ids[0] and skipped["completed"] == [], "skipped_node_does_not_advance", failures)
+    print("STORY_CHECKPOINT two_nodes route=kaia-windrow PLAY=not_run")
     print("WEB_MATCH_RESULT not_wired")
     print("GODOT_BATTLE source_only")
     for route in campaign["routes"]:

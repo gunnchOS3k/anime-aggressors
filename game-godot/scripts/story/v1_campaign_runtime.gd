@@ -107,6 +107,7 @@ func load_progress() -> void:
 		if route_available(selected): progress["selected_route"] = selected
 	elif not envelope.is_empty():
 		last_error = "Unverified or legacy save retained. Authenticated Story encounters must be replayed."
+	_restore_checkpoint_document(saved)
 	active_encounter.clear()
 	_battle_producer = null
 	last_result.clear()
@@ -200,9 +201,12 @@ func select_route(id: String) -> bool:
 	if not route_available(id) or not active_encounter.is_empty():
 		return false
 	var previous: String = progress["selected_route"]
+	var previous_checkpoint: Variant = progress.get("checkpoint", {})
 	progress["selected_route"] = id
+	_write_checkpoint(id)
 	if not save_progress():
 		progress["selected_route"] = previous
+		progress["checkpoint"] = previous_checkpoint
 		return false
 	last_result.clear()
 	return true
@@ -217,17 +221,84 @@ func current_node() -> Dictionary:
 	return {}
 
 
+static func _accepted_prefix(node_ids: Array, completed: Array) -> Array:
+	var accepted: Array = []
+	var index := 0
+	for node_id in node_ids:
+		var id := str(node_id)
+		if index >= completed.size() or str(completed[index]) != id:
+			break
+		accepted.append(id)
+		index += 1
+	return accepted
+
+
+static func checkpoint_cursor(node_ids: Array, completed: Array) -> String:
+	var accepted := _accepted_prefix(node_ids, completed)
+	if accepted.size() >= node_ids.size():
+		return ""
+	return str(node_ids[accepted.size()])
+
+
+static func story_checkpoint(route_id: String, node_ids: Array, completed: Array) -> Dictionary:
+	var accepted := _accepted_prefix(node_ids, completed)
+	return {
+		"schema": "anime_v1.checkpoint.v1",
+		"route_id": route_id,
+		"completed": accepted.duplicate(),
+		"cursor": checkpoint_cursor(node_ids, accepted),
+	}
+
+
+static func restore_story_checkpoint(saved: Dictionary, node_ids: Array) -> Dictionary:
+	## The stored cursor is not trusted. The next node is the first id after the saved prefix.
+	var completed: Array = saved.get("completed", []) if saved.get("completed") is Array else []
+	return story_checkpoint(str(saved.get("route_id", "")), node_ids, completed)
+
+
+func _node_ids(route_id: String) -> Array:
+	var ids: Array = []
+	for node in route_data(route_id).get("nodes", []):
+		ids.append(str(node.get("id", "")))
+	return ids
+
+
+func _write_checkpoint(route_id: String) -> void:
+	if not progress.get("routes", {}).has(route_id):
+		return
+	progress["checkpoint"] = story_checkpoint(route_id, _node_ids(route_id), progress["routes"][route_id].get("completed", []))
+
+
+func _restore_checkpoint_document(saved: Dictionary) -> void:
+	var selected := str(progress.get("selected_route", "kaia-windrow"))
+	var validated: Array = progress.get("routes", {}).get(selected, {}).get("completed", [])
+	var document: Variant = saved.get("checkpoint", {})
+	if document is Dictionary and not document.is_empty():
+		var restored := restore_story_checkpoint(document, _node_ids(selected))
+		var documented: Array = restored.get("completed", [])
+		var matches := str(restored.get("route_id", "")) == selected and documented.size() == validated.size()
+		if matches:
+			for index in documented.size():
+				if str(documented[index]) != str(validated[index]):
+					matches = false
+					break
+		if matches:
+			progress["checkpoint"] = restored
+			return
+	_write_checkpoint(selected)
+
+
 func _rebuild_cursor(id: String) -> void:
 	var entry: Dictionary = progress["routes"][id]
-	entry["cursor"] = ""
+	var node_ids := _node_ids(id)
+	entry["cursor"] = checkpoint_cursor(node_ids, entry.get("completed", []))
 	entry["recruited"] = []
 	entry["essence_fighters"] = []
 	entry["released"] = []
 	entry["form"] = "BASE"
 	var earned := true
 	for node in route_data(id).get("nodes", []):
-		if str(node["id"]) not in entry["completed"]:
-			entry["cursor"] = str(node["id"])
+		if str(node["id"]) == entry["cursor"]:
 			break
 		if node.has("recruit"): entry["recruited"].append(node["recruit"])
 		if node.has("first_loss"): entry["essence_fighters"].append(node["first_loss"])
@@ -279,6 +350,7 @@ func _complete_node(node_id: String, receipt: Dictionary = {}) -> bool:
 	# Persist an independent value so clearing that UI state cannot erase proof.
 	if not receipt.is_empty(): entry["receipts"][node_id] = receipt.duplicate(true)
 	_rebuild_cursor(id)
+	_write_checkpoint(id)
 	if not save_progress():
 		progress = previous
 		return false
