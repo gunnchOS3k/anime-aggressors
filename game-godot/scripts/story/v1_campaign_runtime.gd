@@ -240,20 +240,46 @@ static func checkpoint_cursor(node_ids: Array, completed: Array) -> String:
 	return str(node_ids[accepted.size()])
 
 
-static func story_checkpoint(route_id: String, node_ids: Array, completed: Array) -> Dictionary:
+static func _combat_result(stocks: Variant, damage_percent: Variant) -> Dictionary:
+	if stocks is bool or damage_percent is bool:
+		return {}
+	if not (stocks is int or stocks is float) or not (damage_percent is int or damage_percent is float):
+		return {}
+	if stocks is float and not is_equal_approx(float(stocks), floorf(float(stocks))):
+		return {}
+	if float(stocks) < 0.0 or float(damage_percent) < 0.0:
+		return {}
+	return {"stocks": int(stocks), "damage_percent": float(damage_percent)}
+
+
+static func story_checkpoint(route_id: String, node_ids: Array, completed: Array, stocks: Variant = null, damage_percent: Variant = null) -> Dictionary:
 	var accepted := _accepted_prefix(node_ids, completed)
-	return {
+	var document := {
 		"schema": "anime_v1.checkpoint.v1",
 		"route_id": route_id,
 		"completed": accepted.duplicate(),
 		"cursor": checkpoint_cursor(node_ids, accepted),
 	}
+	var submitted: Array = []
+	for node_id in completed:
+		submitted.append(str(node_id))
+	var combat := _combat_result(stocks, damage_percent)
+	if not combat.is_empty() and submitted == accepted:
+		document["combat"] = combat
+	return document
 
 
 static func restore_story_checkpoint(saved: Dictionary, node_ids: Array) -> Dictionary:
 	## The stored cursor is not trusted. The next node is the first id after the saved prefix.
+	## Stocks and damage percent return with that cursor when the prefix is intact.
 	var completed: Array = saved.get("completed", []) if saved.get("completed") is Array else []
-	return story_checkpoint(str(saved.get("route_id", "")), node_ids, completed)
+	var combat: Variant = saved.get("combat", {})
+	var stocks: Variant = null
+	var damage: Variant = null
+	if combat is Dictionary:
+		stocks = combat.get("stocks", null)
+		damage = combat.get("damage_percent", null)
+	return story_checkpoint(str(saved.get("route_id", "")), node_ids, completed, stocks, damage)
 
 
 func _node_ids(route_id: String) -> Array:
@@ -267,6 +293,16 @@ func _write_checkpoint(route_id: String) -> void:
 	if not progress.get("routes", {}).has(route_id):
 		return
 	progress["checkpoint"] = story_checkpoint(route_id, _node_ids(route_id), progress["routes"][route_id].get("completed", []))
+
+
+func _stamp_combat(route_id: String, stocks: Variant, damage_percent: Variant) -> void:
+	_write_checkpoint(route_id)
+	var combat := _combat_result(stocks, damage_percent)
+	if combat.is_empty() or not progress.get("checkpoint") is Dictionary:
+		return
+	var document: Dictionary = progress["checkpoint"]
+	document["combat"] = combat
+	progress["checkpoint"] = document
 
 
 func _restore_checkpoint_document(saved: Dictionary) -> void:
@@ -339,7 +375,7 @@ func acknowledge_scene(expected_node_id: String = "", expected_route_id: String 
 	return _complete_node(str(node["id"]))
 
 
-func _complete_node(node_id: String, receipt: Dictionary = {}) -> bool:
+func _complete_node(node_id: String, receipt: Dictionary = {}, stocks: Variant = null, damage_percent: Variant = null) -> bool:
 	if current_node().get("id") != node_id:
 		return false
 	var previous := progress.duplicate(true)
@@ -350,7 +386,7 @@ func _complete_node(node_id: String, receipt: Dictionary = {}) -> bool:
 	# Persist an independent value so clearing that UI state cannot erase proof.
 	if not receipt.is_empty(): entry["receipts"][node_id] = receipt.duplicate(true)
 	_rebuild_cursor(id)
-	_write_checkpoint(id)
+	_stamp_combat(id, stocks, damage_percent)
 	if not save_progress():
 		progress = previous
 		return false
@@ -441,9 +477,17 @@ func record_battle_result(winner: int, token: String, objective_evidence: Dictio
 	receipt["objective_evidence"] = objective_evidence.duplicate(true)
 	receipt["winner"] = winner
 	receipt["advanced"] = false
+	var player: Node = producer.get("fighter1") if producer != null else null
+	var stocks: Variant = player.get("stocks") if player != null else null
+	var damage_percent: Variant = player.get("damage_percent") if player != null else null
+	var route_id := str(active_encounter.get("route_id", progress.get("selected_route", "")))
 	if winner == 1 and not bool(receipt["replay"]):
-		if not _complete_node(str(receipt["node_id"]), receipt): return false
+		if not _complete_node(str(receipt["node_id"]), receipt, stocks, damage_percent): return false
 		receipt["advanced"] = true
+	else:
+		_stamp_combat(route_id, stocks, damage_percent)
+		if not _combat_result(stocks, damage_percent).is_empty() and not save_progress():
+			return false
 	last_result = receipt.duplicate(true)
 	active_encounter.clear()
 	_battle_producer = null

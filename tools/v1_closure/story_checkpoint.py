@@ -25,18 +25,49 @@ def checkpoint_cursor(node_ids: list[str], completed: list[str]) -> str:
     return node_ids[len(accepted)]
 
 
-def story_checkpoint(route_id: str, node_ids: list[str], completed: list[str]) -> dict:
+def combat_result(stocks: object, damage_percent: object) -> dict | None:
+    if isinstance(stocks, bool) or isinstance(damage_percent, bool):
+        return None
+    if isinstance(stocks, float) and not stocks.is_integer():
+        return None
+    if not isinstance(stocks, (int, float)) or not isinstance(damage_percent, (int, float)):
+        return None
+    if stocks < 0 or damage_percent < 0:
+        return None
+    return {"stocks": int(stocks), "damage_percent": float(damage_percent)}
+
+
+def story_checkpoint(
+    route_id: str,
+    node_ids: list[str],
+    completed: list[str],
+    stocks: object = None,
+    damage_percent: object = None,
+) -> dict:
     accepted = accepted_prefix(node_ids, completed)
-    return {
+    document = {
         "schema": SCHEMA,
         "route_id": route_id,
         "completed": list(accepted),
         "cursor": checkpoint_cursor(node_ids, accepted),
     }
+    submitted = [str(node_id) for node_id in completed]
+    combat = combat_result(stocks, damage_percent)
+    if combat is not None and submitted == accepted:
+        document["combat"] = combat
+    return document
 
 
 def restore_story_checkpoint(saved: dict, node_ids: list[str]) -> dict:
     completed = saved.get("completed")
     if not isinstance(completed, list):
         completed = []
-    return story_checkpoint(str(saved.get("route_id", "")), node_ids, [str(node_id) for node_id in completed])
+    completed_ids = [str(node_id) for node_id in completed]
+    combat = saved.get("combat") if isinstance(saved.get("combat"), dict) else {}
+    return story_checkpoint(
+        str(saved.get("route_id", "")),
+        node_ids,
+        completed_ids,
+        combat.get("stocks"),
+        combat.get("damage_percent"),
+    )

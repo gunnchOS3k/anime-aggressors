@@ -194,7 +194,8 @@ def main() -> int:
     check("static func checkpoint_cursor" in runtime, "runtime_exports_checkpoint_cursor", failures)
     check("static func restore_story_checkpoint" in runtime, "runtime_exports_checkpoint_restore", failures)
     check('entry["cursor"] = checkpoint_cursor(node_ids, entry.get("completed", []))' in runtime, "cursor_follows_checkpoint_prefix", failures)
-    check("_write_checkpoint(id)" in runtime.split("func _complete_node")[1].split("func ")[0], "completing_a_node_writes_checkpoint", failures)
+    check("_stamp_combat(id, stocks, damage_percent)" in runtime.split("func _complete_node")[1].split("func ")[0], "completing_a_node_writes_checkpoint", failures)
+    check("player.get(\"stocks\")" in runtime and "player.get(\"damage_percent\")" in runtime, "battle_result_reads_stocks_and_damage", failures)
     check("restore_story_checkpoint(document" in runtime, "load_restores_checkpoint_document", failures)
 
     kaia = next(route for route in campaign["routes"] if route["id"] == "kaia-windrow")
@@ -216,6 +217,33 @@ def main() -> int:
     check(forged_restored["cursor"] == node_ids[2], "forged_cursor_does_not_rewind", failures)
     skipped = restore_story_checkpoint({"route_id": "kaia-windrow", "completed": [node_ids[1]], "cursor": node_ids[2]}, node_ids)
     check(skipped["cursor"] == node_ids[0] and skipped["completed"] == [], "skipped_node_does_not_advance", failures)
+    fought = story_checkpoint("kaia-windrow", node_ids, [node_ids[0], node_ids[1]], stocks=1, damage_percent=42.5)
+    fought_restored = restore_story_checkpoint(json.loads(json.dumps(fought)), node_ids)
+    check(
+        fought_restored["cursor"] == node_ids[2]
+        and fought_restored.get("combat") == {"stocks": 1, "damage_percent": 42.5},
+        "cursor_and_combat_restore_together",
+        failures,
+    )
+    forged_fight = dict(fought)
+    forged_fight["cursor"] = node_ids[0]
+    forged_fight_restored = restore_story_checkpoint(forged_fight, node_ids)
+    check(
+        forged_fight_restored["cursor"] == node_ids[2]
+        and forged_fight_restored.get("combat", {}).get("stocks") == 1
+        and forged_fight_restored.get("combat", {}).get("damage_percent") == 42.5,
+        "forged_cursor_keeps_combat_on_real_node",
+        failures,
+    )
+    lost = story_checkpoint("kaia-windrow", node_ids, [], stocks=0, damage_percent=80.0)
+    lost_restored = restore_story_checkpoint(json.loads(json.dumps(lost)), node_ids)
+    check(
+        lost_restored["cursor"] == node_ids[0] and lost_restored.get("combat") == {"stocks": 0, "damage_percent": 80.0},
+        "loss_keeps_same_node_and_combat",
+        failures,
+    )
+    check("combat" not in story_checkpoint("kaia-windrow", node_ids, [node_ids[1]], stocks=2, damage_percent=10.0), "skipped_node_drops_combat", failures)
+    print("STORY_CHECKPOINT cursor_with_combat SOURCE_ONLY PLAY=not_run")
     print("STORY_CHECKPOINT two_nodes route=kaia-windrow PLAY=not_run")
     print("WEB_MATCH_RESULT not_wired")
     print("GODOT_BATTLE source_only")

@@ -10,6 +10,8 @@ State ids: `shield_start`, `shield_hold`, `shield_hit`, `shield_stun`, `shield_b
 
 Events: `shield_start`, `shield_hold`, `shield_hit`, `shield_stun`, `shield_break`, `parry`, `parry_fail`, `hit_damage_applied`, `hit_damage_zero`.
 
+Codex event names for those clips: `shield_start`, `shield_hold`, `shield_hit`, `shield_stun`, `shield_break`, parry success `parry`, parry fail `parry_fail`.
+
 Transitions owned by Cursor rules:
 
 - a fresh ground guard press enters `shield_start` and arms the existing parry window
