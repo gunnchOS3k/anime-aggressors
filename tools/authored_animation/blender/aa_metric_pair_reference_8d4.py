@@ -17,7 +17,7 @@ import bpy
 from mathutils import Matrix, Vector
 from mathutils.bvhtree import BVHTree
 from mathutils.geometry import intersect_ray_tri
-from aa_controls_8d import sha,digest,geometry,weights,rest,actions
+from aa_controls_8d import sha,digest,weights,rest,actions
 from aa_paired_surface_8d2 import contact_vertex,sample_vertex,solve_arm
 ROOT=Path(__file__).resolve().parents[3]
 sys.path.insert(0,str(ROOT/'tools/authored_animation'))
@@ -26,6 +26,25 @@ from private_production_8d4 import current_context
 from metric_reference_scope_8d4 import select_cases
 from paired_animation_8d4 import CLIP, FRAME_COUNT, FPS, inspect_paired_export
 C=Matrix(((1,0,0,0),(0,0,1,0),(0,-1,0,0),(0,0,0,1)))
+
+
+def geometry(names):
+    """Exact asset data and stored bind transforms, independent of stage pose.
+
+    Object.matrix_local is derived from evaluated parent/world matrices. Moving
+    the offline anchor changes its float roundoff even with byte-identical mesh
+    and stored object transforms. Preserve the actual basis, parent inverse and
+    parent binding instead; do not round vertices, weights or rest transforms.
+    """
+    return digest({o.name:{'v':[list(v.co)for v in o.data.vertices],
+                          'faces':[list(p.vertices)for p in o.data.polygons],
+                          'm':[m.name if m else ''for m in o.data.materials],
+                          'basis':[list(row)for row in o.matrix_basis],
+                          'parent_inverse':[list(row)for row in o.matrix_parent_inverse],
+                          'parent':o.parent.name if o.parent else None,
+                          'parent_type':o.parent_type,'parent_bone':o.parent_bone,
+                          'shape':{k.name:[list(v.co)for v in k.data]for k in o.data.shape_keys.key_blocks}if o.data.shape_keys else {}}
+                   for o in bpy.data.objects if o.name in names and o.type=='MESH'})
 
 
 def material_signature(objects):
