@@ -35,6 +35,12 @@ EXTERNAL_INTERNAL_OVERHEAD_BYTES=1*1024**3
 EXTERNAL_PEAK_ALLOCATION_BYTES=4*1024**3
 EXTERNAL_SAFETY_MARGIN_BYTES=8*1024**3
 PROTECTED_VOLUME_DIRS=('source','output','scratch','tmp')
+# This mounted sparsebundle only. The disk-image UUID and the inner APFS
+# volume UUID are different identifiers. Inner APFS FileVault is not the
+# encryption layer; hdiutil image-encrypted / isencrypted is.
+VERIFIED_IMAGE_UUID='4084C33A-5BC4-4C1E-862F-C8B6366F35B3'
+VERIFIED_VOLUME_UUID='7264122E-693D-4719-A42D-F1FAA488C119'
+VERIFIED_BACKING_IMAGE=Path('/Volumes/gunnchOS-Archives/gunnchos-active-dev/private/gunnchos-private-art.sparsebundle')
 
 
 def verify_context(event, live_repository, *, execution_repository, source_sha,
@@ -157,8 +163,67 @@ def validate_manifest_context(manifest):
     return context
 
 
+def _uuid_ok(value):
+    return re.fullmatch(r'[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}', str(value or '')) is not None
+
+
+def _backing_matches(path):
+    if not path:
+        return False
+    return Path(path).resolve(strict=False)==VERIFIED_BACKING_IMAGE.resolve(strict=False)
+
+
+def _image_layer(mount_point):
+    """Disk-image encryption for a mounted sparsebundle. Does not attach or detach.
+
+    Inner APFS Encrypted/FileVault can be false on an encrypted sparsebundle.
+    That inner flag is recorded by the caller and is not this result.
+    """
+    found={'backing_image':None,'image_encrypted':False,'image_uuid':None}
+    try:
+        images=plistlib.loads(subprocess.check_output(['/usr/bin/hdiutil','info','-plist']))
+    except (OSError, subprocess.SubprocessError, plistlib.InvalidFileException):
+        return found
+    matches=[image for image in images.get('images',[])
+             if mount_point in [entry.get('mount-point') for entry in image.get('system-entities',[]) if entry.get('mount-point')]]
+    if len(matches)!=1:
+        return found
+    path=matches[0].get('image-path')
+    found['backing_image']=path
+    found['image_encrypted']=matches[0].get('image-encrypted') is True
+    if not path:
+        found['image_encrypted']=False
+        return found
+    try:
+        text=subprocess.check_output(['/usr/bin/hdiutil','isencrypted',path],text=True,stderr=subprocess.STDOUT)
+    except (OSError, subprocess.SubprocessError):
+        found['image_encrypted']=False
+        return found
+    encrypted=False
+    for line in text.splitlines():
+        if line.startswith('uuid:'):
+            found['image_uuid']=line.split(':',1)[1].strip()
+        elif line.startswith('encrypted:'):
+            encrypted=line.split(':',1)[1].strip().upper()=='YES'
+    found['image_encrypted']=found['image_encrypted'] and encrypted
+    return found
+
+
+def _mount_noowners(mount_point):
+    """True when ownership is not enforced. Fail closed if the mount line is absent."""
+    try:
+        text=subprocess.check_output(['/sbin/mount'],text=True)
+    except (OSError, subprocess.SubprocessError):
+        return True
+    needle=' on '+str(mount_point)+' ('
+    for line in text.splitlines():
+        if needle in line:
+            return 'noowners' in line
+    return True
+
+
 def live_volume_probe(path):
-    """Live diskutil identity for the volume that holds path. No secrets."""
+    """Live diskutil plus disk-image identity. No secrets, no attach, no detach."""
     target=Path(path)
     if not target.exists():
         raise OSError('Encrypted volume is not mounted')
@@ -169,9 +234,13 @@ def live_volume_probe(path):
     mount=info.get('MountPoint') or ''
     if not mount:
         raise OSError('Encrypted volume is not mounted')
-    encrypted=bool(info.get('Encryption') or info.get('EncryptionThisVolumeProper') or info.get('FileVault'))
+    inner=bool(info.get('Encryption') or info.get('EncryptionThisVolumeProper') or info.get('FileVault'))
+    layer=_image_layer(mount)
+    owners=info.get('GlobalPermissionsEnabled') is True and not _mount_noowners(mount)
     return {'volume_uuid':info.get('VolumeUUID'),'filesystem':info.get('FilesystemType'),
-            'encrypted':encrypted,'owners_enabled':info.get('GlobalPermissionsEnabled') is True,
+            'encrypted':layer['image_encrypted'],'image_encrypted':layer['image_encrypted'],
+            'inner_apfs_encrypted':inner,'image_uuid':layer['image_uuid'],
+            'backing_image':layer['backing_image'],'owners_enabled':owners,
             'volume_name':info.get('VolumeName'),'mount_point':mount,
             'device_node':info.get('DeviceNode'),'parent_whole_disk':info.get('ParentWholeDisk')}
 
@@ -222,6 +291,8 @@ def external_production_report(workspace, *, identity, internal_free_bytes, exte
     internal Data volume or the unencrypted archive. The 4 GiB production peak
     and the external safety margin are checked against the encrypted volume's
     free space. The 18 GiB internal reserve stays, plus EXTERNAL_INTERNAL_OVERHEAD_BYTES.
+    Encryption is the sparsebundle container, not inner APFS FileVault.
+    Owners disabled still fails closed.
     """
     checks=[]
     def add(name, ok, detail):
@@ -229,10 +300,14 @@ def external_production_report(workspace, *, identity, internal_free_bytes, exte
     workspace=Path(workspace)
     recorded=identity if isinstance(identity, dict) else {}
     uuid=str(recorded.get('volume_uuid') or '')
+    image_uuid=str(recorded.get('image_uuid') or '')
     add('encrypted_volume_identity_recorded',
-        re.fullmatch(r'[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}', uuid) is not None
-        and recorded.get('volume_name')==EXTERNAL_VOLUME_NAME,
-        'Recorded encrypted volume identity must name gunnchos-private-art and its volume UUID')
+        _uuid_ok(uuid) and _uuid_ok(image_uuid)
+        and recorded.get('volume_name')==EXTERNAL_VOLUME_NAME
+        and uuid.lower()==VERIFIED_VOLUME_UUID.lower()
+        and image_uuid.lower()==VERIFIED_IMAGE_UUID.lower()
+        and _backing_matches(recorded.get('backing_image')),
+        'Recorded identity must name gunnchos-private-art, its APFS volume UUID, and the verified sparsebundle')
     info=None
     try:
         info=probe(workspace if workspace.exists() else workspace.parent)
@@ -243,14 +318,25 @@ def external_production_report(workspace, *, identity, internal_free_bytes, exte
     mount=Path(info['mount_point']) if info and info.get('mount_point') else None
     add('filesystem_apfs', bool(info) and info.get('filesystem')=='apfs',
         'Protected workspace filesystem must be APFS')
-    add('encryption_on', bool(info) and info.get('encrypted') is True,
-        'Protected workspace volume must be encrypted')
+    if info and 'image_encrypted' in info:
+        image_on=info.get('image_encrypted') is True
+    else:
+        image_on=bool(info) and info.get('encrypted') is True
+    add('encryption_on', image_on,
+        'Disk-image container must be encrypted; inner APFS FileVault is not the encryption layer')
     add('owners_on', bool(info) and info.get('owners_enabled') is True,
         'Protected workspace volume must have owners enabled')
     add('volume_name', bool(info) and info.get('volume_name')==EXTERNAL_VOLUME_NAME,
         'Protected workspace volume name must be gunnchos-private-art')
-    add('volume_uuid_matches_recorded', bool(info) and str(info.get('volume_uuid') or '').lower()==uuid.lower() and bool(uuid),
-        'Live volume UUID must match the recorded encrypted image')
+    add('volume_uuid_matches_recorded',
+        bool(info) and str(info.get('volume_uuid') or '').lower()==VERIFIED_VOLUME_UUID.lower() and uuid.lower()==VERIFIED_VOLUME_UUID.lower(),
+        'Live APFS volume UUID must match the verified private-art volume')
+    add('image_uuid_matches_recorded',
+        bool(info) and str(info.get('image_uuid') or '').lower()==VERIFIED_IMAGE_UUID.lower() and image_uuid.lower()==VERIFIED_IMAGE_UUID.lower(),
+        'Live disk-image UUID must match the verified sparsebundle')
+    add('backing_image_matches',
+        bool(info) and _backing_matches(info.get('backing_image')) and _backing_matches(recorded.get('backing_image')),
+        'Backing image must be the verified private-art sparsebundle')
     archive_hit=bool(info) and (
         str(info.get('volume_uuid') or '').lower()==ARCHIVE_VOLUME_UUID.lower()
         or str(info.get('mount_point') or '')==str(ARCHIVE_MOUNT)
@@ -313,6 +399,8 @@ def external_production_report(workspace, *, identity, internal_free_bytes, exte
     add('output_location', output_ok, output_detail)
     reasons=[item['detail'] for item in checks if not item['pass']]
     return {'schema':'encrypted_external_production_8d4.v1','PASS':not reasons,'checks':checks,'reasons':reasons,
+            'inner_apfs_encrypted': None if not info else bool(info.get('inner_apfs_encrypted')),
+            'image_layer_encrypted': image_on,
             'internal_requirement_bytes':internal_need,'external_requirement_bytes':external_need,
             'internal_reserve_bytes':LOCAL_RESERVE_BYTES,'internal_overhead_bytes':EXTERNAL_INTERNAL_OVERHEAD_BYTES,
             'external_peak_allocation_bytes':EXTERNAL_PEAK_ALLOCATION_BYTES,
