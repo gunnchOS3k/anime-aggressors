@@ -11,6 +11,7 @@ from private_production_8d4 import (
     LOCAL_PEAK_ALLOCATION_BYTES, LOCAL_RESERVE_BYTES, LOCAL_SCOPE, VERIFIED_BACKING_IMAGE,
     VERIFIED_IMAGE_UUID, VERIFIED_VOLUME_UUID, external_production_report,
     live_volume_probe, recheck_external_production, verify_local_context,
+    verify_external_context, validate_manifest_context, EXTERNAL_SCOPE,
 )
 
 
@@ -41,6 +42,27 @@ def prepare(root):
 
 
 class ExternalProductionGuard(unittest.TestCase):
+    def test_blender_execution_context_rechecks_encrypted_boundary(self):
+        with tempfile.TemporaryDirectory(dir='/private/tmp')as raw:
+            mount=Path(raw);workspace=prepare(mount)
+            record={'scope':EXTERNAL_SCOPE,'execution_environment':'OWNER_ENCRYPTED_EXTERNAL',
+                    'producer_sha':'a'*40,'execution_recipe_sha':'a'*40,
+                    'private_workspace':str(workspace),'output_path':str(workspace/'metric-stage-8d4'),
+                    'external_volume_identity':identity(),'peak_internal_allocation_bytes':EXTERNAL_INTERNAL_OVERHEAD_BYTES,
+                    'paid_usage_authorized':False,'network_artifact_uploads':False}
+            args=dict(checkout_sha='a'*40,workspace=workspace,directory_mode=0o700,directory_owned=True,
+                      internal_free_bytes=LOCAL_RESERVE_BYTES+EXTERNAL_INTERNAL_OVERHEAD_BYTES,
+                      external_free_bytes=EXTERNAL_PEAK_ALLOCATION_BYTES+EXTERNAL_SAFETY_MARGIN_BYTES,
+                      github_actions=False,tmpdir=mount/'tmp',probe=probe_for(mount))
+            context=verify_external_context(record,**args)
+            self.assertEqual(validate_manifest_context({'producer_sha':'a'*40,'private_execution':context}),context)
+            self.assertFalse(context['human_approved'])
+            for changes in [dict(internal_free_bytes=LOCAL_RESERVE_BYTES),dict(directory_mode=0o755),
+                            dict(github_actions=True),dict(probe=probe_for(mount,owners_enabled=False))]:
+                with self.assertRaises(ValueError):verify_external_context(record,**dict(args,**changes))
+            record['producer_sha']='b'*40
+            with self.assertRaisesRegex(ValueError,'checkout SHA'):verify_external_context(record,**args)
+
     def assert_check(self, report, name, passed):
         match = [item for item in report['checks'] if item['check'] == name]
         self.assertEqual(len(match), 1, name)

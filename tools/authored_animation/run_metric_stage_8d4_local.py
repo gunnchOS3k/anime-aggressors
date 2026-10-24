@@ -17,6 +17,7 @@ import sys
 from pathlib import Path
 from private_production_8d4 import LOCAL_SCOPE, LOCAL_RESERVE_BYTES, LOCAL_PEAK_ALLOCATION_BYTES
 from private_production_8d4 import external_production_report, live_volume_probe, recheck_external_production
+from private_production_8d4 import EXTERNAL_SCOPE, EXTERNAL_INTERNAL_OVERHEAD_BYTES
 from metric_reference_scope_8d4 import select_cases
 from audit_blender_402 import verify_audit
 
@@ -157,6 +158,10 @@ def execute(report, archive, workspace, blender, godot):
                'peak_internal_allocation_bytes': LOCAL_PEAK_ALLOCATION_BYTES,
                'blender_audit_path':report['blender_audit_path'],'blender_binary':str(blender.resolve()),
                'paid_usage_authorized': False, 'network_artifact_uploads': False}
+    if report.get('external_production'):
+        receipt.update(scope=EXTERNAL_SCOPE, execution_environment='OWNER_ENCRYPTED_EXTERNAL',
+                       external_volume_identity=report['external_volume_identity'],
+                       peak_internal_allocation_bytes=EXTERNAL_INTERNAL_OVERHEAD_BYTES)
     context_path = workspace / 'LOCAL_EXECUTION_CONTEXT.json'
     context_path.write_text(json.dumps(receipt, indent=2) + '\n')
     (workspace / 'PREFLIGHT.json').write_text(json.dumps(report, indent=2) + '\n')
