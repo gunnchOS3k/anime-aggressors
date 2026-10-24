@@ -41,20 +41,42 @@ def const_int(text: str, name: str) -> int:
     return int(match.group(1))
 
 
-def confirmed_body_damage(meter_before: float, dealt: float, authored: float, ratio: float) -> dict:
-    applied = dealt
-    if applied <= 0.0 and authored > 0.0 and ratio > 0.0:
-        applied = authored * ratio
-    if applied < 0.0:
-        applied = 0.0
+def confirmed_body_damage(meter_before: float, resolved: float, gate: str = "hit") -> dict:
+    applied = resolved if gate == "hit" and resolved > 0.0 else 0.0
     after = meter_before + applied
     return {
         "event": "hit_damage_applied" if applied > 0.0 else "hit_damage_zero",
+        "gate": gate,
         "damage_applied": applied,
         "meter_after": after,
         "meter_changed": applied > 0.0,
         "stocks_delta": 0,
     }
+
+
+def zero_reason(authored: float, dealt: float, ratio: float, dealt_mult: float) -> str:
+    if authored <= 0.0 and dealt <= 0.0:
+        return "explicit_zero"
+    if ratio <= 0.0:
+        return "rules_zero"
+    if dealt_mult <= 0.0:
+        return "dealt_mult_zero"
+    if dealt <= 0.0:
+        return "resolved_zero"
+    return ""
+
+
+def resolve_dealt(authored: float, scaled: float, ratio: float, dealt_mult: float, stale: float = 1.0, combo: float = 1.0, armor_chip: float = 1.0) -> float:
+    return scaled * dealt_mult * ratio * stale * combo * armor_chip
+
+
+def apply_contact(meter: float, authored: float, scaled: float, ratio: float, dealt_mult: float, gate: str, stale: float = 1.0, combo: float = 1.0, armor_chip: float = 1.0) -> dict:
+    dealt = resolve_dealt(authored, scaled, ratio, dealt_mult, stale, combo, armor_chip)
+    reason = gate if gate in {"parry", "shield", "armor", "invulnerable"} else zero_reason(authored, dealt, ratio, dealt_mult)
+    contact_gate = reason if reason else "hit"
+    # Authored is intentionally unused after resolution. Passing it must not change the meter.
+    _ = authored
+    return confirmed_body_damage(meter, dealt if contact_gate == "hit" else 0.0, contact_gate)
 
 
 def parry_window_open(age: int, consumed: bool) -> bool:
@@ -122,15 +144,26 @@ def main() -> int:
     check("guard defender stun", const_int(guard, "DEFENDER_STUN_FRAMES") == PARRY_DEFENDER_STUN_FRAMES)
     check("guard attacker stun", const_int(guard, "ATTACKER_STUN_FRAMES") == PARRY_ATTACKER_STUN_FRAMES)
 
-    # Public training symptom: HIT jab_1 with shield_dmg 3.0 and a 0% meter.
-    # Authored jab damage is 2.5. A dropped dealt value must still move the meter.
-    jab = confirmed_body_damage(0.0, 0.0, 2.5, 1.0)
+    # Ember jab is authored 2.5 and shield_damage 3. The percent meter follows
+    # resolved body damage. Shield damage and authored damage do not fill a zero.
+    jab = apply_contact(0.0, 2.5, 2.5, 1.0, 1.0, "hit")
     check("jab meter moves", jab["meter_after"] == 2.5 and jab["meter_changed"] and jab["stocks_delta"] == 0)
-    check("jab event", jab["event"] == "hit_damage_applied")
-    kept = confirmed_body_damage(10.0, 2.5, 2.5, 1.0)
-    check("dealt is not doubled", kept["meter_after"] == 12.5)
-    zero_ratio = confirmed_body_damage(0.0, 0.0, 2.5, 0.0)
-    check("zero ratio stays", zero_ratio["meter_after"] == 0.0 and zero_ratio["event"] == "hit_damage_zero")
+    check("jab event", jab["event"] == "hit_damage_applied" and jab["gate"] == "hit")
+    kept = apply_contact(10.0, 2.5, 2.5, 1.0, 1.0, "hit")
+    check("dealt is not doubled", kept["meter_after"] == 12.5 and kept["damage_applied"] == 2.5)
+    scaled_hit = apply_contact(0.0, 2.5, 4.0, 1.0, 1.0, "hit")
+    check("resolved wins over authored", scaled_hit["damage_applied"] == 4.0 and scaled_hit["meter_after"] == 4.0)
+    rules_zero = apply_contact(0.0, 2.5, 2.5, 0.0, 1.0, "hit")
+    check("rules zero stays", rules_zero["meter_after"] == 0.0 and rules_zero["gate"] == "rules_zero" and rules_zero["event"] == "hit_damage_zero")
+    mult_zero = apply_contact(3.0, 2.5, 2.5, 1.0, 0.0, "hit")
+    check("dealt mult zero stays", mult_zero["meter_after"] == 3.0 and mult_zero["gate"] == "dealt_mult_zero")
+    explicit_zero = apply_contact(0.0, 0.0, 0.0, 1.0, 1.0, "hit")
+    check("explicit zero move stays", explicit_zero["meter_after"] == 0.0 and explicit_zero["gate"] == "explicit_zero")
+    for immune in ("parry", "shield", "armor", "invulnerable"):
+        blocked_hit = apply_contact(8.0, 2.5, 2.5, 1.0, 1.0, immune)
+        check(f"{immune} ignores authored", blocked_hit["meter_after"] == 8.0 and blocked_hit["damage_applied"] == 0.0 and blocked_hit["gate"] == immune)
+    chip = apply_contact(0.0, 2.5, 2.5, 1.0, 1.0, "hit", armor_chip=0.55)
+    check("armor chip still hits", abs(chip["damage_applied"] - 1.375) < 1e-9 and chip["gate"] == "hit")
 
     blocked = shield_contact(100.0, 3.0, False, 6)
     check("shield hit", blocked["state"] == "shield_hit" and blocked["next_state"] == "shield_stun")
@@ -162,7 +195,10 @@ def main() -> int:
     for state in ("shield_start", "shield_hold", "shield_hit", "shield_stun", "shield_break"):
         check(f"state {state}", f'const SHIELD_{state.split("_", 1)[1].upper()}' in states or f':= "{state}"' in states)
     check("shield_hit const", 'const SHIELD_HIT := "shield_hit"' in states)
-    check("fighter applies meter", "confirmed_body_damage" in fighter and "damage_percent = float(outcome" in fighter)
+    check("no authored override", "authored_damage * damage_ratio" not in combat and "authored_damage > 0.0" not in combat)
+    check("gate keeps zero", 'if gate == "hit" and resolved_damage > 0.0' in combat)
+    check("fighter applies resolved meter", "confirmed_body_damage(damage_percent, dmg, gate)" in fighter)
+    check("resolver records zero reason", "damage_zero_reason" in (ROOT / "game-godot/scripts/combat/hit_resolver.gd").read_text())
     check("fighter shield hit", "SHIELD_HIT" in fighter)
     check("shield action has key and pad", "p1_shield=" in project and "InputEventKey" in project and "InputEventJoypadButton" in project)
     p1_up = project.split("p1_up=", 1)[1].split("p1_down=", 1)[0]

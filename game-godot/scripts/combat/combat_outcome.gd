@@ -57,18 +57,18 @@ static func parry_window_open(age: int, consumed: bool) -> bool:
 	return not consumed and age >= 0 and age < PARRY_WINDOW_FRAMES
 
 
-static func confirmed_body_damage(meter_before: float, dealt: float, authored_damage: float, damage_ratio: float) -> Dictionary:
-	## A confirmed unblocked hit must move the meter when the move still has
-	## authored damage and the rules ratio is positive. Shield damage is not a
-	## substitute for that meter. Stocks stay with the existing blast/KO path.
-	var applied := dealt
-	if applied <= 0.0 and authored_damage > 0.0 and damage_ratio > 0.0:
-		applied = authored_damage * damage_ratio
-	if applied < 0.0:
-		applied = 0.0
+static func confirmed_body_damage(meter_before: float, resolved_damage: float, gate: String = "hit") -> Dictionary:
+	## The meter follows resolved damage on a clean hit. Authored damage is not
+	## a substitute. Shield damage is a different field. Stocks stay on blast/KO.
+	## Gates that must stay at zero: parry, shield, armor, invulnerable,
+	## explicit_zero, rules_zero, dealt_mult_zero, resolved_zero.
+	var applied := 0.0
+	if gate == "hit" and resolved_damage > 0.0:
+		applied = resolved_damage
 	var after := meter_before + applied
 	return {
 		"event": "hit_damage_applied" if applied > 0.0 else "hit_damage_zero",
+		"gate": gate,
 		"damage_applied": applied,
 		"meter_before": meter_before,
 		"meter_after": after,

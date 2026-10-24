@@ -1654,12 +1654,11 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 	if _transform_pipeline != null: _transform_pipeline.cancel("body_hit")
 	if move_runner != null: move_runner.cancel()
 	hitbox.monitoring = false
-	var dmg: float = float(info.get("damage", 0.0))
-	var authored: float = float(info.get("authored_damage", dmg))
-	var ratio := 1.0
-	if "damage_ratio" in GameState:
-		ratio = float(GameState.damage_ratio)
-	var outcome: Dictionary = _CombatOutcome.confirmed_body_damage(damage_percent, dmg, authored, ratio)
+	var dmg: float = float(info.get("resolved_damage", info.get("damage", 0.0)))
+	var gate := str(info.get("damage_zero_reason", ""))
+	if gate == "":
+		gate = "hit"
+	var outcome: Dictionary = _CombatOutcome.confirmed_body_damage(damage_percent, dmg, gate)
 	if state_machine.current_state == _FighterStates.AURA_CHARGE:
 		aura = maxf(0.0, aura - _CombatMath.AURA_HIT_INTERRUPT_LOSS)
 		_set_aura_vfx(false)

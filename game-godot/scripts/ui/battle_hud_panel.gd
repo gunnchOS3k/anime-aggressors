@@ -112,7 +112,7 @@ func update_from_fighter(f: Node) -> void:
 	var aura: float = float(f.aura) if "aura" in f else 0.0
 	var shield: float = float(f.shield_health) if "shield_health" in f else 100.0
 	if _pct_label:
-		_pct_label.text = "%d%%" % int(pct)
+		_pct_label.text = "%.1f%%" % pct
 		var heat := clampf(pct / 120.0, 0.0, 1.0)
 		_pct_label.add_theme_color_override("font_color", Color(1.0, 1.0 - heat * 0.55, 1.0 - heat * 0.7))
 	if _aura_bar:
