@@ -15,6 +15,7 @@ import stat
 import subprocess
 import urllib.request
 import urllib.error
+from urllib.parse import parse_qsl, urlsplit
 
 PACKAGE='blender-4.0.2-macos-arm64.dmg'
 MANIFEST_URL='https://download.blender.org/release/Blender4.0/blender-4.0.2.sha256'
@@ -41,10 +42,48 @@ def parse_manifest(text):
     return entries
 
 
+# Observed on the owner-saved 4.0.2 files. utm_source is the only benign
+# tracking key. __cf_chl_tk is not accepted; a URL carrying it does not match.
+ALLOWED_ORIGIN_QUERY_KEYS=frozenset({'utm_source'})
+
+
+def canonical_download_url(value,expected):
+    """True when value is the canonical HTTPS URL plus only approved tracking keys.
+
+    Host, path, scheme, and port stay exact. A substring of download.blender.org
+    is not enough.
+    """
+    if not isinstance(value,str) or not isinstance(expected,str):
+        return False
+    try:
+        got=urlsplit(value)
+        want=urlsplit(expected)
+    except ValueError:
+        return False
+    if got.scheme!='https' or want.scheme!='https':
+        return False
+    if got.username or got.password or want.username or want.password:
+        return False
+    if got.hostname!='download.blender.org' or want.hostname!='download.blender.org':
+        return False
+    if got.port not in (None,443) or want.port not in (None,443):
+        return False
+    if got.path!=want.path or not got.path.startswith('/release/Blender4.0/'):
+        return False
+    if got.fragment or want.fragment:
+        return False
+    for key,query_value in parse_qsl(got.query,keep_blank_values=True):
+        if key not in ALLOWED_ORIGIN_QUERY_KEYS:
+            return False
+        if any(mark in query_value for mark in ('/','\\','..','@',' ','#')):
+            return False
+    return True
+
+
 def official_browser_origin(values,expected):
     # Safari/Chromium download-origin metadata is provenance evidence, not a
     # cryptographic source signature. Never infer origin from a filename alone.
-    return isinstance(values,list)and expected in values
+    return isinstance(values,list) and any(canonical_download_url(item,expected) for item in values)
 
 
 def browser_origin(path,expected):

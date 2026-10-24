@@ -6,7 +6,7 @@ import tempfile
 from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
-from audit_blender_402 import PACKAGE, MANIFEST_URL, parse_manifest, tree_digest, verify_audit, official_browser_origin
+from audit_blender_402 import PACKAGE, MANIFEST_URL, PACKAGE_URL, parse_manifest, tree_digest, verify_audit, official_browser_origin
 from private_production_8d4 import current_context, LOCAL_SCOPE
 
 
@@ -30,6 +30,26 @@ class OfficialProducerBoundary(unittest.TestCase):
         self.assertTrue(official_browser_origin([MANIFEST_URL],MANIFEST_URL))
         for values in [[],[MANIFEST_URL+'.evil'],['https://example.com/'+PACKAGE],MANIFEST_URL]:
             self.assertFalse(official_browser_origin(values,MANIFEST_URL))
+
+    def test_browser_origin_accepts_observed_utm_source_and_rejects_other_variations(self):
+        dmg=PACKAGE_URL+'?utm_source=chatgpt.com'
+        manifest=MANIFEST_URL+'?utm_source=chatgpt.com'
+        cloudflare=PACKAGE_URL+'?utm_source=chatgpt.com&__cf_chl_tk=synthetic'
+        self.assertTrue(official_browser_origin([dmg,cloudflare],PACKAGE_URL))
+        self.assertTrue(official_browser_origin([manifest],MANIFEST_URL))
+        self.assertFalse(official_browser_origin([cloudflare],PACKAGE_URL))
+        rejected=[
+            'https://evil.example/release/Blender4.0/blender-4.0.2-macos-arm64.dmg?utm_source=chatgpt.com',
+            'https://download.blender.org.evil.com/release/Blender4.0/blender-4.0.2-macos-arm64.dmg',
+            'https://user@download.blender.org/release/Blender4.0/blender-4.0.2-macos-arm64.dmg',
+            'https://download.blender.org:8443/release/Blender4.0/blender-4.0.2-macos-arm64.dmg',
+            'https://download.blender.org/release/Blender4.0/other.dmg?utm_source=chatgpt.com',
+            PACKAGE_URL+'?utm_source=chatgpt.com&next=/tmp/other',
+            PACKAGE_URL+'?utm_source=chatgpt.com#fragment',
+            'https://evil.example/redirect?url=https://download.blender.org/release/Blender4.0/blender-4.0.2-macos-arm64.dmg',
+        ]
+        for value in rejected:
+            self.assertFalse(official_browser_origin([value],PACKAGE_URL),value)
 
     def test_application_tree_compares_bytes_and_link_targets(self):
         root=Path(tempfile.mkdtemp(prefix='anime_audit_app_fixture_'))
