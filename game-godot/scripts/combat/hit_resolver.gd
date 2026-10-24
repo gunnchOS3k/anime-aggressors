@@ -5,6 +5,7 @@ const _AuraScaler = preload("res://scripts/combat/aura_scaler.gd")
 const _AuraIdentity = preload("res://scripts/combat/aura_identity.gd")
 const _AuraSpecialRuntime = preload("res://scripts/combat/aura_special_runtime.gd")
 const _CombatMath = preload("res://scripts/combat/combat_math.gd")
+const _CombatOutcome = preload("res://scripts/combat/combat_outcome.gd")
 
 signal hit_confirmed(attacker: Node, defender: Node, info: Dictionary)
 
@@ -91,6 +92,7 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 	if defender.has_method("get_weight"):
 		weight = defender.get_weight()
 	var dealt: float = float(scaled.get("damage", 0.0))
+	var authored_damage: float = float(move.get("damage", dealt))
 	if attacker.has_method("get_damage_dealt_mult"):
 		dealt *= attacker.get_damage_dealt_mult()
 	if "damage_ratio" in GameState:
@@ -118,9 +120,11 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 		kb *= 0.65
 	var info := {
 		"damage": dealt,
+		"authored_damage": authored_damage,
 		"launch": kb,
 		"hitstop_frames": int(scaled.get("hitstop_frames", 3)),
 		"shield_damage": float(scaled.get("shield_damage", dealt * 0.8)),
+		"shield_stun_frames": int(scaled.get("shield_stun_frames", move.get("shield_stun_frames", 0))),
 		"move_id": scaled.get("move_id", ""),
 		"blocked": false,
 		"element": scaled.get("element_effect", {}).get("type", ""),
@@ -136,6 +140,8 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 	if ("shielding" in defender and defender.shielding) or ("state_machine" in defender and defender.state_machine.current_state == "shield_hold"):
 		info["blocked"] = true
 		info["launch"] = Vector2.ZERO
+		info["parry_result"] = "fail"
+		info["shield_event"] = "parry_fail"
 	info = _contact_contract(attacker,defender,scaled,info)
 	if combat_feedback:
 		info = combat_feedback.apply_hit(attacker, defender, scaled, info)

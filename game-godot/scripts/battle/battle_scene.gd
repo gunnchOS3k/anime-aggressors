@@ -414,11 +414,11 @@ func _update_hud() -> void:
 	if _p1_panel and fighter1:
 		_p1_panel.update_from_fighter(fighter1)
 	elif p1_hud and fighter1:
-		p1_hud.text = "%s  %d%%  x%d  aura:%d" % [fighter1.data.get("displayName","P1"), int(fighter1.damage_percent), fighter1.stocks, int(fighter1.aura)]
+		p1_hud.text = "%s  %.1f%%  x%d  aura:%d" % [fighter1.data.get("displayName","P1"), float(fighter1.damage_percent), fighter1.stocks, int(fighter1.aura)]
 	if _p2_panel and fighter2:
 		_p2_panel.update_from_fighter(fighter2)
 	elif p2_hud and fighter2:
-		p2_hud.text = "%s  %d%%  x%d  aura:%d%s" % [fighter2.data.get("displayName","P2"), int(fighter2.damage_percent), fighter2.stocks, int(fighter2.aura), " (CPU L%d)" % GameState.cpu_level if GameState.p2_is_cpu else ""]
+		p2_hud.text = "%s  %.1f%%  x%d  aura:%d%s" % [fighter2.data.get("displayName","P2"), float(fighter2.damage_percent), fighter2.stocks, int(fighter2.aura), " (CPU L%d)" % GameState.cpu_level if GameState.p2_is_cpu else ""]
 
 func _toggle_pause() -> void:
 	_paused = not _paused

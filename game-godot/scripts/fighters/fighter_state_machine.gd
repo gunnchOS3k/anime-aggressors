@@ -41,10 +41,10 @@ func can_attack() -> bool:
 func _on_enter(state: String) -> void:
 	if _fighter == null:
 		return
-	if state not in [_FighterStates.SHIELD_START, _FighterStates.SHIELD_HOLD, _FighterStates.SHIELD_STUN]:
+	if state not in [_FighterStates.SHIELD_START, _FighterStates.SHIELD_HOLD, _FighterStates.SHIELD_HIT, _FighterStates.SHIELD_STUN]:
 		_fighter.shielding = false
 	match state:
-		_FighterStates.SHIELD_START, _FighterStates.SHIELD_HOLD:
+		_FighterStates.SHIELD_START, _FighterStates.SHIELD_HOLD, _FighterStates.SHIELD_HIT:
 			_fighter.shielding = true
 		_FighterStates.SHIELD_BREAK:
 			_fighter.shielding = false
@@ -88,8 +88,12 @@ func _on_update(state: String, delta: float) -> void:
 		_FighterStates.AURA_CHARGE:
 			if not _fighter.is_aura_input_held():
 				_fighter.state_machine.enter(_FighterStates.AURA_READY if _fighter.aura >= 100.0 else _FighterStates.IDLE)
+		_FighterStates.SHIELD_HIT:
+			if state_frame >= 1:
+				_fighter.state_machine.enter(_FighterStates.SHIELD_STUN)
 		_FighterStates.SHIELD_STUN:
-			if state_time > 0.25:
+			var stun_limit: float = float(_fighter._shield_stun_limit) if "_shield_stun_limit" in _fighter else 0.25
+			if state_time > stun_limit:
 				_fighter.state_machine.enter(_FighterStates.IDLE)
 		_FighterStates.DODGE_RECOVERY, _FighterStates.AIR_DODGE:
 			var rec := dodge_recovery
