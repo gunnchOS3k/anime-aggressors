@@ -222,15 +222,33 @@ def _mount_noowners(mount_point):
     return True
 
 
+def _diskutil_volume(path):
+    """Return diskutil info for the mount that contains path.
+
+    diskutil info treats a directory inside a volume as an unknown disk.
+    Walk up to the mount point. This does not accept a different volume:
+    the caller still requires the verified UUID, image, and owners.
+    """
+    current=Path(path).resolve()
+    if not current.exists():
+        raise OSError('Encrypted volume is not mounted')
+    while True:
+        result=subprocess.run(['/usr/sbin/diskutil','info','-plist',str(current)],capture_output=True)
+        info=plistlib.loads(result.stdout) if result.stdout else {}
+        mount=info.get('MountPoint') or ''
+        if result.returncode==0 and mount and not info.get('Error'):
+            return info
+        if current.parent==current:
+            raise OSError('Encrypted volume is not mounted')
+        current=current.parent
+
+
 def live_volume_probe(path):
     """Live diskutil plus disk-image identity. No secrets, no attach, no detach."""
     target=Path(path)
     if not target.exists():
         raise OSError('Encrypted volume is not mounted')
-    result=subprocess.run(['/usr/sbin/diskutil','info','-plist',str(target)],capture_output=True)
-    if result.returncode!=0 or not result.stdout:
-        raise OSError('Encrypted volume is not mounted')
-    info=plistlib.loads(result.stdout)
+    info=_diskutil_volume(target)
     mount=info.get('MountPoint') or ''
     if not mount:
         raise OSError('Encrypted volume is not mounted')

@@ -10,7 +10,7 @@ from private_production_8d4 import (
     EXTERNAL_PEAK_ALLOCATION_BYTES, EXTERNAL_SAFETY_MARGIN_BYTES, EXTERNAL_VOLUME_NAME,
     LOCAL_PEAK_ALLOCATION_BYTES, LOCAL_RESERVE_BYTES, LOCAL_SCOPE, VERIFIED_BACKING_IMAGE,
     VERIFIED_IMAGE_UUID, VERIFIED_VOLUME_UUID, external_production_report,
-    recheck_external_production, verify_local_context,
+    live_volume_probe, recheck_external_production, verify_local_context,
 )
 
 
@@ -45,6 +45,18 @@ class ExternalProductionGuard(unittest.TestCase):
         match = [item for item in report['checks'] if item['check'] == name]
         self.assertEqual(len(match), 1, name)
         self.assertEqual(match[0]['pass'], passed, match[0]['detail'])
+
+    def test_live_probe_reads_mount_from_a_directory_inside_it(self):
+        inside=Path('/Volumes/gunnchos-private-art/output')
+        if not inside.is_dir():
+            self.skipTest('verified private volume is not mounted')
+        info=live_volume_probe(inside)
+        self.assertEqual(info['mount_point'], '/Volumes/gunnchos-private-art')
+        self.assertEqual(str(info['volume_uuid']).lower(), VERIFIED_VOLUME_UUID.lower())
+        self.assertEqual(str(info['image_uuid']).lower(), VERIFIED_IMAGE_UUID.lower())
+        self.assertTrue(info['image_encrypted'])
+        self.assertTrue(info['owners_enabled'])
+        self.assertFalse(info['inner_apfs_encrypted'])
 
     def test_legacy_constants_and_bare_18gib_guard_remain(self):
         self.assertEqual(LOCAL_RESERVE_BYTES, 18 * 1024 ** 3)
