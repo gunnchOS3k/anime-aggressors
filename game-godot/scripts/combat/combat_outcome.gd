@@ -57,6 +57,25 @@ static func parry_window_open(age: int, consumed: bool) -> bool:
 	return not consumed and age >= 0 and age < PARRY_WINDOW_FRAMES
 
 
+static func guard_transition(current_state: String, shield_held: bool, just_pressed: bool, grounded: bool, guard_allowed: bool, actions_locked: bool) -> Dictionary:
+	## Press enters shield_start. A later poll while the same button is held
+	## enters shield_hold. Hit, stun, and break are not replaced by that input.
+	var guarding := current_state == "shield_start" or current_state == "shield_hold"
+	if guarding and (not shield_held or not grounded):
+		return {"state": "idle" if grounded else "fall", "event": "shield_release", "begin_parry": false}
+	if current_state == "shield_start" and shield_held and grounded:
+		return {"state": "shield_hold", "event": "shield_hold", "begin_parry": false}
+	if current_state == "shield_hold" and shield_held and grounded:
+		return {"state": "shield_hold", "event": "", "begin_parry": false}
+	if current_state in ["shield_hit", "shield_stun", "shield_break"]:
+		return {"state": current_state, "event": "", "begin_parry": false}
+	if actions_locked or not shield_held or not grounded or not guard_allowed:
+		return {"state": current_state, "event": "", "begin_parry": false}
+	if just_pressed:
+		return {"state": "shield_start", "event": "shield_start", "begin_parry": true}
+	return {"state": "shield_hold", "event": "shield_hold", "begin_parry": false}
+
+
 static func confirmed_body_damage(meter_before: float, resolved_damage: float, gate: String = "hit") -> Dictionary:
 	## The meter follows resolved damage on a clean hit. Authored damage is not
 	## a substitute. Shield damage is a different field. Stocks stay on blast/KO.

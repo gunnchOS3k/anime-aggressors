@@ -780,9 +780,25 @@ func _handle_actions() -> void:
 	var grounded_guard := is_on_floor() and velocity.y >= 0.0
 	# Release an invalid guard before its action-lock gate. Air dodge remains
 	# separate; the existing guard policy only permits shielding on the ground.
-	if state_machine.current_state in [_FighterStates.SHIELD_HOLD, _FighterStates.SHIELD_START] and (not _read_shield() or not grounded_guard):
-		shielding = false
-		state_machine.enter(_FighterStates.IDLE if grounded_guard else _FighterStates.FALL)
+	var guard_step := _CombatOutcome.guard_transition(
+		state_machine.current_state,
+		guard_held,
+		guard_pressed,
+		grounded_guard,
+		shield_break_8c.guard_allowed() and not is_aura_input_held(),
+		not state_machine.can_attack()
+	)
+	var guard_state := str(guard_step.get("state", state_machine.current_state))
+	if guard_state != state_machine.current_state:
+		if bool(guard_step.get("begin_parry", false)):
+			perfect_guard.begin()
+		shielding = guard_state in [_FighterStates.SHIELD_START, _FighterStates.SHIELD_HOLD]
+		state_machine.enter(guard_state)
+		var guard_event := str(guard_step.get("event", ""))
+		if guard_event != "":
+			shield_event.emit({"event": guard_event, "state": guard_state, "damage_applied": 0.0, "stocks_delta": 0})
+	if guard_state in [_FighterStates.SHIELD_START, _FighterStates.SHIELD_HOLD]:
+		return
 	if not state_machine.can_attack():
 		_try_authored_attack_cancel()
 		return
@@ -814,16 +830,6 @@ func _handle_actions() -> void:
 	if _read_aura_burst() and aura >= 100.0 and not party_overdrive.active():
 		_start_move_by_command("aura_burst")
 		return
-	if _read_shield() and grounded_guard and not is_aura_input_held() and shield_break_8c.guard_allowed():
-		if state_machine.current_state != _FighterStates.SHIELD_HOLD:
-			if guard_pressed:perfect_guard.begin()
-			state_machine.enter(_FighterStates.SHIELD_START)
-		state_machine.enter(_FighterStates.SHIELD_HOLD)
-		shielding = true
-		return
-	if state_machine.current_state in [_FighterStates.SHIELD_HOLD, _FighterStates.SHIELD_START]:
-		shielding = false
-		state_machine.enter(_FighterStates.IDLE)
 	if _read_dodge_pressed():
 		_start_dodge()
 	if _read_grab_pressed():

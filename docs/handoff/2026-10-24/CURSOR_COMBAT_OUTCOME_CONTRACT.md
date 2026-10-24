@@ -12,7 +12,10 @@ Events: `shield_start`, `shield_hold`, `shield_hit`, `shield_stun`, `shield_brea
 
 Transitions owned by Cursor rules:
 
-- guard press on the ground enters `shield_start`, then `shield_hold`
+- a fresh ground guard press enters `shield_start` and arms the existing parry window
+- the next poll while that button is still held enters `shield_hold`
+- a button that is already held, rather than just pressed, enters `shield_hold` without arming parry
+- `shield_hit`, `shield_stun`, and `shield_break` are not replaced by that press
 - contact inside the existing 4-frame window emits `parry` and returns to `shield_hold`
 - contact outside that window emits `parry_fail`, then `shield_hit`, then `shield_stun` while shield health remains
 - health at or below 0 emits `shield_break`

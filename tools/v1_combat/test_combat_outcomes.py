@@ -83,6 +83,23 @@ def parry_window_open(age: int, consumed: bool) -> bool:
     return (not consumed) and age >= 0 and age < PARRY_WINDOW_FRAMES
 
 
+def guard_transition(current: str, held: bool, just_pressed: bool, grounded: bool, allowed: bool, actions_locked: bool) -> dict:
+    guarding = current in {"shield_start", "shield_hold"}
+    if guarding and (not held or not grounded):
+        return {"state": "idle" if grounded else "fall", "event": "shield_release", "begin_parry": False}
+    if current == "shield_start" and held and grounded:
+        return {"state": "shield_hold", "event": "shield_hold", "begin_parry": False}
+    if current == "shield_hold" and held and grounded:
+        return {"state": "shield_hold", "event": "", "begin_parry": False}
+    if current in {"shield_hit", "shield_stun", "shield_break"}:
+        return {"state": current, "event": "", "begin_parry": False}
+    if actions_locked or not held or not grounded or not allowed:
+        return {"state": current, "event": "", "begin_parry": False}
+    if just_pressed:
+        return {"state": "shield_start", "event": "shield_start", "begin_parry": True}
+    return {"state": "shield_hold", "event": "shield_hold", "begin_parry": False}
+
+
 def shield_contact(health: float, shield_damage: float, parry_open: bool, stun_frames: int) -> dict:
     if parry_open:
         return {
@@ -189,6 +206,23 @@ def main() -> int:
         and success["shield_health"] == 100.0
         and success["stocks_delta"] == 0,
     )
+    pressed = guard_transition("idle", True, True, True, True, False)
+    check("press is shield_start", pressed["state"] == "shield_start" and pressed["event"] == "shield_start" and pressed["begin_parry"])
+    held_next = guard_transition("shield_start", True, False, True, True, True)
+    check("held after press is shield_hold", held_next["state"] == "shield_hold" and held_next["event"] == "shield_hold" and not held_next["begin_parry"])
+    stayed = guard_transition("shield_hold", True, False, True, True, True)
+    check("hold stays hold", stayed["state"] == "shield_hold" and stayed["event"] == "")
+    already = guard_transition("idle", True, False, True, True, False)
+    check("already held skips start", already["state"] == "shield_hold" and not already["begin_parry"])
+    released = guard_transition("shield_hold", False, False, True, True, True)
+    check("release to idle", released["state"] == "idle" and released["event"] == "shield_release")
+    airborne = guard_transition("shield_start", True, False, False, True, True)
+    check("air guard falls", airborne["state"] == "fall")
+    for locked in ("shield_hit", "shield_stun", "shield_break"):
+        kept_state = guard_transition(locked, True, True, True, True, True)
+        check(f"{locked} not replaced", kept_state["state"] == locked and kept_state["event"] == "")
+    blocked_start = guard_transition("idle", True, True, True, False, False)
+    check("disallowed press stays idle", blocked_start["state"] == "idle" and not blocked_start["begin_parry"])
 
     for fid, tag in AURA_BIBLE.items():
         check(f"bible {fid}", f'"{fid}"' in combat and tag in combat)
@@ -198,6 +232,8 @@ def main() -> int:
     check("no authored override", "authored_damage * damage_ratio" not in combat and "authored_damage > 0.0" not in combat)
     check("gate keeps zero", 'if gate == "hit" and resolved_damage > 0.0' in combat)
     check("fighter applies resolved meter", "confirmed_body_damage(damage_percent, dmg, gate)" in fighter)
+    check("fighter uses guard transition", "guard_transition(" in fighter and "func guard_transition" in combat)
+    check("start is not same-frame hold", "enter(_FighterStates.SHIELD_START)\n\t\tstate_machine.enter(_FighterStates.SHIELD_HOLD)" not in fighter)
     check("resolver records zero reason", "damage_zero_reason" in (ROOT / "game-godot/scripts/combat/hit_resolver.gd").read_text())
     check("fighter shield hit", "SHIELD_HIT" in fighter)
     check("shield action has key and pad", "p1_shield=" in project and "InputEventKey" in project and "InputEventJoypadButton" in project)
