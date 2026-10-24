@@ -1,3 +1,19 @@
+# 2026-10-24 — private original paired candidate produced; artistic gate OPEN
+
+Production source9e2d13e68340b6f540a166cff9f450d46eb29c67 retains db309e1b and PR122 ancestry. Current delivery SHA is git rev-parse HEAD. PR123 remains draft on122; no gala/deployed source used. Final readback124–132 heads unchanged and still separate/draft/unmerged; preservation comparison: production_8d/metric_stage_8d4/FEATURE_PRESERVATION_20261024.md. No Cursor worktree edited.42worktrees retained; unrelated untracked WORKFLOW_REFERENCED_PATHS.json preserved.
+
+ONE original Ember/Juno male/facing1 candidate exists privately, not a roster batch. Existing original8D3 rigs/assets/old actions preserved; actual121-frame new acting, two original60-bone skins, editable saved Blender and animated GLB. Original inputs42baaab8/run39910149332 unchanged. Official audited4.0.2 and verified4.7.1 used on encrypted APFS with owner-only directories. Source/native files and exact private asset hashes are in encrypted PRIVATE_ASSET_RECEIPT.json, not public artifacts.
+
+Private review START_HERE.html and OWNER_REVIEW.md: /Volumes/gunnchos-private-art/output/ember_juno_pilot_owner_review_20261024. Native footage: sibling output/ember-vale__juno-spark__male__1_native_side_v1/review/original_pair_native_60fps.mp4.1280x720,244frames at60Hz, two repeats of the121-frame source action; NO AUDIO, offline artwork playback, not BattleScene/gameplay/device performance. Native original AnimationPlayer proof PASS14,520joint samples; no synthetic stand-in. Source/export preservation and binary ownership checks PASS.9binary/9encrypted guard/21privacy tests PASS. Exact new-head CI not run (skip-ci source checkpoints; no paid/manual workflow).
+
+Actual art failures retained: frontal candidate could not reach; side restraint gets35reachable held frames but still has hand/forearm surface crossings. Original evaluated soles remain above the offline floor. Full skinned-surface agreement, final grip/deformation, expressive character-sheet-faithful acting/materials, floor support, shipping calibration, human acceptance remain FALSE. Do not infer quality from the green joint test. Source scripts/actions, failed runs, fixed stale references, old25-frame reference, raw AVI, phase PNGs, source-space measurements and provenance are preserved privately. No original source regenerated/deleted.
+
+Latest internal19.470GiB, encrypted external63.131GiB. Each new production stage passed19GiB start+official/source/privacy preflight; observed monitored low18.513GiB during the long bake stayed above18GiB ongoing reserve. Capacity variation is not an attributed process allocation. No Blender/Godot/ffmpeg producer left running. No public art/paid Actions/new infrastructure/deletion/merge/tag/deploy.
+
+NEXT: owner reviews the private candidate before any roster expansion. Full pilot acceptance remains FALSE. The next original-art correction is an anatomically authored whole-hand/thumb/forearm contact pose and source foot/sole support, using the saved candidate rather than another generic point solver or global root shift. Recheck full preflight before any new production. Cursor owns later nonduplicated124–132 reconciliation and native unified candidate acceptance. RUNTIME_PAIRED_CONTACT_VERIFIED=false, all human gates false, V1_0_0_RELEASE_AUTHORIZED=false, RC2_READY=false. Do not restart source generation or rerun the completed nine-fighter campaigns.
+
+---
+
 # 2026-10-24 — ONE original private pilot in progress, not artistic acceptance
 
 Active branch release/anime-v1-dialogue-and-elemental-performance retains db309e1b and PR122 ancestry. Current recoverable source: git rev-parse HEAD. No gala/deployed assets used. Cursor124–132 remain separate, preserved, unmerged; see production_8d/metric_stage_8d4/FEATURE_PRESERVATION_20261024.md.42worktrees retained. Unrelated WORKFLOW_REFERENCED_PATHS.json untouched.
