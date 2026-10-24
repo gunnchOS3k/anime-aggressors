@@ -68,6 +68,22 @@ def write_glb(path,doc,binary):
     path.write_bytes(raw);return hashlib.sha256(raw).hexdigest()
 
 
+def facial_fixture(doc,binary,entry):
+    """One declared source facial target; still explicitly synthetic geometry."""
+    binary.extend(bytes((-len(binary))%4));start=len(binary)
+    binary.extend(struct.pack('<25f',*[f/24 for f in range(25)]))
+    view=len(doc['bufferViews']);doc['bufferViews'].append({'buffer':0,'byteOffset':start,'byteLength':100})
+    accessor=len(doc['accessors']);doc['accessors'].append({'bufferView':view,'componentType':5126,'count':25,'type':'SCALAR'})
+    primitive=doc['meshes'][0]['primitives'][0]
+    primitive['targets']=[{'POSITION':primitive['attributes']['POSITION']}]
+    doc['meshes'][0]['extras']={'targetNames':['effort']}
+    animation=doc['animations'][0];sampler=len(animation['samplers'])
+    animation['samplers'].append({'input':animation['samplers'][0]['input'],'output':accessor})
+    animation['channels'].append({'sampler':sampler,'target':{'node':3,'path':'weights'}})
+    entry['actors'][0]['morph_nodes']=[{'node':'A_Mesh','targets':['effort']}]
+    doc['buffers'][0]['byteLength']=len(binary)
+
+
 class BinaryPairedAnimation(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -106,6 +122,23 @@ class BinaryPairedAnimation(unittest.TestCase):
 
     def test_external_buffers_are_rejected(self):
         with self.assertRaises(ValueError):self.probe(lambda d,b,e:d['buffers'][0].update(uri='unbound.bin'))
+
+    def test_original_facial_channel_requires_explicit_owned_target(self):
+        self.assertEqual(len(self.probe(facial_fixture)['facial_channels']),1)
+        def undeclared(d,b,e):
+            facial_fixture(d,b,e);e['actors'][0].pop('morph_nodes')
+        with self.assertRaisesRegex(ValueError,'Undeclared'):self.probe(undeclared)
+        def wrong_actor(d,b,e):
+            facial_fixture(d,b,e);e['actors'][0]['morph_nodes'][0]['node']='B_Mesh'
+        with self.assertRaisesRegex(ValueError,'ownership'):self.probe(wrong_actor)
+
+    def test_facial_target_names_and_weight_bounds_are_preserved(self):
+        def names(d,b,e):
+            facial_fixture(d,b,e);d['meshes'][0]['extras']['targetNames']=['replacement']
+        with self.assertRaisesRegex(ValueError,'names/count'):self.probe(names)
+        def invalid_weight(d,b,e):
+            facial_fixture(d,b,e);view=d['bufferViews'][-1];struct.pack_into('<f',b,view['byteOffset'],1.1)
+        with self.assertRaisesRegex(ValueError,'unit range'):self.probe(invalid_weight)
 
     def test_nonmonotonic_clock_and_buffer_overrun_fail_closed(self):
         def backwards(d,b,e):
