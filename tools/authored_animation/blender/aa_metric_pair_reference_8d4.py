@@ -55,7 +55,9 @@ def material_signature(objects):
 def import_actor(source,role,observation,stage_actor):
     with bpy.data.libraries.load(str(source),link=False) as (available,loaded):
         source_names=list(available.objects);action_names=list(available.actions)
-        loaded.objects=source_names;loaded.actions=action_names;loaded.scenes=list(available.scenes)
+        # Blender replaces requested lists with datablocks on context exit.
+        # Retain string IDs for the original source-preservation mappings.
+        loaded.objects=list(source_names);loaded.actions=list(action_names);loaded.scenes=list(available.scenes)
     units=[{'scene':s.name,'system':s.unit_settings.system,'scale_length':s.unit_settings.scale_length}for s in loaded.scenes]
     assert units and all(abs(u['scale_length']-1.)<1e-8 for u in units),'Source scene metre scale changed'
     collection=bpy.data.collections.new(role+'_SOURCE_ACTOR');bpy.context.scene.collection.children.link(collection)
