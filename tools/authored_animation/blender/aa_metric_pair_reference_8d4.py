@@ -85,7 +85,11 @@ def import_actor(source,role,observation,stage_actor):
     assert len(objects)==len(source_names) and len(curves)==len(action_names)
     for name,ob in objects.items():
         collection.objects.link(ob);ob.name=role+'__'+name
-    for name,action in curves.items():action.name=role+'__'+name
+    for name,action in curves.items():
+        action.name=role+'__'+name
+        # Removing the imported source scene can leave original actions with
+        # zero users. Retain their editable curves through save/reopen.
+        action.use_fake_user=True
     arm=next(o for o in objects.values() if o.type=='ARMATURE')
     assert max(abs(arm.matrix_world[i][j]-float(i==j))for i in range(4)for j in range(4))<1e-6,'Uncalibrated original armature object transform'
     assert not any(b.name.startswith('CTRL_') for b in arm.data.bones),'Do not substitute a different source skeleton'
@@ -116,7 +120,8 @@ def assert_preserved(actor):
     arm=actor['arm'];names=actor['names']
     assert geometry(names)==actor['geometry_hash'] and weights(names)==actor['weights_hash']
     assert material_signature([bpy.data.objects[n]for n in names])==actor['material_hash']
-    assert rest(arm,actor['bone_names'])==actor['rest_hash'] and actions(actor['action_names'])==actor['action_hash']
+    assert rest(arm,actor['bone_names'])==actor['rest_hash'],('Original rest changed',actor['role'])
+    assert actions(actor['action_names'])==actor['action_hash'],('Original action curves changed or omitted',actor['role'])
     assert actor['anchor'].matrix_world==actor['placement'],'A contact solve moved a stage actor root'
 
 
@@ -455,6 +460,7 @@ def run():
         scene['8D4_limit']='Offline owner-calibrated art stage; static GLB snapshots are not installable animated fighter exports or shipping alignment proof'
         bpy.context.preferences.filepaths.save_version=0;bpy.ops.wm.save_as_mainfile(filepath=str(saved))
         actor_names=[{'arm':a['arm'].name,'anchor':a['anchor'].name,'visible_names':[o.name for o in a['visible']],'new_action':action.name,'geometry':a['geometry_hash'],'weights':a['weights_hash'],'rest':a['rest_hash'],'materials':a['material_hash'],'old_actions':a['action_hash']}for a,action in zip(actors,action_pair)]
+        (saved.parent/(case['case']+'_preservation.json')).write_text(json.dumps(actor_names,indent=2)+'\n')
         # Reopen actual saved paired source. This does not regenerate either
         # input rig or rewrite the completed8D3 files.
         bpy.ops.wm.open_mainfile(filepath=str(saved))
