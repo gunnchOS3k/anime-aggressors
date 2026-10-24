@@ -131,7 +131,8 @@ def sample_action(actor,action,frame):
     for curve in action.fcurves:
         if not curve.data_path.startswith('pose.bones['):continue
         bone=curve.data_path.split('"')[1];prop=curve.data_path.split('].')[1]
-        if prop not in ('rotation_euler','location','scale'):raise ValueError(('Unsupported original channel',prop))
+        if prop not in ('rotation_euler','rotation_quaternion','location','scale'):raise ValueError(('Unsupported original channel',prop))
+        if prop=='rotation_quaternion':arm.pose.bones[bone].rotation_mode='QUATERNION'
         getattr(arm.pose.bones[bone],prop)[curve.array_index]=curve.evaluate(frame)
 
 
