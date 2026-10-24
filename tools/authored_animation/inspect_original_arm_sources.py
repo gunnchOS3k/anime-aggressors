@@ -43,11 +43,19 @@ def inspect_bind(path):
     if len(matrices) != len(skin['joints']):
         raise ValueError('Original joint/bind count mismatch')
     bones = {}
+    nodes_by_name = {}
     for node, matrix in zip(skin['joints'], matrices):
         name = doc['nodes'][node]['name']
         if name in bones:
             raise ValueError('Duplicate original joint identity')
         bones[name] = rigid_inverse_column_major(matrix)
+        nodes_by_name[name] = node
+    parents = {}
+    for index, node in enumerate(doc['nodes']):
+        for child in node.get('children', []):
+            if child in parents:
+                raise ValueError('Original rig has ambiguous parent ownership')
+            parents[child] = index
     position = lambda name: tuple(row[3] for row in bones[name][:3])
     frame = body_frame(position('UpperArm_L'), position('UpperArm_R'), position('Chest'), position('Head'))
     foot_forward = add(sub(position('Toes_L'), position('Foot_L')),
@@ -56,6 +64,10 @@ def inspect_bind(path):
         raise ValueError('Measured body forward disagrees with original toes')
     arms = {}
     for side in ('L', 'R'):
+        for child, parent in [('Shoulder_'+side, 'Chest'), ('UpperArm_'+side, 'Shoulder_'+side),
+                              ('LowerArm_'+side, 'UpperArm_'+side), ('Hand_'+side, 'LowerArm_'+side)]:
+            if parents.get(nodes_by_name[child]) != nodes_by_name[parent]:
+                raise ValueError('Original shoulder/elbow/wrist parent convention changed')
         u, e, w = [position(name+'_'+side) for name in ('UpperArm', 'LowerArm', 'Hand')]
         upper, lower = length(sub(e, u)), length(sub(w, e))
         # Child origins must follow actual bone Y, never an assumed global X.

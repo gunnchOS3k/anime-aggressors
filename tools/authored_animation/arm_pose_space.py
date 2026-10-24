@@ -119,3 +119,25 @@ def rigid_inverse_column_major(values):
     t = tuple(values[12:15])
     return tuple(tuple(columns[r][c] for c in range(3)) + (-dot(columns[r], t),)
                  for r in range(3)) + ((0., 0., 0., 1.),)
+
+
+def validate_direction_profile(profile, *, fighter, body):
+    """Keep original acting attached to its own identity and offline clock."""
+    if profile.get('fighter') != fighter or body not in ('male', 'female'):
+        raise ValueError('Do not copy another fighter/body performance')
+    if profile.get('fps') != 60 or profile.get('gameplay_timing_authority') is not False:
+        raise ValueError('Explicit offline authored clock required')
+    frames = profile.get('frames', [])
+    if len(frames) < 2 or [s.get('frame') for s in frames] != list(range(len(frames))):
+        raise ValueError('Consecutive original direction samples required')
+    for sample in frames:
+        for side in ('L', 'R'):
+            fields = sample[side]
+            if not all(math.isfinite(fields[k]) for k in ('forward', 'up', 'outward')):
+                raise ValueError('Non-finite authored target')
+            # These reference actions face the opponent. Rear elbow/throw
+            # techniques require a separate explicit original direction score.
+            if fields['forward'] <= 0:
+                raise ValueError('Reference reach must stay in front of the actor')
+            pole_direction({'right': (1,0,0), 'up': (0,1,0), 'forward': (0,0,1)}, side, **fields['pole'])
+    return frames
