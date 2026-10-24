@@ -1,0 +1,2332 @@
+{
+  "schema": "hand_interface_production_8d3.v1",
+  "source_sha": "42baaab8cc5167798aea7f3aebb22edae9f21007",
+  "run_id": "39910149332",
+  "input_run": 39886629245,
+  "input_sha": "ced4b78a141b5bf2bac05d4fc06488340c9aef2a",
+  "blender_version": "4.0.2",
+  "score_sha256": "98a1d3a20dc5a87100aa9953a6dfffc2c6d1eb7456c1e937ad40d35287df8d73",
+  "rows": [
+    {
+      "fighter": "ember-vale",
+      "body": "male",
+      "input_source_sha256": "6e06048a8d819947bab385cb576c9d8c5f92bb505aecfcd74c6ba9d424c41253",
+      "saved_source": "saved_sources/ember-vale/male/candidate_hand_interface_8d3.blend",
+      "saved_source_sha256": "cbd187033772eb17640491a4b703b82adc4b0e32491640e5e38c54fddb704e0c",
+      "runtime": "game-godot/data/animation/hands_8d3/ember-vale_male.json",
+      "runtime_sha256": "4797e959ebda3acebb05a38317775df01eff87cb9ebcd7d65ece2dd727cd7ef0",
+      "resource": "game-godot/assets/characters/hands_8d3/ember-vale/male/BASE.glb",
+      "resource_sha256": "8b8631a74c64889989339efff5afc5b8375e9b5f2d7069bfb3b0de2fd132ee64",
+      "source_preservation": {
+        "immutable_geometry": true,
+        "immutable_weights": true,
+        "all_original_actions": true,
+        "all_rest_bones": true,
+        "all_object_transforms": true,
+        "edited_topology": true,
+        "edited_materials": true
+      },
+      "old_action_curves_sha256": "f5155c53e067ed2b2d3da7986e888fa4ac51eaa9b5eb4728ab83e9bec7ca00f4",
+      "preserved_actions": 194,
+      "new_actions": [
+        "ANI08D3_fist",
+        "ANI08D3_grip",
+        "ANI08D3_release"
+      ],
+      "edits": [
+        {
+          "mesh": "Palm L",
+          "before": {
+            "original": "Palm L",
+            "backup": "ORIGINAL_8D_Palm L_snapshot_002",
+            "before_sha256": "2f852387ffb2bc88450a3ce6b6075ba6eccaef4223034165df15841d8e222be9",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.006146332493622793,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 6.069269602448912e-07,
+            "signed_volume_m3": 0.0002956807301275726
+          }
+        },
+        {
+          "mesh": "Forearm L",
+          "before": {
+            "original": "Forearm L",
+            "backup": "ORIGINAL_8D_Forearm L",
+            "before_sha256": "8f60cae40efb7e4918b4d9fcf845de809499353a09f21b875d13f9b90be13cf6",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.03330687070222449,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.025200011674314737,
+          "distal_after_m": 0.00299997536058072,
+          "wrist_ellipse_m": [
+            0.04665600957870483,
+            0.011220637034624815
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 2.085126470774412e-05,
+            "signed_volume_m3": 0.0015517955126388176
+          }
+        },
+        {
+          "mesh": "Palm R",
+          "before": {
+            "original": "Palm R",
+            "backup": "ORIGINAL_8D_Palm R_snapshot_002",
+            "before_sha256": "829bf0b43974a620dc701bc636fcdfe88ad934b4e3f094ca02cf770bd166f9c2",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.006146332493622793,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 6.06927073931729e-07,
+            "signed_volume_m3": 0.000295680728490484
+          }
+        },
+        {
+          "mesh": "Forearm R",
+          "before": {
+            "original": "Forearm R",
+            "backup": "ORIGINAL_8D_Forearm R",
+            "before_sha256": "3bf0b63433e332c86b65774cd1e9796da95d04f72e4016c86d0774238ee0ecc8",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.033306873323650225,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.025200011674314737,
+          "distal_after_m": 0.00299997536058072,
+          "wrist_ellipse_m": [
+            0.04665601344108581,
+            0.011220637034624815
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 2.0851317458436824e-05,
+            "signed_volume_m3": 0.001551774439191048
+          }
+        }
+      ],
+      "max_actual_fist_mesh_motion_m": 0.07970583173780907,
+      "source_art_intent": "Loaded combustion fist, dorsal gauntlet ridges and compact opposing thumb",
+      "paired_3d_verified": false,
+      "human_approved": false
+    },
+    {
+      "fighter": "ember-vale",
+      "body": "female",
+      "input_source_sha256": "c99e351f938221677698c636bc0fe3afd70d3d467038ec0fc8b609213504668a",
+      "saved_source": "saved_sources/ember-vale/female/candidate_hand_interface_8d3.blend",
+      "saved_source_sha256": "f101828059fc3d2bedfe3d43f156ab42a269d29e2092d8a8405bc9e57a16b73d",
+      "runtime": "game-godot/data/animation/hands_8d3/ember-vale_female.json",
+      "runtime_sha256": "07116eb7af3c345afda031a0eecdd338c27bdf1b062620913a31f45afbd1039c",
+      "resource": "game-godot/assets/characters/hands_8d3/ember-vale/female/BASE.glb",
+      "resource_sha256": "5a69dca55a1e2aaa9867a46572481c57c64441d44407ce6411fc8cbe813f0ac9",
+      "source_preservation": {
+        "immutable_geometry": true,
+        "immutable_weights": true,
+        "all_original_actions": true,
+        "all_rest_bones": true,
+        "all_object_transforms": true,
+        "edited_topology": true,
+        "edited_materials": true
+      },
+      "old_action_curves_sha256": "b0c00c5240ddb9959a7577200a0aa85903604a86706d265bc9b66b05904158a7",
+      "preserved_actions": 194,
+      "new_actions": [
+        "ANI08D3_fist",
+        "ANI08D3_grip",
+        "ANI08D3_release"
+      ],
+      "edits": [
+        {
+          "mesh": "Palm L",
+          "before": {
+            "original": "Palm L",
+            "backup": "ORIGINAL_8D_Palm L_snapshot_002",
+            "before_sha256": "b48e5346a1e67f4220e8a8baee134bd77a0cada3e2c2c87bab936d08c45f4e17",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.0058770727383304095,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 5.111593281981186e-07,
+            "signed_volume_m3": 0.00023933102513549754
+          }
+        },
+        {
+          "mesh": "Forearm L",
+          "before": {
+            "original": "Forearm L",
+            "backup": "ORIGINAL_8D_Forearm L",
+            "before_sha256": "20dde75ebb4af48652d23d51bd8595194755858b538b21c94c502c556757e9cc",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.029411190214519312,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.022680016234517097,
+          "distal_after_m": 0.0029999860853422433,
+          "wrist_ellipse_m": [
+            0.04105728750228882,
+            0.010729580782353879
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 1.9083816368947737e-05,
+            "signed_volume_m3": 0.0012383332000875254
+          }
+        },
+        {
+          "mesh": "Palm R",
+          "before": {
+            "original": "Palm R",
+            "backup": "ORIGINAL_8D_Palm R_snapshot_002",
+            "before_sha256": "d169cbbe19c50a9f9aec4910560cccb2a33da7db53269c30ae277ed340c8a8ad",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.0058770727383304095,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 5.111585892336734e-07,
+            "signed_volume_m3": 0.000239331025786892
+          }
+        },
+        {
+          "mesh": "Forearm R",
+          "before": {
+            "original": "Forearm R",
+            "backup": "ORIGINAL_8D_Forearm R",
+            "before_sha256": "f97e867116bd5a198de5d03e5c6bb76f5f881fd971a148b324a184e696689819",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.029411190214519312,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.022680016234517097,
+          "distal_after_m": 0.0029999860853422433,
+          "wrist_ellipse_m": [
+            0.04105728750228882,
+            0.010729580782353879
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 1.9083770894212648e-05,
+            "signed_volume_m3": 0.0012383233518437678
+          }
+        }
+      ],
+      "max_actual_fist_mesh_motion_m": 0.07621661731290479,
+      "source_art_intent": "Loaded combustion fist, dorsal gauntlet ridges and compact opposing thumb",
+      "paired_3d_verified": false,
+      "human_approved": false
+    },
+    {
+      "fighter": "rook-ironside",
+      "body": "male",
+      "input_source_sha256": "6adcb6101c0bb3286a0bf48886699b686381c00c65e1579fea8a17e48c099fa1",
+      "saved_source": "saved_sources/rook-ironside/male/candidate_hand_interface_8d3.blend",
+      "saved_source_sha256": "5745dac143bfdbdf541b3c74322f5c13fe29c4ff442d3cc208d385ea6ba92a5a",
+      "runtime": "game-godot/data/animation/hands_8d3/rook-ironside_male.json",
+      "runtime_sha256": "54828a59e0163a6f76c8678239a17d1dd403cc6c4b5915ff1957c9f25e0a0ff7",
+      "resource": "game-godot/assets/characters/hands_8d3/rook-ironside/male/BASE.glb",
+      "resource_sha256": "b1a923bf254636d7354c798bb56096ecd34dded8107ab2bbf77756db706d5f39",
+      "source_preservation": {
+        "immutable_geometry": true,
+        "immutable_weights": true,
+        "all_original_actions": true,
+        "all_rest_bones": true,
+        "all_object_transforms": true,
+        "edited_topology": true,
+        "edited_materials": true
+      },
+      "old_action_curves_sha256": "dad60dab7e600d301eabeafe851c6c4d73e6c795c3267bbbd68533731d81bdd9",
+      "preserved_actions": 194,
+      "new_actions": [
+        "ANI08D3_fist",
+        "ANI08D3_grip",
+        "ANI08D3_release"
+      ],
+      "edits": [
+        {
+          "mesh": "Palm L",
+          "before": {
+            "original": "Palm L",
+            "backup": "ORIGINAL_8D_Palm L_snapshot_002",
+            "before_sha256": "f2a4f413542a2a3039a8a2d9a0a157921b0435656d64d7a8800822fd9a1b8381",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.007268788525196695,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 8.597720579928136e-07,
+            "signed_volume_m3": 0.0004289319546011809
+          }
+        },
+        {
+          "mesh": "Forearm L",
+          "before": {
+            "original": "Forearm L",
+            "backup": "ORIGINAL_8D_Forearm L",
+            "before_sha256": "058ce7965cc2a6ac496e74e865198aff4aaafb096861ec9cee2d000928b4572d",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.05302575328926487,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.035783993429504335,
+          "distal_after_m": 0.002999979638843797,
+          "wrist_ellipse_m": [
+            0.06625154457092285,
+            0.011220637034624815
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 2.0984824004699476e-05,
+            "signed_volume_m3": 0.0032041239972742577
+          }
+        },
+        {
+          "mesh": "Bastion forearm.001",
+          "before": {
+            "original": "Bastion forearm.001",
+            "backup": "ORIGINAL_8D_Bastion forearm.001",
+            "before_sha256": "50ee241b47138773d736dfc64e59129a584bb367d1fb31a7db8580f213055a2b",
+            "original_vertices": 18
+          },
+          "armor": true,
+          "max_surface_displacement_m": 0.054325040944863165,
+          "proximal_vertices_preserved": 6,
+          "distal_before_m": 0.021174690220505,
+          "distal_after_m": -0.005999991204589605,
+          "wrist_ellipse_m": [
+            0.07225154457092285,
+            0.017220637034624814
+          ],
+          "validation": {
+            "vertices": 18,
+            "faces": 20,
+            "boundary_edges": 8,
+            "nonmanifold_edges": 8,
+            "minimum_face_area_m2": 0.00029735543648712337,
+            "signed_volume_m3": 0.0029879615927232315
+          }
+        },
+        {
+          "mesh": "Palm R",
+          "before": {
+            "original": "Palm R",
+            "backup": "ORIGINAL_8D_Palm R_snapshot_002",
+            "before_sha256": "d32055766fab7c28f67af549b789c99678e0fbc715f243531d93d2dd400b44ce",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.007268788525196695,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 8.597770602136734e-07,
+            "signed_volume_m3": 0.0004289319581206991
+          }
+        },
+        {
+          "mesh": "Forearm R",
+          "before": {
+            "original": "Forearm R",
+            "backup": "ORIGINAL_8D_Forearm R",
+            "before_sha256": "871c57d664f9f2e4f546508687c7a939da5461f532ca639c031094f16ac14945",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.053025765638662445,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.035783993429504335,
+          "distal_after_m": 0.002999979638843797,
+          "wrist_ellipse_m": [
+            0.06625154457092285,
+            0.011220637034624815
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 2.0984824004699476e-05,
+            "signed_volume_m3": 0.0032041008682600516
+          }
+        },
+        {
+          "mesh": "Bastion forearm",
+          "before": {
+            "original": "Bastion forearm",
+            "backup": "ORIGINAL_8D_Bastion forearm",
+            "before_sha256": "6eabbe834375d5f4a50cb48be1bedb9450f825be52b04018ef81b556385441f7",
+            "original_vertices": 18
+          },
+          "armor": true,
+          "max_surface_displacement_m": 0.055160942972988944,
+          "proximal_vertices_preserved": 6,
+          "distal_before_m": 0.020174855599179864,
+          "distal_after_m": -0.005999975859594997,
+          "wrist_ellipse_m": [
+            0.07225154457092285,
+            0.017220637034624814
+          ],
+          "validation": {
+            "vertices": 18,
+            "faces": 20,
+            "boundary_edges": 8,
+            "nonmanifold_edges": 8,
+            "minimum_face_area_m2": 2.7212558052269742e-05,
+            "signed_volume_m3": 0.0029632422778370464
+          }
+        }
+      ],
+      "max_actual_fist_mesh_motion_m": 0.09512938888972719,
+      "source_art_intent": "Broad bracing palm and low cuff; armor must leave thumb opposition visible",
+      "paired_3d_verified": false,
+      "human_approved": false
+    },
+    {
+      "fighter": "rook-ironside",
+      "body": "female",
+      "input_source_sha256": "25633ce8a8f923523e78079deea78625178260599d44796b01d3624b46268dd6",
+      "saved_source": "saved_sources/rook-ironside/female/candidate_hand_interface_8d3.blend",
+      "saved_source_sha256": "bd8efe49181ffc4058d480409bf2b4304d8f6b1a0166fa2f09ef2055489094f8",
+      "runtime": "game-godot/data/animation/hands_8d3/rook-ironside_female.json",
+      "runtime_sha256": "5cefdf63c02b1ff64304dcfc3172b0adef06f1628c77c1b871378ed21255dcaf",
+      "resource": "game-godot/assets/characters/hands_8d3/rook-ironside/female/BASE.glb",
+      "resource_sha256": "2ab8abda759377cbba9ad541be8a6db12184dbc4e19f502cd0b9c142c167a397",
+      "source_preservation": {
+        "immutable_geometry": true,
+        "immutable_weights": true,
+        "all_original_actions": true,
+        "all_rest_bones": true,
+        "all_object_transforms": true,
+        "edited_topology": true,
+        "edited_materials": true
+      },
+      "old_action_curves_sha256": "bb3f3652c5b905b1da2a451d44baa3eeb940b81666fc73039df9850b36ca5288",
+      "preserved_actions": 194,
+      "new_actions": [
+        "ANI08D3_fist",
+        "ANI08D3_grip",
+        "ANI08D3_release"
+      ],
+      "edits": [
+        {
+          "mesh": "Palm L",
+          "before": {
+            "original": "Palm L",
+            "backup": "ORIGINAL_8D_Palm L_snapshot_002",
+            "before_sha256": "5b428060535a22a254e053629a0685128fcccfad1a63ad166241db9e359f6128",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.00695035492938079,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 7.237950399030524e-07,
+            "signed_volume_m3": 0.0003471640307995663
+          }
+        },
+        {
+          "mesh": "Forearm L",
+          "before": {
+            "original": "Forearm L",
+            "backup": "ORIGINAL_8D_Forearm L",
+            "before_sha256": "c1f36eddfb28b3c899d7694e61b9a9087f55c35927c773949fe919076bee2513",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.04716556706592967,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.03220559062901884,
+          "distal_after_m": 0.002999979638843797,
+          "wrist_ellipse_m": [
+            0.058301350879669186,
+            0.010729580782353879
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 1.920693102874793e-05,
+            "signed_volume_m3": 0.002539014289954422
+          }
+        },
+        {
+          "mesh": "Bastion forearm.001",
+          "before": {
+            "original": "Bastion forearm.001",
+            "backup": "ORIGINAL_8D_Bastion forearm.001",
+            "before_sha256": "3609cb2dab7b0d0a072262cb2d59806363653ec5bbf8e5aaf898c98efbc293f9",
+            "original_vertices": 18
+          },
+          "armor": true,
+          "max_surface_displacement_m": 0.05497950534840388,
+          "proximal_vertices_preserved": 6,
+          "distal_before_m": 0.021174671594053507,
+          "distal_after_m": -0.005999990040436387,
+          "wrist_ellipse_m": [
+            0.06430135087966919,
+            0.016729580782353877
+          ],
+          "validation": {
+            "vertices": 18,
+            "faces": 20,
+            "boundary_edges": 8,
+            "nonmanifold_edges": 8,
+            "minimum_face_area_m2": 0.000295378704322502,
+            "signed_volume_m3": 0.002967207074211754
+          }
+        },
+        {
+          "mesh": "Palm R",
+          "before": {
+            "original": "Palm R",
+            "backup": "ORIGINAL_8D_Palm R_snapshot_002",
+            "before_sha256": "408c49a28404b2361441066ff5fb441c68d8e17e0380ebdf56c3c4fdfddd30ac",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.006950355321948372,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 7.237991326292104e-07,
+            "signed_volume_m3": 0.00034716406046923353
+          }
+        },
+        {
+          "mesh": "Forearm R",
+          "before": {
+            "original": "Forearm R",
+            "backup": "ORIGINAL_8D_Forearm R",
+            "before_sha256": "e78b4d1c217be6080f174ea65b8a8cbe9737df2c78b571ae8d3ef6c978f4f34a",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.047165579686666355,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.03220559062901884,
+          "distal_after_m": 0.002999979638843797,
+          "wrist_ellipse_m": [
+            0.05830135860443114,
+            0.010729580782353879
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 1.920693102874793e-05,
+            "signed_volume_m3": 0.002538995762202882
+          }
+        },
+        {
+          "mesh": "Bastion forearm",
+          "before": {
+            "original": "Bastion forearm",
+            "backup": "ORIGINAL_8D_Bastion forearm",
+            "before_sha256": "d3d74c3fca2759fbc0255dbd7155abee057c30f322cea4c79232006a85102688",
+            "original_vertices": 18
+          },
+          "armor": true,
+          "max_surface_displacement_m": 0.055676035210405525,
+          "proximal_vertices_preserved": 6,
+          "distal_before_m": 0.020174865843728185,
+          "distal_after_m": -0.005999977554893121,
+          "wrist_ellipse_m": [
+            0.06430135860443115,
+            0.016729580782353877
+          ],
+          "validation": {
+            "vertices": 18,
+            "faces": 20,
+            "boundary_edges": 8,
+            "nonmanifold_edges": 8,
+            "minimum_face_area_m2": 2.7305206458549947e-05,
+            "signed_volume_m3": 0.0029511333452853974
+          }
+        }
+      ],
+      "max_actual_fist_mesh_motion_m": 0.0837689741741601,
+      "source_art_intent": "Broad bracing palm and low cuff; armor must leave thumb opposition visible",
+      "paired_3d_verified": false,
+      "human_approved": false
+    },
+    {
+      "fighter": "juno-spark",
+      "body": "male",
+      "input_source_sha256": "1bccae0ba78ab3995f5125b61865380f6f42b62261e75cad8f07536feca97673",
+      "saved_source": "saved_sources/juno-spark/male/candidate_hand_interface_8d3.blend",
+      "saved_source_sha256": "94db45f2ca0fbdc7f3a50f3ead86ee711c766c57110032c254a1cc1095f3f974",
+      "runtime": "game-godot/data/animation/hands_8d3/juno-spark_male.json",
+      "runtime_sha256": "a96a8bc28d498b463eb134abd6b8f1db7a93b47e1021de19786d018643879981",
+      "resource": "game-godot/assets/characters/hands_8d3/juno-spark/male/BASE.glb",
+      "resource_sha256": "b535c5aa2f11c3a7cf33273c88ada4da9fe9b2f45150115ab28afbeb6fad201b",
+      "source_preservation": {
+        "immutable_geometry": true,
+        "immutable_weights": true,
+        "all_original_actions": true,
+        "all_rest_bones": true,
+        "all_object_transforms": true,
+        "edited_topology": true,
+        "edited_materials": true
+      },
+      "old_action_curves_sha256": "4b60ae544617f86cb39a367c42fcdd8cc94221bfa50edc0a461dce2c3d2f8d65",
+      "preserved_actions": 244,
+      "new_actions": [
+        "ANI08D3_fist",
+        "ANI08D3_grip",
+        "ANI08D3_release"
+      ],
+      "edits": [
+        {
+          "mesh": "Palm L",
+          "before": {
+            "original": "Palm L",
+            "backup": "ORIGINAL_8D_Palm L_snapshot_002",
+            "before_sha256": "4a139f7b340b34264d145ca243572d3b369964a3aec55e842ad202af71f63986",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.005924743579278922,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 4.688499473104457e-07,
+            "signed_volume_m3": 0.00022634611195171026
+          }
+        },
+        {
+          "mesh": "Forearm L",
+          "before": {
+            "original": "Forearm L",
+            "backup": "ORIGINAL_8D_Forearm L",
+            "before_sha256": "d4454f694387cace14c02081eae287368b584f4445c754219ca7cb8ca19fea3e",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.02286569708664497,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.01940399728482589,
+          "distal_after_m": 0.003000009441166185,
+          "wrist_ellipse_m": [
+            0.035925129461288445,
+            0.011220637034624815
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 2.0748560928041115e-05,
+            "signed_volume_m3": 0.0009133269295715457
+          }
+        },
+        {
+          "mesh": "Palm R",
+          "before": {
+            "original": "Palm R",
+            "backup": "ORIGINAL_8D_Palm R_snapshot_002",
+            "before_sha256": "3652a8b8d0bbc94a5acee3b283646d583b448ab276a5ff7659930fe1998b3e8e",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.005924743579278922,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 4.68851879986687e-07,
+            "signed_volume_m3": 0.00022634607663919232
+          }
+        },
+        {
+          "mesh": "Forearm R",
+          "before": {
+            "original": "Forearm R",
+            "backup": "ORIGINAL_8D_Forearm R",
+            "before_sha256": "7b2c835736659a9aead3c49d416fef99a4cc1b3f3e5208a414ce0382b01a21df",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.02286569808103263,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.01940399728482589,
+          "distal_after_m": 0.003000009441166185,
+          "wrist_ellipse_m": [
+            0.03592512559890747,
+            0.011220637034624815
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 2.074853728117887e-05,
+            "signed_volume_m3": 0.0009133183484349509
+          }
+        }
+      ],
+      "max_actual_fist_mesh_motion_m": 0.07917260860450633,
+      "source_art_intent": "Defined metacarpal ridge, precise fast closure and compact thumb",
+      "paired_3d_verified": false,
+      "human_approved": false
+    },
+    {
+      "fighter": "juno-spark",
+      "body": "female",
+      "input_source_sha256": "826206cc0bd892ab88834f7afd986cedb06b6b85dc00dfb556cb029f79aae1cb",
+      "saved_source": "saved_sources/juno-spark/female/candidate_hand_interface_8d3.blend",
+      "saved_source_sha256": "a907c9ddd6092e65ddc6c38bec920c0623c593fabba47af7b7464423285e4cc0",
+      "runtime": "game-godot/data/animation/hands_8d3/juno-spark_female.json",
+      "runtime_sha256": "5136401f7456c54b2b7678e0d38add7efed1db0f1d12731696edad4abd25b5af",
+      "resource": "game-godot/assets/characters/hands_8d3/juno-spark/female/BASE.glb",
+      "resource_sha256": "a177110c7e87eaead304a38d8f97c45f235d6ded16f96896fe0bcddbd274123e",
+      "source_preservation": {
+        "immutable_geometry": true,
+        "immutable_weights": true,
+        "all_original_actions": true,
+        "all_rest_bones": true,
+        "all_object_transforms": true,
+        "edited_topology": true,
+        "edited_materials": true
+      },
+      "old_action_curves_sha256": "5d5ea2deace2e896f239d4b4a0e0b403246bf812ed6f57fe6ccf76df982aa624",
+      "preserved_actions": 244,
+      "new_actions": [
+        "ANI08D3_fist",
+        "ANI08D3_grip",
+        "ANI08D3_release"
+      ],
+      "edits": [
+        {
+          "mesh": "Palm L",
+          "before": {
+            "original": "Palm L",
+            "backup": "ORIGINAL_8D_Palm L_snapshot_002",
+            "before_sha256": "e6408e93093c7e5510f92b8a960a0f5bf20f52d09a056c2087e4673ba450a895",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.005665453641590527,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 3.947754976252327e-07,
+            "signed_volume_m3": 0.00018321021417796326
+          }
+        },
+        {
+          "mesh": "Forearm L",
+          "before": {
+            "original": "Forearm L",
+            "backup": "ORIGINAL_8D_Forearm L",
+            "before_sha256": "0fb596b0d0de80cb7a8c5d49a7e36f2dcb6311886f0faa430f7694a3646260e7",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.02003256976785688,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.017463600262999535,
+          "distal_after_m": 0.003000007287482731,
+          "wrist_ellipse_m": [
+            0.03161411361694336,
+            0.010729580782353879
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 1.8985419956152327e-05,
+            "signed_volume_m3": 0.000731702225241641
+          }
+        },
+        {
+          "mesh": "Palm R",
+          "before": {
+            "original": "Palm R",
+            "backup": "ORIGINAL_8D_Palm R_snapshot_002",
+            "before_sha256": "4990ea2255419df9887eb69d52b16e9e226f55d548a2736b430f98ad6ecb865f",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.005665453641590527,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 3.947740481180517e-07,
+            "signed_volume_m3": 0.00018321023233578446
+          }
+        },
+        {
+          "mesh": "Forearm R",
+          "before": {
+            "original": "Forearm R",
+            "backup": "ORIGINAL_8D_Forearm R",
+            "before_sha256": "f59bf1ce159ba2ef097858cb90c128b2c36878cfe577a3b1b971b5da5f4d78cf",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.020032573399920584,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.017463600262999535,
+          "distal_after_m": 0.003000007287482731,
+          "wrist_ellipse_m": [
+            0.03161411747932434,
+            0.010729580782353879
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 1.8985419956152327e-05,
+            "signed_volume_m3": 0.0007316963580556554
+          }
+        }
+      ],
+      "max_actual_fist_mesh_motion_m": 0.07570661444164285,
+      "source_art_intent": "Defined metacarpal ridge, precise fast closure and compact thumb",
+      "paired_3d_verified": false,
+      "human_approved": false
+    },
+    {
+      "fighter": "kaia-windrow",
+      "body": "male",
+      "input_source_sha256": "9e0542fc15d92960eb2d181ac94478f2ed7f2e0ca5ff320e70fd339f90b171c6",
+      "saved_source": "saved_sources/kaia-windrow/male/candidate_hand_interface_8d3.blend",
+      "saved_source_sha256": "9bfb30ad7151b7a188e0ca625bd1a02b94c80b0c42896d16ae43c11ac777b477",
+      "runtime": "game-godot/data/animation/hands_8d3/kaia-windrow_male.json",
+      "runtime_sha256": "c0cf57af33ce0c9bfd2e7f60197c433856a20511651db9daeebc7a299c9fdfa0",
+      "resource": "game-godot/assets/characters/hands_8d3/kaia-windrow/male/BASE.glb",
+      "resource_sha256": "949aad27ff8f3113468c027cc5c487c1e435db500dc83ae55c955e58b811cc33",
+      "source_preservation": {
+        "immutable_geometry": true,
+        "immutable_weights": true,
+        "all_original_actions": true,
+        "all_rest_bones": true,
+        "all_object_transforms": true,
+        "edited_topology": true,
+        "edited_materials": true
+      },
+      "old_action_curves_sha256": "59e1ce14b7611870c861d2a16763c9e841c5c7b6325bc97cd6576d461e9b682b",
+      "preserved_actions": 244,
+      "new_actions": [
+        "ANI08D3_fist",
+        "ANI08D3_grip",
+        "ANI08D3_release"
+      ],
+      "edits": [
+        {
+          "mesh": "Palm L",
+          "before": {
+            "original": "Palm L",
+            "backup": "ORIGINAL_8D_Palm L_snapshot_002",
+            "before_sha256": "75fb85d04adc089a5b1803458107a0ece4574c4952b21105b305b05a493c610e",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.005029907174342437,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 5.348297236196231e-07,
+            "signed_volume_m3": 0.0002568141117578295
+          }
+        },
+        {
+          "mesh": "Forearm L",
+          "before": {
+            "original": "Forearm L",
+            "backup": "ORIGINAL_8D_Forearm L",
+            "before_sha256": "23702f6fdda7014a9d8a5ac9852d53fd3688b0eca074e4fd35c2afa9857369c7",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.02899822699627975,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.02217599016148597,
+          "distal_after_m": 0.002999992502736859,
+          "wrist_ellipse_m": [
+            0.04105728750228882,
+            0.011220637034624815
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 2.0812023649341427e-05,
+            "signed_volume_m3": 0.0011622131240602409
+          }
+        },
+        {
+          "mesh": "Palm R",
+          "before": {
+            "original": "Palm R",
+            "backup": "ORIGINAL_8D_Palm R_snapshot_002",
+            "before_sha256": "7badf58d3dd60d16f9f307f78fa498784d3e66abb51511b7e27c8aad378287b7",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.005029907174342437,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 5.348313720787701e-07,
+            "signed_volume_m3": 0.00025681411170938443
+          }
+        },
+        {
+          "mesh": "Forearm R",
+          "before": {
+            "original": "Forearm R",
+            "backup": "ORIGINAL_8D_Forearm R",
+            "before_sha256": "26c6500fd0332ae583228bea601657507e83a4440e9e72a8b8b93013bd0a925d",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.028998229230950686,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.02217599016148597,
+          "distal_after_m": 0.002999992502736859,
+          "wrist_ellipse_m": [
+            0.04105728750228882,
+            0.011220637034624815
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 2.0812223738175817e-05,
+            "signed_volume_m3": 0.0011622012654247474
+          }
+        }
+      ],
+      "max_actual_fist_mesh_motion_m": 0.07831434918384127,
+      "source_art_intent": "Flowing palmar arch, relaxed small-finger lead and open thumb web",
+      "paired_3d_verified": false,
+      "human_approved": false
+    },
+    {
+      "fighter": "kaia-windrow",
+      "body": "female",
+      "input_source_sha256": "b40f906243154e6209275f47e3e2a9491c891e8dfd30240417568941e5b60075",
+      "saved_source": "saved_sources/kaia-windrow/female/candidate_hand_interface_8d3.blend",
+      "saved_source_sha256": "2efd003a02ea86e92464a0682b321357cdf5548c47c48f572c512e31f88544aa",
+      "runtime": "game-godot/data/animation/hands_8d3/kaia-windrow_female.json",
+      "runtime_sha256": "04a4cbc91dc48d88fccd409d8559abfd41919179a6c2cc42984d7bd75e229ac1",
+      "resource": "game-godot/assets/characters/hands_8d3/kaia-windrow/female/BASE.glb",
+      "resource_sha256": "09f0cf858a97e3e118e05e902a2636f4f8ca19496d16c0d3ae7b728078e7ac8f",
+      "source_preservation": {
+        "immutable_geometry": true,
+        "immutable_weights": true,
+        "all_original_actions": true,
+        "all_rest_bones": true,
+        "all_object_transforms": true,
+        "edited_topology": true,
+        "edited_materials": true
+      },
+      "old_action_curves_sha256": "3233d671cbd987ce2427a4fa98f741e8db6315fdbbb21a47e994d9894118f41a",
+      "preserved_actions": 244,
+      "new_actions": [
+        "ANI08D3_fist",
+        "ANI08D3_grip",
+        "ANI08D3_release"
+      ],
+      "edits": [
+        {
+          "mesh": "Palm L",
+          "before": {
+            "original": "Palm L",
+            "backup": "ORIGINAL_8D_Palm L_snapshot_002",
+            "before_sha256": "9e6bce607becf56c7f5174288484b93c27bc030bef93fbc04d4c5c8d2bd64f5e",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.004809556863615916,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 4.5054900965624256e-07,
+            "signed_volume_m3": 0.00020788394467305036
+          }
+        },
+        {
+          "mesh": "Forearm L",
+          "before": {
+            "original": "Forearm L",
+            "backup": "ORIGINAL_8D_Forearm L",
+            "before_sha256": "7977536da53f0d555a18a644d4c0b3d362ef3f07acd6242ce547e9a8bce501b2",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.025551569437237295,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.019958407792728394,
+          "distal_after_m": 0.002999992502736859,
+          "wrist_ellipse_m": [
+            0.03613041887283325,
+            0.010729580782353879
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 1.9047914975089952e-05,
+            "signed_volume_m3": 0.0009293918811499277
+          }
+        },
+        {
+          "mesh": "Palm R",
+          "before": {
+            "original": "Palm R",
+            "backup": "ORIGINAL_8D_Palm R_snapshot_002",
+            "before_sha256": "ba132677af3e574edc2002c9e82f4969545cdc84c6c005272b72372df1a5c436",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.004809556863615916,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 4.505513686581253e-07,
+            "signed_volume_m3": 0.0002078839471585252
+          }
+        },
+        {
+          "mesh": "Forearm R",
+          "before": {
+            "original": "Forearm R",
+            "backup": "ORIGINAL_8D_Forearm R",
+            "before_sha256": "928f7e7a51d826e5889960c7c6be447aa70c91c8fc1d8fe5b94082e6aad5acc9",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.025551569437237295,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.019958407792728394,
+          "distal_after_m": 0.002999992502736859,
+          "wrist_ellipse_m": [
+            0.03613041887283325,
+            0.010729580782353879
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 1.9047914975089952e-05,
+            "signed_volume_m3": 0.0009293833935180204
+          }
+        }
+      ],
+      "max_actual_fist_mesh_motion_m": 0.07488613156708625,
+      "source_art_intent": "Flowing palmar arch, relaxed small-finger lead and open thumb web",
+      "paired_3d_verified": false,
+      "human_approved": false
+    },
+    {
+      "fighter": "nix-calder",
+      "body": "male",
+      "input_source_sha256": "3811ca7e9f0bf27b3568cbf630664daf28775df157fd1ed88204ff856abf8641",
+      "saved_source": "saved_sources/nix-calder/male/candidate_hand_interface_8d3.blend",
+      "saved_source_sha256": "f252914c77b69af6b696be256edbca6e5071dfbd5f19bf1b6ea6d51741c563c7",
+      "runtime": "game-godot/data/animation/hands_8d3/nix-calder_male.json",
+      "runtime_sha256": "eb085740c71e3fd1874c625dfd66cae942f88967ce23df750197b28eafef311a",
+      "resource": "game-godot/assets/characters/hands_8d3/nix-calder/male/BASE.glb",
+      "resource_sha256": "c0bbcfebd09c48a7457fde8dcd97bcb61f021c526447994718aa799e05c18ddf",
+      "source_preservation": {
+        "immutable_geometry": true,
+        "immutable_weights": true,
+        "all_original_actions": true,
+        "all_rest_bones": true,
+        "all_object_transforms": true,
+        "edited_topology": true,
+        "edited_materials": true
+      },
+      "old_action_curves_sha256": "16c2c8281918ca195efb141c02f65c500df80cf788a48209bbb52d02cf65c87d",
+      "preserved_actions": 194,
+      "new_actions": [
+        "ANI08D3_fist",
+        "ANI08D3_grip",
+        "ANI08D3_release"
+      ],
+      "edits": [
+        {
+          "mesh": "Palm L",
+          "before": {
+            "original": "Palm L",
+            "backup": "ORIGINAL_8D_Palm L_snapshot_002",
+            "before_sha256": "81cd9279b9c15a264d9859c209d45198e6c741c42546943cd20245b53032751e",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.005677879109133491,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 6.550371836056001e-07,
+            "signed_volume_m3": 0.00031778730233198815
+          }
+        },
+        {
+          "mesh": "Forearm L",
+          "before": {
+            "original": "Forearm L",
+            "backup": "ORIGINAL_8D_Forearm L",
+            "before_sha256": "a87b3a6beb19ab0fccb1603b0b115149c82d9a150f17caf2615c316e05255640",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.035659540269986544,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.027216008980758488,
+          "distal_after_m": 0.002999984993948601,
+          "wrist_ellipse_m": [
+            0.050388490962982174,
+            0.011220637034624815
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 2.0874751498922706e-05,
+            "signed_volume_m3": 0.0018652981292722605
+          }
+        },
+        {
+          "mesh": "Palm R",
+          "before": {
+            "original": "Palm R",
+            "backup": "ORIGINAL_8D_Palm R_snapshot_002",
+            "before_sha256": "94dea874e947aa5f6cabaf5b4653c9fcebdf4299dad9894830c40926e5bb05f4",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.005677879109133491,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 6.550371267621813e-07,
+            "signed_volume_m3": 0.00031778730216695285
+          }
+        },
+        {
+          "mesh": "Forearm R",
+          "before": {
+            "original": "Forearm R",
+            "backup": "ORIGINAL_8D_Forearm R",
+            "before_sha256": "9f5d750077cf95c22942ed75444292abc1261295a13a3fb6c0cc6596b01b206b",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.03565954632741106,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.027216008980758488,
+          "distal_after_m": 0.002999984993948601,
+          "wrist_ellipse_m": [
+            0.050388490962982174,
+            0.011220637034624815
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 2.0874562324024737e-05,
+            "signed_volume_m3": 0.0018652774565692377
+          }
+        }
+      ],
+      "max_actual_fist_mesh_motion_m": 0.07929940055612396,
+      "source_art_intent": "Precise planar dorsal knuckles retaining glossy crystal material",
+      "paired_3d_verified": false,
+      "human_approved": false
+    },
+    {
+      "fighter": "nix-calder",
+      "body": "female",
+      "input_source_sha256": "34343f2fb02743474fc8e78a7c57880fa67a4e420a30970bbe13d8dd09eee4cd",
+      "saved_source": "saved_sources/nix-calder/female/candidate_hand_interface_8d3.blend",
+      "saved_source_sha256": "481d19a5b6d17c4bc9b8de216dafae4a5fc423361b531d8fc046f142b6f94330",
+      "runtime": "game-godot/data/animation/hands_8d3/nix-calder_female.json",
+      "runtime_sha256": "ad336744cd97239694ac841f3d73ff37cac1b7ec8693dab6ba43616ff55165c9",
+      "resource": "game-godot/assets/characters/hands_8d3/nix-calder/female/BASE.glb",
+      "resource_sha256": "9e41f2fb41e514049e5ab9dbd7686e65f4fa3d2866fce987248ce50d664a1408",
+      "source_preservation": {
+        "immutable_geometry": true,
+        "immutable_weights": true,
+        "all_original_actions": true,
+        "all_rest_bones": true,
+        "all_object_transforms": true,
+        "edited_topology": true,
+        "edited_materials": true
+      },
+      "old_action_curves_sha256": "a187a317f3d50194433933514a052ccf78d2310ac1e764e2d0b8e65927d1b583",
+      "preserved_actions": 194,
+      "new_actions": [
+        "ANI08D3_fist",
+        "ANI08D3_grip",
+        "ANI08D3_release"
+      ],
+      "edits": [
+        {
+          "mesh": "Palm L",
+          "before": {
+            "original": "Palm L",
+            "backup": "ORIGINAL_8D_Palm L_snapshot_002",
+            "before_sha256": "5f6aad930df9e911516bcd2e8bb0c81e5222fc0acb8418a57d2308e4d6787039",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.0054293935614800806,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 5.516139367500728e-07,
+            "signed_volume_m3": 0.000257242046790736
+          }
+        },
+        {
+          "mesh": "Forearm L",
+          "before": {
+            "original": "Forearm L",
+            "backup": "ORIGINAL_8D_Forearm L",
+            "before_sha256": "8de6930107bd19adefccdbeba033245974d9e3f20e6899cb75c82b4fb3c6f773",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.0314995557857859,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.02449440467171371,
+          "distal_after_m": 0.002999991425895132,
+          "wrist_ellipse_m": [
+            0.04434187173843383,
+            0.010729580782353879
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 1.9103950762655586e-05,
+            "signed_volume_m3": 0.0014866060170980024
+          }
+        },
+        {
+          "mesh": "Palm R",
+          "before": {
+            "original": "Palm R",
+            "backup": "ORIGINAL_8D_Palm R_snapshot_002",
+            "before_sha256": "ffb1881bd9827bf71cd7f136bbba6db2b81b79f4ccfdc98a7aed0547fb5e3da3",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.0054293935614800806,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 5.516095029634016e-07,
+            "signed_volume_m3": 0.00025724204338982377
+          }
+        },
+        {
+          "mesh": "Forearm R",
+          "before": {
+            "original": "Forearm R",
+            "backup": "ORIGINAL_8D_Forearm R",
+            "before_sha256": "088c90a965cc503196810003d19d7e19b9631890642eddb117eed5cda75883c5",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.03149956687311381,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.02449440467171371,
+          "distal_after_m": 0.002999991425895132,
+          "wrist_ellipse_m": [
+            0.04434187173843383,
+            0.010729580782353879
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 1.9103903468931094e-05,
+            "signed_volume_m3": 0.0014865895127881858
+          }
+        }
+      ],
+      "max_actual_fist_mesh_motion_m": 0.07582847128592331,
+      "source_art_intent": "Precise planar dorsal knuckles retaining glossy crystal material",
+      "paired_3d_verified": false,
+      "human_approved": false
+    },
+    {
+      "fighter": "orion-vell",
+      "body": "male",
+      "input_source_sha256": "d6cf4839f9056da1f320481d0ac86bfdd19954574498a4cdd6cf4920411a0424",
+      "saved_source": "saved_sources/orion-vell/male/candidate_hand_interface_8d3.blend",
+      "saved_source_sha256": "5a16c099ca307f1aac4001d6256c17b33b667897d832fe982003c5351541a77b",
+      "runtime": "game-godot/data/animation/hands_8d3/orion-vell_male.json",
+      "runtime_sha256": "08da87202803982cff1b2b6a4d525cbcafe1ff0d64ab0290129cdd0e50aac2b3",
+      "resource": "game-godot/assets/characters/hands_8d3/orion-vell/male/BASE.glb",
+      "resource_sha256": "7790d06eb40e1b9da88fdcd530a0ed83d6f18206aeb32484d58305c9c468e71a",
+      "source_preservation": {
+        "immutable_geometry": true,
+        "immutable_weights": true,
+        "all_original_actions": true,
+        "all_rest_bones": true,
+        "all_object_transforms": true,
+        "edited_topology": true,
+        "edited_materials": true
+      },
+      "old_action_curves_sha256": "ff8142c288b545f215c9c1d23cc3be95d5f75f82e197f651fd041ba50c720ac2",
+      "preserved_actions": 194,
+      "new_actions": [
+        "ANI08D3_fist",
+        "ANI08D3_grip",
+        "ANI08D3_release"
+      ],
+      "edits": [
+        {
+          "mesh": "Palm L",
+          "before": {
+            "original": "Palm L",
+            "backup": "ORIGINAL_8D_Palm L_snapshot_002",
+            "before_sha256": "9605e30fc99fad596918fae117fa7e8446cba3b5ed6f9dfcea1add81ac0dc756",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.005868428687398202,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 5.708678827431868e-07,
+            "signed_volume_m3": 0.0002770560838378338
+          }
+        },
+        {
+          "mesh": "Forearm L",
+          "before": {
+            "original": "Forearm L",
+            "backup": "ORIGINAL_8D_Forearm L",
+            "before_sha256": "31652b9d60c9187d107021c9d7583d449851818875d82db58b9094169b983a89",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.03132126295866254,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.023687999811954796,
+          "distal_after_m": 0.0030000159313203767,
+          "wrist_ellipse_m": [
+            0.043856648540496826,
+            0.011220637034624815
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 2.0833205780945718e-05,
+            "signed_volume_m3": 0.00134372575938637
+          }
+        },
+        {
+          "mesh": "Palm R",
+          "before": {
+            "original": "Palm R",
+            "backup": "ORIGINAL_8D_Palm R_snapshot_002",
+            "before_sha256": "e8a8a3e6a00d9dde7b2e188f432dd98b38d519e6a2b4ecc5034029852b6ea60d",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.005868428687398202,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 5.708676553695113e-07,
+            "signed_volume_m3": 0.00027705608124422155
+          }
+        },
+        {
+          "mesh": "Forearm R",
+          "before": {
+            "original": "Forearm R",
+            "backup": "ORIGINAL_8D_Forearm R",
+            "before_sha256": "79f353be8ac70932aee4542a28c114cd7e30c0016be383d4e2ee48f1083a53df",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.0313212703922905,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.023687999811954796,
+          "distal_after_m": 0.0030000159313203767,
+          "wrist_ellipse_m": [
+            0.043856648540496826,
+            0.011220637034624815
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 2.08331966859987e-05,
+            "signed_volume_m3": 0.001343712837346311
+          }
+        }
+      ],
+      "max_actual_fist_mesh_motion_m": 0.07886653728345909,
+      "source_art_intent": "Curved orbital palm volume, staggered closure, female reach remains measured not assumed",
+      "paired_3d_verified": false,
+      "human_approved": false
+    },
+    {
+      "fighter": "orion-vell",
+      "body": "female",
+      "input_source_sha256": "0eea510c020b77d3ba907d8c2f606d7ee944294e25b19a8d1d46d2bfa4ec7c27",
+      "saved_source": "saved_sources/orion-vell/female/candidate_hand_interface_8d3.blend",
+      "saved_source_sha256": "b57b7610137efff85f5201d310d94746294e782807588942d28119679ac1e67e",
+      "runtime": "game-godot/data/animation/hands_8d3/orion-vell_female.json",
+      "runtime_sha256": "22dfeb17d2abd2c3b0faeead8f5f15de1e69033fd225f52177042c6944c1d77d",
+      "resource": "game-godot/assets/characters/hands_8d3/orion-vell/female/BASE.glb",
+      "resource_sha256": "2100a50e0b41c007c4ad26cb5cbcdb50f0467ac08dc6e152f1a91df184f696ec",
+      "source_preservation": {
+        "immutable_geometry": true,
+        "immutable_weights": true,
+        "all_original_actions": true,
+        "all_rest_bones": true,
+        "all_object_transforms": true,
+        "edited_topology": true,
+        "edited_materials": true
+      },
+      "old_action_curves_sha256": "1690921b06f2263acefee0a47a2aa4677d968fba06dfacfba72828d73dbcc85c",
+      "preserved_actions": 194,
+      "new_actions": [
+        "ANI08D3_fist",
+        "ANI08D3_grip",
+        "ANI08D3_release"
+      ],
+      "edits": [
+        {
+          "mesh": "Palm L",
+          "before": {
+            "original": "Palm L",
+            "backup": "ORIGINAL_8D_Palm L_snapshot_002",
+            "before_sha256": "58965e96e082c9560637c7fd8b579ca0e35f58a004cc0ff25fa67ea451fd393b",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.005611343175806135,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 4.808433118341782e-07,
+            "signed_volume_m3": 0.0002242557726010036
+          }
+        },
+        {
+          "mesh": "Forearm L",
+          "before": {
+            "original": "Forearm L",
+            "backup": "ORIGINAL_8D_Forearm L",
+            "before_sha256": "16c648d22c3d4ff924c26b36c656c5e33139e964dc553e8546a3aced2fc72c0a",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.027636552746353397,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.021319191670045257,
+          "distal_after_m": 0.0030000159313203767,
+          "wrist_ellipse_m": [
+            0.03859384932518005,
+            0.010729580782353879
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 1.9067631001234986e-05,
+            "signed_volume_m3": 0.0010733691291853872
+          }
+        },
+        {
+          "mesh": "Palm R",
+          "before": {
+            "original": "Palm R",
+            "backup": "ORIGINAL_8D_Palm R_snapshot_002",
+            "before_sha256": "60d1464a9c9f543629e839f250b726c6580ac32a36314683a1c553be2a53bd7e",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.005611343175806135,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 4.808410380974237e-07,
+            "signed_volume_m3": 0.00022425584312514647
+          }
+        },
+        {
+          "mesh": "Forearm R",
+          "before": {
+            "original": "Forearm R",
+            "backup": "ORIGINAL_8D_Forearm R",
+            "before_sha256": "f298d0964a77dd9f4dc8ed87c480d208272628e3793af5ca84b6586ba809552b",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.027636550113623464,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.021319191670045257,
+          "distal_after_m": 0.0030000159313203767,
+          "wrist_ellipse_m": [
+            0.03859385704994201,
+            0.010729580782353879
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 1.9067631001234986e-05,
+            "signed_volume_m3": 0.0010733598358381759
+          }
+        }
+      ],
+      "max_actual_fist_mesh_motion_m": 0.07541429889373977,
+      "source_art_intent": "Curved orbital palm volume, staggered closure, female reach remains measured not assumed",
+      "paired_3d_verified": false,
+      "human_approved": false
+    },
+    {
+      "fighter": "vesper-nyx",
+      "body": "male",
+      "input_source_sha256": "e96ae0afd3e4fdf305d269d4162b3df0dd5fac0206954df8ab6a5cb560976136",
+      "saved_source": "saved_sources/vesper-nyx/male/candidate_hand_interface_8d3.blend",
+      "saved_source_sha256": "200bfd497e9d8b61d67f29330a1c478cebe57e9af7743a9e6c11a50d1dbc737e",
+      "runtime": "game-godot/data/animation/hands_8d3/vesper-nyx_male.json",
+      "runtime_sha256": "7bb54a6b39cda86e010b5e34ed45835be0cbe26f79bdf90fbd99eef52e7ba522",
+      "resource": "game-godot/assets/characters/hands_8d3/vesper-nyx/male/BASE.glb",
+      "resource_sha256": "52c8663bd8b33a685cd7749252be5dfbde0c23f0697868046ca88d890f6abbff",
+      "source_preservation": {
+        "immutable_geometry": true,
+        "immutable_weights": true,
+        "all_original_actions": true,
+        "all_rest_bones": true,
+        "all_object_transforms": true,
+        "edited_topology": true,
+        "edited_materials": true
+      },
+      "old_action_curves_sha256": "e868e5b48fd3108001079d7deaaaec367a968b03429071cbdd9427580fdc4766",
+      "preserved_actions": 194,
+      "new_actions": [
+        "ANI08D3_fist",
+        "ANI08D3_grip",
+        "ANI08D3_release"
+      ],
+      "edits": [
+        {
+          "mesh": "Palm L",
+          "before": {
+            "original": "Palm L",
+            "backup": "ORIGINAL_8D_Palm L_snapshot_002",
+            "before_sha256": "44e9904e6ff9677e5dbcbabf1c48dd37b2ab20fd2741c235d59317b43b1ac920",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.0047495982159538545,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 5.048267439633491e-07,
+            "signed_volume_m3": 0.00024144458929473692
+          }
+        },
+        {
+          "mesh": "Forearm L",
+          "before": {
+            "original": "Forearm L",
+            "backup": "ORIGINAL_8D_Forearm L",
+            "before_sha256": "78e496ec5157732ffca905dd7a1475a2608b09989a546d2b966b114482a5116c",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.02706795826012063,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.020916007575578988,
+          "distal_after_m": 0.0029999850230524316,
+          "wrist_ellipse_m": [
+            0.038724486637115474,
+            0.011220637034624815
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 2.0793735529878177e-05,
+            "signed_volume_m3": 0.0010220419847064225
+          }
+        },
+        {
+          "mesh": "Palm R",
+          "before": {
+            "original": "Palm R",
+            "backup": "ORIGINAL_8D_Palm R_snapshot_002",
+            "before_sha256": "7d90b808f963d363fad9de27b546575385c893936c838655e25ffbe401d0b4ba",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.0047495982159538545,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 5.048235038884741e-07,
+            "signed_volume_m3": 0.0002414445884324677
+          }
+        },
+        {
+          "mesh": "Forearm R",
+          "before": {
+            "original": "Forearm R",
+            "backup": "ORIGINAL_8D_Forearm R",
+            "before_sha256": "b1500f4f8d663a4ec1d4ff06b130c56a182f0a78c000c67678a19f1ed7010ccd",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.02706796183016477,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.020916007575578988,
+          "distal_after_m": 0.0029999850230524316,
+          "wrist_ellipse_m": [
+            0.038724486637115474,
+            0.011220637034624815
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 2.0793744624825194e-05,
+            "signed_volume_m3": 0.0010220310665459832
+          }
+        }
+      ],
+      "max_actual_fist_mesh_motion_m": 0.0787094986202834,
+      "source_art_intent": "Oblique restrained closure and narrow dark wrist continuity",
+      "paired_3d_verified": false,
+      "human_approved": false
+    },
+    {
+      "fighter": "vesper-nyx",
+      "body": "female",
+      "input_source_sha256": "fd4aae506e617b9eb739fd903aad4b02329e81cf1c6dcaa3bee74a3bd129deb6",
+      "saved_source": "saved_sources/vesper-nyx/female/candidate_hand_interface_8d3.blend",
+      "saved_source_sha256": "94a84d124803b7f2ae2b5217c2e42d33024bd4938de1b4fd7e64a7a024c2a321",
+      "runtime": "game-godot/data/animation/hands_8d3/vesper-nyx_female.json",
+      "runtime_sha256": "297543dba66f1fa5656cb82132b90841853d3977c1582d4c85056ba5ab0f7738",
+      "resource": "game-godot/assets/characters/hands_8d3/vesper-nyx/female/BASE.glb",
+      "resource_sha256": "e034cf2ca4a5fb822c665d65d8063da065306b0c665e1d7e974ad4458191855d",
+      "source_preservation": {
+        "immutable_geometry": true,
+        "immutable_weights": true,
+        "all_original_actions": true,
+        "all_rest_bones": true,
+        "all_object_transforms": true,
+        "edited_topology": true,
+        "edited_materials": true
+      },
+      "old_action_curves_sha256": "505273fa878b72bd75e73ca3b9faec80b705d5ad73442bc234f17f5a80143611",
+      "preserved_actions": 194,
+      "new_actions": [
+        "ANI08D3_fist",
+        "ANI08D3_grip",
+        "ANI08D3_release"
+      ],
+      "edits": [
+        {
+          "mesh": "Palm L",
+          "before": {
+            "original": "Palm L",
+            "backup": "ORIGINAL_8D_Palm L_snapshot_002",
+            "before_sha256": "846d8f109242b2c41361687210051ccb2700f79eab25422f75a9622da589a323",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.004541527416998077,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 4.2531814870017115e-07,
+            "signed_volume_m3": 0.0001954457974185313
+          }
+        },
+        {
+          "mesh": "Forearm L",
+          "before": {
+            "original": "Forearm L",
+            "backup": "ORIGINAL_8D_Forearm L",
+            "before_sha256": "2613d924eb100d8bb36ffef2f6cff362959e14a7719f7f290a4f1d24fe3c7c85",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.023817787627536707,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.01882439077598974,
+          "distal_after_m": 0.002999982869368978,
+          "wrist_ellipse_m": [
+            0.03407755179405212,
+            0.010729580782353879
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 1.903077463794034e-05,
+            "signed_volume_m3": 0.0008180800537215151
+          }
+        },
+        {
+          "mesh": "Palm R",
+          "before": {
+            "original": "Palm R",
+            "backup": "ORIGINAL_8D_Palm R_snapshot_002",
+            "before_sha256": "debf4de25f164c8c9ffdc0835dddec3bbfc8ea6682f9b7aaab40d274d1e5452a",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.004541527416998077,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 4.253214740401745e-07,
+            "signed_volume_m3": 0.00019544579079423582
+          }
+        },
+        {
+          "mesh": "Forearm R",
+          "before": {
+            "original": "Forearm R",
+            "backup": "ORIGINAL_8D_Forearm R",
+            "before_sha256": "55387b4cd3ee833f377ade44849bdfae0103a0d5e09db0ec080c6f1e8799f3ce",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.023817787627536707,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.01882439077598974,
+          "distal_after_m": 0.002999982869368978,
+          "wrist_ellipse_m": [
+            0.034077547931671136,
+            0.010729580782353879
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 1.903077463794034e-05,
+            "signed_volume_m3": 0.0008180721851779981
+          }
+        }
+      ],
+      "max_actual_fist_mesh_motion_m": 0.07526384577543949,
+      "source_art_intent": "Oblique restrained closure and narrow dark wrist continuity",
+      "paired_3d_verified": false,
+      "human_approved": false
+    },
+    {
+      "fighter": "yin",
+      "body": "male",
+      "input_source_sha256": "f38f22d4bbbb4dba3fefc848ce77555835e7ed99bd5c6efcb3e1d19543819780",
+      "saved_source": "saved_sources/yin/male/candidate_hand_interface_8d3.blend",
+      "saved_source_sha256": "2fb7efa06b75cd8acd0a20edfeba5ea1dd6721bb4dff0d6eeff8f253feed0852",
+      "runtime": "game-godot/data/animation/hands_8d3/yin_male.json",
+      "runtime_sha256": "043793de842980edca5c0f98621e60ea53cc5b3b8dd4dc4803b3172bc7ae606f",
+      "resource": "game-godot/assets/characters/hands_8d3/yin/male/BASE.glb",
+      "resource_sha256": "948594c29af0bebc070000cfa75de9b683abdd1dc5e16c9a75825fc653e2b1df",
+      "source_preservation": {
+        "immutable_geometry": true,
+        "immutable_weights": true,
+        "all_original_actions": true,
+        "all_rest_bones": true,
+        "all_object_transforms": true,
+        "edited_topology": true,
+        "edited_materials": true
+      },
+      "old_action_curves_sha256": "045f31f4b4d758d6e1e9d10227e30acfdda6d797af17ab4862ed2499ebf59e8b",
+      "preserved_actions": 194,
+      "new_actions": [
+        "ANI08D3_fist",
+        "ANI08D3_grip",
+        "ANI08D3_release"
+      ],
+      "edits": [
+        {
+          "mesh": "Palm L",
+          "before": {
+            "original": "Palm L",
+            "backup": "ORIGINAL_8D_Palm L_snapshot_002",
+            "before_sha256": "ed766d0c6cd8ab72f31b92636d25d39f8d3e6755cc21ac9a2d20c39af166f4ac",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.005590520836688599,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 4.868323912887718e-07,
+            "signed_volume_m3": 0.0002353265816515987
+          }
+        },
+        {
+          "mesh": "Forearm L",
+          "before": {
+            "original": "Forearm L",
+            "backup": "ORIGINAL_8D_Forearm L",
+            "before_sha256": "405b5246a892887679d504cb43fd065c927cf48684b9446ce83e0c4063d9f6f4",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.025111811944291025,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.02015998016577214,
+          "distal_after_m": 0.002999981807079166,
+          "wrist_ellipse_m": [
+            0.03732480611801147,
+            0.011220637034624815
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 2.0773532014572993e-05,
+            "signed_volume_m3": 0.0009643130770279421
+          }
+        },
+        {
+          "mesh": "Palm R",
+          "before": {
+            "original": "Palm R",
+            "backup": "ORIGINAL_8D_Palm R_snapshot_002",
+            "before_sha256": "2523d367b1207e60e74409e7aa4e903e0624fe99ab52257c652eb4a74fb274ef",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.005590520836688599,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 4.868326186624472e-07,
+            "signed_volume_m3": 0.00023532658382188879
+          }
+        },
+        {
+          "mesh": "Forearm R",
+          "before": {
+            "original": "Forearm R",
+            "backup": "ORIGINAL_8D_Forearm R",
+            "before_sha256": "c38cbfc3bd3e786e5ad5e8a6c71b6928c244bda8dcc0b9f2b564aa8e9d2faea5",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.02511182076332493,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.02015998016577214,
+          "distal_after_m": 0.002999981807079166,
+          "wrist_ellipse_m": [
+            0.03732480611801147,
+            0.011220637034624815
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 2.0773419237229973e-05,
+            "signed_volume_m3": 0.0009643032594481015
+          }
+        }
+      ],
+      "max_actual_fist_mesh_motion_m": 0.07901457963369983,
+      "source_art_intent": "Inward gathered palm and economical closing hand; original dark material retained",
+      "paired_3d_verified": false,
+      "human_approved": false
+    },
+    {
+      "fighter": "yin",
+      "body": "female",
+      "input_source_sha256": "7d43c772913951768ae7fcd845e6b89953dcdf9324cc155c2b44fd01b541e06f",
+      "saved_source": "saved_sources/yin/female/candidate_hand_interface_8d3.blend",
+      "saved_source_sha256": "5055c8ebca7ac3fb12e6878f438b82cc2dfa988e656fddbeb3fbe5c121f40907",
+      "runtime": "game-godot/data/animation/hands_8d3/yin_female.json",
+      "runtime_sha256": "9cca9bc7268570d0d4709d0b9fb02facdefc14d10109b3fe2abac3ee286273fc",
+      "resource": "game-godot/assets/characters/hands_8d3/yin/female/BASE.glb",
+      "resource_sha256": "4ebc22c9a714157e3f9d4693225681b9dd58566b06334f4ac3dce455c2c15fff",
+      "source_preservation": {
+        "immutable_geometry": true,
+        "immutable_weights": true,
+        "all_original_actions": true,
+        "all_rest_bones": true,
+        "all_object_transforms": true,
+        "edited_topology": true,
+        "edited_materials": true
+      },
+      "old_action_curves_sha256": "d68570bdffea79adaaaa0d91841a7f3eda7dfe674145b30e9b14c52e03179138",
+      "preserved_actions": 194,
+      "new_actions": [
+        "ANI08D3_fist",
+        "ANI08D3_grip",
+        "ANI08D3_release"
+      ],
+      "edits": [
+        {
+          "mesh": "Palm L",
+          "before": {
+            "original": "Palm L",
+            "backup": "ORIGINAL_8D_Palm L_snapshot_002",
+            "before_sha256": "5269b003ab872902ea517b2d014b09cb82c30f5ba237134517e03ef7a2e2378a",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.00534561073191714,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 4.100447483779135e-07,
+            "signed_volume_m3": 0.00019047364106619045
+          }
+        },
+        {
+          "mesh": "Forearm L",
+          "before": {
+            "original": "Forearm L",
+            "backup": "ORIGINAL_8D_Forearm L",
+            "before_sha256": "6fc968604c35ac9c70a2a6e5fd531c5816fe566a64e840bef181f320a98f7aff",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.022056239154184837,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.018144005443900824,
+          "distal_after_m": 0.0029999796533957124,
+          "wrist_ellipse_m": [
+            0.03284583463668823,
+            0.010729580782353879
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 1.9010582036571577e-05,
+            "signed_volume_m3": 0.0007722693742401927
+          }
+        },
+        {
+          "mesh": "Palm R",
+          "before": {
+            "original": "Palm R",
+            "backup": "ORIGINAL_8D_Palm R_snapshot_002",
+            "before_sha256": "8562a72ba52199e4f251de9f89951c3672d5723b50379602dce66ae0dc5e0183",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.00534561073191714,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 4.10043725196374e-07,
+            "signed_volume_m3": 0.00019047364454671275
+          }
+        },
+        {
+          "mesh": "Forearm R",
+          "before": {
+            "original": "Forearm R",
+            "backup": "ORIGINAL_8D_Forearm R",
+            "before_sha256": "215ae636dbaba6e9911fcea58e623debc9c49f6339402747e82fb7df3f73ee18",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.022056237834656555,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.018144005443900824,
+          "distal_after_m": 0.0029999796533957124,
+          "wrist_ellipse_m": [
+            0.03284583463668823,
+            0.010729580782353879
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 1.9010582036571577e-05,
+            "signed_volume_m3": 0.0007722623197868353
+          }
+        }
+      ],
+      "max_actual_fist_mesh_motion_m": 0.07555547393775837,
+      "source_art_intent": "Inward gathered palm and economical closing hand; original dark material retained",
+      "paired_3d_verified": false,
+      "human_approved": false
+    },
+    {
+      "fighter": "yang",
+      "body": "male",
+      "input_source_sha256": "a04bae9956dffb47676516bbe5ca3d538051c8856e451b468738e99126372e19",
+      "saved_source": "saved_sources/yang/male/candidate_hand_interface_8d3.blend",
+      "saved_source_sha256": "282e904a1e73a32d56c7f0ec701211b3f9ff590d45742c5df79cfb96859d968d",
+      "runtime": "game-godot/data/animation/hands_8d3/yang_male.json",
+      "runtime_sha256": "41ced1ba20b8e6b3be41a1d280a9568a19c39b57d3c60642d484747831b630b8",
+      "resource": "game-godot/assets/characters/hands_8d3/yang/male/BASE.glb",
+      "resource_sha256": "69737808363f48e64b2fe109d734a98a1e7453ce1241cca9832133669744e80f",
+      "source_preservation": {
+        "immutable_geometry": true,
+        "immutable_weights": true,
+        "all_original_actions": true,
+        "all_rest_bones": true,
+        "all_object_transforms": true,
+        "edited_topology": true,
+        "edited_materials": true
+      },
+      "old_action_curves_sha256": "98cfdc12c2de10b42d43117df1253e04fd581f5181241b64015cff77ebf6d4ae",
+      "preserved_actions": 194,
+      "new_actions": [
+        "ANI08D3_fist",
+        "ANI08D3_grip",
+        "ANI08D3_release"
+      ],
+      "edits": [
+        {
+          "mesh": "Palm L",
+          "before": {
+            "original": "Palm L",
+            "backup": "ORIGINAL_8D_Palm L_snapshot_002",
+            "before_sha256": "4b55566d4e6e3c87b460cc51cc828b893e7d3a476327045e9f90c373b08177e8",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.0051841509087314375,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 5.168270149624732e-07,
+            "signed_volume_m3": 0.00025122925896857207
+          }
+        },
+        {
+          "mesh": "Forearm L",
+          "before": {
+            "original": "Forearm L",
+            "backup": "ORIGINAL_8D_Forearm L",
+            "before_sha256": "810189b08752819706df064a034694284dcb0475905548d2529985e7908dfbeb",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.02671203512566899,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.02141999185550958,
+          "distal_after_m": 0.0029999742982909083,
+          "wrist_ellipse_m": [
+            0.03965760698318481,
+            0.011220637034624815
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 2.079084879369475e-05,
+            "signed_volume_m3": 0.0011085447154437517
+          }
+        },
+        {
+          "mesh": "Palm R",
+          "before": {
+            "original": "Palm R",
+            "backup": "ORIGINAL_8D_Palm R_snapshot_002",
+            "before_sha256": "3a98bc1af54f30b15782a99b31b52f861bb353e30c543d3c93547d81c85970bb",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.005184149987684251,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 5.168266170585412e-07,
+            "signed_volume_m3": 0.00025122925924173935
+          }
+        },
+        {
+          "mesh": "Forearm R",
+          "before": {
+            "original": "Forearm R",
+            "backup": "ORIGINAL_8D_Forearm R",
+            "before_sha256": "29101ea123aeed5d722a827d9b47c65c888634b12e94006f58dc27b08af7380b",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.02671203240181888,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.02141999185550958,
+          "distal_after_m": 0.0029999742982909083,
+          "wrist_ellipse_m": [
+            0.03965760698318481,
+            0.011220637034624815
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 2.0790861526620574e-05,
+            "signed_volume_m3": 0.001108534280453906
+          }
+        }
+      ],
+      "max_actual_fist_mesh_motion_m": 0.07949849600500643,
+      "source_art_intent": "Ordered dorsal construction and balanced finger closure; original radiant material retained",
+      "paired_3d_verified": false,
+      "human_approved": false
+    },
+    {
+      "fighter": "yang",
+      "body": "female",
+      "input_source_sha256": "6dab8b8692ee2b678fe2d51ceb032751d5e43863167692ff800d37d4162d89ad",
+      "saved_source": "saved_sources/yang/female/candidate_hand_interface_8d3.blend",
+      "saved_source_sha256": "fa1fd4eb39433eb5198f7eed96814da0c6dfeca42e374a5b25a3d9f610efc7aa",
+      "runtime": "game-godot/data/animation/hands_8d3/yang_female.json",
+      "runtime_sha256": "f3665693111dce729e9345c33189fd89f9da2b0a1a0b71a6c0b73a5a2f291716",
+      "resource": "game-godot/assets/characters/hands_8d3/yang/female/BASE.glb",
+      "resource_sha256": "b42755f6c6a220c152ad69165d36756a73694582b889853a373f0b7494241bb1",
+      "source_preservation": {
+        "immutable_geometry": true,
+        "immutable_weights": true,
+        "all_original_actions": true,
+        "all_rest_bones": true,
+        "all_object_transforms": true,
+        "edited_topology": true,
+        "edited_materials": true
+      },
+      "old_action_curves_sha256": "810d80a30913c13cac9e89725ca6f6acc02acd6321f59ad9c1e3d520568d5e4d",
+      "preserved_actions": 194,
+      "new_actions": [
+        "ANI08D3_fist",
+        "ANI08D3_grip",
+        "ANI08D3_release"
+      ],
+      "edits": [
+        {
+          "mesh": "Palm L",
+          "before": {
+            "original": "Palm L",
+            "backup": "ORIGINAL_8D_Palm L_snapshot_002",
+            "before_sha256": "3fa32b96a35a027ac132393d90297b7577c87f99fbd7959663e535cd74192a26",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.004957271704191567,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 4.354160978436994e-07,
+            "signed_volume_m3": 0.000203344971987514
+          }
+        },
+        {
+          "mesh": "Forearm L",
+          "before": {
+            "original": "Forearm L",
+            "backup": "ORIGINAL_8D_Forearm L",
+            "before_sha256": "2e344a95542f903276fe90028ce7b9c9c1bcbc6f92c5d8a928c8bf2ff85a6259",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.02348808153394227,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.019277993473224342,
+          "distal_after_m": 0.002999981792527251,
+          "wrist_ellipse_m": [
+            0.0348986939907074,
+            0.010729580782353879
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 1.902660369523801e-05,
+            "signed_volume_m3": 0.0008869089164463072
+          }
+        },
+        {
+          "mesh": "Palm R",
+          "before": {
+            "original": "Palm R",
+            "backup": "ORIGINAL_8D_Palm R_snapshot_002",
+            "before_sha256": "da196e10dfe5e750a8f5a8a577464f6270010ed8229dea025fea992e8dc941ed",
+            "original_vertices": 3938
+          },
+          "max_surface_displacement_m": 0.004957271704191567,
+          "sculpt": "Individual thenar/hypothenar/metacarpal relief; existing digit lengths, wrist and weights retained",
+          "validation": {
+            "vertices": 3938,
+            "faces": 3936,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 4.3541922423173673e-07,
+            "signed_volume_m3": 0.0002033449880772723
+          }
+        },
+        {
+          "mesh": "Forearm R",
+          "before": {
+            "original": "Forearm R",
+            "backup": "ORIGINAL_8D_Forearm R",
+            "before_sha256": "6a4d2bc192be822e8ddacdd9ba1045accd7dab02970789352aa6065db80c5065",
+            "original_vertices": 222
+          },
+          "armor": false,
+          "max_surface_displacement_m": 0.02348808153394227,
+          "proximal_vertices_preserved": 121,
+          "distal_before_m": 0.019277993473224342,
+          "distal_after_m": 0.002999981792527251,
+          "wrist_ellipse_m": [
+            0.03489869785308838,
+            0.010729580782353879
+          ],
+          "validation": {
+            "vertices": 222,
+            "faces": 240,
+            "boundary_edges": 0,
+            "nonmanifold_edges": 0,
+            "minimum_face_area_m2": 1.902660369523801e-05,
+            "signed_volume_m3": 0.0008869013871964713
+          }
+        }
+      ],
+      "max_actual_fist_mesh_motion_m": 0.07601832187170728,
+      "source_art_intent": "Ordered dorsal construction and balanced finger closure; original radiant material retained",
+      "paired_3d_verified": false,
+      "human_approved": false
+    }
+  ],
+  "complete": true,
+  "paired_3d_verified": false,
+  "human_approved": false
+}

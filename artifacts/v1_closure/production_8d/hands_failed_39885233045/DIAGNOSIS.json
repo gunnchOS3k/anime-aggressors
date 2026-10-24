@@ -1,0 +1,9 @@
+{
+  "run": 39885233045,
+  "producer_sha": "f1eefe88e7fa0e49e0270ea3bcd4b62d81578563",
+  "conclusion": "failure",
+  "scope": "Dependency setup only; Blender never ran,0 source/artifacts",
+  "root_cause": "Sources use mirror+file:/etc/apt/apt-mirrors.txt; prior .sources replacement did not change this list. Log stillselected http://azure.archive.ubuntu.com/ubuntu andspent7m36s on35.9MB blender-data before8m timeout.",
+  "correction": "Pin actual apt mirrorlists to official HTTPSarchive/security; signed package verification and Blender4.0.2 unchanged. Existing bounded timeouts retained.",
+  "source_preservation_diagnostic_executed": false
+}

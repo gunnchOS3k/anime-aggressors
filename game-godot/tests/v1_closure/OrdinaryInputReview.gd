@@ -28,6 +28,10 @@ var navigation := {}
 var seeded_prerequisites := false
 var dialogue_review := ""
 var dialogue_snapshot := ""
+var stop_scene_and_exit := false
+var edge_pressure := false
+var retry_limit := 4
+var pressure_inputs := false
 
 func _ready() -> void:
 	process_physics_priority = -100
@@ -39,6 +43,10 @@ func _ready() -> void:
 		if arg.begins_with("--ordinary-replay="): replay_nodes=Array(arg.trim_prefix("--ordinary-replay=").split(","))
 		if arg == "--ordinary-video-frames": video_frames=true
 		if arg == "--ordinary-seeded-prerequisites": seeded_prerequisites=true
+		if arg == "--ordinary-stop-scene-and-exit": stop_scene_and_exit=true
+		if arg == "--ordinary-edge-pressure": edge_pressure=true
+		if arg == "--ordinary-pressure-inputs": pressure_inputs=true
+		if arg.begins_with("--ordinary-retry-limit="): retry_limit=clampi(int(arg.get_slice("=",1)),0,4)
 	if output.is_empty(): set_physics_process(false); return
 	DirAccess.make_dir_recursive_absolute(output)
 	print("ORDINARY_PROFILE ", OS.get_user_data_dir())
@@ -62,6 +70,24 @@ func _physics_process(_delta: float) -> void:
 	action_delay -= 1
 	var scene = get_tree().current_scene
 	if scene == null: return
+	# Public presentation control; ordinary automation intentionally skips draft dialogue.
+	if StoryDialogue.is_busy():
+		if stop_scene_and_exit and scene.scene_file_path.ends_with("StoryCampaignScene.tscn"):
+			if action_delay > 0: return
+			var before := JSON.stringify(CampaignRuntime.progress)
+			var saved := FileAccess.get_file_as_bytes(CampaignRuntime.save_path)
+			var stopped_node: String = StoryDialogue.node_id
+			var shown_cue: String = str(StoryDialogue.current.get("cue_id", ""))
+			_press_button(scene, "Stop Scene")
+			var unchanged: bool = before == JSON.stringify(CampaignRuntime.progress)
+			var disk_unchanged: bool = saved == FileAccess.get_file_as_bytes(CampaignRuntime.save_path)
+			if StoryDialogue.is_busy() or not unchanged or not disk_unchanged:
+				failures.append("Stopping the ordinary Story scene failed or changed progress")
+			rows.append({"node":stopped_node,"kind":"scene_stopped_without_progress","shown_cue":shown_cue,"public_stop_button":true,"progress_unchanged":unchanged,"signed_save_unchanged":disk_unchanged})
+			_finish()
+			return
+		_press_button(StoryDialogue, "Skip dialogue · F6")
+		return
 	if scene_id != scene.get_instance_id():
 		scene_id = scene.get_instance_id(); local_frame = 0; action_delay = 50
 		_inputs([])
@@ -128,7 +154,7 @@ func _physics_process(_delta: float) -> void:
 				scene.rematch_btn.pressed.emit(); action_delay=55; return
 			if GameState.last_winner_slot != 1:
 				retries += 1
-				if retries > 4: failures.append("Ordinary-input driver lost repeatedly at "+node_id); _finish(); return
+				if retries > retry_limit: failures.append("Ordinary-input driver lost repeatedly at "+node_id); _finish(); return
 			scene.rematch_btn.pressed.emit(); action_delay = 55
 	elif scene.scene_file_path.ends_with("BattleScene.tscn"):
 		var timeout := 1400 if scene._story_objective != null and scene._story_objective.kind == "SEVENFOLD_TRIAL" else 220
@@ -152,7 +178,15 @@ func _physics_process(_delta: float) -> void:
 
 func _ko_observed(actor) -> void:
 	if not attempt.has("kos"): attempt["kos"] = []
-	attempt["kos"].append({"fighter":actor.fighter_id,"slot":actor.slot,"position":[actor.position.x,actor.position.y],"damage":actor.damage_percent,"remaining_stocks":actor.stocks})
+	attempt["kos"].append({"fighter":actor.fighter_id,"slot":actor.slot,"position":[actor.position.x,actor.position.y],"damage":actor.damage_percent,"remaining_stocks":actor.stocks,"movie_frame":Engine.get_process_frames()-1,"spectral_stock_loss":_stock_loss_effect(actor)})
+
+func _stock_loss_effect(actor: Node) -> Dictionary:
+	var renderer=get_tree().current_scene.get_node_or_null("SpectralFeedback")
+	if renderer == null:return {}
+	for i in range(renderer.history.size()-1,-1,-1):
+		var event: Dictionary=renderer.history[i]
+		if event.kind==7 and str(event.event_id).begins_with("ko:"+str(actor.get_instance_id())+":"):return event.duplicate(true)
+	return {}
 
 func _hit(attacker, defender, info: Dictionary) -> void:
 	if info.get("blocked",false): attempt["blocks"] += 1
@@ -188,13 +222,35 @@ func _combat(scene, target) -> Array:
 		if not p.is_on_floor() and local_frame%40<2: actions.append("jump")
 		if not p.is_on_floor() and p.position.y > p.platform_surface_y-30 and local_frame%45<2: actions.append("up"); actions.append("special")
 		return actions
-	if target.state_machine.current_state == "ledge_hang": return _walk_to(p,0)
+	if target.state_machine.current_state == "ledge_hang":
+		if pressure_inputs:return _walk_to(p,p.platform_center_x+(-1 if target.position.x<p.platform_center_x else 1)*(p.platform_half_width-65),20)
+		return _walk_to(p,0)
 	if absf(target.position.y-p.position.y)>75 and p.is_on_floor() and local_frame%50<2: actions.append("jump")
 	if p.grabbed_target != null:
+		if edge_pressure or pressure_inputs:return ["right" if p.position.x>=p.platform_center_x else "left", "attack"]
 		return ["right" if p.facing==1 else "left", "attack"]
+	if pressure_inputs:
+		if absf(target.position.x-p.position.x)>150 and p.is_on_floor() and p.aura<100:
+			return ["special","shield"] # Ordinary charge; the CPU may approach or interrupt.
+		if absf(target.position.x-p.position.x)<75 and absf(target.position.y-p.position.y)<50:
+			if signf(target.position.x-p.position.x)!=p.facing and absf(target.position.x-p.position.x)>5:return _walk_to(p,target.position.x,0)
+			if p.state_machine.can_attack() and local_frame%4<2:
+				if target.shielding or target.damage_percent>70:return ["grab"]
+				return ["attack","special"] if local_frame%12<2 else ["attack"]
+		return actions
+	# Optional driver tactic only: invite a damaged active opponent toward a
+	# safe stage edge before engaging. No transform/facing/AI/result writes.
+	if edge_pressure and target.damage_percent>70 and local_frame%900<360:
+		var side:=1.0 if p.position.x>=p.platform_center_x else -1.0
+		var edge: float=p.platform_center_x+side*(p.platform_half_width-65)
+		if absf(p.position.x-edge)>30:
+			actions=_walk_to(p,edge,20)
+			if absf(target.position.x-p.position.x)<45 and absf(target.position.y-p.position.y)<35 and local_frame%12<2:actions.append("grab")
+			return actions
 	if absf(target.position.x-p.position.x)<100:
 		if signf(target.position.x-p.position.x) != p.facing and absf(target.position.x-p.position.x)>5: return _walk_to(p,target.position.x,0)
-		if target.shielding and absf(target.position.x-p.position.x)<65 and local_frame%45<2: return ["grab"]
+		# Throw high-percent armored opponents using the same public grab input.
+		if (target.shielding or target.damage_percent>100) and absf(target.position.x-p.position.x)<65 and local_frame%25<3: return ["grab"]
 		if (local_frame+retries*13)%41<2:
 			if (local_frame/41)%3==0:
 				actions = _walk_to(p,target.position.x,0); actions.append("special")
@@ -278,7 +334,7 @@ func _capture(name: String) -> void:
 
 func _finish() -> void:
 	set_physics_process(false); _inputs([])
-	var report := {"evidence_type":"ORDINARY_INPUT_AUTOMATION","human_playthrough":false,"new_profile":not resume,"route":route_id,"replay_nodes":replay_nodes,"profile_path":OS.get_user_data_dir(),"gameplay_overrides":[],"rows":rows,"trace":trace,"failures":failures,"ok":failures.is_empty(),"start_progress":start_progress,"progress":CampaignRuntime.progress,"navigation":navigation,"captures":captured,"video_frames":video_counts,"V1_AUTOMATED_READY":false}
+	var report := {"evidence_type":"ORDINARY_INPUT_AUTOMATION","human_playthrough":false,"new_profile":not resume,"route":route_id,"replay_nodes":replay_nodes,"profile_path":OS.get_user_data_dir(),"gameplay_overrides":[],"driver_tactic":"public_charge_light_grab_pressure" if pressure_inputs else "public_input_edge_pressure" if edge_pressure else "original_public_input","retry_limit":retry_limit,"rows":rows,"trace":trace,"failures":failures,"ok":failures.is_empty(),"start_progress":start_progress,"progress":CampaignRuntime.progress,"navigation":navigation,"captures":captured,"video_frames":video_counts,"V1_AUTOMATED_READY":false}
 	var f := FileAccess.open(output.path_join("ordinary_input_evidence.json"),FileAccess.WRITE)
 	if seeded_prerequisites:
 		report["evidence_type"]="SEEDED_PREREQUISITES_ORDINARY_INPUT"

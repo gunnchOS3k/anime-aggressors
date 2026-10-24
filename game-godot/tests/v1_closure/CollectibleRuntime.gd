@@ -49,7 +49,7 @@ func _run() -> void:
 			check(Bank.load_stream("res://assets/audio/collectible_v1/%s/%s.wav" % [fid,event]) != null, "audio:" + fid + ":" + event)
 	var fb := Feedback.new()
 	root.add_child(fb)
-	var blocked := fb.apply_hit(null, null, {"feedback":{"tier":"super","sfx_event":"super","camera_event":"super"}}, {"blocked":true,"launch":Vector2.ZERO})
+	var blocked := fb.apply_hit(null, null, {"feedback":{"tier":"super","sfx_event":"super","camera_event":"super"}}, {"blocked":true,"launch":Vector2.ZERO,"confirmed_contact":true,"combat_event_id":"declared-block-fixture"})
 	check(blocked.sfx_event == "block" and blocked.camera_event == "" and blocked.vfx_event == "shield_flash", "block_is_not_super_impact")
 	fb.queue_free()
 	var payload := {"ok":failures.is_empty(),"failures":failures,"rows":rows,"scope":"Godot model configure, 22-bone import, embedded candidate playback, 135 WAV loads and block feedback classification. Not complete battle paths, authored animation or visual taste approval.","V1_AUTOMATED_READY":false,"V1_ANIME_HUMAN_PASS":false}

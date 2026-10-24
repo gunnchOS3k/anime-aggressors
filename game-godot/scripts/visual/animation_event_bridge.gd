@@ -21,8 +21,7 @@ func emit_from_anim_event(event_type: String, payload: Dictionary = {}) -> void:
 		return
 	match event_type:
 		"hitbox_on", "active_start":
-			_bus.emit_event("impact_vfx", payload)
-			_bus.emit_event("hitstop", payload)
+			_bus.emit_event("attack_swing", payload)
 		"projectile_release":
 			_bus.emit_event("projectile_trail", payload)
 		"throw_release":
@@ -36,4 +35,6 @@ func emit_from_anim_event(event_type: String, payload: Dictionary = {}) -> void:
 		"recovery_start":
 			_bus.emit_event("recovery_trail", payload)
 		_:
-			_bus.emit_event("sfx", payload.merge({"event_type": event_type}))
+			var body := payload.duplicate(true)
+			body["event_type"] = event_type
+			_bus.emit_event("sfx", body)

@@ -198,6 +198,7 @@ func _on_rematch_pressed() -> void:
 				SceneRouter.go("battle")
 				return
 		CampaignRuntime.abandon_encounter()
+		StoryDialogue.cancel()
 		SceneRouter.go("story")
 		return
 	if GameState.mode == "arcade" or GameState.arcade_active or GameState.arcade_complete or GameState.arcade_failed:
@@ -237,6 +238,7 @@ func _on_change_stage_pressed() -> void:
 func _on_home_pressed() -> void:
 	if GameState.mode == "story":
 		CampaignRuntime.abandon_encounter()
+		StoryDialogue.cancel()
 		SceneRouter.go("story")
 		return
 	GameState.arcade_active = false

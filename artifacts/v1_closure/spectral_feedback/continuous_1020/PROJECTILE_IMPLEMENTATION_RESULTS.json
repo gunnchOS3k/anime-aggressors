@@ -1,0 +1,299 @@
+{
+  "tested_runtime_source": "cf46897045611a46b5c4d9b6c55a83f276e37c4d",
+  "draft_pr": "https://github.com/gunnchOS3k/anime-aggressors/pull/123",
+  "stacked_parent": 122,
+  "authored_policy": {
+    "path": "game-godot/data/combat/projectile_interactions.json",
+    "sha256": "3f4955d37b3ea712a02b475fa9e0f8c7d6fb761867f671c8ee72b25f51292500",
+    "provisional_integrity_by_existing_aura_bin": [
+      1,
+      1,
+      2,
+      4,
+      4
+    ],
+    "damage": "initial damage * (remaining/initial)^authored exponent; unchanged before interception",
+    "eligibility": "explicit move and native behavior allowlist; no new charge state"
+  },
+  "runtime_contract": [
+    "stable spawn/team identity",
+    "swept existing rectangles, time-of-impact then stable owner/sequence ordering",
+    "all interceptions before fighter delivery in the fixed tick",
+    "same-team shots and fighter damage excluded",
+    "immediate retirement on expire/cancel/scene clear",
+    "bounded pair ledger and history; pooled original effects and original audio"
+  ],
+  "prerequisite_fixture": {
+    "path": "artifacts/v1_closure/spectral_feedback/continuous_1020/projectile_regressions/ProjectileInteractions/projectile_interactions.json",
+    "sha256": "e02f818eab5023c6680db171d15a907484b3007f2b254f7b3bb9f115cc194ca5",
+    "PASS": true,
+    "rows": 35,
+    "scope": "explicit aura/position prerequisites; includes four weak shots canceling integrity4; shield/invulnerability/near-fighter/fast sweep/cleanup/determinism/three accessible modes; not ordinary play"
+  },
+  "archetype_continuity": {
+    "path": "artifacts/v1_closure/spectral_feedback/continuous_1020/archetype_continuity/projectile_archetype_continuity.json",
+    "sha256": "b627aafea67897430641922e73f81866a8c56aea43e388272ea99a296ac6b269",
+    "PASS": true,
+    "cases": 18,
+    "position_drift_px": 0,
+    "scope": "all nine existing medium/full emitter trajectories and lifetime versus un-intercepted controls; not owner visual acceptance"
+  },
+  "ordinary_public_exchange": {
+    "runtime_source": "d1950652a0e71e2b5c643027fbc84ab0387b4b8a",
+    "path": "artifacts/v1_closure/spectral_feedback/continuous_1020/projectile_public_latched/projectile_public_inputs.json",
+    "sha256": "a1960efc876f4885de5b4c39a4393189e6998fe8fc396820008870d2a75abecd",
+    "two_local_public_input_streams": true,
+    "active_CPU": false,
+    "seeded_aura_or_damage_or_position": false,
+    "frames": 1534,
+    "cases": [
+      {
+        "aura_at_input": [
+          0.0,
+          0.0
+        ],
+        "case": "equal_quick",
+        "damage_after": [
+          0.0,
+          0.0
+        ],
+        "damage_before": [
+          0.0,
+          0.0
+        ],
+        "interceptions": [
+          {
+            "a": 1000001,
+            "after": [
+              0,
+              0
+            ],
+            "b": 2000001,
+            "before": [
+              1,
+              1
+            ],
+            "event_id": "projectile:294:1000001:2000001",
+            "fighters": [
+              "kaia-windrow",
+              "juno-spark"
+            ],
+            "physics_frame": 295,
+            "result": "mutual_cancel",
+            "sim_frame": 294,
+            "time_of_impact": 0.072214710190724,
+            "world": [
+              -21.3421745300293,
+              274.508483886719
+            ]
+          }
+        ],
+        "public_input_frame": 287
+      },
+      {
+        "aura_at_input": [
+          65.8166666666666,
+          65.3000000000002
+        ],
+        "case": "equal_medium",
+        "damage_after": [
+          0.0,
+          0.0
+        ],
+        "damage_before": [
+          0.0,
+          0.0
+        ],
+        "interceptions": [
+          {
+            "a": 1000002,
+            "after": [
+              0,
+              0
+            ],
+            "b": 2000002,
+            "before": [
+              2,
+              2
+            ],
+            "event_id": "projectile:536:1000002:2000002",
+            "fighters": [
+              "kaia-windrow",
+              "juno-spark"
+            ],
+            "physics_frame": 537,
+            "result": "mutual_cancel",
+            "sim_frame": 536,
+            "time_of_impact": 0.97418627427554,
+            "world": [
+              -21.8193054199219,
+              274.600158691406
+            ]
+          }
+        ],
+        "public_input_frame": 531
+      },
+      {
+        "aura_at_input": [
+          7.61666666666516,
+          88.3666666666656
+        ],
+        "case": "juno_full_vs_kaia_quick",
+        "damage_after": [
+          6.6577824,
+          0.0
+        ],
+        "damage_before": [
+          0.0,
+          0.0
+        ],
+        "interceptions": [
+          {
+            "a": 1000003,
+            "after": [
+              0,
+              3
+            ],
+            "b": 2000003,
+            "before": [
+              1,
+              4
+            ],
+            "event_id": "projectile:1409:1000003:2000003",
+            "fighters": [
+              "kaia-windrow",
+              "juno-spark"
+            ],
+            "physics_frame": 1410,
+            "result": "breakthrough",
+            "sim_frame": 1409,
+            "time_of_impact": 0.903292622468116,
+            "world": [
+              -26.021842956543,
+              272.175231933594
+            ]
+          }
+        ],
+        "public_input_frame": 1404
+      }
+    ],
+    "body_presentation": "existing default models; owner review separately loads both body paths",
+    "earlier_unverified_medium_attempt": "projectile_public/projectile_public_inputs.json retained; driver threshold chatter fixed, no gameplay values changed"
+  },
+  "active_CPU_observation": {
+    "runtime_source": "cf46897045611a46b5c4d9b6c55a83f276e37c4d",
+    "path": "artifacts/v1_closure/spectral_feedback/local_media/projectile_cpu1020/combat_capture.json",
+    "trace_sha256": "9ef070fd9c846ad6bdabc5f00f6edf9bb247167435351b1957fa4e54105dfba5",
+    "local_only": true,
+    "frames": 850,
+    "CPU_enabled": true,
+    "CPU_moves": 11,
+    "player_casts": 15,
+    "contacts": 18,
+    "interceptions": 0,
+    "status": "NO_OPPOSING_PROJECTILE_COLLISION_OBSERVED; retained bounded attempt, not clash acceptance"
+  },
+  "focused_regressions": [
+    {
+      "suite": "ProjectileInteractions",
+      "source_sha": "cf46897045611a46b5c4d9b6c55a83f276e37c4d",
+      "PASS": true,
+      "exit_code": 0,
+      "seconds": 3.7,
+      "output": "artifacts/v1_closure/spectral_feedback/continuous_1020/projectile_regressions/ProjectileInteractions"
+    },
+    {
+      "suite": "ProjectileOwnership",
+      "source_sha": "cf46897045611a46b5c4d9b6c55a83f276e37c4d",
+      "PASS": true,
+      "exit_code": 0,
+      "seconds": 11.9,
+      "output": "artifacts/v1_closure/spectral_feedback/continuous_1020/projectile_regressions/ProjectileOwnership"
+    },
+    {
+      "suite": "ElementalPerformance",
+      "source_sha": "cf46897045611a46b5c4d9b6c55a83f276e37c4d",
+      "PASS": true,
+      "exit_code": 0,
+      "seconds": 12.75,
+      "output": "artifacts/v1_closure/spectral_feedback/continuous_1020/projectile_regressions/ElementalPerformance"
+    },
+    {
+      "suite": "SpectralFeedback",
+      "source_sha": "cf46897045611a46b5c4d9b6c55a83f276e37c4d",
+      "PASS": true,
+      "exit_code": 0,
+      "seconds": 4.02,
+      "output": "artifacts/v1_closure/spectral_feedback/continuous_1020/projectile_regressions/SpectralFeedback"
+    },
+    {
+      "suite": "SpectralIntensity",
+      "source_sha": "cf46897045611a46b5c4d9b6c55a83f276e37c4d",
+      "PASS": true,
+      "exit_code": 0,
+      "seconds": 5.28,
+      "output": "artifacts/v1_closure/spectral_feedback/continuous_1020/projectile_regressions/SpectralIntensity"
+    },
+    {
+      "suite": "ChargeContinuity",
+      "source_sha": "cf46897045611a46b5c4d9b6c55a83f276e37c4d",
+      "PASS": true,
+      "exit_code": 0,
+      "seconds": 7.64,
+      "output": "artifacts/v1_closure/spectral_feedback/continuous_1020/projectile_regressions/ChargeContinuity"
+    },
+    {
+      "suite": "CombatActivation",
+      "source_sha": "cf46897045611a46b5c4d9b6c55a83f276e37c4d",
+      "PASS": true,
+      "exit_code": 0,
+      "seconds": 1.43,
+      "output": "artifacts/v1_closure/spectral_feedback/continuous_1020/projectile_regressions/CombatActivation"
+    },
+    {
+      "suite": "GroundedRecovery",
+      "source_sha": "cf46897045611a46b5c4d9b6c55a83f276e37c4d",
+      "PASS": true,
+      "exit_code": 0,
+      "seconds": 6.48,
+      "output": "artifacts/v1_closure/spectral_feedback/continuous_1020/projectile_regressions/GroundedRecovery"
+    },
+    {
+      "suite": "AuthoredCancel",
+      "source_sha": "cf46897045611a46b5c4d9b6c55a83f276e37c4d",
+      "PASS": true,
+      "exit_code": 0,
+      "seconds": 0.93,
+      "output": "artifacts/v1_closure/spectral_feedback/continuous_1020/projectile_regressions/AuthoredCancel"
+    }
+  ],
+  "manual_review": {
+    "launcher": "tools/v1_closure/play_projectile_review.command",
+    "default": "Kaia vs active Juno CPU, normal controls, aura0, isolated user profile",
+    "local_argument": "--local",
+    "male_argument": "--male",
+    "smoke_verified": [
+      "female activeCPU",
+      "male local2player"
+    ],
+    "scope": "actual source model paths loaded; no new native pixel/video or professional quality approval"
+  },
+  "preservation": {
+    "existing_aura_clash": "untouched",
+    "terrain_reflection_parry_new_hitboxes": false,
+    "damage_frames_collision_range_changes": "Only the explicitly authorized projectile interception and residual damage rules",
+    "story_receipt_authority": "unchanged; no Story playthrough this increment",
+    "historical_108_contact_coverage": "preserved, not rerun",
+    "exports_or_new_native_capture": false,
+    "regular_owner_save_writes": false,
+    "human_or_release_gates_earned": false
+  },
+  "remaining": [
+    "owner visual/contact/animation review and production art",
+    "whole-roster ordinary projectile matchup acceptance",
+    "persistent beam and boomerang/trap/orb tuning at boundary conditions; current native trajectory preserved",
+    "future unlisted projectile archetypes require authored opt-in",
+    "shutdown ObjectDB/resource-in-use diagnostics remain in logs; no failed functional regression"
+  ],
+  "provenance": "Original existing spectral meshes/shaders and original procedural audio reused. New code/data authored in this worktree; no external media or web clash-minigame transplant."
+}

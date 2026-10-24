@@ -39,6 +39,8 @@ func is_transforming() -> bool:
 func can_attempt_transform() -> bool:
 	if _fighter == null:
 		return false
+	if _fighter.has_method("can_start_transform_sequence") and not _fighter.can_start_transform_sequence():
+		return false
 	if is_transforming():
 		return false
 	if not _fighter.has_method("get_aura"):
@@ -76,7 +78,13 @@ func attempt_transform() -> bool:
 func tick(delta: float, game_paused: bool) -> void:
 	if _state != STATE_SEQUENCE:
 		return
-	if game_paused and not _pause_safe:
+	# A reconfigured owner must never receive the previous character's result.
+	if not is_instance_valid(_fighter) or _fighter.get_current_form_id() != _from_form:
+		cancel("owner_changed")
+		return
+	if game_paused:
+		# A pause-safe sequence preserves its phase. It must not complete
+		# or grant a form while the gameplay clock is paused.
 		return
 	_sequence_t += delta
 	var progress := clampf(_sequence_t / maxf(_sequence_duration, 0.01), 0.0, 1.0)
@@ -102,3 +110,13 @@ func force_reset() -> void:
 	_from_form = ""
 	_to_form = ""
 	_sequence_t = 0.0
+
+
+func cancel(reason: String) -> void:
+	var owned_sequence := is_transforming()
+	force_reset()
+	if not owned_sequence:
+		return
+	if is_instance_valid(_fighter) and _fighter.has_method("on_transform_sequence_cancelled"):
+		_fighter.on_transform_sequence_cancelled(reason)
+	transform_failed.emit(reason)

@@ -1,0 +1,44 @@
+{
+  "schema": "game001_fighter_balance/v1",
+  "fighter_id": "yin",
+  "combat_tag": "cosmic_reduction",
+  "status": "TUNING_CANDIDATE",
+  "owner_approved": false,
+  "authority": "No inherited Ember profile; current fighter stats retained, cosmic frame/mechanic candidates require owner balance review.",
+  "mobility": {
+    "run_mult": 1,
+    "dash_mult": 1,
+    "air_mult": 1,
+    "jump_mult": 1,
+    "fall_mult": 1
+  },
+  "defense": {
+    "shield_mult": 1,
+    "dodge_invuln_frames": 10,
+    "spot_dodge_frames": 18,
+    "air_dodge_frames": 22
+  },
+  "aura": {
+    "charge_rate_mult": 0.86,
+    "burst_damage_mult": 1,
+    "scaling_curve": "controlled_candidate"
+  },
+  "recovery": {
+    "up_b_distance": 420,
+    "side_b_distance": 100,
+    "ledge_snap_priority": "normal"
+  },
+  "ai_weights": {
+    "approach": 0.4,
+    "projectile": 0.4,
+    "grab": 0.2,
+    "shield": 0.4,
+    "aerial": 0.25
+  },
+  "h2h_priority": [
+    "jab_1",
+    "jab_2",
+    "jab_finisher",
+    "side_special"
+  ]
+}

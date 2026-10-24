@@ -49,6 +49,7 @@ func _on_enter(state: String) -> void:
 		_FighterStates.SHIELD_BREAK:
 			_fighter.shielding = false
 			_fighter.shield_health = 0.0
+			if "shield_break_8c" in _fighter:_fighter.shield_break_8c.begin()
 		_FighterStates.DODGE_ACTIVE, _FighterStates.AIR_DODGE:
 			if dodge_invuln > 0.0:
 				_fighter.invincible = true
@@ -147,8 +148,10 @@ func _on_update(state: String, delta: float) -> void:
 			if state_time > 0.12:
 				_fighter.state_machine.enter(_FighterStates.IDLE)
 		_FighterStates.SHIELD_BREAK:
-			if state_time > 0.4:
-				_fighter.shield_health = float(_fighter.data.get("shieldProfile", {}).get("maxHealth", 100))
+			var recovered: bool = _fighter.shield_break_8c.ready(state_frame, state_time) if "shield_break_8c" in _fighter else state_time > .4
+			if recovered:
+				if "shield_break_8c" in _fighter:_fighter.shield_break_8c.recover()
+				else:_fighter.shield_health = float(_fighter.data.get("shieldProfile", {}).get("maxHealth", 100))
 				_fighter.state_machine.enter(_FighterStates.IDLE)
 		_FighterStates.LEDGE_HANG:
 			_fighter.tick_ledge_hang(delta)

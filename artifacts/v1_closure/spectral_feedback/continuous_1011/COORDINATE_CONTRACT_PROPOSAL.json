@@ -1,0 +1,409 @@
+{
+  "ticket": "ANI03-P01-G01",
+  "report_parent_sha": "9ce9e15272813266a693f3474b074342c9d89412",
+  "measurement_source": "Existing source-labeled b5f2/floor and7ae+isolated capsule fixtures; all18body/facing sources retained, not relabeled current source. Current locomotion changes do not change rigs/cameras/physics, but new moving-floor placement is unverified.",
+  "source_evidence": {
+    "floor_baseline": {
+      "path": "artifacts/v1_closure/spectral_feedback/continuous_1011/floor_18/roster_contact_range.json",
+      "sha256": "db4ce0730838ee51c10aab531b244ee01cd32370ba54f9347dbd9733ed01a55e"
+    },
+    "floor_only": {
+      "path": "artifacts/v1_closure/spectral_feedback/continuous_1011/floor_candidate_18/roster_contact_range.json",
+      "sha256": "e8994e55bc991bb4992ac45236d9002053a4bccb43cee099bf72dc53cc13acb5"
+    },
+    "capsule": {
+      "path": "artifacts/v1_closure/spectral_feedback/continuous_1011/capsule_framing_1012/RosterContactRange/roster_contact_range.json",
+      "sha256": "46d07c272444bb444cd4c60ef3e4aa2ec8d5030cb2dc2fe7db7baab7bc672b7c"
+    }
+  },
+  "contract": {
+    "physics": "CharacterBody2D origin is not sole plane. Actual sole target is transformed CollisionShape2D rectangle end.y, approximately root.y-1.2; training physical floor280px. Hurt rectangle center is root.y-24,height48. Hitbox uses existing resolved move bounds. Preserve authority.",
+    "model": "Approved GLB joint/mesh metres and +Z heading are projected by Camera3D into SubViewport pixels; Sprite2D scale and context offset then map to game-world2D. Game Camera2D maps all world presentation to final screen, HUD separately. Skeleton bone origins alone are not boot/hand mesh surfaces.",
+    "projection": "screen_world = Sprite2D.to_global(Camera3D.unproject_position(weighted_skin_world3D) - viewport_size/2 + sprite.offset). Floor anchor must use weighted boot soles and actual physical floor, not root origin or viewport rectangle.",
+    "current_incompatibility": "Visible core body139\u2013142px versus hurt48px (about2.9x) and sole33\u201338px belowfloor. Same vertical sprite shift moves soles/hands together; floor-only anchor pushes strike above unchanged gameplay overlap. Capsule shrink repairs gross floor/body relation but worsens reach and silhouette scale. No single uniform offset/scale has demonstrated coherent floor, reach and readability."
+  },
+  "rows": [
+    {
+      "fighter": "ember-vale",
+      "body": "male",
+      "facings": [
+        -1,
+        1
+      ],
+      "root_to_collision_floor_y_px": -1.2000122070314205,
+      "collision_height_px": 45.5999908447266,
+      "hurt_height_px": 48.0,
+      "visible_stance_height_px": 139.529693603516,
+      "visible_to_hurt_height_ratio": 2.9068686167399167,
+      "floor_penetration_max_px": 36.402587890625,
+      "standalone_anchor_typical_contact_gap_max_px": 24.9134521484375,
+      "capsule_framing_typical_gap_max_px": 11.2842712402344,
+      "capsule_framing_outer_gap_max_px": 57.3784103393555,
+      "camera_orthographic_before": 2.12973213195801,
+      "camera_capsule_candidate": 6.19085168838501,
+      "shipping_transform_change": false
+    },
+    {
+      "fighter": "ember-vale",
+      "body": "female",
+      "facings": [
+        -1,
+        1
+      ],
+      "root_to_collision_floor_y_px": -1.2000122070314205,
+      "collision_height_px": 45.5999908447266,
+      "hurt_height_px": 48.0,
+      "visible_stance_height_px": 142.349395751953,
+      "visible_to_hurt_height_ratio": 2.965612411499021,
+      "floor_penetration_max_px": 36.402587890625,
+      "standalone_anchor_typical_contact_gap_max_px": 27.145263671875,
+      "capsule_framing_typical_gap_max_px": 11.3219909667969,
+      "capsule_framing_outer_gap_max_px": 57.4101257324219,
+      "camera_orthographic_before": 2.07409405708313,
+      "camera_capsule_candidate": 6.15095901489258,
+      "shipping_transform_change": false
+    },
+    {
+      "fighter": "rook-ironside",
+      "body": "male",
+      "facings": [
+        -1,
+        1
+      ],
+      "root_to_collision_floor_y_px": 2.6000061035161934,
+      "collision_height_px": 53.2000122070312,
+      "hurt_height_px": 56.0,
+      "visible_stance_height_px": 144.139892578125,
+      "visible_to_hurt_height_ratio": 2.5739266531808034,
+      "floor_penetration_max_px": 32.6025695800781,
+      "standalone_anchor_typical_contact_gap_max_px": 20.3786315917969,
+      "capsule_framing_typical_gap_max_px": 3.64089965820312,
+      "capsule_framing_outer_gap_max_px": 49.1381378173828,
+      "camera_orthographic_before": 2.04651808738708,
+      "camera_capsule_candidate": 5.26758766174316,
+      "shipping_transform_change": false
+    },
+    {
+      "fighter": "rook-ironside",
+      "body": "female",
+      "facings": [
+        -1,
+        1
+      ],
+      "root_to_collision_floor_y_px": 2.6000061035161934,
+      "collision_height_px": 53.2000122070312,
+      "hurt_height_px": 56.0,
+      "visible_stance_height_px": 146.208908081055,
+      "visible_to_hurt_height_ratio": 2.610873358590268,
+      "floor_penetration_max_px": 32.6025695800781,
+      "standalone_anchor_typical_contact_gap_max_px": 22.3974761962891,
+      "capsule_framing_typical_gap_max_px": 4.08148193359375,
+      "capsule_framing_outer_gap_max_px": 49.5753555297852,
+      "camera_orthographic_before": 2.00416684150696,
+      "camera_capsule_candidate": 5.23262596130371,
+      "shipping_transform_change": false
+    },
+    {
+      "fighter": "juno-spark",
+      "body": "male",
+      "facings": [
+        -1,
+        1
+      ],
+      "root_to_collision_floor_y_px": -3.100006103515227,
+      "collision_height_px": 41.7999877929688,
+      "hurt_height_px": 44.0,
+      "visible_stance_height_px": 136.329772949219,
+      "visible_to_hurt_height_ratio": 3.0984039306640683,
+      "floor_penetration_max_px": 38.3025817871094,
+      "standalone_anchor_typical_contact_gap_max_px": 20.4805603027344,
+      "capsule_framing_typical_gap_max_px": 12.3743362426758,
+      "capsule_framing_outer_gap_max_px": 50.3245697021484,
+      "camera_orthographic_before": 2.21164417266846,
+      "camera_capsule_candidate": 6.85256719589233,
+      "shipping_transform_change": false
+    },
+    {
+      "fighter": "juno-spark",
+      "body": "female",
+      "facings": [
+        -1,
+        1
+      ],
+      "root_to_collision_floor_y_px": -3.100006103515227,
+      "collision_height_px": 41.7999877929688,
+      "hurt_height_px": 44.0,
+      "visible_stance_height_px": 133.478302001953,
+      "visible_to_hurt_height_ratio": 3.0335977727716594,
+      "floor_penetration_max_px": 38.3025512695312,
+      "standalone_anchor_typical_contact_gap_max_px": 20.8425598144531,
+      "capsule_framing_typical_gap_max_px": 12.3900833129883,
+      "capsule_framing_outer_gap_max_px": 50.3334579467773,
+      "camera_orthographic_before": 2.24454498291016,
+      "camera_capsule_candidate": 6.80904674530029,
+      "shipping_transform_change": false
+    },
+    {
+      "fighter": "kaia-windrow",
+      "body": "male",
+      "facings": [
+        -1,
+        1
+      ],
+      "root_to_collision_floor_y_px": -0.25,
+      "collision_height_px": 47.5,
+      "hurt_height_px": 50.0,
+      "visible_stance_height_px": 146.109436035156,
+      "visible_to_hurt_height_ratio": 2.92218872070312,
+      "floor_penetration_max_px": 35.4525756835938,
+      "standalone_anchor_typical_contact_gap_max_px": 14.2005157470703,
+      "capsule_framing_typical_gap_max_px": 8.5391845703125,
+      "capsule_framing_outer_gap_max_px": 51.3542022705078,
+      "camera_orthographic_before": 2.05645775794983,
+      "camera_capsule_candidate": 6.00935745239258,
+      "shipping_transform_change": false
+    },
+    {
+      "fighter": "kaia-windrow",
+      "body": "female",
+      "facings": [
+        -1,
+        1
+      ],
+      "root_to_collision_floor_y_px": -0.25,
+      "collision_height_px": 47.5,
+      "hurt_height_px": 50.0,
+      "visible_stance_height_px": 134.161865234375,
+      "visible_to_hurt_height_ratio": 2.6832373046875,
+      "floor_penetration_max_px": 35.4525756835938,
+      "standalone_anchor_typical_contact_gap_max_px": 11.9093780517578,
+      "capsule_framing_typical_gap_max_px": 8.55640411376953,
+      "capsule_framing_outer_gap_max_px": 51.363639831543,
+      "camera_orthographic_before": 2.22499918937683,
+      "camera_capsule_candidate": 5.97020101547241,
+      "shipping_transform_change": false
+    },
+    {
+      "fighter": "nix-calder",
+      "body": "male",
+      "facings": [
+        -1,
+        1
+      ],
+      "root_to_collision_floor_y_px": 0.7000122070314205,
+      "collision_height_px": 49.4000091552734,
+      "hurt_height_px": 52.0,
+      "visible_stance_height_px": 142.303924560547,
+      "visible_to_hurt_height_ratio": 2.736613933856673,
+      "floor_penetration_max_px": 34.5025329589844,
+      "standalone_anchor_typical_contact_gap_max_px": 22.3190765380859,
+      "capsule_framing_typical_gap_max_px": 6.12424468994141,
+      "capsule_framing_outer_gap_max_px": 49.285041809082,
+      "camera_orthographic_before": 2.12949919700623,
+      "camera_capsule_candidate": 5.82761716842651,
+      "shipping_transform_change": false
+    },
+    {
+      "fighter": "nix-calder",
+      "body": "female",
+      "facings": [
+        -1,
+        1
+      ],
+      "root_to_collision_floor_y_px": 0.7000122070314205,
+      "collision_height_px": 49.4000091552734,
+      "hurt_height_px": 52.0,
+      "visible_stance_height_px": 149.383697509766,
+      "visible_to_hurt_height_ratio": 2.872763413649346,
+      "floor_penetration_max_px": 34.5025329589844,
+      "standalone_anchor_typical_contact_gap_max_px": 25.9285125732422,
+      "capsule_framing_typical_gap_max_px": 6.30091094970703,
+      "capsule_framing_outer_gap_max_px": 49.4562530517578,
+      "camera_orthographic_before": 2.01546931266785,
+      "camera_capsule_candidate": 5.78996658325195,
+      "shipping_transform_change": false
+    },
+    {
+      "fighter": "orion-vell",
+      "body": "male",
+      "facings": [
+        -1,
+        1
+      ],
+      "root_to_collision_floor_y_px": -1.2000122070314205,
+      "collision_height_px": 45.5999908447266,
+      "hurt_height_px": 48.0,
+      "visible_stance_height_px": 145.474548339844,
+      "visible_to_hurt_height_ratio": 3.0307197570800835,
+      "floor_penetration_max_px": 36.402587890625,
+      "standalone_anchor_typical_contact_gap_max_px": 18.8587493896484,
+      "capsule_framing_typical_gap_max_px": 8.24082946777344,
+      "capsule_framing_outer_gap_max_px": 49.3014144897461,
+      "camera_orthographic_before": 2.05645775794983,
+      "camera_capsule_candidate": 6.23254728317261,
+      "shipping_transform_change": false
+    },
+    {
+      "fighter": "orion-vell",
+      "body": "female",
+      "facings": [
+        -1,
+        1
+      ],
+      "root_to_collision_floor_y_px": -1.2000122070314205,
+      "collision_height_px": 45.5999908447266,
+      "hurt_height_px": 48.0,
+      "visible_stance_height_px": 116.113311767578,
+      "visible_to_hurt_height_ratio": 2.4190273284912083,
+      "floor_penetration_max_px": 36.402587890625,
+      "standalone_anchor_typical_contact_gap_max_px": 11.5063171386719,
+      "capsule_framing_typical_gap_max_px": 8.25823211669922,
+      "capsule_framing_outer_gap_max_px": 49.3126373291016,
+      "camera_orthographic_before": 2.55960655212402,
+      "camera_capsule_candidate": 6.19175815582275,
+      "shipping_transform_change": false
+    },
+    {
+      "fighter": "vesper-nyx",
+      "body": "male",
+      "facings": [
+        -1,
+        1
+      ],
+      "root_to_collision_floor_y_px": -2.1499938964848297,
+      "collision_height_px": 43.7000122070312,
+      "hurt_height_px": 46.0,
+      "visible_stance_height_px": 146.643173217773,
+      "visible_to_hurt_height_ratio": 3.1878950699515873,
+      "floor_penetration_max_px": 37.3525695800781,
+      "standalone_anchor_typical_contact_gap_max_px": 18.4951171875,
+      "capsule_framing_typical_gap_max_px": 9.86360168457031,
+      "capsule_framing_outer_gap_max_px": 48.7792129516602,
+      "camera_orthographic_before": 2.05490827560425,
+      "camera_capsule_candidate": 6.55083179473877,
+      "shipping_transform_change": false
+    },
+    {
+      "fighter": "vesper-nyx",
+      "body": "female",
+      "facings": [
+        -1,
+        1
+      ],
+      "root_to_collision_floor_y_px": -2.1499938964848297,
+      "collision_height_px": 43.7000122070312,
+      "hurt_height_px": 46.0,
+      "visible_stance_height_px": 147.662811279297,
+      "visible_to_hurt_height_ratio": 3.210061114767326,
+      "floor_penetration_max_px": 37.3525390625,
+      "standalone_anchor_typical_contact_gap_max_px": 20.097412109375,
+      "capsule_framing_typical_gap_max_px": 9.87396240234375,
+      "capsule_framing_outer_gap_max_px": 48.7824859619141,
+      "camera_orthographic_before": 2.02745985984802,
+      "camera_capsule_candidate": 6.50827026367188,
+      "shipping_transform_change": false
+    },
+    {
+      "fighter": "yin",
+      "body": "male",
+      "facings": [
+        -1,
+        1
+      ],
+      "root_to_collision_floor_y_px": -1.2000122070303973,
+      "collision_height_px": 45.5999908447266,
+      "hurt_height_px": 48.0,
+      "visible_stance_height_px": 145.690185546875,
+      "visible_to_hurt_height_ratio": 3.035212198893229,
+      "floor_penetration_max_px": 36.402587890625,
+      "standalone_anchor_typical_contact_gap_max_px": 13.1509704589844,
+      "capsule_framing_typical_gap_max_px": 7.54014587402344,
+      "capsule_framing_outer_gap_max_px": 54.5401458740234,
+      "camera_orthographic_before": 2.05490827560425,
+      "camera_capsule_candidate": 6.23708248138428,
+      "shipping_transform_change": false
+    },
+    {
+      "fighter": "yin",
+      "body": "female",
+      "facings": [
+        -1,
+        1
+      ],
+      "root_to_collision_floor_y_px": -1.2000122070303973,
+      "collision_height_px": 45.5999908447266,
+      "hurt_height_px": 48.0,
+      "visible_stance_height_px": 132.147186279297,
+      "visible_to_hurt_height_ratio": 2.7530663808186873,
+      "floor_penetration_max_px": 36.4025573730469,
+      "standalone_anchor_typical_contact_gap_max_px": 11.2359924316406,
+      "capsule_framing_typical_gap_max_px": 7.55293273925781,
+      "capsule_framing_outer_gap_max_px": 54.5529327392578,
+      "camera_orthographic_before": 2.25068759918213,
+      "camera_capsule_candidate": 6.19629240036011,
+      "shipping_transform_change": false
+    },
+    {
+      "fighter": "yang",
+      "body": "male",
+      "facings": [
+        -1,
+        1
+      ],
+      "root_to_collision_floor_y_px": -1.2000122070314205,
+      "collision_height_px": 45.5999908447266,
+      "hurt_height_px": 48.0,
+      "visible_stance_height_px": 128.212051391602,
+      "visible_to_hurt_height_ratio": 2.671084403991708,
+      "floor_penetration_max_px": 36.402587890625,
+      "standalone_anchor_typical_contact_gap_max_px": 22.8669586181641,
+      "capsule_framing_typical_gap_max_px": 10.1408386230469,
+      "capsule_framing_outer_gap_max_px": 56.310188293457,
+      "camera_orthographic_before": 2.36388897895813,
+      "camera_capsule_candidate": 6.31414699554443,
+      "shipping_transform_change": false
+    },
+    {
+      "fighter": "yang",
+      "body": "female",
+      "facings": [
+        -1,
+        1
+      ],
+      "root_to_collision_floor_y_px": -1.2000122070314205,
+      "collision_height_px": 45.5999908447266,
+      "hurt_height_px": 48.0,
+      "visible_stance_height_px": 127.383819580078,
+      "visible_to_hurt_height_ratio": 2.6538295745849583,
+      "floor_penetration_max_px": 36.402587890625,
+      "standalone_anchor_typical_contact_gap_max_px": 23.7727508544922,
+      "capsule_framing_typical_gap_max_px": 10.1703720092773,
+      "capsule_framing_outer_gap_max_px": 56.3343276977539,
+      "camera_orthographic_before": 2.36388897895813,
+      "camera_capsule_candidate": 6.27335834503174,
+      "shipping_transform_change": false
+    }
+  ],
+  "candidate_A": {
+    "status": "UNIMPLEMENTED_ISOLATED_PRESENTATION_PROPOSAL",
+    "authority": "Preserve accepted collision/damage/timing values.",
+    "implementation": "Jointly author capsule-sized body framing and sole anchor; original move-specific body drive and visible elemental strike silhouettes up to existing hit regions; coordinated dynamic world-camera/stage framing retains screen readability. Keep limb anatomy plausible and projectile/charge origins projected through same transform.",
+    "acceptance": "All18bothfacings: moving supports, typical/outer contact, varied-height/directional aerials, whiff/block/hurt, projectile origins, camera/counterplay readability and normal-speed native review. Do not certify energy reach as physical fist contact.",
+    "risk": "Existing isolated shrink failed, and camera zoom magnifies its hand/contact gaps. Broad camera zoom would reduce world view and counterplay. Candidate is not approved/shipped; original technique/art review required."
+  },
+  "candidate_B": {
+    "status": "GAME_DESIGN_AUTHORIZATION_REQUIRED",
+    "authority": "Retain large character silhouettes and author grounded supported techniques; separately approve coordinated physical floor/hurt/hit geometry.",
+    "implementation": "Compare calibrated geometry proposals with current accepted stock, projectile, ledge, damage, timing, netcode and body parity rules before any default change.",
+    "risk": "Changes combat reach/counterplay and cannot be shipped within current presentation-only authority."
+  },
+  "remaining_tests": [
+    "moving floor/world support",
+    "starts/stops floor placement",
+    "directional aerials/arbitrary defender height",
+    "projectile/charge/signature origins",
+    "multi-fighter camera readability"
+  ],
+  "default_shipping_change": false,
+  "human_gates": false
+}

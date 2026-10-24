@@ -8,6 +8,60 @@ on:
       - vxp/vxp-3-combat-impact-nix-rook
       - v4/dual-form-power-roster
   workflow_dispatch:
+    inputs:
+      grab_acting_8b:
+        description: 'Save and verify original 8B actions on all 18 preserved rigs (remote only)'
+        required: false
+        default: false
+        type: boolean
+      form_acting_8c:
+        description: 'Save 144 original form actions and 36 additive stage resources on preserved 8B source copies'
+        required: false
+        default: false
+        type: boolean
+
+      controls_8d:
+        description: 'Produce versioned original hand and weighted secondary controls on all18 preserved8C rigs'
+        required: false
+        default: false
+        type: boolean
+
+      hands_8d2:
+        description: 'Correct original connected hand anatomy on exact18 saved8D candidates (remote only)'
+        required: false
+        default: false
+        type: boolean
+      hands_repair_8d2:
+        description: 'Repair folded hand surfaces on exact18 saved8D2 candidates; preserve every existing bone and action'
+        required: false
+        default: false
+        type: boolean
+      hand_integration_8d3:
+        description: 'New18-source wrist/palm/cuff and hand-acting candidates plus native comparison; requires fresh public-art approval'
+        required: false
+        default: false
+        type: boolean
+      metric_stage_8d4:
+        description: 'Eight paired offline art reference scenes and static native checks; requires fresh scoped public-art approval'
+        required: false
+        default: false
+        type: boolean
+      controls_verify_run:
+        description: 'Validate/render an already successful8D runtime artifact; no Blender regeneration'
+        required: false
+        default: ''
+        type: string
+      controls_verify_kind:
+        description: 'Saved control namespace: original8D or connected hand anatomy8D2'
+        required: false
+        default: controls-8d
+        type: choice
+        options: [controls-8d, hands-8d2]
+      controls_verify_sha:
+        description: 'Exact successful controls producer commit'
+        required: false
+        default: ''
+        type: string
 
 permissions:
   contents: read
@@ -17,6 +71,542 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  grab-acting-8b:
+    if: github.event_name == 'workflow_dispatch' && inputs.grab_acting_8b
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install existing Blender production dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender python3-numpy
+      - name: Produce saved actions and verified lightweight runtime keys
+        run: |
+          blender --background --factory-startup --python-exit-code 1 --python tools/authored_animation/blender/aa_grab_acting_8b.py -- --output "$RUNNER_TEMP/grab-acting-8b"
+          python3 tools/authored_animation/validate_grab_acting_8b.py "$RUNNER_TEMP/grab-acting-8b"
+      - name: Preserve original-rig source copies
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: grab-acting-8b-saved-sources-${{ github.sha }}
+          path: ${{ runner.temp }}/grab-acting-8b/saved_sources/
+          retention-days: 90
+          if-no-files-found: warn
+      - name: Preserve bounded runtime data and source receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: grab-acting-8b-runtime-${{ github.sha }}
+          path: ${{ runner.temp }}/grab-acting-8b/runtime/
+          retention-days: 90
+          if-no-files-found: warn
+  form-acting-8c:
+    if: github.event_name == 'workflow_dispatch' && inputs.form_acting_8c
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install existing Blender production dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender python3-numpy
+      - name: Download exact preserved 8B original-rig candidates
+        uses: actions/download-artifact@v4
+        with:
+          name: grab-acting-8b-saved-sources-cc2b3a5a555aeb22fc8eb7510bd7702a28975aad
+          repository: gunnchOS3k/anime-aggressors
+          run-id: 39733087497
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/form-acting-8c-input/saved_sources/
+      - name: Produce original stage actions and bounded additive model resources
+        run: |
+          # The producer verifies every downloaded .blend against the retained
+          # exact 8B manifest before any new source/action/model work begins.
+          blender --background --factory-startup --python-exit-code 1 --python tools/authored_animation/blender/aa_form_acting_8c.py -- --input-8b "$RUNNER_TEMP/form-acting-8c-input" --output "$RUNNER_TEMP/form-acting-8c"
+          python3 tools/authored_animation/validate_form_acting_8c.py "$RUNNER_TEMP/form-acting-8c"
+      - name: Preserve new source copies with original and 8B actions intact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: form-acting-8c-saved-sources-${{ github.sha }}
+          path: ${{ runner.temp }}/form-acting-8c/saved_sources/
+          retention-days: 90
+          if-no-files-found: warn
+      - name: Preserve verified runtime actions, stage attachments and receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: form-acting-8c-runtime-${{ github.sha }}
+          path: ${{ runner.temp }}/form-acting-8c/runtime/
+          retention-days: 90
+          if-no-files-found: warn
+  controls-8d:
+    if: github.event_name == 'workflow_dispatch' && inputs.controls_8d
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install existing compatible Blender producer
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender python3-numpy
+      - name: Download exact preserved8C source copies
+        uses: actions/download-artifact@v4
+        with:
+          name: form-acting-8c-saved-sources-1e06532c4775129f81aed13b1ff9eab940683220
+          repository: gunnchOS3k/anime-aggressors
+          run-id: 39790037341
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/controls-8d-input/saved_sources/
+      - name: Save source controls and verify importable candidates
+        run: |
+          blender --background --factory-startup --python-exit-code 1 --python tools/authored_animation/blender/aa_controls_8d.py -- --input "$RUNNER_TEMP/controls-8d-input" --output "$RUNNER_TEMP/controls-8d"
+          python3 tools/authored_animation/validate_controls_8d.py "$RUNNER_TEMP/controls-8d"
+      - name: Preserve editable original control candidates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: controls-8d-saved-sources-${{ github.sha }}
+          path: ${{ runner.temp }}/controls-8d/saved_sources/
+          retention-days: 90
+          if-no-files-found: warn
+      - name: Preserve bounded exports and verification receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: controls-8d-runtime-${{ github.sha }}
+          path: ${{ runner.temp }}/controls-8d/runtime/
+          retention-days: 90
+          if-no-files-found: warn
+  hands-8d2:
+    if: github.event_name == 'workflow_dispatch' && (inputs.hands_8d2 || inputs.hands_repair_8d2)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install existing compatible Blender producer
+        timeout-minutes: 8
+        run: |
+          # The previous Azure mirror streamed dependencies until the45-minute
+          # job timeout, before Blender ever ran. Keep signed Ubuntu packages,
+          # bound network waits and avoid optional GUI/media recommendations.
+          sudo python3 - <<'PYCODE'
+          from pathlib import Path
+          # mirror+file runners read these lists before the sources files.
+          for name,url in [('apt-mirrors.txt','https://archive.ubuntu.com/ubuntu'),('apt-mirrors-security.txt','https://security.ubuntu.com/ubuntu')]:
+              p=Path('/etc/apt')/name
+              if p.is_file():p.write_text(url+'\n')
+          for p in [Path('/etc/apt/sources.list'),*Path('/etc/apt/sources.list.d').glob('*.sources')]:
+              if p.is_file():p.write_text(p.read_text().replace('http://azure.archive.ubuntu.com/ubuntu','https://archive.ubuntu.com/ubuntu'))
+          PYCODE
+          sudo apt-get -o Acquire::ForceIPv4=true -o Acquire::Retries=2 -o Acquire::https::Timeout=20 -o Acquire::http::Timeout=20 update
+          sudo apt-get -o Acquire::ForceIPv4=true -o Acquire::Retries=2 -o Acquire::https::Timeout=20 -o Acquire::http::Timeout=20 install --no-install-recommends -y blender python3-numpy
+          blender --version
+      - name: Download exact saved8D candidates, never regenerate BASE
+        if: inputs.hands_8d2 && !inputs.hands_repair_8d2
+        uses: actions/download-artifact@v4
+        with:
+          name: controls-8d-saved-sources-3ab7667ca0b22e50bb7acfe0b509ff6b4513daf5
+          repository: gunnchOS3k/anime-aggressors
+          run-id: 39852459469
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/hands-8d2-input/saved_sources/
+      - name: Recover actual saved18-rig first hand candidates for a surface-only correction
+        if: inputs.hands_repair_8d2
+        uses: actions/download-artifact@v4
+        with:
+          name: hands-8d2-saved-sources-195194c70cdd70f3930eb5d5082e1cfc159730e5
+          repository: gunnchOS3k/anime-aggressors
+          run-id: 39882654215
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/hands-8d2-input/saved_sources/
+      - name: Recover corresponding measured dimensions and exact source hashes
+        if: inputs.hands_repair_8d2
+        uses: actions/download-artifact@v4
+        with:
+          name: hands-8d2-runtime-195194c70cdd70f3930eb5d5082e1cfc159730e5
+          repository: gunnchOS3k/anime-aggressors
+          run-id: 39882654215
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/hands-8d2-input/runtime/
+      - name: Correct actual connected hand meshes and skin
+        run: |
+          if [ "${{ inputs.hands_repair_8d2 }}" = true ]; then
+            blender --background --factory-startup --python-exit-code 1 --python tools/authored_animation/blender/aa_repair_hand_surface_8d2.py -- --input "$RUNNER_TEMP/hands-8d2-input" --output "$RUNNER_TEMP/hands-8d2"
+          else
+            blender --background --factory-startup --python-exit-code 1 --python tools/authored_animation/blender/aa_hands_8d2.py -- --input "$RUNNER_TEMP/hands-8d2-input" --output "$RUNNER_TEMP/hands-8d2"
+          fi
+          python3 tools/authored_animation/validate_hands_8d2.py "$RUNNER_TEMP/hands-8d2"
+      - name: Preserve edited original source candidates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hands-8d2-saved-sources-${{ github.sha }}
+          path: ${{ runner.temp }}/hands-8d2/saved_sources/
+          retention-days: 90
+          if-no-files-found: warn
+      - name: Preserve anatomy exports and correspondence receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hands-8d2-runtime-${{ github.sha }}
+          path: ${{ runner.temp }}/hands-8d2/runtime/
+          retention-days: 90
+          if-no-files-found: warn
+  hand-integration-8d3:
+    if: github.event_name == 'workflow_dispatch' && inputs.hand_integration_8d3
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install existing compatible Blender producer
+        timeout-minutes: 8
+        run: |
+          # The previous Azure mirror streamed dependencies until the45-minute
+          # job timeout, before Blender ever ran. Keep signed Ubuntu packages,
+          # bound network waits and avoid optional GUI/media recommendations.
+          sudo python3 - <<'PYCODE'
+          from pathlib import Path
+          # mirror+file runners read these lists before the sources files.
+          for name,url in [('apt-mirrors.txt','https://archive.ubuntu.com/ubuntu'),('apt-mirrors-security.txt','https://security.ubuntu.com/ubuntu')]:
+              p=Path('/etc/apt')/name
+              if p.is_file():p.write_text(url+'\n')
+          for p in [Path('/etc/apt/sources.list'),*Path('/etc/apt/sources.list.d').glob('*.sources')]:
+              if p.is_file():p.write_text(p.read_text().replace('http://azure.archive.ubuntu.com/ubuntu','https://archive.ubuntu.com/ubuntu'))
+          PYCODE
+          sudo apt-get -o Acquire::ForceIPv4=true -o Acquire::Retries=2 -o Acquire::https::Timeout=20 -o Acquire::http::Timeout=20 update
+          sudo apt-get -o Acquire::ForceIPv4=true -o Acquire::Retries=2 -o Acquire::https::Timeout=20 -o Acquire::http::Timeout=20 install --no-install-recommends -y blender python3-numpy xvfb libgl1-mesa-dri libxkbcommon0 libpulse0 unzip
+          blender --version
+      - name: Verify exact completed corrected input and no competing manual producer
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PYCODE'
+          import json,subprocess
+          def api(path):return json.loads(subprocess.check_output(['gh','api','repos/gunnchOS3k/anime-aggressors/'+path]))
+          run=api('actions/runs/39886629245')
+          assert run['status']=='completed' and run['conclusion']=='success' and run['event']=='workflow_dispatch' and run['head_sha']=='ced4b78a141b5bf2bac05d4fc06488340c9aef2a'
+          PYCODE
+      - name: Download exact18 corrected sources without regenerating8D2
+        uses: actions/download-artifact@v4
+        with:
+          name: hands-8d2-saved-sources-ced4b78a141b5bf2bac05d4fc06488340c9aef2a
+          repository: gunnchOS3k/anime-aggressors
+          run-id: 39886629245
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/hand-integration-input/saved_sources/
+      - name: Download corresponding input exports and preservation manifest
+        uses: actions/download-artifact@v4
+        with:
+          name: hands-8d2-runtime-ced4b78a141b5bf2bac05d4fc06488340c9aef2a
+          repository: gunnchOS3k/anime-aggressors
+          run-id: 39886629245
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/hand-integration-input/runtime/
+      - name: Save reopen and validate original interface source candidates
+        timeout-minutes: 20
+        run: |
+          blender --background --factory-startup --python-exit-code 1 --python tools/authored_animation/blender/aa_produce_hand_integration_8d3.py -- --input "$RUNNER_TEMP/hand-integration-input" --output "$RUNNER_TEMP/hand-integration-8d3"
+          python3 tools/authored_animation/validate_hand_integration_8d3.py "$RUNNER_TEMP/hand-integration-8d3" > "$RUNNER_TEMP/hand-integration-8d3/runtime/SOURCE_VALIDATION.json"
+      - name: Install existing Godot verifier and isolated candidate namespaces
+        timeout-minutes: 6
+        run: |
+          curl --fail -L --max-time 180 -o "$RUNNER_TEMP/godot.zip" https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip
+          unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP/godot"
+          chmod +x "$RUNNER_TEMP/godot/Godot_v4.7.1-stable_linux.x86_64"
+          echo "GODOT_BIN=$RUNNER_TEMP/godot/Godot_v4.7.1-stable_linux.x86_64" >> "$GITHUB_ENV"
+          cp -R "$RUNNER_TEMP/hand-integration-input/runtime/game-godot/"* game-godot/
+          cp -R "$RUNNER_TEMP/hand-integration-8d3/runtime/game-godot/"* game-godot/
+          mkdir -p "$RUNNER_TEMP/hand-integration-8d3/engine_review"
+      - name: Real imports and36 body facing public attack checks
+        run: |
+          "$GODOT_BIN" --headless --path game-godot --editor --import --quit --log-file "$RUNNER_TEMP/hand-integration-8d3/engine_review/import.log"
+          xvfb-run -a timeout 480 "$GODOT_BIN" --path game-godot --audio-driver Dummy --rendering-method gl_compatibility --log-file "$RUNNER_TEMP/hand-integration-8d3/engine_review/godot.log" --script res://tests/v1_closure/SourceControlsRuntime8D.gd -- --source-hands-8d3 --ordinary-output="$RUNNER_TEMP/hand-integration-8d3/engine_review"
+      - name: Matched corrected8D2 versus8D3 hand wrist cuff views
+        run: |
+          xvfb-run -a timeout 480 "$GODOT_BIN" --path game-godot --audio-driver Dummy --rendering-method gl_compatibility --log-file "$RUNNER_TEMP/hand-integration-8d3/engine_review/comparison.log" --script res://tests/v1_closure/HandIntegrationComparison8D3.gd -- --ordinary-output="$RUNNER_TEMP/hand-integration-8d3/engine_review"
+      - name: Public throw escape and new depth camera observations
+        run: |
+          timeout 480 "$GODOT_BIN" --headless --fixed-fps 60 --path game-godot --log-file "$RUNNER_TEMP/hand-integration-8d3/engine_review/grab.log" --script res://tests/v1_closure/HandIntegrationRuntime8D3.gd -- --ordinary-output="$RUNNER_TEMP/hand-integration-8d3/engine_review"
+          python3 - <<'PYCODE'
+          import os,json,pathlib
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'hand-integration-8d3/engine_review'
+          d=json.loads((p/'source_controls_runtime_8d.json').read_text());assert d['PASS'] and len(d['rows'])==36 and d['lane']=='hands_8d3' and d['native_rendered'] and not d['human_approved']
+          d=json.loads((p/'hand_interface_comparison_8d3.json').read_text());assert d['PASS'] and len(d['rows'])==18 and not d['human_approved']
+          d=json.loads((p/'grab_acting_runtime_8b.json').read_text());assert d['PASS'] and d['complete'] and len(d['rows'])==180 and not d['failures']
+          for r in d['rows']:
+              for phase in ['hold','sustained_hold','before']:
+                  if phase in r:
+                      assert r[phase]['holder_projection']['projection_version']==3 and not r[phase]['paired_3d_verified']
+          for name in ['import.log','godot.log','comparison.log','grab.log']:assert 'SCRIPT ERROR:' not in (p/name).read_text()
+          assert len(list(p.glob('*.png')))==4
+          PYCODE
+      - name: Preserve new editable sources only within exact owner approved scope
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hand-integration-8d3-saved-sources-${{ github.sha }}
+          path: ${{ runner.temp }}/hand-integration-8d3/saved_sources/
+          retention-days: 90
+          if-no-files-found: warn
+      - name: Preserve runtime exports and source correspondence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hand-integration-8d3-runtime-${{ github.sha }}
+          path: ${{ runner.temp }}/hand-integration-8d3/runtime/
+          retention-days: 90
+          if-no-files-found: warn
+      - name: Preserve four native sheets and source matched observation logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hand-integration-8d3-engine-review-${{ github.sha }}
+          path: ${{ runner.temp }}/hand-integration-8d3/engine_review/
+          retention-days: 90
+          if-no-files-found: warn
+  metric-stage-8d4:
+    # Owner decision2026-10-23: no public8D4 proprietary-art production.
+    # Historical de32787d/821045e2 remain preserved, never dispatched.
+    if: github.event_name == 'workflow_dispatch' && inputs.metric_stage_8d4 && github.event.repository.private == true
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install existing compatible Blender producer
+        timeout-minutes: 8
+        run: |
+          # The previous Azure mirror streamed dependencies until the45-minute
+          # job timeout, before Blender ever ran. Keep signed Ubuntu packages,
+          # bound network waits and avoid optional GUI/media recommendations.
+          sudo python3 - <<'PYCODE'
+          from pathlib import Path
+          # mirror+file runners read these lists before the sources files.
+          for name,url in [('apt-mirrors.txt','https://archive.ubuntu.com/ubuntu'),('apt-mirrors-security.txt','https://security.ubuntu.com/ubuntu')]:
+              p=Path('/etc/apt')/name
+              if p.is_file():p.write_text(url+'\n')
+          for p in [Path('/etc/apt/sources.list'),*Path('/etc/apt/sources.list.d').glob('*.sources')]:
+              if p.is_file():p.write_text(p.read_text().replace('http://azure.archive.ubuntu.com/ubuntu','https://archive.ubuntu.com/ubuntu'))
+          PYCODE
+          sudo apt-get -o Acquire::ForceIPv4=true -o Acquire::Retries=2 -o Acquire::https::Timeout=20 -o Acquire::http::Timeout=20 update
+          sudo apt-get -o Acquire::ForceIPv4=true -o Acquire::Retries=2 -o Acquire::https::Timeout=20 -o Acquire::http::Timeout=20 install --no-install-recommends -y blender python3-numpy xvfb libgl1-mesa-dri libxkbcommon0 libpulse0 unzip
+          blender --version
+      - name: Verify exact immutable8D3 input and selected offline scope
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PYCODE'
+          import json,subprocess
+          from pathlib import Path
+          r=json.loads(subprocess.check_output(['gh','api','repos/gunnchOS3k/anime-aggressors/actions/runs/39910149332']))
+          assert r['status']=='completed' and r['conclusion']=='success' and r['head_sha']=='42baaab8cc5167798aea7f3aebb22edae9f21007'
+          p=json.loads(Path('art_source/staging/metric_8d4/inputs_v1.json').read_text())['policy']
+          assert p['status']=='OWNER_SELECTED_OFFLINE_REFERENCE' and p['camera_role']=='OFFLINE_FRAMING_ONLY_NEVER_METRIC_SPACING'
+          assert not p['runtime_equivalence_claim']
+          PYCODE
+      - name: Read saved8D3 sources without regenerating earlier phases
+        uses: actions/download-artifact@v4
+        with:
+          name: hand-integration-8d3-saved-sources-42baaab8cc5167798aea7f3aebb22edae9f21007
+          repository: gunnchOS3k/anime-aggressors
+          run-id: 39910149332
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/metric-stage-input/saved_sources/
+      - name: Read exact associated runtime metadata
+        uses: actions/download-artifact@v4
+        with:
+          name: hand-integration-8d3-runtime-42baaab8cc5167798aea7f3aebb22edae9f21007
+          repository: gunnchOS3k/anime-aggressors
+          run-id: 39910149332
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/metric-stage-input/runtime/
+      - name: Produce eight editable metric reference scenes and static exports
+        timeout-minutes: 22
+        run: |
+          # Explicitly reference-only: do not launch18-rig bulk paired acting.
+          # Internal Mac reserve is untouched; remote scratch forecast4GiB,
+          # producer requires at least8GiB free before writing output.
+          blender --background --factory-startup --python-exit-code 1 --python tools/authored_animation/blender/aa_metric_pair_reference_8d4.py -- --input "$RUNNER_TEMP/metric-stage-input" --output "$RUNNER_TEMP/metric-stage-8d4"
+          python3 tools/authored_animation/validate_metric_stage_8d4.py "$RUNNER_TEMP/metric-stage-8d4" > "$RUNNER_TEMP/metric-stage-8d4/runtime/SOURCE_VALIDATION.json"
+      - name: Install existing native compatibility verifier
+        timeout-minutes: 6
+        run: |
+          curl --fail -L --max-time 180 -o "$RUNNER_TEMP/godot.zip" https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip
+          unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP/godot"
+          chmod +x "$RUNNER_TEMP/godot/Godot_v4.7.1-stable_linux.x86_64"
+          echo "GODOT_BIN=$RUNNER_TEMP/godot/Godot_v4.7.1-stable_linux.x86_64" >> "$GITHUB_ENV"
+      - name: Import static paired surfaces and render side three-quarter sheets
+        timeout-minutes: 10
+        run: |
+          mkdir -p "$RUNNER_TEMP/metric-stage-8d4/engine_review" "$RUNNER_TEMP/metric-stage-viewer"
+          # Static source review has no gameplay/autoload dependency. Do not
+          # bulk-import the shipping game merely to inspect external snapshots.
+          cp game-godot/tests/v1_closure/MetricArtStage8D4.gd "$RUNNER_TEMP/metric-stage-viewer/review.gd"
+          python3 - <<'PYCODE'
+          import os
+          from pathlib import Path
+          (Path(os.environ['RUNNER_TEMP'])/'metric-stage-viewer/project.godot').write_text('config_version=5\n[application]\nconfig/name="Offline metric art reference"\n[rendering]\nrenderer/rendering_method="gl_compatibility"\n')
+          PYCODE
+          xvfb-run -a timeout 480 "$GODOT_BIN" --path "$RUNNER_TEMP/metric-stage-viewer" --audio-driver Dummy --rendering-method gl_compatibility --log-file "$RUNNER_TEMP/metric-stage-8d4/engine_review/godot.log" --script res://review.gd -- --stage-runtime="$RUNNER_TEMP/metric-stage-8d4/runtime" --ordinary-output="$RUNNER_TEMP/metric-stage-8d4/engine_review"
+          python3 - <<'PYCODE'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'metric-stage-8d4/engine_review'
+          d=json.loads((p/'metric_stage_native_8d4.json').read_text())
+          assert d['PASS'] and len(d['rows'])==8 and not d['RUNTIME_PAIRED_CONTACT_VERIFIED'] and not d['human_approved']
+          assert 'SCRIPT ERROR:' not in (p/'godot.log').read_text()
+          assert len(list(p.glob('*.png')))==8 and all(len(r['panels'])==6 for r in d['rows'])
+          PYCODE
+      - name: Preserve new paired references only with fresh owner disclosure approval
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: metric-stage-8d4-saved-scenes-${{ github.sha }}
+          path: ${{ runner.temp }}/metric-stage-8d4/saved_stages/
+          retention-days: 3
+          if-no-files-found: warn
+      - name: Preserve static GLBs and source measurement receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: metric-stage-8d4-static-runtime-${{ github.sha }}
+          path: ${{ runner.temp }}/metric-stage-8d4/runtime/
+          retention-days: 3
+          if-no-files-found: warn
+      - name: Preserve eight native reference sheets and logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: metric-stage-8d4-engine-review-${{ github.sha }}
+          path: ${{ runner.temp }}/metric-stage-8d4/engine_review/
+          retention-days: 3
+          if-no-files-found: warn
+  controls-8d-engine-review:
+    if: github.event_name == 'workflow_dispatch' && inputs.controls_verify_run != ''
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v6
+      - name: Verify exact successful source production
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_RUN: ${{ inputs.controls_verify_run }}
+          SOURCE_SHA: ${{ inputs.controls_verify_sha }}
+        run: |
+          python3 - <<'PYCODE'
+          import os,json,subprocess
+          d=json.loads(subprocess.check_output(['gh','api','repos/gunnchOS3k/anime-aggressors/actions/runs/'+os.environ['SOURCE_RUN']]))
+          assert d['status']=='completed'and d['conclusion']=='success'and d['event']=='workflow_dispatch'and d['head_sha']==os.environ['SOURCE_SHA']
+          PYCODE
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.controls_verify_kind }}-runtime-${{ inputs.controls_verify_sha }}
+          repository: gunnchOS3k/anime-aggressors
+          run-id: ${{ inputs.controls_verify_run }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/controls-verify/runtime/
+      - name: Recover exact8D baseline only for matched anatomy comparison
+        if: inputs.controls_verify_kind == 'hands-8d2'
+        uses: actions/download-artifact@v4
+        with:
+          name: controls-8d-runtime-3ab7667ca0b22e50bb7acfe0b509ff6b4513daf5
+          repository: gunnchOS3k/anime-aggressors
+          run-id: 39852459469
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/controls-baseline/runtime/
+      - name: Validate and install isolated remote candidates
+        run: |
+          if [ "${{ inputs.controls_verify_kind }}" = hands-8d2 ]; then
+            python3 tools/authored_animation/validate_hands_8d2.py "$RUNNER_TEMP/controls-verify" --runtime-only
+          else
+            python3 tools/authored_animation/validate_controls_8d.py "$RUNNER_TEMP/controls-verify" --runtime-only
+          fi
+          cp -R "$RUNNER_TEMP/controls-verify/runtime/game-godot/"* game-godot/
+          if [ "${{ inputs.controls_verify_kind }}" = hands-8d2 ]; then
+            python3 tools/authored_animation/validate_controls_8d.py "$RUNNER_TEMP/controls-baseline" --runtime-only
+            cp -R "$RUNNER_TEMP/controls-baseline/runtime/game-godot/"* game-godot/
+          fi
+      - name: Install existing Godot compatibility verifier
+        timeout-minutes: 6
+        run: |
+          sudo python3 - <<'PYCODE'
+          from pathlib import Path
+          # mirror+file runners read these lists before the sources files.
+          for name,url in [('apt-mirrors.txt','https://archive.ubuntu.com/ubuntu'),('apt-mirrors-security.txt','https://security.ubuntu.com/ubuntu')]:
+              p=Path('/etc/apt')/name
+              if p.is_file():p.write_text(url+'\n')
+          for p in [Path('/etc/apt/sources.list'),*Path('/etc/apt/sources.list.d').glob('*.sources')]:
+              if p.is_file():p.write_text(p.read_text().replace('http://azure.archive.ubuntu.com/ubuntu','https://archive.ubuntu.com/ubuntu'))
+          PYCODE
+          sudo apt-get -o Acquire::ForceIPv4=true -o Acquire::Retries=2 -o Acquire::https::Timeout=20 -o Acquire::http::Timeout=20 update
+          sudo apt-get -o Acquire::ForceIPv4=true -o Acquire::Retries=2 -o Acquire::https::Timeout=20 -o Acquire::http::Timeout=20 install --no-install-recommends -y xvfb libgl1-mesa-dri libxkbcommon0 libpulse0 unzip
+          curl --fail -L -o "$RUNNER_TEMP/godot.zip" https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip
+          unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP/godot"
+          chmod +x "$RUNNER_TEMP/godot/Godot_v4.7.1-stable_linux.x86_64"
+          echo "GODOT_BIN=$RUNNER_TEMP/godot/Godot_v4.7.1-stable_linux.x86_64" >> "$GITHUB_ENV"
+      - name: Actual saved-mesh BattleScene and bounded native sheets
+        run: |
+          mkdir -p "$RUNNER_TEMP/controls-engine-review"
+          "$GODOT_BIN" --headless --path game-godot --editor --import --quit --log-file "$RUNNER_TEMP/controls-engine-review/import.log"
+          REVIEW_ARGS=""
+          if [ "${{ inputs.controls_verify_kind }}" = hands-8d2 ]; then REVIEW_ARGS="--source-hands-8d2"; fi
+          xvfb-run -a timeout 480 "$GODOT_BIN" --path game-godot --audio-driver Dummy --rendering-method gl_compatibility --log-file "$RUNNER_TEMP/controls-engine-review/godot.log" --script res://tests/v1_closure/SourceControlsRuntime8D.gd -- --ordinary-output="$RUNNER_TEMP/controls-engine-review" --source-sha="$GITHUB_SHA" $REVIEW_ARGS
+          python3 - <<'PYCODE'
+          import os,json,pathlib
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'controls-engine-review'
+          d=json.loads((p/'source_controls_runtime_8d.json').read_text())
+          assert d['PASS']and len(d['rows'])==36 and d['native_rendered']and not d['human_approved']
+          assert 'SCRIPT ERROR:'not in (p/'godot.log').read_text()
+          PYCODE
+      - name: Matched18-rig original8D and connected-hand source comparison
+        if: inputs.controls_verify_kind == 'hands-8d2'
+        run: |
+          xvfb-run -a timeout 480 "$GODOT_BIN" --path game-godot --audio-driver Dummy --rendering-method gl_compatibility --log-file "$RUNNER_TEMP/controls-engine-review/comparison.log" --script res://tests/v1_closure/SourceHandsComparison8D2.gd -- --ordinary-output="$RUNNER_TEMP/controls-engine-review"
+          python3 - <<'PYCODE'
+          import os,json,pathlib
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'controls-engine-review'
+          d=json.loads((p/'hands_comparison_8d2.json').read_text())
+          assert d['PASS']and len(d['rows'])==18 and all(len(r['versions'])==2 for r in d['rows'])and not d['human_approved']
+          assert 'SCRIPT ERROR:'not in (p/'comparison.log').read_text()
+          PYCODE
+      - name: Real public grab throw escape and mesh projection on all18 new hand rigs
+        if: inputs.controls_verify_kind == 'hands-8d2'
+        run: |
+          timeout 480 "$GODOT_BIN" --headless --fixed-fps 60 --path game-godot --log-file "$RUNNER_TEMP/controls-engine-review/grab.log" --script res://tests/v1_closure/PairedHandsRuntime8D2.gd -- --ordinary-output="$RUNNER_TEMP/controls-engine-review"
+          python3 - <<'PYCODE'
+          import os,json,pathlib
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'controls-engine-review'
+          d=json.loads((p/'grab_acting_runtime_8b.json').read_text())
+          assert d['PASS']and d['complete']and len(d['rows'])==180 and not d['failures']
+          assert 'SCRIPT ERROR:'not in (p/'grab.log').read_text()
+          PYCODE
+      - name: Preserve native source-control review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.controls_verify_kind }}-engine-review-${{ github.sha }}
+          path: ${{ runner.temp }}/controls-engine-review/
+          retention-days: 90
+          if-no-files-found: warn
   infra:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -27,6 +617,12 @@ jobs:
           python-version: "3.11"
       - name: Workflow referenced paths exist
         run: python3 tools/authored_animation/audit_workflow_referenced_paths.py
+      - name: Source matched hand projection contract
+        run: python3 tools/authored_animation/test_projection_contact_8d3.py -v
+      - name: Private8D4 disclosure boundary
+        run: python3 tools/authored_animation/test_private_production_8d4.py -v
+      - name: Offline stage algebra and authority boundaries
+        run: python3 tools/authored_animation/test_metric_art_stage_8d4.py -v
       - name: Production infrastructure gates
         run: |
           # Post-#116: do not call tools/generated_production_art/* (EXPERIMENT_ONLY,

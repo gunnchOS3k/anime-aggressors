@@ -18,6 +18,10 @@ var _session_before: Dictionary = {}
 var _shot := -1
 var _saved_progress := ""
 var _swap_busy := false
+var _closing := false
+var _dialogue_speaker: Node2D
+var _private_camera_take
+var _private_camera_active := false
 const SESSION_KEYS := ["mode", "arcade_active", "battle_eval_mode", "battle_eval_max_frames", "p1_fighter_id", "p2_fighter_id", "p1_body_variant", "p2_body_variant", "p1_is_cpu", "p2_is_cpu", "stocks", "match_type", "match_timer_seconds", "stage_id", "hazards_enabled", "items_enabled", "cpu_level", "team_mode", "battle_eval_finished", "battle_eval_frames", "battle_eval_result", "last_winner_slot"]
 
 func _ready() -> void:
@@ -26,6 +30,15 @@ func _ready() -> void:
 	for key in SESSION_KEYS:
 		_session_before[key] = GameState.get(key)
 	_build_ui()
+	# Explicit developer-only external source; no new art enters packaged assets.
+	# Missing/invalid private takes leave the established preview untouched.
+	for argument in OS.get_cmdline_user_args():
+		if argument.begins_with("--private-cinematic-camera=") and not OS.has_feature("web"):
+			_private_camera_take = preload("res://scripts/story/ova_private_camera_take.gd").new()
+			if not _private_camera_take.load_library(argument.split("=", true, 1)[1], FileAccess.get_sha256("res://data/story/dialogue/v1/cues.json"), StoryDialogue.nodes):
+				push_warning("Private cinematic camera source rejected: " + _private_camera_take.error)
+				_private_camera_take = null
+	StoryDialogue.cue_started.connect(_on_dialogue_cue)
 	await _present_node()
 
 func _build_ui() -> void:
@@ -77,7 +90,11 @@ func _button(parent: Node, text: String, action: Callable) -> Button:
 	return button
 
 func _toggle_pause() -> void:
-	playing = not playing
+	_set_playing(not playing)
+
+func _set_playing(enabled: bool) -> void:
+	playing = enabled
+	StoryDialogue.set_paused(not playing)
 	_pause.text = "Pause" if playing else "Resume"
 	if _battle != null:
 		_battle.process_mode = Node.PROCESS_MODE_INHERIT if playing else Node.PROCESS_MODE_DISABLED
@@ -94,10 +111,16 @@ func seek(index: int) -> void:
 			limit = i
 			break
 	node_index = clampi(index, 0, limit)
-	await _present_node()
+	await _present_node(not playing)
 
-func _present_node() -> void:
+func _present_node(stay_paused := false) -> void:
+	var tree := get_tree()
+	if _closing or tree == null: return
 	_swap_busy = true
+	StoryDialogue.cancel()
+	_dialogue_speaker = null
+	_private_camera_active = false
+	if _private_camera_take != null: _private_camera_take.clear_node()
 	elapsed = 0
 	_shot = -1
 	if _watch_presenter != null:
@@ -106,13 +129,17 @@ func _present_node() -> void:
 	if _battle != null:
 		_battle.queue_free()
 		_battle = null
-		await get_tree().process_frame
+		await tree.process_frame
+		if _closing or not is_inside_tree(): return
 	var nodes: Array = route.get("nodes", [])
 	if nodes.is_empty():
 		_swap_busy = false
 		return
 	var chapter: Dictionary = nodes[node_index]
+	if _private_camera_take != null:
+		_private_camera_active = _private_camera_take.select_node(str(chapter["id"]))
 	_subtitle.text = "%s · Draft adaptation · Preview" % chapter["title"]
+	if _private_camera_active: _subtitle.text += " · Private camera-source candidate"
 	_copy.text = str(chapter.get("body", chapter.get("block_reason", "")))
 	if not bool(chapter.get("implemented", false)):
 		playing = false
@@ -121,8 +148,8 @@ func _present_node() -> void:
 		_swap_busy = false
 		return
 	_pause.disabled = false
-	playing = true
-	_pause.text = "Pause"
+	playing = not stay_paused
+	_pause.text = "Pause" if playing else "Resume"
 	GameState.mode = "ova"
 	GameState.arcade_active = false
 	GameState.team_mode = false
@@ -143,7 +170,8 @@ func _present_node() -> void:
 	GameState.stage_id = str(chapter.get("stage", "skyline-arena"))
 	_battle = BATTLE.instantiate()
 	_viewport.add_child(_battle)
-	await get_tree().process_frame
+	await tree.process_frame
+	if _closing or not is_inside_tree(): return
 	_battle.hud.visible = false
 	_battle.set_process_unhandled_input(false)
 	var form := "PRISMATIC_GRAY" if node_index >= 16 else "BASE"
@@ -175,6 +203,20 @@ func _present_node() -> void:
 
 	if chapter.get("objective_contract") == "COSMIC_SURVIVAL":
 		_battle._setup_story_cosmic_encounter(chapter)
+	if objective == "FIRST_LOSS":
+		# Read-only dialogue blocking: gameplay CPU jumps must not displace faces.
+		# This staging is confined to watch mode and never ticks Story objectives.
+		for actor in _battle.fighters_root.get_children():
+			actor.set_meta("watch_base_z",actor.z_index)
+			actor.cpu.clear_simulated_inputs()
+			actor.controls_enabled = false
+			actor.is_cpu = false
+			actor.dummy_mode = "idle"
+			actor.move_runner.cancel()
+			actor.velocity = Vector2.ZERO
+			actor.position.y = _watch_presenter.ground_y - 2
+			actor.set_physics_process(false)
+			actor.model_3d.play_clip("story_dialogue_neutral")
 	if chapter["kind"] != "STORY_BATTLE":
 		_battle.fighter1.controls_enabled = false
 		_battle.fighter2.controls_enabled = false
@@ -184,6 +226,12 @@ func _present_node() -> void:
 		_battle.fighter2.position = Vector2(100, 180)
 		_battle.fighter1.model_3d.play_clip("idle")
 		_battle.fighter1.model_3d.set_cinematic_expression(str(chapter.get("expression", "determination")))
+	for actor in _battle.fighters_root.get_children(): actor.set_meta("watch_base_z",actor.z_index)
+	StoryDialogue.begin(str(chapter["id"]),"watch")
+	# begin() resets the dialogue pause state. Reapply the viewer's intent to
+	# the NEW chapter and its new model viewports before queuing its first cue.
+	_set_playing(not stay_paused)
+	StoryDialogue.watch_phase("pre")
 	_swap_busy = false
 
 func _process(delta: float) -> void:
@@ -191,10 +239,12 @@ func _process(delta: float) -> void:
 		return
 	elapsed += delta
 	var chapter: Dictionary = route["nodes"][node_index]
-	var duration := float(chapter.get("watch_seconds", 14))
+	var duration := maxf(float(chapter.get("watch_seconds",14)),StoryDialogue.watch_duration(str(chapter["id"])) + 2.0)
 	var shot := int(elapsed / (duration / 3.0))
 	if shot != _shot:
 		_shot = shot
+		if shot == 1: StoryDialogue.watch_phase("mid")
+		if shot >= 2: StoryDialogue.watch_phase("post")
 		var battle_camera = _battle.get("_battle_camera")
 		if battle_camera != null:
 			battle_camera.set_process(false)
@@ -202,19 +252,27 @@ func _process(delta: float) -> void:
 		var camera := _battle.get_node_or_null("Camera2D") as Camera2D
 		if camera != null:
 			var closeup: bool = chapter["kind"] != "STORY_BATTLE"
-			camera.zoom = Vector2.ONE * (2.8 if closeup else 1.15 + 0.12 * shot)
+			camera.zoom = Vector2.ONE * (1.5 if chapter.get("objective_contract") == "FIRST_LOSS" else 2.8 if closeup else 1.15 + 0.12 * shot)
 	var camera := _battle.get_node_or_null("Camera2D") as Camera2D
 	if camera != null:
 		var closeup: bool = chapter["kind"] != "STORY_BATTLE"
-		var target: Vector2 = (_battle.fighter1.position if closeup else (_battle.fighter1.position + _battle.fighter2.position) * 0.5) + Vector2(0, -60 if closeup else -45)
+		var target: Vector2 = (_dialogue_speaker.position if _dialogue_speaker != null and is_instance_valid(_dialogue_speaker) and StoryDialogue.is_busy() else _battle.fighter1.position if closeup else (_battle.fighter1.position + _battle.fighter2.position) * 0.5) + Vector2(0, -60 if closeup else -45)
+		if _private_camera_active:
+			var framing: Dictionary = _private_camera_take.presentation_sample(StoryDialogue.remaining, bool(StoryDialogue.settings.get("reduced_shake", false)))
+			if not framing.is_empty():
+				target = _battle.fighter1.position.lerp(_battle.fighter2.position, float(framing.focus_mix)) + framing.offset
+				camera.zoom = Vector2.ONE * float(framing.zoom)
 		camera.position = camera.position.lerp(target, 1.0 - exp(-delta * 4.0))
-	if elapsed >= duration:
+	if elapsed >= duration and not StoryDialogue.is_busy():
 		if node_index + 1 < route["nodes"].size():
 			await seek(node_index + 1)
 		else:
 			playing = false
 
 func _exit_tree() -> void:
+	_closing = true
+	if _private_camera_take != null: _private_camera_take.clear_node()
+	StoryDialogue.cancel()
 	if _watch_presenter != null:
 		_watch_presenter.battle = null
 		_watch_presenter = null
@@ -226,3 +284,20 @@ func _exit_tree() -> void:
 			var name := "p%d_%s" % [slot, action]
 			if InputMap.has_action(name):
 				Input.action_release(name)
+
+func _on_dialogue_cue(cue: Dictionary) -> void:
+	if StoryDialogue.context != "watch" or _battle == null: return
+	if str(cue.node_id) != str(route.nodes[node_index].id): return
+	if _private_camera_active:
+		_private_camera_take.begin_cue(str(cue.cue_id), StoryDialogue.remaining)
+	_dialogue_speaker = null
+	for actor in _battle.fighters_root.get_children(): actor.z_index=int(actor.get_meta("watch_base_z",actor.z_index))
+	if cue.get("representation") == "memory_echo": return
+	for actor in _battle.fighters_root.get_children():
+		if actor.fighter_id != cue.speaker_id: continue
+		_dialogue_speaker = actor
+		actor.z_index=int(actor.get_meta("watch_base_z",actor.z_index))+20
+		var expression: String = {"grief":"grief","strained":"shock","soft":"calm"}.get(cue.performance,"determination")
+		actor.model_3d.set_cinematic_expression(expression)
+		if route.nodes[node_index].get("objective_contract","") == "FIRST_LOSS": actor.model_3d.play_clip("story_dialogue_intense" if cue.performance in ["grief","strained"] else "story_dialogue_neutral")
+		break
