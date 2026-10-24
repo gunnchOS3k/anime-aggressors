@@ -16,6 +16,7 @@ import subprocess
 import sys
 from pathlib import Path
 from private_production_8d4 import LOCAL_SCOPE, LOCAL_RESERVE_BYTES, LOCAL_PEAK_ALLOCATION_BYTES
+from private_production_8d4 import external_production_report, live_volume_probe, recheck_external_production
 from metric_reference_scope_8d4 import select_cases
 from audit_blender_402 import verify_audit
 
@@ -32,7 +33,7 @@ def version(binary):
     return result.stdout.splitlines()[0] if result.returncode == 0 and result.stdout else None
 
 
-def preflight(archive, workspace, blender, godot, case_id, blender_audit=None):
+def preflight(archive, workspace, blender, godot, case_id, blender_audit=None, external_production=False, external_identity=None, volume_probe=None):
     reasons = []
     inputs=json.loads((ROOT/'art_source/staging/metric_8d4/inputs_v1.json').read_text())
     selected=select_cases(inputs,case_id)
@@ -40,10 +41,25 @@ def preflight(archive, workspace, blender, godot, case_id, blender_audit=None):
     workspace = workspace.resolve()
     volume = Path('/System/Volumes/Data') if Path('/System/Volumes/Data').is_dir() else ROOT
     free = shutil.disk_usage(volume).free
-    if free < LOCAL_RESERVE_BYTES + LOCAL_PEAK_ALLOCATION_BYTES:
-        reasons.append('Internal space must be at least22GiB:18GiB reserve plus4GiB peak forecast')
-    if workspace.exists() or workspace.is_relative_to(ROOT) or workspace.is_relative_to(Path('/Volumes')):
-        reasons.append('Use a NEW private internal workspace outside Git/worktrees and immutable archives')
+    external_report = None
+    if external_production:
+        # Opt-in path. The legacy 22 GiB / reject-/Volumes checks below stay in force
+        # when this flag is absent. External capacity does not replace the internal reserve.
+        identity = None
+        if external_identity:
+            try:
+                identity = json.loads(Path(external_identity).read_text())
+            except (OSError, json.JSONDecodeError):
+                identity = None
+        external_report = external_production_report(
+            workspace, identity=identity, internal_free_bytes=free, external_free_bytes=None,
+            tmpdir=os.environ.get('TMPDIR'), probe=volume_probe or live_volume_probe)
+        reasons.extend(external_report['reasons'])
+    else:
+        if free < LOCAL_RESERVE_BYTES + LOCAL_PEAK_ALLOCATION_BYTES:
+            reasons.append('Internal space must be at least22GiB:18GiB reserve plus4GiB peak forecast')
+        if workspace.exists() or workspace.is_relative_to(ROOT) or workspace.is_relative_to(Path('/Volumes')):
+            reasons.append('Use a NEW private internal workspace outside Git/worktrees and immutable archives')
     parent = workspace.parent
     if not parent.is_dir():
         reasons.append('Private workspace parent must already exist')
@@ -98,7 +114,7 @@ def preflight(archive, workspace, blender, godot, case_id, blender_audit=None):
                 active.append({'pid': int(fields[0]), 'program': Path(fields[1]).name})
         if active:
             reasons.append('Existing Blender/Godot process preserved; no competing local production')
-    return {'schema': 'zero_cost_local_8d4_preflight.v1', 'PASS': not reasons, 'reasons': reasons,
+    report = {'schema': 'zero_cost_local_8d4_preflight.v1', 'PASS': not reasons, 'reasons': reasons,
             'source_sha': head, 'execution_environment': 'OWNER_LOCAL_OFFLINE',
             'reference_scope':'SINGLE_CASE_PILOT','selected_cases':[c['case']for c in selected],
             'full_reference_batch_complete':False,
@@ -112,11 +128,26 @@ def preflight(archive, workspace, blender, godot, case_id, blender_audit=None):
             'blender_audit_path':str(blender_audit.resolve())if blender_audit else None,
             'network_services_used': False, 'paid_usage_authorized': False,
             'github_dispatch_authorized': False, 'public_upload_authorized': False}
+    if external_production:
+        report['storage_mode'] = 'encrypted_external'
+        report['external_production'] = True
+        report['external_checks'] = external_report['checks']
+        report['external_volume_identity'] = identity
+        report['internal_requirement_bytes'] = external_report['internal_requirement_bytes']
+        report['external_requirement_bytes'] = external_report['external_requirement_bytes']
+        report['execution_environment'] = 'OWNER_ENCRYPTED_EXTERNAL'
+    return report
 
 
 def execute(report, archive, workspace, blender, godot):
     if not report['PASS']:
         raise ValueError('Preflight failed; no private workspace or production output created')
+    if report.get('external_production'):
+        recheck_external_production(
+            workspace, report.get('external_volume_identity'),
+            internal_free_bytes=shutil.disk_usage('/System/Volumes/Data').free,
+            external_free_bytes=None, tmpdir=os.environ.get('TMPDIR'), probe=live_volume_probe,
+            output_path=workspace / 'metric-stage-8d4')
     os.umask(0o077)
     workspace.mkdir(mode=0o700)
     output = workspace / 'metric-stage-8d4'
@@ -152,6 +183,12 @@ def execute(report, archive, workspace, blender, godot):
               'RUNTIME_PAIRED_CONTACT_VERIFIED': False, 'human_approved': False}
     try:
         for name, command, timeout in stages:
+            if report.get('external_production'):
+                recheck_external_production(
+                    workspace, report.get('external_volume_identity'),
+                    internal_free_bytes=shutil.disk_usage('/System/Volumes/Data').free,
+                    external_free_bytes=None, tmpdir=os.environ.get('TMPDIR'), probe=live_volume_probe,
+                    output_path=output)
             with (workspace / (name + '.log')).open('w') as log:
                 result = subprocess.run(command, cwd=ROOT, env=env, stdout=log, stderr=subprocess.STDOUT, timeout=timeout)
             status['stages'].append({'stage': name, 'exit_code': result.returncode})
@@ -222,9 +259,14 @@ def main():
     parser.add_argument('--blender-audit',type=Path,help='Private verified official4.0.2package/app audit; no self-attestation switch')
     parser.add_argument('--case-id',default='ember-vale__juno-spark__male__1',
                         help='Exactly one existing pilot; no local full-batch mode before real reference acceptance')
+    parser.add_argument('--external-production', action='store_true',
+                        help='Opt-in encrypted-volume mode. Does not disable the legacy 22 GiB guard.')
+    parser.add_argument('--external-volume-identity', type=Path,
+                        help='Recorded gunnchos-private-art volume identity JSON. Not a passphrase.')
     args = parser.parse_args()
     archive, workspace = args.archive.resolve(), args.workspace.resolve()
-    report = preflight(archive, workspace, args.blender, args.godot,args.case_id,args.blender_audit)
+    report = preflight(archive, workspace, args.blender, args.godot,args.case_id,args.blender_audit,
+                       external_production=args.external_production, external_identity=args.external_volume_identity)
     print(json.dumps(report, indent=2))
     if args.execute:
         if not report['PASS']:

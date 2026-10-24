@@ -5,6 +5,7 @@ billing, token or artistic approval. No secrets are read or returned.
 """
 import json
 import os
+import plistlib
 import re
 import shutil
 import stat
@@ -16,6 +17,24 @@ SPENDING_CLEARANCE='OWNER_CONFIRMED_INCLUDED_USAGE_AND_ZERO_OVERAGE'
 LOCAL_SCOPE='OWNER_AUTHORIZED_ZERO_COST_LOCAL_ONLY'
 LOCAL_RESERVE_BYTES=18*1024**3
 LOCAL_PEAK_ALLOCATION_BYTES=4*1024**3
+# Opt-in encrypted external mode. These constants do not replace the legacy
+# 18 GiB + 4 GiB internal guard above.
+EXTERNAL_SCOPE='OWNER_AUTHORIZED_ENCRYPTED_EXTERNAL_ONLY'
+EXTERNAL_VOLUME_NAME='gunnchos-private-art'
+ARCHIVE_VOLUME_UUID='9C4EB36E-2864-42F8-BD0B-A4F67EBC7852'
+ARCHIVE_MOUNT=Path('/Volumes/gunnchOS-Archives')
+ARCHIVE_DEVICE_NODE='/dev/disk5s1'
+# Internal residue that still happens when private temp is on the encrypted
+# volume: macOS, Blender, and Godot can write crash reports, font/shader
+# caches, and small system files on the Data volume. A factory-startup probe
+# moved internal available space by 36864 bytes with TMPDIR already external.
+# That figure is not a measured production peak. Until a real one-case run
+# measures internal growth, keep this overhead explicit and nonzero. External
+# free space never substitutes for the 18 GiB internal reserve.
+EXTERNAL_INTERNAL_OVERHEAD_BYTES=1*1024**3
+EXTERNAL_PEAK_ALLOCATION_BYTES=4*1024**3
+EXTERNAL_SAFETY_MARGIN_BYTES=8*1024**3
+PROTECTED_VOLUME_DIRS=('source','output','scratch','tmp')
 
 
 def verify_context(event, live_repository, *, execution_repository, source_sha,
@@ -136,6 +155,178 @@ def validate_manifest_context(manifest):
     if not re.fullmatch(r'[0-9a-f]{40}',context.get('execution_workflow_sha',''))or context.get('artifact_retention_days')!=3:
         raise ValueError('Private workflow or retention provenance mismatch')
     return context
+
+
+def live_volume_probe(path):
+    """Live diskutil identity for the volume that holds path. No secrets."""
+    target=Path(path)
+    if not target.exists():
+        raise OSError('Encrypted volume is not mounted')
+    result=subprocess.run(['/usr/sbin/diskutil','info','-plist',str(target)],capture_output=True)
+    if result.returncode!=0 or not result.stdout:
+        raise OSError('Encrypted volume is not mounted')
+    info=plistlib.loads(result.stdout)
+    mount=info.get('MountPoint') or ''
+    if not mount:
+        raise OSError('Encrypted volume is not mounted')
+    encrypted=bool(info.get('Encryption') or info.get('EncryptionThisVolumeProper') or info.get('FileVault'))
+    return {'volume_uuid':info.get('VolumeUUID'),'filesystem':info.get('FilesystemType'),
+            'encrypted':encrypted,'owners_enabled':info.get('GlobalPermissionsEnabled') is True,
+            'volume_name':info.get('VolumeName'),'mount_point':mount,
+            'device_node':info.get('DeviceNode'),'parent_whole_disk':info.get('ParentWholeDisk')}
+
+
+def _resolved(path):
+    return Path(path).resolve(strict=False)
+
+
+def _inside(path, root):
+    try:
+        _resolved(path).relative_to(_resolved(root))
+        return True
+    except ValueError:
+        return False
+
+
+def _symlink_escapes(path, root):
+    """True when a symlink at or below the mount resolves outside that mount.
+
+    Ancestor symlinks such as /var -> /private/var are path normalization, not an escape.
+    """
+    root_r=_resolved(root)
+    raw=Path(path)
+    if not raw.is_absolute():
+        return True
+    try:
+        _resolved(raw).relative_to(root_r)
+    except ValueError:
+        return True
+    try:
+        parts=raw.relative_to(Path(root)).parts
+    except ValueError:
+        return False
+    cursor=Path(root)
+    for part in parts:
+        cursor=cursor/part
+        if cursor.is_symlink() and not _inside(cursor, root_r):
+            return True
+    return False
+
+
+def external_production_report(workspace, *, identity, internal_free_bytes, external_free_bytes, tmpdir, probe, output_path=None):
+    """Opt-in encrypted-volume gate. Does not alter verify_local_context.
+
+    Blender, Godot, and macOS still allocate some internal files (crash logs,
+    font and shader caches) even when TMPDIR is inside the encrypted volume.
+    TMPDIR outside that volume is refused so private temp cannot land on the
+    internal Data volume or the unencrypted archive. The 4 GiB production peak
+    and the external safety margin are checked against the encrypted volume's
+    free space. The 18 GiB internal reserve stays, plus EXTERNAL_INTERNAL_OVERHEAD_BYTES.
+    """
+    checks=[]
+    def add(name, ok, detail):
+        checks.append({'check':name,'pass':bool(ok),'detail':detail})
+    workspace=Path(workspace)
+    recorded=identity if isinstance(identity, dict) else {}
+    uuid=str(recorded.get('volume_uuid') or '')
+    add('encrypted_volume_identity_recorded',
+        re.fullmatch(r'[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}', uuid) is not None
+        and recorded.get('volume_name')==EXTERNAL_VOLUME_NAME,
+        'Recorded encrypted volume identity must name gunnchos-private-art and its volume UUID')
+    info=None
+    try:
+        info=probe(workspace if workspace.exists() else workspace.parent)
+    except (OSError, ValueError, subprocess.SubprocessError):
+        info=None
+    add('encrypted_volume_mounted', info is not None and bool(info.get('mount_point')),
+        'Encrypted volume is not mounted' if info is None else 'Encrypted volume is mounted')
+    mount=Path(info['mount_point']) if info and info.get('mount_point') else None
+    add('filesystem_apfs', bool(info) and info.get('filesystem')=='apfs',
+        'Protected workspace filesystem must be APFS')
+    add('encryption_on', bool(info) and info.get('encrypted') is True,
+        'Protected workspace volume must be encrypted')
+    add('owners_on', bool(info) and info.get('owners_enabled') is True,
+        'Protected workspace volume must have owners enabled')
+    add('volume_name', bool(info) and info.get('volume_name')==EXTERNAL_VOLUME_NAME,
+        'Protected workspace volume name must be gunnchos-private-art')
+    add('volume_uuid_matches_recorded', bool(info) and str(info.get('volume_uuid') or '').lower()==uuid.lower() and bool(uuid),
+        'Live volume UUID must match the recorded encrypted image')
+    archive_hit=bool(info) and (
+        str(info.get('volume_uuid') or '').lower()==ARCHIVE_VOLUME_UUID.lower()
+        or str(info.get('mount_point') or '')==str(ARCHIVE_MOUNT)
+        or str(info.get('device_node') or '')==ARCHIVE_DEVICE_NODE
+        or str(info.get('parent_whole_disk') or '') in {'disk5','disk4','disk4s2'})
+    path_on_archive=_inside(workspace, ARCHIVE_MOUNT) or (mount is not None and _inside(mount, ARCHIVE_MOUNT))
+    if info is None:
+        add('not_archive_volume', False, 'Archive rejection was not evaluated because the encrypted volume is not mounted')
+        add('not_archive_device', False, 'Archive device check was not evaluated because the encrypted volume is not mounted')
+    else:
+        add('not_archive_volume', not archive_hit and not path_on_archive,
+            'Unencrypted archive mount and immutable archive directories are rejected')
+        add('not_archive_device', info.get('device_node')!=ARCHIVE_DEVICE_NODE and info.get('parent_whole_disk')!='disk5',
+            'Archive device must not host the protected workspace')
+    confined=bool(mount) and workspace.is_absolute() and _inside(workspace, mount) and not path_on_archive
+    add('workspace_confined', confined, 'Workspace realpath must stay inside the mounted encrypted volume')
+    escaped=_symlink_escapes(workspace, mount) if mount else True
+    add('no_symlink_escape', bool(mount) and not escaped, 'Symlink escape outside the encrypted volume is rejected')
+    dirs_ok=False
+    mode_ok=False
+    if mount and not escaped:
+        missing=[]
+        loose=[]
+        for name in PROTECTED_VOLUME_DIRS:
+            directory=mount/name
+            if not directory.is_dir() or directory.is_symlink():
+                missing.append(name)
+            elif stat.S_IMODE(directory.stat().st_mode)&0o077:
+                loose.append(name)
+        dirs_ok=not missing
+        mode_ok=dirs_ok and not loose
+        add('protected_directories', dirs_ok,
+            'Protected source/output/scratch/tmp directories must exist inside the encrypted volume'
+            if missing else 'Protected directories exist')
+        add('owner_only_mode', mode_ok, 'Protected directories must be owner-only (mode 0700)')
+    else:
+        add('protected_directories', False, 'Protected directories were not checked because the encrypted volume is not mounted')
+        add('owner_only_mode', False, 'Owner-only mode was not checked because the encrypted volume is not mounted')
+    tmp_ok=bool(mount) and tmpdir and _inside(tmpdir, mount) and not _symlink_escapes(tmpdir, mount)
+    add('tmpdir_inside_encrypted_volume', bool(tmp_ok),
+        'TMPDIR must be inside the encrypted volume; otherwise Blender, Godot, and macOS temp stay internal or on the unencrypted archive')
+    internal_need=LOCAL_RESERVE_BYTES+EXTERNAL_INTERNAL_OVERHEAD_BYTES
+    add('internal_reserve_plus_overhead',
+        type(internal_free_bytes) is int and internal_free_bytes>=internal_need,
+        'Internal reserve requires 18GiB plus explicit overhead; external capacity does not replace the internal reserve')
+    external_need=EXTERNAL_PEAK_ALLOCATION_BYTES+EXTERNAL_SAFETY_MARGIN_BYTES
+    if external_free_bytes is None and mount:
+        try:external_free_bytes=shutil.disk_usage(mount).free
+        except OSError:external_free_bytes=None
+    add('external_peak_plus_margin',
+        type(external_free_bytes) is int and external_free_bytes>=external_need,
+        'External free space is below the peak allocation plus safety margin' if type(external_free_bytes) is int
+        else 'External free space could not be measured')
+    if output_path is None:
+        output_ok=bool(mount) and confined and not escaped and _inside(workspace, mount/'output')
+        output_detail='Run workspace is inside the encrypted output directory' if output_ok else 'Unexpected output location outside the encrypted volume'
+    else:
+        output_ok=bool(mount) and _inside(output_path, mount/'output') and not _symlink_escapes(output_path, mount)
+        output_detail='Output path is inside the encrypted output directory' if output_ok else 'Unexpected output location outside the encrypted volume'
+    add('output_location', output_ok, output_detail)
+    reasons=[item['detail'] for item in checks if not item['pass']]
+    return {'schema':'encrypted_external_production_8d4.v1','PASS':not reasons,'checks':checks,'reasons':reasons,
+            'internal_requirement_bytes':internal_need,'external_requirement_bytes':external_need,
+            'internal_reserve_bytes':LOCAL_RESERVE_BYTES,'internal_overhead_bytes':EXTERNAL_INTERNAL_OVERHEAD_BYTES,
+            'external_peak_allocation_bytes':EXTERNAL_PEAK_ALLOCATION_BYTES,
+            'external_safety_margin_bytes':EXTERNAL_SAFETY_MARGIN_BYTES,
+            'scope':EXTERNAL_SCOPE}
+
+
+def recheck_external_production(workspace, identity, *, internal_free_bytes, external_free_bytes, tmpdir, probe, output_path=None):
+    """Call again before execution and during a run. Raises; does not delete partial output."""
+    report=external_production_report(workspace, identity=identity, internal_free_bytes=internal_free_bytes,
+        external_free_bytes=external_free_bytes, tmpdir=tmpdir, probe=probe, output_path=output_path)
+    if not report['PASS']:
+        raise ValueError('External production stopped: '+'; '.join(report['reasons']))
+    return report
 
 
 def sanitized_summary(source_result, native_result):
