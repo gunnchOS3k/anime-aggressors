@@ -4,7 +4,7 @@ import unittest
 
 from arm_pose_space import (add, sub, mul, dot, length, body_frame,
                             pole_direction, solve_two_bone, qrotate,
-                            rigid_inverse_column_major)
+                            rigid_inverse_column_major, validate_direction_profile)
 
 
 class OriginalArmGeometry(unittest.TestCase):
@@ -69,6 +69,22 @@ class OriginalArmGeometry(unittest.TestCase):
         for x in (-1., 1.1):
             with self.assertRaises(ValueError):
                 rigid_inverse_column_major((x,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1))
+
+    def test_projective_bind_is_not_silently_treated_as_rigid(self):
+        with self.assertRaises(ValueError):
+            rigid_inverse_column_major((1,0,0,.1, 0,1,0,0, 0,0,1,0, 0,0,0,1))
+
+    def test_reference_direction_cannot_cross_fighter_or_gameplay_authority(self):
+        fields = {'forward':.6, 'up':0., 'outward':0.,
+                  'pole':{'outward':.6,'down':.7,'forward':.1}}
+        profile = {'fighter':'yin', 'fps':60, 'gameplay_timing_authority':False,
+                   'frames':[{'frame':f,'L':fields,'R':fields} for f in (0,1)]}
+        self.assertEqual(len(validate_direction_profile(profile,fighter='yin',body='female')),2)
+        with self.assertRaises(ValueError):
+            validate_direction_profile(profile,fighter='yang',body='female')
+        profile['gameplay_timing_authority'] = True
+        with self.assertRaises(ValueError):
+            validate_direction_profile(profile,fighter='yin',body='female')
 
 
 if __name__ == '__main__':

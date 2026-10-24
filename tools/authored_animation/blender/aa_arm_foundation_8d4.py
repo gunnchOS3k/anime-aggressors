@@ -52,6 +52,13 @@ def solve_original_arm(arm, side, wrist, hand_q=None, *, pole=None,
     u = upper_reference.translation
     a = (b[lower.name].head_local-b[upper.name].head_local).length
     c = (b[hand.name].head_local-b[lower.name].head_local).length
+    distance = (Vector(wrist)-u).length
+    # Retain the original Blender producer's 10-micrometre reach margin.
+    # The portable analytic solver's numerical epsilon is not permission to
+    # move a quantised source rig closer to singular full extension.
+    if distance >= a+c-.00001 or distance <= abs(a-c)+.00001:
+        return {'reachable':False, 'reason':'original_source_reach_margin',
+                'reach_excess_m':max(distance-a-c, abs(a-c)-distance, 0.)}
     if pole is None:
         direction = Vector(pole_direction(rest_frame(arm), side, outward=outward, down=down, forward=forward))
         pole = torso_delta.to_quaternion() @ direction
