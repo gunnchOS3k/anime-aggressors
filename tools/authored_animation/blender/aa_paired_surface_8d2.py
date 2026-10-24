@@ -37,27 +37,10 @@ def sample_vertex(ob,index):
     result=evaluated.matrix_world@mesh.vertices[index].co;evaluated.to_mesh_clear();return result
 
 
-def solve_arm(arm,side,wrist,hand_q):
-    """Two-segment anatomical solve; preserve preferred authored elbow pole."""
-    upper=arm.pose.bones['UpperArm_'+side];lower=arm.pose.bones['LowerArm_'+side];hand=arm.pose.bones['Hand_'+side]
-    u=upper.matrix.translation.copy();e=lower.matrix.translation.copy();w=hand.matrix.translation.copy()
-    a=(e-u).length;b=(w-e).length;axis=wrist-u;distance=axis.length
-    if distance>=a+b-.00001 or distance<=abs(a-b)+.00001:return {'reachable':False,'reach_excess_m':max(distance-a-b,abs(a-b)-distance,0)}
-    axis.normalize();along=(a*a-b*b+distance*distance)/(2*distance);height=math.sqrt(max(0,a*a-along*along))
-    pole=e-u-axis*(e-u).dot(axis)
-    if pole.length<.00001:pole=Vector((1 if side=='R'else-1,.2,-.2)).cross(axis)
-    pole.normalize();elbow=u+axis*along+pole*height
-    q=(e-u).rotation_difference(elbow-u)@upper.matrix.to_quaternion()
-    upper.matrix=Matrix.LocRotScale(u,q,Vector((1,1,1)));bpy.context.view_layer.update()
-    e=lower.matrix.translation.copy();w=hand.matrix.translation.copy()
-    q=(w-e).rotation_difference(wrist-e)@lower.matrix.to_quaternion()
-    lower.matrix=Matrix.LocRotScale(e,q,Vector((1,1,1)));bpy.context.view_layer.update()
-    hand.matrix=Matrix.LocRotScale(hand.matrix.translation,hand_q,Vector((1,1,1)));bpy.context.view_layer.update()
-    residual=(hand.matrix.translation-wrist).length
-    assert residual<.00005,('Offline arm constraint residual',side,residual)
-    for p in [upper,lower,hand]:
-        assert max(abs(s-1)for s in p.scale)<.00005 and p.location.length<.00005,('No arm translation/stretch',p.name,list(p.location),list(p.scale))
-    return {'reachable':True,'wrist_residual_m':residual}
+def solve_arm(arm,side,wrist,hand_q=None,**authoring):
+    """Shared corrected source foundation; old failed assets remain immutable."""
+    from aa_arm_foundation_8d4 import solve_original_arm
+    return solve_original_arm(arm,side,wrist,hand_q,**authoring)
 
 
 def constrain_hand(arm,side,witness,victim_objects,pressure=.0015):
