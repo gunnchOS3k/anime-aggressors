@@ -467,6 +467,8 @@ def run():
         for actor,names in zip(actors,actor_names):
             actor['arm']=bpy.data.objects[names['arm']];actor['anchor']=bpy.data.objects[names['anchor']]
             actor['visible']=[bpy.data.objects[name]for name in names['visible_names']]
+            actor['objects']={key:bpy.data.objects[actor['role']+'__'+key]for key in actor['objects']}
+            actor['actions']={key:bpy.data.actions[actor['role']+'__'+key]for key in actor['actions']}
             assert_preserved(actor)
         # Verify actual saved/reopened animation, not only pre-save solver
         # coordinates. Tolerance is float32 FK serialization, not art approval.
