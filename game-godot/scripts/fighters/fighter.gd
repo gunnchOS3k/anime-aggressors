@@ -14,6 +14,7 @@ const _AuraScaler = preload("res://scripts/combat/aura_scaler.gd")
 const _AuraIdentity = preload("res://scripts/combat/aura_identity.gd")
 const _AuraSpecialRuntime = preload("res://scripts/combat/aura_special_runtime.gd")
 const _CombatMath = preload("res://scripts/combat/combat_math.gd")
+const _CombatOutcome = preload("res://scripts/combat/combat_outcome.gd")
 const _MoveResolver = preload("res://scripts/visual/runtime_move_resolver.gd")
 const _PresentationContext = preload("res://scripts/visual/presentation_context.gd")
 const _FighterDefinition = preload("res://scripts/combat/fighter_definition.gd")
@@ -64,6 +65,7 @@ var damage_percent: float = 0.0
 var stocks: int = 3
 var aura: float = 0.0
 var shield_health: float = 100.0
+var _shield_stun_limit: float = 0.25
 var air_jumps_left: int = 1
 var invincible: bool = false
 var shielding: bool = false
@@ -778,9 +780,25 @@ func _handle_actions() -> void:
 	var grounded_guard := is_on_floor() and velocity.y >= 0.0
 	# Release an invalid guard before its action-lock gate. Air dodge remains
 	# separate; the existing guard policy only permits shielding on the ground.
-	if state_machine.current_state in [_FighterStates.SHIELD_HOLD, _FighterStates.SHIELD_START] and (not _read_shield() or not grounded_guard):
-		shielding = false
-		state_machine.enter(_FighterStates.IDLE if grounded_guard else _FighterStates.FALL)
+	var guard_step := _CombatOutcome.guard_transition(
+		state_machine.current_state,
+		guard_held,
+		guard_pressed,
+		grounded_guard,
+		shield_break_8c.guard_allowed() and not is_aura_input_held(),
+		not state_machine.can_attack()
+	)
+	var guard_state := str(guard_step.get("state", state_machine.current_state))
+	if guard_state != state_machine.current_state:
+		if bool(guard_step.get("begin_parry", false)):
+			perfect_guard.begin()
+		shielding = guard_state in [_FighterStates.SHIELD_START, _FighterStates.SHIELD_HOLD]
+		state_machine.enter(guard_state)
+		var guard_event := str(guard_step.get("event", ""))
+		if guard_event != "":
+			shield_event.emit({"event": guard_event, "state": guard_state, "damage_applied": 0.0, "stocks_delta": 0})
+	if guard_state in [_FighterStates.SHIELD_START, _FighterStates.SHIELD_HOLD]:
+		return
 	if not state_machine.can_attack():
 		_try_authored_attack_cancel()
 		return
@@ -812,16 +830,6 @@ func _handle_actions() -> void:
 	if _read_aura_burst() and aura >= 100.0 and not party_overdrive.active():
 		_start_move_by_command("aura_burst")
 		return
-	if _read_shield() and grounded_guard and not is_aura_input_held() and shield_break_8c.guard_allowed():
-		if state_machine.current_state != _FighterStates.SHIELD_HOLD:
-			if guard_pressed:perfect_guard.begin()
-			state_machine.enter(_FighterStates.SHIELD_START)
-		state_machine.enter(_FighterStates.SHIELD_HOLD)
-		shielding = true
-		return
-	if state_machine.current_state in [_FighterStates.SHIELD_HOLD, _FighterStates.SHIELD_START]:
-		shielding = false
-		state_machine.enter(_FighterStates.IDLE)
 	if _read_dodge_pressed():
 		_start_dodge()
 	if _read_grab_pressed():
@@ -1618,20 +1626,32 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 		stamp_runtime_hook("passive_armor")
 		hit_landed.emit(info)
 		return
-	if state_machine.current_state == _FighterStates.SHIELD_HOLD or shielding:
-		var sdmg: float = info.get("shield_damage", info.get("damage", 0.0) * 0.8)
-		shield_health -= sdmg
-		info["blocked"] = true
-		_hitstop = _CombatMath.frames_to_seconds(info.get("hitstop_frames", 3))
+	if state_machine.current_state == _FighterStates.SHIELD_HOLD or state_machine.current_state == _FighterStates.SHIELD_HIT or shielding:
+		var sdmg: float = float(info.get("shield_damage", info.get("damage", 0.0) * 0.8))
+		var contact: Dictionary = _CombatOutcome.shield_contact(shield_health, sdmg, false, int(info.get("shield_stun_frames", 0)))
+		shield_health = float(contact.get("shield_health", shield_health))
+		info["blocked"] = contact.get("state") != "parry"
+		info["perfect_guard"] = contact.get("parry_result") == "success"
+		info["parry_result"] = contact.get("parry_result", "fail")
+		info["shield_event"] = contact.get("event", "shield_hit")
+		info["damage_applied"] = 0.0
+		info["stocks_delta"] = 0
+		info["aura_bible"] = _CombatOutcome.bible_for(fighter_id)
+		_hitstop = _CombatMath.frames_to_seconds(int(info.get("hitstop_frames", 3)))
 		if attacker != null and "_hitstop" in attacker:
 			attacker._hitstop = _hitstop * 0.5
-		hit_landed.emit(info)
-		if shield_health <= 0.0:
+		if str(contact.get("state")) == "shield_break":
 			shielding = false
 			state_machine.enter(_FighterStates.SHIELD_BREAK)
 			shield_health = 0.0
+		elif str(contact.get("state")) == "parry":
+			state_machine.enter(_FighterStates.SHIELD_HOLD)
 		else:
-			state_machine.enter(_FighterStates.SHIELD_STUN)
+			_shield_stun_limit = _CombatOutcome.stun_seconds(int(contact.get("shield_stun_frames", 0)), _CombatOutcome.SHIELD_STUN_FALLBACK_SECONDS)
+			state_machine.enter(_FighterStates.SHIELD_HIT)
+		hit_landed.emit(info)
+		if has_signal("shield_event"):
+			shield_event.emit(contact)
 		return
 	# Confirmed body impact interrupts the prior move; its later callbacks must not
 	# overwrite hurt/hitstun or activate another hitbox during victim recovery.
@@ -1640,11 +1660,22 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 	if _transform_pipeline != null: _transform_pipeline.cancel("body_hit")
 	if move_runner != null: move_runner.cancel()
 	hitbox.monitoring = false
-	var dmg: float = info.get("damage", 0.0)
+	var dmg: float = float(info.get("resolved_damage", info.get("damage", 0.0)))
+	var gate := str(info.get("damage_zero_reason", ""))
+	if gate == "":
+		gate = "hit"
+	var outcome: Dictionary = _CombatOutcome.confirmed_body_damage(damage_percent, dmg, gate)
 	if state_machine.current_state == _FighterStates.AURA_CHARGE:
 		aura = maxf(0.0, aura - _CombatMath.AURA_HIT_INTERRUPT_LOSS)
 		_set_aura_vfx(false)
-	damage_percent += dmg
+	damage_percent = float(outcome.get("meter_after", damage_percent))
+	info["damage"] = float(outcome.get("damage_applied", dmg))
+	info["damage_applied"] = float(outcome.get("damage_applied", 0.0))
+	info["defender_damage_after"] = damage_percent
+	info["meter_changed"] = bool(outcome.get("meter_changed", false))
+	info["stocks_delta"] = 0
+	info["shield_event"] = str(outcome.get("event", "hit_damage_applied"))
+	dmg = float(info["damage_applied"])
 	damaged.emit(dmg, damage_percent)
 	var launch: Vector2 = info.get("launch", Vector2.ZERO)
 	_di_strength = _CombatMath.di_strength_for_kb(launch.length(), dmg)

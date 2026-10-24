@@ -82,6 +82,8 @@ export class PartyRoomSession {
   private joinTimestamps: number[] = [];
   private inputTimestamps = new Map<string, number[]>();
   private lastSequence = new Map<string, number>();
+  private pendingInputs: ControllerInput[] = [];
+  private servedInputs: unknown[] | null = null;
   private hostTick = 0;
   private result: Record<string, unknown> | null = null;
 
@@ -346,7 +348,18 @@ export class PartyRoomSession {
     }
     this.lastSequence.set(key, input.sequence);
     this.hostTick = Math.max(this.hostTick, input.tick);
+    this.pendingInputs.push(input);
     return { seatIndex: input.seatIndex, sequence: input.sequence, accepted: true };
+  }
+
+  drainPendingInputs(): ControllerInput[] {
+    const batch = this.pendingInputs;
+    this.pendingInputs = [];
+    return batch;
+  }
+
+  noteServedInputs(inputs: unknown[]): void {
+    this.servedInputs = inputs;
   }
 
   advanceHostTick(): number {
@@ -371,6 +384,8 @@ export class PartyRoomSession {
     }
     this.result = null;
     this.hostTick = 0;
+    this.pendingInputs = [];
+    this.servedInputs = null;
     this.room.phase = "lobby";
     return { ok: true };
   }
@@ -391,7 +406,7 @@ export class PartyRoomSession {
           eliminated: s.state === "ELIMINATED_OR_FINISHED",
           identity: s.identity,
         })),
-      world: {},
+      world: this.servedInputs ? { inputs: this.servedInputs } : {},
       events: [],
       result: this.result,
     };
