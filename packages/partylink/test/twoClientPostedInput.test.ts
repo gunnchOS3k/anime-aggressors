@@ -64,8 +64,8 @@ describe("two-client posted input", () => {
       assert.equal(served.sequence, 1, "host replaced the posted sequence");
       assert.equal(
         served.frame.grab,
-        false,
-        "grab stays forced false until unmerged #127; this branch does not map semantic.grab",
+        true,
+        "the integrated #127 contract preserves the client's posted grab",
       );
 
       const state = (await fetch(`${base}/state`).then((r) => r.json())) as {
@@ -75,7 +75,7 @@ describe("two-client posted input", () => {
       assert.ok(echoed, `GET /state did not serve the posted frame: ${JSON.stringify(state.world)}`);
       assert.equal(echoed.frame.attack, true);
       assert.equal(echoed.frame.right, true);
-      assert.equal(echoed.frame.grab, false);
+      assert.equal(echoed.frame.grab, true, "GET /state must preserve the same posted grab");
 
       const before = host.sim.getState().players.find((p) => p.id === p2.seatIndex);
       assert.ok(before);

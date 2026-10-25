@@ -1,0 +1,75 @@
+{
+  "source_head": "ff3cfd48b24bc867330ab84ccba0e94dba18f2bf",
+  "godot": "/Applications/Godot.app/Contents/MacOS/Godot",
+  "user_directory_identity": "aa-preserved-36cab363ac20449f90280edca4db1b93",
+  "scope": "Small, source-bound Godot checks. No asset import, cleanup, export or owner save writes.\n\nCopies the reviewed source dependency closure into a NEW probe project and uses a\nunique user-directory identity. This is engine/API verification, never BattleScene,\nearned Story, physical LAN, packaged-build, device or visual acceptance.\n",
+  "owner_save_files_unchanged": true,
+  "source_manifest_sha256": "3d48d3d3e1dfb0b2ff5875f32428bd7e1fe8ce1dde4524d7b0c361c411b12d82",
+  "tests": [
+    {
+      "test": "tests/save_rules_roundtrip.gd",
+      "exit_code": 0,
+      "pass": true,
+      "guard_stop": null,
+      "seconds": 0.9679463330030558,
+      "sampled_peak_rss_bytes": 122404864,
+      "minimum_internal_free_bytes": 20315447296,
+      "log_sha256": "d44b6064e493611b71f563f0fd4e29cf69fe6967ea8cba01258f9c1f1e3562c8"
+    },
+    {
+      "test": "tests/replay_persist_roundtrip.gd",
+      "exit_code": 0,
+      "pass": true,
+      "guard_stop": null,
+      "seconds": 0.4353779580014816,
+      "sampled_peak_rss_bytes": 128811008,
+      "minimum_internal_free_bytes": 20314333184,
+      "log_sha256": "7e7241117ca81dc68402eca838522dadf09490cc21ad4914ff52c3f136a2926e"
+    },
+    {
+      "test": "tests/v1_closure/StorySceneAuthority.gd",
+      "exit_code": 0,
+      "pass": true,
+      "guard_stop": null,
+      "seconds": 0.33093333299984806,
+      "sampled_peak_rss_bytes": 123453440,
+      "minimum_internal_free_bytes": 20314148864,
+      "log_sha256": "a6ad88e57f48cb4b54c46b233d61948e327429276b282c4c9f59b6d415ae6f17"
+    },
+    {
+      "test": "tests/integration/PreservedContracts.gd",
+      "exit_code": 0,
+      "pass": true,
+      "guard_stop": null,
+      "seconds": 0.3243244170007529,
+      "sampled_peak_rss_bytes": 128073728,
+      "minimum_internal_free_bytes": 20314238976,
+      "log_sha256": "199c704d7c38c40cf66b50745da1cdc7f6451e48315b5fb6af5e5352e9ced072"
+    }
+  ],
+  "godot_version": "4.7.1.stable.official.a13da4feb",
+  "engine_mode": "headless dependency closure; no asset import; NOT native game acceptance",
+  "source_scope": "production files byte-identical to #133; new fixture and runner content bound by file hashes",
+  "retained_failures": [
+    "engine_v1 missing isolated GameState autoload",
+    "engine_v2 premature preload of autoload-dependent scripts",
+    "engine_v3 missing explicit dynamic-loader types",
+    "partylink_before.log: stale forced-false grab expectation,24/25 passed"
+  ],
+  "partylink": {
+    "actual_runtime": "installed Node24.9.0 built-in TS transformation; no tsc/typecheck claim",
+    "tests": 25,
+    "passed": 25,
+    "failed": 0,
+    "suites": 12,
+    "local_http_and_multiprocess": true,
+    "physical_LAN_or_Godot_combat": false,
+    "log_sha256": "9e33ab00e41c3813fb1494a0cd67e594d2f291b3458cf774ab728a17ca313b84",
+    "failed_baseline_sha256": "9eb8b636c4d7a74fe873cab5836500f88fa631bc6c01b406e239c78d8102be86"
+  },
+  "preserved_form_raw_sidecars": 36,
+  "HUMAN_ART_APPROVED": false,
+  "RUNTIME_PAIRED_CONTACT_VERIFIED": false,
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false
+}
