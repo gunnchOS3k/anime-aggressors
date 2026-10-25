@@ -1,3 +1,9 @@
+# 2026-10-24 — actual roster bake exposes stale dependency-graph read
+
+The first actual18-rig category job stopped on Ember male before saving: Original arm must not translate/stretch UpperArm_L. The standalone source baker wrote pose channels then read cached Chest.matrix before dependency-graph evaluation. Paired body library had already updated, so its earlier results did not exercise this boundary. Candidate correction evaluates the graph before arm targets and before rest/chest transport; the strict no-translation/no-stretch guard is unchanged and now reports actual values. This commit is recoverable source preparation REQUIRED by the existing clean-producer preflight; actual original-source verification remains next. Failed roster_original_arm_sources_v1 and paired contact_v6/v7 logs are preserved privately. No new roster .blend/GLB yet. Continue with fresh private run_roster_arm_reference_v2.py, then its native review; do not claim a pass until real source execution succeeds. Human/paired-contact/RC2/release gates remainFALSE. Unrelated dirty work unchanged.
+
+---
+
 # 2026-10-24 — RESTORED CAPACITY; actual original source/export/native production resumed
 
 Owner authorizes complete roster production; no new per-character approval gate. Current source/branch is git rev-parse HEAD / release/anime-v1-dialogue-and-elemental-performance. Producer62e8f9ab was verified equal live draftPR123, still stacked on122. Existing13dirty gameplay/web/PartyLink/lockfile paths and all untracked Cursor/evidence files remain untouched. Cursor integration checkout is not edited.

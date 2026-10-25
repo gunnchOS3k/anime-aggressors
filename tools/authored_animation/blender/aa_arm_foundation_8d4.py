@@ -30,6 +30,9 @@ def solve_original_arm(arm, side, wrist, hand_q=None, *, pole=None,
     """
     if side not in ('L', 'R'):
         raise ValueError('Explicit original arm side required')
+    # Callers may have authored channels directly rather than frame_set().
+    # Resolve those channels before transporting rest space through the torso.
+    bpy.context.view_layer.update()
     b = arm.data.bones
     shoulder = arm.pose.bones['Shoulder_'+side]
     upper = arm.pose.bones['UpperArm_'+side]
@@ -89,7 +92,8 @@ def solve_original_arm(arm, side, wrist, hand_q=None, *, pole=None,
         raise ValueError(('Original arm residual', side, residual))
     for p in (shoulder, upper, lower, hand):
         if p.location.length > .00005 or max(abs(x-1) for x in p.scale) > .00005:
-            raise ValueError(('Original arm must not translate/stretch', p.name))
+            raise ValueError(('Original arm must not translate/stretch', p.name,
+                              'location', tuple(p.location), 'scale', tuple(p.scale)))
     return {**solution, 'wrist_residual_m': residual,
             'reference': 'original_rest_transported_by_authored_chest',
             'wrist_rest_relative_angle_rad': neutral_hand.to_quaternion().rotation_difference(hand.matrix.to_quaternion()).angle}
