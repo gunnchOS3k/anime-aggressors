@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import fs from "node:fs";
+import { readPartyLobbySource } from "./partyLobbySource.js";
 import { describe, it } from "node:test";
 import { consumePostedPartyFrames, startLanPartyHost } from "../src/index.js";
 
@@ -86,10 +86,7 @@ describe("two-client posted input", () => {
       assert.equal(after.damage, before.damage);
       assert.equal(after.x, before.x + 256);
 
-      const lobby = fs.readFileSync(
-        new URL("../../../apps/web/src/screens/PartyLobbyScreen.ts", import.meta.url),
-        "utf8",
-      );
+      const lobby = readPartyLobbySource();
       assert.match(lobby, /consumePostedPartyFrames\(runtime\.session, runtime\.sim!\.getFrame\(\)\)/);
       assert.equal(lobby.includes("attack: frames % 23 === s.seatIndex"), false);
       assert.equal(lobby.includes("grab: false"), false);

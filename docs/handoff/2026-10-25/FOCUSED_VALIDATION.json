@@ -71,5 +71,18 @@
   "HUMAN_ART_APPROVED": false,
   "RUNTIME_PAIRED_CONTACT_VERIFIED": false,
   "RC2_READY": false,
-  "V1_0_0_RELEASE_AUTHORIZED": false
+  "V1_0_0_RELEASE_AUTHORIZED": false,
+  "compiled_partylink": {
+    "compiler": "installed TypeScript6.0.3, supplemental; repository ^5.3 pinned CI not executed",
+    "command": "node <installed TypeScript> --project packages/{game-core,partylink}/tsconfig.json --ignoreDeprecations 6.0 --types node; node --test --test-concurrency=1 packages/partylink/dist/test/*.test.js",
+    "typecheck_and_emit_pass": true,
+    "tests": 25,
+    "passed": 25,
+    "failed": 0,
+    "initial_compiled_failure": "23passed/2failed; source assertions resolved packages/apps instead of repository apps after compilation",
+    "fix": "single unambiguous repository source resolver, all gameplay/input assertions preserved",
+    "before_log_sha256": "4f63a0f31c66dcd30825f07c9cc0f7e792f1fb034bbe2e4f623bd3ccda7482be",
+    "after_log_sha256": "d6a64f69e2670980e98b296d14849591067fb490c956f3d82c2f99fb280b5e5b",
+    "npm_install_or_download": false
+  }
 }

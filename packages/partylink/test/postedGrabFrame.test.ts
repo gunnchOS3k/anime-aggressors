@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import fs from "node:fs";
+import { readPartyLobbySource } from "./partyLobbySource.js";
 import { describe, it } from "node:test";
 import { renderBrowserControllerHtml, startLanPartyHost } from "../src/index.js";
 import type { PartySimInput } from "../src/hostAuthoritativeParty.js";
@@ -93,10 +93,7 @@ describe("posted grab frame", () => {
       const pursuit = renderBrowserControllerHtml({ gameId: "pedestrian-pursuit" });
       assert.equal(pursuit.includes('data-act="grab"'), false);
 
-      const lobby = fs.readFileSync(
-        new URL("../../../apps/web/src/screens/PartyLobbyScreen.ts", import.meta.url),
-        "utf8",
-      );
+      const lobby = readPartyLobbySource();
       assert.equal(lobby.includes("attack: frames % 23 === s.seatIndex"), false);
       assert.match(lobby, /consumePostedPartyFrames\(runtime\.session, runtime\.sim!\.getFrame\(\)\)/);
     } finally {
