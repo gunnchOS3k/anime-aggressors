@@ -1,3 +1,17 @@
+# 2026-10-24 — RESTORED CAPACITY; actual original source/export/native production resumed
+
+Owner authorizes complete roster production; no new per-character approval gate. Current source/branch is git rev-parse HEAD / release/anime-v1-dialogue-and-elemental-performance. Producer62e8f9ab was verified equal live draftPR123, still stacked on122. Existing13dirty gameplay/web/PartyLink/lockfile paths and all untracked Cursor/evidence files remain untouched. Cursor integration checkout is not edited.
+
+Actual completed: preserved AVI converted without rerender to private native_arm_foundation_v1/review/original_pair_native_60fps.mp4 (SHA2567a8e9748bc9c5f37981bc0645ac65499ad656cee0f4475a3f58d3fff2b6d6144).243frames/60fps/4.05s; full decoding PASS; original AVI matches prior delivery SHA; new OWNER_REVIEW_MP4.html embeds it. Original HTML/stills/receipts/AVI preserved. This is silent offline original-art playback, not gameplay.
+
+Actual NEW editable Blender and animated GLB candidates contact_v2,v3,v4,v5 produced on authentic original Ember/Juno male rigs under /Volumes/gunnchos-private-art/output/ember-vale__juno-spark__male__1_arm_contact_vN/metric-stage-8d4. All prior geometry/weights/rest/materials/actions preserved. v2/v4/v5 have actual Godot three-angle native movies and source/native correspondence checks. v2 retains3approach failures; v3 retains2shallow little-finger failures; v4/v5 scoped hand/target intersections clear but wrist acting remains anatomically unsatisfactory. Preserve these as real failed art, not acceptance. New private v6 corrects the grip orientation (digits wrap across target forearm, rather than along it); not executed at this checkpoint.
+
+Resource start27.804GiB internal; latest production preflight26.761GiB. Existing19GiBstart/18GiBoperating guards, official4.0.2 audit, exact4.7.1 Godot, encrypted-volume identity/permissions, immutable inputs and serial execution pass; no guard weakened. Private source/native logs and resource traces retained. No public art, Actions, payment, cleanup, release or merge. PR123 exact-headCI absent, not passed.
+
+NEXT: execute /Volumes/gunnchos-private-art/scratch/run_arm_contact_v6.py with fresh full preflight, then its existing review_arm_contact_v6.py recipe. Inspect true wrist/elbow/skin from three angles. After corrected foundation is visually inspectable, execute preserved serial /Volumes/gunnchos-private-art/scratch/run_roster_arm_reference_v1.py:18NEW original .blend/animatedGLB arm-reference category exports on each fighter's OWN body action, not complete24move acting. No roster source job has executed yet. Private scripts, profiles and original art stay encrypted. Preserve all failed candidates. All human/art/runtime-paired-contact/RC2/release gatesFALSE.
+
+---
+
 # 2026-10-24 — owner rejects arm anatomy; FULL-ROSTER source foundation continuation
 
 NEW owner directive supersedes historical one-pair/stop-for-expansion instructions below. Full nine-fighter/two-body production is authorized. Existing footage is OWNER-REJECTED for inward-folded arms; previous skin/joint correspondence does not approve anatomy. Preserve it as a negative baseline.
