@@ -25,13 +25,14 @@ def owner_state():
     return {str(p.relative_to(directory)): digest(p) for p in directory.rglob("*") if p.is_file()} if directory.exists() else {}
 
 
-def run(godot, output):
+def run(godot, output, suite="preserved"):
     output = output.resolve()
     if output.exists():
         raise ValueError("Preserve previous results: use a new output directory")
     # These tiny source probes do not meet the definition of heavy production.
     # Allow 64MiB total disk growth; retain the protected18GiB after that forecast.
-    if shutil.disk_usage(ROOT).free < 18 * 2**30 + 64 * 2**20:
+    allocation = (256 if suite == "recovery-geometry" else 64) * 2**20
+    if shutil.disk_usage(ROOT).free < 18 * 2**30 + allocation:
         raise ValueError("Insufficient internal reserve for bounded source checks")
     output.mkdir(parents=True)
     project = output / "project"
@@ -48,6 +49,23 @@ def run(godot, output):
              ROOT / "game-godot/tests/v1_closure/StorySceneAuthority.gd",
              ROOT / "game-godot/tests/integration/PreservedContracts.gd"]
     paths += sorted((ROOT / "game-godot/scripts/net").glob("*.gd"))
+    tests = ["tests/save_rules_roundtrip.gd", "tests/replay_persist_roundtrip.gd",
+             "tests/v1_closure/StorySceneAuthority.gd", "tests/integration/PreservedContracts.gd"]
+    autoload = ('[autoload]\nGameState="*res://scripts/core/GameState.gd"\n'
+                'CampaignRuntime="*res://scripts/story/v1_campaign_runtime.gd"\n')
+    if suite == "recovery-geometry":
+        # Pure source/API unit tests: no art, cache, imported assets, autoloads,
+        # BattleScene or native rendering. Separate 256MiB allocation forecast;
+        # the full-scene19GiB start guard is not changed or invoked here.
+        paths = [ROOT / "game-godot" / rel for rel in (
+            "scripts/fighters/fighter_state_machine.gd", "scripts/fighters/fighter_states.gd",
+            "scripts/combat/combat_math.gd", "scripts/combat/combat_space_contract.gd",
+            "tests/integration/RecoveryGeometry.gd")]
+        for fid in ("ember-vale", "rook-ironside", "juno-spark", "kaia-windrow",
+                    "nix-calder", "orion-vell", "vesper-nyx", "yin", "yang"):
+            paths += [ROOT / "game-godot/data" / folder / (fid+".json") for folder in ("fighters", "moves")]
+        tests = ["tests/integration/RecoveryGeometry.gd"]
+        autoload = ""
     for source in paths:
         rel = source.relative_to(ROOT / "game-godot")
         dest = project / rel
@@ -59,16 +77,15 @@ def run(godot, output):
     (project / "project.godot").write_text(
         'config_version=5\n[application]\nconfig/name="' + name + '"\n'
         'config/use_custom_user_dir=true\nconfig/custom_user_dir_name="' + name + '"\n'
-        '[autoload]\nGameState="*res://scripts/core/GameState.gd"\n'
-        'CampaignRuntime="*res://scripts/story/v1_campaign_runtime.gd"\n'
+        + autoload +
         '[rendering]\nrenderer/rendering_method="gl_compatibility"\n')
     before = owner_state()
     rows = []
     head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     receipt = {"source_head": head, "source_files": copied, "godot": str(godot),
-               "user_directory_identity": name, "scope": __doc__, "rows": rows}
-    for test in ["tests/save_rules_roundtrip.gd", "tests/replay_persist_roundtrip.gd",
-                 "tests/v1_closure/StorySceneAuthority.gd", "tests/integration/PreservedContracts.gd"]:
+               "user_directory_identity": name, "scope": __doc__, "suite":suite,
+               "allocation_forecast_bytes":allocation, "rows": rows}
+    for test in tests:
         label = Path(test).stem
         log = output / (label + ".log")
         command = [str(godot), "--headless", "--audio-driver", "Dummy", "--path", str(project),
@@ -88,7 +105,7 @@ def run(godot, output):
                     rss = subprocess.run(["ps", "-o", "rss=", "-p", str(process.pid)], capture_output=True, text=True)
                     if rss.stdout.strip().isdigit():
                         peak = max(peak, int(rss.stdout.strip()) * 1024)
-                    if minimum < 18 * 2**30 or peak > 400 * 2**20 or time.monotonic() - start > 45:
+                    if minimum < 18 * 2**30 or peak > (256 if suite=="recovery-geometry" else 400) * 2**20 or time.monotonic() - start > 45:
                         stopped = "resource_or_time_guard"
                         break
                     time.sleep(.1)
@@ -113,12 +130,13 @@ def run(godot, output):
         print(label, "PASS" if row["pass"] else "FAIL", flush=True)
         if stopped or not receipt["owner_save_files_unchanged"]:
             break
-    return all(x["pass"] for x in rows) and len(rows) == 4 and before == owner_state()
+    return all(x["pass"] for x in rows) and len(rows) == len(tests) and before == owner_state()
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--godot", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--suite", choices=("preserved", "recovery-geometry"), default="preserved")
     args = parser.parse_args()
-    raise SystemExit(0 if run(args.godot, args.output) else 1)
+    raise SystemExit(0 if run(args.godot, args.output, args.suite) else 1)

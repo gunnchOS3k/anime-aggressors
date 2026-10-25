@@ -133,6 +133,11 @@ func _on_update(state: String, delta: float) -> void:
 					return
 			if _fighter.is_on_floor() and _fighter.velocity.y >= 0:
 				_fighter.begin_landing(true, absf(_fighter.velocity.y) > 400.0)
+			elif state_time > _fighter.hitstun_remaining:
+				# Launch is a presentation/reaction state, not permanent airborne
+				# input denial. The resolved hitstun owns its duration. Preserve the
+				# velocity and let ordinary air movement/CPU recovery resume.
+				_fighter.state_machine.enter(_FighterStates.FALL)
 		_FighterStates.GRAB_HOLD:
 			if _fighter.has_method("tick_grab_hold"):
 				_fighter.tick_grab_hold(delta)

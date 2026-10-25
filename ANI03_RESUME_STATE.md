@@ -1,3 +1,20 @@
+# 2026-10-25 — attack-earned attempt exposed recovery and vertical-grab defects
+
+Integrated branch unchanged; exact checkpoint is git rev-parse HEAD. Private-art storage remains untouched/stopped. No new qualification, original assets or native footage.
+
+Actual zero-damage-start, ordinary-input Kaia/Juno CPU3 run in outputs/attack_earned_baseline_20261025 produced a real throw/KO but is EXCLUDED: Juno remained launched10sampled frames after its0.234146s resolved stun expired. Fixed FighterStateMachine.LAUNCHED to return FALL after that existing deadline, preserving grounded landing/velocity/damage/timing values. Next actual run outputs/attack_earned_recovery_fixed_v1 showed Juno double-jump and up-special recovery, then another throw and KO. Its17checks passed, BUT later source/trace review excludes final acceptance: the second grab reached a recovering target far above its authored box. Preserve BOTH attempts as diagnostics, never final KO acceptance.
+
+Fixed grab acquisition vertical admission using resolved authored grab box vs live HurtShape; established70px horizontal range unchanged. Existing collider/move files unmodified. Shared CombatSpace geometry helper supports both facings. New lightweight RecoveryGeometry suite in existing source-check runner:128source/API unit checks PASS,1.0s/114.7MiB sampledRSS, declared actor/shape fixtures across9data profiles and2facings; NOT native or model/art acceptance. Source actor wrapper/full corrected grab match pending actual scene run.
+
+Full-scene v2 was refused prelaunch at19,920,629,760bytesfree (<19GiB). No guard reduced. After the small source test, OS-available space returned to19.53125GiB naturally; native no-movie19.597656GiB forecast still fails. A single fresh strict corrected headless match may run only on passing live preflight. Full-scene guard remains19start/18running+512MiBforecast; lightweight source-only forecast256MiB above18, no assets/cache/autoloads. No paidCI or cleanup.
+
+EXACT NEXT: python3 tools/integration/run_match_completion_checks.py --output outputs/attack_earned_height_fixed_v3 --reuse-imported outputs/native_public_counterplay_female_v3/game-godot --script tests/integration/AttackEarnedMatch.gd
+This stricter probe checks actual acquisition-height overlap, no expired launch lock, attack-to-blast contact provenance, no late mutation, final HUD/winner/result, career save and public rematch/menu. If the CPU escapes, retain it honestly; do not weaken recovery/AI or seed damage. Then focused throw/guard/roster regressions if resource forecasts allow. Old23/13checks not rerun without changed dependency.
+
+Human/paired-runtime/RC2/release gatesFALSE. Full original art, complete earned Story routes/OVA/LAN/device acceptance remains open. No merges/publication/tag/deploy/private reads.
+
+---
+
 # 2026-10-25 — match completion implemented; storage guard stopped further execution
 
 Runtime correction checkpoint `52dafe1f18f3ba39cb4f8e607961f2b40476c0cc`, branch `integration/v1-preserved-candidate-20261025`. Delivery checkpoint is `git rev-parse HEAD`; source stays LOCAL ONLY, no changes to protected PR123/133 or original worktrees. No private storage access, mount test, artifact hash read, migration or qualification this session.

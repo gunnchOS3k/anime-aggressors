@@ -1365,6 +1365,10 @@ func _try_grab_connect() -> void:
 		state_machine.enter(_FighterStates.GRAB_WHIFF)
 		_emit_grab_whiff("range")
 		return
+	if not _grab_overlaps_target_height(opp):
+		state_machine.enter(_FighterStates.GRAB_WHIFF)
+		_emit_grab_whiff("height")
+		return
 	# Acquiring a holder releases its previous victim first; a pair cannot cycle.
 	opp._release_grab_links("grabbed")
 	grabbed_target = opp
@@ -1384,6 +1388,16 @@ func _try_grab_connect() -> void:
 	opp.move_runner.cancel()
 	opp.hitbox.monitoring = false
 	grab_event.emit({"result": "success", "target": opp.fighter_id})
+
+
+func _grab_overlaps_target_height(target: Node) -> bool:
+	# Preserve the established horizontal grab range. Vertical reach comes from
+	# the resolved authored grab box and the live target hurt shape, not an
+	# unlimited column that can pull a recovering airborne fighter to the hand.
+	var boxes: Array = _current_move.get("hitboxes", [])
+	var hurt_shape := target.get_node_or_null("Hurtbox/HurtShape") as CollisionShape2D
+	if boxes.is_empty() or hurt_shape == null or hurt_shape.shape == null: return false
+	return _CombatSpace.grab_height_overlaps(global_transform, boxes, hurt_shape.global_transform, hurt_shape.shape.get_rect())
 
 func execute_throw() -> void:
 	if not is_instance_valid(grabbed_target) or grabbed_target.grabbed_by != self or _transform_match_closed:
