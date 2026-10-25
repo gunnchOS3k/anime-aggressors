@@ -14,6 +14,7 @@ var controls_enabled: bool = true
 var data: Dictionary = {"cpuBehaviorTags": ["rushdown"]}
 var velocity: Vector2 = Vector2.ZERO
 var _on_floor: bool = true
+var _pending_attack_cmd: String = ""
 var state_machine = {"current_state": "idle"}
 
 
@@ -37,8 +38,8 @@ func begin_cpu_telegraph(_cmd: String, _t: float) -> void:
 	pass
 
 
-func queue_attack_command(_cmd: String) -> void:
-	pass
+func queue_attack_command(cmd: String) -> void:
+	_pending_attack_cmd = cmd
 
 
 func _release_action(_action: String) -> void:

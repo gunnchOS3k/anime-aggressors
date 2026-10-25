@@ -57,6 +57,17 @@ func tick(delta: float, opponent: Node2D) -> void:
 		_act_recovery(obs, delta)
 		return
 	_act(obs, delta)
+	_face_pending_ground_attack(obs)
+
+
+func _face_pending_ground_attack(obs: Dictionary) -> void:
+	# Spacing can turn the fighter away while a queued poke waits for guard to
+	# release. Keep that EXISTING command's grounded direction input aimed at
+	# the public target position until Fighter consumes it. Fighter still owns
+	# turn locks, movement, action eligibility and airborne/back-air facing.
+	var pending = _fighter.get("_pending_attack_cmd")
+	if pending is String and not pending.is_empty() and obs.self_on_floor and not obs.facing_toward:
+		_sim_axis(signf(float(obs.dx)))
 
 
 ## Public observation model — only externally visible combat facts.
