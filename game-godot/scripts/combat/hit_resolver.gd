@@ -16,6 +16,9 @@ var _contact_sequence := 0
 func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_pct: float) -> Dictionary:
 	if attacker == null or defender == null:
 		return {}
+	# Reject queued overlaps before spending a target ledger or emitting feedback.
+	if ("combat_closed" in attacker and attacker.combat_closed) or ("combat_closed" in defender and defender.combat_closed):
+		return {}
 	if ("invincible" in defender and defender.invincible) or ("grabbed_by" in defender and defender.grabbed_by != null):
 		return {}
 	if bool(defender.get_meta("story_cosmic_contract", false)):

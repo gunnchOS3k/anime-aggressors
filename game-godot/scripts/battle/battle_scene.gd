@@ -18,6 +18,7 @@ var fighter1
 var fighter2
 var blast: Dictionary = {}
 var _active := false
+var _match_finished := false
 var _paused := false
 var _ko_lock := false
 var _debug_hud
@@ -421,6 +422,7 @@ func _update_hud() -> void:
 		p2_hud.text = "%s  %.1f%%  x%d  aura:%d%s" % [fighter2.data.get("displayName","P2"), float(fighter2.damage_percent), fighter2.stocks, int(fighter2.aura), " (CPU L%d)" % GameState.cpu_level if GameState.p2_is_cpu else ""]
 
 func _toggle_pause() -> void:
+	if _match_finished: return
 	_paused = not _paused
 	# Freeze the SceneTree so CharacterBody2D physics / CPU / hazards stop.
 	# Prior behavior only flipped controls_enabled + BattleSim.paused, so
@@ -592,6 +594,7 @@ func _clear_pause_for_nav() -> void:
 
 
 func _on_pause_rematch() -> void:
+	if _match_finished: return
 	_clear_pause_for_nav()
 	if GameState.mode == "story":
 		var replay_id := str(CampaignRuntime.active_encounter.get("node_id", "")) if CampaignRuntime.active_encounter.get("replay", false) else ""
@@ -604,6 +607,7 @@ func _on_pause_rematch() -> void:
 
 
 func _on_pause_return_menu() -> void:
+	if _match_finished: return
 	StoryDialogue.cancel()
 	_clear_pause_for_nav()
 	if GameState.mode == "story":
@@ -614,13 +618,22 @@ func _on_pause_return_menu() -> void:
 
 
 func _finish_match(winner: int) -> void:
+	# Results, receipts and delayed navigation have one owner. A second KO or
+	# queued objective callback cannot replace a result already committed here.
+	if _match_finished: return
+	_match_finished = true
 	if _hazard_runtime!=null:_hazard_runtime.clear_items()
 	_active = false
-	# The result-delay frames cannot complete or begin another transformation.
-	# Completed forms may retain their victory presentation until scene exit.
+	if _battle_sim != null: _battle_sim.set_paused(true)
+	_update_hud() # Include the final stock loss in the still-visible HUD.
+	if countdown_label != null:
+		countdown_label.text = "%s Wins!" % (fighter1.data.get("displayName", "P1") if winner == 1 else fighter2.data.get("displayName", "P2"))
+		countdown_label.visible = true
+	# Close ALL actors, including Story extras. Preserve completed form artwork,
+	# but retire combat authority before the result-delay frame can run.
 	for actor in fighters_root.get_children():
-		if actor.has_method("close_transformation_for_match_end"):
-			actor.close_transformation_for_match_end()
+		if actor.has_method("close_combat_for_match_end"):
+			actor.close_combat_for_match_end(actor.slot == winner)
 	GameState.last_winner_slot = winner
 	MatchTelemetry.record_match_end(winner)
 	if GameState.mode == "story" and not _story_attempt_token.is_empty():
@@ -642,7 +655,7 @@ func _finish_match(winner: int) -> void:
 		fighter2.controls_enabled = false
 		if _story_cosmic_actor != null:
 			_story_cosmic_actor.controls_enabled = false
-		get_tree().create_timer(0.5).timeout.connect(func(): SceneRouter.go("results"), CONNECT_ONE_SHOT)
+		_queue_results()
 		return
 	if _eval_mode:
 		_complete_eval(winner, "stocks_or_time")
@@ -653,7 +666,18 @@ func _finish_match(winner: int) -> void:
 			var p1_stocks: int = int(fighter1.stocks) if fighter1 else 0
 			var p2_dmg: float = float(fighter2.damage_percent) if fighter2 else 0.0
 			GameState.resolve_challenge(winner, p1_stocks, p2_dmg)
-	get_tree().create_timer(0.5).timeout.connect(func(): SceneRouter.go("results"), CONNECT_ONE_SHOT)
+	_queue_results()
+
+
+func _queue_results() -> void:
+	# A bound callable expires with this BattleScene. Navigating elsewhere during
+	# teardown cannot let an old anonymous timer redirect a later scene.
+	get_tree().create_timer(0.5).timeout.connect(_show_results, CONNECT_ONE_SHOT)
+
+
+func _show_results() -> void:
+	if _match_finished and get_tree().current_scene == self:
+		SceneRouter.go("results")
 
 
 func _complete_eval(winner: int, reason: String) -> void:

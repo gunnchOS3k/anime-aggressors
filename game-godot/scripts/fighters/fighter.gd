@@ -70,6 +70,7 @@ var air_jumps_left: int = 1
 var invincible: bool = false
 var shielding: bool = false
 var controls_enabled: bool = true
+var combat_closed: bool = false # Terminal match boundary, separate from pause/countdown.
 var _input_edge_held: Dictionary = {}
 var spawn_point: Vector2 = Vector2.ZERO
 var combo_count: int = 0
@@ -327,7 +328,27 @@ func close_transformation_for_match_end() -> void:
 	_transform_match_closed = true
 	if _transform_pipeline != null: _transform_pipeline.cancel("match_end")
 
+
+func close_combat_for_match_end(won: bool = false) -> void:
+	if combat_closed: return
+	combat_closed = true
+	controls_enabled = false
+	_pending_attack_cmd = ""
+	if cpu != null and (is_cpu or dummy_mode == "cpu"): cpu.clear_simulated_inputs()
+	close_transformation_for_match_end()
+	if move_runner != null: move_runner.cancel()
+	if hitbox != null: hitbox.set_deferred("monitoring", false)
+	if projectile_spawner != null: projectile_spawner.clear_all()
+	_set_aura_vfx(false)
+	_hitstop = 0.0
+	if model_3d != null and model_3d.get_animation_controller() != null:
+		model_3d.get_animation_controller().presentation_frozen = false
+	_current_move.clear()
+	if state_machine != null and state_machine.current_state != _FighterStates.KO:
+		state_machine.enter(_FighterStates.VICTORY if won else _FighterStates.DEFEAT)
+
 func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, spawn: Vector2) -> void:
+	combat_closed = false
 	if is_instance_valid(_form_audio_8c):_form_audio_8c.clear()
 	shield_break_8c.reset("character_change")
 	if _guard_presentation != null:_guard_presentation.clear("character_change")
@@ -592,6 +613,7 @@ func get_fall_speed() -> float:
 	return float(data.get("fallSpeed", 1800))
 
 func tick_combat_frame() -> void:
+	if combat_closed: return
 	perfect_guard.tick()
 	party_overdrive.tick()
 	if model_3d != null and model_3d.get_animation_controller() != null:
@@ -612,6 +634,7 @@ func tick_combat_frame() -> void:
 		_poll_hitbox_overlaps()
 
 func _physics_process(delta: float) -> void:
+	if combat_closed: return
 	shield_break_8c.observe_guard(_read_shield())
 	if _guard_presentation != null:_guard_presentation.tick(delta)
 	_wave017_vis_accum += delta
@@ -929,6 +952,7 @@ func is_aura_input_held() -> bool:
 	return Input.is_action_pressed("p%d_special" % slot) and Input.is_action_pressed("p%d_shield" % slot)
 
 func queue_attack_command(cmd: String) -> void:
+	if combat_closed: return
 	var rec = get_node_or_null("/root/RuntimeFlightRecorder")
 	if rec and rec.has_method("record_action"):
 		rec.record_action(fighter_id, cmd, "Fighter.queue_attack_command", {})
@@ -1254,6 +1278,7 @@ func stage_center_x() -> float:
 	return platform_center_x
 
 func _on_move_active(move: Dictionary) -> void:
+	if combat_closed: return
 	if party_overdrive.on_active(move):return
 	var mid = str(move.get("move_id", ""))
 	var mt = str(move.get("move_type", "melee"))
@@ -1540,6 +1565,8 @@ func _cancel_grab_runner() -> void:
 
 
 func _exit_tree() -> void:
+	combat_closed = true
+	if cpu != null and (is_cpu or dummy_mode == "cpu"): cpu.clear_simulated_inputs()
 	if _guard_presentation!=null:_guard_presentation.clear("actor_exit")
 	if is_instance_valid(_form_audio_8c):_form_audio_8c.clear()
 	_release_grab_links("scene_exit")
@@ -1614,7 +1641,7 @@ func _try_identity_cancel() -> bool:
 
 
 func receive_hit(attacker: Node, info: Dictionary) -> void:
-	if invincible or grabbed_by != null:
+	if combat_closed or invincible or grabbed_by != null:
 		return
 	if str(info.get("move_id", "")) == "grab":
 		return
@@ -1734,6 +1761,7 @@ func reset_fighter() -> void:
 	state_machine.enter(_FighterStates.RESPAWN)
 	ensure_visible_presentation()
 	get_tree().create_timer(1.2).timeout.connect(func():
+		if combat_closed: return
 		invincible = false
 		state_machine.enter(_FighterStates.IDLE)
 		ensure_visible_presentation()
@@ -1741,6 +1769,7 @@ func reset_fighter() -> void:
 	, CONNECT_ONE_SHOT)
 
 func lose_stock() -> void:
+	if combat_closed: return
 	_release_grab_links("stock_loss")
 	if _grab_presentation!=null:_grab_presentation.clear("stock_loss")
 	party_overdrive.reset("stock_loss")

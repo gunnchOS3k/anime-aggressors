@@ -1,3 +1,17 @@
+# 2026-10-25 — internal match completion correction; ordinary-input check next
+
+Branch `integration/v1-preserved-candidate-20261025`; exact checkpoint is `git rev-parse HEAD`. Previous HEAD0dd59b36. No original worktree, private volume, source art, owner save or remote branch modified. Private storage remains STOPPED under the owner’s accepted read-load USB-stall findings; NO new qualification or asset reads this increment.
+
+Reproduced actual BattleScene boundary failures in `outputs/match_finality_baseline_20261025`: controls/simulation/moves/projectiles stayed live, late contact damaged a fighter, duplicate finish replaced winner and doubled career/telemetry. Also reproduced a results portrait form-owner script error (preview parent is Node2D). Preserved failed baseline, including its harness route-wait limitation; never an earned KO claim.
+
+Implemented idempotent match finality, terminal actor closure/late resolver rejection, bound results timer, final-stock HUD update and immediate winner banner, existing victory/defeat state selection, and portrait live-owner admission. No damage, move timing, collision, balance, Story unlock or private art changed. `outputs/match_finality_fixed_v2`:23 engine lifecycle checks PASS,4.23s,336.3MiB sampled peak RSS, owner saves unchanged. Technical injected result/UI-signal fixture, NOT ordinary/native/earned KO acceptance. Known shutdown3ObjectDB/1resource warning remains explicit and unresolved.
+
+Next: add a bounded ordinary public-input one-stock versus lifecycle observation (active CPU, public assets) that walks offstage only after combat and records actual stock/result/rematch/menu. Label any self-destruct truthfully. Run headless if native allocation forecast fails; no movie, private assets or forced outcomes. Preserve old native clips. Fresh native requires >=19GiB and18GiB after1536MiB import/GPU/swap+100MiB derivation. Current df19.57GiB may be below that19.5977GiB forecast: do not lower it. Continue affected focused terminal/throw/PerfectGuard/form tests serially. No paidCI or new remote publication.
+
+All human art/feel/balance, RUNTIME_PAIRED_CONTACT_VERIFIED, RC2_READY and V1_0_0_RELEASE_AUTHORIZED remain FALSE. Full roster-specific acting, Story earned routes, OVA, LAN and device acceptance remain unfinished.
+
+---
+
 # 2026-10-25 — NEW19ff:0764 reader: idle PASS, fresh read-phase stalls; private access STOPPED
 
 Continue LOCAL integration/v1-preserved-candidate-20261025, sourceb84b9d79 plus current corrected authored-range mapping; final exactHEAD is gitrev-parseHEAD. Original draft123328160df and13358689ce4 unchanged. No Git reconciliation repeated. Original43worktrees, owner saves and all private sources/exports/media retained. All uncommitted source is checkpointed with this delivery; generated outputs stay untracked/local.

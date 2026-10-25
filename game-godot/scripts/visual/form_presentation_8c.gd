@@ -19,6 +19,9 @@ func setup(owner_actor, _model_root: Node3D, rig: Skeleton3D) -> void:
 	reset("setup")
 	actor = owner_actor;skeleton = rig;model = _model_root;document.clear();_failures.clear();_status = "missing"
 	if not is_instance_valid(actor) or not is_instance_valid(skeleton):return
+	# Results/selection portraits use a Node2D bake host, not a combat actor.
+	# Their model still renders, but live form ownership must not be read from it.
+	if not "data" in actor or not "fighter_id" in actor or not "model_3d" in actor:return
 	var body := str(actor.data.get("body_variant","male"))
 	if actor.model_3d != null:body = str(actor.model_3d._body_variant)
 	var path := "res://data/animation/form_acting_8c/%s_%s.json" % [actor.fighter_id,body]
