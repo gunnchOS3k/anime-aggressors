@@ -1,0 +1,137 @@
+{
+  "schema": "private_art_mount_lifecycle_20261024.v1",
+  "source_head_at_investigation": "5b3f88a160276c95d25271f8fa202f9da70b9b19",
+  "time_zone": "America/Chicago (UTC-05:00 at event)",
+  "production_started_this_attempt": false,
+  "art_regenerated_this_attempt": false,
+  "mount_stability_passed": false,
+  "observed_trigger": "USB storage transport interruption: kernel reports SD card reader hardware connection lost, then archive media absent, then disk-image forced unmount and unrecoverable I/O.",
+  "component_root_cause": "UNDETERMINED: logs do not isolate port, reader, cable, power, controller/OS or another software trigger.",
+  "timeline": [
+    {
+      "timestamp": "2026-10-24 22:26:25.289826-0500",
+      "process": "kernel",
+      "PID": 0,
+      "message": "usb-drd0-port-ss@00200000: AppleUSBHostPort::terminateDevice: destroying 0x05ac/8409/3204 (USB-C SD Card Reader): hardware connection lost"
+    },
+    {
+      "timestamp": "2026-10-24 22:26:25.294462-0500",
+      "process": "kernel",
+      "PID": 0,
+      "message": "disk5: media is not present."
+    },
+    {
+      "timestamp": "2026-10-24 22:26:25.297037-0500",
+      "process": "kernel",
+      "PID": 0,
+      "message": "apfs_stop_bg_work_ext:955: disk5s1 Volume gunnchOS-Archives is unmounting, stop any bg work"
+    },
+    {
+      "timestamp": "2026-10-24 22:26:25.300929-0500",
+      "process": "kernel",
+      "PID": 0,
+      "message": "apfs_vfsop_unmount:3578: disk5s1 failed to finish all transactions before unmount! (err 6)"
+    },
+    {
+      "timestamp": "2026-10-24 22:26:25.326948-0500",
+      "process": "diskimagesiod",
+      "PID": 22485,
+      "message": "-[DIIODaemonDelegate unmountAll]: Forcing unmount of <private> (disk7s1)"
+    },
+    {
+      "timestamp": "2026-10-24 22:26:25.338088-0500",
+      "process": "diskimagesiod",
+      "PID": 22485,
+      "message": "void process_terminator::terminate: <136> Terminating due to unrecoverable I/O error"
+    },
+    {
+      "timestamp": "2026-10-24 22:26:25.338144-0500",
+      "process": "kernel",
+      "PID": 0,
+      "message": "apfs_vfsop_unmount:3578: disk7s1 failed to finish all transactions before unmount! (err 6)"
+    }
+  ],
+  "hardware_connection_loss_times": [
+    "2026-10-24 22:14:52.648723-0500",
+    "2026-10-24 22:14:55.070898-0500",
+    "2026-10-24 22:15:07.449665-0500",
+    "2026-10-24 22:17:17.991266-0500",
+    "2026-10-24 22:18:40.278560-0500",
+    "2026-10-24 22:26:25.289826-0500",
+    "2026-10-24 22:26:28.109134-0500",
+    "2026-10-24 22:26:33.043710-0500"
+  ],
+  "archive_remount_times": [
+    "2026-10-24 22:14:59.224634-0500",
+    "2026-10-24 22:15:11.417007-0500",
+    "2026-10-24 22:17:21.953536-0500",
+    "2026-10-24 22:18:44.247144-0500",
+    "2026-10-24 22:22:48.685392-0500",
+    "2026-10-24 22:26:32.146833-0500",
+    "2026-10-24 22:26:37.067480-0500"
+  ],
+  "important_distinction": "The outer archive also disappears briefly and automatically returns. A later mounted snapshot does not establish continuous availability. The encrypted image does not automatically return.",
+  "production_cleanup_audit": {
+    "source_files": [
+      {
+        "path": "tools/authored_animation/private_production_8d4.py",
+        "sha256": "1995f5d70552396852ae1a5bf1702091b65b41dbef9bceb406bd5eadfc61440b"
+      },
+      {
+        "path": "tools/authored_animation/run_metric_stage_8d4_local.py",
+        "sha256": "5098758bdb319e60482f3c20e092b6518933e777f4d5883a7f7ea35d92827118"
+      },
+      {
+        "path": "tools/authored_animation/recover_metric_stage_8d4.py",
+        "sha256": "8a80fa0c179dfdbdeef0693c9c42ee26458c436f5dec225967d2ab1b83efe9e5"
+      }
+    ],
+    "disk_commands_found": [
+      "hdiutil info -plist",
+      "hdiutil isencrypted <existing backing image>",
+      "diskutil info -plist",
+      "mount (listing only)"
+    ],
+    "mount_unmount_detach_eject_commands_found": false,
+    "private_wrapper_review": "Before loss, inspected private scratch production/review wrappers: owned subprocess group INT/TERM cleanup, no disk detach/eject command found. Private scripts cannot be rehashed now.",
+    "scope_limit": "This is a scoped source audit, not proof about every process on the Mac. No heavy production child was active during this reproduced failure.",
+    "owner_managed_volume_mutated_by_this_attempt": false
+  },
+  "preservation": {
+    "completed_source_summary": "18 editable jab/heavy Blender sources and 36 animated GLBs, plus prior 18 arm-reference exports retained; no regeneration.",
+    "native_summary": "18 both-facing strike AVI/MP4s, nine phase sheets and private HTML/handoff had completed before this attempt. Existing historical validation retained.",
+    "receipt_read_before_loss": "output/roster_original_strikes_native_v1/FINAL_EXECUTION_RECEIPT.json accessible before new loss (9352 bytes; mtime 2026-10-25T03:13:42Z).",
+    "fresh_all_asset_hash_verification": "PENDING: encrypted image disappeared before complete readback. Do not assume integrity after interrupted APFS transactions.",
+    "private_owner_review": "/Volumes/gunnchos-private-art/output/roster_original_strikes_native_v1/OWNER_REVIEW.html",
+    "receipt": "/Volumes/gunnchos-private-art/output/roster_original_strikes_native_v1/FINAL_EXECUTION_RECEIPT.json",
+    "handoff": "/Volumes/gunnchos-private-art/output/roster_original_strikes_native_v1/CURSOR_ART_ASSET_HANDOFF_v3.json",
+    "handoff_prior_sha256": "115fde2449ce1022abbf7ecb6aba98e75105cd2baacbaa5d869d5fe0af16a6de"
+  },
+  "guard_results": {
+    "actual_live_mount_guard": "REFUSED as required; mounted=false, production_executed=false; no replacement directory created.",
+    "focused_existing_test": "test_external_production_8d4.ExternalProductionGuard.test_symlink_escape_and_unmounted_volume_rejected: PASS (1 test).",
+    "full_production_preflight": "NOT PASSED; no Blender/Godot/encoding stage launched.",
+    "fresh_native_visual_or_hash_validation": "BLOCKED"
+  },
+  "resources_GiB": {
+    "internal_at_remount": 22.808,
+    "private_at_remount": 58.958,
+    "archive_at_remount": 336.079,
+    "internal_later": 22.80636215209961,
+    "archive_later": 336.04283905029297
+  },
+  "memory_later": {
+    "physical_GiB": 8,
+    "memory_pressure_free_percent": 34,
+    "swap_total_MiB": 9216.0,
+    "swap_used_MiB": 7676.19
+  },
+  "local_log_receipt": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/outputs/anime-aggressors/mount-lifecycle-recovery-20261024/LOCAL_LOG_RECEIPT.json",
+  "raw_logs_committed_or_uploaded": false,
+  "next_action": "Stabilize the existing SD-reader/USB connection first. Do not repeatedly remount/retry production. After stability, remount the same encrypted image once, perform a bounded read-only mount continuity check and verify existing receipts/assets/media hashes before any new writes. Do not regenerate completed assets.",
+  "next_art_after_safety_gate": "Copy already-executed generic strike viewer into tracked source, retain existing media/handoff, then correct Juno heavy leading-hand closure on its own original weighted controls and continue roster acting. No BattleScene authority changes.",
+  "HUMAN_ART_APPROVED": false,
+  "RUNTIME_PAIRED_CONTACT_VERIFIED": false,
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false
+}
