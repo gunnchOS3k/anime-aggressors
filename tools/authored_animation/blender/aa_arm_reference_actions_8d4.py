@@ -20,6 +20,11 @@ def apply_reference_arm_pose(arm, sample, *, wrist_targets=None):
     surface author. It never changes bone lengths/actor placement. Palm
     orientation is neutral here; the mesh-grip stage owns explicit contact.
     """
+    # sample_action writes pose channels without advancing the dependency
+    # graph. Read the CURRENT authored chest, not a cached previous action.
+    # Otherwise the target and shoulder reference belong to different poses
+    # and assigning the solved matrix introduces forbidden bone translation.
+    bpy.context.view_layer.update()
     body = rest_frame(arm)
     reports = []
     for side in ('L', 'R'):
