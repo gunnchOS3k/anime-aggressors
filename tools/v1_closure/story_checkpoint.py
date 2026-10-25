@@ -71,3 +71,46 @@ def restore_story_checkpoint(saved: dict, node_ids: list[str]) -> dict:
         combat.get("stocks"),
         combat.get("damage_percent"),
     )
+
+
+def story_checkpoint_token(cursor: str, stocks: int, damage_percent: float) -> str:
+    return "%s|%d|%.3f" % (cursor, stocks, damage_percent)
+
+
+def story_fields_from_checkpoint(checkpoint: dict) -> dict | None:
+    combat = checkpoint.get("combat") if isinstance(checkpoint.get("combat"), dict) else {}
+    stocks = combat.get("stocks", checkpoint.get("stocks"))
+    damage = combat.get("damage_percent", checkpoint.get("damage_percent"))
+    parsed = combat_result(stocks, damage)
+    if parsed is None:
+        return None
+    return {
+        "cursor": str(checkpoint.get("cursor", "")),
+        "stocks": parsed["stocks"],
+        "damage_percent": parsed["damage_percent"],
+    }
+
+
+def attach_replay_story(record: dict, checkpoint: dict) -> dict:
+    stored = dict(record)
+    fields = story_fields_from_checkpoint(checkpoint)
+    if fields is None:
+        return stored
+    stored["story_checkpoint"] = fields
+    stored["story_integrity"] = story_checkpoint_token(fields["cursor"], fields["stocks"], fields["damage_percent"])
+    return stored
+
+
+def read_replay_story(record: dict) -> dict:
+    if "story_checkpoint" not in record and "story_integrity" not in record:
+        return {"ok": True, "present": False}
+    fields = record.get("story_checkpoint")
+    if not isinstance(fields, dict):
+        return {"ok": False, "present": True, "error": "story_integrity_fail"}
+    parsed = story_fields_from_checkpoint(fields)
+    if parsed is None:
+        return {"ok": False, "present": True, "error": "story_integrity_fail"}
+    token = story_checkpoint_token(parsed["cursor"], parsed["stocks"], parsed["damage_percent"])
+    if record.get("story_integrity") != token:
+        return {"ok": False, "present": True, "error": "story_integrity_fail"}
+    return {"ok": True, "present": True, **parsed}

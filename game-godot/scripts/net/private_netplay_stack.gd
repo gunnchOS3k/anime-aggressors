@@ -290,13 +290,18 @@ func simulate_match_frames(frame_count: int = 120, step_ms: float = 16.67) -> Di
 			for k in keys:
 				parts.append("%d.%s=%s" % [i, str(k), str(b[k])])
 		fr["checksum"] = str(hash("|".join(parts)))
+	var story_checkpoint: Dictionary = {}
+	if CampaignRuntime != null and CampaignRuntime.progress is Dictionary:
+		var saved_checkpoint: Variant = CampaignRuntime.progress.get("checkpoint", {})
+		if saved_checkpoint is Dictionary:
+			story_checkpoint = saved_checkpoint
 	var replay: Dictionary = _ReplayStore.create_record({
 		"seed": match_seed,
 		"roster": roster,
 		"stage": stage_id,
 		"room": room_code,
 		"scope": SCOPE,
-	}, host_peer.replay_frames)
+	}, host_peer.replay_frames, story_checkpoint)
 	var replay_ok: Dictionary = _ReplayStore.verify_record(replay)
 	var chain_ok: Dictionary = _ReplayStore.replay_checksum_chain(replay)
 	var replay_path := _ReplayStore.DEFAULT_PATH

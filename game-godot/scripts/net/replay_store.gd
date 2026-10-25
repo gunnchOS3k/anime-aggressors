@@ -9,7 +9,33 @@ const REPLAY_VERSION := 1
 const DEFAULT_PATH := "user://aa_private_match_replay.json"
 
 
-static func create_record(match_meta: Dictionary, frames: Array) -> Dictionary:
+static func story_checkpoint_token(cursor: String, stocks: int, damage_percent: float) -> String:
+	return "%s|%d|%.3f" % [cursor, stocks, damage_percent]
+
+
+static func story_fields_from_checkpoint(checkpoint: Dictionary) -> Dictionary:
+	## Stores the restored cursor with that fight's stocks and damage. It does not advance the route.
+	var combat: Variant = checkpoint.get("combat", {})
+	if not combat is Dictionary:
+		combat = {}
+	var stocks_v: Variant = combat.get("stocks", checkpoint.get("stocks", null))
+	var damage_v: Variant = combat.get("damage_percent", checkpoint.get("damage_percent", null))
+	if stocks_v is bool or damage_v is bool:
+		return {}
+	if not (stocks_v is int or stocks_v is float) or not (damage_v is int or damage_v is float):
+		return {}
+	if stocks_v is float and not is_equal_approx(float(stocks_v), floorf(float(stocks_v))):
+		return {}
+	if float(stocks_v) < 0.0 or float(damage_v) < 0.0:
+		return {}
+	return {
+		"cursor": str(checkpoint.get("cursor", "")),
+		"stocks": int(stocks_v),
+		"damage_percent": float(damage_v),
+	}
+
+
+static func create_record(match_meta: Dictionary, frames: Array, story_checkpoint: Dictionary = {}) -> Dictionary:
 	## frames: [{frame, p0:Dict, p1:Dict, checksum:String}]
 	var rec := {
 		"replay_version": REPLAY_VERSION,
@@ -24,6 +50,10 @@ static func create_record(match_meta: Dictionary, frames: Array) -> Dictionary:
 		"seed": match_meta.get("seed", 0),
 		"roster": str(match_meta.get("roster", [])),
 	})
+	var fields := story_fields_from_checkpoint(story_checkpoint)
+	if not fields.is_empty():
+		rec["story_checkpoint"] = fields
+		rec["story_integrity"] = story_checkpoint_token(str(fields["cursor"]), int(fields["stocks"]), float(fields["damage_percent"]))
 	return rec
 
 
@@ -44,6 +74,15 @@ static func verify_record(rec: Dictionary) -> Dictionary:
 	})
 	if str(rec.get("integrity", "")) != expected:
 		errors.append("integrity_fail")
+	if rec.has("story_checkpoint") or rec.has("story_integrity"):
+		var story_v: Variant = rec.get("story_checkpoint", {})
+		if typeof(story_v) != TYPE_DICTIONARY:
+			errors.append("story_integrity_fail")
+		else:
+			var story: Dictionary = story_v
+			var story_token := story_checkpoint_token(str(story.get("cursor", "")), int(story.get("stocks", -1)), float(story.get("damage_percent", -1.0)))
+			if story_token != str(rec.get("story_integrity", "")):
+				errors.append("story_integrity_fail")
 	# Monotonic frames
 	var prev := -1
 	for f in frames:
@@ -145,6 +184,13 @@ static func _restore_record_types(rec: Dictionary) -> Dictionary:
 				continue
 			item["frame"] = int(item.get("frame", -1))
 		out["frames"] = frames
+	var story_saved: Variant = out.get("story_checkpoint", {})
+	if typeof(story_saved) == TYPE_DICTIONARY and not (story_saved as Dictionary).is_empty():
+		var story: Dictionary = story_saved
+		story["stocks"] = int(story.get("stocks", -1))
+		story["damage_percent"] = float(story.get("damage_percent", -1.0))
+		story["cursor"] = str(story.get("cursor", ""))
+		out["story_checkpoint"] = story
 	return out
 
 

@@ -19,7 +19,12 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from story_checkpoint import restore_story_checkpoint, story_checkpoint  # noqa: E402
+from story_checkpoint import (  # noqa: E402
+    attach_replay_story,
+    read_replay_story,
+    restore_story_checkpoint,
+    story_checkpoint,
+)
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -243,6 +248,23 @@ def main() -> int:
         failures,
     )
     check("combat" not in story_checkpoint("kaia-windrow", node_ids, [node_ids[1]], stocks=2, damage_percent=10.0), "skipped_node_drops_combat", failures)
+    replay = attach_replay_story({"replay_version": 1, "frames": [{"frame": 1}]}, fought_restored)
+    replay_restored = read_replay_story(json.loads(json.dumps(replay)))
+    check(
+        replay_restored.get("ok") is True
+        and replay_restored.get("cursor") == node_ids[2]
+        and replay_restored.get("stocks") == 1
+        and replay_restored.get("damage_percent") == 42.5,
+        "replay_stores_restored_cursor_stocks_damage",
+        failures,
+    )
+    tampered = json.loads(json.dumps(replay))
+    tampered["story_checkpoint"]["cursor"] = node_ids[0]
+    check(read_replay_story(tampered).get("ok") is False, "replay_rejects_edited_cursor", failures)
+    check(read_replay_story({"replay_version": 1}).get("present") is False, "replay_without_story_stays_valid", failures)
+    check('return "%s|%d|%.3f"' in runtime or 'return "%s|%d|%.3f" %' in (ROOT / "game-godot/scripts/net/replay_store.gd").read_text(), "replay_token_matches_checkpoint", failures)
+    check("host_peer.replay_frames, story_checkpoint" in (ROOT / "game-godot/scripts/net/private_netplay_stack.gd").read_text(), "private_replay_passes_story_checkpoint", failures)
+    print("STORY_REPLAY cursor_stocks_damage SOURCE_ONLY PLAY=not_run")
     print("STORY_CHECKPOINT cursor_with_combat SOURCE_ONLY PLAY=not_run")
     print("STORY_CHECKPOINT two_nodes route=kaia-windrow PLAY=not_run")
     print("WEB_MATCH_RESULT not_wired")
