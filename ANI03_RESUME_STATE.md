@@ -1,3 +1,9 @@
+# 2026-10-24 — actual paired frame90 isolates nonunit wrist orientation
+
+All18new original body sources/GLBs complete at badd0f49. Paired retest v8 on30cc1f91 still correctly rejected Hand_R at source90: location within0.15µm, scale up to1.00069225. Exact failed-frame editable Blender/JSON preserved in private arm_contact_v8. Explicit quaternion interpolation was being used as orientation without normalization, allowing its norm error into the pose matrix. Candidate source correction normalizes finite nonzero wrist orientations before matrix construction; zero/nonfinite orientations reject. Strict no-translation/no-stretch and contact checks unchanged. Private palm-witness orientation also requires normalization before geometry. Verify with fresh contact_v9 after clean-source preflight, then native18-body review. The existing18neutral-wrist source exports did not use this explicit-orientation branch and are not regenerated. Human, paired shipping contact, RC2 and release gatesFALSE.
+
+---
+
 # 2026-10-24 —18ACTUAL original rig/body sources and animated GLBs produced
 
 Source badd0f49 (normally pushed on draftPR123) fixes stale dependency-graph reads before chest/rest arm transport. Failed real source baseline preserved. All18original-rig source/save/reopen/export checks now PASS on that correction; exact per-body source/export SHA, bone counts, clocks and preserved original actions are in EXECUTED_ART_CONTINUATION_20261024.json. PRIVATE outputs: /Volumes/gunnchos-private-art/output/roster_original_arm_sources_v2/metric-stage-8d4/<fighter>/<body>/PRODUCTION_MANIFEST.json.18new arm-reference category clips use each fighter's OWN original body action and private character direction, not24completed move clips. Original geometry/materials/weights/rest/actions exact. Ember male export recovered from its saved source without rebaking; failed export log/partial source preserved. Existing gameplay/Story/Cursor dirty files unchanged.

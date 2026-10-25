@@ -5,6 +5,7 @@ POSES only. Original rest bones, source anatomy, roots and skinning survive.
 Source export/native visual review are still required before shipping use.
 """
 import sys
+import math
 from pathlib import Path
 
 import bpy
@@ -30,6 +31,12 @@ def solve_original_arm(arm, side, wrist, hand_q=None, *, pole=None,
     """
     if side not in ('L', 'R'):
         raise ValueError('Explicit original arm side required')
+    if hand_q is not None:
+        if not math.isfinite(hand_q.magnitude) or hand_q.magnitude < 1e-8:
+            raise ValueError('Explicit wrist orientation must be a finite nonzero quaternion')
+        # A quaternion describes orientation only. Interpolation roundoff must
+        # never become anatomical scale when constructing the pose matrix.
+        hand_q = hand_q.normalized()
     # Callers may have authored channels directly rather than frame_set().
     # Resolve those channels before transporting rest space through the torso.
     bpy.context.view_layer.update()
