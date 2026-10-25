@@ -9,9 +9,12 @@ const PROJECTILE_SCENE := preload("res://scenes/combat/Projectile2D.tscn")
 
 var owner_fighter: Node = null
 var active_projectiles: Array = []
+var _spawn_sequence := 0
+var _interaction_data: Dictionary = {}
 
 func setup(fighter: Node) -> void:
 	owner_fighter = fighter
+	_interaction_data = JSON.parse_string(FileAccess.get_file_as_string("res://data/combat/projectile_interactions.json"))
 
 func spawn_from_move(move: Dictionary, aura_amount: float) -> Node:
 	var proj_cfg: Dictionary = move.get("projectile", {})
@@ -32,6 +35,12 @@ func spawn_from_move(move: Dictionary, aura_amount: float) -> Node:
 	var spawn_frame: int = int(proj_cfg.get("spawn_frame", 0))
 	if owner_fighter == null:
 		return null
+	var limit := int(proj_cfg.get("max_active_per_move", 0))
+	if limit > 0:
+		var same: Array = active_projectiles.filter(func(p): return is_instance_valid(p) and p.active and p.move_id == str(move.get("move_id", "")))
+		while same.size() >= limit:
+			same.pop_front().cancel_immediate()
+		owner_fighter.stamp_runtime_hook("construct_limit")
 	var proj = PROJECTILE_SCENE.instantiate()
 	var battle_root := owner_fighter.get_parent()
 	if battle_root:
@@ -53,22 +62,39 @@ func spawn_from_move(move: Dictionary, aura_amount: float) -> Node:
 				tier = "projectile_medium"
 			_:
 				tier = "projectile_full"
+	var projectile_move := move.duplicate(true)
+	projectile_move["_attack_activation_id"] = owner_fighter.move_runner.activation_id
+	_spawn_sequence += 1
+	var fighter_id: String = owner_fighter.fighter_id if "fighter_id" in owner_fighter else ""
+	var interaction: Dictionary = _interaction_data.get("fighters", {}).get(fighter_id, {}).get(str(move.get("move_id", "")), {})
+	if bool(move.get("_party_move",false)) and interaction.is_empty():
+		interaction={"eligible_behaviors":["straight"],"integrity_by_aura":[1],"residual_damage_exponent":1.0}
+	var integrity_values: Array = interaction.get("integrity_by_aura", [1])
+	var team := "story:" + str(owner_fighter.get_meta("story_team")) if owner_fighter.has_meta("story_team") else "slot:" + str(owner_fighter.slot)
 	var cfg := {
 		"fighter_id": owner_fighter.fighter_id if "fighter_id" in owner_fighter else "",
 		"move_id": move.get("move_id", ""),
 		"aura_level": level,
 		"projectile_tier": tier,
 		"team_slot": owner_fighter.slot if "slot" in owner_fighter else 1,
+		"team_key": team,
+		"order_id": owner_fighter.slot * 1000000 + _spawn_sequence,
+		"clash_eligible": behavior in interaction.get("eligible_behaviors", []),
+		"integrity": int(integrity_values[mini(level, integrity_values.size() - 1)]),
+		"residual_damage_exponent": float(interaction.get("residual_damage_exponent", 1.0)),
 		"lifetime_frames": life,
 		"speed": speed,
 		"behavior": behavior,
+		# Motion classification (including beam) grants no fighter piercing.
+		"pierces_fighters": bool(proj_cfg.get("pierce", false)),
 		"damage": dmg,
-		"move_data": move,
+		"move_data": projectile_move,
 		"angle_deg": float(proj_cfg.get("angle_deg", 0)),
 		"size": Vector2(sz, sz),
 		"color": _element_color(element),
 	}
 	proj.configure(cfg, owner_fighter)
+	if str(proj_cfg.get("type", "")) == "definition_panel": owner_fighter.stamp_runtime_hook("definition_construct")
 	active_projectiles.append(proj)
 	proj.projectile_expired.connect(func(): active_projectiles.erase(proj))
 	return proj
@@ -79,9 +105,9 @@ func tick_all() -> void:
 			p.tick_sim_frame()
 
 func clear_all() -> void:
-	for p in active_projectiles:
+	for p in active_projectiles.duplicate():
 		if is_instance_valid(p):
-			p.queue_free()
+			p.cancel_immediate()
 	active_projectiles.clear()
 
 func count() -> int:

@@ -22,6 +22,8 @@ const _ElementalMaterial = preload("res://scripts/visual/elemental_material_cont
 const _SignaturePresentation = preload("res://scripts/visual/signature_move_presentation.gd")
 const _GeometryFit = preload("res://scripts/visual/geometry_auto_fit.gd")
 const _V16Body = preload("res://scripts/visual/v16_art_direction_body.gd")
+const _BodyAura = preload("res://scripts/visual/elemental_body_aura.gd")
+var _body_aura: Node3D
 
 const VIEWPORT_SIZE := Vector2i(256, 320)
 ## Battle bodies must be owner-visible on Pixel; prior 0.38 read as absent.
@@ -37,6 +39,8 @@ var _viewport: SubViewport
 var _camera: Camera3D
 var _cinematic_expression := ""
 var _expression_controller: Node
+var _source_controls_8d: Node
+var _controls_document_8d: Dictionary = {}
 var _model_root: Node3D
 var _display: Sprite2D
 var _loaded_model: Node3D
@@ -62,6 +66,8 @@ var _charge_level: float = 0.0
 var _review_freeze_phase: String = ""
 var _aura_level: int = 0
 var _aura_tier: int = 0
+var _form_presentation_8c = preload("res://scripts/visual/form_presentation_8c.gd").new()
+var _transform_target_8c := ""
 var _form_id: String = ""
 var _form_presentation: Dictionary = {}
 var _transform_progress: float = 0.0
@@ -264,6 +270,10 @@ func get_current_model_source() -> String:
 
 
 func get_current_animation_source() -> String:
+	if _animation_controller != null and is_instance_valid(_animation_controller):
+		var player = _animation_controller.get_animation_player()
+		if player != null and str(player.current_animation).begins_with("form_acting_8c/"):return "SAVED_ORIGINAL_FORM_8C_WIP_NOT_HUMAN_APPROVED"
+		if player != null and str(player.current_animation).begins_with("authored_studies/"): return "ORIGINAL_EXPLICIT_KEYPOSE_STUDY_NOT_FINAL"
 	return _current_animation_source
 
 
@@ -390,6 +400,15 @@ func _try_load_golden_slice(fighter_data: Dictionary) -> Dictionary:
 
 func _try_load_collectible(fighter_data: Dictionary) -> Dictionary:
 	var model_path := "res://assets/characters/collectible_v1/%s/%s/%s.glb" % [_fighter_id, _body_variant, str(fighter_data.get("collectible_review_form", "BASE"))]
+	_controls_document_8d.clear()
+	var review_state:=get_node_or_null("/root/GameState")
+	if review_state!=null and (review_state.get_meta("source_controls_8d",false) or review_state.get_meta("source_hands_8d2",false) or review_state.get_meta("source_hands_8d3",false)):
+		var lane:="hands_8d3" if review_state.get_meta("source_hands_8d3",false) else "hands_8d2" if review_state.get_meta("source_hands_8d2",false) else "controls_8d"
+		_controls_document_8d=preload("res://scripts/visual/source_controls_8d.gd").candidate_document(_fighter_id,_body_variant,lane)
+		if _controls_document_8d.is_empty():
+			push_error("Requested8D source candidate missing/unverified: "+_fighter_id+"/"+_body_variant)
+			return {"source":"MISSING","loaded":false}
+		model_path=str(_controls_document_8d.resource)
 	if not FileAccess.file_exists(model_path) and not ResourceLoader.exists(model_path):
 		return {"source": "MISSING", "loaded": false}
 	var instance: Node = null
@@ -487,7 +506,7 @@ func truth_flags() -> Dictionary:
 		"PROCEDURAL_RUNTIME_ANIMATION_PASS": _procedural_healthy and has_imported_animations(),
 		"FINAL_HUMAN_AUTHORED_ANIMATION_PASS": false,
 		"CURRENT_MODEL_SOURCE": _current_model_source,
-		"CURRENT_ANIMATION_SOURCE": _current_animation_source,
+		"CURRENT_ANIMATION_SOURCE": get_current_animation_source(),
 		"PROCEDURAL_PROXY_VISIBLE": is_procedural_proxy_visible(),
 		"VISIBLE_MODEL_NODE": _loaded_model.name if _loaded_model else "",
 		"VISIBLE_SKELETON_PRESENT": _visible_skeleton != null,
@@ -635,6 +654,8 @@ func _apply_review_freeze() -> void:
 
 
 func apply_hurt_reaction(reaction: Dictionary) -> void:
+	if _animation_controller!=null and is_instance_valid(_animation_controller):
+		_animation_controller.begin_hit_reaction(reaction)
 	if reaction.has("logical_facing"):
 		_logical_facing = str(reaction.get("logical_facing"))
 	_apply_presentation_yaw(float(reaction.get("mesh_yaw_deg", _FacingContract.mesh_yaw_for_facing(_logical_facing))))
@@ -648,6 +669,7 @@ func _apply_presentation_yaw(override_yaw: float = INF) -> void:
 		yaw = override_yaw
 	elif not _attack_lock.is_empty() and _attack_lock.has("mesh_yaw_deg"):
 		yaw = float(_attack_lock.get("mesh_yaw_deg"))
+	if _animation_controller != null and is_instance_valid(_animation_controller): _animation_controller.set_visual_facing(-1 if yaw<0 else 1)
 	if _loaded_model != null and is_instance_valid(_loaded_model):
 		_loaded_model.rotation_degrees.y = yaw
 	if _proxy_model != null and is_instance_valid(_proxy_model) and _proxy_model != _loaded_model:
@@ -665,6 +687,25 @@ func set_aura_level(level: int) -> void:
 		var form_boost := float(_form_presentation.get("emission_strength", 0.0))
 		_material_controller.set_charge_emission(float(level) * 0.35 + form_boost)
 
+func set_empowerment_state(snapshot: Dictionary) -> void:
+	if not _loaded or _visible_skeleton==null:return
+	if not is_instance_valid(_body_aura):
+		if not bool(snapshot.get("active",false)):return
+		_body_aura=_BodyAura.new();_body_aura.name="PersistentElementalBodyAura"
+		_model_root.add_child(_body_aura);_body_aura.setup(_visible_skeleton)
+	_body_aura.observe(snapshot)
+
+func get_empowerment_evidence() -> Dictionary:
+	return _body_aura.evidence() if is_instance_valid(_body_aura) else {"active":false,"super_ready":false,"vertices":0}
+
+func project_bone_to_combat_world(canonical: String) -> Vector2:
+	if _visible_skeleton==null or _camera==null or _display==null:return Vector2.INF
+	var index:=_visible_skeleton.find_bone(_BoneMap.resolve_on_skeleton(_visible_skeleton,canonical))
+	if index<0:return Vector2.INF
+	_visible_skeleton.force_update_all_bone_transforms()
+	var projected:=_camera.unproject_position(_visible_skeleton.to_global(_visible_skeleton.get_bone_global_pose(index).origin))
+	return _display.to_global(projected-Vector2(_viewport.size)*.5+_display.offset)
+
 
 func set_aura_tier(tier: int) -> void:
 	_aura_tier = clampi(tier, 0, 3)
@@ -673,6 +714,8 @@ func set_aura_tier(tier: int) -> void:
 
 func set_form_id(form_id: String, form_entry: Dictionary = {}) -> void:
 	_form_id = form_id
+	if is_instance_valid(_expression_controller):_expression_controller.set_form(form_id)
+	_form_presentation_8c.set_form(form_id)
 	_form_presentation = form_entry.get("presentation", {})
 	if _using_v16 and _v16_body != null and _v16_body.has_method("apply_story_form"):
 		_v16_body.apply_story_form(form_id)
@@ -683,7 +726,21 @@ func set_form_id(form_id: String, form_entry: Dictionary = {}) -> void:
 		_model_root.scale = Vector3.ONE * body_scale
 
 
+func begin_form_sequence(target_id: String) -> bool:
+	_transform_target_8c = target_id
+	return _animation_controller != null and _animation_controller.begin_form_sequence(target_id)
+
+func end_form_sequence() -> void:
+	_transform_target_8c = ""
+	if is_instance_valid(_expression_controller):_expression_controller.end_form_performance()
+	_form_presentation_8c.clear_preview()
+	if _animation_controller != null:_animation_controller.end_form_sequence()
+
 func set_transform_progress(progress: float) -> void:
+	if _animation_controller != null:_animation_controller.sample_form_sequence(progress)
+	if not _transform_target_8c.is_empty() and _cinematic_expression.is_empty() and is_instance_valid(_expression_controller):
+		_expression_controller.sample_form_performance(_transform_target_8c,progress)
+	if not _transform_target_8c.is_empty():_form_presentation_8c.preview_form(_transform_target_8c,progress)
 	_transform_progress = clampf(progress, 0.0, 1.0)
 	if _material_controller and _material_controller.has_method("set_charge_emission"):
 		var base := float(_form_presentation.get("emission_strength", 0.15))
@@ -959,8 +1016,18 @@ func _setup_procedural_runtime(fighter_data: Dictionary) -> void:
 	_animation_controller = _AnimationController.new()
 	_animation_controller.name = "FighterAnimationController"
 	add_child(_animation_controller)
-	_animation_controller.setup({"fighter_id": _fighter_id}, _proxy_model)
+	_animation_controller.setup({"fighter_id": _fighter_id, "body_variant": _body_variant}, _proxy_model)
+	var live_owner := get_parent()
+	if live_owner != null and "state_machine" in live_owner:
+		_animation_controller.bind_runtime_fighter(live_owner)
 	_visible_skeleton = _animation_controller.get_skeleton() if _animation_controller.has_method("get_skeleton") else _visible_skeleton
+	_form_presentation_8c.setup(live_owner,_proxy_model,_visible_skeleton)
+	_form_presentation_8c.set_form(_form_id)
+	if not _controls_document_8d.is_empty():
+		_source_controls_8d=preload("res://scripts/visual/source_controls_8d.gd").new()
+		_source_controls_8d.name="OriginalSourceControls8D"
+		add_child(_source_controls_8d)
+		_source_controls_8d.setup(live_owner,_proxy_model,_visible_skeleton,_animation_controller.get_animation_player(),_controls_document_8d)
 	_material_controller = _MaterialController.new()
 	_material_controller.name = "FighterMaterialController"
 	add_child(_material_controller)
@@ -1234,7 +1301,32 @@ func _exit_tree() -> void:
 		_viewport = null
 
 
+func _retain_render_materials(node: Node, retained: Array[Material]) -> void:
+	# Geometry destruction updates renderer dependencies. Keep every instance
+	# material alive until the entire retiring model has released its render RIDs.
+	# Mixed surface/whole-mesh overrides otherwise lose their last reference
+	# while another retiring instance still refers to that RID (Godot #85817).
+	if node is MeshInstance3D:
+		var mesh := node as MeshInstance3D
+		for material in [mesh.material_override, mesh.material_overlay]:
+			if material != null: retained.append(material)
+		for surface in range(mesh.get_surface_override_material_count()):
+			var material := mesh.get_surface_override_material(surface)
+			if material != null: retained.append(material)
+	for child in node.get_children():
+		_retain_render_materials(child, retained)
+
+
 func _clear_model() -> void:
+	if is_instance_valid(_source_controls_8d):_source_controls_8d.free()
+	_source_controls_8d=null
+	_controls_document_8d.clear()
+	_form_presentation_8c.reset("model_clear")
+	_transform_target_8c = ""
+	_body_aura=null
+	var retiring_materials: Array[Material] = []
+	if _model_root != null and is_instance_valid(_model_root):
+		_retain_render_materials(_model_root, retiring_materials)
 	# Free controllers immediately so reuse cannot bind stale skeleton/materials.
 	if _animation_controller != null and is_instance_valid(_animation_controller):
 		_animation_controller.free()
@@ -1257,6 +1349,8 @@ func _clear_model() -> void:
 		for child in _model_root.get_children():
 			if is_instance_valid(child):
 				child.free()
+	# All retired mesh instances are gone before local material refs are released.
+	retiring_materials.clear()
 
 
 func _set_loaded(value: bool) -> void:
@@ -1654,13 +1748,25 @@ func _play_clip(requested: String, state: String = "", move: Dictionary = {}) ->
 		if state.is_empty():
 			move_copy["move_id"] = requested
 		var play_state := state
+		var standalone_preview := false
 		if play_state.is_empty():
-			if requested in ["idle", "walk", "run", "fall", "shield", "aura_charge"]:
-				play_state = _FighterStates.IDLE
+			if requested in [_FighterStates.VICTORY, _FighterStates.DEFEAT]:
+				# These existing body performances have no MoveRunner clock.
+				# Routing them as attacks froze manual playback at frame zero.
+				play_state = requested
+			elif requested in ["idle", "walk", "run", "fall", "shield", "aura_charge"]:
+				# Keep the existing state-to-clip authority, including idle guard
+				# and form selection. These states already use the visual clock.
+				play_state = _FighterStates.SHIELD_HOLD if requested == "shield" else requested
 			else:
 				play_state = _FighterStates.ATTACK_STARTUP
+				standalone_preview = true
 		if _animation_controller.has_method("play_for_state"):
-			_animation_controller.play_for_state(play_state, move_copy)
+			# An explicit clip request is presentation-owned. Routing it as a
+			# gameplay attack stalled its manual player without a MoveRunner;
+			# routing charge/walk as IDLE discarded the requested body action.
+			# Real Fighter state calls keep their resolved gameplay clock.
+			_animation_controller.play_for_state(play_state, move_copy, standalone_preview)
 		_last_clip = _animation_controller.get_active_clip() if _animation_controller.has_method("get_active_clip") else requested
 	elif _stylized != null and is_instance_valid(_stylized) and _stylized.has_method("animate_pose"):
 		_stylized.animate_pose(_style_clip, _style_anim_t)
@@ -1696,6 +1802,8 @@ func _update_expression_for_state(state: String) -> void:
 		set_expression(str(_life.get("expression_hurt", "hurt")))
 	elif state == _FighterStates.KO:
 		set_expression("defeat")
+	elif state == _FighterStates.SHIELD_BREAK:
+		set_expression("shock")
 	elif state in [_FighterStates.ATTACK_STARTUP, _FighterStates.SPECIAL_STARTUP, _FighterStates.THROW_STARTUP]:
 		set_expression("battle_intent")
 	elif state in [_FighterStates.ATTACK_ACTIVE, _FighterStates.SPECIAL_ACTIVE, _FighterStates.THROW_RELEASE]:

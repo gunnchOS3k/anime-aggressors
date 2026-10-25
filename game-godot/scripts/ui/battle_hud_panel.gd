@@ -10,6 +10,7 @@ var _pct_label: Label
 var _stock_row: HBoxContainer
 var _aura_bar: ProgressBar
 var _shield_bar: ProgressBar
+var _shield_label: Label
 var _stock_pips: Array = []
 var _max_stocks: int = 3
 var _accent: Color = Color(0.95, 0.55, 0.2)
@@ -76,6 +77,9 @@ func _build() -> void:
 	_shield_bar.custom_minimum_size = Vector2(0, 6)
 	_shield_bar.modulate = Color(0.45, 0.75, 1.0, 0.85)
 	root.add_child(_shield_bar)
+	_shield_label = Label.new()
+	_shield_label.add_theme_font_size_override("font_size", 9)
+	root.add_child(_shield_label)
 
 func configure(display_name: String, accent: Color, max_stocks: int, align_right: bool = false) -> void:
 	_accent = accent
@@ -117,8 +121,16 @@ func update_from_fighter(f: Node) -> void:
 		fill.bg_color = _accent
 		_aura_bar.add_theme_stylebox_override("fill", fill)
 	if _shield_bar:
-		_shield_bar.value = shield
-		_shield_bar.visible = shield < 99.5 or (f.has_method("configure") and bool(f.shielding) if "shielding" in f else false)
+		var maximum: float = float(f.data.get("shieldProfile", {}).get("maxHealth",100)) if "data" in f else 100.0
+		var ratio := clampf(shield/maxf(.001,maximum),0,1)
+		_shield_bar.value = ratio*100.0
+		_shield_bar.visible = ratio < .995 or bool(f.shielding)
+		var status := "HEALTHY"
+		if "_guard_presentation" in f and f._guard_presentation != null:status = str(f._guard_presentation.snapshot().stage).to_upper()
+		if f.state_machine.current_state == "shield_break":status = "BROKEN · RECOVERING"
+		elif "shield_break_8c" in f and not f.shield_break_8c.guard_allowed():status = "RELEASE GUARD"
+		_shield_label.text = "GUARD %d%% · %s" % [roundi(ratio*100),status]
+		_shield_label.visible = _shield_bar.visible
 	for i in _stock_pips.size():
 		var pip: ColorRect = _stock_pips[i]
 		pip.modulate = Color(1, 1, 1, 1) if i < stocks else Color(1, 1, 1, 0.18)

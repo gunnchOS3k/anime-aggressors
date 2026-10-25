@@ -1,0 +1,91 @@
+{
+  "source_sha": "4d5bb494d4bb4eccad213ef32797e78cb43db2dd",
+  "baseline_source_sha": "7c2035253dff671c82756b49e49e4a2c4388f5e3",
+  "branch": "release/anime-v1-dialogue-and-elemental-performance",
+  "draft_pr": "https://github.com/gunnchOS3k/anime-aggressors/pull/123",
+  "stacked_base_pr": 122,
+  "implementation": "compact grounded straight/heavy spine and chest posture with anatomical arm constraints; no root/hip/foot/hand-projection or gameplay-value changes",
+  "geometry": {
+    "configurations": 144,
+    "samples": 864,
+    "corrected_contact_configurations": 108,
+    "preserved_hook_configurations": 36,
+    "max_wrist_projection_drift_viewport_px": 2.15791860682657e-05,
+    "max_hip_foot_drift_m": 0.0,
+    "max_arm_length_drift_m": 8.94069671630859e-08,
+    "max_observed_helper_usec": 56
+  },
+  "constraints": "constraints_straight/strike_posture_constraints.json",
+  "affected_suites": [
+    {
+      "suite": "StrikePostureConstraints",
+      "exit_code": 0,
+      "seconds": 7.004,
+      "console": "artifacts/v1_closure/spectral_feedback/continuous_1020/melee_posture/affected/StrikePostureConstraints/console.log"
+    },
+    {
+      "suite": "GroundedRecovery",
+      "exit_code": 0,
+      "seconds": 6.506,
+      "console": "artifacts/v1_closure/spectral_feedback/continuous_1020/melee_posture/affected/GroundedRecovery/console.log"
+    },
+    {
+      "suite": "ContactReactionClock",
+      "exit_code": 0,
+      "seconds": 8.496,
+      "console": "artifacts/v1_closure/spectral_feedback/continuous_1020/melee_posture/affected/ContactReactionClock/console.log"
+    },
+    {
+      "suite": "AuthoredCancel",
+      "exit_code": 0,
+      "seconds": 1.026,
+      "console": "artifacts/v1_closure/spectral_feedback/continuous_1020/melee_posture/affected/AuthoredCancel/console.log"
+    },
+    {
+      "suite": "CombatChoreography",
+      "exit_code": 0,
+      "seconds": 6.704,
+      "console": "artifacts/v1_closure/spectral_feedback/continuous_1020/melee_posture/affected/CombatChoreography/console.log"
+    }
+  ],
+  "current_failures": [],
+  "retained_failed_prototype": "constraints_first: four Kaia hook reach failures; universal hook adaptation rejected, all hooks preserved across whole arc",
+  "native_comparison": "NATIVE_COMPARISON.json",
+  "native_movies": {
+    "before": "artifacts/v1_closure/spectral_feedback/rendered/melee_posture_before1020.mp4",
+    "after": "artifacts/v1_closure/spectral_feedback/rendered/melee_posture_after1020.mp4"
+  },
+  "native_scope": "two automated ordinary public-input controllers;742frames60fps with original audio,521verified gameplay barcodes per movie; five unchanged contacts plus deliberatewhiff/recovery, no human acceptance",
+  "active_cpu": {
+    "frames": 480,
+    "contacts": 17,
+    "cpu_moves": 9,
+    "player_damage": 0.0,
+    "opponent_damage": 13.49885952,
+    "frozen_opponent": false,
+    "forced_moves": false,
+    "forced_ko": false
+  },
+  "manual_review": "tools/v1_closure/play_melee_review.command, optional --local / --male; both model choices smoke-tested, isolated userdata",
+  "performance": "After MovieWriter742frames/34seconds, CPUrender0.42ms and encoding5.42ms per frame; GPU0unavailable. Fixed60fps output does not prove sustained device FPS. Helper timing is a fixture observation, not total game frame time.",
+  "ci_success": 6,
+  "ci_pending": [
+    "windows-pilot0-windows-2025"
+  ],
+  "limits": [
+    "Partial reduction of head interpenetration, not complete close-body contact fit",
+    "Hooks unchanged; outer range/aerial/whole acting not completed by this correction",
+    "Coupled boots/floor alignment remains unresolved; no whole-model translation",
+    "No new campaign, Gray, Convergence, OVA, LAN or device acceptance"
+  ],
+  "owner_projectile_acceptance": "OWNER_ACCEPTANCE.json; accepted specific prior fighter-impact behavior only",
+  "human_gates": {
+    "GAME_FEEL_HUMAN_PASS": false,
+    "VFX_TASTE_HUMAN_PASS": false,
+    "ANIMATION_TASTE_HUMAN_PASS": false,
+    "SFX_MIX_HUMAN_PASS": false,
+    "V1_ANIME_HUMAN_PASS": false,
+    "FINAL_RELEASE_AUTHORIZED": false
+  },
+  "redistribution": "Original project assets/audio, owner development review only; raw nativeAVI local protected; no publication or release authorization"
+}

@@ -27,10 +27,26 @@ var damage: float = 8.0
 var debug_visible: bool = false
 var projectile_tier: String = "projectile_tap"
 var _visual: Node2D = null
-var _trail: Line2D = null
-var _core: Polygon2D = null
-var _glow: Polygon2D = null
-var _impact_flash: float = 0.0
+var _renderer: Node2D
+var _flight_slot := -1
+var _emission_distance := 0.0
+var _visual_extent := 40.0
+var _elemental_audio: Node
+var _environment_sounded := false
+var order_id := 0
+var team_key := ""
+var clash_eligible := false
+var integrity := 1
+var initial_integrity := 1
+var initial_damage := 0.0
+var residual_damage_exponent := 1.0
+var intercepted_ids: Dictionary = {}
+var pending_targets: Dictionary = {}
+var spawn_bounds := Rect2()
+var pierces_fighters := false
+var _resolving_contact := false
+var _owned_flight_decorations: Array = []
+var fighter_impacts: Array = []
 
 @onready var debug_rect: ColorRect = $DebugRect
 @onready var collision: CollisionShape2D = $CollisionShape2D
@@ -41,12 +57,20 @@ func configure(cfg: Dictionary, owner_node: Node) -> void:
 	move_id = cfg.get("move_id", "")
 	aura_level_at_spawn = cfg.get("aura_level", 0)
 	team_slot = cfg.get("team_slot", 1)
+	order_id = int(cfg.get("order_id", 0))
+	team_key = str(cfg.get("team_key", "slot:" + str(team_slot)))
+	clash_eligible = bool(cfg.get("clash_eligible", false))
+	initial_integrity = clampi(int(cfg.get("integrity", 1)), 1, 16)
+	integrity = initial_integrity
+	residual_damage_exponent = maxf(0.0, float(cfg.get("residual_damage_exponent", 1.0)))
 	lifetime_frames = cfg.get("lifetime_frames", 120)
 	speed = cfg.get("speed", 400.0)
 	behavior = cfg.get("behavior", "straight")
+	pierces_fighters = bool(cfg.get("pierces_fighters", false))
 	move_data = cfg.get("move_data", {})
 	projectile_tier = str(cfg.get("projectile_tier", move_data.get("projectile_tier", "projectile_tap")))
 	damage = float(cfg.get("damage", move_data.get("damage", 8.0)))
+	initial_damage = damage
 	var angle_deg: float = cfg.get("angle_deg", 0.0)
 	var facing: int = owner_node.facing if owner_node and "facing" in owner_node else 1
 	if owner_node and "attack_direction" in owner_node and int(owner_node.attack_direction) != 0:
@@ -65,11 +89,18 @@ func configure(cfg: Dictionary, owner_node: Node) -> void:
 		collision.shape = rect
 	elif collision and collision.shape is RectangleShape2D:
 		(collision.shape as RectangleShape2D).size = size
+	spawn_bounds = world_bounds()
 	# Never present ColorRect as primary art (closes TASTE-001 / Wave016 Golden Slice).
 	if debug_rect:
 		debug_rect.visible = false
 		debug_rect.modulate.a = 0.0
 	_build_intentional_visual(cfg.get("color", Color(1.0, 0.45, 0.12, 0.95)), size)
+	_elemental_audio = preload("res://scripts/audio/elemental_performance.gd").new()
+	_elemental_audio.name = "ElementalProjectileAudio"
+	_elemental_audio.fighter_id = fighter_id
+	add_child(_elemental_audio)
+	_elemental_audio.play("projectile_launch",.65 if projectile_tier == "projectile_tap" else 1.0)
+	_elemental_audio.start_travel()
 	monitoring = true
 	collision_layer = 8
 	collision_mask = 6
@@ -83,301 +114,120 @@ func uses_intentional_visual() -> bool:
 	return _visual != null and is_instance_valid(_visual) and _visual.visible and (debug_rect == null or not debug_rect.visible)
 
 
-func _build_intentional_visual(base_col: Color, size: Vector2) -> void:
-	if _visual != null and is_instance_valid(_visual):
-		_visual.queue_free()
-	_visual = Node2D.new()
-	_visual.name = "IntentionalProjectileVisual"
-	add_child(_visual)
+func _build_intentional_visual(_base_col: Color, size: Vector2) -> void:
+	_visual = Node2D.new(); _visual.name="OriginalSpectralProjectile";add_child(_visual)
+	_renderer = preload("res://scripts/visual/spectral_feedback_renderer.gd").obtain(self)
+	_visual_extent=maxf(36.0,size.length()*1.5)*(1.5 if projectile_tier == "projectile_full" else 1.2 if projectile_tier == "projectile_medium" else 1.0)
+	if _renderer != null:
+		_flight_slot=_renderer.emit_effect(fighter_id,3,global_position,direction,_visual_extent,-1.0)
+		_renderer.set_projectile_integrity(_flight_slot, integrity, initial_integrity)
+		_track_flight_decoration(9,global_position,_visual_extent*1.3,.18)
 
-	var scale_m := 1.0
-	match projectile_tier:
-		"projectile_medium":
-			scale_m = 1.35
-		"projectile_full":
-			scale_m = 1.75
-		_:
-			scale_m = 1.0
+func _track_flight_decoration(kind: int, point: Vector2, extent: float, life: float) -> int:
+	var token := "projectile-flight:%d:%d:%d" % [get_instance_id(), frame_count, kind]
+	var index: int = _renderer.emit_effect(fighter_id,kind,point,direction,extent,life,token)
+	if index >= 0: _owned_flight_decorations.append({"slot":index,"token":token})
+	# Decorations live at most .20s. Discard obsolete ownership records, not
+	# someone else's reused slot; cancellation still clears all live records.
+	if _owned_flight_decorations.size() > 32: _owned_flight_decorations.pop_front()
+	return index
 
-	# Wave018: roster-wide intentional silhouettes (not moving-rectangle primary).
-	var glow_poly := _fighter_tier_poly(fighter_id, projectile_tier, size.x * 0.95 * scale_m, size.y * 0.75 * scale_m, true)
-	var core_poly := _fighter_tier_poly(fighter_id, projectile_tier, size.x * 0.55 * scale_m, size.y * 0.45 * scale_m, false)
-	_glow = Polygon2D.new()
-	_glow.name = "Glow"
-	_glow.color = Color(base_col.r, base_col.g, base_col.b, 0.30)
-	_glow.polygon = glow_poly
-	_visual.add_child(_glow)
+func _retire_flight() -> void:
+	if is_instance_valid(_visual): _visual.hide()
+	if is_instance_valid(_elemental_audio) and is_instance_valid(_elemental_audio.travel): _elemental_audio.travel.stop()
+	if is_instance_valid(_renderer):
+		_renderer.stop_slot(_flight_slot)
+		for owned in _owned_flight_decorations:
+			if owned.slot < _renderer.slots.size() and _renderer.slots[owned.slot].event_id == owned.token:
+				_renderer.stop_slot(owned.slot)
+	_flight_slot = -1
+	_owned_flight_decorations.clear()
 
-	_core = Polygon2D.new()
-	_core.name = "Core"
-	_core.color = Color(
-		minf(1.0, base_col.r * 1.15),
-		minf(1.0, base_col.g * 1.05),
-		minf(1.0, base_col.b * 0.85),
-		0.95
-	)
-	_core.polygon = core_poly
-	_visual.add_child(_core)
-
-	_trail = Line2D.new()
-	_trail.name = "Trail"
-	var trail_w := maxf(3.0, size.y * 0.35 * scale_m)
-	match projectile_tier:
-		"projectile_medium":
-			trail_w *= 1.25
-		"projectile_full":
-			trail_w *= 1.55
-	_trail.width = trail_w
-	_trail.default_color = Color(base_col.r, base_col.g * 0.7, base_col.b * 0.4, 0.55)
-	_trail.begin_cap_mode = Line2D.LINE_CAP_ROUND
-	_trail.end_cap_mode = Line2D.LINE_CAP_ROUND
-	_trail.points = PackedVector2Array([Vector2.ZERO, Vector2.ZERO])
-	_visual.add_child(_trail)
-	# Spawn flash ring — denser for full charge
-	var ring := Polygon2D.new()
-	ring.name = "SpawnFlash"
-	ring.color = Color(1.0, 0.85, 0.45, 0.65 if projectile_tier != "projectile_full" else 0.85)
-	ring.polygon = _ring_poly(size.x * (0.8 if projectile_tier != "projectile_full" else 1.15) * scale_m)
-	_visual.add_child(ring)
-	var tw := create_tween()
-	tw.tween_property(ring, "modulate:a", 0.0, 0.18)
-	tw.tween_callback(ring.queue_free)
-	if projectile_tier == "projectile_full":
-		var corona := Polygon2D.new()
-		corona.name = "FullCorona"
-		corona.color = Color(base_col.r, base_col.g, base_col.b, 0.35)
-		corona.polygon = _ring_poly(size.x * 1.4 * scale_m)
-		_visual.add_child(corona)
-
-
-func _ember_poly(w: float, h: float) -> PackedVector2Array:
-	# Teardrop / ember silhouette — not a rectangle.
-	return PackedVector2Array([
-		Vector2(-w * 0.55, 0.0),
-		Vector2(-w * 0.15, -h * 0.55),
-		Vector2(w * 0.35, -h * 0.35),
-		Vector2(w * 0.65, 0.0),
-		Vector2(w * 0.35, h * 0.35),
-		Vector2(-w * 0.15, h * 0.55),
-	])
-
-
-func _tier_poly(tier: String, w: float, h: float, glow: bool) -> PackedVector2Array:
-	return _fighter_tier_poly(fighter_id, tier, w, h, glow)
-
-
-func _fighter_tier_poly(fid: String, tier: String, w: float, h: float, glow: bool) -> PackedVector2Array:
-	match fid:
-		"rook-ironside":
-			return _rook_poly(tier, w, h)
-		"juno-spark":
-			return _juno_poly(tier, w, h)
-		"kaia-windrow":
-			return _kaia_poly(tier, w, h)
-		"nix-calder":
-			return _nix_poly(tier, w, h)
-		"orion-vell":
-			return _orion_poly(tier, w, h, glow)
-		"vesper-nyx":
-			return _vesper_poly(tier, w, h)
-		_:
-			# Ember Vale default family (Wave016/017)
-			return _ember_tier_poly(tier, w, h, glow)
-
-
-func _ember_tier_poly(tier: String, w: float, h: float, glow: bool) -> PackedVector2Array:
-	match tier:
-		"projectile_medium":
-			return PackedVector2Array([
-				Vector2(-w * 0.5, 0.0),
-				Vector2(-w * 0.1, -h * 0.7),
-				Vector2(w * 0.25, -h * 0.25),
-				Vector2(w * 0.7, -h * 0.15),
-				Vector2(w * 0.45, 0.0),
-				Vector2(w * 0.7, h * 0.15),
-				Vector2(w * 0.25, h * 0.25),
-				Vector2(-w * 0.1, h * 0.7),
-			])
-		"projectile_full":
-			var pts := PackedVector2Array()
-			var spikes := 7 if glow else 5
-			for i in spikes:
-				var a := TAU * float(i) / float(spikes)
-				var r := (w if i % 2 == 0 else w * 0.55)
-				pts.append(Vector2(cos(a), sin(a)) * r * 0.55)
-			return pts
-		_:
-			return _ember_poly(w, h)
-
-
-func _rook_poly(tier: String, w: float, h: float) -> PackedVector2Array:
-	# Heavy hammer / impact wedge
-	match tier:
-		"projectile_medium":
-			return PackedVector2Array([
-				Vector2(-w * 0.55, -h * 0.35), Vector2(w * 0.35, -h * 0.55),
-				Vector2(w * 0.65, 0.0), Vector2(w * 0.35, h * 0.55), Vector2(-w * 0.55, h * 0.35),
-			])
-		"projectile_full":
-			return PackedVector2Array([
-				Vector2(-w * 0.6, -h * 0.5), Vector2(w * 0.2, -h * 0.7), Vector2(w * 0.75, 0.0),
-				Vector2(w * 0.2, h * 0.7), Vector2(-w * 0.6, h * 0.5), Vector2(-w * 0.35, 0.0),
-			])
-		_:
-			return PackedVector2Array([
-				Vector2(-w * 0.5, -h * 0.4), Vector2(w * 0.55, -h * 0.25),
-				Vector2(w * 0.55, h * 0.25), Vector2(-w * 0.5, h * 0.4),
-			])
-
-
-func _juno_poly(tier: String, w: float, h: float) -> PackedVector2Array:
-	# Zigzag bolt
-	match tier:
-		"projectile_medium":
-			return PackedVector2Array([
-				Vector2(-w * 0.55, 0.0), Vector2(-w * 0.1, -h * 0.55), Vector2(w * 0.15, -h * 0.1),
-				Vector2(w * 0.55, -h * 0.45), Vector2(w * 0.7, 0.0), Vector2(w * 0.55, h * 0.45),
-				Vector2(w * 0.15, h * 0.1), Vector2(-w * 0.1, h * 0.55),
-			])
-		"projectile_full":
-			return PackedVector2Array([
-				Vector2(-w * 0.65, 0.0), Vector2(-w * 0.2, -h * 0.7), Vector2(w * 0.05, -h * 0.15),
-				Vector2(w * 0.45, -h * 0.65), Vector2(w * 0.8, 0.0), Vector2(w * 0.45, h * 0.65),
-				Vector2(w * 0.05, h * 0.15), Vector2(-w * 0.2, h * 0.7),
-			])
-		_:
-			return PackedVector2Array([
-				Vector2(-w * 0.5, 0.0), Vector2(0.0, -h * 0.45), Vector2(w * 0.2, -h * 0.05),
-				Vector2(w * 0.6, -h * 0.35), Vector2(w * 0.35, 0.0), Vector2(w * 0.6, h * 0.35),
-				Vector2(w * 0.2, h * 0.05), Vector2(0.0, h * 0.45),
-			])
-
-
-func _kaia_poly(tier: String, w: float, h: float) -> PackedVector2Array:
-	# Crescent gale blade
-	var amp := 1.15 if tier == "projectile_full" else (1.0 if tier == "projectile_medium" else 0.85)
-	return PackedVector2Array([
-		Vector2(-w * 0.4 * amp, 0.0),
-		Vector2(-w * 0.05, -h * 0.7 * amp),
-		Vector2(w * 0.55 * amp, -h * 0.25),
-		Vector2(w * 0.35 * amp, 0.0),
-		Vector2(w * 0.55 * amp, h * 0.25),
-		Vector2(-w * 0.05, h * 0.7 * amp),
-	])
-
-
-func _nix_poly(tier: String, w: float, h: float) -> PackedVector2Array:
-	# Crystal shard
-	match tier:
-		"projectile_full":
-			return PackedVector2Array([
-				Vector2(-w * 0.35, 0.0), Vector2(0.0, -h * 0.75), Vector2(w * 0.55, -h * 0.2),
-				Vector2(w * 0.75, 0.0), Vector2(w * 0.55, h * 0.2), Vector2(0.0, h * 0.75),
-			])
-		_:
-			return PackedVector2Array([
-				Vector2(-w * 0.4, 0.0), Vector2(0.0, -h * 0.6), Vector2(w * 0.65, 0.0), Vector2(0.0, h * 0.6),
-			])
-
-
-func _orion_poly(tier: String, w: float, h: float, glow: bool) -> PackedVector2Array:
-	# Orbit ring / node cluster
-	var pts := PackedVector2Array()
-	var n := 10 if glow or tier == "projectile_full" else 8
-	var r_outer := w * (0.55 if tier != "projectile_tap" else 0.45)
-	var r_inner := r_outer * (0.55 if tier == "projectile_full" else 0.7)
-	for i in n:
-		var a := TAU * float(i) / float(n)
-		var r := r_outer if i % 2 == 0 else r_inner
-		pts.append(Vector2(cos(a), sin(a)) * r)
-	return pts
-
-
-func _vesper_poly(tier: String, w: float, h: float) -> PackedVector2Array:
-	# Asymmetric void sickle
-	match tier:
-		"projectile_medium":
-			return PackedVector2Array([
-				Vector2(-w * 0.5, -h * 0.15), Vector2(w * 0.1, -h * 0.65), Vector2(w * 0.7, -h * 0.1),
-				Vector2(w * 0.25, 0.05), Vector2(w * 0.55, h * 0.45), Vector2(-w * 0.35, h * 0.25),
-			])
-		"projectile_full":
-			return PackedVector2Array([
-				Vector2(-w * 0.6, -h * 0.2), Vector2(0.0, -h * 0.8), Vector2(w * 0.8, -h * 0.15),
-				Vector2(w * 0.3, 0.05), Vector2(w * 0.7, h * 0.55), Vector2(-w * 0.4, h * 0.35),
-			])
-		_:
-			return PackedVector2Array([
-				Vector2(-w * 0.45, 0.0), Vector2(w * 0.15, -h * 0.55), Vector2(w * 0.6, 0.0),
-				Vector2(w * 0.1, h * 0.35),
-			])
-
-
-func _ring_poly(r: float) -> PackedVector2Array:
-	var pts := PackedVector2Array()
-	for i in range(10):
-		var a := TAU * float(i) / 10.0
-		pts.append(Vector2(cos(a), sin(a)) * r)
-	return pts
-
-
-func _deliver_hit(target: Node) -> void:
-	if not active or target == null or target == owner_fighter:
+func _deliver_hit(target: Node, contact := Vector2.INF) -> void:
+	if not active or _resolving_contact or not is_instance_valid(target) or target == owner_fighter or not is_instance_valid(owner_fighter):
 		return
+	var target_team := "story:" + str(target.get_meta("story_team")) if target.has_meta("story_team") else "slot:" + str(target.slot) if "slot" in target else ""
+	if target_team == team_key: return
 	if not target.has_method("receive_hit"):
 		return
 	var id := str(target.get_instance_id())
 	if hit_targets.has(id):
 		return
-	hit_targets[id] = true
+	if target.has_method("try_absorb_projectile") and target.try_absorb_projectile(self, contact if contact.is_finite() else global_position):
+		return # Explicit Yin counter consumed this shot; no damage/contact is forged.
 	var hit_move := move_data.duplicate(true)
 	hit_move["damage"] = damage
 	hit_move["_from_projectile"] = true
+	hit_move["_projectile_instance_id"] = get_instance_id()
+	hit_move["_contact_world"] = contact if contact.is_finite() else global_position
 	var resolver = null
 	if owner_fighter != null and "hit_resolver" in owner_fighter:
 		resolver = owner_fighter.hit_resolver
+	var confirmed: Dictionary = {}
+	_resolving_contact = true
 	if resolver != null and resolver.has_method("resolve"):
-		resolver.resolve(owner_fighter, target, hit_move, owner_fighter.damage_percent if "damage_percent" in owner_fighter else 0.0)
-	projectile_hit.emit(target, hit_move)
-	_spawn_impact()
-	if behavior != "beam":
-		_expire()
-
-
-func _spawn_impact() -> void:
-	if _visual == null:
-		return
-	var burst := Polygon2D.new()
-	burst.color = Color(1.0, 0.7, 0.25, 0.85)
-	var scale_i := 1.0
-	match projectile_tier:
-		"projectile_medium":
-			scale_i = 1.35
-			burst.polygon = _tier_poly(projectile_tier, 26.0, 18.0, false)
-		"projectile_full":
-			scale_i = 1.8
-			burst.polygon = _tier_poly(projectile_tier, 32.0, 24.0, true)
-			burst.color = Color(1.0, 0.55, 0.15, 0.9)
-		_:
-			burst.polygon = _fighter_tier_poly(fighter_id, projectile_tier, 22.0, 16.0, false)
-	_visual.add_child(burst)
-	var tw := create_tween()
-	tw.tween_property(burst, "scale", Vector2(1.8, 1.8) * scale_i, 0.12)
-	tw.parallel().tween_property(burst, "modulate:a", 0.0, 0.12)
+		confirmed = resolver.resolve(owner_fighter, target, hit_move, owner_fighter.damage_percent if "damage_percent" in owner_fighter else 0.0)
+	if confirmed.is_empty():
+		_resolving_contact = false
+		return # invulnerability/Story rejection is not a confirmed impact.
+	hit_targets[id] = true
+	var point: Vector2 = confirmed.get("contact_world", global_position)
+	# Only the existing authored quake slab may pass an unblocked target.
+	# Shield/armor keep their existing stopping policy, regardless of motion.
+	var continues := pierces_fighters and not bool(confirmed.get("blocked", false))
+	fighter_impacts.append({"event_id":confirmed.get("combat_event_id",""),"world":[point.x,point.y],"frame":Engine.get_physics_frames(),"target":target.get_instance_id(),"continued":continues,"integrity":integrity,"damage":confirmed.get("damage",0.0)})
+	if not continues:
+		global_position = point
+		# HitResolver already owns the one elemental contact result and sound.
+		# Retire authority and all owned flight before any external callback.
+		_expire(false)
+	_resolving_contact = false
+	projectile_hit.emit(target, confirmed)
 
 
 func _on_body_entered(body: Node) -> void:
-	_deliver_hit(body)
+	if not active: return
+	if body != owner_fighter and not body.has_method("receive_hit") and not _environment_sounded:
+		_environment_sounded = true
+		if _renderer != null: _renderer.emit_effect(fighter_id,0,global_position,direction,_visual_extent*1.4,.25,"environment:"+str(get_instance_id()))
+	_queue_target(body)
 
 
 func _on_area_entered(area: Area2D) -> void:
 	if area == null:
 		return
-	_deliver_hit(area.get_parent())
+	_queue_target(area.get_parent())
+
+func _queue_target(target: Node) -> void:
+	if active and is_instance_valid(target) and target != owner_fighter and target.has_method("receive_hit"):
+		pending_targets[target.get_instance_id()] = true
+
+func world_bounds() -> Rect2:
+	if collision == null or collision.shape == null: return Rect2(global_position, Vector2.ZERO)
+	var local := collision.shape.get_rect()
+	var first := collision.to_global(local.position)
+	var bounds := Rect2(first, Vector2.ZERO)
+	for point in [local.end, Vector2(local.position.x, local.end.y), Vector2(local.end.x, local.position.y)]: bounds = bounds.expand(collision.to_global(point))
+	return bounds
+
+func intercept(cost: int) -> void:
+	if not active: return
+	integrity = maxi(0, integrity - cost)
+	if integrity == 0:
+		# The confirmed contact owns the sole mixed-element outcome. Do not
+		# add two unrelated dissipations/sounds at the shots' swept endpoints.
+		_expire(false); return
+	var ratio := float(integrity) / initial_integrity
+	damage = initial_damage * pow(ratio, residual_damage_exponent)
+	if is_instance_valid(_renderer):
+		_renderer.set_slot_strength(_flight_slot, .7 + .3 * ratio)
+		_renderer.set_projectile_integrity(_flight_slot, integrity, initial_integrity)
+		_renderer.update_slot(_flight_slot, global_position, direction, _visual_extent * (.65 + .35 * ratio))
 
 func tick_sim_frame() -> void:
 	if not active:
 		return
+	var previous_world := global_position
 	frame_count += 1
 	match behavior:
 		"straight", "beam":
@@ -402,19 +252,26 @@ func tick_sim_frame() -> void:
 		"curving_blade":
 			position += direction * speed / SIM_FPS
 			direction = direction.rotated(0.04 * (1 if aura_level_at_spawn >= 2 else -1))
-	if _trail != null:
-		var back := -direction.normalized() * (18.0 + float(aura_level_at_spawn) * 4.0)
-		_trail.points = PackedVector2Array([back, Vector2.ZERO])
-	if _core != null:
-		_core.rotation = direction.angle()
-	if _glow != null:
-		_glow.rotation = direction.angle()
-		_glow.modulate.a = 0.22 + 0.08 * sin(float(frame_count) * 0.35)
+	if _renderer != null:
+		var ratio := float(integrity) / initial_integrity
+		_renderer.update_slot(_flight_slot,global_position,direction,_visual_extent * (.65 + .35 * ratio))
+		_emission_distance += (global_position-previous_world).length()
+		var spacing := 18.0 if _renderer.option("reduced_particles") else 7.0
+		if _emission_distance >= spacing:
+			_emission_distance=0
+			var trail_slot: int = _track_flight_decoration(3 if fighter_id == "juno-spark" else 4,global_position-direction.normalized()*10.0,_visual_extent*.65*(.65+.35*ratio),.20)
+			_renderer.set_slot_strength(trail_slot,.35+.65*ratio)
 	if frame_count >= lifetime_frames:
 		_expire()
 
-func _expire() -> void:
+func _expire(present_dissipation := true) -> void:
+	if not active: return
 	active = false
+	pending_targets.clear()
+	if present_dissipation: preload("res://scripts/audio/elemental_performance.gd").one_shot(fighter_id,"projectile_dissipate",get_parent(),.5)
+	_retire_flight()
+	if _renderer != null:
+		if present_dissipation: _renderer.emit_effect(fighter_id,5,global_position,direction,_visual_extent,.22)
 	set_deferred("monitoring", false)
 	projectile_expired.emit()
 	queue_free()
@@ -424,3 +281,20 @@ func set_debug_visible(v: bool) -> void:
 	# DebugRect remains available for engineers; never auto-shown as player art.
 	if debug_rect:
 		debug_rect.visible = v
+
+func cancel_immediate() -> void:
+	# Scene/stock cleanup retires authority now, not at queue_free's end of
+	# frame. No pending callback may deliver damage during that interval.
+	if not active: return
+	active = false; pending_targets.clear()
+	_retire_flight()
+	if is_instance_valid(_renderer):
+		if _renderer.is_inside_tree(): _renderer.emit_effect(fighter_id, 5, global_position, direction, _visual_extent, .18)
+	set_deferred("monitoring", false)
+	projectile_expired.emit()
+	queue_free()
+
+func _exit_tree() -> void:
+	_retire_flight()
+	if is_instance_valid(_renderer):
+		if active and _renderer.is_inside_tree(): _renderer.emit_effect(fighter_id,5,global_position,direction,_visual_extent,.18)

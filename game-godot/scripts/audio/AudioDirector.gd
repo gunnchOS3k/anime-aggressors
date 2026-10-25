@@ -18,6 +18,9 @@ var ACOUSTIC_OUTPUT_PHYSICAL: String = "PHYSICAL_PENDING"
 
 func _ready() -> void:
 	apply_master_volume(float(GameState.master_volume) if Engine.get_main_loop() else 1.0)
+	var limiter := AudioEffectHardLimiter.new()
+	limiter.ceiling_db = -1.0
+	AudioServer.add_bus_effect(0,limiter)
 	_Bank.ensure_bus_player(self)
 
 
@@ -73,7 +76,7 @@ func stop_music() -> void:
 		_music_playing = false
 		return
 	for child in root.get_children():
-		if child is AudioStreamPlayer:
+		if child is AudioStreamPlayer and child.get_meta("audio_category", "sfx") == "music":
 			(child as AudioStreamPlayer).stop()
 			child.queue_free()
 	_music_playing = false

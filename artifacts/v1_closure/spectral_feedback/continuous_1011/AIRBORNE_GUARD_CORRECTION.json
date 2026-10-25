@@ -1,0 +1,28 @@
+{
+  "baseline_source": "8f10104dfdaafd698b4c2528c33c0d1056a16914 + recorded fresh-fixture diff; shipping runtime unchanged",
+  "fixed_source_parent": "68989f6006a0f5c9eef19c439c7179652e68be25 + recorded guard diff",
+  "baseline_rows": 36,
+  "baseline_guard_failures": 36,
+  "fixed_rows": 36,
+  "fixed_pass": true,
+  "body_presentations": 18,
+  "facings": [
+    -1,
+    1
+  ],
+  "root_cause": "Cached previous-slide floor flag permits ground guard after upward jump impulse; action lock prevents held-guard release, movement lock skips gravity indefinitely.",
+  "correction": "Require nonascending grounded guard; release invalid ground guard before action lock using FALL while airborne. Existing ground-only guard rule retained; air dodge unchanged.",
+  "competitive_parameters_changed": false,
+  "baseline": "artifacts/v1_closure/spectral_feedback/continuous_1011/airborne_guard_clean_baseline/AirborneGuard/airborne_guard.json",
+  "fixed": "artifacts/v1_closure/spectral_feedback/continuous_1011/airborne_guard_fixed/AirborneGuard/airborne_guard.json",
+  "baseline_fixture_issue_preserved": "airborne_guard_baseline,18invalid successive-case starts; excluded from all36baseline acceptance",
+  "changed_runtime_file_sha256": "c9d2f3973db1202e5e8e636bd26b0b32fc0017f6ca52979c9c8207f9dd0e0e20",
+  "affected_suites_passed": [
+    "AirborneGuard",
+    "ThrowOwnership",
+    "CombatActivation",
+    "InterruptedMove",
+    "SpectralFeedback",
+    "ChargeContinuity"
+  ]
+}

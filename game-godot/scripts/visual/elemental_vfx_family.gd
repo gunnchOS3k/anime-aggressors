@@ -5,6 +5,8 @@ class_name ElementalVfxFamily
 ## VFX amplify the hit; they do not create the hit.
 
 const FAMILIES := {
+	"yin": {"primary":"subtractive_aperture","secondary":"inward_spiral","hit":"void_compression","charge":"inward_absorption","clash":"void_seam","particle_budget":10},
+	"yang": {"primary":"constructed_hex_radiance","secondary":"ordered_rays","hit":"radiant_definition","charge":"ordered_construction","clash":"harmonic_edge","particle_budget":14},
 	"ember-vale": {
 		"primary": "flame_tongues",
 		"secondary": "heat_trail_embers",
@@ -64,6 +66,8 @@ const FAMILIES := {
 }
 
 const CRITICAL_CUES := {
+	"yin": "subtractive_collapse",
+	"yang": "radiant_construction_release",
 	"ember-vale": "furnace_flare_rupture",
 	"rook-ironside": "tectonic_impact_fracture",
 	"juno-spark": "voltage_fork",
@@ -90,7 +94,7 @@ static func family(fighter_id: String) -> Dictionary:
 
 
 static func complete() -> bool:
-	return FAMILIES.size() == 7 and CRITICAL_CUES.size() == 7
+	return FAMILIES.size() == 9 and CRITICAL_CUES.size() == 9
 
 
 static func critical_cue(fighter_id: String) -> String:

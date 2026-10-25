@@ -1,0 +1,1118 @@
+infra	UNKNOWN STEP	﻿2026-10-22T21:37:31.9572324Z Current runner version: '2.338.0'
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9606980Z ##[group]Runner Image Provisioner
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9608336Z Hosted Compute Agent
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9609304Z Version: 20261012.601
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9610352Z Commit: f3dc54e1fb89da6852db922499a0233137369e1d
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9611630Z Build Date: 2026-10-12T17:48:21Z
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9612831Z Worker ID: {95867966-3554-469d-b2c3-b8b97c56dcae}
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9614161Z Region: eastus
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9615041Z Cloud: Azure
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9616042Z ##[endgroup]
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9619145Z ##[group]Operating System
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9620199Z Ubuntu
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9621122Z 24.04.5
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9621912Z LTS
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9622736Z ##[endgroup]
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9623775Z ##[group]Runner Image
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9624771Z Image: ubuntu-24.04
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9625767Z Version: 20261012.334.1
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9628126Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9630861Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9632635Z ##[endgroup]
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9634528Z ##[group]GITHUB_TOKEN Permissions
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9637697Z Contents: read
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9638673Z Metadata: read
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9639601Z ##[endgroup]
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9642545Z Secret source: Actions
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9644022Z Cache mode: write
+infra	UNKNOWN STEP	2026-10-22T21:37:31.9645701Z Prepare workflow directory
+infra	UNKNOWN STEP	2026-10-22T21:37:32.0109033Z Prepare all required actions
+infra	UNKNOWN STEP	2026-10-22T21:37:32.0178157Z Getting action download info
+infra	UNKNOWN STEP	2026-10-22T21:37:32.2320684Z Download action repository 'actions/checkout@v6' (SHA:d23441a48e516b6c34aea4fa41551a30e30af803)
+infra	UNKNOWN STEP	2026-10-22T21:37:32.3567155Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+infra	UNKNOWN STEP	2026-10-22T21:37:32.5388518Z Complete job name: infra
+infra	UNKNOWN STEP	2026-10-22T21:37:32.6142970Z ##[group]Run actions/checkout@v6
+infra	UNKNOWN STEP	2026-10-22T21:37:32.6143870Z with:
+infra	UNKNOWN STEP	2026-10-22T21:37:32.6144337Z   repository: gunnchOS3k/anime-aggressors
+infra	UNKNOWN STEP	2026-10-22T21:37:32.6148343Z   token: ***
+infra	UNKNOWN STEP	2026-10-22T21:37:32.6148779Z   ssh-strict: true
+infra	UNKNOWN STEP	2026-10-22T21:37:32.6149208Z   ssh-user: git
+infra	UNKNOWN STEP	2026-10-22T21:37:32.6149646Z   persist-credentials: true
+infra	UNKNOWN STEP	2026-10-22T21:37:32.6150133Z   clean: true
+infra	UNKNOWN STEP	2026-10-22T21:37:32.6150565Z   sparse-checkout-cone-mode: true
+infra	UNKNOWN STEP	2026-10-22T21:37:32.6151081Z   fetch-depth: 1
+infra	UNKNOWN STEP	2026-10-22T21:37:32.6151505Z   fetch-tags: false
+infra	UNKNOWN STEP	2026-10-22T21:37:32.6151939Z   show-progress: true
+infra	UNKNOWN STEP	2026-10-22T21:37:32.6152381Z   lfs: false
+infra	UNKNOWN STEP	2026-10-22T21:37:32.6152785Z   submodules: false
+infra	UNKNOWN STEP	2026-10-22T21:37:32.6153229Z   set-safe-directory: true
+infra	UNKNOWN STEP	2026-10-22T21:37:32.6153733Z   allow-unsafe-pr-checkout: false
+infra	UNKNOWN STEP	2026-10-22T21:37:32.6154501Z ##[endgroup]
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7119194Z Syncing repository: gunnchOS3k/anime-aggressors
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7121947Z ##[group]Getting Git version info
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7123431Z Working directory is '/home/runner/work/anime-aggressors/anime-aggressors'
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7125225Z [command]/usr/bin/git version
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7184103Z git version 2.55.0
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7207121Z ##[endgroup]
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7221338Z Temporarily overriding HOME='/home/runner/work/_temp/4b557b7c-fe9a-40c2-891c-205754b62480' before making global git config changes
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7223751Z Adding repository directory to the temporary git global config as a safe directory
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7227054Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/anime-aggressors/anime-aggressors
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7279121Z Deleting the contents of '/home/runner/work/anime-aggressors/anime-aggressors'
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7283923Z ##[group]Determining repository object format
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7286196Z ##[endgroup]
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7287783Z ##[group]Initializing the repository
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7291477Z [command]/usr/bin/git init /home/runner/work/anime-aggressors/anime-aggressors
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7403400Z hint: Using 'master' as the name for the initial branch. This default branch name
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7405460Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7407188Z hint: to use in all of your new repositories, which will suppress this warning,
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7408371Z hint: call:
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7408993Z hint:
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7409854Z hint: 	git config --global init.defaultBranch <name>
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7410879Z hint:
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7411791Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7413277Z hint: 'development'. The just-created branch can be renamed via this command:
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7414515Z hint:
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7415221Z hint: 	git branch -m <name>
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7416009Z hint:
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7417256Z hint: Disable this message with "git config set advice.defaultBranchName false"
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7423746Z Initialized empty Git repository in /home/runner/work/anime-aggressors/anime-aggressors/.git/
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7432849Z [command]/usr/bin/git remote add origin https://github.com/gunnchOS3k/anime-aggressors
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7480902Z ##[endgroup]
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7482202Z ##[group]Disabling automatic garbage collection
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7485520Z [command]/usr/bin/git config --local gc.auto 0
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7520752Z ##[endgroup]
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7522393Z ##[group]Setting up auth
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7523390Z Removing SSH command configuration
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7530244Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7565837Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7927504Z Removing HTTP extra header
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7936760Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+infra	UNKNOWN STEP	2026-10-22T21:37:32.7976550Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+infra	UNKNOWN STEP	2026-10-22T21:37:32.8201011Z Removing includeIf entries pointing to credentials config files
+infra	UNKNOWN STEP	2026-10-22T21:37:32.8208427Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+infra	UNKNOWN STEP	2026-10-22T21:37:32.8245621Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+infra	UNKNOWN STEP	2026-10-22T21:37:32.8470437Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-3e64f271-a8ee-45ec-9701-3e50f3c40683.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+infra	UNKNOWN STEP	2026-10-22T21:37:32.8511677Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/anime-aggressors/anime-aggressors/.git.path /home/runner/work/_temp/git-credentials-3e64f271-a8ee-45ec-9701-3e50f3c40683.config
+infra	UNKNOWN STEP	2026-10-22T21:37:32.8546121Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/anime-aggressors/anime-aggressors/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-3e64f271-a8ee-45ec-9701-3e50f3c40683.config
+infra	UNKNOWN STEP	2026-10-22T21:37:32.8584141Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-3e64f271-a8ee-45ec-9701-3e50f3c40683.config
+infra	UNKNOWN STEP	2026-10-22T21:37:32.8629740Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-3e64f271-a8ee-45ec-9701-3e50f3c40683.config
+infra	UNKNOWN STEP	2026-10-22T21:37:32.8661076Z ##[endgroup]
+infra	UNKNOWN STEP	2026-10-22T21:37:32.8662114Z ##[group]Fetching the repository
+infra	UNKNOWN STEP	2026-10-22T21:37:32.8669637Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +2d762eef5584255b099a597d206d4a1473c48a87:refs/remotes/origin/release/anime-v1-dialogue-and-elemental-performance
+infra	UNKNOWN STEP	2026-10-22T21:38:06.9172889Z From https://github.com/gunnchOS3k/anime-aggressors
+infra	UNKNOWN STEP	2026-10-22T21:38:06.9173997Z  * [new ref]           2d762eef5584255b099a597d206d4a1473c48a87 -> origin/release/anime-v1-dialogue-and-elemental-performance
+infra	UNKNOWN STEP	2026-10-22T21:38:06.9186158Z [command]/usr/bin/git branch --list --remote origin/release/anime-v1-dialogue-and-elemental-performance
+infra	UNKNOWN STEP	2026-10-22T21:38:06.9215065Z   origin/release/anime-v1-dialogue-and-elemental-performance
+infra	UNKNOWN STEP	2026-10-22T21:38:06.9224854Z [command]/usr/bin/git rev-parse refs/remotes/origin/release/anime-v1-dialogue-and-elemental-performance
+infra	UNKNOWN STEP	2026-10-22T21:38:06.9250234Z 2d762eef5584255b099a597d206d4a1473c48a87
+infra	UNKNOWN STEP	2026-10-22T21:38:06.9254727Z ##[endgroup]
+infra	UNKNOWN STEP	2026-10-22T21:38:06.9255815Z ##[group]Determining the checkout info
+infra	UNKNOWN STEP	2026-10-22T21:38:06.9256616Z ##[endgroup]
+infra	UNKNOWN STEP	2026-10-22T21:38:06.9260607Z [command]/usr/bin/git sparse-checkout disable
+infra	UNKNOWN STEP	2026-10-22T21:38:06.9312715Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+infra	UNKNOWN STEP	2026-10-22T21:38:06.9343268Z ##[group]Checking out the ref
+infra	UNKNOWN STEP	2026-10-22T21:38:06.9348234Z [command]/usr/bin/git checkout --progress --force -B release/anime-v1-dialogue-and-elemental-performance refs/remotes/origin/release/anime-v1-dialogue-and-elemental-performance
+infra	UNKNOWN STEP	2026-10-22T21:38:07.9806823Z Updating files:  23% (4706/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:08.0199902Z Updating files:  24% (4756/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:08.1111991Z Updating files:  25% (4954/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:08.1796656Z Updating files:  26% (5152/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:08.1957448Z Updating files:  27% (5350/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:08.2164022Z Updating files:  28% (5548/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:08.3359345Z Updating files:  29% (5747/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:08.3921143Z Updating files:  30% (5945/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:08.4480005Z Updating files:  31% (6143/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:08.4949987Z Updating files:  32% (6341/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:08.5322451Z Updating files:  33% (6539/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:08.5909262Z Updating files:  34% (6737/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:08.7148941Z Updating files:  35% (6935/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:08.7976308Z Updating files:  36% (7134/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:08.8920169Z Updating files:  37% (7332/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:08.9579322Z Updating files:  38% (7530/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:08.9772138Z Updating files:  38% (7687/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:09.0668309Z Updating files:  39% (7728/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:09.1635615Z Updating files:  40% (7926/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:09.2447520Z Updating files:  41% (8124/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:09.3117957Z Updating files:  42% (8322/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:09.3991360Z Updating files:  43% (8521/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:09.4218339Z Updating files:  44% (8719/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:09.4801017Z Updating files:  45% (8917/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:09.5037579Z Updating files:  46% (9115/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:09.5272745Z Updating files:  47% (9313/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:09.5718377Z Updating files:  48% (9511/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:09.5870393Z Updating files:  49% (9709/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:09.6043965Z Updating files:  50% (9907/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:09.6407189Z Updating files:  51% (10106/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:09.6689708Z Updating files:  52% (10304/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:09.6938347Z Updating files:  53% (10502/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:09.7233921Z Updating files:  54% (10700/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:09.7588292Z Updating files:  55% (10898/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:09.7720406Z Updating files:  56% (11096/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:09.9609115Z Updating files:  57% (11294/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:09.9775078Z Updating files:  57% (11491/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:10.3015373Z Updating files:  58% (11493/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:10.3394904Z Updating files:  59% (11691/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:10.3765915Z Updating files:  60% (11889/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:10.3841666Z Updating files:  61% (12087/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:10.3978552Z Updating files:  62% (12285/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:10.4124913Z Updating files:  63% (12483/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:10.4256282Z Updating files:  64% (12681/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:10.4384824Z Updating files:  65% (12880/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:10.4503544Z Updating files:  66% (13078/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:10.4623467Z Updating files:  67% (13276/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:10.4729656Z Updating files:  68% (13474/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:10.4840480Z Updating files:  69% (13672/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:10.4944024Z Updating files:  70% (13870/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:10.5678951Z Updating files:  71% (14068/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:10.5963186Z Updating files:  72% (14267/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:10.6372074Z Updating files:  73% (14465/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:10.7906185Z Updating files:  74% (14663/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:10.8142312Z Updating files:  75% (14861/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:10.8368250Z Updating files:  76% (15059/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:10.8633570Z Updating files:  77% (15257/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:10.8846681Z Updating files:  78% (15455/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:10.8976034Z Updating files:  79% (15654/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:10.9150858Z Updating files:  80% (15852/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:10.9627497Z Updating files:  81% (16050/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:11.3217744Z Updating files:  81% (16125/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:11.3621297Z Updating files:  82% (16248/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:11.3765505Z Updating files:  83% (16446/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:11.3905657Z Updating files:  84% (16644/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:11.4043294Z Updating files:  85% (16842/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:11.4156193Z Updating files:  86% (17041/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:11.4265167Z Updating files:  87% (17239/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:11.4384335Z Updating files:  88% (17437/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:11.4667847Z Updating files:  89% (17635/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:11.7411754Z Updating files:  90% (17833/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:11.7590068Z Updating files:  91% (18031/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:11.7684280Z Updating files:  92% (18229/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:11.7773990Z Updating files:  93% (18428/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:11.7896794Z Updating files:  94% (18626/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:11.8018516Z Updating files:  95% (18824/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:11.8205661Z Updating files:  96% (19022/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:11.8315585Z Updating files:  97% (19220/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:11.8435817Z Updating files:  98% (19418/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:11.8540518Z Updating files:  99% (19616/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:11.8541280Z Updating files: 100% (19814/19814)
+infra	UNKNOWN STEP	2026-10-22T21:38:11.8541902Z Updating files: 100% (19814/19814), done.
+infra	UNKNOWN STEP	2026-10-22T21:38:11.9912673Z Switched to a new branch 'release/anime-v1-dialogue-and-elemental-performance'
+infra	UNKNOWN STEP	2026-10-22T21:38:11.9938357Z branch 'release/anime-v1-dialogue-and-elemental-performance' set up to track 'origin/release/anime-v1-dialogue-and-elemental-performance'.
+infra	UNKNOWN STEP	2026-10-22T21:38:12.0048752Z ##[endgroup]
+infra	UNKNOWN STEP	2026-10-22T21:38:12.0880708Z [command]/usr/bin/git log -1 --format=%H
+infra	UNKNOWN STEP	2026-10-22T21:38:12.0913020Z 2d762eef5584255b099a597d206d4a1473c48a87
+infra	UNKNOWN STEP	2026-10-22T21:38:12.1608299Z ##[group]Run actions/setup-python@v5
+infra	UNKNOWN STEP	2026-10-22T21:38:12.1608814Z with:
+infra	UNKNOWN STEP	2026-10-22T21:38:12.1609156Z   python-version: 3.11
+infra	UNKNOWN STEP	2026-10-22T21:38:12.1609577Z   check-latest: false
+infra	UNKNOWN STEP	2026-10-22T21:38:12.1614299Z   token: ***
+infra	UNKNOWN STEP	2026-10-22T21:38:12.1614700Z   update-environment: true
+infra	UNKNOWN STEP	2026-10-22T21:38:12.1615129Z   allow-prereleases: false
+infra	UNKNOWN STEP	2026-10-22T21:38:12.1615545Z   freethreaded: false
+infra	UNKNOWN STEP	2026-10-22T21:38:12.1616033Z ##[endgroup]
+infra	UNKNOWN STEP	2026-10-22T21:38:12.2949666Z ##[group]Installed versions
+infra	UNKNOWN STEP	2026-10-22T21:38:12.3925590Z (node:2358) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+infra	UNKNOWN STEP	2026-10-22T21:38:12.3927135Z (Use `node --trace-deprecation ...` to show where the warning was created)
+infra	UNKNOWN STEP	2026-10-22T21:38:12.3927915Z Successfully set up CPython (3.11.17)
+infra	UNKNOWN STEP	2026-10-22T21:38:12.3928744Z ##[endgroup]
+infra	UNKNOWN STEP	2026-10-22T21:38:12.4354064Z ##[group]Run python3 tools/authored_animation/audit_workflow_referenced_paths.py
+infra	UNKNOWN STEP	2026-10-22T21:38:12.4354738Z [36;1mpython3 tools/authored_animation/audit_workflow_referenced_paths.py[0m
+infra	UNKNOWN STEP	2026-10-22T21:38:13.0857345Z shell: /usr/bin/bash -e {0}
+infra	UNKNOWN STEP	2026-10-22T21:38:13.0857630Z env:
+infra	UNKNOWN STEP	2026-10-22T21:38:13.0857928Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.17/x64
+infra	UNKNOWN STEP	2026-10-22T21:38:13.0858605Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.17/x64/lib/pkgconfig
+infra	UNKNOWN STEP	2026-10-22T21:38:13.0859055Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+infra	UNKNOWN STEP	2026-10-22T21:38:13.0859528Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+infra	UNKNOWN STEP	2026-10-22T21:38:13.0860246Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+infra	UNKNOWN STEP	2026-10-22T21:38:13.0860949Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.17/x64/lib
+infra	UNKNOWN STEP	2026-10-22T21:38:13.0861488Z ##[endgroup]
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3787722Z {
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3788035Z   "ok": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3788402Z   "WORKFLOW_REFERENCED_PATHS_EXIST_PASS": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3788714Z   "checked": 53,
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3788912Z   "missing": [],
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3789525Z   "note": "Generated-production-art paths are EXPERIMENT_ONLY after PR106 salvage; workflows must call current authored/art_pipeline validators instead."
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3790183Z }
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3790391Z WORKFLOW_REFERENCED_PATHS_EXIST_PASS=true
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3863801Z ##[group]Run # Post-#116: do not call tools/generated_production_art/* (EXPERIMENT_ONLY,
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3864437Z [36;1m# Post-#116: do not call tools/generated_production_art/* (EXPERIMENT_ONLY,[0m
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3864985Z [36;1m# intentionally excluded by PR106 salvage). Body/geometry coverage maps to[0m
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3865506Z [36;1m# authored deform-skeleton + mesh-deform audits on current main.[0m
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3865982Z [36;1mpython3 tools/authored_animation/validate_provenance.py[0m
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3866779Z [36;1mpython3 tools/authored_animation/validate_production_infra.py[0m
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3867239Z [36;1mpython3 tools/authored_animation/pixel_spectacle_perf.py[0m
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3867824Z [36;1mpython3 tools/authored_animation/submit_check.py --fighter rook-ironside --action heavy || true[0m
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3868436Z [36;1mpython3 tools/authored_animation/validate_deform_skeleton.py[0m
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3868911Z [36;1mpython3 tools/authored_animation/audit_mesh_deform.py[0m
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3931533Z shell: /usr/bin/bash -e {0}
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3931781Z env:
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3932047Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.17/x64
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3932487Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.17/x64/lib/pkgconfig
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3932914Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3933301Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3933683Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3934074Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.17/x64/lib
+infra	UNKNOWN STEP	2026-10-22T21:38:14.3934393Z ##[endgroup]
+infra	UNKNOWN STEP	2026-10-22T21:38:14.4228698Z {
+infra	UNKNOWN STEP	2026-10-22T21:38:14.4229015Z   "ok": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:14.4229243Z   "failures": [],
+infra	UNKNOWN STEP	2026-10-22T21:38:14.4229512Z   "hero_actions": 98,
+infra	UNKNOWN STEP	2026-10-22T21:38:14.4229765Z   "authored_approved_count": 0,
+infra	UNKNOWN STEP	2026-10-22T21:38:14.4230072Z   "roster_schema": "aa_provenance_roster_v2"
+infra	UNKNOWN STEP	2026-10-22T21:38:14.4230368Z }
+infra	UNKNOWN STEP	2026-10-22T21:38:15.1856596Z {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.1857066Z   "ok": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.1857415Z   "failures": [],
+infra	UNKNOWN STEP	2026-10-22T21:38:15.1857725Z   "warnings": [
+infra	UNKNOWN STEP	2026-10-22T21:38:15.1858072Z     "gitattributes_missing_blend_lfs",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.1858524Z     "BLENDER_SOURCE_STORAGE_SETUP_REQUIRED",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.1858998Z     "BLENDER_SOURCE_STORAGE_SETUP_REQUIRED"
+infra	UNKNOWN STEP	2026-10-22T21:38:15.1859416Z   ],
+infra	UNKNOWN STEP	2026-10-22T21:38:15.1859762Z   "BLENDER_SOURCE_STORAGE_SETUP_REQUIRED": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.1860236Z   "lfs_upload_ready": false,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.1860603Z   "not_final_art": true
+infra	UNKNOWN STEP	2026-10-22T21:38:15.1860910Z }
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2116012Z {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2116627Z   "PIXEL_AUTHORED_COMBAT_PERF_PASS": false,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2117198Z   "PIXEL_SPECTACLE_PERF_PASS": false,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2118292Z   "reason": "No authored-combat Pixel profile. Instrumentation schema only. Do not delete authored animation quality to chase frames.",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2119564Z   "scenes": [
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2119765Z     {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2119974Z       "scene": "normal_fight_baseline",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2120262Z       "avg_fps": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2120497Z       "pct1_low": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2120728Z       "worst_frame_ms": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2120973Z       "particle_count": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2121210Z       "dynamic_lights": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2121441Z       "draw_calls": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2121666Z       "memory_delta_mb": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2121976Z       "device": "Pixel 6a reference (not profiled this pass)",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2122310Z       "measured": false
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2122517Z     },
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2122690Z     {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2122886Z       "scene": "both_aura_100",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2123127Z       "avg_fps": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2123343Z       "pct1_low": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2123563Z       "worst_frame_ms": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2123980Z       "particle_count": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2124236Z       "dynamic_lights": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2124474Z       "draw_calls": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2124737Z       "memory_delta_mb": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2125037Z       "device": "Pixel 6a reference (not profiled this pass)",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2125361Z       "measured": false
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2125563Z     },
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2125731Z     {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2125912Z       "scene": "aura_clash",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2126142Z       "avg_fps": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2126659Z       "pct1_low": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2126889Z       "worst_frame_ms": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2127139Z       "particle_count": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2127370Z       "dynamic_lights": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2127600Z       "draw_calls": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2127822Z       "memory_delta_mb": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2128119Z       "device": "Pixel 6a reference (not profiled this pass)",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2128457Z       "measured": false
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2128673Z     },
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2128841Z     {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2129029Z       "scene": "super",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2129240Z       "avg_fps": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2129453Z       "pct1_low": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2129668Z       "worst_frame_ms": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2129907Z       "particle_count": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2130142Z       "dynamic_lights": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2130376Z       "draw_calls": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2130599Z       "memory_delta_mb": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2130888Z       "device": "Pixel 6a reference (not profiled this pass)",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2131212Z       "measured": false
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2131412Z     },
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2131604Z     {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2131878Z       "scene": "clash_resolution_explosion",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2132155Z       "avg_fps": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2132366Z       "pct1_low": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2132577Z       "worst_frame_ms": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2132807Z       "particle_count": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2133046Z       "dynamic_lights": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2133273Z       "draw_calls": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2133498Z       "memory_delta_mb": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2133781Z       "device": "Pixel 6a reference (not profiled this pass)",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2134096Z       "measured": false
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2134297Z     },
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2134463Z     {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2134640Z       "scene": "ko",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2134841Z       "avg_fps": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2135347Z       "pct1_low": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2135731Z       "worst_frame_ms": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2136171Z       "particle_count": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2136828Z       "dynamic_lights": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2137252Z       "draw_calls": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2137679Z       "memory_delta_mb": null,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2137990Z       "device": "Pixel 6a reference (not profiled this pass)",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2138310Z       "measured": false
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2138512Z     }
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2138876Z   ],
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2139182Z   "lod_policy": "If slow: LOD spectacle. Never remove authored acting quality."
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2139561Z }
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2529684Z {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2529896Z   "ok": false,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2530114Z   "failures": [
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2530355Z     "source_blend_missing_or_lfs_blocked"
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2530646Z   ],
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2530852Z   "fighter": "rook-ironside",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2531106Z   "action": "heavy",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2531326Z   "source_exists": false,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2531560Z   "action_exists": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2531801Z   "provenance_exists": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2532046Z   "glb_exists": false,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2532265Z   "contact_sync": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2532492Z   "preview_renders": false,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2532727Z   "status": "MISSING",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2532963Z   "human_animation_approved": false,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2533534Z   "note": "Submit-check never promotes status to AUTHORED_APPROVED."
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2533911Z }
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2975791Z {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2976629Z   "ok": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2976984Z   "failures": [],
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2977219Z   "glb_checked": 7,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2977444Z   "required_bones": [
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2977664Z     "Root",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2977853Z     "Hips",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2978040Z     "Spine",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2978233Z     "Chest",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2978425Z     "Neck",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2978606Z     "Head",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2978793Z     "Shoulder_L",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2978998Z     "UpperArm_L",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2979198Z     "LowerArm_L",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2979395Z     "Hand_L",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2979587Z     "Shoulder_R",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2979788Z     "UpperArm_R",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2979988Z     "LowerArm_R",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2980187Z     "Hand_R",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2980380Z     "UpperLeg_L",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2980600Z     "LowerLeg_L",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2980804Z     "Foot_L",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2981007Z     "Toes_L",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2981202Z     "UpperLeg_R",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2981402Z     "LowerLeg_R",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2981602Z     "Foot_R",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2981791Z     "Toes_R"
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2981978Z   ]
+infra	UNKNOWN STEP	2026-10-22T21:38:15.2982155Z }
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3458495Z {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3458836Z   "ok": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3459187Z   "failures": [],
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3459505Z   "fighters": [
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3459713Z     {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3459925Z       "fighter_id": "ember-vale",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3460190Z       "proxy": {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3460403Z         "exists": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3460724Z         "path": "game-godot/assets/characters/proxy/ember-vale.glb",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3461094Z         "mesh_count": 43,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3461325Z         "skin_count": 1,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3461554Z         "joint_count": 18,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3461801Z         "accessor_count": 1263,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3462061Z         "has_weights": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3462311Z         "final_weights": false
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3462547Z       },
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3462744Z       "authored_proof": {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3462975Z         "exists": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3463355Z         "path": "game-godot/assets/characters/authored/ember-vale/pipeline_proof.glb",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3463788Z         "mesh_count": 1,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3464015Z         "skin_count": 1,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3464240Z         "joint_count": 23,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3464479Z         "accessor_count": 101,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3464733Z         "has_weights": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3464975Z         "final_weights": false
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3465205Z       }
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3465387Z     },
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3465567Z     {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3465769Z       "fighter_id": "rook-ironside",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3466031Z       "proxy": {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3466478Z         "exists": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3466854Z         "path": "game-godot/assets/characters/proxy/rook-ironside.glb",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3467435Z         "mesh_count": 35,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3467667Z         "skin_count": 1,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3467903Z         "joint_count": 18,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3468141Z         "accessor_count": 1223,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3468426Z         "has_weights": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3468672Z         "final_weights": false
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3468915Z       },
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3469112Z       "authored_proof": {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3469342Z         "exists": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3469729Z         "path": "game-godot/assets/characters/authored/rook-ironside/pipeline_proof.glb",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3470175Z         "mesh_count": 1,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3470399Z         "skin_count": 1,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3470624Z         "joint_count": 23,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3470859Z         "accessor_count": 101,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3471105Z         "has_weights": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3471344Z         "final_weights": false
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3471571Z       }
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3472055Z     },
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3472380Z     {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3472605Z       "fighter_id": "juno-spark",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3472868Z       "proxy": {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3473079Z         "exists": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3473390Z         "path": "game-godot/assets/characters/proxy/juno-spark.glb",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3473750Z         "mesh_count": 35,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3473974Z         "skin_count": 1,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3474201Z         "joint_count": 18,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3474441Z         "accessor_count": 1226,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3474690Z         "has_weights": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3474931Z         "final_weights": false
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3475150Z       },
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3475335Z       "authored_proof": {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3475550Z         "exists": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3475903Z         "path": "game-godot/assets/characters/authored/juno-spark/pipeline_proof.glb",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3476464Z         "mesh_count": 1,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3476689Z         "skin_count": 1,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3476908Z         "joint_count": 23,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3477128Z         "accessor_count": 101,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3477358Z         "has_weights": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3477592Z         "final_weights": false
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3477811Z       }
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3477980Z     },
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3478149Z     {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3478341Z       "fighter_id": "kaia-windrow",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3478604Z       "proxy": {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3478802Z         "exists": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3479106Z         "path": "game-godot/assets/characters/proxy/kaia-windrow.glb",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3479455Z         "mesh_count": 35,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3479671Z         "skin_count": 1,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3479949Z         "joint_count": 18,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3480301Z         "accessor_count": 1224,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3480550Z         "has_weights": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3480803Z         "final_weights": false
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3481025Z       },
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3481217Z       "authored_proof": {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3481436Z         "exists": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3481807Z         "path": "game-godot/assets/characters/authored/kaia-windrow/pipeline_proof.glb",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3482220Z         "mesh_count": 1,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3482431Z         "skin_count": 1,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3482643Z         "joint_count": 23,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3482979Z         "accessor_count": 101,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3483390Z         "has_weights": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3483633Z         "final_weights": false
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3483852Z       }
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3484024Z     },
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3484192Z     {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3484386Z       "fighter_id": "nix-calder",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3484631Z       "proxy": {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3484825Z         "exists": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3485115Z         "path": "game-godot/assets/characters/proxy/nix-calder.glb",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3485450Z         "mesh_count": 37,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3485669Z         "skin_count": 1,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3486048Z         "joint_count": 18,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3486410Z         "accessor_count": 1235,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3486650Z         "has_weights": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3486877Z         "final_weights": false
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3487095Z       },
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3487285Z       "authored_proof": {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3487501Z         "exists": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3487849Z         "path": "game-godot/assets/characters/authored/nix-calder/pipeline_proof.glb",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3488247Z         "mesh_count": 1,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3488461Z         "skin_count": 1,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3488674Z         "joint_count": 23,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3488896Z         "accessor_count": 101,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3489125Z         "has_weights": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3489354Z         "final_weights": false
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3489575Z       }
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3489745Z     },
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3489921Z     {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3490109Z       "fighter_id": "orion-vell",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3490471Z       "proxy": {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3490675Z         "exists": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3490961Z         "path": "game-godot/assets/characters/proxy/orion-vell.glb",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3491289Z         "mesh_count": 36,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3491503Z         "skin_count": 1,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3491712Z         "joint_count": 18,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3491932Z         "accessor_count": 1231,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3492161Z         "has_weights": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3492386Z         "final_weights": false
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3492607Z       },
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3492788Z       "authored_proof": {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3493005Z         "exists": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3493346Z         "path": "game-godot/assets/characters/authored/orion-vell/pipeline_proof.glb",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3493739Z         "mesh_count": 1,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3493951Z         "skin_count": 1,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3494173Z         "joint_count": 23,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3494408Z         "accessor_count": 101,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3494652Z         "has_weights": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3495072Z         "final_weights": false
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3495466Z       }
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3495753Z     },
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3496038Z     {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3496560Z       "fighter_id": "vesper-nyx",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3496980Z       "proxy": {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3497367Z         "exists": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3497866Z         "path": "game-godot/assets/characters/proxy/vesper-nyx.glb",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3498474Z         "mesh_count": 36,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3498841Z         "skin_count": 1,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3499231Z         "joint_count": 18,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3499473Z         "accessor_count": 1232,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3499725Z         "has_weights": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3499957Z         "final_weights": false
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3500179Z       },
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3500364Z       "authored_proof": {
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3500588Z         "exists": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3500962Z         "path": "game-godot/assets/characters/authored/vesper-nyx/pipeline_proof.glb",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3501384Z         "mesh_count": 1,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3501603Z         "skin_count": 1,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3501817Z         "joint_count": 23,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3502043Z         "accessor_count": 101,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3502292Z         "has_weights": true,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3502522Z         "final_weights": false
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3502745Z       }
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3502916Z     }
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3503088Z   ],
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3503552Z   "note": "Proxy weights are procedural. Authored proof is a skinned cylinder for import path, not final character art.",
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3504112Z   "AUTHORED_HURT_PASS": false,
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3504362Z   "final_character_weights": false
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3504607Z }
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3539863Z ##[group]Run python3 - <<'PY'
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3540271Z [36;1mpython3 - <<'PY'[0m
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3540510Z [36;1mimport json[0m
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3540745Z [36;1mfrom pathlib import Path[0m
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3541371Z [36;1mp = json.loads(Path("artifacts/vxp3/reports/AUTHORED_PRODUCTION_INFRA.json").read_text())[0m
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3541851Z [36;1massert p.get("ok"), p[0m
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3542250Z [36;1mgates = Path("artifacts/vxp3/reports/VXP3_AUTHORED_ANIMATION_GATES.json")[0m
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3542675Z [36;1mif gates.is_file():[0m
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3542950Z [36;1m    g = json.loads(gates.read_text())[0m
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3543520Z [36;1m    for k in ("HUMAN_ANIMATION_QUALITY_PASS","HUMAN_AURA_CLASH_PASS","MERGE_AUTHORIZED","FINAL_AUTHORED_ANIMATION_PASS"):[0m
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3544164Z [36;1m        assert g.get(k) is False or g.get(k) is None or g.get(k) == False, k[0m
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3544604Z [36;1mprint("infra ok; human gates false")[0m
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3544883Z [36;1mPY[0m
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3608296Z shell: /usr/bin/bash -e {0}
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3608550Z env:
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3608817Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.17/x64
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3609287Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.17/x64/lib/pkgconfig
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3609721Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3610112Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3610516Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3610911Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.17/x64/lib
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3611241Z ##[endgroup]
+infra	UNKNOWN STEP	2026-10-22T21:38:15.3910742Z infra ok; human gates false
+infra	UNKNOWN STEP	2026-10-22T21:38:15.4042926Z Post job cleanup.
+infra	UNKNOWN STEP	2026-10-22T21:38:15.5185141Z (node:2402) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+infra	UNKNOWN STEP	2026-10-22T21:38:15.5186691Z (Use `node --trace-deprecation ...` to show where the warning was created)
+infra	UNKNOWN STEP	2026-10-22T21:38:15.5370948Z Post job cleanup.
+infra	UNKNOWN STEP	2026-10-22T21:38:15.6253957Z [command]/usr/bin/git version
+infra	UNKNOWN STEP	2026-10-22T21:38:15.6299933Z git version 2.55.0
+infra	UNKNOWN STEP	2026-10-22T21:38:15.6352488Z Temporarily overriding HOME='/home/runner/work/_temp/f8e6d7ac-f054-4a98-87ba-1694e49317e6' before making global git config changes
+infra	UNKNOWN STEP	2026-10-22T21:38:15.6353486Z Adding repository directory to the temporary git global config as a safe directory
+infra	UNKNOWN STEP	2026-10-22T21:38:15.6357442Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/anime-aggressors/anime-aggressors
+infra	UNKNOWN STEP	2026-10-22T21:38:15.6390861Z Removing SSH command configuration
+infra	UNKNOWN STEP	2026-10-22T21:38:15.6400126Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+infra	UNKNOWN STEP	2026-10-22T21:38:15.6443459Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+infra	UNKNOWN STEP	2026-10-22T21:38:15.6710506Z fatal: No url found for submodule path 'third_party/anyCreature' in .gitmodules
+infra	UNKNOWN STEP	2026-10-22T21:38:15.6764872Z ##[warning]The process '/usr/bin/git' failed with exit code 128
+infra	UNKNOWN STEP	2026-10-22T21:38:15.6873390Z Cleaning up orphan processes
+infra	UNKNOWN STEP	2026-10-22T21:38:15.7205786Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/setup-python@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+hands-8d2	UNKNOWN STEP	﻿2026-10-22T21:37:33.1429663Z Current runner version: '2.338.0'
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1451370Z ##[group]Runner Image Provisioner
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1452176Z Hosted Compute Agent
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1452666Z Version: 20261012.601
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1453278Z Commit: f3dc54e1fb89da6852db922499a0233137369e1d
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1453889Z Build Date: 2026-10-12T17:48:21Z
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1454486Z Worker ID: {6dd40fbe-28d2-43a1-b725-b886dfafa300}
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1455117Z Region: westus3
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1455584Z Cloud: Azure
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1456077Z ##[endgroup]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1457223Z ##[group]Operating System
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1458087Z Ubuntu
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1458588Z 24.04.5
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1459032Z LTS
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1459516Z ##[endgroup]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1459994Z ##[group]Runner Image
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1460487Z Image: ubuntu-24.04
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1461052Z Version: 20261012.334.1
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1462187Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1463549Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1464669Z ##[endgroup]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1465766Z ##[group]GITHUB_TOKEN Permissions
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1467627Z Actions: read
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1468226Z Contents: read
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1468740Z Metadata: read
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1469286Z ##[endgroup]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1471087Z Secret source: Actions
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1471906Z Cache mode: write
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1472509Z Prepare workflow directory
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1786303Z Prepare all required actions
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.1826795Z Getting action download info
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.5073972Z Download action repository 'actions/checkout@v6' (SHA:d23441a48e516b6c34aea4fa41551a30e30af803)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:33.6106930Z Download action repository 'actions/download-artifact@v4' (SHA:d3f86a106a0bac45b974a628896c90dbdf5c8093)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.3177811Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.5746190Z Complete job name: hands-8d2
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.6528557Z ##[group]Run actions/checkout@v6
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.6529794Z with:
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.6530619Z   repository: gunnchOS3k/anime-aggressors
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.6539150Z   token: ***
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.6539951Z   ssh-strict: true
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.6540767Z   ssh-user: git
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.6541597Z   persist-credentials: true
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.6542490Z   clean: true
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.6543376Z   sparse-checkout-cone-mode: true
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.6544339Z   fetch-depth: 1
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.6545146Z   fetch-tags: false
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.6545978Z   show-progress: true
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.6546812Z   lfs: false
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.6547676Z   submodules: false
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.6548533Z   set-safe-directory: true
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.6549483Z   allow-unsafe-pr-checkout: false
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.6550698Z ##[endgroup]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7385601Z Syncing repository: gunnchOS3k/anime-aggressors
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7388572Z ##[group]Getting Git version info
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7390057Z Working directory is '/home/runner/work/anime-aggressors/anime-aggressors'
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7392028Z [command]/usr/bin/git version
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7429030Z git version 2.55.0
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7448905Z ##[endgroup]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7471356Z Temporarily overriding HOME='/home/runner/work/_temp/14a9dae4-f5c9-47cf-9f17-a058562fcac9' before making global git config changes
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7474992Z Adding repository directory to the temporary git global config as a safe directory
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7478008Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/anime-aggressors/anime-aggressors
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7525642Z Deleting the contents of '/home/runner/work/anime-aggressors/anime-aggressors'
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7529578Z ##[group]Determining repository object format
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7532354Z ##[endgroup]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7534375Z ##[group]Initializing the repository
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7537238Z [command]/usr/bin/git init /home/runner/work/anime-aggressors/anime-aggressors
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7609664Z hint: Using 'master' as the name for the initial branch. This default branch name
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7612443Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7615238Z hint: to use in all of your new repositories, which will suppress this warning,
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7616733Z hint: call:
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7617800Z hint:
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7618885Z hint: 	git config --global init.defaultBranch <name>
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7620366Z hint:
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7621574Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7623374Z hint: 'development'. The just-created branch can be renamed via this command:
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7624822Z hint:
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7625711Z hint: 	git branch -m <name>
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7627227Z hint:
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7629108Z hint: Disable this message with "git config set advice.defaultBranchName false"
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7632373Z Initialized empty Git repository in /home/runner/work/anime-aggressors/anime-aggressors/.git/
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7637380Z [command]/usr/bin/git remote add origin https://github.com/gunnchOS3k/anime-aggressors
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7664845Z ##[endgroup]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7666330Z ##[group]Disabling automatic garbage collection
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7667918Z [command]/usr/bin/git config --local gc.auto 0
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7696761Z ##[endgroup]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7698254Z ##[group]Setting up auth
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7699199Z Removing SSH command configuration
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7702684Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.7734031Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.8027716Z Removing HTTP extra header
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.8035229Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.8071450Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.8265880Z Removing includeIf entries pointing to credentials config files
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.8271779Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.8309745Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.8510216Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-dc968b9c-57aa-476b-97c7-ec6d3ca6f447.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.8547648Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/anime-aggressors/anime-aggressors/.git.path /home/runner/work/_temp/git-credentials-dc968b9c-57aa-476b-97c7-ec6d3ca6f447.config
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.8582573Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/anime-aggressors/anime-aggressors/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-dc968b9c-57aa-476b-97c7-ec6d3ca6f447.config
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.8615656Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-dc968b9c-57aa-476b-97c7-ec6d3ca6f447.config
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.8647769Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-dc968b9c-57aa-476b-97c7-ec6d3ca6f447.config
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.8682844Z ##[endgroup]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.8684717Z ##[group]Fetching the repository
+hands-8d2	UNKNOWN STEP	2026-10-22T21:37:34.8692707Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +2d762eef5584255b099a597d206d4a1473c48a87:refs/remotes/origin/release/anime-v1-dialogue-and-elemental-performance
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:08.7846037Z From https://github.com/gunnchOS3k/anime-aggressors
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:08.7847023Z  * [new ref]           2d762eef5584255b099a597d206d4a1473c48a87 -> origin/release/anime-v1-dialogue-and-elemental-performance
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:08.7863381Z [command]/usr/bin/git branch --list --remote origin/release/anime-v1-dialogue-and-elemental-performance
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:08.7881835Z   origin/release/anime-v1-dialogue-and-elemental-performance
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:08.7888823Z [command]/usr/bin/git rev-parse refs/remotes/origin/release/anime-v1-dialogue-and-elemental-performance
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:08.7911558Z 2d762eef5584255b099a597d206d4a1473c48a87
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:08.7916032Z ##[endgroup]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:08.7916675Z ##[group]Determining the checkout info
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:08.7917591Z ##[endgroup]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:08.7920853Z [command]/usr/bin/git sparse-checkout disable
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:08.7964332Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:08.7991352Z ##[group]Checking out the ref
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:08.7994776Z [command]/usr/bin/git checkout --progress --force -B release/anime-v1-dialogue-and-elemental-performance refs/remotes/origin/release/anime-v1-dialogue-and-elemental-performance
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:09.8422600Z Updating files:  26% (5192/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:09.8552066Z Updating files:  27% (5350/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:09.8718282Z Updating files:  28% (5548/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:09.9735405Z Updating files:  29% (5747/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:10.0208128Z Updating files:  30% (5945/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:10.0696834Z Updating files:  31% (6143/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:10.1070513Z Updating files:  32% (6341/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:10.1399527Z Updating files:  33% (6539/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:10.1917117Z Updating files:  34% (6737/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:10.2985674Z Updating files:  35% (6935/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:10.3689682Z Updating files:  36% (7134/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:10.4501421Z Updating files:  37% (7332/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:10.5228072Z Updating files:  38% (7530/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:10.6010372Z Updating files:  39% (7728/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:10.6855565Z Updating files:  40% (7926/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:10.7600940Z Updating files:  41% (8124/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:10.8189551Z Updating files:  42% (8322/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:10.8932238Z Updating files:  43% (8521/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:10.9115664Z Updating files:  44% (8719/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:10.9620416Z Updating files:  45% (8917/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:10.9812794Z Updating files:  46% (9115/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.0006320Z Updating files:  47% (9313/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.0387196Z Updating files:  48% (9511/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.0508375Z Updating files:  49% (9709/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.0645007Z Updating files:  50% (9907/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.0955094Z Updating files:  51% (10106/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.1194775Z Updating files:  52% (10304/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.1402022Z Updating files:  53% (10502/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.1647202Z Updating files:  54% (10700/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.1948202Z Updating files:  55% (10898/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.2053338Z Updating files:  56% (11096/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.3812940Z Updating files:  57% (11294/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.6577673Z Updating files:  58% (11493/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.6892758Z Updating files:  59% (11691/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.7200319Z Updating files:  60% (11889/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.7256421Z Updating files:  61% (12087/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.7328374Z Updating files:  62% (12285/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.7446829Z Updating files:  63% (12483/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.7552363Z Updating files:  64% (12681/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.7654654Z Updating files:  65% (12880/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.7749946Z Updating files:  66% (13078/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.7848143Z Updating files:  67% (13276/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.7933346Z Updating files:  68% (13474/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.8020923Z Updating files:  69% (13672/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.8101522Z Updating files:  70% (13870/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.8189494Z Updating files:  71% (14068/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.9523628Z Updating files:  71% (14088/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:11.9756122Z Updating files:  72% (14267/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:12.0102959Z Updating files:  73% (14465/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:12.1421609Z Updating files:  74% (14663/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:12.1629836Z Updating files:  75% (14861/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:12.1824550Z Updating files:  76% (15059/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:12.2064840Z Updating files:  77% (15257/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:12.2244848Z Updating files:  78% (15455/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:12.2346672Z Updating files:  79% (15654/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:12.2506308Z Updating files:  80% (15852/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:12.6048018Z Updating files:  81% (16050/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:12.6381943Z Updating files:  82% (16248/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:12.6495342Z Updating files:  83% (16446/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:12.6599518Z Updating files:  84% (16644/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:12.6705618Z Updating files:  85% (16842/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:12.6798122Z Updating files:  86% (17041/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:12.6886142Z Updating files:  87% (17239/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:12.6980025Z Updating files:  88% (17437/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:12.7207997Z Updating files:  89% (17635/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:12.8256290Z Updating files:  90% (17833/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:12.9556771Z Updating files:  90% (17895/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:12.9702923Z Updating files:  91% (18031/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:12.9776884Z Updating files:  92% (18229/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:12.9845598Z Updating files:  93% (18428/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:12.9930316Z Updating files:  94% (18626/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:13.0010635Z Updating files:  95% (18824/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:13.0162763Z Updating files:  96% (19022/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:13.0248026Z Updating files:  97% (19220/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:13.0343055Z Updating files:  98% (19418/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:13.0420088Z Updating files:  99% (19616/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:13.0420798Z Updating files: 100% (19814/19814)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:13.0421127Z Updating files: 100% (19814/19814), done.
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:13.1837347Z Switched to a new branch 'release/anime-v1-dialogue-and-elemental-performance'
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:13.1838553Z branch 'release/anime-v1-dialogue-and-elemental-performance' set up to track 'origin/release/anime-v1-dialogue-and-elemental-performance'.
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:13.1938348Z ##[endgroup]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:13.1981004Z [command]/usr/bin/git log -1 --format=%H
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:13.2008275Z 2d762eef5584255b099a597d206d4a1473c48a87
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:13.3011619Z ##[group]Run sudo apt-get update
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:13.3011969Z [36;1msudo apt-get update[0m
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:13.3012281Z [36;1msudo apt-get install -y blender python3-numpy[0m
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:13.4280095Z shell: /usr/bin/bash -e {0}
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:13.4280358Z ##[endgroup]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:13.7428747Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:13.7642267Z Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:13.8925537Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:13.8932193Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:13.9012065Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:13.9588982Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:13.9784136Z Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [633 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:14.0300914Z Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [12.4 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:14.0461869Z Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [571 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:14.0853264Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1400 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:14.0916752Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [310 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:14.1039357Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1706 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:14.1378676Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [342 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:14.1388233Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1805 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:14.2064643Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [411 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:14.2388253Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1146 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:14.2462484Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [231 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:14.2495551Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1222 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:14.3563688Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [246 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:14.4035821Z Get:20 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1713 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:14.4220318Z Get:21 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [392 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:23.9969822Z Fetched 12.5 MB in 1s (10.2 MB/s)
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:24.8179564Z Reading package lists...
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:24.8950946Z Reading package lists...
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.1344794Z Building dependency tree...
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.1351992Z Reading state information...
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3494840Z The following additional packages will be installed:
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3495540Z   blender-data gdal-data gdal-plugins gstreamer1.0-plugins-base i965-va-driver
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3496135Z   intel-media-va-driver libaacs0 libaec0 libarmadillo12 libarpack2t64 libass9
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3496812Z   libasyncns0 libavc1394-0 libavcodec60 libavdevice60 libavfilter9
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3497613Z   libavformat60 libavutil58 libbdplus0 libblas3 libblosc1 libbluray2
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3498176Z   libboost-iostreams1.83.0 libboost-locale1.83.0 libboost-thread1.83.0
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3498783Z   libbs2b0 libcaca0 libcdio-cdda2t64 libcdio-paranoia2t64 libcdio19t64
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3499353Z   libcdparanoia0 libcfitsio10t64 libcharls2 libchromaprint1 libcjson1
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3499893Z   libcodec2-1.2 libdav1d7 libdc1394-25 libdcmtk17t64 libdecor-0-0
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3500491Z   libdecor-0-plugin-1-gtk libembree4-4 libexif12 libfftw3-single3 libflac12t64
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3501592Z   libflite1 libfreexl1 libfyba0t64 libgdal34t64 libgdcm3.0t64 libgeos-c1t64
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3502009Z   libgeos3.12.1t64 libgeotiff5 libgif7 libgme0 libgphoto2-6t64 libgphoto2-l10n
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3502504Z   libgphoto2-port12t64 libgsm1 libgstreamer-plugins-base1.0-0 libhdf4-0-alt
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3502904Z   libhdf5-103-1t64 libhdf5-hl-100t64 libhwloc-plugins libhwloc15 libhwy1t64
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3503342Z   libiec61883-0 libigdgmm12 libimath-3-1-29t64 libjack-jackd2-0 libjemalloc2
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3503740Z   libjxl0.7 libkmlbase1t64 libkmldom1t64 libkmlengine1t64 liblapack3
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3504099Z   liblilv-0-0 liblog4cplus-2.0.5t64 libmbedcrypto7t64 libminizip1t64
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3504630Z   libmp3lame0 libmpg123-0t64 libmysofa1 libnetcdf19t64 libodbcinst2 libogdi4.1
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3505036Z   libopenal-data libopenal1 libopencolorio2.1t64 libopencv-core406t64
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3505433Z   libopencv-imgcodecs406t64 libopencv-imgproc406t64 libopencv-videoio406t64
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3505847Z   libopenexr-3-1-30 libopenimageio2.4t64 libopenmpt0t64 libopenvdb10.0t64
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3506238Z   libopus0 liborc-0.4-0t64 libosdcpu3.5.0t64 libosdgpu3.5.0t64 libplacebo338
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3506652Z   libpocketsphinx3 libpoppler134 libpostproc57 libpotrace0 libproj25
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3507057Z   libpugixml1v5 libpulse0 libpystring0 libqhull-r8.0 librav1e0 libraw1394-11
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3507906Z   librist4 librsvg2-2 librsvg2-common librttopo1 librubberband2 libsamplerate0
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3508525Z   libsdl2-2.0-0 libserd-0-0 libshine3 libsndfile1 libsndio7.0 libsocket++1
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3509013Z   libsord-0-0 libsoxr0 libspatialite8t64 libspeex1 libsphinxbase3t64 libspnav0
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3509423Z   libsratom-0-0 libsrt1.5-gnutls libssh-gcrypt-4 libsuperlu6 libsvtav1enc1d1
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3509828Z   libswresample4 libswscale7 libsz2 libtbb12 libtbbbind-2-5 libtbbmalloc2
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3510228Z   libtheora0 libtwolame0 libudfread0 libunibreak5 liburiparser1 libva-drm2
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3510629Z   libva-x11-2 libva2 libvdpau1 libvidstab1.1 libvisual-0.4-0 libvorbisenc2
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3511024Z   libvpl2 libvpx9 libx264-164 libx265-199 libxcb-shape0 libxerces-c3.2t64
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3511402Z   libxnvctrl0 libxv1 libxvidcore4 libyaml-cpp0.8 libzimg2 libzix-0-0
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3511773Z   libzvbi-common libzvbi0t64 mesa-va-drivers mesa-vdpau-drivers
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3512156Z   ocl-icd-libopencl1 pocketsphinx-en-us poppler-data proj-bin proj-data
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3512536Z   unixodbc-common va-driver-all vdpau-driver-all zlib1g zlib1g-dev
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3513286Z Suggested packages:
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3513609Z   gvfs i965-va-driver-shaders libcuda1 libnvcuvid1 libnvidia-encode1
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3514010Z   libbluray-bdj libfftw3-bin libfftw3-dev geotiff-bin gdal-bin libgeotiff-epsg
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3514420Z   gphoto2 libvisual-0.4-plugins libhdf4-doc libhdf4-alt-dev hdf4-tools
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3514824Z   libhwloc-contrib-plugins jackd2 ogdi-bin libportaudio2 opus-tools pulseaudio
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3515239Z   libraw1394-doc librsvg2-bin serdi sndiod sordi speex spacenavd opencl-icd
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3515655Z   poppler-utils ghostscript fonts-japanese-mincho | fonts-ipafont-mincho
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3516047Z   fonts-japanese-gothic | fonts-ipafont-gothic fonts-arphic-ukai
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.3516415Z   fonts-arphic-uming fonts-nanum python3-pytest libvdpau-va-gl1
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4526210Z The following NEW packages will be installed:
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4527289Z   blender blender-data gdal-data gdal-plugins gstreamer1.0-plugins-base
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4528374Z   i965-va-driver intel-media-va-driver libaacs0 libaec0 libarmadillo12
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4529099Z   libarpack2t64 libass9 libasyncns0 libavc1394-0 libavcodec60 libavdevice60
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4529834Z   libavfilter9 libavformat60 libavutil58 libbdplus0 libblas3 libblosc1
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4530464Z   libbluray2 libboost-iostreams1.83.0 libboost-locale1.83.0
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4531484Z   libboost-thread1.83.0 libbs2b0 libcaca0 libcdio-cdda2t64
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4532154Z   libcdio-paranoia2t64 libcdio19t64 libcdparanoia0 libcfitsio10t64 libcharls2
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4532936Z   libchromaprint1 libcjson1 libcodec2-1.2 libdav1d7 libdc1394-25 libdcmtk17t64
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4533705Z   libdecor-0-0 libdecor-0-plugin-1-gtk libembree4-4 libexif12 libfftw3-single3
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4534434Z   libflac12t64 libflite1 libfreexl1 libfyba0t64 libgdal34t64 libgdcm3.0t64
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4535138Z   libgeos-c1t64 libgeos3.12.1t64 libgeotiff5 libgif7 libgme0 libgphoto2-6t64
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4535914Z   libgphoto2-l10n libgphoto2-port12t64 libgsm1 libgstreamer-plugins-base1.0-0
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4536692Z   libhdf4-0-alt libhdf5-103-1t64 libhdf5-hl-100t64 libhwloc-plugins libhwloc15
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4537578Z   libhwy1t64 libiec61883-0 libigdgmm12 libimath-3-1-29t64 libjack-jackd2-0
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4538253Z   libjemalloc2 libjxl0.7 libkmlbase1t64 libkmldom1t64 libkmlengine1t64
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4538919Z   liblapack3 liblilv-0-0 liblog4cplus-2.0.5t64 libmbedcrypto7t64
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4539556Z   libminizip1t64 libmp3lame0 libmpg123-0t64 libmysofa1 libnetcdf19t64
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4540241Z   libodbcinst2 libogdi4.1 libopenal-data libopenal1 libopencolorio2.1t64
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4540912Z   libopencv-core406t64 libopencv-imgcodecs406t64 libopencv-imgproc406t64
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4541659Z   libopencv-videoio406t64 libopenexr-3-1-30 libopenimageio2.4t64
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4542231Z   libopenmpt0t64 libopenvdb10.0t64 libopus0 liborc-0.4-0t64 libosdcpu3.5.0t64
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4542861Z   libosdgpu3.5.0t64 libplacebo338 libpocketsphinx3 libpoppler134 libpostproc57
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4543479Z   libpotrace0 libproj25 libpugixml1v5 libpulse0 libpystring0 libqhull-r8.0
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4544079Z   librav1e0 libraw1394-11 librist4 librsvg2-2 librsvg2-common librttopo1
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4544660Z   librubberband2 libsamplerate0 libsdl2-2.0-0 libserd-0-0 libshine3
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4545278Z   libsndfile1 libsndio7.0 libsocket++1 libsord-0-0 libsoxr0 libspatialite8t64
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4545918Z   libspeex1 libsphinxbase3t64 libspnav0 libsratom-0-0 libsrt1.5-gnutls
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4546559Z   libssh-gcrypt-4 libsuperlu6 libsvtav1enc1d1 libswresample4 libswscale7
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4547203Z   libsz2 libtbb12 libtbbbind-2-5 libtbbmalloc2 libtheora0 libtwolame0
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4547947Z   libudfread0 libunibreak5 liburiparser1 libva-drm2 libva-x11-2 libva2
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4548576Z   libvdpau1 libvidstab1.1 libvisual-0.4-0 libvorbisenc2 libvpl2 libvpx9
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4549226Z   libx264-164 libx265-199 libxcb-shape0 libxerces-c3.2t64 libxnvctrl0 libxv1
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4549902Z   libxvidcore4 libyaml-cpp0.8 libzimg2 libzix-0-0 libzvbi-common libzvbi0t64
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4550632Z   mesa-va-drivers mesa-vdpau-drivers ocl-icd-libopencl1 pocketsphinx-en-us
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4551356Z   poppler-data proj-bin proj-data python3-numpy unixodbc-common va-driver-all
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4551881Z   vdpau-driver-all
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4554897Z The following packages will be upgraded:
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4555279Z   zlib1g zlib1g-dev
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4750299Z 2 upgraded, 180 newly installed, 0 to remove and 97 not upgraded.
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4750652Z Need to get 224 MB of archives.
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4750945Z After this operation, 701 MB of additional disk space will be used.
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.4751495Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:38:25.9283099Z Get:2 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 poppler-data all 0.4.12-1 [2060 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:39:15.3715522Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 zlib1g-dev amd64 1:1.3.dfsg-3.1ubuntu2.3 [894 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:39:40.7449213Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 zlib1g amd64 1:1.3.dfsg-3.1ubuntu2.3 [63.2 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:39:42.8278107Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 blender-data all 4.0.2+dfsg-1ubuntu8 [35.9 MB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:46:52.6730254Z Ign:5 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 blender-data all 4.0.2+dfsg-1ubuntu8
+hands-8d2	UNKNOWN STEP	2026-10-22T21:46:53.4334523Z Get:6 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 libva2 amd64 2.20.0-2ubuntu0.2 [66.4 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:46:55.2608871Z Get:7 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 libva-drm2 amd64 2.20.0-2ubuntu0.2 [7124 B]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:46:56.2974909Z Get:8 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 libva-x11-2 amd64 2.20.0-2ubuntu0.2 [12.0 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:46:57.4388311Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libvdpau1 amd64 1.5-2build1 [27.8 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:46:58.6493178Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libvpl2 amd64 2023.3.0-1build1 [99.8 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:47:01.7122583Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 ocl-icd-libopencl1 amd64 2.3.2-1build1 [38.5 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:47:03.1476518Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libavutil58 amd64 7:6.1.1-3ubuntu5 [401 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:47:12.7666006Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libcodec2-1.2 amd64 1.2.0-2build1 [8998 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:48:02.7505917Z Ign:13 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libcodec2-1.2 amd64 1.2.0-2build1
+hands-8d2	UNKNOWN STEP	2026-10-22T21:48:11.0823801Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libdav1d7 amd64 1.4.1-1build1 [604 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:48:25.2076250Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libgsm1 amd64 1.0.22-1build1 [27.8 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:48:26.7064308Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libhwy1t64 amd64 1.0.7-8.1build1 [584 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:48:39.6783223Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 libjxl0.7 amd64 0.7.0-10.2ubuntu6.1 [1001 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:49:02.9808762Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libmp3lame0 amd64 3.100-6build1 [142 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:49:06.4611070Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libopus0 amd64 1.4-1build1 [208 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:49:12.1472150Z Get:20 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 librav1e0 amd64 0.7.1-2 [1022 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:49:34.7711156Z Get:21 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 librsvg2-2 amd64 2.58.0+dfsg-1ubuntu0.1 [2141 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:50:15.3280550Z Ign:21 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 librsvg2-2 amd64 2.58.0+dfsg-1ubuntu0.1
+hands-8d2	UNKNOWN STEP	2026-10-22T21:50:42.2187868Z Get:22 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libshine3 amd64 3.1.1-2build1 [23.2 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:50:43.3428325Z Get:23 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libspeex1 amd64 1.2.1-2ubuntu2.24.04.1 [59.6 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:50:45.3000480Z Get:24 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libsvtav1enc1d1 amd64 1.7.0+dfsg-2build1 [2425 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:51:37.3745449Z Get:25 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libsoxr0 amd64 0.1.3-4build3 [80.0 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:51:39.6333355Z Get:26 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libswresample4 amd64 7:6.1.1-3ubuntu5 [63.8 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:51:41.5849711Z Get:27 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libtheora0 amd64 1.1.1+dfsg.1-16.1build3 [211 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:51:46.0511813Z Get:28 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libtwolame0 amd64 0.4.0-2build3 [52.3 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:51:47.9920355Z Get:29 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libvorbisenc2 amd64 1.3.7-1build3 [80.8 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:51:50.2356576Z Get:30 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libvpx9 amd64 1.14.0-1ubuntu2.3 [1143 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:52:14.2891587Z Get:31 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libx264-164 amd64 2:0.164.3108+git31e19f9-1 [604 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:52:26.1426655Z Get:32 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libx265-199 amd64 3.5-2build1 [1226 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:52:50.2972181Z Get:33 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libxvidcore4 amd64 2:1.3.7-1build1 [219 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:52:54.9601197Z Get:34 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libzvbi-common all 0.2.42-2 [42.4 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:52:56.3211943Z Get:35 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libzvbi0t64 amd64 0.2.42-2 [261 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:53:01.5482058Z Get:36 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libavcodec60 amd64 7:6.1.1-3ubuntu5 [5851 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:54:12.8094358Z Ign:36 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libavcodec60 amd64 7:6.1.1-3ubuntu5
+hands-8d2	UNKNOWN STEP	2026-10-22T21:54:13.3509174Z Get:37 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libraw1394-11 amd64 2.1.2-2build3 [26.2 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:54:15.0709726Z Get:38 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libavc1394-0 amd64 0.5.4-5build3 [15.4 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:54:15.8574852Z Get:39 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libunibreak5 amd64 5.1-2build1 [25.0 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:54:16.6250879Z Get:40 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libass9 amd64 1:0.17.1-2build1 [104 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:54:18.9201792Z Get:41 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libudfread0 amd64 1.1.2-1build1 [19.0 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:54:19.7578339Z Get:42 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libbluray2 amd64 1:1.3.4-1build1 [159 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:54:23.2758611Z Get:43 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libchromaprint1 amd64 1.5.1-5 [30.5 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:54:24.3029965Z Get:44 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libgme0 amd64 0.6.3-7build1 [134 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:54:26.9920116Z Get:45 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libmpg123-0t64 amd64 1.32.5-1ubuntu1.1 [169 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:54:30.1089961Z Get:46 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libopenmpt0t64 amd64 0.7.3-1.1build3 [647 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:54:42.3799921Z Get:47 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libcjson1 amd64 1.7.17-1 [24.8 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:54:43.2166261Z Get:48 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libmbedcrypto7t64 amd64 2.28.8-1 [209 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:54:46.9812324Z Get:49 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 librist4 amd64 0.2.10+dfsg-2 [74.9 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:54:48.4180327Z Get:50 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libsrt1.5-gnutls amd64 1.5.3-1build2 [316 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:54:53.7222464Z Get:51 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libssh-gcrypt-4 amd64 0.10.6-2ubuntu0.5 [226 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:54:57.7279369Z Get:52 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libavformat60 amd64 7:6.1.1-3ubuntu5 [1153 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:55:18.0148001Z Get:53 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libbs2b0 amd64 3.1.0+dfsg-7build1 [10.6 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:55:18.6918615Z Get:54 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libflite1 amd64 2.2-6build3 [13.6 MB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:59:21.1583903Z Get:55 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libserd-0-0 amd64 0.32.2-1 [43.6 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:59:22.5937652Z Get:56 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libzix-0-0 amd64 0.4.2-2build1 [23.6 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:59:23.5400805Z Get:57 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libsord-0-0 amd64 0.16.16-2build1 [15.8 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:59:24.4093318Z Get:58 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libsratom-0-0 amd64 0.6.16-1build1 [17.3 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:59:25.3024935Z Get:59 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 liblilv-0-0 amd64 0.24.22-1build1 [41.0 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:59:26.5757595Z Get:60 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libmysofa1 amd64 1.3.2+dfsg-2ubuntu2 [1158 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T21:59:50.9457260Z Get:61 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libplacebo338 amd64 6.338.2-2build1 [2654 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:00:47.0691456Z Get:62 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libblas3 amd64 3.12.0-3build1.1 [238 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:00:52.7863846Z Get:63 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 liblapack3 amd64 3.12.0-3build1.1 [2646 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:01:45.4782947Z Get:64 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libasyncns0 amd64 0.8-6build4 [11.3 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:01:46.2552456Z Get:65 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libflac12t64 amd64 1.4.3+ds-2.1ubuntu2 [197 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:01:50.7210893Z Get:66 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libsndfile1 amd64 1.2.2-1ubuntu5.24.04.1 [209 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:01:55.4503080Z Get:67 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libpulse0 amd64 1:16.1+dfsg1-2ubuntu10.1 [292 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:02:01.5765200Z Get:68 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libsphinxbase3t64 amd64 0.8+5prealpha+1-17build2 [126 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:02:04.4744902Z Get:69 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libpocketsphinx3 amd64 0.8.0+real5prealpha+1-15ubuntu5 [133 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:02:07.7688804Z Get:70 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libpostproc57 amd64 7:6.1.1-3ubuntu5 [49.9 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:02:09.1746797Z Get:71 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libsamplerate0 amd64 0.2.2-4build1 [1344 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:03:44.1103151Z Ign:71 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libsamplerate0 amd64 0.2.2-4build1
+hands-8d2	UNKNOWN STEP	2026-10-22T22:03:44.7493661Z Get:72 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 librubberband2 amd64 3.3.0+dfsg-2build1 [130 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:03:47.9365802Z Get:73 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libswscale7 amd64 7:6.1.1-3ubuntu5 [193 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:03:52.7238798Z Get:74 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libvidstab1.1 amd64 1.1.0-2build1 [38.5 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:03:54.1203192Z Get:75 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libzimg2 amd64 3.0.5+ds1-1build1 [254 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:03:59.8590047Z Get:76 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libavfilter9 amd64 7:6.1.1-3ubuntu5 [4235 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:05:32.2229714Z Get:77 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libcaca0 amd64 0.99.beta20-4ubuntu0.2 [209 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:05:37.6627975Z Get:78 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libcdio19t64 amd64 2.1.0-4.1ubuntu1.2 [62.4 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:05:39.6679266Z Get:79 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libcdio-cdda2t64 amd64 10.2+2.0.1-1.1build2 [16.5 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:05:40.8242116Z Get:80 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libcdio-paranoia2t64 amd64 10.2+2.0.1-1.1build2 [16.6 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:05:42.0208615Z Get:81 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libdc1394-25 amd64 2.2.6-4build1 [90.1 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:05:44.8052074Z Get:82 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libiec61883-0 amd64 1.2.0-6build1 [24.5 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:05:45.7649144Z Get:83 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libjack-jackd2-0 amd64 1.9.21~dfsg-3ubuntu3 [289 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:05:52.6193677Z Get:84 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libopenal-data all 1:1.23.1-4build1 [161 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:05:57.2443951Z Get:85 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libsndio7.0 amd64 1.9.0-0.3build3 [29.6 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:05:58.5441904Z Get:86 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libopenal1 amd64 1:1.23.1-4build1 [540 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:06:11.4702359Z Get:87 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libdecor-0-0 amd64 0.2.2-1build2 [16.5 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:06:12.5669544Z Get:88 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libsdl2-2.0-0 amd64 2.30.0+dfsg-1ubuntu3.1 [686 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:06:28.6918501Z Get:89 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxcb-shape0 amd64 1.15-1ubuntu2 [6100 B]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:06:29.4108205Z Get:90 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxv1 amd64 2:1.0.11-1.1build1 [10.7 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:06:30.2103713Z Get:91 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libavdevice60 amd64 7:6.1.1-3ubuntu5 [82.3 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:06:33.1582976Z Get:92 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libboost-thread1.83.0 amd64 1.83.0-2.1ubuntu3.2 [276 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:06:39.8550940Z Get:93 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libboost-locale1.83.0 amd64 1.83.0-2.1ubuntu3.2 [413 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:06:49.9168212Z Get:94 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libtbbmalloc2 amd64 2021.11.0-2ubuntu2 [60.5 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:06:51.9034296Z Get:95 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libhwloc15 amd64 2.10.0-1build1 [172 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:06:56.5477188Z Get:96 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libtbbbind-2-5 amd64 2021.11.0-2ubuntu2 [16.4 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:06:57.6406807Z Get:97 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libtbb12 amd64 2021.11.0-2ubuntu2 [106 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:07:00.9771667Z Get:98 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libembree4-4 amd64 4.3.0+dfsg-2 [9265 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:09:14.8694547Z Ign:98 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libembree4-4 amd64 4.3.0+dfsg-2
+hands-8d2	UNKNOWN STEP	2026-10-22T22:09:15.5938575Z Get:99 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libfftw3-single3 amd64 3.3.10-1ubuntu3 [868 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:09:35.6432759Z Get:100 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libimath-3-1-29t64 amd64 3.1.9-3.1ubuntu2 [72.2 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:09:38.3084782Z Get:101 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libjemalloc2 amd64 5.3.0-2build1 [256 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:09:44.6145509Z Get:102 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libpystring0 amd64 1.1.4-1build1 [28.4 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:09:46.2321211Z Get:103 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libyaml-cpp0.8 amd64 0.8.0+dfsg-6build1 [115 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:09:49.1906899Z Get:104 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libopencolorio2.1t64 amd64 2.1.3+dfsg-1.1build3 [1470 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:10:23.8642595Z Get:105 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libopenexr-3-1-30 amd64 3.1.5-5.1build3 [1004 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:10:47.5455466Z Get:106 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libdcmtk17t64 amd64 3.6.7-9.1build4 [5329 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:12:50.0968435Z Get:107 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libgif7 amd64 5.2.2-1ubuntu1.2 [35.6 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:12:51.5747309Z Get:108 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libopencv-core406t64 amd64 4.6.0+dfsg-13.1ubuntu1 [1202 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:13:19.2579000Z Get:109 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libopencv-imgproc406t64 amd64 4.6.0+dfsg-13.1ubuntu1 [1460 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:13:52.9922720Z Get:110 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libexif12 amd64 0.6.24-1ubuntu0.24.04.1 [88.3 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:13:55.6733577Z Get:111 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libgphoto2-port12t64 amd64 2.5.31-2.1ubuntu1.1 [59.2 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:13:57.6881520Z Get:112 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libgphoto2-6t64 amd64 2.5.31-2.1ubuntu1.1 [735 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:14:14.9679816Z Get:113 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 liborc-0.4-0t64 amd64 1:0.4.38-1ubuntu0.1 [207 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:14:19.9561934Z Get:114 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libgstreamer-plugins-base1.0-0 amd64 1.24.2-1ubuntu0.5 [862 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:14:39.4769171Z Get:115 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 gdal-data all 3.8.4+dfsg-3ubuntu3 [261 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:14:45.7334993Z Get:116 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 gdal-plugins amd64 3.8.4+dfsg-3ubuntu3 [24.8 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:14:47.0554769Z Get:117 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libaec0 amd64 1.1.2-1build1 [22.9 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:14:48.0507841Z Get:118 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libarpack2t64 amd64 3.9.1-1.1build2 [106 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:14:50.7037601Z Get:119 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libsuperlu6 amd64 6.0.1+dfsg1-1build1 [180 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:14:55.0509438Z Get:120 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libarmadillo12 amd64 1:12.6.7+dfsg-1build2 [106 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:14:57.8325250Z Get:121 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libblosc1 amd64 1.21.5+ds-1build1 [36.2 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:14:59.1902911Z Get:122 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libcfitsio10t64 amd64 4.3.1-1.1build2 [528 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:15:11.2105825Z Get:123 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 libminizip1t64 amd64 1:1.3.dfsg-3.1ubuntu2.3 [22.2 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:15:12.1800299Z Get:124 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libfreexl1 amd64 2.0.0-1build2 [41.7 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:15:13.8303083Z Get:125 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libfyba0t64 amd64 4.1.1-11build1 [119 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:15:17.2197633Z Get:126 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libgeos3.12.1t64 amd64 3.12.1-3build1 [849 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:15:36.1704201Z Get:127 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libgeos-c1t64 amd64 3.12.1-3build1 [94.5 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:15:38.6986012Z Get:128 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 proj-data all 9.4.0-1build2 [7885 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:18:32.6249857Z Get:129 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libproj25 amd64 9.4.0-1build2 [1396 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:19:03.5295502Z Get:130 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libgeotiff5 amd64 1.7.1-5build1 [62.9 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:19:05.6229879Z Get:131 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libhdf4-0-alt amd64 4.2.16-4build1 [282 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:19:12.3409433Z Get:132 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libsz2 amd64 1.1.2-1build1 [5476 B]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:19:13.2038177Z Get:133 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libhdf5-103-1t64 amd64 1.10.10+repack-3.1ubuntu4 [1270 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:19:41.6583023Z Get:134 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 liburiparser1 amd64 0.9.7+dfsg-2build1 [35.8 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:19:42.9063302Z Get:135 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libkmlbase1t64 amd64 1.3.0-12build1 [49.9 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:19:44.6235242Z Get:136 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libkmldom1t64 amd64 1.3.0-12build1 [156 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:19:48.9485249Z Get:137 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libkmlengine1t64 amd64 1.3.0-12build1 [71.4 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:19:51.2459468Z Get:138 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libhdf5-hl-100t64 amd64 1.10.10+repack-3.1ubuntu4 [56.0 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:19:53.0527729Z Get:139 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libnetcdf19t64 amd64 1:4.9.2-5ubuntu4 [473 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:20:03.8979277Z Get:140 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 unixodbc-common all 2.3.12-1ubuntu0.24.04.1 [8806 B]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:20:04.9045735Z Get:141 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libodbcinst2 amd64 2.3.12-1ubuntu0.24.04.1 [30.7 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:20:06.0470236Z Get:142 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libogdi4.1 amd64 4.1.1+ds-3build1 [226 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:20:11.6666938Z Get:143 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libpoppler134 amd64 24.02.0-1ubuntu9.11 [1118 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:20:37.8091777Z Get:144 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libqhull-r8.0 amd64 2020.2-6build1 [193 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:20:43.0216387Z Get:145 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 librttopo1 amd64 1.1.0-3build2 [191 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:20:48.0695709Z Get:146 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libspatialite8t64 amd64 5.1.0-3build1 [1919 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:21:31.0424921Z Get:147 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libxerces-c3.2t64 amd64 3.2.4+debian-1.2ubuntu2 [919 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:21:51.3554187Z Get:148 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libgdal34t64 amd64 3.8.4+dfsg-3ubuntu3 [8346 kB]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:22.8446188Z ##[error]The operation was canceled.
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:22.8577284Z ##[group]Run actions/upload-artifact@v4
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:22.8577735Z with:
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:22.8578019Z   name: hands-8d2-saved-sources-2d762eef5584255b099a597d206d4a1473c48a87
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:22.8578403Z   path: /home/runner/work/_temp/hands-8d2/saved_sources/
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:22.8578670Z   retention-days: 90
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:22.8578867Z   if-no-files-found: warn
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:22.8579070Z   compression-level: 6
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:22.8579259Z   overwrite: false
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:22.8579448Z   include-hidden-files: false
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:22.8579861Z ##[endgroup]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:22.9829572Z (node:2927) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:22.9830244Z (Use `node --trace-deprecation ...` to show where the warning was created)
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:22.9857250Z ##[warning]No files were found with the provided path: /home/runner/work/_temp/hands-8d2/saved_sources/. No artifacts will be uploaded.
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.0028570Z ##[group]Run actions/upload-artifact@v4
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.0028827Z with:
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.0029089Z   name: hands-8d2-runtime-2d762eef5584255b099a597d206d4a1473c48a87
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.0029417Z   path: /home/runner/work/_temp/hands-8d2/runtime/
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.0029672Z   retention-days: 90
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.0029871Z   if-no-files-found: warn
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.0030077Z   compression-level: 6
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.0030271Z   overwrite: false
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.0030463Z   include-hidden-files: false
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.0030677Z ##[endgroup]
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.1308924Z (node:2939) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.1310138Z (Use `node --trace-deprecation ...` to show where the warning was created)
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.1360192Z ##[warning]No files were found with the provided path: /home/runner/work/_temp/hands-8d2/runtime/. No artifacts will be uploaded.
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.1509509Z Post job cleanup.
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.2205781Z [command]/usr/bin/git version
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.2239321Z git version 2.55.0
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.2270102Z Temporarily overriding HOME='/home/runner/work/_temp/2581378e-4fe9-4e66-aa67-6c3acde30d50' before making global git config changes
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.2271230Z Adding repository directory to the temporary git global config as a safe directory
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.2274523Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/anime-aggressors/anime-aggressors
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.2300299Z Removing SSH command configuration
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.2305289Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.2334488Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.2573168Z fatal: No url found for submodule path 'third_party/anyCreature' in .gitmodules
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.2594003Z ##[warning]The process '/usr/bin/git' failed with exit code 128
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.2712763Z Cleaning up orphan processes
+hands-8d2	UNKNOWN STEP	2026-10-22T22:23:23.2970895Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

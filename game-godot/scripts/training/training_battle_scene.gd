@@ -2,6 +2,7 @@ extends Node2D
 const _FrameDataTable = preload("res://scripts/combat/frame_data_table.gd")
 const _DataLoader = preload("res://scripts/data/data_loader.gd")
 const _BattleSim = preload("res://scripts/battle/battle_sim.gd")
+const _FighterStates = preload("res://scripts/fighters/fighter_states.gd")
 
 @onready var fighters_root: Node2D = $Fighters
 @onready var stage_root: Node2D = $Stage
@@ -13,6 +14,8 @@ var _debug_hud
 var _battle_sim
 var _hit_log: Label
 var _combo_p1: int = 0
+var _combo_activation := -1
+var _combo_seen:Dictionary={}
 var _paused := false
 var _slow_mo := false
 var _freeze := false
@@ -171,6 +174,7 @@ func _spawn_fighters() -> void:
 	_connect_hits(fighter1, fighter2)
 	_connect_hits(fighter2, fighter1)
 	fighter2.hit_landed.connect(_on_dummy_hit)
+	fighter2.state_machine.state_changed.connect(_on_dummy_control_state)
 	fighter1.grab_event.connect(_on_grab)
 	fighter2.grab_event.connect(_on_grab)
 
@@ -189,11 +193,41 @@ func _connect_hits(attacker, defender) -> void:
 	)
 
 func _on_dummy_hit(info: Dictionary) -> void:
-	if info.get("blocked", false):
+	var event_id:=str(info.get("combat_event_id",""))
+	if not bool(info.get("confirmed_contact",false)) or event_id.is_empty() or _combo_seen.has(event_id):return
+	_combo_seen[event_id]=true
+	if _combo_seen.size()>64:_combo_seen.erase(_combo_seen.keys()[0])
+	var result:=str(info.get("contact_result",""))
+	if result!="hit" or bool(info.get("blocked",false)) or bool(info.get("armor_block",false)):
 		_combo_p1 = 0
-	else:
+		_combo_activation=-1
+		_log("%s %s" % [result.to_upper(),str(info.get("move_id",""))])
+		return
+	var activation:=int(info.get("attack_activation_id",-1))
+	if not bool(info.get("defender_in_hitstun_before",false)) or _combo_p1==0:
+		_combo_p1=1
+	elif activation>=0 and activation!=_combo_activation:
 		_combo_p1 += 1
-	_log("HIT %s combo:%d" % [info.get("move_id", "?"), _combo_p1])
+	_combo_activation=activation
+	var hint:=_authored_link_hint(info)
+	_log("HIT %s combo:%d%s" % [info.get("move_id", "?"), _combo_p1," · "+hint if not hint.is_empty() else ""])
+
+func _on_dummy_control_state(_from:String,to:String) -> void:
+	if _combo_p1>0 and not _FighterStates.locks_actions(to):
+		_combo_p1=0;_combo_activation=-1
+		_log("Opponent recovered. Combo ended.")
+
+func _authored_link_hint(info:Dictionary) -> String:
+	if not is_instance_valid(fighter1) or fighter1.move_runner==null:return ""
+	var runner=fighter1.move_runner
+	if not runner.active or int(info.get("attack_activation_id",-1))!=runner.activation_id or str(info.get("contact_owner",""))!="melee":return ""
+	for window in runner.move_data.get("cancel_windows",[]):
+		if str(window.get("requires",""))!="hit_confirm" or str(window.get("to","")).is_empty() or runner.total_frame>int(window.get("end",-1)):continue
+		var next_move:Dictionary=_DataLoader.find_move(fighter1.move_manifest,str(window.to))
+		var command:=str(next_move.get("input_command",""))
+		var input_label:=str({"attack_neutral":"Attack","attack_up":"Up + Attack","attack_down":"Down + Attack","attack_forward":"Side + Attack","attack_dash":"Dash + Attack"}.get(command,""))
+		if not input_label.is_empty():return "On-hit link: "+input_label
+	return ""
 
 func _on_grab(info: Dictionary) -> void:
 	_log("GRAB %s" % info.get("result", "?"))

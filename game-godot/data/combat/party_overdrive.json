@@ -1,0 +1,1959 @@
+{
+  "schema": "party_overdrive_candidates.v1",
+  "status": "TUNING_CANDIDATE",
+  "human_approved": false,
+  "duration_frames": 600,
+  "transform_startup_frames": 36,
+  "activation_action": "taunt",
+  "ultimate_action": "taunt",
+  "mode_policy": "Explicit items enabled in existing versus, hazards or training; never Story/OVA/online/ranked. No progression or save writes.",
+  "scaling_policy": "Temporary overlay supersedes legacy gameplay; aura/identity enhancements do not stack; BASE data unchanged.",
+  "fighters": {
+    "ember-vale": {
+      "bible": "docs/bibles/fighters/ember-vale.md",
+      "prism_heart": {
+        "state_id": "PRISMATIC_ECHO",
+        "asset_form": "PRISMATIC_GRAY",
+        "overrides": {
+          "side_special": {
+            "damage": 9,
+            "angle_deg": 35,
+            "recovery_frames": 20,
+            "training_display_name": "Sevenfold Furnace \u2014 Echo Special",
+            "self_movement": {
+              "x": 80,
+              "y": 0
+            }
+          }
+        }
+      },
+      "puppet_seal": {
+        "BLACK": {
+          "state_id": "BLACK_PUPPET_ECHO",
+          "asset_form": "BLACK_PUPPET",
+          "overrides": {
+            "side_special": {
+              "damage": 9.45,
+              "angle_deg": 135,
+              "recovery_frames": 22,
+              "training_display_name": "Black Puppet Echo \u2014 Cinder Rush Side"
+            }
+          }
+        },
+        "WHITE": {
+          "state_id": "WHITE_PUPPET_ECHO",
+          "asset_form": "WHITE_PUPPET",
+          "overrides": {
+            "side_special": {
+              "damage": 9.72,
+              "angle_deg": 40,
+              "recovery_frames": 20,
+              "training_display_name": "White Puppet Echo \u2014 Cinder Rush Side"
+            }
+          }
+        }
+      },
+      "ultimate": {
+        "move_id": "party_ultimate:ember-vale",
+        "display_name": "Sevenfold Furnace",
+        "mechanic": "combustion_chase",
+        "startup_frames": 28,
+        "active_frames": 24,
+        "recovery_frames": 36,
+        "visual_move_id": "aura_burst",
+        "guardable": true,
+        "pulses": [
+          {
+            "frame": 1,
+            "damage": 4,
+            "launch_angle": 35,
+            "base_knockback": 12,
+            "projectile": {
+              "type": "party_combustion_chase",
+              "offset_x": 46,
+              "offset_y": -8,
+              "angle_deg": 0,
+              "spawn_frame": 1,
+              "speed_by_aura": [
+                360,
+                360,
+                360,
+                360,
+                360
+              ],
+              "damage_by_aura": [
+                4,
+                4,
+                4,
+                4,
+                4
+              ],
+              "size_by_aura": [
+                24,
+                24,
+                24,
+                24,
+                24
+              ],
+              "lifetime_frames_by_aura": [
+                48,
+                48,
+                48,
+                48,
+                48
+              ],
+              "behavior_by_aura": [
+                "straight",
+                "straight",
+                "straight",
+                "straight",
+                "straight"
+              ],
+              "pierce": false,
+              "max_active_per_move": 3
+            }
+          },
+          {
+            "frame": 8,
+            "damage": 4,
+            "launch_angle": 40,
+            "base_knockback": 12,
+            "projectile": {
+              "type": "party_combustion_chase",
+              "offset_x": 60,
+              "offset_y": -8,
+              "angle_deg": 0,
+              "spawn_frame": 1,
+              "speed_by_aura": [
+                400,
+                400,
+                400,
+                400,
+                400
+              ],
+              "damage_by_aura": [
+                4,
+                4,
+                4,
+                4,
+                4
+              ],
+              "size_by_aura": [
+                22,
+                22,
+                22,
+                22,
+                22
+              ],
+              "lifetime_frames_by_aura": [
+                48,
+                48,
+                48,
+                48,
+                48
+              ],
+              "behavior_by_aura": [
+                "straight",
+                "straight",
+                "straight",
+                "straight",
+                "straight"
+              ],
+              "pierce": false,
+              "max_active_per_move": 3
+            }
+          },
+          {
+            "frame": 16,
+            "damage": 7,
+            "launch_angle": 45,
+            "base_knockback": 12,
+            "projectile": {
+              "type": "party_combustion_chase",
+              "offset_x": 72,
+              "offset_y": -12,
+              "angle_deg": 0,
+              "spawn_frame": 1,
+              "speed_by_aura": [
+                430,
+                430,
+                430,
+                430,
+                430
+              ],
+              "damage_by_aura": [
+                7,
+                7,
+                7,
+                7,
+                7
+              ],
+              "size_by_aura": [
+                28,
+                28,
+                28,
+                28,
+                28
+              ],
+              "lifetime_frames_by_aura": [
+                48,
+                48,
+                48,
+                48,
+                48
+              ],
+              "behavior_by_aura": [
+                "straight",
+                "straight",
+                "straight",
+                "straight",
+                "straight"
+              ],
+              "pierce": false,
+              "max_active_per_move": 3
+            }
+          }
+        ],
+        "source_acting_status": "EXISTING_SIGNATURE_CANDIDATE_REUSED; dedicated ultimate acting missing",
+        "impulse": {
+          "frame": 1,
+          "x": 130,
+          "y": 0
+        }
+      }
+    },
+    "rook-ironside": {
+      "bible": "docs/bibles/fighters/rook-ironside.md",
+      "prism_heart": {
+        "state_id": "PRISMATIC_ECHO",
+        "asset_form": "PRISMATIC_GRAY",
+        "overrides": {
+          "side_special": {
+            "damage": 11,
+            "angle_deg": 40,
+            "recovery_frames": 26,
+            "training_display_name": "Worldbreaker Bastion \u2014 Echo Special",
+            "armor_frames": 3
+          }
+        }
+      },
+      "puppet_seal": {
+        "BLACK": {
+          "state_id": "BLACK_PUPPET_ECHO",
+          "asset_form": "BLACK_PUPPET",
+          "overrides": {
+            "side_special": {
+              "damage": 11.151,
+              "angle_deg": 135,
+              "recovery_frames": 28,
+              "training_display_name": "Black Puppet Echo \u2014 Faultline Breaker Side"
+            }
+          }
+        },
+        "WHITE": {
+          "state_id": "WHITE_PUPPET_ECHO",
+          "asset_form": "WHITE_PUPPET",
+          "overrides": {
+            "side_special": {
+              "damage": 11.47,
+              "angle_deg": 40,
+              "recovery_frames": 26,
+              "training_display_name": "White Puppet Echo \u2014 Faultline Breaker Side"
+            }
+          }
+        }
+      },
+      "ultimate": {
+        "move_id": "party_ultimate:rook-ironside",
+        "display_name": "Worldbreaker Bastion",
+        "mechanic": "guarded_retaliation",
+        "startup_frames": 32,
+        "active_frames": 20,
+        "recovery_frames": 42,
+        "visual_move_id": "aura_burst",
+        "guardable": true,
+        "pulses": [],
+        "source_acting_status": "EXISTING_SIGNATURE_CANDIDATE_REUSED; dedicated ultimate acting missing",
+        "counter_window_frames": 8,
+        "retaliation_frame": 13,
+        "damage": 13,
+        "base_knockback": 18,
+        "angle_deg": 45,
+        "hitboxes": [
+          {
+            "offset_x": 42,
+            "offset_y": -12,
+            "width": 120,
+            "height": 64
+          }
+        ]
+      }
+    },
+    "juno-spark": {
+      "bible": "docs/bibles/fighters/juno-spark.md",
+      "prism_heart": {
+        "state_id": "PRISMATIC_ECHO",
+        "asset_form": "PRISMATIC_GRAY",
+        "overrides": {
+          "side_special": {
+            "damage": 8,
+            "angle_deg": 30,
+            "recovery_frames": 16,
+            "training_display_name": "Spectrum Overdrive \u2014 Echo Special",
+            "self_movement": {
+              "x": 110,
+              "y": 0
+            }
+          }
+        }
+      },
+      "puppet_seal": {
+        "BLACK": {
+          "state_id": "BLACK_PUPPET_ECHO",
+          "asset_form": "BLACK_PUPPET",
+          "overrides": {
+            "side_special": {
+              "damage": 8.694,
+              "angle_deg": 135,
+              "recovery_frames": 18,
+              "training_display_name": "Black Puppet Echo \u2014 Flash Circuit Side"
+            }
+          }
+        },
+        "WHITE": {
+          "state_id": "WHITE_PUPPET_ECHO",
+          "asset_form": "WHITE_PUPPET",
+          "overrides": {
+            "side_special": {
+              "damage": 8.942,
+              "angle_deg": 40,
+              "recovery_frames": 16,
+              "training_display_name": "White Puppet Echo \u2014 Flash Circuit Side"
+            }
+          }
+        }
+      },
+      "ultimate": {
+        "move_id": "party_ultimate:juno-spark",
+        "display_name": "Spectrum Overdrive",
+        "mechanic": "rhythmic_rails",
+        "startup_frames": 24,
+        "active_frames": 22,
+        "recovery_frames": 32,
+        "visual_move_id": "aura_burst",
+        "guardable": true,
+        "pulses": [
+          {
+            "frame": 1,
+            "damage": 3,
+            "launch_angle": 25,
+            "base_knockback": 12,
+            "projectile": {
+              "type": "party_rhythmic_rails",
+              "offset_x": 46,
+              "offset_y": -8,
+              "angle_deg": 0,
+              "spawn_frame": 1,
+              "speed_by_aura": [
+                720,
+                720,
+                720,
+                720,
+                720
+              ],
+              "damage_by_aura": [
+                3,
+                3,
+                3,
+                3,
+                3
+              ],
+              "size_by_aura": [
+                16,
+                16,
+                16,
+                16,
+                16
+              ],
+              "lifetime_frames_by_aura": [
+                48,
+                48,
+                48,
+                48,
+                48
+              ],
+              "behavior_by_aura": [
+                "straight",
+                "straight",
+                "straight",
+                "straight",
+                "straight"
+              ],
+              "pierce": false,
+              "max_active_per_move": 3
+            }
+          },
+          {
+            "frame": 5,
+            "damage": 3,
+            "launch_angle": 45,
+            "base_knockback": 12,
+            "projectile": {
+              "type": "party_rhythmic_rails",
+              "offset_x": 46,
+              "offset_y": -20,
+              "angle_deg": -18,
+              "spawn_frame": 1,
+              "speed_by_aura": [
+                720,
+                720,
+                720,
+                720,
+                720
+              ],
+              "damage_by_aura": [
+                3,
+                3,
+                3,
+                3,
+                3
+              ],
+              "size_by_aura": [
+                16,
+                16,
+                16,
+                16,
+                16
+              ],
+              "lifetime_frames_by_aura": [
+                48,
+                48,
+                48,
+                48,
+                48
+              ],
+              "behavior_by_aura": [
+                "straight",
+                "straight",
+                "straight",
+                "straight",
+                "straight"
+              ],
+              "pierce": false,
+              "max_active_per_move": 3
+            }
+          },
+          {
+            "frame": 14,
+            "damage": 8,
+            "launch_angle": 50,
+            "base_knockback": 12,
+            "projectile": {
+              "type": "party_rhythmic_rails",
+              "offset_x": 46,
+              "offset_y": -8,
+              "angle_deg": 12,
+              "spawn_frame": 1,
+              "speed_by_aura": [
+                480,
+                480,
+                480,
+                480,
+                480
+              ],
+              "damage_by_aura": [
+                8,
+                8,
+                8,
+                8,
+                8
+              ],
+              "size_by_aura": [
+                24,
+                24,
+                24,
+                24,
+                24
+              ],
+              "lifetime_frames_by_aura": [
+                48,
+                48,
+                48,
+                48,
+                48
+              ],
+              "behavior_by_aura": [
+                "straight",
+                "straight",
+                "straight",
+                "straight",
+                "straight"
+              ],
+              "pierce": false,
+              "max_active_per_move": 3
+            }
+          }
+        ],
+        "source_acting_status": "EXISTING_SIGNATURE_CANDIDATE_REUSED; dedicated ultimate acting missing"
+      }
+    },
+    "kaia-windrow": {
+      "bible": "docs/bibles/fighters/kaia-windrow.md",
+      "prism_heart": {
+        "state_id": "PRISMATIC_ECHO",
+        "asset_form": "PRISMATIC_GRAY",
+        "overrides": {
+          "side_special": {
+            "damage": 7,
+            "angle_deg": 80,
+            "recovery_frames": 18,
+            "training_display_name": "Eye of the Seven Winds \u2014 Echo Special",
+            "self_movement": {
+              "x": 55,
+              "y": -100
+            }
+          }
+        }
+      },
+      "puppet_seal": {
+        "BLACK": {
+          "state_id": "BLACK_PUPPET_ECHO",
+          "asset_form": "BLACK_PUPPET",
+          "overrides": {
+            "side_special": {
+              "damage": 9.072,
+              "angle_deg": 135,
+              "recovery_frames": 20,
+              "training_display_name": "Black Puppet Echo \u2014 Spiral Current Side"
+            }
+          }
+        },
+        "WHITE": {
+          "state_id": "WHITE_PUPPET_ECHO",
+          "asset_form": "WHITE_PUPPET",
+          "overrides": {
+            "side_special": {
+              "damage": 9.331,
+              "angle_deg": 40,
+              "recovery_frames": 18,
+              "training_display_name": "White Puppet Echo \u2014 Spiral Current Side"
+            }
+          }
+        }
+      },
+      "ultimate": {
+        "move_id": "party_ultimate:kaia-windrow",
+        "display_name": "Eye of the Seven Winds",
+        "mechanic": "rising_spiral",
+        "startup_frames": 26,
+        "active_frames": 26,
+        "recovery_frames": 34,
+        "visual_move_id": "aura_burst",
+        "guardable": true,
+        "pulses": [
+          {
+            "frame": 1,
+            "damage": 4,
+            "launch_angle": 80,
+            "base_knockback": 12,
+            "projectile": {
+              "type": "party_rising_spiral",
+              "offset_x": 40,
+              "offset_y": -26,
+              "angle_deg": -32,
+              "spawn_frame": 1,
+              "speed_by_aura": [
+                300,
+                300,
+                300,
+                300,
+                300
+              ],
+              "damage_by_aura": [
+                4,
+                4,
+                4,
+                4,
+                4
+              ],
+              "size_by_aura": [
+                24,
+                24,
+                24,
+                24,
+                24
+              ],
+              "lifetime_frames_by_aura": [
+                48,
+                48,
+                48,
+                48,
+                48
+              ],
+              "behavior_by_aura": [
+                "straight",
+                "straight",
+                "straight",
+                "straight",
+                "straight"
+              ],
+              "pierce": false,
+              "max_active_per_move": 3
+            }
+          },
+          {
+            "frame": 10,
+            "damage": 4,
+            "launch_angle": 90,
+            "base_knockback": 12,
+            "projectile": {
+              "type": "party_rising_spiral",
+              "offset_x": 48,
+              "offset_y": -42,
+              "angle_deg": 0,
+              "spawn_frame": 1,
+              "speed_by_aura": [
+                300,
+                300,
+                300,
+                300,
+                300
+              ],
+              "damage_by_aura": [
+                4,
+                4,
+                4,
+                4,
+                4
+              ],
+              "size_by_aura": [
+                26,
+                26,
+                26,
+                26,
+                26
+              ],
+              "lifetime_frames_by_aura": [
+                48,
+                48,
+                48,
+                48,
+                48
+              ],
+              "behavior_by_aura": [
+                "straight",
+                "straight",
+                "straight",
+                "straight",
+                "straight"
+              ],
+              "pierce": false,
+              "max_active_per_move": 3
+            }
+          },
+          {
+            "frame": 20,
+            "damage": 6,
+            "launch_angle": 75,
+            "base_knockback": 12,
+            "projectile": {
+              "type": "party_rising_spiral",
+              "offset_x": 48,
+              "offset_y": -18,
+              "angle_deg": 32,
+              "spawn_frame": 1,
+              "speed_by_aura": [
+                300,
+                300,
+                300,
+                300,
+                300
+              ],
+              "damage_by_aura": [
+                6,
+                6,
+                6,
+                6,
+                6
+              ],
+              "size_by_aura": [
+                30,
+                30,
+                30,
+                30,
+                30
+              ],
+              "lifetime_frames_by_aura": [
+                48,
+                48,
+                48,
+                48,
+                48
+              ],
+              "behavior_by_aura": [
+                "straight",
+                "straight",
+                "straight",
+                "straight",
+                "straight"
+              ],
+              "pierce": false,
+              "max_active_per_move": 3
+            }
+          }
+        ],
+        "source_acting_status": "EXISTING_SIGNATURE_CANDIDATE_REUSED; dedicated ultimate acting missing",
+        "impulse": {
+          "frame": 1,
+          "x": 45,
+          "y": -130
+        }
+      }
+    },
+    "nix-calder": {
+      "bible": "docs/bibles/fighters/nix-calder.md",
+      "prism_heart": {
+        "state_id": "PRISMATIC_ECHO",
+        "asset_form": "PRISMATIC_GRAY",
+        "overrides": {
+          "side_special": {
+            "damage": 6,
+            "angle_deg": 75,
+            "recovery_frames": 24,
+            "training_display_name": "Chromatic Citadel \u2014 Echo Special",
+            "move_type": "projectile",
+            "projectile": {
+              "type": "echo_cryolattice",
+              "offset_x": 46,
+              "offset_y": -8,
+              "angle_deg": 0,
+              "spawn_frame": 1,
+              "speed_by_aura": [
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "damage_by_aura": [
+                6,
+                6,
+                6,
+                6,
+                6
+              ],
+              "size_by_aura": [
+                22,
+                22,
+                22,
+                22,
+                22
+              ],
+              "lifetime_frames_by_aura": [
+                42,
+                42,
+                42,
+                42,
+                42
+              ],
+              "behavior_by_aura": [
+                "straight",
+                "straight",
+                "straight",
+                "straight",
+                "straight"
+              ],
+              "pierce": false,
+              "max_active_per_move": 1
+            }
+          }
+        }
+      },
+      "puppet_seal": {
+        "BLACK": {
+          "state_id": "BLACK_PUPPET_ECHO",
+          "asset_form": "BLACK_PUPPET",
+          "overrides": {
+            "side_special": {
+              "damage": 9.923,
+              "angle_deg": 135,
+              "recovery_frames": 26,
+              "training_display_name": "Black Puppet Echo \u2014 Glacier Lock Side"
+            }
+          }
+        },
+        "WHITE": {
+          "state_id": "WHITE_PUPPET_ECHO",
+          "asset_form": "WHITE_PUPPET",
+          "overrides": {
+            "side_special": {
+              "damage": 10.206,
+              "angle_deg": 40,
+              "recovery_frames": 24,
+              "training_display_name": "White Puppet Echo \u2014 Glacier Lock Side"
+            }
+          }
+        }
+      },
+      "ultimate": {
+        "move_id": "party_ultimate:nix-calder",
+        "display_name": "Chromatic Citadel",
+        "mechanic": "finite_lattice",
+        "startup_frames": 30,
+        "active_frames": 28,
+        "recovery_frames": 42,
+        "visual_move_id": "aura_burst",
+        "guardable": true,
+        "pulses": [
+          {
+            "frame": 1,
+            "damage": 4,
+            "launch_angle": 75,
+            "base_knockback": 4,
+            "projectile": {
+              "type": "party_finite_lattice",
+              "offset_x": 40,
+              "offset_y": -10,
+              "angle_deg": 0,
+              "spawn_frame": 1,
+              "speed_by_aura": [
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "damage_by_aura": [
+                4,
+                4,
+                4,
+                4,
+                4
+              ],
+              "size_by_aura": [
+                24,
+                24,
+                24,
+                24,
+                24
+              ],
+              "lifetime_frames_by_aura": [
+                55,
+                55,
+                55,
+                55,
+                55
+              ],
+              "behavior_by_aura": [
+                "straight",
+                "straight",
+                "straight",
+                "straight",
+                "straight"
+              ],
+              "pierce": false,
+              "max_active_per_move": 3
+            }
+          },
+          {
+            "frame": 11,
+            "damage": 4,
+            "launch_angle": 80,
+            "base_knockback": 4,
+            "projectile": {
+              "type": "party_finite_lattice",
+              "offset_x": 80,
+              "offset_y": -10,
+              "angle_deg": 0,
+              "spawn_frame": 1,
+              "speed_by_aura": [
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "damage_by_aura": [
+                4,
+                4,
+                4,
+                4,
+                4
+              ],
+              "size_by_aura": [
+                24,
+                24,
+                24,
+                24,
+                24
+              ],
+              "lifetime_frames_by_aura": [
+                55,
+                55,
+                55,
+                55,
+                55
+              ],
+              "behavior_by_aura": [
+                "straight",
+                "straight",
+                "straight",
+                "straight",
+                "straight"
+              ],
+              "pierce": false,
+              "max_active_per_move": 3
+            }
+          },
+          {
+            "frame": 21,
+            "damage": 4,
+            "launch_angle": 85,
+            "base_knockback": 4,
+            "projectile": {
+              "type": "party_finite_lattice",
+              "offset_x": 120,
+              "offset_y": -10,
+              "angle_deg": 0,
+              "spawn_frame": 1,
+              "speed_by_aura": [
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "damage_by_aura": [
+                4,
+                4,
+                4,
+                4,
+                4
+              ],
+              "size_by_aura": [
+                24,
+                24,
+                24,
+                24,
+                24
+              ],
+              "lifetime_frames_by_aura": [
+                55,
+                55,
+                55,
+                55,
+                55
+              ],
+              "behavior_by_aura": [
+                "straight",
+                "straight",
+                "straight",
+                "straight",
+                "straight"
+              ],
+              "pierce": false,
+              "max_active_per_move": 3
+            }
+          }
+        ],
+        "source_acting_status": "EXISTING_SIGNATURE_CANDIDATE_REUSED; dedicated ultimate acting missing"
+      }
+    },
+    "orion-vell": {
+      "bible": "docs/bibles/fighters/orion-vell.md",
+      "prism_heart": {
+        "state_id": "PRISMATIC_ECHO",
+        "asset_form": "PRISMATIC_GRAY",
+        "overrides": {
+          "side_special": {
+            "damage": 8,
+            "angle_deg": 150,
+            "recovery_frames": 21,
+            "training_display_name": "Orbit of Seven \u2014 Echo Special"
+          }
+        }
+      },
+      "puppet_seal": {
+        "BLACK": {
+          "state_id": "BLACK_PUPPET_ECHO",
+          "asset_form": "BLACK_PUPPET",
+          "overrides": {
+            "side_special": {
+              "damage": 9.45,
+              "angle_deg": 135,
+              "recovery_frames": 23,
+              "training_display_name": "Black Puppet Echo \u2014 Orbit Collapse Side"
+            }
+          }
+        },
+        "WHITE": {
+          "state_id": "WHITE_PUPPET_ECHO",
+          "asset_form": "WHITE_PUPPET",
+          "overrides": {
+            "side_special": {
+              "damage": 9.72,
+              "angle_deg": 40,
+              "recovery_frames": 21,
+              "training_display_name": "White Puppet Echo \u2014 Orbit Collapse Side"
+            }
+          }
+        }
+      },
+      "ultimate": {
+        "move_id": "party_ultimate:orion-vell",
+        "display_name": "Orbit of Seven",
+        "mechanic": "vector_compression",
+        "startup_frames": 30,
+        "active_frames": 28,
+        "recovery_frames": 40,
+        "visual_move_id": "aura_burst",
+        "guardable": true,
+        "pulses": [
+          {
+            "frame": 1,
+            "damage": 3,
+            "launch_angle": 140,
+            "base_knockback": 12,
+            "projectile": {
+              "type": "party_vector_compression",
+              "offset_x": 50,
+              "offset_y": -28,
+              "angle_deg": -35,
+              "spawn_frame": 1,
+              "speed_by_aura": [
+                220,
+                220,
+                220,
+                220,
+                220
+              ],
+              "damage_by_aura": [
+                3,
+                3,
+                3,
+                3,
+                3
+              ],
+              "size_by_aura": [
+                24,
+                24,
+                24,
+                24,
+                24
+              ],
+              "lifetime_frames_by_aura": [
+                48,
+                48,
+                48,
+                48,
+                48
+              ],
+              "behavior_by_aura": [
+                "straight",
+                "straight",
+                "straight",
+                "straight",
+                "straight"
+              ],
+              "pierce": false,
+              "max_active_per_move": 3
+            }
+          },
+          {
+            "frame": 11,
+            "damage": 3,
+            "launch_angle": 140,
+            "base_knockback": 12,
+            "projectile": {
+              "type": "party_vector_compression",
+              "offset_x": 50,
+              "offset_y": -8,
+              "angle_deg": 35,
+              "spawn_frame": 1,
+              "speed_by_aura": [
+                220,
+                220,
+                220,
+                220,
+                220
+              ],
+              "damage_by_aura": [
+                3,
+                3,
+                3,
+                3,
+                3
+              ],
+              "size_by_aura": [
+                24,
+                24,
+                24,
+                24,
+                24
+              ],
+              "lifetime_frames_by_aura": [
+                48,
+                48,
+                48,
+                48,
+                48
+              ],
+              "behavior_by_aura": [
+                "straight",
+                "straight",
+                "straight",
+                "straight",
+                "straight"
+              ],
+              "pierce": false,
+              "max_active_per_move": 3
+            }
+          },
+          {
+            "frame": 22,
+            "damage": 9,
+            "launch_angle": 135,
+            "base_knockback": 12,
+            "projectile": {
+              "type": "party_vector_compression",
+              "offset_x": 64,
+              "offset_y": -16,
+              "angle_deg": 0,
+              "spawn_frame": 1,
+              "speed_by_aura": [
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "damage_by_aura": [
+                9,
+                9,
+                9,
+                9,
+                9
+              ],
+              "size_by_aura": [
+                32,
+                32,
+                32,
+                32,
+                32
+              ],
+              "lifetime_frames_by_aura": [
+                8,
+                8,
+                8,
+                8,
+                8
+              ],
+              "behavior_by_aura": [
+                "straight",
+                "straight",
+                "straight",
+                "straight",
+                "straight"
+              ],
+              "pierce": false,
+              "max_active_per_move": 3
+            }
+          }
+        ],
+        "source_acting_status": "EXISTING_SIGNATURE_CANDIDATE_REUSED; dedicated ultimate acting missing"
+      }
+    },
+    "vesper-nyx": {
+      "bible": "docs/bibles/fighters/vesper-nyx.md",
+      "prism_heart": {
+        "state_id": "PRISMATIC_ECHO",
+        "asset_form": "PRISMATIC_GRAY",
+        "overrides": {
+          "side_special": {
+            "damage": 7,
+            "angle_deg": 35,
+            "recovery_frames": 18,
+            "training_display_name": "Sevenfold Mirage \u2014 Echo Special",
+            "self_movement": {
+              "x": -90,
+              "y": 0
+            }
+          }
+        }
+      },
+      "puppet_seal": {
+        "BLACK": {
+          "state_id": "BLACK_PUPPET_ECHO",
+          "asset_form": "BLACK_PUPPET",
+          "overrides": {
+            "side_special": {
+              "damage": 8.883,
+              "angle_deg": 135,
+              "recovery_frames": 20,
+              "training_display_name": "Black Puppet Echo \u2014 Null Step Side"
+            }
+          }
+        },
+        "WHITE": {
+          "state_id": "WHITE_PUPPET_ECHO",
+          "asset_form": "WHITE_PUPPET",
+          "overrides": {
+            "side_special": {
+              "damage": 9.137,
+              "angle_deg": 40,
+              "recovery_frames": 18,
+              "training_display_name": "White Puppet Echo \u2014 Null Step Side"
+            }
+          }
+        }
+      },
+      "ultimate": {
+        "move_id": "party_ultimate:vesper-nyx",
+        "display_name": "Sevenfold Mirage",
+        "mechanic": "offset_echoes",
+        "startup_frames": 34,
+        "active_frames": 30,
+        "recovery_frames": 44,
+        "visual_move_id": "aura_burst",
+        "guardable": true,
+        "pulses": [
+          {
+            "frame": 1,
+            "damage": 4,
+            "launch_angle": 35,
+            "base_knockback": 12,
+            "projectile": {
+              "type": "party_offset_echoes",
+              "offset_x": -30,
+              "offset_y": -14,
+              "angle_deg": 180,
+              "spawn_frame": 1,
+              "speed_by_aura": [
+                330,
+                330,
+                330,
+                330,
+                330
+              ],
+              "damage_by_aura": [
+                4,
+                4,
+                4,
+                4,
+                4
+              ],
+              "size_by_aura": [
+                22,
+                22,
+                22,
+                22,
+                22
+              ],
+              "lifetime_frames_by_aura": [
+                48,
+                48,
+                48,
+                48,
+                48
+              ],
+              "behavior_by_aura": [
+                "straight",
+                "straight",
+                "straight",
+                "straight",
+                "straight"
+              ],
+              "pierce": false,
+              "max_active_per_move": 3
+            }
+          },
+          {
+            "frame": 12,
+            "damage": 4,
+            "launch_angle": 35,
+            "base_knockback": 12,
+            "projectile": {
+              "type": "party_offset_echoes",
+              "offset_x": 70,
+              "offset_y": -14,
+              "angle_deg": 0,
+              "spawn_frame": 1,
+              "speed_by_aura": [
+                330,
+                330,
+                330,
+                330,
+                330
+              ],
+              "damage_by_aura": [
+                4,
+                4,
+                4,
+                4,
+                4
+              ],
+              "size_by_aura": [
+                22,
+                22,
+                22,
+                22,
+                22
+              ],
+              "lifetime_frames_by_aura": [
+                48,
+                48,
+                48,
+                48,
+                48
+              ],
+              "behavior_by_aura": [
+                "straight",
+                "straight",
+                "straight",
+                "straight",
+                "straight"
+              ],
+              "pierce": false,
+              "max_active_per_move": 3
+            }
+          },
+          {
+            "frame": 24,
+            "damage": 7,
+            "launch_angle": 65,
+            "base_knockback": 12,
+            "projectile": {
+              "type": "party_offset_echoes",
+              "offset_x": 46,
+              "offset_y": -30,
+              "angle_deg": 0,
+              "spawn_frame": 1,
+              "speed_by_aura": [
+                450,
+                450,
+                450,
+                450,
+                450
+              ],
+              "damage_by_aura": [
+                7,
+                7,
+                7,
+                7,
+                7
+              ],
+              "size_by_aura": [
+                26,
+                26,
+                26,
+                26,
+                26
+              ],
+              "lifetime_frames_by_aura": [
+                48,
+                48,
+                48,
+                48,
+                48
+              ],
+              "behavior_by_aura": [
+                "straight",
+                "straight",
+                "straight",
+                "straight",
+                "straight"
+              ],
+              "pierce": false,
+              "max_active_per_move": 3
+            }
+          }
+        ],
+        "source_acting_status": "EXISTING_SIGNATURE_CANDIDATE_REUSED; dedicated ultimate acting missing"
+      }
+    },
+    "yin": {
+      "bible": "docs/bibles/fighters/yin.md",
+      "prism_heart": {
+        "state_id": "INFINITE_QUIET_TRUE_ASPECT",
+        "asset_form": "BASE",
+        "overrides": {
+          "side_special": {
+            "damage": 9,
+            "angle_deg": 160,
+            "recovery_frames": 24,
+            "training_display_name": "The Infinite Quiet \u2014 Echo Special"
+          }
+        }
+      },
+      "puppet_seal": {
+        "BLACK": {
+          "state_id": "NULL_CONDUCTOR",
+          "asset_form": "BASE",
+          "overrides": {
+            "side_special": {
+              "move_type": "projectile",
+              "damage": 3,
+              "recovery_frames": 28,
+              "projectile": {
+                "type": "null_conductor",
+                "offset_x": 46,
+                "offset_y": -8,
+                "angle_deg": 0,
+                "spawn_frame": 1,
+                "speed_by_aura": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "damage_by_aura": [
+                  3,
+                  3,
+                  3,
+                  3,
+                  3
+                ],
+                "size_by_aura": [
+                  20,
+                  20,
+                  20,
+                  20,
+                  20
+                ],
+                "lifetime_frames_by_aura": [
+                  48,
+                  48,
+                  48,
+                  48,
+                  48
+                ],
+                "behavior_by_aura": [
+                  "straight",
+                  "straight",
+                  "straight",
+                  "straight",
+                  "straight"
+                ],
+                "pierce": false,
+                "max_active_per_move": 1
+              },
+              "training_display_name": "Null Anchor"
+            }
+          }
+        },
+        "WHITE": {
+          "state_id": "NULL_CONDUCTOR",
+          "asset_form": "BASE",
+          "overrides": {
+            "side_special": {
+              "move_type": "projectile",
+              "damage": 3,
+              "recovery_frames": 28,
+              "projectile": {
+                "type": "null_conductor",
+                "offset_x": 46,
+                "offset_y": -8,
+                "angle_deg": 0,
+                "spawn_frame": 1,
+                "speed_by_aura": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "damage_by_aura": [
+                  3,
+                  3,
+                  3,
+                  3,
+                  3
+                ],
+                "size_by_aura": [
+                  20,
+                  20,
+                  20,
+                  20,
+                  20
+                ],
+                "lifetime_frames_by_aura": [
+                  48,
+                  48,
+                  48,
+                  48,
+                  48
+                ],
+                "behavior_by_aura": [
+                  "straight",
+                  "straight",
+                  "straight",
+                  "straight",
+                  "straight"
+                ],
+                "pierce": false,
+                "max_active_per_move": 1
+              },
+              "training_display_name": "Null Anchor"
+            }
+          }
+        }
+      },
+      "ultimate": {
+        "move_id": "party_ultimate:yin",
+        "display_name": "The Infinite Quiet",
+        "mechanic": "collapsing_apertures",
+        "startup_frames": 36,
+        "active_frames": 28,
+        "recovery_frames": 48,
+        "visual_move_id": "aura_burst",
+        "guardable": true,
+        "pulses": [
+          {
+            "frame": 1,
+            "damage": 3,
+            "launch_angle": 165,
+            "base_knockback": 12,
+            "projectile": {
+              "type": "party_collapsing_apertures",
+              "offset_x": 100,
+              "offset_y": -12,
+              "angle_deg": 0,
+              "spawn_frame": 1,
+              "speed_by_aura": [
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "damage_by_aura": [
+                3,
+                3,
+                3,
+                3,
+                3
+              ],
+              "size_by_aura": [
+                34,
+                34,
+                34,
+                34,
+                34
+              ],
+              "lifetime_frames_by_aura": [
+                10,
+                10,
+                10,
+                10,
+                10
+              ],
+              "behavior_by_aura": [
+                "straight",
+                "straight",
+                "straight",
+                "straight",
+                "straight"
+              ],
+              "pierce": false,
+              "max_active_per_move": 3
+            }
+          },
+          {
+            "frame": 12,
+            "damage": 4,
+            "launch_angle": 165,
+            "base_knockback": 12,
+            "projectile": {
+              "type": "party_collapsing_apertures",
+              "offset_x": 65,
+              "offset_y": -12,
+              "angle_deg": 0,
+              "spawn_frame": 1,
+              "speed_by_aura": [
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "damage_by_aura": [
+                4,
+                4,
+                4,
+                4,
+                4
+              ],
+              "size_by_aura": [
+                26,
+                26,
+                26,
+                26,
+                26
+              ],
+              "lifetime_frames_by_aura": [
+                10,
+                10,
+                10,
+                10,
+                10
+              ],
+              "behavior_by_aura": [
+                "straight",
+                "straight",
+                "straight",
+                "straight",
+                "straight"
+              ],
+              "pierce": false,
+              "max_active_per_move": 3
+            }
+          },
+          {
+            "frame": 24,
+            "damage": 9,
+            "launch_angle": 90,
+            "base_knockback": 12,
+            "projectile": {
+              "type": "party_collapsing_apertures",
+              "offset_x": 30,
+              "offset_y": -12,
+              "angle_deg": 0,
+              "spawn_frame": 1,
+              "speed_by_aura": [
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "damage_by_aura": [
+                9,
+                9,
+                9,
+                9,
+                9
+              ],
+              "size_by_aura": [
+                18,
+                18,
+                18,
+                18,
+                18
+              ],
+              "lifetime_frames_by_aura": [
+                10,
+                10,
+                10,
+                10,
+                10
+              ],
+              "behavior_by_aura": [
+                "straight",
+                "straight",
+                "straight",
+                "straight",
+                "straight"
+              ],
+              "pierce": false,
+              "max_active_per_move": 3
+            }
+          }
+        ],
+        "source_acting_status": "EXISTING_SIGNATURE_CANDIDATE_REUSED; dedicated ultimate acting missing"
+      }
+    },
+    "yang": {
+      "bible": "docs/bibles/fighters/yang.md",
+      "prism_heart": {
+        "state_id": "ABSOLUTE_RADIANCE_TRUE_ASPECT",
+        "asset_form": "BASE",
+        "overrides": {
+          "side_special": {
+            "damage": 10,
+            "angle_deg": 25,
+            "recovery_frames": 22,
+            "training_display_name": "The Absolute Radiance \u2014 Echo Special"
+          }
+        }
+      },
+      "puppet_seal": {
+        "BLACK": {
+          "state_id": "RADIANT_CONDUCTOR",
+          "asset_form": "BASE",
+          "overrides": {
+            "side_special": {
+              "move_type": "projectile",
+              "damage": 6,
+              "recovery_frames": 28,
+              "projectile": {
+                "type": "radiant_conductor",
+                "offset_x": 46,
+                "offset_y": -8,
+                "angle_deg": 0,
+                "spawn_frame": 1,
+                "speed_by_aura": [
+                  420,
+                  420,
+                  420,
+                  420,
+                  420
+                ],
+                "damage_by_aura": [
+                  6,
+                  6,
+                  6,
+                  6,
+                  6
+                ],
+                "size_by_aura": [
+                  20,
+                  20,
+                  20,
+                  20,
+                  20
+                ],
+                "lifetime_frames_by_aura": [
+                  40,
+                  40,
+                  40,
+                  40,
+                  40
+                ],
+                "behavior_by_aura": [
+                  "straight",
+                  "straight",
+                  "straight",
+                  "straight",
+                  "straight"
+                ],
+                "pierce": false,
+                "max_active_per_move": 1
+              },
+              "training_display_name": "Conductor Ray"
+            }
+          }
+        },
+        "WHITE": {
+          "state_id": "RADIANT_CONDUCTOR",
+          "asset_form": "BASE",
+          "overrides": {
+            "side_special": {
+              "move_type": "projectile",
+              "damage": 6,
+              "recovery_frames": 28,
+              "projectile": {
+                "type": "radiant_conductor",
+                "offset_x": 46,
+                "offset_y": -8,
+                "angle_deg": 0,
+                "spawn_frame": 1,
+                "speed_by_aura": [
+                  420,
+                  420,
+                  420,
+                  420,
+                  420
+                ],
+                "damage_by_aura": [
+                  6,
+                  6,
+                  6,
+                  6,
+                  6
+                ],
+                "size_by_aura": [
+                  20,
+                  20,
+                  20,
+                  20,
+                  20
+                ],
+                "lifetime_frames_by_aura": [
+                  40,
+                  40,
+                  40,
+                  40,
+                  40
+                ],
+                "behavior_by_aura": [
+                  "straight",
+                  "straight",
+                  "straight",
+                  "straight",
+                  "straight"
+                ],
+                "pierce": false,
+                "max_active_per_move": 1
+              },
+              "training_display_name": "Conductor Ray"
+            }
+          }
+        }
+      },
+      "ultimate": {
+        "move_id": "party_ultimate:yang",
+        "display_name": "The Absolute Radiance",
+        "mechanic": "radiant_construction",
+        "startup_frames": 34,
+        "active_frames": 24,
+        "recovery_frames": 44,
+        "visual_move_id": "aura_burst",
+        "guardable": true,
+        "pulses": [
+          {
+            "frame": 1,
+            "damage": 4,
+            "launch_angle": 30,
+            "base_knockback": 12,
+            "projectile": {
+              "type": "party_radiant_construction",
+              "offset_x": 45,
+              "offset_y": -12,
+              "angle_deg": 0,
+              "spawn_frame": 1,
+              "speed_by_aura": [
+                220,
+                220,
+                220,
+                220,
+                220
+              ],
+              "damage_by_aura": [
+                4,
+                4,
+                4,
+                4,
+                4
+              ],
+              "size_by_aura": [
+                20,
+                20,
+                20,
+                20,
+                20
+              ],
+              "lifetime_frames_by_aura": [
+                48,
+                48,
+                48,
+                48,
+                48
+              ],
+              "behavior_by_aura": [
+                "straight",
+                "straight",
+                "straight",
+                "straight",
+                "straight"
+              ],
+              "pierce": false,
+              "max_active_per_move": 3
+            }
+          },
+          {
+            "frame": 9,
+            "damage": 4,
+            "launch_angle": 45,
+            "base_knockback": 12,
+            "projectile": {
+              "type": "party_radiant_construction",
+              "offset_x": 90,
+              "offset_y": -24,
+              "angle_deg": -15,
+              "spawn_frame": 1,
+              "speed_by_aura": [
+                160,
+                160,
+                160,
+                160,
+                160
+              ],
+              "damage_by_aura": [
+                4,
+                4,
+                4,
+                4,
+                4
+              ],
+              "size_by_aura": [
+                26,
+                26,
+                26,
+                26,
+                26
+              ],
+              "lifetime_frames_by_aura": [
+                48,
+                48,
+                48,
+                48,
+                48
+              ],
+              "behavior_by_aura": [
+                "straight",
+                "straight",
+                "straight",
+                "straight",
+                "straight"
+              ],
+              "pierce": false,
+              "max_active_per_move": 3
+            }
+          },
+          {
+            "frame": 17,
+            "damage": 8,
+            "launch_angle": 70,
+            "base_knockback": 12,
+            "projectile": {
+              "type": "party_radiant_construction",
+              "offset_x": 135,
+              "offset_y": -12,
+              "angle_deg": 15,
+              "spawn_frame": 1,
+              "speed_by_aura": [
+                100,
+                100,
+                100,
+                100,
+                100
+              ],
+              "damage_by_aura": [
+                8,
+                8,
+                8,
+                8,
+                8
+              ],
+              "size_by_aura": [
+                32,
+                32,
+                32,
+                32,
+                32
+              ],
+              "lifetime_frames_by_aura": [
+                48,
+                48,
+                48,
+                48,
+                48
+              ],
+              "behavior_by_aura": [
+                "straight",
+                "straight",
+                "straight",
+                "straight",
+                "straight"
+              ],
+              "pierce": false,
+              "max_active_per_move": 3
+            }
+          }
+        ],
+        "source_acting_status": "EXISTING_SIGNATURE_CANDIDATE_REUSED; dedicated ultimate acting missing"
+      }
+    }
+  }
+}

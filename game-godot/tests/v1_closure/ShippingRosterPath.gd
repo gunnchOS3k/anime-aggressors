@@ -2,6 +2,8 @@ extends SceneTree
 const Data = preload("res://scripts/data/data_loader.gd")
 var failures: Array = []
 var rows: Array = []
+var evidence_directory := ""
+var fighter_filter: Array = []
 
 func _init() -> void:
 	call_deferred("_run")
@@ -30,6 +32,16 @@ func wait_scene(suffix: String, maximum: int = 300) -> bool:
 	return false
 
 func _run() -> void:
+	await process_frame
+	# Explicit signed staged campaign fixture for the two earned-only cosmic fighters.
+	for arg in OS.get_cmdline_user_args():
+		if arg.begins_with("--ordinary-output="):evidence_directory=arg.get_slice("=",1)
+		if arg.begins_with("--roster-fighter="):fighter_filter.append(arg.get_slice("=",1))
+		if arg.begins_with("--roster-staged-unlocks="):
+			var campaign = root.get_node("CampaignRuntime")
+			campaign.save_path=arg.get_slice("=",1)
+			campaign.load_progress()
+			check(campaign.progress.gray_routes.size()==7,"seven_signed_staged_gray_routes_required")
 	var state = root.get_node("GameState")
 	var router = root.get_node("SceneRouter")
 	state.mode = "versus"
@@ -40,7 +52,9 @@ func _run() -> void:
 	state.items_enabled = false
 	state.stocks = 1
 	state.match_timer_seconds = 600
+	for fid in fighter_filter:check(fid in Data.roster_ids(),"known_roster_filter:"+str(fid))
 	for fid in Data.roster_ids():
+		if not fighter_filter.is_empty() and fid not in fighter_filter:continue
 		for variant in ["male", "female"]:
 			var failure_start := failures.size()
 			var label: String = str(fid) + ":" + variant
@@ -130,8 +144,9 @@ func _run() -> void:
 			await frames(6)
 			rows.append({"ok":failures.size() == failure_start,"failures":failures.slice(failure_start),"fighter_id":fid,"presentation":variant,"form":"BASE","select_lock_stage_versus":true,"movement_jump_input":true,"light_heavy_special_super_input":true,"resolved_hit_block":true,"recovery_input":true,"scripted_blast_KO_victory_defeat":true,"rematch_return":true,"human_playthrough":false})
 			print("SHIPPING_PATH_CHECK ",label)
-	var output := FileAccess.open("res://../artifacts/v1_closure/shipping_roster_evidence.json",FileAccess.WRITE)
-	output.store_string(JSON.stringify({"ok":failures.is_empty(),"failures":failures,"rows":rows,"scope":"18 base presentations through real shipping selection, versus, countdown, input commands, hit/block resolver, scripted blast KOs, results, rematch and return. All other form battle paths and human taste remain unproved.","V1_AUTOMATED_READY":false,"V1_ANIME_HUMAN_PASS":false},"  ")+"\n")
+	check(rows.size()==(Data.roster_ids().size() if fighter_filter.is_empty() else fighter_filter.size())*2,"all_requested_body_cases_executed")
+	var output := FileAccess.open(evidence_directory.path_join("shipping_roster_evidence.json") if not evidence_directory.is_empty() else "res://../artifacts/v1_closure/shipping_roster_evidence.json",FileAccess.WRITE)
+	output.store_string(JSON.stringify({"ok":failures.is_empty(),"failures":failures,"rows":rows,"requested_fighters":fighter_filter,"scope":"Explicit signed staged cosmic unlock fixture where provided; requested base presentations through real shipping selection, versus, countdown, input commands, hit/block resolver, scripted blast KOs, results, rematch and return. Scripted KOs are cleanup fixtures, not earned stock-loss evidence. Other form paths and human taste remain unproved.","V1_AUTOMATED_READY":false,"V1_ANIME_HUMAN_PASS":false},"  ")+"\n")
 	output.close()
 	print("SHIPPING_ROSTER ","PASS" if failures.is_empty() else "FAIL"," rows=",rows.size()," failures=",failures)
 	quit(0 if failures.is_empty() else 1)

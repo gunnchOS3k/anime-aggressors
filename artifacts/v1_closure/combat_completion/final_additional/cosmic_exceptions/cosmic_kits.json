@@ -1,0 +1,741 @@
+{
+  "PASS": true,
+  "complete": true,
+  "failures": [],
+  "rows": [
+    {
+      "body": "male",
+      "contacts": 1,
+      "damage": 2.1,
+      "facing": 1,
+      "fighter": "yin",
+      "heavy": false,
+      "model": "res://assets/characters/collectible_v1/yin/male/BASE.glb",
+      "opponent": "juno-spark"
+    },
+    {
+      "body": "male",
+      "contacts": 1,
+      "damage": 10.5,
+      "facing": 1,
+      "fighter": "yin",
+      "heavy": true,
+      "model": "res://assets/characters/collectible_v1/yin/male/BASE.glb",
+      "opponent": "juno-spark"
+    },
+    {
+      "body": "male",
+      "contacts": 1,
+      "damage": 1.936,
+      "facing": 1,
+      "fighter": "yang",
+      "heavy": false,
+      "model": "res://assets/characters/collectible_v1/yang/male/BASE.glb",
+      "opponent": "juno-spark"
+    },
+    {
+      "body": "male",
+      "contacts": 1,
+      "damage": 9.504,
+      "facing": 1,
+      "fighter": "yang",
+      "heavy": true,
+      "model": "res://assets/characters/collectible_v1/yang/male/BASE.glb",
+      "opponent": "juno-spark"
+    },
+    {
+      "case": "absorption",
+      "events": [
+        {
+          "aura_cost": 25.0,
+          "damage": 0,
+          "event_id": "yin-absorb:1:5:2000001",
+          "frame": 539,
+          "projectile": 2000001,
+          "result": "projectile_absorbed",
+          "source_fighter": "juno-spark",
+          "world": [
+            -40.0,
+            261.199829101562
+          ]
+        }
+      ],
+      "opponent": "juno-spark",
+      "scope": "declared resource/overlap fixture, not ordinary CPU timing acceptance"
+    },
+    {
+      "absorptions": 0,
+      "case": "counterplay",
+      "damage": 8.464,
+      "kind": "strong"
+    },
+    {
+      "absorptions": 0,
+      "case": "counterplay",
+      "damage": 6.7712,
+      "kind": "insufficient"
+    },
+    {
+      "absorptions": 0,
+      "case": "counterplay",
+      "damage": 0.0,
+      "kind": "invulnerable"
+    },
+    {
+      "absorptions": 0,
+      "case": "counterplay",
+      "damage": 0.0,
+      "kind": "ally"
+    },
+    {
+      "absorptions": 1,
+      "case": "counterplay",
+      "damage": 6.7712,
+      "kind": "second"
+    },
+    {
+      "body": "female",
+      "case": "public_counter",
+      "damage": 0.0,
+      "delay": 3,
+      "direction": 1,
+      "events": [
+        {
+          "aura_cost": 25.0,
+          "damage": 0,
+          "event_id": "yin-absorb:1:11:2000008",
+          "frame": 747,
+          "projectile": 2000008,
+          "result": "projectile_absorbed",
+          "source_fighter": "juno-spark",
+          "world": [
+            -20.0,
+            275.647399902344
+          ]
+        }
+      ],
+      "scope": "public timing with declared50aura prerequisite; not earned campaign or activeCPU acceptance",
+      "timing": [
+        {
+          "aura": 49.6666666666667,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "startup",
+          "physics_frame": 740,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "startup",
+          "yin_phase_frame": 5,
+          "yin_state": "special_startup"
+        },
+        {
+          "aura": 49.6,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "startup",
+          "physics_frame": 741,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "startup",
+          "yin_phase_frame": 6,
+          "yin_state": "special_startup"
+        },
+        {
+          "aura": 49.5333333333333,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "startup",
+          "physics_frame": 742,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "startup",
+          "yin_phase_frame": 7,
+          "yin_state": "special_startup"
+        },
+        {
+          "aura": 49.4666666666666,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "active",
+          "physics_frame": 743,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "startup",
+          "yin_phase_frame": 8,
+          "yin_state": "special_startup"
+        },
+        {
+          "aura": 49.4,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "active",
+          "physics_frame": 744,
+          "shots": 1,
+          "yin_move": "down_special",
+          "yin_phase": "active",
+          "yin_phase_frame": 0,
+          "yin_state": "special_startup"
+        },
+        {
+          "aura": 49.3333333333333,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "recovery",
+          "physics_frame": 745,
+          "shots": 1,
+          "yin_move": "down_special",
+          "yin_phase": "active",
+          "yin_phase_frame": 1,
+          "yin_state": "special_active"
+        },
+        {
+          "aura": 49.2666666666666,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "recovery",
+          "physics_frame": 746,
+          "shots": 1,
+          "yin_move": "down_special",
+          "yin_phase": "active",
+          "yin_phase_frame": 2,
+          "yin_state": "special_active"
+        },
+        {
+          "aura": 49.2,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "recovery",
+          "physics_frame": 747,
+          "shots": 1,
+          "yin_move": "down_special",
+          "yin_phase": "active",
+          "yin_phase_frame": 3,
+          "yin_state": "special_active"
+        },
+        {
+          "aura": 24.1333333333333,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "recovery",
+          "physics_frame": 748,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "active",
+          "yin_phase_frame": 4,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 24.0666666666666,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "recovery",
+          "physics_frame": 749,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "active",
+          "yin_phase_frame": 5,
+          "yin_state": "special_active"
+        },
+        {
+          "aura": 24.0,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "recovery",
+          "physics_frame": 750,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "recovery",
+          "yin_phase_frame": 0,
+          "yin_state": "special_recovery"
+        },
+        {
+          "aura": 23.9333333333333,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "recovery",
+          "physics_frame": 751,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "recovery",
+          "yin_phase_frame": 1,
+          "yin_state": "special_recovery"
+        },
+        {
+          "aura": 23.8666666666666,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "recovery",
+          "physics_frame": 752,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "recovery",
+          "yin_phase_frame": 2,
+          "yin_state": "special_recovery"
+        },
+        {
+          "aura": 23.8,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "recovery",
+          "physics_frame": 753,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "recovery",
+          "yin_phase_frame": 3,
+          "yin_state": "special_recovery"
+        },
+        {
+          "aura": 23.7333333333333,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "recovery",
+          "physics_frame": 754,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "recovery",
+          "yin_phase_frame": 4,
+          "yin_state": "special_recovery"
+        },
+        {
+          "aura": 23.6666666666666,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "recovery",
+          "physics_frame": 755,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "recovery",
+          "yin_phase_frame": 5,
+          "yin_state": "special_recovery"
+        },
+        {
+          "aura": 23.6,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "recovery",
+          "physics_frame": 756,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "recovery",
+          "yin_phase_frame": 6,
+          "yin_state": "special_recovery"
+        },
+        {
+          "aura": 23.5333333333333,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 757,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "recovery",
+          "yin_phase_frame": 7,
+          "yin_state": "special_recovery"
+        },
+        {
+          "aura": 23.4666666666666,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 758,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "recovery",
+          "yin_phase_frame": 8,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 23.4,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 759,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "recovery",
+          "yin_phase_frame": 9,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 23.3333333333333,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 760,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "recovery",
+          "yin_phase_frame": 10,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 23.2666666666666,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 761,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "recovery",
+          "yin_phase_frame": 11,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 23.2,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 762,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "recovery",
+          "yin_phase_frame": 12,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 23.1333333333333,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 763,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "recovery",
+          "yin_phase_frame": 13,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 23.0666666666666,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 764,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "recovery",
+          "yin_phase_frame": 14,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 23.0,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 765,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "recovery",
+          "yin_phase_frame": 15,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 22.9333333333333,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 766,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "recovery",
+          "yin_phase_frame": 16,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 22.8666666666666,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 767,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "recovery",
+          "yin_phase_frame": 17,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 22.8,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 768,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "recovery",
+          "yin_phase_frame": 18,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 22.7333333333333,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 769,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "recovery",
+          "yin_phase_frame": 19,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 22.6666666666666,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 770,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "recovery",
+          "yin_phase_frame": 20,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 22.6,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 771,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "recovery",
+          "yin_phase_frame": 21,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 22.5333333333333,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 772,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "recovery",
+          "yin_phase_frame": 22,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 22.4666666666666,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 773,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "recovery",
+          "yin_phase_frame": 23,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 22.4,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 774,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "",
+          "yin_phase_frame": 24,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 22.3333333333333,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 775,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "",
+          "yin_phase_frame": 24,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 22.2666666666666,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 776,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "",
+          "yin_phase_frame": 24,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 22.2,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 777,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "",
+          "yin_phase_frame": 24,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 22.1333333333333,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 778,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "",
+          "yin_phase_frame": 24,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 22.0666666666666,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 779,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "",
+          "yin_phase_frame": 24,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 22.0,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 780,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "",
+          "yin_phase_frame": 24,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 21.9333333333333,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 781,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "",
+          "yin_phase_frame": 24,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 21.8666666666666,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 782,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "",
+          "yin_phase_frame": 24,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 21.8,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 783,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "",
+          "yin_phase_frame": 24,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 21.7333333333333,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 784,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "",
+          "yin_phase_frame": 24,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 21.6666666666666,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 785,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "",
+          "yin_phase_frame": 24,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 21.6,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 786,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "",
+          "yin_phase_frame": 24,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 21.5333333333333,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 787,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "",
+          "yin_phase_frame": 24,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 21.4666666666666,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 788,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "",
+          "yin_phase_frame": 24,
+          "yin_state": "idle"
+        },
+        {
+          "aura": 21.4,
+          "damage": 0.0,
+          "juno_move": "neutral_special_projectile",
+          "juno_phase": "",
+          "physics_frame": 789,
+          "shots": 0,
+          "yin_move": "down_special",
+          "yin_phase": "",
+          "yin_phase_frame": 24,
+          "yin_state": "idle"
+        }
+      ]
+    },
+    {
+      "active": 1,
+      "body": "female",
+      "case": "public_panel",
+      "direction": 1,
+      "model": "res://assets/characters/collectible_v1/yang/female/BASE.glb"
+    },
+    {
+      "case": "construct",
+      "expired": true,
+      "old_retired": true,
+      "stationary": true
+    },
+    {
+      "case": "construct_interception",
+      "opponent": "juno-spark",
+      "result": "mutual_cancel"
+    }
+  ],
+  "scope": "explicit reset/aura/overlap fixtures and real public attacks on live BattleScene rigs; no human approval, ordinary campaign, CPU match, guaranteed combo or platform acceptance"
+}

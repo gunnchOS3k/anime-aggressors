@@ -1,0 +1,42 @@
+{
+  "PASS": true,
+  "failures": [],
+  "rows": [
+    {
+      "actual": 1,
+      "event": "first",
+      "expected": 1
+    },
+    {
+      "actual": 1,
+      "event": "isolated",
+      "expected": 1
+    },
+    {
+      "actual": 2,
+      "event": "linked",
+      "expected": 2
+    },
+    {
+      "actual": 2,
+      "event": "linked",
+      "expected": 2
+    },
+    {
+      "actual": 0,
+      "event": "block",
+      "expected": 0
+    },
+    {
+      "actual": 0,
+      "event": "armor",
+      "expected": 0
+    },
+    {
+      "actual": 0,
+      "event": "unconfirmed",
+      "expected": 0
+    }
+  ],
+  "scope": "training UI packet-policy regression; distinct from ordinary CPU combo proof"
+}
