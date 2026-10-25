@@ -1,3 +1,25 @@
+# 2026-10-25 — match completion implemented; storage guard stopped further execution
+
+Runtime correction checkpoint `52dafe1f18f3ba39cb4f8e607961f2b40476c0cc`, branch `integration/v1-preserved-candidate-20261025`. Delivery checkpoint is `git rev-parse HEAD`; source stays LOCAL ONLY, no changes to protected PR123/133 or original worktrees. No private storage access, mount test, artifact hash read, migration or qualification this session.
+
+Actual production fixes: idempotent BattleScene finish and scene-bound results timer; actor terminal combat closure; retired projectile/move/CPU authority; reject late damage/contacts; final-stock HUD refresh/winner banner; existing victory/defeat states; preview form setup admits only real fighter owners. Four runtime source hashes match BOTH passing receipts. No damage/frame/collision/Story balance changes.
+
+PASS: `outputs/match_finality_fixed_v2`23 technical injected-boundary engine assertions. `outputs/ordinary_match_completion_headless_v3`13 ordinary-input engine checks,14 actual contacts with active CPU3, Kaia self-destruct atphysics682 with21.43965damage/0stocks, Juno retained9.40032damage/1stock, actual Juno result, Confirm rematch with freshownership/stocks/damage, public pause/menu UI. HEADLESS, NO new native visuals/movie, NOT attack-earned KO or original private art acceptance. Owner saves hash-unchanged in all executed tests. Old failed baseline/v1/v2 harness attempts retained; v1 used physical/window coordinates against a64px headless Window; v2 keyboard rematch passed but old mouse return failed. Corrected viewport-local UI events in v3.
+
+Resource refusal: attempted `TerminalRoster.gd` was blocked BEFORE clone/launch at19,928,473,600bytesfree vs20,401,094,656required.16:03CDT finalfree18.55928GiB (19,927,871,488bytes),41%RAMfree, swap8705.88MiBused, noheavyjobs. 19GiBstart/18GiBrunning guards unchanged; native no-movie1636MiBforecast needs19.597656GiB, short1,114,951,680bytes. No recording/export or native attempt. No unapproved deletion or paidCI. Further Godot execution STOPPED. Python syntax/diff checks still fit lightweight budget.
+
+PENDING: new36-configuration terminal roster test has NOT EXECUTED. Added career-save-file/single-telemetry assertions to ordinary probe after its13-check pass; those additions NOT RERUN. Runner now refreshes buildidentity and rechecks forecast immediately before launch; manual source path prepared but not launched. Shutdown2ObjectDB/1resource diagnostic remains open and unsuppressed. No exact-candidate CI; earlier checks not promoted to this HEAD.
+
+Evidence: `docs/handoff/2026-10-25/MATCH_COMPLETION.json`; local compact owner entry `outputs/match_completion_delivery_20261025/OWNER_REVIEW.html`, exact resource and source receipt beside it. Earlier native MP4s retained and clearly labeled earlier source. Current corrected runtime can be played through the source-bound guarded command in the owner entry only after capacity genuinely passes. Existing corrected-art bindings preserved but private/native acceptance remains pending storage repair.
+
+EXACT NEXT after fresh internal capacity >=19GiB (and18GiB after512MiB headless forecast):
+`python3 tools/integration/run_match_completion_checks.py --output outputs/terminal_roster_20261025_v2 --reuse-imported outputs/native_public_counterplay_female_v3/game-godot --script tests/integration/TerminalRoster.gd`
+Then rerun OrdinaryMatchCompletion once with a fresh label for added save/telemetry assertions, and affected short throw/PerfectGuard/Party fixtures as warranted. Native visual review separately needs19.597656GiB forecast; no-movie is NOT captured footage. Private production may resume only AFTER owner changes connection/device and a bounded read-load qualification finds no NEW transport errors, then integrity verification. Do not repeat idle-only qualification.
+
+Full-game work remains:18body/24move original acting and effects, paired-runtime contact, earned seven Story routes/Convergence, final OVA, genuine LAN/controllers, Windows/Android physical-device and human acceptance. HUMAN_ART_APPROVED=false; RUNTIME_PAIRED_CONTACT_VERIFIED=false; RC2_READY=false; V1_0_0_RELEASE_AUTHORIZED=false. No merge/push/publication/tag/deploy/release.
+
+---
+
 # 2026-10-25 — internal match completion correction; ordinary-input check next
 
 Branch `integration/v1-preserved-candidate-20261025`; exact checkpoint is `git rev-parse HEAD`. Previous HEAD0dd59b36. No original worktree, private volume, source art, owner save or remote branch modified. Private storage remains STOPPED under the owner’s accepted read-load USB-stall findings; NO new qualification or asset reads this increment.

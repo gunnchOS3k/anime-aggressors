@@ -72,6 +72,10 @@ def run(args):
     before = owner_state()
     head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     diff = subprocess.check_output(["git", "diff", "HEAD"], cwd=ROOT)
+    (project / "data/runtime/build_identity.json").write_text(json.dumps({
+        "git_sha":head,"git_sha_short":head[:12],"git_short_sha":head[:12],
+        "watermark":"INTEGRATED "+head[:12],"build_flavor":"isolated-match-completion-review",
+        "source_diff_sha256":hashlib.sha256(diff).hexdigest()},indent=2)+"\n")
     (output / "SOURCE.patch").write_bytes(diff)
     record = {"source_head":head,"source_diff_sha256":hashlib.sha256(diff).hexdigest(),
               "source_gd_hashes":hashes,"private_assets_installed":False,"private_storage_accessed":False,
@@ -81,12 +85,25 @@ def run(args):
     (output / "SOURCE.json").write_text(json.dumps(record, indent=2)+"\n")
     command = [str(args.godot), "--log-file", str(output / "engine.log"), "--path", str(project),
                "--rendering-method", "gl_compatibility", "--fixed-fps", "60",
-               "--script", "res://"+args.script, "--", "--ordinary-output="+str(output)]
+               "--script", "res://"+args.script, "--", "--ordinary-output="+str(output),
+               "--review-output="+str(output)]
+    if args.script == "tests/integration/PlayableMatchReview.gd":
+        command += ["--review-fighter=kaia-windrow", "--review-opponent=juno-spark"]
     if args.native:
         command[1:1] = ["--windowed", "--resolution", "1280x720"]
     else:
         command[1:1] = ["--headless", "--audio-driver", "Dummy"]
     record["command"] = command
+    # Cloning/refreshing source takes time. Recheck the unchanged forecast
+    # immediately before execution, not only at the beginning of preparation.
+    launch_free = shutil.disk_usage(ROOT).free
+    record["available_at_launch_bytes"] = launch_free
+    if launch_free < required or active_media_jobs():
+        record.update(guard_stop="prelaunch_resource_or_competing_job", exit_code=None)
+        record["pass"] = False
+        (output / "SOURCE.json").write_text(json.dumps(record, indent=2)+"\n")
+        print("Prelaunch resource guard refused execution; preserved prepared source")
+        return 73
     start = time.monotonic()
     peak = 0
     minimum = free
@@ -120,6 +137,7 @@ def run(args):
                   available_after_bytes=shutil.disk_usage(ROOT).free,
                   owner_saves_unchanged=before==owner_state(),
                   log_sha256=sha(output / "stdout.log"))
+    record["shutdown_diagnostics"] = [line for line in text.splitlines() if "ObjectDB" in line or "resources still in use" in line]
     record["pass"] = child.returncode==0 and stopped is None and record["owner_saves_unchanged"] and "SCRIPT ERROR:" not in text
     (output / "SOURCE.json").write_text(json.dumps(record, indent=2)+"\n")
     print(json.dumps({k:record[k] for k in ("source_head","pass","exit_code","guard_stop","seconds","sampled_peak_rss_bytes","minimum_internal_free_bytes","owner_saves_unchanged")}))

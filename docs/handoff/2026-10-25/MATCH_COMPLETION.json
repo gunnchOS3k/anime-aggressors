@@ -1,0 +1,174 @@
+{
+  "runtime_source_commit": "52dafe1f18f3ba39cb4f8e607961f2b40476c0cc",
+  "branch": "integration/v1-preserved-candidate-20261025",
+  "runtime_source_hashes": {
+    "game-godot/scripts/battle/battle_scene.gd": "6415d4c06cf20d4dd39dc93c98253d52f741b7407e6cf8a8983c501da540af93",
+    "game-godot/scripts/combat/hit_resolver.gd": "dcd05e77665ebd99c8778e7495de59508b85c0720898fecba4440d879e3b48ae",
+    "game-godot/scripts/fighters/fighter.gd": "b15d36edacf01942890f4d5e1679c0429c85f4e9aa2c7e6ad9b1a55fdeb8a2fc",
+    "game-godot/scripts/visual/form_presentation_8c.gd": "a0d5c04e2b479942771631e3f775125fb083619859a9641bb4e0b6e00b6893f0"
+  },
+  "implementation": [
+    "Single committed match result and scene-owned results timer",
+    "Closed actor/simulation/input/projectile/contact authority at match end",
+    "Final-stock HUD refresh and immediate winner banner; existing victory/defeat states",
+    "Results portrait safely distinguishes preview host from live fighter"
+  ],
+  "evidence": [
+    {
+      "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025/outputs/match_finality_baseline_20261025",
+      "result_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025/outputs/match_finality_baseline_20261025/MATCH_FINALITY.json",
+      "result_sha256": "a32511c4bc0271c08d36c0ae5fad82aeb2e76214a55df74a8033fbb7a0266be4",
+      "receipt_sha256": "e56764f9459452cab844d62d8864d23f2d426175121d0375a84079ee91f1e81a",
+      "PASS": false,
+      "scope": "Injected match-end boundary with actual actors and UI signals; not earned KO, native gameplay or visual acceptance",
+      "failures": [
+        "both_controls_closed",
+        "simulation_stopped",
+        "moves_cancelled",
+        "buffered_attack_cleared",
+        "cpu_inputs_released",
+        "projectile_authority_retired",
+        "late_contact_rejected",
+        "late_damage_rejected",
+        "first_result_retained",
+        "one_match_end_event",
+        "one_career_result",
+        "results_route_loaded"
+      ],
+      "checks": 14,
+      "source_head": "0dd59b36f1f4778850f8de7a3c4559f910f6c811",
+      "sampled_peak_rss_bytes": 328876032,
+      "seconds": 2.880868084001122,
+      "minimum_internal_free_bytes": 21074796544,
+      "owner_saves_unchanged": true,
+      "runtime_matches_current": false
+    },
+    {
+      "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025/outputs/match_finality_fixed_v2",
+      "result_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025/outputs/match_finality_fixed_v2/MATCH_FINALITY.json",
+      "result_sha256": "c9587fa505409fd38df5239e2a9db5ae5365f58f9c1f78c5d2a157787a265e99",
+      "receipt_sha256": "0dbeb816e0596ce0bff544ae21216f17fdd6ecfa28aa0d8f598b0230a05c22b1",
+      "PASS": true,
+      "scope": "Injected match-end boundary with actual actors and UI signals; not earned KO, native gameplay or visual acceptance",
+      "failures": [],
+      "checks": 23,
+      "source_head": "0dd59b36f1f4778850f8de7a3c4559f910f6c811",
+      "sampled_peak_rss_bytes": 352632832,
+      "seconds": 4.2274749589996645,
+      "minimum_internal_free_bytes": 21048320000,
+      "owner_saves_unchanged": true,
+      "runtime_matches_current": true
+    },
+    {
+      "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025/outputs/ordinary_match_completion_headless_v1",
+      "result_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025/outputs/ordinary_match_completion_headless_v1/ORDINARY_MATCH_COMPLETION.json",
+      "result_sha256": "9872115d05da64d25e26dcb911945896d120cef1108e3ae451fe57cc078bc437",
+      "receipt_sha256": "8b973d635993c5b72323047f4e32bcd4eb4c335c9cd1f5d02fc4af0c74848853",
+      "PASS": false,
+      "scope": "Actual BattleScene ordinary public combat/left input and UI mouse events; active CPU; no forced result. Declared self-destruct tests stock/result/rematch, NOT an attack-earned finishing KO.",
+      "failures": [
+        "winner_portrait_texture_loaded",
+        "public_UI_rematch_started"
+      ],
+      "checks": 10,
+      "source_head": "52dafe1f18f3ba39cb4f8e607961f2b40476c0cc",
+      "sampled_peak_rss_bytes": 327876608,
+      "seconds": 3.89195129199652,
+      "minimum_internal_free_bytes": 21036171264,
+      "owner_saves_unchanged": true,
+      "runtime_matches_current": true
+    },
+    {
+      "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025/outputs/ordinary_match_completion_headless_v2",
+      "result_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025/outputs/ordinary_match_completion_headless_v2/ORDINARY_MATCH_COMPLETION.json",
+      "result_sha256": "42c26eecadbdc82cff3c866f1541e3041cc45b4ed43eadd420e2ff932296054b",
+      "receipt_sha256": "89b2947cefd25dce3b8044f789e959180f24e1f3df29aad50447ef728a8cee6b",
+      "PASS": false,
+      "scope": "Actual BattleScene ordinary public combat/left input and UI events; active CPU; no forced result. Declared self-destruct tests stock/result/rematch, NOT an attack-earned finishing KO.",
+      "failures": [
+        "public_UI_return_to_menu"
+      ],
+      "checks": 13,
+      "source_head": "52dafe1f18f3ba39cb4f8e607961f2b40476c0cc",
+      "sampled_peak_rss_bytes": 348651520,
+      "seconds": 4.882964500000526,
+      "minimum_internal_free_bytes": 21021622272,
+      "owner_saves_unchanged": true,
+      "runtime_matches_current": true
+    },
+    {
+      "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025/outputs/ordinary_match_completion_headless_v3",
+      "result_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025/outputs/ordinary_match_completion_headless_v3/ORDINARY_MATCH_COMPLETION.json",
+      "result_sha256": "3cb9e3b097f0300d0b00a96bd067853ee5078f0302fbcf2c392f020e8860d219",
+      "receipt_sha256": "0b4484fcbb75859e991527cab56f6d928e53a8d417f9a06d214b1bec46a7a3a6",
+      "PASS": true,
+      "scope": "Actual BattleScene ordinary public combat/left input and UI events; active CPU; no forced result. Declared self-destruct tests stock/result/rematch, NOT an attack-earned finishing KO.",
+      "failures": [],
+      "checks": 13,
+      "source_head": "52dafe1f18f3ba39cb4f8e607961f2b40476c0cc",
+      "sampled_peak_rss_bytes": 351846400,
+      "seconds": 4.698987333002151,
+      "minimum_internal_free_bytes": 21013700608,
+      "owner_saves_unchanged": true,
+      "runtime_matches_current": true
+    }
+  ],
+  "ordinary_input_observation": {
+    "contacts": 14,
+    "stock_losses": [
+      {
+        "damage": 21.43965056,
+        "fighter": "kaia-windrow",
+        "frame": 682,
+        "phase": "ordinary_left_input_self_destruct_attempt",
+        "position": [
+          -583.7158203125,
+          290.319396972656
+        ],
+        "remaining_stocks": 0,
+        "slot": 1
+      }
+    ],
+    "winner": 2,
+    "checks_passed": 13,
+    "rematch": true,
+    "return_menu": true,
+    "headless": true,
+    "native_visual_acceptance": false,
+    "attack_earned_finishing_KO": false,
+    "scope": "Active CPU; ordinary attacks/guard plus intentional left-input self-destruct; no forced result/damage/positions"
+  },
+  "resource_gate": {
+    "measured_at": "2026-10-25T16:03:31.831997-05:00",
+    "internal_available_bytes": 19927871488,
+    "internal_available_GiB": 18.559276580810547,
+    "start_guard_bytes": 20401094656,
+    "running_reserve_bytes": 19327352832,
+    "headless_forecast_bytes": 536870912,
+    "native_no_movie_forecast_bytes": 1715470336,
+    "headless_start_deficit_bytes": 473223168,
+    "native_no_movie_deficit_bytes": 1114951680,
+    "memory": "The system has 8589934592 (524288 pages with a page size of 16384).\nSystem-wide memory free percentage: 41%",
+    "swap": "vm.swapusage: total = 10240.00M  used = 8705.88M  free = 1534.12M  (encrypted)",
+    "competing_media_processes": [],
+    "new_private_storage_qualification": false,
+    "private_volume_accessed": false,
+    "heavy_execution_stopped": true
+  },
+  "next_tests": {
+    "terminal_roster": "NOT_EXECUTED: start guard refused before clone/launch; no matrix pass claimed",
+    "ordinary_persisted_result_assertions": "Added after passing13checks; NOT_RERUN due guard",
+    "native_no_movie": "NOT_EXECUTED: current1.038GiB deficit to unchanged forecast; no new footage"
+  },
+  "shutdown_warnings": "Still present: latest2ObjectDB/1resource at exit. No suppression or blanket cleanup claim. Earlier stage-bed playback diagnostic retained.",
+  "private_art_status": "STOPPED; no new mount qualification or art access. Existing guarded18body bindings preserved, not native original-art acceptance.",
+  "CI": "No exact-candidate remote CI; no paid Actions dispatched",
+  "remote_state": "Integrated branch local-only; protected PRs unchanged by this work",
+  "human_gates": {
+    "HUMAN_ART_APPROVED": false,
+    "RUNTIME_PAIRED_CONTACT_VERIFIED": false,
+    "RC2_READY": false,
+    "V1_0_0_RELEASE_AUTHORIZED": false
+  },
+  "next_command": "python3 tools/integration/run_match_completion_checks.py --output outputs/terminal_roster_20261025_v2 --reuse-imported outputs/native_public_counterplay_female_v3/game-godot --script tests/integration/TerminalRoster.gd"
+}
