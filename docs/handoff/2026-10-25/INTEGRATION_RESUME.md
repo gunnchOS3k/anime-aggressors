@@ -1,3 +1,11 @@
+# New reader outcome —2026-10-25
+
+See NEW_READER_QUALIFICATION.json and TOP of ANI03_RESUME_STATE.md. Generic19ff:0764 idle observation PASSED907s/58samples; subsequent read-only integrity check encountered8NEWbulk-IN pipe stalls15:35:29–30. BothUUIDs remainedmounted; nohardwaredisconnect/corruption claim. STOPprivate access; no heavy private-native stage ran. This is new-reader evidence, not oldApplefault reuse.
+
+Guarded originalasset→BattleScene adapter and own-source phase mapping implemented;5Pythonbinding/13recording tests and11engine track/metadata assertionsPASS. Originalart inventoryunchanged; actualprivateGLB import/native video remainsPENDING. No artifactregeneration, remote source changes or humanapproval. Requalify under read load after transport is stabilized; never bypass oldreceipt's laterfaults.
+
+---
+
 # Current native integration checkpoint — 2026-10-25
 
 Source `a9faeddf08f7b79aa5b16df374b599c32c77a622`, local branch `integration/v1-preserved-candidate-20261025`. Original draft123/133 remain unchanged. See NATIVE_VALIDATION_20261025.json and the TOP of ANI03_RESUME_STATE.md for current truth; earlier status below is preserved history.

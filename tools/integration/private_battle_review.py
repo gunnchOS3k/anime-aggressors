@@ -92,11 +92,15 @@ def confined(path, root=PRIVATE):
 
 
 def checked(definition, guard, root=PRIVATE):
+    guard.check()
     path=confined(definition['path'],root)
     digest=hashlib.sha256()
     with path.open('rb') as source:
-        for block in iter(lambda:source.read(1024**2),b''):
-            guard.check();digest.update(block)
+        while True:
+            guard.check()
+            block=source.read(1024**2)
+            if not block: break
+            digest.update(block)
     if digest.hexdigest()!=definition['sha256']: raise ValueError('Preserved source hash changed: '+str(path))
     return path
 
@@ -120,9 +124,13 @@ def landmarks(export, move):
     last=int(export['frames'])-1
     # These are the preserved offline catalog phases, NOT replacement gameplay
     # values. The runtime resamples them onto its already resolved phase clock.
-    if export['FPS']!=60 or contact!=move['startup_frames'] or last!=sum(move[k] for k in ('startup_frames','active_frames','recovery_frames')):
+    total=sum(move[k] for k in ('startup_frames','active_frames','recovery_frames'))
+    # Preserved baker samples each fighter's OWN original action range N.
+    # Its contact is round((N-1)*startup/total), including Yin/Yang whose
+    # authored action ranges are not identical to the newer catalog totals.
+    if export['FPS']!=60 or not 2<=last<=240 or total<=0 or contact!=round(last*move['startup_frames']/total):
         raise ValueError('Authored landmarks/catalog do not match; do not invent a timing map')
-    return {'contact':contact,'active_end':contact+int(move['active_frames']),'last':last}
+    return {'contact':contact,'active_end':last*(move['startup_frames']+move['active_frames'])/total,'last':last}
 
 
 def make_manifest(guard):
