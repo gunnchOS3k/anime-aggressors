@@ -35,17 +35,28 @@ static func row_for(fighter: String, body: String) -> Dictionary:
 	var path := requested_manifest()
 	if path.is_empty() or not private_path(path): return {}
 	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	var found := candidate_row(data,fighter,body)
+	if found.is_empty() or checked_asset(found.model).is_empty(): return {}
+	return found.duplicate(true)
+
+static func candidate_row(data: Variant, fighter: String, body: String) -> Dictionary:
+	# Malformed review metadata must reject before model import, rather than
+	# throwing a script error or partially installing a different body/action.
 	if not data is Dictionary or data.get("schema", "") != SCHEMA: return {}
 	if data.get("review_only") != true or data.get("HUMAN_ART_APPROVED") != false: return {}
 	if data.get("private_volume_uuid", "") != "7264122E-693D-4719-A42D-F1FAA488C119": return {}
+	if not data.get("rows") is Array: return {}
 	var found: Dictionary = {}
 	for row in data.get("rows", []):
+		if not row is Dictionary: return {}
 		if row.get("fighter", "") != fighter or row.get("body", "") != body: continue
 		if not found.is_empty(): return {} # Ambiguous identities are not accepted.
 		found = row
 	if found.is_empty() or found.get("root_policy", "") != "GAMEPLAY_ROOT_UNCHANGED": return {}
-	if checked_asset(found.get("model", {})).is_empty(): return {}
-	return found.duplicate(true)
+	if not found.get("model") is Dictionary or not found.get("moves") is Dictionary or found.moves.is_empty(): return {}
+	for move_id in found.moves:
+		if not found.moves[move_id] is Dictionary or not found.moves[move_id].has_all(["path","sha256","clip","contact","active_end","last"]): return {}
+	return found
 
 static func gather(node: Node, rigs: Array, players: Array) -> void:
 	if node is Skeleton3D: rigs.append(node)

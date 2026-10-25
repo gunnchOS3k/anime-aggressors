@@ -4,6 +4,8 @@ var output := ""
 var body := "male"
 var automated := false
 var cpu_level := 3 # Public setup option: levels1/2 intentionally do not initiate attacks.
+var fighter_id := "ember-vale"
+var opponent_id := "juno-spark"
 var battle
 var held: Array = []
 var contacts: Array = []
@@ -35,12 +37,16 @@ func run() -> void:
 		if arg.begins_with("--review-output="): output=arg.trim_prefix("--review-output=")
 		if arg == "--review-female": body="female"
 		if arg == "--review-automate": automated=true
+		if arg.begins_with("--review-fighter="): fighter_id=arg.trim_prefix("--review-fighter=")
+		if arg.begins_with("--review-opponent="): opponent_id=arg.trim_prefix("--review-opponent=")
 	if output.is_empty(): quit(2); return
 	if not OS.get_user_data_dir().get_file().begins_with("aa-native-"):
 		push_error("Refusing owner profile");quit(2);return
 	var gs = root.get_node("GameState")
 	gs.mode="versus"; gs.stage_id="training-grid"
-	gs.p1_fighter_id="ember-vale"; gs.p2_fighter_id="juno-spark"
+	var ids := ["ember-vale","rook-ironside","juno-spark","kaia-windrow","nix-calder","orion-vell","vesper-nyx","yin","yang"]
+	if fighter_id not in ids or opponent_id not in ids: push_error("Unknown review identity");quit(2);return
+	gs.p1_fighter_id=fighter_id; gs.p2_fighter_id=opponent_id
 	gs.p1_body_variant=body;gs.p2_body_variant=body
 	gs.p1_is_cpu=false;gs.p2_is_cpu=true
 	gs.cpu_level=cpu_level
@@ -65,7 +71,7 @@ func run() -> void:
 		actor.move_runner.move_started.connect(move_event.bind("start",actor))
 		actor.move_runner.move_ended.connect(move_event.bind("end",actor))
 	var help := Label.new()
-	help.text="INTEGRATED SOURCE REVIEW · "+body+" · active Juno CPU\nA/D move · J jab · J+K heavy · L guard · W jump · I dodge · U grab.\nOriginal private art is used only with an explicit verified manifest. Human approval pending."
+	help.text="INTEGRATED SOURCE REVIEW · "+body+" · active "+opponent_id+" CPU\nA/D move · J jab · J+K heavy · L guard · W jump · I dodge · U grab.\nOriginal private art is used only with an explicit verified manifest. Human approval pending."
 	help.position=Vector2(24,105);help.add_theme_font_size_override("font_size",16)
 	battle.hud.add_child(help)
 	physics_frame.connect(observe)

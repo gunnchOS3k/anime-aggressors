@@ -23,7 +23,7 @@ def active_media_jobs():
     jobs = []
     for line in result.stdout.splitlines():
         parts = line.strip().split(None, 1)
-        if len(parts) == 2 and Path(parts[1]).name.lower() in ("godot", "ffmpeg"):
+        if len(parts) == 2 and Path(parts[1]).name.lower() in ("godot", "ffmpeg", "blender"):
             jobs.append({"pid": int(parts[0]), "application": Path(parts[1]).name})
     return jobs
 
@@ -51,7 +51,7 @@ def write_state(path, state):
     temporary.replace(path)
 
 
-def run_owned_recording(cmd, root, movie, output, preflight, *, error_log=None, max_seconds=None, max_rss_bytes=None):
+def run_owned_recording(cmd, root, movie, output, preflight, *, error_log=None, max_seconds=None, max_rss_bytes=None, environment_check=None):
     """Stop only our own Godot child if the protected reserve is endangered."""
     root, movie, output = Path(root), Path(movie), Path(output)
     registry = root / "artifacts/v1_closure/spectral_feedback/local_media/native_recording.lock"
@@ -63,6 +63,9 @@ def run_owned_recording(cmd, root, movie, output, preflight, *, error_log=None, 
         raise RuntimeError("Native reserve exhausted; no recording started")
     if active_media_jobs():
         raise RuntimeError("An existing Godot/FFmpeg job is active; no duplicate recording started")
+    if environment_check:
+        reason = environment_check()
+        if reason: raise RuntimeError("Native environment refused: " + str(reason))
     # A stale lock is reported, rather than silently discarded or pruning data.
     try:
         descriptor = os.open(registry, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
@@ -90,6 +93,14 @@ def run_owned_recording(cmd, root, movie, output, preflight, *, error_log=None, 
         script_failed = False
         resource_failed = False
         while child.poll() is None:
+            reason = environment_check() if environment_check else None
+            if reason:
+                resource_failed = True
+                state.update(status="INTERRUPTED_ENVIRONMENT_GUARD", environment_failure=str(reason))
+                child.terminate()
+                try: child.wait(timeout=8)
+                except subprocess.TimeoutExpired: child.kill(); child.wait()
+                break
             rss = subprocess.run(["ps", "-o", "rss=", "-p", str(child.pid)], capture_output=True, text=True) if max_rss_bytes else None
             if rss and rss.stdout.strip().isdigit():
                 state["sampled_peak_RSS_bytes"] = max(state.get("sampled_peak_RSS_bytes", 0), int(rss.stdout.strip())*1024)
