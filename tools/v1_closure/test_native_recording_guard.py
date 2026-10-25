@@ -11,6 +11,18 @@ import native_recording_guard as guard
 
 
 class RecordingStorageSafety(unittest.TestCase):
+    def test_zero_exit_with_script_error_is_failed_and_evidence_preserved(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp); output=root/"review"; output.mkdir()
+            movie=root/"new.avi"; log=output/"native.log"
+            preflight=guard.budget(root,movie,10,60); preflight["PASS"]=True
+            child=[sys.executable,"-c","from pathlib import Path; Path("+repr(str(log))+").write_text('SCRIPT ERROR: actual failure\\n'); Path("+repr(str(movie))+").write_bytes(b'preserved')"]
+            with patch.object(guard,"active_media_jobs",return_value=[]),patch.object(guard.shutil,"disk_usage",return_value=SimpleNamespace(free=preflight["required_free_bytes"]+100_000_000)):
+                self.assertEqual(guard.run_owned_recording(child,root,movie,output,preflight,error_log=log),1)
+            state=json.loads((output/"RECORDING_STATE.json").read_text())
+            self.assertEqual(state["status"],"FAILED_SCRIPT_ERROR_PRESERVED")
+            self.assertEqual(movie.read_bytes(),b"preserved")
+
     def test_budget_requires_raw_and_derivation_headroom(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -24,18 +25,39 @@ def run(args):
     movie = output / "native_match_60fps.avi"
     storage = budget(ROOT, movie, args.frames, 60)
     # Additional allowance for the fresh Godot import/cache and possible swap.
-    storage["import_and_swap_forecast_bytes"] = 600 * 2**20
+    # First measured native run consumed about1.16GiB including its movie.
+    # Keep1.5GiB for import/GPU/swap in addition to the existing movie budget.
+    storage["import_and_swap_forecast_bytes"] = 1536 * 2**20
     free = shutil.disk_usage(ROOT).free
-    if free < max(19*2**30, storage["required_free_bytes"] + 600*2**20):
+    if free < max(19*2**30, storage["required_free_bytes"] + storage["import_and_swap_forecast_bytes"]):
         raise ValueError("19GiB start /18GiB after capture+import+swap forecast not met")
     if active_media_jobs(): raise ValueError("Existing media process preserved")
     output.mkdir(parents=True)
     project = output / "game-godot"
     # APFS copy-on-write. Never move/clean/write the original checkout or caches.
-    subprocess.run(["/bin/cp", "-cR", str(ROOT / "game-godot"), str(project)], check=True)
+    source = ROOT / "game-godot"
+    imported = getattr(args, "reuse_imported", None)
+    if imported:
+        imported = imported.resolve()
+        receipt = json.loads((imported.parent / "SOURCE.json").read_text())
+        if not imported.is_relative_to(ROOT / "outputs") or receipt.get("private_assets_installed") is not False or not (imported / ".godot/imported").is_dir():
+            raise ValueError("Only this candidate's existing public-asset import may be reused")
+        subprocess.run(["git", "merge-base", "--is-ancestor", receipt["source_head"], "HEAD"], cwd=ROOT, check=True)
+    subprocess.run(["/bin/cp", "-cR", str(imported or source), str(project)], check=True)
+    if imported:
+        # Keep the imported public resources; refresh ALL tracked source from
+        # this candidate, rather than running stale code from the earlier movie.
+        for relative in subprocess.check_output(["git", "ls-files", "game-godot"], cwd=ROOT, text=True).splitlines():
+            current = ROOT / relative
+            if not current.is_file(): continue
+            destination = project / current.relative_to(source)
+            if not destination.exists() or current.read_bytes() != destination.read_bytes():
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(current, destination)
     config = (project / "project.godot").read_text()
     name = "aa-native-"+output.name
-    config = config.replace('config/name="Anime Aggressors"', 'config/name="'+name+'"\nconfig/use_custom_user_dir=true\nconfig/custom_user_dir_name="'+name+'"')
+    config = re.sub(r'^config/(?:name|use_custom_user_dir|custom_user_dir_name)=.*\n', '', config, flags=re.M)
+    config = config.replace('[application]', '[application]\nconfig/name="'+name+'"\nconfig/use_custom_user_dir=true\nconfig/custom_user_dir_name="'+name+'"', 1)
     (project / "project.godot").write_text(config)
     identity = project / "data/runtime/build_identity.json"
     head = subprocess.check_output(["git","rev-parse","HEAD"], cwd=ROOT, text=True).strip()
@@ -46,6 +68,11 @@ def run(args):
     before = {str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in owner.rglob("*") if p.is_file()} if owner.exists() else {}
     manifest = {"source_head":head,"source_diff_sha256":hashlib.sha256(subprocess.check_output(["git","diff","HEAD"],cwd=ROOT)).hexdigest(),"project":str(project),"user_identity":name,"storage":storage,"private_assets_installed":False,"owner_saves_before":before}
     (output/"SOURCE.json").write_text(json.dumps(manifest,indent=2)+'\n')
+    if imported:
+        manifest["reused_public_import"] = str(imported)
+        manifest["import"] = {"scope":"Existing public resource cache reused; current tracked source refreshed. No fresh import claim."}
+        (output/"SOURCE.json").write_text(json.dumps(manifest,indent=2)+'\n')
+        return capture(args, output, project, movie, godot, owner, before, manifest)
     start = time.monotonic();peak=0;minimum=free
     with (output/"import.log").open("x") as log:
         child=subprocess.Popen([godot,"--headless","--editor","--import","--path",str(project),"--quit"],stdout=log,stderr=subprocess.STDOUT,env=env)
@@ -67,6 +94,10 @@ def run(args):
     (output/"SOURCE.json").write_text(json.dumps(manifest,indent=2)+'\n')
     if child.returncode or "SCRIPT ERROR:" in text or "Parse Error" in text:
         raise RuntimeError("Actual import failed; retain logs and repair source")
+    return capture(args, output, project, movie, godot, owner, before, manifest)
+
+
+def capture(args, output, project, movie, godot, owner, before, manifest):
     if args.import_only: return 0
     if shutil.disk_usage(ROOT).free < 19*2**30:
         raise RuntimeError("Post-import19GiB start guard failed; preserve import, defer capture")
@@ -74,7 +105,7 @@ def run(args):
     if not args.manual: command.append("--review-automate")
     if args.female: command.append("--review-female")
     command[1:1]=["--log-file",str(output/"native.log")]
-    result=run_owned_recording(command,ROOT,movie,output,budget(ROOT,movie,args.frames,60))
+    result=run_owned_recording(command,ROOT,movie,output,budget(ROOT,movie,args.frames,60),error_log=output/"native.log")
     after={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in owner.rglob("*") if p.is_file()} if owner.exists() else {}
     manifest["owner_saves_unchanged"]=before==after
     manifest["native_exit"]=result
@@ -91,5 +122,6 @@ if __name__ == "__main__":
     parser.add_argument("--female",action="store_true")
     parser.add_argument("--manual",action="store_true")
     parser.add_argument("--import-only",action="store_true")
+    parser.add_argument("--reuse-imported",type=Path,help="Reuse an earlier isolated public-resource import, while refreshing current source")
     args=parser.parse_args()
     raise SystemExit(run(args))

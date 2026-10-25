@@ -3,6 +3,7 @@ extends SceneTree
 var output := ""
 var body := "male"
 var automated := false
+var cpu_level := 3 # Public setup option: levels1/2 intentionally do not initiate attacks.
 var battle
 var held: Array = []
 var contacts: Array = []
@@ -41,7 +42,9 @@ func run() -> void:
 	gs.p1_fighter_id="ember-vale"; gs.p2_fighter_id="juno-spark"
 	gs.p1_body_variant=body;gs.p2_body_variant=body
 	gs.p1_is_cpu=false;gs.p2_is_cpu=true
-	# Keep saved defaults/rules; no changes to damage, stocks, timers or CPU tuning.
+	gs.cpu_level=cpu_level
+	# Select the existing attacking difficulty; no AI strategy, combat values,
+	# damage, stocks, timer, hitstun or outcome is overridden.
 	if gs.battle_eval_mode: failures.append("privileged_mode");quit(2);return
 	root.get_node("SceneRouter").go("battle")
 	for i in range(360):
@@ -52,6 +55,10 @@ func run() -> void:
 	if battle == null or not battle._active:
 		push_error("Battle did not activate");quit(2);return
 	for actor in [battle.fighter1,battle.fighter2]:
+		if not preload("res://scripts/visual/private_battle_art.gd").requested_manifest().is_empty():
+			var original: Dictionary = actor.model_3d.get_animation_controller().original_art_report()
+			if actor.model_3d.get_current_model_source() != "PRIVATE_ORIGINAL_ART_CANDIDATE" or not original.failures.is_empty() or original.moves.size() != 4:
+				push_error("Requested private move set not installed completely");quit(2);return
 		actor.hit_resolver.hit_confirmed.connect(contact)
 		actor.koed.connect(stock_lost.bind(actor))
 	var help := Label.new()
@@ -98,7 +105,7 @@ func observe() -> void:
 		var actors: Array=[]
 		for a in [p,d]:
 			var c=a.model_3d.get_animation_controller()
-			actors.append({"fighter":a.fighter_id,"body":a.body_variant,"position":[a.position.x,a.position.y],"facing":a.facing,"state":a.state_machine.current_state,"move":a.move_runner.current_move_id(),"move_frame":a.move_runner.total_frame,"damage":a.damage_percent,"stocks":a.stocks,"hitstop":a._hitstop,"clip":c.get_active_clip(),"private_art":c.original_art_report(),"model":a.model_3d.get_current_model_source(),"CPU":a.is_cpu,"controls":a.controls_enabled})
+			actors.append({"fighter":a.fighter_id,"body":a.model_3d.get_body_variant(),"position":[a.position.x,a.position.y],"facing":a.facing,"state":a.state_machine.current_state,"move":a.move_runner.current_move_id(),"move_frame":a.move_runner.total_frame,"damage":a.damage_percent,"stocks":a.stocks,"hitstop":a._hitstop,"clip":c.get_active_clip(),"private_art":c.original_art_report(),"model":a.model_3d.get_current_model_source(),"CPU":a.is_cpu,"controls":a.controls_enabled})
 		trace.append({"frame":Engine.get_physics_frames(),"case":label,"actors":actors,"HUD":[battle.p1_hud.text,battle.p2_hud.text],"ko_banner":battle.ko_label.text,"process_ms":Performance.get_monitor(Performance.TIME_PROCESS)*1000.0})
 	if ticks%60==0: save()
 

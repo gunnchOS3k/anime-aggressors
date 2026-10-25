@@ -140,5 +140,9 @@ static func source_frame(frame: int, move: Dictionary, source: Dictionary) -> fl
 	var active_end := float(source.active_end)
 	var last := float(source.last)
 	if frame < start: return contact * clampf(float(frame)/float(start), 0, 1)
-	if frame <= start+active: return lerpf(contact, active_end, clampf(float(frame-start)/float(active), 0, 1))
+	# MoveRunner enters active at start, then emits the first hitbox callback
+	# at start+1. Hold the authored contact through that callback; mapping it
+	# a frame into follow-through made short attacks visually late on contact.
+	if frame <= start+active:
+		return lerpf(contact, active_end, clampf(float(frame-start-1)/float(maxi(1,active-1)), 0, 1))
 	return lerpf(active_end, last, clampf(float(frame-start-active)/float(recovery), 0, 1))

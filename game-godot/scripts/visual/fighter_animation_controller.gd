@@ -65,6 +65,7 @@ var _strike_posture = preload("res://scripts/visual/grounded_strike_posture.gd")
 const _PrivateArt = preload("res://scripts/visual/private_battle_art.gd")
 var _private_moves: Dictionary = {}
 var _private_clip_failures: Array = []
+var _private_model := false
 
 func uses_original_source_clip() -> bool:
 	return is_instance_valid(_player) and _private_moves.has(str(_player.current_animation).trim_prefix("combat_choreography/"))
@@ -76,13 +77,18 @@ func _install_private_moves(model: Node3D) -> void:
 	if not model.has_meta("private_original_art"): return
 	var row: Dictionary = model.get_meta("private_original_art")
 	var library := _player.get_animation_library("combat_choreography")
+	var staged: Dictionary = {}
 	for move_id in row.get("moves", {}):
 		var definition: Dictionary = row.moves[move_id]
 		var clip: Animation = _PrivateArt.load_clip(definition, _player, _skeleton)
 		if clip == null:
 			_private_clip_failures.append(str(move_id)+":bind_or_import_rejected")
 			push_error("Private original clip rejected: "+str(move_id))
-			continue
+			return # No partially installed move set after any rejected bind.
+		staged[move_id] = clip
+	for move_id in staged:
+		var definition: Dictionary = row.moves[move_id]
+		var clip: Animation = staged[move_id]
 		for suffix in ["", "_left"]:
 			var key := str(move_id)+str(suffix)
 			if library.has_animation(key): library.remove_animation(key)
@@ -159,6 +165,7 @@ func begin_hit_reaction(reaction: Dictionary) -> void:
 
 
 func setup(fighter, model_root: Node3D) -> void:
+	_private_model = model_root.has_meta("private_original_art")
 	_fighter = fighter
 	_fighter_id = ""
 	if fighter != null:
@@ -499,6 +506,18 @@ func _animation_from_data(data: Dictionary) -> Animation:
 		anim.track_set_path(reset,NodePath("%s:%s" % [_skeleton_path,hips]))
 		anim.track_insert_key(reset,0.0,_skeleton.get_bone_rest(index).origin)
 		anim.track_insert_key(reset,anim.length,_skeleton.get_bone_rest(index).origin)
+	if _private_model:
+		# Older fallback clips do not key the original weighted finger/accessory
+		# controls. Restore their actual rest when a saved source action ends;
+		# never leave its final fist/hair pose latched into neutral or defense.
+		for index in range(_skeleton.get_bone_count()):
+			var bone := str(_skeleton.get_bone_name(index))
+			if not bone.begins_with("D8_") or tracks.has(bone): continue
+			var reset := anim.add_track(Animation.TYPE_ROTATION_3D)
+			anim.track_set_path(reset,NodePath("%s:%s" % [_skeleton_path,bone]))
+			var rest := _skeleton.get_bone_rest(index).basis.get_rotation_quaternion()
+			anim.track_insert_key(reset,0.0,rest)
+			anim.track_insert_key(reset,anim.length,rest)
 	return anim
 
 

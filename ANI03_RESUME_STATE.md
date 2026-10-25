@@ -1,3 +1,17 @@
+# 2026-10-25 — interrupted observer/binding source preserved; native retry pending
+
+Integration branch `integration/v1-preserved-candidate-20261025`, prior HEAD `aadc5eb194c230c152f6b54fa0ecdf0769aa7213`. Original draft123 `328160df` and133 `58689ce4` unchanged, all44 worktrees retained. Five pending files snapshotted in `outputs/resumption_20261025_2/INTERRUPTED_SOURCE.patch`; all retained in this checkpoint, with resolved private clip contact-clock correction and a nine-timeline MoveRunner regression. This candidate remains LOCAL ONLY.
+
+Observer now reads `model_3d.get_body_variant()` and selects the existing attacking CPU difficulty3. Recording guard now rejects SCRIPT ERROR even if Godot exits0. Eleven recording-guard tests PASS; real MoveRunner first-hitbox sampling across9timelines PASS; observer parse PASS. Direct controller --check-only requires autoload singleton context, so actual scene execution must validate that controller. Failed relative-log-path/standalone-class parse attempts retained; no art acceptance from them.
+
+Prior20second native movie at aadc5eb1 is FAILED complete acceptance:27real contacts but0observer samples. Preserve `outputs/native_public_baseline_v1` and new rejection receipt, not a native pass. Old CPU2 could guard/parry but did not initiate attacks. No private models, KO or victory verified. Original owner save hashes matched.
+
+Current internal about20.17GiB, revised1200frame preflight includes1.5GiB import/GPU/swap plus300MiB raw/100MiB derivation, preserving18GiB. Fresh14:24reader hardware losses and14:28:58pipe stall mean private-art dependent reads/writes BLOCKED despite both UUIDs mounted. No remount, cleanup, rebake, public upload or paid workflow. Native retry may use INTERNAL PUBLIC repository assets only if fresh guard passes; this cannot establish original private-art acceptance.
+
+Next: run one corrected observer native capture using NEW `outputs/native_public_observer_v2` cached APFS-cloned project, current source, active CPU3 and isolated profile. No fresh resource import needed. Current private source-clock now holds authored contact through actual first callback at startup+1; no gameplay frame data changed. Private binding still needs safe stable-volume manifest/injection execution and real BattleScene verification. Actual corrected art remains2/24moves per18bodies;22moves/body and complete game acceptance pending. All human/paired-runtime/RC2/release gates FALSE.
+
+---
+
 # 2026-10-25 — Codex sole ownership; preserved integrated candidate
 
 Current branch `integration/v1-preserved-candidate-20261025` in `/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025`. Exact delivery is `git rev-parse HEAD`. Base #13358689ce4 plus17individually reviewed, author-preserving `-x` ports of #123 after common3043da06. Original #123328160df, #13358689ce4 and #122c5f3be23 unchanged. All43existingworktrees retained/hashed unchanged; newcandidate is44th. Original dirty/untracked/ignored/private work remains in place with local refs/diffs/text snapshots. No reset/rebase/stash/cleanup/merge/remote rewrite. Earlier Cursor ownership split is superseded: Codex owns full engineering; Cursor checkouts remain read-only.
