@@ -11,6 +11,16 @@ import native_recording_guard as guard
 
 
 class RecordingStorageSafety(unittest.TestCase):
+    def test_owned_resource_timeout_preserves_evidence(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);output=root/"review";output.mkdir();movie=root/"new.avi"
+            preflight=guard.budget(root,movie,10,60);preflight["PASS"]=True
+            child=[sys.executable,"-c","import time; from pathlib import Path; Path("+repr(str(movie))+").write_bytes(b'preserved'); time.sleep(10)"]
+            with patch.object(guard,"active_media_jobs",return_value=[]),patch.object(guard.shutil,"disk_usage",return_value=SimpleNamespace(free=preflight["required_free_bytes"]+100_000_000)):
+                self.assertEqual(guard.run_owned_recording(child,root,movie,output,preflight,max_seconds=.1),75)
+            self.assertEqual(json.loads((output/"RECORDING_STATE.json").read_text())["status"],"INTERRUPTED_RESOURCE_GUARD")
+            self.assertEqual(movie.read_bytes(),b"preserved")
+
     def test_zero_exit_with_script_error_is_failed_and_evidence_preserved(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp); output=root/"review"; output.mkdir()

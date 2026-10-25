@@ -51,7 +51,7 @@ def write_state(path, state):
     temporary.replace(path)
 
 
-def run_owned_recording(cmd, root, movie, output, preflight, *, error_log=None):
+def run_owned_recording(cmd, root, movie, output, preflight, *, error_log=None, max_seconds=None, max_rss_bytes=None):
     """Stop only our own Godot child if the protected reserve is endangered."""
     root, movie, output = Path(root), Path(movie), Path(output)
     registry = root / "artifacts/v1_closure/spectral_feedback/local_media/native_recording.lock"
@@ -88,7 +88,18 @@ def run_owned_recording(cmd, root, movie, output, preflight, *, error_log=None):
         floor = NATIVE_RESERVE + DERIVATION_RESERVE
         interrupted = False
         script_failed = False
+        resource_failed = False
         while child.poll() is None:
+            rss = subprocess.run(["ps", "-o", "rss=", "-p", str(child.pid)], capture_output=True, text=True) if max_rss_bytes else None
+            if rss and rss.stdout.strip().isdigit():
+                state["sampled_peak_RSS_bytes"] = max(state.get("sampled_peak_RSS_bytes", 0), int(rss.stdout.strip())*1024)
+            if (max_rss_bytes and ((rss.returncode and child.poll() is None) or state.get("sampled_peak_RSS_bytes", 0) > max_rss_bytes)) or (max_seconds and time.time()-state["started_unix"] > max_seconds):
+                resource_failed = True
+                state.update(status="INTERRUPTED_RESOURCE_GUARD", max_seconds=max_seconds, max_rss_bytes=max_rss_bytes)
+                child.terminate()
+                try: child.wait(timeout=8)
+                except subprocess.TimeoutExpired: child.kill(); child.wait()
+                break
             if error_log and Path(error_log).exists() and "SCRIPT ERROR:" in Path(error_log).read_text(errors="replace"):
                 script_failed = True
                 state.update(status="FAILED_SCRIPT_ERROR_PRESERVED")
@@ -119,13 +130,13 @@ def run_owned_recording(cmd, root, movie, output, preflight, *, error_log=None):
             script_failed = True
             state["status"] = "FAILED_SCRIPT_ERROR_PRESERVED"
         state.update(exit_code=result, finished_unix=time.time(), free_after=shutil.disk_usage(root).free)
-        if not interrupted and not script_failed:
+        if not interrupted and not script_failed and not resource_failed:
             state["status"] = "PROCESS_COMPLETED_PENDING_MEDIA_VERIFICATION" if result == 0 else "FAILED_PROCESS_PRESERVED"
         if movie.exists():
             info = movie.stat()
             state.update(raw_logical_bytes=info.st_size, raw_allocated_bytes=info.st_blocks * 512)
         write_state(state_path, state)
-        return 73 if interrupted else 1 if script_failed else result
+        return 73 if interrupted else 75 if resource_failed else 1 if script_failed else result
     finally:
         if child is not None and child.poll() is None:
             child.terminate()

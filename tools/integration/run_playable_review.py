@@ -105,7 +105,7 @@ def capture(args, output, project, movie, godot, owner, before, manifest):
     if not args.manual: command.append("--review-automate")
     if args.female: command.append("--review-female")
     command[1:1]=["--log-file",str(output/"native.log")]
-    result=run_owned_recording(command,ROOT,movie,output,budget(ROOT,movie,args.frames,60),error_log=output/"native.log")
+    result=run_owned_recording(command,ROOT,movie,output,budget(ROOT,movie,args.frames,60),error_log=output/"native.log",max_seconds=240,max_rss_bytes=1536*2**20)
     after={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in owner.rglob("*") if p.is_file()} if owner.exists() else {}
     manifest["owner_saves_unchanged"]=before==after
     manifest["native_exit"]=result
