@@ -1,3 +1,11 @@
+# 2026-10-24 — remounted; 18 actual native bodies visibly recovered
+
+The existing encrypted APFS/image UUID, ownership and private directories match the approved identity. Native roster_v3 completed 18/18 animated MP4s using the existing original GLBs, not a rebake. All18 bodies have now been inspected at one actual three-angle phase PNG each: geometry visible. Both facings have36 native skeletal playback reports; canonical facing has1,104,264 scoped skin samples. These are arm-reference clips, not complete move inventories, BattleScene or artistic approval. Failed blank roster_v2 remains preserved. Corrected generic viewer is tools/authored_animation/godot/original_arm_reference_viewer.gd: camera attached and current/tree assertion; front/profile captions corrected. Existing movie captions are reversed and must be disclosed/corrected in derivative review copies, preserving originals.
+
+Final paired contact_v9 source/GLB/native AVI exists,181 sourceframes, tested hand/forearm crossings0; source109→110 wrist step9.419deg, later18.189deg remains motion review pending. No new paired source/export required just for MP4 conversion. Next: guarded serial conversion/gallery and source113 release-frame inspection, then next actual move-specific original acting category across18, using each fighter's own original actions and bibles. Latest filesystem free23.766GiB internal,60.272GiB encrypted,337.601GiB archive; recheck full19GiB start/18GiB running/memory/tool/privacy guards before heavy stages. No production process currently active. Preserve13existing gameplay/PartyLink dirty paths and Cursor PR133 untouched. All human/paired-shipping/RC2/release gatesFALSE. No public artwork, paid run, merge, cleanup or source regeneration.
+
+---
+
 # RECOVERED NATIVE REVIEW — encrypted volume currently UNMOUNTED
 
 Live source2692419968b43d77ddaa563ac48413afe79e444f verified local=remote draftPR123, still on122. Cursor draftPR133 now58689ce4754b82ec10b3b4ad461873204202b963, read-only;13existing dirty gameplay/web/PartyLink paths unchanged, no staged owner changes. All18original arm-reference Blender sources/animatedGLBs from badd0f49 remain produced; DO NOT rebake/export them.
