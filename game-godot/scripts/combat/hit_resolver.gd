@@ -5,6 +5,7 @@ const _AuraScaler = preload("res://scripts/combat/aura_scaler.gd")
 const _AuraIdentity = preload("res://scripts/combat/aura_identity.gd")
 const _AuraSpecialRuntime = preload("res://scripts/combat/aura_special_runtime.gd")
 const _CombatMath = preload("res://scripts/combat/combat_math.gd")
+const _CombatOutcome = preload("res://scripts/combat/combat_outcome.gd")
 
 signal hit_confirmed(attacker: Node, defender: Node, info: Dictionary)
 
@@ -90,11 +91,16 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 	var weight: float = 100.0
 	if defender.has_method("get_weight"):
 		weight = defender.get_weight()
+	var authored_damage: float = float(move.get("damage", scaled.get("damage", 0.0)))
 	var dealt: float = float(scaled.get("damage", 0.0))
+	var dealt_mult := 1.0
 	if attacker.has_method("get_damage_dealt_mult"):
-		dealt *= attacker.get_damage_dealt_mult()
+		dealt_mult = float(attacker.get_damage_dealt_mult())
+		dealt *= dealt_mult
+	var rules_ratio := 1.0
 	if "damage_ratio" in GameState:
-		dealt *= float(GameState.damage_ratio)
+		rules_ratio = float(GameState.damage_ratio)
+		dealt *= rules_ratio
 	if attacker.has_method("stale_repeat_count"):
 		dealt *= _CombatMath.stale_multiplier(int(attacker.stale_repeat_count(str(scaled.get("move_id", "")))))
 	if "combo_count" in attacker:
@@ -118,9 +124,11 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 		kb *= 0.65
 	var info := {
 		"damage": dealt,
+		"authored_damage": authored_damage,
 		"launch": kb,
 		"hitstop_frames": int(scaled.get("hitstop_frames", 3)),
 		"shield_damage": float(scaled.get("shield_damage", dealt * 0.8)),
+		"shield_stun_frames": int(scaled.get("shield_stun_frames", move.get("shield_stun_frames", 0))),
 		"move_id": scaled.get("move_id", ""),
 		"blocked": false,
 		"element": scaled.get("element_effect", {}).get("type", ""),
@@ -130,12 +138,29 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 	for hook in info.get("aura_runtime_hooks", []):
 		if attacker != null and attacker.has_method("stamp_runtime_hook"):
 			attacker.stamp_runtime_hook(str(hook))
+	if not info.has("damage"):
+		info["damage"] = dealt
 	dealt = float(info.get("damage", dealt))
+	var zero_reason := ""
+	if authored_damage <= 0.0 and dealt <= 0.0:
+		zero_reason = "explicit_zero"
+	elif rules_ratio <= 0.0:
+		zero_reason = "rules_zero"
+	elif dealt_mult <= 0.0:
+		zero_reason = "dealt_mult_zero"
+	elif dealt <= 0.0:
+		zero_reason = "resolved_zero"
+	info["authored_damage"] = authored_damage
+	info["resolved_damage"] = dealt
+	info["damage_zero_reason"] = zero_reason
+	info["damage"] = dealt
 	kb = info.get("launch", kb)
 	# Classify contact before presenting it; receive_hit used to mark block too late.
 	if ("shielding" in defender and defender.shielding) or ("state_machine" in defender and defender.state_machine.current_state == "shield_hold"):
 		info["blocked"] = true
 		info["launch"] = Vector2.ZERO
+		info["parry_result"] = "fail"
+		info["shield_event"] = "parry_fail"
 	info = _contact_contract(attacker,defender,scaled,info)
 	if combat_feedback:
 		info = combat_feedback.apply_hit(attacker, defender, scaled, info)
@@ -145,6 +170,14 @@ func resolve(attacker: Node, defender: Node, move: Dictionary, attacker_damage_p
 	elif attacker.has_node("_CombatFeedback"):
 		var fb = attacker.get_node("_CombatFeedback")
 		info = fb.apply_hit(attacker, defender, scaled, info)
+	# Presentation may replace the dictionary. Missing combat keys are restored
+	# from the pre-feedback resolution. An explicit resolved 0 stays 0.
+	if not info.has("damage_zero_reason"):
+		info["damage_zero_reason"] = zero_reason
+	if not info.has("damage"):
+		info["damage"] = dealt
+	if not info.has("resolved_damage"):
+		info["resolved_damage"] = float(info.get("damage", dealt))
 	if defender.has_method("receive_hit"):
 		defender.receive_hit(attacker, info)
 	info["actual_launch"] = Vector2.ZERO if info.get("blocked",false) else defender.velocity if "velocity" in defender else info.get("launch",Vector2.ZERO)

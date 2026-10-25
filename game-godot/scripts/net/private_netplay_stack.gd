@@ -290,19 +290,26 @@ func simulate_match_frames(frame_count: int = 120, step_ms: float = 16.67) -> Di
 			for k in keys:
 				parts.append("%d.%s=%s" % [i, str(k), str(b[k])])
 		fr["checksum"] = str(hash("|".join(parts)))
+	var story_checkpoint: Dictionary = {}
+	if CampaignRuntime != null and CampaignRuntime.progress is Dictionary:
+		var saved_checkpoint: Variant = CampaignRuntime.progress.get("checkpoint", {})
+		if saved_checkpoint is Dictionary:
+			story_checkpoint = saved_checkpoint
 	var replay: Dictionary = _ReplayStore.create_record({
 		"seed": match_seed,
 		"roster": roster,
 		"stage": stage_id,
 		"room": room_code,
 		"scope": SCOPE,
-	}, host_peer.replay_frames)
+	}, host_peer.replay_frames, story_checkpoint)
 	var replay_ok: Dictionary = _ReplayStore.verify_record(replay)
 	var chain_ok: Dictionary = _ReplayStore.replay_checksum_chain(replay)
+	var replay_path := _ReplayStore.DEFAULT_PATH
+	var replay_written: bool = _ReplayStore.write_json(replay, replay_path)
 	host_peer.session.end_match()
 	guest_peer.session.end_match()
 	var exchange_ok: bool = host_peer.last_confirmed_frame >= 0 and guest_peer.last_confirmed_frame >= 0 and inputs_exchanged >= frame_count
-	var replay_pass: bool = bool(replay_ok.get("ok", false)) and bool(chain_ok.get("ok", false))
+	var replay_pass: bool = bool(replay_ok.get("ok", false)) and bool(chain_ok.get("ok", false)) and replay_written
 	return {
 		"ok": exchange_ok and replay_pass and not ended,
 		"frames": frame_count,
@@ -317,6 +324,8 @@ func simulate_match_frames(frame_count: int = 120, step_ms: float = 16.67) -> Di
 		"guest_stats": guest_peer.outbound.stats(),
 		"replay": replay_ok,
 		"replay_chain": chain_ok,
+		"replay_path": replay_path,
+		"replay_written": replay_written,
 		"spectator_count": host_peer.session.spectators.size(),
 		"scope": SCOPE,
 	}

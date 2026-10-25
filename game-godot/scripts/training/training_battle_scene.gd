@@ -210,7 +210,7 @@ func _on_dummy_hit(info: Dictionary) -> void:
 		_combo_p1 += 1
 	_combo_activation=activation
 	var hint:=_authored_link_hint(info)
-	_log("HIT %s combo:%d%s" % [info.get("move_id", "?"), _combo_p1," · "+hint if not hint.is_empty() else ""])
+	_log("HIT %s combo:%d meter:%.1f%s" % [info.get("move_id", "?"), _combo_p1, float(info.get("defender_damage_after", 0.0)), " · "+hint if not hint.is_empty() else ""])
 
 func _on_dummy_control_state(_from:String,to:String) -> void:
 	if _combo_p1>0 and not _FighterStates.locks_actions(to):

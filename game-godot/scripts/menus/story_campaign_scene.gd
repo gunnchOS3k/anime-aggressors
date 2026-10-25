@@ -238,12 +238,11 @@ func on_back() -> void:
 
 func _on_next_route() -> void:
 	if _scene_pending: return
-	for route in CampaignRuntime.campaign["routes"]:
-		var id: String = route["id"]
-		if CampaignRuntime.route_available(id) and not CampaignRuntime.progress["routes"][id]["complete"]:
-			CampaignRuntime.select_route(id)
-			_refresh()
-			return
+	var id := CampaignRuntime.next_incomplete_route_id()
+	if id.is_empty():
+		return
+	CampaignRuntime.select_route(id)
+	_refresh()
 
 
 func _on_stop_scene() -> void:
