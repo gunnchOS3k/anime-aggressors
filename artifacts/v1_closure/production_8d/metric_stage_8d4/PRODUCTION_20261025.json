@@ -649,7 +649,101 @@
         "visually_inspected": false
       }
     ],
-    "full_roster_body_pass": "First job stopped on missing private module path before asset save. Failure retained; v2 path-only repair prepared."
+    "full_roster_body_pass": {
+      "producer_source": "c8aace4598b4693cc9c0635a3f1760f3c5f8d46f",
+      "recipe": "/Volumes/gunnchos-private-art/scratch/run_roster_heavy_body_v2.py",
+      "private_output": "/Volumes/gunnchos-private-art/output/roster_heavy_body_v2",
+      "completed_source_export_bodies": [
+        {
+          "fighter": "ember-vale",
+          "body": "female",
+          "source": "/Volumes/gunnchos-private-art/output/roster_heavy_body_v2/metric-stage-8d4/ember-vale/female/original_heavy_body_v1.blend",
+          "GLB": "/Volumes/gunnchos-private-art/output/roster_heavy_body_v2/metric-stage-8d4/ember-vale/female/heavy_attack.glb",
+          "status": "Actual save/reopen/export and previous-data checks completed; native and post-disconnect hash readback PENDING",
+          "sha256": null,
+          "stage_exit_code": 0,
+          "elapsed_s": 23.401104999997187,
+          "sampled_peak_RSS_bytes": 404684800,
+          "minimum_internal_free_GiB": 20.893779754638672
+        }
+      ],
+      "interrupted": {
+        "fighter": "ember-vale",
+        "body": "male",
+        "status": "Mount lost during actual source job. Partial source/export existence and integrity UNVERIFIED; preserve all partial output.",
+        "elapsed_s": 17.298128291000467,
+        "minimum_internal_free_GiB": 20.893680572509766,
+        "owned_child_stopped": true
+      },
+      "other_bodies": "Not executed in this body pass; do not count prepared scores as produced assets."
+    }
   },
-  "next_command": "python3 /Volumes/gunnchos-private-art/scratch/run_roster_heavy_body_v2.py"
+  "next_command": "STOP heavy work. Stabilize physical SD-reader/USB connection before one owner remount; recheck both identities/continuity and rehash new/old assets. Read private roster_heavy_body_v2/BATCH_STATUS.json, retain completed Ember female, inspect interrupted male. Native-review existing Ember female before resuming only unfinished bodies in a new version. Never rerun the whole completed source batch.",
+  "terminal_resource_failure": {
+    "UTC": "2026-10-25T14:19:55.574456+00:00",
+    "window": "last10minutes",
+    "events": [
+      {
+        "timestamp": "2026-10-25 09:18:38.949972-0500",
+        "process": "kernel",
+        "message": "usb-drd0-port-ss@00200000: AppleUSBHostPort::terminateDevice: destroying 0x05ac/8409/3204 (USB-C SD Card Reader): hardware connection lost"
+      },
+      {
+        "timestamp": "2026-10-25 09:18:38.951983-0500",
+        "process": "kernel",
+        "message": "apfs_stop_bg_work_ext:955: disk5s1 Volume gunnchOS-Archives is unmounting, stop any bg work"
+      },
+      {
+        "timestamp": "2026-10-25 09:18:38.985685-0500",
+        "process": "diskimagesiod",
+        "message": "-[DIIODaemonDelegate unmountAll]: Forcing unmount of <private> (disk7s1)"
+      },
+      {
+        "timestamp": "2026-10-25 09:18:39.013454-0500",
+        "process": "diskimagesiod",
+        "message": "void process_terminator::terminate: <136> Terminating due to unrecoverable I/O error"
+      },
+      {
+        "timestamp": "2026-10-25 09:18:42.958155-0500",
+        "process": "kernel",
+        "message": "usb-drd0-port-ss@00200000: AppleUSBHostPort::terminateDevice: destroying 0x05ac/8409/3204 (USB-C SD Card Reader): hardware connection lost"
+      },
+      {
+        "timestamp": "2026-10-25 09:18:46.950165-0500",
+        "process": "kernel",
+        "message": "usb-drd0-port-ss@00200000: AppleUSBHostPort::terminateDevice: destroying 0x05ac/8409/3204 (USB-C SD Card Reader): hardware connection lost"
+      },
+      {
+        "timestamp": "2026-10-25 09:18:50.957277-0500",
+        "process": "kernel",
+        "message": "usb-drd0-port-ss@00200000: AppleUSBHostPort::terminateDevice: destroying 0x05ac/8409/3204 (USB-C SD Card Reader): hardware connection lost"
+      },
+      {
+        "timestamp": "2026-10-25 09:18:56.271960-0500",
+        "process": "kernel",
+        "message": "usb-drd0-port-ss@00200000: AppleUSBHostPort::terminateDevice: destroying 0x05ac/8409/3204 (USB-C SD Card Reader): hardware connection lost"
+      },
+      {
+        "timestamp": "2026-10-25 09:18:56.274537-0500",
+        "process": "kernel",
+        "message": "apfs_stop_bg_work_ext:955: disk5s1 Volume gunnchOS-Archives is unmounting, stop any bg work"
+      },
+      {
+        "timestamp": "2026-10-25 09:19:02.050789-0500",
+        "process": "kernel",
+        "message": "usb-drd0-port-ss@00200000: AppleUSBHostPort::terminateDevice: destroying 0x05ac/8409/3204 (USB-C SD Card Reader): hardware connection lost"
+      },
+      {
+        "timestamp": "2026-10-25 09:19:02.055456-0500",
+        "process": "kernel",
+        "message": "apfs_stop_bg_work_ext:955: disk5s1 Volume gunnchOS-Archives is unmounting, stop any bg work"
+      }
+    ],
+    "query_exit": 0,
+    "internal_free_GiB": 20.905624389648438,
+    "private_mounted": false,
+    "archive_mounted": true
+  },
+  "production_halted": true,
+  "validation_scope_after_new_loss": "Earlier151file/20movie integrity and new hand source/native checks are historical completed evidence, not fresh verification after09:18 disconnect. Private volume currently absent."
 }
