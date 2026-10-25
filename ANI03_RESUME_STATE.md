@@ -1,3 +1,13 @@
+# 2026-10-25 — stable observation and existing art integrity recovered; production continues
+
+Recovered1c55c430/PR123 draft on122; Cursor PR13358689ce4 unchanged. Both mount identities held13samples/120.262seconds, recent5minute fault query0; this is bounded observation, not future hardware guarantee. Physical archive store currentlydisk4s2 (USB), outerarchiveAPFSdisk5, privateimageAPFSdisk7; identities resolved dynamically. Full official Blender4.0.2/Godot4.7.1/encryption/ownership/source/allocation preflightPASS. Internal21.957GiB, external capacity and original19start/18running/12external reserve remain inforce. No source regeneration during recovery.
+
+Actual fresh verification151files PASS: original18source rigs, preserved18arm-reference sources/exports,18strike sources/36GLBs,18MP4/AVI pairs, pairedv9/v10media and finalv10source/export, privatehandoff. All20MP4s fullydecoded serially; mininternal21.956GiB. Private receipt output/production_integrity_20261025_v1/INTEGRITY.json. Generic already-executed native strike viewer now recovered to tools/authored_animation/godot/original_strike_review.gd. New private roster_review_20261025_v1/OWNER_REVIEW.html reuses unchanged18movies, posters, category labels, explicitloading/error/ended states, exact move/facing chapters and normal/slow speeds. Browser interaction test PENDING at this checkpoint. No newart yet; Junoheavy openhand stillrealdefect (original palmsnap jab is intentional).
+
+NEXT: native browser interaction verification for all18existing selections; then actual versioned Junoheavy leading-finger closure on OWN preserved weightedcontrols for BOTHbodies, retainingjab/allprioractions/geometry/timing/roots. Execute existing official encrypted resource guards serially and inspect true native motion. Continue fullbody/remaining original move categories acrossroster. Do not repeat151hash recovery or rebuildvalid18exports. No Cursorworktreeedits. Detailed sourcecheckpoint PRODUCTION_20261025.json. Human/pairedshipping/RC2/releaseFALSE; no publicart/paidCI/cleanup/merge.
+
+---
+
 # 2026-10-24 — repeated mount loss diagnosed: archive USB transport interruption
 
 Recovered source 5b3f88a160276c95d25271f8fa202f9da70b9b19, draft PR123 on122; Cursor PR133 remains58689ce4754b82ec10b3b4ad461873204202b963. Existing13tracked dirty files and untracked Cursor work retained. No art regeneration, source export, native recording, encoding, mount/repair/eject or heavy job executed in this attempt.
