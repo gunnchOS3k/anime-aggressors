@@ -20,6 +20,12 @@ func setup(model: Node3D, owner_controller: Node) -> void:
 		parts.append({"node":node,"position":node.position,"weight":.45 if label.contains("ribbon") else .3})
 func _process(delta: float) -> void:
 	if controller==null or not is_instance_valid(controller) or controller.presentation_frozen: return
+	if controller.has_method("uses_original_source_clip") and controller.uses_original_source_clip():
+		# Authored source accessories already follow the original weighted rig.
+		offset=0;speed=0
+		for part in parts:
+			if is_instance_valid(part.node):part.node.position=part.position
+		return
 	var settings=get_node_or_null("/root/StoryDialogue")
 	var reduced: bool=settings!=null and bool(settings.settings.get("reduced_shake",false))
 	var dt:=minf(delta,.025)

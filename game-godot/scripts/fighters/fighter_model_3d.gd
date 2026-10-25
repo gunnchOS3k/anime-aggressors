@@ -903,6 +903,24 @@ func capture_viewport_image() -> Image:
 
 
 func _resolve_and_load_model(fighter_data: Dictionary) -> Dictionary:
+	var private_art = preload("res://scripts/visual/private_battle_art.gd")
+	if not private_art.requested_manifest().is_empty():
+		_controls_document_8d.clear()
+		var row: Dictionary = private_art.row_for(_fighter_id, _body_variant)
+		var original: Node3D = private_art.import_model(row) if not row.is_empty() else null
+		if original == null:
+			push_error("Private original art missing or invalid for "+_fighter_id+"/"+_body_variant)
+			return {"source":"PRIVATE_ORIGINAL_ART_REJECTED", "loaded":false}
+		_proxy_model = original
+		_proxy_model.name = "CollectibleV1_Private_%s_%s" % [_fighter_id, _body_variant]
+		_model_root.add_child(_proxy_model)
+		_visible_skeleton = _find_skeleton(_proxy_model)
+		_procedural_healthy = _visible_skeleton != null
+		_using_collectible = _procedural_healthy
+		_using_v16 = false
+		var private_presentation := {"source":"PRIVATE_ORIGINAL_ART_CANDIDATE", "loaded":_procedural_healthy, "body_variant":_body_variant, "model_sha256":row.model.sha256, "HUMAN_ART_APPROVED":false}
+		_last_presentation = private_presentation
+		return private_presentation
 	## V1 owner task supersedes the earlier presentation candidate.
 	var collectible := _try_load_collectible(fighter_data)
 	if collectible.get("loaded", false):

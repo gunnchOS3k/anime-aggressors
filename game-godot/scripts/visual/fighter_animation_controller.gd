@@ -62,8 +62,36 @@ var _support_solver = preload("res://scripts/visual/locomotion_weight_transfer.g
 var support_knee_corrections := 0
 var support_knee_anchor_error_m := 0.0
 var _strike_posture = preload("res://scripts/visual/grounded_strike_posture.gd").new()
+const _PrivateArt = preload("res://scripts/visual/private_battle_art.gd")
+var _private_moves: Dictionary = {}
+var _private_clip_failures: Array = []
+
+func uses_original_source_clip() -> bool:
+	return is_instance_valid(_player) and _private_moves.has(str(_player.current_animation).trim_prefix("combat_choreography/"))
+
+func original_art_report() -> Dictionary:
+	return {"moves":_private_moves.duplicate(true), "failures":_private_clip_failures.duplicate(), "active":uses_original_source_clip(), "human_approved":false}
+
+func _install_private_moves(model: Node3D) -> void:
+	if not model.has_meta("private_original_art"): return
+	var row: Dictionary = model.get_meta("private_original_art")
+	var library := _player.get_animation_library("combat_choreography")
+	for move_id in row.get("moves", {}):
+		var definition: Dictionary = row.moves[move_id]
+		var clip: Animation = _PrivateArt.load_clip(definition, _player, _skeleton)
+		if clip == null:
+			_private_clip_failures.append(str(move_id)+":bind_or_import_rejected")
+			push_error("Private original clip rejected: "+str(move_id))
+			continue
+		for suffix in ["", "_left"]:
+			var key := str(move_id)+str(suffix)
+			if library.has_animation(key): library.remove_animation(key)
+			library.add_animation(key, clip)
+			_loaded_clips[key] = true
+			_private_moves[key] = {"sha256":definition.sha256, "source_clip":definition.clip, "contact":definition.contact, "active_end":definition.active_end, "last":definition.last}
 
 func _correct_support_knees() -> void:
+	if uses_original_source_clip(): return # Saved whole-body acting owns its original knees/feet.
 	if not is_instance_valid(_runtime_fighter) or not _runtime_fighter.is_on_floor() or not is_instance_valid(_skeleton): return
 	# Existing authored tracks used a -Z knee pole while these rigs face +Z.
 	# Reflect only the backward bend component, retaining authored lateral
@@ -157,6 +185,7 @@ func setup(fighter, model_root: Node3D) -> void:
 			_load_procedural_clips(model_root)
 			_load_authored_studies()
 			_load_combat_choreography(model_root)
+			_install_private_moves(model_root)
 			return
 	_disable_embedded_players(model_root)
 	_player = AnimationPlayer.new()
@@ -586,6 +615,12 @@ func synchronize_move(frame: int,move: Dictionary) -> void:
 	if not _player.has_animation(key): return
 	_move_synchronized = true
 	if _player.current_animation != key: _player.play(key,0)
+	if _private_moves.has(directional_id):
+		# Exactly one saved full-body pose; no older arm/posture/support overlays.
+		_attack_support_exchange.clear(); _authored_transition.clear()
+		_neutral_return_pose.clear(); _grounded_return.clear()
+		_player.seek(_PrivateArt.source_frame(frame, move, _private_moves[directional_id])/60.0, true)
+		return
 	var visual_frame := float(frame)
 	var mid := directional_id
 	if key.begins_with("combat_choreography/") and _choreography_timing.has(mid):
