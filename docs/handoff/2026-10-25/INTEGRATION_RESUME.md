@@ -1,3 +1,15 @@
+# Current native integration checkpoint — 2026-10-25
+
+Source `a9faeddf08f7b79aa5b16df374b599c32c77a622`, local branch `integration/v1-preserved-candidate-20261025`. Original draft123/133 remain unchanged. See NATIVE_VALIDATION_20261025.json and the TOP of ANI03_RESUME_STATE.md for current truth; earlier status below is preserved history.
+
+Actual BattleScene/public-model capture succeeded with fixed observer. A separate independently reproduced CPU backward-attack defect is corrected and native counterplay now damages the player. Both body presentations of Ember/Juno are visible in35seconds of verified native MP4 output with game audio. NOT corrected private art, fullroster, KO/victory/rematch, sustained60fps or human acceptance. Failed old capture and source failures preserved. Owner saves unchanged.
+
+Private-art dependent work still BLOCKED: repeated fresh USB reader faults despite mounted correct encrypted UUID. No private asset read/rehash/bake/export/injection performed. Current art-binding code is opt-in/source-only, not executed acceptance. Reuse existing sources/exports after transport and integrity guards pass. No public art or paid service.
+
+Owner review: outputs/native_playable_review_20261025/OWNER_REVIEW.html; guarded manual launcher alongside, preflight-only passed. Exact next safe command: `python3 outputs/native_playable_review_20261025/play_manual.py --preflight-only`.
+
+---
+
 # Preserved integrated candidate — 2026-10-25
 
 Branch: `integration/v1-preserved-candidate-20261025`. Base #133 `58689ce4754b82ec10b3b4ad461873204202b963`; original #123 `328160dfaebc7c9687b126ac85e5b08c75d78670`. Merge-base `3043da067afb155daf6a4c0eb42def41bdd2087c`.
