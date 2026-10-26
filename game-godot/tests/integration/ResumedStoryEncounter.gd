@@ -11,6 +11,8 @@ var started_position := Vector2.ZERO
 var original_node: Dictionary = {}
 var actor_samples: Array = []
 var invulnerable_transitions: Array = []
+var stale_invulnerability: Array = []
+var ledge_move_leaks: Array = []
 
 func wire_equal(a: Variant, b: Variant) -> bool:
 	# JSON has one numeric type; native Dictionary equality distinguishes
@@ -103,6 +105,13 @@ func transition_observed(from: String, to: String, actor) -> void:
 
 func observe() -> void:
 	if not is_instance_valid(battle): return
+	for actor in [battle.fighter1, battle.fighter2]:
+		if actor.state_machine.current_state in ["ledge_hang", "ledge_getup"] and actor.move_runner.active and ledge_move_leaks.size() < 12:
+			ledge_move_leaks.append({"frame": Engine.get_physics_frames(), "actor": actor_snapshot(actor)})
+		# Kaia/Juno's respawn immunity expires in1.2s; ordinary grounded shield
+		# is never a long-lived invulnerability owner. Preserve actual failures.
+		if actor.invincible and actor.state_machine.current_state in ["idle", "shield_hold", "shield_break"] and actor.state_machine.state_time > 1.3 and stale_invulnerability.size() < 12:
+			stale_invulnerability.append({"frame": Engine.get_physics_frames(), "actor": actor_snapshot(actor)})
 	if battle.fighter1.shielding: guard_frames += 1
 	if absf(battle.fighter1.position.x - started_position.x) > 10.0: p1_motion = true
 	if battle._active and Engine.get_physics_frames() % 120 == 0:
@@ -207,6 +216,8 @@ func run() -> void:
 		elapsed = i; play_controls()
 		await physics_frame
 	keys([])
+	check(stale_invulnerability.is_empty(), "no_permanent_grounded_invincibility")
+	check(ledge_move_leaks.is_empty(), "ledge_acquisition_retires_interrupted_move")
 	check(p1_motion and int(move_counts["1"]) > 0, "ordinary_player_movement_and_attacks_work")
 	check(int(move_counts["2"]) > 0, "normal_CPU_uses_actual_moves")
 	if pass_name in ["story-restart", "story-controls"]:
@@ -278,7 +289,7 @@ func finish() -> void:
 	keys([])
 	observations["combat"] = {"contacts": contacts, "stock_losses": losses, "moves": move_counts,
 		"guard_frames": guard_frames, "input_count": inputs.size(), "frames_bound": 11400,
-		"player_damage_or_stock_written": false, "result_injected": false, "CPU_overridden": false, "actor_samples": actor_samples, "invulnerable_transitions": invulnerable_transitions}
+		"player_damage_or_stock_written": false, "result_injected": false, "CPU_overridden": false, "actor_samples": actor_samples, "invulnerable_transitions": invulnerable_transitions, "stale_invulnerability": stale_invulnerability, "ledge_move_leaks": ledge_move_leaks}
 	observations["combat"]["last_trace"] = trace.slice(maxi(0, trace.size()-4))
 	var active_trace: Array = trace.filter(func(row): return row.active)
 	observations["combat"]["last_active_trace"] = active_trace.slice(maxi(0, active_trace.size()-4))

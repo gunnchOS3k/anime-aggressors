@@ -143,6 +143,9 @@ func observe(opponent: Node2D) -> Dictionary:
 
 func _act_recovery(obs: Dictionary, _delta: float) -> void:
 	_last_goal = "recovery"
+	# Recovery owns inward movement/pokes. A shield held by an earlier neutral
+	# decision would lock both and keep every queued attack behind guard.
+	_sim_shield(false)
 	# Grounded edge danger: stop chasing outward; face stage / back up.
 	if obs.edge_danger and obs.self_on_floor:
 		var inward := signf(obs.stage_dx)

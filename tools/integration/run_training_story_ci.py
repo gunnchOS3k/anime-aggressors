@@ -101,6 +101,7 @@ def run(output, suite_set="training-story"):
         ] if suite_set == "training-story" else [
             ("story-play", "tests/integration/ResumedStoryEncounter.gd", "STORY_ENCOUNTER_PLAY.json"),
             ("story-restart", "tests/integration/ResumedStoryEncounter.gd", "STORY_ENCOUNTER_RESTART.json"),
+            ("throw-ownership", "tests/v1_closure/ThrowOwnership.gd", "throw_ownership.json"),
         ]
         if suite_set == "story-controls":
             suites = [("story-controls", "tests/integration/ResumedStoryEncounter.gd", "STORY_ENCOUNTER_CONTROLS.json"),

@@ -1193,6 +1193,10 @@ func _check_ledge_grab() -> void:
 		var toward_stage := signf(platform_center_x - global_position.x)
 		if absf(velocity.x) > 80.0 and signf(velocity.x) == -toward_stage:
 			continue
+		# Ledge acquisition interrupts the old airborne move. Its later active
+		# tick must not overwrite LEDGE_HANG/GETUP and strand ledge invincibility.
+		if move_runner.active: move_runner.cancel()
+		hitbox.monitoring = false
 		_ledge_side = side
 		global_position = _CombatSpace.ledge_hang_position(anchor.x, platform_surface_y, side)
 		velocity = Vector2.ZERO
@@ -1987,6 +1991,8 @@ func _sync_motion_state() -> void:
 		_FighterStates.AURA_CHARGE, _FighterStates.AURA_READY,
 		_FighterStates.GRAB_STARTUP, _FighterStates.GRAB_ACTIVE, _FighterStates.GRAB_HOLD, _FighterStates.THROW_STARTUP, _FighterStates.THROW_RELEASE,
 		_FighterStates.AIR_DODGE, _FighterStates.LAUNCHED,
+		_FighterStates.LEDGE_GETUP, _FighterStates.KO, _FighterStates.RESPAWN,
+		_FighterStates.DODGE_START, _FighterStates.DODGE_ACTIVE, _FighterStates.DODGE_RECOVERY,
 	]:
 		if velocity.y > 0:
 			state_machine.enter(_FighterStates.FALL if velocity.y < get_fall_speed() * 0.02 else _FighterStates.FAST_FALL)
@@ -1994,6 +2000,12 @@ func _sync_motion_state() -> void:
 func _check_edge() -> void:
 	if shield_break_8c.holds_lock():return
 	if party_overdrive.owns_motion():return
+	# Edge warning is locomotion presentation, never an interrupt/cancel for
+	# dodge, ledge getup, hurt, throw or authored attack state ownership.
+	if state_machine.current_state not in [
+		_FighterStates.IDLE, _FighterStates.WALK, _FighterStates.RUN, _FighterStates.DASH,
+		_FighterStates.SKID, _FighterStates.TURNAROUND, _FighterStates.EDGE_WARNING, _FighterStates.LEDGE_TEETER,
+	]: return
 	if not is_on_floor():
 		return
 	var edge_dist = platform_half_width - absf(global_position.x - platform_center_x)
