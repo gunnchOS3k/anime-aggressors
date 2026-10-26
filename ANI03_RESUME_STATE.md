@@ -1,3 +1,13 @@
+# 2026-10-26 — physics-server frame boundary and tutorial teardown repair
+
+Saved parent803e9feff1cc7c8893efb1d753740c6d0902a80c. Exact source is git rev-parse HEAD; existing integration branch and public software-only manual job preserved. Run40344576672 importPASS, TrainingPractice10PASS and StorySceneOwnership8PASS; FrameStepFAIL2of326 (contact and fresh guard), LifecycleFAIL tutorial_battle_scene.gd:110 viewport after SceneRouter teardown. Evidence outputs/training_story_ci_803e9fef retained.
+
+New source: step completion waits for process_frame AFTER PhysicsServer2D.step (official4.7.1 main.cpp5030–5037), instead of pausing at late SceneTree physics callback BEFORE the server advances. One-step catch-up cap restores previous Engine setting, including cancellation/exit. No forced contact/damage or hitbox/frame/balance changes. Tutorial consumes cancel before routing. Actual18-body/two-facing stepping rows and explicit contact/guard observations added. New declared nonqualifying Story loss save-fault/retry/signed-restore suite uses actual inactive narrative/countdown and owned producer; never earned Story or forced KO. NOT YET ENGINE VERIFIED at this checkpoint.
+
+NEXT: push normally [skip ci], dispatch existing authored-animation-production.yml with ONLY training_story_runtime=true; verify actual five suites, retain failures. No local Godot/Blender/import/media or repeated failing resource preflight; no private reads/art uploads. Existing Mac19start/18reserve remains blocked. No active owned local engine jobs. All human-art/paired-runtime/RC2/release gatesFALSE. Native full-match audio/visual and earned-route/device/private-art acceptance pending. No merge/deploy/release.
+
+---
+
 # 2026-10-26 — real import and Story pass; second Training parser defect repaired
 
 Run40343766460, exact source3fdd777a070fd685621376f1c9d11349d688001e: official4.7.1importPASS34.64s/871030784bytesRSS; eight-route StorySceneOwnership PASS1.606s/166518784bytesRSS, no errors. Training refused: practice_stats.gd:43 inferred eligible from a Variant-returning hitbox query. Explicit boolean declaration repairs type inference, without changing predicate or eligibility. Old3training results are FAIL (erroring process/code0 is NOT pass); log-limit stopped cascadedNil errors. Exact raw public workflow log+ENGINE_RESULT preserved outputs/training_story_ci_3fdd777a. Runner now stops immediately on SCRIPT ERROR and reports assertion counts/results hashes, with diagnostics retained.

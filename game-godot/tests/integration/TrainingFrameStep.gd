@@ -3,6 +3,15 @@ extends "res://tests/integration/TrainingLifecycle.gd"
 ## contact/damage injection, seeded result or original-art acceptance.
 var samples: Array = []
 
+func actor_snapshot(actor) -> Dictionary:
+	return {"position": [actor.global_position.x, actor.global_position.y],
+		"velocity": [actor.velocity.x, actor.velocity.y], "floor": actor.is_on_floor(),
+		"state": actor.state_machine.current_state, "controls": actor.controls_enabled,
+		"damage": actor.damage_percent, "invincible": actor.invincible,
+		"shielding": actor.shielding, "guard_clock": actor.perfect_guard.clock,
+		"move": actor.move_runner.current_move_id(), "move_frame": actor.move_runner.total_frame,
+		"phase": actor.move_runner.phase}
+
 func action(slot: int, suffix: String, pressed: bool) -> void:
 	var event := InputEventAction.new()
 	event.action = "p%d_%s" % [slot, suffix]
@@ -79,6 +88,7 @@ func run() -> void:
 		await physics_frame
 	keys([])
 	await frames(12)
+	samples.append({"phase": "before_stepped_attack", "player": actor_snapshot(player), "target": actor_snapshot(target)})
 	await tool_key(KEY_F11)
 	await action(1, "attack", true)
 	await action(1, "attack", false)
@@ -86,6 +96,7 @@ func run() -> void:
 		await step(training)
 		if target.damage_percent > 0: break
 	check(target.damage_percent > 0, "stepped_attack_startup_and_contact_apply_actual_damage")
+	samples.append({"phase": "after_stepped_attack", "player": actor_snapshot(player), "target": actor_snapshot(target)})
 	var applied: float = target.damage_percent
 	var hits: int = training._practice.slot_stats(1).hits
 	var hitstop: float = player._hitstop
@@ -96,6 +107,7 @@ func run() -> void:
 		for slot in renderer.slots:
 			if slot.active: visual_ages.append({"id": slot.event_id, "age": slot.age})
 	await frames(30)
+	check(target.damage_percent == applied, "paused_wall_time_cannot_apply_late_damage")
 	check(player._hitstop == hitstop and target.state_machine.state_time == hurt_time, "paused_hitstop_and_hurt_time_are_frozen")
 	if renderer != null:
 		for prior in visual_ages:
@@ -117,13 +129,40 @@ func run() -> void:
 	await step(training)
 	var guard_clock: int = target.perfect_guard.clock
 	var guard_opened: int = target.perfect_guard.opened
+	samples.append({"phase": "guard_step", "target": actor_snapshot(target), "held": Input.is_action_pressed("p2_shield")})
 	await frames(30)
 	check(target.shielding and target.perfect_guard.clock == guard_clock and target.perfect_guard.opened == guard_opened, "paused_wall_time_cannot_age_fresh_guard")
+	samples.append({"phase": "guard_paused", "target": actor_snapshot(target), "held": Input.is_action_pressed("p2_shield")})
 	await step(training)
 	check(target.perfect_guard.clock == guard_clock + 1, "guard_window_advances_exactly_one_simulation_frame")
 	await action(2, "shield", false)
 	samples.append({"steps": training._frame_clock.frames, "contacts": hits, "damage": applied,
 		"original_art": false, "active_CPU": false, "scope": "declared idle practice target"})
+	# Shared clock/body-selection compatibility across the complete public
+	# roster. These movement rows are not private-art or all-move acceptance.
+	for fighter_id in preload("res://scripts/data/data_loader.gd").roster_ids():
+		for body_variant in ["male", "female"]:
+			gs.p1_fighter_id = fighter_id
+			gs.p1_body_variant = body_variant
+			gs.training_dummy_mode = "idle"
+			root.get_node("SceneRouter").go("training_battle")
+			if not await wait_route("TrainingBattleScene.tscn"):
+				check(false, fighter_id + ":roster_scene_load")
+				continue
+			training = current_scene
+			await frames(45)
+			player = training.fighter1
+			check(player.fighter_id == fighter_id and player.model_3d._body_variant == body_variant, fighter_id + ":" + body_variant + ":real_actor_presentation_binding")
+			await tool_key(KEY_F11)
+			for direction in [-1, 1]:
+				var axis := "left" if direction == -1 else "right"
+				await action(1, axis, true)
+				for i in range(8):
+					await step(training)
+					if player.facing == direction: break
+				await action(1, axis, false)
+				check(player.facing == direction, fighter_id + ":" + body_variant + ":stepped_facing:" + str(direction))
+			samples.append({"fighter": fighter_id, "body": body_variant, "steps": training._frame_clock.frames, "original_art": false})
 	finish()
 
 func finish() -> void:

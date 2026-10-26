@@ -97,6 +97,7 @@ def run(output):
             ("practice", "tests/integration/TrainingPractice.gd", "TRAINING_PRACTICE.json"),
             ("lifecycle", "tests/integration/TrainingLifecycle.gd", "TRAINING_LIFECYCLE.json"),
             ("story-scenes", "tests/v1_closure/StorySceneOwnership.gd", "story_scene_ownership.json"),
+            ("story-save-recovery", "tests/integration/StorySaveRecovery.gd", "STORY_SAVE_RECOVERY.json"),
         ]:
             profile(name)
             outcome = execute(base+["--fixed-fps", "60", "--script", "res://"+script,
@@ -108,9 +109,10 @@ def run(output):
             outcome["failures"] = data.get("failures", ["Result missing"])
             outcome["checks"] = len(data.get("checks", []))
             outcome["rows"] = len(data.get("rows", []))
+            outcome["observations"] = data.get("samples", data.get("observations", []))
             if path.exists(): outcome["result_sha256"] = sha(path)
             record["suites"][name] = outcome
-        record["PASS"] = len(record["suites"]) == 4 and all(row["PASS"] for row in record["suites"].values())
+        record["PASS"] = len(record["suites"]) == 5 and all(row["PASS"] for row in record["suites"].values())
     except Exception as error:
         record["error"] = str(error)
     finally:
