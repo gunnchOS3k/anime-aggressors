@@ -20,6 +20,6 @@ export function renderTrainingMoveOverlay({ player, comboCount = 0 }: TrainingMo
       <div class="training-move-name">${moveName}</div>
       <div class="training-move-input">${input}</div>
       ${followUps ? `<div class="training-follow-up">Try: ${followUps}</div>` : ""}
-      ${comboCount > 0 ? `<div class="training-combo-count">Combo ×${comboCount}</div>` : ""}
+      ${comboCount > 0 ? `<div class="training-combo-count">Hit chain ×${comboCount}</div>` : ""}
     </div>`;
 }

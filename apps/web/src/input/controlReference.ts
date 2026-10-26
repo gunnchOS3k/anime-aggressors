@@ -18,7 +18,7 @@ export const P2_CONTROL_LINES = [
 
 export const BATTLE_SHORTCUT_LINES = [
   "H — controls overlay",
-  "F1 debug · F2 hitboxes · F3 pause · R rematch",
+  "F1 debug · F2 hitboxes · F3 pause · R rematch · F9 save snapshot",
 ] as const;
 
 export const TRAINING_RESET_KEYS = { damage: "F7", positions: "F8" } as const;

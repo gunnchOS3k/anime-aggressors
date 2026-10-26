@@ -1,0 +1,37 @@
+{
+  "command": [
+    "/opt/homebrew/bin/node",
+    "--max-old-space-size=96",
+    "--experimental-loader",
+    "./outputs/integration-checks/source-ts-loader.mjs",
+    "--test",
+    "--test-concurrency=1",
+    "apps/web/test/trainingCommands.test.ts",
+    "apps/web/test/trainingRuntime.test.ts",
+    "apps/web/test/replayRecorder.test.ts",
+    "apps/web/test/controlsCheckVersus.test.ts"
+  ],
+  "returncode": 0,
+  "seconds": 1.3539129170021624,
+  "peak_sampled_family_rss_bytes": 169279488,
+  "guard_failure": null,
+  "scope": "Production local practice helpers, actual TypeScript combat and rollback negative baseline, recorder. No Godot/browser renderer/native/device acceptance.",
+  "tests_passed": 16,
+  "tests_failed": 0,
+  "app_transformed_syntax": "PASS; not a compiler/typecheck or DOM/renderer test",
+  "source_sha256": {
+    "apps/web/src/game/App.ts": "f29bde7808da2e62af7b370ad40869ab02bf0469a2c406f633eeba9d79d9a5a1",
+    "apps/web/src/input/controlReference.ts": "8f2013feefd8a488b0b01af19c2245e542c63af1cc02ab0d85b141ffe05fddc9",
+    "apps/web/src/match/trainingCommands.ts": "d11ea555c35d7bb6ea866b1ec21e8773cdf4dafaf1c4b6834ce225e710ebff49",
+    "apps/web/src/match/trainingHitTracker.ts": "3029b22bc15312e04b18d3a186af93a38541d18647499e32682c413e197be019",
+    "apps/web/src/ui/TrainingMoveOverlay.ts": "b38f86a6a870934ed998e440af58ba4e60b27c5bf50e86cb177530a66edf910e",
+    "apps/web/test/trainingCommands.test.ts": "9c867290f8b97c2d3729f3502b54c26d043f8e1155a384f39818aca8649034f6",
+    "apps/web/test/trainingRuntime.test.ts": "017d6b840dad8a8e4a840ce181a4baf1e9a00f0d9485a8b6e26f180115a3ff65",
+    "packages/game-core/src/training/trainingMode.ts": "7769ba6f06b7636a7adde50c6303dc1ebf397422952641ce3133adf77b1acf4a",
+    "packages/game-core/src/simulate.ts": "ffca16ce9a8bef457adbc475faf28c87827a03ab67e18fcebff7e70e85019a32",
+    "packages/rollback/src/RollbackSession.ts": "926999692651bac19578e4aea9fc1ab6b098eb1aefa41c01c0013a17d40cf17d"
+  },
+  "godot_training_and_story": "NOT_EXECUTED_RESOURCE_BLOCKED",
+  "negative_baseline": "Editing a RollbackSession snapshot leaves authoritative next-frame damage unchanged; production local-practice path now uses existing simulateFrame directly. Competitive rollback source unchanged.",
+  "presentation_scope": "All nine/two-body test rows are real TypeScript common-attack contact/reset, not Godot model/art/24-move acceptance."
+}

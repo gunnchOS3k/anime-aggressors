@@ -28,6 +28,15 @@ func key(slot: int, activation: int) -> String:
 	return "%d:%d" % [slot, activation]
 
 func move_started(slot: int, activation: int, move: Dictionary) -> void:
+	var id := key(slot, activation)
+	if attempts.has(id): return
+	# Authored cancels may replace MoveRunner's current move without an end
+	# signal. Close the old attempt as interrupted, preserving live projectiles.
+	for previous in attempts.keys():
+		if int(attempts[previous].slot) == slot and not attempts[previous].ended:
+			attempts[previous].ended = true
+			attempts[previous].natural = false
+			_finish_if_ready(previous)
 	var counter := slot_stats(slot)
 	counter.last_move = str(move.get("move_id", ""))
 	var projectile := move.has("projectile")
@@ -35,8 +44,6 @@ func move_started(slot: int, activation: int, move: Dictionary) -> void:
 		projectile or not move.get("hitboxes", []).is_empty() or str(move.get("move_type", "")) == "throw")
 	if not eligible:
 		return
-	var id := key(slot, activation)
-	if attempts.has(id): return
 	counter.started += 1
 	attempts[id] = {"slot": slot, "move": counter.last_move, "ended": false,
 		"natural": false, "projectile": projectile, "spawned": 0, "pending": 0,
