@@ -1,3 +1,13 @@
+# 2026-10-26 — first actual resumed battle played; full authored match continuation
+
+Actual run40357116955 @86e42611d7d69fd645149c7ff63c177718f3d5bb: officialGodot importPASS42.03s/856215552bytesRSS. Application-created/authenticated NewCampaign -> actualResumeSave -> canonicalKaiafemale/JunoCPU3male/Skyline2stock BattleScene allpassed; player113moves/CPU102moves,38contacts,150guardframes, one naturalJuno stockloss atframe3240. At6000simulationframes(100s) matchnotfinished, so aggregateFAIL solely legitimate_combat_outcome_within_bound; NO earnednode/forcedresult claimed. Exactnonprivate rawlog/result outputs/resumed_story_86e42611 retained. Initialbound ended before the authored180s match; this was insufficient play evidence, not proof of brokencombat.
+
+New actualStory source: scene retains chapteridentity after record_battle_result clears active_encounter, allowing existing aftermath expression/acting to resolve. Legitimate win's ownedcontext/node/generation dialogue finishes (or publicF6Skip) before existing0.5s Results transition; callback also requires current_scene==self and finishedmatch, so other scenes cannot redirect it. Combat/timing/data/balance unchanged. Winningbranch runtime proofpending, no injectedwin permitted. Loss/competitive transitionunchanged. Nextactualplay probe covers180sauthoredtimer (11400framebound/190s), under SAME existing120swall/memory/storage guards; previous100s ran24.87swall/300265472bytesRSS, projectednewrun~47swall, no increased localallocation or weakenedguard.
+
+NEXT push and dispatch ONLYstory_encounter_runtime=true in existingpublicworkflow; inspect genuineoutcome and secondprocessrestart. Ifwin notearned, truthfully recordloss and verifycursor/unlocks notadvanced; do notlowerCPU orforcevictory. No rerunfiveacceptedTraining/Storyfixtures, nativeMac/privateart reads remainblocked, no newpreflight/deletion/export. Allhuman/paired-runtime/RC2/releaseFALSE. Protectedsource/assets/saves/worktrees untouched.
+
+---
+
 # 2026-10-26 — real resumed Story battle continuation prepared
 
 Recovered local/remote91924ccb with only retained outputs untracked; no newer tracked work overwritten. Accepted five-suite run40352284099 remains unchanged evidence. New focused existing-workflow option story_encounter_runtime executes ONLY a new actualStory journey and separate real-process restart using the same isolated profile, not the five accepted suites. All art production inputsfalse/no uploads/no paid runner. Macnative/privateUSB gates unchanged; no new preflight/private reads.

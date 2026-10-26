@@ -147,7 +147,9 @@ func run() -> void:
 		check(campaign.progress.checkpoint == expected.get("checkpoint", null), "new_process_restores_signed_result_metadata")
 	if not await enter_authored_battle(campaign): finish(); return
 	var initial_completed: Array = campaign.progress.routes[campaign.progress.selected_route].completed.duplicate()
-	for i in range(6000 if pass_name == "story-play" else 420):
+	# Cover the actual authored180s timer, never shorten/change match rules.
+	# First100s probe legitimately took one stock but did not finish.
+	for i in range(11400 if pass_name == "story-play" else 420):
 		if not is_instance_valid(battle) or not battle._active: break
 		elapsed = i; play_controls()
 		await physics_frame
@@ -205,8 +207,9 @@ func public_cancel() -> void:
 func finish() -> void:
 	keys([])
 	observations["combat"] = {"contacts": contacts, "stock_losses": losses, "moves": move_counts,
-		"guard_frames": guard_frames, "input_count": inputs.size(), "frames_bound": 6000,
+		"guard_frames": guard_frames, "input_count": inputs.size(), "frames_bound": 11400,
 		"player_damage_or_stock_written": false, "result_injected": false, "CPU_overridden": false}
+	observations["combat"]["last_trace"] = trace.slice(maxi(0, trace.size()-4))
 	var data := {"PASS": failures.is_empty(), "checks": checks, "failures": failures, "observations": observations,
 		"inputs": inputs, "trace": trace, "scope": "Actual canonical Story UI/combat, active normal CPU, isolated application-created signed save and real process restart. Public assets/headless; no native visual/art/device/full-campaign acceptance."}
 	var filename := "STORY_ENCOUNTER_PLAY.json" if pass_name == "story-play" else "STORY_ENCOUNTER_RESTART.json"

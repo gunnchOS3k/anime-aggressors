@@ -42,6 +42,7 @@ var _stage_camera_profile: Dictionary = {}
 var _wave018_vis_accum: float = 0.0
 var _wave018_last_telemetry_ids: Array = []
 var _story_attempt_token: String = ""
+var _story_node_id := ""
 var _story_dialogue_generation := -1
 var _story_cosmic_actor
 var _story_survival := false
@@ -61,6 +62,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	if GameState.mode == "story":
 		_story_attempt_token = str(CampaignRuntime.active_encounter.get("token", ""))
+		_story_node_id = str(CampaignRuntime.active_encounter.get("node_id", ""))
 		CampaignRuntime.bind_battle_scene(self, _story_attempt_token)
 	_build_stage()
 	_spawn_fighters()
@@ -656,7 +658,13 @@ func _finish_match(winner: int) -> void:
 		fighter2.controls_enabled = false
 		if _story_cosmic_actor != null:
 			_story_cosmic_actor.controls_enabled = false
-		_queue_results()
+		# The receipt is already committed and combat is closed. Let this
+		# chapter's authored aftermath finish (or receive public Skip) before
+		# Results tears its actors/voice down. Never wait on another scene.
+		if winner == 1 and not _story_receipt_failed and get_tree().current_scene == self and _owns_story_dialogue() and StoryDialogue.is_busy():
+			StoryDialogue.sequence_finished.connect(_on_story_result_sequence_finished.bind(_story_dialogue_generation), CONNECT_ONE_SHOT)
+		else:
+			_queue_results()
 		return
 	if _eval_mode:
 		_complete_eval(winner, "stocks_or_time")
@@ -674,6 +682,15 @@ func _queue_results() -> void:
 	# A bound callable expires with this BattleScene. Navigating elsewhere during
 	# teardown cannot let an old anonymous timer redirect a later scene.
 	get_tree().create_timer(0.5).timeout.connect(_show_results, CONNECT_ONE_SHOT)
+
+func _owns_story_dialogue() -> bool:
+	# Intro cues may fire inside _ready; chapter/generation owns their acting.
+	# Navigation callbacks additionally require current_scene below.
+	return is_inside_tree() and StoryDialogue.context == "battle" and StoryDialogue.node_id == _story_node_id and StoryDialogue._generation == _story_dialogue_generation
+
+func _on_story_result_sequence_finished(generation: int) -> void:
+	if _match_finished and get_tree().current_scene == self and generation == _story_dialogue_generation and _owns_story_dialogue():
+		_queue_results()
 
 
 func _show_results() -> void:
@@ -758,7 +775,7 @@ func _exit_tree() -> void:
 
 
 func _setup_story_dialogue() -> void:
-	StoryDialogue.begin(str(CampaignRuntime.active_encounter.get("node_id","")),"battle")
+	StoryDialogue.begin(_story_node_id,"battle")
 	_story_dialogue_generation = StoryDialogue._generation
 	StoryDialogue.cue_started.connect(_on_story_cue)
 	for actor in fighters_root.get_children():
@@ -774,7 +791,9 @@ func _on_story_cue(cue: Dictionary) -> void:
 	# Combat facial reactions retain authority; dialogue staging only before live controls.
 	if _active: return
 	if cue.get("representation") == "memory_echo": return
-	if StoryDialogue.context != "battle" or StoryDialogue.node_id != str(CampaignRuntime.active_encounter.get("node_id","")): return
+	# record_battle_result retires active_encounter before success cues fire.
+	# This scene keeps its own chapter/generation for the resulting acting.
+	if not _owns_story_dialogue(): return
 	for actor in fighters_root.get_children():
 		if actor.fighter_id != cue["speaker_id"]: continue
 		var expression := str({"strained":"shock","grief":"grief","soft":"calm","formal":"determination","clear":"determination"}.get(cue["performance"],"determination"))
