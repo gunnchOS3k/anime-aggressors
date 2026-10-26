@@ -1,3 +1,25 @@
+# 2026-10-25 — native blocked; PartyLink match/disconnect ownership corrected
+
+Branch integration/v1-preserved-candidate-20261025. Owner/rematch source saved82e6232e656bab9c724fc0065fadeb460dfc3791; exact latest delivery is `git rev-parse HEAD`. Only owned source/tests/docs changed. Protected PR123/133, original43worktrees plus candidate, owner saves, private art and old evidence preserved. LOCAL ONLY; no remote CI/merge/push/publication.
+
+Fresh preflight ONCE20:50:28CDT:18024239104bytes /16.786380768GiB internal,29% RAM free,9513.56MiB swap, no media jobs. Native needs21042823168bytes /19.59765625GiB (deficit3018584064); headless20401094656. Below18running reserve: NO Godot/native/Blender/import/export/audio-full-match/recording attempted. No repeating failed launch. Only tiny source/receipt writes and bounded installed-Node source tests without emit/build/download/private assets; no heavy guard lowered.
+
+ACTUAL new implementation: shared PartyRoom owner check precedes remote start setup; explicit owner token required for HTTPstart/rematch; failed request cannot mutate team/fighter setup or clear sim/queued commands. Authorized rematch clears old sequence/rate windows; same-round reconnect retains duplicate protection. Baseline6/6FAIL preserved;32/32affected source tests PASS. Subsequent transport API probe independently reproduced2failures: disconnected client input accepted and queued old command survived disconnect. Now reject disconnected input before sequence/rate admission, retire ONLY that participant's unconsumed commands; authenticated reconnect restores input with original sequence protection. Final34/34PASS (9new+25affected),2.740s,218.22MiB sampled process-family peakRSS. Actual localhost/two-client requests plus declared room/transport fixtures, NOT physical LAN/native combat. Existing host sim is movement/bookkeeping; full BattleScene transport integration remains unfinished. No new competing combat resolver or rules/balance change.
+
+Evidence: docs/handoff/2026-10-25/PARTYLINK_MATCH_OWNERSHIP.json and PARTYLINK_DISCONNECT.json. Failed baselines under outputs/lan_match_ownership_20261025_baseline_v3 and outputs/lan_disconnect_20261025_baseline; first loader no-isolation harness failure also retained. Final source hashes/log receipt outputs/lan_disconnect_20261025_fixed_regressions. Local owner entry outputs/game_continuation_20261025/OWNER_REVIEW.html; all links verified. Node24source transformation only; exact pinned TypeScript/compiler/CI pending. No remaining owned source-test processes.
+
+Existing21earned-match/11replay/39throw/36terminal/128geometry/12audio checks preserved; no unnecessary repeats. Corrected throw463/5.89824→blast503 remains HEADLESS, not current native acceptance. Audio-only full-match regression STILL NOT RUN due capacity. No new floor/silhouette/animation/movie, earned Story/OVA/LAN/device claim.
+
+Capacity options: prior20authorized installers already removed. No newly verified multi-GiB deletion candidate. Metadata-only standalone Downloads Blender4.0.2DMG252350524bytes and VirtualBox7WindowsEXE110628872bytes total362979396bytes /0.338GiB, insufficient and NOT freshly archived/authorized for removal. Personal yearbook/course archives excluded; no deletion/copy/private/external read. Owner normal app shutdown/restart may let OS reclaim swap; no promised amount, direct swap manipulation or new cleanup authorized.
+
+EXACT NEXT once owner capacity restoration allows passing fresh19GiBstart/18GiBafter512MiB forecast:
+`python3 tools/integration/run_match_completion_checks.py --output outputs/attack_earned_scene_audio_v4 --reuse-imported outputs/native_public_counterplay_female_v3/game-godot --script tests/integration/AttackEarnedMatch.gd`
+Then corrected native no-movie path requires separate1636MiB forecast/19.59765625GiB. Use NEWlabel and --native, inspect real visual KO/HUD/rematch/audio; no stills-as-movie claim. No private production until owner hardware change, representative read-load continuity and existing-art integrity. Current36originalexports =two IDs/body;22remainingIDs/body plus original acting/forms/shields/effects, seven earned routes/Convergence/OVA, genuine LAN BattleScene/controller/platform/device acceptance remain unfinished.
+
+Human art/paired-runtime/RC2/release gatesFALSE. No paid infrastructure, protected-art upload, merge, release/tag or deployment. Only local outputs untracked. Continue from this exact source; no repeated reconciliation/KO audit/art exports.
+
+---
+
 # 2026-10-25 — PartyLink owner/rematch correction; native still below capacity
 
 Recovered9a394168; exact saved checkpoint is `git rev-parse HEAD` on integration/v1-preserved-candidate-20261025, LOCAL ONLY. Only our two PartyLink source files, one new test, README and compact evidence/resume changed. Protected PR123/133 and all worktrees/saves/art retained.

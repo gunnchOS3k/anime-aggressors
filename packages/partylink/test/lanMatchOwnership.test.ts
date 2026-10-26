@@ -142,4 +142,41 @@ describe("LAN match ownership and rematch input lifetime", () => {
       assert.equal(host.session.submitInput(input, now).accepted, true);
     } finally { await host.close(); }
   });
+
+  it("disconnected participants cannot post gameplay until their authenticated reconnect", async () => {
+    const { host, players, owner } = await readyHost();
+    try {
+      assert.equal((await post(host, "/start", { ownerToken: owner.token })).body.ok, true);
+      const p = players[0];
+      const input = { participantId: p.id, token: p.token, seatIndex: p.seatIndex,
+        sequence: 1, tick: 1, semantic: { right: true }, clientMs: Date.now() };
+      assert.equal((await post(host, "/input", input)).body.accepted, true);
+      host.tick();
+      host.session.disconnect(p.id); // Actual transport-lifecycle API, not forced combat state.
+      const denied = await post(host, "/input", { ...input, sequence: 2, tick: 2 });
+      assert.equal(denied.body.accepted, false);
+      assert.equal(denied.body.reason, "player_disconnected");
+      assert.equal((await post(host, "/reconnect", { code: host.session.room.code, token: p.token })).body.ok, true);
+      assert.equal((await post(host, "/input", input)).body.reason, "stale_sequence");
+      assert.equal((await post(host, "/input", { ...input, sequence: 2, tick: 2 })).body.accepted, true);
+    } finally { await host.close(); }
+  });
+
+  it("disconnect retires only that participant's not-yet-consumed commands", async () => {
+    const { host, players, owner } = await readyHost();
+    try {
+      assert.equal((await post(host, "/start", { ownerToken: owner.token })).body.ok, true);
+      for (const p of players) {
+        assert.equal((await post(host, "/input", { participantId: p.id, token: p.token,
+          seatIndex: p.seatIndex, sequence: 1, tick: 1, semantic: { right: true }, clientMs: Date.now() })).body.accepted, true);
+      }
+      host.session.disconnect(players[0].id);
+      const frame = host.tick();
+      const inputs = (frame.world as { inputs: Array<{ seatIndex: number }> }).inputs;
+      assert.deepEqual(inputs.map((i) => i.seatIndex), [players[1].seatIndex]);
+      assert.equal(host.session.room.seats[players[0].seatIndex].state, "DISCONNECTED_RECONNECTABLE");
+      assert.equal((await post(host, "/reconnect", { code: host.session.room.code, token: players[0].token })).body.ok, true);
+      assert.equal((host.tick().world as { inputs: unknown[] }).inputs.length, 0);
+    } finally { await host.close(); }
+  });
 });

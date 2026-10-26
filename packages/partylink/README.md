@@ -15,6 +15,11 @@ sequence/rate windows; reconnecting within a round retains replay protection.
 The local display-host `startMatch()` API remains trusted and uses its own owner
 credential internally.
 
+After a transport disconnect, that participant's unconsumed commands are retired
+and new input is rejected until authenticated reconnect. Commands from other
+players and already-served frames remain intact; reconnect does not reset the
+participant's sequence history.
+
 Loopback session/input tests do not establish physical LAN or native Godot
 combat acceptance. `HostAuthoritativePartySim` currently advances movement and
 bookkeeping; it does not resolve the committed BattleScene combat rules.

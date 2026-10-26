@@ -297,6 +297,9 @@ export class PartyRoomSession {
     if (!p) return;
     p.connected = false;
     p.lastSeenMs = nowMs;
+    // Retire commands still waiting for a host tick; already-served frames and
+    // other participants' inputs keep their original authority.
+    this.pendingInputs = this.pendingInputs.filter((input) => input.participantId !== p.id);
     for (const seat of this.room.seats) {
       if (seat.participantId !== participantId) continue;
       if (seat.state === "CONNECTED" || seat.state === "READY" || seat.state === "JOINING") {
@@ -335,6 +338,9 @@ export class PartyRoomSession {
     }
     if (p.seatIndex !== input.seatIndex) {
       return { seatIndex: input.seatIndex, sequence: input.sequence, accepted: false, reason: "wrong_seat_input_rejected" };
+    }
+    if (!p.connected) {
+      return { seatIndex: input.seatIndex, sequence: input.sequence, accepted: false, reason: "player_disconnected" };
     }
 
     const key = p.id;
