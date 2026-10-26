@@ -1,18 +1,54 @@
-# 2026-10-26 — FINAL VERIFIED Story/combat + netplay source checkpoint
+# 2026-10-26 — Verified Story victory and netplay checkpoint
 
-Verified/pushedruntimeHEAD468195d9ede8c345f3d586206d24c781ea34310d onintegration/v1-preserved-candidate-20261025. Finaldeliverycommit onlyadds thisresume/README/compactCIreceipt; getactualdeliverySHAwithgitrev-parseHEAD. Trackedsourcecleanbeforethosedocupdates; onlyretainedoutputs untracked. Noownedengine/Blender/encoding/testprocessesremain; allauthorizedremotejobscomplete. PR123/133/protectedworktrees/ownerprofiles/privateartunchanged. No merge/publicart/deploy/release/paidoperation.
+Worktree: `/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025`  
+Branch: `integration/v1-preserved-candidate-20261025`  
+Verified runtime source: `468195d9ede8c345f3d586206d24c781ea34310d`  
+Delivery: a documentation-only descendant; run `git rev-parse HEAD` for its exact SHA. All runtime code is committed. Only preserved `outputs/` is untracked. No owned engine, Blender, encoder or test processes remain. Protected PRs #123/#133, worktrees, owner saves and private art remain unchanged.
 
-Finalrun40394671484SUCCESS at468195d9: TypeScript5.9.3 actualgame-core/rollback/netplaycompilesPASS;24compiledtestsPASS1.205s/57753600sampledRSS, compilerpeak379637760bytes. Node24.21.0, lockedcompilerintegritiesverifiedby npmci, sourcehashesunchanged. CanonicalKaia/Juno640frames/3–8framedelay/reordering/118duplicates:actualdamage6/4, rollback109/78, fullreplayhash3c137404 (sameasMacNode source run). Twoindependentprocessdefaultinitialhashesmatch; throwingsendcannotrepeatframe; all9×bothbodymetadata×bothseatsinitialfacingscanonicalidentitycorrect; explicitauthorizedcustomprofilepreserved. Compact docs/handoff/2026-10-26/NETPLAY_SESSION_ENGINE.json; raw outputs/netplay_ci_468195d9. Priorfailedbaselines/candidatewhiffs retained. NotactualLAN/humanclients/native/device/onlineacceptance.
+## Accepted results — do not repeat without affected changes
 
-Storyacceptedruntime8a2d561fbb7c10e18747cb6855a1fc82260e198a run40392194130 remains valid: NOgame-godotchangesafterit (gitdiff8a2d561fHEAD--game-godotEMPTY). ActualGodot4.7.1: earnedKaiafemale/JunoCPU3two-stockwin,66contacts,91/93moves; finalthrow5136 ->blastKO5160 (24frames), correctwinner/HUD/ResultsWIN, successdialogue3.933s retained45frames/publicSkip; signedprologueearned, nextrecruitJuno. Newprocessauthenticatesearnedprefix/body/checkpoint, fresh2stock0damage attempt, normalcombat andpauseReturn. Story39checks+restart29+all9ThrowOwnership39rowsPASS/zeroScriptErrors. Earlierrealdefeat/save/retry evidence retained. No fabricatedchapter/fullcampaignclaim; owner13-nodeprofileuntouched. CompactSTORY_ENCOUNTER_ENGINE.json and rawoutputs/story_getup_8a2d561f.
+- **Story:** run `40392194130`, Godot 4.7.1, runtime `8a2d561fbb7c10e18747cb6855a1fc82260e198a`. Story 39 checks, separate-process restart 29 checks, and nine-fighter throw ownership 39 rows passed; zero script errors. There have been **no `game-godot` changes since this source**.
+- Kaia female defeated normal Juno CPU3 in the authored two-stock encounter: 66 contacts and 91/93 move starts. Final back throw contacted at frame 5136; Juno lost the last stock at 5160, 24 frames later. No damage, position, stocks, winner or progression were injected.
+- The 3.933-second success dialogue remained owned and visible after 45 frames; public F6 Skip then allowed Results. Signed progress earned the prologue and resumed at `kaia-windrow:recruit:juno-spark`. A new process authenticated the receipt/body/checkpoint, started fresh two-stock/zero-damage combat, and returned through the real pause UI. Earlier legitimate loss/save/retry evidence remains preserved. This is one earned chapter in an isolated CI profile, not full campaign acceptance or a modification of the owner's existing profile.
+- **Netplay software:** run `40394671484` at `468195d9`. TypeScript 5.9.3 compiled game-core, rollback and netplay; all 24 compiled tests passed. Node 24.21.0: test command 1.205 seconds / 57,753,600 bytes sampled RSS; compiler peak 379,637,760 bytes. Actual 640-frame canonical Kaia/Juno combat with 3–8-frame delay, reordering and 118 duplicate packets matched authoritative replay: damage 6/4, rollback counts 109/78, hash `3c137404`. Source and compiled runs match.
+- Independent process defaults now hash identically. Send failure cannot repeat an already simulated frame. Canonical selection preserves all nine identities, both body metadata values and both initial facings/seats; explicit custom profiles retain precedence. These are software checks, **not Godot LAN, native art, audio or device acceptance**.
 
-NEXT EXECUTABLE IMPLEMENTATION: realGodottwo-processLANremoteinput -> EXISTINGhostBattleSceneseam. Inspectgame-godot/scripts/menus/online_private_scene.gd (currentlybothpeerssameprocess/noBattleScenenavigation),scripts/net/network_sim.gd (explicitnosockets),scripts/net/rollback_session_gd.gd (checksumsonly/noactualcombatreplay),andfighter.gdinputreaders(~2126). AddactualENetconnection +boundguestslotprovider beforefighterphysics/actions; do NOTinjectdamage/moves/results oruseanAIguestasacceptance. ExistingReplayActualBattle.gd isreal-scene/public-inputobserverpattern. TestTWOrealGodotprocessesonpublicUbuntu, guestmovement/attack/shield/grab ->legitimatehostcontact/damage; whiff/slotspoof/latepacket/disconnectretirement. IDs0/1 mapfighter slots1/2explicitly. Gueststatepresentation/replication, authenticatedinvites/reconnect/resync andcomprehensiveactualcombatrollbackare mandatoryfurtherintegration, notcompletedbyfirsthostinputpath. BattleSim.pausedaloneisNOTaphysicsbarrier. KeepCursorBeatLinkrepositoryuntouched; CodexownsAnime.
+Compact receipts: `docs/handoff/2026-10-26/STORY_ENCOUNTER_ENGINE.json` and `NETPLAY_SESSION_ENGINE.json`. Raw logs/results: `outputs/story_getup_8a2d561f/`, `outputs/netplay_ci_468195d9/`. Failed baselines and driver whiffs remain under `outputs/netplay_source_20261026/` and earlier Story folders. No merge, release, deployment, private-art publication or paid execution occurred.
 
-Otherknownrollbackwork: TSprojectile/clashIDsarestillmoduleglobaloutsideGameState; webCombatEventAdapterdedupusesrenderframeandcanrepeatlastHitEventduringhitstop. Audio/visual/achievements/Story/save/resultsideeffectsneedconfirmed-eventownership duringresim; do NOTclaimfullrollbackfromnewmeleetests. WebSocketconnectstillthrowsstub.
+## Exact next implementation
 
-NoheavyMac/private-artreads/newUSBqualification/cleanup/newartproduced. LastindependentlightNodecheckinternalfree17694720000bytes=16.479GiB/memoryfree31%; source14testbatch1.833s/129187840RSS. Local19GiBstart/18GiBrunning and19.598GiBno-moviefullforecastunchanged/unmet; do NOTrepeatknown-failingpreflightoraskownertostopCursor. Nativefullmatchaudio/visualneedsqualifiedwindow. Privateoriginalart needschangedstoragepath READ-LOAD qualificationwithNOnewUSBfaults +hash/resourceguards, thenexistingverify-only/nativebinding; neverrebake18sources/36strikeexportsforloaderfailure. Complete18body×24moveoriginalacting/effects/forms,7earnedStoryroutes+Convergence+OVAs, genuineLAN/online/rollback/controllers/Android/Windows/deviceacceptance stillrequired. Allhumanart/gameplay/mix/paired-runtime/RC2/V1releasegatesFALSE.
+Implement a real two-process Godot LAN remote-input path into the existing host BattleScene. Inspect:
 
-EXACT RESUME COMMANDS (lightweight): gitstatus--short; gitrev-parseHEAD; readthisentry+docs/handoff/2026-10-26/{STORY_ENCOUNTER_ENGINE,NETPLAY_SESSION_ENGINE}.json; inspectaboveGodotnetwork/inputsource. No rerunacceptedunchangedsuites, Gitreconciliation, artworkexports orstoragequalification. Currentfinaldeliverysourcehashesidenticaltocompiler-verified468195d9; onlydocumentationnew.
+- `game-godot/scripts/menus/online_private_scene.gd`: currently creates both peers in one process and never opens BattleScene.
+- `game-godot/scripts/net/network_sim.gd`: explicitly has no sockets.
+- `game-godot/scripts/net/rollback_session_gd.gd`: input checksums only, without combat snapshots/restoration/resimulation.
+- `game-godot/scripts/fighters/fighter.gd`: input readers around line 2126.
+- `game-godot/tests/integration/ReplayActualBattle.gd`: useful actual-scene/public-input observation pattern.
+
+Add actual ENet connection and one bound guest-slot input provider before fighter physics/actions. Preserve existing host collision, damage, throws, stocks and results. Do not inject moves/outcomes or substitute an AI guest. Test two real Godot processes on the approved public Ubuntu runner: remote movement/attack/shield/grab, real contact versus whiff, slot spoof rejection, disconnect/late-input retirement. Session IDs 0/1 must map explicitly to fighter slots 1/2. `BattleSim.paused` alone does not stop CharacterBody physics.
+
+Guest state replication/presentation, authenticated invites, reconnect/resync and comprehensive actual-combat rollback remain mandatory further work. The TS and Godot simulators have different combat authority; the new TS session cannot simply replace Godot simulation. Do not modify Cursor's BeatLink repository.
+
+Other known rollback gaps: TS projectile/clash IDs use module-global counters outside snapshots; `apps/web/src/combat/CombatEventAdapter.ts` deduplicates render frames and can repeat a retained hit event during hitstop. Audio, VFX, achievements, Story, saves and results need authoritative replay-safe event ownership. WebSocket connect remains a stub.
+
+## Resource and acceptance boundaries
+
+No heavy Mac execution, private-art reads, new USB qualification, cleanup or new artwork occurred. Last independent lightweight test measurement: internal free **16.479 GiB**, memory free 31%; the 14-test source batch used 1.833 seconds / 129,187,840 bytes peak child RSS. The 19 GiB start / 18 GiB running guards and 19.598 GiB no-movie forecast are unchanged and unmet. Do not rerun the known-failing native preflight or ask the owner to stop Cursor.
+
+Native full-match audio/visual review needs a qualified execution window. Private original art needs a changed storage path, representative read-load qualification with no new USB faults, hash verification and full resource guards before existing verify-only/native binding. Do not rebake the preserved 18 sources/36 strike exports for a loader failure.
+
+Full 18-body × 24-move acting/effects/forms, seven earned campaigns, Convergence/OVAs, genuine LAN/online/rollback, controllers, Android/Windows and device acceptance remain unfinished. All human, paired-runtime, RC2 and release gates remain false.
+
+Resume with these lightweight commands in the worktree:
+
+```sh
+git status --short
+git rev-parse HEAD
+sed -n '1,180p' ANI03_RESUME_STATE.md
+sed -n '1,220p' game-godot/scripts/menus/online_private_scene.gd
+```
+
+Continue the next real gameplay seam; do not restart Git reconciliation, accepted suites, artwork export or storage qualification.
 
 ---
 

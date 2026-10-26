@@ -21,7 +21,7 @@ existing combat rollback engine, current/future inputs wait for their frame.
 `pumpRemoteInputs()` reconciles packets without advancing combat or sending a
 new input; use it while waiting and when draining the end of a test/session.
 
-The restore/future window is120frames. Identical duplicates are idempotent;
+The restore/future window is 120 frames. Identical duplicates are idempotent;
 conflicting confirmations, invalid seats/frames and missing history fail
 explicitly. Transport errors propagate after retiring an already simulated
 frame. Reconnection, retransmission and state resynchronization remain required.
