@@ -5,6 +5,7 @@ signal _scene_settled
 var _status: Label
 var _body: Label
 var _route_picker: OptionButton
+var _presentation_picker: OptionButton
 var _replay_picker: OptionButton
 var _action: Button
 var _back_button: Button
@@ -52,6 +53,7 @@ func _build_ui() -> void:
 		_refresh())
 	host.add_child(_route_picker)
 	var presentation := OptionButton.new()
+	_presentation_picker = presentation
 	_chapter_controls.append(presentation)
 	presentation.add_item("Female presentation")
 	presentation.add_item("Male presentation")
@@ -118,6 +120,10 @@ func _button(row: Node, text: String, handler: Callable) -> Button:
 
 
 func _refresh() -> void:
+	# A failed settings write rolls progress back; Resume Save can also
+	# restore a different presentation. Show the authoritative saved value.
+	if _presentation_picker != null:
+		_presentation_picker.select(1 if CampaignRuntime.progress["presentation"] == "male" else 0)
 	for control in _chapter_controls:
 		if control != _back_button and control != _stop_scene:
 			control.disabled = _scene_pending

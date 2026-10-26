@@ -76,6 +76,9 @@ func load_progress() -> void:
 			if parsed is Dictionary:
 				saved = parsed
 	if saved.get("schema") == SCHEMA and saved.get("canon_decision") == campaign.get("canon_decision"):
+		# Only an authenticated, compatible restore retires an earlier write
+		# failure. Invalid/legacy envelopes keep their existing warning below.
+		last_error = ""
 		progress["presentation"] = "male" if saved.get("presentation") == "male" else "female"
 		var tokens := []
 		# Root first, then variations, then Convergence; recompute every derived unlock.
