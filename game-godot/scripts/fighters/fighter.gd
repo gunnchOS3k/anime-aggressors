@@ -2159,6 +2159,7 @@ func _read_jump_held() -> bool:
 	return Input.is_action_pressed("p%d_jump" % slot)
 
 func _input_edge(suffix: String) -> bool:
+	if remote_controls != null: return remote_controls.just_pressed(suffix)
 	# Rising edge on Input.is_action_pressed. Input.action_press() from scripts /
 	# CPU / touch mirrors only guarantees is_action_just_pressed for the issuing
 	# frame; if that frame's idle callback runs after CharacterBody physics,

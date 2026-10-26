@@ -3,12 +3,22 @@ extends RefCounted
 const BUTTONS := ["up", "down", "jump", "attack", "special", "shield", "grab", "dodge", "taunt"]
 var buttons: Dictionary = {}
 var horizontal := 0.0
+var _pressed: Dictionary = {}
 
 func clear() -> void:
 	buttons.clear()
+	_pressed.clear()
 	horizontal = 0.0
 
+func begin_frame() -> void:
+	_pressed.clear()
+
+func just_pressed(key: String) -> bool:
+	return bool(_pressed.get(key, false))
+
 func apply(packet: Dictionary) -> void:
+	for key in BUTTONS:
+		if bool(packet.buttons[key]) and not held(key): _pressed[key] = true
 	buttons = packet.buttons.duplicate()
 	horizontal = float(packet.axis)
 
@@ -20,6 +30,7 @@ func axis() -> float:
 
 func release(key: String) -> void:
 	buttons[key] = false
+	_pressed.erase(key)
 
 static func valid(packet: Dictionary) -> bool:
 	if packet.size() != 5 or not packet.has_all(["kind", "epoch", "seq", "axis", "buttons"]): return false

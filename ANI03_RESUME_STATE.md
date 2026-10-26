@@ -1,3 +1,11 @@
+# 2026-10-26 — LAN first real import failure preserved; parser + batched input correction
+
+Run40410086620 @4f785073 import FAIL: bytes_to_var() accepts one argument in official4.7.1; no two-process test ran. Exact raw failure outputs/lan_ci_4f785073/workflow.log. Corrected safe object-disabled bytes_to_var(bytes) (not bytes_to_var_with_objects).
+
+Read-only review found remote rising edges were consumed by repeated same-frame reads and lost if socket press/release arrived together. New remote control source latches actual received rising edges until next HOST physics boundary, non-consuming within that frame, matching ordinary Input.just_pressed semantics. Added real socket public press/release batch observation, not synthetic damage. No local engine/art/native work. All accepted historical evidence retained. NEXT normal push and dispatch ONLYlan_battle_runtime=true inexistingworkflow. Exactsource gitrev-parseHEAD. Actual LAN/engine acceptance stillPENDING; human/RC2/releaseFALSE.
+
+---
+
 # 2026-10-26 — Actual Godot LAN input bridge implementation; engine proof pending
 
 Worktree/branch unchanged: integration/v1-preserved-candidate-20261025. Parent source 8d0eac06993081ddad5a2370c358d54c4151fc06; exact implementation SHA is `git rev-parse HEAD` after this checkpoint. No worktree/source/save/art disposal.

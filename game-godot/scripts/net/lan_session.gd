@@ -89,6 +89,7 @@ func _send(id: int, data: Dictionary) -> void:
 
 func _physics_process(_delta: float) -> void:
 	if peer == null: return
+	remote.begin_frame()
 	peer.poll()
 	if role == "host":
 		pass # Peer membership comes from actual ENet connect/disconnect signals.
@@ -103,7 +104,7 @@ func _physics_process(_delta: float) -> void:
 		var bytes := peer.get_packet()
 		count += 1
 		if bytes.size() > MAX_PACKET: rejected_inputs += 1; continue
-		var message = bytes_to_var(bytes, false)
+		var message = bytes_to_var(bytes)
 		if typeof(message) != TYPE_DICTIONARY: rejected_inputs += 1; continue
 		_receive(sender, message)
 	if role == "guest":

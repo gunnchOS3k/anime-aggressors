@@ -12,6 +12,7 @@ var grab_events: Array = []
 var before_campaign := ""
 var whiff_damage := -1.0
 var spoof_sent := false
+var batch_sent := false
 
 func run() -> void:
 	await process_frame
@@ -69,6 +70,7 @@ func host_run() -> void:
 		await physics_frame
 	keys([])
 	check(whiff_damage == 0.0, "remote_whiff_did_not_apply_damage")
+	check(move_starts.any(func(row): return row.slot == 2 and int(row.frame) < 90), "socket_batched_public_press_release_survives_one_physics_frame")
 	check(move_starts.any(func(row): return row.slot == 2), "remote_public_input_started_real_move")
 	check(contacts.any(func(row): return row.attacker == "juno-spark" and float(row.damage) > 0), "remote_melee_real_confirmed_damage")
 	check(contacts.any(func(row): return row.defender == "juno-spark" and row.result in ["shield", "parry"]), "remote_guard_real_contact")
@@ -104,7 +106,14 @@ func guest_run() -> void:
 			var spoof = LanControls.local_packet(lan.epoch, 0)
 			spoof["slot"] = 1; spoof["damage"] = 999
 			lan._send(1, spoof); spoof_sent = true
-		if f < 90: keys(["attack"] if f % 32 < 3 else [])
+		if f < 90:
+			keys([])
+			if f >= 15 and not batch_sent:
+				keys(["attack"])
+				lan._send(1, LanControls.local_packet(lan.epoch, lan._sequence)); lan._sequence += 1
+				keys([])
+				lan._send(1, LanControls.local_packet(lan.epoch, lan._sequence)); lan._sequence += 1
+				batch_sent = true
 		elif f < 270:
 			var dx: float = float(a.position[0]) - float(b.position[0])
 			if absf(dx) > 54: keys(["right" if dx > 0 else "left"])
