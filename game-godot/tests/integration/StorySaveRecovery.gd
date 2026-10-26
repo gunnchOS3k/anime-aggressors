@@ -77,8 +77,13 @@ func run() -> void:
 		var resumed := false
 		for button in scene.find_children("*", "Button", true, false):
 			if button.text == "Resume Save":
+				var delivery := {"pressed": 0}
+				button.pressed.connect(func(): delivery.pressed += 1)
 				await click(button)
-				resumed = true
+				resumed = delivery.pressed == 1
+				saved_scope["resume_UI"] = {"button": str(button.get_global_rect()), "viewport": str(root.get_visible_rect()),
+					"pressed": delivery.pressed, "error": campaign.last_error, "body": campaign.progress.presentation,
+					"selected": presentation.selected, "disabled": button.disabled, "visible": button.is_visible_in_tree()}
 				break
 		check(resumed, "actual_Resume_Save_button_used")
 		check(campaign.current_node().id == node and campaign.progress.checkpoint == checkpoint, "Resume_Save_restores_signed_node_and_checkpoint")
