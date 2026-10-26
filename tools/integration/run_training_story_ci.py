@@ -69,7 +69,7 @@ def execute(command, log, deadline=120):
             "PASS": child.returncode == 0 and not stop and not errors}
 
 
-def run(output):
+def run(output, suite_set="training-story"):
     output.mkdir(parents=True, exist_ok=False)
     record = {"PASS": False, "scope": "Real headless Godot public-resource scene tests, not native visual/art/device/earned-route acceptance", "suites": {}}
     try:
@@ -92,16 +92,22 @@ def run(output):
         imported = execute(base+["--editor", "--import", "--quit"], output/"import.log", 180)
         record["import"] = imported
         if not imported["PASS"]: return record
-        for name, script, result in [
+        suites = [
             ("frame-step", "tests/integration/TrainingFrameStep.gd", "TRAINING_FRAME_STEP.json"),
             ("practice", "tests/integration/TrainingPractice.gd", "TRAINING_PRACTICE.json"),
             ("lifecycle", "tests/integration/TrainingLifecycle.gd", "TRAINING_LIFECYCLE.json"),
             ("story-scenes", "tests/v1_closure/StorySceneOwnership.gd", "story_scene_ownership.json"),
             ("story-save-recovery", "tests/integration/StorySaveRecovery.gd", "STORY_SAVE_RECOVERY.json"),
-        ]:
-            profile(name)
+        ] if suite_set == "training-story" else [
+            ("story-play", "tests/integration/ResumedStoryEncounter.gd", "STORY_ENCOUNTER_PLAY.json"),
+            ("story-restart", "tests/integration/ResumedStoryEncounter.gd", "STORY_ENCOUNTER_RESTART.json"),
+        ]
+        record["suite_set"] = suite_set
+        for name, script, result in suites:
+            # A second REAL process reopens the first process's signed save.
+            profile("story-encounter" if suite_set == "story-encounter" else name)
             outcome = execute(base+["--fixed-fps", "60", "--script", "res://"+script,
-                                   "--", "--ordinary-output="+str(output)], output/(name+".log"))
+                                   "--", "--ordinary-output="+str(output), "--story-pass="+name], output/(name+".log"))
             path = output/result
             data = json.loads(path.read_text()) if path.exists() else {}
             outcome["result_present"] = path.exists()
@@ -112,7 +118,8 @@ def run(output):
             outcome["observations"] = data.get("samples", data.get("observations", []))
             if path.exists(): outcome["result_sha256"] = sha(path)
             record["suites"][name] = outcome
-        record["PASS"] = len(record["suites"]) == 5 and all(row["PASS"] for row in record["suites"].values())
+            if suite_set == "story-encounter" and not outcome["PASS"]: break
+        record["PASS"] = len(record["suites"]) == len(suites) and all(row["PASS"] for row in record["suites"].values())
     except Exception as error:
         record["error"] = str(error)
     finally:
@@ -124,5 +131,6 @@ def run(output):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--suite-set", choices=["training-story", "story-encounter"], default="training-story")
     args = parser.parse_args()
-    raise SystemExit(0 if run(args.output)["PASS"] else 1)
+    raise SystemExit(0 if run(args.output, args.suite_set)["PASS"] else 1)

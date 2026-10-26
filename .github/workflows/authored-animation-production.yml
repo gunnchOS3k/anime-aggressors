@@ -14,6 +14,11 @@ on:
         required: false
         default: false
         type: boolean
+      story_encounter_runtime:
+        description: "Public ordinary-input resumed Story battle and genuine process restart; no private art or export"
+        required: false
+        default: false
+        type: boolean
       grab_acting_8b:
         description: 'Save and verify original 8B actions on all 18 preserved rigs (remote only)'
         required: false
@@ -655,7 +660,7 @@ jobs:
           PY
 
   training-story-runtime:
-    if: github.event_name == 'workflow_dispatch' && inputs.training_story_runtime && github.event.repository.private == false
+    if: github.event_name == 'workflow_dispatch' && (inputs.training_story_runtime || inputs.story_encounter_runtime) && github.event.repository.private == false
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     permissions:
@@ -676,6 +681,11 @@ jobs:
           chmod +x "$RUNNER_TEMP/godot/Godot_v4.7.1-stable_linux.x86_64"
           echo "GODOT_BIN=$RUNNER_TEMP/godot/Godot_v4.7.1-stable_linux.x86_64" >> "$GITHUB_ENV"
       - name: Real headless training and narrative scene checks, isolated profiles
-        run: python3 tools/integration/run_training_story_ci.py --output "$RUNNER_TEMP/training-story"
+        env:
+          STORY_ENCOUNTER: ${{ inputs.story_encounter_runtime }}
+        run: |
+          suite=training-story
+          if [ "$STORY_ENCOUNTER" = true ]; then suite=story-encounter; fi
+          python3 tools/integration/run_training_story_ci.py --output "$RUNNER_TEMP/training-story" --suite-set "$suite"
       # Results are printed to the existing job log, not uploaded to artifact
       # storage. No new cache, paid storage or proprietary-art disclosure.
