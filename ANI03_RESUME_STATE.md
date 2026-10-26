@@ -1,3 +1,11 @@
+# 2026-10-26 — fix actual engine parse defect, then rerun focused acceptance
+
+Recovered source4f7ca889e00d1d2cdaf09900e70b3730b249c946 with clean tracked worktree. Run40263812350 reached official Godot4.7.1.stable.official.a13da4feb onUbuntu. Import exit0 was correctly REJECTED due SCRIPT ERROR Parse Error: can_attack_now not found. No Training/Story suite executed. Root source game-godot/scripts/fighters/fighter.gd dummy attack branch, line2265 before repair. No AAFighter can_attack_now exists. Corrected to the actual state_machine.can_attack() gate already used in _handle_actions (FighterStateMachine checks controls_enabled and locks_actions). Range90/chance0.03/public attack input preserved; no dummy permissive shim, balance/frame/damage change or parser suppression. Existing working sparse checkout retained, unrelated anyCreature unchanged.
+
+Next: push scoped repair and rerun same training_story_runtime manual workflow; inspect actual exact-SHA import and all four engine suites. CI diagnostics now retain parser location lines. Local19/18guards/noheavy/noCursorinterruption/private-read prohibition unchanged. All gatesFALSE; no acceptance claim before real suite PASS.
+
+---
+
 # 2026-10-25 — first engine CI checkout failure preserved; corrected narrow checkout
 
 Source153437084cc69d471964a675ac21f5e7eaa9ee10 pushed normally to existing integration candidate branch. Existing manual workflow run40263595410: infraPASS; focused job NEVER REACHED GODOT because actions/checkout persist-credentials:false cleanup runs git submodule foreach and fails on preserved third_party/anyCreature gitlink missing.gitmodules URL. No art job ran; all eight art jobs skipped. This is checkout failure, not engine acceptance/failure. Corrected job uses the same default checkout credential behavior as passing infra, sparse public game-godot +tools/integration only. Read-only token scope unchanged; no private source/artifact access or artifact upload. Do not repair/rewrite/remove the unrelated submodule.

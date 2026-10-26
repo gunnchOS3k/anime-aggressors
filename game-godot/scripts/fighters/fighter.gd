@@ -2262,7 +2262,7 @@ func _dummy_tick(delta: float) -> void:
 			if is_on_floor() and state_machine.can_move() and randf() < 0.02:
 				_dummy_press("jump")
 		"attack":
-			if absf(dx) < 90 and can_attack_now() and randf() < 0.03:
+			if absf(dx) < 90 and state_machine.can_attack() and randf() < 0.03:
 				_dummy_press("attack")
 		"di_in", "di_out":
 			# Prefer shield between hits; DI applied in hurt path via _dummy_apply_di.

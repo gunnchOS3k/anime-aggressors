@@ -61,7 +61,8 @@ def execute(command, log, deadline=120):
                 break
             time.sleep(.1)
     text = log.read_text(errors="replace")
-    errors = [line for line in text.splitlines() if "SCRIPT ERROR:" in line or "Parse Error" in line]
+    lines = text.splitlines()
+    errors = ["\n".join(lines[i:i+3]) for i, line in enumerate(lines) if "SCRIPT ERROR:" in line or "Parse Error" in line]
     return {"exit_code": child.returncode, "guard_stop": stop, "seconds": time.monotonic()-started,
             "sampled_peak_rss_bytes": peak, "script_errors": errors[:30], "log_sha256": sha(log),
             "PASS": child.returncode == 0 and not stop and not errors}
