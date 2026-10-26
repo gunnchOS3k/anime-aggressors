@@ -1,0 +1,116 @@
+"""Actual two-process localhost ENet/host BattleScene check, public CI only.
+
+No private assets, exports or uploads. Reuses the existing hosted runner's
+guards; never permits heavy local execution through this command.
+"""
+import json
+import os
+from pathlib import Path
+import re
+import socket
+import subprocess
+import time
+
+from run_training_story_ci import ROOT, execute, guard, sha
+
+
+def run():
+    guard()
+    output = Path(os.environ["RUNNER_TEMP"]) / "lan-battle"
+    output.mkdir(exist_ok=False)
+    record = {"PASS": False, "scope": "Actual two-process localhost ENet guest input into host BattleScene; not physical LAN, guest-rendered combat, rollback, art or human approval", "suites": {}}
+    processes = []
+    streams = []
+    try:
+        record["available_start_bytes"] = guard()
+        head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+        if head != os.environ["GITHUB_SHA"]: raise RuntimeError("Exact source SHA mismatch")
+        record["source_head"] = head
+        record["source_sha256"] = {str(p.relative_to(ROOT)): sha(p) for p in (ROOT / "game-godot/scripts").rglob("*.gd")}
+        godot = os.environ["GODOT_BIN"]
+        record["godot_version"] = subprocess.check_output([godot, "--version"], text=True).strip()
+        if not record["godot_version"].startswith("4.7.1.stable"): raise RuntimeError("Unexpected engine")
+        project = ROOT / "game-godot/project.godot"
+        config = re.sub(r'^config/(?:name|use_custom_user_dir|custom_user_dir_name)=.*\n', '', project.read_text(), flags=re.M)
+        project.write_text(config.replace('[application]', '[application]\nconfig/name="aa-native-ci-lan"\nconfig/use_custom_user_dir=true\nconfig/custom_user_dir_name="aa-native-ci-lan"', 1))
+        base = [godot, "--headless", "--path", str(ROOT / "game-godot"), "--audio-driver", "Dummy", "--rendering-method", "gl_compatibility"]
+        record["import"] = execute(base + ["--editor", "--import", "--quit"], output / "import.log", 180)
+        if not record["import"]["PASS"]: return record
+        # Reserve an unused loopback UDP port. No listening interface exposed
+        # outside this runner; ENet host binds explicitly to127.0.0.1.
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as candidate:
+            candidate.bind(("127.0.0.1", 0))
+            port = candidate.getsockname()[1]
+        record["port"] = port
+        started = time.monotonic()
+        peak = 0
+        for role in ["host", "guest"]:
+            guard()
+            if role == "guest":
+                deadline = time.monotonic() + 12
+                while not (output / "HOST_READY").exists():
+                    if processes[0].poll() is not None or time.monotonic() > deadline:
+                        raise RuntimeError("Host did not reach real ENet listen")
+                    time.sleep(.05)
+            stream = (output / (role + ".log")).open("x")
+            streams.append(stream)
+            environment = {**os.environ, "XDG_DATA_HOME": str(output / (role + "-profile"))}
+            command = base + ["--max-fps", "60", "--script", "res://tests/integration/LanActualBattle.gd", "--",
+                              "--ordinary-output=" + str(output), "--lan-role=" + role, "--lan-port=" + str(port)]
+            processes.append(subprocess.Popen(command, cwd=ROOT, env=environment, stdout=stream, stderr=subprocess.STDOUT))
+        while any(child.poll() is None for child in processes):
+            guard()
+            rss = 0
+            for child in processes:
+                path = Path(f"/proc/{child.pid}/status")
+                if path.exists():
+                    match = re.search(r"^VmRSS:\s+(\d+)", path.read_text(), re.M)
+                    if match: rss += int(match[1]) * 1024
+            peak = max(peak, rss)
+            if peak > 4 * 2**30: raise RuntimeError("Combined process memory guard")
+            if time.monotonic() - started > 60: raise RuntimeError("Bounded two-process timeout")
+            for role in ["host", "guest"]:
+                path = output / (role + ".log")
+                if path.stat().st_size > 8 * 2**20: raise RuntimeError("Log size guard")
+                if "SCRIPT ERROR:" in path.read_text(errors="replace"): raise RuntimeError("Actual engine script error")
+            time.sleep(.1)
+        record["seconds"] = time.monotonic() - started
+        record["combined_sampled_peak_rss_bytes"] = peak
+        for role, child in zip(["host", "guest"], processes):
+            path = output / ("LAN_" + role.upper() + ".json")
+            data = json.loads(path.read_text()) if path.exists() else {}
+            record["suites"][role] = {"PASS": child.returncode == 0 and data.get("PASS", False), "exit_code": child.returncode,
+                "checks": len(data.get("checks", [])), "failures": data.get("failures", ["Missing result"]), "result": data,
+                "result_sha256": sha(path) if path.exists() else None, "log_sha256": sha(output / (role + ".log"))}
+        if not all(s["PASS"] for s in record["suites"].values()): return record
+        # Changed shared input readers and scene lifecycle warrant these two
+        # existing affected regressions, not another full Story playthrough.
+        for name, script, filename in [
+            ("throw-ownership", "tests/v1_closure/ThrowOwnership.gd", "throw_ownership.json"),
+            ("training-lifecycle", "tests/integration/TrainingLifecycle.gd", "TRAINING_LIFECYCLE.json"),
+        ]:
+            outcome = execute(base + ["--fixed-fps", "60", "--script", "res://" + script, "--", "--ordinary-output=" + str(output)], output / (name + ".log"))
+            path = output / filename
+            data = json.loads(path.read_text()) if path.exists() else {}
+            outcome.update({"PASS": outcome["PASS"] and bool(data.get("PASS", False)), "failures": data.get("failures", []),
+                            "checks": len(data.get("checks", [])), "rows": len(data.get("rows", [])), "result": data})
+            record["suites"][name] = outcome
+        record["PASS"] = all(s["PASS"] for s in record["suites"].values())
+    except Exception as error:
+        record["error"] = str(error)
+    finally:
+        for child in processes:
+            if child.poll() is None:
+                child.terminate()
+                try: child.wait(5)
+                except subprocess.TimeoutExpired: child.kill(); child.wait()
+        for stream in streams: stream.close()
+        for path in output.glob("*.log"):
+            print("DIAGNOSTIC", path.name, path.read_text(errors="replace")[-14000:])
+        (output / "LAN_ENGINE_RESULT.json").write_text(json.dumps(record, indent=2) + "\n")
+        print(json.dumps(record, indent=2))
+    return record
+
+
+if __name__ == "__main__":
+    raise SystemExit(0 if run()["PASS"] else 1)

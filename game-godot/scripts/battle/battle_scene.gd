@@ -67,6 +67,7 @@ func _ready() -> void:
 		CampaignRuntime.bind_battle_scene(self, _story_attempt_token)
 	_build_stage()
 	_spawn_fighters()
+	LanSession.bind_battle(self)
 	_setup_hud_panels()
 	_apply_device_role()
 	_time_remaining = float(GameState.match_timer_seconds)
@@ -602,6 +603,10 @@ func _clear_pause_for_nav() -> void:
 func _on_pause_rematch() -> void:
 	if _match_finished: return
 	_clear_pause_for_nav()
+	if LanSession.role == "host":
+		LanSession.stop()
+		SceneRouter.go("online_private")
+		return
 	if GameState.mode == "story":
 		var replay_id := str(CampaignRuntime.active_encounter.get("node_id", "")) if CampaignRuntime.active_encounter.get("replay", false) else ""
 		CampaignRuntime.abandon_encounter()
@@ -628,6 +633,7 @@ func _finish_match(winner: int) -> void:
 	# queued objective callback cannot replace a result already committed here.
 	if _match_finished: return
 	_match_finished = true
+	if LanSession.role == "host": LanSession.retire_battle("Match complete; late inputs rejected")
 	if _hazard_runtime!=null:_hazard_runtime.clear_items()
 	_active = false
 	if _battle_sim != null: _battle_sim.set_paused(true)
@@ -764,6 +770,7 @@ func _tick_story_cosmic_encounter(delta: float) -> void:
 
 
 func _exit_tree() -> void:
+	LanSession.unbind_battle(self)
 	var dialogue = get_node_or_null("/root/StoryDialogue")
 	if dialogue != null and _story_dialogue_generation >= 0 and int(dialogue.get("_generation")) == _story_dialogue_generation and str(dialogue.get("context")) == "battle":
 		# Direct navigation must retire this battle's intro/voice/overlay, but

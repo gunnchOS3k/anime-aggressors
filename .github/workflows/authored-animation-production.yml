@@ -24,6 +24,11 @@ on:
         required: false
         default: false
         type: boolean
+      lan_battle_runtime:
+        description: "Two actual localhost Godot ENet processes and host BattleScene public-input check; no private art/export"
+        required: false
+        default: false
+        type: boolean
       netplay_session_runtime:
         description: "Compile and test public game-core/rollback/netplay software only; no Godot/art/export"
         required: false
@@ -670,7 +675,7 @@ jobs:
           PY
 
   training-story-runtime:
-    if: github.event_name == 'workflow_dispatch' && (inputs.training_story_runtime || inputs.story_encounter_runtime || inputs.story_controls_runtime || inputs.netplay_session_runtime) && github.event.repository.private == false
+    if: github.event_name == 'workflow_dispatch' && (inputs.training_story_runtime || inputs.story_encounter_runtime || inputs.story_controls_runtime || inputs.netplay_session_runtime || inputs.lan_battle_runtime) && github.event.repository.private == false
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     permissions:
@@ -689,10 +694,11 @@ jobs:
           VERIFY_STORY: ${{ inputs.story_encounter_runtime }}
           VERIFY_CONTROLS: ${{ inputs.story_controls_runtime }}
           VERIFY_NETPLAY: ${{ inputs.netplay_session_runtime }}
+          VERIFY_LAN: ${{ inputs.lan_battle_runtime }}
         run: |
           python3 - <<'PY'
           import os, sys
-          selected = sum(os.environ.get(k) == "true" for k in ["VERIFY_TRAINING", "VERIFY_STORY", "VERIFY_CONTROLS", "VERIFY_NETPLAY"])
+          selected = sum(os.environ.get(k) == "true" for k in ["VERIFY_TRAINING", "VERIFY_STORY", "VERIFY_CONTROLS", "VERIFY_NETPLAY", "VERIFY_LAN"])
           if selected != 1: raise SystemExit("Select exactly one software verification mode; no silently skipped suites")
           sys.path.insert(0,"tools/integration")
           from run_training_story_ci import guard
@@ -708,7 +714,7 @@ jobs:
           chmod +x "$RUNNER_TEMP/godot/Godot_v4.7.1-stable_linux.x86_64"
           echo "GODOT_BIN=$RUNNER_TEMP/godot/Godot_v4.7.1-stable_linux.x86_64" >> "$GITHUB_ENV"
       - name: Real headless training and narrative scene checks, isolated profiles
-        if: ${{ !inputs.netplay_session_runtime }}
+        if: ${{ !inputs.netplay_session_runtime && !inputs.lan_battle_runtime }}
         env:
           STORY_ENCOUNTER: ${{ inputs.story_encounter_runtime }}
           STORY_CONTROLS: ${{ inputs.story_controls_runtime }}
@@ -717,6 +723,9 @@ jobs:
           if [ "$STORY_ENCOUNTER" = true ]; then suite=story-encounter; fi
           if [ "$STORY_CONTROLS" = true ]; then suite=story-controls; fi
           python3 tools/integration/run_training_story_ci.py --output "$RUNNER_TEMP/training-story" --suite-set "$suite"
+      - name: Actual two-process ENet host BattleScene and affected regressions
+        if: inputs.lan_battle_runtime
+        run: python3 tools/integration/run_lan_battle_ci.py
       - uses: actions/setup-node@v4
         if: inputs.netplay_session_runtime
         with:

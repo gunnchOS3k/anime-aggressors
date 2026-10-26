@@ -1,3 +1,20 @@
+# 2026-10-26 — Actual Godot LAN input bridge implementation; engine proof pending
+
+Worktree/branch unchanged: integration/v1-preserved-candidate-20261025. Parent source 8d0eac06993081ddad5a2370c358d54c4151fc06; exact implementation SHA is `git rev-parse HEAD` after this checkpoint. No worktree/source/save/art disposal.
+
+New source: ENet session with one peer-owned guest slot, per-fighter control source (movement, jump, attack/special, shield/Perfect Guard, dodge, grab/throw, aura chord, transform and taunt), existing host BattleScene collision/damage/stocks authority, bounded/strict packets and sequence/epoch validation, timeout/disconnect/scene/result retirement. Actual LAN menu host/join/start uses sockets; guest currently has a read-only identity/damage/shield/aura/status mirror, NOT a rendered BattleScene. Rematch returns to LAN lobby for reconnect rather than silently granting local control. No combat numbers, art, Story or saves changed.
+
+Prepared real TWO-PROCESS public-asset Godot fixture and existing Ubuntu workflow selection `lan_battle_runtime=true`: independent guest public controls, whiff/contact/guard/grab/throw, spoof rejection and disconnect neutrality, followed by affected existing throw/Training lifecycle regressions. Python AST and git diff checks pass; actual Godot parsing/runtime NOT YET VERIFIED. Preserve failed runs and fix actual errors. Do not claim native, physical LAN, rollback, art or human acceptance.
+
+NEXT COMMAND after normal commit/push:
+`gh workflow run authored-animation-production.yml --repo gunnchOS3k/anime-aggressors --ref integration/v1-preserved-candidate-20261025 -f lan_battle_runtime=true`
+
+No local Godot/Blender/media/private reads/resource qualification/cleanup; prior 16.479 GiB <19.598 native requirement, 19start/18running guards unchanged. Use only existing standard public Ubuntu software job (no uploads/cache/private/paid production). No owned local engine/capture process. Original protected PRs123/133, 43worktrees, source rigs and owner profiles preserved. Only outputs untracked. All human-art/paired-runtime/RC2/release gates FALSE.
+
+Full guest rendering, session authentication, reconnect/resync, real BattleScene snapshots/restoration/resimulation and replay-safe effects remain unfinished. Existing canonical aura0–4 (0/25/50/75/100), ascension75, PerfectGuard4/24 and per-character shield capacities/HUD retain existing authority. Separate Yin/Yang form domains retained. No new guard or meter resolver. Continue real networking, not a new canon inventory.
+
+---
+
 # 2026-10-26 — Verified Story victory and netplay checkpoint
 
 Worktree: `/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025`

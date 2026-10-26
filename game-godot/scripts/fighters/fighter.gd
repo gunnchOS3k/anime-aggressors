@@ -72,6 +72,13 @@ var shielding: bool = false
 var controls_enabled: bool = true
 var combat_closed: bool = false # Terminal match boundary, separate from pause/countdown.
 var _input_edge_held: Dictionary = {}
+# One optional remote control source; local/touch/CPU behavior remains unchanged.
+var remote_controls
+
+func _button_held(suffix: String) -> bool:
+	if remote_controls != null: return remote_controls.held(suffix)
+	return Input.is_action_pressed("p%d_%s" % [slot, suffix])
+
 var _training_dummy_owned_actions: Dictionary = {}
 var use_training_physics_clock := false
 var _training_timeouts: Array = []
@@ -950,6 +957,7 @@ func _resolve_special_command() -> String:
 	return "special_neutral"
 
 func is_aura_input_held() -> bool:
+	if remote_controls != null: return _button_held("special") and _button_held("shield")
 	if not InputMap.has_action("p%d_special" % slot) or not InputMap.has_action("p%d_shield" % slot):
 		return false # Cinematic/story actors can exist beyond the two human input channels.
 	var tim = get_node_or_null("/root/TouchInputManager")
@@ -1520,8 +1528,7 @@ func tick_grab_hold(_delta: float) -> void:
 		state_machine.enter(_FighterStates.IDLE)
 		return
 	_throw_direction = _ThrowResolver.read_throw_direction(self)
-	var attack_action := "p%d_attack" % slot
-	var attack_now := Input.is_action_pressed(attack_action)
+	var attack_now := _button_held("attack")
 	if not attack_now:
 		_input_edge_held["attack"] = false
 		_grab_throw_latch = false
@@ -2124,6 +2131,7 @@ func _setup_shapes() -> void:
 		body.position = -col_sz / 2.0
 
 func _read_axis() -> float:
+	if remote_controls != null: return remote_controls.axis()
 	var touch = TouchInputManager.get_axis(slot)
 	# Prefer live touch stick when the overlay/harness is active — TIM also
 	# mirrors axis into Input actions, and a digital full-press would otherwise
@@ -2136,6 +2144,7 @@ func _read_axis() -> float:
 	return kb
 
 func _read_jump_pressed() -> bool:
+	if remote_controls != null: return _input_edge("jump")
 	if TouchInputManager.consume_touch_just_pressed(slot, "jump"):
 		return true
 	if Input.is_action_just_pressed("p%d_jump" % slot):
@@ -2144,6 +2153,7 @@ func _read_jump_pressed() -> bool:
 	return _input_edge("jump")
 
 func _read_jump_held() -> bool:
+	if remote_controls != null: return _button_held("jump")
 	if TouchInputManager.is_touch_pressed(slot, "jump"):
 		return true
 	return Input.is_action_pressed("p%d_jump" % slot)
@@ -2154,14 +2164,14 @@ func _input_edge(suffix: String) -> bool:
 	# frame; if that frame's idle callback runs after CharacterBody physics,
 	# attacks/grabs silently drop. Edge-on-pressed matches real digital-button
 	# semantics and keeps synthetic presses reliable.
-	var action := "p%d_%s" % [slot, suffix]
-	var held := Input.is_action_pressed(action)
+	var held := _button_held(suffix)
 	var was := bool(_input_edge_held.get(suffix, false))
 	_input_edge_held[suffix] = held
 	return held and not was
 
 
 func _read_attack_pressed() -> bool:
+	if remote_controls != null: return _input_edge("attack")
 	if TouchInputManager.consume_touch_just_pressed(slot, "attack"):
 		return true
 	if Input.is_action_just_pressed("p%d_attack" % slot):
@@ -2180,6 +2190,7 @@ func _read_transform_input() -> bool:
 
 
 func _read_special_pressed() -> bool:
+	if remote_controls != null: return _input_edge("special")
 	if TouchInputManager.consume_touch_just_pressed(slot, "special"):
 		return true
 	if Input.is_action_just_pressed("p%d_special" % slot):
@@ -2188,11 +2199,13 @@ func _read_special_pressed() -> bool:
 	return _input_edge("special")
 
 func _read_shield() -> bool:
+	if remote_controls != null: return _button_held("shield")
 	if TouchInputManager.is_touch_pressed(slot, "shield"):
 		return true
 	return Input.is_action_pressed("p%d_shield" % slot)
 
 func _read_dodge_pressed() -> bool:
+	if remote_controls != null: return _input_edge("dodge")
 	if TouchInputManager.consume_touch_just_pressed(slot, "dodge"):
 		return true
 	if Input.is_action_just_pressed("p%d_dodge" % slot):
@@ -2201,6 +2214,7 @@ func _read_dodge_pressed() -> bool:
 	return _input_edge("dodge")
 
 func _read_grab_pressed() -> bool:
+	if remote_controls != null: return _input_edge("grab")
 	if TouchInputManager.consume_touch_just_pressed(slot, "grab"):
 		return true
 	if Input.is_action_just_pressed("p%d_grab" % slot):
@@ -2209,19 +2223,25 @@ func _read_grab_pressed() -> bool:
 	return _input_edge("grab")
 
 func _read_up() -> bool:
+	if remote_controls != null: return _button_held("up")
 	if TouchInputManager.get_vertical(slot) < -0.22:
 		return true
 	return Input.is_action_pressed("p%d_up" % slot)
 
 func _read_down() -> bool:
+	if remote_controls != null: return _button_held("down")
 	if TouchInputManager.get_vertical(slot) > 0.22:
 		return true
 	return Input.is_action_pressed("p%d_down" % slot)
 
 func _read_aura_burst() -> bool:
+	if remote_controls != null: return aura >= 100.0 and _input_edge("attack")
 	return Input.is_action_just_pressed("p%d_attack" % slot) and aura >= 100.0
 
 func _release_action(action: String) -> void:
+	if remote_controls != null:
+		remote_controls.release(action.trim_prefix("p%d_" % slot))
+		return
 	Input.action_release(action)
 
 func _dummy_apply_di() -> void:

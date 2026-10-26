@@ -191,6 +191,10 @@ func _play_results_celebration() -> void:
 
 
 func _on_rematch_pressed() -> void:
+	if LanSession.role == "host":
+		LanSession.stop()
+		SceneRouter.go("online_private")
+		return
 	if GameState.mode == "story":
 		if GameState.last_winner_slot != 1:
 			var replay_id := str(CampaignRuntime.last_result.get("node_id", "")) if bool(CampaignRuntime.last_result.get("replay", false)) else ""

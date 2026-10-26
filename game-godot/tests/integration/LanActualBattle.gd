@@ -1,0 +1,142 @@
+extends "res://tests/integration/OrdinaryMatchCompletion.gd"
+## Two real processes; public Input actions reach host's existing Fighter.
+## No direct move, damage, position, stock, winner or progression injection.
+const LanControls = preload("res://scripts/net/lan_controls.gd")
+var lan
+var side := ""
+var port := 27834
+var guest_samples: Array = []
+var move_starts: Array = []
+var guard_events: Array = []
+var grab_events: Array = []
+var before_campaign := ""
+var whiff_damage := -1.0
+var spoof_sent := false
+
+func run() -> void:
+	await process_frame
+	for arg in OS.get_cmdline_user_args():
+		if arg.begins_with("--ordinary-output="): output = arg.trim_prefix("--ordinary-output=")
+		if arg.begins_with("--lan-role="): side = arg.trim_prefix("--lan-role=")
+		if arg.begins_with("--lan-port="): port = int(arg.trim_prefix("--lan-port="))
+	if output.is_empty() or side not in ["host", "guest"] or not OS.get_user_data_dir().get_file().begins_with("aa-native-"):
+		push_error("Explicit LAN role/output and isolated profile required"); quit(2); return
+	lan = root.get_node("LanSession")
+	before_campaign = JSON.stringify(root.get_node("CampaignRuntime").progress)
+	if side == "host": await host_run()
+	else: await guest_run()
+	finish()
+
+func host_run() -> void:
+	var gs = root.get_node("GameState")
+	# Legal pre-match selections, never in-match modifications.
+	gs.p1_fighter_id = "kaia-windrow"; gs.p2_fighter_id = "juno-spark"
+	gs.p1_body_variant = "female"; gs.p2_body_variant = "male"
+	gs.stage_id = "training-grid"; gs.stocks = 3; gs.match_timer_seconds = 180
+	gs.match_type = "stock"; gs.ruleset_id = "stock-3"
+	check(lan.host(port, "127.0.0.1") == OK, "real_ENet_server_listen")
+	var ready = FileAccess.open(output.path_join("HOST_READY"), FileAccess.WRITE)
+	ready.store_string(str(OS.get_process_id())); ready.close()
+	for i in range(600):
+		await physics_frame
+		if lan.guest_id != 0: break
+	check(lan.guest_id > 1, "independent_guest_peer_connected")
+	if lan.guest_id == 0: return
+	check(lan.start_match(), "host_starts_existing_BattleScene")
+	for i in range(420):
+		await physics_frame
+		if active_battle(): break
+	check(active_battle(), "real_BattleScene_countdown_and_combat")
+	if not active_battle(): return
+	battle = current_scene
+	check(not battle.fighter1.is_cpu and not battle.fighter2.is_cpu, "two_player_no_CPU_substitution")
+	check(battle.fighter2.remote_controls == lan.remote and battle.fighter1.remote_controls == null, "only_guest_slot_bound")
+	for actor in [battle.fighter1, battle.fighter2]:
+		actor.hit_resolver.hit_confirmed.connect(record_contact)
+		actor.move_runner.move_started.connect(func(id): move_starts.append({"slot":actor.slot,"move":id,"frame":lan.combat_frames}))
+		actor.shield_event.connect(func(info): guard_events.append({"slot":actor.slot,"info":info,"frame":lan.combat_frames}))
+		actor.grab_event.connect(func(info): grab_events.append({"slot":actor.slot,"info":info,"frame":lan.combat_frames}))
+	for i in range(900):
+		var f: int = lan.combat_frames
+		if f == 88 or f == 89: whiff_damage = battle.fighter1.damage_percent
+		# Shield practice: only host's ordinary keys attack the guest.
+		if f >= 270 and f < 420:
+			var dx: float = battle.fighter2.position.x - battle.fighter1.position.x
+			if absf(dx) > 54: keys(["right" if dx > 0 else "left"])
+			else: keys(["attack"] if f % 32 < 2 else [])
+		else: keys([])
+		if f >= 680: break
+		await physics_frame
+	keys([])
+	check(whiff_damage == 0.0, "remote_whiff_did_not_apply_damage")
+	check(move_starts.any(func(row): return row.slot == 2), "remote_public_input_started_real_move")
+	check(contacts.any(func(row): return row.attacker == "juno-spark" and float(row.damage) > 0), "remote_melee_real_confirmed_damage")
+	check(contacts.any(func(row): return row.defender == "juno-spark" and row.result in ["shield", "parry"]), "remote_guard_real_contact")
+	check(grab_events.any(func(row): return row.slot == 2 and row.info.get("result", "") == "success"), "remote_genuine_grab_acquired")
+	check(contacts.any(func(row): return row.attacker == "juno-spark" and row.move.begins_with("throw_")), "remote_public_attack_released_real_throw")
+	check(lan.rejected_inputs > 0, "spoofed_host_slot_packet_rejected")
+	check(battle.fighter1.remote_controls == null, "guest_never_owned_host_slot")
+	# Guest disconnects while right is held. Real ENet teardown must neutralize it.
+	for i in range(180):
+		await physics_frame
+		if lan.guest_id == 0: break
+	check(lan.guest_id == 0 and lan.remote.axis() == 0.0 and lan.remote.buttons.is_empty(), "disconnect_clears_held_remote_controls")
+	check(not battle._match_finished and gs.last_winner_slot == -1, "disconnect_does_not_invent_match_result")
+	var rejected: int = lan.rejected_inputs
+	lan._receive(999, {"kind":"input", "epoch":lan.epoch, "seq":2147483600, "axis":1.0, "buttons":{}})
+	check(lan.rejected_inputs == rejected + 1 and lan.remote.axis() == 0.0, "retired_session_rejects_late_input")
+	check(before_campaign == JSON.stringify(root.get_node("CampaignRuntime").progress), "Story_save_ownership_unchanged")
+	root.get_node("SceneRouter").go("main_menu")
+	await frames(5)
+	check(lan._battle == null and lan._closed, "scene_exit_retires_bound_battle")
+
+func guest_run() -> void:
+	check(lan.join("127.0.0.1", port) == OK, "independent_ENet_client_connect")
+	for i in range(1500):
+		await physics_frame
+		if lan.latest.is_empty(): continue
+		var state: Dictionary = lan.latest
+		if not state.get("active", false): keys([]); continue
+		var f: int = int(state.combat_frame)
+		var a: Dictionary = state.actors[0]
+		var b: Dictionary = state.actors[1]
+		if not spoof_sent:
+			var spoof = LanControls.local_packet(lan.epoch, 0)
+			spoof["slot"] = 1; spoof["damage"] = 999
+			lan._send(1, spoof); spoof_sent = true
+		if f < 90: keys(["attack"] if f % 32 < 3 else [])
+		elif f < 270:
+			var dx: float = float(a.position[0]) - float(b.position[0])
+			if absf(dx) > 54: keys(["right" if dx > 0 else "left"])
+			else: keys(["attack"] if f % 32 < 3 else [])
+		elif f < 420: keys(["shield"])
+		elif f < 660:
+			var dx: float = float(a.position[0]) - float(b.position[0])
+			if b.state == "grab_hold": keys(["attack", "down"] if f % 12 < 5 else [])
+			elif absf(dx) > 48: keys(["right" if dx > 0 else "left"])
+			else: keys(["grab"] if f % 35 < 4 else [])
+		else:
+			keys(["right"])
+			if f >= 690:
+				await frames(5)
+				lan.stop()
+				break
+		if f % 30 < 3: guest_samples.append(state.duplicate(true))
+	keys([])
+	check(spoof_sent, "spoof_probe_sent_over_actual_socket")
+	check(not guest_samples.is_empty(), "authoritative_state_mirror_received")
+	check(guest_samples.any(func(s): return s.actors[0].fighter == "kaia-windrow" and s.actors[1].fighter == "juno-spark" and s.actors[0].body == "female" and s.actors[1].body == "male"), "exact_fighter_body_identity_mirrored")
+	check(guest_samples.any(func(s): return float(s.actors[0].damage) > 0), "real_host_damage_observed_by_guest")
+
+func finish() -> void:
+	keys([])
+	var result = {"PASS":failures.is_empty(), "role":side, "pid":OS.get_process_id(), "checks":checks, "failures":failures,
+		"contacts":contacts, "move_starts":move_starts, "guards":guard_events, "grabs":grab_events, "guest_samples":guest_samples,
+		"received_inputs":lan.received_inputs if lan != null else 0, "rejected_inputs":lan.rejected_inputs if lan != null else 0,
+		"scope":"Two actual localhost ENet Godot processes, guest public input into authoritative host BattleScene; not guest-rendered combat, physical LAN, rollback, original art or human acceptance",
+		"HUMAN_ART_APPROVED":false,"RC2_READY":false,"V1_0_0_RELEASE_AUTHORIZED":false}
+	var file = FileAccess.open(output.path_join("LAN_" + side.to_upper() + ".json"), FileAccess.WRITE)
+	file.store_string(JSON.stringify(result, "  ")); file.close()
+	if lan != null: lan.stop()
+	print("LAN_ACTUAL_BATTLE ",side," ","PASS" if failures.is_empty() else "FAIL"," checks=",checks.size()," failures=",failures)
+	quit(0 if failures.is_empty() else 1)
