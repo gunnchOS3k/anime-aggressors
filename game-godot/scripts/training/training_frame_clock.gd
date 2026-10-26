@@ -31,6 +31,12 @@ func cancel() -> void:
 	_restore_step_limit()
 
 func _physics_process(delta: float) -> void:
+	# Input can arrive after Main has already calculated this render frame's
+	# catch-up count. Close before a second actor tick even in that case; the
+	# first server step (and its next query flush) have already completed.
+	if stepping:
+		finish_frame()
+		return
 	if not pending: return
 	pending = false
 	stepping = true
@@ -45,6 +51,8 @@ func _physics_process(delta: float) -> void:
 func finish_frame() -> void:
 	if not stepping: return
 	stepping = false
+	if get_tree().process_frame.is_connected(finish_frame):
+		get_tree().process_frame.disconnect(finish_frame)
 	frames += 1
 	_restore_step_limit()
 	frame_finished.emit(_frame_delta)

@@ -403,6 +403,12 @@ func _request_physics_step() -> void:
 	_step_time_scale = Engine.time_scale
 	# One step is one 60Hz simulation frame, including from slow motion.
 	Engine.time_scale = 1.0
+	# PhysicsServer2D.flush_queries precedes SceneTree physics callbacks and
+	# skips delivery while paused. Open here, before that flush, so genuine
+	# Area2D contacts from the preceding server step can reach the resolver.
+	# The early clock still owns input/combat tick start, and closes after the
+	# server step before idle presentation. No manual overlap/damage dispatch.
+	get_tree().paused = false
 
 
 func _begin_physics_step() -> void:

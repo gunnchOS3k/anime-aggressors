@@ -8,6 +8,7 @@ func actor_snapshot(actor) -> Dictionary:
 		"velocity": [actor.velocity.x, actor.velocity.y], "floor": actor.is_on_floor(),
 		"state": actor.state_machine.current_state, "controls": actor.controls_enabled,
 		"damage": actor.damage_percent, "invincible": actor.invincible,
+		"facing": actor.facing,
 		"shielding": actor.shielding, "guard_clock": actor.perfect_guard.clock,
 		"move": actor.move_runner.current_move_id(), "move_frame": actor.move_runner.total_frame,
 		"phase": actor.move_runner.phase}
@@ -125,6 +126,12 @@ func run() -> void:
 	check(player.invincible and target.invincible, "paused_wall_time_cannot_expire_respawn")
 	for i in range(73): await step(training)
 	check(not player.invincible and not target.invincible, "active_physics_steps_expire_existing_respawn_duration")
+	# Respawn immunity ends above the platform; normal gravity/landing must
+	# finish before asking the existing grounded-only guard to activate.
+	for i in range(120):
+		if target.is_on_floor() and not preload("res://scripts/fighters/fighter_states.gd").locks_actions(target.state_machine.current_state): break
+		await step(training)
+	check(target.is_on_floor(), "practice_target_lands_before_ground_guard")
 	await action(2, "shield", true)
 	await step(training)
 	var guard_clock: int = target.perfect_guard.clock
@@ -136,6 +143,18 @@ func run() -> void:
 	await step(training)
 	check(target.perfect_guard.clock == guard_clock + 1, "guard_window_advances_exactly_one_simulation_frame")
 	await action(2, "shield", false)
+	# Retain an independently reproduced reset boundary: an earlier respawn
+	# callback must not end a newly requested practice reset or emit twice.
+	var completions := {"count": 0}
+	target.respawned.connect(func(): completions.count += 1)
+	training._reset_practice()
+	for i in range(36): await step(training)
+	training._reset_practice()
+	for i in range(37): await step(training)
+	check(target.invincible and target.state_machine.current_state == "respawn" and completions.count == 0, "earlier_reset_cannot_end_new_respawn")
+	for i in range(36): await step(training)
+	check(not target.invincible and completions.count == 1, "only_current_respawn_completes_once")
+	samples.append({"phase": "repeated_reset", "respawn_completions": completions.count, "target": actor_snapshot(target)})
 	samples.append({"steps": training._frame_clock.frames, "contacts": hits, "damage": applied,
 		"original_art": false, "active_CPU": false, "scope": "declared idle practice target"})
 	# Shared clock/body-selection compatibility across the complete public
