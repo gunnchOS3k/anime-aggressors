@@ -53,7 +53,7 @@ func tick(delta: float, opponent: Node2D) -> void:
 	var obs := observe(opponent)
 	_obs_cache = obs
 	# Recovery / edge danger always outranks aggression at every tier.
-	if obs.offstage or obs.edge_danger:
+	if obs.hanging or obs.offstage or obs.edge_danger:
 		_act_recovery(obs, delta)
 		return
 	_act(obs, delta)

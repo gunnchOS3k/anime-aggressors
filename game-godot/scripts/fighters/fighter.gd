@@ -1232,12 +1232,17 @@ func tick_ledge_hang(_delta: float) -> void:
 		_ledge_side
 	)
 	if _read_jump_pressed() or _read_up():
+		_ledge_regrab_cooldown = 0.4
 		velocity.y = -get_jump_strength() * 0.85
 		velocity.x = float(-_ledge_side) * get_air_speed() * 0.35
 		invincible = false
 		state_machine.enter(_FighterStates.JUMP)
 		return
 	if _read_attack_pressed() or _read_dodge_pressed() or (_ledge_side < 0 and _read_axis() > 0.4) or (_ledge_side > 0 and _read_axis() < -0.4):
+		# Getup starts inside the existing42px snap window. Use the same regrab
+		# lock as a ledge drop so its first falling tick can land on the stage
+		# instead of immediately undoing the completed getup.
+		_ledge_regrab_cooldown = 0.4
 		global_position.x += float(-_ledge_side) * 28.0
 		global_position.y = platform_surface_y - 8.0
 		state_machine.enter(_FighterStates.LEDGE_GETUP)
