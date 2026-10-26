@@ -71,11 +71,7 @@ func play_stage_music(stage_id: String) -> Dictionary:
 
 
 func stop_music() -> void:
-	var root := _Bank.ensure_bus_player(self)
-	if root == null:
-		_music_playing = false
-		return
-	for child in root.get_children():
+	for child in _Bank.active_players():
 		if child is AudioStreamPlayer and child.get_meta("audio_category", "sfx") == "music":
 			(child as AudioStreamPlayer).stop()
 			child.queue_free()
@@ -89,19 +85,15 @@ func on_pause() -> void:
 		"master_volume": float(GameState.master_volume),
 	}
 	# Soft-pause: stop playback nodes but retain logical state for resume.
-	var root := _Bank.ensure_bus_player(self)
-	if root != null:
-		for child in root.get_children():
-			if child is AudioStreamPlayer:
-				(child as AudioStreamPlayer).stream_paused = true
+	for child in _Bank.active_players():
+		if child is AudioStreamPlayer:
+			(child as AudioStreamPlayer).stream_paused = true
 
 
 func on_resume() -> void:
-	var root := _Bank.ensure_bus_player(self)
-	if root != null:
-		for child in root.get_children():
-			if child is AudioStreamPlayer:
-				(child as AudioStreamPlayer).stream_paused = false
+	for child in _Bank.active_players():
+		if child is AudioStreamPlayer:
+			(child as AudioStreamPlayer).stream_paused = false
 	# If pause cleared players, restore stage bed from snapshot without inventing new content.
 	if bool(_paused_snapshot.get("music_playing", false)) and not _music_playing:
 		play_stage_music(str(_paused_snapshot.get("last_music_stage", "training-grid")))

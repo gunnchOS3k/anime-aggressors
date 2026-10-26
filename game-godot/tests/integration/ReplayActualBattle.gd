@@ -82,7 +82,10 @@ func run() -> void:
 		if route_is("ResultsScene.tscn"):break
 	var expected=signature(source.contacts,source_epoch)
 	var actual=signature(contacts,epoch)
-	check(actual==expected,"identical_actual_contact_frames_moves_and_damage")
+	# The retained Godot JSON stores decimal floats, not their original binary
+	# representation. Compare the SAME serialized contract; retain exact binary
+	# equality separately. No arbitrary tolerance or contact/frame relaxation.
+	check(JSON.stringify(actual)==JSON.stringify(expected),"identical_persisted_contact_frames_moves_and_damage")
 	check(losses.size()==source.stock_losses.size() and not losses.is_empty(),"same_actual_stock_loss_count")
 	if not losses.is_empty():
 		check(int(losses[0].frame)-epoch==int(source.stock_losses[0].frame)-source_epoch,"identical_actual_KO_frame")
@@ -93,7 +96,10 @@ func run() -> void:
 	check(before_progress==JSON.stringify(campaign.progress),"Story_progress_preserved")
 	replay_result={"source_path":source_path,"source_sha256":FileAccess.get_sha256(source_path),
 		"stored_input_record":path,"stored_record_sha256":FileAccess.get_sha256(path),
-		"expected_contacts":expected,"actual_contacts":actual,"CPU_active":true,"source_epoch":source_epoch,"playback_epoch":epoch}
+		"expected_contacts":expected,"actual_contacts":actual,"CPU_active":true,"source_epoch":source_epoch,"playback_epoch":epoch,
+		"binary_float_exact_match":actual==expected,"comparison":"Exact Godot retained JSON serialization; no arbitrary numeric tolerance"}
+	if not actual.is_empty() and actual.size()==expected.size():
+		replay_result["damage_binary_deltas"]=range(actual.size()).map(func(i):return float(actual[i].damage)-float(expected[i].damage))
 	finish()
 
 func finish() -> void:

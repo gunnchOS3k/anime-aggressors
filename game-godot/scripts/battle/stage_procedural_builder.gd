@@ -52,6 +52,7 @@ const THEMES := {
 
 static func build(stage_root: Node2D, stage_data: Dictionary, reduce_motion: bool = false) -> Dictionary:
 	for c in stage_root.get_children():
+		if c is AudioStreamPlayer: c.stop()
 		c.queue_free()
 	var stage_id := str(stage_data.get("id", "skyline-arena"))
 	var theme: Dictionary = THEMES.get(stage_id, THEMES["skyline-arena"])
@@ -76,7 +77,9 @@ static func build(stage_root: Node2D, stage_data: Dictionary, reduce_motion: boo
 	var bed_path := str(audio_bed.get("path", _ProceduralAudio.stage_bed_path(stage_id)))
 	var bed_loaded := _ProceduralAudio.load_stream(bed_path) != null
 	if bed_loaded and stage_root.is_inside_tree():
-		_ProceduralAudio.play(bed_path, stage_root, -10.0)
+		# A stage bed ends with its stage. One-shot combat tails still use the
+		# shared bank; rematch cannot accumulate beds on the global audio root.
+		_ProceduralAudio.play(bed_path, stage_root, -10.0, true)
 	return {
 		"stage_id": stage_id,
 		"productionStatus": str(stage_data.get("productionStatus", "")),

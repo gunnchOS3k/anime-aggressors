@@ -6,6 +6,7 @@ class_name ProceduralAudioBank
 const SHARED_ROOT := "res://assets/audio/procedural/shared"
 const FIGHTER_ROOT := "res://assets/audio/procedural/fighters"
 const STAGE_ROOT := "res://assets/audio/procedural/stages"
+const PLAYERS_GROUP := "aa_procedural_audio_players"
 
 const SHARED_CATS: Array[String] = [
 	"hit", "move", "charge", "projectile", "defense", "ko",
@@ -68,11 +69,17 @@ static func stage_bed_path(stage_id: String) -> String:
 	return "%s/%s/bed.wav" % [STAGE_ROOT, stage_id]
 
 
-static func play(path: String, host: Node = null, volume_db: float = 0.0) -> Dictionary:
+static func active_players() -> Array:
+	var tree := Engine.get_main_loop() as SceneTree
+	if tree == null:return []
+	return tree.get_nodes_in_group(PLAYERS_GROUP).filter(func(p):return is_instance_valid(p) and not p.is_queued_for_deletion())
+
+
+static func play(path: String, host: Node = null, volume_db: float = 0.0, scene_owned: bool = false) -> Dictionary:
 	var stream := load_stream(path)
 	if stream == null:
 		return {"ok": false, "path": path, "error": "missing_stream"}
-	var root := ensure_bus_player(host)
+	var root := host if scene_owned else ensure_bus_player(host)
 	if root == null or not root.is_inside_tree():
 		return {"ok": true, "path": path, "playing": false, "loaded": true, "deferred": true}
 	var player := AudioStreamPlayer.new()
@@ -81,6 +88,7 @@ static func play(path: String, host: Node = null, volume_db: float = 0.0) -> Dic
 	if path.contains("/stages/"): volume_db += linear_to_db(maxf(.0001,float(root.get_tree().root.get_node("StoryDialogue").settings.music_volume)))
 	player.volume_db = volume_db
 	root.add_child(player)
+	player.add_to_group(PLAYERS_GROUP)
 	if not player.is_inside_tree():
 		player.queue_free()
 		return {"ok": true, "path": path, "playing": false, "loaded": true, "deferred": true}

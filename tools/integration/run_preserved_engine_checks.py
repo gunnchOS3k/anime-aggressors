@@ -31,7 +31,7 @@ def run(godot, output, suite="preserved"):
         raise ValueError("Preserve previous results: use a new output directory")
     # These tiny source probes do not meet the definition of heavy production.
     # Allow 64MiB total disk growth; retain the protected18GiB after that forecast.
-    allocation = (256 if suite == "recovery-geometry" else 64) * 2**20
+    allocation = (256 if suite != "preserved" else 64) * 2**20
     if shutil.disk_usage(ROOT).free < 18 * 2**30 + allocation:
         raise ValueError("Insufficient internal reserve for bounded source checks")
     output.mkdir(parents=True)
@@ -66,6 +66,14 @@ def run(godot, output, suite="preserved"):
             paths += [ROOT / "game-godot/data" / folder / (fid+".json") for folder in ("fighters", "moves")]
         tests = ["tests/integration/RecoveryGeometry.gd"]
         autoload = ""
+    elif suite == "stage-audio":
+        paths = [ROOT / "game-godot" / rel for rel in (
+            "scripts/audio/procedural_audio_bank.gd", "scripts/battle/stage_procedural_builder.gd",
+            "scripts/audio/AudioDirector.gd", "tests/integration/StageAudioOwnership.gd",
+            "tests/integration/AudioSettingsFixture.gd",
+            "assets/audio/procedural/stages/training-grid/bed.wav", "assets/audio/procedural/shared/hit.wav")]
+        tests = ["tests/integration/StageAudioOwnership.gd"]
+        autoload = '[autoload]\nGameState="*res://tests/integration/AudioSettingsFixture.gd"\n'
     for source in paths:
         rel = source.relative_to(ROOT / "game-godot")
         dest = project / rel
@@ -105,7 +113,7 @@ def run(godot, output, suite="preserved"):
                     rss = subprocess.run(["ps", "-o", "rss=", "-p", str(process.pid)], capture_output=True, text=True)
                     if rss.stdout.strip().isdigit():
                         peak = max(peak, int(rss.stdout.strip()) * 1024)
-                    if minimum < 18 * 2**30 or peak > (256 if suite=="recovery-geometry" else 400) * 2**20 or time.monotonic() - start > 45:
+                    if minimum < 18 * 2**30 or peak > (256 if suite!="preserved" else 400) * 2**20 or time.monotonic() - start > 45:
                         stopped = "resource_or_time_guard"
                         break
                     time.sleep(.1)
@@ -137,6 +145,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--godot", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--suite", choices=("preserved", "recovery-geometry"), default="preserved")
+    parser.add_argument("--suite", choices=("preserved", "recovery-geometry", "stage-audio"), default="preserved")
     args = parser.parse_args()
     raise SystemExit(0 if run(args.godot, args.output, args.suite) else 1)

@@ -1,3 +1,25 @@
+# 2026-10-25 — earned KO, actual-input replay and roster terminal ownership verified; stage audio repaired
+
+Branch `integration/v1-preserved-candidate-20261025`; exact saved checkpoint is `git rev-parse HEAD`. Runtime recovery/grab source `ffb9df6df5b4c1942dd7f8438fe8f7c581636c5c`; subsequent test checkpoint `f836b9a514cb6f467d4715dfcd0955104ef44938`. LOCAL ONLY. No protected PR/worktree/owner save/private-art reads, remote CI or storage qualification changed.
+
+Qualified ordinary-input BattleScene win preserved in `outputs/attack_earned_height_fixed_v3`: active Juno CPU3, valid Kaia grab462, backthrow contact463, 5.89824 damage, genuine bottom-blast stock loss503, 21 checks PASS. Existing damage/hitstop/frame values retained. Air recovery now returns after resolved stun; invalid vertical grab acquisition is rejected against actual authored box/hurt shape. Earlier air-lock and invalid-height wins remain EXCLUDED. Source/API recovery/geometry128 PASS. Grounded ThrowOwnership39 rows PASS (nine x four directions plus shield/armor/interruption); original invalid floating-target fixture failure retained. Not native/art approval.
+
+`outputs/actual_battle_replay_20261025_v2`: 11 PASS, ACTUAL BattleScene replay of stored public P1 inputs with active seeded CPU, same relative contact246 and KO286, winner/persisted career/Story agree. Existing ReplayStore/checksum used, no toy simulation/state injection. Exact retained Godot JSON serialization matches; binary damage round-trip delta -8.88e-16 recorded, no arbitrary tolerance. v1 strict binary-comparison failure preserved. Replay UI/network acceptance NOT claimed.
+
+`outputs/terminal_roster_verified_20261025`:36 PASS (nine x two bodies x two facings), actual public actors, declared terminal/respawn fixtures. Closed damage/contact/projectile/CPU ownership and pending respawn rejection verified; no native visual/body-art/earned-form claim. 25.0s,332.8MiB RSS, owner saves unchanged. No need rerun unchanged suites.
+
+New independently reproduced audio defect: stage bed was parented to the global audio root, surviving stage exit and layering on rematch. `outputs/stage_audio_ownership_baseline_20261025` FAIL5/8 retained. StageBuilder now owns its bed; Bank registers players so AudioDirector pause/resume/stop reaches scene-owned music while shared punch tails survive. `outputs/stage_audio_ownership_fixed_20261025`:12 PASS, actual retained WAV/StageBuilder/AudioDirector nodes, Dummy output and explicit volume-only autoload fixture. 0.770s,117.6MiB RSS, minimum18.849GiB. Five ObjectDB exit warnings remain; no blanket shutdown/acoustic acceptance claimed. Full BattleScene rerun after this audio-only change PENDING fresh19GiB start guard.
+
+Latest native preflight `outputs/attack_earned_delivery_20261025/NATIVE_PREFLIGHT.json` at20:27:53CDT:19.01190567GiB internal vs19.59765625GiB required, deficit628944896bytes;37% RAM free,8364MiB swap used. NO native process launched. Native no-movie is not recorded footage. Source-only probes have a separate256MiB budget above18GiB; full scene19start/18running+512MiB and native1636MiB forecasts unchanged. No cleanup/swap manipulation/private qualification performed.
+
+EXACT NEXT (only fresh passing full-scene preflight):
+`python3 tools/integration/run_match_completion_checks.py --output outputs/attack_earned_scene_audio_v4 --reuse-imported outputs/native_public_counterplay_female_v3/game-godot --script tests/integration/AttackEarnedMatch.gd`
+Then preserve compact source-bound earned-KO receipt/owner entry; fresh native no-movie only if19.59765625GiB forecast genuinely passes. Existing replay source-hash guard intentionally rejects recordings after runtime changes; use a newly earned input record for future replay, never bypass it. No repeated private reads until hardware change/read-load continuity/integrity. No media jobs left by completed probes.
+
+Full roster original art remains two move IDs per body (36 exports);22 other IDs/body plus acting/forms/shields/Story/OVA/LAN/device acceptance open. No new Blender/GLBs/private footage. HUMAN_ART_APPROVED=false; RUNTIME_PAIRED_CONTACT_VERIFIED=false; RC2_READY=false; V1_0_0_RELEASE_AUTHORIZED=false. No merge/push/publication/deployment/tag/release.
+
+---
+
 # 2026-10-25 — qualified attack-earned KO preserved; replay/native continuation next
 
 Runtime source `ffb9df6df5b4c1942dd7f8438fe8f7c581636c5c`. Core recovery/vertical-grab corrections committed; exact delivery checkpoint is git rev-parse HEAD. Only Codex-owned test/tool files staged in this continuation; no reset/reconciliation/private reads/art production/remote changes.
