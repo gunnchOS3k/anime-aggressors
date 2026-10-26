@@ -1,3 +1,13 @@
+# 2026-10-26 — inactive query flush identified; current engine rerun pending
+
+Checkpoint7b85db8d (exact git rev-parse HEAD), integration branch. Run40346284821 @d6e5872f: importPASS; Practice10PASS, Lifecycle24PASS, StorySceneOwnership8rowsPASS, StorySaveRecovery17PASS; no script errors. FrameStep451/453PASS, contact+freshguardFAIL. All18public-body loading/both-facing stepping rows PASS, not private-art/native/all-move approval. Exact logs and result outputs/training_story_ci_d6e5872f retained.
+
+Actual next cause: official4.7.1 GodotPhysicsServer2D::flush_queries returns while inactive; it runs BEFORE the early SceneTree clock. Now request opens tree before that query flush and closes after server.step. Guard test now waits for authentic landing after airborne respawn instead of demanding ground shield while falling. Added repeated-reset regression expected to expose stale training timeout ownership (no source repair yet): reset36steps/reset37steps must not expire new immunity; total73steps must emit onlyone completion. This is technical practice, no forced battle/earned progress. Catch-up guard prevents second actor tick even if Main computed multiple steps before the F12 input arrived.
+
+NEXT push and same authorized public Ubuntu job. If only repeated-reset check fails, preserve baseline then retire training-only timeouts/hitstop on practice reset and verify again. No local heavy work/private reads/new preflight/paid/artwork upload. Human/paired-runtime/RC2/releaseFALSE; native/audio/device and earned campaign pending.
+
+---
+
 # 2026-10-26 — physics-server frame boundary and tutorial teardown repair
 
 Saved parent803e9feff1cc7c8893efb1d753740c6d0902a80c. Exact source is git rev-parse HEAD; existing integration branch and public software-only manual job preserved. Run40344576672 importPASS, TrainingPractice10PASS and StorySceneOwnership8PASS; FrameStepFAIL2of326 (contact and fresh guard), LifecycleFAIL tutorial_battle_scene.gd:110 viewport after SceneRouter teardown. Evidence outputs/training_story_ci_803e9fef retained.
