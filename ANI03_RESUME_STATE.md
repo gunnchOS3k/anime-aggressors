@@ -1,3 +1,11 @@
+# 2026-10-25 — first engine CI checkout failure preserved; corrected narrow checkout
+
+Source153437084cc69d471964a675ac21f5e7eaa9ee10 pushed normally to existing integration candidate branch. Existing manual workflow run40263595410: infraPASS; focused job NEVER REACHED GODOT because actions/checkout persist-credentials:false cleanup runs git submodule foreach and fails on preserved third_party/anyCreature gitlink missing.gitmodules URL. No art job ran; all eight art jobs skipped. This is checkout failure, not engine acceptance/failure. Corrected job uses the same default checkout credential behavior as passing infra, sparse public game-godot +tools/integration only. Read-only token scope unchanged; no private source/artifact access or artifact upload. Do not repair/rewrite/remove the unrelated submodule.
+
+Additional bounded Story implementation: preview selection follows the actual resumed/changed canonical route instead of always defaulting to Kaia; explicit alternative preview choices survive ordinary refreshes. Read-only handoff preserves body presentation and cannot award/save progress or invent a Convergence OVA. Existing eight-route source fixture now covers these selections. New source unverified until exact-head engine job passes. Next: push checkpoint and dispatch SAME manual software job; preserve first failed run. Local native guards/workloads/private storage unchanged; all human/release gatesFALSE.
+
+---
+
 # 2026-10-25 — full-physics training stepping implemented; public engine check pending
 
 Parent source f670eae2adc5751ae7ec9fd9ec757875b72602d6; exact checkpoint `git rev-parse HEAD`, integration/v1-preserved-candidate-20261025. No local native preflight repeated, heavy process, private read, artwork export, owner save mutation, deletion or Cursor interruption. Protected branches/worktrees preserved.

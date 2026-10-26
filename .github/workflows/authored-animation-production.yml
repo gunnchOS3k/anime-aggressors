@@ -663,8 +663,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          persist-credentials: false
           lfs: false
+          sparse-checkout: |
+            game-godot
+            tools/integration
       - name: Existing official Godot 4.7.1 verifier, without art artifacts or templates
         timeout-minutes: 3
         run: |

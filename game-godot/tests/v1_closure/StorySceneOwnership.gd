@@ -33,6 +33,13 @@ func _run() -> void:
 		check(c.save_progress(),fid+":fixture_save")
 		router.go("story");await frames(6)
 		var menu=current_scene
+		if fid != "sevenfold-convergence":
+			check(menu._watch_picker.get_item_metadata(menu._watch_picker.selected) == fid,fid+":campaign_preview_defaults_to_selected_route")
+			# A refresh must not discard a manually chosen preview variation.
+			menu._watch_picker.select((menu._watch_picker.selected + 1) % menu._watch_picker.item_count)
+			var chosen_preview = menu._watch_picker.get_item_metadata(menu._watch_picker.selected)
+			menu._refresh()
+			check(menu._watch_picker.get_item_metadata(menu._watch_picker.selected) == chosen_preview,fid+":explicit_preview_selection_survives_refresh")
 		menu._action.pressed.emit();await frames(1)
 		if capture_ui and fid=="kaia-windrow" and DisplayServer.get_name()!="headless":
 			root.always_on_top=true;root.move_to_foreground()

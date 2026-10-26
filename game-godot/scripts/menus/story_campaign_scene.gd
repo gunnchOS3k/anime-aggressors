@@ -15,6 +15,9 @@ var _scene_request := 0
 var _scene_notice := ""
 var _scene_replay: AcceptDialog
 var _replay_generation := -1
+var _watch_picker: OptionButton
+var _watch_button: Button
+var _watch_route_owner := ""
 
 
 func _ready() -> void:
@@ -84,6 +87,7 @@ func _build_ui() -> void:
 	var watch_row := HBoxContainer.new()
 	host.add_child(watch_row)
 	var watch_picker := OptionButton.new()
+	_watch_picker = watch_picker
 	_chapter_controls.append(watch_picker)
 	watch_picker.name = "CampaignVariationPicker"
 	for route in CampaignRuntime.campaign.get("routes", []):
@@ -94,11 +98,7 @@ func _build_ui() -> void:
 		if route.get("id") == "kaia-windrow":
 			watch_picker.select(watch_picker.item_count - 1)
 	watch_row.add_child(watch_picker)
-	_button(watch_row, "Watch Campaign Preview", func():
-		if _scene_pending: return
-		CampaignRuntime.watch_route_id = str(watch_picker.get_item_metadata(watch_picker.selected))
-		CampaignRuntime.watch_presentation = str(CampaignRuntime.progress["presentation"])
-		SceneRouter.go("ova"))
+	_watch_button = _button(watch_row, "Watch Campaign Preview", _on_watch_campaign)
 	var notice := Label.new()
 	notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	notice.text = "V1 candidate · Draft adaptation · Story and art await owner review."
@@ -123,6 +123,14 @@ func _refresh() -> void:
 			control.disabled = _scene_pending
 	_stop_scene.visible = _scene_pending
 	var id: String = CampaignRuntime.progress["selected_route"]
+	# Follow the actual Story route when entering/resuming/changing routes.
+	# Subsequent refreshes preserve an explicitly chosen preview variation.
+	if id != _watch_route_owner and _watch_picker != null:
+		_watch_route_owner = id
+		for index in _watch_picker.item_count:
+			if str(_watch_picker.get_item_metadata(index)) == id:
+				_watch_picker.select(index)
+				break
 	var route: Dictionary = CampaignRuntime.route_data(id)
 	var node: Dictionary = CampaignRuntime.current_node()
 	if title_label:
@@ -172,6 +180,16 @@ func _on_continue() -> void:
 	if _scene_pending: return
 	CampaignRuntime.load_progress()
 	_refresh()
+
+
+func _on_watch_campaign() -> void:
+	if _scene_pending or _watch_picker == null or _watch_picker.selected < 0: return
+	var id := str(_watch_picker.get_item_metadata(_watch_picker.selected))
+	if id == "sevenfold-convergence" or CampaignRuntime.route_data(id).is_empty(): return
+	CampaignRuntime.watch_route_id = id
+	CampaignRuntime.watch_presentation = str(CampaignRuntime.progress["presentation"])
+	# A preview, including after an earned ending, never grants or saves progress.
+	SceneRouter.go("ova")
 
 
 func _on_action() -> void:
