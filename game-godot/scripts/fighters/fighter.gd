@@ -72,6 +72,7 @@ var shielding: bool = false
 var controls_enabled: bool = true
 var combat_closed: bool = false # Terminal match boundary, separate from pause/countdown.
 var _input_edge_held: Dictionary = {}
+var _training_dummy_owned_actions: Dictionary = {}
 var spawn_point: Vector2 = Vector2.ZERO
 var combo_count: int = 0
 var authored_cancel_history: Array=[]
@@ -348,6 +349,7 @@ func close_combat_for_match_end(won: bool = false) -> void:
 		state_machine.enter(_FighterStates.VICTORY if won else _FighterStates.DEFEAT)
 
 func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, spawn: Vector2) -> void:
+	clear_training_dummy_inputs()
 	combat_closed = false
 	if is_instance_valid(_form_audio_8c):_form_audio_8c.clear()
 	shield_break_8c.reset("character_change")
@@ -1580,6 +1582,7 @@ func _cancel_grab_runner() -> void:
 
 func _exit_tree() -> void:
 	combat_closed = true
+	clear_training_dummy_inputs()
 	if cpu != null and (is_cpu or dummy_mode == "cpu"): cpu.clear_simulated_inputs()
 	if _guard_presentation!=null:_guard_presentation.clear("actor_exit")
 	if is_instance_valid(_form_audio_8c):_form_audio_8c.clear()
@@ -1815,6 +1818,20 @@ func lose_stock() -> void:
 func reset_damage() -> void:
 	damage_percent = 0.0
 	combo_count = 0
+
+func reset_training_practice() -> bool:
+	var gs = get_node_or_null("/root/GameState")
+	if gs == null or str(gs.mode) not in ["training", "tutorial"] or combat_closed:
+		return false
+	clear_training_dummy_inputs()
+	if cpu != null and is_cpu: cpu.clear_simulated_inputs()
+	_pending_attack_cmd = ""
+	move_runner.cancel()
+	projectile_spawner.clear_all()
+	# Reuse the existing respawn authority, including its visible 1.2s immunity.
+	# This practice control cannot reopen a terminal competitive actor.
+	reset_fighter()
+	return true
 
 func reset_position() -> void:
 	if is_instance_valid(_form_audio_8c):_form_audio_8c.clear()
@@ -2169,27 +2186,66 @@ func _dummy_apply_di() -> void:
 			var outward := 1.0 if global_position.x > platform_center_x else -1.0
 			velocity = _CombatMath.apply_di(velocity, outward, 0.2, _di_strength)
 
+
+func configure_training_dummy(mode: String, level: int = 2) -> bool:
+	var gs = get_node_or_null("/root/GameState")
+	if gs == null or str(gs.mode) not in ["training", "tutorial"]:
+		return false
+	if mode == "stand": mode = "idle" # Existing fixture/menu alias.
+	if mode not in ["idle", "shield", "jump", "attack", "cpu", "di_in", "di_out"]:
+		return false
+	clear_training_dummy_inputs()
+	if cpu != null and (is_cpu or dummy_mode == "cpu"):
+		cpu.clear_simulated_inputs()
+	dummy_mode = mode
+	is_cpu = mode == "cpu"
+	if is_cpu and cpu != null:
+		cpu.setup(self, level)
+	return true
+
+
+func clear_training_dummy_inputs() -> void:
+	for action in _training_dummy_owned_actions:
+		if InputMap.has_action(action): Input.action_release(action)
+	_training_dummy_owned_actions.clear()
+
+
+func _dummy_press(suffix: String) -> void:
+	var action := "p%d_%s" % [slot, suffix]
+	if not Input.is_action_pressed(action):
+		Input.action_press(action)
+		_training_dummy_owned_actions[action] = true
+
+
+func _dummy_release(suffix: String) -> void:
+	var action := "p%d_%s" % [slot, suffix]
+	if _training_dummy_owned_actions.erase(action):
+		Input.action_release(action)
+
 func _dummy_tick(delta: float) -> void:
+	_dummy_release("attack")
+	_dummy_release("jump")
+	if not controls_enabled:
+		clear_training_dummy_inputs()
+		return
 	var target = _find_opponent()
 	if target == null:
 		return
 	var dx: float = float(target.global_position.x) - global_position.x
 	match dummy_mode:
 		"shield":
-			if not Input.is_action_pressed("p%d_shield" % slot):
-				Input.action_press("p%d_shield" % slot)
+			_dummy_press("shield")
 		"jump":
-			if is_on_floor() and randf() < 0.02:
-				_jump_short_hop = false
-				state_machine.enter(_FighterStates.JUMP_SQUAT)
+			if is_on_floor() and state_machine.can_move() and randf() < 0.02:
+				_dummy_press("jump")
 		"attack":
-			if absf(dx) < 90 and randf() < 0.03:
-				_start_move_by_command("attack_neutral")
+			if absf(dx) < 90 and can_attack_now() and randf() < 0.03:
+				_dummy_press("attack")
 		"di_in", "di_out":
 			# Prefer shield between hits; DI applied in hurt path via _dummy_apply_di.
 			if state_machine.current_state in [_FighterStates.IDLE, _FighterStates.WALK, _FighterStates.RUN]:
-				if not Input.is_action_pressed("p%d_shield" % slot) and randf() < 0.02:
-					Input.action_press("p%d_shield" % slot)
+				if randf() < 0.02:
+					_dummy_press("shield")
 		"idle":
 			pass
 

@@ -1,3 +1,17 @@
+# 2026-10-25 — training implementation saved; native remains owner-blocked
+
+Branch `integration/v1-preserved-candidate-20261025`, parent checkpoint `bbfabaff0478fb5c15a64d7326839ea084d644fd`; exact delivery is `git rev-parse HEAD`. LOCAL ONLY. Owner says continue source work while Cursor runs: do not request app shutdown/restart, repeat failed preflight, or start heavy/native/private-art operations. Previously measured17.723GiB remains last measurement, not a new capacity claim. No private transport qualification/read, art regeneration, deletion, CI dispatch or gameplay balance change.
+
+New training source: explicit dummy action ownership releases sticky simulated shield on mode change/exit; jump/attack dummy uses public action eligibility. Practice observer consumes real resolver event IDs and damage_applied, separates shield/Perfect Guard/armor, counts natural completed whiffs, waits for projectile expiration, tracks combos only before defender control returns. Public reset reuses existing actor respawn (including displayed1.2s immunity), retires moves/projectiles and clears practice counters. Existing pause/freeze ownership corrected; menu preserves settings and offers both body presentations/all nine identities/CPU1–5. These Godot changes have NOT been parsed or run by Godot under the resource restriction. Historical Godot0%-hit closure, accessibility/layout, engine teardown and native visual acceptance remain PENDING.
+
+Browser client defect reproduced in source: D was both P1right and training damage reset. Dedicated F7damage/F8position commands now share help text, ignore key-repeat resets and cannot reset nontraining matches. `outputs/training_source_commands_v1`:8PASS/0FAIL with installed Node production-handler + real game-core ordinary approach/attack simulation;0.812s,101171200bytes sampled family RSS, no resource breach. No builds/imports/cache or native claims. Compact source-bound receipt `artifacts/v1_closure/integration_training/SOURCE_VALIDATION.json`; logs retained in outputs. Tests preserve earned damage on D, explicit resets, practice-only scope and nine×two presentation identity configuration (not artwork acceptance).
+
+`TrainingLifecycle.gd` and `TrainingPractice.gd` prepared for existing guarded runner, NOT_EXECUTED. When owner provides native window and actual guards pass: python3 tools/integration/run_match_completion_checks.py --output outputs/training_practice_v1 --reuse-imported outputs/native_public_counterplay_female_v3/game-godot --script tests/integration/TrainingPractice.gd . Also run TrainingLifecycle separately for tutorial/pause/save navigation. Do not use an alternate runner to bypass19start/18running requirements. Full-match audio/native and original-art BattleScene acceptance remain pending.
+
+NEXT safe source task: inspect committed Story checkpoint/route/end/OVA source for one concrete unfinished progression defect; fix through existing authority, preserve all earned saves and145nodes/1025cues. No seeded earnings or repeat campaign victory automation. All human/paired-runtime/RC2/release gatesFALSE.
+
+---
+
 # 2026-10-25 — owner keeps native blocked; training lifecycle source in progress
 
 Owner explicitly chose continuing source work while Cursor runs. Do NOT ask owner to close applications/restart or repeatedly preflight. Preservef0ffea0015287a7e15859e594a59efd2e19c895e and all newer changes. Branch integration/v1-preserved-candidate-20261025, LOCAL ONLY.

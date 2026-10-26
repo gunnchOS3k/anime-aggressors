@@ -3,6 +3,7 @@ const _FrameDataTable = preload("res://scripts/combat/frame_data_table.gd")
 const _DataLoader = preload("res://scripts/data/data_loader.gd")
 const _BattleSim = preload("res://scripts/battle/battle_sim.gd")
 const _FighterStates = preload("res://scripts/fighters/fighter_states.gd")
+const _PracticeStats = preload("res://scripts/training/practice_stats.gd")
 
 @onready var fighters_root: Node2D = $Fighters
 @onready var stage_root: Node2D = $Stage
@@ -20,6 +21,11 @@ var _paused := false
 var _slow_mo := false
 var _freeze := false
 var _frame_overlay: Label
+var _practice = _PracticeStats.new()
+var _practice_label: Label
+var _practice_panel: PanelContainer
+var _dummy_option: OptionButton
+var _pinned_entry: Dictionary = {}
 
 const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
 const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
@@ -34,6 +40,9 @@ var _pause_panel: PanelContainer
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	# Keep pause controls live without making the fighters inherit ALWAYS.
+	fighters_root.process_mode = Node.PROCESS_MODE_PAUSABLE
+	stage_root.process_mode = Node.PROCESS_MODE_PAUSABLE
 	if GameState.has_method("begin_training") and str(GameState.mode) not in ["training", "tutorial"]:
 		GameState.begin_training()
 	_build_stage()
@@ -56,7 +65,9 @@ func _ready() -> void:
 	_update_help()
 	_ensure_frame_overlay()
 	_ensure_move_list_access()
-	_ensure_move_browser()
+	if str(GameState.mode) == "training":
+		_ensure_move_browser()
+		_ensure_practice_controls()
 
 
 func _ensure_move_list_access() -> void:
@@ -70,7 +81,7 @@ func _ensure_move_list_access() -> void:
 	if hud:
 		hud.add_child(_move_list_btn)
 	_pin_reminder = Label.new()
-	_pin_reminder.position = Vector2(24, 88)
+	_pin_reminder.position = Vector2(24, 112)
 	_pin_reminder.add_theme_font_size_override("font_size", 15)
 	_pin_reminder.modulate = Color(1.0, 0.88, 0.4)
 	_pin_reminder.process_mode = Node.PROCESS_MODE_ALWAYS
@@ -131,11 +142,16 @@ func _open_training_move_list() -> void:
 
 
 func _on_training_pin(entry: Dictionary) -> void:
+	_pinned_entry = entry.duplicate(true)
 	var glyphs: Dictionary = entry.get("input_glyphs", {})
 	if _pin_reminder:
-		_pin_reminder.text = "PINNED: %s  %s  (success detection: not implemented)" % [
+		var goal := "land a confirmed hit" if float(entry.get("damage", 0.0)) > 0 else "perform the action"
+		if entry.get("move_id", "") == "grab": goal = "acquire an actual target"
+		if str(entry.get("move_id", "")).begins_with("form_"): goal = "form activation; completion tracking pending"
+		_pin_reminder.text = "PRACTICE: %s  %s · %s" % [
 			str(entry.get("display_name", "")),
 			str(glyphs.get("compact", "")),
+			goal,
 		]
 		_pin_reminder.visible = true
 
@@ -158,10 +174,7 @@ func _spawn_fighters() -> void:
 	fighters_root.add_child(fighter2)
 	fighter1.configure(GameState.p1_fighter_id, 1, false, 99, s1)
 	fighter2.configure(GameState.p2_fighter_id, 2, false, 99, s2)
-	fighter2.dummy_mode = GameState.training_dummy_mode
-	fighter2.is_cpu = GameState.training_dummy_mode == "cpu"
-	if fighter2.is_cpu:
-		fighter2.cpu.setup(fighter2, GameState.cpu_level)
+	fighter2.configure_training_dummy(GameState.training_dummy_mode, GameState.cpu_level)
 	fighter1.global_position = s1
 	fighter2.global_position = s2
 	for f in [fighter1, fighter2]:
@@ -177,6 +190,13 @@ func _spawn_fighters() -> void:
 	fighter2.state_machine.state_changed.connect(_on_dummy_control_state)
 	fighter1.grab_event.connect(_on_grab)
 	fighter2.grab_event.connect(_on_grab)
+	for actor in [fighter1, fighter2]:
+		actor.move_runner.move_started.connect(_practice_move_started.bind(actor))
+		actor.move_runner.move_ended.connect(_practice_move_ended.bind(actor))
+		actor.hit_resolver.hit_confirmed.connect(_practice_contact)
+		actor.projectile_spawner.projectile_spawned.connect(_practice_projectile.bind(actor))
+		actor.state_machine.state_changed.connect(_practice_control.bind(actor.slot))
+		actor.grab_event.connect(_practice_grab.bind(actor.slot))
 
 func _connect_hits(attacker, defender) -> void:
 	var hb: Area2D = attacker.get_node("Hitbox")
@@ -232,6 +252,99 @@ func _authored_link_hint(info:Dictionary) -> String:
 func _on_grab(info: Dictionary) -> void:
 	_log("GRAB %s" % info.get("result", "?"))
 
+
+func _practice_move_started(_move: String, actor) -> void:
+	_practice.move_started(actor.slot, actor.move_runner.activation_id, actor.move_runner.move_data)
+	if actor == fighter1 and _pinned_entry.get("move_id", "") == _move:
+		_pin_reminder.text = "MOVE STARTED: %s · %s" % [_move, "awaiting actual contact" if float(_pinned_entry.get("damage", 0.0)) > 0 else "action observed"]
+
+
+func _practice_move_ended(_move: String, actor) -> void:
+	var runner = actor.move_runner
+	var natural: bool = runner.phase == "recovery" and runner.frame_in_phase >= int(runner.move_data.get("recovery_frames", 0))
+	_practice.move_ended(actor.slot, runner.activation_id, natural)
+
+
+func _practice_contact(attacker, defender, info: Dictionary) -> void:
+	if not _practice.contact(attacker.slot, defender.slot, info): return
+	if attacker == fighter1 and _pinned_entry.get("move_id", "") == str(info.get("move_id", "")):
+		var result := str(info.get("contact_result", ""))
+		_pin_reminder.text = "%s: %s · applied %.2f%%" % [result.to_upper(), str(info.get("move_id", "")), float(info.get("damage_applied", 0.0))]
+	if str(info.get("contact_result", "")) == "hit" and float(info.get("damage_applied", 0.0)) == 0.0:
+		_log("Confirmed zero-damage contact: %s" % str(info.get("damage_zero_reason", "unspecified")))
+
+
+func _practice_projectile(shot, actor) -> void:
+	var instance: int = shot.get_instance_id()
+	_practice.projectile_started(actor.slot, int(shot.move_data.get("_attack_activation_id", -1)), instance)
+	shot.projectile_expired.connect(func():
+		_practice.projectile_ended(instance, shot.frame_count >= shot.lifetime_frames and shot.intercepted_ids.is_empty())
+	)
+
+
+func _practice_control(_from: String, to: String, slot: int) -> void:
+	if not _FighterStates.locks_actions(to): _practice.recovered(slot)
+
+
+func _practice_grab(info: Dictionary, slot: int) -> void:
+	_practice.grab(slot, str(info.get("result", "")))
+	if slot == 1 and _pinned_entry.get("move_id", "") == "grab" and _pin_reminder:
+		_pin_reminder.text = "GRAB %s · actual acquisition" % str(info.get("result", "?")).to_upper()
+
+
+func _ensure_practice_controls() -> void:
+	_practice_panel = PanelContainer.new()
+	_practice_panel.name = "PracticeControls"
+	_practice_panel.custom_minimum_size = Vector2(330, 0)
+	var column := VBoxContainer.new()
+	_practice_panel.add_child(column)
+	_practice_label = Label.new()
+	_practice_label.add_theme_font_size_override("font_size", 15)
+	_practice_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_practice_label.custom_minimum_size.x = 324
+	column.add_child(_practice_label)
+	var dummy := OptionButton.new()
+	_dummy_option = dummy
+	var modes := ["idle", "shield", "jump", "attack", "cpu", "di_in", "di_out"]
+	for mode in modes: dummy.add_item("Dummy: " + mode)
+	dummy.select(maxi(0, modes.find(fighter2.dummy_mode)))
+	dummy.item_selected.connect(func(index):
+		fighter2.configure_training_dummy(modes[index], GameState.cpu_level)
+		GameState.training_dummy_mode = fighter2.dummy_mode
+	)
+	column.add_child(dummy)
+	var reset := Button.new()
+	reset.text = "Reset practice (respawn fighters)"
+	reset.pressed.connect(_reset_practice)
+	column.add_child(reset)
+	hud.add_child(_practice_panel)
+
+
+func _reset_practice() -> void:
+	for actor in [fighter1, fighter2]:
+		actor.reset_training_practice()
+	_practice.clear()
+	_combo_p1 = 0
+	_combo_activation = -1
+	_combo_seen.clear()
+	_log("Practice reset. Existing respawn immunity lasts 1.2s; wait before attacking.")
+
+
+func _refresh_practice_hud() -> void:
+	if _practice_label == null or not is_instance_valid(fighter1) or not is_instance_valid(fighter2): return
+	_practice_panel.position = Vector2(maxf(24, get_viewport_rect().size.x - 354), 24)
+	var lines := PackedStringArray()
+	for actor in [fighter1, fighter2]:
+		var row: Dictionary = _practice.slot_stats(actor.slot)
+		lines.append("P%d %s %.1f%% %s" % [actor.slot, actor.fighter_id, actor.damage_percent, "INVULNERABLE" if actor.invincible else ""])
+		lines.append("Session hits %d · total %.2f%% · misses %d" % [row.hits, row.damage, row.whiffs])
+		lines.append("Combo %d / %.2f%% · best %d" % [row.combo, row.combo_damage, row.best_combo])
+		lines.append("Blocks %d · Perfect Guard %d · armor %d" % [row.blocks, row.perfect_guards, row.armor])
+		lines.append("Last %s %s +%.2f%%" % [row.last_move, row.last_result, row.last_damage])
+	_practice_label.text = "\n".join(lines)
+	if _pinned_entry.get("move_id", "") == "aura_charge" and fighter1.state_machine.current_state == "aura_charge" and _pin_reminder:
+		_pin_reminder.text = "AURA CHARGE OBSERVED · %.1f" % fighter1.aura
+
 func _log(msg: String) -> void:
 	if _hit_log:
 		_hit_log.text = msg
@@ -247,13 +360,13 @@ func _toggle_pause() -> void:
 	_paused = not _paused
 	get_tree().paused = _paused
 	if _battle_sim:
-		_battle_sim.set_paused(_paused)
+		_battle_sim.set_paused(_paused or _freeze)
 	if fighter1:
-		fighter1.controls_enabled = not _paused
+		fighter1.controls_enabled = not _paused and not _freeze
 		if _paused:
 			fighter1.velocity = Vector2.ZERO
 	if fighter2:
-		fighter2.controls_enabled = not _paused
+		fighter2.controls_enabled = not _paused and not _freeze
 		if _paused:
 			fighter2.velocity = Vector2.ZERO
 	_ensure_pause_panel()
@@ -321,6 +434,7 @@ func _restore_training_time() -> void:
 	_slow_mo = false
 	if is_inside_tree():
 		get_tree().paused = false
+	if is_instance_valid(fighters_root): fighters_root.process_mode = Node.PROCESS_MODE_PAUSABLE
 	if is_instance_valid(_battle_sim):
 		_battle_sim.set_freeze(false)
 		_battle_sim.set_paused(false)
@@ -338,10 +452,15 @@ func _unhandled_input(event: InputEvent) -> void:
 			KEY_F3:
 				fighter1.reset_position()
 				fighter2.reset_position()
+				_practice.recovered(1)
+				_practice.recovered(2)
 			KEY_F4:
 				fighter1.reset_damage()
 				fighter2.reset_damage()
 				_combo_p1 = 0
+				_combo_activation = -1
+				_practice.recovered(1)
+				_practice.recovered(2)
 			KEY_F5:
 				fighter1.fill_aura()
 			KEY_F7:
@@ -357,13 +476,15 @@ func _unhandled_input(event: InputEvent) -> void:
 			KEY_F11:
 				_freeze = not _freeze
 				_battle_sim.set_freeze(_freeze)
-				fighter1.controls_enabled = not _freeze
-				fighter2.controls_enabled = not _freeze
+				_battle_sim.set_paused(_freeze or _paused)
+				fighters_root.process_mode = Node.PROCESS_MODE_DISABLED if _freeze else Node.PROCESS_MODE_PAUSABLE
+				fighter1.controls_enabled = not _freeze and not _paused
+				fighter2.controls_enabled = not _freeze and not _paused
 				_log("FREEZE" if _freeze else "UNFREEZE")
 			KEY_F12:
 				if _freeze or _paused:
 					_battle_sim.step_frame()
-					_log("STEP 1 FRAME")
+					_log("STEP COMBAT FRAME (movement remains paused)")
 	if event.is_action_pressed("ui_cancel"):
 		_ensure_pause_panel()
 		_toggle_pause()
@@ -377,8 +498,9 @@ func _cycle_dummy() -> void:
 	var modes := ["idle", "shield", "jump", "attack", "cpu", "di_in", "di_out"]
 	var idx := modes.find(fighter2.dummy_mode)
 	idx = (idx + 1) % modes.size()
-	fighter2.dummy_mode = modes[idx]
-	fighter2.is_cpu = fighter2.dummy_mode == "cpu"
+	fighter2.configure_training_dummy(modes[idx], GameState.cpu_level)
+	GameState.training_dummy_mode = fighter2.dummy_mode
+	if is_instance_valid(_dummy_option): _dummy_option.select(idx)
 	_log("Dummy: %s" % fighter2.dummy_mode)
 
 
@@ -396,6 +518,7 @@ func _ensure_frame_overlay() -> void:
 
 
 func _process(_delta: float) -> void:
+	_refresh_practice_hud()
 	if _frame_overlay == null or fighter1 == null:
 		return
 	var move: Dictionary = fighter1._current_move if "_current_move" in fighter1 else {}

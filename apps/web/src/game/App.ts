@@ -8,8 +8,6 @@ import {
   getActiveClash,
   getComboRoutesForFighter,
   getFighterMoveList,
-  resetTrainingDamage,
-  resetTrainingPositions,
   type GameConfig,
   type GameState,
   type GameRuleset,
@@ -40,6 +38,7 @@ import { renderComboHintOverlay } from "../ui/ComboHintOverlay.js";
 import { renderTrainingMoveOverlay } from "../ui/TrainingMoveOverlay.ts";
 import { renderControlsOverlayHtml, BATTLE_SHORTCUT_LINES, TRAINING_SHORTCUT_LINES } from "../input/controlReference.ts";
 import { applyTrainingLaunchSetup } from "../match/trainingSetup.ts";
+import { applyTrainingResetKey } from "../match/trainingCommands.ts";
 import { renderEnergyClashPrompt, isClashActive } from "../ui/EnergyClashPrompt.js";
 import { mountDemoOnboarding } from "../demo/demoOnboarding.ts";
 
@@ -217,13 +216,9 @@ export class PlatformFighterApp {
       this.resetMatch();
     }
     if (this.trainingMode && this.gameState) {
-      if (e.key === "d" || e.key === "D") {
+      if (applyTrainingResetKey(this.gameState, e.key, e.repeat)) {
         e.preventDefault();
-        resetTrainingDamage(this.gameState);
-      }
-      if (e.key === "p" || e.key === "P") {
-        e.preventDefault();
-        resetTrainingPositions(this.gameState);
+        if (!e.repeat) this.comboHits = 0;
       }
       if (e.key === "1") {
         e.preventDefault();
@@ -654,7 +649,7 @@ export class PlatformFighterApp {
     const clash = getActiveClash(this.gameState);
 
     const parts = [
-      `<div class="pf-training-aura-hint">${dummyLabel} · D reset damage · P reset positions · 1-4 dummy modes</div>`,
+      `<div class="pf-training-aura-hint">${dummyLabel} · ${TRAINING_SHORTCUT_LINES[0]}</div>`,
       moveListHtml,
       renderTrainingMoveOverlay({ player: p1, comboCount: this.comboHits }),
       beginnerRoute

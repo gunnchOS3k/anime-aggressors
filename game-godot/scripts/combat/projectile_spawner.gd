@@ -6,6 +6,7 @@ const _AAProjectile = preload("res://scripts/combat/projectile.gd")
 ## Spawns _AAProjectile instances from move projectile config.
 
 const PROJECTILE_SCENE := preload("res://scenes/combat/Projectile2D.tscn")
+signal projectile_spawned(projectile: Node)
 
 var owner_fighter: Node = null
 var active_projectiles: Array = []
@@ -97,6 +98,7 @@ func spawn_from_move(move: Dictionary, aura_amount: float) -> Node:
 	if str(proj_cfg.get("type", "")) == "definition_panel": owner_fighter.stamp_runtime_hook("definition_construct")
 	active_projectiles.append(proj)
 	proj.projectile_expired.connect(func(): active_projectiles.erase(proj))
+	projectile_spawned.emit(proj)
 	return proj
 
 func tick_all() -> void:
