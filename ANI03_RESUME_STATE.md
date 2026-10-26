@@ -1,3 +1,21 @@
+# 2026-10-25 — execution stopped below running reserve; earned KO preserved
+
+Runtime source `855a1789afc09cc3c3ec8d94591993a6367e8154`; exact delivery HEAD is `git rev-parse HEAD`. Branch integration/v1-preserved-candidate-20261025 LOCAL ONLY. No protected PR/worktree/remote changes or exact-head CI. This entry supersedes pending statuses below.
+
+Preserved PASS:21 ordinary-input active-CPU match checks;11 actual BattleScene input-replay checks;36 terminal body/facing rows;39 grounded directional/policy throw rows;128 source/API recovery-height checks. Valid acquisition462, throw contact463 for5.89824, authentic bottom-blast KO503. No expired recovery lock or forced result. Shared punch/music ownership12checks PASS after reproduced stage-lifetime failure. Stage music retires with stage; director pause/stop works. No blanket shutdown/acoustic acceptance. Move/asset data unchanged since033e4501. Story owner saves preserved; no new earned route/OVA/LAN/device claim.
+
+Audio-only full-match regression attack_earned_scene_audio_v4 refused BEFORE clone/launch:20240924672bytes available vs20401094656 required; no output folder/process created. Final measurement 2026-10-25T20:35:11.105910-05:00: 19164667904bytes /17.848487854GiB, BELOW18GiB running reserve. Native no-movie requires21042823168bytes /19.59765625GiB; deficit1878155264bytes.42% RAM free,8747.94MiB swap used, no media process active. ALL further engine/native/Blender execution STOPPED. Only tiny receipt/checkpoint writes completed. No cleanup/swap manipulation/private reads/qualification.
+
+Compact receipt docs/handoff/2026-10-25/ATTACK_EARNED_KO.json; local owner entry outputs/attack_earned_delivery_20261025/OWNER_REVIEW.html and POST_AUDIO_PREFLIGHT.json. Prior HTML/media unchanged. No new native stills/movie. Audio unit hashes match saved runtime; earlier actual-match mechanics unchanged except three documented audio-ownership files.
+
+EXACT NEXT only after fresh storage/memory/competing-job preflight passes19GiB start AND18GiB after512MiB forecast:
+`python3 tools/integration/run_match_completion_checks.py --output outputs/attack_earned_scene_audio_v4 --reuse-imported outputs/native_public_counterplay_female_v3/game-godot --script tests/integration/AttackEarnedMatch.gd`
+Then corrected-match native path needs separate19.59765625GiB forecast: same runner with --native and NEW label. Manual owner command in review entry; no-movie is not footage. Replay source-hash guard must use newly recorded current-source inputs after audio changes. No repeated unchanged suites/private reads. Private production awaits owner hardware change, representative read-load continuity and integrity.
+
+No owned processes left running. Only outputs evidence remains untracked.43 original worktrees plus integrated candidate retained. HUMAN_ART_APPROVED=false; RUNTIME_PAIRED_CONTACT_VERIFIED=false; RC2_READY=false; V1_0_0_RELEASE_AUTHORIZED=false. Full18body/24move acting, forms/effects, seven earned routes/Convergence, OVA, LAN/input/device acceptance incomplete. No merge/push/art upload/paid execution/deploy/tag/release.
+
+---
+
 # 2026-10-25 — earned KO, actual-input replay and roster terminal ownership verified; stage audio repaired
 
 Branch `integration/v1-preserved-candidate-20261025`; exact saved checkpoint is `git rev-parse HEAD`. Runtime recovery/grab source `ffb9df6df5b4c1942dd7f8438fe8f7c581636c5c`; subsequent test checkpoint `f836b9a514cb6f467d4715dfcd0955104ef44938`. LOCAL ONLY. No protected PR/worktree/owner save/private-art reads, remote CI or storage qualification changed.

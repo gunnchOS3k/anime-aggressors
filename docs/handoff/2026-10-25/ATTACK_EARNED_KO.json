@@ -1,0 +1,294 @@
+{
+  "source_runtime_commit": "855a1789afc09cc3c3ec8d94591993a6367e8154",
+  "branch": "integration/v1-preserved-candidate-20261025",
+  "remote_state": "LOCAL ONLY; protected PR123/133 branches/worktrees untouched; no exact-candidate CI",
+  "implementation": [
+    "Airborne LAUNCHED returns to FALL after existing resolved hitstun; grounded landing/velocity/timing retained",
+    "Grab acquisition uses resolved authored vertical box versus actual hurt shape; established horizontal range and move data unchanged",
+    "Stage-owned ambience retires on exit/rebuild/rematch; director pause/stop reaches registered players, shared punch tails preserved"
+  ],
+  "qualified_finish": {
+    "scope": "Actual one-stock BattleScene, active CPU3, ordinary edge-pressure/grab/throw/UI inputs; zero starting damage; no damage, positions, AI, stocks or results written during play.",
+    "acquisition": {
+      "attacker_position": [
+        -520.538146972656,
+        280.175201416016
+      ],
+      "attacker_slot": 1,
+      "authored_height_overlap": true,
+      "defender_slot": 2,
+      "frame": 462,
+      "target_position": [
+        -488.138122558594,
+        283.0751953125
+      ]
+    },
+    "finish_proof": {
+      "contact_was_inside_blast": true,
+      "damage_applied": true,
+      "damage_seeded": false,
+      "distinct_opponent": true,
+      "frames_from_contact": 40,
+      "last_confirmed_body_contact": {
+        "activation_id": 3,
+        "attacker": "kaia-windrow",
+        "attacker_slot": 1,
+        "attacker_x": -520.538146972656,
+        "contact_owner": "direct_throw",
+        "damage": 5.89824,
+        "damage_after": 5.89824,
+        "defender": "juno-spark",
+        "defender_slot": 2,
+        "event_id": "105579022142:463:1",
+        "frame": 463,
+        "hitstun_seconds": 0.209747886657715,
+        "launch": [
+          -13.4261016845703,
+          -11.1917352676392
+        ],
+        "move": "throw_back",
+        "position": [
+          -550.538146972656,
+          268.175201416016
+        ],
+        "result": "hit",
+        "state": "launched"
+      },
+      "result_injected": false,
+      "stock_loss": {
+        "damage": 5.89824,
+        "fighter": "juno-spark",
+        "frame": 503,
+        "phase": "ordinary_edge_guard",
+        "position": [
+          -546.374755859375,
+          420.942657470703
+        ],
+        "remaining_stocks": 0,
+        "slot": 2
+      },
+      "stock_or_position_written_by_driver": false
+    },
+    "terminal": {
+      "HUD": [
+        {
+          "percent_text": "0.0%",
+          "remaining_stock_pips": 1
+        },
+        {
+          "percent_text": "5.9%",
+          "remaining_stock_pips": 0
+        }
+      ],
+      "actors": [
+        {
+          "CPU": false,
+          "body": "male",
+          "clip": "victory",
+          "closed": true,
+          "controls": false,
+          "damage": 0.0,
+          "fighter": "kaia-windrow",
+          "model": "COLLECTIBLE_V1_CANDIDATE",
+          "move": "",
+          "position": [
+            -518.893676757812,
+            280.175201416016
+          ],
+          "slot": 1,
+          "state": "victory",
+          "stocks": 1
+        },
+        {
+          "CPU": true,
+          "body": "female",
+          "clip": "defeat",
+          "closed": true,
+          "controls": false,
+          "damage": 5.89824,
+          "fighter": "juno-spark",
+          "model": "COLLECTIBLE_V1_CANDIDATE",
+          "move": "",
+          "position": [
+            -546.374755859375,
+            420.942657470703
+          ],
+          "slot": 2,
+          "state": "defeat",
+          "stocks": 0
+        }
+      ],
+      "banner": "Kaia Windrow Wins!",
+      "frame": 504,
+      "paused_sim": true,
+      "winner": 1
+    },
+    "headless": true,
+    "captured_gameplay_movie": false,
+    "native_visual_acceptance": false,
+    "separate_HP_zero_KO": "No separate HP-zero fighter terminal rule found; proves existing stock/blast path only"
+  },
+  "evidence": [
+    {
+      "result_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025/outputs/attack_earned_height_fixed_v3/ATTACK_EARNED_MATCH.json",
+      "result_sha256": "240881c29841156e2526d917150fac75002b8099ef5c13916e0f5df5df91a800",
+      "source_receipt_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025/outputs/attack_earned_height_fixed_v3/SOURCE.json",
+      "source_receipt_sha256": "c6f71c469647349b972eb7d2454140acd66cbbe30d1c128c32c509a491ae2890",
+      "PASS": true,
+      "scope": "Ordinary public inputs, active CPU; headless actual BattleScene, not native visual acceptance",
+      "tested_source_head": "ffb9df6df5b4c1942dd7f8438fe8f7c581636c5c",
+      "checks_or_rows": 21,
+      "failures": [],
+      "runtime_files_different_since_test": [
+        "game-godot/scripts/audio/AudioDirector.gd",
+        "game-godot/scripts/audio/procedural_audio_bank.gd",
+        "game-godot/scripts/battle/stage_procedural_builder.gd"
+      ],
+      "owner_saves_unchanged": true,
+      "shutdown_diagnostics": [
+        "WARNING: 2 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "ERROR: 1 resources still in use at exit (run with --verbose for details)."
+      ]
+    },
+    {
+      "result_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025/outputs/actual_battle_replay_20261025_v2/ACTUAL_BATTLE_REPLAY.json",
+      "result_sha256": "67b2b05e0de127ee0a6263a95e11a317f44f7b6dad75f99c01265659f70f8957",
+      "source_receipt_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025/outputs/actual_battle_replay_20261025_v2/SOURCE.json",
+      "source_receipt_sha256": "273b508ae8b174508e912418271f3f4fffd6ab8c1b98ba77e256a44314630698",
+      "PASS": true,
+      "scope": "Recorded public inputs through actual BattleScene, active CPU; review-only, not shipping replay UI/network",
+      "tested_source_head": "f836b9a514cb6f467d4715dfcd0955104ef44938",
+      "checks_or_rows": 11,
+      "failures": [],
+      "runtime_files_different_since_test": [
+        "game-godot/scripts/audio/AudioDirector.gd",
+        "game-godot/scripts/audio/procedural_audio_bank.gd",
+        "game-godot/scripts/battle/stage_procedural_builder.gd"
+      ],
+      "owner_saves_unchanged": true,
+      "shutdown_diagnostics": [
+        "WARNING: 9 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "ERROR: 4 resources still in use at exit (run with --verbose for details)."
+      ]
+    },
+    {
+      "result_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025/outputs/terminal_roster_verified_20261025/TERMINAL_ROSTER.json",
+      "result_sha256": "af5971e640ba9b958ad81cc991d7220ac9fbc8f4204d576dec10d20fdd8317c6",
+      "source_receipt_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025/outputs/terminal_roster_verified_20261025/SOURCE.json",
+      "source_receipt_sha256": "aa8b1341abc2d1ada50166ccdd15a31568c42f68509c8cac2d8a236216521da6",
+      "PASS": true,
+      "scope": "Nine fighters x two bodies x two facings; declared public-actor lifecycle fixtures, not art acceptance",
+      "tested_source_head": "f836b9a514cb6f467d4715dfcd0955104ef44938",
+      "checks_or_rows": 36,
+      "failures": [],
+      "runtime_files_different_since_test": [
+        "game-godot/scripts/audio/AudioDirector.gd",
+        "game-godot/scripts/audio/procedural_audio_bank.gd",
+        "game-godot/scripts/battle/stage_procedural_builder.gd"
+      ],
+      "owner_saves_unchanged": true,
+      "shutdown_diagnostics": []
+    },
+    {
+      "result_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025/outputs/throw_ownership_grounded_fixture_v2/THROW_OWNERSHIP.json",
+      "result_sha256": "77870d880026a8112472383569b9c2cf9704f5dfb40b43143745dbf3dcae9eb1",
+      "source_receipt_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025/outputs/throw_ownership_grounded_fixture_v2/SOURCE.json",
+      "source_receipt_sha256": "0a8ce8ddff9d2cb0ee1906f7aa52d7b03a6968541f5a7816430c35148c5a3d73",
+      "PASS": true,
+      "scope": "36 directional plus3policy rows; grounded idle-defender fixture, not active-CPU combos",
+      "tested_source_head": "ffb9df6df5b4c1942dd7f8438fe8f7c581636c5c",
+      "checks_or_rows": 39,
+      "failures": [],
+      "runtime_files_different_since_test": [
+        "game-godot/scripts/audio/AudioDirector.gd",
+        "game-godot/scripts/audio/procedural_audio_bank.gd",
+        "game-godot/scripts/battle/stage_procedural_builder.gd"
+      ],
+      "owner_saves_unchanged": true,
+      "shutdown_diagnostics": [
+        "WARNING: 2 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "ERROR: 1 resources still in use at exit (run with --verbose for details)."
+      ]
+    },
+    {
+      "result_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025/outputs/recovery_geometry_source_v1/RECOVERY_GEOMETRY.json",
+      "result_sha256": "45d71ed100b390c30ff9e8318fe786f3070b43556cbe706791ece633d999324e",
+      "source_receipt_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025/outputs/recovery_geometry_source_v1/RESULTS.json",
+      "source_receipt_sha256": "d90db03586316b5e2f62be3b389bc06a7333e68007e651cbbb9513b38c12bcb0",
+      "PASS": true,
+      "scope": "Source/API checks with declared reaction/shape fixtures; no BattleScene/visual acceptance",
+      "tested_source_head": "033e45018eaf5c8fa0f411b5d3a48d739274ec64",
+      "checks_or_rows": 128,
+      "failures": [],
+      "source_files_match_current": true,
+      "owner_saves_unchanged": true,
+      "shutdown_diagnostics": "Retained in original log; no blanket shutdown pass claimed"
+    },
+    {
+      "result_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025/outputs/stage_audio_ownership_fixed_20261025/STAGE_AUDIO_OWNERSHIP.json",
+      "result_sha256": "d4d1a8cbf3512139353ae92002257550d21968f37d43fb6f9f3e2c0a7f122e17",
+      "source_receipt_path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025/outputs/stage_audio_ownership_fixed_20261025/RESULTS.json",
+      "source_receipt_sha256": "7dea22abba52199ff16fec9ee2b276d92d35748c634ecf9f070e566550db05a0",
+      "PASS": true,
+      "scope": "Actual WAV/stage/AudioDirector lifetime; Dummy output and volume-only fixture, not acoustic/native/full-match acceptance",
+      "tested_source_head": "f836b9a514cb6f467d4715dfcd0955104ef44938",
+      "checks_or_rows": 12,
+      "failures": [],
+      "source_files_match_current": true,
+      "owner_saves_unchanged": true,
+      "shutdown_diagnostics": "Retained in original log; no blanket shutdown pass claimed"
+    }
+  ],
+  "replay_comparison": {
+    "comparison": "Exact Godot retained JSON serialization; no arbitrary numeric tolerance",
+    "binary_float_exact_match": false,
+    "damage_binary_deltas": [
+      -8.88178419700125e-16
+    ]
+  },
+  "negative_evidence_preserved": [
+    "outputs/attack_earned_baseline_20261025:EXCLUDED expired air-lock",
+    "outputs/attack_earned_recovery_fixed_v1:EXCLUDED vertically invalid reacquisition",
+    "outputs/throw_ownership_recovery_height_20261025:39 invalid floating-target acquisitions; grounded fixture setup corrected, original authority assertions retained",
+    "outputs/actual_battle_replay_20261025_v1:binary JSON-roundtrip difference; exact retained Godot JSON comparison and raw delta now recorded",
+    "outputs/stage_audio_ownership_baseline_20261025:5/8 failed lifetime checks"
+  ],
+  "unchanged_move_and_asset_data_since_start": true,
+  "resource_gate": {
+    "measured_at": "2026-10-25T20:35:11.105910-05:00",
+    "available_bytes": 19164667904,
+    "available_GiB": 17.848487854003906,
+    "required_native_no_movie_bytes": 21042823168,
+    "required_native_no_movie_GiB": 19.59765625,
+    "deficit_bytes": 1878155264,
+    "start_guard_bytes": 20401094656,
+    "running_reserve_bytes": 19327352832,
+    "forecast_bytes": 1715470336,
+    "memory_pressure": "The system has 8589934592 (524288 pages with a page size of 16384).\nSystem-wide memory free percentage: 42%",
+    "swap": "vm.swapusage: total = 10240.00M  used = 8747.94M  free = 1492.06M  (encrypted)",
+    "media_jobs": [],
+    "native_capacity_pass": false,
+    "private_storage_accessed": false,
+    "new_transport_qualification": false,
+    "full_scene_rerun_refused_before_launch": {
+      "label": "attack_earned_scene_audio_v4",
+      "available_bytes": 20240924672,
+      "required_bytes": 20401094656,
+      "deficit_bytes": 160169984,
+      "no_process_launched": true
+    }
+  },
+  "next_command_when_full_scene_forecast_passes": "python3 tools/integration/run_match_completion_checks.py --output outputs/attack_earned_scene_audio_v4 --reuse-imported outputs/native_public_counterplay_female_v3/game-godot --script tests/integration/AttackEarnedMatch.gd",
+  "owner_manual_command_when_native_forecast_passes": "python3 tools/integration/run_match_completion_checks.py --output outputs/manual_earned_match_owner_NEW_LABEL --reuse-imported outputs/native_public_counterplay_female_v3/game-godot --native --script tests/integration/PlayableMatchReview.gd --max-seconds 600",
+  "native_status": "NOT EXECUTED this increment. No new stills/movie/audio or visual acceptance. Earlier native public-model clips remain earlier-source evidence. Full-scene rerun after audio-only correction refused BEFORE launch.",
+  "current_art_coverage": "Preserved18body bindings/36 original jab-heavy exports:two move IDs/body;22 more move IDs/body plus acting/forms/shields/effects/native integration unfinished. No private reads or new production.",
+  "story_and_game_scope": "Earned owner Story saves preserved. Isolated career persistence, actual-match replay, rematch and menu checks passed. No new earned Story route, unlock, OVA, LAN, controller, native or physical-device acceptance.",
+  "remaining_visual_defects": "No floor/silhouette/choreography asset correction claimed. Recovery/grab authority corrected; native presentation and original-art contact remain unverified.",
+  "CI": "No exact-candidate remote CI or paid workflow",
+  "human_gates": {
+    "HUMAN_ART_APPROVED": false,
+    "RUNTIME_PAIRED_CONTACT_VERIFIED": false,
+    "RC2_READY": false,
+    "V1_0_0_RELEASE_AUTHORIZED": false
+  }
+}
