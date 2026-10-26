@@ -100,11 +100,14 @@ export class NetplaySession {
       confirmed.push(p === local.playerId || !!row?.has(p));
     }
 
+    const outgoingFrame = this.frame;
     this.rollback.advanceFrame(frameInputs, confirmed);
-    // The wire frame is the input's actual simulation frame, never N+1.
-    this.transport.send({ type: "input", frame: this.frame, playerId: local.playerId, input: { ...local } });
     this.frame += 1;
     this.pruneRemoteInputs();
+    // Retire the simulated frame even when a disconnected transport throws.
+    // A retry cannot simulate N twice or relabel N+1 as N. The caller still
+    // receives the transport error and must reconnect/resynchronize.
+    this.transport.send({ type: "input", frame: outgoingFrame, playerId: local.playerId, input: { ...local } });
     return this.getState();
   }
 

@@ -684,7 +684,20 @@ jobs:
             tools/integration
             packages
       - name: Existing hosted software resource guard
-        run: python3 -c 'import sys; sys.path.insert(0,"tools/integration"); from run_training_story_ci import guard; print("hosted available bytes", guard())'
+        env:
+          VERIFY_TRAINING: ${{ inputs.training_story_runtime }}
+          VERIFY_STORY: ${{ inputs.story_encounter_runtime }}
+          VERIFY_CONTROLS: ${{ inputs.story_controls_runtime }}
+          VERIFY_NETPLAY: ${{ inputs.netplay_session_runtime }}
+        run: |
+          python3 - <<'PY'
+          import os, sys
+          selected = sum(os.environ.get(k) == "true" for k in ["VERIFY_TRAINING", "VERIFY_STORY", "VERIFY_CONTROLS", "VERIFY_NETPLAY"])
+          if selected != 1: raise SystemExit("Select exactly one software verification mode; no silently skipped suites")
+          sys.path.insert(0,"tools/integration")
+          from run_training_story_ci import guard
+          print("hosted available bytes", guard())
+          PY
       - name: Existing official Godot 4.7.1 verifier, without art artifacts or templates
         if: ${{ !inputs.netplay_session_runtime }}
         timeout-minutes: 3

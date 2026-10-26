@@ -1,6 +1,7 @@
 import { it } from "node:test";
 import assert from "node:assert/strict";
-import { cloneGameState, createInitialGameState, hashState, replay, simulateFrame,
+import { spawnSync } from "node:child_process";
+import { cloneGameState, createInitialGameState, hashState, replay, simulateFrame, DEFAULT_FIGHTERS, buildCreatedFighter,
   type GameConfig, type InputFrame } from "@anime-aggressors/game-core";
 import { NetplaySession } from "../src/netplaySession.js";
 import type { NetplayMessage, NetplayTransport } from "../src/transport.js";
@@ -41,7 +42,7 @@ it("outgoing input and envelope identify the same actual simulation frame", () =
 });
 
 function combatInput(frame: number, playerId: number): InputFrame {
-  const approaching = frame >= 180 && frame < 264;
+  const approaching = frame >= 180 && frame < 251;
   return input(frame, playerId, {
     right: approaching && playerId === 0,
     left: approaching && playerId === 1,
@@ -171,4 +172,48 @@ it("advancing real aura controls cannot mutate an older simulation snapshot", ()
   for (let f = 180; f < 190; f++) state = simulateFrame(state, [input(f, 0, {auraCharge: true}), input(f, 1)]);
   assert.ok(state.players[0].aura.current > 0, "real charge must have occurred");
   assert.equal(hashState(saved), before, "saved aura must not share the live mutable object");
+});
+
+it("a transport failure cannot rewind the already simulated local frame", () => {
+  const transport = new TestTransport(0);
+  const session = new NetplaySession(transport, {gameConfig: config, localPlayerId: 0});
+  transport.onSend = () => { throw new Error("connection interrupted"); };
+  assert.throws(() => session.advanceLocal([input(0, 0)]), /connection interrupted/);
+  assert.equal(session.getState().frame, 1);
+  transport.onSend = undefined;
+  assert.throws(() => session.advanceLocal([input(0, 0)]), /Local input/);
+  session.advanceLocal([input(1, 0)]);
+  assert.equal(session.getState().frame, 2);
+  assert.equal(transport.sent.at(-1)?.frame, 1);
+});
+
+it("independent processes initialize identical canonical simulation state", () => {
+  // A shared-process test hides module-initialization Date.now() metadata.
+  // No fixed clock, seeded snapshot or copied state is supplied to either process.
+  const script = `import {createInitialGameState,hashState} from '@anime-aggressors/game-core';
+    console.log(hashState(createInitialGameState(${JSON.stringify(config)})));`;
+  function peer() {
+    const result = spawnSync(process.execPath, [...process.execArgv.filter(flag => !flag.startsWith("--test")),
+      "--input-type=module", "--eval", script], {encoding: "utf8", timeout: 5000});
+    assert.equal(result.status, 0, result.stderr);
+    return result.stdout.trim();
+  }
+  assert.equal(peer(), peer(), "identical match config must not hash differently with process start time");
+});
+
+it("canonical fighter selection preserves all nine identities, both bodies and seats", () => {
+  for (const fighter of DEFAULT_FIGHTERS) for (const body of ["male", "female"] as const) {
+    const state = createInitialGameState({...config, characterIds: [fighter.id, fighter.id], bodyVariants: [body, body]});
+    for (const player of state.players) {
+      assert.equal(player.characterId, "created:" + fighter.id);
+      assert.equal(player.fighterName, fighter.name);
+      assert.equal(player.fighterSize, fighter.size);
+      assert.equal(player.fighterColor, fighter.color);
+      assert.equal(player.bodyVariant, body);
+      assert.equal(player.facing, player.id === 0 ? 1 : -1);
+    }
+  }
+  const explicit = buildCreatedFighter({id: "owned-custom", name: "Practice", size: "large", color: "blue"});
+  const state = createInitialGameState({...config, fighterProfiles: [explicit]});
+  assert.equal(state.players[0].characterId, "created:owned-custom", "an explicit authorized profile keeps precedence");
 });
