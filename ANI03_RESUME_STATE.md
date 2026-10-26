@@ -1,3 +1,13 @@
+# 2026-10-26 — real import and Story pass; second Training parser defect repaired
+
+Run40343766460, exact source3fdd777a070fd685621376f1c9d11349d688001e: official4.7.1importPASS34.64s/871030784bytesRSS; eight-route StorySceneOwnership PASS1.606s/166518784bytesRSS, no errors. Training refused: practice_stats.gd:43 inferred eligible from a Variant-returning hitbox query. Explicit boolean declaration repairs type inference, without changing predicate or eligibility. Old3training results are FAIL (erroring process/code0 is NOT pass); log-limit stopped cascadedNil errors. Exact raw public workflow log+ENGINE_RESULT preserved outputs/training_story_ci_3fdd777a. Runner now stops immediately on SCRIPT ERROR and reports assertion counts/results hashes, with diagnostics retained.
+
+Additional actual Training presentation: confirmed hit effects now share the training physics clock instead of decaying while the paused training root stays ALWAYS for UI. Live nontraining effect behavior/density/damage unchanged. Frame fixture checks real contact-effect age remains fixed while paused. Resuming cancels an unexecuted step request to prevent a later stray frame. These newer changes need exact-head runtime checks; previousStoryPASS is evidence at3fdd only.
+
+NEXT push this checkpoint and dispatch the same public software-only manual job, no art artifacts/private inputs/paid runner. Local no-heavy/19/18reserve preserved; no new preflight, source/art regeneration or Cursor interruption. All human/paired/RC2/release gatesFALSE.
+
+---
+
 # 2026-10-26 — fix actual engine parse defect, then rerun focused acceptance
 
 Recovered source4f7ca889e00d1d2cdaf09900e70b3730b249c946 with clean tracked worktree. Run40263812350 reached official Godot4.7.1.stable.official.a13da4feb onUbuntu. Import exit0 was correctly REJECTED due SCRIPT ERROR Parse Error: can_attack_now not found. No Training/Story suite executed. Root source game-godot/scripts/fighters/fighter.gd dummy attack branch, line2265 before repair. No AAFighter can_attack_now exists. Corrected to the actual state_machine.can_attack() gate already used in _handle_actions (FighterStateMachine checks controls_enabled and locks_actions). Range90/chance0.03/public attack input preserved; no dummy permissive shim, balance/frame/damage change or parser suppression. Existing working sparse checkout retained, unrelated anyCreature unchanged.

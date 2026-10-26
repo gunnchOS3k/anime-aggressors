@@ -54,6 +54,7 @@ def execute(command, log, deadline=120):
             if shutil.disk_usage(ROOT).free < 2 * 2**30: stop = "CI_storage_reserve"
             if peak > 4 * 2**30: stop = "process_memory_guard"
             if log.stat().st_size > 8 * 2**20: stop = "log_limit"
+            if "SCRIPT ERROR:" in log.read_text(errors="replace"): stop = "engine_script_error"
             if stop:
                 child.terminate()
                 try: child.wait(5)
@@ -105,6 +106,9 @@ def run(output):
             outcome["result_present"] = path.exists()
             outcome["PASS"] = outcome["PASS"] and bool(data.get("PASS", False))
             outcome["failures"] = data.get("failures", ["Result missing"])
+            outcome["checks"] = len(data.get("checks", []))
+            outcome["rows"] = len(data.get("rows", []))
+            if path.exists(): outcome["result_sha256"] = sha(path)
             record["suites"][name] = outcome
         record["PASS"] = len(record["suites"]) == 4 and all(row["PASS"] for row in record["suites"].values())
     except Exception as error:

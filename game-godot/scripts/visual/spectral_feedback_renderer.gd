@@ -12,6 +12,7 @@ var _sequence := 0
 var peak_active := 0
 var dropped := 0
 var reused := 0
+var _training_physics_clock := false
 var cpu_update_us: Array = []
 var clash_presentation = preload("res://scripts/visual/projectile_clash_presentation.gd").new()
 
@@ -26,6 +27,8 @@ static func obtain(context: Node) -> Node2D:
 		renderer = load("res://scripts/visual/spectral_feedback_renderer.gd").new()
 		renderer.name = "SpectralFeedback"
 		host.add_child(renderer)
+	if bool(host.get_meta("training_physics_clock", false)):
+		renderer.set_training_physics_clock()
 	return renderer
 
 func _ready() -> void:
@@ -218,6 +221,7 @@ func stop_slot(index: int) -> void:
 	slots[index].active=false;slots[index].mesh.hide()
 
 func _process(delta: float) -> void:
+	if _training_physics_clock and not Engine.is_in_physics_frame(): return
 	var start := Time.get_ticks_usec()
 	clash_presentation.advance(delta)
 	var reduced := option("reduced_particles")
@@ -245,6 +249,16 @@ func _process(delta: float) -> void:
 		if slot.life>0: slot.mesh.material.set_shader_parameter("phase",slot.age/slot.life)
 	cpu_update_us.append(Time.get_ticks_usec()-start)
 	if cpu_update_us.size()>3600:cpu_update_us.pop_front()
+
+func set_training_physics_clock() -> void:
+	_training_physics_clock = true
+	process_mode = Node.PROCESS_MODE_PAUSABLE
+	process_physics_priority = 4
+	set_process(false)
+	set_physics_process(true)
+
+func _physics_process(delta: float) -> void:
+	if _training_physics_clock: _process(delta)
 
 func active_count() -> int:
 	var n:=0

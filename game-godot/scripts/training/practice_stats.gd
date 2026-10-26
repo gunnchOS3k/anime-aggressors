@@ -40,7 +40,7 @@ func move_started(slot: int, activation: int, move: Dictionary) -> void:
 	var counter := slot_stats(slot)
 	counter.last_move = str(move.get("move_id", ""))
 	var projectile := move.has("projectile")
-	var eligible := float(move.get("damage", 0.0)) > 0.0 and (
+	var eligible: bool = float(move.get("damage", 0.0)) > 0.0 and (
 		projectile or not move.get("hitboxes", []).is_empty() or str(move.get("move_type", "")) == "throw")
 	if not eligible:
 		return

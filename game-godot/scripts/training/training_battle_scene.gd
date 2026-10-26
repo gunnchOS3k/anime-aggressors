@@ -45,6 +45,7 @@ var _pause_panel: PanelContainer
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	set_meta("training_physics_clock", true)
 	# Keep pause controls live without making the fighters inherit ALWAYS.
 	fighters_root.process_mode = Node.PROCESS_MODE_PAUSABLE
 	stage_root.process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -390,7 +391,10 @@ func _apply_clock_pause() -> void:
 		_battle_sim.set_paused(stopped)
 	# Pause preserves velocity, control ownership, hitstop and pending moves.
 	# In particular it must not enable the tutorial's disabled practice target.
-	if not stopped: _buffered_inputs.clear()
+	if not stopped:
+		_buffered_inputs.clear()
+		if is_instance_valid(_frame_clock): _frame_clock.cancel()
+		Engine.time_scale = 0.35 if _slow_mo else 1.0
 
 
 func _request_physics_step() -> void:

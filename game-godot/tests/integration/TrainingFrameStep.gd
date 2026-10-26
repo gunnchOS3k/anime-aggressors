@@ -90,8 +90,18 @@ func run() -> void:
 	var hits: int = training._practice.slot_stats(1).hits
 	var hitstop: float = player._hitstop
 	var hurt_time: float = target.state_machine.state_time
+	var renderer = training.get_node_or_null("SpectralFeedback")
+	var visual_ages: Array = []
+	if renderer != null:
+		for slot in renderer.slots:
+			if slot.active: visual_ages.append({"id": slot.event_id, "age": slot.age})
 	await frames(30)
 	check(player._hitstop == hitstop and target.state_machine.state_time == hurt_time, "paused_hitstop_and_hurt_time_are_frozen")
+	if renderer != null:
+		for prior in visual_ages:
+			for slot in renderer.slots:
+				if slot.event_id == prior.id:
+					check(slot.age == prior.age, "confirmed_contact_effect_lifetime_uses_simulation_time")
 	for i in range(8): await step(training)
 	check(target.damage_percent == applied and training._practice.slot_stats(1).hits == hits, "step_does_not_duplicate_contact_or_damage")
 	check(player._hitstop < hitstop or hitstop == 0.0, "step_advances_real_hitstop")
