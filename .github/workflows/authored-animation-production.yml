@@ -24,6 +24,11 @@ on:
         required: false
         default: false
         type: boolean
+      netplay_session_runtime:
+        description: "Compile and test public game-core/rollback/netplay software only; no Godot/art/export"
+        required: false
+        default: false
+        type: boolean
       grab_acting_8b:
         description: 'Save and verify original 8B actions on all 18 preserved rigs (remote only)'
         required: false
@@ -665,7 +670,7 @@ jobs:
           PY
 
   training-story-runtime:
-    if: github.event_name == 'workflow_dispatch' && (inputs.training_story_runtime || inputs.story_encounter_runtime || inputs.story_controls_runtime) && github.event.repository.private == false
+    if: github.event_name == 'workflow_dispatch' && (inputs.training_story_runtime || inputs.story_encounter_runtime || inputs.story_controls_runtime || inputs.netplay_session_runtime) && github.event.repository.private == false
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     permissions:
@@ -677,7 +682,11 @@ jobs:
           sparse-checkout: |
             game-godot
             tools/integration
+            packages
+      - name: Existing hosted software resource guard
+        run: python3 -c 'import sys; sys.path.insert(0,"tools/integration"); from run_training_story_ci import guard; print("hosted available bytes", guard())'
       - name: Existing official Godot 4.7.1 verifier, without art artifacts or templates
+        if: ${{ !inputs.netplay_session_runtime }}
         timeout-minutes: 3
         run: |
           curl --fail --location --max-time 120 --retry 1 -o "$RUNNER_TEMP/godot.zip" https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip
@@ -686,6 +695,7 @@ jobs:
           chmod +x "$RUNNER_TEMP/godot/Godot_v4.7.1-stable_linux.x86_64"
           echo "GODOT_BIN=$RUNNER_TEMP/godot/Godot_v4.7.1-stable_linux.x86_64" >> "$GITHUB_ENV"
       - name: Real headless training and narrative scene checks, isolated profiles
+        if: ${{ !inputs.netplay_session_runtime }}
         env:
           STORY_ENCOUNTER: ${{ inputs.story_encounter_runtime }}
           STORY_CONTROLS: ${{ inputs.story_controls_runtime }}
@@ -694,5 +704,12 @@ jobs:
           if [ "$STORY_ENCOUNTER" = true ]; then suite=story-encounter; fi
           if [ "$STORY_CONTROLS" = true ]; then suite=story-controls; fi
           python3 tools/integration/run_training_story_ci.py --output "$RUNNER_TEMP/training-story" --suite-set "$suite"
+      - uses: actions/setup-node@v4
+        if: inputs.netplay_session_runtime
+        with:
+          node-version: '24'
+      - name: Compile and test actual public rollback session sources
+        if: inputs.netplay_session_runtime
+        run: python3 tools/integration/run_netplay_session_ci.py
       # Results are printed to the existing job log, not uploaded to artifact
       # storage. No new cache, paid storage or proprietary-art disclosure.

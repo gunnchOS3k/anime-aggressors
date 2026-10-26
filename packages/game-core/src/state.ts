@@ -137,6 +137,7 @@ export function cloneGameState(state: GameState): GameState {
     },
     players: state.players.map((p) => ({
       ...p,
+      aura: { ...p.aura },
       hitVictimsThisMove: [...p.hitVictimsThisMove],
       staleMoveQueue: [...p.staleMoveQueue],
       multiHitContacts: p.multiHitContacts.map((c) => ({ ...c })),

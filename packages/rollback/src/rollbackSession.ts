@@ -68,6 +68,14 @@ export class RollbackSession {
     while (this.history.length > this.config.maxRollbackFrames + 1) {
       this.history.shift();
     }
+    // Inputs older than the earliest restorable state cannot participate in
+    // resimulation. Bound these maps along with the snapshot history.
+    const oldest = this.history[0].frame;
+    for (const map of [this.confirmedInputs, this.predictedInputs]) {
+      for (const key of map.keys()) {
+        if (Number(key.split(":", 1)[0]) < oldest) map.delete(key);
+      }
+    }
   }
 
   /** Advance one frame using predicted inputs for unconfirmed slots. */
@@ -226,6 +234,7 @@ function inputsEqual(a: InputFrame, b: InputFrame): boolean {
     a.shield === b.shield &&
     a.dodge === b.dodge &&
     a.grab === b.grab &&
+    !!a.auraCharge === !!b.auraCharge &&
     a.wearableGesture === b.wearableGesture
   );
 }
