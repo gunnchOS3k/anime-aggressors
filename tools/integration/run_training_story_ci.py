@@ -103,11 +103,12 @@ def run(output, suite_set="training-story"):
             ("story-restart", "tests/integration/ResumedStoryEncounter.gd", "STORY_ENCOUNTER_RESTART.json"),
         ]
         if suite_set == "story-controls":
-            suites = [("story-controls", "tests/integration/ResumedStoryEncounter.gd", "STORY_ENCOUNTER_CONTROLS.json")]
+            suites = [("story-controls", "tests/integration/ResumedStoryEncounter.gd", "STORY_ENCOUNTER_CONTROLS.json"),
+                      ("lifecycle", "tests/integration/TrainingLifecycle.gd", "TRAINING_LIFECYCLE.json")]
         record["suite_set"] = suite_set
         for name, script, result in suites:
             # A second REAL process reopens the first process's signed save.
-            profile("story-encounter" if suite_set.startswith("story-") else name)
+            profile("story-encounter" if name.startswith("story-") else name)
             outcome = execute(base+["--fixed-fps", "60", "--script", "res://"+script,
                                    "--", "--ordinary-output="+str(output), "--story-pass="+name], output/(name+".log"))
             path = output/result

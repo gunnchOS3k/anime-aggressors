@@ -42,6 +42,7 @@ var _move_browser: Control
 var _pin_reminder: Label
 var _move_list_btn: Button
 var _pause_panel: PanelContainer
+var _pause_resume_button: Button
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -378,6 +379,8 @@ func _toggle_pause() -> void:
 		_pause_panel.visible = _paused
 	if _move_list_panel != null and is_instance_valid(_move_list_panel) and _move_list_panel.visible and _paused:
 		_move_list_panel.close_panel()
+	if _paused and is_instance_valid(_pause_resume_button):
+		_pause_resume_button.grab_focus()
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	TouchInputManager._sync_overlay()
 	_log("PAUSED" if _paused else "RESUMED")
@@ -462,6 +465,7 @@ func _ensure_pause_panel() -> void:
 	v.add_child(title)
 	var resume_btn := Button.new()
 	resume_btn.text = "Resume"
+	_pause_resume_button = resume_btn
 	resume_btn.pressed.connect(_toggle_pause)
 	v.add_child(resume_btn)
 	var move_list_btn := Button.new()
@@ -549,9 +553,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		_toggle_pause()
 		get_viewport().set_input_as_handled()
 		return
-	if _paused and event.is_action_pressed("ui_accept"):
-		_toggle_pause()
-		get_viewport().set_input_as_handled()
+	# Focused GUI buttons own confirm press AND release. Resuming here on
+	# press hides the panel and cancels their pending release activation.
 
 func _cycle_dummy() -> void:
 	var modes := ["idle", "shield", "jump", "attack", "cpu", "di_in", "di_out"]

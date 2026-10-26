@@ -82,7 +82,8 @@ func run() -> void:
 	check(paused and training._paused, "training_pause_entered")
 	for button in training._pause_panel.find_children("*", "Button", true, false):
 		if button.text == "Return to Training Menu":
-			await click(button)
+			button.grab_focus()
+			await accept_focused()
 			break
 	check(await wait_route("TrainingMenuScene.tscn"), "training_pause_return")
 	check(not paused and is_equal_approx(Engine.time_scale, 1.0), "training_return_restores_clock")

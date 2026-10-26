@@ -25,6 +25,7 @@ var _debug_hud
 var _battle_sim
 var _hazard_runtime
 var _pause_panel: PanelContainer
+var _pause_resume_button: Button
 var _pause_center: CenterContainer
 var _p1_panel
 var _p2_panel
@@ -457,6 +458,8 @@ func _toggle_pause() -> void:
 	if _move_list_panel != null and is_instance_valid(_move_list_panel) and _move_list_panel.visible and _paused:
 		_move_list_panel.close_panel()
 	# BattleScene must keep receiving ui_cancel/ui_accept while the tree is paused.
+	if _paused and is_instance_valid(_pause_resume_button):
+		_pause_resume_button.grab_focus()
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	TouchInputManager._sync_overlay()
 
@@ -466,9 +469,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		_toggle_pause()
 		get_viewport().set_input_as_handled()
 		return
-	if _paused and event.is_action_pressed("ui_accept"):
-		_toggle_pause()
-		get_viewport().set_input_as_handled()
+	# Focused GUI buttons own confirm press AND release. Resuming here on
+	# press hides the panel and cancels their pending release activation.
 	if event is InputEventJoypadButton and event.pressed:
 		_refresh_pad_prompt()
 
@@ -529,6 +531,7 @@ func _ensure_pause_panel() -> void:
 	v.add_child(title)
 	var resume_btn := Button.new()
 	resume_btn.text = "Resume"
+	_pause_resume_button = resume_btn
 	resume_btn.pressed.connect(_toggle_pause)
 	v.add_child(resume_btn)
 	var rematch_btn := Button.new()

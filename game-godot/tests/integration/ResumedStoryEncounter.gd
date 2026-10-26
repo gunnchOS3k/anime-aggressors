@@ -9,6 +9,8 @@ var guard_frames := 0
 var p1_motion := false
 var started_position := Vector2.ZERO
 var original_node: Dictionary = {}
+var actor_samples: Array = []
+var invulnerable_transitions: Array = []
 
 func wire_equal(a: Variant, b: Variant) -> bool:
 	# JSON has one numeric type; native Dictionary equality distinguishes
@@ -46,16 +48,20 @@ func activate(button: Button) -> bool:
 	var viewport = button.get_viewport()
 	var owner = viewport.gui_get_focus_owner()
 	var detail := {"button": label, "can_process": button.can_process(), "paused": paused,
-		"focus": str(owner.get_path()) if owner != null else "NONE"}
+		"focus": str(owner.get_path()) if owner != null else "NONE", "disabled": button.disabled, "visible": button.is_visible_in_tree()}
 	var event := InputEventAction.new()
 	event.action = "ui_accept"; event.pressed = true
 	viewport.push_input(event, true)
+	detail["press_handled"] = viewport.is_input_handled()
+	detail["paused_after_press"] = paused
+	detail["button_down_after_press"] = button.is_pressed()
 	await process_frame
 	event = event.duplicate(); event.pressed = false
 	if is_instance_valid(viewport): viewport.push_input(event, true)
 	else: root.push_input(event, true)
 	await process_frame
 	detail["delivered"] = delivered.count
+	detail["paused_after_release"] = paused
 	if not observations.has("UI"): observations["UI"] = []
 	observations["UI"].append(detail)
 	inputs.append({"frame": Engine.get_physics_frames(), "UI_confirm_delivered": delivered.count})
@@ -78,10 +84,29 @@ func public_key(code: Key) -> void:
 func move_started(_id: String, actor) -> void:
 	move_counts[str(actor.slot)] += 1
 
+func actor_snapshot(actor) -> Dictionary:
+	return {"slot": actor.slot, "state": actor.state_machine.current_state,
+		"state_time": actor.state_machine.state_time, "invincible": actor.invincible,
+		"floor": actor.is_on_floor(), "velocity": [actor.velocity.x, actor.velocity.y],
+		"position": [actor.position.x, actor.position.y], "controls": actor.controls_enabled,
+		"grabbed_by": actor.grabbed_by.slot if is_instance_valid(actor.grabbed_by) else 0,
+		"grabbed_target": actor.grabbed_target.slot if is_instance_valid(actor.grabbed_target) else 0,
+		"pending": actor._pending_attack_cmd, "runner_active": actor.move_runner.active,
+		"runner_phase": actor.move_runner.phase, "runner_frame": actor.move_runner.total_frame,
+		"CPU_goal": actor.cpu._last_goal, "CPU_timer": actor.cpu._timer,
+		"moves": int(move_counts[str(actor.slot)])}
+
+func transition_observed(from: String, to: String, actor) -> void:
+	if actor.invincible:
+		invulnerable_transitions.append({"frame": Engine.get_physics_frames(), "slot": actor.slot,
+			"from": from, "to": to, "invincible_before_entry": true})
+
 func observe() -> void:
 	if not is_instance_valid(battle): return
 	if battle.fighter1.shielding: guard_frames += 1
 	if absf(battle.fighter1.position.x - started_position.x) > 10.0: p1_motion = true
+	if battle._active and Engine.get_physics_frames() % 120 == 0:
+		actor_samples.append({"frame": Engine.get_physics_frames(), "actors": [actor_snapshot(battle.fighter1), actor_snapshot(battle.fighter2)]})
 	if Engine.get_physics_frames() % 15 == 0 or battle._match_finished:
 		super.observe()
 
@@ -130,6 +155,7 @@ func enter_authored_battle(campaign) -> bool:
 		actor.koed.connect(stock_lost.bind(actor))
 		actor.grab_event.connect(grab_event.bind(actor))
 		actor.move_runner.move_started.connect(move_started.bind(actor))
+		actor.state_machine.state_changed.connect(transition_observed.bind(actor))
 	started_position = battle.fighter1.position
 	physics_frame.connect(observe)
 	return true
@@ -187,6 +213,18 @@ func run() -> void:
 		await public_cancel()
 		observations["pause"] = {"scene_paused": battle._paused, "tree_paused": paused, "panel_visible": battle._pause_panel.visible if battle._pause_panel != null else false}
 		check(battle._paused and paused, "real_cancel_opens_pause")
+		if pass_name == "story-controls":
+			check(root.gui_get_focus_owner() == battle._pause_resume_button, "pause_opens_with_Resume_focus")
+			check(await choose("Resume"), "focused_Resume_release_activates_once")
+			check(not paused and not battle._paused, "focused_Resume_restores_combat")
+			await public_cancel()
+			check(await choose("Move List / Command Guide"), "focused_Move_List_confirm")
+			check(paused and battle._move_list_panel.visible, "command_guide_keeps_combat_paused")
+			check(await choose("Close Move List"), "focused_nested_Close_confirm")
+			check(paused and not battle._move_list_panel.visible, "nested_close_keeps_pause_menu")
+			await public_cancel()
+			check(not paused and not battle._paused, "Escape_resumes_without_confirm_conflict")
+			await public_cancel()
 		check(await choose("Return to Menu"), "real_pause_return_after_resumed_controls")
 		check(await wait_route("StoryCampaignScene.tscn"), "resumed_attempt_returns_to_Story")
 		check(campaign.progress.routes[campaign.progress.selected_route].completed == initial_completed, "abandoned_attempt_awards_no_progress")
@@ -214,6 +252,9 @@ func run() -> void:
 		if dialogue.is_busy(): await public_key(KEY_F6)
 		check(await wait_route("ResultsScene.tscn"), "legitimate_Story_results_transition")
 		if not route_is("ResultsScene.tscn"): finish(); return
+		var result_chip: Label = current_scene.get_node_or_null("VictoryChip")
+		observations["results"] = {"title": current_scene.title_label.text, "chip": result_chip.text if result_chip != null else "MISSING"}
+		check(result_chip != null and result_chip.text == ("WIN" if won else "DEFEAT"), "Story_result_chip_matches_actual_outcome")
 		check(await choose("Return to Story" if won else "Back Home"), "actual_results_return_to_Story_UI")
 		check(await wait_route("StoryCampaignScene.tscn"), "results_return_to_Story")
 		check(campaign.progress.routes[campaign.progress.selected_route].completed.size() == initial_completed.size() + (1 if won else 0), "canonical_completion_prefix_matches_outcome")
@@ -237,7 +278,7 @@ func finish() -> void:
 	keys([])
 	observations["combat"] = {"contacts": contacts, "stock_losses": losses, "moves": move_counts,
 		"guard_frames": guard_frames, "input_count": inputs.size(), "frames_bound": 11400,
-		"player_damage_or_stock_written": false, "result_injected": false, "CPU_overridden": false}
+		"player_damage_or_stock_written": false, "result_injected": false, "CPU_overridden": false, "actor_samples": actor_samples, "invulnerable_transitions": invulnerable_transitions}
 	observations["combat"]["last_trace"] = trace.slice(maxi(0, trace.size()-4))
 	var active_trace: Array = trace.filter(func(row): return row.active)
 	observations["combat"]["last_active_trace"] = active_trace.slice(maxi(0, active_trace.size()-4))

@@ -174,7 +174,7 @@ func _play_results_celebration() -> void:
 	# Non-color victory cue: second rule + "WIN" chip.
 	var chip := Label.new()
 	chip.name = "VictoryChip"
-	chip.text = "WIN"
+	chip.text = "DEFEAT" if GameState.mode == "story" and winner != 1 else "WIN"
 	chip.add_theme_font_size_override("font_size", Vxp2BrandScript.TYPE_META)
 	chip.add_theme_color_override("font_color", Vxp2BrandScript.COLOR_GOLD_BRIGHT)
 	chip.position = Vector2(40, 96)
