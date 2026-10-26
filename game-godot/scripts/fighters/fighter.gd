@@ -73,6 +73,8 @@ var controls_enabled: bool = true
 var combat_closed: bool = false # Terminal match boundary, separate from pause/countdown.
 var _input_edge_held: Dictionary = {}
 var _training_dummy_owned_actions: Dictionary = {}
+var use_training_physics_clock := false
+var _training_timeouts: Array = []
 var spawn_point: Vector2 = Vector2.ZERO
 var combo_count: int = 0
 var authored_cancel_history: Array=[]
@@ -333,6 +335,7 @@ func close_transformation_for_match_end() -> void:
 func close_combat_for_match_end(won: bool = false) -> void:
 	if combat_closed: return
 	combat_closed = true
+	_training_timeouts.clear()
 	controls_enabled = false
 	_pending_attack_cmd = ""
 	if cpu != null and (is_cpu or dummy_mode == "cpu"): cpu.clear_simulated_inputs()
@@ -637,6 +640,7 @@ func tick_combat_frame() -> void:
 
 func _physics_process(delta: float) -> void:
 	if combat_closed: return
+	if use_training_physics_clock: _tick_training_timeouts(delta)
 	shield_break_8c.observe_guard(_read_shield())
 	if _guard_presentation != null:_guard_presentation.tick(delta)
 	_wave017_vis_accum += delta
@@ -1464,10 +1468,10 @@ func enable_phase_cancel(seconds: float) -> void:
 	invincible = true
 	stamp_runtime_hook("phase_cancel")
 	stamp_runtime_hook("phase_invuln")
-	get_tree().create_timer(minf(seconds, 0.12)).timeout.connect(func():
+	_gameplay_timeout(minf(seconds, 0.12), func():
 		if phase_cancel_remaining <= 0.0:
 			invincible = false
-	, CONNECT_ONE_SHOT)
+	)
 
 
 func tick_aura_charge(delta: float) -> void:
@@ -1598,9 +1602,9 @@ func try_tech() -> bool:
 	velocity = Vector2.ZERO
 	state_machine.landing_lag = 0.04
 	state_machine.enter(_FighterStates.LAND)
-	get_tree().create_timer(_CombatMath.TECH_WINDOW_SEC).timeout.connect(func():
+	_gameplay_timeout(_CombatMath.TECH_WINDOW_SEC, func():
 		invincible = false
-	, CONNECT_ONE_SHOT)
+	)
 	stamp_runtime_hook("tech")
 	return true
 
@@ -1777,13 +1781,32 @@ func reset_fighter() -> void:
 	invincible = true
 	state_machine.enter(_FighterStates.RESPAWN)
 	ensure_visible_presentation()
-	get_tree().create_timer(1.2).timeout.connect(func():
+	_gameplay_timeout(1.2, func():
 		if combat_closed: return
 		invincible = false
 		state_machine.enter(_FighterStates.IDLE)
 		ensure_visible_presentation()
 		respawned.emit()
-	, CONNECT_ONE_SHOT)
+	)
+
+
+func _gameplay_timeout(seconds: float, callback: Callable) -> void:
+	if use_training_physics_clock:
+		_training_timeouts.append({"remaining": seconds, "callback": callback})
+	else:
+		# Preserve existing match behavior outside training/tutorial scenes.
+		get_tree().create_timer(seconds).timeout.connect(callback, CONNECT_ONE_SHOT)
+
+
+func _tick_training_timeouts(delta: float) -> void:
+	var due: Array[Callable] = []
+	for timer in _training_timeouts.duplicate():
+		timer.remaining = float(timer.remaining) - delta
+		if float(timer.remaining) <= 0.000001:
+			_training_timeouts.erase(timer)
+			due.append(timer.callback)
+	for callback in due:
+		if not combat_closed and callback.is_valid(): callback.call()
 
 func lose_stock() -> void:
 	if combat_closed: return

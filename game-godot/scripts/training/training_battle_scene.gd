@@ -4,6 +4,7 @@ const _DataLoader = preload("res://scripts/data/data_loader.gd")
 const _BattleSim = preload("res://scripts/battle/battle_sim.gd")
 const _FighterStates = preload("res://scripts/fighters/fighter_states.gd")
 const _PracticeStats = preload("res://scripts/training/practice_stats.gd")
+const _TrainingClock = preload("res://scripts/training/training_frame_clock.gd")
 
 @onready var fighters_root: Node2D = $Fighters
 @onready var stage_root: Node2D = $Stage
@@ -26,6 +27,10 @@ var _practice_label: Label
 var _practice_panel: PanelContainer
 var _dummy_option: OptionButton
 var _pinned_entry: Dictionary = {}
+var _frame_clock
+var _buffered_inputs: Dictionary = {}
+var _injected_inputs: Array[String] = []
+var _step_time_scale := 1.0
 
 const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
 const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
@@ -50,6 +55,10 @@ func _ready() -> void:
 	_battle_sim = _BattleSim.new()
 	add_child(_battle_sim)
 	_battle_sim.bind_fighters([fighter1, fighter2])
+	_frame_clock = _TrainingClock.new()
+	_frame_clock.frame_started.connect(_begin_physics_step)
+	_frame_clock.frame_finished.connect(_end_physics_step)
+	add_child(_frame_clock)
 	var rules = load("res://scripts/combat/competitive_rules.gd")
 	var show_debug := true
 	if rules != null:
@@ -178,6 +187,8 @@ func _spawn_fighters() -> void:
 	fighter1.global_position = s1
 	fighter2.global_position = s2
 	for f in [fighter1, fighter2]:
+		f.use_training_physics_clock = true
+		if f.model_3d != null: f.model_3d.set_training_physics_clock()
 		f.platform_half_width = float(main.get("width", 800)) / 2.0
 		f.platform_center_x = float(main.get("x", 0))
 		if f.has_method("ensure_visible_presentation"):
@@ -334,6 +345,7 @@ func _refresh_practice_hud() -> void:
 	if _practice_label == null or not is_instance_valid(fighter1) or not is_instance_valid(fighter2): return
 	_practice_panel.position = Vector2(maxf(24, get_viewport_rect().size.x - 354), 24)
 	var lines := PackedStringArray()
+	lines.append("%s · stepped frames %d · queued taps %d" % ["PAUSED" if _paused or _freeze else "LIVE", _frame_clock.frames if _frame_clock != null else 0, _buffered_inputs.size()])
 	for actor in [fighter1, fighter2]:
 		var row: Dictionary = _practice.slot_stats(actor.slot)
 		lines.append("P%d %s %.1f%% %s" % [actor.slot, actor.fighter_id, actor.damage_percent, "INVULNERABLE" if actor.invincible else ""])
@@ -358,17 +370,7 @@ func _update_help() -> void:
 
 func _toggle_pause() -> void:
 	_paused = not _paused
-	get_tree().paused = _paused
-	if _battle_sim:
-		_battle_sim.set_paused(_paused or _freeze)
-	if fighter1:
-		fighter1.controls_enabled = not _paused and not _freeze
-		if _paused:
-			fighter1.velocity = Vector2.ZERO
-	if fighter2:
-		fighter2.controls_enabled = not _paused and not _freeze
-		if _paused:
-			fighter2.velocity = Vector2.ZERO
+	_apply_clock_pause()
 	_ensure_pause_panel()
 	if _pause_panel:
 		_pause_panel.process_mode = Node.PROCESS_MODE_ALWAYS
@@ -378,6 +380,55 @@ func _toggle_pause() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	TouchInputManager._sync_overlay()
 	_log("PAUSED" if _paused else "RESUMED")
+
+
+func _apply_clock_pause() -> void:
+	var stopped := _paused or _freeze
+	get_tree().paused = stopped
+	if _battle_sim:
+		_battle_sim.set_freeze(_freeze)
+		_battle_sim.set_paused(stopped)
+	# Pause preserves velocity, control ownership, hitstop and pending moves.
+	# In particular it must not enable the tutorial's disabled practice target.
+	if not stopped: _buffered_inputs.clear()
+
+
+func _request_physics_step() -> void:
+	if not (_paused or _freeze) or _frame_clock == null: return
+	if not _frame_clock.request_frame(): return
+	_step_time_scale = Engine.time_scale
+	# One step is one 60Hz simulation frame, including from slow motion.
+	Engine.time_scale = 1.0
+
+
+func _begin_physics_step() -> void:
+	get_tree().paused = false
+	_battle_sim.set_freeze(false)
+	_battle_sim.set_paused(false)
+	_battle_sim.step_frame()
+	for action in _buffered_inputs:
+		if not Input.is_action_pressed(action):
+			Input.action_press(action, float(_buffered_inputs[action]))
+			_injected_inputs.append(action)
+	_buffered_inputs.clear()
+
+
+func _end_physics_step(_delta: float) -> void:
+	for action in _injected_inputs: Input.action_release(action)
+	_injected_inputs.clear()
+	Engine.time_scale = _step_time_scale
+	_apply_clock_pause()
+	_refresh_practice_hud()
+	_log("STEPPED FULL PHYSICS FRAME %d" % _frame_clock.frames)
+
+
+func _input(event: InputEvent) -> void:
+	if not (_paused or _freeze) or event.is_echo(): return
+	for slot in [1, 2]:
+		for suffix in ["left", "right", "up", "down", "attack", "special", "jump", "shield", "dodge", "grab"]:
+			var action := "p%d_%s" % [slot, suffix]
+			if InputMap.has_action(action) and event.is_action_pressed(action):
+				_buffered_inputs[action] = event.get_action_strength(action)
 
 
 func _ensure_pause_panel() -> void:
@@ -432,6 +483,10 @@ func _restore_training_time() -> void:
 	_paused = false
 	_freeze = false
 	_slow_mo = false
+	if is_instance_valid(_frame_clock): _frame_clock.cancel()
+	for action in _injected_inputs: Input.action_release(action)
+	_injected_inputs.clear()
+	_buffered_inputs.clear()
 	if is_inside_tree():
 		get_tree().paused = false
 	if is_instance_valid(fighters_root): fighters_root.process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -447,7 +502,7 @@ func _exit_tree() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed:
+	if event is InputEventKey and event.pressed and not event.echo:
 		match event.keycode:
 			KEY_F3:
 				fighter1.reset_position()
@@ -475,16 +530,10 @@ func _unhandled_input(event: InputEvent) -> void:
 				_log("SLOW-MO" if _slow_mo else "NORMAL SPEED")
 			KEY_F11:
 				_freeze = not _freeze
-				_battle_sim.set_freeze(_freeze)
-				_battle_sim.set_paused(_freeze or _paused)
-				fighters_root.process_mode = Node.PROCESS_MODE_DISABLED if _freeze else Node.PROCESS_MODE_PAUSABLE
-				fighter1.controls_enabled = not _freeze and not _paused
-				fighter2.controls_enabled = not _freeze and not _paused
+				_apply_clock_pause()
 				_log("FREEZE" if _freeze else "UNFREEZE")
 			KEY_F12:
-				if _freeze or _paused:
-					_battle_sim.step_frame()
-					_log("STEP COMBAT FRAME (movement remains paused)")
+				_request_physics_step()
 	if event.is_action_pressed("ui_cancel"):
 		_ensure_pause_panel()
 		_toggle_pause()

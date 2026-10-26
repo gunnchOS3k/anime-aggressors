@@ -9,6 +9,11 @@ on:
       - v4/dual-form-power-roster
   workflow_dispatch:
     inputs:
+      training_story_runtime:
+        description: "Public-resource Training/Story Godot tests only; no original-art production or exports"
+        required: false
+        default: false
+        type: boolean
       grab_acting_8b:
         description: 'Save and verify original 8B actions on all 18 preserved rigs (remote only)'
         required: false
@@ -648,3 +653,27 @@ jobs:
                   assert g.get(k) is False or g.get(k) is None or g.get(k) == False, k
           print("infra ok; human gates false")
           PY
+
+  training-story-runtime:
+    if: github.event_name == 'workflow_dispatch' && inputs.training_story_runtime && github.event.repository.private == false
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Existing official Godot 4.7.1 verifier, without art artifacts or templates
+        timeout-minutes: 3
+        run: |
+          curl --fail --location --max-time 120 --retry 1 -o "$RUNNER_TEMP/godot.zip" https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip
+          printf '%s  %s\n' c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba "$RUNNER_TEMP/godot.zip" | sha256sum --check
+          unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP/godot"
+          chmod +x "$RUNNER_TEMP/godot/Godot_v4.7.1-stable_linux.x86_64"
+          echo "GODOT_BIN=$RUNNER_TEMP/godot/Godot_v4.7.1-stable_linux.x86_64" >> "$GITHUB_ENV"
+      - name: Real headless training and narrative scene checks, isolated profiles
+        run: python3 tools/integration/run_training_story_ci.py --output "$RUNNER_TEMP/training-story"
+      # Results are printed to the existing job log, not uploaded to artifact
+      # storage. No new cache, paid storage or proprietary-art disclosure.

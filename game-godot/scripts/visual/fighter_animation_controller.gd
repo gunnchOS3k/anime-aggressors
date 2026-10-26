@@ -19,6 +19,7 @@ var _active_clip: String = ""
 var _throw_dir: String = "forward"
 var _move_synchronized := false
 var presentation_frozen := false
+var _training_physics_clock := false
 var _body_variant := "male"
 var _visual_facing := 1
 var secondary_follow: Node
@@ -596,6 +597,7 @@ func _load_authored_studies() -> void:
 	_player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
 
 func _process(delta: float) -> void:
+	if _training_physics_clock and not Engine.is_in_physics_frame(): return
 	if not _form_sequence.is_empty():return # Owned progress is sampled by the existing transform pipeline.
 	if not presentation_frozen:_reaction_age+=delta
 	if not _grab_escape_clip.is_empty():
@@ -610,6 +612,17 @@ func _process(delta: float) -> void:
 		_player.advance(delta)
 	_blend_neutral_return(delta)
 	_correct_support_knees()
+
+
+func set_training_physics_clock() -> void:
+	_training_physics_clock = true
+	set_process(false)
+	set_physics_process(true)
+	process_physics_priority = 3
+
+
+func _physics_process(delta: float) -> void:
+	if _training_physics_clock: _process(delta)
 
 func _synchronize_landing() -> bool:
 	if not is_instance_valid(_runtime_fighter) or _player == null or not is_instance_valid(_player): return false

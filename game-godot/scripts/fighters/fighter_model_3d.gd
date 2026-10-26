@@ -47,6 +47,7 @@ var _loaded_model: Node3D
 var _proxy_model: Node3D
 var _stylized: Node3D
 var _animation_controller: Node
+var _training_physics_clock := false
 var _material_controller: Node
 var _visible_skeleton: Skeleton3D
 var _loaded := false
@@ -130,6 +131,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	if _training_physics_clock and not Engine.is_in_physics_frame(): return
 	# Wave018/020: heal scene-tree visibility AND blank SubViewport framebuffers.
 	if _loaded and not is_visible_renderable_body():
 		heal_visibility_if_needed()
@@ -146,6 +148,18 @@ func _process(delta: float) -> void:
 	_style_anim_t += delta * _style_speed
 	if _stylized.has_method("animate_pose"):
 		_stylized.animate_pose(_style_clip, _style_anim_t)
+
+
+func set_training_physics_clock() -> void:
+	_training_physics_clock = true
+	set_process(false)
+	set_physics_process(true)
+	process_physics_priority = 2
+	if is_instance_valid(_animation_controller): _animation_controller.set_training_physics_clock()
+
+
+func _physics_process(delta: float) -> void:
+	if _training_physics_clock: _process(delta)
 
 
 func configure(fighter_data: Dictionary, body_variant: String = "") -> bool:
@@ -1032,6 +1046,7 @@ func _try_load_final_glb(fighter_data: Dictionary) -> Dictionary:
 func _setup_procedural_runtime(fighter_data: Dictionary) -> void:
 	_current_animation_source = "COLLECTIBLE_KEYPOSE_CANDIDATE" if _using_collectible else "PROCEDURAL_RUNTIME_ANIMATION"
 	_animation_controller = _AnimationController.new()
+	if _training_physics_clock: _animation_controller.set_training_physics_clock()
 	_animation_controller.name = "FighterAnimationController"
 	add_child(_animation_controller)
 	_animation_controller.setup({"fighter_id": _fighter_id, "body_variant": _body_variant}, _proxy_model)
