@@ -94,6 +94,8 @@ export async function startLanPartyHost(opts: LanHostOptions): Promise<LanHostHa
   let teamMode: PartyTeamMode = opts.teamMode ?? "FFA";
 
   const beginMatch = (ownerToken: string) => {
+    // Admission precedes automatic fighter/team setup as well as sim creation.
+    if (!session.isOwnerToken(ownerToken)) return { ok: false as const, reason: "owner_only" };
     ensureSeatDefaults(session, teamMode);
     const start = session.startMatch(ownerToken);
     if (!start.ok) return start;
@@ -211,8 +213,11 @@ export async function startLanPartyHost(opts: LanHostOptions): Promise<LanHostHa
         return;
       }
       if (url.pathname === "/start") {
-        const owner = session.room.participants.find((p) => p.id === session.room.ownerId)!;
-        const token = String(body.ownerToken ?? owner.token);
+        if (!session.isOwnerToken(body.ownerToken)) {
+          sendJson(res, 403, { ok: false, reason: "owner_only" });
+          return;
+        }
+        const token = body.ownerToken as string;
         if (typeof body.teamMode === "string") teamMode = body.teamMode as PartyTeamMode;
         const start = beginMatch(token);
         sendJson(res, start.ok ? 200 : 400, start);
@@ -225,9 +230,9 @@ export async function startLanPartyHost(opts: LanHostOptions): Promise<LanHostHa
         return;
       }
       if (url.pathname === "/rematch") {
-        const owner = session.room.participants.find((p) => p.id === session.room.ownerId)!;
-        sim = null;
-        sendJson(res, 200, session.rematch(String(body.ownerToken ?? owner.token)));
+        const out = session.rematch(typeof body.ownerToken === "string" ? body.ownerToken : "");
+        if (out.ok) sim = null;
+        sendJson(res, out.ok ? 200 : out.reason === "owner_only" ? 403 : 400, out);
         return;
       }
 

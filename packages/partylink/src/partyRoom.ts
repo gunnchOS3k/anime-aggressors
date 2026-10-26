@@ -273,9 +273,13 @@ export class PartyRoomSession {
     return { ok: true };
   }
 
-  startMatch(ownerToken: string): { ok: boolean; reason?: string } {
+  isOwnerToken(token: unknown): boolean {
     const owner = this.room.participants.find((p) => p.id === this.room.ownerId);
-    if (!owner || owner.token !== ownerToken) return { ok: false, reason: "owner_only" };
+    return typeof token === "string" && owner !== undefined && owner.token === token;
+  }
+
+  startMatch(ownerToken: string): { ok: boolean; reason?: string } {
+    if (!this.isOwnerToken(ownerToken)) return { ok: false, reason: "owner_only" };
     const seated = this.room.seats.filter((s) => s.state === "READY" || s.state === "CONNECTED");
     const ready = this.room.seats.filter((s) => s.state === "READY");
     if (ready.length < MIN_PLAYER_SEATS) return { ok: false, reason: "need_min_ready" };
@@ -377,8 +381,7 @@ export class PartyRoomSession {
   }
 
   rematch(ownerToken: string): { ok: boolean; reason?: string } {
-    const owner = this.room.participants.find((p) => p.id === this.room.ownerId);
-    if (!owner || owner.token !== ownerToken) return { ok: false, reason: "owner_only" };
+    if (!this.isOwnerToken(ownerToken)) return { ok: false, reason: "owner_only" };
     for (const seat of this.room.seats) {
       if (seat.participantId) seat.state = "CONNECTED";
     }
@@ -386,6 +389,10 @@ export class PartyRoomSession {
     this.hostTick = 0;
     this.pendingInputs = [];
     this.servedInputs = null;
+    // Sequence and rate windows belong to the completed round. A controller
+    // may restart its sequence on rematch; reconnect within a round must not.
+    this.lastSequence.clear();
+    this.inputTimestamps.clear();
     this.room.phase = "lobby";
     return { ok: true };
   }

@@ -1,3 +1,21 @@
+# 2026-10-25 — PartyLink owner/rematch correction; native still below capacity
+
+Recovered9a394168; exact saved checkpoint is `git rev-parse HEAD` on integration/v1-preserved-candidate-20261025, LOCAL ONLY. Only our two PartyLink source files, one new test, README and compact evidence/resume changed. Protected PR123/133 and all worktrees/saves/art retained.
+
+ONE fresh capacity check20:50:28CDT:18024239104bytes /16.786380768GiB,29% RAM free,9513.56MiB swap, no heavy jobs. Native no-movie requires21042823168bytes (deficit3018584064), headless requires20401094656. NO Godot/native/Blender/full-match audio run attempted; prior suites unchanged. Below18GiB reserve: only tiny source/receipt writes and bounded installed-Node source tests, no build/export/import/download/private reads.
+
+Reproduced PartyLink actual localhost defects: missing owner token inherited server host authority; denied start still changed fighter/team setup; rejected rematch nulled live sim; successful rematch kept old sequence/rate windows. Baseline6/6FAIL in outputs/lan_match_ownership_20261025_baseline_v3 (earlier harness/status baselines preserved). Corrected existing room authority, no competing gameplay resolver: explicit owner check before mutation, only successful rematch clears sim, round-local sequence/rate reset. Reconnect within same round still rejects duplicate input. Trusted local host API retained.7new checks plus25affected existing tests PASS32/32;3.275s,217.05MiB sampled process-family peakRSS. Source-TS transform only; no new compiler/CI, native/physical-LAN/BattleScene combat claim. Host party sim remains movement/bookkeeping rather than full authoritative combat.
+
+Compact exact source/log hashes: docs/handoff/2026-10-25/PARTYLINK_MATCH_OWNERSHIP.json. Source matched32-test receipt. No new art or native media. Existing earned throw463→blast503,21match/11replay/39throw/36terminal/128geometry/12audio evidence preserved; audio-only FULLMATCH still pending resource window. No need rerun unchanged suites.
+
+Storage options reviewed WITHOUT broad scan/external reads: prior20authorized installers already removed; no verified multi-GiB candidate remains. Two metadata-only standalone installers (BlenderDMG252350524, VirtualBoxWindowsEXE110628872bytes) total0.338GiB, insufficient and NOT authorized/freshly verified for removal. Personal archives excluded. No deletion/copy/swap changes. Owner normal app shutdown/restart may recover OS swap capacity; remeasure once afterward. Private original art still awaits representative read-load qualification after hardware change, then integrity.
+
+NEXT independent source task: reproduce disconnected PartyLink participant input admission/queued-input ownership in bounded localhost tests; fix only actual failure. Native NEXT after resource restoration: existing run_match_completion_checks.py --output outputs/attack_earned_scene_audio_v4 --reuse-imported outputs/native_public_counterplay_female_v3/game-godot --script tests/integration/AttackEarnedMatch.gd; then separately guarded native no-movie. No repeated known-failing launch.
+
+No owned test processes remain. Only outputs evidence untracked. HUMAN_ART_APPROVED=false; RUNTIME_PAIRED_CONTACT_VERIFIED=false; RC2_READY=false; V1_0_0_RELEASE_AUTHORIZED=false. Full18bodies/24move art (22otherIDs/body unfinished), earned Story/Convergence/OVA/LAN/devices remain open. No merge/push/publication/paid usage/deploy/tag/release.
+
+---
+
 # 2026-10-25 — execution stopped below running reserve; earned KO preserved
 
 Runtime source `855a1789afc09cc3c3ec8d94591993a6367e8154`; exact delivery HEAD is `git rev-parse HEAD`. Branch integration/v1-preserved-candidate-20261025 LOCAL ONLY. No protected PR/worktree/remote changes or exact-head CI. This entry supersedes pending statuses below.
