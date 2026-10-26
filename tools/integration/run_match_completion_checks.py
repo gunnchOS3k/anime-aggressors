@@ -89,6 +89,18 @@ def run(args):
                "--review-output="+str(output)]
     if args.script == "tests/integration/PlayableMatchReview.gd":
         command += ["--review-fighter=kaia-windrow", "--review-opponent=juno-spark"]
+    if args.replay_source:
+        replay_source=args.replay_source.resolve()
+        if not replay_source.is_relative_to(ROOT / "outputs") or not replay_source.is_file():
+            raise ValueError("Replay source must be retained internal candidate evidence")
+        prior=json.loads((replay_source.parent / "SOURCE.json").read_text())
+        if prior.get("private_assets_installed") is not False:
+            raise ValueError("Only recorded public-model gameplay may be replayed here")
+        for rel, expected in prior["source_gd_hashes"].items():
+            if rel.startswith("game-godot/scripts/") and sha(ROOT / rel)!=expected:
+                raise ValueError("Gameplay source differs from recorded input: "+rel)
+        record["replay_source_sha256"]=sha(replay_source)
+        command += ["--replay-source="+str(replay_source)]
     if args.native:
         command[1:1] = ["--windowed", "--resolution", "1280x720"]
     else:
@@ -152,4 +164,5 @@ if __name__ == "__main__":
     parser.add_argument("--script", default="tests/integration/MatchFinality.gd")
     parser.add_argument("--native", action="store_true")
     parser.add_argument("--max-seconds", type=int, default=60)
+    parser.add_argument("--replay-source", type=Path)
     raise SystemExit(run(parser.parse_args()))

@@ -1,3 +1,18 @@
+# 2026-10-25 — qualified attack-earned KO preserved; replay/native continuation next
+
+Runtime source `ffb9df6df5b4c1942dd7f8438fe8f7c581636c5c`. Core recovery/vertical-grab corrections committed; exact delivery checkpoint is git rev-parse HEAD. Only Codex-owned test/tool files staged in this continuation; no reset/reconciliation/private reads/art production/remote changes.
+
+QUALIFIED HEADLESS ATTACK FINISH: outputs/attack_earned_height_fixed_v3, exactffb9source. Ordinary Kaia/Juno CPU3, zero starting damage. Valid acquisition462 atKaia(-520.538,280.175)/Juno(-488.138,283.075); authored vertical overlapTRUE. Backthrow contact463, applied5.89824, velocity(-13.4261,-11.1917), resolvedstun0.209748s. Juno bottomblast420 at503, root(-546.375,420.943), stock1→0. 40frames afterconfirmedcontact, no damage/positions/stocks/result injected.21checksPASS: no expiredlaunchlocks, no late contact/mutation, HUDstock/% and winner agree, one career+telemetry result, save persisted, actual public Confirm rematch and pause/menu, Story memory unchanged. HEADLESS, no visual/native/ordinary-human/paired-art approval. Original failedairlock and verticallyinvalid secondgrab attempts remainEXCLUDED.
+
+Affected ThrowOwnership oldfixture failed39acquisitions: its disableddefender floated aty240 whileattacker landed~280, previously accepted onlybecause verticalrange wasunlimited. Preserved outputs/throw_ownership_recovery_height_20261025. Repaired SETUP by allowing both realactors toland and ASSERTING grounded before idledefenderlock; all old damage/event/duplicate/armor/shield assertions retained. outputs/throw_ownership_grounded_fixture_v2 PASS39rows (36directions+3policy),31.68s,322.17MiBRSS, owner savesunchanged. Source/geometry unit128PASS alreadypreserved; not model/native/earnedStory evidence.
+
+New ReplayActualBattle.gd prepared to replay the retained qualifying P1inputlog through ACTUAL BattleScene +active seededCPU, using existingReplayStore/checksum APIs. No toy netplaysimulation/stateinjection. NOTEXECUTED atthischeckpoint. Python syntax/diff checksPASS. Fullscene guard still19start/18reserve+512MiBforecast, nativenomovie19.597656GiB. No guardlowering. Latest actual fullrunmin19.495GiB; nativecapacitynotyetclaimed. No newprivatequalification or assetaccess; originalart blocked onread-load USBstability/integrity.
+
+EXACT NEXT: python3 tools/integration/run_match_completion_checks.py --output outputs/actual_battle_replay_20261025_v1 --reuse-imported outputs/native_public_counterplay_female_v3/game-godot --script tests/integration/ReplayActualBattle.gd --replay-source outputs/attack_earned_height_fixed_v3/ATTACK_EARNED_MATCH.json
+Then pending36terminalbody/facing check iffreshguardpasses; assess ONE native no-movie preflight beforelaunch. No repeatedknownfailing capture, no movieclaim fromstills. Preserve all43originalworktrees/saves and priornativeclips. All human/pairedruntime/RC2/release gatesFALSE.
+
+---
+
 # 2026-10-25 — attack-earned attempt exposed recovery and vertical-grab defects
 
 Integrated branch unchanged; exact checkpoint is git rev-parse HEAD. Private-art storage remains untouched/stopped. No new qualification, original assets or native footage.

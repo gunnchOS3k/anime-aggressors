@@ -47,7 +47,15 @@ func run_case(p,d,fid: String,direction: String,policy: String) -> void:
 	release_inputs()
 	p.configure(fid,1,false,9,Vector2(-80,240)); d.configure("juno-spark" if fid!="juno-spark" else "ember-vale",2,false,9,Vector2(-48,240))
 	reset_fixture(p,d)
-	for i in range(6): await physics_frame
+	# The former disabled defender stayed at spawn y240 while the attacker
+	# fell to y280. Its "ground grab" relied on the old unlimited height bug.
+	# Let BOTH real bodies settle before locking the declared idle opponent.
+	for i in range(90):
+		await physics_frame
+		if p.is_on_floor() and d.is_on_floor():break
+	d.controls_enabled=false
+	var grounded_fixture: bool=p.is_on_floor() and d.is_on_floor()
+	check(grounded_fixture,fid+":"+direction+":"+policy+":grounded_fixture")
 	if policy=="shield": d.state_machine.enter("shield_hold")
 	if policy=="armor": d.armor_frames_remaining=5.0
 	contacts.clear(); feedback.clear(); damages.clear()
@@ -92,7 +100,7 @@ func run_case(p,d,fid: String,direction: String,policy: String) -> void:
 			check(contacts[0].contact_result=="hit",prefix+":body_or_grab_bypasses_shield")
 	check(is_equal_approx(d.damage_percent,before),prefix+":no_later_damage")
 	check(not p.hitbox.monitoring and p.grabbed_target==null and d.grabbed_by==null,prefix+":release_cleanup")
-	rows.append({"fighter":fid,"direction":direction,"policy":policy,"contacts":contacts.size(),"damage_applications":damages.size(),"feedback_dispatches":feedback.size(),"damage":before,"defender_state_after":d.state_machine.current_state,"release_frame":contacts[0].move_frame if not contacts.is_empty() else -1})
+	rows.append({"fighter":fid,"direction":direction,"policy":policy,"contacts":contacts.size(),"damage_applications":damages.size(),"feedback_dispatches":feedback.size(),"damage":before,"defender_state_after":d.state_machine.current_state,"release_frame":contacts[0].move_frame if not contacts.is_empty() else -1,"grounded_fixture":grounded_fixture})
 
 func reset_fixture(p,d) -> void:
 	p.move_runner.cancel(); d.move_runner.cancel()
@@ -100,7 +108,7 @@ func reset_fixture(p,d) -> void:
 	p.global_position=Vector2(-80,240); d.global_position=Vector2(-48,240)
 	p.velocity=Vector2.ZERO; d.velocity=Vector2.ZERO
 	p.state_machine.enter("idle"); d.state_machine.enter("idle")
-	p.controls_enabled=true; d.controls_enabled=false
+	p.controls_enabled=true; d.controls_enabled=true
 	p.invincible=false; d.invincible=false; p.aura=0; d.aura=0
 	p._hitstop=0; d._hitstop=0; p.hitstun_remaining=0; d.hitstun_remaining=0
 	p.damage_percent=0; d.damage_percent=0; d.armor_frames_remaining=0
