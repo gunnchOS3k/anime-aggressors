@@ -102,10 +102,12 @@ def run(output, suite_set="training-story"):
             ("story-play", "tests/integration/ResumedStoryEncounter.gd", "STORY_ENCOUNTER_PLAY.json"),
             ("story-restart", "tests/integration/ResumedStoryEncounter.gd", "STORY_ENCOUNTER_RESTART.json"),
         ]
+        if suite_set == "story-controls":
+            suites = [("story-controls", "tests/integration/ResumedStoryEncounter.gd", "STORY_ENCOUNTER_CONTROLS.json")]
         record["suite_set"] = suite_set
         for name, script, result in suites:
             # A second REAL process reopens the first process's signed save.
-            profile("story-encounter" if suite_set == "story-encounter" else name)
+            profile("story-encounter" if suite_set.startswith("story-") else name)
             outcome = execute(base+["--fixed-fps", "60", "--script", "res://"+script,
                                    "--", "--ordinary-output="+str(output), "--story-pass="+name], output/(name+".log"))
             path = output/result
@@ -118,7 +120,7 @@ def run(output, suite_set="training-story"):
             outcome["observations"] = data.get("samples", data.get("observations", []))
             if path.exists(): outcome["result_sha256"] = sha(path)
             record["suites"][name] = outcome
-            if suite_set == "story-encounter" and not outcome["PASS"]: break
+            if suite_set.startswith("story-") and not outcome["PASS"]: break
         record["PASS"] = len(record["suites"]) == len(suites) and all(row["PASS"] for row in record["suites"].values())
     except Exception as error:
         record["error"] = str(error)
@@ -131,6 +133,6 @@ def run(output, suite_set="training-story"):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--suite-set", choices=["training-story", "story-encounter"], default="training-story")
+    parser.add_argument("--suite-set", choices=["training-story", "story-encounter", "story-controls"], default="training-story")
     args = parser.parse_args()
     raise SystemExit(0 if run(args.output, args.suite_set)["PASS"] else 1)

@@ -19,6 +19,11 @@ on:
         required: false
         default: false
         type: boolean
+      story_controls_runtime:
+        description: "Focused public Story pause/control regression; does not replay a full campaign battle"
+        required: false
+        default: false
+        type: boolean
       grab_acting_8b:
         description: 'Save and verify original 8B actions on all 18 preserved rigs (remote only)'
         required: false
@@ -660,7 +665,7 @@ jobs:
           PY
 
   training-story-runtime:
-    if: github.event_name == 'workflow_dispatch' && (inputs.training_story_runtime || inputs.story_encounter_runtime) && github.event.repository.private == false
+    if: github.event_name == 'workflow_dispatch' && (inputs.training_story_runtime || inputs.story_encounter_runtime || inputs.story_controls_runtime) && github.event.repository.private == false
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     permissions:
@@ -683,9 +688,11 @@ jobs:
       - name: Real headless training and narrative scene checks, isolated profiles
         env:
           STORY_ENCOUNTER: ${{ inputs.story_encounter_runtime }}
+          STORY_CONTROLS: ${{ inputs.story_controls_runtime }}
         run: |
           suite=training-story
           if [ "$STORY_ENCOUNTER" = true ]; then suite=story-encounter; fi
+          if [ "$STORY_CONTROLS" = true ]; then suite=story-controls; fi
           python3 tools/integration/run_training_story_ci.py --output "$RUNNER_TEMP/training-story" --suite-set "$suite"
       # Results are printed to the existing job log, not uploaded to artifact
       # storage. No new cache, paid storage or proprietary-art disclosure.

@@ -10,6 +10,24 @@ var p1_motion := false
 var started_position := Vector2.ZERO
 var original_node: Dictionary = {}
 
+func wire_equal(a: Variant, b: Variant) -> bool:
+	# JSON has one numeric type; native Dictionary equality distinguishes
+	# int stocks from JSON-decoded float stocks. Compare exact wire values,
+	# preserving every key/type except that specified numeric representation.
+	if a is Dictionary and b is Dictionary:
+		if a.size() != b.size(): return false
+		for key in a:
+			if not b.has(key) or not wire_equal(a[key], b[key]): return false
+		return true
+	if a is Array and b is Array:
+		if a.size() != b.size(): return false
+		for i in a.size():
+			if not wire_equal(a[i], b[i]): return false
+		return true
+	if typeof(a) in [TYPE_INT, TYPE_FLOAT] and typeof(b) in [TYPE_INT, TYPE_FLOAT]:
+		return float(a) == float(b)
+	return typeof(a) == typeof(b) and a == b
+
 func wait_route(suffix: String, limit := 180) -> bool:
 	for i in range(limit):
 		await process_frame
@@ -20,11 +38,15 @@ func wait_route(suffix: String, limit := 180) -> bool:
 
 func activate(button: Button) -> bool:
 	if button == null: return false
+	var label: String = button.text
 	var delivered := {"count": 0}
 	button.pressed.connect(func(): delivered.count += 1, CONNECT_ONE_SHOT)
 	button.grab_focus()
 	await process_frame
 	var viewport = button.get_viewport()
+	var owner = viewport.gui_get_focus_owner()
+	var detail := {"button": label, "can_process": button.can_process(), "paused": paused,
+		"focus": str(owner.get_path()) if owner != null else "NONE"}
 	var event := InputEventAction.new()
 	event.action = "ui_accept"; event.pressed = true
 	viewport.push_input(event, true)
@@ -33,6 +55,9 @@ func activate(button: Button) -> bool:
 	if is_instance_valid(viewport): viewport.push_input(event, true)
 	else: root.push_input(event, true)
 	await process_frame
+	detail["delivered"] = delivered.count
+	if not observations.has("UI"): observations["UI"] = []
+	observations["UI"].append(detail)
 	inputs.append({"frame": Engine.get_physics_frames(), "UI_confirm_delivered": delivered.count})
 	return delivered.count == 1
 
@@ -114,7 +139,7 @@ func run() -> void:
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--ordinary-output="): output = arg.trim_prefix("--ordinary-output=")
 		if arg.begins_with("--story-pass="): pass_name = arg.trim_prefix("--story-pass=")
-	if output.is_empty() or OS.get_user_data_dir().get_file() != "aa-native-ci-story-encounter" or pass_name not in ["story-play", "story-restart"]:
+	if output.is_empty() or OS.get_user_data_dir().get_file() != "aa-native-ci-story-encounter" or pass_name not in ["story-play", "story-restart", "story-controls"]:
 		push_error("Refusing nonisolated Story profile or unknown journey")
 		quit(2); return
 	var campaign = root.get_node("CampaignRuntime")
@@ -126,7 +151,7 @@ func run() -> void:
 	check(await choose("Story"), "actual_main_menu_Story_UI")
 	check(await wait_route("StoryCampaignScene.tscn"), "Story_menu_loaded")
 	if not route_is("StoryCampaignScene.tscn"): finish(); return
-	if pass_name == "story-play":
+	if pass_name in ["story-play", "story-controls"]:
 		check(not FileAccess.file_exists(campaign.save_path), "new_isolated_profile_not_owner_or_staged_save")
 		check(await choose("New Campaign"), "actual_New_Campaign_UI")
 		var confirmation: ConfirmationDialog
@@ -143,8 +168,10 @@ func run() -> void:
 		check(previous.get("PASS", false), "previous_real_process_completed_qualifying_journey")
 		var expected: Dictionary = previous.get("observations", {}).get("saved", {})
 		check(campaign.current_node().get("id", "") == expected.get("node", "MISSING") and campaign.progress.presentation == expected.get("body", "MISSING"), "new_process_restores_authored_node_and_body")
-		check(campaign.progress.routes[campaign.progress.selected_route].completed == expected.get("completed", null) and campaign.progress.routes[campaign.progress.selected_route].receipts == expected.get("receipts", null), "new_process_restores_only_real_earned_receipts")
-		check(campaign.progress.checkpoint == expected.get("checkpoint", null), "new_process_restores_signed_result_metadata")
+		check(wire_equal(campaign.progress.routes[campaign.progress.selected_route].completed, expected.get("completed", null)) and wire_equal(campaign.progress.routes[campaign.progress.selected_route].receipts, expected.get("receipts", null)), "new_process_restores_only_real_earned_receipts")
+		check(wire_equal(campaign.progress.checkpoint, expected.get("checkpoint", null)), "new_process_restores_signed_result_metadata")
+		observations["restore_types"] = {"actual_stocks": type_string(typeof(campaign.progress.checkpoint.get("combat", {}).get("stocks"))),
+			"JSON_stocks": type_string(typeof(expected.get("checkpoint", {}).get("combat", {}).get("stocks")))}
 	if not await enter_authored_battle(campaign): finish(); return
 	var initial_completed: Array = campaign.progress.routes[campaign.progress.selected_route].completed.duplicate()
 	# Cover the actual authored180s timer, never shorten/change match rules.
@@ -156,8 +183,10 @@ func run() -> void:
 	keys([])
 	check(p1_motion and int(move_counts["1"]) > 0, "ordinary_player_movement_and_attacks_work")
 	check(int(move_counts["2"]) > 0, "normal_CPU_uses_actual_moves")
-	if pass_name == "story-restart":
+	if pass_name in ["story-restart", "story-controls"]:
 		await public_cancel()
+		observations["pause"] = {"scene_paused": battle._paused, "tree_paused": paused, "panel_visible": battle._pause_panel.visible if battle._pause_panel != null else false}
+		check(battle._paused and paused, "real_cancel_opens_pause")
 		check(await choose("Return to Menu"), "real_pause_return_after_resumed_controls")
 		check(await wait_route("StoryCampaignScene.tscn"), "resumed_attempt_returns_to_Story")
 		check(campaign.progress.routes[campaign.progress.selected_route].completed == initial_completed, "abandoned_attempt_awards_no_progress")
@@ -210,9 +239,12 @@ func finish() -> void:
 		"guard_frames": guard_frames, "input_count": inputs.size(), "frames_bound": 11400,
 		"player_damage_or_stock_written": false, "result_injected": false, "CPU_overridden": false}
 	observations["combat"]["last_trace"] = trace.slice(maxi(0, trace.size()-4))
+	var active_trace: Array = trace.filter(func(row): return row.active)
+	observations["combat"]["last_active_trace"] = active_trace.slice(maxi(0, active_trace.size()-4))
 	var data := {"PASS": failures.is_empty(), "checks": checks, "failures": failures, "observations": observations,
 		"inputs": inputs, "trace": trace, "scope": "Actual canonical Story UI/combat, active normal CPU, isolated application-created signed save and real process restart. Public assets/headless; no native visual/art/device/full-campaign acceptance."}
 	var filename := "STORY_ENCOUNTER_PLAY.json" if pass_name == "story-play" else "STORY_ENCOUNTER_RESTART.json"
+	if pass_name == "story-controls": filename = "STORY_ENCOUNTER_CONTROLS.json"
 	var file := FileAccess.open(output.path_join(filename), FileAccess.WRITE)
 	file.store_string(JSON.stringify(data, "  ")); file.close()
 	quit(0 if failures.is_empty() else 1)
