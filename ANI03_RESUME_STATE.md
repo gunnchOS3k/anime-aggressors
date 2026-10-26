@@ -1,3 +1,13 @@
+# 2026-10-26 — actual stepped contact/guard proven; reset ownership repaired
+
+Run40347560611 @be66762a23f7afbd7b3b012a074e1292df962921 preserved outputs/training_story_ci_be66762a: importPASS; real Kaia jab contact on stepped move frame6,2.304% applied, hurt_light; fresh ground guard frozen through paused wall time, next F12 advances once. All18public-body/two-facing rows verified. Practice10/Lifecycle24/StorySceneOwnership8rows/StorySaveRecovery17PASS. FrameStepFAIL: four invalid cross-slot comparisons (unowned effects share emptyeventID) and two legitimate repeated-reset failures (respawned emitted2times). No engine SCRIPT ERROR; failure retained, not accepted aggregate.
+
+New runtime: training-only reset retires previous timeout ownership, so earlier respawn/tech/phase callbacks cannot expire a new reset. Practice reset clears real prior hitstop/controller freeze; competitive timers/frame/balance untouched. Added actual-input contact→reset verification. Paused VFX test now matches exact pool slot+event+kind+seed, verifies same owner/active state AND unchanged age; also requires real confirmed primary hit effect, no vacuous/cross-slot equality. Source query-open/server-close clock corrections retained.
+
+NEXT after push: dispatch existing public software-only authored-animation-production.yml -f training_story_runtime=true on integration/v1-preserved-candidate-20261025; inspect actual5suites at exactnewSHA and retain ENGINE_RESULT. If passes, next source task is Story Resume Save UI/body-selection rollback consistency plus actual restored-encounter ownership; no fabricated Story earnings. Full native/audio and private original-art BattleScene still await independent resource/USB read-load qualification. No new preflight/private reads/Blender/import/media locally, no app shutdown request. Original43worktrees+candidate, advanced protectedPRs/saves/private art all retained. All human-art/paired-runtime/RC2/releaseFALSE.
+
+---
+
 # 2026-10-26 — inactive query flush identified; current engine rerun pending
 
 Checkpoint7b85db8d (exact git rev-parse HEAD), integration branch. Run40346284821 @d6e5872f: importPASS; Practice10PASS, Lifecycle24PASS, StorySceneOwnership8rowsPASS, StorySaveRecovery17PASS; no script errors. FrameStep451/453PASS, contact+freshguardFAIL. All18public-body loading/both-facing stepping rows PASS, not private-art/native/all-move approval. Exact logs and result outputs/training_story_ci_d6e5872f retained.

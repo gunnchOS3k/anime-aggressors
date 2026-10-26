@@ -1760,6 +1760,10 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 	# Hit telemetry is recorded by HitResolver.resolve (single source of truth).
 
 func reset_fighter() -> void:
+	if use_training_physics_clock:
+		# A practice reset owns a new respawn. Earlier respawn/tech/phase
+		# deadlines must not expire its immunity or overwrite its later state.
+		_training_timeouts.clear()
 	if is_instance_valid(_form_audio_8c):_form_audio_8c.clear()
 	shield_break_8c.reset("respawn")
 	if _guard_presentation != null:_guard_presentation.clear("respawn")
@@ -1849,6 +1853,9 @@ func reset_training_practice() -> bool:
 	clear_training_dummy_inputs()
 	if cpu != null and is_cpu: cpu.clear_simulated_inputs()
 	_pending_attack_cmd = ""
+	_hitstop = 0.0
+	if model_3d != null and model_3d.get_animation_controller() != null:
+		model_3d.get_animation_controller().presentation_frozen = false
 	move_runner.cancel()
 	projectile_spawner.clear_all()
 	# Reuse the existing respawn authority, including its visible 1.2s immunity.

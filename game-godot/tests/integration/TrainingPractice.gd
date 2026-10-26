@@ -69,6 +69,22 @@ func run() -> void:
 	check(training._practice.slot_stats(1).hits == 0, "practice_reset_clears_session_counters")
 	await frames(90)
 	check(not training.fighter1.invincible and not defender.invincible, "existing_respawn_immunity_expires")
+	# Reset during an actual new contact, while its real hitstop is active.
+	# No synthetic hitstop/damage assignment or forced combat result.
+	for i in range(360):
+		var dx: float = defender.global_position.x - training.fighter1.global_position.x
+		if absf(dx) > 60: keys(["right" if dx > 0 else "left"])
+		elif i % 35 == 0: keys(["attack"])
+		else: keys([])
+		await physics_frame
+		if defender.damage_percent > 0: break
+	keys([])
+	var stopped_by_contact: bool = training.fighter1._hitstop > 0.0 or defender._hitstop > 0.0
+	check(defender.damage_percent > 0 and stopped_by_contact, "reset_probe_reaches_real_contact_hitstop")
+	training._reset_practice()
+	check(training.fighter1._hitstop == 0.0 and defender._hitstop == 0.0, "practice_reset_retires_previous_contact_hitstop")
+	var controller = training.fighter1.model_3d.get_animation_controller()
+	check(controller != null and not controller.presentation_frozen, "practice_reset_releases_contact_animation_freeze")
 	check(JSON.stringify(campaign.progress) == story_before, "practice_does_not_change_Story_progress")
 	finish()
 

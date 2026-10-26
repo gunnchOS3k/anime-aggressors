@@ -105,16 +105,21 @@ func run() -> void:
 	var renderer = training.get_node_or_null("SpectralFeedback")
 	var visual_ages: Array = []
 	if renderer != null:
-		for slot in renderer.slots:
-			if slot.active: visual_ages.append({"id": slot.event_id, "age": slot.age})
+		for index in renderer.slots.size():
+			var slot: Dictionary = renderer.slots[index]
+			if slot.active: visual_ages.append({"slot": index, "id": slot.event_id, "kind": slot.kind, "seed": slot.seed, "age": slot.age})
+	check(visual_ages.any(func(row): return not str(row.id).is_empty() and row.kind == 0), "actual_confirmed_contact_primary_effect_present")
 	await frames(30)
 	check(target.damage_percent == applied, "paused_wall_time_cannot_apply_late_damage")
 	check(player._hitstop == hitstop and target.state_machine.state_time == hurt_time, "paused_hitstop_and_hurt_time_are_frozen")
 	if renderer != null:
 		for prior in visual_ages:
-			for slot in renderer.slots:
-				if slot.event_id == prior.id:
-					check(slot.age == prior.age, "confirmed_contact_effect_lifetime_uses_simulation_time")
+			# Unowned decoration can share an empty event ID. Match its actual
+			# pool slot as well, and reject retirement/reuse while paused.
+			var slot: Dictionary = renderer.slots[prior.slot]
+			check(slot.active and slot.event_id == prior.id and slot.kind == prior.kind and slot.seed == prior.seed, "paused_effect_pool_preserves_exact_owner")
+			check(slot.age == prior.age, "confirmed_contact_effect_lifetime_uses_simulation_time")
+	samples.append({"phase": "paused_effects", "slots": visual_ages})
 	for i in range(8): await step(training)
 	check(target.damage_percent == applied and training._practice.slot_stats(1).hits == hits, "step_does_not_duplicate_contact_or_damage")
 	check(player._hitstop < hitstop or hitstop == 0.0, "step_advances_real_hitstop")
