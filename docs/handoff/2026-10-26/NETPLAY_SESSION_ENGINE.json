@@ -1,0 +1,115 @@
+{
+  "PASS": true,
+  "scope": "Compiled public TypeScript combat/rollback sessions; not Godot LAN, native/device, human or online acceptance",
+  "source_head": "468195d9ede8c345f3d586206d24c781ea34310d",
+  "node_version": "v24.21.0",
+  "locked_tools": {
+    "typescript": {
+      "version": "5.9.3",
+      "integrity": "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="
+    },
+    "@types/node": {
+      "version": "20.19.43",
+      "integrity": "sha512-6oYBAi5ikg4Pl+kGsoYtawUMBT2zZMCvPNF7pVLnHZfd1zf38DRiWn/gT01RYCdUqkv7Fhr+C9ot4/tb+2sVvA=="
+    },
+    "undici-types": {
+      "version": "6.21.0",
+      "integrity": "sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ=="
+    }
+  },
+  "steps": {
+    "locked_compiler": {
+      "exit_code": 0,
+      "guard_stop": null,
+      "seconds": 2.6098198079999975,
+      "sampled_peak_rss_bytes": 133423104,
+      "script_errors": [],
+      "log_sha256": "c59541a7d8bfc9987c0aa47adf2cdd2858be8b66de5abc0331d5a6484ae63ab6",
+      "PASS": true
+    },
+    "game-core_compile": {
+      "exit_code": 0,
+      "guard_stop": null,
+      "seconds": 2.3142104259999883,
+      "sampled_peak_rss_bytes": 379637760,
+      "script_errors": [],
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "PASS": true
+    },
+    "rollback_compile": {
+      "exit_code": 0,
+      "guard_stop": null,
+      "seconds": 1.0072825760000228,
+      "sampled_peak_rss_bytes": 224141312,
+      "script_errors": [],
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "PASS": true
+    },
+    "netplay_compile": {
+      "exit_code": 0,
+      "guard_stop": null,
+      "seconds": 1.1073586880000335,
+      "sampled_peak_rss_bytes": 238657536,
+      "script_errors": [],
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "PASS": true
+    },
+    "compiled_tests": {
+      "exit_code": 0,
+      "guard_stop": null,
+      "seconds": 1.205410927999992,
+      "sampled_peak_rss_bytes": 57753600,
+      "script_errors": [],
+      "log_sha256": "cf3e609ab07dac7ad936615232a5e461c11f1ca8dae7f04b226c451427d3cb28",
+      "PASS": true
+    }
+  },
+  "sources_unchanged": true,
+  "workflow": "https://github.com/gunnchOS3k/anime-aggressors/actions/runs/40394671484",
+  "scenario": {
+    "scenario": "post_countdown_melee",
+    "frames": 640,
+    "delay_frames": [
+      3,
+      8
+    ],
+    "duplicate_packets": 118,
+    "damage": [
+      6,
+      4
+    ],
+    "rollback_counts": [
+      109,
+      78
+    ],
+    "final_hash": "3c137404"
+  },
+  "test_summary": [
+    "\u2139 tests 24",
+    "\u2139 pass 24",
+    "\u2139 fail 0",
+    "\u2139 duration_ms 1137.781082"
+  ],
+  "raw_evidence": "outputs/netplay_ci_468195d9/",
+  "raw_result_sha256": "482522a6a19cd4d33c780b9727a0a6c42af2206414fdbbf664db65c34f238677",
+  "verified_features": [
+    "original-frame late input correction through actual game-core rollback",
+    "future-frame buffering and bounded input/snapshot history",
+    "duplicate/malformed/conflicting input handling",
+    "mutable aura snapshot isolation and aura-only misprediction",
+    "send failure cannot repeat a retired frame",
+    "independent-process default match hash equality",
+    "all9 canonical fighter identities with both body values and both initial facings/seats; explicit profiles retain precedence"
+  ],
+  "known_gaps": [
+    "No Godot transport/BattleScene state replication or actual combat snapshot/restore/resimulation",
+    "WebSocket transport remains a stub; no online relay, authentication or actual resync proven",
+    "No real two-device LAN or independently controlled native multiplayer acceptance",
+    "Projectile/clash module-global IDs and rendered-hitstop audiovisual dedup still need correction/testing",
+    "No native private-art, audio-mix or device acceptance"
+  ],
+  "HUMAN_ART_APPROVED": false,
+  "RUNTIME_PAIRED_CONTACT_VERIFIED": false,
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false
+}
