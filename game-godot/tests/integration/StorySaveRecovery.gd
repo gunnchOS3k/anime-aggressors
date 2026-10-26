@@ -29,6 +29,8 @@ func run() -> void:
 		finish()
 		return
 	var producer = current_scene
+	var dialogue = root.get_node("StoryDialogue")
+	check(dialogue.context == "battle" and dialogue.is_busy(), "actual_owned_intro_active_before_navigation")
 	check(campaign._battle_producer == producer, "actual_BattleScene_binds_result_owner")
 	check(not producer._active, "declared_closed_countdown_boundary_not_played_match")
 	var good_path: String = campaign.save_path
@@ -54,6 +56,7 @@ func run() -> void:
 		"fixture": "declared nonqualifying closed-BattleScene loss boundary; no combat completion claim"}
 	root.get_node("SceneRouter").go("story")
 	await frames(6)
+	check(not dialogue.is_busy() and not dialogue._panel.visible, "exited_battle_retires_owned_intro_and_overlay")
 	# Real Story settings handler plus filesystem fault: rollback must be
 	# visible, and Resume Save must reload the existing signed checkpoint.
 	var scene = current_scene
@@ -82,6 +85,7 @@ func run() -> void:
 				await click(button)
 				resumed = delivery.pressed == 1
 				saved_scope["resume_UI"] = {"button": str(button.get_global_rect()), "viewport": str(root.get_visible_rect()),
+					"canvas_transform": str(button.get_global_transform_with_canvas()),
 					"pressed": delivery.pressed, "error": campaign.last_error, "body": campaign.progress.presentation,
 					"selected": presentation.selected, "disabled": button.disabled, "visible": button.is_visible_in_tree()}
 				break

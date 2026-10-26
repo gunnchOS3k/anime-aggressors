@@ -65,7 +65,10 @@ func image(label: String) -> void:
 	images.append({"path":path,"physics_frame":Engine.get_physics_frames()})
 
 func click(button: Button) -> void:
-	var pos=button.get_global_rect().get_center()
+	# GUI input is viewport-local. A retained battle camera can give a menu
+	# canvas a nonidentity transform; its unprojected global rect is not the
+	# position actually drawn or hit-tested by the viewport.
+	var pos=button.get_global_transform_with_canvas() * (button.size * 0.5)
 	var motion=InputEventMouseMotion.new();motion.position=pos;motion.global_position=pos
 	# Headless Window is 64px, while canvas_items has a larger logical viewport.
 	# These observed button rectangles are VIEWPORT-local, not physical pixels.

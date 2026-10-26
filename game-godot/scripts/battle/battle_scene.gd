@@ -42,6 +42,7 @@ var _stage_camera_profile: Dictionary = {}
 var _wave018_vis_accum: float = 0.0
 var _wave018_last_telemetry_ids: Array = []
 var _story_attempt_token: String = ""
+var _story_dialogue_generation := -1
 var _story_cosmic_actor
 var _story_survival := false
 var _story_elapsed := 0.0
@@ -743,6 +744,11 @@ func _tick_story_cosmic_encounter(delta: float) -> void:
 
 
 func _exit_tree() -> void:
+	var dialogue = get_node_or_null("/root/StoryDialogue")
+	if dialogue != null and _story_dialogue_generation >= 0 and int(dialogue.get("_generation")) == _story_dialogue_generation and str(dialogue.get("context")) == "battle":
+		# Direct navigation must retire this battle's intro/voice/overlay, but
+		# cannot cancel a later sequence already owned by an incoming scene.
+		dialogue.cancel()
 	if _hazard_runtime!=null:_hazard_runtime.clear_items()
 	if _story_objective != null:
 		for actor in _story_objective.actors:
@@ -753,6 +759,7 @@ func _exit_tree() -> void:
 
 func _setup_story_dialogue() -> void:
 	StoryDialogue.begin(str(CampaignRuntime.active_encounter.get("node_id","")),"battle")
+	_story_dialogue_generation = StoryDialogue._generation
 	StoryDialogue.cue_started.connect(_on_story_cue)
 	for actor in fighters_root.get_children():
 		actor.move_runner.move_started.connect(func(_id):

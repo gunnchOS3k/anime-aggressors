@@ -1,3 +1,13 @@
+# 2026-10-26 — Resume Save input delivery and battle-intro teardown
+
+Run40349939618 @3c020c12: import/allTraining/8Storyownership rowsPASS; save-recovery24of25PASS, selector rollback fixed but Resume result failed. Run40350504648 @b4a996dca7416b112c54def36da951f5b7efccc4 added actual pressed observation: buttonvisible/enabled, rect(220,272,160,48), viewport1280square, but pressed=0. The earlier fixture only attempted the click; do NOT claim it had exercised Resume Save. Raw/results outputs/story_resume_delivery_b4a996dc and outputs/training_story_ci_3c020c12 preserved.
+
+New small changes: ordinary UI driver uses get_global_transform_with_canvas()*localcenter (correct viewport-local input), not globalrect excluding canvas projection. Same normal motion/press/release input, actual pressed count required; no handler-call shortcut. Story BattleScene now tracks its dialogue generation and cancels ONLY its own battle intro/voice/overlay on any scene exit. Incoming generation cannot be cancelled by outgoing actor teardown. Added real intro-busy-before/hidden-after scene checks; original UI signature/save assertions unchanged. Pending actual engine proof; no native visual acceptance.
+
+NEXT push current checkpoint, same authorized public software-only job; all27StorySaveRecovery checks plus previousTraining631/13/24 and8Storyrows must pass. Preserve failures. No local engine/media/art/private reads/new resource preflight, no paid/art upload. Original combat/math/data and signedearned/unlock authority retained. All human/paired-runtime/RC2/releaseFALSE. Next native/audio and private-art execution still requires existing independent resource/read-load gates, not passing headless CI.
+
+---
+
 # 2026-10-26 — Story UI rollback defect reproduced and corrected
 
 Accepted engine sourcec115b408 and actual run40348453685 retained below. Expanded Story test source d477c8c5e28f75e462fc662fa6095d568d8a3646, run40349254146: allTraining631/13/24checks and8routeStoryrows stillPASS; save-recovery23of25PASS. Exact twoFAIL: failed_body_save_restores_visible_selection; Resume_Save_restores_presentation_and_clears_stale_error. No script errors. Preserved baseline outputs/story_settings_d477c8c5_baseline, no owner saves/earnings used.
