@@ -82,12 +82,31 @@ func run() -> void:
 			if button.text == "Resume Save":
 				var delivery := {"pressed": 0}
 				button.pressed.connect(func(): delivery.pressed += 1)
+				var point: Vector2 = button.get_global_transform_with_canvas() * (button.size * 0.5)
+				var motion := InputEventMouseMotion.new()
+				motion.position = point; motion.global_position = point
+				root.push_input(motion, true)
+				await process_frame
+				var hover = root.gui_get_hovered_control()
 				await click(button)
 				resumed = delivery.pressed == 1
 				saved_scope["resume_UI"] = {"button": str(button.get_global_rect()), "viewport": str(root.get_visible_rect()),
 					"canvas_transform": str(button.get_global_transform_with_canvas()),
+					"mouse": str(root.get_mouse_position()), "hover": str(hover.get_path()) if is_instance_valid(hover) else "NONE",
 					"pressed": delivery.pressed, "error": campaign.last_error, "body": campaign.progress.presentation,
 					"selected": presentation.selected, "disabled": button.disabled, "visible": button.is_visible_in_tree()}
+				var covering: Array = []
+				for control in root.find_children("*", "Control", true, false):
+					if covering.size() < 24 and control.is_visible_in_tree() and control.mouse_filter != Control.MOUSE_FILTER_IGNORE and control.get_global_rect().has_point(point):
+						covering.append({"path": str(control.get_path()), "rect": str(control.get_global_rect()), "filter": control.mouse_filter})
+				saved_scope["resume_UI"]["covering"] = covering
+				if not resumed:
+					# Independently exercise supported keyboard/controller confirm;
+					# pointer delivery remains a required assertion below.
+					button.grab_focus()
+					await accept_focused()
+					saved_scope["resume_UI"]["confirm_pressed"] = delivery.pressed
+					saved_scope["resume_UI"]["confirm_error"] = campaign.last_error
 				break
 		check(resumed, "actual_Resume_Save_button_used")
 		check(campaign.current_node().id == node and campaign.progress.checkpoint == checkpoint, "Resume_Save_restores_signed_node_and_checkpoint")
