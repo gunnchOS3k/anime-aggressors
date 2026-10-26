@@ -1,3 +1,21 @@
+# 2026-10-25 — owner keeps native blocked; training lifecycle source in progress
+
+Owner explicitly chose continuing source work while Cursor runs. Do NOT ask owner to close applications/restart or repeatedly preflight. Preservef0ffea0015287a7e15859e594a59efd2e19c895e and all newer changes. Branch integration/v1-preserved-candidate-20261025, LOCAL ONLY.
+
+One fresh preflight21:28:49CDT:19029925888bytes /17.722999573GiB available,33% RAM free,9249.38MiB swap, no media jobs. Native needs21042823168bytes (deficit2012897280), headless20401094656. NO Godot/Blender/native/import/encoding stage or old suite rerun. Independent low-resource source work only;19GiBstart/18GiBrunning guards unchanged. No private reads, CI dispatch, original-art regeneration, deletion or external migration.
+
+New source corrections: initialize training defaults at menu entry BEFORE configured stage/dummy choices; shared TrainingBattleScene no longer replaces tutorial mode/rules. begin_tutorial explicitly restores P1human and disables privileged eval context. Training/tutorial exit restores tree pause/freeze/slow state; tutorial completion commits once after all5named actions, not every80ms while guide stays open. New TrainingLifecycle.gd prepared for actual isolated scene/UI/public lesson actions with Story hash unchanged. NOT_EXECUTED: engine/full-scene forecast unavailable. Source inspection/diff checks only; no native completion or artistic approval claim.
+
+Targeted nonprivate cache inventory (own outputs/*/game-godot/.godot with private_assets_installed=false):17directories each80379904nonexclusive allocated bytes, total1.272614GiB. Keep existing native_public_counterplay_female_v3 imported anchor;16others upper-bound1.197754GiB. APFSclone shared extents mean actual reclaim may be much smaller/zero, and even this upper bound cannot close1.874657GiB native deficit. No deletion/move authorized or performed; source/logs/media/evidence untouched. No suitable user Gradle version/transforms directories found. Do not expand into broad cleanup or repeated installer scans.
+
+NEXT source task under latest owner Priority1: trace actual Training0%-hit conditions and dummy-owned input cleanup; implement collision-authoritative practice statistics, reset/settings and defensive feedback without changing hit/damage authority. Sticky shield action in fighter._dummy_tick currently has no mode-switch release; investigate/repair through existing actor input path. Do not repeat PartyLink protocol tests (34PASS preserved) or assert historical native0% defect closed without actual training contact proof.
+
+Pending qualified engine command for lifecycle: python3 tools/integration/run_match_completion_checks.py --output outputs/training_lifecycle_v1 --reuse-imported outputs/native_public_counterplay_female_v3/game-godot --script tests/integration/TrainingLifecycle.gd. Actual dedicated native window still starts with pending full-match audio regression attack_earned_scene_audio_v4, then native earned KO. Do NOT launch while current guards fail.
+
+Human art/paired runtime/RC2/release gatesFALSE. No owner saves/private assets/protected PRs/worktrees modified. Original36move exports/twoIDsperbody preserved,22otherIDs/body and full acting/effects/forms/native art acceptance remain pending. No new earned Story/unlock/OVA/device/LAN claim. No merge/push/publication/tag/deploy/release.
+
+---
+
 # 2026-10-25 — native blocked; PartyLink match/disconnect ownership corrected
 
 Branch integration/v1-preserved-candidate-20261025. Owner/rematch source saved82e6232e656bab9c724fc0065fadeb460dfc3791; exact latest delivery is `git rev-parse HEAD`. Only owned source/tests/docs changed. Protected PR123/133, original43worktrees plus candidate, owner saves, private art and old evidence preserved. LOCAL ONLY; no remote CI/merge/push/publication.

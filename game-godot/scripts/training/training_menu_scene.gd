@@ -12,6 +12,10 @@ var _roster: Array = []
 var _stages: Array = []
 
 func _ready() -> void:
+	# Establish training defaults before the player chooses stage/dummy/fighters.
+	# Doing this in the battle after those choices would overwrite the setup.
+	if str(GameState.mode) != "training":
+		GameState.begin_training()
 	_roster = _DataLoader.roster_ids()
 	_stages = GameState.production_stage_ids()
 	if _stages.is_empty():

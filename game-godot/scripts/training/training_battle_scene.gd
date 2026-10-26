@@ -34,7 +34,7 @@ var _pause_panel: PanelContainer
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	if GameState.has_method("begin_training") and str(GameState.mode) != "training":
+	if GameState.has_method("begin_training") and str(GameState.mode) not in ["training", "tutorial"]:
 		GameState.begin_training()
 	_build_stage()
 	_spawn_fighters()
@@ -307,16 +307,29 @@ func _ensure_pause_panel() -> void:
 
 
 func _on_training_pause_return() -> void:
-	_paused = false
-	get_tree().paused = false
-	if _battle_sim:
-		_battle_sim.set_paused(false)
-	Engine.time_scale = 1.0
+	_restore_training_time()
 	if _pause_panel:
 		_pause_panel.visible = false
 	process_mode = Node.PROCESS_MODE_INHERIT
 	TouchInputManager._sync_overlay()
 	SceneRouter.go("training")
+
+
+func _restore_training_time() -> void:
+	_paused = false
+	_freeze = false
+	_slow_mo = false
+	if is_inside_tree():
+		get_tree().paused = false
+	if is_instance_valid(_battle_sim):
+		_battle_sim.set_freeze(false)
+		_battle_sim.set_paused(false)
+	Engine.time_scale = 1.0
+
+
+func _exit_tree() -> void:
+	# Pause/slow/freeze are training-owned; a routed menu must remain usable.
+	_restore_training_time()
 
 
 func _unhandled_input(event: InputEvent) -> void:

@@ -144,6 +144,8 @@ func begin_tutorial() -> void:
 	ensure_first_run_loaded()
 	mode = "tutorial"
 	arcade_active = false
+	battle_eval_mode = false
+	p1_is_cpu = false
 	hazards_enabled = false
 	items_enabled = false
 	tutorial_step = 0

@@ -5,12 +5,14 @@ extends "res://scripts/training/training_battle_scene.gd"
 var _guide: Label
 var _steps_done: Dictionary = {}
 var _poll_timer: float = 0.0
+var _completion_recorded := false
 
 const ORDER: Array[String] = ["move", "jump", "attack", "special", "aura"]
 
 
 func _ready() -> void:
-	GameState.mode = "tutorial"
+	if str(GameState.mode) != "tutorial" or str(GameState.ruleset_id) != "tutorial":
+		GameState.begin_tutorial()
 	GameState.stage_id = "training-grid"
 	GameState.p2_fighter_id = "rook-ironside"
 	GameState.training_dummy_mode = "idle"
@@ -85,15 +87,25 @@ func _refresh_guide() -> void:
 			remaining += 1
 	if remaining == 0:
 		lines.append("All steps complete — press Esc to continue.")
-		GameState.complete_tutorial()
+		_record_completion_if_ready()
 	_guide.text = "\n".join(lines)
+
+
+func _record_completion_if_ready() -> bool:
+	if _completion_recorded:
+		return false
+	for step in ORDER:
+		if not (_steps_done.has(step) or GameState.tutorial_steps_done.has(step)):
+			return false
+	_completion_recorded = true
+	GameState.complete_tutorial()
+	return true
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
-		Engine.time_scale = 1.0
-		if _steps_done.size() >= ORDER.size() or GameState.tutorial_steps_done.size() >= ORDER.size():
-			GameState.complete_tutorial()
+		_restore_training_time()
+		_record_completion_if_ready()
 		SceneRouter.go("mode_select")
 		get_viewport().set_input_as_handled()
 		return
