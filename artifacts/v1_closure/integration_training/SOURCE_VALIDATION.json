@@ -1,0 +1,28 @@
+{
+  "command": [
+    "/opt/homebrew/bin/node",
+    "--max-old-space-size=96",
+    "--experimental-loader",
+    "./outputs/integration-checks/source-ts-loader.mjs",
+    "--test",
+    "--test-concurrency=1",
+    "apps/web/test/trainingCommands.test.ts",
+    "apps/web/test/controlsCheckVersus.test.ts"
+  ],
+  "returncode": 0,
+  "seconds": 0.8124128329945961,
+  "peak_sampled_family_rss_bytes": 101171200,
+  "guard_failure": null,
+  "scope": "Node source-transformed production handler and real TypeScript game-core simulation. No Godot/build/import/native/device acceptance.",
+  "source_sha256": {
+    "apps/web/src/input/controlReference.ts": "a1f4f28bbf91494b6fb5d2a867f3b826691df6263d74fd1bff002d0545ef75ca",
+    "apps/web/src/match/trainingCommands.ts": "39b2acd9707dcb521a49147c9ed8389cee883c243acbb3c0b9563fb1d22bdbd5",
+    "apps/web/src/game/App.ts": "0b737872f5199a266060ffeb8e4454db50a8b53cfbc6186ff3d7317a69f75b5d",
+    "apps/web/test/trainingCommands.test.ts": "9c867290f8b97c2d3729f3502b54c26d043f8e1155a384f39818aca8649034f6",
+    "packages/game-core/src/training/trainingMode.ts": "7769ba6f06b7636a7adde50c6303dc1ebf397422952641ce3133adf77b1acf4a"
+  },
+  "tests_passed": 8,
+  "tests_failed": 0,
+  "godot_training_lifecycle": "NOT_EXECUTED_RESOURCE_BLOCKED",
+  "godot_training_practice": "NOT_EXECUTED_RESOURCE_BLOCKED"
+}

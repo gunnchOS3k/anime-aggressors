@@ -485,8 +485,12 @@ func record_battle_result(winner: int, token: String, objective_evidence: Dictio
 		if not _complete_node(str(receipt["node_id"]), receipt, stocks, damage_percent): return false
 		receipt["advanced"] = true
 	else:
+		var previous := progress.duplicate(true)
 		_stamp_combat(route_id, stocks, damage_percent)
 		if not _combat_result(stocks, damage_percent).is_empty() and not save_progress():
+			# Failed loss/replay writes must not leave an unsaved checkpoint in
+			# memory while Resume Save still refers to the previous signed state.
+			progress = previous
 			return false
 	last_result = receipt.duplicate(true)
 	active_encounter.clear()

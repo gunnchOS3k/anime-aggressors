@@ -50,6 +50,28 @@ func _run() -> void:
 		dialogue.skip_all();await frames(1)
 		check(c.progress.routes[other].completed.is_empty(),fid+":unread_other_route_not_advanced")
 		check(scene_node.id in c.progress.routes[fid].completed,fid+":only_owned_scene_acknowledged")
+		# Replaying an already-read chapter is presentation-only. Its close
+		# callback must never cancel a later generation of Story dialogue.
+		var before_replay := JSON.stringify(c.progress)
+		var saved_replay := FileAccess.get_file_as_bytes(c.save_path)
+		for index in menu._replay_picker.item_count:
+			if menu._replay_picker.get_item_metadata(index) == scene_node.id:
+				menu._replay_picker.select(index)
+		button(menu,"Replay Selected Encounter").pressed.emit()
+		check(is_instance_valid(menu._scene_replay) and menu._scene_pending,fid+":replay_dialog_owns_presentation")
+		check(menu._action.disabled and menu._route_picker.disabled,fid+":replay_locks_competing_chapter_controls")
+		if is_instance_valid(menu._scene_replay):
+			var review = menu._scene_replay
+			var generation: int = dialogue._generation
+			review.confirmed.emit()
+			check(not menu._scene_pending and not dialogue.is_busy(),fid+":replay_close_returns_control")
+			dialogue.begin(scene_node.id,"scene")
+			for event in ["scene_start","scene_turn","scene_resolution"]: dialogue.fire(event)
+			var next_generation: int = dialogue._generation
+			menu._close_scene_replay(review,generation) # Deliberate stale-callback fixture.
+			check(dialogue._generation == next_generation and dialogue.is_busy(),fid+":stale_replay_close_cannot_cancel_next_scene")
+			dialogue.cancel()
+		check(before_replay == JSON.stringify(c.progress) and saved_replay == FileAccess.get_file_as_bytes(c.save_path),fid+":replay_never_writes_or_advances")
 		# Reset only this declared fixture, then test stop/restart ownership.
 		c.progress=c.new_progress();c.progress.selected_route=fid;c.progress.routes[fid].cursor=scene_node.id;c.save_progress()
 		router.go("story");await frames(6);menu=current_scene

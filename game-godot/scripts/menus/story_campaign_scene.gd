@@ -13,6 +13,8 @@ var _chapter_controls: Array[BaseButton] = []
 var _scene_pending := false
 var _scene_request := 0
 var _scene_notice := ""
+var _scene_replay: AcceptDialog
+var _replay_generation := -1
 
 
 func _ready() -> void:
@@ -218,9 +220,15 @@ func _on_replay() -> void:
 			scroll.add_child(transcript);review.add_child(scroll)
 			StoryDialogue.begin(selected,"replay")
 			for event in ["scene_start","scene_turn","scene_resolution"]: StoryDialogue.fire(event)
-			review.confirmed.connect(func(): StoryDialogue.cancel(); review.queue_free())
-			review.canceled.connect(func(): StoryDialogue.cancel(); review.queue_free())
+			_scene_replay = review
+			_replay_generation = StoryDialogue._generation
+			_scene_pending = true
+			# Replay owns its presentation only. It cannot acknowledge a chapter
+			# or leave a stale close callback able to cancel the next scene.
+			review.confirmed.connect(_close_scene_replay.bind(review, _replay_generation))
+			review.canceled.connect(_close_scene_replay.bind(review, _replay_generation))
 			add_child(review)
+			_refresh()
 			review.popup_centered(Vector2i(960, 450))
 			return # Presentation only: no acknowledgment, receipt or save write.
 	if CampaignRuntime.begin_encounter(selected):
@@ -228,6 +236,7 @@ func _on_replay() -> void:
 
 
 func on_back() -> void:
+	_discard_scene_replay()
 	_scene_request += 1
 	_scene_pending = false
 	StoryDialogue.cancel()
@@ -247,6 +256,9 @@ func _on_next_route() -> void:
 
 func _on_stop_scene() -> void:
 	if not _scene_pending: return
+	if is_instance_valid(_scene_replay):
+		_close_scene_replay(_scene_replay, _replay_generation)
+		return
 	_scene_request += 1
 	_scene_pending = false
 	StoryDialogue.cancel()
@@ -257,6 +269,7 @@ func _on_stop_scene() -> void:
 
 
 func _exit_tree() -> void:
+	_discard_scene_replay()
 	if _scene_pending:
 		_scene_request += 1
 		_scene_pending = false
@@ -266,3 +279,24 @@ func _exit_tree() -> void:
 
 func _on_scene_sequence_finished() -> void:
 	_scene_settled.emit()
+
+
+func _close_scene_replay(review: AcceptDialog, generation: int) -> void:
+	if review != _scene_replay: return
+	_scene_replay = null
+	_replay_generation = -1
+	if generation == StoryDialogue._generation: StoryDialogue.cancel()
+	if is_instance_valid(review): review.queue_free()
+	_scene_pending = false
+	_scene_notice = "Read-only replay closed. Story progress is unchanged."
+	if is_inside_tree():
+		_refresh()
+		_action.grab_focus()
+
+
+func _discard_scene_replay() -> void:
+	# Called before route teardown; any queued dialog callback is now stale.
+	var review := _scene_replay
+	_scene_replay = null
+	_replay_generation = -1
+	if is_instance_valid(review): review.queue_free()

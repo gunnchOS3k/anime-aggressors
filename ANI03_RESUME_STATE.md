@@ -1,3 +1,13 @@
+# 2026-10-25 — Story replay ownership and failed-save rollback source correction
+
+Training checkpoint `29a769d6` is committed. New source closes two Story edge paths: read-only chapter replay now locks competing chapter controls, owns only its dialogue generation and discards stale dialog callbacks on teardown; replay close cannot cancel a later narrative generation or acknowledge chapters. Failed loss/replay checkpoint saves now restore the prior in-memory progress, matching the existing transactional win path. No campaign graph, dialogue, receipts, unlock prerequisites or earned owner save was edited.
+
+Existing eight-route StorySceneOwnership fixture now covers replay lock/close/no-write/stale-generation behavior. NOT_EXECUTED: Godot parsing/runtime and full-scene forecast still unavailable; old eight-path PASS is historical, not a pass for these changed sources. Source/diff inspection only for this Story increment. No newly earned route completion or OVA acceptance. Compact training source receipt was outside sparse-checkout scope and is explicitly added with --sparse in this checkpoint; no sparsity or worktree change.
+
+NEXT safe implementation: fix browser training state resets/settings at the actual simulation ownership boundary. App currently edits RollbackSession's returned clone, so resets can disappear on the next tick. Use the same existing simulateFrame authority for local practice, preserve competitive rollback unchanged, and exercise reset-plus-next-frame with actual earned damage. Do not repeat resource preflight or launch Godot.
+
+---
+
 # 2026-10-25 — training implementation saved; native remains owner-blocked
 
 Branch `integration/v1-preserved-candidate-20261025`, parent checkpoint `bbfabaff0478fb5c15a64d7326839ea084d644fd`; exact delivery is `git rev-parse HEAD`. LOCAL ONLY. Owner says continue source work while Cursor runs: do not request app shutdown/restart, repeat failed preflight, or start heavy/native/private-art operations. Previously measured17.723GiB remains last measurement, not a new capacity claim. No private transport qualification/read, art regeneration, deletion, CI dispatch or gameplay balance change.
