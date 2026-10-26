@@ -1,3 +1,13 @@
+# 2026-10-26 — actual five-suite Godot acceptance PASS; next Story UI reproduction
+
+Engine sourcec115b40863d395f09fe1a1feed48e80b87a638a8 normally pushed. Run40348453685 SUCCESS, official4.7.1.stable.official.a13da4feb: importPASS34.13s/860897280bytes sampledRSS. FrameStep631PASS23.80s (real2.304%contact, no duplicate/late damage, hitstop/guard/animation/effect clocks, exactstep, repeated-reset,18publicbodies×bothfacings); Practice13PASS4.02s (realcontact/whiff/meters/resetduringactualhitstop); Lifecycle24PASS5.72s; StorySceneOwnership8rowsPASS1.51s; savefault/retry/signedrestore17PASS2.41s. ZERO engine ERROR lines. Exact nonprivate workflow log+ENGINE_RESULT outputs/training_story_ci_c115b408. This is REAL HEADLESS ENGINE acceptance only, not nativevisual/device/privateart/earnedroute acceptance.
+
+Continuing actual Story UI correctness: new isolated fault test selects a different body via real handler with unavailable save path, then clicks actual Resume Save. Expects authoritative body rollback to be reflected in visible selector and stale write error cleared after authenticated restore. Existing source appears to leave both stale. This expanded suite is NOT YET EXECUTED; preserve negative baseline before repairing. Original accepted17checks retained, no unlock/route progression seeded.
+
+NEXT push expanded fixture and same public software-only manual job; if demonstrated, retain failure then fix selector refresh and valid-load error lifecycle. No local heavy/private/paid work or new resource preflight. Full-match audio/native, earned campaigns/Convergence/OVAs, private-art2/24moveIDcoverage perbody, full LAN/controllers/platform/device acceptance remain unfinished. All human/paired-runtime/RC2/releaseFALSE.
+
+---
+
 # 2026-10-26 — actual stepped contact/guard proven; reset ownership repaired
 
 Run40347560611 @be66762a23f7afbd7b3b012a074e1292df962921 preserved outputs/training_story_ci_be66762a: importPASS; real Kaia jab contact on stepped move frame6,2.304% applied, hurt_light; fresh ground guard frozen through paused wall time, next F12 advances once. All18public-body/two-facing rows verified. Practice10/Lifecycle24/StorySceneOwnership8rows/StorySaveRecovery17PASS. FrameStepFAIL: four invalid cross-slot comparisons (unowned effects share emptyeventID) and two legitimate repeated-reset failures (respawned emitted2times). No engine SCRIPT ERROR; failure retained, not accepted aggregate.

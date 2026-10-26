@@ -54,6 +54,35 @@ func run() -> void:
 		"fixture": "declared nonqualifying closed-BattleScene loss boundary; no combat completion claim"}
 	root.get_node("SceneRouter").go("story")
 	await frames(6)
+	# Real Story settings handler plus filesystem fault: rollback must be
+	# visible, and Resume Save must reload the existing signed checkpoint.
+	var scene = current_scene
+	var presentation: OptionButton
+	for control in scene._chapter_controls:
+		if control is OptionButton and control.item_count == 2 and control.get_item_text(0) == "Female presentation":
+			presentation = control
+	check(presentation != null, "actual_Story_body_selector_present")
+	if presentation != null:
+		var saved_body: String = campaign.progress.presentation
+		var settings_disk_before := FileAccess.get_file_as_bytes(good_path)
+		var saved_index := 1 if saved_body == "male" else 0
+		campaign.save_path = "user://intentionally_missing_directory/settings.json"
+		presentation.select(1 - saved_index)
+		presentation.item_selected.emit(1 - saved_index) # Declared UI selection.
+		check(campaign.last_error == "Could not write Story progress.", "settings_failure_is_real_write_error")
+		check(campaign.progress.presentation == saved_body, "failed_body_save_keeps_authoritative_presentation")
+		check(presentation.selected == saved_index, "failed_body_save_restores_visible_selection")
+		check(FileAccess.get_file_as_bytes(good_path) == settings_disk_before, "failed_settings_write_preserves_signed_profile")
+		campaign.save_path = good_path
+		var resumed := false
+		for button in scene.find_children("*", "Button", true, false):
+			if button.text == "Resume Save":
+				await click(button)
+				resumed = true
+				break
+		check(resumed, "actual_Resume_Save_button_used")
+		check(campaign.current_node().id == node and campaign.progress.checkpoint == checkpoint, "Resume_Save_restores_signed_node_and_checkpoint")
+		check(presentation.selected == saved_index and campaign.last_error.is_empty(), "Resume_Save_restores_presentation_and_clears_stale_error")
 	finish()
 
 func finish() -> void:
