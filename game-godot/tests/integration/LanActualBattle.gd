@@ -14,6 +14,7 @@ var whiff_damage := -1.0
 var spoof_sent := false
 var batch_sent := false
 var batch_observation: Dictionary = {}
+var lobby_observations: Array = []
 var replica_rows: Array = []
 var replica_contacts := 0
 var guest_career := 0
@@ -36,8 +37,8 @@ func run() -> void:
 func host_run() -> void:
 	var gs = root.get_node("GameState")
 	# Legal pre-match selections, never in-match modifications.
-	gs.p1_fighter_id = "kaia-windrow"; gs.p2_fighter_id = "juno-spark"
-	gs.p1_body_variant = "female"; gs.p2_body_variant = "male"
+	gs.p1_fighter_id = "kaia-windrow"; gs.p2_fighter_id = "rook-ironside"
+	gs.p1_body_variant = "female"; gs.p2_body_variant = "female"
 	gs.stage_id = "training-grid"; gs.stocks = 3; gs.match_timer_seconds = 180
 	gs.match_type = "stock"; gs.ruleset_id = "stock-3"
 	check(lan.host(port, "127.0.0.1") == OK, "real_ENet_server_listen")
@@ -108,6 +109,10 @@ func host_run() -> void:
 func guest_run() -> void:
 	root.get_node("GameState").p1_fighter_id = "juno-spark"
 	root.get_node("GameState").p1_body_variant = "male"
+	# Observe actual decoded HOST messages while the session exists. stop()
+	# correctly clears lobby state, so a post-disconnect read cannot prove ACK.
+	lan.changed.connect(func():
+		if not lan.lobby_state.is_empty() and (lobby_observations.is_empty() or lobby_observations.back() != lan.lobby_state): lobby_observations.append(lan.lobby_state.duplicate(true)))
 	check(lan.join("127.0.0.1", port) == OK, "independent_ENet_client_connect")
 	for i in range(600):
 		await physics_frame
@@ -176,7 +181,8 @@ func guest_run() -> void:
 				replica_contacts = replica.presented_contacts.size()
 	keys([])
 	check(spoof_sent, "spoof_probe_sent_over_actual_socket")
-	check(lan.lobby_state.get("guest_ready", false) and lan.lobby_state.get("p2", {}).get("fighter", "") == "juno-spark", "guest_observes_host_acknowledged_own_selection")
+	check(lobby_observations.any(func(ack):return ack.get("guest_ready",false) and int(ack.get("revision",-1)) >= 1 and ack.get("p2",{}) == {"fighter":"juno-spark","body":"male"}), "guest_observes_host_acknowledged_own_selection")
+	check(guest_samples.any(func(s):return lobby_observations.any(func(ack):return ack.get("guest_ready",false) and ack.p2.fighter==s.actors[1].fighter and ack.p2.body==s.actors[1].body)), "host_ack_matches_actual_initialized_remote_fighter_and_body")
 	check(batch_sent and not batch_observation.is_empty(), "batched_tap_sent_from_authoritative_grounded_neutral")
 	check(not replica_rows.is_empty(), "guest_real_BattleScene_presentation_loaded")
 	check(replica_rows.all(func(row):return row.models and row.no_local_authority), "guest_models_loaded_without_second_combat_simulation")
@@ -191,7 +197,7 @@ func guest_run() -> void:
 func finish() -> void:
 	keys([])
 	var result = {"PASS":failures.is_empty(), "role":side, "pid":OS.get_process_id(), "checks":checks, "failures":failures,
-		"replica_rows":replica_rows, "replica_contacts":replica_contacts, "contacts":contacts, "move_starts":move_starts, "guards":guard_events, "grabs":grab_events, "guest_samples":guest_samples, "batch_observation":batch_observation,
+		"replica_rows":replica_rows, "replica_contacts":replica_contacts, "contacts":contacts, "move_starts":move_starts, "guards":guard_events, "grabs":grab_events, "guest_samples":guest_samples, "batch_observation":batch_observation, "received_host_lobby_observations":lobby_observations,
 		"received_inputs":lan.received_inputs if lan != null else 0, "rejected_inputs":lan.rejected_inputs if lan != null else 0,
 		"scope":"Two actual localhost ENet Godot processes, guest public input into authoritative host BattleScene; host-state guest BattleScene presentation, not physical LAN, rollback, original art or human acceptance",
 		"HUMAN_ART_APPROVED":false,"RC2_READY":false,"V1_0_0_RELEASE_AUTHORIZED":false}

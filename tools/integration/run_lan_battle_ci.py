@@ -111,6 +111,10 @@ def run():
         record["terminal_combined_sampled_peak_rss_bytes"] = terminal["combined_sampled_peak_rss_bytes"]
         record["suites"].update({"terminal-"+k:v for k,v in terminal["suites"].items()})
         if not all(s["PASS"] for s in terminal["suites"].values()): return record
+        lobby = pair(base, output / "lobby-reconnect", "tests/integration/LanLobbyReconnect.gd")
+        record["lobby_seconds"] = lobby["seconds"]
+        record["suites"].update({"lobby-"+k:v for k,v in lobby["suites"].items()})
+        if not all(s["PASS"] for s in lobby["suites"].values()): return record
         # Changed shared input readers and scene lifecycle warrant these two
         # existing affected regressions, not another full Story playthrough.
         for name, script, filename in [

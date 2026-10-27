@@ -101,6 +101,9 @@ func stop() -> void:
 func _peer_joined(id: int) -> void:
 	if role != "host" or guest_id != 0 or _bound_once: return
 	guest_id = id
+	guest_pick_ready = false
+	_remote_pick_revision = -1
+	_lobby_id = Crypto.new().generate_random_bytes(16).hex_encode()
 	status = "Guest connected; host can start the selected versus match"
 	_send(guest_id, {"kind":"hello", "version":VERSION, "slot":2, "lobby":_lobby_id})
 	_publish_lobby()
@@ -109,6 +112,7 @@ func _peer_left(id: int) -> void:
 	if role == "host" and id == guest_id:
 		guest_id = 0
 		guest_pick_ready = false
+		_remote_pick_revision = -1
 		var battle = _battle.get_ref() if _battle != null else null
 		if is_instance_valid(battle): battle.abandon_network_match()
 		retire_battle("Guest disconnected; controls retired")
@@ -133,7 +137,7 @@ func _physics_process(_delta: float) -> void:
 	if role == "host":
 		pass # Peer membership comes from actual ENet connect/disconnect signals.
 	else:
-		if peer.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED or (latest.is_empty() and Time.get_ticks_msec() > _guest_deadline):
+		if peer.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED or (_lobby_id.is_empty() and Time.get_ticks_msec() > _guest_deadline):
 			_retire_guest_transport()
 			return
 	var count := 0
