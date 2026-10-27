@@ -1,0 +1,295 @@
+{
+  "schema": "lan-deadlines-pause-engine/v1",
+  "source_head": "c7b6e60e5bffb97c6c2838e04733cae042326ce8",
+  "workflow": "https://github.com/gunnchOS3k/anime-aggressors/actions/runs/40489421632",
+  "godot_version": "4.7.1.stable.official.a13da4feb",
+  "PASS": true,
+  "raw_result": "outputs/lan_pause_c7b6e60e/ENGINE_RESULT.json",
+  "raw_result_sha256": "8183bd226b8837a0959d0efbfa523cdbc842f86df19c56e5004b237ebbbfdf15",
+  "suites": {
+    "host": {
+      "PASS": true,
+      "checks": 25,
+      "rows": null,
+      "runtime_errors": []
+    },
+    "guest": {
+      "PASS": true,
+      "checks": 14,
+      "rows": null,
+      "runtime_errors": []
+    },
+    "terminal-host": {
+      "PASS": true,
+      "checks": 16,
+      "rows": null,
+      "runtime_errors": []
+    },
+    "terminal-guest": {
+      "PASS": true,
+      "checks": 10,
+      "rows": null,
+      "runtime_errors": []
+    },
+    "lobby-host": {
+      "PASS": true,
+      "checks": 8,
+      "rows": null,
+      "runtime_errors": []
+    },
+    "lobby-guest": {
+      "PASS": true,
+      "checks": 8,
+      "rows": null,
+      "runtime_errors": []
+    },
+    "respawn-host": {
+      "PASS": true,
+      "checks": 19,
+      "rows": null,
+      "runtime_errors": []
+    },
+    "respawn-guest": {
+      "PASS": true,
+      "checks": 4,
+      "rows": null,
+      "runtime_errors": []
+    },
+    "combat-components": {
+      "PASS": true,
+      "checks": 14,
+      "rows": 0,
+      "runtime_errors": []
+    },
+    "party-components": {
+      "PASS": true,
+      "checks": 357,
+      "rows": 18,
+      "runtime_errors": []
+    },
+    "stage-audio": {
+      "PASS": true,
+      "checks": 13,
+      "rows": 0,
+      "runtime_errors": []
+    },
+    "authored-special-links": {
+      "PASS": true,
+      "checks": 73,
+      "rows": 6,
+      "runtime_errors": []
+    },
+    "throw-ownership": {
+      "PASS": true,
+      "checks": 0,
+      "rows": 39,
+      "runtime_errors": []
+    },
+    "training-lifecycle": {
+      "PASS": true,
+      "checks": 24,
+      "rows": 0,
+      "runtime_errors": []
+    }
+  },
+  "respawn_host": {
+    "HUMAN_ART_APPROVED": false,
+    "PASS": true,
+    "RC2_READY": false,
+    "V1_0_0_RELEASE_AUTHORIZED": false,
+    "checks": [
+      {
+        "check": "real_ENet_respawn_host",
+        "pass": true
+      },
+      {
+        "check": "legal_stock_match_starts",
+        "pass": true
+      },
+      {
+        "check": "only_host_actors_own_fixed_network_deadlines",
+        "pass": true
+      },
+      {
+        "check": "ordinary_walkoff_loses_one_real_stock_without_terminal_result",
+        "pass": true
+      },
+      {
+        "check": "actual_respawn_has_serializable_authoritative_deadline",
+        "pass": true
+      },
+      {
+        "check": "foreign_deadline_restore_rejected_atomically",
+        "pass": true
+      },
+      {
+        "check": "same_boundary_deadline_restore_has_no_immediate_callback",
+        "pass": true
+      },
+      {
+        "check": "real_host_pause_UI",
+        "pass": true
+      },
+      {
+        "check": "pause_holds_serialized_fighter_deadline_clock",
+        "pass": true
+      },
+      {
+        "check": "pause_holds_actual_CharacterBody_position",
+        "pass": true
+      },
+      {
+        "check": "paused_physics_does_not_advance_respawn_or_movement",
+        "pass": true
+      },
+      {
+        "check": "paused_round_cannot_expire_authoritative_KO_lock",
+        "pass": true
+      },
+      {
+        "check": "real_resume_UI_restarts_gameplay_clock",
+        "pass": true
+      },
+      {
+        "check": "actual_respawn_completes_once_without_new_stock_loss",
+        "pass": true
+      },
+      {
+        "check": "original_1_2_second_respawn_uses_exactly_72_actor_physics_steps",
+        "pass": true
+      },
+      {
+        "check": "expired_respawn_event_removed_before_dispatch",
+        "pass": true
+      },
+      {
+        "check": "original_KO_lock_is_named_48_step_online_deadline",
+        "pass": true
+      },
+      {
+        "check": "second_ordinary_stock_loss_has_pending_deadline_before_disconnect",
+        "pass": true
+      },
+      {
+        "check": "abandoned_match_cannot_reopen_from_late_deadline",
+        "pass": true
+      }
+    ],
+    "deadline_observations": [
+      {
+        "clock": 297,
+        "next_id": 1,
+        "owner": {
+          "fighter": "juno-spark",
+          "instance": 112793225004
+        },
+        "pending": [
+          {
+            "due": 364,
+            "id": 1,
+            "kind": "respawn"
+          }
+        ],
+        "schema": "fighter_network_deadlines/v1"
+      },
+      {
+        "after": {
+          "clock": 298,
+          "next_id": 1,
+          "owner": {
+            "fighter": "juno-spark",
+            "instance": 112793225004
+          },
+          "pending": [
+            {
+              "due": 364,
+              "id": 1,
+              "kind": "respawn"
+            }
+          ],
+          "schema": "fighter_network_deadlines/v1"
+        },
+        "before": {
+          "clock": 298,
+          "next_id": 1,
+          "owner": {
+            "fighter": "juno-spark",
+            "instance": 112793225004
+          },
+          "pending": [
+            {
+              "due": 364,
+              "id": 1,
+              "kind": "respawn"
+            }
+          ],
+          "schema": "fighter_network_deadlines/v1"
+        },
+        "case": "real_pause",
+        "position_after": "(202.0, 200.0)",
+        "position_before": "(202.0, 200.0)",
+        "round_after": [
+          298,
+          341,
+          true
+        ],
+        "round_before": [
+          298,
+          341,
+          true
+        ]
+      },
+      {
+        "clock": 439,
+        "next_id": 2,
+        "owner": {
+          "fighter": "juno-spark",
+          "instance": 112793225004
+        },
+        "pending": [
+          {
+            "due": 510,
+            "id": 2,
+            "kind": "respawn"
+          }
+        ],
+        "schema": "fighter_network_deadlines/v1"
+      }
+    ],
+    "failures": [],
+    "respawn_events": [
+      {
+        "clock": 364,
+        "invincible": false,
+        "state": "idle"
+      }
+    ],
+    "role": "host",
+    "scope": "Actual two-process ordinary walkoff, unchanged72-step online respawn, real pause/resume, same-boundary atomic deadline restoration, retirement on abandonment. NOT attack-earnedKO, historical physics/contact resimulation, native visuals or human approval.",
+    "stock_events": [
+      {
+        "clock": 292,
+        "ko_deadline": 341,
+        "round_clock": 293,
+        "stocks": 2
+      },
+      {
+        "clock": 438,
+        "ko_deadline": 487,
+        "round_clock": 439,
+        "stocks": 1
+      }
+    ]
+  },
+  "scope": "Actual two-process direct LAN guest BattleScene/selection, result/rematch, lobby replacement, ordinary stock loss,72-step online respawn, fixed48-stepKO lock, real paused CharacterBody, pending respawn retirement,18Partybodycomponents; not full historical combat rollback/Internet/nativeart/acoustic/device approval",
+  "source_sha256": {
+    "game-godot/scripts/combat/party_overdrive.gd": "da237e74b8c79b91db7caaf1610f8aabf96ee67304677c877a58b04f5fa512c2",
+    "game-godot/scripts/battle/battle_scene.gd": "71f7d3466a49bc709799f1920f5576bea8149a0584288f34665a050424bbe41b",
+    "game-godot/scripts/fighters/fighter.gd": "54e820053dbd883999ec48519237e0c74a1f006ebfc20782cc9a71fb737ac5e2",
+    "game-godot/scripts/net/lan_session.gd": "6398852beb91e7e03c48bd1586da26f35ff01862fc5c82bc4e977d9a9bf61a00"
+  },
+  "HUMAN_ART_APPROVED": false,
+  "RUNTIME_PAIRED_CONTACT_VERIFIED": false,
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false
+}

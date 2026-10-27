@@ -61,6 +61,18 @@ func run() -> void:
 	check(counter.hits == hits and counter.whiffs > misses, "completed_missed_swing_is_not_a_hit")
 	practice_observation = training._practice.snapshot()
 	await image("01_real_training_contacts")
+	# Prime a real jab_1 cursor through ordinary neutral presses, not a state
+	# assignment. At most one natural three-jab cycle is needed from any cursor.
+	var primed_first_jab := false
+	for attempt in range(3):
+		for i in range(90):
+			if training.fighter1.is_on_floor() and training.fighter1.state_machine.can_attack() and training.fighter1._hitstop <= 0: break
+			await physics_frame
+		keys(["attack"]); await frames(2); keys([])
+		if training.fighter1.move_runner.current_move_id() == "jab_1":
+			primed_first_jab = true; break
+		await frames(60)
+	check(primed_first_jab, "ordinary_neutral_input_primes_first_authored_jab_before_reset")
 	for button in training._practice_panel.find_children("*", "Button", true, false):
 		if button.text.begins_with("Reset practice"):
 			await click(button)
@@ -69,6 +81,10 @@ func run() -> void:
 	check(training._practice.slot_stats(1).hits == 0, "practice_reset_clears_session_counters")
 	await frames(90)
 	check(not training.fighter1.invincible and not defender.invincible, "existing_respawn_immunity_expires")
+	keys(["attack"]); await frames(2); keys([])
+	check(training.fighter1.move_runner.current_move_id() == "jab_1", "first_neutral_attack_after_public_reset_restarts_jab_one")
+	check(training.fighter1.authored_cancel_history.is_empty(), "practice_reset_clears_previous_authored_link_attempt_history")
+	await frames(60)
 	# Reset during an actual new contact, while its real hitstop is active.
 	# No synthetic hitstop/damage assignment or forced combat result.
 	for i in range(360):

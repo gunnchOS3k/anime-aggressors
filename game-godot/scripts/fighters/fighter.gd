@@ -1920,6 +1920,10 @@ func reset_training_practice() -> bool:
 	clear_training_dummy_inputs()
 	if cpu != null and is_cpu: cpu.clear_simulated_inputs()
 	_pending_attack_cmd = ""
+	# A practice reset owns a fresh authored input sequence. Retaining jab_1's
+	# chain cursor made the next neutral practice attack unexpectedly jab_2.
+	_jab_chain = 0
+	authored_cancel_history.clear()
 	_hitstop = 0.0
 	if model_3d != null and model_3d.get_animation_controller() != null:
 		model_3d.get_animation_controller().presentation_frozen = false
