@@ -39,7 +39,7 @@ func host_run() -> void:
 	battle = current_scene
 	var p = battle.fighter2
 	check(p.use_network_physics_clock and battle.fighter1.use_network_physics_clock, "only_host_actors_own_fixed_network_deadlines")
-	p.koed.connect(func():stock_events.append({"clock":p._network_clock,"stocks":p.stocks}))
+	p.koed.connect(func():stock_events.append({"clock":p._network_clock,"stocks":p.stocks,"round_clock":battle._network_round_clock,"ko_deadline":battle._network_ko_deadline}))
 	p.respawned.connect(func():respawn_events.append({"clock":p._network_clock,"state":p.state_machine.current_state,"invincible":p.invincible}))
 	var pending_second_respawn: Array = []
 	battle._battle_sim.frame_completed.connect(func(_frame):
@@ -67,8 +67,13 @@ func host_run() -> void:
 	if not battle._paused: return
 	var paused_queue: Dictionary = p.capture_network_deadlines()
 	var paused_position: Vector2 = p.position
+	var paused_round: Array = [battle._network_round_clock, battle._network_ko_deadline, battle._ko_lock]
 	await frames(18)
+	deadline_observations.append({"case":"real_pause", "before":paused_queue, "after":p.capture_network_deadlines(), "position_before":paused_position, "position_after":p.position, "round_before":paused_round, "round_after":[battle._network_round_clock,battle._network_ko_deadline,battle._ko_lock]})
+	check(p.capture_network_deadlines() == paused_queue, "pause_holds_serialized_fighter_deadline_clock")
+	check(p.position == paused_position, "pause_holds_actual_CharacterBody_position")
 	check(p.capture_network_deadlines() == paused_queue and p.position == paused_position and respawn_events.is_empty(), "paused_physics_does_not_advance_respawn_or_movement")
+	check([battle._network_round_clock,battle._network_ko_deadline,battle._ko_lock] == paused_round, "paused_round_cannot_expire_authoritative_KO_lock")
 	# Focused real Resume button owns the input event.
 	battle._pause_resume_button.grab_focus(); await accept_focused()
 	check(not battle._paused, "real_resume_UI_restarts_gameplay_clock")
@@ -79,6 +84,7 @@ func host_run() -> void:
 	if not respawn_events.is_empty() and not stock_events.is_empty():
 		check(int(respawn_events[0].clock) - int(stock_events[0].clock) == 72, "original_1_2_second_respawn_uses_exactly_72_actor_physics_steps")
 	check(p._network_deadlines.is_empty(), "expired_respawn_event_removed_before_dispatch")
+	check(not battle._ko_lock and not stock_events.is_empty() and int(stock_events[0].ko_deadline) - int(stock_events[0].round_clock) == 48, "original_KO_lock_is_named_48_step_online_deadline")
 	# A SECOND ordinary walk-off begins another real respawn. The guest
 	# leaves while that deadline is pending; closure must cancel it.
 	for i in range(600):

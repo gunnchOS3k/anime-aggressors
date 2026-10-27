@@ -21,6 +21,8 @@ var _active := false
 var _match_finished := false
 var _paused := false
 var _ko_lock := false
+var _network_round_clock := 0
+var _network_ko_deadline := -1
 var _debug_hud
 var _battle_sim
 var _hazard_runtime
@@ -63,6 +65,11 @@ var _training_pin_label: Label
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	# The controller remains alive for pause UI and LAN, but its simulation
+	# descendants must not inherit ALWAYS and move/tick through a real pause.
+	# Training already uses this ownership split for its one-step clock.
+	fighters_root.process_mode = Node.PROCESS_MODE_PAUSABLE
+	stage_root.process_mode = Node.PROCESS_MODE_PAUSABLE
 	if GameState.mode == "story":
 		_story_attempt_token = str(CampaignRuntime.active_encounter.get("token", ""))
 		_story_node_id = str(CampaignRuntime.active_encounter.get("node_id", ""))
@@ -336,6 +343,15 @@ func _physics_process(delta: float) -> void:
 	if _lan_replica != null:
 		_lan_replica.step(delta)
 		return
+	# The existing0.8s KO lock gates stock authority as well as the banner.
+	# Online ownership therefore uses a named48-step deadline, not a wall
+	# timer that could expire during pause or survive historical restoration.
+	# Continue its presentation after terminal commit, as the old timer did.
+	if fighter1 != null and fighter1.use_network_physics_clock and not _paused:
+		_network_round_clock += 1
+		if _network_ko_deadline >= 0 and _network_round_clock >= _network_ko_deadline:
+			_network_ko_deadline = -1
+			_release_ko_lock()
 	_wave018_vis_accum += delta
 	if _wave018_vis_accum >= 0.5:
 		_wave018_vis_accum = 0.0
@@ -415,15 +431,17 @@ func _check_blast(f) -> void:
 	var pos: Vector2 = f.global_position
 	if pos.x < blast.get("left", -9999) or pos.x > blast.get("right", 9999) or pos.y < blast.get("top", -9999) or pos.y > blast.get("bottom", 9999):
 		_ko_lock = true
+		if f.use_network_physics_clock: _network_ko_deadline = _network_round_clock + 48
 		if ko_label:
 			ko_label.text = "%s KO!" % f.data.get("displayName", "?")
 			ko_label.visible = true
 		f.lose_stock()
-		get_tree().create_timer(0.8).timeout.connect(func():
-			if ko_label:
-				ko_label.visible = false
-			_ko_lock = false
-		, CONNECT_ONE_SHOT)
+		if not f.use_network_physics_clock:
+			get_tree().create_timer(0.8).timeout.connect(_release_ko_lock, CONNECT_ONE_SHOT)
+
+func _release_ko_lock() -> void:
+	if ko_label: ko_label.visible = false
+	_ko_lock = false
 
 func _on_ko(_f) -> void:
 	pass
