@@ -48,7 +48,10 @@ func drive_host_first_match(frame: int) -> void:
 		match_trace.append({"frame":Engine.get_physics_frames(),"actors":[{"position":[p.position.x,p.position.y],"velocity":[p.velocity.x,p.velocity.y],"state":p.state_machine.current_state,"damage":p.damage_percent},{"position":[d.position.x,d.position.y],"velocity":[d.velocity.x,d.velocity.y],"state":d.state_machine.current_state,"damage":d.damage_percent}]})
 	if p.grabbed_by != null: phase="host_mash_escape"; keys(["attack"] if frame%4<2 else ["jump"]); return
 	if p.grabbed_target != null: phase="host_outward_back_throw"; keys(["left","attack"]); return
-	var edge: float = p.platform_center_x-p.platform_half_width+24
+	# Allow real dash braking distance before the edge. The rejected first
+	# driver stopped24px inside the platform with411px/s residual motion and
+	# walked off before contact; no attack-earned result was accepted.
+	var edge: float = p.platform_center_x-p.platform_half_width+112
 	if not p.is_on_floor() and (p.position.x<edge+16 or p.position.y>p.platform_surface_y):
 		phase="host_legitimate_air_recovery"
 		var action: Array = ["right"]
@@ -89,7 +92,7 @@ func expected_first_winner() -> int:
 	return int(first_terminal.get("winner", -1))
 
 func first_match_label() -> String:
-	return "ordinary_attack_earned_terminal_stock_loss"
+	return "ordinary_terminal_stock_loss"
 
 func first_match_scope() -> String:
 	return "Two independent public-input seats; bounded edge pressure and resistance/recovery; actual contacts required before stock loss. No CPU, seeded damage, scripted stock removal, fixed winner or walk-off substitute. Headless software acceptance only; no historical rollback."
