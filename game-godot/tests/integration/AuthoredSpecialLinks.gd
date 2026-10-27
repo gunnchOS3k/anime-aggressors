@@ -42,12 +42,19 @@ func probe(fighter: String, outcome: String) -> void:
 	battle = current_scene
 	var p = battle.fighter1; var d = battle.fighter2
 	starts.clear(); stage_contacts.clear()
+	# Countdown suspends grounded movement/gravity. A distant whiff must wait
+	# for genuine landing before requesting a grounded jab (no root injection).
+	for i in range(90):
+		if p.is_on_floor() and d.is_on_floor(): break
+		await physics_frame
+	check(p.is_on_floor() and d.is_on_floor(), fighter + ":" + outcome + ":natural_grounded_start")
 	p.move_runner.move_started.connect(func(mid): starts.append({"move":mid,"frame":Engine.get_physics_frames()}))
 	p.hit_resolver.hit_confirmed.connect(record_contact)
 	if outcome == "shield": Input.action_press("p2_shield"); await frames(20)
 	var attempted := false
 	var eligible_before := false
 	var defender_recovered := false
+	var control_frames: Array = []
 	var attempted_frame := -1
 	var source_activation := -1
 	var target := "down_special" if fighter == "vesper-nyx" else "side_special"
@@ -82,7 +89,10 @@ func probe(fighter: String, outcome: String) -> void:
 					break
 			if attempted: break
 			await physics_frame
-		await frames(2); keys([]); await frames(5)
+		await frames(2); keys([])
+		for i in range(60 if outcome == "contact" else 5):
+			control_frames.append({"frame":Engine.get_physics_frames(), "can_act":d.state_machine.can_move() or d.state_machine.can_attack(), "state":d.state_machine.current_state})
+			await physics_frame
 	check(attempted, fighter + ":" + outcome + ":actual_resolved_window_input")
 	var links: Array = p.authored_cancel_history.filter(func(row): return row.from == "jab_finisher" and row.to == target and row.activation == source_activation)
 	var target_started: bool = starts.any(func(row): return row.move == target)
@@ -97,11 +107,17 @@ func probe(fighter: String, outcome: String) -> void:
 	var catalog: Dictionary = Catalog.build_fighter_catalog(fighter)
 	var finisher: Array = catalog.entries.filter(func(e):return e.move_id == "jab_finisher")
 	check(not finisher.is_empty() and finisher[0].authored_links.any(func(link):return link.to == target), fighter + ":learning_guide_carries_actual_manifest_link")
+	var finisher_hits: Array = stage_contacts.filter(func(row):return row.move == "jab_finisher" and row.result == "hit")
+	var target_hits: Array = stage_contacts.filter(func(row):return row.move == target and row.result == "hit")
+	var link_status := "No subsequent target contact observed"
+	if not finisher_hits.is_empty() and not target_hits.is_empty():
+		var recovered_between: bool = defender_recovered or control_frames.any(func(row): return row.can_act and int(row.frame) < int(target_hits[0].frame))
+		link_status = "Escapable follow-up: defender control returned before target contact" if recovered_between else "Observed contact before defender control returned, quiet defender only; active-opponent acceptance pending"
 	rows.append({"fighter":fighter,"body":gs.p1_body_variant,"facing":p.facing,"case":outcome,"target":target,
 		"source":"res://data/moves/"+fighter+".json#jab_finisher.cancel_windows", "attempt_move_frame":attempted_frame,
 		"eligible":eligible_before,"links":links.duplicate(true),"target_started":target_started,"contacts":stage_contacts.duplicate(true),
 		"defender_control_returned_before_cancel":defender_recovered,
-		"combo_status":"Cancel activation verified only; target follow-up/contact and active-opponent true-link acceptance remain unverified"})
+		"defender_control_trace":control_frames, "combo_status":link_status, "move_starts":starts.duplicate(true)})
 	keys([]); Input.action_release("p2_shield")
 
 func finish() -> void:

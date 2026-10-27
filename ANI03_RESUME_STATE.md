@@ -1,3 +1,13 @@
+# 2026-10-26 — Four authored links execute; negative whiff driver correction
+
+Run40432495650 @552f2191: host20/guest11, ThrowOwnership39rows andTrainingLifecycle24PASS; nohost/guest runtimeerrors. AuthoredSpecialLinks45/49PASS,4failures ONLY distantwhiff expected groundedjabs/window. Allfour bodyhitlinks actuallystarted once atresolvedmoveframesEmber8/Vesper7/Yin8/Yang9; Ember side_special also contacted12physicsframesafterfinisher. Allshieldcontacts rejectbodycancel. Preserve fullnegative outputs/lan_links_552f2191.
+
+Actual drivercause: countdown leaves fighters suspended until controls start. Approachcases naturallyland, but distantwhiff requestedattack3framesafterstart andwasairborne. Newfixture waits ordinarygravity/realgrounding withassertion; no root/state/contact injection or weakenedexpectedjab/window. Also records actualdefendercontrolaftercancel andtargetcontacts toclassifyobservedlink vsescapablefollowup honestly; quietdefenders remain notactiveCPUacceptance.
+
+NEXT commit/pushthenONLYlan_battle_runtime=true. Exactsourcegitrev-parseHEAD. No localheavy/privateart/native operations; allguards/gates preserved. Fullactualcombatrollback stillmissing: namedrewindabletimeouts, deterministicPhysicsServer collisionbarrier, fenceddeferredpolls, restorableprojectiles, stableeventIDs andCharacterBodyfloorcache mustbeimplemented beforechecksumfacade canresimrealcombat.
+
+---
+
 # 2026-10-26 — Guest actual BattleScene engine PASS; authored special links now wired
 
 Accepted source6c77735311cececb26405a628b357c081d90a2ba run40432106726 PASS: host20/guest11 checks, 66guest observations with exact damage/shield replication and bothpublicmodels/clips loaded, 14deduplicated confirmedcontact cues; no guest damage/physics/save authority. Pair18.971s/594726912combinedRSS. Host/guest ZERO runtimeERRORlines. ThrowOwnership39rows andTrainingLifecycle24PASS. Existing publicimport duplicate animation names andTraining shutdownwarnings retained, notart/errorfreeclaim. Compact docs/handoff/2026-10-26/LAN_GUEST_ENGINE.json; full outputs/lan_ci_6c777353.
