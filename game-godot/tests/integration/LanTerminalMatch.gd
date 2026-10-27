@@ -40,13 +40,18 @@ func host_run() -> void:
 	if not active_battle():check(false,"actual_host_battle_started");return
 	battle=current_scene
 	var starting_epoch:int=lan.epoch
-	for i in range(600):
+	first_match_started()
+	for i in range(first_match_budget()):
+		drive_host_first_match(i)
 		await physics_frame
 		if battle._match_finished:break
-	check(battle._match_finished and battle.fighter2.stocks==0,"ordinary_guest_walkoff_real_terminal_stock_loss")
+	keys([])
+	check(battle._match_finished and first_match_stock_lost(),first_match_label())
 	first_terminal=lan.latest.duplicate(true)
-	check(first_terminal.phase=="result" and not first_terminal.active and first_terminal.closed and int(first_terminal.winner)==1,"first_terminal_snapshot_has_committed_winner_and_phase")
-	check(first_terminal.actors[0].state=="victory" and first_terminal.actors[1].state in ["ko","defeat"],"first_terminal_snapshot_has_real_terminal_acting")
+	validate_first_match()
+	check(first_terminal.phase=="result" and not first_terminal.active and first_terminal.closed and int(first_terminal.winner)==expected_first_winner(),"first_terminal_snapshot_has_committed_winner_and_phase")
+	var winner_index: int = int(first_terminal.get("winner", -1))-1
+	check(winner_index in [0,1] and first_terminal.actors[winner_index].state=="victory" and first_terminal.actors[1-winner_index].state in ["ko","defeat"],"first_terminal_snapshot_has_real_terminal_acting")
 	var accepted:int=lan.received_inputs
 	var rejected:int=lan.rejected_inputs
 	await frames(20)
@@ -54,7 +59,7 @@ func host_run() -> void:
 	for i in range(120):
 		await physics_frame
 		if route_is("ResultsScene.tscn"):break
-	check(route_is("ResultsScene.tscn") and gs.last_winner_slot==1,"host_actual_results_match_winner")
+	check(route_is("ResultsScene.tscn") and gs.last_winner_slot==expected_first_winner(),"host_actual_results_match_winner")
 	if not route_is("ResultsScene.tscn"):return
 	check(gs.career_matches==career_before+1,"host_awards_real_result_once")
 	current_scene.rematch_btn.grab_focus();await accept_focused()
@@ -93,7 +98,7 @@ func guest_run() -> void:
 	root.get_node("GameState").p1_fighter_id="juno-spark"
 	root.get_node("GameState").p1_body_variant="male"
 	check(lan.join("127.0.0.1",port)==OK,"real_guest_connect")
-	for i in range(900):
+	for i in range(first_match_budget()+300):
 		await physics_frame
 		if lan.latest.is_empty():continue
 		if lan.latest.get("phase","")=="result":
@@ -101,15 +106,15 @@ func guest_run() -> void:
 			keys(["attack"])
 			lan._send(1,Controls.local_packet(lan.epoch,lan._sequence));lan._sequence+=1
 			late_sent=true;keys([]);break
-		keys(["right"] if lan.latest.get("active",false) else [])
+		drive_guest_first_match(lan.latest)
 	check(late_sent,"late_control_probe_sent_over_actual_socket_after_terminal")
-	check(not first_terminal.get("active",true) and int(first_terminal.get("winner",-1))==1,"guest_observes_same_authoritative_terminal_result")
+	check(not first_terminal.get("active",true) and int(first_terminal.get("winner",-1))==expected_first_winner(),"guest_observes_same_authoritative_terminal_result")
 	for i in range(120):
 		await physics_frame
 		if route_is("ResultsScene.tscn"):break
 	check(route_is("ResultsScene.tscn"),"guest_actual_ResultsScene_loaded")
 	if not route_is("ResultsScene.tscn"):return
-	check(root.get_node("GameState").last_winner_slot==1 and int(root.get_node("GameState").career_matches)==career_before,"guest_result_display_does_not_award_progress")
+	check(root.get_node("GameState").last_winner_slot==expected_first_winner() and int(root.get_node("GameState").career_matches)==career_before,"guest_result_display_does_not_award_progress")
 	var old_epoch:int=lan.epoch
 	await frames(30)
 	current_scene.rematch_btn.grab_focus();await accept_focused()
@@ -131,10 +136,40 @@ func guest_run() -> void:
 	check(lan.peer == null and lan._closed,"host_menu_return_retires_inactive_guest_transport")
 	check(int(root.get_node("GameState").career_matches)==career_before,"guest_never_records_host_career_result")
 
+func first_match_budget() -> int:
+	return 600
+
+func first_match_started() -> void:
+	pass
+
+func drive_host_first_match(_frame: int) -> void:
+	pass
+
+func drive_guest_first_match(snapshot: Dictionary) -> void:
+	keys(["right"] if snapshot.get("active",false) else [])
+
+func first_match_stock_lost() -> bool:
+	return battle.fighter2.stocks == 0
+
+func first_match_scope() -> String:
+	return "Declared ordinary walk-off, NOT attack-earned KO"
+
+func first_match_label() -> String:
+	return "ordinary_guest_walkoff_real_terminal_stock_loss"
+
+func expected_first_winner() -> int:
+	return 1
+
+func validate_first_match() -> void:
+	pass
+
+func first_match_evidence() -> Dictionary:
+	return {}
+
 func finish() -> void:
 	keys([])
-	var result={"PASS":failures.is_empty(),"role":side,"checks":checks,"failures":failures,"first_terminal":first_terminal,"contacts":contacts,
-		"scope":"Actual two-process ENet terminal snapshot, declared ordinary walk-off (not attack-earnedKO), real Results UI, both-consent rematch, fresh epoch and real rematch melee; no Story/privateart/nativevisual/rollback approval",
+	var result={"PASS":failures.is_empty(),"role":side,"checks":checks,"failures":failures,"first_terminal":first_terminal,"contacts":contacts,"first_match_evidence":first_match_evidence(), "first_match_scope":first_match_scope(),
+		"scope":"Actual two-process ENet terminal snapshot; first_match_scope identifies finish evidence. Real Results UI, both-consent rematch, fresh epoch and real rematch melee; no Story/privateart/nativevisual/rollback approval",
 		"HUMAN_ART_APPROVED":false,"RC2_READY":false,"V1_0_0_RELEASE_AUTHORIZED":false}
 	var file=FileAccess.open(output.path_join("LAN_"+side.to_upper()+".json"),FileAccess.WRITE);file.store_string(JSON.stringify(result,"  "));file.close()
 	lan.stop()

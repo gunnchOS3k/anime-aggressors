@@ -102,6 +102,17 @@ def run(scope="all"):
         base = [godot, "--headless", "--path", str(ROOT / "game-godot"), "--audio-driver", "Dummy", "--rendering-method", "gl_compatibility"]
         record["import"] = execute(base + ["--editor", "--import", "--quit"], output / "import.log", 180)
         if not record["import"]["PASS"]: return record
+        if scope == "attack":
+            earned = pair(base + ["--verbose"], output / "attack-earned", "tests/integration/LanAttackEarnedMatch.gd")
+            record["attack_seconds"] = earned["seconds"]
+            record["suites"].update({"attack-"+k:v for k,v in earned["suites"].items()})
+            h = earned["suites"]["host"]["result"].get("first_terminal", {})
+            g = earned["suites"]["guest"]["result"].get("first_terminal", {})
+            fields = ["epoch", "committed_frame", "winner", "actors", "contacts", "phase", "closed"]
+            record["terminal_state_agreement"] = bool(h) and bool(g) and all(h.get(key) == g.get(key) for key in fields)
+            record["PASS"] = all(s["PASS"] for s in earned["suites"].values()) and record["terminal_state_agreement"]
+            record["scope"] = "Bounded actual two-process attack-earned match, Results/rematch/menu and exact terminal-state agreement; public input only. Failure retained if no genuine attack-earned finish occurs. No historical rollback, native visual, art or device acceptance. Other suites NOT rerun."
+            return record
         if scope == "respawn":
             focused = pair(base, output / "respawn-clock", "tests/integration/LanRespawnClock.gd")
             record["respawn_seconds"] = focused["seconds"]
@@ -167,5 +178,5 @@ def run(scope="all"):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--scope", choices=["all", "respawn"], default="all")
+    parser.add_argument("--scope", choices=["all", "respawn", "attack"], default="all")
     raise SystemExit(0 if run(parser.parse_args().scope)["PASS"] else 1)

@@ -42,7 +42,10 @@ func host_run() -> void:
 	p.koed.connect(func():stock_events.append({"clock":p._network_clock,"stocks":p.stocks,"round_clock":battle._network_round_clock,"ko_deadline":battle._network_ko_deadline}))
 	p.respawned.connect(func():respawn_events.append({"clock":p._network_clock,"state":p.state_machine.current_state,"invincible":p.invincible}))
 	var pending_second_respawn: Array = []
-	battle._battle_sim.frame_completed.connect(func(_frame):
+	# Stock authority now commits after PhysicsServer query flushing. Observe
+	# the complete stock-loss/deadline transaction there, before the guest can
+	# disconnect on that committed snapshot and retire the pending queue.
+	battle._battle_sim.frame_committed.connect(func(_frame):
 		if stock_events.size() == 2 and not p._network_deadlines.is_empty() and pending_second_respawn.is_empty(): pending_second_respawn.append(p.capture_network_deadlines()))
 	# A real jump must retain its momentum through the same public pause UI.
 	# No velocity/state/root assignment: paused CharacterBody owns the snapshot.
