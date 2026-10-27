@@ -47,11 +47,18 @@ var pierces_fighters := false
 var _resolving_contact := false
 var _owned_flight_decorations: Array = []
 var fighter_impacts: Array = []
+# Retention is opt-in for trusted same-world component history. The live LAN
+# path does NOT enable historical replay until CharacterBody/world restore is
+# complete. Node identity must survive expiration for stored hit receipts.
+var _history_retained := false
+var _contact_generation := 0
+var _spawn_config: Dictionary = {}
 
 @onready var debug_rect: ColorRect = $DebugRect
 @onready var collision: CollisionShape2D = $CollisionShape2D
 
 func configure(cfg: Dictionary, owner_node: Node) -> void:
+	_spawn_config = cfg.duplicate(true)
 	owner_fighter = owner_node
 	fighter_id = cfg.get("fighter_id", "")
 	move_id = cfg.get("move_id", "")
@@ -272,9 +279,9 @@ func _expire(present_dissipation := true) -> void:
 	_retire_flight()
 	if _renderer != null:
 		if present_dissipation: _renderer.emit_effect(fighter_id,5,global_position,direction,_visual_extent,.22)
-	set_deferred("monitoring", false)
+	_defer_retired_monitoring()
 	projectile_expired.emit()
-	queue_free()
+	if not _history_retained: queue_free()
 
 func set_debug_visible(v: bool) -> void:
 	debug_visible = v
@@ -290,9 +297,93 @@ func cancel_immediate() -> void:
 	_retire_flight()
 	if is_instance_valid(_renderer):
 		if _renderer.is_inside_tree(): _renderer.emit_effect(fighter_id, 5, global_position, direction, _visual_extent, .18)
-	set_deferred("monitoring", false)
+	_defer_retired_monitoring()
 	projectile_expired.emit()
-	queue_free()
+	if not _history_retained: queue_free()
+
+func _defer_retired_monitoring() -> void:
+	_contact_generation += 1
+	_apply_owned_monitoring.call_deferred(false, _contact_generation)
+
+func _apply_owned_monitoring(enabled: bool, generation: int) -> void:
+	# A retirement queued before a component restore cannot shut down the
+	# revived shot at the same activation/frame (callback ABA).
+	if generation == _contact_generation: monitoring = enabled
+
+func capture_network_component() -> Dictionary:
+	if _resolving_contact or is_queued_for_deletion() or not is_instance_valid(owner_fighter): return {}
+	if collision == null or not collision.shape is RectangleShape2D: return {}
+	return {"schema":1, "instance":get_instance_id(), "owner":owner_fighter.get_instance_id(),
+		"config":_spawn_config.duplicate(true), "world":global_transform, "size":collision.shape.size,
+		"active":active, "frame":frame_count, "direction":direction, "damage":damage, "integrity":integrity,
+		"hit_targets":hit_targets.duplicate(true), "pending_targets":pending_targets.duplicate(true),
+		"intercepted_ids":intercepted_ids.duplicate(true), "spawn_bounds":spawn_bounds,
+		"emission_distance":_emission_distance, "environment_sounded":_environment_sounded,
+		"fighter_impacts":fighter_impacts.duplicate(true), "layer":collision_layer, "mask":collision_mask,
+		"monitoring":monitoring, "monitorable":monitorable}
+
+func validates_network_component(state: Dictionary) -> bool:
+	if _resolving_contact or is_queued_for_deletion() or not _history_retained: return false
+	if not is_instance_valid(owner_fighter) or collision == null or not collision.shape is RectangleShape2D: return false
+	if state.get("schema") != 1 or state.get("instance") != get_instance_id() or state.get("owner") != owner_fighter.get_instance_id(): return false
+	if state.get("config") != _spawn_config or state.get("size") != collision.shape.size: return false
+	if not state.get("world") is Transform2D or not state.world.is_finite(): return false
+	if not state.get("direction") is Vector2 or not state.direction.is_finite(): return false
+	if not state.get("spawn_bounds") is Rect2 or not state.spawn_bounds.position.is_finite() or not state.spawn_bounds.size.is_finite(): return false
+	for key in ["active", "environment_sounded", "monitoring", "monitorable"]:
+		if typeof(state.get(key)) != TYPE_BOOL: return false
+	for key in ["frame", "integrity", "layer", "mask"]:
+		if typeof(state.get(key)) != TYPE_INT: return false
+	if state.frame < 0 or state.frame >= lifetime_frames or state.integrity < 1 or state.integrity > initial_integrity: return false
+	for key in ["damage", "emission_distance"]:
+		if typeof(state.get(key)) != TYPE_FLOAT or not is_finite(state[key]) or state[key] < 0: return false
+	if not state.get("fighter_impacts") is Array: return false
+	for key in ["hit_targets", "pending_targets", "intercepted_ids"]:
+		if not state.get(key) is Dictionary: return false
+		for target in state[key]:
+			if typeof(state[key][target]) != TYPE_BOOL: return false
+	# Instance-ID ledgers are valid only with the SAME retained world actors.
+	for ledger in [state.hit_targets, state.pending_targets]:
+		for target in ledger:
+			if typeof(target) != TYPE_INT and (not target is String or not target.is_valid_int()): return false
+			if int(target) <= 0: return false
+			var actor = instance_from_id(int(target))
+			if not is_instance_valid(actor) or not actor.has_method("receive_hit") or actor == owner_fighter: return false
+	return true
+
+func restore_network_component_silent(state: Dictionary) -> void:
+	# Spawner validates the entire transaction before calling; no yields or
+	# signals in this path. It is not a complete PhysicsServer/world restore.
+	assert(validates_network_component(state))
+	deactivate_network_component_silent()
+	global_transform = state.world
+	active = state.active; frame_count = state.frame; direction = state.direction
+	damage = state.damage; integrity = state.integrity
+	hit_targets = state.hit_targets.duplicate(true); pending_targets = state.pending_targets.duplicate(true)
+	intercepted_ids = state.intercepted_ids.duplicate(true); spawn_bounds = state.spawn_bounds
+	_emission_distance = state.emission_distance; _environment_sounded = state.environment_sounded
+	fighter_impacts = state.fighter_impacts.duplicate(true)
+	collision_layer = state.layer; collision_mask = state.mask; monitorable = state.monitorable
+	_apply_owned_monitoring(state.monitoring, _contact_generation)
+
+func deactivate_network_component_silent() -> void:
+	active = false; pending_targets.clear(); _retire_flight()
+	_contact_generation += 1
+	_apply_owned_monitoring(false, _contact_generation)
+
+func reconcile_network_presentation() -> void:
+	# Call once AFTER eventual full-world resimulation. Restore itself never
+	# launches audio, recreates impact effects, or dispatches contact signals.
+	if not active: return
+	if is_instance_valid(_visual): _visual.show()
+	if is_instance_valid(_renderer):
+		var ratio := float(integrity) / initial_integrity
+		if _flight_slot < 0: _flight_slot = _renderer.emit_effect(fighter_id,3,global_position,direction,_visual_extent,-1.0)
+		_renderer.set_slot_strength(_flight_slot, .7 + .3 * ratio)
+		_renderer.set_projectile_integrity(_flight_slot, integrity, initial_integrity)
+		_renderer.update_slot(_flight_slot, global_position, direction, _visual_extent * (.65 + .35 * ratio))
+	if is_instance_valid(_elemental_audio) and is_instance_valid(_elemental_audio.travel):
+		if not _elemental_audio.travel.playing: _elemental_audio.travel.play()
 
 func _exit_tree() -> void:
 	_retire_flight()

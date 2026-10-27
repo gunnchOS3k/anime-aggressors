@@ -8,6 +8,23 @@ var frame := 0
 var last_pair_tests := 0
 var last_resolve_us := 0
 
+func capture_network_component() -> Dictionary:
+	# starts belongs to an OPEN swept-motion phase and cannot be a closed
+	# component snapshot. Area pending targets live on the retained shots.
+	if not starts.is_empty(): return {}
+	return {"schema":1, "frame":frame, "history":history.duplicate(true)}
+
+func restore_network_component(state: Dictionary) -> bool:
+	if not starts.is_empty() or state.get("schema") != 1: return false
+	if typeof(state.get("frame")) != TYPE_INT or state.frame < 0 or not state.get("history") is Array: return false
+	if state.history.size() > 256: return false
+	for event in state.history:
+		if not event is Dictionary or not event.get("confirmed_interception", false): return false
+		if typeof(event.get("sim_frame")) != TYPE_INT or event.sim_frame < 0 or event.sim_frame > state.frame: return false
+	# No intercept(), signals, sounds or presentation during component restore.
+	frame = state.frame; history = state.history.duplicate(true)
+	return true
+
 func shots(fighters: Array) -> Array:
 	var result: Array = []
 	for fighter in fighters:

@@ -102,6 +102,22 @@ def run(scope="all"):
         base = [godot, "--headless", "--path", str(ROOT / "game-godot"), "--audio-driver", "Dummy", "--rendering-method", "gl_compatibility"]
         record["import"] = execute(base + ["--editor", "--import", "--quit"], output / "import.log", 180)
         if not record["import"]["PASS"]: return record
+        if scope == "projectiles":
+            for name, script, filename in [
+                ("projectile-history", "tests/integration/ProjectileComponentHistory.gd", "PROJECTILE_COMPONENT_HISTORY.json"),
+                ("projectile-impact", "tests/v1_closure/ProjectileFighterImpact.gd", "projectile_fighter_impact.json"),
+                ("projectile-interactions", "tests/v1_closure/ProjectileInteractions.gd", "projectile_interactions.json"),
+                ("nix-authored-grab", "tests/integration/NixAuthoredGrab.gd", "NIX_AUTHORED_GRAB.json"),
+            ]:
+                outcome = execute(base + ["--fixed-fps", "60", "--script", "res://" + script, "--", "--ordinary-output=" + str(output)], output / (name + ".log"))
+                path = output / filename
+                data = json.loads(path.read_text()) if path.exists() else {}
+                outcome.update({"PASS": outcome["PASS"] and bool(data.get("PASS", False)), "failures": data.get("failures", []),
+                                "checks": len(data.get("checks", [])), "rows": len(data.get("rows", [])), "result": data})
+                record["suites"][name] = outcome
+            record["PASS"] = all(s["PASS"] for s in record["suites"].values())
+            record["scope"] = "Projectile retained-node component history plus affected original impact/clash and Nix cancel regressions. No historical CharacterBody/world replay, delayed-input combat, native visual/audio/device or human acceptance. Other suites NOT rerun."
+            return record
         if scope == "attack":
             earned = pair(base + ["--verbose"], output / "attack-earned", "tests/integration/LanAttackEarnedMatch.gd")
             record["attack_seconds"] = earned["seconds"]
@@ -178,5 +194,5 @@ def run(scope="all"):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--scope", choices=["all", "respawn", "attack"], default="all")
+    parser.add_argument("--scope", choices=["all", "respawn", "attack", "projectiles"], default="all")
     raise SystemExit(0 if run(parser.parse_args().scope)["PASS"] else 1)
