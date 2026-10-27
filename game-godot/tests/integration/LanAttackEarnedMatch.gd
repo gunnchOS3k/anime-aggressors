@@ -70,7 +70,7 @@ func drive_guest_first_match(snapshot: Dictionary) -> void:
 	var f: int = int(snapshot.combat_frame)
 	var p: Dictionary = snapshot.actors[1]; var d: Dictionary = snapshot.actors[0]
 	var dx: float = float(d.position[0])-float(p.position[0])
-	if p.state == "grabbed": phase="guest_mash_escape"; keys(["jump"] if f%4<2 else ["attack"]); return
+	if int(p.get("grab_owner", 0)) > 0: phase="guest_mash_escape"; keys(["jump"] if f%4<2 else ["attack"]); return
 	var actor = current_scene.fighter2 if current_scene != null and "fighter2" in current_scene else null
 	if actor == null: keys([]); return
 	var outside: bool = absf(float(p.position[0])-actor.platform_center_x)>actor.platform_half_width-24 or float(p.position[1])>actor.platform_surface_y+12

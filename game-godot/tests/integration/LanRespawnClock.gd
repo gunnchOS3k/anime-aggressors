@@ -7,6 +7,8 @@ var port := 27834
 var stock_events: Array = []
 var respawn_events: Array = []
 var deadline_observations: Array = []
+var pause_query_observation: Dictionary = {}
+var pause_probe: Area2D
 
 func run() -> void:
 	await process_frame
@@ -60,14 +62,17 @@ func host_run() -> void:
 	check(jumper.velocity.y < -50 and not jumper.is_on_floor(), "ordinary_host_jump_has_real_ascending_momentum")
 	var jump_position: Vector2 = jumper.position
 	var jump_velocity: Vector2 = jumper.velocity
-	var pause_jump = InputEventAction.new(); pause_jump.action = "ui_cancel"; pause_jump.pressed = true; Input.parse_input_event(pause_jump)
-	await process_frame
-	pause_jump = pause_jump.duplicate(); pause_jump.pressed = false; Input.parse_input_event(pause_jump)
+	# An actual noncombat PhysicsServer area probe, added at the open end of
+	# a real jumped frame. Its notification cannot be replaced by a fake hit.
+	# Ordinary viewport input requests Pause before the following query flush.
+	battle._battle_sim.frame_completed.connect(request_pause_during_pending_query, CONNECT_ONE_SHOT)
 	for i in range(30):
 		if battle._paused and battle._pause_panel != null: break
 		await process_frame
 	check(battle._paused and battle._pause_panel != null, "real_pause_during_ascending_jump")
 	if not battle._paused: return
+	check(pause_query_observation.get("query_engine_frame", -1) > int(pause_query_observation.get("request_engine_frame", -1)) and battle._battle_sim.committed_frame >= int(pause_query_observation.get("source_frame", 2147483647)), "pause_waits_for_actual_PhysicsServer_query_and_closed_prior_step")
+	check(not bool(pause_query_observation.get("paused_at_query", true)), "real_query_notification_occurs_before_physics_is_paused")
 	# Input.parse_input_event queues unhandled input. One ordinary physics
 	# tick can finish before the pause UI handles that request. Freeze from
 	# its OBSERVED owning boundary, while still rejecting the old zeroing bug.
@@ -78,6 +83,7 @@ func host_run() -> void:
 	deadline_observations.append({"case":"ascending_jump_pause", "position_at_request":[jump_position.x,jump_position.y], "position_at_pause":[paused_jump_position.x,paused_jump_position.y], "position_paused":[jumper.position.x,jumper.position.y], "velocity_at_request":[jump_velocity.x,jump_velocity.y], "velocity_at_pause":[paused_jump_velocity.x,paused_jump_velocity.y], "velocity_paused":[jumper.velocity.x,jumper.velocity.y]})
 	check(jumper.position == paused_jump_position and jumper.velocity == paused_jump_velocity, "pause_preserves_actual_airborne_position_and_velocity")
 	battle._pause_resume_button.grab_focus(); await accept_focused()
+	if is_instance_valid(pause_probe): pause_probe.queue_free()
 	await frames(4)
 	check(not battle._paused and jumper.velocity.y < 0 and jumper.position.y < paused_jump_position.y, "resume_continues_original_ascent_instead_of_erasing_momentum")
 	for i in range(600):
@@ -135,6 +141,27 @@ func host_run() -> void:
 	check(battle._network_abandoned and p.combat_closed and p._network_deadlines.is_empty() and respawn_events.size() == 1 and not battle._match_finished, "abandoned_match_cannot_reopen_from_late_deadline")
 	root.get_node("SceneRouter").go("main_menu"); await frames(5)
 
+func request_pause_during_pending_query(frame: int) -> void:
+	var jumper = battle.fighter1
+	pause_query_observation = {"source_frame":frame,"request_engine_frame":Engine.get_physics_frames()}
+	pause_probe = Area2D.new()
+	pause_probe.name = "NoncombatPauseFlushProbe"
+	pause_probe.collision_layer = 0
+	pause_probe.collision_mask = jumper.collision_layer
+	pause_probe.monitorable = false
+	var shape := CollisionShape2D.new()
+	var circle := CircleShape2D.new(); circle.radius = 32.0; shape.shape = circle
+	pause_probe.add_child(shape)
+	battle.stage_root.add_child(pause_probe)
+	pause_probe.global_position = jumper.global_position + Vector2(0,-24)
+	pause_probe.body_entered.connect(func(body):
+		if body == jumper:
+			pause_query_observation["query_engine_frame"] = Engine.get_physics_frames()
+			pause_query_observation["paused_at_query"] = paused)
+	var event := InputEventAction.new(); event.action = "ui_cancel"; event.pressed = true
+	root.push_input(event)
+	event = event.duplicate(); event.pressed = false; root.push_input(event)
+
 func guest_run() -> void:
 	root.get_node("GameState").p1_fighter_id = "juno-spark"
 	root.get_node("GameState").p1_body_variant = "male"
@@ -160,7 +187,7 @@ func guest_run() -> void:
 
 func finish() -> void:
 	keys([])
-	var result := {"PASS":failures.is_empty(), "role":side, "checks":checks, "failures":failures, "stock_events":stock_events, "respawn_events":respawn_events, "deadline_observations":deadline_observations,
+	var result := {"PASS":failures.is_empty(), "role":side, "checks":checks, "failures":failures, "stock_events":stock_events, "respawn_events":respawn_events, "deadline_observations":deadline_observations,"pause_query_observation":pause_query_observation,
 		"scope":"Actual two-process ordinary jump/pause/resume momentum, walkoff, unchanged72-step online respawn, same-boundary atomic deadline restoration, retirement on abandonment. NOT attack-earnedKO, historical physics/contact resimulation, native visuals or human approval.",
 		"HUMAN_ART_APPROVED":false, "RC2_READY":false, "V1_0_0_RELEASE_AUTHORIZED":false}
 	var file = FileAccess.open(output.path_join("LAN_" + side.to_upper() + ".json"), FileAccess.WRITE)

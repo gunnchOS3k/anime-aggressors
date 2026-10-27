@@ -1,0 +1,144 @@
+{
+  "schema": 1,
+  "scope": "Two bounded actual ENet ordinary-input attack-earned match attempts, nonprivate headless assets. Both rejected; no KO/rollback/native acceptance. No in-match damage, positions, stocks, winner, hitstun or AI injected.",
+  "attempts": [
+    {
+      "source": "70aa9f30553579a12a0244b53bfacbbf96507fb8",
+      "run": "https://github.com/gunnchOS3k/anime-aggressors/actions/runs/40533046525",
+      "PASS": false,
+      "attack_earned_KO_verified": false,
+      "terminal_state_agreement": true,
+      "contacts": 0,
+      "acquisitions": 0,
+      "contact_groups": [],
+      "phase": "result",
+      "combat_frame": 125,
+      "end_actors": [
+        {
+          "fighter": "kaia-windrow",
+          "body": "female",
+          "damage": 0.0,
+          "stocks": 1,
+          "state": "victory"
+        },
+        {
+          "fighter": "juno-spark",
+          "body": "male",
+          "damage": 0.0,
+          "stocks": 0,
+          "state": "ko"
+        }
+      ],
+      "role_results": {
+        "attack-host": {
+          "PASS": false,
+          "checks": 19,
+          "failures": [
+            "actual_opponent_attack_precedes_terminal_stock_loss",
+            "first_terminal_snapshot_has_committed_winner_and_phase",
+            "host_actual_results_match_winner"
+          ],
+          "runtime_errors": []
+        },
+        "attack-guest": {
+          "PASS": true,
+          "checks": 10,
+          "failures": [],
+          "runtime_errors": []
+        }
+      },
+      "raw_result_path": "outputs/lan_attack_70aa9f30/ENGINE_RESULT.json",
+      "raw_result_sha256": "22bab36be600382ba0c565f7e2cd4c780cd5123db4543b60edd32b761497e92c"
+    },
+    {
+      "source": "cb8d018574c1ebc187d5bf9b556dbecef6a78c12",
+      "run": "https://github.com/gunnchOS3k/anime-aggressors/actions/runs/40533643767",
+      "PASS": false,
+      "attack_earned_KO_verified": false,
+      "terminal_state_agreement": false,
+      "contacts": 65,
+      "acquisitions": 62,
+      "contact_groups": [
+        {
+          "move": "throw_back",
+          "result": "hit",
+          "attacker_slot": 1,
+          "count": 62
+        },
+        {
+          "move": "jab_1",
+          "result": "hit",
+          "attacker_slot": 2,
+          "count": 1
+        },
+        {
+          "move": "jab_2",
+          "result": "hit",
+          "attacker_slot": 2,
+          "count": 1
+        },
+        {
+          "move": "jab_finisher",
+          "result": "hit",
+          "attacker_slot": 2,
+          "count": 1
+        }
+      ],
+      "phase": "combat",
+      "combat_frame": 2400,
+      "end_actors": [
+        {
+          "fighter": "kaia-windrow",
+          "body": "female",
+          "damage": 3.537952,
+          "stocks": 1,
+          "state": "throw_release"
+        },
+        {
+          "fighter": "juno-spark",
+          "body": "male",
+          "damage": 156.907339776,
+          "stocks": 1,
+          "state": "launched"
+        }
+      ],
+      "role_results": {
+        "attack-host": {
+          "PASS": false,
+          "checks": 10,
+          "failures": [
+            "ordinary_terminal_stock_loss",
+            "actual_opponent_attack_precedes_terminal_stock_loss",
+            "first_terminal_snapshot_has_committed_winner_and_phase",
+            "first_terminal_snapshot_has_real_terminal_acting",
+            "real_socket_late_terminal_controls_rejected",
+            "host_actual_results_match_winner"
+          ],
+          "runtime_errors": []
+        },
+        "attack-guest": {
+          "PASS": false,
+          "checks": 4,
+          "failures": [
+            "late_control_probe_sent_over_actual_socket_after_terminal",
+            "guest_observes_same_authoritative_terminal_result",
+            "guest_actual_ResultsScene_loaded"
+          ],
+          "runtime_errors": []
+        }
+      },
+      "raw_result_path": "outputs/lan_attack_cb8d0185/ENGINE_RESULT.json",
+      "raw_result_sha256": "1223e93bda798eae1f1bc9cc9aa7c9f5c0d127cbd71ae59a93c7fa8d58d651de"
+    }
+  ],
+  "driver_limits": [
+    "First24px edge approach overshot due real dash braking; guest walked off at0damage before any contact. Results/rematch/menu did run, not earnedKO.",
+    "Second112px inside approach produced65contacts/62 separately acquired throws and active guest attacks, but no stockloss in2400ticks. Counterplay/trajectory and repeated stale throws did not yield an earned finish.",
+    "Guest escape branch checked nonexistent state grabbed; actual victim shares grab_hold and is identified by grab_owner. Correct the driver for future counterplay coverage. No third attempt launched; deterministic combat work continues."
+  ],
+  "no_further_KO_attempt_launched": true,
+  "HUMAN_ART_APPROVED": false,
+  "RUNTIME_PAIRED_CONTACT_VERIFIED": false,
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false
+}

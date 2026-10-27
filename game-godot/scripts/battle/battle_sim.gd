@@ -45,6 +45,9 @@ func enable_network_commit(owner: Node, epoch: int) -> void:
 
 func _close_physics_frame() -> void:
 	if not network_commit_enabled or _pending_frame.is_empty(): return
+	# Global physics_frame is emitted even while paused, but PhysicsServer's
+	# flush_queries is skipped while inactive. Never certify that as closed.
+	if get_tree().paused: return
 	var owner = _commit_owner.get_ref() if _commit_owner != null else null
 	if not is_instance_valid(owner) or not owner.is_inside_tree() or owner._network_abandoned:
 		_pending_frame.clear()

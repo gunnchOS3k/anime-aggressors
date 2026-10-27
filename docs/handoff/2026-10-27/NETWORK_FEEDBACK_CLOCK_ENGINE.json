@@ -1,0 +1,201 @@
+{
+  "schema": 1,
+  "source_head": "35c9bc466f15abcc7a6be5c360f2f666d886e1ce",
+  "run": "https://github.com/gunnchOS3k/anime-aggressors/actions/runs/40534078965",
+  "PASS": true,
+  "godot_version": "4.7.1.stable.official.a13da4feb",
+  "scope": "Actual localhost ENet host/guest BattleScene, live physics commit and fixed-frame critical-feedback eligibility; affected combat/Party/audio/Training regressions. Not complete restorable combat state, historical resimulation, attack-earned multiplayer KO, native visual/audio, physical LAN or original-art acceptance.",
+  "suites": {
+    "host": {
+      "PASS": true,
+      "checks": 29,
+      "failures": [],
+      "runtime_errors": []
+    },
+    "guest": {
+      "PASS": true,
+      "checks": 14,
+      "failures": [],
+      "runtime_errors": []
+    },
+    "terminal-host": {
+      "PASS": true,
+      "checks": 16,
+      "failures": [],
+      "runtime_errors": []
+    },
+    "terminal-guest": {
+      "PASS": true,
+      "checks": 10,
+      "failures": [],
+      "runtime_errors": []
+    },
+    "lobby-host": {
+      "PASS": true,
+      "checks": 8,
+      "failures": [],
+      "runtime_errors": []
+    },
+    "lobby-guest": {
+      "PASS": true,
+      "checks": 8,
+      "failures": [],
+      "runtime_errors": []
+    },
+    "respawn-host": {
+      "PASS": true,
+      "checks": 24,
+      "failures": [],
+      "runtime_errors": []
+    },
+    "respawn-guest": {
+      "PASS": true,
+      "checks": 4,
+      "failures": [],
+      "runtime_errors": []
+    },
+    "combat-components": {
+      "PASS": true,
+      "checks": 23,
+      "rows": 0,
+      "failures": []
+    },
+    "party-components": {
+      "PASS": true,
+      "checks": 357,
+      "rows": 18,
+      "failures": []
+    },
+    "stage-audio": {
+      "PASS": true,
+      "checks": 13,
+      "rows": 0,
+      "failures": []
+    },
+    "authored-special-links": {
+      "PASS": true,
+      "checks": 73,
+      "rows": 6,
+      "failures": []
+    },
+    "throw-ownership": {
+      "PASS": true,
+      "checks": 0,
+      "rows": 39,
+      "failures": []
+    },
+    "training-lifecycle": {
+      "PASS": true,
+      "checks": 24,
+      "rows": 0,
+      "failures": []
+    },
+    "training-practice": {
+      "PASS": true,
+      "checks": 17,
+      "rows": 0,
+      "failures": []
+    },
+    "training-authored-link": {
+      "PASS": true,
+      "checks": 18,
+      "rows": 2,
+      "failures": []
+    },
+    "nix-authored-grab": {
+      "PASS": true,
+      "checks": 26,
+      "rows": 3,
+      "failures": []
+    }
+  },
+  "feedback_clocks": [
+    {
+      "actor_clock": 386,
+      "event": "115007817597:474:1",
+      "frame": 386,
+      "hitstop_frames": 2,
+      "source": "actor_physics"
+    },
+    {
+      "actor_clock": 417,
+      "event": "115007817597:505:2",
+      "frame": 417,
+      "hitstop_frames": 5,
+      "source": "actor_physics"
+    },
+    {
+      "actor_clock": 449,
+      "event": "115007817597:537:3",
+      "frame": 449,
+      "hitstop_frames": 2,
+      "source": "actor_physics"
+    },
+    {
+      "actor_clock": 482,
+      "event": "115007817597:570:4",
+      "frame": 482,
+      "hitstop_frames": 2,
+      "source": "actor_physics"
+    },
+    {
+      "actor_clock": 690,
+      "event": "115007817597:777:5",
+      "frame": 690,
+      "hitstop_frames": 5,
+      "source": "actor_physics"
+    },
+    {
+      "actor_clock": 726,
+      "event": "115007817597:813:6",
+      "frame": 726,
+      "hitstop_frames": 5,
+      "source": "actor_physics"
+    },
+    {
+      "actor_clock": 762,
+      "event": "115007817597:849:7",
+      "frame": 762,
+      "hitstop_frames": 5,
+      "source": "actor_physics"
+    },
+    {
+      "actor_clock": 798,
+      "event": "115007817597:885:8",
+      "frame": 798,
+      "hitstop_frames": 5,
+      "source": "actor_physics"
+    },
+    {
+      "actor_clock": 834,
+      "event": "115007817597:921:9",
+      "frame": 834,
+      "hitstop_frames": 5,
+      "source": "actor_physics"
+    }
+  ],
+  "commit_observations": 697,
+  "render_catchup_commits": 60,
+  "commit_errors": [],
+  "source_sha256": {
+    "game-godot/scripts/combat/combat_feedback.gd": "52450fc484aaf389b4b194e59c916e89b9b8eb8a635c981e21327950992595f4",
+    "game-godot/scripts/battle/battle_scene.gd": "15fd685a48116253743292fa8003ef9d16c64f9a046e7e7017bec2c6dcc51125",
+    "game-godot/scripts/battle/battle_sim.gd": "bcad42818bd28a1ddac954060a1aefdf777f6ab35680907f70309b1d175f370f",
+    "game-godot/scripts/net/lan_session.gd": "447f501c65198d43b604ebc647df991295e93b306291f2ff950cf55d87baf978"
+  },
+  "raw_result_path": "outputs/lan_feedback_35c9bc46/ENGINE_RESULT.json",
+  "raw_result_sha256": "e06d6ed5754ec5f59fbd390b59c05aab97702627a978a9254d36ea3eb599abdf",
+  "remaining_diagnostic_counts": {
+    "nix-authored-grab.log": 2,
+    "stage-audio.log": 1,
+    "import.log": 192,
+    "throw-ownership.log": 2,
+    "authored-special-links.log": 2,
+    "training-lifecycle.log": 2,
+    "combat-components.log": 2
+  },
+  "HUMAN_ART_APPROVED": false,
+  "RUNTIME_PAIRED_CONTACT_VERIFIED": false,
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false
+}

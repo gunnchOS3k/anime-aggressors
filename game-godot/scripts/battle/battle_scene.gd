@@ -20,6 +20,7 @@ var blast: Dictionary = {}
 var _active := false
 var _match_finished := false
 var _paused := false
+var _network_pause_requested := false
 var _ko_lock := false
 var _network_round_clock := 0
 var _network_ko_deadline := -1
@@ -97,6 +98,10 @@ func _ready() -> void:
 		LanSession.status = "LAN ownership lost before battle binding; reconnect"
 		SceneRouter.call_deferred("go", "online_private")
 		return
+	if _battle_sim.network_commit_enabled:
+		# Bind AFTER LanSession: publish the closed step, then freeze before any
+		# new actor/input Node tick. PhysicsServer must stay active until here.
+		_battle_sim.frame_committed.connect(_apply_pending_network_pause)
 	if not _story_attempt_token.is_empty() and CampaignRuntime.active_encounter.get("objective_contract") == "COSMIC_SURVIVAL":
 		_setup_story_cosmic_encounter(CampaignRuntime.active_encounter)
 	elif not _story_attempt_token.is_empty() and CampaignRuntime.active_encounter.get("objective_contract", "STOCK_WIN") != "STOCK_WIN":
@@ -489,7 +494,20 @@ func _update_hud() -> void:
 
 func _toggle_pause() -> void:
 	if _match_finished: return
-	_paused = not _paused
+	if _battle_sim != null and _battle_sim.network_commit_enabled and not _paused:
+		# Pausing immediately disables PhysicsServer query flushing. A pending
+		# contact/KO must commit before the pause menu can abandon this match.
+		_network_pause_requested = not _network_pause_requested
+		return
+	_apply_pause(not _paused)
+
+func _apply_pending_network_pause(_frame: int) -> void:
+	if not _network_pause_requested: return
+	_network_pause_requested = false
+	if not _match_finished and not _network_abandoned: _apply_pause(true)
+
+func _apply_pause(value: bool) -> void:
+	_paused = value
 	# Freeze the SceneTree so CharacterBody2D physics / CPU / hazards stop.
 	# Prior behavior only flipped controls_enabled + BattleSim.paused, so
 	# fighters kept sliding under gravity/velocity while the pause panel showed
@@ -661,6 +679,7 @@ func _on_move_list_pin(entry: Dictionary) -> void:
 
 
 func _clear_pause_for_nav() -> void:
+	_network_pause_requested = false
 	_paused = false
 	get_tree().paused = false
 	if _battle_sim:
@@ -707,6 +726,7 @@ func abandon_network_match() -> void:
 		_finish_match(2 if fighter1.stocks <= 0 else 1)
 		return
 	_network_abandoned = true
+	_network_pause_requested = false
 	_active = false
 	if _battle_sim != null: _battle_sim.set_paused(true)
 	for actor in fighters_root.get_children():
@@ -720,6 +740,7 @@ func _finish_match(winner: int) -> void:
 	# queued objective callback cannot replace a result already committed here.
 	if _match_finished: return
 	_match_finished = true
+	_network_pause_requested = false
 	if _hazard_runtime!=null:_hazard_runtime.clear_items()
 	_active = false
 	if _battle_sim != null: _battle_sim.set_paused(true)
