@@ -5,6 +5,7 @@ const _BattleSim = preload("res://scripts/battle/battle_sim.gd")
 const _FighterStates = preload("res://scripts/fighters/fighter_states.gd")
 const _PracticeStats = preload("res://scripts/training/practice_stats.gd")
 const _TrainingClock = preload("res://scripts/training/training_frame_clock.gd")
+const _AuthoredLinkPractice = preload("res://scripts/training/authored_link_practice.gd")
 
 @onready var fighters_root: Node2D = $Fighters
 @onready var stage_root: Node2D = $Stage
@@ -23,7 +24,9 @@ var _slow_mo := false
 var _freeze := false
 var _frame_overlay: Label
 var _practice = _PracticeStats.new()
+var _link_practice = _AuthoredLinkPractice.new()
 var _practice_label: Label
+var _link_label: Label
 var _practice_panel: PanelContainer
 var _dummy_option: OptionButton
 var _pinned_entry: Dictionary = {}
@@ -57,6 +60,7 @@ func _ready() -> void:
 	_battle_sim = _BattleSim.new()
 	add_child(_battle_sim)
 	_battle_sim.bind_fighters([fighter1, fighter2])
+	_battle_sim.frame_completed.connect(_observe_link_step)
 	_frame_clock = _TrainingClock.new()
 	_frame_clock.frame_started.connect(_begin_physics_step)
 	_frame_clock.frame_finished.connect(_end_physics_step)
@@ -117,6 +121,7 @@ func _ensure_move_browser() -> void:
 
 
 func _on_browser_play(fid: String, move_id: String, aura_amount: float, facing: int) -> void:
+	_link_practice.clear("Debug move preview is not an ordinary-input link attempt. Choose a lesson again.")
 	if fighter1 == null:
 		return
 	if fighter1.has_method("training_play_move"):
@@ -139,6 +144,7 @@ func _open_training_move_list() -> void:
 	TouchInputManager._sync_overlay()
 	if _move_list_panel == null or not is_instance_valid(_move_list_panel):
 		_move_list_panel = MOVE_LIST_PANEL.new()
+		_move_list_panel.allow_link_practice = str(GameState.mode) == "training"
 		_move_list_panel.name = "TrainingMoveList"
 		_move_list_panel.process_mode = Node.PROCESS_MODE_ALWAYS
 		if hud:
@@ -146,6 +152,7 @@ func _open_training_move_list() -> void:
 		else:
 			add_child(_move_list_panel)
 		_move_list_panel.pin_requested.connect(_on_training_pin)
+		_move_list_panel.link_practice_requested.connect(_on_training_link)
 	var fid := str(GameState.p1_fighter_id) if GameState.p1_fighter_id else "ember-vale"
 	if fighter1 != null and "fighter_id" in fighter1:
 		fid = str(fighter1.fighter_id)
@@ -153,6 +160,7 @@ func _open_training_move_list() -> void:
 
 
 func _on_training_pin(entry: Dictionary) -> void:
+	_link_practice.clear("Single-move practice selected.")
 	_pinned_entry = entry.duplicate(true)
 	var glyphs: Dictionary = entry.get("input_glyphs", {})
 	if _pin_reminder:
@@ -165,6 +173,19 @@ func _on_training_pin(entry: Dictionary) -> void:
 			goal,
 		]
 		_pin_reminder.visible = true
+
+
+func _on_training_link(source: String, target: String) -> void:
+	if str(GameState.mode) != "training" or not is_instance_valid(fighter1): return
+	if _link_practice.choose(fighter1, source, target):
+		_pinned_entry.clear()
+		if _pin_reminder != null: _pin_reminder.text = ""
+
+
+func _observe_link_step(_frame: int) -> void:
+	if is_instance_valid(fighter1) and not fighter1.controls_enabled:
+		_link_practice.restart("Attacker control ended. Start a fresh source attack after control returns.")
+	if is_instance_valid(fighter2): _link_practice.observe_defender(fighter2)
 
 func _build_stage() -> void:
 	var stage_id := GameState.stage_id if GameState.stage_id != "" else "training-grid"
@@ -267,12 +288,14 @@ func _on_grab(info: Dictionary) -> void:
 
 
 func _practice_move_started(_move: String, actor) -> void:
+	_link_practice.move_started(actor, _move)
 	_practice.move_started(actor.slot, actor.move_runner.activation_id, actor.move_runner.move_data)
 	if actor == fighter1 and _pinned_entry.get("move_id", "") == _move:
 		_pin_reminder.text = "MOVE STARTED: %s · %s" % [_move, "awaiting actual contact" if float(_pinned_entry.get("damage", 0.0)) > 0 else "action observed"]
 
 
 func _practice_move_ended(_move: String, actor) -> void:
+	_link_practice.move_ended(actor)
 	var runner = actor.move_runner
 	var natural: bool = runner.phase == "recovery" and runner.frame_in_phase >= int(runner.move_data.get("recovery_frames", 0))
 	_practice.move_ended(actor.slot, runner.activation_id, natural)
@@ -280,6 +303,7 @@ func _practice_move_ended(_move: String, actor) -> void:
 
 func _practice_contact(attacker, defender, info: Dictionary) -> void:
 	if not _practice.contact(attacker.slot, defender.slot, info): return
+	_link_practice.contact(attacker, defender, info)
 	if attacker == fighter1 and _pinned_entry.get("move_id", "") == str(info.get("move_id", "")):
 		var result := str(info.get("contact_result", ""))
 		_pin_reminder.text = "%s: %s · applied %.2f%%" % [result.to_upper(), str(info.get("move_id", "")), float(info.get("damage_applied", 0.0))]
@@ -297,6 +321,11 @@ func _practice_projectile(shot, actor) -> void:
 
 func _practice_control(_from: String, to: String, slot: int) -> void:
 	if not _FighterStates.locks_actions(to): _practice.recovered(slot)
+	var actor = fighter1 if slot == 1 else fighter2
+	if is_instance_valid(actor): _link_practice.observe_defender(actor)
+	if to in [_FighterStates.KO, _FighterStates.RESPAWN]: _link_practice.restart("Respawn or KO ended the attempt. Start the source again.")
+	elif slot == 1 and (to in [_FighterStates.HURT_LIGHT, _FighterStates.HURT_HEAVY, _FighterStates.HITSTUN, _FighterStates.LAUNCHED, _FighterStates.TUMBLE, _FighterStates.SHIELD_STUN, _FighterStates.SHIELD_BREAK] or (to == _FighterStates.GRAB_HOLD and actor.grabbed_by != null)):
+		_link_practice.restart("Attacker interrupted. Start the source again.")
 
 
 func _practice_grab(info: Dictionary, slot: int) -> void:
@@ -316,12 +345,18 @@ func _ensure_practice_controls() -> void:
 	_practice_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_practice_label.custom_minimum_size.x = 324
 	column.add_child(_practice_label)
+	_link_label = Label.new()
+	_link_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_link_label.custom_minimum_size.x = 324
+	_link_label.add_theme_font_size_override("font_size", 15)
+	column.add_child(_link_label)
 	var dummy := OptionButton.new()
 	_dummy_option = dummy
 	var modes := ["idle", "shield", "jump", "attack", "cpu", "di_in", "di_out"]
 	for mode in modes: dummy.add_item("Dummy: " + mode)
 	dummy.select(maxi(0, modes.find(fighter2.dummy_mode)))
 	dummy.item_selected.connect(func(index):
+		_link_practice.restart("Dummy behavior changed. Start a fresh source attack.")
 		fighter2.configure_training_dummy(modes[index], GameState.cpu_level)
 		GameState.training_dummy_mode = fighter2.dummy_mode
 	)
@@ -334,6 +369,7 @@ func _ensure_practice_controls() -> void:
 
 
 func _reset_practice() -> void:
+	_link_practice.restart("Practice reset. Wait for landing, then start the source again.")
 	for actor in [fighter1, fighter2]:
 		actor.reset_training_practice()
 	_practice.clear()
@@ -356,6 +392,18 @@ func _refresh_practice_hud() -> void:
 		lines.append("Blocks %d · Perfect Guard %d · armor %d" % [row.blocks, row.perfect_guards, row.armor])
 		lines.append("Last %s %s +%.2f%%" % [row.last_move, row.last_result, row.last_damage])
 	_practice_label.text = "\n".join(lines)
+	if _link_label != null:
+		var selected: Dictionary = _link_practice.selection
+		var title := "Authored link practice"
+		if not selected.is_empty():
+			var glyphs = preload("res://scripts/ui/input_glyph_presenter.gd")
+			title = "%s %s → %s %s" % [selected.source, glyphs.glyphs_for_command(str(selected.source_command)).compact, selected.target, glyphs.glyphs_for_command(str(selected.target_command)).compact]
+			if not _link_practice.attempt.is_empty() and fighter1.move_runner.active and fighter1.move_runner.activation_id == int(_link_practice.attempt.source_activation):
+				for window in _link_practice.attempt.resolved_windows:
+					if str(window.get("to", "")) == str(selected.target):
+						title += "\nLive %s frame %d · link %d–%d" % [fighter1.move_runner.phase, fighter1.move_runner.total_frame, int(window.start), int(window.end)]
+						title += " · hitstop" if fighter1._hitstop > 0 else " · cancel eligible" if fighter1.move_runner.can_cancel_to(str(selected.target)) else " · cancel unavailable"
+		_link_label.text = title + "\n" + _link_practice.message
 	if _pinned_entry.get("move_id", "") == "aura_charge" and fighter1.state_machine.current_state == "aura_charge" and _pin_reminder:
 		_pin_reminder.text = "AURA CHARGE OBSERVED · %.1f" % fighter1.aura
 
@@ -517,6 +565,8 @@ func _exit_tree() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode in [KEY_F3, KEY_F4, KEY_F5, KEY_F7]:
+			_link_practice.clear("Debug position, damage or aura edit ended this lesson. Choose a lesson again.")
 		match event.keycode:
 			KEY_F3:
 				fighter1.reset_position()
@@ -557,6 +607,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	# press hides the panel and cancels their pending release activation.
 
 func _cycle_dummy() -> void:
+	_link_practice.restart("Dummy behavior changed. Start a fresh source attack.")
 	var modes := ["idle", "shield", "jump", "attack", "cpu", "di_in", "di_out"]
 	var idx := modes.find(fighter2.dummy_mode)
 	idx = (idx + 1) % modes.size()

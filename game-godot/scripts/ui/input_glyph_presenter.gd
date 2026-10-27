@@ -44,7 +44,12 @@ static func detect_device() -> String:
 static func glyphs_for_command(input_command: String, device: String = "") -> Dictionary:
 	if device.is_empty():
 		device = detect_device()
-	var base: Dictionary = CMD_GLYPHS.get(input_command, {
+	# Runtime manifests use attack_air_*, while the original presentation
+	# vocabulary uses aerial_*. Alias notation only; never remap gameplay input.
+	var glyph_command := input_command
+	if input_command.begins_with("attack_air_"):
+		glyph_command = "aerial_" + input_command.trim_prefix("attack_air_")
+	var base: Dictionary = CMD_GLYPHS.get(glyph_command, {
 		"dir": "",
 		"btn": input_command.to_upper(),
 		"seq": [input_command],

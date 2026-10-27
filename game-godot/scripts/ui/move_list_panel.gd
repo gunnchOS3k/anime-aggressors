@@ -9,6 +9,9 @@ const _PresentationContext = preload("res://scripts/visual/presentation_context.
 
 signal closed
 signal pin_requested(move_entry: Dictionary)
+signal link_practice_requested(source_move_id: String, target_move_id: String)
+
+var allow_link_practice := false
 
 var fighter_id: String = ""
 var _catalog: Dictionary = {}
@@ -38,6 +41,7 @@ var _btn_pause: Button
 var _btn_slow: Button
 var _btn_pin: Button
 var _btn_close: Button
+var _link_buttons: VBoxContainer
 
 
 func _ready() -> void:
@@ -170,6 +174,8 @@ func _build_ui() -> void:
 	_detail.custom_minimum_size = Vector2(0, 120)
 	_detail.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	left.add_child(_detail)
+	_link_buttons = VBoxContainer.new()
+	left.add_child(_link_buttons)
 
 	var right := VBoxContainer.new()
 	right.custom_minimum_size = Vector2(320, 0)
@@ -341,6 +347,9 @@ func _current_entry() -> Dictionary:
 
 
 func _refresh_detail() -> void:
+	for child in _link_buttons.get_children():
+		_link_buttons.remove_child(child)
+		child.queue_free()
 	var e := _current_entry()
 	if e.is_empty():
 		_detail.text = ""
@@ -374,7 +383,20 @@ func _refresh_detail() -> void:
 		if target.is_empty(): continue
 		var enriched: Dictionary = Glyphs.enrich_entry(target, _device)
 		lines.append("On body hit: %s → %s · move frames %d–%d (BASE). Aura may change this window; a cancel is not a guaranteed combo." % [str(target.get("display_name", link.to)), str(enriched.get("input_glyphs", {}).get("compact", target.get("input_command", ""))), int(link.start), int(link.end)])
+		if allow_link_practice:
+			var button := Button.new()
+			button.text = "Practice link → " + str(target.get("display_name", link.to))
+			button.set_meta("source_move", str(e.move_id))
+			button.set_meta("target_move", str(link.to))
+			button.pressed.connect(_practice_link.bind(str(e.move_id), str(link.to)))
+			_link_buttons.add_child(button)
 	_detail.text = "\n".join(lines)
+
+
+func _practice_link(source: String, target: String) -> void:
+	if not allow_link_practice: return
+	link_practice_requested.emit(source, target)
+	close_panel()
 
 
 func _ensure_preview() -> void:
