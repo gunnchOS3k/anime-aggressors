@@ -1,3 +1,15 @@
+# 2026-10-26 — Guest actual BattleScene engine PASS; authored special links now wired
+
+Accepted source6c77735311cececb26405a628b357c081d90a2ba run40432106726 PASS: host20/guest11 checks, 66guest observations with exact damage/shield replication and bothpublicmodels/clips loaded, 14deduplicated confirmedcontact cues; no guest damage/physics/save authority. Pair18.971s/594726912combinedRSS. Host/guest ZERO runtimeERRORlines. ThrowOwnership39rows andTrainingLifecycle24PASS. Existing publicimport duplicate animation names andTraining shutdownwarnings retained, notart/errorfreeclaim. Compact docs/handoff/2026-10-26/LAN_GUEST_ENGINE.json; full outputs/lan_ci_6c777353.
+
+New implementation: existing authored attack-cancel reader now accepts exclusive fresh Special using same commandresolver/ground-air/window/body-hit/activation/hitstop/full-meter gates. Heavy andcharge chords remainowned. No move/frame/damage/hitstunvalues changed. Existing authored Ember/Yin/Yang finisher→side_special andVesper finisher→down_special now inputreachable (engine proofpending). MoveListcatalog includesYin/Yang, shows sourceauthored target/input/basewindow and explicitly warns cancellation isnotguaranteedcombo. No replacementcombocatalog ornewcanon.
+
+New actual ordinary-input AuthoredSpecialLinks suite:4characterbodyhit cases plusEmberwhiff/shield negatives, recordsactualresolvedwindow, contactevent andcancelactivation; quietdefenders declarednotCPUcomboproof. AddedtoexistingLANjob becauseFighterinputchanged; all old gatesretained. NEXT normalcommit/pushthenexistingworkflowONLYlan_battle_runtime=true. Preserve failures and inspectnewactualresults; sourceSHA=gitrev-parseHEAD.
+
+Next networking: actualprediction/simulationrollback remainsMISSING (currentnative rollbackclass hashesinputs only); do notpromotereplica snapshotstoactualrestoration. Terminalfirst-result packet acceptance andguestKO/results/rematch handoff needordinaryinputprobe, notinjectedwinner. PhysicalLAN/invites/auth/reconnect/resync/packetloss/nativevisual/audio remainopen. No localheavy/native/privateartreads/USBqualification/storagepreflight/cleanup/paidrun/artupload.19start/18reserveguards unchanged. ProtectedPRs/worktrees/art/savespreserved. Humanart/pairedruntime/RC2/releaseFALSE.
+
+---
+
 # 2026-10-26 — First real ENet combat PASS; guest BattleScene source implemented
 
 Accepted assertion source c5abdf89d8530120e9e8bef3bebdb361c8d5a074; public Ubuntu run40410298438 PASS: actual two-process host20/guest5 checks, 14 real contacts (4 melee,5shield,5throw_down), batched public tap, slot-spoof rejection and disconnect neutrality. ThrowOwnership39rows and TrainingLifecycle24PASS. Pair18.165s/446480384combinedRSS. Raw outputs/lan_ci_c5abdf89; compact docs/handoff/2026-10-26/LAN_INPUT_ENGINE.json. Genuine remaining diagnostics preserved: stale departed-peer send and guest missingtaunt action (now corrected source, pendingproof); oldpublic-asset import rename collisions and shutdown resourcewarnings notclaimedclean.

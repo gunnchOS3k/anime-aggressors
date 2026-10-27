@@ -57,7 +57,7 @@ static func load_json(path: String) -> Dictionary:
 static func roster_ids() -> PackedStringArray:
 	return PackedStringArray([
 		"ember-vale", "rook-ironside", "juno-spark", "kaia-windrow",
-		"nix-calder", "orion-vell", "vesper-nyx",
+		"nix-calder", "orion-vell", "vesper-nyx", "yin", "yang",
 	])
 
 
@@ -194,6 +194,7 @@ static func _entry_from_move(
 		"short_description": short_desc,
 		"is_core": core_ids.has(move_id),
 		"element_effect": move.get("element_effect", {}),
+		"authored_links": move.get("cancel_windows", []).filter(func(w):return w.has("to") and str(w.get("requires", "")) == "hit_confirm").duplicate(true),
 	}
 
 

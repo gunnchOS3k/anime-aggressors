@@ -894,8 +894,11 @@ func _try_authored_attack_cancel() -> bool:
 	# Public press edges remain required. Shield/whiff/stale projectiles cannot
 	# grant a body-hit cancel, and controls/hurt/landing retain their authority.
 	if not controls_enabled or not _FighterStates.is_attack_state(state_machine.current_state) or _hitstop>0 or move_runner==null or not move_runner.active:return false
-	if not _read_attack_pressed() or _read_special_pressed() or aura>=100:return false
-	var command:=_resolve_attack_command()
+	var attack_pressed := _read_attack_pressed()
+	var special_pressed := _read_special_pressed()
+	# Exclusive public inputs preserve heavy/charge/full-meter chord ownership.
+	if attack_pressed == special_pressed or aura>=100 or (special_pressed and is_aura_input_held()):return false
+	var command := _resolve_special_command() if special_pressed else _resolve_attack_command()
 	var target: Dictionary={}
 	if command=="attack_neutral" and is_on_floor():
 		target=_DataLoader.find_move(move_manifest,"jab_2" if _jab_chain==1 else "jab_finisher" if _jab_chain==2 else "jab_1")

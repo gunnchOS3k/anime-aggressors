@@ -87,6 +87,7 @@ def run():
         # Changed shared input readers and scene lifecycle warrant these two
         # existing affected regressions, not another full Story playthrough.
         for name, script, filename in [
+            ("authored-special-links", "tests/integration/AuthoredSpecialLinks.gd", "AUTHORED_SPECIAL_LINKS.json"),
             ("throw-ownership", "tests/v1_closure/ThrowOwnership.gd", "throw_ownership.json"),
             ("training-lifecycle", "tests/integration/TrainingLifecycle.gd", "TRAINING_LIFECYCLE.json"),
         ]:

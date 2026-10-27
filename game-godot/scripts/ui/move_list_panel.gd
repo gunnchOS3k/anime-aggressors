@@ -367,6 +367,13 @@ func _refresh_detail() -> void:
 		lines.append("Clip: %s · move_id: %s" % [str(e.get("animation_clip", "")), str(e.get("move_id", ""))])
 		if str(e.get("reachability", "")) == "LAB_ONLY":
 			lines.append("[i]CONCEPT / LAB TECHNIQUE — NOT CURRENTLY BOUND TO NORMAL MATCH INPUT[/i]")
+	for link in e.get("authored_links", []):
+		var target: Dictionary = {}
+		for candidate in _flat_playable:
+			if str(candidate.get("move_id", "")) == str(link.to): target = candidate; break
+		if target.is_empty(): continue
+		var enriched: Dictionary = Glyphs.enrich_entry(target, _device)
+		lines.append("On body hit: %s → %s · move frames %d–%d (BASE). Aura may change this window; a cancel is not a guaranteed combo." % [str(target.get("display_name", link.to)), str(enriched.get("input_glyphs", {}).get("compact", target.get("input_command", ""))), int(link.start), int(link.end)])
 	_detail.text = "\n".join(lines)
 
 
