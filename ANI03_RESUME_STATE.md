@@ -1,3 +1,11 @@
+# 2026-10-27 — Trial canonical BASE identity corrected; only trial rerun next
+
+Run40579593476 at7dd74ea8 retained: ProjectileComponentHistory451/18 PASS again; FlatCombatReplay compiled/loadedrealGameState butfailedbinding(4checks) because trialgate incorrectlytreated fighter-specificBASE IDs asliteralBASE. Actualauthority uses KAIA_BASE/JUNO_BASE fromeachFormsDoc.default_form. Gate nowcomparesactualcurrentID toitsowncanonicaldefault, no aliases, unlock changes or balance modification. Negative evidence outputs/flat_replay_7dd74ea8 retained. Additional staged native-cache defect probe willmovepausedrealpublicactorup80px andimmediatelyreinstateexacttransform, withoutphysicsstep/contact; expectsprioris_on_floorcachepersistinair, demonstratingwhytransformassignmentisnotrestore. ThisprobeisNOTplayedmovement/rollbackacceptance.
+
+Existing scope=physics nowrunsONLY FlatCombatReplay; unchanged451body/phase/effect projectilereceiptandimpact/clash/Nix receiptsreuseexactsourcehashes, no repeatedroster suite. CandidatestillNOTshippingLAN. Nextcommit/push/manualphysicsjob; actualexecutionoutcomepending. Allhuman/pairedruntime/RC2/releasefalse; no localheavy/privateart/read-loadretry/cleanup/save/spend.
+
+---
+
 # 2026-10-27 — First isolated physics job retained; autoload ordering corrected
 
 Run40579137718 atda163ffd FAILED: strengthened ProjectileComponentHistory451checks/18rows PASS (including real unsafephysics-phase rejection and zero newrenderer events duringrestore), but FlatCombatReplay didnotcompile because const-preload loaded productionHitResolver/GameState-dependent candidate BEFORE SceneTree autoloadregistration. ImportitselfPASS. Fullnegative outputs/flat_replay_da163ffd retained. Fixture nowloads actualcandidate onlyafter realTraining andGameState areinitialized; no productionautoloadreplacement/stub/skipping. Read-onlyreview also addedpre-install pair-overlap, snapshotguardclock==worldframe andsingle-jabactivationcount validations, plus exactwhole-world atomicnegativechecks. BASE-only/profile-hitboxscale scopeexplicitlyfenced. SourceexecutionstillPENDING; no fullrollbackacceptance.

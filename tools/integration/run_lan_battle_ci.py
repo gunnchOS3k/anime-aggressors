@@ -109,7 +109,6 @@ def run(scope="all"):
                 ("projectile-interactions", "tests/v1_closure/ProjectileInteractions.gd", "projectile_interactions.json"),
                 ("nix-authored-grab", "tests/integration/NixAuthoredGrab.gd", "NIX_AUTHORED_GRAB.json"),
             ] if scope == "projectiles" else [
-                ("projectile-history", "tests/integration/ProjectileComponentHistory.gd", "PROJECTILE_COMPONENT_HISTORY.json"),
                 ("flat-combat-replay", "tests/integration/FlatCombatReplay.gd", "FLAT_COMBAT_REPLAY.json"),
             ]
             for name, script, filename in component_suites:
@@ -120,7 +119,7 @@ def run(scope="all"):
                                 "checks": len(data.get("checks", [])), "rows": len(data.get("rows", [])), "result": data})
                 record["suites"][name] = outcome
             record["PASS"] = all(s["PASS"] for s in record["suites"].values())
-            record["scope"] = "Projectile retained-node component history plus affected original impact/clash and Nix cancel regressions. No historical CharacterBody/world replay, delayed-input combat, native visual/audio/device or human acceptance. Other suites NOT rerun." if scope == "projectiles" else "Isolated source-owned flat-floor movement/contact restore/replay trial, plus strengthened projectile history phase/effect checks. Experimental backend NOT enabled in production LAN; no shipping CharacterBody parity, complete game-world replay, real delayed-packet LAN or native art/audio/device acceptance. Other suites NOT rerun."
+            record["scope"] = "Projectile retained-node component history plus affected original impact/clash and Nix cancel regressions. No historical CharacterBody/world replay, delayed-input combat, native visual/audio/device or human acceptance. Other suites NOT rerun." if scope == "projectiles" else "Isolated source-owned flat-floor movement/contact restore/replay trial only. Reuse unchanged accepted projectile-history receipts. Experimental backend NOT enabled in production LAN; no shipping CharacterBody parity, complete game-world replay, real delayed-packet LAN or native art/audio/device acceptance. Other suites NOT rerun."
             return record
         if scope == "attack":
             earned = pair(base + ["--verbose"], output / "attack-earned", "tests/integration/LanAttackEarnedMatch.gd")

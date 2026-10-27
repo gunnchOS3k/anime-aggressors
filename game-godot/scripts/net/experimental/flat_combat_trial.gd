@@ -306,7 +306,10 @@ func _configure_from_live_impl(p: Node, d: Node, stage: Dictionary, epoch_value:
 	if move.get("move_id", "") != "jab_1" or move.get("move_type", "") != "melee" or move.has("projectile") or move.get("grounded_air", "") != "grounded" or move.get("_party_move", false) or move.get("form_override_applied", false): return false
 	if float(p.aura) >= 25.0 or float(d.aura) >= 25.0 or bool(p.invincible) or bool(d.invincible): return false
 	for source in [p, d]:
-		if source.get_current_form_id() not in ["", "BASE"] or source.party_overdrive.state != "BASE": return false
+		# Live base IDs are character-owned (KAIA_BASE, JUNO_BASE, ...), not
+		# the visual/canonical umbrella label "BASE".
+		var base_id := str(source.get_forms_doc().get("default_form", ""))
+		if source.get_current_form_id() != base_id or source.party_overdrive.state != "BASE": return false
 	# This first proof uses the actual Kaia jab's unit-scale authored box.
 	# Other profile scaling requires the same resolved runtime shape contract.
 	if float(p.data.get("hitHurtProfile", {}).get("hitboxScale", 1.0)) != 1.0: return false

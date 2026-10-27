@@ -44,6 +44,16 @@ func run() -> void:
 	battle._battle_sim.set_paused(true)
 	p.set_physics_process(false); d.set_physics_process(false)
 	await process_frame
+	# Declared native-cache defect probe ONLY. This is not a played contact,
+	# historical restore or acceptance teleport: no physics step is advanced,
+	# and the live actor's exact transform is reinstated immediately.
+	var original_transform: Transform2D = p.global_transform
+	var native_floor_before: bool = p.is_on_floor()
+	p.global_position -= Vector2(0, 80)
+	var native_floor_after_transform: bool = p.is_on_floor()
+	var geometric_bottom: float = p.hit_resolver._world_bounds(p.get_node("CollisionShape2D")).end.y
+	p.global_transform = original_transform
+	check(native_floor_before and native_floor_after_transform and geometric_bottom < float(stage.mainPlatform.y) - 70.0 and p.global_transform == original_transform, "actual_CharacterBody_transform_change_leaves_incorrect_prior_floor_cache")
 	var history: Array = []
 	var neutral := {"axis":0.0, "attack":false, "shield":false}
 	var held_guard := {"axis":0.0, "attack":false, "shield":true}
@@ -104,7 +114,10 @@ func run() -> void:
 		"snapshot_frame":checkpoint.frame, "approach_steps":approach_steps, "replay_steps":history.size(), "retired_intents":retired,
 		"source_move":p.move_runner.move_data.duplicate(true), "failure":trial.failure,
 		"baseline_shield_health":baseline.actors[1].shield_health, "corrected_shield_health":trial.actors[1].shield_health,
-		"production_LAN_enabled":false, "historical_CharacterBody_restored":false}
+		"production_LAN_enabled":false, "historical_CharacterBody_restored":false,
+		"native_cache_probe":{"declared_staged_defect_probe":true, "floor_before":native_floor_before,
+			"floor_after_airborne_transform":native_floor_after_transform, "geometric_bottom":geometric_bottom,
+			"stage_surface":stage.mainPlatform.y, "original_transform_reinstated":p.global_transform == original_transform}}
 	trial.free()
 	finish()
 
