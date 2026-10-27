@@ -618,10 +618,10 @@ func competitive_stage_ids() -> Array:
 	return out
 
 
-func selectable_roster_ids() -> Array:
+func selectable_roster_ids(allow_review: bool = true) -> Array:
 	var ids := roster_ids()
 	var campaign_runtime := get_node_or_null("/root/CampaignRuntime")
-	var review := OS.is_debug_build() and OS.get_environment("AA_V1_ROUTE_REVIEW") == "1"
+	var review := allow_review and OS.is_debug_build() and OS.get_environment("AA_V1_ROUTE_REVIEW") == "1"
 	if review:
 		return ids
 	var selected := []

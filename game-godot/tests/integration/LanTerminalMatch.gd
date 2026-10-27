@@ -32,7 +32,7 @@ func host_run() -> void:
 	var ready=FileAccess.open(output.path_join("HOST_READY"),FileAccess.WRITE);ready.store_string("ready");ready.close()
 	for i in range(600):
 		await physics_frame
-		if lan.guest_id>1:break
+		if lan.guest_id>1 and lan.guest_pick_ready:break
 	check(lan.start_match(),"host_starts_legal_one_stock_match")
 	for i in range(420):
 		await physics_frame
@@ -90,6 +90,8 @@ func host_run() -> void:
 	check(gs.career_matches==career_before+1,"abandoned_rematch_does_not_award_result")
 
 func guest_run() -> void:
+	root.get_node("GameState").p1_fighter_id="juno-spark"
+	root.get_node("GameState").p1_body_variant="male"
 	check(lan.join("127.0.0.1",port)==OK,"real_guest_connect")
 	for i in range(900):
 		await physics_frame

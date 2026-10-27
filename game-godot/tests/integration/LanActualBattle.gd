@@ -45,9 +45,12 @@ func host_run() -> void:
 	ready.store_string(str(OS.get_process_id())); ready.close()
 	for i in range(600):
 		await physics_frame
-		if lan.guest_id != 0: break
+		if lan.guest_id != 0 and lan.guest_pick_ready: break
 	check(lan.guest_id > 1, "independent_guest_peer_connected")
 	if lan.guest_id == 0: return
+	await frames(6) # Bounded real lobby request/ack exchange, before any match.
+	check(lan.guest_pick_ready and gs.p2_fighter_id == "juno-spark" and gs.p2_body_variant == "male", "guest_owned_lobby_selection_acknowledged")
+	check(lan.rejected_inputs >= 5 and gs.p1_fighter_id == "kaia-windrow" and gs.p1_body_variant == "female", "invalid_locked_or_spoofed_lobby_choices_cannot_own_host_or_unlock_fighters")
 	check(lan.start_match(), "host_starts_existing_BattleScene")
 	for i in range(420):
 		await physics_frame
@@ -103,7 +106,21 @@ func host_run() -> void:
 	check(lan._battle == null and lan._closed, "scene_exit_retires_bound_battle")
 
 func guest_run() -> void:
+	root.get_node("GameState").p1_fighter_id = "juno-spark"
+	root.get_node("GameState").p1_body_variant = "male"
 	check(lan.join("127.0.0.1", port) == OK, "independent_ENet_client_connect")
+	for i in range(600):
+		await physics_frame
+		if not lan._lobby_id.is_empty(): break
+	var rejected_choices: Array = [
+		{"fighter":"../../not-a-fighter", "body":"male"},
+		{"fighter":"juno-spark", "body":"invalid"},
+		{"fighter":"yin", "body":"male"},
+		{"fighter":"juno-spark", "body":"male", "slot":1},
+		{"fighter":"juno-spark", "body":"male", "unlocked":true}]
+	for choice in rejected_choices:
+		var packet: Dictionary = {"kind":"selection", "lobby":lan._lobby_id, "revision":1000, "fighter":"juno-spark", "body":"male"}
+		packet.merge(choice, true); lan._send(1, packet)
 	for i in range(1500):
 		await physics_frame
 		if lan.latest.is_empty(): continue
@@ -116,6 +133,7 @@ func guest_run() -> void:
 			var spoof = LanControls.local_packet(lan.epoch, 0)
 			spoof["slot"] = 1; spoof["damage"] = 999
 			lan._send(1, spoof); spoof_sent = true
+			lan._send(1, {"kind":"selection", "lobby":lan._lobby_id, "revision":1001, "fighter":"ember-vale", "body":"female"})
 		if f < 90:
 			keys([])
 			# Countdown starts actors above the floor. A fresh tap during LAND
@@ -158,6 +176,7 @@ func guest_run() -> void:
 				replica_contacts = replica.presented_contacts.size()
 	keys([])
 	check(spoof_sent, "spoof_probe_sent_over_actual_socket")
+	check(lan.lobby_state.get("guest_ready", false) and lan.lobby_state.get("p2", {}).get("fighter", "") == "juno-spark", "guest_observes_host_acknowledged_own_selection")
 	check(batch_sent and not batch_observation.is_empty(), "batched_tap_sent_from_authoritative_grounded_neutral")
 	check(not replica_rows.is_empty(), "guest_real_BattleScene_presentation_loaded")
 	check(replica_rows.all(func(row):return row.models and row.no_local_authority), "guest_models_loaded_without_second_combat_simulation")

@@ -1,7 +1,6 @@
 extends "res://tests/integration/OrdinaryMatchCompletion.gd"
 ## Real Party pickup/taunt/ultimate paths, with EXPLICIT staged item pickups.
 ## No earned-item, active-opponent, art, network or full rollback acceptance.
-const Party = preload("res://scripts/combat/party_overdrive.gd")
 const IDS := ["ember-vale", "rook-ironside", "juno-spark", "kaia-windrow", "nix-calder", "orion-vell", "vesper-nyx", "yin", "yang"]
 var rows: Array = []
 
@@ -44,7 +43,10 @@ func exercise(fid: String, body: String) -> void:
 		keys(["left"]); await frames(1); keys([]); await frames(2)
 	var face: int = p.facing
 	check(p.model_3d.get_body_variant() == body and face == (-1 if body == "female" else 1), label + ":real_body_and_public_facing")
-	var shadow = Party.new(); shadow.setup(p)
+	# Main --script is compiled before autoload registration. Reuse the exact
+	# production script already loaded by the live Fighter after GameState,
+	# rather than preloading its autoload dependency before the scene exists.
+	var shadow = p.party_overdrive.get_script().new(); shadow.setup(p)
 	var base: Dictionary = p.party_overdrive.capture_component_state()
 	check(shadow.restore_component_state(base), label + ":base_restore")
 	var invalid: Dictionary = base.duplicate(true); invalid.owner.instance = 0

@@ -3,7 +3,7 @@ extends Node
 ## Guest BattleScene is a read-only presentation replica with no local damage.
 ## No claim of authenticated Internet service or combat rollback/resimulation.
 const Controls = preload("res://scripts/net/lan_controls.gd")
-const VERSION := 1
+const VERSION := 2
 const MAX_PACKET := 32768
 const INPUT_TIMEOUT_MS := 1000
 signal changed
@@ -33,6 +33,12 @@ var _starting := false
 var local_rematch_ready := false
 var remote_rematch_ready := false
 var _guest_result_epoch := -1
+var lobby_state: Dictionary = {}
+var guest_pick_ready := false
+var _lobby_id := ""
+var _local_pick: Dictionary = {}
+var _pick_revision := 0
+var _remote_pick_revision := -1
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -47,6 +53,7 @@ func host(port: int = 27834, address: String = "*") -> Error:
 	var error := peer.create_server(port, 1, 1)
 	if error != OK: peer = null; return error
 	role = "host"
+	_lobby_id = Crypto.new().generate_random_bytes(16).hex_encode()
 	peer.peer_connected.connect(_peer_joined)
 	peer.peer_disconnected.connect(_peer_left)
 	status = "Listening on UDP %d; waiting for one LAN guest" % port
@@ -58,6 +65,8 @@ func join(address: String, port: int = 27834) -> Error:
 	var error := peer.create_client(address, port, 1)
 	if error != OK: peer = null; return error
 	role = "guest"
+	var allowed: Array = GameState.selectable_roster_ids(false)
+	_local_pick = {"fighter":GameState.p1_fighter_id if GameState.p1_fighter_id in allowed else allowed[0], "body":GameState.p1_body_variant if GameState.p1_body_variant in ["male", "female"] else "male"}
 	status = "Connecting to %s:%d" % [address, port]
 	_guest_deadline = Time.get_ticks_msec() + 10000
 	return OK
@@ -79,6 +88,12 @@ func stop() -> void:
 	local_rematch_ready = false
 	remote_rematch_ready = false
 	_guest_result_epoch = -1
+	lobby_state.clear()
+	guest_pick_ready = false
+	_lobby_id = ""
+	_local_pick.clear()
+	_pick_revision = 0
+	_remote_pick_revision = -1
 	last_sequence = -1
 	_last_snapshot = -1
 	status = "Offline"
@@ -87,11 +102,13 @@ func _peer_joined(id: int) -> void:
 	if role != "host" or guest_id != 0 or _bound_once: return
 	guest_id = id
 	status = "Guest connected; host can start the selected versus match"
-	_send(guest_id, {"kind":"hello", "version":VERSION, "slot":2})
+	_send(guest_id, {"kind":"hello", "version":VERSION, "slot":2, "lobby":_lobby_id})
+	_publish_lobby()
 
 func _peer_left(id: int) -> void:
 	if role == "host" and id == guest_id:
 		guest_id = 0
+		guest_pick_ready = false
 		var battle = _battle.get_ref() if _battle != null else null
 		if is_instance_valid(battle): battle.abandon_network_match()
 		retire_battle("Guest disconnected; controls retired")
@@ -157,6 +174,21 @@ func _on_authoritative_step(_frame: int) -> void:
 	if _ticks % 3 == 0: _publish(battle)
 
 func _receive(sender: int, message: Dictionary) -> void:
+	if role == "host" and message.get("kind", "") == "selection":
+		if sender != guest_id or guest_id == 0 or _bound_once or _starting or _battle != null or message.size() != 5 or not message.has_all(["kind", "lobby", "revision", "fighter", "body"]):
+			rejected_inputs += 1; return
+		if typeof(message.lobby) != TYPE_STRING or message.lobby != _lobby_id or typeof(message.revision) != TYPE_INT or message.revision <= _remote_pick_revision or message.revision > 2147483647 or typeof(message.fighter) != TYPE_STRING or typeof(message.body) != TYPE_STRING:
+			rejected_inputs += 1; return
+		# Same canonical signed-unlock policy as local selection, without the
+		# offline review bypass. Never accept unlock/form/save flags from peers.
+		if message.fighter not in GameState.selectable_roster_ids(false) or message.body not in ["male", "female"]:
+			rejected_inputs += 1; _send(guest_id, {"kind":"selection_error", "reason":"Fighter/body unavailable in the host's unlocked roster"}); return
+		_remote_pick_revision = message.revision
+		GameState.p2_fighter_id = message.fighter
+		GameState.p2_body_variant = message.body
+		guest_pick_ready = true
+		_publish_lobby()
+		return
 	if role == "host" and sender == guest_id and message.get("kind", "") == "rematch":
 		if message.size() == 3 and message.has_all(["kind", "epoch", "ready"]) and typeof(message.epoch) == TYPE_INT and message.epoch == epoch and typeof(message.ready) == TYPE_BOOL and message.ready and _bound_once and _closed and latest.get("phase", "") == "result":
 			remote_rematch_ready = true
@@ -177,7 +209,14 @@ func _receive(sender: int, message: Dictionary) -> void:
 		remote.apply(message)
 		received_inputs += 1
 	elif sender == 1 and message.get("kind", "") == "hello" and message.get("version", -1) == VERSION:
+		_lobby_id = str(message.get("lobby", ""))
+		_send_selection()
 		status = "Connected as guest slot 2. Host chooses match. P1 controls drive remote fighter."
+	elif sender == 1 and message.get("kind", "") == "lobby" and message.get("lobby", "") == _lobby_id and not guest_battle_open:
+		lobby_state = message.duplicate(true)
+		changed.emit()
+	elif sender == 1 and message.get("kind", "") == "selection_error":
+		status = str(message.get("reason", "Selection rejected"))
 	elif sender == 1 and message.get("kind", "") == "state" and int(message.get("sequence", -1)) > _last_snapshot:
 		_last_snapshot = int(message.sequence)
 		if epoch != int(message.epoch):
@@ -219,7 +258,9 @@ func _show_guest_results(result_epoch: int) -> void:
 	SceneRouter.go("results")
 
 func start_match() -> bool:
-	if role != "host" or guest_id == 0 or _bound_once or _starting: return false
+	if role != "host" or guest_id == 0 or not guest_pick_ready or _bound_once or _starting: return false
+	var allowed: Array = GameState.selectable_roster_ids(false)
+	if GameState.p1_fighter_id not in allowed or GameState.p2_fighter_id not in allowed or GameState.p1_body_variant not in ["male", "female"] or GameState.p2_body_variant not in ["male", "female"]: return false
 	_starting = true
 	# Existing selected roster, bodies, stage and rules; no in-match changes.
 	GameState.begin_online_queue("private")
@@ -231,6 +272,28 @@ func start_match() -> bool:
 	GameState.reset_match()
 	SceneRouter.go("battle")
 	return true
+
+func select_local_fighter(id: String, body: String) -> bool:
+	if role.is_empty() or _starting or _bound_once or guest_battle_open or _battle != null or id not in GameState.selectable_roster_ids(false) or body not in ["male", "female"]: return false
+	if role == "host":
+		GameState.p1_fighter_id = id; GameState.p1_body_variant = body
+		_publish_lobby()
+	else:
+		_local_pick = {"fighter":id, "body":body}
+		_send_selection()
+	return true
+
+func _send_selection() -> void:
+	if role != "guest" or _lobby_id.is_empty() or _local_pick.is_empty(): return
+	_pick_revision += 1
+	_send(1, {"kind":"selection", "lobby":_lobby_id, "revision":_pick_revision, "fighter":str(_local_pick.fighter), "body":str(_local_pick.body)})
+
+func _publish_lobby() -> void:
+	if role != "host" or _bound_once or _starting: return
+	lobby_state = {"kind":"lobby", "lobby":_lobby_id, "roster":GameState.selectable_roster_ids(false), "guest_ready":guest_pick_ready, "revision":_remote_pick_revision,
+		"p1":{"fighter":GameState.p1_fighter_id, "body":GameState.p1_body_variant}, "p2":{"fighter":GameState.p2_fighter_id, "body":GameState.p2_body_variant}}
+	_send(guest_id, lobby_state)
+	changed.emit()
 
 func bind_battle(battle: Node) -> bool:
 	if role != "host" or guest_id == 0 or _bound_once or GameState.mode != "online_private":
