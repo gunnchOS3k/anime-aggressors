@@ -29,6 +29,12 @@ on:
         required: false
         default: false
         type: boolean
+      lan_battle_scope:
+        description: "All affected LAN regressions, or only the changed respawn/pause pair; same nonprivate resource guards"
+        required: false
+        default: all
+        type: choice
+        options: [all, respawn]
       netplay_session_runtime:
         description: "Compile and test public game-core/rollback/netplay software only; no Godot/art/export"
         required: false
@@ -725,7 +731,9 @@ jobs:
           python3 tools/integration/run_training_story_ci.py --output "$RUNNER_TEMP/training-story" --suite-set "$suite"
       - name: Actual two-process ENet host BattleScene and affected regressions
         if: inputs.lan_battle_runtime
-        run: python3 tools/integration/run_lan_battle_ci.py
+        env:
+          LAN_BATTLE_SCOPE: ${{ inputs.lan_battle_scope || 'all' }}
+        run: python3 tools/integration/run_lan_battle_ci.py --scope "$LAN_BATTLE_SCOPE"
       - uses: actions/setup-node@v4
         if: inputs.netplay_session_runtime
         with:

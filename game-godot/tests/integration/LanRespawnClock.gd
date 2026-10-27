@@ -65,12 +65,18 @@ func host_run() -> void:
 		await process_frame
 	check(battle._paused and battle._pause_panel != null, "real_pause_during_ascending_jump")
 	if not battle._paused: return
+	# Input.parse_input_event queues unhandled input. One ordinary physics
+	# tick can finish before the pause UI handles that request. Freeze from
+	# its OBSERVED owning boundary, while still rejecting the old zeroing bug.
+	var paused_jump_position: Vector2 = jumper.position
+	var paused_jump_velocity: Vector2 = jumper.velocity
+	check(paused_jump_velocity.y < -50, "pause_keeps_nonzero_ascending_momentum")
 	await frames(18)
-	deadline_observations.append({"case":"ascending_jump_pause", "position_before":[jump_position.x,jump_position.y], "position_paused":[jumper.position.x,jumper.position.y], "velocity_before":[jump_velocity.x,jump_velocity.y], "velocity_paused":[jumper.velocity.x,jumper.velocity.y]})
-	check(jumper.position == jump_position and jumper.velocity == jump_velocity, "pause_preserves_actual_airborne_position_and_velocity")
+	deadline_observations.append({"case":"ascending_jump_pause", "position_at_request":[jump_position.x,jump_position.y], "position_at_pause":[paused_jump_position.x,paused_jump_position.y], "position_paused":[jumper.position.x,jumper.position.y], "velocity_at_request":[jump_velocity.x,jump_velocity.y], "velocity_at_pause":[paused_jump_velocity.x,paused_jump_velocity.y], "velocity_paused":[jumper.velocity.x,jumper.velocity.y]})
+	check(jumper.position == paused_jump_position and jumper.velocity == paused_jump_velocity, "pause_preserves_actual_airborne_position_and_velocity")
 	battle._pause_resume_button.grab_focus(); await accept_focused()
 	await frames(4)
-	check(not battle._paused and jumper.velocity.y < 0 and jumper.position.y < jump_position.y, "resume_continues_original_ascent_instead_of_erasing_momentum")
+	check(not battle._paused and jumper.velocity.y < 0 and jumper.position.y < paused_jump_position.y, "resume_continues_original_ascent_instead_of_erasing_momentum")
 	for i in range(600):
 		await physics_frame
 		if not stock_events.is_empty(): break

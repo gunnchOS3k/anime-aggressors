@@ -3,6 +3,7 @@
 No private assets, exports or uploads. Reuses the existing hosted runner's
 guards; never permits heavy local execution through this command.
 """
+import argparse
 import json
 import os
 from pathlib import Path
@@ -78,11 +79,12 @@ def pair(base, output, script):
 
 
 
-def run():
+def run(scope="all"):
     guard()
     output = Path(os.environ["RUNNER_TEMP"]) / "lan-battle"
     output.mkdir(exist_ok=False)
     record = {"PASS": False, "scope": "Actual two-process localhost ENet guest input into host BattleScene; host-state guest BattleScene presentation; not physical LAN, native visual, rollback, art or human approval", "suites": {}}
+    record["suite_set"] = scope
     processes = []
     streams = []
     try:
@@ -100,6 +102,13 @@ def run():
         base = [godot, "--headless", "--path", str(ROOT / "game-godot"), "--audio-driver", "Dummy", "--rendering-method", "gl_compatibility"]
         record["import"] = execute(base + ["--editor", "--import", "--quit"], output / "import.log", 180)
         if not record["import"]["PASS"]: return record
+        if scope == "respawn":
+            focused = pair(base, output / "respawn-clock", "tests/integration/LanRespawnClock.gd")
+            record["respawn_seconds"] = focused["seconds"]
+            record["suites"].update({"respawn-"+k:v for k,v in focused["suites"].items()})
+            record["PASS"] = all(s["PASS"] for s in focused["suites"].values())
+            record["scope"] = "Focused actual two-process localhost jump/pause/respawn/abandonment only. Other suites NOT rerun; preserve their exact-source receipts. Not historical rollback, physical LAN, native art/audio/device or human acceptance."
+            return record
         first = pair(base, output / "input", "tests/integration/LanActualBattle.gd")
         record.update({k:first[k] for k in ["seconds", "combined_sampled_peak_rss_bytes"]})
         record["suites"].update(first["suites"])
@@ -139,7 +148,6 @@ def run():
                             "checks": len(data.get("checks", [])), "rows": len(data.get("rows", [])), "result": data})
             record["suites"][name] = outcome
         record["PASS"] = all(s["PASS"] for s in record["suites"].values())
-        record["remaining_diagnostics"] = {str(p.relative_to(output)):[line for line in p.read_text(errors="replace").splitlines() if "ERROR:" in line or "WARNING:" in line] for p in output.rglob("*.log")}
     except Exception as error:
         record["error"] = str(error)
     finally:
@@ -149,6 +157,7 @@ def run():
                 try: child.wait(5)
                 except subprocess.TimeoutExpired: child.kill(); child.wait()
         for stream in streams: stream.close()
+        record["remaining_diagnostics"] = {str(p.relative_to(output)):[line for line in p.read_text(errors="replace").splitlines() if "ERROR:" in line or "WARNING:" in line] for p in output.rglob("*.log")}
         for path in output.rglob("*.log"):
             print("DIAGNOSTIC", str(path.relative_to(output)), path.read_text(errors="replace")[-14000:])
         (output / "LAN_ENGINE_RESULT.json").write_text(json.dumps(record, indent=2) + "\n")
@@ -157,4 +166,6 @@ def run():
 
 
 if __name__ == "__main__":
-    raise SystemExit(0 if run()["PASS"] else 1)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--scope", choices=["all", "respawn"], default="all")
+    raise SystemExit(0 if run(parser.parse_args().scope)["PASS"] else 1)
