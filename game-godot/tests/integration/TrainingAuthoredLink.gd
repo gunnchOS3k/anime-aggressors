@@ -24,6 +24,7 @@ func run() -> void:
 	await click(training._move_list_btn)
 	var panel = training._move_list_panel
 	check(panel != null and panel.visible and panel.allow_link_practice, "training_move_list_opens_real_link_practice_UI")
+	if panel == null or not panel.visible: finish(); return
 	# Declared lesson menu selection, not a move/action execution helper.
 	var list_index := -1
 	for i in panel._list.item_count:

@@ -906,8 +906,10 @@ func _try_authored_attack_cancel() -> bool:
 	var attack_pressed := _read_attack_pressed()
 	var special_pressed := _read_special_pressed()
 	# Exclusive public inputs preserve heavy/charge/full-meter chord ownership.
-	if attack_pressed == special_pressed or aura>=100 or (special_pressed and is_aura_input_held()):return false
-	var command := _resolve_special_command() if special_pressed else _resolve_attack_command()
+	var grab_pressed := _read_grab_pressed()
+	if int(attack_pressed) + int(special_pressed) + int(grab_pressed) != 1 or aura>=100 or (special_pressed and is_aura_input_held()):return false
+	if grab_pressed and not is_on_floor(): return false
+	var command := "grab" if grab_pressed else _resolve_special_command() if special_pressed else _resolve_attack_command()
 	var target: Dictionary={}
 	if command=="attack_neutral" and is_on_floor():
 		target=_DataLoader.find_move(move_manifest,"jab_2" if _jab_chain==1 else "jab_finisher" if _jab_chain==2 else "jab_1")

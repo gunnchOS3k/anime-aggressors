@@ -56,7 +56,7 @@ func move_ended(actor) -> void:
 	elif actor.move_runner.activation_id == int(attempt.source_activation) and bool(attempt.source_hit) and not bool(attempt.accepted_cancel):
 		attempt.outcome = "cancel_window_ended"
 		message = "Source hit, but its cancel opportunity ended. Start the source again."
-	elif actor.move_runner.activation_id == int(attempt.target_activation) and bool(attempt.accepted_cancel) and not bool(attempt.target_contact):
+	elif actor.move_runner.activation_id == int(attempt.target_activation) and bool(attempt.accepted_cancel) and not bool(attempt.target_contact) and str(attempt.outcome) != "grab_whiff":
 		attempt.outcome = "no_target_contact"
 		message = "Cancel accepted; no target contact observed. Check spacing and defender escape."
 
@@ -68,10 +68,13 @@ func contact(attacker, defender, info: Dictionary) -> void:
 	var body_hit := result == "hit" and not bool(info.get("blocked", false)) and not bool(info.get("armor_block", false))
 	var move_id := str(info.get("move_id", ""))
 	if activation == int(attempt.source_activation) and move_id == str(selection.source):
-		var owns_source: bool = str(info.get("contact_owner", "")) == "melee" and attacker.move_runner.active and attacker.move_runner.activation_id == activation and attacker.move_runner.current_move_id() == move_id
+		var owns_source: bool = attacker.move_runner.owns_confirmed_contact(info) and attacker.move_runner.current_move_id() == move_id
+		# A defended source never earns a cancel, but still needs honest block/
+		# Perfect Guard feedback in the lesson rather than an ownership error.
+		if not body_hit and attacker.move_runner.active and attacker.move_runner.activation_id == activation and attacker.move_runner.current_move_id() == move_id: owns_source = true
 		if not owns_source:
 			attempt.outcome = "source_cancel_ownership_unavailable"
-			message = "This source contact has no current melee cancel ownership. Authored route execution remains unverified."
+			message = "This source contact has no current authored cancel ownership. Route execution remains unverified."
 		elif body_hit and not bool(attempt.source_hit):
 			attempt.source_hit = true
 			attempt.source_event = str(info.get("combat_event_id", ""))
@@ -103,6 +106,20 @@ func observe_defender(actor) -> void:
 	if attempt.is_empty() or not bool(attempt.source_hit) or bool(attempt.target_contact) or actor.get_instance_id() != int(attempt.target_instance): return
 	if actor.controls_enabled and actor._hitstop <= 0.0 and (actor.state_machine.can_move() or actor.state_machine.can_attack()):
 		attempt.recovered_between = true
+
+func grab(actor, info: Dictionary) -> void:
+	if selection.is_empty() or attempt.is_empty() or actor.get_instance_id() != _owner or str(selection.target) != "grab" or not bool(attempt.accepted_cancel) or actor.move_runner.activation_id != int(attempt.target_activation): return
+	if str(info.get("result", "")) == "whiff":
+		attempt.outcome = "grab_whiff"
+		message = "Grab cancel accepted; acquisition missed. Range, height and escape remain authoritative."
+		return
+	if str(info.get("result", "")) != "success" or not is_instance_valid(actor.grabbed_target): return
+	var target = actor.grabbed_target
+	if target.get_instance_id() != int(attempt.target_instance) or target.grabbed_by != actor: return
+	attempt.target_contact = true
+	attempt.outcome = "grab_after_recovery" if bool(attempt.recovered_between) else "grab_before_observed_recovery"
+	attempt["grab_frame"] = Engine.get_physics_frames()
+	message = "Grab acquired after accepted cancel. Defender control had returned; not guaranteed." if bool(attempt.recovered_between) else "Grab acquired before observed recovery. Acquisition is not a damage hit or guaranteed-combo proof."
 
 func snapshot() -> Dictionary:
 	return {"selection":selection.duplicate(true), "attempt":attempt.duplicate(true), "message":message}

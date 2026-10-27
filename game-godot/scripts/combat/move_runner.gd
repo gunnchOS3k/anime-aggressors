@@ -51,8 +51,20 @@ func cancel() -> void:
 	in_cancel_window = false
 
 func record_confirmed_contact(info: Dictionary) -> void:
-	if active and bool(info.get("confirmed_contact",false)) and str(info.get("contact_result",""))=="hit" and str(info.get("contact_owner",""))=="melee" and int(info.get("attack_activation_id",-1))==activation_id:
-		confirmed_body_hit=true
+	if owns_confirmed_contact(info): confirmed_body_hit = true
+
+func owns_confirmed_contact(info: Dictionary) -> bool:
+	if not active or not bool(info.get("confirmed_contact", false)) or str(info.get("contact_result", "")) != "hit" or bool(info.get("blocked", false)) or bool(info.get("armor_block", false)) or int(info.get("attack_activation_id", -1)) != activation_id: return false
+	if str(info.get("contact_owner", "")) == "melee": return true
+	# Nix's existing authored Frost Shot -> Grab needs its own cast's actual
+	# body contact. A lingering shot cannot confirm a replacement activation;
+	# no projectile gains a generic cancel or changes its fighter-impact rules.
+	if str(info.get("contact_owner", "")) != "projectile" or not move_data.has("projectile") or str(info.get("move_id", "")) != current_move_id(): return false
+	if not move_data.get("cancel_windows", []).any(func(window): return str(window.get("to", "")) == "grab" and str(window.get("requires", "")) == "hit_confirm" and int(window.get("end", -1)) >= total_frame): return false
+	var instance := int(info.get("projectile_instance_id", 0))
+	if instance <= 0 or not is_instance_id_valid(instance): return false
+	var shot = instance_from_id(instance)
+	return is_instance_valid(shot) and "owner_fighter" in shot and shot.owner_fighter == _fighter_body and "move_data" in shot and int(shot.move_data.get("_attack_activation_id", -1)) == activation_id and str(shot.move_data.get("move_id", "")) == current_move_id()
 
 func can_cancel_to(target_move: String) -> bool:
 	if not active:return false

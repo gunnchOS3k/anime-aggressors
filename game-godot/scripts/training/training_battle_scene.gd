@@ -49,6 +49,9 @@ var _pause_resume_button: Button
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	# Primary practice controls remain visible above the optional diagnostic
+	# CanvasLayer, which is added later and occupies the same top-left region.
+	hud.layer = 2
 	set_meta("training_physics_clock", true)
 	# Keep pause controls live without making the fighters inherit ALWAYS.
 	fighters_root.process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -330,6 +333,7 @@ func _practice_control(_from: String, to: String, slot: int) -> void:
 
 func _practice_grab(info: Dictionary, slot: int) -> void:
 	_practice.grab(slot, str(info.get("result", "")))
+	if slot == 1: _link_practice.grab(fighter1, info)
 	if slot == 1 and _pinned_entry.get("move_id", "") == "grab" and _pin_reminder:
 		_pin_reminder.text = "GRAB %s · actual acquisition" % str(info.get("result", "?")).to_upper()
 

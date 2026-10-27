@@ -130,6 +130,7 @@ def run():
             ("training-lifecycle", "tests/integration/TrainingLifecycle.gd", "TRAINING_LIFECYCLE.json"),
             ("training-practice", "tests/integration/TrainingPractice.gd", "TRAINING_PRACTICE.json"),
             ("training-authored-link", "tests/integration/TrainingAuthoredLink.gd", "TRAINING_AUTHORED_LINK.json"),
+            ("nix-authored-grab", "tests/integration/NixAuthoredGrab.gd", "NIX_AUTHORED_GRAB.json"),
         ]:
             outcome = execute(base + ["--fixed-fps", "60", "--script", "res://" + script, "--", "--ordinary-output=" + str(output)], output / (name + ".log"))
             path = output / filename
