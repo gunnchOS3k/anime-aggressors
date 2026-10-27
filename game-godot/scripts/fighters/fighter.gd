@@ -82,6 +82,10 @@ func _button_held(suffix: String) -> bool:
 var _training_dummy_owned_actions: Dictionary = {}
 var use_training_physics_clock := false
 var _training_timeouts: Array = []
+var use_network_physics_clock := false
+var _network_clock := 0
+var _network_deadline_id := 0
+var _network_deadlines: Array = []
 var spawn_point: Vector2 = Vector2.ZERO
 var combo_count: int = 0
 var authored_cancel_history: Array=[]
@@ -343,6 +347,7 @@ func close_combat_for_match_end(won: bool = false) -> void:
 	if combat_closed: return
 	combat_closed = true
 	_training_timeouts.clear()
+	_network_deadlines.clear()
 	controls_enabled = false
 	_pending_attack_cmd = ""
 	if cpu != null and (is_cpu or dummy_mode == "cpu"): cpu.clear_simulated_inputs()
@@ -360,6 +365,9 @@ func close_combat_for_match_end(won: bool = false) -> void:
 
 func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, spawn: Vector2) -> void:
 	clear_training_dummy_inputs()
+	_network_deadlines.clear()
+	_network_clock = 0
+	_network_deadline_id = 0
 	combat_closed = false
 	if is_instance_valid(_form_audio_8c):_form_audio_8c.clear()
 	shield_break_8c.reset("character_change")
@@ -648,6 +656,7 @@ func tick_combat_frame() -> void:
 func _physics_process(delta: float) -> void:
 	if combat_closed: return
 	if use_training_physics_clock: _tick_training_timeouts(delta)
+	elif use_network_physics_clock: _tick_network_deadlines()
 	shield_break_8c.observe_guard(_read_shield())
 	if _guard_presentation != null:_guard_presentation.tick(delta)
 	_wave017_vis_accum += delta
@@ -1488,10 +1497,7 @@ func enable_phase_cancel(seconds: float) -> void:
 	invincible = true
 	stamp_runtime_hook("phase_cancel")
 	stamp_runtime_hook("phase_invuln")
-	_gameplay_timeout(minf(seconds, 0.12), func():
-		if phase_cancel_remaining <= 0.0:
-			invincible = false
-	)
+	_gameplay_timeout(minf(seconds, 0.12), _on_gameplay_deadline.bind("phase_cancel"), "phase_cancel")
 
 
 func tick_aura_charge(delta: float) -> void:
@@ -1605,6 +1611,7 @@ func _cancel_grab_runner() -> void:
 
 func _exit_tree() -> void:
 	combat_closed = true
+	_network_deadlines.clear()
 	clear_training_dummy_inputs()
 	if cpu != null and (is_cpu or dummy_mode == "cpu"): cpu.clear_simulated_inputs()
 	if _guard_presentation!=null:_guard_presentation.clear("actor_exit")
@@ -1621,9 +1628,7 @@ func try_tech() -> bool:
 	velocity = Vector2.ZERO
 	state_machine.landing_lag = 0.04
 	state_machine.enter(_FighterStates.LAND)
-	_gameplay_timeout(_CombatMath.TECH_WINDOW_SEC, func():
-		invincible = false
-	)
+	_gameplay_timeout(_CombatMath.TECH_WINDOW_SEC, _on_gameplay_deadline.bind("tech"), "tech")
 	stamp_runtime_hook("tech")
 	return true
 
@@ -1779,6 +1784,7 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 	# Hit telemetry is recorded by HitResolver.resolve (single source of truth).
 
 func reset_fighter() -> void:
+	_network_deadlines.clear()
 	if use_training_physics_clock:
 		# A practice reset owns a new respawn. Earlier respawn/tech/phase
 		# deadlines must not expire its immunity or overwrite its later state.
@@ -1804,21 +1810,63 @@ func reset_fighter() -> void:
 	invincible = true
 	state_machine.enter(_FighterStates.RESPAWN)
 	ensure_visible_presentation()
-	_gameplay_timeout(1.2, func():
-		if combat_closed: return
-		invincible = false
-		state_machine.enter(_FighterStates.IDLE)
-		ensure_visible_presentation()
-		respawned.emit()
-	)
+	_gameplay_timeout(1.2, _on_gameplay_deadline.bind("respawn"), "respawn")
 
 
-func _gameplay_timeout(seconds: float, callback: Callable) -> void:
+func _gameplay_timeout(seconds: float, callback: Callable, kind: String = "") -> void:
 	if use_training_physics_clock:
 		_training_timeouts.append({"remaining": seconds, "callback": callback})
+	elif use_network_physics_clock:
+		assert(kind in ["phase_cancel", "tech", "respawn"])
+		_network_deadline_id += 1
+		_network_deadlines.append({"id":_network_deadline_id, "kind":kind, "due":_network_clock + maxi(1, int(ceil(seconds * 60.0 - 0.000001)))})
 	else:
 		# Preserve existing match behavior outside training/tutorial scenes.
 		get_tree().create_timer(seconds).timeout.connect(callback, CONNECT_ONE_SHOT)
+
+func _on_gameplay_deadline(kind: String) -> void:
+	match kind:
+		"phase_cancel":
+			if phase_cancel_remaining <= 0.0: invincible = false
+		"tech": invincible = false
+		"respawn":
+			if combat_closed: return
+			invincible = false
+			state_machine.enter(_FighterStates.IDLE)
+			ensure_visible_presentation()
+			respawned.emit()
+
+func _tick_network_deadlines() -> void:
+	_network_clock += 1
+	var due: Array = []
+	for row in _network_deadlines:
+		if int(row.due) <= _network_clock: due.append(row)
+	# Remove before dispatch, so an expired event has exactly one owner even
+	# if its existing handler clears/schedules other deadlines synchronously.
+	for row in due: _network_deadlines.erase(row)
+	for row in due:
+		if not combat_closed: _on_gameplay_deadline(str(row.kind))
+
+func capture_network_deadlines() -> Dictionary:
+	return {"schema":"fighter_network_deadlines/v1", "owner":{"instance":get_instance_id(), "fighter":fighter_id}, "clock":_network_clock, "next_id":_network_deadline_id, "pending":_network_deadlines.duplicate(true)}
+
+func restore_network_deadlines(record: Dictionary) -> bool:
+	# Trusted LOCAL component restore, never a network packet. The caller must
+	# separately restore actor/physics/round/event state before resimulation.
+	if not use_network_physics_clock or record.size() != 5 or record.get("schema", "") != "fighter_network_deadlines/v1" or record.get("owner", {}) != {"instance":get_instance_id(), "fighter":fighter_id}: return false
+	if typeof(record.get("clock")) != TYPE_INT or typeof(record.get("next_id")) != TYPE_INT or typeof(record.get("pending")) != TYPE_ARRAY or record.clock < 0 or record.next_id < 0 or record.pending.size() > 64: return false
+	var seen: Dictionary = {}
+	var previous_id := 0
+	for row in record.pending:
+		if typeof(row) != TYPE_DICTIONARY or row.size() != 3 or not row.has_all(["id", "kind", "due"]): return false
+		if typeof(row.id) != TYPE_INT or row.id <= 0 or row.id > record.next_id or seen.has(row.id) or typeof(row.kind) != TYPE_STRING or row.kind not in ["phase_cancel", "tech", "respawn"] or typeof(row.due) != TYPE_INT or row.due <= record.clock or row.due > record.clock + 72: return false
+		if row.id <= previous_id or row.due > record.clock + (72 if row.kind == "respawn" else 8): return false
+		seen[row.id] = true
+		previous_id = row.id
+	_network_clock = record.clock
+	_network_deadline_id = record.next_id
+	_network_deadlines = record.pending.duplicate(true)
+	return true
 
 
 func _tick_training_timeouts(delta: float) -> void:

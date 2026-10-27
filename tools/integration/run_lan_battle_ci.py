@@ -115,6 +115,10 @@ def run():
         record["lobby_seconds"] = lobby["seconds"]
         record["suites"].update({"lobby-"+k:v for k,v in lobby["suites"].items()})
         if not all(s["PASS"] for s in lobby["suites"].values()): return record
+        respawn = pair(base, output / "respawn-clock", "tests/integration/LanRespawnClock.gd")
+        record["respawn_seconds"] = respawn["seconds"]
+        record["suites"].update({"respawn-"+k:v for k,v in respawn["suites"].items()})
+        if not all(s["PASS"] for s in respawn["suites"].values()): return record
         # Changed shared input readers and scene lifecycle warrant these two
         # existing affected regressions, not another full Story playthrough.
         for name, script, filename in [

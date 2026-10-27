@@ -316,6 +316,7 @@ func bind_battle(battle: Node) -> bool:
 	battle.fighter2.remote_controls = remote
 	battle.fighter2._input_edge_held.clear()
 	for actor in [battle.fighter1, battle.fighter2]:
+		actor.use_network_physics_clock = true
 		actor.hit_resolver.hit_confirmed.connect(_record_contact)
 	battle._battle_sim.frame_completed.connect(_on_authoritative_step)
 	_publish(battle)
