@@ -52,6 +52,16 @@ func run() -> void:
 	check(bool(hit.get("playing",false)),"original_hit_sound_starts")
 	transient.queue_free();await frames(2)
 	check(players(root,"sfx").size()==1,"one_shot_tail_keeps_shared_owner")
+	# Observe real mixer retirement while a paused voice's owner exits. This
+	# must not change the separately verified shared punch-tail policy above.
+	var owned=Node.new();root.add_child(owned)
+	Bank.play(HIT,owned,-6,true)
+	var owned_voice=players(owned,"sfx")[0]
+	owned_voice.stream_paused=true
+	var retirement: Array=[]
+	owned_voice.tree_exiting.connect(func():retirement.append({"playing":owned_voice.playing,"stream_released":owned_voice.stream==null}))
+	owned.queue_free();await frames(2)
+	check(retirement.size()==1 and not retirement[0].playing and retirement[0].stream_released,"paused_voice_stops_and_releases_stream_before_owner_exit")
 	var director=load("res://scripts/audio/AudioDirector.gd").new();root.add_child(director)
 	var controlled=Node2D.new();root.add_child(controlled);Builder.build(controlled,data,true);await frames(2)
 	director.on_pause()

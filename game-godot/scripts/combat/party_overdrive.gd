@@ -170,3 +170,42 @@ func show_cue(kind: int, size: float, life: float) -> void:
 	if renderer!=null:renderer.emit_effect(fighter.fighter_id,kind,fighter.global_position+Vector2(0,-24),Vector2(fighter.facing,0),size,life)
 func snapshot() -> Dictionary:
 	return {"schema":"party_state.v1","fighter":fighter.fighter_id,"slot":fighter.slot,"clock":clock,"state":state,"item":item,"variant":variant,"activation":activation,"remaining":remaining,"ultimate_used":ultimate_used,"counter_armed":counter_armed,"status":"TUNING_CANDIDATE","network_transport_verified":false}
+
+# Trusted local simulation COMPONENT, separate from the diagnostic snapshot.
+# Capture only at completed steps. Models/glyphs, projectiles, Fighter motion
+# and committed presentation events require their own restoration barrier.
+# This API is never a peer-authorized form grant or a full-match snapshot.
+func capture_component_state() -> Dictionary:
+	var result := {"schema":"party_overdrive/v1", "owner":{
+		"instance":fighter.get_instance_id() if is_instance_valid(fighter) else 0,
+		"fighter":str(fighter.fighter_id) if is_instance_valid(fighter) else "",
+		"slot":int(fighter.slot) if is_instance_valid(fighter) else 0}}
+	for key in ["state", "item", "variant", "activation", "clock", "remaining", "startup_left", "ultimate_used", "counter_armed", "pulses_fired", "history", "_previous_presentation", "_resetting"]:
+		var value = get(key)
+		result[key] = value.duplicate(true) if value is Dictionary or value is Array else value
+	return result
+
+func restore_component_state(record: Dictionary) -> bool:
+	var baseline := capture_component_state()
+	if record.size() != baseline.size() or record.get("schema", "") != baseline.schema or record.get("owner", {}) != baseline.owner: return false
+	for key in baseline:
+		if not record.has(key) or typeof(record[key]) != typeof(baseline[key]): return false
+	# A synchronous reset is not a complete-step boundary. Never resume half
+	# of its cancellation, presentation teardown or ownership release.
+	if _resetting or record._resetting: return false
+	if record.state not in ["BASE", "ITEM_ACQUIRED", "TRANSFORMATION_STARTUP", "OVERDRIVE_ACTIVE", "ULTIMATE_STARTUP", "ULTIMATE_ACTIVE", "ULTIMATE_RECOVERY"]: return false
+	if record.item not in ["", "prism_heart", "puppet_seal"] or record.variant not in ["", "BLACK", "WHITE"]: return false
+	if record.state != "BASE" and (record.item.is_empty() or record.variant.is_empty()): return false
+	for key in ["activation", "clock", "remaining", "startup_left"]:
+		if int(record[key]) < 0: return false
+	if record.remaining > int(doc.get("duration_frames", 0)) or record.startup_left > int(doc.get("transform_startup_frames", 0)) or record.history.size() > 64: return false
+	var authored_pulses: Array = doc.get("fighters", {}).get(str(fighter.fighter_id), {}).get("ultimate", {}).get("pulses", [])
+	for key in record.pulses_fired:
+		if typeof(key) != TYPE_INT or key < 0 or key >= authored_pulses.size() or typeof(record.pulses_fired[key]) != TYPE_BOOL or not record.pulses_fired[key]: return false
+	# All checks precede writes. Do not transition/reset/start a move, spend
+	# meter, emit audio, spawn a pulse or reconfigure source art on restoration.
+	for key in baseline:
+		if key in ["schema", "owner"]: continue
+		var value = record[key]
+		set(key, value.duplicate(true) if value is Dictionary or value is Array else value)
+	return true

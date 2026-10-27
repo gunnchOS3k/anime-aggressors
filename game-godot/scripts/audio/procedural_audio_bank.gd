@@ -93,8 +93,17 @@ static func play(path: String, host: Node = null, volume_db: float = 0.0, scene_
 		player.queue_free()
 		return {"ok": true, "path": path, "playing": false, "loaded": true, "deferred": true}
 	player.finished.connect(player.queue_free)
+	# A paused playback can retain its WAV when its owner/scene is removed.
+	# Explicitly retire the mixer voice before the node leaves the tree; do
+	# not rely on natural `finished` during pause, results or menu navigation.
+	player.tree_exiting.connect(_retire_playback.bind(player), CONNECT_ONE_SHOT)
 	player.play()
 	return {"ok": true, "path": path, "playing": true}
+
+
+static func _retire_playback(player: AudioStreamPlayer) -> void:
+	player.stop()
+	player.stream = null
 
 
 static func play_shared(category: String, host: Node = null) -> Dictionary:

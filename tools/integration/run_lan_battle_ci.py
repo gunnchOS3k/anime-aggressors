@@ -115,6 +115,8 @@ def run():
         # existing affected regressions, not another full Story playthrough.
         for name, script, filename in [
             ("combat-components", "tests/integration/NativeCombatComponents.gd", "NATIVE_COMBAT_COMPONENTS.json"),
+            ("party-components", "tests/integration/PartyCombatComponents.gd", "PARTY_COMBAT_COMPONENTS.json"),
+            ("stage-audio", "tests/integration/StageAudioOwnership.gd", "STAGE_AUDIO_OWNERSHIP.json"),
             ("authored-special-links", "tests/integration/AuthoredSpecialLinks.gd", "AUTHORED_SPECIAL_LINKS.json"),
             ("throw-ownership", "tests/v1_closure/ThrowOwnership.gd", "throw_ownership.json"),
             ("training-lifecycle", "tests/integration/TrainingLifecycle.gd", "TRAINING_LIFECYCLE.json"),
