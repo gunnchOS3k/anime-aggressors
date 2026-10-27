@@ -1,3 +1,11 @@
+# 2026-10-26 — Completed-step LAN driver timing correction; current engine proof pending
+
+Run40434159416 @921d2fb279f9e6dfa5ca692235b0f55dcd15abb7 FAILED only host batched-tap-before90 assertion (22/23 host checks; guest11/11). No host/guest runtime ERRORs. Actual remote melee, guard, grab/throw, guest models/HUD/animation, completed-step snapshots and abandoned-disconnect cleanup passed. Terminal pair/regressions did not run because first pair correctly failed. Full negative outputs/lan_terminal_921d2fb2. Earliest guest snapshot shows FAST_FALL/not grounded; at frame32 actual IDLE/grounded, first accepted later attack162. Previous driver fired its only tap at >=15 without checking actual eligibility. Driver now waits host-reported IDLE+grounded+no move/hitstop, records that exact snapshot, retains real press+release over ENet and SAME before90 move-start assertion. No combat or remote edge rules changed. This is not a passing result until actual next engine run.
+
+NEXT normal commit/push then existing workflow ONLYlan_battle_runtime=true. Inspect both input roles, terminal Results/both-consent-rematch/menu UI, components, authored links, throws and Training. Exact source=git rev-parse HEAD. Preserve all failed evidence; no local native/art/Blender/media/private reads/USB qualification/cleanup/new spending. All human/paired-runtime/RC2/release gates false. Full combat physics rollback, secure invites/reconnect, native visual/audio/device and complete original action/Story/OVA production remain unfinished.
+
+---
+
 # 2026-10-26 — Terminal/result/rematch exercised; guarded UI readiness + snapshot boundary
 
 Run40433753397 @517693a4: inputpair20/11PASSzeroerrors. Terminalpair progressedthroughlegitimatewalkoff,committedfirstwinner/acting,lateinputrejection,actualbothResults/UIrematch,newroundfreshstateandrealremotecontact; thenhostfixturecalledfind_children onNilpausepanel (LanTerminalMatch78). ActualengineScriptError correctlyFAILSjob despitefixturethenprintingPASS. Fullnegative outputs/lan_terminal_517693a4. NewfixturewaitsboundedactualUIopenandassertsreadinessbeforedereference; no directhandler/fakepause.

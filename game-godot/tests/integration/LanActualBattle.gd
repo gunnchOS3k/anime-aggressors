@@ -13,6 +13,7 @@ var before_campaign := ""
 var whiff_damage := -1.0
 var spoof_sent := false
 var batch_sent := false
+var batch_observation: Dictionary = {}
 var replica_rows: Array = []
 var replica_contacts := 0
 var guest_career := 0
@@ -117,7 +118,11 @@ func guest_run() -> void:
 			lan._send(1, spoof); spoof_sent = true
 		if f < 90:
 			keys([])
-			if f >= 15 and not batch_sent:
+			# Countdown starts actors above the floor. A fresh tap during LAND
+			# recovery is correctly rejected; exercise socket edge retention only
+			# once the actual host reports an eligible neutral, grounded actor.
+			if f >= 15 and not batch_sent and b.state == "idle" and b.grounded and not b.move_active and float(b.hitstop) <= 0.0:
+				batch_observation = {"combat_frame":f, "actor":b.duplicate(true)}
 				keys(["attack"])
 				lan._send(1, LanControls.local_packet(lan.epoch, lan._sequence)); lan._sequence += 1
 				keys([])
@@ -153,6 +158,7 @@ func guest_run() -> void:
 				replica_contacts = replica.presented_contacts.size()
 	keys([])
 	check(spoof_sent, "spoof_probe_sent_over_actual_socket")
+	check(batch_sent and not batch_observation.is_empty(), "batched_tap_sent_from_authoritative_grounded_neutral")
 	check(not replica_rows.is_empty(), "guest_real_BattleScene_presentation_loaded")
 	check(replica_rows.all(func(row):return row.models and row.no_local_authority), "guest_models_loaded_without_second_combat_simulation")
 	check(replica_rows.all(func(row):return row.damage_matches and row.shield_matches), "guest_HUD_uses_exact_authoritative_damage_and_shield")
@@ -166,7 +172,7 @@ func guest_run() -> void:
 func finish() -> void:
 	keys([])
 	var result = {"PASS":failures.is_empty(), "role":side, "pid":OS.get_process_id(), "checks":checks, "failures":failures,
-		"replica_rows":replica_rows, "replica_contacts":replica_contacts, "contacts":contacts, "move_starts":move_starts, "guards":guard_events, "grabs":grab_events, "guest_samples":guest_samples,
+		"replica_rows":replica_rows, "replica_contacts":replica_contacts, "contacts":contacts, "move_starts":move_starts, "guards":guard_events, "grabs":grab_events, "guest_samples":guest_samples, "batch_observation":batch_observation,
 		"received_inputs":lan.received_inputs if lan != null else 0, "rejected_inputs":lan.rejected_inputs if lan != null else 0,
 		"scope":"Two actual localhost ENet Godot processes, guest public input into authoritative host BattleScene; host-state guest BattleScene presentation, not physical LAN, rollback, original art or human acceptance",
 		"HUMAN_ART_APPROVED":false,"RC2_READY":false,"V1_0_0_RELEASE_AUTHORIZED":false}
