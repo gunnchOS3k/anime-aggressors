@@ -30,11 +30,11 @@ on:
         default: false
         type: boolean
       lan_battle_scope:
-        description: "Affected LAN regressions, focused respawn/pause, or bounded attack-earned pair; same nonprivate resource guards"
+        description: "Affected LAN, focused pause/projectile components, or bounded attack-earned pair; same nonprivate resource guards"
         required: false
         default: all
         type: choice
-        options: [all, respawn, attack]
+        options: [all, respawn, attack, projectiles]
       netplay_session_runtime:
         description: "Compile and test public game-core/rollback/netplay software only; no Godot/art/export"
         required: false
