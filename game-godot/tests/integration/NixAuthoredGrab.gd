@@ -82,7 +82,7 @@ func probe_nix(outcome: String, body: String) -> void:
 		# A new ordinary cast cannot borrow the old real projectile receipt.
 		check(await legal_ground_control(p), "new_cast_waits_real_control")
 		keys(["special"]); await frames(2); keys([])
-		check(p.move_runner.activation_id != cast_activation and not source_events.is_empty() and not p.move_runner.owns_confirmed_contact(source_events[0].info) and not p.move_runner.confirmed_body_hit, "old_shot_cannot_confirm_replacement_cast")
+		check(p.move_runner.activation_id != cast_activation and not source_events.is_empty() and not p.move_runner.owns_confirmed_contact(source_events[0].info) and not p.move_runner.confirmed_body_hit, "retained_old_contact_receipt_cannot_confirm_replacement_cast")
 	else:
 		check(not before.get("eligible", true) and links.is_empty() and grab_events.all(func(row): return row.result != "success"), outcome + ":unearned_grab_cancel_rejected")
 		if outcome == "shield":
@@ -94,7 +94,7 @@ func probe_nix(outcome: String, body: String) -> void:
 func finish() -> void:
 	keys([]); Input.action_release("p2_shield")
 	var result = {"PASS":failures.is_empty(), "checks":checks, "failures":failures, "rows":lesson_rows, "inputs":inputs,
-		"scope":"Actual public-input Nix Frost Shot -> Grab using original manifest timing, real owned projectile and normal grab acquisition. Female body hit, male shield and female distant whiff. Quiet Training dummy only; not active-CPU, both-facing/all-aura, guaranteed combo, native visual or rollback acceptance."}
+		"scope":"Actual public-input Nix Frost Shot -> Grab using original manifest timing, real owned projectile and normal grab acquisition. Female body hit, male shield, female distant whiff and old stored receipt rejection. Does not test a live earlier shot arriving during a new cast. Quiet Training dummy only; not active-CPU, both-facing/all-aura, guaranteed combo, native visual or rollback acceptance."}
 	var file = FileAccess.open(output.path_join("NIX_AUTHORED_GRAB.json"), FileAccess.WRITE)
 	file.store_string(JSON.stringify(result, "  ")); file.close()
 	print("NIX_AUTHORED_GRAB ", "PASS" if failures.is_empty() else "FAIL", " checks=", checks.size(), " failures=", failures)

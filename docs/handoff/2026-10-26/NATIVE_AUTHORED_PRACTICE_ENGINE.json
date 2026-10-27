@@ -1,0 +1,462 @@
+{
+  "schema": "native-authored-practice-engine/v1",
+  "source_head": "b5969f77ab0a7c3e9ae4bfe820514ce6ab6524fc",
+  "workflow": "https://github.com/gunnchOS3k/anime-aggressors/actions/runs/40492587349",
+  "godot_version": "4.7.1.stable.official.a13da4feb",
+  "PASS": true,
+  "raw_result": "outputs/lan_nix_b5969f77/ENGINE_RESULT.json",
+  "raw_result_sha256": "d44782cf213645b83c31dd1dc98a23a88ec4fd7c4046f187dec92efab7a4ddae",
+  "suites": {
+    "host": {
+      "PASS": true,
+      "checks": 25,
+      "rows": null,
+      "failures": []
+    },
+    "guest": {
+      "PASS": true,
+      "checks": 14,
+      "rows": null,
+      "failures": []
+    },
+    "terminal-host": {
+      "PASS": true,
+      "checks": 16,
+      "rows": null,
+      "failures": []
+    },
+    "terminal-guest": {
+      "PASS": true,
+      "checks": 10,
+      "rows": null,
+      "failures": []
+    },
+    "lobby-host": {
+      "PASS": true,
+      "checks": 8,
+      "rows": null,
+      "failures": []
+    },
+    "lobby-guest": {
+      "PASS": true,
+      "checks": 8,
+      "rows": null,
+      "failures": []
+    },
+    "respawn-host": {
+      "PASS": true,
+      "checks": 19,
+      "rows": null,
+      "failures": []
+    },
+    "respawn-guest": {
+      "PASS": true,
+      "checks": 4,
+      "rows": null,
+      "failures": []
+    },
+    "combat-components": {
+      "PASS": true,
+      "checks": 23,
+      "rows": 0,
+      "failures": []
+    },
+    "party-components": {
+      "PASS": true,
+      "checks": 357,
+      "rows": 18,
+      "failures": []
+    },
+    "stage-audio": {
+      "PASS": true,
+      "checks": 13,
+      "rows": 0,
+      "failures": []
+    },
+    "authored-special-links": {
+      "PASS": true,
+      "checks": 73,
+      "rows": 6,
+      "failures": []
+    },
+    "throw-ownership": {
+      "PASS": true,
+      "checks": 0,
+      "rows": 39,
+      "failures": []
+    },
+    "training-lifecycle": {
+      "PASS": true,
+      "checks": 24,
+      "rows": 0,
+      "failures": []
+    },
+    "training-practice": {
+      "PASS": true,
+      "checks": 17,
+      "rows": 0,
+      "failures": []
+    },
+    "training-authored-link": {
+      "PASS": true,
+      "checks": 18,
+      "rows": 2,
+      "failures": []
+    },
+    "nix-authored-grab": {
+      "PASS": true,
+      "checks": 26,
+      "rows": 3,
+      "failures": []
+    }
+  },
+  "practice": [
+    {
+      "attempt": {
+        "accepted_cancel": true,
+        "contacts": [
+          {
+            "activation": 1,
+            "damage_applied": 2.304,
+            "defender_in_hitstun_before": false,
+            "event": "102592677710:189:1",
+            "frame": 189,
+            "move": "jab_1",
+            "result": "hit"
+          },
+          {
+            "activation": 2,
+            "damage_applied": 2.7648,
+            "defender_in_hitstun_before": true,
+            "event": "102592677710:195:2",
+            "frame": 195,
+            "move": "jab_2",
+            "result": "hit"
+          }
+        ],
+        "outcome": "contact_before_recovery",
+        "recovered_between": false,
+        "resolved_windows": [
+          {
+            "end": 10.0,
+            "requires": "hit_confirm",
+            "start": 5.0
+          },
+          {
+            "end": 11.0,
+            "requires": "hit_confirm",
+            "start": 5.0,
+            "to": "jab_2"
+          }
+        ],
+        "source_activation": 1,
+        "source_event": "102592677710:189:1",
+        "source_hit": true,
+        "target_activation": 2,
+        "target_contact": true,
+        "target_instance": 102022252336
+      },
+      "message": "Observed target hit before recovery. This attempt does not prove a guaranteed combo.",
+      "selection": {
+        "base_windows": [
+          {
+            "end": 11.0,
+            "requires": "hit_confirm",
+            "start": 5.0,
+            "to": "jab_2"
+          }
+        ],
+        "fighter": "kaia-windrow",
+        "source": "jab_1",
+        "source_command": "attack_neutral",
+        "target": "jab_2",
+        "target_command": "attack_neutral"
+      }
+    },
+    {
+      "attempt": {
+        "accepted_cancel": false,
+        "contacts": [
+          {
+            "activation": 3,
+            "damage_applied": 0.0,
+            "defender_in_hitstun_before": false,
+            "event": "102592677710:458:3",
+            "frame": 458,
+            "move": "jab_1",
+            "result": "shield"
+          }
+        ],
+        "outcome": "source_defended",
+        "recovered_between": false,
+        "resolved_windows": [
+          {
+            "end": 10.0,
+            "requires": "hit_confirm",
+            "start": 5.0
+          },
+          {
+            "end": 11.0,
+            "requires": "hit_confirm",
+            "start": 5.0,
+            "to": "jab_2"
+          }
+        ],
+        "source_activation": 3,
+        "source_event": "",
+        "source_hit": false,
+        "target_activation": -1,
+        "target_contact": false,
+        "target_instance": 0
+      },
+      "message": "Source SHIELD. Body-hit cancel not earned.",
+      "selection": {
+        "base_windows": [
+          {
+            "end": 11.0,
+            "requires": "hit_confirm",
+            "start": 5.0,
+            "to": "jab_2"
+          }
+        ],
+        "fighter": "kaia-windrow",
+        "source": "jab_1",
+        "source_command": "attack_neutral",
+        "target": "jab_2",
+        "target_command": "attack_neutral"
+      }
+    }
+  ],
+  "nix": [
+    {
+      "case": "body",
+      "fighter": "nix-calder",
+      "body": "female",
+      "facing": 1,
+      "source": "res://data/moves/nix-calder.json#neutral_special_projectile.cancel_windows",
+      "requested_at": {
+        "confirmed_body_hit": true,
+        "defender_can_act": false,
+        "defender_state": "hurt_heavy",
+        "distance": 34.3622283935547,
+        "eligible": true,
+        "frame": 191,
+        "move_frame": 12
+      },
+      "links": [
+        {
+          "activation": 1,
+          "confirmed_body_hit": true,
+          "from": "neutral_special_projectile",
+          "gameplay_frame": 191,
+          "input_command": "grab",
+          "move_frame": 12,
+          "to": "grab"
+        }
+      ],
+      "grabs": [
+        {
+          "activation": 2,
+          "actual_target": 0,
+          "frame": 191,
+          "reason": "",
+          "reciprocal_hold": false,
+          "result": "attempt"
+        },
+        {
+          "activation": 2,
+          "actual_target": 102240356145,
+          "frame": 197,
+          "reason": "",
+          "reciprocal_hold": true,
+          "result": "success"
+        },
+        {
+          "activation": 3,
+          "actual_target": 0,
+          "frame": 318,
+          "reason": "throw_release",
+          "reciprocal_hold": false,
+          "result": "throw"
+        }
+      ],
+      "lesson": {
+        "attempt": {
+          "accepted_cancel": true,
+          "contacts": [
+            {
+              "activation": 1,
+              "damage_applied": 8.82,
+              "defender_in_hitstun_before": false,
+              "event": "102810781519:185:1",
+              "frame": 185,
+              "move": "neutral_special_projectile",
+              "result": "hit"
+            }
+          ],
+          "grab_frame": 197,
+          "outcome": "grab_before_observed_recovery",
+          "recovered_between": false,
+          "resolved_windows": [
+            {
+              "end": 20.0,
+              "requires": "hit_confirm",
+              "start": 12.0,
+              "to": "grab"
+            }
+          ],
+          "source_activation": 1,
+          "source_event": "102810781519:185:1",
+          "source_hit": true,
+          "target_activation": 2,
+          "target_contact": true,
+          "target_instance": 102240356145
+        },
+        "message": "Grab acquired before observed recovery. Acquisition is not a damage hit or guaranteed-combo proof.",
+        "selection": {
+          "base_windows": [
+            {
+              "end": 20.0,
+              "requires": "hit_confirm",
+              "start": 12.0,
+              "to": "grab"
+            }
+          ],
+          "fighter": "nix-calder",
+          "source": "neutral_special_projectile",
+          "source_command": "special_neutral",
+          "target": "grab",
+          "target_command": "grab"
+        }
+      }
+    },
+    {
+      "case": "shield",
+      "fighter": "nix-calder",
+      "body": "male",
+      "facing": 1,
+      "source": "res://data/moves/nix-calder.json#neutral_special_projectile.cancel_windows",
+      "requested_at": {
+        "confirmed_body_hit": false,
+        "defender_can_act": false,
+        "defender_state": "shield_hit",
+        "distance": 35.1000061035156,
+        "eligible": false,
+        "frame": 553,
+        "move_frame": 12
+      },
+      "links": [],
+      "grabs": [],
+      "lesson": {
+        "attempt": {
+          "accepted_cancel": false,
+          "contacts": [
+            {
+              "activation": 1,
+              "damage_applied": 0.0,
+              "defender_in_hitstun_before": false,
+              "event": "197149067050:548:1",
+              "frame": 548,
+              "move": "neutral_special_projectile",
+              "result": "shield"
+            }
+          ],
+          "outcome": "source_defended",
+          "recovered_between": false,
+          "resolved_windows": [
+            {
+              "end": 20.0,
+              "requires": "hit_confirm",
+              "start": 12.0,
+              "to": "grab"
+            }
+          ],
+          "source_activation": 1,
+          "source_event": "",
+          "source_hit": false,
+          "target_activation": -1,
+          "target_contact": false,
+          "target_instance": 0
+        },
+        "message": "Source SHIELD. Body-hit cancel not earned.",
+        "selection": {
+          "base_windows": [
+            {
+              "end": 20.0,
+              "requires": "hit_confirm",
+              "start": 12.0,
+              "to": "grab"
+            }
+          ],
+          "fighter": "nix-calder",
+          "source": "neutral_special_projectile",
+          "source_command": "special_neutral",
+          "target": "grab",
+          "target_command": "grab"
+        }
+      }
+    },
+    {
+      "case": "whiff",
+      "fighter": "nix-calder",
+      "body": "female",
+      "facing": 1,
+      "source": "res://data/moves/nix-calder.json#neutral_special_projectile.cancel_windows",
+      "requested_at": {
+        "confirmed_body_hit": false,
+        "defender_can_act": true,
+        "defender_state": "idle",
+        "distance": 360.0,
+        "eligible": false,
+        "frame": 778,
+        "move_frame": 12
+      },
+      "links": [],
+      "grabs": [],
+      "lesson": {
+        "attempt": {
+          "accepted_cancel": false,
+          "contacts": [],
+          "outcome": "no_body_hit",
+          "recovered_between": false,
+          "resolved_windows": [
+            {
+              "end": 20.0,
+              "requires": "hit_confirm",
+              "start": 12.0,
+              "to": "grab"
+            }
+          ],
+          "source_activation": 1,
+          "source_event": "",
+          "source_hit": false,
+          "target_activation": -1,
+          "target_contact": false,
+          "target_instance": 0
+        },
+        "message": "No body hit. A whiff or interrupted attack cannot grant this link.",
+        "selection": {
+          "base_windows": [
+            {
+              "end": 20.0,
+              "requires": "hit_confirm",
+              "start": 12.0,
+              "to": "grab"
+            }
+          ],
+          "fighter": "nix-calder",
+          "source": "neutral_special_projectile",
+          "source_command": "special_neutral",
+          "target": "grab",
+          "target_command": "grab"
+        }
+      }
+    }
+  ],
+  "scope": "Actual nonprivate official Godot Training UI and ordinary-input authored links against quiet idle/shield dummy. Source body contact, existing cancel acceptance, same-defender target contact/grab and observed recovery are distinct. Nix old-shot negative uses stored already-resolved receipt, not a live delayed shot. No active-CPU/inescapable combo/native art/rollback acceptance.",
+  "negative_result": "outputs/lan_lesson_cdb942e7/ENGINE_RESULT.json",
+  "HUMAN_ART_APPROVED": false,
+  "RUNTIME_PAIRED_CONTACT_VERIFIED": false,
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false
+}

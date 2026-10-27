@@ -21,6 +21,7 @@ def ref(path):
 
 def build(engine_result=None):
     verified = {}
+    verified_grabs = {}
     engine = json.loads(engine_result.read_text()) if engine_result else {}
     # Accept only an actual retained successful engine result. Per-row evidence
     # remains bound to that SHA, never promoted to newer arbitrary revisions.
@@ -33,6 +34,23 @@ def build(engine_result=None):
                     verified.setdefault((row["fighter"], row["body"], contact["move"]), []).append({
                         "source_head":engine["source_head"], "frame":contact["frame"],
                         "contact_event":contact["contact_event"], "scope":"quiet-defender actual public-input contact; not active-CPU/visual/rollback approval"})
+        nix = engine.get("suites", {}).get("nix-authored-grab", {})
+        if nix.get("PASS"):
+            for row in nix.get("result", {}).get("rows", []):
+                if row.get("case") != "body": continue
+                for observation in row.get("source_contacts", []):
+                    contact = observation.get("info", {})
+                    if not observation.get("owns_confirmation_at_contact") or contact.get("contact_result") != "hit": continue
+                    verified.setdefault((row["fighter"], row["body"], contact["move_id"]), []).append({
+                        "source_head":engine["source_head"], "frame":contact["gameplay_frame"],
+                        "contact_event":contact["combat_event_id"], "scope":"actual owned projectile contact into existing authored grab route; quiet Training dummy, not guaranteed combo/CPU/visual/rollback approval"})
+                lesson = row.get("lesson", {}).get("attempt", {})
+                if not lesson.get("accepted_cancel") or not lesson.get("target_contact"): continue
+                for grab in row.get("grabs", []):
+                    if grab.get("result") != "success" or not grab.get("reciprocal_hold") or grab.get("activation") != lesson.get("target_activation"): continue
+                    verified_grabs.setdefault((row["fighter"], row["body"], "grab"), []).append({
+                        "source_head":engine["source_head"], "frame":grab["frame"], "activation":grab["activation"],
+                        "defender_instance":grab["actual_target"], "scope":"actual reciprocal acquisition after accepted authored cancel, not a damage/contact hit or guaranteed combo; quiet Training dummy only"})
     roster = []
     for fid in IDS:
         path = f"game-godot/data/moves/{fid}.json"
@@ -50,6 +68,7 @@ def build(engine_result=None):
                 "explicit_hit_confirm_links":[w for w in move.get("cancel_windows", []) if w.get("to") and w.get("requires")=="hit_confirm"],
                 "bodies":{body:{"data_binding":"MANIFEST_PRESENT",
                     "current_engine_contact_evidence":verified.get((fid, body, mid), []),
+                    "current_engine_grab_acquisition_evidence":verified_grabs.get((fid, body, mid), []),
                     "native_original_animation":"PENDING_PRIVATE_STORAGE_AND_PRODUCED_ACTION_VERIFICATION",
                     "active_opponent_execution":"NOT_ESTABLISHED_BY_THIS_INDEX",
                     "multiplayer_rollback":"FULL_NATIVE_ROLLBACK_UNFINISHED",

@@ -44,6 +44,33 @@ func host_run() -> void:
 	var pending_second_respawn: Array = []
 	battle._battle_sim.frame_completed.connect(func(_frame):
 		if stock_events.size() == 2 and not p._network_deadlines.is_empty() and pending_second_respawn.is_empty(): pending_second_respawn.append(p.capture_network_deadlines()))
+	# A real jump must retain its momentum through the same public pause UI.
+	# No velocity/state/root assignment: paused CharacterBody owns the snapshot.
+	var jumper = battle.fighter1
+	for i in range(90):
+		if jumper.is_on_floor() and jumper.state_machine.can_move(): break
+		await physics_frame
+	keys(["jump"]); await frames(2); keys([])
+	for i in range(45):
+		if jumper.velocity.y < -50 and not jumper.is_on_floor(): break
+		await physics_frame
+	check(jumper.velocity.y < -50 and not jumper.is_on_floor(), "ordinary_host_jump_has_real_ascending_momentum")
+	var jump_position: Vector2 = jumper.position
+	var jump_velocity: Vector2 = jumper.velocity
+	var pause_jump = InputEventAction.new(); pause_jump.action = "ui_cancel"; pause_jump.pressed = true; Input.parse_input_event(pause_jump)
+	await process_frame
+	pause_jump = pause_jump.duplicate(); pause_jump.pressed = false; Input.parse_input_event(pause_jump)
+	for i in range(30):
+		if battle._paused and battle._pause_panel != null: break
+		await process_frame
+	check(battle._paused and battle._pause_panel != null, "real_pause_during_ascending_jump")
+	if not battle._paused: return
+	await frames(18)
+	deadline_observations.append({"case":"ascending_jump_pause", "position_before":[jump_position.x,jump_position.y], "position_paused":[jumper.position.x,jumper.position.y], "velocity_before":[jump_velocity.x,jump_velocity.y], "velocity_paused":[jumper.velocity.x,jumper.velocity.y]})
+	check(jumper.position == jump_position and jumper.velocity == jump_velocity, "pause_preserves_actual_airborne_position_and_velocity")
+	battle._pause_resume_button.grab_focus(); await accept_focused()
+	await frames(4)
+	check(not battle._paused and jumper.velocity.y < 0 and jumper.position.y < jump_position.y, "resume_continues_original_ascent_instead_of_erasing_momentum")
 	for i in range(600):
 		await physics_frame
 		if not stock_events.is_empty(): break
@@ -125,7 +152,7 @@ func guest_run() -> void:
 func finish() -> void:
 	keys([])
 	var result := {"PASS":failures.is_empty(), "role":side, "checks":checks, "failures":failures, "stock_events":stock_events, "respawn_events":respawn_events, "deadline_observations":deadline_observations,
-		"scope":"Actual two-process ordinary walkoff, unchanged72-step online respawn, real pause/resume, same-boundary atomic deadline restoration, retirement on abandonment. NOT attack-earnedKO, historical physics/contact resimulation, native visuals or human approval.",
+		"scope":"Actual two-process ordinary jump/pause/resume momentum, walkoff, unchanged72-step online respawn, same-boundary atomic deadline restoration, retirement on abandonment. NOT attack-earnedKO, historical physics/contact resimulation, native visuals or human approval.",
 		"HUMAN_ART_APPROVED":false, "RC2_READY":false, "V1_0_0_RELEASE_AUTHORIZED":false}
 	var file = FileAccess.open(output.path_join("LAN_" + side.to_upper() + ".json"), FileAccess.WRITE)
 	file.store_string(JSON.stringify(result, "  ")); file.close()

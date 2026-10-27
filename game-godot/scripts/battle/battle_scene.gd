@@ -481,12 +481,10 @@ func _toggle_pause() -> void:
 		_battle_sim.set_paused(_paused)
 	if fighter1:
 		fighter1.controls_enabled = not _paused
-		if _paused:
-			fighter1.velocity = Vector2.ZERO
 	if fighter2:
 		fighter2.controls_enabled = not _paused
-		if _paused:
-			fighter2.velocity = Vector2.ZERO
+	# Fighter roots are PAUSABLE. Keep the actual jump/launch momentum while
+	# the tree is frozen; zeroing velocity here erased it on every resume.
 	_ensure_pause_panel()
 	if _pause_panel:
 		_pause_panel.process_mode = Node.PROCESS_MODE_ALWAYS
