@@ -39,6 +39,8 @@ func run() -> void:
 	first.move_ended.connect(func(mid):dispatches.append(mid))
 	first.phase_changed.connect(func(name):dispatches.append(name))
 	check(first.restore_component_state(source) and second.restore_component_state(source), "actual_MoveRunner_state_restore")
+	var generation_before_restore: int = first.contact_generation
+	check(first.restore_component_state(source) and first.contact_generation > generation_before_restore and first.capture_component_state() == source, "restore_invalidates_callbacks_without_serializing_generation")
 	check(dispatches.is_empty(), "restore_emits_no_move_or_phase_events")
 	var other: Dictionary=source.duplicate(true);other.owner.instance=0
 	check(not first.restore_component_state(other),"snapshot_cannot_transfer_fighter_ownership")
@@ -70,6 +72,29 @@ func run() -> void:
 	machine.state_changed.connect(func(a,b):transitions.append([a,b]))
 	check(machine.restore_component_state(state) and machine.capture_component_state()==state,"actual_state_machine_clocks_restore")
 	check(transitions.is_empty(),"state_restore_does_not_reenter_or_dispatch_gameplay")
+	# Exercise the actual Fighter callback fence on a live, ordinary-input
+	# active whiff. Negative requests never query contacts or spend its ledger.
+	for i in range(60):
+		if p.move_runner.is_active_phase() and p.hitbox.monitoring: break
+		await physics_frame
+	check(p.move_runner.is_active_phase() and p.hitbox.monitoring, "public_whiff_reaches_actual_live_overlap_phase")
+	var runner=p.move_runner
+	var generation: int=runner.contact_generation
+	var activation: int=runner.activation_id
+	var move_id: String=runner.current_move_id()
+	var move_frame: int=runner.total_frame
+	var engine_frame: int=Engine.get_physics_frames()
+	var ledger: Dictionary=runner.hit_targets.duplicate(true)
+	check(not p._poll_owned_hitbox_overlaps(generation-1, activation, move_id, move_frame, engine_frame), "stale_collision_generation_rejected")
+	check(not p._poll_owned_hitbox_overlaps(generation, activation-1, move_id, move_frame, engine_frame), "replacement_attack_cannot_borrow_deferred_activation")
+	check(not p._poll_owned_hitbox_overlaps(generation, activation, "jab_2", move_frame, engine_frame), "different_move_cannot_borrow_deferred_request")
+	check(not p._poll_owned_hitbox_overlaps(generation, activation, move_id, move_frame-1, engine_frame) and not p._poll_owned_hitbox_overlaps(generation, activation, move_id, move_frame, engine_frame-1), "later_move_or_physics_frame_rejects_old_poll")
+	check(runner.hit_targets == ledger and p._poll_owned_hitbox_overlaps(generation, activation, move_id, move_frame, engine_frame), "negative_requests_preserve_ledger_and_current_request_still_polls")
+	# Identical current-boundary restore, NOT partial historical physics rewind.
+	# It deliberately reuses all IDs/frame values to reproduce callback ABA.
+	var current: Dictionary=runner.capture_component_state()
+	check(runner.restore_component_state(current) and not p._poll_owned_hitbox_overlaps(generation, activation, move_id, move_frame, engine_frame), "same_activation_frame_restore_cannot_resurrect_old_callback")
+	check(p._poll_owned_hitbox_overlaps(runner.contact_generation, activation, move_id, move_frame, engine_frame) and runner.hit_targets == ledger, "fresh_post_restore_poll_retains_real_overlap_path")
 	check(battle.fighter2.damage_percent==0,"public_whiff_and_shadow_replay_never_apply_damage")
 	component_result={"source_runner":source,"guard":captured_guard,"state":state,"replay":replay}
 	first.free();second.free();machine.free()
@@ -78,7 +103,7 @@ func run() -> void:
 func finish() -> void:
 	keys([])
 	var result={"PASS":failures.is_empty(),"checks":checks,"failures":failures,"components":component_result,
-		"scope":"Actual production MoveRunner/PerfectGuard/state-machine component capture, atomic side-effect-free restore and isolated phase replay from live public-input whiff. NOT full Fighter, CharacterBody, projectile, contact or BattleScene/LAN rollback.",
+		"scope":"Actual production MoveRunner/PerfectGuard/state-machine component capture, atomic no-signal restore and isolated phase replay from public-input whiff; real Fighter stale callback rejection and current-boundary restore ABA fence. NOT a closed collision barrier, historical CharacterBody/projectile/BattleScene restore or full LAN rollback.",
 		"HUMAN_ART_APPROVED":false,"RC2_READY":false,"V1_0_0_RELEASE_AUTHORIZED":false}
 	var file=FileAccess.open(output.path_join("NATIVE_COMBAT_COMPONENTS.json"),FileAccess.WRITE)
 	file.store_string(JSON.stringify(result,"  "));file.close()

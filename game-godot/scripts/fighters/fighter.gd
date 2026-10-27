@@ -1348,8 +1348,14 @@ func _on_move_active(move: Dictionary) -> void:
 		velocity += Vector2(float(sm.get("x", 0)) * facing, float(sm.get("y", 0)))
 	hitbox.monitoring = true
 	_update_hitbox_from_move(move)
+	var contact_generation: int = move_runner.contact_generation
+	var contact_activation: int = move_runner.activation_id
+	var contact_move: String = move_runner.current_move_id()
+	var contact_frame: int = move_runner.total_frame
+	var contact_engine_frame: int = Engine.get_physics_frames()
 	_poll_hitbox_overlaps()
-	call_deferred("_poll_hitbox_overlaps")
+	call_deferred("_poll_owned_hitbox_overlaps", contact_generation,
+		contact_activation, contact_move, contact_frame, contact_engine_frame)
 	if mt == "burst" or mid == "aura_burst":
 		state_machine.enter(_FighterStates.AURA_BURST_ACTIVE)
 	elif str(move.get("input_command", "")).begins_with("special") or mt in ["field", "trap", "movement"]:
@@ -1358,10 +1364,22 @@ func _on_move_active(move: Dictionary) -> void:
 		state_machine.enter(_FighterStates.ATTACK_ACTIVE)
 
 
+func _poll_owned_hitbox_overlaps(generation: int, activation: int, move_id: String, move_frame: int, engine_frame: int) -> bool:
+	# The deferred request owns only its exact live activation/frame. In
+	# particular a component restore may reuse activation/frame IDs, but must
+	# never resurrect a queued callback from the discarded timeline.
+	if combat_closed or move_runner == null or not move_runner.is_active_phase(): return false
+	if generation != move_runner.contact_generation or activation != move_runner.activation_id or move_id != move_runner.current_move_id(): return false
+	if move_frame != move_runner.total_frame or engine_frame != Engine.get_physics_frames(): return false
+	if hitbox == null or not hitbox.monitoring: return false
+	_poll_hitbox_overlaps()
+	return true
+
+
 func _poll_hitbox_overlaps() -> void:
 	## Active-frame overlap poll: Area2D.area_entered can miss if the hurtbox
 	## was already overlapping when monitoring flipped on.
-	if hitbox == null or not hitbox.monitoring:
+	if combat_closed or hitbox == null or not hitbox.monitoring:
 		return
 	if move_runner == null or not move_runner.is_active_phase():
 		return

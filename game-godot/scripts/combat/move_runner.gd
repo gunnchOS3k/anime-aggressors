@@ -16,6 +16,9 @@ var total_frame := 0
 var _fighter_body: Node2D
 var hit_targets: Dictionary = {}
 var activation_id := 0
+# Runtime callback ownership, deliberately NOT serialized or rewound. An old
+# deferred collision request must not become valid again after state restore.
+var contact_generation := 0
 var in_cancel_window := false
 var confirmed_body_hit := false
 
@@ -23,6 +26,7 @@ func start_move(move: Dictionary, fighter: Node2D) -> void:
 	if move.is_empty():
 		return
 	_fighter_body = fighter
+	contact_generation += 1
 	activation_id += 1
 	move_data = move.duplicate(true)
 	active = true
@@ -36,6 +40,7 @@ func start_move(move: Dictionary, fighter: Node2D) -> void:
 	phase_changed.emit(phase)
 
 func cancel() -> void:
+	contact_generation += 1
 	if active:
 		move_ended.emit(move_data.get("move_id", ""))
 	active = false
@@ -82,11 +87,13 @@ func tick_sim_frame() -> void:
 				_set_phase("recovery")
 		"recovery":
 			if frame_in_phase >= recovery:
+				contact_generation += 1
 				move_ended.emit(move_data.get("move_id", ""))
 				active = false
 				phase = ""
 
 func _set_phase(next: String) -> void:
+	contact_generation += 1
 	phase = next
 	frame_in_phase = 0
 	phase_changed.emit(phase)
@@ -132,6 +139,7 @@ func restore_component_state(state: Dictionary) -> bool:
 		if not state.has(key) or typeof(state[key]) != typeof(baseline[key]): return false
 	if state.phase not in ["", "startup", "active", "recovery"] or state.total_frame < 0 or state.frame_in_phase < 0 or state.activation_id < 0: return false
 	if state.active and (state.phase.is_empty() or str(state.move_data.get("move_id", "")).is_empty()): return false
+	contact_generation += 1
 	for key in baseline:
 		if key in ["schema", "owner"]: continue
 		var value = state[key]

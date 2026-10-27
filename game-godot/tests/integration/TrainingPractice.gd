@@ -2,6 +2,7 @@ extends "res://tests/integration/TrainingLifecycle.gd"
 ## Pending real-scene acceptance. No damage/contact/state injection. An idle
 ## practice target is declared setup, not active-CPU or true-combo acceptance.
 var practice_observation: Dictionary = {}
+var reset_observation: Dictionary = {}
 
 func run() -> void:
 	await process_frame
@@ -81,8 +82,19 @@ func run() -> void:
 	check(training._practice.slot_stats(1).hits == 0, "practice_reset_clears_session_counters")
 	await frames(90)
 	check(not training.fighter1.invincible and not defender.invincible, "existing_respawn_immunity_expires")
+	# Respawn holds gravity during immunity. Its expiry does not imply that
+	# the real actor has landed or finished landing recovery. Wait for that
+	# authority before asking for a GROUNDED neutral (an aerial is legal too).
+	reset_observation = {"after_immunity": reset_actor(training.fighter1)}
+	for i in range(180):
+		if training.fighter1.is_on_floor() and training.fighter1.state_machine.can_attack() and training.fighter1._hitstop <= 0: break
+		await physics_frame
+	reset_observation["before_input"] = reset_actor(training.fighter1)
+	check(training.fighter1.is_on_floor() and training.fighter1.state_machine.can_attack(), "practice_respawn_naturally_lands_and_returns_attack_control")
+	var reset_activation: int = training.fighter1.move_runner.activation_id
 	keys(["attack"]); await frames(2); keys([])
-	check(training.fighter1.move_runner.current_move_id() == "jab_1", "first_neutral_attack_after_public_reset_restarts_jab_one")
+	reset_observation["after_input"] = reset_actor(training.fighter1)
+	check(training.fighter1.move_runner.active and training.fighter1.move_runner.activation_id > reset_activation and training.fighter1.move_runner.current_move_id() == "jab_1", "first_neutral_attack_after_public_reset_restarts_jab_one")
 	check(training.fighter1.authored_cancel_history.is_empty(), "practice_reset_clears_previous_authored_link_attempt_history")
 	await frames(60)
 	# Reset during an actual new contact, while its real hitstop is active.
@@ -104,6 +116,9 @@ func run() -> void:
 	check(JSON.stringify(campaign.progress) == story_before, "practice_does_not_change_Story_progress")
 	finish()
 
+func reset_actor(actor) -> Dictionary:
+	return {"frame":Engine.get_physics_frames(), "position":[actor.position.x, actor.position.y], "grounded":actor.is_on_floor(), "can_attack":actor.state_machine.can_attack(), "state":actor.state_machine.current_state, "chain_cursor":actor._jab_chain, "move":actor.move_runner.current_move_id(), "activation":actor.move_runner.activation_id}
+
 func finish() -> void:
 	keys([])
 	paused = false
@@ -111,6 +126,7 @@ func finish() -> void:
 	var file := FileAccess.open(output.path_join("TRAINING_PRACTICE.json"), FileAccess.WRITE)
 	file.store_string(JSON.stringify({"PASS": failures.is_empty(), "checks": checks,
 		"failures": failures, "inputs": inputs, "practice": practice_observation,
+		"reset_observation": reset_observation,
 		"screenshots": images, "headless": DisplayServer.get_name() == "headless",
 		"scope": "Actual public-input training against declared practice dummy, no injected contacts/damage. Not active-CPU, artistic or true-combo acceptance."}, "  "))
 	file.close()
