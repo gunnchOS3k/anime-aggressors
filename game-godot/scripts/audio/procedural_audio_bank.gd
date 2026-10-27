@@ -85,6 +85,11 @@ static func play(path: String, host: Node = null, volume_db: float = 0.0, scene_
 	var player := AudioStreamPlayer.new()
 	player.stream = stream
 	player.set_meta("audio_category","music" if path.contains("/stages/") else "sfx")
+	var scene := root.get_tree().current_scene
+	if is_instance_valid(scene) and is_instance_valid(host) and (host == scene or scene.is_ancestor_of(host)):
+		# One-shots may outlive an individual hit/actor, but not the actual
+		# owning match/scene. Autoload/UI callers keep their shared lifetime.
+		player.set_meta("audio_scene_owner", scene.get_instance_id())
 	if path.contains("/stages/"): volume_db += linear_to_db(maxf(.0001,float(root.get_tree().root.get_node("StoryDialogue").settings.music_volume)))
 	player.volume_db = volume_db
 	root.add_child(player)
@@ -104,6 +109,13 @@ static func play(path: String, host: Node = null, volume_db: float = 0.0, scene_
 static func _retire_playback(player: AudioStreamPlayer) -> void:
 	player.stop()
 	player.stream = null
+
+
+static func retire_scene_audio(scene: Node) -> void:
+	for player in active_players():
+		if player is AudioStreamPlayer and int(player.get_meta("audio_scene_owner", 0)) == scene.get_instance_id():
+			_retire_playback(player)
+			player.queue_free()
 
 
 static func play_shared(category: String, host: Node = null) -> Dictionary:

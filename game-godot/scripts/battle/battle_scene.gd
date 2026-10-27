@@ -819,6 +819,7 @@ func _tick_story_cosmic_encounter(delta: float) -> void:
 
 
 func _exit_tree() -> void:
+	preload("res://scripts/audio/procedural_audio_bank.gd").retire_scene_audio(self)
 	LanSession.unbind_battle(self)
 	var dialogue = get_node_or_null("/root/StoryDialogue")
 	if dialogue != null and _story_dialogue_generation >= 0 and int(dialogue.get("_generation")) == _story_dialogue_generation and str(dialogue.get("context")) == "battle":

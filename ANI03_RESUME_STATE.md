@@ -1,3 +1,11 @@
+# 2026-10-26 — Remaining shared impact voice needs actual match ownership
+
+Run40435375863 @5b9d04a213245b23d4fe9b24f4bb212d67bd26ac: all inputhost23/guest12 + terminalhost15/guest10 gameplay assertions PASS; guest zeroERROR. Job correctly FAILS remaining original Juno light.wav mixer playback resource at host shutdown. Party/component/audio/links/throw/Training suites skipped after terminal error, NOT accepted. Raw outputs/lan_party_5b9d04a2 preserved. Early tree-exiting voice retirement reduced but did not eliminate retained playback. Root lifetime issue: combat one-shots use shared root and survive BattleScene exit; actual menu navigation occurs shortly after rematch impact. New bank tags only sounds from actual scene descendants with scene instance ownership; BattleScene exit stops/releases/queues those players. Punch tails still survive individual actor teardown within a scene; autoload/UI global sounds and original samples/mix unchanged. Added actual menu-return assertion for retired rematch audio. No error suppression. Next existing LAN job must pass before acceptance.
+
+All pending Party component source/tests saved in5b9d04a2, not silently lost; no rebake/private/art/native local operations. All resource/human/release guards unchanged. NEXT commit/push narrow scene-audio ownership fix + existing ONLYlan_battle_runtime=true. Inspect actual diagnostics and all18Party rows. Full native rollback, invites/reconnect, independent lobby selection, art/Story/OVA/device work remain unfinished.
+
+---
+
 # 2026-10-26 — Guest transport clean; actual paused WAV shutdown ownership fix
 
 Run40434951204 @439e7fb93d8db8d1c3d76c7f317ea18c3e5c1c11: inputhost23/guest12 and terminal15/guest10 gameplay checks all PASS, guest runtimeERRORs now ZERO including host menu-departure retirement. JOB still FAIL: verbose host exit identifies AudioStreamPlaybackWAV + original Juno collectible whiff.wav/light.wav resources retained. New narrow ProceduralAudioBank tree_exiting callback explicitly stops voice/releases stream before node teardown. Shared punch tails and scene-owned stage beds retain existing policy; no global mute/cut, changed samples or filtered diagnostics. Existing StageAudioOwnership now also observes real paused voice's mixer/stream retirement and is included in affected engine job. Negative raw outputs/lan_terminal_439e7fb9 preserved.

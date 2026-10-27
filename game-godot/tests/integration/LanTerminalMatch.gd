@@ -71,6 +71,7 @@ func host_run() -> void:
 		await physics_frame
 		if not contacts.is_empty():break
 	check(contacts.any(func(row):return row.attacker=="juno-spark" and row.result=="hit"),"guest_controls_remain_bound_after_real_rematch")
+	var rematch_instance: int = battle.get_instance_id()
 	# Actual pause UI Return; never call a fabricated result or reset damage.
 	var cancel=InputEventAction.new();cancel.action="ui_cancel";cancel.pressed=true;Input.parse_input_event(cancel)
 	await process_frame
@@ -85,6 +86,7 @@ func host_run() -> void:
 			button.grab_focus();await accept_focused();break
 	await frames(5)
 	check(route_is("MainMenuScene.tscn") and lan.role.is_empty(),"actual_menu_return_retires_LAN_session")
+	check(preload("res://scripts/audio/procedural_audio_bank.gd").active_players().all(func(player):return int(player.get_meta("audio_scene_owner",0))!=rematch_instance),"actual_menu_return_retires_match_owned_audio_players")
 	check(gs.career_matches==career_before+1,"abandoned_rematch_does_not_award_result")
 
 func guest_run() -> void:
