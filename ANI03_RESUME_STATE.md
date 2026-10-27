@@ -1,3 +1,11 @@
+# 2026-10-27 — First isolated physics job retained; autoload ordering corrected
+
+Run40579137718 atda163ffd FAILED: strengthened ProjectileComponentHistory451checks/18rows PASS (including real unsafephysics-phase rejection and zero newrenderer events duringrestore), but FlatCombatReplay didnotcompile because const-preload loaded productionHitResolver/GameState-dependent candidate BEFORE SceneTree autoloadregistration. ImportitselfPASS. Fullnegative outputs/flat_replay_da163ffd retained. Fixture nowloads actualcandidate onlyafter realTraining andGameState areinitialized; no productionautoloadreplacement/stub/skipping. Read-onlyreview also addedpre-install pair-overlap, snapshotguardclock==worldframe andsingle-jabactivationcount validations, plus exactwhole-world atomicnegativechecks. BASE-only/profile-hitboxscale scopeexplicitlyfenced. SourceexecutionstillPENDING; no fullrollbackacceptance.
+
+NEXT normalcommit/push andexisting manualscope=physics. No localheavy/privateart/storage-retry/cleanup/spending/humangatechanges. Originalacceptedprojectileimpact/clash/Nix andliveLANresults preservedunchanged.
+
+---
+
 # 2026-10-27 — Isolated restorable flat-combat candidate saved; engine pending
 
 New experimental source scripts/net/experimental/flat_combat_trial.gd is NOT imported by production LAN/BattleScene. It retains actual BattleScene-derived geometry, canonical profile movement and ordinary-input resolved Kaia jab, while owning explicit flat-floor position/velocity/grounded state in separate Node2D actors. Actual production MoveRunner/FSM/PerfectGuard/HitResolver/CombatOutcome perform phases and guarded contact; only unstable event identity/telemetry are adapted into epoch/frame-owned intents. No hidden CharacterBody caches or external audio/VFX/Story writes. Scope deliberately rejects body-hit reactions, overlap/pushboxes, aerial/edges, shield-break, repeated/new moves, forms, throws and projectiles. This is an isolated alternative, not source parity or full historical rollback.

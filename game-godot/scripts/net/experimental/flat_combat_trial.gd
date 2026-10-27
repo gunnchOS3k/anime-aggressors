@@ -257,6 +257,7 @@ class Actor extends Node2D:
 		var machine_ok: bool = machine_check.restore_component_state(row.machine)
 		machine_check.free()
 		if not runner_ok or not guard_ok or not machine_ok: return false
+		if row.runner.activation_id != row.attack_count: return false
 		# Nested fields are inspected only AFTER real component schema/type
 		# validation, so malformed records cannot throw halfway through restore.
 		if row.machine.current_state not in SUPPORTED_STATES or row.machine.previous_state not in SUPPORTED_STATES: return false
@@ -304,6 +305,11 @@ func _configure_from_live_impl(p: Node, d: Node, stage: Dictionary, epoch_value:
 	var move: Dictionary = p.move_runner.move_data.duplicate(true)
 	if move.get("move_id", "") != "jab_1" or move.get("move_type", "") != "melee" or move.has("projectile") or move.get("grounded_air", "") != "grounded" or move.get("_party_move", false) or move.get("form_override_applied", false): return false
 	if float(p.aura) >= 25.0 or float(d.aura) >= 25.0 or bool(p.invincible) or bool(d.invincible): return false
+	for source in [p, d]:
+		if source.get_current_form_id() not in ["", "BASE"] or source.party_overdrive.state != "BASE": return false
+	# This first proof uses the actual Kaia jab's unit-scale authored box.
+	# Other profile scaling requires the same resolved runtime shape contract.
+	if float(p.data.get("hitHurtProfile", {}).get("hitboxScale", 1.0)) != 1.0: return false
 	if not move.get("self_movement", {}).is_empty() or int(move.get("armor_frames", 0)) > 0: return false
 	if move.get("hitboxes", []).size() != 1 or int(move.get("startup_frames", 0)) <= 0 or int(move.get("active_frames", 0)) <= 0: return false
 	if stage.get("spawnPoints", []).size() != 2: return false
@@ -402,6 +408,10 @@ func restore(record: Dictionary) -> bool:
 		if typeof(line) != TYPE_STRING: return false
 	for i in range(2):
 		if typeof(record.actors[i]) != TYPE_DICTIONARY or not actors[i].valid_state(record.actors[i]): return false
+		if record.actors[i].guard.clock != record.frame: return false
+	var first_body := Rect2(record.actors[0].position + actors[0].body_rect.position, actors[0].body_rect.size)
+	var second_body := Rect2(record.actors[1].position + actors[1].body_rect.position, actors[1].body_rect.size)
+	if first_body.intersects(second_body): return false
 	# Every validation completed before touching live world/components. Retire
 	# abandoned intents even if a replacement later reuses the SAME stable ID
 	# with a different outcome (shield -> Perfect Guard, for example).

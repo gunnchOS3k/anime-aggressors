@@ -2,7 +2,6 @@ extends "res://tests/integration/OrdinaryMatchCompletion.gd"
 ## Isolated experimental game-owned flat-floor world. Uses real source actors
 ## to bind approved geometry/movement and an ordinary-input resolved jab.
 ## It neither replaces BattleSim nor claims shipping CharacterBody parity.
-const Trial = preload("res://scripts/net/experimental/flat_combat_trial.gd")
 var result_evidence: Dictionary = {}
 
 func run() -> void:
@@ -30,7 +29,13 @@ func run() -> void:
 	check(p.move_runner.active and p.move_runner.current_move_id() == "jab_1", "ordinary_input_resolved_actual_canonical_jab")
 	if not p.move_runner.active: finish(); return
 	var stage: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/stages/training-grid.json"))
-	var trial = Trial.new(); root.add_child(trial)
+	# HitResolver uses the real GameState autoload. SceneTree --script is
+	# compiled before autoload registration, so load the production-dependent
+	# candidate only now, after the genuine game scene and autoloads are ready.
+	var trial_script = load("res://scripts/net/experimental/flat_combat_trial.gd")
+	check(trial_script != null and trial_script.can_instantiate(), "candidate_loads_after_real_autoload_registration")
+	if trial_script == null or not trial_script.can_instantiate(): finish(); return
+	var trial = trial_script.new(); root.add_child(trial)
 	var configured: bool = trial.configure_from_live(p, d, stage, 417)
 	check(configured, "bind_actual_source_geometry_movement_jab_and_epoch")
 	if not configured: result_evidence["failure"] = trial.failure; trial.free(); finish(); return
@@ -75,6 +80,10 @@ func run() -> void:
 	check(not trial.restore(poison) and trial.capture() == baseline, "foreign_epoch_restore_is_atomic")
 	poison = checkpoint.duplicate(true); poison.actors[1].guard.clock = -1
 	check(not trial.restore(poison) and trial.capture() == baseline, "malformed_second_actor_rejects_entire_historical_restore_atomically")
+	poison = checkpoint.duplicate(true); poison.actors[1].guard.clock = checkpoint.frame + 1
+	check(not trial.restore(poison) and trial.capture() == baseline, "future_guard_clock_cannot_borrow_historical_frame")
+	poison = checkpoint.duplicate(true); poison.actors[1].position.x = checkpoint.actors[0].position.x
+	check(not trial.restore(poison) and trial.capture() == baseline, "pair_overlap_rejected_before_either_actor_is_restored")
 	check(not trial.advance_owned(trial.epoch + 1, trial.frame + 1, neutral, held_guard) and trial.capture() == baseline, "foreign_epoch_input_cannot_advance_world")
 	check(not trial.advance_owned(trial.epoch, trial.frame, neutral, held_guard) and trial.capture() == baseline, "duplicate_or_reordered_input_frame_cannot_advance_world")
 	check(trial.restore(checkpoint), "restore_before_late_input_correction")
