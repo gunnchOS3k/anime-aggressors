@@ -811,8 +811,14 @@ func _handle_actions() -> void:
 	_input_edge_held["guard_button"]=guard_held
 	# Existing normalized taunt edge. Hardware/PartyLink mapping belongs elsewhere.
 	if _input_edge("taunt") and party_overdrive.action():return
+	# These routes share press edges. Sample once so a declined identity cancel
+	# cannot consume touch/fallback edges before the exact authored resolver.
+	var cancel_edges: Dictionary = {}
+	if _FighterStates.is_attack_state(state_machine.current_state) and move_runner != null and move_runner.active:
+		cancel_edges = {"attack":_read_attack_pressed(),"special":_read_special_pressed(),"grab":_read_grab_pressed()}
+		if phase_cancel_remaining > 0.0: cancel_edges["dodge"] = _read_dodge_pressed()
 	# Vesper phase cancel / Juno dash cancel — interrupt recovery when windows are live.
-	if _try_identity_cancel():
+	if _try_identity_cancel(cancel_edges):
 		return
 	if state_machine.current_state == _FighterStates.GRAB_HOLD:
 		_throw_direction = _ThrowResolver.read_throw_direction(self)
@@ -845,7 +851,7 @@ func _handle_actions() -> void:
 	if guard_state in [_FighterStates.SHIELD_START, _FighterStates.SHIELD_HOLD]:
 		return
 	if not state_machine.can_attack():
-		_try_authored_attack_cancel()
+		_try_authored_attack_cancel(cancel_edges)
 		return
 	if _pending_attack_cmd != "":
 		_start_move_by_command(_pending_attack_cmd)
@@ -898,15 +904,15 @@ func _start_move(move_id: String) -> void:
 	if not m.is_empty():
 		_start_move_dict(m)
 
-func _try_authored_attack_cancel() -> bool:
+func _try_authored_attack_cancel(edges: Dictionary = {}) -> bool:
 	# Existing explicit manifest links only; no new frame windows or hitstun.
 	# Public press edges remain required. Shield/whiff/stale projectiles cannot
 	# grant a body-hit cancel, and controls/hurt/landing retain their authority.
 	if not controls_enabled or not _FighterStates.is_attack_state(state_machine.current_state) or _hitstop>0 or move_runner==null or not move_runner.active:return false
-	var attack_pressed := _read_attack_pressed()
-	var special_pressed := _read_special_pressed()
+	var attack_pressed: bool = bool(edges.attack) if edges.has("attack") else _read_attack_pressed()
+	var special_pressed: bool = bool(edges.special) if edges.has("special") else _read_special_pressed()
 	# Exclusive public inputs preserve heavy/charge/full-meter chord ownership.
-	var grab_pressed := _read_grab_pressed()
+	var grab_pressed: bool = bool(edges.grab) if edges.has("grab") else _read_grab_pressed()
 	if int(attack_pressed) + int(special_pressed) + int(grab_pressed) != 1 or aura>=100 or (special_pressed and is_aura_input_held()):return false
 	if grab_pressed and not is_on_floor(): return false
 	var command := "grab" if grab_pressed else _resolve_special_command() if special_pressed else _resolve_attack_command()
@@ -1680,21 +1686,34 @@ func runtime_hooks_seen() -> Array:
 	return _runtime_hooks_seen.keys()
 
 
-func _try_identity_cancel() -> bool:
+func _try_identity_cancel(edges: Dictionary = {}) -> bool:
 	if not _FighterStates.is_attack_state(state_machine.current_state):
 		return false
-	if phase_cancel_remaining > 0.0 and (_read_dodge_pressed() or _read_special_pressed()):
+	var phase_dodge := false
+	var phase_special := false
+	if phase_cancel_remaining > 0.0:
+		phase_dodge = bool(edges.dodge) if edges.has("dodge") else _read_dodge_pressed()
+		phase_special = bool(edges.special) if edges.has("special") else _read_special_pressed()
+	if phase_cancel_remaining > 0.0 and (phase_dodge or phase_special):
 		move_runner.cancel()
 		hitbox.monitoring = false
 		phase_cancel_remaining = 0.0
 		stamp_runtime_hook("phase_cancel")
-		if _read_dodge_pressed():
+		if phase_dodge:
 			_start_dodge()
 		else:
 			state_machine.enter(_FighterStates.IDLE)
 			_start_move_by_command(_resolve_special_command())
 		return true
 	if dash_cancel_remaining > 0.0 and absf(_read_axis()) > 0.75 and is_on_floor():
+		# Juno's explicit finisher -> dash_attack must retain its fresh Attack.
+		# Axis-only, defended/expired and wrong-input routes keep the existing
+		# identity dash behavior; this grants no new authored window or hitstun.
+		if _try_authored_attack_cancel(edges):
+			dash_cancel_remaining = 0.0
+			stamp_runtime_hook("dash_cancel")
+			velocity.x = _read_axis() * get_dash_speed()
+			return true
 		move_runner.cancel()
 		hitbox.monitoring = false
 		dash_cancel_remaining = 0.0

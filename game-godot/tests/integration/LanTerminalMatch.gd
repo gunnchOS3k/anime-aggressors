@@ -8,6 +8,7 @@ var port := 27834
 var first_terminal: Dictionary = {}
 var career_before := 0
 var late_sent := false
+var terminal_pause_request: Dictionary = {}
 
 func run() -> void:
 	await process_frame
@@ -140,7 +141,18 @@ func first_match_budget() -> int:
 	return 600
 
 func first_match_started() -> void:
-	pass
+	battle._battle_sim.frame_completed.connect(observe_terminal_pause)
+
+func observe_terminal_pause(frame: int) -> void:
+	if not terminal_pause_request.is_empty() or battle._match_finished: return
+	var p = battle.fighter2
+	if p.position.x <= float(battle.blast.right): return
+	# Real ordinary walk-off already crossed the bound in this step. Public
+	# Pause input must wait for its stock/result commit, not hide it in a menu.
+	terminal_pause_request = {"source_frame":frame,"engine_frame":Engine.get_physics_frames(),"position":[p.position.x,p.position.y],"stocks_before_commit":p.stocks}
+	var event := InputEventAction.new(); event.action = "ui_cancel"; event.pressed = true
+	root.push_input(event)
+	event = event.duplicate(); event.pressed = false; root.push_input(event)
 
 func drive_host_first_match(_frame: int) -> void:
 	pass
@@ -161,14 +173,14 @@ func expected_first_winner() -> int:
 	return 1
 
 func validate_first_match() -> void:
-	pass
+	check(not terminal_pause_request.is_empty() and battle._match_finished and not battle._paused and not battle._network_pause_requested and int(first_terminal.get("committed_frame", -1)) >= int(terminal_pause_request.get("source_frame", 2147483647)), "pending_pause_cannot_replace_legitimate_prior_stock_result_commit")
 
 func first_match_evidence() -> Dictionary:
 	return {}
 
 func finish() -> void:
 	keys([])
-	var result={"PASS":failures.is_empty(),"role":side,"checks":checks,"failures":failures,"first_terminal":first_terminal,"contacts":contacts,"first_match_evidence":first_match_evidence(), "first_match_scope":first_match_scope(),
+	var result={"PASS":failures.is_empty(),"role":side,"checks":checks,"failures":failures,"first_terminal":first_terminal,"contacts":contacts,"first_match_evidence":first_match_evidence(),"terminal_pause_request":terminal_pause_request, "first_match_scope":first_match_scope(),
 		"scope":"Actual two-process ENet terminal snapshot; first_match_scope identifies finish evidence. Real Results UI, both-consent rematch, fresh epoch and real rematch melee; no Story/privateart/nativevisual/rollback approval",
 		"HUMAN_ART_APPROVED":false,"RC2_READY":false,"V1_0_0_RELEASE_AUTHORIZED":false}
 	var file=FileAccess.open(output.path_join("LAN_"+side.to_upper()+".json"),FileAccess.WRITE);file.store_string(JSON.stringify(result,"  "));file.close()
