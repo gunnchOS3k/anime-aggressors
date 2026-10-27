@@ -67,6 +67,9 @@ func probe(fid: String, body: String, epoch: int) -> void:
 	if source.is_empty(): spawner.end_network_component_history(); return
 	var recorded_move := str(shot.move_id)
 	var original_audio_count: int = shot._elemental_audio.events.size()
+	await physics_frame
+	check(not spawner.restore_network_component(source), fid + body + ":unsafe_physics_phase_restore_rejected_before_mutation")
+	await process_frame
 	var replay: Array = []
 	for i in range(6):
 		shot.tick_sim_frame()
@@ -83,7 +86,9 @@ func probe(fid: String, body: String, epoch: int) -> void:
 	shot.cancel_immediate()
 	check(not shot.active and not shot.is_queued_for_deletion() and spawner.count() == 0, fid + body + ":expired_shot_retained_outside_active_registry")
 	var events_before: Array = lifecycle.duplicate()
+	var visual_events_before: int = shot._renderer.history.size()
 	check(spawner.restore_network_component(source), fid + body + ":expired_node_revived_without_respawn")
+	check(shot._renderer.history.size() == visual_events_before, fid + body + ":restore_emits_no_new_impact_trail_or_dissipation")
 	await process_frame
 	check(shot.active and shot.monitoring and shot.get_instance_id() == first_id, fid + body + ":old_deferred_retirement_cannot_disable_revived_Area")
 	check(lifecycle == events_before and shot._elemental_audio.events.size() == original_audio_count and not shot._elemental_audio.travel.playing, fid + body + ":silent_restore_does_not_replay_sound_or_events")
