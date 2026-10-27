@@ -51,6 +51,23 @@ func _load_profiles() -> void:
 func bind_camera(cam: Camera2D) -> void:
 	_camera = cam
 
+func present_replica_contact(info: Dictionary, defender: Node) -> bool:
+	# Confirmed host event only. Never call apply_hit/receive_hit, change clocks,
+	# meter/damage or dispatch achievements/Story receipts on the guest.
+	var id := str(info.get("combat_event_id", ""))
+	if id.is_empty() or not bool(info.get("confirmed_contact", false)) or _presented_events.has(id): return false
+	_presented_events[id] = true
+	if _presented_events.size() > 256: _presented_events.erase(_presented_events.keys()[0])
+	var shown: Dictionary = info.duplicate(true)
+	if str(shown.get("contact_result", "")) in ["shield", "parry"]:
+		var audio := _guard_contact(defender, shown)
+		shown["elemental_guard_owned_cue"] = bool(audio.get("pool_cue", false))
+	else:
+		var event := _V1Sfx.impact_event({"move_id":shown.get("move_id", ""), "feedback":{"tier":shown.get("feedback_tier", "light")}})
+		_V1Sfx.play_event(str(shown.get("attacker_id", "")), event, self)
+	_present_contact(defender, shown)
+	return true
+
 func apply_hit(attacker: Node, defender: Node, move: Dictionary, info: Dictionary) -> Dictionary:
 	var fb: Dictionary = move.get("feedback", {})
 	var tier: String = fb.get("tier", "light")

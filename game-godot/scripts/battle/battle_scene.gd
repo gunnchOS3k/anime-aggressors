@@ -51,6 +51,7 @@ var _story_elapsed := 0.0
 var _story_cosmic_cadence := 0.0
 var _story_objective
 var _story_receipt_failed := false
+var _lan_replica
 
 const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
 const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
@@ -73,6 +74,11 @@ func _ready() -> void:
 	_time_remaining = float(GameState.match_timer_seconds)
 	_time_enabled = GameState.match_timer_seconds > 0 and GameState.match_type != "stock_untimed"
 	_update_timer_label()
+	if LanSession.role == "guest" and LanSession.guest_battle_open:
+		_lan_replica = preload("res://scripts/net/lan_battle_replica.gd").new()
+		add_child(_lan_replica)
+		_lan_replica.setup(self)
+		return # No guest countdown, BattleSim, CPU, timer, KO or career authority.
 	_battle_sim = _BattleSim.new()
 	add_child(_battle_sim)
 	_battle_sim.bind_fighters([fighter1, fighter2])
@@ -316,6 +322,9 @@ func _run_countdown() -> void:
 		countdown_label.visible = false
 
 func _physics_process(delta: float) -> void:
+	if _lan_replica != null:
+		_lan_replica.step(delta)
+		return
 	_wave018_vis_accum += delta
 	if _wave018_vis_accum >= 0.5:
 		_wave018_vis_accum = 0.0
@@ -465,6 +474,12 @@ func _toggle_pause() -> void:
 	TouchInputManager._sync_overlay()
 
 func _unhandled_input(event: InputEvent) -> void:
+	if _lan_replica != null:
+		if event.is_action_pressed("ui_cancel"):
+			LanSession.stop()
+			SceneRouter.go("online_private")
+			get_viewport().set_input_as_handled()
+		return
 	if event.is_action_pressed("ui_cancel"):
 		_ensure_pause_panel()
 		_toggle_pause()
@@ -633,7 +648,6 @@ func _finish_match(winner: int) -> void:
 	# queued objective callback cannot replace a result already committed here.
 	if _match_finished: return
 	_match_finished = true
-	if LanSession.role == "host": LanSession.retire_battle("Match complete; late inputs rejected")
 	if _hazard_runtime!=null:_hazard_runtime.clear_items()
 	_active = false
 	if _battle_sim != null: _battle_sim.set_paused(true)
@@ -647,6 +661,8 @@ func _finish_match(winner: int) -> void:
 		if actor.has_method("close_combat_for_match_end"):
 			actor.close_combat_for_match_end(actor.slot == winner)
 	GameState.last_winner_slot = winner
+	# Publish only after terminal actor ownership and the winner agree.
+	if LanSession.role == "host": LanSession.retire_battle("Match complete; late inputs rejected")
 	MatchTelemetry.record_match_end(winner)
 	if GameState.mode == "story" and not _story_attempt_token.is_empty():
 		var evidence: Dictionary = _story_objective.evidence() if _story_objective != null else {"stock_win":fighter2.stocks <= 0 and fighter1.stocks > 0, "survived":_story_survival and fighter1.stocks > 0 and _time_remaining <= 0, "elapsed":_story_elapsed}

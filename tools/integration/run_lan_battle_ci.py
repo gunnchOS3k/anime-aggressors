@@ -79,8 +79,9 @@ def run():
         for role, child in zip(["host", "guest"], processes):
             path = output / ("LAN_" + role.upper() + ".json")
             data = json.loads(path.read_text()) if path.exists() else {}
-            record["suites"][role] = {"PASS": child.returncode == 0 and data.get("PASS", False), "exit_code": child.returncode,
-                "checks": len(data.get("checks", [])), "failures": data.get("failures", ["Missing result"]), "result": data,
+            runtime_errors = [line for line in (output / (role + ".log")).read_text().splitlines() if "ERROR:" in line]
+            record["suites"][role] = {"PASS": child.returncode == 0 and data.get("PASS", False) and not runtime_errors, "exit_code": child.returncode,
+                "runtime_errors": runtime_errors, "checks": len(data.get("checks", [])), "failures": data.get("failures", ["Missing result"]), "result": data,
                 "result_sha256": sha(path) if path.exists() else None, "log_sha256": sha(output / (role + ".log"))}
         if not all(s["PASS"] for s in record["suites"].values()): return record
         # Changed shared input readers and scene lifecycle warrant these two
@@ -96,6 +97,7 @@ def run():
                             "checks": len(data.get("checks", [])), "rows": len(data.get("rows", [])), "result": data})
             record["suites"][name] = outcome
         record["PASS"] = all(s["PASS"] for s in record["suites"].values())
+        record["remaining_diagnostics"] = {p.name:[line for line in p.read_text(errors="replace").splitlines() if "ERROR:" in line or "WARNING:" in line] for p in output.glob("*.log")}
     except Exception as error:
         record["error"] = str(error)
     finally:

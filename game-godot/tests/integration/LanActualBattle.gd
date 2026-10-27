@@ -13,6 +13,9 @@ var before_campaign := ""
 var whiff_damage := -1.0
 var spoof_sent := false
 var batch_sent := false
+var replica_rows: Array = []
+var replica_contacts := 0
+var guest_career := 0
 
 func run() -> void:
 	await process_frame
@@ -24,6 +27,7 @@ func run() -> void:
 		push_error("Explicit LAN role/output and isolated profile required"); quit(2); return
 	lan = root.get_node("LanSession")
 	before_campaign = JSON.stringify(root.get_node("CampaignRuntime").progress)
+	guest_career = int(root.get_node("GameState").career_matches)
 	if side == "host": await host_run()
 	else: await guest_run()
 	finish()
@@ -130,9 +134,26 @@ func guest_run() -> void:
 				await frames(5)
 				lan.stop()
 				break
-		if f % 30 < 3: guest_samples.append(state.duplicate(true))
+		if f % 30 < 3:
+			guest_samples.append(state.duplicate(true))
+			if current_scene != null and "_lan_replica" in current_scene and current_scene._lan_replica != null:
+				var replica = current_scene._lan_replica
+				var p = current_scene.fighter1; var d = current_scene.fighter2
+				replica_rows.append({"sequence":replica.sequence,"sample":replica.sample.sequence,
+					"damage_matches":p.damage_percent == float(replica.sample.actors[0].damage) and d.damage_percent == float(replica.sample.actors[1].damage),
+					"shield_matches":d.shield_health == float(replica.sample.actors[1].shield),
+					"no_local_authority":p.combat_closed and d.combat_closed and not p.is_physics_processing() and not d.is_physics_processing() and not p.hitbox.monitoring and not d.hitbox.monitoring,
+					"models":p.model_3d.is_model_loaded() and d.model_3d.is_model_loaded(),
+					"clips":[p.model_3d.get_animation_controller().get_active_clip(),d.model_3d.get_animation_controller().get_active_clip()]})
+				replica_contacts = replica.presented_contacts.size()
 	keys([])
 	check(spoof_sent, "spoof_probe_sent_over_actual_socket")
+	check(not replica_rows.is_empty(), "guest_real_BattleScene_presentation_loaded")
+	check(replica_rows.all(func(row):return row.models and row.no_local_authority), "guest_models_loaded_without_second_combat_simulation")
+	check(replica_rows.all(func(row):return row.damage_matches and row.shield_matches), "guest_HUD_uses_exact_authoritative_damage_and_shield")
+	check(replica_rows.any(func(row):return row.clips[0] != "" and row.clips[1] != ""), "guest_animation_players_select_runtime_clips")
+	check(replica_contacts > 0, "confirmed_host_contact_cues_presented_once_on_guest")
+	check(int(root.get_node("GameState").career_matches) == guest_career and before_campaign == JSON.stringify(root.get_node("CampaignRuntime").progress), "guest_replica_cannot_award_career_or_Story_progress")
 	check(not guest_samples.is_empty(), "authoritative_state_mirror_received")
 	check(guest_samples.any(func(s): return s.actors[0].fighter == "kaia-windrow" and s.actors[1].fighter == "juno-spark" and s.actors[0].body == "female" and s.actors[1].body == "male"), "exact_fighter_body_identity_mirrored")
 	check(guest_samples.any(func(s): return float(s.actors[0].damage) > 0), "real_host_damage_observed_by_guest")
@@ -140,9 +161,9 @@ func guest_run() -> void:
 func finish() -> void:
 	keys([])
 	var result = {"PASS":failures.is_empty(), "role":side, "pid":OS.get_process_id(), "checks":checks, "failures":failures,
-		"contacts":contacts, "move_starts":move_starts, "guards":guard_events, "grabs":grab_events, "guest_samples":guest_samples,
+		"replica_rows":replica_rows, "replica_contacts":replica_contacts, "contacts":contacts, "move_starts":move_starts, "guards":guard_events, "grabs":grab_events, "guest_samples":guest_samples,
 		"received_inputs":lan.received_inputs if lan != null else 0, "rejected_inputs":lan.rejected_inputs if lan != null else 0,
-		"scope":"Two actual localhost ENet Godot processes, guest public input into authoritative host BattleScene; not guest-rendered combat, physical LAN, rollback, original art or human acceptance",
+		"scope":"Two actual localhost ENet Godot processes, guest public input into authoritative host BattleScene; host-state guest BattleScene presentation, not physical LAN, rollback, original art or human acceptance",
 		"HUMAN_ART_APPROVED":false,"RC2_READY":false,"V1_0_0_RELEASE_AUTHORIZED":false}
 	var file = FileAccess.open(output.path_join("LAN_" + side.to_upper() + ".json"), FileAccess.WRITE)
 	file.store_string(JSON.stringify(result, "  ")); file.close()

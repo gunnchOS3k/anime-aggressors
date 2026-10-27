@@ -1,3 +1,15 @@
+# 2026-10-26 — First real ENet combat PASS; guest BattleScene source implemented
+
+Accepted assertion source c5abdf89d8530120e9e8bef3bebdb361c8d5a074; public Ubuntu run40410298438 PASS: actual two-process host20/guest5 checks, 14 real contacts (4 melee,5shield,5throw_down), batched public tap, slot-spoof rejection and disconnect neutrality. ThrowOwnership39rows and TrainingLifecycle24PASS. Pair18.165s/446480384combinedRSS. Raw outputs/lan_ci_c5abdf89; compact docs/handoff/2026-10-26/LAN_INPUT_ENGINE.json. Genuine remaining diagnostics preserved: stale departed-peer send and guest missingtaunt action (now corrected source, pendingproof); oldpublic-asset import rename collisions and shutdown resourcewarnings notclaimedclean.
+
+New source implements guest REAL BattleScene using host stage/roster/body/rules configuration, read-only actor/pose/timing/form/guard/actualHUD replication, bounded position interpolation, projectile silhouette/integrity/termination replication and host-confirmed contact VFX/audio deduplication. Guest actor physics/collisions/damage authority disabled; no guest BattleSim/countdown/KO/award/save authority. Host's original combat remains sole authority. This is NOT actual prediction/rollback/resimulation or physicalLAN/native visual approval. No private assets touched.
+
+Pending exact-source proof: run existing `lan_battle_runtime=true` public Ubuntu job after normal checkpoint/push. Guest fixture checks real scene/model/clip loading, exact damage/shieldfields, no second authority and no guest career/Story awards. Strict host/guest ERROR diagnostics now fail their acceptance; existing import/shutdown diagnostics retained separately. Current source SHA=gitrev-parseHEAD. Only outputs untracked. No local native/art/Blender/media/resourcepreflight/USB qualification, no cost/upload/merge/release. All human/paired/RC2/releaseFALSE. Native/private art guards unchanged and unmet.
+
+Next independently reproduced authored-chain defect: existing Ember/Yin/Yang jab_finisher→side_special and Vesper jab_finisher→down_special hit-confirm windows are unreachable because existing cancel resolver accepts Attack only. Extend SAME resolver with exclusive special input and existing ground/air/window/contact gates; do not changeframe/damage/hitstun. Need actual ordinary-input contact/whiff/shield engine test and honest truecombo classification, not another taxonomy.
+
+---
+
 # 2026-10-26 — LAN first real import failure preserved; parser + batched input correction
 
 Run40410086620 @4f785073 import FAIL: bytes_to_var() accepts one argument in official4.7.1; no two-process test ran. Exact raw failure outputs/lan_ci_4f785073/workflow.log. Corrected safe object-disabled bytes_to_var(bytes) (not bytes_to_var_with_objects).

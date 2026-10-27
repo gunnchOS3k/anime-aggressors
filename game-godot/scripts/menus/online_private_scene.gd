@@ -1,6 +1,6 @@
 extends "res://scripts/ui/console_menu_base.gd"
 ## Direct trusted-LAN host-authoritative input bridge. Guest rendering/rollback
-## remain unfinished; the guest status view is explicitly not a battle view.
+## remain unfinished. Guest presentation uses host state, never local damage.
 var _status: Label
 var _address: LineEdit
 var _start: Button
@@ -12,7 +12,7 @@ func _ready() -> void:
 	_status = Label.new()
 	_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_status.custom_minimum_size = Vector2(520, 165)
-	_status.text = "One host BattleScene + one remote guest input seat. Trusted LAN only. Guest battle rendering and combat rollback remain unfinished."
+	_status.text = "One host-authoritative BattleScene with synchronized guest presentation. Trusted LAN only. Prediction, rollback and reconnect remain unfinished."
 	box.add_child(_status)
 	_address = LineEdit.new()
 	_address.placeholder_text = "Host LAN address; UDP 27834"
