@@ -21,6 +21,7 @@ var _active := false
 var _match_finished := false
 var _paused := false
 var _network_pause_requested := false
+var _pause_controls: Dictionary = {}
 var _ko_lock := false
 var _network_round_clock := 0
 var _network_ko_deadline := -1
@@ -336,11 +337,11 @@ func _run_countdown() -> void:
 		if _network_abandoned: return
 		if countdown_label:
 			countdown_label.text = str(i)
-		await get_tree().create_timer(1.0).timeout
+		await get_tree().create_timer(1.0, false).timeout
 	if _network_abandoned: return
 	if countdown_label:
 		countdown_label.text = "FIGHT!"
-	await get_tree().create_timer(0.6).timeout
+	await get_tree().create_timer(0.6, false).timeout
 	if countdown_label:
 		countdown_label.visible = false
 
@@ -507,6 +508,11 @@ func _apply_pending_network_pause(_frame: int) -> void:
 	if not _match_finished and not _network_abandoned: _apply_pause(true)
 
 func _apply_pause(value: bool) -> void:
+	if value == _paused: return
+	if value:
+		_pause_controls.clear()
+		for actor in [fighter1, fighter2]:
+			if is_instance_valid(actor): _pause_controls[actor.get_instance_id()] = actor.controls_enabled
 	_paused = value
 	# Freeze the SceneTree so CharacterBody2D physics / CPU / hazards stop.
 	# Prior behavior only flipped controls_enabled + BattleSim.paused, so
@@ -520,10 +526,12 @@ func _apply_pause(value: bool) -> void:
 			ach.report_event("pause_resume")
 	if _battle_sim:
 		_battle_sim.set_paused(_paused)
-	if fighter1:
-		fighter1.controls_enabled = not _paused
-	if fighter2:
-		fighter2.controls_enabled = not _paused
+	for actor in [fighter1, fighter2]:
+		if not is_instance_valid(actor): continue
+		# Resume restores its own controls; it cannot grant input during a
+		# countdown, scripted encounter lock or terminal combat retirement.
+		actor.controls_enabled = not _paused and not actor.combat_closed and bool(_pause_controls.get(actor.get_instance_id(), false))
+	if not _paused: _pause_controls.clear()
 	# Fighter roots are PAUSABLE. Keep the actual jump/launch momentum while
 	# the tree is frozen; zeroing velocity here erased it on every resume.
 	_ensure_pause_panel()
@@ -679,6 +687,7 @@ func _on_move_list_pin(entry: Dictionary) -> void:
 
 
 func _clear_pause_for_nav() -> void:
+	_pause_controls.clear()
 	_network_pause_requested = false
 	_paused = false
 	get_tree().paused = false

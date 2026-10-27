@@ -9,6 +9,7 @@ var respawn_events: Array = []
 var deadline_observations: Array = []
 var pause_query_observation: Dictionary = {}
 var pause_probe: Area2D
+var countdown_pause_observation: Dictionary = {}
 
 func run() -> void:
 	await process_frame
@@ -34,6 +35,26 @@ func host_run() -> void:
 		await physics_frame
 		if lan.guest_pick_ready: break
 	check(lan.start_match(), "legal_stock_match_starts")
+	for i in range(60):
+		await physics_frame
+		if current_scene != null and "_battle_sim" in current_scene and current_scene._battle_sim != null: break
+	var initializing = current_scene
+	check(initializing != null and "fighter1" in initializing and not initializing._active, "actual_prematch_countdown_before_controls")
+	if initializing == null or not ("fighter1" in initializing): return
+	var early_pause := InputEventAction.new(); early_pause.action = "ui_cancel"; early_pause.pressed = true
+	root.push_input(early_pause)
+	early_pause = early_pause.duplicate(); early_pause.pressed = false; root.push_input(early_pause)
+	for i in range(30):
+		if initializing._paused: break
+		await process_frame
+	check(initializing._paused, "public_pause_accepted_during_countdown")
+	if not initializing._paused: return
+	var label_before: String = initializing.countdown_label.text
+	await frames(90)
+	countdown_pause_observation = {"before_label":label_before,"after_label":initializing.countdown_label.text,"active_while_paused":initializing._active,"controls_while_paused":[initializing.fighter1.controls_enabled,initializing.fighter2.controls_enabled]}
+	check(initializing.countdown_label.text == label_before and not initializing._active and not initializing.fighter1.controls_enabled and not initializing.fighter2.controls_enabled, "paused_countdown_does_not_advance_or_grant_controls")
+	initializing._pause_resume_button.grab_focus(); await accept_focused()
+	check(not initializing._paused and not initializing._active and not initializing.fighter1.controls_enabled and not initializing.fighter2.controls_enabled, "resume_cannot_bypass_remaining_countdown_input_lock")
 	for i in range(420):
 		await physics_frame
 		if active_battle(): break
@@ -187,7 +208,7 @@ func guest_run() -> void:
 
 func finish() -> void:
 	keys([])
-	var result := {"PASS":failures.is_empty(), "role":side, "checks":checks, "failures":failures, "stock_events":stock_events, "respawn_events":respawn_events, "deadline_observations":deadline_observations,"pause_query_observation":pause_query_observation,
+	var result := {"PASS":failures.is_empty(), "role":side, "checks":checks, "failures":failures, "stock_events":stock_events, "respawn_events":respawn_events, "deadline_observations":deadline_observations,"pause_query_observation":pause_query_observation,"countdown_pause_observation":countdown_pause_observation,
 		"scope":"Actual two-process ordinary jump/pause/resume momentum, walkoff, unchanged72-step online respawn, same-boundary atomic deadline restoration, retirement on abandonment. NOT attack-earnedKO, historical physics/contact resimulation, native visuals or human approval.",
 		"HUMAN_ART_APPROVED":false, "RC2_READY":false, "V1_0_0_RELEASE_AUTHORIZED":false}
 	var file = FileAccess.open(output.path_join("LAN_" + side.to_upper() + ".json"), FileAccess.WRITE)
