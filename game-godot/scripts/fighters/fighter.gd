@@ -15,6 +15,7 @@ const _AuraIdentity = preload("res://scripts/combat/aura_identity.gd")
 const _AuraSpecialRuntime = preload("res://scripts/combat/aura_special_runtime.gd")
 const _CombatMath = preload("res://scripts/combat/combat_math.gd")
 const _CombatOutcome = preload("res://scripts/combat/combat_outcome.gd")
+const _BodyHitMotion = preload("res://scripts/combat/body_hit_motion.gd")
 const _MoveResolver = preload("res://scripts/visual/runtime_move_resolver.gd")
 const _PresentationContext = preload("res://scripts/visual/presentation_context.gd")
 const _FighterDefinition = preload("res://scripts/combat/fighter_definition.gd")
@@ -1789,15 +1790,16 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 	dmg = float(info["damage_applied"])
 	damaged.emit(dmg, damage_percent)
 	var launch: Vector2 = info.get("launch", Vector2.ZERO)
-	_di_strength = _CombatMath.di_strength_for_kb(launch.length(), dmg)
 	# Initial DI snapshot at hit confirm.
 	var sx := _read_axis()
 	var sy := -1.0 if _read_up() else (1.0 if _read_down() else 0.0)
-	launch = _CombatMath.apply_di(launch, sx, sy, _di_strength)
+	var motion := _BodyHitMotion.resolve(launch, dmg, sx, sy, int(info.get("hitstop_frames", 3)))
+	_di_strength = motion.di_strength
+	launch = motion.velocity
 	velocity = launch
 	_last_knockback = launch
-	hitstun_remaining = _CombatMath.hitstun_seconds(launch.length())
-	_hitstop = _CombatMath.frames_to_seconds(info.get("hitstop_frames", 3))
+	hitstun_remaining = motion.hitstun
+	_hitstop = motion.hitstop
 	if attacker != null and attacker.has_method("configure"):
 		attacker._hitstop = _hitstop * 0.5
 		attacker.combo_count += 1
@@ -1812,13 +1814,7 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 	_last_hurt_reaction["move_id"] = str(info.get("move_id", ""))
 	if model_3d and model_3d.has_method("apply_hurt_reaction"):
 		model_3d.apply_hurt_reaction(_last_hurt_reaction)
-	var heavy = dmg >= 8.0 or launch.length() > 14.0
-	if launch.length() > 14.0:
-		state_machine.enter(_FighterStates.LAUNCHED)
-	elif heavy:
-		state_machine.enter(_FighterStates.HURT_HEAVY)
-	else:
-		state_machine.enter(_FighterStates.HURT_LIGHT)
+	state_machine.enter(motion.state)
 	hit_landed.emit(info)
 	# Hit telemetry is recorded by HitResolver.resolve (single source of truth).
 

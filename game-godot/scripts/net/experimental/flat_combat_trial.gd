@@ -1,6 +1,6 @@
 extends Node2D
-## EXPERIMENTAL, NOT shipping enabled. Fully owned flat-ground movement and
-## canonical jab -> shield/Perfect Guard or whiff only. No CharacterBody,
+## EXPERIMENTAL, NOT shipping enabled. Owned flat-platform ground/air movement
+## and canonical jab -> body/shield/Perfect Guard or whiff. No CharacterBody,
 ## PhysicsServer, timers, audio, visual effects, Story writes or network grants.
 ## Both original advance and replay execute these SAME rules/components.
 
@@ -10,10 +10,16 @@ const Machine = preload("res://scripts/fighters/fighter_state_machine.gd")
 const Outcome = preload("res://scripts/combat/combat_outcome.gd")
 const MathRules = preload("res://scripts/combat/combat_math.gd")
 const States = preload("res://scripts/fighters/fighter_states.gd")
+const BodyMotion = preload("res://scripts/combat/body_hit_motion.gd")
+const AuraIdentity = preload("res://scripts/combat/aura_identity.gd")
+const AuraScaler = preload("res://scripts/combat/aura_scaler.gd")
+const HitReaction = preload("res://scripts/combat/directional_hit_reaction.gd")
+const Data = preload("res://scripts/data/data_loader.gd")
 const STEP := 1.0 / 60.0
 const LIMIT := 4096
-const ACTOR_FIELDS := ["position", "velocity", "grounded", "floor_normal", "facing", "shield_health", "shielding", "_shield_stun_limit", "_hitstop", "held", "attack_count", "activation_contact", "whiffed", "hooks"]
-const SUPPORTED_STATES := ["idle", "walk", "run", "dash", "attack_startup", "attack_active", "attack_recovery", "shield_start", "shield_hold", "shield_hit", "shield_stun"]
+const ACTOR_FIELDS := ["position", "velocity", "grounded", "floor_normal", "facing", "shield_health", "shielding", "_shield_stun_limit", "_hitstop", "held", "current_input", "attack_count", "activation_contact", "whiffed", "hooks", "damage_percent", "aura", "combo_count", "hitstun_remaining", "_di_strength", "_last_knockback", "_last_hurt_reaction", "_last_hit_result", "air_jumps_left", "_jump_short_hop", "_was_airborne", "_fast_falling", "_air_dodge_used", "_pending_landing_from_attack"]
+const SUPPORTED_STATES := ["idle", "walk", "run", "dash", "attack_startup", "attack_active", "attack_recovery", "shield_start", "shield_hold", "shield_hit", "shield_stun", "jump_squat", "jump", "double_jump", "fall", "fast_fall", "land", "hurt_light", "hurt_heavy", "hitstun", "launched", "tumble"]
+const HURT := ["hurt_light", "hurt_heavy", "hitstun", "launched", "tumble"]
 
 class TimelineResolver extends "res://scripts/combat/hit_resolver.gd":
 	var world
@@ -27,6 +33,7 @@ class TimelineResolver extends "res://scripts/combat/hit_resolver.gd":
 		result["timestamp_usec"] = int(round(float(world.frame) * 1000000.0 / 60.0))
 		result["timeline_epoch"] = world.epoch
 		result["contact_world"] = attacker.attack_bounds().intersection(defender.hurt_bounds()).get_center()
+		result["defender_airborne"] = not defender.grounded
 		return result
 
 	func _record_hit_telemetry(info: Dictionary) -> void:
@@ -47,6 +54,10 @@ class Actor extends Node2D:
 	var run_speed := 0.0
 	var dash_speed := 0.0
 	var traction := 0.0
+	var fall_speed := 0.0
+	var jump_strength := 0.0
+	var air_speed := 0.0
+	var air_accel := 0.0
 	var velocity := Vector2.ZERO
 	var grounded := true
 	var floor_normal := Vector2.UP
@@ -63,10 +74,22 @@ class Actor extends Node2D:
 	var shield_health := 0.0
 	var _shield_stun_limit := 0.25
 	var _hitstop := 0.0
+	var hitstun_remaining := 0.0
+	var _di_strength := "medium"
+	var _last_knockback := Vector2.ZERO
+	var _last_hurt_reaction: Dictionary = {}
+	var _last_hit_result: Dictionary = {}
+	var air_jumps_left := 1
+	var _jump_short_hop := false
+	var _was_airborne := false
+	var _fast_falling := false
+	var _air_dodge_used := false
+	var _pending_landing_from_attack := false
 	var state_machine
 	var move_runner
 	var perfect_guard
 	var held := {"axis":0.0, "attack":false, "shield":false}
+	var current_input := {"axis":0.0, "attack":false, "shield":false, "jump":false, "up":false, "down":false}
 	var attack_count := 0
 	var activation_contact := false
 	var whiffed := false
@@ -83,6 +106,10 @@ class Actor extends Node2D:
 		run_speed = float(source.get_run_speed())
 		dash_speed = float(source.get_dash_speed())
 		traction = float(source.get_traction())
+		fall_speed = float(source.get_fall_speed()); jump_strength = float(source.get_jump_strength())
+		air_speed = float(source.get_air_speed()); air_accel = float(source.get_air_accel())
+		air_jumps_left = int(data.get("maxJumps", 2)) - 1
+		held = current_input.duplicate(true)
 		body_rect = local_source_rect(source, "CollisionShape2D")
 		hurt_rect = local_source_rect(source, "Hurtbox/HurtShape")
 		shield_health = float(data.get("shieldProfile", {}).get("maxHealth", 100.0))
@@ -142,6 +169,7 @@ class Actor extends Node2D:
 		return Rect2(center - size * 0.5, size)
 
 	func pre_step(input: Dictionary) -> void:
+		current_input = input.duplicate(true)
 		if _hitstop > 0.0:
 			_hitstop -= STEP
 			return
@@ -150,19 +178,15 @@ class Actor extends Node2D:
 		if not shielding and state_machine.current_state not in ["shield_hold", "shield_start", "shield_break", "shield_stun"]:
 			shield_health = minf(float(data.get("shieldProfile", {}).get("maxHealth", 100.0)), shield_health + MathRules.SHIELD_REGEN_PER_SECOND * STEP)
 		state_machine.update(STEP)
-		var axis := float(input.axis)
-		if not state_machine.can_move():
-			velocity.x = move_toward(velocity.x, 0.0, run_speed * STEP * 8.0)
-		elif absf(axis) > 0.1:
-			facing = 1 if axis > 0.0 else -1
-			var speed := dash_speed if absf(axis) > 0.75 else run_speed
-			state_machine.enter("dash" if absf(axis) > 0.75 else ("run" if absf(velocity.x) > speed * 0.5 else "walk"))
-			velocity.x = move_toward(velocity.x, axis * speed, traction * STEP)
-		else:
-			velocity.x = move_toward(velocity.x, 0.0, traction * STEP)
-			if absf(velocity.x) < 10.0: state_machine.enter("idle")
+		if state_machine.current_state in HURT:
+			velocity.y += fall_speed * STEP
+			integrate_motion()
+			track_landing()
+			return
+		apply_movement(input)
 		var shield_edge := bool(input.shield) and not bool(held.shield)
-		var guard_step: Dictionary = Outcome.guard_transition(state_machine.current_state, bool(input.shield), shield_edge, grounded, true, not state_machine.can_attack())
+		var grounded_guard := grounded and velocity.y >= 0.0
+		var guard_step: Dictionary = Outcome.guard_transition(state_machine.current_state, bool(input.shield), shield_edge, grounded_guard, true, not state_machine.can_attack())
 		if str(guard_step.state) != state_machine.current_state:
 			if bool(guard_step.begin_parry): perfect_guard.begin()
 			shielding = str(guard_step.state) in ["shield_start", "shield_hold"]
@@ -170,20 +194,91 @@ class Actor extends Node2D:
 		var attack_edge := bool(input.attack) and not bool(held.attack)
 		held = input.duplicate(true)
 		if attack_edge and state_machine.can_attack() and not shielding:
-			if slot != 1 or attack_count != 0:
-				world.reject("Only the one canonical initiating jab is supported")
+			if slot != 1 or attack_count != 0 or not grounded:
+				world.reject("Only the one canonical grounded initiating jab is supported")
 				return
 			attack_count += 1
 			activation_contact = false
 			move_runner.start_move(jab, self)
 			state_machine.enter("attack_startup")
-		position += velocity * STEP
-		# This is a deliberately GROUNDED finite-platform candidate. It does
-		# not pretend that floor clamping implements ledges, falls or slopes.
-		grounded = true
-		floor_normal = Vector2.UP
-		if not is_zero_approx(velocity.y) or body_bounds().position.x < world.platform.position.x or body_bounds().end.x > world.platform.end.x:
-			world.reject("Unsupported aerial or platform-edge movement")
+		if aura > 0.0: aura = AuraScaler.apply_charge_tick(aura, STEP, false, 1.0)
+		integrate_motion()
+		if not grounded and state_machine.current_state not in ["jump", "double_jump", "jump_squat", "attack_startup", "attack_active", "attack_recovery", "launched"] and velocity.y > 0:
+			state_machine.enter("fall" if velocity.y < fall_speed * 0.02 else "fast_fall")
+		track_landing()
+
+	func apply_movement(input: Dictionary) -> void:
+		if state_machine.current_state == "jump_squat":
+			velocity.x = move_toward(velocity.x, 0.0, run_speed * STEP * 4.0)
+			if not bool(input.jump): _jump_short_hop = true
+			return
+		if state_machine.current_state == "land":
+			if grounded: velocity.x = move_toward(velocity.x, 0.0, run_speed * STEP * 6.0)
+			return
+		var axis := float(input.axis)
+		if not state_machine.can_move():
+			if grounded: velocity.x = move_toward(velocity.x, 0.0, run_speed * STEP * 8.0)
+			return
+		if not grounded:
+			_fast_falling = velocity.y > 80.0 and not bool(input.jump) and bool(input.down)
+			velocity.y += fall_speed * (1.45 if _fast_falling else 1.0) * STEP
+		else:
+			air_jumps_left = int(data.get("maxJumps", 2)) - 1
+			_air_dodge_used = false; _fast_falling = false
+			if velocity.y > 0.0: velocity.y = 0.0
+		if absf(axis) > 0.1:
+			if grounded: facing = 1 if axis > 0.0 else -1
+			var speed := dash_speed if absf(axis) > 0.75 else run_speed
+			if grounded: state_machine.enter("dash" if absf(axis) > 0.75 else ("run" if absf(velocity.x) > speed * 0.5 else "walk"))
+			velocity.x = move_toward(velocity.x, axis * (speed if grounded else air_speed), (traction if grounded else air_accel) * STEP)
+		else:
+			velocity.x = move_toward(velocity.x, 0.0, (traction if grounded else air_accel * 0.45) * STEP)
+			if grounded and absf(velocity.x) < 10.0 and not States.is_attack_state(state_machine.current_state): state_machine.enter("idle")
+		if bool(input.jump) and not bool(held.jump):
+			if grounded:
+				_jump_short_hop = false; state_machine.enter("jump_squat")
+			elif air_jumps_left > 0:
+				velocity.y = -jump_strength * 0.9; air_jumps_left -= 1
+				state_machine.enter("double_jump")
+
+	func complete_jump_squat() -> void:
+		var short_hop := _jump_short_hop or not bool(current_input.jump)
+		velocity.y = -MathRules.short_hop_velocity(jump_strength) if short_hop else -jump_strength
+		_jump_short_hop = false
+		state_machine.enter("jump")
+
+	func apply_hitstun_di(_delta: float) -> void:
+		var sy := -1.0 if bool(current_input.up) else 1.0 if bool(current_input.down) else 0.0
+		velocity = MathRules.apply_di(velocity, float(current_input.axis), sy, _di_strength)
+
+	func begin_landing(from_aerial: bool, from_fast_fall: bool = false) -> void:
+		var override := float(jab.get("landing_lag", -1.0)) if attack_count > 0 else -1.0
+		if override < 0.0 and _pending_landing_from_attack: override = MathRules.LANDING_LAG_AERIAL
+		state_machine.landing_lag = MathRules.landing_lag_seconds(from_aerial, from_fast_fall, override)
+		_pending_landing_from_attack = false
+		state_machine.enter("land")
+
+	func integrate_motion() -> void:
+		var bottom := body_bounds().end.y
+		var next := position + velocity * STEP
+		if next.x + body_rect.position.x < world.platform.position.x or next.x + body_rect.end.x > world.platform.end.x:
+			world.reject("Platform edges/ledges remain unsupported by this candidate")
+			return
+		if velocity.y >= 0.0 and bottom <= world.platform.position.y + 0.00001 and next.y + body_rect.end.y >= world.platform.position.y:
+			next.y = world.platform.position.y - body_rect.end.y
+			velocity.y = 0.0; grounded = true; floor_normal = Vector2.UP
+		else:
+			grounded = false; floor_normal = Vector2.ZERO
+		position = next
+
+	func track_landing() -> void:
+		var airborne := not grounded
+		if _was_airborne and not airborne:
+			var from_attack := States.is_attack_state(state_machine.previous_state) or _pending_landing_from_attack
+			var from_hurt: bool = state_machine.current_state in ["launched", "tumble", "hitstun", "fall", "fast_fall"]
+			if from_hurt or from_attack or state_machine.current_state in ["fall", "fast_fall", "jump", "double_jump"]:
+				begin_landing(true, _fast_falling)
+		_was_airborne = airborne
 
 	func combat_step() -> void:
 		perfect_guard.tick()
@@ -205,21 +300,42 @@ class Actor extends Node2D:
 		state_machine.enter("idle")
 
 	func receive_hit(attacker: Node, info: Dictionary) -> void:
-		if not shielding or not bool(info.get("blocked", false)):
-			world.reject("Body-hit reaction/knockback is not implemented by this trial")
+		if combat_closed or invincible or grabbed_by != null: return
+		_last_hit_result = info.duplicate(true)
+		_last_knockback = info.get("launch", Vector2.ZERO)
+		if shielding or state_machine.current_state in ["shield_hold", "shield_hit"]:
+			var result: Dictionary = Outcome.shield_contact(shield_health, float(info.get("shield_damage", 0.0)), false, int(info.get("shield_stun_frames", 0)))
+			if result.state != "shield_hit":
+				world.reject("Shield break is not implemented by this trial")
+				return
+			shield_health = float(result.shield_health)
+			info.merge({"blocked":true, "perfect_guard":false, "parry_result":"fail", "damage_applied":0.0, "stocks_delta":0, "shield_event":str(result.event), "aura_bible":Outcome.bible_for(fighter_id)}, true)
+			_hitstop = MathRules.frames_to_seconds(int(info.get("hitstop_frames", 3)))
+			attacker._hitstop = _hitstop * 0.5
+			_shield_stun_limit = Outcome.stun_seconds(int(result.shield_stun_frames), Outcome.SHIELD_STUN_FALLBACK_SECONDS)
+			state_machine.enter("shield_hit")
+			hit_landed.emit(info)
 			return
-		var result: Dictionary = Outcome.shield_contact(shield_health, float(info.get("shield_damage", 0.0)), false, int(info.get("shield_stun_frames", 0)))
-		if result.state != "shield_hit":
-			world.reject("Shield break is not implemented by this trial")
-			return
-		shield_health = float(result.shield_health)
-		info["damage_applied"] = 0.0
-		info["stocks_delta"] = 0
-		info["shield_event"] = str(result.event)
-		_hitstop = MathRules.frames_to_seconds(int(info.get("hitstop_frames", 3)))
-		attacker._hitstop = _hitstop * 0.5
-		_shield_stun_limit = Outcome.stun_seconds(int(result.shield_stun_frames), Outcome.SHIELD_STUN_FALLBACK_SECONDS)
-		state_machine.enter("shield_hit")
+		# Same production body policy; no second aura/damage scaling. This
+		# bounded world owns no grabs, armor, transformations or native effects.
+		move_runner.cancel()
+		var gate := str(info.get("damage_zero_reason", ""))
+		var outcome: Dictionary = Outcome.confirmed_body_damage(damage_percent, float(info.get("resolved_damage", info.get("damage", 0.0))), "hit" if gate.is_empty() else gate)
+		damage_percent = float(outcome.meter_after)
+		info.merge({"damage":float(outcome.damage_applied), "damage_applied":float(outcome.damage_applied), "defender_damage_after":damage_percent, "meter_changed":bool(outcome.meter_changed), "stocks_delta":0, "shield_event":str(outcome.event)}, true)
+		var sy := -1.0 if bool(current_input.up) else 1.0 if bool(current_input.down) else 0.0
+		var motion: Dictionary = BodyMotion.resolve(info.get("launch", Vector2.ZERO), float(outcome.damage_applied), float(current_input.axis), sy, int(info.get("hitstop_frames", 3)))
+		_di_strength = motion.di_strength; velocity = motion.velocity
+		_last_knockback = velocity; hitstun_remaining = motion.hitstun; _hitstop = motion.hitstop
+		# Validate actual same-world attacker ownership, rather than pretending
+		# a synthetic actor is a Fighter by adding a dummy configure() method.
+		if attacker == world.actors[0] and attacker.world == world:
+			attacker._hitstop = _hitstop * 0.5
+			attacker.combo_count += 1
+			attacker.aura = minf(100.0, float(attacker.aura) + AuraIdentity.on_hit_aura_gain(attacker.fighter_id, str(attacker.data.get("combatTag", ""))))
+		_last_hurt_reaction = HitReaction.resolve(fighter_id, velocity, info)
+		_last_hurt_reaction["move_id"] = str(info.get("move_id", ""))
+		state_machine.enter(str(motion.state))
 		hit_landed.emit(info)
 
 	func capture() -> Dictionary:
@@ -237,11 +353,17 @@ class Actor extends Node2D:
 		if row.size() != baseline.size() or row.get("identity", {}) != baseline.identity: return false
 		for key in baseline:
 			if not row.has(key) or typeof(row[key]) != typeof(baseline[key]): return false
-		if not world.finite_value(row) or not row.grounded or row.floor_normal != Vector2.UP or not is_zero_approx(row.velocity.y): return false
+		if not world.finite_value(row): return false
+		if row.floor_normal != (Vector2.UP if row.grounded else Vector2.ZERO): return false
+		if row.damage_percent < 0.0 or row.aura < 0.0 or row.aura > 100.0 or row.combo_count not in [0, 1]: return false
+		if row.hitstun_remaining < 0.0 or row.hitstun_remaining > 4.0 or row._di_strength not in ["light", "medium", "heavy", "launch", "super"]: return false
+		if row.air_jumps_left < 0 or row.air_jumps_left >= int(data.get("maxJumps", 2)): return false
 		if row.facing not in [-1, 1] or row.attack_count < 0 or row.attack_count > 1 or (slot != 1 and row.attack_count != 0): return false
 		if row.shield_health <= 0.0 or row.shield_health > float(data.get("shieldProfile", {}).get("maxHealth", 100.0)) or row._hitstop < -STEP or row._hitstop > 0.1: return false
-		if row._shield_stun_limit <= 0.0 or row._shield_stun_limit > 0.25 or not world.valid_input(row.held): return false
-		if absf(float(row.position.y) + body_rect.end.y - world.platform.position.y) > 0.00001: return false
+		if row._shield_stun_limit <= 0.0 or row._shield_stun_limit > 0.25 or not world.valid_input(row.held) or not world.valid_input(row.current_input): return false
+		var bottom: float = row.position.y + body_rect.end.y
+		if bottom > world.platform.position.y + 0.00001: return false
+		if row.grounded and absf(bottom - world.platform.position.y) > 0.00001: return false
 		if row.position.x + body_rect.position.x < world.platform.position.x or row.position.x + body_rect.end.x > world.platform.end.x: return false
 		# Production validators execute on detached shadow COMPONENTS bound to
 		# this same actor; they cannot mutate this actor or emit live callbacks.
@@ -294,15 +416,22 @@ var _ready_trial := false
 func reject(reason: String) -> void:
 	if failure.is_empty(): failure = reason
 
-func configure_from_live(p: Node, d: Node, stage: Dictionary, epoch_value: int) -> bool:
-	var accepted := _configure_from_live_impl(p, d, stage, epoch_value)
+func configure_from_live(p: Node, d: Node, stage: Dictionary, epoch_value: int, resolved_jab: Dictionary = {}) -> bool:
+	var accepted := _configure_from_live_impl(p, d, stage, epoch_value, resolved_jab)
 	if not accepted: reject("Source configuration is outside the isolated flat-jab trial contract")
 	return accepted
 
-func _configure_from_live_impl(p: Node, d: Node, stage: Dictionary, epoch_value: int) -> bool:
+func _configure_from_live_impl(p: Node, d: Node, stage: Dictionary, epoch_value: int, resolved_jab: Dictionary) -> bool:
 	if not is_inside_tree() or _ready_trial or epoch_value <= 0: return false
 	if stage.get("layoutType", "") != "flat" or not stage.get("sidePlatforms", []).is_empty() or stage.get("ledges", true): return false
-	var move: Dictionary = p.move_runner.move_data.duplicate(true)
+	# An optional retained binding must be byte-for-byte the same resolved jab
+	# obtained through ordinary source input. Callers cannot supply new values.
+	var move: Dictionary = p.move_runner.move_data.duplicate(true) if resolved_jab.is_empty() else resolved_jab.duplicate(true)
+	if not resolved_jab.is_empty():
+		if float(p.aura) != 0.0: return false
+		var canonical: Dictionary = Data.find_move(p.move_manifest, "jab_1")
+		var expected: Dictionary = AuraIdentity.apply_to_scaled_move(AuraScaler.apply_to_move(canonical, 0.0), str(p.fighter_id), 0.0, str(p.data.get("combatTag", "")))
+		if move != expected: return false
 	if move.get("move_id", "") != "jab_1" or move.get("move_type", "") != "melee" or move.has("projectile") or move.get("grounded_air", "") != "grounded" or move.get("_party_move", false) or move.get("form_override_applied", false): return false
 	if float(p.aura) >= 25.0 or float(d.aura) >= 25.0 or bool(p.invincible) or bool(d.invincible): return false
 	for source in [p, d]:
@@ -342,12 +471,29 @@ func _configure_from_live_impl(p: Node, d: Node, stage: Dictionary, epoch_value:
 	resolver = TimelineResolver.new()
 	resolver.world = self
 	add_child(resolver)
-	_contract = digest({"stage":stage, "actors":actors.map(func(actor): return {"fighter":actor.fighter_id, "body":actor.body_variant, "data":actor.data, "jab":actor.jab, "body_rect":actor.body_rect, "hurt_rect":actor.hurt_rect, "run":actor.run_speed, "dash":actor.dash_speed, "traction":actor.traction}), "rules_ratio":_rules_ratio})
+	_contract = digest({"stage":stage, "actors":actors.map(func(actor): return {"fighter":actor.fighter_id, "body":actor.body_variant, "data":actor.data, "jab":actor.jab, "body_rect":actor.body_rect, "hurt_rect":actor.hurt_rect, "run":actor.run_speed, "dash":actor.dash_speed, "traction":actor.traction, "fall_speed":actor.fall_speed, "jump":actor.jump_strength, "air_speed":actor.air_speed, "air_accel":actor.air_accel}), "rules_ratio":_rules_ratio})
 	_ready_trial = true
 	return true
 
 func valid_input(input: Dictionary) -> bool:
-	return input.size() == 3 and input.has_all(["axis", "attack", "shield"]) and typeof(input.axis) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(input.axis)) and absf(float(input.axis)) <= 1.0 and typeof(input.attack) == TYPE_BOOL and typeof(input.shield) == TYPE_BOOL
+	if input.size() not in [3, 6] or not input.has_all(["axis", "attack", "shield"]): return false
+	if typeof(input.axis) not in [TYPE_INT, TYPE_FLOAT] or not is_finite(float(input.axis)) or absf(float(input.axis)) > 1.0: return false
+	for key in input:
+		if key == "axis": continue
+		if key not in ["attack", "shield", "jump", "up", "down"] or typeof(input[key]) != TYPE_BOOL: return false
+	return input.size() == 3 or input.has_all(["jump", "up", "down"])
+
+func normalize_input(input: Dictionary) -> Dictionary:
+	var result := {"axis":float(input.axis), "attack":bool(input.attack), "shield":bool(input.shield), "jump":false, "up":false, "down":false}
+	for key in ["jump", "up", "down"]: result[key] = bool(input.get(key, false))
+	return result
+
+func unsupported_overlap(first: Dictionary, second: Dictionary) -> bool:
+	# Grounded neutral pushboxes are not approximated here. Hurt/airborne
+	# crossing is allowed by production spacing and is not a failed fixture.
+	if not first.grounded or not second.grounded: return false
+	if first.machine.current_state in HURT or second.machine.current_state in HURT: return false
+	return Rect2(first.position + actors[0].body_rect.position, actors[0].body_rect.size).intersects(Rect2(second.position + actors[1].body_rect.position, actors[1].body_rect.size))
 
 func advance_owned(input_epoch: int, input_frame: int, p1: Dictionary, p2: Dictionary) -> bool:
 	# Local source-owned input history, not an authorization to accept remote
@@ -361,9 +507,9 @@ func advance(p1: Dictionary, p2: Dictionary) -> bool:
 	if float(GameState.damage_ratio) != _rules_ratio: reject("Prematch damage rules changed"); return false
 	_advancing = true
 	frame += 1
-	actors[0].pre_step(p1)
-	actors[1].pre_step(p2)
-	if actors[0].body_bounds().intersects(actors[1].body_bounds()): reject("Body-overlap/pushbox case is outside the bounded trial")
+	actors[0].pre_step(normalize_input(p1))
+	actors[1].pre_step(normalize_input(p2))
+	if unsupported_overlap(actors[0].capture(), actors[1].capture()): reject("Body-overlap/pushbox case is outside the bounded trial")
 	if failure.is_empty():
 		# Preserve the existing per-actor BattleSim order, including each
 		# PerfectGuard tick before that actor's own runner, not a new rule.
@@ -377,14 +523,11 @@ func resolve_active(attacker: Node) -> void:
 	if not failure.is_empty(): return
 	var defender = actors[1]
 	if not attacker.attack_bounds().intersects(defender.hurt_bounds()): return
-	if not defender.shielding:
-		reject("Unshielded body contact is deliberately unsupported, not a fabricated miss")
-		return
 	var info: Dictionary = resolver.resolve(attacker, defender, attacker.move_runner.move_data, attacker.damage_percent)
 	if not info.is_empty(): attacker.activation_contact = true
 
 func record_contact_intent(info: Dictionary) -> void:
-	if str(info.get("contact_result", "")) not in ["shield", "parry"]:
+	if str(info.get("contact_result", "")) not in ["shield", "parry", "hit"]:
 		reject("Resolver produced an unsupported contact")
 		return
 	events.append(info.duplicate(true))
@@ -394,7 +537,7 @@ func record_whiff(actor: Node) -> void:
 
 func capture() -> Dictionary:
 	assert(_ready_trial and not _advancing)
-	return {"schema":"flat_combat_trial/v1", "world":get_instance_id(), "epoch":epoch, "frame":frame, "contract":_contract, "actors":actors.map(func(actor):return actor.capture()), "events":events.duplicate(true), "contact_sequence":resolver._contact_sequence, "resolver_logs":resolver.recent_logs(), "failure":failure}
+	return {"schema":"flat_combat_trial/v2", "world":get_instance_id(), "epoch":epoch, "frame":frame, "contract":_contract, "actors":actors.map(func(actor):return actor.capture()), "events":events.duplicate(true), "contact_sequence":resolver._contact_sequence, "resolver_logs":resolver.recent_logs(), "failure":failure}
 
 func restore(record: Dictionary) -> bool:
 	if not _ready_trial or _advancing: return false
@@ -405,16 +548,14 @@ func restore(record: Dictionary) -> bool:
 	if not finite_value(record) or record.frame < 0 or record.frame > frame or record.frame > LIMIT or record.actors.size() != 2 or record.events.size() > LIMIT or record.contact_sequence < 0 or record.contact_sequence > LIMIT or record.resolver_logs.size() > 24 or not record.failure.is_empty(): return false
 	var ids: Dictionary = {}
 	for event in record.events:
-		if typeof(event) != TYPE_DICTIONARY or event.get("timeline_epoch", -1) != epoch or typeof(event.get("gameplay_frame")) != TYPE_INT or event.gameplay_frame < 1 or event.gameplay_frame > record.frame or typeof(event.get("combat_event_id")) != TYPE_STRING or event.combat_event_id.is_empty() or ids.has(event.combat_event_id) or event.get("contact_result", "") not in ["shield", "parry", "whiff"]: return false
+		if typeof(event) != TYPE_DICTIONARY or event.get("timeline_epoch", -1) != epoch or typeof(event.get("gameplay_frame")) != TYPE_INT or event.gameplay_frame < 1 or event.gameplay_frame > record.frame or typeof(event.get("combat_event_id")) != TYPE_STRING or event.combat_event_id.is_empty() or ids.has(event.combat_event_id) or event.get("contact_result", "") not in ["shield", "parry", "hit", "whiff"]: return false
 		ids[event.combat_event_id] = true
 	for line in record.resolver_logs:
 		if typeof(line) != TYPE_STRING: return false
 	for i in range(2):
 		if typeof(record.actors[i]) != TYPE_DICTIONARY or not actors[i].valid_state(record.actors[i]): return false
 		if record.actors[i].guard.clock != record.frame: return false
-	var first_body := Rect2(record.actors[0].position + actors[0].body_rect.position, actors[0].body_rect.size)
-	var second_body := Rect2(record.actors[1].position + actors[1].body_rect.position, actors[1].body_rect.size)
-	if first_body.intersects(second_body): return false
+	if unsupported_overlap(record.actors[0], record.actors[1]): return false
 	# Every validation completed before touching live world/components. Retire
 	# abandoned intents even if a replacement later reuses the SAME stable ID
 	# with a different outcome (shield -> Perfect Guard, for example).

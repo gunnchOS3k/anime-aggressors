@@ -1,3 +1,13 @@
+# 2026-10-27 — Body/vertical replay and real Training controls: engine validation pending
+
+Branch integration/v1-preserved-candidate-20261025. Prior accepted source/receipts preserved. New bounded candidate extends isolated owned movement with full/short/double jump, gravity/landing, canonical body damage/DI/knockback/hurt/hitstop/earned aura and atomic airborne/input snapshots. Shipping LAN still does NOT load it. Fighter body launch policy extracted unchanged into combat/body_hit_motion.gd; complete relevant integration regression required after focused parity. New BodyVerticalReplay compares actual public Training actors using real inputs against candidate motion/contact, then restores body/air histories and changes one defensive input. Engine outcome PENDING; no claim of physics parity or full-world rollback.
+
+Training input presenter now derives actual current InputMap bindings, corrects Heavy (Attack+Special), Grab/Dodge, ground charge, fresh Tier3 transform, dash and held-target Attack throw notation. No input mappings, damage, frame data or aura requirements changed. New TrainingControls uses real UI, temporary in-memory remapping and physical keyboard events, actual earned charge and existing named form; runtime Kaia/female versus idle Rook/male only. Nine catalogues/three device notation checks do not imply all-body/device/native acceptance. Engine result PENDING.
+
+NEXT: commit/push scoped source, existing public official4.7.1 Ubuntu scope=physics (FlatCombatReplay, BodyVerticalReplay, TrainingControls). Preserve/correct actual failures. Then affected live integration because shared Fighter extraction changed. No local heavy/native/Blender/encode/private-art read, resource-preflight retry, cleanup, owner saves, paid infrastructure or publication. outputs/ protected untracked. Native/art read-load/whole-world/net rollback/remaining full V1 content remain pending. All human art/gameplay/paired-runtime/RC2/release gates false.
+
+---
+
 # 2026-10-27 — Projectile history accepted; actual isolated movement/contact restore and alternate history PASS
 
 Latest implementation source8079ac6e16fec6e85b7230945034d3592f485505. Branch integration/v1-preserved-candidate-20261025, normalpushonly. Finalreceipt/docs checkpoint changesnoimplementation; obtainexactgitrev-parseHEAD. Currenttrackedtreecleanaftercheckpoint; outputs/retaineduntracked; allremotejobscompleted, no localheavyprocessstarted. No protectedworktrees, ownersaves, privateart orCursor/sharedBeatLinksource touched.

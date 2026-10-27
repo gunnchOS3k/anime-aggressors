@@ -110,6 +110,8 @@ def run(scope="all"):
                 ("nix-authored-grab", "tests/integration/NixAuthoredGrab.gd", "NIX_AUTHORED_GRAB.json"),
             ] if scope == "projectiles" else [
                 ("flat-combat-replay", "tests/integration/FlatCombatReplay.gd", "FLAT_COMBAT_REPLAY.json"),
+                ("body-vertical-replay", "tests/integration/BodyVerticalReplay.gd", "BODY_VERTICAL_REPLAY.json"),
+                ("training-controls", "tests/integration/TrainingControls.gd", "TRAINING_CONTROLS.json"),
             ]
             for name, script, filename in component_suites:
                 outcome = execute(base + ["--fixed-fps", "60", "--script", "res://" + script, "--", "--ordinary-output=" + str(output)], output / (name + ".log"))
