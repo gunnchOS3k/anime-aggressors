@@ -44,3 +44,29 @@ func try_contact(attacker, move: Dictionary) -> Dictionary:
 	return info
 func snapshot() -> Dictionary:
 	return {"clock":clock,"opened":opened,"consumed":consumed,"next_attempt":next_attempt,"window_frames":WINDOW_FRAMES,"status":"TUNING_CANDIDATE"}
+
+
+# Local trusted rollback COMPONENT state. This is not a full Fighter/physics/
+# projectile/timer snapshot and is never accepted from a network peer.
+func capture_component_state() -> Dictionary:
+	var result := {"schema":"perfect_guard/v1"}
+	result["owner"] = {"instance":fighter.get_instance_id() if is_instance_valid(fighter) else 0, "fighter":str(fighter.fighter_id) if is_instance_valid(fighter) and "fighter_id" in fighter else ""}
+	for key in ["clock", "opened", "consumed", "next_attempt", "history"]:
+		var value = get(key)
+		result[key] = value.duplicate(true) if value is Dictionary or value is Array else value
+	return result
+
+func restore_component_state(state: Dictionary) -> bool:
+	var baseline := capture_component_state()
+	if state.size() != baseline.size() or state.get("schema", "") != baseline.schema: return false
+	if state.get("owner", {}) != baseline.owner: return false
+	# Validate the entire record BEFORE writes. Restore does not call enter(),
+	# start_move(), cancel(), emit signals, spend aura or dispatch presentation.
+	for key in baseline:
+		if not state.has(key) or typeof(state[key]) != typeof(baseline[key]): return false
+	if state.clock < 0 or state.opened > state.clock + 1 or state.next_attempt < 0 or state.history.size() > 64: return false
+	for key in baseline:
+		if key in ["schema", "owner"]: continue
+		var value = state[key]
+		set(key, value.duplicate(true) if value is Dictionary or value is Array else value)
+	return true

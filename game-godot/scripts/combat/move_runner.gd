@@ -110,3 +110,30 @@ func debug_summary() -> String:
 	return "move:%s frame:%d phase:%s hitbox:%s cancel:%s" % [
 		current_move_id(), total_frame, phase, str(is_active_phase()), str(in_cancel_window)
 	]
+
+
+# Local trusted rollback COMPONENT state. This is not a full Fighter/physics/
+# projectile/timer snapshot and is never accepted from a network peer.
+func capture_component_state() -> Dictionary:
+	var result := {"schema":"move_runner/v1"}
+	result["owner"] = {"instance":_fighter_body.get_instance_id() if is_instance_valid(_fighter_body) else 0, "fighter":str(_fighter_body.fighter_id) if is_instance_valid(_fighter_body) and "fighter_id" in _fighter_body else ""}
+	for key in ["active", "move_data", "phase", "frame_in_phase", "total_frame", "hit_targets", "activation_id", "in_cancel_window", "confirmed_body_hit"]:
+		var value = get(key)
+		result[key] = value.duplicate(true) if value is Dictionary or value is Array else value
+	return result
+
+func restore_component_state(state: Dictionary) -> bool:
+	var baseline := capture_component_state()
+	if state.size() != baseline.size() or state.get("schema", "") != baseline.schema: return false
+	if state.get("owner", {}) != baseline.owner: return false
+	# Validate the entire record BEFORE writes. Restore does not call enter(),
+	# start_move(), cancel(), emit signals, spend aura or dispatch presentation.
+	for key in baseline:
+		if not state.has(key) or typeof(state[key]) != typeof(baseline[key]): return false
+	if state.phase not in ["", "startup", "active", "recovery"] or state.total_frame < 0 or state.frame_in_phase < 0 or state.activation_id < 0: return false
+	if state.active and (state.phase.is_empty() or str(state.move_data.get("move_id", "")).is_empty()): return false
+	for key in baseline:
+		if key in ["schema", "owner"]: continue
+		var value = state[key]
+		set(key, value.duplicate(true) if value is Dictionary or value is Array else value)
+	return true

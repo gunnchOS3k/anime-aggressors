@@ -64,7 +64,12 @@ func probe(fighter: String, outcome: String) -> void:
 				var dx: float = d.position.x - p.position.x
 				if absf(dx) < 46 and p.is_on_floor() and d.is_on_floor(): break
 				keys(["right" if dx > 0 else "left"]); await physics_frame
-		keys([]); await frames(3)
+		keys([])
+		# Ground contact is not yet control return: honor real landing recovery.
+		for i in range(120):
+			if p.is_on_floor() and p.state_machine.can_attack() and p._hitstop <= 0: break
+			await physics_frame
+		check(p.is_on_floor() and p.state_machine.can_attack(), fighter + ":" + outcome + ":legal_attack_control_" + jab)
 		keys(["attack"]); await frames(2); keys([])
 		for i in range(30):
 			if p.move_runner.active and p.move_runner.current_move_id() == jab: break

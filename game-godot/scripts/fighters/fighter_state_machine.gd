@@ -168,3 +168,31 @@ func _on_update(state: String, delta: float) -> void:
 			if state_time > 0.16:
 				_fighter.invincible = false
 				_fighter.state_machine.enter(_FighterStates.IDLE)
+
+
+# Local trusted rollback COMPONENT state. This is not a full Fighter/physics/
+# projectile/timer snapshot and is never accepted from a network peer.
+func capture_component_state() -> Dictionary:
+	var result := {"schema":"fighter_state_machine/v1"}
+	result["owner"] = {"instance":_fighter.get_instance_id() if is_instance_valid(_fighter) else 0, "fighter":str(_fighter.fighter_id) if is_instance_valid(_fighter) and "fighter_id" in _fighter else ""}
+	for key in ["current_state", "previous_state", "state_frame", "state_time", "landing_lag", "dodge_recovery", "dodge_invuln"]:
+		var value = get(key)
+		result[key] = value.duplicate(true) if value is Dictionary or value is Array else value
+	return result
+
+func restore_component_state(state: Dictionary) -> bool:
+	var baseline := capture_component_state()
+	if state.size() != baseline.size() or state.get("schema", "") != baseline.schema: return false
+	if state.get("owner", {}) != baseline.owner: return false
+	# Validate the entire record BEFORE writes. Restore does not call enter(),
+	# start_move(), cancel(), emit signals, spend aura or dispatch presentation.
+	for key in baseline:
+		if not state.has(key) or typeof(state[key]) != typeof(baseline[key]): return false
+	if state.current_state.is_empty() or state.state_frame < 0: return false
+	for key in ["state_time", "landing_lag", "dodge_recovery", "dodge_invuln"]:
+		if not is_finite(float(state[key])) or float(state[key]) < 0: return false
+	for key in baseline:
+		if key in ["schema", "owner"]: continue
+		var value = state[key]
+		set(key, value.duplicate(true) if value is Dictionary or value is Array else value)
+	return true

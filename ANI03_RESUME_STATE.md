@@ -1,3 +1,13 @@
+# 2026-10-26 — Contact links and real follow-ups observed; whiff control-return corrected
+
+Run40432892058 @63416f1c retains4actualauthoredspeciallinks andtargetfollow-upcontacts beforeobservedquietdefendercontrolreturn (notactiveCPU/guarantee). Host/guest20/11,throws39rows,Training24PASS. Onlywhifffirstpressstillfailed: realgroundingdoesnotendLANDrecovery. Recordedwhiffmovestarts showfirstmissedpress, thenjab1/jab2shiftedonepress. Newdriverwaitsrealstate_machine.can_attack +ground/hitstopbeforeeachrequestedjab, assertseligibility; no state/inputbuffer/frame/balance change. Negative outputs/lan_links_63416f1c preserved.
+
+Newcodepreparesreal production component capture/validated atomic restore onMoveRunner (phase/activation/hittargetledger), PerfectGuard (clock/window/rearm/consumed/history), state machine(clocks/recovery); boundactoridentity retained andwrongowner/types/invalidranges rejected. Restoringcallsnoenter/start/cancel andemitsnosignals. NEWenginefixturecapturesactualpublicwhiffstate andexecutesrealcomponentphase/rearmcode inisolatedcopies, notlivecollision orwholeBattleScene rewind. DoNOTclaimthisasfullGodotrollback. Next publicLANjob includescomponenttest plusauthoredlinks andexistingaffectedchecks.
+
+ActualfullrollbackblockedbyrewindableSceneTreeTimer callbacks, physicscachedoverlaps anddeferredpollgeneration, restorableprojectiles, stabletimelinetiedeventIDs andfloor/slidecache. No lateinput wiredtochecksumfacade. Existingguestpresentationacceptance remains6c777353; no privateart/nativevisual/resourcequalification. Allhuman/paired/RC2/releaseFALSE. NEXT commit/pushandexistingONLYlan_battle_runtime=true; exactsourcegitrev-parseHEAD.
+
+---
+
 # 2026-10-26 — Four authored links execute; negative whiff driver correction
 
 Run40432495650 @552f2191: host20/guest11, ThrowOwnership39rows andTrainingLifecycle24PASS; nohost/guest runtimeerrors. AuthoredSpecialLinks45/49PASS,4failures ONLY distantwhiff expected groundedjabs/window. Allfour bodyhitlinks actuallystarted once atresolvedmoveframesEmber8/Vesper7/Yin8/Yang9; Ember side_special also contacted12physicsframesafterfinisher. Allshieldcontacts rejectbodycancel. Preserve fullnegative outputs/lan_links_552f2191.
