@@ -1,3 +1,13 @@
+# 2026-10-26 — Terminal/result/rematch exercised; guarded UI readiness + snapshot boundary
+
+Run40433753397 @517693a4: inputpair20/11PASSzeroerrors. Terminalpair progressedthroughlegitimatewalkoff,committedfirstwinner/acting,lateinputrejection,actualbothResults/UIrematch,newroundfreshstateandrealremotecontact; thenhostfixturecalledfind_children onNilpausepanel (LanTerminalMatch78). ActualengineScriptError correctlyFAILSjob despitefixturethenprintingPASS. Fullnegative outputs/lan_terminal_517693a4. NewfixturewaitsboundedactualUIopenandassertsreadinessbeforedereference; no directhandler/fakepause.
+
+Newactual runtimecorrections: requiredLANbindingreturnsbool/failsclosed (no localP2fallthrough ifdisconnectduringdeferredscenecreation); nonterminaldisconnectabandonsbothactors/combat withoutresult, whilepreservingalreadyearnedterminalstockcondition; no queuedlateprojectiles/attacks/careeraward afterabandon. Countdowncannotre-enableabandonedactors. Sourcepost-step BattleSim signal recordscompletedfixed-stepframe; networkinputpollstillearly, snapshotsnowpublishAFTERmovement/combat/projectileresolution, andpausedstatustogglepublisheswithoutadvancingclocks. No hitbox/timing/damage/canon valueschanged.
+
+Engineproofpendingforthesenewchanges. NEXT normalcommit/pushthenexistingONLYlan_battle_runtime=true. All fourclassiclinks/componentcaptureactualsuccessremain90612bf1 accepted; nofullrollbackclaim. Precise fullrollback blockers retainedbelow. No privateart/localnative/Blender/media/USBqualification/cleanup/paidexecution. Allhuman/pairedruntime/RC2/releaseFALSE. ExactcurrentSHA=gitrev-parseHEAD; onlyoutputs untracked plusdocumentedpendingeditsbeforecommit.
+
+---
+
 # 2026-10-26 — Canonical special links and component replay PASS; LAN results/rematch pending
 
 Accepted fullrun40433277891 @90612bf12372a40d325139bb870bc726768ed173: host20/guest11, component14, authoredlinks73checks/6cases, throws39rows, Training24PASS. FourEmber/Vesper/Yin/Yang originalmanifest finisher→special routes actuallyexecuteonce; targetcontactsobservedbeforequietdefendercontrolreturn. Whiffandshieldgenuinelydenybody-hitcancel. No activeCPU/guaranteedlink claim. ComponentMoveRunner/PerfectGuard/state-machine capture/atomic no-signal restore andisolatedproductionphasereplay verified, NOT actualCharacterBody/contact/BattleScene rollback. Compact CANONICAL_LINKS_COMPONENT_ENGINE.json, raw outputs/lan_components_90612bf1.

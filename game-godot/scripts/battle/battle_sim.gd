@@ -5,6 +5,9 @@ class_name BattleSim
 
 const SIM_FPS := 60.0
 const STEP := 1.0 / SIM_FPS
+signal frame_completed(frame: int)
+var simulation_frame := 0
+var completed_engine_frame := 0
 
 var fighters: Array = []
 var paused := false
@@ -61,3 +64,6 @@ func _tick_sim_frame() -> void:
 		if f.has_method("tick_combat_frame"):
 			f.tick_combat_frame()
 	projectile_interactions.resolve_frame(fighters)
+	simulation_frame += 1
+	completed_engine_frame = Engine.get_physics_frames()
+	frame_completed.emit(simulation_frame)

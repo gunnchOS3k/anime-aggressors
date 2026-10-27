@@ -75,6 +75,11 @@ func host_run() -> void:
 	var cancel=InputEventAction.new();cancel.action="ui_cancel";cancel.pressed=true;Input.parse_input_event(cancel)
 	await process_frame
 	cancel=cancel.duplicate();cancel.pressed=false;Input.parse_input_event(cancel)
+	for i in range(60):
+		if battle._pause_panel != null and battle._paused: break
+		await process_frame
+	check(battle._pause_panel != null and battle._paused,"actual_rematch_pause_UI_opened")
+	if battle._pause_panel == null or not battle._paused:return
 	for button in battle._pause_panel.find_children("*","Button",true,false):
 		if button.text.contains("Return"):
 			button.grab_focus();await accept_focused();break

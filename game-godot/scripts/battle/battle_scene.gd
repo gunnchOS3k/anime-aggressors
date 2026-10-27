@@ -52,6 +52,7 @@ var _story_cosmic_cadence := 0.0
 var _story_objective
 var _story_receipt_failed := false
 var _lan_replica
+var _network_abandoned := false
 
 const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
 const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
@@ -68,7 +69,6 @@ func _ready() -> void:
 		CampaignRuntime.bind_battle_scene(self, _story_attempt_token)
 	_build_stage()
 	_spawn_fighters()
-	LanSession.bind_battle(self)
 	_setup_hud_panels()
 	_apply_device_role()
 	_time_remaining = float(GameState.match_timer_seconds)
@@ -82,6 +82,13 @@ func _ready() -> void:
 	_battle_sim = _BattleSim.new()
 	add_child(_battle_sim)
 	_battle_sim.bind_fighters([fighter1, fighter2])
+	if GameState.mode == "online_private" and not LanSession.bind_battle(self):
+		# A peer can leave between Start and deferred scene creation. A network
+		# match must never fall back to a locally controllable guest or result.
+		for actor in [fighter1, fighter2]: actor.close_combat_for_match_end(false)
+		LanSession.status = "LAN ownership lost before battle binding; reconnect"
+		SceneRouter.call_deferred("go", "online_private")
+		return
 	if not _story_attempt_token.is_empty() and CampaignRuntime.active_encounter.get("objective_contract") == "COSMIC_SURVIVAL":
 		_setup_story_cosmic_encounter(CampaignRuntime.active_encounter)
 	elif not _story_attempt_token.is_empty() and CampaignRuntime.active_encounter.get("objective_contract", "STOCK_WIN") != "STOCK_WIN":
@@ -140,6 +147,7 @@ func _ready() -> void:
 				actor.model_3d.set_cinematic_expression("grief" if _story_objective.kind == "FIRST_LOSS" else "determination")
 			else: actor.model_3d.set_cinematic_expression("")
 	await _run_countdown()
+	if _network_abandoned: return
 	fighter1.controls_enabled = true
 	fighter2.controls_enabled = true
 	if _story_objective != null: _story_objective.activate_controls()
@@ -312,9 +320,11 @@ func _connect_hitboxes(attacker, defender) -> void:
 
 func _run_countdown() -> void:
 	for i in range(3, 0, -1):
+		if _network_abandoned: return
 		if countdown_label:
 			countdown_label.text = str(i)
 		await get_tree().create_timer(1.0).timeout
+	if _network_abandoned: return
 	if countdown_label:
 		countdown_label.text = "FIGHT!"
 	await get_tree().create_timer(0.6).timeout
@@ -322,6 +332,7 @@ func _run_countdown() -> void:
 		countdown_label.visible = false
 
 func _physics_process(delta: float) -> void:
+	if _network_abandoned: return
 	if _lan_replica != null:
 		_lan_replica.step(delta)
 		return
@@ -474,6 +485,12 @@ func _toggle_pause() -> void:
 	TouchInputManager._sync_overlay()
 
 func _unhandled_input(event: InputEvent) -> void:
+	if _network_abandoned:
+		if event.is_action_pressed("ui_cancel"):
+			LanSession.stop()
+			SceneRouter.go("online_private")
+			get_viewport().set_input_as_handled()
+		return
 	if _lan_replica != null:
 		if event.is_action_pressed("ui_cancel"):
 			LanSession.stop()
@@ -644,7 +661,22 @@ func _on_pause_return_menu() -> void:
 	SceneRouter.go("main_menu")
 
 
+func abandon_network_match() -> void:
+	if _match_finished or _network_abandoned: return
+	# Preserve an earned terminal stock condition already resolved by combat.
+	if fighter1.stocks <= 0 or fighter2.stocks <= 0:
+		_finish_match(2 if fighter1.stocks <= 0 else 1)
+		return
+	_network_abandoned = true
+	_active = false
+	if _battle_sim != null: _battle_sim.set_paused(true)
+	for actor in fighters_root.get_children():
+		if actor.has_method("close_combat_for_match_end"): actor.close_combat_for_match_end(false)
+	countdown_label.text = "Connection lost · Match abandoned · Back to LAN lobby"
+	countdown_label.visible = true
+
 func _finish_match(winner: int) -> void:
+	if _network_abandoned: return
 	# Results, receipts and delayed navigation have one owner. A second KO or
 	# queued objective callback cannot replace a result already committed here.
 	if _match_finished: return

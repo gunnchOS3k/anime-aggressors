@@ -54,6 +54,7 @@ func host_run() -> void:
 	check(active_battle(), "real_BattleScene_countdown_and_combat")
 	if not active_battle(): return
 	battle = current_scene
+	check(int(lan.latest.simulation_frame) > 0 and int(lan.latest.completed_engine_frame) <= Engine.get_physics_frames(), "snapshots_follow_completed_real_combat_steps")
 	check(not battle.fighter1.is_cpu and not battle.fighter2.is_cpu, "two_player_no_CPU_substitution")
 	check(battle.fighter2.remote_controls == lan.remote and battle.fighter1.remote_controls == null, "only_guest_slot_bound")
 	for actor in [battle.fighter1, battle.fighter2]:
@@ -88,6 +89,10 @@ func host_run() -> void:
 		if lan.guest_id == 0: break
 	check(lan.guest_id == 0 and lan.remote.axis() == 0.0 and lan.remote.buttons.is_empty(), "disconnect_clears_held_remote_controls")
 	check(not battle._match_finished and gs.last_winner_slot == -1, "disconnect_does_not_invent_match_result")
+	var stopped_damage: Array = [battle.fighter1.damage_percent, battle.fighter2.damage_percent]
+	await frames(30)
+	check(battle._network_abandoned and not battle._active and battle.fighter1.combat_closed and battle.fighter2.combat_closed, "disconnect_abandons_nonterminal_combat_authority")
+	check(stopped_damage == [battle.fighter1.damage_percent, battle.fighter2.damage_percent] and not battle._match_finished, "abandoned_network_match_cannot_gain_late_damage_or_result")
 	var rejected: int = lan.rejected_inputs
 	lan._receive(999, {"kind":"input", "epoch":lan.epoch, "seq":2147483600, "axis":1.0, "buttons":{}})
 	check(lan.rejected_inputs == rejected + 1 and lan.remote.axis() == 0.0, "retired_session_rejects_late_input")

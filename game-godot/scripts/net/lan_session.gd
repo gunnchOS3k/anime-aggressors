@@ -92,7 +92,9 @@ func _peer_joined(id: int) -> void:
 func _peer_left(id: int) -> void:
 	if role == "host" and id == guest_id:
 		guest_id = 0
-		retire_battle("Guest disconnected; held inputs cleared (no result awarded)")
+		var battle = _battle.get_ref() if _battle != null else null
+		if is_instance_valid(battle): battle.abandon_network_match()
+		retire_battle("Guest disconnected; controls retired")
 
 func _send(id: int, data: Dictionary) -> void:
 	if id <= 0 or peer == null or peer.get_connection_status() != MultiplayerPeer.CONNECTION_CONNECTED: return
@@ -133,10 +135,14 @@ func _physics_process(_delta: float) -> void:
 		elif not _closed and (battle._match_finished or battle.fighter2.combat_closed): retire_battle("Match complete; late inputs rejected")
 		elif battle._paused or get_tree().paused: remote.clear()
 		elif Time.get_ticks_msec() - _last_input_ms > INPUT_TIMEOUT_MS: remote.clear()
-		if is_instance_valid(battle):
-			_ticks += 1
-			if battle._active and not _closed: combat_frames += 1
-			if _ticks % 3 == 0: _publish(battle)
+		if is_instance_valid(battle) and bool(latest.get("paused", false)) != bool(battle._paused): _publish(battle)
+
+func _on_authoritative_step(_frame: int) -> void:
+	var battle = _battle.get_ref() if _battle != null else null
+	if not is_instance_valid(battle): return
+	_ticks += 1
+	if battle._active and not _closed: combat_frames += 1
+	if _ticks % 3 == 0: _publish(battle)
 
 func _receive(sender: int, message: Dictionary) -> void:
 	if role == "host" and sender == guest_id and message.get("kind", "") == "rematch":
@@ -214,8 +220,10 @@ func start_match() -> bool:
 	SceneRouter.go("battle")
 	return true
 
-func bind_battle(battle: Node) -> void:
-	if role != "host" or guest_id == 0 or _bound_once or GameState.mode != "online_private": return
+func bind_battle(battle: Node) -> bool:
+	if role != "host" or guest_id == 0 or _bound_once or GameState.mode != "online_private":
+		_starting = false
+		return false
 	_bound_once = true
 	_starting = false
 	local_rematch_ready = false
@@ -230,7 +238,9 @@ func bind_battle(battle: Node) -> void:
 	battle.fighter2._input_edge_held.clear()
 	for actor in [battle.fighter1, battle.fighter2]:
 		actor.hit_resolver.hit_confirmed.connect(_record_contact)
+	battle._battle_sim.frame_completed.connect(_on_authoritative_step)
 	_publish(battle)
+	return true
 
 func retire_battle(reason: String) -> void:
 	_closed = true
@@ -301,7 +311,7 @@ func _publish(battle: Node) -> void:
 					"extent":shot._visual_extent, "integrity":shot.integrity, "initial_integrity":shot.initial_integrity})
 	_snapshot_seq += 1
 	latest = {"kind":"state", "sequence":_snapshot_seq, "epoch":epoch, "frame":Engine.get_physics_frames(),
-		"combat_frame":combat_frames, "active":battle._active, "paused":battle._paused, "closed":_closed, "phase":"result" if battle._match_finished else ("combat" if battle._active else "countdown"),
+		"simulation_frame":battle._battle_sim.simulation_frame, "completed_engine_frame":battle._battle_sim.completed_engine_frame, "combat_frame":combat_frames, "active":battle._active, "paused":battle._paused, "closed":_closed, "phase":"result" if battle._match_finished else ("abandoned" if battle._network_abandoned else "combat" if battle._active else "countdown"),
 		"actors":actors, "winner":GameState.last_winner_slot, "time_remaining":battle._time_remaining,
 		"contacts":_contact_events.duplicate(true), "projectiles":shots,
 		"config":{"stage":GameState.stage_id, "stocks":GameState.stocks, "timer":GameState.match_timer_seconds,
