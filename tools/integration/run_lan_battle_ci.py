@@ -104,7 +104,9 @@ def run():
         record.update({k:first[k] for k in ["seconds", "combined_sampled_peak_rss_bytes"]})
         record["suites"].update(first["suites"])
         if not all(s["PASS"] for s in first["suites"].values()): return record
-        terminal = pair(base, output / "terminal", "tests/integration/LanTerminalMatch.gd")
+        # Preserve actionable retained-resource identity, rather than filtering
+        # shutdown errors when the Results/rematch/menu sequence frees actors.
+        terminal = pair(base + ["--verbose"], output / "terminal", "tests/integration/LanTerminalMatch.gd")
         record["terminal_seconds"] = terminal["seconds"]
         record["terminal_combined_sampled_peak_rss_bytes"] = terminal["combined_sampled_peak_rss_bytes"]
         record["suites"].update({"terminal-"+k:v for k,v in terminal["suites"].items()})

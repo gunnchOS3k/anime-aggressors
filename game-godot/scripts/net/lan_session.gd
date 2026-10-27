@@ -105,14 +105,19 @@ func _send(id: int, data: Dictionary) -> void:
 
 func _physics_process(_delta: float) -> void:
 	if peer == null: return
+	# ENet closes the native instance after a host departure. Polling that
+	# inactive instance every frame logs an engine error, even though the
+	# previous frame already observed DISCONNECTED. Retire it before polling.
+	if role == "guest" and peer.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED:
+		_retire_guest_transport()
+		return
 	remote.begin_frame()
 	peer.poll()
 	if role == "host":
 		pass # Peer membership comes from actual ENet connect/disconnect signals.
 	else:
 		if peer.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED or (latest.is_empty() and Time.get_ticks_msec() > _guest_deadline):
-			status = "Host unavailable; reconnect from lobby"
-			remote.clear()
+			_retire_guest_transport()
 			return
 	var count := 0
 	while peer.get_available_packet_count() > 0 and count < 120:
@@ -136,6 +141,13 @@ func _physics_process(_delta: float) -> void:
 		elif battle._paused or get_tree().paused: remote.clear()
 		elif Time.get_ticks_msec() - _last_input_ms > INPUT_TIMEOUT_MS: remote.clear()
 		if is_instance_valid(battle) and bool(latest.get("paused", false)) != bool(battle._paused): _publish(battle)
+
+func _retire_guest_transport() -> void:
+	if peer != null and peer.get_connection_status() != MultiplayerPeer.CONNECTION_DISCONNECTED: peer.close()
+	peer = null
+	_closed = true
+	remote.clear()
+	status = "Host unavailable; reconnect from lobby"
 
 func _on_authoritative_step(_frame: int) -> void:
 	var battle = _battle.get_ref() if _battle != null else null

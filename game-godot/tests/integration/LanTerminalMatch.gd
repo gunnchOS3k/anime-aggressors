@@ -124,6 +124,7 @@ func guest_run() -> void:
 	keys([])
 	check(float(lan.latest.actors[0].damage)>0,"guest_sees_real_rematch_contact")
 	await frames(60)
+	check(lan.peer == null and lan._closed,"host_menu_return_retires_inactive_guest_transport")
 	check(int(root.get_node("GameState").career_matches)==career_before,"guest_never_records_host_career_result")
 
 func finish() -> void:
