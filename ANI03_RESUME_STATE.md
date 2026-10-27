@@ -1,3 +1,15 @@
+# 2026-10-27 — Live network physics commit implementation; exact-source engine pending
+
+Saved source changes move online authoritative publication from BattleSim.frame_completed (synchronous move/projectile work, before deferred polls and PhysicsServer.step/query flush) to the next SceneTree.physics_frame boundary. This per-physics signal follows the preceding step's query flush and precedes next actor/input Node callbacks, including render catch-up. BattleScene commits online timer/blast/stocks/results there; terminal publication waits for committed winner/actor state. The 48-step KO lock and 72-step actor respawn contracts remain unchanged. Offline/Training frame stepping retains its existing synchronous path.
+
+LanSession captures every committed frame in a bounded 120-frame, encoded, epoch-owned presentation history and transmits at the existing cadence. Returned history is detached from live state. Packets explicitly say rollback_restorable=false: no whole CharacterBody historical restore, input prediction/resimulation or replay-side-effect acceptance is claimed. Actor floor/slide cache, retained projectile lifecycle, stable event identities, input buffers and deterministic feedback remain required before actual rollback.
+
+The affected existing two-process input test now observes opening/deferred/commit engine frames, actual committed damage, detached/wrong-epoch history and temporary 20fps rendering while physics remains60Hz. No fighter damage, stock, position, move, hitstun or outcome is injected. Existing contact/throw/guard/disconnect and terminal/pause/Party/Training suites remain required because the network lifecycle dependency changed. Exact engine result PENDING; use existing authored-animation-production.yml with only lan_battle_runtime=true, default scope all. No new workflow/infrastructure/artifact publication. Prior accepted receipts remain intact.
+
+Source SHA is git rev-parse HEAD; normal branch remains integration/v1-preserved-candidate-20261025. Only outputs/ was untracked on recovery. No local heavy workload, resource retry, private-art access, save write, cleanup, spend, merge or release. Preserve all worktrees, original assets and accepted/failed evidence. HUMAN_ART_APPROVED=false; RUNTIME_PAIRED_CONTACT_VERIFIED=false; RC2_READY=false; V1_0_0_RELEASE_AUTHORIZED=false.
+
+---
+
 # 2026-10-27 — Saved multiplayer, canonical-link and pause delivery
 
 The integration branch remains `integration/v1-preserved-candidate-20261025`, descended from the owner's b436990e checkpoint. No reset, reconciliation, protected-branch modification or private-art access was performed. PR #123 and #133 remain separate open drafts. Current saved SHA is `git rev-parse HEAD`; only retained local `outputs/` evidence is untracked.

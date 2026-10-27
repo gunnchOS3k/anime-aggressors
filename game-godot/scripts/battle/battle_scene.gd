@@ -89,6 +89,7 @@ func _ready() -> void:
 	_battle_sim = _BattleSim.new()
 	add_child(_battle_sim)
 	_battle_sim.bind_fighters([fighter1, fighter2])
+	_battle_sim.frame_committing.connect(_commit_network_frame)
 	if GameState.mode == "online_private" and not LanSession.bind_battle(self):
 		# A peer can leave between Start and deferred scene creation. A network
 		# match must never fall back to a locally controllable guest or result.
@@ -347,7 +348,7 @@ func _physics_process(delta: float) -> void:
 	# Online ownership therefore uses a named48-step deadline, not a wall
 	# timer that could expire during pause or survive historical restoration.
 	# Continue its presentation after terminal commit, as the old timer did.
-	if fighter1 != null and fighter1.use_network_physics_clock and not _paused:
+	if fighter1 != null and fighter1.use_network_physics_clock and not _paused and (not _battle_sim.network_commit_enabled or (_match_finished and _battle_sim.committed_at_engine_frame != Engine.get_physics_frames())):
 		_network_round_clock += 1
 		if _network_ko_deadline >= 0 and _network_round_clock >= _network_ko_deadline:
 			_network_ko_deadline = -1
@@ -371,20 +372,42 @@ func _physics_process(delta: float) -> void:
 		if not _active: return
 	if _hazard_runtime:
 		_hazard_runtime.tick(delta)
-	if _time_enabled:
+	if _time_enabled and not _battle_sim.network_commit_enabled:
 		_time_remaining = maxf(0.0, _time_remaining - delta)
 		_update_timer_label()
 		if _time_remaining <= 0.0:
 			_end_match_on_time()
 			return
 	_update_hud()
-	_check_blast(fighter1)
-	_check_blast(fighter2)
-	_check_match_end()
+	if not _battle_sim.network_commit_enabled:
+		_check_blast(fighter1)
+		_check_blast(fighter2)
+		_check_match_end()
 	_flight_accum += delta
 	if _flight_accum >= 0.2:
 		_flight_accum = 0.0
 		_emit_flight_snapshot()
+
+func _commit_network_frame(_frame: int, active_at_step: bool) -> void:
+	# Only completed live network steps reach this handler. Stock/result
+	# authority runs after all movement, synchronous and deferred contacts,
+	# projectile work and the PhysicsServer's resulting overlap notifications.
+	if _network_abandoned or _match_finished: return
+	_network_round_clock += 1
+	if _network_ko_deadline >= 0 and _network_round_clock >= _network_ko_deadline:
+		_network_ko_deadline = -1
+		_release_ko_lock()
+	if not active_at_step or not _active: return
+	if _time_enabled:
+		_time_remaining = maxf(0.0, _time_remaining - _BattleSim.STEP)
+		_update_timer_label()
+		if _time_remaining <= 0.0:
+			_end_match_on_time()
+			return
+	_check_blast(fighter1)
+	_check_blast(fighter2)
+	_check_match_end()
+	_update_hud()
 
 
 func _emit_flight_snapshot() -> void:

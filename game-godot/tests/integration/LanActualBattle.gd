@@ -17,6 +17,10 @@ var batch_observation: Dictionary = {}
 var lobby_observations: Array = []
 var replica_rows: Array = []
 var replica_contacts := 0
+var opened_frames: Dictionary = {}
+var deferred_frames: Dictionary = {}
+var committed_rows: Array = []
+var commit_errors: Array = []
 var guest_career := 0
 
 func run() -> void:
@@ -59,6 +63,8 @@ func host_run() -> void:
 	check(active_battle(), "real_BattleScene_countdown_and_combat")
 	if not active_battle(): return
 	battle = current_scene
+	battle._battle_sim.frame_completed.connect(observed_open_frame)
+	battle._battle_sim.frame_committed.connect(observed_committed_frame)
 	check(int(lan.latest.simulation_frame) > 0 and int(lan.latest.completed_engine_frame) <= Engine.get_physics_frames(), "snapshots_follow_completed_real_combat_steps")
 	check(not battle.fighter1.is_cpu and not battle.fighter2.is_cpu, "two_player_no_CPU_substitution")
 	check(battle.fighter2.remote_controls == lan.remote and battle.fighter1.remote_controls == null, "only_guest_slot_bound")
@@ -79,6 +85,13 @@ func host_run() -> void:
 		if f >= 680: break
 		await physics_frame
 	keys([])
+	check(not committed_rows.is_empty() and commit_errors.is_empty(), "actual_snapshot_commit_follows_deferred_work_and_PhysicsServer_flush")
+	check(committed_rows.any(func(row):return row.slow_render), "physics_commit_remains_per_tick_during_render_catchup")
+	var latest_frame: int = int(lan.latest.get("committed_frame", -1))
+	var private_copy: Dictionary = lan.committed_state(latest_frame, lan.epoch)
+	if not private_copy.is_empty(): private_copy.actors[0].damage = 999999
+	var unchanged: Dictionary = lan.committed_state(latest_frame, lan.epoch)
+	check(not unchanged.is_empty() and float(unchanged.actors[0].damage) != 999999 and not unchanged.rollback_restorable and lan.committed_state(latest_frame, lan.epoch-1).is_empty(), "encoded_committed_history_is_detached_epoch_bound_and_not_falsely_restorable")
 	check(whiff_damage == 0.0, "remote_whiff_did_not_apply_damage")
 	check(move_starts.any(func(row): return row.slot == 2 and int(row.frame) < 90), "socket_batched_public_press_release_survives_one_physics_frame")
 	check(move_starts.any(func(row): return row.slot == 2), "remote_public_input_started_real_move")
@@ -105,6 +118,27 @@ func host_run() -> void:
 	root.get_node("SceneRouter").go("main_menu")
 	await frames(5)
 	check(lan._battle == null and lan._closed, "scene_exit_retires_bound_battle")
+	Engine.max_fps = 60
+
+func observed_open_frame(frame: int) -> void:
+	opened_frames[frame] = Engine.get_physics_frames()
+	call_deferred("observed_deferred_frame", frame)
+
+func observed_deferred_frame(frame: int) -> void:
+	deferred_frames[frame] = Engine.get_physics_frames()
+
+func observed_committed_frame(frame: int) -> void:
+	# Connection may follow the opening of the first pending frame. Only
+	# frames observed at both boundaries can prove deferred-work ordering.
+	if not opened_frames.has(frame): return
+	var sim = battle._battle_sim
+	var record: Dictionary = lan.committed_state(frame, lan.epoch)
+	if not deferred_frames.has(frame) or int(deferred_frames[frame]) >= Engine.get_physics_frames(): commit_errors.append({"frame":frame, "reason":"deferred_work_not_closed"})
+	if record.is_empty() or str(record.get("snapshot_boundary", "")) != "physics_commit" or int(record.get("source_engine_frame", -1)) >= int(record.get("commit_engine_frame", -1)): commit_errors.append({"frame":frame, "reason":"missing_closed_snapshot"})
+	if not record.is_empty() and [record.actors[0].damage,record.actors[1].damage] != [battle.fighter1.damage_percent,battle.fighter2.damage_percent]: commit_errors.append({"frame":frame, "reason":"committed_damage_mismatch"})
+	committed_rows.append({"frame":frame, "source_engine_frame":sim.committed_engine_frame, "commit_engine_frame":sim.committed_at_engine_frame, "slow_render":Engine.max_fps==20})
+	if int(lan.combat_frames) == 300: Engine.max_fps = 20
+	if int(lan.combat_frames) == 360: Engine.max_fps = 60
 
 func guest_run() -> void:
 	root.get_node("GameState").p1_fighter_id = "juno-spark"
@@ -196,8 +230,9 @@ func guest_run() -> void:
 
 func finish() -> void:
 	keys([])
+	Engine.max_fps = 60
 	var result = {"PASS":failures.is_empty(), "role":side, "pid":OS.get_process_id(), "checks":checks, "failures":failures,
-		"replica_rows":replica_rows, "replica_contacts":replica_contacts, "contacts":contacts, "move_starts":move_starts, "guards":guard_events, "grabs":grab_events, "guest_samples":guest_samples, "batch_observation":batch_observation, "received_host_lobby_observations":lobby_observations,
+		"physics_commit_rows":committed_rows, "physics_commit_errors":commit_errors, "replica_rows":replica_rows, "replica_contacts":replica_contacts, "contacts":contacts, "move_starts":move_starts, "guards":guard_events, "grabs":grab_events, "guest_samples":guest_samples, "batch_observation":batch_observation, "received_host_lobby_observations":lobby_observations,
 		"received_inputs":lan.received_inputs if lan != null else 0, "rejected_inputs":lan.rejected_inputs if lan != null else 0,
 		"scope":"Two actual localhost ENet Godot processes, guest public input into authoritative host BattleScene; host-state guest BattleScene presentation, not physical LAN, rollback, original art or human acceptance",
 		"HUMAN_ART_APPROVED":false,"RC2_READY":false,"V1_0_0_RELEASE_AUTHORIZED":false}

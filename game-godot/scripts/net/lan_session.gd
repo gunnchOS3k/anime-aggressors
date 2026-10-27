@@ -39,6 +39,9 @@ var _lobby_id := ""
 var _local_pick: Dictionary = {}
 var _pick_revision := 0
 var _remote_pick_revision := -1
+var _publish_pending := false
+var _committed_states: Dictionary = {}
+const COMMITTED_HISTORY_LIMIT := 120
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -95,6 +98,8 @@ func stop() -> void:
 	_pick_revision = 0
 	_remote_pick_revision = -1
 	last_sequence = -1
+	_publish_pending = false
+	_committed_states.clear()
 	_last_snapshot = -1
 	status = "Offline"
 
@@ -174,8 +179,13 @@ func _on_authoritative_step(_frame: int) -> void:
 	var battle = _battle.get_ref() if _battle != null else null
 	if not is_instance_valid(battle): return
 	_ticks += 1
-	if battle._active and not _closed: combat_frames += 1
-	if _ticks % 3 == 0: _publish(battle)
+	if battle._battle_sim.committed_active: combat_frames += 1
+	# Capture every closed frame, transmit at the existing three-tick cadence.
+	# A terminal publication requested during gameplay commit waits until the
+	# winner, stocks and actors are all committed together.
+	var send_now: bool = _ticks % 3 == 0 or _publish_pending or battle._match_finished
+	_publish_pending = false
+	_publish(battle, send_now, true)
 
 func _receive(sender: int, message: Dictionary) -> void:
 	if role == "host" and message.get("kind", "") == "selection":
@@ -309,6 +319,8 @@ func bind_battle(battle: Node) -> bool:
 	remote_rematch_ready = false
 	_battle = weakref(battle)
 	epoch += 1
+	_committed_states.clear()
+	_publish_pending = false
 	_closed = false
 	last_sequence = -1
 	_last_input_ms = Time.get_ticks_msec()
@@ -318,7 +330,8 @@ func bind_battle(battle: Node) -> bool:
 	for actor in [battle.fighter1, battle.fighter2]:
 		actor.use_network_physics_clock = true
 		actor.hit_resolver.hit_confirmed.connect(_record_contact)
-	battle._battle_sim.frame_completed.connect(_on_authoritative_step)
+	battle._battle_sim.enable_network_commit(battle, epoch)
+	battle._battle_sim.frame_committed.connect(_on_authoritative_step)
 	_publish(battle)
 	return true
 
@@ -366,7 +379,17 @@ func _open_guest_battle() -> void:
 	guest_battle_open = true
 	SceneRouter.go("battle")
 
-func _publish(battle: Node) -> void:
+func committed_state(frame: int, match_epoch: int) -> Dictionary:
+	if match_epoch != epoch or not _committed_states.has(frame): return {}
+	# Encoded storage cannot share mutable actor/move/array dictionaries with
+	# a renderer, packet consumer or later frame. This is PRESENTATION state,
+	# deliberately not advertised as complete/restorable CharacterBody state.
+	return bytes_to_var(_committed_states[frame].duplicate())
+
+func _publish(battle: Node, send_packet: bool = true, at_commit: bool = false) -> void:
+	if battle._battle_sim.network_commit_enabled and battle._battle_sim.commit_in_progress:
+		_publish_pending = true
+		return
 	var actors: Array = []
 	for actor in [battle.fighter1, battle.fighter2]:
 		var shown_move: Dictionary = {}
@@ -391,9 +414,15 @@ func _publish(battle: Node) -> void:
 					"extent":shot._visual_extent, "integrity":shot.integrity, "initial_integrity":shot.initial_integrity})
 	_snapshot_seq += 1
 	latest = {"kind":"state", "sequence":_snapshot_seq, "epoch":epoch, "frame":Engine.get_physics_frames(),
+		"snapshot_boundary":"physics_commit" if at_commit else "lifecycle", "rollback_restorable":false,
+		"committed_frame":battle._battle_sim.committed_frame, "source_engine_frame":battle._battle_sim.committed_engine_frame,
+		"commit_engine_frame":battle._battle_sim.committed_at_engine_frame,
 		"simulation_frame":battle._battle_sim.simulation_frame, "completed_engine_frame":battle._battle_sim.completed_engine_frame, "combat_frame":combat_frames, "active":battle._active, "paused":battle._paused, "closed":_closed, "phase":"result" if battle._match_finished else ("abandoned" if battle._network_abandoned else "combat" if battle._active else "countdown"),
 		"actors":actors, "winner":GameState.last_winner_slot, "time_remaining":battle._time_remaining,
 		"contacts":_contact_events.duplicate(true), "projectiles":shots,
 		"config":{"stage":GameState.stage_id, "stocks":GameState.stocks, "timer":GameState.match_timer_seconds,
 			"match_type":GameState.match_type,"ruleset":GameState.ruleset_id,"seed":GameState.match_seed}}
-	_send(guest_id, latest)
+	if at_commit:
+		_committed_states[battle._battle_sim.committed_frame] = var_to_bytes(latest)
+		while _committed_states.size() > COMMITTED_HISTORY_LIMIT: _committed_states.erase(_committed_states.keys()[0])
+	if send_packet: _send(guest_id, latest)
