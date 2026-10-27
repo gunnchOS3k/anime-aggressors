@@ -14,28 +14,12 @@ import time
 from run_training_story_ci import ROOT, execute, guard, sha
 
 
-def run():
-    guard()
-    output = Path(os.environ["RUNNER_TEMP"]) / "lan-battle"
+def pair(base, output, script):
     output.mkdir(exist_ok=False)
-    record = {"PASS": False, "scope": "Actual two-process localhost ENet guest input into host BattleScene; not physical LAN, guest-rendered combat, rollback, art or human approval", "suites": {}}
+    record = {"suites": {}}
     processes = []
     streams = []
     try:
-        record["available_start_bytes"] = guard()
-        head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
-        if head != os.environ["GITHUB_SHA"]: raise RuntimeError("Exact source SHA mismatch")
-        record["source_head"] = head
-        record["source_sha256"] = {str(p.relative_to(ROOT)): sha(p) for p in (ROOT / "game-godot/scripts").rglob("*.gd")}
-        godot = os.environ["GODOT_BIN"]
-        record["godot_version"] = subprocess.check_output([godot, "--version"], text=True).strip()
-        if not record["godot_version"].startswith("4.7.1.stable"): raise RuntimeError("Unexpected engine")
-        project = ROOT / "game-godot/project.godot"
-        config = re.sub(r'^config/(?:name|use_custom_user_dir|custom_user_dir_name)=.*\n', '', project.read_text(), flags=re.M)
-        project.write_text(config.replace('[application]', '[application]\nconfig/name="aa-native-ci-lan"\nconfig/use_custom_user_dir=true\nconfig/custom_user_dir_name="aa-native-ci-lan"', 1))
-        base = [godot, "--headless", "--path", str(ROOT / "game-godot"), "--audio-driver", "Dummy", "--rendering-method", "gl_compatibility"]
-        record["import"] = execute(base + ["--editor", "--import", "--quit"], output / "import.log", 180)
-        if not record["import"]["PASS"]: return record
         # Reserve an unused loopback UDP port. No listening interface exposed
         # outside this runner; ENet host binds explicitly to127.0.0.1.
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as candidate:
@@ -55,7 +39,7 @@ def run():
             stream = (output / (role + ".log")).open("x")
             streams.append(stream)
             environment = {**os.environ, "XDG_DATA_HOME": str(output / (role + "-profile"))}
-            command = base + ["--max-fps", "60", "--script", "res://tests/integration/LanActualBattle.gd", "--",
+            command = base + ["--max-fps", "60", "--script", "res://" + script, "--",
                               "--ordinary-output=" + str(output), "--lan-role=" + role, "--lan-port=" + str(port)]
             processes.append(subprocess.Popen(command, cwd=ROOT, env=environment, stdout=stream, stderr=subprocess.STDOUT))
         while any(child.poll() is None for child in processes):
@@ -83,7 +67,48 @@ def run():
             record["suites"][role] = {"PASS": child.returncode == 0 and data.get("PASS", False) and not runtime_errors, "exit_code": child.returncode,
                 "runtime_errors": runtime_errors, "checks": len(data.get("checks", [])), "failures": data.get("failures", ["Missing result"]), "result": data,
                 "result_sha256": sha(path) if path.exists() else None, "log_sha256": sha(output / (role + ".log"))}
-        if not all(s["PASS"] for s in record["suites"].values()): return record
+        return record
+    finally:
+        for child in processes:
+            if child.poll() is None:
+                child.terminate()
+                try: child.wait(5)
+                except subprocess.TimeoutExpired: child.kill(); child.wait()
+        for stream in streams: stream.close()
+
+
+
+def run():
+    guard()
+    output = Path(os.environ["RUNNER_TEMP"]) / "lan-battle"
+    output.mkdir(exist_ok=False)
+    record = {"PASS": False, "scope": "Actual two-process localhost ENet guest input into host BattleScene; host-state guest BattleScene presentation; not physical LAN, native visual, rollback, art or human approval", "suites": {}}
+    processes = []
+    streams = []
+    try:
+        record["available_start_bytes"] = guard()
+        head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+        if head != os.environ["GITHUB_SHA"]: raise RuntimeError("Exact source SHA mismatch")
+        record["source_head"] = head
+        record["source_sha256"] = {str(p.relative_to(ROOT)): sha(p) for p in (ROOT / "game-godot/scripts").rglob("*.gd")}
+        godot = os.environ["GODOT_BIN"]
+        record["godot_version"] = subprocess.check_output([godot, "--version"], text=True).strip()
+        if not record["godot_version"].startswith("4.7.1.stable"): raise RuntimeError("Unexpected engine")
+        project = ROOT / "game-godot/project.godot"
+        config = re.sub(r'^config/(?:name|use_custom_user_dir|custom_user_dir_name)=.*\n', '', project.read_text(), flags=re.M)
+        project.write_text(config.replace('[application]', '[application]\nconfig/name="aa-native-ci-lan"\nconfig/use_custom_user_dir=true\nconfig/custom_user_dir_name="aa-native-ci-lan"', 1))
+        base = [godot, "--headless", "--path", str(ROOT / "game-godot"), "--audio-driver", "Dummy", "--rendering-method", "gl_compatibility"]
+        record["import"] = execute(base + ["--editor", "--import", "--quit"], output / "import.log", 180)
+        if not record["import"]["PASS"]: return record
+        first = pair(base, output / "input", "tests/integration/LanActualBattle.gd")
+        record.update({k:first[k] for k in ["seconds", "combined_sampled_peak_rss_bytes"]})
+        record["suites"].update(first["suites"])
+        if not all(s["PASS"] for s in first["suites"].values()): return record
+        terminal = pair(base, output / "terminal", "tests/integration/LanTerminalMatch.gd")
+        record["terminal_seconds"] = terminal["seconds"]
+        record["terminal_combined_sampled_peak_rss_bytes"] = terminal["combined_sampled_peak_rss_bytes"]
+        record["suites"].update({"terminal-"+k:v for k,v in terminal["suites"].items()})
+        if not all(s["PASS"] for s in terminal["suites"].values()): return record
         # Changed shared input readers and scene lifecycle warrant these two
         # existing affected regressions, not another full Story playthrough.
         for name, script, filename in [
@@ -99,7 +124,7 @@ def run():
                             "checks": len(data.get("checks", [])), "rows": len(data.get("rows", [])), "result": data})
             record["suites"][name] = outcome
         record["PASS"] = all(s["PASS"] for s in record["suites"].values())
-        record["remaining_diagnostics"] = {p.name:[line for line in p.read_text(errors="replace").splitlines() if "ERROR:" in line or "WARNING:" in line] for p in output.glob("*.log")}
+        record["remaining_diagnostics"] = {str(p.relative_to(output)):[line for line in p.read_text(errors="replace").splitlines() if "ERROR:" in line or "WARNING:" in line] for p in output.rglob("*.log")}
     except Exception as error:
         record["error"] = str(error)
     finally:
@@ -109,8 +134,8 @@ def run():
                 try: child.wait(5)
                 except subprocess.TimeoutExpired: child.kill(); child.wait()
         for stream in streams: stream.close()
-        for path in output.glob("*.log"):
-            print("DIAGNOSTIC", path.name, path.read_text(errors="replace")[-14000:])
+        for path in output.rglob("*.log"):
+            print("DIAGNOSTIC", str(path.relative_to(output)), path.read_text(errors="replace")[-14000:])
         (output / "LAN_ENGINE_RESULT.json").write_text(json.dumps(record, indent=2) + "\n")
         print(json.dumps(record, indent=2))
     return record

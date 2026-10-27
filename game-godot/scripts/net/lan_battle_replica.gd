@@ -82,6 +82,9 @@ func step(delta: float) -> void:
 			var defender = actors[int(event.defender_slot)-1]
 			defender.combat_feedback.present_replica_contact(event, defender)
 		_update_shots(latest.get("projectiles", []))
+	if LanSession.peer == null or LanSession.peer.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED:
+		battle.countdown_label.visible = true
+		battle.countdown_label.text = "LAN disconnected · Back to lobby"
 	if _remaining > 0:
 		for i in range(2): actors[i].position = actors[i].position.lerp(_targets[i], 1.0 / float(_remaining))
 		_remaining -= 1

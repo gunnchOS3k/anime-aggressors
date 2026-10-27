@@ -1,0 +1,130 @@
+{
+  "source_head": "90612bf12372a40d325139bb870bc726768ed173",
+  "run": "https://github.com/gunnchOS3k/anime-aggressors/actions/runs/40433277891",
+  "PASS": true,
+  "godot_version": "4.7.1.stable.official.a13da4feb",
+  "scope": "Real headless host/guest BattleScene plus actual authored public-input cancel routes and real component capture/restore/replay; not physicalLAN/nativevisual/fullrollback/artapproval",
+  "suites": {
+    "host": {
+      "PASS": true,
+      "checks": 20,
+      "rows": null,
+      "failures": [],
+      "runtime_errors": [],
+      "seconds": null,
+      "sampled_peak_rss_bytes": null
+    },
+    "guest": {
+      "PASS": true,
+      "checks": 11,
+      "rows": null,
+      "failures": [],
+      "runtime_errors": [],
+      "seconds": null,
+      "sampled_peak_rss_bytes": null
+    },
+    "combat-components": {
+      "PASS": true,
+      "checks": 14,
+      "rows": 0,
+      "failures": [],
+      "runtime_errors": null,
+      "seconds": 2.508004752000005,
+      "sampled_peak_rss_bytes": 274391040
+    },
+    "authored-special-links": {
+      "PASS": true,
+      "checks": 73,
+      "rows": 6,
+      "failures": [],
+      "runtime_errors": null,
+      "seconds": 11.83449637599999,
+      "sampled_peak_rss_bytes": 304943104
+    },
+    "throw-ownership": {
+      "PASS": true,
+      "checks": 0,
+      "rows": 39,
+      "failures": [],
+      "runtime_errors": null,
+      "seconds": 46.44946609300001,
+      "sampled_peak_rss_bytes": 322023424
+    },
+    "training-lifecycle": {
+      "PASS": true,
+      "checks": 24,
+      "rows": 0,
+      "failures": [],
+      "runtime_errors": null,
+      "seconds": 5.418552024000007,
+      "sampled_peak_rss_bytes": 307503104
+    }
+  },
+  "links": [
+    {
+      "fighter": "ember-vale",
+      "body": "female",
+      "case": "contact",
+      "target": "side_special",
+      "attempt_move_frame": 8,
+      "eligible": true,
+      "target_started": true,
+      "combo_status": "Observed contact before defender control returned, quiet defender only; active-opponent acceptance pending"
+    },
+    {
+      "fighter": "vesper-nyx",
+      "body": "male",
+      "case": "contact",
+      "target": "down_special",
+      "attempt_move_frame": 7,
+      "eligible": true,
+      "target_started": true,
+      "combo_status": "Observed contact before defender control returned, quiet defender only; active-opponent acceptance pending"
+    },
+    {
+      "fighter": "yin",
+      "body": "male",
+      "case": "contact",
+      "target": "side_special",
+      "attempt_move_frame": 8,
+      "eligible": true,
+      "target_started": true,
+      "combo_status": "Observed contact before defender control returned, quiet defender only; active-opponent acceptance pending"
+    },
+    {
+      "fighter": "yang",
+      "body": "female",
+      "case": "contact",
+      "target": "side_special",
+      "attempt_move_frame": 9,
+      "eligible": true,
+      "target_started": true,
+      "combo_status": "Observed contact before defender control returned, quiet defender only; active-opponent acceptance pending"
+    },
+    {
+      "fighter": "ember-vale",
+      "body": "female",
+      "case": "whiff",
+      "target": "side_special",
+      "attempt_move_frame": 8,
+      "eligible": false,
+      "target_started": false,
+      "combo_status": "No subsequent target contact observed"
+    },
+    {
+      "fighter": "ember-vale",
+      "body": "female",
+      "case": "shield",
+      "target": "side_special",
+      "attempt_move_frame": 8,
+      "eligible": false,
+      "target_started": false,
+      "combo_status": "No subsequent target contact observed"
+    }
+  ],
+  "raw_evidence": "outputs/lan_components_90612bf1/",
+  "HUMAN_ART_APPROVED": false,
+  "RUNTIME_PAIRED_CONTACT_VERIFIED": false,
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false
+}

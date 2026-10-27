@@ -24,6 +24,10 @@ func _ready() -> void:
 	super._ready()
 	Vxp2BrandScript.apply_surface_chrome(self, {"title_size": Vxp2BrandScript.TYPE_HERO})
 	_ready_display()
+	if not LanSession.role.is_empty():
+		rematch_btn.text = "Ready for LAN rematch"
+		change_fighters_btn.visible = false
+		change_stage_btn.visible = false
 	Vxp2GlyphScript.attach(self, ["confirm", "back"])
 	Vxp2A11yScript.apply(self)
 
@@ -191,9 +195,10 @@ func _play_results_celebration() -> void:
 
 
 func _on_rematch_pressed() -> void:
-	if LanSession.role == "host":
-		LanSession.stop()
-		SceneRouter.go("online_private")
+	if not LanSession.role.is_empty():
+		if LanSession.request_rematch():
+			rematch_btn.text = "Waiting for both players…"
+			rematch_btn.disabled = true
 		return
 	if GameState.mode == "story":
 		if GameState.last_winner_slot != 1:
@@ -240,6 +245,7 @@ func _on_change_stage_pressed() -> void:
 
 
 func _on_home_pressed() -> void:
+	if not LanSession.role.is_empty(): LanSession.stop()
 	if GameState.mode == "story":
 		CampaignRuntime.abandon_encounter()
 		StoryDialogue.cancel()

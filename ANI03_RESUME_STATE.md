@@ -1,3 +1,15 @@
+# 2026-10-26 — Canonical special links and component replay PASS; LAN results/rematch pending
+
+Accepted fullrun40433277891 @90612bf12372a40d325139bb870bc726768ed173: host20/guest11, component14, authoredlinks73checks/6cases, throws39rows, Training24PASS. FourEmber/Vesper/Yin/Yang originalmanifest finisher→special routes actuallyexecuteonce; targetcontactsobservedbeforequietdefendercontrolreturn. Whiffandshieldgenuinelydenybody-hitcancel. No activeCPU/guaranteedlink claim. ComponentMoveRunner/PerfectGuard/state-machine capture/atomic no-signal restore andisolatedproductionphasereplay verified, NOT actualCharacterBody/contact/BattleScene rollback. Compact CANONICAL_LINKS_COMPONENT_ENGINE.json, raw outputs/lan_components_90612bf1.
+
+Derived requested MOVE_COMBO_RUNTIME_COVERAGE.json: 9fighters/18bodies/216BASErecords/432bodyconfigurations,46preservedTSauthoredsequences. Per-move statuses distinguishsourceentry/feedbackmetadata/currentenginecontact/body/privateoriginalanimation/nativevisual/multiplayerrollback/approval. Not216finishedanimatedmoves; TSroutes arenotnativecancelgrants. Generator readsPUBLICsourceonly; all historicalevidencepreserved andprivateartuntouched.
+
+NEW runtimeimplementations pendingproof: guestactualResultsScenefollowscommittedhostresult withoutcareer/Story award; realboth-consentrematch packets boundtoENetpeer+epoch, freshBattleScenegeneration andzeroedordinaryprematch state; lateold-epoch readinesscannotauto-consentnextmatch; hostpauseReturnclosestransport; disconnectedguestshowsbanner. Newtwo-process LanTerminalMatch usesDECLAREDordinarywalkoff (NOTattackearnedKO), actualResult/UIrematchbuttons, latecontrolrejection andgenuinepublicmeleeafterrematch. No injectedstock/damage/winner. Runnernowexecutesinputpairthenindependentterminalpairserially withsameguard/strictERRORpolicy andseparateisolatedprofiles, followedbysameaffectedcomponents/links/throws/Training.
+
+NEXT normalcommit/pushthenexistingworkflowONLYlan_battle_runtime=true; sourceSHA=gitrev-parseHEAD. Actualnewterminal/UIproofPENDING. All private-art/nativeMac/audio/device/physicalLAN/secureinvites/reconnect/fullphysicsrollback/remainingoriginalacting7campaigns/OVA/platform gatesopen. No newstoragequalification/deletion/ownerprofilewrites/localengine/paid/newinfra/artupload. Allhumanart/pairedruntime/RC2/releaseFALSE. Protectedworktrees/PRs preserved.
+
+---
+
 # 2026-10-26 — Contact links and real follow-ups observed; whiff control-return corrected
 
 Run40432892058 @63416f1c retains4actualauthoredspeciallinks andtargetfollow-upcontacts beforeobservedquietdefendercontrolreturn (notactiveCPU/guarantee). Host/guest20/11,throws39rows,Training24PASS. Onlywhifffirstpressstillfailed: realgroundingdoesnotendLANDrecovery. Recordedwhiffmovestarts showfirstmissedpress, thenjab1/jab2shiftedonepress. Newdriverwaitsrealstate_machine.can_attack +ground/hitstopbeforeeachrequestedjab, assertseligibility; no state/inputbuffer/frame/balance change. Negative outputs/lan_links_63416f1c preserved.

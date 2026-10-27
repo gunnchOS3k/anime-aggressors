@@ -634,6 +634,7 @@ func _on_pause_rematch() -> void:
 
 func _on_pause_return_menu() -> void:
 	if _match_finished: return
+	if LanSession.role == "host": LanSession.stop()
 	StoryDialogue.cancel()
 	_clear_pause_for_nav()
 	if GameState.mode == "story":

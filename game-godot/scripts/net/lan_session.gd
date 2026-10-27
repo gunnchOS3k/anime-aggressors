@@ -30,6 +30,9 @@ var _guest_deadline := 0
 var guest_battle_open := false
 var _contact_events: Array = []
 var _starting := false
+var local_rematch_ready := false
+var remote_rematch_ready := false
+var _guest_result_epoch := -1
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -73,6 +76,9 @@ func stop() -> void:
 	_contact_events.clear()
 	guest_battle_open = false
 	_starting = false
+	local_rematch_ready = false
+	remote_rematch_ready = false
+	_guest_result_epoch = -1
 	last_sequence = -1
 	_last_snapshot = -1
 	status = "Offline"
@@ -120,6 +126,7 @@ func _physics_process(_delta: float) -> void:
 			_send(1, Controls.local_packet(epoch, _sequence))
 			_sequence += 1
 		return
+	_try_rematch()
 	if _battle != null:
 		var battle = _battle.get_ref()
 		if not is_instance_valid(battle): retire_battle("Battle scene ended")
@@ -132,6 +139,12 @@ func _physics_process(_delta: float) -> void:
 			if _ticks % 3 == 0: _publish(battle)
 
 func _receive(sender: int, message: Dictionary) -> void:
+	if role == "host" and sender == guest_id and message.get("kind", "") == "rematch":
+		if message.size() == 3 and message.has_all(["kind", "epoch", "ready"]) and typeof(message.epoch) == TYPE_INT and message.epoch == epoch and typeof(message.ready) == TYPE_BOOL and message.ready and _bound_once and _closed and latest.get("phase", "") == "result":
+			remote_rematch_ready = true
+			_try_rematch()
+		else: rejected_inputs += 1
+		return
 	if role == "host":
 		if sender != guest_id or _closed or not Controls.valid(message) or message.epoch != epoch or message.seq <= last_sequence:
 			rejected_inputs += 1
@@ -149,11 +162,43 @@ func _receive(sender: int, message: Dictionary) -> void:
 		status = "Connected as guest slot 2. Host chooses match. P1 controls drive remote fighter."
 	elif sender == 1 and message.get("kind", "") == "state" and int(message.get("sequence", -1)) > _last_snapshot:
 		_last_snapshot = int(message.sequence)
+		if epoch != int(message.epoch):
+			guest_battle_open = false
+			local_rematch_ready = false
+			remote_rematch_ready = false
 		latest = message.duplicate(true)
 		epoch = int(message.epoch)
 		status = "Host BattleScene: %s — guest controls slot 2; authoritative host state mirrored; no prediction/rollback" % message.get("phase", "")
 		if not guest_battle_open: _open_guest_battle()
+		if latest.get("phase", "") == "result" and _guest_result_epoch != epoch:
+			_guest_result_epoch = epoch
+			_show_guest_results(epoch)
 		changed.emit()
+
+func request_rematch() -> bool:
+	if role.is_empty() or not latest.get("closed", false) or latest.get("phase", "") != "result": return false
+	local_rematch_ready = true
+	if role == "guest": _send(1, {"kind":"rematch", "epoch":epoch, "ready":true})
+	else: _try_rematch()
+	return true
+
+func _try_rematch() -> void:
+	if role != "host" or guest_id == 0 or not local_rematch_ready or not remote_rematch_ready or _battle != null: return
+	local_rematch_ready = false
+	remote_rematch_ready = false
+	_bound_once = false
+	_starting = false
+	combat_frames = 0
+	_contact_events.clear()
+	remote.clear()
+	start_match()
+
+func _show_guest_results(result_epoch: int) -> void:
+	await get_tree().create_timer(0.5).timeout
+	if role != "guest" or epoch != result_epoch or latest.get("phase", "") != "result": return
+	if int(latest.get("winner", -1)) not in [1, 2]: return
+	GameState.last_winner_slot = int(latest.winner) # display metadata only; no career/Story award
+	SceneRouter.go("results")
 
 func start_match() -> bool:
 	if role != "host" or guest_id == 0 or _bound_once or _starting: return false
@@ -172,6 +217,9 @@ func start_match() -> bool:
 func bind_battle(battle: Node) -> void:
 	if role != "host" or guest_id == 0 or _bound_once or GameState.mode != "online_private": return
 	_bound_once = true
+	_starting = false
+	local_rematch_ready = false
+	remote_rematch_ready = false
 	_battle = weakref(battle)
 	epoch += 1
 	_closed = false
