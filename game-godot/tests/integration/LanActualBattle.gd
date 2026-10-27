@@ -22,6 +22,7 @@ var deferred_frames: Dictionary = {}
 var committed_rows: Array = []
 var commit_errors: Array = []
 var guest_career := 0
+var feedback_clocks: Array = []
 
 func run() -> void:
 	await process_frame
@@ -92,6 +93,7 @@ func host_run() -> void:
 	if not private_copy.is_empty(): private_copy.actors[0].damage = 999999
 	var unchanged: Dictionary = lan.committed_state(latest_frame, lan.epoch)
 	check(not unchanged.is_empty() and float(unchanged.actors[0].damage) != 999999 and not unchanged.rollback_restorable and lan.committed_state(latest_frame, lan.epoch-1).is_empty(), "encoded_committed_history_is_detached_epoch_bound_and_not_falsely_restorable")
+	check(not feedback_clocks.is_empty() and feedback_clocks.all(func(row):return row.source == "actor_physics" and row.frame == row.actor_clock), "actual_launch_feedback_uses_authoritative_physics_clock_instead_of_wall_time")
 	check(whiff_damage == 0.0, "remote_whiff_did_not_apply_damage")
 	check(move_starts.any(func(row): return row.slot == 2 and int(row.frame) < 90), "socket_batched_public_press_release_survives_one_physics_frame")
 	check(move_starts.any(func(row): return row.slot == 2), "remote_public_input_started_real_move")
@@ -119,6 +121,11 @@ func host_run() -> void:
 	await frames(5)
 	check(lan._battle == null and lan._closed, "scene_exit_retires_bound_battle")
 	Engine.max_fps = 60
+
+func record_contact(attacker, defender, info: Dictionary) -> void:
+	super.record_contact(attacker, defender, info)
+	if str(info.get("contact_result", "")) == "hit":
+		feedback_clocks.append({"event":info.get("combat_event_id", ""),"source":info.get("critical_clock_source", ""), "frame":info.get("critical_clock_frame", -1),"actor_clock":attacker._network_clock,"hitstop_frames":info.get("hitstop_frames", -1)})
 
 func observed_open_frame(frame: int) -> void:
 	opened_frames[frame] = Engine.get_physics_frames()
@@ -232,7 +239,7 @@ func finish() -> void:
 	keys([])
 	Engine.max_fps = 60
 	var result = {"PASS":failures.is_empty(), "role":side, "pid":OS.get_process_id(), "checks":checks, "failures":failures,
-		"physics_commit_rows":committed_rows, "physics_commit_errors":commit_errors, "replica_rows":replica_rows, "replica_contacts":replica_contacts, "contacts":contacts, "move_starts":move_starts, "guards":guard_events, "grabs":grab_events, "guest_samples":guest_samples, "batch_observation":batch_observation, "received_host_lobby_observations":lobby_observations,
+		"feedback_clocks":feedback_clocks, "physics_commit_rows":committed_rows, "physics_commit_errors":commit_errors, "replica_rows":replica_rows, "replica_contacts":replica_contacts, "contacts":contacts, "move_starts":move_starts, "guards":guard_events, "grabs":grab_events, "guest_samples":guest_samples, "batch_observation":batch_observation, "received_host_lobby_observations":lobby_observations,
 		"received_inputs":lan.received_inputs if lan != null else 0, "rejected_inputs":lan.rejected_inputs if lan != null else 0,
 		"scope":"Two actual localhost ENet Godot processes, guest public input into authoritative host BattleScene; host-state guest BattleScene presentation, not physical LAN, rollback, original art or human acceptance",
 		"HUMAN_ART_APPROVED":false,"RC2_READY":false,"V1_0_0_RELEASE_AUTHORIZED":false}

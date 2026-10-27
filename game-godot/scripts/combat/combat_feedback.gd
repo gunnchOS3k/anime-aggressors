@@ -19,6 +19,10 @@ var _shake_remaining: float = 0.0
 var _shake_intensity: float = 0.0
 var fighter_id: String = ""
 var _last_critical_at: Dictionary = {}
+# Online hitstop eligibility must advance with authoritative gameplay, not
+# render speed, wall-clock pauses or the time spent replaying a history.
+var _last_critical_step: Dictionary = {}
+const CRITICAL_REARM_FRAMES := 27 # Existing0.45s cooldown at60Hz.
 var _last_prediction: Dictionary = {}
 var _presented_events: Dictionary = {}
 
@@ -211,16 +215,22 @@ func _apply_launch_presentation(attacker: Node, defender: Node, move: Dictionary
 	result["launch_prediction"] = pred
 	result["launch_trail_tier"] = _Predictor.trail_tier(pred, launch.length())
 	var key := str(defender.get_instance_id()) if defender != null else "none"
-	var now := Time.get_ticks_msec() / 1000.0
+	var network_clock: bool = attacker != null and "use_network_physics_clock" in attacker and attacker.use_network_physics_clock
+	var frame: int = int(attacker._network_clock) if network_clock else -1
+	var now := Time.get_ticks_msec() / 1000.0 if not network_clock else 0.0
 	var last := float(_last_critical_at.get(key, -99.0))
+	var network_key := str(defender.slot) if network_clock and defender != null and "slot" in defender else key
 	var danger := str(pred.get("tier", "SAFE"))
-	var spam := now - last < 0.45
+	var spam := frame - int(_last_critical_step.get(network_key, -1000)) < CRITICAL_REARM_FRAMES if network_clock else now - last < 0.45
+	result["critical_clock_source"] = "actor_physics" if network_clock else "wall_time"
+	result["critical_clock_frame"] = frame
 	var multi := bool(move.get("multi_hit", false)) and not bool(move.get("final_hit", true))
 	if multi or spam:
 		result["critical_suppressed"] = true
 		return result
 	if danger in ["CRITICAL_RECOVERABLE", "NEAR_CERTAIN_KO"]:
-		_last_critical_at[key] = now
+		if network_clock: _last_critical_step[network_key] = frame
+		else: _last_critical_at[key] = now
 		result["hitstop_frames"] = maxi(int(result.get("hitstop_frames", 3)), 8)
 		_emit_juice("launch_critical_recoverable" if danger == "CRITICAL_RECOVERABLE" else "launch_near_certain_ko", {
 			"attacker_id": attacker_id,

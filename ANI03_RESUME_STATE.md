@@ -1,3 +1,11 @@
+# 2026-10-27 — Online critical-hitstop timing source corrected; engine pending
+
+Additional real gameplay nondeterminism found: CombatFeedback._apply_launch_presentation used Time.get_ticks_msec() to gate an extra authoritative hitstop decision, so wall-clock pauses/render scheduling/replay speed could change subsequent gameplay. Online host actors now use their existing fixed _network_clock and the SAME0.45s rearm expressed as27ticks. Offline timing, predictor thresholds, hitstop magnitude, damage, moves and presentation resources remain unchanged. Per-defender network ledger uses stable seat identity. Actual LAN body-contact records now verify selected physics clock equals the attacker's real clock, including existing render catch-up. Engine validation PENDING; no historical restore claim. Full snapshots must also restore this cooldown ledger before resimulation; confirmed audiovisual separation remains unfinished.
+
+The full commit-boundary run40532177908 remains accepted for its exact70aa9f30source. Bounded corrected attack attempt40533643767 atcb8d0185 still running when this source change was saved; do not cancel it by dispatching another job. NEXT preserve its outcome, then run existing all affected suites for this feedback source change. No local heavy/privateart/native/preflight retry/save/spend/cleanup. All human/pairedruntime/RC2/releaseFALSE. Exact saved source SHA=git rev-parse HEAD; outputs/ retained untracked.
+
+---
+
 # 2026-10-27 — Full physics commit engine PASS; first earned LAN attempt rejected
 
 Run40532177908 at70aa9f30553579a12a0244b53bfacbbf96507fb8 SUCCESS. Input28/14, terminal16/10, lobby8/8, respawn24/4, components23, Party357/18rows, audio13, authoredlinks73, throws39rows, Training24/17/18 and Nix26 ALLPASS. 697 real commit observations,60under20fps rendering/60Hzphysics, zero commit mismatches; all actual two-process role runtimeERROR arrays empty. Receipt docs/handoff/2026-10-27/PHYSICS_COMMIT_ENGINE.json. Existing192 import duplicate-animation diagnostics and individual shutdown warnings remain retained, not suppressed or declared solved. This is the live physics commit boundary, NOT complete historical rollback.
