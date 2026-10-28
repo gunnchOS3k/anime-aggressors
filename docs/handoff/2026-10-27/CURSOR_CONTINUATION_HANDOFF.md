@@ -58,3 +58,10 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - `lan_resim_bridge.gd`: LanControls ↔ trial input round-trip; late guest packet → owned flat resim correction; asserts shipping contract.
 - `DelayedInputSnapshotResim.gd`: 4-frame delayed wrong-open-guard mispredict, then late shield packet restores oracle tip (CI physics scope).
 - `lan_session.gd`: optional observe-only Callable hook; default unset → no shipping behavior change.
+
+## Push status (honest)
+
+- Remote branch created successfully (no force): `origin/cursor/continuation-isolated-combat-20261027` @ `2bbab9551016fbc6b1b7af1f86df3d43daf5cdf1`
+- Local tip ahead (not yet on remote — auth unavailable for second FF push): `fac4669be37a19477fa46ba9e2af13ad6646951f`
+- Engineering commit for delayed resim: `9221d1dbe710a2c4e1e7de60b475fdc9ebc5b00c`
+- Remote did not diverge; force-push was not used or needed.
