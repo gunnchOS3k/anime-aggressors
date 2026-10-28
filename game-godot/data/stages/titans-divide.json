@@ -1,0 +1,165 @@
+{
+  "id": "titans-divide",
+  "displayName": "Titans' Divide",
+  "index": 1,
+  "layoutType": "split_canyon",
+  "mainPlatform": {
+    "x": 0,
+    "y": 290,
+    "width": 520,
+    "height": 44
+  },
+  "sidePlatforms": [
+    {
+      "x": -340,
+      "y": 210,
+      "width": 160,
+      "height": 24
+    },
+    {
+      "x": 340,
+      "y": 210,
+      "width": 160,
+      "height": 24
+    },
+    {
+      "x": -160,
+      "y": 120,
+      "width": 120,
+      "height": 22
+    },
+    {
+      "x": 160,
+      "y": 120,
+      "width": 120,
+      "height": 22
+    }
+  ],
+  "spawnPoints": [
+    {
+      "slot": 1,
+      "x": -200,
+      "y": 210
+    },
+    {
+      "slot": 2,
+      "x": 200,
+      "y": 210
+    }
+  ],
+  "blastZones": {
+    "left": -680,
+    "right": 680,
+    "top": -420,
+    "bottom": 460
+  },
+  "ledges": true,
+  "hazardSockets": [
+    {
+      "id": "mist_left",
+      "x": -260,
+      "y": 250,
+      "radius": 18,
+      "authoritative": true,
+      "effect": "soft_push_right",
+      "frames_period": 120
+    },
+    {
+      "id": "mist_right",
+      "x": 260,
+      "y": 250,
+      "radius": 18,
+      "authoritative": true,
+      "effect": "soft_push_left",
+      "frames_period": 120
+    }
+  ],
+  "cameraProfile": {
+    "mode": "platform_fighter",
+    "minZoom": 0.7,
+    "maxZoom": 1.2,
+    "lerp": 0.12,
+    "deadzone": {
+      "x": 80,
+      "y": 60
+    }
+  },
+  "lightingProfile": {
+    "keyColor": "#9ec7ff",
+    "keyAlpha": 0.12,
+    "ambient": "#0a1420",
+    "rim": "#f4a7c3"
+  },
+  "performanceTier": {
+    "default": "high",
+    "low": {
+      "particles": false,
+      "bands": 1
+    },
+    "medium": {
+      "particles": true,
+      "bands": 2
+    },
+    "high": {
+      "particles": true,
+      "bands": 4
+    }
+  },
+  "a11y": {
+    "highContrastEdges": true,
+    "colorblindMarkers": true
+  },
+  "audioBed": {
+    "event": "bed_titans_divide",
+    "status": "PROCEDURAL_WORKING_NOT_HUMAN_FINAL",
+    "path": "res://assets/audio/procedural/stages/titans-divide/bed.wav"
+  },
+  "previewPlaceholder": "res://assets/stages/procedural/titans-divide.svg",
+  "artStatus": "PROCEDURAL_WORKING_NOT_HUMAN_FINAL",
+  "productionStatus": "PLAYABLE_PROCEDURAL_BATCH1",
+  "geometryStatus": "PROCEDURAL_WORKING",
+  "HUMAN_ART_APPROVED": false,
+  "yin_yang_presence": {
+    "expression": "monument_statues",
+    "original": true,
+    "franchise_signage": false
+  },
+  "pink_foreshadow": {
+    "motif": "petal_dust_ledge",
+    "subtle": true
+  },
+  "rulesets": {
+    "competitive": {
+      "hazards": "predictable_authoritative"
+    },
+    "party_chaos": {
+      "hazards": true,
+      "transformations": false
+    },
+    "story": {
+      "narrative_hooks": true
+    }
+  },
+  "hazard_model": "authoritative_snapshot",
+  "rng_policy": "no_divergent_rng",
+  "notes": "Oathbreak Falls guidance: original Yin/Yang statues only \u2014 no franchise statue compositions. Working procedural geometry this pass.",
+  "ledgeAnchors": [
+    {
+      "id": "left",
+      "x": -260.0,
+      "y": 290.0,
+      "facing": 1
+    },
+    {
+      "id": "right",
+      "x": 260.0,
+      "y": 290.0,
+      "facing": -1
+    }
+  ],
+  "working_alias_note": "Owner prompt Oathbreak Falls guidance applied here: original Yin/Yang statues.",
+  "setdress": {
+    "statues": "original_yin_yang_pair",
+    "no_franchise_composition": true
+  }
+}

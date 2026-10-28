@@ -1,0 +1,364 @@
+{
+  "HUMAN_ART_APPROVED": false,
+  "PASS": true,
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false,
+  "checks": [
+    {
+      "check": "actual_public_Training_scene",
+      "pass": true
+    },
+    {
+      "check": "ordinary_input_resolved_actual_canonical_jab",
+      "pass": true
+    },
+    {
+      "check": "candidate_loads_after_real_autoload_registration",
+      "pass": true
+    },
+    {
+      "check": "bind_actual_source_geometry_movement_jab_and_epoch",
+      "pass": true
+    },
+    {
+      "check": "actual_CharacterBody_transform_change_leaves_incorrect_prior_floor_cache",
+      "pass": true
+    },
+    {
+      "check": "multiple_real_candidate_fixed_steps_approach_stop_and_owned_floor",
+      "pass": true
+    },
+    {
+      "check": "canonical_shield_path_supported_without_live_state_mutation:",
+      "pass": true
+    },
+    {
+      "check": "actual_production_HitResolver_makes_one_normal_shield_contact",
+      "pass": true
+    },
+    {
+      "check": "complete_candidate_snapshot_restore",
+      "pass": true
+    },
+    {
+      "check": "discarded_contact_and_presentation_intent_retired",
+      "pass": true
+    },
+    {
+      "check": "same_input_history_reproduces_entire_candidate_state_exactly",
+      "pass": true
+    },
+    {
+      "check": "same_canonical_contact_replays_once_with_same_frame_and_identity",
+      "pass": true
+    },
+    {
+      "check": "foreign_epoch_restore_is_atomic",
+      "pass": true
+    },
+    {
+      "check": "malformed_second_actor_rejects_entire_historical_restore_atomically",
+      "pass": true
+    },
+    {
+      "check": "future_guard_clock_cannot_borrow_historical_frame",
+      "pass": true
+    },
+    {
+      "check": "pair_overlap_rejected_before_either_actor_is_restored",
+      "pass": true
+    },
+    {
+      "check": "foreign_epoch_input_cannot_advance_world",
+      "pass": true
+    },
+    {
+      "check": "duplicate_or_reordered_input_frame_cannot_advance_world",
+      "pass": true
+    },
+    {
+      "check": "restore_before_late_input_correction",
+      "pass": true
+    },
+    {
+      "check": "repeated_restore_retires_exactly_the_discarded_contact_intent",
+      "pass": true
+    },
+    {
+      "check": "exactly_one_frame_owned_delayed_Shield_release_changed",
+      "pass": true
+    },
+    {
+      "check": "actual_PerfectGuard_changes_normal_block_to_legal_fresh_press_parry",
+      "pass": true
+    },
+    {
+      "check": "alternative_history_has_correct_distinct_authoritative_shield_result",
+      "pass": true
+    },
+    {
+      "check": "isolated_replay_never_changes_live_fighters_or_Story",
+      "pass": true
+    }
+  ],
+  "evidence": {
+    "approach_steps": 104,
+    "baseline_contact": {
+      "actual_defender_state": "shield_hit",
+      "actual_launch": "(0.0, 0.0)",
+      "attack_activation_id": 1,
+      "attacker_id": "kaia-windrow",
+      "aura_bible": {
+        "aura_tag": "speed_chain",
+        "bible": "docs/bibles/fighters/juno-spark.md",
+        "element": "spark"
+      },
+      "aura_identity_tag": "wind_drift",
+      "aura_runtime_hooks": [],
+      "authored_damage": 2.4,
+      "blocked": true,
+      "clash_supported": false,
+      "combat_event_id": "flat:417:121:1:2:1:1",
+      "combo_count_before": 0,
+      "confirmed_contact": true,
+      "contact_direction": "(1.0, 0.0)",
+      "contact_owner": "melee",
+      "contact_result": "shield",
+      "contact_world": "(174.0787, 266.175)",
+      "counterhit": false,
+      "damage": 2.304,
+      "damage_applied": 0.0,
+      "damage_zero_reason": "",
+      "defender_airborne": false,
+      "defender_damage_before": 0.0,
+      "defender_id": "juno-spark",
+      "defender_in_hitstun_before": false,
+      "defender_state_before": "shield_hold",
+      "element": "gale",
+      "element_effect": "wind_drift",
+      "gameplay_frame": 121,
+      "hitstop_frames": 2,
+      "launch": "(0.0, 0.0)",
+      "launch_strength": 0.0,
+      "move_frame": 5,
+      "move_id": "jab_1",
+      "parry_result": "fail",
+      "parry_supported": true,
+      "perfect_guard": false,
+      "projectile_instance_id": -1,
+      "resolved_damage": 2.304,
+      "shield_damage": 3.0,
+      "shield_event": "shield_hit",
+      "shield_stun_frames": 6,
+      "stocks_delta": 0,
+      "timeline_epoch": 417,
+      "timestamp_usec": 2016667
+    },
+    "baseline_shield_health": 49.4000000000004,
+    "corrected_contacts": [
+      {
+        "attack_activation_id": 1,
+        "attacker_id": "kaia-windrow",
+        "attacker_stun_frames": 6,
+        "blocked": true,
+        "clash_supported": false,
+        "combat_event_id": "flat:417:121:1:2:1:1",
+        "combo_count_before": 0,
+        "confirmed_contact": true,
+        "contact_direction": "(1.0, 0.0)",
+        "contact_owner": "melee",
+        "contact_result": "parry",
+        "contact_world": "(174.0787, 266.175)",
+        "counterhit": false,
+        "damage": 0.0,
+        "damage_applied": 0.0,
+        "defender_airborne": false,
+        "defender_damage_before": 0.0,
+        "defender_id": "juno-spark",
+        "defender_in_hitstun_before": false,
+        "defender_state_before": "shield_hold",
+        "defender_stun_frames": 2,
+        "element": "gale",
+        "gameplay_frame": 121,
+        "guard_age_frames": 0,
+        "guard_window_frames": 4,
+        "hitstop_frames": 2,
+        "launch": "(0.0, 0.0)",
+        "launch_strength": 0.0,
+        "move_frame": 5,
+        "move_id": "jab_1",
+        "parry_result": "success",
+        "parry_supported": true,
+        "perfect_guard": true,
+        "projectile_instance_id": -1,
+        "shield_damage": 0.0,
+        "shield_event": "parry",
+        "stocks_delta": 0,
+        "timeline_epoch": 417,
+        "timestamp_usec": 2016667
+      }
+    ],
+    "corrected_input_frame": 119,
+    "corrected_shield_health": 50.8333333333337,
+    "failure": "",
+    "historical_CharacterBody_restored": false,
+    "native_cache_probe": {
+      "declared_staged_defect_probe": true,
+      "floor_after_airborne_transform": true,
+      "floor_before": true,
+      "geometric_bottom": 199.973754882812,
+      "original_transform_reinstated": true,
+      "stage_surface": 280.0
+    },
+    "production_LAN_enabled": false,
+    "replay_steps": 28,
+    "retired_intents": [
+      {
+        "actual_defender_state": "shield_hit",
+        "actual_launch": "(0.0, 0.0)",
+        "attack_activation_id": 1,
+        "attacker_id": "kaia-windrow",
+        "aura_bible": {
+          "aura_tag": "speed_chain",
+          "bible": "docs/bibles/fighters/juno-spark.md",
+          "element": "spark"
+        },
+        "aura_identity_tag": "wind_drift",
+        "aura_runtime_hooks": [],
+        "authored_damage": 2.4,
+        "blocked": true,
+        "clash_supported": false,
+        "combat_event_id": "flat:417:121:1:2:1:1",
+        "combo_count_before": 0,
+        "confirmed_contact": true,
+        "contact_direction": "(1.0, 0.0)",
+        "contact_owner": "melee",
+        "contact_result": "shield",
+        "contact_world": "(174.0787, 266.175)",
+        "counterhit": false,
+        "damage": 2.304,
+        "damage_applied": 0.0,
+        "damage_zero_reason": "",
+        "defender_airborne": false,
+        "defender_damage_before": 0.0,
+        "defender_id": "juno-spark",
+        "defender_in_hitstun_before": false,
+        "defender_state_before": "shield_hold",
+        "element": "gale",
+        "element_effect": "wind_drift",
+        "gameplay_frame": 121,
+        "hitstop_frames": 2,
+        "launch": "(0.0, 0.0)",
+        "launch_strength": 0.0,
+        "move_frame": 5,
+        "move_id": "jab_1",
+        "parry_result": "fail",
+        "parry_supported": true,
+        "perfect_guard": false,
+        "projectile_instance_id": -1,
+        "resolved_damage": 2.304,
+        "shield_damage": 3.0,
+        "shield_event": "shield_hit",
+        "shield_stun_frames": 6,
+        "stocks_delta": 0,
+        "timeline_epoch": 417,
+        "timestamp_usec": 2016667
+      }
+    ],
+    "snapshot_frame": 116,
+    "source_move": {
+      "active_frames": 3.0,
+      "angle_deg": 65.0,
+      "animation_id": "jab_1",
+      "aura_identity_tag": "wind_drift",
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1.0
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "element_strength": 1.5,
+          "hitbox_scale": 1.15
+        },
+        "level_3": {
+          "cancel_windows": [
+            {
+              "end": 14.0,
+              "start": 8.0
+            }
+          ],
+          "damage_mult": 1.15,
+          "element_strength": 1.8,
+          "extra_active_frames": 1.0,
+          "hitbox_scale": 1.25
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "feedback_tier": "aura",
+          "hitbox_scale": 1.35
+        }
+      },
+      "base_knockback": 3.0,
+      "cancel_windows": [
+        {
+          "end": 10.0,
+          "requires": "hit_confirm",
+          "start": 5.0
+        },
+        {
+          "end": 11.0,
+          "requires": "hit_confirm",
+          "start": 5.0,
+          "to": "jab_2"
+        }
+      ],
+      "combat_tag": "wind_drift",
+      "damage": 2.4,
+      "direction": "neutral",
+      "element_effect": {
+        "effect": "wind_drift",
+        "strength": 1.0,
+        "type": "gale"
+      },
+      "feedback": {
+        "camera_event": "shake_light",
+        "hitstop_frames": 2.0,
+        "particle_profile": "kaia-windrow.jab_1.air_streaks_crescents",
+        "screen_flash": false,
+        "sfx_event": "kaia-windrow.jab_1.sfx",
+        "tier": "light",
+        "vfx_event": "kaia_windrow_jab_1_crescent_ribbon"
+      },
+      "fighter_id": "kaia-windrow",
+      "grounded_air": "grounded",
+      "h2h_string_id": "kaia-windrow:jab_1->jab_2",
+      "hitboxes": [
+        {
+          "height": 34.0,
+          "offset_x": 36.0,
+          "offset_y": -12.0,
+          "width": 40.0
+        }
+      ],
+      "hitstop_frames": 2.0,
+      "input_command": "attack_neutral",
+      "knockback_growth": 1.1,
+      "move_id": "jab_1",
+      "move_type": "melee",
+      "recovery_frames": 8.0,
+      "shield_damage": 3.0,
+      "shield_stun_frames": 6.0,
+      "startup_frames": 4.0,
+      "training_display_name": "Jab 1",
+      "v3_fantasy": "Short palm gust",
+      "v3_particle_library": "air_streaks_crescents",
+      "v3_vfx_shape": "crescent_ribbon"
+    }
+  },
+  "failures": [],
+  "scope": "Executed isolated source-owned flat-floor movement/contact world using source geometry, ordinary-input resolved canonical jab and production combat components. Complete candidate restore/replay and one corrected input; NOT shipping CharacterBody parity, full-world rollback, real delayed-packet LAN or native audiovisual/art/device acceptance."
+}

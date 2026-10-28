@@ -1,0 +1,29 @@
+{
+  "schema": "stage_rulesets/v1",
+  "rulesets": {
+    "competitive": {
+      "id": "competitive",
+      "hazards_default": false,
+      "deterministic": true
+    },
+    "party_chaos": {
+      "id": "party_chaos",
+      "hazards_default": true,
+      "deterministic": true,
+      "label": "PARTY_CHAOS"
+    },
+    "story": {
+      "id": "story",
+      "hazards_default": "stage_scripted",
+      "deterministic": true
+    },
+    "mythic_party": {
+      "id": "mythic_party",
+      "hazards_default": true,
+      "deterministic": true,
+      "label": "MYTHIC_CLEARLY_LABELED",
+      "consent_required": true
+    }
+  },
+  "notes": "Mythic party is labeled and consent-gated. Not a silent ranked mode."
+}

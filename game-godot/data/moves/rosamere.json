@@ -1,0 +1,2272 @@
+{
+  "fighter_id": "rosamere",
+  "schema_version": 2,
+  "combat_tag": "first_bloom",
+  "moves": [
+    {
+      "move_id": "jab_1",
+      "fighter_id": "rosamere",
+      "move_type": "melee",
+      "direction": "neutral",
+      "input_command": "attack_neutral",
+      "grounded_air": "grounded",
+      "startup_frames": 5,
+      "active_frames": 2,
+      "recovery_frames": 10,
+      "hitboxes": [
+        {
+          "offset_x": 38,
+          "offset_y": -6,
+          "width": 42,
+          "height": 30
+        }
+      ],
+      "damage": 2.1,
+      "angle_deg": 100,
+      "base_knockback": 3.2,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 2,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "light",
+        "hitstop_frames": 2,
+        "camera_event": "shake_light",
+        "vfx_event": "rosamere.jab_1.subtractive_aperture",
+        "sfx_event": "rosamere.jab_1.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.subtractive_aperture"
+      },
+      "training_display_name": "Still Palm",
+      "combat_tag": "first_bloom",
+      "element_effect": {
+        "type": "void",
+        "effect": "reduction",
+        "strength": 1
+      },
+      "cancel_windows": [
+        {
+          "start": 7,
+          "end": 16,
+          "requires": "hit_confirm",
+          "to": "jab_2"
+        }
+      ],
+      "h2h_string_id": "yin:jab_1->jab_2",
+      "animation_id": "jab_1",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false
+    },
+    {
+      "move_id": "jab_2",
+      "fighter_id": "rosamere",
+      "move_type": "melee",
+      "direction": "neutral",
+      "input_command": "attack_neutral",
+      "grounded_air": "grounded",
+      "startup_frames": 4,
+      "active_frames": 2,
+      "recovery_frames": 11,
+      "hitboxes": [
+        {
+          "offset_x": 40,
+          "offset_y": -6,
+          "width": 44,
+          "height": 30
+        }
+      ],
+      "damage": 2.8,
+      "angle_deg": 110,
+      "base_knockback": 4.1,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 2,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "light",
+        "hitstop_frames": 2,
+        "camera_event": "shake_light",
+        "vfx_event": "rosamere.jab_2.subtractive_aperture",
+        "sfx_event": "rosamere.jab_2.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.subtractive_aperture"
+      },
+      "training_display_name": "Folded Return",
+      "combat_tag": "first_bloom",
+      "element_effect": {
+        "type": "void",
+        "effect": "reduction",
+        "strength": 1
+      },
+      "cancel_windows": [
+        {
+          "start": 6,
+          "end": 16,
+          "requires": "hit_confirm",
+          "to": "jab_finisher"
+        }
+      ],
+      "h2h_string_id": "yin:jab_2->jab_finisher",
+      "animation_id": "jab_2",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false
+    },
+    {
+      "move_id": "jab_finisher",
+      "fighter_id": "rosamere",
+      "move_type": "melee",
+      "direction": "neutral",
+      "input_command": "attack_neutral",
+      "grounded_air": "grounded",
+      "startup_frames": 6,
+      "active_frames": 3,
+      "recovery_frames": 14,
+      "hitboxes": [
+        {
+          "offset_x": 42,
+          "offset_y": -4,
+          "width": 48,
+          "height": 34
+        }
+      ],
+      "damage": 4.6,
+      "angle_deg": 125,
+      "base_knockback": 7.5,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 5,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.2,
+          "element_strength": 1.6
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 2,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "rosamere.jab_finisher.subtractive_aperture",
+        "sfx_event": "rosamere.jab_finisher.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.subtractive_aperture"
+      },
+      "training_display_name": "Closing Spiral",
+      "combat_tag": "first_bloom",
+      "element_effect": {
+        "type": "void",
+        "effect": "reduction",
+        "strength": 1
+      },
+      "cancel_windows": [
+        {
+          "start": 8,
+          "end": 14,
+          "requires": "hit_confirm",
+          "to": "side_special"
+        }
+      ],
+      "h2h_string_id": "yin:jab_finisher->side_special",
+      "animation_id": "jab_finisher",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false
+    },
+    {
+      "move_id": "forward_tilt",
+      "fighter_id": "rosamere",
+      "move_type": "melee",
+      "direction": "forward",
+      "input_command": "attack_forward",
+      "grounded_air": "grounded",
+      "startup_frames": 7,
+      "active_frames": 3,
+      "recovery_frames": 15,
+      "hitboxes": [
+        {
+          "offset_x": 44,
+          "offset_y": -8,
+          "width": 52,
+          "height": 28
+        }
+      ],
+      "damage": 6.1,
+      "angle_deg": 115,
+      "base_knockback": 8.5,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 5,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "rosamere.forward_tilt.subtractive_aperture",
+        "sfx_event": "rosamere.forward_tilt.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.subtractive_aperture"
+      },
+      "training_display_name": "Inward Fold",
+      "combat_tag": "first_bloom",
+      "element_effect": {
+        "type": "void",
+        "effect": "reduction",
+        "strength": 1
+      },
+      "animation_id": "forward_tilt",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false
+    },
+    {
+      "move_id": "up_tilt",
+      "fighter_id": "rosamere",
+      "move_type": "melee",
+      "direction": "up",
+      "input_command": "attack_up",
+      "grounded_air": "grounded",
+      "startup_frames": 6,
+      "active_frames": 3,
+      "recovery_frames": 14,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "damage": 5.4,
+      "angle_deg": 88,
+      "base_knockback": 7,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 5,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "rosamere.up_tilt.subtractive_aperture",
+        "sfx_event": "rosamere.up_tilt.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.subtractive_aperture"
+      },
+      "training_display_name": "Quiet Rise",
+      "combat_tag": "first_bloom",
+      "element_effect": {
+        "type": "void",
+        "effect": "reduction",
+        "strength": 1
+      },
+      "animation_id": "up_tilt",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false
+    },
+    {
+      "move_id": "down_tilt",
+      "fighter_id": "rosamere",
+      "move_type": "melee",
+      "direction": "down",
+      "input_command": "attack_down",
+      "grounded_air": "grounded",
+      "startup_frames": 6,
+      "active_frames": 3,
+      "recovery_frames": 13,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "damage": 4.3,
+      "angle_deg": 260,
+      "base_knockback": 6,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 5,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "rosamere.down_tilt.subtractive_aperture",
+        "sfx_event": "rosamere.down_tilt.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.subtractive_aperture"
+      },
+      "training_display_name": "Low Collapse",
+      "combat_tag": "first_bloom",
+      "element_effect": {
+        "type": "void",
+        "effect": "reduction",
+        "strength": 1
+      },
+      "animation_id": "down_tilt",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false
+    },
+    {
+      "move_id": "dash_attack",
+      "fighter_id": "rosamere",
+      "move_type": "melee",
+      "direction": "forward",
+      "input_command": "attack_dash",
+      "grounded_air": "grounded",
+      "startup_frames": 7,
+      "active_frames": 4,
+      "recovery_frames": 18,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "damage": 6.8,
+      "angle_deg": 110,
+      "base_knockback": 9.5,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 5,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "rosamere.dash_attack.subtractive_aperture",
+        "sfx_event": "rosamere.dash_attack.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.subtractive_aperture"
+      },
+      "training_display_name": "Shortened Path",
+      "combat_tag": "first_bloom",
+      "element_effect": {
+        "type": "void",
+        "effect": "reduction",
+        "strength": 1
+      },
+      "animation_id": "dash_attack",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false
+    },
+    {
+      "move_id": "heavy_attack",
+      "fighter_id": "rosamere",
+      "move_type": "melee",
+      "direction": "forward",
+      "input_command": "attack_heavy",
+      "grounded_air": "grounded",
+      "startup_frames": 11,
+      "active_frames": 4,
+      "recovery_frames": 22,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "damage": 10.5,
+      "angle_deg": 130,
+      "base_knockback": 14,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 8,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.2,
+          "element_strength": 1.6
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 2,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "heavy",
+        "hitstop_frames": 8,
+        "camera_event": "shake_heavy",
+        "vfx_event": "rosamere.heavy_attack.subtractive_aperture",
+        "sfx_event": "rosamere.heavy_attack.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.subtractive_aperture"
+      },
+      "training_display_name": "Event Horizon",
+      "combat_tag": "first_bloom",
+      "element_effect": {
+        "type": "void",
+        "effect": "reduction",
+        "strength": 1
+      },
+      "wave016_reachability": "DESIGN_ONLY_NO_DISTINCT_CONTROL",
+      "note": "CONTROLS.md does not distinguish tilt vs smash/heavy; not bound to avoid awkward inputs.",
+      "animation_id": "heavy_attack",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false
+    },
+    {
+      "move_id": "neutral_air",
+      "fighter_id": "rosamere",
+      "move_type": "melee",
+      "direction": "air_neutral",
+      "input_command": "attack_air_neutral",
+      "grounded_air": "air",
+      "startup_frames": 5,
+      "active_frames": 3,
+      "recovery_frames": 11,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "damage": 4.8,
+      "angle_deg": 100,
+      "base_knockback": 6.5,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 5,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "rosamere.neutral_air.subtractive_aperture",
+        "sfx_event": "rosamere.neutral_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.subtractive_aperture"
+      },
+      "training_display_name": "Quiet Orbit",
+      "combat_tag": "first_bloom",
+      "element_effect": {
+        "type": "void",
+        "effect": "reduction",
+        "strength": 1
+      },
+      "animation_id": "neutral_air",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false
+    },
+    {
+      "move_id": "forward_air",
+      "fighter_id": "rosamere",
+      "move_type": "melee",
+      "direction": "air_forward",
+      "input_command": "attack_air_forward",
+      "grounded_air": "air",
+      "startup_frames": 6,
+      "active_frames": 3,
+      "recovery_frames": 13,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "damage": 6.1,
+      "angle_deg": 115,
+      "base_knockback": 8.2,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 5,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "rosamere.forward_air.subtractive_aperture",
+        "sfx_event": "rosamere.forward_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.subtractive_aperture"
+      },
+      "training_display_name": "Returning Palm",
+      "combat_tag": "first_bloom",
+      "element_effect": {
+        "type": "void",
+        "effect": "reduction",
+        "strength": 1
+      },
+      "animation_id": "forward_air",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false
+    },
+    {
+      "move_id": "back_air",
+      "fighter_id": "rosamere",
+      "move_type": "melee",
+      "direction": "back",
+      "input_command": "attack_air_back",
+      "grounded_air": "air",
+      "startup_frames": 6,
+      "active_frames": 3,
+      "recovery_frames": 13,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "damage": 6.1,
+      "angle_deg": 145,
+      "base_knockback": 8.2,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 3,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "light",
+        "hitstop_frames": 3,
+        "camera_event": "shake_light",
+        "vfx_event": "rosamere.back_air.subtractive_aperture",
+        "sfx_event": "rosamere.back_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.subtractive_aperture"
+      },
+      "training_display_name": "Rear Aperture",
+      "combat_tag": "first_bloom",
+      "element_effect": {
+        "type": "void",
+        "effect": "reduction",
+        "strength": 1
+      },
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false,
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
+      "v3_fantasy": "Original inward reduction and economical palm chain"
+    },
+    {
+      "move_id": "up_air",
+      "fighter_id": "rosamere",
+      "move_type": "melee",
+      "direction": "air_up",
+      "input_command": "attack_air_up",
+      "grounded_air": "air",
+      "startup_frames": 6,
+      "active_frames": 3,
+      "recovery_frames": 12,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "damage": 5.1,
+      "angle_deg": 90,
+      "base_knockback": 7,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 5,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "rosamere.up_air.subtractive_aperture",
+        "sfx_event": "rosamere.up_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.subtractive_aperture"
+      },
+      "training_display_name": "Suspended Fold",
+      "combat_tag": "first_bloom",
+      "element_effect": {
+        "type": "void",
+        "effect": "reduction",
+        "strength": 1
+      },
+      "animation_id": "up_air",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false
+    },
+    {
+      "move_id": "down_air",
+      "fighter_id": "rosamere",
+      "move_type": "melee",
+      "direction": "air_down",
+      "input_command": "attack_air_down",
+      "grounded_air": "air",
+      "startup_frames": 7,
+      "active_frames": 3,
+      "recovery_frames": 14,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "damage": 6.8,
+      "angle_deg": 270,
+      "base_knockback": 9,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 8,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "heavy",
+        "hitstop_frames": 8,
+        "camera_event": "shake_heavy",
+        "vfx_event": "rosamere.down_air.subtractive_aperture",
+        "sfx_event": "rosamere.down_air.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.subtractive_aperture"
+      },
+      "training_display_name": "Settling Void",
+      "combat_tag": "first_bloom",
+      "element_effect": {
+        "type": "void",
+        "effect": "reduction",
+        "strength": 1
+      },
+      "animation_id": "down_air",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false
+    },
+    {
+      "move_id": "bloom_seed",
+      "fighter_id": "rosamere",
+      "move_type": "projectile",
+      "direction": "neutral",
+      "input_command": "special_neutral",
+      "grounded_air": "both",
+      "startup_frames": 8,
+      "active_frames": 2,
+      "recovery_frames": 18,
+      "hitboxes": [],
+      "damage": 6,
+      "angle_deg": 120,
+      "base_knockback": 7.5,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 5,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.2,
+          "element_strength": 1.6
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 2,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "rosamere.neutral_special_projectile.subtractive_aperture",
+        "sfx_event": "rosamere.neutral_special_projectile.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.subtractive_aperture"
+      },
+      "training_display_name": "Bloom Seed",
+      "combat_tag": "first_bloom",
+      "element_effect": {
+        "type": "primordial_pink",
+        "effect": "bloom_seed",
+        "strength": 1
+      },
+      "projectile": {
+        "spawn_frame": 8,
+        "type": "null_aperture",
+        "offset_x": 46,
+        "offset_y": -2,
+        "angle_deg": 0,
+        "speed_by_aura": [
+          270,
+          300,
+          330,
+          360
+        ],
+        "damage_by_aura": [
+          6,
+          7,
+          8,
+          9
+        ],
+        "size_by_aura": [
+          14,
+          16,
+          20,
+          24
+        ],
+        "lifetime_frames_by_aura": [
+          40,
+          44,
+          48,
+          52
+        ],
+        "behavior_by_aura": [
+          "straight",
+          "straight",
+          "straight",
+          "straight"
+        ],
+        "speed": 270,
+        "lifetime_frames": 40,
+        "size": 10,
+        "pierce": false,
+        "homing": 0.0
+      },
+      "animation_id": "bloom_seed",
+      "v3_fantasy": "compose_nurture",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false,
+      "pink_system": "bloom_seed"
+    },
+    {
+      "move_id": "petal_constellation",
+      "fighter_id": "rosamere",
+      "move_type": "field",
+      "direction": "forward",
+      "input_command": "special_forward",
+      "grounded_air": "grounded",
+      "startup_frames": 9,
+      "active_frames": 4,
+      "recovery_frames": 20,
+      "hitboxes": [
+        {
+          "offset_x": 48,
+          "offset_y": -6,
+          "width": 56,
+          "height": 30
+        }
+      ],
+      "damage": 7.5,
+      "angle_deg": 120,
+      "base_knockback": 11,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 8,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.2,
+          "element_strength": 1.6
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 2,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "heavy",
+        "hitstop_frames": 8,
+        "camera_event": "shake_heavy",
+        "vfx_event": "rosamere.side_special.subtractive_aperture",
+        "sfx_event": "rosamere.side_special.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.subtractive_aperture"
+      },
+      "training_display_name": "Petal Constellation",
+      "combat_tag": "first_bloom",
+      "element_effect": {
+        "type": "primordial_pink",
+        "effect": "petal_constellation",
+        "strength": 1
+      },
+      "self_movement": {
+        "x": 100,
+        "y": 0
+      },
+      "armor_frames": 0,
+      "animation_id": "petal_constellation",
+      "v3_fantasy": "unfold_constellation",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false,
+      "pink_system": "petal_constellation"
+    },
+    {
+      "move_id": "first_dawn",
+      "fighter_id": "rosamere",
+      "move_type": "movement",
+      "direction": "up",
+      "input_command": "special_up",
+      "grounded_air": "both",
+      "startup_frames": 7,
+      "active_frames": 4,
+      "recovery_frames": 20,
+      "hitboxes": [
+        {
+          "offset_x": 20,
+          "offset_y": -28,
+          "width": 36,
+          "height": 48
+        }
+      ],
+      "damage": 6.0,
+      "angle_deg": 90,
+      "base_knockback": 11,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 5,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "rosamere.up_special_recovery.subtractive_aperture",
+        "sfx_event": "rosamere.up_special_recovery.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.subtractive_aperture"
+      },
+      "training_display_name": "First Dawn",
+      "combat_tag": "first_bloom",
+      "element_effect": {
+        "type": "primordial_pink",
+        "effect": "first_dawn",
+        "strength": 1
+      },
+      "self_movement": {
+        "x": 0,
+        "y": -320
+      },
+      "recovery_profile": {
+        "snap_ledge": true,
+        "air_friction": 0.92,
+        "landing_lag": 10
+      },
+      "animation_id": "first_dawn",
+      "v3_fantasy": "ascend_permission",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false,
+      "pink_system": "first_dawn"
+    },
+    {
+      "move_id": "gentle_reversal",
+      "fighter_id": "rosamere",
+      "move_type": "counter",
+      "direction": "down",
+      "input_command": "special_down",
+      "grounded_air": "grounded",
+      "startup_frames": 9,
+      "active_frames": 6,
+      "recovery_frames": 24,
+      "hitboxes": [
+        {
+          "offset_x": 12,
+          "offset_y": 8,
+          "width": 60,
+          "height": 24
+        }
+      ],
+      "damage": 0,
+      "angle_deg": 265,
+      "base_knockback": 8.5,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 8,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.2,
+          "element_strength": 1.6
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 2,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "heavy",
+        "hitstop_frames": 8,
+        "camera_event": "shake_heavy",
+        "vfx_event": "rosamere.down_special.subtractive_aperture",
+        "sfx_event": "rosamere.down_special.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.subtractive_aperture"
+      },
+      "training_display_name": "Gentle Reversal",
+      "combat_tag": "first_bloom",
+      "element_effect": {
+        "type": "primordial_pink",
+        "effect": "gentle_reversal",
+        "strength": 1
+      },
+      "trap": {
+        "linger_frames": 40,
+        "burn_ticks": 3
+      },
+      "animation_id": "gentle_reversal",
+      "v3_fantasy": "quiet_turn",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false,
+      "cosmic_counter": {
+        "max_integrity": 1,
+        "aura_cost": 25.0,
+        "max_per_activation": 1
+      },
+      "pink_system": "gentle_reversal"
+    },
+    {
+      "move_id": "grab",
+      "fighter_id": "rosamere",
+      "move_type": "grab",
+      "direction": "neutral",
+      "input_command": "grab",
+      "grounded_air": "grounded",
+      "startup_frames": 5,
+      "active_frames": 3,
+      "recovery_frames": 18,
+      "hitboxes": [
+        {
+          "offset_x": 28,
+          "offset_y": -4,
+          "width": 48,
+          "height": 36
+        }
+      ],
+      "damage": 0,
+      "angle_deg": 45,
+      "base_knockback": 0,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 2,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "light",
+        "hitstop_frames": 2,
+        "camera_event": "shake_light",
+        "vfx_event": "rosamere.grab.subtractive_aperture",
+        "sfx_event": "rosamere.grab.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.subtractive_aperture"
+      },
+      "training_display_name": "Grab",
+      "combat_tag": "first_bloom",
+      "grab_range": 34,
+      "animation_id": "grab",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false,
+      "element_effect": {
+        "type": "void",
+        "effect": "reduction",
+        "strength": 1
+      }
+    },
+    {
+      "move_id": "throw_forward",
+      "fighter_id": "rosamere",
+      "move_type": "throw",
+      "direction": "forward",
+      "input_command": "throw_forward",
+      "grounded_air": "both",
+      "startup_frames": 4,
+      "active_frames": 2,
+      "recovery_frames": 12,
+      "hitboxes": [],
+      "damage": 6.0,
+      "angle_deg": 32,
+      "base_knockback": 15,
+      "knockback_growth": 1.15,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 5,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5,
+          "knockback_mult": 1.08
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8,
+          "knockback_mult": 1.15
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "rosamere.throw_forward.subtractive_aperture",
+        "sfx_event": "rosamere.throw_forward.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.subtractive_aperture"
+      },
+      "training_display_name": "Flame Spin Toss",
+      "combat_tag": "first_bloom",
+      "throw": {
+        "direction": "forward",
+        "hold_frames": 0,
+        "release_frame": 2,
+        "victim_offset": {
+          "x": 24,
+          "y": -10
+        },
+        "damage": 5.6000000000000005,
+        "angle_deg": 35,
+        "base_knockback": 14,
+        "knockback_growth": 1.15,
+        "combo_role": "positioning",
+        "role": "edge_pressure",
+        "authored": true
+      },
+      "element_effect": {
+        "type": "void",
+        "effect": "reduction",
+        "strength": 1
+      },
+      "animation_id": "throw_forward",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false
+    },
+    {
+      "move_id": "throw_back",
+      "fighter_id": "rosamere",
+      "move_type": "throw",
+      "direction": "back",
+      "input_command": "throw_back",
+      "grounded_air": "both",
+      "startup_frames": 5,
+      "active_frames": 2,
+      "recovery_frames": 13,
+      "hitboxes": [],
+      "damage": 7.5,
+      "angle_deg": 138,
+      "base_knockback": 17,
+      "knockback_growth": 1.15,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 5,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5,
+          "knockback_mult": 1.08
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8,
+          "knockback_mult": 1.15
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "rosamere.throw_back.subtractive_aperture",
+        "sfx_event": "rosamere.throw_back.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.subtractive_aperture"
+      },
+      "training_display_name": "Reversal Flame Burst",
+      "combat_tag": "first_bloom",
+      "throw": {
+        "direction": "back",
+        "hold_frames": 0,
+        "release_frame": 2,
+        "victim_offset": {
+          "x": -26,
+          "y": -8
+        },
+        "damage": 7.2,
+        "angle_deg": 140,
+        "base_knockback": 18,
+        "knockback_growth": 1.15,
+        "combo_role": "reversal",
+        "role": "reversal",
+        "authored": true
+      },
+      "element_effect": {
+        "type": "void",
+        "effect": "reduction",
+        "strength": 1
+      },
+      "animation_id": "throw_back",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false
+    },
+    {
+      "move_id": "throw_up",
+      "fighter_id": "rosamere",
+      "move_type": "throw",
+      "direction": "up",
+      "input_command": "throw_up",
+      "grounded_air": "both",
+      "startup_frames": 4,
+      "active_frames": 2,
+      "recovery_frames": 12,
+      "hitboxes": [],
+      "damage": 6.8,
+      "angle_deg": 85,
+      "base_knockback": 16,
+      "knockback_growth": 1.15,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 5,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5,
+          "knockback_mult": 1.08
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8,
+          "knockback_mult": 1.15
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "rosamere.throw_up.subtractive_aperture",
+        "sfx_event": "rosamere.throw_up.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.subtractive_aperture"
+      },
+      "training_display_name": "Erupting Uppercut",
+      "combat_tag": "first_bloom",
+      "throw": {
+        "direction": "up",
+        "hold_frames": 0,
+        "release_frame": 2,
+        "victim_offset": {
+          "x": 6,
+          "y": -30
+        },
+        "damage": 6.4,
+        "angle_deg": 82,
+        "base_knockback": 16,
+        "knockback_growth": 1.15,
+        "combo_role": "juggle",
+        "role": "juggle",
+        "authored": true
+      },
+      "element_effect": {
+        "type": "void",
+        "effect": "reduction",
+        "strength": 1
+      },
+      "animation_id": "throw_up",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false
+    },
+    {
+      "move_id": "throw_down",
+      "fighter_id": "rosamere",
+      "move_type": "throw",
+      "direction": "down",
+      "input_command": "throw_down",
+      "grounded_air": "both",
+      "startup_frames": 5,
+      "active_frames": 3,
+      "recovery_frames": 14,
+      "hitboxes": [],
+      "damage": 5.2,
+      "angle_deg": 272,
+      "base_knockback": 10,
+      "knockback_growth": 1.15,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 5,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5,
+          "knockback_mult": 1.08
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8,
+          "knockback_mult": 1.15
+        },
+        "super_ready": {
+          "damage_mult": 1.2,
+          "hitbox_scale": 1.35,
+          "feedback_tier": "aura"
+        }
+      },
+      "feedback": {
+        "tier": "medium",
+        "hitstop_frames": 5,
+        "camera_event": "shake_medium",
+        "vfx_event": "rosamere.throw_down.subtractive_aperture",
+        "sfx_event": "rosamere.throw_down.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.subtractive_aperture"
+      },
+      "training_display_name": "Ground Ignition",
+      "combat_tag": "first_bloom",
+      "throw": {
+        "direction": "down",
+        "hold_frames": 0,
+        "release_frame": 2,
+        "victim_offset": {
+          "x": 10,
+          "y": 14
+        },
+        "damage": 4.800000000000001,
+        "angle_deg": 270,
+        "base_knockback": 12,
+        "knockback_growth": 1.15,
+        "combo_role": "setup",
+        "role": "setup",
+        "authored": true
+      },
+      "element_effect": {
+        "type": "void",
+        "effect": "reduction",
+        "strength": 1
+      },
+      "animation_id": "throw_down",
+      "v3_fantasy": "Original inward reduction and economical palm chain",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false
+    },
+    {
+      "move_id": "origination_script",
+      "fighter_id": "rosamere",
+      "move_type": "charge",
+      "direction": "none",
+      "input_command": "aura_charge",
+      "grounded_air": "both",
+      "startup_frames": 0,
+      "active_frames": 0,
+      "recovery_frames": 0,
+      "hitboxes": [],
+      "damage": 0,
+      "angle_deg": 45,
+      "base_knockback": 0,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 11,
+      "aura_scaling": {},
+      "feedback": {
+        "tier": "aura",
+        "hitstop_frames": 11,
+        "camera_event": "shake_aura",
+        "vfx_event": "rosamere.aura_charge.subtractive_aperture",
+        "sfx_event": "rosamere.aura_charge.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.subtractive_aperture"
+      },
+      "training_display_name": "Origination Script",
+      "combat_tag": "first_bloom",
+      "animation_id": "origination_script",
+      "v3_fantasy": "write_beginning",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false,
+      "element_effect": {
+        "type": "primordial_pink",
+        "effect": "origination_script",
+        "strength": 1
+      },
+      "pink_system": "origination_script"
+    },
+    {
+      "move_id": "first_permission",
+      "fighter_id": "rosamere",
+      "move_type": "burst",
+      "direction": "neutral",
+      "input_command": "aura_burst",
+      "grounded_air": "both",
+      "startup_frames": 14,
+      "active_frames": 6,
+      "recovery_frames": 28,
+      "hitboxes": [
+        {
+          "offset_x": 36,
+          "offset_y": -8,
+          "width": 40,
+          "height": 32
+        }
+      ],
+      "damage": 15,
+      "angle_deg": 125,
+      "base_knockback": 22,
+      "knockback_growth": 1.1,
+      "shield_damage": 3,
+      "shield_stun_frames": 6,
+      "hitstop_frames": 14,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        },
+        "level_1": {
+          "damage_mult": 1.05,
+          "element_strength": 1.2
+        },
+        "level_2": {
+          "damage_mult": 1.1,
+          "hitbox_scale": 1.15,
+          "element_strength": 1.5
+        },
+        "level_3": {
+          "damage_mult": 1.15,
+          "hitbox_scale": 1.25,
+          "extra_active_frames": 1,
+          "cancel_windows": [
+            {
+              "start": 8,
+              "end": 14
+            }
+          ],
+          "element_strength": 1.8
+        },
+        "super_ready": {
+          "damage_mult": 1.3,
+          "hitbox_scale": 1.5,
+          "feedback_tier": "super"
+        }
+      },
+      "feedback": {
+        "tier": "super",
+        "hitstop_frames": 14,
+        "camera_event": "shake_super",
+        "vfx_event": "rosamere.aura_burst.subtractive_aperture",
+        "sfx_event": "rosamere.aura_burst.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.subtractive_aperture"
+      },
+      "training_display_name": "First Permission",
+      "combat_tag": "first_bloom",
+      "element_effect": {
+        "type": "primordial_pink",
+        "effect": "first_permission",
+        "strength": 1
+      },
+      "meter_cost": 100,
+      "animation_id": "first_permission",
+      "v3_fantasy": "grant_agency",
+      "v3_vfx_shape": "subtractive_aperture",
+      "v3_particle_library": "subtractive_aperture",
+      "status": "TUNING_CANDIDATE",
+      "owner_approved": false,
+      "pink_system": "first_permission"
+    },
+    {
+      "move_type": "grab",
+      "direction": "neutral",
+      "input_command": "grab",
+      "grounded_air": "grounded",
+      "startup_frames": 8,
+      "active_frames": 4,
+      "recovery_frames": 22,
+      "hitboxes": [
+        {
+          "offset_x": 34,
+          "offset_y": -4,
+          "width": 36,
+          "height": 36
+        }
+      ],
+      "damage": 0.0,
+      "angle_deg": 70,
+      "base_knockback": 6.5,
+      "knockback_growth": 1.15,
+      "shield_damage": 8,
+      "shield_stun_frames": 10,
+      "hitstop_frames": 4,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        }
+      },
+      "feedback": {
+        "tier": "heavy",
+        "hitstop_frames": 4,
+        "camera_event": "shake_medium",
+        "vfx_event": "rosamere_super",
+        "sfx_event": "rosamere.super.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.petals"
+      },
+      "combat_tag": "first_bloom",
+      "element_effect": {
+        "type": "primordial_pink",
+        "effect": "super",
+        "strength": 2
+      },
+      "fighter_id": "rosamere",
+      "move_id": "quiet_embrace",
+      "training_display_name": "Quiet Embrace",
+      "animation_id": "quiet_embrace",
+      "pink_system": "quiet_embrace",
+      "mythic": false,
+      "v3_fantasy": "compose_nurture_unfold"
+    },
+    {
+      "move_type": "melee",
+      "direction": "neutral",
+      "input_command": "attack_special",
+      "grounded_air": "grounded",
+      "startup_frames": 8,
+      "active_frames": 4,
+      "recovery_frames": 22,
+      "hitboxes": [
+        {
+          "offset_x": 42,
+          "offset_y": -10,
+          "width": 56,
+          "height": 40
+        }
+      ],
+      "damage": 8.0,
+      "angle_deg": 70,
+      "base_knockback": 6.5,
+      "knockback_growth": 1.15,
+      "shield_damage": 8,
+      "shield_stun_frames": 10,
+      "hitstop_frames": 4,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        }
+      },
+      "feedback": {
+        "tier": "heavy",
+        "hitstop_frames": 4,
+        "camera_event": "shake_medium",
+        "vfx_event": "rosamere_super",
+        "sfx_event": "rosamere.super.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.petals"
+      },
+      "combat_tag": "first_bloom",
+      "element_effect": {
+        "type": "primordial_pink",
+        "effect": "super",
+        "strength": 2
+      },
+      "fighter_id": "rosamere",
+      "move_id": "a_world_in_bloom",
+      "training_display_name": "A World in Bloom",
+      "animation_id": "a_world_in_bloom",
+      "pink_system": "a_world_in_bloom",
+      "mythic": false,
+      "v3_fantasy": "compose_nurture_unfold"
+    },
+    {
+      "move_type": "melee",
+      "direction": "neutral",
+      "input_command": "attack_special",
+      "grounded_air": "grounded",
+      "startup_frames": 8,
+      "active_frames": 4,
+      "recovery_frames": 22,
+      "hitboxes": [
+        {
+          "offset_x": 42,
+          "offset_y": -10,
+          "width": 56,
+          "height": 40
+        }
+      ],
+      "damage": 8.0,
+      "angle_deg": 70,
+      "base_knockback": 6.5,
+      "knockback_growth": 1.15,
+      "shield_damage": 8,
+      "shield_stun_frames": 10,
+      "hitstop_frames": 4,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        }
+      },
+      "feedback": {
+        "tier": "heavy",
+        "hitstop_frames": 4,
+        "camera_event": "shake_medium",
+        "vfx_event": "rosamere_super",
+        "sfx_event": "rosamere.super.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.petals"
+      },
+      "combat_tag": "first_bloom",
+      "element_effect": {
+        "type": "primordial_pink",
+        "effect": "super",
+        "strength": 2
+      },
+      "fighter_id": "rosamere",
+      "move_id": "before_there_was_time",
+      "training_display_name": "Before There Was Time",
+      "animation_id": "before_there_was_time",
+      "pink_system": "before_there_was_time",
+      "mythic": false,
+      "v3_fantasy": "compose_nurture_unfold"
+    },
+    {
+      "move_type": "melee",
+      "direction": "neutral",
+      "input_command": "attack_special",
+      "grounded_air": "grounded",
+      "startup_frames": 8,
+      "active_frames": 4,
+      "recovery_frames": 22,
+      "hitboxes": [
+        {
+          "offset_x": 42,
+          "offset_y": -10,
+          "width": 56,
+          "height": 40
+        }
+      ],
+      "damage": 8.0,
+      "angle_deg": 70,
+      "base_knockback": 6.5,
+      "knockback_growth": 1.15,
+      "shield_damage": 8,
+      "shield_stun_frames": 10,
+      "hitstop_frames": 4,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        }
+      },
+      "feedback": {
+        "tier": "heavy",
+        "hitstop_frames": 4,
+        "camera_event": "shake_medium",
+        "vfx_event": "rosamere_super",
+        "sfx_event": "rosamere.super.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.petals"
+      },
+      "combat_tag": "first_bloom",
+      "element_effect": {
+        "type": "primordial_pink",
+        "effect": "super",
+        "strength": 2
+      },
+      "fighter_id": "rosamere",
+      "move_id": "the_first_permission",
+      "training_display_name": "The First Permission",
+      "animation_id": "the_first_permission",
+      "pink_system": "the_first_permission",
+      "mythic": false,
+      "v3_fantasy": "compose_nurture_unfold"
+    },
+    {
+      "move_type": "melee",
+      "direction": "neutral",
+      "input_command": "attack_special",
+      "grounded_air": "grounded",
+      "startup_frames": 8,
+      "active_frames": 4,
+      "recovery_frames": 22,
+      "hitboxes": [
+        {
+          "offset_x": 42,
+          "offset_y": -10,
+          "width": 56,
+          "height": 40
+        }
+      ],
+      "damage": 8.0,
+      "angle_deg": 70,
+      "base_knockback": 6.5,
+      "knockback_growth": 1.15,
+      "shield_damage": 8,
+      "shield_stun_frames": 10,
+      "hitstop_frames": 4,
+      "aura_scaling": {
+        "level_0": {
+          "damage_mult": 1
+        }
+      },
+      "feedback": {
+        "tier": "heavy",
+        "hitstop_frames": 4,
+        "camera_event": "shake_medium",
+        "vfx_event": "rosamere_super",
+        "sfx_event": "rosamere.super.sfx",
+        "screen_flash": false,
+        "particle_profile": "rosamere.petals"
+      },
+      "combat_tag": "first_bloom",
+      "element_effect": {
+        "type": "primordial_pink",
+        "effect": "super",
+        "strength": 2
+      },
+      "fighter_id": "rosamere",
+      "move_id": "mythic_everything_again",
+      "training_display_name": "Mythic Everything Again",
+      "animation_id": "mythic_everything_again",
+      "pink_system": "mythic_everything_again",
+      "mythic": true,
+      "v3_fantasy": "compose_nurture_unfold",
+      "label": "MYTHIC_CLEARLY_LABELED",
+      "ranked_allowed": false,
+      "notes": "Mythic Everything Again is clearly labeled mythic; not a silent ranked win button."
+    }
+  ],
+  "game001_identity": {
+    "schema": "game001_fighter_identity/v1",
+    "combat_tag": "burn_rushdown",
+    "h2h_links": 3,
+    "special_frame_fingerprint": true
+  },
+  "status": "TUNING_CANDIDATE",
+  "owner_approved": false,
+  "kit_authority": "source/ANIME_AGGRESSORS_COMPLETE_CHARACTER_MOVEMENT_ANIMATION_BIBLE_V1.md sections16\u201318",
+  "candidate_mechanics": "bounded reduction"
+}

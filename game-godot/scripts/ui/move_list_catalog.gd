@@ -58,6 +58,7 @@ static func roster_ids() -> PackedStringArray:
 	return PackedStringArray([
 		"ember-vale", "rook-ironside", "juno-spark", "kaia-windrow",
 		"nix-calder", "orion-vell", "vesper-nyx", "yin", "yang",
+		"rosamere",
 	])
 
 

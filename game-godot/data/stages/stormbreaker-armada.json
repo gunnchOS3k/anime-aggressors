@@ -1,0 +1,129 @@
+{
+  "id": "stormbreaker-armada",
+  "displayName": "Stormbreaker Armada",
+  "index": 24,
+  "layoutType": "fleet",
+  "mainPlatform": {
+    "x": 0,
+    "y": 280,
+    "width": 900,
+    "height": 40
+  },
+  "sidePlatforms": [
+    {
+      "x": -260,
+      "y": 180,
+      "width": 170,
+      "height": 24
+    },
+    {
+      "x": 260,
+      "y": 180,
+      "width": 170,
+      "height": 24
+    }
+  ],
+  "spawnPoints": [
+    {
+      "slot": 1,
+      "x": -220,
+      "y": 200
+    },
+    {
+      "slot": 2,
+      "x": 220,
+      "y": 200
+    }
+  ],
+  "blastZones": {
+    "left": -620,
+    "right": 620,
+    "top": -400,
+    "bottom": 440
+  },
+  "ledges": true,
+  "hazardSockets": [],
+  "cameraProfile": {
+    "mode": "platform_fighter",
+    "minZoom": 0.7,
+    "maxZoom": 1.2,
+    "lerp": 0.12,
+    "deadzone": {
+      "x": 80,
+      "y": 60
+    }
+  },
+  "lightingProfile": {
+    "keyColor": "#8899aa",
+    "keyAlpha": 0.1,
+    "ambient": "#0c1014",
+    "rim": "#f4a7c3"
+  },
+  "performanceTier": {
+    "default": "high",
+    "low": {
+      "particles": false,
+      "bands": 1
+    },
+    "medium": {
+      "particles": true,
+      "bands": 2
+    },
+    "high": {
+      "particles": true,
+      "bands": 4
+    }
+  },
+  "a11y": {
+    "highContrastEdges": true,
+    "colorblindMarkers": true
+  },
+  "audioBed": {
+    "event": "bed_stormbreaker_armada",
+    "status": "NOT_AUTHORED",
+    "path": "res://assets/audio/procedural/stages/stormbreaker-armada/bed.wav"
+  },
+  "previewPlaceholder": "res://assets/stages/procedural/stormbreaker-armada.svg",
+  "artStatus": "NOT_AUTHORED",
+  "productionStatus": "REGISTERED_PENDING",
+  "geometryStatus": "PENDING",
+  "HUMAN_ART_APPROVED": false,
+  "yin_yang_presence": {
+    "expression": "armada_flags",
+    "original": true,
+    "franchise_signage": false
+  },
+  "pink_foreshadow": {
+    "motif": "armada_signal_rose",
+    "subtle": true
+  },
+  "rulesets": {
+    "competitive": {
+      "hazards": "predictable_authoritative"
+    },
+    "party_chaos": {
+      "hazards": true,
+      "transformations": false
+    },
+    "story": {
+      "narrative_hooks": true
+    }
+  },
+  "hazard_model": "authoritative_snapshot",
+  "rng_policy": "no_divergent_rng",
+  "notes": "Ship decks. Registered only \u2014 geometry/art pending; not claimed finished.",
+  "ledgeAnchors": [
+    {
+      "id": "left",
+      "x": -450.0,
+      "y": 280.0,
+      "facing": 1
+    },
+    {
+      "id": "right",
+      "x": 450.0,
+      "y": 280.0,
+      "facing": -1
+    }
+  ]
+}

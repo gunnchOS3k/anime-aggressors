@@ -192,6 +192,12 @@ func _observe_link_step(_frame: int) -> void:
 
 func _build_stage() -> void:
 	var stage_id := GameState.stage_id if GameState.stage_id != "" else "training-grid"
+	var manager = load("res://scripts/battle/stage_manager.gd").new()
+	manager.load_registry()
+	if manager.is_playable(stage_id):
+		var built: Dictionary = manager.build_stage(stage_root, stage_id, false, "competitive")
+		if bool(built.get("ok", false)):
+			return
 	var stage_data: Dictionary = GameState.load_stage(stage_id)
 	if str(stage_data.get("id", "")) == "":
 		stage_data["id"] = stage_id

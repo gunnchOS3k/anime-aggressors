@@ -1,0 +1,179 @@
+{
+  "id": "rosamere",
+  "displayName": "Rosamere",
+  "workingTitle": "The First Bloom",
+  "archetype": "Primordial Nurture / Compose Spacer",
+  "element": "Primordial Pink",
+  "size": "medium",
+  "color": "#F4A7C3",
+  "auraColor": "#FFE6F1",
+  "seed_color": "#FFD0E4",
+  "weight": 102,
+  "runSpeed": 258,
+  "dashSpeed": 392,
+  "airSpeed": 228,
+  "jumpStrength": 620,
+  "fallSpeed": 1680,
+  "maxJumps": 2,
+  "damageTakenMult": 1.0,
+  "damageDealtMult": 0.98,
+  "shieldHealthMult": 1.05,
+  "signatureMove": "A World in Bloom",
+  "combatTag": "first_bloom",
+  "defaultSkin": "placeholder_rosamere",
+  "animationManifestPath": "res://data/fighters/rosamere_animations.json",
+  "moveListPath": "res://data/moves/rosamere.json",
+  "hitHurtProfile": {
+    "hurtboxWidth": 40,
+    "hurtboxHeight": 50,
+    "hitboxScale": 1.0
+  },
+  "shieldProfile": {
+    "maxHealth": 105,
+    "decayPerSecond": 16,
+    "stunMult": 0.95
+  },
+  "cpuBehaviorTags": [
+    "spacing",
+    "protect",
+    "projectile"
+  ],
+  "productionStatus": "WORKING_CANDIDATE_OWNER_REVIEW",
+  "modelTier": "pending_original_collectible",
+  "modelPath": "",
+  "portraitPlaceholder": "res://assets/ui/placeholders/fighter_rosamere.svg",
+  "body_variants": [
+    "female",
+    "male"
+  ],
+  "authorship": {
+    "status": "WORKING_CANDIDATE_OWNER_REVIEW",
+    "silhouette": "primordial_petal_column",
+    "color_language": "Primordial Pink \u2014 soft rose, dawn cream, quiet gold rim",
+    "note": "Name/design/gameplay NOT owner-finalized. Working identity flexible. No cel-shaded GLB claimed finished this pass.",
+    "assetStatuses": {
+      "data": "WORKING_CANDIDATE",
+      "moves": "WORKING_CANDIDATE",
+      "silhouette": "SPEC_ONLY",
+      "model_glb": "NOT_AUTHORED",
+      "animations": "CLIP_LIST_ONLY",
+      "vfx": "SPEC_ONLY",
+      "audio": "NOT_AUTHORED",
+      "bible": "WORKING_CANDIDATE",
+      "story": "STUB_OWNER_REVIEW",
+      "training": "HOOKED"
+    }
+  },
+  "art_status": {
+    "HUMAN_ART_APPROVED": false,
+    "cel_shaded_glb": false,
+    "status": "NOT_AUTHORED_THIS_PASS",
+    "honest": true
+  },
+  "balancePath": "res://data/balance/rosamere.json",
+  "unlock_rule": "secret_tenth_after_kaia_philosophical_breakthrough_or_dev_override",
+  "secret_tenth": true,
+  "owner_approved": false,
+  "forms": {
+    "FAMILIAR_ROSE": {
+      "status": "WORKING_CANDIDATE",
+      "context": "voluntarily_constrained_normal_playable",
+      "can_lose": true,
+      "invincible": false,
+      "note": "Familiar Rose \u2014 self-limited competitive projection."
+    },
+    "COMPETITIVE_SELF_LIMITED": {
+      "status": "WORKING_CANDIDATE",
+      "can_lose": true,
+      "invincible": false,
+      "ranked_allowed": true,
+      "note": "Competitive form is intentionally self-limited and can lose."
+    },
+    "FIRST_BLOOM": {
+      "status": "WORKING_CANDIDATE",
+      "context": "primordial_identity_cinematic_enhanced",
+      "can_lose": true,
+      "note": "Primordial presentation \u2014 not ranked omnipotence."
+    },
+    "EVERLASTING_ORIGIN": {
+      "status": "STORY_MYTHIC_ONLY",
+      "ranked_allowed": false,
+      "invincible_ranked": false,
+      "mythic_label_required": true,
+      "note": "Everlasting Origin is story/mythic only. NO invincible ranked character."
+    }
+  },
+  "systems": [
+    "FirstPermission",
+    "BloomSeed",
+    "PetalConstellation",
+    "OriginationScript",
+    "FirstDawn",
+    "GentleReversal",
+    "QuietEmbrace"
+  ],
+  "supers": [
+    {
+      "id": "a_world_in_bloom",
+      "display": "A World in Bloom",
+      "mythic": false
+    },
+    {
+      "id": "before_there_was_time",
+      "display": "Before There Was Time",
+      "mythic": false
+    },
+    {
+      "id": "the_first_permission",
+      "display": "The First Permission",
+      "mythic": false
+    },
+    {
+      "id": "mythic_everything_again",
+      "display": "Mythic Everything Again",
+      "mythic": true,
+      "label": "MYTHIC_CLEARLY_LABELED"
+    }
+  ],
+  "cosmology": {
+    "above": [
+      "yin",
+      "yang",
+      "prismatic_gray"
+    ],
+    "created": [
+      "yin",
+      "yang"
+    ],
+    "kaia_gray": "extraordinary_but_cannot_defeat_pink_or_dominate_true_yin_yang",
+    "allows_agency": true,
+    "preserves": [
+      "Green Between",
+      "seven spectrum",
+      "Rook First Loss",
+      "Puppets",
+      "Essence 0/1/2/4/6",
+      "Prismatic Gray",
+      "impossible Yin/Yang",
+      "Sevenfold Convergence",
+      "Yin/Yang unlocks"
+    ]
+  },
+  "dedication": {
+    "tribute": "Rosemary",
+    "relation": "aunt",
+    "tone": "respectful",
+    "forbidden": [
+      "cancer imagery",
+      "illness stereotypes",
+      "exploitative tragedy"
+    ],
+    "credits_text_status": "OWNER_REVIEW",
+    "public_fiction_ok": true
+  },
+  "game001": {
+    "identity_depth": "WORKING_CANDIDATE_NOT_OWNER_FINAL",
+    "h2h_string_count": 3,
+    "balance_schema": "game001_fighter_balance/v1"
+  }
+}

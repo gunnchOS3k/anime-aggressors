@@ -1,0 +1,212 @@
+{
+	"HUMAN_ART_APPROVED": false,
+	"PASS": true,
+	"RC2_READY": false,
+	"V1_0_0_RELEASE_AUTHORIZED": false,
+	"checks": [
+		{
+			"check": "stage_manager_loads",
+			"pass": true
+		},
+		{
+			"check": "canonical_launch_preserved",
+			"pass": true
+		},
+		{
+			"check": "expanded_30_registered",
+			"pass": true
+		},
+		{
+			"check": "batch1_at_least_5_playable",
+			"pass": true
+		},
+		{
+			"check": "human_art_gate_false",
+			"pass": true
+		},
+		{
+			"check": "rc2_gate_false",
+			"pass": true
+		},
+		{
+			"check": "v1_gate_false",
+			"pass": true
+		},
+		{
+			"check": "pending_count_honest",
+			"pass": true
+		},
+		{
+			"check": "pending_stage_refuses_playable_build",
+			"pass": true
+		},
+		{
+			"check": "pending_reason_honest",
+			"pass": true
+		},
+		{
+			"check": "build_ok:titans-divide",
+			"pass": true
+		},
+		{
+			"check": "status_playable:titans-divide",
+			"pass": true
+		},
+		{
+			"check": "spawns:titans-divide",
+			"pass": true
+		},
+		{
+			"check": "collision_platforms:titans-divide",
+			"pass": true
+		},
+		{
+			"check": "yin_yang_presence:titans-divide",
+			"pass": true
+		},
+		{
+			"check": "hazard_deterministic:titans-divide",
+			"pass": true
+		},
+		{
+			"check": "hazard_deterministic:titans-divide",
+			"pass": true
+		},
+		{
+			"check": "build_ok:the-last-horizon",
+			"pass": true
+		},
+		{
+			"check": "status_playable:the-last-horizon",
+			"pass": true
+		},
+		{
+			"check": "spawns:the-last-horizon",
+			"pass": true
+		},
+		{
+			"check": "collision_platforms:the-last-horizon",
+			"pass": true
+		},
+		{
+			"check": "yin_yang_presence:the-last-horizon",
+			"pass": true
+		},
+		{
+			"check": "last_horizon_competitive_no_hazards",
+			"pass": true
+		},
+		{
+			"check": "build_ok:sunburst-highlands",
+			"pass": true
+		},
+		{
+			"check": "status_playable:sunburst-highlands",
+			"pass": true
+		},
+		{
+			"check": "spawns:sunburst-highlands",
+			"pass": true
+		},
+		{
+			"check": "collision_platforms:sunburst-highlands",
+			"pass": true
+		},
+		{
+			"check": "yin_yang_presence:sunburst-highlands",
+			"pass": true
+		},
+		{
+			"check": "hazard_deterministic:sunburst-highlands",
+			"pass": true
+		},
+		{
+			"check": "build_ok:nightveil-city",
+			"pass": true
+		},
+		{
+			"check": "status_playable:nightveil-city",
+			"pass": true
+		},
+		{
+			"check": "spawns:nightveil-city",
+			"pass": true
+		},
+		{
+			"check": "collision_platforms:nightveil-city",
+			"pass": true
+		},
+		{
+			"check": "yin_yang_presence:nightveil-city",
+			"pass": true
+		},
+		{
+			"check": "hazard_deterministic:nightveil-city",
+			"pass": true
+		},
+		{
+			"check": "build_ok:the-furnace-between",
+			"pass": true
+		},
+		{
+			"check": "status_playable:the-furnace-between",
+			"pass": true
+		},
+		{
+			"check": "spawns:the-furnace-between",
+			"pass": true
+		},
+		{
+			"check": "collision_platforms:the-furnace-between",
+			"pass": true
+		},
+		{
+			"check": "yin_yang_presence:the-furnace-between",
+			"pass": true
+		},
+		{
+			"check": "hazard_deterministic:the-furnace-between",
+			"pass": true
+		},
+		{
+			"check": "hazard_deterministic:the-furnace-between",
+			"pass": true
+		},
+		{
+			"check": "training_loads_titans_divide",
+			"pass": true
+		},
+		{
+			"check": "fighters_spawned",
+			"pass": true
+		},
+		{
+			"check": "actors_present",
+			"pass": true
+		},
+		{
+			"check": "spawn_separation",
+			"pass": true
+		},
+		{
+			"check": "move_runner_bound",
+			"pass": true
+		}
+	],
+	"evidence": {
+		"p1": "kaia-windrow",
+		"p2": "juno-spark",
+		"pending_count": 25,
+		"playable": [
+			"titans-divide",
+			"the-last-horizon",
+			"sunburst-highlands",
+			"nightveil-city",
+			"the-furnace-between"
+		],
+		"spawn_gap": 360.0,
+		"stage_id": "titans-divide"
+	},
+	"failures": [],
+	"scope": "Expanded 30-stage registry + batch1 procedural playable build/spawn + titans-divide 1v1 training smoke. Not V1/human art/RC2."
+}

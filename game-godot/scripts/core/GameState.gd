@@ -624,8 +624,23 @@ func selectable_roster_ids(allow_review: bool = true) -> Array:
 	var review := allow_review and OS.is_debug_build() and OS.get_environment("AA_V1_ROUTE_REVIEW") == "1"
 	if review:
 		return ids
+	var secret_locked := ["yin", "yang", "rosamere"]
 	var selected := []
 	for id in ids:
-		if id not in ["yin", "yang"] or (campaign_runtime != null and bool(campaign_runtime.progress.get(str(id) + "_unlocked", false))):
+		if id not in secret_locked or (campaign_runtime != null and bool(campaign_runtime.progress.get(str(id) + "_unlocked", false))):
+			selected.append(id)
+		elif id == "rosamere" and OS.get_environment("AA_ROSAMERE_DEV_OVERRIDE") == "1":
+			# Dev/training hook only — not a silent public unlock of the nine-adjacent secret.
 			selected.append(id)
 	return selected
+
+
+func secret_tenth_id() -> String:
+	return "rosamere"
+
+
+func is_secret_tenth_unlocked() -> bool:
+	var campaign_runtime := get_node_or_null("/root/CampaignRuntime")
+	if campaign_runtime != null and bool(campaign_runtime.progress.get("rosamere_unlocked", false)):
+		return true
+	return OS.get_environment("AA_ROSAMERE_DEV_OVERRIDE") == "1"

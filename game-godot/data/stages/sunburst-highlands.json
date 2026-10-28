@@ -1,0 +1,145 @@
+{
+  "id": "sunburst-highlands",
+  "displayName": "Sunburst Highlands",
+  "index": 3,
+  "layoutType": "sloped_triple",
+  "mainPlatform": {
+    "x": 0,
+    "y": 300,
+    "width": 880,
+    "height": 42
+  },
+  "sidePlatforms": [
+    {
+      "x": -300,
+      "y": 200,
+      "width": 200,
+      "height": 24
+    },
+    {
+      "x": 300,
+      "y": 160,
+      "width": 200,
+      "height": 24
+    },
+    {
+      "x": 0,
+      "y": 90,
+      "width": 160,
+      "height": 22
+    }
+  ],
+  "spawnPoints": [
+    {
+      "slot": 1,
+      "x": -220,
+      "y": 220
+    },
+    {
+      "slot": 2,
+      "x": 220,
+      "y": 220
+    }
+  ],
+  "blastZones": {
+    "left": -650,
+    "right": 650,
+    "top": -410,
+    "bottom": 450
+  },
+  "ledges": true,
+  "hazardSockets": [
+    {
+      "id": "wind_current",
+      "x": 0,
+      "y": 140,
+      "radius": 22,
+      "authoritative": true,
+      "effect": "updraft",
+      "frames_period": 90
+    }
+  ],
+  "cameraProfile": {
+    "mode": "platform_fighter",
+    "minZoom": 0.7,
+    "maxZoom": 1.2,
+    "lerp": 0.12,
+    "deadzone": {
+      "x": 80,
+      "y": 60
+    }
+  },
+  "lightingProfile": {
+    "keyColor": "#ffd080",
+    "keyAlpha": 0.15,
+    "ambient": "#1a1208",
+    "rim": "#f4a7c3"
+  },
+  "performanceTier": {
+    "default": "high",
+    "low": {
+      "particles": false,
+      "bands": 1
+    },
+    "medium": {
+      "particles": true,
+      "bands": 2
+    },
+    "high": {
+      "particles": true,
+      "bands": 4
+    }
+  },
+  "a11y": {
+    "highContrastEdges": true,
+    "colorblindMarkers": true
+  },
+  "audioBed": {
+    "event": "bed_sunburst_highlands",
+    "status": "PROCEDURAL_WORKING_NOT_HUMAN_FINAL",
+    "path": "res://assets/audio/procedural/stages/sunburst-highlands/bed.wav"
+  },
+  "previewPlaceholder": "res://assets/stages/procedural/sunburst-highlands.svg",
+  "artStatus": "PROCEDURAL_WORKING_NOT_HUMAN_FINAL",
+  "productionStatus": "PLAYABLE_PROCEDURAL_BATCH1",
+  "geometryStatus": "PROCEDURAL_WORKING",
+  "HUMAN_ART_APPROVED": false,
+  "yin_yang_presence": {
+    "expression": "floral_mural",
+    "original": true,
+    "franchise_signage": false
+  },
+  "pink_foreshadow": {
+    "motif": "soft_rose_flora",
+    "subtle": true
+  },
+  "rulesets": {
+    "competitive": {
+      "hazards": "predictable_authoritative"
+    },
+    "party_chaos": {
+      "hazards": true,
+      "transformations": false
+    },
+    "story": {
+      "narrative_hooks": true
+    }
+  },
+  "hazard_model": "authoritative_snapshot",
+  "rng_policy": "no_divergent_rng",
+  "notes": "Original coastal highlands; no franchise checkerboards/loops. Working procedural geometry this pass.",
+  "ledgeAnchors": [
+    {
+      "id": "left",
+      "x": -440.0,
+      "y": 300.0,
+      "facing": 1
+    },
+    {
+      "id": "right",
+      "x": 440.0,
+      "y": 300.0,
+      "facing": -1
+    }
+  ]
+}

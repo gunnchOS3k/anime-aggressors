@@ -70,3 +70,22 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Engineering delayed-resim commit: `9221d1dbe710a2c4e1e7de60b475fdc9ebc5b00c`
 - CI: workflow_dispatch Authored Animation Production, `lan_battle_runtime=true`, `lan_battle_scope=physics`
 - Run: https://github.com/gunnchOS3k/anime-aggressors/actions/runs/40610562424
+
+
+## First Bloom + 30-stage pass (Cursor)
+
+- Working fighter: `rosamere` / The First Bloom — **NOT owner-finalized** (name/design/gameplay flexible)
+- Secret tenth registered; training/command-guide hooks; Pink revelation stub after Kaia `prismatic_gray`
+- Pink systems in-game (deterministic IDs + retirement): FirstPermission, BloomSeed, PetalConstellation, OriginationScript, FirstDawn, GentleReversal, QuietEmbrace (+ supers incl. Mythic Everything Again labeled)
+- Competitive self-limited can lose; Everlasting Origin story/mythic only — **no invincible ranked character**
+- Art: `art_status.cel_shaded_glb=false` / `NOT_AUTHORED_THIS_PASS` (honest; no fake finished GLB)
+- Dedication credits text: `docs/fighters/ROSAMERE_DEDICATION_OWNER_REVIEW.json` — OWNER_REVIEW
+- Stages: expanded 30 registered; canonical launch 6 preserved
+- **Playable batch1 (procedural working):** titans-divide, the-last-horizon, sunburst-highlands, nightveil-city, the-furnace-between
+- Remaining 25: `REGISTERED_PENDING` (JSON + stubs only — not claimed finished)
+- StageManager owns registry/build/hazard snapshots; shipping rollback still off
+- Tests (Godot 4.7.1 headless): PinkBloomSystemsDeterminism PASS (33), ExpandedStageLoadSmoke PASS (47), FlatCombatReplay PASS (24)
+- Evidence: `artifacts/cursor_continuation/BLOOM_STAGE_RUNTIME_EVIDENCE.json`
+- Gates remain false: RC2_READY, V1_0_0_RELEASE_AUTHORIZED, HUMAN_ART_APPROVED
+- Pre-commit tip (parent of this work): `4568e3e1eb4bc8d4bd4bc90f22e3aadbff857c66`
+

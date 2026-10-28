@@ -47,6 +47,42 @@ const THEMES := {
 		"accent": Color(0.35, 0.7, 0.45, 0.25),
 		"hazard": Color(0.3, 0.7, 0.4, 0.25),
 	},
+	# Expanded batch1 — original AA geography (procedural working, not human-final).
+	"titans-divide": {
+		"bg": Color(0.06, 0.09, 0.14),
+		"platform": Color(0.22, 0.26, 0.32),
+		"trim": Color(0.55, 0.72, 0.95),
+		"accent": Color(0.95, 0.65, 0.78, 0.22),
+		"hazard": Color(0.35, 0.55, 0.85, 0.35),
+	},
+	"the-last-horizon": {
+		"bg": Color(0.04, 0.05, 0.1),
+		"platform": Color(0.18, 0.2, 0.28),
+		"trim": Color(1.0, 0.9, 0.94),
+		"accent": Color(0.95, 0.65, 0.78, 0.2),
+		"hazard": Color(0.7, 0.5, 0.65, 0.2),
+	},
+	"sunburst-highlands": {
+		"bg": Color(0.12, 0.18, 0.08),
+		"platform": Color(0.28, 0.36, 0.18),
+		"trim": Color(1.0, 0.75, 0.3),
+		"accent": Color(0.95, 0.7, 0.8, 0.22),
+		"hazard": Color(0.55, 0.85, 0.45, 0.3),
+	},
+	"nightveil-city": {
+		"bg": Color(0.03, 0.04, 0.1),
+		"platform": Color(0.14, 0.16, 0.26),
+		"trim": Color(0.45, 0.55, 1.0),
+		"accent": Color(0.95, 0.65, 0.78, 0.18),
+		"hazard": Color(0.55, 0.4, 0.95, 0.32),
+	},
+	"the-furnace-between": {
+		"bg": Color(0.12, 0.05, 0.04),
+		"platform": Color(0.3, 0.16, 0.12),
+		"trim": Color(1.0, 0.45, 0.2),
+		"accent": Color(0.95, 0.65, 0.78, 0.2),
+		"hazard": Color(1.0, 0.35, 0.15, 0.4),
+	},
 }
 
 
@@ -62,6 +98,7 @@ static func build(stage_root: Node2D, stage_data: Dictionary, reduce_motion: boo
 
 	_add_background(stage_root, theme, lighting, reduce_motion, perf_tier)
 	_add_environment_setdress(stage_root, stage_id, theme, perf_tier, reduce_motion)
+	_add_yin_yang_and_pink_presence(stage_root, stage_data, theme, reduce_motion)
 	if stage_id == "ember-courtyard":
 		_add_ember_golden_slice_layers(stage_root, theme, reduce_motion, perf_tier)
 	_add_blast_guides(stage_root, stage_data.get("blastZones", {}), theme)
@@ -424,3 +461,73 @@ static func _add_ember_golden_slice_layers(root: Node2D, theme: Dictionary, redu
 			])
 			parallax.add_child(ember)
 		root.add_child(parallax)
+
+
+static func _add_yin_yang_and_pink_presence(root: Node2D, stage_data: Dictionary, theme: Dictionary, reduce_motion: bool) -> void:
+	## Varied original Yin/Yang presence + subtle Primordial Pink foreshadow.
+	## Never franchise signage, Bat-Signal compositions, or protected statue layouts.
+	var stage_id := str(stage_data.get("id", ""))
+	var yy: Dictionary = stage_data.get("yin_yang_presence", {})
+	var pink: Dictionary = stage_data.get("pink_foreshadow", {})
+	if yy.is_empty() and pink.is_empty() and stage_id not in [
+		"titans-divide", "the-last-horizon", "sunburst-highlands", "nightveil-city", "the-furnace-between"
+	]:
+		return
+	var presence := Node2D.new()
+	presence.name = "YinYangPinkPresence"
+	presence.z_index = -17
+	# Original Yin (cool void) + Yang (warm definition) markers — not franchise statues.
+	var yin := Polygon2D.new()
+	yin.name = "OriginalYinMarker"
+	yin.color = Color(0.22, 0.24, 0.38, 0.55)
+	yin.polygon = PackedVector2Array([
+		Vector2(-420, -180), Vector2(-360, -240), Vector2(-300, -180), Vector2(-360, -120),
+	])
+	presence.add_child(yin)
+	var yang := Polygon2D.new()
+	yang.name = "OriginalYangMarker"
+	yang.color = Color(0.95, 0.82, 0.42, 0.5)
+	yang.polygon = PackedVector2Array([
+		Vector2(300, -180), Vector2(360, -240), Vector2(420, -180), Vector2(360, -120),
+	])
+	presence.add_child(yang)
+	if stage_id == "titans-divide":
+		# Monument pair — original cosmic beings, not Valley-of-the-End copies.
+		for side in [-1.0, 1.0]:
+			var statue := Polygon2D.new()
+			statue.name = "OriginalCosmicStatue_%s" % ("yin" if side < 0.0 else "yang")
+			statue.color = Color(0.35, 0.38, 0.45, 0.7) if side < 0.0 else Color(0.85, 0.75, 0.45, 0.65)
+			statue.polygon = PackedVector2Array([
+				Vector2(side * 480, 40), Vector2(side * 440, -160), Vector2(side * 520, -160), Vector2(side * 560, 40),
+			])
+			presence.add_child(statue)
+	if stage_id == "nightveil-city":
+		# Cosmic sky conflict arcs — explicitly NOT a bat-signal disc composition.
+		var arc_a := Line2D.new()
+		arc_a.name = "SkyConflictYin"
+		arc_a.width = 3.0
+		arc_a.default_color = Color(0.35, 0.4, 0.7, 0.45)
+		arc_a.add_point(Vector2(-200, -260))
+		arc_a.add_point(Vector2(-40, -300))
+		arc_a.add_point(Vector2(80, -250))
+		presence.add_child(arc_a)
+		var arc_b := Line2D.new()
+		arc_b.name = "SkyConflictYang"
+		arc_b.width = 3.0
+		arc_b.default_color = Color(0.95, 0.85, 0.4, 0.4)
+		arc_b.add_point(Vector2(200, -260))
+		arc_b.add_point(Vector2(40, -305))
+		arc_b.add_point(Vector2(-80, -245))
+		presence.add_child(arc_b)
+	# Subtle pink foreshadow (seed / petal — never illness imagery).
+	if not reduce_motion or not pink.is_empty():
+		var petal := Polygon2D.new()
+		petal.name = "PinkForeshadow"
+		petal.color = Color(0.96, 0.65, 0.76, 0.35)
+		petal.polygon = PackedVector2Array([
+			Vector2(-12, -320), Vector2(0, -340), Vector2(12, -320), Vector2(0, -300),
+		])
+		presence.add_child(petal)
+	root.add_child(presence)
+	root.set_meta("yin_yang_presence", str(yy.get("expression", "default_pair")))
+	root.set_meta("pink_foreshadow", str(pink.get("motif", "petal_seed")))
