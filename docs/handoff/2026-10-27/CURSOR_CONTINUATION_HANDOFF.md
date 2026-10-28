@@ -49,7 +49,7 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Engineering baseline (prior runtime): `3062cdf47742a1c0e60de3bb22c4758e4d66e481`
 - Delayed-resim engineering commit: `9221d1dbe710a2c4e1e7de60b475fdc9ebc5b00c`
 - Requested publish tip: `89817629ee14e15dba12ee12ff49bc1e592eab9e` (FF-pushed from `2bbab955`)
-- Current remote tip (includes handoff publish stamp): `82243ad977910fad2192ad2a91180d57f018cf39`
+- Current remote tip (includes handoff + CI URL stamps): `57489380716ba1e45028b3889a59feec7a2afc35`
 - Runtime evidence: `artifacts/cursor_continuation/CURSOR_CONTINUATION_RUNTIME_EVIDENCE.json`
 - Suites (local Godot 4.7.1 headless): FlatCombatReplay PASS, BodyVerticalReplay PASS, AirborneKnockbackResim PASS, DelayedInputSnapshotResim PASS
 - Shipping LAN backend remains disabled (`SHIPPING_BACKEND_ENABLED=false`). Host committed snapshots stay `rollback_restorable=false`. Opt-in `LanSession.experimental_input_observer` is observe-only and cleared on stop.
@@ -63,7 +63,7 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 ## Push status (published)
 
 - Requested tip published: `89817629ee14e15dba12ee12ff49bc1e592eab9e`
-- Remote tip SHA after handoff stamp: `82243ad977910fad2192ad2a91180d57f018cf39`
+- Remote tip SHA: `57489380716ba1e45028b3889a59feec7a2afc35`
 - Branch: `origin/cursor/continuation-isolated-combat-20261027`
 - Push: fast-forward `2bbab955` → `89817629` → `82243ad9` (no force)
 - Auth: git push succeeded (ConnectScm not required)
