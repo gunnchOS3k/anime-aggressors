@@ -88,7 +88,7 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Evidence: `artifacts/cursor_continuation/BLOOM_STAGE_RUNTIME_EVIDENCE.json`
 - Engineering commit: `8ee6e1915e630c38e148f8101012d604057780f0`
 - Requested publish tip: `8f26f9f565cee813eb4d7be723b08a4ff40664dd` (FF-pushed from `4568e3e1`; ancestor check OK)
-- Remote tip (FF, no force): `93af6494623491081b21efc83d68755430bfc4c7`
+- Remote tip (FF, no force): matches origin/cursor/continuation-isolated-combat-20261027 after this stamp
 - Gates remain false: RC2_READY, V1_0_0_RELEASE_AUTHORIZED, HUMAN_ART_APPROVED
 - Pre-commit tip (parent of this work): `4568e3e1eb4bc8d4bd4bc90f22e3aadbff857c66`
 
