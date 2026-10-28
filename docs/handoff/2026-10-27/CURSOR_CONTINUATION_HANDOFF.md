@@ -85,7 +85,10 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Remaining 25: `REGISTERED_PENDING` (JSON + stubs only — not claimed finished)
 - StageManager owns registry/build/hazard snapshots; shipping rollback still off
 - Tests (Godot 4.7.1 headless): PinkBloomSystemsDeterminism PASS (33), ExpandedStageLoadSmoke PASS (47), FlatCombatReplay PASS (24)
-- Evidence: `artifacts/cursor_continuation/BLOOM_STAGE_RUNTIME_EVIDENCE.json`
+- Evidence: 
+- Published Bloom/stage tip (FF, no force): 
+- Engineering commit: 
+- Remote tip:  ()`artifacts/cursor_continuation/BLOOM_STAGE_RUNTIME_EVIDENCE.json`
 - Local Bloom/stage tip: `8ee6e1915e630c38e148f8101012d604057780f0` (ahead of remote `4568e3e1`)
 - Push: blocked this session (HTTPS auth / no usable gh login after ConnectScm); FF push still required when credentials available — **no force**
 - Gates remain false: RC2_READY, V1_0_0_RELEASE_AUTHORIZED, HUMAN_ART_APPROVED
