@@ -106,5 +106,6 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Hooks: `data/forms/rosamere.json`, `rosamere_form_selection.gd`, training/versus apply paths
 - Tests: RosamereThreeFormCanon PASS, PinkBloomSystemsDeterminism PASS, FlatCombatReplay PASS
 - Evidence: `artifacts/cursor_continuation/ROSAMERE_THREE_FORM_CANON_EVIDENCE.json`
-- Engineering tip: `e06d0cf7` (three-form confirmation); remote tip stamped after FF push
+- Engineering tip: `e06d0cf7` (three-form confirmation)
+- Local tip pending FF push: `f2bceb2bc0df76e1a18b7526fa982dc57e4d4eb0` (ahead of remote `695a9dd9`; ConnectScm connected but HTTPS push auth still blocked this session — no force)
 
