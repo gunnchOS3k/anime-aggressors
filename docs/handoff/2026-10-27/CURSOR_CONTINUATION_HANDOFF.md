@@ -45,7 +45,7 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 
 ## Cursor continuation commit
 
-- Cursor tip SHA: `01358a26dcb5bc8a7831bd51691e01bc792d38c6` (docs stamp)
+- Cursor tip SHA: `12cad2de8a85e848ebb1908e5007c507a608e564`
 - Engineering commit SHA: `3062cdf47742a1c0e60de3bb22c4758e4d66e481` (runtime suites exercised this tree)
 - Parent/source tip: `b4f9808b4e52b8a6b80fdb1cc286d56ec3f94c91`
 - Runtime evidence: `artifacts/cursor_continuation/CURSOR_CONTINUATION_RUNTIME_EVIDENCE.json`
