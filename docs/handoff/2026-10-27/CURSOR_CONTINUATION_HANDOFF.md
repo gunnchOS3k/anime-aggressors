@@ -47,6 +47,7 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Parent/source tip: `b4f9808b4e52b8a6b80fdb1cc286d56ec3f94c91`
 - First remote-recoverable push: `2bbab9551016fbc6b1b7af1f86df3d43daf5cdf1` → `origin/cursor/continuation-isolated-combat-20261027` (new branch; fast-forward create, no force)
 - Engineering baseline (prior runtime): `3062cdf47742a1c0e60de3bb22c4758e4d66e481`
+- Delayed pass tip SHA (pre-stamp): 9221d1dbe710a2c4e1e7de60b475fdc9ebc5b00c
 - This pass adds delayed LanControls correction + shadow LAN observer; tip SHA stamped after commit/push below.
 - Runtime evidence: `artifacts/cursor_continuation/CURSOR_CONTINUATION_RUNTIME_EVIDENCE.json`
 - Suites (local Godot 4.7.1 headless): FlatCombatReplay PASS, BodyVerticalReplay PASS, AirborneKnockbackResim PASS, DelayedInputSnapshotResim PASS
