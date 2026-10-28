@@ -41,3 +41,12 @@
 ## Machine-readable twin
 
 See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
+
+
+## Cursor continuation commit
+
+- Cursor SHA: 
+- Parent/source tip: 
+- Runtime evidence: 
+- Suites: FlatCombatReplay PASS (24), BodyVerticalReplay PASS (21), AirborneKnockbackResim PASS (24)
+- Shipping LAN backend remains disabled for the experimental path.
