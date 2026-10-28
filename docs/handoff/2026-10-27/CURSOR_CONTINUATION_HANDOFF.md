@@ -42,12 +42,18 @@
 
 See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 
+## Cursor continuation commit / push
 
-## Cursor continuation commit
-
-- Cursor tip SHA: `12cad2de8a85e848ebb1908e5007c507a608e564`
-- Engineering commit SHA: `3062cdf47742a1c0e60de3bb22c4758e4d66e481` (runtime suites exercised this tree)
 - Parent/source tip: `b4f9808b4e52b8a6b80fdb1cc286d56ec3f94c91`
+- First remote-recoverable push: `2bbab9551016fbc6b1b7af1f86df3d43daf5cdf1` → `origin/cursor/continuation-isolated-combat-20261027` (new branch; fast-forward create, no force)
+- Engineering baseline (prior runtime): `3062cdf47742a1c0e60de3bb22c4758e4d66e481`
+- This pass adds delayed LanControls correction + shadow LAN observer; tip SHA stamped after commit/push below.
 - Runtime evidence: `artifacts/cursor_continuation/CURSOR_CONTINUATION_RUNTIME_EVIDENCE.json`
-- Suites: FlatCombatReplay PASS (24), BodyVerticalReplay PASS (21), AirborneKnockbackResim PASS (24)
-- Shipping LAN backend remains disabled for the experimental path.
+- Suites (local Godot 4.7.1 headless): FlatCombatReplay PASS, BodyVerticalReplay PASS, AirborneKnockbackResim PASS, DelayedInputSnapshotResim PASS
+- Shipping LAN backend remains disabled (`SHIPPING_BACKEND_ENABLED=false`). Host committed snapshots stay `rollback_restorable=false`. Opt-in `LanSession.experimental_input_observer` is observe-only and cleared on stop.
+
+## LAN / parity work this pass
+
+- `lan_resim_bridge.gd`: LanControls ↔ trial input round-trip; late guest packet → owned flat resim correction; asserts shipping contract.
+- `DelayedInputSnapshotResim.gd`: 4-frame delayed wrong-open-guard mispredict, then late shield packet restores oracle tip (CI physics scope).
+- `lan_session.gd`: optional observe-only Callable hook; default unset → no shipping behavior change.

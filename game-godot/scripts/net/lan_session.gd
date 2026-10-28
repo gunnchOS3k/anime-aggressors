@@ -2,6 +2,8 @@ extends Node
 ## Real direct-LAN ENet input bridge. Host BattleScene is the ONLY simulation.
 ## Guest BattleScene is a read-only presentation replica with no local damage.
 ## No claim of authenticated Internet service or combat rollback/resimulation.
+## Optional experimental_input_observer is observe-only shadow plumbing toward
+## isolated flat resim; default unset. Never enables CharacterBody rollback.
 const Controls = preload("res://scripts/net/lan_controls.gd")
 const VERSION := 2
 const MAX_PACKET := 32768
@@ -42,6 +44,8 @@ var _remote_pick_revision := -1
 var _publish_pending := false
 var _committed_states: Dictionary = {}
 const COMMITTED_HISTORY_LIMIT := 120
+## Opt-in Callable(packet). Default unset → zero shipping behavior change.
+var experimental_input_observer: Callable = Callable()
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -101,6 +105,7 @@ func stop() -> void:
 	_publish_pending = false
 	_committed_states.clear()
 	_last_snapshot = -1
+	experimental_input_observer = Callable()
 	status = "Offline"
 
 func _peer_joined(id: int) -> void:
@@ -222,6 +227,10 @@ func _receive(sender: int, message: Dictionary) -> void:
 		_last_input_ms = Time.get_ticks_msec()
 		remote.apply(message)
 		received_inputs += 1
+		# Observe-only: never restores committed LAN history (rollback_restorable
+		# remains false) and never arms the experimental shipping backend.
+		if experimental_input_observer.is_valid():
+			experimental_input_observer.call(message.duplicate(true))
 	elif sender == 1 and message.get("kind", "") == "hello" and message.get("version", -1) == VERSION:
 		_lobby_id = str(message.get("lobby", ""))
 		_send_selection()

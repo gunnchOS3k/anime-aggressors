@@ -112,6 +112,7 @@ def run(scope="all"):
                 ("flat-combat-replay", "tests/integration/FlatCombatReplay.gd", "FLAT_COMBAT_REPLAY.json"),
                 ("body-vertical-replay", "tests/integration/BodyVerticalReplay.gd", "BODY_VERTICAL_REPLAY.json"),
                 ("airborne-knockback-resim", "tests/integration/AirborneKnockbackResim.gd", "AIRBORNE_KNOCKBACK_RESIM.json"),
+                ("delayed-input-snapshot-resim", "tests/integration/DelayedInputSnapshotResim.gd", "DELAYED_INPUT_SNAPSHOT_RESIM.json"),
                 ("training-controls", "tests/integration/TrainingControls.gd", "TRAINING_CONTROLS.json"),
             ]
             for name, script, filename in component_suites:
