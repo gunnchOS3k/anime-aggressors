@@ -47,7 +47,7 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Parent/source tip: `b4f9808b4e52b8a6b80fdb1cc286d56ec3f94c91`
 - First remote-recoverable push: `2bbab9551016fbc6b1b7af1f86df3d43daf5cdf1` → `origin/cursor/continuation-isolated-combat-20261027` (new branch; fast-forward create, no force)
 - Engineering baseline (prior runtime): `3062cdf47742a1c0e60de3bb22c4758e4d66e481`
-- Delayed pass tip SHA (pre-stamp): 9221d1dbe710a2c4e1e7de60b475fdc9ebc5b00c
+- Delayed pass tip SHA:  (includes docs stamps after )9221d1dbe710a2c4e1e7de60b475fdc9ebc5b00c
 - This pass adds delayed LanControls correction + shadow LAN observer; tip SHA stamped after commit/push below.
 - Runtime evidence: `artifacts/cursor_continuation/CURSOR_CONTINUATION_RUNTIME_EVIDENCE.json`
 - Suites (local Godot 4.7.1 headless): FlatCombatReplay PASS, BodyVerticalReplay PASS, AirborneKnockbackResim PASS, DelayedInputSnapshotResim PASS
@@ -59,9 +59,10 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - `DelayedInputSnapshotResim.gd`: 4-frame delayed wrong-open-guard mispredict, then late shield packet restores oracle tip (CI physics scope).
 - `lan_session.gd`: optional observe-only Callable hook; default unset → no shipping behavior change.
 
-## Push status (honest)
+## Push status (published)
 
-- Remote branch created successfully (no force): `origin/cursor/continuation-isolated-combat-20261027` @ `2bbab9551016fbc6b1b7af1f86df3d43daf5cdf1`
-- Local tip ahead (not yet on remote — auth unavailable for second FF push): `fac4669be37a19477fa46ba9e2af13ad6646951f`
-- Engineering commit for delayed resim: `9221d1dbe710a2c4e1e7de60b475fdc9ebc5b00c`
-- Remote did not diverge; force-push was not used or needed.
+- Remote tip SHA: `89817629ee14e15dba12ee12ff49bc1e592eab9e`
+- Branch: `origin/cursor/continuation-isolated-combat-20261027`
+- Push: fast-forward from `2bbab955` → `89817629` (no force)
+- Auth: git push succeeded (ConnectScm not required)
+- Engineering delayed-resim commit: `9221d1dbe710a2c4e1e7de60b475fdc9ebc5b00c`
