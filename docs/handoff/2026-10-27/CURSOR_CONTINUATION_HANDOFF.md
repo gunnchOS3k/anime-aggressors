@@ -107,5 +107,6 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Tests: RosamereThreeFormCanon PASS, PinkBloomSystemsDeterminism PASS, FlatCombatReplay PASS
 - Evidence: `artifacts/cursor_continuation/ROSAMERE_THREE_FORM_CANON_EVIDENCE.json`
 - Engineering tip: `e06d0cf7` (three-form confirmation)
-- Published remote tip (FF, no force): `6004a1df1db49ca40c657fb7c90da4c9e05491f7` (includes eng `e06d0cf7`; ancestor of prior remote `695a9dd9`)
+- Requested tip FF-published: `6004a1df1db49ca40c657fb7c90da4c9e05491f7` (eng `e06d0cf7`; from `695a9dd9`)
+- Remote HEAD after handoff stamp: `a4bfe14328843f5aec7c3166eda47831d8c05e45`
 
