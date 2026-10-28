@@ -27,6 +27,8 @@ func run() -> void:
 		finish(); return
 	var sys = Pink.new()
 	sys.reset(7)
+	check(sys.form_id == "FAMILIAR_ROSE", "default_story_form_familiar_rose")
+	check(sys.gameplay_contract_id == "COMPETITIVE_SELF_LIMITED", "default_contract_competitive")
 	check(sys.competitive_can_lose(), "competitive_form_can_lose")
 	var bloom: Dictionary = sys.activate("BloomSeed", 1, {"duration_frames": 5})
 	check(bool(bloom.get("ok", false)), "bloom_seed_activates")
@@ -34,7 +36,8 @@ func run() -> void:
 	check(event_id.begins_with("pink:7:"), "bloom_event_id_deterministic_prefix")
 	check(sys.has_active("BloomSeed"), "bloom_active")
 	var snap: Dictionary = sys.capture()
-	check(str(snap.get("schema", "")) == "pink_bloom_systems/v1", "capture_schema")
+	check(str(snap.get("schema", "")) == "pink_bloom_systems/v2", "capture_schema_v2")
+	check(int(snap.get("manifestation_count", 0)) == 3, "capture_three_manifestations")
 	check(not bool(snap.get("ranked_invincible", true)), "capture_rejects_ranked_invincible_flag_default_false")
 	for i in range(5):
 		sys.advance_frame()
@@ -53,8 +56,9 @@ func run() -> void:
 	var mythic: Dictionary = sys.activate("mythic_everything_again", 1, {})
 	check(bool(mythic.get("ok", false)), "mythic_everything_again_in_everlasting")
 	check(str(mythic.get("effect", {}).get("system_id", "")) == "mythic_everything_again", "mythic_clearly_labeled_system_id")
-	sys.set_form("COMPETITIVE_SELF_LIMITED", false)
-	check(sys.competitive_can_lose(), "return_to_self_limited_can_lose")
+	var back: Dictionary = sys.set_form("COMPETITIVE_SELF_LIMITED", false)
+	check(bool(back.get("ok", false)) and str(back.get("form_id", "")) == "FAMILIAR_ROSE", "contract_id_maps_to_familiar_rose")
+	check(sys.competitive_can_lose(), "return_to_familiar_self_limited_can_lose")
 	var roster: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/fighters/roster.json"))
 	check("rosamere" in roster.get("fighters", []), "secret_tenth_in_roster")
 	check("rosamere" in roster.get("secret", []), "rosamere_marked_secret")
@@ -67,7 +71,8 @@ func run() -> void:
 	var fighter: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/fighters/rosamere.json"))
 	check(str(fighter.get("art_status", {}).get("status", "")) == "NOT_AUTHORED_THIS_PASS", "honest_art_status")
 	check(not bool(fighter.get("art_status", {}).get("cel_shaded_glb", true)), "no_fake_finished_glb")
-	check(not bool(fighter.get("owner_approved", true)), "owner_not_finalized")
+	check(bool(fighter.get("owner_approved", {}).get("name", false)), "name_owner_approved")
+	check(not bool(fighter.get("owner_approved", {}).get("final_art", true)), "final_art_still_not_approved")
 	finish()
 
 func finish() -> void:

@@ -1,0 +1,244 @@
+{
+  "fighter_id": "rosamere",
+  "schema_version": 1,
+  "ascension_runtime": true,
+  "state_domain": "primordial_pink_three_form_canon",
+  "canon_status": "OWNER_APPROVED_THREE_FORM_AND_MYTHOLOGY",
+  "name_title_status": "OWNER_FINAL",
+  "display_name": "Rosamere",
+  "title": "The First Bloom",
+  "tuning_status": "BALANCE_NOT_APPROVED",
+  "art_status": {
+    "HUMAN_ART_APPROVED": false,
+    "cel_shaded_glb": false,
+    "status": "NOT_AUTHORED_THIS_PASS",
+    "honest": true
+  },
+  "three_form_canon": true,
+  "manifestation_count": 3,
+  "note": "THERE ARE THREE FORMS, NOT FOUR. COMPETITIVE_SELF_LIMITED is the gameplay contract attached to Familiar Rose — not a fourth story form. Technical IDs FAMILIAR_ROSE, COMPETITIVE_SELF_LIMITED, FIRST_BLOOM, EVERLASTING_ORIGIN are all preserved.",
+  "technical_ids_preserved": [
+    "FAMILIAR_ROSE",
+    "COMPETITIVE_SELF_LIMITED",
+    "FIRST_BLOOM",
+    "EVERLASTING_ORIGIN"
+  ],
+  "ui_manifestations": [
+    "FAMILIAR_ROSE",
+    "FIRST_BLOOM",
+    "EVERLASTING_ORIGIN"
+  ],
+  "default_form": "FAMILIAR_ROSE",
+  "form_ladder": [
+    "FAMILIAR_ROSE",
+    "FIRST_BLOOM"
+  ],
+  "story_form_ladder": [
+    "FAMILIAR_ROSE",
+    "FIRST_BLOOM",
+    "EVERLASTING_ORIGIN"
+  ],
+  "gameplay_contracts": {
+    "COMPETITIVE_SELF_LIMITED": {
+      "contract_id": "COMPETITIVE_SELF_LIMITED",
+      "attaches_to_form": "FAMILIAR_ROSE",
+      "is_story_form": false,
+      "can_lose": true,
+      "invincible": false,
+      "ranked_allowed": true,
+      "note": "Fair wins/losses. Not a fourth story manifestation."
+    }
+  },
+  "transform_rules": {
+    "require_aura_tier": 3,
+    "input": "shield_special_attack",
+    "pause_safe": true,
+    "min_aura_percent": 75.0,
+    "competitive_ladder_excludes_everlasting": true,
+    "everlasting_requires_mode": [
+      "story",
+      "ova",
+      "mythic_party"
+    ],
+    "mythic_party_consent_required_for_everlasting": true
+  },
+  "transition_hooks": {
+    "FAMILIAR_ROSE->FIRST_BLOOM": {
+      "clip": "first_dawn",
+      "seconds": 1.05,
+      "deterministic": true,
+      "permitted_from_modes": [
+        "training",
+        "versus",
+        "story",
+        "ova",
+        "mythic_party"
+      ]
+    },
+    "FIRST_BLOOM->FAMILIAR_ROSE": {
+      "clip": "idle",
+      "seconds": 0.6,
+      "deterministic": true,
+      "permitted_from_modes": [
+        "training",
+        "versus",
+        "story",
+        "ova",
+        "mythic_party"
+      ]
+    },
+    "FIRST_BLOOM->EVERLASTING_ORIGIN": {
+      "clip": "the_first_permission",
+      "seconds": 1.35,
+      "deterministic": true,
+      "permitted_from_modes": [
+        "story",
+        "ova",
+        "mythic_party"
+      ],
+      "forbid_modes": [
+        "versus",
+        "ranked"
+      ]
+    },
+    "EVERLASTING_ORIGIN->FAMILIAR_ROSE": {
+      "clip": "gentle_reversal",
+      "seconds": 0.9,
+      "deterministic": true,
+      "permitted_from_modes": [
+        "story",
+        "ova",
+        "mythic_party",
+        "training"
+      ]
+    }
+  },
+  "forms": {
+    "FAMILIAR_ROSE": {
+      "form_id": "FAMILIAR_ROSE",
+      "display_name": "Familiar Rose",
+      "roman_index": "I",
+      "manifestation": true,
+      "ladder_step": "BASE",
+      "gameplay_contract_id": "COMPETITIVE_SELF_LIMITED",
+      "body_scale": 1.0,
+      "head_presentation": "warm_approachable_petal",
+      "idle_clip": "idle",
+      "transform_in_seconds": 0.0,
+      "transform_in_clip": "aura_charge",
+      "permitted_modes": [
+        "training",
+        "versus",
+        "ranked",
+        "story",
+        "ova",
+        "mythic_party"
+      ],
+      "primary_standard_playable": true,
+      "presentation": {
+        "emission_strength": 0.18,
+        "aura_shape": "soft_petals",
+        "element_accent": "#F4A7C3",
+        "rim": "#FFE6F1",
+        "warm_approachable": true,
+        "motion_authority": "compose, nurture, unfold",
+        "original_form_acting_status": "PENDING_AUTHORED_PRODUCTION",
+        "cel_shaded_glb": false
+      },
+      "move_overrides": {}
+    },
+    "FIRST_BLOOM": {
+      "form_id": "FIRST_BLOOM",
+      "display_name": "First Bloom",
+      "roman_index": "II",
+      "manifestation": true,
+      "ladder_step": "ASCENDANT_REVELATION",
+      "gameplay_contract_id": "BOUNDED_DETERMINISTIC_COMPETITIVE",
+      "body_scale": 1.0,
+      "head_presentation": "ascendant_petal_crown",
+      "idle_clip": "idle",
+      "transformed_idle_clip": "aura_charge",
+      "transform_in_seconds": 1.05,
+      "transform_in_clip": "first_dawn",
+      "permitted_modes": [
+        "training",
+        "versus",
+        "story",
+        "ova",
+        "mythic_party"
+      ],
+      "presentation": {
+        "emission_strength": 0.52,
+        "aura_shape": "bloom_constellation",
+        "element_accent": "#FFD0E4",
+        "rim": "#FFE6F1",
+        "ascendant_glow": true,
+        "not_oversized": true,
+        "motion_authority": "compose, nurture, unfold, reveal",
+        "original_form_acting_status": "PENDING_AUTHORED_PRODUCTION",
+        "cel_shaded_glb": false,
+        "bounded_competitive_effects": true
+      },
+      "move_overrides": {
+        "bloom_seed": {
+          "training_display_name": "Bloom Seed (Ascendant)",
+          "presentation_only_note": "BALANCE_NOT_APPROVED — presentation/VFX emphasis only this pass"
+        },
+        "petal_constellation": {
+          "training_display_name": "Petal Constellation (Ascendant)",
+          "presentation_only_note": "BALANCE_NOT_APPROVED"
+        },
+        "a_world_in_bloom": {
+          "training_display_name": "A World in Bloom (Ascendant)",
+          "presentation_only_note": "BALANCE_NOT_APPROVED"
+        }
+      }
+    },
+    "EVERLASTING_ORIGIN": {
+      "form_id": "EVERLASTING_ORIGIN",
+      "display_name": "Everlasting Origin",
+      "roman_index": "III",
+      "manifestation": true,
+      "ladder_step": "TRUE_CREATOR",
+      "gameplay_contract_id": "STORY_MYTHIC_UNLIMITED",
+      "body_scale": 1.0,
+      "head_presentation": "origin_dawn_veil",
+      "idle_clip": "idle",
+      "transformed_idle_clip": "the_first_permission",
+      "transform_in_seconds": 1.35,
+      "transform_in_clip": "the_first_permission",
+      "permitted_modes": [
+        "story",
+        "ova",
+        "mythic_party"
+      ],
+      "forbid_modes": [
+        "versus",
+        "ranked"
+      ],
+      "ranked_allowed": false,
+      "invincible_ranked": false,
+      "mythic_label_required": true,
+      "mythic_consent_required": true,
+      "presentation": {
+        "emission_strength": 0.82,
+        "aura_shape": "origin_script_field",
+        "element_accent": "#FFE6F1",
+        "rim": "#F4A7C3",
+        "creator_glow": true,
+        "not_oversized": true,
+        "motion_authority": "compose, nurture, unfold, originate, permit",
+        "original_form_acting_status": "PENDING_AUTHORED_PRODUCTION",
+        "cel_shaded_glb": false,
+        "mythic_clearly_labeled": true
+      },
+      "move_overrides": {
+        "mythic_everything_again": {
+          "training_display_name": "Everything Again (Mythic)",
+          "label": "MYTHIC_CLEARLY_LABELED",
+          "ranked_allowed": false
+        }
+      }
+    }
+  }
+}

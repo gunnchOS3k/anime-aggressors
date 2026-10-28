@@ -92,3 +92,18 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Gates remain false: RC2_READY, V1_0_0_RELEASE_AUTHORIZED, HUMAN_ART_APPROVED
 - Pre-commit tip (parent of this work): `4568e3e1eb4bc8d4bd4bc90f22e3aadbff857c66`
 
+
+## Rosamere three-form canon confirmation
+
+- Name **Rosamere** + title **The First Bloom**: OWNER FINAL
+- Three-form canon + high-level mythology: OWNER APPROVED
+- Forms (UI/story): I Familiar Rose (`FAMILIAR_ROSE`) · II First Bloom (`FIRST_BLOOM`) · III Everlasting Origin (`EVERLASTING_ORIGIN`)
+- `COMPETITIVE_SELF_LIMITED` = Familiar Rose gameplay contract (NOT a fourth story form); technical IDs preserved
+- Everlasting: Story + opted-in Mythic Party only; never invincible ranked
+- Final art / balance / cinematics / V1 / RC2: still false; `art_status` honest
+- Dedication credits: OWNER_REVIEW for publication
+- Pink revelation remains after Kaia breakthrough; First Permission systems + Everything Again (Mythic) preserved
+- Hooks: `data/forms/rosamere.json`, `rosamere_form_selection.gd`, training/versus apply paths
+- Tests: RosamereThreeFormCanon PASS, PinkBloomSystemsDeterminism PASS, FlatCombatReplay PASS
+- Evidence: `artifacts/cursor_continuation/ROSAMERE_THREE_FORM_CANON_EVIDENCE.json`
+

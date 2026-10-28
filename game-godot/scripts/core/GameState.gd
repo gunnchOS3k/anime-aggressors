@@ -11,6 +11,11 @@ var p1_body_variant: String = "male"
 var p1_story_skin: String = "BASE"
 var p2_story_skin: String = "BASE"
 var p2_body_variant: String = "female"
+## Rosamere three-form selection (story manifestations). COMPETITIVE_SELF_LIMITED
+## may be supplied and maps onto FAMILIAR_ROSE + contract — never a fourth form.
+var p1_form_id: String = ""
+var p2_form_id: String = ""
+var mythic_party_consent: bool = false
 var p1_is_cpu: bool = false
 var p2_is_cpu: bool = true
 var cpu_level: int = 2

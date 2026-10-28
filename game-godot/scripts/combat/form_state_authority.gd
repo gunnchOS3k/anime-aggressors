@@ -3,12 +3,22 @@ extends RefCounted
 ## receipt, stat modifier or unlock. A clip alias is never a gameplay move ID.
 const SPECTRUM := ["ember-vale","rook-ironside","juno-spark","kaia-windrow","nix-calder","orion-vell","vesper-nyx"]
 const COSMIC := ["yin","yang"]
+const PINK := ["rosamere"]
+const PINK_MANIFESTATIONS := ["FAMILIAR_ROSE", "FIRST_BLOOM", "EVERLASTING_ORIGIN"]
 const ESSENCE_COUNTS := [0,1,2,4,6]
 
 static func describe(fighter_id: String, state: String, legacy: Dictionary = {}) -> Dictionary:
 	var spectrum := fighter_id in SPECTRUM
 	var cosmic := fighter_id in COSMIC
+	var pink := fighter_id in PINK
 	var result := {"applicable":false,"state":state,"domain":"unknown","asset_form":"","grants_progress":false,"human_approved":false}
+	if pink:
+		if state == "COMPETITIVE_SELF_LIMITED":
+			return {"applicable":true,"state":state,"domain":"gameplay_contract","asset_form":"FAMILIAR_ROSE","attaches_to_form":"FAMILIAR_ROSE","is_story_form":false,"fourth_form":false,"grants_progress":false,"human_approved":false,"final_art_approved":false}
+		if state in PINK_MANIFESTATIONS or state == "BASE" or legacy.get("forms", {}).has(state):
+			var form_id := "FAMILIAR_ROSE" if state == "BASE" else state
+			return {"applicable":true,"state":form_id,"domain":"primordial_pink_three_form_canon","asset_form":form_id,"gameplay_owner":"RosamereFormSelection + PinkBloomSystems","story_alias":false,"manifestation_count":3,"grants_progress":false,"human_approved":false,"final_art_approved":false}
+		return result
 	if not spectrum and not cosmic: return result
 	if state == "BASE":
 		result.merge({"applicable":true,"domain":"playable_base","asset_form":"BASE"},true)

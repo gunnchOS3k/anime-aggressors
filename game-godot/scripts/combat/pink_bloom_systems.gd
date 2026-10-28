@@ -2,12 +2,17 @@ extends RefCounted
 ## Deterministic Primordial Pink / First Bloom combat systems.
 ## Narrative omnipotence ≠ desync: every gameplay-affecting effect carries a
 ## stable event ID and is retired from combat state on expiry or cancel.
-## Competitive form is SELF_LIMITED (can lose). Everlasting Origin is
-## story/mythic only — never an invincible ranked character.
-## Working identity (Rosamere / The First Bloom) is NOT owner-finalized.
+##
+## THREE-FORM CANON (owner-approved name/title/mythology):
+##   I  FAMILIAR_ROSE — primary standard-playable; uses COMPETITIVE_SELF_LIMITED contract
+##   II FIRST_BLOOM — Ascendant revelation; bounded deterministic competitive effects
+##   III EVERLASTING_ORIGIN — Story + opted-in Mythic Party only; NEVER invincible ranked
+## COMPETITIVE_SELF_LIMITED is NOT a fourth story form — it is Familiar Rose's gameplay contract.
+## Final art / balance / cinematics / V1: NOT approved.
 
-const SCHEMA := "pink_bloom_systems/v1"
+const SCHEMA := "pink_bloom_systems/v2"
 const FIGHTER_ID := "rosamere"
+const Selection = preload("res://scripts/combat/rosamere_form_selection.gd")
 
 const SYSTEM_IDS := [
 	"FirstPermission",
@@ -31,10 +36,15 @@ const FORM_FAMILIAR := "FAMILIAR_ROSE"
 const FORM_FIRST_BLOOM := "FIRST_BLOOM"
 const FORM_EVERLASTING := "EVERLASTING_ORIGIN"
 
+const STORY_FORMS := [FORM_FAMILIAR, FORM_FIRST_BLOOM, FORM_EVERLASTING]
+
 var epoch: int = 0
 var frame: int = 0
 var next_event_seq: int = 1
-var form_id: String = FORM_COMPETITIVE
+## Active story manifestation (one of three). Never COMPETITIVE_SELF_LIMITED.
+var form_id: String = FORM_FAMILIAR
+## Gameplay contract ID. COMPETITIVE_SELF_LIMITED attaches to Familiar Rose.
+var gameplay_contract_id: String = FORM_COMPETITIVE
 var active_effects: Array = []
 var retired_event_ids: Array = []
 var origination_script_level: int = 0
@@ -45,7 +55,8 @@ func reset(p_epoch: int = 1) -> void:
 	epoch = p_epoch
 	frame = 0
 	next_event_seq = 1
-	form_id = FORM_COMPETITIVE
+	form_id = FORM_FAMILIAR
+	gameplay_contract_id = FORM_COMPETITIVE
 	active_effects.clear()
 	retired_event_ids.clear()
 	origination_script_level = 0
@@ -60,17 +71,22 @@ func capture() -> Dictionary:
 		"frame": frame,
 		"next_event_seq": next_event_seq,
 		"form_id": form_id,
+		"story_form_id": form_id,
+		"gameplay_contract_id": gameplay_contract_id,
 		"active_effects": active_effects.duplicate(true),
 		"retired_event_ids": retired_event_ids.duplicate(true),
 		"origination_script_level": origination_script_level,
 		"petal_constellation_charges": petal_constellation_charges,
 		"ranked_invincible": false,
 		"everlasting_ranked_forbidden": true,
+		"three_form_canon": true,
+		"manifestation_count": 3,
 	}
 
 
 func restore(record: Dictionary) -> bool:
-	if str(record.get("schema", "")) != SCHEMA:
+	var schema := str(record.get("schema", ""))
+	if schema != SCHEMA and schema != "pink_bloom_systems/v1":
 		return false
 	if str(record.get("fighter_id", "")) != FIGHTER_ID:
 		return false
@@ -79,7 +95,14 @@ func restore(record: Dictionary) -> bool:
 	epoch = int(record.get("epoch", 0))
 	frame = int(record.get("frame", 0))
 	next_event_seq = int(record.get("next_event_seq", 1))
-	form_id = str(record.get("form_id", FORM_COMPETITIVE))
+	var raw_form := str(record.get("form_id", FORM_FAMILIAR))
+	var norm: Dictionary = Selection.normalize_selection(raw_form)
+	if not bool(norm.get("ok", false)):
+		return false
+	form_id = str(norm.get("form_id", FORM_FAMILIAR))
+	gameplay_contract_id = str(record.get("gameplay_contract_id", norm.get("gameplay_contract_id", FORM_COMPETITIVE)))
+	if form_id == FORM_FAMILIAR:
+		gameplay_contract_id = FORM_COMPETITIVE
 	active_effects = record.get("active_effects", []).duplicate(true)
 	retired_event_ids = record.get("retired_event_ids", []).duplicate(true)
 	origination_script_level = int(record.get("origination_script_level", 0))
@@ -88,12 +111,31 @@ func restore(record: Dictionary) -> bool:
 
 
 func set_form(p_form: String, mythic_consent: bool = false) -> Dictionary:
-	if p_form == FORM_EVERLASTING and not mythic_consent:
-		return _fail("everlasting_requires_mythic_consent")
-	if p_form not in [FORM_COMPETITIVE, FORM_FAMILIAR, FORM_FIRST_BLOOM, FORM_EVERLASTING]:
+	## Accepts story form IDs or COMPETITIVE_SELF_LIMITED (maps onto Familiar Rose).
+	var norm: Dictionary = Selection.normalize_selection(p_form)
+	if not bool(norm.get("ok", false)):
 		return _fail("unknown_form")
-	form_id = p_form
-	return {"ok": true, "form_id": form_id, "can_lose": form_id != FORM_EVERLASTING, "ranked_allowed": form_id != FORM_EVERLASTING}
+	var resolved := str(norm.get("form_id", FORM_FAMILIAR))
+	if resolved == FORM_EVERLASTING and not mythic_consent:
+		return _fail("everlasting_requires_mythic_consent")
+	form_id = resolved
+	gameplay_contract_id = str(norm.get("gameplay_contract_id", ""))
+	if form_id == FORM_FAMILIAR:
+		gameplay_contract_id = FORM_COMPETITIVE
+	return {
+		"ok": true,
+		"form_id": form_id,
+		"story_form_id": form_id,
+		"gameplay_contract_id": gameplay_contract_id,
+		"can_lose": competitive_can_lose(),
+		"ranked_allowed": form_id != FORM_EVERLASTING,
+		"fourth_form": false,
+		"manifestation_count": 3,
+	}
+
+
+func story_forms() -> Array:
+	return STORY_FORMS.duplicate()
 
 
 func advance_frame() -> Array:
@@ -115,7 +157,7 @@ func activate(system_id: String, owner_slot: int, payload: Dictionary = {}) -> D
 		return _fail("unknown_system")
 	if system_id == "mythic_everything_again" and form_id != FORM_EVERLASTING:
 		return _fail("mythic_requires_everlasting_form")
-	if form_id == FORM_COMPETITIVE or form_id == FORM_FAMILIAR:
+	if form_id == FORM_FAMILIAR or gameplay_contract_id == FORM_COMPETITIVE:
 		# Self-limited competitive path — no omnipotent overrides.
 		if bool(payload.get("omnipotent", false)):
 			return _fail("competitive_rejects_omnipotence")
@@ -130,6 +172,8 @@ func activate(system_id: String, owner_slot: int, payload: Dictionary = {}) -> D
 		"expires_frame": frame + max(1, duration),
 		"payload": payload.duplicate(true),
 		"deterministic": true,
+		"form_id": form_id,
+		"gameplay_contract_id": gameplay_contract_id,
 	}
 	active_effects.append(effect)
 	match system_id:
@@ -172,6 +216,8 @@ func active_event_ids() -> Array:
 
 
 func competitive_can_lose() -> bool:
+	## Familiar Rose (competitive contract) and First Bloom can lose.
+	## Everlasting Origin is story/mythic — not a ranked invincible win condition.
 	return form_id != FORM_EVERLASTING
 
 

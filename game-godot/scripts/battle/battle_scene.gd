@@ -61,6 +61,7 @@ var _network_abandoned := false
 const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
 const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
 const MOVE_LIST_PANEL := preload("res://scripts/ui/move_list_panel.gd")
+const _RosamereForms = preload("res://scripts/combat/rosamere_form_selection.gd")
 
 var _move_list_panel: Control
 var _training_pin_label: Label
@@ -78,6 +79,7 @@ func _ready() -> void:
 		CampaignRuntime.bind_battle_scene(self, _story_attempt_token)
 	_build_stage()
 	_spawn_fighters()
+	_apply_rosamere_form_hooks()
 	_setup_hud_panels()
 	_apply_device_role()
 	_time_remaining = float(GameState.match_timer_seconds)
@@ -227,6 +229,26 @@ func _build_stage() -> void:
 		reduce = bool(device.reduce_motion)
 	var builder = load("res://scripts/battle/stage_procedural_builder.gd")
 	builder.build(stage_root, stage_data, reduce)
+
+func _apply_rosamere_form_hooks() -> void:
+	## Versus/story form selection: three manifestations; Everlasting never ranked.
+	for pair in [[fighter1, GameState.p1_form_id, GameState.p1_fighter_id], [fighter2, GameState.p2_form_id, GameState.p2_fighter_id]]:
+		var actor = pair[0]
+		var form_id := str(pair[1])
+		var fid := str(pair[2])
+		if not is_instance_valid(actor) or fid != "rosamere":
+			continue
+		if form_id.is_empty():
+			form_id = "FAMILIAR_ROSE"
+		var mode := str(GameState.mode)
+		if mode.is_empty():
+			mode = "versus"
+		var consent := bool(GameState.mythic_party_consent) or mode in ["story", "ova"]
+		var gate: Dictionary = _RosamereForms.select_for_mode(form_id, mode, consent)
+		if not bool(gate.get("ok", false)) and form_id == "EVERLASTING_ORIGIN":
+			form_id = "FAMILIAR_ROSE"
+		_RosamereForms.apply_to_fighter(actor, form_id, mode, consent)
+
 
 func _spawn_fighters() -> void:
 	for c in fighters_root.get_children():

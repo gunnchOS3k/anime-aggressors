@@ -1,62 +1,55 @@
-# Rosamere — The First Bloom (WORKING IDENTITY)
+# Rosamere — The First Bloom
 
-> Status: WORKING_CANDIDATE_OWNER_REVIEW. Name, design, and gameplay are NOT owner-finalized.
-> Keep working identity flexible. Do not treat this document as locked canon.
+> **Owner-approved:** Name, title, three-form canon, high-level mythology.
+> **Not approved:** Final art, balance, cinematics, V1 / RC2 release.
+
+## Identity
+
+| Field | Value | Status |
+|------|--------|--------|
+| Name | Rosamere | OWNER FINAL |
+| Title | The First Bloom | OWNER FINAL |
+| Color | Primordial Pink | OWNER APPROVED mythology |
 
 ## Cosmology (preserve peers)
 
-Rosamere (Primordial Pink) sits **above** Yin, Yang, and Prismatic Gray. Pink **created** Yin and Yang so agency could exist in the spectrum. Kaia's Prismatic Gray is extraordinary — a philosophical breakthrough that can confront the cosmic twins — but Gray cannot defeat Pink by raw power, nor dominate true Yin/Yang. Pink allows agency; Pink is not a ranked invincible win condition.
+Rosamere sits **above** Yin, Yang, and Prismatic Gray. Pink **created** Yin and Yang so agency could exist. Kaia's Prismatic Gray is extraordinary — a philosophical breakthrough — but Gray cannot defeat Pink by raw power, nor dominate true Yin/Yang. Pink allows agency.
 
-Preserve without retuning the nine:
-- Green Between
-- Seven spectrum fighters
-- Rook First Loss
-- Puppets
-- Essence 0 / 1 / 2 / 4 / 6
-- Prismatic Gray
-- Impossible Yin / Yang
-- Sevenfold Convergence
-- Yin / Yang unlocks
+Preserve without retuning the nine: Green Between, seven spectrum, Rook First Loss, Puppets, Essence 0/1/2/4/6, Prismatic Gray, impossible Yin/Yang, Sevenfold Convergence, Yin/Yang unlocks.
 
-**Story placement:** Pink revelation lands **after** Kaia's philosophical breakthrough. Do not claim Kaia beat Pink (or the twins) by raw power.
+**Story placement:** Pink revelation lands **after** Kaia's philosophical breakthrough. Do not claim Kaia beat Pink by raw power.
 
-## Competitive vs Mythic
+## Three forms — NOT four
 
-| Form | Context | Can lose? | Ranked |
-|------|---------|-----------|--------|
-| Competitive Self-Limited | Versus / ranked | Yes (intentionally) | Allowed candidate |
-| Everlasting Origin | Story / mythic only | N/A narrative | **Forbidden** as invincible ranked |
+| # | Form ID | Display | Modes | Notes |
+|---|---------|---------|-------|-------|
+| I | `FAMILIAR_ROSE` | Familiar Rose | training / versus / ranked / story | Primary standard-playable; warm, approachable |
+| II | `FIRST_BLOOM` | First Bloom | training / versus / story | Ascendant revelation; bounded deterministic competitive effects if any |
+| III | `EVERLASTING_ORIGIN` | Everlasting Origin | story / ova / mythic_party (consent) | True unlimited creator; **NEVER** invincible ranked |
 
-Mythic Everything Again is clearly labeled MYTHIC. Narrative omnipotence ≠ network desync: every gameplay-affecting effect is deterministic with IDs and event retirement in combat state.
+### Gameplay contract (not a fourth form)
 
-## Silhouette / color language
+| Technical ID | Role |
+|--------------|------|
+| `COMPETITIVE_SELF_LIMITED` | Gameplay contract attached to **Familiar Rose** playable projection — fair wins/losses. **Not** a story manifestation. |
 
-- Silhouette: tall soft petal-column; gentle shoulders; no aggressive weapon chrome.
-- Primordial Pink: soft rose `#F4A7C3`, dawn cream `#FFE6F1`, quiet gold rim.
-- Body presentation variants: female / male interchangeable presentation; no exploitative framing.
-- Art: cel-shaded GLB **not authored this pass**. Honest `art_status.cel_shaded_glb = false`.
+UI and story must show **three** manifestations. Preserve all four technical IDs in source mapping.
 
 ## Systems (deterministic IDs)
 
-1. **First Permission** — grants a timed agency window (self or ally); expires by frame ID.
-2. **Bloom Seed** — plant a seed projectile / zone; blooms after fixed frames; retired on hit or timeout.
-3. **Petal Constellation** — multi-hit petal pattern with fixed offsets; constellation IDs in snapshot.
-4. **Origination Script** — charge/write meter that alters next special's deterministic script ID.
-5. **First Dawn** — recovery / vertical permission; fixed arc tables.
-6. **Gentle Reversal** — counter-turn with fixed frames; no RNG branch.
-7. **Quiet Embrace** — soft grab / protective clinch; release timings fixed.
+First Permission, Bloom Seed, Petal Constellation, Origination Script, First Dawn, Gentle Reversal, Quiet Embrace.
 
 ## Supers
 
 - A World in Bloom
 - Before There Was Time
 - The First Permission
-- Mythic Everything Again (**MYTHIC_CLEARLY_LABELED**; not silent ranked)
+- Everything Again / Mythic Everything Again (**MYTHIC_CLEARLY_LABELED**)
 
-## Dedication (owner-review)
+## Art
 
-Respectful tribute to aunt Rosemary (pink / gunnchOS). Public fiction may carry soft pink motif. Optional credits dedication text is marked OWNER_REVIEW. Forbidden: cancer imagery, illness stereotypes, exploitative tragedy.
+Cel-shaded GLB **not authored**. Honest `art_status.cel_shaded_glb = false`. Form presentation uses Godot emission/aura/clip hooks only.
 
-## Move fantasy language
+## Dedication (publication)
 
-Compose / nurture / unfold — never “erase,” “infect,” or illness metaphors.
+Credits dedication text remains **OWNER_REVIEW** for publication. Forbidden: cancer imagery, illness stereotypes, exploitative tragedy.

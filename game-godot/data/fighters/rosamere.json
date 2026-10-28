@@ -1,7 +1,6 @@
 {
   "id": "rosamere",
   "displayName": "Rosamere",
-  "workingTitle": "The First Bloom",
   "archetype": "Primordial Nurture / Compose Spacer",
   "element": "Primordial Pink",
   "size": "medium",
@@ -38,7 +37,7 @@
     "protect",
     "projectile"
   ],
-  "productionStatus": "WORKING_CANDIDATE_OWNER_REVIEW",
+  "productionStatus": "CANON_NAME_TITLE_MYTHOLOGY_APPROVED_ART_BALANCE_PENDING",
   "modelTier": "pending_original_collectible",
   "modelPath": "",
   "portraitPlaceholder": "res://assets/ui/placeholders/fighter_rosamere.svg",
@@ -47,21 +46,22 @@
     "male"
   ],
   "authorship": {
-    "status": "WORKING_CANDIDATE_OWNER_REVIEW",
+    "status": "NAME_TITLE_MYTHOLOGY_OWNER_APPROVED",
     "silhouette": "primordial_petal_column",
     "color_language": "Primordial Pink \u2014 soft rose, dawn cream, quiet gold rim",
-    "note": "Name/design/gameplay NOT owner-finalized. Working identity flexible. No cel-shaded GLB claimed finished this pass.",
+    "note": "Name Rosamere + title The First Bloom + three-form canon + high-level mythology OWNER APPROVED. Final art/balance/cinematics/V1 NOT approved.",
     "assetStatuses": {
-      "data": "WORKING_CANDIDATE",
-      "moves": "WORKING_CANDIDATE",
+      "data": "CANON_IDENTITY_APPROVED",
+      "moves": "SYSTEMS_PRESERVED_BALANCE_NOT_APPROVED",
       "silhouette": "SPEC_ONLY",
       "model_glb": "NOT_AUTHORED",
-      "animations": "CLIP_LIST_ONLY",
-      "vfx": "SPEC_ONLY",
+      "animations": "CLIP_LIST_PLUS_FORM_PRESENTATION_HOOKS",
+      "vfx": "FORM_PRESENTATION_SPEC",
       "audio": "NOT_AUTHORED",
-      "bible": "WORKING_CANDIDATE",
-      "story": "STUB_OWNER_REVIEW",
-      "training": "HOOKED"
+      "bible": "OWNER_APPROVED_MYTHOLOGY",
+      "story": "STUB_AFTER_KAIA_BREAKTHROUGH",
+      "training": "FORM_SELECTION_HOOKED",
+      "forms": "THREE_FORM_CANON"
     }
   },
   "art_status": {
@@ -73,34 +73,60 @@
   "balancePath": "res://data/balance/rosamere.json",
   "unlock_rule": "secret_tenth_after_kaia_philosophical_breakthrough_or_dev_override",
   "secret_tenth": true,
-  "owner_approved": false,
+  "owner_approved": {
+    "name": true,
+    "title": true,
+    "three_form_canon": true,
+    "high_level_mythology": true,
+    "final_art": false,
+    "balance": false,
+    "cinematics": false,
+    "V1_0_0_RELEASE_AUTHORIZED": false,
+    "RC2_READY": false
+  },
   "forms": {
     "FAMILIAR_ROSE": {
-      "status": "WORKING_CANDIDATE",
-      "context": "voluntarily_constrained_normal_playable",
+      "roman": "I",
+      "display": "Familiar Rose",
+      "manifestation": true,
+      "gameplay_contract_id": "COMPETITIVE_SELF_LIMITED",
+      "primary_standard_playable": true,
       "can_lose": true,
       "invincible": false,
-      "note": "Familiar Rose \u2014 self-limited competitive projection."
-    },
-    "COMPETITIVE_SELF_LIMITED": {
-      "status": "WORKING_CANDIDATE",
-      "can_lose": true,
-      "invincible": false,
-      "ranked_allowed": true,
-      "note": "Competitive form is intentionally self-limited and can lose."
+      "status": "OWNER_APPROVED_CANON"
     },
     "FIRST_BLOOM": {
-      "status": "WORKING_CANDIDATE",
-      "context": "primordial_identity_cinematic_enhanced",
+      "roman": "II",
+      "display": "First Bloom",
+      "manifestation": true,
+      "context": "ascendant_revelation",
+      "bounded_deterministic_competitive": true,
       "can_lose": true,
-      "note": "Primordial presentation \u2014 not ranked omnipotence."
+      "status": "OWNER_APPROVED_CANON"
     },
     "EVERLASTING_ORIGIN": {
-      "status": "STORY_MYTHIC_ONLY",
+      "roman": "III",
+      "display": "Everlasting Origin",
+      "manifestation": true,
       "ranked_allowed": false,
       "invincible_ranked": false,
       "mythic_label_required": true,
-      "note": "Everlasting Origin is story/mythic only. NO invincible ranked character."
+      "permitted_modes": [
+        "story",
+        "ova",
+        "mythic_party"
+      ],
+      "status": "OWNER_APPROVED_CANON"
+    },
+    "COMPETITIVE_SELF_LIMITED": {
+      "is_story_form": false,
+      "is_gameplay_contract": true,
+      "attaches_to_form": "FAMILIAR_ROSE",
+      "can_lose": true,
+      "invincible": false,
+      "ranked_allowed": true,
+      "note": "NOT a fourth story form \u2014 Familiar Rose playable projection contract.",
+      "status": "OWNER_APPROVED_CONTRACT"
     }
   },
   "systems": [
@@ -172,8 +198,17 @@
     "public_fiction_ok": true
   },
   "game001": {
-    "identity_depth": "WORKING_CANDIDATE_NOT_OWNER_FINAL",
+    "identity_depth": "NAME_TITLE_MYTHOLOGY_OWNER_APPROVED",
     "h2h_string_count": 3,
-    "balance_schema": "game001_fighter_balance/v1"
-  }
+    "balance_schema": "game001_fighter_balance/v1",
+    "balance_approved": false
+  },
+  "title": "The First Bloom",
+  "name_status": "OWNER_FINAL",
+  "title_status": "OWNER_FINAL",
+  "mythology_status": "OWNER_APPROVED",
+  "default_form_id": "FAMILIAR_ROSE",
+  "forms_path": "res://data/forms/rosamere.json",
+  "three_form_canon": true,
+  "manifestation_count": 3
 }
