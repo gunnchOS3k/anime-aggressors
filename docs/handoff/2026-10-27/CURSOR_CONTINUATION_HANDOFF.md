@@ -47,8 +47,9 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Parent/source tip: `b4f9808b4e52b8a6b80fdb1cc286d56ec3f94c91`
 - First remote-recoverable push: `2bbab9551016fbc6b1b7af1f86df3d43daf5cdf1` → `origin/cursor/continuation-isolated-combat-20261027` (new branch; fast-forward create, no force)
 - Engineering baseline (prior runtime): `3062cdf47742a1c0e60de3bb22c4758e4d66e481`
-- Delayed pass tip SHA:  (includes docs stamps after )9221d1dbe710a2c4e1e7de60b475fdc9ebc5b00c
-- This pass adds delayed LanControls correction + shadow LAN observer; tip SHA stamped after commit/push below.
+- Delayed-resim engineering commit: `9221d1dbe710a2c4e1e7de60b475fdc9ebc5b00c`
+- Requested publish tip: `89817629ee14e15dba12ee12ff49bc1e592eab9e` (FF-pushed from `2bbab955`)
+- Current remote tip (includes handoff publish stamp): `82243ad977910fad2192ad2a91180d57f018cf39`
 - Runtime evidence: `artifacts/cursor_continuation/CURSOR_CONTINUATION_RUNTIME_EVIDENCE.json`
 - Suites (local Godot 4.7.1 headless): FlatCombatReplay PASS, BodyVerticalReplay PASS, AirborneKnockbackResim PASS, DelayedInputSnapshotResim PASS
 - Shipping LAN backend remains disabled (`SHIPPING_BACKEND_ENABLED=false`). Host committed snapshots stay `rollback_restorable=false`. Opt-in `LanSession.experimental_input_observer` is observe-only and cleared on stop.
@@ -61,8 +62,11 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 
 ## Push status (published)
 
-- Remote tip SHA: `89817629ee14e15dba12ee12ff49bc1e592eab9e`
+- Requested tip published: `89817629ee14e15dba12ee12ff49bc1e592eab9e`
+- Remote tip SHA after handoff stamp: `82243ad977910fad2192ad2a91180d57f018cf39`
 - Branch: `origin/cursor/continuation-isolated-combat-20261027`
-- Push: fast-forward from `2bbab955` → `89817629` (no force)
+- Push: fast-forward `2bbab955` → `89817629` → `82243ad9` (no force)
 - Auth: git push succeeded (ConnectScm not required)
 - Engineering delayed-resim commit: `9221d1dbe710a2c4e1e7de60b475fdc9ebc5b00c`
+- CI: workflow_dispatch Authored Animation Production, `lan_battle_runtime=true`, `lan_battle_scope=physics`
+- Run: https://github.com/gunnchOS3k/anime-aggressors/actions/runs/40610562424
