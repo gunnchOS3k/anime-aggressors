@@ -88,7 +88,7 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Evidence: `artifacts/cursor_continuation/BLOOM_STAGE_RUNTIME_EVIDENCE.json`
 - Engineering commit: `8ee6e1915e630c38e148f8101012d604057780f0`
 - Requested publish tip: `8f26f9f565cee813eb4d7be723b08a4ff40664dd` (FF-pushed from `4568e3e1`; ancestor check OK)
-- Remote tip (FF, no force): `03e06c0da42f911e15cff35911e6ace3741a4488`
+- Remote tip before this docs stamp: `a5a26ab3987515cc34495ba03c78268b51dbec1f` (branch tip advances with this commit; includes requested `8f26f9f5` + eng `8ee6e191`)
 - Gates remain false: RC2_READY, V1_0_0_RELEASE_AUTHORIZED, HUMAN_ART_APPROVED
 - Pre-commit tip (parent of this work): `4568e3e1eb4bc8d4bd4bc90f22e3aadbff857c66`
 
