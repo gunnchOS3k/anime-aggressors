@@ -1,0 +1,45 @@
+{
+  "temporary_owner": "cursor",
+  "source_branch": "integration/v1-preserved-candidate-20261025",
+  "source_sha": "b4f9808b4e52b8a6b80fdb1cc286d56ec3f94c91",
+  "cursor_branch": "cursor/continuation-isolated-combat-20261027",
+  "worktree_head_before_commit": "b4f9808b4e52b8a6b80fdb1cc286d56ec3f94c91",
+  "godot_version": "4.7.1.stable.official.a13da4feb",
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false,
+  "shipping_backend_enabled": false,
+  "suites": {
+    "flat": {
+      "PASS": true,
+      "checks": 24,
+      "failures": [],
+      "result_sha256": "48d2f66014539a9e381f1921a3d0949df24ac8cb3e9881add1c2de483542584c"
+    },
+    "body": {
+      "PASS": true,
+      "checks": 21,
+      "failures": [],
+      "result_sha256": "cf23431abae7a6d6ac86c1d5c879648418d86b5b8ce67ca05d35e167184bea7e"
+    },
+    "air": {
+      "PASS": true,
+      "checks": 24,
+      "failures": [],
+      "result_sha256": "592ecee125e22e5c239375bd9e1f947172eca155d3dfa0e1b0eb821784bdade5"
+    }
+  },
+  "source_sha256": {
+    "game-godot/scripts/net/experimental/flat_combat_trial.gd": "75d301435e11497f16f5b86f48d7877b3fc018668e80644730e8b9727bb6083d",
+    "game-godot/scripts/net/experimental/flat_combat_resim.gd": "cc750e9f3cc26cb020f0c7987fca6c32db840f51ecac46fe2976801711b34e14",
+    "game-godot/scripts/net/experimental/human_seat_policy.gd": "67d3aa9b234b40315aede2614da60f1505d5c7fbf6f36c6d7e4122b9553d2cbb",
+    "game-godot/tests/integration/AirborneKnockbackResim.gd": "5c92272dca3db6dea3d9dc6d91719383da99bbb165b2e6c48a65cead01ff5b72",
+    "tools/integration/run_lan_battle_ci.py": "1470e2843876f3568706d7fa4f28a8e5a2218993df0a43561e25a64a86a34f12",
+    "docs/handoff/2026-10-27/CURSOR_CONTINUATION_HANDOFF.md": "c38ebc621236fb3552022a53fda31a0c7a9b543eb3cb24cc9907d15e95e3a9cb"
+  },
+  "PASS": true,
+  "notes": [
+    "Bound flat trial actors to live Training world X to clear BodyVertical spawn-offset parity failure at tip.",
+    "Added experimental 2-human-seat resim + airborne knockback corrected-remote DI with shipping LAN left disabled.",
+    "Codex dirty trees left untouched."
+  ]
+}

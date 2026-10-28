@@ -465,8 +465,17 @@ func _configure_from_live_impl(p: Node, d: Node, stage: Dictionary, epoch_value:
 		actor.name = "TrialActor%d" % (i + 1)
 		add_child(actor)
 		actor.setup(self, i + 1, source, move if i == 0 else {})
+		# Bind to the live Training actor's current world X (already earned by
+		# ordinary scene spawn), snapped onto this owned flat platform top.
+		# Stage JSON spawnPoints remain contract evidence only — using them as
+		# absolute roots created a constant horizontal offset versus CharacterBody
+		# and failed fixed-step motion parity despite matching velocity/state.
 		var spawn: Dictionary = stage.spawnPoints[i]
-		actor.position = Vector2(float(spawn.x), platform.position.y - actor.body_rect.end.y)
+		if not is_finite(float(spawn.x)) or not is_finite(float(source.global_position.x)):
+			return false
+		actor.position = Vector2(float(source.global_position.x), platform.position.y - actor.body_rect.end.y)
+		if actor.position.x + actor.body_rect.position.x < platform.position.x or actor.position.x + actor.body_rect.end.x > platform.end.x:
+			return false
 		actors.append(actor)
 	resolver = TimelineResolver.new()
 	resolver.world = self

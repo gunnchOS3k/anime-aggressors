@@ -1,0 +1,188 @@
+{
+  "HUMAN_ART_APPROVED": false,
+  "PASS": true,
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false,
+  "checks": [
+    {
+      "check": "human_seat_policy_excludes_bots_cpu_and_spectators",
+      "pass": true
+    },
+    {
+      "check": "ordinary_source_input_resolves_canonical_jab",
+      "pass": true
+    },
+    {
+      "check": "bind_actual_geometry_and_retained_verified_BASE_jab",
+      "pass": true
+    },
+    {
+      "check": "bind_resim_requires_exactly_two_human_fighting_seats",
+      "pass": true
+    },
+    {
+      "check": "experimental_resim_keeps_shipping_LAN_backend_disabled",
+      "pass": true
+    },
+    {
+      "check": "bots_and_spectators_alone_never_validate_2p",
+      "pass": true
+    },
+    {
+      "check": "airborne_body_path_supported:",
+      "pass": true
+    },
+    {
+      "check": "one_airborne_body_contact_with_damage",
+      "pass": true
+    },
+    {
+      "check": "contact_contract_marks_defender_airborne",
+      "pass": true
+    },
+    {
+      "check": "strike_path_uses_airborne_defender_contract",
+      "pass": true
+    },
+    {
+      "check": "airborne_hurt_or_launch_state",
+      "pass": true
+    },
+    {
+      "check": "airborne_damage_and_combo_applied",
+      "pass": true
+    },
+    {
+      "check": "restore_world_snapshot_before_airborne_contact",
+      "pass": true
+    },
+    {
+      "check": "discarded_airborne_hit_intent_retired",
+      "pass": true
+    },
+    {
+      "check": "same_inputs_exact_airborne_knockback_replay",
+      "pass": true
+    },
+    {
+      "check": "restore_before_corrected_remote_di",
+      "pass": true
+    },
+    {
+      "check": "rebind_resim_after_snapshot_restore",
+      "pass": true
+    },
+    {
+      "check": "predict_remote_neutral_after_airborne_hit",
+      "pass": true
+    },
+    {
+      "check": "corrected_remote_di_triggers_owned_resim",
+      "pass": true
+    },
+    {
+      "check": "rollback_count_increments",
+      "pass": true
+    },
+    {
+      "check": "resim_reconciliation_keeps_shipping_off",
+      "pass": true
+    },
+    {
+      "check": "reconciliation_records_two_human_seats_only",
+      "pass": true
+    },
+    {
+      "check": "corrected_path_retains_airborne_damage",
+      "pass": true
+    },
+    {
+      "check": "airborne_resim_preserves_earned_Story",
+      "pass": true
+    }
+  ],
+  "evidence": {
+    "airborne_hit": {
+      "actual_defender_state": "hurt_light",
+      "actual_launch": "(1.546164, -3.31576)",
+      "attack_activation_id": 1,
+      "attacker_id": "kaia-windrow",
+      "aura_identity_tag": "wind_drift",
+      "aura_runtime_hooks": [],
+      "authored_damage": 2.4,
+      "blocked": false,
+      "clash_supported": false,
+      "combat_event_id": "flat:931:108:1:2:1:1",
+      "combo_count_before": 0,
+      "confirmed_contact": true,
+      "contact_direction": "(0.422618, -0.906308)",
+      "contact_owner": "melee",
+      "contact_result": "hit",
+      "contact_world": "(179.1069, 255.27)",
+      "counterhit": false,
+      "damage": 2.304,
+      "damage_applied": 2.304,
+      "damage_zero_reason": "",
+      "defender_airborne": true,
+      "defender_damage_after": 2.304,
+      "defender_damage_before": 0.0,
+      "defender_id": "juno-spark",
+      "defender_in_hitstun_before": false,
+      "defender_state_before": "idle",
+      "element": "gale",
+      "element_effect": "wind_drift",
+      "gameplay_frame": 108,
+      "hitstop_frames": 2,
+      "launch": "(1.546164, -3.31576)",
+      "launch_strength": 3.65853643417358,
+      "meter_changed": true,
+      "move_frame": 5,
+      "move_id": "jab_1",
+      "parry_supported": true,
+      "projectile_instance_id": -1,
+      "resolved_damage": 2.304,
+      "shield_damage": 3.0,
+      "shield_event": "hit_damage_applied",
+      "shield_stun_frames": 6,
+      "stocks_delta": 0,
+      "timeline_epoch": 931,
+      "timestamp_usec": 1800000
+    },
+    "approach_steps": 100,
+    "baseline_frame": 139,
+    "di_frame": 109,
+    "pre_hit_frame": 103,
+    "reconciliation": {
+      "correction_frame": 109,
+      "human_seats": [
+        {
+          "fighter_id": "kaia-windrow",
+          "name": "",
+          "peer_id": 1,
+          "role": "human",
+          "seat_id": 1
+        },
+        {
+          "fighter_id": "juno-spark",
+          "name": "",
+          "peer_id": 2,
+          "role": "human",
+          "seat_id": 2
+        }
+      ],
+      "ok": true,
+      "remote_seat": 1,
+      "replacement_intents": [],
+      "resim_tip": 109,
+      "retired_intents": [],
+      "rollback_count": 1,
+      "rolled_back": true,
+      "shipping_backend_enabled": false,
+      "snapshot_frame": 108,
+      "tip_frame": 109
+    }
+  },
+  "failures": [],
+  "scope": "Isolated flat-trial airborne knockback, world snapshot restore, corrected remote DI resim, and 2-human-seat policy (bots/spectators excluded). Shipping LAN CharacterBody backend remains disabled. Not 8p, not art/device/human acceptance.",
+  "shipping_backend_enabled": false
+}

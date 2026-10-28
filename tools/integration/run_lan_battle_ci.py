@@ -111,6 +111,7 @@ def run(scope="all"):
             ] if scope == "projectiles" else [
                 ("flat-combat-replay", "tests/integration/FlatCombatReplay.gd", "FLAT_COMBAT_REPLAY.json"),
                 ("body-vertical-replay", "tests/integration/BodyVerticalReplay.gd", "BODY_VERTICAL_REPLAY.json"),
+                ("airborne-knockback-resim", "tests/integration/AirborneKnockbackResim.gd", "AIRBORNE_KNOCKBACK_RESIM.json"),
                 ("training-controls", "tests/integration/TrainingControls.gd", "TRAINING_CONTROLS.json"),
             ]
             for name, script, filename in component_suites:
