@@ -85,8 +85,7 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Remaining 25: `REGISTERED_PENDING` (JSON + stubs only — not claimed finished)
 - StageManager owns registry/build/hazard snapshots; shipping rollback still off
 - Tests (Godot 4.7.1 headless): PinkBloomSystemsDeterminism PASS (33), ExpandedStageLoadSmoke PASS (47), FlatCombatReplay PASS (24)
-- Evidence: 
-- Three-form confirmation engineering tip (FF):`artifacts/cursor_continuation/BLOOM_STAGE_RUNTIME_EVIDENCE.json`
+- Evidence: `artifacts/cursor_continuation/BLOOM_STAGE_RUNTIME_EVIDENCE.json`
 - Engineering commit: `8ee6e1915e630c38e148f8101012d604057780f0`
 - Requested publish tip: `8f26f9f565cee813eb4d7be723b08a4ff40664dd` (FF-pushed from `4568e3e1`; ancestor check OK)
 - Remote tip before this docs stamp: `a5a26ab3987515cc34495ba03c78268b51dbec1f` (branch tip advances with this commit; includes requested `8f26f9f5` + eng `8ee6e191`)
@@ -106,6 +105,6 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Pink revelation remains after Kaia breakthrough; First Permission systems + Everything Again (Mythic) preserved
 - Hooks: `data/forms/rosamere.json`, `rosamere_form_selection.gd`, training/versus apply paths
 - Tests: RosamereThreeFormCanon PASS, PinkBloomSystemsDeterminism PASS, FlatCombatReplay PASS
-- Evidence: 
-- Three-form confirmation engineering tip (FF):`artifacts/cursor_continuation/ROSAMERE_THREE_FORM_CANON_EVIDENCE.json`
+- Evidence: `artifacts/cursor_continuation/ROSAMERE_THREE_FORM_CANON_EVIDENCE.json`
+- Engineering tip: `e06d0cf7` (three-form confirmation); remote tip stamped after FF push
 
