@@ -68,3 +68,33 @@ static func validate_engineering(rig: Dictionary) -> Dictionary:
 		and str(rig.get("collision", {}).get("mode", "")) == "scale_aware_capsule" \
 		and not bool(rig.get("avatar_ko_is_true_rosamere_defeat", true))
 	return {"ok": ok, "rig_id": rig.get("rig_id", ""), "shipping": Authority.shipping_flags_false()}
+
+
+static func camera_profile_for_battle(rig: Dictionary) -> Dictionary:
+	## Spectacle camera scaffold for BattleCameraController — a11y-aware, not final art.
+	var cam: Dictionary = rig.get("camera", {})
+	var zoom_out: float = float(cam.get("min_zoom_out", 1.8))
+	return {
+		"minZoom": clampf(0.55 / maxf(zoom_out * 0.35, 0.5), 0.42, 0.85),
+		"maxZoom": 1.05,
+		"lerp": 0.1,
+		"deadzone": {"x": 140, "y": 90},
+		"spectacle_framing": bool(cam.get("spectacle_framing", true)),
+		"shake_budget_per_10s": int(cam.get("shake_budget_per_10s", 4)),
+		"a11y_reduce_motion_respected": bool(cam.get("a11y_reduce_motion_respected", true)),
+		"colossus_rig_id": str(rig.get("rig_id", "")),
+		"HUMAN_ART_APPROVED": false,
+		"collision_scaffold": rig.get("collision", {}),
+	}
+
+
+static func collision_scaffold_summary(rig: Dictionary) -> Dictionary:
+	var c: Dictionary = rig.get("collision", {})
+	return {
+		"mode": str(c.get("mode", "")),
+		"radius": float(c.get("radius", 0.0)),
+		"height": float(c.get("height", 0.0)),
+		"not_simple_uniform_scale_hitbox": bool(c.get("not_simple_uniform_scale_hitbox", false)),
+		"real_giant_engineering": bool(rig.get("real_giant_engineering", false)),
+		"HUMAN_ART_APPROVED": false,
+	}

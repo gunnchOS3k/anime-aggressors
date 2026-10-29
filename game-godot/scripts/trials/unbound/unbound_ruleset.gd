@@ -5,6 +5,7 @@ class_name UnboundRuleset
 
 const Authority = preload("res://scripts/trials/mode_authority.gd")
 const Eligibility = preload("res://scripts/trials/rosamere_trials_eligibility.gd")
+const Seats = preload("res://scripts/trials/partylink_seat_enforcement.gd")
 
 const LABEL := "UNBALANCED MYTHIC"
 const MODE_ID := "convergence_unbound"
@@ -83,8 +84,12 @@ static func all_presets() -> Array:
 
 static func create_session(seed: int, preset_id: String, mythic_consent: bool = false, seats: int = 2) -> Dictionary:
 	var rules: Dictionary = preset(preset_id)
-	var seat_truth: Dictionary = Authority.player_count_truth(MODE_ID)
-	var seated: int = clampi(seats, int(seat_truth.get("min", 2)), int(seat_truth.get("max", 8)))
+	var seat_gate: Dictionary = Seats.enforce(MODE_ID, seats, seats)
+	var seat_truth: Dictionary = Seats.truth_for(MODE_ID)
+	var seated: int = int(seat_gate.get("seated", 0))
+	if not bool(seat_gate.get("ok", false)):
+		## Still form a session for journey/sim, but mark PartyLink live as blocked.
+		seated = clampi(seats, int(seat_truth.get("live_min", 2)), int(seat_truth.get("live_max", 4)))
 	var everlasting_gate: Dictionary = Eligibility.evaluate("EVERLASTING_ORIGIN", MODE_ID, mythic_consent, true)
 	return {
 		"mode": MODE_ID,
@@ -97,13 +102,16 @@ static func create_session(seed: int, preset_id: String, mythic_consent: bool = 
 		"mythic_consent": mythic_consent,
 		"seats": seated,
 		"seat_honesty": seat_truth,
+		"seat_gate": seat_gate,
 		"partylink_honest_seat_counts": true,
+		"partylink_live_ok": bool(seat_gate.get("ok", false)),
 		"feeds_ranked_mmr": false,
 		"label": LABEL,
 		"everlasting_permitted": bool(everlasting_gate.get("ok", false)),
 		"colossus_rigs": [],
 		"events": [],
 		"result": {},
+		"SHIPPING_ROLLBACK_ENABLED": false,
 		"shipping": Authority.shipping_flags_false(),
 	}
 

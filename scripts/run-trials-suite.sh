@@ -16,13 +16,18 @@ SCRIPTS=(
   res://tests/integration/EchoesGauntletLore.gd
   res://tests/integration/UnboundRulesetContract.gd
   res://tests/integration/TrialsRosamereEligibility.gd
+  res://tests/integration/TrialsSharedCombatBridge.gd
+  res://tests/integration/TrialsPartyLinkSeats.gd
+  res://tests/integration/TrialsModePresentation.gd
 )
 FAIL=0
 cd "$ROOT/game-godot"
 for s in "${SCRIPTS[@]}"; do
   name="$(basename "$s" .gd)"
   echo "==> $name"
-  if "$GODOT" --headless --path . --rendering-driver opengl3 --script "$s" > "$OUT/${name}.log" 2>&1; then
+  if "$GODOT" --headless --path . --rendering-driver opengl3 --script "$s" > "$OUT/${name}.log" 2>&1 \
+    && grep -q " PASS " "$OUT/${name}.log" \
+    && ! grep -q "Compilation failed" "$OUT/${name}.log"; then
     tail -2 "$OUT/${name}.log" || true
   else
     echo "FAIL $name"

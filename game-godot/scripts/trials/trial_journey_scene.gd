@@ -3,6 +3,8 @@ extends "res://scripts/ui/console_menu_base.gd"
 
 const Authority = preload("res://scripts/trials/mode_authority.gd")
 const Eligibility = preload("res://scripts/trials/rosamere_trials_eligibility.gd")
+const Bridge = preload("res://scripts/trials/shared_combat_bridge.gd")
+const Presentation = preload("res://scripts/trials/mode_presentation.gd")
 const Derby = preload("res://scripts/trials/derby/resonance_trial_sim.gd")
 const Flagline = preload("res://scripts/trials/flagline/fractured_accord_sim.gd")
 const Prism = preload("res://scripts/trials/prism/prism_weave_sim.gd")
@@ -42,6 +44,7 @@ func _build_ui() -> void:
 	for item in [
 		["AdvanceBtn", "Advance Journey", _on_advance],
 		["PlayBtn", "Run Playable Sim", _on_play],
+		["LiveBattleBtn", "Enter Live Shared Combat", _on_live_battle],
 		["SaveBtn", "Save Local Record", _on_save],
 		["BackBtn", "Back to Trials", on_back],
 	]:
@@ -51,16 +54,39 @@ func _build_ui() -> void:
 		b.custom_minimum_size = Vector2(320, 48)
 		b.pressed.connect(item[2])
 		vbox.add_child(b)
+		if item[0] == "LiveBattleBtn" and not Bridge.supports_live_shared_combat(mode_id):
+			b.disabled = true
+			b.text = "Live Shared Combat (journey-only mode)"
 
 
 func _enter_select() -> void:
 	_phase = "select"
 	var pc: Dictionary = Authority.player_count_truth(mode_id)
 	var forms: Array = Eligibility.offered_forms(mode_id, GameState.mythic_party_consent, GameState.trial_story_reveal)
-	_status.text = "SELECT\nMode: %s\nPlayers: %d–%d (%s)\nRosamere forms offered: %s\nRanked MMR: never\nShipping flags: all false" % [
+	var art: Dictionary = Presentation.for_mode(mode_id, GameState.match_seed if GameState.match_seed != 0 else 42)
+	_status.text = "SELECT\nMode: %s\nPlayers: %d–%d (%s)\nRosamere forms offered: %s\nRanked MMR: never\nart_status: %s · HUMAN_ART=%s\nLive shared combat: %s\nShipping flags: all false" % [
 		mode_id, int(pc.min), int(pc.max), str(pc.honest_note), ", ".join(forms),
+		str(art.get("art_status", "")), str(art.get("HUMAN_ART", false)),
+		str(Bridge.supports_live_shared_combat(mode_id)),
 	]
 	GameState.trial_journey_phase = _phase
+
+
+func _on_live_battle() -> void:
+	if not Bridge.supports_live_shared_combat(mode_id):
+		_status.text = "This mode stays journey/sim until PartyLink depth lands.\nSHIPPING_ROLLBACK stays false."
+		return
+	var prep: Dictionary = Bridge.prepare_live_battle(mode_id, GameState.trial_seat_count, _unbound_preset)
+	if not bool(prep.get("ok", false)):
+		_status.text = "Live battle blocked (honest seats):\n%s" % JSON.stringify(prep.get("gate", {}), "  ")
+		return
+	_status.text = "Entering BattleScene with shared combat overlay…\n%s" % JSON.stringify({
+		"mode": mode_id,
+		"seated": prep.get("seated", 0),
+		"feeds_ranked_mmr": false,
+		"HUMAN_ART": false,
+	}, "  ")
+	SceneRouter.go("battle")
 
 
 func _on_advance() -> void:

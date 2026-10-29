@@ -6,8 +6,10 @@
   "RC2_READY": false,
   "V1_0_0_RELEASE_AUTHORIZED": false,
   "SHIPPING_ROLLBACK_ENABLED": false,
+  "HUMAN_ART": false,
   "labs_remain_diagnostics": true,
   "nav_slots": ["FIGHT", "STORY", "PARTY", "TRIALS", "TRAINING", "CAREER"],
+  "live_shared_combat_modes": ["resonance_trial", "fractured_accord", "convergence_unbound"],
   "modes": [
     {
       "id": "resonance_trial",
@@ -18,6 +20,9 @@
       "authority_contract": "game-core 10s damage + Kinetic Bat final launch",
       "player_counts": {"min": 1, "max": 2, "honest_note": "solo primary; alternating/coop challenges optional"},
       "feeds_ranked_mmr": false,
+      "live_shared_combat": true,
+      "art_status": "SCAFFOLD_PROCEDURAL",
+      "HUMAN_ART": false,
       "rosamere": {"familiar": true, "first_bloom": true, "everlasting": false}
     },
     {
@@ -30,6 +35,9 @@
       "player_counts": {"min": 2, "max": 4, "honest_note": "2v2 with CPU fill to 4"},
       "team_display": {"solar": "Beaconward", "lunar": "Veilward"},
       "feeds_ranked_mmr": false,
+      "live_shared_combat": true,
+      "art_status": "SCAFFOLD_PROCEDURAL",
+      "HUMAN_ART": false,
       "rosamere": {"familiar": true, "first_bloom": true, "everlasting": false},
       "yin_yang_not_ordinary_captains": true
     },
@@ -42,6 +50,9 @@
       "authority_contract": "60s territorial; harmonic tiles; a11y beyond color",
       "player_counts": {"min": 2, "max": 10, "honest_note": "ten-fighter roster cap; current playable seats 2–4 until PartyLink depth"},
       "feeds_ranked_mmr": false,
+      "live_shared_combat": false,
+      "art_status": "SCAFFOLD_PROCEDURAL",
+      "HUMAN_ART": false,
       "rosamere": {"familiar": true, "first_bloom": true, "everlasting": false}
     },
     {
@@ -53,6 +64,9 @@
       "authority_contract": "4 lanes, 3 lives, seeded waves; Fracture Echoes lore",
       "player_counts": {"min": 1, "max": 2, "honest_note": "1–2 human seats"},
       "feeds_ranked_mmr": false,
+      "live_shared_combat": false,
+      "art_status": "SCAFFOLD_PROCEDURAL",
+      "HUMAN_ART": false,
       "rosamere": {"familiar": true, "first_bloom": true, "everlasting": false}
     },
     {
@@ -64,6 +78,9 @@
       "authority_contract": "Echoes not real Puppets/souls; bosses as simulations; no canonical cosmic defeat",
       "player_counts": {"min": 1, "max": 2, "honest_note": "solo + coop"},
       "feeds_ranked_mmr": false,
+      "live_shared_combat": false,
+      "art_status": "SCAFFOLD_PROCEDURAL",
+      "HUMAN_ART": false,
       "rosamere": {"familiar": true, "first_bloom": true, "everlasting": false}
     },
     {
@@ -73,8 +90,11 @@
       "subtitle": "UNBALANCED MYTHIC",
       "scene_key": "trial_unbound",
       "authority_contract": "full supers, min cooldowns, instant resources, extended transforms, rapid respawn, amplified knockback; never ranked MMR",
-      "player_counts": {"min": 2, "max": 8, "honest_note": "PartyLink honest seat counts; colossus seats opt-in Mythic only"},
+      "player_counts": {"min": 2, "max": 8, "honest_note": "PartyLink honest seat counts; live max 4 until PartyLink depth; colossus seats opt-in Mythic only"},
       "feeds_ranked_mmr": false,
+      "live_shared_combat": true,
+      "art_status": "SCAFFOLD_PROCEDURAL",
+      "HUMAN_ART": false,
       "label": "UNBALANCED MYTHIC",
       "rosamere": {"familiar": true, "first_bloom": true, "everlasting": "mythic_consent_required"},
       "presets": ["total_unbound", "prismatic_storm", "colossus_clash", "kaiju_siege", "custom"]

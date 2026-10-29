@@ -1822,6 +1822,17 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 		return
 	if str(info.get("move_id", "")) == "grab":
 		return
+	## Trials shared combat: apply GameState modifiers — no forked hit path.
+	if str(GameState.mode) == "trials" and bool(GameState.trial_live_combat):
+		var _tr_dr := float(GameState.damage_ratio)
+		var _tr_kb := float(GameState.trial_knockback_mult)
+		if not is_equal_approx(_tr_dr, 1.0):
+			if info.has("resolved_damage"):
+				info["resolved_damage"] = float(info.get("resolved_damage", 0.0)) * _tr_dr
+			if info.has("damage"):
+				info["damage"] = float(info.get("damage", 0.0)) * _tr_dr
+		if not is_equal_approx(_tr_kb, 1.0) and info.has("launch") and typeof(info["launch"]) == TYPE_VECTOR2:
+			info["launch"] = info["launch"] * _tr_kb
 	_last_hit_result = info.duplicate(true)
 	_last_knockback = info.get("launch", Vector2.ZERO)
 	_last_shield_damage = float(info.get("shield_damage", 0.0))

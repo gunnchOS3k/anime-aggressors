@@ -44,6 +44,15 @@ var trial_challenge: String = "solo"  # solo | alternating | coop | fighter_chal
 var trial_seat_count: int = 2
 var trial_story_reveal: bool = false  # spoiler-safe until story reveal
 var trial_records: Array = []  # local-only; never ranked MMR
+## Live shared BattleScene bridge (Unbound / Derby / Flagline overlay).
+var trial_live_combat: bool = false
+var trial_unbound_preset: String = "total_unbound"
+var trial_knockback_mult: float = 1.0
+var trial_overlay_state: Dictionary = {}
+var trial_sim_snapshot: Dictionary = {}
+var trial_colossus_rigs: Array = []
+var trial_camera_profile: Dictionary = {}
+var feeds_trial_ranked_mmr: bool = false  # always false; explicit flag for audits
 var arcade_index: int = 0
 var arcade_seed: int = 7
 var arcade_player_id: String = "ember-vale"
@@ -395,8 +404,25 @@ func begin_trial(mode_id: String, seats: int = 2, challenge: String = "solo") ->
 	mode = "trials"
 	trial_mode_id = mode_id
 	trial_journey_phase = "select"
-	trial_seat_count = seats
+	var Seats = load("res://scripts/trials/partylink_seat_enforcement.gd")
+	var seated := seats
+	if Seats != null:
+		var gate: Dictionary = Seats.enforce(mode_id, seats, seats)
+		if bool(gate.get("ok", false)):
+			seated = int(gate.get("seated", seats))
+		else:
+			## Honest clamp to live range even when multiplayer underfill rejects live PartyLink.
+			var truth: Dictionary = Seats.truth_for(mode_id)
+			seated = clampi(seats, int(truth.get("live_min", 1)), int(truth.get("live_max", 2)))
+	trial_seat_count = seated
 	trial_challenge = challenge
+	trial_live_combat = false
+	trial_knockback_mult = 1.0
+	trial_overlay_state = {}
+	trial_sim_snapshot = {}
+	trial_colossus_rigs = []
+	trial_camera_profile = {}
+	feeds_trial_ranked_mmr = false
 	arcade_active = false
 	hazards_enabled = false
 	items_enabled = false

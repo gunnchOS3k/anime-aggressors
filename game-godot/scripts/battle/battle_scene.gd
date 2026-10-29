@@ -82,6 +82,10 @@ func _ready() -> void:
 	_apply_rosamere_form_hooks()
 	_setup_hud_panels()
 	_apply_device_role()
+	if str(GameState.mode) == "trials" and bool(GameState.trial_live_combat):
+		var _TrialsBridge = load("res://scripts/trials/shared_combat_bridge.gd")
+		if _TrialsBridge != null:
+			_TrialsBridge.mount_overlay_on_battle(self)
 	_time_remaining = float(GameState.match_timer_seconds)
 	_time_enabled = GameState.match_timer_seconds > 0 and GameState.match_type != "stock_untimed"
 	_update_timer_label()

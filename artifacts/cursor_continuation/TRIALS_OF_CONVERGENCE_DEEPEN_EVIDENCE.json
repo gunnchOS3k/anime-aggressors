@@ -1,0 +1,64 @@
+{
+  "suite": "trials_of_convergence_deepen",
+  "branch": "cursor/continuation-isolated-combat-20261027",
+  "base_tip_before": "71c3b46bd97def41654101bd1234fe3e85147270",
+  "umbrella": "TRIALS_OF_CONVERGENCE",
+  "shift": "deepen_shared_combat_partylink_presentation",
+  "modes": {
+    "resonance_trial": {
+      "deepened": "live shared BattleScene path + dummy/Kinetic Bat scaffold overlay; 10s contract chrome; journey Enter Live Shared Combat",
+      "art_status": "SCAFFOLD_PROCEDURAL",
+      "HUMAN_ART": false
+    },
+    "fractured_accord": {
+      "deepened": "live shared BattleScene + territory strip overlay (Beaconward/Veilward); PartyLink 2–4 seat enforcement; team mode",
+      "art_status": "SCAFFOLD_PROCEDURAL",
+      "HUMAN_ART": false
+    },
+    "prism_weave": {
+      "deepened": "harmonic tile grid presentation + a11y markers; honest live_max=4 vs catalog max 10; journey-only until PartyLink depth",
+      "art_status": "SCAFFOLD_PROCEDURAL",
+      "HUMAN_ART": false
+    },
+    "riftline_defense": {
+      "deepened": "four-lane presentation scaffolds + Fracture Echo silhouettes; journey-only live combat",
+      "art_status": "SCAFFOLD_PROCEDURAL",
+      "HUMAN_ART": false
+    },
+    "echoes_gauntlet": {
+      "deepened": "survival echo / boss simulation presentation; canonical cosmic defeat remains false",
+      "art_status": "SCAFFOLD_PROCEDURAL",
+      "HUMAN_ART": false
+    },
+    "convergence_unbound": {
+      "deepened": "Unbound modifiers on shared fighter receive_hit (damage_ratio + trial_knockback_mult); colossus collision/camera scaffold into BattleCamera; PartyLink live_max=4; never ranked MMR; Everlasting mythic consent",
+      "art_status": "SCAFFOLD_PROCEDURAL",
+      "HUMAN_ART": false,
+      "feeds_ranked_mmr": false
+    }
+  },
+  "shared_combat": {
+    "bridge": "game-godot/scripts/trials/shared_combat_bridge.gd",
+    "overlay": "game-godot/scripts/trials/trial_combat_overlay.gd",
+    "battle_scene_mount": true,
+    "forked_combat_systems": false
+  },
+  "partylink": {
+    "enforcement": "game-godot/scripts/trials/partylink_seat_enforcement.gd",
+    "SHIPPING_ROLLBACK_ENABLED": false,
+    "honest_live_caps": {"prism_weave": 4, "convergence_unbound": 4}
+  },
+  "tests_added": [
+    "TrialsSharedCombatBridge",
+    "TrialsPartyLinkSeats",
+    "TrialsModePresentation"
+  ],
+  "suite_pass": true,
+  "suite_scripts": 11,
+  "HUMAN_ART_APPROVED": false,
+  "HUMAN_ART": false,
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false,
+  "SHIPPING_ROLLBACK_ENABLED": false,
+  "honesty": "Scaffold presentation + shared combat modifiers are not commercial V1 / human-art claims"
+}
