@@ -407,7 +407,8 @@ func begin_trial(mode_id: String, seats: int = 2, challenge: String = "solo") ->
 	var Seats = load("res://scripts/trials/partylink_seat_enforcement.gd")
 	var seated := seats
 	if Seats != null:
-		var gate: Dictionary = Seats.enforce(mode_id, seats, seats)
+		## Local journey path: connected_humans=-1 (CPU fill allowed). Not a PartyLink human claim.
+		var gate: Dictionary = Seats.enforce(mode_id, seats, -1)
 		if bool(gate.get("ok", false)):
 			seated = int(gate.get("seated", seats))
 		else:
@@ -416,13 +417,7 @@ func begin_trial(mode_id: String, seats: int = 2, challenge: String = "solo") ->
 			seated = clampi(seats, int(truth.get("live_min", 1)), int(truth.get("live_max", 2)))
 	trial_seat_count = seated
 	trial_challenge = challenge
-	trial_live_combat = false
-	trial_knockback_mult = 1.0
-	trial_overlay_state = {}
-	trial_sim_snapshot = {}
-	trial_colossus_rigs = []
-	trial_camera_profile = {}
-	feeds_trial_ranked_mmr = false
+	clear_trial_modifiers()
 	arcade_active = false
 	hazards_enabled = false
 	items_enabled = false
@@ -434,15 +429,51 @@ func begin_trial(mode_id: String, seats: int = 2, challenge: String = "solo") ->
 		match_seed = 42
 
 
+func clear_trial_modifiers() -> void:
+	## Reset Unbound/Derby/Flagline combat modifiers so they cannot leak into Versus/Career.
+	trial_live_combat = false
+	trial_knockback_mult = 1.0
+	damage_ratio = 1.0
+	trial_overlay_state = {}
+	trial_sim_snapshot = {}
+	trial_colossus_rigs = []
+	trial_camera_profile = {}
+	feeds_trial_ranked_mmr = false
+	trial_unbound_preset = "total_unbound"
+
+
+func end_trial() -> void:
+	## Exit Trials journey/live combat — clear modifiers; keep local trial_records.
+	clear_trial_modifiers()
+	trial_journey_phase = "select"
+	if mode == "trials":
+		mode = "versus"
+		apply_competitive_ruleset()
+	team_mode = false
+	team_size = 2
+
+
 func record_trial_result(payload: Dictionary) -> void:
-	## Local trial ledger only. Explicitly never feeds ranked MMR or story unlocks.
+	## Local trial ledger only. Explicitly never feeds ranked MMR, career wins, or story unlocks.
 	var record: Dictionary = payload.duplicate(true)
+	var kind := str(record.get("result_kind", "SIMULATION"))
+	if kind != "REAL_PLAYER" and kind != "SIMULATION":
+		kind = "SIMULATION"
+	record["result_kind"] = kind
 	record["feeds_ranked_mmr"] = false
+	record["feeds_career_mmr"] = false
+	record["feeds_career_wins"] = false
 	record["earned_story_progress"] = false
 	record["HUMAN_ART_APPROVED"] = false
 	record["RC2_READY"] = false
 	record["V1_0_0_RELEASE_AUTHORIZED"] = false
 	record["SHIPPING_ROLLBACK_ENABLED"] = false
+	## run_solo_to_results / headless journeys are never REAL_PLAYER earned records.
+	if kind == "SIMULATION":
+		record["earned_personal_best"] = false
+		record["honesty"] = "SIMULATION — not a real-player Trials receipt"
+	else:
+		record["honesty"] = "REAL_PLAYER — local Trials receipt; never ranked/career/story"
 	trial_records.append(record)
 	## Cap local history; do not claim career ranked progression.
 	if trial_records.size() > 64:

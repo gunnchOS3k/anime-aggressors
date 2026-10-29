@@ -6,6 +6,7 @@ const Eligibility = preload("res://scripts/trials/rosamere_trials_eligibility.gd
 const Bridge = preload("res://scripts/trials/shared_combat_bridge.gd")
 const Presentation = preload("res://scripts/trials/mode_presentation.gd")
 const Derby = preload("res://scripts/trials/derby/resonance_trial_sim.gd")
+const ResonanceDummy = preload("res://scripts/trials/derby/resonance_dummy_actor.gd")
 const Flagline = preload("res://scripts/trials/flagline/fractured_accord_sim.gd")
 const Prism = preload("res://scripts/trials/prism/prism_weave_sim.gd")
 const Riftline = preload("res://scripts/trials/riftline/riftline_defense_sim.gd")
@@ -143,11 +144,17 @@ func _setup_blurb() -> Dictionary:
 
 func _on_play() -> void:
 	_phase = "play"
+	## Headless/scripted journeys are SIMULATION — never earned REAL_PLAYER records.
 	match mode_id:
 		"resonance_trial":
+			## Deterministic smoke only. run_solo_to_results is NOT an earned PB path.
 			_state = Derby.run_solo_to_results(int(_state.get("seed", 42)), str(_state.get("fighter_id", "ember-vale")))
+			_state["result_kind"] = "SIMULATION"
+			_state["earned_personal_best"] = false
+			_state["dummy_actor"] = ResonanceDummy.identity()
 		"fractured_accord":
 			_state = Flagline.run_capture_journey(int(_state.get("seed", 42)))
+			_state["result_kind"] = "SIMULATION"
 		"prism_weave":
 			## Short deterministic burst for interactive play; full 60s available in suite.
 			var s: Dictionary = _state if not _state.is_empty() else Prism.create(42, 4)
@@ -156,20 +163,24 @@ func _on_play() -> void:
 				if str(s.get("phase", "")) == "results":
 					break
 			_state = s
+			_state["result_kind"] = "SIMULATION"
 		"riftline_defense":
 			_state = Riftline.run_seeded_smoke(int(_state.get("seed", 42)))
+			_state["result_kind"] = "SIMULATION"
 		"echoes_gauntlet":
 			_state = Echoes.run_clear_smoke(int(_state.get("seed", 42)), bool(_state.get("coop", false)))
+			_state["result_kind"] = "SIMULATION"
 		"convergence_unbound":
 			if _state.is_empty():
 				_setup()
 			_state = Unbound.simulate_play_frames(_state, 180)
 			_state = Unbound.advance_journey(_state)  # play -> results
+			_state["result_kind"] = "SIMULATION"
 		_:
 			pass
 	_phase = "results"
 	GameState.trial_journey_phase = _phase
-	_status.text = "RESULTS\n%s" % JSON.stringify(_summarize(), "  ")
+	_status.text = "RESULTS (SIMULATION — not earned REAL_PLAYER)\n%s" % JSON.stringify(_summarize(), "  ")
 
 
 func _summarize() -> Dictionary:
@@ -216,9 +227,13 @@ func _summarize() -> Dictionary:
 
 func _on_save() -> void:
 	_phase = "save"
-	_save = Authority.empty_save_payload(mode_id, int(_state.get("seed", 0)), _summarize())
+	## Journey "Run Playable Sim" is always SIMULATION — never earned REAL_PLAYER PB.
+	var kind := str(_state.get("result_kind", "SIMULATION"))
+	if kind != "REAL_PLAYER":
+		kind = "SIMULATION"
+	_save = Authority.empty_save_payload(mode_id, int(_state.get("seed", 0)), _summarize(), kind)
 	GameState.record_trial_result(_save)
-	_status.text = "SAVE (local only)\n%s" % JSON.stringify(_save, "  ")
+	_status.text = "SAVE (local %s only — never ranked/career/story)\n%s" % [kind, JSON.stringify(_save, "  ")]
 	GameState.trial_journey_phase = _phase
 
 
@@ -227,4 +242,5 @@ func footer_hint() -> String:
 
 
 func on_back() -> void:
+	GameState.end_trial()
 	SceneRouter.go("trials")

@@ -1,69 +1,64 @@
 {
-  "suite": "trials_of_convergence_deepen",
+  "suite": "trials_of_convergence_deepen_ci_integrity",
   "branch": "cursor/continuation-isolated-combat-20261027",
-  "base_tip_before": "71c3b46bd97def41654101bd1234fe3e85147270",
+  "base_tip_before": "f0c5c4ed624f4ad93f4c3f1e5ba61894f4884758",
+  "feature_eng": "11544d46da4643d88f726f44637b0a33065592ea",
   "umbrella": "TRIALS_OF_CONVERGENCE",
-  "shift": "deepen_shared_combat_partylink_presentation",
+  "shift": "fix_bodyvariant_ci_combat_integrity_resonance_deepen",
+  "failed_ci_prior": "https://github.com/gunnchOS3k/anime-aggressors/actions/runs/40818594988",
+  "ci_root_cause": "BodyVariant class_name unresolved without .godot cache in clean CI; fixed via explicit preload of res://scripts/data/body_variant.gd",
   "modes": {
     "resonance_trial": {
-      "deepened": "live shared BattleScene path + dummy/Kinetic Bat scaffold overlay; 10s contract chrome; journey Enter Live Shared Combat",
+      "deepened": "ResonanceDummyActor identity; Kinetic Bat launch + distance scoring in sim; live shared combat path; run_solo_to_results marked SIMULATION only",
       "art_status": "SCAFFOLD_PROCEDURAL",
-      "HUMAN_ART": false
+      "HUMAN_ART": false,
+      "result_honesty": "SIMULATION vs REAL_PLAYER receipts"
     },
     "fractured_accord": {
-      "deepened": "live shared BattleScene + territory strip overlay (Beaconward/Veilward); PartyLink 2\u20134 seat enforcement; team mode",
+      "deepened": "2v2+capture with connected_humans-only seats; CPU fill for remainder; battle_scene_fighter_slots=2 honesty",
       "art_status": "SCAFFOLD_PROCEDURAL",
       "HUMAN_ART": false
     },
     "prism_weave": {
-      "deepened": "harmonic tile grid presentation + a11y markers; honest live_max=4 vs catalog max 10; journey-only until PartyLink depth",
+      "deepened": "journey-only; honest live_max=4; PartyLink seat enforcement; no invented seats",
       "art_status": "SCAFFOLD_PROCEDURAL",
       "HUMAN_ART": false
     },
     "riftline_defense": {
-      "deepened": "four-lane presentation scaffolds + Fracture Echo silhouettes; journey-only live combat",
+      "deepened": "journey-only live combat; seat honesty preserved",
       "art_status": "SCAFFOLD_PROCEDURAL",
       "HUMAN_ART": false
     },
     "echoes_gauntlet": {
-      "deepened": "survival echo / boss simulation presentation; canonical cosmic defeat remains false",
+      "deepened": "journey-only; SIMULATION receipts only from headless smoke",
       "art_status": "SCAFFOLD_PROCEDURAL",
       "HUMAN_ART": false
     },
     "convergence_unbound": {
-      "deepened": "Unbound modifiers on shared fighter receive_hit (damage_ratio + trial_knockback_mult); colossus collision/camera scaffold into BattleCamera; PartyLink live_max=4; never ranked MMR; Everlasting mythic consent",
+      "deepened": "damage_ratio single-owner HitResolver (10@1.35→13.5); KB mult on receive_hit; Prismatic/Puppet/Colossus actor ids; end_trial clears modifiers; never ranked MMR",
       "art_status": "SCAFFOLD_PROCEDURAL",
       "HUMAN_ART": false,
       "feeds_ranked_mmr": false
     }
   },
   "shared_combat": {
-    "bridge": "game-godot/scripts/trials/shared_combat_bridge.gd",
-    "overlay": "game-godot/scripts/trials/trial_combat_overlay.gd",
-    "battle_scene_mount": true,
+    "duplicate_damage_ratio_removed": true,
+    "hit_resolver_owner": true,
+    "end_trial_clears_modifiers": true,
     "forked_combat_systems": false
   },
   "partylink": {
-    "enforcement": "game-godot/scripts/trials/partylink_seat_enforcement.gd",
-    "SHIPPING_ROLLBACK_ENABLED": false,
-    "honest_live_caps": {
-      "prism_weave": 4,
-      "convergence_unbound": 4
-    }
+    "connected_humans_only": true,
+    "no_invented_seats": true,
+    "battle_scene_fighter_slots": 2,
+    "SHIPPING_ROLLBACK_ENABLED": false
   },
-  "tests_added": [
-    "TrialsSharedCombatBridge",
-    "TrialsPartyLinkSeats",
-    "TrialsModePresentation"
-  ],
   "suite_pass": true,
-  "suite_scripts": 11,
+  "suite_scripts": 12,
   "HUMAN_ART_APPROVED": false,
   "HUMAN_ART": false,
   "RC2_READY": false,
   "V1_0_0_RELEASE_AUTHORIZED": false,
   "SHIPPING_ROLLBACK_ENABLED": false,
-  "honesty": "Scaffold presentation + shared combat modifiers are not commercial V1 / human-art claims",
-  "published_tip": "11544d46da4643d88f726f44637b0a33065592ea",
-  "ff_push": "origin/cursor/continuation-isolated-combat-20261027"
+  "honesty": "Native Trials headless suite ≠ Web CI; scaffolds are not commercial V1 / human-art claims"
 }

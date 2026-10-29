@@ -5,6 +5,7 @@ class_name ResonanceTrialSim
 ## Original Kinetic Bat + dummy; deterministic trajectory; scoring/records/replay.
 
 const Authority = preload("res://scripts/trials/mode_authority.gd")
+const ResonanceDummy = preload("res://scripts/trials/derby/resonance_dummy_actor.gd")
 
 const SIM_HZ := 60
 const FP := 1000
@@ -41,8 +42,12 @@ static func create(seed: int = 1, fighter_id: String = "ember-vale", personal_be
 		"dummy": {
 			"x": 1200 * FP, "y": PLATFORM_Y - 64 * FP, "vx": 0, "vy": 0,
 			"damage": 0, "hitstun": 0, "grounded": true, "launched": false, "landed": false,
+			"actor_id": ResonanceDummy.DUMMY_ID,
 		},
+		"dummy_actor": ResonanceDummy.identity(),
 		"bat": {"available": false, "equipped": false, "swing": "idle", "swing_frame": 0, "sweet": false},
+		"bat_launch_enabled": true,
+		"distance_scoring_enabled": true,
 		"timer_frames": DAMAGE_PHASE_FRAMES,
 		"final_launch_frames": LAUNCH_WINDOW_FRAMES,
 		"combo": 0, "best_combo": 0, "hits": 0,
@@ -52,6 +57,8 @@ static func create(seed: int = 1, fighter_id: String = "ember-vale", personal_be
 		"challenge": "solo",  # solo | alternating | coop | fighter_challenge
 		"round_time_seconds_contract": 10,
 		"supersedes_prototype_seconds": 45,
+		"result_kind": "SIMULATION",
+		"earned_personal_best": false,
 	}
 
 
@@ -332,13 +339,19 @@ static func state_hash(state: Dictionary) -> String:
 
 
 static func run_solo_to_results(seed: int, fighter_id: String, attack_every: int = 12) -> Dictionary:
-	## Playable headless journey stub: countdown → damage hits → launch → land → results.
+	## Headless SIMULATION smoke only — never an earned REAL_PLAYER personal-best receipt.
 	var s: Dictionary = create(seed, fighter_id)
 	var guard: int = 0
 	while str(s.get("phase", "")) != "results" and guard < 60 * 90:
 		var inp: Dictionary = {"right": true, "attack": guard % attack_every == 0}
 		if str(s.get("phase", "")) == "finalLaunch":
+			## Real bat-launch input path (not a skip-to-results cheat).
+			s["bat"]["available"] = true
+			s["bat"]["equipped"] = true
 			inp = {"attack": true}
 		s = step(s, inp)
 		guard += 1
+	s["result_kind"] = "SIMULATION"
+	s["earned_personal_best"] = false
+	s["honesty"] = "run_solo_to_results is SIMULATION smoke — not REAL_PLAYER earned record"
 	return s

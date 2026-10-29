@@ -23,13 +23,23 @@ static func display_team(team_id: String) -> String:
 	return str(DISPLAY_ALIAS.get(team_id, team_id))
 
 
-static func create(seed: int = 1, start_room: int = 0) -> Dictionary:
-	var slots := [
-		{"player_id": 0, "team_id": "solar", "fighter_id": "ember-vale", "is_bot": false},
-		{"player_id": 1, "team_id": "lunar", "fighter_id": "rook-ironside", "is_bot": false},
-		{"player_id": 2, "team_id": "solar", "fighter_id": "juno-spark", "is_bot": true},
-		{"player_id": 3, "team_id": "lunar", "fighter_id": "kaia-windrow", "is_bot": true},
+static func create(seed: int = 1, start_room: int = 0, connected_humans: int = 2) -> Dictionary:
+	## 2v2 + capture. connected_humans = real human seats only; remainder are CPU bots.
+	## Never invent human seats. 2-fighter BattleScene still ≠ 4 simultaneous humans.
+	var humans: int = clampi(connected_humans, 0, 4)
+	var roster := [
+		{"fighter_id": "ember-vale", "team_id": "solar"},
+		{"fighter_id": "rook-ironside", "team_id": "lunar"},
+		{"fighter_id": "juno-spark", "team_id": "solar"},
+		{"fighter_id": "kaia-windrow", "team_id": "lunar"},
 	]
+	var slots: Array = []
+	for i in range(4):
+		var entry: Dictionary = roster[i].duplicate(true)
+		entry["player_id"] = i
+		entry["is_bot"] = i >= humans
+		entry["is_human"] = i < humans
+		slots.append(entry)
 	return {
 		"mode": "fractured_accord",
 		"legacy_mode": "flaglineClash",
@@ -47,6 +57,8 @@ static func create(seed: int = 1, start_room: int = 0) -> Dictionary:
 		"intro_frames": 3 * SIM_HZ,
 		"transition_frames": 0,
 		"team_slots": slots,
+		"connected_humans": humans,
+		"battle_scene_fighter_slots": 2,
 		"stocks": [3, 3, 3, 3],
 		"in_core": [false, false, false, false],
 		"config": {
@@ -57,10 +69,12 @@ static func create(seed: int = 1, start_room: int = 0) -> Dictionary:
 			"overtime_enabled": true,
 			"team_wipe_wins_room": false,
 			"bots_enabled": true,
+			"twovstwo_plus_capture": true,
 		},
 		"yin_yang_not_ordinary_captains": true,
 		"display_alias": DISPLAY_ALIAS.duplicate(),
 		"art_territory_name": str(ART_TERRITORY_NAMES.get(clampi(start_room, -2, 2), "")),
+		"result_kind": "SIMULATION",
 	}
 
 
@@ -255,9 +269,10 @@ static func state_hash(state: Dictionary) -> String:
 	])
 
 
-static func run_capture_journey(seed: int = 7) -> Dictionary:
-	## Headless playable journey: force Beaconward presence until capture → push rooms.
-	var s := create(seed, 0)
+static func run_capture_journey(seed: int = 7, connected_humans: int = 2) -> Dictionary:
+	## Headless SIMULATION journey: force Beaconward presence until capture → push rooms.
+	## Not a REAL_PLAYER earned receipt.
+	var s := create(seed, 0, connected_humans)
 	s["config"]["bots_enabled"] = false
 	while str(s.get("phase", "")) == "intro":
 		s = step(s)
@@ -270,4 +285,7 @@ static func run_capture_journey(seed: int = 7) -> Dictionary:
 		set_presence(s, 3, false)
 		s = step(s)
 		guard += 1
+	s["result_kind"] = "SIMULATION"
+	s["earned_personal_best"] = false
+	s["honesty"] = "run_capture_journey is SIMULATION — 2v2+capture rules exercised, not REAL_PLAYER"
 	return s

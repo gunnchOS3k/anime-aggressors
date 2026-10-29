@@ -2,8 +2,10 @@ extends RefCounted
 class_name TrialsPartyLinkSeats
 ## Honest PartyLink seat-count enforcement for Trials modes that promise multiplayer.
 ## Never enables SHIPPING_ROLLBACK. Caps to catalog truth, not aspirational marketing.
+## Connected humans only for live PartyLink — never invent seats. 2-fighter BattleScene ≠ 4 humans.
 
 const Authority = preload("res://scripts/trials/mode_authority.gd")
+const Allocator = preload("res://scripts/net/partylink_variant_allocator.gd")
 
 ## Modes that currently accept live PartyLink seating (honest playable seats may be < max).
 const PLAYABLE_SEATS := {
@@ -15,6 +17,10 @@ const PLAYABLE_SEATS := {
 	"convergence_unbound": {"min": 2, "max": 8, "live_max": 4},
 }
 
+## Shared BattleScene currently hosts two fighter actors. Extra PartyLink seats are
+## lobby/roster truth only until multi-actor depth lands — never fabricate humans.
+const BATTLE_SCENE_FIGHTER_SLOTS := 2
+
 
 static func truth_for(mode_id: String) -> Dictionary:
 	var catalog: Dictionary = Authority.player_count_truth(mode_id)
@@ -25,6 +31,7 @@ static func truth_for(mode_id: String) -> Dictionary:
 		"catalog_max": int(catalog.get("max", 1)),
 		"live_min": int(live.get("min", catalog.get("min", 1))),
 		"live_max": int(live.get("live_max", live.get("max", 2))),
+		"battle_scene_fighter_slots": BATTLE_SCENE_FIGHTER_SLOTS,
 		"honest_note": str(catalog.get("honest_note", "")),
 		"SHIPPING_ROLLBACK_ENABLED": false,
 	}
@@ -32,6 +39,8 @@ static func truth_for(mode_id: String) -> Dictionary:
 
 static func enforce(mode_id: String, requested_seats: int, connected_humans: int = -1) -> Dictionary:
 	## Returns ok + seated count. Rejects underfilled multiplayer promises honestly.
+	## connected_humans >= 0: live PartyLink — seated never exceeds connected humans.
+	## connected_humans < 0: local/sim journey only (CPU fill allowed); not a human PartyLink claim.
 	var t: Dictionary = truth_for(mode_id)
 	var want: int = requested_seats
 	var live_min: int = int(t.live_min)
@@ -48,10 +57,22 @@ static func enforce(mode_id: String, requested_seats: int, connected_humans: int
 			"SHIPPING_ROLLBACK_ENABLED": false,
 			"feeds_ranked_mmr": false,
 		}
-	## Aspirational catalog max (e.g. Prism 10 / Unbound 8) is not yet live — clamp honestly.
-	var seated: int = clampi(want, live_min, live_max)
-	var humans: int = connected_humans if connected_humans >= 0 else seated
+	var live_partylink: bool = connected_humans >= 0
+	var humans: int = connected_humans if live_partylink else want
+	var capped_want: int = mini(want, humans) if live_partylink else want
 	if catalog_min >= 2 and humans < live_min:
+		return {
+			"ok": false,
+			"reason": "multiplayer_seat_underfill",
+			"requested": want,
+			"connected_humans": humans if live_partylink else -1,
+			"seated": 0,
+			"truth": t,
+			"note": "Mode promises multiplayer; refusing premature single-seat live session",
+			"SHIPPING_ROLLBACK_ENABLED": false,
+			"feeds_ranked_mmr": false,
+		}
+	if live_partylink and capped_want < live_min and catalog_min >= 2:
 		return {
 			"ok": false,
 			"reason": "multiplayer_seat_underfill",
@@ -59,18 +80,28 @@ static func enforce(mode_id: String, requested_seats: int, connected_humans: int
 			"connected_humans": humans,
 			"seated": 0,
 			"truth": t,
-			"note": "Mode promises multiplayer; refusing premature single-seat live session",
+			"note": "Connected humans below live minimum after honest clamp",
 			"SHIPPING_ROLLBACK_ENABLED": false,
 			"feeds_ranked_mmr": false,
 		}
+	## Aspirational catalog max (e.g. Prism 10 / Unbound 8) is not yet live — clamp honestly.
+	var seated: int = clampi(capped_want, live_min, live_max)
+	if live_partylink:
+		seated = mini(seated, humans)
 	var degraded: bool = seated < want
+	var scene_note := ""
+	if seated > BATTLE_SCENE_FIGHTER_SLOTS:
+		scene_note = "PartyLink seats=%d exceed 2-fighter BattleScene; extra seats are lobby/roster only until multi-actor depth" % seated
 	return {
 		"ok": true,
 		"reason": "clamped_to_live_max" if degraded else "accepted",
 		"requested": want,
-		"connected_humans": humans,
+		"connected_humans": humans if live_partylink else -1,
 		"seated": seated,
 		"degraded_from_catalog_max": degraded,
+		"live_partylink": live_partylink,
+		"battle_scene_fighter_slots": BATTLE_SCENE_FIGHTER_SLOTS,
+		"scene_seat_honesty": scene_note,
 		"truth": t,
 		"partylink_allocator_safe": seated in [2, 4, 6, 8] or seated <= 2,
 		"SHIPPING_ROLLBACK_ENABLED": false,
@@ -80,13 +111,15 @@ static func enforce(mode_id: String, requested_seats: int, connected_humans: int
 
 static func allocate_variants(mode_id: String, roster_picks: Array) -> Dictionary:
 	## PartyLink body_variant allocation only after seat enforcement passes.
-	var gate: Dictionary = enforce(mode_id, roster_picks.size(), roster_picks.size())
+	## roster_picks must be connected humans only — size is the connected count.
+	var humans: int = roster_picks.size()
+	var gate: Dictionary = enforce(mode_id, humans, humans)
 	if not bool(gate.get("ok", false)):
 		return {"ok": false, "gate": gate, "assigned": []}
-	var Allocator = load("res://scripts/net/partylink_variant_allocator.gd")
-	var assigned: Array = []
-	if Allocator != null:
-		assigned = Allocator.allocate(roster_picks)
+	## Only allocate for the honestly seated prefix — never pad invented seats.
+	var seated: int = int(gate.get("seated", 0))
+	var picks: Array = roster_picks.slice(0, seated) if seated < roster_picks.size() else roster_picks
+	var assigned: Array = Allocator.allocate(picks)
 	return {
 		"ok": true,
 		"gate": gate,

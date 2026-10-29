@@ -10,6 +10,7 @@ const Seats = preload("res://scripts/trials/partylink_seat_enforcement.gd")
 const Presentation = preload("res://scripts/trials/mode_presentation.gd")
 const Unbound = preload("res://scripts/trials/unbound/unbound_ruleset.gd")
 const Derby = preload("res://scripts/trials/derby/resonance_trial_sim.gd")
+const ResonanceDummy = preload("res://scripts/trials/derby/resonance_dummy_actor.gd")
 const Flagline = preload("res://scripts/trials/flagline/fractured_accord_sim.gd")
 const Colossus = preload("res://scripts/trials/unbound/colossus_rig.gd")
 
@@ -29,29 +30,36 @@ static func supports_live_shared_combat(mode_id: String) -> bool:
 
 
 static func scale_hit_info(info: Dictionary) -> Dictionary:
-	## Shared combat path: scale damage/knockback from GameState trial modifiers.
+	## Knockback-only overlay for Trials. Damage ratio is applied once in HitResolver
+	## (10 @ 1.35 → 13.5). Do not re-multiply damage here or in fighter.receive_hit.
 	var gs := _gs()
 	if gs == null or str(gs.mode) != "trials":
 		return info
 	var out: Dictionary = info.duplicate(true)
-	var dr: float = float(gs.damage_ratio)
 	var kb: float = float(gs.trial_knockback_mult)
-	if not is_equal_approx(dr, 1.0):
-		if out.has("resolved_damage"):
-			out["resolved_damage"] = float(out.get("resolved_damage", 0.0)) * dr
-		if out.has("damage"):
-			out["damage"] = float(out.get("damage", 0.0)) * dr
 	if not is_equal_approx(kb, 1.0) and out.has("launch") and typeof(out["launch"]) == TYPE_VECTOR2:
 		out["launch"] = out["launch"] * kb
+	out["damage_ratio_owner"] = "HitResolver"
+	out["damage_ratio"] = float(gs.damage_ratio)
 	return out
 
 
-static func prepare_live_battle(mode_id: String, seats: int = 2, unbound_preset: String = Unbound.PRESET_TOTAL) -> Dictionary:
+static func expected_resolved_damage(authored: float, ratio: float = -1.0) -> float:
+	## HitResolver contract probe: authored * GameState.damage_ratio.
+	var gs := _gs()
+	var r: float = ratio
+	if r < 0.0:
+		r = float(gs.damage_ratio) if gs != null else 1.0
+	return authored * r
+
+
+static func prepare_live_battle(mode_id: String, seats: int = 2, unbound_preset: String = Unbound.PRESET_TOTAL, connected_humans: int = -1) -> Dictionary:
 	## Configure GameState for BattleScene entry. Returns honesty + presentation payload.
+	## connected_humans < 0 => local/sim journey (CPU fill). >=0 => live PartyLink humans only.
 	var gs := _gs()
 	if gs == null:
 		return {"ok": false, "reason": "gamestate_missing", "SHIPPING_ROLLBACK_ENABLED": false}
-	var gate: Dictionary = Seats.enforce(mode_id, seats, seats)
+	var gate: Dictionary = Seats.enforce(mode_id, seats, connected_humans)
 	if not bool(gate.get("ok", false)) and mode_id != "resonance_trial":
 		## Solo Resonance is allowed; multiplayer-promise modes must pass seat gate.
 		if int(Authority.player_count_truth(mode_id).get("min", 1)) >= 2:
@@ -140,25 +148,33 @@ static func _apply_unbound(gs: Node, preset_id: String, seats: int) -> Dictionar
 
 
 static func _apply_derby(gs: Node) -> Dictionary:
-	## Shared fighter combat overlay for Resonance — 10s contract chrome; dummy as CPU idle.
+	## Resonance live path — real ResonanceDummyActor + Kinetic Bat / distance scoring via sim.
 	gs.damage_ratio = 1.0
 	gs.trial_knockback_mult = 1.0
 	gs.stocks = 99
 	gs.match_timer_seconds = 10
 	gs.match_type = "stock"
 	gs.ruleset_id = "trial-resonance-live"
+	var dummy_cfg: Dictionary = ResonanceDummy.live_cpu_config()
 	gs.p2_is_cpu = true
-	gs.p2_fighter_id = "rook-ironside"  # stand-in dummy body until dedicated dummy actor
+	gs.p2_fighter_id = str(dummy_cfg.get("standin_fighter_id", ResonanceDummy.battle_standin_fighter_id()))
 	gs.training_dummy_mode = "idle"
 	gs.trial_colossus_rigs = []
 	gs.trial_camera_profile = {}
 	var sim: Dictionary = Derby.create(gs.match_seed if gs.match_seed != 0 else 42, gs.p1_fighter_id)
+	sim["dummy_actor"] = ResonanceDummy.identity()
+	sim["bat_launch_enabled"] = true
+	sim["distance_scoring_enabled"] = true
 	gs.trial_sim_snapshot = sim
 	return {
 		"contract_seconds": 10,
 		"kinetic_bat": true,
-		"dummy_standin": true,
+		"dummy_actor": ResonanceDummy.identity(),
+		"dummy_geometry_standin": true,
+		"bat_launch": true,
+		"distance_scoring": true,
 		"feeds_ranked_mmr": false,
+		"result_kind_live": "REAL_PLAYER",
 		"shipping": Authority.shipping_flags_false(),
 	}
 
@@ -175,13 +191,18 @@ static func _apply_flagline(gs: Node, seats: int) -> Dictionary:
 	gs.p2_is_cpu = seats < 2
 	gs.trial_colossus_rigs = []
 	gs.trial_camera_profile = {"minZoom": 0.75, "maxZoom": 1.25, "lerp": 0.14}
-	var sim: Dictionary = Flagline.create(gs.match_seed if gs.match_seed != 0 else 42, 0)
+	## Local live entry: treat seated humans honestly; CPU fills remaining 2v2 slots.
+	var humans_for_flagline: int = clampi(seats, 1, 4)
+	var sim: Dictionary = Flagline.create(gs.match_seed if gs.match_seed != 0 else 42, 0, humans_for_flagline)
 	gs.trial_sim_snapshot = sim
 	return {
 		"rooms": [-2, -1, 0, 1, 2],
 		"aliases": Flagline.DISPLAY_ALIAS.duplicate(),
 		"territory": str(sim.get("art_territory_name", "")),
 		"yin_yang_not_ordinary_captains": true,
+		"twovstwo_plus_capture": true,
+		"connected_humans": humans_for_flagline,
+		"battle_scene_fighter_slots": 2,
 		"feeds_ranked_mmr": false,
 		"shipping": Authority.shipping_flags_false(),
 	}
@@ -237,7 +258,7 @@ static func overlay_hud_lines(state: Dictionary = {}) -> PackedStringArray:
 					float(gs.trial_knockback_mult), float(gs.damage_ratio), int(gs.stocks),
 				])
 		"resonance_trial":
-			lines.append("Resonance · 10s damage contract · Kinetic Bat scaffold")
+			lines.append("Resonance · 10s · %s · Kinetic Bat + distance" % ResonanceDummy.DISPLAY_NAME)
 		"fractured_accord":
 			var snap: Dictionary = gs.trial_sim_snapshot if gs else {}
 			lines.append("Flagline · %s" % str(snap.get("art_territory_name", "Accord Fracture")))

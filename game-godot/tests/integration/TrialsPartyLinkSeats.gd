@@ -23,10 +23,18 @@ func run() -> void:
 	check(bool(prism.get("ok", false)), "prism_10_ok_clamped")
 	check(int(prism.get("seated", 0)) == 4, "prism_live_max_4")
 	check(bool(prism.get("degraded_from_catalog_max", false)), "prism_degraded_honest")
+	check(int(prism.get("battle_scene_fighter_slots", 0)) == 2, "prism_scene_slots_2")
+	check(str(prism.get("scene_seat_honesty", "")) != "", "prism_scene_honesty_note")
 
 	var unbound8: Dictionary = Seats.enforce("convergence_unbound", 8, 8)
 	check(bool(unbound8.get("ok", false)), "unbound_8_ok_clamped")
 	check(int(unbound8.get("seated", 0)) == 4, "unbound_live_max_4")
+
+	## Don't invent seats above connected humans (request 4, only 2 connected → seated 2).
+	var two_humans: Dictionary = Seats.enforce("fractured_accord", 4, 2)
+	check(bool(two_humans.get("ok", false)), "flagline_two_humans_ok")
+	check(int(two_humans.get("seated", 0)) == 2, "flagline_no_invented_seats")
+	check(int(two_humans.get("connected_humans", -1)) == 2, "flagline_connected_truth")
 
 	var under: Dictionary = Seats.enforce("fractured_accord", 2, 1)
 	check(not bool(under.get("ok", true)), "flagline_underfill_reject")
@@ -50,6 +58,11 @@ func run() -> void:
 	check((alloc.get("assigned", []) as Array).size() == 4, "four_variants")
 	check(not bool(alloc.get("SHIPPING_ROLLBACK_ENABLED", true)), "alloc_no_rollback")
 	check(not bool(alloc.get("feeds_ranked_mmr", true)), "alloc_no_mmr")
+
+	## Local/sim path (connected_humans=-1) still clamps without inventing PartyLink humans.
+	var local: Dictionary = Seats.enforce("prism_weave", 10, -1)
+	check(bool(local.get("ok", false)), "local_sim_ok")
+	check(int(local.get("connected_humans", 0)) == -1, "local_not_partylink_claim")
 
 	print("TRIALS_PARTYLINK_SEATS ", "PASS" if failures.is_empty() else "FAIL", " checks=", checks, " failures=", failures)
 	quit(0 if failures.is_empty() else 1)

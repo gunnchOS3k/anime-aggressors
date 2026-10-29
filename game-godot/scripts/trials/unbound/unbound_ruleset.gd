@@ -48,11 +48,13 @@ static func preset(preset_id: String) -> Dictionary:
 		PRESET_PRISMATIC:
 			m["name"] = "Prismatic Storm"
 			m["prismatic_unique_per_spectrum"] = true
+			m["prismatic_actors"] = ["spectrum_ember", "spectrum_juno", "spectrum_kaia", "spectrum_nix", "spectrum_orion", "spectrum_vesper", "spectrum_rook"]
 			m["projectile_mult"] = 2.0
 			m["note"] = "Prismatic unique per spectrum fighter — original kits, not third-party copies"
 		PRESET_COLOSSUS:
 			m["name"] = "Colossus Clash"
 			m["colossus_enabled"] = true
+			m["colossus_actors"] = ["cosmic_colossus_yin", "cosmic_colossus_yang"]
 			m["scale_aware_collision"] = true
 			m["camera_spectacle"] = true
 			m["real_giant_engineering"] = true
@@ -64,6 +66,7 @@ static func preset(preset_id: String) -> Dictionary:
 			m["colossus_enabled"] = true
 			m["kaiju_waves"] = true
 			m["black_white_puppet_echoes"] = true
+			m["puppet_actors"] = ["puppet_echo_black", "puppet_echo_white"]
 			m["black_white_are_yin_yang_rosamere_puppets"] = false
 			m["requires_separate_approval_for_named_puppets"] = true
 			m["spectacle_budget"] = {"vfx_cap": 24, "camera_shakes_per_10s": 4, "a11y_reduce_motion": true}
@@ -84,7 +87,8 @@ static func all_presets() -> Array:
 
 static func create_session(seed: int, preset_id: String, mythic_consent: bool = false, seats: int = 2) -> Dictionary:
 	var rules: Dictionary = preset(preset_id)
-	var seat_gate: Dictionary = Seats.enforce(MODE_ID, seats, seats)
+	## Local/sim session: connected_humans=-1. Live PartyLink callers pass real humans.
+	var seat_gate: Dictionary = Seats.enforce(MODE_ID, seats, -1)
 	var seat_truth: Dictionary = Seats.truth_for(MODE_ID)
 	var seated: int = int(seat_gate.get("seated", 0))
 	if not bool(seat_gate.get("ok", false)):

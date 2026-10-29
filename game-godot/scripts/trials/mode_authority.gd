@@ -69,15 +69,23 @@ static func shipping_flags_false() -> Dictionary:
 	}
 
 
-static func empty_save_payload(mode_id: String, seed: int, result: Dictionary) -> Dictionary:
-	## Local trial record only — never ranked MMR / never commercial claim.
+static func empty_save_payload(mode_id: String, seed: int, result: Dictionary, result_kind: String = "SIMULATION") -> Dictionary:
+	## Local trial record only — never ranked MMR / career / story / commercial claim.
+	## result_kind: SIMULATION (headless/run_solo) or REAL_PLAYER (live human journey).
+	var kind := result_kind
+	if kind != "REAL_PLAYER":
+		kind = "SIMULATION"
 	return {
 		"mode_id": mode_id,
 		"seed": seed,
 		"tick_hz": TICK_HZ,
 		"result": result,
+		"result_kind": kind,
 		"feeds_ranked_mmr": false,
+		"feeds_career_mmr": false,
+		"feeds_career_wins": false,
 		"earned_story_progress": false,
+		"earned_personal_best": kind == "REAL_PLAYER",
 		"shipping": shipping_flags_false(),
 		"saved_at_unix": int(Time.get_unix_time_from_system()),
 	}
