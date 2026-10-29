@@ -1,8 +1,9 @@
 extends RefCounted
 class_name ColossusRig
-## Real giant engineering scaffolding — rigs, scale-aware collision, cameras.
+## Real giant engineering — dictionary authority + ColossusActor node factory.
 ## Not a simple scale-up transform. Cosmic Colossus Yin/Yang + Rosamere Everlasting
 ## Origin controllable in opt-in Mythic only. Avatar KO ≠ true Rosamere defeat.
+## Live battles mount ColossusActor (CharacterBody2D + capsule) beyond dict scaffolds.
 
 const Authority = preload("res://scripts/trials/mode_authority.gd")
 

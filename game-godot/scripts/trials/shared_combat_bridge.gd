@@ -16,6 +16,8 @@ const Prism = preload("res://scripts/trials/prism/prism_weave_sim.gd")
 const Riftline = preload("res://scripts/trials/riftline/riftline_defense_sim.gd")
 const Echoes = preload("res://scripts/trials/echoes/echoes_gauntlet_sim.gd")
 const Colossus = preload("res://scripts/trials/unbound/colossus_rig.gd")
+const FlaglineFourBody = preload("res://scripts/trials/flagline/flagline_four_body.gd")
+const ColossusActor = preload("res://scripts/trials/unbound/colossus_actor.gd")
 
 ## All six Trials modes enter shared BattleScene combat with overlay + live sim tick.
 const LIVE_SHARED_COMBAT_MODES := [
@@ -233,14 +235,31 @@ static func _apply_flagline(gs: Node, seats: int) -> Dictionary:
 	gs.ruleset_id = "trial-fractured-accord-live"
 	gs.team_mode = true
 	gs.team_size = 2
+	gs.team_attack = false
 	gs.p2_is_cpu = seats < 2
 	gs.trial_colossus_rigs = []
-	gs.trial_camera_profile = {"minZoom": 0.75, "maxZoom": 1.25, "lerp": 0.14}
-	## Local live entry: treat seated humans honestly; CPU fills remaining 2v2 slots.
+	gs.trial_camera_profile = {"minZoom": 0.55, "maxZoom": 1.35, "lerp": 0.12}
+	## Local live entry: seated humans honest; CPU fills remaining 2v2 seats.
+	## Actual four Fighter bodies spawn under BattleSim (not logical CPU-only).
 	var humans_for_flagline: int = clampi(seats, 1, 4)
 	var sim: Dictionary = Flagline.create(gs.match_seed if gs.match_seed != 0 else 42, 0, humans_for_flagline)
 	sim["live_actor_sync"] = true
 	sim["twovstwo_actors"] = true
+	sim["actual_combat_bodies"] = true
+	sim["logical_cpu_only"] = false
+	sim["battle_scene_fighter_slots"] = 4
+	sim["multi_actor_depth"] = true
+	var roster: Array = FlaglineFourBody.roster_from_sim(sim)
+	gs.trial_four_body = true
+	gs.trial_body_roster = roster
+	if roster.size() >= 2:
+		gs.p1_fighter_id = str(roster[0].get("fighter_id", gs.p1_fighter_id))
+		gs.p2_fighter_id = str(roster[1].get("fighter_id", gs.p2_fighter_id))
+		gs.p1_is_cpu = bool(roster[0].get("is_bot", false))
+		gs.p2_is_cpu = bool(roster[1].get("is_bot", true))
+	gs.trial_sim_snapshot = sim
+	var honesty: Dictionary = FlaglineFourBody.honesty(sim, 4)
+	sim["honesty"] = honesty
 	gs.trial_sim_snapshot = sim
 	return {
 		"rooms": [-2, -1, 0, 1, 2],
@@ -256,9 +275,13 @@ static func _apply_flagline(gs: Node, seats: int) -> Dictionary:
 		"actor_count": Flagline.actor_slots(sim).size(),
 		"logical_actor_count": 4,
 		"multi_actor_depth": true,
-		"independent_cpu_fill": true,
-		"battle_scene_fighter_slots": 2,
-		"not_four_simultaneous_human_bodies": true,
+		"independent_cpu_fill": humans_for_flagline < 4,
+		"battle_scene_fighter_slots": 4,
+		"actual_combat_bodies": true,
+		"logical_cpu_only": false,
+		"combat_authority": "BattleSim+HitResolver",
+		"not_four_simultaneous_human_bodies": humans_for_flagline < 4,
+		"body_roster": roster,
 		"occupancy": Flagline.occupancy_summary(sim),
 		"feeds_ranked_mmr": false,
 		"shipping": Authority.shipping_flags_false(),
@@ -383,7 +406,15 @@ static func mount_overlay_on_battle(battle: Node) -> Node:
 			if battle._battle_camera != null and battle._battle_camera.has_method("configure"):
 				var cam := battle.get_node_or_null("Camera2D")
 				if cam:
-					battle._battle_camera.configure(cam, merged, [battle.fighter1, battle.fighter2], battle.blast)
+					var focus: Array = [battle.fighter1, battle.fighter2]
+					if "fighter3" in battle and battle.fighter3 != null:
+						focus.append(battle.fighter3)
+					if "fighter4" in battle and battle.fighter4 != null:
+						focus.append(battle.fighter4)
+					battle._battle_camera.configure(cam, merged, focus, battle.blast)
+	## Real Colossus actors (CharacterBody2D + capsule) for Unbound presets.
+	if str(gs.trial_mode_id) == "convergence_unbound" and not (gs.trial_colossus_rigs as Array).is_empty():
+		mount_colossus_actors_on_battle(battle)
 	return overlay
 
 
@@ -402,9 +433,19 @@ static func tick_live_from_battle(battle: Node) -> Dictionary:
 	var p2_pos: Vector2 = f2.global_position if f2 != null else Vector2(1400, 700)
 	match mode_id:
 		"fractured_accord":
-			## Multi-actor depth: 2 BattleScene bodies + independent CPU fill for logical 4.
-			snap = Flagline.tick_live(snap, p1_pos, p2_pos)
+			## Actual four-body combat: sync all live Fighter positions into Flagline capture/OT.
+			var positions: Array = FlaglineFourBody.collect_positions(battle)
+			if positions.size() >= 4:
+				snap = Flagline.tick_live_multi(snap, positions)
+			else:
+				snap = Flagline.tick_live(snap, p1_pos, p2_pos)
+			snap["actual_combat_bodies"] = positions.size() >= 4
+			snap["battle_scene_fighter_slots"] = maxi(2, positions.size())
+			snap["logical_cpu_only"] = false
 			gs.trial_sim_snapshot = snap
+			## Room/game end → player-owned Flagline results (capture/OT already in sim).
+			if str(snap.get("phase", "")) == "gameWon":
+				_seal_flagline_results(gs, snap)
 			return Flagline.occupancy_summary(snap)
 		"prism_weave":
 			var atk1: bool = false
@@ -458,12 +499,28 @@ static func tick_live_from_battle(battle: Node) -> Dictionary:
 				gs.trial_sim_snapshot = snap
 				if not (snap.get("colossus_rigs", []) as Array).is_empty():
 					gs.trial_colossus_rigs = snap.get("colossus_rigs", [])
+				## Tick real ColossusActor nodes when mounted (beyond dict scaffolds).
+				var root: Node = battle.get_node_or_null("ColossusActors")
+				if root != null:
+					var synced: Array = []
+					for child in root.get_children():
+						if child != null and child.has_method("tick_frame"):
+							child.tick_frame(int(snap.get("frame", 0)), int(snap.get("seed", 1)))
+							if child.has_method("to_rig_dictionary"):
+								synced.append(child.to_rig_dictionary())
+					if not synced.is_empty():
+						gs.trial_colossus_rigs = synced
+						snap["colossus_rigs"] = synced
+						snap["colossus_actors_live"] = true
+						gs.trial_sim_snapshot = snap
 			return {
 				"preset": gs.trial_unbound_preset,
 				"cooldown_mult": gs.trial_cooldown_mult,
 				"full_supers": gs.trial_full_supers,
 				"actors": (gs.trial_actors as Array).size(),
 				"colossus_rigs": (gs.trial_colossus_rigs as Array).size(),
+				"colossus_actors_live": bool(snap.get("colossus_actors_live", false)),
+				"beyond_dictionary_scaffold": true,
 				"live": true,
 			}
 		_:
@@ -509,6 +566,58 @@ static func seal_live_resonance_result() -> Dictionary:
 	var sealed: Dictionary = Derby.seal_real_player(snap, owned)
 	gs.trial_sim_snapshot = sealed
 	return sealed
+
+
+static func _seal_flagline_results(gs: Node, snap: Dictionary) -> Dictionary:
+	## Player-owned Flagline receipt only when live four-body combat produced gameWon.
+	var owned: bool = bool(snap.get("actual_combat_bodies", false)) \
+		and bool(snap.get("live_actor_sync", false)) \
+		and str(snap.get("phase", "")) == "gameWon"
+	var sealed: Dictionary = snap.duplicate(true)
+	sealed["result_kind"] = "REAL_PLAYER" if owned else "SIMULATION"
+	sealed["earned_personal_best"] = owned
+	sealed["feeds_ranked_mmr"] = false
+	sealed["SHIPPING_ROLLBACK_ENABLED"] = false
+	sealed["HUMAN_ART_APPROVED"] = false
+	sealed["rematch"] = FlaglineFourBody.rematch_payload(sealed)
+	gs.trial_sim_snapshot = sealed
+	if owned:
+		gs.record_trial_result({
+			"mode_id": "fractured_accord",
+			"result_kind": "REAL_PLAYER",
+			"winning_team": sealed.get("winning_team", ""),
+			"display_winner": Flagline.display_team(str(sealed.get("winning_team", ""))),
+			"rooms_won": sealed.get("rooms_won", {}),
+			"four_body": true,
+			"battle_scene_fighter_slots": 4,
+			"seed": sealed.get("seed", 0),
+		})
+	return sealed
+
+
+static func mount_colossus_actors_on_battle(battle: Node) -> Array:
+	## Spawn real ColossusActor nodes (capsule collision) beyond dictionary scaffolds.
+	var gs := _gs()
+	if battle == null or gs == null:
+		return []
+	if str(gs.trial_mode_id) != "convergence_unbound":
+		return []
+	var rigs: Array = gs.trial_colossus_rigs
+	if rigs.is_empty():
+		return []
+	var existing: Node = battle.get_node_or_null("ColossusActors")
+	if existing != null:
+		existing.queue_free()
+	var root := Node2D.new()
+	root.name = "ColossusActors"
+	battle.add_child(root)
+	var actors: Array = []
+	for rig in rigs:
+		var actor = ColossusActor.spawn_from_rig(root, rig)
+		actors.append(actor)
+	gs.trial_overlay_state["colossus_actors_mounted"] = actors.size()
+	gs.trial_overlay_state["colossus_beyond_dictionary"] = true
+	return actors
 
 
 static func overlay_hud_lines(state: Dictionary = {}) -> PackedStringArray:

@@ -1,0 +1,48 @@
+{
+  "suite": "trials_pvs_four_body_colossus_ordinary",
+  "branch": "cursor/continuation-isolated-combat-20261027",
+  "shift": "pvs_rtm_bind_flagline_four_body_colossus_actors_ordinary_journeys",
+  "pvs": {
+    "contract_id": "GUNNCHOS3K_PVS",
+    "contract_version": "1.0.0",
+    "contract_source_sha": "935eb3a20548b1a4b726f2ba305df94ff496be16",
+    "ancestry_includes": "45b456617002569c33a5a27fe30d5cf8be5a7032",
+    "rtm": "artifacts/cursor_continuation/rtm/ANIME_REQUIREMENTS_TO_EVIDENCE_MATRIX.json",
+    "schema_validate": "PASS",
+    "independent_review_status": "not_started"
+  },
+  "flagline": {
+    "actual_four_body": true,
+    "logical_cpu_only": false,
+    "combat_authority": "BattleSim+HitResolver",
+    "battle_scene_fighter_slots": 4,
+    "body_input_team": true,
+    "hits_capture_ot_results_rematch": true,
+    "test": "game-godot/tests/integration/FlaglineFourBodyCombat.gd"
+  },
+  "colossus": {
+    "beyond_dictionary_scaffold": true,
+    "actor_class": "ColossusActor",
+    "collision": "CharacterBody2D+CapsuleShape2D+Area2D Hurtbox",
+    "HUMAN_ART_APPROVED": false,
+    "test": "game-godot/tests/integration/ColossusActorCollision.gd"
+  },
+  "ordinary_input_journeys": {
+    "modes": 6,
+    "player_owned_results_only": true,
+    "test": "game-godot/tests/integration/TrialsOrdinaryInputJourneys.gd"
+  },
+  "preserved": {
+    "fighters": 10,
+    "rosamere_forms": 3,
+    "SHIPPING_ROLLBACK_ENABLED": false,
+    "HUMAN_ART": false,
+    "RC2_READY": false,
+    "V1_0_0_RELEASE_AUTHORIZED": false,
+    "CURSOR_COMPLETE": false,
+    "bodyvariant_fix_preserved": true
+  },
+  "suite_scripts": 15,
+  "suite_pass": true,
+  "tip_honesty": "Trials CI coverage tip = Actions head_sha for trials-of-convergence; doc tip stamp may differ by docs-only commit — report both."
+}

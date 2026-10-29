@@ -57,6 +57,9 @@ var trial_overlay_state: Dictionary = {}
 var trial_sim_snapshot: Dictionary = {}
 var trial_colossus_rigs: Array = []
 var trial_camera_profile: Dictionary = {}
+## Flagline actual four-body BattleSim combat (not logical CPU-only occupancy).
+var trial_four_body: bool = false
+var trial_body_roster: Array = []  # [{slot,fighter_id,team_id,is_bot,is_human}]
 var feeds_trial_ranked_mmr: bool = false  # always false; explicit flag for audits
 var arcade_index: int = 0
 var arcade_seed: int = 7
@@ -451,6 +454,8 @@ func clear_trial_modifiers() -> void:
 	trial_sim_snapshot = {}
 	trial_colossus_rigs = []
 	trial_camera_profile = {}
+	trial_four_body = false
+	trial_body_roster = []
 	feeds_trial_ranked_mmr = false
 	trial_unbound_preset = "total_unbound"
 

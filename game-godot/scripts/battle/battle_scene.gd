@@ -16,6 +16,8 @@ const _BattleCamera = preload("res://scripts/battle/battle_camera_controller.gd"
 
 var fighter1
 var fighter2
+var fighter3
+var fighter4
 var blast: Dictionary = {}
 var _active := false
 var _match_finished := false
@@ -62,6 +64,7 @@ const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
 const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
 const MOVE_LIST_PANEL := preload("res://scripts/ui/move_list_panel.gd")
 const _RosamereForms = preload("res://scripts/combat/rosamere_form_selection.gd")
+const _FlaglineFourBody = preload("res://scripts/trials/flagline/flagline_four_body.gd")
 
 var _move_list_panel: Control
 var _training_pin_label: Label
@@ -96,7 +99,7 @@ func _ready() -> void:
 		return # No guest countdown, BattleSim, CPU, timer, KO or career authority.
 	_battle_sim = _BattleSim.new()
 	add_child(_battle_sim)
-	_battle_sim.bind_fighters([fighter1, fighter2])
+	_battle_sim.bind_fighters(_active_combat_bodies())
 	_battle_sim.frame_committing.connect(_commit_network_frame)
 	if GameState.mode == "online_private" and not LanSession.bind_battle(self):
 		# A peer can leave between Start and deferred scene creation. A network
@@ -254,9 +257,19 @@ func _apply_rosamere_form_hooks() -> void:
 		_RosamereForms.apply_to_fighter(actor, form_id, mode, consent)
 
 
+func _active_combat_bodies() -> Array:
+	var bodies: Array = []
+	for f in [fighter1, fighter2, fighter3, fighter4]:
+		if f != null and is_instance_valid(f):
+			bodies.append(f)
+	return bodies
+
+
 func _spawn_fighters() -> void:
 	for c in fighters_root.get_children():
 		c.queue_free()
+	fighter3 = null
+	fighter4 = null
 	var stage_data: Dictionary = GameState.load_stage(GameState.stage_id)
 	var spawns: Array = stage_data.get("spawnPoints", [])
 	var s1 := Vector2(-200, 200)
@@ -267,6 +280,13 @@ func _spawn_fighters() -> void:
 			s1 = Vector2(sp.x, sp.y)
 		if sp.slot == 2:
 			s2 = Vector2(sp.x, sp.y)
+	var four_body := bool(GameState.trial_four_body) \
+		and str(GameState.mode) == "trials" \
+		and str(GameState.trial_mode_id) == "fractured_accord" \
+		and (GameState.trial_body_roster as Array).size() >= 4
+	if four_body:
+		_spawn_flagline_four_bodies(stage_data, main, s1, s2)
+		return
 	fighter1 = FIGHTER_SCENE.instantiate()
 	fighter2 = FIGHTER_SCENE.instantiate()
 	fighter1.name = "Fighter1"
@@ -280,18 +300,7 @@ func _spawn_fighters() -> void:
 	fighter1.global_position = s1
 	fighter2.global_position = s2
 	for f in [fighter1, fighter2]:
-		if f.has_method("configure_stage_geometry"):
-			f.configure_stage_geometry(main, stage_data.get("ledgeAnchors", []), bool(stage_data.get("ledges", true)))
-		else:
-			f.platform_half_width = float(main.get("width", 800)) / 2.0
-			f.platform_center_x = float(main.get("x", 0))
-		# Wave018: battle must not inherit select-preview ghosts / stuck visibility.
-		if f.has_method("ensure_visible_presentation"):
-			f.ensure_visible_presentation()
-		if f.model_3d != null and f.model_3d.has_method("heal_visibility_if_needed"):
-			f.model_3d.heal_visibility_if_needed()
-		if f.model_3d != null and f.model_3d.has_method("set_select_mode"):
-			f.model_3d.set_select_mode(false)
+		_finish_fighter_spawn(f, main, stage_data)
 	_emit_battle_visibility_telemetry()
 	_connect_hitboxes(fighter1, fighter2)
 	_connect_hitboxes(fighter2, fighter1)
@@ -300,12 +309,72 @@ func _spawn_fighters() -> void:
 	_update_hud()
 
 
+func _finish_fighter_spawn(f, main: Dictionary, stage_data: Dictionary) -> void:
+	if f == null or not is_instance_valid(f):
+		return
+	if f.has_method("configure_stage_geometry"):
+		f.configure_stage_geometry(main, stage_data.get("ledgeAnchors", []), bool(stage_data.get("ledges", true)))
+	else:
+		f.platform_half_width = float(main.get("width", 800)) / 2.0
+		f.platform_center_x = float(main.get("x", 0))
+	# Wave018: battle must not inherit select-preview ghosts / stuck visibility.
+	if f.has_method("ensure_visible_presentation"):
+		f.ensure_visible_presentation()
+	if f.model_3d != null and f.model_3d.has_method("heal_visibility_if_needed"):
+		f.model_3d.heal_visibility_if_needed()
+	if f.model_3d != null and f.model_3d.has_method("set_select_mode"):
+		f.model_3d.set_select_mode(false)
+
+
+func _spawn_flagline_four_bodies(stage_data: Dictionary, main: Dictionary, s1: Vector2, s2: Vector2) -> void:
+	## Actual four Fighter bodies under BattleSim — combat authority, not logical CPU-only.
+	var roster: Array = GameState.trial_body_roster
+	var offsets: Array = _FlaglineFourBody.spawn_offsets()
+	var mid := (s1 + s2) * 0.5
+	var bodies: Array = []
+	for i in range(4):
+		var entry: Dictionary = roster[i]
+		var actor = FIGHTER_SCENE.instantiate()
+		actor.name = "Fighter%d" % (i + 1)
+		fighters_root.add_child(actor)
+		var spawn: Vector2 = mid + offsets[i]
+		if i == 0:
+			spawn = s1 + Vector2(-40, 0)
+		elif i == 1:
+			spawn = s2 + Vector2(40, 0)
+		var cpu_flag := bool(entry.get("is_bot", true)) or bool(GameState.battle_eval_mode)
+		## Slot 1 may still be human; seats beyond connected humans are CPU.
+		if i == 0 and not bool(entry.get("is_bot", true)):
+			cpu_flag = bool(GameState.p1_is_cpu) or bool(GameState.battle_eval_mode)
+		actor.configure(str(entry.get("fighter_id", "ember-vale")), int(entry.get("slot", i + 1)), cpu_flag, GameState.stocks, spawn)
+		actor.global_position = spawn
+		actor.set_meta("flagline_team_id", str(entry.get("team_id", "")))
+		actor.set_meta("flagline_display_team", str(entry.get("display_team", "")))
+		actor.set_meta("flagline_four_body", true)
+		_finish_fighter_spawn(actor, main, stage_data)
+		bodies.append(actor)
+		match i:
+			0:
+				fighter1 = actor
+			1:
+				fighter2 = actor
+			2:
+				fighter3 = actor
+			3:
+				fighter4 = actor
+	_emit_battle_visibility_telemetry()
+	_FlaglineFourBody.connect_cross_team_hitboxes(self, bodies, Callable(self, "_connect_hitboxes"))
+	for f in bodies:
+		f.koed.connect(_on_ko.bind(f))
+	_update_hud()
+
+
 func _emit_battle_visibility_telemetry() -> void:
 	var telem = get_node_or_null("/root/Wave018VisibilityTelemetry")
 	if telem == null or not telem.has_method("emit_battle_row"):
 		return
 	_wave018_last_telemetry_ids.clear()
-	for f in [fighter1, fighter2]:
+	for f in _active_combat_bodies():
 		if f == null or not is_instance_valid(f):
 			continue
 		var model = f.get("model_3d")
@@ -726,6 +795,11 @@ func _clear_pause_for_nav() -> void:
 
 
 func _on_pause_rematch() -> void:
+	## Flagline four-body rematch keeps Trials combat authority + roster.
+	if str(GameState.mode) == "trials" and str(GameState.trial_mode_id) == "fractured_accord" and bool(GameState.trial_four_body):
+		var _Bridge = load("res://scripts/trials/shared_combat_bridge.gd")
+		if _Bridge != null:
+			_Bridge.prepare_live_battle("fractured_accord", int(GameState.trial_seat_count), str(GameState.trial_unbound_preset), -1)
 	if _match_finished: return
 	_clear_pause_for_nav()
 	if LanSession.role == "host":

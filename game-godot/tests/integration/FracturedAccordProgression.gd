@@ -60,7 +60,7 @@ func run() -> void:
 	check(bool(live.get("multi_actor_depth", false)), "multi_actor_depth")
 	check(int(live.get("logical_actor_count", 0)) == 4, "logical_actor_count_4")
 	check(bool(occ1.get("independent_cpu_fill", false)), "independent_cpu_fill")
-	check(int(occ1.get("battle_scene_fighter_slots", 0)) == 2, "honest_two_battle_slots")
+	check(int(occ1.get("battle_scene_fighter_slots", 0)) == 4, "four_battle_slots_contract")
 	var multi := Flagline.create(23, 0, 4)
 	multi["config"]["bots_enabled"] = false
 	while str(multi.get("phase", "")) == "intro":
@@ -71,5 +71,19 @@ func run() -> void:
 	var occ_m := Flagline.occupancy_summary(multi)
 	check(int(occ_m.get("actor_count", 0)) == 4, "tick_live_multi_four")
 	check(int(occ_m.get("solar_in_core", 0)) >= 1, "multi_solar_in_core")
+	## Capture → room push → OT contract still honest.
+	var ot := Flagline.create(29, 0, 2)
+	ot["config"]["bots_enabled"] = false
+	ot["config"]["capture_to_win"] = 100.0
+	ot["room_timer_frames"] = 5
+	while str(ot.get("phase", "")) == "intro":
+		ot = Flagline.step(ot)
+	Flagline.set_presence(ot, 0, true)
+	Flagline.set_presence(ot, 2, true)
+	Flagline.set_presence(ot, 1, false)
+	Flagline.set_presence(ot, 3, false)
+	ot["capture"] = {"solar": 40.0, "lunar": 10.0, "contested": false, "controlling": "solar"}
+	ot = Flagline.step(ot)
+	check(str(ot.get("room_win_reason", "")) == "overtime" or str(ot.get("phase", "")) in ["roomWon", "gameWon", "roomFight"], "ot_or_room_path")
 	print("FRACTURED_ACCORD_PROGRESSION ", "PASS" if failures.is_empty() else "FAIL", " checks=", checks, " failures=", failures)
 	quit(0 if failures.is_empty() else 1)

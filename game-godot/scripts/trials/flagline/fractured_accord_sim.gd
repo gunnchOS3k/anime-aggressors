@@ -58,10 +58,10 @@ static func create(seed: int = 1, start_room: int = 0, connected_humans: int = 2
 		"transition_frames": 0,
 		"team_slots": slots,
 		"connected_humans": humans,
-		"battle_scene_fighter_slots": 2,
+		"battle_scene_fighter_slots": 4,
 		"stocks": [3, 3, 3, 3],
 		"in_core": [false, false, false, false],
-		## Logical 2v2 actor world positions (independent of BattleScene's 2 fighter slots).
+		## Four actor world positions — live BattleSim bodies when trial_four_body.
 		"actor_positions": [
 			{"x": 720.0, "y": 540.0},
 			{"x": 1200.0, "y": 540.0},
@@ -70,6 +70,8 @@ static func create(seed: int = 1, start_room: int = 0, connected_humans: int = 2
 		],
 		"multi_actor_depth": true,
 		"logical_actor_count": 4,
+		"actual_combat_bodies": false,
+		"logical_cpu_only": true,
 		"config": {
 			"capture_to_win": 100.0,
 			"capture_rate": 12.0,
@@ -86,10 +88,11 @@ static func create(seed: int = 1, start_room: int = 0, connected_humans: int = 2
 		"art_territory_name": str(ART_TERRITORY_NAMES.get(clampi(start_room, -2, 2), "")),
 		"result_kind": "SIMULATION",
 		"honesty": {
-			"battle_scene_fighter_slots": 2,
+			"battle_scene_fighter_slots": 4,
 			"logical_actors": 4,
-			"extra_seats_are_cpu_or_lobby": true,
-			"not_four_simultaneous_human_bodies": true,
+			"extra_seats_are_cpu_or_lobby": humans < 4,
+			"not_four_simultaneous_human_bodies": humans < 4,
+			"actual_combat_bodies_require_live_bridge": true,
 		},
 	}
 
@@ -332,10 +335,12 @@ static func occupancy_summary(state: Dictionary) -> Dictionary:
 		"stronghold_rooms": [-2, 2],
 		"actor_count": actor_slots(state).size(),
 		"connected_humans": int(state.get("connected_humans", 0)),
-		"battle_scene_fighter_slots": int(state.get("battle_scene_fighter_slots", 2)),
+		"battle_scene_fighter_slots": int(state.get("battle_scene_fighter_slots", 4)),
 		"multi_actor_depth": bool(state.get("multi_actor_depth", false)),
 		"logical_actor_count": int(state.get("logical_actor_count", actor_slots(state).size())),
 		"independent_cpu_fill": bool(state.get("config", {}).get("independent_cpu_fill", false)),
+		"actual_combat_bodies": bool(state.get("actual_combat_bodies", false)),
+		"logical_cpu_only": bool(state.get("logical_cpu_only", not bool(state.get("actual_combat_bodies", false)))),
 		"actor_positions": state.get("actor_positions", []),
 	}
 

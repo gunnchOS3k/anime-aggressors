@@ -1,33 +1,25 @@
-# Anime Aggressors — Requirements-to-Evidence Matrix (RTM)
+# Anime Aggressors — Requirements-to-Evidence Matrix
 
-**CURSOR_COMPLETE: NOT claimed.**  
-**HUMAN_ART / RC2 / V1 / SHIPPING_ROLLBACK: false.**
+**Contract:** `GUNNCHOS3K_PVS@1.0.0`  
+**Source SHA pin:** `935eb3a20548b1a4b726f2ba305df94ff496be16` (gunnchos-site `docs/gunnchos3k-product-verification-standard-v1`; ancestry includes `45b4566`)  
+**Schema:** `artifacts/cursor_continuation/rtm/requirements_to_evidence_matrix.schema.json`  
+**JSON:** `artifacts/cursor_continuation/rtm/ANIME_REQUIREMENTS_TO_EVIDENCE_MATRIX.json`
 
-Shared gunnchOS3k Product Verification Standard was **not** present in `thursday-open-lab-hub` at generation time. This matrix uses the local fallback schema:
+## Honesty
 
-`artifacts/cursor_continuation/rtm/LOCAL_PRODUCT_VERIFICATION_SCHEMA.json`
+- `HUMAN` / `RC2` / `V1` = **false**
+- `SHIPPING_ROLLBACK_ENABLED` = **false**
+- Every row: `independent_review_status` = **not_started**
+- Not a certification artifact
 
-Machine-readable: `ANIME_REQUIREMENTS_TO_EVIDENCE_MATRIX.json`
+## Tip honesty (Trials CI vs doc stamp)
 
-| ID | Requirement | Status | Honesty |
-|---|---|---|---|
-| AA-RTM-001 | 10 fighters | EVIDENCED | Art not HUMAN_ART |
-| AA-RTM-002 | Story campaign | PARTIAL | Authority tests ≠ V1 Story complete |
-| AA-RTM-003 | Rosamere 3 forms | EVIDENCED | Canon + eligibility; art pending |
-| AA-RTM-004 | 6 Trials real gameplay | PARTIAL | Native review / partial per mode |
-| AA-RTM-005 | Prismatic/Puppet/Mythic eligibility | EVIDENCED | Never ranked / Versus / Story contaminate |
-| AA-RTM-006 | Frame / hitbox integrity | PARTIAL | HitResolver owner; colossus scaffold |
-| AA-RTM-007 | Determinism / rollback | PARTIAL | Resim evidence; shipping rollback false |
-| AA-RTM-008 | Real seat counts | EVIDENCED | No invented humans; 2 battle slots honest |
-| AA-RTM-009 | Accessibility | PARTIAL | Markers / reduce-motion; no full a11y audit |
-| AA-RTM-010 | BodyVariant CI fix | EVIDENCED | Clean-env preload preserved |
-| AA-RTM-011 | Cursor-Complete gate | IN_PROGRESS | Explicitly not claimed |
+- **Branch tip (post-commit)** is the SHA that must match FF-pushed HEAD.
+- **Trials CI coverage tip** = the commit SHA that GitHub Actions ran for `trials-of-convergence` (BodyVariant clean-env + suite).
+- **Doc tip stamps** (e.g. `TRIALS_RTM_DEEPEN_TIP_STAMP.json`) may lag or lead by a docs-only stamp commit. Report both SHAs; do not claim CI green on a tip that was never covered.
 
-## Cursor-Complete gaps (honest)
+## Validate
 
-- Codex HUMAN_ART (dummy mesh, Flagline territory, colossus/puppet presentation)
-- Device playtest of all six live shared-combat paths
-- Story owner sign-off
-- True 4-body BattleScene (Flagline still logical 4 + CPU fill on 2 slots)
-- Owner a11y matrix
-- RC2 / V1 remain forbidden
+```bash
+PYTHONPATH=/path/to/venv/site-packages python3 scripts/validate-anime-rtm.py
+```
