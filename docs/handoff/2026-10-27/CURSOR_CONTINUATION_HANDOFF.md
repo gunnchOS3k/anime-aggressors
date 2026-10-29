@@ -121,5 +121,6 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Local Godot 4.7.1 evidence: PinkBloomSystemsDeterminism PASS (50), RosamereThreeFormCanon PASS (38), ExpandedStageLoadSmoke PASS (99), RosamereOrdinaryControlsTraining PASS (28), FlatCombatReplay PASS (24).
 - Evidence: `artifacts/cursor_continuation/SHIFT_PRESENTATION_CONTROLS_STAGES_EVIDENCE.json`
 
-- Engineering tip: 
-- Requested publish tip pending FF push of this stamp.
+- Engineering tip: `b2b9efa75422bc157bd5feefeb34c6ebf20eb7e3`
+- Docs stamp tip (pre-push): `6e4e2bb9ee2ff28d7dec490548bcb73e3ea88cd2`
+- Requested publish tip: this commit after FF push.
