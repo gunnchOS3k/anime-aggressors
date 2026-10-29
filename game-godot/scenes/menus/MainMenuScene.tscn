@@ -111,6 +111,12 @@ custom_minimum_size = Vector2(280, 52)
 layout_mode = 2
 text = "Training"
 
+[node name="Trials" type="Button" parent="Layout/SecondaryColumn"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 52)
+layout_mode = 2
+text = "Trials"
+
 [node name="Rulesets" type="Button" parent="Layout/SecondaryColumn"]
 custom_minimum_size = Vector2(280, 52)
 layout_mode = 2
@@ -173,6 +179,7 @@ horizontal_alignment = 1
 [connection signal="pressed" from="Layout/HeroColumn/Fight" to="." method="_on_start_battle_pressed"]
 [connection signal="pressed" from="Layout/SecondaryColumn/Story" to="." method="_on_story_pressed"]
 [connection signal="pressed" from="Layout/SecondaryColumn/Training" to="." method="_on_training_pressed"]
+[connection signal="pressed" from="Layout/SecondaryColumn/Trials" to="." method="_on_trials_pressed"]
 [connection signal="pressed" from="Layout/SecondaryColumn/Rulesets" to="." method="_on_rulesets_pressed"]
 [connection signal="pressed" from="Layout/SecondaryColumn/FighterVault" to="." method="_on_fighter_vault_pressed"]
 [connection signal="pressed" from="Layout/SecondaryColumn/StageVault" to="." method="_on_stage_vault_pressed"]

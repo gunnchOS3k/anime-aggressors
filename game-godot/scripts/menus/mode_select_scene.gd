@@ -65,6 +65,12 @@ func _on_challenges_pressed() -> void:
 	GameState.mode = "challenges"
 	SceneRouter.go("challenges")
 
+func _on_trials_pressed() -> void:
+	GameState.mode = "trials"
+	GameState.arcade_active = false
+	GameState.team_mode = false
+	SceneRouter.go_trials()
+
 func _on_online_pressed() -> void:
 	GameState.mode = "online_private"
 	SceneRouter.go("online_hub")

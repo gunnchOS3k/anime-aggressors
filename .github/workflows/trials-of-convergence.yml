@@ -1,0 +1,76 @@
+name: trials-of-convergence
+
+on:
+  push:
+    branches:
+      - cursor/continuation-isolated-combat-20261027
+    paths:
+      - "game-godot/scripts/trials/**"
+      - "game-godot/scenes/trials/**"
+      - "game-godot/scenes/menus/TrialsHubScene.tscn"
+      - "game-godot/data/trials/**"
+      - "game-godot/tests/integration/Trials*.gd"
+      - "game-godot/tests/integration/Resonance*.gd"
+      - "game-godot/tests/integration/Fractured*.gd"
+      - "game-godot/tests/integration/Prism*.gd"
+      - "game-godot/tests/integration/Riftline*.gd"
+      - "game-godot/tests/integration/Echoes*.gd"
+      - "game-godot/tests/integration/Unbound*.gd"
+      - ".github/workflows/trials-of-convergence.yml"
+  pull_request:
+    paths:
+      - "game-godot/scripts/trials/**"
+      - "game-godot/scenes/trials/**"
+      - "game-godot/data/trials/**"
+      - "game-godot/tests/integration/Trials*.gd"
+      - "game-godot/tests/integration/Resonance*.gd"
+      - "game-godot/tests/integration/Fractured*.gd"
+      - "game-godot/tests/integration/Prism*.gd"
+      - "game-godot/tests/integration/Riftline*.gd"
+      - "game-godot/tests/integration/Echoes*.gd"
+      - "game-godot/tests/integration/Unbound*.gd"
+
+jobs:
+  trials-suite:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Godot 4.7.1
+        run: |
+          curl -fsSL -o godot.zip \
+            https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip
+          unzip -q godot.zip
+          sudo mv Godot_v4.7.1-stable_linux.x86_64 /usr/local/bin/godot
+          godot --version
+      - name: Run Trials of Convergence suite
+        working-directory: game-godot
+        run: |
+          set -euo pipefail
+          mkdir -p ../artifacts/cursor_continuation/trials_of_convergence
+          SCRIPTS=(
+            res://tests/integration/TrialsModeAuthority.gd
+            res://tests/integration/ResonanceTrialDeterminism.gd
+            res://tests/integration/FracturedAccordProgression.gd
+            res://tests/integration/PrismWeaveDeterminism.gd
+            res://tests/integration/RiftlineSeededWaves.gd
+            res://tests/integration/EchoesGauntletLore.gd
+            res://tests/integration/UnboundRulesetContract.gd
+            res://tests/integration/TrialsRosamereEligibility.gd
+          )
+          FAIL=0
+          for s in "${SCRIPTS[@]}"; do
+            echo "==> $s"
+            if ! godot --headless --path . --script "$s" > "../artifacts/cursor_continuation/trials_of_convergence/$(basename "$s" .gd).log" 2>&1; then
+              echo "FAIL $s"
+              FAIL=1
+              cat "../artifacts/cursor_continuation/trials_of_convergence/$(basename "$s" .gd).log" || true
+            fi
+          done
+          test "$FAIL" -eq 0
+      - name: Upload trial logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trials-of-convergence-logs
+          path: artifacts/cursor_continuation/trials_of_convergence/

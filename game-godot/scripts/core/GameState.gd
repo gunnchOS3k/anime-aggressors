@@ -34,8 +34,16 @@ var last_winner_slot: int = -1
 var debug_combat_hud: bool = false
 
 ## Arcade ladder (Alpha minimum mode beyond Versus + Training).
-var mode: String = "versus"  # versus | training | arcade | tutorial | hazards | team | challenges | online_unranked | online_ranked | tournament
+var mode: String = "versus"  # versus | training | arcade | tutorial | hazards | team | challenges | trials | online_unranked | online_ranked | tournament
 var arcade_active: bool = false
+
+## Trials of Convergence (first-class player nav; Labs remain diagnostics).
+var trial_mode_id: String = ""
+var trial_journey_phase: String = "select"
+var trial_challenge: String = "solo"  # solo | alternating | coop | fighter_challenge
+var trial_seat_count: int = 2
+var trial_story_reveal: bool = false  # spoiler-safe until story reveal
+var trial_records: Array = []  # local-only; never ranked MMR
 var arcade_index: int = 0
 var arcade_seed: int = 7
 var arcade_player_id: String = "ember-vale"
@@ -380,6 +388,39 @@ func begin_training() -> void:
 	ruleset_id = "training"
 	stage_id = "training-grid"
 	reset_match()
+
+
+func begin_trial(mode_id: String, seats: int = 2, challenge: String = "solo") -> void:
+	## Trials of Convergence entry — local spectacle/objective modes; never ranked MMR.
+	mode = "trials"
+	trial_mode_id = mode_id
+	trial_journey_phase = "select"
+	trial_seat_count = seats
+	trial_challenge = challenge
+	arcade_active = false
+	hazards_enabled = false
+	items_enabled = false
+	team_mode = false
+	online_queue = "private"
+	match_type = "trial"
+	ruleset_id = "trial-%s" % mode_id
+	if match_seed == 0:
+		match_seed = 42
+
+
+func record_trial_result(payload: Dictionary) -> void:
+	## Local trial ledger only. Explicitly never feeds ranked MMR or story unlocks.
+	var record: Dictionary = payload.duplicate(true)
+	record["feeds_ranked_mmr"] = false
+	record["earned_story_progress"] = false
+	record["HUMAN_ART_APPROVED"] = false
+	record["RC2_READY"] = false
+	record["V1_0_0_RELEASE_AUTHORIZED"] = false
+	record["SHIPPING_ROLLBACK_ENABLED"] = false
+	trial_records.append(record)
+	## Cap local history; do not claim career ranked progression.
+	if trial_records.size() > 64:
+		trial_records = trial_records.slice(trial_records.size() - 64, trial_records.size())
 
 
 func begin_local_versus(p2_cpu: bool = true) -> void:

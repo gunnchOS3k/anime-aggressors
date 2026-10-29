@@ -1,0 +1,48 @@
+{
+  "suite": "trials_of_convergence",
+  "branch": "cursor/continuation-isolated-combat-20261027",
+  "base_tip_before": "0f5bd5f88b833be3b0c86498674161c4f760b8b9",
+  "umbrella": "TRIALS_OF_CONVERGENCE",
+  "modes": {
+    "resonance_trial": {
+      "gameplay": "native 60Hz sim; 10s damage contract; Kinetic Bat; SELECT→PLAY→RESULTS→SAVE journey scene",
+      "tests": "ResonanceTrialDeterminism PASS"
+    },
+    "fractured_accord": {
+      "gameplay": "five-room -2..+2; Beaconward/Veilward aliases; 2v2+CPU; capture journey",
+      "tests": "FracturedAccordProgression PASS"
+    },
+    "prism_weave": {
+      "gameplay": "60s territorial sim; harmonic tiles; a11y markers; journey scene",
+      "tests": "PrismWeaveDeterminism PASS"
+    },
+    "riftline_defense": {
+      "gameplay": "4 lanes seeded waves; fighter-identity projectiles; Fracture Echoes lore",
+      "tests": "RiftlineSeededWaves PASS"
+    },
+    "echoes_gauntlet": {
+      "gameplay": "solo+coop gauntlet; bosses as simulations; no canonical cosmic defeat",
+      "tests": "EchoesGauntletLore PASS"
+    },
+    "convergence_unbound": {
+      "gameplay": "UnboundRuleset presets + colossus rig scaffolding; UNBALANCED MYTHIC; never ranked MMR",
+      "tests": "UnboundRulesetContract PASS"
+    }
+  },
+  "nav": {
+    "main_menu_trials": true,
+    "mode_select_trials": true,
+    "labs_remain_diagnostics": true
+  },
+  "rosamere": {
+    "spoiler_safe_pre_reveal": true,
+    "everlasting_unbound_consent": true,
+    "tests": "TrialsRosamereEligibility PASS"
+  },
+  "ci": ".github/workflows/trials-of-convergence.yml",
+  "HUMAN_ART_APPROVED": false,
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false,
+  "SHIPPING_ROLLBACK_ENABLED": false,
+  "honesty": "Headless sim/journey smoke and JSON catalogs are not commercial V1 claims"
+}

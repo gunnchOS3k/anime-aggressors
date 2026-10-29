@@ -30,6 +30,13 @@ const SCENES := {
 	"settings": "res://scenes/menus/SettingsScene.tscn",
 	"controls": "res://scenes/menus/ControlsScene.tscn",
 	"labs": "res://scenes/menus/LabsScene.tscn",
+	"trials": "res://scenes/menus/TrialsHubScene.tscn",
+	"trial_resonance": "res://scenes/trials/ResonanceTrialScene.tscn",
+	"trial_fractured_accord": "res://scenes/trials/FracturedAccordScene.tscn",
+	"trial_prism_weave": "res://scenes/trials/PrismWeaveScene.tscn",
+	"trial_riftline": "res://scenes/trials/RiftlineDefenseScene.tscn",
+	"trial_echoes": "res://scenes/trials/EchoesGauntletScene.tscn",
+	"trial_unbound": "res://scenes/trials/ConvergenceUnboundScene.tscn",
 	"build_info": "res://scenes/menus/BuildInfoScene.tscn",
 	"roster_art_review": "res://scenes/labs/FullRosterArtReviewScene.tscn",
 	"launch_feedback_review": "res://scenes/labs/LaunchFeedbackReviewScene.tscn",
@@ -91,6 +98,10 @@ func go_launch_feedback_review() -> void:
 
 func go_selection_review() -> void:
 	go("selection_review")
+
+
+func go_trials() -> void:
+	go("trials")
 
 
 func go_build_info(return_scene: String = "settings") -> void:

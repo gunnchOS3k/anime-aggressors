@@ -1,0 +1,89 @@
+{
+  "umbrella": "TRIALS_OF_CONVERGENCE",
+  "schema_version": 1,
+  "tick_hz": 60,
+  "HUMAN_ART_APPROVED": false,
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false,
+  "SHIPPING_ROLLBACK_ENABLED": false,
+  "labs_remain_diagnostics": true,
+  "nav_slots": ["FIGHT", "STORY", "PARTY", "TRIALS", "TRAINING", "CAREER"],
+  "modes": [
+    {
+      "id": "resonance_trial",
+      "legacy_ids": ["impactDummyDerby", "impact_dummy_derby"],
+      "display_name": "Resonance Trial",
+      "subtitle": "Impact Dummy Derby",
+      "scene_key": "trial_resonance",
+      "authority_contract": "game-core 10s damage + Kinetic Bat final launch",
+      "player_counts": {"min": 1, "max": 2, "honest_note": "solo primary; alternating/coop challenges optional"},
+      "feeds_ranked_mmr": false,
+      "rosamere": {"familiar": true, "first_bloom": true, "everlasting": false}
+    },
+    {
+      "id": "fractured_accord",
+      "legacy_ids": ["flaglineClash", "flagline_clash"],
+      "display_name": "Fractured Accord",
+      "subtitle": "Flagline Clash",
+      "scene_key": "trial_fractured_accord",
+      "authority_contract": "five-room push-pull -2..+2; solar/lunar internal; Beaconward/Veilward display",
+      "player_counts": {"min": 2, "max": 4, "honest_note": "2v2 with CPU fill to 4"},
+      "team_display": {"solar": "Beaconward", "lunar": "Veilward"},
+      "feeds_ranked_mmr": false,
+      "rosamere": {"familiar": true, "first_bloom": true, "everlasting": false},
+      "yin_yang_not_ordinary_captains": true
+    },
+    {
+      "id": "prism_weave",
+      "legacy_ids": ["paintFloor", "paint_the_floor"],
+      "display_name": "Prism Weave",
+      "subtitle": "Paint the Floor",
+      "scene_key": "trial_prism_weave",
+      "authority_contract": "60s territorial; harmonic tiles; a11y beyond color",
+      "player_counts": {"min": 2, "max": 10, "honest_note": "ten-fighter roster cap; current playable seats 2–4 until PartyLink depth"},
+      "feeds_ranked_mmr": false,
+      "rosamere": {"familiar": true, "first_bloom": true, "everlasting": false}
+    },
+    {
+      "id": "riftline_defense",
+      "legacy_ids": ["laneBlaster", "4_lane_blaster"],
+      "display_name": "Riftline Defense",
+      "subtitle": "4-Lane Blaster",
+      "scene_key": "trial_riftline",
+      "authority_contract": "4 lanes, 3 lives, seeded waves; Fracture Echoes lore",
+      "player_counts": {"min": 1, "max": 2, "honest_note": "1–2 human seats"},
+      "feeds_ranked_mmr": false,
+      "rosamere": {"familiar": true, "first_bloom": true, "everlasting": false}
+    },
+    {
+      "id": "echoes_gauntlet",
+      "legacy_ids": ["survivalGauntlet"],
+      "display_name": "Echoes of Convergence",
+      "subtitle": "Survival Gauntlet",
+      "scene_key": "trial_echoes",
+      "authority_contract": "Echoes not real Puppets/souls; bosses as simulations; no canonical cosmic defeat",
+      "player_counts": {"min": 1, "max": 2, "honest_note": "solo + coop"},
+      "feeds_ranked_mmr": false,
+      "rosamere": {"familiar": true, "first_bloom": true, "everlasting": false}
+    },
+    {
+      "id": "convergence_unbound",
+      "legacy_ids": [],
+      "display_name": "Convergence Unbound",
+      "subtitle": "UNBALANCED MYTHIC",
+      "scene_key": "trial_unbound",
+      "authority_contract": "full supers, min cooldowns, instant resources, extended transforms, rapid respawn, amplified knockback; never ranked MMR",
+      "player_counts": {"min": 2, "max": 8, "honest_note": "PartyLink honest seat counts; colossus seats opt-in Mythic only"},
+      "feeds_ranked_mmr": false,
+      "label": "UNBALANCED MYTHIC",
+      "rosamere": {"familiar": true, "first_bloom": true, "everlasting": "mythic_consent_required"},
+      "presets": ["total_unbound", "prismatic_storm", "colossus_clash", "kaiju_siege", "custom"]
+    }
+  ],
+  "shelved_documented_not_erased": [
+    {"path": "apps/web/src/minigames/homeRun.ts", "note": "kinetic toy; not a Trials mode"},
+    {"path": "legacy/web/src/games/paint", "note": "legacy shell"},
+    {"path": "legacy/web/src/games/lanes", "note": "legacy shell"},
+    {"path": "game/godot/scripts/modes/ImpactDummyDerby.gd", "note": "45s prototype superseded by 10s game-core contract"}
+  ]
+}
