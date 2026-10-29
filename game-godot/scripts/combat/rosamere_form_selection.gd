@@ -104,12 +104,20 @@ static func apply_to_fighter(fighter: Node, form_id: String, mode: String, mythi
 	var resolved := str(gate.get("form_id", FORM_FAMILIAR))
 	if fighter == null or not is_instance_valid(fighter):
 		return {"ok": false, "reason": "invalid_fighter"}
-	if fighter.has_method("apply_form"):
-		fighter.apply_form(resolved)
+	var previous := ""
+	if fighter.has_method("get_current_form_id"):
+		previous = str(fighter.get_current_form_id())
 	if fighter.has_method("set_meta"):
 		fighter.set_meta("rosamere_gameplay_contract", str(gate.get("gameplay_contract_id", "")))
 		fighter.set_meta("rosamere_presentation", gate.get("presentation", {}))
 		fighter.set_meta("rosamere_mode", mode)
+	if fighter.has_method("apply_form"):
+		fighter.apply_form(resolved)
+	## Presentation production hooks (poses/VFX/audio/transitions) — final art still false.
+	var Presentation = load("res://scripts/visual/rosamere_form_presentation.gd")
+	if Presentation != null and Presentation.has_method("apply_to_fighter"):
+		var presented: Dictionary = Presentation.apply_to_fighter(fighter, resolved, previous)
+		gate["presentation_production"] = presented
 	return gate
 
 

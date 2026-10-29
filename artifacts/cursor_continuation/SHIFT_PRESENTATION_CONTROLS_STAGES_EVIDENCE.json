@@ -1,0 +1,142 @@
+{
+  "temporary_owner": "cursor",
+  "branch": "cursor/continuation-isolated-combat-20261027",
+  "parent_tip": "5118d854f8f6b4205047411d8b473b22293d042f",
+  "godot_version": "4.7.1.stable.official.a13da4feb",
+  "generated_at": "2026-10-29T02:28:33.895236+00:00",
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false,
+  "HUMAN_ART_APPROVED": false,
+  "shipping_backend_enabled": false,
+  "SHIPPING_ROLLBACK_ENABLED": false,
+  "WORKING_CANDIDATE": false,
+  "owner_canon": {
+    "name": "Rosamere",
+    "title": "The First Bloom",
+    "status": "OWNER_APPROVED_NOT_WORKING_CANDIDATE",
+    "manifestations": [
+      "FAMILIAR_ROSE",
+      "FIRST_BLOOM",
+      "EVERLASTING_ORIGIN"
+    ],
+    "gameplay_contract": "COMPETITIVE_SELF_LIMITED attaches to FAMILIAR_ROSE (not a fourth form)"
+  },
+  "gameplay_delivered": [
+    "Restored Rosamere aura_charge/aura_burst ordinary move IDs for Training/combat",
+    "Wired PinkBloomSystems into Fighter ordinary specials/grab/charge/burst",
+    "Quiet Embrace no longer steals grab binding; fires on grab confirm",
+    "Three-form presentation production hooks (poses/VFX/audio/transitions) with honest art_status",
+    "Batch2 five authored-layout stages playable (distinct geometry); launch six preserved"
+  ],
+  "art_status": {
+    "status": "THREE_FORM_PRESENTATION_PRODUCTION_IN_PROGRESS",
+    "cel_shaded_glb": false,
+    "HUMAN_ART_APPROVED": false
+  },
+  "stages": {
+    "expanded_30": 30,
+    "playable_expanded": [
+      "titans-divide",
+      "the-last-horizon",
+      "sunburst-highlands",
+      "the-concord-guildhall",
+      "hermits-tide-retreat",
+      "celestial-observatory",
+      "the-infinity-chamber",
+      "the-convergence-tournament-grounds",
+      "nightveil-city",
+      "the-furnace-between"
+    ],
+    "playable_count": 10,
+    "registered_pending": [
+      "skyward-games-stadium",
+      "aethercrest-academy",
+      "ascension-arena",
+      "wind-city-hardwood",
+      "lakeshore-gridiron",
+      "archive-of-life-expedition-outpost",
+      "morphing-battle-coliseum",
+      "ruins-of-the-seven-pillars",
+      "solara-metropolis",
+      "manhattan-aftershock",
+      "beatlink-soundstage",
+      "leviathans-wake",
+      "clockwork-archipelago",
+      "worlds-martial-summit",
+      "stormbreaker-armada",
+      "moonfall-cathedral",
+      "orbital-zero",
+      "titan-assembly-yard",
+      "worldroot-sanctuary",
+      "neon-underworld"
+    ],
+    "pending_count": 20,
+    "canonical_launch_preserved": true,
+    "batch2": [
+      "the-concord-guildhall",
+      "hermits-tide-retreat",
+      "celestial-observatory",
+      "the-infinity-chamber",
+      "the-convergence-tournament-grounds"
+    ]
+  },
+  "tests": {
+    "PinkBloomSystemsDeterminism": {
+      "PASS": true,
+      "checks": 50
+    },
+    "RosamereThreeFormCanon": {
+      "PASS": true,
+      "checks": 38
+    },
+    "ExpandedStageLoadSmoke": {
+      "PASS": true,
+      "checks": 99
+    },
+    "RosamereOrdinaryControlsTraining": {
+      "PASS": true,
+      "checks": 28
+    },
+    "FlatCombatReplay": {
+      "PASS": true,
+      "checks": 24
+    }
+  },
+  "PASS": true,
+  "remaining": {
+    "art": [
+      "cel_shaded_glb",
+      "human form acting",
+      "final VFX/audio mix",
+      "HUMAN_ART_APPROVED"
+    ],
+    "stages": [
+      "skyward-games-stadium",
+      "aethercrest-academy",
+      "ascension-arena",
+      "wind-city-hardwood",
+      "lakeshore-gridiron",
+      "archive-of-life-expedition-outpost",
+      "morphing-battle-coliseum",
+      "ruins-of-the-seven-pillars",
+      "solara-metropolis",
+      "manhattan-aftershock",
+      "beatlink-soundstage",
+      "leviathans-wake",
+      "clockwork-archipelago",
+      "worlds-martial-summit",
+      "stormbreaker-armada",
+      "moonfall-cathedral",
+      "orbital-zero",
+      "titan-assembly-yard",
+      "worldroot-sanctuary",
+      "neon-underworld"
+    ],
+    "blockers": [
+      "Final Rosamere art not approved",
+      "Shipping rollback remains off pending combat-world parity + independent-client evidence",
+      "V1/RC2 human gates remain false",
+      "20 expanded stages still REGISTERED_PENDING"
+    ]
+  }
+}

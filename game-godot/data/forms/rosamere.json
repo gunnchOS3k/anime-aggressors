@@ -11,12 +11,21 @@
   "art_status": {
     "HUMAN_ART_APPROVED": false,
     "cel_shaded_glb": false,
-    "status": "NOT_AUTHORED_THIS_PASS",
-    "honest": true
+    "status": "THREE_FORM_PRESENTATION_PRODUCTION_IN_PROGRESS",
+    "honest": true,
+    "final_art_approved": false,
+    "presentation_production": {
+      "models": "PROCEDURAL_PLACEHOLDER_NOT_CEL_SHADED_GLB",
+      "poses": "FORM_POSE_HOOKS_AUTHORED_RUNTIME",
+      "vfx": "FORM_AURA_EMISSION_HOOKS_AUTHORED_RUNTIME",
+      "audio": "TRANSITION_SFX_HOOKS_AUTHORED_RUNTIME",
+      "transitions": "TRANSITION_HOOKS_WIRED_DETERMINISTIC",
+      "HUMAN_ART_APPROVED": false
+    }
   },
   "three_form_canon": true,
   "manifestation_count": 3,
-  "note": "THERE ARE THREE FORMS, NOT FOUR. COMPETITIVE_SELF_LIMITED is the gameplay contract attached to Familiar Rose — not a fourth story form. Technical IDs FAMILIAR_ROSE, COMPETITIVE_SELF_LIMITED, FIRST_BLOOM, EVERLASTING_ORIGIN are all preserved.",
+  "note": "THERE ARE THREE FORMS, NOT FOUR. COMPETITIVE_SELF_LIMITED is the gameplay contract attached to Familiar Rose \u2014 not a fourth story form. Technical IDs FAMILIAR_ROSE, COMPETITIVE_SELF_LIMITED, FIRST_BLOOM, EVERLASTING_ORIGIN are all preserved.",
   "technical_ids_preserved": [
     "FAMILIAR_ROSE",
     "COMPETITIVE_SELF_LIMITED",
@@ -142,8 +151,9 @@
         "rim": "#FFE6F1",
         "warm_approachable": true,
         "motion_authority": "compose, nurture, unfold",
-        "original_form_acting_status": "PENDING_AUTHORED_PRODUCTION",
-        "cel_shaded_glb": false
+        "original_form_acting_status": "RUNTIME_HOOKS_AUTHORED_FINAL_ART_NOT_APPROVED",
+        "cel_shaded_glb": false,
+        "production_pass": "three_form_presentation_runtime_hooks"
       },
       "move_overrides": {}
     },
@@ -175,14 +185,15 @@
         "ascendant_glow": true,
         "not_oversized": true,
         "motion_authority": "compose, nurture, unfold, reveal",
-        "original_form_acting_status": "PENDING_AUTHORED_PRODUCTION",
+        "original_form_acting_status": "RUNTIME_HOOKS_AUTHORED_FINAL_ART_NOT_APPROVED",
         "cel_shaded_glb": false,
-        "bounded_competitive_effects": true
+        "bounded_competitive_effects": true,
+        "production_pass": "three_form_presentation_runtime_hooks"
       },
       "move_overrides": {
         "bloom_seed": {
           "training_display_name": "Bloom Seed (Ascendant)",
-          "presentation_only_note": "BALANCE_NOT_APPROVED — presentation/VFX emphasis only this pass"
+          "presentation_only_note": "BALANCE_NOT_APPROVED \u2014 presentation/VFX emphasis only this pass"
         },
         "petal_constellation": {
           "training_display_name": "Petal Constellation (Ascendant)",
@@ -228,9 +239,10 @@
         "creator_glow": true,
         "not_oversized": true,
         "motion_authority": "compose, nurture, unfold, originate, permit",
-        "original_form_acting_status": "PENDING_AUTHORED_PRODUCTION",
+        "original_form_acting_status": "RUNTIME_HOOKS_AUTHORED_FINAL_ART_NOT_APPROVED",
         "cel_shaded_glb": false,
-        "mythic_clearly_labeled": true
+        "mythic_clearly_labeled": true,
+        "production_pass": "three_form_presentation_runtime_hooks"
       },
       "move_overrides": {
         "mythic_everything_again": {
@@ -240,5 +252,7 @@
         }
       }
     }
-  }
+  },
+  "WORKING_CANDIDATE": false,
+  "owner_record": "OWNER_APPROVED_NOT_WORKING_CANDIDATE"
 }

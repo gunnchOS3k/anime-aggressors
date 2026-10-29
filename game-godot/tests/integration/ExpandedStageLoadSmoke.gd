@@ -22,6 +22,9 @@ func run() -> void:
 	check(int(summary.get("expanded_count", 0)) == 30, "expanded_30_registered")
 	var playable: Array = summary.get("playable_expanded", [])
 	check(playable.size() >= 5, "batch1_at_least_5_playable")
+	check(playable.size() >= 10, "batch2_at_least_10_playable_authored_or_procedural")
+	for need in ["the-concord-guildhall", "hermits-tide-retreat", "celestial-observatory", "the-infinity-chamber", "the-convergence-tournament-grounds"]:
+		check(need in playable, "batch2_playable:" + need)
 	check(not bool(summary.get("HUMAN_ART_APPROVED", true)), "human_art_gate_false")
 	check(not bool(summary.get("RC2_READY", true)), "rc2_gate_false")
 	check(not bool(summary.get("V1_0_0_RELEASE_AUTHORIZED", true)), "v1_gate_false")
@@ -39,7 +42,13 @@ func run() -> void:
 		root.add_child(stage_root)
 		var built: Dictionary = manager.build_stage(stage_root, str(stage_id), true, "competitive")
 		check(bool(built.get("ok", false)), "build_ok:" + str(stage_id))
-		check(str(built.get("productionStatus", "")).begins_with("PLAYABLE"), "status_playable:" + str(stage_id))
+		var prod_status := str(built.get("productionStatus", ""))
+		check(prod_status.begins_with("PLAYABLE"), "status_playable:" + str(stage_id))
+		if str(stage_id) in ["the-concord-guildhall", "hermits-tide-retreat", "celestial-observatory", "the-infinity-chamber", "the-convergence-tournament-grounds"]:
+			check(prod_status.find("AUTHORED") >= 0 or prod_status.find("BATCH2") >= 0, "batch2_authored_status:" + str(stage_id))
+			var main: Dictionary = built.get("main_platform", {})
+			check(float(main.get("width", 900)) != 900.0, "batch2_not_uniform_stub_width:" + str(stage_id))
+			check(int((built.get("spawn_points", []) as Array).size()) >= 2, "batch2_spawns:" + str(stage_id))
 		var spawns: Array = built.get("spawn_points", [])
 		check(spawns.size() >= 2, "spawns:" + str(stage_id))
 		var bodies := 0

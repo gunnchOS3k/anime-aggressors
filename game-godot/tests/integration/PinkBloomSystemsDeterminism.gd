@@ -66,12 +66,25 @@ func run() -> void:
 	var move_ids: Array = []
 	for m in moves.get("moves", []):
 		move_ids.append(str(m.get("move_id", "")))
-	for need in ["bloom_seed", "petal_constellation", "first_dawn", "gentle_reversal", "quiet_embrace", "a_world_in_bloom", "before_there_was_time", "the_first_permission", "mythic_everything_again"]:
+	for need in ["bloom_seed", "petal_constellation", "first_dawn", "gentle_reversal", "quiet_embrace", "a_world_in_bloom", "before_there_was_time", "the_first_permission", "mythic_everything_again", "aura_charge", "aura_burst", "grab"]:
 		check(need in move_ids, "move_present:" + need)
+	check("origination_script" not in move_ids, "aura_charge_id_restored_not_origination_script")
+	check("first_permission" not in move_ids, "aura_burst_id_restored_not_first_permission_move_id")
+	var by_id: Dictionary = {}
+	for m in moves.get("moves", []):
+		by_id[str(m.get("move_id", ""))] = m
+	check(str(by_id.get("aura_charge", {}).get("input_command", "")) == "aura_charge", "aura_charge_ordinary_input")
+	check(str(by_id.get("aura_burst", {}).get("input_command", "")) == "aura_burst", "aura_burst_ordinary_input")
+	check(str(by_id.get("bloom_seed", {}).get("input_command", "")) == "special_neutral", "bloom_seed_special_neutral")
+	check(str(by_id.get("grab", {}).get("input_command", "")) == "grab", "grab_ordinary_input")
+	check(str(by_id.get("quiet_embrace", {}).get("input_command", "")) == "", "quiet_embrace_does_not_steal_grab")
 	var fighter: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/fighters/rosamere.json"))
-	check(str(fighter.get("art_status", {}).get("status", "")) == "NOT_AUTHORED_THIS_PASS", "honest_art_status")
+	var art_status := str(fighter.get("art_status", {}).get("status", ""))
+	check(art_status in ["NOT_AUTHORED_THIS_PASS", "THREE_FORM_PRESENTATION_PRODUCTION_IN_PROGRESS"], "honest_art_status")
 	check(not bool(fighter.get("art_status", {}).get("cel_shaded_glb", true)), "no_fake_finished_glb")
+	check(not bool(fighter.get("art_status", {}).get("HUMAN_ART_APPROVED", true)), "human_art_still_false")
 	check(bool(fighter.get("owner_approved", {}).get("name", false)), "name_owner_approved")
+	check(not bool(fighter.get("owner_approved", {}).get("WORKING_CANDIDATE", true)), "canon_not_working_candidate")
 	check(not bool(fighter.get("owner_approved", {}).get("final_art", true)), "final_art_still_not_approved")
 	finish()
 

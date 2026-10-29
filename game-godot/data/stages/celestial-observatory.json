@@ -2,47 +2,64 @@
   "id": "celestial-observatory",
   "displayName": "Celestial Observatory",
   "index": 6,
-  "layoutType": "observatory",
+  "layoutType": "observatory_authored",
   "mainPlatform": {
     "x": 0,
-    "y": 280,
-    "width": 900,
-    "height": 40
+    "y": 270,
+    "width": 520,
+    "height": 38
   },
   "sidePlatforms": [
     {
-      "x": -260,
+      "x": -280,
       "y": 180,
-      "width": 170,
-      "height": 24
+      "width": 150,
+      "height": 22
     },
     {
-      "x": 260,
+      "x": 280,
       "y": 180,
-      "width": 170,
-      "height": 24
+      "width": 150,
+      "height": 22
+    },
+    {
+      "x": 0,
+      "y": 100,
+      "width": 180,
+      "height": 22
     }
   ],
   "spawnPoints": [
     {
       "slot": 1,
-      "x": -220,
-      "y": 200
+      "x": -170,
+      "y": 190
     },
     {
       "slot": 2,
-      "x": 220,
-      "y": 200
+      "x": 170,
+      "y": 190
     }
   ],
   "blastZones": {
-    "left": -620,
-    "right": 620,
-    "top": -400,
+    "left": -660,
+    "right": 660,
+    "top": -450,
     "bottom": 440
   },
   "ledges": true,
-  "hazardSockets": [],
+  "hazardSockets": [
+    {
+      "id": "lens_flare_arc",
+      "x": 0,
+      "y": 90,
+      "radius": 22,
+      "authoritative": true,
+      "effect": "soft_push_down",
+      "frames_period": 210,
+      "damage": 0
+    }
+  ],
   "cameraProfile": {
     "mode": "platform_fighter",
     "minZoom": 0.7,
@@ -54,10 +71,10 @@
     }
   },
   "lightingProfile": {
-    "keyColor": "#8899aa",
-    "keyAlpha": 0.1,
-    "ambient": "#0c1014",
-    "rim": "#f4a7c3"
+    "keyColor": "#a8c4ff",
+    "keyAlpha": 0.16,
+    "ambient": "#050814",
+    "rim": "#ffe6f1"
   },
   "performanceTier": {
     "default": "high",
@@ -80,13 +97,13 @@
   },
   "audioBed": {
     "event": "bed_celestial_observatory",
-    "status": "NOT_AUTHORED",
+    "status": "PROCEDURAL_WORKING_NOT_HUMAN_FINAL",
     "path": "res://assets/audio/procedural/stages/celestial-observatory/bed.wav"
   },
   "previewPlaceholder": "res://assets/stages/procedural/celestial-observatory.svg",
-  "artStatus": "NOT_AUTHORED",
-  "productionStatus": "REGISTERED_PENDING",
-  "geometryStatus": "PENDING",
+  "artStatus": "AUTHORED_LAYOUT_NOT_HUMAN_FINAL",
+  "productionStatus": "PLAYABLE_AUTHORED_LAYOUT_BATCH2",
+  "geometryStatus": "AUTHORED_LAYOUT_WORKING",
   "HUMAN_ART_APPROVED": false,
   "yin_yang_presence": {
     "expression": "dome_projection",
@@ -125,5 +142,6 @@
       "y": 280.0,
       "facing": -1
     }
-  ]
+  ],
+  "playable": true
 }

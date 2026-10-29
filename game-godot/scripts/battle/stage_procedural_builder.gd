@@ -83,6 +83,42 @@ const THEMES := {
 		"accent": Color(0.95, 0.65, 0.78, 0.2),
 		"hazard": Color(1.0, 0.35, 0.15, 0.4),
 	},
+	# Expanded batch2 — authored layouts (distinct geometry); art not human-final.
+	"the-concord-guildhall": {
+		"bg": Color(0.08, 0.07, 0.06),
+		"platform": Color(0.28, 0.24, 0.18),
+		"trim": Color(0.82, 0.7, 0.42),
+		"accent": Color(0.95, 0.65, 0.78, 0.18),
+		"hazard": Color(0.75, 0.6, 0.35, 0.28),
+	},
+	"hermits-tide-retreat": {
+		"bg": Color(0.04, 0.08, 0.12),
+		"platform": Color(0.18, 0.28, 0.3),
+		"trim": Color(0.45, 0.78, 0.9),
+		"accent": Color(0.95, 0.7, 0.82, 0.16),
+		"hazard": Color(0.3, 0.65, 0.85, 0.3),
+	},
+	"celestial-observatory": {
+		"bg": Color(0.03, 0.04, 0.1),
+		"platform": Color(0.16, 0.18, 0.3),
+		"trim": Color(0.65, 0.75, 1.0),
+		"accent": Color(1.0, 0.9, 0.95, 0.2),
+		"hazard": Color(0.55, 0.65, 1.0, 0.28),
+	},
+	"the-infinity-chamber": {
+		"bg": Color(0.06, 0.03, 0.1),
+		"platform": Color(0.22, 0.14, 0.3),
+		"trim": Color(0.78, 0.55, 1.0),
+		"accent": Color(0.95, 0.65, 0.78, 0.2),
+		"hazard": Color(0.7, 0.4, 0.95, 0.3),
+	},
+	"the-convergence-tournament-grounds": {
+		"bg": Color(0.1, 0.07, 0.04),
+		"platform": Color(0.3, 0.22, 0.14),
+		"trim": Color(1.0, 0.8, 0.4),
+		"accent": Color(0.95, 0.65, 0.78, 0.18),
+		"hazard": Color(0.95, 0.7, 0.3, 0.25),
+	},
 }
 
 

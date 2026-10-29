@@ -1,0 +1,103 @@
+{
+  "id": "rosamere_three_form_presentation_production",
+  "fighter_id": "rosamere",
+  "schema": "rosamere_form_presentation/v1",
+  "canon_status": "OWNER_APPROVED_THREE_FORM_AND_MYTHOLOGY",
+  "WORKING_CANDIDATE": false,
+  "name": "Rosamere",
+  "title": "The First Bloom",
+  "art_status": {
+    "HUMAN_ART_APPROVED": false,
+    "cel_shaded_glb": false,
+    "status": "THREE_FORM_PRESENTATION_PRODUCTION_IN_PROGRESS",
+    "honest": true
+  },
+  "manifestations": {
+    "FAMILIAR_ROSE": {
+      "roman": "I",
+      "pose_idle": "idle",
+      "pose_transformed_idle": "idle",
+      "aura_shape": "soft_petals",
+      "emission_strength": 0.18,
+      "element_accent": "#F4A7C3",
+      "rim": "#FFE6F1",
+      "transition_in_sfx": "rosamere.form.familiar_rose.in",
+      "transition_out_sfx": "rosamere.form.familiar_rose.out",
+      "vfx_motif": "soft_petals",
+      "status": "RUNTIME_HOOKS_AUTHORED_FINAL_ART_NOT_APPROVED"
+    },
+    "FIRST_BLOOM": {
+      "roman": "II",
+      "pose_idle": "aura_charge",
+      "pose_transformed_idle": "aura_charge",
+      "transform_in_clip": "first_dawn",
+      "aura_shape": "bloom_constellation",
+      "emission_strength": 0.52,
+      "element_accent": "#FFD0E4",
+      "rim": "#FFE6F1",
+      "transition_in_sfx": "rosamere.form.first_bloom.in",
+      "transition_out_sfx": "rosamere.form.first_bloom.out",
+      "vfx_motif": "bloom_constellation",
+      "status": "RUNTIME_HOOKS_AUTHORED_FINAL_ART_NOT_APPROVED"
+    },
+    "EVERLASTING_ORIGIN": {
+      "roman": "III",
+      "pose_idle": "the_first_permission",
+      "pose_transformed_idle": "the_first_permission",
+      "transform_in_clip": "the_first_permission",
+      "aura_shape": "origin_script_field",
+      "emission_strength": 0.82,
+      "element_accent": "#FFE6F1",
+      "rim": "#F4A7C3",
+      "transition_in_sfx": "rosamere.form.everlasting_origin.in",
+      "transition_out_sfx": "rosamere.form.everlasting_origin.out",
+      "vfx_motif": "origin_script_field",
+      "mythic_label_required": true,
+      "status": "RUNTIME_HOOKS_AUTHORED_FINAL_ART_NOT_APPROVED"
+    }
+  },
+  "gameplay_contract": {
+    "COMPETITIVE_SELF_LIMITED": {
+      "attaches_to_form": "FAMILIAR_ROSE",
+      "is_story_form": false,
+      "fourth_form": false
+    }
+  },
+  "transitions": [
+    {
+      "from": "FAMILIAR_ROSE",
+      "to": "FIRST_BLOOM",
+      "clip": "first_dawn",
+      "seconds": 1.05,
+      "sfx": "rosamere.form.first_bloom.in"
+    },
+    {
+      "from": "FIRST_BLOOM",
+      "to": "FAMILIAR_ROSE",
+      "clip": "idle",
+      "seconds": 0.6,
+      "sfx": "rosamere.form.familiar_rose.in"
+    },
+    {
+      "from": "FIRST_BLOOM",
+      "to": "EVERLASTING_ORIGIN",
+      "clip": "the_first_permission",
+      "seconds": 1.35,
+      "sfx": "rosamere.form.everlasting_origin.in",
+      "modes": [
+        "story",
+        "ova",
+        "mythic_party"
+      ]
+    },
+    {
+      "from": "EVERLASTING_ORIGIN",
+      "to": "FAMILIAR_ROSE",
+      "clip": "gentle_reversal",
+      "seconds": 0.9,
+      "sfx": "rosamere.form.familiar_rose.in"
+    }
+  ],
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false
+}

@@ -171,6 +171,17 @@ static func _entry_from_move(
 	var short_desc := str(meta.get("move_descriptions", {}).get(move_id, ""))
 	if short_desc.is_empty():
 		short_desc = _default_description(fighter_id, move_id, display, move)
+	if move.has("ordinary_combat_control") and not bool(move.get("ordinary_combat_control", true)):
+		playable = true  # still Training-browsable
+		reachability = str(move.get("reachability", "TRAINING_OR_FORM_CONTEXT"))
+	if move_id == "quiet_embrace":
+		reachability = str(move.get("reachability", "PINK_SYSTEM_ON_GRAB_CONFIRM"))
+		if not str(move.get("note", "")).is_empty():
+			short_desc = str(move.get("note"))
+	elif str(move.get("reachability", "")).begins_with("FORM_SUPER"):
+		reachability = str(move.get("reachability"))
+		if not str(move.get("note", "")).is_empty():
+			short_desc = str(move.get("note"))
 	var core_ids: Array = meta.get("core_moves", [])
 	return {
 		"fighter_id": fighter_id,

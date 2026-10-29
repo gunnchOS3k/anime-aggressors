@@ -110,3 +110,14 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Requested tip FF-published: `6004a1df1db49ca40c657fb7c90da4c9e05491f7` (eng `e06d0cf7`; from `695a9dd9`)
 - Remote HEAD after handoff stamp: `a4bfe14328843f5aec7c3166eda47831d8c05e45`
 
+
+## Shift — presentation / ordinary controls / batch2 stages
+
+- Owner canon recorded as **OWNER_APPROVED** (not WORKING_CANDIDATE): Rosamere / The First Bloom / three forms; `COMPETITIVE_SELF_LIMITED` remains Familiar Rose contract only.
+- Three-form presentation production: runtime pose/VFX/audio/transition hooks + `rosamere_form_presentation.gd`; honest `art_status=THREE_FORM_PRESENTATION_PRODUCTION_IN_PROGRESS`; final art still false.
+- Ordinary Training/combat wiring: restored `aura_charge`/`aura_burst` move IDs; PinkBloomSystems activates from specials/grab/charge/burst; Quiet Embrace no longer steals grab.
+- Stage batch2 authored layouts playable (5): the-concord-guildhall, hermits-tide-retreat, celestial-observatory, the-infinity-chamber, the-convergence-tournament-grounds. Launch six preserved. 20 still REGISTERED_PENDING.
+- Shipping rollback still off. RC2_READY / V1_0_0_RELEASE_AUTHORIZED / HUMAN_ART_APPROVED remain false.
+- Local Godot 4.7.1 evidence: PinkBloomSystemsDeterminism PASS (50), RosamereThreeFormCanon PASS (38), ExpandedStageLoadSmoke PASS (99), RosamereOrdinaryControlsTraining PASS (28), FlatCombatReplay PASS (24).
+- Evidence: `artifacts/cursor_continuation/SHIFT_PRESENTATION_CONTROLS_STAGES_EVIDENCE.json`
+

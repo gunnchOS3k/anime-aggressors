@@ -48,7 +48,7 @@ First Permission, Bloom Seed, Petal Constellation, Origination Script, First Daw
 
 ## Art
 
-Cel-shaded GLB **not authored**. Honest `art_status.cel_shaded_glb = false`. Form presentation uses Godot emission/aura/clip hooks only.
+Cel-shaded GLB **not authored**. Honest `art_status.cel_shaded_glb = false` / `THREE_FORM_PRESENTATION_PRODUCTION_IN_PROGRESS`. Runtime pose/VFX/audio/transition hooks authored; final art NOT approved. Name/title/three-form canon are OWNER APPROVED (not WORKING_CANDIDATE).
 
 ## Dedication (publication)
 

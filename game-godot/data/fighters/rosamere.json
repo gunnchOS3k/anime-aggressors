@@ -67,8 +67,17 @@
   "art_status": {
     "HUMAN_ART_APPROVED": false,
     "cel_shaded_glb": false,
-    "status": "NOT_AUTHORED_THIS_PASS",
-    "honest": true
+    "status": "THREE_FORM_PRESENTATION_PRODUCTION_IN_PROGRESS",
+    "honest": true,
+    "final_art_approved": false,
+    "presentation_production": {
+      "models": "PROCEDURAL_PLACEHOLDER_NOT_CEL_SHADED_GLB",
+      "poses": "FORM_POSE_HOOKS_AUTHORED_RUNTIME",
+      "vfx": "FORM_AURA_EMISSION_HOOKS_AUTHORED_RUNTIME",
+      "audio": "TRANSITION_SFX_HOOKS_AUTHORED_RUNTIME",
+      "transitions": "TRANSITION_HOOKS_WIRED_DETERMINISTIC",
+      "HUMAN_ART_APPROVED": false
+    }
   },
   "balancePath": "res://data/balance/rosamere.json",
   "unlock_rule": "secret_tenth_after_kaia_philosophical_breakthrough_or_dev_override",
@@ -82,7 +91,9 @@
     "balance": false,
     "cinematics": false,
     "V1_0_0_RELEASE_AUTHORIZED": false,
-    "RC2_READY": false
+    "RC2_READY": false,
+    "WORKING_CANDIDATE": false,
+    "canon_record": "OWNER_APPROVED_NOT_WORKING_CANDIDATE"
   },
   "forms": {
     "FAMILIAR_ROSE": {
@@ -93,7 +104,11 @@
       "primary_standard_playable": true,
       "can_lose": true,
       "invincible": false,
-      "status": "OWNER_APPROVED_CANON"
+      "status": "OWNER_APPROVED_CANON",
+      "presentation": {
+        "cel_shaded_glb": false,
+        "production_pass": "three_form_presentation_runtime_hooks"
+      }
     },
     "FIRST_BLOOM": {
       "roman": "II",
@@ -102,7 +117,11 @@
       "context": "ascendant_revelation",
       "bounded_deterministic_competitive": true,
       "can_lose": true,
-      "status": "OWNER_APPROVED_CANON"
+      "status": "OWNER_APPROVED_CANON",
+      "presentation": {
+        "cel_shaded_glb": false,
+        "production_pass": "three_form_presentation_runtime_hooks"
+      }
     },
     "EVERLASTING_ORIGIN": {
       "roman": "III",
@@ -116,7 +135,11 @@
         "ova",
         "mythic_party"
       ],
-      "status": "OWNER_APPROVED_CANON"
+      "status": "OWNER_APPROVED_CANON",
+      "presentation": {
+        "cel_shaded_glb": false,
+        "production_pass": "three_form_presentation_runtime_hooks"
+      }
     },
     "COMPETITIVE_SELF_LIMITED": {
       "is_story_form": false,

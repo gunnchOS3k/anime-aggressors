@@ -2,47 +2,70 @@
   "id": "hermits-tide-retreat",
   "displayName": "Hermit's Tide Retreat",
   "index": 5,
-  "layoutType": "coastal_retreat",
+  "layoutType": "coastal_retreat_authored",
   "mainPlatform": {
     "x": 0,
-    "y": 280,
-    "width": 900,
+    "y": 300,
+    "width": 640,
     "height": 40
   },
   "sidePlatforms": [
     {
-      "x": -260,
-      "y": 180,
-      "width": 170,
-      "height": 24
+      "x": -360,
+      "y": 230,
+      "width": 140,
+      "height": 22
     },
     {
-      "x": 260,
-      "y": 180,
-      "width": 170,
-      "height": 24
+      "x": 360,
+      "y": 230,
+      "width": 140,
+      "height": 22
+    },
+    {
+      "x": -120,
+      "y": 150,
+      "width": 110,
+      "height": 20
+    },
+    {
+      "x": 120,
+      "y": 150,
+      "width": 110,
+      "height": 20
     }
   ],
   "spawnPoints": [
     {
       "slot": 1,
-      "x": -220,
-      "y": 200
+      "x": -180,
+      "y": 220
     },
     {
       "slot": 2,
-      "x": 220,
-      "y": 200
+      "x": 180,
+      "y": 220
     }
   ],
   "blastZones": {
-    "left": -620,
-    "right": 620,
-    "top": -400,
-    "bottom": 440
+    "left": -700,
+    "right": 700,
+    "top": -430,
+    "bottom": 470
   },
   "ledges": true,
-  "hazardSockets": [],
+  "hazardSockets": [
+    {
+      "id": "tide_pulse",
+      "x": 0,
+      "y": 310,
+      "radius": 40,
+      "authoritative": true,
+      "effect": "soft_lift",
+      "frames_period": 180,
+      "damage": 0
+    }
+  ],
   "cameraProfile": {
     "mode": "platform_fighter",
     "minZoom": 0.7,
@@ -54,9 +77,9 @@
     }
   },
   "lightingProfile": {
-    "keyColor": "#8899aa",
-    "keyAlpha": 0.1,
-    "ambient": "#0c1014",
+    "keyColor": "#7ec8e3",
+    "keyAlpha": 0.13,
+    "ambient": "#07121a",
     "rim": "#f4a7c3"
   },
   "performanceTier": {
@@ -80,13 +103,13 @@
   },
   "audioBed": {
     "event": "bed_hermits_tide_retreat",
-    "status": "NOT_AUTHORED",
+    "status": "PROCEDURAL_WORKING_NOT_HUMAN_FINAL",
     "path": "res://assets/audio/procedural/stages/hermits-tide-retreat/bed.wav"
   },
   "previewPlaceholder": "res://assets/stages/procedural/hermits-tide-retreat.svg",
-  "artStatus": "NOT_AUTHORED",
-  "productionStatus": "REGISTERED_PENDING",
-  "geometryStatus": "PENDING",
+  "artStatus": "AUTHORED_LAYOUT_NOT_HUMAN_FINAL",
+  "productionStatus": "PLAYABLE_AUTHORED_LAYOUT_BATCH2",
+  "geometryStatus": "AUTHORED_LAYOUT_WORKING",
   "HUMAN_ART_APPROVED": false,
   "yin_yang_presence": {
     "expression": "tide_reflection",
@@ -125,5 +148,6 @@
       "y": 280.0,
       "facing": -1
     }
-  ]
+  ],
+  "playable": true
 }

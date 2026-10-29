@@ -25,6 +25,8 @@ const _AuraTierContract = preload("res://scripts/combat/aura_tier_contract.gd")
 const _FacingContract = preload("res://scripts/combat/fighter_facing_contract.gd")
 const _HitReaction = preload("res://scripts/combat/directional_hit_reaction.gd")
 const _CosmicKit = preload("res://scripts/combat/cosmic_kit_runtime.gd")
+const _PinkBloomSystems = preload("res://scripts/combat/pink_bloom_systems.gd")
+const _RosamereFormPresentation = preload("res://scripts/visual/rosamere_form_presentation.gd")
 var party_overdrive = preload("res://scripts/combat/party_overdrive.gd").new()
 var perfect_guard = preload("res://scripts/combat/perfect_guard.gd").new()
 var _form_audio_8c
@@ -32,6 +34,8 @@ var shield_break_8c = preload("res://scripts/combat/shield_break_8c.gd").new()
 var _guard_presentation
 var _cosmic_counter_activation := -1
 var cosmic_kit_history: Array = []
+var pink_bloom = null
+var pink_bloom_history: Array = []
 
 func try_absorb_projectile(shot, point: Vector2) -> bool:
 	return _CosmicKit.absorb(self, shot, point)
@@ -276,12 +280,25 @@ func apply_form(form_id: String) -> void:
 	var entry: Dictionary = _FormDefinition.form_entry(_forms_doc, form_id)
 	if entry.is_empty():
 		return
+	var previous := _current_form_id
 	_current_form_id = form_id
+	if pink_bloom != null:
+		pink_bloom.set_form(form_id, true)
 	if model_3d != null and model_3d.has_method("set_form_id"):
 		model_3d.set_form_id(form_id, entry)
 	var idle_clip := str(entry.get("transformed_idle_clip", entry.get("idle_clip", "idle")))
 	if model_3d != null and model_3d.has_method("play_clip"):
 		model_3d.play_clip(idle_clip)
+	if fighter_id == "rosamere" and previous != form_id:
+		var presentation: Dictionary = entry.get("presentation", {})
+		set_meta("rosamere_presentation", presentation)
+		set_meta("rosamere_last_transition", {
+			"from": previous,
+			"to": form_id,
+			"clip": idle_clip,
+			"deterministic": true,
+			"final_art_approved": false,
+		})
 
 
 func on_transform_sequence_start(_from: String, _to: String) -> void:
@@ -381,6 +398,8 @@ func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, s
 	_transform_match_closed = false
 	_cosmic_counter_activation = -1
 	cosmic_kit_history.clear()
+	pink_bloom_history.clear()
+	pink_bloom = null
 	if has_meta("story_cosmic_contract"):
 		remove_meta("story_cosmic_contract")
 	fighter_id = id
@@ -403,6 +422,12 @@ func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, s
 	_fighter_def = _FighterDefinition.build(id, data)
 	_forms_doc = _fighter_def.get("forms_doc", {})
 	_current_form_id = str(_fighter_def.get("default_form_id", ""))
+	if fighter_id == "rosamere":
+		pink_bloom = _PinkBloomSystems.new()
+		pink_bloom.reset(maxi(1, slot))
+		if not _current_form_id.is_empty():
+			pink_bloom.set_form(_current_form_id, true)
+		_RosamereFormPresentation.apply_to_fighter(self, _current_form_id if not _current_form_id.is_empty() else "FAMILIAR_ROSE", "")
 	if model_3d != null and model_3d.has_method("set_form_id") and not _current_form_id.is_empty():
 		model_3d.set_form_id(_current_form_id, _FormDefinition.form_entry(_forms_doc, _current_form_id))
 	if model_3d != null and model_3d.has_method("set_presentation_context"):
@@ -637,6 +662,8 @@ func tick_combat_frame() -> void:
 	if combat_closed: return
 	perfect_guard.tick()
 	party_overdrive.tick()
+	if pink_bloom != null:
+		pink_bloom.advance_frame()
 	if model_3d != null and model_3d.get_animation_controller() != null:
 		model_3d.get_animation_controller().presentation_frozen = _hitstop > 0.0
 	if _hitstop > 0.0:
@@ -1107,6 +1134,7 @@ func _start_move_dict(m: Dictionary) -> void:
 	move_runner.start_move(_current_move, self)
 	var mid = str(m.get("move_id", ""))
 	var mt = str(m.get("move_type", "melee"))
+	_activate_pink_bloom_for_move(_current_move if not _current_move.is_empty() else m)
 	if bool(m.get("_party_ultimate",false)):
 		state_machine.enter("ultimate_startup")
 	elif mid == "grab" or mt == "grab":
@@ -1121,6 +1149,70 @@ func _start_move_dict(m: Dictionary) -> void:
 		state_machine.enter(_FighterStates.SPECIAL_STARTUP)
 	else:
 		state_machine.enter(_FighterStates.ATTACK_STARTUP)
+
+
+func _activate_pink_bloom_for_move(move: Dictionary) -> void:
+	## Wire Pink systems through ordinary combat controls / Training without stealing grab/burst IDs.
+	if pink_bloom == null or fighter_id != "rosamere":
+		return
+	var mid := str(move.get("move_id", ""))
+	var system_id := str(move.get("pink_system", ""))
+	if system_id.is_empty():
+		match mid:
+			"bloom_seed":
+				system_id = "BloomSeed"
+			"petal_constellation":
+				system_id = "PetalConstellation"
+			"first_dawn":
+				system_id = "FirstDawn"
+			"gentle_reversal":
+				system_id = "GentleReversal"
+			"aura_charge":
+				system_id = "OriginationScript"
+			"aura_burst":
+				system_id = _pink_super_or_permission_for_form()
+			"grab":
+				system_id = "QuietEmbrace"
+			_:
+				system_id = ""
+	if system_id.is_empty():
+		return
+	var payload := {
+		"move_id": mid,
+		"form_id": _current_form_id,
+		"training_display_name": str(move.get("training_display_name", mid)),
+		"ordinary_combat_control": bool(move.get("ordinary_combat_control", true)),
+	}
+	var activated: Dictionary = pink_bloom.activate(system_id, slot, payload)
+	if bool(activated.get("ok", false)):
+		pink_bloom_history.append(activated.get("effect", {}))
+		if pink_bloom_history.size() > 64:
+			pink_bloom_history.pop_front()
+		stamp_runtime_hook("pink_bloom:" + system_id)
+		## Training practice feedback: expose last Pink activation on the actor.
+		set_meta("rosamere_last_pink_activation", {
+			"system_id": system_id,
+			"move_id": mid,
+			"event_id": str(activated.get("effect", {}).get("event_id", "")),
+			"form_id": _current_form_id,
+		})
+
+
+func _pink_super_or_permission_for_form() -> String:
+	## Ordinary aura_burst remains the control; form selects which authored super/system fires.
+	match _current_form_id:
+		"EVERLASTING_ORIGIN":
+			return "mythic_everything_again"
+		"FIRST_BLOOM":
+			return "the_first_permission"
+		_:
+			return "FirstPermission"
+
+
+func get_pink_bloom_snapshot() -> Dictionary:
+	if pink_bloom == null:
+		return {}
+	return pink_bloom.capture()
 
 func _start_dodge() -> void:
 	if _dodge_cooldown > 0.0:

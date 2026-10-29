@@ -1171,7 +1171,9 @@
       "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
       "owner_approved": false,
-      "pink_system": "bloom_seed"
+      "pink_system": "BloomSeed",
+      "ordinary_combat_control": true,
+      "pink_system_activation": true
     },
     {
       "move_id": "petal_constellation",
@@ -1256,7 +1258,9 @@
       "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
       "owner_approved": false,
-      "pink_system": "petal_constellation"
+      "pink_system": "PetalConstellation",
+      "ordinary_combat_control": true,
+      "pink_system_activation": true
     },
     {
       "move_id": "first_dawn",
@@ -1345,7 +1349,9 @@
       "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
       "owner_approved": false,
-      "pink_system": "first_dawn"
+      "pink_system": "FirstDawn",
+      "ordinary_combat_control": true,
+      "pink_system_activation": true
     },
     {
       "move_id": "gentle_reversal",
@@ -1434,7 +1440,9 @@
         "aura_cost": 25.0,
         "max_per_activation": 1
       },
-      "pink_system": "gentle_reversal"
+      "pink_system": "GentleReversal",
+      "ordinary_combat_control": true,
+      "pink_system_activation": true
     },
     {
       "move_id": "grab",
@@ -1877,7 +1885,7 @@
       "owner_approved": false
     },
     {
-      "move_id": "origination_script",
+      "move_id": "aura_charge",
       "fighter_id": "rosamere",
       "move_type": "charge",
       "direction": "none",
@@ -1917,10 +1925,13 @@
         "effect": "origination_script",
         "strength": 1
       },
-      "pink_system": "origination_script"
+      "pink_system": "OriginationScript",
+      "ordinary_combat_control": true,
+      "note": "Canonical aura_charge ID restored for ordinary Training/combat; Pink system OriginationScript still fires.",
+      "pink_system_activation": true
     },
     {
-      "move_id": "first_permission",
+      "move_id": "aura_burst",
       "fighter_id": "rosamere",
       "move_type": "burst",
       "direction": "neutral",
@@ -1998,12 +2009,15 @@
       "v3_particle_library": "subtractive_aperture",
       "status": "TUNING_CANDIDATE",
       "owner_approved": false,
-      "pink_system": "first_permission"
+      "pink_system": "FirstPermission",
+      "ordinary_combat_control": true,
+      "note": "Canonical aura_burst ID restored for ordinary Training/combat; Pink system FirstPermission still fires.",
+      "pink_system_activation": true
     },
     {
       "move_type": "grab",
       "direction": "neutral",
-      "input_command": "grab",
+      "input_command": "",
       "grounded_air": "grounded",
       "startup_frames": 8,
       "active_frames": 4,
@@ -2047,14 +2061,20 @@
       "move_id": "quiet_embrace",
       "training_display_name": "Quiet Embrace",
       "animation_id": "quiet_embrace",
-      "pink_system": "quiet_embrace",
+      "pink_system": "QuietEmbrace",
       "mythic": false,
-      "v3_fantasy": "compose_nurture_unfold"
+      "v3_fantasy": "compose_nurture_unfold",
+      "ordinary_combat_control": false,
+      "training_browser": true,
+      "reachability": "PINK_SYSTEM_ON_GRAB_CONFIRM",
+      "pink_system_activation": true,
+      "status": "TUNING_CANDIDATE",
+      "note": "Quiet Embrace is a Pink system fired on ordinary grab confirm \u2014 not a second grab binding."
     },
     {
       "move_type": "melee",
       "direction": "neutral",
-      "input_command": "attack_special",
+      "input_command": "",
       "grounded_air": "grounded",
       "startup_frames": 8,
       "active_frames": 4,
@@ -2100,12 +2120,19 @@
       "animation_id": "a_world_in_bloom",
       "pink_system": "a_world_in_bloom",
       "mythic": false,
-      "v3_fantasy": "compose_nurture_unfold"
+      "v3_fantasy": "compose_nurture_unfold",
+      "ordinary_combat_control": false,
+      "training_browser": true,
+      "reachability": "FORM_SUPER_VIA_AURA_BURST",
+      "form_gate": "FAMILIAR_ROSE",
+      "pink_system_activation": true,
+      "status": "TUNING_CANDIDATE",
+      "note": "Preserved authored super. Ordinary match fires via aura_burst + active form; Training browser can still play directly."
     },
     {
       "move_type": "melee",
       "direction": "neutral",
-      "input_command": "attack_special",
+      "input_command": "",
       "grounded_air": "grounded",
       "startup_frames": 8,
       "active_frames": 4,
@@ -2151,12 +2178,19 @@
       "animation_id": "before_there_was_time",
       "pink_system": "before_there_was_time",
       "mythic": false,
-      "v3_fantasy": "compose_nurture_unfold"
+      "v3_fantasy": "compose_nurture_unfold",
+      "ordinary_combat_control": false,
+      "training_browser": true,
+      "reachability": "FORM_SUPER_VIA_AURA_BURST",
+      "form_gate": "FIRST_BLOOM",
+      "pink_system_activation": true,
+      "status": "TUNING_CANDIDATE",
+      "note": "Preserved authored super. Ordinary match fires via aura_burst + active form; Training browser can still play directly."
     },
     {
       "move_type": "melee",
       "direction": "neutral",
-      "input_command": "attack_special",
+      "input_command": "",
       "grounded_air": "grounded",
       "startup_frames": 8,
       "active_frames": 4,
@@ -2202,12 +2236,19 @@
       "animation_id": "the_first_permission",
       "pink_system": "the_first_permission",
       "mythic": false,
-      "v3_fantasy": "compose_nurture_unfold"
+      "v3_fantasy": "compose_nurture_unfold",
+      "ordinary_combat_control": false,
+      "training_browser": true,
+      "reachability": "FORM_SUPER_VIA_AURA_BURST",
+      "form_gate": "FIRST_BLOOM",
+      "pink_system_activation": true,
+      "status": "TUNING_CANDIDATE",
+      "note": "Preserved authored super. Ordinary match fires via aura_burst + active form; Training browser can still play directly."
     },
     {
       "move_type": "melee",
       "direction": "neutral",
-      "input_command": "attack_special",
+      "input_command": "",
       "grounded_air": "grounded",
       "startup_frames": 8,
       "active_frames": 4,
@@ -2256,7 +2297,15 @@
       "v3_fantasy": "compose_nurture_unfold",
       "label": "MYTHIC_CLEARLY_LABELED",
       "ranked_allowed": false,
-      "notes": "Mythic Everything Again is clearly labeled mythic; not a silent ranked win button."
+      "notes": "Mythic Everything Again is clearly labeled mythic; not a silent ranked win button.",
+      "ordinary_combat_control": false,
+      "training_browser": true,
+      "reachability": "FORM_SUPER_VIA_AURA_BURST",
+      "form_gate": "EVERLASTING_ORIGIN",
+      "pink_system_activation": true,
+      "status": "TUNING_CANDIDATE",
+      "mythic_label": "MYTHIC_CLEARLY_LABELED",
+      "note": "Preserved authored super. Ordinary match fires via aura_burst + active form; Training browser can still play directly."
     }
   ],
   "game001_identity": {
@@ -2268,5 +2317,6 @@
   "status": "TUNING_CANDIDATE",
   "owner_approved": false,
   "kit_authority": "source/ANIME_AGGRESSORS_COMPLETE_CHARACTER_MOVEMENT_ANIMATION_BIBLE_V1.md sections16\u201318",
-  "candidate_mechanics": "bounded reduction"
+  "candidate_mechanics": "bounded reduction",
+  "ordinary_controls_note": "Specials/charge/burst use ordinary InputMap commands. Pink systems activate from those moves. Quiet Embrace + form supers preserve authored content without stealing grab/burst bindings."
 }
