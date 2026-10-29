@@ -122,7 +122,7 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Evidence: `artifacts/cursor_continuation/SHIFT_PRESENTATION_CONTROLS_STAGES_EVIDENCE.json`
 
 - Engineering tip: `b2b9efa75422bc157bd5feefeb34c6ebf20eb7e3`
-- Local tip ahead of remote (FF-safe): `d12645c67c2d24c3618b5eaa93079913228cef19`
+- Local tip ahead of remote (FF-safe): `f6554fafb0999ec925b6fa31035fa2f4b8d7206a`
 - Last verified remote before this shift: `5118d854f8f6b4205047411d8b473b22293d042f`
 - Push status: tip ahead pending FF push auth (ConnectScm connected; `gh`/`git push` still unauthenticated in this agent shell). No force-push.
 
@@ -137,7 +137,7 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - RC2_READY / V1_0_0_RELEASE_AUTHORIZED / HUMAN_ART_APPROVED remain false.
 
 - Engineering tip: `b5de4f2a420cd05ade1bdbdf7793c54cb8f7a16a`
-- Local tip ahead of remote (FF-safe): `42e2b03a7f585e6a85a22b6c6a884367ca6739e3`
+- Local tip ahead of remote (FF-safe): `f6554fafb0999ec925b6fa31035fa2f4b8d7206a`
 - Last verified remote before this shift: `107e6b4a9dfb8c15067f180f7056f7f078e21800`
 - Push status: tip ahead pending FF push auth (ConnectScm connected; `gh`/`git push` still unauthenticated in this agent shell). No force-push.
 - Prior green CI at parent tip 107e6b4a: https://github.com/gunnchOS3k/anime-aggressors/actions/runs/40806830477
