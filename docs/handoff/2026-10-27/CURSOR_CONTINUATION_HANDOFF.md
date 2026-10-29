@@ -122,5 +122,6 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Evidence: `artifacts/cursor_continuation/SHIFT_PRESENTATION_CONTROLS_STAGES_EVIDENCE.json`
 
 - Engineering tip: `b2b9efa75422bc157bd5feefeb34c6ebf20eb7e3`
-- Docs stamp tip (pre-push): `6e4e2bb9ee2ff28d7dec490548bcb73e3ea88cd2`
-- Requested publish tip: this commit after FF push.
+- Local tip ahead of remote (FF-safe): `d12645c67c2d24c3618b5eaa93079913228cef19`
+- Last verified remote before this shift: `5118d854f8f6b4205047411d8b473b22293d042f`
+- Push status: tip ahead pending FF push auth (ConnectScm connected; `gh`/`git push` still unauthenticated in this agent shell). No force-push.
