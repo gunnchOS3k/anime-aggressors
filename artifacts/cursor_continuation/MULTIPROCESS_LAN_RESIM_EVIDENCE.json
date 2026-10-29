@@ -1,0 +1,139 @@
+{
+  "port": 63072,
+  "SHIPPING_ROLLBACK_ENABLED": false,
+  "SHIPPING_BACKEND_ENABLED": false,
+  "roles": {
+    "host": {
+      "HUMAN_ART_APPROVED": false,
+      "PASS": true,
+      "RC2_READY": false,
+      "SHIPPING_BACKEND_ENABLED": false,
+      "SHIPPING_ROLLBACK_ENABLED": false,
+      "V1_0_0_RELEASE_AUTHORIZED": false,
+      "checks": [
+        {
+          "check": "shipping_backend_disabled",
+          "pass": true
+        },
+        {
+          "check": "bridge_self_test",
+          "pass": true
+        },
+        {
+          "check": "shipping_contract_keeps_rollback_off",
+          "pass": true
+        },
+        {
+          "check": "rejects_premature_restorable_claim",
+          "pass": true
+        },
+        {
+          "check": "host_enet_listen",
+          "pass": true
+        },
+        {
+          "check": "independent_guest_process_evidence",
+          "pass": true
+        },
+        {
+          "check": "host_observed_cross_process_guest_packets",
+          "pass": true
+        },
+        {
+          "check": "observed_packet_valid_lan_controls",
+          "pass": true
+        },
+        {
+          "check": "packet_maps_to_trial_input",
+          "pass": true
+        }
+      ],
+      "evidence": {
+        "SHIPPING_ROLLBACK_ENABLED": false,
+        "enet_peer_connected": true,
+        "guest_id": 1206780001,
+        "observed_packets": 3,
+        "pid": 67163,
+        "role": "host",
+        "rollback_restorable": false,
+        "sample_seq": 1,
+        "shipping_backend_enabled": false,
+        "transport": "enet_lobby_plus_cross_process_lan_controls_files"
+      },
+      "failures": [],
+      "scope": "Two-process localhost ENet lobby + cross-process LanControls into experimental resim bridge. Shipping rollback remains OFF. Not V1/human art."
+    },
+    "guest": {
+      "HUMAN_ART_APPROVED": false,
+      "PASS": true,
+      "RC2_READY": false,
+      "SHIPPING_BACKEND_ENABLED": false,
+      "SHIPPING_ROLLBACK_ENABLED": false,
+      "V1_0_0_RELEASE_AUTHORIZED": false,
+      "checks": [
+        {
+          "check": "shipping_backend_disabled",
+          "pass": true
+        },
+        {
+          "check": "bridge_self_test",
+          "pass": true
+        },
+        {
+          "check": "shipping_contract_keeps_rollback_off",
+          "pass": true
+        },
+        {
+          "check": "rejects_premature_restorable_claim",
+          "pass": true
+        },
+        {
+          "check": "guest_enet_join",
+          "pass": true
+        },
+        {
+          "check": "guest_packet_valid:1",
+          "pass": true
+        },
+        {
+          "check": "guest_packet_valid:2",
+          "pass": true
+        },
+        {
+          "check": "guest_packet_valid:3",
+          "pass": true
+        },
+        {
+          "check": "guest_packet_valid:4",
+          "pass": true
+        },
+        {
+          "check": "guest_packet_valid:5",
+          "pass": true
+        },
+        {
+          "check": "guest_packet_valid:6",
+          "pass": true
+        },
+        {
+          "check": "guest_packet_valid:7",
+          "pass": true
+        }
+      ],
+      "evidence": {
+        "SHIPPING_ROLLBACK_ENABLED": false,
+        "packets_sent": 7,
+        "pid": 67181,
+        "role": "guest",
+        "shipping_backend_enabled": false,
+        "transport": "enet_join_plus_cross_process_lan_controls_files"
+      },
+      "failures": [],
+      "scope": "Two-process localhost ENet lobby + cross-process LanControls into experimental resim bridge. Shipping rollback remains OFF. Not V1/human art."
+    }
+  },
+  "distinct_pids": true,
+  "PASS": true,
+  "host_observed": 3,
+  "enet_peer": true
+}

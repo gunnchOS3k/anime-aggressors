@@ -10,7 +10,9 @@
     "HUMAN_ART_APPROVED": false,
     "cel_shaded_glb": false,
     "status": "THREE_FORM_PRESENTATION_PRODUCTION_IN_PROGRESS",
-    "honest": true
+    "honest": true,
+    "cinematic_final_mix": false,
+    "vfx_final_approved": false
   },
   "manifestations": {
     "FAMILIAR_ROSE": {
@@ -24,6 +26,9 @@
       "transition_in_sfx": "rosamere.form.familiar_rose.in",
       "transition_out_sfx": "rosamere.form.familiar_rose.out",
       "vfx_motif": "soft_petals",
+      "vfx_particle_budget": 18,
+      "cinematic_expression": "soft_resolve",
+      "camera_beat": "hold_close_familiar",
       "status": "RUNTIME_HOOKS_AUTHORED_FINAL_ART_NOT_APPROVED"
     },
     "FIRST_BLOOM": {
@@ -38,6 +43,9 @@
       "transition_in_sfx": "rosamere.form.first_bloom.in",
       "transition_out_sfx": "rosamere.form.first_bloom.out",
       "vfx_motif": "bloom_constellation",
+      "vfx_particle_budget": 36,
+      "cinematic_expression": "bloom_awaken",
+      "camera_beat": "pull_bloom_constellation",
       "status": "RUNTIME_HOOKS_AUTHORED_FINAL_ART_NOT_APPROVED"
     },
     "EVERLASTING_ORIGIN": {
@@ -52,6 +60,9 @@
       "transition_in_sfx": "rosamere.form.everlasting_origin.in",
       "transition_out_sfx": "rosamere.form.everlasting_origin.out",
       "vfx_motif": "origin_script_field",
+      "vfx_particle_budget": 48,
+      "cinematic_expression": "origin_stillness",
+      "camera_beat": "mythic_origin_hold",
       "mythic_label_required": true,
       "status": "RUNTIME_HOOKS_AUTHORED_FINAL_ART_NOT_APPROVED"
     }
@@ -69,14 +80,18 @@
       "to": "FIRST_BLOOM",
       "clip": "first_dawn",
       "seconds": 1.05,
-      "sfx": "rosamere.form.first_bloom.in"
+      "sfx": "rosamere.form.first_bloom.in",
+      "camera_beat": "pull_bloom_constellation",
+      "vfx_burst": "bloom_constellation_open"
     },
     {
       "from": "FIRST_BLOOM",
       "to": "FAMILIAR_ROSE",
       "clip": "idle",
       "seconds": 0.6,
-      "sfx": "rosamere.form.familiar_rose.in"
+      "sfx": "rosamere.form.familiar_rose.in",
+      "camera_beat": "hold_close_familiar",
+      "vfx_burst": "soft_petals_settle"
     },
     {
       "from": "FIRST_BLOOM",
@@ -84,6 +99,8 @@
       "clip": "the_first_permission",
       "seconds": 1.35,
       "sfx": "rosamere.form.everlasting_origin.in",
+      "camera_beat": "mythic_origin_hold",
+      "vfx_burst": "origin_script_field_rise",
       "modes": [
         "story",
         "ova",
@@ -95,9 +112,45 @@
       "to": "FAMILIAR_ROSE",
       "clip": "gentle_reversal",
       "seconds": 0.9,
-      "sfx": "rosamere.form.familiar_rose.in"
+      "sfx": "rosamere.form.familiar_rose.in",
+      "camera_beat": "hold_close_familiar",
+      "vfx_burst": "origin_script_field_fade"
     }
   ],
+  "cinematic_presentation": {
+    "status": "RUNTIME_BEATS_AUTHORED_FINAL_CINEMATIC_NOT_APPROVED",
+    "HUMAN_ART_APPROVED": false,
+    "beats": [
+      {
+        "id": "familiar_idle_hold",
+        "form_id": "FAMILIAR_ROSE",
+        "seconds": 0.8,
+        "camera": "hold_close_familiar",
+        "expression": "soft_resolve"
+      },
+      {
+        "id": "first_dawn_transform",
+        "form_id": "FIRST_BLOOM",
+        "seconds": 1.05,
+        "camera": "pull_bloom_constellation",
+        "expression": "bloom_awaken",
+        "requires_clip": "first_dawn"
+      },
+      {
+        "id": "everlasting_permission",
+        "form_id": "EVERLASTING_ORIGIN",
+        "seconds": 1.35,
+        "camera": "mythic_origin_hold",
+        "expression": "origin_stillness",
+        "requires_clip": "the_first_permission",
+        "modes": [
+          "story",
+          "ova",
+          "mythic_party"
+        ]
+      }
+    ]
+  },
   "RC2_READY": false,
   "V1_0_0_RELEASE_AUTHORIZED": false
 }

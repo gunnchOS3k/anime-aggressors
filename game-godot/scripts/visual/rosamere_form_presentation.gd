@@ -91,14 +91,20 @@ static func _play_transition(fighter: Node, from_id: String, to_id: String, pres
 		fighter.model_3d.play_clip(clip)
 	var sfx_event := str(hook.get("sfx", presentation.get("transition_in_sfx", "transform")))
 	Sfx.play_event("rosamere", "transform", fighter)
+	var cinematic := cinematic_beat_for_form(to_id)
+	if fighter.model_3d != null and fighter.model_3d.has_method("set_cinematic_expression"):
+		fighter.model_3d.set_cinematic_expression(str(cinematic.get("expression", presentation.get("cinematic_expression", ""))))
 	if fighter.has_method("set_meta"):
 		fighter.set_meta("rosamere_last_transition", {
 			"from": from_id,
 			"to": to_id,
 			"clip": clip,
 			"sfx_event": sfx_event,
+			"camera_beat": str(hook.get("camera_beat", presentation.get("camera_beat", cinematic.get("camera", "")))),
+			"vfx_burst": str(hook.get("vfx_burst", "")),
 			"deterministic": true,
 			"final_art_approved": false,
+			"cinematic_final_mix": false,
 		})
 
 
@@ -111,9 +117,30 @@ static func _apply_model_presentation(fighter: Node, presentation: Dictionary) -
 		"transformed_idle_clip": str(presentation.get("pose_transformed_idle", presentation.get("pose_idle", "idle"))),
 		"aura_shape": str(presentation.get("aura_shape", "soft_petals")),
 		"emission_strength": float(presentation.get("emission_strength", 0.18)),
+		"vfx_particle_budget": int(presentation.get("vfx_particle_budget", 18)),
+		"camera_beat": str(presentation.get("camera_beat", "")),
 	}
 	if fighter.model_3d.has_method("set_form_id"):
 		fighter.model_3d.set_form_id(str(presentation.get("form_id", FORM_FAMILIAR)), entry)
+	if fighter.model_3d.has_method("set_cinematic_expression"):
+		fighter.model_3d.set_cinematic_expression(str(presentation.get("cinematic_expression", "")))
+	if fighter.has_method("set_meta"):
+		fighter.set_meta("rosamere_vfx_motif", str(presentation.get("vfx_motif", "")))
+		fighter.set_meta("rosamere_vfx_particle_budget", int(presentation.get("vfx_particle_budget", 18)))
+		fighter.set_meta("rosamere_camera_beat", str(presentation.get("camera_beat", "")))
+
+
+static func cinematic_presentation() -> Dictionary:
+	var doc := load_doc()
+	return doc.get("cinematic_presentation", {})
+
+
+static func cinematic_beat_for_form(form_id: String) -> Dictionary:
+	var cinematic: Dictionary = cinematic_presentation()
+	for beat in cinematic.get("beats", []):
+		if str(beat.get("form_id", "")) == form_id:
+			return beat
+	return {}
 
 
 static func validate_production() -> Dictionary:
@@ -125,6 +152,11 @@ static func validate_production() -> Dictionary:
 		failures.append("art_status_not_honest")
 	if bool(doc.get("WORKING_CANDIDATE", true)):
 		failures.append("still_marked_working_candidate")
+	var art: Dictionary = doc.get("art_status", {})
+	if bool(art.get("cinematic_final_mix", true)):
+		failures.append("cinematic_final_mix_must_stay_false")
+	if bool(art.get("vfx_final_approved", true)):
+		failures.append("vfx_final_must_stay_false")
 	var mans: Dictionary = doc.get("manifestations", {})
 	for need in [FORM_FAMILIAR, FORM_FIRST_BLOOM, FORM_EVERLASTING]:
 		if not mans.has(need):
@@ -139,14 +171,29 @@ static func validate_production() -> Dictionary:
 				failures.append("missing_vfx:" + need)
 			if str(row.get("transition_in_sfx", "")).is_empty():
 				failures.append("missing_audio:" + need)
+			if str(row.get("cinematic_expression", "")).is_empty():
+				failures.append("missing_cinematic_expression:" + need)
+			if str(row.get("camera_beat", "")).is_empty():
+				failures.append("missing_camera_beat:" + need)
 	if doc.get("transitions", []).size() < 3:
 		failures.append("insufficient_transitions")
+	var cinematic: Dictionary = doc.get("cinematic_presentation", {})
+	if cinematic.is_empty():
+		failures.append("missing_cinematic_presentation")
+	elif bool(cinematic.get("HUMAN_ART_APPROVED", true)):
+		failures.append("cinematic_human_art_must_stay_false")
+	elif str(cinematic.get("status", "")).find("NOT_APPROVED") < 0:
+		failures.append("cinematic_status_must_remain_honest")
+	elif int(cinematic.get("beats", []).size()) < 3:
+		failures.append("insufficient_cinematic_beats")
 	if bool(doc.get("RC2_READY", true)) or bool(doc.get("V1_0_0_RELEASE_AUTHORIZED", true)):
 		failures.append("release_gates_must_stay_false")
 	return {
 		"ok": failures.is_empty(),
 		"failures": failures,
 		"manifestation_count": mans.size(),
+		"cinematic_beats": int(cinematic.get("beats", []).size()) if not cinematic.is_empty() else 0,
 		"HUMAN_ART_APPROVED": false,
 		"cel_shaded_glb": false,
+		"cinematic_final_mix": false,
 	}

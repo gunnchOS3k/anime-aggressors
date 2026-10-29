@@ -125,3 +125,14 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Local tip ahead of remote (FF-safe): `d12645c67c2d24c3618b5eaa93079913228cef19`
 - Last verified remote before this shift: `5118d854f8f6b4205047411d8b473b22293d042f`
 - Push status: tip ahead pending FF push auth (ConnectScm connected; `gh`/`git push` still unauthenticated in this agent shell). No force-push.
+
+
+## Shift — batch3 stages / cinematic presentation / multiprocess LAN prep
+
+- Three-form presentation advanced: cinematic beats, camera/VFX budgets, expression hooks; `art_status` remains `THREE_FORM_PRESENTATION_PRODUCTION_IN_PROGRESS` (final art/cinematic/VFX mix NOT approved).
+- Stage batch3 authored layouts playable (5) with combat hazards: skyward-games-stadium, aethercrest-academy, ascension-arena, wind-city-hardwood, lakeshore-gridiron. Launch six preserved. 15 still REGISTERED_PENDING (registry ≠ commercial completion).
+- Multi-process LAN resim evidence: distinct host/guest PIDs + ENet peer + cross-process LanControls into experimental bridge. `SHIPPING_ROLLBACK_ENABLED=false` / shipping backend off.
+- Local Godot 4.7.1 evidence: PinkBloomSystemsDeterminism PASS, RosamereThreeFormCanon PASS, ExpandedStageLoadSmoke PASS, RosamereOrdinaryControlsTraining PASS, FlatCombatReplay PASS, MultiProcessLanResimEvidence PASS.
+- Evidence: `artifacts/cursor_continuation/SHIFT_BATCH3_PRESENTATION_LAN_EVIDENCE.json`, `MULTIPROCESS_LAN_RESIM_EVIDENCE.json`
+- RC2_READY / V1_0_0_RELEASE_AUTHORIZED / HUMAN_ART_APPROVED remain false.
+

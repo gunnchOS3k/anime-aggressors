@@ -119,6 +119,42 @@ const THEMES := {
 		"accent": Color(0.95, 0.65, 0.78, 0.18),
 		"hazard": Color(0.95, 0.7, 0.3, 0.25),
 	},
+	# Expanded batch3 — authored layouts with combat hazards; art not human-final.
+	"skyward-games-stadium": {
+		"bg": Color(0.05, 0.08, 0.12),
+		"platform": Color(0.2, 0.26, 0.32),
+		"trim": Color(0.65, 0.78, 0.92),
+		"accent": Color(0.95, 0.7, 0.82, 0.16),
+		"hazard": Color(0.5, 0.7, 0.9, 0.3),
+	},
+	"aethercrest-academy": {
+		"bg": Color(0.07, 0.06, 0.12),
+		"platform": Color(0.24, 0.2, 0.32),
+		"trim": Color(0.78, 0.68, 0.95),
+		"accent": Color(0.95, 0.7, 0.85, 0.18),
+		"hazard": Color(0.7, 0.55, 0.95, 0.28),
+	},
+	"ascension-arena": {
+		"bg": Color(0.1, 0.07, 0.04),
+		"platform": Color(0.32, 0.24, 0.14),
+		"trim": Color(1.0, 0.82, 0.45),
+		"accent": Color(0.95, 0.68, 0.78, 0.18),
+		"hazard": Color(1.0, 0.75, 0.35, 0.28),
+	},
+	"wind-city-hardwood": {
+		"bg": Color(0.06, 0.1, 0.07),
+		"platform": Color(0.28, 0.32, 0.2),
+		"trim": Color(0.55, 0.85, 0.45),
+		"accent": Color(0.95, 0.7, 0.8, 0.16),
+		"hazard": Color(0.45, 0.8, 0.5, 0.28),
+	},
+	"lakeshore-gridiron": {
+		"bg": Color(0.04, 0.08, 0.12),
+		"platform": Color(0.18, 0.28, 0.3),
+		"trim": Color(0.45, 0.78, 0.9),
+		"accent": Color(0.95, 0.72, 0.84, 0.16),
+		"hazard": Color(0.35, 0.7, 0.85, 0.3),
+	},
 }
 
 

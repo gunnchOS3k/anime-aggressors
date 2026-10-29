@@ -86,6 +86,11 @@ func run() -> void:
 	check(bool(fighter.get("owner_approved", {}).get("name", false)), "name_owner_approved")
 	check(not bool(fighter.get("owner_approved", {}).get("WORKING_CANDIDATE", true)), "canon_not_working_candidate")
 	check(not bool(fighter.get("owner_approved", {}).get("final_art", true)), "final_art_still_not_approved")
+	var Presentation = load("res://scripts/visual/rosamere_form_presentation.gd")
+	var prod: Dictionary = Presentation.validate_production()
+	check(bool(prod.get("ok", false)), "three_form_presentation_production_valid")
+	check(int(prod.get("cinematic_beats", 0)) >= 3, "cinematic_beats_authored")
+	check(not bool(prod.get("cinematic_final_mix", true)), "cinematic_final_mix_false")
 	finish()
 
 func finish() -> void:

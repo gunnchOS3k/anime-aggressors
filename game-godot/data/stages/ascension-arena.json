@@ -2,47 +2,64 @@
   "id": "ascension-arena",
   "displayName": "Ascension Arena",
   "index": 11,
-  "layoutType": "arena",
+  "layoutType": "ascension_ring_authored",
   "mainPlatform": {
     "x": 0,
-    "y": 280,
-    "width": 900,
-    "height": 40
+    "y": 275,
+    "width": 580,
+    "height": 38
   },
   "sidePlatforms": [
     {
-      "x": -260,
-      "y": 180,
-      "width": 170,
-      "height": 24
+      "x": -220,
+      "y": 185,
+      "width": 130,
+      "height": 20
     },
     {
-      "x": 260,
-      "y": 180,
-      "width": 170,
-      "height": 24
+      "x": 220,
+      "y": 185,
+      "width": 130,
+      "height": 20
+    },
+    {
+      "x": 0,
+      "y": 95,
+      "width": 140,
+      "height": 20
     }
   ],
   "spawnPoints": [
     {
       "slot": 1,
-      "x": -220,
-      "y": 200
+      "x": -160,
+      "y": 195
     },
     {
       "slot": 2,
-      "x": 220,
-      "y": 200
+      "x": 160,
+      "y": 195
     }
   ],
   "blastZones": {
-    "left": -620,
-    "right": 620,
-    "top": -400,
-    "bottom": 440
+    "left": -640,
+    "right": 640,
+    "top": -460,
+    "bottom": 450
   },
   "ledges": true,
-  "hazardSockets": [],
+  "hazardSockets": [
+    {
+      "id": "ascension_ring_pulse",
+      "x": 0,
+      "y": 270,
+      "radius": 36,
+      "authoritative": true,
+      "effect": "soft_push_out",
+      "frames_period": 170,
+      "damage": 0
+    }
+  ],
   "cameraProfile": {
     "mode": "platform_fighter",
     "minZoom": 0.7,
@@ -54,9 +71,9 @@
     }
   },
   "lightingProfile": {
-    "keyColor": "#8899aa",
-    "keyAlpha": 0.1,
-    "ambient": "#0c1014",
+    "keyColor": "#ffe0a8",
+    "keyAlpha": 0.16,
+    "ambient": "#120c08",
     "rim": "#f4a7c3"
   },
   "performanceTier": {
@@ -80,21 +97,21 @@
   },
   "audioBed": {
     "event": "bed_ascension_arena",
-    "status": "NOT_AUTHORED",
+    "status": "PROCEDURAL_WORKING_NOT_HUMAN_FINAL",
     "path": "res://assets/audio/procedural/stages/ascension-arena/bed.wav"
   },
   "previewPlaceholder": "res://assets/stages/procedural/ascension-arena.svg",
-  "artStatus": "NOT_AUTHORED",
-  "productionStatus": "REGISTERED_PENDING",
-  "geometryStatus": "PENDING",
+  "artStatus": "AUTHORED_LAYOUT_NOT_HUMAN_FINAL",
+  "productionStatus": "PLAYABLE_AUTHORED_LAYOUT_BATCH3",
+  "geometryStatus": "AUTHORED_LAYOUT_WORKING",
   "HUMAN_ART_APPROVED": false,
   "yin_yang_presence": {
-    "expression": "ascension_rings",
+    "expression": "ascension_ring_dual",
     "original": true,
     "franchise_signage": false
   },
   "pink_foreshadow": {
-    "motif": "ascension_bloom_ring",
+    "motif": "ring_petal_spark",
     "subtle": true
   },
   "rulesets": {
@@ -111,19 +128,20 @@
   },
   "hazard_model": "authoritative_snapshot",
   "rng_policy": "no_divergent_rng",
-  "notes": "Vertical climb rings. Registered only \u2014 geometry/art pending; not claimed finished.",
+  "notes": "Ascension ring platforms \u2014 authored layout working; art not human-final.",
   "ledgeAnchors": [
     {
       "id": "left",
-      "x": -450.0,
-      "y": 280.0,
+      "x": -290.0,
+      "y": 275.0,
       "facing": 1
     },
     {
       "id": "right",
-      "x": 450.0,
-      "y": 280.0,
+      "x": 290.0,
+      "y": 275.0,
       "facing": -1
     }
-  ]
+  ],
+  "playable": true
 }
