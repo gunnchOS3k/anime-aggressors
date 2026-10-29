@@ -1,0 +1,108 @@
+{
+  "package": "trials_of_convergence_native_playable_review",
+  "branch": "cursor/continuation-isolated-combat-20261027",
+  "umbrella": "TRIALS_OF_CONVERGENCE",
+  "suite_scripts": 12,
+  "suite_pass": true,
+  "HUMAN_ART": false,
+  "HUMAN_ART_APPROVED": false,
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false,
+  "SHIPPING_ROLLBACK_ENABLED": false,
+  "preserved": {
+    "rosamere_three_forms": true,
+    "fighters": 10,
+    "stages": true,
+    "campaign": true
+  },
+  "modes": {
+    "resonance_trial": {
+      "real_vs_sim": "REAL_live_shared_combat + authored dummy; SIMULATION for headless run_solo",
+      "completion_level": "PLAYABLE_NATIVE_REVIEW",
+      "real": [
+        "authored ResonanceDummyActor (not rook)",
+        "damage→bat→10s→flight→distance→records sim",
+        "live BattleScene bridge + player-owned hit feed",
+        "REAL_PLAYER only when player_owned_events at results"
+      ],
+      "sim": ["run_solo_to_results smoke", "journey Run Playable Sim"],
+      "HUMAN_ART": false
+    },
+    "fractured_accord": {
+      "real_vs_sim": "REAL_2v2_actors+core_occupancy+contested+OT+stronghold via live tick; SIMULATION for capture journey",
+      "completion_level": "PLAYABLE_NATIVE_REVIEW",
+      "real": [
+        "4 logical 2v2 actors (humans + CPU fill)",
+        "core occupancy from fighter positions",
+        "contested capture pause",
+        "5-room push-pull + overtime stronghold",
+        "live shared combat overlay (not HUD strip alone)"
+      ],
+      "sim": ["run_capture_journey headless"],
+      "honest_limit": "battle_scene_fighter_slots=2; extra seats lobby/CPU until multi-actor depth",
+      "HUMAN_ART": false
+    },
+    "prism_weave": {
+      "real_vs_sim": "REAL_live_shared_combat movement→paint; SIMULATION for determinism suite",
+      "completion_level": "PLAYABLE_NATIVE_REVIEW_PARTIAL",
+      "real": ["live BattleScene bridge", "movement paints tiles from fighter velocity"],
+      "sim": ["60s headless weave", "journey burst"],
+      "honest_limit": "live_max=4 PartyLink; catalog max 10 aspirational",
+      "HUMAN_ART": false
+    },
+    "riftline_defense": {
+      "real_vs_sim": "REAL_live_shared_combat attacks/enemies; SIMULATION for seeded waves",
+      "completion_level": "PLAYABLE_NATIVE_REVIEW_PARTIAL",
+      "real": ["live bridge", "lane from position", "fire from attack state", "fracture echo enemies"],
+      "sim": ["run_seeded_smoke"],
+      "HUMAN_ART": false
+    },
+    "echoes_gauntlet": {
+      "real_vs_sim": "REAL_live_shared_combat attacks vs sim bosses; SIMULATION for clear smoke",
+      "completion_level": "PLAYABLE_NATIVE_REVIEW_PARTIAL",
+      "real": ["live bridge", "attack-driven boss damage", "echo adds"],
+      "sim": ["run_clear_smoke"],
+      "honesty": "bosses are simulations; never canonical cosmic defeat",
+      "HUMAN_ART": false
+    },
+    "convergence_unbound": {
+      "real_vs_sim": "REAL_live modifiers+controllable actors; SIMULATION for journey frames",
+      "completion_level": "PLAYABLE_NATIVE_REVIEW",
+      "real": [
+        "full_supers / cooldown_mult / instant_resources / respawn_frames on GameState",
+        "Prismatic / Puppet / Colossus controllable actors",
+        "HitResolver damage_ratio single owner",
+        "cleared on Versus/Story/training — never contaminates ranked"
+      ],
+      "sim": ["simulate_play_frames"],
+      "feeds_ranked_mmr": false,
+      "HUMAN_ART": false
+    }
+  },
+  "partylink": {
+    "connected_humans_only": true,
+    "no_invented_seats": true,
+    "battle_scene_fighter_slots": 2,
+    "SHIPPING_ROLLBACK_ENABLED": false
+  },
+  "how_to_review": [
+    "Open Trials Hub → select mode → Enter Live Shared Combat",
+    "Resonance: land hits on Impact Dummy during 10s → bat launch → distance",
+    "Fractured Accord: occupy CORE with both fighters to contest; solo to capture",
+    "Prism/Rift/Echoes: move/attack; overlay ticks live sim",
+    "Unbound: verify supers/CDs; exit to Versus and confirm modifiers cleared",
+    "Do not treat scaffolds as HUMAN_ART / RC2 / V1"
+  ],
+  "blockers": [
+    "HUMAN_ART / Codex dummy mesh + stage art still pending",
+    "BattleScene still 2 fighter slots — 4-seat Flagline uses CPU fill honesty",
+    "Prism catalog max 10 / Unbound max 8 not live (live_max 4)",
+    "No commercial V1 / RC2 claim"
+  ],
+  "next": [
+    "Codex: Resonance dummy mesh + Flagline territory art",
+    "Multi-actor BattleScene depth for true 4-fighter Flagline",
+    "Device playtest of live shared combat paths",
+    "Keep SHIPPING_ROLLBACK / HUMAN_ART / RC2 / V1 false"
+  ]
+}

@@ -51,12 +51,13 @@ static func derby(seed: int = 1) -> Dictionary:
 	p["elements"] = [
 		{
 			"id": "impact_dummy",
-			"kind": "dummy_silhouette",
+			"kind": "authored_procedural_capsule",
 			"art_status": ART_STATUS_PLACEHOLDER,
 			"HUMAN_ART": false,
+			"not_rook_standin": true,
 			"color": Color(0.72, 0.74, 0.78),
 			"position": Vector2(1200, 836),
-			"note": "Kinetic impact dummy scaffold — not final dummy art",
+			"note": "Authored ResonanceDummyActor capsule — not a roster fighter stand-in",
 		},
 		{
 			"id": "kinetic_bat_launcher",

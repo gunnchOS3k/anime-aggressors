@@ -12,10 +12,20 @@ const Unbound = preload("res://scripts/trials/unbound/unbound_ruleset.gd")
 const Derby = preload("res://scripts/trials/derby/resonance_trial_sim.gd")
 const ResonanceDummy = preload("res://scripts/trials/derby/resonance_dummy_actor.gd")
 const Flagline = preload("res://scripts/trials/flagline/fractured_accord_sim.gd")
+const Prism = preload("res://scripts/trials/prism/prism_weave_sim.gd")
+const Riftline = preload("res://scripts/trials/riftline/riftline_defense_sim.gd")
+const Echoes = preload("res://scripts/trials/echoes/echoes_gauntlet_sim.gd")
 const Colossus = preload("res://scripts/trials/unbound/colossus_rig.gd")
 
-## Modes that can enter shared BattleScene combat with overlay (not journey-only).
-const LIVE_SHARED_COMBAT_MODES := ["resonance_trial", "fractured_accord", "convergence_unbound"]
+## All six Trials modes enter shared BattleScene combat with overlay + live sim tick.
+const LIVE_SHARED_COMBAT_MODES := [
+	"resonance_trial",
+	"fractured_accord",
+	"prism_weave",
+	"riftline_defense",
+	"echoes_gauntlet",
+	"convergence_unbound",
+]
 
 
 static func _gs() -> Node:
@@ -60,8 +70,8 @@ static func prepare_live_battle(mode_id: String, seats: int = 2, unbound_preset:
 	if gs == null:
 		return {"ok": false, "reason": "gamestate_missing", "SHIPPING_ROLLBACK_ENABLED": false}
 	var gate: Dictionary = Seats.enforce(mode_id, seats, connected_humans)
-	if not bool(gate.get("ok", false)) and mode_id != "resonance_trial":
-		## Solo Resonance is allowed; multiplayer-promise modes must pass seat gate.
+	if not bool(gate.get("ok", false)) and mode_id != "resonance_trial" and mode_id != "riftline_defense" and mode_id != "echoes_gauntlet":
+		## Solo-capable modes allowed; multiplayer-promise modes must pass seat gate.
 		if int(Authority.player_count_truth(mode_id).get("min", 1)) >= 2:
 			return {"ok": false, "gate": gate, "SHIPPING_ROLLBACK_ENABLED": false}
 	var seated: int = int(gate.get("seated", seats)) if bool(gate.get("ok", false)) else clampi(seats, 1, 2)
@@ -81,8 +91,17 @@ static func prepare_live_battle(mode_id: String, seats: int = 2, unbound_preset:
 		"fractured_accord":
 			applied = _apply_flagline(gs, seated)
 			presentation = Presentation.flagline_territory(gs.match_seed, 0)
+		"prism_weave":
+			applied = _apply_prism(gs, seated)
+			presentation = Presentation.prism_tiles(gs.match_seed)
+		"riftline_defense":
+			applied = _apply_riftline(gs, seated)
+			presentation = Presentation.riftline_lanes(gs.match_seed)
+		"echoes_gauntlet":
+			applied = _apply_echoes(gs, seated)
+			presentation = Presentation.survival_echoes(gs.match_seed)
 		_:
-			applied = {"note": "journey_only"}
+			applied = {"note": "unknown_mode"}
 	gs.trial_overlay_state = {
 		"mode_id": mode_id,
 		"presentation": presentation,
@@ -112,8 +131,14 @@ static func _apply_unbound(gs: Node, preset_id: String, seats: int) -> Dictionar
 		seats
 	)
 	var rules: Dictionary = session.get("rules", Unbound.preset(preset_id))
-	gs.damage_ratio = float(rules.get("damage_mult", 1.35))
-	gs.trial_knockback_mult = float(rules.get("knockback_mult", 1.85))
+	var runtime: Dictionary = Unbound.runtime_modifiers(preset_id)
+	gs.damage_ratio = float(runtime.get("damage_mult", 1.35))
+	gs.trial_knockback_mult = float(runtime.get("knockback_mult", 1.85))
+	gs.trial_cooldown_mult = float(runtime.get("cooldown_mult", 0.15))
+	gs.trial_full_supers = bool(runtime.get("full_supers", true))
+	gs.trial_instant_resources = bool(runtime.get("instant_resources", true))
+	gs.trial_respawn_frames = int(runtime.get("respawn_frames", 30))
+	gs.trial_actors = runtime.get("controllable_actors", [])
 	gs.stocks = int(rules.get("stocks", 7))
 	var timer_s: int = int(rules.get("timer_seconds", 0))
 	gs.match_timer_seconds = timer_s
@@ -134,30 +159,43 @@ static func _apply_unbound(gs: Node, preset_id: String, seats: int) -> Dictionar
 	else:
 		gs.trial_colossus_rigs = []
 	gs.trial_camera_profile = cam
+	gs.trial_sim_snapshot = session
 	return {
 		"label": Unbound.LABEL,
 		"preset": rules.get("preset_id", preset_id),
 		"damage_ratio": gs.damage_ratio,
 		"knockback_mult": gs.trial_knockback_mult,
+		"cooldown_mult": gs.trial_cooldown_mult,
+		"full_supers": gs.trial_full_supers,
+		"instant_resources": gs.trial_instant_resources,
+		"respawn_frames": gs.trial_respawn_frames,
+		"controllable_actors": gs.trial_actors,
 		"stocks": gs.stocks,
 		"everlasting_permitted": bool(session.get("everlasting_permitted", false)),
 		"feeds_ranked_mmr": false,
+		"contaminates_versus": false,
+		"contaminates_story": false,
 		"camera_profile": cam,
 		"shipping": Authority.shipping_flags_false(),
 	}
 
 
 static func _apply_derby(gs: Node) -> Dictionary:
-	## Resonance live path — real ResonanceDummyActor + Kinetic Bat / distance scoring via sim.
+	## Resonance live path — authored ResonanceDummyActor (not rook) + Kinetic Bat / distance.
 	gs.damage_ratio = 1.0
 	gs.trial_knockback_mult = 1.0
+	gs.trial_cooldown_mult = 1.0
+	gs.trial_full_supers = false
+	gs.trial_instant_resources = false
+	gs.trial_respawn_frames = 0
+	gs.trial_actors = []
 	gs.stocks = 99
 	gs.match_timer_seconds = 10
 	gs.match_type = "stock"
 	gs.ruleset_id = "trial-resonance-live"
 	var dummy_cfg: Dictionary = ResonanceDummy.live_cpu_config()
 	gs.p2_is_cpu = true
-	gs.p2_fighter_id = str(dummy_cfg.get("standin_fighter_id", ResonanceDummy.battle_standin_fighter_id()))
+	gs.p2_fighter_id = str(dummy_cfg.get("fighter_id", ResonanceDummy.battle_fighter_id()))
 	gs.training_dummy_mode = "idle"
 	gs.trial_colossus_rigs = []
 	gs.trial_camera_profile = {}
@@ -165,16 +203,21 @@ static func _apply_derby(gs: Node) -> Dictionary:
 	sim["dummy_actor"] = ResonanceDummy.identity()
 	sim["bat_launch_enabled"] = true
 	sim["distance_scoring_enabled"] = true
+	sim["player_owned_events"] = false
 	gs.trial_sim_snapshot = sim
 	return {
 		"contract_seconds": 10,
 		"kinetic_bat": true,
 		"dummy_actor": ResonanceDummy.identity(),
-		"dummy_geometry_standin": true,
+		"dummy_geometry_standin": false,
+		"authored_dummy": true,
+		"not_rook_standin": true,
 		"bat_launch": true,
 		"distance_scoring": true,
+		"damage_bat_flight_distance_records": true,
 		"feeds_ranked_mmr": false,
 		"result_kind_live": "REAL_PLAYER",
+		"real_player_requires_player_owned_events": true,
 		"shipping": Authority.shipping_flags_false(),
 	}
 
@@ -182,6 +225,8 @@ static func _apply_derby(gs: Node) -> Dictionary:
 static func _apply_flagline(gs: Node, seats: int) -> Dictionary:
 	gs.damage_ratio = 1.0
 	gs.trial_knockback_mult = 1.0
+	gs.trial_cooldown_mult = 1.0
+	gs.trial_actors = []
 	gs.stocks = 3
 	gs.match_timer_seconds = 180
 	gs.match_type = "stock"
@@ -194,6 +239,8 @@ static func _apply_flagline(gs: Node, seats: int) -> Dictionary:
 	## Local live entry: treat seated humans honestly; CPU fills remaining 2v2 slots.
 	var humans_for_flagline: int = clampi(seats, 1, 4)
 	var sim: Dictionary = Flagline.create(gs.match_seed if gs.match_seed != 0 else 42, 0, humans_for_flagline)
+	sim["live_actor_sync"] = true
+	sim["twovstwo_actors"] = true
 	gs.trial_sim_snapshot = sim
 	return {
 		"rooms": [-2, -1, 0, 1, 2],
@@ -201,8 +248,98 @@ static func _apply_flagline(gs: Node, seats: int) -> Dictionary:
 		"territory": str(sim.get("art_territory_name", "")),
 		"yin_yang_not_ordinary_captains": true,
 		"twovstwo_plus_capture": true,
+		"core_occupancy": true,
+		"contested_capture": true,
+		"overtime": true,
+		"stronghold": true,
 		"connected_humans": humans_for_flagline,
+		"actor_count": Flagline.actor_slots(sim).size(),
 		"battle_scene_fighter_slots": 2,
+		"occupancy": Flagline.occupancy_summary(sim),
+		"feeds_ranked_mmr": false,
+		"shipping": Authority.shipping_flags_false(),
+	}
+
+
+static func _apply_prism(gs: Node, seats: int) -> Dictionary:
+	gs.damage_ratio = 1.0
+	gs.trial_knockback_mult = 1.0
+	gs.trial_cooldown_mult = 1.0
+	gs.trial_actors = []
+	gs.stocks = 3
+	gs.match_timer_seconds = 60
+	gs.match_type = "stock"
+	gs.ruleset_id = "trial-prism-weave-live"
+	gs.p2_is_cpu = seats < 2
+	gs.trial_colossus_rigs = []
+	gs.trial_camera_profile = {}
+	var n: int = clampi(seats, 2, 4)
+	var sim: Dictionary = Prism.create(gs.match_seed if gs.match_seed != 0 else 42, n)
+	sim["live_shared_combat"] = true
+	sim["real_movement"] = true
+	gs.trial_sim_snapshot = sim
+	return {
+		"live_shared_combat": true,
+		"real_movement": true,
+		"real_attacks": true,
+		"fighter_count": n,
+		"battle_scene_fighter_slots": 2,
+		"feeds_ranked_mmr": false,
+		"shipping": Authority.shipping_flags_false(),
+	}
+
+
+static func _apply_riftline(gs: Node, seats: int) -> Dictionary:
+	gs.damage_ratio = 1.0
+	gs.trial_knockback_mult = 1.0
+	gs.trial_cooldown_mult = 1.0
+	gs.trial_actors = []
+	gs.stocks = 3
+	gs.match_timer_seconds = 180
+	gs.match_type = "stock"
+	gs.ruleset_id = "trial-riftline-live"
+	gs.p2_is_cpu = true
+	gs.trial_colossus_rigs = []
+	gs.trial_camera_profile = {}
+	var sim: Dictionary = Riftline.create(gs.match_seed if gs.match_seed != 0 else 42, gs.p1_fighter_id, clampi(seats, 1, 2))
+	sim["live_shared_combat"] = true
+	sim["real_enemies"] = true
+	gs.trial_sim_snapshot = sim
+	return {
+		"live_shared_combat": true,
+		"real_movement": true,
+		"real_attacks": true,
+		"real_enemies": true,
+		"fracture_echoes": true,
+		"lanes": 4,
+		"feeds_ranked_mmr": false,
+		"shipping": Authority.shipping_flags_false(),
+	}
+
+
+static func _apply_echoes(gs: Node, seats: int) -> Dictionary:
+	gs.damage_ratio = 1.0
+	gs.trial_knockback_mult = 1.0
+	gs.trial_cooldown_mult = 1.0
+	gs.trial_actors = []
+	gs.stocks = 3
+	gs.match_timer_seconds = 300
+	gs.match_type = "stock"
+	gs.ruleset_id = "trial-echoes-live"
+	gs.p2_is_cpu = true
+	gs.trial_colossus_rigs = []
+	gs.trial_camera_profile = {}
+	var sim: Dictionary = Echoes.create(gs.match_seed if gs.match_seed != 0 else 42, seats >= 2)
+	sim["live_shared_combat"] = true
+	sim["real_enemies"] = true
+	gs.trial_sim_snapshot = sim
+	return {
+		"live_shared_combat": true,
+		"real_movement": true,
+		"real_attacks": true,
+		"real_enemies": true,
+		"bosses_are_simulations": true,
+		"canonical_cosmic_defeat": false,
 		"feeds_ranked_mmr": false,
 		"shipping": Authority.shipping_flags_false(),
 	}
@@ -226,6 +363,8 @@ static func mount_overlay_on_battle(battle: Node) -> Node:
 	battle.add_child(overlay)
 	if overlay.has_method("configure"):
 		overlay.configure(gs.trial_overlay_state)
+	if overlay.has_method("bind_battle"):
+		overlay.bind_battle(battle)
 	## Merge colossus / flagline camera scaffold into battle camera when present.
 	if battle.has_method("_apply_device_role") and not gs.trial_camera_profile.is_empty():
 		if "_stage_camera_profile" in battle:
@@ -238,6 +377,113 @@ static func mount_overlay_on_battle(battle: Node) -> Node:
 				if cam:
 					battle._battle_camera.configure(cam, merged, [battle.fighter1, battle.fighter2], battle.blast)
 	return overlay
+
+
+static func tick_live_from_battle(battle: Node) -> Dictionary:
+	## Advance mode sim from real BattleScene fighter movement/attacks/enemies.
+	var gs := _gs()
+	if gs == null or not bool(gs.trial_live_combat) or battle == null:
+		return {}
+	var mode_id: String = str(gs.trial_mode_id)
+	var snap: Dictionary = gs.trial_sim_snapshot
+	if snap.is_empty():
+		return {}
+	var f1 = battle.get("fighter1") if "fighter1" in battle else battle.get_node_or_null("Fighter1")
+	var f2 = battle.get("fighter2") if "fighter2" in battle else battle.get_node_or_null("Fighter2")
+	var p1_pos: Vector2 = f1.global_position if f1 != null else Vector2(400, 700)
+	var p2_pos: Vector2 = f2.global_position if f2 != null else Vector2(1400, 700)
+	match mode_id:
+		"fractured_accord":
+			snap = Flagline.tick_live(snap, p1_pos, p2_pos)
+			gs.trial_sim_snapshot = snap
+			return Flagline.occupancy_summary(snap)
+		"prism_weave":
+			var moves: Array = []
+			if f1 != null:
+				moves.append({"slot": 0, "dx": signi(int(f1.velocity.x)) if "velocity" in f1 else 0, "dy": 0})
+			if f2 != null:
+				moves.append({"slot": 1, "dx": signi(int(f2.velocity.x)) if "velocity" in f2 else 0, "dy": 0})
+			snap = Prism.step(snap, moves)
+			gs.trial_sim_snapshot = snap
+			return {"phase": snap.get("phase", ""), "winner_slot": snap.get("winner_slot", -1), "live": true}
+		"riftline_defense":
+			var actions: Array = [{"slot": 0, "fire": false, "lane": clampi(int(p1_pos.y / 180.0), 0, 3)}]
+			if f1 != null and f1.has_method("stamp_runtime_hook"):
+				## Attack ownership inferred from recent hit / attacking state when available.
+				var attacking: bool = false
+				if "state_machine" in f1 and f1.state_machine != null:
+					attacking = str(f1.state_machine.current_state).contains("attack")
+				actions[0]["fire"] = attacking
+			snap = Riftline.step(snap, actions)
+			gs.trial_sim_snapshot = snap
+			return {"wave": snap.get("wave", 0), "score": snap.get("score", 0), "echoes": (snap.get("echoes", []) as Array).size(), "live": true}
+		"echoes_gauntlet":
+			var attack: bool = false
+			if f1 != null and "state_machine" in f1 and f1.state_machine != null:
+				attack = str(f1.state_machine.current_state).contains("attack")
+			snap = Echoes.step(snap, attack)
+			gs.trial_sim_snapshot = snap
+			return {
+				"phase": snap.get("phase", ""),
+				"wave_index": snap.get("wave_index", 0),
+				"canonical_cosmic_defeat": false,
+				"live": true,
+			}
+		"resonance_trial":
+			## Damage phase advances on timer; live hits feed apply_damage_event separately.
+			var inp: Dictionary = {}
+			if f1 != null and "velocity" in f1:
+				inp["right"] = f1.velocity.x > 10.0
+				inp["left"] = f1.velocity.x < -10.0
+				inp["jump"] = f1.velocity.y < -50.0
+			snap = Derby.step(snap, inp)
+			gs.trial_sim_snapshot = snap
+			return {
+				"phase": snap.get("phase", ""),
+				"damage": snap.get("dummy", {}).get("damage", 0),
+				"distance": snap.get("final_distance", 0),
+				"player_owned_events": bool(snap.get("player_owned_events", false)),
+				"live": true,
+			}
+		"convergence_unbound":
+			if str(snap.get("phase", "")) == "play":
+				snap = Unbound.simulate_play_frames(snap, 1)
+				gs.trial_sim_snapshot = snap
+			return {
+				"preset": gs.trial_unbound_preset,
+				"cooldown_mult": gs.trial_cooldown_mult,
+				"full_supers": gs.trial_full_supers,
+				"actors": (gs.trial_actors as Array).size(),
+				"live": true,
+			}
+		_:
+			return {}
+
+
+static func notify_live_hit(damage: float, facing: int = 1) -> void:
+	## Player-owned Resonance hits from BattleScene HitResolver path.
+	var gs := _gs()
+	if gs == null or str(gs.trial_mode_id) != "resonance_trial":
+		return
+	if not bool(gs.trial_live_combat):
+		return
+	var snap: Dictionary = gs.trial_sim_snapshot
+	if snap.is_empty():
+		return
+	snap = Derby.apply_damage_event(snap, int(ceil(damage)), facing)
+	snap["player_owned_events"] = true
+	gs.trial_sim_snapshot = snap
+
+
+static func seal_live_resonance_result() -> Dictionary:
+	var gs := _gs()
+	if gs == null:
+		return {}
+	var snap: Dictionary = gs.trial_sim_snapshot
+	var owned: bool = bool(snap.get("player_owned_events", false))
+	var sealed: Dictionary = Derby.seal_real_player(snap, owned)
+	gs.trial_sim_snapshot = sealed
+	return sealed
 
 
 static func overlay_hud_lines(state: Dictionary = {}) -> PackedStringArray:
@@ -254,15 +500,31 @@ static func overlay_hud_lines(state: Dictionary = {}) -> PackedStringArray:
 			var applied: Dictionary = st.get("applied", {})
 			lines.append("%s · %s" % [Unbound.LABEL, str(applied.get("preset", ""))])
 			if gs != null:
-				lines.append("KB×%.2f DMG×%.2f stocks=%d" % [
-					float(gs.trial_knockback_mult), float(gs.damage_ratio), int(gs.stocks),
+				lines.append("KB×%.2f DMG×%.2f CD×%.2f stocks=%d actors=%d" % [
+					float(gs.trial_knockback_mult), float(gs.damage_ratio),
+					float(gs.trial_cooldown_mult), int(gs.stocks), (gs.trial_actors as Array).size(),
 				])
 		"resonance_trial":
 			lines.append("Resonance · 10s · %s · Kinetic Bat + distance" % ResonanceDummy.DISPLAY_NAME)
+			lines.append("Authored dummy · not rook · REAL_PLAYER only if player-owned")
 		"fractured_accord":
 			var snap: Dictionary = gs.trial_sim_snapshot if gs else {}
+			var occ: Dictionary = Flagline.occupancy_summary(snap) if not snap.is_empty() else {}
 			lines.append("Flagline · %s" % str(snap.get("art_territory_name", "Accord Fracture")))
-			lines.append("Beaconward vs Veilward")
+			lines.append("Beaconward vs Veilward · core %d/%d contested=%s" % [
+				int(occ.get("solar_in_core", 0)), int(occ.get("lunar_in_core", 0)),
+				str(occ.get("contested", false)),
+			])
+		"prism_weave":
+			lines.append("Prism Weave · live movement paints tiles")
+		"riftline_defense":
+			var rsnap: Dictionary = gs.trial_sim_snapshot if gs else {}
+			lines.append("Riftline · wave %s · echoes %d" % [
+				str(rsnap.get("wave", 1)), (rsnap.get("echoes", []) as Array).size(),
+			])
+		"echoes_gauntlet":
+			var esnap: Dictionary = gs.trial_sim_snapshot if gs else {}
+			lines.append("Echoes · wave %s · sim bosses only" % str(esnap.get("wave_index", 0)))
 		_:
 			lines.append("Journey presentation active")
 	lines.append("HUMAN_ART=false · SHIPPING_ROLLBACK=false")

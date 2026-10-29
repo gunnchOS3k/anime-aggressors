@@ -44,10 +44,15 @@ var trial_challenge: String = "solo"  # solo | alternating | coop | fighter_chal
 var trial_seat_count: int = 2
 var trial_story_reveal: bool = false  # spoiler-safe until story reveal
 var trial_records: Array = []  # local-only; never ranked MMR
-## Live shared BattleScene bridge (Unbound / Derby / Flagline overlay).
+## Live shared BattleScene bridge (Unbound / Derby / Flagline / Prism / Rift / Echoes).
 var trial_live_combat: bool = false
 var trial_unbound_preset: String = "total_unbound"
 var trial_knockback_mult: float = 1.0
+var trial_cooldown_mult: float = 1.0
+var trial_full_supers: bool = false
+var trial_instant_resources: bool = false
+var trial_respawn_frames: int = 0
+var trial_actors: Array = []  # Unbound Prismatic/Puppet/Colossus controllable actors
 var trial_overlay_state: Dictionary = {}
 var trial_sim_snapshot: Dictionary = {}
 var trial_colossus_rigs: Array = []
@@ -376,12 +381,15 @@ func arcade_opponent_name() -> String:
 
 
 func apply_competitive_ruleset() -> void:
+	## Competitive Versus/ranked path — Trials Unbound modifiers must never leak here.
+	clear_trial_modifiers()
 	var rules = load("res://scripts/combat/competitive_rules.gd")
 	if rules != null:
 		rules.apply_to_gamestate(self)
 
 
 func begin_training() -> void:
+	clear_trial_modifiers()
 	mode = "training"
 	arcade_active = false
 	hazards_enabled = false
@@ -430,9 +438,14 @@ func begin_trial(mode_id: String, seats: int = 2, challenge: String = "solo") ->
 
 
 func clear_trial_modifiers() -> void:
-	## Reset Unbound/Derby/Flagline combat modifiers so they cannot leak into Versus/Career.
+	## Reset Unbound/Derby/Flagline/Prism/Rift/Echoes modifiers so they cannot leak into Versus/Story/ranked.
 	trial_live_combat = false
 	trial_knockback_mult = 1.0
+	trial_cooldown_mult = 1.0
+	trial_full_supers = false
+	trial_instant_resources = false
+	trial_respawn_frames = 0
+	trial_actors = []
 	damage_ratio = 1.0
 	trial_overlay_state = {}
 	trial_sim_snapshot = {}
@@ -481,6 +494,8 @@ func record_trial_result(payload: Dictionary) -> void:
 
 
 func begin_local_versus(p2_cpu: bool = true) -> void:
+	## Versus never inherits Trials Unbound supers/CDs/resources/actors.
+	clear_trial_modifiers()
 	mode = "versus"
 	arcade_active = false
 	hazards_enabled = false

@@ -289,3 +289,63 @@ static func run_capture_journey(seed: int = 7, connected_humans: int = 2) -> Dic
 	s["earned_personal_best"] = false
 	s["honesty"] = "run_capture_journey is SIMULATION — 2v2+capture rules exercised, not REAL_PLAYER"
 	return s
+
+
+static func actor_slots(state: Dictionary) -> Array:
+	## Real 2v2 logical actors (humans + CPU fill) — not HUD-only.
+	return state.get("team_slots", [])
+
+
+static func occupancy_summary(state: Dictionary) -> Dictionary:
+	var counts: Dictionary = _counts_in_core(state)
+	var cap: Dictionary = state.get("capture", {})
+	## Contested is live occupancy truth (both teams in core), not HUD-only.
+	var contested_live: bool = int(counts.get("solar", 0)) > 0 and int(counts.get("lunar", 0)) > 0
+	return {
+		"solar_in_core": int(counts.get("solar", 0)),
+		"lunar_in_core": int(counts.get("lunar", 0)),
+		"contested": contested_live or bool(cap.get("contested", false)),
+		"controlling": str(cap.get("controlling", "")),
+		"solar_capture": float(cap.get("solar", 0.0)),
+		"lunar_capture": float(cap.get("lunar", 0.0)),
+		"current_room": int(state.get("current_room", 0)),
+		"phase": str(state.get("phase", "")),
+		"rooms_won": state.get("rooms_won", {}),
+		"art_territory_name": str(state.get("art_territory_name", "")),
+		"overtime_enabled": bool(state.get("config", {}).get("overtime_enabled", true)),
+		"stronghold_rooms": [-2, 2],
+		"actor_count": actor_slots(state).size(),
+		"connected_humans": int(state.get("connected_humans", 0)),
+		"battle_scene_fighter_slots": int(state.get("battle_scene_fighter_slots", 2)),
+	}
+
+
+static func sync_live_presence_from_positions(
+	state: Dictionary,
+	p1_pos: Vector2,
+	p2_pos: Vector2,
+	core_center: Vector2 = Vector2(960, 540),
+	core_radius: float = 160.0
+) -> Dictionary:
+	## Map 2 BattleScene fighters onto 4 logical 2v2 actors (human seats + CPU fill).
+	## P1 → solar slot 0; P2 → lunar slot 1; CPU slots 2/3 mirror teammates when bots_enabled.
+	var next: Dictionary = state.duplicate(true)
+	var p1_in: bool = p1_pos.distance_to(core_center) <= core_radius
+	var p2_in: bool = p2_pos.distance_to(core_center) <= core_radius
+	set_presence(next, 0, p1_in)
+	set_presence(next, 1, p2_in)
+	if bool(next.get("config", {}).get("bots_enabled", true)):
+		## Teammate CPU fill mirrors human presence for 2v2 occupancy honesty.
+		set_presence(next, 2, p1_in)
+		set_presence(next, 3, p2_in)
+	next["live_actor_sync"] = true
+	next["core_center"] = {"x": core_center.x, "y": core_center.y, "radius": core_radius}
+	return next
+
+
+static func tick_live(state: Dictionary, p1_pos: Vector2, p2_pos: Vector2, core_center: Vector2 = Vector2(960, 540), core_radius: float = 160.0) -> Dictionary:
+	## One live frame: sync real actor occupancy → contested capture → OT/stronghold rules.
+	var next: Dictionary = sync_live_presence_from_positions(state, p1_pos, p2_pos, core_center, core_radius)
+	## Disable RNG bot drift while live positions own occupancy.
+	next["config"]["bots_enabled"] = false
+	return step(next)

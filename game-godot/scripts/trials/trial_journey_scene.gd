@@ -57,7 +57,9 @@ func _build_ui() -> void:
 		vbox.add_child(b)
 		if item[0] == "LiveBattleBtn" and not Bridge.supports_live_shared_combat(mode_id):
 			b.disabled = true
-			b.text = "Live Shared Combat (journey-only mode)"
+			b.text = "Live Shared Combat (unavailable)"
+		elif item[0] == "LiveBattleBtn":
+			b.text = "Enter Live Shared Combat"
 
 
 func _enter_select() -> void:

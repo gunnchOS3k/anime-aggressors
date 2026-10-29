@@ -169,3 +169,77 @@ static func simulate_play_frames(session: Dictionary, frames: int = 120) -> Dict
 
 static func never_feeds_ranked(session: Dictionary) -> bool:
 	return not bool(session.get("feeds_ranked_mmr", true)) and not bool(session.get("rules", {}).get("feeds_ranked_mmr", true))
+
+
+static func controllable_actors_for(preset_id: String) -> Array:
+	## Controllable Mythic actors for live Unbound — never Versus/Story/ranked roster claims.
+	var rules: Dictionary = preset(preset_id)
+	var actors: Array = []
+	match str(rules.get("preset_id", preset_id)):
+		PRESET_PRISMATIC:
+			for aid in rules.get("prismatic_actors", []):
+				actors.append({
+					"actor_id": aid,
+					"kind": "prismatic_spectrum",
+					"controllable": true,
+					"trials_only": true,
+					"contaminates_versus": false,
+					"contaminates_story": false,
+					"feeds_ranked_mmr": false,
+				})
+		PRESET_COLOSSUS:
+			for aid in rules.get("controllable_avatars", []):
+				actors.append({
+					"actor_id": aid,
+					"kind": "colossus_avatar",
+					"controllable": true,
+					"trials_only": true,
+					"avatar_ko_is_true_defeat": false,
+					"contaminates_versus": false,
+					"contaminates_story": false,
+					"feeds_ranked_mmr": false,
+				})
+		PRESET_KAIJU:
+			for aid in rules.get("puppet_actors", []):
+				actors.append({
+					"actor_id": aid,
+					"kind": "puppet_echo",
+					"controllable": true,
+					"trials_only": true,
+					"is_yin_yang_rosamere_puppet": false,
+					"contaminates_versus": false,
+					"contaminates_story": false,
+					"feeds_ranked_mmr": false,
+				})
+		_:
+			actors.append({
+				"actor_id": "unbound_fighter_slot",
+				"kind": "unbound_ruleset_fighter",
+				"controllable": true,
+				"full_supers": true,
+				"trials_only": true,
+				"contaminates_versus": false,
+				"contaminates_story": false,
+				"feeds_ranked_mmr": false,
+			})
+	return actors
+
+
+static func runtime_modifiers(preset_id: String) -> Dictionary:
+	## Applied to GameState during live Unbound only; cleared by end_trial / Versus entry.
+	var rules: Dictionary = preset(preset_id)
+	return {
+		"full_supers": bool(rules.get("full_supers", true)),
+		"cooldown_mult": float(rules.get("cooldown_mult", 0.15)),
+		"instant_resources": bool(rules.get("instant_resources", true)),
+		"respawn_frames": int(rules.get("respawn_frames", 30)),
+		"rapid_respawn": bool(rules.get("rapid_respawn", true)),
+		"knockback_mult": float(rules.get("knockback_mult", 1.85)),
+		"damage_mult": float(rules.get("damage_mult", 1.35)),
+		"transform_duration_mult": float(rules.get("transform_duration_mult", 2.5)),
+		"controllable_actors": controllable_actors_for(preset_id),
+		"feeds_ranked_mmr": false,
+		"contaminates_versus": false,
+		"contaminates_story": false,
+		"SHIPPING_ROLLBACK_ENABLED": false,
+	}

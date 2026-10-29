@@ -37,5 +37,24 @@ func run() -> void:
 	check(str(journey.get("phase", "")) == "gameWon", "journey_game_won")
 	check(str(journey.get("winning_team", "")) in ["solar", "lunar"], "has_winner")
 	check(bool(journey.get("yin_yang_not_ordinary_captains", false)), "yin_yang_not_captains")
+	## Real 2v2 actors + core occupancy + contested capture (not HUD strip alone).
+	var live := Flagline.create(17, 0, 2)
+	check(Flagline.actor_slots(live).size() == 4, "four_actors")
+	check(int(live.get("connected_humans", 0)) == 2, "two_humans_cpu_fill")
+	live = Flagline.sync_live_presence_from_positions(live, Vector2(960, 540), Vector2(960, 540))
+	var occ0 := Flagline.occupancy_summary(live)
+	check(bool(occ0.get("contested", false)), "contested_when_both_in_core")
+	check(int(occ0.get("solar_in_core", 0)) >= 1 and int(occ0.get("lunar_in_core", 0)) >= 1, "both_teams_occupancy")
+	## Uncontested solar capture progresses meter.
+	live = Flagline.create(19, 0, 2)
+	live["config"]["bots_enabled"] = false
+	while str(live.get("phase", "")) == "intro":
+		live = Flagline.step(live)
+	for _i in range(30):
+		live = Flagline.tick_live(live, Vector2(960, 540), Vector2(100, 540))
+	var occ1 := Flagline.occupancy_summary(live)
+	check(float(occ1.get("solar_capture", 0.0)) > 0.0, "solar_capture_progress")
+	check(bool(occ1.get("overtime_enabled", false)), "ot_enabled")
+	check((-2 in (occ1.get("stronghold_rooms", []) as Array)) and (2 in (occ1.get("stronghold_rooms", []) as Array)), "stronghold_rooms")
 	print("FRACTURED_ACCORD_PROGRESSION ", "PASS" if failures.is_empty() else "FAIL", " checks=", checks, " failures=", failures)
 	quit(0 if failures.is_empty() else 1)

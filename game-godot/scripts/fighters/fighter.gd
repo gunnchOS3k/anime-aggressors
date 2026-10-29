@@ -1088,6 +1088,18 @@ func _start_move_dict(m: Dictionary) -> void:
 	elif not _current_form_id.is_empty() and not _forms_doc.is_empty():
 		var form_entry: Dictionary = _FormDefinition.form_entry(_forms_doc, _current_form_id)
 		base_move = _FormDefinition.apply_move_override(m, form_entry, str(m.get("move_id", "")))
+	## Convergence Unbound only — min cooldowns / full supers / instant resources.
+	## Never applied in Versus/Story/ranked (trial modifiers cleared on those entries).
+	if str(GameState.mode) == "trials" and bool(GameState.trial_live_combat) and str(GameState.trial_mode_id) == "convergence_unbound":
+		base_move = base_move.duplicate(true)
+		var cd_mult: float = float(GameState.trial_cooldown_mult)
+		if cd_mult > 0.0 and cd_mult < 1.0:
+			base_move["recovery_frames"] = maxi(1, int(round(float(base_move.get("recovery_frames", 12)) * cd_mult)))
+			base_move["startup_frames"] = maxi(1, int(round(float(base_move.get("startup_frames", 4)) * maxf(cd_mult, 0.35))))
+		if bool(GameState.trial_full_supers) and str(base_move.get("move_id", "")) == "aura_burst":
+			base_move["unbound_full_super"] = true
+		if bool(GameState.trial_instant_resources):
+			aura = 100.0
 	if party_overdrive.active():
 		_current_move = base_move.duplicate(true)
 	else:
@@ -1828,6 +1840,12 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 		var _tr_kb := float(GameState.trial_knockback_mult)
 		if not is_equal_approx(_tr_kb, 1.0) and info.has("launch") and typeof(info["launch"]) == TYPE_VECTOR2:
 			info["launch"] = info["launch"] * _tr_kb
+		## Resonance: player-owned hits on the authored dummy feed damage→bat→distance.
+		if str(GameState.trial_mode_id) == "resonance_trial" and slot == 2:
+			var Bridge = load("res://scripts/trials/shared_combat_bridge.gd")
+			if Bridge != null:
+				var dmg_live: float = float(info.get("resolved_damage", info.get("damage", 0.0)))
+				Bridge.notify_live_hit(dmg_live, int(sign(float(info.get("launch", Vector2(1, 0)).x))))
 	_last_hit_result = info.duplicate(true)
 	_last_knockback = info.get("launch", Vector2.ZERO)
 	_last_shield_damage = float(info.get("shield_damage", 0.0))

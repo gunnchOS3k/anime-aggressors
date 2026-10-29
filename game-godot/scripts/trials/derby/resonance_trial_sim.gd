@@ -351,7 +351,46 @@ static func run_solo_to_results(seed: int, fighter_id: String, attack_every: int
 			inp = {"attack": true}
 		s = step(s, inp)
 		guard += 1
+	return seal_simulation(s)
+
+
+static func seal_simulation(state: Dictionary) -> Dictionary:
+	var s: Dictionary = state.duplicate(true)
 	s["result_kind"] = "SIMULATION"
 	s["earned_personal_best"] = false
-	s["honesty"] = "run_solo_to_results is SIMULATION smoke — not REAL_PLAYER earned record"
+	s["player_owned_events"] = false
+	s["honesty"] = "SIMULATION — not REAL_PLAYER earned record"
 	return s
+
+
+static func seal_real_player(state: Dictionary, player_owned: bool) -> Dictionary:
+	## Only player-owned live events earn REAL_PLAYER results / personal bests.
+	var s: Dictionary = state.duplicate(true)
+	if player_owned and str(s.get("phase", "")) == "results":
+		s["result_kind"] = "REAL_PLAYER"
+		s["earned_personal_best"] = true
+		s["player_owned_events"] = true
+		s["honesty"] = "REAL_PLAYER — local Trials receipt from player-owned combat events"
+	else:
+		return seal_simulation(s)
+	return s
+
+
+static func apply_damage_event(state: Dictionary, damage: int, facing: int = 1) -> Dictionary:
+	## Bridge live BattleScene hits into Resonance damage→bat→flight contract.
+	var next: Dictionary = state.duplicate(true)
+	if str(next.get("phase", "")) != "damage":
+		return next
+	var d: Dictionary = next["dummy"]
+	var dmg: int = maxi(1, damage)
+	d["damage"] = int(d.get("damage", 0)) + dmg
+	d["hitstun"] = 8
+	d["vx"] = facing * (4 * FP + int(d.get("damage", 0)) * 20)
+	d["vy"] = -6 * FP
+	d["grounded"] = false
+	next["hits"] = int(next.get("hits", 0)) + 1
+	next["combo"] = int(next.get("combo", 0)) + 1
+	next["best_combo"] = maxi(int(next.get("best_combo", 0)), int(next.get("combo", 0)))
+	next["player_owned_events"] = true
+	_push(next, {"type": "hit", "frame": next["frame"], "damage": dmg, "source": "live_battle"})
+	return next
