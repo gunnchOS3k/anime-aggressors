@@ -254,7 +254,11 @@ static func _apply_flagline(gs: Node, seats: int) -> Dictionary:
 		"stronghold": true,
 		"connected_humans": humans_for_flagline,
 		"actor_count": Flagline.actor_slots(sim).size(),
+		"logical_actor_count": 4,
+		"multi_actor_depth": true,
+		"independent_cpu_fill": true,
 		"battle_scene_fighter_slots": 2,
+		"not_four_simultaneous_human_bodies": true,
 		"occupancy": Flagline.occupancy_summary(sim),
 		"feeds_ranked_mmr": false,
 		"shipping": Authority.shipping_flags_false(),
@@ -282,8 +286,12 @@ static func _apply_prism(gs: Node, seats: int) -> Dictionary:
 		"live_shared_combat": true,
 		"real_movement": true,
 		"real_attacks": true,
+		"attack_paint_burst": true,
+		"markers_beyond_color": true,
 		"fighter_count": n,
 		"battle_scene_fighter_slots": 2,
+		"live_max_honest": 4,
+		"catalog_max_aspirational": 10,
 		"feeds_ranked_mmr": false,
 		"shipping": Authority.shipping_flags_false(),
 	}
@@ -394,41 +402,40 @@ static func tick_live_from_battle(battle: Node) -> Dictionary:
 	var p2_pos: Vector2 = f2.global_position if f2 != null else Vector2(1400, 700)
 	match mode_id:
 		"fractured_accord":
+			## Multi-actor depth: 2 BattleScene bodies + independent CPU fill for logical 4.
 			snap = Flagline.tick_live(snap, p1_pos, p2_pos)
 			gs.trial_sim_snapshot = snap
 			return Flagline.occupancy_summary(snap)
 		"prism_weave":
-			var moves: Array = []
-			if f1 != null:
-				moves.append({"slot": 0, "dx": signi(int(f1.velocity.x)) if "velocity" in f1 else 0, "dy": 0})
-			if f2 != null:
-				moves.append({"slot": 1, "dx": signi(int(f2.velocity.x)) if "velocity" in f2 else 0, "dy": 0})
-			snap = Prism.step(snap, moves)
-			gs.trial_sim_snapshot = snap
-			return {"phase": snap.get("phase", ""), "winner_slot": snap.get("winner_slot", -1), "live": true}
-		"riftline_defense":
-			var actions: Array = [{"slot": 0, "fire": false, "lane": clampi(int(p1_pos.y / 180.0), 0, 3)}]
-			if f1 != null and f1.has_method("stamp_runtime_hook"):
-				## Attack ownership inferred from recent hit / attacking state when available.
-				var attacking: bool = false
-				if "state_machine" in f1 and f1.state_machine != null:
-					attacking = str(f1.state_machine.current_state).contains("attack")
-				actions[0]["fire"] = attacking
-			snap = Riftline.step(snap, actions)
-			gs.trial_sim_snapshot = snap
-			return {"wave": snap.get("wave", 0), "score": snap.get("score", 0), "echoes": (snap.get("echoes", []) as Array).size(), "live": true}
-		"echoes_gauntlet":
-			var attack: bool = false
+			var atk1: bool = false
+			var atk2: bool = false
 			if f1 != null and "state_machine" in f1 and f1.state_machine != null:
-				attack = str(f1.state_machine.current_state).contains("attack")
-			snap = Echoes.step(snap, attack)
+				atk1 = str(f1.state_machine.current_state).contains("attack")
+			if f2 != null and "state_machine" in f2 and f2.state_machine != null:
+				atk2 = str(f2.state_machine.current_state).contains("attack")
+			snap = Prism.tick_live_from_world(snap, [p1_pos, p2_pos], [atk1, atk2])
 			gs.trial_sim_snapshot = snap
-			return {
-				"phase": snap.get("phase", ""),
-				"wave_index": snap.get("wave_index", 0),
-				"canonical_cosmic_defeat": false,
-				"live": true,
-			}
+			return Prism.live_scoreboard(snap)
+		"riftline_defense":
+			var r_atk1: bool = false
+			var r_atk2: bool = false
+			if f1 != null and "state_machine" in f1 and f1.state_machine != null:
+				r_atk1 = str(f1.state_machine.current_state).contains("attack")
+			if f2 != null and "state_machine" in f2 and f2.state_machine != null:
+				r_atk2 = str(f2.state_machine.current_state).contains("attack")
+			snap = Riftline.tick_live_from_battle(snap, p1_pos, p2_pos, r_atk1, r_atk2, f2 != null)
+			gs.trial_sim_snapshot = snap
+			return Riftline.live_hud(snap)
+		"echoes_gauntlet":
+			var e_atk: bool = false
+			var e_coop: bool = false
+			if f1 != null and "state_machine" in f1 and f1.state_machine != null:
+				e_atk = str(f1.state_machine.current_state).contains("attack")
+			if f2 != null and "state_machine" in f2 and f2.state_machine != null:
+				e_coop = str(f2.state_machine.current_state).contains("attack")
+			snap = Echoes.tick_live_from_battle(snap, e_atk, e_coop)
+			gs.trial_sim_snapshot = snap
+			return Echoes.live_hud(snap)
 		"resonance_trial":
 			## Damage phase advances on timer; live hits feed apply_damage_event separately.
 			var inp: Dictionary = {}
@@ -449,29 +456,47 @@ static func tick_live_from_battle(battle: Node) -> Dictionary:
 			if str(snap.get("phase", "")) == "play":
 				snap = Unbound.simulate_play_frames(snap, 1)
 				gs.trial_sim_snapshot = snap
+				if not (snap.get("colossus_rigs", []) as Array).is_empty():
+					gs.trial_colossus_rigs = snap.get("colossus_rigs", [])
 			return {
 				"preset": gs.trial_unbound_preset,
 				"cooldown_mult": gs.trial_cooldown_mult,
 				"full_supers": gs.trial_full_supers,
 				"actors": (gs.trial_actors as Array).size(),
+				"colossus_rigs": (gs.trial_colossus_rigs as Array).size(),
 				"live": true,
 			}
 		_:
 			return {}
 
 
-static func notify_live_hit(damage: float, facing: int = 1) -> void:
-	## Player-owned Resonance hits from BattleScene HitResolver path.
+static func notify_live_hit(damage: float, facing: int = 1, lane: int = -1) -> void:
+	## Player-owned hits from BattleScene HitResolver path → mode-specific live feeds.
 	var gs := _gs()
-	if gs == null or str(gs.trial_mode_id) != "resonance_trial":
+	if gs == null or not bool(gs.trial_live_combat):
 		return
-	if not bool(gs.trial_live_combat):
-		return
+	var mode_id: String = str(gs.trial_mode_id)
 	var snap: Dictionary = gs.trial_sim_snapshot
 	if snap.is_empty():
 		return
-	snap = Derby.apply_damage_event(snap, int(ceil(damage)), facing)
-	snap["player_owned_events"] = true
+	match mode_id:
+		"resonance_trial":
+			snap = Derby.apply_damage_event(snap, int(ceil(damage)), facing)
+			snap["player_owned_events"] = true
+		"echoes_gauntlet":
+			snap = Echoes.notify_player_attack(snap, maxi(1, int(ceil(damage))))
+		"riftline_defense":
+			var use_lane: int = lane if lane >= 0 else 0
+			snap = Riftline.notify_echo_hit(snap, use_lane, maxi(50, int(ceil(damage)) * 10))
+		"convergence_unbound":
+			var rigs: Array = gs.trial_colossus_rigs
+			if not rigs.is_empty():
+				var idx: int = 0
+				rigs[idx] = Colossus.apply_hit(rigs[idx], float(gs.trial_knockback_mult), facing)
+				gs.trial_colossus_rigs = rigs
+				snap["colossus_rigs"] = rigs
+		_:
+			return
 	gs.trial_sim_snapshot = snap
 
 

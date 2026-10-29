@@ -85,6 +85,9 @@ func run() -> void:
 	check(bool(prep_f.get("applied", {}).get("overtime", false)), "flagline_ot")
 	check(bool(prep_f.get("applied", {}).get("stronghold", false)), "flagline_stronghold")
 	check(int(prep_f.get("applied", {}).get("actor_count", 0)) == 4, "flagline_four_actors")
+	check(bool(prep_f.get("applied", {}).get("multi_actor_depth", false)), "flagline_multi_actor_depth")
+	check(bool(prep_f.get("applied", {}).get("independent_cpu_fill", false)), "flagline_independent_cpu")
+	check(bool(prep_f.get("applied", {}).get("not_four_simultaneous_human_bodies", false)), "flagline_slot_honesty")
 	var art: Dictionary = Presentation.flagline_territory(1, 0)
 	check(Presentation.assert_no_human_art(art), "flagline_no_human_art")
 	## Live occupancy sync from positions is not HUD-only.
@@ -92,11 +95,14 @@ func run() -> void:
 	var occ: Dictionary = Flagline.occupancy_summary(live_fa)
 	check(int(occ.get("solar_in_core", 0)) >= 1, "live_solar_occupancy")
 	check(bool(occ.get("contested", true)) == false or int(occ.get("lunar_in_core", 0)) == 0, "live_uncontested_or_clear")
+	check(bool(occ.get("multi_actor_depth", false)), "live_multi_actor_depth")
 
 	var prep_p: Dictionary = Bridge.prepare_live_battle("prism_weave", 4, Unbound.PRESET_TOTAL, -1)
 	check(bool(prep_p.get("ok", false)), "prep_prism_ok")
 	check(bool(prep_p.get("applied", {}).get("live_shared_combat", false)), "prism_live")
 	check(bool(prep_p.get("applied", {}).get("real_movement", false)), "prism_movement")
+	check(bool(prep_p.get("applied", {}).get("attack_paint_burst", false)), "prism_attack_paint")
+	check(bool(prep_p.get("applied", {}).get("markers_beyond_color", false)), "prism_a11y")
 
 	var prep_r: Dictionary = Bridge.prepare_live_battle("riftline_defense", 1, Unbound.PRESET_TOTAL, -1)
 	check(bool(prep_r.get("ok", false)), "prep_rift_ok")
@@ -105,6 +111,7 @@ func run() -> void:
 	var prep_e: Dictionary = Bridge.prepare_live_battle("echoes_gauntlet", 1, Unbound.PRESET_TOTAL, -1)
 	check(bool(prep_e.get("ok", false)), "prep_echoes_ok")
 	check(bool(prep_e.get("applied", {}).get("real_enemies", false)), "echoes_enemies")
+	check(not bool(prep_e.get("applied", {}).get("canonical_cosmic_defeat", true)), "echoes_no_cosmic")
 
 	var gate1: Dictionary = Seats.enforce("convergence_unbound", 1, 1)
 	check(not bool(gate1.get("ok", true)), "unbound_rejects_single_seat")

@@ -165,6 +165,62 @@ static func state_hash(state: Dictionary) -> String:
 	])
 
 
+static func tick_live_from_battle(
+	state: Dictionary,
+	p1_pos: Vector2,
+	p2_pos: Vector2 = Vector2.ZERO,
+	p1_attacking: bool = false,
+	p2_attacking: bool = false,
+	p2_present: bool = false
+) -> Dictionary:
+	## Live shared combat: lane from fighter Y; fire from attack state; dual seat when present.
+	var actions: Array = [{
+		"slot": 0,
+		"fire": p1_attacking,
+		"lane": clampi(int(p1_pos.y / 180.0), 0, LANES - 1),
+	}]
+	if p2_present and state.get("players", []).size() >= 2:
+		actions.append({
+			"slot": 1,
+			"fire": p2_attacking,
+			"lane": clampi(int(p2_pos.y / 180.0), 0, LANES - 1),
+		})
+	var next: Dictionary = step(state, actions)
+	next["live_shared_combat"] = true
+	next["real_enemies"] = true
+	next["real_attacks"] = true
+	return next
+
+
+static func notify_echo_hit(state: Dictionary, lane: int, damage: int = 100) -> Dictionary:
+	## Player-owned HitResolver path can delete a Fracture Echo on the matching lane.
+	var next: Dictionary = state.duplicate(true)
+	var echoes: Array = []
+	var hit: bool = false
+	for echo in next.get("echoes", []):
+		if not hit and int(echo.get("lane", -2)) == lane:
+			hit = true
+			next["score"] = int(next.get("score", 0)) + damage
+			next["player_owned_echo_hits"] = int(next.get("player_owned_echo_hits", 0)) + 1
+			continue
+		echoes.append(echo)
+	next["echoes"] = echoes
+	return next
+
+
+static func live_hud(state: Dictionary) -> Dictionary:
+	return {
+		"wave": int(state.get("wave", 1)),
+		"score": int(state.get("score", 0)),
+		"echoes": (state.get("echoes", []) as Array).size(),
+		"projectiles": (state.get("projectiles", []) as Array).size(),
+		"player_owned_echo_hits": int(state.get("player_owned_echo_hits", 0)),
+		"fracture_echoes": bool(state.get("lore", {}).get("fracture_echoes", false)),
+		"enslaved_fighters": bool(state.get("lore", {}).get("enslaved_fighters", true)),
+		"live": true,
+	}
+
+
 static func run_seeded_smoke(seed: int = 11) -> Dictionary:
 	var s := create(seed, "ember-vale", 1)
 	for i in range(SIM_HZ * 8):

@@ -31,5 +31,17 @@ func run() -> void:
 	check(not bool(cleared.get("canonical_cosmic_defeat", true)), "no_canonical_cosmic_defeat")
 	var coop := Echoes.create(6, true)
 	check((coop.get("players", []) as Array).size() == 2, "coop_seats")
+	## Live deepen: player-owned boss hits; still never canonical cosmic defeat.
+	var live := Echoes.create(8, false)
+	live = Echoes.tick_live_from_battle(live, false)
+	live = Echoes.tick_live_from_battle(live, true)
+	if str(live.get("phase", "")) == "fight":
+		var hp0: int = int(live.get("boss", {}).get("hp", 0))
+		live = Echoes.notify_player_attack(live, 12)
+		check(int(live.get("boss", {}).get("hp", 0)) < hp0, "player_owned_boss_damage")
+		check(int(live.get("player_owned_boss_hits", 0)) >= 1, "boss_hit_count")
+	var hud := Echoes.live_hud(live)
+	check(not bool(hud.get("canonical_cosmic_defeat", true)), "hud_no_cosmic_defeat")
+	check(bool(hud.get("boss_is_simulation", false)) or str(hud.get("phase", "")) != "fight", "boss_sim_or_intro")
 	print("ECHOES_GAUNTLET_LORE ", "PASS" if failures.is_empty() else "FAIL", " checks=", checks, " failures=", failures)
 	quit(0 if failures.is_empty() else 1)

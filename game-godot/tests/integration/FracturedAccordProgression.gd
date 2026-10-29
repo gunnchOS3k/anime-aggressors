@@ -56,5 +56,20 @@ func run() -> void:
 	check(float(occ1.get("solar_capture", 0.0)) > 0.0, "solar_capture_progress")
 	check(bool(occ1.get("overtime_enabled", false)), "ot_enabled")
 	check((-2 in (occ1.get("stronghold_rooms", []) as Array)) and (2 in (occ1.get("stronghold_rooms", []) as Array)), "stronghold_rooms")
+	## Multi-actor depth beyond BattleScene's 2 fighter slots (logical 4 + independent CPU fill).
+	check(bool(live.get("multi_actor_depth", false)), "multi_actor_depth")
+	check(int(live.get("logical_actor_count", 0)) == 4, "logical_actor_count_4")
+	check(bool(occ1.get("independent_cpu_fill", false)), "independent_cpu_fill")
+	check(int(occ1.get("battle_scene_fighter_slots", 0)) == 2, "honest_two_battle_slots")
+	var multi := Flagline.create(23, 0, 4)
+	multi["config"]["bots_enabled"] = false
+	while str(multi.get("phase", "")) == "intro":
+		multi = Flagline.step(multi)
+	multi = Flagline.tick_live_multi(multi, [
+		Vector2(960, 540), Vector2(200, 540), Vector2(980, 520), Vector2(180, 560),
+	])
+	var occ_m := Flagline.occupancy_summary(multi)
+	check(int(occ_m.get("actor_count", 0)) == 4, "tick_live_multi_four")
+	check(int(occ_m.get("solar_in_core", 0)) >= 1, "multi_solar_in_core")
 	print("FRACTURED_ACCORD_PROGRESSION ", "PASS" if failures.is_empty() else "FAIL", " checks=", checks, " failures=", failures)
 	quit(0 if failures.is_empty() else 1)

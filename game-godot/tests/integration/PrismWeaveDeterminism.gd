@@ -34,5 +34,12 @@ func run() -> void:
 	for i in range(10):
 		short = Prism.step(short)
 	check(str(short.get("phase", "")) == "results", "results_on_timer")
+	## Live deepen: world positions paint + attack burst; a11y markers preserved.
+	var live := Prism.create(9, 2)
+	live = Prism.tick_live_from_world(live, [Vector2(400, 400), Vector2(1400, 700)], [true, false])
+	var board := Prism.live_scoreboard(live)
+	check(int(board.get("attack_paint_events", 0)) >= 1, "attack_paint_burst")
+	check(bool(board.get("markers_beyond_color", false)), "live_a11y_markers")
+	check(int(board.get("live_max_honest", 0)) == 4, "live_max_honest_4")
 	print("PRISM_WEAVE_DETERMINISM ", "PASS" if failures.is_empty() else "FAIL", " checks=", checks, " failures=", failures)
 	quit(0 if failures.is_empty() else 1)

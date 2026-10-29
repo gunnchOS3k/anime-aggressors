@@ -139,6 +139,72 @@ static func state_hash(state: Dictionary) -> String:
 	] + scores)
 
 
+static func world_to_tile(pos: Vector2, stage_w: float = 1920.0, stage_h: float = 1080.0) -> Vector2i:
+	var tx: int = clampi(int((pos.x / maxf(stage_w, 1.0)) * COLS), 0, COLS - 1)
+	var ty: int = clampi(int((pos.y / maxf(stage_h, 1.0)) * ROWS), 0, ROWS - 1)
+	return Vector2i(tx, ty)
+
+
+static func paint_burst(state: Dictionary, slot: int, x: int, y: int, radius: int = 1) -> void:
+	## Attack-earned paint burst — still marker-accessible, not color-only.
+	for dy in range(-radius, radius + 1):
+		for dx in range(-radius, radius + 1):
+			if absi(dx) + absi(dy) <= radius:
+				paint(state, slot, x + dx, y + dy)
+
+
+static func tick_live_from_world(
+	state: Dictionary,
+	positions: Array,
+	attacks: Array = []
+) -> Dictionary:
+	## Live shared combat: real fighter world positions paint tiles; attacks burst-paint.
+	var next: Dictionary = state.duplicate(true)
+	var fighters: Array = next.get("fighters", [])
+	## Non-empty zero moves so step skips seeded idle weave and advances timer/score.
+	var hold_moves: Array = []
+	for i in range(fighters.size()):
+		hold_moves.append({"slot": i, "dx": 0, "dy": 0})
+	for i in range(mini(positions.size(), fighters.size())):
+		var p: Variant = positions[i]
+		if typeof(p) != TYPE_VECTOR2:
+			continue
+		var tile: Vector2i = world_to_tile(p)
+		var f: Dictionary = fighters[i]
+		f["x"] = tile.x
+		f["y"] = tile.y
+		paint(next, i, tile.x, tile.y)
+		if i < attacks.size() and bool(attacks[i]):
+			paint_burst(next, i, tile.x, tile.y, 1)
+			next["attack_paint_events"] = int(next.get("attack_paint_events", 0)) + 1
+	next["fighters"] = fighters
+	next = step(next, hold_moves)
+	next["live_shared_combat"] = true
+	next["real_movement"] = true
+	next["accessibility"] = next.get("accessibility", {"markers_beyond_color": true, "high_contrast_ready": true})
+	return next
+
+
+static func live_scoreboard(state: Dictionary) -> Dictionary:
+	var scores: Array = []
+	for f in state.get("fighters", []):
+		scores.append({
+			"slot": int(f.get("slot", -1)),
+			"fighter_id": str(f.get("fighter_id", "")),
+			"marker": str(f.get("marker", "")),
+			"score": int(f.get("score", 0)),
+		})
+	return {
+		"phase": str(state.get("phase", "")),
+		"winner_slot": int(state.get("winner_slot", -1)),
+		"scores": scores,
+		"attack_paint_events": int(state.get("attack_paint_events", 0)),
+		"markers_beyond_color": bool(state.get("accessibility", {}).get("markers_beyond_color", false)),
+		"live_max_honest": 4,
+		"catalog_max_aspirational": MAX_FIGHTERS,
+	}
+
+
 static func run_to_results(seed: int = 3, fighters: int = 4) -> Dictionary:
 	var s := create(seed, fighters)
 	var guard: int = 0

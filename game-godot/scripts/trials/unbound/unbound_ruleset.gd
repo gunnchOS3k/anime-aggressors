@@ -153,6 +153,7 @@ static func simulate_play_frames(session: Dictionary, frames: int = 120) -> Dict
 	if str(next.get("phase", "")) != "play":
 		return next
 	var kb: float = float(next["rules"].get("knockback_mult", 1.0))
+	var Colossus = load("res://scripts/trials/unbound/colossus_rig.gd")
 	for i in range(frames):
 		next["frame"] = int(next.get("frame", 0)) + 1
 		var events: Array = next.get("events", [])
@@ -163,6 +164,22 @@ static func simulate_play_frames(session: Dictionary, frames: int = 120) -> Dict
 				"knockback_mult": kb,
 				"full_supers": next["rules"].get("full_supers", true),
 			})
+		## Colossus / Kaiju rigs tick as controllable spectacle actors during play.
+		if Colossus != null and bool(next["rules"].get("colossus_enabled", false)):
+			var rigs: Array = next.get("colossus_rigs", [])
+			if not rigs.is_empty():
+				next["colossus_rigs"] = Colossus.step_rigs(rigs, int(next["frame"]), int(next.get("seed", 1)))
+				if int(next["frame"]) % 45 == 0 and not rigs.is_empty():
+					var hit_idx: int = int(next["frame"]) % rigs.size()
+					var updated: Array = next["colossus_rigs"]
+					updated[hit_idx] = Colossus.apply_hit(updated[hit_idx], kb, 1 if hit_idx % 2 == 0 else -1)
+					next["colossus_rigs"] = updated
+					events.append({
+						"type": "colossus_hit_scaffold",
+						"frame": next["frame"],
+						"rig_id": updated[hit_idx].get("rig_id", ""),
+						"avatar_ko_is_true_defeat": false,
+					})
 		next["events"] = events
 	return next
 

@@ -61,6 +61,15 @@ static func create(seed: int = 1, start_room: int = 0, connected_humans: int = 2
 		"battle_scene_fighter_slots": 2,
 		"stocks": [3, 3, 3, 3],
 		"in_core": [false, false, false, false],
+		## Logical 2v2 actor world positions (independent of BattleScene's 2 fighter slots).
+		"actor_positions": [
+			{"x": 720.0, "y": 540.0},
+			{"x": 1200.0, "y": 540.0},
+			{"x": 640.0, "y": 620.0},
+			{"x": 1280.0, "y": 620.0},
+		],
+		"multi_actor_depth": true,
+		"logical_actor_count": 4,
 		"config": {
 			"capture_to_win": 100.0,
 			"capture_rate": 12.0,
@@ -70,11 +79,18 @@ static func create(seed: int = 1, start_room: int = 0, connected_humans: int = 2
 			"team_wipe_wins_room": false,
 			"bots_enabled": true,
 			"twovstwo_plus_capture": true,
+			"independent_cpu_fill": true,
 		},
 		"yin_yang_not_ordinary_captains": true,
 		"display_alias": DISPLAY_ALIAS.duplicate(),
 		"art_territory_name": str(ART_TERRITORY_NAMES.get(clampi(start_room, -2, 2), "")),
 		"result_kind": "SIMULATION",
+		"honesty": {
+			"battle_scene_fighter_slots": 2,
+			"logical_actors": 4,
+			"extra_seats_are_cpu_or_lobby": true,
+			"not_four_simultaneous_human_bodies": true,
+		},
 	}
 
 
@@ -317,7 +333,106 @@ static func occupancy_summary(state: Dictionary) -> Dictionary:
 		"actor_count": actor_slots(state).size(),
 		"connected_humans": int(state.get("connected_humans", 0)),
 		"battle_scene_fighter_slots": int(state.get("battle_scene_fighter_slots", 2)),
+		"multi_actor_depth": bool(state.get("multi_actor_depth", false)),
+		"logical_actor_count": int(state.get("logical_actor_count", actor_slots(state).size())),
+		"independent_cpu_fill": bool(state.get("config", {}).get("independent_cpu_fill", false)),
+		"actor_positions": state.get("actor_positions", []),
 	}
+
+
+static func _set_actor_position(state: Dictionary, slot: int, pos: Vector2) -> void:
+	var arr: Array = state.get("actor_positions", [])
+	while arr.size() < 4:
+		arr.append({"x": 960.0, "y": 540.0})
+	if slot < 0 or slot >= arr.size():
+		return
+	arr[slot] = {"x": pos.x, "y": pos.y}
+	state["actor_positions"] = arr
+
+
+static func _teammate_human_position(state: Dictionary, bot_slot: int) -> Vector2:
+	## Prefer the first human on the same team as an anchor (independent fill, not hard mirror).
+	var slots: Array = state.get("team_slots", [])
+	var positions: Array = state.get("actor_positions", [])
+	if bot_slot < 0 or bot_slot >= slots.size():
+		return Vector2(960, 540)
+	var team: String = str(slots[bot_slot].get("team_id", ""))
+	for i in range(slots.size()):
+		if i == bot_slot:
+			continue
+		if bool(slots[i].get("is_human", false)) and str(slots[i].get("team_id", "")) == team:
+			var p: Dictionary = positions[i] if i < positions.size() else {}
+			return Vector2(float(p.get("x", 960.0)), float(p.get("y", 540.0)))
+	return Vector2(960, 540)
+
+
+static func _advance_independent_cpu_fill(
+	state: Dictionary,
+	core_center: Vector2,
+	core_radius: float
+) -> void:
+	## CPU seats are independent actors beyond BattleScene's 2 slots — not hard mirrors.
+	## Soft-anchor to teammate human so occupancy stays honest under 2-body live sync.
+	if not bool(state.get("config", {}).get("independent_cpu_fill", true)):
+		return
+	var rng: Callable = Authority.mulberry32(int(state.get("seed", 1)) * 7919 + int(state.get("frame", 0)))
+	var slots: Array = state.get("team_slots", [])
+	var positions: Array = state.get("actor_positions", [])
+	for i in range(mini(slots.size(), positions.size())):
+		if not bool(slots[i].get("is_bot", false)):
+			continue
+		var cur: Dictionary = positions[i]
+		var pos := Vector2(float(cur.get("x", 960.0)), float(cur.get("y", 540.0)))
+		var anchor: Vector2 = _teammate_human_position(state, i)
+		var cap: Dictionary = state.get("capture", {})
+		var solar_cap: float = float(cap.get("solar", 0.0))
+		var lunar_cap: float = float(cap.get("lunar", 0.0))
+		var team: String = str(slots[i].get("team_id", ""))
+		var press_core: bool = true
+		if team == "solar":
+			press_core = solar_cap <= lunar_cap + 8.0 or rng.call() > 0.4
+		else:
+			press_core = lunar_cap <= solar_cap + 8.0 or rng.call() > 0.4
+		## Blend teammate anchor (keeps team occupancy coherent) with core pressure (depth).
+		var to_anchor: Vector2 = (anchor - pos) * 0.35
+		var toward_core: Vector2 = (core_center - pos).normalized() if pos.distance_to(core_center) > 1.0 else Vector2.ZERO
+		var step_px: float = 14.0 + float(rng.call()) * 18.0
+		pos += to_anchor
+		if press_core and anchor.distance_to(core_center) <= core_radius * 1.35:
+			pos += toward_core * step_px
+		elif not press_core:
+			pos -= toward_core * step_px * 0.45
+			pos.x += (float(rng.call()) - 0.5) * 20.0
+		else:
+			## Human teammate outside core → bot loiters near teammate (no false contested).
+			pos += (anchor - pos) * 0.25
+		positions[i] = {"x": pos.x, "y": pos.y}
+		set_presence(state, i, pos.distance_to(core_center) <= core_radius)
+	state["actor_positions"] = positions
+
+
+static func sync_live_presence_from_actor_positions(
+	state: Dictionary,
+	positions: Array,
+	core_center: Vector2 = Vector2(960, 540),
+	core_radius: float = 160.0
+) -> Dictionary:
+	## Accept up to 4 world positions for logical 2v2 actors.
+	## Missing slots keep prior positions / independent CPU fill.
+	var next: Dictionary = state.duplicate(true)
+	var count: int = mini(positions.size(), 4)
+	for i in range(count):
+		var p: Variant = positions[i]
+		if typeof(p) != TYPE_VECTOR2:
+			continue
+		_set_actor_position(next, i, p)
+		set_presence(next, i, p.distance_to(core_center) <= core_radius)
+	## Fill remaining bot seats with independent multi-actor AI (beyond BattleScene 2 slots).
+	_advance_independent_cpu_fill(next, core_center, core_radius)
+	next["live_actor_sync"] = true
+	next["multi_actor_depth"] = true
+	next["core_center"] = {"x": core_center.x, "y": core_center.y, "radius": core_radius}
+	return next
 
 
 static func sync_live_presence_from_positions(
@@ -327,25 +442,28 @@ static func sync_live_presence_from_positions(
 	core_center: Vector2 = Vector2(960, 540),
 	core_radius: float = 160.0
 ) -> Dictionary:
-	## Map 2 BattleScene fighters onto 4 logical 2v2 actors (human seats + CPU fill).
-	## P1 → solar slot 0; P2 → lunar slot 1; CPU slots 2/3 mirror teammates when bots_enabled.
-	var next: Dictionary = state.duplicate(true)
-	var p1_in: bool = p1_pos.distance_to(core_center) <= core_radius
-	var p2_in: bool = p2_pos.distance_to(core_center) <= core_radius
-	set_presence(next, 0, p1_in)
-	set_presence(next, 1, p2_in)
-	if bool(next.get("config", {}).get("bots_enabled", true)):
-		## Teammate CPU fill mirrors human presence for 2v2 occupancy honesty.
-		set_presence(next, 2, p1_in)
-		set_presence(next, 3, p2_in)
-	next["live_actor_sync"] = true
-	next["core_center"] = {"x": core_center.x, "y": core_center.y, "radius": core_radius}
-	return next
+	## Map 2 BattleScene fighters onto logical slots 0/1; slots 2/3 run independent CPU fill.
+	## Honest: battle_scene_fighter_slots remains 2 — extra actors are CPU/lobby depth, not 4 humans.
+	return sync_live_presence_from_actor_positions(
+		state, [p1_pos, p2_pos], core_center, core_radius
+	)
 
 
 static func tick_live(state: Dictionary, p1_pos: Vector2, p2_pos: Vector2, core_center: Vector2 = Vector2(960, 540), core_radius: float = 160.0) -> Dictionary:
-	## One live frame: sync real actor occupancy → contested capture → OT/stronghold rules.
+	## One live frame: sync multi-actor occupancy → contested capture → OT/stronghold rules.
 	var next: Dictionary = sync_live_presence_from_positions(state, p1_pos, p2_pos, core_center, core_radius)
-	## Disable RNG bot drift while live positions own occupancy.
+	## Disable legacy RNG bot drift; independent CPU fill owns bot occupancy.
+	next["config"]["bots_enabled"] = false
+	return step(next)
+
+
+static func tick_live_multi(
+	state: Dictionary,
+	positions: Array,
+	core_center: Vector2 = Vector2(960, 540),
+	core_radius: float = 160.0
+) -> Dictionary:
+	## Live tick with explicit up-to-4 actor positions (PartyLink lobby / future multi-body).
+	var next: Dictionary = sync_live_presence_from_actor_positions(state, positions, core_center, core_radius)
 	next["config"]["bots_enabled"] = false
 	return step(next)

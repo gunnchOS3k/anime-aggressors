@@ -122,6 +122,46 @@ static func state_hash(state: Dictionary) -> String:
 	])
 
 
+static func notify_player_attack(state: Dictionary, damage: int = 8) -> Dictionary:
+	## Live HitResolver / attack ownership feeds boss damage — still simulation bosses only.
+	var next: Dictionary = state.duplicate(true)
+	if str(next.get("phase", "")) != "fight":
+		return next
+	deal_damage(next, maxi(1, damage))
+	next["player_owned_boss_hits"] = int(next.get("player_owned_boss_hits", 0)) + 1
+	next["canonical_cosmic_defeat"] = false
+	next["live_shared_combat"] = true
+	return next
+
+
+static func tick_live_from_battle(state: Dictionary, attacking: bool, coop_attacking: bool = false) -> Dictionary:
+	## Advance gauntlet from live BattleScene attack states; bosses remain simulations.
+	var next: Dictionary = step(state, attacking)
+	if coop_attacking and bool(next.get("coop", false)):
+		next = notify_player_attack(next, 5)
+	elif attacking:
+		next["live_attack_ticks"] = int(next.get("live_attack_ticks", 0)) + 1
+	next["canonical_cosmic_defeat"] = false
+	next["live_shared_combat"] = true
+	next["real_enemies"] = true
+	return next
+
+
+static func live_hud(state: Dictionary) -> Dictionary:
+	var boss: Dictionary = state.get("boss", {})
+	return {
+		"phase": str(state.get("phase", "")),
+		"wave_index": int(state.get("wave_index", 0)),
+		"boss_id": str(boss.get("id", "")),
+		"boss_hp": int(boss.get("hp", 0)),
+		"boss_is_simulation": bool(boss.get("is_simulation", true)),
+		"canonical_cosmic_defeat": false,
+		"player_owned_boss_hits": int(state.get("player_owned_boss_hits", 0)),
+		"echo_adds": (state.get("echo_adds", []) as Array).size(),
+		"live": true,
+	}
+
+
 static func run_clear_smoke(seed: int = 5, coop: bool = false) -> Dictionary:
 	var s := create(seed, coop)
 	var guard: int = 0
