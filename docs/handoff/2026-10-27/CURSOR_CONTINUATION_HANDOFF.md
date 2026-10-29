@@ -137,7 +137,7 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - RC2_READY / V1_0_0_RELEASE_AUTHORIZED / HUMAN_ART_APPROVED remain false.
 
 - Engineering tip: `b5de4f2a420cd05ade1bdbdf7793c54cb8f7a16a`
-- Local tip ahead of remote (FF-safe): `5344678cd61e01aa8189555f1f93c7dd204c4f3f`
+- Local tip ahead of remote (FF-safe): `0e9ecaa09530e0cefc8d0f743f611336ce6eb42e`
 - Last verified remote before this shift: `107e6b4a9dfb8c15067f180f7056f7f078e21800`
 - Push status: tip ahead pending FF push auth (ConnectScm connected; `gh`/`git push` still unauthenticated in this agent shell). No force-push.
 - Prior green CI at parent tip 107e6b4a: https://github.com/gunnchOS3k/anime-aggressors/actions/runs/40806830477
