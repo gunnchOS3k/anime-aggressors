@@ -136,3 +136,5 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Evidence: `artifacts/cursor_continuation/SHIFT_BATCH3_PRESENTATION_LAN_EVIDENCE.json`, `MULTIPROCESS_LAN_RESIM_EVIDENCE.json`
 - RC2_READY / V1_0_0_RELEASE_AUTHORIZED / HUMAN_ART_APPROVED remain false.
 
+- Engineering tip: 
+- Push: fast-forward only (no force)
