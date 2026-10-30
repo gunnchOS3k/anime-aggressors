@@ -1,0 +1,35 @@
+{
+  "suite": "aa_rtm_009_a11y_plus_aa_rtm_007_rollback_honesty",
+  "temporary_owner": "cursor",
+  "branch": "cursor/continuation-v1-batch4-stages-20261030",
+  "parent_tip_preserved": "433fe112ea6bf6434d9f5595c7b415fbf69015fd",
+  "godot_version": "4.7.1.stable.official",
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false,
+  "HUMAN_ART_APPROVED": false,
+  "CURSOR_COMPLETE": false,
+  "SHIPPING_ROLLBACK_ENABLED": false,
+  "device_matrix_pass": false,
+  "owner_a11y_playtest": false,
+  "WCAG_product_audit": false,
+  "HitResolver_untouched": true,
+  "aa_rtm_009": {
+    "reduce_motion": true,
+    "focus_neighbors": true,
+    "sr_labels": true,
+    "surfaces": ["trials_journey", "rosamere_hud", "story_campaign"]
+  },
+  "aa_rtm_007": {
+    "shipping_rollback_honesty": true,
+    "resim_not_commercial_rollback": true
+  },
+  "tests": {
+    "AccessibilityDigitalPolish": {"PASS": true, "checks": 27},
+    "ShippingRollbackHonesty": {"PASS": true, "checks": 9},
+    "RosamerePresentationHudTrainingVersus": {"PASS": true, "checks": 22},
+    "FlatCombatReplay": {"PASS": true, "checks": 24}
+  },
+  "published_remote_tip_before": "e93e65b4b08e635f58e3ce2e327af9f7162dfd3a",
+  "push_status": "pending",
+  "PASS": true
+}

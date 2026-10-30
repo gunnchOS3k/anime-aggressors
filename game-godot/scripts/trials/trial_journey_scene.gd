@@ -9,6 +9,7 @@ const Bridge = preload("res://scripts/trials/shared_combat_bridge.gd")
 const Presentation = preload("res://scripts/trials/mode_presentation.gd")
 const Journey = preload("res://scripts/trials/trial_playable_journey.gd")
 const Seats = preload("res://scripts/trials/partylink_seat_enforcement.gd")
+const A11y = preload("res://scripts/ui/accessibility_surface.gd")
 const Derby = preload("res://scripts/trials/derby/resonance_trial_sim.gd")
 const ResonanceDummy = preload("res://scripts/trials/derby/resonance_dummy_actor.gd")
 const Flagline = preload("res://scripts/trials/flagline/fractured_accord_sim.gd")
@@ -35,7 +36,26 @@ func _ready() -> void:
 		var entry: Dictionary = Authority.mode_entry(mode_id)
 		title_label.text = str(entry.get("display_name", mode_id))
 	_build_ui()
+	_apply_digital_a11y()
 	_enter_select()
+
+
+func _apply_digital_a11y() -> Dictionary:
+	## AA-RTM-009 digital polish — reduce-motion/focus/SR labels. Not device matrix pass.
+	var contract: Dictionary = A11y.trials_journey_a11y_contract(mode_id)
+	var polished: Dictionary = A11y.polish_menu_surface(self, "trials_journey:" + mode_id, {
+		"AdvanceBtn": "Advance Trials journey",
+		"PlayBtn": "Run playable simulation",
+		"LiveBattleBtn": "Enter live shared combat",
+		"RetryBtn": "Retry trial",
+		"SaveBtn": "Save local Trials record",
+		"BackBtn": "Back to Trials hub",
+	})
+	if _status != null and bool(contract.get("reduce_motion", false)):
+		_status.text = str(_status.text) + "\nA11y: reduce_motion ON · digital polish ≠ device matrix pass"
+	set_meta("trials_a11y_contract", contract)
+	set_meta("trials_a11y_polish", polished)
+	return polished
 
 
 func _build_ui() -> void:

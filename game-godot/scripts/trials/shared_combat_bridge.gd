@@ -572,6 +572,9 @@ static func seal_live_resonance_result() -> Dictionary:
 	var owned: bool = bool(snap.get("player_owned_events", false))
 	var sealed: Dictionary = Derby.seal_real_player(snap, owned)
 	sealed = Ownership.seal_trace(sealed, str(sealed.get("result_kind", "SIMULATION")))
+	## AA-RTM-007 honesty — live seals never enable shipping rollback.
+	sealed["SHIPPING_ROLLBACK_ENABLED"] = false
+	sealed["feeds_ranked_mmr"] = false
 	gs.trial_sim_snapshot = sealed
 	return sealed
 

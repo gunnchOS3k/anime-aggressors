@@ -4,6 +4,7 @@ class_name RosamerePresentationHud
 ## Versus / training surfaces. ≠ HUMAN_ART. Does not touch HitResolver / Codex combat.
 
 const Presentation = preload("res://scripts/visual/rosamere_form_presentation.gd")
+const A11y = preload("res://scripts/ui/accessibility_surface.gd")
 
 const HUD_NAME := "RosamerePresentationCardHud"
 const SLOT_META := "rosamere_presentation_hud_slot"
@@ -87,11 +88,20 @@ static func mount_on_hud(hud: Node, fighters: Array, mode: String = "") -> Dicti
 		label.set_meta(SLOT_META, slot)
 		label.text = build_card_text(fighter, mode)
 		label.visible = true
+		var form_id := resolve_form_id(fighter)
+		A11y.label_control(
+			label,
+			"Rosamere presentation card %s" % form_id,
+			"Three-form cosmology honesty. Presentation-only. Not HUMAN_ART. Digital a11y label — not device matrix pass."
+		)
+		A11y.apply_reduce_motion_to_label(label)
 		mounted.append({
 			"slot": slot,
-			"form_id": resolve_form_id(fighter),
+			"form_id": form_id,
 			"label_name": name,
 			"text": label.text,
+			"a11y_sr_name": str(label.get_meta(A11y.META_SR_NAME, "")),
+			"reduce_motion": A11y.reduce_motion_active(),
 		})
 	## Hide stale cards when Rosamere leaves the matchup.
 	for child in hud.get_children():
@@ -114,6 +124,8 @@ static func mount_on_hud(hud: Node, fighters: Array, mode: String = "") -> Dicti
 		"HitResolver_untouched": true,
 		"Codex_combat_data_untouched": true,
 		"presentation_only": true,
+		"reduce_motion": A11y.reduce_motion_active(),
+		"device_matrix_pass": false,
 		"mode": mode,
 	}
 

@@ -371,6 +371,8 @@ static func seal_real_player(state: Dictionary, player_owned: bool) -> Dictionar
 		s["earned_personal_best"] = true
 		s["player_owned_events"] = true
 		s["honesty"] = "REAL_PLAYER — local Trials receipt from player-owned combat events"
+		s["SHIPPING_ROLLBACK_ENABLED"] = false
+		s["feeds_ranked_mmr"] = false
 	else:
 		return seal_simulation(s)
 	return s

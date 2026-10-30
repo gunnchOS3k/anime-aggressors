@@ -3,6 +3,7 @@ extends "res://scripts/ui/console_menu_base.gd"
 signal _scene_settled
 
 const _RosamerePresentation = preload("res://scripts/visual/rosamere_form_presentation.gd")
+const _A11y = preload("res://scripts/ui/accessibility_surface.gd")
 
 var _status: Label
 var _body: Label
@@ -29,7 +30,16 @@ func _ready() -> void:
 	GameState.mode = "versus"
 	_build_ui()
 	_refresh()
+	_apply_digital_a11y()
 	_action.grab_focus()
+
+
+func _apply_digital_a11y() -> Dictionary:
+	## AA-RTM-009 digital Story surface polish — not owner a11y device matrix.
+	return _A11y.polish_menu_surface(self, "story_campaign", {
+		"RoutePicker": "Story route picker",
+		"RosamereStoryPresentationHook": "Rosamere Story presentation honesty",
+	})
 
 
 func _build_ui() -> void:
@@ -196,6 +206,12 @@ func _refresh_rosamere_story_presentation(node: Dictionary) -> void:
 	]
 	if str(gray.get("presentation_line", "")) != "":
 		_rosamere_hook_label.text += "\n" + str(gray.get("presentation_line", ""))
+	_A11y.label_control(
+		_rosamere_hook_label,
+		"Rosamere Story presentation honesty",
+		"Three-form cosmology stub. Digital SR label — not device matrix pass."
+	)
+	_A11y.apply_reduce_motion_to_label(_rosamere_hook_label)
 
 
 func _on_new_game() -> void:

@@ -220,3 +220,14 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Local Godot 4.7.1: RosamerePresentationHudTrainingVersus PASS (22), RosamereCosmologyHonestyPresentation PASS (73), TrialsPartyLinkSeats PASS (30), TrialsPlayableJourneyLifecycle PASS (110), FlatCombatReplay PASS (24)
 - Evidence: `artifacts/cursor_continuation/ROSAMERE_HUD_PARTYLINK_POLISH_EVIDENCE.json`
 - Flags remain false
+
+
+## Shift — AA-RTM-009 a11y digital polish + AA-RTM-007 rollback honesty (2026-10-30)
+
+- Tip parent preserved: `433fe112`
+- `accessibility_surface.gd`: reduce_motion / focus neighbors / SR+tooltip labels on Trials journey, Rosamere HUD, Story campaign — digital only; device_matrix_pass=false; WCAG audit not claimed
+- `shipping_rollback_honesty.gd` + live Resonance seal declares `SHIPPING_ROLLBACK_ENABLED=false`
+- Local Godot 4.7.1: AccessibilityDigitalPolish PASS (27), ShippingRollbackHonesty PASS (9), RosamerePresentationHudTrainingVersus PASS (22), FlatCombatReplay PASS (24)
+- Evidence: `artifacts/cursor_continuation/A11Y_ROLLBACK_DIGITAL_POLISH_EVIDENCE.json`
+- Codex HitResolver untouched
+- Flags remain false

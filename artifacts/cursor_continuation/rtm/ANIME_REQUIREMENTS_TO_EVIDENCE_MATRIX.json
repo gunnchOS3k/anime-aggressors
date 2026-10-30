@@ -259,14 +259,16 @@
       ],
       "tests": [
         "game-godot/tests/integration/PrismWeaveDeterminism.gd",
-        "game-godot/tests/integration/ResonanceTrialDeterminism.gd"
+        "game-godot/tests/integration/ResonanceTrialDeterminism.gd",
+        "game-godot/tests/integration/ShippingRollbackHonesty.gd"
       ],
       "automated_evidence": [
         "artifacts/cursor_continuation/PINK_BLOOM_SYSTEMS_DETERMINISM.json",
         "artifacts/cursor_continuation/FLAT_COMBAT_REPLAY.json",
         "artifacts/cursor_continuation/DELAYED_INPUT_SNAPSHOT_RESIM.json",
         "artifacts/cursor_continuation/BODY_VERTICAL_REPLAY.json",
-        "docs/ROLLBACK_DESIGN.md"
+        "docs/ROLLBACK_DESIGN.md",
+        "artifacts/cursor_continuation/a11y_digital_polish_verify/SHIPPING_ROLLBACK_HONESTY.json"
       ],
       "native_physical": {
         "status": "not_run",
@@ -279,10 +281,10 @@
         "CURSOR_COMPLETE blocked on shipping rollback remaining false by design"
       ],
       "severity": "high",
-      "sha": "50f044a07d3210e2b94fc4362403c86fc3ac9053",
+      "sha": "433fe112ea6bf6434d9f5595c7b415fbf69015fd",
       "independent_review_status": "not_started",
       "cursor_complete_status": "in_progress",
-      "notes": "SHIPPING_ROLLBACK_ENABLED=false everywhere in Trials evidence; resim evidence \u2260 commercial rollback ship"
+      "notes": "ShippingRollbackHonesty + live seal declares SHIPPING_ROLLBACK_ENABLED=false; resim \u2260 commercial rollback ship"
     },
     {
       "req_id": "AA-RTM-008",
@@ -331,15 +333,18 @@
       "tests": [
         "game-godot/scripts/trials/prism/prism_weave_sim.gd",
         "game-godot/tests/v1_closure/PerfectGuardAccessibility.gd",
-        "game-godot/scripts/trials/unbound/colossus_rig.gd"
+        "game-godot/scripts/trials/unbound/colossus_rig.gd",
+        "game-godot/tests/integration/AccessibilityDigitalPolish.gd"
       ],
       "automated_evidence": [
-        "docs/DESIGN_ACCESSIBILITY_AND_DEPTH.md"
+        "docs/DESIGN_ACCESSIBILITY_AND_DEPTH.md",
+        "artifacts/cursor_continuation/a11y_digital_polish_verify/ACCESSIBILITY_DIGITAL_POLISH.json",
+        "artifacts/cursor_continuation/A11Y_ROLLBACK_DIGITAL_POLISH_EVIDENCE.json"
       ],
       "native_physical": {
         "status": "not_run",
         "platforms": [],
-        "notes": "Headless/native suite \u2260 device physical acceptance"
+        "notes": "Headless/native suite \u2260 device physical acceptance; digital polish \u2260 device matrix pass"
       },
       "art_status": "not_applicable",
       "limitations": [
@@ -347,10 +352,10 @@
         "Screen reader / remapping device pass"
       ],
       "severity": "high",
-      "sha": "50f044a07d3210e2b94fc4362403c86fc3ac9053",
+      "sha": "433fe112ea6bf6434d9f5595c7b415fbf69015fd",
       "independent_review_status": "not_started",
       "cursor_complete_status": "in_progress",
-      "notes": "Markers / reduce-motion flags present; not a full WCAG product audit"
+      "notes": "Digital reduce_motion/focus/SR labels on Trials/Rosamere HUD/Story; not WCAG product audit / device matrix"
     },
     {
       "req_id": "AA-RTM-010",
