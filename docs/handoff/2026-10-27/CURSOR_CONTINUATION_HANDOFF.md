@@ -186,7 +186,7 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 ## Shift — Story earned-prefix + Rosamere Story presentation + Trials ownership traces (2026-10-30)
 
 - Tip parent preserved: `ddba4c48`
-- Engineering tip: `1e8338dc` · local tip: `044cc547`
+- Engineering tip: `1e8338dc` · local tip: `f9a1c750`
 - AA-RTM-002: `StoryEarnedPrefix` + `StoryEarnedPrefixDialogueAuthority` — 7 Kaia STOCK_WIN receipts via bound BattleScene producer (closed countdown), then durable `kaia-windrow:accord` after authenticated reload; staged fixture ≠ owner sign-off
 - Rosamere: Story hooks + choreography stubs in presentation production JSON; StoryCampaignScene pink-revelation surface; HitResolver/rollback untouched; choreography ≠ HUMAN_ART
 - Trials: `trial_real_player_ownership.gd` digital ownership traces on `notify_live_hit` / seal; no physical device invention
