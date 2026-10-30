@@ -225,9 +225,22 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 ## Shift — AA-RTM-009 a11y digital polish + AA-RTM-007 rollback honesty (2026-10-30)
 
 - Tip parent preserved: `433fe112`
+- Engineering tip: `7c4af3ab969a637427a7bb5ba7550ad28c36bc39`
 - `accessibility_surface.gd`: reduce_motion / focus neighbors / SR+tooltip labels on Trials journey, Rosamere HUD, Story campaign — digital only; device_matrix_pass=false; WCAG audit not claimed
 - `shipping_rollback_honesty.gd` + live Resonance seal declares `SHIPPING_ROLLBACK_ENABLED=false`
 - Local Godot 4.7.1: AccessibilityDigitalPolish PASS (27), ShippingRollbackHonesty PASS (9), RosamerePresentationHudTrainingVersus PASS (22), FlatCombatReplay PASS (24)
 - Evidence: `artifacts/cursor_continuation/A11Y_ROLLBACK_DIGITAL_POLISH_EVIDENCE.json`
 - Codex HitResolver untouched
+- Push blocked: HTTPS Device not configured; SSH Permission denied (publickey); gh not logged in. Remote remains `e93e65b4`. No ConnectScm re-prompt; no force.
+- Flags remain false
+
+
+## Shift — AA-RTM-006 hitbox integrity honesty (2026-10-30)
+
+- Tip parent preserved: `7c4af3ab`
+- `hitbox_integrity_honesty.gd` + `HitboxIntegrityHonesty` — HitResolver owns `damage_ratio` once; Trials bridge scales knockback only; Colossus scale-aware capsule; presentation card on `prepare_live_battle`
+- Codex HitResolver / combat data not rewritten; HUMAN_ART hitbox review + roster frame-data audit still open; device_matrix_pass=false
+- Local Godot 4.7.1: HitboxIntegrityHonesty PASS (41), TrialsHitResolverDamageRatio PASS (16), ColossusActorCollision PASS (41), FlatCombatReplay PASS (24)
+- Evidence: `artifacts/cursor_continuation/HITBOX_INTEGRITY_HONESTY_EVIDENCE.json`
+- Push blocked same as a11y tip (HTTPS Device / SSH pubkey / gh). Remote remains `e93e65b4`.
 - Flags remain false

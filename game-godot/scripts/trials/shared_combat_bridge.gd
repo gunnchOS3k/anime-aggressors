@@ -105,6 +105,10 @@ static func prepare_live_battle(mode_id: String, seats: int = 2, unbound_preset:
 			presentation = Presentation.survival_echoes(gs.match_seed)
 		_:
 			applied = {"note": "unknown_mode"}
+	var HitboxHonesty = load("res://scripts/rc/hitbox_integrity_honesty.gd")
+	var hitbox_card: Dictionary = {}
+	if HitboxHonesty != null:
+		hitbox_card = HitboxHonesty.presentation_honesty_card(mode_id)
 	gs.trial_overlay_state = {
 		"mode_id": mode_id,
 		"presentation": presentation,
@@ -113,6 +117,8 @@ static func prepare_live_battle(mode_id: String, seats: int = 2, unbound_preset:
 		"feeds_ranked_mmr": false,
 		"SHIPPING_ROLLBACK_ENABLED": false,
 		"HUMAN_ART_APPROVED": false,
+		"hitbox_integrity": hitbox_card,
+		"damage_ratio_owner": "HitResolver",
 	}
 	return {
 		"ok": true,
@@ -123,6 +129,8 @@ static func prepare_live_battle(mode_id: String, seats: int = 2, unbound_preset:
 		"presentation": presentation,
 		"feeds_ranked_mmr": false,
 		"SHIPPING_ROLLBACK_ENABLED": false,
+		"hitbox_integrity": hitbox_card,
+		"damage_ratio_owner": "HitResolver",
 	}
 
 

@@ -229,9 +229,14 @@
         "game-godot/scripts/trials/shared_combat_bridge.gd",
         "game-godot/tests/integration/TrialsHitResolverDamageRatio.gd",
         "game-godot/scripts/trials/unbound/colossus_rig.gd",
-        "game-godot/scripts/trials/unbound/colossus_actor.gd"
+        "game-godot/scripts/trials/unbound/colossus_actor.gd",
+        "game-godot/tests/integration/HitboxIntegrityHonesty.gd",
+        "game-godot/scripts/rc/hitbox_integrity_honesty.gd"
       ],
-      "automated_evidence": [],
+      "automated_evidence": [
+        "artifacts/cursor_continuation/hitbox_integrity_verify/HITBOX_INTEGRITY_HONESTY.json",
+        "artifacts/cursor_continuation/HITBOX_INTEGRITY_HONESTY_EVIDENCE.json"
+      ],
       "native_physical": {
         "status": "not_run",
         "platforms": [],
@@ -243,10 +248,10 @@
         "HUMAN_ART hitbox review"
       ],
       "severity": "high",
-      "sha": "50f044a07d3210e2b94fc4362403c86fc3ac9053",
+      "sha": "7c4af3ab969a637427a7bb5ba7550ad28c36bc39",
       "independent_review_status": "not_started",
       "cursor_complete_status": "in_progress",
-      "notes": "HitResolver owns damage_ratio; ColossusActor scale-aware capsule collision (not final hurtbox art)"
+      "notes": "Digital honesty card on prepare_live_battle; HitResolver owns damage_ratio once; Trials KB overlay only; Colossus scale-aware capsule; Codex untouched; HUMAN_ART/roster audit still open"
     },
     {
       "req_id": "AA-RTM-007",
@@ -281,7 +286,7 @@
         "CURSOR_COMPLETE blocked on shipping rollback remaining false by design"
       ],
       "severity": "high",
-      "sha": "433fe112ea6bf6434d9f5595c7b415fbf69015fd",
+      "sha": "7c4af3ab969a637427a7bb5ba7550ad28c36bc39",
       "independent_review_status": "not_started",
       "cursor_complete_status": "in_progress",
       "notes": "ShippingRollbackHonesty + live seal declares SHIPPING_ROLLBACK_ENABLED=false; resim \u2260 commercial rollback ship"
@@ -352,7 +357,7 @@
         "Screen reader / remapping device pass"
       ],
       "severity": "high",
-      "sha": "433fe112ea6bf6434d9f5595c7b415fbf69015fd",
+      "sha": "7c4af3ab969a637427a7bb5ba7550ad28c36bc39",
       "independent_review_status": "not_started",
       "cursor_complete_status": "in_progress",
       "notes": "Digital reduce_motion/focus/SR labels on Trials/Rosamere HUD/Story; not WCAG product audit / device matrix"

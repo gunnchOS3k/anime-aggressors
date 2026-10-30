@@ -1,0 +1,32 @@
+{
+  "suite": "aa_rtm_006_hitbox_integrity_honesty",
+  "temporary_owner": "cursor",
+  "branch": "cursor/continuation-v1-batch4-stages-20261030",
+  "parent_tip_preserved": "7c4af3ab969a637427a7bb5ba7550ad28c36bc39",
+  "a11y_tip": "7c4af3ab969a637427a7bb5ba7550ad28c36bc39",
+  "godot_version": "4.7.1.stable.official",
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false,
+  "HUMAN_ART_APPROVED": false,
+  "CURSOR_COMPLETE": false,
+  "SHIPPING_ROLLBACK_ENABLED": false,
+  "device_matrix_pass": false,
+  "roster_frame_data_owner_audit": false,
+  "HitResolver_untouched": true,
+  "Codex_combat_data_untouched": true,
+  "aa_rtm_006": {
+    "damage_ratio_owner": "HitResolver",
+    "knockback_scaled_once_in_trials_overlay": true,
+    "colossus_scale_aware_capsule": true,
+    "presentation_honesty_card_on_prepare": true
+  },
+  "tests": {
+    "HitboxIntegrityHonesty": {"PASS": true, "checks": 41},
+    "TrialsHitResolverDamageRatio": {"PASS": true, "checks": 16},
+    "ColossusActorCollision": {"PASS": true, "checks": 41},
+    "FlatCombatReplay": {"PASS": true, "checks": 24}
+  },
+  "published_remote_tip_before": "e93e65b4b08e635f58e3ce2e327af9f7162dfd3a",
+  "push_status": "blocked_https_device_not_configured_and_ssh_permission_denied",
+  "PASS": true
+}
