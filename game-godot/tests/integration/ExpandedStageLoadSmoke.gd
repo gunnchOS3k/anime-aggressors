@@ -24,17 +24,20 @@ func run() -> void:
 	check(playable.size() >= 5, "batch1_at_least_5_playable")
 	check(playable.size() >= 10, "batch2_at_least_10_playable_authored_or_procedural")
 	check(playable.size() >= 15, "batch3_at_least_15_playable_authored_or_procedural")
+	check(playable.size() >= 20, "batch4_at_least_20_playable_authored_or_procedural")
 	for need in ["the-concord-guildhall", "hermits-tide-retreat", "celestial-observatory", "the-infinity-chamber", "the-convergence-tournament-grounds"]:
 		check(need in playable, "batch2_playable:" + need)
 	for need in ["skyward-games-stadium", "aethercrest-academy", "ascension-arena", "wind-city-hardwood", "lakeshore-gridiron"]:
 		check(need in playable, "batch3_playable:" + need)
+	for need in ["archive-of-life-expedition-outpost", "morphing-battle-coliseum", "ruins-of-the-seven-pillars", "solara-metropolis", "manhattan-aftershock"]:
+		check(need in playable, "batch4_playable:" + need)
 	check(not bool(summary.get("HUMAN_ART_APPROVED", true)), "human_art_gate_false")
 	check(not bool(summary.get("RC2_READY", true)), "rc2_gate_false")
 	check(not bool(summary.get("V1_0_0_RELEASE_AUTHORIZED", true)), "v1_gate_false")
 
 	var pending: Array = summary.get("registered_pending", [])
 	check(pending.size() == 30 - playable.size(), "pending_count_honest")
-	check(pending.size() == 15, "batch3_leaves_15_pending")
+	check(pending.size() == 10, "batch4_leaves_10_pending")
 	if pending.size() > 0:
 		var refused: Dictionary = manager.build_stage(Node2D.new(), str(pending[0]), true, "competitive")
 		check(not bool(refused.get("ok", true)), "pending_stage_refuses_playable_build")
@@ -43,6 +46,10 @@ func run() -> void:
 	var authored_batch := [
 		"the-concord-guildhall", "hermits-tide-retreat", "celestial-observatory", "the-infinity-chamber", "the-convergence-tournament-grounds",
 		"skyward-games-stadium", "aethercrest-academy", "ascension-arena", "wind-city-hardwood", "lakeshore-gridiron",
+		"archive-of-life-expedition-outpost", "morphing-battle-coliseum", "ruins-of-the-seven-pillars", "solara-metropolis", "manhattan-aftershock",
+	]
+	var batch4_ids := [
+		"archive-of-life-expedition-outpost", "morphing-battle-coliseum", "ruins-of-the-seven-pillars", "solara-metropolis", "manhattan-aftershock",
 	]
 	for stage_id in playable:
 		var stage_root := Node2D.new()
@@ -53,13 +60,16 @@ func run() -> void:
 		var prod_status := str(built.get("productionStatus", ""))
 		check(prod_status.begins_with("PLAYABLE"), "status_playable:" + str(stage_id))
 		if str(stage_id) in authored_batch:
-			check(prod_status.find("AUTHORED") >= 0 or prod_status.find("BATCH2") >= 0 or prod_status.find("BATCH3") >= 0, "authored_status:" + str(stage_id))
+			check(prod_status.find("AUTHORED") >= 0 or prod_status.find("BATCH2") >= 0 or prod_status.find("BATCH3") >= 0 or prod_status.find("BATCH4") >= 0, "authored_status:" + str(stage_id))
 			var main: Dictionary = built.get("main_platform", {})
 			check(float(main.get("width", 900)) != 900.0, "authored_not_uniform_stub_width:" + str(stage_id))
 			check(int((built.get("spawn_points", []) as Array).size()) >= 2, "authored_spawns:" + str(stage_id))
 		if str(stage_id) in ["skyward-games-stadium", "aethercrest-academy", "ascension-arena", "wind-city-hardwood", "lakeshore-gridiron"]:
 			check(prod_status.find("BATCH3") >= 0, "batch3_status:" + str(stage_id))
 			check(int((built.get("hazard_snapshot", []) as Array).size()) >= 1, "batch3_has_combat_hazard:" + str(stage_id))
+		if str(stage_id) in batch4_ids:
+			check(prod_status.find("BATCH4") >= 0, "batch4_status:" + str(stage_id))
+			check(int((built.get("hazard_snapshot", []) as Array).size()) >= 1, "batch4_has_combat_hazard:" + str(stage_id))
 		var spawns: Array = built.get("spawn_points", [])
 		check(spawns.size() >= 2, "spawns:" + str(stage_id))
 		var bodies := 0

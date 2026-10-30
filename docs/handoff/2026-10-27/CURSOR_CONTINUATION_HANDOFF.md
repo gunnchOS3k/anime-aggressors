@@ -141,3 +141,17 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Last verified remote before this shift: `107e6b4a9dfb8c15067f180f7056f7f078e21800`
 - Push status: tip ahead pending FF push auth (ConnectScm connected; `gh`/`git push` still unauthenticated in this agent shell). No force-push.
 - Prior green CI at parent tip 107e6b4a: https://github.com/gunnchOS3k/anime-aggressors/actions/runs/40806830477
+
+
+## Shift — batch4 stages (Cursor isolated worktree 2026-10-30)
+
+- Isolated branch/worktree: `cursor/continuation-v1-batch4-stages-20261030` @ `repos/anime-aggressors/.worktrees/cursor-continuation-v1-batch4-stages-20261030`
+- Parent tip preserved: `9c373ab3c24432c2e60fc2eadcf4d57ada20e514` (`cursor/continuation-isolated-combat-20261027`)
+- Codex integrated tree untouched (`_anime_v1_integrated_20261025` @ `b4f9808b`); combat/rollback/net files not rewritten
+- Stage batch4 authored layouts playable (5) with combat hazards: archive-of-life-expedition-outpost, morphing-battle-coliseum, ruins-of-the-seven-pillars, solara-metropolis, manhattan-aftershock
+- Launch six preserved. Playable expanded=20. Remaining 10 REGISTERED_PENDING (registry ≠ commercial completion)
+- Local Godot 4.7.1 evidence: ExpandedStageLoadSmoke PASS (229), FlatCombatReplay PASS (24)
+- Evidence: `artifacts/cursor_continuation/BATCH4_STAGES_RUNTIME_EVIDENCE.json`
+- Disk: ~5 GiB free (below 18 GiB AGENTS floor) — lightweight isolated HOME; full APFS clone guard skipped
+- RC2_READY / V1_0_0_RELEASE_AUTHORIZED / HUMAN_ART_APPROVED / CURSOR_COMPLETE remain false
+- SHIPPING_ROLLBACK_ENABLED=false

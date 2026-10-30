@@ -1,0 +1,65 @@
+{
+  "suite": "batch4_authored_stages",
+  "temporary_owner": "cursor",
+  "branch": "cursor/continuation-v1-batch4-stages-20261030",
+  "parent_tip": "9c373ab3c24432c2e60fc2eadcf4d57ada20e514",
+  "godot_version": "4.7.1.stable.official",
+  "generated_at": "2026-10-30T20:27:25Z",
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false,
+  "HUMAN_ART_APPROVED": false,
+  "SHIPPING_ROLLBACK_ENABLED": false,
+  "CURSOR_COMPLETE": false,
+  "stages": {
+    "launch_six_preserved": true,
+    "playable_expanded_batch4": [
+      "archive-of-life-expedition-outpost",
+      "morphing-battle-coliseum",
+      "ruins-of-the-seven-pillars",
+      "solara-metropolis",
+      "manhattan-aftershock"
+    ],
+    "playable_expanded_count": 20,
+    "registered_pending_count": 10,
+    "art_status": "AUTHORED_LAYOUT_NOT_HUMAN_FINAL",
+    "layout_playable_neq_commercial_art": true
+  },
+  "tests": {
+    "ExpandedStageLoadSmoke": {
+      "PASS": true,
+      "checks": 229,
+      "failures": [],
+      "evidence": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/cursor-continuation-v1-batch4-stages-20261030/artifacts/cursor_continuation/batch4_stage_verify/EXPANDED_STAGE_LOAD_SMOKE.json",
+      "log": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/cursor-continuation-v1-batch4-stages-20261030/artifacts/cursor_continuation/batch4_stage_verify/ExpandedStageLoadSmoke.log"
+    },
+    "FlatCombatReplay": {
+      "PASS": true,
+      "exit_code": 0,
+      "log": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/anime-aggressors/.worktrees/cursor-continuation-v1-batch4-stages-20261030/artifacts/cursor_continuation/batch4_stage_verify/FlatCombatReplay.log",
+      "note": "Combat surface untouched; regression after stage-only Cursor work"
+    }
+  },
+  "disk": {
+    "free_gb_after": 4.96,
+    "note": "Below 18 GiB AGENTS floor \u2014 full APFS clone guard skipped; lightweight isolated HOME used"
+  },
+  "codex_surfaces_untouched": [
+    "hit_resolver.gd",
+    "lan_session.gd",
+    "flat_combat_trial.gd",
+    "rollback shipping flags"
+  ],
+  "remaining_pending_stages": [
+    "beatlink-soundstage",
+    "leviathans-wake",
+    "clockwork-archipelago",
+    "worlds-martial-summit",
+    "stormbreaker-armada",
+    "moonfall-cathedral",
+    "orbital-zero",
+    "titan-assembly-yard",
+    "worldroot-sanctuary",
+    "neon-underworld"
+  ],
+  "PASS": true
+}
