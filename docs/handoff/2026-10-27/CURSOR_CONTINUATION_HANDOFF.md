@@ -214,6 +214,7 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 ## Shift — Rosamere presentation HUD + PartyLink seat honesty (2026-10-30)
 
 - Tip parent preserved: `a8151240`
+- Engineering tip: `6df10126ecc619d8e104591372feab47f293d553`
 - Versus/training presentation-card HUD (`rosamere_presentation_hud.gd`) for three-form + cosmology honesty; presentation-only; ≠ HUMAN_ART; HitResolver untouched
 - AA-RTM-008 deepen: PartyLink `presentation_honesty_card` + Trials SETUP surface; seats>2 BattleScene slots flagged lobby/roster only
 - Local Godot 4.7.1: RosamerePresentationHudTrainingVersus PASS (22), RosamereCosmologyHonestyPresentation PASS (73), TrialsPartyLinkSeats PASS (30), TrialsPlayableJourneyLifecycle PASS (110), FlatCombatReplay PASS (24)
