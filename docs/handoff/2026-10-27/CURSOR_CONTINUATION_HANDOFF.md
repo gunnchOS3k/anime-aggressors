@@ -266,6 +266,7 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 ## Shift — Rosamere Story/Trials surface polish (2026-10-30)
 
 - Tip parent preserved: `65d88b44` (published via HTTPS after creds recovered)
+- Engineering tip: `b862373d580058a115b364f87b84e9a7bd615e03`
 - `rosamere_surface_polish.gd`: three-form + spoiler-safe Trials + Story hooks + HUD a11y honesty; ≠ HUMAN_ART/device
 - Local Godot 4.7.1: RosamereSurfacePolish PASS (22), CursorCompleteHonesty PASS (10)
 - Evidence: `artifacts/cursor_continuation/ROSAMERE_SURFACE_POLISH_EVIDENCE.json`
