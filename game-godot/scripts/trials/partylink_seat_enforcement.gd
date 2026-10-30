@@ -158,7 +158,7 @@ static func presentation_honesty_card(mode_id: String, requested_seats: int = -1
 		])
 	else:
 		lines.append("Seated ≤ BattleScene slots · no fabricated multi-actor humans")
-	lines.append("SHIPPING_ROLLBACK_ENABLED=false · never ranked")
+	lines.append("SHIPPING_ROLLBACK_ENABLED=false · never ranked · CURSOR_COMPLETE=false")
 	return {
 		"ok": true,
 		"mode_id": mode_id,
@@ -175,5 +175,68 @@ static func presentation_honesty_card(mode_id: String, requested_seats: int = -1
 		"SHIPPING_ROLLBACK_ENABLED": false,
 		"feeds_ranked_mmr": false,
 		"HUMAN_ART_APPROVED": false,
+		"device_matrix_pass": false,
+		"RC2_READY": false,
+		"V1_0_0_RELEASE_AUTHORIZED": false,
+		"CURSOR_COMPLETE": false,
 		"presentation_only": true,
+	}
+
+
+static func six_mode_honesty_matrix() -> Dictionary:
+	## Digital matrix across all LIVE PartyLink/Trials modes — never invents seats.
+	## Catalog aspirational max may exceed live_max; BattleScene slots stay 2.
+	var Bridge = load("res://scripts/trials/shared_combat_bridge.gd")
+	var modes: Array = Bridge.LIVE_SHARED_COMBAT_MODES
+	var rows: Array = []
+	var failures: Array = []
+	for mode_id in modes:
+		var truth: Dictionary = truth_for(str(mode_id))
+		var live_max: int = int(truth.get("live_max", 2))
+		var catalog_max: int = int(truth.get("catalog_max", live_max))
+		## Live PartyLink: request catalog_max with catalog_max connected — expect clamp to live_max.
+		var live: Dictionary = enforce(str(mode_id), catalog_max, catalog_max)
+		var card: Dictionary = presentation_honesty_card(str(mode_id), catalog_max, mini(catalog_max, live_max))
+		if not bool(live.get("ok", false)) and int(truth.get("catalog_min", 1)) <= live_max:
+			## Some modes (catalog_min>=2) need enough humans — retry with live_max humans.
+			live = enforce(str(mode_id), live_max, live_max)
+			card = presentation_honesty_card(str(mode_id), live_max, live_max)
+		if not bool(live.get("ok", false)):
+			failures.append("live_fail:" + str(mode_id))
+		if int(live.get("seated", -1)) > live_max:
+			failures.append("over_live_max:" + str(mode_id))
+		if int(live.get("seated", 0)) > catalog_max:
+			failures.append("over_catalog:" + str(mode_id))
+		if bool(live.get("SHIPPING_ROLLBACK_ENABLED", true)):
+			failures.append("rollback:" + str(mode_id))
+		if bool(card.get("invented_seats", true)):
+			failures.append("invented_card:" + str(mode_id))
+		if bool(card.get("CURSOR_COMPLETE", true)):
+			failures.append("cursor_complete:" + str(mode_id))
+		## Never invent seats: zero connected must not seat multiplayer catalog_min>=2.
+		if int(truth.get("catalog_min", 1)) >= 2:
+			var zero: Dictionary = enforce(str(mode_id), 2, 0)
+			if bool(zero.get("ok", true)):
+				failures.append("invented_zero_humans:" + str(mode_id))
+		rows.append({
+			"mode_id": mode_id,
+			"catalog_max": catalog_max,
+			"live_max": live_max,
+			"seated": int(live.get("seated", 0)),
+			"battle_scene_fighter_slots": BATTLE_SCENE_FIGHTER_SLOTS,
+			"degraded_from_catalog_max": bool(live.get("degraded_from_catalog_max", false)) or catalog_max > live_max,
+			"SHIPPING_ROLLBACK_ENABLED": false,
+		})
+	return {
+		"ok": failures.is_empty() and rows.size() == 6,
+		"failures": failures,
+		"mode_count": rows.size(),
+		"rows": rows,
+		"battle_scene_fighter_slots": BATTLE_SCENE_FIGHTER_SLOTS,
+		"invented_seats": false,
+		"SHIPPING_ROLLBACK_ENABLED": false,
+		"HUMAN_ART_APPROVED": false,
+		"device_matrix_pass": false,
+		"CURSOR_COMPLETE": false,
+		"req_id": "AA-RTM-008",
 	}

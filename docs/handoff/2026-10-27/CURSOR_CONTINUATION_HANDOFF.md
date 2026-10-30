@@ -271,3 +271,12 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Local Godot 4.7.1: RosamereSurfacePolish PASS (22), CursorCompleteHonesty PASS (10)
 - Evidence: `artifacts/cursor_continuation/ROSAMERE_SURFACE_POLISH_EVIDENCE.json`
 - Codex HitResolver untouched; flags remain false
+
+
+## Shift — PartyLink / roster / native-build prep (2026-10-30)
+
+- Parent tip: `93b88a5c` (published)
+- RTMs 002/004/006/009/011: no further digital without inventing HUMAN_ART/device — skipped
+- Deepened AA-RTM-008 six-mode PartyLink seat honesty matrix; AA-RTM-001 ten-fighter digital presentation; `NATIVE_BUILD_PREP.md` honesty (export green=false)
+- Tests: PartyLinkRosterNativeHonesty PASS (21), TrialsPartyLinkSeats PASS (30)
+- Codex HitResolver untouched; flags remain false

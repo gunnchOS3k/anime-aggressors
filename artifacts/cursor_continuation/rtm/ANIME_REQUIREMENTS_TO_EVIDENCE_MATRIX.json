@@ -35,12 +35,15 @@
         1,
         2
       ],
-      "tests": [],
+      "tests": [
+        "game-godot/tests/integration/PartyLinkRosterNativeHonesty.gd"
+      ],
       "automated_evidence": [
         "game-godot/data/fighters/roster.json",
         "game-godot/data/fighters/ember-vale.json",
         "game-godot/data/fighters/rosamere.json",
-        "artifacts/cursor_continuation/trials_native_review/NATIVE_PLAYABLE_REVIEW_PACKAGE.json#preserved.fighters"
+        "artifacts/cursor_continuation/trials_native_review/NATIVE_PLAYABLE_REVIEW_PACKAGE.json#preserved.fighters",
+        "artifacts/cursor_continuation/PARTYLINK_ROSTER_NATIVE_HONESTY_EVIDENCE.json"
       ],
       "native_physical": {
         "status": "not_run",
@@ -55,7 +58,7 @@
       "sha": "50f044a07d3210e2b94fc4362403c86fc3ac9053",
       "independent_review_status": "not_started",
       "cursor_complete_status": "complete",
-      "notes": "Roster data + Trials preservation claim; HUMAN_ART false for final character art"
+      "notes": "Ten fighters digital presentation completeness (json+anim+moves); HUMAN_ART/frame owner audit still open"
     },
     {
       "req_id": "AA-RTM-002",
@@ -318,10 +321,12 @@
         "game-godot/scripts/battle/battle_scene.gd",
         "game-godot/tests/integration/FlaglineFourBodyCombat.gd",
         "game-godot/scripts/trials/partylink_seat_enforcement.gd",
-        "game-godot/tests/integration/TrialsPartyLinkSeats.gd"
+        "game-godot/tests/integration/TrialsPartyLinkSeats.gd",
+        "game-godot/tests/integration/PartyLinkRosterNativeHonesty.gd"
       ],
       "automated_evidence": [
-        "artifacts/cursor_continuation/ROSAMERE_HUD_PARTYLINK_POLISH_EVIDENCE.json"
+        "artifacts/cursor_continuation/ROSAMERE_HUD_PARTYLINK_POLISH_EVIDENCE.json",
+        "artifacts/cursor_continuation/PARTYLINK_ROSTER_NATIVE_HONESTY_EVIDENCE.json"
       ],
       "native_physical": {
         "status": "not_run",
@@ -337,7 +342,7 @@
       "sha": "50f044a07d3210e2b94fc4362403c86fc3ac9053",
       "independent_review_status": "not_started",
       "cursor_complete_status": "complete",
-      "notes": "Actual 4 Fighter bodies under BattleSim+HitResolver; humans honest; CPU fill when <4 humans; not_four_simultaneous_human_bodies when humans<4"
+      "notes": "Six-mode seat honesty matrix + BattleScene 2-slot lobby honesty; invented seats false; native/export green not claimed"
     },
     {
       "req_id": "AA-RTM-009",
@@ -386,10 +391,12 @@
       ],
       "tests": [
         "game-godot/scripts/data/body_variant.gd",
-        "game-godot/scripts/net/partylink_variant_allocator.gd"
+        "game-godot/scripts/net/partylink_variant_allocator.gd",
+        "game-godot/tests/integration/PartyLinkRosterNativeHonesty.gd"
       ],
       "automated_evidence": [
-        ".github/workflows/trials-of-convergence.yml"
+        ".github/workflows/trials-of-convergence.yml",
+        "artifacts/cursor_continuation/PARTYLINK_ROSTER_NATIVE_HONESTY_EVIDENCE.json"
       ],
       "native_physical": {
         "status": "not_applicable",
