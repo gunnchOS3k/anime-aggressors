@@ -200,6 +200,7 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 ## Shift — Rosamere three-form presentation + cosmology honesty (2026-10-30)
 
 - Tip parent preserved: `e93e65b4`
+- Engineering tip: `6dfaa9d6` · local tip: `67dbf959`
 - Engineering/local tip: `6dfaa9d68c9e88a1ec947e82095f05e7bfd153df`
 - Presentation cards for Familiar Rose / First Bloom / Everlasting Origin; choreography stubs deepened with cosmology beats
 - Yin / Yang / Puppet / Prismatic Gray honesty surfaces (`rosamere_cosmology_honesty.json` + presentation APIs); Gray cannot defeat Pink; Puppets ≠ Pink forms
