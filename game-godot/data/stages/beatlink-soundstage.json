@@ -2,47 +2,86 @@
   "id": "beatlink-soundstage",
   "displayName": "BeatLink Soundstage",
   "index": 20,
-  "layoutType": "soundstage",
+  "layoutType": "soundstage_grid_authored",
   "mainPlatform": {
     "x": 0,
-    "y": 280,
-    "width": 900,
-    "height": 40
+    "y": 298,
+    "width": 820,
+    "height": 42
   },
   "sidePlatforms": [
     {
-      "x": -260,
-      "y": 180,
-      "width": 170,
-      "height": 24
+      "x": -310,
+      "y": 225,
+      "width": 155,
+      "height": 22
     },
     {
-      "x": 260,
-      "y": 180,
-      "width": 170,
-      "height": 24
+      "x": 310,
+      "y": 225,
+      "width": 155,
+      "height": 22
+    },
+    {
+      "x": -150,
+      "y": 150,
+      "width": 125,
+      "height": 18
+    },
+    {
+      "x": 150,
+      "y": 150,
+      "width": 125,
+      "height": 18
+    },
+    {
+      "x": 0,
+      "y": 95,
+      "width": 180,
+      "height": 18
     }
   ],
   "spawnPoints": [
     {
       "slot": 1,
       "x": -220,
-      "y": 200
+      "y": 220
     },
     {
       "slot": 2,
       "x": 220,
-      "y": 200
+      "y": 220
     }
   ],
   "blastZones": {
-    "left": -620,
-    "right": 620,
-    "top": -400,
-    "bottom": 440
+    "left": -705,
+    "right": 705,
+    "top": -435,
+    "bottom": 470
   },
   "ledges": true,
-  "hazardSockets": [],
+  "hazardSockets": [
+    {
+      "id": "soundstage_bass_pulse_l",
+      "x": -270,
+      "y": 255,
+      "radius": 14,
+      "authoritative": true,
+      "effect": "soft_push_right",
+      "frames_period": 148,
+      "damage": 0
+    },
+    {
+      "id": "soundstage_bass_pulse_r",
+      "x": 270,
+      "y": 255,
+      "radius": 14,
+      "authoritative": true,
+      "effect": "soft_push_left",
+      "frames_period": 148,
+      "damage": 0
+    }
+  ],
   "cameraProfile": {
     "mode": "platform_fighter",
     "minZoom": 0.7,
@@ -54,9 +93,9 @@
     }
   },
   "lightingProfile": {
-    "keyColor": "#8899aa",
-    "keyAlpha": 0.1,
-    "ambient": "#0c1014",
+    "keyColor": "#78c8e8",
+    "keyAlpha": 0.14,
+    "ambient": "#081018",
     "rim": "#f4a7c3"
   },
   "performanceTier": {
@@ -80,21 +119,21 @@
   },
   "audioBed": {
     "event": "bed_beatlink_soundstage",
-    "status": "NOT_AUTHORED",
+    "status": "PROCEDURAL_WORKING_NOT_HUMAN_FINAL",
     "path": "res://assets/audio/procedural/stages/beatlink-soundstage/bed.wav"
   },
   "previewPlaceholder": "res://assets/stages/procedural/beatlink-soundstage.svg",
-  "artStatus": "NOT_AUTHORED",
-  "productionStatus": "REGISTERED_PENDING",
-  "geometryStatus": "PENDING",
+  "artStatus": "AUTHORED_LAYOUT_NOT_HUMAN_FINAL",
+  "productionStatus": "PLAYABLE_AUTHORED_LAYOUT_BATCH5",
+  "geometryStatus": "AUTHORED_LAYOUT_WORKING",
   "HUMAN_ART_APPROVED": false,
   "yin_yang_presence": {
-    "expression": "soundstage_backdrop",
+    "expression": "soundstage_stereo_balance",
     "original": true,
     "franchise_signage": false
   },
   "pink_foreshadow": {
-    "motif": "soundstage_pink_gel",
+    "motif": "monitor_petal_glow",
     "subtle": true
   },
   "rulesets": {
@@ -111,19 +150,20 @@
   },
   "hazard_model": "authoritative_snapshot",
   "rng_policy": "no_divergent_rng",
-  "notes": "Music stage \u2014 original AA set. Registered only \u2014 geometry/art pending; not claimed finished.",
+  "notes": "BeatLink soundstage grid \u2014 authored layout working; art not human-final.",
   "ledgeAnchors": [
     {
       "id": "left",
-      "x": -450.0,
-      "y": 280.0,
+      "x": -410.0,
+      "y": 298.0,
       "facing": 1
     },
     {
       "id": "right",
-      "x": 450.0,
-      "y": 280.0,
+      "x": 410.0,
+      "y": 298.0,
       "facing": -1
     }
-  ]
+  ],
+  "playable": true
 }

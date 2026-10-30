@@ -155,3 +155,17 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Disk: ~5 GiB free (below 18 GiB AGENTS floor) — lightweight isolated HOME; full APFS clone guard skipped
 - RC2_READY / V1_0_0_RELEASE_AUTHORIZED / HUMAN_ART_APPROVED / CURSOR_COMPLETE remain false
 - SHIPPING_ROLLBACK_ENABLED=false
+
+
+## Shift — batch5 stages + Story interrupted-journey deepen (2026-10-30)
+
+- Branch/worktree: `cursor/continuation-v1-batch4-stages-20261030`
+- Parent preserved tip: `51b7090e` (batch4) → batch5 engineering continues on same isolated branch
+- Batch5 authored layouts playable (10): beatlink-soundstage, leviathans-wake, clockwork-archipelago, worlds-martial-summit, stormbreaker-armada, moonfall-cathedral, orbital-zero, titan-assembly-yard, worldroot-sanctuary, neon-underworld
+- Expanded playable layouts **30/30** (layout ≠ HUMAN_ART / commercial completion)
+- Launch six preserved. REGISTERED_PENDING expanded count = 0
+- AA-RTM-002 deepen: `StoryInterruptedJourneyAuthority.gd` — mid-journey combat checkpoint stamp/reload, forged combat rejection, dialogue/wrong-route acknowledge honesty
+- Local Godot 4.7.1: ExpandedStageLoadSmoke PASS (359), FlatCombatReplay PASS (24), StorySaveRecovery PASS (27), StorySceneAuthority PASS (16), StoryInterruptedJourneyAuthority PASS (22)
+- Evidence: `artifacts/cursor_continuation/BATCH5_STAGES_STORY_RUNTIME_EVIDENCE.json`
+- Codex combat/rollback/integrated tree untouched
+- RC2_READY / V1_0_0_RELEASE_AUTHORIZED / HUMAN_ART_APPROVED / CURSOR_COMPLETE remain false

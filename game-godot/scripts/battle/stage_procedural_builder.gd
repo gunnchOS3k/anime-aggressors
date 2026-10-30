@@ -191,6 +191,77 @@ const THEMES := {
 		"accent": Color(0.95, 0.68, 0.8, 0.16),
 		"hazard": Color(0.55, 0.65, 0.75, 0.3),
 	},
+	# Expanded batch5 — final 10 authored layouts with combat hazards; art not human-final.
+	"beatlink-soundstage": {
+		"bg": Color(0.04, 0.08, 0.12),
+		"platform": Color(0.18, 0.26, 0.32),
+		"trim": Color(0.5, 0.85, 0.95),
+		"accent": Color(0.95, 0.7, 0.82, 0.16),
+		"hazard": Color(0.4, 0.75, 0.9, 0.28),
+	},
+	"leviathans-wake": {
+		"bg": Color(0.03, 0.08, 0.12),
+		"platform": Color(0.16, 0.28, 0.32),
+		"trim": Color(0.4, 0.75, 0.85),
+		"accent": Color(0.95, 0.72, 0.84, 0.16),
+		"hazard": Color(0.35, 0.7, 0.85, 0.3),
+	},
+	"clockwork-archipelago": {
+		"bg": Color(0.09, 0.07, 0.04),
+		"platform": Color(0.3, 0.24, 0.14),
+		"trim": Color(0.9, 0.75, 0.4),
+		"accent": Color(0.95, 0.68, 0.78, 0.18),
+		"hazard": Color(0.85, 0.65, 0.3, 0.28),
+	},
+	"worlds-martial-summit": {
+		"bg": Color(0.1, 0.08, 0.05),
+		"platform": Color(0.3, 0.26, 0.16),
+		"trim": Color(0.95, 0.85, 0.5),
+		"accent": Color(0.95, 0.7, 0.8, 0.16),
+		"hazard": Color(0.9, 0.75, 0.4, 0.28),
+	},
+	"stormbreaker-armada": {
+		"bg": Color(0.05, 0.07, 0.1),
+		"platform": Color(0.22, 0.26, 0.3),
+		"trim": Color(0.6, 0.72, 0.85),
+		"accent": Color(0.95, 0.7, 0.82, 0.16),
+		"hazard": Color(0.5, 0.65, 0.8, 0.3),
+	},
+	"moonfall-cathedral": {
+		"bg": Color(0.04, 0.05, 0.1),
+		"platform": Color(0.2, 0.22, 0.3),
+		"trim": Color(0.7, 0.78, 0.95),
+		"accent": Color(0.95, 0.72, 0.85, 0.18),
+		"hazard": Color(0.55, 0.65, 0.9, 0.28),
+	},
+	"orbital-zero": {
+		"bg": Color(0.03, 0.05, 0.1),
+		"platform": Color(0.18, 0.22, 0.3),
+		"trim": Color(0.6, 0.85, 0.95),
+		"accent": Color(0.95, 0.7, 0.82, 0.16),
+		"hazard": Color(0.45, 0.75, 0.9, 0.28),
+	},
+	"titan-assembly-yard": {
+		"bg": Color(0.08, 0.07, 0.05),
+		"platform": Color(0.28, 0.24, 0.18),
+		"trim": Color(0.8, 0.7, 0.45),
+		"accent": Color(0.95, 0.68, 0.78, 0.16),
+		"hazard": Color(0.75, 0.6, 0.35, 0.28),
+	},
+	"worldroot-sanctuary": {
+		"bg": Color(0.05, 0.09, 0.06),
+		"platform": Color(0.22, 0.3, 0.2),
+		"trim": Color(0.55, 0.85, 0.5),
+		"accent": Color(0.95, 0.7, 0.8, 0.16),
+		"hazard": Color(0.45, 0.75, 0.5, 0.28),
+	},
+	"neon-underworld": {
+		"bg": Color(0.06, 0.04, 0.1),
+		"platform": Color(0.24, 0.16, 0.28),
+		"trim": Color(0.95, 0.45, 0.75),
+		"accent": Color(0.95, 0.7, 0.85, 0.18),
+		"hazard": Color(0.85, 0.4, 0.7, 0.3),
+	},
 }
 
 

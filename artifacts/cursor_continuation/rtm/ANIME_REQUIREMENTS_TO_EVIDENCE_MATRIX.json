@@ -5,7 +5,7 @@
   "contract_source_sha": "935eb3a20548b1a4b726f2ba305df94ff496be16",
   "product_id": "anime-aggressors",
   "product_repo": "https://github.com/gunnchOS3k/anime-aggressors",
-  "generated_at": "2026-10-29T20:01:49Z",
+  "generated_at": "2026-10-30T20:36:19Z",
   "honesty_flags": {
     "HUMAN": false,
     "RC2": false,
@@ -16,7 +16,7 @@
       "status": "in_progress",
       "sha": "50f044a07d3210e2b94fc4362403c86fc3ac9053",
       "actor": "cursor",
-      "notes": "Four-body Flagline + ColossusActor + PVS RTM bind; CURSOR_COMPLETE not claimed"
+      "notes": "Batch5 30/30 expanded layouts + Story interrupted-journey deepen; CURSOR_COMPLETE not claimed"
     },
     "codex_independently_verified": {
       "status": "not_started"
@@ -69,10 +69,12 @@
       "tests": [
         "game-godot/tests/integration/StorySaveRecovery.gd",
         "game-godot/tests/integration/ResumedStoryEncounter.gd",
-        "game-godot/tests/v1_closure/StorySceneAuthority.gd"
+        "game-godot/tests/v1_closure/StorySceneAuthority.gd",
+        "game-godot/tests/integration/StoryInterruptedJourneyAuthority.gd"
       ],
       "automated_evidence": [
-        "docs/story/"
+        "docs/story/",
+        "artifacts/cursor_continuation/batch5_stage_verify/STORY_INTERRUPTED_JOURNEY_AUTHORITY.json"
       ],
       "native_physical": {
         "status": "not_run",
@@ -85,10 +87,10 @@
         "V1_0_0_RELEASE_AUTHORIZED=false"
       ],
       "severity": "high",
-      "sha": "50f044a07d3210e2b94fc4362403c86fc3ac9053",
+      "sha": "PENDING_TIP",
       "independent_review_status": "not_started",
       "cursor_complete_status": "in_progress",
-      "notes": "Story authority tests exist; commercial Story complete / V1 not claimed"
+      "notes": "Story authority tests exist incl. interrupted-journey checkpoint; commercial Story complete / V1 not claimed"
     },
     {
       "req_id": "AA-RTM-003",

@@ -1,0 +1,170 @@
+{
+  "PASS": true,
+  "checks": [
+    {
+      "check": "isolated_signed_profile_created",
+      "pass": true
+    },
+    {
+      "check": "ordinary_story_start_API",
+      "pass": true
+    },
+    {
+      "check": "declared_fixture_cannot_qualify",
+      "pass": true
+    },
+    {
+      "check": "actual_owned_intro_active_before_navigation",
+      "pass": true
+    },
+    {
+      "check": "actual_BattleScene_binds_result_owner",
+      "pass": true
+    },
+    {
+      "check": "declared_closed_countdown_boundary_not_played_match",
+      "pass": true
+    },
+    {
+      "check": "failed_loss_save_is_rejected",
+      "pass": true
+    },
+    {
+      "check": "failure_is_actual_write_error_not_owner_rejection",
+      "pass": true
+    },
+    {
+      "check": "failed_loss_write_rolls_back_memory",
+      "pass": true
+    },
+    {
+      "check": "failed_loss_write_preserves_prior_signed_save",
+      "pass": true
+    },
+    {
+      "check": "failed_write_keeps_retryable_result_owner",
+      "pass": true
+    },
+    {
+      "check": "same_owner_can_retry_after_storage_failure",
+      "pass": true
+    },
+    {
+      "check": "duplicate_result_is_rejected",
+      "pass": true
+    },
+    {
+      "check": "technical_loss_does_not_advance_or_qualify",
+      "pass": true
+    },
+    {
+      "check": "signed_restore_keeps_current_encounter",
+      "pass": true
+    },
+    {
+      "check": "signed_restore_keeps_saved_combat_checkpoint",
+      "pass": true
+    },
+    {
+      "check": "retry_does_not_award_story_nodes",
+      "pass": true
+    },
+    {
+      "check": "retry_does_not_award_unlocks",
+      "pass": true
+    },
+    {
+      "check": "exited_battle_retires_owned_intro_and_overlay",
+      "pass": true
+    },
+    {
+      "check": "actual_Story_body_selector_present",
+      "pass": true
+    },
+    {
+      "check": "settings_failure_is_real_write_error",
+      "pass": true
+    },
+    {
+      "check": "failed_body_save_keeps_authoritative_presentation",
+      "pass": true
+    },
+    {
+      "check": "failed_body_save_restores_visible_selection",
+      "pass": true
+    },
+    {
+      "check": "failed_settings_write_preserves_signed_profile",
+      "pass": true
+    },
+    {
+      "check": "actual_Resume_Save_button_used",
+      "pass": true
+    },
+    {
+      "check": "Resume_Save_restores_signed_node_and_checkpoint",
+      "pass": true
+    },
+    {
+      "check": "Resume_Save_restores_presentation_and_clears_stale_error",
+      "pass": true
+    }
+  ],
+  "failures": [],
+  "observations": {
+    "checkpoint": {
+      "combat": {
+        "damage_percent": 0.0,
+        "stocks": 2
+      },
+      "completed": [],
+      "cursor": "kaia-windrow:prologue",
+      "route_id": "kaia-windrow",
+      "schema": "anime_v1.checkpoint.v1"
+    },
+    "earned_battles": 0,
+    "fixture": "declared nonqualifying closed-BattleScene loss boundary; no combat completion claim",
+    "node": "kaia-windrow:prologue",
+    "resume_UI": {
+      "body": "female",
+      "button": "[P: (220.0, 246.0), S: (160.0, 48.0)]",
+      "canvas_transform": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (220.0, 246.0)]",
+      "covering": [
+        {
+          "filter": 0,
+          "path": "/root/StoryCampaignScene",
+          "rect": "[P: (0.0, 0.0), S: (1280.0, 1280.0)]"
+        },
+        {
+          "filter": 0,
+          "path": "/root/StoryCampaignScene/Background",
+          "rect": "[P: (0.0, 0.0), S: (1280.0, 1280.0)]"
+        },
+        {
+          "filter": 1,
+          "path": "/root/StoryCampaignScene/@VBoxContainer@111",
+          "rect": "[P: (48.0, 64.0), S: (1184.0, 1168.0)]"
+        },
+        {
+          "filter": 1,
+          "path": "/root/StoryCampaignScene/@VBoxContainer@111/@HBoxContainer@135",
+          "rect": "[P: (48.0, 246.0), S: (1184.0, 48.0)]"
+        },
+        {
+          "filter": 0,
+          "path": "/root/StoryCampaignScene/@VBoxContainer@111/@HBoxContainer@135/@Button@137",
+          "rect": "[P: (220.0, 246.0), S: (160.0, 48.0)]"
+        }
+      ],
+      "disabled": false,
+      "error": "",
+      "hover": "/root/StoryCampaignScene/@VBoxContainer@111/@HBoxContainer@135/@Button@137",
+      "mouse": "(0.0, 0.0)",
+      "pressed": 1,
+      "selected": 0,
+      "viewport": "[P: (0.0, 0.0), S: (1280.0, 1280.0)]",
+      "visible": true
+    }
+  },
+  "scope": "Real Godot scene ownership and signed save fault/retry/restore APIs. Declared loss boundary, no earned-route/KO/native acceptance."
+}

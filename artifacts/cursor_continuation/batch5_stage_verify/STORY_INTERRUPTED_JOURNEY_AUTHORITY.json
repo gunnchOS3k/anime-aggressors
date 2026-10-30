@@ -1,0 +1,99 @@
+{
+	"HUMAN_ART_APPROVED": false,
+	"PASS": true,
+	"RC2_READY": false,
+	"V1_0_0_RELEASE_AUTHORIZED": false,
+	"checks": [
+		{
+			"check": "isolated_signed_profile_created",
+			"pass": true
+		},
+		{
+			"check": "schema_v2",
+			"pass": true
+		},
+		{
+			"check": "default_route_kaia",
+			"pass": true
+		},
+		{
+			"check": "cursor_has_start_node",
+			"pass": true
+		},
+		{
+			"check": "interrupted_combat_checkpoint_saved",
+			"pass": true
+		},
+		{
+			"check": "checkpoint_schema_v1",
+			"pass": true
+		},
+		{
+			"check": "stamped_stocks",
+			"pass": true
+		},
+		{
+			"check": "stamped_damage",
+			"pass": true
+		},
+		{
+			"check": "stamped_cursor_matches_journey",
+			"pass": true
+		},
+		{
+			"check": "authenticated_reload_clears_error",
+			"pass": true
+		},
+		{
+			"check": "reload_restores_cursor_node",
+			"pass": true
+		},
+		{
+			"check": "reload_restores_interrupted_stocks",
+			"pass": true
+		},
+		{
+			"check": "reload_restores_interrupted_damage",
+			"pass": true
+		},
+		{
+			"check": "reload_clears_active_encounter",
+			"pass": true
+		},
+		{
+			"check": "forged_prefix_drops_or_empties_combat",
+			"pass": true
+		},
+		{
+			"check": "illegal_completed_prefix_rejected",
+			"pass": true
+		},
+		{
+			"check": "illegal_combat_not_trusted",
+			"pass": true
+		},
+		{
+			"check": "wrong_route_acknowledge_rejected",
+			"pass": true
+		},
+		{
+			"check": "wrong_route_leaves_memory_unchanged",
+			"pass": true
+		},
+		{
+			"check": "wrong_route_leaves_disk_unchanged",
+			"pass": true
+		},
+		{
+			"check": "unsigned_envelope_warns",
+			"pass": true
+		},
+		{
+			"check": "unsigned_does_not_apply_presentation",
+			"pass": true
+		}
+	],
+	"failures": [],
+	"req_id": "AA-RTM-002",
+	"scope": "Interrupted Story journey signed checkpoint + forged combat rejection + dialogue/wrong-route authority. Not owner playthrough / V1."
+}
