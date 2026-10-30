@@ -108,6 +108,77 @@ static func validate_real_player_trace(sealed: Dictionary) -> Dictionary:
 	}
 
 
+static func six_mode_ids() -> Array:
+	return [
+		"resonance_trial",
+		"fractured_accord",
+		"prism_weave",
+		"riftline_defense",
+		"echoes_gauntlet",
+		"convergence_unbound",
+	]
+
+
+static func six_mode_digital_contract() -> Dictionary:
+	## All six Trials modes share the digital ownership contract.
+	## Physical device / HUMAN_ART territory meshes remain open — not claimed here.
+	var modes: Array = []
+	for mode_id in six_mode_ids():
+		var empty: Dictionary = empty_trace(str(mode_id))
+		modes.append({
+			"mode_id": mode_id,
+			"digital_only": bool(empty.get("digital_only", false)),
+			"physical_device": bool(empty.get("physical_device", true)),
+			"invented_hardware": bool(empty.get("invented_hardware", true)),
+			"HUMAN_ART_APPROVED": bool(empty.get("HUMAN_ART_APPROVED", true)),
+			"shared_combat": true,
+		})
+	var failures: Array = []
+	for row in modes:
+		if not bool(row.get("digital_only", false)):
+			failures.append("not_digital:" + str(row.get("mode_id")))
+		if bool(row.get("physical_device", false)):
+			failures.append("physical_claimed:" + str(row.get("mode_id")))
+		if bool(row.get("invented_hardware", false)):
+			failures.append("hardware_invented:" + str(row.get("mode_id")))
+		if bool(row.get("HUMAN_ART_APPROVED", false)):
+			failures.append("human_art:" + str(row.get("mode_id")))
+	return {
+		"ok": failures.is_empty() and modes.size() == 6,
+		"failures": failures,
+		"modes": modes,
+		"mode_count": modes.size(),
+		"digital_only": true,
+		"physical_device": false,
+		"invented_hardware": false,
+		"device_matrix_pass": false,
+		"HUMAN_ART_APPROVED": false,
+		"territory_mesh_human_art": false,
+		"SHIPPING_ROLLBACK_ENABLED": false,
+		"req_id": "AA-RTM-004",
+	}
+
+
+static func seal_owned_live_snapshot(snap: Dictionary, mode_id: String) -> Dictionary:
+	## Generic digital seal for modes without a specialized seal helper.
+	## REAL_PLAYER only when player_owned_events is already true from notify_live_hit.
+	var out: Dictionary = snap.duplicate(true)
+	out["mode_id"] = mode_id if not mode_id.is_empty() else str(out.get("mode_id", ""))
+	var owned := bool(out.get("player_owned_events", false))
+	out["result_kind"] = "REAL_PLAYER" if owned else "SIMULATION"
+	out["feeds_ranked_mmr"] = false
+	out["SHIPPING_ROLLBACK_ENABLED"] = false
+	out["HUMAN_ART_APPROVED"] = false
+	out["digital_only"] = true
+	out["physical_device"] = false
+	out["invented_hardware"] = false
+	out["device_matrix_pass"] = false
+	if owned and (not out.has("ownership_trace") or (out.get("ownership_trace", {}) as Dictionary).is_empty()):
+		out = append_hit_event(out, 1.0, 1, -1)
+	out = seal_trace(out, str(out.get("result_kind", "SIMULATION")))
+	return out
+
+
 static func journey_trace_summary(gs: Node) -> Dictionary:
 	## Summarize digital ownership from GameState trial ledger + live snapshot.
 	if gs == null:

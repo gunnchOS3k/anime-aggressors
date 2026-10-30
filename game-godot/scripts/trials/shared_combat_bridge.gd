@@ -109,6 +109,17 @@ static func prepare_live_battle(mode_id: String, seats: int = 2, unbound_preset:
 	var hitbox_card: Dictionary = {}
 	if HitboxHonesty != null:
 		hitbox_card = HitboxHonesty.presentation_honesty_card(mode_id)
+	## Seed digital ownership ledger (empty) — never invents physical devices.
+	var snap0: Dictionary = gs.trial_sim_snapshot if gs.trial_sim_snapshot is Dictionary else {}
+	if snap0.is_empty():
+		snap0 = {"mode_id": mode_id, "phase": "setup"}
+	snap0["mode_id"] = mode_id
+	if not snap0.has("ownership_trace") or (snap0.get("ownership_trace", {}) as Dictionary).is_empty():
+		snap0["ownership_trace"] = Ownership.empty_trace(mode_id)
+	snap0["digital_only"] = true
+	snap0["physical_device"] = false
+	snap0["invented_hardware"] = false
+	gs.trial_sim_snapshot = snap0
 	gs.trial_overlay_state = {
 		"mode_id": mode_id,
 		"presentation": presentation,
@@ -119,6 +130,8 @@ static func prepare_live_battle(mode_id: String, seats: int = 2, unbound_preset:
 		"HUMAN_ART_APPROVED": false,
 		"hitbox_integrity": hitbox_card,
 		"damage_ratio_owner": "HitResolver",
+		"ownership_digital_only": true,
+		"device_matrix_pass": false,
 	}
 	return {
 		"ok": true,
@@ -131,6 +144,9 @@ static func prepare_live_battle(mode_id: String, seats: int = 2, unbound_preset:
 		"SHIPPING_ROLLBACK_ENABLED": false,
 		"hitbox_integrity": hitbox_card,
 		"damage_ratio_owner": "HitResolver",
+		"ownership_trace_seeded": true,
+		"digital_only": true,
+		"device_matrix_pass": false,
 	}
 
 
@@ -583,7 +599,40 @@ static func seal_live_resonance_result() -> Dictionary:
 	## AA-RTM-007 honesty — live seals never enable shipping rollback.
 	sealed["SHIPPING_ROLLBACK_ENABLED"] = false
 	sealed["feeds_ranked_mmr"] = false
+	sealed["device_matrix_pass"] = false
+	sealed["digital_only"] = true
+	sealed["physical_device"] = false
 	gs.trial_sim_snapshot = sealed
+	return sealed
+
+
+static func seal_live_owned_result(mode_id: String = "") -> Dictionary:
+	## Digital ownership seal for any live shared-combat Trials mode.
+	## Specialized helpers remain for resonance / flagline; others use generic seal.
+	var gs := _gs()
+	if gs == null:
+		return {}
+	var mid: String = mode_id if not mode_id.is_empty() else str(gs.trial_mode_id)
+	if mid == "resonance_trial":
+		return seal_live_resonance_result()
+	if mid == "fractured_accord":
+		var snap_f: Dictionary = gs.trial_sim_snapshot
+		return _seal_flagline_results(gs, snap_f)
+	var sealed: Dictionary = Ownership.seal_owned_live_snapshot(gs.trial_sim_snapshot, mid)
+	gs.trial_sim_snapshot = sealed
+	if str(sealed.get("result_kind", "")) == "REAL_PLAYER":
+		gs.record_trial_result({
+			"mode_id": mid,
+			"result_kind": "REAL_PLAYER",
+			"ownership_trace": sealed.get("ownership_trace", {}),
+			"digital_only": true,
+			"physical_device": false,
+			"invented_hardware": false,
+			"device_matrix_pass": false,
+			"HUMAN_ART_APPROVED": false,
+			"SHIPPING_ROLLBACK_ENABLED": false,
+			"feeds_ranked_mmr": false,
+		})
 	return sealed
 
 

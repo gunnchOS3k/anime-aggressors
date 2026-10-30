@@ -72,12 +72,16 @@
         "game-godot/tests/v1_closure/StorySceneAuthority.gd",
         "game-godot/tests/integration/StoryInterruptedJourneyAuthority.gd",
         "game-godot/tests/integration/StoryJourneyPathAuthority.gd",
-        "game-godot/tests/integration/StoryEarnedPrefixDialogueAuthority.gd"
+        "game-godot/tests/integration/StoryEarnedPrefixDialogueAuthority.gd",
+        "game-godot/tests/integration/StoryJourneyHonesty.gd",
+        "game-godot/scripts/story/story_journey_honesty.gd"
       ],
       "automated_evidence": [
         "docs/story/",
         "artifacts/cursor_continuation/batch5_stage_verify/STORY_INTERRUPTED_JOURNEY_AUTHORITY.json",
-        "artifacts/cursor_continuation/earned_prefix_rosamere_ownership_verify/STORY_EARNED_PREFIX_DIALOGUE_AUTHORITY.json"
+        "artifacts/cursor_continuation/earned_prefix_rosamere_ownership_verify/STORY_EARNED_PREFIX_DIALOGUE_AUTHORITY.json",
+        "artifacts/cursor_continuation/story_trials_rtm_deepen_verify/STORY_JOURNEY_HONESTY.json",
+        "artifacts/cursor_continuation/STORY_TRIALS_RTM_DEEPEN_EVIDENCE.json"
       ],
       "native_physical": {
         "status": "not_run",
@@ -90,10 +94,10 @@
         "V1_0_0_RELEASE_AUTHORIZED=false"
       ],
       "severity": "high",
-      "sha": "ddba4c48d8830a0a238146b0d47c0b84e2953006",
+      "sha": "d50b863a384c89823398f23f1192c8da6c4b8af5",
       "independent_review_status": "not_started",
       "cursor_complete_status": "in_progress",
-      "notes": "Earned STOCK_WIN prefix via bound BattleScene producer then durable accord dialogue; staged fixture \u2260 owner sign-off / V1"
+      "notes": "Spectral catalog + interrupt save/recovery + OOO dialogue honesty; earned prefix still staged fixture \u2260 owner sign-off / V1 / device"
     },
     {
       "req_id": "AA-RTM-003",
@@ -151,7 +155,8 @@
         "game-godot/tests/integration/FlaglineFourBodyCombat.gd",
         "game-godot/tests/integration/TrialsPlayableJourneyLifecycle.gd",
         "game-godot/scripts/trials/trial_playable_journey.gd",
-        "game-godot/tests/integration/TrialsRealPlayerOwnershipTrace.gd"
+        "game-godot/tests/integration/TrialsRealPlayerOwnershipTrace.gd",
+        "game-godot/tests/integration/TrialsSixModeOwnershipHonesty.gd"
       ],
       "automated_evidence": [
         "game-godot/scripts/trials/",
@@ -160,7 +165,9 @@
         "artifacts/cursor_continuation/TRIALS_OF_CONVERGENCE_DEEPEN_EVIDENCE.json",
         "artifacts/cursor_continuation/trials_native_review/NATIVE_PLAYABLE_REVIEW_PACKAGE.json",
         "artifacts/cursor_continuation/TRIALS_PLAYABLE_STORY_PATH_EVIDENCE.json",
-        "artifacts/cursor_continuation/earned_prefix_rosamere_ownership_verify/TRIALS_REAL_PLAYER_OWNERSHIP_TRACE.json"
+        "artifacts/cursor_continuation/earned_prefix_rosamere_ownership_verify/TRIALS_REAL_PLAYER_OWNERSHIP_TRACE.json",
+        "artifacts/cursor_continuation/story_trials_rtm_deepen_verify/TRIALS_SIX_MODE_OWNERSHIP_HONESTY.json",
+        "artifacts/cursor_continuation/STORY_TRIALS_RTM_DEEPEN_EVIDENCE.json"
       ],
       "native_physical": {
         "status": "not_run",
@@ -174,10 +181,10 @@
         "CURSOR_COMPLETE not claimed"
       ],
       "severity": "high",
-      "sha": "ddba4c48d8830a0a238146b0d47c0b84e2953006",
+      "sha": "d50b863a384c89823398f23f1192c8da6c4b8af5",
       "independent_review_status": "not_started",
       "cursor_complete_status": "in_progress",
-      "notes": "Digital REAL_PLAYER ownership traces on notify_live_hit/seal; no physical device invention; device/HUMAN_ART still open"
+      "notes": "All six modes seed digital ownership + seal_live_owned_result; no physical device / HUMAN_ART territory claim"
     },
     {
       "req_id": "AA-RTM-005",
@@ -401,10 +408,14 @@
       "layers": [
         4
       ],
-      "tests": [],
+      "tests": [
+        "game-godot/tests/integration/CursorCompleteHonesty.gd",
+        "game-godot/scripts/rc/cursor_complete_honesty.gd"
+      ],
       "automated_evidence": [
         "artifacts/cursor_continuation/rtm/ANIME_REQUIREMENTS_TO_EVIDENCE_MATRIX.json",
-        "artifacts/owner_playable_review/OWNER_PLAYABLE_REVIEW_PACKAGE.json"
+        "artifacts/owner_playable_review/OWNER_PLAYABLE_REVIEW_PACKAGE.json",
+        "artifacts/cursor_continuation/story_trials_rtm_deepen_verify/CURSOR_COMPLETE_HONESTY.json"
       ],
       "native_physical": {
         "status": "not_run",
@@ -421,10 +432,10 @@
         "Trials CI tip may lag doc stamp tip by one docs commit \u2014 report both honestly"
       ],
       "severity": "blocker",
-      "sha": "50f044a07d3210e2b94fc4362403c86fc3ac9053",
+      "sha": "d50b863a384c89823398f23f1192c8da6c4b8af5",
       "independent_review_status": "not_started",
       "cursor_complete_status": "in_progress",
-      "notes": "CURSOR_COMPLETE NOT claimed. HUMAN_ART/RC2/V1/SHIPPING_ROLLBACK false."
+      "notes": "CursorCompleteHonesty declares CURSOR_COMPLETE=false with open blockers; HUMAN_ART/RC2/V1/SHIPPING_ROLLBACK false."
     }
   ]
 }

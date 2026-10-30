@@ -246,3 +246,14 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Push blocked same as a11y tip (HTTPS Device / SSH pubkey / gh). Remote remains `e93e65b4`.
 - Flags remain false
 - Next unfinished Cursor RTM (digital-capable, still open): AA-RTM-002 Story owner-path deepen / AA-RTM-004 Trials device-honest deepen — both still blocked on owner/device/HUMAN_ART for CURSOR_COMPLETE; AA-RTM-011 remains gate.
+
+
+## Shift — AA-RTM-002/004 digital deepen + AA-RTM-011 gate honesty (2026-10-30)
+
+- Tip parent preserved: `d50b863a`
+- AA-RTM-002: `story_journey_honesty.gd` — spectral catalog, interrupt save/recovery, OOO dialogue not durable; owner/device/V1 false
+- AA-RTM-004: six-mode ownership seed + `seal_live_owned_result`; TrialsSixModeOwnershipHonesty; no physical device / HUMAN_ART territory claim
+- AA-RTM-011: `cursor_complete_honesty.gd` declares CURSOR_COMPLETE=false with open blockers
+- Local Godot 4.7.1: StoryJourneyHonesty PASS (39), TrialsSixModeOwnershipHonesty PASS (83), TrialsRealPlayerOwnershipTrace PASS (21), CursorCompleteHonesty PASS (10), FlatCombatReplay PASS (24)
+- Evidence: `artifacts/cursor_continuation/STORY_TRIALS_RTM_DEEPEN_EVIDENCE.json`
+- Codex HitResolver untouched; flags remain false
