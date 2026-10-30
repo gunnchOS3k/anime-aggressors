@@ -186,13 +186,16 @@ func _refresh_rosamere_story_presentation(node: Dictionary) -> void:
 		_rosamere_hook_label.visible = false
 		_rosamere_hook_label.text = ""
 		return
-	var familiar: Dictionary = _RosamerePresentation.story_hook_for_form("FAMILIAR_ROSE")
+	var familiar: Dictionary = _RosamerePresentation.presentation_card_for_form("FAMILIAR_ROSE")
 	var bloom: Dictionary = _RosamerePresentation.choreography_stub_for_form("FIRST_BLOOM")
+	var gray: Dictionary = _RosamerePresentation.domain_honesty_surface("prismatic_gray")
 	_rosamere_hook_label.visible = true
-	_rosamere_hook_label.text = "Rosamere Story presentation · %s · choreography stub (%s) ≠ HUMAN_ART · HitResolver untouched" % [
-		str(familiar.get("presentation_line", "three-form hooks authored")),
+	_rosamere_hook_label.text = "Rosamere three-form presentation · %s · choreography (%s) ≠ HUMAN_ART · Yin/Yang/Puppet/Gray honesty · HitResolver untouched" % [
+		str(familiar.get("presentation_line", "three-form cards authored")),
 		str(bloom.get("transform_beat", "first_dawn")),
 	]
+	if str(gray.get("presentation_line", "")) != "":
+		_rosamere_hook_label.text += "\n" + str(gray.get("presentation_line", ""))
 
 
 func _on_new_game() -> void:

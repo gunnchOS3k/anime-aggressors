@@ -193,5 +193,16 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Local Godot 4.7.1: StoryEarnedPrefixDialogueAuthority PASS (44), RosamereStoryPresentationIntegration PASS (31), TrialsRealPlayerOwnershipTrace PASS (21), StoryJourneyPathAuthority PASS (28), FlatCombatReplay PASS (24)
 - Evidence: `artifacts/cursor_continuation/EARNED_PREFIX_ROSAMERE_OWNERSHIP_EVIDENCE.json`
 - Codex combat/rollback/integrated tree untouched
-- FF-push blocked: ConnectScm connected session GitHub, but `gh` still unauthenticated and `git push` HTTPS fails (`could not read Username … Device not configured`); ancestry preserves `ddba4c48`; no force
+- FF-push of `e93e65b4` succeeded to `origin/cursor/continuation-v1-batch4-stages-20261030` (gh keyring token invalid for CLI; git HTTPS push worked)
 - RC2_READY / V1_0_0_RELEASE_AUTHORIZED / HUMAN_ART_APPROVED / CURSOR_COMPLETE remain false
+
+
+## Shift — Rosamere three-form presentation + cosmology honesty (2026-10-30)
+
+- Tip parent preserved: `e93e65b4`
+- Presentation cards for Familiar Rose / First Bloom / Everlasting Origin; choreography stubs deepened with cosmology beats
+- Yin / Yang / Puppet / Prismatic Gray honesty surfaces (`rosamere_cosmology_honesty.json` + presentation APIs); Gray cannot defeat Pink; Puppets ≠ Pink forms
+- HitResolver / Codex combat data untouched; choreography ≠ HUMAN_ART
+- Local Godot 4.7.1: RosamereCosmologyHonestyPresentation PASS (73), RosamereStoryPresentationIntegration PASS (31), RosamereThreeFormCanon PASS (38), FlatCombatReplay PASS (24)
+- Evidence: `artifacts/cursor_continuation/ROSAMERE_COSMOLOGY_HONESTY_EVIDENCE.json`
+- Flags remain false
