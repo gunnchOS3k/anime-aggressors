@@ -261,3 +261,12 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Codex HitResolver untouched; flags remain false
 - Push blocked: HTTPS Device not configured; SSH Permission denied (publickey); gh logged out. Remote remains `e93e65b4`. No ConnectScm re-prompt; no force.
 - Next: credentialed FF-push; remaining Cursor RTM deepen still owner/device/HUMAN_ART gated (002/004/006/009/011)
+
+
+## Shift — Rosamere Story/Trials surface polish (2026-10-30)
+
+- Tip parent preserved: `65d88b44` (published via HTTPS after creds recovered)
+- `rosamere_surface_polish.gd`: three-form + spoiler-safe Trials + Story hooks + HUD a11y honesty; ≠ HUMAN_ART/device
+- Local Godot 4.7.1: RosamereSurfacePolish PASS (22), CursorCompleteHonesty PASS (10)
+- Evidence: `artifacts/cursor_continuation/ROSAMERE_SURFACE_POLISH_EVIDENCE.json`
+- Codex HitResolver untouched; flags remain false
