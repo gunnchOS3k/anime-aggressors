@@ -209,3 +209,13 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Evidence: `artifacts/cursor_continuation/ROSAMERE_COSMOLOGY_HONESTY_EVIDENCE.json`
 - Local tip `2ce6876b` / engineering `6dfaa9d6` unpublished (push HTTPS Device not configured; gh keyring invalid). Remote remains `e93e65b4`. No ConnectScm re-prompt; no force.
 - Flags remain false
+
+
+## Shift — Rosamere presentation HUD + PartyLink seat honesty (2026-10-30)
+
+- Tip parent preserved: `a8151240`
+- Versus/training presentation-card HUD (`rosamere_presentation_hud.gd`) for three-form + cosmology honesty; presentation-only; ≠ HUMAN_ART; HitResolver untouched
+- AA-RTM-008 deepen: PartyLink `presentation_honesty_card` + Trials SETUP surface; seats>2 BattleScene slots flagged lobby/roster only
+- Local Godot 4.7.1: RosamerePresentationHudTrainingVersus PASS (22), RosamereCosmologyHonestyPresentation PASS (73), TrialsPartyLinkSeats PASS (30), TrialsPlayableJourneyLifecycle PASS (110), FlatCombatReplay PASS (24)
+- Evidence: `artifacts/cursor_continuation/ROSAMERE_HUD_PARTYLINK_POLISH_EVIDENCE.json`
+- Flags remain false

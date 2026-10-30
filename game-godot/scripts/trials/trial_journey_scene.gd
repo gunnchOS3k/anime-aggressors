@@ -8,6 +8,7 @@ const Eligibility = preload("res://scripts/trials/rosamere_trials_eligibility.gd
 const Bridge = preload("res://scripts/trials/shared_combat_bridge.gd")
 const Presentation = preload("res://scripts/trials/mode_presentation.gd")
 const Journey = preload("res://scripts/trials/trial_playable_journey.gd")
+const Seats = preload("res://scripts/trials/partylink_seat_enforcement.gd")
 const Derby = preload("res://scripts/trials/derby/resonance_trial_sim.gd")
 const ResonanceDummy = preload("res://scripts/trials/derby/resonance_dummy_actor.gd")
 const Flagline = preload("res://scripts/trials/flagline/fractured_accord_sim.gd")
@@ -139,13 +140,16 @@ func _setup() -> void:
 			_state = Unbound.advance_journey(_state)
 		_:
 			_state = {"mode": mode_id, "error": "unknown"}
-	_status.text = "SETUP\nInstructions: %s\n%s" % [
+	var seat_card: Dictionary = Seats.presentation_honesty_card(mode_id, GameState.trial_seat_count, -1)
+	_status.text = "SETUP\nInstructions: %s\n%s\n\n%s" % [
 		Journey.first_play_instructions(mode_id),
 		JSON.stringify(_setup_blurb(), "  "),
+		str(seat_card.get("text", "")),
 	]
 
 
 func _setup_blurb() -> Dictionary:
+	var seat_card: Dictionary = Seats.presentation_honesty_card(mode_id, GameState.trial_seat_count, -1)
 	return {
 		"mode": mode_id,
 		"phase": _state.get("phase", ""),
@@ -153,6 +157,13 @@ func _setup_blurb() -> Dictionary:
 		"label": _state.get("label", ""),
 		"win_condition": Journey.win_condition(mode_id),
 		"feeds_ranked_mmr": false,
+		"partylink_seat_honesty": {
+			"seated": seat_card.get("seated", 0),
+			"battle_scene_fighter_slots": seat_card.get("battle_scene_fighter_slots", 2),
+			"invented_seats": false,
+			"live_partylink": false,
+			"SHIPPING_ROLLBACK_ENABLED": false,
+		},
 	}
 
 

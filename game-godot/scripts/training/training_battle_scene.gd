@@ -40,6 +40,7 @@ const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
 const MOVE_LIST_PANEL := preload("res://scripts/ui/move_list_panel.gd")
 const MOVE_BROWSER := preload("res://scripts/training/move_browser.gd")
 const _RosamereForms = preload("res://scripts/combat/rosamere_form_selection.gd")
+const _RosamerePresentationHud = preload("res://scripts/ui/rosamere_presentation_hud.gd")
 
 var _move_list_panel: Control
 var _move_browser: Control
@@ -62,6 +63,7 @@ func _ready() -> void:
 	_build_stage()
 	_spawn_fighters()
 	_apply_rosamere_form_hooks()
+	_mount_rosamere_presentation_hud()
 	_battle_sim = _BattleSim.new()
 	add_child(_battle_sim)
 	_battle_sim.bind_fighters([fighter1, fighter2])
@@ -222,6 +224,15 @@ func _apply_rosamere_form_hooks() -> void:
 			mode = "training"
 		var consent := bool(GameState.mythic_party_consent) or mode in ["story", "ova", "training"]
 		_RosamereForms.apply_to_fighter(actor, form_id, mode, consent)
+
+
+func _mount_rosamere_presentation_hud() -> Dictionary:
+	## Presentation-only card HUD — ≠ HUMAN_ART; HitResolver untouched.
+	var mode := str(GameState.mode)
+	if mode.is_empty():
+		mode = "training"
+	return _RosamerePresentationHud.mount_on_hud(hud, [fighter1, fighter2], mode)
+
 
 func _spawn_fighters() -> void:
 	var stage_data: Dictionary = GameState.load_stage(GameState.stage_id if GameState.stage_id != "" else "training-grid")

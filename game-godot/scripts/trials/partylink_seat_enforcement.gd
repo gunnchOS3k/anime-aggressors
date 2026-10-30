@@ -127,3 +127,53 @@ static func allocate_variants(mode_id: String, roster_picks: Array) -> Dictionar
 		"SHIPPING_ROLLBACK_ENABLED": false,
 		"feeds_ranked_mmr": false,
 	}
+
+
+static func presentation_honesty_card(mode_id: String, requested_seats: int = -1, connected_humans: int = -1) -> Dictionary:
+	## Digital presentation card for Trials SETUP/HUD — never invents humans or claims
+	## simultaneous humans beyond BattleScene fighter slots without lobby honesty.
+	var truth: Dictionary = truth_for(mode_id)
+	var want: int = requested_seats if requested_seats > 0 else int(truth.get("live_max", 2))
+	var gate: Dictionary = enforce(mode_id, want, connected_humans)
+	var seated: int = int(gate.get("seated", 0)) if bool(gate.get("ok", false)) else 0
+	var live_partylink: bool = connected_humans >= 0
+	var simultaneous_humans_claimed := live_partylink and seated > 0
+	var exceeds_battle_slots: bool = seated > BATTLE_SCENE_FIGHTER_SLOTS
+	var lines: PackedStringArray = []
+	lines.append("PartyLink seats · %s" % mode_id)
+	lines.append("Catalog %d–%d · live max %d · BattleScene fighter slots %d" % [
+		int(truth.get("catalog_min", 1)),
+		int(truth.get("catalog_max", 1)),
+		int(truth.get("live_max", 2)),
+		BATTLE_SCENE_FIGHTER_SLOTS,
+	])
+	if live_partylink:
+		lines.append("Connected humans %d · seated %d (never invent seats)" % [connected_humans, seated])
+	else:
+		lines.append("Local/sim journey · connected_humans=-1 · not a live PartyLink human claim")
+	if exceeds_battle_slots:
+		lines.append("Seats>%d are lobby/roster only — not %d simultaneous BattleScene humans" % [
+			BATTLE_SCENE_FIGHTER_SLOTS,
+			seated,
+		])
+	else:
+		lines.append("Seated ≤ BattleScene slots · no fabricated multi-actor humans")
+	lines.append("SHIPPING_ROLLBACK_ENABLED=false · never ranked")
+	return {
+		"ok": true,
+		"mode_id": mode_id,
+		"text": "\n".join(lines),
+		"truth": truth,
+		"gate": gate,
+		"seated": seated,
+		"connected_humans": connected_humans,
+		"live_partylink": live_partylink,
+		"simultaneous_humans_claimed": simultaneous_humans_claimed,
+		"simultaneous_humans_gt_battle_slots": exceeds_battle_slots and simultaneous_humans_claimed,
+		"battle_scene_fighter_slots": BATTLE_SCENE_FIGHTER_SLOTS,
+		"invented_seats": false,
+		"SHIPPING_ROLLBACK_ENABLED": false,
+		"feeds_ranked_mmr": false,
+		"HUMAN_ART_APPROVED": false,
+		"presentation_only": true,
+	}

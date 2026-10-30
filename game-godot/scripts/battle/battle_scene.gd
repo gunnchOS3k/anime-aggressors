@@ -64,6 +64,7 @@ const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
 const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
 const MOVE_LIST_PANEL := preload("res://scripts/ui/move_list_panel.gd")
 const _RosamereForms = preload("res://scripts/combat/rosamere_form_selection.gd")
+const _RosamerePresentationHud = preload("res://scripts/ui/rosamere_presentation_hud.gd")
 const _FlaglineFourBody = preload("res://scripts/trials/flagline/flagline_four_body.gd")
 
 var _move_list_panel: Control
@@ -84,6 +85,7 @@ func _ready() -> void:
 	_spawn_fighters()
 	_apply_rosamere_form_hooks()
 	_setup_hud_panels()
+	_mount_rosamere_presentation_hud()
 	_apply_device_role()
 	if str(GameState.mode) == "trials" and bool(GameState.trial_live_combat):
 		var _TrialsBridge = load("res://scripts/trials/shared_combat_bridge.gd")
@@ -255,6 +257,14 @@ func _apply_rosamere_form_hooks() -> void:
 		if not bool(gate.get("ok", false)) and form_id == "EVERLASTING_ORIGIN":
 			form_id = "FAMILIAR_ROSE"
 		_RosamereForms.apply_to_fighter(actor, form_id, mode, consent)
+
+
+func _mount_rosamere_presentation_hud() -> Dictionary:
+	## Versus presentation-only card HUD — ≠ HUMAN_ART; HitResolver untouched.
+	var mode := str(GameState.mode)
+	if mode.is_empty():
+		mode = "versus"
+	return _RosamerePresentationHud.mount_on_hud(hud, [fighter1, fighter2, fighter3, fighter4], mode)
 
 
 func _active_combat_bodies() -> Array:

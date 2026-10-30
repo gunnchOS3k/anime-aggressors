@@ -64,5 +64,17 @@ func run() -> void:
 	check(bool(local.get("ok", false)), "local_sim_ok")
 	check(int(local.get("connected_humans", 0)) == -1, "local_not_partylink_claim")
 
+	## Presentation honesty card — digital SETUP/HUD; never claims invented seats.
+	var card: Dictionary = Seats.presentation_honesty_card("fractured_accord", 4, 4)
+	check(bool(card.get("ok", false)), "card_ok")
+	check(int(card.get("seated", 0)) == 4, "card_seated_4")
+	check(bool(card.get("simultaneous_humans_gt_battle_slots", false)), "card_flags_gt_battle_slots")
+	check(not bool(card.get("invented_seats", true)), "card_no_invented")
+	check(str(card.get("text", "")).find("lobby/roster") >= 0, "card_lobby_honesty")
+	check(not bool(card.get("SHIPPING_ROLLBACK_ENABLED", true)), "card_no_rollback")
+	var sim_card: Dictionary = Seats.presentation_honesty_card("prism_weave", 10, -1)
+	check(not bool(sim_card.get("live_partylink", true)), "sim_card_not_live_claim")
+	check(str(sim_card.get("text", "")).find("not a live PartyLink") >= 0, "sim_card_text")
+
 	print("TRIALS_PARTYLINK_SEATS ", "PASS" if failures.is_empty() else "FAIL", " checks=", checks, " failures=", failures)
 	quit(0 if failures.is_empty() else 1)
