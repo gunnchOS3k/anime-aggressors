@@ -18,6 +18,7 @@ const Echoes = preload("res://scripts/trials/echoes/echoes_gauntlet_sim.gd")
 const Colossus = preload("res://scripts/trials/unbound/colossus_rig.gd")
 const FlaglineFourBody = preload("res://scripts/trials/flagline/flagline_four_body.gd")
 const ColossusActor = preload("res://scripts/trials/unbound/colossus_actor.gd")
+const Ownership = preload("res://scripts/trials/trial_real_player_ownership.gd")
 
 ## All six Trials modes enter shared BattleScene combat with overlay + live sim tick.
 const LIVE_SHARED_COMBAT_MODES := [
@@ -553,7 +554,13 @@ static func notify_live_hit(damage: float, facing: int = 1, lane: int = -1) -> v
 				gs.trial_colossus_rigs = rigs
 				snap["colossus_rigs"] = rigs
 		_:
+			## Still record digital ownership for modes that only mark owned via notify.
+			snap["mode_id"] = mode_id
+			snap = Ownership.append_hit_event(snap, damage, facing, lane)
+			gs.trial_sim_snapshot = snap
 			return
+	snap["mode_id"] = mode_id
+	snap = Ownership.append_hit_event(snap, damage, facing, lane)
 	gs.trial_sim_snapshot = snap
 
 
@@ -564,6 +571,7 @@ static func seal_live_resonance_result() -> Dictionary:
 	var snap: Dictionary = gs.trial_sim_snapshot
 	var owned: bool = bool(snap.get("player_owned_events", false))
 	var sealed: Dictionary = Derby.seal_real_player(snap, owned)
+	sealed = Ownership.seal_trace(sealed, str(sealed.get("result_kind", "SIMULATION")))
 	gs.trial_sim_snapshot = sealed
 	return sealed
 
@@ -579,6 +587,13 @@ static func _seal_flagline_results(gs: Node, snap: Dictionary) -> Dictionary:
 	sealed["feeds_ranked_mmr"] = false
 	sealed["SHIPPING_ROLLBACK_ENABLED"] = false
 	sealed["HUMAN_ART_APPROVED"] = false
+	## Flagline ownership is four-body sync — synthesize one digital event when owned.
+	if owned:
+		sealed["mode_id"] = "fractured_accord"
+		sealed["player_owned_events"] = true
+		if not sealed.has("ownership_trace") or (sealed.get("ownership_trace", {}) as Dictionary).is_empty():
+			sealed = Ownership.append_hit_event(sealed, 1.0, 1, -1)
+	sealed = Ownership.seal_trace(sealed, str(sealed.get("result_kind", "SIMULATION")))
 	sealed["rematch"] = FlaglineFourBody.rematch_payload(sealed)
 	gs.trial_sim_snapshot = sealed
 	if owned:
@@ -591,6 +606,9 @@ static func _seal_flagline_results(gs: Node, snap: Dictionary) -> Dictionary:
 			"four_body": true,
 			"battle_scene_fighter_slots": 4,
 			"seed": sealed.get("seed", 0),
+			"ownership_trace": sealed.get("ownership_trace", {}),
+			"digital_only": true,
+			"physical_device": false,
 		})
 	return sealed
 

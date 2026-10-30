@@ -2,6 +2,8 @@ extends "res://scripts/ui/console_menu_base.gd"
 
 signal _scene_settled
 
+const _RosamerePresentation = preload("res://scripts/visual/rosamere_form_presentation.gd")
+
 var _status: Label
 var _body: Label
 var _route_picker: OptionButton
@@ -10,6 +12,7 @@ var _replay_picker: OptionButton
 var _action: Button
 var _back_button: Button
 var _stop_scene: Button
+var _rosamere_hook_label: Label
 var _chapter_controls: Array[BaseButton] = []
 var _scene_pending := false
 var _scene_request := 0
@@ -107,6 +110,11 @@ func _build_ui() -> void:
 	if CampaignRuntime.route_review_enabled():
 		notice.text += "\nOpening routes are accessible for review; Gray and cosmic unlocks require completed campaigns."
 	host.add_child(notice)
+	_rosamere_hook_label = Label.new()
+	_rosamere_hook_label.name = "RosamereStoryPresentationHook"
+	_rosamere_hook_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_rosamere_hook_label.visible = false
+	host.add_child(_rosamere_hook_label)
 
 
 func _button(row: Node, text: String, handler: Callable) -> Button:
@@ -165,6 +173,26 @@ func _refresh() -> void:
 			_replay_picker.add_item(str(chapter["title"]))
 			_replay_picker.set_item_metadata(_replay_picker.item_count - 1, str(chapter["id"]))
 	_replay_picker.disabled = _scene_pending or _replay_picker.item_count == 0
+	_refresh_rosamere_story_presentation(node)
+
+
+func _refresh_rosamere_story_presentation(node: Dictionary) -> void:
+	## Cursor presentation surface for Rosamere Story hooks / choreography stubs.
+	## Honesty: choreography ≠ HUMAN_ART; does not rewrite HitResolver/rollback.
+	if _rosamere_hook_label == null:
+		return
+	var contract: Dictionary = _RosamerePresentation.story_integration_contract(node)
+	if not bool(contract.get("story_surface", false)):
+		_rosamere_hook_label.visible = false
+		_rosamere_hook_label.text = ""
+		return
+	var familiar: Dictionary = _RosamerePresentation.story_hook_for_form("FAMILIAR_ROSE")
+	var bloom: Dictionary = _RosamerePresentation.choreography_stub_for_form("FIRST_BLOOM")
+	_rosamere_hook_label.visible = true
+	_rosamere_hook_label.text = "Rosamere Story presentation · %s · choreography stub (%s) ≠ HUMAN_ART · HitResolver untouched" % [
+		str(familiar.get("presentation_line", "three-form hooks authored")),
+		str(bloom.get("transform_beat", "first_dawn")),
+	]
 
 
 func _on_new_game() -> void:

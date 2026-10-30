@@ -24,6 +24,7 @@ SCRIPTS=(
   res://tests/integration/ColossusActorCollision.gd
   res://tests/integration/TrialsOrdinaryInputJourneys.gd
   res://tests/integration/TrialsPlayableJourneyLifecycle.gd
+  res://tests/integration/TrialsRealPlayerOwnershipTrace.gd
 )
 FAIL=0
 cd "$ROOT/game-godot"
@@ -47,7 +48,7 @@ payload = {
   "suite": "trials_of_convergence",
   "unix": int(time.time()),
   "pass": $FAIL == 0,
-  "scripts": 16,
+  "scripts": 17,
   "HUMAN_ART_APPROVED": False,
   "RC2_READY": False,
   "V1_0_0_RELEASE_AUTHORIZED": False,

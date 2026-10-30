@@ -4,12 +4,15 @@ extends RefCounted
 ## COMPETITIVE_SELF_LIMITED is never a fourth form presentation.
 
 const DOC_PATH := "res://data/story/rosamere_three_form_presentation_production.json"
+const HOOKS_PATH := "res://data/story/rosamere_form_presentation_hooks.json"
 const Selection = preload("res://scripts/combat/rosamere_form_selection.gd")
 const Sfx = preload("res://scripts/audio/v1_candidate_sfx.gd")
 
 const FORM_FAMILIAR := "FAMILIAR_ROSE"
 const FORM_FIRST_BLOOM := "FIRST_BLOOM"
 const FORM_EVERLASTING := "EVERLASTING_ORIGIN"
+
+## Choreography stubs are runtime presentation scaffolding — never HUMAN_ART.
 
 
 static func load_doc() -> Dictionary:
@@ -143,6 +146,97 @@ static func cinematic_beat_for_form(form_id: String) -> Dictionary:
 	return {}
 
 
+static func load_hooks_doc() -> Dictionary:
+	if not FileAccess.file_exists(HOOKS_PATH):
+		return {}
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(HOOKS_PATH))
+	return parsed if typeof(parsed) == TYPE_DICTIONARY else {}
+
+
+static func story_hook_for_form(form_id: String) -> Dictionary:
+	## Story integration presentation hook — not HitResolver / not HUMAN_ART.
+	var norm: Dictionary = Selection.normalize_selection(form_id)
+	if not bool(norm.get("ok", false)):
+		return {}
+	var resolved := str(norm.get("form_id", FORM_FAMILIAR))
+	var doc := load_doc()
+	var hooks: Dictionary = doc.get("story_hooks", {})
+	var entry: Dictionary = hooks.get(resolved, {})
+	if entry.is_empty():
+		var hooks_doc := load_hooks_doc()
+		var form_row: Dictionary = hooks_doc.get("forms", {}).get(resolved, {})
+		entry = {
+			"form_id": resolved,
+			"roman": str(form_row.get("roman", "")),
+			"story_modes": form_row.get("modes", []),
+			"pink_revelation_node": str(hooks_doc.get("pink_revelation_node", "kaia-windrow:pink_revelation")),
+			"insert_after": str(hooks_doc.get("insert_after", "")),
+		}
+	var out := entry.duplicate(true)
+	out["form_id"] = resolved
+	out["HUMAN_ART_APPROVED"] = false
+	out["choreography_is_human_art"] = false
+	out["status"] = str(out.get("status", "STORY_HOOK_RUNTIME_STUB"))
+	return out
+
+
+static func choreography_stub_for_form(form_id: String) -> Dictionary:
+	## Authored choreography stub beats for Cursor presentation — honesty ≠ HUMAN_ART.
+	var norm: Dictionary = Selection.normalize_selection(form_id)
+	if not bool(norm.get("ok", false)):
+		return {}
+	var resolved := str(norm.get("form_id", FORM_FAMILIAR))
+	var doc := load_doc()
+	var stubs: Dictionary = doc.get("choreography_stubs", {})
+	var entry: Dictionary = stubs.get(resolved, {})
+	if entry.is_empty():
+		var presentation := manifestation_presentation(resolved)
+		entry = {
+			"form_id": resolved,
+			"idle_beat": str(presentation.get("pose_idle", "idle")),
+			"transform_beat": str(presentation.get("transform_in_clip", presentation.get("pose_idle", "idle"))),
+			"camera_beat": str(presentation.get("camera_beat", "")),
+			"expression": str(presentation.get("cinematic_expression", "")),
+			"vfx_motif": str(presentation.get("vfx_motif", "")),
+		}
+	var out := entry.duplicate(true)
+	out["form_id"] = resolved
+	out["HUMAN_ART_APPROVED"] = false
+	out["choreography_is_human_art"] = false
+	out["status"] = str(out.get("status", "CHOREOGRAPHY_STUB_NOT_HUMAN_ART"))
+	out["final_mix"] = false
+	return out
+
+
+static func story_integration_contract(node: Dictionary = {}) -> Dictionary:
+	## Forms presentation + Story hooks for campaign UI / pink revelation surface.
+	var hooks_doc := load_hooks_doc()
+	var node_id := str(node.get("id", ""))
+	var fighter_hint := str(node.get("fighter_hint", ""))
+	var is_pink := node_id == str(hooks_doc.get("pink_revelation_node", "kaia-windrow:pink_revelation")) \
+		or bool(node.get("pink_working_identity", false)) \
+		or fighter_hint == "rosamere"
+	var forms: Array = []
+	for fid in [FORM_FAMILIAR, FORM_FIRST_BLOOM, FORM_EVERLASTING]:
+		forms.append({
+			"form_id": fid,
+			"story_hook": story_hook_for_form(fid),
+			"choreography_stub": choreography_stub_for_form(fid),
+		})
+	return {
+		"ok": true,
+		"fighter_id": "rosamere",
+		"story_surface": is_pink,
+		"node_id": node_id,
+		"pink_revelation_node": str(hooks_doc.get("pink_revelation_node", "kaia-windrow:pink_revelation")),
+		"forms": forms,
+		"HUMAN_ART_APPROVED": false,
+		"choreography_is_human_art": false,
+		"HitResolver_untouched": true,
+		"status": "STORY_PRESENTATION_HOOKS_AUTHORED_FINAL_ART_NOT_APPROVED",
+	}
+
+
 static func validate_production() -> Dictionary:
 	var doc := load_doc()
 	var failures: Array = []
@@ -188,12 +282,33 @@ static func validate_production() -> Dictionary:
 		failures.append("insufficient_cinematic_beats")
 	if bool(doc.get("RC2_READY", true)) or bool(doc.get("V1_0_0_RELEASE_AUTHORIZED", true)):
 		failures.append("release_gates_must_stay_false")
+	var story_hooks: Dictionary = doc.get("story_hooks", {})
+	var choreo: Dictionary = doc.get("choreography_stubs", {})
+	for need in [FORM_FAMILIAR, FORM_FIRST_BLOOM, FORM_EVERLASTING]:
+		if not story_hooks.has(need):
+			failures.append("missing_story_hook:" + need)
+		elif bool(story_hooks[need].get("HUMAN_ART_APPROVED", true)):
+			failures.append("story_hook_human_art_must_stay_false:" + need)
+		if not choreo.has(need):
+			failures.append("missing_choreography_stub:" + need)
+		elif bool(choreo[need].get("choreography_is_human_art", true)):
+			failures.append("choreography_must_not_claim_human_art:" + need)
+		elif bool(choreo[need].get("HUMAN_ART_APPROVED", true)):
+			failures.append("choreography_human_art_must_stay_false:" + need)
+	var hooks_doc := load_hooks_doc()
+	if hooks_doc.is_empty():
+		failures.append("missing_presentation_hooks_doc")
+	elif str(hooks_doc.get("pink_revelation_node", "")) != "kaia-windrow:pink_revelation":
+		failures.append("pink_revelation_node_mismatch")
 	return {
 		"ok": failures.is_empty(),
 		"failures": failures,
 		"manifestation_count": mans.size(),
 		"cinematic_beats": int(cinematic.get("beats", []).size()) if not cinematic.is_empty() else 0,
+		"story_hooks": story_hooks.size(),
+		"choreography_stubs": choreo.size(),
 		"HUMAN_ART_APPROVED": false,
 		"cel_shaded_glb": false,
 		"cinematic_final_mix": false,
+		"choreography_is_human_art": false,
 	}

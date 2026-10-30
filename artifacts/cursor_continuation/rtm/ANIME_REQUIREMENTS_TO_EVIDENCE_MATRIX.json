@@ -71,11 +71,13 @@
         "game-godot/tests/integration/ResumedStoryEncounter.gd",
         "game-godot/tests/v1_closure/StorySceneAuthority.gd",
         "game-godot/tests/integration/StoryInterruptedJourneyAuthority.gd",
-        "game-godot/tests/integration/StoryJourneyPathAuthority.gd"
+        "game-godot/tests/integration/StoryJourneyPathAuthority.gd",
+        "game-godot/tests/integration/StoryEarnedPrefixDialogueAuthority.gd"
       ],
       "automated_evidence": [
         "docs/story/",
-        "artifacts/cursor_continuation/batch5_stage_verify/STORY_INTERRUPTED_JOURNEY_AUTHORITY.json"
+        "artifacts/cursor_continuation/batch5_stage_verify/STORY_INTERRUPTED_JOURNEY_AUTHORITY.json",
+        "artifacts/cursor_continuation/earned_prefix_rosamere_ownership_verify/STORY_EARNED_PREFIX_DIALOGUE_AUTHORITY.json"
       ],
       "native_physical": {
         "status": "not_run",
@@ -88,10 +90,10 @@
         "V1_0_0_RELEASE_AUTHORIZED=false"
       ],
       "severity": "high",
-      "sha": "fbae9f03bc478c61e31eb3ac55c9d17aa2574ee7",
+      "sha": "ddba4c48d8830a0a238146b0d47c0b84e2953006",
       "independent_review_status": "not_started",
       "cursor_complete_status": "in_progress",
-      "notes": "Prologue interrupt/resume + dialogue out-of-order honesty; owner sign-off / V1 still false"
+      "notes": "Earned STOCK_WIN prefix via bound BattleScene producer then durable accord dialogue; staged fixture \u2260 owner sign-off / V1"
     },
     {
       "req_id": "AA-RTM-003",
@@ -106,26 +108,29 @@
       "tests": [
         "game-godot/scripts/combat/rosamere_form_selection.gd",
         "game-godot/scripts/trials/rosamere_trials_eligibility.gd",
-        "game-godot/tests/integration/TrialsRosamereEligibility.gd"
+        "game-godot/tests/integration/TrialsRosamereEligibility.gd",
+        "game-godot/tests/integration/RosamereStoryPresentationIntegration.gd"
       ],
       "automated_evidence": [
         "artifacts/cursor_continuation/ROSAMERE_THREE_FORM_CANON.json",
-        "artifacts/cursor_continuation/ROSAMERE_THREE_FORM_CANON_EVIDENCE.json"
+        "artifacts/cursor_continuation/ROSAMERE_THREE_FORM_CANON_EVIDENCE.json",
+        "artifacts/cursor_continuation/earned_prefix_rosamere_ownership_verify/ROSAMERE_STORY_PRESENTATION_INTEGRATION.json"
       ],
       "native_physical": {
         "status": "not_run",
         "platforms": [],
         "notes": "Headless/native suite \u2260 device physical acceptance"
       },
-      "art_status": "not_applicable",
+      "art_status": "THREE_FORM_PRESENTATION_PRODUCTION_IN_PROGRESS",
       "limitations": [
-        "HUMAN_ART for form presentation"
+        "HUMAN_ART for form presentation",
+        "choreography stubs \u2260 HUMAN_ART"
       ],
       "severity": "medium",
-      "sha": "50f044a07d3210e2b94fc4362403c86fc3ac9053",
+      "sha": "ddba4c48d8830a0a238146b0d47c0b84e2953006",
       "independent_review_status": "not_started",
       "cursor_complete_status": "complete",
-      "notes": "Three-form canon + Trials eligibility gated; Everlasting needs mythic consent / Story"
+      "notes": "Three-form canon + Story presentation hooks/choreography stubs on pink revelation; HitResolver untouched; HUMAN_ART still false"
     },
     {
       "req_id": "AA-RTM-004",
@@ -141,7 +146,8 @@
         "game-godot/tests/integration/TrialsOrdinaryInputJourneys.gd",
         "game-godot/tests/integration/FlaglineFourBodyCombat.gd",
         "game-godot/tests/integration/TrialsPlayableJourneyLifecycle.gd",
-        "game-godot/scripts/trials/trial_playable_journey.gd"
+        "game-godot/scripts/trials/trial_playable_journey.gd",
+        "game-godot/tests/integration/TrialsRealPlayerOwnershipTrace.gd"
       ],
       "automated_evidence": [
         "game-godot/scripts/trials/",
@@ -149,12 +155,13 @@
         ".github/workflows/trials-of-convergence.yml",
         "artifacts/cursor_continuation/TRIALS_OF_CONVERGENCE_DEEPEN_EVIDENCE.json",
         "artifacts/cursor_continuation/trials_native_review/NATIVE_PLAYABLE_REVIEW_PACKAGE.json",
-        "artifacts/cursor_continuation/TRIALS_PLAYABLE_STORY_PATH_EVIDENCE.json"
+        "artifacts/cursor_continuation/TRIALS_PLAYABLE_STORY_PATH_EVIDENCE.json",
+        "artifacts/cursor_continuation/earned_prefix_rosamere_ownership_verify/TRIALS_REAL_PLAYER_OWNERSHIP_TRACE.json"
       ],
       "native_physical": {
         "status": "not_run",
         "platforms": [],
-        "notes": "Headless/native suite \u2260 device physical acceptance"
+        "notes": "Headless/native suite \u2260 device physical acceptance; digital ownership traces \u2260 physical devices"
       },
       "art_status": "not_applicable",
       "limitations": [
@@ -163,10 +170,10 @@
         "CURSOR_COMPLETE not claimed"
       ],
       "severity": "high",
-      "sha": "fbae9f03bc478c61e31eb3ac55c9d17aa2574ee7",
+      "sha": "ddba4c48d8830a0a238146b0d47c0b84e2953006",
       "independent_review_status": "not_started",
       "cursor_complete_status": "in_progress",
-      "notes": "All six modes catalogued as playable experiences with live shared combat + journey instructions/win-loss/retry; device/HUMAN_ART still open; CURSOR_COMPLETE not claimed"
+      "notes": "Digital REAL_PLAYER ownership traces on notify_live_hit/seal; no physical device invention; device/HUMAN_ART still open"
     },
     {
       "req_id": "AA-RTM-005",
