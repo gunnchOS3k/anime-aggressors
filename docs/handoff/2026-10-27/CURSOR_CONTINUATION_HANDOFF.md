@@ -169,3 +169,15 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Evidence: `artifacts/cursor_continuation/BATCH5_STAGES_STORY_RUNTIME_EVIDENCE.json`
 - Codex combat/rollback/integrated tree untouched
 - RC2_READY / V1_0_0_RELEASE_AUTHORIZED / HUMAN_ART_APPROVED / CURSOR_COMPLETE remain false
+
+
+## Shift — Trials playable experiences + Story path (2026-10-30 cont)
+
+- Tip parent preserved: `455e16c7`
+- Six Trials catalog `live_shared_combat` aligned to all six (was 3); each mode has first-play instructions, win/loss, retry, playable_experience=true
+- `trial_playable_journey.gd` + journey scene Retry/RESULTS outcome/exit contract
+- Story AA-RTM-002: prologue battle interrupt/resume + out-of-order dialogue cannot mint durable progression
+- Local Godot 4.7.1: TrialsPlayableJourneyLifecycle PASS (110), TrialsOrdinaryInputJourneys PASS (26), StoryJourneyPathAuthority PASS (28), FlatCombatReplay PASS (24)
+- Evidence: `artifacts/cursor_continuation/TRIALS_PLAYABLE_STORY_PATH_EVIDENCE.json`
+- Still scaffold / not playable as commercial art: HUMAN_ART meshes; device playtest; PartyLink simultaneous-human claims; shipping rollback
+- Flags remain false

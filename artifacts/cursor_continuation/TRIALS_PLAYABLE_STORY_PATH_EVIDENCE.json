@@ -1,0 +1,64 @@
+{
+  "suite": "trials_playable_experiences_plus_story_path",
+  "temporary_owner": "cursor",
+  "branch": "cursor/continuation-v1-batch4-stages-20261030",
+  "parent_tip_preserved": "455e16c7567e1b87fe986bcbdd08f0a5113daf2b",
+  "godot_version": "4.7.1.stable.official",
+  "generated_at": "2026-10-30T20:42:32Z",
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false,
+  "HUMAN_ART_APPROVED": false,
+  "CURSOR_COMPLETE": false,
+  "SHIPPING_ROLLBACK_ENABLED": false,
+  "trials": {
+    "playable_experiences": [
+      "resonance_trial",
+      "fractured_accord",
+      "prism_weave",
+      "riftline_defense",
+      "echoes_gauntlet",
+      "convergence_unbound"
+    ],
+    "still_stub_or_scaffold": {
+      "HUMAN_ART_meshes": "SCAFFOLD_PROCEDURAL for all six",
+      "PartyLink_simultaneous_humans_gt_gate": "CPU fill honesty; not four simultaneous humans claimed",
+      "shipping_rollback": false,
+      "device_playtest": "not_run"
+    },
+    "became_playable_this_pass": [
+      "catalog live_shared_combat aligned to all six (was 3)",
+      "first_play_instructions / win_loss / retry_policy per mode",
+      "trial_playable_journey helper + journey scene Retry/RESULTS outcome",
+      "TrialsPlayableJourneyLifecycle smoke (110)"
+    ]
+  },
+  "story_aa_rtm_002": {
+    "deepened": "prologue interrupt/resume + dialogue out-of-order honesty",
+    "owner_sign_off": false,
+    "cursor_complete_status": "in_progress"
+  },
+  "tests": {
+    "TrialsPlayableJourneyLifecycle": {
+      "PASS": true,
+      "checks": 110
+    },
+    "TrialsOrdinaryInputJourneys": {
+      "PASS": true,
+      "checks": 26
+    },
+    "StoryJourneyPathAuthority": {
+      "PASS": true,
+      "checks": 28
+    },
+    "FlatCombatReplay": {
+      "PASS": true,
+      "checks": 24
+    }
+  },
+  "disk": {
+    "free_gb": 2.34
+  },
+  "codex_surfaces_untouched": true,
+  "push_status": "pending_attempt",
+  "PASS": true
+}

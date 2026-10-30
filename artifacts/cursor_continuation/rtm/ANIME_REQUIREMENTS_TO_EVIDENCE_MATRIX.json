@@ -5,7 +5,7 @@
   "contract_source_sha": "935eb3a20548b1a4b726f2ba305df94ff496be16",
   "product_id": "anime-aggressors",
   "product_repo": "https://github.com/gunnchOS3k/anime-aggressors",
-  "generated_at": "2026-10-30T20:36:19Z",
+  "generated_at": "2026-10-30T20:42:32Z",
   "honesty_flags": {
     "HUMAN": false,
     "RC2": false,
@@ -16,7 +16,7 @@
       "status": "in_progress",
       "sha": "e696dd645fb43899432616eeec3baca865c1e615",
       "actor": "cursor",
-      "notes": "Batch5 30/30 expanded layouts + Story interrupted-journey deepen; CURSOR_COMPLETE not claimed"
+      "notes": "Trials playable journey deepen + Story path honesty; CURSOR_COMPLETE not claimed"
     },
     "codex_independently_verified": {
       "status": "not_started"
@@ -70,7 +70,8 @@
         "game-godot/tests/integration/StorySaveRecovery.gd",
         "game-godot/tests/integration/ResumedStoryEncounter.gd",
         "game-godot/tests/v1_closure/StorySceneAuthority.gd",
-        "game-godot/tests/integration/StoryInterruptedJourneyAuthority.gd"
+        "game-godot/tests/integration/StoryInterruptedJourneyAuthority.gd",
+        "game-godot/tests/integration/StoryJourneyPathAuthority.gd"
       ],
       "automated_evidence": [
         "docs/story/",
@@ -90,7 +91,7 @@
       "sha": "e696dd645fb43899432616eeec3baca865c1e615",
       "independent_review_status": "not_started",
       "cursor_complete_status": "in_progress",
-      "notes": "Story authority tests exist incl. interrupted-journey checkpoint; commercial Story complete / V1 not claimed"
+      "notes": "Prologue interrupt/resume + dialogue out-of-order honesty; owner sign-off / V1 still false"
     },
     {
       "req_id": "AA-RTM-003",
@@ -138,14 +139,17 @@
       ],
       "tests": [
         "game-godot/tests/integration/TrialsOrdinaryInputJourneys.gd",
-        "game-godot/tests/integration/FlaglineFourBodyCombat.gd"
+        "game-godot/tests/integration/FlaglineFourBodyCombat.gd",
+        "game-godot/tests/integration/TrialsPlayableJourneyLifecycle.gd",
+        "game-godot/scripts/trials/trial_playable_journey.gd"
       ],
       "automated_evidence": [
         "game-godot/scripts/trials/",
         "scripts/run-trials-suite.sh",
         ".github/workflows/trials-of-convergence.yml",
         "artifacts/cursor_continuation/TRIALS_OF_CONVERGENCE_DEEPEN_EVIDENCE.json",
-        "artifacts/cursor_continuation/trials_native_review/NATIVE_PLAYABLE_REVIEW_PACKAGE.json"
+        "artifacts/cursor_continuation/trials_native_review/NATIVE_PLAYABLE_REVIEW_PACKAGE.json",
+        "artifacts/cursor_continuation/TRIALS_PLAYABLE_STORY_PATH_EVIDENCE.json"
       ],
       "native_physical": {
         "status": "not_run",
@@ -162,7 +166,7 @@
       "sha": "50f044a07d3210e2b94fc4362403c86fc3ac9053",
       "independent_review_status": "not_started",
       "cursor_complete_status": "in_progress",
-      "notes": "Native suite + ordinary-input journeys; REAL_PLAYER only when player-owned; Web CI \u2260 native Trials tip"
+      "notes": "All six modes catalogued as playable experiences with live shared combat + journey instructions/win-loss/retry; device/HUMAN_ART still open; CURSOR_COMPLETE not claimed"
     },
     {
       "req_id": "AA-RTM-005",

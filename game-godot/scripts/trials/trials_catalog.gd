@@ -22,6 +22,9 @@ static func display_rows() -> Array:
 			"players": Authority.player_count_truth(str(m.get("id", ""))),
 			"feeds_ranked_mmr": bool(m.get("feeds_ranked_mmr", false)),
 			"label": str(m.get("label", "")),
+			"live_shared_combat": bool(m.get("live_shared_combat", false)),
+			"playable_experience": bool(m.get("playable_experience", false)),
+			"first_play_instructions": str(m.get("first_play_instructions", "")),
 		})
 	return rows
 
