@@ -186,11 +186,12 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 ## Shift — Story earned-prefix + Rosamere Story presentation + Trials ownership traces (2026-10-30)
 
 - Tip parent preserved: `ddba4c48`
+- Engineering tip: `1e8338dc` · local tip: `5ab62c94`
 - AA-RTM-002: `StoryEarnedPrefix` + `StoryEarnedPrefixDialogueAuthority` — 7 Kaia STOCK_WIN receipts via bound BattleScene producer (closed countdown), then durable `kaia-windrow:accord` after authenticated reload; staged fixture ≠ owner sign-off
 - Rosamere: Story hooks + choreography stubs in presentation production JSON; StoryCampaignScene pink-revelation surface; HitResolver/rollback untouched; choreography ≠ HUMAN_ART
 - Trials: `trial_real_player_ownership.gd` digital ownership traces on `notify_live_hit` / seal; no physical device invention
 - Local Godot 4.7.1: StoryEarnedPrefixDialogueAuthority PASS (44), RosamereStoryPresentationIntegration PASS (31), TrialsRealPlayerOwnershipTrace PASS (21), StoryJourneyPathAuthority PASS (28), FlatCombatReplay PASS (24)
 - Evidence: `artifacts/cursor_continuation/EARNED_PREFIX_ROSAMERE_OWNERSHIP_EVIDENCE.json`
 - Codex combat/rollback/integrated tree untouched
-- FF-push blocked (`gh` unauthenticated after ConnectScm)
+- FF-push blocked: ConnectScm connected session GitHub, but `gh` still unauthenticated and `git push` HTTPS fails (`could not read Username … Device not configured`); ancestry preserves `ddba4c48`; no force
 - RC2_READY / V1_0_0_RELEASE_AUTHORIZED / HUMAN_ART_APPROVED / CURSOR_COMPLETE remain false
