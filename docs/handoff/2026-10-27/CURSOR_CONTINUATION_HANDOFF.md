@@ -207,4 +207,5 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - HitResolver / Codex combat data untouched; choreography ≠ HUMAN_ART
 - Local Godot 4.7.1: RosamereCosmologyHonestyPresentation PASS (73), RosamereStoryPresentationIntegration PASS (31), RosamereThreeFormCanon PASS (38), FlatCombatReplay PASS (24)
 - Evidence: `artifacts/cursor_continuation/ROSAMERE_COSMOLOGY_HONESTY_EVIDENCE.json`
+- Local tip `2ce6876b` / engineering `6dfaa9d6` unpublished (push HTTPS Device not configured; gh keyring invalid). Remote remains `e93e65b4`. No ConnectScm re-prompt; no force.
 - Flags remain false
