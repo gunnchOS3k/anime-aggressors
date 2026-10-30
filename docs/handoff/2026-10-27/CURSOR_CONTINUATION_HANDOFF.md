@@ -238,9 +238,11 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 ## Shift — AA-RTM-006 hitbox integrity honesty (2026-10-30)
 
 - Tip parent preserved: `7c4af3ab`
+- Engineering/local tip: `0b95ea350ebde5df013a7abf98d147dea41b0df2`
 - `hitbox_integrity_honesty.gd` + `HitboxIntegrityHonesty` — HitResolver owns `damage_ratio` once; Trials bridge scales knockback only; Colossus scale-aware capsule; presentation card on `prepare_live_battle`
 - Codex HitResolver / combat data not rewritten; HUMAN_ART hitbox review + roster frame-data audit still open; device_matrix_pass=false
 - Local Godot 4.7.1: HitboxIntegrityHonesty PASS (41), TrialsHitResolverDamageRatio PASS (16), ColossusActorCollision PASS (41), FlatCombatReplay PASS (24)
 - Evidence: `artifacts/cursor_continuation/HITBOX_INTEGRITY_HONESTY_EVIDENCE.json`
 - Push blocked same as a11y tip (HTTPS Device / SSH pubkey / gh). Remote remains `e93e65b4`.
 - Flags remain false
+- Next unfinished Cursor RTM (digital-capable, still open): AA-RTM-002 Story owner-path deepen / AA-RTM-004 Trials device-honest deepen — both still blocked on owner/device/HUMAN_ART for CURSOR_COMPLETE; AA-RTM-011 remains gate.
