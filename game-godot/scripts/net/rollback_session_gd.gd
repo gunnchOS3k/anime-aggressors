@@ -86,6 +86,7 @@ func advance_frame(local_inputs: Array, confirmed_flags: Array) -> Dictionary:
 	while _history.size() > policy.max_rollback_frames + 2:
 		_history.pop_front()
 	current_frame += 1
+	_prune_inputs()
 	return {
 		"ok": true,
 		"frame": current_frame - 1,
@@ -95,55 +96,71 @@ func advance_frame(local_inputs: Array, confirmed_flags: Array) -> Dictionary:
 	}
 
 
+func _valid_remote_buttons(buttons: Dictionary) -> bool:
+	var allowed := _default_buttons()
+	for button in buttons:
+		if not allowed.has(button) or typeof(buttons[button]) != TYPE_BOOL:
+			return false
+	return true
+
+
+func _prune_inputs() -> void:
+	if _history.is_empty(): return
+	var oldest: int = int(_history[0].frame)
+	for records in [_confirmed, _predicted]:
+		for key in records.keys():
+			if int(str(key).get_slice(":", 0)) < oldest:
+				records.erase(key)
+
+
 func confirm_remote_input(frame: int, player_id: int, buttons: Dictionary) -> Dictionary:
+	# Inputs are immutable once confirmed. Validate before changing either the
+	# timeline or its pending maps; a rejected packet cannot poison a later step.
+	if frame < 0 or player_id < 0 or player_id >= max_players or not _valid_remote_buttons(buttons):
+		return {"ok": false, "rolled_back": false, "error": "invalid_input", "frame": frame}
+	if frame > current_frame + policy.max_rollback_frames:
+		return {"ok": false, "rolled_back": false, "error": "future_input_limit", "frame": frame}
 	var key := _key(frame, player_id)
-	var predicted = _predicted.get(key, null)
-	_confirmed[key] = buttons.duplicate(true)
-	var mismatch := false
-	if predicted != null:
-		mismatch = str(predicted) != str(buttons)
-	if not mismatch:
-		return {"ok": true, "rolled_back": false, "frame": frame}
+	if _confirmed.has(key):
+		return {"ok": _confirmed[key] == buttons, "rolled_back": false, "error": "" if _confirmed[key] == buttons else "conflicting_confirmation", "frame": frame}
+	if frame >= current_frame:
+		_confirmed[key] = buttons.duplicate(true)
+		return {"ok": true, "rolled_back": false, "queued": true, "frame": frame}
 	if not policy.can_rollback(frame, current_frame):
 		desync_detected = true
 		return {"ok": false, "rolled_back": false, "error": "beyond_rollback", "frame": frame}
-	# Resim from frame.
 	var start_idx := -1
 	for i in range(_history.size()):
 		if int(_history[i].get("frame", -1)) == frame:
 			start_idx = i
 			break
 	if start_idx < 0:
-		return {"ok": false, "rolled_back": false, "error": "missing_history"}
+		return {"ok": false, "rolled_back": false, "error": "missing_history", "frame": frame}
+	var original: Dictionary = _history[start_idx]
+	_confirmed[key] = buttons.duplicate(true)
+	_predicted.erase(key)
+	if original.inputs[player_id] == buttons:
+		original.confirmed[player_id] = true
+		return {"ok": true, "rolled_back": false, "frame": frame}
+	# This class only rebuilds INPUT CHECKSUMS, not a game-world snapshot.
+	# Retain the original tip and every recorded slot's input. Replaying a fixed
+	# policy window used to invent unplayed frames and discard local input.
+	var target_frame: int = current_frame
+	var replay_rows: Array = _history.slice(start_idx).duplicate(true)
 	rollback_count += 1
 	last_rollback_frame = frame
-	# Truncate and re-advance with confirmed remote.
-	var keep: Array = _history.slice(0, start_idx)
-	_history = keep
+	_history = _history.slice(0, start_idx)
 	current_frame = frame
-	for i in range(start_idx, start_idx + policy.max_rollback_frames):
-		# Rebuild using confirmed where available else last predicted.
-		var rebuilt: Array = []
-		var flags: Array = []
+	for record in replay_rows:
+		var rebuilt: Array = record.inputs.duplicate(true)
+		var flags: Array = record.confirmed.duplicate()
 		for p in range(max_players):
-			var k2 := _key(current_frame, p)
-			if _confirmed.has(k2):
-				rebuilt.append(_confirmed[k2].duplicate(true))
-				flags.append(true)
-			elif _predicted.has(k2):
-				rebuilt.append(_predicted[k2].duplicate(true))
-				flags.append(false)
-			else:
-				rebuilt.append(_default_buttons())
-				flags.append(false)
+			var confirmed_key := _key(current_frame, p)
+			if _confirmed.has(confirmed_key):
+				rebuilt[p] = _confirmed[confirmed_key].duplicate(true)
+				flags[p] = true
 		advance_frame(rebuilt, flags)
-		if current_frame >= frame + (i - start_idx) + 1 and i >= start_idx:
-			pass
-		# Stop once we've caught original tip.
-		if _history.size() > 0 and int(_history[-1].get("frame", -1)) >= frame + (policy.max_rollback_frames):
-			break
-		if current_frame > frame + policy.max_rollback_frames:
-			break
+	assert(current_frame == target_frame)
 	return {
 		"ok": true,
 		"rolled_back": true,
@@ -190,5 +207,5 @@ static func self_test() -> Dictionary:
 	var ok: bool = bool(rb.get("rolled_back", false)) and s.rollback_count >= 1
 	var c1: String = str(s._checksum_for(0, [{"a": 1}, {"b": 2}]))
 	var c2: String = str(s._checksum_for(0, [{"a": 1}, {"b": 2}]))
-	ok = ok and c1 == c2 and before > 0
+	ok = ok and c1 == c2 and before > 0 and s.current_frame == before
 	return {"ok": ok, "rollback_count": s.rollback_count, "state": s.as_dict()}

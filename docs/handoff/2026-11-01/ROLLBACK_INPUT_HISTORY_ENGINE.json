@@ -1,0 +1,136 @@
+{
+  "source_parent": "b4f9808b4e52b8a6b80fdb1cc286d56ec3f94c91",
+  "status": "CODEX_AUTHORED_ENGINEERING_CANDIDATE_AWAITING_DISTINCT_REVIEW",
+  "godot_version": "4.7.1.stable.official.a13da4feb",
+  "source_sha256": {
+    "game-godot/scripts/net/rollback_session_gd.gd": "eb962543a07bd815e1d9062ff714b6b3a76badd0c8e213fa91849a9b6d287e78",
+    "game-godot/tests/integration/RollbackInputHistory.gd": "ab7bdda889b7b7782da0b484300d2efd3d266482d0dee905ad815c4007b31957",
+    "tools/integration/run_lan_battle_ci.py": "7d447680d391b34fe4e499f583b399b063bf8c7748f6afba1989966203fd3067"
+  },
+  "runs": {
+    "before_fixed_harness": {
+      "exit_code": 1,
+      "engine_result": {
+        "HUMAN_ART_APPROVED": false,
+        "PASS": false,
+        "RC2_READY": false,
+        "V1_0_0_RELEASE_AUTHORIZED": false,
+        "checks": [
+          "one_frame_correction_does_not_invent_seven_unplayed_frames",
+          "corrected_remote_and_recorded_local_input_preserved",
+          "contradictory_confirmed_input_rejected_before_any_mutation",
+          "duplicate_confirmation_idempotent",
+          "malformed_or_unbounded_packet_rejected:[-1, 1, { \"attack\": true }]",
+          "malformed_or_unbounded_packet_rejected:[0, -1, {  }]",
+          "malformed_or_unbounded_packet_rejected:[0, 2, {  }]",
+          "malformed_or_unbounded_packet_rejected:[0, 1, { \"attack\": \"bad\" }]",
+          "malformed_or_unbounded_packet_rejected:[0, 1, { \"unknown\": false }]",
+          "malformed_or_unbounded_packet_rejected:[100, 1, {  }]",
+          "out_of_order_late_confirmations_replay_only_to_original_tip",
+          "final_checksum_matches_on_time_authoritative_inputs",
+          "every_retained_frame_checksum_and_unrelated_local_input_matches_authoritative_timeline",
+          "dictionary_insertion_order_does_not_create_false_rollback",
+          "late_input_corrects_implicit_default_even_without_predicted_map_entry",
+          "bounded_future_confirmation_queues_without_advancing",
+          "queued_confirmation_used_on_its_exact_frame",
+          "long_session_bounds_input_maps_with_retained_checksum_history",
+          "stale_confirmation_reports_desync_without_poisoning_input_or_history",
+          "existing_private_checksum_scaffold_self_test_still_passes"
+        ],
+        "failures": [
+          "one_frame_correction_does_not_invent_seven_unplayed_frames",
+          "contradictory_confirmed_input_rejected_before_any_mutation",
+          "duplicate_confirmation_idempotent",
+          "malformed_or_unbounded_packet_rejected:[-1, 1, { \"attack\": true }]",
+          "malformed_or_unbounded_packet_rejected:[0, -1, {  }]",
+          "malformed_or_unbounded_packet_rejected:[0, 2, {  }]",
+          "malformed_or_unbounded_packet_rejected:[0, 1, { \"attack\": \"bad\" }]",
+          "malformed_or_unbounded_packet_rejected:[0, 1, { \"unknown\": false }]",
+          "malformed_or_unbounded_packet_rejected:[100, 1, {  }]",
+          "out_of_order_late_confirmations_replay_only_to_original_tip",
+          "final_checksum_matches_on_time_authoritative_inputs",
+          "every_retained_frame_checksum_and_unrelated_local_input_matches_authoritative_timeline",
+          "dictionary_insertion_order_does_not_create_false_rollback",
+          "late_input_corrects_implicit_default_even_without_predicted_map_entry",
+          "bounded_future_confirmation_queues_without_advancing",
+          "long_session_bounds_input_maps_with_retained_checksum_history",
+          "stale_confirmation_reports_desync_without_poisoning_input_or_history"
+        ],
+        "scope": "Actual standalone Godot input/checksum scaffold only. No game-world rollback, multiplayer sockets, renderer/art/device/human acceptance."
+      },
+      "engine_result_sha256": "4ce1f91a63c03d095a2c6cf1f1129f5840513d4a26c51bbb2ceab428846fa95b",
+      "log_sha256": "7f5c5cf614e97990ed96b90974219cafc0540681ab93e71bbbb88ed8787950d3",
+      "engine_errors": [],
+      "script_sha256": "f4103ca740e0f4068202a07e65033faad660c20faa905e3e613089fcb8a4d2a4",
+      "test_sha256": "ab7bdda889b7b7782da0b484300d2efd3d266482d0dee905ad815c4007b31957"
+    },
+    "after_fixed_harness": {
+      "exit_code": 0,
+      "engine_result": {
+        "HUMAN_ART_APPROVED": false,
+        "PASS": true,
+        "RC2_READY": false,
+        "V1_0_0_RELEASE_AUTHORIZED": false,
+        "checks": [
+          "one_frame_correction_does_not_invent_seven_unplayed_frames",
+          "corrected_remote_and_recorded_local_input_preserved",
+          "contradictory_confirmed_input_rejected_before_any_mutation",
+          "duplicate_confirmation_idempotent",
+          "malformed_or_unbounded_packet_rejected:[-1, 1, { \"attack\": true }]",
+          "malformed_or_unbounded_packet_rejected:[0, -1, {  }]",
+          "malformed_or_unbounded_packet_rejected:[0, 2, {  }]",
+          "malformed_or_unbounded_packet_rejected:[0, 1, { \"attack\": \"bad\" }]",
+          "malformed_or_unbounded_packet_rejected:[0, 1, { \"unknown\": false }]",
+          "malformed_or_unbounded_packet_rejected:[100, 1, {  }]",
+          "out_of_order_late_confirmations_replay_only_to_original_tip",
+          "final_checksum_matches_on_time_authoritative_inputs",
+          "every_retained_frame_checksum_and_unrelated_local_input_matches_authoritative_timeline",
+          "dictionary_insertion_order_does_not_create_false_rollback",
+          "late_input_corrects_implicit_default_even_without_predicted_map_entry",
+          "bounded_future_confirmation_queues_without_advancing",
+          "queued_confirmation_used_on_its_exact_frame",
+          "long_session_bounds_input_maps_with_retained_checksum_history",
+          "stale_confirmation_reports_desync_without_poisoning_input_or_history",
+          "existing_private_checksum_scaffold_self_test_still_passes"
+        ],
+        "failures": [],
+        "scope": "Actual standalone Godot input/checksum scaffold only. No game-world rollback, multiplayer sockets, renderer/art/device/human acceptance."
+      },
+      "engine_result_sha256": "dc201f145a0ee60b505c9796f10ccf6443fe59a4f8b8eaa409a121c9ce2352b5",
+      "log_sha256": "3e184338dcb60a08f88f074b77beb43fee61855544047722442b63def66187d9",
+      "engine_errors": [],
+      "script_sha256": "eb962543a07bd815e1d9062ff714b6b3a76badd0c8e213fa91849a9b6d287e78",
+      "test_sha256": "ab7bdda889b7b7782da0b484300d2efd3d266482d0dee905ad815c4007b31957"
+    }
+  },
+  "static_checks": {
+    "git_diff_check": true,
+    "ci_runner_python_ast": true
+  },
+  "resource_scope": {
+    "initial_preflight": "outputs/rollback_input_history_20261101/PREFLIGHT.json",
+    "forecast_bytes": 1048576,
+    "actual_fixture_files_bytes": 83898,
+    "available_after_bytes": 13967360000,
+    "engine_binary_copied": false,
+    "engine_hardlink_attempt": "DENIED_NO_LINK_CREATED",
+    "minimal_engine_launch": "Auto-approved escalation to initialize dedicated test profile; no game imports/build/export/capture",
+    "dedicated_engine_profile": "/Users/gunnchos/Library/Application Support/CodexRollbackInputCheck-20261101"
+  },
+  "negative_evidence": [
+    "outputs/rollback_input_history_20261101/EXECUTION.json: initial regression harness parse defect and sandbox data-dir failures",
+    "outputs/rollback_input_history_20261101/FIXED_HARNESS_EXECUTION.json: baseline fails 17 assertions, candidate passes assertions but wrapper rejects engine initialization errors",
+    "before_fixed_harness/escalated-engine.log: clean baseline FAIL exit1, seventeen regression failures"
+  ],
+  "scope_limits": [
+    "Input dictionaries/checksums only; this class does not restore game-world state.",
+    "No shipping LAN or native CharacterBody rollback enabled.",
+    "Full integration, imported art, combat scene, physical device and cross-platform determinism tests were not run.",
+    "private_netplay_stack caller currently ignores rejected confirmation result and still advances last_confirmed_frame; existing separate integration concern remains.",
+    "No independent review by this author; distinct reviewer requested.",
+    "All ten fighters including Rosamere and all six Trials preserved; no roster/story changes."
+  ],
+  "HUMAN": false,
+  "RC2": false,
+  "V1": false
+}
