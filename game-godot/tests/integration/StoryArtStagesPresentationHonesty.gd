@@ -74,10 +74,14 @@ func run() -> void:
 	check(not bool(pcard.get("HUMAN_ART_APPROVED", true)), "pcard_art_false")
 	check(bool(pcard.get("layout_playable_neq_human_art", false)), "pcard_layout_neq_art")
 
-	## Trials backdrop honesty for one mode.
+	## Trials backdrop honesty for one mode + deepen across all six.
 	var backdrop: Dictionary = TrialsPresentation.stage_backdrop_honesty("prism_weave")
 	check(bool(backdrop.get("ok", false)), "prism_backdrop")
 	check(str(backdrop.get("stage_id", "")) == "celestial-observatory", "prism_stage_id")
+	check(bool(backdrop.get("layout_playable_neq_human_art", false)), "prism_layout_neq")
+	check(not bool(backdrop.get("RC2_READY", true)), "prism_rc2_false")
+	check(not bool(backdrop.get("V1_0_0_RELEASE_AUTHORIZED", true)), "prism_v1_false")
+	check(int(cross.get("trials_backdrop_layout_neq_art_count", 0)) == 6, "six_backdrops_layout_neq")
 
 	## Registry contract direct.
 	var reg: Dictionary = StagePresentation.registry_presentation_contract()

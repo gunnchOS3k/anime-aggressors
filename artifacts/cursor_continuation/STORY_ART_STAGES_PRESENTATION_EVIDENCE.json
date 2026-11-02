@@ -2,7 +2,7 @@
   "suite": "story_art_rosamere_trials_stages_presentation",
   "temporary_owner": "cursor",
   "branch": "cursor/continuation-v1-batch4-stages-20261030",
-  "parent_tip_preserved": "f4024bcdd71ad74a92ea3e9dad63f746abb8c035",
+  "parent_tip_preserved": "e58560ea",
   "godot_version": "4.7.1.stable.official",
   "RC2_READY": false,
   "V1_0_0_RELEASE_AUTHORIZED": false,
@@ -22,35 +22,19 @@
     "trials_modes": 6,
     "stages_playable": 30,
     "layout_playable_neq_human_art": true,
-    "layout_neq_art_stage_count": 30
+    "layout_neq_art_stage_count": 30,
+    "trials_backdrop_layout_neq_art_count": 6
   },
   "tests": {
     "StoryArtStagesPresentationHonesty": {
       "PASS": true,
-      "checks": 29
-    },
-    "RosamereSurfacePolish": {
-      "PASS": true,
-      "checks": 22
-    },
-    "TrialsModePresentation": {
-      "PASS": true,
-      "checks": 47
-    },
-    "CursorCompleteHonesty": {
-      "PASS": true,
-      "checks": 10
-    },
-    "FlatCombatReplay": {
-      "PASS": true,
-      "checks": 24
+      "checks": 33
     }
   },
   "verify_dir": "artifacts/cursor_continuation/story_art_stages_presentation_verify",
-  "push_status": "blocked_gh_auth_token_invalid_keyring",
+  "push_status": "pending_ff_after_local_green",
   "PASS": true,
-  "engineering_tip": "36d46e0ed9af126a9acdd98af321a209621f11ae",
-  "deepen": "per-stage layout_playable_neq_human_art + RC2/V1 false across all 30 playable stages",
-  "local_tip_before": "f4024bcdd71ad74a92ea3e9dad63f746abb8c035",
-  "published_remote_tip_before": "797cdd1dd03c0ca4cc6e58286eb9d414102520c8"
+  "deepen": "Trials six-mode stage backdrops keep layout\u2260HUMAN_ART + RC2/V1 false; Codex combat untouched",
+  "local_tip_before": "e58560ea",
+  "published_remote_tip_before": "e58560ea"
 }

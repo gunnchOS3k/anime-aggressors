@@ -158,6 +158,19 @@ static func cross_surface_bindings() -> Dictionary:
 	## At least some expanded stages carry pink foreshadow presentation metadata.
 	if foreshadow_count < 1:
 		failures.append("no_pink_foreshadow_surfaces")
+	## Deepen: every Trials mode backdrop keeps layout≠HUMAN_ART + RC2/V1 false.
+	var backdrop_ok_count := 0
+	for mode_id in Bridge.LIVE_SHARED_COMBAT_MODES:
+		var bound: Dictionary = TrialsPresentation.stage_backdrop_honesty(str(mode_id))
+		if bool(bound.get("ok", false)) and bool(bound.get("layout_playable_neq_human_art", false)):
+			if not bool(bound.get("RC2_READY", true)) and not bool(bound.get("V1_0_0_RELEASE_AUTHORIZED", true)):
+				backdrop_ok_count += 1
+			else:
+				failures.append("backdrop_gate:" + str(mode_id))
+		else:
+			failures.append("backdrop_deepen:" + str(mode_id))
+	if backdrop_ok_count != Bridge.LIVE_SHARED_COMBAT_MODES.size():
+		failures.append("backdrop_deepen_incomplete")
 	var complete: Dictionary = CursorComplete.presentation_honesty_card()
 	if bool(complete.get("CURSOR_COMPLETE", true)):
 		failures.append("cursor_complete_claimed")
@@ -166,6 +179,7 @@ static func cross_surface_bindings() -> Dictionary:
 		"failures": failures,
 		"pink_foreshadow_stage_count": foreshadow_count,
 		"playable_stage_count": int(stages.get("playable_count", 0)),
+		"trials_backdrop_layout_neq_art_count": backdrop_ok_count,
 		"CURSOR_COMPLETE": false,
 		"HUMAN_ART_APPROVED": false,
 	}

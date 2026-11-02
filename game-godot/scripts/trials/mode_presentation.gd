@@ -282,6 +282,18 @@ static func stage_backdrop_honesty(mode_id: String) -> Dictionary:
 	## Launch / expanded stages may be playable layouts; still not HUMAN_ART.
 	if bool(mode_card.get("HUMAN_ART_APPROVED", true)):
 		failures.append("mode_art_claimed")
+	## Deepen: backdrop stage card must keep layout≠HUMAN_ART and RC2/V1 false.
+	if not card.is_empty():
+		if not bool(card.get("layout_playable_neq_human_art", false)):
+			failures.append("stage_layout_eq_art")
+		if bool(card.get("RC2_READY", true)):
+			failures.append("stage_rc2_claimed")
+		if bool(card.get("V1_0_0_RELEASE_AUTHORIZED", true)):
+			failures.append("stage_v1_claimed")
+	if bool(mode_card.get("RC2_READY", true)):
+		failures.append("mode_rc2_claimed")
+	if bool(mode_card.get("V1_0_0_RELEASE_AUTHORIZED", true)):
+		failures.append("mode_v1_claimed")
 	return {
 		"ok": failures.is_empty(),
 		"failures": failures,
