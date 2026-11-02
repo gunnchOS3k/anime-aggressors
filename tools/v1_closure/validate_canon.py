@@ -13,7 +13,7 @@ def validate():
  assert d['approval_date']=='2026-10-09' and d['status']=='APPROVED_WORKING_V1_NARRATIVE_CANON'
  assert hashlib.sha256((ROOT/d['source']).read_bytes()).hexdigest()==d['source_sha256']
  assert c==build(), 'Campaign compiler output drift'
- assert sum(len(r['nodes']) for r in c['routes'])==145
+ assert sum(len(r['nodes']) for r in c['routes'])==146  # +kaia pink_revelation stub
  for r in c['routes'][:7]:
   loss=[n for n in r['nodes'] if 'first_loss' in n];assert len(loss)==1 and loss[0]['first_loss']==r['first_loss']['fighter']==expected[r['id']]
   assert r['consequence']==m['route_consequences'][r['id']]==d['route_consequences'][r['id']]
