@@ -354,8 +354,18 @@ func play_for_state(state: String, move: Dictionary = {}, standalone_preview := 
 		var landing := _grab_acting_clip("throw_landing")
 		if not landing.is_empty():clip = landing;_throw_landing_active = true
 	elif not reacting and state not in [_FighterStates.FALL, _FighterStates.FAST_FALL]:_throw_reaction_pending = false
-	var directional_id := move_id+("_left" if _visual_facing==-1 else "")
-	if action_state and _player.has_animation("combat_choreography/"+directional_id): clip=directional_id
+	# Prefer canonical alias (tilt_forward etc.) over raw move_id when both exist.
+	# Facing-left variants of the alias win; move_id is last-resort identity.
+	var left_suffix := "_left" if _visual_facing == -1 else ""
+	var directional_alias := clip + left_suffix if not clip.is_empty() else ""
+	var directional_id := move_id + left_suffix
+	if action_state:
+		if not directional_alias.is_empty() and _player.has_animation("combat_choreography/" + directional_alias):
+			clip = directional_alias
+		elif not clip.is_empty() and _player.has_animation("combat_choreography/" + clip):
+			pass
+		elif _player.has_animation("combat_choreography/" + directional_id):
+			clip = directional_id
 	if clip.is_empty() or not _loaded_clips.has(clip):
 		clip = _fallback_clip(state, move_id)
 	var play_key := _animation_play_key(clip)
@@ -649,12 +659,24 @@ func synchronize_move(frame: int,move: Dictionary) -> void:
 	# presentation belongs to the reciprocal pair rather than that old action.
 	if is_instance_valid(_runtime_fighter) and _runtime_fighter.state_machine.current_state == _FighterStates.GRAB_HOLD and not _reciprocal_grab_role().is_empty():return
 	if is_instance_valid(_runtime_fighter) and _runtime_fighter.state_machine.current_state == _FighterStates.GRAB_WHIFF and str(move.get("move_id", "")) == "grab":return
-	var directional_id := str(move.get("move_id",""))+("_left" if _visual_facing==-1 else "")
+	var left_suffix := "_left" if _visual_facing == -1 else ""
+	var gameplay_mid := str(move.get("move_id", ""))
+	var visual_mid := str(move.get("visual_move_id", ""))
+	if visual_mid.is_empty():
+		visual_mid = _MoveResolver.canonical_clip_for_move_id(gameplay_mid)
+	if visual_mid.is_empty():
+		visual_mid = gameplay_mid
+	var directional_id := visual_mid + left_suffix
 	var key := "combat_choreography/"+directional_id
-	if not _player.has_animation(key): key = "authored_studies/"+str(move.get("move_id",""))
+	if not _player.has_animation(key):
+		directional_id = gameplay_mid + left_suffix
+		key = "combat_choreography/"+directional_id
+	if not _player.has_animation(key): key = "authored_studies/"+visual_mid
+	if not _player.has_animation(key): key = "authored_studies/"+gameplay_mid
 	if not _player.has_animation(key): return
 	_move_synchronized = true
 	if _player.current_animation != key: _player.play(key,0)
+	_active_clip = directional_id if _loaded_clips.has(directional_id) else visual_mid
 	if _private_moves.has(directional_id):
 		# Exactly one saved full-body pose; no older arm/posture/support overlays.
 		_attack_support_exchange.clear(); _authored_transition.clear()
@@ -663,6 +685,10 @@ func synchronize_move(frame: int,move: Dictionary) -> void:
 		return
 	var visual_frame := float(frame)
 	var mid := directional_id
+	if key.begins_with("combat_choreography/") and not _choreography_timing.has(mid) and _choreography_timing.has(gameplay_mid + left_suffix):
+		mid = gameplay_mid + left_suffix
+	elif key.begins_with("combat_choreography/") and not _choreography_timing.has(mid) and _choreography_timing.has(gameplay_mid):
+		mid = gameplay_mid
 	if key.begins_with("combat_choreography/") and _choreography_timing.has(mid):
 		var clip: Dictionary = _choreography_timing[mid]
 		var actual_start := maxi(1,int(move.get("startup_frames",clip.startup_frames)))
@@ -728,7 +754,13 @@ func _load_combat_choreography(model_root: Node3D) -> void:
 	_load_grab_acting_overlay(library)
 	for mid in _MoveResolver.move_id_to_clip_table():
 		var alias: String = str(_MoveResolver.move_id_to_clip_table()[mid])
-		if library.has_animation(mid) and not library.has_animation(alias): library.add_animation(alias,library.get_animation(mid)); _loaded_clips[alias]=true
+		if library.has_animation(mid) and not library.has_animation(alias):
+			library.add_animation(alias, library.get_animation(mid))
+			_loaded_clips[alias] = true
+		if _choreography_timing.has(mid) and not _choreography_timing.has(alias):
+			_choreography_timing[alias] = _choreography_timing[mid]
+		if _choreography_timing.has(mid + "_left") and not _choreography_timing.has(alias + "_left"):
+			_choreography_timing[alias + "_left"] = _choreography_timing[mid + "_left"]
 	for alias in {"hurt_light_front":"hurt_light","hurt_light_back":"hurt_light","launch_horizontal":"launched","launch_vertical":"launched"}:
 		var source: String = str({"hurt_light_front":"hurt_light","hurt_light_back":"hurt_light","launch_horizontal":"launched","launch_vertical":"launched"}[alias])
 		if not library.has_animation(alias): library.add_animation(alias,library.get_animation(source)); _loaded_clips[alias]=true

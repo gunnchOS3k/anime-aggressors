@@ -1115,6 +1115,7 @@ func _start_move_dict(m: Dictionary) -> void:
 	# Explicit per-battle experiment; never a saved setting or implicit BASE retune.
 	if bool(get_meta("base_aura_single_pass_candidate", false)):
 		_current_move["_resolved_melee_scaling"] = true
+	# Canonical clip alias for routing E2E / presentation identity (move_id may differ).
 	# Neutral special cast clip follows aura tier (tap/medium/full) — no new buttons.
 	var mid0 := str(_current_move.get("move_id", m.get("move_id", "")))
 	if mid0 == "neutral_special_projectile" or str(m.get("move_type", "")) == "projectile":
@@ -1123,6 +1124,10 @@ func _start_move_dict(m: Dictionary) -> void:
 		_current_move["projectile_tier"] = tier_clip
 	elif mid0 == "aura_burst":
 		_current_move["visual_move_id"] = _MoveResolver.canonical_clip_for_move_id("aura_burst")
+	elif not mid0.is_empty() and not _current_move.has("visual_move_id"):
+		var canon_clip := _MoveResolver.canonical_clip_for_move_id(mid0)
+		if not canon_clip.is_empty():
+			_current_move["visual_move_id"] = canon_clip
 	var lock := _FacingContract.lock_attack_direction(
 		_FacingContract.logical_facing_from_int(facing), _current_move
 	)
