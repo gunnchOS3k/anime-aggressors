@@ -292,4 +292,6 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Local Godot 4.7.1: StoryArtStagesPresentationHonesty PASS (25), RosamereSurfacePolish PASS (22), TrialsModePresentation PASS (47), CursorCompleteHonesty PASS (10), FlatCombatReplay PASS (24)
 - Evidence: `artifacts/cursor_continuation/STORY_ART_STAGES_PRESENTATION_EVIDENCE.json`
 - HUMAN_ART_APPROVED / RC2_READY / V1_0_0_RELEASE_AUTHORIZED / CURSOR_COMPLETE remain **false**
+- Engineering tip: `36d46e0ed9af126a9acdd98af321a209621f11ae`
+- Local tip: `048df36d26ae770982c241196bf93d063844b410`
 - Push: pending FF after this tip stamp
