@@ -626,7 +626,9 @@ func _process(delta: float) -> void:
 			_clear_grab_escape("completed_or_interrupted")
 			if not state.is_empty():play_for_state(state)
 	if _synchronize_landing(): return
-	if _player != null and is_instance_valid(_player) and _player.has_animation_library("authored_studies") and not _move_synchronized and not _locomotion_synchronized and not presentation_frozen:
+	# Move sync is driven only by a bound runtime fighter's synchronize_move; unbound models self-advance.
+	var move_clock_owned := _move_synchronized and is_instance_valid(_runtime_fighter)
+	if _player != null and is_instance_valid(_player) and _player.has_animation_library("authored_studies") and not move_clock_owned and not _locomotion_synchronized and not presentation_frozen:
 		_player.advance(delta)
 	_blend_neutral_return(delta)
 	_correct_support_knees()

@@ -69,7 +69,7 @@ func _run() -> void:
 		if model != null:
 			var model_source := str(model.get_current_model_source())
 			var v16 := model_source == "ART_DIRECTION_CANDIDATE_V1_6"
-			if model_source not in ["PROCEDURAL_PRODUCTION_PROXY", "HUMAN_CANDIDATE", "ART_DIRECTION_CANDIDATE_V1_6", "GOLDEN_SLICE_CANDIDATE"]:
+			if model_source not in ["PROCEDURAL_PRODUCTION_PROXY", "HUMAN_CANDIDATE", "ART_DIRECTION_CANDIDATE_V1_6", "GOLDEN_SLICE_CANDIDATE", "COLLECTIBLE_V1_CANDIDATE"]:
 				fighter_ok = false
 				fighter_reasons.append("model_source=%s" % model_source)
 			if model_source == "PROCEDURAL_PRODUCTION_PROXY" and not model.is_procedural_proxy_visible():
