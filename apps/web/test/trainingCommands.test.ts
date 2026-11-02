@@ -21,7 +21,8 @@ function earnHit(): GameState {
   while (state.phase === "countdown") state = simulateFrame(state, []);
   for (let f = 0; f < 300; f++) {
     const [p1, p2] = state.players;
-    const close = Math.abs(p1.x - p2.x) < 80 * FP_SCALE;
+    // Small defenders (juno) need a tighter approach than large hurtboxes.
+    const close = Math.abs(p1.x - p2.x) < 55 * FP_SCALE;
     state = simulateFrame(state, [input(f, 0, {
       right: p1.x < p2.x && !close, left: p1.x > p2.x && !close, attack: close,
     }), input(f, 1)]);
