@@ -11,7 +11,9 @@ func _init() -> void:
 func _run() -> void:
 	var failures: PackedStringArray = PackedStringArray()
 	var ids := Catalog.roster_ids()
-	if ids.size() != 7:
+	# Spectrum (7) + cosmic yin/yang + pink/rosamere working seat — catalog honesty, not HUMAN_ART.
+	const EXPECTED_ROSTER := 10
+	if ids.size() != EXPECTED_ROSTER:
 		failures.append("roster_size")
 	var playable_total := 0
 	var false_playable := 0
@@ -35,7 +37,7 @@ func _run() -> void:
 				if bool(e.get("playable", false)):
 					lab_as_playable += 1
 					false_playable += 1
-	if playable_total < 7 * 20:
+	if playable_total < EXPECTED_ROSTER * 20:
 		failures.append("playable_too_low_%d" % playable_total)
 	if false_playable != 0:
 		failures.append("false_playable_%d" % false_playable)
