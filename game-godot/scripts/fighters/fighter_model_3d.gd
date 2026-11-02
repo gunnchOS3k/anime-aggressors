@@ -935,17 +935,19 @@ func _resolve_and_load_model(fighter_data: Dictionary) -> Dictionary:
 		var private_presentation := {"source":"PRIVATE_ORIGINAL_ART_CANDIDATE", "loaded":_procedural_healthy, "body_variant":_body_variant, "model_sha256":row.model.sha256, "HUMAN_ART_APPROVED":false}
 		_last_presentation = private_presentation
 		return private_presentation
+	## Wave014 AUTHORITY_MIXED: Kaia golden-slice must win over collectible when present.
+	## Collectible remains the V1 review default for every other fighter.
+	if _fighter_id == "kaia-windrow":
+		var golden := _try_load_golden_slice(fighter_data)
+		if golden.get("loaded", false):
+			_last_presentation = golden
+			return golden
 	## V1 owner task supersedes the earlier presentation candidate.
 	var collectible := _try_load_collectible(fighter_data)
 	if collectible.get("loaded", false):
 		_last_presentation = collectible
 		return collectible
 	## Route through canonical presentation authority — reject deprecated player paths.
-	if _fighter_id == "kaia-windrow":
-		var golden := _try_load_golden_slice(fighter_data)
-		if golden.get("loaded", false):
-			_last_presentation = golden
-			return golden
 	if _V16Body.is_slice(_fighter_id):
 		var v16_info := _mount_v16_candidate()
 		_last_presentation = v16_info
@@ -1045,7 +1047,13 @@ func _try_load_final_glb(fighter_data: Dictionary) -> Dictionary:
 
 func _setup_procedural_runtime(fighter_data: Dictionary) -> void:
 	_current_animation_source = "COLLECTIBLE_KEYPOSE_CANDIDATE" if _using_collectible else "PROCEDURAL_RUNTIME_ANIMATION"
-	_animation_controller = _AnimationController.new()
+	var anim_script: Script = _AnimationController
+	if anim_script == null or not anim_script.can_instantiate():
+		anim_script = load("res://scripts/visual/fighter_animation_controller.gd") as Script
+	if anim_script == null or not anim_script.can_instantiate():
+		push_error("FighterAnimationController unavailable for %s" % _fighter_id)
+		return
+	_animation_controller = anim_script.new()
 	if _training_physics_clock: _animation_controller.set_training_physics_clock()
 	_animation_controller.name = "FighterAnimationController"
 	add_child(_animation_controller)
@@ -1061,7 +1069,13 @@ func _setup_procedural_runtime(fighter_data: Dictionary) -> void:
 		_source_controls_8d.name="OriginalSourceControls8D"
 		add_child(_source_controls_8d)
 		_source_controls_8d.setup(live_owner,_proxy_model,_visible_skeleton,_animation_controller.get_animation_player(),_controls_document_8d)
-	_material_controller = _MaterialController.new()
+	var mat_script: Script = _MaterialController
+	if mat_script == null or not mat_script.can_instantiate():
+		mat_script = load("res://scripts/visual/fighter_material_controller.gd") as Script
+	if mat_script == null or not mat_script.can_instantiate():
+		push_error("FighterMaterialController unavailable for %s" % _fighter_id)
+		return
+	_material_controller = mat_script.new()
 	_material_controller.name = "FighterMaterialController"
 	add_child(_material_controller)
 	if _material_controller.has_method("set_presentation_context"):

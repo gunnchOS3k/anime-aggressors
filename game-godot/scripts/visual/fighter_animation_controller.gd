@@ -233,11 +233,19 @@ func get_grab_acting_report() -> Dictionary:
 	return result
 
 
+func _touch_pressed(slot: int, action: String) -> bool:
+	var tree := Engine.get_main_loop()
+	if tree == null or not (tree is SceneTree):
+		return false
+	var tim = (tree as SceneTree).root.get_node_or_null("/root/TouchInputManager")
+	return tim != null and tim.has_method("is_touch_pressed") and bool(tim.is_touch_pressed(slot, action))
+
+
 func _grab_escape_allowed(state: String) -> bool:
 	if not is_instance_valid(_runtime_fighter) or state not in [_FighterStates.IDLE, _FighterStates.FALL]:return false
 	if _runtime_fighter._transform_match_closed or not _reciprocal_grab_role().is_empty() or absf(_runtime_fighter._read_axis()) > .001:return false
 	for suffix in ["attack", "special", "jump", "grab", "shield", "dodge", "taunt"]:
-		var held := Input.is_action_pressed("p%d_%s" % [_runtime_fighter.slot, suffix]) or TouchInputManager.is_touch_pressed(_runtime_fighter.slot, suffix)
+		var held := Input.is_action_pressed("p%d_%s" % [_runtime_fighter.slot, suffix]) or _touch_pressed(_runtime_fighter.slot, suffix)
 		var was := bool(_grab_escape_buttons.get(suffix, false))
 		_grab_escape_buttons[suffix] = held
 		if held and not was:return false
@@ -270,7 +278,7 @@ func begin_grab_escape() -> void:
 	# Snapshot the final mash press without consuming its input edge. Only a new
 	# action interrupts the presentation; the existing escape impulse is retained.
 	for suffix in ["attack", "special", "jump", "grab", "shield", "dodge", "taunt"]:
-		_grab_escape_buttons[suffix] = Input.is_action_pressed("p%d_%s" % [_runtime_fighter.slot, suffix]) or TouchInputManager.is_touch_pressed(_runtime_fighter.slot, suffix)
+		_grab_escape_buttons[suffix] = Input.is_action_pressed("p%d_%s" % [_runtime_fighter.slot, suffix]) or _touch_pressed(_runtime_fighter.slot, suffix)
 	var state := str(_runtime_fighter.state_machine.current_state)
 	if not _grab_escape_allowed(state):_clear_grab_escape("new_action_or_movement");return
 	_grab_escape_clip = clip
