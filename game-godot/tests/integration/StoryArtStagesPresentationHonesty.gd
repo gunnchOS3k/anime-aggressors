@@ -82,6 +82,8 @@ func run() -> void:
 	check(not bool(backdrop.get("RC2_READY", true)), "prism_rc2_false")
 	check(not bool(backdrop.get("V1_0_0_RELEASE_AUTHORIZED", true)), "prism_v1_false")
 	check(int(cross.get("trials_backdrop_layout_neq_art_count", 0)) == 6, "six_backdrops_layout_neq")
+	check(int(cross.get("stages_layout_neq_art_count", 0)) == 30, "cross_stages_layout_neq_30")
+	check(int(cross.get("rosamere_three_form_layout_neq_art_count", 0)) == 3, "cross_rosa_three_neq")
 
 	## Registry contract direct.
 	var reg: Dictionary = StagePresentation.registry_presentation_contract()

@@ -171,6 +171,44 @@ static func cross_surface_bindings() -> Dictionary:
 			failures.append("backdrop_deepen:" + str(mode_id))
 	if backdrop_ok_count != Bridge.LIVE_SHARED_COMBAT_MODES.size():
 		failures.append("backdrop_deepen_incomplete")
+	## Deepen: every playable stage card keeps layout≠HUMAN_ART + Codex combat untouched flags.
+	var stage_layout_ok_count := 0
+	for card in stages.get("cards", []):
+		if typeof(card) != TYPE_DICTIONARY:
+			continue
+		var sc: Dictionary = card
+		if bool(sc.get("layout_playable_neq_human_art", false)) and not bool(sc.get("HUMAN_ART_APPROVED", true)):
+			if not bool(sc.get("RC2_READY", true)) and not bool(sc.get("V1_0_0_RELEASE_AUTHORIZED", true)):
+				stage_layout_ok_count += 1
+			else:
+				failures.append("stage_gate:" + str(sc.get("stage_id", "")))
+		else:
+			failures.append("stage_layout:" + str(sc.get("stage_id", "")))
+	var expected_stages := int(stages.get("playable_count", 0))
+	if expected_stages > 0 and stage_layout_ok_count != expected_stages:
+		failures.append("stage_layout_deepen_incomplete")
+	## Deepen: Rosamere three-form presentation cards stay ≠ HUMAN_ART across Story surface.
+	var rosa_ok_count := 0
+	var rosa_three: Dictionary = RosamerePolish.three_form_contract()
+	if not bool(rosa_three.get("ok", false)):
+		failures.append("rosamere_three_form_cross")
+		for f in rosa_three.get("failures", []):
+			failures.append("rosa3:" + str(f))
+	else:
+		for fid in rosa_three.get("forms", []):
+			var rcard: Dictionary = RosamerePresentation.presentation_card_for_form(str(fid))
+			if rcard.is_empty():
+				failures.append("rosa_card_missing:" + str(fid))
+			elif bool(rcard.get("HUMAN_ART_APPROVED", false)) or bool(rcard.get("choreography_is_human_art", false)):
+				failures.append("rosa_art:" + str(fid))
+			elif bool(rcard.get("RC2_READY", false)) or bool(rcard.get("V1_0_0_RELEASE_AUTHORIZED", false)):
+				failures.append("rosa_gate:" + str(fid))
+			elif not bool(rcard.get("HitResolver_untouched", false)) or not bool(rcard.get("Codex_combat_data_untouched", false)):
+				failures.append("rosa_codex:" + str(fid))
+			else:
+				rosa_ok_count += 1
+		if rosa_ok_count != 3:
+			failures.append("rosamere_three_form_incomplete")
 	var complete: Dictionary = CursorComplete.presentation_honesty_card()
 	if bool(complete.get("CURSOR_COMPLETE", true)):
 		failures.append("cursor_complete_claimed")
@@ -180,8 +218,12 @@ static func cross_surface_bindings() -> Dictionary:
 		"pink_foreshadow_stage_count": foreshadow_count,
 		"playable_stage_count": int(stages.get("playable_count", 0)),
 		"trials_backdrop_layout_neq_art_count": backdrop_ok_count,
+		"stages_layout_neq_art_count": stage_layout_ok_count,
+		"rosamere_three_form_layout_neq_art_count": rosa_ok_count,
 		"CURSOR_COMPLETE": false,
 		"HUMAN_ART_APPROVED": false,
+		"Codex_combat_data_untouched": true,
+		"HitResolver_untouched": true,
 	}
 
 
