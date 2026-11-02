@@ -51,6 +51,8 @@ var clock_ms: float = 0.0
 var ended: bool = false
 var end_reason: String = ""
 var pass_evidence: Dictionary = {}
+## Bounded diagnostic only; rejection never grants a combat outcome or winner.
+var last_input_rejection: Dictionary = {}
 
 
 func _make_peer(pname: String, pid: int, host: bool) -> PeerLocal:
@@ -181,17 +183,39 @@ func _buttons_for(frame: int, player_id: int) -> Dictionary:
 	}
 
 
+func _reject_input(reason: String, from_peer: PeerLocal, to_peer: PeerLocal, frame: int = -1) -> void:
+	last_input_rejection = {
+		"reason": reason, "frame": frame,
+		"sender_slot": from_peer.player_id, "receiver_slot": to_peer.player_id,
+	}
+	ended = true
+	end_reason = "input_rejected:%s" % reason
+
+
 func _deliver(from_peer: PeerLocal, to_peer: PeerLocal, dt_ms: float) -> Array:
+	# Terminal input rejection closes this simulated match. Later messages in
+	# the same batch or a subsequent drain cannot reopen confirmation/liveness.
+	if ended: return []
 	var delivered: Array = from_peer.outbound.advance(dt_ms)
 	var accepted: Array = []
 	for msg in delivered:
+		if str(msg.get("type", "")) == _OnlineProtocol.MSG_INPUT:
+			# Do not coerce strings/fractions into a different authoritative frame
+			# or slot. Check before schema validators that use typed dictionaries.
+			var payload: Variant = msg.get("payload", null)
+			if not payload is Dictionary or typeof(payload.get("frame")) != TYPE_INT or typeof(payload.get("player_id")) != TYPE_INT or not payload.get("buttons") is Dictionary:
+				_reject_input("invalid_input_payload", from_peer, to_peer)
+				break
+			var bound_pair: bool = (from_peer == host_peer and to_peer == guest_peer) or (from_peer == guest_peer and to_peer == host_peer)
+			if not bound_pair or from_peer.is_spectator or int(payload.player_id) != from_peer.player_id or int(payload.player_id) == to_peer.player_id:
+				_reject_input("player_slot_not_owned", from_peer, to_peer, int(payload.frame))
+				break
 		var v: Dictionary = _AntiTamper.validate_envelope(msg)
 		if not bool(v.get("ok", false)):
 			var decision: Dictionary = disconnect_policy.evaluate(clock_ms, 0.0, false, true)
 			ended = true
 			end_reason = str(decision.get("reason", "tamper"))
-			continue
-		to_peer.last_rx_ms = clock_ms
+			break
 		var t: String = str(msg.get("type", ""))
 		match t:
 			_OnlineProtocol.MSG_INPUT:
@@ -199,7 +223,10 @@ func _deliver(from_peer: PeerLocal, to_peer: PeerLocal, dt_ms: float) -> Array:
 				var frame: int = int(p.get("frame", -1))
 				var pid: int = int(p.get("player_id", -1))
 				var buttons: Dictionary = p.get("buttons", {})
-				to_peer.rollback.confirm_remote_input(frame, pid, buttons)
+				var confirmation: Dictionary = to_peer.rollback.confirm_remote_input(frame, pid, buttons)
+				if not bool(confirmation.get("ok", false)):
+					_reject_input(str(confirmation.get("error", "confirmation_rejected")), from_peer, to_peer, frame)
+					break
 				to_peer.last_confirmed_frame = maxi(to_peer.last_confirmed_frame, frame)
 				accepted.append(msg)
 			_OnlineProtocol.MSG_CHECKSUM:
@@ -225,6 +252,9 @@ func _deliver(from_peer: PeerLocal, to_peer: PeerLocal, dt_ms: float) -> Array:
 				accepted.append(msg)
 			_:
 				accepted.append(msg)
+		# Only accepted traffic refreshes the valid-message clock. A signed
+		# envelope whose input is rejected is not synchronization progress.
+		if not ended: to_peer.last_rx_ms = clock_ms
 	return accepted
 
 
@@ -318,6 +348,7 @@ func simulate_match_frames(frame_count: int = 120, step_ms: float = 16.67) -> Di
 		"rollbacks": rollbacks,
 		"ended": ended,
 		"end_reason": end_reason,
+		"input_rejection": last_input_rejection.duplicate(true),
 		"host_confirmed": host_peer.last_confirmed_frame,
 		"guest_confirmed": guest_peer.last_confirmed_frame,
 		"host_stats": host_peer.outbound.stats(),

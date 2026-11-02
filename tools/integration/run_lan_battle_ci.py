@@ -110,6 +110,7 @@ def run(scope="all"):
                 ("nix-authored-grab", "tests/integration/NixAuthoredGrab.gd", "NIX_AUTHORED_GRAB.json"),
             ] if scope == "projectiles" else [
                 ("rollback-input-history", "tests/integration/RollbackInputHistory.gd", "ROLLBACK_INPUT_HISTORY.json"),
+                ("private-input-confirmation", "tests/integration/PrivateInputConfirmation.gd", "PRIVATE_INPUT_CONFIRMATION.json"),
                 ("flat-combat-replay", "tests/integration/FlatCombatReplay.gd", "FLAT_COMBAT_REPLAY.json"),
                 ("body-vertical-replay", "tests/integration/BodyVerticalReplay.gd", "BODY_VERTICAL_REPLAY.json"),
                 ("training-controls", "tests/integration/TrainingControls.gd", "TRAINING_CONTROLS.json"),
