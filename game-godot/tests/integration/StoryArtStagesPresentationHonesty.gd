@@ -44,6 +44,12 @@ func run() -> void:
 	check(int(stages.get("playable_count", 0)) == 30, "stages_30")
 	check(int(stages.get("pending_count", -1)) == 0, "no_pending")
 	check(bool(stages.get("canonical_launch_preserved", false)), "launch_preserved")
+	## Deepen: every playable stage keeps layout≠HUMAN_ART and RC2/V1 false.
+	var stage_reg: Dictionary = StagePresentation.registry_presentation_contract()
+	check(bool(stage_reg.get("layout_playable_neq_human_art", false)), "reg_layout_neq")
+	check(int(stage_reg.get("layout_neq_art_stage_count", 0)) == 30, "layout_neq_all_30")
+	check(not bool(stage_reg.get("RC2_READY", true)), "reg_rc2_false")
+	check(not bool(stage_reg.get("V1_0_0_RELEASE_AUTHORIZED", true)), "reg_v1_false")
 
 	var trials: Dictionary = report.get("trials", {})
 	check(int(trials.get("mode_count", 0)) == 6, "six_trials")

@@ -71,11 +71,21 @@ static func registry_presentation_contract() -> Dictionary:
 		failures.append("summary_art_claimed")
 	if not bool(summary.get("canonical_launch_preserved", false)):
 		failures.append("launch_six_not_preserved")
+	var layout_neq_art_count := 0
 	for stage_id in playable:
 		## Registry playable is authoritative; some batch1 JSON omit playable=true.
 		var card: Dictionary = card_for_stage(str(stage_id))
 		card["playable"] = true
 		card["registry_playable"] = true
+		## Per-stage deepen: layout playable never equals human art completion.
+		if not bool(card.get("layout_playable_neq_human_art", false)):
+			failures.append("layout_eq_art:" + str(stage_id))
+		else:
+			layout_neq_art_count += 1
+		if bool(card.get("RC2_READY", true)):
+			failures.append("rc2_claimed:" + str(stage_id))
+		if bool(card.get("V1_0_0_RELEASE_AUTHORIZED", true)):
+			failures.append("v1_claimed:" + str(stage_id))
 		cards.append(card)
 		if bool(card.get("HUMAN_ART_APPROVED", true)):
 			failures.append("art_claimed:" + str(stage_id))
@@ -88,6 +98,8 @@ static func registry_presentation_contract() -> Dictionary:
 			failures.append("missing_art_status:" + str(stage_id))
 		elif art.find("HUMAN_FINAL") >= 0 and art.find("NOT_HUMAN") < 0:
 			failures.append("art_status_implies_final:" + str(stage_id))
+	if layout_neq_art_count != playable.size():
+		failures.append("layout_neq_art_incomplete")
 	return {
 		"ok": failures.is_empty(),
 		"failures": failures,
@@ -97,6 +109,7 @@ static func registry_presentation_contract() -> Dictionary:
 		"canonical_launch_preserved": bool(summary.get("canonical_launch_preserved", false)),
 		"cards": cards,
 		"layout_playable_neq_human_art": true,
+		"layout_neq_art_stage_count": layout_neq_art_count,
 		"HUMAN_ART_APPROVED": false,
 		"RC2_READY": false,
 		"V1_0_0_RELEASE_AUTHORIZED": false,
