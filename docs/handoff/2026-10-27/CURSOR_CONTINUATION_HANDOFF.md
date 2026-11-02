@@ -294,4 +294,4 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - HUMAN_ART_APPROVED / RC2_READY / V1_0_0_RELEASE_AUTHORIZED / CURSOR_COMPLETE remain **false**
 - Engineering tip: `36d46e0ed9af126a9acdd98af321a209621f11ae`
 - Local tip: `048df36d26ae770982c241196bf93d063844b410`
-- Push: pending FF after this tip stamp
+- Push: blocked (HTTPS Device not configured; SSH Permission denied; gh logged out). Remote remains `797cdd1d`. No force.
