@@ -5,7 +5,7 @@ ROOT=Path(__file__).resolve().parents[2];OUT=ROOT/'artifacts/v1_closure/dialogue
 identity=json.loads((OUT/'continuation_identity.json').read_text())
 checks={p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest()==sha for p,sha in identity['preserved_gameplay_hashes'].items()}
 cues=json.loads((ROOT/'game-godot/data/story/dialogue/v1/cues.json').read_text())['cues'];nodes=json.loads((ROOT/'game-godot/data/story/dialogue/v1/nodes.json').read_text())['nodes']
-checks['145_nodes_1025_cues']=len(nodes)==145 and len(cues)==1025
+checks['146_nodes_1025_cues']=len(nodes)==146 and len(cues)==1025
 checks['every_cue_exactly_one_binding']=sorted(cues)==sorted(cid for n in nodes.values() for ids in n['events'].values() for cid in ids)
 checks['all_unique_cue_ids']=len(set(cues))==1025
 checks['all_final_dialogue_gates_false']=all(c['final_dialogue_approved'] is False for c in cues.values())

@@ -183,7 +183,7 @@ def main() -> int:
         battles = [node for node in route["nodes"] if node["kind"] == "STORY_BATTLE"]
         check(len(battles) == 16, f"{route['id']}_16_battles", failures)
         check(all(node.get("implemented") is True for node in route["nodes"]), f"{route['id']}_implemented", failures)
-    check(node_total == 145, "145_nodes", failures)
+    check(node_total == 146, "146_nodes", failures)
     check(campaign.get("first_loss_selected") == APPROVED_FIRST_LOSS, "approved_first_loss_map", failures)
 
     web = WEB.read_text()

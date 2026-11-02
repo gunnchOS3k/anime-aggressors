@@ -11,7 +11,7 @@ def validate_graph():
  runtime=(ROOT/'game-godot/scripts/story/v1_campaign_runtime.gd').read_text()
  ids=[]; rows=[]
  for route in c['routes']:
-  nodes=route['nodes'];assert len(nodes)==(5 if route['id']=='sevenfold-convergence' else 20)
+  nodes=route['nodes'];assert len(nodes)==(5 if route['id']=='sevenfold-convergence' else (21 if route['id']=='kaia-windrow' else 20))
   for n in nodes:
    assert n['kind'] in ['STORY_BATTLE','INTERACTIVE_DIALOGUE'] and n['implemented']
    ids.append(n['id'])
@@ -26,6 +26,6 @@ def validate_graph():
   assert set(puppets['yin']+puppets['yang'])==set(c['spectral_order'])-{route['id'],loss}
   assert [n['essence_after'] for n in nodes if 'essence_after' in n]==[1,2,4,6]
   rows.append({'route':route['id'],'declared_nodes':len(nodes),'battle_nodes':sum(n['kind']=='STORY_BATTLE' for n in nodes)})
- assert len(ids)==len(set(ids))==145
+ assert len(ids)==len(set(ids))==146
  return {'ok':True,'nodes':145,'routes':rows,'presentation_complete':False,'V1_AUTOMATED_READY':False}
 if __name__=='__main__':print(json.dumps(validate_graph(),indent=2))

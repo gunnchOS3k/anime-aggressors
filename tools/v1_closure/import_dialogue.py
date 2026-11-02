@@ -25,7 +25,7 @@ def main():
  pack=args.pack; script=json.loads((pack/'ANIME_V1_DIALOGUE_PRODUCTION_DRAFT.json').read_text())
  graph=json.loads((ROOT/'game-godot/data/story/v1_campaign.json').read_text())
  nodes={n['id']:(r,n) for r in graph['routes'] for n in r['nodes']}
- assert len(nodes)==145 and {n['node_id'] for n in script['nodes']}==set(nodes)
+ assert len(nodes)==146 and {n['node_id'] for n in script['nodes']}==set(nodes)
  assert script['first_loss_selected']==graph['first_loss_selected'] and len(set(script['first_loss_selected'].values()))==7
  csv_rows={r['cue_id']:r for r in csv.DictReader((pack/'ANIME_V1_TTS_CUE_MANIFEST.csv').open())}
  assert len(csv_rows)==1025
