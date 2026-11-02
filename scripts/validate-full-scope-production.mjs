@@ -412,11 +412,20 @@ if (!/not _?FighterStates\.is_attack_state\(/.test(fighterSrc)) {
 }
 ok("movement attack-state boolean check");
 
-const auraIdx = fighterSrc.indexOf("is_aura_input_held");
-const shieldIdx = fighterSrc.indexOf("_read_shield()");
-const handleActions = fighterSrc.slice(fighterSrc.indexOf("func _handle_actions"), fighterSrc.indexOf("func is_aura_input_held"));
-if (auraIdx < 0 || shieldIdx < 0 || auraIdx > shieldIdx) {
-  fail("aura charge must be checked before shield handling in _handle_actions");
+const handleActions = fighterSrc.slice(
+  fighterSrc.indexOf("func _handle_actions"),
+  fighterSrc.indexOf("func is_aura_input_held"),
+);
+// Intentional mutual exclusion: shield transition samples guard first but must
+ // refuse shield while aura is held; aura charge runs on the non-shield path.
+if (!handleActions.includes("_read_shield()")) {
+  fail("_handle_actions missing shield sample");
+}
+if (!/not is_aura_input_held\(\)/.test(handleActions)) {
+  fail("shield path must exclude aura via not is_aura_input_held()");
+}
+if (!/is_aura_input_held\(\)\s+and\s+not party_overdrive\.active\(\)/.test(handleActions)) {
+  fail("aura charge branch missing after shield gate in _handle_actions");
 }
 if (/if _read_shield\(\)[\s\S]{0,120}return[\s\S]{0,400}is_aura_input_held/.test(handleActions)) {
   fail("shield early return blocks aura charge branch");

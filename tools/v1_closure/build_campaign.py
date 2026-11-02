@@ -95,6 +95,25 @@ def build():
                 node.update(kind="INTERACTIVE_DIALOGUE", implemented=True, body=profile["aftermath"] + " " + profile["growth"], copy_status="DRAFT_OWNER_REVIEW", expression="determination")
                 node.pop("block_reason", None)
                 if key == "unlock": node["route_complete"] = True
+        # Primordial Pink revelation (presentation stub) — Kaia route only; ≠ HUMAN_ART.
+        if anchor == "kaia-windrow":
+            pink = {
+                "id": "kaia-windrow:pink_revelation",
+                "title": "The First Permission (working stub)",
+                "kind": "INTERACTIVE_DIALOGUE",
+                "implemented": True,
+                "copy_status": "STUB_OWNER_REVIEW",
+                "watch_seconds": 8,
+                "expression": "quiet_awe",
+                "body": "Gray was never meant to erase them. Only to understand why they could not be forced. Above Yin and Yang, Primordial Pink grants permission — not domination. Kaia did not defeat Pink by raw power.",
+                "pink_working_identity": True,
+                "fighter_hint": "rosamere",
+                "do_not": ["claim_kaia_power_victory_over_pink", "retune_nine"],
+                "dialogue_ref": "res://data/story/pink_revelation_stub.json",
+                "presentation_status": "STUB_OWNER_REVIEW",
+            }
+            insert_at = next((i for i, n in enumerate(nodes) if n.get("id") == "kaia-windrow:impossible_battle_2"), len(nodes))
+            nodes.insert(insert_at, pink)
         routes.append({"id": anchor, "title": "The Green Between" if anchor == "kaia-windrow" else names[anchor] + " — Prismatic Route",
                        "watch_title": "Anime Aggressors OVA — Kaia Route" if anchor == "kaia-windrow" else names[anchor].split()[0] + " Route Variation",
                        "watch_role": "PRIMARY_OVA" if anchor == "kaia-windrow" else "CAMPAIGN_VARIATION",
