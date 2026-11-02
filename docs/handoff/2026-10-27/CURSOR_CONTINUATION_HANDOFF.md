@@ -281,3 +281,15 @@ See `artifacts/cursor_continuation/CURSOR_OWNERSHIP_PROVENANCE.json`.
 - Deepened AA-RTM-008 six-mode PartyLink seat honesty matrix; AA-RTM-001 ten-fighter digital presentation; `NATIVE_BUILD_PREP.md` honesty (export green=false)
 - Tests: PartyLinkRosterNativeHonesty PASS (21), TrialsPartyLinkSeats PASS (30)
 - Codex HitResolver untouched; flags remain false
+
+
+## Shift — Story / art / Rosamere / Trials / stages presentation (2026-11-01)
+
+- Isolated worktree only: `cursor/continuation-v1-batch4-stages-20261030` @ `797cdd1d` parent preserved
+- Codex combat/rollback/integrated trees **not written** (`_anime_v1_integrated_20261025`, isolated-combat worktree)
+- `stage_presentation.gd` + StageManager presentation cards; Trials `stage_backdrop_honesty` per mode; `story_art_stages_presentation_honesty.gd` cross-surface card
+- 30/30 layout playable ≠ HUMAN_ART; Rosamere art_status remains `THREE_FORM_PRESENTATION_PRODUCTION_IN_PROGRESS`; six Trials scaffold presentations
+- Local Godot 4.7.1: StoryArtStagesPresentationHonesty PASS (25), RosamereSurfacePolish PASS (22), TrialsModePresentation PASS (47), CursorCompleteHonesty PASS (10), FlatCombatReplay PASS (24)
+- Evidence: `artifacts/cursor_continuation/STORY_ART_STAGES_PRESENTATION_EVIDENCE.json`
+- HUMAN_ART_APPROVED / RC2_READY / V1_0_0_RELEASE_AUTHORIZED / CURSOR_COMPLETE remain **false**
+- Push: pending FF after this tip stamp

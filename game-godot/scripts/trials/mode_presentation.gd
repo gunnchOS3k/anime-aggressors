@@ -224,3 +224,76 @@ static func assert_no_human_art(payload: Dictionary) -> bool:
 		if bool(el.get("HUMAN_ART", false)) or bool(el.get("HUMAN_ART_APPROVED", false)):
 			return false
 	return true
+
+
+## Representative stage backdrop ids for Trials SETUP presentation (scaffold only).
+## Layout playable ≠ HUMAN_ART. Never invent device / commercial art claims.
+const MODE_STAGE_BACKDROPS := {
+	"resonance_trial": "titans-divide",
+	"fractured_accord": "the-concord-guildhall",
+	"prism_weave": "celestial-observatory",
+	"riftline_defense": "ruins-of-the-seven-pillars",
+	"echoes_gauntlet": "void-pier",
+	"convergence_unbound": "the-infinity-chamber",
+}
+
+
+static func presentation_honesty_card(mode_id: String = "") -> Dictionary:
+	return {
+		"req_ids": ["AA-RTM-004"],
+		"surface": "trials_mode_presentation",
+		"mode_id": mode_id,
+		"art_status": ART_STATUS_SCAFFOLD,
+		"HUMAN_ART": false,
+		"HUMAN_ART_APPROVED": false,
+		"final_art_approved": false,
+		"device_matrix_pass": false,
+		"feeds_ranked_mmr": false,
+		"SHIPPING_ROLLBACK_ENABLED": false,
+		"RC2_READY": false,
+		"V1_0_0_RELEASE_AUTHORIZED": false,
+		"CURSOR_COMPLETE": false,
+		"HitResolver_untouched": true,
+		"Codex_combat_data_untouched": true,
+	}
+
+
+static func stage_backdrop_honesty(mode_id: String) -> Dictionary:
+	var StagePresentation = load("res://scripts/battle/stage_presentation.gd")
+	var stage_id := str(MODE_STAGE_BACKDROPS.get(mode_id, ""))
+	if stage_id.is_empty():
+		return {
+			"ok": false,
+			"reason": "unknown_mode_backdrop",
+			"mode_id": mode_id,
+			"HUMAN_ART_APPROVED": false,
+		}
+	var card: Dictionary = {}
+	if StagePresentation != null:
+		card = StagePresentation.card_for_stage(stage_id)
+	var mode_card: Dictionary = presentation_honesty_card(mode_id)
+	var failures: Array = []
+	if card.is_empty():
+		failures.append("missing_stage_card")
+	elif bool(card.get("HUMAN_ART_APPROVED", true)):
+		failures.append("stage_art_claimed")
+	elif bool(card.get("dishonest_source_art_flag", false)):
+		failures.append("stage_source_art_true")
+	## Launch / expanded stages may be playable layouts; still not HUMAN_ART.
+	if bool(mode_card.get("HUMAN_ART_APPROVED", true)):
+		failures.append("mode_art_claimed")
+	return {
+		"ok": failures.is_empty(),
+		"failures": failures,
+		"mode_id": mode_id,
+		"stage_id": stage_id,
+		"stage_card": card,
+		"mode_card": mode_card,
+		"backdrop_is_scaffold": true,
+		"layout_playable_neq_human_art": true,
+		"HUMAN_ART": false,
+		"HUMAN_ART_APPROVED": false,
+		"device_matrix_pass": false,
+		"RC2_READY": false,
+		"V1_0_0_RELEASE_AUTHORIZED": false,
+	}

@@ -37,9 +37,12 @@ func summary() -> Dictionary:
 		"playable_expanded": playable,
 		"registered_pending": pending,
 		"canonical_launch_preserved": bool(_prod.get("canonical_launch_preserved", false)),
+		"layout_playable_neq_human_art": true,
+		"presentation_surface": "stages",
 		"HUMAN_ART_APPROVED": false,
 		"RC2_READY": false,
 		"V1_0_0_RELEASE_AUTHORIZED": false,
+		"CURSOR_COMPLETE": false,
 	}
 
 
@@ -74,6 +77,10 @@ func build_stage(stage_root: Node2D, stage_id: String, reduce_motion: bool = fal
 	var ruleset: Dictionary = _rulesets.get("rulesets", {}).get(ruleset_id, {})
 	var hazards_enabled := _hazards_enabled(stage_data, ruleset_id, ruleset)
 	var hazard_snapshot := _hazard_snapshot(stage_data, hazards_enabled)
+	var StagePresentation = load("res://scripts/battle/stage_presentation.gd")
+	var presentation_card: Dictionary = {}
+	if StagePresentation != null:
+		presentation_card = StagePresentation.card_for_stage(stage_id, stage_data)
 	return {
 		"ok": true,
 		"stage_id": stage_id,
@@ -88,7 +95,10 @@ func build_stage(stage_root: Node2D, stage_id: String, reduce_motion: bool = fal
 		"productionStatus": stage_data.get("productionStatus", ""),
 		"geometryStatus": stage_data.get("geometryStatus", ""),
 		"artStatus": stage_data.get("artStatus", ""),
+		"presentation_card": presentation_card,
+		"layout_playable_neq_human_art": true,
 		"HUMAN_ART_APPROVED": false,
+		"CURSOR_COMPLETE": false,
 		"deterministic": true,
 	}
 
