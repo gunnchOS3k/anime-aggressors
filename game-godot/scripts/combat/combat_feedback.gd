@@ -4,8 +4,9 @@ class_name CombatFeedback
 ## Data-driven hit feedback: hitstop, camera, VFX, Path A procedural SFX.
 
 const _ProceduralAudio = preload("res://scripts/audio/procedural_audio_bank.gd")
+const _V1Sfx = preload("res://scripts/audio/v1_candidate_sfx.gd")
 const _SfxResolver = preload("res://scripts/audio/combat_sfx_resolver.gd")
-const _VfxDirector = preload("res://scripts/visual/move_vfx_director.gd")
+const _Spectral = preload("res://scripts/visual/spectral_feedback_renderer.gd")
 const _Predictor = preload("res://scripts/combat/critical_launch_predictor.gd")
 const _TrailScript = preload("res://scripts/visual/launch_trail_system.gd")
 const _CueScript = preload("res://scripts/visual/critical_launch_cue.gd")
@@ -18,7 +19,12 @@ var _shake_remaining: float = 0.0
 var _shake_intensity: float = 0.0
 var fighter_id: String = ""
 var _last_critical_at: Dictionary = {}
+# Online hitstop eligibility must advance with authoritative gameplay, not
+# render speed, wall-clock pauses or the time spent replaying a history.
+var _last_critical_step: Dictionary = {}
+const CRITICAL_REARM_FRAMES := 27 # Existing0.45s cooldown at60Hz.
 var _last_prediction: Dictionary = {}
+var _presented_events: Dictionary = {}
 
 const TIER_HITSTOP := {
 	"light": {"min": 2, "max": 3},
@@ -49,6 +55,23 @@ func _load_profiles() -> void:
 func bind_camera(cam: Camera2D) -> void:
 	_camera = cam
 
+func present_replica_contact(info: Dictionary, defender: Node) -> bool:
+	# Confirmed host event only. Never call apply_hit/receive_hit, change clocks,
+	# meter/damage or dispatch achievements/Story receipts on the guest.
+	var id := str(info.get("combat_event_id", ""))
+	if id.is_empty() or not bool(info.get("confirmed_contact", false)) or _presented_events.has(id): return false
+	_presented_events[id] = true
+	if _presented_events.size() > 256: _presented_events.erase(_presented_events.keys()[0])
+	var shown: Dictionary = info.duplicate(true)
+	if str(shown.get("contact_result", "")) in ["shield", "parry"]:
+		var audio := _guard_contact(defender, shown)
+		shown["elemental_guard_owned_cue"] = bool(audio.get("pool_cue", false))
+	else:
+		var event := _V1Sfx.impact_event({"move_id":shown.get("move_id", ""), "feedback":{"tier":shown.get("feedback_tier", "light")}})
+		_V1Sfx.play_event(str(shown.get("attacker_id", "")), event, self)
+	_present_contact(defender, shown)
+	return true
+
 func apply_hit(attacker: Node, defender: Node, move: Dictionary, info: Dictionary) -> Dictionary:
 	var fb: Dictionary = move.get("feedback", {})
 	var tier: String = fb.get("tier", "light")
@@ -61,20 +84,56 @@ func apply_hit(attacker: Node, defender: Node, move: Dictionary, info: Dictionar
 	result["vfx_event"] = fb.get("vfx_event", "")
 	result["sfx_event"] = fb.get("sfx_event", "")
 	result["camera_event"] = fb.get("camera_event", "")
-	result["screen_flash"] = fb.get("screen_flash", false)
+	result["screen_flash"] = fb.get("screen_flash", false) and not _presentation_option("reduced_flash")
 	result["element"] = move.get("element_effect", {}).get("type", "")
-	_play_procedural_sfx(result.sfx_event, tier, attacker)
-	_play_v3_move_content(attacker, defender, move, result)
-	_trigger_camera(tier, fb.get("camera_event", ""))
-	_emit_juice("hitstop", {"tier": tier, "frames": hitstop})
-	_emit_juice("impact_vfx", {
-		"socket": fb.get("vfx_socket", "chest"),
-		"element": result["element"],
-		"tier": tier,
-		"vfx_event": result["vfx_event"],
-	})
-	_emit_juice("sfx", {"event_id": result["sfx_event"], "category": "hit", "tier": tier})
+	if not bool(info.get("confirmed_contact",false)) or str(info.get("combat_event_id","")).is_empty():
+		result["presentation_rejected"]="unconfirmed_contact"
+		return result
+	var confirmed_id := str(info.combat_event_id)
+	if _presented_events.has(confirmed_id):
+		result["presentation_rejected"]="duplicate_contact"
+		return result
+	_presented_events[confirmed_id]=true
+	if _presented_events.size()>256:_presented_events.erase(_presented_events.keys()[0])
+	if bool(result.get("perfect_guard", false)):
+		result["hitstop_frames"] = 2
+		result["feedback_tier"] = "perfect_guard"
+		result["screen_flash"] = false
+		result["camera_event"] = ""
+		result["sfx_event"] = "charge_ready"
+		result["vfx_event"] = "perfect_guard_seal"
+		var guard_audio := _guard_contact(defender,result)
+		result["elemental_guard_owned_cue"] = bool(guard_audio.get("pool_cue",false))
+		result["played_audio"] = guard_audio if bool(guard_audio.get("ok",false)) else preload("res://scripts/audio/elemental_performance.gd").one_shot(str(defender.fighter_id),"charge_ready",self)
+		_present_contact(defender, result)
+		feedback_triggered.emit(result)
+		return result
+	if bool(result.get("blocked", false)):
+		result["hitstop_frames"] = 2 if bool(result.get("armor_block",false)) else clampi(hitstop, 2, 4)
+		result["sfx_event"] = "block"
+		result["vfx_event"] = "shield_flash"
+		result["camera_event"] = ""
+		result["screen_flash"] = false
+		var defender_id := str(defender.fighter_id) if defender != null and "fighter_id" in defender else ""
+		var guard_audio := _guard_contact(defender,result)
+		result["elemental_guard_owned_cue"] = bool(guard_audio.get("pool_cue",false))
+		result["played_audio"] = guard_audio if bool(guard_audio.get("ok",false)) else _V1Sfx.play_event(defender_id, "block", self)
+		var attacking_element_id := str(attacker.fighter_id) if attacker != null and "fighter_id" in attacker else ""
+		if not attacking_element_id.is_empty() and not bool(guard_audio.get("ok",false)): result["elemental_block"] = preload("res://scripts/audio/elemental_performance.gd").one_shot(attacking_element_id,"block",self)
+		_present_contact(defender,result)
+		feedback_triggered.emit(result)
+		return result
+	var fid := str(attacker.fighter_id) if attacker != null and "fighter_id" in attacker else fighter_id
+	var played := _V1Sfx.play_event(fid, _V1Sfx.impact_event(move), self)
+	result["played_audio"] = played
+	if not bool(played.get("ok", false)):
+		_play_procedural_sfx(result.sfx_event, tier, attacker, str(move.get("move_id", "")))
 	result = _apply_launch_presentation(attacker, defender, move, result)
+	_present_contact(defender,result)
+	_trigger_camera(tier, fb.get("camera_event", ""))
+	_emit_juice("hitstop", {"tier": tier, "frames": result.hitstop_frames, "combat_event_id":result.get("combat_event_id","")})
+	_emit_juice("impact_vfx", result)
+	_emit_juice("sfx", {"event_id": result["sfx_event"], "category": "hit", "tier": tier})
 	feedback_triggered.emit(result)
 	return result
 
@@ -108,6 +167,11 @@ func emit_optional_rumble(strength: float, duration_ms: int) -> void:
 
 func last_prediction() -> Dictionary:
 	return _last_prediction.duplicate(true)
+
+func _guard_contact(defender: Node, info: Dictionary) -> Dictionary:
+	if defender != null and "_guard_presentation" in defender and defender._guard_presentation != null:
+		return defender._guard_presentation.confirmed_contact(info)
+	return {}
 
 
 func _apply_launch_presentation(attacker: Node, defender: Node, move: Dictionary, result: Dictionary) -> Dictionary:
@@ -151,16 +215,22 @@ func _apply_launch_presentation(attacker: Node, defender: Node, move: Dictionary
 	result["launch_prediction"] = pred
 	result["launch_trail_tier"] = _Predictor.trail_tier(pred, launch.length())
 	var key := str(defender.get_instance_id()) if defender != null else "none"
-	var now := Time.get_ticks_msec() / 1000.0
+	var network_clock: bool = attacker != null and "use_network_physics_clock" in attacker and attacker.use_network_physics_clock
+	var frame: int = int(attacker._network_clock) if network_clock else -1
+	var now := Time.get_ticks_msec() / 1000.0 if not network_clock else 0.0
 	var last := float(_last_critical_at.get(key, -99.0))
+	var network_key := str(defender.slot) if network_clock and defender != null and "slot" in defender else key
 	var danger := str(pred.get("tier", "SAFE"))
-	var spam := now - last < 0.45
+	var spam := frame - int(_last_critical_step.get(network_key, -1000)) < CRITICAL_REARM_FRAMES if network_clock else now - last < 0.45
+	result["critical_clock_source"] = "actor_physics" if network_clock else "wall_time"
+	result["critical_clock_frame"] = frame
 	var multi := bool(move.get("multi_hit", false)) and not bool(move.get("final_hit", true))
 	if multi or spam:
 		result["critical_suppressed"] = true
 		return result
 	if danger in ["CRITICAL_RECOVERABLE", "NEAR_CERTAIN_KO"]:
-		_last_critical_at[key] = now
+		if network_clock: _last_critical_step[network_key] = frame
+		else: _last_critical_at[key] = now
 		result["hitstop_frames"] = maxi(int(result.get("hitstop_frames", 3)), 8)
 		_emit_juice("launch_critical_recoverable" if danger == "CRITICAL_RECOVERABLE" else "launch_near_certain_ko", {
 			"attacker_id": attacker_id,
@@ -168,13 +238,12 @@ func _apply_launch_presentation(attacker: Node, defender: Node, move: Dictionary
 			"family": _CueScript.family_for(attacker_id),
 		})
 		if defender is Node2D:
-			_spawn_critical_cue(defender as Node2D, attacker_id, launch, danger)
 			_ensure_trail(defender as Node2D, attacker_id, "CRITICAL")
 		emit_optional_rumble(0.45 if danger == "CRITICAL_RECOVERABLE" else 0.7, 90)
-	elif str(result["launch_trail_tier"]) == "HIGH":
+	elif launch.length() >= 6.0:
 		_emit_juice("launch_high", {"attacker_id": attacker_id, "tier": "HIGH"})
 		if defender is Node2D:
-			_ensure_trail(defender as Node2D, attacker_id, "HIGH")
+			_ensure_trail(defender as Node2D, attacker_id, "HIGH" if launch.length() >= 14.0 else "MEDIUM")
 	return result
 
 
@@ -208,6 +277,7 @@ func _default_hitstop(tier: String) -> int:
 	return int((range.min + range.max) / 2.0)
 
 func _trigger_camera(tier: String, event: String) -> void:
+	if _presentation_option("reduced_shake"): return
 	var intensity_scale := 1.0
 	var role = Engine.get_main_loop().root.get_node_or_null("/root/DeviceRoleRuntime") if Engine.get_main_loop() else null
 	if role != null:
@@ -239,31 +309,13 @@ func _trigger_camera(tier: String, event: String) -> void:
 	if event != "" and intensity_scale > 0.01:
 		print("[CombatFeedback] camera_event: %s tier:%s" % [event, tier])
 
-func _play_v3_move_content(attacker: Node, defender: Node, move: Dictionary, result: Dictionary) -> void:
-	var fid := fighter_id
-	if fid == "" and attacker != null and "fighter_id" in attacker:
-		fid = str(attacker.fighter_id)
-	var mid := str(move.get("move_id", ""))
-	if fid == "" or mid == "":
-		return
-	var pos := Vector2.ZERO
+func _present_contact(defender: Node, info: Dictionary) -> void:
 	if defender is Node2D:
-		pos = (defender as Node2D).global_position
-	elif attacker is Node2D:
-		pos = (attacker as Node2D).global_position
-	var facing := 1
-	if attacker != null and "facing" in attacker:
-		facing = int(attacker.facing)
-	var parent: Node2D = defender as Node2D if defender is Node2D else attacker as Node2D
-	if parent != null:
-		var played: Dictionary = _VfxDirector.play(parent, fid, mid, pos, facing)
-		result["vfx_shape"] = played.get("shape", "")
-		result["vfx_palette_only"] = bool(played.get("palette_only", false))
-	var fb: Dictionary = move.get("feedback", {})
-	result["particle_profile"] = fb.get("particle_profile", "")
+		var renderer = _Spectral.obtain(defender)
+		if renderer != null: renderer.contact(info,defender)
 
 
-func _play_procedural_sfx(event: String, tier: String, attacker: Node) -> void:
+func _play_procedural_sfx(event: String, tier: String, attacker: Node, move_id: String = "") -> void:
 	if event == "":
 		return
 	var fid := fighter_id
@@ -271,9 +323,7 @@ func _play_procedural_sfx(event: String, tier: String, attacker: Node) -> void:
 		fid = str(attacker.fighter_id)
 	elif fid == "" and attacker != null and attacker.has_method("get") and attacker.get("data") is Dictionary:
 		fid = str((attacker.get("data") as Dictionary).get("id", ""))
-	var mid := ""
-	if attacker != null and "_current_move" in attacker and attacker._current_move is Dictionary:
-		mid = str(attacker._current_move.get("move_id", ""))
+	var mid := move_id
 	var played: Dictionary
 	if fid != "" and mid != "":
 		played = _SfxResolver.play_move(fid, mid, self)
@@ -287,6 +337,9 @@ func _play_procedural_sfx(event: String, tier: String, attacker: Node) -> void:
 		print("[CombatFeedback] sfx_miss: %s tier:%s" % [event, tier])
 
 func _process(delta: float) -> void:
+	if _presentation_option("reduced_shake"):
+		_shake_remaining=0
+		if _camera != null: _camera.offset=Vector2.ZERO
 	if _camera == null or _shake_remaining <= 0.0:
 		return
 	_shake_remaining -= delta
@@ -296,50 +349,14 @@ func _process(delta: float) -> void:
 	)
 	_camera.offset = offset if _shake_remaining > 0.0 else Vector2.ZERO
 
-func spawn_hit_spark(parent: Node2D, pos: Vector2, element: String) -> void:
-	var role = Engine.get_main_loop().root.get_node_or_null("/root/DeviceRoleRuntime") if Engine.get_main_loop() else null
-	if role != null and role.has_method("fx_allows_hit_sparks") and not role.fx_allows_hit_sparks():
-		return
-	var spark := ColorRect.new()
-	spark.size = Vector2(12, 12)
-	spark.position = pos - spark.size / 2.0
-	spark.color = _element_color(element)
-	parent.add_child(spark)
-	var tween := spark.create_tween()
-	tween.tween_property(spark, "modulate:a", 0.0, 0.15)
-	tween.tween_callback(spark.queue_free)
-	# GAME-RC-003: secondary ring for heavy/aura readability.
-	var ring := ColorRect.new()
-	ring.size = Vector2(22, 22)
-	ring.position = pos - ring.size / 2.0
-	ring.color = Color(_element_color(element).r, _element_color(element).g, _element_color(element).b, 0.35)
-	parent.add_child(ring)
-	var rt := ring.create_tween()
-	rt.tween_property(ring, "scale", Vector2(1.8, 1.8), 0.18)
-	rt.parallel().tween_property(ring, "modulate:a", 0.0, 0.18)
-	rt.tween_callback(ring.queue_free)
+## Legacy direct calls cannot manufacture confirmed contact. HitResolver owns that contract.
+func spawn_hit_spark(_parent: Node2D, _pos: Vector2, _element: String) -> void:
+	pass
 
-## Grab release / recovery cue — short flash so throws are readable.
 func spawn_grab_recovery_flash(parent: Node2D, pos: Vector2, direction: String) -> void:
-	var role = Engine.get_main_loop().root.get_node_or_null("/root/DeviceRoleRuntime") if Engine.get_main_loop() else null
-	if role != null and role.has_method("fx_allows_hit_sparks") and not role.fx_allows_hit_sparks():
-		return
-	var flash := ColorRect.new()
-	flash.size = Vector2(28, 18)
-	flash.position = pos - flash.size / 2.0
-	match direction:
-		"up":
-			flash.color = Color(0.95, 0.95, 1.0, 0.8)
-		"down":
-			flash.color = Color(0.9, 0.55, 0.2, 0.8)
-		"back":
-			flash.color = Color(0.6, 0.8, 1.0, 0.8)
-		_:
-			flash.color = Color(1.0, 0.75, 0.35, 0.8)
-	parent.add_child(flash)
-	var tw := flash.create_tween()
-	tw.tween_property(flash, "modulate:a", 0.0, 0.22)
-	tw.tween_callback(flash.queue_free)
+	var renderer = _Spectral.obtain(parent)
+	if renderer != null:
+		renderer.emit_effect(str(parent.fighter_id),6,pos,Vector2.UP if direction == "up" else Vector2.RIGHT,48,.12)
 
 func _element_color(element: String) -> Color:
 	match element:
@@ -351,3 +368,7 @@ func _element_color(element: String) -> Color:
 		"gravity": return Color(0.5, 0.4, 0.8)
 		"void": return Color(0.6, 0.2, 0.8)
 		_: return Color(1.0, 1.0, 1.0)
+
+func _presentation_option(key: String) -> bool:
+	var node = get_node_or_null("/root/StoryDialogue")
+	return bool(node.settings.get(key,false)) if node != null else false

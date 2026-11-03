@@ -1,0 +1,37 @@
+{
+  "schema": "persistent_empowerment/v1",
+  "parent_source": "9d75c1ea5a17f215f1ba263043b960edcc7aa887",
+  "source_binding": {
+    "game-godot/scripts/visual/elemental_body_aura.gd": "14eb30668a5cf4049627fb7db5dba2a61d54fe00b100dfb211acfb5cce33a0a6",
+    "game-godot/scripts/visual/combat_expression_director.gd": "7054b784deb6c5a0f28ab379c1fdd08131574b7971134822b5967f2a85e26df5",
+    "game-godot/scripts/fighters/fighter_model_3d.gd": "df09edd8c84a4c867012ebfcd7fd18ccfdb65f392f3e639627b7bfec76b84dea",
+    "game-godot/scripts/fighters/fighter.gd": "51a028c03ad770fd170b2e4319f58ea2154283d489a498a44d65da349aedd145",
+    "game-godot/scripts/audio/elemental_performance.gd": "664ed92a25159263712d18f6c22a4977aea04122ada61fd5c1d5ba7db66407b0",
+    "game-godot/tests/v1_closure/PersistentEmpowerment.gd": "a13f234359e6cb265b1bfa58d773dbd644986b8cfc2bf38446b8ce49fdee4db6"
+  },
+  "baseline_failures": 180,
+  "baseline_rows": 36,
+  "baseline_scope": "missing-presentation baseline; sandbox user-profile diagnostic retained",
+  "fixed_PASS": true,
+  "fixed_cases": 36,
+  "coverage": "All9 x both bodies x both facings: public charge/release/move/jump, loop ownership, intensity, pause, model swap, KO, depletion",
+  "fixtures": [
+    "empowerment_baseline1012",
+    "empowerment_compile1012",
+    "empowerment_lifecycle_fixed1012"
+  ],
+  "immutable_failures": [
+    "empowerment_fixed1012 (native BoneMap name/type parse)",
+    "empowerment_lifecycle1012 (fixture inference parse)"
+  ],
+  "original_provenance": "art_source/audio/elemental_v1/CHARGED_AMBIENCE_PROVENANCE.json",
+  "gameplay_authority_changed": false,
+  "geometry_changed": false,
+  "owner_approved": false,
+  "unfinished": [
+    "native Compatibility visual acceptance pending",
+    "feet-to-floor mismatch blocks honest grounded accents",
+    "charged CPU interactions/action lines not yet implemented",
+    "professional animation and human taste remain unapproved"
+  ]
+}

@@ -1,0 +1,209 @@
+{
+	"PASS": false,
+	"failures": [
+		"mash:reciprocal_escape",
+		"startup:held_move_cancelled",
+		"startup:hold_ownership_stable",
+		"simultaneous:no_mutual_ownership_cycle",
+		"hurt:reciprocal_release",
+		"hurt:cannot_restore_hold",
+		"reset_position:owner:reciprocal_release",
+		"reset_position:victim:reciprocal_release",
+		"configure:owner:reciprocal_release",
+		"configure:victim:reciprocal_release",
+		"match_end:owner:reciprocal_release",
+		"match_end:victim:reciprocal_release"
+	],
+	"rows": [
+		{
+			"case": "mash",
+			"events": [
+				{
+					"result": "success",
+					"target": "juno-spark"
+				},
+				{
+					"reason": "invuln",
+					"result": "whiff"
+				},
+				{
+					"reason": "invuln",
+					"result": "whiff"
+				},
+				{
+					"result": "mash_escape"
+				},
+				{
+					"result": "mash_escape"
+				},
+				{
+					"result": "mash_escape"
+				},
+				{
+					"result": "mash_escape"
+				},
+				{
+					"result": "mash_escape"
+				},
+				{
+					"result": "mash_escape"
+				},
+				{
+					"result": "mash_escape"
+				},
+				{
+					"result": "mash_escape"
+				},
+				{
+					"result": "mash_escape"
+				},
+				{
+					"result": "mash_escape"
+				},
+				{
+					"result": "mash_escape"
+				}
+			],
+			"owner_holding": true,
+			"owner_state": "idle",
+			"victim_held": true,
+			"victim_move_active": false,
+			"victim_state": "grab_hold"
+		},
+		{
+			"case": "startup",
+			"events": [
+				{
+					"result": "success",
+					"target": "juno-spark"
+				}
+			],
+			"owner_holding": true,
+			"owner_state": "grab_hold",
+			"victim_held": true,
+			"victim_move_active": false,
+			"victim_state": "idle"
+		},
+		{
+			"case": "simultaneous",
+			"events": [
+				{
+					"result": "success",
+					"target": "juno-spark"
+				},
+				{
+					"reason": "invuln",
+					"result": "whiff"
+				},
+				{
+					"reason": "invuln",
+					"result": "whiff"
+				}
+			],
+			"owner_holding": true,
+			"owner_state": "grab_hold",
+			"victim_held": true,
+			"victim_move_active": false,
+			"victim_state": "grab_hold"
+		},
+		{
+			"case": "hurt",
+			"events": [
+				{
+					"result": "success",
+					"target": "juno-spark"
+				}
+			],
+			"owner_holding": true,
+			"owner_state": "grab_hold",
+			"victim_held": true,
+			"victim_move_active": false,
+			"victim_state": "grab_hold"
+		},
+		{
+			"case": "reset_position:owner",
+			"events": [
+				{
+					"result": "success",
+					"target": "juno-spark"
+				}
+			],
+			"owner_holding": false,
+			"owner_state": "grab_hold",
+			"victim_held": true,
+			"victim_move_active": false,
+			"victim_state": "grab_hold"
+		},
+		{
+			"case": "reset_position:victim",
+			"events": [
+				{
+					"result": "success",
+					"target": "juno-spark"
+				}
+			],
+			"owner_holding": true,
+			"owner_state": "grab_hold",
+			"victim_held": false,
+			"victim_move_active": false,
+			"victim_state": "grab_hold"
+		},
+		{
+			"case": "configure:owner",
+			"events": [
+				{
+					"result": "success",
+					"target": "juno-spark"
+				}
+			],
+			"owner_holding": true,
+			"owner_state": "grab_hold",
+			"victim_held": true,
+			"victim_move_active": false,
+			"victim_state": "grab_hold"
+		},
+		{
+			"case": "configure:victim",
+			"events": [
+				{
+					"result": "success",
+					"target": "juno-spark"
+				}
+			],
+			"owner_holding": true,
+			"owner_state": "grab_hold",
+			"victim_held": true,
+			"victim_move_active": false,
+			"victim_state": "grab_hold"
+		},
+		{
+			"case": "match_end:owner",
+			"events": [
+				{
+					"result": "success",
+					"target": "juno-spark"
+				}
+			],
+			"owner_holding": true,
+			"owner_state": "grab_hold",
+			"victim_held": true,
+			"victim_move_active": false,
+			"victim_state": "grab_hold"
+		},
+		{
+			"case": "match_end:victim",
+			"events": [
+				{
+					"result": "success",
+					"target": "juno-spark"
+				}
+			],
+			"owner_holding": true,
+			"owner_state": "grab_hold",
+			"victim_held": true,
+			"victim_move_active": false,
+			"victim_state": "grab_hold"
+		}
+	],
+	"scope": "Declared positioning/receive-hit fixtures; genuine public grab/mash controls; not CPU or visual acceptance"
+}

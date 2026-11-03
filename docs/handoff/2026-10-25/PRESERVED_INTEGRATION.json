@@ -1,0 +1,191 @@
+{
+  "schema": "preserved_integration.v1",
+  "base_pr": 133,
+  "base_head": "58689ce4754b82ec10b3b4ad461873204202b963",
+  "codex_pr": 123,
+  "codex_head": "328160dfaebc7c9687b126ac85e5b08c75d78670",
+  "merge_base": "3043da067afb155daf6a4c0eb42def41bdd2087c",
+  "forward_ports": [
+    {
+      "original": "0422cdfb5a3399766c361405020b2c38d9b63702",
+      "candidate": "226fcee5559cb3c90e3cb5ed2fb6dbf46b93732f",
+      "decision": "rest-frame arm foundation; removes inherited poles; no gameplay changes",
+      "paths": [
+        "ANI03_RESUME_STATE.md",
+        "artifacts/v1_closure/production_8d/metric_stage_8d4/ARM_FOUNDATION_STATUS.json",
+        "tools/authored_animation/arm_pose_space.py",
+        "tools/authored_animation/blender/aa_arm_foundation_8d4.py",
+        "tools/authored_animation/blender/aa_arm_reference_actions_8d4.py",
+        "tools/authored_animation/blender/aa_metric_pair_reference_8d4.py",
+        "tools/authored_animation/blender/aa_paired_surface_8d2.py",
+        "tools/authored_animation/inspect_original_arm_sources.py",
+        "tools/authored_animation/test_arm_pose_space.py"
+      ]
+    },
+    {
+      "original": "62e8f9ab26432b27a135be341db3cee04a401e48",
+      "candidate": "fc2559d71fdfc15cd9a7120f70f30084cddbeda1",
+      "decision": "original action-mode preservation and fail-closed private handoff validation",
+      "paths": [
+        "ANI03_RESUME_STATE.md",
+        "artifacts/v1_closure/production_8d/metric_stage_8d4/ARM_FOUNDATION_STATUS.json",
+        "docs/handoff/2026-10-24/ORIGINAL_ART_ARM_FOUNDATION.md",
+        "tools/authored_animation/arm_pose_space.py",
+        "tools/authored_animation/art_integration_contract.py",
+        "tools/authored_animation/blender/aa_arm_foundation_8d4.py",
+        "tools/authored_animation/blender/aa_arm_reference_actions_8d4.py",
+        "tools/authored_animation/inspect_original_arm_sources.py",
+        "tools/authored_animation/test_arm_pose_space.py",
+        "tools/authored_animation/test_art_integration_contract.py"
+      ]
+    },
+    {
+      "original": "02d4c020b73cacecff46dae94f446db46ea2f5e3",
+      "candidate": "5bf9d0b88832236d8f92c93c9041b4af1e17a07d",
+      "decision": "private production provenance only",
+      "paths": [
+        "ANI03_RESUME_STATE.md",
+        "artifacts/v1_closure/production_8d/metric_stage_8d4/EXECUTED_ART_CONTINUATION_20261024.json"
+      ]
+    },
+    {
+      "original": "badd0f49d1f195e4df962bd2d6fcd24d83b7e42d",
+      "candidate": "c2ae2ca2efaef93e6f3d5e781ae1f939191487af",
+      "decision": "evaluate authored torso before solving arm chains",
+      "paths": [
+        "ANI03_RESUME_STATE.md",
+        "tools/authored_animation/blender/aa_arm_foundation_8d4.py",
+        "tools/authored_animation/blender/aa_arm_reference_actions_8d4.py"
+      ]
+    },
+    {
+      "original": "30cc1f91cba413e0f7013ed1576461515dfaadbc",
+      "candidate": "266b8250c275b4b146699d5f2337f3296ee9a9c0",
+      "decision": "18-rig source/export evidence, explicitly not gameplay acceptance",
+      "paths": [
+        "ANI03_RESUME_STATE.md",
+        "artifacts/v1_closure/production_8d/metric_stage_8d4/EXECUTED_ART_CONTINUATION_20261024.json"
+      ]
+    },
+    {
+      "original": "2692419968b43d77ddaa563ac48413afe79e444f",
+      "candidate": "27bc27137821b8ff82cbae83050ef60db4e4b878",
+      "decision": "normalise interpolated wrist quaternion without anatomical scale",
+      "paths": [
+        "ANI03_RESUME_STATE.md",
+        "tools/authored_animation/blender/aa_arm_foundation_8d4.py"
+      ]
+    },
+    {
+      "original": "bdcf842cc76bfe760f9e8a1853fafb94411e7665",
+      "candidate": "3557e800df7e426f1be772a03c13471997f1fe1f",
+      "decision": "retain native/mount failure provenance",
+      "paths": [
+        "ANI03_RESUME_STATE.md",
+        "artifacts/v1_closure/production_8d/metric_stage_8d4/EXECUTED_ART_CONTINUATION_20261024.json"
+      ]
+    },
+    {
+      "original": "7a718b68bd7d2b92ab885a9296fb61cf0c1cdbe4",
+      "candidate": "f71765e2791ec337a55c22fdc1a78db862e5edd5",
+      "decision": "attach review camera; retains rejected blank frames",
+      "paths": [
+        "ANI03_RESUME_STATE.md",
+        "tools/authored_animation/godot/original_arm_reference_viewer.gd"
+      ]
+    },
+    {
+      "original": "1861b07e0683accdc81394aacad40a27f60e868e",
+      "candidate": "d61dd71e636b433494a1fbaa8d8c722de5e4d17a",
+      "decision": "visible roster and paired release receipts",
+      "paths": [
+        "ANI03_RESUME_STATE.md",
+        "artifacts/v1_closure/production_8d/metric_stage_8d4/NATIVE_RECOVERY_20261024.json"
+      ]
+    },
+    {
+      "original": "f7cd6e11aa5c19a652a1f7d2bbe846aaff775eec",
+      "candidate": "9542013984c90c88e8f24b605f839d33f74f1983",
+      "decision": "18 source/36 strike export receipts",
+      "paths": [
+        "ANI03_RESUME_STATE.md",
+        "artifacts/v1_closure/production_8d/metric_stage_8d4/STRIKE_PRODUCTION_20261024.json"
+      ]
+    },
+    {
+      "original": "a6f78a15595eec18657e388fa1aa10fac18e5575",
+      "candidate": "e4878f7bdf8da5d2ac9a19d8433c78dbfdaca537",
+      "decision": "completed native playback and mount-loss record",
+      "paths": [
+        "ANI03_RESUME_STATE.md",
+        "artifacts/v1_closure/production_8d/metric_stage_8d4/STRIKE_PRODUCTION_20261024.json"
+      ]
+    },
+    {
+      "original": "59b86cde3db6d6857e5c16a2d28de7ecd2a31b15",
+      "candidate": "b6a5e8fd8dd7c3e99273d113d1784596a44824d2",
+      "decision": "clarify stopped process state",
+      "paths": [
+        "ANI03_RESUME_STATE.md"
+      ]
+    },
+    {
+      "original": "5b3f88a160276c95d25271f8fa202f9da70b9b19",
+      "candidate": "84938b9ab3f23d87569bec5945f764bb430bd949",
+      "decision": "per-clip verification scope correction",
+      "paths": [
+        "artifacts/v1_closure/production_8d/metric_stage_8d4/STRIKE_PRODUCTION_20261024.json"
+      ]
+    },
+    {
+      "original": "1c55c430c432acc0c3e0f952cefac439c9c51fc5",
+      "candidate": "82993bdbaa3f90865209e3838f347efddc198760",
+      "decision": "USB failure evidence; no cleanup or remount implementation",
+      "paths": [
+        "ANI03_RESUME_STATE.md",
+        "artifacts/v1_closure/production_8d/metric_stage_8d4/MOUNT_LIFECYCLE_20261024.json",
+        "artifacts/v1_closure/production_8d/metric_stage_8d4/MOUNT_LIFECYCLE_20261024.md",
+        "artifacts/v1_closure/production_8d/metric_stage_8d4/STRIKE_PRODUCTION_20261024.json"
+      ]
+    },
+    {
+      "original": "810e0f01ca312f16aeacd48e90a02d965ecd33b3",
+      "candidate": "a8fcccee694c6b85b344234565bf9383b35be67f",
+      "decision": "review-only generic viewer and gallery; no automatic asset installation",
+      "paths": [
+        "ANI03_RESUME_STATE.md",
+        "artifacts/v1_closure/production_8d/metric_stage_8d4/PRODUCTION_20261025.json",
+        "tools/authored_animation/build_clip_review.py",
+        "tools/authored_animation/clip_review.html",
+        "tools/authored_animation/godot/original_strike_review.gd"
+      ]
+    },
+    {
+      "original": "c8aace4598b4693cc9c0635a3f1760f3c5f8d46f",
+      "candidate": "008b455aec4c2b4abc6737c89bb56f231773e665",
+      "decision": "Juno hand production and pending full-body evidence",
+      "paths": [
+        "ANI03_RESUME_STATE.md",
+        "artifacts/v1_closure/production_8d/metric_stage_8d4/PRODUCTION_20261025.json"
+      ]
+    },
+    {
+      "original": "328160dfaebc7c9687b126ac85e5b08c75d78670",
+      "candidate": "45ee9213f95ef9f262cfef654fe80fbca7c1ef1d",
+      "decision": "actual partial production stop and sanitized private handoff",
+      "paths": [
+        "ANI03_RESUME_STATE.md",
+        "artifacts/v1_closure/production_8d/metric_stage_8d4/CURSOR_ART_DELTA_20261025.json",
+        "artifacts/v1_closure/production_8d/metric_stage_8d4/CURSOR_ART_DELTA_20261025.md",
+        "artifacts/v1_closure/production_8d/metric_stage_8d4/PRODUCTION_20261025.json",
+        "artifacts/v1_closure/production_8d/metric_stage_8d4/ROSTER_CONTINUATION_20261025.json"
+      ]
+    }
+  ],
+  "original_prs_unchanged": true,
+  "source_worktrees_untouched": true,
+  "private_assets_installed": false,
+  "human_art_approved": false,
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false
+}

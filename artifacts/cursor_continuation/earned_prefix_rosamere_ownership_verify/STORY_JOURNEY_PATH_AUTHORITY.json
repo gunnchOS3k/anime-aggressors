@@ -1,0 +1,145 @@
+{
+	"HUMAN_ART_APPROVED": false,
+	"PASS": true,
+	"RC2_READY": false,
+	"V1_0_0_RELEASE_AUTHORIZED": false,
+	"checks": [
+		{
+			"check": "reset_campaign",
+			"pass": true
+		},
+		{
+			"check": "kaia_route",
+			"pass": true
+		},
+		{
+			"check": "opens_on_story_battle",
+			"pass": true
+		},
+		{
+			"check": "prologue_implemented",
+			"pass": true
+		},
+		{
+			"check": "begin_prologue_encounter",
+			"pass": true
+		},
+		{
+			"check": "encounter_node",
+			"pass": true
+		},
+		{
+			"check": "gamestate_story_mode",
+			"pass": true
+		},
+		{
+			"check": "stage_bound",
+			"pass": true
+		},
+		{
+			"check": "fighters_bound",
+			"pass": true
+		},
+		{
+			"check": "interrupt_save",
+			"pass": true
+		},
+		{
+			"check": "reload_auth_ok",
+			"pass": true
+		},
+		{
+			"check": "resume_same_prologue",
+			"pass": true
+		},
+		{
+			"check": "resume_stocks",
+			"pass": true
+		},
+		{
+			"check": "resume_damage",
+			"pass": true
+		},
+		{
+			"check": "reload_clears_encounter",
+			"pass": true
+		},
+		{
+			"check": "prologue_not_auto_won",
+			"pass": true
+		},
+		{
+			"check": "dialogue_node_present",
+			"pass": true
+		},
+		{
+			"check": "dialogue_kind",
+			"pass": true
+		},
+		{
+			"check": "dialogue_implemented",
+			"pass": true
+		},
+		{
+			"check": "dialogue_fixture_save",
+			"pass": true
+		},
+		{
+			"check": "cursor_on_dialogue",
+			"pass": true
+		},
+		{
+			"check": "acknowledge_dialogue",
+			"pass": true
+		},
+		{
+			"check": "dialogue_completed_in_memory",
+			"pass": true
+		},
+		{
+			"check": "post_dialogue_save",
+			"pass": true
+		},
+		{
+			"check": "out_of_order_dialogue_not_durable",
+			"pass": true
+		},
+		{
+			"check": "reload_returns_sequential_cursor",
+			"pass": true
+		},
+		{
+			"check": "wrong_route_rejected",
+			"pass": true
+		},
+		{
+			"check": "wrong_route_no_mutate",
+			"pass": true
+		}
+	],
+	"failures": [],
+	"path_trace": [
+		{
+			"id": "kaia-windrow:prologue",
+			"kind": "STORY_BATTLE",
+			"objective": "Win the opening encounter.",
+			"path": "A"
+		},
+		{
+			"id": "kaia-windrow:accord",
+			"kind": "INTERACTIVE_DIALOGUE",
+			"path": "B"
+		},
+		{
+			"advanced_to": "kaia-windrow:prologue",
+			"kind": "STORY_BATTLE",
+			"path": "B"
+		},
+		{
+			"honesty": "out_of_order_dialogue_dropped_on_authenticated_restore",
+			"path": "B"
+		}
+	],
+	"req_id": "AA-RTM-002",
+	"scope": "Kaia Story journey paths: prologue battle interrupt/resume + authored dialogue acknowledge/reload. Not owner sign-off / V1."
+}

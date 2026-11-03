@@ -20,6 +20,8 @@ const ACCENTS := {
 	"nix-calder": "rigid_frost_lock_crystal_trace",
 	"orion-vell": "inward_compression_orbit_release",
 	"vesper-nyx": "phase_smear_displaced_silhouette",
+	"yin": "inward_fold_open_rim",
+	"yang": "ordered_brace_outward_recovery",
 }
 
 
@@ -47,6 +49,8 @@ static func resolve(fighter_id: String, incoming: Vector2, info: Dictionary) -> 
 	return {
 		"fighter_id": fighter_id,
 		"family": family,
+		"performance_clip": "reaction_elemental" if str(info.get("move_id","")).contains("special") else "reaction_heavy" if float(info.get("damage",0))>=8 or str(info.get("feedback_tier","")) in ["heavy","aura","super"] else "reaction_light",
+		"combat_event_id":str(info.get("combat_event_id","")),
 		"incoming": incoming,
 		"react_dir": away.get("react_dir"),
 		"logical_facing": away.get("logical_facing"),

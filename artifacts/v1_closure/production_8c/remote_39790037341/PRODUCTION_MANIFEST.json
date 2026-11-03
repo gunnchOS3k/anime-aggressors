@@ -1,0 +1,3930 @@
+{
+  "schema": "form_production_8c.v1",
+  "runtime_input_sha": "1e06532c4775129f81aed13b1ff9eab940683220",
+  "remote_run_id": "39790037341",
+  "rows": [
+    {
+      "fighter": "ember-vale",
+      "body": "male",
+      "input_8b_source": "saved_sources/ember-vale/male/candidate_8b.blend",
+      "input_8b_sha256": "a548c7b6fc58984c592fe69ef7aedb3570d5ee2db91e70c8478210dd0e0ca5fa",
+      "original_source": "art_source/collectible_v1/ember-vale/male/candidate.blend",
+      "original_source_sha256": "533bdd0e6c56131204fb859256adc71f7ecfa88f8bd388c0f3d00aa0486f405d",
+      "saved_source": "saved_sources/ember-vale/male/candidate_8c.blend",
+      "saved_source_sha256": "27da4fba0af22e33076c2980d1cefdeb78d3719634c8f62ab43275fc23b3a71b",
+      "source_geometry_rest_weights_sha256": "3cfbdb815eea037bb61383b01c23dc0387dfe2c36bad04e1bbc798d5fe1f557b",
+      "original_actions_preserved": 177,
+      "preserved_8b_actions": 30,
+      "original_actions_sha256": "9a7abd6562ae07664e885132112be0e717215ed15950d1297d4cfc4bbc081f51",
+      "new_saved_actions": [
+        "ANI08C_WIP_form_transform_awakened_build",
+        "ANI08C_WIP_form_transform_awakened_build_left",
+        "ANI08C_WIP_form_idle_awakened_build",
+        "ANI08C_WIP_form_idle_awakened_build_left",
+        "ANI08C_WIP_form_transform_ascended",
+        "ANI08C_WIP_form_transform_ascended_left",
+        "ANI08C_WIP_form_idle_ascended",
+        "ANI08C_WIP_form_idle_ascended_left"
+      ],
+      "source_runtime_verification": {
+        "PASS": true,
+        "max_matrix_component_error": 3.7550926208496094e-06,
+        "frames_evaluated": 548,
+        "scope": "saved Blender evaluated pose versus rig-specific runtime keys, not visual quality"
+      },
+      "rig_bones": [
+        "Root",
+        "Hips",
+        "Spine",
+        "Chest",
+        "Neck",
+        "Head",
+        "Shoulder_L",
+        "UpperArm_L",
+        "LowerArm_L",
+        "Hand_L",
+        "Shoulder_R",
+        "UpperArm_R",
+        "LowerArm_R",
+        "Hand_R",
+        "UpperLeg_L",
+        "LowerLeg_L",
+        "Foot_L",
+        "Toes_L",
+        "UpperLeg_R",
+        "LowerLeg_R",
+        "Foot_R",
+        "Toes_R"
+      ],
+      "runtime_file": "runtime/game-godot/data/animation/form_acting_8c/ember-vale_male.json",
+      "runtime_sha256": "8a61aa8870f2aceb0a455d613f760bc25e1f45456c696ad71e54f4787dc14794",
+      "attachments": {
+        "EMBER_AWAKENED_BUILD": {
+          "form_id": "EMBER_AWAKENED_BUILD",
+          "ladder_step": "AWAKENED_BUILD",
+          "parts": [
+            {
+              "node": "Socket_Chest",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_ember-vale_1_vent_L0",
+                "ANI08C_ember-vale_1_vent_L1",
+                "ANI08C_ember-vale_1_vent_L2",
+                "ANI08C_ember-vale_1_vent_R0",
+                "ANI08C_ember-vale_1_vent_R1",
+                "ANI08C_ember-vale_1_vent_R2"
+              ]
+            }
+          ],
+          "mesh_objects": 6,
+          "vertices": 36,
+          "triangles": 48,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/ember-vale/male/EMBER_AWAKENED_BUILD.glb",
+          "sha256": "cf6fa6f55c4645abf8ecd9b74e2b64e74103d4616f325694ef3f1b6dc4198f29",
+          "bytes": 8888
+        },
+        "EMBER_ASCENDED": {
+          "form_id": "EMBER_ASCENDED",
+          "ladder_step": "ASCENDED",
+          "parts": [
+            {
+              "node": "Socket_Chest.001",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_ember-vale_2_vent_L0",
+                "ANI08C_ember-vale_2_vent_L1",
+                "ANI08C_ember-vale_2_vent_L2",
+                "ANI08C_ember-vale_2_vent_L3",
+                "ANI08C_ember-vale_2_vent_R0",
+                "ANI08C_ember-vale_2_vent_R1",
+                "ANI08C_ember-vale_2_vent_R2",
+                "ANI08C_ember-vale_2_vent_R3"
+              ]
+            },
+            {
+              "node": "Socket_Head",
+              "canonical_bone": "Head",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.8500000238418579
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_ember-vale_2_heat_crown0",
+                "ANI08C_ember-vale_2_heat_crown1",
+                "ANI08C_ember-vale_2_heat_crown2",
+                "ANI08C_ember-vale_2_heat_crown3",
+                "ANI08C_ember-vale_2_heat_crown4"
+              ]
+            }
+          ],
+          "mesh_objects": 13,
+          "vertices": 78,
+          "triangles": 104,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/ember-vale/male/EMBER_ASCENDED.glb",
+          "sha256": "40ca126adc6136c89cd8944a387951163f2c66c5c5320fdf96f08e2d27db8456",
+          "bytes": 18344
+        }
+      },
+      "human_approved": false,
+      "native_visual_verified": false
+    },
+    {
+      "fighter": "ember-vale",
+      "body": "female",
+      "input_8b_source": "saved_sources/ember-vale/female/candidate_8b.blend",
+      "input_8b_sha256": "1fb28fea23fb8217d76456eec203203c265d63a6b86030ab79e4bbd53e2f7548",
+      "original_source": "art_source/collectible_v1/ember-vale/female/candidate.blend",
+      "original_source_sha256": "5e65b15e456604c072a96d9c091eb3a15c3e4731e0dc860a2c99db1aac8670f0",
+      "saved_source": "saved_sources/ember-vale/female/candidate_8c.blend",
+      "saved_source_sha256": "b8213aff79b9e8084f0ec10d1cebd1a6bcd58a8e6d113887e5df92755d442377",
+      "source_geometry_rest_weights_sha256": "7f269ef25369111d3c096b35d04feee3cd158b0c2f0a319ecc969d8a51687359",
+      "original_actions_preserved": 177,
+      "preserved_8b_actions": 30,
+      "original_actions_sha256": "8684c88ddf06f466fc98f3803db054b97355b451dfeb30629364ed6c26f16fb3",
+      "new_saved_actions": [
+        "ANI08C_WIP_form_transform_awakened_build",
+        "ANI08C_WIP_form_transform_awakened_build_left",
+        "ANI08C_WIP_form_idle_awakened_build",
+        "ANI08C_WIP_form_idle_awakened_build_left",
+        "ANI08C_WIP_form_transform_ascended",
+        "ANI08C_WIP_form_transform_ascended_left",
+        "ANI08C_WIP_form_idle_ascended",
+        "ANI08C_WIP_form_idle_ascended_left"
+      ],
+      "source_runtime_verification": {
+        "PASS": true,
+        "max_matrix_component_error": 3.7550926208496094e-06,
+        "frames_evaluated": 548,
+        "scope": "saved Blender evaluated pose versus rig-specific runtime keys, not visual quality"
+      },
+      "rig_bones": [
+        "Root",
+        "Hips",
+        "Spine",
+        "Chest",
+        "Neck",
+        "Head",
+        "Shoulder_L",
+        "UpperArm_L",
+        "LowerArm_L",
+        "Hand_L",
+        "Shoulder_R",
+        "UpperArm_R",
+        "LowerArm_R",
+        "Hand_R",
+        "UpperLeg_L",
+        "LowerLeg_L",
+        "Foot_L",
+        "Toes_L",
+        "UpperLeg_R",
+        "LowerLeg_R",
+        "Foot_R",
+        "Toes_R"
+      ],
+      "runtime_file": "runtime/game-godot/data/animation/form_acting_8c/ember-vale_female.json",
+      "runtime_sha256": "84124584e459187dc29e71acb155cbb5107d3593e020bfa3a1709118f7a21cfc",
+      "attachments": {
+        "EMBER_AWAKENED_BUILD": {
+          "form_id": "EMBER_AWAKENED_BUILD",
+          "ladder_step": "AWAKENED_BUILD",
+          "parts": [
+            {
+              "node": "Socket_Chest",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_ember-vale_1_vent_L0",
+                "ANI08C_ember-vale_1_vent_L1",
+                "ANI08C_ember-vale_1_vent_L2",
+                "ANI08C_ember-vale_1_vent_R0",
+                "ANI08C_ember-vale_1_vent_R1",
+                "ANI08C_ember-vale_1_vent_R2"
+              ]
+            }
+          ],
+          "mesh_objects": 6,
+          "vertices": 36,
+          "triangles": 48,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/ember-vale/female/EMBER_AWAKENED_BUILD.glb",
+          "sha256": "cf6fa6f55c4645abf8ecd9b74e2b64e74103d4616f325694ef3f1b6dc4198f29",
+          "bytes": 8888
+        },
+        "EMBER_ASCENDED": {
+          "form_id": "EMBER_ASCENDED",
+          "ladder_step": "ASCENDED",
+          "parts": [
+            {
+              "node": "Socket_Chest.001",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_ember-vale_2_vent_L0",
+                "ANI08C_ember-vale_2_vent_L1",
+                "ANI08C_ember-vale_2_vent_L2",
+                "ANI08C_ember-vale_2_vent_L3",
+                "ANI08C_ember-vale_2_vent_R0",
+                "ANI08C_ember-vale_2_vent_R1",
+                "ANI08C_ember-vale_2_vent_R2",
+                "ANI08C_ember-vale_2_vent_R3"
+              ]
+            },
+            {
+              "node": "Socket_Head",
+              "canonical_bone": "Head",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.8500000238418579
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_ember-vale_2_heat_crown0",
+                "ANI08C_ember-vale_2_heat_crown1",
+                "ANI08C_ember-vale_2_heat_crown2",
+                "ANI08C_ember-vale_2_heat_crown3",
+                "ANI08C_ember-vale_2_heat_crown4"
+              ]
+            }
+          ],
+          "mesh_objects": 13,
+          "vertices": 78,
+          "triangles": 104,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/ember-vale/female/EMBER_ASCENDED.glb",
+          "sha256": "40ca126adc6136c89cd8944a387951163f2c66c5c5320fdf96f08e2d27db8456",
+          "bytes": 18344
+        }
+      },
+      "human_approved": false,
+      "native_visual_verified": false
+    },
+    {
+      "fighter": "rook-ironside",
+      "body": "male",
+      "input_8b_source": "saved_sources/rook-ironside/male/candidate_8b.blend",
+      "input_8b_sha256": "4318807179ad47485e2ed819385cc6d6e7ffc05a0f15df03d6d463fcf33e8363",
+      "original_source": "art_source/collectible_v1/rook-ironside/male/candidate.blend",
+      "original_source_sha256": "32e8247a11c1b07247c019f88fca56510038352981e0f5a088e95bcf134cacc3",
+      "saved_source": "saved_sources/rook-ironside/male/candidate_8c.blend",
+      "saved_source_sha256": "e80f049f6fbfd3ed33b6a49d0d0c29ca953b76893338d808c05cece5e7a9ef48",
+      "source_geometry_rest_weights_sha256": "408b72b3f11b9086ae21428f9c5238f1690959844091133d2c702c97b0c98b9b",
+      "original_actions_preserved": 177,
+      "preserved_8b_actions": 30,
+      "original_actions_sha256": "35682c4b75f03364580ceb016fb7181d44c44fe3375b1a01c9c1cc82ac4624be",
+      "new_saved_actions": [
+        "ANI08C_WIP_form_transform_awakened_build",
+        "ANI08C_WIP_form_transform_awakened_build_left",
+        "ANI08C_WIP_form_idle_awakened_build",
+        "ANI08C_WIP_form_idle_awakened_build_left",
+        "ANI08C_WIP_form_transform_ascended",
+        "ANI08C_WIP_form_transform_ascended_left",
+        "ANI08C_WIP_form_idle_ascended",
+        "ANI08C_WIP_form_idle_ascended_left"
+      ],
+      "source_runtime_verification": {
+        "PASS": true,
+        "max_matrix_component_error": 3.516674041748047e-06,
+        "frames_evaluated": 740,
+        "scope": "saved Blender evaluated pose versus rig-specific runtime keys, not visual quality"
+      },
+      "rig_bones": [
+        "Root",
+        "Hips",
+        "Spine",
+        "Chest",
+        "Neck",
+        "Head",
+        "Shoulder_L",
+        "UpperArm_L",
+        "LowerArm_L",
+        "Hand_L",
+        "Shoulder_R",
+        "UpperArm_R",
+        "LowerArm_R",
+        "Hand_R",
+        "UpperLeg_L",
+        "LowerLeg_L",
+        "Foot_L",
+        "Toes_L",
+        "UpperLeg_R",
+        "LowerLeg_R",
+        "Foot_R",
+        "Toes_R"
+      ],
+      "runtime_file": "runtime/game-godot/data/animation/form_acting_8c/rook-ironside_male.json",
+      "runtime_sha256": "7bc44288004e9f49aa94903083d58190faa1415952338a6aa13a4b54c8b59f1a",
+      "attachments": {
+        "ROOK_AWAKENED_BUILD": {
+          "form_id": "ROOK_AWAKENED_BUILD",
+          "ladder_step": "AWAKENED_BUILD",
+          "parts": [
+            {
+              "node": "Socket_Shoulder_L",
+              "canonical_bone": "Shoulder_L",
+              "source_rest_transform_godot": [
+                [
+                  0.0,
+                  0.0,
+                  0.9999999403953552,
+                  -0.10000000149011612
+                ],
+                [
+                  -4.371138828673793e-08,
+                  1.0,
+                  0.0,
+                  0.7300000190734863
+                ],
+                [
+                  -1.0,
+                  -4.371138828673793e-08,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_rook-ironside_1_stratum_L0",
+                "ANI08C_rook-ironside_1_stratum_L1",
+                "ANI08C_rook-ironside_1_stratum_L2"
+              ]
+            },
+            {
+              "node": "Socket_LowerArm_L",
+              "canonical_bone": "LowerArm_L",
+              "source_rest_transform_godot": [
+                [
+                  0.9349175095558167,
+                  -0.28202345967292786,
+                  0.2153875082731247,
+                  -0.37400001287460327
+                ],
+                [
+                  -0.2820233702659607,
+                  -0.22210098803043365,
+                  0.9333457350730896,
+                  0.5600000023841858
+                ],
+                [
+                  -0.21538753807544708,
+                  -0.9333456158638,
+                  -0.28718334436416626,
+                  1.6983457973296368e-09
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_rook-ironside_1_joint_L"
+              ]
+            },
+            {
+              "node": "Socket_Shoulder_R",
+              "canonical_bone": "Shoulder_R",
+              "source_rest_transform_godot": [
+                [
+                  0.0,
+                  0.0,
+                  -0.9999999403953552,
+                  0.10000000149011612
+                ],
+                [
+                  4.371138828673793e-08,
+                  1.0,
+                  0.0,
+                  0.7300000190734863
+                ],
+                [
+                  1.0,
+                  -4.371138828673793e-08,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_rook-ironside_1_stratum_R0",
+                "ANI08C_rook-ironside_1_stratum_R1",
+                "ANI08C_rook-ironside_1_stratum_R2"
+              ]
+            },
+            {
+              "node": "Socket_LowerArm_R",
+              "canonical_bone": "LowerArm_R",
+              "source_rest_transform_godot": [
+                [
+                  0.9349175095558167,
+                  0.28202345967292786,
+                  -0.2153875082731247,
+                  0.37400001287460327
+                ],
+                [
+                  0.2820233702659607,
+                  -0.22210098803043365,
+                  0.9333457350730896,
+                  0.5600000023841858
+                ],
+                [
+                  0.21538753807544708,
+                  -0.9333456158638,
+                  -0.28718334436416626,
+                  1.6983457973296368e-09
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_rook-ironside_1_joint_R"
+              ]
+            }
+          ],
+          "mesh_objects": 8,
+          "vertices": 120,
+          "triangles": 104,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/rook-ironside/male/ROOK_AWAKENED_BUILD.glb",
+          "sha256": "f532a567fb28cbd7b628ca729062a48aaa117da2898d76f8fb4d779092eeeb1f",
+          "bytes": 12132
+        },
+        "ROOK_ASCENDED": {
+          "form_id": "ROOK_ASCENDED",
+          "ladder_step": "ASCENDED",
+          "parts": [
+            {
+              "node": "Socket_Shoulder_L.001",
+              "canonical_bone": "Shoulder_L",
+              "source_rest_transform_godot": [
+                [
+                  0.0,
+                  0.0,
+                  0.9999999403953552,
+                  -0.10000000149011612
+                ],
+                [
+                  -4.371138828673793e-08,
+                  1.0,
+                  0.0,
+                  0.7300000190734863
+                ],
+                [
+                  -1.0,
+                  -4.371138828673793e-08,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_rook-ironside_2_stratum_L0",
+                "ANI08C_rook-ironside_2_stratum_L1",
+                "ANI08C_rook-ironside_2_stratum_L2",
+                "ANI08C_rook-ironside_2_stratum_L3"
+              ]
+            },
+            {
+              "node": "Socket_LowerArm_L.001",
+              "canonical_bone": "LowerArm_L",
+              "source_rest_transform_godot": [
+                [
+                  0.9349175095558167,
+                  -0.28202345967292786,
+                  0.2153875082731247,
+                  -0.37400001287460327
+                ],
+                [
+                  -0.2820233702659607,
+                  -0.22210098803043365,
+                  0.9333457350730896,
+                  0.5600000023841858
+                ],
+                [
+                  -0.21538753807544708,
+                  -0.9333456158638,
+                  -0.28718334436416626,
+                  1.6983457973296368e-09
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_rook-ironside_2_joint_L"
+              ]
+            },
+            {
+              "node": "Socket_Shoulder_R.001",
+              "canonical_bone": "Shoulder_R",
+              "source_rest_transform_godot": [
+                [
+                  0.0,
+                  0.0,
+                  -0.9999999403953552,
+                  0.10000000149011612
+                ],
+                [
+                  4.371138828673793e-08,
+                  1.0,
+                  0.0,
+                  0.7300000190734863
+                ],
+                [
+                  1.0,
+                  -4.371138828673793e-08,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_rook-ironside_2_stratum_R0",
+                "ANI08C_rook-ironside_2_stratum_R1",
+                "ANI08C_rook-ironside_2_stratum_R2",
+                "ANI08C_rook-ironside_2_stratum_R3"
+              ]
+            },
+            {
+              "node": "Socket_LowerArm_R.001",
+              "canonical_bone": "LowerArm_R",
+              "source_rest_transform_godot": [
+                [
+                  0.9349175095558167,
+                  0.28202345967292786,
+                  -0.2153875082731247,
+                  0.37400001287460327
+                ],
+                [
+                  0.2820233702659607,
+                  -0.22210098803043365,
+                  0.9333457350730896,
+                  0.5600000023841858
+                ],
+                [
+                  0.21538753807544708,
+                  -0.9333456158638,
+                  -0.28718334436416626,
+                  1.6983457973296368e-09
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_rook-ironside_2_joint_R"
+              ]
+            }
+          ],
+          "mesh_objects": 10,
+          "vertices": 132,
+          "triangles": 112,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/rook-ironside/male/ROOK_ASCENDED.glb",
+          "sha256": "8bf24d61ff809ca5f68e9221f7901e3be65ef3e3db18f70e7c42f1ee41bce93c",
+          "bytes": 14148
+        }
+      },
+      "human_approved": false,
+      "native_visual_verified": false
+    },
+    {
+      "fighter": "rook-ironside",
+      "body": "female",
+      "input_8b_source": "saved_sources/rook-ironside/female/candidate_8b.blend",
+      "input_8b_sha256": "f5a9d86cc8eb390a9e23e30278a42124e703ed050f3f1cf6c8f292dc1668ab6f",
+      "original_source": "art_source/collectible_v1/rook-ironside/female/candidate.blend",
+      "original_source_sha256": "a84618f34a3e92b7a699dcabadcc26ffd43d89904eb85579f022fe35a9b5335d",
+      "saved_source": "saved_sources/rook-ironside/female/candidate_8c.blend",
+      "saved_source_sha256": "73beb516e4f62afc89e6558a5626ec8c054631b9b7961bd47b7401e0defa0ff3",
+      "source_geometry_rest_weights_sha256": "c985b034bf43e8aaf4e709b7f7bc3c26fa0d8191a2e2a186dd3ec64553e3e4e4",
+      "original_actions_preserved": 177,
+      "preserved_8b_actions": 30,
+      "original_actions_sha256": "3591a9e53fd5544bd991b27fda0156c57f7605bde3da4a31ad4a8491f33b7419",
+      "new_saved_actions": [
+        "ANI08C_WIP_form_transform_awakened_build",
+        "ANI08C_WIP_form_transform_awakened_build_left",
+        "ANI08C_WIP_form_idle_awakened_build",
+        "ANI08C_WIP_form_idle_awakened_build_left",
+        "ANI08C_WIP_form_transform_ascended",
+        "ANI08C_WIP_form_transform_ascended_left",
+        "ANI08C_WIP_form_idle_ascended",
+        "ANI08C_WIP_form_idle_ascended_left"
+      ],
+      "source_runtime_verification": {
+        "PASS": true,
+        "max_matrix_component_error": 3.516674041748047e-06,
+        "frames_evaluated": 740,
+        "scope": "saved Blender evaluated pose versus rig-specific runtime keys, not visual quality"
+      },
+      "rig_bones": [
+        "Root",
+        "Hips",
+        "Spine",
+        "Chest",
+        "Neck",
+        "Head",
+        "Shoulder_L",
+        "UpperArm_L",
+        "LowerArm_L",
+        "Hand_L",
+        "Shoulder_R",
+        "UpperArm_R",
+        "LowerArm_R",
+        "Hand_R",
+        "UpperLeg_L",
+        "LowerLeg_L",
+        "Foot_L",
+        "Toes_L",
+        "UpperLeg_R",
+        "LowerLeg_R",
+        "Foot_R",
+        "Toes_R"
+      ],
+      "runtime_file": "runtime/game-godot/data/animation/form_acting_8c/rook-ironside_female.json",
+      "runtime_sha256": "54cf38a48811ad913090e8a47471d9f10e8834f6ad3a95ec392f8b8bdf12af57",
+      "attachments": {
+        "ROOK_AWAKENED_BUILD": {
+          "form_id": "ROOK_AWAKENED_BUILD",
+          "ladder_step": "AWAKENED_BUILD",
+          "parts": [
+            {
+              "node": "Socket_Shoulder_L",
+              "canonical_bone": "Shoulder_L",
+              "source_rest_transform_godot": [
+                [
+                  0.0,
+                  0.0,
+                  0.9999999403953552,
+                  -0.10000000149011612
+                ],
+                [
+                  -4.371138828673793e-08,
+                  1.0,
+                  0.0,
+                  0.7300000190734863
+                ],
+                [
+                  -1.0,
+                  -4.371138828673793e-08,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_rook-ironside_1_stratum_L0",
+                "ANI08C_rook-ironside_1_stratum_L1",
+                "ANI08C_rook-ironside_1_stratum_L2"
+              ]
+            },
+            {
+              "node": "Socket_LowerArm_L",
+              "canonical_bone": "LowerArm_L",
+              "source_rest_transform_godot": [
+                [
+                  0.9349175095558167,
+                  -0.28202345967292786,
+                  0.2153875082731247,
+                  -0.37400001287460327
+                ],
+                [
+                  -0.2820233702659607,
+                  -0.22210098803043365,
+                  0.9333457350730896,
+                  0.5600000023841858
+                ],
+                [
+                  -0.21538753807544708,
+                  -0.9333456158638,
+                  -0.28718334436416626,
+                  1.6983457973296368e-09
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_rook-ironside_1_joint_L"
+              ]
+            },
+            {
+              "node": "Socket_Shoulder_R",
+              "canonical_bone": "Shoulder_R",
+              "source_rest_transform_godot": [
+                [
+                  0.0,
+                  0.0,
+                  -0.9999999403953552,
+                  0.10000000149011612
+                ],
+                [
+                  4.371138828673793e-08,
+                  1.0,
+                  0.0,
+                  0.7300000190734863
+                ],
+                [
+                  1.0,
+                  -4.371138828673793e-08,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_rook-ironside_1_stratum_R0",
+                "ANI08C_rook-ironside_1_stratum_R1",
+                "ANI08C_rook-ironside_1_stratum_R2"
+              ]
+            },
+            {
+              "node": "Socket_LowerArm_R",
+              "canonical_bone": "LowerArm_R",
+              "source_rest_transform_godot": [
+                [
+                  0.9349175095558167,
+                  0.28202345967292786,
+                  -0.2153875082731247,
+                  0.37400001287460327
+                ],
+                [
+                  0.2820233702659607,
+                  -0.22210098803043365,
+                  0.9333457350730896,
+                  0.5600000023841858
+                ],
+                [
+                  0.21538753807544708,
+                  -0.9333456158638,
+                  -0.28718334436416626,
+                  1.6983457973296368e-09
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_rook-ironside_1_joint_R"
+              ]
+            }
+          ],
+          "mesh_objects": 8,
+          "vertices": 120,
+          "triangles": 104,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/rook-ironside/female/ROOK_AWAKENED_BUILD.glb",
+          "sha256": "f532a567fb28cbd7b628ca729062a48aaa117da2898d76f8fb4d779092eeeb1f",
+          "bytes": 12132
+        },
+        "ROOK_ASCENDED": {
+          "form_id": "ROOK_ASCENDED",
+          "ladder_step": "ASCENDED",
+          "parts": [
+            {
+              "node": "Socket_Shoulder_L.001",
+              "canonical_bone": "Shoulder_L",
+              "source_rest_transform_godot": [
+                [
+                  0.0,
+                  0.0,
+                  0.9999999403953552,
+                  -0.10000000149011612
+                ],
+                [
+                  -4.371138828673793e-08,
+                  1.0,
+                  0.0,
+                  0.7300000190734863
+                ],
+                [
+                  -1.0,
+                  -4.371138828673793e-08,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_rook-ironside_2_stratum_L0",
+                "ANI08C_rook-ironside_2_stratum_L1",
+                "ANI08C_rook-ironside_2_stratum_L2",
+                "ANI08C_rook-ironside_2_stratum_L3"
+              ]
+            },
+            {
+              "node": "Socket_LowerArm_L.001",
+              "canonical_bone": "LowerArm_L",
+              "source_rest_transform_godot": [
+                [
+                  0.9349175095558167,
+                  -0.28202345967292786,
+                  0.2153875082731247,
+                  -0.37400001287460327
+                ],
+                [
+                  -0.2820233702659607,
+                  -0.22210098803043365,
+                  0.9333457350730896,
+                  0.5600000023841858
+                ],
+                [
+                  -0.21538753807544708,
+                  -0.9333456158638,
+                  -0.28718334436416626,
+                  1.6983457973296368e-09
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_rook-ironside_2_joint_L"
+              ]
+            },
+            {
+              "node": "Socket_Shoulder_R.001",
+              "canonical_bone": "Shoulder_R",
+              "source_rest_transform_godot": [
+                [
+                  0.0,
+                  0.0,
+                  -0.9999999403953552,
+                  0.10000000149011612
+                ],
+                [
+                  4.371138828673793e-08,
+                  1.0,
+                  0.0,
+                  0.7300000190734863
+                ],
+                [
+                  1.0,
+                  -4.371138828673793e-08,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_rook-ironside_2_stratum_R0",
+                "ANI08C_rook-ironside_2_stratum_R1",
+                "ANI08C_rook-ironside_2_stratum_R2",
+                "ANI08C_rook-ironside_2_stratum_R3"
+              ]
+            },
+            {
+              "node": "Socket_LowerArm_R.001",
+              "canonical_bone": "LowerArm_R",
+              "source_rest_transform_godot": [
+                [
+                  0.9349175095558167,
+                  0.28202345967292786,
+                  -0.2153875082731247,
+                  0.37400001287460327
+                ],
+                [
+                  0.2820233702659607,
+                  -0.22210098803043365,
+                  0.9333457350730896,
+                  0.5600000023841858
+                ],
+                [
+                  0.21538753807544708,
+                  -0.9333456158638,
+                  -0.28718334436416626,
+                  1.6983457973296368e-09
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_rook-ironside_2_joint_R"
+              ]
+            }
+          ],
+          "mesh_objects": 10,
+          "vertices": 132,
+          "triangles": 112,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/rook-ironside/female/ROOK_ASCENDED.glb",
+          "sha256": "8bf24d61ff809ca5f68e9221f7901e3be65ef3e3db18f70e7c42f1ee41bce93c",
+          "bytes": 14148
+        }
+      },
+      "human_approved": false,
+      "native_visual_verified": false
+    },
+    {
+      "fighter": "juno-spark",
+      "body": "male",
+      "input_8b_source": "saved_sources/juno-spark/male/candidate_8b.blend",
+      "input_8b_sha256": "07b5a9ee1dcbb94af084682fc93838bfcfd796575e29819c1348ffcb73e8e8c0",
+      "original_source": "art_source/collectible_v1/juno-spark/male/candidate.blend",
+      "original_source_sha256": "976f0911319e4c5826b1e4bde859575a4f8178d660794072d58d0a079128a602",
+      "saved_source": "saved_sources/juno-spark/male/candidate_8c.blend",
+      "saved_source_sha256": "e505fed59e42080b2fddd93f4360749d9981d1b3b82b53ba88e647606acd1696",
+      "source_geometry_rest_weights_sha256": "1570a557a539acfd6106b3a3441db70a49e7237272cf4f780251acc75dbb63bd",
+      "original_actions_preserved": 227,
+      "preserved_8b_actions": 30,
+      "original_actions_sha256": "ccf5be94bd6996bd0610c9c373a17bce92b1b8d1d0e2075b9b44a5ae21403e61",
+      "new_saved_actions": [
+        "ANI08C_WIP_form_transform_awakened_build",
+        "ANI08C_WIP_form_transform_awakened_build_left",
+        "ANI08C_WIP_form_idle_awakened_build",
+        "ANI08C_WIP_form_idle_awakened_build_left",
+        "ANI08C_WIP_form_transform_ascended",
+        "ANI08C_WIP_form_transform_ascended_left",
+        "ANI08C_WIP_form_idle_ascended",
+        "ANI08C_WIP_form_idle_ascended_left"
+      ],
+      "source_runtime_verification": {
+        "PASS": true,
+        "max_matrix_component_error": 3.7550926208496094e-06,
+        "frames_evaluated": 416,
+        "scope": "saved Blender evaluated pose versus rig-specific runtime keys, not visual quality"
+      },
+      "rig_bones": [
+        "Root",
+        "Hips",
+        "Spine",
+        "Chest",
+        "Neck",
+        "Head",
+        "Shoulder_L",
+        "UpperArm_L",
+        "LowerArm_L",
+        "Hand_L",
+        "Shoulder_R",
+        "UpperArm_R",
+        "LowerArm_R",
+        "Hand_R",
+        "UpperLeg_L",
+        "LowerLeg_L",
+        "Foot_L",
+        "Toes_L",
+        "UpperLeg_R",
+        "LowerLeg_R",
+        "Foot_R",
+        "Toes_R"
+      ],
+      "runtime_file": "runtime/game-godot/data/animation/form_acting_8c/juno-spark_male.json",
+      "runtime_sha256": "5a669650eb6d9d776a3b252989eb61953d82d9b1375299aa8167bc737681979a",
+      "attachments": {
+        "JUNO_AWAKENED_BUILD": {
+          "form_id": "JUNO_AWAKENED_BUILD",
+          "ladder_step": "AWAKENED_BUILD",
+          "parts": [
+            {
+              "node": "Socket_Chest",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_juno-spark_1_rail_L0",
+                "ANI08C_juno-spark_1_rail_L1",
+                "ANI08C_juno-spark_1_rail_R0",
+                "ANI08C_juno-spark_1_rail_R1"
+              ]
+            }
+          ],
+          "mesh_objects": 4,
+          "vertices": 24,
+          "triangles": 16,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/juno-spark/male/JUNO_AWAKENED_BUILD.glb",
+          "sha256": "bb0081b753642bf5ae92a4f4f8a6f4cf8adf96ac5d7839ecf9d8914d917693b9",
+          "bytes": 4888
+        },
+        "JUNO_ASCENDED": {
+          "form_id": "JUNO_ASCENDED",
+          "ladder_step": "ASCENDED",
+          "parts": [
+            {
+              "node": "Socket_Chest.001",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_juno-spark_2_rail_L0",
+                "ANI08C_juno-spark_2_rail_L1",
+                "ANI08C_juno-spark_2_rail_L2",
+                "ANI08C_juno-spark_2_rail_R0",
+                "ANI08C_juno-spark_2_rail_R1",
+                "ANI08C_juno-spark_2_rail_R2"
+              ]
+            },
+            {
+              "node": "Socket_Shoulder_L",
+              "canonical_bone": "Shoulder_L",
+              "source_rest_transform_godot": [
+                [
+                  1.1920926823449918e-07,
+                  0.0,
+                  0.9999997615814209,
+                  -0.10000000149011612
+                ],
+                [
+                  -4.371138473402425e-08,
+                  0.9999999403953552,
+                  0.0,
+                  0.7300000190734863
+                ],
+                [
+                  -0.9999998807907104,
+                  -4.371138828673793e-08,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_juno-spark_2_fork_L"
+              ]
+            },
+            {
+              "node": "Socket_Shoulder_R",
+              "canonical_bone": "Shoulder_R",
+              "source_rest_transform_godot": [
+                [
+                  1.1920926823449918e-07,
+                  0.0,
+                  -0.9999997615814209,
+                  0.10000000149011612
+                ],
+                [
+                  4.371138473402425e-08,
+                  0.9999999403953552,
+                  0.0,
+                  0.7300000190734863
+                ],
+                [
+                  0.9999998807907104,
+                  -4.371138828673793e-08,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_juno-spark_2_fork_R"
+              ]
+            }
+          ],
+          "mesh_objects": 8,
+          "vertices": 52,
+          "triangles": 36,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/juno-spark/male/JUNO_ASCENDED.glb",
+          "sha256": "f5e05c9b0d27061453166a4e09dc70ec649b8d4837c3b373d554b792a89274bb",
+          "bytes": 9764
+        }
+      },
+      "human_approved": false,
+      "native_visual_verified": false
+    },
+    {
+      "fighter": "juno-spark",
+      "body": "female",
+      "input_8b_source": "saved_sources/juno-spark/female/candidate_8b.blend",
+      "input_8b_sha256": "72ce2abba03e62b8c46d013731cdd397913e491702337ce72b38516ff00c1c2a",
+      "original_source": "art_source/collectible_v1/juno-spark/female/candidate.blend",
+      "original_source_sha256": "da0591855254ecfaeea767b486b2ee7284527bec28605247b1eebba0993261a9",
+      "saved_source": "saved_sources/juno-spark/female/candidate_8c.blend",
+      "saved_source_sha256": "ad4acb77fe36dc8ebdf71b96655bb3075797cfe77885f53dcbd31cb75d503067",
+      "source_geometry_rest_weights_sha256": "02db9987fbf523c234e0a0e397c70a0b5fa7879df1903fbe62f0328d4244fe4a",
+      "original_actions_preserved": 227,
+      "preserved_8b_actions": 30,
+      "original_actions_sha256": "2c9f504b1c42cb3bb96577d0f5ea27f72ee17d14dd3d33be06ac539c520d6786",
+      "new_saved_actions": [
+        "ANI08C_WIP_form_transform_awakened_build",
+        "ANI08C_WIP_form_transform_awakened_build_left",
+        "ANI08C_WIP_form_idle_awakened_build",
+        "ANI08C_WIP_form_idle_awakened_build_left",
+        "ANI08C_WIP_form_transform_ascended",
+        "ANI08C_WIP_form_transform_ascended_left",
+        "ANI08C_WIP_form_idle_ascended",
+        "ANI08C_WIP_form_idle_ascended_left"
+      ],
+      "source_runtime_verification": {
+        "PASS": true,
+        "max_matrix_component_error": 3.7550926208496094e-06,
+        "frames_evaluated": 416,
+        "scope": "saved Blender evaluated pose versus rig-specific runtime keys, not visual quality"
+      },
+      "rig_bones": [
+        "Root",
+        "Hips",
+        "Spine",
+        "Chest",
+        "Neck",
+        "Head",
+        "Shoulder_L",
+        "UpperArm_L",
+        "LowerArm_L",
+        "Hand_L",
+        "Shoulder_R",
+        "UpperArm_R",
+        "LowerArm_R",
+        "Hand_R",
+        "UpperLeg_L",
+        "LowerLeg_L",
+        "Foot_L",
+        "Toes_L",
+        "UpperLeg_R",
+        "LowerLeg_R",
+        "Foot_R",
+        "Toes_R"
+      ],
+      "runtime_file": "runtime/game-godot/data/animation/form_acting_8c/juno-spark_female.json",
+      "runtime_sha256": "12308783c2d6e53d7f13890472e755756dae823af978ddb192d24dfbddb6168c",
+      "attachments": {
+        "JUNO_AWAKENED_BUILD": {
+          "form_id": "JUNO_AWAKENED_BUILD",
+          "ladder_step": "AWAKENED_BUILD",
+          "parts": [
+            {
+              "node": "Socket_Chest",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_juno-spark_1_rail_L0",
+                "ANI08C_juno-spark_1_rail_L1",
+                "ANI08C_juno-spark_1_rail_R0",
+                "ANI08C_juno-spark_1_rail_R1"
+              ]
+            }
+          ],
+          "mesh_objects": 4,
+          "vertices": 24,
+          "triangles": 16,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/juno-spark/female/JUNO_AWAKENED_BUILD.glb",
+          "sha256": "bb0081b753642bf5ae92a4f4f8a6f4cf8adf96ac5d7839ecf9d8914d917693b9",
+          "bytes": 4888
+        },
+        "JUNO_ASCENDED": {
+          "form_id": "JUNO_ASCENDED",
+          "ladder_step": "ASCENDED",
+          "parts": [
+            {
+              "node": "Socket_Chest.001",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_juno-spark_2_rail_L0",
+                "ANI08C_juno-spark_2_rail_L1",
+                "ANI08C_juno-spark_2_rail_L2",
+                "ANI08C_juno-spark_2_rail_R0",
+                "ANI08C_juno-spark_2_rail_R1",
+                "ANI08C_juno-spark_2_rail_R2"
+              ]
+            },
+            {
+              "node": "Socket_Shoulder_L",
+              "canonical_bone": "Shoulder_L",
+              "source_rest_transform_godot": [
+                [
+                  1.1920926823449918e-07,
+                  0.0,
+                  0.9999997615814209,
+                  -0.10000000149011612
+                ],
+                [
+                  -4.371138473402425e-08,
+                  0.9999999403953552,
+                  0.0,
+                  0.7300000190734863
+                ],
+                [
+                  -0.9999998807907104,
+                  -4.371138828673793e-08,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_juno-spark_2_fork_L"
+              ]
+            },
+            {
+              "node": "Socket_Shoulder_R",
+              "canonical_bone": "Shoulder_R",
+              "source_rest_transform_godot": [
+                [
+                  1.1920926823449918e-07,
+                  0.0,
+                  -0.9999997615814209,
+                  0.10000000149011612
+                ],
+                [
+                  4.371138473402425e-08,
+                  0.9999999403953552,
+                  0.0,
+                  0.7300000190734863
+                ],
+                [
+                  0.9999998807907104,
+                  -4.371138828673793e-08,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_juno-spark_2_fork_R"
+              ]
+            }
+          ],
+          "mesh_objects": 8,
+          "vertices": 52,
+          "triangles": 36,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/juno-spark/female/JUNO_ASCENDED.glb",
+          "sha256": "f5e05c9b0d27061453166a4e09dc70ec649b8d4837c3b373d554b792a89274bb",
+          "bytes": 9764
+        }
+      },
+      "human_approved": false,
+      "native_visual_verified": false
+    },
+    {
+      "fighter": "kaia-windrow",
+      "body": "male",
+      "input_8b_source": "saved_sources/kaia-windrow/male/candidate_8b.blend",
+      "input_8b_sha256": "837f0bb7ca6f64cb00328379af434bde4392cc78f0f94d4b05ddefbae7d874b2",
+      "original_source": "art_source/collectible_v1/kaia-windrow/male/candidate.blend",
+      "original_source_sha256": "03ee413a4057e6c906129a84db1faca8ac7336c99001732e920f7af1c71a1bba",
+      "saved_source": "saved_sources/kaia-windrow/male/candidate_8c.blend",
+      "saved_source_sha256": "5a90459172429281629f679815de97d996f9ac8ba3f25db85490e55826666add",
+      "source_geometry_rest_weights_sha256": "afc4e876e33229e0066888ea6416c12e9acf226ec3c50dcaff8a034436e9f5e9",
+      "original_actions_preserved": 227,
+      "preserved_8b_actions": 30,
+      "original_actions_sha256": "11eea9a0886281ed85e767011ddc44351b71005b777353db52977da10a2e72b9",
+      "new_saved_actions": [
+        "ANI08C_WIP_form_transform_awakened_build",
+        "ANI08C_WIP_form_transform_awakened_build_left",
+        "ANI08C_WIP_form_idle_awakened_build",
+        "ANI08C_WIP_form_idle_awakened_build_left",
+        "ANI08C_WIP_form_transform_ascended",
+        "ANI08C_WIP_form_transform_ascended_left",
+        "ANI08C_WIP_form_idle_ascended",
+        "ANI08C_WIP_form_idle_ascended_left"
+      ],
+      "source_runtime_verification": {
+        "PASS": true,
+        "max_matrix_component_error": 3.7550926208496094e-06,
+        "frames_evaluated": 662,
+        "scope": "saved Blender evaluated pose versus rig-specific runtime keys, not visual quality"
+      },
+      "rig_bones": [
+        "Root",
+        "Hips",
+        "Spine",
+        "Chest",
+        "Neck",
+        "Head",
+        "Shoulder_L",
+        "UpperArm_L",
+        "LowerArm_L",
+        "Hand_L",
+        "Shoulder_R",
+        "UpperArm_R",
+        "LowerArm_R",
+        "Hand_R",
+        "UpperLeg_L",
+        "LowerLeg_L",
+        "Foot_L",
+        "Toes_L",
+        "UpperLeg_R",
+        "LowerLeg_R",
+        "Foot_R",
+        "Toes_R"
+      ],
+      "runtime_file": "runtime/game-godot/data/animation/form_acting_8c/kaia-windrow_male.json",
+      "runtime_sha256": "7aa9a75bec4127a6d30cc5a142f8fea748631f7fdcda3f2eadabdf3182307a76",
+      "attachments": {
+        "KAIA_AWAKENED_BUILD": {
+          "form_id": "KAIA_AWAKENED_BUILD",
+          "ladder_step": "AWAKENED_BUILD",
+          "parts": [
+            {
+              "node": "Socket_Chest",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_kaia-windrow_1_pressure_airfoil_L0",
+                "ANI08C_kaia-windrow_1_pressure_airfoil_R0"
+              ]
+            },
+            {
+              "node": "Socket_Hips",
+              "canonical_bone": "Hips",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.4300000071525574
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_kaia-windrow_1_pressure_crescent_L",
+                "ANI08C_kaia-windrow_1_pressure_crescent_R"
+              ]
+            }
+          ],
+          "mesh_objects": 4,
+          "vertices": 84,
+          "triangles": 76,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/kaia-windrow/male/KAIA_AWAKENED_BUILD.glb",
+          "sha256": "56102afaaddeb46bf081455c845782dc8ac66e42672214682adb6fc0d7f06e24",
+          "bytes": 7064
+        },
+        "KAIA_ASCENDED": {
+          "form_id": "KAIA_ASCENDED",
+          "ladder_step": "ASCENDED",
+          "parts": [
+            {
+              "node": "Socket_Chest.001",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_kaia-windrow_2_pressure_airfoil_L0",
+                "ANI08C_kaia-windrow_2_pressure_airfoil_L1",
+                "ANI08C_kaia-windrow_2_pressure_airfoil_R0",
+                "ANI08C_kaia-windrow_2_pressure_airfoil_R1"
+              ]
+            },
+            {
+              "node": "Socket_Hips.001",
+              "canonical_bone": "Hips",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.4300000071525574
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_kaia-windrow_2_pressure_crescent_L",
+                "ANI08C_kaia-windrow_2_pressure_crescent_R"
+              ]
+            }
+          ],
+          "mesh_objects": 6,
+          "vertices": 100,
+          "triangles": 88,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/kaia-windrow/male/KAIA_ASCENDED.glb",
+          "sha256": "9fab87ad2b57e6966556f5e974d1c0f0ccc8b5091758144339c4c97c9490d5bb",
+          "bytes": 9292
+        }
+      },
+      "human_approved": false,
+      "native_visual_verified": false
+    },
+    {
+      "fighter": "kaia-windrow",
+      "body": "female",
+      "input_8b_source": "saved_sources/kaia-windrow/female/candidate_8b.blend",
+      "input_8b_sha256": "86bcc668b535aaace3f09502cce972f1ef7ebbf68551a58142fea9688d8e5ef6",
+      "original_source": "art_source/collectible_v1/kaia-windrow/female/candidate.blend",
+      "original_source_sha256": "16728ed5e759050d8a5801b327def48cbd6487b255242175ad6f75172de16eb3",
+      "saved_source": "saved_sources/kaia-windrow/female/candidate_8c.blend",
+      "saved_source_sha256": "c31b325667144232cb5214c695ce08fe96699058fa049e7db3d20c2c16d664a8",
+      "source_geometry_rest_weights_sha256": "286262964f4ff12cbb32715e0dafd71ae61c192609983e80251de6251416dacd",
+      "original_actions_preserved": 227,
+      "preserved_8b_actions": 30,
+      "original_actions_sha256": "44bdf5c6ee532f8b1f99eed5e2e85c8c111f0fad9cce333a69533068b6f4ae75",
+      "new_saved_actions": [
+        "ANI08C_WIP_form_transform_awakened_build",
+        "ANI08C_WIP_form_transform_awakened_build_left",
+        "ANI08C_WIP_form_idle_awakened_build",
+        "ANI08C_WIP_form_idle_awakened_build_left",
+        "ANI08C_WIP_form_transform_ascended",
+        "ANI08C_WIP_form_transform_ascended_left",
+        "ANI08C_WIP_form_idle_ascended",
+        "ANI08C_WIP_form_idle_ascended_left"
+      ],
+      "source_runtime_verification": {
+        "PASS": true,
+        "max_matrix_component_error": 3.7550926208496094e-06,
+        "frames_evaluated": 662,
+        "scope": "saved Blender evaluated pose versus rig-specific runtime keys, not visual quality"
+      },
+      "rig_bones": [
+        "Root",
+        "Hips",
+        "Spine",
+        "Chest",
+        "Neck",
+        "Head",
+        "Shoulder_L",
+        "UpperArm_L",
+        "LowerArm_L",
+        "Hand_L",
+        "Shoulder_R",
+        "UpperArm_R",
+        "LowerArm_R",
+        "Hand_R",
+        "UpperLeg_L",
+        "LowerLeg_L",
+        "Foot_L",
+        "Toes_L",
+        "UpperLeg_R",
+        "LowerLeg_R",
+        "Foot_R",
+        "Toes_R"
+      ],
+      "runtime_file": "runtime/game-godot/data/animation/form_acting_8c/kaia-windrow_female.json",
+      "runtime_sha256": "a948437a0f27f5c8600ac112ac5662b4d567727e6b6e1b72cbe6bf04f6681498",
+      "attachments": {
+        "KAIA_AWAKENED_BUILD": {
+          "form_id": "KAIA_AWAKENED_BUILD",
+          "ladder_step": "AWAKENED_BUILD",
+          "parts": [
+            {
+              "node": "Socket_Chest",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_kaia-windrow_1_pressure_airfoil_L0",
+                "ANI08C_kaia-windrow_1_pressure_airfoil_R0"
+              ]
+            },
+            {
+              "node": "Socket_Hips",
+              "canonical_bone": "Hips",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.4300000071525574
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_kaia-windrow_1_pressure_crescent_L",
+                "ANI08C_kaia-windrow_1_pressure_crescent_R"
+              ]
+            }
+          ],
+          "mesh_objects": 4,
+          "vertices": 84,
+          "triangles": 76,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/kaia-windrow/female/KAIA_AWAKENED_BUILD.glb",
+          "sha256": "56102afaaddeb46bf081455c845782dc8ac66e42672214682adb6fc0d7f06e24",
+          "bytes": 7064
+        },
+        "KAIA_ASCENDED": {
+          "form_id": "KAIA_ASCENDED",
+          "ladder_step": "ASCENDED",
+          "parts": [
+            {
+              "node": "Socket_Chest.001",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_kaia-windrow_2_pressure_airfoil_L0",
+                "ANI08C_kaia-windrow_2_pressure_airfoil_L1",
+                "ANI08C_kaia-windrow_2_pressure_airfoil_R0",
+                "ANI08C_kaia-windrow_2_pressure_airfoil_R1"
+              ]
+            },
+            {
+              "node": "Socket_Hips.001",
+              "canonical_bone": "Hips",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.4300000071525574
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_kaia-windrow_2_pressure_crescent_L",
+                "ANI08C_kaia-windrow_2_pressure_crescent_R"
+              ]
+            }
+          ],
+          "mesh_objects": 6,
+          "vertices": 100,
+          "triangles": 88,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/kaia-windrow/female/KAIA_ASCENDED.glb",
+          "sha256": "9fab87ad2b57e6966556f5e974d1c0f0ccc8b5091758144339c4c97c9490d5bb",
+          "bytes": 9292
+        }
+      },
+      "human_approved": false,
+      "native_visual_verified": false
+    },
+    {
+      "fighter": "nix-calder",
+      "body": "male",
+      "input_8b_source": "saved_sources/nix-calder/male/candidate_8b.blend",
+      "input_8b_sha256": "c6bce226b5f481335b570e58c3c1097a03144b29e9859b0f8a08b3a7588ea4ad",
+      "original_source": "art_source/collectible_v1/nix-calder/male/candidate.blend",
+      "original_source_sha256": "695cba349da020f2f33686f3a77eadb215e9866b08915fcb19e9517f7853492d",
+      "saved_source": "saved_sources/nix-calder/male/candidate_8c.blend",
+      "saved_source_sha256": "46973de949b8993bb7a135a61fcf1b70737da31957947894e207afc2b7675e82",
+      "source_geometry_rest_weights_sha256": "5ae9dc147ae13a18a34488de01d96cc894995437648ef9f427c2587c7299e125",
+      "original_actions_preserved": 177,
+      "preserved_8b_actions": 30,
+      "original_actions_sha256": "30acbc73eeb872e5bc72086d026ab253ddc75a8d8452ec3f6b610cb3d1bdc5f9",
+      "new_saved_actions": [
+        "ANI08C_WIP_form_transform_awakened_build",
+        "ANI08C_WIP_form_transform_awakened_build_left",
+        "ANI08C_WIP_form_idle_awakened_build",
+        "ANI08C_WIP_form_idle_awakened_build_left",
+        "ANI08C_WIP_form_transform_ascended",
+        "ANI08C_WIP_form_transform_ascended_left",
+        "ANI08C_WIP_form_idle_ascended",
+        "ANI08C_WIP_form_idle_ascended_left"
+      ],
+      "source_runtime_verification": {
+        "PASS": true,
+        "max_matrix_component_error": 3.516674041748047e-06,
+        "frames_evaluated": 776,
+        "scope": "saved Blender evaluated pose versus rig-specific runtime keys, not visual quality"
+      },
+      "rig_bones": [
+        "Root",
+        "Hips",
+        "Spine",
+        "Chest",
+        "Neck",
+        "Head",
+        "Shoulder_L",
+        "UpperArm_L",
+        "LowerArm_L",
+        "Hand_L",
+        "Shoulder_R",
+        "UpperArm_R",
+        "LowerArm_R",
+        "Hand_R",
+        "UpperLeg_L",
+        "LowerLeg_L",
+        "Foot_L",
+        "Toes_L",
+        "UpperLeg_R",
+        "LowerLeg_R",
+        "Foot_R",
+        "Toes_R"
+      ],
+      "runtime_file": "runtime/game-godot/data/animation/form_acting_8c/nix-calder_male.json",
+      "runtime_sha256": "f2fa084a56cf8946c464ce0db50f2dd974fd3445c7bbe9dbe48d8fa33ed3efc8",
+      "attachments": {
+        "NIX_AWAKENED_BUILD": {
+          "form_id": "NIX_AWAKENED_BUILD",
+          "ladder_step": "AWAKENED_BUILD",
+          "parts": [
+            {
+              "node": "Socket_Shoulder_L",
+              "canonical_bone": "Shoulder_L",
+              "source_rest_transform_godot": [
+                [
+                  0.0,
+                  0.0,
+                  0.9999999403953552,
+                  -0.10000000149011612
+                ],
+                [
+                  -4.371138828673793e-08,
+                  1.0,
+                  0.0,
+                  0.7300000190734863
+                ],
+                [
+                  -1.0,
+                  -4.371138828673793e-08,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_nix-calder_1_mantle_facet_L0",
+                "ANI08C_nix-calder_1_mantle_facet_L1",
+                "ANI08C_nix-calder_1_mantle_facet_L2"
+              ]
+            },
+            {
+              "node": "Socket_Shoulder_R",
+              "canonical_bone": "Shoulder_R",
+              "source_rest_transform_godot": [
+                [
+                  0.0,
+                  0.0,
+                  -0.9999999403953552,
+                  0.10000000149011612
+                ],
+                [
+                  4.371138828673793e-08,
+                  1.0,
+                  0.0,
+                  0.7300000190734863
+                ],
+                [
+                  1.0,
+                  -4.371138828673793e-08,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_nix-calder_1_mantle_facet_R0",
+                "ANI08C_nix-calder_1_mantle_facet_R1",
+                "ANI08C_nix-calder_1_mantle_facet_R2"
+              ]
+            }
+          ],
+          "mesh_objects": 6,
+          "vertices": 36,
+          "triangles": 48,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/nix-calder/male/NIX_AWAKENED_BUILD.glb",
+          "sha256": "decbc1e2025ef69c599577f8339409a9bb10d4e1e1de14fa25663cfd62ba0164",
+          "bytes": 9428
+        },
+        "NIX_ASCENDED": {
+          "form_id": "NIX_ASCENDED",
+          "ladder_step": "ASCENDED",
+          "parts": [
+            {
+              "node": "Socket_Shoulder_L.001",
+              "canonical_bone": "Shoulder_L",
+              "source_rest_transform_godot": [
+                [
+                  0.0,
+                  0.0,
+                  0.9999999403953552,
+                  -0.10000000149011612
+                ],
+                [
+                  -4.371138828673793e-08,
+                  1.0,
+                  0.0,
+                  0.7300000190734863
+                ],
+                [
+                  -1.0,
+                  -4.371138828673793e-08,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_nix-calder_2_mantle_facet_L0",
+                "ANI08C_nix-calder_2_mantle_facet_L1",
+                "ANI08C_nix-calder_2_mantle_facet_L2",
+                "ANI08C_nix-calder_2_mantle_facet_L3"
+              ]
+            },
+            {
+              "node": "Socket_Shoulder_R.001",
+              "canonical_bone": "Shoulder_R",
+              "source_rest_transform_godot": [
+                [
+                  0.0,
+                  0.0,
+                  -0.9999999403953552,
+                  0.10000000149011612
+                ],
+                [
+                  4.371138828673793e-08,
+                  1.0,
+                  0.0,
+                  0.7300000190734863
+                ],
+                [
+                  1.0,
+                  -4.371138828673793e-08,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_nix-calder_2_mantle_facet_R0",
+                "ANI08C_nix-calder_2_mantle_facet_R1",
+                "ANI08C_nix-calder_2_mantle_facet_R2",
+                "ANI08C_nix-calder_2_mantle_facet_R3"
+              ]
+            },
+            {
+              "node": "Socket_Chest",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_nix-calder_2_central_crystal"
+              ]
+            }
+          ],
+          "mesh_objects": 9,
+          "vertices": 55,
+          "triangles": 74,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/nix-calder/male/NIX_ASCENDED.glb",
+          "sha256": "4bed1a0cdbb9f0c5429bc1ae00bf37e90fb961ada4fde10de9b72c5de3d89174",
+          "bytes": 13848
+        }
+      },
+      "human_approved": false,
+      "native_visual_verified": false
+    },
+    {
+      "fighter": "nix-calder",
+      "body": "female",
+      "input_8b_source": "saved_sources/nix-calder/female/candidate_8b.blend",
+      "input_8b_sha256": "6756835d155c560d3b319220c2ce6e8d2093851761da11bc7bf9365912f36b86",
+      "original_source": "art_source/collectible_v1/nix-calder/female/candidate.blend",
+      "original_source_sha256": "9b79daf57be22780939f54c26c79968efdfa3ca4a747f07e5f297a4b57cb5cd3",
+      "saved_source": "saved_sources/nix-calder/female/candidate_8c.blend",
+      "saved_source_sha256": "ab35d1f979a10f25900a2193d523004b86cf98ced1fa284aeba8a3dda8fe78db",
+      "source_geometry_rest_weights_sha256": "57307a3a73ae523481e3a0063fb4e442277a9a85f1452409be221c7783220a3d",
+      "original_actions_preserved": 177,
+      "preserved_8b_actions": 30,
+      "original_actions_sha256": "abd1c1df5f51957a2372b55784cf3691e9d59f887d91ada5d29fbfaa0d04dd75",
+      "new_saved_actions": [
+        "ANI08C_WIP_form_transform_awakened_build",
+        "ANI08C_WIP_form_transform_awakened_build_left",
+        "ANI08C_WIP_form_idle_awakened_build",
+        "ANI08C_WIP_form_idle_awakened_build_left",
+        "ANI08C_WIP_form_transform_ascended",
+        "ANI08C_WIP_form_transform_ascended_left",
+        "ANI08C_WIP_form_idle_ascended",
+        "ANI08C_WIP_form_idle_ascended_left"
+      ],
+      "source_runtime_verification": {
+        "PASS": true,
+        "max_matrix_component_error": 3.516674041748047e-06,
+        "frames_evaluated": 776,
+        "scope": "saved Blender evaluated pose versus rig-specific runtime keys, not visual quality"
+      },
+      "rig_bones": [
+        "Root",
+        "Hips",
+        "Spine",
+        "Chest",
+        "Neck",
+        "Head",
+        "Shoulder_L",
+        "UpperArm_L",
+        "LowerArm_L",
+        "Hand_L",
+        "Shoulder_R",
+        "UpperArm_R",
+        "LowerArm_R",
+        "Hand_R",
+        "UpperLeg_L",
+        "LowerLeg_L",
+        "Foot_L",
+        "Toes_L",
+        "UpperLeg_R",
+        "LowerLeg_R",
+        "Foot_R",
+        "Toes_R"
+      ],
+      "runtime_file": "runtime/game-godot/data/animation/form_acting_8c/nix-calder_female.json",
+      "runtime_sha256": "67bebe07d311fb9df748a2899cb6e9244ecd3b2166cee55f51f47dbbeb624d39",
+      "attachments": {
+        "NIX_AWAKENED_BUILD": {
+          "form_id": "NIX_AWAKENED_BUILD",
+          "ladder_step": "AWAKENED_BUILD",
+          "parts": [
+            {
+              "node": "Socket_Shoulder_L",
+              "canonical_bone": "Shoulder_L",
+              "source_rest_transform_godot": [
+                [
+                  0.0,
+                  0.0,
+                  0.9999999403953552,
+                  -0.10000000149011612
+                ],
+                [
+                  -4.371138828673793e-08,
+                  1.0,
+                  0.0,
+                  0.7300000190734863
+                ],
+                [
+                  -1.0,
+                  -4.371138828673793e-08,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_nix-calder_1_mantle_facet_L0",
+                "ANI08C_nix-calder_1_mantle_facet_L1",
+                "ANI08C_nix-calder_1_mantle_facet_L2"
+              ]
+            },
+            {
+              "node": "Socket_Shoulder_R",
+              "canonical_bone": "Shoulder_R",
+              "source_rest_transform_godot": [
+                [
+                  0.0,
+                  0.0,
+                  -0.9999999403953552,
+                  0.10000000149011612
+                ],
+                [
+                  4.371138828673793e-08,
+                  1.0,
+                  0.0,
+                  0.7300000190734863
+                ],
+                [
+                  1.0,
+                  -4.371138828673793e-08,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_nix-calder_1_mantle_facet_R0",
+                "ANI08C_nix-calder_1_mantle_facet_R1",
+                "ANI08C_nix-calder_1_mantle_facet_R2"
+              ]
+            }
+          ],
+          "mesh_objects": 6,
+          "vertices": 36,
+          "triangles": 48,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/nix-calder/female/NIX_AWAKENED_BUILD.glb",
+          "sha256": "decbc1e2025ef69c599577f8339409a9bb10d4e1e1de14fa25663cfd62ba0164",
+          "bytes": 9428
+        },
+        "NIX_ASCENDED": {
+          "form_id": "NIX_ASCENDED",
+          "ladder_step": "ASCENDED",
+          "parts": [
+            {
+              "node": "Socket_Shoulder_L.001",
+              "canonical_bone": "Shoulder_L",
+              "source_rest_transform_godot": [
+                [
+                  0.0,
+                  0.0,
+                  0.9999999403953552,
+                  -0.10000000149011612
+                ],
+                [
+                  -4.371138828673793e-08,
+                  1.0,
+                  0.0,
+                  0.7300000190734863
+                ],
+                [
+                  -1.0,
+                  -4.371138828673793e-08,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_nix-calder_2_mantle_facet_L0",
+                "ANI08C_nix-calder_2_mantle_facet_L1",
+                "ANI08C_nix-calder_2_mantle_facet_L2",
+                "ANI08C_nix-calder_2_mantle_facet_L3"
+              ]
+            },
+            {
+              "node": "Socket_Shoulder_R.001",
+              "canonical_bone": "Shoulder_R",
+              "source_rest_transform_godot": [
+                [
+                  0.0,
+                  0.0,
+                  -0.9999999403953552,
+                  0.10000000149011612
+                ],
+                [
+                  4.371138828673793e-08,
+                  1.0,
+                  0.0,
+                  0.7300000190734863
+                ],
+                [
+                  1.0,
+                  -4.371138828673793e-08,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_nix-calder_2_mantle_facet_R0",
+                "ANI08C_nix-calder_2_mantle_facet_R1",
+                "ANI08C_nix-calder_2_mantle_facet_R2",
+                "ANI08C_nix-calder_2_mantle_facet_R3"
+              ]
+            },
+            {
+              "node": "Socket_Chest",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_nix-calder_2_central_crystal"
+              ]
+            }
+          ],
+          "mesh_objects": 9,
+          "vertices": 55,
+          "triangles": 74,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/nix-calder/female/NIX_ASCENDED.glb",
+          "sha256": "4bed1a0cdbb9f0c5429bc1ae00bf37e90fb961ada4fde10de9b72c5de3d89174",
+          "bytes": 13848
+        }
+      },
+      "human_approved": false,
+      "native_visual_verified": false
+    },
+    {
+      "fighter": "orion-vell",
+      "body": "male",
+      "input_8b_source": "saved_sources/orion-vell/male/candidate_8b.blend",
+      "input_8b_sha256": "2f621ac9c91e88d7dd4c9a67218b66fa6f06596fd4b2c8cdcd302d10427cd35f",
+      "original_source": "art_source/collectible_v1/orion-vell/male/candidate.blend",
+      "original_source_sha256": "eb6934c63de5178c2b44aa83bb00c346a2b35512ade23e1faba5a1066346a100",
+      "saved_source": "saved_sources/orion-vell/male/candidate_8c.blend",
+      "saved_source_sha256": "14ae38a99c88cb51c9710c48f38203f5586c28f5209d14d37a559ebe08a2e681",
+      "source_geometry_rest_weights_sha256": "80adc873ce6df949d9ba6c7b7e65a60fdbf3df73db4a639901049bf5099ac912",
+      "original_actions_preserved": 177,
+      "preserved_8b_actions": 30,
+      "original_actions_sha256": "ee8d480149a31b44e2bc9a7a355d454ffc9764358a3c8c8a5d98794de79cbd18",
+      "new_saved_actions": [
+        "ANI08C_WIP_form_transform_awakened_build",
+        "ANI08C_WIP_form_transform_awakened_build_left",
+        "ANI08C_WIP_form_idle_awakened_build",
+        "ANI08C_WIP_form_idle_awakened_build_left",
+        "ANI08C_WIP_form_transform_ascended",
+        "ANI08C_WIP_form_transform_ascended_left",
+        "ANI08C_WIP_form_idle_ascended",
+        "ANI08C_WIP_form_idle_ascended_left"
+      ],
+      "source_runtime_verification": {
+        "PASS": true,
+        "max_matrix_component_error": 3.635883331298828e-06,
+        "frames_evaluated": 728,
+        "scope": "saved Blender evaluated pose versus rig-specific runtime keys, not visual quality"
+      },
+      "rig_bones": [
+        "Root",
+        "Hips",
+        "Spine",
+        "Chest",
+        "Neck",
+        "Head",
+        "Shoulder_L",
+        "UpperArm_L",
+        "LowerArm_L",
+        "Hand_L",
+        "Shoulder_R",
+        "UpperArm_R",
+        "LowerArm_R",
+        "Hand_R",
+        "UpperLeg_L",
+        "LowerLeg_L",
+        "Foot_L",
+        "Toes_L",
+        "UpperLeg_R",
+        "LowerLeg_R",
+        "Foot_R",
+        "Toes_R"
+      ],
+      "runtime_file": "runtime/game-godot/data/animation/form_acting_8c/orion-vell_male.json",
+      "runtime_sha256": "90ec726e8f1828164ddbe5e0006771c0911aa27739593408ff4b35b63e5487ef",
+      "attachments": {
+        "ORION_AWAKENED_BUILD": {
+          "form_id": "ORION_AWAKENED_BUILD",
+          "ladder_step": "AWAKENED_BUILD",
+          "parts": [
+            {
+              "node": "Socket_Chest",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_orion-vell_1_orbit0",
+                "ANI08C_orion-vell_1_orbit1",
+                "ANI08C_orion-vell_1_orbital_node0",
+                "ANI08C_orion-vell_1_orbital_node1",
+                "ANI08C_orion-vell_1_orbital_node2",
+                "ANI08C_orion-vell_1_orbital_node3"
+              ]
+            }
+          ],
+          "mesh_objects": 6,
+          "vertices": 128,
+          "triangles": 136,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/orion-vell/male/ORION_AWAKENED_BUILD.glb",
+          "sha256": "234d4f11e28bbb887685e6382ab7d674131e83fadc7bc76c1d9e5c10b33ddccd",
+          "bytes": 11220
+        },
+        "ORION_ASCENDED": {
+          "form_id": "ORION_ASCENDED",
+          "ladder_step": "ASCENDED",
+          "parts": [
+            {
+              "node": "Socket_Chest.001",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_orion-vell_2_orbit0",
+                "ANI08C_orion-vell_2_orbit1",
+                "ANI08C_orion-vell_2_orbit2",
+                "ANI08C_orion-vell_2_orbital_node0",
+                "ANI08C_orion-vell_2_orbital_node1",
+                "ANI08C_orion-vell_2_orbital_node2",
+                "ANI08C_orion-vell_2_orbital_node3",
+                "ANI08C_orion-vell_2_orbital_node4"
+              ]
+            }
+          ],
+          "mesh_objects": 8,
+          "vertices": 185,
+          "triangles": 194,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/orion-vell/male/ORION_ASCENDED.glb",
+          "sha256": "e4484be1959b77b654d1cf6c4800f83f060ff12e9125188a04c6e70fbd0b7e44",
+          "bytes": 14408
+        }
+      },
+      "human_approved": false,
+      "native_visual_verified": false
+    },
+    {
+      "fighter": "orion-vell",
+      "body": "female",
+      "input_8b_source": "saved_sources/orion-vell/female/candidate_8b.blend",
+      "input_8b_sha256": "2d009fe67f2f2ac929daed049345be7e65d15cd295b843384d3327143b25d02e",
+      "original_source": "art_source/collectible_v1/orion-vell/female/candidate.blend",
+      "original_source_sha256": "3ea199cb8483f13582d92141e0c1e17fa3e4ae9d9fdc0fef5accd4e8be76e373",
+      "saved_source": "saved_sources/orion-vell/female/candidate_8c.blend",
+      "saved_source_sha256": "32b1fe53c184485047a727f277daf7dcdc9aa764e4f6abf310a73571b6289500",
+      "source_geometry_rest_weights_sha256": "1b04ffa65a5f0fb2407a2b9f922d7851ade080c8ec5756bb53ae2baf9929ef9b",
+      "original_actions_preserved": 177,
+      "preserved_8b_actions": 30,
+      "original_actions_sha256": "fe86e3399efcc4db72550fbe4ccc0c15ac86163759ba05b9fbacb861034e0932",
+      "new_saved_actions": [
+        "ANI08C_WIP_form_transform_awakened_build",
+        "ANI08C_WIP_form_transform_awakened_build_left",
+        "ANI08C_WIP_form_idle_awakened_build",
+        "ANI08C_WIP_form_idle_awakened_build_left",
+        "ANI08C_WIP_form_transform_ascended",
+        "ANI08C_WIP_form_transform_ascended_left",
+        "ANI08C_WIP_form_idle_ascended",
+        "ANI08C_WIP_form_idle_ascended_left"
+      ],
+      "source_runtime_verification": {
+        "PASS": true,
+        "max_matrix_component_error": 3.635883331298828e-06,
+        "frames_evaluated": 728,
+        "scope": "saved Blender evaluated pose versus rig-specific runtime keys, not visual quality"
+      },
+      "rig_bones": [
+        "Root",
+        "Hips",
+        "Spine",
+        "Chest",
+        "Neck",
+        "Head",
+        "Shoulder_L",
+        "UpperArm_L",
+        "LowerArm_L",
+        "Hand_L",
+        "Shoulder_R",
+        "UpperArm_R",
+        "LowerArm_R",
+        "Hand_R",
+        "UpperLeg_L",
+        "LowerLeg_L",
+        "Foot_L",
+        "Toes_L",
+        "UpperLeg_R",
+        "LowerLeg_R",
+        "Foot_R",
+        "Toes_R"
+      ],
+      "runtime_file": "runtime/game-godot/data/animation/form_acting_8c/orion-vell_female.json",
+      "runtime_sha256": "691bfae894b43ce5f09f07cc89f97eabc5eb5bb3425386ef854b6c694a80ff98",
+      "attachments": {
+        "ORION_AWAKENED_BUILD": {
+          "form_id": "ORION_AWAKENED_BUILD",
+          "ladder_step": "AWAKENED_BUILD",
+          "parts": [
+            {
+              "node": "Socket_Chest",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_orion-vell_1_orbit0",
+                "ANI08C_orion-vell_1_orbit1",
+                "ANI08C_orion-vell_1_orbital_node0",
+                "ANI08C_orion-vell_1_orbital_node1",
+                "ANI08C_orion-vell_1_orbital_node2",
+                "ANI08C_orion-vell_1_orbital_node3"
+              ]
+            }
+          ],
+          "mesh_objects": 6,
+          "vertices": 128,
+          "triangles": 136,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/orion-vell/female/ORION_AWAKENED_BUILD.glb",
+          "sha256": "234d4f11e28bbb887685e6382ab7d674131e83fadc7bc76c1d9e5c10b33ddccd",
+          "bytes": 11220
+        },
+        "ORION_ASCENDED": {
+          "form_id": "ORION_ASCENDED",
+          "ladder_step": "ASCENDED",
+          "parts": [
+            {
+              "node": "Socket_Chest.001",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_orion-vell_2_orbit0",
+                "ANI08C_orion-vell_2_orbit1",
+                "ANI08C_orion-vell_2_orbit2",
+                "ANI08C_orion-vell_2_orbital_node0",
+                "ANI08C_orion-vell_2_orbital_node1",
+                "ANI08C_orion-vell_2_orbital_node2",
+                "ANI08C_orion-vell_2_orbital_node3",
+                "ANI08C_orion-vell_2_orbital_node4"
+              ]
+            }
+          ],
+          "mesh_objects": 8,
+          "vertices": 185,
+          "triangles": 194,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/orion-vell/female/ORION_ASCENDED.glb",
+          "sha256": "e4484be1959b77b654d1cf6c4800f83f060ff12e9125188a04c6e70fbd0b7e44",
+          "bytes": 14408
+        }
+      },
+      "human_approved": false,
+      "native_visual_verified": false
+    },
+    {
+      "fighter": "vesper-nyx",
+      "body": "male",
+      "input_8b_source": "saved_sources/vesper-nyx/male/candidate_8b.blend",
+      "input_8b_sha256": "ff46d367de91cf051c2a8f3e8d5623c6f94db0356050f6d26e0d80151dd1986a",
+      "original_source": "art_source/collectible_v1/vesper-nyx/male/candidate.blend",
+      "original_source_sha256": "812e9787fdd1de13ff0a25a0b748ef6bae0f5ef97f43fd26f114c12dc9148489",
+      "saved_source": "saved_sources/vesper-nyx/male/candidate_8c.blend",
+      "saved_source_sha256": "99e690cb087274513c23de492b69653ea469f0649e9283b7cfefe55effec25ea",
+      "source_geometry_rest_weights_sha256": "ab165996e8e9d7a505c2ac9f5795a27e498570f0a8d086a4965b33b5a249e6a3",
+      "original_actions_preserved": 177,
+      "preserved_8b_actions": 30,
+      "original_actions_sha256": "38ad7e2d315cbf7f5cee9b5bfd693b4dac6b37557970a762338892c438c85e77",
+      "new_saved_actions": [
+        "ANI08C_WIP_form_transform_awakened_build",
+        "ANI08C_WIP_form_transform_awakened_build_left",
+        "ANI08C_WIP_form_idle_awakened_build",
+        "ANI08C_WIP_form_idle_awakened_build_left",
+        "ANI08C_WIP_form_transform_ascended",
+        "ANI08C_WIP_form_transform_ascended_left",
+        "ANI08C_WIP_form_idle_ascended",
+        "ANI08C_WIP_form_idle_ascended_left"
+      ],
+      "source_runtime_verification": {
+        "PASS": true,
+        "max_matrix_component_error": 3.6954879760742188e-06,
+        "frames_evaluated": 638,
+        "scope": "saved Blender evaluated pose versus rig-specific runtime keys, not visual quality"
+      },
+      "rig_bones": [
+        "Root",
+        "Hips",
+        "Spine",
+        "Chest",
+        "Neck",
+        "Head",
+        "Shoulder_L",
+        "UpperArm_L",
+        "LowerArm_L",
+        "Hand_L",
+        "Shoulder_R",
+        "UpperArm_R",
+        "LowerArm_R",
+        "Hand_R",
+        "UpperLeg_L",
+        "LowerLeg_L",
+        "Foot_L",
+        "Toes_L",
+        "UpperLeg_R",
+        "LowerLeg_R",
+        "Foot_R",
+        "Toes_R"
+      ],
+      "runtime_file": "runtime/game-godot/data/animation/form_acting_8c/vesper-nyx_male.json",
+      "runtime_sha256": "55ee8a843943d21302870c89f1ed231d4e39ba428546aa70af57b3ed66c3ad4c",
+      "attachments": {
+        "VESPER_AWAKENED_BUILD": {
+          "form_id": "VESPER_AWAKENED_BUILD",
+          "ladder_step": "AWAKENED_BUILD",
+          "parts": [
+            {
+              "node": "Socket_Chest",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_vesper-nyx_1_dislocation0",
+                "ANI08C_vesper-nyx_1_dislocation1",
+                "ANI08C_vesper-nyx_1_dislocation2",
+                "ANI08C_vesper-nyx_1_dislocation3"
+              ]
+            }
+          ],
+          "mesh_objects": 4,
+          "vertices": 24,
+          "triangles": 16,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/vesper-nyx/male/VESPER_AWAKENED_BUILD.glb",
+          "sha256": "0f213abf24d4aa823d25b8e99db18bc61a34ad2529247604901c44f55ff19f44",
+          "bytes": 4988
+        },
+        "VESPER_ASCENDED": {
+          "form_id": "VESPER_ASCENDED",
+          "ladder_step": "ASCENDED",
+          "parts": [
+            {
+              "node": "Socket_Chest.001",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_vesper-nyx_2_dislocation0",
+                "ANI08C_vesper-nyx_2_dislocation1",
+                "ANI08C_vesper-nyx_2_dislocation2",
+                "ANI08C_vesper-nyx_2_dislocation3",
+                "ANI08C_vesper-nyx_2_dislocation4",
+                "ANI08C_vesper-nyx_2_broken_phase_frame"
+              ]
+            }
+          ],
+          "mesh_objects": 6,
+          "vertices": 68,
+          "triangles": 56,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/vesper-nyx/male/VESPER_ASCENDED.glb",
+          "sha256": "423d83006a5c908bdf4f11f6339c86de4c6e399c0c5d6c4cc713d1eca29e4880",
+          "bytes": 8068
+        }
+      },
+      "human_approved": false,
+      "native_visual_verified": false
+    },
+    {
+      "fighter": "vesper-nyx",
+      "body": "female",
+      "input_8b_source": "saved_sources/vesper-nyx/female/candidate_8b.blend",
+      "input_8b_sha256": "fbd6168be8e8dd8197832447590c420304497e58ee9ce28c3c28b420f0cf16a3",
+      "original_source": "art_source/collectible_v1/vesper-nyx/female/candidate.blend",
+      "original_source_sha256": "748cfcd1f30e7d052e35d1d1c274ff816f27cb9b64d90ea20ccbcdad15dbf3b2",
+      "saved_source": "saved_sources/vesper-nyx/female/candidate_8c.blend",
+      "saved_source_sha256": "da9dc1ffd854007d9dfbaec871b80725c553361c5a5a03c0a2ce3adc632747b9",
+      "source_geometry_rest_weights_sha256": "dc89905278ea6a99b98efa204656bf856ded8dd3c0a3bbcf22c9518795c3f54e",
+      "original_actions_preserved": 177,
+      "preserved_8b_actions": 30,
+      "original_actions_sha256": "ca5a5f733ba42878b5583b7186a59f4dd3ab5160ed2d70be18ea0df14fd1f1f7",
+      "new_saved_actions": [
+        "ANI08C_WIP_form_transform_awakened_build",
+        "ANI08C_WIP_form_transform_awakened_build_left",
+        "ANI08C_WIP_form_idle_awakened_build",
+        "ANI08C_WIP_form_idle_awakened_build_left",
+        "ANI08C_WIP_form_transform_ascended",
+        "ANI08C_WIP_form_transform_ascended_left",
+        "ANI08C_WIP_form_idle_ascended",
+        "ANI08C_WIP_form_idle_ascended_left"
+      ],
+      "source_runtime_verification": {
+        "PASS": true,
+        "max_matrix_component_error": 3.6954879760742188e-06,
+        "frames_evaluated": 638,
+        "scope": "saved Blender evaluated pose versus rig-specific runtime keys, not visual quality"
+      },
+      "rig_bones": [
+        "Root",
+        "Hips",
+        "Spine",
+        "Chest",
+        "Neck",
+        "Head",
+        "Shoulder_L",
+        "UpperArm_L",
+        "LowerArm_L",
+        "Hand_L",
+        "Shoulder_R",
+        "UpperArm_R",
+        "LowerArm_R",
+        "Hand_R",
+        "UpperLeg_L",
+        "LowerLeg_L",
+        "Foot_L",
+        "Toes_L",
+        "UpperLeg_R",
+        "LowerLeg_R",
+        "Foot_R",
+        "Toes_R"
+      ],
+      "runtime_file": "runtime/game-godot/data/animation/form_acting_8c/vesper-nyx_female.json",
+      "runtime_sha256": "78083a1d6ab3ae4b8c2b1da9498c49404b74ee2360ac59e9f710a205d34abfbe",
+      "attachments": {
+        "VESPER_AWAKENED_BUILD": {
+          "form_id": "VESPER_AWAKENED_BUILD",
+          "ladder_step": "AWAKENED_BUILD",
+          "parts": [
+            {
+              "node": "Socket_Chest",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_vesper-nyx_1_dislocation0",
+                "ANI08C_vesper-nyx_1_dislocation1",
+                "ANI08C_vesper-nyx_1_dislocation2",
+                "ANI08C_vesper-nyx_1_dislocation3"
+              ]
+            }
+          ],
+          "mesh_objects": 4,
+          "vertices": 24,
+          "triangles": 16,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/vesper-nyx/female/VESPER_AWAKENED_BUILD.glb",
+          "sha256": "0f213abf24d4aa823d25b8e99db18bc61a34ad2529247604901c44f55ff19f44",
+          "bytes": 4988
+        },
+        "VESPER_ASCENDED": {
+          "form_id": "VESPER_ASCENDED",
+          "ladder_step": "ASCENDED",
+          "parts": [
+            {
+              "node": "Socket_Chest.001",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_vesper-nyx_2_dislocation0",
+                "ANI08C_vesper-nyx_2_dislocation1",
+                "ANI08C_vesper-nyx_2_dislocation2",
+                "ANI08C_vesper-nyx_2_dislocation3",
+                "ANI08C_vesper-nyx_2_dislocation4",
+                "ANI08C_vesper-nyx_2_broken_phase_frame"
+              ]
+            }
+          ],
+          "mesh_objects": 6,
+          "vertices": 68,
+          "triangles": 56,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/vesper-nyx/female/VESPER_ASCENDED.glb",
+          "sha256": "423d83006a5c908bdf4f11f6339c86de4c6e399c0c5d6c4cc713d1eca29e4880",
+          "bytes": 8068
+        }
+      },
+      "human_approved": false,
+      "native_visual_verified": false
+    },
+    {
+      "fighter": "yin",
+      "body": "male",
+      "input_8b_source": "saved_sources/yin/male/candidate_8b.blend",
+      "input_8b_sha256": "ece89e5ed8eb6625fb0f0e77e2f2989712087fd5053381196374316ac150b0a2",
+      "original_source": "art_source/collectible_v1/yin/male/candidate.blend",
+      "original_source_sha256": "65d47a8aa3947ccd36e2f9d9e34bf39217f82ec82b311395201a2bfa3f1974f2",
+      "saved_source": "saved_sources/yin/male/candidate_8c.blend",
+      "saved_source_sha256": "0cdca80f2fcd895e45247584255460f1217a44cf68f004bf053e4e7fe9c341c4",
+      "source_geometry_rest_weights_sha256": "10578cbcc60d75bed139ba2d60109eb37f9b0f5c8e655445646d7ee5772ee2ac",
+      "original_actions_preserved": 177,
+      "preserved_8b_actions": 30,
+      "original_actions_sha256": "eb344fd5c4ece314f46226a7acc437e99f5954a171ec02329706f7edd25bcf7c",
+      "new_saved_actions": [
+        "ANI08C_WIP_form_transform_cosmic_surge",
+        "ANI08C_WIP_form_transform_cosmic_surge_left",
+        "ANI08C_WIP_form_idle_cosmic_surge",
+        "ANI08C_WIP_form_idle_cosmic_surge_left",
+        "ANI08C_WIP_form_transform_cosmic_ascendant",
+        "ANI08C_WIP_form_transform_cosmic_ascendant_left",
+        "ANI08C_WIP_form_idle_cosmic_ascendant",
+        "ANI08C_WIP_form_idle_cosmic_ascendant_left"
+      ],
+      "source_runtime_verification": {
+        "PASS": true,
+        "max_matrix_component_error": 3.516674041748047e-06,
+        "frames_evaluated": 824,
+        "scope": "saved Blender evaluated pose versus rig-specific runtime keys, not visual quality"
+      },
+      "rig_bones": [
+        "Root",
+        "Hips",
+        "Spine",
+        "Chest",
+        "Neck",
+        "Head",
+        "Shoulder_L",
+        "UpperArm_L",
+        "LowerArm_L",
+        "Hand_L",
+        "Shoulder_R",
+        "UpperArm_R",
+        "LowerArm_R",
+        "Hand_R",
+        "UpperLeg_L",
+        "LowerLeg_L",
+        "Foot_L",
+        "Toes_L",
+        "UpperLeg_R",
+        "LowerLeg_R",
+        "Foot_R",
+        "Toes_R"
+      ],
+      "runtime_file": "runtime/game-godot/data/animation/form_acting_8c/yin_male.json",
+      "runtime_sha256": "55b5215fda2636277fedb03c891c63421da82cc3de99304a2ff1808f702c2915",
+      "attachments": {
+        "YIN_COSMIC_SURGE": {
+          "form_id": "YIN_COSMIC_SURGE",
+          "ladder_step": "COSMIC_SURGE",
+          "parts": [
+            {
+              "node": "Socket_Chest",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_yin_1_collapsed_aperture0",
+                "ANI08C_yin_1_collapsed_aperture1"
+              ]
+            }
+          ],
+          "mesh_objects": 2,
+          "vertices": 100,
+          "triangles": 96,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/yin/male/YIN_COSMIC_SURGE.glb",
+          "sha256": "527fed4b91bb8aab8ea9db7851cebcc5110f6a175fa28aefef1ba9ca233cc688",
+          "bytes": 5240
+        },
+        "YIN_COSMIC_ASCENDANT": {
+          "form_id": "YIN_COSMIC_ASCENDANT",
+          "ladder_step": "COSMIC_ASCENDANT",
+          "parts": [
+            {
+              "node": "Socket_Chest.001",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_yin_2_collapsed_aperture0",
+                "ANI08C_yin_2_collapsed_aperture1",
+                "ANI08C_yin_2_collapsed_aperture2",
+                "ANI08C_yin_2_inward_edge-1",
+                "ANI08C_yin_2_inward_edge1"
+              ]
+            }
+          ],
+          "mesh_objects": 5,
+          "vertices": 162,
+          "triangles": 152,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/yin/male/YIN_COSMIC_ASCENDANT.glb",
+          "sha256": "a4fa693cd9c37027d8e57d65106828b683dbdc903b52ef37c93541afe7e9ce23",
+          "bytes": 9432
+        }
+      },
+      "human_approved": false,
+      "native_visual_verified": false
+    },
+    {
+      "fighter": "yin",
+      "body": "female",
+      "input_8b_source": "saved_sources/yin/female/candidate_8b.blend",
+      "input_8b_sha256": "7575e0b1ca9abb25abbc8ecd14d07015e4c1532f3f0d120fa2589cf07c1fbb30",
+      "original_source": "art_source/collectible_v1/yin/female/candidate.blend",
+      "original_source_sha256": "61aea39a3a1748c9de962e59020ca050aa6069211a5fcea5dbc4bebf5b059049",
+      "saved_source": "saved_sources/yin/female/candidate_8c.blend",
+      "saved_source_sha256": "9b58226a3983c79507579a563309ab418999511341a8b7aba95d19c8cdd10496",
+      "source_geometry_rest_weights_sha256": "5bba7b7112bf823198db4633f6efc58b6026450d893ac4eed53b10a364a36458",
+      "original_actions_preserved": 177,
+      "preserved_8b_actions": 30,
+      "original_actions_sha256": "93e8f4a053746791758674aba9d99687e11982cc09053d02aa685c3dfdee7662",
+      "new_saved_actions": [
+        "ANI08C_WIP_form_transform_cosmic_surge",
+        "ANI08C_WIP_form_transform_cosmic_surge_left",
+        "ANI08C_WIP_form_idle_cosmic_surge",
+        "ANI08C_WIP_form_idle_cosmic_surge_left",
+        "ANI08C_WIP_form_transform_cosmic_ascendant",
+        "ANI08C_WIP_form_transform_cosmic_ascendant_left",
+        "ANI08C_WIP_form_idle_cosmic_ascendant",
+        "ANI08C_WIP_form_idle_cosmic_ascendant_left"
+      ],
+      "source_runtime_verification": {
+        "PASS": true,
+        "max_matrix_component_error": 3.516674041748047e-06,
+        "frames_evaluated": 824,
+        "scope": "saved Blender evaluated pose versus rig-specific runtime keys, not visual quality"
+      },
+      "rig_bones": [
+        "Root",
+        "Hips",
+        "Spine",
+        "Chest",
+        "Neck",
+        "Head",
+        "Shoulder_L",
+        "UpperArm_L",
+        "LowerArm_L",
+        "Hand_L",
+        "Shoulder_R",
+        "UpperArm_R",
+        "LowerArm_R",
+        "Hand_R",
+        "UpperLeg_L",
+        "LowerLeg_L",
+        "Foot_L",
+        "Toes_L",
+        "UpperLeg_R",
+        "LowerLeg_R",
+        "Foot_R",
+        "Toes_R"
+      ],
+      "runtime_file": "runtime/game-godot/data/animation/form_acting_8c/yin_female.json",
+      "runtime_sha256": "090020418b299e88338d1ba88b54db6fdce386a8d7df836fa16e5587ecabd968",
+      "attachments": {
+        "YIN_COSMIC_SURGE": {
+          "form_id": "YIN_COSMIC_SURGE",
+          "ladder_step": "COSMIC_SURGE",
+          "parts": [
+            {
+              "node": "Socket_Chest",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_yin_1_collapsed_aperture0",
+                "ANI08C_yin_1_collapsed_aperture1"
+              ]
+            }
+          ],
+          "mesh_objects": 2,
+          "vertices": 100,
+          "triangles": 96,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/yin/female/YIN_COSMIC_SURGE.glb",
+          "sha256": "527fed4b91bb8aab8ea9db7851cebcc5110f6a175fa28aefef1ba9ca233cc688",
+          "bytes": 5240
+        },
+        "YIN_COSMIC_ASCENDANT": {
+          "form_id": "YIN_COSMIC_ASCENDANT",
+          "ladder_step": "COSMIC_ASCENDANT",
+          "parts": [
+            {
+              "node": "Socket_Chest.001",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_yin_2_collapsed_aperture0",
+                "ANI08C_yin_2_collapsed_aperture1",
+                "ANI08C_yin_2_collapsed_aperture2",
+                "ANI08C_yin_2_inward_edge-1",
+                "ANI08C_yin_2_inward_edge1"
+              ]
+            }
+          ],
+          "mesh_objects": 5,
+          "vertices": 162,
+          "triangles": 152,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/yin/female/YIN_COSMIC_ASCENDANT.glb",
+          "sha256": "a4fa693cd9c37027d8e57d65106828b683dbdc903b52ef37c93541afe7e9ce23",
+          "bytes": 9432
+        }
+      },
+      "human_approved": false,
+      "native_visual_verified": false
+    },
+    {
+      "fighter": "yang",
+      "body": "male",
+      "input_8b_source": "saved_sources/yang/male/candidate_8b.blend",
+      "input_8b_sha256": "9d032629406a676abfd5a16fb05db8e8987279ea1712c3e471fc9206cadea91a",
+      "original_source": "art_source/collectible_v1/yang/male/candidate.blend",
+      "original_source_sha256": "b1fe0054d0407deed362e47f6091c2dd41f2274614f7f0bc0a12863603b4ac76",
+      "saved_source": "saved_sources/yang/male/candidate_8c.blend",
+      "saved_source_sha256": "e338573af716a195f7cd24948b55d25ca9a0b175cecef9e04af020269f987c51",
+      "source_geometry_rest_weights_sha256": "8e47ed3bbda18edbfdddfb69804a7c9a7770424c431a08de6def9b4462f8a9b3",
+      "original_actions_preserved": 177,
+      "preserved_8b_actions": 30,
+      "original_actions_sha256": "b1c0cc9a6c0e12828109a4927d76e65e461ff28c40b64f88be2a042531361afc",
+      "new_saved_actions": [
+        "ANI08C_WIP_form_transform_cosmic_surge",
+        "ANI08C_WIP_form_transform_cosmic_surge_left",
+        "ANI08C_WIP_form_idle_cosmic_surge",
+        "ANI08C_WIP_form_idle_cosmic_surge_left",
+        "ANI08C_WIP_form_transform_cosmic_ascendant",
+        "ANI08C_WIP_form_transform_cosmic_ascendant_left",
+        "ANI08C_WIP_form_idle_cosmic_ascendant",
+        "ANI08C_WIP_form_idle_cosmic_ascendant_left"
+      ],
+      "source_runtime_verification": {
+        "PASS": true,
+        "max_matrix_component_error": 3.516674041748047e-06,
+        "frames_evaluated": 728,
+        "scope": "saved Blender evaluated pose versus rig-specific runtime keys, not visual quality"
+      },
+      "rig_bones": [
+        "Root",
+        "Hips",
+        "Spine",
+        "Chest",
+        "Neck",
+        "Head",
+        "Shoulder_L",
+        "UpperArm_L",
+        "LowerArm_L",
+        "Hand_L",
+        "Shoulder_R",
+        "UpperArm_R",
+        "LowerArm_R",
+        "Hand_R",
+        "UpperLeg_L",
+        "LowerLeg_L",
+        "Foot_L",
+        "Toes_L",
+        "UpperLeg_R",
+        "LowerLeg_R",
+        "Foot_R",
+        "Toes_R"
+      ],
+      "runtime_file": "runtime/game-godot/data/animation/form_acting_8c/yang_male.json",
+      "runtime_sha256": "ec8b86329189b4a7254a047304e4bb42749905e8973843cea94131f7222c3205",
+      "attachments": {
+        "YANG_COSMIC_SURGE": {
+          "form_id": "YANG_COSMIC_SURGE",
+          "ladder_step": "COSMIC_SURGE",
+          "parts": [
+            {
+              "node": "Socket_Chest",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_yang_1_definition_halo0",
+                "ANI08C_yang_1_definition_halo1",
+                "ANI08C_yang_1_construct_ray0",
+                "ANI08C_yang_1_construct_ray1",
+                "ANI08C_yang_1_construct_ray2",
+                "ANI08C_yang_1_construct_ray3",
+                "ANI08C_yang_1_construct_ray4",
+                "ANI08C_yang_1_construct_ray5"
+              ]
+            }
+          ],
+          "mesh_objects": 8,
+          "vertices": 130,
+          "triangles": 132,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/yang/male/YANG_COSMIC_SURGE.glb",
+          "sha256": "7d20b0ef919e73c9f8179aaffc35b8456911ef591fc849e93f420f8a173d5970",
+          "bytes": 13088
+        },
+        "YANG_COSMIC_ASCENDANT": {
+          "form_id": "YANG_COSMIC_ASCENDANT",
+          "ladder_step": "COSMIC_ASCENDANT",
+          "parts": [
+            {
+              "node": "Socket_Chest.001",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_yang_2_definition_halo0",
+                "ANI08C_yang_2_definition_halo1",
+                "ANI08C_yang_2_definition_halo2",
+                "ANI08C_yang_2_construct_ray0",
+                "ANI08C_yang_2_construct_ray1",
+                "ANI08C_yang_2_construct_ray2",
+                "ANI08C_yang_2_construct_ray3",
+                "ANI08C_yang_2_construct_ray4",
+                "ANI08C_yang_2_construct_ray5",
+                "ANI08C_yang_2_construct_ray6",
+                "ANI08C_yang_2_construct_ray7"
+              ]
+            }
+          ],
+          "mesh_objects": 11,
+          "vertices": 190,
+          "triangles": 192,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/yang/male/YANG_COSMIC_ASCENDANT.glb",
+          "sha256": "f79fbf9b7209daaaa1d735c20a1e0ee6a61b2305fce2a0da2dcd16f9728c6494",
+          "bytes": 17908
+        }
+      },
+      "human_approved": false,
+      "native_visual_verified": false
+    },
+    {
+      "fighter": "yang",
+      "body": "female",
+      "input_8b_source": "saved_sources/yang/female/candidate_8b.blend",
+      "input_8b_sha256": "0472f0ecddf107c21e8ba2772fe9dd0961a4ef6f88567f577864921314d1ab21",
+      "original_source": "art_source/collectible_v1/yang/female/candidate.blend",
+      "original_source_sha256": "6b48b08ece61c8162873fb137d73221e5dd107bd4a27d5053ec1b411d4d90a4f",
+      "saved_source": "saved_sources/yang/female/candidate_8c.blend",
+      "saved_source_sha256": "cc792415aef22ff30d915db4899a3f7c804b65e470b19dcdb480198db4078afe",
+      "source_geometry_rest_weights_sha256": "a719d20d4556d31797b23618899520050c7e2f5fab1325cc7d6446e227d52e20",
+      "original_actions_preserved": 177,
+      "preserved_8b_actions": 30,
+      "original_actions_sha256": "f092847558b0e501ce53a87656681806e6d721ec0b8a2fcfebaadc4236e622f3",
+      "new_saved_actions": [
+        "ANI08C_WIP_form_transform_cosmic_surge",
+        "ANI08C_WIP_form_transform_cosmic_surge_left",
+        "ANI08C_WIP_form_idle_cosmic_surge",
+        "ANI08C_WIP_form_idle_cosmic_surge_left",
+        "ANI08C_WIP_form_transform_cosmic_ascendant",
+        "ANI08C_WIP_form_transform_cosmic_ascendant_left",
+        "ANI08C_WIP_form_idle_cosmic_ascendant",
+        "ANI08C_WIP_form_idle_cosmic_ascendant_left"
+      ],
+      "source_runtime_verification": {
+        "PASS": true,
+        "max_matrix_component_error": 3.516674041748047e-06,
+        "frames_evaluated": 728,
+        "scope": "saved Blender evaluated pose versus rig-specific runtime keys, not visual quality"
+      },
+      "rig_bones": [
+        "Root",
+        "Hips",
+        "Spine",
+        "Chest",
+        "Neck",
+        "Head",
+        "Shoulder_L",
+        "UpperArm_L",
+        "LowerArm_L",
+        "Hand_L",
+        "Shoulder_R",
+        "UpperArm_R",
+        "LowerArm_R",
+        "Hand_R",
+        "UpperLeg_L",
+        "LowerLeg_L",
+        "Foot_L",
+        "Toes_L",
+        "UpperLeg_R",
+        "LowerLeg_R",
+        "Foot_R",
+        "Toes_R"
+      ],
+      "runtime_file": "runtime/game-godot/data/animation/form_acting_8c/yang_female.json",
+      "runtime_sha256": "22115f98bc85b2a27b1118798fe648ee756928d05653ee4b81327dfff1a22fbb",
+      "attachments": {
+        "YANG_COSMIC_SURGE": {
+          "form_id": "YANG_COSMIC_SURGE",
+          "ladder_step": "COSMIC_SURGE",
+          "parts": [
+            {
+              "node": "Socket_Chest",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_yang_1_definition_halo0",
+                "ANI08C_yang_1_definition_halo1",
+                "ANI08C_yang_1_construct_ray0",
+                "ANI08C_yang_1_construct_ray1",
+                "ANI08C_yang_1_construct_ray2",
+                "ANI08C_yang_1_construct_ray3",
+                "ANI08C_yang_1_construct_ray4",
+                "ANI08C_yang_1_construct_ray5"
+              ]
+            }
+          ],
+          "mesh_objects": 8,
+          "vertices": 130,
+          "triangles": 132,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/yang/female/YANG_COSMIC_SURGE.glb",
+          "sha256": "7d20b0ef919e73c9f8179aaffc35b8456911ef591fc849e93f420f8a173d5970",
+          "bytes": 13088
+        },
+        "YANG_COSMIC_ASCENDANT": {
+          "form_id": "YANG_COSMIC_ASCENDANT",
+          "ladder_step": "COSMIC_ASCENDANT",
+          "parts": [
+            {
+              "node": "Socket_Chest.001",
+              "canonical_bone": "Chest",
+              "source_rest_transform_godot": [
+                [
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0,
+                  0.6499999761581421
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "children": [
+                "ANI08C_yang_2_definition_halo0",
+                "ANI08C_yang_2_definition_halo1",
+                "ANI08C_yang_2_definition_halo2",
+                "ANI08C_yang_2_construct_ray0",
+                "ANI08C_yang_2_construct_ray1",
+                "ANI08C_yang_2_construct_ray2",
+                "ANI08C_yang_2_construct_ray3",
+                "ANI08C_yang_2_construct_ray4",
+                "ANI08C_yang_2_construct_ray5",
+                "ANI08C_yang_2_construct_ray6",
+                "ANI08C_yang_2_construct_ray7"
+              ]
+            }
+          ],
+          "mesh_objects": 11,
+          "vertices": 190,
+          "triangles": 192,
+          "rigid_bone_follow": true,
+          "independent_hair_cloth": false,
+          "human_approved": false,
+          "path": "res://assets/characters/form_acting_8c/yang/female/YANG_COSMIC_ASCENDANT.glb",
+          "sha256": "f79fbf9b7209daaaa1d735c20a1e0ee6a61b2305fce2a0da2dcd16f9728c6494",
+          "bytes": 17908
+        }
+      },
+      "human_approved": false,
+      "native_visual_verified": false
+    }
+  ],
+  "complete": true,
+  "human_approved": false,
+  "blender_version": "4.0.2",
+  "storage": {
+    "remote_expected_peak_extra_bytes": 3019255168,
+    "owner_internal_binary_allocation_bytes": 0
+  }
+}

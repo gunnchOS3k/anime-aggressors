@@ -22,6 +22,8 @@ const _ElementalMaterial = preload("res://scripts/visual/elemental_material_cont
 const _SignaturePresentation = preload("res://scripts/visual/signature_move_presentation.gd")
 const _GeometryFit = preload("res://scripts/visual/geometry_auto_fit.gd")
 const _V16Body = preload("res://scripts/visual/v16_art_direction_body.gd")
+const _BodyAura = preload("res://scripts/visual/elemental_body_aura.gd")
+var _body_aura: Node3D
 
 const VIEWPORT_SIZE := Vector2i(256, 320)
 ## Battle bodies must be owner-visible on Pixel; prior 0.38 read as absent.
@@ -35,12 +37,17 @@ const FINAL_SCREEN_LUMA_THRESHOLD := 0.12
 
 var _viewport: SubViewport
 var _camera: Camera3D
+var _cinematic_expression := ""
+var _expression_controller: Node
+var _source_controls_8d: Node
+var _controls_document_8d: Dictionary = {}
 var _model_root: Node3D
 var _display: Sprite2D
 var _loaded_model: Node3D
 var _proxy_model: Node3D
 var _stylized: Node3D
 var _animation_controller: Node
+var _training_physics_clock := false
 var _material_controller: Node
 var _visible_skeleton: Skeleton3D
 var _loaded := false
@@ -60,6 +67,8 @@ var _charge_level: float = 0.0
 var _review_freeze_phase: String = ""
 var _aura_level: int = 0
 var _aura_tier: int = 0
+var _form_presentation_8c = preload("res://scripts/visual/form_presentation_8c.gd").new()
+var _transform_target_8c := ""
 var _form_id: String = ""
 var _form_presentation: Dictionary = {}
 var _transform_progress: float = 0.0
@@ -78,6 +87,7 @@ var _body_variant: String = "male"
 var _v16_body: Node3D = null
 var _using_v16: bool = false
 var _using_golden_slice: bool = false
+var _using_collectible: bool = false
 ## Wave018: generation token cancels superseded configure/swap races.
 var _configure_generation: int = 0
 var _load_failure_logged: bool = false
@@ -121,6 +131,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	if _training_physics_clock and not Engine.is_in_physics_frame(): return
 	# Wave018/020: heal scene-tree visibility AND blank SubViewport framebuffers.
 	if _loaded and not is_visible_renderable_body():
 		heal_visibility_if_needed()
@@ -139,6 +150,18 @@ func _process(delta: float) -> void:
 		_stylized.animate_pose(_style_clip, _style_anim_t)
 
 
+func set_training_physics_clock() -> void:
+	_training_physics_clock = true
+	set_process(false)
+	set_physics_process(true)
+	process_physics_priority = 2
+	if is_instance_valid(_animation_controller): _animation_controller.set_training_physics_clock()
+
+
+func _physics_process(delta: float) -> void:
+	if _training_physics_clock: _process(delta)
+
+
 func configure(fighter_data: Dictionary, body_variant: String = "") -> bool:
 	_configure_generation += 1
 	var gen := _configure_generation
@@ -147,6 +170,8 @@ func configure(fighter_data: Dictionary, body_variant: String = "") -> bool:
 	# Keep display texture alive during swap so preview never blanks mid-cycle.
 	if _display != null and is_instance_valid(_display):
 		_display.visible = true
+	_cinematic_expression = ""
+	_expression_controller = null
 	_clear_model()
 	if gen != _configure_generation:
 		return false
@@ -154,6 +179,7 @@ func configure(fighter_data: Dictionary, body_variant: String = "") -> bool:
 	_body_variant = _resolved_body_variant(body_variant, fighter_data)
 	_using_v16 = false
 	_using_golden_slice = false
+	_using_collectible = false
 	_v16_body = null
 	_life = _CharacterLife.for_id(_fighter_id)
 	_current_model_source = "MISSING"
@@ -204,12 +230,20 @@ func configure(fighter_data: Dictionary, body_variant: String = "") -> bool:
 	_enforce_exactly_one_visible_body()
 	_reset_model_root_transform()
 	_frame_camera_for_figure()
+	if _face_chip != null:
+		_face_chip.visible = not _using_collectible
 	_set_loaded(_loaded_model != null)
 	_configure_swap_count += 1
 	if _configure_swap_count % VIEWPORT_REFRESH_EVERY_SWAPS == 0:
 		refresh_viewport_texture(true)
 	heal_visibility_if_needed()
-	set_expression(str(_life.get("expression_idle", "neutral")))
+	# Kaia's golden slice wins over the collectible body, but watch still reads
+	# cinematic expression from this controller. Without it, catastrophe shock is Nil.
+	if (_using_collectible or _using_golden_slice) and _loaded_model != null:
+		_expression_controller = load("res://scripts/visual/collectible_expression_controller.gd").new()
+		_loaded_model.add_child(_expression_controller)
+		_expression_controller.configure(_loaded_model, _fighter_id, str(fighter_data.get("collectible_review_form", "BASE")))
+	set_expression("neutral" if _using_collectible else str(_life.get("expression_idle", "neutral")))
 	_apply_presentation_yaw()
 	_play_clip("idle")
 	_apply_playback_scale("idle")
@@ -252,6 +286,10 @@ func get_current_model_source() -> String:
 
 
 func get_current_animation_source() -> String:
+	if _animation_controller != null and is_instance_valid(_animation_controller):
+		var player = _animation_controller.get_animation_player()
+		if player != null and str(player.current_animation).begins_with("form_acting_8c/"):return "SAVED_ORIGINAL_FORM_8C_WIP_NOT_HUMAN_APPROVED"
+		if player != null and str(player.current_animation).begins_with("authored_studies/"): return "ORIGINAL_EXPLICIT_KEYPOSE_STUDY_NOT_FINAL"
 	return _current_animation_source
 
 
@@ -376,6 +414,53 @@ func _try_load_golden_slice(fighter_data: Dictionary) -> Dictionary:
 	}
 
 
+func _try_load_collectible(fighter_data: Dictionary) -> Dictionary:
+	var model_path := "res://assets/characters/collectible_v1/%s/%s/%s.glb" % [_fighter_id, _body_variant, str(fighter_data.get("collectible_review_form", "BASE"))]
+	_controls_document_8d.clear()
+	var review_state:=get_node_or_null("/root/GameState")
+	if review_state!=null and (review_state.get_meta("source_controls_8d",false) or review_state.get_meta("source_hands_8d2",false) or review_state.get_meta("source_hands_8d3",false)):
+		var lane:="hands_8d3" if review_state.get_meta("source_hands_8d3",false) else "hands_8d2" if review_state.get_meta("source_hands_8d2",false) else "controls_8d"
+		_controls_document_8d=preload("res://scripts/visual/source_controls_8d.gd").candidate_document(_fighter_id,_body_variant,lane)
+		if _controls_document_8d.is_empty():
+			push_error("Requested8D source candidate missing/unverified: "+_fighter_id+"/"+_body_variant)
+			return {"source":"MISSING","loaded":false}
+		model_path=str(_controls_document_8d.resource)
+	if not FileAccess.file_exists(model_path) and not ResourceLoader.exists(model_path):
+		return {"source": "MISSING", "loaded": false}
+	var instance: Node = null
+	if ResourceLoader.exists(model_path):
+		var resource = load(model_path)
+		if resource is PackedScene:
+			instance = (resource as PackedScene).instantiate()
+	if instance == null:
+		var doc := GLTFDocument.new()
+		var state := GLTFState.new()
+		if doc.append_from_file(model_path, state) != OK:
+			return {"source": "MISSING", "loaded": false}
+		instance = doc.generate_scene(state)
+	if not instance is Node3D:
+		instance.queue_free()
+		return {"source": "MISSING", "loaded": false}
+	if _proxy_model != null and is_instance_valid(_proxy_model):
+		_proxy_model.queue_free()
+	_proxy_model = instance as Node3D
+	_proxy_model.name = "CollectibleV1_%s_%s" % [_fighter_id, _body_variant]
+	_proxy_model.visible = true
+	_model_root.add_child(_proxy_model)
+	_visible_skeleton = _find_skeleton(_proxy_model)
+	_procedural_healthy = _visible_skeleton != null
+	_using_collectible = _procedural_healthy
+	_using_v16 = false
+	return {
+		"source": "COLLECTIBLE_V1_CANDIDATE",
+		"loaded": _procedural_healthy,
+		"path": model_path,
+		"body_variant": _body_variant,
+		"FINAL_CHARACTER_ART_PASS": false,
+		"HUMAN_ART_DIRECTION_APPROVAL": false,
+	}
+
+
 func _mount_v16_candidate() -> Dictionary:
 	_v16_body = _V16Body.create(_fighter_id, _body_variant)
 	_model_root.add_child(_v16_body)
@@ -437,7 +522,7 @@ func truth_flags() -> Dictionary:
 		"PROCEDURAL_RUNTIME_ANIMATION_PASS": _procedural_healthy and has_imported_animations(),
 		"FINAL_HUMAN_AUTHORED_ANIMATION_PASS": false,
 		"CURRENT_MODEL_SOURCE": _current_model_source,
-		"CURRENT_ANIMATION_SOURCE": _current_animation_source,
+		"CURRENT_ANIMATION_SOURCE": get_current_animation_source(),
 		"PROCEDURAL_PROXY_VISIBLE": is_procedural_proxy_visible(),
 		"VISIBLE_MODEL_NODE": _loaded_model.name if _loaded_model else "",
 		"VISIBLE_SKELETON_PRESENT": _visible_skeleton != null,
@@ -445,7 +530,7 @@ func truth_flags() -> Dictionary:
 		"COMPETITIVE_GAMEPLAY_ROOT_MOTION": "PHYSICS_AUTHORITATIVE",
 		"VISIBLE_RUNTIME_ANIMATION_CONTROLLERS_PER_FIGHTER": 1 if _animation_controller else 0,
 		"SHIPPING_MODEL_DATA_LOADED": _loaded and _current_model_source != "MISSING",
-		"FINAL_CHARACTER_ART_PASS": false if _using_golden_slice else _current_model_source in ["FINAL_CUSTOM", "APPROVED_VROID"],
+		"FINAL_CHARACTER_ART_PASS": false if _using_collectible or _using_golden_slice else _current_model_source in ["FINAL_CUSTOM", "APPROVED_VROID"],
 		"HUMAN_ART_DIRECTION_APPROVAL": false,
 		"STYLIZED_FALLBACK_VISIBLE": is_stylized_visible(),
 	}
@@ -585,6 +670,8 @@ func _apply_review_freeze() -> void:
 
 
 func apply_hurt_reaction(reaction: Dictionary) -> void:
+	if _animation_controller!=null and is_instance_valid(_animation_controller):
+		_animation_controller.begin_hit_reaction(reaction)
 	if reaction.has("logical_facing"):
 		_logical_facing = str(reaction.get("logical_facing"))
 	_apply_presentation_yaw(float(reaction.get("mesh_yaw_deg", _FacingContract.mesh_yaw_for_facing(_logical_facing))))
@@ -598,6 +685,7 @@ func _apply_presentation_yaw(override_yaw: float = INF) -> void:
 		yaw = override_yaw
 	elif not _attack_lock.is_empty() and _attack_lock.has("mesh_yaw_deg"):
 		yaw = float(_attack_lock.get("mesh_yaw_deg"))
+	if _animation_controller != null and is_instance_valid(_animation_controller): _animation_controller.set_visual_facing(-1 if yaw<0 else 1)
 	if _loaded_model != null and is_instance_valid(_loaded_model):
 		_loaded_model.rotation_degrees.y = yaw
 	if _proxy_model != null and is_instance_valid(_proxy_model) and _proxy_model != _loaded_model:
@@ -615,6 +703,25 @@ func set_aura_level(level: int) -> void:
 		var form_boost := float(_form_presentation.get("emission_strength", 0.0))
 		_material_controller.set_charge_emission(float(level) * 0.35 + form_boost)
 
+func set_empowerment_state(snapshot: Dictionary) -> void:
+	if not _loaded or _visible_skeleton==null:return
+	if not is_instance_valid(_body_aura):
+		if not bool(snapshot.get("active",false)):return
+		_body_aura=_BodyAura.new();_body_aura.name="PersistentElementalBodyAura"
+		_model_root.add_child(_body_aura);_body_aura.setup(_visible_skeleton)
+	_body_aura.observe(snapshot)
+
+func get_empowerment_evidence() -> Dictionary:
+	return _body_aura.evidence() if is_instance_valid(_body_aura) else {"active":false,"super_ready":false,"vertices":0}
+
+func project_bone_to_combat_world(canonical: String) -> Vector2:
+	if _visible_skeleton==null or _camera==null or _display==null:return Vector2.INF
+	var index:=_visible_skeleton.find_bone(_BoneMap.resolve_on_skeleton(_visible_skeleton,canonical))
+	if index<0:return Vector2.INF
+	_visible_skeleton.force_update_all_bone_transforms()
+	var projected:=_camera.unproject_position(_visible_skeleton.to_global(_visible_skeleton.get_bone_global_pose(index).origin))
+	return _display.to_global(projected-Vector2(_viewport.size)*.5+_display.offset)
+
 
 func set_aura_tier(tier: int) -> void:
 	_aura_tier = clampi(tier, 0, 3)
@@ -623,6 +730,8 @@ func set_aura_tier(tier: int) -> void:
 
 func set_form_id(form_id: String, form_entry: Dictionary = {}) -> void:
 	_form_id = form_id
+	if is_instance_valid(_expression_controller):_expression_controller.set_form(form_id)
+	_form_presentation_8c.set_form(form_id)
 	_form_presentation = form_entry.get("presentation", {})
 	if _using_v16 and _v16_body != null and _v16_body.has_method("apply_story_form"):
 		_v16_body.apply_story_form(form_id)
@@ -633,7 +742,21 @@ func set_form_id(form_id: String, form_entry: Dictionary = {}) -> void:
 		_model_root.scale = Vector3.ONE * body_scale
 
 
+func begin_form_sequence(target_id: String) -> bool:
+	_transform_target_8c = target_id
+	return _animation_controller != null and _animation_controller.begin_form_sequence(target_id)
+
+func end_form_sequence() -> void:
+	_transform_target_8c = ""
+	if is_instance_valid(_expression_controller):_expression_controller.end_form_performance()
+	_form_presentation_8c.clear_preview()
+	if _animation_controller != null:_animation_controller.end_form_sequence()
+
 func set_transform_progress(progress: float) -> void:
+	if _animation_controller != null:_animation_controller.sample_form_sequence(progress)
+	if not _transform_target_8c.is_empty() and _cinematic_expression.is_empty() and is_instance_valid(_expression_controller):
+		_expression_controller.sample_form_performance(_transform_target_8c,progress)
+	if not _transform_target_8c.is_empty():_form_presentation_8c.preview_form(_transform_target_8c,progress)
 	_transform_progress = clampf(progress, 0.0, 1.0)
 	if _material_controller and _material_controller.has_method("set_charge_emission"):
 		var base := float(_form_presentation.get("emission_strength", 0.15))
@@ -665,8 +788,15 @@ func _apply_faceless_head_presentation() -> void:
 		_expression_label.modulate.a = 0.0
 
 
+func set_cinematic_expression(state: String) -> void:
+	_cinematic_expression = state
+	set_expression(state if not state.is_empty() else "neutral")
+
+
 func set_expression(state: String) -> void:
 	_expression = state
+	if _expression_controller != null and is_instance_valid(_expression_controller):
+		_expression_controller.set_expression(state)
 	if _expression_label:
 		_expression_label.text = _expression_glyph(state)
 	if _face_chip:
@@ -780,7 +910,7 @@ func trigger_hit_flash(intensity: float = 1.0) -> void:
 
 
 func capture_viewport_image() -> Image:
-	if _viewport == null:
+	if _viewport == null or DisplayServer.get_name() == "headless":
 		return null
 	var tex: Texture2D = _viewport.get_texture()
 	if tex == null:
@@ -789,12 +919,37 @@ func capture_viewport_image() -> Image:
 
 
 func _resolve_and_load_model(fighter_data: Dictionary) -> Dictionary:
-	## Route through canonical presentation authority — reject deprecated player paths.
+	var private_art = preload("res://scripts/visual/private_battle_art.gd")
+	if not private_art.requested_manifest().is_empty():
+		_controls_document_8d.clear()
+		var row: Dictionary = private_art.row_for(_fighter_id, _body_variant)
+		var original: Node3D = private_art.import_model(row) if not row.is_empty() else null
+		if original == null:
+			push_error("Private original art missing or invalid for "+_fighter_id+"/"+_body_variant)
+			return {"source":"PRIVATE_ORIGINAL_ART_REJECTED", "loaded":false}
+		_proxy_model = original
+		_proxy_model.name = "CollectibleV1_Private_%s_%s" % [_fighter_id, _body_variant]
+		_model_root.add_child(_proxy_model)
+		_visible_skeleton = _find_skeleton(_proxy_model)
+		_procedural_healthy = _visible_skeleton != null
+		_using_collectible = _procedural_healthy
+		_using_v16 = false
+		var private_presentation := {"source":"PRIVATE_ORIGINAL_ART_CANDIDATE", "loaded":_procedural_healthy, "body_variant":_body_variant, "model_sha256":row.model.sha256, "HUMAN_ART_APPROVED":false}
+		_last_presentation = private_presentation
+		return private_presentation
+	## Wave014 AUTHORITY_MIXED: Kaia golden-slice must win over collectible when present.
+	## Collectible remains the V1 review default for every other fighter.
 	if _fighter_id == "kaia-windrow":
 		var golden := _try_load_golden_slice(fighter_data)
 		if golden.get("loaded", false):
 			_last_presentation = golden
 			return golden
+	## V1 owner task supersedes the earlier presentation candidate.
+	var collectible := _try_load_collectible(fighter_data)
+	if collectible.get("loaded", false):
+		_last_presentation = collectible
+		return collectible
+	## Route through canonical presentation authority — reject deprecated player paths.
 	if _V16Body.is_slice(_fighter_id):
 		var v16_info := _mount_v16_candidate()
 		_last_presentation = v16_info
@@ -822,7 +977,7 @@ func get_presentation_trace() -> Dictionary:
 
 func capture_portrait_image() -> Image:
 	refresh_viewport_texture(true)
-	if _viewport == null:
+	if _viewport == null or DisplayServer.get_name() == "headless":
 		return null
 	var tex: Texture2D = _viewport.get_texture()
 	if tex == null:
@@ -893,17 +1048,41 @@ func _try_load_final_glb(fighter_data: Dictionary) -> Dictionary:
 
 
 func _setup_procedural_runtime(fighter_data: Dictionary) -> void:
-	_current_animation_source = "PROCEDURAL_RUNTIME_ANIMATION"
-	_animation_controller = _AnimationController.new()
+	_current_animation_source = "COLLECTIBLE_KEYPOSE_CANDIDATE" if _using_collectible else "PROCEDURAL_RUNTIME_ANIMATION"
+	var anim_script: Script = _AnimationController
+	if anim_script == null or not anim_script.can_instantiate():
+		anim_script = load("res://scripts/visual/fighter_animation_controller.gd") as Script
+	if anim_script == null or not anim_script.can_instantiate():
+		push_error("FighterAnimationController unavailable for %s" % _fighter_id)
+		return
+	_animation_controller = anim_script.new()
+	if _training_physics_clock: _animation_controller.set_training_physics_clock()
 	_animation_controller.name = "FighterAnimationController"
 	add_child(_animation_controller)
-	_animation_controller.setup({"fighter_id": _fighter_id}, _proxy_model)
+	_animation_controller.setup({"fighter_id": _fighter_id, "body_variant": _body_variant}, _proxy_model)
+	var live_owner := get_parent()
+	if live_owner != null and "state_machine" in live_owner:
+		_animation_controller.bind_runtime_fighter(live_owner)
 	_visible_skeleton = _animation_controller.get_skeleton() if _animation_controller.has_method("get_skeleton") else _visible_skeleton
-	_material_controller = _MaterialController.new()
+	_form_presentation_8c.setup(live_owner,_proxy_model,_visible_skeleton)
+	_form_presentation_8c.set_form(_form_id)
+	if not _controls_document_8d.is_empty():
+		_source_controls_8d=preload("res://scripts/visual/source_controls_8d.gd").new()
+		_source_controls_8d.name="OriginalSourceControls8D"
+		add_child(_source_controls_8d)
+		_source_controls_8d.setup(live_owner,_proxy_model,_visible_skeleton,_animation_controller.get_animation_player(),_controls_document_8d)
+	var mat_script: Script = _MaterialController
+	if mat_script == null or not mat_script.can_instantiate():
+		mat_script = load("res://scripts/visual/fighter_material_controller.gd") as Script
+	if mat_script == null or not mat_script.can_instantiate():
+		push_error("FighterMaterialController unavailable for %s" % _fighter_id)
+		return
+	_material_controller = mat_script.new()
 	_material_controller.name = "FighterMaterialController"
 	add_child(_material_controller)
 	if _material_controller.has_method("set_presentation_context"):
 		_material_controller.set_presentation_context(_presentation_context)
+	_material_controller.preserve_imported_materials = _using_collectible
 	_material_controller.bind_model(_proxy_model, _fighter_id)
 	_apply_toon_materials(_proxy_model, fighter_data)
 	_refresh_elemental_materials()
@@ -915,7 +1094,7 @@ func _apply_toon_materials(root: Node3D, fighter_data: Dictionary) -> void:
 	# Candidate bodies keep KayKit silhouette but receive shared cel + elemental value groups.
 	# This does not promote HUMAN_APPROVED.
 	_refresh_elemental_materials()
-	if _using_golden_slice or _current_model_source == "GOLDEN_SLICE_CANDIDATE":
+	if _using_collectible or _using_golden_slice or _current_model_source == "GOLDEN_SLICE_CANDIDATE":
 		return
 	if _current_model_source in ["HUMAN_CANDIDATE", "HUMAN_APPROVED"]:
 		return
@@ -957,6 +1136,8 @@ func _apply_identity_lighting() -> void:
 
 
 func _refresh_elemental_materials() -> void:
+	if _using_collectible:
+		return # Preserve the sculpted face, costume and form materials.
 	var root := _proxy_model if _proxy_model != null else _loaded_model
 	if root == null or not is_instance_valid(root):
 		return
@@ -1169,7 +1350,32 @@ func _exit_tree() -> void:
 		_viewport = null
 
 
+func _retain_render_materials(node: Node, retained: Array[Material]) -> void:
+	# Geometry destruction updates renderer dependencies. Keep every instance
+	# material alive until the entire retiring model has released its render RIDs.
+	# Mixed surface/whole-mesh overrides otherwise lose their last reference
+	# while another retiring instance still refers to that RID (Godot #85817).
+	if node is MeshInstance3D:
+		var mesh := node as MeshInstance3D
+		for material in [mesh.material_override, mesh.material_overlay]:
+			if material != null: retained.append(material)
+		for surface in range(mesh.get_surface_override_material_count()):
+			var material := mesh.get_surface_override_material(surface)
+			if material != null: retained.append(material)
+	for child in node.get_children():
+		_retain_render_materials(child, retained)
+
+
 func _clear_model() -> void:
+	if is_instance_valid(_source_controls_8d):_source_controls_8d.free()
+	_source_controls_8d=null
+	_controls_document_8d.clear()
+	_form_presentation_8c.reset("model_clear")
+	_transform_target_8c = ""
+	_body_aura=null
+	var retiring_materials: Array[Material] = []
+	if _model_root != null and is_instance_valid(_model_root):
+		_retain_render_materials(_model_root, retiring_materials)
 	# Free controllers immediately so reuse cannot bind stale skeleton/materials.
 	if _animation_controller != null and is_instance_valid(_animation_controller):
 		_animation_controller.free()
@@ -1184,6 +1390,7 @@ func _clear_model() -> void:
 	_v16_body = null
 	_using_v16 = false
 	_using_golden_slice = false
+	_using_collectible = false
 	_last_clip = ""
 	_style_anim_t = 0.0
 	_style_clip = "idle"
@@ -1191,6 +1398,8 @@ func _clear_model() -> void:
 		for child in _model_root.get_children():
 			if is_instance_valid(child):
 				child.free()
+	# All retired mesh instances are gone before local material refs are released.
+	retiring_materials.clear()
 
 
 func _set_loaded(value: bool) -> void:
@@ -1588,13 +1797,25 @@ func _play_clip(requested: String, state: String = "", move: Dictionary = {}) ->
 		if state.is_empty():
 			move_copy["move_id"] = requested
 		var play_state := state
+		var standalone_preview := false
 		if play_state.is_empty():
-			if requested in ["idle", "walk", "run", "fall", "shield", "aura_charge"]:
-				play_state = _FighterStates.IDLE
+			if requested in [_FighterStates.VICTORY, _FighterStates.DEFEAT]:
+				# These existing body performances have no MoveRunner clock.
+				# Routing them as attacks froze manual playback at frame zero.
+				play_state = requested
+			elif requested in ["idle", "walk", "run", "fall", "shield", "aura_charge"]:
+				# Keep the existing state-to-clip authority, including idle guard
+				# and form selection. These states already use the visual clock.
+				play_state = _FighterStates.SHIELD_HOLD if requested == "shield" else requested
 			else:
 				play_state = _FighterStates.ATTACK_STARTUP
+				standalone_preview = true
 		if _animation_controller.has_method("play_for_state"):
-			_animation_controller.play_for_state(play_state, move_copy)
+			# An explicit clip request is presentation-owned. Routing it as a
+			# gameplay attack stalled its manual player without a MoveRunner;
+			# routing charge/walk as IDLE discarded the requested body action.
+			# Real Fighter state calls keep their resolved gameplay clock.
+			_animation_controller.play_for_state(play_state, move_copy, standalone_preview)
 		_last_clip = _animation_controller.get_active_clip() if _animation_controller.has_method("get_active_clip") else requested
 	elif _stylized != null and is_instance_valid(_stylized) and _stylized.has_method("animate_pose"):
 		_stylized.animate_pose(_style_clip, _style_anim_t)
@@ -1611,6 +1832,8 @@ func _apply_playback_scale(clip: String) -> void:
 		scale = float(_life.get("run_speed", 1.0))
 	elif clip in ["jab_1", "jab_2", "heavy_attack", "special", "aura_burst", "throw_forward", "throw_back", "throw_up", "throw_down"]:
 		scale = float(_life.get("attack_speed", 1.0))
+	if _using_collectible:
+		scale = 1.0 # Exported move clips use the gameplay frame clock.
 	_style_speed = scale
 	if _animation_controller != null and is_instance_valid(_animation_controller) and _animation_controller.has_method("get_animation_player"):
 		var player: AnimationPlayer = _animation_controller.get_animation_player()
@@ -1619,19 +1842,31 @@ func _apply_playback_scale(clip: String) -> void:
 
 
 func _update_expression_for_state(state: String) -> void:
+	if not _cinematic_expression.is_empty():
+		set_expression(_cinematic_expression)
+		return
 	if state in [_FighterStates.AURA_CHARGE, _FighterStates.AURA_READY]:
 		set_expression(str(_life.get("expression_charge", "charging")))
 	elif state in [_FighterStates.HURT_LIGHT, _FighterStates.HURT_HEAVY, _FighterStates.HITSTUN, _FighterStates.LAUNCHED]:
 		set_expression(str(_life.get("expression_hurt", "hurt")))
 	elif state == _FighterStates.KO:
 		set_expression("defeat")
+	elif state == _FighterStates.SHIELD_BREAK:
+		set_expression("shock")
 	elif state in [_FighterStates.ATTACK_STARTUP, _FighterStates.SPECIAL_STARTUP, _FighterStates.THROW_STARTUP]:
-		set_expression("focused")
+		set_expression("battle_intent")
+	elif state in [_FighterStates.ATTACK_ACTIVE, _FighterStates.SPECIAL_ACTIVE, _FighterStates.THROW_RELEASE]:
+		set_expression("attack_effort")
 	elif state in [_FighterStates.IDLE, _FighterStates.WALK]:
-		set_expression(str(_life.get("expression_idle", "neutral")))
+		set_expression("neutral" if _using_collectible else str(_life.get("expression_idle", "neutral")))
 
 
 func _refresh_aura_overlay() -> void:
+	if _using_collectible and _aura_overlay != null:
+		_aura_overlay.visible = false # Elemental gameplay VFX replace the old rectangular body overlay.
+		return
+	if _aura_overlay != null:
+		_aura_overlay.visible = true
 	if _aura_overlay == null:
 		return
 	var tier_alpha := clampf(0.08 + float(_aura_tier) * 0.12, 0.08, 0.48)

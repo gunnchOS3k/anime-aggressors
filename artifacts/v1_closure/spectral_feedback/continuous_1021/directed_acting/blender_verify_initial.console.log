@@ -1,0 +1,15 @@
+ ArchWarn: ARCH_CACHE_LINE_SIZE != Arch_ObtainCacheLineSize()
+ Function: Arch_ValidateAssumptions
+     File: /Users/brecht/dev/build_darwin/deps/build/usd/src/external_usd/pxr/base/arch/assumptions.cpp
+     Line: 153
+DIRECTED_VERIFY kaia-windrow male {'PASS': False, 'max_matrix_component_error': 1.9532913565635681, 'frames_evaluated': 523, 'scope': 'saved Blender evaluated pose versus rig-specific runtime keys, not visual quality'}
+Blender 3.3.1 (hash b292cfe5a936 built 2022-10-04 23:46:43)
+Read blend: /Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure/art_source/collectible_v1/kaia-windrow/male/candidate.blend
+Error: Python: Traceback (most recent call last):
+  File "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure/tools/authored_animation/blender/aa_directed_performance.py", line 220, in <module>
+    main()
+  File "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure/tools/authored_animation/blender/aa_directed_performance.py", line 180, in main
+    assert result["PASS"], "Source action differs from runtime keys"
+AssertionError: Source action differs from runtime keys
+
+Blender quit

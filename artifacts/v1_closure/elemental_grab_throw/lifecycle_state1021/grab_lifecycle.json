@@ -1,0 +1,220 @@
+{
+	"PASS": true,
+	"failures": [],
+	"rows": [
+		{
+			"case": "mash",
+			"events": [
+				{
+					"result": "success",
+					"target": "juno-spark"
+				},
+				{
+					"reason": "mash_escape",
+					"result": "mash_escape",
+					"target": "juno-spark"
+				}
+			],
+			"owner_holding": false,
+			"owner_state": "hitstun",
+			"victim_held": false,
+			"victim_move_active": false,
+			"victim_state": "fast_fall"
+		},
+		{
+			"case": "startup",
+			"events": [
+				{
+					"result": "success",
+					"target": "juno-spark"
+				}
+			],
+			"owner_holding": true,
+			"owner_state": "grab_hold",
+			"victim_held": true,
+			"victim_move_active": false,
+			"victim_state": "grab_hold"
+		},
+		{
+			"case": "simultaneous",
+			"events": [],
+			"owner_holding": false,
+			"owner_state": "grab_hold",
+			"victim_held": false,
+			"victim_move_active": false,
+			"victim_state": "grab_hold"
+		},
+		{
+			"case": "hurt",
+			"events": [
+				{
+					"result": "success",
+					"target": "juno-spark"
+				},
+				{
+					"reason": "body_hit",
+					"result": "released",
+					"target": "juno-spark"
+				}
+			],
+			"owner_holding": false,
+			"owner_state": "land",
+			"victim_held": false,
+			"victim_move_active": false,
+			"victim_state": "idle"
+		},
+		{
+			"case": "reset_position:owner",
+			"events": [
+				{
+					"result": "success",
+					"target": "juno-spark"
+				},
+				{
+					"reason": "position_reset",
+					"result": "released",
+					"target": "juno-spark"
+				}
+			],
+			"owner_holding": false,
+			"owner_state": "idle",
+			"victim_held": false,
+			"victim_move_active": false,
+			"victim_state": "idle"
+		},
+		{
+			"case": "reset_position:victim",
+			"events": [
+				{
+					"result": "success",
+					"target": "juno-spark"
+				},
+				{
+					"reason": "position_reset",
+					"result": "released",
+					"target": "juno-spark"
+				}
+			],
+			"owner_holding": false,
+			"owner_state": "grab_whiff",
+			"victim_held": false,
+			"victim_move_active": false,
+			"victim_state": "idle"
+		},
+		{
+			"case": "configure:owner",
+			"events": [
+				{
+					"result": "success",
+					"target": "juno-spark"
+				},
+				{
+					"reason": "character_change",
+					"result": "released",
+					"target": "juno-spark"
+				}
+			],
+			"owner_holding": false,
+			"owner_state": "idle",
+			"victim_held": false,
+			"victim_move_active": false,
+			"victim_state": "idle"
+		},
+		{
+			"case": "configure:victim",
+			"events": [
+				{
+					"result": "success",
+					"target": "juno-spark"
+				},
+				{
+					"reason": "character_change",
+					"result": "released",
+					"target": "juno-spark"
+				}
+			],
+			"owner_holding": false,
+			"owner_state": "grab_whiff",
+			"victim_held": false,
+			"victim_move_active": false,
+			"victim_state": "idle"
+		},
+		{
+			"case": "match_end:owner",
+			"events": [
+				{
+					"result": "success",
+					"target": "juno-spark"
+				},
+				{
+					"reason": "match_end",
+					"result": "released",
+					"target": "juno-spark"
+				}
+			],
+			"owner_holding": false,
+			"owner_state": "idle",
+			"victim_held": false,
+			"victim_move_active": false,
+			"victim_state": "idle"
+		},
+		{
+			"case": "match_end:victim",
+			"events": [
+				{
+					"result": "success",
+					"target": "juno-spark"
+				},
+				{
+					"reason": "match_end",
+					"result": "released",
+					"target": "juno-spark"
+				}
+			],
+			"owner_holding": false,
+			"owner_state": "grab_whiff",
+			"victim_held": false,
+			"victim_move_active": false,
+			"victim_state": "idle"
+		},
+		{
+			"case": "external_state:hitstun",
+			"events": [
+				{
+					"result": "success",
+					"target": "juno-spark"
+				},
+				{
+					"reason": "state_interrupted:hitstun",
+					"result": "released",
+					"target": "juno-spark"
+				}
+			],
+			"owner_holding": false,
+			"owner_state": "hitstun",
+			"victim_held": false,
+			"victim_move_active": false,
+			"victim_state": "idle"
+		},
+		{
+			"case": "external_state:ko",
+			"events": [
+				{
+					"result": "success",
+					"target": "juno-spark"
+				},
+				{
+					"reason": "state_interrupted:ko",
+					"result": "released",
+					"target": "juno-spark"
+				}
+			],
+			"owner_holding": false,
+			"owner_state": "ko",
+			"victim_held": false,
+			"victim_move_active": false,
+			"victim_state": "idle"
+		}
+	],
+	"scope": "Declared positioning/receive-hit fixtures; genuine public grab/mash controls; not CPU or visual acceptance"
+}

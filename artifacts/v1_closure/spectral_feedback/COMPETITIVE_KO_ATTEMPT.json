@@ -1,0 +1,77 @@
+{
+  "schema": "ani03_bounded_competitive_ko_attempt/v1",
+  "source_sha": "967414087b74191fde411b95da5281c85b2c9c72",
+  "ordinary_public_controls": true,
+  "opponent_cpu": true,
+  "forced_moves": false,
+  "forced_ko": false,
+  "frozen_opponent": false,
+  "initial_damage_fixture": 110,
+  "body_contacts": 45,
+  "ko_events": [
+    {
+      "fighter": "ember-vale",
+      "movie_frame": 567,
+      "stocks": 8
+    }
+  ],
+  "finishing_events": [
+    {
+      "direction": [
+        1.0,
+        0.0
+      ],
+      "event_id": "ko:92878669565:9",
+      "extent": 160.0,
+      "family": "branching_voltage",
+      "fid": "juno-spark",
+      "kind": 7,
+      "life": 0.35,
+      "physics_frame": 569,
+      "process_frame": 568,
+      "seed": 29.3400200601805,
+      "world": [
+        593.592590332031,
+        281.125274658203
+      ]
+    }
+  ],
+  "native_movie_recorded": false,
+  "competitive_ko_acceptance": false,
+  "reason": "Actual authoritative stock loss, but throw duplicate-contact defect affects this result; no claim of fair finished KO/combo acceptance",
+  "reproducer": "python3 tools/v1_closure/probe_spectral_combos.py juno-spark_edgeguard-throw_high (already completed; preserve label, use next unused label after fixing)",
+  "root_cause_files": [
+    "game-godot/scripts/fighters/fighter.gd:execute_throw",
+    "game-godot/scripts/fighters/fighter.gd:_on_move_active",
+    "game-godot/scripts/combat/hit_resolver.gd:resolve"
+  ],
+  "exact_duplicate_group": [
+    {
+      "event_id": "93230991122:502:1",
+      "movie_frame": 500,
+      "move": "throw_back",
+      "attacker_move_frame": 0,
+      "damage_before": 110.0,
+      "damage": 5.75552,
+      "defender_state_before": "hitstun"
+    },
+    {
+      "event_id": "93230991122:509:2",
+      "movie_frame": 507,
+      "move": "throw_back",
+      "attacker_move_frame": 4,
+      "damage_before": 115.75552,
+      "damage": 5.75552,
+      "defender_state_before": "launched"
+    },
+    {
+      "event_id": "93230991122:511:3",
+      "movie_frame": 509,
+      "move": "throw_back",
+      "attacker_move_frame": 5,
+      "damage_before": 121.51104,
+      "damage": 5.4101888,
+      "defender_state_before": "launched"
+    }
+  ]
+}

@@ -1,0 +1,216 @@
+{
+	"HUMAN_ART_APPROVED": false,
+	"PASS": true,
+	"RC2_READY": false,
+	"V1_0_0_RELEASE_AUTHORIZED": false,
+	"checks": [
+		{
+			"check": "reset_campaign",
+			"pass": true
+		},
+		{
+			"check": "kaia_route",
+			"pass": true
+		},
+		{
+			"check": "ooo_fixture_save",
+			"pass": true
+		},
+		{
+			"check": "ooo_ack_in_memory",
+			"pass": true
+		},
+		{
+			"check": "ooo_ack_save",
+			"pass": true
+		},
+		{
+			"check": "ooo_not_durable",
+			"pass": true
+		},
+		{
+			"check": "ooo_reverts_prologue",
+			"pass": true
+		},
+		{
+			"check": "reset_for_earned_prefix",
+			"pass": true
+		},
+		{
+			"check": "advance_to_dialogue",
+			"pass": true
+		},
+		{
+			"check": "landed_on_accord",
+			"pass": true
+		},
+		{
+			"check": "seven_stock_wins_before_accord",
+			"pass": true
+		},
+		{
+			"check": "cursor_is_dialogue",
+			"pass": true
+		},
+		{
+			"check": "cursor_accord",
+			"pass": true
+		},
+		{
+			"check": "receipt_win:kaia-windrow:prologue",
+			"pass": true
+		},
+		{
+			"check": "receipt_stock_win:kaia-windrow:prologue",
+			"pass": true
+		},
+		{
+			"check": "receipt_token:kaia-windrow:prologue",
+			"pass": true
+		},
+		{
+			"check": "receipt_win:kaia-windrow:recruit:juno-spark",
+			"pass": true
+		},
+		{
+			"check": "receipt_stock_win:kaia-windrow:recruit:juno-spark",
+			"pass": true
+		},
+		{
+			"check": "receipt_token:kaia-windrow:recruit:juno-spark",
+			"pass": true
+		},
+		{
+			"check": "receipt_win:kaia-windrow:recruit:nix-calder",
+			"pass": true
+		},
+		{
+			"check": "receipt_stock_win:kaia-windrow:recruit:nix-calder",
+			"pass": true
+		},
+		{
+			"check": "receipt_token:kaia-windrow:recruit:nix-calder",
+			"pass": true
+		},
+		{
+			"check": "receipt_win:kaia-windrow:recruit:rook-ironside",
+			"pass": true
+		},
+		{
+			"check": "receipt_stock_win:kaia-windrow:recruit:rook-ironside",
+			"pass": true
+		},
+		{
+			"check": "receipt_token:kaia-windrow:recruit:rook-ironside",
+			"pass": true
+		},
+		{
+			"check": "receipt_win:kaia-windrow:recruit:orion-vell",
+			"pass": true
+		},
+		{
+			"check": "receipt_stock_win:kaia-windrow:recruit:orion-vell",
+			"pass": true
+		},
+		{
+			"check": "receipt_token:kaia-windrow:recruit:orion-vell",
+			"pass": true
+		},
+		{
+			"check": "receipt_win:kaia-windrow:recruit:ember-vale",
+			"pass": true
+		},
+		{
+			"check": "receipt_stock_win:kaia-windrow:recruit:ember-vale",
+			"pass": true
+		},
+		{
+			"check": "receipt_token:kaia-windrow:recruit:ember-vale",
+			"pass": true
+		},
+		{
+			"check": "receipt_win:kaia-windrow:recruit:vesper-nyx",
+			"pass": true
+		},
+		{
+			"check": "receipt_stock_win:kaia-windrow:recruit:vesper-nyx",
+			"pass": true
+		},
+		{
+			"check": "receipt_token:kaia-windrow:recruit:vesper-nyx",
+			"pass": true
+		},
+		{
+			"check": "dialogue_durable_after_earned_prefix",
+			"pass": true
+		},
+		{
+			"check": "reload_keeps_accord",
+			"pass": true
+		},
+		{
+			"check": "accord_in_completed",
+			"pass": true
+		},
+		{
+			"check": "advanced_past_accord",
+			"pass": true
+		},
+		{
+			"check": "begin_replay_prologue_for_forge",
+			"pass": true
+		},
+		{
+			"check": "battle_for_forge_check",
+			"pass": true
+		},
+		{
+			"check": "forge_battle_bound",
+			"pass": true
+		},
+		{
+			"check": "active_forge_rejected",
+			"pass": true
+		},
+		{
+			"check": "inactive_replay_result_accepted",
+			"pass": true
+		},
+		{
+			"check": "replay_does_not_advance",
+			"pass": true
+		}
+	],
+	"failures": [],
+	"owner_sign_off": false,
+	"path_trace": [
+		{
+			"honesty": "out_of_order_dialogue_dropped_without_earned_prefix"
+		},
+		{
+			"earned": [
+				"kaia-windrow:prologue",
+				"kaia-windrow:recruit:juno-spark",
+				"kaia-windrow:recruit:nix-calder",
+				"kaia-windrow:recruit:rook-ironside",
+				"kaia-windrow:recruit:orion-vell",
+				"kaia-windrow:recruit:ember-vale",
+				"kaia-windrow:recruit:vesper-nyx"
+			],
+			"path": "earned_prefix",
+			"staged_producer_fixture": true
+		},
+		{
+			"dialogue_id": "kaia-windrow:accord",
+			"durable": true,
+			"human_playthrough": false,
+			"owner_sign_off": false,
+			"path": "dialogue_after_earned_prefix"
+		},
+		{
+			"honesty": "active_battle_cannot_forge_stock_win; replay inactive accepted without advance"
+		}
+	],
+	"req_id": "AA-RTM-002",
+	"scope": "Kaia earned STOCK_WIN prefix via bound BattleScene producer, then durable accord dialogue. Staged fixture ≠ owner sign-off / V1."
+}

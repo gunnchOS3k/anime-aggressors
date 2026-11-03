@@ -16,14 +16,22 @@ const _BattleCamera = preload("res://scripts/battle/battle_camera_controller.gd"
 
 var fighter1
 var fighter2
+var fighter3
+var fighter4
 var blast: Dictionary = {}
 var _active := false
+var _match_finished := false
 var _paused := false
+var _network_pause_requested := false
+var _pause_controls: Dictionary = {}
 var _ko_lock := false
+var _network_round_clock := 0
+var _network_ko_deadline := -1
 var _debug_hud
 var _battle_sim
 var _hazard_runtime
 var _pause_panel: PanelContainer
+var _pause_resume_button: Button
 var _pause_center: CenterContainer
 var _p1_panel
 var _p2_panel
@@ -40,25 +48,77 @@ var _battle_camera
 var _stage_camera_profile: Dictionary = {}
 var _wave018_vis_accum: float = 0.0
 var _wave018_last_telemetry_ids: Array = []
+var _story_attempt_token: String = ""
+var _story_node_id := ""
+var _story_dialogue_generation := -1
+var _story_cosmic_actor
+var _story_survival := false
+var _story_elapsed := 0.0
+var _story_cosmic_cadence := 0.0
+var _story_objective
+var _story_receipt_failed := false
+var _lan_replica
+var _network_abandoned := false
 
 const FIGHTER_SCENE := preload("res://scenes/fighters/Fighter.tscn")
 const DEBUG_HUD_SCENE := preload("res://scenes/ui/DebugHud.tscn")
 const MOVE_LIST_PANEL := preload("res://scripts/ui/move_list_panel.gd")
+const _RosamereForms = preload("res://scripts/combat/rosamere_form_selection.gd")
+const _RosamerePresentationHud = preload("res://scripts/ui/rosamere_presentation_hud.gd")
+const _FlaglineFourBody = preload("res://scripts/trials/flagline/flagline_four_body.gd")
 
 var _move_list_panel: Control
 var _training_pin_label: Label
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	# The controller remains alive for pause UI and LAN, but its simulation
+	# descendants must not inherit ALWAYS and move/tick through a real pause.
+	# Training already uses this ownership split for its one-step clock.
+	fighters_root.process_mode = Node.PROCESS_MODE_PAUSABLE
+	stage_root.process_mode = Node.PROCESS_MODE_PAUSABLE
+	if GameState.mode == "story":
+		_story_attempt_token = str(CampaignRuntime.active_encounter.get("token", ""))
+		_story_node_id = str(CampaignRuntime.active_encounter.get("node_id", ""))
+		CampaignRuntime.bind_battle_scene(self, _story_attempt_token)
 	_build_stage()
 	_spawn_fighters()
+	_apply_rosamere_form_hooks()
 	_setup_hud_panels()
+	_mount_rosamere_presentation_hud()
 	_apply_device_role()
+	if str(GameState.mode) == "trials" and bool(GameState.trial_live_combat):
+		var _TrialsBridge = load("res://scripts/trials/shared_combat_bridge.gd")
+		if _TrialsBridge != null:
+			_TrialsBridge.mount_overlay_on_battle(self)
 	_time_remaining = float(GameState.match_timer_seconds)
 	_time_enabled = GameState.match_timer_seconds > 0 and GameState.match_type != "stock_untimed"
+	_update_timer_label()
+	if LanSession.role == "guest" and LanSession.guest_battle_open:
+		_lan_replica = preload("res://scripts/net/lan_battle_replica.gd").new()
+		add_child(_lan_replica)
+		_lan_replica.setup(self)
+		return # No guest countdown, BattleSim, CPU, timer, KO or career authority.
 	_battle_sim = _BattleSim.new()
 	add_child(_battle_sim)
-	_battle_sim.bind_fighters([fighter1, fighter2])
+	_battle_sim.bind_fighters(_active_combat_bodies())
+	_battle_sim.frame_committing.connect(_commit_network_frame)
+	if GameState.mode == "online_private" and not LanSession.bind_battle(self):
+		# A peer can leave between Start and deferred scene creation. A network
+		# match must never fall back to a locally controllable guest or result.
+		for actor in [fighter1, fighter2]: actor.close_combat_for_match_end(false)
+		LanSession.status = "LAN ownership lost before battle binding; reconnect"
+		SceneRouter.call_deferred("go", "online_private")
+		return
+	if _battle_sim.network_commit_enabled:
+		# Bind AFTER LanSession: publish the closed step, then freeze before any
+		# new actor/input Node tick. PhysicsServer must stay active until here.
+		_battle_sim.frame_committed.connect(_apply_pending_network_pause)
+	if not _story_attempt_token.is_empty() and CampaignRuntime.active_encounter.get("objective_contract") == "COSMIC_SURVIVAL":
+		_setup_story_cosmic_encounter(CampaignRuntime.active_encounter)
+	elif not _story_attempt_token.is_empty() and CampaignRuntime.active_encounter.get("objective_contract", "STOCK_WIN") != "STOCK_WIN":
+		_story_objective = preload("res://scripts/story/v1_story_encounter.gd").new()
+		_story_objective.setup(self, CampaignRuntime.active_encounter)
 	if GameState.mode == "hazards" or GameState.hazards_enabled or GameState.items_enabled:
 		_hazard_runtime = _HazardItemRuntime.new()
 		add_child(_hazard_runtime)
@@ -96,11 +156,27 @@ func _ready() -> void:
 			countdown_label.visible = false
 		fighter1.controls_enabled = true
 		fighter2.controls_enabled = true
+		if _story_objective != null: _story_objective.activate_controls()
+		if _story_cosmic_actor != null: _story_cosmic_actor.controls_enabled = true
 		_active = true
 		return
+	if not _story_attempt_token.is_empty():
+		_setup_story_dialogue()
+		for actor in fighters_root.get_children(): actor.controls_enabled = false
+		StoryDialogue.fire("encounter_intro")
+		if StoryDialogue.is_busy(): await StoryDialogue.sequence_finished
+		if _battle_camera != null: _battle_camera.set_physics_process(true)
+	if not _story_attempt_token.is_empty():
+		for actor in fighters_root.get_children():
+			if _story_objective != null and _story_objective.kind in ["FIRST_LOSS","PRISMATIC_TRANSFORMATION"] and actor == fighter2:
+				actor.model_3d.set_cinematic_expression("grief" if _story_objective.kind == "FIRST_LOSS" else "determination")
+			else: actor.model_3d.set_cinematic_expression("")
 	await _run_countdown()
+	if _network_abandoned: return
 	fighter1.controls_enabled = true
 	fighter2.controls_enabled = true
+	if _story_objective != null: _story_objective.activate_controls()
+	if _story_cosmic_actor != null: _story_cosmic_actor.controls_enabled = true
 	_active = true
 
 func _apply_device_role() -> void:
@@ -163,9 +239,47 @@ func _build_stage() -> void:
 	var builder = load("res://scripts/battle/stage_procedural_builder.gd")
 	builder.build(stage_root, stage_data, reduce)
 
+func _apply_rosamere_form_hooks() -> void:
+	## Versus/story form selection: three manifestations; Everlasting never ranked.
+	for pair in [[fighter1, GameState.p1_form_id, GameState.p1_fighter_id], [fighter2, GameState.p2_form_id, GameState.p2_fighter_id]]:
+		var actor = pair[0]
+		var form_id := str(pair[1])
+		var fid := str(pair[2])
+		if not is_instance_valid(actor) or fid != "rosamere":
+			continue
+		if form_id.is_empty():
+			form_id = "FAMILIAR_ROSE"
+		var mode := str(GameState.mode)
+		if mode.is_empty():
+			mode = "versus"
+		var consent := bool(GameState.mythic_party_consent) or mode in ["story", "ova"]
+		var gate: Dictionary = _RosamereForms.select_for_mode(form_id, mode, consent)
+		if not bool(gate.get("ok", false)) and form_id == "EVERLASTING_ORIGIN":
+			form_id = "FAMILIAR_ROSE"
+		_RosamereForms.apply_to_fighter(actor, form_id, mode, consent)
+
+
+func _mount_rosamere_presentation_hud() -> Dictionary:
+	## Versus presentation-only card HUD — ≠ HUMAN_ART; HitResolver untouched.
+	var mode := str(GameState.mode)
+	if mode.is_empty():
+		mode = "versus"
+	return _RosamerePresentationHud.mount_on_hud(hud, [fighter1, fighter2, fighter3, fighter4], mode)
+
+
+func _active_combat_bodies() -> Array:
+	var bodies: Array = []
+	for f in [fighter1, fighter2, fighter3, fighter4]:
+		if f != null and is_instance_valid(f):
+			bodies.append(f)
+	return bodies
+
+
 func _spawn_fighters() -> void:
 	for c in fighters_root.get_children():
 		c.queue_free()
+	fighter3 = null
+	fighter4 = null
 	var stage_data: Dictionary = GameState.load_stage(GameState.stage_id)
 	var spawns: Array = stage_data.get("spawnPoints", [])
 	var s1 := Vector2(-200, 200)
@@ -176,6 +290,13 @@ func _spawn_fighters() -> void:
 			s1 = Vector2(sp.x, sp.y)
 		if sp.slot == 2:
 			s2 = Vector2(sp.x, sp.y)
+	var four_body := bool(GameState.trial_four_body) \
+		and str(GameState.mode) == "trials" \
+		and str(GameState.trial_mode_id) == "fractured_accord" \
+		and (GameState.trial_body_roster as Array).size() >= 4
+	if four_body:
+		_spawn_flagline_four_bodies(stage_data, main, s1, s2)
+		return
 	fighter1 = FIGHTER_SCENE.instantiate()
 	fighter2 = FIGHTER_SCENE.instantiate()
 	fighter1.name = "Fighter1"
@@ -189,18 +310,7 @@ func _spawn_fighters() -> void:
 	fighter1.global_position = s1
 	fighter2.global_position = s2
 	for f in [fighter1, fighter2]:
-		if f.has_method("configure_stage_geometry"):
-			f.configure_stage_geometry(main, stage_data.get("ledgeAnchors", []), bool(stage_data.get("ledges", true)))
-		else:
-			f.platform_half_width = float(main.get("width", 800)) / 2.0
-			f.platform_center_x = float(main.get("x", 0))
-		# Wave018: battle must not inherit select-preview ghosts / stuck visibility.
-		if f.has_method("ensure_visible_presentation"):
-			f.ensure_visible_presentation()
-		if f.model_3d != null and f.model_3d.has_method("heal_visibility_if_needed"):
-			f.model_3d.heal_visibility_if_needed()
-		if f.model_3d != null and f.model_3d.has_method("set_select_mode"):
-			f.model_3d.set_select_mode(false)
+		_finish_fighter_spawn(f, main, stage_data)
 	_emit_battle_visibility_telemetry()
 	_connect_hitboxes(fighter1, fighter2)
 	_connect_hitboxes(fighter2, fighter1)
@@ -209,12 +319,72 @@ func _spawn_fighters() -> void:
 	_update_hud()
 
 
+func _finish_fighter_spawn(f, main: Dictionary, stage_data: Dictionary) -> void:
+	if f == null or not is_instance_valid(f):
+		return
+	if f.has_method("configure_stage_geometry"):
+		f.configure_stage_geometry(main, stage_data.get("ledgeAnchors", []), bool(stage_data.get("ledges", true)))
+	else:
+		f.platform_half_width = float(main.get("width", 800)) / 2.0
+		f.platform_center_x = float(main.get("x", 0))
+	# Wave018: battle must not inherit select-preview ghosts / stuck visibility.
+	if f.has_method("ensure_visible_presentation"):
+		f.ensure_visible_presentation()
+	if f.model_3d != null and f.model_3d.has_method("heal_visibility_if_needed"):
+		f.model_3d.heal_visibility_if_needed()
+	if f.model_3d != null and f.model_3d.has_method("set_select_mode"):
+		f.model_3d.set_select_mode(false)
+
+
+func _spawn_flagline_four_bodies(stage_data: Dictionary, main: Dictionary, s1: Vector2, s2: Vector2) -> void:
+	## Actual four Fighter bodies under BattleSim — combat authority, not logical CPU-only.
+	var roster: Array = GameState.trial_body_roster
+	var offsets: Array = _FlaglineFourBody.spawn_offsets()
+	var mid := (s1 + s2) * 0.5
+	var bodies: Array = []
+	for i in range(4):
+		var entry: Dictionary = roster[i]
+		var actor = FIGHTER_SCENE.instantiate()
+		actor.name = "Fighter%d" % (i + 1)
+		fighters_root.add_child(actor)
+		var spawn: Vector2 = mid + offsets[i]
+		if i == 0:
+			spawn = s1 + Vector2(-40, 0)
+		elif i == 1:
+			spawn = s2 + Vector2(40, 0)
+		var cpu_flag := bool(entry.get("is_bot", true)) or bool(GameState.battle_eval_mode)
+		## Slot 1 may still be human; seats beyond connected humans are CPU.
+		if i == 0 and not bool(entry.get("is_bot", true)):
+			cpu_flag = bool(GameState.p1_is_cpu) or bool(GameState.battle_eval_mode)
+		actor.configure(str(entry.get("fighter_id", "ember-vale")), int(entry.get("slot", i + 1)), cpu_flag, GameState.stocks, spawn)
+		actor.global_position = spawn
+		actor.set_meta("flagline_team_id", str(entry.get("team_id", "")))
+		actor.set_meta("flagline_display_team", str(entry.get("display_team", "")))
+		actor.set_meta("flagline_four_body", true)
+		_finish_fighter_spawn(actor, main, stage_data)
+		bodies.append(actor)
+		match i:
+			0:
+				fighter1 = actor
+			1:
+				fighter2 = actor
+			2:
+				fighter3 = actor
+			3:
+				fighter4 = actor
+	_emit_battle_visibility_telemetry()
+	_FlaglineFourBody.connect_cross_team_hitboxes(self, bodies, Callable(self, "_connect_hitboxes"))
+	for f in bodies:
+		f.koed.connect(_on_ko.bind(f))
+	_update_hud()
+
+
 func _emit_battle_visibility_telemetry() -> void:
 	var telem = get_node_or_null("/root/Wave018VisibilityTelemetry")
 	if telem == null or not telem.has_method("emit_battle_row"):
 		return
 	_wave018_last_telemetry_ids.clear()
-	for f in [fighter1, fighter2]:
+	for f in _active_combat_bodies():
 		if f == null or not is_instance_valid(f):
 			continue
 		var model = f.get("model_3d")
@@ -269,16 +439,31 @@ func _connect_hitboxes(attacker, defender) -> void:
 
 func _run_countdown() -> void:
 	for i in range(3, 0, -1):
+		if _network_abandoned: return
 		if countdown_label:
 			countdown_label.text = str(i)
-		await get_tree().create_timer(1.0).timeout
+		await get_tree().create_timer(1.0, false).timeout
+	if _network_abandoned: return
 	if countdown_label:
 		countdown_label.text = "FIGHT!"
-	await get_tree().create_timer(0.6).timeout
+	await get_tree().create_timer(0.6, false).timeout
 	if countdown_label:
 		countdown_label.visible = false
 
 func _physics_process(delta: float) -> void:
+	if _network_abandoned: return
+	if _lan_replica != null:
+		_lan_replica.step(delta)
+		return
+	# The existing0.8s KO lock gates stock authority as well as the banner.
+	# Online ownership therefore uses a named48-step deadline, not a wall
+	# timer that could expire during pause or survive historical restoration.
+	# Continue its presentation after terminal commit, as the old timer did.
+	if fighter1 != null and fighter1.use_network_physics_clock and not _paused and (not _battle_sim.network_commit_enabled or (_match_finished and _battle_sim.committed_at_engine_frame != Engine.get_physics_frames())):
+		_network_round_clock += 1
+		if _network_ko_deadline >= 0 and _network_round_clock >= _network_ko_deadline:
+			_network_ko_deadline = -1
+			_release_ko_lock()
 	_wave018_vis_accum += delta
 	if _wave018_vis_accum >= 0.5:
 		_wave018_vis_accum = 0.0
@@ -291,22 +476,49 @@ func _physics_process(delta: float) -> void:
 		if _eval_frames >= _eval_max_frames:
 			_finish_eval_timeout()
 			return
+	if _story_survival:
+		_tick_story_cosmic_encounter(delta)
+	if _story_objective != null:
+		_story_objective.tick(delta)
+		if not _active: return
 	if _hazard_runtime:
 		_hazard_runtime.tick(delta)
-	if _time_enabled:
+	if _time_enabled and not _battle_sim.network_commit_enabled:
 		_time_remaining = maxf(0.0, _time_remaining - delta)
 		_update_timer_label()
 		if _time_remaining <= 0.0:
 			_end_match_on_time()
 			return
 	_update_hud()
-	_check_blast(fighter1)
-	_check_blast(fighter2)
-	_check_match_end()
+	if not _battle_sim.network_commit_enabled:
+		_check_blast(fighter1)
+		_check_blast(fighter2)
+		_check_match_end()
 	_flight_accum += delta
 	if _flight_accum >= 0.2:
 		_flight_accum = 0.0
 		_emit_flight_snapshot()
+
+func _commit_network_frame(_frame: int, active_at_step: bool) -> void:
+	# Only completed live network steps reach this handler. Stock/result
+	# authority runs after all movement, synchronous and deferred contacts,
+	# projectile work and the PhysicsServer's resulting overlap notifications.
+	if _network_abandoned or _match_finished: return
+	_network_round_clock += 1
+	if _network_ko_deadline >= 0 and _network_round_clock >= _network_ko_deadline:
+		_network_ko_deadline = -1
+		_release_ko_lock()
+	if not active_at_step or not _active: return
+	if _time_enabled:
+		_time_remaining = maxf(0.0, _time_remaining - _BattleSim.STEP)
+		_update_timer_label()
+		if _time_remaining <= 0.0:
+			_end_match_on_time()
+			return
+	_check_blast(fighter1)
+	_check_blast(fighter2)
+	_check_match_end()
+	_update_hud()
 
 
 func _emit_flight_snapshot() -> void:
@@ -325,12 +537,20 @@ func _update_timer_label() -> void:
 	if _timer_label == null:
 		return
 	if not _time_enabled:
-		_timer_label.text = "?"
+		_timer_label.text = "—"
+		_timer_label.tooltip_text = "Untimed objective. Follow the prompts and preserve your stocks."
 		return
 	var secs := int(ceil(_time_remaining))
 	_timer_label.text = "%d:%02d" % [secs / 60, secs % 60]
 
 func _end_match_on_time() -> void:
+	if _story_objective != null or (GameState.mode == "story" and not _story_survival):
+		# Story stock victories require actual KOs. A percent tie-break cannot issue that receipt.
+		_finish_match(2)
+		return
+	if _story_survival:
+		_finish_match(1 if fighter1.stocks > 0 else 2)
+		return
 	# Higher stocks wins; tie-break lower percent.
 	var winner := 1
 	if fighter2.stocks > fighter1.stocks:
@@ -345,20 +565,25 @@ func _check_blast(f) -> void:
 	var pos: Vector2 = f.global_position
 	if pos.x < blast.get("left", -9999) or pos.x > blast.get("right", 9999) or pos.y < blast.get("top", -9999) or pos.y > blast.get("bottom", 9999):
 		_ko_lock = true
+		if f.use_network_physics_clock: _network_ko_deadline = _network_round_clock + 48
 		if ko_label:
 			ko_label.text = "%s KO!" % f.data.get("displayName", "?")
 			ko_label.visible = true
 		f.lose_stock()
-		get_tree().create_timer(0.8).timeout.connect(func():
-			if ko_label:
-				ko_label.visible = false
-			_ko_lock = false
-		, CONNECT_ONE_SHOT)
+		if not f.use_network_physics_clock:
+			get_tree().create_timer(0.8).timeout.connect(_release_ko_lock, CONNECT_ONE_SHOT)
+
+func _release_ko_lock() -> void:
+	if ko_label: ko_label.visible = false
+	_ko_lock = false
 
 func _on_ko(_f) -> void:
 	pass
 
 func _check_match_end() -> void:
+	if _story_objective != null:
+		if fighter1.stocks <= 0: _finish_match(2)
+		return
 	if fighter1.stocks <= 0 or fighter2.stocks <= 0:
 		var winner := 2 if fighter1.stocks <= 0 else 1
 		_finish_match(winner)
@@ -367,14 +592,33 @@ func _update_hud() -> void:
 	if _p1_panel and fighter1:
 		_p1_panel.update_from_fighter(fighter1)
 	elif p1_hud and fighter1:
-		p1_hud.text = "%s  %d%%  x%d  aura:%d" % [fighter1.data.get("displayName","P1"), int(fighter1.damage_percent), fighter1.stocks, int(fighter1.aura)]
+		p1_hud.text = "%s  %.1f%%  x%d  aura:%d" % [fighter1.data.get("displayName","P1"), float(fighter1.damage_percent), fighter1.stocks, int(fighter1.aura)]
 	if _p2_panel and fighter2:
 		_p2_panel.update_from_fighter(fighter2)
 	elif p2_hud and fighter2:
-		p2_hud.text = "%s  %d%%  x%d  aura:%d%s" % [fighter2.data.get("displayName","P2"), int(fighter2.damage_percent), fighter2.stocks, int(fighter2.aura), " (CPU L%d)" % GameState.cpu_level if GameState.p2_is_cpu else ""]
+		p2_hud.text = "%s  %.1f%%  x%d  aura:%d%s" % [fighter2.data.get("displayName","P2"), float(fighter2.damage_percent), fighter2.stocks, int(fighter2.aura), " (CPU L%d)" % GameState.cpu_level if GameState.p2_is_cpu else ""]
 
 func _toggle_pause() -> void:
-	_paused = not _paused
+	if _match_finished: return
+	if _battle_sim != null and _battle_sim.network_commit_enabled and not _paused:
+		# Pausing immediately disables PhysicsServer query flushing. A pending
+		# contact/KO must commit before the pause menu can abandon this match.
+		_network_pause_requested = not _network_pause_requested
+		return
+	_apply_pause(not _paused)
+
+func _apply_pending_network_pause(_frame: int) -> void:
+	if not _network_pause_requested: return
+	_network_pause_requested = false
+	if not _match_finished and not _network_abandoned: _apply_pause(true)
+
+func _apply_pause(value: bool) -> void:
+	if value == _paused: return
+	if value:
+		_pause_controls.clear()
+		for actor in [fighter1, fighter2]:
+			if is_instance_valid(actor): _pause_controls[actor.get_instance_id()] = actor.controls_enabled
+	_paused = value
 	# Freeze the SceneTree so CharacterBody2D physics / CPU / hazards stop.
 	# Prior behavior only flipped controls_enabled + BattleSim.paused, so
 	# fighters kept sliding under gravity/velocity while the pause panel showed
@@ -387,14 +631,14 @@ func _toggle_pause() -> void:
 			ach.report_event("pause_resume")
 	if _battle_sim:
 		_battle_sim.set_paused(_paused)
-	if fighter1:
-		fighter1.controls_enabled = not _paused
-		if _paused:
-			fighter1.velocity = Vector2.ZERO
-	if fighter2:
-		fighter2.controls_enabled = not _paused
-		if _paused:
-			fighter2.velocity = Vector2.ZERO
+	for actor in [fighter1, fighter2]:
+		if not is_instance_valid(actor): continue
+		# Resume restores its own controls; it cannot grant input during a
+		# countdown, scripted encounter lock or terminal combat retirement.
+		actor.controls_enabled = not _paused and not actor.combat_closed and bool(_pause_controls.get(actor.get_instance_id(), false))
+	if not _paused: _pause_controls.clear()
+	# Fighter roots are PAUSABLE. Keep the actual jump/launch momentum while
+	# the tree is frozen; zeroing velocity here erased it on every resume.
 	_ensure_pause_panel()
 	if _pause_panel:
 		_pause_panel.process_mode = Node.PROCESS_MODE_ALWAYS
@@ -405,18 +649,31 @@ func _toggle_pause() -> void:
 	if _move_list_panel != null and is_instance_valid(_move_list_panel) and _move_list_panel.visible and _paused:
 		_move_list_panel.close_panel()
 	# BattleScene must keep receiving ui_cancel/ui_accept while the tree is paused.
+	if _paused and is_instance_valid(_pause_resume_button):
+		_pause_resume_button.grab_focus()
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	TouchInputManager._sync_overlay()
 
 func _unhandled_input(event: InputEvent) -> void:
+	if _network_abandoned:
+		if event.is_action_pressed("ui_cancel"):
+			LanSession.stop()
+			SceneRouter.go("online_private")
+			get_viewport().set_input_as_handled()
+		return
+	if _lan_replica != null:
+		if event.is_action_pressed("ui_cancel"):
+			LanSession.stop()
+			SceneRouter.go("online_private")
+			get_viewport().set_input_as_handled()
+		return
 	if event.is_action_pressed("ui_cancel"):
 		_ensure_pause_panel()
 		_toggle_pause()
 		get_viewport().set_input_as_handled()
 		return
-	if _paused and event.is_action_pressed("ui_accept"):
-		_toggle_pause()
-		get_viewport().set_input_as_handled()
+	# Focused GUI buttons own confirm press AND release. Resuming here on
+	# press hides the panel and cancels their pending release activation.
 	if event is InputEventJoypadButton and event.pressed:
 		_refresh_pad_prompt()
 
@@ -477,6 +734,7 @@ func _ensure_pause_panel() -> void:
 	v.add_child(title)
 	var resume_btn := Button.new()
 	resume_btn.text = "Resume"
+	_pause_resume_button = resume_btn
 	resume_btn.pressed.connect(_toggle_pause)
 	v.add_child(resume_btn)
 	var rematch_btn := Button.new()
@@ -534,6 +792,8 @@ func _on_move_list_pin(entry: Dictionary) -> void:
 
 
 func _clear_pause_for_nav() -> void:
+	_pause_controls.clear()
+	_network_pause_requested = false
 	_paused = false
 	get_tree().paused = false
 	if _battle_sim:
@@ -545,20 +805,104 @@ func _clear_pause_for_nav() -> void:
 
 
 func _on_pause_rematch() -> void:
+	## Flagline four-body rematch keeps Trials combat authority + roster.
+	if str(GameState.mode) == "trials" and str(GameState.trial_mode_id) == "fractured_accord" and bool(GameState.trial_four_body):
+		var _Bridge = load("res://scripts/trials/shared_combat_bridge.gd")
+		if _Bridge != null:
+			_Bridge.prepare_live_battle("fractured_accord", int(GameState.trial_seat_count), str(GameState.trial_unbound_preset), -1)
+	if _match_finished: return
 	_clear_pause_for_nav()
+	if LanSession.role == "host":
+		LanSession.stop()
+		SceneRouter.go("online_private")
+		return
+	if GameState.mode == "story":
+		var replay_id := str(CampaignRuntime.active_encounter.get("node_id", "")) if CampaignRuntime.active_encounter.get("replay", false) else ""
+		CampaignRuntime.abandon_encounter()
+		if not CampaignRuntime.begin_encounter(replay_id):
+			SceneRouter.go("story")
+			return
 	GameState.reset_match()
 	SceneRouter.go("battle")
 
 
 func _on_pause_return_menu() -> void:
+	if _match_finished: return
+	if LanSession.role == "host": LanSession.stop()
+	StoryDialogue.cancel()
 	_clear_pause_for_nav()
+	if GameState.mode == "story":
+		CampaignRuntime.abandon_encounter()
+		SceneRouter.go("story")
+		return
 	SceneRouter.go("main_menu")
 
 
-func _finish_match(winner: int) -> void:
+func abandon_network_match() -> void:
+	if _match_finished or _network_abandoned: return
+	# Preserve an earned terminal stock condition already resolved by combat.
+	if fighter1.stocks <= 0 or fighter2.stocks <= 0:
+		_finish_match(2 if fighter1.stocks <= 0 else 1)
+		return
+	_network_abandoned = true
+	_network_pause_requested = false
 	_active = false
+	if _battle_sim != null: _battle_sim.set_paused(true)
+	for actor in fighters_root.get_children():
+		if actor.has_method("close_combat_for_match_end"): actor.close_combat_for_match_end(false)
+	countdown_label.text = "Connection lost · Match abandoned · Back to LAN lobby"
+	countdown_label.visible = true
+
+func _finish_match(winner: int) -> void:
+	if _network_abandoned: return
+	# Results, receipts and delayed navigation have one owner. A second KO or
+	# queued objective callback cannot replace a result already committed here.
+	if _match_finished: return
+	_match_finished = true
+	_network_pause_requested = false
+	if _hazard_runtime!=null:_hazard_runtime.clear_items()
+	_active = false
+	if _battle_sim != null: _battle_sim.set_paused(true)
+	_update_hud() # Include the final stock loss in the still-visible HUD.
+	if countdown_label != null:
+		countdown_label.text = "%s Wins!" % (fighter1.data.get("displayName", "P1") if winner == 1 else fighter2.data.get("displayName", "P2"))
+		countdown_label.visible = true
+	# Close ALL actors, including Story extras. Preserve completed form artwork,
+	# but retire combat authority before the result-delay frame can run.
+	for actor in fighters_root.get_children():
+		if actor.has_method("close_combat_for_match_end"):
+			actor.close_combat_for_match_end(actor.slot == winner)
 	GameState.last_winner_slot = winner
+	# Publish only after terminal actor ownership and the winner agree.
+	if LanSession.role == "host": LanSession.retire_battle("Match complete; late inputs rejected")
 	MatchTelemetry.record_match_end(winner)
+	if GameState.mode == "story" and not _story_attempt_token.is_empty():
+		var evidence: Dictionary = _story_objective.evidence() if _story_objective != null else {"stock_win":fighter2.stocks <= 0 and fighter1.stocks > 0, "survived":_story_survival and fighter1.stocks > 0 and _time_remaining <= 0, "elapsed":_story_elapsed}
+		_story_receipt_failed = not CampaignRuntime.record_battle_result(winner, _story_attempt_token, evidence, self)
+		if not _story_receipt_failed and winner == 1:
+			StoryDialogue.fire("encounter_success",evidence)
+			StoryDialogue.fire("first_loss_resolved",evidence)
+			StoryDialogue.fire("essence_earned",evidence)
+		else: StoryDialogue.cancel()
+		if _story_receipt_failed:
+			CampaignRuntime.last_error = "Story outcome could not be saved or verified. Retry this encounter."
+			CampaignRuntime.active_encounter.clear()
+		if _story_objective != null:
+			for actor in _story_objective.actors:
+				actor.controls_enabled = false
+				actor.cpu.clear_simulated_inputs()
+		fighter1.controls_enabled = false
+		fighter2.controls_enabled = false
+		if _story_cosmic_actor != null:
+			_story_cosmic_actor.controls_enabled = false
+		# The receipt is already committed and combat is closed. Let this
+		# chapter's authored aftermath finish (or receive public Skip) before
+		# Results tears its actors/voice down. Never wait on another scene.
+		if winner == 1 and not _story_receipt_failed and get_tree().current_scene == self and _owns_story_dialogue() and StoryDialogue.is_busy():
+			StoryDialogue.sequence_finished.connect(_on_story_result_sequence_finished.bind(_story_dialogue_generation), CONNECT_ONE_SHOT)
+		else:
+			_queue_results()
+		return
 	if _eval_mode:
 		_complete_eval(winner, "stocks_or_time")
 		return
@@ -568,7 +912,27 @@ func _finish_match(winner: int) -> void:
 			var p1_stocks: int = int(fighter1.stocks) if fighter1 else 0
 			var p2_dmg: float = float(fighter2.damage_percent) if fighter2 else 0.0
 			GameState.resolve_challenge(winner, p1_stocks, p2_dmg)
-	get_tree().create_timer(0.5).timeout.connect(func(): SceneRouter.go("results"), CONNECT_ONE_SHOT)
+	_queue_results()
+
+
+func _queue_results() -> void:
+	# A bound callable expires with this BattleScene. Navigating elsewhere during
+	# teardown cannot let an old anonymous timer redirect a later scene.
+	get_tree().create_timer(0.5).timeout.connect(_show_results, CONNECT_ONE_SHOT)
+
+func _owns_story_dialogue() -> bool:
+	# Intro cues may fire inside _ready; chapter/generation owns their acting.
+	# Navigation callbacks additionally require current_scene below.
+	return is_inside_tree() and StoryDialogue.context == "battle" and StoryDialogue.node_id == _story_node_id and StoryDialogue._generation == _story_dialogue_generation
+
+func _on_story_result_sequence_finished(generation: int) -> void:
+	if _match_finished and get_tree().current_scene == self and generation == _story_dialogue_generation and _owns_story_dialogue():
+		_queue_results()
+
+
+func _show_results() -> void:
+	if _match_finished and get_tree().current_scene == self:
+		SceneRouter.go("results")
 
 
 func _complete_eval(winner: int, reason: String) -> void:
@@ -602,3 +966,81 @@ func _finish_eval_timeout() -> void:
 			winner = 1 if fighter1.damage_percent <= fighter2.damage_percent else 2
 	GameState.last_winner_slot = winner
 	_complete_eval(winner, "frame_cap")
+
+
+func _setup_story_cosmic_encounter(contract: Dictionary) -> void:
+	_story_survival = true
+	fighter2.set_meta("story_cosmic_contract", true)
+	var data: Dictionary = fighter2.data.duplicate(true)
+	data["collectible_review_form"] = "COSMIC_BOSS"
+	fighter2.model_3d.configure(data)
+	_story_cosmic_actor = FIGHTER_SCENE.instantiate()
+	_story_cosmic_actor.name = "YangStoryManifestation"
+	fighters_root.add_child(_story_cosmic_actor)
+	_story_cosmic_actor.configure(str(contract["additional_opponent"]), 3, true, 99, Vector2(80, 160))
+	_story_cosmic_actor.controls_enabled = false # Activated with the ordinary countdown below.
+	_story_cosmic_actor.set_meta("story_cosmic_contract", true)
+	data = _story_cosmic_actor.data.duplicate(true)
+	data["collectible_review_form"] = "COSMIC_BOSS"
+	_story_cosmic_actor.model_3d.configure(data)
+	var stage: Dictionary = GameState.load_stage(GameState.stage_id)
+	_story_cosmic_actor.configure_stage_geometry(stage.get("mainPlatform", {}), stage.get("ledgeAnchors", []), bool(stage.get("ledges", true)))
+	_connect_hitboxes(_story_cosmic_actor, fighter1)
+	_connect_hitboxes(fighter1, _story_cosmic_actor)
+	_battle_sim.bind_fighters([fighter1, fighter2, _story_cosmic_actor])
+	_timer_label.tooltip_text = "Survive Yin and Yang. Ordinary damage cannot defeat their story manifestations."
+
+
+func _tick_story_cosmic_encounter(delta: float) -> void:
+	_story_elapsed += delta
+	# Both manifestations use the same active observation/input CPU as normal fighters.
+	_check_blast(_story_cosmic_actor)
+
+
+func _exit_tree() -> void:
+	preload("res://scripts/audio/procedural_audio_bank.gd").retire_scene_audio(self)
+	LanSession.unbind_battle(self)
+	var dialogue = get_node_or_null("/root/StoryDialogue")
+	if dialogue != null and _story_dialogue_generation >= 0 and int(dialogue.get("_generation")) == _story_dialogue_generation and str(dialogue.get("context")) == "battle":
+		# Direct navigation must retire this battle's intro/voice/overlay, but
+		# cannot cancel a later sequence already owned by an incoming scene.
+		dialogue.cancel()
+	if _hazard_runtime!=null:_hazard_runtime.clear_items()
+	if _story_objective != null:
+		for actor in _story_objective.actors:
+			if is_instance_valid(actor): actor.cpu.clear_simulated_inputs()
+		_story_objective.battle = null
+		_story_objective = null
+
+
+func _setup_story_dialogue() -> void:
+	StoryDialogue.begin(_story_node_id,"battle")
+	_story_dialogue_generation = StoryDialogue._generation
+	StoryDialogue.cue_started.connect(_on_story_cue)
+	for actor in fighters_root.get_children():
+		actor.move_runner.move_started.connect(func(_id):
+			if not _active or StoryDialogue.context != "battle": return
+			StoryDialogue.fire("cosmic_engaged",{"fighter":actor.fighter_id,"move":_id})
+			if actor == fighter1: StoryDialogue.fire("gray_combat_action",{"move":_id}))
+		actor.hit_resolver.hit_confirmed.connect(func(attacker,defender,info):
+			if not _active or StoryDialogue.context != "battle": return
+			StoryDialogue.fire("combat_contact",{"attacker":attacker.fighter_id,"defender":defender.fighter_id,"blocked":info.get("blocked",false)}))
+
+func _on_story_cue(cue: Dictionary) -> void:
+	# Combat facial reactions retain authority; dialogue staging only before live controls.
+	if _active: return
+	if cue.get("representation") == "memory_echo": return
+	# record_battle_result retires active_encounter before success cues fire.
+	# This scene keeps its own chapter/generation for the resulting acting.
+	if not _owns_story_dialogue(): return
+	for actor in fighters_root.get_children():
+		if actor.fighter_id != cue["speaker_id"]: continue
+		var expression := str({"strained":"shock","grief":"grief","soft":"calm","formal":"determination","clear":"determination"}.get(cue["performance"],"determination"))
+		actor.model_3d.set_cinematic_expression(expression)
+		if not _active:
+			actor.model_3d.play_clip("story_dialogue_intense" if cue["performance"] in ["strained","grief"] else "story_dialogue_neutral")
+			var camera := get_node_or_null("Camera2D") as Camera2D
+			if camera != null:
+				if _battle_camera != null: _battle_camera.set_physics_process(false)
+				camera.position = actor.position + Vector2(0,-70)
+				camera.zoom = Vector2.ONE * 1.25

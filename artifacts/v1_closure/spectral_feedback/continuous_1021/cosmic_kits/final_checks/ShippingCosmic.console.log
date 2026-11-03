@@ -1,0 +1,60 @@
+{"project": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/aa-ordinary-review-af552j7y/game-godot", "profile": "cosmic_final_ShippingCosmic1021", "isolated_project_name": "Anime Aggressors Review cosmic_final_ShippingCosmic1021", "command": ["/opt/homebrew/bin/godot", "--path", "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/aa-ordinary-review-af552j7y/game-godot", "--log-file", "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure/artifacts/v1_closure/spectral_feedback/continuous_1021/cosmic_kits/final_checks/ShippingCosmic/godot.log", "--headless", "--fixed-fps", "60", "--script", "res://tests/v1_closure/ShippingRosterPath.gd", "--", "--ordinary-output=/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure/artifacts/v1_closure/spectral_feedback/continuous_1021/cosmic_kits/final_checks/ShippingCosmic", "--roster-staged-unlocks=/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure/artifacts/v1_closure/spectral_feedback/local_media/cosmic_staged_unlocks1021.json", "--roster-fighter=yin", "--roster-fighter=yang", "--source-sha=12faa876cdaa887e5490bb0796fd04e57b53d6c5", "--ordinary-max-nodes=20", "--ordinary-route=kaia-windrow"]}
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+WARNING: REVIEW_ONLY announcer spoken-name unavailable: fighter=yin reason=unknown_fighter
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unavailable (res://scripts/audio/announcer_voice_provider.gd:180)
+         [1] speak_lockin (res://scripts/audio/announcer_voice_provider.gd:82)
+         [2] announce_lock (res://scripts/audio/fighter_announcer.gd:94)
+         [3] _announce_lock (res://scripts/menus/fighter_select_scene.gd:821)
+         [4] _on_next_player_pressed (res://scripts/menus/fighter_select_scene.gd:758)
+         [5] _on_lock_in_pressed (res://scripts/menus/fighter_select_scene.gd:745)
+         [6] _run (res://tests/v1_closure/ShippingRosterPath.gd:70)
+         [7] wait_scene (res://tests/v1_closure/ShippingRosterPath.gd:31)
+         [8] frames (res://tests/v1_closure/ShippingRosterPath.gd:18)
+SHIPPING_PATH_CHECK yin:male
+WARNING: REVIEW_ONLY announcer spoken-name unavailable: fighter=yin reason=unknown_fighter
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unavailable (res://scripts/audio/announcer_voice_provider.gd:180)
+         [1] speak_lockin (res://scripts/audio/announcer_voice_provider.gd:82)
+         [2] announce_lock (res://scripts/audio/fighter_announcer.gd:94)
+         [3] _announce_lock (res://scripts/menus/fighter_select_scene.gd:821)
+         [4] _on_next_player_pressed (res://scripts/menus/fighter_select_scene.gd:758)
+         [5] _on_lock_in_pressed (res://scripts/menus/fighter_select_scene.gd:745)
+         [6] _run (res://tests/v1_closure/ShippingRosterPath.gd:70)
+         [7] wait_scene (res://tests/v1_closure/ShippingRosterPath.gd:31)
+         [8] frames (res://tests/v1_closure/ShippingRosterPath.gd:18)
+SHIPPING_PATH_CHECK yin:female
+WARNING: REVIEW_ONLY announcer spoken-name unavailable: fighter=yang reason=unknown_fighter
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unavailable (res://scripts/audio/announcer_voice_provider.gd:180)
+         [1] speak_lockin (res://scripts/audio/announcer_voice_provider.gd:82)
+         [2] announce_lock (res://scripts/audio/fighter_announcer.gd:94)
+         [3] _announce_lock (res://scripts/menus/fighter_select_scene.gd:821)
+         [4] _on_next_player_pressed (res://scripts/menus/fighter_select_scene.gd:758)
+         [5] _on_lock_in_pressed (res://scripts/menus/fighter_select_scene.gd:745)
+         [6] _run (res://tests/v1_closure/ShippingRosterPath.gd:70)
+         [7] wait_scene (res://tests/v1_closure/ShippingRosterPath.gd:31)
+         [8] frames (res://tests/v1_closure/ShippingRosterPath.gd:18)
+SHIPPING_PATH_CHECK yang:male
+WARNING: REVIEW_ONLY announcer spoken-name unavailable: fighter=yang reason=unknown_fighter
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _warn_unavailable (res://scripts/audio/announcer_voice_provider.gd:180)
+         [1] speak_lockin (res://scripts/audio/announcer_voice_provider.gd:82)
+         [2] announce_lock (res://scripts/audio/fighter_announcer.gd:94)
+         [3] _announce_lock (res://scripts/menus/fighter_select_scene.gd:821)
+         [4] _on_next_player_pressed (res://scripts/menus/fighter_select_scene.gd:758)
+         [5] _on_lock_in_pressed (res://scripts/menus/fighter_select_scene.gd:745)
+         [6] _run (res://tests/v1_closure/ShippingRosterPath.gd:70)
+         [7] wait_scene (res://tests/v1_closure/ShippingRosterPath.gd:31)
+         [8] frames (res://tests/v1_closure/ShippingRosterPath.gd:18)
+SHIPPING_PATH_CHECK yang:female
+SHIPPING_ROSTER PASS rows=4 failures=[]
+WARNING: 4 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 2 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

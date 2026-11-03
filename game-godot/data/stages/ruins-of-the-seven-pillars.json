@@ -1,0 +1,181 @@
+{
+  "id": "ruins-of-the-seven-pillars",
+  "displayName": "Ruins of the Seven Pillars",
+  "index": 16,
+  "layoutType": "seven_pillars_authored",
+  "mainPlatform": {
+    "x": 0,
+    "y": 305,
+    "width": 840,
+    "height": 40
+  },
+  "sidePlatforms": [
+    {
+      "x": -360,
+      "y": 240,
+      "width": 80,
+      "height": 18
+    },
+    {
+      "x": -240,
+      "y": 190,
+      "width": 80,
+      "height": 18
+    },
+    {
+      "x": -120,
+      "y": 145,
+      "width": 80,
+      "height": 18
+    },
+    {
+      "x": 0,
+      "y": 110,
+      "width": 90,
+      "height": 18
+    },
+    {
+      "x": 120,
+      "y": 145,
+      "width": 80,
+      "height": 18
+    },
+    {
+      "x": 240,
+      "y": 190,
+      "width": 80,
+      "height": 18
+    },
+    {
+      "x": 360,
+      "y": 240,
+      "width": 80,
+      "height": 18
+    }
+  ],
+  "spawnPoints": [
+    {
+      "slot": 1,
+      "x": -230,
+      "y": 220
+    },
+    {
+      "slot": 2,
+      "x": 230,
+      "y": 220
+    }
+  ],
+  "blastZones": {
+    "left": -710,
+    "right": 710,
+    "top": -440,
+    "bottom": 475
+  },
+  "ledges": true,
+  "hazardSockets": [
+    {
+      "id": "pillar_dustfall_c",
+      "x": 0,
+      "y": 200,
+      "radius": 18,
+      "authoritative": true,
+      "effect": "soft_push_down",
+      "frames_period": 170,
+      "damage": 0
+    },
+    {
+      "id": "pillar_echo_l",
+      "x": -280,
+      "y": 255,
+      "radius": 12,
+      "authoritative": true,
+      "effect": "soft_push_right",
+      "frames_period": 155,
+      "damage": 0
+    }
+  ],
+  "cameraProfile": {
+    "mode": "platform_fighter",
+    "minZoom": 0.7,
+    "maxZoom": 1.2,
+    "lerp": 0.12,
+    "deadzone": {
+      "x": 80,
+      "y": 60
+    }
+  },
+  "lightingProfile": {
+    "keyColor": "#b8a888",
+    "keyAlpha": 0.12,
+    "ambient": "#100e0a",
+    "rim": "#f4a7c3"
+  },
+  "performanceTier": {
+    "default": "high",
+    "low": {
+      "particles": false,
+      "bands": 1
+    },
+    "medium": {
+      "particles": true,
+      "bands": 2
+    },
+    "high": {
+      "particles": true,
+      "bands": 4
+    }
+  },
+  "a11y": {
+    "highContrastEdges": true,
+    "colorblindMarkers": true
+  },
+  "audioBed": {
+    "event": "bed_ruins_of_the_seven_pillars",
+    "status": "PROCEDURAL_WORKING_NOT_HUMAN_FINAL",
+    "path": "res://assets/audio/procedural/stages/ruins-of-the-seven-pillars/bed.wav"
+  },
+  "previewPlaceholder": "res://assets/stages/procedural/ruins-of-the-seven-pillars.svg",
+  "artStatus": "AUTHORED_LAYOUT_NOT_HUMAN_FINAL",
+  "productionStatus": "PLAYABLE_AUTHORED_LAYOUT_BATCH4",
+  "geometryStatus": "AUTHORED_LAYOUT_WORKING",
+  "HUMAN_ART_APPROVED": false,
+  "yin_yang_presence": {
+    "expression": "seven_pillars_echo",
+    "original": true,
+    "franchise_signage": false
+  },
+  "pink_foreshadow": {
+    "motif": "ruins_petal_moss",
+    "subtle": true
+  },
+  "rulesets": {
+    "competitive": {
+      "hazards": "predictable_authoritative"
+    },
+    "party_chaos": {
+      "hazards": true,
+      "transformations": false
+    },
+    "story": {
+      "narrative_hooks": true
+    }
+  },
+  "hazard_model": "authoritative_snapshot",
+  "rng_policy": "no_divergent_rng",
+  "notes": "Seven pillar ruins ladder \u2014 authored layout working; art not human-final.",
+  "ledgeAnchors": [
+    {
+      "id": "left",
+      "x": -420.0,
+      "y": 305.0,
+      "facing": 1
+    },
+    {
+      "id": "right",
+      "x": 420.0,
+      "y": 305.0,
+      "facing": -1
+    }
+  ],
+  "playable": true
+}

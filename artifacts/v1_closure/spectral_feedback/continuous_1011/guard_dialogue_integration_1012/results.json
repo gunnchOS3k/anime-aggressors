@@ -1,0 +1,61 @@
+[
+  {
+    "suite": "FullCampaign",
+    "source_sha": "7ae4447dcded2d5d1ab3b910a4f96f3465ad50cd",
+    "passed": true,
+    "exit_code": 0,
+    "seconds": 245.39,
+    "reports": [
+      "artifacts/v1_closure/spectral_feedback/continuous_1011/guard_dialogue_integration_1012/FullCampaign/report_full_campaign_runtime_evidence.json"
+    ],
+    "stdout": "artifacts/v1_closure/spectral_feedback/continuous_1011/guard_dialogue_integration_1012/FullCampaign/stdout.log",
+    "scope": "isolated source fixture; no human/device/competitive acceptance",
+    "source_diff_sha256": "03900b884f652808980c843cf11fde472f490f44471de9b4993cf36e7745212d",
+    "source_changes": [
+      "game-godot/tests/v1_closure/RosterContactRange.gd",
+      "tools/v1_closure/validate_continuous_combat.py"
+    ]
+  },
+  {
+    "suite": "ShippingRosterPath",
+    "source_sha": "7ae4447dcded2d5d1ab3b910a4f96f3465ad50cd",
+    "passed": true,
+    "exit_code": 0,
+    "seconds": 99.17,
+    "reports": [],
+    "stdout": "artifacts/v1_closure/spectral_feedback/continuous_1011/guard_dialogue_integration_1012/ShippingRosterPath/stdout.log",
+    "scope": "isolated source fixture; no human/device/competitive acceptance",
+    "source_diff_sha256": "c7dd34d07e6d2ae648b70392b4c4a6e27e104aefe5922a4407ef146cae6bf4ad",
+    "source_changes": [
+      "artifacts/v1_closure/full_campaign_runtime_evidence.json",
+      "artifacts/v1_closure/spectral_feedback/COMBO_INTERACTIONS.json",
+      "artifacts/v1_closure/spectral_feedback/COMBO_PROBE_MATRIX.csv",
+      "artifacts/v1_closure/spectral_feedback/COMBO_PROBE_MATRIX.json",
+      "artifacts/v1_closure/spectral_feedback/combo_probe_index.json",
+      "game-godot/tests/v1_closure/RosterContactRange.gd",
+      "tools/v1_closure/reconcile_roster_increment.py",
+      "tools/v1_closure/validate_continuous_combat.py"
+    ]
+  },
+  {
+    "suite": "CampaignRestart",
+    "source_sha": "7ae4447dcded2d5d1ab3b910a4f96f3465ad50cd",
+    "passed": true,
+    "exit_code": 0,
+    "seconds": 71.1,
+    "reports": [],
+    "stdout": "artifacts/v1_closure/spectral_feedback/continuous_1011/guard_dialogue_integration_1012/CampaignRestart/stdout.log",
+    "scope": "isolated source fixture; no human/device/competitive acceptance",
+    "source_diff_sha256": "c7dd34d07e6d2ae648b70392b4c4a6e27e104aefe5922a4407ef146cae6bf4ad",
+    "source_changes": [
+      "artifacts/v1_closure/full_campaign_runtime_evidence.json",
+      "artifacts/v1_closure/spectral_feedback/COMBO_INTERACTIONS.json",
+      "artifacts/v1_closure/spectral_feedback/COMBO_PROBE_MATRIX.csv",
+      "artifacts/v1_closure/spectral_feedback/COMBO_PROBE_MATRIX.json",
+      "artifacts/v1_closure/spectral_feedback/combo_probe_index.json",
+      "game-godot/tests/v1_closure/RosterContactRange.gd",
+      "tools/v1_closure/reconcile_roster_increment.py",
+      "tools/v1_closure/validate_continuous_combat.py"
+    ]
+  }
+]

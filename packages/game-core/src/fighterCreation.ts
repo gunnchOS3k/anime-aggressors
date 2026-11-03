@@ -1,5 +1,6 @@
 import type { CreatedFighter } from "./createdFighter.js";
-import { getDefaultCreatedFighter } from "./createdFighter.js";
+import { getDefaultCreatedFighter, buildCreatedFighter } from "./createdFighter.js";
+import { getDefaultFighterProfile } from "./defaultFighters.js";
 import type { FighterSize } from "./sizeClasses.js";
 import { getSizeStats, scaleBySize } from "./sizeClasses.js";
 import type { FighterColor, ElementEffect } from "./elements.js";
@@ -21,7 +22,16 @@ export function getFighterProfile(
   config: GameConfig,
   playerId: number,
 ): CreatedFighter {
-  return config.fighterProfiles?.[playerId] ?? getDefaultCreatedFighter(playerId);
+  const explicit = config.fighterProfiles?.[playerId];
+  if (explicit) return explicit;
+  const selectedId = config.characterIds[playerId];
+  const canonical = getDefaultFighterProfile(selectedId ?? "");
+  // The selected canonical identity, not its seat index, owns the profile.
+  // Preserve explicit creations and the existing legacy/test fallback.
+  if (canonical && canonical.id === selectedId) {
+    return buildCreatedFighter({id: canonical.id, name: canonical.name, size: canonical.size, color: canonical.color});
+  }
+  return getDefaultCreatedFighter(playerId);
 }
 
 export function applyCreatedFighterToPlayer(

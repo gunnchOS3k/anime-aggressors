@@ -1,0 +1,213 @@
+{
+  "schema": "anime_aggressors_requirements_to_evidence_matrix/v1",
+  "product": "Anime Aggressors",
+  "branch": "cursor/continuation-isolated-combat-20261027",
+  "generated_unix": 1793300193,
+  "product_verification_standard": {
+    "shared_pvs_available": false,
+    "fallback": "artifacts/cursor_continuation/rtm/LOCAL_PRODUCT_VERIFICATION_SCHEMA.json",
+    "note": "thursday-open-lab-hub had no shared PVS at generation time"
+  },
+  "gates": {
+    "CURSOR_COMPLETE": false,
+    "HUMAN_ART": false,
+    "HUMAN_ART_APPROVED": false,
+    "RC2_READY": false,
+    "V1_0_0_RELEASE_AUTHORIZED": false,
+    "SHIPPING_ROLLBACK_ENABLED": false
+  },
+  "status_summary": {
+    "EVIDENCED": 5,
+    "PARTIAL": 5,
+    "IN_PROGRESS": 1
+  },
+  "requirements": [
+    {
+      "id": "AA-RTM-001",
+      "requirement": "10 playable fighters on roster (Ember, Juno, Kaia, Nix, Orion, Rook, Vesper, Yin, Yang, Rosamere)",
+      "category": "roster",
+      "status": "EVIDENCED",
+      "evidence": [
+        "game-godot/data/fighters/roster.json",
+        "game-godot/data/fighters/ember-vale.json",
+        "game-godot/data/fighters/rosamere.json",
+        "artifacts/cursor_continuation/trials_native_review/NATIVE_PLAYABLE_REVIEW_PACKAGE.json#preserved.fighters"
+      ],
+      "honesty": "Roster data + Trials preservation claim; HUMAN_ART false for final character art",
+      "gaps": [
+        "HUMAN_ART / Codex final meshes not claimed"
+      ]
+    },
+    {
+      "id": "AA-RTM-002",
+      "requirement": "Story campaign journey playable with save/recovery authority",
+      "category": "story",
+      "status": "PARTIAL",
+      "evidence": [
+        "docs/story/",
+        "game-godot/tests/integration/StorySaveRecovery.gd",
+        "game-godot/tests/integration/ResumedStoryEncounter.gd",
+        "game-godot/tests/v1_closure/StorySceneAuthority.gd"
+      ],
+      "honesty": "Story authority tests exist; commercial Story complete / V1 not claimed",
+      "gaps": [
+        "Owner Story playthrough sign-off",
+        "V1_0_0_RELEASE_AUTHORIZED=false"
+      ]
+    },
+    {
+      "id": "AA-RTM-003",
+      "requirement": "Rosamere exactly 3 forms (Familiar Rose, First Bloom, Everlasting Origin); COMPETITIVE_SELF_LIMITED not a fourth form",
+      "category": "rosamere",
+      "status": "EVIDENCED",
+      "evidence": [
+        "artifacts/cursor_continuation/ROSAMERE_THREE_FORM_CANON.json",
+        "artifacts/cursor_continuation/ROSAMERE_THREE_FORM_CANON_EVIDENCE.json",
+        "game-godot/scripts/combat/rosamere_form_selection.gd",
+        "game-godot/scripts/trials/rosamere_trials_eligibility.gd",
+        "game-godot/tests/integration/TrialsRosamereEligibility.gd"
+      ],
+      "honesty": "Three-form canon + Trials eligibility gated; Everlasting needs mythic consent / Story",
+      "gaps": [
+        "HUMAN_ART for form presentation"
+      ]
+    },
+    {
+      "id": "AA-RTM-004",
+      "requirement": "Six Trials of Convergence modes with real shared combat (not HUD-only scaffolds)",
+      "category": "trials",
+      "status": "PARTIAL",
+      "evidence": [
+        "game-godot/scripts/trials/",
+        "scripts/run-trials-suite.sh",
+        ".github/workflows/trials-of-convergence.yml",
+        "artifacts/cursor_continuation/TRIALS_OF_CONVERGENCE_DEEPEN_EVIDENCE.json",
+        "artifacts/cursor_continuation/trials_native_review/NATIVE_PLAYABLE_REVIEW_PACKAGE.json"
+      ],
+      "honesty": "Native headless suite + live shared combat bridge; Web CI \u2260 native Trials; PLAYABLE_NATIVE_REVIEW / PARTIAL per mode",
+      "gaps": [
+        "Device playtest",
+        "HUMAN_ART territory/dummy meshes",
+        "CURSOR_COMPLETE not claimed"
+      ]
+    },
+    {
+      "id": "AA-RTM-005",
+      "requirement": "Prismatic / Puppet / Mythic (Unbound) eligibility \u2014 controllable Trials-only actors; never contaminate Versus/Story/ranked",
+      "category": "mythic_eligibility",
+      "status": "EVIDENCED",
+      "evidence": [
+        "game-godot/scripts/trials/unbound/unbound_ruleset.gd",
+        "game-godot/scripts/trials/unbound/colossus_rig.gd",
+        "game-godot/tests/integration/UnboundRulesetContract.gd",
+        "game-godot/tests/integration/TrialsSharedCombatBridge.gd"
+      ],
+      "honesty": "feeds_ranked_mmr=false; avatar KO \u2260 true Rosamere defeat; puppets not Yin/Yang without approval",
+      "gaps": [
+        "Final colossus/puppet art",
+        "Owner mythic consent UX review"
+      ]
+    },
+    {
+      "id": "AA-RTM-006",
+      "requirement": "Frame / hitbox integrity \u2014 HitResolver owns damage_ratio; Trials scale knockback only once; colossus scale-aware collision",
+      "category": "combat_integrity",
+      "status": "PARTIAL",
+      "evidence": [
+        "game-godot/scripts/combat/hit_resolver.gd",
+        "game-godot/scripts/trials/shared_combat_bridge.gd",
+        "game-godot/tests/integration/TrialsHitResolverDamageRatio.gd",
+        "game-godot/scripts/trials/unbound/colossus_rig.gd"
+      ],
+      "honesty": "Contract tests for 10@1.35\u219213.5; colossus collision is scaffold not final hurtbox art",
+      "gaps": [
+        "Full roster frame-data owner audit",
+        "HUMAN_ART hitbox review"
+      ]
+    },
+    {
+      "id": "AA-RTM-007",
+      "requirement": "Determinism / rollback honesty \u2014 seeded Trials sims; shipping rollback disabled",
+      "category": "netcode_determinism",
+      "status": "PARTIAL",
+      "evidence": [
+        "artifacts/cursor_continuation/PINK_BLOOM_SYSTEMS_DETERMINISM.json",
+        "artifacts/cursor_continuation/FLAT_COMBAT_REPLAY.json",
+        "artifacts/cursor_continuation/DELAYED_INPUT_SNAPSHOT_RESIM.json",
+        "artifacts/cursor_continuation/BODY_VERTICAL_REPLAY.json",
+        "docs/ROLLBACK_DESIGN.md",
+        "game-godot/tests/integration/PrismWeaveDeterminism.gd",
+        "game-godot/tests/integration/ResonanceTrialDeterminism.gd"
+      ],
+      "honesty": "SHIPPING_ROLLBACK_ENABLED=false everywhere in Trials evidence; resim evidence \u2260 commercial rollback ship",
+      "gaps": [
+        "Production rollback netcode not enabled",
+        "CURSOR_COMPLETE blocked on shipping rollback remaining false by design"
+      ]
+    },
+    {
+      "id": "AA-RTM-008",
+      "requirement": "Real PartyLink seat counts \u2014 connected humans only; no invented seats; BattleScene 2-slot honesty",
+      "category": "partylink_seats",
+      "status": "EVIDENCED",
+      "evidence": [
+        "game-godot/scripts/trials/partylink_seat_enforcement.gd",
+        "game-godot/tests/integration/TrialsPartyLinkSeats.gd",
+        "game-godot/scripts/net/partylink_variant_allocator.gd"
+      ],
+      "honesty": "live_max honest (e.g. Prism 4); catalog maxima aspirational; Flagline logical 4 with CPU fill beyond 2 battle slots",
+      "gaps": [
+        "True 4-body BattleScene not shipped"
+      ]
+    },
+    {
+      "id": "AA-RTM-009",
+      "requirement": "Accessibility \u2014 shared input grammar; Prism markers beyond color; Perfect Guard a11y; colossus camera reduce-motion",
+      "category": "a11y",
+      "status": "PARTIAL",
+      "evidence": [
+        "docs/DESIGN_ACCESSIBILITY_AND_DEPTH.md",
+        "game-godot/scripts/trials/prism/prism_weave_sim.gd",
+        "game-godot/tests/v1_closure/PerfectGuardAccessibility.gd",
+        "game-godot/scripts/trials/unbound/colossus_rig.gd"
+      ],
+      "honesty": "Markers / reduce-motion flags present; not a full WCAG product audit",
+      "gaps": [
+        "Owner a11y playtest matrix",
+        "Screen reader / remapping device pass"
+      ]
+    },
+    {
+      "id": "AA-RTM-010",
+      "requirement": "BodyVariant CI preload fix preserved (clean-env PartyLink seats)",
+      "category": "ci_integrity",
+      "status": "EVIDENCED",
+      "evidence": [
+        ".github/workflows/trials-of-convergence.yml",
+        "game-godot/scripts/data/body_variant.gd",
+        "game-godot/scripts/net/partylink_variant_allocator.gd"
+      ],
+      "honesty": "CI clean-env step must not emit BodyVariant undeclared",
+      "gaps": []
+    },
+    {
+      "id": "AA-RTM-011",
+      "requirement": "Cursor-Complete gate for Anime Aggressors",
+      "category": "cursor_complete",
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "artifacts/cursor_continuation/rtm/ANIME_REQUIREMENTS_TO_EVIDENCE_MATRIX.json",
+        "artifacts/owner_playable_review/OWNER_PLAYABLE_REVIEW_PACKAGE.json"
+      ],
+      "honesty": "CURSOR_COMPLETE is NOT claimed. HUMAN_ART/RC2/V1/SHIPPING_ROLLBACK remain false.",
+      "gaps": [
+        "HUMAN_ART Codex pass",
+        "Device playtest of all six Trials live paths",
+        "Story owner sign-off",
+        "True multi-body Flagline beyond logical CPU fill",
+        "A11y owner matrix",
+        "RC2/V1 still forbidden"
+      ]
+    }
+  ]
+}

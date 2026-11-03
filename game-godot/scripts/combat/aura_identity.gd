@@ -129,7 +129,13 @@ const PROFILES := {
 }
 
 
+const COSMIC_PROFILES := {
+	"yin": {"tag":"cosmic_reduction", "charge_rate_mult":.86, "on_hit_aura_gain":1.2, "air_accel":1400.0, "ground_traction":1800.0, "charge_move_mult":.36},
+	"yang": {"tag":"cosmic_definition", "charge_rate_mult":1.03, "on_hit_aura_gain":1.6, "air_accel":1400.0, "ground_traction":1800.0, "charge_move_mult":.44},
+}
+
 static func profile_for(fighter_id: String, combat_tag: String = "") -> Dictionary:
+	if COSMIC_PROFILES.has(fighter_id): return COSMIC_PROFILES[fighter_id].duplicate(true)
 	if PROFILES.has(fighter_id):
 		return PROFILES[fighter_id].duplicate(true)
 	for id in PROFILES:
@@ -163,6 +169,11 @@ static func apply_to_scaled_move(move: Dictionary, fighter_id: String, aura_amou
 	var scaled := move.duplicate(true)
 	var profile := profile_for(fighter_id, combat_tag)
 	var level: int = int(_AuraScaler.aura_level(aura_amount))
+	if COSMIC_PROFILES.has(fighter_id):
+		var cosmic_element: Dictionary = scaled.get("element_effect", {}).duplicate(true)
+		cosmic_element["type"] = "void" if fighter_id == "yin" else "radiance"
+		cosmic_element["effect"] = "reduction" if fighter_id == "yin" else "definition"
+		scaled["element_effect"] = cosmic_element
 
 	var extend_at: int = int(profile.get("hitbox_extend_at_level", -1))
 	if extend_at >= 0 and level >= extend_at:
@@ -277,4 +288,4 @@ static func has_passive_armor(fighter_id: String, aura_amount: float, combat_tag
 
 
 static func all_fighter_ids() -> Array:
-	return PROFILES.keys()
+	return PROFILES.keys() + COSMIC_PROFILES.keys()

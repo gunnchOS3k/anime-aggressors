@@ -1,0 +1,348 @@
+{
+  "observed_at": "2026-10-21T13:48:23.480721+00:00",
+  "runtime_source": "125c18b07baea90d19efad63cc23e9de5f1aa998",
+  "entry_source": "292fd24d3ba043cfa57915d31f206827ae22db8f",
+  "source_hashes": {
+    "art_source/animation/fighters/juno-spark/directed_performance/female_transition_evaluated_actions.json": "1163d81e05d10317f2e9001f2c4160b70a30b49ae1ddfeb20fb0f3209f5b7be8",
+    "art_source/animation/fighters/juno-spark/directed_performance/female_transition_runtime_export.json": "780715ca3906c8a94aea2517f872bd01f01d130416907178482d18fcd13325c6",
+    "art_source/animation/fighters/juno-spark/directed_performance/female_transition_source_actions.json": "5573cab04c8717258a0515849418643cd5adf9239cee5c78b58173c09b9d70b5",
+    "art_source/animation/fighters/juno-spark/directed_performance/male_transition_evaluated_actions.json": "1163d81e05d10317f2e9001f2c4160b70a30b49ae1ddfeb20fb0f3209f5b7be8",
+    "art_source/animation/fighters/juno-spark/directed_performance/male_transition_runtime_export.json": "780715ca3906c8a94aea2517f872bd01f01d130416907178482d18fcd13325c6",
+    "art_source/animation/fighters/juno-spark/directed_performance/male_transition_source_actions.json": "41e5a9e1e412518c86d2ab315b09b8835b0ac4bc0928a5a1a18e7a365d4b5690",
+    "art_source/animation/fighters/juno-spark/directed_performance/transitions_v1.json": "615f5b501ec6fec748e367ef831f37649c3f2de46c50df87e04d8a289ace1f85",
+    "art_source/animation/fighters/kaia-windrow/directed_performance/female_transition_evaluated_actions.json": "48c9ca3a790d2bb174f82538fcac6648a08bb5fd44a63e1bd4b760827d60ed22",
+    "art_source/animation/fighters/kaia-windrow/directed_performance/female_transition_runtime_export.json": "a4f4b631c9d08771d96f2209068628d191695a6401ab57b1b1de9c39b366a2d5",
+    "art_source/animation/fighters/kaia-windrow/directed_performance/female_transition_source_actions.json": "30088e570c3efba7b9e70b59004913559daf35cf60ba6fbdd5a432ba14c6ae91",
+    "art_source/animation/fighters/kaia-windrow/directed_performance/male_transition_evaluated_actions.json": "48c9ca3a790d2bb174f82538fcac6648a08bb5fd44a63e1bd4b760827d60ed22",
+    "art_source/animation/fighters/kaia-windrow/directed_performance/male_transition_runtime_export.json": "a4f4b631c9d08771d96f2209068628d191695a6401ab57b1b1de9c39b366a2d5",
+    "art_source/animation/fighters/kaia-windrow/directed_performance/male_transition_source_actions.json": "5b45970a7f628275358890d899a7259f34a6fdcaa49a7a2a71b2054c5d782c1a",
+    "art_source/animation/fighters/kaia-windrow/directed_performance/transitions_v1.json": "29f62136dd1f7e1616380d0b14ecd0d6bc07c70909fb33bdc400d686b824fc1b",
+    "art_source/collectible_v1/juno-spark/female/candidate.blend": "da0591855254ecfaeea767b486b2ee7284527bec28605247b1eebba0993261a9",
+    "art_source/collectible_v1/juno-spark/male/candidate.blend": "976f0911319e4c5826b1e4bde859575a4f8178d660794072d58d0a079128a602",
+    "art_source/collectible_v1/kaia-windrow/female/candidate.blend": "16728ed5e759050d8a5801b327def48cbd6487b255242175ad6f75172de16eb3",
+    "art_source/collectible_v1/kaia-windrow/male/candidate.blend": "03ee413a4057e6c906129a84db1faca8ac7336c99001732e920f7af1c71a1bba",
+    "game-godot/data/animation/combat_performance/juno-spark_female.json": "b5e8477602f0e625a1dcc90bda4523ff5371e946299a510782a9a5b413ffc30b",
+    "game-godot/data/animation/combat_performance/juno-spark_male.json": "12d8b4c7e0e53331b369c97d6bb4cf4832910f8fc27d48d86591ad782549570b",
+    "game-godot/data/animation/combat_performance/kaia-windrow_female.json": "31e818bf0e52341dfd187e061ed74d40abf1df00f79eabe76127e0db9482135b",
+    "game-godot/data/animation/combat_performance/kaia-windrow_male.json": "43ed69fb1c731297bd08349095f9054e2533463c22675cbbf6a9a1515dfa1fa0",
+    "game-godot/scripts/visual/authored_locomotion_transition.gd": "8ddb47f9908cad4d88f69cce3b1caaeb934bc8a7227a31652d1d6112f5218cd6",
+    "game-godot/scripts/visual/fighter_animation_controller.gd": "94d39e18c7498d6c3ff618dff4e6763dd93dd688d08b803380589dbaec788101",
+    "game-godot/tests/v1_closure/AuthoredTransitions.gd": "21377f44f10b5e987f729d846b5d77c9b806fcdba45609c8be5f5cc6d11a9050",
+    "game-godot/tests/v1_closure/DirectedSourceAssets.gd": "b9f97c87e2dbdd4e2046f8eed570771c3fd566e6300cc2f54c4dc89e5075b0de",
+    "game-godot/tests/v1_closure/TransitionCounterplay.gd": "df4ebbe9d93f58fb9f03b7735a5124d947cfdbfe6810c07f303e3f37df98a3fd",
+    "tools/authored_animation/analyze_transitions.py": "5184bdc580668e8cfa6755ab86ca9c4c645fd5404088acc5e5dced4c66d10901",
+    "tools/authored_animation/bake_authored_transitions.py": "e31480d17103a2c83f012506e99e11d0e274ddcdb87fb8352280c53f19932c5a",
+    "tools/authored_animation/blender/aa_directed_performance.py": "cec82f0b8f208037804313c12a0a444310a2641525570d2e6cb4df9046fa18e5"
+  },
+  "assets": [
+    {
+      "fighter": "kaia-windrow",
+      "body": "male",
+      "source": "art_source/collectible_v1/kaia-windrow/male/candidate.blend",
+      "new_actions": [
+        "ANI06_WIP_transition_start",
+        "ANI06_WIP_transition_start_left",
+        "ANI06_WIP_transition_accelerate",
+        "ANI06_WIP_transition_accelerate_left",
+        "ANI06_WIP_transition_stop",
+        "ANI06_WIP_transition_stop_left",
+        "ANI06_WIP_transition_reverse",
+        "ANI06_WIP_transition_reverse_left",
+        "ANI06_WIP_transition_pivot",
+        "ANI06_WIP_transition_pivot_left",
+        "ANI06_WIP_transition_dash",
+        "ANI06_WIP_transition_dash_left",
+        "ANI06_WIP_transition_move_light",
+        "ANI06_WIP_transition_move_light_left",
+        "ANI06_WIP_transition_move_heavy",
+        "ANI06_WIP_transition_move_heavy_left",
+        "ANI06_WIP_transition_guard",
+        "ANI06_WIP_transition_guard_left"
+      ],
+      "source_digest": "afc4e876e33229e0066888ea6416c12e9acf226ec3c50dcaff8a034436e9f5e9",
+      "original_actions_preserved": true,
+      "ANI05_actions_preserved": true,
+      "runtime_export": {
+        "PASS": true,
+        "max_matrix_component_error": 3.7550926208496094e-06,
+        "frames_evaluated": 1208,
+        "scope": "saved Blender evaluated pose versus rig-specific runtime keys, not visual quality"
+      }
+    },
+    {
+      "fighter": "kaia-windrow",
+      "body": "female",
+      "source": "art_source/collectible_v1/kaia-windrow/female/candidate.blend",
+      "new_actions": [
+        "ANI06_WIP_transition_start",
+        "ANI06_WIP_transition_start_left",
+        "ANI06_WIP_transition_accelerate",
+        "ANI06_WIP_transition_accelerate_left",
+        "ANI06_WIP_transition_stop",
+        "ANI06_WIP_transition_stop_left",
+        "ANI06_WIP_transition_reverse",
+        "ANI06_WIP_transition_reverse_left",
+        "ANI06_WIP_transition_pivot",
+        "ANI06_WIP_transition_pivot_left",
+        "ANI06_WIP_transition_dash",
+        "ANI06_WIP_transition_dash_left",
+        "ANI06_WIP_transition_move_light",
+        "ANI06_WIP_transition_move_light_left",
+        "ANI06_WIP_transition_move_heavy",
+        "ANI06_WIP_transition_move_heavy_left",
+        "ANI06_WIP_transition_guard",
+        "ANI06_WIP_transition_guard_left"
+      ],
+      "source_digest": "286262964f4ff12cbb32715e0dafd71ae61c192609983e80251de6251416dacd",
+      "original_actions_preserved": true,
+      "ANI05_actions_preserved": true,
+      "runtime_export": {
+        "PASS": true,
+        "max_matrix_component_error": 3.7550926208496094e-06,
+        "frames_evaluated": 1208,
+        "scope": "saved Blender evaluated pose versus rig-specific runtime keys, not visual quality"
+      }
+    },
+    {
+      "fighter": "juno-spark",
+      "body": "male",
+      "source": "art_source/collectible_v1/juno-spark/male/candidate.blend",
+      "new_actions": [
+        "ANI06_WIP_transition_start",
+        "ANI06_WIP_transition_start_left",
+        "ANI06_WIP_transition_accelerate",
+        "ANI06_WIP_transition_accelerate_left",
+        "ANI06_WIP_transition_stop",
+        "ANI06_WIP_transition_stop_left",
+        "ANI06_WIP_transition_reverse",
+        "ANI06_WIP_transition_reverse_left",
+        "ANI06_WIP_transition_pivot",
+        "ANI06_WIP_transition_pivot_left",
+        "ANI06_WIP_transition_dash",
+        "ANI06_WIP_transition_dash_left",
+        "ANI06_WIP_transition_move_light",
+        "ANI06_WIP_transition_move_light_left",
+        "ANI06_WIP_transition_move_heavy",
+        "ANI06_WIP_transition_move_heavy_left",
+        "ANI06_WIP_transition_guard",
+        "ANI06_WIP_transition_guard_left"
+      ],
+      "source_digest": "1570a557a539acfd6106b3a3441db70a49e7237272cf4f780251acc75dbb63bd",
+      "original_actions_preserved": true,
+      "ANI05_actions_preserved": true,
+      "runtime_export": {
+        "PASS": true,
+        "max_matrix_component_error": 3.7550926208496094e-06,
+        "frames_evaluated": 1048,
+        "scope": "saved Blender evaluated pose versus rig-specific runtime keys, not visual quality"
+      }
+    },
+    {
+      "fighter": "juno-spark",
+      "body": "female",
+      "source": "art_source/collectible_v1/juno-spark/female/candidate.blend",
+      "new_actions": [
+        "ANI06_WIP_transition_start",
+        "ANI06_WIP_transition_start_left",
+        "ANI06_WIP_transition_accelerate",
+        "ANI06_WIP_transition_accelerate_left",
+        "ANI06_WIP_transition_stop",
+        "ANI06_WIP_transition_stop_left",
+        "ANI06_WIP_transition_reverse",
+        "ANI06_WIP_transition_reverse_left",
+        "ANI06_WIP_transition_pivot",
+        "ANI06_WIP_transition_pivot_left",
+        "ANI06_WIP_transition_dash",
+        "ANI06_WIP_transition_dash_left",
+        "ANI06_WIP_transition_move_light",
+        "ANI06_WIP_transition_move_light_left",
+        "ANI06_WIP_transition_move_heavy",
+        "ANI06_WIP_transition_move_heavy_left",
+        "ANI06_WIP_transition_guard",
+        "ANI06_WIP_transition_guard_left"
+      ],
+      "source_digest": "02db9987fbf523c234e0a0e397c70a0b5fa7879df1903fbe62f0328d4244fe4a",
+      "original_actions_preserved": true,
+      "ANI05_actions_preserved": true,
+      "runtime_export": {
+        "PASS": true,
+        "max_matrix_component_error": 3.7550926208496094e-06,
+        "frames_evaluated": 1048,
+        "scope": "saved Blender evaluated pose versus rig-specific runtime keys, not visual quality"
+      }
+    }
+  ],
+  "total_source_evaluated_frames": 4512,
+  "new_actions_per_rig": 18,
+  "original_directed_actions_per_rig": 32,
+  "new_actions_human_approved": false,
+  "runtime_composition": "source pelvis/torso/arm deltas plus unchanged distance gait and existing support solver; original ANI05 full body clips preserved",
+  "suites": [
+    {
+      "suite": "DirectedSourceAssets",
+      "exit_code": 0,
+      "script_errors": false,
+      "seconds": 6.198
+    },
+    {
+      "suite": "AuthoredTransitions",
+      "exit_code": 0,
+      "script_errors": false,
+      "seconds": 10.495
+    },
+    {
+      "suite": "RosterFootwork",
+      "exit_code": 0,
+      "script_errors": false,
+      "seconds": 9.364
+    },
+    {
+      "suite": "MeleeGuardContinuity",
+      "exit_code": 0,
+      "script_errors": false,
+      "seconds": 5.18
+    },
+    {
+      "suite": "GroundedRecovery",
+      "exit_code": 0,
+      "script_errors": false,
+      "seconds": 6.715
+    },
+    {
+      "suite": "StrikePostureConstraints",
+      "exit_code": 0,
+      "script_errors": false,
+      "seconds": 6.663
+    },
+    {
+      "suite": "SupportKneePlane",
+      "exit_code": 0,
+      "script_errors": false,
+      "seconds": 6.407
+    },
+    {
+      "suite": "RosterLanding",
+      "exit_code": 0,
+      "script_errors": false,
+      "seconds": 16.243
+    },
+    {
+      "suite": "ContactReactionClock",
+      "exit_code": 0,
+      "script_errors": false,
+      "seconds": 10.042
+    },
+    {
+      "suite": "CombatChoreography",
+      "exit_code": 0,
+      "script_errors": false,
+      "seconds": 6.656
+    },
+    {
+      "suite": "FighterBodySpacing",
+      "exit_code": 0,
+      "script_errors": false,
+      "seconds": 30.053
+    },
+    {
+      "suite": "ThrowOwnership",
+      "exit_code": 0,
+      "script_errors": false,
+      "seconds": 25.015
+    },
+    {
+      "suite": "ChargeContinuity",
+      "exit_code": 0,
+      "script_errors": false,
+      "seconds": 9.641
+    },
+    {
+      "suite": "ProjectileFighterImpact",
+      "exit_code": 0,
+      "script_errors": false,
+      "seconds": 7.167
+    },
+    {
+      "suite": "CosmicKits",
+      "exit_code": 0,
+      "script_errors": false,
+      "seconds": 6.266
+    },
+    {
+      "suite": "AuthoredCancel",
+      "exit_code": 0,
+      "script_errors": false,
+      "seconds": 0.929
+    },
+    {
+      "suite": "TerminalBodyActing",
+      "exit_code": 0,
+      "script_errors": false,
+      "seconds": 5.012
+    }
+  ],
+  "owner_launches": [
+    {
+      "body": "female",
+      "script_errors": false,
+      "PASS": true,
+      "evidence": "owner_female.console.log"
+    },
+    {
+      "body": "male",
+      "script_errors": false,
+      "PASS": true,
+      "evidence": "owner_male.console.log"
+    }
+  ],
+  "public_transition_cases": 72,
+  "matched_root_position_velocity_unchanged": true,
+  "footwork_same_ANI05_recipe": [
+    {
+      "fighter": "kaia-windrow",
+      "cases": 12,
+      "mean_slip_range_px": [
+        0.00104156137431825,
+        0.00792548045351663
+      ],
+      "maximum_slip_px_per_frame": 0.0198032408952713,
+      "prior_max_px_per_frame": 1.71305
+    },
+    {
+      "fighter": "juno-spark",
+      "cases": 12,
+      "mean_slip_range_px": [
+        0.00195390266162576,
+        0.0104511487152195
+      ],
+      "maximum_slip_px_per_frame": 0.0458456091582775,
+      "prior_max_px_per_frame": 1.24848
+    }
+  ],
+  "category_measurements": "COMPARISON.json",
+  "counterplay": "COUNTERPLAY_ANALYSIS.json",
+  "attempt_ledger": "ATTEMPT_LEDGER.json",
+  "protected_authority": "PRESERVED_AUTHORITY.json",
+  "performance_scope": "headless fixed60Hz samples only; no native FPS/audio or physical device acceptance",
+  "VISUAL_VERIFICATION_PENDING": true,
+  "gates": {
+    "VISUAL_ACCEPTANCE": false,
+    "HUMAN_GAMEPLAY_PASS": false,
+    "GAME_FEEL_HUMAN_PASS": false,
+    "ANIMATION_TASTE_HUMAN_PASS": false,
+    "VFX_TASTE_HUMAN_PASS": false,
+    "SFX_MIX_HUMAN_PASS": false,
+    "BALANCE_HUMAN_PASS": false,
+    "V1_ANIME_HUMAN_PASS": false,
+    "V1_RELEASE_AUTHORIZED": false,
+    "FINAL_RELEASE_AUTHORIZED": false
+  },
+  "remaining_visual_defects": [
+    "Kaia stop/replant transient 1.4765px in broader probe",
+    "movement-to-attack stance handoffs and facing flip silhouettes",
+    "35-38px original boot/floor projection mismatch",
+    "12.5-17.6px outer-strike gaps",
+    "Head-bound hair without independent controls/weights"
+  ],
+  "warnings": "Existing resource-at-exit warnings retained; no script errors in final suites; not leak-free certification."
+}

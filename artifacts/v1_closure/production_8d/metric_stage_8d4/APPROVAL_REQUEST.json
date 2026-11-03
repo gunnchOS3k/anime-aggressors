@@ -1,0 +1,36 @@
+{
+  "status": "PUBLIC_UPLOAD_DECLINED_PRIVATE_PRODUCTION_AUTHORIZED_SETUP_REQUIRED",
+  "producer_sha": "821045e2417ba5edf4ef37a71b2f3644cd3e7fcf",
+  "remote_branch": "release/anime-v1-dialogue-and-elemental-performance",
+  "question_tool_call": "Replacement request_user_input_async question in this conversation; supersedes de32787d request",
+  "required_by": "Owner 8D-4 Section11, plus subsequent calibration reply requirement10",
+  "job_description": "PREPARED_JOB.json",
+  "preconditions": [
+    "Direct explicit approval for these exact new public artifact classes",
+    "Remote branch remains exact producer_sha",
+    "No active manual production job on same workflow/ref",
+    "Input run39910149332 still SUCCESS with expected source sha"
+  ],
+  "after_success": "python3 tools/authored_animation/recover_metric_stage_8d4.py --run ACTUAL_RUN_ID --source-sha 821045e2417ba5edf4ef37a71b2f3644cd3e7fcf",
+  "on_failure": "Recover with --allow-failed; do not mark source/native/contact passed",
+  "source_art_generated": false,
+  "remote_job_started": false,
+  "RUNTIME_PAIRED_CONTACT_VERIFIED": false,
+  "human_approved": false,
+  "not_authorized_to_dispatch": true,
+  "superseded_producer_sha": "de32787daf982c4ffb914313e18a7e14fd0c5d36",
+  "public_dispatch_prohibited": true,
+  "historical_unauthorized_dispatch_command": [
+    "gh",
+    "workflow",
+    "run",
+    "authored-animation-production.yml",
+    "--repo",
+    "gunnchOS3k/anime-aggressors",
+    "--ref",
+    "release/anime-v1-dialogue-and-elemental-performance",
+    "-f",
+    "metric_stage_8d4=true"
+  ],
+  "next_action": "Do not request public upload again. Obtain only the missing private-environment setup, source-READ credential and no-paid-spending clearance; see tools/authored_animation/private/README.md."
+}

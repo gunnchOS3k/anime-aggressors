@@ -1,0 +1,17 @@
+{
+  "parent_sha": "689e27c5eefc5da2892c14122c4962ea67aa74d0",
+  "baseline": "continuous_1011/projectile_ownership_ground1012/projectile_ownership.json",
+  "corrected": "continuous_1011/projectile_ownership_fixed1012/projectile_ownership.json",
+  "baseline_failures": 54,
+  "configurations": 18,
+  "before_contacts": 36,
+  "after_contacts": 18,
+  "phantom_contacts_before": 18,
+  "phantom_contacts_after": 0,
+  "same_damage_frame_data_geometry": true,
+  "scope": "Public cast after heavy whiff against reconfigured idle target; ownership regression, no active-CPU combo or KO acceptance. Invalid first fixture and second fixture with two incomplete heavy setups retained separately.",
+  "root_cause": "Recovery allows a new command before the previous MoveRunner ends; start_move did not retire its melee hitbox. Projectile active-phase polling reused that shape and cast damage before the projectile release.",
+  "fix": "Retire melee shape at every move start; prohibit fighter overlap polling/resolution for projectile moves; record emitting activation and projectile IDs.",
+  "source_diff_sha256": "e3a42f271c2d3de305c784bed33ec586fb2d799931e50c9f1ddc223aedb911bf",
+  "human_gates_false": true
+}

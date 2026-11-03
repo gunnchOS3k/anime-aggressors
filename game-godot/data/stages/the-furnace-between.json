@@ -1,0 +1,156 @@
+{
+  "id": "the-furnace-between",
+  "displayName": "The Furnace Between",
+  "index": 30,
+  "layoutType": "furnace_corridor",
+  "mainPlatform": {
+    "x": 0,
+    "y": 295,
+    "width": 860,
+    "height": 44
+  },
+  "sidePlatforms": [
+    {
+      "x": -280,
+      "y": 190,
+      "width": 150,
+      "height": 24
+    },
+    {
+      "x": 280,
+      "y": 190,
+      "width": 150,
+      "height": 24
+    },
+    {
+      "x": 0,
+      "y": 100,
+      "width": 200,
+      "height": 24
+    }
+  ],
+  "spawnPoints": [
+    {
+      "slot": 1,
+      "x": -230,
+      "y": 215
+    },
+    {
+      "slot": 2,
+      "x": 230,
+      "y": 215
+    }
+  ],
+  "blastZones": {
+    "left": -660,
+    "right": 660,
+    "top": -415,
+    "bottom": 455
+  },
+  "ledges": true,
+  "hazardSockets": [
+    {
+      "id": "heat_vent_l",
+      "x": -180,
+      "y": 260,
+      "radius": 20,
+      "authoritative": true,
+      "effect": "damage_tick",
+      "damage": 0.4,
+      "frames_period": 60
+    },
+    {
+      "id": "heat_vent_r",
+      "x": 180,
+      "y": 260,
+      "radius": 20,
+      "authoritative": true,
+      "effect": "damage_tick",
+      "damage": 0.4,
+      "frames_period": 60
+    }
+  ],
+  "cameraProfile": {
+    "mode": "platform_fighter",
+    "minZoom": 0.7,
+    "maxZoom": 1.2,
+    "lerp": 0.12,
+    "deadzone": {
+      "x": 80,
+      "y": 60
+    }
+  },
+  "lightingProfile": {
+    "keyColor": "#ff6a3a",
+    "keyAlpha": 0.16,
+    "ambient": "#180808",
+    "rim": "#f4a7c3"
+  },
+  "performanceTier": {
+    "default": "high",
+    "low": {
+      "particles": false,
+      "bands": 1
+    },
+    "medium": {
+      "particles": true,
+      "bands": 2
+    },
+    "high": {
+      "particles": true,
+      "bands": 4
+    }
+  },
+  "a11y": {
+    "highContrastEdges": true,
+    "colorblindMarkers": true
+  },
+  "audioBed": {
+    "event": "bed_the_furnace_between",
+    "status": "PROCEDURAL_WORKING_NOT_HUMAN_FINAL",
+    "path": "res://assets/audio/procedural/stages/the-furnace-between/bed.wav"
+  },
+  "previewPlaceholder": "res://assets/stages/procedural/the-furnace-between.svg",
+  "artStatus": "PROCEDURAL_WORKING_NOT_HUMAN_FINAL",
+  "productionStatus": "PLAYABLE_PROCEDURAL_BATCH1",
+  "geometryStatus": "PROCEDURAL_WORKING",
+  "HUMAN_ART_APPROVED": false,
+  "yin_yang_presence": {
+    "expression": "furnace_relief",
+    "original": true,
+    "franchise_signage": false
+  },
+  "pink_foreshadow": {
+    "motif": "furnace_ember_rose",
+    "subtle": true
+  },
+  "rulesets": {
+    "competitive": {
+      "hazards": "predictable_authoritative"
+    },
+    "party_chaos": {
+      "hazards": true,
+      "transformations": false
+    },
+    "story": {
+      "narrative_hooks": true
+    }
+  },
+  "hazard_model": "authoritative_snapshot",
+  "rng_policy": "no_divergent_rng",
+  "notes": "Heat corridor between spectrum poles. Working procedural geometry this pass.",
+  "ledgeAnchors": [
+    {
+      "id": "left",
+      "x": -430.0,
+      "y": 295.0,
+      "facing": 1
+    },
+    {
+      "id": "right",
+      "x": 430.0,
+      "y": 295.0,
+      "facing": -1
+    }
+  ]
+}

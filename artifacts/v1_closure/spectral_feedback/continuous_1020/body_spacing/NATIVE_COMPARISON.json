@@ -1,0 +1,171 @@
+{
+  "verification_status": "VERIFIED_NATIVE60_AUDIO_FRAME_SOURCE",
+  "before_source_sha": "b264ee5578f9ea7ffe7ba6d830608e38c017e252",
+  "after_source_sha": "e42655d5657ecbf1a4a8750e7c9be89ea35d29db",
+  "identical_public_inputs": true,
+  "public_input_transitions": 31,
+  "simulation_frames": 867,
+  "native_frames_per_movie": 868,
+  "verified_barcode_frames_per_movie": 647,
+  "movies": {
+    "before": "artifacts/v1_closure/spectral_feedback/rendered/body_spacing_before1020.mp4",
+    "after": "artifacts/v1_closure/spectral_feedback/rendered/body_spacing_after1020.mp4"
+  },
+  "observations": [
+    {
+      "case": "grounded close neutral",
+      "before": {
+        "min_root_separation_px": 1.53190326690674,
+        "last_root_separation_px": 12.433349609375,
+        "first_signed_separation": 3.1704301834105983,
+        "last_signed_separation": -12.433349609374998
+      },
+      "after": {
+        "min_root_separation_px": 32.3999979496002,
+        "last_root_separation_px": 32.3999996185303,
+        "first_signed_separation": 32.40000104904173,
+        "last_signed_separation": 32.39999961853024
+      }
+    },
+    {
+      "case": "public dodge crossing",
+      "before": {
+        "min_root_separation_px": 12.433349609375,
+        "last_root_separation_px": 87.171012878418,
+        "first_signed_separation": -12.433349609374998,
+        "last_signed_separation": -87.171012878418
+      },
+      "after": {
+        "min_root_separation_px": 1.52368783950806,
+        "last_root_separation_px": 51.4696798324585,
+        "first_signed_separation": 33.34798002243046,
+        "last_signed_separation": -51.46967983245847
+      }
+    },
+    {
+      "case": "public jump crossing",
+      "before": {
+        "min_root_separation_px": 16.5465145111084,
+        "last_root_separation_px": 16.5465145111084,
+        "first_signed_separation": -87.171012878418,
+        "last_signed_separation": -16.54651451110842
+      },
+      "after": {
+        "min_root_separation_px": 0.757846832275391,
+        "last_root_separation_px": 32.3999981880188,
+        "first_signed_separation": -51.46967983245847,
+        "last_signed_separation": 32.399998188018756
+      }
+    },
+    {
+      "case": "return to neutral",
+      "before": {
+        "min_root_separation_px": 98.6591377258301,
+        "last_root_separation_px": 98.6591377258301,
+        "first_signed_separation": 98.6591377258301,
+        "last_signed_separation": 98.6591377258301
+      },
+      "after": {
+        "min_root_separation_px": 100.776634216309,
+        "last_root_separation_px": 100.776634216309,
+        "first_signed_separation": 100.7766342163086,
+        "last_signed_separation": 100.7766342163086
+      }
+    }
+  ],
+  "before_contacts": 1,
+  "after_contacts": 6,
+  "after_contact_results": [
+    {
+      "move": "jab_1",
+      "result": "shield",
+      "owner": "melee",
+      "physics_frame": 346
+    },
+    {
+      "move": "jab_2",
+      "result": "hit",
+      "owner": "melee",
+      "physics_frame": 397
+    },
+    {
+      "move": "jab_1",
+      "result": "hit",
+      "owner": "melee",
+      "physics_frame": 441
+    },
+    {
+      "move": "heavy_attack",
+      "result": "hit",
+      "owner": "melee",
+      "physics_frame": 493
+    },
+    {
+      "move": "heavy_attack",
+      "result": "hit",
+      "owner": "melee",
+      "physics_frame": 554
+    },
+    {
+      "move": "throw_back",
+      "result": "hit",
+      "owner": "direct_throw",
+      "physics_frame": 727
+    }
+  ],
+  "contact_crop": "artifacts/v1_closure/spectral_feedback/continuous_1020/body_spacing/NATIVE_COMPARISON.png",
+  "contact_crop_sha256": "f8f6bc2d1f8bd67ee775326005262958033ca83c8cd6bdd1660e8f00e37f3423",
+  "selected_native_frames": [
+    {
+      "label": "before",
+      "native_frame": 337,
+      "physics_frame": 338,
+      "root_separation_px": 12.433349609375
+    },
+    {
+      "label": "after",
+      "native_frame": 337,
+      "physics_frame": 338,
+      "root_separation_px": 32.3999996185303
+    },
+    {
+      "label": "before",
+      "native_frame": 345,
+      "physics_frame": 346,
+      "root_separation_px": 12.433349609375
+    },
+    {
+      "label": "after",
+      "native_frame": 345,
+      "physics_frame": 346,
+      "root_separation_px": 32.3999996185303
+    },
+    {
+      "label": "before",
+      "native_frame": 623,
+      "physics_frame": 624,
+      "root_separation_px": 87.0055656433105
+    },
+    {
+      "label": "after",
+      "native_frame": 623,
+      "physics_frame": 624,
+      "root_separation_px": 51.3042364120483
+    },
+    {
+      "label": "before",
+      "native_frame": 726,
+      "physics_frame": 727,
+      "root_separation_px": 24.0
+    },
+    {
+      "label": "after",
+      "native_frame": 726,
+      "physics_frame": 727,
+      "root_separation_px": 24.0
+    }
+  ],
+  "original_audio_verified": true,
+  "scope": "two automated public controllers; actual BattleScene, no frozen target/seeded damage/positions/outcome; input stream identical, physics/contact changes expected from body spacing. No human visual approval or sustained-deviceFPS claim.",
+  "redistribution": "original project assets/audio for owner development review; rawAVIs protected local-only; no public release authorization"
+}

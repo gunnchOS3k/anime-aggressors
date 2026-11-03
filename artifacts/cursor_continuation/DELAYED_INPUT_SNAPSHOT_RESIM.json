@@ -1,0 +1,352 @@
+{
+  "HUMAN_ART_APPROVED": false,
+  "PASS": true,
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false,
+  "checks": [
+    {
+      "check": "lan_resim_bridge_round_trip_and_shipping_contract",
+      "pass": true
+    },
+    {
+      "check": "ordinary_source_input_resolves_canonical_jab",
+      "pass": true
+    },
+    {
+      "check": "bind_actual_geometry_and_retained_verified_BASE_jab",
+      "pass": true
+    },
+    {
+      "check": "bind_resim_two_human_seats_only",
+      "pass": true
+    },
+    {
+      "check": "experimental_resim_keeps_shipping_disabled",
+      "pass": true
+    },
+    {
+      "check": "bind_lan_bridge_to_disabled_shipping_resim",
+      "pass": true
+    },
+    {
+      "check": "oracle_shield_contact_established",
+      "pass": true
+    },
+    {
+      "check": "restore_pre_strike_world_snapshot",
+      "pass": true
+    },
+    {
+      "check": "rebind_resim_after_snapshot_restore",
+      "pass": true
+    },
+    {
+      "check": "rebind_lan_bridge_after_snapshot_restore",
+      "pass": true
+    },
+    {
+      "check": "predict_wrong_open_guard_on_contact_frame",
+      "pass": true
+    },
+    {
+      "check": "advanced_past_delay_window_before_late_packet",
+      "pass": true
+    },
+    {
+      "check": "mispredict_produced_body_hit_before_correction",
+      "pass": true
+    },
+    {
+      "check": "late_packet_round_trips_lan_controls_shape",
+      "pass": true
+    },
+    {
+      "check": "shadow_observer_accepts_valid_lan_packet",
+      "pass": true
+    },
+    {
+      "check": "late_lan_packet_triggers_owned_resim",
+      "pass": true
+    },
+    {
+      "check": "delayed_rollback_count_increments",
+      "pass": true
+    },
+    {
+      "check": "delayed_correction_keeps_shipping_off",
+      "pass": true
+    },
+    {
+      "check": "shipping_committed_history_not_mutated",
+      "pass": true
+    },
+    {
+      "check": "late_correction_restores_oracle_shield_contact",
+      "pass": true
+    },
+    {
+      "check": "late_correction_damage_matches_oracle",
+      "pass": true
+    },
+    {
+      "check": "late_correction_shield_health_matches_oracle",
+      "pass": true
+    },
+    {
+      "check": "late_correction_tip_frame_matches_oracle",
+      "pass": true
+    },
+    {
+      "check": "shipping_lan_snapshots_remain_non_restorable",
+      "pass": true
+    },
+    {
+      "check": "lan_session_opt_in_observer_receives_shadow_packet",
+      "pass": true
+    },
+    {
+      "check": "delayed_input_resim_preserves_earned_Story",
+      "pass": true
+    }
+  ],
+  "evidence": {
+    "contact_frame": 117,
+    "corrected_frame": 140,
+    "delay_frames": 4,
+    "oracle_event": {
+      "actual_defender_state": "shield_hit",
+      "actual_launch": "(0.0, 0.0)",
+      "attack_activation_id": 1,
+      "attacker_id": "kaia-windrow",
+      "aura_bible": {
+        "aura_tag": "speed_chain",
+        "bible": "docs/bibles/fighters/juno-spark.md",
+        "element": "spark"
+      },
+      "aura_identity_tag": "wind_drift",
+      "aura_runtime_hooks": [],
+      "authored_damage": 2.4,
+      "blocked": true,
+      "clash_supported": false,
+      "combat_event_id": "flat:944:117:1:2:1:1",
+      "combo_count_before": 0,
+      "confirmed_contact": true,
+      "contact_direction": "(1.0, 0.0)",
+      "contact_owner": "melee",
+      "contact_result": "shield",
+      "contact_world": "(174.0787, 266.175)",
+      "counterhit": false,
+      "damage": 2.304,
+      "damage_applied": 0.0,
+      "damage_zero_reason": "",
+      "defender_airborne": false,
+      "defender_damage_before": 0.0,
+      "defender_id": "juno-spark",
+      "defender_in_hitstun_before": false,
+      "defender_state_before": "shield_hold",
+      "element": "gale",
+      "element_effect": "wind_drift",
+      "gameplay_frame": 117,
+      "hitstop_frames": 2,
+      "launch": "(0.0, 0.0)",
+      "launch_strength": 0.0,
+      "move_frame": 5,
+      "move_id": "jab_1",
+      "parry_result": "fail",
+      "parry_supported": true,
+      "perfect_guard": false,
+      "projectile_instance_id": -1,
+      "resolved_damage": 2.304,
+      "shield_damage": 3.0,
+      "shield_event": "shield_hit",
+      "shield_stun_frames": 6,
+      "stocks_delta": 0,
+      "timeline_epoch": 944,
+      "timestamp_usec": 1950000
+    },
+    "oracle_frame": 140,
+    "reconciliation": {
+      "correction_frame": 117,
+      "human_seats": [
+        {
+          "fighter_id": "kaia-windrow",
+          "name": "",
+          "peer_id": 1,
+          "role": "human",
+          "seat_id": 1
+        },
+        {
+          "fighter_id": "juno-spark",
+          "name": "",
+          "peer_id": 2,
+          "role": "human",
+          "seat_id": 2
+        }
+      ],
+      "lan_packet_epoch": 944,
+      "lan_packet_seq": 9001,
+      "ok": true,
+      "remote_seat": 1,
+      "replacement_intents": [
+        {
+          "actual_defender_state": "shield_hit",
+          "actual_launch": "(0.0, 0.0)",
+          "attack_activation_id": 1,
+          "attacker_id": "kaia-windrow",
+          "aura_bible": {
+            "aura_tag": "speed_chain",
+            "bible": "docs/bibles/fighters/juno-spark.md",
+            "element": "spark"
+          },
+          "aura_identity_tag": "wind_drift",
+          "aura_runtime_hooks": [],
+          "authored_damage": 2.4,
+          "blocked": true,
+          "clash_supported": false,
+          "combat_event_id": "flat:944:117:1:2:1:1",
+          "combo_count_before": 0,
+          "confirmed_contact": true,
+          "contact_direction": "(1.0, 0.0)",
+          "contact_owner": "melee",
+          "contact_result": "shield",
+          "contact_world": "(174.0787, 266.175)",
+          "counterhit": false,
+          "damage": 2.304,
+          "damage_applied": 0.0,
+          "damage_zero_reason": "",
+          "defender_airborne": false,
+          "defender_damage_before": 0.0,
+          "defender_id": "juno-spark",
+          "defender_in_hitstun_before": false,
+          "defender_state_before": "shield_hold",
+          "element": "gale",
+          "element_effect": "wind_drift",
+          "gameplay_frame": 117,
+          "hitstop_frames": 2,
+          "launch": "(0.0, 0.0)",
+          "launch_strength": 0.0,
+          "move_frame": 5,
+          "move_id": "jab_1",
+          "parry_result": "fail",
+          "parry_supported": true,
+          "perfect_guard": false,
+          "projectile_instance_id": -1,
+          "resolved_damage": 2.304,
+          "shield_damage": 3.0,
+          "shield_event": "shield_hit",
+          "shield_stun_frames": 6,
+          "stocks_delta": 0,
+          "timeline_epoch": 944,
+          "timestamp_usec": 1950000
+        }
+      ],
+      "resim_tip": 121,
+      "retired_intents": [
+        {
+          "actual_defender_state": "hurt_light",
+          "actual_launch": "(1.546164, -3.31576)",
+          "attack_activation_id": 1,
+          "attacker_id": "kaia-windrow",
+          "aura_identity_tag": "wind_drift",
+          "aura_runtime_hooks": [],
+          "authored_damage": 2.4,
+          "blocked": false,
+          "clash_supported": false,
+          "combat_event_id": "flat:944:117:1:2:1:1",
+          "combo_count_before": 0,
+          "confirmed_contact": true,
+          "contact_direction": "(0.422618, -0.906308)",
+          "contact_owner": "melee",
+          "contact_result": "hit",
+          "contact_world": "(174.0787, 266.175)",
+          "counterhit": false,
+          "damage": 2.304,
+          "damage_applied": 2.304,
+          "damage_zero_reason": "",
+          "defender_airborne": false,
+          "defender_damage_after": 2.304,
+          "defender_damage_before": 0.0,
+          "defender_id": "juno-spark",
+          "defender_in_hitstun_before": false,
+          "defender_state_before": "idle",
+          "element": "gale",
+          "element_effect": "wind_drift",
+          "gameplay_frame": 117,
+          "hitstop_frames": 2,
+          "launch": "(1.546164, -3.31576)",
+          "launch_strength": 3.65853643417358,
+          "meter_changed": true,
+          "move_frame": 5,
+          "move_id": "jab_1",
+          "parry_supported": true,
+          "projectile_instance_id": -1,
+          "resolved_damage": 2.304,
+          "shield_damage": 3.0,
+          "shield_event": "hit_damage_applied",
+          "shield_stun_frames": 6,
+          "stocks_delta": 0,
+          "timeline_epoch": 944,
+          "timestamp_usec": 1950000
+        }
+      ],
+      "rollback_count": 1,
+      "rolled_back": true,
+      "shipping_backend_enabled": false,
+      "shipping_committed_states_untouched": true,
+      "snapshot_frame": 116,
+      "tip_frame": 121
+    },
+    "shipping_backend_enabled": false,
+    "wrong_events": [
+      {
+        "actual_defender_state": "hurt_light",
+        "actual_launch": "(1.546164, -3.31576)",
+        "attack_activation_id": 1,
+        "attacker_id": "kaia-windrow",
+        "aura_identity_tag": "wind_drift",
+        "aura_runtime_hooks": [],
+        "authored_damage": 2.4,
+        "blocked": false,
+        "clash_supported": false,
+        "combat_event_id": "flat:944:117:1:2:1:1",
+        "combo_count_before": 0,
+        "confirmed_contact": true,
+        "contact_direction": "(0.422618, -0.906308)",
+        "contact_owner": "melee",
+        "contact_result": "hit",
+        "contact_world": "(174.0787, 266.175)",
+        "counterhit": false,
+        "damage": 2.304,
+        "damage_applied": 2.304,
+        "damage_zero_reason": "",
+        "defender_airborne": false,
+        "defender_damage_after": 2.304,
+        "defender_damage_before": 0.0,
+        "defender_id": "juno-spark",
+        "defender_in_hitstun_before": false,
+        "defender_state_before": "idle",
+        "element": "gale",
+        "element_effect": "wind_drift",
+        "gameplay_frame": 117,
+        "hitstop_frames": 2,
+        "launch": "(1.546164, -3.31576)",
+        "launch_strength": 3.65853643417358,
+        "meter_changed": true,
+        "move_frame": 5,
+        "move_id": "jab_1",
+        "parry_supported": true,
+        "projectile_instance_id": -1,
+        "resolved_damage": 2.304,
+        "shield_damage": 3.0,
+        "shield_event": "hit_damage_applied",
+        "shield_stun_frames": 6,
+        "stocks_delta": 0,
+        "timeline_epoch": 944,
+        "timestamp_usec": 1950000
+      }
+    ]
+  },
+  "failures": [],
+  "scope": "Delayed guest LanControls packet + owned flat-trial snapshot restore matching oracle shield tip. 2 human seats only. Shipping LAN CharacterBody rollback remains disabled; host committed states stay non-restorable. Not 8p/art/device/human acceptance.",
+  "shipping_backend_enabled": false
+}

@@ -1,0 +1,268 @@
+{
+  "root_cause": "Rook thin warm outlines blend with armor; Yin low-value spirals converge inside opaque torso, obscuring charged silhouette.",
+  "implementation": "Rook solid four-face stone fragments with pale/dark facet contrast and outside-body placement; Yin inward curl kept at visible torso boundary with local dark-core/pale-rim shading. Existing rig anchors, object count and alpha/a11y controls retained.",
+  "source_files": {
+    "game-godot/scripts/visual/elemental_body_aura.gd": "44d312b83838bdb83f4bcbed4d0e86049fd42b120b4c73d6e6ac59ba5c597e36"
+  },
+  "rows": [
+    {
+      "fighter": "rook-ironside",
+      "body": "male",
+      "facing": 1,
+      "before_vertices": [
+        288,
+        180,
+        108
+      ],
+      "after_vertices": [
+        192,
+        120,
+        72
+      ],
+      "owned_meshes": 1,
+      "owned_materials": 1
+    },
+    {
+      "fighter": "rook-ironside",
+      "body": "male",
+      "facing": -1,
+      "before_vertices": [
+        288,
+        180,
+        108
+      ],
+      "after_vertices": [
+        192,
+        120,
+        72
+      ],
+      "owned_meshes": 1,
+      "owned_materials": 1
+    },
+    {
+      "fighter": "rook-ironside",
+      "body": "female",
+      "facing": 1,
+      "before_vertices": [
+        288,
+        180,
+        108
+      ],
+      "after_vertices": [
+        192,
+        120,
+        72
+      ],
+      "owned_meshes": 1,
+      "owned_materials": 1
+    },
+    {
+      "fighter": "rook-ironside",
+      "body": "female",
+      "facing": -1,
+      "before_vertices": [
+        288,
+        180,
+        108
+      ],
+      "after_vertices": [
+        192,
+        120,
+        72
+      ],
+      "owned_meshes": 1,
+      "owned_materials": 1
+    },
+    {
+      "fighter": "yin",
+      "body": "male",
+      "facing": 1,
+      "before_vertices": [
+        576,
+        360,
+        216
+      ],
+      "after_vertices": [
+        576,
+        360,
+        216
+      ],
+      "owned_meshes": 1,
+      "owned_materials": 1
+    },
+    {
+      "fighter": "yin",
+      "body": "male",
+      "facing": -1,
+      "before_vertices": [
+        576,
+        360,
+        216
+      ],
+      "after_vertices": [
+        576,
+        360,
+        216
+      ],
+      "owned_meshes": 1,
+      "owned_materials": 1
+    },
+    {
+      "fighter": "yin",
+      "body": "female",
+      "facing": 1,
+      "before_vertices": [
+        576,
+        360,
+        216
+      ],
+      "after_vertices": [
+        576,
+        360,
+        216
+      ],
+      "owned_meshes": 1,
+      "owned_materials": 1
+    },
+    {
+      "fighter": "yin",
+      "body": "female",
+      "facing": -1,
+      "before_vertices": [
+        576,
+        360,
+        216
+      ],
+      "after_vertices": [
+        576,
+        360,
+        216
+      ],
+      "owned_meshes": 1,
+      "owned_materials": 1
+    }
+  ],
+  "other_seven_geometry_counts_unchanged": true,
+  "new_particles": 0,
+  "new_mesh_instances": 0,
+  "new_materials": 0,
+  "full_meter_threshold_changed": false,
+  "gameplay_parameters_changed": false,
+  "regressions": [
+    {
+      "suite": "PersistentEmpowerment",
+      "source_sha": "8dec382fb4fba0e168035a1e4add6ee896c8a5de",
+      "passed": true,
+      "exit_code": 0,
+      "seconds": 32.5,
+      "reports": [],
+      "stdout": "artifacts/v1_closure/spectral_feedback/continuous_1011/rook_yin_readability1019/PersistentEmpowerment/stdout.log",
+      "scope": "isolated source fixture; no human/device/competitive acceptance",
+      "source_diff_sha256": "2d8eea1e820ac677f489f8f53b6537ca3cdaa8c3a420542cf78854bb17d8c3c5",
+      "source_changes": [
+        "game-godot/scripts/visual/elemental_body_aura.gd",
+        "game-godot/tests/v1_closure/NativeEmpowerment.gd"
+      ]
+    },
+    {
+      "suite": "SpectralIntensity",
+      "source_sha": "8dec382fb4fba0e168035a1e4add6ee896c8a5de",
+      "passed": true,
+      "exit_code": 0,
+      "seconds": 5.75,
+      "reports": [],
+      "stdout": "artifacts/v1_closure/spectral_feedback/continuous_1011/rook_yin_readability1019/SpectralIntensity/stdout.log",
+      "scope": "isolated source fixture; no human/device/competitive acceptance",
+      "source_diff_sha256": "8f4ce129794c0d78bdde76d29888e05def1818e21dc03c0079e9e118da485aff",
+      "source_changes": [
+        "game-godot/scripts/visual/elemental_body_aura.gd",
+        "game-godot/tests/v1_closure/NativeEmpowerment.gd",
+        "tools/v1_closure/verify_empowerment_movie.py"
+      ]
+    }
+  ],
+  "native_review": {
+    "path": "artifacts/v1_closure/spectral_feedback/rendered/rook_yin_readability1019.mp4",
+    "sha256": "d01f6cee7ce81e0ead1236c06460ee6a92d4380b754dfa05f15077be9c9c0bb0",
+    "source_sha": "5a2472b9f581e236b45a77e11ecd5d922c2d2a2f",
+    "streams": [
+      {
+        "codec_name": "h264",
+        "codec_type": "video",
+        "r_frame_rate": "60/1",
+        "duration": "12.800000",
+        "nb_read_frames": "768"
+      },
+      {
+        "codec_name": "aac",
+        "codec_type": "audio",
+        "r_frame_rate": "0/0",
+        "duration": "12.800000",
+        "nb_read_frames": "600"
+      }
+    ],
+    "sheets": [
+      {
+        "path": "artifacts/v1_closure/spectral_feedback/continuous_1019/rook_yin_native/rook-ironside_aura.png",
+        "sha256": "3269b57b77ae4284b81f9e776800bba2f53fabe6e5eeeebe164b920ee4bda756",
+        "source_sha": "5a2472b9f581e236b45a77e11ecd5d922c2d2a2f",
+        "verification_status": "VERIFIED_NATIVE_FRAME_AND_PAIRED_IDENTITY",
+        "frames": [
+          413,
+          426,
+          474
+        ],
+        "redistribution": "Original development owner review; no public release authorization"
+      },
+      {
+        "path": "artifacts/v1_closure/spectral_feedback/continuous_1019/rook_yin_native/yin_aura.png",
+        "sha256": "8d694075984f48c557f2aa0b8c0314935dcda7e0b5cb0efad310bd4b521293fc",
+        "source_sha": "5a2472b9f581e236b45a77e11ecd5d922c2d2a2f",
+        "verification_status": "VERIFIED_NATIVE_FRAME_AND_PAIRED_IDENTITY",
+        "frames": [
+          686,
+          699,
+          747
+        ],
+        "redistribution": "Original development owner review; no public release authorization"
+      }
+    ],
+    "verification_status": "VERIFIED_NATIVE_FRAME_BARCODES_AND_PAIRED_IDENTITIES",
+    "fighters": [
+      "rook-ironside",
+      "yin"
+    ],
+    "visible_body_models": 4,
+    "native_audio_volume_db": {
+      "mean_volume": -29.3,
+      "max_volume": -6.6
+    },
+    "recording_measurements": {
+      "CPU render time": 0.45,
+      "Encoding time": 5.37
+    },
+    "material_null_errors": 0,
+    "script_errors": 0,
+    "professional_quality_approved": false,
+    "GPU_measurement_available": false,
+    "scope": "4 visible model energy/movement/jump at native60fps with original sound. No active CPU, combo, contact or device-FPS acceptance.",
+    "redistribution": "Original procedural/project assets; owner development review, no public release authorization"
+  },
+  "owner_approved": false,
+  "runtime_source": "5a2472b9f581e236b45a77e11ecd5d922c2d2a2f",
+  "native_frame_checks": {
+    "matched": 587,
+    "total": 587
+  },
+  "after_visual_findings": {
+    "rook-ironside": "Solid gray/brown facets are visibly separate from gold armor at gameplay scale; silhouette remains clear during release/jump. Full-body acting is still a development candidate.",
+    "yin": "Pale-edged dark curls now surround the torso boundary instead of disappearing inside it. Readability is improved but still restrained; normal fight/owner artistic judgment remains pending."
+  },
+  "comparison": {
+    "path": "artifacts/v1_closure/spectral_feedback/continuous_1019/rook_yin_native/readability_before_after.png",
+    "sha256": "2fe16e6918dbc60e9818cae8fe6230d72b8fdc0b5a6b5124d622232d4a77d8e8",
+    "before_source": "c7dbe11565781ef8bcee6108ffad2ac9c956ebf0",
+    "after_source": "5a2472b9f581e236b45a77e11ecd5d922c2d2a2f",
+    "scope": "Unscaled crops of verified public-energy frames; idle-target presentation, no CPU/combo acceptance."
+  }
+}

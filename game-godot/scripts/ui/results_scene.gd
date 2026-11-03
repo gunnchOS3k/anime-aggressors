@@ -24,6 +24,10 @@ func _ready() -> void:
 	super._ready()
 	Vxp2BrandScript.apply_surface_chrome(self, {"title_size": Vxp2BrandScript.TYPE_HERO})
 	_ready_display()
+	if not LanSession.role.is_empty():
+		rematch_btn.text = "Ready for LAN rematch"
+		change_fighters_btn.visible = false
+		change_stage_btn.visible = false
 	Vxp2GlyphScript.attach(self, ["confirm", "back"])
 	Vxp2A11yScript.apply(self)
 
@@ -46,7 +50,30 @@ func _ready_display() -> void:
 		fid = str(GameState.p1_fighter_id)
 		name = GameState.load_fighter(fid).get("displayName", name)
 	_configure_victory_portrait(fid, variant)
-	if GameState.arcade_active or GameState.mode == "arcade":
+	if GameState.mode == "story":
+		var receipt: Dictionary = CampaignRuntime.last_result
+		if winner == 1 and receipt.get("objective_contract") == "FIRST_LOSS":
+			for chapter in CampaignRuntime.route_data(str(receipt.get("route_id",""))).get("nodes", []):
+				if chapter["id"] == receipt.get("node_id"):
+					var aftermath := Label.new()
+					aftermath.name = "FirstLossAftermath"
+					aftermath.position = Vector2(80, 570)
+					aftermath.size = Vector2(1120, 95)
+					aftermath.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+					aftermath.text = "Draft Story · " + str(chapter.get("consequence",{}).get("aftermath","")) + "\nRoute-local loss. Ultimate fate remains under owner review."
+					add_child(aftermath)
+
+		if title_label:
+			title_label.text = "Encounter Complete" if winner == 1 else "Encounter Lost — Try Again"
+		if rematch_btn:
+			rematch_btn.text = "Return to Story" if winner == 1 else "Retry Encounter"
+		if change_fighters_btn:
+			change_fighters_btn.visible = false
+		if change_stage_btn:
+			change_stage_btn.visible = false
+		if not bool(receipt.get("advanced", false)) and winner == 1 and not bool(receipt.get("replay", false)) and title_label:
+			title_label.text = "Progress could not be saved — Return to Story"
+	elif GameState.arcade_active or GameState.mode == "arcade":
 		var bout := GameState.arcade_index + 1
 		var total := GameState.ARCADE_LADDER.size()
 		if GameState.arcade_complete:
@@ -151,7 +178,7 @@ func _play_results_celebration() -> void:
 	# Non-color victory cue: second rule + "WIN" chip.
 	var chip := Label.new()
 	chip.name = "VictoryChip"
-	chip.text = "WIN"
+	chip.text = "DEFEAT" if GameState.mode == "story" and winner != 1 else "WIN"
 	chip.add_theme_font_size_override("font_size", Vxp2BrandScript.TYPE_META)
 	chip.add_theme_color_override("font_color", Vxp2BrandScript.COLOR_GOLD_BRIGHT)
 	chip.position = Vector2(40, 96)
@@ -168,6 +195,21 @@ func _play_results_celebration() -> void:
 
 
 func _on_rematch_pressed() -> void:
+	if not LanSession.role.is_empty():
+		if LanSession.request_rematch():
+			rematch_btn.text = "Waiting for both players…"
+			rematch_btn.disabled = true
+		return
+	if GameState.mode == "story":
+		if GameState.last_winner_slot != 1:
+			var replay_id := str(CampaignRuntime.last_result.get("node_id", "")) if bool(CampaignRuntime.last_result.get("replay", false)) else ""
+			if CampaignRuntime.begin_encounter(replay_id):
+				SceneRouter.go("battle")
+				return
+		CampaignRuntime.abandon_encounter()
+		StoryDialogue.cancel()
+		SceneRouter.go("story")
+		return
 	if GameState.mode == "arcade" or GameState.arcade_active or GameState.arcade_complete or GameState.arcade_failed:
 		var next := GameState.advance_arcade_after_result()
 		match next:
@@ -203,6 +245,12 @@ func _on_change_stage_pressed() -> void:
 
 
 func _on_home_pressed() -> void:
+	if not LanSession.role.is_empty(): LanSession.stop()
+	if GameState.mode == "story":
+		CampaignRuntime.abandon_encounter()
+		StoryDialogue.cancel()
+		SceneRouter.go("story")
+		return
 	GameState.arcade_active = false
 	GameState.arcade_complete = false
 	GameState.arcade_failed = false

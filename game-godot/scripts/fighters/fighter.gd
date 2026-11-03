@@ -14,6 +14,8 @@ const _AuraScaler = preload("res://scripts/combat/aura_scaler.gd")
 const _AuraIdentity = preload("res://scripts/combat/aura_identity.gd")
 const _AuraSpecialRuntime = preload("res://scripts/combat/aura_special_runtime.gd")
 const _CombatMath = preload("res://scripts/combat/combat_math.gd")
+const _CombatOutcome = preload("res://scripts/combat/combat_outcome.gd")
+const _BodyHitMotion = preload("res://scripts/combat/body_hit_motion.gd")
 const _MoveResolver = preload("res://scripts/visual/runtime_move_resolver.gd")
 const _PresentationContext = preload("res://scripts/visual/presentation_context.gd")
 const _FighterDefinition = preload("res://scripts/combat/fighter_definition.gd")
@@ -22,6 +24,21 @@ const _TransformPipeline = preload("res://scripts/combat/transform_pipeline.gd")
 const _AuraTierContract = preload("res://scripts/combat/aura_tier_contract.gd")
 const _FacingContract = preload("res://scripts/combat/fighter_facing_contract.gd")
 const _HitReaction = preload("res://scripts/combat/directional_hit_reaction.gd")
+const _CosmicKit = preload("res://scripts/combat/cosmic_kit_runtime.gd")
+const _PinkBloomSystems = preload("res://scripts/combat/pink_bloom_systems.gd")
+const _RosamereFormPresentation = preload("res://scripts/visual/rosamere_form_presentation.gd")
+var party_overdrive = preload("res://scripts/combat/party_overdrive.gd").new()
+var perfect_guard = preload("res://scripts/combat/perfect_guard.gd").new()
+var _form_audio_8c
+var shield_break_8c = preload("res://scripts/combat/shield_break_8c.gd").new()
+var _guard_presentation
+var _cosmic_counter_activation := -1
+var cosmic_kit_history: Array = []
+var pink_bloom = null
+var pink_bloom_history: Array = []
+
+func try_absorb_projectile(shot, point: Vector2) -> bool:
+	return _CosmicKit.absorb(self, shot, point)
 const _SignaturePresentation = preload("res://scripts/visual/signature_move_presentation.gd")
 
 signal damaged(amount: float, total: float)
@@ -29,6 +46,7 @@ signal koed()
 signal respawned()
 signal hit_landed(info: Dictionary)
 signal grab_event(info: Dictionary)
+signal shield_event(info: Dictionary)
 signal state_changed(state: String)
 
 const GRAVITY := 1800.0
@@ -52,13 +70,30 @@ var damage_percent: float = 0.0
 var stocks: int = 3
 var aura: float = 0.0
 var shield_health: float = 100.0
+var _shield_stun_limit: float = 0.25
 var air_jumps_left: int = 1
 var invincible: bool = false
 var shielding: bool = false
 var controls_enabled: bool = true
+var combat_closed: bool = false # Terminal match boundary, separate from pause/countdown.
 var _input_edge_held: Dictionary = {}
+# One optional remote control source; local/touch/CPU behavior remains unchanged.
+var remote_controls
+
+func _button_held(suffix: String) -> bool:
+	if remote_controls != null: return remote_controls.held(suffix)
+	return Input.is_action_pressed("p%d_%s" % [slot, suffix])
+
+var _training_dummy_owned_actions: Dictionary = {}
+var use_training_physics_clock := false
+var _training_timeouts: Array = []
+var use_network_physics_clock := false
+var _network_clock := 0
+var _network_deadline_id := 0
+var _network_deadlines: Array = []
 var spawn_point: Vector2 = Vector2.ZERO
 var combo_count: int = 0
+var authored_cancel_history: Array=[]
 var hitstun_remaining: float = 0.0
 var grabbed_target = null
 var grabbed_by = null
@@ -88,20 +123,28 @@ var animator
 @onready var grab_range_debug: ColorRect = $GrabRangeDebug
 
 var _hitstop: float = 0.0
+var _spectral_charge_slot := -1
+var _spectral_renderer: Node2D
 var _current_move: Dictionary = {}
 var _pending_attack_cmd: String = ""
 var _last_state: String = ""
 var _aura_sfx_hook: bool = false
+var _elemental_audio: Node
 var _last_hit_result: Dictionary = {}
 var _last_knockback: Vector2 = Vector2.ZERO
 var _last_shield_damage: float = 0.0
 var _cpu_telegraph_remaining: float = 0.0
 var _cpu_telegraph_cmd: String = ""
-var _telegraph_pulse: ColorRect = null
+var _telegraph_pulse: Node2D = null
+var _spectral_telegraph_slot := -1
 var _base_modulate: Color = Color.WHITE
 var _last_element_effect: String = ""
 var _throw_direction: String = ""
 var _grab_throw_latch: bool = false
+var _grab_acquisition_activation := -1
+var _releasing_grab := false
+var _grab_whiff_activation := -1
+var _grab_presentation: Node
 var _jab_chain: int = 0
 var _show_grab_range: bool = false
 var _show_projectile_boxes: bool = false
@@ -111,10 +154,12 @@ var _fast_falling: bool = false
 var _air_dodge_used: bool = false
 var _dodge_cooldown: float = 0.0
 var _ledge_side: int = 0
+var _ledge_regrab_cooldown := 0.0
 var _di_strength: String = "medium"
 var _pending_landing_from_attack: bool = false
 var armor_frames_remaining: float = 0.0
 var phase_cancel_remaining: float = 0.0
+var _batch_locomotion := false
 var dash_cancel_remaining: float = 0.0
 var _runtime_hooks_seen: Dictionary = {}
 var grab_mash: float = 0.0
@@ -127,8 +172,14 @@ var _current_form_id: String = ""
 var _transform_pipeline
 var _transform_activations: int = 0
 var _transform_sequence_active: bool = false
+var _transform_match_closed: bool = false
 
 func _ready() -> void:
+	perfect_guard.setup(self)
+	shield_break_8c.setup(self)
+	_form_audio_8c=preload("res://scripts/audio/transformation_audio_8c.gd").new()
+	add_child(_form_audio_8c);_form_audio_8c.setup(self)
+	party_overdrive.setup(self)
 	add_to_group("fighters")
 	state_machine = _FighterStateMachine.new()
 	add_child(state_machine)
@@ -169,6 +220,18 @@ func _ready() -> void:
 		grab_range_debug.visible = false
 		grab_range_debug.size = Vector2(_CombatMath.GRAB_RANGE_PX, 36)
 		grab_range_debug.color = Color(0.2, 0.8, 1.0, 0.25)
+	var expression=preload("res://scripts/visual/combat_expression_director.gd").new()
+	expression.name="CombatExpressionDirector";add_child(expression);expression.setup(self)
+	_grab_presentation=preload("res://scripts/visual/elemental_grab_throw_presentation.gd").new()
+	_grab_presentation.name="ElementalGrabThrow";add_child(_grab_presentation);_grab_presentation.setup(self)
+	_guard_presentation=preload("res://scripts/visual/elemental_guard_8c.gd").new()
+	_guard_presentation.setup(self)
+
+func get_effective_combat_aura() -> float:
+	return 0.0 if party_overdrive.active() else aura
+
+func _party_element() -> Dictionary:
+	return _DataLoader.find_move(move_manifest,"aura_burst").get("element_effect",{}).duplicate(true)
 
 func get_aura() -> float:
 	return aura
@@ -199,6 +262,13 @@ func attempt_transform() -> bool:
 	return _transform_pipeline.attempt_transform()
 
 
+func can_start_transform_sequence() -> bool:
+	if _transform_match_closed or party_overdrive.state != "BASE": return false
+	# Playable cosmic advancement is separate from authored Story boss context.
+	if fighter_id in ["yin", "yang"] and get_meta("story_cosmic_contract", false): return false
+	return controls_enabled and stocks > 0 and grabbed_by == null and grabbed_target == null and state_machine != null and state_machine.can_attack() and not move_runner.active
+
+
 func tick_transform_pipeline(delta: float, game_paused: bool = false) -> void:
 	if _transform_pipeline != null:
 		_transform_pipeline.tick(delta, game_paused)
@@ -210,36 +280,135 @@ func apply_form(form_id: String) -> void:
 	var entry: Dictionary = _FormDefinition.form_entry(_forms_doc, form_id)
 	if entry.is_empty():
 		return
+	var previous := _current_form_id
 	_current_form_id = form_id
+	if pink_bloom != null:
+		pink_bloom.set_form(form_id, true)
 	if model_3d != null and model_3d.has_method("set_form_id"):
 		model_3d.set_form_id(form_id, entry)
 	var idle_clip := str(entry.get("transformed_idle_clip", entry.get("idle_clip", "idle")))
 	if model_3d != null and model_3d.has_method("play_clip"):
 		model_3d.play_clip(idle_clip)
+	if fighter_id == "rosamere" and previous != form_id:
+		var presentation: Dictionary = entry.get("presentation", {})
+		set_meta("rosamere_presentation", presentation)
+		set_meta("rosamere_last_transition", {
+			"from": previous,
+			"to": form_id,
+			"clip": idle_clip,
+			"deterministic": true,
+			"final_art_approved": false,
+		})
 
 
 func on_transform_sequence_start(_from: String, _to: String) -> void:
 	_transform_sequence_active = true
 	state_machine.enter(_FighterStates.AURA_BURST_STARTUP)
+	if model_3d != null and model_3d.has_method("begin_form_sequence") and model_3d.begin_form_sequence(_to):
+		_form_audio_8c.begin(_to,1 if _FormDefinition.form_entry(_forms_doc,_to).ladder_step in ["AWAKENED_BUILD","COSMIC_SURGE"] else 2)
+		return
+	preload("res://scripts/audio/v1_candidate_sfx.gd").play_event(fighter_id,"transform",self)
 	if model_3d != null and model_3d.has_method("play_clip"):
 		var target: Dictionary = _FormDefinition.form_entry(_forms_doc, _to)
 		model_3d.play_clip(str(target.get("transform_in_clip", "aura_charge")))
 
 
 func on_transform_sequence_tick(progress: float) -> void:
+	_form_audio_8c.sample(progress)
 	if model_3d != null and model_3d.has_method("set_transform_progress"):
 		model_3d.set_transform_progress(progress)
 
 
 func _on_transform_completed(_fid: String, _form_id: String) -> void:
+	_form_audio_8c.complete()
+	if model_3d != null:model_3d.end_form_sequence()
 	_transform_sequence_active = false
 	_transform_activations += 1
 	state_machine.enter(_FighterStates.IDLE)
 	aura = maxf(0.0, aura - 25.0)
 
+
+func on_transform_sequence_cancelled(_reason: String) -> void:
+	_form_audio_8c.cancel()
+	if model_3d != null:model_3d.end_form_sequence()
+	_transform_sequence_active = false
+	if model_3d != null and model_3d.has_method("set_transform_progress"):
+		model_3d.set_transform_progress(0.0)
+	# The interrupting hurt/grab/KO state retains authority. No idle transition,
+	# aura refund or successful-transformation cost may be issued by cancellation.
+	_set_aura_vfx(false)
+
+
+func reset_legacy_transformation(reason: String) -> void:
+	if _transform_pipeline != null: _transform_pipeline.cancel(reason)
+	_transform_sequence_active = false
+	var base_form := _FormDefinition.default_form_id(_forms_doc)
+	if not base_form.is_empty() and _current_form_id != base_form: apply_form(base_form)
+	if model_3d != null and model_3d.has_method("set_transform_progress"):
+		model_3d.set_transform_progress(0.0)
+
+
+func close_transformation_for_match_end() -> void:
+	if is_instance_valid(_form_audio_8c):_form_audio_8c.clear()
+	shield_break_8c.reset("match_end")
+	if _guard_presentation != null:_guard_presentation.clear("match_end")
+	_cancel_grab_acting_presentation("match_end")
+	_release_grab_links("match_end")
+	if _grab_presentation!=null:_grab_presentation.clear("match_end")
+	party_overdrive.reset("match_end")
+	perfect_guard.reset()
+	_transform_match_closed = true
+	if _transform_pipeline != null: _transform_pipeline.cancel("match_end")
+
+
+func close_combat_for_match_end(won: bool = false) -> void:
+	if combat_closed: return
+	combat_closed = true
+	_training_timeouts.clear()
+	_network_deadlines.clear()
+	controls_enabled = false
+	_pending_attack_cmd = ""
+	if cpu != null and (is_cpu or dummy_mode == "cpu"): cpu.clear_simulated_inputs()
+	close_transformation_for_match_end()
+	if move_runner != null: move_runner.cancel()
+	if hitbox != null: hitbox.set_deferred("monitoring", false)
+	if projectile_spawner != null: projectile_spawner.clear_all()
+	_set_aura_vfx(false)
+	_hitstop = 0.0
+	if model_3d != null and model_3d.get_animation_controller() != null:
+		model_3d.get_animation_controller().presentation_frozen = false
+	_current_move.clear()
+	if state_machine != null and state_machine.current_state != _FighterStates.KO:
+		state_machine.enter(_FighterStates.VICTORY if won else _FighterStates.DEFEAT)
+
 func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, spawn: Vector2) -> void:
+	clear_training_dummy_inputs()
+	_network_deadlines.clear()
+	_network_clock = 0
+	_network_deadline_id = 0
+	combat_closed = false
+	if is_instance_valid(_form_audio_8c):_form_audio_8c.clear()
+	shield_break_8c.reset("character_change")
+	if _guard_presentation != null:_guard_presentation.clear("character_change")
+	_release_grab_links("character_change")
+	if _grab_presentation!=null:_grab_presentation.clear("character_change")
+	party_overdrive.reset("character_change")
+	perfect_guard.reset()
+	if _transform_pipeline != null: _transform_pipeline.cancel("fighter_reconfigured")
+	_transform_match_closed = false
+	_cosmic_counter_activation = -1
+	cosmic_kit_history.clear()
+	pink_bloom_history.clear()
+	pink_bloom = null
+	if has_meta("story_cosmic_contract"):
+		remove_meta("story_cosmic_contract")
 	fighter_id = id
 	slot = player_slot
+	# Story and team encounters may have more actors than the two local defaults.
+	# CPU control uses the same action names as human slots.
+	for suffix in ["left", "right", "up", "down", "jump", "attack", "special", "shield", "grab", "dodge", "taunt"]:
+		var action := "p%d_%s" % [slot, suffix]
+		if not InputMap.has_action(action): InputMap.add_action(action)
 	is_cpu = cpu_flag
 	# Human-controlled slots must not inherit the training "cpu" dummy default,
 	# or CpuController keeps synthesizing pN_shield/attack on top of real input
@@ -253,6 +422,12 @@ func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, s
 	_fighter_def = _FighterDefinition.build(id, data)
 	_forms_doc = _fighter_def.get("forms_doc", {})
 	_current_form_id = str(_fighter_def.get("default_form_id", ""))
+	if fighter_id == "rosamere":
+		pink_bloom = _PinkBloomSystems.new()
+		pink_bloom.reset(maxi(1, slot))
+		if not _current_form_id.is_empty():
+			pink_bloom.set_form(_current_form_id, true)
+		_RosamereFormPresentation.apply_to_fighter(self, _current_form_id if not _current_form_id.is_empty() else "FAMILIAR_ROSE", "")
 	if model_3d != null and model_3d.has_method("set_form_id") and not _current_form_id.is_empty():
 		model_3d.set_form_id(_current_form_id, _FormDefinition.form_entry(_forms_doc, _current_form_id))
 	if model_3d != null and model_3d.has_method("set_presentation_context"):
@@ -263,6 +438,11 @@ func configure(id: String, player_slot: int, cpu_flag: bool, stock_count: int, s
 	if gs_variant != null:
 		variant = str(gs_variant.p1_body_variant if player_slot == 1 else gs_variant.p2_body_variant)
 	model_data["body_variant"] = "female" if variant == "female" else "male"
+	var campaign_runtime = get_node_or_null("/root/CampaignRuntime")
+	if gs_variant != null and gs_variant.mode != "story" and gs_variant.mode != "ova" and campaign_runtime != null:
+		var skin: String = gs_variant.p1_story_skin if player_slot == 1 else gs_variant.p2_story_skin
+		if skin == "PRISMATIC_GRAY" and id in campaign_runtime.progress.get("gray_routes", []):
+			model_data["collectible_review_form"] = "PRISMATIC_GRAY"
 	data = model_data
 	_model_presentation_data = data
 	var model_loaded: bool = model_3d != null and model_3d.configure(data)
@@ -454,7 +634,7 @@ func get_dash_speed() -> float:
 
 func get_air_speed() -> float:
 	var base := float(data.get("airSpeed", 220))
-	var bonus: float = _AuraIdentity.air_drift_bonus(fighter_id, aura, str(data.get("combatTag", "")))
+	var bonus: float = _AuraIdentity.air_drift_bonus(fighter_id, get_effective_combat_aura(), str(data.get("combatTag", "")))
 	return base * (1.0 + bonus)
 
 func get_air_accel() -> float:
@@ -479,15 +659,34 @@ func get_fall_speed() -> float:
 	return float(data.get("fallSpeed", 1800))
 
 func tick_combat_frame() -> void:
+	if combat_closed: return
+	perfect_guard.tick()
+	party_overdrive.tick()
+	if pink_bloom != null:
+		pink_bloom.advance_frame()
+	if model_3d != null and model_3d.get_animation_controller() != null:
+		model_3d.get_animation_controller().presentation_frozen = _hitstop > 0.0
 	if _hitstop > 0.0:
 		return
+	# Present the next authoritative move frame before its collision callbacks.
+	if model_3d != null and move_runner.active:
+		var before_controller = model_3d.get_animation_controller()
+		if before_controller != null: before_controller.synchronize_move(move_runner.total_frame+1,move_runner.move_data)
 	move_runner.tick_sim_frame()
 	projectile_spawner.tick_all()
 	_sync_attack_phase_state()
+	if model_3d != null and move_runner.active:
+		var controller = model_3d.get_animation_controller()
+		if controller != null: controller.synchronize_move(move_runner.total_frame,move_runner.move_data)
 	if move_runner != null and move_runner.is_active_phase():
 		_poll_hitbox_overlaps()
 
 func _physics_process(delta: float) -> void:
+	if combat_closed: return
+	if use_training_physics_clock: _tick_training_timeouts(delta)
+	elif use_network_physics_clock: _tick_network_deadlines()
+	shield_break_8c.observe_guard(_read_shield())
+	if _guard_presentation != null:_guard_presentation.tick(delta)
 	_wave017_vis_accum += delta
 	if _wave017_vis_accum >= 0.25:
 		_wave017_vis_accum = 0.0
@@ -496,6 +695,7 @@ func _physics_process(delta: float) -> void:
 			_wave017_ghost_events += 1
 			ensure_visible_presentation()
 
+	_ledge_regrab_cooldown = maxf(0.0, _ledge_regrab_cooldown - delta)
 	_tick_cpu_telegraph(delta)
 	if _hitstop > 0.0:
 		_hitstop -= delta
@@ -508,12 +708,16 @@ func _physics_process(delta: float) -> void:
 		_transform_pipeline.tick(delta, paused)
 	_tick_shield_regen(delta)
 	# Kaia air-drift stamp (runtime, not data-only).
-	if not is_on_floor() and _AuraIdentity.air_drift_bonus(fighter_id, aura, str(data.get("combatTag", ""))) > 0.0:
+	if not is_on_floor() and _AuraIdentity.air_drift_bonus(fighter_id, get_effective_combat_aura(), str(data.get("combatTag", ""))) > 0.0:
 		stamp_runtime_hook("air_drift")
-	if grabbed_target != null and state_machine.current_state not in [
-		_FighterStates.GRAB_HOLD, _FighterStates.THROW_STARTUP, _FighterStates.THROW_RELEASE,
-	]:
-		state_machine.enter(_FighterStates.GRAB_HOLD)
+	# A stale pair must never restore a hold over the interrupting hurt/KO state.
+	if grabbed_target != null and (not is_instance_valid(grabbed_target) or grabbed_target.grabbed_by != self):
+		_release_grab_links("invalid_target")
+	if grabbed_by != null and (not is_instance_valid(grabbed_by) or grabbed_by.grabbed_target != self):
+		_release_grab_links("invalid_owner")
+	# A hanging CPU must produce recovery input before the ledge state reads it.
+	if state_machine.current_state == _FighterStates.LEDGE_HANG and is_cpu and controls_enabled:
+		cpu.tick(delta, _find_opponent())
 	state_machine.update(delta)
 	if grabbed_by != null:
 		global_position = grabbed_by.global_position + Vector2(24 * grabbed_by.facing, -8)
@@ -552,6 +756,13 @@ func _physics_process(delta: float) -> void:
 	_check_edge()
 	_track_landing()
 	_play_current_animation(state_machine.current_state)
+	if not _batch_locomotion:sync_locomotion_presentation()
+
+func sync_locomotion_presentation() -> void:
+	# Bound battles sample gait/support after shared body spacing, so blocked
+	# approach motion does not advance the feet as if the root walked through.
+	if model_3d != null and model_3d.get_animation_controller() != null:
+		model_3d.get_animation_controller().synchronize_locomotion(global_position,model_3d,is_on_floor())
 
 func _apply_movement(delta: float) -> void:
 	if state_machine.current_state == _FighterStates.JUMP_SQUAT:
@@ -566,10 +777,14 @@ func _apply_movement(delta: float) -> void:
 			velocity.x = move_toward(velocity.x, 0.0, get_run_speed() * delta * 6.0)
 		return
 	if not state_machine.can_move():
+		if party_overdrive.owns_motion() and not is_on_floor():velocity.y += get_fall_speed() * delta
 		if is_on_floor():
 			velocity.x = move_toward(velocity.x, 0.0, get_run_speed() * delta * 8.0)
 		return
 	var axis: float = _read_axis()
+	# Held charge owns its presentation state. Locomotion still applies, but
+	# entering idle/walk/fall each frame would stop and restart its audio/emitter.
+	var charging: bool = state_machine.current_state in [_FighterStates.AURA_CHARGE, _FighterStates.AURA_READY]
 	if not is_on_floor():
 		_fast_falling = velocity.y > 80 and not _read_jump_held() and _read_down()
 		var ff: float = FAST_FALL_MULT if _fast_falling else 1.0
@@ -588,9 +803,9 @@ func _apply_movement(delta: float) -> void:
 		var spd: float = get_run_speed()
 		if absf(axis) > 0.75 and is_on_floor():
 			spd = get_dash_speed()
-			state_machine.enter(_FighterStates.DASH)
+			if not charging: state_machine.enter(_FighterStates.DASH)
 		else:
-			if is_on_floor():
+			if is_on_floor() and not charging:
 				state_machine.enter(_FighterStates.RUN if absf(velocity.x) > spd * 0.5 else _FighterStates.WALK)
 		if state_machine.current_state == _FighterStates.AURA_CHARGE:
 			spd *= get_charge_move_mult()
@@ -606,7 +821,7 @@ func _apply_movement(delta: float) -> void:
 	else:
 		var stop: float = get_traction() if is_on_floor() else get_air_accel() * 0.45
 		velocity.x = move_toward(velocity.x, 0.0, stop * delta)
-		if is_on_floor() and not _FighterStates.is_attack_state(state_machine.current_state):
+		if is_on_floor() and not charging and not _FighterStates.is_attack_state(state_machine.current_state):
 			if absf(velocity.x) < 10.0:
 				state_machine.enter(_FighterStates.IDLE)
 	if _read_jump_pressed():
@@ -619,23 +834,61 @@ func _apply_movement(delta: float) -> void:
 			state_machine.enter(_FighterStates.DOUBLE_JUMP)
 
 func _handle_actions() -> void:
-	if _pending_attack_cmd != "":
-		_start_move_by_command(_pending_attack_cmd)
-		_pending_attack_cmd = ""
+	var guard_held:bool=_read_shield()
+	var guard_pressed:bool=guard_held and not bool(_input_edge_held.get("guard_button",false))
+	_input_edge_held["guard_button"]=guard_held
+	# Existing normalized taunt edge. Hardware/PartyLink mapping belongs elsewhere.
+	if _input_edge("taunt") and party_overdrive.action():return
+	# These routes share press edges. Sample once so a declined identity cancel
+	# cannot consume touch/fallback edges before the exact authored resolver.
+	var cancel_edges: Dictionary = {}
+	if _FighterStates.is_attack_state(state_machine.current_state) and move_runner != null and move_runner.active:
+		cancel_edges = {"attack":_read_attack_pressed(),"special":_read_special_pressed(),"grab":_read_grab_pressed()}
+		if phase_cancel_remaining > 0.0: cancel_edges["dodge"] = _read_dodge_pressed()
 	# Vesper phase cancel / Juno dash cancel — interrupt recovery when windows are live.
-	if _try_identity_cancel():
+	if _try_identity_cancel(cancel_edges):
 		return
 	if state_machine.current_state == _FighterStates.GRAB_HOLD:
 		_throw_direction = _ThrowResolver.read_throw_direction(self)
 		if grab_range_debug:
 			grab_range_debug.visible = _show_grab_range
 		return
+	# is_on_floor() still describes the previous slide on the jump-impulse
+	# frame. Ground guard cannot replace an ascending jump, or its movement
+	# lock would preserve that impulse indefinitely instead of applying gravity.
+	var grounded_guard := is_on_floor() and velocity.y >= 0.0
+	# Release an invalid guard before its action-lock gate. Air dodge remains
+	# separate; the existing guard policy only permits shielding on the ground.
+	var guard_step := _CombatOutcome.guard_transition(
+		state_machine.current_state,
+		guard_held,
+		guard_pressed,
+		grounded_guard,
+		shield_break_8c.guard_allowed() and not is_aura_input_held(),
+		not state_machine.can_attack()
+	)
+	var guard_state := str(guard_step.get("state", state_machine.current_state))
+	if guard_state != state_machine.current_state:
+		if bool(guard_step.get("begin_parry", false)):
+			perfect_guard.begin()
+		shielding = guard_state in [_FighterStates.SHIELD_START, _FighterStates.SHIELD_HOLD]
+		state_machine.enter(guard_state)
+		var guard_event := str(guard_step.get("event", ""))
+		if guard_event != "":
+			shield_event.emit({"event": guard_event, "state": guard_state, "damage_applied": 0.0, "stocks_delta": 0})
+	if guard_state in [_FighterStates.SHIELD_START, _FighterStates.SHIELD_HOLD]:
+		return
 	if not state_machine.can_attack():
+		_try_authored_attack_cancel(cancel_edges)
+		return
+	if _pending_attack_cmd != "":
+		_start_move_by_command(_pending_attack_cmd)
+		_pending_attack_cmd = ""
 		return
 	if _read_transform_input() and _transform_pipeline != null and _transform_pipeline.can_attempt_transform():
 		if _transform_pipeline.attempt_transform():
 			return
-	if is_aura_input_held():
+	if is_aura_input_held() and not party_overdrive.active():
 		tick_aura_charge(get_physics_process_delta_time())
 		if aura < 100.0:
 			state_machine.enter(_FighterStates.AURA_CHARGE)
@@ -645,6 +898,7 @@ func _handle_actions() -> void:
 			_set_aura_vfx(true)
 		# Jump cancels charge (platform-fighter interrupt, not locked).
 		if _read_jump_pressed() and is_on_floor() and state_machine.current_state != _FighterStates.JUMP_SQUAT:
+			if _elemental_audio != null: _elemental_audio.cancel_charge()
 			_set_aura_vfx(false)
 			_jump_short_hop = false
 			state_machine.enter(_FighterStates.JUMP_SQUAT)
@@ -652,35 +906,54 @@ func _handle_actions() -> void:
 	elif state_machine.current_state in [_FighterStates.AURA_CHARGE, _FighterStates.AURA_READY]:
 		state_machine.enter(_FighterStates.IDLE)
 		_set_aura_vfx(false)
-	if _read_aura_burst() and aura >= 100.0:
+	if _read_aura_burst() and aura >= 100.0 and not party_overdrive.active():
 		_start_move_by_command("aura_burst")
 		return
-	if _read_shield() and is_on_floor() and not is_aura_input_held():
-		if state_machine.current_state != _FighterStates.SHIELD_HOLD:
-			state_machine.enter(_FighterStates.SHIELD_START)
-		state_machine.enter(_FighterStates.SHIELD_HOLD)
-		shielding = true
-		return
-	if state_machine.current_state in [_FighterStates.SHIELD_HOLD, _FighterStates.SHIELD_START]:
-		shielding = false
-		state_machine.enter(_FighterStates.IDLE)
 	if _read_dodge_pressed():
 		_start_dodge()
 	if _read_grab_pressed():
 		_start_move("grab")
-	if _read_attack_pressed():
-		if aura >= 100.0:
+	var attack_pressed := _read_attack_pressed()
+	var special_pressed := _read_special_pressed()
+	if attack_pressed and special_pressed and is_on_floor() and not is_aura_input_held() and aura < 100.0:
+		_start_move_by_command("attack_heavy")
+		return
+	if attack_pressed:
+		if aura >= 100.0 and not party_overdrive.active():
 			_start_move_by_command("aura_burst")
 			return
 		var cmd: String = _resolve_attack_command()
 		_start_move_by_command(cmd)
-	if _read_special_pressed() and not is_aura_input_held():
+	if special_pressed and not is_aura_input_held():
 		_start_move_by_command(_resolve_special_command())
 
 func _start_move(move_id: String) -> void:
 	var m: Dictionary = _DataLoader.find_move(move_manifest, move_id)
 	if not m.is_empty():
 		_start_move_dict(m)
+
+func _try_authored_attack_cancel(edges: Dictionary = {}) -> bool:
+	# Existing explicit manifest links only; no new frame windows or hitstun.
+	# Public press edges remain required. Shield/whiff/stale projectiles cannot
+	# grant a body-hit cancel, and controls/hurt/landing retain their authority.
+	if not controls_enabled or not _FighterStates.is_attack_state(state_machine.current_state) or _hitstop>0 or move_runner==null or not move_runner.active:return false
+	var attack_pressed: bool = bool(edges.attack) if edges.has("attack") else _read_attack_pressed()
+	var special_pressed: bool = bool(edges.special) if edges.has("special") else _read_special_pressed()
+	# Exclusive public inputs preserve heavy/charge/full-meter chord ownership.
+	var grab_pressed: bool = bool(edges.grab) if edges.has("grab") else _read_grab_pressed()
+	if int(attack_pressed) + int(special_pressed) + int(grab_pressed) != 1 or aura>=100 or (special_pressed and is_aura_input_held()):return false
+	if grab_pressed and not is_on_floor(): return false
+	var command := "grab" if grab_pressed else _resolve_special_command() if special_pressed else _resolve_attack_command()
+	var target: Dictionary={}
+	if command=="attack_neutral" and is_on_floor():
+		target=_DataLoader.find_move(move_manifest,"jab_2" if _jab_chain==1 else "jab_finisher" if _jab_chain==2 else "jab_1")
+	else:
+		target=_DataLoader.find_move_by_input(move_manifest,command,not is_on_floor())
+	if target.is_empty() or not move_runner.can_cancel_to(str(target.get("move_id",""))):return false
+	authored_cancel_history.append({"from":move_runner.current_move_id(),"to":str(target.move_id),"activation":move_runner.activation_id,"move_frame":move_runner.total_frame,"gameplay_frame":Engine.get_physics_frames(),"input_command":command,"confirmed_body_hit":move_runner.confirmed_body_hit})
+	if authored_cancel_history.size()>64:authored_cancel_history.pop_front()
+	_start_move_by_command(command)
+	return true
 
 
 func training_play_move(move_id: String, aura_amount: float = -1.0, facing_override: int = 0) -> Dictionary:
@@ -717,7 +990,7 @@ func _resolve_attack_command() -> String:
 	if up: return "attack_up"
 	if down: return "attack_down"
 	if absf(axis) > 0.3: return "attack_forward"
-	# heavy_attack / smash remain DESIGN_ONLY: CONTROLS do not distinguish tilt vs smash/heavy.
+	# Grounded simultaneous Attack + Special resolves heavy before these tilt inputs.
 	if _jab_chain == 0: return "attack_neutral"
 	if _jab_chain == 1: return "attack_neutral"
 	return "attack_neutral"
@@ -732,12 +1005,16 @@ func _resolve_special_command() -> String:
 	return "special_neutral"
 
 func is_aura_input_held() -> bool:
+	if remote_controls != null: return _button_held("special") and _button_held("shield")
+	if not InputMap.has_action("p%d_special" % slot) or not InputMap.has_action("p%d_shield" % slot):
+		return false # Cinematic/story actors can exist beyond the two human input channels.
 	var tim = get_node_or_null("/root/TouchInputManager")
 	if tim != null and tim.has_method("is_aura_charge_touch") and tim.is_aura_charge_touch(slot):
 		return true
 	return Input.is_action_pressed("p%d_special" % slot) and Input.is_action_pressed("p%d_shield" % slot)
 
 func queue_attack_command(cmd: String) -> void:
+	if combat_closed: return
 	var rec = get_node_or_null("/root/RuntimeFlightRecorder")
 	if rec and rec.has_method("record_action"):
 		rec.record_action(fighter_id, cmd, "Fighter.queue_attack_command", {})
@@ -750,35 +1027,31 @@ func begin_cpu_telegraph(cmd: String, duration: float = 0.2) -> void:
 	_ensure_telegraph_pulse()
 	if _telegraph_pulse != null:
 		_telegraph_pulse.visible = true
-		_telegraph_pulse.modulate = Color(1.0, 0.85, 0.2, 0.85)
+		var renderer = preload("res://scripts/visual/spectral_feedback_renderer.gd").obtain(self)
+		if renderer != null and _spectral_telegraph_slot < 0:
+			_spectral_renderer=renderer
+			_spectral_telegraph_slot=renderer.emit_effect(fighter_id,12,global_position+Vector2(0,-24),Vector2(facing,0),84,-1.0,"",self)
 
 func _ensure_telegraph_pulse() -> void:
 	if _telegraph_pulse != null:
 		return
-	_telegraph_pulse = ColorRect.new()
+	_telegraph_pulse = Node2D.new()
 	_telegraph_pulse.name = "CpuTelegraphPulse"
-	_telegraph_pulse.size = Vector2(40, 56)
-	_telegraph_pulse.position = Vector2(-20, -60)
-	_telegraph_pulse.color = Color(1.0, 0.8, 0.15, 0.55)
-	_telegraph_pulse.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_telegraph_pulse.visible = false
 	add_child(_telegraph_pulse)
+
 
 func _tick_cpu_telegraph(delta: float) -> void:
 	if _cpu_telegraph_remaining <= 0.0:
 		if _telegraph_pulse != null:
 			_telegraph_pulse.visible = false
+		if is_instance_valid(_spectral_renderer) and _spectral_telegraph_slot>=0:
+			_spectral_renderer.stop_slot(_spectral_telegraph_slot);_spectral_telegraph_slot=-1
 		return
 	_cpu_telegraph_remaining = maxf(0.0, _cpu_telegraph_remaining - delta)
-	if _telegraph_pulse != null:
-		var pulse := 0.45 + 0.4 * absf(sin(Time.get_ticks_msec() * 0.02))
-		_telegraph_pulse.modulate.a = pulse
-		_telegraph_pulse.visible = _cpu_telegraph_remaining > 0.0
-	# Soft body flash while telegraphing (a11y: still visible with reduce_motion via alpha only).
-	if body != null and _cpu_telegraph_remaining > 0.0:
-		body.modulate = Color(1.25, 1.1, 0.7, 1.0)
-	elif body != null:
-		body.modulate = _base_modulate
+	if _telegraph_pulse != null: _telegraph_pulse.visible=_cpu_telegraph_remaining>0.0
+	if is_instance_valid(_spectral_renderer) and _spectral_telegraph_slot>=0:
+		_spectral_renderer.update_slot(_spectral_telegraph_slot,global_position+Vector2(0,-24),Vector2(facing,0),84,clampf(1.0-_cpu_telegraph_remaining/.2,0,1))
 
 func _start_move_by_command(cmd: String) -> void:
 	var m: Dictionary = {}
@@ -803,14 +1076,46 @@ func _start_move_by_command(cmd: String) -> void:
 	_start_move_dict(m)
 
 func _start_move_dict(m: Dictionary) -> void:
+	# Recovery may permit a new public command before the old runner ends.
+	# Retire that activation's melee shape before the next owner takes over.
+	hitbox.monitoring = false
+	var startup_event := "super_startup" if str(m.get("move_id", "")) == "aura_burst" else "whiff"
+	if not bool(m.get("_party_ultimate",false)):
+		preload("res://scripts/audio/v1_candidate_sfx.gd").play_event(fighter_id, startup_event, self)
 	var base_move := m
-	if not _current_form_id.is_empty() and not _forms_doc.is_empty():
+	if party_overdrive.active():
+		base_move = party_overdrive.overlay(m)
+	elif not _current_form_id.is_empty() and not _forms_doc.is_empty():
 		var form_entry: Dictionary = _FormDefinition.form_entry(_forms_doc, _current_form_id)
 		base_move = _FormDefinition.apply_move_override(m, form_entry, str(m.get("move_id", "")))
-	_current_move = _AuraScaler.apply_to_move(base_move, aura)
-	_current_move = _AuraIdentity.apply_to_scaled_move(
-		_current_move, fighter_id, aura, str(data.get("combatTag", ""))
-	)
+	## Convergence Unbound only — min cooldowns / full supers / instant resources.
+	## Never applied in Versus/Story/ranked (trial modifiers cleared on those entries).
+	if str(GameState.mode) == "trials" and bool(GameState.trial_live_combat) and str(GameState.trial_mode_id) == "convergence_unbound":
+		base_move = base_move.duplicate(true)
+		var cd_mult: float = float(GameState.trial_cooldown_mult)
+		if cd_mult > 0.0 and cd_mult < 1.0:
+			base_move["recovery_frames"] = maxi(1, int(round(float(base_move.get("recovery_frames", 12)) * cd_mult)))
+			base_move["startup_frames"] = maxi(1, int(round(float(base_move.get("startup_frames", 4)) * maxf(cd_mult, 0.35))))
+		if bool(GameState.trial_full_supers) and str(base_move.get("move_id", "")) == "aura_burst":
+			base_move["unbound_full_super"] = true
+		if bool(GameState.trial_instant_resources):
+			aura = 100.0
+	if party_overdrive.active():
+		_current_move = base_move.duplicate(true)
+	else:
+		_current_move = _AuraScaler.apply_to_move(base_move, aura)
+		_current_move = _AuraIdentity.apply_to_scaled_move(
+			_current_move, fighter_id, aura, str(data.get("combatTag", ""))
+		)
+	# Only literal form overlays opt into resolved-melee ownership. BASE and
+	# projectile resolution retain their existing accepted behavior. The resolver
+	# must not apply aura/identity a second time to these already resolved moves.
+	if bool(_current_move.get("form_override_applied", false)):
+		_current_move["_resolved_form_melee_scaling"] = true
+	# Explicit per-battle experiment; never a saved setting or implicit BASE retune.
+	if bool(get_meta("base_aura_single_pass_candidate", false)):
+		_current_move["_resolved_melee_scaling"] = true
+	# Canonical clip alias for routing E2E / presentation identity (move_id may differ).
 	# Neutral special cast clip follows aura tier (tap/medium/full) — no new buttons.
 	var mid0 := str(_current_move.get("move_id", m.get("move_id", "")))
 	if mid0 == "neutral_special_projectile" or str(m.get("move_type", "")) == "projectile":
@@ -819,6 +1124,10 @@ func _start_move_dict(m: Dictionary) -> void:
 		_current_move["projectile_tier"] = tier_clip
 	elif mid0 == "aura_burst":
 		_current_move["visual_move_id"] = _MoveResolver.canonical_clip_for_move_id("aura_burst")
+	elif not mid0.is_empty() and not _current_move.has("visual_move_id"):
+		var canon_clip := _MoveResolver.canonical_clip_for_move_id(mid0)
+		if not canon_clip.is_empty():
+			_current_move["visual_move_id"] = canon_clip
 	var lock := _FacingContract.lock_attack_direction(
 		_FacingContract.logical_facing_from_int(facing), _current_move
 	)
@@ -842,7 +1151,10 @@ func _start_move_dict(m: Dictionary) -> void:
 	move_runner.start_move(_current_move, self)
 	var mid = str(m.get("move_id", ""))
 	var mt = str(m.get("move_type", "melee"))
-	if mid == "grab" or mt == "grab":
+	_activate_pink_bloom_for_move(_current_move if not _current_move.is_empty() else m)
+	if bool(m.get("_party_ultimate",false)):
+		state_machine.enter("ultimate_startup")
+	elif mid == "grab" or mt == "grab":
 		state_machine.enter(_FighterStates.GRAB_STARTUP)
 	elif mt == "throw" or mid.begins_with("throw_"):
 		state_machine.enter(_FighterStates.THROW_STARTUP)
@@ -854,6 +1166,70 @@ func _start_move_dict(m: Dictionary) -> void:
 		state_machine.enter(_FighterStates.SPECIAL_STARTUP)
 	else:
 		state_machine.enter(_FighterStates.ATTACK_STARTUP)
+
+
+func _activate_pink_bloom_for_move(move: Dictionary) -> void:
+	## Wire Pink systems through ordinary combat controls / Training without stealing grab/burst IDs.
+	if pink_bloom == null or fighter_id != "rosamere":
+		return
+	var mid := str(move.get("move_id", ""))
+	var system_id := str(move.get("pink_system", ""))
+	if system_id.is_empty():
+		match mid:
+			"bloom_seed":
+				system_id = "BloomSeed"
+			"petal_constellation":
+				system_id = "PetalConstellation"
+			"first_dawn":
+				system_id = "FirstDawn"
+			"gentle_reversal":
+				system_id = "GentleReversal"
+			"aura_charge":
+				system_id = "OriginationScript"
+			"aura_burst":
+				system_id = _pink_super_or_permission_for_form()
+			"grab":
+				system_id = "QuietEmbrace"
+			_:
+				system_id = ""
+	if system_id.is_empty():
+		return
+	var payload := {
+		"move_id": mid,
+		"form_id": _current_form_id,
+		"training_display_name": str(move.get("training_display_name", mid)),
+		"ordinary_combat_control": bool(move.get("ordinary_combat_control", true)),
+	}
+	var activated: Dictionary = pink_bloom.activate(system_id, slot, payload)
+	if bool(activated.get("ok", false)):
+		pink_bloom_history.append(activated.get("effect", {}))
+		if pink_bloom_history.size() > 64:
+			pink_bloom_history.pop_front()
+		stamp_runtime_hook("pink_bloom:" + system_id)
+		## Training practice feedback: expose last Pink activation on the actor.
+		set_meta("rosamere_last_pink_activation", {
+			"system_id": system_id,
+			"move_id": mid,
+			"event_id": str(activated.get("effect", {}).get("event_id", "")),
+			"form_id": _current_form_id,
+		})
+
+
+func _pink_super_or_permission_for_form() -> String:
+	## Ordinary aura_burst remains the control; form selects which authored super/system fires.
+	match _current_form_id:
+		"EVERLASTING_ORIGIN":
+			return "mythic_everything_again"
+		"FIRST_BLOOM":
+			return "the_first_permission"
+		_:
+			return "FirstPermission"
+
+
+func get_pink_bloom_snapshot() -> Dictionary:
+	if pink_bloom == null:
+		return {}
+	return pink_bloom.capture()
 
 func _start_dodge() -> void:
 	if _dodge_cooldown > 0.0:
@@ -915,6 +1291,9 @@ func begin_landing(from_aerial: bool, from_fast_fall: bool = false) -> void:
 	state_machine.enter(_FighterStates.LAND)
 
 func _track_landing() -> void:
+	if party_overdrive.owns_motion():
+		_was_airborne=not is_on_floor()
+		return
 	var airborne := not is_on_floor()
 	if _was_airborne and not airborne:
 		var from_attack := _FighterStates.is_attack_state(state_machine.previous_state) or _pending_landing_from_attack
@@ -924,6 +1303,8 @@ func _track_landing() -> void:
 	_was_airborne = airborne
 
 func _check_ledge_grab() -> void:
+	if party_overdrive.owns_motion():return
+	if _ledge_regrab_cooldown > 0.0: return
 	if not ledges_enabled:
 		return
 	if is_on_floor() or invincible:
@@ -950,6 +1331,10 @@ func _check_ledge_grab() -> void:
 		var toward_stage := signf(platform_center_x - global_position.x)
 		if absf(velocity.x) > 80.0 and signf(velocity.x) == -toward_stage:
 			continue
+		# Ledge acquisition interrupts the old airborne move. Its later active
+		# tick must not overwrite LEDGE_HANG/GETUP and strand ledge invincibility.
+		if move_runner.active: move_runner.cancel()
+		hitbox.monitoring = false
 		_ledge_side = side
 		global_position = _CombatSpace.ledge_hang_position(anchor.x, platform_surface_y, side)
 		velocity = Vector2.ZERO
@@ -985,17 +1370,23 @@ func tick_ledge_hang(_delta: float) -> void:
 		_ledge_side
 	)
 	if _read_jump_pressed() or _read_up():
+		_ledge_regrab_cooldown = 0.4
 		velocity.y = -get_jump_strength() * 0.85
 		velocity.x = float(-_ledge_side) * get_air_speed() * 0.35
 		invincible = false
 		state_machine.enter(_FighterStates.JUMP)
 		return
 	if _read_attack_pressed() or _read_dodge_pressed() or (_ledge_side < 0 and _read_axis() > 0.4) or (_ledge_side > 0 and _read_axis() < -0.4):
+		# Getup starts inside the existing42px snap window. Use the same regrab
+		# lock as a ledge drop so its first falling tick can land on the stage
+		# instead of immediately undoing the completed getup.
+		_ledge_regrab_cooldown = 0.4
 		global_position.x += float(-_ledge_side) * 28.0
 		global_position.y = platform_surface_y - 8.0
 		state_machine.enter(_FighterStates.LEDGE_GETUP)
 		return
 	if _read_down() or state_machine.state_time > 2.5:
+		_ledge_regrab_cooldown = 0.4
 		invincible = false
 		global_position.y += 6.0
 		state_machine.enter(_FighterStates.FALL)
@@ -1040,25 +1431,49 @@ func stage_center_x() -> float:
 	return platform_center_x
 
 func _on_move_active(move: Dictionary) -> void:
+	if combat_closed: return
+	if party_overdrive.on_active(move):return
 	var mid = str(move.get("move_id", ""))
 	var mt = str(move.get("move_type", "melee"))
+	if _CosmicKit.on_active(self, move): return
+	if move_runner.frame_in_phase == 1 and mt not in ["projectile","grab","throw"] and not move.has("projectile"):
+		var renderer = preload("res://scripts/visual/spectral_feedback_renderer.gd").obtain(self)
+		if renderer != null: renderer.emit_effect(fighter_id,6,hitbox.global_position,Vector2(facing,0),58,.13)
+	# Release and contact are separate: a legitimate missed burst still sounds.
+	if move_runner.frame_in_phase == 1 and (mid == "aura_burst" or mt == "burst"):
+		if _elemental_audio != null: _elemental_audio.play("signature_release")
+		var release_renderer = preload("res://scripts/visual/spectral_feedback_renderer.gd").obtain(self)
+		if release_renderer != null: release_renderer.emit_effect(fighter_id,9,global_position+Vector2(0,-24),Vector2(facing,0),160,.24)
 	if mid == "grab" or mt == "grab":
+		# A successful acquisition consumes this activation, not just this frame.
+		if grabbed_by != null or _grab_acquisition_activation == move_runner.activation_id:return
 		state_machine.enter(_FighterStates.GRAB_ACTIVE)
 		_try_grab_connect()
 		return
 	if mt == "throw" or mid.begins_with("throw_"):
 		state_machine.enter(_FighterStates.THROW_RELEASE)
+		# execute_throw owns the grabbed-target release. A throw has no melee
+		# overlap owner and must never reactivate the previous grab shape.
+		hitbox.monitoring = false
+		return
 	if mt == "projectile" or move.has("projectile"):
-		projectile_spawner.spawn_from_move(_current_move, aura)
+		if move_runner.frame_in_phase == 1:
+			projectile_spawner.spawn_from_move(_current_move, get_effective_combat_aura())
 		state_machine.enter(_FighterStates.SPECIAL_ACTIVE)
 		return
 	var sm: Dictionary = move.get("self_movement", {})
-	if sm is Dictionary and (sm.get("x", 0) != 0 or sm.get("y", 0) != 0):
+	if move_runner.frame_in_phase == 1 and sm is Dictionary and (sm.get("x", 0) != 0 or sm.get("y", 0) != 0):
 		velocity += Vector2(float(sm.get("x", 0)) * facing, float(sm.get("y", 0)))
 	hitbox.monitoring = true
 	_update_hitbox_from_move(move)
+	var contact_generation: int = move_runner.contact_generation
+	var contact_activation: int = move_runner.activation_id
+	var contact_move: String = move_runner.current_move_id()
+	var contact_frame: int = move_runner.total_frame
+	var contact_engine_frame: int = Engine.get_physics_frames()
 	_poll_hitbox_overlaps()
-	call_deferred("_poll_hitbox_overlaps")
+	call_deferred("_poll_owned_hitbox_overlaps", contact_generation,
+		contact_activation, contact_move, contact_frame, contact_engine_frame)
 	if mt == "burst" or mid == "aura_burst":
 		state_machine.enter(_FighterStates.AURA_BURST_ACTIVE)
 	elif str(move.get("input_command", "")).begins_with("special") or mt in ["field", "trap", "movement"]:
@@ -1067,17 +1482,29 @@ func _on_move_active(move: Dictionary) -> void:
 		state_machine.enter(_FighterStates.ATTACK_ACTIVE)
 
 
+func _poll_owned_hitbox_overlaps(generation: int, activation: int, move_id: String, move_frame: int, engine_frame: int) -> bool:
+	# The deferred request owns only its exact live activation/frame. In
+	# particular a component restore may reuse activation/frame IDs, but must
+	# never resurrect a queued callback from the discarded timeline.
+	if combat_closed or move_runner == null or not move_runner.is_active_phase(): return false
+	if generation != move_runner.contact_generation or activation != move_runner.activation_id or move_id != move_runner.current_move_id(): return false
+	if move_frame != move_runner.total_frame or engine_frame != Engine.get_physics_frames(): return false
+	if hitbox == null or not hitbox.monitoring: return false
+	_poll_hitbox_overlaps()
+	return true
+
+
 func _poll_hitbox_overlaps() -> void:
 	## Active-frame overlap poll: Area2D.area_entered can miss if the hurtbox
 	## was already overlapping when monitoring flipped on.
-	if hitbox == null or not hitbox.monitoring:
+	if combat_closed or hitbox == null or not hitbox.monitoring:
 		return
 	if move_runner == null or not move_runner.is_active_phase():
 		return
 	var move: Dictionary = _current_move
 	if move.is_empty():
 		move = _DataLoader.find_move(move_manifest, move_runner.current_move_id())
-	if move.is_empty() or str(move.get("move_id", "")) == "grab":
+	if move.is_empty() or move.has("projectile") or str(move.get("move_type", "")) in ["projectile", "grab", "throw"] or str(move.get("move_id", "")) == "grab" or str(move.get("move_id", "")).begins_with("throw_"):
 		return
 	for area in hitbox.get_overlapping_areas():
 		if area == null or area == hurtbox:
@@ -1093,34 +1520,59 @@ func _poll_hitbox_overlaps() -> void:
 
 
 func _try_grab_connect() -> void:
+	if grabbed_by != null or _transform_match_closed or bool(get_meta("story_released",false)):return
+	if is_instance_valid(grabbed_target):return
 	var opp = _find_opponent()
-	if opp == null or not opp != null and opp.has_method("configure"):
+	if not is_instance_valid(opp) or not opp.has_method("configure"):
 		state_machine.enter(_FighterStates.GRAB_WHIFF)
-		grab_event.emit({"result": "whiff"})
+		_emit_grab_whiff("no_target")
 		return
-	if opp.invincible or opp.grabbed_by != null:
+	if opp.invincible or opp.grabbed_by != null or bool(opp.get_meta("story_cosmic_contract", false)):
 		state_machine.enter(_FighterStates.GRAB_WHIFF)
-		grab_event.emit({"result": "whiff", "reason": "invuln"})
+		_emit_grab_whiff("invuln")
 		return
 	var dist = absf(opp.global_position.x - global_position.x)
 	if dist > _CombatMath.GRAB_RANGE_PX:
 		state_machine.enter(_FighterStates.GRAB_WHIFF)
-		grab_event.emit({"result": "whiff", "reason": "range"})
+		_emit_grab_whiff("range")
 		return
+	if not _grab_overlaps_target_height(opp):
+		state_machine.enter(_FighterStates.GRAB_WHIFF)
+		_emit_grab_whiff("height")
+		return
+	# Acquiring a holder releases its previous victim first; a pair cannot cycle.
+	opp._release_grab_links("grabbed")
 	grabbed_target = opp
 	opp.grabbed_by = self
 	opp.grab_mash = 0.0
 	grab_mash = 0.0
 	_grab_throw_latch = false
 	_throw_direction = ""
+	_grab_acquisition_activation = move_runner.activation_id
 	_input_edge_held["attack"] = false
-	_input_edge_held["grab"] = false
+	# Preserve the acquisition press until a real release. Clearing its edge here
+	# would reacquire automatically after the timed throw while Grab stays held.
 	state_machine.enter(_FighterStates.GRAB_HOLD)
 	opp.state_machine.enter(_FighterStates.GRAB_HOLD)
+	# Enter hold before cancellation so normal/ultimate move-ended callbacks
+	# cannot return the victim to idle or later emit its old hitbox/projectile.
+	opp.move_runner.cancel()
+	opp.hitbox.monitoring = false
 	grab_event.emit({"result": "success", "target": opp.fighter_id})
 
+
+func _grab_overlaps_target_height(target: Node) -> bool:
+	# Preserve the established horizontal grab range. Vertical reach comes from
+	# the resolved authored grab box and the live target hurt shape, not an
+	# unlimited column that can pull a recovering airborne fighter to the hand.
+	var boxes: Array = _current_move.get("hitboxes", [])
+	var hurt_shape := target.get_node_or_null("Hurtbox/HurtShape") as CollisionShape2D
+	if boxes.is_empty() or hurt_shape == null or hurt_shape.shape == null: return false
+	return _CombatSpace.grab_height_overlaps(global_transform, boxes, hurt_shape.global_transform, hurt_shape.shape.get_rect())
+
 func execute_throw() -> void:
-	if grabbed_target == null:
+	if not is_instance_valid(grabbed_target) or grabbed_target.grabbed_by != self or _transform_match_closed:
+		_release_grab_links("invalid_release")
 		return
 	var target = grabbed_target
 	grabbed_target = null
@@ -1130,12 +1582,21 @@ func execute_throw() -> void:
 	state_machine.enter(_FighterStates.THROW_STARTUP)
 	var throw_move: Dictionary = _ThrowResolver.resolve_throw(self, target, move_manifest, direction)
 	_ThrowResolver.apply_victim_offset(self, target, throw_move)
+	if party_overdrive.active():throw_move=party_overdrive.overlay(throw_move)
 	_start_move_dict(throw_move)
+	# THROW_STARTUP was entered while _current_move still described the grab.
+	# Re-entering the same state emits no callback. Show the resolved release
+	# pose now, before frame-zero contact/hitstop, not at the end-of-frame update.
+	_play_current_animation(state_machine.current_state)
+	hitbox.monitoring = false
 	target.state_machine.enter(_FighterStates.HITSTUN)
-	hit_resolver.resolve(self, target, throw_move, damage_percent)
-	grab_event.emit({"result": "throw", "target": target.fighter_id, "direction": direction})
-	if combat_feedback != null and combat_feedback.has_method("spawn_grab_recovery_flash"):
-		combat_feedback.spawn_grab_recovery_flash(self, global_position + Vector2(0, -24), direction)
+	var contact: Dictionary=hit_resolver.resolve(self, target, throw_move, damage_percent)
+	grab_event.emit({"result":"throw" if not contact.is_empty() else "released","reason":"throw_release","target":target.fighter_id,"target_instance":target.get_instance_id(),"direction":direction,"contact":contact})
+
+func _emit_grab_whiff(reason: String) -> void:
+	if move_runner==null or _grab_whiff_activation==move_runner.activation_id:return
+	_grab_whiff_activation=move_runner.activation_id
+	grab_event.emit({"result":"whiff","reason":reason})
 
 func _update_hitbox_from_move(move: Dictionary) -> void:
 	var boxes: Array = move.get("hitboxes", [])
@@ -1172,10 +1633,7 @@ func enable_phase_cancel(seconds: float) -> void:
 	invincible = true
 	stamp_runtime_hook("phase_cancel")
 	stamp_runtime_hook("phase_invuln")
-	get_tree().create_timer(minf(seconds, 0.12)).timeout.connect(func():
-		if phase_cancel_remaining <= 0.0:
-			invincible = false
-	, CONNECT_ONE_SHOT)
+	_gameplay_timeout(minf(seconds, 0.12), _on_gameplay_deadline.bind("phase_cancel"), "phase_cancel")
 
 
 func tick_aura_charge(delta: float) -> void:
@@ -1209,12 +1667,13 @@ func _tick_shield_regen(delta: float) -> void:
 
 
 func tick_grab_hold(_delta: float) -> void:
-	if grabbed_target == null:
+	if grabbed_by != null:return # Held victim is not a grab owner and cannot return itself to neutral.
+	if not is_instance_valid(grabbed_target) or _transform_match_closed:
+		_release_grab_links("hold_closed")
 		state_machine.enter(_FighterStates.IDLE)
 		return
 	_throw_direction = _ThrowResolver.read_throw_direction(self)
-	var attack_action := "p%d_attack" % slot
-	var attack_now := Input.is_action_pressed(attack_action)
+	var attack_now := _button_held("attack")
 	if not attack_now:
 		_input_edge_held["attack"] = false
 		_grab_throw_latch = false
@@ -1226,7 +1685,7 @@ func tick_grab_hold(_delta: float) -> void:
 	if grabbed_target.has_method("tick_grab_mash"):
 		grabbed_target.tick_grab_mash(_delta)
 	if float(grabbed_target.grab_mash) >= _CombatMath.GRAB_MASH_ESCAPE:
-		_break_grab_mash()
+		grabbed_target._break_grab_mash()
 		return
 	if state_machine.state_time > 2.0:
 		execute_throw()
@@ -1240,16 +1699,60 @@ func tick_grab_mash(_delta: float) -> void:
 
 
 func _break_grab_mash() -> void:
-	var attacker = grabbed_by
+	if not is_instance_valid(grabbed_by):return
+	_release_grab_links("mash_escape")
+	velocity.x = -float(facing) * 180.0
+	# Acting observes the real victim escape after ownership cleanup. It never
+	# adds a state, control lock, timer or damage owner.
+	if model_3d != null:
+		var controller = model_3d.get_animation_controller()
+		if controller != null and controller.has_method("begin_grab_escape"):controller.begin_grab_escape()
+
+
+func _release_grab_links(reason: String) -> void:
+	# Existing pair ownership, torn down once and reciprocally. No hit, damage,
+	# invulnerability or throw-release may be synthesized by interruption.
+	var victim = grabbed_target
+	var owner = grabbed_by
+	grabbed_target = null
 	grabbed_by = null
 	grab_mash = 0.0
-	if attacker != null:
-		attacker.grabbed_target = null
-		if attacker.state_machine:
-			attacker.state_machine.enter(_FighterStates.GRAB_WHIFF)
-	state_machine.enter(_FighterStates.IDLE)
-	velocity.x = -float(facing) * 180.0
-	grab_event.emit({"result": "mash_escape"})
+	_grab_throw_latch = false
+	if is_instance_valid(victim) and victim.grabbed_by == self:
+		victim.grabbed_by = null
+		victim.grab_mash = 0.0
+		if victim.is_inside_tree() and victim.model_3d.is_inside_tree() and victim.state_machine.current_state == _FighterStates.GRAB_HOLD:
+			victim.state_machine.enter(_FighterStates.IDLE if victim.is_on_floor() else _FighterStates.FALL)
+		grab_event.emit({"result":"mash_escape" if reason=="mash_escape" else "released","reason":reason,"target":victim.fighter_id})
+	if is_instance_valid(owner) and owner.grabbed_target == self:
+		owner.grabbed_target = null
+		owner._grab_throw_latch = false
+		owner._cancel_grab_runner()
+		if owner.hitbox != null:owner.hitbox.monitoring=false
+		if owner.is_inside_tree() and owner.model_3d.is_inside_tree() and owner.state_machine.current_state == _FighterStates.GRAB_HOLD:owner.state_machine.enter(_FighterStates.GRAB_WHIFF)
+		owner.grab_event.emit({"result":"mash_escape" if reason=="mash_escape" else "released","reason":reason,"target":fighter_id})
+	if is_instance_valid(victim) or is_instance_valid(owner):
+		_cancel_grab_runner()
+		if hitbox != null:hitbox.monitoring=false
+		if reason!="scene_exit" and is_inside_tree() and state_machine != null and state_machine.current_state==_FighterStates.GRAB_HOLD:
+			state_machine.enter(_FighterStates.IDLE if is_on_floor() else _FighterStates.FALL)
+
+
+func _cancel_grab_runner() -> void:
+	if move_runner == null or move_runner.current_move_id()!="grab":return
+	_releasing_grab=true
+	move_runner.cancel()
+	_releasing_grab=false
+
+
+func _exit_tree() -> void:
+	combat_closed = true
+	_network_deadlines.clear()
+	clear_training_dummy_inputs()
+	if cpu != null and (is_cpu or dummy_mode == "cpu"): cpu.clear_simulated_inputs()
+	if _guard_presentation!=null:_guard_presentation.clear("actor_exit")
+	if is_instance_valid(_form_audio_8c):_form_audio_8c.clear()
+	_release_grab_links("scene_exit")
 
 
 func try_tech() -> bool:
@@ -1261,9 +1764,7 @@ func try_tech() -> bool:
 	velocity = Vector2.ZERO
 	state_machine.landing_lag = 0.04
 	state_machine.enter(_FighterStates.LAND)
-	get_tree().create_timer(_CombatMath.TECH_WINDOW_SEC).timeout.connect(func():
-		invincible = false
-	, CONNECT_ONE_SHOT)
+	_gameplay_timeout(_CombatMath.TECH_WINDOW_SEC, _on_gameplay_deadline.bind("tech"), "tech")
 	stamp_runtime_hook("tech")
 	return true
 
@@ -1295,21 +1796,34 @@ func runtime_hooks_seen() -> Array:
 	return _runtime_hooks_seen.keys()
 
 
-func _try_identity_cancel() -> bool:
+func _try_identity_cancel(edges: Dictionary = {}) -> bool:
 	if not _FighterStates.is_attack_state(state_machine.current_state):
 		return false
-	if phase_cancel_remaining > 0.0 and (_read_dodge_pressed() or _read_special_pressed()):
+	var phase_dodge := false
+	var phase_special := false
+	if phase_cancel_remaining > 0.0:
+		phase_dodge = bool(edges.dodge) if edges.has("dodge") else _read_dodge_pressed()
+		phase_special = bool(edges.special) if edges.has("special") else _read_special_pressed()
+	if phase_cancel_remaining > 0.0 and (phase_dodge or phase_special):
 		move_runner.cancel()
 		hitbox.monitoring = false
 		phase_cancel_remaining = 0.0
 		stamp_runtime_hook("phase_cancel")
-		if _read_dodge_pressed():
+		if phase_dodge:
 			_start_dodge()
 		else:
 			state_machine.enter(_FighterStates.IDLE)
 			_start_move_by_command(_resolve_special_command())
 		return true
 	if dash_cancel_remaining > 0.0 and absf(_read_axis()) > 0.75 and is_on_floor():
+		# Juno's explicit finisher -> dash_attack must retain its fresh Attack.
+		# Axis-only, defended/expired and wrong-input routes keep the existing
+		# identity dash behavior; this grants no new authored window or hitstun.
+		if _try_authored_attack_cancel(edges):
+			dash_cancel_remaining = 0.0
+			stamp_runtime_hook("dash_cancel")
+			velocity.x = _read_axis() * get_dash_speed()
+			return true
 		move_runner.cancel()
 		hitbox.monitoring = false
 		dash_cancel_remaining = 0.0
@@ -1321,10 +1835,22 @@ func _try_identity_cancel() -> bool:
 
 
 func receive_hit(attacker: Node, info: Dictionary) -> void:
-	if invincible or grabbed_by != null:
+	if combat_closed or invincible or grabbed_by != null:
 		return
 	if str(info.get("move_id", "")) == "grab":
 		return
+	## Trials shared combat: knockback mult only here.
+	## damage_ratio is applied once in HitResolver.resolve — never re-multiply.
+	if str(GameState.mode) == "trials" and bool(GameState.trial_live_combat):
+		var _tr_kb := float(GameState.trial_knockback_mult)
+		if not is_equal_approx(_tr_kb, 1.0) and info.has("launch") and typeof(info["launch"]) == TYPE_VECTOR2:
+			info["launch"] = info["launch"] * _tr_kb
+		## Resonance: player-owned hits on the authored dummy feed damage→bat→distance.
+		if str(GameState.trial_mode_id) == "resonance_trial" and slot == 2:
+			var Bridge = load("res://scripts/trials/shared_combat_bridge.gd")
+			if Bridge != null:
+				var dmg_live: float = float(info.get("resolved_damage", info.get("damage", 0.0)))
+				Bridge.notify_live_hit(dmg_live, int(sign(float(info.get("launch", Vector2(1, 0)).x))))
 	_last_hit_result = info.duplicate(true)
 	_last_knockback = info.get("launch", Vector2.ZERO)
 	_last_shield_damage = float(info.get("shield_damage", 0.0))
@@ -1333,34 +1859,68 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 		stamp_runtime_hook("passive_armor")
 		hit_landed.emit(info)
 		return
-	if state_machine.current_state == _FighterStates.SHIELD_HOLD or shielding:
-		var sdmg: float = info.get("shield_damage", info.get("damage", 0.0) * 0.8)
-		shield_health -= sdmg
-		info["blocked"] = true
-		hit_landed.emit(info)
-		if shield_health <= 0.0:
+	if state_machine.current_state == _FighterStates.SHIELD_HOLD or state_machine.current_state == _FighterStates.SHIELD_HIT or shielding:
+		var sdmg: float = float(info.get("shield_damage", info.get("damage", 0.0) * 0.8))
+		var contact: Dictionary = _CombatOutcome.shield_contact(shield_health, sdmg, false, int(info.get("shield_stun_frames", 0)))
+		shield_health = float(contact.get("shield_health", shield_health))
+		info["blocked"] = contact.get("state") != "parry"
+		info["perfect_guard"] = contact.get("parry_result") == "success"
+		info["parry_result"] = contact.get("parry_result", "fail")
+		info["shield_event"] = contact.get("event", "shield_hit")
+		info["damage_applied"] = 0.0
+		info["stocks_delta"] = 0
+		info["aura_bible"] = _CombatOutcome.bible_for(fighter_id)
+		_hitstop = _CombatMath.frames_to_seconds(int(info.get("hitstop_frames", 3)))
+		if attacker != null and "_hitstop" in attacker:
+			attacker._hitstop = _hitstop * 0.5
+		if str(contact.get("state")) == "shield_break":
 			shielding = false
 			state_machine.enter(_FighterStates.SHIELD_BREAK)
 			shield_health = 0.0
+		elif str(contact.get("state")) == "parry":
+			state_machine.enter(_FighterStates.SHIELD_HOLD)
 		else:
-			state_machine.enter(_FighterStates.SHIELD_STUN)
+			_shield_stun_limit = _CombatOutcome.stun_seconds(int(contact.get("shield_stun_frames", 0)), _CombatOutcome.SHIELD_STUN_FALLBACK_SECONDS)
+			state_machine.enter(_FighterStates.SHIELD_HIT)
+		hit_landed.emit(info)
+		if has_signal("shield_event"):
+			shield_event.emit(contact)
 		return
-	var dmg: float = info.get("damage", 0.0)
+	# Confirmed body impact interrupts the prior move; its later callbacks must not
+	# overwrite hurt/hitstun or activate another hitbox during victim recovery.
+	_release_grab_links("body_hit")
+	party_overdrive.interrupt()
+	if _transform_pipeline != null: _transform_pipeline.cancel("body_hit")
+	if move_runner != null: move_runner.cancel()
+	hitbox.monitoring = false
+	var dmg: float = float(info.get("resolved_damage", info.get("damage", 0.0)))
+	var gate := str(info.get("damage_zero_reason", ""))
+	if gate == "":
+		gate = "hit"
+	var outcome: Dictionary = _CombatOutcome.confirmed_body_damage(damage_percent, dmg, gate)
 	if state_machine.current_state == _FighterStates.AURA_CHARGE:
 		aura = maxf(0.0, aura - _CombatMath.AURA_HIT_INTERRUPT_LOSS)
 		_set_aura_vfx(false)
-	damage_percent += dmg
+	damage_percent = float(outcome.get("meter_after", damage_percent))
+	info["damage"] = float(outcome.get("damage_applied", dmg))
+	info["damage_applied"] = float(outcome.get("damage_applied", 0.0))
+	info["defender_damage_after"] = damage_percent
+	info["meter_changed"] = bool(outcome.get("meter_changed", false))
+	info["stocks_delta"] = 0
+	info["shield_event"] = str(outcome.get("event", "hit_damage_applied"))
+	dmg = float(info["damage_applied"])
 	damaged.emit(dmg, damage_percent)
 	var launch: Vector2 = info.get("launch", Vector2.ZERO)
-	_di_strength = _CombatMath.di_strength_for_kb(launch.length(), dmg)
 	# Initial DI snapshot at hit confirm.
 	var sx := _read_axis()
 	var sy := -1.0 if _read_up() else (1.0 if _read_down() else 0.0)
-	launch = _CombatMath.apply_di(launch, sx, sy, _di_strength)
+	var motion := _BodyHitMotion.resolve(launch, dmg, sx, sy, int(info.get("hitstop_frames", 3)))
+	_di_strength = motion.di_strength
+	launch = motion.velocity
 	velocity = launch
 	_last_knockback = launch
-	hitstun_remaining = _CombatMath.hitstun_seconds(launch.length())
-	_hitstop = _CombatMath.frames_to_seconds(info.get("hitstop_frames", 3))
+	hitstun_remaining = motion.hitstun
+	_hitstop = motion.hitstop
 	if attacker != null and attacker.has_method("configure"):
 		attacker._hitstop = _hitstop * 0.5
 		attacker.combo_count += 1
@@ -1372,19 +1932,29 @@ func receive_hit(attacker: Node, info: Dictionary) -> void:
 			attacker.aura = minf(100.0, float(attacker.aura) + gain)
 	# Presentation-only: readable hurt pose family before launch clip. CombatMath velocity already applied.
 	_last_hurt_reaction = _HitReaction.resolve(fighter_id, launch, info)
+	_last_hurt_reaction["move_id"] = str(info.get("move_id", ""))
 	if model_3d and model_3d.has_method("apply_hurt_reaction"):
 		model_3d.apply_hurt_reaction(_last_hurt_reaction)
-	var heavy = dmg >= 8.0 or launch.length() > 14.0
-	if launch.length() > 14.0:
-		state_machine.enter(_FighterStates.LAUNCHED)
-	elif heavy:
-		state_machine.enter(_FighterStates.HURT_HEAVY)
-	else:
-		state_machine.enter(_FighterStates.HURT_LIGHT)
+	state_machine.enter(motion.state)
 	hit_landed.emit(info)
 	# Hit telemetry is recorded by HitResolver.resolve (single source of truth).
 
 func reset_fighter() -> void:
+	_network_deadlines.clear()
+	if use_training_physics_clock:
+		# A practice reset owns a new respawn. Earlier respawn/tech/phase
+		# deadlines must not expire its immunity or overwrite its later state.
+		_training_timeouts.clear()
+	if is_instance_valid(_form_audio_8c):_form_audio_8c.clear()
+	shield_break_8c.reset("respawn")
+	if _guard_presentation != null:_guard_presentation.clear("respawn")
+	_release_grab_links("respawn")
+	if _grab_presentation!=null:_grab_presentation.clear("respawn")
+	party_overdrive.reset("respawn")
+	perfect_guard.reset()
+	reset_legacy_transformation("respawn")
+	var trail = get_node_or_null("LaunchTrail")
+	if trail != null: trail.clear()
 	damage_percent = 0.0
 	aura = 0.0
 	combo_count = 0
@@ -1396,14 +1966,92 @@ func reset_fighter() -> void:
 	invincible = true
 	state_machine.enter(_FighterStates.RESPAWN)
 	ensure_visible_presentation()
-	get_tree().create_timer(1.2).timeout.connect(func():
-		invincible = false
-		state_machine.enter(_FighterStates.IDLE)
-		ensure_visible_presentation()
-		respawned.emit()
-	, CONNECT_ONE_SHOT)
+	_gameplay_timeout(1.2, _on_gameplay_deadline.bind("respawn"), "respawn")
+
+
+func _gameplay_timeout(seconds: float, callback: Callable, kind: String = "") -> void:
+	if use_training_physics_clock:
+		_training_timeouts.append({"remaining": seconds, "callback": callback})
+	elif use_network_physics_clock:
+		assert(kind in ["phase_cancel", "tech", "respawn"])
+		_network_deadline_id += 1
+		_network_deadlines.append({"id":_network_deadline_id, "kind":kind, "due":_network_clock + maxi(1, int(ceil(seconds * 60.0 - 0.000001)))})
+	else:
+		# Preserve existing match behavior outside training/tutorial scenes.
+		get_tree().create_timer(seconds).timeout.connect(callback, CONNECT_ONE_SHOT)
+
+func _on_gameplay_deadline(kind: String) -> void:
+	match kind:
+		"phase_cancel":
+			if phase_cancel_remaining <= 0.0: invincible = false
+		"tech": invincible = false
+		"respawn":
+			if combat_closed: return
+			invincible = false
+			state_machine.enter(_FighterStates.IDLE)
+			ensure_visible_presentation()
+			respawned.emit()
+
+func _tick_network_deadlines() -> void:
+	_network_clock += 1
+	var due: Array = []
+	for row in _network_deadlines:
+		if int(row.due) <= _network_clock: due.append(row)
+	# Remove before dispatch, so an expired event has exactly one owner even
+	# if its existing handler clears/schedules other deadlines synchronously.
+	for row in due: _network_deadlines.erase(row)
+	for row in due:
+		if not combat_closed: _on_gameplay_deadline(str(row.kind))
+
+func capture_network_deadlines() -> Dictionary:
+	return {"schema":"fighter_network_deadlines/v1", "owner":{"instance":get_instance_id(), "fighter":fighter_id}, "clock":_network_clock, "next_id":_network_deadline_id, "pending":_network_deadlines.duplicate(true)}
+
+func restore_network_deadlines(record: Dictionary) -> bool:
+	# Trusted LOCAL component restore, never a network packet. The caller must
+	# separately restore actor/physics/round/event state before resimulation.
+	if not use_network_physics_clock or record.size() != 5 or record.get("schema", "") != "fighter_network_deadlines/v1" or record.get("owner", {}) != {"instance":get_instance_id(), "fighter":fighter_id}: return false
+	if typeof(record.get("clock")) != TYPE_INT or typeof(record.get("next_id")) != TYPE_INT or typeof(record.get("pending")) != TYPE_ARRAY or record.clock < 0 or record.next_id < 0 or record.pending.size() > 64: return false
+	var seen: Dictionary = {}
+	var previous_id := 0
+	for row in record.pending:
+		if typeof(row) != TYPE_DICTIONARY or row.size() != 3 or not row.has_all(["id", "kind", "due"]): return false
+		if typeof(row.id) != TYPE_INT or row.id <= 0 or row.id > record.next_id or seen.has(row.id) or typeof(row.kind) != TYPE_STRING or row.kind not in ["phase_cancel", "tech", "respawn"] or typeof(row.due) != TYPE_INT or row.due <= record.clock or row.due > record.clock + 72: return false
+		if row.id <= previous_id or row.due > record.clock + (72 if row.kind == "respawn" else 8): return false
+		seen[row.id] = true
+		previous_id = row.id
+	_network_clock = record.clock
+	_network_deadline_id = record.next_id
+	_network_deadlines = record.pending.duplicate(true)
+	return true
+
+
+func _tick_training_timeouts(delta: float) -> void:
+	var due: Array[Callable] = []
+	for timer in _training_timeouts.duplicate():
+		timer.remaining = float(timer.remaining) - delta
+		if float(timer.remaining) <= 0.000001:
+			_training_timeouts.erase(timer)
+			due.append(timer.callback)
+	for callback in due:
+		if not combat_closed and callback.is_valid(): callback.call()
 
 func lose_stock() -> void:
+	if combat_closed: return
+	_release_grab_links("stock_loss")
+	if _grab_presentation!=null:_grab_presentation.clear("stock_loss")
+	party_overdrive.reset("stock_loss")
+	perfect_guard.reset()
+	# Called only by authentic battle stock loss; danger predictions are never a final result.
+	reset_legacy_transformation("stock_loss")
+	var renderer = preload("res://scripts/visual/spectral_feedback_renderer.gd").obtain(self)
+	if renderer != null:
+		var canvas_to_world := get_viewport().get_canvas_transform().affine_inverse()
+		var screen := get_viewport().get_canvas_transform()*global_position
+		screen=screen.clamp(Vector2(60,120),get_viewport_rect().size-Vector2(60,80))
+		renderer.emit_effect(str(_last_hit_result.get("attacker_id",fighter_id)),7,canvas_to_world*screen,velocity.normalized(),160,.35,"ko:"+str(get_instance_id())+":"+str(stocks))
+	var trail = get_node_or_null("LaunchTrail")
+	if trail != null: trail.clear()
+	preload("res://scripts/audio/v1_candidate_sfx.gd").play_event(fighter_id, "ko", self)
 	stocks -= 1
 	state_machine.enter(_FighterStates.KO)
 	ensure_visible_presentation()
@@ -1421,7 +2069,34 @@ func reset_damage() -> void:
 	damage_percent = 0.0
 	combo_count = 0
 
+func reset_training_practice() -> bool:
+	var gs = get_node_or_null("/root/GameState")
+	if gs == null or str(gs.mode) not in ["training", "tutorial"] or combat_closed:
+		return false
+	clear_training_dummy_inputs()
+	if cpu != null and is_cpu: cpu.clear_simulated_inputs()
+	_pending_attack_cmd = ""
+	# A practice reset owns a fresh authored input sequence. Retaining jab_1's
+	# chain cursor made the next neutral practice attack unexpectedly jab_2.
+	_jab_chain = 0
+	authored_cancel_history.clear()
+	_hitstop = 0.0
+	if model_3d != null and model_3d.get_animation_controller() != null:
+		model_3d.get_animation_controller().presentation_frozen = false
+	move_runner.cancel()
+	projectile_spawner.clear_all()
+	# Reuse the existing respawn authority, including its visible 1.2s immunity.
+	# This practice control cannot reopen a terminal competitive actor.
+	reset_fighter()
+	return true
+
 func reset_position() -> void:
+	if is_instance_valid(_form_audio_8c):_form_audio_8c.clear()
+	shield_break_8c.reset("position_reset")
+	if _guard_presentation != null:_guard_presentation.clear("position_reset")
+	_cancel_grab_acting_presentation("position_reset")
+	_release_grab_links("position_reset")
+	if _grab_presentation!=null:_grab_presentation.clear("position_reset")
 	global_position = spawn_point
 	velocity = Vector2.ZERO
 	grabbed_target = null
@@ -1477,10 +2152,13 @@ func debug_combat_summary() -> Dictionary:
 	}
 
 func _on_move_ended(_move_id: String) -> void:
+	var party_state_owned:bool=party_overdrive._resetting and _move_id.begins_with("party_ultimate:")
+	party_overdrive.move_ended(_move_id)
 	_attack_facing_locked = false
 	if model_3d and model_3d.has_method("clear_attack_facing_lock"):
 		model_3d.clear_attack_facing_lock()
 	hitbox.monitoring = false
+	if party_state_owned or _releasing_grab:return # External grab/hurt/KO owns its state; cancellation cannot overwrite it.
 	var s: String = str(state_machine.current_state) if state_machine else ""
 	if s == _FighterStates.GRAB_HOLD:
 		return
@@ -1500,6 +2178,7 @@ func _on_move_ended(_move_id: String) -> void:
 		state_machine.enter(_FighterStates.IDLE)
 
 func _on_phase_changed(phase: String) -> void:
+	if party_overdrive.on_phase(phase):return
 	match phase:
 		"startup":
 			pass
@@ -1525,18 +2204,31 @@ func _sync_attack_phase_state() -> void:
 				pass
 
 func _sync_motion_state() -> void:
+	if shield_break_8c.holds_lock():return # Opt-in candidate keeps its existing state during platform loss.
+	if party_overdrive.owns_motion():return
 	if not is_on_floor() and state_machine.current_state not in [
 		_FighterStates.JUMP, _FighterStates.DOUBLE_JUMP, _FighterStates.ATTACK_STARTUP,
 		_FighterStates.ATTACK_ACTIVE, _FighterStates.ATTACK_RECOVERY,
 		_FighterStates.SPECIAL_STARTUP, _FighterStates.SPECIAL_ACTIVE, _FighterStates.SPECIAL_RECOVERY,
 		_FighterStates.AURA_BURST_STARTUP, _FighterStates.AURA_BURST_ACTIVE, _FighterStates.AURA_BURST_RECOVERY,
-		_FighterStates.GRAB_STARTUP, _FighterStates.THROW_STARTUP, _FighterStates.THROW_RELEASE,
+		_FighterStates.AURA_CHARGE, _FighterStates.AURA_READY,
+		_FighterStates.GRAB_STARTUP, _FighterStates.GRAB_ACTIVE, _FighterStates.GRAB_HOLD, _FighterStates.THROW_STARTUP, _FighterStates.THROW_RELEASE,
 		_FighterStates.AIR_DODGE, _FighterStates.LAUNCHED,
+		_FighterStates.LEDGE_GETUP, _FighterStates.KO, _FighterStates.RESPAWN,
+		_FighterStates.DODGE_START, _FighterStates.DODGE_ACTIVE, _FighterStates.DODGE_RECOVERY,
 	]:
 		if velocity.y > 0:
 			state_machine.enter(_FighterStates.FALL if velocity.y < get_fall_speed() * 0.02 else _FighterStates.FAST_FALL)
 
 func _check_edge() -> void:
+	if shield_break_8c.holds_lock():return
+	if party_overdrive.owns_motion():return
+	# Edge warning is locomotion presentation, never an interrupt/cancel for
+	# dodge, ledge getup, hurt, throw or authored attack state ownership.
+	if state_machine.current_state not in [
+		_FighterStates.IDLE, _FighterStates.WALK, _FighterStates.RUN, _FighterStates.DASH,
+		_FighterStates.SKID, _FighterStates.TURNAROUND, _FighterStates.EDGE_WARNING, _FighterStates.LEDGE_TEETER,
+	]: return
 	if not is_on_floor():
 		return
 	var edge_dist = platform_half_width - absf(global_position.x - platform_center_x)
@@ -1547,21 +2239,47 @@ func _check_edge() -> void:
 		state_machine.enter(_FighterStates.IDLE if absf(_read_axis()) < 0.1 else _FighterStates.WALK)
 
 func _set_aura_vfx(on: bool) -> void:
-	if aura_vfx:
-		aura_vfx.visible = on
-		if on and data.has("auraColor"):
-			var c := Color(data.get("auraColor"))
-			c.a = clampf(0.2 + aura / 200.0, 0.2, 0.55)
-			aura_vfx.color = c
+	if aura_vfx: aura_vfx.visible=false
+	if _spectral_renderer == null or not is_instance_valid(_spectral_renderer):
+		_spectral_renderer = preload("res://scripts/visual/spectral_feedback_renderer.gd").obtain(self)
+	var charging: bool = on and state_machine.current_state in [_FighterStates.AURA_CHARGE,_FighterStates.AURA_READY]
+	if _spectral_renderer != null:
+		if charging:
+			if _spectral_charge_slot < 0: _spectral_charge_slot=_spectral_renderer.emit_effect(fighter_id,2,global_position+Vector2(0,-24),Vector2.RIGHT,84,-1.0,"",self)
+			_spectral_renderer.update_slot(_spectral_charge_slot,global_position+Vector2(0,-24),Vector2.RIGHT,72+aura*.45,aura/100.0)
+		elif _spectral_charge_slot>=0:
+			_spectral_renderer.stop_slot(_spectral_charge_slot);_spectral_charge_slot=-1
+			_spectral_renderer.emit_effect(fighter_id,5,global_position+Vector2(0,-24),Vector2.RIGHT,90,.18)
 	if model_3d and model_3d.has_method("set_aura_level"):
 		model_3d.set_aura_level(get_aura_level() if on or aura > 1.0 else 0)
 	if model_3d and model_3d.has_method("set_aura_tier"):
 		model_3d.set_aura_tier(get_aura_tier() if on or aura > 1.0 else 0)
-	if on and not _aura_sfx_hook:
-		_aura_sfx_hook = true
+	if _elemental_audio == null:
+		_elemental_audio = preload("res://scripts/audio/elemental_performance.gd").new()
+		_elemental_audio.name = "ElementalPerformance"
+		_elemental_audio.fighter_id = fighter_id
+		add_child(_elemental_audio)
+	_elemental_audio.set_fighter_identity(fighter_id)
+	_elemental_audio.update_charge(on and state_machine.current_state in [_FighterStates.AURA_CHARGE,_FighterStates.AURA_READY],aura/100.0)
 
 
 func _on_state_changed(_from: String, to: String) -> void:
+	shield_break_8c.state_changed(to)
+	if to in [_FighterStates.KO, _FighterStates.RESPAWN]:
+		if is_instance_valid(_form_audio_8c):_form_audio_8c.clear()
+		shield_break_8c.reset(to)
+		if _guard_presentation != null:_guard_presentation.clear(to)
+	if to==_FighterStates.GRAB_STARTUP:grab_event.emit({"result":"attempt"})
+	if to not in [_FighterStates.GRAB_HOLD,_FighterStates.THROW_STARTUP,_FighterStates.THROW_RELEASE] and (grabbed_by != null or grabbed_target != null):
+		_release_grab_links("state_interrupted:"+to)
+	if party_overdrive.owns_motion() and to not in ["party_transform","ultimate_startup","ultimate_active","ultimate_recovery"]:
+		party_overdrive.reset("state_interrupted:"+to,true,false)
+	if _transform_sequence_active and to != _FighterStates.AURA_BURST_STARTUP:
+		_transform_pipeline.cancel("state_interrupted:" + to)
+	if _elemental_audio != null and _from in [_FighterStates.AURA_CHARGE,_FighterStates.AURA_READY] and to not in [_FighterStates.AURA_CHARGE,_FighterStates.AURA_READY]:
+		if to in [_FighterStates.IDLE,_FighterStates.AURA_BURST_STARTUP]: _elemental_audio.update_charge(false,aura/100.0)
+		else: _elemental_audio.cancel_charge()
+	if _from in [_FighterStates.AURA_CHARGE,_FighterStates.AURA_READY] and to not in [_FighterStates.AURA_CHARGE,_FighterStates.AURA_READY]: _set_aura_vfx(false)
 	_play_current_animation(to)
 	if to in [_FighterStates.AURA_CHARGE, _FighterStates.AURA_READY, _FighterStates.AURA_BURST_STARTUP, _FighterStates.AURA_BURST_ACTIVE]:
 		_set_aura_vfx(true)
@@ -1570,13 +2288,23 @@ func _on_state_changed(_from: String, to: String) -> void:
 	state_changed.emit(to)
 
 
+func _cancel_grab_acting_presentation(reason: String) -> void:
+	if model_3d == null:return
+	var controller = model_3d.get_animation_controller()
+	if controller != null and controller.has_method("cancel_grab_acting"):controller.cancel_grab_acting(reason)
+
+
 func _play_current_animation(state: String) -> void:
+	# Existing per-character signature candidates, not newly authored ultimate acting.
+	if state=="party_transform":state="aura_charge"
+	elif state.begins_with("ultimate_"):state="aura_burst_"+state.trim_prefix("ultimate_")
 	if not animator:
 		return
 	ensure_visible_presentation()
 	if model_3d and model_3d.is_model_loaded():
 		var move_copy: Dictionary = _current_move.duplicate()
 		move_copy["throw_direction"] = _throw_direction
+		move_copy["grab_role"] = "attacker" if is_instance_valid(grabbed_target) and grabbed_target.grabbed_by == self else "victim" if is_instance_valid(grabbed_by) and grabbed_by.grabbed_target == self else ""
 		# Prefer visual_move_id (projectile tier / signature bind) when set.
 		if move_copy.has("visual_move_id") and str(move_copy.get("visual_move_id", "")) != "":
 			move_copy["move_id"] = str(move_copy.get("visual_move_id"))
@@ -1614,6 +2342,7 @@ func _setup_shapes() -> void:
 		body.position = -col_sz / 2.0
 
 func _read_axis() -> float:
+	if remote_controls != null: return remote_controls.axis()
 	var touch = TouchInputManager.get_axis(slot)
 	# Prefer live touch stick when the overlay/harness is active — TIM also
 	# mirrors axis into Input actions, and a digital full-press would otherwise
@@ -1626,6 +2355,7 @@ func _read_axis() -> float:
 	return kb
 
 func _read_jump_pressed() -> bool:
+	if remote_controls != null: return _input_edge("jump")
 	if TouchInputManager.consume_touch_just_pressed(slot, "jump"):
 		return true
 	if Input.is_action_just_pressed("p%d_jump" % slot):
@@ -1634,24 +2364,26 @@ func _read_jump_pressed() -> bool:
 	return _input_edge("jump")
 
 func _read_jump_held() -> bool:
+	if remote_controls != null: return _button_held("jump")
 	if TouchInputManager.is_touch_pressed(slot, "jump"):
 		return true
 	return Input.is_action_pressed("p%d_jump" % slot)
 
 func _input_edge(suffix: String) -> bool:
+	if remote_controls != null: return remote_controls.just_pressed(suffix)
 	# Rising edge on Input.is_action_pressed. Input.action_press() from scripts /
 	# CPU / touch mirrors only guarantees is_action_just_pressed for the issuing
 	# frame; if that frame's idle callback runs after CharacterBody physics,
 	# attacks/grabs silently drop. Edge-on-pressed matches real digital-button
 	# semantics and keeps synthetic presses reliable.
-	var action := "p%d_%s" % [slot, suffix]
-	var held := Input.is_action_pressed(action)
+	var held := _button_held(suffix)
 	var was := bool(_input_edge_held.get(suffix, false))
 	_input_edge_held[suffix] = held
 	return held and not was
 
 
 func _read_attack_pressed() -> bool:
+	if remote_controls != null: return _input_edge("attack")
 	if TouchInputManager.consume_touch_just_pressed(slot, "attack"):
 		return true
 	if Input.is_action_just_pressed("p%d_attack" % slot):
@@ -1670,6 +2402,7 @@ func _read_transform_input() -> bool:
 
 
 func _read_special_pressed() -> bool:
+	if remote_controls != null: return _input_edge("special")
 	if TouchInputManager.consume_touch_just_pressed(slot, "special"):
 		return true
 	if Input.is_action_just_pressed("p%d_special" % slot):
@@ -1678,11 +2411,13 @@ func _read_special_pressed() -> bool:
 	return _input_edge("special")
 
 func _read_shield() -> bool:
+	if remote_controls != null: return _button_held("shield")
 	if TouchInputManager.is_touch_pressed(slot, "shield"):
 		return true
 	return Input.is_action_pressed("p%d_shield" % slot)
 
 func _read_dodge_pressed() -> bool:
+	if remote_controls != null: return _input_edge("dodge")
 	if TouchInputManager.consume_touch_just_pressed(slot, "dodge"):
 		return true
 	if Input.is_action_just_pressed("p%d_dodge" % slot):
@@ -1691,6 +2426,7 @@ func _read_dodge_pressed() -> bool:
 	return _input_edge("dodge")
 
 func _read_grab_pressed() -> bool:
+	if remote_controls != null: return _input_edge("grab")
 	if TouchInputManager.consume_touch_just_pressed(slot, "grab"):
 		return true
 	if Input.is_action_just_pressed("p%d_grab" % slot):
@@ -1699,19 +2435,25 @@ func _read_grab_pressed() -> bool:
 	return _input_edge("grab")
 
 func _read_up() -> bool:
+	if remote_controls != null: return _button_held("up")
 	if TouchInputManager.get_vertical(slot) < -0.22:
 		return true
 	return Input.is_action_pressed("p%d_up" % slot)
 
 func _read_down() -> bool:
+	if remote_controls != null: return _button_held("down")
 	if TouchInputManager.get_vertical(slot) > 0.22:
 		return true
 	return Input.is_action_pressed("p%d_down" % slot)
 
 func _read_aura_burst() -> bool:
+	if remote_controls != null: return aura >= 100.0 and _input_edge("attack")
 	return Input.is_action_just_pressed("p%d_attack" % slot) and aura >= 100.0
 
 func _release_action(action: String) -> void:
+	if remote_controls != null:
+		remote_controls.release(action.trim_prefix("p%d_" % slot))
+		return
 	Input.action_release(action)
 
 func _dummy_apply_di() -> void:
@@ -1723,27 +2465,66 @@ func _dummy_apply_di() -> void:
 			var outward := 1.0 if global_position.x > platform_center_x else -1.0
 			velocity = _CombatMath.apply_di(velocity, outward, 0.2, _di_strength)
 
+
+func configure_training_dummy(mode: String, level: int = 2) -> bool:
+	var gs = get_node_or_null("/root/GameState")
+	if gs == null or str(gs.mode) not in ["training", "tutorial"]:
+		return false
+	if mode == "stand": mode = "idle" # Existing fixture/menu alias.
+	if mode not in ["idle", "shield", "jump", "attack", "cpu", "di_in", "di_out"]:
+		return false
+	clear_training_dummy_inputs()
+	if cpu != null and (is_cpu or dummy_mode == "cpu"):
+		cpu.clear_simulated_inputs()
+	dummy_mode = mode
+	is_cpu = mode == "cpu"
+	if is_cpu and cpu != null:
+		cpu.setup(self, level)
+	return true
+
+
+func clear_training_dummy_inputs() -> void:
+	for action in _training_dummy_owned_actions:
+		if InputMap.has_action(action): Input.action_release(action)
+	_training_dummy_owned_actions.clear()
+
+
+func _dummy_press(suffix: String) -> void:
+	var action := "p%d_%s" % [slot, suffix]
+	if not Input.is_action_pressed(action):
+		Input.action_press(action)
+		_training_dummy_owned_actions[action] = true
+
+
+func _dummy_release(suffix: String) -> void:
+	var action := "p%d_%s" % [slot, suffix]
+	if _training_dummy_owned_actions.erase(action):
+		Input.action_release(action)
+
 func _dummy_tick(delta: float) -> void:
+	_dummy_release("attack")
+	_dummy_release("jump")
+	if not controls_enabled:
+		clear_training_dummy_inputs()
+		return
 	var target = _find_opponent()
 	if target == null:
 		return
 	var dx: float = float(target.global_position.x) - global_position.x
 	match dummy_mode:
 		"shield":
-			if not Input.is_action_pressed("p%d_shield" % slot):
-				Input.action_press("p%d_shield" % slot)
+			_dummy_press("shield")
 		"jump":
-			if is_on_floor() and randf() < 0.02:
-				_jump_short_hop = false
-				state_machine.enter(_FighterStates.JUMP_SQUAT)
+			if is_on_floor() and state_machine.can_move() and randf() < 0.02:
+				_dummy_press("jump")
 		"attack":
-			if absf(dx) < 90 and randf() < 0.03:
-				_start_move_by_command("attack_neutral")
+			if absf(dx) < 90 and state_machine.can_attack() and randf() < 0.03:
+				_dummy_press("attack")
 		"di_in", "di_out":
 			# Prefer shield between hits; DI applied in hurt path via _dummy_apply_di.
 			if state_machine.current_state in [_FighterStates.IDLE, _FighterStates.WALK, _FighterStates.RUN]:
-				if not Input.is_action_pressed("p%d_shield" % slot) and randf() < 0.02:
-					Input.action_press("p%d_shield" % slot)
+				if randf() < 0.02:
+					_dummy_press("shield")
 		"idle":
 			pass
 
@@ -1751,10 +2532,15 @@ func _find_opponent() -> Node2D:
 	var parent = get_parent()
 	if parent == null:
 		return null
+	var nearest: Node2D = null
 	for c in parent.get_children():
-		if c != self and c != null and c.has_method("configure"):
-			return c
-	return null
+		if c == self or c == null or not c.has_method("receive_hit") or c.stocks <= 0 or c.get_meta("story_released", false): continue
+		# Hostile CPUs must not duel immune Story manifestations or passive
+		# sacrifice/escort actors while ignoring the ordinarily vulnerable player.
+		if is_cpu and bool(c.get_meta("story_cosmic_contract", false)): continue
+		if has_meta("story_team") and get_meta("story_team") == c.get_meta("story_team", ""): continue
+		if nearest == null or position.distance_squared_to(c.position) < position.distance_squared_to(nearest.position): nearest = c
+	return nearest
 
 func input_display() -> String:
 	var parts: PackedStringArray = []

@@ -1,0 +1,50 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Cannot infer the type of "surface" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/visual/elemental_grab_throw_presentation.gd:109)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/fighters/fighter.gd:0)
+ERROR: Failed to load script "res://scripts/fighters/fighter.gd" with error "Compilation failed".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AAFighter._ready (res://scripts/fighters/fighter.gd:196)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://scripts/fighters/fighter.gd:196)
+       [1] _spawn_fighters (res://scripts/battle/battle_scene.gd:214)
+       [2] _ready (res://scripts/battle/battle_scene.gd:64)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: AAFighter._ready (res://scripts/fighters/fighter.gd:196)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://scripts/fighters/fighter.gd:196)
+       [1] _spawn_fighters (res://scripts/battle/battle_scene.gd:215)
+       [2] _ready (res://scripts/battle/battle_scene.gd:64)
+ERROR: Can't use get_node() with absolute paths from outside the active scene tree.
+   at: get_node_or_null (scene/main/node.cpp:1910)
+   GDScript backtrace (most recent call first):
+       [0] heal_visibility_if_needed (res://scripts/fighters/fighter_model_3d.gd:1619)
+       [1] ensure_visible_presentation (res://scripts/fighters/fighter.gd:399)
+       [2] _play_current_animation (res://scripts/fighters/fighter.gd:1887)
+       [3] _on_state_changed (res://scripts/fighters/fighter.gd:1873)
+       [4] enter (res://scripts/fighters/fighter_state_machine.gd:27)
+       [5] _release_grab_links (res://scripts/fighters/fighter.gd:1487)
+       [6] _exit_tree (res://scripts/fighters/fighter.gd:1498)
+ERROR: Can't use get_node() with absolute paths from outside the active scene tree.
+   at: get_node_or_null (scene/main/node.cpp:1910)
+   GDScript backtrace (most recent call first):
+       [0] play_for_state (res://scripts/fighters/fighter_model_3d.gd:806)
+       [1] _play_current_animation (res://scripts/fighters/fighter.gd:1894)
+       [2] _on_state_changed (res://scripts/fighters/fighter.gd:1873)
+       [3] enter (res://scripts/fighters/fighter_state_machine.gd:27)
+       [4] _release_grab_links (res://scripts/fighters/fighter.gd:1487)
+       [5] _exit_tree (res://scripts/fighters/fighter.gd:1498)
+SCRIPT ERROR: Invalid access to property or key 'stocks' on a base object of type 'previously freed'.
+   at: _check_match_end (res://scripts/battle/battle_scene.gd:409)
+   GDScript backtrace (most recent call first):
+       [0] _check_match_end (res://scripts/battle/battle_scene.gd:409)
+       [1] _physics_process (res://scripts/battle/battle_scene.gd:341)
+GRAB_LIFECYCLE_8A PASS rows=15
+SCRIPT ERROR: Invalid access to property or key 'stocks' on a base object of type 'previously freed'.
+   at: _check_match_end (res://scripts/battle/battle_scene.gd:409)
+   GDScript backtrace (most recent call first):
+       [0] _check_match_end (res://scripts/battle/battle_scene.gd:409)
+       [1] _physics_process (res://scripts/battle/battle_scene.gd:341)

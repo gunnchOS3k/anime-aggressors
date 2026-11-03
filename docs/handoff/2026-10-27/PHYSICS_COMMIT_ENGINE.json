@@ -1,0 +1,151 @@
+{
+  "schema": 1,
+  "source_head": "70aa9f30553579a12a0244b53bfacbbf96507fb8",
+  "workflow_run": "https://github.com/gunnchOS3k/anime-aggressors/actions/runs/40532177908",
+  "godot_version": "4.7.1.stable.official.a13da4feb",
+  "PASS": true,
+  "scope": "Actual host-authoritative localhost ENet BattleScene with guest presentation. Live post-query physics commit and bounded immutable presentation history; NOT complete restorable snapshots or historical combat resimulation. Headless public assets only.",
+  "commits_observed": 697,
+  "render_catchup_commits": 60,
+  "commit_errors": [],
+  "history_limit": 120,
+  "rollback_restorable": false,
+  "suites": {
+    "host": {
+      "PASS": true,
+      "checks": 28,
+      "failures": [],
+      "runtime_errors": []
+    },
+    "guest": {
+      "PASS": true,
+      "checks": 14,
+      "failures": [],
+      "runtime_errors": []
+    },
+    "terminal-host": {
+      "PASS": true,
+      "checks": 16,
+      "failures": [],
+      "runtime_errors": []
+    },
+    "terminal-guest": {
+      "PASS": true,
+      "checks": 10,
+      "failures": [],
+      "runtime_errors": []
+    },
+    "lobby-host": {
+      "PASS": true,
+      "checks": 8,
+      "failures": [],
+      "runtime_errors": []
+    },
+    "lobby-guest": {
+      "PASS": true,
+      "checks": 8,
+      "failures": [],
+      "runtime_errors": []
+    },
+    "respawn-host": {
+      "PASS": true,
+      "checks": 24,
+      "failures": [],
+      "runtime_errors": []
+    },
+    "respawn-guest": {
+      "PASS": true,
+      "checks": 4,
+      "failures": [],
+      "runtime_errors": []
+    },
+    "combat-components": {
+      "PASS": true,
+      "checks": 23,
+      "rows": 0,
+      "failures": []
+    },
+    "party-components": {
+      "PASS": true,
+      "checks": 357,
+      "rows": 18,
+      "failures": []
+    },
+    "stage-audio": {
+      "PASS": true,
+      "checks": 13,
+      "rows": 0,
+      "failures": []
+    },
+    "authored-special-links": {
+      "PASS": true,
+      "checks": 73,
+      "rows": 6,
+      "failures": []
+    },
+    "throw-ownership": {
+      "PASS": true,
+      "checks": 0,
+      "rows": 39,
+      "failures": []
+    },
+    "training-lifecycle": {
+      "PASS": true,
+      "checks": 24,
+      "rows": 0,
+      "failures": []
+    },
+    "training-practice": {
+      "PASS": true,
+      "checks": 17,
+      "rows": 0,
+      "failures": []
+    },
+    "training-authored-link": {
+      "PASS": true,
+      "checks": 18,
+      "rows": 2,
+      "failures": []
+    },
+    "nix-authored-grab": {
+      "PASS": true,
+      "checks": 26,
+      "rows": 3,
+      "failures": []
+    }
+  },
+  "source_sha256": {
+    "game-godot/scripts/battle/battle_scene.gd": "15fd685a48116253743292fa8003ef9d16c64f9a046e7e7017bec2c6dcc51125",
+    "game-godot/scripts/battle/battle_sim.gd": "bcad42818bd28a1ddac954060a1aefdf777f6ab35680907f70309b1d175f370f",
+    "game-godot/scripts/net/lan_session.gd": "447f501c65198d43b604ebc647df991295e93b306291f2ff950cf55d87baf978"
+  },
+  "raw_result_path": "outputs/lan_commit_70aa9f30/ENGINE_RESULT.json",
+  "raw_result_sha256": "4337f41114039ce24ed97a29f3e98ca3e8b071c111e29e1eaa12941e5a4bde5f",
+  "retained_negative": {
+    "source": "986d33f44adfdd149ca489cc35fb7ae11aeb0615",
+    "run": "https://github.com/gunnchOS3k/anime-aggressors/actions/runs/40531471169",
+    "path": "outputs/lan_commit_986d33f4",
+    "failure": "Respawn fixture observed pre-commit frame_completed; actual second stock loss/deadline existed at frame_committed. Observer corrected without weakening assertions."
+  },
+  "retained_diagnostic_counts": {
+    "stage-audio.log": 1,
+    "import.log": 192,
+    "throw-ownership.log": 2,
+    "authored-special-links.log": 2,
+    "training-lifecycle.log": 2,
+    "combat-components.log": 2,
+    "terminal/guest.log": 1
+  },
+  "remaining": [
+    "Historical CharacterBody floor/slide/collision restoration",
+    "Projectile lifecycle and stable ownership across discarded timelines",
+    "Frame-indexed input capture, prediction and corrected-input resimulation",
+    "Deterministic gameplay feedback versus confirmed audiovisual/progression effects",
+    "Attack-earned two-process KO attempt running separately; no result yet",
+    "Native visual/audio, physical LAN/Internet and private original-art integration acceptance"
+  ],
+  "HUMAN_ART_APPROVED": false,
+  "RUNTIME_PAIRED_CONTACT_VERIFIED": false,
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false
+}

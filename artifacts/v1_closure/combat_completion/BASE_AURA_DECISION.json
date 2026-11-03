@@ -1,0 +1,68 @@
+{
+  "parent": "b3c6993000a3c08cca1c3189467aff6a6c4e2e91",
+  "actual_defect": true,
+  "root": "Fighter startup applies AuraScaler and AuraIdentity, then HitResolver applies them again to BASE melee. Form overlays already carry resolved ownership.",
+  "affected": "Confirmed damage, resolution-stage knockback scaling/element metadata and repeat identity features can differ; actual startup timing and live collision geometry already use the first resolved move. Direct throw and projectile paths have different construction; this experiment deliberately leaves them unchanged.",
+  "decision": "Preserve historical BASE default; expose opt-in per-battle candidate for controlled comparison. No silent rewrite of216 BASE records. Candidate is not final approved balance.",
+  "candidate_owner": "fighter metadata base_aura_single_pass_candidate; not saved or set by ordinary modes",
+  "rows": [
+    {
+      "fighter": "ember-vale",
+      "paired_configurations": 8,
+      "damage_changes": 4,
+      "unchanged_live_geometry": true
+    },
+    {
+      "fighter": "juno-spark",
+      "paired_configurations": 8,
+      "damage_changes": 4,
+      "unchanged_live_geometry": true
+    },
+    {
+      "fighter": "kaia-windrow",
+      "paired_configurations": 8,
+      "damage_changes": 4,
+      "unchanged_live_geometry": true
+    },
+    {
+      "fighter": "nix-calder",
+      "paired_configurations": 8,
+      "damage_changes": 4,
+      "unchanged_live_geometry": true
+    },
+    {
+      "fighter": "orion-vell",
+      "paired_configurations": 8,
+      "damage_changes": 4,
+      "unchanged_live_geometry": true
+    },
+    {
+      "fighter": "rook-ironside",
+      "paired_configurations": 8,
+      "damage_changes": 4,
+      "unchanged_live_geometry": true
+    },
+    {
+      "fighter": "vesper-nyx",
+      "paired_configurations": 8,
+      "damage_changes": 4,
+      "unchanged_live_geometry": true
+    },
+    {
+      "fighter": "yang",
+      "paired_configurations": 8,
+      "damage_changes": 4,
+      "unchanged_live_geometry": true
+    },
+    {
+      "fighter": "yin",
+      "paired_configurations": 8,
+      "damage_changes": 4,
+      "unchanged_live_geometry": true
+    }
+  ],
+  "pair_count": 72,
+  "public_input_samples": 144,
+  "base_move_JSON_changed": false,
+  "human_approved": false
+}

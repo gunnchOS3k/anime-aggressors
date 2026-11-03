@@ -1,0 +1,172 @@
+{
+  "parent_source": "3dd51a46177e75fc8190ee718507ab466b5a532e",
+  "source_binding": {
+    "game-godot/scripts/visual/action_line_director.gd": "35bea14f2b1756e8bab4adde5918bbaf3f3829e9bc5eb95721d7757684c955aa",
+    "game-godot/scripts/visual/combat_expression_director.gd": "1a4c6e487814aa7b3fdb2360f9e9edf074300d0d92324222eb84939e225d6242",
+    "game-godot/scripts/visual/spectral_feedback_renderer.gd": "4b98890c7c29af201486e96015e294a3aa17ae7d7f2594ec18625c3471582445",
+    "game-godot/scripts/fighters/fighter_model_3d.gd": "93b4876f4a4fc6c248d0587cc49966c4057e1c1d0734041cb605f01c0183167a",
+    "game-godot/shaders/spectral_feedback.gdshader": "46c604f47cbacd74f1f111c09ec4ebd1f5610815f1467547e709a7337a5fdf30",
+    "game-godot/data/animation/combat_expression_profiles.json": "25cec07c6cfeaa7b84dd229fb61ef1d2a0eda64fc1e06c1e05ac17747e5031a9"
+  },
+  "implemented": [
+    "actual-displacement charged movement",
+    "resolved startup convergence",
+    "authored striking-limb projected-path smears",
+    "single full-meter arrival",
+    "confirmed heavy contact accent; whiff/shield/dedup stay separate"
+  ],
+  "verified_cases": 18,
+  "PASS": true,
+  "short_startup_baseline_failures": 5,
+  "short_startup_fix": "Clamp trigger to last observable startup tick, without modifying runner frame data",
+  "regressions": [
+    {
+      "suite": "ProjectileOwnership",
+      "source_sha": "3dd51a46177e75fc8190ee718507ab466b5a532e",
+      "passed": true,
+      "exit_code": 0,
+      "seconds": 13.52,
+      "reports": [],
+      "stdout": "artifacts/v1_closure/spectral_feedback/continuous_1011/expression_integration1012/ProjectileOwnership/stdout.log",
+      "scope": "isolated source fixture; no human/device/competitive acceptance",
+      "source_diff_sha256": "7c0decad0a51c0d5150ad0987d451c08233f4f47373b9bf91eb40e8127685844",
+      "source_changes": [
+        "game-godot/scripts/fighters/fighter_model_3d.gd",
+        "game-godot/scripts/visual/combat_expression_director.gd",
+        "game-godot/scripts/visual/spectral_feedback_renderer.gd",
+        "game-godot/shaders/spectral_feedback.gdshader"
+      ]
+    },
+    {
+      "suite": "ThrowOwnership",
+      "source_sha": "3dd51a46177e75fc8190ee718507ab466b5a532e",
+      "passed": true,
+      "exit_code": 0,
+      "seconds": 23.03,
+      "reports": [],
+      "stdout": "artifacts/v1_closure/spectral_feedback/continuous_1011/expression_integration1012/ThrowOwnership/stdout.log",
+      "scope": "isolated source fixture; no human/device/competitive acceptance",
+      "source_diff_sha256": "7c0decad0a51c0d5150ad0987d451c08233f4f47373b9bf91eb40e8127685844",
+      "source_changes": [
+        "game-godot/scripts/fighters/fighter_model_3d.gd",
+        "game-godot/scripts/visual/combat_expression_director.gd",
+        "game-godot/scripts/visual/spectral_feedback_renderer.gd",
+        "game-godot/shaders/spectral_feedback.gdshader"
+      ]
+    },
+    {
+      "suite": "SpectralFeedback",
+      "source_sha": "3dd51a46177e75fc8190ee718507ab466b5a532e",
+      "passed": true,
+      "exit_code": 0,
+      "seconds": 4.5,
+      "reports": [],
+      "stdout": "artifacts/v1_closure/spectral_feedback/continuous_1011/expression_integration1012/SpectralFeedback/stdout.log",
+      "scope": "isolated source fixture; no human/device/competitive acceptance",
+      "source_diff_sha256": "7c0decad0a51c0d5150ad0987d451c08233f4f47373b9bf91eb40e8127685844",
+      "source_changes": [
+        "game-godot/scripts/fighters/fighter_model_3d.gd",
+        "game-godot/scripts/visual/combat_expression_director.gd",
+        "game-godot/scripts/visual/spectral_feedback_renderer.gd",
+        "game-godot/shaders/spectral_feedback.gdshader"
+      ]
+    },
+    {
+      "suite": "ChargeContinuity",
+      "source_sha": "3dd51a46177e75fc8190ee718507ab466b5a532e",
+      "passed": true,
+      "exit_code": 0,
+      "seconds": 9.26,
+      "reports": [],
+      "stdout": "artifacts/v1_closure/spectral_feedback/continuous_1011/expression_integration1012/ChargeContinuity/stdout.log",
+      "scope": "isolated source fixture; no human/device/competitive acceptance",
+      "source_diff_sha256": "7c0decad0a51c0d5150ad0987d451c08233f4f47373b9bf91eb40e8127685844",
+      "source_changes": [
+        "game-godot/scripts/fighters/fighter_model_3d.gd",
+        "game-godot/scripts/visual/combat_expression_director.gd",
+        "game-godot/scripts/visual/spectral_feedback_renderer.gd",
+        "game-godot/shaders/spectral_feedback.gdshader"
+      ]
+    },
+    {
+      "suite": "CombatChoreography",
+      "source_sha": "3dd51a46177e75fc8190ee718507ab466b5a532e",
+      "passed": true,
+      "exit_code": 0,
+      "seconds": 9.8,
+      "reports": [],
+      "stdout": "artifacts/v1_closure/spectral_feedback/continuous_1011/expression_integration1012/CombatChoreography/stdout.log",
+      "scope": "isolated source fixture; no human/device/competitive acceptance",
+      "source_diff_sha256": "7c0decad0a51c0d5150ad0987d451c08233f4f47373b9bf91eb40e8127685844",
+      "source_changes": [
+        "game-godot/scripts/fighters/fighter_model_3d.gd",
+        "game-godot/scripts/visual/combat_expression_director.gd",
+        "game-godot/scripts/visual/spectral_feedback_renderer.gd",
+        "game-godot/shaders/spectral_feedback.gdshader"
+      ]
+    },
+    {
+      "suite": "ElementalPerformance",
+      "source_sha": "3dd51a46177e75fc8190ee718507ab466b5a532e",
+      "passed": true,
+      "exit_code": 0,
+      "seconds": 13.71,
+      "reports": [
+        "artifacts/v1_closure/spectral_feedback/continuous_1011/expression_integration1012/ElementalPerformance/report_elemental_runtime_test.json"
+      ],
+      "stdout": "artifacts/v1_closure/spectral_feedback/continuous_1011/expression_integration1012/ElementalPerformance/stdout.log",
+      "scope": "isolated source fixture; no human/device/competitive acceptance",
+      "source_diff_sha256": "7c0decad0a51c0d5150ad0987d451c08233f4f47373b9bf91eb40e8127685844",
+      "source_changes": [
+        "game-godot/scripts/fighters/fighter_model_3d.gd",
+        "game-godot/scripts/visual/combat_expression_director.gd",
+        "game-godot/scripts/visual/spectral_feedback_renderer.gd",
+        "game-godot/shaders/spectral_feedback.gdshader"
+      ]
+    },
+    {
+      "suite": "DialogueProduction",
+      "source_sha": "3dd51a46177e75fc8190ee718507ab466b5a532e",
+      "passed": true,
+      "exit_code": 0,
+      "seconds": 1.48,
+      "reports": [],
+      "stdout": "artifacts/v1_closure/spectral_feedback/continuous_1011/expression_integration1012/DialogueProduction/stdout.log",
+      "scope": "isolated source fixture; no human/device/competitive acceptance",
+      "source_diff_sha256": "4ad2318cba67cf53b23c2ce4aa6437041f3f24bac13d3f5a8f31c827c958c16e",
+      "source_changes": [
+        "artifacts/v1_closure/dialogue_performance/elemental_runtime_test.json",
+        "game-godot/scripts/fighters/fighter_model_3d.gd",
+        "game-godot/scripts/visual/combat_expression_director.gd",
+        "game-godot/scripts/visual/spectral_feedback_renderer.gd",
+        "game-godot/shaders/spectral_feedback.gdshader"
+      ]
+    },
+    {
+      "suite": "OwnerOverrideFaces",
+      "source_sha": "3dd51a46177e75fc8190ee718507ab466b5a532e",
+      "passed": true,
+      "exit_code": 0,
+      "seconds": 14.21,
+      "reports": [],
+      "stdout": "artifacts/v1_closure/spectral_feedback/continuous_1011/expression_integration1012/OwnerOverrideFaces/stdout.log",
+      "scope": "isolated source fixture; no human/device/competitive acceptance",
+      "source_diff_sha256": "4ad2318cba67cf53b23c2ce4aa6437041f3f24bac13d3f5a8f31c827c958c16e",
+      "source_changes": [
+        "artifacts/v1_closure/dialogue_performance/elemental_runtime_test.json",
+        "game-godot/scripts/fighters/fighter_model_3d.gd",
+        "game-godot/scripts/visual/combat_expression_director.gd",
+        "game-godot/scripts/visual/spectral_feedback_renderer.gd",
+        "game-godot/shaders/spectral_feedback.gdshader"
+      ]
+    }
+  ],
+  "native_status": "BLOCKED_DISK_RESERVE: 3400frame recording did not start",
+  "no_gameplay_writes": true,
+  "professional_quality_approved": false,
+  "unfinished": [
+    "native all18visibility/animation/shape review",
+    "ground-contact accents blocked by floor contract",
+    "fullscreen tunnels / true mesh squash / cinematic finishing emphasis unimplemented"
+  ]
+}

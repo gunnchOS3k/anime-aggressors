@@ -20,7 +20,7 @@
 			"input_command": "attack_neutral",
 			"name": "jab_1",
 			"pass": true,
-			"visual_move_id": "jab_1"
+			"visual_move_id": "jab"
 		},
 		{
 			"active_clip": "tilt_forward",
@@ -35,7 +35,7 @@
 			"input_command": "attack_forward",
 			"name": "forward_tilt",
 			"pass": true,
-			"visual_move_id": "forward_tilt"
+			"visual_move_id": "tilt_forward"
 		},
 		{
 			"active_clip": "tilt_up",
@@ -50,7 +50,7 @@
 			"input_command": "attack_up",
 			"name": "up_tilt",
 			"pass": true,
-			"visual_move_id": "up_tilt"
+			"visual_move_id": "tilt_up"
 		},
 		{
 			"active_clip": "tilt_down",
@@ -65,14 +65,14 @@
 			"input_command": "attack_down",
 			"name": "down_tilt",
 			"pass": true,
-			"visual_move_id": "down_tilt"
+			"visual_move_id": "tilt_down"
 		},
 		{
-			"active_clip": "heavy",
+			"active_clip": "dash_attack",
 			"active_frame": true,
 			"bone_motion": true,
 			"capture": "desktop_battlescene",
-			"expect_clip": "heavy",
+			"expect_clip": "dash_attack",
 			"expect_move": "dash_attack",
 			"gameplay_move_id": "dash_attack",
 			"generic_fallback": false,
@@ -95,7 +95,7 @@
 			"input_command": "attack_air_neutral",
 			"name": "neutral_air",
 			"pass": true,
-			"visual_move_id": "neutral_air"
+			"visual_move_id": "aerial_neutral"
 		},
 		{
 			"active_clip": "aerial_forward",
@@ -110,7 +110,7 @@
 			"input_command": "attack_air_forward",
 			"name": "forward_air",
 			"pass": true,
-			"visual_move_id": "forward_air"
+			"visual_move_id": "aerial_forward"
 		},
 		{
 			"active_clip": "aerial_back",
@@ -125,7 +125,7 @@
 			"input_command": "attack_air_back",
 			"name": "back_air",
 			"pass": true,
-			"visual_move_id": "back_air"
+			"visual_move_id": "aerial_back"
 		},
 		{
 			"active_clip": "aerial_up",
@@ -140,7 +140,7 @@
 			"input_command": "attack_air_up",
 			"name": "up_air",
 			"pass": true,
-			"visual_move_id": "up_air"
+			"visual_move_id": "aerial_up"
 		},
 		{
 			"active_clip": "aerial_down",
@@ -155,7 +155,7 @@
 			"input_command": "attack_air_down",
 			"name": "down_air",
 			"pass": true,
-			"visual_move_id": "down_air"
+			"visual_move_id": "aerial_down"
 		},
 		{
 			"active_clip": "projectile_tap",
@@ -173,11 +173,11 @@
 			"visual_move_id": "projectile_tap"
 		},
 		{
-			"active_clip": "signature_lane_feint",
+			"active_clip": "side_special",
 			"active_frame": true,
 			"bone_motion": true,
 			"capture": "desktop_battlescene",
-			"expect_clip": "signature_lane_feint",
+			"expect_clip": "side_special",
 			"expect_move": "side_special",
 			"gameplay_move_id": "side_special",
 			"generic_fallback": false,
@@ -200,14 +200,14 @@
 			"input_command": "special_up",
 			"name": "up_special",
 			"pass": true,
-			"visual_move_id": "up_special_recovery"
+			"visual_move_id": "recovery"
 		},
 		{
-			"active_clip": "signature_lane_trap",
+			"active_clip": "down_special",
 			"active_frame": true,
 			"bone_motion": true,
 			"capture": "desktop_battlescene",
-			"expect_clip": "signature_lane_trap",
+			"expect_clip": "down_special",
 			"expect_move": "down_special",
 			"gameplay_move_id": "down_special",
 			"generic_fallback": false,
@@ -218,7 +218,7 @@
 			"visual_move_id": "down_special"
 		},
 		{
-			"active_clip": "grab",
+			"active_clip": "grab_whiff",
 			"active_frame": true,
 			"bone_motion": true,
 			"capture": "desktop_battlescene",
@@ -233,7 +233,7 @@
 			"visual_move_id": "grab"
 		},
 		{
-			"active_clip": "signature_lane_burst",
+			"active_clip": "aura_burst",
 			"bone_motion": true,
 			"gameplay_move_id": "aura_burst",
 			"generic_fallback": false,

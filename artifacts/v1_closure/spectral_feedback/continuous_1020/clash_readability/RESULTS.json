@@ -1,0 +1,1245 @@
+{
+  "schema": "ani03_clash_readability_increment/v1",
+  "runtime_source_sha": "369b3d34d1a2ad57ef17e230b163507816774604",
+  "baseline_source_sha": "610580933ce7c09c8e70e0fc07c0bf266de07678",
+  "timestamp_utc": "2026-10-20T15:50:28.984929+00:00",
+  "PR": "https://github.com/gunnchOS3k/anime-aggressors/pull/123",
+  "stacked_parent_PR": 122,
+  "cause": [
+    "Prior active CPU test produced zero opposing projectile collisions.",
+    "Controlled contacts used faint shield-style rings, endpoint dissipations and overlapping sounds; breakthrough direction could follow the losing first shot.",
+    "Survivor integrity loss had weak scale/alpha distinction. Wide gameplay camera further reduced legibility. Contact position/layering was not the reproduced cause."
+  ],
+  "implemented": [
+    "Confirmed-event-only opt-in indicator (absent by default).",
+    "Mixed inward cancellation crescents/contact seam; directional breakthrough/fragments; high-commitment pressure pulse and mixed environment.",
+    "Immediate loser visual retirement without duplicate endpoint bursts; counted surviving energy shells and retained tracking core.",
+    "Primary outcome priority; bounded secondary/stage detail, nearby ornament/extent reduction, bounded short original audio envelopes. No camera impulse, added hitstop, flashes or combat-value changes."
+  ],
+  "authority_unchanged": {
+    "before_after_same_frames_positions_integrity_damage": true,
+    "compared_fields": [
+      "a",
+      "b",
+      "before",
+      "after",
+      "event_id",
+      "fighters",
+      "physics_frame",
+      "sim_frame",
+      "result",
+      "time_of_impact",
+      "world"
+    ],
+    "native_short_survivor_damage": 7.7090112,
+    "native_short_cases": [
+      {
+        "case": "equal_quick",
+        "contact": {
+          "a": 1000001,
+          "after": [
+            0,
+            0
+          ],
+          "b": 2000001,
+          "before": [
+            1,
+            1
+          ],
+          "confirmed_interception": true,
+          "event_id": "projectile:294:1000001:2000001",
+          "fighters": [
+            "kaia-windrow",
+            "juno-spark"
+          ],
+          "physics_frame": 295,
+          "result": "mutual_cancel",
+          "sim_frame": 294,
+          "time_of_impact": 0.072214710190724,
+          "winner_direction": [
+            -0.70710676908493,
+            0.0
+          ],
+          "world": [
+            -21.3421745300293,
+            274.508483886719
+          ]
+        },
+        "damage_after": [
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "case": "juno_full_vs_kaia_quick",
+        "contact": {
+          "a": 1000002,
+          "after": [
+            0,
+            3
+          ],
+          "b": 2000002,
+          "before": [
+            1,
+            4
+          ],
+          "confirmed_interception": true,
+          "event_id": "projectile:553:1000002:2000002",
+          "fighters": [
+            "kaia-windrow",
+            "juno-spark"
+          ],
+          "physics_frame": 554,
+          "result": "breakthrough",
+          "sim_frame": 553,
+          "time_of_impact": 0.903292622468116,
+          "winner_direction": [
+            -0.70710676908493,
+            0.0
+          ],
+          "world": [
+            -26.021842956543,
+            272.175231933594
+          ]
+        },
+        "damage_after": [
+          7.7090112,
+          0.0
+        ]
+      }
+    ]
+  },
+  "ordinary_public_input_modes": [
+    {
+      "mode": "Full",
+      "source": "f566d4f9fdebb5244436ce027665c429e62f6a9e",
+      "authority": [
+        {
+          "a": 1000001,
+          "b": 2000001,
+          "before": [
+            1,
+            1
+          ],
+          "after": [
+            0,
+            0
+          ],
+          "event_id": "projectile:294:1000001:2000001",
+          "fighters": [
+            "kaia-windrow",
+            "juno-spark"
+          ],
+          "physics_frame": 295,
+          "sim_frame": 294,
+          "result": "mutual_cancel",
+          "time_of_impact": 0.072214710190724,
+          "world": [
+            -21.3421745300293,
+            274.508483886719
+          ]
+        },
+        {
+          "a": 1000002,
+          "b": 2000002,
+          "before": [
+            2,
+            2
+          ],
+          "after": [
+            0,
+            0
+          ],
+          "event_id": "projectile:536:1000002:2000002",
+          "fighters": [
+            "kaia-windrow",
+            "juno-spark"
+          ],
+          "physics_frame": 537,
+          "sim_frame": 536,
+          "result": "mutual_cancel",
+          "time_of_impact": 0.97418627427554,
+          "world": [
+            -21.8193054199219,
+            274.600158691406
+          ]
+        },
+        {
+          "a": 1000003,
+          "b": 2000003,
+          "before": [
+            4,
+            4
+          ],
+          "after": [
+            0,
+            0
+          ],
+          "event_id": "projectile:723:1000003:2000003",
+          "fighters": [
+            "kaia-windrow",
+            "juno-spark"
+          ],
+          "physics_frame": 724,
+          "sim_frame": 723,
+          "result": "mutual_cancel",
+          "time_of_impact": 0.444355160548494,
+          "world": [
+            -22.127628326416,
+            274.600158691406
+          ]
+        },
+        {
+          "a": 1000004,
+          "b": 2000004,
+          "before": [
+            1,
+            4
+          ],
+          "after": [
+            0,
+            3
+          ],
+          "event_id": "projectile:1928:1000004:2000004",
+          "fighters": [
+            "kaia-windrow",
+            "juno-spark"
+          ],
+          "physics_frame": 1929,
+          "sim_frame": 1928,
+          "result": "breakthrough",
+          "time_of_impact": 0.903292622468116,
+          "world": [
+            -26.021842956543,
+            272.175231933594
+          ]
+        }
+      ],
+      "hits": [
+        {
+          "attacker_slot": 2,
+          "damage": 5.6065536,
+          "defender_slot": 1,
+          "frame": 1933,
+          "owner": "projectile",
+          "result": "hit"
+        }
+      ],
+      "cases": [
+        {
+          "case": "equal_quick",
+          "before": [
+            1,
+            1
+          ],
+          "after": [
+            0,
+            0
+          ],
+          "result": "mutual_cancel",
+          "aura_at_input": [
+            0.0,
+            0.0
+          ],
+          "damage_after": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "case": "equal_medium",
+          "before": [
+            2,
+            2
+          ],
+          "after": [
+            0,
+            0
+          ],
+          "result": "mutual_cancel",
+          "aura_at_input": [
+            65.8166666666666,
+            65.3000000000002
+          ],
+          "damage_after": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "case": "equal_full_major",
+          "before": [
+            4,
+            4
+          ],
+          "after": [
+            0,
+            0
+          ],
+          "result": "mutual_cancel",
+          "aura_at_input": [
+            87.9874999999995,
+            87.3333333333334
+          ],
+          "damage_after": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "case": "juno_full_vs_kaia_quick",
+          "before": [
+            1,
+            4
+          ],
+          "after": [
+            0,
+            3
+          ],
+          "result": "breakthrough",
+          "aura_at_input": [
+            7.65416666666605,
+            88.2666666666667
+          ],
+          "damage_after": [
+            5.6065536,
+            0.0
+          ]
+        }
+      ],
+      "confirmed": 4,
+      "primary_cues": 4,
+      "path": "artifacts/v1_closure/spectral_feedback/continuous_1020/clash_readability/public_modes/Full/projectile_public_inputs.json"
+    },
+    {
+      "mode": "Balanced",
+      "source": "f566d4f9fdebb5244436ce027665c429e62f6a9e",
+      "authority": [
+        {
+          "a": 1000001,
+          "b": 2000001,
+          "before": [
+            1,
+            1
+          ],
+          "after": [
+            0,
+            0
+          ],
+          "event_id": "projectile:294:1000001:2000001",
+          "fighters": [
+            "kaia-windrow",
+            "juno-spark"
+          ],
+          "physics_frame": 295,
+          "sim_frame": 294,
+          "result": "mutual_cancel",
+          "time_of_impact": 0.072214710190724,
+          "world": [
+            -21.3421745300293,
+            274.508483886719
+          ]
+        },
+        {
+          "a": 1000002,
+          "b": 2000002,
+          "before": [
+            2,
+            2
+          ],
+          "after": [
+            0,
+            0
+          ],
+          "event_id": "projectile:536:1000002:2000002",
+          "fighters": [
+            "kaia-windrow",
+            "juno-spark"
+          ],
+          "physics_frame": 537,
+          "sim_frame": 536,
+          "result": "mutual_cancel",
+          "time_of_impact": 0.97418627427554,
+          "world": [
+            -21.8193054199219,
+            274.600158691406
+          ]
+        },
+        {
+          "a": 1000003,
+          "b": 2000003,
+          "before": [
+            4,
+            4
+          ],
+          "after": [
+            0,
+            0
+          ],
+          "event_id": "projectile:723:1000003:2000003",
+          "fighters": [
+            "kaia-windrow",
+            "juno-spark"
+          ],
+          "physics_frame": 724,
+          "sim_frame": 723,
+          "result": "mutual_cancel",
+          "time_of_impact": 0.444355160548494,
+          "world": [
+            -22.127628326416,
+            274.600158691406
+          ]
+        },
+        {
+          "a": 1000004,
+          "b": 2000004,
+          "before": [
+            1,
+            4
+          ],
+          "after": [
+            0,
+            3
+          ],
+          "event_id": "projectile:1928:1000004:2000004",
+          "fighters": [
+            "kaia-windrow",
+            "juno-spark"
+          ],
+          "physics_frame": 1929,
+          "sim_frame": 1928,
+          "result": "breakthrough",
+          "time_of_impact": 0.903292622468116,
+          "world": [
+            -26.021842956543,
+            272.175231933594
+          ]
+        }
+      ],
+      "hits": [
+        {
+          "attacker_slot": 2,
+          "damage": 5.6065536,
+          "defender_slot": 1,
+          "frame": 1933,
+          "owner": "projectile",
+          "result": "hit"
+        }
+      ],
+      "cases": [
+        {
+          "case": "equal_quick",
+          "before": [
+            1,
+            1
+          ],
+          "after": [
+            0,
+            0
+          ],
+          "result": "mutual_cancel",
+          "aura_at_input": [
+            0.0,
+            0.0
+          ],
+          "damage_after": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "case": "equal_medium",
+          "before": [
+            2,
+            2
+          ],
+          "after": [
+            0,
+            0
+          ],
+          "result": "mutual_cancel",
+          "aura_at_input": [
+            65.8166666666666,
+            65.3000000000002
+          ],
+          "damage_after": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "case": "equal_full_major",
+          "before": [
+            4,
+            4
+          ],
+          "after": [
+            0,
+            0
+          ],
+          "result": "mutual_cancel",
+          "aura_at_input": [
+            87.9874999999995,
+            87.3333333333334
+          ],
+          "damage_after": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "case": "juno_full_vs_kaia_quick",
+          "before": [
+            1,
+            4
+          ],
+          "after": [
+            0,
+            3
+          ],
+          "result": "breakthrough",
+          "aura_at_input": [
+            7.65416666666605,
+            88.2666666666667
+          ],
+          "damage_after": [
+            5.6065536,
+            0.0
+          ]
+        }
+      ],
+      "confirmed": 4,
+      "primary_cues": 4,
+      "path": "artifacts/v1_closure/spectral_feedback/continuous_1020/clash_readability/public_modes/Balanced/projectile_public_inputs.json"
+    },
+    {
+      "mode": "Reduced",
+      "source": "f566d4f9fdebb5244436ce027665c429e62f6a9e",
+      "authority": [
+        {
+          "a": 1000001,
+          "b": 2000001,
+          "before": [
+            1,
+            1
+          ],
+          "after": [
+            0,
+            0
+          ],
+          "event_id": "projectile:294:1000001:2000001",
+          "fighters": [
+            "kaia-windrow",
+            "juno-spark"
+          ],
+          "physics_frame": 295,
+          "sim_frame": 294,
+          "result": "mutual_cancel",
+          "time_of_impact": 0.072214710190724,
+          "world": [
+            -21.3421745300293,
+            274.508483886719
+          ]
+        },
+        {
+          "a": 1000002,
+          "b": 2000002,
+          "before": [
+            2,
+            2
+          ],
+          "after": [
+            0,
+            0
+          ],
+          "event_id": "projectile:536:1000002:2000002",
+          "fighters": [
+            "kaia-windrow",
+            "juno-spark"
+          ],
+          "physics_frame": 537,
+          "sim_frame": 536,
+          "result": "mutual_cancel",
+          "time_of_impact": 0.97418627427554,
+          "world": [
+            -21.8193054199219,
+            274.600158691406
+          ]
+        },
+        {
+          "a": 1000003,
+          "b": 2000003,
+          "before": [
+            4,
+            4
+          ],
+          "after": [
+            0,
+            0
+          ],
+          "event_id": "projectile:723:1000003:2000003",
+          "fighters": [
+            "kaia-windrow",
+            "juno-spark"
+          ],
+          "physics_frame": 724,
+          "sim_frame": 723,
+          "result": "mutual_cancel",
+          "time_of_impact": 0.444355160548494,
+          "world": [
+            -22.127628326416,
+            274.600158691406
+          ]
+        },
+        {
+          "a": 1000004,
+          "b": 2000004,
+          "before": [
+            1,
+            4
+          ],
+          "after": [
+            0,
+            3
+          ],
+          "event_id": "projectile:1928:1000004:2000004",
+          "fighters": [
+            "kaia-windrow",
+            "juno-spark"
+          ],
+          "physics_frame": 1929,
+          "sim_frame": 1928,
+          "result": "breakthrough",
+          "time_of_impact": 0.903292622468116,
+          "world": [
+            -26.021842956543,
+            272.175231933594
+          ]
+        }
+      ],
+      "hits": [
+        {
+          "attacker_slot": 2,
+          "damage": 5.6065536,
+          "defender_slot": 1,
+          "frame": 1933,
+          "owner": "projectile",
+          "result": "hit"
+        }
+      ],
+      "cases": [
+        {
+          "case": "equal_quick",
+          "before": [
+            1,
+            1
+          ],
+          "after": [
+            0,
+            0
+          ],
+          "result": "mutual_cancel",
+          "aura_at_input": [
+            0.0,
+            0.0
+          ],
+          "damage_after": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "case": "equal_medium",
+          "before": [
+            2,
+            2
+          ],
+          "after": [
+            0,
+            0
+          ],
+          "result": "mutual_cancel",
+          "aura_at_input": [
+            65.8166666666666,
+            65.3000000000002
+          ],
+          "damage_after": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "case": "equal_full_major",
+          "before": [
+            4,
+            4
+          ],
+          "after": [
+            0,
+            0
+          ],
+          "result": "mutual_cancel",
+          "aura_at_input": [
+            87.9874999999995,
+            87.3333333333334
+          ],
+          "damage_after": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "case": "juno_full_vs_kaia_quick",
+          "before": [
+            1,
+            4
+          ],
+          "after": [
+            0,
+            3
+          ],
+          "result": "breakthrough",
+          "aura_at_input": [
+            7.65416666666605,
+            88.2666666666667
+          ],
+          "damage_after": [
+            5.6065536,
+            0.0
+          ]
+        }
+      ],
+      "confirmed": 4,
+      "primary_cues": 4,
+      "path": "artifacts/v1_closure/spectral_feedback/continuous_1020/clash_readability/public_modes/Reduced/projectile_public_inputs.json"
+    }
+  ],
+  "ordinary_modes_qualification": "Two automated ordinary public-input controllers, genuinely earned aura, neither active-CPU collision proof nor owner acceptance. All three modes have identical authority. Source f566; current changes only crowd/major presentation.",
+  "budget_comparison": {
+    "rows": [
+      {
+        "mode": "Full",
+        "confirmed_events": 12,
+        "meshes_before": 84,
+        "meshes_after": 36,
+        "one_shot_players_before": 72,
+        "one_shot_players_after": 25
+      },
+      {
+        "mode": "Balanced",
+        "confirmed_events": 12,
+        "meshes_before": 84,
+        "meshes_after": 36,
+        "one_shot_players_before": 72,
+        "one_shot_players_after": 25
+      },
+      {
+        "mode": "Reduced",
+        "confirmed_events": 12,
+        "meshes_before": 32,
+        "meshes_after": 29,
+        "one_shot_players_before": 72,
+        "one_shot_players_after": 25
+      }
+    ],
+    "scope": "12 nearby real resolver contacts in one fixed frame with explicit aura/position prerequisites. Historical-script overlay uses current shader for count-only comparison; not legacy rendered proof, acoustic measurement or sustained hardware FPS."
+  },
+  "current_stress": {
+    "source_sha": "369b3d34d1a2ad57ef17e230b163507816774604",
+    "native_fixture_rows": 21,
+    "confirmed": 54,
+    "primary_cues": 54,
+    "crowd_simplifications": 39,
+    "stress_rows": [
+      {
+        "active_meshes": 36,
+        "audio_voices": 1,
+        "camera_impulses": 0,
+        "events": 12,
+        "mode": "Full",
+        "primary_cues": 12,
+        "scenario": "12 nearby confirmed quick collisions in one fixed frame; explicit stress prerequisites",
+        "secondary_suppressed": 9,
+        "source": "real native resolver/spawner, not forced fighter damage"
+      },
+      {
+        "active_meshes": 36,
+        "audio_voices": 1,
+        "camera_impulses": 0,
+        "events": 12,
+        "mode": "Balanced",
+        "primary_cues": 12,
+        "scenario": "12 nearby confirmed quick collisions in one fixed frame; explicit stress prerequisites",
+        "secondary_suppressed": 11,
+        "source": "real native resolver/spawner, not forced fighter damage"
+      },
+      {
+        "active_meshes": 29,
+        "audio_voices": 1,
+        "camera_impulses": 0,
+        "events": 12,
+        "mode": "Reduced",
+        "primary_cues": 12,
+        "scenario": "12 nearby confirmed quick collisions in one fixed frame; explicit stress prerequisites",
+        "secondary_suppressed": 12,
+        "source": "real native resolver/spawner, not forced fighter damage"
+      }
+    ],
+    "pixels": "artifacts/v1_closure/spectral_feedback/continuous_1020/clash_readability/stress_native_flushed/PIXEL_VERIFICATION.json"
+  },
+  "movies": [
+    {
+      "verification_status": "VERIFIED_NATIVE60_AUDIO_FRAME_SOURCE",
+      "source_sha": "610580933ce7c09c8e70e0fc07c0bf266de07678",
+      "movie": "artifacts/v1_closure/spectral_feedback/rendered/clash_readability_before1020.mp4",
+      "raw_local_only": "artifacts/v1_closure/spectral_feedback/local_media/clash_readability_before_short1020.avi",
+      "raw_sha256": "476fa9341f5c1344161eced9c42a5e2761946502abb33e155d8f782379e0b6c9",
+      "movie_sha256": "dbc1ad7850e6f10a23bf81541e4e5afd5bf55a7570a16b7523a32393f618e348",
+      "trace_sha256": "eb8d92ca40410aaf9bc4d9352d7336864db9288ecf6709e84a5fb35d44893ad7",
+      "matched_frames": 458,
+      "container_frames": 679,
+      "audio_volume_db": {
+        "mean_volume": -32.0,
+        "max_volume": -7.2
+      },
+      "streams": [
+        {
+          "codec_type": "video",
+          "r_frame_rate": "60/1",
+          "duration": "11.316667"
+        },
+        {
+          "codec_type": "audio",
+          "r_frame_rate": "0/0",
+          "duration": "11.316000"
+        }
+      ],
+      "contact_sheet": "artifacts/v1_closure/spectral_feedback/continuous_1020/clash_readability/before_short/CONTACT_SHEET.png",
+      "contact_sheet_sha256": "1842f10b028da2d7cc6b806ff72e9c733b0777dfc413c28e8847146155ac4036",
+      "selected_frames": [
+        {
+          "event_id": "projectile:294:1000001:2000001",
+          "native_frame": 292,
+          "physics_frame": 295,
+          "emission_process_frame": 294
+        },
+        {
+          "event_id": "projectile:294:1000001:2000001",
+          "native_frame": 295,
+          "physics_frame": 295,
+          "emission_process_frame": 294
+        },
+        {
+          "event_id": "projectile:294:1000001:2000001",
+          "native_frame": 301,
+          "physics_frame": 295,
+          "emission_process_frame": 294
+        },
+        {
+          "event_id": "projectile:553:1000002:2000002",
+          "native_frame": 551,
+          "physics_frame": 554,
+          "emission_process_frame": 553
+        },
+        {
+          "event_id": "projectile:553:1000002:2000002",
+          "native_frame": 554,
+          "physics_frame": 554,
+          "emission_process_frame": 553
+        },
+        {
+          "event_id": "projectile:553:1000002:2000002",
+          "native_frame": 560,
+          "physics_frame": 554,
+          "emission_process_frame": 553
+        }
+      ],
+      "scope": "two automated public-input controllers; earned aura, real native collisions; no CPU/human visual acceptance or sustained-device FPS claim",
+      "redistribution": "Original project assets/audio, owner development review only; no release authorization"
+    },
+    {
+      "verification_status": "VERIFIED_NATIVE60_AUDIO_FRAME_SOURCE",
+      "source_sha": "2f5aed2bd55acafde1e6d29b7d54223129761f90",
+      "movie": "artifacts/v1_closure/spectral_feedback/rendered/clash_readability_after1020.mp4",
+      "raw_local_only": "artifacts/v1_closure/spectral_feedback/local_media/clash_readability_after_short1020.avi",
+      "raw_sha256": "934bf5a6d817095a6602de155742916ba68512fd6c670fddfa4fcf2a400eb2f7",
+      "movie_sha256": "043e4b61d9a6a80b511dbf0d24666b4763a2a6a31ea12999fd366e67cfbde959",
+      "trace_sha256": "35b0b563df07339daa11530955e4a04bfd1ec1ffe95f47494150791c4de4acb2",
+      "matched_frames": 458,
+      "container_frames": 679,
+      "audio_volume_db": {
+        "mean_volume": -32.6,
+        "max_volume": -7.5
+      },
+      "streams": [
+        {
+          "codec_type": "video",
+          "r_frame_rate": "60/1",
+          "duration": "11.316667"
+        },
+        {
+          "codec_type": "audio",
+          "r_frame_rate": "0/0",
+          "duration": "11.316000"
+        }
+      ],
+      "contact_sheet": "artifacts/v1_closure/spectral_feedback/continuous_1020/clash_readability/after_short/CONTACT_SHEET.png",
+      "contact_sheet_sha256": "b437ff134826dd38a3de6d42ea9518ca596687533992799b64652ec3e16dac75",
+      "selected_frames": [
+        {
+          "event_id": "projectile:294:1000001:2000001",
+          "native_frame": 292,
+          "physics_frame": 295,
+          "emission_process_frame": 294
+        },
+        {
+          "event_id": "projectile:294:1000001:2000001",
+          "native_frame": 295,
+          "physics_frame": 295,
+          "emission_process_frame": 294
+        },
+        {
+          "event_id": "projectile:294:1000001:2000001",
+          "native_frame": 301,
+          "physics_frame": 295,
+          "emission_process_frame": 294
+        },
+        {
+          "event_id": "projectile:553:1000002:2000002",
+          "native_frame": 551,
+          "physics_frame": 554,
+          "emission_process_frame": 553
+        },
+        {
+          "event_id": "projectile:553:1000002:2000002",
+          "native_frame": 554,
+          "physics_frame": 554,
+          "emission_process_frame": 553
+        },
+        {
+          "event_id": "projectile:553:1000002:2000002",
+          "native_frame": 560,
+          "physics_frame": 554,
+          "emission_process_frame": 553
+        }
+      ],
+      "scope": "two automated public-input controllers; earned aura, real native collisions; no CPU/human visual acceptance or sustained-device FPS claim",
+      "redistribution": "Original project assets/audio, owner development review only; no release authorization"
+    },
+    {
+      "verification_status": "VERIFIED_NATIVE60_AUDIO_FRAME_SOURCE",
+      "source_sha": "f566d4f9fdebb5244436ce027665c429e62f6a9e",
+      "movie": "artifacts/v1_closure/spectral_feedback/rendered/clash_readability_final1020.mp4",
+      "raw_local_only": "artifacts/v1_closure/spectral_feedback/local_media/clash_readability_final_short1020.avi",
+      "raw_sha256": "e71976fa1d7127dc5850f1cdad1105de922d359a1157df4ea584e9bb92679005",
+      "movie_sha256": "4c29b57468f928687b68ee7f6e842523f792d5bf3c2f7fbbdf761ed57c76cc8a",
+      "trace_sha256": "001fe74e99bcf9154133504de3d65c787aaa84e745530f689227fbb4d76943d4",
+      "matched_frames": 458,
+      "container_frames": 679,
+      "audio_volume_db": {
+        "mean_volume": -32.6,
+        "max_volume": -7.5
+      },
+      "streams": [
+        {
+          "codec_type": "video",
+          "r_frame_rate": "60/1",
+          "duration": "11.316667"
+        },
+        {
+          "codec_type": "audio",
+          "r_frame_rate": "0/0",
+          "duration": "11.316000"
+        }
+      ],
+      "contact_sheet": "artifacts/v1_closure/spectral_feedback/continuous_1020/clash_readability/final_short/CONTACT_SHEET.png",
+      "contact_sheet_sha256": "e975186b9c1e6f1275c8e44150627e245c50f2cf1030947c4da64d92f096ee55",
+      "selected_frames": [
+        {
+          "event_id": "projectile:294:1000001:2000001",
+          "native_frame": 292,
+          "physics_frame": 295,
+          "emission_process_frame": 294
+        },
+        {
+          "event_id": "projectile:294:1000001:2000001",
+          "native_frame": 295,
+          "physics_frame": 295,
+          "emission_process_frame": 294
+        },
+        {
+          "event_id": "projectile:294:1000001:2000001",
+          "native_frame": 301,
+          "physics_frame": 295,
+          "emission_process_frame": 294
+        },
+        {
+          "event_id": "projectile:553:1000002:2000002",
+          "native_frame": 551,
+          "physics_frame": 554,
+          "emission_process_frame": 553
+        },
+        {
+          "event_id": "projectile:553:1000002:2000002",
+          "native_frame": 554,
+          "physics_frame": 554,
+          "emission_process_frame": 553
+        },
+        {
+          "event_id": "projectile:553:1000002:2000002",
+          "native_frame": 560,
+          "physics_frame": 554,
+          "emission_process_frame": 553
+        }
+      ],
+      "scope": "two automated public-input controllers; earned aura, real native collisions; no CPU/human visual acceptance or sustained-device FPS claim",
+      "redistribution": "Original project assets/audio, owner development review only; no release authorization"
+    }
+  ],
+  "movie_limits": "Final normal-cue movie is exact f566, not relabeled as369; later crowd budgeting and Full-major environment are represented by current native fixture screenshots. Native60fps encoded output, not sustained device60fps measurement. Intermediate2f5aed X-cue video is diagnostic.",
+  "focused_regressions": [
+    {
+      "suite": "ProjectileInteractions",
+      "source_sha": "369b3d34d1a2ad57ef17e230b163507816774604",
+      "PASS": true,
+      "exit_code": 0,
+      "seconds": 4.03,
+      "output": "artifacts/v1_closure/spectral_feedback/continuous_1020/clash_readability/regressions/ProjectileInteractions"
+    },
+    {
+      "suite": "ProjectileArchetypeContinuity",
+      "source_sha": "369b3d34d1a2ad57ef17e230b163507816774604",
+      "PASS": true,
+      "exit_code": 0,
+      "seconds": 3.35,
+      "output": "artifacts/v1_closure/spectral_feedback/continuous_1020/clash_readability/regressions/ProjectileArchetypeContinuity"
+    },
+    {
+      "suite": "SpectralFeedback",
+      "source_sha": "369b3d34d1a2ad57ef17e230b163507816774604",
+      "PASS": true,
+      "exit_code": 0,
+      "seconds": 3.94,
+      "output": "artifacts/v1_closure/spectral_feedback/continuous_1020/clash_readability/regressions/SpectralFeedback"
+    },
+    {
+      "suite": "SpectralIntensity",
+      "source_sha": "369b3d34d1a2ad57ef17e230b163507816774604",
+      "PASS": true,
+      "exit_code": 0,
+      "seconds": 5.36,
+      "output": "artifacts/v1_closure/spectral_feedback/continuous_1020/clash_readability/regressions/SpectralIntensity"
+    },
+    {
+      "suite": "ExpressionPoolPriority",
+      "source_sha": "369b3d34d1a2ad57ef17e230b163507816774604",
+      "PASS": true,
+      "exit_code": 0,
+      "seconds": 5.08,
+      "output": "artifacts/v1_closure/spectral_feedback/continuous_1020/clash_readability/regressions/ExpressionPoolPriority"
+    },
+    {
+      "suite": "ChargeContinuity",
+      "source_sha": "369b3d34d1a2ad57ef17e230b163507816774604",
+      "PASS": true,
+      "exit_code": 0,
+      "seconds": 7.61,
+      "output": "artifacts/v1_closure/spectral_feedback/continuous_1020/clash_readability/regressions/ChargeContinuity"
+    },
+    {
+      "suite": "ElementalPerformance",
+      "source_sha": "369b3d34d1a2ad57ef17e230b163507816774604",
+      "PASS": true,
+      "exit_code": 0,
+      "seconds": 12.77,
+      "output": "artifacts/v1_closure/spectral_feedback/continuous_1020/clash_readability/regressions/ElementalPerformance"
+    },
+    {
+      "suite": "ProjectileOwnership",
+      "source_sha": "369b3d34d1a2ad57ef17e230b163507816774604",
+      "PASS": true,
+      "exit_code": 0,
+      "seconds": 12.18,
+      "output": "artifacts/v1_closure/spectral_feedback/continuous_1020/clash_readability/regressions/ProjectileOwnership"
+    },
+    {
+      "suite": "ClashReadability",
+      "source_sha": "369b3d34d1a2ad57ef17e230b163507816774604",
+      "PASS": true,
+      "exit_code": 0,
+      "seconds": 2.37,
+      "output": "artifacts/v1_closure/spectral_feedback/continuous_1020/clash_readability/regressions/ClashReadability"
+    }
+  ],
+  "active_CPU_observation": "artifacts/v1_closure/spectral_feedback/continuous_1020/clash_readability/ACTIVE_CPU_OBSERVATION.json",
+  "launcher_smoke": {
+    "status": "PASS",
+    "source_runtime": "369b3d34d1a2ad57ef17e230b163507816774604",
+    "local_controls": true,
+    "indicator_opt_in": true,
+    "visible_model_paths_logged": [
+      "kaia-windrow/female/BASE.glb",
+      "juno-spark/female/BASE.glb"
+    ],
+    "logs": "artifacts/v1_closure/spectral_feedback/local_media/projectile_owner_review/20261020T154900Z_44170"
+  },
+  "diagnostics": [
+    "Preserved native watchdog failure and stale-pixel preview; neither counts as successful visual evidence.",
+    "Existing ObjectDB/resources-in-use exit diagnostics persist; functional assertions/script/shader checks passed."
+  ],
+  "provenance": {
+    "new_assets": "Original analytic shader/code only; no imported textures, Nintendo material or third-party sound.",
+    "audio": "Existing original elemental_v1 block/charge_release/projectile_impact, generated by tools/audio/generate_elemental_performance.py; shortened envelopes and pitch variation only.",
+    "no_paid_services_or_voice_materials": true
+  },
+  "limitations": [
+    "Human visual/audio approval pending.",
+    "Kaia/Juno ordinary comparison is not nine-fighter matchup acceptance.",
+    "Extreme pool saturation can retire the oldest prior cue; newly confirmed outcomes and owned flight cores retain priority.",
+    "No CPU projectile collision observed in the bounded test.",
+    "No physical platform/device or sustained-performance certification."
+  ],
+  "all_human_release_gates_false": true,
+  "no_merge_deploy_tag_release": true,
+  "ordinary_repetition": {
+    "results": [
+      {
+        "mode": "Full",
+        "runtime_source": "369b3d34d1a2ad57ef17e230b163507816774604",
+        "exit_code": 0,
+        "seconds": 2.8,
+        "cases": 9,
+        "confirmed_interceptions": 9,
+        "primary_cues": 9,
+        "secondary_suppressed": 0,
+        "peak_clash_audio_voices": 1,
+        "damage_hits": 0,
+        "controls_enabled": [
+          true,
+          true
+        ],
+        "trace": "artifacts/v1_closure/spectral_feedback/continuous_1020/clash_readability/public_repetition/Full/projectile_public_inputs.json",
+        "status": "TECHNICAL_PASS_ORDINARY_REPEATED_INPUTS",
+        "scope": "Two public controllers; first exchange then8 at25-frame input intervals. No CPU or human visual acceptance, no seeded aura/positions."
+      },
+      {
+        "mode": "Balanced",
+        "runtime_source": "369b3d34d1a2ad57ef17e230b163507816774604",
+        "exit_code": 0,
+        "seconds": 2.07,
+        "cases": 9,
+        "confirmed_interceptions": 9,
+        "primary_cues": 9,
+        "secondary_suppressed": 7,
+        "peak_clash_audio_voices": 1,
+        "damage_hits": 0,
+        "controls_enabled": [
+          true,
+          true
+        ],
+        "trace": "artifacts/v1_closure/spectral_feedback/continuous_1020/clash_readability/public_repetition/Balanced/projectile_public_inputs.json",
+        "status": "TECHNICAL_PASS_ORDINARY_REPEATED_INPUTS",
+        "scope": "Two public controllers; first exchange then8 at25-frame input intervals. No CPU or human visual acceptance, no seeded aura/positions."
+      },
+      {
+        "mode": "Reduced",
+        "runtime_source": "369b3d34d1a2ad57ef17e230b163507816774604",
+        "exit_code": 0,
+        "seconds": 2.04,
+        "cases": 9,
+        "confirmed_interceptions": 9,
+        "primary_cues": 9,
+        "secondary_suppressed": 9,
+        "peak_clash_audio_voices": 1,
+        "damage_hits": 0,
+        "controls_enabled": [
+          true,
+          true
+        ],
+        "trace": "artifacts/v1_closure/spectral_feedback/continuous_1020/clash_readability/public_repetition/Reduced/projectile_public_inputs.json",
+        "status": "TECHNICAL_PASS_ORDINARY_REPEATED_INPUTS",
+        "scope": "Two public controllers; first exchange then8 at25-frame input intervals. No CPU or human visual acceptance, no seeded aura/positions."
+      }
+    ],
+    "timing": [
+      {
+        "mode": "Full",
+        "contact_frames": [
+          295,
+          426,
+          451,
+          476,
+          501,
+          526,
+          551,
+          576,
+          601
+        ],
+        "input_frames": [
+          287,
+          418,
+          443,
+          468,
+          493,
+          518,
+          543,
+          568,
+          593
+        ]
+      },
+      {
+        "mode": "Balanced",
+        "contact_frames": [
+          295,
+          426,
+          451,
+          476,
+          501,
+          526,
+          551,
+          576,
+          601
+        ],
+        "input_frames": [
+          287,
+          418,
+          443,
+          468,
+          493,
+          518,
+          543,
+          568,
+          593
+        ]
+      },
+      {
+        "mode": "Reduced",
+        "contact_frames": [
+          295,
+          426,
+          451,
+          476,
+          501,
+          526,
+          551,
+          576,
+          601
+        ],
+        "input_frames": [
+          287,
+          418,
+          443,
+          468,
+          493,
+          518,
+          543,
+          568,
+          593
+        ]
+      }
+    ],
+    "same_authority_all_modes": true,
+    "native_stress_pixels_separate": true
+  },
+  "CI_snapshot": "artifacts/v1_closure/spectral_feedback/continuous_1020/clash_readability/CI_SNAPSHOT_369b3d34.json"
+}

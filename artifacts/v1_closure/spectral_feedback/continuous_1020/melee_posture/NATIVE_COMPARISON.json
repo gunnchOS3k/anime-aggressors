@@ -1,0 +1,110 @@
+{
+  "PASS": true,
+  "before_source_sha": "7c2035253dff671c82756b49e49e4a2c4388f5e3",
+  "after_source_sha": "4d5bb494d4bb4eccad213ef32797e78cb43db2dd",
+  "inputs_and_complete_physics_control_damage_contact_traces_identical": true,
+  "frames": 741,
+  "contacts": [
+    {
+      "case": "Kaia light / Juno shield",
+      "move": "jab_1",
+      "result": "shield",
+      "physics_frame": 316,
+      "before_head_overlap_px2": 742.296821594238,
+      "after_head_overlap_px2": 416.3203125,
+      "reduction_percent": 43.91457697395702,
+      "posture": {
+        "admitted": true,
+        "bone_lengths_changed": false,
+        "cpu_usec": 37,
+        "head_retreat_px": 5.10104802728802,
+        "max_hand_depth_m": 0.0797780675131474,
+        "phase_weight": 1.0,
+        "pitch_radians": 0.453785605518526,
+        "root_moved": false,
+        "wrist_projection_error_viewport_px": 7.62939453125e-06
+      }
+    },
+    {
+      "case": "Kaia light",
+      "move": "jab_2",
+      "result": "hit",
+      "physics_frame": 367,
+      "before_head_overlap_px2": 742.051155090332,
+      "after_head_overlap_px2": 742.051155090332,
+      "reduction_percent": 0.0,
+      "posture": {
+        "admitted": false,
+        "reason": "authored_hook_preserved"
+      }
+    },
+    {
+      "case": "Juno light",
+      "move": "jab_1",
+      "result": "hit",
+      "physics_frame": 428,
+      "before_head_overlap_px2": 1436.05432128906,
+      "after_head_overlap_px2": 1073.9948425293,
+      "reduction_percent": 25.212101895613593,
+      "posture": {
+        "admitted": true,
+        "bone_lengths_changed": false,
+        "cpu_usec": 32,
+        "head_retreat_px": 5.50766698908456,
+        "max_hand_depth_m": 0.0831438564441211,
+        "phase_weight": 1.0,
+        "pitch_radians": 0.488692190558412,
+        "root_moved": false,
+        "wrist_projection_error_viewport_px": 0.0
+      }
+    },
+    {
+      "case": "Kaia heavy",
+      "move": "heavy_attack",
+      "result": "hit",
+      "physics_frame": 497,
+      "before_head_overlap_px2": 894.910675048828,
+      "after_head_overlap_px2": 556.246299743652,
+      "reduction_percent": 37.843371941752494,
+      "posture": {
+        "admitted": true,
+        "bone_lengths_changed": false,
+        "cpu_usec": 34,
+        "head_retreat_px": 5.10104802728802,
+        "max_hand_depth_m": 0.0791216653645649,
+        "phase_weight": 1.0,
+        "pitch_radians": 0.453785605518526,
+        "root_moved": false,
+        "wrist_projection_error_viewport_px": 1.52587890625e-05
+      }
+    },
+    {
+      "case": "Juno heavy",
+      "move": "heavy_attack",
+      "result": "hit",
+      "physics_frame": 580,
+      "before_head_overlap_px2": 1575.65213012695,
+      "after_head_overlap_px2": 1217.01123046875,
+      "reduction_percent": 22.761426383455863,
+      "posture": {
+        "admitted": true,
+        "bone_lengths_changed": false,
+        "cpu_usec": 34,
+        "head_retreat_px": 5.50767217707289,
+        "max_hand_depth_m": 0.0824892009076282,
+        "phase_weight": 1.0,
+        "pitch_radians": 0.488692190558412,
+        "root_moved": false,
+        "wrist_projection_error_viewport_px": 7.62939453125e-06
+      }
+    }
+  ],
+  "normal_speed_movies": {
+    "before": "artifacts/v1_closure/spectral_feedback/rendered/melee_posture_before1020.mp4",
+    "after": "artifacts/v1_closure/spectral_feedback/rendered/melee_posture_after1020.mp4"
+  },
+  "contact_crop": "artifacts/v1_closure/spectral_feedback/continuous_1020/melee_posture/NATIVE_COMPARISON.png",
+  "contact_crop_sha256": "c5791b75f71b0681df1ca35f3758485ecad07f24b192faa1c91dfda5f6f457c5",
+  "scope": "native ordinary two-controller contact; weighted Head skin convex hull area, no final contact fit or artistic pass threshold; hooks intentionally unchanged",
+  "redistribution": "original project assets/audio, owner development review only; no release authorization"
+}

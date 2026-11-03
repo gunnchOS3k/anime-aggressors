@@ -1,0 +1,124 @@
+{
+  "fighter_id": "yang",
+  "schema_version": 1,
+  "ascension_runtime": true,
+  "state_domain": "cosmic_playable_advancement",
+  "tuning_status": "TUNING_CANDIDATE",
+  "owner_authorization": "2026-10-21 master continuation: distinct playable cosmic Surge/Ascendant using existing transformation infrastructure",
+  "default_form": "YANG_BASE",
+  "form_ladder": [
+    "YANG_BASE",
+    "YANG_COSMIC_SURGE",
+    "YANG_COSMIC_ASCENDANT"
+  ],
+  "transform_rules": {
+    "require_aura_tier": 3,
+    "input": "shield_special_attack",
+    "pause_safe": true,
+    "min_aura_percent": 75.0
+  },
+  "composition_policy": "Existing literal form override -> AuraScaler once -> fighter identity once. BASE data unchanged; no additional stat multiplier. All enhanced values candidate, not accepted balance.",
+  "counterplay": "More outward displacement and commitment; longer recovery exposes a whiff punish. Definition Panel remains one finite stationary non-piercing construct. No boss immunity or full-stage damage.",
+  "canon_policy": {
+    "grants_story_progress": false,
+    "ordinary_essence_puppet_gray": false,
+    "boss_immunity": false,
+    "cosmic_boss_state": false
+  },
+  "forms": {
+    "YANG_BASE": {
+      "form_id": "YANG_BASE",
+      "display_name": "Yang",
+      "ladder_step": "BASE",
+      "body_scale": 1.0,
+      "head_presentation": "human_elemental_face",
+      "idle_clip": "idle",
+      "transform_in_seconds": 0,
+      "transform_in_clip": "aura_charge",
+      "presentation": {
+        "emission_strength": 0.13,
+        "aura_shape": "radiance",
+        "element_accent": "#F7F3E8",
+        "motion_authority": "emit, expand, declare, construct, align, project outward",
+        "original_form_acting_status": "PENDING_AUTHORED_PRODUCTION"
+      },
+      "move_overrides": {}
+    },
+    "YANG_COSMIC_SURGE": {
+      "form_id": "YANG_COSMIC_SURGE",
+      "display_name": "Yang \u2014 Cosmic Surge",
+      "ladder_step": "COSMIC_SURGE",
+      "body_scale": 1.0,
+      "head_presentation": "human_elemental_face",
+      "idle_clip": "idle",
+      "transform_in_seconds": 1.0,
+      "transform_in_clip": "aura_charge",
+      "presentation": {
+        "emission_strength": 0.44,
+        "aura_shape": "radiance",
+        "element_accent": "#F7F3E8",
+        "motion_authority": "emit, expand, declare, construct, align, project outward",
+        "original_form_acting_status": "PENDING_AUTHORED_PRODUCTION"
+      },
+      "move_overrides": {
+        "jab_1": {
+          "damage": 2.5,
+          "training_display_name": "Surge: First Definition"
+        },
+        "forward_tilt": {
+          "damage": 7.4,
+          "angle_deg": 30,
+          "recovery_frames": 16,
+          "training_display_name": "Surge: Radiant Axis"
+        },
+        "side_special": {
+          "damage": 9.0,
+          "angle_deg": 30,
+          "recovery_frames": 21,
+          "training_display_name": "Surge: Declared Vector"
+        }
+      }
+    },
+    "YANG_COSMIC_ASCENDANT": {
+      "form_id": "YANG_COSMIC_ASCENDANT",
+      "display_name": "Yang \u2014 Cosmic Ascendant",
+      "ladder_step": "COSMIC_ASCENDANT",
+      "body_scale": 1.0,
+      "head_presentation": "human_elemental_face",
+      "idle_clip": "idle",
+      "transform_in_seconds": 1.2,
+      "transform_in_clip": "aura_super_transform",
+      "presentation": {
+        "emission_strength": 0.7,
+        "aura_shape": "radiance",
+        "element_accent": "#F7F3E8",
+        "motion_authority": "emit, expand, declare, construct, align, project outward",
+        "original_form_acting_status": "PENDING_AUTHORED_PRODUCTION"
+      },
+      "move_overrides": {
+        "jab_1": {
+          "damage": 2.8,
+          "training_display_name": "Ascendant: First Definition"
+        },
+        "forward_tilt": {
+          "damage": 8.1,
+          "angle_deg": 25,
+          "recovery_frames": 18,
+          "training_display_name": "Ascendant: Radiant Axis"
+        },
+        "side_special": {
+          "damage": 10.0,
+          "angle_deg": 25,
+          "recovery_frames": 23,
+          "training_display_name": "Ascendant: Declared Vector"
+        },
+        "aura_burst": {
+          "damage": 18.5,
+          "angle_deg": 40,
+          "recovery_frames": 34,
+          "training_display_name": "Ascendant: Perfect Definition"
+        }
+      }
+    }
+  }
+}

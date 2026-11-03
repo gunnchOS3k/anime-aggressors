@@ -1,0 +1,463 @@
+{
+  "schema_version": "1.0.0",
+  "contract_id": "GUNNCHOS3K_PVS",
+  "contract_version": "1.0.0",
+  "contract_source_sha": "935eb3a20548b1a4b726f2ba305df94ff496be16",
+  "product_id": "anime-aggressors",
+  "product_repo": "https://github.com/gunnchOS3k/anime-aggressors",
+  "generated_at": "2026-10-30T20:42:32Z",
+  "honesty_flags": {
+    "HUMAN": false,
+    "RC2": false,
+    "V1": false
+  },
+  "phase_summary": {
+    "cursor_complete": {
+      "status": "in_progress",
+      "sha": "36d46e0ed9af126a9acdd98af321a209621f11ae",
+      "actor": "cursor",
+      "notes": "Story/art/Rosamere/Trials/stages presentation deepen; CURSOR_COMPLETE not claimed"
+    },
+    "codex_independently_verified": {
+      "status": "not_started"
+    },
+    "human_approval": {
+      "status": "not_started"
+    }
+  },
+  "rows": [
+    {
+      "req_id": "AA-RTM-001",
+      "owner": "anime-aggressors-cursor",
+      "expected_behavior": "10 playable fighters on roster (Ember, Juno, Kaia, Nix, Orion, Rook, Vesper, Yin, Yang, Rosamere)",
+      "verification_method": "automated Godot headless suite + evidence JSON; not human certification",
+      "layers": [
+        1,
+        2
+      ],
+      "tests": [
+        "game-godot/tests/integration/PartyLinkRosterNativeHonesty.gd"
+      ],
+      "automated_evidence": [
+        "game-godot/data/fighters/roster.json",
+        "game-godot/data/fighters/ember-vale.json",
+        "game-godot/data/fighters/rosamere.json",
+        "artifacts/cursor_continuation/trials_native_review/NATIVE_PLAYABLE_REVIEW_PACKAGE.json#preserved.fighters",
+        "artifacts/cursor_continuation/PARTYLINK_ROSTER_NATIVE_HONESTY_EVIDENCE.json"
+      ],
+      "native_physical": {
+        "status": "not_run",
+        "platforms": [],
+        "notes": "Headless/native suite \u2260 device physical acceptance"
+      },
+      "art_status": "wip",
+      "limitations": [
+        "HUMAN_ART / Codex final meshes not claimed"
+      ],
+      "severity": "medium",
+      "sha": "cd9e7d331e64d6613e62bfef767f1ededf8098ba",
+      "independent_review_status": "not_started",
+      "cursor_complete_status": "complete",
+      "notes": "Ten fighters digital presentation completeness (json+anim+moves); HUMAN_ART/frame owner audit still open"
+    },
+    {
+      "req_id": "AA-RTM-002",
+      "owner": "anime-aggressors-cursor",
+      "expected_behavior": "Story campaign journey playable with save/recovery authority",
+      "verification_method": "automated Godot headless suite + evidence JSON; not human certification",
+      "layers": [
+        2,
+        4
+      ],
+      "tests": [
+        "game-godot/tests/integration/StorySaveRecovery.gd",
+        "game-godot/tests/integration/ResumedStoryEncounter.gd",
+        "game-godot/tests/v1_closure/StorySceneAuthority.gd",
+        "game-godot/tests/integration/StoryInterruptedJourneyAuthority.gd",
+        "game-godot/tests/integration/StoryJourneyPathAuthority.gd",
+        "game-godot/tests/integration/StoryEarnedPrefixDialogueAuthority.gd",
+        "game-godot/tests/integration/StoryJourneyHonesty.gd",
+        "game-godot/scripts/story/story_journey_honesty.gd",
+        "game-godot/tests/integration/StoryArtStagesPresentationHonesty.gd"
+      ],
+      "automated_evidence": [
+        "docs/story/",
+        "artifacts/cursor_continuation/batch5_stage_verify/STORY_INTERRUPTED_JOURNEY_AUTHORITY.json",
+        "artifacts/cursor_continuation/earned_prefix_rosamere_ownership_verify/STORY_EARNED_PREFIX_DIALOGUE_AUTHORITY.json",
+        "artifacts/cursor_continuation/story_trials_rtm_deepen_verify/STORY_JOURNEY_HONESTY.json",
+        "artifacts/cursor_continuation/STORY_TRIALS_RTM_DEEPEN_EVIDENCE.json",
+        "artifacts/cursor_continuation/ROSAMERE_SURFACE_POLISH_EVIDENCE.json",
+        "artifacts/cursor_continuation/STORY_ART_STAGES_PRESENTATION_EVIDENCE.json",
+        "artifacts/cursor_continuation/story_art_stages_presentation_verify/STORY_ART_STAGES_PRESENTATION_HONESTY.json"
+      ],
+      "native_physical": {
+        "status": "not_run",
+        "platforms": [],
+        "notes": "Headless/native suite \u2260 device physical acceptance"
+      },
+      "art_status": "not_applicable",
+      "limitations": [
+        "Owner Story playthrough sign-off",
+        "V1_0_0_RELEASE_AUTHORIZED=false"
+      ],
+      "severity": "high",
+      "sha": "36d46e0ed9af126a9acdd98af321a209621f11ae",
+      "independent_review_status": "not_started",
+      "cursor_complete_status": "in_progress",
+      "notes": "Cross-surface Story/Rosamere/Trials/stages presentation honesty; owner/device/V1 still open"
+    },
+    {
+      "req_id": "AA-RTM-003",
+      "owner": "anime-aggressors-cursor",
+      "expected_behavior": "Rosamere exactly 3 forms (Familiar Rose, First Bloom, Everlasting Origin); COMPETITIVE_SELF_LIMITED not a fourth form",
+      "verification_method": "automated Godot headless suite + evidence JSON; not human certification",
+      "layers": [
+        1,
+        2,
+        3
+      ],
+      "tests": [
+        "game-godot/scripts/combat/rosamere_form_selection.gd",
+        "game-godot/scripts/trials/rosamere_trials_eligibility.gd",
+        "game-godot/tests/integration/TrialsRosamereEligibility.gd",
+        "game-godot/tests/integration/RosamereStoryPresentationIntegration.gd",
+        "game-godot/tests/integration/RosamereCosmologyHonestyPresentation.gd",
+        "game-godot/tests/integration/RosamerePresentationHudTrainingVersus.gd",
+        "game-godot/tests/integration/RosamereSurfacePolish.gd",
+        "game-godot/tests/integration/StoryArtStagesPresentationHonesty.gd"
+      ],
+      "automated_evidence": [
+        "artifacts/cursor_continuation/ROSAMERE_THREE_FORM_CANON.json",
+        "artifacts/cursor_continuation/ROSAMERE_THREE_FORM_CANON_EVIDENCE.json",
+        "artifacts/cursor_continuation/earned_prefix_rosamere_ownership_verify/ROSAMERE_STORY_PRESENTATION_INTEGRATION.json",
+        "artifacts/cursor_continuation/rosamere_cosmology_honesty_verify/ROSAMERE_COSMOLOGY_HONESTY_PRESENTATION.json",
+        "artifacts/cursor_continuation/rosamere_presentation_hud_verify/ROSAMERE_PRESENTATION_HUD_TRAINING_VERSUS.json",
+        "artifacts/cursor_continuation/ROSAMERE_SURFACE_POLISH_EVIDENCE.json",
+        "artifacts/cursor_continuation/rosamere_surface_polish_verify/ROSAMERE_SURFACE_POLISH.json",
+        "artifacts/cursor_continuation/STORY_ART_STAGES_PRESENTATION_EVIDENCE.json",
+        "artifacts/cursor_continuation/story_art_stages_presentation_verify/STORY_ART_STAGES_PRESENTATION_HONESTY.json"
+      ],
+      "native_physical": {
+        "status": "not_run",
+        "platforms": [],
+        "notes": "Headless/native suite \u2260 device physical acceptance"
+      },
+      "art_status": "THREE_FORM_PRESENTATION_PRODUCTION_IN_PROGRESS",
+      "limitations": [
+        "HUMAN_ART for form presentation",
+        "choreography stubs \u2260 HUMAN_ART"
+      ],
+      "severity": "medium",
+      "sha": "36d46e0ed9af126a9acdd98af321a209621f11ae",
+      "independent_review_status": "not_started",
+      "cursor_complete_status": "complete",
+      "notes": "Three-form art_status in-progress + Story/Trials/stages presentation honesty; HUMAN_ART still false"
+    },
+    {
+      "req_id": "AA-RTM-004",
+      "owner": "anime-aggressors-cursor",
+      "expected_behavior": "Six Trials of Convergence modes with real shared combat (not HUD-only scaffolds)",
+      "verification_method": "automated Godot headless suite + evidence JSON; not human certification",
+      "layers": [
+        2,
+        3,
+        4
+      ],
+      "tests": [
+        "game-godot/tests/integration/TrialsOrdinaryInputJourneys.gd",
+        "game-godot/tests/integration/FlaglineFourBodyCombat.gd",
+        "game-godot/tests/integration/TrialsPlayableJourneyLifecycle.gd",
+        "game-godot/scripts/trials/trial_playable_journey.gd",
+        "game-godot/tests/integration/TrialsRealPlayerOwnershipTrace.gd",
+        "game-godot/tests/integration/TrialsSixModeOwnershipHonesty.gd",
+        "game-godot/tests/integration/StoryArtStagesPresentationHonesty.gd"
+      ],
+      "automated_evidence": [
+        "game-godot/scripts/trials/",
+        "scripts/run-trials-suite.sh",
+        ".github/workflows/trials-of-convergence.yml",
+        "artifacts/cursor_continuation/TRIALS_OF_CONVERGENCE_DEEPEN_EVIDENCE.json",
+        "artifacts/cursor_continuation/trials_native_review/NATIVE_PLAYABLE_REVIEW_PACKAGE.json",
+        "artifacts/cursor_continuation/TRIALS_PLAYABLE_STORY_PATH_EVIDENCE.json",
+        "artifacts/cursor_continuation/earned_prefix_rosamere_ownership_verify/TRIALS_REAL_PLAYER_OWNERSHIP_TRACE.json",
+        "artifacts/cursor_continuation/story_trials_rtm_deepen_verify/TRIALS_SIX_MODE_OWNERSHIP_HONESTY.json",
+        "artifacts/cursor_continuation/STORY_TRIALS_RTM_DEEPEN_EVIDENCE.json",
+        "artifacts/cursor_continuation/ROSAMERE_SURFACE_POLISH_EVIDENCE.json",
+        "artifacts/cursor_continuation/STORY_ART_STAGES_PRESENTATION_EVIDENCE.json",
+        "artifacts/cursor_continuation/story_art_stages_presentation_verify/STORY_ART_STAGES_PRESENTATION_HONESTY.json"
+      ],
+      "native_physical": {
+        "status": "not_run",
+        "platforms": [],
+        "notes": "Headless/native suite \u2260 device physical acceptance; digital ownership traces \u2260 physical devices"
+      },
+      "art_status": "not_applicable",
+      "limitations": [
+        "Device playtest",
+        "HUMAN_ART territory meshes",
+        "CURSOR_COMPLETE not claimed"
+      ],
+      "severity": "high",
+      "sha": "36d46e0ed9af126a9acdd98af321a209621f11ae",
+      "independent_review_status": "not_started",
+      "cursor_complete_status": "in_progress",
+      "notes": "Trials mode presentation + stage backdrop honesty; no physical device / HUMAN_ART territory claim"
+    },
+    {
+      "req_id": "AA-RTM-005",
+      "owner": "anime-aggressors-cursor",
+      "expected_behavior": "Prismatic / Puppet / Mythic (Unbound) eligibility \u2014 controllable Trials-only actors; never contaminate Versus/Story/ranked",
+      "verification_method": "automated Godot headless suite + evidence JSON; not human certification",
+      "layers": [
+        1,
+        2,
+        7
+      ],
+      "tests": [
+        "game-godot/scripts/trials/unbound/unbound_ruleset.gd",
+        "game-godot/scripts/trials/unbound/colossus_rig.gd",
+        "game-godot/tests/integration/UnboundRulesetContract.gd",
+        "game-godot/tests/integration/TrialsSharedCombatBridge.gd",
+        "game-godot/scripts/trials/unbound/colossus_actor.gd",
+        "game-godot/tests/integration/ColossusActorCollision.gd"
+      ],
+      "automated_evidence": [],
+      "native_physical": {
+        "status": "not_run",
+        "platforms": [],
+        "notes": "Headless/native suite \u2260 device physical acceptance"
+      },
+      "art_status": "wip",
+      "limitations": [
+        "Final colossus/puppet HUMAN_ART",
+        "Owner mythic consent UX review"
+      ],
+      "severity": "medium",
+      "sha": "50f044a07d3210e2b94fc4362403c86fc3ac9053",
+      "independent_review_status": "not_started",
+      "cursor_complete_status": "complete",
+      "notes": "ColossusActor CharacterBody2D+capsule beyond dict scaffolds; feeds_ranked_mmr=false; HUMAN_ART false"
+    },
+    {
+      "req_id": "AA-RTM-006",
+      "owner": "anime-aggressors-cursor",
+      "expected_behavior": "Frame / hitbox integrity \u2014 HitResolver owns damage_ratio; Trials scale knockback only once; colossus scale-aware collision",
+      "verification_method": "automated Godot headless suite + evidence JSON; not human certification",
+      "layers": [
+        1,
+        2,
+        3
+      ],
+      "tests": [
+        "game-godot/scripts/combat/hit_resolver.gd",
+        "game-godot/scripts/trials/shared_combat_bridge.gd",
+        "game-godot/tests/integration/TrialsHitResolverDamageRatio.gd",
+        "game-godot/scripts/trials/unbound/colossus_rig.gd",
+        "game-godot/scripts/trials/unbound/colossus_actor.gd",
+        "game-godot/tests/integration/HitboxIntegrityHonesty.gd",
+        "game-godot/scripts/rc/hitbox_integrity_honesty.gd"
+      ],
+      "automated_evidence": [
+        "artifacts/cursor_continuation/hitbox_integrity_verify/HITBOX_INTEGRITY_HONESTY.json",
+        "artifacts/cursor_continuation/HITBOX_INTEGRITY_HONESTY_EVIDENCE.json"
+      ],
+      "native_physical": {
+        "status": "not_run",
+        "platforms": [],
+        "notes": "Headless/native suite \u2260 device physical acceptance"
+      },
+      "art_status": "wip",
+      "limitations": [
+        "Full roster frame-data owner audit",
+        "HUMAN_ART hitbox review"
+      ],
+      "severity": "high",
+      "sha": "0b95ea350ebde5df013a7abf98d147dea41b0df2",
+      "independent_review_status": "not_started",
+      "cursor_complete_status": "in_progress",
+      "notes": "Digital honesty card on prepare_live_battle; HitResolver owns damage_ratio once; Trials KB overlay only; Colossus scale-aware capsule; Codex untouched; HUMAN_ART/roster audit still open"
+    },
+    {
+      "req_id": "AA-RTM-007",
+      "owner": "anime-aggressors-cursor",
+      "expected_behavior": "Determinism / rollback honesty \u2014 seeded Trials sims; shipping rollback disabled",
+      "verification_method": "automated Godot headless suite + evidence JSON; not human certification",
+      "layers": [
+        3,
+        7
+      ],
+      "tests": [
+        "game-godot/tests/integration/PrismWeaveDeterminism.gd",
+        "game-godot/tests/integration/ResonanceTrialDeterminism.gd",
+        "game-godot/tests/integration/ShippingRollbackHonesty.gd"
+      ],
+      "automated_evidence": [
+        "artifacts/cursor_continuation/PINK_BLOOM_SYSTEMS_DETERMINISM.json",
+        "artifacts/cursor_continuation/FLAT_COMBAT_REPLAY.json",
+        "artifacts/cursor_continuation/DELAYED_INPUT_SNAPSHOT_RESIM.json",
+        "artifacts/cursor_continuation/BODY_VERTICAL_REPLAY.json",
+        "docs/ROLLBACK_DESIGN.md",
+        "artifacts/cursor_continuation/a11y_digital_polish_verify/SHIPPING_ROLLBACK_HONESTY.json"
+      ],
+      "native_physical": {
+        "status": "not_run",
+        "platforms": [],
+        "notes": "Headless/native suite \u2260 device physical acceptance"
+      },
+      "art_status": "not_applicable",
+      "limitations": [
+        "Production rollback netcode not enabled",
+        "CURSOR_COMPLETE blocked on shipping rollback remaining false by design"
+      ],
+      "severity": "high",
+      "sha": "7c4af3ab969a637427a7bb5ba7550ad28c36bc39",
+      "independent_review_status": "not_started",
+      "cursor_complete_status": "in_progress",
+      "notes": "ShippingRollbackHonesty + live seal declares SHIPPING_ROLLBACK_ENABLED=false; resim \u2260 commercial rollback ship"
+    },
+    {
+      "req_id": "AA-RTM-008",
+      "owner": "anime-aggressors-cursor",
+      "expected_behavior": "Real PartyLink seat counts \u2014 connected humans only; no invented seats; BattleScene 2-slot honesty",
+      "verification_method": "automated Godot headless suite + evidence JSON; not human certification",
+      "layers": [
+        2,
+        4,
+        7
+      ],
+      "tests": [
+        "game-godot/scripts/trials/flagline/flagline_four_body.gd",
+        "game-godot/scripts/battle/battle_scene.gd",
+        "game-godot/tests/integration/FlaglineFourBodyCombat.gd",
+        "game-godot/scripts/trials/partylink_seat_enforcement.gd",
+        "game-godot/tests/integration/TrialsPartyLinkSeats.gd",
+        "game-godot/tests/integration/PartyLinkRosterNativeHonesty.gd"
+      ],
+      "automated_evidence": [
+        "artifacts/cursor_continuation/ROSAMERE_HUD_PARTYLINK_POLISH_EVIDENCE.json",
+        "artifacts/cursor_continuation/PARTYLINK_ROSTER_NATIVE_HONESTY_EVIDENCE.json"
+      ],
+      "native_physical": {
+        "status": "not_run",
+        "platforms": [],
+        "notes": "Headless/native suite \u2260 device physical acceptance"
+      },
+      "art_status": "wip",
+      "limitations": [
+        "Four simultaneous human PartyLink bodies still aspirational",
+        "Device playtest"
+      ],
+      "severity": "medium",
+      "sha": "cd9e7d331e64d6613e62bfef767f1ededf8098ba",
+      "independent_review_status": "not_started",
+      "cursor_complete_status": "complete",
+      "notes": "Six-mode seat honesty matrix + BattleScene 2-slot lobby honesty; invented seats false; native/export green not claimed"
+    },
+    {
+      "req_id": "AA-RTM-009",
+      "owner": "anime-aggressors-cursor",
+      "expected_behavior": "Accessibility \u2014 shared input grammar; Prism markers beyond color; Perfect Guard a11y; colossus camera reduce-motion",
+      "verification_method": "automated Godot headless suite + evidence JSON; not human certification",
+      "layers": [
+        6
+      ],
+      "tests": [
+        "game-godot/scripts/trials/prism/prism_weave_sim.gd",
+        "game-godot/tests/v1_closure/PerfectGuardAccessibility.gd",
+        "game-godot/scripts/trials/unbound/colossus_rig.gd",
+        "game-godot/tests/integration/AccessibilityDigitalPolish.gd"
+      ],
+      "automated_evidence": [
+        "docs/DESIGN_ACCESSIBILITY_AND_DEPTH.md",
+        "artifacts/cursor_continuation/a11y_digital_polish_verify/ACCESSIBILITY_DIGITAL_POLISH.json",
+        "artifacts/cursor_continuation/A11Y_ROLLBACK_DIGITAL_POLISH_EVIDENCE.json",
+        "artifacts/cursor_continuation/ROSAMERE_SURFACE_POLISH_EVIDENCE.json"
+      ],
+      "native_physical": {
+        "status": "not_run",
+        "platforms": [],
+        "notes": "Headless/native suite \u2260 device physical acceptance; digital polish \u2260 device matrix pass"
+      },
+      "art_status": "not_applicable",
+      "limitations": [
+        "Owner a11y playtest matrix",
+        "Screen reader / remapping device pass"
+      ],
+      "severity": "high",
+      "sha": "b862373d580058a115b364f87b84e9a7bd615e03",
+      "independent_review_status": "not_started",
+      "cursor_complete_status": "in_progress",
+      "notes": "Digital reduce_motion/focus/SR labels on Trials/Rosamere HUD/Story; not WCAG product audit / device matrix"
+    },
+    {
+      "req_id": "AA-RTM-010",
+      "owner": "anime-aggressors-cursor",
+      "expected_behavior": "BodyVariant CI preload fix preserved (clean-env PartyLink seats)",
+      "verification_method": "automated Godot headless suite + evidence JSON; not human certification",
+      "layers": [
+        1,
+        2
+      ],
+      "tests": [
+        "game-godot/scripts/data/body_variant.gd",
+        "game-godot/scripts/net/partylink_variant_allocator.gd",
+        "game-godot/tests/integration/PartyLinkRosterNativeHonesty.gd"
+      ],
+      "automated_evidence": [
+        ".github/workflows/trials-of-convergence.yml",
+        "artifacts/cursor_continuation/PARTYLINK_ROSTER_NATIVE_HONESTY_EVIDENCE.json"
+      ],
+      "native_physical": {
+        "status": "not_applicable",
+        "platforms": [
+          "github-actions"
+        ],
+        "notes": "CI BodyVariant preload gate"
+      },
+      "art_status": "not_applicable",
+      "limitations": [],
+      "severity": "medium",
+      "sha": "cd9e7d331e64d6613e62bfef767f1ededf8098ba",
+      "independent_review_status": "not_started",
+      "cursor_complete_status": "complete",
+      "notes": "CI clean-env step must not emit BodyVariant undeclared"
+    },
+    {
+      "req_id": "AA-RTM-011",
+      "owner": "anime-aggressors-cursor",
+      "expected_behavior": "Cursor-Complete gate for Anime Aggressors",
+      "verification_method": "automated Godot headless suite + evidence JSON; not human certification",
+      "layers": [
+        4
+      ],
+      "tests": [
+        "game-godot/tests/integration/CursorCompleteHonesty.gd",
+        "game-godot/scripts/rc/cursor_complete_honesty.gd"
+      ],
+      "automated_evidence": [
+        "artifacts/cursor_continuation/rtm/ANIME_REQUIREMENTS_TO_EVIDENCE_MATRIX.json",
+        "artifacts/owner_playable_review/OWNER_PLAYABLE_REVIEW_PACKAGE.json",
+        "artifacts/cursor_continuation/story_trials_rtm_deepen_verify/CURSOR_COMPLETE_HONESTY.json"
+      ],
+      "native_physical": {
+        "status": "not_run",
+        "platforms": [],
+        "notes": "Headless/native suite \u2260 device physical acceptance"
+      },
+      "art_status": "wip",
+      "limitations": [
+        "HUMAN_ART Codex/final mesh pass",
+        "Device playtest of all six Trials live paths",
+        "Story owner sign-off",
+        "A11y owner matrix",
+        "RC2/V1 still forbidden",
+        "Trials CI tip may lag doc stamp tip by one docs commit \u2014 report both honestly"
+      ],
+      "severity": "blocker",
+      "sha": "39b903f77ff994d37c26b8923771ba9fd69a3a61",
+      "independent_review_status": "not_started",
+      "cursor_complete_status": "in_progress",
+      "notes": "CursorCompleteHonesty declares CURSOR_COMPLETE=false with open blockers; HUMAN_ART/RC2/V1/SHIPPING_ROLLBACK false."
+    }
+  ]
+}

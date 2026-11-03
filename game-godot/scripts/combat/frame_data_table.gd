@@ -45,12 +45,27 @@ static func table_for_fighter(fighter_id: String) -> Array:
 	return out
 
 
+## Rosamere kit uses authored special ids; map CORE special slots for integrity only.
+## Does not rewrite HitResolver / Codex combat resolution.
+const CORE_SPECIAL_ALIASES := {
+	"rosamere": {
+		"neutral_special_projectile": "bloom_seed",
+		"side_special": "petal_constellation",
+		"up_special_recovery": "first_dawn",
+		"down_special": "gentle_reversal",
+	},
+}
+
+
 static func core_complete(fighter_id: String) -> Dictionary:
 	var manifest: Dictionary = _DataLoader.load_moves(fighter_id)
 	var present: Array = []
 	var missing: Array = []
+	var aliases: Dictionary = CORE_SPECIAL_ALIASES.get(fighter_id, {})
 	for mid in CORE_IDS:
 		var mv: Dictionary = _DataLoader.find_move(manifest, mid)
+		if mv.is_empty() and aliases.has(mid):
+			mv = _DataLoader.find_move(manifest, str(aliases[mid]))
 		if mv.is_empty():
 			missing.append(mid)
 		else:

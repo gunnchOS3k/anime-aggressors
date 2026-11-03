@@ -1,0 +1,57 @@
+{
+  "attempts": [
+    {
+      "path": "baseline",
+      "outcome": "Source failures plus invalid cost window (included idle decay)"
+    },
+    {
+      "path": "baseline_corrected_measurement",
+      "outcome": "Test call-signature parse error; not a source defect"
+    },
+    {
+      "path": "baseline_final",
+      "outcome": "4 real lifecycle failures; cost sampled at completion correctly"
+    },
+    {
+      "path": "roster",
+      "outcome": "Real match timer reached Results; source reference freed; terminated only owned test"
+    },
+    {
+      "path": "roster_untimed",
+      "outcome": "28/28 lifecycle cases PASS"
+    },
+    {
+      "path": "cosmic",
+      "outcome": "8/8 lifecycle cases PASS; candidate values, no native review"
+    },
+    {
+      "path": "matchups",
+      "outcome": "81 no-contact driver failures: configure records spawn, does not position live actor"
+    },
+    {
+      "path": "matchups_positioned",
+      "outcome": "81 driver failures: input during aerial/landing state, not grounded actionable tilt"
+    },
+    {
+      "path": "matchups_grounded_pilot",
+      "outcome": "3 driver failures: landing recovery had not returned action control"
+    },
+    {
+      "path": "matchups_actionable_pilot",
+      "outcome": "3/3 genuine contact/shield PASS after waiting for real control"
+    },
+    {
+      "path": "matchups_final",
+      "outcome": "81/81 contact and shield PASS before numerical scaling assertion; not proof of correct damage"
+    },
+    {
+      "path": "scaling_before",
+      "outcome": "3/3 numerical failures demonstrate form melee scaled twice; 18.845 vs expected14.5"
+    },
+    {
+      "path": "scaling_after_pilot",
+      "outcome": "3/3 contact/shield/damage PASS and real match-end callback cleanup PASS"
+    }
+  ],
+  "preservation": "Every earlier outcome retained; no failed source/fixture result promoted to acceptance."
+}

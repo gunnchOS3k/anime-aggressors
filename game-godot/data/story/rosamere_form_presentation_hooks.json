@@ -1,0 +1,56 @@
+{
+  "id": "rosamere_form_presentation_hooks",
+  "fighter_id": "rosamere",
+  "insert_after": "kaia_philosophical_breakthrough",
+  "pink_revelation_node": "kaia-windrow:pink_revelation",
+  "forms": {
+    "FAMILIAR_ROSE": {
+      "roman": "I",
+      "modes": [
+        "training",
+        "versus",
+        "story"
+      ]
+    },
+    "FIRST_BLOOM": {
+      "roman": "II",
+      "modes": [
+        "training",
+        "versus",
+        "story"
+      ],
+      "revelation": true
+    },
+    "EVERLASTING_ORIGIN": {
+      "roman": "III",
+      "modes": [
+        "story",
+        "ova",
+        "mythic_party"
+      ],
+      "never_ranked": true
+    }
+  },
+  "gameplay_contract": {
+    "COMPETITIVE_SELF_LIMITED": {
+      "attaches_to": "FAMILIAR_ROSE",
+      "is_story_form": false
+    }
+  },
+  "story_integration": {
+    "status": "STORY_PRESENTATION_HOOKS_AUTHORED_FINAL_ART_NOT_APPROVED",
+    "HUMAN_ART_APPROVED": false,
+    "choreography_is_human_art": false,
+    "HitResolver_untouched": true,
+    "Codex_combat_data_untouched": true,
+    "surfaces": [
+      "story_campaign_scene_pink_revelation",
+      "three_form_presentation_production",
+      "choreography_stubs",
+      "presentation_cards",
+      "cosmology_honesty_yin_yang_puppet_prismatic"
+    ]
+  },
+  "cosmology_honesty_ref": "res://data/story/rosamere_cosmology_honesty.json",
+  "dedication_credits_status": "OWNER_REVIEW"
+}

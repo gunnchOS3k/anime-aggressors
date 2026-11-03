@@ -1,0 +1,243 @@
+shader_type canvas_item;
+render_mode unshaded;
+// Original analytic distance fields. No image, sample, imported shader or screen capture.
+uniform int family = 0;
+uniform int kind = 0;
+uniform float phase = 0.0;
+uniform float clock_s = 0.0;
+uniform float seed = 0.0;
+uniform float density = 1.0;
+uniform float flash = 1.0;
+uniform vec4 accent : source_color = vec4(1.0, 0.3, 0.05, 1.0);
+uniform int secondary_family = 0;
+uniform vec4 secondary_accent : source_color = vec4(1.0);
+uniform float integrity_layers = 0.0;
+uniform float initial_integrity = 0.0;
+uniform float breakthrough = 0.0;
+uniform float clash_ornament = 1.0;
+float hash(vec2 p) { return fract(sin(dot(p,vec2(127.1,311.7))+seed)*43758.5453); }
+float noise(vec2 p) {
+ vec2 i=floor(p), f=fract(p); f=f*f*(3.0-2.0*f);
+ return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);
+}
+float line(vec2 p, vec2 a, vec2 b, float w) {
+ vec2 ab=b-a; float h=clamp(dot(p-a,ab)/max(dot(ab,ab),0.0001),0.0,1.0);
+ return 1.0-smoothstep(w,w+0.018,length(p-a-ab*h));
+}
+float ring(vec2 p,float r,float w) { return 1.0-smoothstep(w,w+0.018,abs(length(p)-r)); }
+// Compact original elemental contours for a single mixed-contact mesh.
+float element_contour(int f, vec2 p, float t) {
+ float s=0.0;
+ if(f==3) { // wind curls and leaf-like slips
+  s=ring(p+vec2(.12,0),.34+t*.08,.016)*smoothstep(-.24,.3,p.x);
+  s+=ring(p-vec2(.12,.04),.5,.012)*smoothstep(.1,.45,p.y);
+ } else if(f==2) { // static seeded branches, never a flashing sine
+  for(int i=0;i<4;i++){float j=float(i);vec2 d=vec2(cos(j*1.57+seed),sin(j*1.57+seed));vec2 b=d*.25+vec2(-d.y,d.x)*.09;
+   s+=line(p,d*.08,b,.011)+line(p,b,d*.59,.008);s+=line(p,b,b+vec2(d.y,-d.x)*.16,.007);}
+ } else if(f==0) {s=ring(p,.37+noise(p*5.0)*.12,.038)*(.55+.35*noise(p*7.0));}
+ else if(f==1) {float d=max(abs(p.x)*.8+abs(p.y)*.6,abs(p.y));s=1.0-smoothstep(.018,.04,abs(d-.43));}
+ else if(f==4) {for(int i=0;i<6;i++){float a=float(i)*1.047;vec2 d=vec2(cos(a),sin(a));s+=line(p,d*.2,d*.57,.013);s+=line(p,d*.4,d*.4+vec2(-d.y,d.x)*.1,.008);}}
+ else if(f==5) {s=ring(p*vec2(.7,1.25),.41,.018)+ring(p*vec2(1.15,.8),.3,.01)*.5;}
+ else if(f==6) {s=line(p,vec2(-.25,-.4),vec2(.05,.43),.014)+line(p,vec2(.02,-.43),vec2(.32,.4),.009);}
+ else if(f==7) {s=ring(p,.48-t*.18,.025)*(1.0-smoothstep(.35,.6,p.x));}
+ else {float h=max(abs(p.x)*.866+abs(p.y)*.5,abs(p.y));s=1.0-smoothstep(.014,.035,abs(h-.4));s+=line(p,vec2(-.2,0),vec2(.2,0),.012);}
+ return s;
+}
+void fragment() {
+ vec2 p=(UV-0.5)*2.0; float r=length(p), a=atan(p.y,p.x);
+ float n=noise(p*6.0+vec2(-clock_s*2.0,clock_s));
+ float t=phase; float f=pow(max(0.0,1.0-t),1.5);
+ float core=exp(-r*r*85.0)*max(0.0,1.0-t*4.0)*flash;
+ float shape=0.0; float bits=0.0;
+ float outline=0.0; float mix_weight=0.0;
+ if(kind<20 || kind==28) {
+ // Nine different motion and distance-field grammars, not nine recolored discs.
+ if (family==0) { // combustion: turbulent advancing tongues and pressure corona
+  float edge=0.36+0.20*n+0.13*sin(a*5.0-clock_s*4.0);
+  shape=(1.0-smoothstep(edge,edge+0.07,r))*smoothstep(-0.7,0.6,p.x)*0.72;
+  shape+=ring(p,0.22+t*0.55+n*0.07,0.035)*0.48;
+ } else if (family==1) { // armor/earth: angular compression, moving fracture planes
+  float facet=max(abs(p.x)*0.82+abs(p.y)*0.56,abs(p.y));
+  shape=(1.0-smoothstep(0.028,0.05,abs(facet-(0.26+t*0.5))))*0.7;
+  for(int i=0;i<5;i++) { float q=float(i)*1.256+seed; vec2 d=vec2(cos(q),sin(q)); shape+=line(p,d*0.16,d*(0.42+t*0.4),0.013)*0.7; }
+ } else if (family==2) { // electricity: seeded branching, moving irregular arcs
+  for(int i=0;i<6;i++) { float q=float(i)*1.047+seed*0.13; vec2 d=vec2(cos(q),sin(q)); vec2 side=vec2(-d.y,d.x);
+   vec2 last=vec2(0.0); for(int j=1;j<5;j++) { float k=float(j); vec2 next=d*(k*0.16)+side*(hash(vec2(float(i),k+floor(clock_s*(2.0+10.0*flash))))-0.5)*0.25;
+    shape+=line(p,last,next,0.008)*0.85; if(j==3) shape+=line(p,next,next+side*0.18+d*0.1,0.006)*0.7; last=next; }
+  }
+ } else if (family==3) { // wind: sweeping nested crescents, open negative space
+  for(int i=0;i<3;i++) { vec2 q=p+vec2(0.18-float(i)*0.16,0.0); shape+=ring(q,0.3+float(i)*0.16+t*0.18,0.015+0.008*float(i))*smoothstep(-0.25,0.4,q.x)*0.8; }
+ } else if (family==4) { // ice: six faceted lances with abrupt formation
+  for(int i=0;i<6;i++) { float q=float(i)*1.047; vec2 d=vec2(cos(q),sin(q)); float x=dot(p,d), y=abs(dot(p,vec2(-d.y,d.x)));
+   shape+= (1.0-smoothstep(0.012,0.025,abs(y-max(0.0,0.62-x)*0.09)))*step(0.16,x)*step(x,0.64)*0.8;
+  } shape+=ring(p,0.2,0.012)*0.5;
+ } else if (family==5) { // gravity: elliptical orbit, inward moving satellite nodes
+  shape=ring(p*vec2(0.75,1.3),0.42+t*0.1,0.019)*0.85;
+  for(int i=0;i<4;i++) { float q=float(i)*1.57+clock_s*2.0; vec2 c=vec2(cos(q),sin(q))*max(0.14,0.62-t*0.4); shape+=exp(-dot(p-c,p-c)*480.0); }
+ } else if (family==6) { // phase: dislocated seams, intermittent separated echoes
+  for(int i=0;i<3;i++) { float x=float(i)*0.17-0.18+sin(clock_s*3.0)*0.06; shape+=line(p,vec2(x-0.2,-0.6),vec2(x+0.2,0.6),0.012)*(0.85-float(i)*0.2); }
+  shape*=smoothstep(0.25,0.65,n);
+ } else if (family==7) { // Yin: collapsing aperture and inward subtraction
+  shape=ring(p,0.65-t*0.45,0.022)*0.8;
+  for(int i=0;i<5;i++) { float q=float(i)*1.256+clock_s; vec2 d=vec2(cos(q),sin(q)); shape+=line(p,d*(0.7-t*0.48),d*(0.55-t*0.4),0.012)*0.7; }
+  core=0.0;
+ } else { // Yang: expanding structured hexagonal construction
+  float hex=max(abs(p.x)*0.866+abs(p.y)*0.5,abs(p.y)); shape=(1.0-smoothstep(0.015,0.032,abs(hex-(0.3+t*0.25))))*0.8;
+  for(int i=0;i<6;i++) { float q=float(i)*1.047; vec2 d=vec2(cos(q),sin(q)); shape+=line(p,d*0.16,d*(0.5+t*0.2),0.012)*0.75; }
+ }
+ // Directional slash/contact pressure; clears in under 0.3 s.
+ float crescent=ring(p+vec2(0.35,0),0.5+t*0.12,0.023)*smoothstep(-0.1,0.5,p.x);
+ if(kind==0 || kind==9) { shape+=crescent; }
+ // Secondary motes within the same bounded mesh, seeded and density controlled.
+ for(int i=0;i<10;i++) { float j=float(i); float q=hash(vec2(j,3))*6.283; vec2 d=vec2(cos(q),sin(q)); vec2 c=d*(0.22+t*(0.35+hash(vec2(j,8))*0.3));
+  bits+=exp(-dot(p-c,p-c)*1400.0)*step(j,9.0*density)*0.7;
+ }
+ if(kind==1) { // defensive crescent, no body-contact bloom or explosion
+  core=0.0; shape=shape*0.15+ring(p*vec2(1.0,0.8),0.35+t*0.28,0.027)*(0.4+0.6*smoothstep(-0.3,0.3,p.x)); bits*=0.25;
+ } else if(kind==10) { core=0.0; shape*=0.65; bits*=0.2; } else if(kind==2) { // charge evolves continuously; no contact arc
+  core=0.0; shape*=0.65; bits*=0.3; f=1.0;
+ } else if(kind==3) { core=exp(-r*r*65.0)*0.6*flash; shape*=0.75; f=1.0;
+  if(initial_integrity>0.0) {
+   // Readable constant core plus countable energy shells. Losing integrity
+   // removes shells instead of making the survivor almost invisible.
+   shape+=exp(-dot(p-vec2(.12,0),p-vec2(.12,0))*55.0)*.38;
+   for(int i=0;i<4;i++){float j=float(i);float rr=.25+j*.13;float live=step(j+.5,ceil(integrity_layers*4.0/max(4.0,initial_integrity)));
+    if(family==2) {shape+=ring(p*vec2(.85,1.1),rr,.014)*(step(.3,abs(sin(a*3.0+j)))+.15)*live*.55;}
+    else if(family==3) {shape+=ring(p+vec2(j*.035,0),rr,.016)*smoothstep(-.2,.3,p.x)*live*.65;}
+    else if(family==1 || family==8) {float h=max(abs(p.x)*.866+abs(p.y)*.5,abs(p.y));shape+=(1.0-smoothstep(.012,.03,abs(h-rr)))*live*.48;}
+    else {shape+=ring(p,rr,.013)*(0.4+0.6*smoothstep(-.15,.2,p.x))*live*.5;}
+   }
+  }
+ }
+ else if(kind==4) { // irregular volumetric-looking smoke wisps, never straight launch lines
+  float cloud=(1.0-smoothstep(0.26+noise(p*4.0+clock_s)*0.3,0.75,r)); shape=cloud*(0.18+0.28*n); bits=0.0; core=0.0;
+ } else if(kind==5) { core=0.0; shape*=0.5; bits*=0.7; }
+ else if(kind==12) { shape*=0.42; core=0.0; bits=0.0; }
+ else if(kind==6) { shape=crescent*0.55; core=0.0; bits=0.0; }
+ else if(kind==7) { shape+=ring(p,0.2+t*0.7,0.025); core*=0.5; }
+ else if(kind==8) { shape*=0.45; core=0.0; bits=0.0; }
+ // Original comic action grammar. Whiff/anticipation/motion never uses a core.
+ if(kind>=13 && kind<18) {
+  core=0.0;bits=0.0;shape=0.0;
+  if(kind==13 || kind==15) {
+   for(int i=0;i<6;i++) {
+    float j=float(i), y=(j-2.5)*0.105;
+    float bend=(family==3 || family==5)?sin(p.x*3.0+j)*0.10:0.0;
+    if(family==2) bend=sin(p.x*22.0+j)*0.035;
+    if(family==6) bend=step(0.0,p.x)*0.06;
+    float segment=family==1?step(0.3,hash(vec2(floor(p.x*5.0),j))):1.0;
+    float stroke=line(vec2(p.x,p.y-bend),vec2(-.8,y),vec2(.55,y*.25),0.005+(family==0?0.012:0.0));
+    shape+=stroke*smoothstep(-.9,-.5,p.x)*(1.0-smoothstep(.2,.8,p.x))*segment*step(j,5.0*density)*.52;
+   }
+   if(family==4)shape*=step(0.1,abs(p.x));
+   if(family==7)shape*=1.0-smoothstep(.15,.75,abs(p.x));
+   if(family==8)shape*=.65+.35*step(.5,fract(p.x*4.0));
+  } else if(kind==14) {
+   for(int i=0;i<6;i++){float q=float(i)*1.047;vec2 d=vec2(cos(q),sin(q));shape+=line(p,d*(.78-t*.25),d*(.5-t*.2),.008)*step(float(i),5.0*density)*.5;}
+  } else if(kind==16) {
+   for(int i=0;i<8;i++){float q=float(i)*.785+float(family)*.17;vec2 d=vec2(cos(q),sin(q));shape+=line(p,d*.1,d*(.55+t*.2),.013)*step(float(i),7.0*density)*.6;}
+   shape+=ring(p,.18+t*.18,.015)*.35;
+  } else if(kind==17) {
+   float facet=max(abs(p.x)*.866+abs(p.y)*.5,abs(p.y));
+   shape=(family==8)?(1.0-smoothstep(.014,.035,abs(facet-(.2+t*.4))))*.5:ring(p,.2+t*.48,.018)*.42;
+  }
+ }
+ // Surface reactions share the bounded pool, with their own low, open grammar.
+ // UV is flattened onto the queried platform; no screen flash or collision.
+ if(kind==18 || kind==19 || kind==28) {
+  core=0.0;bits=0.0;shape=0.0;
+  float spread=0.12+0.64*t;
+  float residue=(kind==19)?0.48:1.0;
+  if(family==3) { // wind pressure: open spirals and carried leaf silhouettes
+   for(int i=0;i<3;i++) {float j=float(i);vec2 q=p+vec2(sin(t*3.0+j)*.15,0.0);shape+=ring(q,spread+j*.09,.014)*smoothstep(-.2,.45,q.x)*.42;}
+   for(int i=0;i<7;i++){float j=float(i),q=j*2.4+t*2.8;vec2 c=vec2(cos(q),sin(q))*(.2+t*.53);vec2 v=p-c;float leaf=abs(v.x+v.y*.45)+abs(v.y)*1.7;shape+=(1.0-smoothstep(.018,.045,leaf))*step(j,6.0*density)*.65;}
+  } else if(family==2) { // voltage branches travel along the surface, no strobe
+   for(int i=0;i<5;i++){float j=float(i),q=j*1.256+seed;vec2 d=vec2(cos(q),sin(q));vec2 s=vec2(-d.y,d.x);vec2 last=vec2(0.0);
+    for(int k=1;k<5;k++){float h=float(k);vec2 next=d*(h*.17)+s*(hash(vec2(j,h))-.5)*.18;shape+=line(p,last,next,.006)*smoothstep(h*.10,h*.10+.2,t)*.52;last=next;}}
+  } else if(family==0) { // heat crown, embers and cooling scalloped scorch
+   shape=ring(p,spread+n*.06,.035)*(.3+.4*n);
+   shape+=(1.0-smoothstep(.2,.6,r))*(.12+.18*n)*residue;
+  } else if(family==1) { // angular seismic fractures, separate flying stone chips
+   for(int i=0;i<6;i++){float j=float(i),q=j*1.047+seed;vec2 d=vec2(cos(q),sin(q));vec2 bend=d*.3+vec2(-d.y,d.x)*.08;shape+=(line(p,d*.1,bend,.008)+line(p,bend,d*spread,.007))*.55;vec2 v=p-d*(spread+.04);shape+=(1.0-smoothstep(.02,.05,abs(v.x)+abs(v.y)*1.2))*density*.5;}
+  } else if(family==4) { // crystalline frost grows in six structured branches
+   for(int i=0;i<6;i++){float q=float(i)*1.047;vec2 d=vec2(cos(q),sin(q)),s=vec2(-d.y,d.x);shape+=line(p,d*.12,d*spread,.009)*.6;for(int j=1;j<3;j++){vec2 c=d*(float(j)*.18);shape+=(line(p,c,c+(d+s)*.1,.006)+line(p,c,c+(d-s)*.1,.006))*.45;}}
+  } else if(family==5) { // orbital nodes are pulled inward, elliptical gravity field
+   shape=ring(p*vec2(.8,1.25),.62-t*.24,.015)*.5;
+   for(int i=0;i<5;i++){float q=float(i)*1.256+t*2.0;vec2 c=vec2(cos(q),sin(q))*(.75-t*.55);shape+=exp(-dot(p-c,p-c)*1700.0)*density*.8;}
+  } else if(family==6) { // phase: offset seam pairs with separated negative space
+   for(int i=0;i<3;i++){float x=(float(i)-1.0)*.25;shape+=line(p,vec2(x-.12,-spread),vec2(x+.12,spread),.009)*.4;shape+=line(p,vec2(x-.05,-spread),vec2(x+.19,spread),.004)*.25;}
+  } else if(family==7) { // Yin: inward subtraction with a pale enclosing rim
+   shape=ring(p,.72-t*.56,.018)*.6;
+   for(int i=0;i<6;i++){float q=float(i)*1.047+t;vec2 d=vec2(cos(q),sin(q));shape+=line(p,d*(.8-t*.58),d*(.63-t*.48),.012)*.45;}
+  } else { // Yang: outward construction, ordered hexagons and radial braces
+   float hex=max(abs(p.x)*.866+abs(p.y)*.5,abs(p.y));shape=(1.0-smoothstep(.012,.028,abs(hex-spread)))*.55;
+   for(int i=0;i<6;i++){float q=float(i)*1.047;vec2 d=vec2(cos(q),sin(q));shape+=line(p,d*.18,d*spread,.008)*.45;}
+  }
+  shape*=residue*mix(.30,1.0,density);f=sin(min(1.0,t*6.0)*1.5708)*pow(max(0.0,1.0-t),1.3);
+ }
+ }
+ if(kind>=20 && kind!=28) {
+  core=0.0;bits=0.0;shape=0.0;
+  // One clear held beat, then a single fade; density never erases the result.
+  f=1.0-smoothstep(.48,1.0,t);
+  if(kind==25) { // owned elemental clinch: open center, no hit flash or damage cue
+   float breathe=.97+.025*sin(clock_s*2.0);
+   shape=element_contour(family,p*1.25/breathe,0.0)*.58;
+   shape+=element_contour(secondary_family,-p*1.7,0.0)*.13;
+   shape*=smoothstep(.18,.28,r);f=1.0;mix_weight=.12;
+  } else if(kind==26) { // directional release smear; primary hit already has its own owner
+   vec2 q=vec2((p.x+.18-t*.22)*.9,p.y*1.5);
+   shape=element_contour(family,q,t)*smoothstep(-.7,.1,p.x)*.75;
+   float bend=(family==3 || family==5)?sin(p.x*4.0)*.08:0.0;
+   if(family==2)bend=sin(p.x*24.0+seed)*.035;
+   if(family==6)bend=step(.0,p.x)*.08;
+   for(int i=0;i<3;i++){float j=float(i);float y=(j-1.0)*.12;
+    shape+=line(vec2(p.x,p.y-bend),vec2(-.65,y),vec2(.6,y*.25),.008)*(.6-j*.1)*step(j,2.0*density);}
+   f=pow(max(0.0,1.0-t),1.3);
+  } else if(kind==27) { // sparse identity wake follows measured victim displacement
+   shape=element_contour(family,vec2(p.x*.9+.15,p.y*1.8),t)*.38;
+   shape*=1.0-smoothstep(.0,.65,p.x);f*=.65;
+  } else if(kind==29) { // attempted catch / escape: split contour, never a contact core
+   shape=element_contour(family,p*1.55,t)*smoothstep(.24,.4,abs(p.y))*.45;
+   f=pow(max(0.0,1.0-t),1.5);
+  } else if(kind==24) { // original guard brackets: inward closure, open center
+   float settle=smoothstep(0.0,.35,t);
+   float x=.55-.18*settle;
+   shape=(line(p,vec2(-x,-.42),vec2(-x,.42),.018)+line(p,vec2(x,-.42),vec2(x,.42),.018))*.85;
+   shape+=line(p,vec2(-x,-.42),vec2(-x+.16,-.42),.018)+line(p,vec2(x,.42),vec2(x-.16,.42),.018);
+   shape+=element_contour(family,p*1.6,t)*.2;
+  } else if(kind==20) { // mutual cancellation: two inward curls close onto one seam
+   float pull=1.0-smoothstep(0.0,.44,t);
+   float left=element_contour(family,p+vec2(.26*pull,0),t)*(1.0-smoothstep(-.02,.1,p.x));
+   float right=element_contour(secondary_family,-p+vec2(.26*pull,0),t)*smoothstep(-.1,.02,p.x);
+   float left_curl=ring(p+vec2(.26,.06),.42-t*.10,.022)*smoothstep(-.10,.12,p.x);
+   float right_curl=ring(p-vec2(.26,-.06),.42-t*.10,.022)*(1.0-smoothstep(-.12,.10,p.x));
+   shape=(left+right)*(.24+pull*.55)*clash_ornament+(left_curl+right_curl)*.75;
+   shape+=line(p,vec2(-.10,-.40),vec2(.04,-.08),.023)*.8+line(p,vec2(.04,-.08),vec2(-.06,.22),.019)*.8;
+   outline=ring(p+vec2(.26,.06),.42-t*.10,.046)*smoothstep(-.10,.12,p.x)+ring(p-vec2(.26,-.06),.42-t*.10,.046)*(1.0-smoothstep(-.12,.10,p.x));
+   outline+=line(p,vec2(-.10,-.40),vec2(.04,-.08),.048)+line(p,vec2(.04,-.08),vec2(-.06,.22),.045);
+   mix_weight=smoothstep(-.08,.08,p.x);
+  } else if(kind==21) { // winner travels forward; weak elemental pieces peel behind
+   float sweep=ring(p+vec2(.27,0),.5+t*.13,.026)*smoothstep(-.02,.4,p.x);
+   shape=sweep*.85+element_contour(family,p-vec2(.08+t*.12,0),t)*.45*clash_ornament;
+   outline=ring(p+vec2(.27,0),.5+t*.13,.05)*smoothstep(-.02,.4,p.x);
+   for(int i=0;i<3;i++){float j=float(i);vec2 c=vec2(-.18-t*(.25+j*.06),(j-1.0)*(.17+t*.2));shape+=element_contour(secondary_family,(p-c)*3.5,t)*.45*clash_ornament;}
+   mix_weight=1.0-smoothstep(-.3,.04,p.x);
+  } else if(kind==22) { // high commitment only: one mixed pressure pulse
+   shape=(element_contour(family,p,t)*.65+element_contour(secondary_family,-p,t)*.65)*clash_ornament;
+   float pulse=.2+sin(min(1.0,t*1.4)*1.5708)*.48;
+   shape+=ring(p*vec2(1.0,1.15),pulse,.026)*.65;
+   outline=ring(p*vec2(1.0,1.15),pulse,.052);
+   if(breakthrough>.5)shape+=ring(p+vec2(.28,0),.5+t*.12,.022)*smoothstep(.0,.4,p.x)*.65;
+   mix_weight=smoothstep(-.2,.2,p.y);
+  } else { // expendable fragments; no central explosion or lingering core
+   for(int i=0;i<3;i++){float j=float(i);vec2 c=vec2(-.22-t*.35,(j-1.0)*(.16+t*.28));shape+=element_contour(family,(p-c)*3.2,t)*.48;}
+  }
+ }
+ float alpha=clamp((max(shape,outline*.74)*f+bits*f+core)*accent.a,0.0,(kind==18 || kind==19 || kind==28)?0.46:0.88);
+ vec3 ink=mix(accent.rgb,vec3(1.0,0.97,0.88),clamp(core,0.0,1.0)*0.8);
+ if(kind>=20) {ink=mix(vec3(.025,.04,.06),mix(accent.rgb,secondary_accent.rgb,mix_weight),smoothstep(.05,.35,shape));}
+ if(kind==20) {ink=mix(ink,vec3(.96,1.0,.94),(1.0-smoothstep(.05,.13,abs(p.x)))*smoothstep(.1,.6,shape)*.48);}
+ if(family==0 && kind!=4 && kind!=6) { float thermal=clamp((1.0-r)*n*f,0.0,1.0); ink=mix(ink,vec3(1.0,0.75,0.17),thermal*0.65); }
+ COLOR=vec4(ink,alpha);
+}

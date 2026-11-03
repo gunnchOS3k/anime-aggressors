@@ -42,7 +42,10 @@ export type GameRuleset = {
   updatedAt: string;
 };
 
-const now = () => new Date().toISOString();
+// Built-in presets are immutable source data, not documents created when a
+// client starts. The epoch sentinel keeps identical default match configs
+// deterministic across independent processes; authored/custom dates remain.
+const BUILTIN_PRESET_TIMESTAMP = "1970-01-01T00:00:00.000Z";
 
 export const DEFAULT_RULESET: GameRuleset = {
   id: "default-stock-3",
@@ -60,8 +63,8 @@ export const DEFAULT_RULESET: GameRuleset = {
   elementMode: "on",
   teamMode: "off",
   createdFighters: "allowed",
-  createdAt: now(),
-  updatedAt: now(),
+  createdAt: BUILTIN_PRESET_TIMESTAMP,
+  updatedAt: BUILTIN_PRESET_TIMESTAMP,
 };
 
 export const RULESET_PRESETS: GameRuleset[] = [

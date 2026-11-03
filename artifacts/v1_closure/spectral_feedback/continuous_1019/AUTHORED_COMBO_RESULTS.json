@@ -1,0 +1,867 @@
+{
+  "catalogs": [
+    {
+      "path": "game/godot/data/combos/combo_catalog.json",
+      "authored_routes": 70,
+      "shipping_Godot_consumer": false,
+      "consumer": "legacy game/godot/scripts/combat/ComboCatalog.gd"
+    },
+    {
+      "path": "packages/game-core/src/moves/comboRoutes.ts",
+      "authored_routes": 46,
+      "reported_historical_count": 48,
+      "shipping_Godot_consumer": false,
+      "consumer": "web ComboGuideScreen and App.ts"
+    }
+  ],
+  "shipping_authority": "game-godot move manifests \u2192 public command resolution \u2192 MoveRunner \u2192 confirmed collision ledger",
+  "status_scope": {
+    "AUTHORED_ROUTE": "Existing catalogs retained; current explicit jab links are authored in shipping move manifests",
+    "INPUT_RECOGNIZED": "Public presses recorded, resolved move activation observed",
+    "LEGAL_CANCEL": "Explicit target, resolved frame window and same-activation body-hit required; whiffs/shields/stale emissions rejected",
+    "STRICT_COMBO_VERIFIED": "Only pairs listed with no observed defender control between distinct contact owners",
+    "PLAYER_EXECUTABLE": "Automated ordinary public controls versus active CPUs; not manual-owner acceptance",
+    "VISUALLY_ACCEPTED": false
+  },
+  "captures": [
+    {
+      "path": "artifacts/v1_closure/spectral_feedback/continuous_1019/kaia_authored_public",
+      "source_sha": "0815d2ca753c0426b353c129c82b4e20513479ae",
+      "source_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "fighter": "kaia-windrow",
+      "active_CPU": true,
+      "cpu_moves": 30,
+      "authored_cancels": [
+        {
+          "activation": 2,
+          "confirmed_body_hit": true,
+          "from": "jab_1",
+          "gameplay_frame": 347,
+          "input_command": "attack_neutral",
+          "move_frame": 6,
+          "to": "jab_2"
+        },
+        {
+          "activation": 3,
+          "confirmed_body_hit": true,
+          "from": "jab_2",
+          "gameplay_frame": 353,
+          "input_command": "attack_up",
+          "move_frame": 6,
+          "to": "up_tilt"
+        },
+        {
+          "activation": 6,
+          "confirmed_body_hit": true,
+          "from": "jab_1",
+          "gameplay_frame": 399,
+          "input_command": "attack_neutral",
+          "move_frame": 6,
+          "to": "jab_2"
+        },
+        {
+          "activation": 7,
+          "confirmed_body_hit": true,
+          "from": "jab_2",
+          "gameplay_frame": 405,
+          "input_command": "attack_up",
+          "move_frame": 6,
+          "to": "up_tilt"
+        },
+        {
+          "activation": 11,
+          "confirmed_body_hit": true,
+          "from": "jab_2",
+          "gameplay_frame": 463,
+          "input_command": "attack_up",
+          "move_frame": 6,
+          "to": "up_tilt"
+        },
+        {
+          "activation": 17,
+          "confirmed_body_hit": true,
+          "from": "jab_1",
+          "gameplay_frame": 559,
+          "input_command": "attack_neutral",
+          "move_frame": 6,
+          "to": "jab_2"
+        },
+        {
+          "activation": 18,
+          "confirmed_body_hit": true,
+          "from": "jab_2",
+          "gameplay_frame": 565,
+          "input_command": "attack_up",
+          "move_frame": 6,
+          "to": "up_tilt"
+        },
+        {
+          "activation": 27,
+          "confirmed_body_hit": true,
+          "from": "jab_1",
+          "gameplay_frame": 719,
+          "input_command": "attack_neutral",
+          "move_frame": 6,
+          "to": "jab_2"
+        },
+        {
+          "activation": 28,
+          "confirmed_body_hit": true,
+          "from": "jab_2",
+          "gameplay_frame": 725,
+          "input_command": "attack_up",
+          "move_frame": 6,
+          "to": "up_tilt"
+        }
+      ],
+      "body_hits": 23,
+      "blocks": 22,
+      "strict_pairs": 1,
+      "pairs": [
+        {
+          "first_move": "neutral_air",
+          "second_move": "jab_1",
+          "first_contact": 323,
+          "second_contact": 344,
+          "first_activation": 1,
+          "second_activation": 2,
+          "defender_control_frames": [
+            337
+          ],
+          "first_damage_before": 0.0,
+          "status": "ESCAPABLE_AFTER_CONTROL"
+        },
+        {
+          "first_move": "jab_1",
+          "second_move": "jab_2",
+          "first_contact": 344,
+          "second_contact": 350,
+          "first_activation": 2,
+          "second_activation": 3,
+          "defender_control_frames": [],
+          "first_damage_before": 5.5296,
+          "status": "STRICT_COMBO_VERIFIED"
+        },
+        {
+          "first_move": "jab_2",
+          "second_move": "up_tilt",
+          "first_contact": 350,
+          "second_contact": 357,
+          "first_activation": 3,
+          "second_activation": 4,
+          "defender_control_frames": [],
+          "first_damage_before": 7.8336,
+          "status": "ISOLATED_OR_UNVERIFIED_CONTACT"
+        },
+        {
+          "first_move": "up_tilt",
+          "second_move": "jab_finisher",
+          "first_contact": 357,
+          "second_contact": 377,
+          "first_activation": 4,
+          "second_activation": 5,
+          "defender_control_frames": [
+            367
+          ],
+          "first_damage_before": 10.432512,
+          "status": "ESCAPABLE_AFTER_CONTROL"
+        },
+        {
+          "first_move": "jab_finisher",
+          "second_move": "jab_1",
+          "first_contact": 377,
+          "second_contact": 396,
+          "first_activation": 5,
+          "second_activation": 6,
+          "defender_control_frames": [
+            387,
+            391,
+            392,
+            393,
+            394
+          ],
+          "first_damage_before": 15.29856,
+          "status": "ESCAPABLE_AFTER_CONTROL"
+        },
+        {
+          "first_move": "jab_1",
+          "second_move": "jab_2",
+          "first_contact": 396,
+          "second_contact": 402,
+          "first_activation": 6,
+          "second_activation": 7,
+          "defender_control_frames": [],
+          "first_damage_before": 19.07712,
+          "status": "ISOLATED_OR_UNVERIFIED_CONTACT"
+        },
+        {
+          "first_move": "jab_2",
+          "second_move": "jab_finisher",
+          "first_contact": 402,
+          "second_contact": 425,
+          "first_activation": 7,
+          "second_activation": 9,
+          "defender_control_frames": [
+            408
+          ],
+          "first_damage_before": 20.6180352,
+          "status": "SHIELDED_FOLLOWUP"
+        },
+        {
+          "first_move": "jab_2",
+          "second_move": "up_tilt",
+          "first_contact": 460,
+          "second_contact": 467,
+          "first_activation": 11,
+          "second_activation": 12,
+          "defender_control_frames": [],
+          "first_damage_before": 22.321152,
+          "status": "ISOLATED_OR_UNVERIFIED_CONTACT"
+        },
+        {
+          "first_move": "up_tilt",
+          "second_move": "jab_finisher",
+          "first_contact": 467,
+          "second_contact": 485,
+          "first_activation": 12,
+          "second_activation": 13,
+          "defender_control_frames": [
+            483
+          ],
+          "first_damage_before": 23.87828736,
+          "status": "SHIELDED_FOLLOWUP"
+        },
+        {
+          "first_move": "jab_1",
+          "second_move": "jab_2",
+          "first_contact": 556,
+          "second_contact": 562,
+          "first_activation": 17,
+          "second_activation": 18,
+          "defender_control_frames": [],
+          "first_damage_before": 26.89523712,
+          "status": "ISOLATED_OR_UNVERIFIED_CONTACT"
+        },
+        {
+          "first_move": "jab_2",
+          "second_move": "up_tilt",
+          "first_contact": 562,
+          "second_contact": 569,
+          "first_activation": 18,
+          "second_activation": 19,
+          "defender_control_frames": [],
+          "first_damage_before": 27.98088192,
+          "status": "ISOLATED_OR_UNVERIFIED_CONTACT"
+        },
+        {
+          "first_move": "up_tilt",
+          "second_move": "jab_finisher",
+          "first_contact": 569,
+          "second_contact": 593,
+          "first_activation": 19,
+          "second_activation": 20,
+          "defender_control_frames": [
+            586
+          ],
+          "first_damage_before": 29.28365568,
+          "status": "ESCAPABLE_AFTER_CONTROL"
+        },
+        {
+          "first_move": "jab_finisher",
+          "second_move": "jab_1",
+          "first_contact": 593,
+          "second_contact": 612,
+          "first_activation": 20,
+          "second_activation": 21,
+          "defender_control_frames": [
+            610
+          ],
+          "first_damage_before": 32.30060544,
+          "status": "SHIELDED_FOLLOWUP"
+        },
+        {
+          "first_move": "jab_finisher",
+          "second_move": "jab_1",
+          "first_contact": 645,
+          "second_contact": 664,
+          "first_activation": 23,
+          "second_activation": 24,
+          "defender_control_frames": [
+            662
+          ],
+          "first_damage_before": 34.47189504,
+          "status": "SHIELDED_FOLLOWUP"
+        },
+        {
+          "first_move": "jab_finisher",
+          "second_move": "jab_1",
+          "first_contact": 697,
+          "second_contact": 716,
+          "first_activation": 26,
+          "second_activation": 27,
+          "defender_control_frames": [
+            714
+          ],
+          "first_damage_before": 36.64318464,
+          "status": "ESCAPABLE_AFTER_CONTROL"
+        },
+        {
+          "first_move": "jab_1",
+          "second_move": "jab_2",
+          "first_contact": 716,
+          "second_contact": 722,
+          "first_activation": 27,
+          "second_activation": 28,
+          "defender_control_frames": [],
+          "first_damage_before": 38.81447424,
+          "status": "ISOLATED_OR_UNVERIFIED_CONTACT"
+        },
+        {
+          "first_move": "jab_2",
+          "second_move": "up_tilt",
+          "first_contact": 722,
+          "second_contact": 729,
+          "first_activation": 28,
+          "second_activation": 29,
+          "defender_control_frames": [],
+          "first_damage_before": 39.90011904,
+          "status": "ISOLATED_OR_UNVERIFIED_CONTACT"
+        },
+        {
+          "first_move": "up_tilt",
+          "second_move": "jab_finisher",
+          "first_contact": 729,
+          "second_contact": 753,
+          "first_activation": 29,
+          "second_activation": 30,
+          "defender_control_frames": [
+            747
+          ],
+          "first_damage_before": 41.2028928,
+          "status": "SHIELDED_FOLLOWUP"
+        },
+        {
+          "first_move": "heavy_attack",
+          "second_move": "heavy_attack",
+          "first_contact": 816,
+          "second_contact": 844,
+          "first_activation": 33,
+          "second_activation": 34,
+          "defender_control_frames": [
+            835
+          ],
+          "first_damage_before": 44.6312448,
+          "status": "SHIELDED_FOLLOWUP"
+        },
+        {
+          "first_move": "heavy_attack",
+          "second_move": "heavy_attack",
+          "first_contact": 868,
+          "second_contact": 896,
+          "first_activation": 35,
+          "second_activation": 36,
+          "defender_control_frames": [
+            887
+          ],
+          "first_damage_before": 50.66514432,
+          "status": "SHIELDED_FOLLOWUP"
+        },
+        {
+          "first_move": "heavy_attack",
+          "second_move": "heavy_attack",
+          "first_contact": 920,
+          "second_contact": 952,
+          "first_activation": 37,
+          "second_activation": 38,
+          "defender_control_frames": [
+            940,
+            945,
+            946
+          ],
+          "first_damage_before": 55.05343488,
+          "status": "SHIELDED_FOLLOWUP"
+        },
+        {
+          "first_move": "heavy_attack",
+          "second_move": "heavy_attack",
+          "first_contact": 976,
+          "second_contact": 1004,
+          "first_activation": 39,
+          "second_activation": 40,
+          "defender_control_frames": [
+            996
+          ],
+          "first_damage_before": 58.82462208,
+          "status": "SHIELDED_FOLLOWUP"
+        },
+        {
+          "first_move": "neutral_special_projectile",
+          "second_move": "neutral_special_projectile",
+          "first_contact": 1134,
+          "second_contact": 1154,
+          "first_activation": 44,
+          "second_activation": 45,
+          "defender_control_frames": [
+            1152,
+            1153
+          ],
+          "first_damage_before": 62.59580928,
+          "status": "SHIELDED_FOLLOWUP"
+        }
+      ],
+      "stage_events": 45,
+      "stage_events_same_physics_frame": true,
+      "trace_sha256": "12f6a5fa6e967041b4fec8c465563370e1d08c486bce2e24dde7f5fb7942b544",
+      "rules": "existing explicit targeted manifest cancels now connected; no damage/frame/hitstun/AI/collision values changed",
+      "owner_approved": false
+    },
+    {
+      "path": "artifacts/v1_closure/spectral_feedback/continuous_1019/juno_authored_public",
+      "source_sha": "0815d2ca753c0426b353c129c82b4e20513479ae",
+      "source_diff_sha256": "8c4cc9b764ac1855c3b429f430215feb3d4bb01510e9092678e95a4eea70b8f9",
+      "fighter": "juno-spark",
+      "active_CPU": true,
+      "cpu_moves": 33,
+      "authored_cancels": [
+        {
+          "activation": 1,
+          "confirmed_body_hit": true,
+          "from": "jab_1",
+          "gameplay_frame": 341,
+          "input_command": "attack_neutral",
+          "move_frame": 4,
+          "to": "jab_2"
+        },
+        {
+          "activation": 2,
+          "confirmed_body_hit": true,
+          "from": "jab_2",
+          "gameplay_frame": 345,
+          "input_command": "attack_neutral",
+          "move_frame": 4,
+          "to": "jab_finisher"
+        },
+        {
+          "activation": 4,
+          "confirmed_body_hit": true,
+          "from": "jab_1",
+          "gameplay_frame": 365,
+          "input_command": "attack_neutral",
+          "move_frame": 4,
+          "to": "jab_2"
+        },
+        {
+          "activation": 5,
+          "confirmed_body_hit": true,
+          "from": "jab_2",
+          "gameplay_frame": 369,
+          "input_command": "attack_neutral",
+          "move_frame": 4,
+          "to": "jab_finisher"
+        },
+        {
+          "activation": 10,
+          "confirmed_body_hit": true,
+          "from": "jab_1",
+          "gameplay_frame": 429,
+          "input_command": "attack_neutral",
+          "move_frame": 4,
+          "to": "jab_2"
+        },
+        {
+          "activation": 14,
+          "confirmed_body_hit": true,
+          "from": "jab_2",
+          "gameplay_frame": 473,
+          "input_command": "attack_neutral",
+          "move_frame": 4,
+          "to": "jab_finisher"
+        },
+        {
+          "activation": 16,
+          "confirmed_body_hit": true,
+          "from": "jab_1",
+          "gameplay_frame": 493,
+          "input_command": "attack_neutral",
+          "move_frame": 4,
+          "to": "jab_2"
+        },
+        {
+          "activation": 17,
+          "confirmed_body_hit": true,
+          "from": "jab_2",
+          "gameplay_frame": 497,
+          "input_command": "attack_neutral",
+          "move_frame": 4,
+          "to": "jab_finisher"
+        },
+        {
+          "activation": 19,
+          "confirmed_body_hit": true,
+          "from": "jab_1",
+          "gameplay_frame": 517,
+          "input_command": "attack_neutral",
+          "move_frame": 4,
+          "to": "jab_2"
+        },
+        {
+          "activation": 23,
+          "confirmed_body_hit": true,
+          "from": "jab_2",
+          "gameplay_frame": 589,
+          "input_command": "attack_neutral",
+          "move_frame": 4,
+          "to": "jab_finisher"
+        },
+        {
+          "activation": 25,
+          "confirmed_body_hit": true,
+          "from": "jab_1",
+          "gameplay_frame": 629,
+          "input_command": "attack_neutral",
+          "move_frame": 4,
+          "to": "jab_2"
+        },
+        {
+          "activation": 29,
+          "confirmed_body_hit": true,
+          "from": "jab_2",
+          "gameplay_frame": 673,
+          "input_command": "attack_neutral",
+          "move_frame": 4,
+          "to": "jab_finisher"
+        }
+      ],
+      "body_hits": 23,
+      "blocks": 11,
+      "strict_pairs": 4,
+      "pairs": [
+        {
+          "first_move": "jab_1",
+          "second_move": "jab_2",
+          "first_contact": 338,
+          "second_contact": 342,
+          "first_activation": 1,
+          "second_activation": 2,
+          "defender_control_frames": [],
+          "first_damage_before": 0.0,
+          "status": "STRICT_COMBO_VERIFIED"
+        },
+        {
+          "first_move": "jab_2",
+          "second_move": "jab_finisher",
+          "first_contact": 342,
+          "second_contact": 347,
+          "first_activation": 2,
+          "second_activation": 3,
+          "defender_control_frames": [],
+          "first_damage_before": 2.116,
+          "status": "STRICT_COMBO_VERIFIED"
+        },
+        {
+          "first_move": "jab_finisher",
+          "second_move": "jab_1",
+          "first_contact": 347,
+          "second_contact": 362,
+          "first_activation": 3,
+          "second_activation": 4,
+          "defender_control_frames": [],
+          "first_damage_before": 4.6552,
+          "status": "STRICT_COMBO_VERIFIED"
+        },
+        {
+          "first_move": "jab_1",
+          "second_move": "jab_2",
+          "first_contact": 362,
+          "second_contact": 366,
+          "first_activation": 4,
+          "second_activation": 5,
+          "defender_control_frames": [],
+          "first_damage_before": 8.63328,
+          "status": "STRICT_COMBO_VERIFIED"
+        },
+        {
+          "first_move": "jab_2",
+          "second_move": "jab_1",
+          "first_contact": 366,
+          "second_contact": 386,
+          "first_activation": 5,
+          "second_activation": 7,
+          "defender_control_frames": [
+            372
+          ],
+          "first_damage_before": 10.2719104,
+          "status": "SHIELDED_FOLLOWUP"
+        },
+        {
+          "first_move": "jab_finisher",
+          "second_move": "jab_1",
+          "first_contact": 411,
+          "second_contact": 426,
+          "first_activation": 9,
+          "second_activation": 10,
+          "defender_control_frames": [
+            421
+          ],
+          "first_damage_before": 12.10419712,
+          "status": "ESCAPABLE_AFTER_CONTROL"
+        },
+        {
+          "first_move": "jab_1",
+          "second_move": "jab_finisher",
+          "first_contact": 426,
+          "second_contact": 443,
+          "first_activation": 10,
+          "second_activation": 12,
+          "defender_control_frames": [
+            432
+          ],
+          "first_damage_before": 14.54860032,
+          "status": "SHIELDED_FOLLOWUP"
+        },
+        {
+          "first_move": "jab_2",
+          "second_move": "jab_finisher",
+          "first_contact": 470,
+          "second_contact": 475,
+          "first_activation": 14,
+          "second_activation": 15,
+          "defender_control_frames": [],
+          "first_damage_before": 15.67431232,
+          "status": "ISOLATED_OR_UNVERIFIED_CONTACT"
+        },
+        {
+          "first_move": "jab_finisher",
+          "second_move": "jab_1",
+          "first_contact": 475,
+          "second_contact": 490,
+          "first_activation": 15,
+          "second_activation": 16,
+          "defender_control_frames": [],
+          "first_damage_before": 16.9093792,
+          "status": "ISOLATED_OR_UNVERIFIED_CONTACT"
+        },
+        {
+          "first_move": "jab_1",
+          "second_move": "jab_2",
+          "first_contact": 490,
+          "second_contact": 494,
+          "first_activation": 16,
+          "second_activation": 17,
+          "defender_control_frames": [],
+          "first_damage_before": 18.9034976,
+          "status": "ISOLATED_OR_UNVERIFIED_CONTACT"
+        },
+        {
+          "first_move": "jab_2",
+          "second_move": "jab_finisher",
+          "first_contact": 494,
+          "second_contact": 499,
+          "first_activation": 17,
+          "second_activation": 18,
+          "defender_control_frames": [],
+          "first_damage_before": 19.9005568,
+          "status": "ISOLATED_OR_UNVERIFIED_CONTACT"
+        },
+        {
+          "first_move": "jab_finisher",
+          "second_move": "jab_1",
+          "first_contact": 499,
+          "second_contact": 514,
+          "first_activation": 18,
+          "second_activation": 19,
+          "defender_control_frames": [
+            509
+          ],
+          "first_damage_before": 21.09702784,
+          "status": "ESCAPABLE_AFTER_CONTROL"
+        },
+        {
+          "first_move": "jab_1",
+          "second_move": "jab_2",
+          "first_contact": 514,
+          "second_contact": 586,
+          "first_activation": 19,
+          "second_activation": 23,
+          "defender_control_frames": [
+            520,
+            523,
+            524,
+            525,
+            526,
+            527,
+            528,
+            529,
+            530,
+            531,
+            532,
+            533,
+            549,
+            550,
+            551,
+            552,
+            553,
+            554,
+            555,
+            556,
+            557,
+            558,
+            559,
+            560,
+            561,
+            562,
+            563,
+            564,
+            565,
+            566,
+            567,
+            568,
+            569,
+            585
+          ],
+          "first_damage_before": 23.09114624,
+          "status": "ESCAPABLE_AFTER_CONTROL"
+        },
+        {
+          "first_move": "jab_2",
+          "second_move": "jab_1",
+          "first_contact": 586,
+          "second_contact": 626,
+          "first_activation": 23,
+          "second_activation": 25,
+          "defender_control_frames": [
+            592,
+            598,
+            599,
+            600,
+            601,
+            602,
+            603,
+            604,
+            605,
+            606,
+            607,
+            608,
+            609,
+            610
+          ],
+          "first_damage_before": 24.190404008,
+          "status": "ESCAPABLE_AFTER_CONTROL"
+        },
+        {
+          "first_move": "jab_1",
+          "second_move": "jab_finisher",
+          "first_contact": 626,
+          "second_contact": 643,
+          "first_activation": 25,
+          "second_activation": 27,
+          "defender_control_frames": [
+            632
+          ],
+          "first_damage_before": 25.386875048,
+          "status": "SHIELDED_FOLLOWUP"
+        },
+        {
+          "first_move": "jab_2",
+          "second_move": "jab_1",
+          "first_contact": 670,
+          "second_contact": 690,
+          "first_activation": 29,
+          "second_activation": 31,
+          "defender_control_frames": [
+            676
+          ],
+          "first_damage_before": 26.383934248,
+          "status": "SHIELDED_FOLLOWUP"
+        },
+        {
+          "first_move": "heavy_attack",
+          "second_move": "heavy_attack",
+          "first_contact": 796,
+          "second_contact": 820,
+          "first_activation": 34,
+          "second_activation": 35,
+          "defender_control_frames": [
+            809
+          ],
+          "first_damage_before": 27.64022884,
+          "status": "SHIELDED_FOLLOWUP"
+        },
+        {
+          "first_move": "heavy_attack",
+          "second_move": "heavy_attack",
+          "first_contact": 844,
+          "second_contact": 876,
+          "first_activation": 36,
+          "second_activation": 37,
+          "defender_control_frames": [
+            868
+          ],
+          "first_damage_before": 33.93744484,
+          "status": "SHIELDED_FOLLOWUP"
+        },
+        {
+          "first_move": "heavy_attack",
+          "second_move": "heavy_attack",
+          "first_contact": 900,
+          "second_contact": 924,
+          "first_activation": 38,
+          "second_activation": 39,
+          "defender_control_frames": [
+            919
+          ],
+          "first_damage_before": 38.723329,
+          "status": "ESCAPABLE_AFTER_CONTROL"
+        },
+        {
+          "first_move": "heavy_attack",
+          "second_move": "heavy_attack",
+          "first_contact": 924,
+          "second_contact": 952,
+          "first_activation": 39,
+          "second_activation": 40,
+          "defender_control_frames": [
+            943
+          ],
+          "first_damage_before": 42.1867978,
+          "status": "ESCAPABLE_AFTER_CONTROL"
+        },
+        {
+          "first_move": "heavy_attack",
+          "second_move": "heavy_attack",
+          "first_contact": 952,
+          "second_contact": 980,
+          "first_activation": 40,
+          "second_activation": 41,
+          "defender_control_frames": [
+            971,
+            972,
+            973
+          ],
+          "first_damage_before": 45.6502666,
+          "status": "ESCAPABLE_AFTER_CONTROL"
+        },
+        {
+          "first_move": "heavy_attack",
+          "second_move": "heavy_attack",
+          "first_contact": 980,
+          "second_contact": 1012,
+          "first_activation": 41,
+          "second_activation": 42,
+          "defender_control_frames": [
+            999
+          ],
+          "first_damage_before": 49.1137354,
+          "status": "SHIELDED_FOLLOWUP"
+        }
+      ],
+      "stage_events": 34,
+      "stage_events_same_physics_frame": true,
+      "trace_sha256": "c9290e72dd226c3bc392fe98f1b7a43d47996c9dc1a8935d015a42b18977f090",
+      "rules": "existing explicit targeted manifest cancels now connected; no damage/frame/hitstun/AI/collision values changed",
+      "owner_approved": false
+    }
+  ],
+  "full_legacy_or_web_routes_certified": false,
+  "historical_contact_matrix_changed": false
+}

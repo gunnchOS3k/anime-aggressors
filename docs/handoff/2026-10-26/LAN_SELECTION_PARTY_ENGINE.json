@@ -1,0 +1,231 @@
+{
+  "schema": "lan-selection-party-engine/v1",
+  "source_head": "4f8b31a49b75e4ef026b4ecdebefe244c6f6005f",
+  "workflow": "https://github.com/gunnchOS3k/anime-aggressors/actions/runs/40487983157",
+  "godot_version": "4.7.1.stable.official.a13da4feb",
+  "PASS": true,
+  "raw_result": "outputs/lan_selection_4f8b31a4/ENGINE_RESULT.json",
+  "raw_result_sha256": "e4afdbfb3de638812d0da11b5de72bea5b0514a7d6648a1e1222bbf1c1f6a8b7",
+  "suites": {
+    "host": {
+      "PASS": true,
+      "checks": 25,
+      "rows": null,
+      "runtime_error_count": 0,
+      "failures": []
+    },
+    "guest": {
+      "PASS": true,
+      "checks": 14,
+      "rows": null,
+      "runtime_error_count": 0,
+      "failures": []
+    },
+    "terminal-host": {
+      "PASS": true,
+      "checks": 16,
+      "rows": null,
+      "runtime_error_count": 0,
+      "failures": []
+    },
+    "terminal-guest": {
+      "PASS": true,
+      "checks": 10,
+      "rows": null,
+      "runtime_error_count": 0,
+      "failures": []
+    },
+    "lobby-host": {
+      "PASS": true,
+      "checks": 8,
+      "rows": null,
+      "runtime_error_count": 0,
+      "failures": []
+    },
+    "lobby-guest": {
+      "PASS": true,
+      "checks": 8,
+      "rows": null,
+      "runtime_error_count": 0,
+      "failures": []
+    },
+    "combat-components": {
+      "PASS": true,
+      "checks": 14,
+      "rows": 0,
+      "runtime_error_count": 0,
+      "failures": []
+    },
+    "party-components": {
+      "PASS": true,
+      "checks": 357,
+      "rows": 18,
+      "runtime_error_count": 0,
+      "failures": []
+    },
+    "stage-audio": {
+      "PASS": true,
+      "checks": 13,
+      "rows": 0,
+      "runtime_error_count": 0,
+      "failures": []
+    },
+    "authored-special-links": {
+      "PASS": true,
+      "checks": 73,
+      "rows": 6,
+      "runtime_error_count": 0,
+      "failures": []
+    },
+    "throw-ownership": {
+      "PASS": true,
+      "checks": 0,
+      "rows": 39,
+      "runtime_error_count": 0,
+      "failures": []
+    },
+    "training-lifecycle": {
+      "PASS": true,
+      "checks": 24,
+      "rows": 0,
+      "runtime_error_count": 0,
+      "failures": []
+    }
+  },
+  "party_body_rows": [
+    {
+      "fighter": "ember-vale",
+      "body": "male",
+      "facing": 1
+    },
+    {
+      "fighter": "ember-vale",
+      "body": "female",
+      "facing": -1
+    },
+    {
+      "fighter": "rook-ironside",
+      "body": "male",
+      "facing": 1
+    },
+    {
+      "fighter": "rook-ironside",
+      "body": "female",
+      "facing": -1
+    },
+    {
+      "fighter": "juno-spark",
+      "body": "male",
+      "facing": 1
+    },
+    {
+      "fighter": "juno-spark",
+      "body": "female",
+      "facing": -1
+    },
+    {
+      "fighter": "kaia-windrow",
+      "body": "male",
+      "facing": 1
+    },
+    {
+      "fighter": "kaia-windrow",
+      "body": "female",
+      "facing": -1
+    },
+    {
+      "fighter": "nix-calder",
+      "body": "male",
+      "facing": 1
+    },
+    {
+      "fighter": "nix-calder",
+      "body": "female",
+      "facing": -1
+    },
+    {
+      "fighter": "orion-vell",
+      "body": "male",
+      "facing": 1
+    },
+    {
+      "fighter": "orion-vell",
+      "body": "female",
+      "facing": -1
+    },
+    {
+      "fighter": "vesper-nyx",
+      "body": "male",
+      "facing": 1
+    },
+    {
+      "fighter": "vesper-nyx",
+      "body": "female",
+      "facing": -1
+    },
+    {
+      "fighter": "yin",
+      "body": "male",
+      "facing": 1
+    },
+    {
+      "fighter": "yin",
+      "body": "female",
+      "facing": -1
+    },
+    {
+      "fighter": "yang",
+      "body": "male",
+      "facing": 1
+    },
+    {
+      "fighter": "yang",
+      "body": "female",
+      "facing": -1
+    }
+  ],
+  "received_host_acks": [
+    {
+      "guest_ready": true,
+      "kind": "lobby",
+      "lobby": "e2a5c52b551c4bdf4ba0efa87ab58255",
+      "p1": {
+        "body": "female",
+        "fighter": "kaia-windrow"
+      },
+      "p2": {
+        "body": "male",
+        "fighter": "juno-spark"
+      },
+      "revision": 1,
+      "roster": [
+        "ember-vale",
+        "rook-ironside",
+        "juno-spark",
+        "kaia-windrow",
+        "nix-calder",
+        "orion-vell",
+        "vesper-nyx"
+      ]
+    }
+  ],
+  "accepted_scope": [
+    "Two real localhost ENet processes: slot2 remote public controls and host-state real guest BattleScene",
+    "Host-validated canonical fighter/body ACK agrees with actual initialized fighter; no peer unlock flags or seat1 transfer",
+    "Real human-duration lobby and replacement ENet client with fresh nonce/revision; no midmatch reconnect claim",
+    "Declared ordinary walkoff result, both-consent actual UI rematch, fresh round remote contact, real menu cleanup",
+    "Original audio scene ownership and paused voice release; no acoustic/native audio approval",
+    "Nine fighters/both bodies: declared Party pickups/public taunts, actual ultimate pulse ownership, local component restore; not full live physics rollback",
+    "Four actual manifest special cancels and whiff/shield rejection; quiet defender, not guaranteed active-opponent full combos"
+  ],
+  "remaining": [
+    "Full actual combat prediction/restoration/resimulation",
+    "Secure online invitations and active-match reconnect/resync",
+    "Native visuals/acoustics/physical LAN/controllers/device/platform acceptance",
+    "Complete original move/action art and VFX, seven earned Story routes/Convergence/OVA"
+  ],
+  "HUMAN_ART_APPROVED": false,
+  "RUNTIME_PAIRED_CONTACT_VERIFIED": false,
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false
+}

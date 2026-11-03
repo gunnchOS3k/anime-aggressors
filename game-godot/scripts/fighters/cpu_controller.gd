@@ -53,10 +53,21 @@ func tick(delta: float, opponent: Node2D) -> void:
 	var obs := observe(opponent)
 	_obs_cache = obs
 	# Recovery / edge danger always outranks aggression at every tier.
-	if obs.offstage or obs.edge_danger:
+	if obs.hanging or obs.offstage or obs.edge_danger:
 		_act_recovery(obs, delta)
 		return
 	_act(obs, delta)
+	_face_pending_ground_attack(obs)
+
+
+func _face_pending_ground_attack(obs: Dictionary) -> void:
+	# Spacing can turn the fighter away while a queued poke waits for guard to
+	# release. Keep that EXISTING command's grounded direction input aimed at
+	# the public target position until Fighter consumes it. Fighter still owns
+	# turn locks, movement, action eligibility and airborne/back-air facing.
+	var pending = _fighter.get("_pending_attack_cmd")
+	if pending is String and not pending.is_empty() and obs.self_on_floor and not obs.facing_toward:
+		_sim_axis(signf(float(obs.dx)))
 
 
 ## Public observation model — only externally visible combat facts.
@@ -76,7 +87,7 @@ func observe(opponent: Node2D) -> Dictionary:
 		opp_shielding = bool(opponent.shielding)
 	if "state_machine" in opponent and opponent.state_machine != null:
 		var st: String = str(opponent.state_machine.current_state)
-		opp_attacking = st.contains("attack") or st.contains("special") or st.contains("throw") or st.contains("aura_burst")
+		opp_attacking = st.contains("attack") or st.contains("special") or st.contains("throw") or st.contains("aura_burst") or st.begins_with("ultimate_")
 		opp_hitstun = st.contains("hitstun") or st.contains("hurt") or st.contains("launch") or st.contains("tumble")
 	var opp_pct: float = float(opponent.damage_percent) if "damage_percent" in opponent else 0.0
 	var opp_stocks: int = int(opponent.stocks) if "stocks" in opponent else 1
@@ -132,6 +143,9 @@ func observe(opponent: Node2D) -> Dictionary:
 
 func _act_recovery(obs: Dictionary, _delta: float) -> void:
 	_last_goal = "recovery"
+	# Recovery owns inward movement/pokes. A shield held by an earlier neutral
+	# decision would lock both and keep every queued attack behind guard.
+	_sim_shield(false)
 	# Grounded edge danger: stop chasing outward; face stage / back up.
 	if obs.edge_danger and obs.self_on_floor:
 		var inward := signf(obs.stage_dx)

@@ -1,0 +1,124 @@
+{
+  "fighter_id": "yin",
+  "schema_version": 1,
+  "ascension_runtime": true,
+  "state_domain": "cosmic_playable_advancement",
+  "tuning_status": "TUNING_CANDIDATE",
+  "owner_authorization": "2026-10-21 master continuation: distinct playable cosmic Surge/Ascendant using existing transformation infrastructure",
+  "default_form": "YIN_BASE",
+  "form_ladder": [
+    "YIN_BASE",
+    "YIN_COSMIC_SURGE",
+    "YIN_COSMIC_ASCENDANT"
+  ],
+  "transform_rules": {
+    "require_aura_tier": 3,
+    "input": "shield_special_attack",
+    "pause_safe": true,
+    "min_aura_percent": 75.0
+  },
+  "composition_policy": "Existing literal form override -> AuraScaler once -> fighter identity once. BASE data unchanged; no additional stat multiplier. All enhanced values candidate, not accepted balance.",
+  "counterplay": "More inward launch control and commitment; longer recovery exposes a whiff punish. Existing finite absorption remains one eligible projectile, integrity<=1, 25 aura. No reflection or immunity.",
+  "canon_policy": {
+    "grants_story_progress": false,
+    "ordinary_essence_puppet_gray": false,
+    "boss_immunity": false,
+    "cosmic_boss_state": false
+  },
+  "forms": {
+    "YIN_BASE": {
+      "form_id": "YIN_BASE",
+      "display_name": "Yin",
+      "ladder_step": "BASE",
+      "body_scale": 1.0,
+      "head_presentation": "human_elemental_face",
+      "idle_clip": "idle",
+      "transform_in_seconds": 0,
+      "transform_in_clip": "aura_charge",
+      "presentation": {
+        "emission_strength": 0.13,
+        "aura_shape": "void",
+        "element_accent": "#0A0A0D",
+        "motion_authority": "absorb, settle, fold, collapse, still, draw inward",
+        "original_form_acting_status": "PENDING_AUTHORED_PRODUCTION"
+      },
+      "move_overrides": {}
+    },
+    "YIN_COSMIC_SURGE": {
+      "form_id": "YIN_COSMIC_SURGE",
+      "display_name": "Yin \u2014 Cosmic Surge",
+      "ladder_step": "COSMIC_SURGE",
+      "body_scale": 1.0,
+      "head_presentation": "human_elemental_face",
+      "idle_clip": "idle",
+      "transform_in_seconds": 1.0,
+      "transform_in_clip": "aura_charge",
+      "presentation": {
+        "emission_strength": 0.44,
+        "aura_shape": "void",
+        "element_accent": "#0A0A0D",
+        "motion_authority": "absorb, settle, fold, collapse, still, draw inward",
+        "original_form_acting_status": "PENDING_AUTHORED_PRODUCTION"
+      },
+      "move_overrides": {
+        "jab_1": {
+          "damage": 2.4,
+          "training_display_name": "Surge: Quiet Interruption"
+        },
+        "forward_tilt": {
+          "damage": 6.7,
+          "angle_deg": 135,
+          "recovery_frames": 18,
+          "training_display_name": "Surge: Inward Fold"
+        },
+        "side_special": {
+          "damage": 8.25,
+          "angle_deg": 140,
+          "recovery_frames": 23,
+          "training_display_name": "Surge: Distance Collapse"
+        }
+      }
+    },
+    "YIN_COSMIC_ASCENDANT": {
+      "form_id": "YIN_COSMIC_ASCENDANT",
+      "display_name": "Yin \u2014 Cosmic Ascendant",
+      "ladder_step": "COSMIC_ASCENDANT",
+      "body_scale": 1.0,
+      "head_presentation": "human_elemental_face",
+      "idle_clip": "idle",
+      "transform_in_seconds": 1.2,
+      "transform_in_clip": "aura_super_transform",
+      "presentation": {
+        "emission_strength": 0.7,
+        "aura_shape": "void",
+        "element_accent": "#0A0A0D",
+        "motion_authority": "absorb, settle, fold, collapse, still, draw inward",
+        "original_form_acting_status": "PENDING_AUTHORED_PRODUCTION"
+      },
+      "move_overrides": {
+        "jab_1": {
+          "damage": 2.6,
+          "training_display_name": "Ascendant: Quiet Interruption"
+        },
+        "forward_tilt": {
+          "damage": 7.2,
+          "angle_deg": 150,
+          "recovery_frames": 20,
+          "training_display_name": "Ascendant: Inward Fold"
+        },
+        "side_special": {
+          "damage": 9.0,
+          "angle_deg": 150,
+          "recovery_frames": 25,
+          "training_display_name": "Ascendant: Distance Collapse"
+        },
+        "aura_burst": {
+          "damage": 17.5,
+          "angle_deg": 155,
+          "recovery_frames": 32,
+          "training_display_name": "Ascendant: Toward Zero"
+        }
+      }
+    }
+  }
+}

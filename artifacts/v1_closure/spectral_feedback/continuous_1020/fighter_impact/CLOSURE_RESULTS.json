@@ -1,0 +1,238 @@
+{
+  "schema": "ani03_impact_support_closure/v1",
+  "recovered_head": "e1347d57f64264ecc385daab8325914d612bd893",
+  "knee_source": "b2e27e48f26d802e99cc8322fe5eeef0f765cb30",
+  "current_runtime_source": "08d46000fa8314f4fc862728d37aa7ed8f5e7729",
+  "branch": "release/anime-v1-dialogue-and-elemental-performance",
+  "PR": "https://github.com/gunnchOS3k/anime-aggressors/pull/123",
+  "stacked_parent_PR": 122,
+  "projectile_impact": {
+    "source": "e1347d57f64264ecc385daab8325914d612bd893",
+    "fixture_cases": 63,
+    "fixture_PASS": true,
+    "baseline_failures": 190,
+    "policy": "Stop on first confirmed fighter contact; motion type and aura do not grant piercing. Explicit Rook quake_slab pierce:true retains unique-target ledger, existing lifetime and shield/armor stopping.",
+    "sustained_native_contract": "No explicit numeric sustained-contact contract configured; no invented cadence or new beam piercing.",
+    "retirement": "Authoritative active=false, core/owned flight trail and travel audio retired at contact; HitResolver owns one impact; no late pending damage.",
+    "ordinary_vfx_modes": [
+      "Full",
+      "Balanced",
+      "Reduced"
+    ],
+    "ordinary_impacts_per_mode": 4,
+    "ordinary_authority_identical": true
+  },
+  "knee_plane": {
+    "before_cases": 144,
+    "before_failures": 144,
+    "after_cases": 144,
+    "PASS": true,
+    "bodies": 18,
+    "facings": 2,
+    "scope": "Grounded +Z knee bend plane; preserve lateral turnout, hip/hand/foot anchors, foot basis and bone lengths. No whole-model translation, proportions or competitive values changed.",
+    "maximum_anchor_drift_m": 1.13728174255812e-06,
+    "maximum_segment_length_drift_m": 8.94069671630859e-08
+  },
+  "additional_terminal_acting": {
+    "before_cases": 36,
+    "before_failures": 72,
+    "after_cases": 36,
+    "PASS": true,
+    "correction": "Route existing victory/defeat presentation requests to state-owned manual animation playback, not MoveRunner-synchronized attack startup.",
+    "minimum_clock_after_18frames_s": 0.3,
+    "minimum_body_hand_motion_m": 0.0887155309319496,
+    "maximum_final_hold_drift_m": 0.0,
+    "qualification": "Real model presentation methods across all9fighters/bothbodies; no match outcome, earned KO or Story receipt created. Not included in earlier native combat movie."
+  },
+  "focused_regressions": [
+    {
+      "suite": "ProjectileInteractions",
+      "exit": 0,
+      "PASS": true,
+      "seconds": 4.24,
+      "reports": [
+        {
+          "path": "artifacts/v1_closure/spectral_feedback/continuous_1020/impact_support_integration/ProjectileInteractions/projectile_interactions.json",
+          "PASS": true,
+          "cases": 35
+        }
+      ],
+      "source_checkpoint": "e1347d57f64264ecc385daab8325914d612bd893",
+      "runtime_diff_hash": "83f2daf332f02ff233b518582ef800818b57295c4005f50b6278cbe8974949ac"
+    },
+    {
+      "suite": "ProjectileArchetypeContinuity",
+      "exit": 0,
+      "PASS": true,
+      "seconds": 3.37,
+      "reports": [
+        {
+          "path": "artifacts/v1_closure/spectral_feedback/continuous_1020/impact_support_integration/ProjectileArchetypeContinuity/projectile_archetype_continuity.json",
+          "PASS": true,
+          "cases": 18
+        }
+      ],
+      "source_checkpoint": "e1347d57f64264ecc385daab8325914d612bd893",
+      "runtime_diff_hash": "83f2daf332f02ff233b518582ef800818b57295c4005f50b6278cbe8974949ac"
+    },
+    {
+      "suite": "ProjectileOwnership",
+      "exit": 0,
+      "PASS": true,
+      "seconds": 12.23,
+      "reports": [
+        {
+          "path": "artifacts/v1_closure/spectral_feedback/continuous_1020/impact_support_integration/ProjectileOwnership/projectile_ownership.json",
+          "PASS": true,
+          "cases": 18
+        }
+      ],
+      "source_checkpoint": "e1347d57f64264ecc385daab8325914d612bd893",
+      "runtime_diff_hash": "83f2daf332f02ff233b518582ef800818b57295c4005f50b6278cbe8974949ac"
+    },
+    {
+      "suite": "ChargeContinuity",
+      "exit": 0,
+      "PASS": true,
+      "seconds": 8.31,
+      "reports": [
+        {
+          "path": "artifacts/v1_closure/spectral_feedback/continuous_1020/impact_support_integration/ChargeContinuity/charge_continuity.json",
+          "PASS": true,
+          "cases": 9
+        }
+      ],
+      "source_checkpoint": "e1347d57f64264ecc385daab8325914d612bd893",
+      "runtime_diff_hash": "83f2daf332f02ff233b518582ef800818b57295c4005f50b6278cbe8974949ac"
+    },
+    {
+      "suite": "GroundedRecovery",
+      "exit": 0,
+      "PASS": true,
+      "seconds": 6.36,
+      "reports": [
+        {
+          "path": "artifacts/v1_closure/spectral_feedback/continuous_1020/impact_support_integration/GroundedRecovery/grounded_recovery.json",
+          "PASS": true,
+          "cases": 36
+        }
+      ],
+      "source_checkpoint": "e1347d57f64264ecc385daab8325914d612bd893",
+      "runtime_diff_hash": "83f2daf332f02ff233b518582ef800818b57295c4005f50b6278cbe8974949ac"
+    },
+    {
+      "suite": "ContactReactionClock",
+      "exit": 0,
+      "PASS": true,
+      "seconds": 8.45,
+      "reports": [
+        {
+          "path": "artifacts/v1_closure/spectral_feedback/continuous_1020/impact_support_integration/ContactReactionClock/contact_reaction_clock.json",
+          "PASS": true,
+          "cases": 18
+        }
+      ],
+      "source_checkpoint": "e1347d57f64264ecc385daab8325914d612bd893",
+      "runtime_diff_hash": "83f2daf332f02ff233b518582ef800818b57295c4005f50b6278cbe8974949ac"
+    },
+    {
+      "suite": "CombatChoreography",
+      "exit": 0,
+      "PASS": true,
+      "seconds": 5.96,
+      "reports": [
+        {
+          "path": "artifacts/v1_closure/spectral_feedback/continuous_1020/impact_support_integration/CombatChoreography/combat_choreography.json",
+          "PASS": true,
+          "cases": 864
+        }
+      ],
+      "source_checkpoint": "e1347d57f64264ecc385daab8325914d612bd893",
+      "runtime_diff_hash": "5e0d76390a1281efd934959e4f1b315e7081ddbf4ae046a809e28cbfbde77883"
+    },
+    {
+      "suite": "SpectralIntensity",
+      "exit": 0,
+      "PASS": true,
+      "seconds": 5.59,
+      "reports": [
+        {
+          "path": "artifacts/v1_closure/spectral_feedback/continuous_1020/impact_support_integration/SpectralIntensity/spectral_intensity.json",
+          "PASS": true,
+          "cases": 54
+        }
+      ],
+      "source_checkpoint": "e1347d57f64264ecc385daab8325914d612bd893",
+      "runtime_diff_hash": "5e0d76390a1281efd934959e4f1b315e7081ddbf4ae046a809e28cbfbde77883"
+    },
+    {
+      "suite": "ClashReadability",
+      "exit": 0,
+      "PASS": true,
+      "seconds": 2.49,
+      "reports": [
+        {
+          "path": "artifacts/v1_closure/spectral_feedback/continuous_1020/impact_support_integration/ClashReadability/clash_readability.json",
+          "PASS": true,
+          "cases": 21
+        }
+      ],
+      "source_checkpoint": "e1347d57f64264ecc385daab8325914d612bd893",
+      "runtime_diff_hash": "5e0d76390a1281efd934959e4f1b315e7081ddbf4ae046a809e28cbfbde77883"
+    },
+    {
+      "suite": "ThrowOwnership",
+      "exit": 0,
+      "PASS": true,
+      "seconds": 20.82,
+      "reports": [
+        {
+          "path": "artifacts/v1_closure/spectral_feedback/continuous_1020/impact_support_integration/ThrowOwnership/throw_ownership.json",
+          "PASS": true,
+          "cases": 39
+        }
+      ],
+      "source_checkpoint": "e1347d57f64264ecc385daab8325914d612bd893",
+      "runtime_diff_hash": "5e0d76390a1281efd934959e4f1b315e7081ddbf4ae046a809e28cbfbde77883"
+    }
+  ],
+  "native_review": {
+    "path": "artifacts/v1_closure/spectral_feedback/rendered/impact_support_native1020.mp4",
+    "source_sha": "b2e27e48f26d802e99cc8322fe5eeef0f765cb30",
+    "sha256": "d9a0b36e31627b6865672c9b2460184f75deb16c8424a99053acbebfd8f0ec55",
+    "contact_sheet": "artifacts/v1_closure/spectral_feedback/continuous_1020/fighter_impact/native_review/CONTACT_SHEET.png",
+    "frames": 860,
+    "fps": 60,
+    "duration_s": 14.333333333333334,
+    "verified_gameplay_frame_codes": 639,
+    "grounded_knee_samples": 1191,
+    "minimum_forward_knee_m": 0.00610707886517048,
+    "original_audio_db": {
+      "mean_volume": -29.7,
+      "max_volume": -6.6
+    },
+    "source_report": "artifacts/v1_closure/spectral_feedback/continuous_1020/fighter_impact/native_review/NATIVE_MOVIE.json",
+    "scope": "Two ordinary public-input controllers; genuinely earned aura, real fighter contacts/shield/hurt/jump/recovery. No active CPU or human visual approval. Native fixed60fps output is not sustained device60fps measurement.",
+    "raw_local_only": "artifacts/v1_closure/spectral_feedback/local_media/impact_support_native1020.avi",
+    "redistribution": "Original project assets/audio, owner development review only; no release authorization"
+  },
+  "normal_speed_desktop_inspection": "Pending native UI permissions; actual native movie plus verified before/contact/after frame sheets are delivered.",
+  "preservation": {
+    "owner_saves_modified": false,
+    "Story_progression_modified": false,
+    "worktrees_preserved": 33,
+    "heavy_exports_run": false,
+    "gameplay_frame_damage_knockback_geometry_changed": false,
+    "external_assets_added": false
+  },
+  "remaining": "Visible close-body overlap, coupled model/floor authority and outer-reach fit, full-roster authored acting. Existing distinct Yin/Yang kits, seven routes, earned Convergence, OVAs, LAN and physical-device acceptance remain unfinished.",
+  "human_gates": {
+    "GAME_FEEL_HUMAN_PASS": false,
+    "VFX_TASTE_HUMAN_PASS": false,
+    "ANIMATION_TASTE_HUMAN_PASS": false,
+    "SFX_MIX_HUMAN_PASS": false,
+    "V1_ANIME_HUMAN_PASS": false,
+    "FINAL_RELEASE_AUTHORIZED": false
+  },
+  "CI_snapshot": "artifacts/v1_closure/spectral_feedback/continuous_1020/fighter_impact/CI_08d46000.json"
+}

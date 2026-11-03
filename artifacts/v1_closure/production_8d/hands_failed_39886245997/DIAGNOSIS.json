@@ -1,0 +1,20 @@
+{
+  "run": 39886245997,
+  "source_sha": "5585005be4c854b3d5d033cbbe6422dba29deec2",
+  "conclusion": "failure",
+  "saved_sources_produced": 0,
+  "dependency_mirror_correction": "PASS; actualBlender4.0.2 ran after57seconds setup",
+  "failure_stage": "after_surface_edit_before_deformation_sample",
+  "preservation_checks": {
+    "geometry": false,
+    "weights": false,
+    "all_bone_rest": true,
+    "all_action_curves": true
+  },
+  "changed_objects": [
+    "ORIGINAL_8D_Palm R",
+    "ORIGINAL_8D_Palm L"
+  ],
+  "root_cause": "preserve_part reused existing protected backup ID names on the saved first-hand input. New copies displaced the old backup names, so name-bound geometry/weights changed even though protected data survived under displaced IDs. No candidate was saved.",
+  "correction": "Choose explicitly unused snapshot names before copy naming, assert preexisting protected backup identity retained. Preserve strict immutable geometry/weights/rest/actions assertions."
+}

@@ -1,0 +1,195 @@
+# TEMPLATE ONLY. Not a workflow in the public repository.
+# Installation requires owner authorization; production requires separate approval.
+name: Private 8D-4 Reference Art
+on:
+  workflow_dispatch:
+    inputs:
+      source_sha:
+        description: 'Exact40-character reviewed public CODE SHA; never a branch/ref'
+        required: true
+        type: string
+      included_usage_and_zero_overage_confirmed:
+        description: 'Owner verified included allowance and blocked paid overage; not an automatic billing measurement'
+        required: true
+        default: false
+        type: boolean
+permissions:
+  contents: read
+concurrency:
+  group: private-8d4-reference-art
+  cancel-in-progress: false
+jobs:
+  metric-stage-8d4:
+    # Owner decision2026-10-23: no public8D4 proprietary-art production.
+    # Historical de32787d/821045e2 remain preserved, never dispatched.
+    if: github.event_name == 'workflow_dispatch' && github.event.repository.private == true && inputs.included_usage_and_zero_overage_confirmed == true && vars.ART_PRODUCTION_DISPATCH_AUTHORIZED == 'true' && vars.ART_PRODUCTION_APP_ACCESS_REVIEWED == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: production-code
+    env:
+      AA_8D4_APPROVED_PRIVATE_REPOSITORY: ${{ vars.ART_PRODUCTION_APPROVED_REPOSITORY }}
+      AA_8D4_SOURCE_SHA: ${{ inputs.source_sha }}
+      AA_8D4_SPENDING_CLEARANCE: OWNER_CONFIRMED_INCLUDED_USAGE_AND_ZERO_OVERAGE
+    steps:
+      - name: Verify restricted execution repository before any production
+        working-directory: ${{ github.workspace }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          INPUT_SOURCE_SHA: ${{ inputs.source_sha }}
+          INPUT_TOKEN_CONFIGURED: ${{ secrets.ANIME_SOURCE_ARTIFACTS_READ != '' }}
+        run: |
+          python3 - <<'PYCODE'
+          import json,os,re,subprocess
+          from pathlib import Path
+          event=json.loads(Path(os.environ['GITHUB_EVENT_PATH']).read_text())
+          repo=event['repository']
+          assert repo['private'] is True and repo['full_name']==os.environ['GITHUB_REPOSITORY']
+          assert repo['full_name']==os.environ['AA_8D4_APPROVED_PRIVATE_REPOSITORY']
+          assert os.environ['INPUT_TOKEN_CONFIGURED']=='true','Configure the scoped READ token before any paid/included runner work'
+          assert repo['full_name'].startswith('gunnchOS3k/') and repo['full_name']!='gunnchOS3k/anime-aggressors'
+          assert re.fullmatch('[0-9a-f]{40}',os.environ['INPUT_SOURCE_SHA'])
+          live=json.loads(subprocess.check_output(['gh','api','repos/'+repo['full_name']]))
+          assert live['private'] is True and live['visibility']=='private' and not live['archived']
+          metadata=Path(os.environ['RUNNER_TEMP'])/'private-repository.json'
+          metadata.write_text(json.dumps(live))
+          with open(os.environ['GITHUB_ENV'],'a') as exported:
+              exported.write('AA_8D4_PRIVATE_REPOSITORY_METADATA='+str(metadata)+'\n')
+          PYCODE
+      - name: Checkout exact non-sensitive producer code only
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          repository: gunnchOS3k/anime-aggressors
+          ref: ${{ inputs.source_sha }}
+          path: production-code
+          persist-credentials: false
+      - name: Install existing compatible Blender producer
+        timeout-minutes: 8
+        run: |
+          # The previous Azure mirror streamed dependencies until the45-minute
+          # job timeout, before Blender ever ran. Keep signed Ubuntu packages,
+          # bound network waits and avoid optional GUI/media recommendations.
+          sudo python3 - <<'PYCODE'
+          from pathlib import Path
+          # mirror+file runners read these lists before the sources files.
+          for name,url in [('apt-mirrors.txt','https://archive.ubuntu.com/ubuntu'),('apt-mirrors-security.txt','https://security.ubuntu.com/ubuntu')]:
+              p=Path('/etc/apt')/name
+              if p.is_file():p.write_text(url+'\n')
+          for p in [Path('/etc/apt/sources.list'),*Path('/etc/apt/sources.list.d').glob('*.sources')]:
+              if p.is_file():p.write_text(p.read_text().replace('http://azure.archive.ubuntu.com/ubuntu','https://archive.ubuntu.com/ubuntu'))
+          PYCODE
+          sudo apt-get -o Acquire::ForceIPv4=true -o Acquire::Retries=2 -o Acquire::https::Timeout=20 -o Acquire::http::Timeout=20 update
+          sudo apt-get -o Acquire::ForceIPv4=true -o Acquire::Retries=2 -o Acquire::https::Timeout=20 -o Acquire::http::Timeout=20 install --no-install-recommends -y blender python3-numpy xvfb libgl1-mesa-dri libxkbcommon0 libpulse0 unzip
+          blender --version
+      - name: Verify exact immutable8D3 input and selected offline scope
+        env:
+          GH_TOKEN: ${{ secrets.ANIME_SOURCE_ARTIFACTS_READ }}
+        run: |
+          python3 - <<'PYCODE'
+          import json,subprocess
+          from pathlib import Path
+          r=json.loads(subprocess.check_output(['gh','api','repos/gunnchOS3k/anime-aggressors/actions/runs/39910149332']))
+          assert r['status']=='completed' and r['conclusion']=='success' and r['head_sha']=='42baaab8cc5167798aea7f3aebb22edae9f21007'
+          p=json.loads(Path('art_source/staging/metric_8d4/inputs_v1.json').read_text())['policy']
+          assert p['status']=='OWNER_SELECTED_OFFLINE_REFERENCE' and p['camera_role']=='OFFLINE_FRAMING_ONLY_NEVER_METRIC_SPACING'
+          assert not p['runtime_equivalence_claim']
+          PYCODE
+      - name: Read saved8D3 sources without regenerating earlier phases
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: hand-integration-8d3-saved-sources-42baaab8cc5167798aea7f3aebb22edae9f21007
+          repository: gunnchOS3k/anime-aggressors
+          run-id: 39910149332
+          github-token: ${{ secrets.ANIME_SOURCE_ARTIFACTS_READ }}
+          path: ${{ runner.temp }}/metric-stage-input/saved_sources/
+      - name: Read exact associated runtime metadata
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: hand-integration-8d3-runtime-42baaab8cc5167798aea7f3aebb22edae9f21007
+          repository: gunnchOS3k/anime-aggressors
+          run-id: 39910149332
+          github-token: ${{ secrets.ANIME_SOURCE_ARTIFACTS_READ }}
+          path: ${{ runner.temp }}/metric-stage-input/runtime/
+      - name: Produce eight editable metric reference scenes and static exports
+        timeout-minutes: 22
+        run: |
+          # Explicitly reference-only: do not launch18-rig bulk paired acting.
+          # Internal Mac reserve is untouched; remote scratch forecast4GiB,
+          # producer requires at least8GiB free before writing output.
+          blender --background --factory-startup --python-exit-code 1 --python tools/authored_animation/blender/aa_metric_pair_reference_8d4.py -- --input "$RUNNER_TEMP/metric-stage-input" --output "$RUNNER_TEMP/metric-stage-8d4"
+          python3 tools/authored_animation/validate_metric_stage_8d4.py "$RUNNER_TEMP/metric-stage-8d4" > "$RUNNER_TEMP/metric-stage-8d4/runtime/SOURCE_VALIDATION.json"
+      - name: Install existing native compatibility verifier
+        timeout-minutes: 6
+        run: |
+          curl --fail -L --max-time 180 -o "$RUNNER_TEMP/godot.zip" https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip
+          unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP/godot"
+          chmod +x "$RUNNER_TEMP/godot/Godot_v4.7.1-stable_linux.x86_64"
+          echo "GODOT_BIN=$RUNNER_TEMP/godot/Godot_v4.7.1-stable_linux.x86_64" >> "$GITHUB_ENV"
+      - name: Import static paired surfaces and render side three-quarter sheets
+        timeout-minutes: 10
+        run: |
+          mkdir -p "$RUNNER_TEMP/metric-stage-8d4/engine_review" "$RUNNER_TEMP/metric-stage-viewer"
+          # Static source review has no gameplay/autoload dependency. Do not
+          # bulk-import the shipping game merely to inspect external snapshots.
+          cp game-godot/tests/v1_closure/MetricArtStage8D4.gd "$RUNNER_TEMP/metric-stage-viewer/review.gd"
+          python3 - <<'PYCODE'
+          import os
+          from pathlib import Path
+          (Path(os.environ['RUNNER_TEMP'])/'metric-stage-viewer/project.godot').write_text('config_version=5\n[application]\nconfig/name="Offline metric art reference"\n[rendering]\nrenderer/rendering_method="gl_compatibility"\n')
+          PYCODE
+          xvfb-run -a timeout 480 "$GODOT_BIN" --path "$RUNNER_TEMP/metric-stage-viewer" --audio-driver Dummy --rendering-method gl_compatibility --log-file "$RUNNER_TEMP/metric-stage-8d4/engine_review/godot.log" --script res://review.gd -- --stage-runtime="$RUNNER_TEMP/metric-stage-8d4/runtime" --ordinary-output="$RUNNER_TEMP/metric-stage-8d4/engine_review"
+          python3 - <<'PYCODE'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'metric-stage-8d4/engine_review'
+          d=json.loads((p/'metric_stage_native_8d4.json').read_text())
+          assert d['PASS'] and len(d['rows'])==8 and not d['RUNTIME_PAIRED_CONTACT_VERIFIED'] and not d['human_approved']
+          assert 'SCRIPT ERROR:' not in (p/'godot.log').read_text()
+          assert len(list(p.glob('*.png')))==8 and all(len(r['panels'])==6 for r in d['rows'])
+          PYCODE
+      - name: Recheck private access and bound outputs before artifact upload
+        id: private_upload
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PYCODE'
+          import json,os,subprocess,sys
+          from pathlib import Path
+          sys.path.insert(0,'tools/authored_animation')
+          from private_production_8d4 import current_context
+          live=json.loads(subprocess.check_output(['gh','api','repos/'+os.environ['GITHUB_REPOSITORY']]))
+          Path(os.environ['AA_8D4_PRIVATE_REPOSITORY_METADATA']).write_text(json.dumps(live))
+          context=current_context(Path.cwd())
+          out=Path(os.environ['RUNNER_TEMP'])/'metric-stage-8d4'
+          total=sum(p.stat().st_size for p in out.rglob('*')if p.is_file())if out.exists()else 0
+          assert total<=3*1024**3,'Output exceeds owner-clearance allocation; upload withheld'
+          if (out/'runtime').exists():(out/'runtime/PRIVATE_EXECUTION_RECEIPT.json').write_text(json.dumps(context,indent=2)+'\n')
+          PYCODE
+      - name: Preserve editable sources in restricted private artifacts only
+        if: always() && steps.private_upload.outcome == 'success'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: metric-stage-8d4-saved-scenes-${{ inputs.source_sha }}
+          path: ${{ runner.temp }}/metric-stage-8d4/saved_stages/
+          retention-days: 3
+          if-no-files-found: warn
+      - name: Preserve static GLBs and source measurement receipts
+        if: always() && steps.private_upload.outcome == 'success'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: metric-stage-8d4-static-runtime-${{ inputs.source_sha }}
+          path: ${{ runner.temp }}/metric-stage-8d4/runtime/
+          retention-days: 3
+          if-no-files-found: warn
+      - name: Preserve eight native reference sheets and logs
+        if: always() && steps.private_upload.outcome == 'success'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: metric-stage-8d4-engine-review-${{ inputs.source_sha }}
+          path: ${{ runner.temp }}/metric-stage-8d4/engine_review/
+          retention-days: 3
+          if-no-files-found: warn

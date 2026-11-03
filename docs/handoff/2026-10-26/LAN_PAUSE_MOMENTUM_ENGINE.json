@@ -1,0 +1,146 @@
+{
+  "schema": "lan-pause-momentum-engine/v1",
+  "source_head": "a1f6b22fe13c2696873baf3374621304b69c7bb1",
+  "workflow": "https://github.com/gunnchOS3k/anime-aggressors/actions/runs/40494063863",
+  "PASS": true,
+  "godot_version": "4.7.1.stable.official.a13da4feb",
+  "suite_set": "respawn",
+  "scope": "Focused actual two-process localhost jump/pause/respawn/abandonment only. Other suites NOT rerun; preserve their exact-source receipts. Not historical rollback, physical LAN, native art/audio/device or human acceptance.",
+  "raw_result": "outputs/lan_momentum_a1f6b22f/ENGINE_RESULT.json",
+  "raw_result_sha256": "b748177aecda7afd7b22b139d5d3919a8db6f18c32554e812941e1fe2a396e5a",
+  "suites": {
+    "respawn-host": {
+      "PASS": true,
+      "checks": 24,
+      "failures": [],
+      "runtime_errors": []
+    },
+    "respawn-guest": {
+      "PASS": true,
+      "checks": 4,
+      "failures": [],
+      "runtime_errors": []
+    }
+  },
+  "observations": [
+    {
+      "case": "ascending_jump_pause",
+      "position_at_pause": [
+        -202.0,
+        265.179626464844
+      ],
+      "position_at_request": [
+        -202.0,
+        272.437225341797
+      ],
+      "position_paused": [
+        -202.0,
+        265.179626464844
+      ],
+      "velocity_at_pause": [
+        0.0,
+        -435.456024169922
+      ],
+      "velocity_at_request": [
+        0.0,
+        -464.256011962891
+      ],
+      "velocity_paused": [
+        0.0,
+        -435.456024169922
+      ]
+    },
+    {
+      "clock": 299,
+      "next_id": 1,
+      "owner": {
+        "fighter": "juno-spark",
+        "instance": 112608675628
+      },
+      "pending": [
+        {
+          "due": 366,
+          "id": 1,
+          "kind": "respawn"
+        }
+      ],
+      "schema": "fighter_network_deadlines/v1"
+    },
+    {
+      "after": {
+        "clock": 300,
+        "next_id": 1,
+        "owner": {
+          "fighter": "juno-spark",
+          "instance": 112608675628
+        },
+        "pending": [
+          {
+            "due": 366,
+            "id": 1,
+            "kind": "respawn"
+          }
+        ],
+        "schema": "fighter_network_deadlines/v1"
+      },
+      "before": {
+        "clock": 300,
+        "next_id": 1,
+        "owner": {
+          "fighter": "juno-spark",
+          "instance": 112608675628
+        },
+        "pending": [
+          {
+            "due": 366,
+            "id": 1,
+            "kind": "respawn"
+          }
+        ],
+        "schema": "fighter_network_deadlines/v1"
+      },
+      "case": "real_pause",
+      "position_after": "(202.0, 200.0)",
+      "position_before": "(202.0, 200.0)",
+      "round_after": [
+        300,
+        343,
+        true
+      ],
+      "round_before": [
+        300,
+        343,
+        true
+      ]
+    },
+    {
+      "clock": 440,
+      "next_id": 2,
+      "owner": {
+        "fighter": "juno-spark",
+        "instance": 112608675628
+      },
+      "pending": [
+        {
+          "due": 511,
+          "id": 2,
+          "kind": "respawn"
+        }
+      ],
+      "schema": "fighter_network_deadlines/v1"
+    }
+  ],
+  "reused_full_receipt": "docs/handoff/2026-10-26/NATIVE_AUTHORED_PRACTICE_ENGINE.json",
+  "reused_other_LAN_roles": "outputs/lan_momentum_f41917f1/ENGINE_RESULT.json (input/results/lobby roles PASS; only old pause driver failed)",
+  "source_hashes": {
+    "game-godot/scripts/combat/move_runner.gd": "b7adb0170fdf2d579be012f4e1eee4d5071013397f36ef857ef770eb5531f11a",
+    "game-godot/scripts/battle/battle_scene.gd": "5f803f55df3e74744fcca8ebf46200eb8ca32787a901a8a58e51c67f80f2764e",
+    "game-godot/scripts/fighters/fighter.gd": "b9b736894adbb772cd338726ef4c1bb1dc050596760d1b1028525c27d62364b1",
+    "game-godot/scripts/net/lan_session.gd": "6398852beb91e7e03c48bd1586da26f35ff01862fc5c82bc4e977d9a9bf61a00"
+  },
+  "negative_result": "outputs/lan_momentum_f41917f1/ENGINE_RESULT.json",
+  "HUMAN_ART_APPROVED": false,
+  "RUNTIME_PAIRED_CONTACT_VERIFIED": false,
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false
+}

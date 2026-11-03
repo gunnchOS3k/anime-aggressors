@@ -90,7 +90,19 @@ for (const id of FIGHTERS) {
 ok(`all ${FIGHTERS.length} fighter JSON files`);
 
 const roster = readJson("data/fighters/roster.json");
-if (roster.fighters?.length !== FIGHTERS.length) fail("roster.json count mismatch");
+const rosterIds = roster.fighters ?? [];
+for (const id of FIGHTERS) {
+  if (!rosterIds.includes(id)) fail(`roster.json missing fighter: ${id}`);
+}
+// Pink working identity may appear as a 10th roster seat without claiming HUMAN_ART.
+const allowedExtra = new Set(["rosamere"]);
+const extras = rosterIds.filter((id) => !FIGHTERS.includes(id));
+if (extras.some((id) => !allowedExtra.has(id))) {
+  fail(`roster.json unexpected fighters: ${extras.join(",")}`);
+}
+if (rosterIds.length < FIGHTERS.length || rosterIds.length > FIGHTERS.length + allowedExtra.size) {
+  fail("roster.json count mismatch");
+}
 ok("roster.json");
 
 for (const id of STAGES) {

@@ -1,6 +1,5 @@
 import {
   createInitialGameState,
-  simulateFrame,
   resetForRematch,
   hashState,
   gameConfigFromRuleset,
@@ -8,8 +7,6 @@ import {
   getActiveClash,
   getComboRoutesForFighter,
   getFighterMoveList,
-  resetTrainingDamage,
-  resetTrainingPositions,
   type GameConfig,
   type GameState,
   type GameRuleset,
@@ -40,6 +37,8 @@ import { renderComboHintOverlay } from "../ui/ComboHintOverlay.js";
 import { renderTrainingMoveOverlay } from "../ui/TrainingMoveOverlay.ts";
 import { renderControlsOverlayHtml, BATTLE_SHORTCUT_LINES, TRAINING_SHORTCUT_LINES } from "../input/controlReference.ts";
 import { applyTrainingLaunchSetup } from "../match/trainingSetup.ts";
+import { applyTrainingResetKey, advanceTrainingFrame, setTrainingDummy } from "../match/trainingCommands.ts";
+import { TrainingHitTracker } from "../match/trainingHitTracker.ts";
 import { renderEnergyClashPrompt, isClashActive } from "../ui/EnergyClashPrompt.js";
 import { mountDemoOnboarding } from "../demo/demoOnboarding.ts";
 
@@ -85,6 +84,7 @@ export class PlatformFighterApp {
   private matchEndResult: { match: MatchRecord; replay: ReplayRecord | null } | null = null;
   private matchMode = "playMatch";
   private comboHits = 0;
+  private practiceHits = new TrainingHitTracker();
   private battleComboCount = 0;
   private battleComboDecay = 0;
   private lastMoveCallout = "";
@@ -93,7 +93,7 @@ export class PlatformFighterApp {
   private showControlsOverlay = false;
   private disposeOnboarding: (() => void) | null = null;
   private prevStocks: number[] = [3, 3];
-  private prevShielding: boolean[] = [false, false];
+  private prevShieldStun: number[] = [0, 0];
 
   private trainingDummyBehavior: import("@anime-aggressors/game-core").TrainingDummyBehavior = "idle";
 
@@ -217,13 +217,9 @@ export class PlatformFighterApp {
       this.resetMatch();
     }
     if (this.trainingMode && this.gameState) {
-      if (e.key === "d" || e.key === "D") {
+      if (applyTrainingResetKey(this.gameState, e.key, e.repeat)) {
         e.preventDefault();
-        resetTrainingDamage(this.gameState);
-      }
-      if (e.key === "p" || e.key === "P") {
-        e.preventDefault();
-        resetTrainingPositions(this.gameState);
+        if (!e.repeat) this.restartTrainingSegment();
       }
       if (e.key === "1") {
         e.preventDefault();
@@ -241,22 +237,35 @@ export class PlatformFighterApp {
         e.preventDefault();
         this.trainingDummyBehavior = "cpu1";
       }
-      if (this.gameState.config.training) {
-        this.gameState.config.training.dummyBehavior = this.trainingDummyBehavior;
-        if (this.trainingDummyBehavior === "cpu1") {
-          this.gameState.config.cpuOpponents = [
-            { playerId: 1, difficulty: 1, seed: this.gameState.config.seed },
-          ];
-        } else {
-          this.gameState.config.cpuOpponents = undefined;
-        }
+      if (["1", "2", "3", "4"].includes(e.key) && !e.repeat) {
+        setTrainingDummy(this.gameState, this.trainingDummyBehavior);
+        this.restartTrainingSegment();
       }
     }
-    if (e.key === "s" || e.key === "S") {
+    if (e.key === "F9" && !e.repeat) {
       e.preventDefault();
       void this.saveSnapshot();
     }
   };
+
+  private restartTrainingSegment(): void {
+    if (!this.trainingMode || !this.gameState) return;
+    this.practiceHits.reset();
+    this.comboHits = 0;
+    this.battleComboCount = 0;
+    this.battleComboDecay = 0;
+    this.lastMoveCallout = "";
+    this.prevDamage = this.gameState.players.map(p => p.damage);
+    this.prevShieldStun = this.gameState.players.map(p => p.shieldStunFrames);
+    // Reset/settings commands are not attack inputs. Start a fresh replay
+    // segment so its snapshot contains the real practice setup.
+    this.initialState = structuredClone(this.gameState);
+    this.replayRecorder?.start(this.gameState);
+    this.simFrame = 0;
+    this.statTracker = new StatEventTracker(this.matchMode);
+    this.statTracker.initFromState(this.gameState);
+    this.statTracker.start(this.gameState.frame);
+  }
 
   private async saveSnapshot(): Promise<void> {
     if (!this.gameState) return;
@@ -272,7 +281,7 @@ export class PlatformFighterApp {
   private resetMatch(): void {
     if (!this.gameState) return;
     this.gameState = resetForRematch(this.gameState);
-    this.rollback = new RollbackSession(this.gameState, {
+    this.rollback = this.trainingMode ? null : new RollbackSession(this.gameState, {
       snapshotInterval: 1,
       maxRollbackFrames: 120,
       playerCount: 2,
@@ -280,7 +289,9 @@ export class PlatformFighterApp {
     this.simFrame = 0;
     this.paused = false;
     this.comboHits = 0;
+    this.practiceHits.reset();
     this.state = "fighting";
+    if (this.trainingMode) this.restartTrainingSegment();
   }
 
   beginMatch(select: CharacterSelectResult, ruleset?: GameRuleset): void {
@@ -361,15 +372,16 @@ export class PlatformFighterApp {
     this.statTracker.initFromState(this.gameState);
     this.statTracker.start(0);
     this.matchEndResult = null;
-    this.rollback = new RollbackSession(this.gameState, {
+    this.rollback = this.trainingMode ? null : new RollbackSession(this.gameState, {
       snapshotInterval: 1,
       maxRollbackFrames: 120,
       playerCount: 2,
     });
     this.simFrame = 0;
     this.comboHits = 0;
+    this.practiceHits.reset();
     this.state = "fighting";
-    this.paused = this.trainingMode;
+    this.paused = false;
 
     this.showFightAnnouncement();
     this.disposeOnboarding?.();
@@ -442,15 +454,23 @@ export class PlatformFighterApp {
   }
 
   private tick(): void {
-    if (!this.gameState || !this.rollback || this.state !== "fighting") return;
+    if (!this.gameState || (!this.trainingMode && !this.rollback) || this.state !== "fighting") return;
 
     const inputs = pollAllInputs(this.simFrame);
     this.replayRecorder?.recordFrame(this.simFrame, inputs);
-    this.gameState = this.rollback.advanceFrame(inputs, [true, true]);
+    const before = this.gameState;
+    this.gameState = this.trainingMode
+      ? advanceTrainingFrame(before, inputs)
+      : this.rollback!.advanceFrame(inputs, [true, true]);
+    if (this.trainingMode) {
+      this.practiceHits.observe(before, this.gameState);
+      this.comboHits = this.practiceHits.chain;
+    }
     this.statTracker?.trackFrame(this.gameState, inputs);
     this.simFrame += 1;
 
     for (const hit of this.gameState.lastHitEvents ?? []) {
+      if (hit.frame !== this.gameState.frame) continue;
       if (hit.attackerPlayerId === 0) {
         this.battleComboCount += 1;
         this.battleComboDecay = 90;
@@ -544,15 +564,12 @@ export class PlatformFighterApp {
     for (const p of this.gameState.players) {
       if (p.damage > this.prevDamage[p.id]) {
         globalAudio.play("hit_confirm");
-        if (this.trainingMode && p.id === 1) {
-          this.comboHits += 1;
-        }
       }
-      const shielding = p.actionState === "shielding";
-      if (shielding && !this.prevShielding[p.id]) {
+      const blockConfirmed = p.actionState === "shieldStun" || p.actionState === "shieldBreak";
+      if (blockConfirmed && p.shieldStunFrames > this.prevShieldStun[p.id]) {
         globalAudio.play("shield_hit", 0.6);
       }
-      this.prevShielding[p.id] = shielding;
+      this.prevShieldStun[p.id] = p.shieldStunFrames;
       if (p.stocks < this.prevStocks[p.id]) {
         globalAudio.play("ko");
       }
@@ -654,7 +671,8 @@ export class PlatformFighterApp {
     const clash = getActiveClash(this.gameState);
 
     const parts = [
-      `<div class="pf-training-aura-hint">${dummyLabel} · D reset damage · P reset positions · 1-4 dummy modes</div>`,
+      `<div class="pf-training-aura-hint">${dummyLabel} · ${TRAINING_SHORTCUT_LINES[0]}</div>`,
+      `<div class="pf-training-stats">${this.paused ? "PAUSED — F3 resumes" : "Practice live"} · Confirmed P1 hits ${this.practiceHits.hits} · Applied damage ${this.practiceHits.damage.toFixed(1)}% · Best hit chain ${this.practiceHits.bestChain}</div>`,
       moveListHtml,
       renderTrainingMoveOverlay({ player: p1, comboCount: this.comboHits }),
       beginnerRoute

@@ -1,0 +1,41 @@
+{
+  "story_ownership_before": {
+    "PASS": false,
+    "rows": 8,
+    "failures": 40,
+    "source_sha": "b2f91f9b16decf2c61f925cd76174af9571aa2c6",
+    "source_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "script_errors": 0,
+    "exit_leak_warning": false,
+    "path": "artifacts/v1_closure/spectral_feedback/continuous_1019/story_ownership_before/story_scene_ownership.json"
+  },
+  "story_ownership_fixed": {
+    "PASS": true,
+    "rows": 8,
+    "failures": 0,
+    "source_sha": "b2f91f9b16decf2c61f925cd76174af9571aa2c6",
+    "source_diff_sha256": "fa45443c2d6b3276503927b029135b2661c6b214029cc88bcc547a0f4facc261",
+    "script_errors": 0,
+    "exit_leak_warning": false,
+    "path": "artifacts/v1_closure/spectral_feedback/continuous_1019/story_ownership_fixed/story_scene_ownership.json"
+  },
+  "story_ownership_cleanup": {
+    "PASS": true,
+    "rows": 8,
+    "failures": 0,
+    "source_sha": "b2f91f9b16decf2c61f925cd76174af9571aa2c6",
+    "source_diff_sha256": "674f7501ceeb9127a43b28c1195f08747f02f6137de2152d0579640ceedd571d",
+    "script_errors": 0,
+    "exit_leak_warning": false,
+    "path": "artifacts/v1_closure/spectral_feedback/continuous_1019/story_ownership_cleanup/story_scene_ownership.json"
+  },
+  "root_cause": "Story menu awaited global dialogue completion while route/save/watch controls remained active; oldscene could acknowledge newly selected chapter. Consecutive narrative nodes also exposed stale suspended callbacks after stop/restart.",
+  "correction": "Scene-owned route/node/generation token and central expected-node guard; navigation/body/save/replay locked during playback; explicit StopScene preserves progress/save, returns control and disconnects owned waiters; Back/sceneexit cancel presentation.",
+  "scope": "Eight explicit route-position UIfixtures, no synthetic battle receipts promoted toordinary acceptance. Fresh public-control campaign/restart verification next.",
+  "source_files": {
+    "game-godot/scripts/menus/story_campaign_scene.gd": "be88e97edb5bc583385d1873efcb69732bb431654a0465222379dd7547f86a19",
+    "game-godot/scripts/story/v1_campaign_runtime.gd": "8478cf4378b7de36fe4c3f4c8101e2632d11f22843fb24cfad02ad3464840552",
+    "game-godot/tests/v1_closure/StorySceneOwnership.gd": "fb9eeb8fb279736b708a9b7a311d70aad6ee7a3ba1e0a3c1794fced6f23fbd0e"
+  },
+  "human_approved": false
+}

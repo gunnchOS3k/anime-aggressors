@@ -1,0 +1,256 @@
+{
+  "id": "rosamere_three_form_presentation_production",
+  "fighter_id": "rosamere",
+  "schema": "rosamere_form_presentation/v1",
+  "canon_status": "OWNER_APPROVED_THREE_FORM_AND_MYTHOLOGY",
+  "WORKING_CANDIDATE": false,
+  "name": "Rosamere",
+  "title": "The First Bloom",
+  "art_status": {
+    "HUMAN_ART_APPROVED": false,
+    "cel_shaded_glb": false,
+    "status": "THREE_FORM_PRESENTATION_PRODUCTION_IN_PROGRESS",
+    "honest": true,
+    "cinematic_final_mix": false,
+    "vfx_final_approved": false
+  },
+  "manifestations": {
+    "FAMILIAR_ROSE": {
+      "roman": "I",
+      "pose_idle": "idle",
+      "pose_transformed_idle": "idle",
+      "aura_shape": "soft_petals",
+      "emission_strength": 0.18,
+      "element_accent": "#F4A7C3",
+      "rim": "#FFE6F1",
+      "transition_in_sfx": "rosamere.form.familiar_rose.in",
+      "transition_out_sfx": "rosamere.form.familiar_rose.out",
+      "vfx_motif": "soft_petals",
+      "vfx_particle_budget": 18,
+      "cinematic_expression": "soft_resolve",
+      "camera_beat": "hold_close_familiar",
+      "status": "RUNTIME_HOOKS_AUTHORED_FINAL_ART_NOT_APPROVED"
+    },
+    "FIRST_BLOOM": {
+      "roman": "II",
+      "pose_idle": "aura_charge",
+      "pose_transformed_idle": "aura_charge",
+      "transform_in_clip": "first_dawn",
+      "aura_shape": "bloom_constellation",
+      "emission_strength": 0.52,
+      "element_accent": "#FFD0E4",
+      "rim": "#FFE6F1",
+      "transition_in_sfx": "rosamere.form.first_bloom.in",
+      "transition_out_sfx": "rosamere.form.first_bloom.out",
+      "vfx_motif": "bloom_constellation",
+      "vfx_particle_budget": 36,
+      "cinematic_expression": "bloom_awaken",
+      "camera_beat": "pull_bloom_constellation",
+      "status": "RUNTIME_HOOKS_AUTHORED_FINAL_ART_NOT_APPROVED"
+    },
+    "EVERLASTING_ORIGIN": {
+      "roman": "III",
+      "pose_idle": "the_first_permission",
+      "pose_transformed_idle": "the_first_permission",
+      "transform_in_clip": "the_first_permission",
+      "aura_shape": "origin_script_field",
+      "emission_strength": 0.82,
+      "element_accent": "#FFE6F1",
+      "rim": "#F4A7C3",
+      "transition_in_sfx": "rosamere.form.everlasting_origin.in",
+      "transition_out_sfx": "rosamere.form.everlasting_origin.out",
+      "vfx_motif": "origin_script_field",
+      "vfx_particle_budget": 48,
+      "cinematic_expression": "origin_stillness",
+      "camera_beat": "mythic_origin_hold",
+      "mythic_label_required": true,
+      "status": "RUNTIME_HOOKS_AUTHORED_FINAL_ART_NOT_APPROVED"
+    }
+  },
+  "gameplay_contract": {
+    "COMPETITIVE_SELF_LIMITED": {
+      "attaches_to_form": "FAMILIAR_ROSE",
+      "is_story_form": false,
+      "fourth_form": false
+    }
+  },
+  "transitions": [
+    {
+      "from": "FAMILIAR_ROSE",
+      "to": "FIRST_BLOOM",
+      "clip": "first_dawn",
+      "seconds": 1.05,
+      "sfx": "rosamere.form.first_bloom.in",
+      "camera_beat": "pull_bloom_constellation",
+      "vfx_burst": "bloom_constellation_open"
+    },
+    {
+      "from": "FIRST_BLOOM",
+      "to": "FAMILIAR_ROSE",
+      "clip": "idle",
+      "seconds": 0.6,
+      "sfx": "rosamere.form.familiar_rose.in",
+      "camera_beat": "hold_close_familiar",
+      "vfx_burst": "soft_petals_settle"
+    },
+    {
+      "from": "FIRST_BLOOM",
+      "to": "EVERLASTING_ORIGIN",
+      "clip": "the_first_permission",
+      "seconds": 1.35,
+      "sfx": "rosamere.form.everlasting_origin.in",
+      "camera_beat": "mythic_origin_hold",
+      "vfx_burst": "origin_script_field_rise",
+      "modes": [
+        "story",
+        "ova",
+        "mythic_party"
+      ]
+    },
+    {
+      "from": "EVERLASTING_ORIGIN",
+      "to": "FAMILIAR_ROSE",
+      "clip": "gentle_reversal",
+      "seconds": 0.9,
+      "sfx": "rosamere.form.familiar_rose.in",
+      "camera_beat": "hold_close_familiar",
+      "vfx_burst": "origin_script_field_fade"
+    }
+  ],
+  "cinematic_presentation": {
+    "status": "RUNTIME_BEATS_AUTHORED_FINAL_CINEMATIC_NOT_APPROVED",
+    "HUMAN_ART_APPROVED": false,
+    "beats": [
+      {
+        "id": "familiar_idle_hold",
+        "form_id": "FAMILIAR_ROSE",
+        "seconds": 0.8,
+        "camera": "hold_close_familiar",
+        "expression": "soft_resolve"
+      },
+      {
+        "id": "first_dawn_transform",
+        "form_id": "FIRST_BLOOM",
+        "seconds": 1.05,
+        "camera": "pull_bloom_constellation",
+        "expression": "bloom_awaken",
+        "requires_clip": "first_dawn"
+      },
+      {
+        "id": "everlasting_permission",
+        "form_id": "EVERLASTING_ORIGIN",
+        "seconds": 1.35,
+        "camera": "mythic_origin_hold",
+        "expression": "origin_stillness",
+        "requires_clip": "the_first_permission",
+        "modes": [
+          "story",
+          "ova",
+          "mythic_party"
+        ]
+      }
+    ]
+  },
+  "story_hooks": {
+    "FAMILIAR_ROSE": {
+      "status": "STORY_HOOK_RUNTIME_STUB",
+      "story_node": "kaia-windrow:pink_revelation",
+      "presentation_line": "Familiar Rose holds permission without domination.",
+      "HUMAN_ART_APPROVED": false,
+      "HitResolver_untouched": true
+    },
+    "FIRST_BLOOM": {
+      "status": "STORY_HOOK_RUNTIME_STUB",
+      "story_node": "kaia-windrow:pink_revelation",
+      "presentation_line": "First Bloom opens after philosophical breakthrough — not a power victory.",
+      "HUMAN_ART_APPROVED": false,
+      "HitResolver_untouched": true
+    },
+    "EVERLASTING_ORIGIN": {
+      "status": "STORY_HOOK_RUNTIME_STUB",
+      "story_node": "kaia-windrow:pink_revelation",
+      "presentation_line": "Everlasting Origin is mythic Story/OVA only — never ranked.",
+      "modes": ["story", "ova", "mythic_party"],
+      "HUMAN_ART_APPROVED": false,
+      "HitResolver_untouched": true
+    }
+  },
+  "choreography_stubs": {
+    "FAMILIAR_ROSE": {
+      "status": "CHOREOGRAPHY_STUB_NOT_HUMAN_ART",
+      "idle_beat": "idle",
+      "transform_beat": "idle",
+      "camera_beat": "hold_close_familiar",
+      "expression": "soft_resolve",
+      "vfx_motif": "soft_petals",
+      "seconds": 0.8,
+      "cosmology_beat": "permission_without_domination",
+      "excludes": ["yin", "yang", "PRISMATIC_GRAY", "BLACK_PUPPET", "WHITE_PUPPET"],
+      "HUMAN_ART_APPROVED": false,
+      "choreography_is_human_art": false,
+      "final_mix": false
+    },
+    "FIRST_BLOOM": {
+      "status": "CHOREOGRAPHY_STUB_NOT_HUMAN_ART",
+      "idle_beat": "aura_charge",
+      "transform_beat": "first_dawn",
+      "camera_beat": "pull_bloom_constellation",
+      "expression": "bloom_awaken",
+      "vfx_motif": "bloom_constellation",
+      "seconds": 1.05,
+      "cosmology_beat": "breakthrough_not_power_victory",
+      "excludes": ["yin", "yang", "PRISMATIC_GRAY", "BLACK_PUPPET", "WHITE_PUPPET"],
+      "HUMAN_ART_APPROVED": false,
+      "choreography_is_human_art": false,
+      "final_mix": false
+    },
+    "EVERLASTING_ORIGIN": {
+      "status": "CHOREOGRAPHY_STUB_NOT_HUMAN_ART",
+      "idle_beat": "the_first_permission",
+      "transform_beat": "the_first_permission",
+      "camera_beat": "mythic_origin_hold",
+      "expression": "origin_stillness",
+      "vfx_motif": "origin_script_field",
+      "seconds": 1.35,
+      "cosmology_beat": "mythic_origin_above_created_cosmology",
+      "excludes": ["yin", "yang", "PRISMATIC_GRAY", "ranked"],
+      "modes": ["story", "ova", "mythic_party"],
+      "HUMAN_ART_APPROVED": false,
+      "choreography_is_human_art": false,
+      "final_mix": false
+    }
+  },
+  "presentation_cards": {
+    "FAMILIAR_ROSE": {
+      "status": "PRESENTATION_CARD_RUNTIME_STUB_NOT_HUMAN_ART",
+      "presentation_line": "Familiar Rose — permission without domination; competitive contract only; not Yin/Yang/Puppet/Gray.",
+      "roman": "I",
+      "HUMAN_ART_APPROVED": false,
+      "choreography_is_human_art": false,
+      "HitResolver_untouched": true,
+      "Codex_combat_data_untouched": true
+    },
+    "FIRST_BLOOM": {
+      "status": "PRESENTATION_CARD_RUNTIME_STUB_NOT_HUMAN_ART",
+      "presentation_line": "First Bloom — philosophical breakthrough; not a power victory over Yin/Yang or Gray.",
+      "roman": "II",
+      "HUMAN_ART_APPROVED": false,
+      "choreography_is_human_art": false,
+      "HitResolver_untouched": true,
+      "Codex_combat_data_untouched": true
+    },
+    "EVERLASTING_ORIGIN": {
+      "status": "PRESENTATION_CARD_RUNTIME_STUB_NOT_HUMAN_ART",
+      "presentation_line": "Everlasting Origin — mythic Story/OVA only; above created cosmology; never ranked.",
+      "roman": "III",
+      "modes": ["story", "ova", "mythic_party"],
+      "HUMAN_ART_APPROVED": false,
+      "choreography_is_human_art": false,
+      "HitResolver_untouched": true,
+      "Codex_combat_data_untouched": true
+    }
+  },
+  "cosmology_honesty_ref": "res://data/story/rosamere_cosmology_honesty.json",
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false
+}

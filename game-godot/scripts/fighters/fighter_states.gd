@@ -3,6 +3,10 @@ class_name FighterStates
 
 const FPS := 60.0
 
+const PARTY_TRANSFORM := "party_transform"
+const ULTIMATE_STARTUP := "ultimate_startup"
+const ULTIMATE_ACTIVE := "ultimate_active"
+const ULTIMATE_RECOVERY := "ultimate_recovery"
 const IDLE := "idle"
 const WALK := "walk"
 const RUN := "run"
@@ -23,6 +27,7 @@ const SPECIAL_ACTIVE := "special_active"
 const SPECIAL_RECOVERY := "special_recovery"
 const SHIELD_START := "shield_start"
 const SHIELD_HOLD := "shield_hold"
+const SHIELD_HIT := "shield_hit"
 const SHIELD_STUN := "shield_stun"
 const SHIELD_BREAK := "shield_break"
 const DODGE_START := "dodge_start"
@@ -57,10 +62,10 @@ const DEFEAT := "defeat"
 
 static func all_states() -> Array[String]:
 	return [
-		IDLE, WALK, RUN, DASH, SKID, TURNAROUND, JUMP_SQUAT, JUMP, DOUBLE_JUMP, FALL, FAST_FALL, LAND,
+		PARTY_TRANSFORM, ULTIMATE_STARTUP, ULTIMATE_ACTIVE, ULTIMATE_RECOVERY, IDLE, WALK, RUN, DASH, SKID, TURNAROUND, JUMP_SQUAT, JUMP, DOUBLE_JUMP, FALL, FAST_FALL, LAND,
 		ATTACK_STARTUP, ATTACK_ACTIVE, ATTACK_RECOVERY,
 		SPECIAL_STARTUP, SPECIAL_ACTIVE, SPECIAL_RECOVERY,
-		SHIELD_START, SHIELD_HOLD, SHIELD_STUN, SHIELD_BREAK,
+		SHIELD_START, SHIELD_HOLD, SHIELD_HIT, SHIELD_STUN, SHIELD_BREAK,
 		DODGE_START, DODGE_ACTIVE, DODGE_RECOVERY, AIR_DODGE,
 		GRAB_STARTUP, GRAB_ACTIVE, GRAB_WHIFF, GRAB_HOLD, THROW_STARTUP, THROW_RELEASE,
 		AURA_CHARGE, AURA_READY, AURA_BURST_STARTUP, AURA_BURST_ACTIVE, AURA_BURST_RECOVERY,
@@ -70,6 +75,7 @@ static func all_states() -> Array[String]:
 
 static func is_attack_state(s: String) -> bool:
 	return s in [
+		ULTIMATE_STARTUP, ULTIMATE_ACTIVE, ULTIMATE_RECOVERY,
 		ATTACK_STARTUP, ATTACK_ACTIVE, ATTACK_RECOVERY,
 		SPECIAL_STARTUP, SPECIAL_ACTIVE, SPECIAL_RECOVERY,
 		AURA_BURST_STARTUP, AURA_BURST_ACTIVE, AURA_BURST_RECOVERY,
@@ -77,11 +83,11 @@ static func is_attack_state(s: String) -> bool:
 	]
 
 static func is_hurt_state(s: String) -> bool:
-	return s in [HURT_LIGHT, HURT_HEAVY, HITSTOP, HITSTUN, LAUNCHED, TUMBLE, SHIELD_STUN, SHIELD_BREAK]
+	return s in [HURT_LIGHT, HURT_HEAVY, HITSTOP, HITSTUN, LAUNCHED, TUMBLE, SHIELD_HIT, SHIELD_STUN, SHIELD_BREAK]
 
 static func locks_movement(s: String) -> bool:
 	return is_attack_state(s) or is_hurt_state(s) or s in [
-		SHIELD_HOLD, SHIELD_START, GRAB_HOLD, GRAB_STARTUP, GRAB_ACTIVE,
+		PARTY_TRANSFORM, SHIELD_HOLD, SHIELD_START, SHIELD_HIT, GRAB_HOLD, GRAB_STARTUP, GRAB_ACTIVE,
 		AURA_BURST_STARTUP, AURA_BURST_ACTIVE, AURA_BURST_RECOVERY,
 		KO, RESPAWN, GRAB_WHIFF, JUMP_SQUAT, LAND, LEDGE_HANG, LEDGE_GETUP,
 		AIR_DODGE, DODGE_ACTIVE, DODGE_RECOVERY,
@@ -113,6 +119,7 @@ static func animation_for_state(s: String) -> String:
 		SPECIAL_STARTUP, SPECIAL_ACTIVE, SPECIAL_RECOVERY: return "neutral_special_projectile"
 		SHIELD_START: return "shield_start"
 		SHIELD_HOLD: return "shield_hold"
+		SHIELD_HIT: return "shield_hit"
 		SHIELD_STUN: return "shield_stun"
 		SHIELD_BREAK: return "shield_break"
 		DODGE_START, DODGE_ACTIVE, DODGE_RECOVERY: return "spot_dodge"

@@ -9,6 +9,7 @@ import type { AddressInfo } from "node:net";
 import { renderBrowserControllerHtml } from "./browserController.js";
 import { PartyRoomSession, type CreateRoomOptions } from "./partyRoom.js";
 import { HostAuthoritativePartySim, partyGameConfig } from "./hostAuthoritativeParty.js";
+import { consumePostedPartyFrames } from "./postedPartyFrames.js";
 import { teamForSeat, type PartyTeamMode } from "./teamAssign.js";
 import { buildJoinQrPayload } from "./identity.js";
 import type { ControllerInput, PublicGameState } from "./types.js";
@@ -91,9 +92,10 @@ export async function startLanPartyHost(opts: LanHostOptions): Promise<LanHostHa
   const session = new PartyRoomSession(opts);
   let sim: HostAuthoritativePartySim | null = null;
   let teamMode: PartyTeamMode = opts.teamMode ?? "FFA";
-  const pendingInputs: ControllerInput[] = [];
 
   const beginMatch = (ownerToken: string) => {
+    // Admission precedes automatic fighter/team setup as well as sim creation.
+    if (!session.isOwnerToken(ownerToken)) return { ok: false as const, reason: "owner_only" };
     ensureSeatDefaults(session, teamMode);
     const start = session.startMatch(ownerToken);
     if (!start.ok) return start;
@@ -211,8 +213,11 @@ export async function startLanPartyHost(opts: LanHostOptions): Promise<LanHostHa
         return;
       }
       if (url.pathname === "/start") {
-        const owner = session.room.participants.find((p) => p.id === session.room.ownerId)!;
-        const token = String(body.ownerToken ?? owner.token);
+        if (!session.isOwnerToken(body.ownerToken)) {
+          sendJson(res, 403, { ok: false, reason: "owner_only" });
+          return;
+        }
+        const token = body.ownerToken as string;
         if (typeof body.teamMode === "string") teamMode = body.teamMode as PartyTeamMode;
         const start = beginMatch(token);
         sendJson(res, start.ok ? 200 : 400, start);
@@ -221,14 +226,13 @@ export async function startLanPartyHost(opts: LanHostOptions): Promise<LanHostHa
       if (url.pathname === "/input") {
         const input = body as unknown as ControllerInput;
         const ack = session.submitInput(input);
-        if (ack.accepted) pendingInputs.push(input);
         sendJson(res, 200, ack);
         return;
       }
       if (url.pathname === "/rematch") {
-        const owner = session.room.participants.find((p) => p.id === session.room.ownerId)!;
-        sim = null;
-        sendJson(res, 200, session.rematch(String(body.ownerToken ?? owner.token)));
+        const out = session.rematch(typeof body.ownerToken === "string" ? body.ownerToken : "");
+        if (out.ok) sim = null;
+        sendJson(res, out.ok ? 200 : out.reason === "owner_only" ? 403 : 400, out);
         return;
       }
 
@@ -279,46 +283,27 @@ export async function startLanPartyHost(opts: LanHostOptions): Promise<LanHostHa
       return beginMatch(owner.token);
     },
     tick: (inputs = []) => {
-      const batch = [...pendingInputs, ...inputs];
-      pendingInputs.length = 0;
-      if (sim) {
-        sim.advance(
-          batch.map((i) => ({
-            seatIndex: i.seatIndex,
-            sequence: i.sequence,
-            frame: {
-              frame: 0,
-              playerId: i.seatIndex,
-              left: Boolean(i.semantic.left ?? i.semantic.steerLeft),
-              right: Boolean(i.semantic.right ?? i.semantic.steerRight),
-              up: Boolean(i.semantic.up),
-              down: Boolean(i.semantic.down),
-              jump: Boolean(i.semantic.jump),
-              attack: Boolean(i.semantic.attack),
-              special: Boolean(i.semantic.special),
-              shield: Boolean(i.semantic.shield),
-              dodge: Boolean(i.semantic.dodge),
-              grab: false,
-            },
-          })),
-          batch.map(() => 5),
-        );
-        session.advanceHostTick();
-        const state = sim.getState();
-        const pub = session.publicGameState();
-        pub.world = {
-          players: state.players.map((p) => ({
-            seatIndex: p.id,
-            x: p.x,
-            y: p.y,
-            stocks: p.stocks,
-          })),
-          arena: sim.arenaCamera(),
-          hudSlots: sim.hudSlots(),
-        };
-        return pub;
+      if (!sim) {
+        session.drainPendingInputs();
+        return session.publicGameState();
       }
-      return session.publicGameState();
+      const batch = consumePostedPartyFrames(session, sim.getFrame(), inputs);
+      sim.advance(batch, batch.map(() => 5));
+      session.advanceHostTick();
+      const state = sim.getState();
+      const pub = session.publicGameState();
+      pub.world = {
+        players: state.players.map((p) => ({
+          seatIndex: p.id,
+          x: p.x,
+          y: p.y,
+          stocks: p.stocks,
+        })),
+        arena: sim.arenaCamera(),
+        hudSlots: sim.hudSlots(),
+        inputs: batch,
+      };
+      return pub;
     },
     getPublicState: () => session.publicGameState(),
   };

@@ -10,6 +10,7 @@ import {
   partyGameConfig,
   teamForSeat,
   buildJoinQrPayload,
+  consumePostedPartyFrames,
   type PartyTeamMode,
 } from "@anime-aggressors/partylink";
 import { navigateTo } from "../router.js";
@@ -191,31 +192,10 @@ export function mountPartyArenaScreen(root: HTMLElement): void {
     return;
   }
 
-  let frames = 0;
   let raf = 0;
 
   const draw = () => {
-    frames += 1;
-    const inputs = runtime.session.room.seats
-      .filter((s) => s.participantId && s.state !== "ELIMINATED_OR_FINISHED")
-      .map((s, i) => ({
-        seatIndex: s.seatIndex,
-        sequence: frames + i,
-        frame: {
-          frame: frames,
-          playerId: s.seatIndex,
-          left: frames % 17 === s.seatIndex,
-          right: false,
-          up: false,
-          down: false,
-          jump: false,
-          attack: frames % 23 === s.seatIndex,
-          special: false,
-          shield: false,
-          dodge: false,
-          grab: false,
-        },
-      }));
+    const inputs = consumePostedPartyFrames(runtime.session, runtime.sim!.getFrame());
     runtime.sim!.advance(inputs, inputs.map(() => 5));
     runtime.session.advanceHostTick();
     const cam = runtime.sim!.arenaCamera();

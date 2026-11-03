@@ -1,0 +1,157 @@
+{
+  "id": "nightveil-city",
+  "displayName": "Nightveil City",
+  "index": 17,
+  "layoutType": "skyline_tiers",
+  "mainPlatform": {
+    "x": 0,
+    "y": 285,
+    "width": 940,
+    "height": 40
+  },
+  "sidePlatforms": [
+    {
+      "x": -320,
+      "y": 175,
+      "width": 180,
+      "height": 24
+    },
+    {
+      "x": 320,
+      "y": 175,
+      "width": 180,
+      "height": 24
+    },
+    {
+      "x": -100,
+      "y": 70,
+      "width": 140,
+      "height": 22
+    },
+    {
+      "x": 100,
+      "y": 70,
+      "width": 140,
+      "height": 22
+    }
+  ],
+  "spawnPoints": [
+    {
+      "slot": 1,
+      "x": -250,
+      "y": 205
+    },
+    {
+      "slot": 2,
+      "x": 250,
+      "y": 205
+    }
+  ],
+  "blastZones": {
+    "left": -640,
+    "right": 640,
+    "top": -430,
+    "bottom": 450
+  },
+  "ledges": true,
+  "hazardSockets": [
+    {
+      "id": "neon_pulse",
+      "x": 0,
+      "y": 100,
+      "radius": 16,
+      "authoritative": true,
+      "effect": "soft_stun_zone",
+      "frames_period": 180
+    }
+  ],
+  "cameraProfile": {
+    "mode": "platform_fighter",
+    "minZoom": 0.7,
+    "maxZoom": 1.2,
+    "lerp": 0.12,
+    "deadzone": {
+      "x": 80,
+      "y": 60
+    }
+  },
+  "lightingProfile": {
+    "keyColor": "#6a7cff",
+    "keyAlpha": 0.14,
+    "ambient": "#060812",
+    "rim": "#f4a7c3"
+  },
+  "performanceTier": {
+    "default": "high",
+    "low": {
+      "particles": false,
+      "bands": 1
+    },
+    "medium": {
+      "particles": true,
+      "bands": 2
+    },
+    "high": {
+      "particles": true,
+      "bands": 4
+    }
+  },
+  "a11y": {
+    "highContrastEdges": true,
+    "colorblindMarkers": true
+  },
+  "audioBed": {
+    "event": "bed_nightveil_city",
+    "status": "PROCEDURAL_WORKING_NOT_HUMAN_FINAL",
+    "path": "res://assets/audio/procedural/stages/nightveil-city/bed.wav"
+  },
+  "previewPlaceholder": "res://assets/stages/procedural/nightveil-city.svg",
+  "artStatus": "PROCEDURAL_WORKING_NOT_HUMAN_FINAL",
+  "productionStatus": "PLAYABLE_PROCEDURAL_BATCH1",
+  "geometryStatus": "PROCEDURAL_WORKING",
+  "HUMAN_ART_APPROVED": false,
+  "yin_yang_presence": {
+    "expression": "sky_conflict",
+    "original": true,
+    "franchise_signage": false
+  },
+  "pink_foreshadow": {
+    "motif": "night_petal_lantern",
+    "subtle": true
+  },
+  "rulesets": {
+    "competitive": {
+      "hazards": "predictable_authoritative"
+    },
+    "party_chaos": {
+      "hazards": true,
+      "transformations": false
+    },
+    "story": {
+      "narrative_hooks": true
+    }
+  },
+  "hazard_model": "authoritative_snapshot",
+  "rng_policy": "no_divergent_rng",
+  "notes": "Yin/Yang sky conflict \u2014 NOT bat-signal composition. Working procedural geometry this pass.",
+  "ledgeAnchors": [
+    {
+      "id": "left",
+      "x": -470.0,
+      "y": 285.0,
+      "facing": 1
+    },
+    {
+      "id": "right",
+      "x": 470.0,
+      "y": 285.0,
+      "facing": -1
+    }
+  ],
+  "setdress": {
+    "sky": "yin_yang_sky_conflict",
+    "forbid": [
+      "bat_signal_composition"
+    ]
+  }
+}

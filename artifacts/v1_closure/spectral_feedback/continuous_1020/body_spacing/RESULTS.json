@@ -1,0 +1,140 @@
+{
+  "implementation_source_sha": "380de325d65483d3236010174c79eda347bb748d",
+  "baseline_source_sha": "b264ee5578f9ea7ffe7ba6d830608e38c017e252",
+  "branch": "release/anime-v1-dialogue-and-elemental-performance",
+  "draft_pr": "https://github.com/gunnchOS3k/anime-aggressors/pull/123",
+  "stacked_base_pr": 122,
+  "root_cause": "Fighter layer2/mask1 only collides with stage; no shared grounded body separation. Actual body is profile-sized RectangleShape2D. Visual projection/proportions/floor integration also remain imperfect but cannot fix overlapping gameplay roots.",
+  "correction": "post-stage/pre-combat horizontal body-shape constraints; stable slot/path ordering; symmetric bounded separation, signed stage sweeps, support-edge clipping; gait sampled at final root; no velocity added, no opponent-platform collision",
+  "combat_values_unchanged": true,
+  "intentional_crossing": [
+    "airborne including jump-impulse frame",
+    "dodge/air-dodge",
+    "Vesper phase/cancel window",
+    "authored self_movement.x attacks",
+    "grab/throw",
+    "hurt/hitstun/launch/tumble",
+    "ledge states/respawn/invulnerability",
+    "same Story team/passive allies/cosmic staging"
+  ],
+  "ordinary_comparison": "PUBLIC_COMPARISON.json",
+  "focused_suites": [
+    {
+      "suite": "RosterMale",
+      "exit_code": 0,
+      "script_errors": false,
+      "seconds": 14.426
+    },
+    {
+      "suite": "RosterFemale",
+      "exit_code": 0,
+      "script_errors": false,
+      "seconds": 14.248
+    },
+    {
+      "suite": "ThrowOwnership",
+      "exit_code": 0,
+      "script_errors": false,
+      "seconds": 20.023
+    },
+    {
+      "suite": "GroundedRecovery",
+      "exit_code": 0,
+      "script_errors": false,
+      "seconds": 6.437
+    },
+    {
+      "suite": "RosterFootwork",
+      "exit_code": 0,
+      "script_errors": false,
+      "seconds": 32.223
+    },
+    {
+      "suite": "ContactReactionClock",
+      "exit_code": 0,
+      "script_errors": false,
+      "seconds": 8.496
+    },
+    {
+      "suite": "AuthoredCancel",
+      "exit_code": 0,
+      "script_errors": false,
+      "seconds": 0.875
+    },
+    {
+      "suite": "CampaignRestart",
+      "exit_code": 0,
+      "script_errors": false,
+      "seconds": 66.306
+    }
+  ],
+  "shared_roster": {
+    "configurations": 36,
+    "fighters": 9,
+    "body_presentations": 18,
+    "approach_directions": 2,
+    "root_contact_range_px": [
+      31.5000014305115,
+      36.9000005722046
+    ],
+    "max_contact_gap_oscillation_px": 8.58306884765625e-06,
+    "actual_model_paths_verified": true,
+    "human_approved": false
+  },
+  "story": "real PUPPET_IMBALANCE six-actor setup with five activeCPUs; reverse-array solve matches, no campaign begin/result or earned receipt; full owner routes not accepted",
+  "active_cpu": {
+    "source_sha": "380de325d65483d3236010174c79eda347bb748d",
+    "frames": 340,
+    "cpu_moves": 4,
+    "contacts": 9,
+    "opponent_cpu": true,
+    "forced_moves": false,
+    "forced_ko": false,
+    "frozen_opponent": false
+  },
+  "ci": {
+    "source_sha": "380de325d65483d3236010174c79eda347bb748d",
+    "passed": 6,
+    "pending": [
+      "windows-pilot0-windows-2025"
+    ]
+  },
+  "native_video": {
+    "status": "VERIFIED_NATIVE60_AUDIO_FRAME_SOURCE",
+    "source_ids": {
+      "before": "b264ee5578f9ea7ffe7ba6d830608e38c017e252",
+      "after": "e42655d5657ecbf1a4a8750e7c9be89ea35d29db"
+    },
+    "movies": {
+      "before": "artifacts/v1_closure/spectral_feedback/rendered/body_spacing_before1020.mp4",
+      "after": "artifacts/v1_closure/spectral_feedback/rendered/body_spacing_after1020.mp4"
+    },
+    "frames_per_movie": 868,
+    "fps": 60,
+    "verified_gameplay_frame_codes_per_movie": 647,
+    "identical_public_inputs": true,
+    "comparison": "NATIVE_COMPARISON.json",
+    "contact_crops": "NATIVE_COMPARISON.png",
+    "owner_closed_previous_game": true,
+    "human_visual_approved": false,
+    "runtime_vs_recording": "868fixed60fps movie frames/14.467s each, recorded40\u201341s offline. CPUrender0.44ms/frame, GPU0unavailable; not sustained-deviceFPS evidence."
+  },
+  "owner_play": "tools/v1_closure/play_melee_review.command, optional --local / --male; quit old review first to load new source; separate isolated profile, Story saves untouched",
+  "remaining": "model/boot-floor fit, projected head/hair/limb contact and outer reach, full individual choreography/human art acceptance",
+  "gates": {
+    "GAME_FEEL_HUMAN_PASS": false,
+    "VFX_TASTE_HUMAN_PASS": false,
+    "ANIMATION_TASTE_HUMAN_PASS": false,
+    "SFX_MIX_HUMAN_PASS": false,
+    "V1_ANIME_HUMAN_PASS": false,
+    "FINAL_RELEASE_AUTHORIZED": false
+  },
+  "preservation": "33worktrees/backups/evidence/owner saves untouched; accepted projectile, knee-plane, torso and terminal acting source retained; no heavy export/cleanup/merge/tag/deploy/release",
+  "native_source_ci": {
+    "source_sha": "e42655d5657ecbf1a4a8750e7c9be89ea35d29db",
+    "passed": 6,
+    "pending": [
+      "windows-pilot0-windows-2025"
+    ]
+  }
+}

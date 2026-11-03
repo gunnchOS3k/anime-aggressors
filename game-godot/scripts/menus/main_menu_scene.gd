@@ -80,6 +80,11 @@ func _on_training_pressed() -> void:
 	_press_feedback()
 	SceneRouter.go_training()
 
+func _on_trials_pressed() -> void:
+	_press_feedback()
+	GameState.mode = "trials"
+	SceneRouter.go_trials()
+
 func _on_rulesets_pressed() -> void:
 	_press_feedback()
 	SceneRouter.go("ruleset")

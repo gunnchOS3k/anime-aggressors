@@ -1,0 +1,9 @@
+{"project": "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/aa-ordinary-review-9kg9h8q5/game-godot", "profile": "production_dialogueproduction_20261010", "isolated_project_name": "Anime Aggressors Review production_dialogueproduction_20261010", "command": ["/opt/homebrew/bin/godot", "--path", "/var/folders/dp/z5frf3m511jcdpdf8v878v8h0000gn/T/aa-ordinary-review-9kg9h8q5/game-godot", "--log-file", "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure/artifacts/v1_closure/dialogue_performance/regressions/DialogueProduction/godot.log", "--headless", "--fixed-fps", "60", "--script", "res://tests/v1_closure/DialogueProduction.gd", "--", "--ordinary-output=/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_closure/artifacts/v1_closure/dialogue_performance/regressions/DialogueProduction", "--source-sha=6bdd16b788faf6f9c88ed163bcdc968a95a9c2c3", "--ordinary-max-nodes=20", "--ordinary-route=kaia-windrow"]}
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Attempting to make child window exclusive, but the parent window already has another exclusive child. This window: /root/StoryDialogue/@AcceptDialog@35, parent window: /root, current exclusive child window: /root/StoryDialogue/@AcceptDialog@24
+   at: _set_transient_exclusive_child (scene/main/window.cpp:1160)
+   GDScript backtrace (most recent call first):
+       [0] show_transcript (res://scripts/story/story_dialogue_director.gd:189)
+       [1] _run (res://tests/v1_closure/DialogueProduction.gd:69)
+DIALOGUE_PRODUCTION PASS cues=1025

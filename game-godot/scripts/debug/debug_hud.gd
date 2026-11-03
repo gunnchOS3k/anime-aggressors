@@ -32,8 +32,12 @@ func push_log(text: String) -> void:
 		hit_logs.pop_front()
 
 func _on_hit_landed(info: Dictionary) -> void:
-	var tag := "SHIELD" if info.get("blocked", false) else "HIT"
-	push_log("%s %s" % [tag, info.get("move_id", "?")])
+	var tag := "PARRY" if info.get("perfect_guard", false) else "SHIELD" if info.get("blocked", false) else "HIT"
+	var meter := float(info.get("defender_damage_after", info.get("damage_applied", -1.0)))
+	if meter >= 0.0 and tag == "HIT":
+		push_log("%s %s meter:%.1f" % [tag, info.get("move_id", "?"), meter])
+	else:
+		push_log("%s %s" % [tag, info.get("move_id", "?")])
 
 func _on_grab(info: Dictionary) -> void:
 	push_log("GRAB %s" % info.get("result", "?"))
@@ -73,8 +77,8 @@ func _update_text() -> void:
 		if f.has_method("debug_combat_summary"):
 			combat = f.debug_combat_summary()
 		lines.append("%s%s" % [name, proxy])
-		lines.append("  %d%% x%d aura:%d aura_level:%d state:%s" % [
-			int(f.damage_percent), f.stocks, int(f.aura),
+		lines.append("  %.1f%% x%d aura:%d aura_level:%d state:%s" % [
+			float(f.damage_percent), f.stocks, int(f.aura),
 			combat.get("aura_level", f.get_aura_level() if f.has_method("get_aura_level") else 0),
 			state,
 		])

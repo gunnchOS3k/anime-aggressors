@@ -1,0 +1,94 @@
+{
+  "schema": "zero_cost_art_cinematic_continuation.v1",
+  "recorded_UTC": "2026-10-23T19:45:47.756501+00:00",
+  "implementation_checkpoints": {
+    "single_case_pilot": "6492fec4",
+    "camera_and_watch_pause": "ef1f35ec7d8323875cb85cf2be6fd99b4979233a"
+  },
+  "local_branch": "release/anime-v1-dialogue-and-elemental-performance",
+  "draft_pr": 123,
+  "stacked_parent": 122,
+  "new_implementation": [
+    "One explicit local reference case; producer/validator/static native viewer agree; partial output cannot pass as the eight-case batch",
+    "Cue-local camera transitions ease using dialogue time; reduced-motion hold; authored takes untouched",
+    "Paused chapter navigation preserves the new scene/model/dialogue pause state"
+  ],
+  "focused_results": {
+    "scope_negative_tests": {
+      "passed": 7,
+      "scope": "Pure synthetic scope/provenance assertions"
+    },
+    "private_offline_tests": {
+      "passed": 21,
+      "scope": "Privacy/provenance/storage boundary assertions"
+    },
+    "private_camera_native": {
+      "passed": 147,
+      "actual_camera_resources": 7,
+      "actual_cue_bindings": 114,
+      "scope": "Headless native Animation resource import/sampling; no body render"
+    },
+    "watch_pause_native": {
+      "passed": 15,
+      "retained_pre_fix_failed_checks": 6,
+      "scope": "Real watch/dialogue code in a tiny synthetic-actor project and digital-silence player; not shipping model/audio/gameplay acceptance"
+    }
+  },
+  "private_actions": {
+    "disabled": true,
+    "production_dispatches": 0,
+    "new_infrastructure": false,
+    "paid_usage_authorized": false,
+    "public_art_disclosure_authorized": false
+  },
+  "art_production": {
+    "executed": false,
+    "new_scenes": 0,
+    "new_GLBs": 0,
+    "new_review_films": 0,
+    "pilot_prepared": true,
+    "remaining_batch_ready": false,
+    "animated_export_verified": false,
+    "release_acting_verified": false
+  },
+  "resource_status": {
+    "internal_free_GiB_last_preflight": 17.742,
+    "producer_required_GiB": 22,
+    "reserve_GiB": 18,
+    "producer_forecast_GiB": 4,
+    "compatible_Blender_required": "4.0.2",
+    "installed_Blender": "3.3.1",
+    "official_package_SHA256_verified": false,
+    "installer_and_expanded_allocation_verified": false,
+    "new_unique_verified_archive_bytes": 1781616002,
+    "additional_installer_original_bytes_pending_deletion_approval": 0,
+    "logical_bytes_removed": 2252061070,
+    "observed_APFS_free_increase_bytes": 2235412480,
+    "other_deletions": 0,
+    "protected_sources_evidence_saves_worktrees_preserved": true,
+    "owner_authorized_installer_files_deleted": 20,
+    "remaining_safe_verified_multiGiB_removal_candidates": 0,
+    "observed_recovery_scope": "Sum of immediate before/after measurements; concurrent usage and APFS snapshots mean final free space differs."
+  },
+  "editorial": {
+    "private_takes_preserved": 7,
+    "canonical_cues": 114,
+    "canonical_nodes_in_retained_inventory": 145,
+    "editorial_sequences_in_retained_inventory": 53,
+    "retained_technical_movies": 3,
+    "verified_finished_final_films": 0,
+    "completed_inventory_regenerated": false
+  },
+  "CI": {
+    "current_code_checkpoints": "Intentionally skipped with owner zero-cost policy; not passed",
+    "last_prior_verified_head": "7030fdb485110c1dbb60655a980fdd9df5cc0a8c",
+    "last_prior_workflow_runs_succeeded": 6,
+    "private_original_invalid_workflow_record_preserved": true
+  },
+  "HUMAN_ART_PASS": false,
+  "HUMAN_GAMEPLAY_PASS": false,
+  "ROSTER_PARITY_ACCEPTANCE": false,
+  "V1_RELEASE_AUTHORIZED": false,
+  "RUNTIME_PAIRED_CONTACT_VERIFIED": false,
+  "private_artwork_committed": false
+}

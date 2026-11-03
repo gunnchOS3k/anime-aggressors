@@ -1,0 +1,52 @@
+{
+  "starting_checkpoint": "9a39416830898c53c4f80d46f90a8ecdafe15c00",
+  "branch": "integration/v1-preserved-candidate-20261025",
+  "source_changes": {
+    "packages/partylink/src/lanHost.ts": "282b7423d749ac731a844aea2d8a42778d542b780141be31a94e6e59b30edb62",
+    "packages/partylink/src/partyRoom.ts": "9cf13c1bee1de17e3bb8036305e7fda816e79d7bd77da073bd4109f22bfc0976",
+    "packages/partylink/test/lanMatchOwnership.test.ts": "05d629909b0348789cc777e4fe3ec327e614027ef88112852ca1393ca4e6fded"
+  },
+  "implemented": [
+    "Explicit owner credential required by HTTP start/rematch; no server-side owner-token fallback",
+    "Unauthorized start cannot mutate fighter/team defaults or selected team mode",
+    "Rejected rematch cannot retire running simulation or flush queued inputs",
+    "Authorized rematch resets round sequence/rate state; same-round reconnect keeps stale-input protection"
+  ],
+  "baseline": {
+    "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025/outputs/lan_match_ownership_20261025_baseline_v3",
+    "checks": 6,
+    "passed": 0,
+    "failed": 6,
+    "log_sha256": "5f0c96d9f49360b4324fc7a1335f37a0d993ddb13076f3ec136dd50169db16dc"
+  },
+  "regression": {
+    "path": "/Users/gunnchos/Downloads/gunnchos-7gc-research-product-spine/repos/_anime_v1_integrated_20261025/outputs/lan_match_ownership_20261025_regressions",
+    "checks": 32,
+    "passed": 32,
+    "failed": 0,
+    "new_checks": 7,
+    "source_receipt_sha256": "3f14d972f37d2e372aacdb8a32dcaaecc2c5e526b5250e98c43f263f7165df6c",
+    "log_sha256": "de3c7b97e7a7b35cc71216b7e22f1f8a8fe20b223ec978c65f2d733e6a2122d0",
+    "seconds": 3.2750331249990268,
+    "sampled_process_family_peak_RSS_bytes": 227590144,
+    "scope": "Installed Node24 source transformation; actual loopback requests/two-client processes and declared room/session fixtures. Host party sim is bookkeeping/movement only: NOT Godot combat, physical LAN, full multiplayer or device acceptance. No compile/export/download/asset access."
+  },
+  "harness_failure_retained": "outputs/lan_match_ownership_20261025_baseline: Node no-isolation mode failed module resolution before application tests; rerun used existing proven loader mode",
+  "native_and_audio_full_match": "NOT_EXECUTED: single fresh preflight16.786380768GiB vs19.59765625GiB native required; 3018584064byte deficit;19GiB start and18GiB running protections unchanged",
+  "resources": {
+    "measured_at": "2026-10-25T20:50:28.553021-05:00",
+    "internal_available_bytes": 18024239104,
+    "RAM_free_percent": 29,
+    "swap_used_MiB": 9513.56,
+    "active_media_jobs": []
+  },
+  "storage_options": "Prior20installer removals complete. No remaining verified multi-GiB removal candidate. Metadata-only standalone installers: Downloads/blender-4.0.2-macos-arm64.dmg252350524bytes and VirtualBox-7.0.8-156879-Win.exe110628872bytes; neither freshly archived/verified or authorized for removal; combined0.338GiB cannot close native deficit. Personal yearbook/course archives excluded; no external reads/copies/deletion. Owner may close unused applications/restart normally to let OS manage swap, then fresh preflight; no swap manipulation authorized.",
+  "progress_scope": "No new Story earnings, private-art/native playback, move export, physical LAN, Android/Windows/device or visual acceptance. Existing earned KO/guard/throw/Story/art source evidence preserved. No exact-head CI/typecheck claim; Node24 TS runtime transformation only.",
+  "human_gates": {
+    "HUMAN_ART_APPROVED": false,
+    "RUNTIME_PAIRED_CONTACT_VERIFIED": false,
+    "RC2_READY": false,
+    "V1_0_0_RELEASE_AUTHORIZED": false
+  },
+  "remote": "LOCAL ONLY; protected PR123/133 unchanged, no paid Actions or publication"
+}

@@ -1,0 +1,67 @@
+extends SceneTree
+## Public cast after a real whiff. Repositioned idle target is an ownership fixture,
+## never qualifying combo, active-CPU, KO or ordinary campaign evidence.
+const Renderer=preload("res://scripts/visual/spectral_feedback_renderer.gd")
+var output := ""
+var failures: Array=[]
+var rows: Array=[]
+var contacts: Array=[]
+var damages: Array=[]
+var feedback: Array=[]
+func _init() -> void:call_deferred("_run")
+func check(ok: bool,label: String) -> void:
+	if not ok:failures.append(label)
+func release_inputs() -> void:
+	for key in ["right","left","attack","special","shield"]:Input.action_release("p1_"+key)
+func _run() -> void:
+	await process_frame
+	for arg in OS.get_cmdline_user_args():
+		if arg.begins_with("--ordinary-output="):output=arg.get_slice("=",1)
+	var gs=root.get_node("GameState");gs.mode="versus";gs.stage_id="training-grid";gs.p1_fighter_id="ember-vale";gs.p2_is_cpu=false;gs.stocks=9;gs.match_timer_seconds=1800
+	root.get_node("SceneRouter").go("battle")
+	for i in range(220):await physics_frame
+	var p=current_scene.fighter1;var d=current_scene.fighter2
+	p.hit_resolver.hit_confirmed.connect(func(a,b,info):
+		if a==p and b==d:contacts.append({"info":info.duplicate(true),"projectile_count":p.projectile_spawner.count(),"move_phase":p.move_runner.phase,"move_frame":p.move_runner.total_frame}))
+	d.damaged.connect(func(amount,_total):damages.append(amount))
+	p.combat_feedback.feedback_triggered.connect(func(info):feedback.append(info.duplicate(true)))
+	for fid in Renderer.IDS:
+		for body in ["male","female"]:
+			release_inputs();gs.p1_body_variant=body;p.configure(fid,1,false,9,Vector2(-100,240));d.configure("juno-spark" if fid!="juno-spark" else "ember-vale",2,false,9,Vector2(440,240))
+			p.move_runner.cancel();d.move_runner.cancel();p.projectile_spawner.clear_all();d.projectile_spawner.clear_all()
+			p.controls_enabled=true;d.controls_enabled=false;p.state_machine.enter("idle");d.state_machine.enter("idle")
+			p.velocity=Vector2.ZERO;d.velocity=Vector2.ZERO;p._hitstop=0;d._hitstop=0;p.aura=0;d.aura=0;p.facing=1;d.facing=-1;p.invincible=false;d.invincible=false;d.damage_percent=0
+			for i in range(40):await physics_frame
+			check(p.is_on_floor() and p.state_machine.can_attack(),fid+":"+body+":grounded_public_setup")
+			Input.action_press("p1_attack");Input.action_press("p1_special")
+			for i in range(3):await physics_frame
+			Input.action_release("p1_attack");Input.action_release("p1_special")
+			var prefix: String=fid+":"+body
+			check(str(p._current_move.get("move_id",""))=="heavy_attack",prefix+":real_public_heavy_whiff")
+			for i in range(100):
+				await physics_frame
+				if p.state_machine.can_attack():break
+			var stale_before: bool=p.hitbox.monitoring
+			var prior_active: bool=p.move_runner.active
+			# Explicit authority fixture setup, after the unrelated whiff; no combo claim.
+			d.global_position=p.global_position+Vector2(40,0);d.velocity=Vector2.ZERO
+			contacts.clear();damages.clear();feedback.clear()
+			Input.action_press("p1_special")
+			for i in range(3):await physics_frame
+			Input.action_release("p1_special")
+			check(str(p._current_move.get("move_id",""))=="neutral_special_projectile",prefix+":real_public_cast")
+			var stale_after_start: bool=p.hitbox.monitoring
+			for i in range(110):await physics_frame
+			var phantom: Array=contacts.filter(func(c):return c.projectile_count==0 and c.info.move_id=="neutral_special_projectile")
+			check(not stale_after_start,prefix+":cast_retires_previous_melee_hitbox")
+			check(phantom.is_empty(),prefix+":no_melee_contact_owned_by_projectile_cast")
+			check(contacts.size()==1 and damages.size()==1,prefix+":one_projectile_contact_and_damage")
+			check(feedback.size()==1,prefix+":one_synchronized_feedback_dispatch")
+			if not contacts.is_empty():
+				check(contacts[0].info.get("contact_owner","")=="projectile" and int(contacts[0].info.get("projectile_instance_id",-1))>=0,prefix+":emitter_owns_authoritative_contact")
+				var event: String=contacts[0].info.combat_event_id
+				check(Renderer.obtain(p).history.filter(func(h):return h.event_id==event).size()==1,prefix+":one_primary_impact")
+			check(p.projectile_spawner.count()==0 and not p.hitbox.monitoring,prefix+":expiration_cleanup")
+			rows.append({"fighter":fid,"body":body,"prior_move_active":prior_active,"previous_melee_monitoring":stale_before,"monitoring_after_cast_start":stale_after_start,"contacts":contacts.duplicate(true),"damage_applications":damages.duplicate(),"feedback_dispatches":feedback.size(),"phantom_contacts":phantom.size()})
+	var f=FileAccess.open(output.path_join("projectile_ownership.json"),FileAccess.WRITE);f.store_string(JSON.stringify({"PASS":failures.is_empty(),"failures":failures,"rows":rows,"scope":"public heavy whiff and projectile cast, reconfigured idle defender; ownership regression only. No balance, frame data, AI or accepted terrain rules changed."},"  "));f.close()
+	print("PROJECTILE_OWNERSHIP ","PASS" if failures.is_empty() else "FAIL"," rows=",rows.size()," failures=",failures.size());quit(0 if failures.is_empty() else 1)

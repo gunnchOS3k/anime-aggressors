@@ -1,0 +1,109 @@
+{
+  "intensity_before1012": {
+    "passed": false,
+    "rows": 54,
+    "failures": 108,
+    "source_sha": "89536e8bb352ff8ae5da46c86d372b9280a2f761",
+    "source_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "receipt": "artifacts/v1_closure/spectral_feedback/continuous_1011/intensity_before1012/spectral_intensity.json",
+    "log": "artifacts/v1_closure/spectral_feedback/continuous_1011/intensity_before1012/godot.log",
+    "scope": "54live-setting pressure cases,9fighters/18body models. Declared owned emitters and contact; no gameplay results or artistic approval."
+  },
+  "intensity_fixed1012": {
+    "passed": true,
+    "rows": 54,
+    "failures": 0,
+    "source_sha": "89536e8bb352ff8ae5da46c86d372b9280a2f761",
+    "source_diff_sha256": "57d1bf5d0ec1dc7cc6d7b403854a96b239989157c2994628a8d84f60a501fbe3",
+    "receipt": "artifacts/v1_closure/spectral_feedback/continuous_1011/intensity_fixed1012/spectral_intensity.json",
+    "log": "artifacts/v1_closure/spectral_feedback/continuous_1011/intensity_fixed1012/godot.log",
+    "scope": "54live-setting pressure cases,9fighters/18body models. Declared owned emitters and contact; no gameplay results or artistic approval."
+  },
+  "root_cause": "Shared spectral renderer ignored global vfx_intensity and retained old decoration count after live density changes; body aura already honored it.",
+  "correction": "Full/Balanced/Reduced now drive shared shader density 1/.6/.2; Reduced also caps newdecorations at32. Live changes trim transient decoration first, retain charge/projectile/primary owners. Explicit flash/contrast/density flags remain independent; maxallocated96.",
+  "limits": "If retained ownedemitters/primary confirmations alone exceed32, they retain natural lifecycle instead of being forcibly erased. No damage/AI/frame/collision changes. Native afteraura movie sourcec7 predates this density-only update; no fresh global-intensity native visual proof.",
+  "shipping_files": {
+    "game-godot/scripts/visual/spectral_feedback_renderer.gd": "b5fca23aa5c4b1305efb2222003cacb6e34cf9c1fff1a136962c46a3e6b3ff89"
+  },
+  "owner_approved": false,
+  "fixture_sha256": "0a8a1db631d7a36ea952f6011be137bd0f2c9034a90332379423e1ca8ec8248c",
+  "integration": [
+    {
+      "suite": "SpectralIntensity",
+      "source_sha": "89536e8bb352ff8ae5da46c86d372b9280a2f761",
+      "passed": true,
+      "exit_code": 0,
+      "seconds": 6.71,
+      "reports": [],
+      "stdout": "artifacts/v1_closure/spectral_feedback/continuous_1011/intensity_integration1012/SpectralIntensity/stdout.log",
+      "scope": "isolated source fixture; no human/device/competitive acceptance",
+      "source_diff_sha256": "f80f81086f541bbe41d665edb44b23f2c305603556ed7e398a5ac3cc50c60c14",
+      "source_changes": [
+        "game-godot/scripts/visual/spectral_feedback_renderer.gd",
+        "tools/v1_closure/validate_continuous_combat.py"
+      ]
+    },
+    {
+      "suite": "ExpressionPoolPriority",
+      "source_sha": "89536e8bb352ff8ae5da46c86d372b9280a2f761",
+      "passed": true,
+      "exit_code": 0,
+      "seconds": 5.46,
+      "reports": [],
+      "stdout": "artifacts/v1_closure/spectral_feedback/continuous_1011/intensity_integration1012/ExpressionPoolPriority/stdout.log",
+      "scope": "isolated source fixture; no human/device/competitive acceptance",
+      "source_diff_sha256": "f80f81086f541bbe41d665edb44b23f2c305603556ed7e398a5ac3cc50c60c14",
+      "source_changes": [
+        "game-godot/scripts/visual/spectral_feedback_renderer.gd",
+        "tools/v1_closure/validate_continuous_combat.py"
+      ]
+    },
+    {
+      "suite": "SpectralFeedback",
+      "source_sha": "89536e8bb352ff8ae5da46c86d372b9280a2f761",
+      "passed": true,
+      "exit_code": 0,
+      "seconds": 4.38,
+      "reports": [],
+      "stdout": "artifacts/v1_closure/spectral_feedback/continuous_1011/intensity_integration1012/SpectralFeedback/stdout.log",
+      "scope": "isolated source fixture; no human/device/competitive acceptance",
+      "source_diff_sha256": "f80f81086f541bbe41d665edb44b23f2c305603556ed7e398a5ac3cc50c60c14",
+      "source_changes": [
+        "game-godot/scripts/visual/spectral_feedback_renderer.gd",
+        "tools/v1_closure/validate_continuous_combat.py"
+      ]
+    },
+    {
+      "suite": "ActionLineProduction",
+      "source_sha": "89536e8bb352ff8ae5da46c86d372b9280a2f761",
+      "passed": true,
+      "exit_code": 0,
+      "seconds": 8.23,
+      "reports": [],
+      "stdout": "artifacts/v1_closure/spectral_feedback/continuous_1011/intensity_integration1012/ActionLineProduction/stdout.log",
+      "scope": "isolated source fixture; no human/device/competitive acceptance",
+      "source_diff_sha256": "f80f81086f541bbe41d665edb44b23f2c305603556ed7e398a5ac3cc50c60c14",
+      "source_changes": [
+        "game-godot/scripts/visual/spectral_feedback_renderer.gd",
+        "tools/v1_closure/validate_continuous_combat.py"
+      ]
+    },
+    {
+      "suite": "PersistentEmpowerment",
+      "source_sha": "89536e8bb352ff8ae5da46c86d372b9280a2f761",
+      "passed": true,
+      "exit_code": 0,
+      "seconds": 36.82,
+      "reports": [],
+      "stdout": "artifacts/v1_closure/spectral_feedback/continuous_1011/intensity_integration1012/PersistentEmpowerment/stdout.log",
+      "scope": "isolated source fixture; no human/device/competitive acceptance",
+      "source_diff_sha256": "b218fe186aa03b092dacf5212bff30cee5964a01b0b4b9cdb18077ec25348fa8",
+      "source_changes": [
+        "game-godot/scripts/visual/spectral_feedback_renderer.gd",
+        "tools/v1_closure/build_full_roster_production_review.py",
+        "tools/v1_closure/reconcile_roster_increment.py",
+        "tools/v1_closure/validate_continuous_combat.py"
+      ]
+    }
+  ]
+}

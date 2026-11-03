@@ -124,6 +124,7 @@ def copy_tree(dst: Path) -> None:
         "data",
         "scenes",
         "docs",
+        "shaders",
         "project.godot",
         "icon.svg",
         "icon.png",
@@ -150,16 +151,24 @@ def copy_tree(dst: Path) -> None:
     (dst / "artifacts/engineering_wave011").mkdir(parents=True, exist_ok=True)
 
 
+def _godot_cmd(godot: str, work: Path, script: str) -> list[str]:
+    return [
+        godot,
+        "--headless",
+        "--display-driver",
+        "headless",
+        "--audio-driver",
+        "Dummy",
+        "--path",
+        str(work),
+        "--script",
+        script,
+    ]
+
+
 def run_component(godot: str, work: Path) -> tuple[int, str]:
     proc = subprocess.run(
-        [
-            godot,
-            "--headless",
-            "--path",
-            str(work),
-            "--script",
-            "res://tests/engineering_wave011/Wave011RuntimeTest.gd",
-        ],
+        _godot_cmd(godot, work, "res://tests/engineering_wave011/Wave011RuntimeTest.gd"),
         cwd=work,
         capture_output=True,
         text=True,
@@ -171,14 +180,7 @@ def run_component(godot: str, work: Path) -> tuple[int, str]:
 
 def run_roster(godot: str, work: Path) -> tuple[int, str]:
     proc = subprocess.run(
-        [
-            godot,
-            "--headless",
-            "--path",
-            str(work),
-            "--script",
-            ROSTER_SCRIPT,
-        ],
+        _godot_cmd(godot, work, ROSTER_SCRIPT),
         cwd=work,
         capture_output=True,
         text=True,
@@ -316,7 +318,7 @@ def main() -> int:
         clean.mkdir()
         copy_tree(clean)
         subprocess.run(
-            [godot, "--headless", "--path", str(clean), "--import"],
+            [godot, "--headless", "--display-driver", "headless", "--audio-driver", "Dummy", "--path", str(clean), "--import"],
             cwd=clean,
             capture_output=True,
             text=True,
@@ -327,6 +329,7 @@ def main() -> int:
             parse_ok(clean_log)
             and clean_code == 0
             and "Wave011RuntimeTest PASS" in clean_log
+            and "WAVE011_COMPONENT_RUNTIME_PASS" in clean_log
         )
         results = []
         for mid, rel, old, new in MUTATIONS:
@@ -342,6 +345,8 @@ def main() -> int:
     payload = {
         "schema": "gunnchos.engineering_wave011.mutation.v1",
         "clean_baseline_pass": clean_ok,
+        "clean_exit": clean_code,
+        "clean_log_tail": "\n".join(clean_log.splitlines()[-60:]),
         "WAVE011_MUTATIONS_ATTEMPTED": attempted,
         "WAVE011_MUTATIONS_KILLED": killed,
         "WAVE011_BEHAVIORAL_KILLED": behavioral_killed,

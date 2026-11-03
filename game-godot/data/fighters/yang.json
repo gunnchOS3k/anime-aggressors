@@ -16,11 +16,11 @@
   "damageTakenMult": 1,
   "damageDealtMult": 1,
   "shieldHealthMult": 1,
-  "signatureMove": "Cinder Rush",
-  "combatTag": "burn_rushdown",
-  "defaultSkin": "procedural_final_ember-vale",
-  "animationManifestPath": "res://data/fighters/ember-vale_animations.json",
-  "moveListPath": "res://data/moves/ember-vale.json",
+  "signatureMove": "Perfect Definition",
+  "combatTag": "cosmic_definition",
+  "defaultSkin": "collectible_v1_yang",
+  "animationManifestPath": "res://data/fighters/yang_animations.json",
+  "moveListPath": "res://data/moves/yang.json",
   "hitHurtProfile": {
     "hurtboxWidth": 40,
     "hurtboxHeight": 48,
@@ -32,20 +32,20 @@
     "stunMult": 1
   },
   "cpuBehaviorTags": [
-    "rushdown",
-    "approach"
+    "control",
+    "projectile",
+    "shield"
   ],
   "productionStatus": "TUNING_CANDIDATE",
   "modelTier": "original_rigged_procedural_final_3d",
-  "portraitPlaceholder": "res://assets/ui/placeholders/fighter_ember-vale.svg",
-  "modelPath": "res://assets/characters/procedural_final/ember-vale.glb",
+  "modelPath": "res://assets/characters/collectible_v1/yang/male/BASE.glb",
   "authorship": {
     "status": "TUNING_CANDIDATE",
     "note": "Numeric baselines intentionally not owner-approved; do not treat as balance canon."
   },
-  "balancePath": "res://data/balance/ember-vale.json",
+  "balancePath": "res://data/balance/yang.json",
   "game001": {
-    "identity_depth": "PASS_DATA",
+    "identity_depth": "CANDIDATE_RUNTIME_NOT_ACCEPTED",
     "h2h_string_count": 3,
     "balance_schema": "game001_fighter_balance/v1"
   },
@@ -70,5 +70,6 @@
     "male",
     "female"
   ],
-  "unlock_rule": "seven_gray_routes_or_dev_override"
+  "unlock_rule": "seven_gray_routes_or_dev_override",
+  "candidate_kit": true
 }

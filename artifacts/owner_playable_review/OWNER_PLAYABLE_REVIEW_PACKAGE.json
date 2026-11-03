@@ -1,0 +1,66 @@
+{
+  "schema": "anime_owner_playable_review_package/v1",
+  "title": "Anime Aggressors — Owner Playable Review Package",
+  "branch": "cursor/continuation-isolated-combat-20261027",
+  "umbrella": "TRIALS_OF_CONVERGENCE + roster/story/rosamere continuation",
+  "generatedAt": "2026-10-29T19:00:00Z",
+  "rtm": "artifacts/cursor_continuation/rtm/ANIME_REQUIREMENTS_TO_EVIDENCE_MATRIX.json",
+  "native_trials_review": "artifacts/cursor_continuation/trials_native_review/NATIVE_PLAYABLE_REVIEW_PACKAGE.json",
+  "gates": {
+    "CURSOR_COMPLETE": false,
+    "HUMAN_ART": false,
+    "HUMAN_ART_APPROVED": false,
+    "RC2_READY": false,
+    "V1_0_0_RELEASE_AUTHORIZED": false,
+    "SHIPPING_ROLLBACK_ENABLED": false
+  },
+  "preserved": {
+    "fighters": 10,
+    "rosamere_three_forms": true,
+    "stages": true,
+    "campaign": true,
+    "bodyvariant_ci_fix": true
+  },
+  "playableLoop": [
+    "Main menu → Versus (confirm Unbound modifiers cleared)",
+    "Character select browse 10 fighters",
+    "Training: Rosamere Familiar / First Bloom (spoiler-safe)",
+    "Story encounter resume once (save authority)",
+    "Trials Hub → each of 6 modes → Enter Live Shared Combat",
+    "Resonance: hits on Impact Dummy → bat → distance (REAL_PLAYER only if owned hits)",
+    "Flagline: 2v2 logical actors; core contest; note BattleScene still 2 bodies",
+    "Prism: move/attack paints tiles (markers beyond color)",
+    "Riftline: lane + attack fire vs Fracture Echoes",
+    "Echoes: attack sim bosses — never canonical cosmic defeat",
+    "Unbound Colossus: supers/CDs/colossus scaffolds; exit Versus clears modifiers"
+  ],
+  "modesDeepened": {
+    "fractured_accord": "multi_actor_depth + independent CPU fill beyond 2 battle slots (honest)",
+    "convergence_unbound": "colossus step_rigs / scale-aware overlap / live hit scaffold",
+    "prism_weave": "world-position paint + attack burst + a11y markers",
+    "riftline_defense": "dual-seat live fire + player-owned echo hit path",
+    "echoes_gauntlet": "player-owned boss damage + live HUD honesty",
+    "resonance_trial": "authored dummy preserved (prior deepen)"
+  },
+  "ownerReviewChecklist": [
+    "Confirm RTM statuses — no CURSOR_COMPLETE claim",
+    "Confirm SHIPPING_ROLLBACK_ENABLED false in Trials overlay / Unbound",
+    "Confirm Rosamere still exactly 3 forms in Training / Story gates",
+    "Play Flagline and observe logical 4 actors without claiming 4 human bodies",
+    "Play Unbound Colossus and confirm Versus clears modifiers after exit",
+    "Do not treat scaffolds as HUMAN_ART / RC2 / V1"
+  ],
+  "blockers": [
+    "HUMAN_ART / Codex meshes + territory art",
+    "BattleScene still 2 fighter slots",
+    "Device playtest outstanding",
+    "Story owner sign-off outstanding",
+    "No commercial V1 / RC2 authorization"
+  ],
+  "next": [
+    "Owner digital playthrough using this checklist",
+    "Keep Trials CI green after deepen FF",
+    "Codex art for Resonance dummy + Flagline territory",
+    "Keep HUMAN_ART / RC2 / V1 / SHIPPING_ROLLBACK false"
+  ]
+}

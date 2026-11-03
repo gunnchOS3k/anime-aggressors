@@ -76,6 +76,11 @@ custom_minimum_size = Vector2(280, 56)
 layout_mode = 2
 text = "Challenges"
 
+[node name="Trials" type="Button" parent="Scroll/VBox"]
+custom_minimum_size = Vector2(280, 56)
+layout_mode = 2
+text = "Trials of Convergence"
+
 [node name="OnlineHub" type="Button" parent="Scroll/VBox"]
 custom_minimum_size = Vector2(280, 56)
 layout_mode = 2
@@ -103,5 +108,6 @@ horizontal_alignment = 1
 [connection signal="pressed" from="Scroll/VBox/Team" to="." method="_on_team_pressed"]
 [connection signal="pressed" from="Scroll/VBox/Hazards" to="." method="_on_hazards_pressed"]
 [connection signal="pressed" from="Scroll/VBox/Challenges" to="." method="_on_challenges_pressed"]
+[connection signal="pressed" from="Scroll/VBox/Trials" to="." method="_on_trials_pressed"]
 [connection signal="pressed" from="Scroll/VBox/OnlineHub" to="." method="_on_online_pressed"]
 [connection signal="pressed" from="Scroll/VBox/Tournament" to="." method="_on_tournament_pressed"]

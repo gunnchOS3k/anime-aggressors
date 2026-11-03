@@ -8,6 +8,11 @@ const FORM_AWAKENED_BUILD := "AWAKENED_BUILD"
 const FORM_ASCENDED := "ASCENDED"
 
 const LADDER := [FORM_BASE, FORM_AWAKENED_BUILD, FORM_ASCENDED]
+const _StateAuthority = preload("res://scripts/combat/form_state_authority.gd")
+
+
+static func describe_state(fighter_id: String, state: String) -> Dictionary:
+	return _StateAuthority.describe(fighter_id, state, load_forms(fighter_id))
 
 
 static func load_forms(fighter_id: String) -> Dictionary:

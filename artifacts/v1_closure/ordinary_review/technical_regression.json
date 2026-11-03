@@ -1,0 +1,100 @@
+{
+  "tests": [
+    {
+      "name": "combat_activation",
+      "ok": true,
+      "failures": [],
+      "source_sha": "d0d2bb09f3e44f4cd042fa647a0c7890ae1f1059",
+      "scope": "Staged direct active callbacks, real hit/block feedback, shield release and queued-action locks; corrected fixture controls. Verbose run uses the same committed test bytes.",
+      "report": "artifacts/v1_closure/ordinary_review/regression_combat/passed_before_targeting.json",
+      "report_sha256": "d8625b44ba4a4b2696f78085871508d2bbd438362cca0828ac79edb1315e2ded",
+      "log": "artifacts/v1_closure/ordinary_review/regression_combat/verbose.log",
+      "log_sha256": "bf366ff83bdc490cf94f7d832c8564653717b0e1ec0232c741a49fddf2dd8ad4",
+      "shutdown_warnings_in_log": false,
+      "announcer_warning_in_log": false
+    },
+    {
+      "name": "full_campaign",
+      "ok": true,
+      "failures": [],
+      "source_sha": "37b0fa7b8cfc1928dd4e84438aa904362551de38",
+      "scope": "STAGED source automation; protected player, positioned contacts and KOs; all 145 nodes plus semantic save negatives, replay past state and receipt alias regression.",
+      "report": "artifacts/v1_closure/full_campaign_runtime_evidence.json",
+      "report_sha256": "5d8759a9b0004243a10163a24b4de3d97473abcbd8763ecebe84a67df214e03d",
+      "log": "artifacts/v1_closure/ordinary_review/regression_full03/godot.log",
+      "log_sha256": "89adb561e993ef6130435026e3ef653673f9ed0217bafa11520d4144321d26d2",
+      "shutdown_warnings_in_log": false,
+      "announcer_warning_in_log": false
+    },
+    {
+      "name": "fresh_process_watch",
+      "ok": true,
+      "failures": [],
+      "source_sha": "79159054519568ed9c149eb982bb91000e636f16",
+      "scope": "Loads signed staged fixture in fresh process; all seven watch modes never alter Story progress; earned Gray model preserves move authority.",
+      "report": "artifacts/v1_closure/campaign_restart_evidence.json",
+      "report_sha256": "eca613928bf581daa19717a839221e2a8353ac32eeb4049819969f8635ed5fa6",
+      "log": "artifacts/v1_closure/ordinary_review/regression_restart/godot.log",
+      "log_sha256": "6dcb4beaf3bfe8fe9e8b6b2bef034841dc2ae0ddd7452df15748a0df4903c7b7",
+      "shutdown_warnings_in_log": false,
+      "announcer_warning_in_log": false
+    },
+    {
+      "name": "roster_models",
+      "ok": true,
+      "failures": [],
+      "source_sha": "79159054519568ed9c149eb982bb91000e636f16",
+      "scope": "STAGED AA_V1_ROUTE_REVIEW=1; 18 male/female BASE presentations through select/stage/battle/results; normal inputs plus explicit opponent/contact/KO fixtures.",
+      "report": "artifacts/v1_closure/shipping_roster_evidence.json",
+      "report_sha256": "05b1831f6491566c56d3dee74346098eb9e60a0704a9ff3817a3466732b53186",
+      "log": "artifacts/v1_closure/ordinary_review/regression_roster/godot.log",
+      "log_sha256": "5ae236dd7477cc1c695939ea897edf7f6bd5e980b50c936cfa979a1d75f4cb46",
+      "shutdown_warnings_in_log": false,
+      "announcer_warning_in_log": true
+    },
+    {
+      "name": "seven_losses",
+      "ok": true,
+      "failures": [],
+      "source_sha": "79159054519568ed9c149eb982bb91000e636f16",
+      "scope": "STAGED signed checkpoint slices, seven unique approved actor/camera/live-control paths; no human cinematic acceptance.",
+      "report": "artifacts/v1_closure/first_loss_framing_evidence.json",
+      "report_sha256": "ab74a9f07baf1fc041903adace761c4ee711325a4a22c1d191b2e63bf71780fc",
+      "log": "artifacts/v1_closure/ordinary_review/regression_framing/godot.log",
+      "log_sha256": "1ef1b49f05ac8f43bab3957a064f1ca11c9abdee71b85e30c85363581670a383",
+      "shutdown_warnings_in_log": false,
+      "announcer_warning_in_log": false
+    },
+    {
+      "name": "final_cosmic_targeting_combat",
+      "ok": true,
+      "failures": [],
+      "source_sha": "83bab0825230154761b39e1a7ff63eeacf66de8d",
+      "report": "artifacts/v1_closure/combat_activation_evidence.json",
+      "report_sha256": "d8625b44ba4a4b2696f78085871508d2bbd438362cca0828ac79edb1315e2ded",
+      "log": "regression_targeting/godot.log",
+      "scope": "Combat activation, release/action-lock regressions plus immune Story target exclusion and normal competitive target preservation."
+    }
+  ],
+  "all_assertions_pass": true,
+  "ordinary_kaia": "kaia_objective_matrix.json",
+  "ordinary_restart": "render_83_kaia/ordinary_input_evidence.json",
+  "canon_validator": "seven unique approved First Loss identities; PASS",
+  "graph_validator": "145 declared nodes; PASS",
+  "known_warnings": [
+    "Verbose headless audio shutdown retained AudioStreamWAV/AudioStreamPlaybackWAV resources, not failed gameplay assertions. Engine diagnostics can appear on stderr after log file closure.",
+    "Headless speech unavailable; Yin/Yang announcer-name data unknown_fighter. Final voice/announcer acceptance remains pending."
+  ],
+  "failed_fixture_history": [
+    "regression_combat/failed_setup_evidence.json",
+    "regression_full/failed_pulse_evidence.json",
+    "regression_full02/failed_guard_fixture_evidence.json"
+  ],
+  "evidence_class": "STAGED_SOURCE_REGRESSION, separately labeled ordinary inputs elsewhere",
+  "V1_AUTOMATED_READY": false,
+  "all_human_gates": false,
+  "ordinary_kaia_current_source": "kaia_targeting_final_resume/ordinary_input_evidence.json",
+  "seeded_convergence_current_source": "convergence_targeting/ordinary_input_evidence.json",
+  "later_changes_scope": "Full staged sweep at 37b0 source; later dialogue replay, objective feedback and cosmic target selection covered by current normal-input run, target regression and renderer review.",
+  "ordinary_restart_note": "Fresh renderer process loaded all 20 earned Kaia nodes. Replay changed selected_route only; earned progress, receipts and unlocks unchanged."
+}

@@ -48,6 +48,8 @@
 |-------|--------|-----|
 | Attack | Neutral / forward / up / down tilt, dash attack | Neutral / forward / back / up / down aerial |
 | Special + direction | Neutral / side / up / down special | Same |
+| Attack + Special together (below full aura) | Heavy attack | Uses normal aerial / special resolution |
+| Attack at full aura | Super / aura burst | Super / aura burst |
 | Shield | Hold shield | — |
 | Dodge | Spot dodge; left/right + dodge = roll | Air dodge |
 | Grab | Grab; direction + attack while grabbing = throw | — |

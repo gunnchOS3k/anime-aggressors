@@ -42,6 +42,19 @@ static func hurt_size_from_profile(profile: Dictionary) -> Vector2:
 	)
 
 
+static func grab_height_overlaps(actor_transform: Transform2D, boxes: Array, hurt_transform: Transform2D, hurt_rect: Rect2) -> bool:
+	# Geometry-only query; acquisition, horizontal range and gameplay ownership
+	# remain in Fighter. Use the authored vertical interval and live hurt shape.
+	if boxes.is_empty(): return false
+	var box: Dictionary = boxes[0]
+	var height := float(box.get("height", 0.0))
+	if height <= 0.0: return false
+	var authored := Rect2(Vector2(0, float(box.get("offset_y", 0.0)) - height * .5), Vector2(1, height))
+	var reach: Rect2 = actor_transform * authored
+	var hurt: Rect2 = hurt_transform * hurt_rect
+	return reach.position.y <= hurt.end.y and hurt.position.y <= reach.end.y
+
+
 static func collision_size_from_profile(profile: Dictionary) -> Vector2:
 	var hurt := hurt_size_from_profile(profile)
 	# Capsule-ish rect slightly smaller than hurt for forgiveness.

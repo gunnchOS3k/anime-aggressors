@@ -1,0 +1,115 @@
+{
+  "schema": "alternate_reader_requalification.v1",
+  "recorded": "2026-10-25T15:41:07.038184-05:00",
+  "integration_branch": "integration/v1-preserved-candidate-20261025",
+  "source_checkpoint_before_final_correction": "b84b9d79cf012adbf02faa6a6e872fa0173ff16d",
+  "reader": {
+    "vendor": "19ff",
+    "product": "0764",
+    "name": "Generic USB Storage",
+    "registry": 4295064642,
+    "old_Apple_reader_faults_used_as_new_failures": false
+  },
+  "bounded_idle_observation": {
+    "status": "PASS_15_MINUTE_BOUNDED_OBSERVATION",
+    "started": "2026-10-25T15:18:01.308841-05:00",
+    "seconds": 907.2735121250007,
+    "samples": 58,
+    "faults": [],
+    "permanent_reliability_claim": false
+  },
+  "later_read_phase": {
+    "status": "STOPPED_NEW_READER_PIPE_STALL",
+    "faults": [
+      "2026-10-25 15:35:29.641 E  kernel[0:513] (IOUSBHostFamily) AppleUSBXHCIRequest: AppleUSBIORequest::complete: device 1 (USB Storage@00100000) endpoint 0x81: status 0xe0005000 (pipe stalled): 0 bytes transferred",
+      "2026-10-25 15:35:29.827 E  kernel[0:513] (IOUSBHostFamily) AppleUSBXHCIRequest: AppleUSBIORequest::complete: device 1 (USB Storage@00100000) endpoint 0x81: status 0xe0005000 (pipe stalled): 0 bytes transferred",
+      "2026-10-25 15:35:29.941 E  kernel[0:513] (IOUSBHostFamily) AppleUSBXHCIRequest: AppleUSBIORequest::complete: device 1 (USB Storage@00100000) endpoint 0x81: status 0xe0005000 (pipe stalled): 0 bytes transferred",
+      "2026-10-25 15:35:29.988 E  kernel[0:513] (IOUSBHostFamily) AppleUSBXHCIRequest: AppleUSBIORequest::complete: device 1 (USB Storage@00100000) endpoint 0x81: status 0xe0005000 (pipe stalled): 0 bytes transferred",
+      "2026-10-25 15:35:30.101 E  kernel[0:513] (IOUSBHostFamily) AppleUSBXHCIRequest: AppleUSBIORequest::complete: device 1 (USB Storage@00100000) endpoint 0x81: status 0xe0005000 (pipe stalled): 0 bytes transferred",
+      "2026-10-25 15:35:30.160 E  kernel[0:513] (IOUSBHostFamily) AppleUSBXHCIRequest: AppleUSBIORequest::complete: device 1 (USB Storage@00100000) endpoint 0x81: status 0xe0005000 (pipe stalled): 0 bytes transferred",
+      "2026-10-25 15:35:30.339 E  kernel[0:513] (IOUSBHostFamily) AppleUSBXHCIRequest: AppleUSBIORequest::complete: device 1 (USB Storage@00100000) endpoint 0x81: status 0xe0005000 (pipe stalled): 0 bytes transferred",
+      "2026-10-25 15:35:30.347 E  kernel[0:513] (IOUSBHostFamily) AppleUSBXHCIRequest: AppleUSBIORequest::complete: device 1 (USB Storage@00100000) endpoint 0x81: status 0xe0005000 (pipe stalled): 0 bytes transferred"
+    ],
+    "hardware_disconnect_observed": false,
+    "data_corruption_established": false,
+    "cause": "UNDETERMINED; no hardware/driver/component attribution"
+  },
+  "current_mount_and_memory_snapshot": {
+    "checked": "2026-10-25T15:38:12.591087-05:00",
+    "internal_free_bytes": 21088882688,
+    "mounts": [
+      {
+        "path": "/Volumes/gunnchOS-Archives",
+        "uuid": "9C4EB36E-2864-42F8-BD0B-A4F67EBC7852",
+        "device": "disk5s1",
+        "ownership": false,
+        "free_bytes": 359022698496
+      },
+      {
+        "path": "/Volumes/gunnchos-private-art",
+        "uuid": "7264122E-693D-4719-A42D-F1FAA488C119",
+        "device": "disk7s1",
+        "ownership": true,
+        "free_bytes": 62937260032
+      }
+    ],
+    "memory": "The system has 8589934592 (524288 pages with a page size of 16384).\nSystem-wide memory free percentage: 36%",
+    "swap": "vm.swapusage: total = 9216.00M  used = 8464.19M  free = 751.81M  (encrypted)",
+    "fresh_faults": [
+      "2026-10-25 15:35:29.641 E  kernel[0:513] (IOUSBHostFamily) AppleUSBXHCIRequest: AppleUSBIORequest::complete: device 1 (USB Storage@00100000) endpoint 0x81: status 0xe0005000 (pipe stalled): 0 bytes transferred",
+      "2026-10-25 15:35:29.827 E  kernel[0:513] (IOUSBHostFamily) AppleUSBXHCIRequest: AppleUSBIORequest::complete: device 1 (USB Storage@00100000) endpoint 0x81: status 0xe0005000 (pipe stalled): 0 bytes transferred",
+      "2026-10-25 15:35:29.941 E  kernel[0:513] (IOUSBHostFamily) AppleUSBXHCIRequest: AppleUSBIORequest::complete: device 1 (USB Storage@00100000) endpoint 0x81: status 0xe0005000 (pipe stalled): 0 bytes transferred",
+      "2026-10-25 15:35:29.988 E  kernel[0:513] (IOUSBHostFamily) AppleUSBXHCIRequest: AppleUSBIORequest::complete: device 1 (USB Storage@00100000) endpoint 0x81: status 0xe0005000 (pipe stalled): 0 bytes transferred",
+      "2026-10-25 15:35:30.101 E  kernel[0:513] (IOUSBHostFamily) AppleUSBXHCIRequest: AppleUSBIORequest::complete: device 1 (USB Storage@00100000) endpoint 0x81: status 0xe0005000 (pipe stalled): 0 bytes transferred",
+      "2026-10-25 15:35:30.160 E  kernel[0:513] (IOUSBHostFamily) AppleUSBXHCIRequest: AppleUSBIORequest::complete: device 1 (USB Storage@00100000) endpoint 0x81: status 0xe0005000 (pipe stalled): 0 bytes transferred",
+      "2026-10-25 15:35:30.339 E  kernel[0:513] (IOUSBHostFamily) AppleUSBXHCIRequest: AppleUSBIORequest::complete: device 1 (USB Storage@00100000) endpoint 0x81: status 0xe0005000 (pipe stalled): 0 bytes transferred",
+      "2026-10-25 15:35:30.347 E  kernel[0:513] (IOUSBHostFamily) AppleUSBXHCIRequest: AppleUSBIORequest::complete: device 1 (USB Storage@00100000) endpoint 0x81: status 0xe0005000 (pipe stalled): 0 bytes transferred"
+    ],
+    "heavy_processes": [],
+    "private_access": "STOPPED_NEW_READER_STALL; no further source/media integrity reads or private writes"
+  },
+  "integrity": {
+    "handoff_sha256_verified": "115fde2449ce1022abbf7ecb6aba98e75105cd2baacbaa5d869d5fe0af16a6de",
+    "all36_export_phase_metadata_records_match_preserved_baker_formula": true,
+    "full_original_Blender_GLB_media_hash_pass": false,
+    "reason": "Interrupted by fresh alternate-reader bulk-IN stalls; no full integrity pass inferred from partial reads",
+    "official_Blender_audit": "First preflight reached asset validation after verify_audit returned; no Blender bake executed; full production preflight did not complete"
+  },
+  "resource_forecast": {
+    "internal_available_bytes": 21088882688,
+    "internal_available_GiB": 19.640552520751953,
+    "movie720_required_bytes": 21231566848,
+    "movie720_deficit_bytes": 142684160,
+    "nonrecording_native_required_bytes": 21042823168,
+    "nonrecording_native_capacity_only_pass": true,
+    "private_production_allowed": false,
+    "why": "Transport gate failed even though a nonrecording native capacity forecast fits"
+  },
+  "source_changes": [
+    "Preserved-handoff adapter for all18fighter/body identities and24canonical move records each; connects only already-produced jab/heavy clips",
+    "Authored source range-to-catalog phase mapping corrected for Yin/Yang without altering gameplay values",
+    "Strict bone/root/event/stretch and malformed/duplicate body metadata boundaries",
+    "Owned native process environment callback stops on mount/device/transport loss; failed guard now checked BEFORE opening a source file",
+    "Parameterized existing ordinary-input BattleScene review for canonical roster identities"
+  ],
+  "validation": {
+    "Python_binding_tests": 5,
+    "recording_guard_tests": 13,
+    "engine_clip_ownership_and_metadata_assertions": 11,
+    "new_original_art_files": 0,
+    "new_GLBs": 0,
+    "new_private_BattleScene_runs": 0,
+    "new_gameplay_movies": 0
+  },
+  "remaining": [
+    "Actual original GLB-to-BattleScene import and visible animation acceptance remain NOT EXECUTED",
+    "Native KO/victory/rematch and paired runtime contact remain unverified",
+    "Sole/floor and contact silhouettes, full24move original acting, elemental/form/Story/LAN/device completion remain pending"
+  ],
+  "next_action": "Stabilize the existing transport under representative read load; then NEW qualification plus full hash/resource preflight. Do not reuse the idle PASS alone, remount repeatedly, bypass stalls, or regenerate existing art.",
+  "no_remount_repair_cleanup_public_art_paid_run": true,
+  "HUMAN_ART_APPROVED": false,
+  "RUNTIME_PAIRED_CONTACT_VERIFIED": false,
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false
+}

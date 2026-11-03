@@ -82,6 +82,8 @@ export class PartyRoomSession {
   private joinTimestamps: number[] = [];
   private inputTimestamps = new Map<string, number[]>();
   private lastSequence = new Map<string, number>();
+  private pendingInputs: ControllerInput[] = [];
+  private servedInputs: unknown[] | null = null;
   private hostTick = 0;
   private result: Record<string, unknown> | null = null;
 
@@ -271,9 +273,13 @@ export class PartyRoomSession {
     return { ok: true };
   }
 
-  startMatch(ownerToken: string): { ok: boolean; reason?: string } {
+  isOwnerToken(token: unknown): boolean {
     const owner = this.room.participants.find((p) => p.id === this.room.ownerId);
-    if (!owner || owner.token !== ownerToken) return { ok: false, reason: "owner_only" };
+    return typeof token === "string" && owner !== undefined && owner.token === token;
+  }
+
+  startMatch(ownerToken: string): { ok: boolean; reason?: string } {
+    if (!this.isOwnerToken(ownerToken)) return { ok: false, reason: "owner_only" };
     const seated = this.room.seats.filter((s) => s.state === "READY" || s.state === "CONNECTED");
     const ready = this.room.seats.filter((s) => s.state === "READY");
     if (ready.length < MIN_PLAYER_SEATS) return { ok: false, reason: "need_min_ready" };
@@ -291,6 +297,9 @@ export class PartyRoomSession {
     if (!p) return;
     p.connected = false;
     p.lastSeenMs = nowMs;
+    // Retire commands still waiting for a host tick; already-served frames and
+    // other participants' inputs keep their original authority.
+    this.pendingInputs = this.pendingInputs.filter((input) => input.participantId !== p.id);
     for (const seat of this.room.seats) {
       if (seat.participantId !== participantId) continue;
       if (seat.state === "CONNECTED" || seat.state === "READY" || seat.state === "JOINING") {
@@ -330,6 +339,9 @@ export class PartyRoomSession {
     if (p.seatIndex !== input.seatIndex) {
       return { seatIndex: input.seatIndex, sequence: input.sequence, accepted: false, reason: "wrong_seat_input_rejected" };
     }
+    if (!p.connected) {
+      return { seatIndex: input.seatIndex, sequence: input.sequence, accepted: false, reason: "player_disconnected" };
+    }
 
     const key = p.id;
     const stamps = (this.inputTimestamps.get(key) ?? []).filter((t) => nowMs - t < 1000);
@@ -346,7 +358,18 @@ export class PartyRoomSession {
     }
     this.lastSequence.set(key, input.sequence);
     this.hostTick = Math.max(this.hostTick, input.tick);
+    this.pendingInputs.push(input);
     return { seatIndex: input.seatIndex, sequence: input.sequence, accepted: true };
+  }
+
+  drainPendingInputs(): ControllerInput[] {
+    const batch = this.pendingInputs;
+    this.pendingInputs = [];
+    return batch;
+  }
+
+  noteServedInputs(inputs: unknown[]): void {
+    this.servedInputs = inputs;
   }
 
   advanceHostTick(): number {
@@ -364,13 +387,18 @@ export class PartyRoomSession {
   }
 
   rematch(ownerToken: string): { ok: boolean; reason?: string } {
-    const owner = this.room.participants.find((p) => p.id === this.room.ownerId);
-    if (!owner || owner.token !== ownerToken) return { ok: false, reason: "owner_only" };
+    if (!this.isOwnerToken(ownerToken)) return { ok: false, reason: "owner_only" };
     for (const seat of this.room.seats) {
       if (seat.participantId) seat.state = "CONNECTED";
     }
     this.result = null;
     this.hostTick = 0;
+    this.pendingInputs = [];
+    this.servedInputs = null;
+    // Sequence and rate windows belong to the completed round. A controller
+    // may restart its sequence on rematch; reconnect within a round must not.
+    this.lastSequence.clear();
+    this.inputTimestamps.clear();
     this.room.phase = "lobby";
     return { ok: true };
   }
@@ -391,7 +419,7 @@ export class PartyRoomSession {
           eliminated: s.state === "ELIMINATED_OR_FINISHED",
           identity: s.identity,
         })),
-      world: {},
+      world: this.servedInputs ? { inputs: this.servedInputs } : {},
       events: [],
       result: this.result,
     };

@@ -1,0 +1,83 @@
+{
+  "source_head": "8079ac6e16fec6e85b7230945034d3592f485505",
+  "workflow": "https://github.com/gunnchOS3k/anime-aggressors/actions/runs/40579975076",
+  "godot_version": "4.7.1.stable.official.a13da4feb",
+  "PASS": true,
+  "checks": 24,
+  "failures": [],
+  "source_sha256": {
+    "game-godot/scripts/net/experimental/flat_combat_trial.gd": "1ae216ba18b7cd2d6ac1471fd0bcc5fa7f27e014fc03e356eb27bd8d2392f847",
+    "game-godot/tests/integration/FlatCombatReplay.gd": "ac527e7a1f648d5ae79c9e269ce85f38acea95d177da028c2750586be36bfb27",
+    "tools/integration/run_lan_battle_ci.py": "a5af41b3f098d18e159500d693ef5ed34d336047ebe71d4d073ec59bf60edf00"
+  },
+  "strategy": "EXPERIMENTAL_GAME_OWNED_FLAT_GROUND_ONLY",
+  "shipping_backend_enabled": false,
+  "native_CharacterBody_cache_probe": {
+    "declared_staged_defect_probe": true,
+    "floor_after_airborne_transform": true,
+    "floor_before": true,
+    "geometric_bottom": 199.973754882812,
+    "original_transform_reinstated": true,
+    "stage_surface": 280.0
+  },
+  "approach_steps": 119,
+  "snapshot_frame": 131,
+  "contact_frame": 136,
+  "move_frame": 5,
+  "replay_steps": 28,
+  "same_input_entire_candidate_snapshot_agreement": true,
+  "changed_input": {
+    "frame": 134,
+    "count": 1,
+    "control": "Juno Shield released for one frame; unchanged following input presses again",
+    "before": "shield",
+    "after": "parry",
+    "guard_age_frames": 0,
+    "baseline_shield_health": 44.9000000000004,
+    "corrected_shield_health": 46.3333333333338
+  },
+  "retired_intents": 1,
+  "runtime_diagnostics": [],
+  "preserved_import_diagnostic_count": 192,
+  "negative_runs": [
+    {
+      "run": 40579137718,
+      "source": "da163ffd24ccd516d73163a8b1972f73b78a7f58",
+      "cause": "SceneTree test preloaded GameState-dependent production script before autoload registration; fixed deferred actual load.",
+      "raw": "outputs/flat_replay_da163ffd"
+    },
+    {
+      "run": 40579593476,
+      "source": "7dd74ea868eb09f230db84d46ca31da6d4e81607",
+      "cause": "Experimental BASE-only gate expected an umbrella literal instead of canonical KAIA_BASE/JUNO_BASE; fixed canonical FormsDoc.default_form comparison.",
+      "raw": "outputs/flat_replay_7dd74ea8"
+    }
+  ],
+  "projectile_component_reuse": {
+    "source": "7dd74ea868eb09f230db84d46ca31da6d4e81607",
+    "workflow": 40579593476,
+    "workflow_overall_pass": false,
+    "component_pass": true,
+    "checks": 451,
+    "body_rows": 18,
+    "failed_other_component": "Trial configuration gate, not projectile history.",
+    "raw": "outputs/flat_replay_7dd74ea8",
+    "production_hashes_unchanged": true
+  },
+  "scope_limits": [
+    "Only the complete experimental grounded jab/shield/Perfect Guard/whiff subset is restored. No shipping CharacterBody/native world restoration.",
+    "Same official Godot build replay, not accepted cross-platform determinism or actual late-packet LAN.",
+    "Retires event INTENTS only; no original audiovisual emitters or irreversible progression were executed in the trial.",
+    "Body-hit/launch, jumps, platform edges, slopes, pushboxes, throws, projectiles, forms, shield break, KO/results and full input prediction/resimulation remain unsupported by this alternative.",
+    "Production host-authoritative LAN remains unchanged; component projectile history remains opt-in/off."
+  ],
+  "raw_evidence": {
+    "path": "outputs/flat_replay_8079ac6e",
+    "engine_result_sha256": "798f47b1a8966508eacb4603565f61da0bc1deb3a1afff47811bf281482c4b1d",
+    "workflow_log_sha256": "fd8930edecbcfe9a72a3c831c31d39b3290d6dd8b780602e49d81b83adb4122c"
+  },
+  "HUMAN_ART_APPROVED": false,
+  "RUNTIME_PAIRED_CONTACT_VERIFIED": false,
+  "RC2_READY": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false
+}

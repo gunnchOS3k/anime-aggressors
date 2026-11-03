@@ -1,0 +1,26 @@
+# Authored asset closure — source-specific implementation plan
+
+ANI-03 bounded comparison is COMPLETE; VISUAL_ACCEPTANCE=false. Reuse the existing
+868-frame native AFTER9d291e7b and647matched gameplay codes. No new movie or platform
+export is authorized below18GiB plus temporary allocations. Existing Kaia/Juno
+measurements remain source-bound; no new numerical geometry sweep was performed.
+
+| Affected asset/authority | Causal limitation | Corrective asset work | This increment |
+|---|---|---|---|
+| `game-godot/scripts/fighters/fighter_model_3d.gd`, Camera3D/SubViewport/ModelDisplay framing | The CharacterBody2D origin/collider floor and projected skin do not share a sole plane. The320px viewport, orthographic framing, battle sprite offset and display scale project the current boots35.27pxKaia/38.12pxJuno below support. | Calibrate a per-rig sole reference from weighted skin together with camera framing and contact poses in the actual battle camera. Validate every pose against the unchanged physical floor and hit/hurt regions. A global sprite/model translation is rejected because it moves the hands too. | No transform/scale/collision change. Open. |
+| `art_source/collectible_v1/{kaia-windrow,juno-spark}/{male,female}/candidate.blend`; matching `game-godot/assets/characters/collectible_v1/.../BASE.glb` | Existing feet/Toes bones describe ankle/toe centres, not a dedicated weighted sole-contact control. Rigid boot meshes and the crouch/load poses were authored in rig metres independently from the battle support plane. | Add non-deforming sole references and original full-body support/pivot/landing keys on the preserved rigs. Preserve canonical proportions and bone lengths. Deliver neutral, loaded support, release step, contact and recovery clips with baked sole trajectories; no floating ankle-only fix. | Existing models untouched. Source files available; final coordinated clips not delivered. |
+| `tools/v1_closure/build_combat_choreography.py::make_clip/solve`, `data/animation/combat_choreography` and `combat_performance` | Current analytic arm paths clamp to anatomical reach. At~71pxroot spacing, outer Kaia light/Juno heavy/Kaia heavy still register17.63/12.49/14.86px beyond the visible hand hull. A low contact region and large body projection couple this to the floor discrepancy. | Author move-specific kinetic-chain poses with deliberate support-foot switches, pelvis travel inside the rig, rib/shoulder progression and plausible palm/weapon silhouettes. Preserve resolved startup/active/recovery/cancel times. Test close AND outer poses together; do not stretch arms or expand hitboxes. | Four cosmic rigs get new candidate move clips mapped to their own frame data; no claim of Kaia/Juno outer-range closure. |
+| `tools/v1_closure/build_collectibles.py::skeleton/build_character`, Head-bound Face/Hair cap/Hair sweep meshes in the same Blender sources | Large head/hair geometry and42-degree presentation headings project across the32.4pxgrounded root separation. Hair is predominantly Head-bound; the bounded accessory-follow fallback cannot supply independent authored clearance. | Author contact/defense head and torso angles with intentional silhouette separation; add restrained independent hair/cloth controls/weights where required. Judge complete silhouettes in the unchanged game camera. Any canonical design/projection revision remains a human art decision. | No head/hair shrinking, masking or character translation. Open. |
+| Cosmic `down_special` authored tracks and reaction clips on all4Yin/Yang rigs | Ember-derived specials did not express absorption/construction. The generic low sweep was unsuitable for a counter/panel gesture. | Bake bilateral inward-hand absorption guards and outward two-hand panel construction, and different quiet-versus-fractured-brace reaction keys. Use existing FK/constraint authoring; preserve limb anatomy and live gameplay timing. | IMPLEMENTED as original TUNING_CANDIDATE source keys. No new external motion/audio/model assets; no final visual approval. |
+| Final animation production and review | Shared numerical support/guard tests do not prove weight, striking technique or production acting. Current native guard changes are small and partly occluded. | Animator reviews three-beat anticipation/contact/recovery, VFX-off, grayscale,25%-scale and duplicate-fighter cases using the bibles; export only after safe capacity and review original audio at normal speed. | Human art/animation/feel gates stay false. Existing media retained as evidence of limitations. |
+
+The renderer does not own combat authority. Nothing in this plan changes damage,
+attack rectangles, collision/parry/terrain rules or the seven accepted fighter
+baselines. If plausible authored poses cannot cover the existing floor/contact
+layout, record that exact art/game-design decision instead of another solver patch.
+
+Source authority: `source/ANIME_AGGRESSORS_COMPLETE_CHARACTER_MOVEMENT_ANIMATION_BIBLE_V1.md`,
+`docs/bibles/fighters/{kaia-windrow,juno-spark,yin,yang}.md`, preserved character
+reference renders and existing `continuous_1020/final_contact` source/frame proofs.
+The remaining seven earned routes/Convergence, final Kaia OVA/six variations,
+genuine LAN and physical-platform acceptance remain separate unfinished V1 work.

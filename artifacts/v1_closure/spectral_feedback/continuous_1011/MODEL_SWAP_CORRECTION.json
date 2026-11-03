@@ -1,0 +1,193 @@
+{
+  "ticket": "ANI03-P01-G02",
+  "parent_sha": "2a8106ca00e73ce8d188b9a72661e7c71eb6730a",
+  "source_diff_sha256": "7aac96518b7fea07d7e044762fe50bfd6f5d7db0324c81f38026a24af367856d",
+  "root_cause": "Mesh destruction released per-instance overrides while sibling retiring render instances retained dependent material RIDs. Keeping strong refs to all retiring whole-mesh/overlay/surface overrides until every mesh is freed removes native GLES diagnostics. Controllers/rigs/assets retain original ownership. No diagnostic suppression or shared material mutation.",
+  "primary_context": "https://github.com/godotengine/godot/issues/85817",
+  "tests": [
+    {
+      "label": "material_baseline_1012",
+      "source_manifest": "artifacts/v1_closure/spectral_feedback/continuous_1011/material_baseline_1012/launch_manifest.json",
+      "fixture_assertions_pass": true,
+      "native_null_material_errors": 204,
+      "native_acceptance_pass": false,
+      "model_cases": 54,
+      "script_errors": 0,
+      "results": "artifacts/v1_closure/spectral_feedback/continuous_1011/material_baseline_1012/model_swap_lifecycle.json",
+      "stdout_sha256": "dbc9f98e166622a55937409ea8569a43d11b15dcb228aade97a412dccf2da4f4",
+      "scope": "54native model-only swaps,9fighters x2bodies x3cycles; pixel/material/node ownership, not gameplay or art approval; renderer diagnostics evaluated separately"
+    },
+    {
+      "label": "material_retained_1012",
+      "source_manifest": "artifacts/v1_closure/spectral_feedback/continuous_1011/material_retained_1012/launch_manifest.json",
+      "fixture_assertions_pass": true,
+      "native_null_material_errors": 0,
+      "native_acceptance_pass": true,
+      "model_cases": 54,
+      "script_errors": 0,
+      "results": "artifacts/v1_closure/spectral_feedback/continuous_1011/material_retained_1012/model_swap_lifecycle.json",
+      "stdout_sha256": "bdce3bce23b1190483a56611934220021c7584b0c44eb3f44e20631b951a8b32",
+      "scope": "54native model-only swaps,9fighters x2bodies x3cycles; pixel/material/node ownership, not gameplay or art approval; renderer diagnostics evaluated separately"
+    },
+    {
+      "label": "material_dispose_before_1012",
+      "source_manifest": "artifacts/v1_closure/spectral_feedback/continuous_1011/material_dispose_before_1012/launch_manifest.json",
+      "fixture_assertions_pass": true,
+      "native_null_material_errors": 0,
+      "native_acceptance_pass": true,
+      "model_cases": 18,
+      "script_errors": 0,
+      "results": "artifacts/v1_closure/spectral_feedback/continuous_1011/material_dispose_before_1012/model_swap_lifecycle.json",
+      "stdout_sha256": "6cb1bfe7640cdff99589b16f721ad3d1c7ed3a1dde548b84086dcb9a4e79b237",
+      "scope": "54native model-only swaps,9fighters x2bodies x3cycles; pixel/material/node ownership, not gameplay or art approval; renderer diagnostics evaluated separately"
+    }
+  ],
+  "models": [
+    {
+      "fighter": "ember-vale",
+      "body": "male",
+      "node_growth_after_warmup": 0,
+      "resource_growth_after_warmup": 0.0,
+      "static_bytes_delta_after_warmup": 1241500.0,
+      "native_pixels": 3378
+    },
+    {
+      "fighter": "ember-vale",
+      "body": "female",
+      "node_growth_after_warmup": 0,
+      "resource_growth_after_warmup": 0.0,
+      "static_bytes_delta_after_warmup": 1227620.0,
+      "native_pixels": 3467
+    },
+    {
+      "fighter": "rook-ironside",
+      "body": "male",
+      "node_growth_after_warmup": 0,
+      "resource_growth_after_warmup": 0.0,
+      "static_bytes_delta_after_warmup": 1233348.0,
+      "native_pixels": 4237
+    },
+    {
+      "fighter": "rook-ironside",
+      "body": "female",
+      "node_growth_after_warmup": 0,
+      "resource_growth_after_warmup": 0.0,
+      "static_bytes_delta_after_warmup": 1233432.0,
+      "native_pixels": 4647
+    },
+    {
+      "fighter": "juno-spark",
+      "body": "male",
+      "node_growth_after_warmup": 0,
+      "resource_growth_after_warmup": 0.0,
+      "static_bytes_delta_after_warmup": 1226596.0,
+      "native_pixels": 3080
+    },
+    {
+      "fighter": "juno-spark",
+      "body": "female",
+      "node_growth_after_warmup": 0,
+      "resource_growth_after_warmup": 0.0,
+      "static_bytes_delta_after_warmup": 1232916.0,
+      "native_pixels": 2883
+    },
+    {
+      "fighter": "kaia-windrow",
+      "body": "male",
+      "node_growth_after_warmup": 0,
+      "resource_growth_after_warmup": 0.0,
+      "static_bytes_delta_after_warmup": 1239876.0,
+      "native_pixels": 4192
+    },
+    {
+      "fighter": "kaia-windrow",
+      "body": "female",
+      "node_growth_after_warmup": 0,
+      "resource_growth_after_warmup": 0.0,
+      "static_bytes_delta_after_warmup": 1233500.0,
+      "native_pixels": 5081
+    },
+    {
+      "fighter": "nix-calder",
+      "body": "male",
+      "node_growth_after_warmup": 0,
+      "resource_growth_after_warmup": 0.0,
+      "static_bytes_delta_after_warmup": 1225152.0,
+      "native_pixels": 3551
+    },
+    {
+      "fighter": "nix-calder",
+      "body": "female",
+      "node_growth_after_warmup": 0,
+      "resource_growth_after_warmup": 0.0,
+      "static_bytes_delta_after_warmup": 1231336.0,
+      "native_pixels": 4139
+    },
+    {
+      "fighter": "orion-vell",
+      "body": "male",
+      "node_growth_after_warmup": 0,
+      "resource_growth_after_warmup": 0.0,
+      "static_bytes_delta_after_warmup": 1224496.0,
+      "native_pixels": 3942
+    },
+    {
+      "fighter": "orion-vell",
+      "body": "female",
+      "node_growth_after_warmup": 0,
+      "resource_growth_after_warmup": 0.0,
+      "static_bytes_delta_after_warmup": 1230960.0,
+      "native_pixels": 3194
+    },
+    {
+      "fighter": "vesper-nyx",
+      "body": "male",
+      "node_growth_after_warmup": 0,
+      "resource_growth_after_warmup": 0.0,
+      "static_bytes_delta_after_warmup": 1223896.0,
+      "native_pixels": 4173
+    },
+    {
+      "fighter": "vesper-nyx",
+      "body": "female",
+      "node_growth_after_warmup": 0,
+      "resource_growth_after_warmup": 0.0,
+      "static_bytes_delta_after_warmup": 1233160.0,
+      "native_pixels": 4129
+    },
+    {
+      "fighter": "yin",
+      "body": "male",
+      "node_growth_after_warmup": 0,
+      "resource_growth_after_warmup": 0.0,
+      "static_bytes_delta_after_warmup": 1232684.0,
+      "native_pixels": 3618
+    },
+    {
+      "fighter": "yin",
+      "body": "female",
+      "node_growth_after_warmup": 0,
+      "resource_growth_after_warmup": 0.0,
+      "static_bytes_delta_after_warmup": 1233048.0,
+      "native_pixels": 3201
+    },
+    {
+      "fighter": "yang",
+      "body": "male",
+      "node_growth_after_warmup": 0,
+      "resource_growth_after_warmup": 0.0,
+      "static_bytes_delta_after_warmup": 1232632.0,
+      "native_pixels": 2821
+    },
+    {
+      "fighter": "yang",
+      "body": "female",
+      "node_growth_after_warmup": 0,
+      "resource_growth_after_warmup": 0.0,
+      "static_bytes_delta_after_warmup": 1230336.0,
+      "native_pixels": 3678
+    }
+  ],
+  "limits": "Native AppleM2 Godot4.7.1 Compatibility lifecycle; no device/performance or art approval. Static bytes include cache/allocator noise; live nodes and resources bounded across warmed cycles.",
+  "human_gates": false
+}

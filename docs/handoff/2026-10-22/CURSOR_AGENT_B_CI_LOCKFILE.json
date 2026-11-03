@@ -1,0 +1,86 @@
+{
+  "agent": "B",
+  "date": "2026-10-22",
+  "v1": "NOT READY",
+  "rc2": "NOT READY",
+  "authorized": false,
+  "merged": false,
+  "deployed": false,
+  "dns_changed": false,
+  "gunnchos_com_edited": false,
+  "story_edited": false,
+  "codex_art_edited": false,
+  "portal_edited": false,
+  "merged_into_123": false,
+  "b04": "OPEN",
+  "b05": "OPEN",
+  "issues_127_and_128": "open and not updated",
+  "old_head": "c41b59694877e8ea1bf7f20b4f5f305113a9c56e",
+  "lockfile_head": "2e681d823494ea95d61f86c137767b7a56964c67",
+  "pr_tip_note": "The commit that adds this JSON is the pull request tip. Its parent is lockfile_head.",
+  "npm_error_quote": "npm error code EUSAGE\nnpm error `npm ci` can only install packages when your package.json and package-lock.json or npm-shrinkwrap.json are in sync. Please update your lock file with `npm install` before continuing.\nnpm error Missing: @anime-aggressors/invite-contract@0.0.0 from lock file\nnpm error Missing: @anime-aggressors/invite-contract@0.0.0 from lock file",
+  "failed_ci_run": "https://github.com/gunnchOS3k/anime-aggressors/actions/runs/39873111838",
+  "lockfile_change": "Added node_modules/@anime-aggressors/invite-contract link and packages/invite-contract at the declared version 0.0.0. No other lock entries. No package.json dependency added.",
+  "ci_run": "https://github.com/gunnchOS3k/anime-aggressors/actions/runs/39898893049",
+  "ci_head": "2e681d823494ea95d61f86c137767b7a56964c67",
+  "ci_conclusion": "success",
+  "ci_log_quote": "added 42 packages, and audited 53 packages in 3s",
+  "ci_push_run": "https://github.com/gunnchOS3k/anime-aggressors/actions/runs/39898888497",
+  "local_npm_ci": false,
+  "disk_free_gib_approx": 12,
+  "two_client_evidence": {
+    "level": "host consumed two process posts; stepState moved x from left/right only",
+    "test": "packages/partylink/test/twoClientPostedFrames.test.ts",
+    "command": "PARTYLINK_ROOT=$PWD node --experimental-transform-types --import /tmp/party-ts-register.mjs --test packages/partylink/test/twoClientPostedFrames.test.ts packages/partylink/test/postedGrabFrame.test.ts",
+    "result": "2 passed, 0 failed",
+    "proven": [
+      "two independent node processes posted",
+      "host consumed each post",
+      "silent seat input was not invented",
+      "malformed JSON /input rejected with HTTP 500",
+      "grab bit survived on the served frame",
+      "x changed by +256 for right and -256 for left",
+      "existing POST /reconnect restored the same seat"
+    ],
+    "not_proven": [
+      "contact",
+      "throw ownership",
+      "damage",
+      "match outcome",
+      "multiplayer acceptance"
+    ]
+  },
+  "adapters": [
+    {
+      "repo": "pedestrian-pursuit",
+      "pr": 43,
+      "sha": "980d20ae448afaa480757de7131f281804d86ab8",
+      "checks": "success",
+      "edited": false
+    },
+    {
+      "repo": "beatlink-party",
+      "pr": 33,
+      "sha": "b534d50acb46af8b4a875d213075384ce55bdbaf",
+      "checks": "success",
+      "edited": false,
+      "two_client_prerequisite": "scripts/browser-two-client-evidence.mjs imports playwright and requires a server on port 3001 and the web app on port 5173. vitest and socket.io-client are also absent. No root node_modules, apps/server/node_modules, or apps/web/node_modules. Not installed. Not run."
+    },
+    {
+      "repo": "archive-of-life-artifact-world",
+      "pr": 44,
+      "sha": "5f8489f1b759337a2bbb559ce4b4f0d661356654",
+      "checks": "success",
+      "edited": false
+    }
+  ],
+  "codex": {
+    "observed_sha": "f3753775df43592b0c29a06d0b8329abfc35164e",
+    "claimed_sha": "f3753775df43592b0c29a06d0b8329abfc35164e",
+    "worktree_edited": false,
+    "original_131_base": "7c25c2996f8adcee97ec2187a14bfc578d8681bf",
+    "merge_base": "7c25c2996f8adcee97ec2187a14bfc578d8681bf",
+    "commits_ahead": 18,
+    "file_overlap_with_131": []
+  }
+}

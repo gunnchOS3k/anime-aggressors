@@ -1,0 +1,74 @@
+{
+  "PASS": true,
+  "complete": true,
+  "failures": [],
+  "rows": [
+    {
+      "body": "male",
+      "contacts": 1,
+      "damage": 2.1,
+      "facing": 1,
+      "fighter": "yin",
+      "heavy": false,
+      "model": "res://assets/characters/collectible_v1/yin/male/BASE.glb",
+      "opponent": "juno-spark"
+    },
+    {
+      "body": "male",
+      "contacts": 1,
+      "damage": 10.5,
+      "facing": 1,
+      "fighter": "yin",
+      "heavy": true,
+      "model": "res://assets/characters/collectible_v1/yin/male/BASE.glb",
+      "opponent": "juno-spark"
+    },
+    {
+      "body": "male",
+      "contacts": 1,
+      "damage": 1.936,
+      "facing": 1,
+      "fighter": "yang",
+      "heavy": false,
+      "model": "res://assets/characters/collectible_v1/yang/male/BASE.glb",
+      "opponent": "juno-spark"
+    },
+    {
+      "body": "male",
+      "contacts": 1,
+      "damage": 9.504,
+      "facing": 1,
+      "fighter": "yang",
+      "heavy": true,
+      "model": "res://assets/characters/collectible_v1/yang/male/BASE.glb",
+      "opponent": "juno-spark"
+    },
+    {
+      "case": "absorption",
+      "events": [
+        {
+          "aura_cost": 25.0,
+          "damage": 0,
+          "event_id": "yin-absorb:1:5:2000001",
+          "frame": 539,
+          "projectile": 2000001,
+          "result": "projectile_absorbed",
+          "source_fighter": "juno-spark",
+          "world": [
+            -40.0,
+            261.199829101562
+          ]
+        }
+      ],
+      "opponent": "juno-spark",
+      "scope": "declared resource/overlap fixture, not ordinary CPU timing acceptance"
+    },
+    {
+      "case": "construct",
+      "expired": true,
+      "old_retired": true,
+      "stationary": true
+    }
+  ],
+  "scope": "explicit reset/aura/overlap fixtures and real public attacks on live BattleScene rigs; no human approval, ordinary campaign, CPU match, guaranteed combo or platform acceptance"
+}

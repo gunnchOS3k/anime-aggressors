@@ -1,0 +1,175 @@
+{
+  "id": "neon-underworld",
+  "displayName": "Neon Underworld",
+  "index": 29,
+  "layoutType": "neon_alleys_authored",
+  "mainPlatform": {
+    "x": 0,
+    "y": 310,
+    "width": 780,
+    "height": 40
+  },
+  "sidePlatforms": [
+    {
+      "x": -285,
+      "y": 235,
+      "width": 140,
+      "height": 22
+    },
+    {
+      "x": 295,
+      "y": 245,
+      "width": 135,
+      "height": 22
+    },
+    {
+      "x": -130,
+      "y": 165,
+      "width": 110,
+      "height": 18
+    },
+    {
+      "x": 150,
+      "y": 150,
+      "width": 120,
+      "height": 18
+    },
+    {
+      "x": -40,
+      "y": 95,
+      "width": 90,
+      "height": 16
+    },
+    {
+      "x": 100,
+      "y": 80,
+      "width": 85,
+      "height": 16
+    }
+  ],
+  "spawnPoints": [
+    {
+      "slot": 1,
+      "x": -200,
+      "y": 230
+    },
+    {
+      "slot": 2,
+      "x": 220,
+      "y": 240
+    }
+  ],
+  "blastZones": {
+    "left": -690,
+    "right": 690,
+    "top": -430,
+    "bottom": 480
+  },
+  "ledges": true,
+  "hazardSockets": [
+    {
+      "id": "neon_vent_l",
+      "x": -240,
+      "y": 275,
+      "radius": 14,
+      "authoritative": true,
+      "effect": "soft_push_right",
+      "frames_period": 148,
+      "damage": 0
+    },
+    {
+      "id": "neon_vent_r",
+      "x": 250,
+      "y": 275,
+      "radius": 14,
+      "authoritative": true,
+      "effect": "soft_push_left",
+      "frames_period": 148,
+      "damage": 0
+    }
+  ],
+  "cameraProfile": {
+    "mode": "platform_fighter",
+    "minZoom": 0.7,
+    "maxZoom": 1.2,
+    "lerp": 0.12,
+    "deadzone": {
+      "x": 80,
+      "y": 60
+    }
+  },
+  "lightingProfile": {
+    "keyColor": "#e060a8",
+    "keyAlpha": 0.15,
+    "ambient": "#0c0814",
+    "rim": "#f4a7c3"
+  },
+  "performanceTier": {
+    "default": "high",
+    "low": {
+      "particles": false,
+      "bands": 1
+    },
+    "medium": {
+      "particles": true,
+      "bands": 2
+    },
+    "high": {
+      "particles": true,
+      "bands": 4
+    }
+  },
+  "a11y": {
+    "highContrastEdges": true,
+    "colorblindMarkers": true
+  },
+  "audioBed": {
+    "event": "bed_neon_underworld",
+    "status": "PROCEDURAL_WORKING_NOT_HUMAN_FINAL",
+    "path": "res://assets/audio/procedural/stages/neon-underworld/bed.wav"
+  },
+  "previewPlaceholder": "res://assets/stages/procedural/neon-underworld.svg",
+  "artStatus": "AUTHORED_LAYOUT_NOT_HUMAN_FINAL",
+  "productionStatus": "PLAYABLE_AUTHORED_LAYOUT_BATCH5",
+  "geometryStatus": "AUTHORED_LAYOUT_WORKING",
+  "HUMAN_ART_APPROVED": false,
+  "yin_yang_presence": {
+    "expression": "underworld_alley_split",
+    "original": true,
+    "franchise_signage": false
+  },
+  "pink_foreshadow": {
+    "motif": "neon_petal_sign",
+    "subtle": true
+  },
+  "rulesets": {
+    "competitive": {
+      "hazards": "predictable_authoritative"
+    },
+    "party_chaos": {
+      "hazards": true,
+      "transformations": false
+    },
+    "story": {
+      "narrative_hooks": true
+    }
+  },
+  "hazard_model": "authoritative_snapshot",
+  "rng_policy": "no_divergent_rng",
+  "notes": "Neon underworld alleys \u2014 authored layout working; art not human-final.",
+  "ledgeAnchors": [
+    {
+      "id": "left",
+      "x": -390.0,
+      "y": 310.0,
+      "facing": 1
+    },
+    {
+      "id": "right",
+      "x": 390.0,
+      "y": 310.0,
+      "facing": -1
+    }
+  ],
+  "playable": true
+}

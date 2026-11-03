@@ -1,0 +1,79 @@
+{
+	"PASS": true,
+	"complete": true,
+	"expected_cases": 3,
+	"failures": [],
+	"match_end_verified": true,
+	"rows": [
+		{
+			"attacker_world": [
+				-39.4722213745117,
+				281.18359375
+			],
+			"body": "male",
+			"confirmed_damage": 14.5,
+			"contacts": 1,
+			"damage": 14.5,
+			"defender": "ember-vale",
+			"defender_world": [
+				9.56287956237793,
+				281.125274658203
+			],
+			"expected_single_pass_damage": 14.5,
+			"facing": 1,
+			"fighter": "ember-vale",
+			"form": "EMBER_ASCENDED",
+			"move": "forward_tilt",
+			"resolved_move_damage": 13.45,
+			"result": "hit",
+			"shield": false
+		},
+		{
+			"attacker_world": [
+				-40.5277786254883,
+				281.18359375
+			],
+			"body": "female",
+			"confirmed_damage": 13.45,
+			"contacts": 1,
+			"damage": 0.0,
+			"defender": "rook-ironside",
+			"defender_world": [
+				-88.0,
+				277.386535644531
+			],
+			"expected_single_pass_damage": 13.45,
+			"facing": -1,
+			"fighter": "ember-vale",
+			"form": "EMBER_ASCENDED",
+			"move": "forward_tilt",
+			"resolved_move_damage": 13.45,
+			"result": "shield",
+			"shield": true
+		},
+		{
+			"attacker_world": [
+				-39.4722213745117,
+				281.18359375
+			],
+			"body": "male",
+			"confirmed_damage": 14.5,
+			"contacts": 1,
+			"damage": 14.5,
+			"defender": "juno-spark",
+			"defender_world": [
+				10.0420980453491,
+				283.025268554688
+			],
+			"expected_single_pass_damage": 14.5,
+			"facing": 1,
+			"fighter": "ember-vale",
+			"form": "EMBER_ASCENDED",
+			"move": "forward_tilt",
+			"resolved_move_damage": 13.45,
+			"result": "hit",
+			"shield": false
+		}
+	],
+	"scope": "Bounded ordered matchup fixtures; one alternating body/facing per pair, not 324 configuration coverage. Explicit top-form/aura setup; public attack/guard input, idle P2. One explicit match-end callback fixture, not an earned win. No human/CPU/earned acceptance."
+}

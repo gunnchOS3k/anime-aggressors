@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>Original roster animation review</title>
+<style>
+body{margin:24px auto;padding:0 20px;max-width:1440px;background:#121923;color:#edf3fa;font:17px system-ui}
+h1{font-size:28px}p{line-height:1.5}label,button,select,a{font:inherit}select,button{padding:9px;margin:5px 6px 5px 0}
+a{color:#a8d7ff}video{display:block;width:100%;aspect-ratio:1440/760;background:#252d38;object-fit:contain}
+#state{padding:12px;border-left:4px solid #95ceff;background:#233143;min-height:24px}#state[data-state=error]{border-color:#ff967f}
+#detail{font-variant-numeric:tabular-nums}#chapters{display:flex;flex-wrap:wrap}.note{color:#c7d3e1}button:focus,select:focus{outline:3px solid #ffd86b}
+</style>
+<h1>Original roster — jab and heavy candidates</h1>
+<p>Solo character acting, both bodies and facings, three simultaneous camera angles. This is silent offline Godot art playback, not BattleScene combat or artistic approval. Existing movies are reused unchanged.</p>
+<label for="pick">Fighter / body / candidate</label><select id="pick"></select>
+<label for="speed">Playback</label><select id="speed"><option value="1">Normal speed · 1×</option><option value="0.5">Review · ½×</option><option value="0.25">Review · ¼×</option></select>
+<p id="state" role="status" aria-live="polite" data-state="loading">Loading selection…</p>
+<video id="movie" controls playsinline preload="auto"></video>
+<div><button id="play">Play</button><button id="pause">Pause</button><button id="replay">Replay selection</button><a id="direct" href="">Open exact MP4</a></div>
+<p id="detail"></p><div id="chapters" aria-label="Move and facing chapters"></div>
+<p id="gap" class="note"></p>
+<p>Each move includes its original source motion and a short recovery hold. Chapter buttons replay that move through recovery; slower playback is optional. First-frame posters prevent an unloaded video surface from looking like a failed capture.</p>
+<p id="links"></p>
+<script id="review-data" type="application/json">__REVIEW_DATA__</script>
+<script>
+'use strict';
+const data=JSON.parse(document.getElementById('review-data').textContent);
+const pick=document.getElementById('pick'),v=document.getElementById('movie'),state=document.getElementById('state'),detail=document.getElementById('detail'),chapters=document.getElementById('chapters'),speed=document.getElementById('speed');
+let selected=null,expected='',generation=0,chapterEnd=null;
+function message(kind,text){state.dataset.state=kind;state.textContent=text;}
+function active(){return selected&&new URL(v.currentSrc||v.src,location.href).href===expected;}
+for(const row of data.rows){const option=document.createElement('option');option.value=row.id;option.textContent=`${row.fighter} / ${row.body} / ${row.candidate}`;pick.append(option);}
+function choose(){
+ generation++;chapterEnd=null;v.pause();selected=data.rows.find(x=>x.id===pick.value);if(!selected)return;
+ history.replaceState(null,'','#'+encodeURIComponent(selected.id));expected=new URL(selected.video,location.href).href;
+ v.poster=selected.poster;v.src=selected.video;v.playbackRate=Number(speed.value);document.getElementById('direct').href=selected.video;
+ message('loading','Loading '+selected.fighter+' / '+selected.body+'…');detail.textContent='';document.getElementById('gap').textContent=selected.limitations;
+ chapters.replaceChildren();for(const chapter of selected.chapters){const b=document.createElement('button');b.textContent=`${chapter.move} · facing ${chapter.facing>0?'+1':'−1'}`;b.onclick=()=>{chapterEnd=chapter.end;v.currentTime=chapter.start;play();};chapters.append(b);}
+ v.load();
+}
+async function play(){const token=generation;try{await v.play();if(token===generation)message('playing','Playing · '+speed.value+'× · '+selected.fighter+' / '+selected.body);}catch(e){if(token===generation)message('ready','Ready. Use the video Play control to start playback. '+e.message);}}
+function showDetail(){if(!selected)return;const c=selected.chapters.find(c=>v.currentTime>=c.start&&v.currentTime<c.end);detail.textContent=`${selected.fighter} / ${selected.body} · ${selected.candidate} · ${c?c.move+' · facing '+(c.facing>0?'+1':'−1'):'lead-in / end'} · ${v.currentTime.toFixed(2)} / ${Number.isFinite(v.duration)?v.duration.toFixed(2):'…'} s · profile / front / three-quarter`;}
+v.addEventListener('loadedmetadata',()=>{if(!active())return;v.playbackRate=Number(speed.value);v.currentTime=selected.chapters[0].start;message('ready','Ready · press Play. No automatic playback is required.');showDetail();});
+v.addEventListener('loadeddata',()=>{if(active()&&v.paused)message('ready','Ready · visible video frame loaded. Press Play.');});
+v.addEventListener('playing',()=>{if(active())message('playing','Playing · '+speed.value+'×');});
+v.addEventListener('waiting',()=>{if(active())message('loading','Loading video data…');});
+v.addEventListener('pause',()=>{if(active()&&!v.ended&&state.dataset.state!=='loading')message('paused','Paused · seek or press Play to continue.');});
+v.addEventListener('ended',()=>{if(active()){chapterEnd=null;message('ended','Ended · Replay selection or choose another fighter.');}});
+v.addEventListener('error',()=>{if(active())message('error',`Unable to load this MP4 (media error ${v.error?.code??'unknown'}). Use “Open exact MP4”; confirm the encrypted volume is still mounted. Preserve the file and report the failure; do not regenerate artwork.`);});
+v.addEventListener('timeupdate',()=>{showDetail();if(chapterEnd!==null&&v.currentTime>=chapterEnd){v.pause();chapterEnd=null;message('ended','Move and recovery complete · choose another chapter or replay.');}});
+document.getElementById('play').onclick=play;document.getElementById('pause').onclick=()=>v.pause();document.getElementById('replay').onclick=()=>{chapterEnd=null;v.currentTime=selected.chapters[0].start;play();};
+speed.onchange=()=>{v.playbackRate=Number(speed.value);};pick.onchange=choose;
+for(const link of data.links??[]){const a=document.createElement('a');a.href=link.href;a.textContent=link.label;document.getElementById('links').append(a,document.createTextNode(' · '));}
+const remembered=decodeURIComponent(location.hash.slice(1));if(data.rows.some(x=>x.id===remembered))pick.value=remembered;choose();
+addEventListener('pageshow',()=>{if(selected&&v.error)choose();else showDetail();});
+</script></html>

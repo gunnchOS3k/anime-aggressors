@@ -10,6 +10,7 @@ signal item_collected(slot: int, item_id: String)
 var enabled: bool = false
 var items_enabled: bool = true
 var hazards_enabled: bool = true
+var _party_pickup_sequence := 0
 var _elapsed: float = 0.0
 var _spawn_timer: float = 0.0
 var _hazard_timer: float = 0.0
@@ -87,7 +88,29 @@ func _flash_hazard_band() -> void:
 	tw.finished.connect(band.queue_free)
 
 
+func spawn_party_item(id: String, world: Vector2, variant: String="BLACK") -> int:
+	if not enabled or not items_enabled or GameState.mode not in ["versus","hazards","training"] or not GameState.items_enabled:return -1
+	if id not in ["prism_heart","puppet_seal"] or variant not in ["BLACK","WHITE"] or stage_root==null:return -1
+	_party_pickup_sequence+=1
+	var node=preload("res://scripts/visual/party_item_glyph.gd").new()
+	node.item_id=id;node.variant=variant
+	stage_root.add_child(node);node.global_position=world
+	_active_items.append({"id":id,"party":true,"variant":variant,"token":_party_pickup_sequence,"world":world,"ttl":10.0,"node":node})
+	return _party_pickup_sequence
+
+func clear_items() -> void:
+	for item in _active_items:
+		if is_instance_valid(item.get("node")):item.node.queue_free()
+	_active_items.clear()
+
 func _spawn_item() -> void:
+	if GameState.mode in ["versus","hazards","training"] and GameState.items_enabled and _rng.randi_range(0,1)==0:
+		# Reuse existing scheduler and bounded pickup list. Ground placement is
+		# derived from the actual configured stage, not from model projections.
+		var floor_y:=280.0
+		if not _fighters.is_empty():floor_y=float(_fighters[0].platform_surface_y)
+		spawn_party_item("prism_heart" if _rng.randi_range(0,1)==0 else "puppet_seal",Vector2(_rng.randf_range(-220,220),floor_y-24),"BLACK" if _rng.randi_range(0,1)==0 else "WHITE")
+		return
 	if stage_root == null:
 		return
 	var def: Dictionary = ITEM_TABLE[_rng.randi_range(0, ITEM_TABLE.size() - 1)]
@@ -113,6 +136,10 @@ func _tick_items(delta: float) -> void:
 		var collected := false
 		for f in _fighters:
 			if f == null:
+				continue
+			if bool(item.get("party",false)):
+				if f.global_position.distance_to(item.world+Vector2(0,24))<28 and f.party_overdrive.acquire(item.id,item.variant,int(item.token)):
+					item_collected.emit(f.slot,item.id);collected=true;break
 				continue
 			if absf(float(f.global_position.x) - float(item.get("x", 0.0))) < 28.0 and absf(float(f.global_position.y) - 160.0) < 80.0:
 				_apply_item(f, item.get("def", {}))

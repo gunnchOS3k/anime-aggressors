@@ -1,0 +1,10512 @@
+{
+  "schema": "original_grab_acting_8b.v1",
+  "status": "AUTHORED_WIP_SOURCE_CANDIDATE",
+  "owner_approved": false,
+  "human_approved": false,
+  "source_actions_saved": false,
+  "source_runtime_verified": false,
+  "units": {
+    "pelvis": "Measured rest-height units; local translation delta from the rig's neutral Hips anchor.",
+    "R": "Measured rest-height units; local Hand_R target delta from that rig's neutral hand anchor.",
+    "L": "Measured rest-height units; local Hand_L target delta from that rig's neutral hand anchor.",
+    "front": "Measured rest-height units; front sole target offset from that rig's measured sole anchor.",
+    "back": "Measured rest-height units; back sole target offset from that rig's measured sole anchor.",
+    "regional_rotations": "hips, spine, chest, neck, head and wrist_R/L are regional Euler degrees in the established directed-pose convention.",
+    "axes": "+Y up, +Z live forward; use the existing facing mirror and actual rig rest transforms.",
+    "tempo": "Source clip phase timing only. Preserve existing gameplay release/contact/state timing and input authority."
+  },
+  "composition": "Every fighter has its own manually specified hold base and individually specified regional/hand/support changes for each named pose. Poses below are fully expanded; there is no shared roster keyframe or random/procedural motion score.",
+  "pending": [
+    "Remote saved Blender action authoring and evaluated-action/runtime JSON correspondence for all 18 preserved rigs.",
+    "Human direction, hand/foot contact and VFX-off review; this finite pose score does not establish source acting before saving and verification.",
+    "Independent articulated hair/cloth/power-structure controls and any separately required material or GLB export.",
+    "Dedicated interrupted and KO source action work; no completed claim is made for those actions."
+  ],
+  "fighters": {
+    "ember-vale": {
+      "bible": "docs/bibles/fighters/ember-vale.md",
+      "intent": "Furnace-jaw clinch: committed forward intent, rear-foot ignition load and an angry interruption. Victim motion breaks the combustion rhythm before a driven recovery.",
+      "poses": {
+        "hold": {
+          "pelvis": [
+            0.006,
+            -0.05,
+            0.03
+          ],
+          "hips": [
+            9,
+            13,
+            2
+          ],
+          "spine": [
+            11,
+            -5,
+            -1
+          ],
+          "chest": [
+            14,
+            -18,
+            -2
+          ],
+          "neck": [
+            -10,
+            7,
+            0
+          ],
+          "head": [
+            -4,
+            6,
+            1
+          ],
+          "R": [
+            -0.018,
+            -0.045,
+            0.103
+          ],
+          "L": [
+            0.022,
+            -0.032,
+            0.088
+          ],
+          "front": [
+            0,
+            0,
+            0.018
+          ],
+          "back": [
+            0,
+            0,
+            -0.012
+          ],
+          "front_roll": 2,
+          "wrist_R": [
+            -43,
+            10,
+            -5
+          ],
+          "wrist_L": [
+            -37,
+            -12,
+            4
+          ],
+          "shoulder": 7
+        },
+        "hold_load": {
+          "pelvis": [
+            0.008,
+            -0.061,
+            0.022
+          ],
+          "hips": [
+            12,
+            18,
+            2
+          ],
+          "spine": [
+            14,
+            -7,
+            -1
+          ],
+          "chest": [
+            17,
+            -22,
+            -2
+          ],
+          "neck": [
+            -10,
+            7,
+            0
+          ],
+          "head": [
+            -5,
+            7,
+            1
+          ],
+          "R": [
+            -0.015,
+            -0.052,
+            0.095
+          ],
+          "L": [
+            0.025,
+            -0.042,
+            0.078
+          ],
+          "front": [
+            0,
+            0,
+            0.018
+          ],
+          "back": [
+            0,
+            0,
+            -0.012
+          ],
+          "front_roll": 4,
+          "wrist_R": [
+            -43,
+            10,
+            -5
+          ],
+          "wrist_L": [
+            -37,
+            -12,
+            4
+          ],
+          "shoulder": 7
+        },
+        "restrained": {
+          "pelvis": [
+            -0.008,
+            -0.039,
+            -0.016
+          ],
+          "hips": [
+            -6,
+            -9,
+            -3
+          ],
+          "spine": [
+            -9,
+            5,
+            2
+          ],
+          "chest": [
+            -13,
+            15,
+            4
+          ],
+          "neck": [
+            8,
+            -7,
+            -1
+          ],
+          "head": [
+            8,
+            -4,
+            -2
+          ],
+          "R": [
+            0.025,
+            0.022,
+            -0.018
+          ],
+          "L": [
+            -0.015,
+            0.015,
+            -0.026
+          ],
+          "front": [
+            0,
+            0.006,
+            -0.006
+          ],
+          "back": [
+            0,
+            0,
+            0.006
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            20,
+            -18,
+            12
+          ],
+          "wrist_L": [
+            24,
+            14,
+            -10
+          ],
+          "shoulder": 4
+        },
+        "resist": {
+          "pelvis": [
+            -0.014,
+            -0.047,
+            -0.023
+          ],
+          "hips": [
+            -2,
+            -16,
+            -5
+          ],
+          "spine": [
+            -5,
+            9,
+            3
+          ],
+          "chest": [
+            -7,
+            23,
+            6
+          ],
+          "neck": [
+            4,
+            -12,
+            -2
+          ],
+          "head": [
+            2,
+            -10,
+            -4
+          ],
+          "R": [
+            0.038,
+            0.034,
+            0.008
+          ],
+          "L": [
+            -0.028,
+            0.019,
+            -0.01
+          ],
+          "front": [
+            0,
+            0.012,
+            -0.012
+          ],
+          "back": [
+            0,
+            0,
+            0.008
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            5,
+            -24,
+            18
+          ],
+          "wrist_L": [
+            13,
+            20,
+            -14
+          ],
+          "shoulder": 9
+        },
+        "escape": {
+          "pelvis": [
+            0.016,
+            -0.042,
+            -0.026
+          ],
+          "hips": [
+            7,
+            26,
+            4
+          ],
+          "spine": [
+            9,
+            -12,
+            -3
+          ],
+          "chest": [
+            13,
+            -31,
+            -6
+          ],
+          "neck": [
+            -5,
+            14,
+            2
+          ],
+          "head": [
+            -2,
+            12,
+            3
+          ],
+          "R": [
+            0.054,
+            0.018,
+            0.025
+          ],
+          "L": [
+            -0.039,
+            0.031,
+            -0.018
+          ],
+          "front": [
+            0,
+            0.017,
+            -0.018
+          ],
+          "back": [
+            0,
+            0,
+            -0.012
+          ],
+          "front_roll": 6,
+          "wrist_R": [
+            -16,
+            22,
+            -18
+          ],
+          "wrist_L": [
+            8,
+            -25,
+            12
+          ],
+          "shoulder": 12
+        },
+        "recover": {
+          "pelvis": [
+            0.004,
+            -0.021,
+            0.018
+          ],
+          "hips": [
+            4,
+            8,
+            1
+          ],
+          "spine": [
+            5,
+            -3,
+            0
+          ],
+          "chest": [
+            7,
+            -11,
+            -1
+          ],
+          "neck": [
+            -4,
+            4,
+            0
+          ],
+          "head": [
+            -1,
+            3,
+            0
+          ],
+          "R": [
+            -0.006,
+            0.004,
+            0.03
+          ],
+          "L": [
+            0.009,
+            0.014,
+            0.018
+          ],
+          "front": [
+            0,
+            0,
+            0.006
+          ],
+          "back": [
+            0,
+            0,
+            0
+          ],
+          "front_roll": 1,
+          "wrist_R": [
+            -20,
+            6,
+            -2
+          ],
+          "wrist_L": [
+            -16,
+            -7,
+            2
+          ],
+          "shoulder": 3
+        },
+        "acquire": {
+          "pelvis": [
+            0.009,
+            -0.044,
+            0.042
+          ],
+          "hips": [
+            12,
+            20,
+            3
+          ],
+          "spine": [
+            14,
+            -8,
+            -2
+          ],
+          "chest": [
+            19,
+            -25,
+            -3
+          ],
+          "neck": [
+            -12,
+            10,
+            1
+          ],
+          "head": [
+            -5,
+            8,
+            1
+          ],
+          "R": [
+            -0.023,
+            -0.023,
+            0.128
+          ],
+          "L": [
+            0.028,
+            -0.021,
+            0.109
+          ],
+          "front": [
+            0,
+            0,
+            0.026
+          ],
+          "back": [
+            0,
+            0,
+            -0.014
+          ],
+          "front_roll": 5,
+          "wrist_R": [
+            -52,
+            13,
+            -7
+          ],
+          "wrist_L": [
+            -45,
+            -15,
+            5
+          ],
+          "shoulder": 10
+        },
+        "acquire_load": {
+          "pelvis": [
+            0.004,
+            -0.059,
+            0.006
+          ],
+          "hips": [
+            10,
+            22,
+            2
+          ],
+          "spine": [
+            13,
+            -8,
+            -1
+          ],
+          "chest": [
+            15,
+            -23,
+            -2
+          ],
+          "neck": [
+            -10,
+            7,
+            0
+          ],
+          "head": [
+            -3,
+            9,
+            1
+          ],
+          "R": [
+            0.009,
+            -0.017,
+            0.032
+          ],
+          "L": [
+            0.02,
+            -0.008,
+            0.02
+          ],
+          "front": [
+            0,
+            0,
+            0.01
+          ],
+          "back": [
+            0,
+            0,
+            -0.018
+          ],
+          "front_roll": 1,
+          "wrist_R": [
+            -23,
+            13,
+            -5
+          ],
+          "wrist_L": [
+            -18,
+            -12,
+            4
+          ],
+          "shoulder": 5
+        },
+        "whiff": {
+          "pelvis": [
+            0.014,
+            -0.054,
+            0.039
+          ],
+          "hips": [
+            15,
+            25,
+            4
+          ],
+          "spine": [
+            17,
+            -10,
+            -3
+          ],
+          "chest": [
+            22,
+            -31,
+            -4
+          ],
+          "neck": [
+            -8,
+            13,
+            1
+          ],
+          "head": [
+            1,
+            10,
+            2
+          ],
+          "R": [
+            -0.005,
+            -0.058,
+            0.141
+          ],
+          "L": [
+            0.045,
+            -0.041,
+            0.117
+          ],
+          "front": [
+            0,
+            0,
+            0.023
+          ],
+          "back": [
+            0,
+            0.007,
+            -0.01
+          ],
+          "front_roll": 8,
+          "wrist_R": [
+            -15,
+            18,
+            -8
+          ],
+          "wrist_L": [
+            -8,
+            -17,
+            6
+          ],
+          "shoulder": 11
+        },
+        "release_forward": {
+          "pelvis": [
+            0.012,
+            -0.045,
+            0.047
+          ],
+          "hips": [
+            14,
+            28,
+            3
+          ],
+          "spine": [
+            15,
+            -10,
+            -2
+          ],
+          "chest": [
+            21,
+            -33,
+            -4
+          ],
+          "neck": [
+            -12,
+            14,
+            1
+          ],
+          "head": [
+            -4,
+            9,
+            1
+          ],
+          "R": [
+            -0.025,
+            -0.018,
+            0.145
+          ],
+          "L": [
+            0.031,
+            -0.026,
+            0.119
+          ],
+          "front": [
+            0,
+            0,
+            0.018
+          ],
+          "back": [
+            0,
+            0,
+            -0.012
+          ],
+          "front_roll": 7,
+          "wrist_R": [
+            -61,
+            15,
+            -6
+          ],
+          "wrist_L": [
+            -48,
+            -13,
+            5
+          ],
+          "shoulder": 12
+        },
+        "release_back": {
+          "pelvis": [
+            -0.012,
+            -0.052,
+            -0.018
+          ],
+          "hips": [
+            5,
+            -39,
+            -5
+          ],
+          "spine": [
+            8,
+            19,
+            2
+          ],
+          "chest": [
+            12,
+            -23,
+            5
+          ],
+          "neck": [
+            -6,
+            12,
+            -1
+          ],
+          "head": [
+            -2,
+            -22,
+            -3
+          ],
+          "R": [
+            0.054,
+            -0.017,
+            -0.019
+          ],
+          "L": [
+            -0.031,
+            0.01,
+            -0.052
+          ],
+          "front": [
+            0,
+            0,
+            0.01
+          ],
+          "back": [
+            0,
+            0,
+            -0.019
+          ],
+          "front_roll": 2,
+          "wrist_R": [
+            -20,
+            -26,
+            13
+          ],
+          "wrist_L": [
+            -46,
+            17,
+            -8
+          ],
+          "shoulder": 9
+        },
+        "release_up": {
+          "pelvis": [
+            0.004,
+            -0.02,
+            0.021
+          ],
+          "hips": [
+            -4,
+            14,
+            1
+          ],
+          "spine": [
+            -7,
+            -6,
+            0
+          ],
+          "chest": [
+            -11,
+            -15,
+            -2
+          ],
+          "neck": [
+            5,
+            5,
+            0
+          ],
+          "head": [
+            -12,
+            4,
+            0
+          ],
+          "R": [
+            -0.009,
+            0.128,
+            0.066
+          ],
+          "L": [
+            0.015,
+            0.109,
+            0.058
+          ],
+          "front": [
+            0,
+            0,
+            0.018
+          ],
+          "back": [
+            0,
+            0,
+            -0.012
+          ],
+          "front_roll": 6,
+          "wrist_R": [
+            -28,
+            6,
+            -4
+          ],
+          "wrist_L": [
+            -24,
+            -8,
+            3
+          ],
+          "shoulder": 11
+        },
+        "release_down": {
+          "pelvis": [
+            0.008,
+            -0.086,
+            0.031
+          ],
+          "hips": [
+            23,
+            18,
+            3
+          ],
+          "spine": [
+            20,
+            -8,
+            -2
+          ],
+          "chest": [
+            27,
+            -20,
+            -3
+          ],
+          "neck": [
+            -11,
+            8,
+            0
+          ],
+          "head": [
+            9,
+            6,
+            1
+          ],
+          "R": [
+            -0.012,
+            -0.164,
+            0.098
+          ],
+          "L": [
+            0.021,
+            -0.149,
+            0.081
+          ],
+          "front": [
+            0,
+            0,
+            0.018
+          ],
+          "back": [
+            0,
+            0,
+            -0.012
+          ],
+          "front_roll": 3,
+          "wrist_R": [
+            -19,
+            12,
+            -5
+          ],
+          "wrist_L": [
+            -16,
+            -10,
+            4
+          ],
+          "shoulder": 10
+        },
+        "air_forward": {
+          "pelvis": [
+            -0.006,
+            -0.025,
+            -0.008
+          ],
+          "hips": [
+            -12,
+            -11,
+            -7
+          ],
+          "spine": [
+            -10,
+            7,
+            4
+          ],
+          "chest": [
+            -15,
+            16,
+            8
+          ],
+          "neck": [
+            8,
+            -8,
+            -2
+          ],
+          "head": [
+            11,
+            -6,
+            -4
+          ],
+          "R": [
+            0.047,
+            0.03,
+            -0.042
+          ],
+          "L": [
+            -0.026,
+            0.019,
+            -0.031
+          ],
+          "front": [
+            0,
+            0.041,
+            -0.02
+          ],
+          "back": [
+            0,
+            0.025,
+            0.022
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            18,
+            -18,
+            15
+          ],
+          "wrist_L": [
+            26,
+            14,
+            -11
+          ],
+          "shoulder": 5
+        },
+        "air_back": {
+          "pelvis": [
+            0.01,
+            -0.027,
+            0.013
+          ],
+          "hips": [
+            11,
+            18,
+            6
+          ],
+          "spine": [
+            13,
+            -10,
+            -3
+          ],
+          "chest": [
+            18,
+            -24,
+            -7
+          ],
+          "neck": [
+            -6,
+            12,
+            2
+          ],
+          "head": [
+            6,
+            14,
+            4
+          ],
+          "R": [
+            0.033,
+            0.011,
+            0.039
+          ],
+          "L": [
+            -0.043,
+            0.026,
+            0.024
+          ],
+          "front": [
+            0,
+            0.03,
+            0.027
+          ],
+          "back": [
+            0,
+            0.046,
+            -0.018
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            5,
+            20,
+            -14
+          ],
+          "wrist_L": [
+            12,
+            -18,
+            9
+          ],
+          "shoulder": 6
+        },
+        "air_up": {
+          "pelvis": [
+            -0.003,
+            -0.018,
+            -0.004
+          ],
+          "hips": [
+            -9,
+            8,
+            4
+          ],
+          "spine": [
+            -13,
+            -5,
+            -2
+          ],
+          "chest": [
+            -18,
+            -10,
+            -5
+          ],
+          "neck": [
+            7,
+            4,
+            1
+          ],
+          "head": [
+            12,
+            5,
+            3
+          ],
+          "R": [
+            0.041,
+            -0.022,
+            -0.016
+          ],
+          "L": [
+            -0.035,
+            -0.008,
+            -0.024
+          ],
+          "front": [
+            0,
+            0.05,
+            0.006
+          ],
+          "back": [
+            0,
+            0.044,
+            -0.011
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            23,
+            9,
+            14
+          ],
+          "wrist_L": [
+            18,
+            -11,
+            -12
+          ],
+          "shoulder": 3
+        },
+        "air_down": {
+          "pelvis": [
+            0.006,
+            -0.04,
+            0.014
+          ],
+          "hips": [
+            19,
+            12,
+            6
+          ],
+          "spine": [
+            17,
+            -7,
+            -4
+          ],
+          "chest": [
+            23,
+            -16,
+            -8
+          ],
+          "neck": [
+            -7,
+            6,
+            2
+          ],
+          "head": [
+            -5,
+            9,
+            4
+          ],
+          "R": [
+            0.03,
+            0.066,
+            0.018
+          ],
+          "L": [
+            -0.038,
+            0.052,
+            0.027
+          ],
+          "front": [
+            0,
+            0.033,
+            -0.024
+          ],
+          "back": [
+            0,
+            0.027,
+            0.018
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -6,
+            16,
+            -12
+          ],
+          "wrist_L": [
+            2,
+            -14,
+            10
+          ],
+          "shoulder": 8
+        },
+        "landing": {
+          "pelvis": [
+            0.011,
+            -0.079,
+            0.027
+          ],
+          "hips": [
+            18,
+            15,
+            4
+          ],
+          "spine": [
+            16,
+            -7,
+            -2
+          ],
+          "chest": [
+            21,
+            -20,
+            -5
+          ],
+          "neck": [
+            -9,
+            8,
+            1
+          ],
+          "head": [
+            3,
+            5,
+            2
+          ],
+          "R": [
+            0.018,
+            -0.071,
+            0.039
+          ],
+          "L": [
+            -0.023,
+            -0.052,
+            0.027
+          ],
+          "front": [
+            0,
+            0,
+            0.017
+          ],
+          "back": [
+            0,
+            0,
+            -0.015
+          ],
+          "front_roll": 3,
+          "wrist_R": [
+            -13,
+            11,
+            -4
+          ],
+          "wrist_L": [
+            -9,
+            -10,
+            3
+          ],
+          "shoulder": 8
+        }
+      },
+      "tempo": {
+        "hold_frames": 40,
+        "escape_frames": 18,
+        "recovery_frames": 20,
+        "air_frames": 24,
+        "landing_frames": 18
+      }
+    },
+    "rook-ironside": {
+      "bible": "docs/bibles/fighters/rook-ironside.md",
+      "intent": "Fortress clamp: broad hips and locked shoulders carry the hold. Resistance remains one heavy unit; escape buys a braced weight transfer rather than agility.",
+      "poses": {
+        "hold": {
+          "pelvis": [
+            -0.006,
+            -0.07,
+            0.012
+          ],
+          "hips": [
+            12,
+            7,
+            -2
+          ],
+          "spine": [
+            8,
+            -3,
+            1
+          ],
+          "chest": [
+            10,
+            -10,
+            2
+          ],
+          "neck": [
+            -6,
+            4,
+            0
+          ],
+          "head": [
+            -2,
+            2,
+            -1
+          ],
+          "R": [
+            -0.012,
+            -0.072,
+            0.083
+          ],
+          "L": [
+            0.018,
+            -0.065,
+            0.079
+          ],
+          "front": [
+            0.009,
+            0,
+            0.006
+          ],
+          "back": [
+            -0.007,
+            0,
+            -0.01
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -31,
+            16,
+            -8
+          ],
+          "wrist_L": [
+            -29,
+            -15,
+            7
+          ],
+          "shoulder": 11
+        },
+        "hold_load": {
+          "pelvis": [
+            -0.009,
+            -0.083,
+            0.008
+          ],
+          "hips": [
+            16,
+            10,
+            -3
+          ],
+          "spine": [
+            10,
+            -4,
+            1
+          ],
+          "chest": [
+            13,
+            -13,
+            3
+          ],
+          "neck": [
+            -6,
+            4,
+            0
+          ],
+          "head": [
+            -3,
+            3,
+            -1
+          ],
+          "R": [
+            -0.014,
+            -0.08,
+            0.078
+          ],
+          "L": [
+            0.021,
+            -0.074,
+            0.073
+          ],
+          "front": [
+            0.009,
+            0,
+            0.006
+          ],
+          "back": [
+            -0.007,
+            0,
+            -0.01
+          ],
+          "front_roll": 1,
+          "wrist_R": [
+            -31,
+            16,
+            -8
+          ],
+          "wrist_L": [
+            -29,
+            -15,
+            7
+          ],
+          "shoulder": 13
+        },
+        "restrained": {
+          "pelvis": [
+            0.007,
+            -0.061,
+            -0.01
+          ],
+          "hips": [
+            -4,
+            -6,
+            3
+          ],
+          "spine": [
+            -5,
+            3,
+            -1
+          ],
+          "chest": [
+            -8,
+            9,
+            -4
+          ],
+          "neck": [
+            5,
+            -3,
+            1
+          ],
+          "head": [
+            6,
+            -2,
+            2
+          ],
+          "R": [
+            0.02,
+            0.008,
+            -0.017
+          ],
+          "L": [
+            -0.022,
+            0.012,
+            -0.022
+          ],
+          "front": [
+            0.008,
+            0,
+            -0.004
+          ],
+          "back": [
+            -0.006,
+            0,
+            0.005
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            18,
+            -13,
+            11
+          ],
+          "wrist_L": [
+            16,
+            12,
+            -9
+          ],
+          "shoulder": 8
+        },
+        "resist": {
+          "pelvis": [
+            0.012,
+            -0.08,
+            -0.016
+          ],
+          "hips": [
+            2,
+            -12,
+            5
+          ],
+          "spine": [
+            -2,
+            7,
+            -2
+          ],
+          "chest": [
+            -4,
+            16,
+            -6
+          ],
+          "neck": [
+            3,
+            -7,
+            1
+          ],
+          "head": [
+            2,
+            -5,
+            3
+          ],
+          "R": [
+            0.03,
+            0.023,
+            0.005
+          ],
+          "L": [
+            -0.035,
+            0.017,
+            -0.009
+          ],
+          "front": [
+            0.01,
+            0,
+            -0.009
+          ],
+          "back": [
+            -0.009,
+            0,
+            0.008
+          ],
+          "front_roll": 1,
+          "wrist_R": [
+            8,
+            -18,
+            17
+          ],
+          "wrist_L": [
+            10,
+            17,
+            -15
+          ],
+          "shoulder": 14
+        },
+        "escape": {
+          "pelvis": [
+            -0.017,
+            -0.075,
+            -0.019
+          ],
+          "hips": [
+            9,
+            21,
+            -5
+          ],
+          "spine": [
+            7,
+            -9,
+            2
+          ],
+          "chest": [
+            12,
+            -25,
+            6
+          ],
+          "neck": [
+            -4,
+            10,
+            -1
+          ],
+          "head": [
+            -1,
+            9,
+            -3
+          ],
+          "R": [
+            0.047,
+            -0.005,
+            0.013
+          ],
+          "L": [
+            -0.045,
+            0.016,
+            -0.021
+          ],
+          "front": [
+            0.012,
+            0,
+            -0.012
+          ],
+          "back": [
+            -0.01,
+            0,
+            -0.014
+          ],
+          "front_roll": 3,
+          "wrist_R": [
+            -8,
+            21,
+            -15
+          ],
+          "wrist_L": [
+            5,
+            -19,
+            12
+          ],
+          "shoulder": 16
+        },
+        "recover": {
+          "pelvis": [
+            -0.004,
+            -0.04,
+            0.008
+          ],
+          "hips": [
+            7,
+            4,
+            -1
+          ],
+          "spine": [
+            4,
+            -2,
+            0
+          ],
+          "chest": [
+            6,
+            -6,
+            1
+          ],
+          "neck": [
+            -3,
+            2,
+            0
+          ],
+          "head": [
+            -1,
+            1,
+            0
+          ],
+          "R": [
+            -0.006,
+            -0.02,
+            0.021
+          ],
+          "L": [
+            0.008,
+            -0.015,
+            0.019
+          ],
+          "front": [
+            0.007,
+            0,
+            0.003
+          ],
+          "back": [
+            -0.006,
+            0,
+            -0.006
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -18,
+            10,
+            -5
+          ],
+          "wrist_L": [
+            -17,
+            -9,
+            4
+          ],
+          "shoulder": 7
+        },
+        "acquire": {
+          "pelvis": [
+            -0.007,
+            -0.073,
+            0.026
+          ],
+          "hips": [
+            15,
+            12,
+            -3
+          ],
+          "spine": [
+            11,
+            -5,
+            1
+          ],
+          "chest": [
+            15,
+            -16,
+            3
+          ],
+          "neck": [
+            -8,
+            6,
+            0
+          ],
+          "head": [
+            -3,
+            4,
+            -1
+          ],
+          "R": [
+            -0.023,
+            -0.049,
+            0.109
+          ],
+          "L": [
+            0.028,
+            -0.044,
+            0.103
+          ],
+          "front": [
+            0.01,
+            0,
+            0.013
+          ],
+          "back": [
+            -0.008,
+            0,
+            -0.012
+          ],
+          "front_roll": 2,
+          "wrist_R": [
+            -43,
+            20,
+            -10
+          ],
+          "wrist_L": [
+            -40,
+            -19,
+            9
+          ],
+          "shoulder": 15
+        },
+        "acquire_load": {
+          "pelvis": [
+            -0.008,
+            -0.088,
+            -0.003
+          ],
+          "hips": [
+            17,
+            11,
+            -3
+          ],
+          "spine": [
+            9,
+            -4,
+            1
+          ],
+          "chest": [
+            12,
+            -13,
+            3
+          ],
+          "neck": [
+            -6,
+            4,
+            0
+          ],
+          "head": [
+            -2,
+            4,
+            -1
+          ],
+          "R": [
+            0.014,
+            -0.045,
+            0.018
+          ],
+          "L": [
+            -0.01,
+            -0.038,
+            0.014
+          ],
+          "front": [
+            0.009,
+            0,
+            0.002
+          ],
+          "back": [
+            -0.009,
+            0,
+            -0.015
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -24,
+            17,
+            -7
+          ],
+          "wrist_L": [
+            -23,
+            -16,
+            6
+          ],
+          "shoulder": 10
+        },
+        "whiff": {
+          "pelvis": [
+            -0.011,
+            -0.082,
+            0.03
+          ],
+          "hips": [
+            18,
+            16,
+            -4
+          ],
+          "spine": [
+            13,
+            -7,
+            2
+          ],
+          "chest": [
+            18,
+            -21,
+            4
+          ],
+          "neck": [
+            -6,
+            8,
+            0
+          ],
+          "head": [
+            3,
+            6,
+            -2
+          ],
+          "R": [
+            -0.007,
+            -0.093,
+            0.119
+          ],
+          "L": [
+            0.042,
+            -0.086,
+            0.108
+          ],
+          "front": [
+            0.011,
+            0,
+            0.012
+          ],
+          "back": [
+            -0.008,
+            0,
+            -0.012
+          ],
+          "front_roll": 2,
+          "wrist_R": [
+            -11,
+            23,
+            -9
+          ],
+          "wrist_L": [
+            -9,
+            -20,
+            8
+          ],
+          "shoulder": 14
+        },
+        "release_forward": {
+          "pelvis": [
+            -0.003,
+            -0.062,
+            0.035
+          ],
+          "hips": [
+            17,
+            19,
+            -2
+          ],
+          "spine": [
+            13,
+            -8,
+            1
+          ],
+          "chest": [
+            18,
+            -24,
+            3
+          ],
+          "neck": [
+            -8,
+            9,
+            0
+          ],
+          "head": [
+            -2,
+            5,
+            -1
+          ],
+          "R": [
+            -0.019,
+            -0.04,
+            0.128
+          ],
+          "L": [
+            0.026,
+            -0.045,
+            0.117
+          ],
+          "front": [
+            0.009,
+            0,
+            0.006
+          ],
+          "back": [
+            -0.007,
+            0,
+            -0.01
+          ],
+          "front_roll": 3,
+          "wrist_R": [
+            -50,
+            21,
+            -10
+          ],
+          "wrist_L": [
+            -45,
+            -18,
+            8
+          ],
+          "shoulder": 17
+        },
+        "release_back": {
+          "pelvis": [
+            0.017,
+            -0.079,
+            -0.016
+          ],
+          "hips": [
+            10,
+            -29,
+            5
+          ],
+          "spine": [
+            6,
+            13,
+            -2
+          ],
+          "chest": [
+            11,
+            -16,
+            -5
+          ],
+          "neck": [
+            -3,
+            7,
+            1
+          ],
+          "head": [
+            -1,
+            -15,
+            3
+          ],
+          "R": [
+            0.047,
+            -0.049,
+            -0.012
+          ],
+          "L": [
+            -0.04,
+            -0.033,
+            -0.038
+          ],
+          "front": [
+            0.01,
+            0,
+            0.006
+          ],
+          "back": [
+            -0.01,
+            0,
+            -0.018
+          ],
+          "front_roll": 1,
+          "wrist_R": [
+            -17,
+            -22,
+            12
+          ],
+          "wrist_L": [
+            -35,
+            16,
+            -7
+          ],
+          "shoulder": 15
+        },
+        "release_up": {
+          "pelvis": [
+            -0.002,
+            -0.044,
+            0.011
+          ],
+          "hips": [
+            2,
+            8,
+            -1
+          ],
+          "spine": [
+            -4,
+            -3,
+            0
+          ],
+          "chest": [
+            -7,
+            -9,
+            1
+          ],
+          "neck": [
+            3,
+            3,
+            0
+          ],
+          "head": [
+            -9,
+            2,
+            -1
+          ],
+          "R": [
+            -0.004,
+            0.094,
+            0.055
+          ],
+          "L": [
+            0.01,
+            0.087,
+            0.051
+          ],
+          "front": [
+            0.009,
+            0,
+            0.006
+          ],
+          "back": [
+            -0.007,
+            0,
+            -0.01
+          ],
+          "front_roll": 2,
+          "wrist_R": [
+            -22,
+            13,
+            -6
+          ],
+          "wrist_L": [
+            -20,
+            -12,
+            5
+          ],
+          "shoulder": 17
+        },
+        "release_down": {
+          "pelvis": [
+            -0.006,
+            -0.105,
+            0.022
+          ],
+          "hips": [
+            25,
+            11,
+            -3
+          ],
+          "spine": [
+            18,
+            -5,
+            1
+          ],
+          "chest": [
+            24,
+            -14,
+            3
+          ],
+          "neck": [
+            -9,
+            5,
+            0
+          ],
+          "head": [
+            11,
+            3,
+            -1
+          ],
+          "R": [
+            -0.008,
+            -0.178,
+            0.079
+          ],
+          "L": [
+            0.014,
+            -0.172,
+            0.073
+          ],
+          "front": [
+            0.011,
+            0,
+            0.009
+          ],
+          "back": [
+            -0.009,
+            0,
+            -0.013
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -14,
+            17,
+            -7
+          ],
+          "wrist_L": [
+            -12,
+            -15,
+            6
+          ],
+          "shoulder": 16
+        },
+        "air_forward": {
+          "pelvis": [
+            0.005,
+            -0.045,
+            -0.006
+          ],
+          "hips": [
+            -8,
+            -7,
+            5
+          ],
+          "spine": [
+            -6,
+            4,
+            -2
+          ],
+          "chest": [
+            -10,
+            11,
+            -6
+          ],
+          "neck": [
+            5,
+            -4,
+            1
+          ],
+          "head": [
+            8,
+            -3,
+            3
+          ],
+          "R": [
+            0.029,
+            -0.011,
+            -0.033
+          ],
+          "L": [
+            -0.025,
+            -0.006,
+            -0.029
+          ],
+          "front": [
+            0.008,
+            0.03,
+            -0.011
+          ],
+          "back": [
+            -0.006,
+            0.026,
+            0.013
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            15,
+            -12,
+            12
+          ],
+          "wrist_L": [
+            18,
+            11,
+            -10
+          ],
+          "shoulder": 9
+        },
+        "air_back": {
+          "pelvis": [
+            -0.007,
+            -0.048,
+            0.009
+          ],
+          "hips": [
+            8,
+            12,
+            -5
+          ],
+          "spine": [
+            9,
+            -6,
+            2
+          ],
+          "chest": [
+            13,
+            -17,
+            6
+          ],
+          "neck": [
+            -4,
+            6,
+            -1
+          ],
+          "head": [
+            5,
+            8,
+            -3
+          ],
+          "R": [
+            0.024,
+            -0.014,
+            0.023
+          ],
+          "L": [
+            -0.03,
+            0.003,
+            0.018
+          ],
+          "front": [
+            0.007,
+            0.025,
+            0.016
+          ],
+          "back": [
+            -0.007,
+            0.032,
+            -0.012
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            6,
+            15,
+            -12
+          ],
+          "wrist_L": [
+            9,
+            -13,
+            10
+          ],
+          "shoulder": 10
+        },
+        "air_up": {
+          "pelvis": [
+            0.002,
+            -0.032,
+            -0.003
+          ],
+          "hips": [
+            -6,
+            5,
+            -3
+          ],
+          "spine": [
+            -8,
+            -2,
+            1
+          ],
+          "chest": [
+            -12,
+            -7,
+            4
+          ],
+          "neck": [
+            5,
+            2,
+            0
+          ],
+          "head": [
+            9,
+            3,
+            -2
+          ],
+          "R": [
+            0.027,
+            -0.035,
+            -0.01
+          ],
+          "L": [
+            -0.024,
+            -0.026,
+            -0.015
+          ],
+          "front": [
+            0.008,
+            0.036,
+            0.003
+          ],
+          "back": [
+            -0.007,
+            0.034,
+            -0.005
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            19,
+            8,
+            11
+          ],
+          "wrist_L": [
+            16,
+            -8,
+            -10
+          ],
+          "shoulder": 7
+        },
+        "air_down": {
+          "pelvis": [
+            -0.004,
+            -0.059,
+            0.01
+          ],
+          "hips": [
+            16,
+            8,
+            -5
+          ],
+          "spine": [
+            12,
+            -4,
+            2
+          ],
+          "chest": [
+            18,
+            -11,
+            6
+          ],
+          "neck": [
+            -5,
+            4,
+            -1
+          ],
+          "head": [
+            -3,
+            5,
+            -3
+          ],
+          "R": [
+            0.025,
+            0.034,
+            0.014
+          ],
+          "L": [
+            -0.029,
+            0.027,
+            0.019
+          ],
+          "front": [
+            0.008,
+            0.026,
+            -0.013
+          ],
+          "back": [
+            -0.007,
+            0.024,
+            0.01
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -2,
+            13,
+            -10
+          ],
+          "wrist_L": [
+            4,
+            -12,
+            8
+          ],
+          "shoulder": 12
+        },
+        "landing": {
+          "pelvis": [
+            -0.008,
+            -0.101,
+            0.015
+          ],
+          "hips": [
+            23,
+            9,
+            -4
+          ],
+          "spine": [
+            16,
+            -4,
+            2
+          ],
+          "chest": [
+            22,
+            -12,
+            5
+          ],
+          "neck": [
+            -7,
+            5,
+            -1
+          ],
+          "head": [
+            5,
+            3,
+            -2
+          ],
+          "R": [
+            0.021,
+            -0.099,
+            0.027
+          ],
+          "L": [
+            -0.024,
+            -0.091,
+            0.024
+          ],
+          "front": [
+            0.012,
+            0,
+            0.008
+          ],
+          "back": [
+            -0.011,
+            0,
+            -0.01
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -10,
+            14,
+            -6
+          ],
+          "wrist_L": [
+            -8,
+            -13,
+            5
+          ],
+          "shoulder": 14
+        }
+      },
+      "tempo": {
+        "hold_frames": 56,
+        "escape_frames": 25,
+        "recovery_frames": 28,
+        "air_frames": 30,
+        "landing_frames": 26
+      }
+    },
+    "juno-spark": {
+      "bible": "docs/bibles/fighters/juno-spark.md",
+      "intent": "Circuit catch: compact alternating diagonals and a narrow loaded foot, with a sharp routing reversal. Victim current desynchronizes in a small recoil, then escape snaps into a new compact line.",
+      "poses": {
+        "hold": {
+          "pelvis": [
+            -0.005,
+            -0.03,
+            0.025
+          ],
+          "hips": [
+            6,
+            17,
+            -3
+          ],
+          "spine": [
+            8,
+            -7,
+            2
+          ],
+          "chest": [
+            11,
+            -21,
+            4
+          ],
+          "neck": [
+            -8,
+            9,
+            -1
+          ],
+          "head": [
+            -3,
+            7,
+            -2
+          ],
+          "R": [
+            -0.023,
+            -0.015,
+            0.087
+          ],
+          "L": [
+            0.012,
+            0.009,
+            0.069
+          ],
+          "front": [
+            -0.004,
+            0,
+            0.02
+          ],
+          "back": [
+            0.003,
+            0,
+            -0.008
+          ],
+          "front_roll": 4,
+          "wrist_R": [
+            -39,
+            6,
+            -9
+          ],
+          "wrist_L": [
+            -29,
+            -9,
+            7
+          ],
+          "shoulder": 5
+        },
+        "hold_load": {
+          "pelvis": [
+            -0.007,
+            -0.038,
+            0.019
+          ],
+          "hips": [
+            8,
+            23,
+            -4
+          ],
+          "spine": [
+            11,
+            -10,
+            3
+          ],
+          "chest": [
+            14,
+            -27,
+            5
+          ],
+          "neck": [
+            -8,
+            9,
+            -1
+          ],
+          "head": [
+            -4,
+            9,
+            -2
+          ],
+          "R": [
+            -0.02,
+            -0.022,
+            0.08
+          ],
+          "L": [
+            0.016,
+            0.003,
+            0.061
+          ],
+          "front": [
+            -0.004,
+            0,
+            0.02
+          ],
+          "back": [
+            0.003,
+            0,
+            -0.008
+          ],
+          "front_roll": 6,
+          "wrist_R": [
+            -39,
+            6,
+            -9
+          ],
+          "wrist_L": [
+            -29,
+            -9,
+            7
+          ],
+          "shoulder": 7
+        },
+        "restrained": {
+          "pelvis": [
+            0.008,
+            -0.025,
+            -0.018
+          ],
+          "hips": [
+            -8,
+            -14,
+            5
+          ],
+          "spine": [
+            -10,
+            8,
+            -3
+          ],
+          "chest": [
+            -14,
+            19,
+            -6
+          ],
+          "neck": [
+            9,
+            -10,
+            2
+          ],
+          "head": [
+            10,
+            -7,
+            3
+          ],
+          "R": [
+            0.032,
+            0.033,
+            -0.022
+          ],
+          "L": [
+            -0.019,
+            0.024,
+            -0.033
+          ],
+          "front": [
+            -0.003,
+            0.009,
+            -0.008
+          ],
+          "back": [
+            0.003,
+            0,
+            0.007
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            26,
+            -9,
+            18
+          ],
+          "wrist_L": [
+            18,
+            13,
+            -13
+          ],
+          "shoulder": 2
+        },
+        "resist": {
+          "pelvis": [
+            0.014,
+            -0.033,
+            -0.02
+          ],
+          "hips": [
+            -2,
+            -24,
+            7
+          ],
+          "spine": [
+            -4,
+            13,
+            -4
+          ],
+          "chest": [
+            -7,
+            29,
+            -8
+          ],
+          "neck": [
+            4,
+            -15,
+            2
+          ],
+          "head": [
+            1,
+            -12,
+            4
+          ],
+          "R": [
+            0.048,
+            0.046,
+            0.003
+          ],
+          "L": [
+            -0.027,
+            0.028,
+            -0.017
+          ],
+          "front": [
+            -0.004,
+            0.016,
+            -0.014
+          ],
+          "back": [
+            0.003,
+            0,
+            0.009
+          ],
+          "front_roll": 2,
+          "wrist_R": [
+            8,
+            -17,
+            25
+          ],
+          "wrist_L": [
+            12,
+            19,
+            -18
+          ],
+          "shoulder": 8
+        },
+        "escape": {
+          "pelvis": [
+            -0.016,
+            -0.029,
+            -0.032
+          ],
+          "hips": [
+            5,
+            34,
+            -7
+          ],
+          "spine": [
+            8,
+            -16,
+            4
+          ],
+          "chest": [
+            12,
+            -39,
+            8
+          ],
+          "neck": [
+            -5,
+            18,
+            -2
+          ],
+          "head": [
+            -2,
+            15,
+            -4
+          ],
+          "R": [
+            0.059,
+            0.026,
+            0.017
+          ],
+          "L": [
+            -0.042,
+            0.042,
+            -0.028
+          ],
+          "front": [
+            -0.005,
+            0.023,
+            -0.024
+          ],
+          "back": [
+            0.004,
+            0,
+            -0.015
+          ],
+          "front_roll": 9,
+          "wrist_R": [
+            -11,
+            24,
+            -24
+          ],
+          "wrist_L": [
+            4,
+            -27,
+            17
+          ],
+          "shoulder": 11
+        },
+        "recover": {
+          "pelvis": [
+            -0.003,
+            -0.012,
+            0.011
+          ],
+          "hips": [
+            2,
+            9,
+            -1
+          ],
+          "spine": [
+            3,
+            -4,
+            1
+          ],
+          "chest": [
+            4,
+            -12,
+            2
+          ],
+          "neck": [
+            -3,
+            5,
+            0
+          ],
+          "head": [
+            -1,
+            4,
+            -1
+          ],
+          "R": [
+            -0.011,
+            0.018,
+            0.024
+          ],
+          "L": [
+            0.006,
+            0.025,
+            0.011
+          ],
+          "front": [
+            -0.003,
+            0,
+            0.008
+          ],
+          "back": [
+            0.002,
+            0,
+            -0.003
+          ],
+          "front_roll": 2,
+          "wrist_R": [
+            -16,
+            4,
+            -4
+          ],
+          "wrist_L": [
+            -11,
+            -5,
+            3
+          ],
+          "shoulder": 2
+        },
+        "acquire": {
+          "pelvis": [
+            -0.007,
+            -0.026,
+            0.039
+          ],
+          "hips": [
+            8,
+            26,
+            -5
+          ],
+          "spine": [
+            11,
+            -11,
+            3
+          ],
+          "chest": [
+            16,
+            -31,
+            6
+          ],
+          "neck": [
+            -10,
+            13,
+            -1
+          ],
+          "head": [
+            -4,
+            10,
+            -3
+          ],
+          "R": [
+            -0.03,
+            0.009,
+            0.116
+          ],
+          "L": [
+            0.019,
+            0.019,
+            0.091
+          ],
+          "front": [
+            -0.005,
+            0,
+            0.03
+          ],
+          "back": [
+            0.004,
+            0,
+            -0.01
+          ],
+          "front_roll": 8,
+          "wrist_R": [
+            -51,
+            8,
+            -13
+          ],
+          "wrist_L": [
+            -37,
+            -12,
+            9
+          ],
+          "shoulder": 9
+        },
+        "acquire_load": {
+          "pelvis": [
+            -0.004,
+            -0.041,
+            0.004
+          ],
+          "hips": [
+            7,
+            28,
+            -3
+          ],
+          "spine": [
+            10,
+            -12,
+            2
+          ],
+          "chest": [
+            12,
+            -29,
+            4
+          ],
+          "neck": [
+            -8,
+            9,
+            -1
+          ],
+          "head": [
+            -2,
+            11,
+            -2
+          ],
+          "R": [
+            0.002,
+            0.015,
+            0.025
+          ],
+          "L": [
+            0.01,
+            0.026,
+            0.012
+          ],
+          "front": [
+            -0.004,
+            0,
+            0.012
+          ],
+          "back": [
+            0.003,
+            0,
+            -0.015
+          ],
+          "front_roll": 3,
+          "wrist_R": [
+            -21,
+            7,
+            -8
+          ],
+          "wrist_L": [
+            -15,
+            -8,
+            5
+          ],
+          "shoulder": 4
+        },
+        "whiff": {
+          "pelvis": [
+            -0.011,
+            -0.037,
+            0.043
+          ],
+          "hips": [
+            12,
+            33,
+            -6
+          ],
+          "spine": [
+            15,
+            -15,
+            4
+          ],
+          "chest": [
+            20,
+            -38,
+            7
+          ],
+          "neck": [
+            -7,
+            16,
+            -2
+          ],
+          "head": [
+            3,
+            12,
+            -3
+          ],
+          "R": [
+            -0.007,
+            -0.029,
+            0.13
+          ],
+          "L": [
+            0.042,
+            -0.008,
+            0.101
+          ],
+          "front": [
+            -0.004,
+            0,
+            0.027
+          ],
+          "back": [
+            0.004,
+            0.012,
+            -0.01
+          ],
+          "front_roll": 11,
+          "wrist_R": [
+            -9,
+            13,
+            -11
+          ],
+          "wrist_L": [
+            -3,
+            -15,
+            8
+          ],
+          "shoulder": 10
+        },
+        "release_forward": {
+          "pelvis": [
+            -0.006,
+            -0.025,
+            0.045
+          ],
+          "hips": [
+            10,
+            31,
+            -4
+          ],
+          "spine": [
+            12,
+            -14,
+            3
+          ],
+          "chest": [
+            18,
+            -37,
+            6
+          ],
+          "neck": [
+            -10,
+            16,
+            -1
+          ],
+          "head": [
+            -3,
+            11,
+            -2
+          ],
+          "R": [
+            -0.031,
+            0.008,
+            0.132
+          ],
+          "L": [
+            0.02,
+            -0.002,
+            0.103
+          ],
+          "front": [
+            -0.004,
+            0,
+            0.02
+          ],
+          "back": [
+            0.003,
+            0,
+            -0.008
+          ],
+          "front_roll": 10,
+          "wrist_R": [
+            -58,
+            10,
+            -12
+          ],
+          "wrist_L": [
+            -42,
+            -12,
+            9
+          ],
+          "shoulder": 10
+        },
+        "release_back": {
+          "pelvis": [
+            0.016,
+            -0.032,
+            -0.024
+          ],
+          "hips": [
+            1,
+            -43,
+            7
+          ],
+          "spine": [
+            4,
+            21,
+            -4
+          ],
+          "chest": [
+            8,
+            -26,
+            -8
+          ],
+          "neck": [
+            -3,
+            12,
+            2
+          ],
+          "head": [
+            -1,
+            -24,
+            4
+          ],
+          "R": [
+            0.053,
+            0.013,
+            -0.028
+          ],
+          "L": [
+            -0.039,
+            0.039,
+            -0.062
+          ],
+          "front": [
+            -0.004,
+            0,
+            0.012
+          ],
+          "back": [
+            0.003,
+            0,
+            -0.024
+          ],
+          "front_roll": 4,
+          "wrist_R": [
+            -16,
+            -25,
+            20
+          ],
+          "wrist_L": [
+            -38,
+            18,
+            -12
+          ],
+          "shoulder": 8
+        },
+        "release_up": {
+          "pelvis": [
+            -0.002,
+            -0.011,
+            0.017
+          ],
+          "hips": [
+            -6,
+            19,
+            -2
+          ],
+          "spine": [
+            -9,
+            -8,
+            1
+          ],
+          "chest": [
+            -13,
+            -19,
+            3
+          ],
+          "neck": [
+            6,
+            7,
+            -1
+          ],
+          "head": [
+            -15,
+            5,
+            -2
+          ],
+          "R": [
+            -0.015,
+            0.143,
+            0.053
+          ],
+          "L": [
+            0.008,
+            0.123,
+            0.047
+          ],
+          "front": [
+            -0.004,
+            0,
+            0.02
+          ],
+          "back": [
+            0.003,
+            0,
+            -0.008
+          ],
+          "front_roll": 9,
+          "wrist_R": [
+            -24,
+            3,
+            -8
+          ],
+          "wrist_L": [
+            -18,
+            -5,
+            6
+          ],
+          "shoulder": 10
+        },
+        "release_down": {
+          "pelvis": [
+            -0.006,
+            -0.064,
+            0.028
+          ],
+          "hips": [
+            20,
+            24,
+            -5
+          ],
+          "spine": [
+            19,
+            -12,
+            3
+          ],
+          "chest": [
+            25,
+            -28,
+            6
+          ],
+          "neck": [
+            -10,
+            11,
+            -1
+          ],
+          "head": [
+            8,
+            8,
+            -2
+          ],
+          "R": [
+            -0.02,
+            -0.141,
+            0.087
+          ],
+          "L": [
+            0.015,
+            -0.123,
+            0.066
+          ],
+          "front": [
+            -0.004,
+            0,
+            0.02
+          ],
+          "back": [
+            0.003,
+            0,
+            -0.008
+          ],
+          "front_roll": 5,
+          "wrist_R": [
+            -15,
+            7,
+            -9
+          ],
+          "wrist_L": [
+            -9,
+            -8,
+            7
+          ],
+          "shoulder": 9
+        },
+        "air_forward": {
+          "pelvis": [
+            0.007,
+            -0.018,
+            -0.011
+          ],
+          "hips": [
+            -14,
+            -17,
+            8
+          ],
+          "spine": [
+            -12,
+            10,
+            -5
+          ],
+          "chest": [
+            -17,
+            23,
+            -9
+          ],
+          "neck": [
+            10,
+            -12,
+            3
+          ],
+          "head": [
+            13,
+            -9,
+            4
+          ],
+          "R": [
+            0.051,
+            0.041,
+            -0.048
+          ],
+          "L": [
+            -0.025,
+            0.029,
+            -0.039
+          ],
+          "front": [
+            -0.004,
+            0.048,
+            -0.025
+          ],
+          "back": [
+            0.003,
+            0.032,
+            0.026
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            22,
+            -11,
+            20
+          ],
+          "wrist_L": [
+            28,
+            16,
+            -15
+          ],
+          "shoulder": 3
+        },
+        "air_back": {
+          "pelvis": [
+            -0.01,
+            -0.02,
+            0.017
+          ],
+          "hips": [
+            13,
+            24,
+            -8
+          ],
+          "spine": [
+            15,
+            -13,
+            5
+          ],
+          "chest": [
+            20,
+            -31,
+            9
+          ],
+          "neck": [
+            -7,
+            15,
+            -3
+          ],
+          "head": [
+            7,
+            18,
+            -4
+          ],
+          "R": [
+            0.036,
+            0.02,
+            0.047
+          ],
+          "L": [
+            -0.046,
+            0.039,
+            0.03
+          ],
+          "front": [
+            -0.004,
+            0.034,
+            0.032
+          ],
+          "back": [
+            0.003,
+            0.051,
+            -0.022
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            3,
+            22,
+            -20
+          ],
+          "wrist_L": [
+            10,
+            -20,
+            14
+          ],
+          "shoulder": 4
+        },
+        "air_up": {
+          "pelvis": [
+            0.003,
+            -0.011,
+            -0.006
+          ],
+          "hips": [
+            -11,
+            12,
+            -5
+          ],
+          "spine": [
+            -15,
+            -6,
+            3
+          ],
+          "chest": [
+            -20,
+            -15,
+            7
+          ],
+          "neck": [
+            8,
+            5,
+            -1
+          ],
+          "head": [
+            15,
+            7,
+            -3
+          ],
+          "R": [
+            0.045,
+            -0.014,
+            -0.019
+          ],
+          "L": [
+            -0.034,
+            -0.001,
+            -0.028
+          ],
+          "front": [
+            -0.004,
+            0.058,
+            0.009
+          ],
+          "back": [
+            0.003,
+            0.047,
+            -0.014
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            27,
+            6,
+            19
+          ],
+          "wrist_L": [
+            20,
+            -9,
+            -16
+          ],
+          "shoulder": 1
+        },
+        "air_down": {
+          "pelvis": [
+            -0.005,
+            -0.031,
+            0.018
+          ],
+          "hips": [
+            21,
+            18,
+            -8
+          ],
+          "spine": [
+            19,
+            -9,
+            5
+          ],
+          "chest": [
+            26,
+            -22,
+            10
+          ],
+          "neck": [
+            -8,
+            9,
+            -2
+          ],
+          "head": [
+            -6,
+            11,
+            -4
+          ],
+          "R": [
+            0.034,
+            0.08,
+            0.022
+          ],
+          "L": [
+            -0.041,
+            0.062,
+            0.032
+          ],
+          "front": [
+            -0.004,
+            0.038,
+            -0.03
+          ],
+          "back": [
+            0.003,
+            0.029,
+            0.024
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -4,
+            14,
+            -18
+          ],
+          "wrist_L": [
+            3,
+            -16,
+            13
+          ],
+          "shoulder": 6
+        },
+        "landing": {
+          "pelvis": [
+            -0.007,
+            -0.049,
+            0.02
+          ],
+          "hips": [
+            12,
+            16,
+            -4
+          ],
+          "spine": [
+            10,
+            -7,
+            3
+          ],
+          "chest": [
+            14,
+            -19,
+            5
+          ],
+          "neck": [
+            -6,
+            7,
+            -1
+          ],
+          "head": [
+            1,
+            5,
+            -2
+          ],
+          "R": [
+            0.017,
+            -0.026,
+            0.028
+          ],
+          "L": [
+            -0.018,
+            -0.008,
+            0.017
+          ],
+          "front": [
+            -0.004,
+            0,
+            0.014
+          ],
+          "back": [
+            0.003,
+            0,
+            -0.007
+          ],
+          "front_roll": 5,
+          "wrist_R": [
+            -11,
+            5,
+            -7
+          ],
+          "wrist_L": [
+            -6,
+            -7,
+            5
+          ],
+          "shoulder": 5
+        }
+      },
+      "tempo": {
+        "hold_frames": 28,
+        "escape_frames": 12,
+        "recovery_frames": 13,
+        "air_frames": 19,
+        "landing_frames": 11
+      }
+    },
+    "kaia-windrow": {
+      "bible": "docs/bibles/fighters/kaia-windrow.md",
+      "intent": "Pressure cradle: an open crescent held by banked hips and a counterbalancing hand. Restraint disturbs balance, resistance restores an arc, escape redirects sideways and landing bleeds force through a spiral step.",
+      "poses": {
+        "hold": {
+          "pelvis": [
+            0.012,
+            -0.036,
+            0.019
+          ],
+          "hips": [
+            4,
+            -15,
+            5
+          ],
+          "spine": [
+            5,
+            8,
+            -3
+          ],
+          "chest": [
+            7,
+            20,
+            -6
+          ],
+          "neck": [
+            -5,
+            -8,
+            2
+          ],
+          "head": [
+            -2,
+            -5,
+            3
+          ],
+          "R": [
+            0.004,
+            0.014,
+            0.081
+          ],
+          "L": [
+            -0.014,
+            0.037,
+            0.062
+          ],
+          "front": [
+            0.006,
+            0,
+            0.012
+          ],
+          "back": [
+            -0.004,
+            0,
+            -0.006
+          ],
+          "front_roll": 3,
+          "wrist_R": [
+            -28,
+            15,
+            -12
+          ],
+          "wrist_L": [
+            -19,
+            -19,
+            10
+          ],
+          "shoulder": 4
+        },
+        "hold_load": {
+          "pelvis": [
+            0.017,
+            -0.044,
+            0.012
+          ],
+          "hips": [
+            6,
+            -21,
+            7
+          ],
+          "spine": [
+            7,
+            11,
+            -4
+          ],
+          "chest": [
+            10,
+            27,
+            -8
+          ],
+          "neck": [
+            -5,
+            -8,
+            2
+          ],
+          "head": [
+            -3,
+            -7,
+            4
+          ],
+          "R": [
+            0.01,
+            0.009,
+            0.075
+          ],
+          "L": [
+            -0.019,
+            0.045,
+            0.056
+          ],
+          "front": [
+            0.006,
+            0,
+            0.012
+          ],
+          "back": [
+            -0.004,
+            0,
+            -0.006
+          ],
+          "front_roll": 5,
+          "wrist_R": [
+            -28,
+            15,
+            -12
+          ],
+          "wrist_L": [
+            -19,
+            -19,
+            10
+          ],
+          "shoulder": 6
+        },
+        "restrained": {
+          "pelvis": [
+            -0.015,
+            -0.029,
+            -0.012
+          ],
+          "hips": [
+            -5,
+            12,
+            -7
+          ],
+          "spine": [
+            -7,
+            -6,
+            4
+          ],
+          "chest": [
+            -10,
+            -17,
+            9
+          ],
+          "neck": [
+            6,
+            8,
+            -3
+          ],
+          "head": [
+            7,
+            5,
+            -4
+          ],
+          "R": [
+            0.034,
+            0.043,
+            -0.015
+          ],
+          "L": [
+            -0.04,
+            0.02,
+            -0.025
+          ],
+          "front": [
+            0.005,
+            0.01,
+            -0.004
+          ],
+          "back": [
+            -0.004,
+            0,
+            0.008
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            18,
+            -22,
+            17
+          ],
+          "wrist_L": [
+            29,
+            17,
+            -20
+          ],
+          "shoulder": 3
+        },
+        "resist": {
+          "pelvis": [
+            -0.023,
+            -0.039,
+            -0.01
+          ],
+          "hips": [
+            -1,
+            23,
+            -11
+          ],
+          "spine": [
+            -3,
+            -12,
+            6
+          ],
+          "chest": [
+            -5,
+            -28,
+            13
+          ],
+          "neck": [
+            3,
+            13,
+            -4
+          ],
+          "head": [
+            1,
+            10,
+            -6
+          ],
+          "R": [
+            0.047,
+            0.057,
+            0.005
+          ],
+          "L": [
+            -0.052,
+            0.028,
+            -0.012
+          ],
+          "front": [
+            0.008,
+            0.016,
+            -0.008
+          ],
+          "back": [
+            -0.006,
+            0,
+            0.011
+          ],
+          "front_roll": 1,
+          "wrist_R": [
+            5,
+            -29,
+            23
+          ],
+          "wrist_L": [
+            18,
+            23,
+            -27
+          ],
+          "shoulder": 7
+        },
+        "escape": {
+          "pelvis": [
+            0.029,
+            -0.034,
+            -0.024
+          ],
+          "hips": [
+            3,
+            -33,
+            12
+          ],
+          "spine": [
+            6,
+            16,
+            -7
+          ],
+          "chest": [
+            9,
+            38,
+            -15
+          ],
+          "neck": [
+            -4,
+            -18,
+            5
+          ],
+          "head": [
+            -2,
+            -13,
+            7
+          ],
+          "R": [
+            0.06,
+            0.041,
+            0.025
+          ],
+          "L": [
+            -0.064,
+            0.063,
+            -0.019
+          ],
+          "front": [
+            0.015,
+            0.02,
+            -0.014
+          ],
+          "back": [
+            -0.012,
+            0,
+            -0.011
+          ],
+          "front_roll": 8,
+          "wrist_R": [
+            -9,
+            29,
+            -25
+          ],
+          "wrist_L": [
+            8,
+            -31,
+            22
+          ],
+          "shoulder": 10
+        },
+        "recover": {
+          "pelvis": [
+            0.009,
+            -0.015,
+            0.01
+          ],
+          "hips": [
+            1,
+            -8,
+            3
+          ],
+          "spine": [
+            2,
+            4,
+            -1
+          ],
+          "chest": [
+            3,
+            11,
+            -3
+          ],
+          "neck": [
+            -2,
+            -4,
+            1
+          ],
+          "head": [
+            0,
+            -3,
+            1
+          ],
+          "R": [
+            0.006,
+            0.024,
+            0.025
+          ],
+          "L": [
+            -0.009,
+            0.034,
+            0.011
+          ],
+          "front": [
+            0.004,
+            0,
+            0.005
+          ],
+          "back": [
+            -0.003,
+            0,
+            -0.003
+          ],
+          "front_roll": 2,
+          "wrist_R": [
+            -12,
+            9,
+            -6
+          ],
+          "wrist_L": [
+            -7,
+            -11,
+            5
+          ],
+          "shoulder": 2
+        },
+        "acquire": {
+          "pelvis": [
+            0.016,
+            -0.031,
+            0.032
+          ],
+          "hips": [
+            6,
+            -22,
+            8
+          ],
+          "spine": [
+            8,
+            12,
+            -4
+          ],
+          "chest": [
+            12,
+            29,
+            -10
+          ],
+          "neck": [
+            -7,
+            -12,
+            3
+          ],
+          "head": [
+            -3,
+            -8,
+            5
+          ],
+          "R": [
+            -0.008,
+            0.031,
+            0.107
+          ],
+          "L": [
+            -0.023,
+            0.054,
+            0.085
+          ],
+          "front": [
+            0.009,
+            0,
+            0.022
+          ],
+          "back": [
+            -0.006,
+            0,
+            -0.009
+          ],
+          "front_roll": 6,
+          "wrist_R": [
+            -39,
+            20,
+            -17
+          ],
+          "wrist_L": [
+            -28,
+            -24,
+            14
+          ],
+          "shoulder": 8
+        },
+        "acquire_load": {
+          "pelvis": [
+            0.02,
+            -0.049,
+            0.001
+          ],
+          "hips": [
+            5,
+            -26,
+            7
+          ],
+          "spine": [
+            7,
+            13,
+            -4
+          ],
+          "chest": [
+            9,
+            30,
+            -9
+          ],
+          "neck": [
+            -5,
+            -8,
+            2
+          ],
+          "head": [
+            -1,
+            -10,
+            4
+          ],
+          "R": [
+            0.027,
+            0.029,
+            0.016
+          ],
+          "L": [
+            -0.029,
+            0.052,
+            0.006
+          ],
+          "front": [
+            0.007,
+            0,
+            0.007
+          ],
+          "back": [
+            -0.006,
+            0,
+            -0.014
+          ],
+          "front_roll": 2,
+          "wrist_R": [
+            -18,
+            19,
+            -10
+          ],
+          "wrist_L": [
+            -11,
+            -21,
+            9
+          ],
+          "shoulder": 4
+        },
+        "whiff": {
+          "pelvis": [
+            0.025,
+            -0.043,
+            0.033
+          ],
+          "hips": [
+            9,
+            -30,
+            11
+          ],
+          "spine": [
+            11,
+            16,
+            -6
+          ],
+          "chest": [
+            15,
+            35,
+            -13
+          ],
+          "neck": [
+            -5,
+            -15,
+            4
+          ],
+          "head": [
+            4,
+            -10,
+            6
+          ],
+          "R": [
+            0.011,
+            -0.003,
+            0.122
+          ],
+          "L": [
+            -0.042,
+            0.031,
+            0.096
+          ],
+          "front": [
+            0.012,
+            0,
+            0.02
+          ],
+          "back": [
+            -0.009,
+            0.009,
+            -0.008
+          ],
+          "front_roll": 9,
+          "wrist_R": [
+            -6,
+            24,
+            -15
+          ],
+          "wrist_L": [
+            3,
+            -26,
+            13
+          ],
+          "shoulder": 9
+        },
+        "release_forward": {
+          "pelvis": [
+            0.022,
+            -0.029,
+            0.037
+          ],
+          "hips": [
+            7,
+            -28,
+            9
+          ],
+          "spine": [
+            9,
+            15,
+            -5
+          ],
+          "chest": [
+            14,
+            34,
+            -12
+          ],
+          "neck": [
+            -8,
+            -15,
+            4
+          ],
+          "head": [
+            -3,
+            -10,
+            5
+          ],
+          "R": [
+            -0.01,
+            0.036,
+            0.128
+          ],
+          "L": [
+            -0.03,
+            0.045,
+            0.099
+          ],
+          "front": [
+            0.006,
+            0,
+            0.012
+          ],
+          "back": [
+            -0.004,
+            0,
+            -0.006
+          ],
+          "front_roll": 8,
+          "wrist_R": [
+            -47,
+            23,
+            -16
+          ],
+          "wrist_L": [
+            -34,
+            -24,
+            14
+          ],
+          "shoulder": 9
+        },
+        "release_back": {
+          "pelvis": [
+            -0.026,
+            -0.037,
+            -0.015
+          ],
+          "hips": [
+            -2,
+            38,
+            -12
+          ],
+          "spine": [
+            1,
+            -19,
+            7
+          ],
+          "chest": [
+            5,
+            22,
+            14
+          ],
+          "neck": [
+            -2,
+            -10,
+            -4
+          ],
+          "head": [
+            -1,
+            21,
+            -6
+          ],
+          "R": [
+            0.053,
+            0.03,
+            -0.021
+          ],
+          "L": [
+            -0.061,
+            0.058,
+            -0.049
+          ],
+          "front": [
+            0.008,
+            0,
+            0.01
+          ],
+          "back": [
+            -0.009,
+            0,
+            -0.02
+          ],
+          "front_roll": 4,
+          "wrist_R": [
+            -10,
+            -31,
+            22
+          ],
+          "wrist_L": [
+            -29,
+            24,
+            -18
+          ],
+          "shoulder": 7
+        },
+        "release_up": {
+          "pelvis": [
+            0.01,
+            -0.014,
+            0.013
+          ],
+          "hips": [
+            -7,
+            -17,
+            5
+          ],
+          "spine": [
+            -10,
+            8,
+            -3
+          ],
+          "chest": [
+            -14,
+            19,
+            -7
+          ],
+          "neck": [
+            6,
+            -7,
+            2
+          ],
+          "head": [
+            -13,
+            -4,
+            3
+          ],
+          "R": [
+            0.002,
+            0.148,
+            0.048
+          ],
+          "L": [
+            -0.018,
+            0.158,
+            0.039
+          ],
+          "front": [
+            0.006,
+            0,
+            0.012
+          ],
+          "back": [
+            -0.004,
+            0,
+            -0.006
+          ],
+          "front_roll": 7,
+          "wrist_R": [
+            -18,
+            11,
+            -10
+          ],
+          "wrist_L": [
+            -12,
+            -14,
+            9
+          ],
+          "shoulder": 8
+        },
+        "release_down": {
+          "pelvis": [
+            0.021,
+            -0.068,
+            0.024
+          ],
+          "hips": [
+            17,
+            -21,
+            10
+          ],
+          "spine": [
+            16,
+            11,
+            -5
+          ],
+          "chest": [
+            22,
+            26,
+            -11
+          ],
+          "neck": [
+            -8,
+            -10,
+            3
+          ],
+          "head": [
+            7,
+            -7,
+            5
+          ],
+          "R": [
+            0.002,
+            -0.126,
+            0.082
+          ],
+          "L": [
+            -0.024,
+            -0.106,
+            0.063
+          ],
+          "front": [
+            0.006,
+            0,
+            0.012
+          ],
+          "back": [
+            -0.004,
+            0,
+            -0.006
+          ],
+          "front_roll": 4,
+          "wrist_R": [
+            -10,
+            17,
+            -12
+          ],
+          "wrist_L": [
+            -4,
+            -19,
+            10
+          ],
+          "shoulder": 8
+        },
+        "air_forward": {
+          "pelvis": [
+            -0.013,
+            -0.019,
+            -0.007
+          ],
+          "hips": [
+            -10,
+            16,
+            -12
+          ],
+          "spine": [
+            -9,
+            -8,
+            7
+          ],
+          "chest": [
+            -14,
+            -22,
+            15
+          ],
+          "neck": [
+            8,
+            11,
+            -4
+          ],
+          "head": [
+            10,
+            8,
+            -6
+          ],
+          "R": [
+            0.053,
+            0.055,
+            -0.035
+          ],
+          "L": [
+            -0.049,
+            0.036,
+            -0.043
+          ],
+          "front": [
+            0.011,
+            0.042,
+            -0.024
+          ],
+          "back": [
+            -0.009,
+            0.03,
+            0.025
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            15,
+            -24,
+            22
+          ],
+          "wrist_L": [
+            31,
+            20,
+            -24
+          ],
+          "shoulder": 3
+        },
+        "air_back": {
+          "pelvis": [
+            0.019,
+            -0.021,
+            0.012
+          ],
+          "hips": [
+            10,
+            -24,
+            13
+          ],
+          "spine": [
+            12,
+            13,
+            -8
+          ],
+          "chest": [
+            17,
+            29,
+            -16
+          ],
+          "neck": [
+            -5,
+            -14,
+            4
+          ],
+          "head": [
+            6,
+            -17,
+            7
+          ],
+          "R": [
+            0.041,
+            0.037,
+            0.04
+          ],
+          "L": [
+            -0.062,
+            0.056,
+            0.026
+          ],
+          "front": [
+            0.012,
+            0.032,
+            0.029
+          ],
+          "back": [
+            -0.009,
+            0.047,
+            -0.023
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            1,
+            27,
+            -24
+          ],
+          "wrist_L": [
+            13,
+            -25,
+            20
+          ],
+          "shoulder": 4
+        },
+        "air_up": {
+          "pelvis": [
+            -0.007,
+            -0.009,
+            -0.003
+          ],
+          "hips": [
+            -9,
+            -12,
+            8
+          ],
+          "spine": [
+            -12,
+            6,
+            -5
+          ],
+          "chest": [
+            -17,
+            14,
+            -10
+          ],
+          "neck": [
+            7,
+            -5,
+            3
+          ],
+          "head": [
+            13,
+            -6,
+            5
+          ],
+          "R": [
+            0.047,
+            -0.003,
+            -0.013
+          ],
+          "L": [
+            -0.049,
+            0.017,
+            -0.023
+          ],
+          "front": [
+            0.01,
+            0.055,
+            0.01
+          ],
+          "back": [
+            -0.008,
+            0.046,
+            -0.011
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            21,
+            12,
+            20
+          ],
+          "wrist_L": [
+            25,
+            -15,
+            -21
+          ],
+          "shoulder": 1
+        },
+        "air_down": {
+          "pelvis": [
+            0.014,
+            -0.032,
+            0.014
+          ],
+          "hips": [
+            18,
+            -18,
+            13
+          ],
+          "spine": [
+            17,
+            9,
+            -7
+          ],
+          "chest": [
+            23,
+            22,
+            -16
+          ],
+          "neck": [
+            -6,
+            -8,
+            4
+          ],
+          "head": [
+            -4,
+            -10,
+            6
+          ],
+          "R": [
+            0.039,
+            0.093,
+            0.017
+          ],
+          "L": [
+            -0.057,
+            0.075,
+            0.029
+          ],
+          "front": [
+            0.011,
+            0.034,
+            -0.026
+          ],
+          "back": [
+            -0.009,
+            0.029,
+            0.021
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -2,
+            19,
+            -21
+          ],
+          "wrist_L": [
+            7,
+            -22,
+            18
+          ],
+          "shoulder": 5
+        },
+        "landing": {
+          "pelvis": [
+            0.026,
+            -0.058,
+            0.018
+          ],
+          "hips": [
+            11,
+            -26,
+            10
+          ],
+          "spine": [
+            9,
+            13,
+            -5
+          ],
+          "chest": [
+            13,
+            30,
+            -12
+          ],
+          "neck": [
+            -5,
+            -12,
+            3
+          ],
+          "head": [
+            2,
+            -8,
+            5
+          ],
+          "R": [
+            0.027,
+            -0.018,
+            0.031
+          ],
+          "L": [
+            -0.044,
+            0.007,
+            0.018
+          ],
+          "front": [
+            0.013,
+            0,
+            0.015
+          ],
+          "back": [
+            -0.01,
+            0,
+            -0.011
+          ],
+          "front_roll": 6,
+          "wrist_R": [
+            -7,
+            17,
+            -10
+          ],
+          "wrist_L": [
+            -1,
+            -19,
+            8
+          ],
+          "shoulder": 6
+        }
+      },
+      "tempo": {
+        "hold_frames": 52,
+        "escape_frames": 22,
+        "recovery_frames": 23,
+        "air_frames": 32,
+        "landing_frames": 21
+      }
+    },
+    "nix-calder": {
+      "bible": "docs/bibles/fighters/nix-calder.md",
+      "intent": "Cryolattice lock: vertical facets, measured hands and exact stop points. Resistance flexes then fractures structure; escape restores a chosen brace rather than a flourish.",
+      "poses": {
+        "hold": {
+          "pelvis": [
+            0.003,
+            -0.047,
+            0.014
+          ],
+          "hips": [
+            7,
+            5,
+            1
+          ],
+          "spine": [
+            6,
+            -2,
+            0
+          ],
+          "chest": [
+            9,
+            -8,
+            -1
+          ],
+          "neck": [
+            -5,
+            3,
+            0
+          ],
+          "head": [
+            -1,
+            2,
+            0
+          ],
+          "R": [
+            -0.009,
+            -0.038,
+            0.077
+          ],
+          "L": [
+            0.011,
+            -0.026,
+            0.073
+          ],
+          "front": [
+            0.002,
+            0,
+            0.009
+          ],
+          "back": [
+            -0.002,
+            0,
+            -0.009
+          ],
+          "front_roll": 1,
+          "wrist_R": [
+            -34,
+            12,
+            -3
+          ],
+          "wrist_L": [
+            -32,
+            -11,
+            3
+          ],
+          "shoulder": 6
+        },
+        "hold_load": {
+          "pelvis": [
+            0.004,
+            -0.056,
+            0.01
+          ],
+          "hips": [
+            10,
+            7,
+            1
+          ],
+          "spine": [
+            8,
+            -3,
+            0
+          ],
+          "chest": [
+            12,
+            -10,
+            -1
+          ],
+          "neck": [
+            -5,
+            3,
+            0
+          ],
+          "head": [
+            -2,
+            3,
+            0
+          ],
+          "R": [
+            -0.01,
+            -0.046,
+            0.072
+          ],
+          "L": [
+            0.013,
+            -0.035,
+            0.067
+          ],
+          "front": [
+            0.002,
+            0,
+            0.009
+          ],
+          "back": [
+            -0.002,
+            0,
+            -0.009
+          ],
+          "front_roll": 2,
+          "wrist_R": [
+            -34,
+            12,
+            -3
+          ],
+          "wrist_L": [
+            -32,
+            -11,
+            3
+          ],
+          "shoulder": 8
+        },
+        "restrained": {
+          "pelvis": [
+            -0.005,
+            -0.035,
+            -0.013
+          ],
+          "hips": [
+            -5,
+            -5,
+            -2
+          ],
+          "spine": [
+            -6,
+            2,
+            1
+          ],
+          "chest": [
+            -9,
+            7,
+            3
+          ],
+          "neck": [
+            5,
+            -3,
+            -1
+          ],
+          "head": [
+            6,
+            -2,
+            -1
+          ],
+          "R": [
+            0.02,
+            0.021,
+            -0.015
+          ],
+          "L": [
+            -0.018,
+            0.017,
+            -0.021
+          ],
+          "front": [
+            0.002,
+            0.004,
+            -0.005
+          ],
+          "back": [
+            -0.002,
+            0,
+            0.005
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            16,
+            -12,
+            9
+          ],
+          "wrist_L": [
+            19,
+            10,
+            -8
+          ],
+          "shoulder": 3
+        },
+        "resist": {
+          "pelvis": [
+            -0.009,
+            -0.044,
+            -0.018
+          ],
+          "hips": [
+            -1,
+            -11,
+            -3
+          ],
+          "spine": [
+            -2,
+            5,
+            2
+          ],
+          "chest": [
+            -4,
+            14,
+            4
+          ],
+          "neck": [
+            2,
+            -6,
+            -1
+          ],
+          "head": [
+            1,
+            -5,
+            -2
+          ],
+          "R": [
+            0.031,
+            0.031,
+            0.001
+          ],
+          "L": [
+            -0.029,
+            0.022,
+            -0.009
+          ],
+          "front": [
+            0.003,
+            0.009,
+            -0.008
+          ],
+          "back": [
+            -0.003,
+            0,
+            0.007
+          ],
+          "front_roll": 1,
+          "wrist_R": [
+            4,
+            -17,
+            14
+          ],
+          "wrist_L": [
+            10,
+            15,
+            -12
+          ],
+          "shoulder": 8
+        },
+        "escape": {
+          "pelvis": [
+            0.012,
+            -0.039,
+            -0.022
+          ],
+          "hips": [
+            6,
+            18,
+            3
+          ],
+          "spine": [
+            7,
+            -8,
+            -2
+          ],
+          "chest": [
+            11,
+            -22,
+            -5
+          ],
+          "neck": [
+            -3,
+            9,
+            1
+          ],
+          "head": [
+            -1,
+            7,
+            2
+          ],
+          "R": [
+            0.042,
+            0.016,
+            0.015
+          ],
+          "L": [
+            -0.037,
+            0.029,
+            -0.018
+          ],
+          "front": [
+            0.004,
+            0.011,
+            -0.013
+          ],
+          "back": [
+            -0.004,
+            0,
+            -0.012
+          ],
+          "front_roll": 4,
+          "wrist_R": [
+            -10,
+            18,
+            -13
+          ],
+          "wrist_L": [
+            3,
+            -19,
+            10
+          ],
+          "shoulder": 10
+        },
+        "recover": {
+          "pelvis": [
+            0.002,
+            -0.022,
+            0.007
+          ],
+          "hips": [
+            3,
+            3,
+            0
+          ],
+          "spine": [
+            3,
+            -1,
+            0
+          ],
+          "chest": [
+            4,
+            -4,
+            0
+          ],
+          "neck": [
+            -2,
+            1,
+            0
+          ],
+          "head": [
+            0,
+            1,
+            0
+          ],
+          "R": [
+            -0.004,
+            0.004,
+            0.02
+          ],
+          "L": [
+            0.005,
+            0.011,
+            0.017
+          ],
+          "front": [
+            0.002,
+            0,
+            0.004
+          ],
+          "back": [
+            -0.002,
+            0,
+            -0.004
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -17,
+            7,
+            -1
+          ],
+          "wrist_L": [
+            -15,
+            -6,
+            1
+          ],
+          "shoulder": 3
+        },
+        "acquire": {
+          "pelvis": [
+            0.004,
+            -0.043,
+            0.026
+          ],
+          "hips": [
+            10,
+            9,
+            2
+          ],
+          "spine": [
+            9,
+            -4,
+            0
+          ],
+          "chest": [
+            13,
+            -12,
+            -2
+          ],
+          "neck": [
+            -7,
+            5,
+            0
+          ],
+          "head": [
+            -2,
+            4,
+            1
+          ],
+          "R": [
+            -0.017,
+            -0.019,
+            0.099
+          ],
+          "L": [
+            0.019,
+            -0.011,
+            0.094
+          ],
+          "front": [
+            0.003,
+            0,
+            0.016
+          ],
+          "back": [
+            -0.003,
+            0,
+            -0.011
+          ],
+          "front_roll": 3,
+          "wrist_R": [
+            -45,
+            15,
+            -4
+          ],
+          "wrist_L": [
+            -42,
+            -14,
+            4
+          ],
+          "shoulder": 9
+        },
+        "acquire_load": {
+          "pelvis": [
+            0.003,
+            -0.06,
+            -0.001
+          ],
+          "hips": [
+            10,
+            10,
+            1
+          ],
+          "spine": [
+            8,
+            -4,
+            0
+          ],
+          "chest": [
+            10,
+            -11,
+            -1
+          ],
+          "neck": [
+            -5,
+            3,
+            0
+          ],
+          "head": [
+            -1,
+            4,
+            0
+          ],
+          "R": [
+            0.012,
+            -0.01,
+            0.019
+          ],
+          "L": [
+            -0.009,
+            0.002,
+            0.015
+          ],
+          "front": [
+            0.002,
+            0,
+            0.005
+          ],
+          "back": [
+            -0.003,
+            0,
+            -0.014
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -24,
+            12,
+            -3
+          ],
+          "wrist_L": [
+            -22,
+            -11,
+            3
+          ],
+          "shoulder": 5
+        },
+        "whiff": {
+          "pelvis": [
+            0.007,
+            -0.051,
+            0.027
+          ],
+          "hips": [
+            12,
+            14,
+            3
+          ],
+          "spine": [
+            11,
+            -6,
+            -1
+          ],
+          "chest": [
+            16,
+            -18,
+            -3
+          ],
+          "neck": [
+            -5,
+            7,
+            1
+          ],
+          "head": [
+            2,
+            5,
+            1
+          ],
+          "R": [
+            -0.001,
+            -0.051,
+            0.11
+          ],
+          "L": [
+            0.028,
+            -0.039,
+            0.101
+          ],
+          "front": [
+            0.003,
+            0,
+            0.014
+          ],
+          "back": [
+            -0.003,
+            0.005,
+            -0.01
+          ],
+          "front_roll": 4,
+          "wrist_R": [
+            -10,
+            18,
+            -4
+          ],
+          "wrist_L": [
+            -7,
+            -16,
+            4
+          ],
+          "shoulder": 8
+        },
+        "release_forward": {
+          "pelvis": [
+            0.006,
+            -0.037,
+            0.032
+          ],
+          "hips": [
+            11,
+            16,
+            2
+          ],
+          "spine": [
+            10,
+            -7,
+            -1
+          ],
+          "chest": [
+            16,
+            -21,
+            -3
+          ],
+          "neck": [
+            -7,
+            8,
+            1
+          ],
+          "head": [
+            -2,
+            5,
+            1
+          ],
+          "R": [
+            -0.02,
+            -0.011,
+            0.116
+          ],
+          "L": [
+            0.022,
+            -0.015,
+            0.105
+          ],
+          "front": [
+            0.002,
+            0,
+            0.009
+          ],
+          "back": [
+            -0.002,
+            0,
+            -0.009
+          ],
+          "front_roll": 4,
+          "wrist_R": [
+            -51,
+            16,
+            -4
+          ],
+          "wrist_L": [
+            -46,
+            -14,
+            4
+          ],
+          "shoulder": 10
+        },
+        "release_back": {
+          "pelvis": [
+            -0.01,
+            -0.047,
+            -0.019
+          ],
+          "hips": [
+            2,
+            -27,
+            -4
+          ],
+          "spine": [
+            3,
+            12,
+            2
+          ],
+          "chest": [
+            6,
+            -15,
+            4
+          ],
+          "neck": [
+            -2,
+            7,
+            -1
+          ],
+          "head": [
+            -1,
+            -14,
+            -2
+          ],
+          "R": [
+            0.039,
+            -0.011,
+            -0.019
+          ],
+          "L": [
+            -0.034,
+            0.009,
+            -0.043
+          ],
+          "front": [
+            0.003,
+            0,
+            0.007
+          ],
+          "back": [
+            -0.004,
+            0,
+            -0.018
+          ],
+          "front_roll": 1,
+          "wrist_R": [
+            -12,
+            -19,
+            11
+          ],
+          "wrist_L": [
+            -31,
+            14,
+            -6
+          ],
+          "shoulder": 7
+        },
+        "release_up": {
+          "pelvis": [
+            0.002,
+            -0.025,
+            0.01
+          ],
+          "hips": [
+            -4,
+            6,
+            1
+          ],
+          "spine": [
+            -6,
+            -2,
+            0
+          ],
+          "chest": [
+            -9,
+            -7,
+            -1
+          ],
+          "neck": [
+            4,
+            2,
+            0
+          ],
+          "head": [
+            -10,
+            2,
+            0
+          ],
+          "R": [
+            -0.003,
+            0.112,
+            0.043
+          ],
+          "L": [
+            0.006,
+            0.106,
+            0.041
+          ],
+          "front": [
+            0.002,
+            0,
+            0.009
+          ],
+          "back": [
+            -0.002,
+            0,
+            -0.009
+          ],
+          "front_roll": 3,
+          "wrist_R": [
+            -20,
+            9,
+            -2
+          ],
+          "wrist_L": [
+            -18,
+            -8,
+            2
+          ],
+          "shoulder": 9
+        },
+        "release_down": {
+          "pelvis": [
+            0.004,
+            -0.079,
+            0.02
+          ],
+          "hips": [
+            19,
+            8,
+            2
+          ],
+          "spine": [
+            16,
+            -4,
+            0
+          ],
+          "chest": [
+            22,
+            -10,
+            -2
+          ],
+          "neck": [
+            -7,
+            4,
+            0
+          ],
+          "head": [
+            8,
+            3,
+            1
+          ],
+          "R": [
+            -0.006,
+            -0.145,
+            0.072
+          ],
+          "L": [
+            0.009,
+            -0.139,
+            0.068
+          ],
+          "front": [
+            0.002,
+            0,
+            0.009
+          ],
+          "back": [
+            -0.002,
+            0,
+            -0.009
+          ],
+          "front_roll": 1,
+          "wrist_R": [
+            -11,
+            12,
+            -3
+          ],
+          "wrist_L": [
+            -9,
+            -10,
+            3
+          ],
+          "shoulder": 9
+        },
+        "air_forward": {
+          "pelvis": [
+            -0.004,
+            -0.025,
+            -0.008
+          ],
+          "hips": [
+            -9,
+            -7,
+            -4
+          ],
+          "spine": [
+            -8,
+            3,
+            2
+          ],
+          "chest": [
+            -12,
+            10,
+            5
+          ],
+          "neck": [
+            6,
+            -4,
+            -1
+          ],
+          "head": [
+            8,
+            -3,
+            -2
+          ],
+          "R": [
+            0.032,
+            0.026,
+            -0.032
+          ],
+          "L": [
+            -0.027,
+            0.021,
+            -0.029
+          ],
+          "front": [
+            0.003,
+            0.034,
+            -0.014
+          ],
+          "back": [
+            -0.003,
+            0.027,
+            0.015
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            15,
+            -12,
+            12
+          ],
+          "wrist_L": [
+            20,
+            10,
+            -10
+          ],
+          "shoulder": 4
+        },
+        "air_back": {
+          "pelvis": [
+            0.006,
+            -0.027,
+            0.011
+          ],
+          "hips": [
+            9,
+            13,
+            4
+          ],
+          "spine": [
+            10,
+            -6,
+            -2
+          ],
+          "chest": [
+            14,
+            -17,
+            -5
+          ],
+          "neck": [
+            -4,
+            7,
+            1
+          ],
+          "head": [
+            4,
+            9,
+            2
+          ],
+          "R": [
+            0.027,
+            0.01,
+            0.026
+          ],
+          "L": [
+            -0.033,
+            0.023,
+            0.02
+          ],
+          "front": [
+            0.003,
+            0.027,
+            0.019
+          ],
+          "back": [
+            -0.003,
+            0.036,
+            -0.014
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            3,
+            15,
+            -11
+          ],
+          "wrist_L": [
+            9,
+            -13,
+            9
+          ],
+          "shoulder": 5
+        },
+        "air_up": {
+          "pelvis": [
+            -0.002,
+            -0.017,
+            -0.003
+          ],
+          "hips": [
+            -7,
+            5,
+            2
+          ],
+          "spine": [
+            -10,
+            -2,
+            -1
+          ],
+          "chest": [
+            -13,
+            -7,
+            -3
+          ],
+          "neck": [
+            5,
+            2,
+            1
+          ],
+          "head": [
+            10,
+            3,
+            2
+          ],
+          "R": [
+            0.028,
+            -0.018,
+            -0.011
+          ],
+          "L": [
+            -0.025,
+            -0.008,
+            -0.018
+          ],
+          "front": [
+            0.003,
+            0.043,
+            0.005
+          ],
+          "back": [
+            -0.003,
+            0.038,
+            -0.007
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            19,
+            7,
+            11
+          ],
+          "wrist_L": [
+            17,
+            -8,
+            -10
+          ],
+          "shoulder": 2
+        },
+        "air_down": {
+          "pelvis": [
+            0.004,
+            -0.034,
+            0.012
+          ],
+          "hips": [
+            16,
+            8,
+            4
+          ],
+          "spine": [
+            14,
+            -4,
+            -2
+          ],
+          "chest": [
+            20,
+            -11,
+            -5
+          ],
+          "neck": [
+            -5,
+            4,
+            1
+          ],
+          "head": [
+            -3,
+            5,
+            2
+          ],
+          "R": [
+            0.026,
+            0.055,
+            0.016
+          ],
+          "L": [
+            -0.03,
+            0.046,
+            0.021
+          ],
+          "front": [
+            0.003,
+            0.029,
+            -0.017
+          ],
+          "back": [
+            -0.003,
+            0.025,
+            0.013
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -2,
+            11,
+            -10
+          ],
+          "wrist_L": [
+            3,
+            -12,
+            8
+          ],
+          "shoulder": 6
+        },
+        "landing": {
+          "pelvis": [
+            0.004,
+            -0.068,
+            0.012
+          ],
+          "hips": [
+            15,
+            6,
+            2
+          ],
+          "spine": [
+            12,
+            -3,
+            -1
+          ],
+          "chest": [
+            17,
+            -8,
+            -3
+          ],
+          "neck": [
+            -5,
+            3,
+            1
+          ],
+          "head": [
+            3,
+            2,
+            1
+          ],
+          "R": [
+            0.017,
+            -0.051,
+            0.024
+          ],
+          "L": [
+            -0.019,
+            -0.041,
+            0.021
+          ],
+          "front": [
+            0.004,
+            0,
+            0.008
+          ],
+          "back": [
+            -0.004,
+            0,
+            -0.008
+          ],
+          "front_roll": 1,
+          "wrist_R": [
+            -8,
+            10,
+            -2
+          ],
+          "wrist_L": [
+            -6,
+            -9,
+            2
+          ],
+          "shoulder": 7
+        }
+      },
+      "tempo": {
+        "hold_frames": 48,
+        "escape_frames": 20,
+        "recovery_frames": 22,
+        "air_frames": 27,
+        "landing_frames": 22
+      }
+    },
+    "orion-vell": {
+      "bible": "docs/bibles/fighters/orion-vell.md",
+      "intent": "Orbital suspension: composed center, small hand-vector changes and counter-rotating regional curves. Restraint scatters orbital order; escape re-centers the mass before the hands settle.",
+      "poses": {
+        "hold": {
+          "pelvis": [
+            -0.009,
+            -0.028,
+            0.01
+          ],
+          "hips": [
+            2,
+            19,
+            4
+          ],
+          "spine": [
+            3,
+            -9,
+            -2
+          ],
+          "chest": [
+            5,
+            -23,
+            -5
+          ],
+          "neck": [
+            -3,
+            10,
+            1
+          ],
+          "head": [
+            -1,
+            6,
+            2
+          ],
+          "R": [
+            -0.008,
+            0.029,
+            0.071
+          ],
+          "L": [
+            0.006,
+            0.046,
+            0.057
+          ],
+          "front": [
+            -0.003,
+            0,
+            0.005
+          ],
+          "back": [
+            0.003,
+            0,
+            -0.005
+          ],
+          "front_roll": 1,
+          "wrist_R": [
+            -21,
+            18,
+            -8
+          ],
+          "wrist_L": [
+            -15,
+            -22,
+            7
+          ],
+          "shoulder": 3
+        },
+        "hold_load": {
+          "pelvis": [
+            -0.012,
+            -0.035,
+            0.006
+          ],
+          "hips": [
+            3,
+            25,
+            5
+          ],
+          "spine": [
+            4,
+            -12,
+            -3
+          ],
+          "chest": [
+            7,
+            -29,
+            -6
+          ],
+          "neck": [
+            -3,
+            10,
+            1
+          ],
+          "head": [
+            -2,
+            8,
+            3
+          ],
+          "R": [
+            -0.005,
+            0.023,
+            0.065
+          ],
+          "L": [
+            0.01,
+            0.052,
+            0.052
+          ],
+          "front": [
+            -0.003,
+            0,
+            0.005
+          ],
+          "back": [
+            0.003,
+            0,
+            -0.005
+          ],
+          "front_roll": 2,
+          "wrist_R": [
+            -21,
+            18,
+            -8
+          ],
+          "wrist_L": [
+            -15,
+            -22,
+            7
+          ],
+          "shoulder": 4
+        },
+        "restrained": {
+          "pelvis": [
+            0.011,
+            -0.023,
+            -0.009
+          ],
+          "hips": [
+            -4,
+            -16,
+            -5
+          ],
+          "spine": [
+            -6,
+            8,
+            3
+          ],
+          "chest": [
+            -9,
+            21,
+            6
+          ],
+          "neck": [
+            5,
+            -10,
+            -2
+          ],
+          "head": [
+            6,
+            -7,
+            -3
+          ],
+          "R": [
+            0.027,
+            0.047,
+            -0.012
+          ],
+          "L": [
+            -0.033,
+            0.029,
+            -0.02
+          ],
+          "front": [
+            -0.003,
+            0.007,
+            -0.003
+          ],
+          "back": [
+            0.003,
+            0,
+            0.005
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            14,
+            -21,
+            14
+          ],
+          "wrist_L": [
+            23,
+            17,
+            -16
+          ],
+          "shoulder": 2
+        },
+        "resist": {
+          "pelvis": [
+            0.018,
+            -0.032,
+            -0.013
+          ],
+          "hips": [
+            -1,
+            -27,
+            -7
+          ],
+          "spine": [
+            -2,
+            14,
+            4
+          ],
+          "chest": [
+            -4,
+            32,
+            9
+          ],
+          "neck": [
+            2,
+            -16,
+            -2
+          ],
+          "head": [
+            1,
+            -12,
+            -4
+          ],
+          "R": [
+            0.039,
+            0.057,
+            0.004
+          ],
+          "L": [
+            -0.043,
+            0.037,
+            -0.01
+          ],
+          "front": [
+            -0.004,
+            0.011,
+            -0.006
+          ],
+          "back": [
+            0.004,
+            0,
+            0.008
+          ],
+          "front_roll": 1,
+          "wrist_R": [
+            2,
+            -28,
+            20
+          ],
+          "wrist_L": [
+            13,
+            23,
+            -22
+          ],
+          "shoulder": 5
+        },
+        "escape": {
+          "pelvis": [
+            -0.022,
+            -0.026,
+            -0.019
+          ],
+          "hips": [
+            2,
+            36,
+            8
+          ],
+          "spine": [
+            4,
+            -18,
+            -5
+          ],
+          "chest": [
+            7,
+            -41,
+            -10
+          ],
+          "neck": [
+            -3,
+            20,
+            3
+          ],
+          "head": [
+            -1,
+            14,
+            5
+          ],
+          "R": [
+            0.049,
+            0.037,
+            0.018
+          ],
+          "L": [
+            -0.051,
+            0.062,
+            -0.015
+          ],
+          "front": [
+            -0.007,
+            0.014,
+            -0.01
+          ],
+          "back": [
+            0.006,
+            0,
+            -0.009
+          ],
+          "front_roll": 4,
+          "wrist_R": [
+            -8,
+            27,
+            -19
+          ],
+          "wrist_L": [
+            6,
+            -30,
+            18
+          ],
+          "shoulder": 7
+        },
+        "recover": {
+          "pelvis": [
+            -0.006,
+            -0.011,
+            0.005
+          ],
+          "hips": [
+            1,
+            10,
+            2
+          ],
+          "spine": [
+            1,
+            -5,
+            -1
+          ],
+          "chest": [
+            2,
+            -12,
+            -2
+          ],
+          "neck": [
+            -1,
+            5,
+            0
+          ],
+          "head": [
+            0,
+            3,
+            1
+          ],
+          "R": [
+            -0.003,
+            0.033,
+            0.021
+          ],
+          "L": [
+            0.004,
+            0.041,
+            0.01
+          ],
+          "front": [
+            -0.002,
+            0,
+            0.002
+          ],
+          "back": [
+            0.002,
+            0,
+            -0.002
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -8,
+            11,
+            -4
+          ],
+          "wrist_L": [
+            -5,
+            -13,
+            3
+          ],
+          "shoulder": 1
+        },
+        "acquire": {
+          "pelvis": [
+            -0.012,
+            -0.024,
+            0.021
+          ],
+          "hips": [
+            3,
+            27,
+            6
+          ],
+          "spine": [
+            5,
+            -13,
+            -3
+          ],
+          "chest": [
+            8,
+            -32,
+            -7
+          ],
+          "neck": [
+            -5,
+            14,
+            2
+          ],
+          "head": [
+            -2,
+            9,
+            3
+          ],
+          "R": [
+            -0.017,
+            0.045,
+            0.094
+          ],
+          "L": [
+            0.013,
+            0.061,
+            0.079
+          ],
+          "front": [
+            -0.004,
+            0,
+            0.011
+          ],
+          "back": [
+            0.004,
+            0,
+            -0.007
+          ],
+          "front_roll": 3,
+          "wrist_R": [
+            -30,
+            24,
+            -11
+          ],
+          "wrist_L": [
+            -22,
+            -27,
+            10
+          ],
+          "shoulder": 6
+        },
+        "acquire_load": {
+          "pelvis": [
+            -0.015,
+            -0.039,
+            -0.002
+          ],
+          "hips": [
+            3,
+            29,
+            5
+          ],
+          "spine": [
+            4,
+            -14,
+            -3
+          ],
+          "chest": [
+            6,
+            -31,
+            -6
+          ],
+          "neck": [
+            -3,
+            10,
+            1
+          ],
+          "head": [
+            -1,
+            11,
+            3
+          ],
+          "R": [
+            0.016,
+            0.043,
+            0.013
+          ],
+          "L": [
+            -0.014,
+            0.062,
+            0.004
+          ],
+          "front": [
+            -0.003,
+            0,
+            0.003
+          ],
+          "back": [
+            0.004,
+            0,
+            -0.011
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -13,
+            22,
+            -7
+          ],
+          "wrist_L": [
+            -9,
+            -24,
+            6
+          ],
+          "shoulder": 3
+        },
+        "whiff": {
+          "pelvis": [
+            -0.018,
+            -0.032,
+            0.023
+          ],
+          "hips": [
+            6,
+            34,
+            8
+          ],
+          "spine": [
+            8,
+            -17,
+            -4
+          ],
+          "chest": [
+            12,
+            -39,
+            -9
+          ],
+          "neck": [
+            -3,
+            17,
+            3
+          ],
+          "head": [
+            3,
+            12,
+            4
+          ],
+          "R": [
+            0.003,
+            0.016,
+            0.107
+          ],
+          "L": [
+            0.028,
+            0.044,
+            0.088
+          ],
+          "front": [
+            -0.005,
+            0,
+            0.01
+          ],
+          "back": [
+            0.004,
+            0.006,
+            -0.006
+          ],
+          "front_roll": 4,
+          "wrist_R": [
+            -2,
+            27,
+            -9
+          ],
+          "wrist_L": [
+            4,
+            -29,
+            8
+          ],
+          "shoulder": 6
+        },
+        "release_forward": {
+          "pelvis": [
+            -0.016,
+            -0.022,
+            0.027
+          ],
+          "hips": [
+            4,
+            32,
+            6
+          ],
+          "spine": [
+            6,
+            -16,
+            -3
+          ],
+          "chest": [
+            10,
+            -38,
+            -8
+          ],
+          "neck": [
+            -5,
+            17,
+            2
+          ],
+          "head": [
+            -2,
+            11,
+            3
+          ],
+          "R": [
+            -0.02,
+            0.05,
+            0.112
+          ],
+          "L": [
+            0.016,
+            0.056,
+            0.089
+          ],
+          "front": [
+            -0.003,
+            0,
+            0.005
+          ],
+          "back": [
+            0.003,
+            0,
+            -0.005
+          ],
+          "front_roll": 4,
+          "wrist_R": [
+            -37,
+            26,
+            -10
+          ],
+          "wrist_L": [
+            -27,
+            -28,
+            9
+          ],
+          "shoulder": 7
+        },
+        "release_back": {
+          "pelvis": [
+            0.019,
+            -0.03,
+            -0.012
+          ],
+          "hips": [
+            -1,
+            -42,
+            -8
+          ],
+          "spine": [
+            1,
+            21,
+            5
+          ],
+          "chest": [
+            4,
+            -25,
+            10
+          ],
+          "neck": [
+            -1,
+            11,
+            -3
+          ],
+          "head": [
+            0,
+            -23,
+            -5
+          ],
+          "R": [
+            0.044,
+            0.04,
+            -0.018
+          ],
+          "L": [
+            -0.051,
+            0.067,
+            -0.04
+          ],
+          "front": [
+            -0.004,
+            0,
+            0.005
+          ],
+          "back": [
+            0.005,
+            0,
+            -0.015
+          ],
+          "front_roll": 2,
+          "wrist_R": [
+            -7,
+            -30,
+            18
+          ],
+          "wrist_L": [
+            -22,
+            26,
+            -15
+          ],
+          "shoulder": 5
+        },
+        "release_up": {
+          "pelvis": [
+            -0.007,
+            -0.01,
+            0.008
+          ],
+          "hips": [
+            -5,
+            20,
+            3
+          ],
+          "spine": [
+            -8,
+            -9,
+            -2
+          ],
+          "chest": [
+            -11,
+            -23,
+            -4
+          ],
+          "neck": [
+            5,
+            8,
+            1
+          ],
+          "head": [
+            -11,
+            5,
+            2
+          ],
+          "R": [
+            -0.002,
+            0.158,
+            0.038
+          ],
+          "L": [
+            0.004,
+            0.168,
+            0.032
+          ],
+          "front": [
+            -0.003,
+            0,
+            0.005
+          ],
+          "back": [
+            0.003,
+            0,
+            -0.005
+          ],
+          "front_roll": 3,
+          "wrist_R": [
+            -14,
+            15,
+            -7
+          ],
+          "wrist_L": [
+            -9,
+            -18,
+            6
+          ],
+          "shoulder": 6
+        },
+        "release_down": {
+          "pelvis": [
+            -0.015,
+            -0.059,
+            0.016
+          ],
+          "hips": [
+            14,
+            25,
+            7
+          ],
+          "spine": [
+            13,
+            -12,
+            -3
+          ],
+          "chest": [
+            18,
+            -29,
+            -8
+          ],
+          "neck": [
+            -6,
+            12,
+            2
+          ],
+          "head": [
+            6,
+            8,
+            3
+          ],
+          "R": [
+            -0.004,
+            -0.106,
+            0.071
+          ],
+          "L": [
+            0.009,
+            -0.089,
+            0.054
+          ],
+          "front": [
+            -0.003,
+            0,
+            0.005
+          ],
+          "back": [
+            0.003,
+            0,
+            -0.005
+          ],
+          "front_roll": 2,
+          "wrist_R": [
+            -7,
+            20,
+            -8
+          ],
+          "wrist_L": [
+            -2,
+            -22,
+            7
+          ],
+          "shoulder": 6
+        },
+        "air_forward": {
+          "pelvis": [
+            0.01,
+            -0.014,
+            -0.005
+          ],
+          "hips": [
+            -9,
+            -20,
+            -8
+          ],
+          "spine": [
+            -8,
+            10,
+            5
+          ],
+          "chest": [
+            -12,
+            26,
+            10
+          ],
+          "neck": [
+            7,
+            -12,
+            -3
+          ],
+          "head": [
+            8,
+            -9,
+            -4
+          ],
+          "R": [
+            0.04,
+            0.063,
+            -0.029
+          ],
+          "L": [
+            -0.039,
+            0.045,
+            -0.035
+          ],
+          "front": [
+            -0.005,
+            0.039,
+            -0.019
+          ],
+          "back": [
+            0.004,
+            0.031,
+            0.019
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            11,
+            -23,
+            19
+          ],
+          "wrist_L": [
+            26,
+            20,
+            -20
+          ],
+          "shoulder": 2
+        },
+        "air_back": {
+          "pelvis": [
+            -0.015,
+            -0.017,
+            0.009
+          ],
+          "hips": [
+            9,
+            29,
+            9
+          ],
+          "spine": [
+            10,
+            -15,
+            -5
+          ],
+          "chest": [
+            15,
+            -35,
+            -11
+          ],
+          "neck": [
+            -4,
+            16,
+            3
+          ],
+          "head": [
+            5,
+            19,
+            5
+          ],
+          "R": [
+            0.032,
+            0.046,
+            0.033
+          ],
+          "L": [
+            -0.047,
+            0.061,
+            0.021
+          ],
+          "front": [
+            -0.005,
+            0.031,
+            0.022
+          ],
+          "back": [
+            0.004,
+            0.043,
+            -0.017
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            0,
+            25,
+            -20
+          ],
+          "wrist_L": [
+            10,
+            -24,
+            17
+          ],
+          "shoulder": 3
+        },
+        "air_up": {
+          "pelvis": [
+            0.006,
+            -0.007,
+            -0.002
+          ],
+          "hips": [
+            -8,
+            15,
+            5
+          ],
+          "spine": [
+            -11,
+            -7,
+            -3
+          ],
+          "chest": [
+            -15,
+            -18,
+            -7
+          ],
+          "neck": [
+            6,
+            6,
+            2
+          ],
+          "head": [
+            11,
+            7,
+            3
+          ],
+          "R": [
+            0.036,
+            0.009,
+            -0.01
+          ],
+          "L": [
+            -0.038,
+            0.027,
+            -0.018
+          ],
+          "front": [
+            -0.004,
+            0.05,
+            0.008
+          ],
+          "back": [
+            0.004,
+            0.044,
+            -0.008
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            17,
+            14,
+            17
+          ],
+          "wrist_L": [
+            21,
+            -17,
+            -18
+          ],
+          "shoulder": 1
+        },
+        "air_down": {
+          "pelvis": [
+            -0.011,
+            -0.025,
+            0.01
+          ],
+          "hips": [
+            15,
+            22,
+            9
+          ],
+          "spine": [
+            14,
+            -11,
+            -5
+          ],
+          "chest": [
+            20,
+            -27,
+            -11
+          ],
+          "neck": [
+            -5,
+            10,
+            3
+          ],
+          "head": [
+            -3,
+            12,
+            4
+          ],
+          "R": [
+            0.031,
+            0.101,
+            0.014
+          ],
+          "L": [
+            -0.043,
+            0.083,
+            0.023
+          ],
+          "front": [
+            -0.005,
+            0.032,
+            -0.021
+          ],
+          "back": [
+            0.004,
+            0.028,
+            0.017
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -1,
+            18,
+            -18
+          ],
+          "wrist_L": [
+            5,
+            -21,
+            16
+          ],
+          "shoulder": 4
+        },
+        "landing": {
+          "pelvis": [
+            -0.018,
+            -0.049,
+            0.011
+          ],
+          "hips": [
+            9,
+            28,
+            7
+          ],
+          "spine": [
+            7,
+            -14,
+            -4
+          ],
+          "chest": [
+            11,
+            -33,
+            -9
+          ],
+          "neck": [
+            -4,
+            14,
+            2
+          ],
+          "head": [
+            2,
+            9,
+            3
+          ],
+          "R": [
+            0.021,
+            -0.003,
+            0.026
+          ],
+          "L": [
+            -0.032,
+            0.021,
+            0.016
+          ],
+          "front": [
+            -0.006,
+            0,
+            0.008
+          ],
+          "back": [
+            0.005,
+            0,
+            -0.008
+          ],
+          "front_roll": 2,
+          "wrist_R": [
+            -4,
+            19,
+            -7
+          ],
+          "wrist_L": [
+            1,
+            -21,
+            6
+          ],
+          "shoulder": 4
+        }
+      },
+      "tempo": {
+        "hold_frames": 60,
+        "escape_frames": 24,
+        "recovery_frames": 26,
+        "air_frames": 34,
+        "landing_frames": 24
+      }
+    },
+    "vesper-nyx": {
+      "bible": "docs/bibles/fighters/vesper-nyx.md",
+      "intent": "Offset phase catch: asymmetric shoulder lead and a withheld opposite hand. Restraint forces one coherent body, resistance tests a different diagonal, escape slips into a clearly chosen physical position.",
+      "poses": {
+        "hold": {
+          "pelvis": [
+            0.017,
+            -0.033,
+            0.016
+          ],
+          "hips": [
+            5,
+            -22,
+            -7
+          ],
+          "spine": [
+            7,
+            11,
+            4
+          ],
+          "chest": [
+            10,
+            28,
+            9
+          ],
+          "neck": [
+            -6,
+            -13,
+            -3
+          ],
+          "head": [
+            -2,
+            -8,
+            -5
+          ],
+          "R": [
+            -0.016,
+            0.023,
+            0.082
+          ],
+          "L": [
+            -0.027,
+            -0.009,
+            0.047
+          ],
+          "front": [
+            0.007,
+            0,
+            0.014
+          ],
+          "back": [
+            -0.005,
+            0,
+            -0.009
+          ],
+          "front_roll": 2,
+          "wrist_R": [
+            -32,
+            21,
+            -16
+          ],
+          "wrist_L": [
+            -13,
+            -26,
+            12
+          ],
+          "shoulder": 5
+        },
+        "hold_load": {
+          "pelvis": [
+            0.023,
+            -0.041,
+            0.009
+          ],
+          "hips": [
+            7,
+            -30,
+            -9
+          ],
+          "spine": [
+            10,
+            15,
+            5
+          ],
+          "chest": [
+            14,
+            35,
+            12
+          ],
+          "neck": [
+            -6,
+            -13,
+            -3
+          ],
+          "head": [
+            -3,
+            -11,
+            -6
+          ],
+          "R": [
+            -0.01,
+            0.017,
+            0.076
+          ],
+          "L": [
+            -0.034,
+            -0.015,
+            0.041
+          ],
+          "front": [
+            0.007,
+            0,
+            0.014
+          ],
+          "back": [
+            -0.005,
+            0,
+            -0.009
+          ],
+          "front_roll": 4,
+          "wrist_R": [
+            -32,
+            21,
+            -16
+          ],
+          "wrist_L": [
+            -13,
+            -26,
+            12
+          ],
+          "shoulder": 7
+        },
+        "restrained": {
+          "pelvis": [
+            -0.019,
+            -0.027,
+            -0.015
+          ],
+          "hips": [
+            -6,
+            18,
+            9
+          ],
+          "spine": [
+            -8,
+            -9,
+            -5
+          ],
+          "chest": [
+            -12,
+            -24,
+            -12
+          ],
+          "neck": [
+            7,
+            12,
+            4
+          ],
+          "head": [
+            8,
+            8,
+            6
+          ],
+          "R": [
+            0.043,
+            0.038,
+            -0.02
+          ],
+          "L": [
+            -0.023,
+            0.013,
+            -0.032
+          ],
+          "front": [
+            0.006,
+            0.008,
+            -0.006
+          ],
+          "back": [
+            -0.005,
+            0,
+            0.007
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            22,
+            -25,
+            22
+          ],
+          "wrist_L": [
+            31,
+            18,
+            -16
+          ],
+          "shoulder": 2
+        },
+        "resist": {
+          "pelvis": [
+            -0.029,
+            -0.036,
+            -0.017
+          ],
+          "hips": [
+            -1,
+            32,
+            13
+          ],
+          "spine": [
+            -3,
+            -17,
+            -8
+          ],
+          "chest": [
+            -6,
+            -38,
+            -17
+          ],
+          "neck": [
+            3,
+            19,
+            5
+          ],
+          "head": [
+            1,
+            14,
+            8
+          ],
+          "R": [
+            0.06,
+            0.054,
+            0.004
+          ],
+          "L": [
+            -0.036,
+            0.02,
+            -0.018
+          ],
+          "front": [
+            0.009,
+            0.015,
+            -0.011
+          ],
+          "back": [
+            -0.007,
+            0,
+            0.01
+          ],
+          "front_roll": 1,
+          "wrist_R": [
+            6,
+            -33,
+            28
+          ],
+          "wrist_L": [
+            19,
+            25,
+            -23
+          ],
+          "shoulder": 8
+        },
+        "escape": {
+          "pelvis": [
+            0.035,
+            -0.03,
+            -0.027
+          ],
+          "hips": [
+            4,
+            -43,
+            -14
+          ],
+          "spine": [
+            7,
+            22,
+            8
+          ],
+          "chest": [
+            11,
+            46,
+            18
+          ],
+          "neck": [
+            -4,
+            -23,
+            -6
+          ],
+          "head": [
+            -1,
+            -17,
+            -9
+          ],
+          "R": [
+            0.067,
+            0.03,
+            0.027
+          ],
+          "L": [
+            -0.06,
+            0.049,
+            -0.024
+          ],
+          "front": [
+            0.016,
+            0.018,
+            -0.017
+          ],
+          "back": [
+            -0.012,
+            0,
+            -0.013
+          ],
+          "front_roll": 7,
+          "wrist_R": [
+            -12,
+            32,
+            -29
+          ],
+          "wrist_L": [
+            10,
+            -35,
+            23
+          ],
+          "shoulder": 11
+        },
+        "recover": {
+          "pelvis": [
+            0.011,
+            -0.014,
+            0.008
+          ],
+          "hips": [
+            2,
+            -12,
+            -4
+          ],
+          "spine": [
+            3,
+            6,
+            2
+          ],
+          "chest": [
+            4,
+            15,
+            5
+          ],
+          "neck": [
+            -2,
+            -6,
+            -1
+          ],
+          "head": [
+            0,
+            -4,
+            -2
+          ],
+          "R": [
+            -0.005,
+            0.03,
+            0.025
+          ],
+          "L": [
+            -0.013,
+            0.005,
+            0.01
+          ],
+          "front": [
+            0.005,
+            0,
+            0.006
+          ],
+          "back": [
+            -0.004,
+            0,
+            -0.004
+          ],
+          "front_roll": 1,
+          "wrist_R": [
+            -13,
+            12,
+            -8
+          ],
+          "wrist_L": [
+            -5,
+            -15,
+            6
+          ],
+          "shoulder": 2
+        },
+        "acquire": {
+          "pelvis": [
+            0.022,
+            -0.029,
+            0.031
+          ],
+          "hips": [
+            8,
+            -32,
+            -10
+          ],
+          "spine": [
+            11,
+            17,
+            6
+          ],
+          "chest": [
+            16,
+            39,
+            14
+          ],
+          "neck": [
+            -8,
+            -18,
+            -4
+          ],
+          "head": [
+            -3,
+            -12,
+            -7
+          ],
+          "R": [
+            -0.026,
+            0.043,
+            0.11
+          ],
+          "L": [
+            -0.036,
+            0.009,
+            0.072
+          ],
+          "front": [
+            0.01,
+            0,
+            0.025
+          ],
+          "back": [
+            -0.007,
+            0,
+            -0.011
+          ],
+          "front_roll": 5,
+          "wrist_R": [
+            -44,
+            27,
+            -22
+          ],
+          "wrist_L": [
+            -22,
+            -32,
+            16
+          ],
+          "shoulder": 9
+        },
+        "acquire_load": {
+          "pelvis": [
+            0.028,
+            -0.045,
+            -0.001
+          ],
+          "hips": [
+            7,
+            -35,
+            -8
+          ],
+          "spine": [
+            10,
+            18,
+            5
+          ],
+          "chest": [
+            12,
+            38,
+            11
+          ],
+          "neck": [
+            -6,
+            -13,
+            -3
+          ],
+          "head": [
+            -1,
+            -14,
+            -6
+          ],
+          "R": [
+            0.014,
+            0.038,
+            0.017
+          ],
+          "L": [
+            -0.032,
+            0.006,
+            -0.002
+          ],
+          "front": [
+            0.008,
+            0,
+            0.008
+          ],
+          "back": [
+            -0.007,
+            0,
+            -0.016
+          ],
+          "front_roll": 1,
+          "wrist_R": [
+            -20,
+            25,
+            -13
+          ],
+          "wrist_L": [
+            -7,
+            -28,
+            10
+          ],
+          "shoulder": 5
+        },
+        "whiff": {
+          "pelvis": [
+            0.031,
+            -0.039,
+            0.034
+          ],
+          "hips": [
+            12,
+            -41,
+            -13
+          ],
+          "spine": [
+            15,
+            21,
+            8
+          ],
+          "chest": [
+            21,
+            46,
+            17
+          ],
+          "neck": [
+            -6,
+            -21,
+            -5
+          ],
+          "head": [
+            4,
+            -15,
+            -8
+          ],
+          "R": [
+            -0.001,
+            0.008,
+            0.125
+          ],
+          "L": [
+            -0.051,
+            -0.019,
+            0.085
+          ],
+          "front": [
+            0.012,
+            0,
+            0.022
+          ],
+          "back": [
+            -0.009,
+            0.01,
+            -0.01
+          ],
+          "front_roll": 8,
+          "wrist_R": [
+            -8,
+            30,
+            -19
+          ],
+          "wrist_L": [
+            7,
+            -34,
+            15
+          ],
+          "shoulder": 10
+        },
+        "release_forward": {
+          "pelvis": [
+            0.028,
+            -0.026,
+            0.038
+          ],
+          "hips": [
+            9,
+            -38,
+            -11
+          ],
+          "spine": [
+            12,
+            20,
+            7
+          ],
+          "chest": [
+            18,
+            44,
+            15
+          ],
+          "neck": [
+            -9,
+            -20,
+            -4
+          ],
+          "head": [
+            -3,
+            -14,
+            -6
+          ],
+          "R": [
+            -0.03,
+            0.047,
+            0.132
+          ],
+          "L": [
+            -0.042,
+            -0.001,
+            0.09
+          ],
+          "front": [
+            0.007,
+            0,
+            0.014
+          ],
+          "back": [
+            -0.005,
+            0,
+            -0.009
+          ],
+          "front_roll": 7,
+          "wrist_R": [
+            -52,
+            29,
+            -21
+          ],
+          "wrist_L": [
+            -29,
+            -33,
+            16
+          ],
+          "shoulder": 10
+        },
+        "release_back": {
+          "pelvis": [
+            -0.033,
+            -0.035,
+            -0.02
+          ],
+          "hips": [
+            -1,
+            49,
+            15
+          ],
+          "spine": [
+            2,
+            -26,
+            -9
+          ],
+          "chest": [
+            6,
+            30,
+            -18
+          ],
+          "neck": [
+            -2,
+            -14,
+            6
+          ],
+          "head": [
+            0,
+            27,
+            9
+          ],
+          "R": [
+            0.063,
+            0.038,
+            -0.026
+          ],
+          "L": [
+            -0.052,
+            0.032,
+            -0.058
+          ],
+          "front": [
+            0.009,
+            0,
+            0.011
+          ],
+          "back": [
+            -0.01,
+            0,
+            -0.024
+          ],
+          "front_roll": 3,
+          "wrist_R": [
+            -11,
+            -36,
+            26
+          ],
+          "wrist_L": [
+            -28,
+            27,
+            -18
+          ],
+          "shoulder": 8
+        },
+        "release_up": {
+          "pelvis": [
+            0.014,
+            -0.012,
+            0.011
+          ],
+          "hips": [
+            -6,
+            -25,
+            -6
+          ],
+          "spine": [
+            -9,
+            12,
+            4
+          ],
+          "chest": [
+            -13,
+            29,
+            8
+          ],
+          "neck": [
+            6,
+            -10,
+            -3
+          ],
+          "head": [
+            -14,
+            -7,
+            -4
+          ],
+          "R": [
+            -0.013,
+            0.155,
+            0.046
+          ],
+          "L": [
+            -0.023,
+            0.127,
+            0.028
+          ],
+          "front": [
+            0.007,
+            0,
+            0.014
+          ],
+          "back": [
+            -0.005,
+            0,
+            -0.009
+          ],
+          "front_roll": 6,
+          "wrist_R": [
+            -20,
+            17,
+            -13
+          ],
+          "wrist_L": [
+            -8,
+            -20,
+            10
+          ],
+          "shoulder": 9
+        },
+        "release_down": {
+          "pelvis": [
+            0.027,
+            -0.064,
+            0.022
+          ],
+          "hips": [
+            18,
+            -31,
+            -12
+          ],
+          "spine": [
+            17,
+            16,
+            7
+          ],
+          "chest": [
+            23,
+            36,
+            15
+          ],
+          "neck": [
+            -9,
+            -15,
+            -4
+          ],
+          "head": [
+            8,
+            -10,
+            -6
+          ],
+          "R": [
+            -0.014,
+            -0.119,
+            0.084
+          ],
+          "L": [
+            -0.033,
+            -0.145,
+            0.049
+          ],
+          "front": [
+            0.007,
+            0,
+            0.014
+          ],
+          "back": [
+            -0.005,
+            0,
+            -0.009
+          ],
+          "front_roll": 3,
+          "wrist_R": [
+            -12,
+            23,
+            -16
+          ],
+          "wrist_L": [
+            -1,
+            -27,
+            12
+          ],
+          "shoulder": 9
+        },
+        "air_forward": {
+          "pelvis": [
+            -0.017,
+            -0.017,
+            -0.01
+          ],
+          "hips": [
+            -11,
+            24,
+            14
+          ],
+          "spine": [
+            -10,
+            -12,
+            -8
+          ],
+          "chest": [
+            -15,
+            -30,
+            -18
+          ],
+          "neck": [
+            9,
+            15,
+            5
+          ],
+          "head": [
+            11,
+            11,
+            7
+          ],
+          "R": [
+            0.06,
+            0.05,
+            -0.04
+          ],
+          "L": [
+            -0.031,
+            0.025,
+            -0.046
+          ],
+          "front": [
+            0.012,
+            0.043,
+            -0.023
+          ],
+          "back": [
+            -0.009,
+            0.027,
+            0.026
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            19,
+            -28,
+            26
+          ],
+          "wrist_L": [
+            34,
+            22,
+            -23
+          ],
+          "shoulder": 3
+        },
+        "air_back": {
+          "pelvis": [
+            0.024,
+            -0.02,
+            0.014
+          ],
+          "hips": [
+            11,
+            -35,
+            -15
+          ],
+          "spine": [
+            13,
+            18,
+            9
+          ],
+          "chest": [
+            18,
+            40,
+            19
+          ],
+          "neck": [
+            -6,
+            -18,
+            -5
+          ],
+          "head": [
+            7,
+            -21,
+            -8
+          ],
+          "R": [
+            0.048,
+            0.032,
+            0.047
+          ],
+          "L": [
+            -0.055,
+            0.046,
+            0.025
+          ],
+          "front": [
+            0.013,
+            0.029,
+            0.031
+          ],
+          "back": [
+            -0.01,
+            0.049,
+            -0.024
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            2,
+            30,
+            -27
+          ],
+          "wrist_L": [
+            15,
+            -28,
+            20
+          ],
+          "shoulder": 4
+        },
+        "air_up": {
+          "pelvis": [
+            -0.009,
+            -0.008,
+            -0.004
+          ],
+          "hips": [
+            -10,
+            -18,
+            -9
+          ],
+          "spine": [
+            -13,
+            9,
+            6
+          ],
+          "chest": [
+            -18,
+            22,
+            12
+          ],
+          "neck": [
+            8,
+            -8,
+            -3
+          ],
+          "head": [
+            14,
+            -9,
+            -5
+          ],
+          "R": [
+            0.052,
+            0.002,
+            -0.017
+          ],
+          "L": [
+            -0.037,
+            0.014,
+            -0.028
+          ],
+          "front": [
+            0.011,
+            0.054,
+            0.008
+          ],
+          "back": [
+            -0.009,
+            0.043,
+            -0.014
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            24,
+            18,
+            24
+          ],
+          "wrist_L": [
+            28,
+            -20,
+            -21
+          ],
+          "shoulder": 1
+        },
+        "air_down": {
+          "pelvis": [
+            0.019,
+            -0.029,
+            0.016
+          ],
+          "hips": [
+            19,
+            -27,
+            -15
+          ],
+          "spine": [
+            18,
+            14,
+            8
+          ],
+          "chest": [
+            24,
+            31,
+            19
+          ],
+          "neck": [
+            -7,
+            -12,
+            -5
+          ],
+          "head": [
+            -5,
+            -14,
+            -7
+          ],
+          "R": [
+            0.046,
+            0.09,
+            0.021
+          ],
+          "L": [
+            -0.05,
+            0.063,
+            0.031
+          ],
+          "front": [
+            0.012,
+            0.035,
+            -0.028
+          ],
+          "back": [
+            -0.009,
+            0.026,
+            0.023
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -3,
+            24,
+            -24
+          ],
+          "wrist_L": [
+            9,
+            -26,
+            18
+          ],
+          "shoulder": 6
+        },
+        "landing": {
+          "pelvis": [
+            0.032,
+            -0.054,
+            0.016
+          ],
+          "hips": [
+            12,
+            -34,
+            -12
+          ],
+          "spine": [
+            10,
+            17,
+            6
+          ],
+          "chest": [
+            15,
+            39,
+            15
+          ],
+          "neck": [
+            -6,
+            -17,
+            -4
+          ],
+          "head": [
+            3,
+            -11,
+            -6
+          ],
+          "R": [
+            0.032,
+            -0.009,
+            0.03
+          ],
+          "L": [
+            -0.037,
+            -0.03,
+            0.014
+          ],
+          "front": [
+            0.014,
+            0,
+            0.016
+          ],
+          "back": [
+            -0.01,
+            0,
+            -0.012
+          ],
+          "front_roll": 4,
+          "wrist_R": [
+            -8,
+            21,
+            -14
+          ],
+          "wrist_L": [
+            2,
+            -25,
+            11
+          ],
+          "shoulder": 7
+        }
+      },
+      "tempo": {
+        "hold_frames": 44,
+        "escape_frames": 17,
+        "recovery_frames": 18,
+        "air_frames": 26,
+        "landing_frames": 17
+      }
+    },
+    "yin": {
+      "bible": "docs/bibles/fighters/yin.md",
+      "intent": "Subtractive stillness: inward elbows and economical palms shorten the hold's shape without hiding the white seed. Restraint swallows force; resistance exposes a small discontinuity, escape folds inward before settling.",
+      "poses": {
+        "hold": {
+          "pelvis": [
+            -0.002,
+            -0.019,
+            0.004
+          ],
+          "hips": [
+            1,
+            4,
+            -1
+          ],
+          "spine": [
+            2,
+            -2,
+            1
+          ],
+          "chest": [
+            3,
+            -6,
+            2
+          ],
+          "neck": [
+            -2,
+            2,
+            0
+          ],
+          "head": [
+            0,
+            1,
+            -1
+          ],
+          "R": [
+            -0.023,
+            0.008,
+            0.054
+          ],
+          "L": [
+            0.021,
+            0.014,
+            0.047
+          ],
+          "front": [
+            0,
+            0,
+            0.003
+          ],
+          "back": [
+            0,
+            0,
+            -0.003
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -17,
+            8,
+            -2
+          ],
+          "wrist_L": [
+            -15,
+            -9,
+            2
+          ],
+          "shoulder": 1
+        },
+        "hold_load": {
+          "pelvis": [
+            -0.003,
+            -0.024,
+            0.002
+          ],
+          "hips": [
+            2,
+            6,
+            -1
+          ],
+          "spine": [
+            3,
+            -3,
+            1
+          ],
+          "chest": [
+            4,
+            -8,
+            2
+          ],
+          "neck": [
+            -2,
+            2,
+            0
+          ],
+          "head": [
+            -1,
+            2,
+            -1
+          ],
+          "R": [
+            -0.026,
+            0.004,
+            0.049
+          ],
+          "L": [
+            0.024,
+            0.011,
+            0.043
+          ],
+          "front": [
+            0,
+            0,
+            0.003
+          ],
+          "back": [
+            0,
+            0,
+            -0.003
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -17,
+            8,
+            -2
+          ],
+          "wrist_L": [
+            -15,
+            -9,
+            2
+          ],
+          "shoulder": 2
+        },
+        "restrained": {
+          "pelvis": [
+            0.003,
+            -0.016,
+            -0.006
+          ],
+          "hips": [
+            -2,
+            -3,
+            2
+          ],
+          "spine": [
+            -3,
+            2,
+            -1
+          ],
+          "chest": [
+            -5,
+            5,
+            -3
+          ],
+          "neck": [
+            3,
+            -2,
+            1
+          ],
+          "head": [
+            4,
+            -1,
+            1
+          ],
+          "R": [
+            0.012,
+            0.019,
+            -0.01
+          ],
+          "L": [
+            -0.014,
+            0.014,
+            -0.014
+          ],
+          "front": [
+            0,
+            0.002,
+            -0.002
+          ],
+          "back": [
+            0,
+            0,
+            0.003
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            10,
+            -7,
+            6
+          ],
+          "wrist_L": [
+            12,
+            6,
+            -5
+          ],
+          "shoulder": 0
+        },
+        "resist": {
+          "pelvis": [
+            0.005,
+            -0.022,
+            -0.009
+          ],
+          "hips": [
+            0,
+            -7,
+            3
+          ],
+          "spine": [
+            -1,
+            4,
+            -2
+          ],
+          "chest": [
+            -2,
+            9,
+            -4
+          ],
+          "neck": [
+            1,
+            -4,
+            1
+          ],
+          "head": [
+            0,
+            -3,
+            2
+          ],
+          "R": [
+            0.02,
+            0.027,
+            0.001
+          ],
+          "L": [
+            -0.023,
+            0.019,
+            -0.006
+          ],
+          "front": [
+            0,
+            0.005,
+            -0.004
+          ],
+          "back": [
+            0,
+            0,
+            0.005
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            2,
+            -11,
+            10
+          ],
+          "wrist_L": [
+            6,
+            10,
+            -8
+          ],
+          "shoulder": 3
+        },
+        "escape": {
+          "pelvis": [
+            -0.007,
+            -0.018,
+            -0.012
+          ],
+          "hips": [
+            1,
+            11,
+            -3
+          ],
+          "spine": [
+            2,
+            -6,
+            2
+          ],
+          "chest": [
+            4,
+            -14,
+            5
+          ],
+          "neck": [
+            -2,
+            6,
+            -1
+          ],
+          "head": [
+            0,
+            4,
+            -2
+          ],
+          "R": [
+            0.027,
+            0.016,
+            0.01
+          ],
+          "L": [
+            -0.029,
+            0.029,
+            -0.01
+          ],
+          "front": [
+            0,
+            0.006,
+            -0.006
+          ],
+          "back": [
+            0,
+            0,
+            -0.006
+          ],
+          "front_roll": 1,
+          "wrist_R": [
+            -5,
+            12,
+            -9
+          ],
+          "wrist_L": [
+            2,
+            -13,
+            7
+          ],
+          "shoulder": 4
+        },
+        "recover": {
+          "pelvis": [
+            -0.001,
+            -0.008,
+            0.002
+          ],
+          "hips": [
+            0,
+            2,
+            0
+          ],
+          "spine": [
+            1,
+            -1,
+            0
+          ],
+          "chest": [
+            1,
+            -3,
+            1
+          ],
+          "neck": [
+            -1,
+            1,
+            0
+          ],
+          "head": [
+            0,
+            0,
+            0
+          ],
+          "R": [
+            -0.01,
+            0.011,
+            0.014
+          ],
+          "L": [
+            0.009,
+            0.015,
+            0.009
+          ],
+          "front": [
+            0,
+            0,
+            0.001
+          ],
+          "back": [
+            0,
+            0,
+            -0.001
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -7,
+            4,
+            -1
+          ],
+          "wrist_L": [
+            -6,
+            -4,
+            1
+          ],
+          "shoulder": 0
+        },
+        "acquire": {
+          "pelvis": [
+            -0.003,
+            -0.017,
+            0.012
+          ],
+          "hips": [
+            2,
+            7,
+            -2
+          ],
+          "spine": [
+            4,
+            -4,
+            1
+          ],
+          "chest": [
+            6,
+            -10,
+            3
+          ],
+          "neck": [
+            -3,
+            4,
+            -1
+          ],
+          "head": [
+            -1,
+            2,
+            -1
+          ],
+          "R": [
+            -0.03,
+            0.02,
+            0.071
+          ],
+          "L": [
+            0.027,
+            0.025,
+            0.063
+          ],
+          "front": [
+            0,
+            0,
+            0.007
+          ],
+          "back": [
+            0,
+            0,
+            -0.004
+          ],
+          "front_roll": 1,
+          "wrist_R": [
+            -24,
+            11,
+            -3
+          ],
+          "wrist_L": [
+            -21,
+            -12,
+            3
+          ],
+          "shoulder": 3
+        },
+        "acquire_load": {
+          "pelvis": [
+            -0.004,
+            -0.027,
+            -0.003
+          ],
+          "hips": [
+            2,
+            8,
+            -1
+          ],
+          "spine": [
+            3,
+            -4,
+            1
+          ],
+          "chest": [
+            4,
+            -9,
+            2
+          ],
+          "neck": [
+            -2,
+            2,
+            0
+          ],
+          "head": [
+            0,
+            3,
+            -1
+          ],
+          "R": [
+            -0.008,
+            0.017,
+            0.01
+          ],
+          "L": [
+            0.01,
+            0.023,
+            0.006
+          ],
+          "front": [
+            0,
+            0,
+            0.002
+          ],
+          "back": [
+            0,
+            0,
+            -0.007
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -12,
+            9,
+            -2
+          ],
+          "wrist_L": [
+            -10,
+            -10,
+            2
+          ],
+          "shoulder": 1
+        },
+        "whiff": {
+          "pelvis": [
+            -0.005,
+            -0.022,
+            0.013
+          ],
+          "hips": [
+            4,
+            11,
+            -3
+          ],
+          "spine": [
+            6,
+            -6,
+            2
+          ],
+          "chest": [
+            8,
+            -14,
+            4
+          ],
+          "neck": [
+            -2,
+            6,
+            -1
+          ],
+          "head": [
+            2,
+            4,
+            -2
+          ],
+          "R": [
+            -0.018,
+            -0.001,
+            0.08
+          ],
+          "L": [
+            0.036,
+            0.01,
+            0.069
+          ],
+          "front": [
+            0,
+            0,
+            0.006
+          ],
+          "back": [
+            0,
+            0.003,
+            -0.004
+          ],
+          "front_roll": 1,
+          "wrist_R": [
+            -3,
+            13,
+            -3
+          ],
+          "wrist_L": [
+            0,
+            -14,
+            3
+          ],
+          "shoulder": 3
+        },
+        "release_forward": {
+          "pelvis": [
+            -0.004,
+            -0.014,
+            0.016
+          ],
+          "hips": [
+            3,
+            12,
+            -2
+          ],
+          "spine": [
+            5,
+            -6,
+            1
+          ],
+          "chest": [
+            8,
+            -16,
+            3
+          ],
+          "neck": [
+            -3,
+            7,
+            -1
+          ],
+          "head": [
+            -1,
+            4,
+            -1
+          ],
+          "R": [
+            -0.034,
+            0.023,
+            0.084
+          ],
+          "L": [
+            0.031,
+            0.024,
+            0.072
+          ],
+          "front": [
+            0,
+            0,
+            0.003
+          ],
+          "back": [
+            0,
+            0,
+            -0.003
+          ],
+          "front_roll": 1,
+          "wrist_R": [
+            -30,
+            12,
+            -3
+          ],
+          "wrist_L": [
+            -25,
+            -13,
+            3
+          ],
+          "shoulder": 4
+        },
+        "release_back": {
+          "pelvis": [
+            0.006,
+            -0.02,
+            -0.009
+          ],
+          "hips": [
+            0,
+            -18,
+            4
+          ],
+          "spine": [
+            1,
+            9,
+            -2
+          ],
+          "chest": [
+            3,
+            -11,
+            -5
+          ],
+          "neck": [
+            -1,
+            5,
+            1
+          ],
+          "head": [
+            0,
+            -10,
+            2
+          ],
+          "R": [
+            0.024,
+            0.018,
+            -0.012
+          ],
+          "L": [
+            -0.029,
+            0.031,
+            -0.029
+          ],
+          "front": [
+            0,
+            0,
+            0.003
+          ],
+          "back": [
+            0,
+            0,
+            -0.01
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -5,
+            -14,
+            8
+          ],
+          "wrist_L": [
+            -17,
+            12,
+            -6
+          ],
+          "shoulder": 2
+        },
+        "release_up": {
+          "pelvis": [
+            -0.001,
+            -0.007,
+            0.003
+          ],
+          "hips": [
+            -3,
+            5,
+            -1
+          ],
+          "spine": [
+            -5,
+            -2,
+            1
+          ],
+          "chest": [
+            -7,
+            -6,
+            2
+          ],
+          "neck": [
+            3,
+            2,
+            0
+          ],
+          "head": [
+            -7,
+            1,
+            -1
+          ],
+          "R": [
+            -0.016,
+            0.109,
+            0.027
+          ],
+          "L": [
+            0.014,
+            0.114,
+            0.023
+          ],
+          "front": [
+            0,
+            0,
+            0.003
+          ],
+          "back": [
+            0,
+            0,
+            -0.003
+          ],
+          "front_roll": 1,
+          "wrist_R": [
+            -10,
+            6,
+            -2
+          ],
+          "wrist_L": [
+            -8,
+            -7,
+            2
+          ],
+          "shoulder": 3
+        },
+        "release_down": {
+          "pelvis": [
+            -0.004,
+            -0.043,
+            0.009
+          ],
+          "hips": [
+            10,
+            7,
+            -2
+          ],
+          "spine": [
+            9,
+            -3,
+            1
+          ],
+          "chest": [
+            13,
+            -9,
+            3
+          ],
+          "neck": [
+            -4,
+            4,
+            -1
+          ],
+          "head": [
+            4,
+            2,
+            -1
+          ],
+          "R": [
+            -0.021,
+            -0.086,
+            0.054
+          ],
+          "L": [
+            0.02,
+            -0.077,
+            0.044
+          ],
+          "front": [
+            0,
+            0,
+            0.003
+          ],
+          "back": [
+            0,
+            0,
+            -0.003
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -5,
+            9,
+            -2
+          ],
+          "wrist_L": [
+            -3,
+            -10,
+            2
+          ],
+          "shoulder": 3
+        },
+        "air_forward": {
+          "pelvis": [
+            0.003,
+            -0.01,
+            -0.003
+          ],
+          "hips": [
+            -6,
+            -5,
+            4
+          ],
+          "spine": [
+            -5,
+            3,
+            -2
+          ],
+          "chest": [
+            -8,
+            7,
+            -5
+          ],
+          "neck": [
+            4,
+            -3,
+            1
+          ],
+          "head": [
+            5,
+            -2,
+            2
+          ],
+          "R": [
+            0.022,
+            0.03,
+            -0.021
+          ],
+          "L": [
+            -0.024,
+            0.021,
+            -0.024
+          ],
+          "front": [
+            0,
+            0.025,
+            -0.009
+          ],
+          "back": [
+            0,
+            0.02,
+            0.01
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            8,
+            -8,
+            9
+          ],
+          "wrist_L": [
+            15,
+            7,
+            -9
+          ],
+          "shoulder": 1
+        },
+        "air_back": {
+          "pelvis": [
+            -0.004,
+            -0.012,
+            0.005
+          ],
+          "hips": [
+            5,
+            9,
+            -4
+          ],
+          "spine": [
+            6,
+            -5,
+            2
+          ],
+          "chest": [
+            9,
+            -12,
+            5
+          ],
+          "neck": [
+            -3,
+            5,
+            -1
+          ],
+          "head": [
+            3,
+            7,
+            -2
+          ],
+          "R": [
+            0.019,
+            0.02,
+            0.018
+          ],
+          "L": [
+            -0.027,
+            0.029,
+            0.012
+          ],
+          "front": [
+            0,
+            0.02,
+            0.012
+          ],
+          "back": [
+            0,
+            0.028,
+            -0.008
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            0,
+            10,
+            -9
+          ],
+          "wrist_L": [
+            6,
+            -9,
+            7
+          ],
+          "shoulder": 2
+        },
+        "air_up": {
+          "pelvis": [
+            0.002,
+            -0.005,
+            -0.001
+          ],
+          "hips": [
+            -5,
+            4,
+            -2
+          ],
+          "spine": [
+            -7,
+            -2,
+            1
+          ],
+          "chest": [
+            -9,
+            -5,
+            3
+          ],
+          "neck": [
+            4,
+            2,
+            0
+          ],
+          "head": [
+            7,
+            2,
+            -1
+          ],
+          "R": [
+            0.02,
+            -0.004,
+            -0.007
+          ],
+          "L": [
+            -0.021,
+            0.006,
+            -0.013
+          ],
+          "front": [
+            0,
+            0.033,
+            0.004
+          ],
+          "back": [
+            0,
+            0.029,
+            -0.005
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            12,
+            5,
+            8
+          ],
+          "wrist_L": [
+            14,
+            -6,
+            -8
+          ],
+          "shoulder": 0
+        },
+        "air_down": {
+          "pelvis": [
+            -0.003,
+            -0.018,
+            0.006
+          ],
+          "hips": [
+            10,
+            6,
+            -4
+          ],
+          "spine": [
+            9,
+            -3,
+            2
+          ],
+          "chest": [
+            13,
+            -8,
+            5
+          ],
+          "neck": [
+            -3,
+            3,
+            -1
+          ],
+          "head": [
+            -2,
+            4,
+            -2
+          ],
+          "R": [
+            0.018,
+            0.063,
+            0.01
+          ],
+          "L": [
+            -0.025,
+            0.051,
+            0.016
+          ],
+          "front": [
+            0,
+            0.021,
+            -0.012
+          ],
+          "back": [
+            0,
+            0.018,
+            0.009
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -1,
+            8,
+            -8
+          ],
+          "wrist_L": [
+            3,
+            -9,
+            7
+          ],
+          "shoulder": 2
+        },
+        "landing": {
+          "pelvis": [
+            -0.005,
+            -0.034,
+            0.006
+          ],
+          "hips": [
+            6,
+            8,
+            -3
+          ],
+          "spine": [
+            5,
+            -4,
+            2
+          ],
+          "chest": [
+            8,
+            -10,
+            4
+          ],
+          "neck": [
+            -2,
+            4,
+            -1
+          ],
+          "head": [
+            1,
+            3,
+            -2
+          ],
+          "R": [
+            0.012,
+            -0.007,
+            0.018
+          ],
+          "L": [
+            -0.018,
+            0.009,
+            0.011
+          ],
+          "front": [
+            0,
+            0,
+            0.004
+          ],
+          "back": [
+            0,
+            0,
+            -0.004
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -3,
+            8,
+            -2
+          ],
+          "wrist_L": [
+            0,
+            -9,
+            2
+          ],
+          "shoulder": 2
+        }
+      },
+      "tempo": {
+        "hold_frames": 72,
+        "escape_frames": 27,
+        "recovery_frames": 32,
+        "air_frames": 38,
+        "landing_frames": 28
+      }
+    },
+    "yang": {
+      "bible": "docs/bibles/fighters/yang.md",
+      "intent": "Declared construction: symmetric hands, exact regional alignment and a small opposing black seed. Restraint cracks ordered geometry; escape reforms outward braces before an exact return.",
+      "poses": {
+        "hold": {
+          "pelvis": [
+            0.001,
+            -0.025,
+            0.009
+          ],
+          "hips": [
+            3,
+            0,
+            0
+          ],
+          "spine": [
+            3,
+            0,
+            0
+          ],
+          "chest": [
+            5,
+            0,
+            0
+          ],
+          "neck": [
+            -3,
+            0,
+            0
+          ],
+          "head": [
+            -1,
+            0,
+            0
+          ],
+          "R": [
+            -0.014,
+            0.02,
+            0.068
+          ],
+          "L": [
+            0.014,
+            0.02,
+            0.068
+          ],
+          "front": [
+            0.003,
+            0,
+            0.006
+          ],
+          "back": [
+            -0.003,
+            0,
+            -0.006
+          ],
+          "front_roll": 1,
+          "wrist_R": [
+            -24,
+            14,
+            -4
+          ],
+          "wrist_L": [
+            -24,
+            -14,
+            4
+          ],
+          "shoulder": 4
+        },
+        "hold_load": {
+          "pelvis": [
+            0.001,
+            -0.033,
+            0.005
+          ],
+          "hips": [
+            5,
+            0,
+            0
+          ],
+          "spine": [
+            5,
+            0,
+            0
+          ],
+          "chest": [
+            7,
+            0,
+            0
+          ],
+          "neck": [
+            -3,
+            0,
+            0
+          ],
+          "head": [
+            -2,
+            0,
+            0
+          ],
+          "R": [
+            -0.017,
+            0.014,
+            0.062
+          ],
+          "L": [
+            0.017,
+            0.014,
+            0.062
+          ],
+          "front": [
+            0.003,
+            0,
+            0.006
+          ],
+          "back": [
+            -0.003,
+            0,
+            -0.006
+          ],
+          "front_roll": 2,
+          "wrist_R": [
+            -24,
+            14,
+            -4
+          ],
+          "wrist_L": [
+            -24,
+            -14,
+            4
+          ],
+          "shoulder": 6
+        },
+        "restrained": {
+          "pelvis": [
+            -0.002,
+            -0.02,
+            -0.01
+          ],
+          "hips": [
+            -4,
+            -4,
+            -2
+          ],
+          "spine": [
+            -5,
+            2,
+            1
+          ],
+          "chest": [
+            -8,
+            6,
+            3
+          ],
+          "neck": [
+            4,
+            -3,
+            -1
+          ],
+          "head": [
+            5,
+            -2,
+            -1
+          ],
+          "R": [
+            0.02,
+            0.031,
+            -0.013
+          ],
+          "L": [
+            -0.02,
+            0.027,
+            -0.016
+          ],
+          "front": [
+            0.003,
+            0.004,
+            -0.003
+          ],
+          "back": [
+            -0.003,
+            0,
+            0.004
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            14,
+            -14,
+            10
+          ],
+          "wrist_L": [
+            16,
+            13,
+            -9
+          ],
+          "shoulder": 2
+        },
+        "resist": {
+          "pelvis": [
+            -0.004,
+            -0.029,
+            -0.014
+          ],
+          "hips": [
+            -1,
+            -10,
+            -4
+          ],
+          "spine": [
+            -2,
+            5,
+            2
+          ],
+          "chest": [
+            -4,
+            13,
+            5
+          ],
+          "neck": [
+            2,
+            -6,
+            -1
+          ],
+          "head": [
+            1,
+            -4,
+            -2
+          ],
+          "R": [
+            0.032,
+            0.043,
+            0.002
+          ],
+          "L": [
+            -0.03,
+            0.036,
+            -0.006
+          ],
+          "front": [
+            0.004,
+            0.009,
+            -0.006
+          ],
+          "back": [
+            -0.004,
+            0,
+            0.007
+          ],
+          "front_roll": 1,
+          "wrist_R": [
+            3,
+            -20,
+            15
+          ],
+          "wrist_L": [
+            8,
+            18,
+            -13
+          ],
+          "shoulder": 7
+        },
+        "escape": {
+          "pelvis": [
+            0.006,
+            -0.023,
+            -0.019
+          ],
+          "hips": [
+            3,
+            16,
+            4
+          ],
+          "spine": [
+            5,
+            -8,
+            -2
+          ],
+          "chest": [
+            8,
+            -20,
+            -6
+          ],
+          "neck": [
+            -3,
+            9,
+            1
+          ],
+          "head": [
+            -1,
+            6,
+            2
+          ],
+          "R": [
+            0.045,
+            0.029,
+            0.015
+          ],
+          "L": [
+            -0.043,
+            0.041,
+            -0.012
+          ],
+          "front": [
+            0.005,
+            0.012,
+            -0.01
+          ],
+          "back": [
+            -0.005,
+            0,
+            -0.009
+          ],
+          "front_roll": 4,
+          "wrist_R": [
+            -8,
+            21,
+            -15
+          ],
+          "wrist_L": [
+            4,
+            -23,
+            12
+          ],
+          "shoulder": 9
+        },
+        "recover": {
+          "pelvis": [
+            0,
+            -0.01,
+            0.004
+          ],
+          "hips": [
+            1,
+            0,
+            0
+          ],
+          "spine": [
+            1,
+            0,
+            0
+          ],
+          "chest": [
+            2,
+            0,
+            0
+          ],
+          "neck": [
+            -1,
+            0,
+            0
+          ],
+          "head": [
+            0,
+            0,
+            0
+          ],
+          "R": [
+            -0.006,
+            0.024,
+            0.018
+          ],
+          "L": [
+            0.006,
+            0.024,
+            0.018
+          ],
+          "front": [
+            0.002,
+            0,
+            0.002
+          ],
+          "back": [
+            -0.002,
+            0,
+            -0.002
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -10,
+            8,
+            -2
+          ],
+          "wrist_L": [
+            -10,
+            -8,
+            2
+          ],
+          "shoulder": 2
+        },
+        "acquire": {
+          "pelvis": [
+            0.001,
+            -0.022,
+            0.022
+          ],
+          "hips": [
+            5,
+            0,
+            0
+          ],
+          "spine": [
+            6,
+            0,
+            0
+          ],
+          "chest": [
+            9,
+            0,
+            0
+          ],
+          "neck": [
+            -5,
+            0,
+            0
+          ],
+          "head": [
+            -2,
+            0,
+            0
+          ],
+          "R": [
+            -0.023,
+            0.039,
+            0.092
+          ],
+          "L": [
+            0.023,
+            0.039,
+            0.092
+          ],
+          "front": [
+            0.004,
+            0,
+            0.013
+          ],
+          "back": [
+            -0.004,
+            0,
+            -0.008
+          ],
+          "front_roll": 3,
+          "wrist_R": [
+            -35,
+            19,
+            -6
+          ],
+          "wrist_L": [
+            -35,
+            -19,
+            6
+          ],
+          "shoulder": 8
+        },
+        "acquire_load": {
+          "pelvis": [
+            0.001,
+            -0.037,
+            -0.002
+          ],
+          "hips": [
+            5,
+            0,
+            0
+          ],
+          "spine": [
+            5,
+            0,
+            0
+          ],
+          "chest": [
+            7,
+            0,
+            0
+          ],
+          "neck": [
+            -3,
+            0,
+            0
+          ],
+          "head": [
+            -1,
+            0,
+            0
+          ],
+          "R": [
+            -0.002,
+            0.034,
+            0.014
+          ],
+          "L": [
+            0.002,
+            0.034,
+            0.014
+          ],
+          "front": [
+            0.003,
+            0,
+            0.004
+          ],
+          "back": [
+            -0.004,
+            0,
+            -0.011
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -17,
+            15,
+            -4
+          ],
+          "wrist_L": [
+            -17,
+            -15,
+            4
+          ],
+          "shoulder": 4
+        },
+        "whiff": {
+          "pelvis": [
+            0.002,
+            -0.029,
+            0.025
+          ],
+          "hips": [
+            8,
+            0,
+            1
+          ],
+          "spine": [
+            9,
+            0,
+            -1
+          ],
+          "chest": [
+            12,
+            0,
+            -1
+          ],
+          "neck": [
+            -3,
+            0,
+            0
+          ],
+          "head": [
+            3,
+            0,
+            1
+          ],
+          "R": [
+            -0.008,
+            0.005,
+            0.104
+          ],
+          "L": [
+            0.027,
+            0.005,
+            0.1
+          ],
+          "front": [
+            0.004,
+            0,
+            0.011
+          ],
+          "back": [
+            -0.004,
+            0.006,
+            -0.007
+          ],
+          "front_roll": 4,
+          "wrist_R": [
+            -5,
+            23,
+            -5
+          ],
+          "wrist_L": [
+            -3,
+            -22,
+            5
+          ],
+          "shoulder": 8
+        },
+        "release_forward": {
+          "pelvis": [
+            0.001,
+            -0.019,
+            0.029
+          ],
+          "hips": [
+            7,
+            0,
+            0
+          ],
+          "spine": [
+            8,
+            0,
+            0
+          ],
+          "chest": [
+            12,
+            0,
+            0
+          ],
+          "neck": [
+            -6,
+            0,
+            0
+          ],
+          "head": [
+            -2,
+            0,
+            0
+          ],
+          "R": [
+            -0.026,
+            0.044,
+            0.109
+          ],
+          "L": [
+            0.026,
+            0.044,
+            0.109
+          ],
+          "front": [
+            0.003,
+            0,
+            0.006
+          ],
+          "back": [
+            -0.003,
+            0,
+            -0.006
+          ],
+          "front_roll": 4,
+          "wrist_R": [
+            -43,
+            21,
+            -6
+          ],
+          "wrist_L": [
+            -43,
+            -21,
+            6
+          ],
+          "shoulder": 9
+        },
+        "release_back": {
+          "pelvis": [
+            -0.005,
+            -0.027,
+            -0.014
+          ],
+          "hips": [
+            1,
+            -26,
+            -4
+          ],
+          "spine": [
+            2,
+            13,
+            2
+          ],
+          "chest": [
+            4,
+            -16,
+            5
+          ],
+          "neck": [
+            -1,
+            7,
+            -1
+          ],
+          "head": [
+            0,
+            -15,
+            -2
+          ],
+          "R": [
+            0.036,
+            0.033,
+            -0.018
+          ],
+          "L": [
+            -0.039,
+            0.052,
+            -0.038
+          ],
+          "front": [
+            0.004,
+            0,
+            0.006
+          ],
+          "back": [
+            -0.005,
+            0,
+            -0.017
+          ],
+          "front_roll": 2,
+          "wrist_R": [
+            -7,
+            -23,
+            12
+          ],
+          "wrist_L": [
+            -25,
+            20,
+            -10
+          ],
+          "shoulder": 6
+        },
+        "release_up": {
+          "pelvis": [
+            0,
+            -0.009,
+            0.007
+          ],
+          "hips": [
+            -4,
+            0,
+            0
+          ],
+          "spine": [
+            -6,
+            0,
+            0
+          ],
+          "chest": [
+            -9,
+            0,
+            0
+          ],
+          "neck": [
+            4,
+            0,
+            0
+          ],
+          "head": [
+            -10,
+            0,
+            0
+          ],
+          "R": [
+            -0.008,
+            0.143,
+            0.035
+          ],
+          "L": [
+            0.008,
+            0.143,
+            0.035
+          ],
+          "front": [
+            0.003,
+            0,
+            0.006
+          ],
+          "back": [
+            -0.003,
+            0,
+            -0.006
+          ],
+          "front_roll": 3,
+          "wrist_R": [
+            -16,
+            11,
+            -4
+          ],
+          "wrist_L": [
+            -16,
+            -11,
+            4
+          ],
+          "shoulder": 8
+        },
+        "release_down": {
+          "pelvis": [
+            0.001,
+            -0.055,
+            0.016
+          ],
+          "hips": [
+            14,
+            0,
+            0
+          ],
+          "spine": [
+            13,
+            0,
+            0
+          ],
+          "chest": [
+            18,
+            0,
+            0
+          ],
+          "neck": [
+            -6,
+            0,
+            0
+          ],
+          "head": [
+            6,
+            0,
+            0
+          ],
+          "R": [
+            -0.012,
+            -0.112,
+            0.068
+          ],
+          "L": [
+            0.012,
+            -0.112,
+            0.068
+          ],
+          "front": [
+            0.003,
+            0,
+            0.006
+          ],
+          "back": [
+            -0.003,
+            0,
+            -0.006
+          ],
+          "front_roll": 1,
+          "wrist_R": [
+            -8,
+            15,
+            -4
+          ],
+          "wrist_L": [
+            -8,
+            -15,
+            4
+          ],
+          "shoulder": 8
+        },
+        "air_forward": {
+          "pelvis": [
+            -0.002,
+            -0.013,
+            -0.006
+          ],
+          "hips": [
+            -9,
+            -6,
+            -5
+          ],
+          "spine": [
+            -8,
+            3,
+            3
+          ],
+          "chest": [
+            -12,
+            9,
+            6
+          ],
+          "neck": [
+            6,
+            -4,
+            -1
+          ],
+          "head": [
+            7,
+            -3,
+            -2
+          ],
+          "R": [
+            0.033,
+            0.046,
+            -0.027
+          ],
+          "L": [
+            -0.031,
+            0.038,
+            -0.03
+          ],
+          "front": [
+            0.004,
+            0.034,
+            -0.015
+          ],
+          "back": [
+            -0.004,
+            0.028,
+            0.016
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            11,
+            -15,
+            14
+          ],
+          "wrist_L": [
+            22,
+            13,
+            -13
+          ],
+          "shoulder": 3
+        },
+        "air_back": {
+          "pelvis": [
+            0.003,
+            -0.016,
+            0.009
+          ],
+          "hips": [
+            8,
+            12,
+            5
+          ],
+          "spine": [
+            9,
+            -6,
+            -3
+          ],
+          "chest": [
+            13,
+            -16,
+            -6
+          ],
+          "neck": [
+            -4,
+            7,
+            1
+          ],
+          "head": [
+            4,
+            9,
+            2
+          ],
+          "R": [
+            0.027,
+            0.029,
+            0.029
+          ],
+          "L": [
+            -0.036,
+            0.043,
+            0.02
+          ],
+          "front": [
+            0.004,
+            0.028,
+            0.019
+          ],
+          "back": [
+            -0.004,
+            0.038,
+            -0.014
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            1,
+            18,
+            -14
+          ],
+          "wrist_L": [
+            8,
+            -16,
+            11
+          ],
+          "shoulder": 4
+        },
+        "air_up": {
+          "pelvis": [
+            -0.001,
+            -0.006,
+            -0.002
+          ],
+          "hips": [
+            -7,
+            4,
+            3
+          ],
+          "spine": [
+            -10,
+            -2,
+            -2
+          ],
+          "chest": [
+            -13,
+            -6,
+            -4
+          ],
+          "neck": [
+            5,
+            2,
+            1
+          ],
+          "head": [
+            9,
+            3,
+            1
+          ],
+          "R": [
+            0.029,
+            0.002,
+            -0.009
+          ],
+          "L": [
+            -0.029,
+            0.012,
+            -0.016
+          ],
+          "front": [
+            0.004,
+            0.045,
+            0.006
+          ],
+          "back": [
+            -0.004,
+            0.039,
+            -0.007
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            17,
+            10,
+            13
+          ],
+          "wrist_L": [
+            19,
+            -11,
+            -12
+          ],
+          "shoulder": 1
+        },
+        "air_down": {
+          "pelvis": [
+            0.002,
+            -0.023,
+            0.01
+          ],
+          "hips": [
+            14,
+            8,
+            5
+          ],
+          "spine": [
+            13,
+            -4,
+            -3
+          ],
+          "chest": [
+            19,
+            -10,
+            -6
+          ],
+          "neck": [
+            -5,
+            4,
+            1
+          ],
+          "head": [
+            -3,
+            5,
+            2
+          ],
+          "R": [
+            0.027,
+            0.081,
+            0.013
+          ],
+          "L": [
+            -0.034,
+            0.067,
+            0.021
+          ],
+          "front": [
+            0.004,
+            0.029,
+            -0.018
+          ],
+          "back": [
+            -0.004,
+            0.025,
+            0.014
+          ],
+          "front_roll": 0,
+          "wrist_R": [
+            -1,
+            13,
+            -13
+          ],
+          "wrist_L": [
+            4,
+            -15,
+            11
+          ],
+          "shoulder": 5
+        },
+        "landing": {
+          "pelvis": [
+            0.001,
+            -0.046,
+            0.01
+          ],
+          "hips": [
+            10,
+            0,
+            0
+          ],
+          "spine": [
+            8,
+            0,
+            0
+          ],
+          "chest": [
+            12,
+            0,
+            0
+          ],
+          "neck": [
+            -4,
+            0,
+            0
+          ],
+          "head": [
+            2,
+            0,
+            0
+          ],
+          "R": [
+            0.018,
+            -0.015,
+            0.024
+          ],
+          "L": [
+            -0.018,
+            -0.015,
+            0.024
+          ],
+          "front": [
+            0.005,
+            0,
+            0.007
+          ],
+          "back": [
+            -0.005,
+            0,
+            -0.007
+          ],
+          "front_roll": 1,
+          "wrist_R": [
+            -5,
+            14,
+            -3
+          ],
+          "wrist_L": [
+            -5,
+            -14,
+            3
+          ],
+          "shoulder": 6
+        }
+      },
+      "tempo": {
+        "hold_frames": 64,
+        "escape_frames": 23,
+        "recovery_frames": 25,
+        "air_frames": 31,
+        "landing_frames": 23
+      }
+    }
+  }
+}

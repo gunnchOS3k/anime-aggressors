@@ -8,7 +8,14 @@ var p1_fighter_id: String = "ember-vale"
 var p2_fighter_id: String = "rook-ironside"
 ## Presentation-only dual-form body (male|female). Combat sim ignores these.
 var p1_body_variant: String = "male"
+var p1_story_skin: String = "BASE"
+var p2_story_skin: String = "BASE"
 var p2_body_variant: String = "female"
+## Rosamere three-form selection (story manifestations). COMPETITIVE_SELF_LIMITED
+## may be supplied and maps onto FAMILIAR_ROSE + contract — never a fourth form.
+var p1_form_id: String = ""
+var p2_form_id: String = ""
+var mythic_party_consent: bool = false
 var p1_is_cpu: bool = false
 var p2_is_cpu: bool = true
 var cpu_level: int = 2
@@ -27,8 +34,33 @@ var last_winner_slot: int = -1
 var debug_combat_hud: bool = false
 
 ## Arcade ladder (Alpha minimum mode beyond Versus + Training).
-var mode: String = "versus"  # versus | training | arcade | tutorial | hazards | team | challenges | online_unranked | online_ranked | tournament
+var mode: String = "versus"  # versus | training | arcade | tutorial | hazards | team | challenges | trials | online_unranked | online_ranked | tournament
 var arcade_active: bool = false
+
+## Trials of Convergence (first-class player nav; Labs remain diagnostics).
+var trial_mode_id: String = ""
+var trial_journey_phase: String = "select"
+var trial_challenge: String = "solo"  # solo | alternating | coop | fighter_challenge
+var trial_seat_count: int = 2
+var trial_story_reveal: bool = false  # spoiler-safe until story reveal
+var trial_records: Array = []  # local-only; never ranked MMR
+## Live shared BattleScene bridge (Unbound / Derby / Flagline / Prism / Rift / Echoes).
+var trial_live_combat: bool = false
+var trial_unbound_preset: String = "total_unbound"
+var trial_knockback_mult: float = 1.0
+var trial_cooldown_mult: float = 1.0
+var trial_full_supers: bool = false
+var trial_instant_resources: bool = false
+var trial_respawn_frames: int = 0
+var trial_actors: Array = []  # Unbound Prismatic/Puppet/Colossus controllable actors
+var trial_overlay_state: Dictionary = {}
+var trial_sim_snapshot: Dictionary = {}
+var trial_colossus_rigs: Array = []
+var trial_camera_profile: Dictionary = {}
+## Flagline actual four-body BattleSim combat (not logical CPU-only occupancy).
+var trial_four_body: bool = false
+var trial_body_roster: Array = []  # [{slot,fighter_id,team_id,is_bot,is_human}]
+var feeds_trial_ranked_mmr: bool = false  # always false; explicit flag for audits
 var arcade_index: int = 0
 var arcade_seed: int = 7
 var arcade_player_id: String = "ember-vale"
@@ -142,6 +174,8 @@ func begin_tutorial() -> void:
 	ensure_first_run_loaded()
 	mode = "tutorial"
 	arcade_active = false
+	battle_eval_mode = false
+	p1_is_cpu = false
 	hazards_enabled = false
 	items_enabled = false
 	tutorial_step = 0
@@ -350,12 +384,15 @@ func arcade_opponent_name() -> String:
 
 
 func apply_competitive_ruleset() -> void:
+	## Competitive Versus/ranked path — Trials Unbound modifiers must never leak here.
+	clear_trial_modifiers()
 	var rules = load("res://scripts/combat/competitive_rules.gd")
 	if rules != null:
 		rules.apply_to_gamestate(self)
 
 
 func begin_training() -> void:
+	clear_trial_modifiers()
 	mode = "training"
 	arcade_active = false
 	hazards_enabled = false
@@ -373,7 +410,97 @@ func begin_training() -> void:
 	reset_match()
 
 
+func begin_trial(mode_id: String, seats: int = 2, challenge: String = "solo") -> void:
+	## Trials of Convergence entry — local spectacle/objective modes; never ranked MMR.
+	mode = "trials"
+	trial_mode_id = mode_id
+	trial_journey_phase = "select"
+	var Seats = load("res://scripts/trials/partylink_seat_enforcement.gd")
+	var seated := seats
+	if Seats != null:
+		## Local journey path: connected_humans=-1 (CPU fill allowed). Not a PartyLink human claim.
+		var gate: Dictionary = Seats.enforce(mode_id, seats, -1)
+		if bool(gate.get("ok", false)):
+			seated = int(gate.get("seated", seats))
+		else:
+			## Honest clamp to live range even when multiplayer underfill rejects live PartyLink.
+			var truth: Dictionary = Seats.truth_for(mode_id)
+			seated = clampi(seats, int(truth.get("live_min", 1)), int(truth.get("live_max", 2)))
+	trial_seat_count = seated
+	trial_challenge = challenge
+	clear_trial_modifiers()
+	arcade_active = false
+	hazards_enabled = false
+	items_enabled = false
+	team_mode = false
+	online_queue = "private"
+	match_type = "trial"
+	ruleset_id = "trial-%s" % mode_id
+	if match_seed == 0:
+		match_seed = 42
+
+
+func clear_trial_modifiers() -> void:
+	## Reset Unbound/Derby/Flagline/Prism/Rift/Echoes modifiers so they cannot leak into Versus/Story/ranked.
+	trial_live_combat = false
+	trial_knockback_mult = 1.0
+	trial_cooldown_mult = 1.0
+	trial_full_supers = false
+	trial_instant_resources = false
+	trial_respawn_frames = 0
+	trial_actors = []
+	damage_ratio = 1.0
+	trial_overlay_state = {}
+	trial_sim_snapshot = {}
+	trial_colossus_rigs = []
+	trial_camera_profile = {}
+	trial_four_body = false
+	trial_body_roster = []
+	feeds_trial_ranked_mmr = false
+	trial_unbound_preset = "total_unbound"
+
+
+func end_trial() -> void:
+	## Exit Trials journey/live combat — clear modifiers; keep local trial_records.
+	clear_trial_modifiers()
+	trial_journey_phase = "select"
+	if mode == "trials":
+		mode = "versus"
+		apply_competitive_ruleset()
+	team_mode = false
+	team_size = 2
+
+
+func record_trial_result(payload: Dictionary) -> void:
+	## Local trial ledger only. Explicitly never feeds ranked MMR, career wins, or story unlocks.
+	var record: Dictionary = payload.duplicate(true)
+	var kind := str(record.get("result_kind", "SIMULATION"))
+	if kind != "REAL_PLAYER" and kind != "SIMULATION":
+		kind = "SIMULATION"
+	record["result_kind"] = kind
+	record["feeds_ranked_mmr"] = false
+	record["feeds_career_mmr"] = false
+	record["feeds_career_wins"] = false
+	record["earned_story_progress"] = false
+	record["HUMAN_ART_APPROVED"] = false
+	record["RC2_READY"] = false
+	record["V1_0_0_RELEASE_AUTHORIZED"] = false
+	record["SHIPPING_ROLLBACK_ENABLED"] = false
+	## run_solo_to_results / headless journeys are never REAL_PLAYER earned records.
+	if kind == "SIMULATION":
+		record["earned_personal_best"] = false
+		record["honesty"] = "SIMULATION — not a real-player Trials receipt"
+	else:
+		record["honesty"] = "REAL_PLAYER — local Trials receipt; never ranked/career/story"
+	trial_records.append(record)
+	## Cap local history; do not claim career ranked progression.
+	if trial_records.size() > 64:
+		trial_records = trial_records.slice(trial_records.size() - 64, trial_records.size())
+
+
 func begin_local_versus(p2_cpu: bool = true) -> void:
+	## Versus never inherits Trials Unbound supers/CDs/resources/actors.
+	clear_trial_modifiers()
 	mode = "versus"
 	arcade_active = false
 	hazards_enabled = false
@@ -435,6 +562,9 @@ func ensure_save_loaded() -> void:
 	damage_ratio = float(cfg.get_value("rules", "damage_ratio", 1.0))
 	team_attack = bool(cfg.get_value("rules", "team_attack", false))
 	ruleset_preset_name = str(cfg.get_value("rules", "preset", "default"))
+	stocks = int(cfg.get_value("rules", "stocks", 3))
+	cpu_level = int(cfg.get_value("rules", "cpu_level", 2))
+	match_timer_seconds = int(cfg.get_value("rules", "timer", 180))
 	online_queue = str(cfg.get_value("online", "queue", "private"))
 	mode = str(cfg.get_value("modes", "last_mode", mode))
 	_InputPersistence.ensure_loaded()
@@ -609,3 +739,31 @@ func competitive_stage_ids() -> Array:
 			continue
 		out.append(id)
 	return out
+
+
+func selectable_roster_ids(allow_review: bool = true) -> Array:
+	var ids := roster_ids()
+	var campaign_runtime := get_node_or_null("/root/CampaignRuntime")
+	var review := allow_review and OS.is_debug_build() and OS.get_environment("AA_V1_ROUTE_REVIEW") == "1"
+	if review:
+		return ids
+	var secret_locked := ["yin", "yang", "rosamere"]
+	var selected := []
+	for id in ids:
+		if id not in secret_locked or (campaign_runtime != null and bool(campaign_runtime.progress.get(str(id) + "_unlocked", false))):
+			selected.append(id)
+		elif id == "rosamere" and OS.get_environment("AA_ROSAMERE_DEV_OVERRIDE") == "1":
+			# Dev/training hook only — not a silent public unlock of the nine-adjacent secret.
+			selected.append(id)
+	return selected
+
+
+func secret_tenth_id() -> String:
+	return "rosamere"
+
+
+func is_secret_tenth_unlocked() -> bool:
+	var campaign_runtime := get_node_or_null("/root/CampaignRuntime")
+	if campaign_runtime != null and bool(campaign_runtime.progress.get("rosamere_unlocked", false)):
+		return true
+	return OS.get_environment("AA_ROSAMERE_DEV_OVERRIDE") == "1"

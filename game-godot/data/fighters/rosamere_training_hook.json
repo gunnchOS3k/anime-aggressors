@@ -1,0 +1,55 @@
+{
+  "fighter_id": "rosamere",
+  "status": "FORM_SELECTION_HOOKED",
+  "name": "Rosamere",
+  "title": "The First Bloom",
+  "name_title_status": "OWNER_FINAL",
+  "training_visible_when": [
+    "AA_ROSAMERE_DEV_OVERRIDE=1",
+    "rosamere_unlocked"
+  ],
+  "command_guide": true,
+  "move_list_catalog": true,
+  "form_selection": {
+    "manifestations": [
+      "FAMILIAR_ROSE",
+      "FIRST_BLOOM",
+      "EVERLASTING_ORIGIN"
+    ],
+    "default": "FAMILIAR_ROSE",
+    "gameplay_contract_on_familiar": "COMPETITIVE_SELF_LIMITED",
+    "competitive_self_limited_is_fourth_form": false,
+    "training_allows": [
+      "FAMILIAR_ROSE",
+      "FIRST_BLOOM"
+    ],
+    "versus_allows": [
+      "FAMILIAR_ROSE",
+      "FIRST_BLOOM"
+    ],
+    "story_allows": [
+      "FAMILIAR_ROSE",
+      "FIRST_BLOOM",
+      "EVERLASTING_ORIGIN"
+    ],
+    "everlasting_requires_mythic_consent_in_mythic_party": true,
+    "training_everlasting_preview": "dev_override_only_not_standard_training"
+  },
+  "systems": [
+    "FirstPermission",
+    "BloomSeed",
+    "PetalConstellation",
+    "OriginationScript",
+    "FirstDawn",
+    "GentleReversal",
+    "QuietEmbrace"
+  ],
+  "supers": [
+    "a_world_in_bloom",
+    "before_there_was_time",
+    "the_first_permission",
+    "mythic_everything_again"
+  ],
+  "mythic_label": "MYTHIC_CLEARLY_LABELED",
+  "note": "Do not silently retune the nine. Art/balance/cinematics/V1 not approved."
+}

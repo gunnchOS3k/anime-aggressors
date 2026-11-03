@@ -1,0 +1,37 @@
+{
+  "schema": "gunnchos_local_product_verification_schema/v1",
+  "note": "Shared gunnchOS3k Product Verification Standard was NOT found in thursday-open-lab-hub at recovery time; Anime uses this local schema aligned to the same honesty contract.",
+  "shared_pvs_referenced": false,
+  "shared_pvs_path_searched": [
+    "repos/_open_lab_worktrees/thursday-open-lab-hub/**",
+    "docs/**/*Verification*",
+    "artifacts/**/*PVS*"
+  ],
+  "status_enum": [
+    "NOT_STARTED",
+    "IN_PROGRESS",
+    "PARTIAL",
+    "IMPLEMENTED_PENDING_EVIDENCE",
+    "EVIDENCED",
+    "CURSOR_COMPLETE",
+    "BLOCKED_HUMAN",
+    "BLOCKED_EXTERNAL"
+  ],
+  "forbidden_claims_until_earned": [
+    "CURSOR_COMPLETE",
+    "HUMAN_ART",
+    "HUMAN_ART_APPROVED",
+    "RC2_READY",
+    "V1_0_0_RELEASE_AUTHORIZED",
+    "SHIPPING_ROLLBACK_ENABLED"
+  ],
+  "requirement_fields": [
+    "id",
+    "requirement",
+    "category",
+    "status",
+    "evidence",
+    "honesty",
+    "gaps"
+  ]
+}

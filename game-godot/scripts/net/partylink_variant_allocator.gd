@@ -2,6 +2,8 @@ extends RefCounted
 class_name PartyLinkVariantAllocator
 
 ## 2/4/6/8-safe duplicate fighter body_variant allocation.
+## Explicit preload keeps headless/CI clean-env parseable without .godot class cache.
+const BodyVariant = preload("res://scripts/data/body_variant.gd")
 
 
 static func allocate(roster_picks: Array) -> Array:

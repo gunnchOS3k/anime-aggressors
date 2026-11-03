@@ -41,12 +41,15 @@ func can_attack() -> bool:
 func _on_enter(state: String) -> void:
 	if _fighter == null:
 		return
+	if state not in [_FighterStates.SHIELD_START, _FighterStates.SHIELD_HOLD, _FighterStates.SHIELD_HIT, _FighterStates.SHIELD_STUN]:
+		_fighter.shielding = false
 	match state:
-		_FighterStates.SHIELD_START, _FighterStates.SHIELD_HOLD:
+		_FighterStates.SHIELD_START, _FighterStates.SHIELD_HOLD, _FighterStates.SHIELD_HIT:
 			_fighter.shielding = true
 		_FighterStates.SHIELD_BREAK:
 			_fighter.shielding = false
 			_fighter.shield_health = 0.0
+			if "shield_break_8c" in _fighter:_fighter.shield_break_8c.begin()
 		_FighterStates.DODGE_ACTIVE, _FighterStates.AIR_DODGE:
 			if dodge_invuln > 0.0:
 				_fighter.invincible = true
@@ -85,8 +88,12 @@ func _on_update(state: String, delta: float) -> void:
 		_FighterStates.AURA_CHARGE:
 			if not _fighter.is_aura_input_held():
 				_fighter.state_machine.enter(_FighterStates.AURA_READY if _fighter.aura >= 100.0 else _FighterStates.IDLE)
+		_FighterStates.SHIELD_HIT:
+			if state_frame >= 1:
+				_fighter.state_machine.enter(_FighterStates.SHIELD_STUN)
 		_FighterStates.SHIELD_STUN:
-			if state_time > 0.25:
+			var stun_limit: float = float(_fighter._shield_stun_limit) if "_shield_stun_limit" in _fighter else 0.25
+			if state_time > stun_limit:
 				_fighter.state_machine.enter(_FighterStates.IDLE)
 		_FighterStates.DODGE_RECOVERY, _FighterStates.AIR_DODGE:
 			var rec := dodge_recovery
@@ -126,6 +133,11 @@ func _on_update(state: String, delta: float) -> void:
 					return
 			if _fighter.is_on_floor() and _fighter.velocity.y >= 0:
 				_fighter.begin_landing(true, absf(_fighter.velocity.y) > 400.0)
+			elif state_time > _fighter.hitstun_remaining:
+				# Launch is a presentation/reaction state, not permanent airborne
+				# input denial. The resolved hitstun owns its duration. Preserve the
+				# velocity and let ordinary air movement/CPU recovery resume.
+				_fighter.state_machine.enter(_FighterStates.FALL)
 		_FighterStates.GRAB_HOLD:
 			if _fighter.has_method("tick_grab_hold"):
 				_fighter.tick_grab_hold(delta)
@@ -145,8 +157,10 @@ func _on_update(state: String, delta: float) -> void:
 			if state_time > 0.12:
 				_fighter.state_machine.enter(_FighterStates.IDLE)
 		_FighterStates.SHIELD_BREAK:
-			if state_time > 0.4:
-				_fighter.shield_health = float(_fighter.data.get("shieldProfile", {}).get("maxHealth", 100))
+			var recovered: bool = _fighter.shield_break_8c.ready(state_frame, state_time) if "shield_break_8c" in _fighter else state_time > .4
+			if recovered:
+				if "shield_break_8c" in _fighter:_fighter.shield_break_8c.recover()
+				else:_fighter.shield_health = float(_fighter.data.get("shieldProfile", {}).get("maxHealth", 100))
 				_fighter.state_machine.enter(_FighterStates.IDLE)
 		_FighterStates.LEDGE_HANG:
 			_fighter.tick_ledge_hang(delta)
@@ -154,3 +168,31 @@ func _on_update(state: String, delta: float) -> void:
 			if state_time > 0.16:
 				_fighter.invincible = false
 				_fighter.state_machine.enter(_FighterStates.IDLE)
+
+
+# Local trusted rollback COMPONENT state. This is not a full Fighter/physics/
+# projectile/timer snapshot and is never accepted from a network peer.
+func capture_component_state() -> Dictionary:
+	var result := {"schema":"fighter_state_machine/v1"}
+	result["owner"] = {"instance":_fighter.get_instance_id() if is_instance_valid(_fighter) else 0, "fighter":str(_fighter.fighter_id) if is_instance_valid(_fighter) and "fighter_id" in _fighter else ""}
+	for key in ["current_state", "previous_state", "state_frame", "state_time", "landing_lag", "dodge_recovery", "dodge_invuln"]:
+		var value = get(key)
+		result[key] = value.duplicate(true) if value is Dictionary or value is Array else value
+	return result
+
+func restore_component_state(state: Dictionary) -> bool:
+	var baseline := capture_component_state()
+	if state.size() != baseline.size() or state.get("schema", "") != baseline.schema: return false
+	if state.get("owner", {}) != baseline.owner: return false
+	# Validate the entire record BEFORE writes. Restore does not call enter(),
+	# start_move(), cancel(), emit signals, spend aura or dispatch presentation.
+	for key in baseline:
+		if not state.has(key) or typeof(state[key]) != typeof(baseline[key]): return false
+	if state.current_state.is_empty() or state.state_frame < 0: return false
+	for key in ["state_time", "landing_lag", "dodge_recovery", "dodge_invuln"]:
+		if not is_finite(float(state[key])) or float(state[key]) < 0: return false
+	for key in baseline:
+		if key in ["schema", "owner"]: continue
+		var value = state[key]
+		set(key, value.duplicate(true) if value is Dictionary or value is Array else value)
+	return true

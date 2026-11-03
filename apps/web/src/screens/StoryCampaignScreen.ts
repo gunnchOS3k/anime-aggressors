@@ -50,8 +50,7 @@ function render(state: StoryDirectorState, dev: boolean): string {
         ${
           enc
             ? `<a class="btn" data-testid="story-launch-encounter" href="${APP_ROUTES.matchSetupFighters}">Launch Encounter</a>
-               <button type="button" class="btn" data-testid="story-sim-win" id="story-sim-win">Record Win (advance)</button>
-               <button type="button" class="btn" data-testid="story-sim-loss" id="story-sim-loss">Record Loss (retry)</button>`
+               <p data-testid="story-result-boundary">Launch opens match setup only. This page cannot record a win or a loss. BattleScene records the result from the encounter.</p>`
             : `<button type="button" class="btn" data-testid="story-advance" id="story-advance">Continue</button>`
         }
         ${state.pendingRetryNodeId ? `<p class="story-retry">Retry ready — prior progress preserved.</p>` : ""}
@@ -60,7 +59,13 @@ function render(state: StoryDirectorState, dev: boolean): string {
 
   const qa = dev
     ? `<div class="story-controls story-controls--qa" data-testid="story-qa-drawer">
-        <p><em>QA drawer (?dev=1)</em></p>
+        <p><em>QA drawer (?dev=1). These controls are not on the public page.</em></p>
+        ${
+          enc
+            ? `<button type="button" class="btn" data-testid="story-sim-win" id="story-sim-win">Record Win (QA)</button>
+               <button type="button" class="btn" data-testid="story-sim-loss" id="story-sim-loss">Record Loss (QA)</button>`
+            : ""
+        }
         <label>Essence tier
           <select id="story-essence">
             ${[0, 1, 2, 4, 6].map((n) => `<option value="${n}" ${state.essenceCount === n ? "selected" : ""}>${n}</option>`).join("")}

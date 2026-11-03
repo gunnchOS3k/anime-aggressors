@@ -1,0 +1,20 @@
+controls-8d	Save source controls and verify importable candidates	﻿2026-10-22T20:46:11.9268445Z ##[group]Run blender --background --factory-startup --python-exit-code 1 --python tools/authored_animation/blender/aa_controls_8d.py -- --input "$RUNNER_TEMP/controls-8d-input" --output "$RUNNER_TEMP/controls-8d"
+controls-8d	Save source controls and verify importable candidates	2026-10-22T20:46:11.9271290Z [36;1mblender --background --factory-startup --python-exit-code 1 --python tools/authored_animation/blender/aa_controls_8d.py -- --input "$RUNNER_TEMP/controls-8d-input" --output "$RUNNER_TEMP/controls-8d"[0m
+controls-8d	Save source controls and verify importable candidates	2026-10-22T20:46:11.9273266Z [36;1mpython3 tools/authored_animation/validate_controls_8d.py "$RUNNER_TEMP/controls-8d"[0m
+controls-8d	Save source controls and verify importable candidates	2026-10-22T20:46:11.9338773Z shell: /usr/bin/bash -e {0}
+controls-8d	Save source controls and verify importable candidates	2026-10-22T20:46:11.9339034Z ##[endgroup]
+controls-8d	Save source controls and verify importable candidates	2026-10-22T20:46:15.1810538Z Traceback (most recent call last):
+controls-8d	Save source controls and verify importable candidates	2026-10-22T20:46:15.1811005Z Blender 4.0.2
+controls-8d	Save source controls and verify importable candidates	2026-10-22T20:46:15.1812166Z   File "/home/runner/work/anime-aggressors/anime-aggressors/tools/authored_animation/blender/aa_controls_8d.py", line 264, in <module>
+controls-8d	Save source controls and verify importable candidates	2026-10-22T20:46:15.1813469Z Read blend: "/home/runner/work/_temp/controls-8d-input/saved_sources/ember-vale/male/candidate_8c.blend"
+controls-8d	Save source controls and verify importable candidates	2026-10-22T20:46:15.1814782Z     if __name__=='__main__':run()
+controls-8d	Save source controls and verify importable candidates	2026-10-22T20:46:15.1815560Z                             ^^^^^
+controls-8d	Save source controls and verify importable candidates	2026-10-22T20:46:15.1816760Z   File "/home/runner/work/anime-aggressors/anime-aggressors/tools/authored_animation/blender/aa_controls_8d.py", line 231, in run
+controls-8d	Save source controls and verify importable candidates	2026-10-22T20:46:15.1818418Z     assert geometry(old_objects)==old_geo and rest(arm,canonical)==old_rest and actions(old_actions)==old_curve
+controls-8d	Save source controls and verify importable candidates	2026-10-22T20:46:15.1820027Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+controls-8d	Save source controls and verify importable candidates	2026-10-22T20:46:15.1820527Z AssertionError
+controls-8d	Save source controls and verify importable candidates	2026-10-22T20:46:15.1820716Z 
+controls-8d	Save source controls and verify importable candidates	2026-10-22T20:46:15.1821034Z Error: script failed, file: 'tools/authored_animation/blender/aa_controls_8d.py', exiting.
+controls-8d	Save source controls and verify importable candidates	2026-10-22T20:46:15.2664076Z 
+controls-8d	Save source controls and verify importable candidates	2026-10-22T20:46:15.2664593Z Blender quit
+controls-8d	Save source controls and verify importable candidates	2026-10-22T20:46:15.2774122Z ##[error]Process completed with exit code 1.

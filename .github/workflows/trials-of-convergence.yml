@@ -1,0 +1,84 @@
+name: trials-of-convergence
+
+on:
+  push:
+    branches:
+      - cursor/continuation-isolated-combat-20261027
+    paths:
+      - "game-godot/scripts/trials/**"
+      - "game-godot/scenes/trials/**"
+      - "game-godot/scenes/menus/TrialsHubScene.tscn"
+      - "game-godot/data/trials/**"
+      - "game-godot/scripts/net/partylink_variant_allocator.gd"
+      - "game-godot/scripts/data/body_variant.gd"
+      - "game-godot/scripts/combat/hit_resolver.gd"
+      - "game-godot/scripts/fighters/fighter.gd"
+      - "game-godot/scripts/core/GameState.gd"
+      - "game-godot/scripts/battle/battle_scene.gd"
+      - "game-godot/tests/integration/Trials*.gd"
+      - "game-godot/tests/integration/Resonance*.gd"
+      - "game-godot/tests/integration/Fractured*.gd"
+      - "game-godot/tests/integration/Prism*.gd"
+      - "game-godot/tests/integration/Riftline*.gd"
+      - "game-godot/tests/integration/Echoes*.gd"
+      - "game-godot/tests/integration/Unbound*.gd"
+      - "scripts/run-trials-suite.sh"
+      - ".github/workflows/trials-of-convergence.yml"
+  pull_request:
+    paths:
+      - "game-godot/scripts/trials/**"
+      - "game-godot/scenes/trials/**"
+      - "game-godot/data/trials/**"
+      - "game-godot/scripts/net/partylink_variant_allocator.gd"
+      - "game-godot/scripts/data/body_variant.gd"
+      - "game-godot/scripts/combat/hit_resolver.gd"
+      - "game-godot/scripts/fighters/fighter.gd"
+      - "game-godot/scripts/core/GameState.gd"
+      - "game-godot/scripts/battle/battle_scene.gd"
+      - "game-godot/tests/integration/Trials*.gd"
+      - "game-godot/tests/integration/Resonance*.gd"
+      - "game-godot/tests/integration/Fractured*.gd"
+      - "game-godot/tests/integration/Prism*.gd"
+      - "game-godot/tests/integration/Riftline*.gd"
+      - "game-godot/tests/integration/Echoes*.gd"
+      - "game-godot/tests/integration/Unbound*.gd"
+      - "scripts/run-trials-suite.sh"
+
+jobs:
+  trials-suite:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Godot 4.7.1
+        run: |
+          curl -fsSL -o godot.zip \
+            https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip
+          unzip -q godot.zip
+          sudo mv Godot_v4.7.1-stable_linux.x86_64 /usr/local/bin/godot
+          godot --version
+      - name: Clean-env validate BodyVariant preload
+        working-directory: game-godot
+        run: |
+          set -euo pipefail
+          ## CI checkout has no .godot class cache — allocator must parse via explicit preload.
+          rm -rf .godot
+          mkdir -p ../artifacts/cursor_continuation/trials_of_convergence
+          mkdir -p /tmp/aa-trials-home/Library/Application\ Support/aa-native-cursor-trials/logs
+          export HOME=/tmp/aa-trials-home
+          godot --headless --path . --script res://tests/integration/TrialsPartyLinkSeats.gd \
+            > ../artifacts/cursor_continuation/trials_of_convergence/clean_env_partylink.log 2>&1
+          grep -q "TRIALS_PARTYLINK_SEATS PASS" ../artifacts/cursor_continuation/trials_of_convergence/clean_env_partylink.log
+          ! grep -q 'Identifier "BodyVariant" not declared' ../artifacts/cursor_continuation/trials_of_convergence/clean_env_partylink.log
+          ! grep -qE 'Compilation failed|Parse Error' ../artifacts/cursor_continuation/trials_of_convergence/clean_env_partylink.log
+      - name: Run Trials of Convergence suite (strict)
+        run: |
+          set -euo pipefail
+          chmod +x scripts/run-trials-suite.sh
+          scripts/run-trials-suite.sh
+      - name: Upload trial logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trials-of-convergence-logs
+          path: artifacts/cursor_continuation/trials_of_convergence/
