@@ -3,6 +3,12 @@ var failures: Array = []
 func _init() -> void: call_deferred("_run")
 func check(ok: bool, label: String) -> void:
 	if not ok: failures.append(label); push_error(label)
+func _node_at(c, fid: String, suffix: String) -> int:
+	var nodes: Array = c.route_data(fid)["nodes"]
+	for i in range(nodes.size()):
+		if str(nodes[i].get("id", "")).ends_with(suffix):
+			return i
+	return -1
 func _run() -> void:
 	var c=root.get_node("CampaignRuntime")
 	var state=root.get_node("GameState")
@@ -17,7 +23,7 @@ func _run() -> void:
 		var id:String=route["id"]
 		check(c.progress["routes"][id]["complete"],"fresh_process_complete_"+id)
 		count+=c.progress["routes"][id]["completed"].size()
-	check(count==145,"fresh_process_all_145")
+	check(count==146,"fresh_process_all_146")
 	var saved:=JSON.stringify(c.progress)
 	var watch_rows:=[]
 	for fid in c.campaign["spectral_order"]:
@@ -31,7 +37,9 @@ func _run() -> void:
 		var elapsed:float=watch.elapsed
 		for i in range(8): await physics_frame
 		check(watch.elapsed==elapsed,"watch_pause_"+fid)
-		await watch.seek(10)
+		var loss_i: int = _node_at(c, fid, ":first_loss")
+		check(loss_i >= 0, "watch_first_loss_index_"+fid)
+		await watch.seek(loss_i)
 		check(watch._battle.fighter2.fighter_id==c.APPROVED_FIRST_LOSS[fid],"watch_shared_first_loss_"+fid)
 		var blocked_positions: Array=[]
 		for actor in watch._battle.fighters_root.get_children():
@@ -39,17 +47,22 @@ func _run() -> void:
 			blocked_positions.append(actor.position)
 		for i in range(8):await physics_frame
 		for i in range(blocked_positions.size()):check(watch._battle.fighters_root.get_child(i).position==blocked_positions[i],"watch_faces_stay_in_blocking_"+fid)
-		await watch.seek(11)
+		var puppet_i: int = _node_at(c, fid, ":puppet_imbalance")
+		await watch.seek(puppet_i)
 		check(watch._watch_presenter.puppets.size()==5,"watch_five_puppets_"+fid)
 		check(watch._watch_presenter.puppets[0].get_meta("story_form")=="BLACK_PUPPET","watch_puppet_forms_"+fid)
-		await watch.seek(13)
+		var eq_i: int = _node_at(c, fid, ":equilibrium")
+		await watch.seek(eq_i)
 		check(watch._watch_presenter.puppets.size()==4,"watch_equilibrium_"+fid)
-		await watch.seek(17)
+		var cosmic_i: int = _node_at(c, fid, ":impossible_battle_2")
+		await watch.seek(cosmic_i)
 		check(watch._watch_presenter.actors.size()==3,"watch_two_cosmic_manifests_"+fid)
-		await watch.seek(16)
+		var gray_i: int = _node_at(c, fid, ":prismatic_gray")
+		await watch.seek(gray_i)
 		check(watch._battle.fighter1.get_meta("story_form","")=="PRISMATIC_GRAY","watch_shared_gray_"+fid)
-		await watch.seek(19)
-		check(watch.node_index==19,"watch_ending_reachable_"+fid)
+		var end_i: int = _node_at(c, fid, ":unlock")
+		await watch.seek(end_i)
+		check(watch.node_index==end_i,"watch_ending_reachable_"+fid)
 		# Exit while seek is suspended on freeing the previous BattleScene.
 		watch.seek(0)
 		router.go("story")

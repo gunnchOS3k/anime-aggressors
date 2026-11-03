@@ -79,6 +79,10 @@ func _run() -> void:
 				await _exercise(node)
 				if is_instance_valid(battle) and battle._story_objective != null: print("OBJECTIVE_EVIDENCE ",battle._story_objective.evidence()," state=",battle.fighter1.state_machine.current_state," shielding=",battle.fighter1.shielding)
 				await frames(40)
+				for _wait in range(240):
+					if current_scene != null and current_scene.scene_file_path.ends_with("ResultsScene.tscn"): break
+					root.get_node("StoryDialogue").skip_all() # post-win dialogue gates Results
+					await physics_frame
 				check(campaign.last_result.get("advanced",false), "authenticated_result_" + node["id"])
 				check(current_scene.scene_file_path.ends_with("ResultsScene.tscn"), "results_scene_" + node["id"])
 				rows.append({"node":node["id"], "kind":"battle", "receipt":campaign.last_result.duplicate(true), "real_player_control":true, "staged_automation":true,"human_playthrough":false})
@@ -93,7 +97,7 @@ func _run() -> void:
 		if fid != "sevenfold-convergence": check(fid in campaign.progress["gray_routes"],"earned_gray_"+fid)
 	check(campaign.progress["gray_routes"].size()==7,"seven_gray_completions")
 	check(campaign.progress["yin_unlocked"] and campaign.progress["yang_unlocked"],"legitimate_cosmic_unlocks")
-	check(rows.size()==145,"all_145_nodes_exercised")
+	check(rows.size()==146,"all_146_nodes_exercised")
 	await _negative_and_replay()
 	_output()
 	quit(0 if failures.is_empty() else 1)

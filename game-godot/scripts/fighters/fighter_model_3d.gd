@@ -237,7 +237,9 @@ func configure(fighter_data: Dictionary, body_variant: String = "") -> bool:
 	if _configure_swap_count % VIEWPORT_REFRESH_EVERY_SWAPS == 0:
 		refresh_viewport_texture(true)
 	heal_visibility_if_needed()
-	if _using_collectible and _loaded_model != null:
+	# Kaia's golden slice wins over the collectible body, but watch still reads
+	# cinematic expression from this controller. Without it, catastrophe shock is Nil.
+	if (_using_collectible or _using_golden_slice) and _loaded_model != null:
 		_expression_controller = load("res://scripts/visual/collectible_expression_controller.gd").new()
 		_loaded_model.add_child(_expression_controller)
 		_expression_controller.configure(_loaded_model, _fighter_id, str(fighter_data.get("collectible_review_form", "BASE")))
