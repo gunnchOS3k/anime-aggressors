@@ -43,7 +43,7 @@ func new_progress() -> Dictionary:
 	for route in campaign.get("routes", []):
 		routes[str(route["id"])] = {"cursor": str(route["nodes"][0]["id"]), "completed": [], "receipts": {}, "recruited": [], "essence": 0, "essence_fighters": [], "released": [], "form": "BASE", "complete": false, "earned": false}
 	return {"schema": SCHEMA, "canon_decision": campaign.get("canon_decision", ""), "selected_route": "kaia-windrow", "presentation": "female",
-		"routes": routes, "gray_routes": [], "review_gray_routes": [], "yin_unlocked": false, "yang_unlocked": false}
+		"routes": routes, "gray_routes": [], "review_gray_routes": [], "yin_unlocked": false, "yang_unlocked": false, "rosamere_unlocked": false}
 
 
 func _key() -> PackedByteArray:
@@ -365,6 +365,25 @@ func _rebuild_unlocks() -> void:
 	var cosmic: bool = progress["gray_routes"].size() == 7 and convergence.get("earned", false)
 	progress["yin_unlocked"] = cosmic
 	progress["yang_unlocked"] = cosmic
+	progress["rosamere_unlocked"] = secret_reveal_earned("rosamere")
+
+
+## True only when the scene revealing `fighter_id` is completed and every
+## STORY_BATTLE before it on that route holds a qualifying receipt.
+func secret_reveal_earned(fighter_id: String) -> bool:
+	for route in campaign.get("routes", []):
+		var entry: Dictionary = progress.get("routes", {}).get(str(route["id"]), {})
+		if entry.is_empty():
+			continue
+		for node in route.get("nodes", []):
+			var node_id := str(node["id"])
+			if node_id not in entry.get("completed", []):
+				break
+			if node.get("kind") == "STORY_BATTLE" and not bool(entry.get("receipts", {}).get(node_id, {}).get("qualifying", false)):
+				break
+			if str(node.get("fighter_hint", "")) == fighter_id:
+				return true
+	return false
 
 
 func acknowledge_scene(expected_node_id: String = "", expected_route_id: String = "") -> bool:
